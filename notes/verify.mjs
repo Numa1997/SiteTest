@@ -1,4 +1,4 @@
-// Lead's check of the ten simulation pages after the note repairs.
+// Lead's check of the eleven simulation pages (Fig. 11 added 29 October 2026; first written for the ten of 20 October).
 // For each page at 1440 × 900, 1600 × 900 and 390 × 844: console and page errors, KaTeX errors, sideways scroll, every fold of the
 // note opening, numbered equations present, and (at the two desktop widths) display equations wider than their box, whose number
 // would then sit outside the visible part.
@@ -16,14 +16,16 @@ const PAGES = [
   [1, 'Circular Wave Interference Visualization.html'], [2, 'Double Pendulum.html'],
   [3, 'Interactive Double-Slit Experiment Visualization.html'], [4, 'Transverse and longitudinal waves.html'],
   [5, 'water-wave.html'], [6, 'wave-interference.html'], [7, 'phasor-sums.html'], [8, 'draw-decompose.html'],
-  [9, 'driven-oscillator.html'], [10, 'wind-turbine.html']].filter(([n]) => !only.length || only.includes(String(n)));
+  [9, 'driven-oscillator.html'], [10, 'wind-turbine.html'], [11, 'pendulum-control.html']].filter(([n]) => !only.length || only.includes(String(n)));
 const TYPES = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.svg': 'image/svg+xml', '.woff2': 'font/woff2', '.webp': 'image/webp', '.png': 'image/png', '.json': 'application/json' };
 const server = http.createServer((q, r) => {
   const p = path.join(dist, decodeURIComponent(q.url.split('?')[0]));
   fs.readFile(p, (e, b) => { if (e) { r.writeHead(404); r.end(); return; } r.writeHead(200, { 'content-type': TYPES[path.extname(p)] || 'application/octet-stream' }); r.end(b); });
 }).listen(0);
 const port = server.address().port;
-const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' });
+// The Chromium of the machine: the path of 20 October 2026 if it is there, else the image's current one.
+const CHROME = ['/opt/pw-browsers/chromium-1194/chrome-linux/chrome', '/opt/pw-browsers/chromium'].find((p) => fs.existsSync(p));
+const browser = await chromium.launch({ executablePath: CHROME });
 let bad = 0;
 for (const [fig, file] of PAGES) {
   for (const [vw, vh, tag] of [[1440, 900, 'desk'], [1600, 900, 'wide'], [390, 844, 'phone']]) {

@@ -2,11 +2,11 @@
 
 | | |
 |---|---|
-| File | [public/scripts/sim.js](../../public/scripts/sim.js), 429 lines, 20.9 kB (20 925 bytes) |
-| Loaded by | the ten simulation pages in `public/simulations/`, as the second shared script, after `fold.js` and before `dataset.js` (table below); the two pages of Iron, Cotton and the Head (`portfolios/impact/index.html`, `ar.html`), first, before `dataset.js`, for the data panel ([portfolios.md](../portfolios.md#the-data-panel-of-the-study)); the ideal and servo presses inside the Hydraulic Press Study's frames ([portfolios.md](../portfolios.md#the-data-panel-of-the-two-simulations-since-23-october-2026)); and Droplet Collection, first, before `dataset.js` and the inline script, for the data panel ([portfolios.md](../portfolios.md#the-data-panel-the-bookkeeper-since-24-october-2026)). No other page loads it. A walkthrough is loaded only for an element `#walk` that names one in `data-walk`. |
-| Defines | `window.Sim` ([sim.js:415](../../public/scripts/sim.js#L415)), a fresh object with 12 members |
-| Reads | `window.WALK` ([sim.js:409](../../public/scripts/sim.js#L409)), `window.Fold` ([sim.js:328](../../public/scripts/sim.js#L328)), `window.Sim.live` ([sim.js:315](../../public/scripts/sim.js#L315)), `window.renderMathInElement` from KaTeX ([sim.js:355](../../public/scripts/sim.js#L355)) |
-| Emits | the DOM event `typeset` on `document` ([sim.js:366](../../public/scripts/sim.js#L366), [sim.js:397](../../public/scripts/sim.js#L397)) |
+| File | [public/scripts/sim.js](../../public/scripts/sim.js), 508 lines, 27.8 kB (27 779 bytes; measured 29 October 2026) |
+| Loaded by | the eleven simulation pages in `public/simulations/`, as the second shared script, after `fold.js` and before `dataset.js` (table below); the three pages of Iron, Cotton and the Head (`portfolios/impact/index.html`, `de.html`, `ar.html`), first, before `dataset.js`, for the data panel ([portfolios.md](../portfolios.md#the-data-panel-of-the-study)); the ideal and servo presses inside the Hydraulic Press Study's frames (in all three languages) ([portfolios.md](../portfolios.md#the-data-panel-of-the-two-simulations-since-23-october-2026)); and Droplet Collection, first, before `dataset.js` and the inline script, for the data panel ([portfolios.md](../portfolios.md#the-data-panel-the-bookkeeper-since-24-october-2026)); and the simulation and wind tabs of Rotor Pendula ([portfolios.md](../portfolios.md#rotor-pendula-rotor-pendula)). No other page loads it (checked 29 October 2026). A walkthrough is loaded only for an element `#walk` that names one in `data-walk`. |
+| Defines | `window.Sim` ([sim.js:494](../../public/scripts/sim.js#L494)), a fresh object with 12 members |
+| Reads | `window.WALK` ([sim.js:488](../../public/scripts/sim.js#L488)), `window.Fold` ([sim.js:407](../../public/scripts/sim.js#L407)), `window.Sim.live` ([sim.js:392](../../public/scripts/sim.js#L392)), `window.renderMathInElement` from KaTeX ([sim.js:434](../../public/scripts/sim.js#L434)) |
+| Emits | the DOM event `typeset` on `document` ([sim.js:445](../../public/scripts/sim.js#L445), [sim.js:476](../../public/scripts/sim.js#L476)) |
 
 `sim.js` is the toolbox every simulation page stands on. It gives the page a colour palette, canvases that stay sharp on
 high-density screens, labels set like typeset mathematics, axis ticks, a pixel read-back for the data panel's Check,
@@ -17,24 +17,25 @@ and it shows a visible error banner if any script on the page throws.
 ## Load order on the pages
 
 Every simulation page loads the shared scripts at the end of `<body>`, in this order. The page's own inline script sits
-between `dataset.js` and `datalog.js`; Figs. 9 and 10 load their data panel's ledger (`scripts/ledger/<page>.js`) just
-before `datalog.js`, on the same line.
+between `dataset.js` and `datalog.js`; Figs. 9, 10 and 11 load their data panel's ledger (`scripts/ledger/<page>.js`) just
+before `datalog.js`, on the same line. Line numbers measured 29 October 2026.
 
 | Fig. | Page | `fold.js` | `sim.js` | `dataset.js` | page script | `datalog.js` |
 |---|---|---|---|---|---|---|
-| 1 | [Circular Wave Interference Visualization.html](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L505) | L505 | L506 | L507 | L508 | L904 |
-| 2 | [Double Pendulum.html](../../public/simulations/Double%20Pendulum.html#L389) | L389 | L390 | L391 | L392 | L867 |
-| 3 | [Interactive Double-Slit Experiment Visualization.html](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L546) | L546 | L547 | L548 | L549 | L945 |
-| 4 | [Transverse and longitudinal waves.html](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L732) | L732 | L733 | L734 | L735 | L1083 |
-| 5 | [water-wave.html](../../public/simulations/water-wave.html#L563) | L563 | L564 | L565 | L566 | L888 |
-| 6 | [wave-interference.html](../../public/simulations/wave-interference.html#L489) | L489 | L490 | L491 | L492 | L974 |
-| 7 | [phasor-sums.html](../../public/simulations/phasor-sums.html#L660) | L660 | L661 | L662 | L663 | L1476 |
-| 8 | [draw-decompose.html](../../public/simulations/draw-decompose.html#L618) | L618 | L619 | L620 | L621 | L1413 |
-| 9 | [driven-oscillator.html](../../public/simulations/driven-oscillator.html#L598) | L598 | L599 | L600 | L601 | L1930, after `ledger/driven-oscillator.js` on the same line |
-| 10 | [wind-turbine.html](../../public/simulations/wind-turbine.html#L547) | L547 | L548 | L549 | L550 | L1168, after `ledger/wind-turbine.js` on the same line |
+| 1 | [Circular Wave Interference Visualization.html](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L506) | L506 | L507 | L508 | L509 | L905 |
+| 2 | [Double Pendulum.html](../../public/simulations/Double%20Pendulum.html#L451) | L451 | L452 | L453 | L454 | L929 |
+| 3 | [Interactive Double-Slit Experiment Visualization.html](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L547) | L547 | L548 | L549 | L550 | L946 |
+| 4 | [Transverse and longitudinal waves.html](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L733) | L733 | L734 | L735 | L736 | L1084 |
+| 5 | [water-wave.html](../../public/simulations/water-wave.html#L565) | L565 | L566 | L567 | L568 | L890 |
+| 6 | [wave-interference.html](../../public/simulations/wave-interference.html#L490) | L490 | L491 | L492 | L493 | L975 |
+| 7 | [phasor-sums.html](../../public/simulations/phasor-sums.html#L661) | L661 | L662 | L663 | L664 | L1477 |
+| 8 | [draw-decompose.html](../../public/simulations/draw-decompose.html#L619) | L619 | L620 | L621 | L622 | L1414 |
+| 9 | [driven-oscillator.html](../../public/simulations/driven-oscillator.html#L599) | L599 | L600 | L601 | L602 | L1931, after `ledger/driven-oscillator.js` on the same line |
+| 10 | [wind-turbine.html](../../public/simulations/wind-turbine.html#L548) | L548 | L549 | L550 | L551 | L1169, after `ledger/wind-turbine.js` on the same line |
+| 11 | [pendulum-control.html](../../public/simulations/pendulum-control.html#L419) | L419 | L420 | L421 | L422 | L1347, after `ledger/pendulum-control.js` on the same line |
 
 The scripts are plain `<script src>` tags at the end of the body, so they run while the document is still loading. That is
-why `sim.js` defers its own start to `DOMContentLoaded` ([sim.js:412](../../public/scripts/sim.js#L412)), and why
+why `sim.js` defers its own start to `DOMContentLoaded` ([sim.js:491](../../public/scripts/sim.js#L491)), and why
 `fold.js`, which registered its start first ([fold.js:411](../../public/scripts/fold.js#L411)), folds the lecture note
 before `sim.js` typesets it.
 
@@ -49,8 +50,8 @@ before `sim.js` typesets it.
    `'../'`. KaTeX is later loaded from this root.
 3. It installs a `window` `error` listener that turns the first uncaught error into a banner
    ([sim.js:230](../../public/scripts/sim.js#L230)).
-4. It schedules `boot()` for `DOMContentLoaded` ([sim.js:412-413](../../public/scripts/sim.js#L412-L413)).
-5. It assigns `window.Sim` ([sim.js:415-428](../../public/scripts/sim.js#L415-L428)). This replaces any earlier `Sim` object,
+4. It schedules `boot()` for `DOMContentLoaded` ([sim.js:491-492](../../public/scripts/sim.js#L491-L492)).
+5. It assigns `window.Sim` ([sim.js:494-507](../../public/scripts/sim.js#L494-L507)). This replaces any earlier `Sim` object,
    so anything that wants to add to `Sim` (`dataset.js`, `datalog.js`, the page) must run after this file.
 
 The page's own script then runs and uses the helpers: it sizes its canvases, wires its sliders, starts its clock.
@@ -93,38 +94,38 @@ The page's own script then runs and uses the helpers: it sizes its canvases, wir
 
 ### At `DOMContentLoaded`: `boot()`
 
-`boot()` ([sim.js:402-411](../../public/scripts/sim.js#L402-L411)) runs two steps in order.
+`boot()` ([sim.js:481-490](../../public/scripts/sim.js#L481-L490)) runs two steps in order.
 
-1. `typeset()` ([sim.js:339-382](../../public/scripts/sim.js#L339-L382)) sets the mathematics.
+1. `typeset()` ([sim.js:418-461](../../public/scripts/sim.js#L418-L461)) sets the mathematics.
    - It collects every `.paper` (the lecture note) and every `.stage__cap` and `.formula` (figure captions)
-     ([sim.js:340](../../public/scripts/sim.js#L340)). With no paper but captions, `mathIn` sets only the captions, and since 23 October 2026 only if a caption contains `\(`, so a
+     ([sim.js:419](../../public/scripts/sim.js#L419)). With no paper but captions, `mathIn` sets only the captions, and since 23 October 2026 only if a caption contains `\(`, so a
      page without mathematics in its captions (the impact study) loads no KaTeX
-     ([sim.js:342](../../public/scripts/sim.js#L342), [sim.js:391-400](../../public/scripts/sim.js#L391-L400)).
-   - It adds a "Skip to the lecture note" link at the top of the body ([sim.js:343-347](../../public/scripts/sim.js#L343-L347)).
+     ([sim.js:420](../../public/scripts/sim.js#L420), [sim.js:470-479](../../public/scripts/sim.js#L470-L479)).
+   - It adds a "Skip to the lecture note" link at the top of the body ([sim.js:422-426](../../public/scripts/sim.js#L422-L426)).
    - It loads `vendor/katex/katex.min.js`, then `vendor/katex/contrib/auto-render.min.js`, one after the other, from `ROOT`
-     ([sim.js:352-353](../../public/scripts/sim.js#L352-L353)). `load()` calls the next step on success and on failure alike
-     ([sim.js:332-338](../../public/scripts/sim.js#L332-L338)).
+     ([sim.js:431-432](../../public/scripts/sim.js#L431-L432)). `load()` calls the next step on success and on failure alike
+     ([sim.js:411-417](../../public/scripts/sim.js#L411-L417)).
    - In each paper, KaTeX's auto-render replaces `\[ … \]` by display mathematics and `\( … \)` by inline mathematics,
      skips elements with class `notex`, and does not stop on a bad formula (`throwOnError: false`)
-     ([sim.js:356-362](../../public/scripts/sim.js#L356-L362)). Captions get inline mathematics only, and the root element gets
-     the class `tex-ready` ([sim.js:385-390](../../public/scripts/sim.js#L385-L390)).
-   - Each paper gets the class `is-typeset` ([sim.js:348-350](../../public/scripts/sim.js#L348-L350)). The stylesheet hides
+     ([sim.js:435-441](../../public/scripts/sim.js#L435-L441)). Captions get inline mathematics only, and the root element gets
+     the class `tex-ready` ([sim.js:464-469](../../public/scripts/sim.js#L464-L469)).
+   - Each paper gets the class `is-typeset` ([sim.js:427-429](../../public/scripts/sim.js#L427-L429)). The stylesheet hides
      the paper body until then ([paper.css:24](../../public/styles/paper.css#L24)), so the reader never sees raw TeX. If
-     KaTeX has not arrived after 4 s the paper is shown anyway ([sim.js:351](../../public/scripts/sim.js#L351)).
-   - It then fires `typeset` on `document` ([sim.js:366](../../public/scripts/sim.js#L366)). `fold.js` listens for it to
+     KaTeX has not arrived after 4 s the paper is shown anyway ([sim.js:430](../../public/scripts/sim.js#L430)).
+   - It then fires `typeset` on `document` ([sim.js:445](../../public/scripts/sim.js#L445)). `fold.js` listens for it to
      re-aim a `#hash` link, because the page grew taller ([fold.js:402](../../public/scripts/fold.js#L402)).
    - Independently, an `IntersectionObserver` marks the contents-list link of the section being read with `is-here`. A
      section counts as "being read" while it crosses the band from 20 % to 30 % of the window height, the margins
-     `-20% 0px -70% 0px` ([sim.js:370-381](../../public/scripts/sim.js#L370-L381)).
+     `-20% 0px -70% 0px` ([sim.js:449-460](../../public/scripts/sim.js#L449-L460)).
 2. The walkthrough. If the page has `#walk`, `boot()` appends a script tag for `../scripts/walk/<data-walk>.js` and, once it
-   has loaded, calls `walkthrough(window.WALK[<key>])` ([sim.js:404-410](../../public/scripts/sim.js#L404-L410)). The engine is
+   has loaded, calls `walkthrough(window.WALK[<key>])` ([sim.js:483-489](../../public/scripts/sim.js#L483-L489)). The engine is
    described in [walk.md](walk.md); in short:
    - it writes the section's HTML: heading, intro, a "Hold the numbers" switch, a numbered step list and one card
-     ([sim.js:250-254](../../public/scripts/sim.js#L250-L254));
+     ([sim.js:327-331](../../public/scripts/sim.js#L327-L331));
    - `show(i)` fills the card with the step's title, place in the code, formula, note, code excerpt and a symbol table
-     whose "Now" column is empty at first ([sim.js:283-307](../../public/scripts/sim.js#L283-L307));
-   - `update()` fills the "Now" column from `Sim.live()` every 200 ms ([sim.js:318-326](../../public/scripts/sim.js#L318-L326));
-   - finally it hands the section to `Fold.walk` so it becomes a fold ([sim.js:328](../../public/scripts/sim.js#L328)).
+     whose "Now" column is empty at first ([sim.js:360-384](../../public/scripts/sim.js#L360-L384));
+   - `update()` fills the "Now" column from `Sim.live()` every 200 ms ([sim.js:395-403](../../public/scripts/sim.js#L395-L403));
+   - finally it hands the section to `Fold.walk` so it becomes a fold ([sim.js:407](../../public/scripts/sim.js#L407)).
 
 ## Public interface
 
@@ -144,10 +145,10 @@ The page's own script then runs and uses the helpers: it sizes its canvases, wir
 | `Sim.fmt` | [210-214](../../public/scripts/sim.js#L210-L214) | `v, digits` | String with fixed decimals and a typographic minus. |
 | `Sim.showError` | [217-229](../../public/scripts/sim.js#L217-L229) | `message` | Inserts `#sim-error` ("This simulation stopped. … Reload the page to try again.") at the top of `<main>`, once per page. |
 
-Which page uses which helper (occurrences of `Sim.<name>` counted with grep in the ten pages): every page uses `Sim.theme`,
+Which page uses which helper (occurrences of `Sim.<name>` counted with grep in the eleven pages, 29 October 2026): every page uses `Sim.theme`,
 `Sim.slider` and `Sim.clock`; every page except Fig. 3, which draws SVG, uses `Sim.canvas2d`, `Sim.onResize`,
-`Sim.playButton` and `Sim.fmt`; `Sim.tex` is used by Figs. 5, 6, 8, 9 and 10; `Sim.ticks`, `Sim.readPixel` and
-`Sim.isBurgundy` by Figs. 9 and 10 only; no page calls `Sim.showError` directly.
+`Sim.playButton` and `Sim.fmt`; `Sim.tex` is used by Figs. 5, 6, 8, 9, 10 and 11; `Sim.ticks`, `Sim.readPixel` and
+`Sim.isBurgundy` by Figs. 9, 10 and 11 only; no page calls `Sim.showError` directly.
 
 ## Internal functions
 
@@ -161,17 +162,17 @@ Which page uses which helper (occurrences of `Sim.<name>` counted with grep in t
 | `paint` (in `playButton`) | [200-203](../../public/scripts/sim.js#L200-L203) | Sets the label and `aria-pressed`. |
 | `esc` | [233](../../public/scripts/sim.js#L233) | Escapes `&`, `<`, `>`. |
 | `markup` | [236-244](../../public/scripts/sim.js#L236-L244) | Turns each `⟦key\|text⟧` into `<span class="k" data-k="key" tabindex="0">text</span>`; escapes the text in between when asked. |
-| `walkthrough` | [246-329](../../public/scripts/sim.js#L246-L329) | Builds and runs the "From symbols to code" section. |
-| `light` (in `walkthrough`) | [278-282](../../public/scripts/sim.js#L278-L282) | Toggles `is-lit` on every element of the card with the same `data-k`. |
-| `show` (in `walkthrough`) | [283-307](../../public/scripts/sim.js#L283-L307) | Renders step `i` and forces one update of the "Now" column. |
-| `read` (in `walkthrough`) | [314-316](../../public/scripts/sim.js#L314-L316) | Calls `Sim.live()`; returns `{}` if it is missing or throws. |
-| `update` (in `walkthrough`) | [318-325](../../public/scripts/sim.js#L318-L325) | Writes each `[data-v]` cell from the live (or held) values; a missing key shows `—`. |
-| `load` | [332-338](../../public/scripts/sim.js#L332-L338) | Appends a script to `<head>`; calls `done` on load or error. |
-| `typeset` | [339-382](../../public/scripts/sim.js#L339-L382) | KaTeX for papers and captions, skip link, contents highlighter. |
-| `show` (in `typeset`) | [348-350](../../public/scripts/sim.js#L348-L350) | Adds `is-typeset` to every paper. |
-| `renderCaps` | [385-390](../../public/scripts/sim.js#L385-L390) | Inline mathematics in captions; adds `tex-ready` to `<html>`. |
-| `mathIn` | [391-400](../../public/scripts/sim.js#L391-L400) | Captions only (no paper on the page); 4 s fallback for `tex-ready`. |
-| `boot` | [402-411](../../public/scripts/sim.js#L402-L411) | `typeset()` and the walkthrough loader. |
+| `walkthrough` | [323-408](../../public/scripts/sim.js#L323-L408) | Builds and runs the "From symbols to code" section. |
+| `light` (in `walkthrough`) | [355-359](../../public/scripts/sim.js#L355-L359) | Toggles `is-lit` on every element of the card with the same `data-k`. |
+| `show` (in `walkthrough`) | [360-384](../../public/scripts/sim.js#L360-L384) | Renders step `i` and forces one update of the "Now" column. |
+| `read` (in `walkthrough`) | [391-393](../../public/scripts/sim.js#L391-L393) | Calls `Sim.live()`; returns `{}` if it is missing or throws. |
+| `update` (in `walkthrough`) | [395-402](../../public/scripts/sim.js#L395-L402) | Writes each `[data-v]` cell from the live (or held) values; a missing key shows `—`. |
+| `load` | [411-417](../../public/scripts/sim.js#L411-L417) | Appends a script to `<head>`; calls `done` on load or error. |
+| `typeset` | [418-461](../../public/scripts/sim.js#L418-L461) | KaTeX for papers and captions, skip link, contents highlighter. |
+| `show` (in `typeset`) | [427-429](../../public/scripts/sim.js#L427-L429) | Adds `is-typeset` to every paper. |
+| `renderCaps` | [464-469](../../public/scripts/sim.js#L464-L469) | Inline mathematics in captions; adds `tex-ready` to `<html>`. |
+| `mathIn` | [470-479](../../public/scripts/sim.js#L470-L479) | Captions only (no paper on the page); 4 s fallback for `tex-ready`. |
+| `boot` | [481-490](../../public/scripts/sim.js#L481-L490) | `typeset()` and the walkthrough loader. |
 
 ## State it keeps
 
@@ -180,8 +181,8 @@ Which page uses which helper (occurrences of `Sim.<name>` counted with grep in t
   ([sim.js:238](../../public/scripts/sim.js#L238)).
 - Per clock: `playing`, `last` (last frame time stamp), `t` (accumulated play time in s), `listeners`
   ([sim.js:177](../../public/scripts/sim.js#L177)).
-- Per walkthrough: `cur` (current step), `held`, `snap` (the frozen values) ([sim.js:249](../../public/scripts/sim.js#L249),
-  [sim.js:256](../../public/scripts/sim.js#L256)).
+- Per walkthrough: `cur` (current step), `held`, `snap` (the frozen values) ([sim.js:326](../../public/scripts/sim.js#L326),
+  [sim.js:333](../../public/scripts/sim.js#L333)).
 - No `localStorage` or `sessionStorage`.
 - DOM it writes: the canvas bitmap size; `style="--p: …"` on sliders; button text and `aria-pressed`; `#sim-error`;
   `a.skip-link` at the top of `<body>`; class `is-typeset` on `.paper`; class `tex-ready` on `<html>`; class `is-here` on
@@ -195,27 +196,27 @@ Which page uses which helper (occurrences of `Sim.<name>` counted with grep in t
 |---|---|---|
 | Each `Sim.clock` | one `requestAnimationFrame` loop, every display frame, forever; `dt ≤ 0.05 s` | [sim.js:178-186](../../public/scripts/sim.js#L178-L186) |
 | `Sim.onResize` | 80 ms after the last size change | [sim.js:145](../../public/scripts/sim.js#L145) |
-| Walkthrough "Now" column | every 200 ms (5 rewrites per second), for the life of the page | [sim.js:326](../../public/scripts/sim.js#L326) |
-| Paper shown without KaTeX | after 4000 ms | [sim.js:351](../../public/scripts/sim.js#L351), [sim.js:392](../../public/scripts/sim.js#L392) |
-| `typeset` event | once, after both KaTeX scripts have loaded or failed | [sim.js:366](../../public/scripts/sim.js#L366) |
+| Walkthrough "Now" column | every 200 ms (5 rewrites per second), for the life of the page | [sim.js:403](../../public/scripts/sim.js#L403) |
+| Paper shown without KaTeX | after 4000 ms | [sim.js:430](../../public/scripts/sim.js#L430), [sim.js:471](../../public/scripts/sim.js#L471) |
+| `typeset` event | once, after both KaTeX scripts have loaded or failed | [sim.js:445](../../public/scripts/sim.js#L445) |
 
 Listeners: `window` `error` ([sim.js:230](../../public/scripts/sim.js#L230)); `DOMContentLoaded`
-([sim.js:412](../../public/scripts/sim.js#L412)); `input` on each slider ([sim.js:162](../../public/scripts/sim.js#L162));
+([sim.js:491](../../public/scripts/sim.js#L491)); `input` on each slider ([sim.js:162](../../public/scripts/sim.js#L162));
 `click` on play buttons ([sim.js:204](../../public/scripts/sim.js#L204)); in the walkthrough: `change` on Hold
-([sim.js:257](../../public/scripts/sim.js#L257)), `click` and `keydown` on each step button (arrow keys, Home, End;
-[sim.js:265-274](../../public/scripts/sim.js#L265-L274)), `mouseover`/`focusin` and `mouseout`/`focusout` on the card
-([sim.js:308-313](../../public/scripts/sim.js#L308-L313)), `click` on Previous and Next
-([sim.js:303-305](../../public/scripts/sim.js#L303-L305)).
+([sim.js:334](../../public/scripts/sim.js#L334)), `click` and `keydown` on each step button (arrow keys, Home, End;
+[sim.js:342-351](../../public/scripts/sim.js#L342-L351)), `mouseover`/`focusin` and `mouseout`/`focusout` on the card
+([sim.js:385-390](../../public/scripts/sim.js#L385-L390)), `click` on Previous and Next
+([sim.js:380-382](../../public/scripts/sim.js#L380-L382)).
 
 ## Contracts with other files
 
 - **Simulation pages** provide `<section class="walk" id="walk" data-walk="<key>">`, an `article.paper` with `\( \)` and
   `\[ \]`, captions `.stage__cap`, and a function `Sim.live()` that returns an object of display strings keyed by the
-  walkthrough's symbol keys (for example [Double Pendulum.html:684](../../public/simulations/Double%20Pendulum.html#L684)).
+  walkthrough's symbol keys (for example [Double Pendulum.html:746](../../public/simulations/Double%20Pendulum.html#L746)).
   See [walk.md](walk.md).
 - **`walk/<key>.js`** must define `window.WALK[<key>]` ([walk.md](walk.md)).
 - **`fold.js`** must load before `sim.js` so that `window.Fold` exists when the walkthrough calls `Fold.walk`
-  ([sim.js:328](../../public/scripts/sim.js#L328), [fold.js:342](../../public/scripts/fold.js#L342)); it listens for
+  ([sim.js:407](../../public/scripts/sim.js#L407), [fold.js:342](../../public/scripts/fold.js#L342)); it listens for
   `typeset` ([fold.js:402](../../public/scripts/fold.js#L402)). See [fold.md](fold.md).
 - **`dataset.js`** adds `Sim.dataset` and **`datalog.js`** adds `Sim.colourMap` to the object made here
   ([dataset.js:17](../../public/scripts/dataset.js#L17), [datalog.js:103](../../public/scripts/datalog.js#L103)); both must
@@ -232,40 +233,54 @@ Listeners: `window` `error` ([sim.js:230](../../public/scripts/sim.js#L230)); `D
 
 ## How to change it safely
 
-- Keep the load order `fold.js` → `sim.js` → `dataset.js` → page script → `datalog.js`. [Line 415](../../public/scripts/sim.js#L415) creates `Sim` afresh, so
+- Keep the load order `fold.js` → `sim.js` → `dataset.js` → page script → `datalog.js`. [Line 494](../../public/scripts/sim.js#L494) creates `Sim` afresh, so
   anything attached to `Sim` before it is lost.
-- Adding a helper: define it inside the IIFE and add it to the object at [lines 415-428](../../public/scripts/sim.js#L415-L428). Removing or renaming one: grep the
-  ten pages first (the counts above).
-- `readPixel` must keep refusing transparent pixels ([line 130](../../public/scripts/sim.js#L130)); the Check of Figs. 9 and 10 relies on it to tell "drawn" from
+- Adding a helper: define it inside the IIFE and add it to the object at [lines 494-507](../../public/scripts/sim.js#L494-L507). Removing or renaming one: grep the
+  eleven pages first (the counts above).
+- `readPixel` must keep refusing transparent pixels ([line 130](../../public/scripts/sim.js#L130)); the Check of Figs. 9, 10 and 11 relies on it to tell "drawn" from
   "not drawn".
 - `tex()` understands only `_{…}`, `^{…}` and `\mathrm{…}` without nested braces. A label with nesting needs a parser
   change, not a different string.
-- The walkthrough HTML ([lines 250-302](../../public/scripts/sim.js#L250-L302)) is styled by `sim.css`; class names are a contract with the stylesheet. The step and
+- The walkthrough HTML ([lines 327-377](../../public/scripts/sim.js#L327-L377)) is styled by `sim.css`; class names are a contract with the stylesheet. The step and
   symbol fields are inserted as HTML except `where`, the code excerpt `code` (escaped around its marks by `markup(st.code, true)`)
-  and the code column of `syms`, which are escaped ([sim.js:290](../../public/scripts/sim.js#L290),
-  [sim.js:295](../../public/scripts/sim.js#L295), [sim.js:298](../../public/scripts/sim.js#L298)).
-- After a change, open all ten pages and check: no banner, the lecture note typeset, every "Now" cell filled (a missing key
-  shows `—`), the walkthrough folds. A headless check of all ten pages (Chromium, 1.5 s after load) found no page errors
+  and the code column of `syms`, which are escaped ([sim.js:367](../../public/scripts/sim.js#L367),
+  [sim.js:372](../../public/scripts/sim.js#L372), [sim.js:375](../../public/scripts/sim.js#L375)).
+- After a change, open all eleven pages and check: no banner, the lecture note typeset, every "Now" cell filled (a missing key
+  shows `—`), the walkthrough folds. A headless check of all ten pages of the time (before Fig. 11; Chromium, 1.5 s after load) found no page errors
   and a `Sim.live()` value for every symbol key of every walkthrough.
 
 ## Notes for maintainers
 
 1. Fixed on 2026-10-15: the unused derivation-card builder, boot call and unused selectors were removed; active equation and walkthrough styles remain (commit [8982ed3](https://github.com/Numa1997/SiteTest/commit/8982ed35e78161ea7cdd82ae1794f44ccfe39f3c)).
 2. Fixed on 2026-10-15: the unused isInk helper and export were removed (commit [8982ed3](https://github.com/Numa1997/SiteTest/commit/8982ed35e78161ea7cdd82ae1794f44ccfe39f3c)).
-3. The walkthrough file is loaded from the relative path `'../scripts/walk/'` ([sim.js:408](../../public/scripts/sim.js#L408)),
-   while KaTeX uses `ROOT` ([sim.js:352](../../public/scripts/sim.js#L352)). A page that is not exactly one folder below
+3. On an English page the walkthrough file is loaded from the relative path `'../scripts/walk/'` ([sim.js:487](../../public/scripts/sim.js#L487)),
+   while KaTeX and the translated walkthroughs use `ROOT` ([sim.js:431](../../public/scripts/sim.js#L431)). A page that is not exactly one folder below
    `public/` would fail to load its walkthrough.
 4. The header comment ([sim.js:1-2](../../public/scripts/sim.js#L1-L2)) lists only the helpers, not the typesetting and the
    walkthrough engine that make up half the file.
 5. `playButton` sets `aria-pressed="true"` while the clock is paused and the label reads "Play"
-   ([sim.js:201-202](../../public/scripts/sim.js#L201-L202)), so a screen reader announces "Play, pressed" while nothing
+   ([sim.js:202-202](../../public/scripts/sim.js#L202-L202)), so a screen reader announces "Play, pressed" while nothing
    plays. Whether this is intended is not determined from the code.
 6. The `error` listener ([sim.js:230](../../public/scripts/sim.js#L230)) reacts to any uncaught error on the page, also one
    thrown by `datalog.js` or a walkthrough file, and always says "This simulation stopped", even if the animation goes on.
-7. The "Now" column is rewritten every 200 ms ([sim.js:326](../../public/scripts/sim.js#L326)), 5 times a second, and the
+7. The "Now" column is rewritten every 200 ms ([sim.js:403](../../public/scripts/sim.js#L403)), 5 times a second, and the
    interval keeps running while the walkthrough is folded away. CLAUDE.md asks for "about 4 per second" for readouts of a
    running figure; this column sits outside the figure, so the rule may not apply.
 
 ## The Algebra column is typeset (21 October 2026)
 
 `algebra(math)` in `sim.js` splits a step's `math` field at each `<br>`, translates each line from the light HTML it is written in (`<sub>`, `<sup>`, Unicode symbols, upright `<span style="font-style: normal">` words) to TeX with `htmlToTex()`, and typesets it with KaTeX, the same mathematics as the lecture note. A mark `⟦key|…⟧` becomes `\htmlClass{k}{\htmlData{k=key}{…}}`, so hovering still lights the formula, the code and the table together. A line KaTeX cannot read stays as written. The walkthrough is drawn again when KaTeX has loaded (the `typeset` event). Checked on all ten pages: 270 of 270 lines typeset, no sideways scroll at 390 px.
+
+## The page's words in other languages: `_t()` and `T()` (since 23 October 2026)
+
+The first statement of the file ([sim.js:4](../../public/scripts/sim.js#L4)) defines one translator under two names,
+`window._t` and `window.T`, unless a page already has a `T`. `_t('Play')` looks the English string up in `window.I18N`, the
+table that `scripts/i18n/strings-<lang>.js` sets on a German or Arabic page, and returns the English unchanged when there is no
+table (every English page) or no entry. `{name}` placeholders are filled from the second argument, and an entry that is an
+object of plural forms is chosen with `Intl.PluralRules` for the page's language when the call passes `n`
+(`_t('{n} sources', { n: n })`). The pages pass every word they write for the reader through `_t()`; how the tables are made
+and checked is in [i18n.md](../i18n.md).
+
+On a translated page `boot()` also loads the walkthrough in the page's language: when `window.I18N_WALK` is set, the file is
+`scripts/walk/<lang>/<key>.js` instead of `../scripts/walk/<key>.js` ([sim.js:487](../../public/scripts/sim.js#L487)).
+

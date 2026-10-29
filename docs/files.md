@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-896 files, 57.9 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+890 files, 57.5 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -22,7 +22,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [IBM Plex, Instrument Serif, and the Arabic faces](#ibm-plex-instrument-serif-and-the-arabic-faces) | 61 |
 | [Thumbnails](#thumbnails) | 11 |
 | [Logo](#logo) | 1 |
-| [Project copy: Droplet Collection](#project-copy-droplet-collection) | 11 |
+| [Project copy: Droplet Collection](#project-copy-droplet-collection) | 5 |
 | [Project copy: Rotor Pendula](#project-copy-rotor-pendula) | 2 |
 | [Project copy: Hydraulic Press Study](#project-copy-hydraulic-press-study) | 8 |
 | [Iron, Cotton and the Head](#iron-cotton-and-the-head) | 7 |
@@ -45,16 +45,16 @@ to confirm that every file is described. Sizes are those of the files when the l
 | File | Size | What it is | Explained in |
 |---|---|---|---|
 | [`.gitignore`](../.gitignore) | 39 B | Files git leaves out: Python caches, node_modules, build output. | [files.md](files.md) |
-| [`AGENTS.md`](../AGENTS.md) | 13.6 kB | The maintainer's summary: ownership, layout, design rules, folds, the data pipeline, platform quirks. | [build-and-deploy.md](build-and-deploy.md) |
-| [`CLAUDE.md`](../CLAUDE.md) | 4.8 kB | How Numa expects an AI assistant to work on the project. | [build-and-deploy.md](build-and-deploy.md) |
-| [`README.md`](../README.md) | 7.9 kB | Start here: what the project is, how the files fit together, where each one is explained. | [README.md](../README.md) |
+| [`AGENTS.md`](../AGENTS.md) | 14.8 kB | The maintainer's summary: ownership, layout, design rules, folds, the data pipeline, platform quirks. | [build-and-deploy.md](build-and-deploy.md) |
+| [`CLAUDE.md`](../CLAUDE.md) | 5.4 kB | How Numa expects an AI assistant to work on the project. | [build-and-deploy.md](build-and-deploy.md) |
+| [`README.md`](../README.md) | 9.0 kB | Start here: what the project is, how the files fit together, where each one is explained. | [README.md](../README.md) |
 | [`index.html`](../index.html) | 52.2 kB | The home page: CV, research, simulation plates, index; also the build entry page. | [pages.md](pages.md) |
 | [`package.json`](../package.json) | 479 B | Build declaration: vite build; template dependencies. | [build-and-deploy.md](build-and-deploy.md) |
 | [`postcss.config.js`](../postcss.config.js) | 81 B | PostCSS settings (template; unused by the site). | [build-and-deploy.md](build-and-deploy.md) |
 | [`tailwind.config.js`](../tailwind.config.js) | 155 B | Tailwind settings (template; unused by the site). | [build-and-deploy.md](build-and-deploy.md) |
 | [`tsconfig.json`](../tsconfig.json) | 485 B | TypeScript settings for src/ (template; unused by the site). | [build-and-deploy.md](build-and-deploy.md) |
 | [`vite.config.ts`](../vite.config.ts) | 310 B | Vite settings: relative base, output folder from the platform. | [build-and-deploy.md](build-and-deploy.md) |
-| [`wrangler.jsonc`](../wrangler.jsonc) | 486 B | Cloudflare settings: the Worker phyein-usul, the dist/ folder, the custom domains phyeinusul.com and www. | [usul.md](usul.md) |
+| [`wrangler.jsonc`](../wrangler.jsonc) | 611 B | Cloudflare settings: the Worker phyein-usul, the dist/ folder, the custom domains phyeinusul.com and www. | [usul.md](usul.md) |
 
 ## Pages under public/
 
@@ -131,7 +131,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/scripts/walk/ar/pendulum.js`](../public/scripts/walk/ar/pendulum.js) | 38.0 kB | Arabic walkthrough pendulum, generated from the English one; do not edit. | [i18n.md](i18n.md) |
 | [`public/scripts/walk/ar/phasors.js`](../public/scripts/walk/ar/phasors.js) | 41.9 kB | Arabic walkthrough phasors, generated from the English one; do not edit. | [i18n.md](i18n.md) |
 | [`public/scripts/walk/ar/slit.js`](../public/scripts/walk/ar/slit.js) | 29.8 kB | Arabic walkthrough slit, generated from the English one; do not edit. | [i18n.md](i18n.md) |
-| [`public/scripts/walk/ar/tl.js`](../public/scripts/walk/ar/tl.js) | 32.2 kB | Arabic walkthrough tl, generated from the English one; do not edit. | [i18n.md](i18n.md) |
+| [`public/scripts/walk/ar/tl.js`](../public/scripts/walk/ar/tl.js) | 32.3 kB | Arabic walkthrough tl, generated from the English one; do not edit. | [i18n.md](i18n.md) |
 | [`public/scripts/walk/ar/turbine.js`](../public/scripts/walk/ar/turbine.js) | 42.7 kB | Arabic walkthrough turbine, generated from the English one; do not edit. | [i18n.md](i18n.md) |
 | [`public/scripts/walk/ar/water.js`](../public/scripts/walk/ar/water.js) | 28.6 kB | Arabic walkthrough water, generated from the English one; do not edit. | [i18n.md](i18n.md) |
 | [`public/scripts/walk/bench.js`](../public/scripts/walk/bench.js) | 31.9 kB | "From symbols to code" for Fig. 6 · Wave Interference Simulator. | [walk.md](scripts/walk.md) |
@@ -143,7 +143,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/scripts/walk/de/pendcontrol.js`](../public/scripts/walk/de/pendcontrol.js) | 15.6 kB | German walkthrough pendcontrol, generated from the English one; do not edit. | [i18n.md](i18n.md) |
 | [`public/scripts/walk/de/pendulum.js`](../public/scripts/walk/de/pendulum.js) | 32.1 kB | German walkthrough pendulum, generated from the English one; do not edit. | [i18n.md](i18n.md) |
 | [`public/scripts/walk/de/phasors.js`](../public/scripts/walk/de/phasors.js) | 35.6 kB | German walkthrough phasors, generated from the English one; do not edit. | [i18n.md](i18n.md) |
-| [`public/scripts/walk/de/slit.js`](../public/scripts/walk/de/slit.js) | 24.8 kB | German walkthrough slit, generated from the English one; do not edit. | [i18n.md](i18n.md) |
+| [`public/scripts/walk/de/slit.js`](../public/scripts/walk/de/slit.js) | 24.9 kB | German walkthrough slit, generated from the English one; do not edit. | [i18n.md](i18n.md) |
 | [`public/scripts/walk/de/tl.js`](../public/scripts/walk/de/tl.js) | 27.9 kB | German walkthrough tl, generated from the English one; do not edit. | [i18n.md](i18n.md) |
 | [`public/scripts/walk/de/turbine.js`](../public/scripts/walk/de/turbine.js) | 36.4 kB | German walkthrough turbine, generated from the English one; do not edit. | [i18n.md](i18n.md) |
 | [`public/scripts/walk/de/water.js`](../public/scripts/walk/de/water.js) | 24.5 kB | German walkthrough water, generated from the English one; do not edit. | [i18n.md](i18n.md) |
@@ -351,16 +351,10 @@ to confirm that every file is described. Sizes are those of the files when the l
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
-| [`public/portfolios/droplet-collection/fig/c1_ice.svg`](../public/portfolios/droplet-collection/fig/c1_ice.svg) | 86.8 kB | A vector figure of the project. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/fig/ecoll_map.svg`](../public/portfolios/droplet-collection/fig/ecoll_map.svg) | 75.7 kB | A vector figure of the project. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/fig/fallspeed_gk.svg`](../public/portfolios/droplet-collection/fig/fallspeed_gk.svg) | 57.1 kB | A vector figure of the project. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/fig/golovin.svg`](../public/portfolios/droplet-collection/fig/golovin.svg) | 56.2 kB | A vector figure of the project. | [portfolios.md](portfolios.md) |
 | [`public/portfolios/droplet-collection/fig/plate-efficiency.svg`](../public/portfolios/droplet-collection/fig/plate-efficiency.svg) | 8.9 kB | Plate of the Portfolios page article (efficiency), written by the Droplet Collection build. | [portfolios.md](portfolios.md) |
 | [`public/portfolios/droplet-collection/fig/plate-fallspeed.svg`](../public/portfolios/droplet-collection/fig/plate-fallspeed.svg) | 9.4 kB | Plate of the Portfolios page article (fallspeed), written by the Droplet Collection build. | [portfolios.md](portfolios.md) |
 | [`public/portfolios/droplet-collection/fig/plate-first.svg`](../public/portfolios/droplet-collection/fig/plate-first.svg) | 40.9 kB | Plate of the Portfolios page article (first), written by the Droplet Collection build. | [portfolios.md](portfolios.md) |
 | [`public/portfolios/droplet-collection/fig/plate-warm.svg`](../public/portfolios/droplet-collection/fig/plate-warm.svg) | 24.3 kB | Plate of the Portfolios page article (warm), written by the Droplet Collection build. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/fig/w2_rain.svg`](../public/portfolios/droplet-collection/fig/w2_rain.svg) | 45.0 kB | A vector figure of the project. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/fig/w2_spectra.svg`](../public/portfolios/droplet-collection/fig/w2_spectra.svg) | 74.0 kB | A vector figure of the project. | [portfolios.md](portfolios.md) |
 | [`public/portfolios/droplet-collection/index.html`](../public/portfolios/droplet-collection/index.html) | 1.88 MB | Entry page of the project copy: module script and stylesheet loader. | [portfolios.md](portfolios.md) |
 
 ## Project copy: Rotor Pendula
@@ -400,7 +394,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | File | Size | What it is | Explained in |
 |---|---|---|---|
 | [`portfolios-src/hydraulics/.gitignore`](../portfolios-src/hydraulics/.gitignore) | 148 B | Keeps the files the checks and the standalone build write out of git. | [README.md](../portfolios-src/hydraulics/README.md) |
-| [`portfolios-src/hydraulics/README.md`](../portfolios-src/hydraulics/README.md) | 5.8 kB | The study's source: what it is, how the served page is generated, the four checks. | [README.md](../portfolios-src/hydraulics/README.md) |
+| [`portfolios-src/hydraulics/README.md`](../portfolios-src/hydraulics/README.md) | 5.9 kB | The study's source: what it is, how the served page is generated, the four checks. | [README.md](../portfolios-src/hydraulics/README.md) |
 | [`portfolios-src/hydraulics/check_control.py`](../portfolios-src/hydraulics/check_control.py) | 17.2 kB | Checks the servo press's physics and loop analysis against an independent SciPy/SymPy model. | [README.md](../portfolios-src/hydraulics/README.md) |
 | [`portfolios-src/hydraulics/check_physics.py`](../portfolios-src/hydraulics/check_physics.py) | 12.6 kB | Checks the ideal press's physics against an independent Python model. | [README.md](../portfolios-src/hydraulics/README.md) |
 | [`portfolios-src/hydraulics/dump_control.js`](../portfolios-src/hydraulics/dump_control.js) | 2.2 kB | Runs the servo press page's physics block in Node for its check script. | [README.md](../portfolios-src/hydraulics/README.md) |
@@ -441,7 +435,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
-| [`portfolios-src/rotor-pendula/README.md`](../portfolios-src/rotor-pendula/README.md) | 8.3 kB | The study's source: what it is, how the served page is generated, the checks. | [README.md](../portfolios-src/rotor-pendula/README.md) |
+| [`portfolios-src/rotor-pendula/README.md`](../portfolios-src/rotor-pendula/README.md) | 8.4 kB | The study's source: what it is, how the served page is generated, the checks. | [README.md](../portfolios-src/rotor-pendula/README.md) |
 | [`portfolios-src/rotor-pendula/check_physics.py`](../portfolios-src/rotor-pendula/check_physics.py) | 7.8 kB | Independent checks: SymPy derivations and SciPy re-integration with retyped constants. | [README.md](../portfolios-src/rotor-pendula/README.md) |
 
 <details><summary>27 files: Model output copied from notes/rotor-pendula/derive/, read by the number script or the simulation build.</summary>
@@ -531,7 +525,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | File | Size | What it is | Explained in |
 |---|---|---|---|
 | [`portfolios-src/impact/.gitignore`](../portfolios-src/impact/.gitignore) | 11 B | Keeps the stand-alone build (out/) and screenshots out of git. | [README.md](../portfolios-src/impact/README.md) |
-| [`portfolios-src/impact/README.md`](../portfolios-src/impact/README.md) | 3.0 kB | The study's source: every file, how the two pages are generated, the checks. | [README.md](../portfolios-src/impact/README.md) |
+| [`portfolios-src/impact/README.md`](../portfolios-src/impact/README.md) | 3.1 kB | The study's source: every file, how the two pages are generated, the checks. | [README.md](../portfolios-src/impact/README.md) |
 | [`portfolios-src/impact/build.py`](../portfolios-src/impact/build.py) | 8.1 kB | Generates public/portfolios/impact/index.html, de.html and ar.html (--site), or stand-alone pages in out/. | [README.md](../portfolios-src/impact/README.md) |
 | [`portfolios-src/impact/checks/data_panel.cjs`](../portfolios-src/impact/checks/data_panel.cjs) | 10.1 kB | Check script data_panel (see the README). | [README.md](../portfolios-src/impact/README.md) |
 | [`portfolios-src/impact/checks/energy_books.cjs`](../portfolios-src/impact/checks/energy_books.cjs) | 1.1 kB | Check script energy_books (see the README). | [README.md](../portfolios-src/impact/README.md) |
@@ -668,24 +662,24 @@ to confirm that every file is described. Sizes are those of the files when the l
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
-| [`docs/appdeploy-app.md`](appdeploy-app.md) | 2.5 kB | Documentation: The AppDeploy app · numa-koudsie-website-0cyj78. | [appdeploy-app.md](appdeploy-app.md) |
-| [`docs/architecture.md`](architecture.md) | 7.9 kB | Documentation: How the site fits together. | [architecture.md](architecture.md) |
-| [`docs/assets.md`](assets.md) | 10.8 kB | Documentation: Fonts, maths and pictures: `public/vendor/`, `public/fonts/`, `public/images/`. | [assets.md](assets.md) |
-| [`docs/build-and-deploy.md`](build-and-deploy.md) | 19.0 kB | Documentation: Build files, tests and deployment. | [build-and-deploy.md](build-and-deploy.md) |
+| [`docs/appdeploy-app.md`](appdeploy-app.md) | 3.3 kB | Documentation: The AppDeploy app · numa-koudsie-website-0cyj78. | [appdeploy-app.md](appdeploy-app.md) |
+| [`docs/architecture.md`](architecture.md) | 8.4 kB | Documentation: How the site fits together. | [architecture.md](architecture.md) |
+| [`docs/assets.md`](assets.md) | 11.0 kB | Documentation: Fonts, maths and pictures: `public/vendor/`, `public/fonts/`, `public/images/`. | [assets.md](assets.md) |
+| [`docs/build-and-deploy.md`](build-and-deploy.md) | 20.7 kB | Documentation: Build files, tests and deployment. | [build-and-deploy.md](build-and-deploy.md) |
 | [`docs/files.md`](files.md) | this file | This list. Written by tools/inventory.py; do not edit by hand. | [files.md](files.md) |
 | [`docs/glossary.md`](glossary.md) | 8.5 kB | Documentation: Glossary: English, German, Arabic. | [glossary.md](glossary.md) |
-| [`docs/i18n.md`](i18n.md) | 16.4 kB | Documentation: The site in German and Arabic: `tools/i18n/`, `i18n/`, `public/de/`, `public/ar/`. | [i18n.md](i18n.md) |
-| [`docs/minor-issues-report.md`](minor-issues-report.md) | 19.9 kB | Documentation: Minor issues · final verification report. | [minor-issues-report.md](minor-issues-report.md) |
-| [`docs/notes.md`](notes.md) | 3.7 kB | Documentation: The lecture-note review: `notes/` and `.claude/agents/`. | [notes.md](notes.md) |
-| [`docs/pages.md`](pages.md) | 52.7 kB | Documentation: The site's own pages: home, simulations catalog, Portfolios, robots.txt. | [pages.md](pages.md) |
-| [`docs/portfolios.md`](portfolios.md) | 63.6 kB | Documentation: The four research projects: `public/portfolios/`. | [portfolios.md](portfolios.md) |
-| [`docs/research-theory-audit.md`](research-theory-audit.md) | 29.1 kB | Documentation: Readability audit: Droplet Collection and Rotor Pendula. | [research-theory-audit.md](research-theory-audit.md) |
-| [`docs/scripts/catalog.md`](scripts/catalog.md) | 15.1 kB | Documentation: public/scripts/catalog.js. | [catalog.md](scripts/catalog.md) |
-| [`docs/scripts/datalog.md`](scripts/datalog.md) | 64.8 kB | Documentation: public/scripts/datalog.js. | [datalog.md](scripts/datalog.md) |
-| [`docs/scripts/dataset.md`](scripts/dataset.md) | 17.7 kB | Documentation: public/scripts/dataset.js. | [dataset.md](scripts/dataset.md) |
+| [`docs/i18n.md`](i18n.md) | 16.5 kB | Documentation: The site in German and Arabic: `tools/i18n/`, `i18n/`, `public/de/`, `public/ar/`. | [i18n.md](i18n.md) |
+| [`docs/minor-issues-report.md`](minor-issues-report.md) | 20.3 kB | Documentation: Minor issues · final verification report. | [minor-issues-report.md](minor-issues-report.md) |
+| [`docs/notes.md`](notes.md) | 5.1 kB | Documentation: The lecture-note review: `notes/` and `.claude/agents/`. | [notes.md](notes.md) |
+| [`docs/pages.md`](pages.md) | 53.2 kB | Documentation: The site's own pages: home, simulations catalog, Portfolios, robots.txt. | [pages.md](pages.md) |
+| [`docs/portfolios.md`](portfolios.md) | 63.8 kB | Documentation: The four research projects: `public/portfolios/`. | [portfolios.md](portfolios.md) |
+| [`docs/research-theory-audit.md`](research-theory-audit.md) | 29.8 kB | Documentation: Readability audit: Droplet Collection and Rotor Pendula. | [research-theory-audit.md](research-theory-audit.md) |
+| [`docs/scripts/catalog.md`](scripts/catalog.md) | 15.4 kB | Documentation: public/scripts/catalog.js. | [catalog.md](scripts/catalog.md) |
+| [`docs/scripts/datalog.md`](scripts/datalog.md) | 65.2 kB | Documentation: public/scripts/datalog.js. | [datalog.md](scripts/datalog.md) |
+| [`docs/scripts/dataset.md`](scripts/dataset.md) | 18.1 kB | Documentation: public/scripts/dataset.js. | [dataset.md](scripts/dataset.md) |
 | [`docs/scripts/fold.md`](scripts/fold.md) | 22.6 kB | Documentation: public/scripts/fold.js. | [fold.md](scripts/fold.md) |
-| [`docs/scripts/sim.md`](scripts/sim.md) | 27.0 kB | Documentation: public/scripts/sim.js. | [sim.md](scripts/sim.md) |
-| [`docs/scripts/walk.md`](scripts/walk.md) | 20.7 kB | Documentation: public/scripts/walk/*.js. | [walk.md](scripts/walk.md) |
+| [`docs/scripts/sim.md`](scripts/sim.md) | 28.6 kB | Documentation: public/scripts/sim.js. | [sim.md](scripts/sim.md) |
+| [`docs/scripts/walk.md`](scripts/walk.md) | 26.4 kB | Documentation: public/scripts/walk/*.js. | [walk.md](scripts/walk.md) |
 | [`docs/simulations/fig01-wave-sources.md`](simulations/fig01-wave-sources.md) | 50.0 kB | Documentation: Fig. 1 · Wave Interference. | [fig01-wave-sources.md](simulations/fig01-wave-sources.md) |
 | [`docs/simulations/fig02-double-pendulum.md`](simulations/fig02-double-pendulum.md) | 49.7 kB | Documentation: Fig. 2 · Double Pendulum. | [fig02-double-pendulum.md](simulations/fig02-double-pendulum.md) |
 | [`docs/simulations/fig03-double-slit.md`](simulations/fig03-double-slit.md) | 44.3 kB | Documentation: Fig. 3 · Double-Slit Interference. | [fig03-double-slit.md](simulations/fig03-double-slit.md) |
@@ -693,12 +687,12 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`docs/simulations/fig05-water-wave.md`](simulations/fig05-water-wave.md) | 35.8 kB | Documentation: Fig. 5 · Circular Water Waves. | [fig05-water-wave.md](simulations/fig05-water-wave.md) |
 | [`docs/simulations/fig06-wave-bench.md`](simulations/fig06-wave-bench.md) | 42.8 kB | Documentation: Fig. 6 · Wave Interference Simulator. | [fig06-wave-bench.md](simulations/fig06-wave-bench.md) |
 | [`docs/simulations/fig07-phasor-sums.md`](simulations/fig07-phasor-sums.md) | 41.7 kB | Documentation: Fig. 7 · Phasor Sums. | [fig07-phasor-sums.md](simulations/fig07-phasor-sums.md) |
-| [`docs/simulations/fig08-draw-decompose.md`](simulations/fig08-draw-decompose.md) | 34.8 kB | Documentation: Fig. 8 · Draw & Decompose. | [fig08-draw-decompose.md](simulations/fig08-draw-decompose.md) |
-| [`docs/simulations/fig09-driven-oscillator.md`](simulations/fig09-driven-oscillator.md) | 56.9 kB | Documentation: Fig. 9 · Driven Oscillator. | [fig09-driven-oscillator.md](simulations/fig09-driven-oscillator.md) |
-| [`docs/simulations/fig10-wind-turbine.md`](simulations/fig10-wind-turbine.md) | 52.5 kB | Documentation: Fig. 10 · Wind Turbine Control. | [fig10-wind-turbine.md](simulations/fig10-wind-turbine.md) |
+| [`docs/simulations/fig08-draw-decompose.md`](simulations/fig08-draw-decompose.md) | 34.9 kB | Documentation: Fig. 8 · Draw & Decompose. | [fig08-draw-decompose.md](simulations/fig08-draw-decompose.md) |
+| [`docs/simulations/fig09-driven-oscillator.md`](simulations/fig09-driven-oscillator.md) | 57.1 kB | Documentation: Fig. 9 · Driven Oscillator. | [fig09-driven-oscillator.md](simulations/fig09-driven-oscillator.md) |
+| [`docs/simulations/fig10-wind-turbine.md`](simulations/fig10-wind-turbine.md) | 52.6 kB | Documentation: Fig. 10 · Wind Turbine Control. | [fig10-wind-turbine.md](simulations/fig10-wind-turbine.md) |
 | [`docs/simulations/fig11-pendulum-control.md`](simulations/fig11-pendulum-control.md) | 19.1 kB | Documentation: Fig. 11 · Double Pendulum under Control. | [fig11-pendulum-control.md](simulations/fig11-pendulum-control.md) |
-| [`docs/styles.md`](styles.md) | 46.4 kB | Documentation: Stylesheets: `public/styles/`. | [styles.md](styles.md) |
-| [`docs/usul.md`](usul.md) | 6.2 kB | Documentation: Phyein Usul · the website at phyeinusul.com. | [usul.md](usul.md) |
+| [`docs/styles.md`](styles.md) | 47.1 kB | Documentation: Stylesheets: `public/styles/`. | [styles.md](styles.md) |
+| [`docs/usul.md`](usul.md) | 8.6 kB | Documentation: Phyein Usul · the website at phyeinusul.com. | [usul.md](usul.md) |
 
 ## Tools
 
@@ -772,7 +766,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | File | Size | What it is | Explained in |
 |---|---|---|---|
 | [`.claude/agents/derivation-checker.md`](../.claude/agents/derivation-checker.md) | 863 B | Claude Code agent definition: derivation-checker, one role of the lecture-note review. | [notes.md](notes.md) |
-| [`.claude/agents/physics-teacher.md`](../.claude/agents/physics-teacher.md) | 1.5 kB | Claude Code agent definition: physics-teacher, one role of the lecture-note review. | [notes.md](notes.md) |
+| [`.claude/agents/physics-teacher.md`](../.claude/agents/physics-teacher.md) | 1.7 kB | Claude Code agent definition: physics-teacher, one role of the lecture-note review. | [notes.md](notes.md) |
 | [`.claude/agents/referee.md`](../.claude/agents/referee.md) | 760 B | Claude Code agent definition: referee, one role of the lecture-note review. | [notes.md](notes.md) |
 | [`.claude/agents/walkthrough-keeper.md`](../.claude/agents/walkthrough-keeper.md) | 614 B | Claude Code agent definition: walkthrough-keeper, one role of the lecture-note review. | [notes.md](notes.md) |
 
@@ -780,7 +774,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
-| [`notes/rotor-pendula/README.md`](../notes/rotor-pendula/README.md) | 10.3 kB | Rotor Pendula study record: brief, status, contracts, skeptic and referee reports, dossiers. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/README.md`](../notes/rotor-pendula/README.md) | 10.5 kB | Rotor Pendula study record: brief, status, contracts, skeptic and referee reports, dossiers. | [portfolios.md](portfolios.md) |
 
 <details><summary>66 files: Rotor Pendula model or model run (L0-L6): script, its output or its log; see the script header.</summary>
 
@@ -900,7 +894,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/droplets/contract-L7.md`](../notes/droplets/contract-L7.md) | 6.1 kB | Gate 1 contract of model level L7: question, picture, model, assumptions with their numbers, predictions, answers to the skeptic. | [status.md](../notes/droplets/status.md) |
 | [`notes/droplets/contract-L8.md`](../notes/droplets/contract-L8.md) | 16.1 kB | Gate 1 contract of model level L8: question, picture, model, assumptions with their numbers, predictions, answers to the skeptic. | [status.md](../notes/droplets/status.md) |
 | [`notes/droplets/contract-L9.md`](../notes/droplets/contract-L9.md) | 9.1 kB | Gate 1 contract of model level L9: question, picture, model, assumptions with their numbers, predictions, answers to the skeptic. | [status.md](../notes/droplets/status.md) |
-| [`notes/droplets/done.md`](../notes/droplets/done.md) | 1.7 kB | Definition of done of the Droplet Collection study, as a checklist; only Numa may change it. | [done.md](../notes/droplets/done.md) |
+| [`notes/droplets/done.md`](../notes/droplets/done.md) | 1.9 kB | Definition of done of the Droplet Collection study, as a checklist; only Numa may change it. | [done.md](../notes/droplets/done.md) |
 | [`notes/droplets/dossier-coalescence-turbulence.md`](../notes/droplets/dossier-coalescence-turbulence.md) | 26.2 kB | Scout dossier on coalescence-turbulence: primary sources read for the study. | [status.md](../notes/droplets/status.md) |
 | [`notes/droplets/dossier-fallspeed-efficiency.md`](../notes/droplets/dossier-fallspeed-efficiency.md) | 38.0 kB | Scout dossier on fallspeed-efficiency: primary sources read for the study. | [status.md](../notes/droplets/status.md) |
 | [`notes/droplets/dossier-ice.md`](../notes/droplets/dossier-ice.md) | 34.2 kB | Scout dossier on ice: primary sources read for the study. | [status.md](../notes/droplets/status.md) |
@@ -995,15 +989,15 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/droplets/skeptic-G1-L4L5-r1.md`](../notes/droplets/skeptic-G1-L4L5-r1.md) | 21.5 kB | Blind skeptic report, gate 1, level L4L5, round 1. | [status.md](../notes/droplets/status.md) |
 | [`notes/droplets/skeptic-G1-L9-r1.md`](../notes/droplets/skeptic-G1-L9-r1.md) | 20.6 kB | Blind skeptic report, gate 1, level L9, round 1. | [status.md](../notes/droplets/status.md) |
 | [`notes/droplets/skeptic-G3-r1.md`](../notes/droplets/skeptic-G3-r1.md) | 25.8 kB | Blind skeptic report, gate 3: r1. | [status.md](../notes/droplets/status.md) |
-| [`notes/droplets/status.md`](../notes/droplets/status.md) | 11.7 kB | Status of the Droplet Collection study: Fermi estimate, queue, done list with evidence, decisions for Numa. Read first. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/status.md`](../notes/droplets/status.md) | 12.2 kB | Status of the Droplet Collection study: Fermi estimate, queue, done list with evidence, decisions for Numa. Read first. | [status.md](../notes/droplets/status.md) |
 
 ## Record of the lecture-note review
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
 | [`notes/.gitignore`](../notes/.gitignore) | 118 B | Keeps the review's screenshots out of the repository. | [notes.md](notes.md) |
-| [`notes/STANDARD.md`](../notes/STANDARD.md) | 8.6 kB | The standard the lecture notes are judged against, and Numa's verdicts. | [notes.md](notes.md) |
-| [`notes/STATUS.md`](../notes/STATUS.md) | 2.3 kB | Status of the lecture-note review, one row per figure. | [notes.md](notes.md) |
+| [`notes/STANDARD.md`](../notes/STANDARD.md) | 8.7 kB | The standard the lecture notes are judged against, and Numa's verdicts. | [notes.md](notes.md) |
+| [`notes/STATUS.md`](../notes/STATUS.md) | 2.9 kB | Status of the lecture-note review, one row per figure. | [notes.md](notes.md) |
 | [`notes/fig01/check-out.txt`](../notes/fig01/check-out.txt) | 2.2 kB | Fig. 1: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig01/check.md`](../notes/fig01/check.md) | 23.9 kB | Fig. 1: the derivation checker's table of equations and numbers. | [notes.md](notes.md) |
 | [`notes/fig01/check.py`](../notes/fig01/check.py) | 6.3 kB | Fig. 1: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
@@ -1124,5 +1118,5 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/home/longlines.cjs`](../notes/home/longlines.cjs) | 1.2 kB | Browser measurements of the home page: index size, column widths, characters per line, section screenshots. | [styles.md](styles.md) |
 | [`notes/home/measure.cjs`](../notes/home/measure.cjs) | 2.6 kB | Browser measurements of the home page: index size, column widths, characters per line, section screenshots. | [styles.md](styles.md) |
 | [`notes/home/sections.cjs`](../notes/home/sections.cjs) | 891 B | Browser measurements of the home page: index size, column widths, characters per line, section screenshots. | [styles.md](styles.md) |
-| [`notes/verify.mjs`](../notes/verify.mjs) | 4.5 kB | Checks the ten simulation pages in headless Chromium at desktop and phone size. | [notes.md](notes.md) |
+| [`notes/verify.mjs`](../notes/verify.mjs) | 4.8 kB | Checks the ten simulation pages in headless Chromium at desktop and phone size. | [notes.md](notes.md) |
 | [`notes/walkcheck.cjs`](../notes/walkcheck.cjs) | 1.7 kB | Searches every quoted code line of the ten walkthroughs in its page. | [notes.md](notes.md) |

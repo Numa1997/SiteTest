@@ -3,14 +3,19 @@
 This is Numa Koudsie's physics website, Phyein Usul. Owner: Numa. Changes need Numa's explicit request.
 
 The GitHub repository `Numa1997/SiteTest` is its source: `index.html` and `public/` are the site; `README.md`, `docs/` (what every file
-and script is and how it works) and `tools/` sit beside them. It runs in two places:
+and script is and how it works) and `tools/` sit beside them. It runs in two places (a third, the AppDeploy app, is gone; see below):
 - Primary, since 20 October 2026: <https://phyeinusul.com> (and www), Cloudflare Worker `phyein-usul`, static assets only, built from
-  `main` (`npm run build`, then `npx wrangler deploy`; settings in `wrangler.jsonc`). See `docs/usul.md`.
-- The AppDeploy app `numa-koudsie-website-0cyj78` ("Numa Koudsie website"), kept as it is at v65 (equal to commit `5c7ba7f`); it is
-  updated only on Numa's request. See `docs/appdeploy-app.md`.
-No GitHub Pages (Numa's decision, 14 October 2026). Change the repository first, build and check it, update the `docs/` pages that
-describe the change, and run `python3 tools/inventory.py` (it rewrites `docs/files.md` and fails if a file is undescribed); deploying
-to Cloudflare or AppDeploy happens only when Numa asks.
+  `main` (`npm run build`, then `npx wrangler deploy`; settings in `wrangler.jsonc`). Since 21 October 2026 Cloudflare Workers Builds
+  runs both commands by itself on every push or merge to `main`, so merging into `main` publishes the live site. See `docs/usul.md`.
+- GitHub Pages, <https://numa1997.github.io/SiteTest/>: switched on in the repository's settings, it republishes `main` on every
+  push (GitHub's "pages build and deployment" runs, since 16 January 2026). Numa's decision, 29 October 2026: keep it on as a backup
+  copy (this replaces the "no GitHub Pages" decision of 14 October 2026, which was written down but never switched off). It serves
+  the repository as it is, without the Vite build: see `docs/usul.md`, "GitHub Pages".
+- Formerly the AppDeploy app `numa-koudsie-website-0cyj78` ("Numa Koudsie website"), kept at v65 (equal to commit `5c7ba7f`) by
+  Numa's decision of 20 October 2026. AppDeploy reports it deleted (checked 29 October 2026: `get_apps` lists no apps, `get_app_status` says "App deleted" with its last snapshot `1792151590518`, v65, and the address answers 404). Touch AppDeploy only on Numa's request. See `docs/appdeploy-app.md`.
+Change the repository first, build and check it, update the `docs/` pages that describe the change, and run
+`python3 tools/inventory.py` (it rewrites `docs/files.md` and fails if a file is undescribed). Work on a branch: merging into `main`
+deploys, so it happens only on Numa's word; a manual `wrangler deploy` only when Numa asks.
 Languages (since 23 October 2026): English is the only source. `tools/i18n/build.py` writes the German and Arabic pages into
 `public/de/` and `public/ar/` from the English pages and the tables in `i18n/<lang>/`; after changing an English page that has a
 translation, `scripts/catalog.js`, a script using `T('…')` or a stylesheet with an `.rtl.css` copy, run it (`--check` fails on
@@ -43,7 +48,7 @@ the registry `scripts/catalog.js` (`SIMULATIONS`, `SIM_FIELDS`, `SIM_TOOLS`) wit
 `SIMULATIONS` (and its field in `SIM_FIELDS` if new), its thumbnail (a missing one shows the Fig. number instead), and its number in the
 hand-written Fig. links at the top of every simulation page. Simulation pages link back to `simulations.html`; the home page keeps its plates
 and links to the catalog from the hero button, the section intro and a button under the plates.
-Design: the house design of `DESIGN.md` in the app `droplet-collection-yl7l26` (the reference; read it before changing styles): titles in
+Design: the house design of `DESIGN.md` in the app `droplet-collection-yl7l26` (the reference; read it before changing styles (29 October 2026: AppDeploy lists no apps and the app's address answers 404, so `DESIGN.md` cannot be read there and no copy is in this repository; until Numa names a new reference, `docs/styles.md` records the design as the stylesheets implement it)): titles in
 Instrument Serif at weight 400 on the simulation, catalog and Portfolios pages (`styles/sim.css`, `styles/catalog.css`), and in IBM Plex
 Serif at weight 600 on the home page alone (`styles/site.css`); IBM Plex Sans text, IBM Plex Mono labels, every box outlined, no card shadows. Accent wine `#7a1f2b`. Explanations are lecture
 notes set like the house LaTeX write-up: `styles/paper.css` (prose and symbols in Latin Modern Roman, self-hosted in `fonts/lm/`, token
@@ -55,21 +60,17 @@ Plotted figures in the notes are inline SVG made with the house chart style (whi
 formulas; every number in a note comes from a computation or the page code.
 Figs. 9 (driven oscillator), 10 (wind turbine control) and 11 (double pendulum under control) solve the whole run first (RK4), store every sample in the dataset, then play the
 stored samples back; nothing is integrated while the reader watches.
-Portfolios: `portfolios.html` introduces long research projects; each lives as a static copy under `portfolios/<name>/`:
-`portfolios/droplet-collection/` (app `droplet-collection-yl7l26`), `portfolios/rotor-pendula/` (app `rotor-pendula-gafw0f`) and
-`portfolios/hydraulics/` (the Hydraulic Press Study: one self-contained page with three tabs, `#servo`, `#ideal`, `#theory`, generated by
-`python3 portfolios-src/hydraulics/tools/build_combined.py --site` from its source in `portfolios-src/hydraulics/` (not served), never edited by hand; see
-docs/portfolios.md) and `portfolios/impact/` (Iron, Cotton and the Head: `index.html` in English and `ar.html` in Arabic, written by
-`python3 portfolios-src/impact/build.py --site` from `portfolios-src/impact/`, never edited by hand; the Arabic page alone links
-`fonts/arabic.css`, Amiri and Noto Naskh Arabic under the OFL, added on Numa's request on 22 October 2026; see
-docs/portfolios.md). The first two are each
-the Vite build of its app without saved runs and backend (hash routes; link to `portfolios/<name>/index.html#/…`: folder addresses
-returned 403 on AppDeploy until mid-October 2026; on 20 October both hosts serve them), with a back link to `../../portfolios.html`. Their build folder is `static/`, not `assets/`. AppDeploy rewrites a relative
-stylesheet link in a deployed HTML file to the site root (seen for `./assets/…` and, since October 2026, `./static/…`: both give 403), so
-after building, replace the `<link rel="stylesheet" href="./static/….css">` in the copy's `index.html` with a short script that adds
-the same link at run time (the platform leaves scripts alone); without it the copy shows unstyled. Their source stays in their apps;
-rebuild there, copy the build folder here, then patch the stylesheet link. Build the copies with the KaTeX version the apps use
-(0.16.47; the apps have no lockfile), or their hidden MathML and equation spacing drift from the apps'.
+Portfolios: `portfolios.html` introduces four long research projects, each a page generated from its source in `portfolios-src/<name>/`
+(not served) and never edited by hand; see docs/portfolios.md. `portfolios/droplet-collection/` (Droplet Collection:
+`python3 portfolios-src/droplets/tools/build.py --site`), `portfolios/rotor-pendula/` (Rotor Pendula: lecture notes, simulation and
+turbulent-wind tabs in one page, `python3 portfolios-src/rotor-pendula/tools/build_combined.py --site`), `portfolios/hydraulics/`
+(the Hydraulic Press Study: one self-contained page with three tabs, `#servo`, `#ideal`, `#theory`, generated by
+`python3 portfolios-src/hydraulics/tools/build_combined.py --site`) and `portfolios/impact/` (Iron, Cotton and the Head, written by
+`python3 portfolios-src/impact/build.py --site`; the Arabic page alone links `fonts/arabic.css`, Amiri and Noto Naskh Arabic under
+the OFL, added on Numa's request on 22 October 2026). The Hydraulic Press Study and Iron, Cotton and the Head also have German and
+Arabic pages (`de.html`, `ar.html`). Until 23 October 2026 Droplet Collection and Rotor Pendula were Vite builds copied from their
+AppDeploy apps (`droplet-collection-yl7l26`, `rotor-pendula-gafw0f`); no app copy remains, and the apps are no longer their source.
+How those copies were built and patched for AppDeploy is kept in docs/portfolios.md as history.
 Data panel, a pipeline in three files. `scripts/dataset.js`: `Sim.dataset()` gives a page one named store (dims, typed-array variables,
 scalars, attrs; the shape of an xarray/NetCDF dataset) and the page writes every number into it at the line that computes it, every frame,
 overwriting the last frame; nothing is recomputed for display. `scripts/datalog.js` + `styles/data.css`: the panel, which only reads the
@@ -77,7 +78,7 @@ store and does no work while closed (since 24 October 2026 a bookkeeper, skill `
 numbers the animation is about, live, with sparklines; one table in causal sections (symbol, meaning, value aligned on the decimal
 point, unit, Δ, how obtained, check), its words rewritten at most 4 times a second while the simulation plays, Live on by default;
 the books, each balance with its residual stored by the page and added again by the panel; arrays as rows that open in place into
-tables copied at one instant. A page declares this in `Sim.data.ledger` (Figs. 9 and 10 and Rotor Pendula, in `scripts/ledger/<page>.js`; Droplet Collection, in its `datahooks.js`); without
+tables copied at one instant. A page declares this in `Sim.data.ledger` (Figs. 9, 10 and 11 and the simulation and wind tabs of Rotor Pendula, in `scripts/ledger/<page>.js`; Droplet Collection, in its `datahooks.js`); without
 it the panel shows the page's `groups` in the same table. Read values:
 a switch in each figure's caption, off by default (a hover readout over the running figure proved disruptive and was removed); while on, a click
 or tap pins the object under it (rings up to 22 px around the point), a drag moves the pin, the page's own pointer actions are held back,
@@ -86,11 +87,11 @@ value, the formula recomputed from the stored inputs, the pixel or SVG element r
 `Sim.data.round` says what a round is (one period, one loop, ten seconds); every frame of it is copied (all scalars and the pinned point,
 at most 600 samples), then shown as charts and a table and saved as .npz + CSV; at most five rounds are kept. Save: the store as .npz +
 dataset.json + the rounds as CSV + README. The contract is at the top of datalog.js. A page loads dataset.js after sim.js and datalog.js
-after its own script (all ten figures, and the two pages of Iron, Cotton and the Head, whose hooks are in
+after its own script (all eleven figures, the Droplet Collection page, the three pages (English, German, Arabic) of Iron, Cotton and the Head, whose hooks are in
 `portfolios-src/impact/datahooks.js`, and the ideal and servo presses of the Hydraulic Press Study, whose store and hooks sit in their
 own pages, and the simulation and wind tabs of Rotor Pendula, whose stores sit in `portfolios-src/rotor-pendula/rotor_sim.html` and `rotor_wind.html` and
 whose links to the shared files `tools/build_combined.py --site` rewrites). `Sim.live()` reads the store too. Keep the taps where the page computes a value; keep the
 walkthrough excerpts untouched (insert after a quoted line, never inside a quoted pair).
 How Numa expects Claude to work (persistence, plain language, build when clear) is in CLAUDE.md.
 For the AppDeploy app only: AppDeploy reformats stored source with Prettier; base any diff against the app on its stored snapshot (`src_read`).
-Security (October 2026): every page, the portfolio copies included, opens its head with the charset line, then a Content-Security-Policy meta tag and `<meta name="referrer" content="strict-origin-when-cross-origin">`. The policy admits the site's own files and AppDeploy's injected overlay (script from v2.appdeploy.ai, beacons to api-v2.appdeploy.ai, images from appdeploy.ai, the one install-prompt file on unpkg.com) and nothing else; inline scripts stay allowed because every page keeps its code inline and AppDeploy injects inline scripts when it serves a page. The Hydraulic Press Study's page alone adds `'unsafe-eval'` to `script-src` and `blob:` to `worker-src` (its solver worker is built at run time from a `blob:` address); a meta policy binds only its own page. A new page copies both meta tags; a new outside resource needs its origin added to the policy in every page. Fonts are self-hosted in `fonts/` (`plex.css`, `instrument-plex.css`, and `arabic.css` for Arabic pages only; IBM Plex and Instrument Serif under the SIL Open Font License, `fonts/OFL-*.txt`), the same files Google Fonts serves: never link fonts.googleapis.com again, it sends every visitor's address to Google. After copying a portfolio build, replace its `@import"https://fonts.googleapis.com/…"` with `@import"../../../fonts/instrument-plex.css"` and add the two meta tags. Response headers: on phyeinusul.com they come from `public/_headers` (nosniff, framing only by the site itself, referrer, permissions, opener isolation, HSTS for one year; see `docs/usul.md`); on the AppDeploy app they are AppDeploy's and cannot be set. The policy's AppDeploy origins are unused on Cloudflare and harmless.
+Security (October 2026): every page, the portfolio pages included, opens its head with the charset line, then a Content-Security-Policy meta tag and `<meta name="referrer" content="strict-origin-when-cross-origin">`. One exception (checked 29 October 2026): the CV page `cv/index.html` (added 25 October 2026) has a stricter policy of its own (scripts only from the site and none inline, no AppDeploy origins) and no referrer tag; on phyeinusul.com `_headers` sets the referrer rule for it anyway. The policy admits the site's own files and AppDeploy's injected overlay (script from v2.appdeploy.ai, beacons to api-v2.appdeploy.ai, images from appdeploy.ai, the one install-prompt file on unpkg.com) and nothing else; inline scripts stay allowed because every page keeps its code inline and AppDeploy injects inline scripts when it serves a page. Two studies add `'unsafe-eval'` to `script-src` and `blob:` to `worker-src`, because their solver worker is built at run time from a `blob:` address: the Hydraulic Press Study (its three pages) and Rotor Pendula (`tools/build_combined.py` adds them); a meta policy binds only its own page. A new page copies both meta tags; a new outside resource needs its origin added to the policy in every page. Fonts are self-hosted in `fonts/` (`plex.css`, `instrument-plex.css`, and `arabic.css` for the Arabic pages and for the Portfolios page in English and German, whose Arabic labels need it; IBM Plex and Instrument Serif under the SIL Open Font License, `fonts/OFL-*.txt`), the same files Google Fonts serves: never link fonts.googleapis.com again, it sends every visitor's address to Google. The portfolio generators write both meta tags and inline or self-host their fonts; no page links Google Fonts (checked 29 October 2026: `grep -rl fonts.googleapis public index.html` finds nothing). Response headers: on phyeinusul.com they come from `public/_headers` (nosniff, framing only by the site itself, referrer, permissions, opener isolation, HSTS for one year; see `docs/usul.md`); on the AppDeploy app they are AppDeploy's and cannot be set. The policy's AppDeploy origins are unused on Cloudflare and harmless.

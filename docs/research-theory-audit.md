@@ -2,6 +2,10 @@
 
 15 October 2026 · for Numa Koudsie
 
+A dated record, kept as written. Correction, 29 October 2026: the Droplet Collection and Rotor Pendula it describes were the
+former app copies (routes such as `#/report`); since 23 October 2026 both are rewritten and generated from `portfolios-src/`
+([portfolios.md](portfolios.md)), so its chapter and route references no longer point at the current pages.
+
 The two research projects now explain the difficult transitions more slowly, while keeping the chapter order, clear existing paragraphs, numbered equations, figures and expandable calculations. Their numerical models, solver code and stored result data were not changed by this revision.
 
 The main route remains **physical picture → stated model → equation → interpretation → limit**. The aim is a reader with a bachelor's degree in physics who can follow mechanics and differential equations but has not studied cloud microphysics or turbine-mounted generators.
@@ -111,15 +115,15 @@ Numa's reading of the wording.
 | # | Where | What was wrong | Done |
 |---|---|---|---|
 | 1 | Rotor Pendula `#/report` | Two of Sol's sentences were rewritten in place and a paragraph was added without a mark, against the page's own convention of marked notes; `report.tex` still had Sol's words. | Sol's text restored word for word; the additions are three boxes marked *Reading note*, named in the lede and in the closing note (app v5, snapshot `1792108602425`). |
-| 2 | Figs. 4, 8, 9 | A new paragraph was placed between a sentence ending in ":" or "," and the equation that completes it. | Moved after the equation ([Fig. 4 L137](../public/simulations/Transverse%20and%20longitudinal%20waves.html#L137), [Fig. 8 L305](../public/simulations/draw-decompose.html#L305), [Fig. 9 L295](../public/simulations/driven-oscillator.html#L295)). |
-| 3 | Fig. 10 | "the linearised equation below": (10) is above. | "(10) above" ([L346](../public/simulations/wind-turbine.html#L346)). |
-| 4 | Fig. 10 | The note concluded that no global convergence argument exists. The net torque $\tfrac12\rho\pi R^5\omega^2[c_p(\lambda)/\lambda^3 - c_{p,\max}/\lambda_\text{opt}^3]$ is positive for every $\lambda$ below $\lambda_\text{opt}$ and negative above it (grid of step $10^{-4}$ over the fit), although $c_p/\lambda^3$ rises between $\lambda = 2.4$ and $4.3$. | The sign argument replaces the two sentences ([L340](../public/simulations/wind-turbine.html#L340)). |
+| 2 | Figs. 4, 8, 9 | A new paragraph was placed between a sentence ending in ":" or "," and the equation that completes it. | Moved after the equation ([Fig. 4 L138](../public/simulations/Transverse%20and%20longitudinal%20waves.html#L138), [Fig. 8 L306](../public/simulations/draw-decompose.html#L306), [Fig. 9 L296](../public/simulations/driven-oscillator.html#L296)). |
+| 3 | Fig. 10 | "the linearised equation below": (10) is above. | "(10) above" ([L347](../public/simulations/wind-turbine.html#L347)). |
+| 4 | Fig. 10 | The note concluded that no global convergence argument exists. The net torque $\tfrac12\rho\pi R^5\omega^2[c_p(\lambda)/\lambda^3 - c_{p,\max}/\lambda_\text{opt}^3]$ is positive for every $\lambda$ below $\lambda_\text{opt}$ and negative above it (grid of step $10^{-4}$ over the fit), although $c_p/\lambda^3$ rises between $\lambda = 2.4$ and $4.3$. | The sign argument replaces the two sentences ([L341](../public/simulations/wind-turbine.html#L341)). |
 | 5 | this repository | The branch `codex/minor-issues-20261015` was cut before the audit repairs `32c240c`–`2c6a436`, so it reverted `datalog.js`, `data.css`, `portfolios.html` and the docs. | Three-way merge; the nine docs conflicts resolved by keeping the hash-linked notes and appending the added sections; `fig07-phasor-sums.md` re-based on the one-line shift of the inserted paragraph. |
 | 6 | both copies | Built with KaTeX 0.16.11 while the apps use 0.16.47. The visible maths is the same; the hidden MathML differs in 134 formulas (10⁻¹² read as "1, 0⁻¹²") and multi-line equations shift by up to 10 px. | Rebuilt on 0.16.47 ([portfolios.md](portfolios.md)). |
 | 7 | Droplet Collection ch. 4 and ch. 9 | "the two effects compete" is false for partners much smaller than the collector ($E_\text{coal}$ stays 0.995 at Stokes speeds); the reading of (56) proved $\varepsilon = 2f$ for disjoint regions only, while the Golovin spectra overlap. | Both sentences made exact: for equal totals the deficit and the excess are each $\varepsilon L/2$ (app v11, snapshot `1792108231309`). |
 | 8 | QA scenarios | Rotor: the solver re-run test had lost its sanity flag. Droplet: two scenarios were merged with an ambiguous step order. Neither change was reported. | Flag restored; "Return to Theory" added to the step. |
 | 9 | Rotor Pendula ch. 10 | The renamed heading was still a question. | "The accelerometer's range on the blade". |
-| 10 | Figs. 3, 5, 9, 10; Rotor ch. 7 and 9 | Everyday pictures replaced by abstract wording: each photon interferes with itself; pressure cannot spin a parcel; a slow rotor lets the air slip between its blades; the leaves in calm water and in rapids. | Fixed on 16 October 2026 (next section). Evidence: [Fig. 3 L491](../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L491) (both slits for every single photon), [Fig. 5 L253](../public/simulations/water-wave.html#L253) (Kelvin), [Fig. 9 L245](../public/simulations/driven-oscillator.html#L245) (Millennium Bridge), [Fig. 10 L235](../public/simulations/wind-turbine.html#L235) ("almost like a solid wall"); Rotor ch. 9 "like money at compound interest" in `index-CsGEKbO8.js`. |
+| 10 | Figs. 3, 5, 9, 10; Rotor ch. 7 and 9 | Everyday pictures replaced by abstract wording: each photon interferes with itself; pressure cannot spin a parcel; a slow rotor lets the air slip between its blades; the leaves in calm water and in rapids. | Fixed on 16 October 2026 (next section). Evidence: [Fig. 3 L492](../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L492) (both slits for every single photon), [Fig. 5 L254](../public/simulations/water-wave.html#L254) (Kelvin), [Fig. 9 L246](../public/simulations/driven-oscillator.html#L246) (Millennium Bridge), [Fig. 10 L236](../public/simulations/wind-turbine.html#L236) ("almost like a solid wall"); Rotor ch. 9 "like money at compound interest" in `index-CsGEKbO8.js`. |
 | 11 | Figs. 2, 8, 9; Droplet ch. 5, 7; Rotor ch. 3 | A garbled sentence, a run-on, $\varphi$ used before it is defined, $v_t$ used for the Stokes speed, a symbol clash on $f$. | Fixed on 16 October 2026 with item 10 (next section); for example the Stokes speed is written \(v_t^S\) in `index-DGIxitSc.js`. |
 
 Also in the Rotor Theory: the angle-only linearisation in chapter 3's fold-out is now displayed as equation (18a), because
@@ -214,7 +218,10 @@ Checks after the repairs, all passing: [notes/verify.mjs](../notes/verify.mjs) (
 two desktop widths); [notes/walkcheck.cjs](../notes/walkcheck.cjs) (226 of 226 quoted code lines found verbatim); every page
 byte-identical to `db1a24b` outside `<article id="paper">`; `tools/inventory.py --check`.
 
-Open, for Numa:
+Open, for Numa (as of 20 October 2026; status on 29 October 2026: every quoted walkthrough line is again found verbatim,
+758 of 758 with `node notes/walkcheck.cjs`; Fig. 7 still has no `media-src`; Fig. 2's trail now fades with
+`destination-out`, line 625, so that fault is gone; Fig. 2's `replace('-', '−')` is still there twice; the other items were
+not re-checked):
 - Walkthrough fixes: every quoted code line is found verbatim in its page (226/226), but six excerpts leave out page lines
   without the `...` line the format requires, and each walkthrough uses some symbols or claims that differ from its
   repaired note (for example Fig. 8's step 3 writes `a + ib` where the note uses a for an angle; Fig. 10's step 4 still says

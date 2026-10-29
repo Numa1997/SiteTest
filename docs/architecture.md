@@ -9,19 +9,19 @@ index.html  (home: logo and note, CV, research, simulation plates)
   ├── public/simulations.html      the catalog: one card per simulation, in figure order
   │     └── public/simulations/*.html   eleven simulation pages (Figs. 1–11)
   └── public/portfolios.html       the four research projects
-        ├── public/portfolios/droplet-collection/index.html#/…   built copy of its own app
-        ├── public/portfolios/rotor-pendula/index.html#/…        built copy of its own app
-        ├── public/portfolios/hydraulics/index.html#servo|ideal|theory   one page, generated from portfolios-src/hydraulics/
-        └── public/portfolios/impact/index.html | ar.html        English and Arabic pages, generated from portfolios-src/impact/
+        ├── public/portfolios/droplet-collection/index.html#book|sim|problems|checks   one page, generated from portfolios-src/droplets/
+        ├── public/portfolios/rotor-pendula/index.html#notes|sim|wind   one page, generated from portfolios-src/rotor-pendula/
+        ├── public/portfolios/hydraulics/index.html#servo|ideal|theory  (+ de.html, ar.html)   generated from portfolios-src/hydraulics/
+        └── public/portfolios/impact/index.html | de.html | ar.html   English, German and Arabic, generated from portfolios-src/impact/
 ```
 
 Every page is a plain HTML file. There is no server code, no database and no login: the server (Cloudflare for
-phyeinusul.com, AppDeploy for the older app) hands out files, and everything else happens in the reader's browser. Pages: [pages.md](pages.md). Simulations: [simulations/](simulations/).
-Project copies: [portfolios.md](portfolios.md).
+phyeinusul.com, GitHub Pages for the backup copy, and until it was deleted AppDeploy for the older app) hands out files, and everything else happens in the reader's browser. Pages: [pages.md](pages.md). Simulations: [simulations/](simulations/).
+Research projects: [portfolios.md](portfolios.md). German and Arabic pages: [i18n.md](i18n.md).
 
 ## Anatomy of a simulation page
 
-Each of the ten pages is one self-contained HTML file: its own markup, its own simulation script inline, and links to the
+Each of the eleven pages is one self-contained HTML file: its own markup, its own simulation script inline, and links to the
 shared files. Read from top to bottom, a page holds:
 
 1. **The figure** (`<figure class="stage">`): a canvas or SVG that the page's script draws every frame, with a caption.
@@ -34,7 +34,7 @@ shared files. Read from top to bottom, a page holds:
 5. **The data panel**: a tab at the right edge of the window (a bottom sheet on phones) that lists every number the
    simulation computes.
 
-The shared files load in this order at the end of the body (from `public/simulations/water-wave.html:563–885`; the other
+The shared files load in this order at the end of the body (from `public/simulations/water-wave.html:565–890`; the other
 pages follow the same order):
 
 | Order | File | Role | Docs |
@@ -46,7 +46,7 @@ pages follow the same order):
 | 5 | `scripts/datalog.js` | The data panel; it only reads the store. | [scripts/datalog.md](scripts/datalog.md) |
 
 Stylesheets, in the `<head>`: `styles/sim.css` (which imports the self-hosted fonts from `fonts/instrument-plex.css`, KaTeX's stylesheet and `paper.css`),
-`styles/data.css`, `styles/fold.css`. See [styles.md](styles.md).
+`styles/data.css`, `styles/fold.css`, `styles/i18n.css` (the language switch). See [styles.md](styles.md).
 
 ## The data pipeline: one notebook, read three ways
 
@@ -73,7 +73,7 @@ The simulation pages work the same way:
   `Sim.data.round`), at most 600 samples, and shows charts and a table. **Save** writes the store as `.npz` (NumPy's
   format) plus CSV, `dataset.json` and a README, in one zip.
 
-Figs. 9 and 10 go one step further: they solve the whole run first (classical fourth-order Runge–Kutta), store every
+Figs. 9, 10 and 11 go one step further: they solve the whole run first (classical fourth-order Runge–Kutta), store every
 sample, and then only play the stored samples back. Nothing is integrated while the reader watches.
 
 ## Folds
@@ -103,7 +103,8 @@ Latin Modern Roman with KaTeX maths, numbered equations and figures. Details: [s
 
 ## Where the source lives
 
-This repository is the source. Its `main` branch is built and served by Cloudflare as Phyein Usul, <https://phyeinusul.com>
-([usul.md](usul.md)). The AppDeploy app `numa-koudsie-website-0cyj78` still runs an older copy (v65, equal to commit
-`5c7ba7f`) and is changed only on Numa's request ([appdeploy-app.md](appdeploy-app.md)). Build steps and what AppDeploy does
+This repository is the source. Its `main` branch is built and served by Cloudflare as Phyein Usul, <https://phyeinusul.com>,
+rebuilt by Cloudflare Workers Builds on every merge into `main` ([usul.md](usul.md)); GitHub Pages republishes `main`, unbuilt,
+at <https://numa1997.github.io/SiteTest/> as a backup ([usul.md](usul.md#github-pages)). The AppDeploy app `numa-koudsie-website-0cyj78`, which ran an older copy (v65, equal to commit
+`5c7ba7f`), is reported deleted by AppDeploy on 29 October 2026 ([appdeploy-app.md](appdeploy-app.md)). Build steps and what AppDeploy does
 on a deploy: [build-and-deploy.md](build-and-deploy.md).

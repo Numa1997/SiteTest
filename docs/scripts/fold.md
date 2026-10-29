@@ -2,8 +2,8 @@
 
 | | |
 |---|---|
-| File | [public/scripts/fold.js](../../public/scripts/fold.js), 414 lines, 24.0 kB (23 973 bytes) |
-| Loaded by | [index.html:625](../../index.html#L625) (the home page); [portfolios.html:333](../../public/portfolios.html#L333); [simulations.html:123](../../public/simulations.html#L123), before `catalog.js`; the ten simulation pages, first of the shared scripts (load-order table in [sim.md](sim.md#load-order-on-the-pages)) |
+| File | [public/scripts/fold.js](../../public/scripts/fold.js), 414 lines, 24.5 kB (24 526 bytes; measured 29 October 2026) |
+| Loaded by | [index.html:621](../../index.html#L621) (the home page); [portfolios.html:420](../../public/portfolios.html#L420); [simulations.html:124](../../public/simulations.html#L124), before `catalog.js`; the eleven simulation pages, first of the shared scripts (load-order table in [sim.md](sim.md#load-order-on-the-pages)) |
 | Defines | `window.Fold = { make, walk, all, openTo, setCard, onCard, onAll, tools }` ([fold.js:413](../../public/scripts/fold.js#L413)) |
 | Sets on `<html>` | CSS variables `--fold-open`, `--fold-close`, `--fold-ease` ([fold.js:21-23](../../public/scripts/fold.js#L21-L23)) and `--fold-top` ([fold.js:297](../../public/scripts/fold.js#L297)) |
 | Stores | `localStorage['fold:<path>']` ([fold.js:61](../../public/scripts/fold.js#L61)) |
@@ -110,7 +110,7 @@ the reader has already used the wheel, touch or a key ([fold.js:400-402](../../p
 ### Pinned headers below a page bar
 
 A bar that sticks across the whole width (the home page index on phones; the search bar of the simulations list) carries
-`data-fold-bar` ([index.html:64](../../index.html#L64), [simulations.html:56](../../public/simulations.html#L56)).
+`data-fold-bar` ([index.html:64](../../index.html#L64), [simulations.html:57](../../public/simulations.html#L57)).
 `measureTop()` ([fold.js:291-298](../../public/scripts/fold.js#L291-L298)) takes the tallest such bar that is currently `sticky`
 or `fixed`, at `top ≤ 1 px`, and wider than 60 % of the window, and writes its height to `--fold-top`. Headers pin below it
 ([fold.css:33](../../public/styles/fold.css#L33)). It re-measures on window `resize` and when a bar changes size.
@@ -135,15 +135,15 @@ Each level-1 header is watched by a `ResizeObserver` that writes its height to `
 | `home()` [353-372](../../public/scripts/fold.js#L353-L372) | `index.html` (needs `main .section[id]` and `.layout`) | each section, `h2` numbered `01`…`05` | none | `positions`: roles (`article.entry`), `education`: qualifications (`h3`), `research`: projects (`article`), `simulations`: figures (`article`), `skills`: areas (`dt`); a count of 0 is left out | open |
 | `portfolios()` [375-396](../../public/scripts/fold.js#L375-L396) | `portfolios.html` | each `article.proj`; its `.proj__band` is removed and its number and texts become the title number and counts | each `.proj__part` with an `h3` (id `<project>-part-<n>` if missing) | the band's `p` and last `span` | open |
 | `papers()` [313-339](../../public/scripts/fold.js#L313-L339) | simulation pages | each `.paper .psec` with an `h3` | each `h4` with what follows it up to the next `h4`, wrapped in `section.ppart` (id from the `h4`, else `<section id>-<number>`) | parts, equations (`\[` in the source plus `.katex-display`), figures (`.pfig`), boxes (`.pbox`) | open |
-| `walk()` [342-350](../../public/scripts/fold.js#L342-L350) | simulation pages, called by `sim.js` ([sim.js:328](../../public/scripts/sim.js#L328)) | `#walk`, titled by its `h2` | none | "N steps · each formula beside the code that computes it and its value now" | open |
-| page script | `simulations.html` ([simulations.html:241-246](../../public/simulations.html#L241-L246)) | each `section.simfold`, one per simulation | none | the entry's `subject` | closed (`defaultOpen: false`); open while a search or chip filters (`forceOpen`) |
+| `walk()` [342-350](../../public/scripts/fold.js#L342-L350) | simulation pages, called by `sim.js` ([sim.js:407](../../public/scripts/sim.js#L407)) | `#walk`, titled by its `h2` | none | "N steps · each formula beside the code that computes it and its value now" | open |
+| page script | `simulations.html` ([simulations.html:242-247](../../public/simulations.html#L242-L247)) | each `section.simfold`, one per simulation | none | the entry's `subject` | closed (`defaultOpen: false`); open while a search or chip filters (`forceOpen`) |
 
 Expand all / Collapse all sits at the end of the paper's header (`.paper__head`) on simulation pages, before the first section
 on the home page, before the first project on Portfolios, and before the list on the simulations page
 ([fold.js:338](../../public/scripts/fold.js#L338), [348](../../public/scripts/fold.js#L348), [371](../../public/scripts/fold.js#L371),
-[395](../../public/scripts/fold.js#L395), [simulations.html:344](../../public/simulations.html#L344)).
+[395](../../public/scripts/fold.js#L395), [simulations.html:345](../../public/simulations.html#L345)).
 
-Measured in headless Chromium (1.5 s after load): the ten simulation pages have 10 or 11 level-1 folds and 2 to 10 level-2
+Measured in headless Chromium (1.5 s after load): the ten simulation pages of the time (before Fig. 11) have 10 or 11 level-1 folds and 2 to 10 level-2
 folds each; on Fig. 2 the counts lines of the first sections read "1 figure", "1 equation", "3 equations · 1 box",
 "4 parts · 7 equations", and the walkthrough's reads "8 steps · each formula beside the code that computes it and its value
 now". The home page has 5 folds, counted "7 roles", "3 qualifications", "3 projects", "8 figures", "7 areas". The simulations
@@ -197,7 +197,7 @@ for `many` (Arabic has six forms). See [i18n.md](../i18n.md#words-inside-scripts
 | `openTo` | [243-259](../../public/scripts/fold.js#L243-L259) | Open around a target and scroll. |
 | `targetOf` | [260-263](../../public/scripts/fold.js#L260-L263) | Element for a `#hash` (URL-decoded). |
 | `measureTop`, `watchBars` | [291-304](../../public/scripts/fold.js#L291-L304) | Height of the sticky page bar. |
-| `plural`, `count`, `join` | [306-308](../../public/scripts/fold.js#L306-L308) | Counts-line helpers ("3 equations · 1 box"). |
+| `plural`, `count`, `join` | [307-308](../../public/scripts/fold.js#L307-L308) | Counts-line helpers ("3 equations · 1 box"). |
 | `papers`, `walk`, `home`, `portfolios` | [313-396](../../public/scripts/fold.js#L313-L396) | Adapters. |
 | `boot` | [404-410](../../public/scripts/fold.js#L404-L410) | Start-up. |
 
@@ -231,13 +231,13 @@ at load); the `typeset` event; `ResizeObserver` on level-1 headers and on `[data
 
 ## Contracts with other files
 
-- **`sim.js`** calls `Fold.walk(#walk)` after building the walkthrough ([sim.js:328](../../public/scripts/sim.js#L328)) and fires
-  `typeset` ([sim.js:366](../../public/scripts/sim.js#L366)). `fold.js` must load first so that `window.Fold` exists then
+- **`sim.js`** calls `Fold.walk(#walk)` after building the walkthrough ([sim.js:407](../../public/scripts/sim.js#L407)) and fires
+  `typeset` ([sim.js:445](../../public/scripts/sim.js#L445)). `fold.js` must load first so that `window.Fold` exists then
   ([sim.md](sim.md)).
 - **`simulations.html`** builds one `section.simfold` per simulation with an `article[data-card]` inside, calls `Fold.make` with
   `defaultOpen: false` and `forceOpen` while filtering, sets `Fold.onCard` and `Fold.onAll` to keep its own record of open
-  cards, and places the tools before the list ([simulations.html:241-246](../../public/simulations.html#L241-L246),
-  [341-345](../../public/simulations.html#L341-L345)); see [catalog.md](catalog.md).
+  cards, and places the tools before the list ([simulations.html:242-247](../../public/simulations.html#L242-L247),
+  [342-346](../../public/simulations.html#L342-L346)); see [catalog.md](catalog.md).
 - **`fold.css`** owns the look and the height animation; class and attribute names are shared ([../styles.md](../styles.md)).
 - **Lecture notes** must keep the structure `.paper .psec > h3` and `> h4` with `.psub__n` numbers for the counts and ids to
   work; the home page `main .section[id] > h2` inside `.layout`; Portfolios `article.proj > .proj__band` and `.proj__head h2`,
@@ -262,6 +262,6 @@ at load); the `typeset` event; `ResizeObserver` on level-1 headers and on `[data
    element or in code would also be counted.
 2. A fold made without any id gets the body id `fold-body` ([fold.js:178](../../public/scripts/fold.js#L178)); two such folds on
    one page would share an id. All current adapters supply ids.
-3. The home page's Simulations section is counted as "8 figures" (measured), while the catalog lists ten simulations. The count
+3. The home page's Simulations section is counted as "8 figures" (measured), while the catalog lists eleven simulations. The count
    is taken from the home page's own `article` elements ([fold.js:360](../../public/scripts/fold.js#L360)); whether the home page
-   should show all ten is a question for [../pages.md](../pages.md).
+   should show all eleven is a question for [../pages.md](../pages.md).

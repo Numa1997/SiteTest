@@ -2,9 +2,9 @@
 
 | | |
 |---|---|
-| Page | [public/simulations/pendulum-control.html](../../public/simulations/pendulum-control.html) (about 1 350 lines) |
+| Page | [public/simulations/pendulum-control.html](../../public/simulations/pendulum-control.html) (1 349 lines, 185 085 bytes) |
 | Walkthrough | [public/scripts/walk/pendcontrol.js](../../public/scripts/walk/pendcontrol.js) (147 lines, 9 steps, key `pendcontrol`) |
-| Thumbnail | [public/images/sims/pendulum-control.webp](../../public/images/sims/pendulum-control.webp) (WebP, 800 × 500 px, 14 kB) |
+| Thumbnail | [public/images/sims/pendulum-control.webp](../../public/images/sims/pendulum-control.webp) (WebP, 800 × 500 px, 14.0 kB) |
 | Catalog entry | [public/scripts/catalog.js#L217](../../public/scripts/catalog.js#L217-L234) (`id: 'pendulum-control'`, `fig: 11`, `field: 'control'`, `stage: 2`) |
 | Translations | `public/de/simulations/pendulum-control.html`, `public/ar/simulations/pendulum-control.html`, written by `tools/i18n/build.py` from `i18n/<lang>/simulations__pendulum-control.html.json` |
 
@@ -70,16 +70,16 @@ and rejected in the note: its best slowest decay is 0.009 1/s against LQR's 0.60
 | [L703](../../public/simulations/pendulum-control.html#L703) | `stepRK4()` | one RK4 step of the closed loop; the coil's work and the stops' heat ride along |
 | [L717](../../public/simulations/pendulum-control.html#L717) | `run()` | the whole 30 s, handing every `every`-th state to a callback |
 | [L728](../../public/simulations/pendulum-control.html#L728) | `solve(from)` | design, solve at h, store, solve again at h/2 for the error, settle time, books, scales |
-| [L831](../../public/simulations/pendulum-control.html#L831) | `geom()` | the rig's scale (px/m) and the chart areas |
-| [L852](../../public/simulations/pendulum-control.html#L852) | `drawRig()` | pivot, pale rest pose, magnet, rail, cart and coil, strut (two tubes and the stop), rods and balls, force arrows, ruler and flag, energy bars |
-| [L941](../../public/simulations/pendulum-control.html#L941), [L950](../../public/simulations/pendulum-control.html#L950) | `chartGeom()`, `drawChart()` | the 10 s window chart of θ1, θ2, X and the strip of the whole run (coil at its limit, strut at a stop) |
-| [L1000](../../public/simulations/pendulum-control.html#L1000) | `drawForces()` | F, F*, ±κ Imax and N over the run |
-| [L1039](../../public/simulations/pendulum-control.html#L1039) | `drawPhase()` | the three phase-space shadows with the fixed point and the state now |
-| [L1080](../../public/simulations/pendulum-control.html#L1080) | `frame()` | copies the stored sample nearest to the playback time into the `*_now` values |
-| [L1106](../../public/simulations/pendulum-control.html#L1106) | `pose()` | the hand: ball 1 turns the upper rod, ball 2 bends both rods (two-link inverse kinematics), the cart slides; poses beyond the stops are refused |
-| [L1127](../../public/simulations/pendulum-control.html#L1127) | `holdState()` | while held: the clock stops, the controller's force for the held pose is shown, nothing is stored |
-| [L1158](../../public/simulations/pendulum-control.html#L1158) | `release()` | solve a new run from the released pose and the hand's smoothed speeds (about 50 ms) |
-| [L1208](../../public/simulations/pendulum-control.html#L1208) | `Sim.data` | the data panel's hooks |
+| [L834](../../public/simulations/pendulum-control.html#L834) | `geom()` | the rig's scale (px/m) and the chart areas |
+| [L855](../../public/simulations/pendulum-control.html#L855) | `drawRig()` | pivot, pale rest pose, magnet, rail, cart and coil, strut (two tubes and the stop), rods and balls, force arrows, ruler and flag, energy bars |
+| [L944](../../public/simulations/pendulum-control.html#L944), [L953](../../public/simulations/pendulum-control.html#L953) | `chartGeom()`, `drawChart()` | the 10 s window chart of θ1, θ2, X and the strip of the whole run (coil at its limit, strut at a stop) |
+| [L1003](../../public/simulations/pendulum-control.html#L1003) | `drawForces()` | F, F*, ±κ Imax and N over the run |
+| [L1042](../../public/simulations/pendulum-control.html#L1042) | `drawPhase()` | the three phase-space shadows with the fixed point and the state now |
+| [L1083](../../public/simulations/pendulum-control.html#L1083) | `frame()` | copies the stored sample nearest to the playback time into the `*_now` values |
+| [L1109](../../public/simulations/pendulum-control.html#L1109) | `pose()` | the hand: ball 1 turns the upper rod, ball 2 bends both rods (two-link inverse kinematics), the cart slides; poses beyond the stops are refused |
+| [L1130](../../public/simulations/pendulum-control.html#L1130) | `holdState()` | while held: the clock stops, the controller's force for the held pose is shown, nothing is stored |
+| [L1161](../../public/simulations/pendulum-control.html#L1161) | `release()` | solve a new run from the released pose and the hand's smoothed speeds (about 50 ms) |
+| [L1211](../../public/simulations/pendulum-control.html#L1211) | `Sim.data` | the data panel's hooks |
 
 ## The store and its checks
 
@@ -87,10 +87,10 @@ Groups (in the panel's order): Parameters, The rig, Rest and controller, Start o
 Drawing. Every derived scalar and every array has a check that recomputes it from stored inputs only:
 
 - the stored state arrays (`th1`, `th2`, `Xs`, `w1`, `w2`, `vX`) and the work and heat integrals (`Wc`, `Qs`) by rerunning the
-  same RK4 from the stored start `y0s` to sample n (`replay()`, [L1180](../../public/simulations/pendulum-control.html#L1180));
+  same RK4 from the stored start `y0s` to sample n (`replay()`, [L1183](../../public/simulations/pendulum-control.html#L1183));
 - `Fs`, `Is`, `Ns`, `ells`, `Es` from the stored state at row n with the page's pure functions;
 - the rest, the gains, the eigenvalues and the rank by redesigning from the stored parameters (`storedDesign()`,
-  [L1179](../../public/simulations/pendulum-control.html#L1179));
+  [L1182](../../public/simulations/pendulum-control.html#L1182));
 - `err_half` by solving the run again with h/2; `t_settle`, `t_sat`, `t_stop`, the chart scales and `E_rest` from the stored arrays;
 - the `*_now` values against the stored arrays at `i_now` (or as "set by your hand" while a ball or the cart is held).
 

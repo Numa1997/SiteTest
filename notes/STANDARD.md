@@ -57,7 +57,8 @@ meant to serve both. Show it in the pilot and **ask Numa** whether this is the b
 
 ## Numa's verdicts
 
-**20 October 2026, before the pilot. This rule overrides anything above that reads as "rewrite".** Numa, in his words:
+**20 October 2026, before the pilot. This rule overrides anything above that reads as "rewrite".** (Itself overridden by the
+verdict of 21 October 2026 below: every note is rewritten.) Numa, in his words:
 "What rewrite? It should simply offer a proper derivations and explanations, good relaxed feynmaj like writing, IF NEEDED.
 IF THE JUDGMENT SAYS THE EXPLANATIONS ARE CLEAR, THEN NO NEED. DO NOT OVER KILL MY SOMULATIONS!"
 

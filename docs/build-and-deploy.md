@@ -2,15 +2,18 @@
 
 ## Where the site runs
 
-One source, two places (since 20 October 2026):
+One source, two places (Cloudflare since 20 October 2026; GitHub Pages kept as a backup by Numa's decision of 29 October 2026). The
+third row, the AppDeploy app, is history: AppDeploy reports it deleted on 29 October 2026 ([appdeploy-app.md](appdeploy-app.md)).
 
 | | Address | Built from | How it is deployed |
 |---|---|---|---|
-| **Phyein Usul**, primary | <https://phyeinusul.com> | this repository's `main` | `npm run build`, then `npx wrangler deploy` (Cloudflare Worker `phyein-usul`, settings in `wrangler.jsonc`): [usul.md](usul.md) |
-| AppDeploy app `numa-koudsie-website-0cyj78` | <https://numa-koudsie-website-0cyj78.v2.appdeploy.ai> | its own stored copy, v65, equal to commit `5c7ba7f` | through AppDeploy's MCP server (below), only on Numa's request: [appdeploy-app.md](appdeploy-app.md) |
+| **Phyein Usul**, primary | <https://phyeinusul.com> | this repository's `main` | `npm run build`, then `npx wrangler deploy` (Cloudflare Worker `phyein-usul`, settings in `wrangler.jsonc`), run by Cloudflare Workers Builds on every push or merge to `main` since 21 October 2026: [usul.md](usul.md) |
+| GitHub Pages, backup | <https://numa1997.github.io/SiteTest/> | this repository's `main`, as it is (no Vite build) | GitHub's "pages build and deployment" on every push to `main`: [usul.md](usul.md#github-pages) |
+| AppDeploy app `numa-koudsie-website-0cyj78` | <https://numa-koudsie-website-0cyj78.v2.appdeploy.ai> | its own stored copy, v65, equal to commit `5c7ba7f`; deleted by 29 October 2026 (the address answers 404) | through AppDeploy's MCP server (below), only on Numa's request: [appdeploy-app.md](appdeploy-app.md) |
 
 The repository comes first: a change is made and checked here, the documentation is brought up to date, the change is
-committed, and it is deployed to Cloudflare when Numa asks. `README.md`, `docs/` and `tools/` are not served by either.
+committed on a branch, and it reaches Cloudflare when it is merged into `main`, which happens only on Numa's word. `README.md`,
+`docs/` and `tools/` are not served by Cloudflare or AppDeploy; GitHub Pages serves the whole repository as it is.
 
 Until 20 October 2026 the order was the other way round: the AppDeploy app was the deliverable and this repository its copy.
 AppDeploy stores the source of each deployed version (its *stored snapshot*). Checked on 14 October 2026 against stored version `1792010233353`: the app lists 238 files (`src_glob`), the repository
@@ -48,10 +51,11 @@ This section and the next describe the AppDeploy app only. On Cloudflare the bui
 
 ## Security
 
-Since 16 October 2026 (app version `1792151590518`) every page, the project copies included, carries two `meta` tags right
-after its charset line (lines 5 and 6, for example [index.html:5–6](../index.html#L5-L6)). One page differs: the Hydraulic
-Press Study (`portfolios/hydraulics/index.html`, added 21 October 2026) adds `'unsafe-eval'` to `script-src` and `blob:` to
-`worker-src`, because its solver runs in a Web Worker that it builds at run time and starts from a `blob:` address; a policy in a
+Since 16 October 2026 (app version `1792151590518`) every page, the project pages included, carries two `meta` tags right
+after its charset line (lines 5 and 6, for example [index.html:5–6](../index.html#L5-L6)). Two studies differ: the Hydraulic
+Press Study (`portfolios/hydraulics/index.html`, added 21 October 2026, and its `de.html` and `ar.html`) and Rotor Pendula
+(`portfolios/rotor-pendula/index.html`, generated since 23 October 2026) add `'unsafe-eval'` to `script-src` and `blob:` to
+`worker-src`, because their solver runs in a Web Worker built at run time and started from a `blob:` address; a policy in a
 `meta` tag binds only the page that carries it ([portfolios.md](portfolios.md#the-hydraulic-press-study-hydraulics)):
 
 - a **Content-Security-Policy**: a list, read by the visitor's browser, of the only places the page may load code, styles, fonts,
@@ -67,16 +71,17 @@ The policy, one directive per row:
 | `script-src` | `'self' 'unsafe-inline' https://v2.appdeploy.ai` and one file on unpkg.com | The site's scripts; code written inside the pages (every page keeps its code inline, and AppDeploy injects inline scripts when it serves a page); AppDeploy's overlay; the install-prompt library the overlay loads on phones, exactly one file, which the overlay checks against a SHA-384 fingerprint. |
 | `style-src` | `'self' 'unsafe-inline'` | The stylesheets; inline styles (KaTeX writes them, and so does the overlay). |
 | `img-src` | `'self' data: blob: https://appdeploy.ai` | Images of the site, the inline SVG favicons (`data:`), canvas exports (`blob:`), the overlay's icons. |
-| `font-src` | `'self' data:` | The self-hosted fonts ([assets.md](assets.md)); one font the project copies' stylesheets carry inline. |
-| `connect-src` | `'self' https://api-v2.appdeploy.ai` | Requests for the site's own files (the project copies load their data); the overlay's timing reports. |
-| `worker-src` | `'self'` | The solver workers of the project copies; AppDeploy's service worker. |
+| `font-src` | `'self' data:` | The self-hosted fonts ([assets.md](assets.md)); the fonts that the Hydraulic Press Study and Rotor Pendula carry inline as `data:` addresses (until 23 October 2026 also one font in the app copies' stylesheets). |
+| `connect-src` | `'self' https://api-v2.appdeploy.ai` | Requests for the site's own files (the former app copies loaded their data this way; the generated project pages fetch nothing, checked 29 October 2026); the overlay's timing reports. |
+| `worker-src` | `'self'` | AppDeploy's service worker (the solver workers of the Hydraulic Press Study and Rotor Pendula start from `blob:` addresses, which their own policy adds). |
 | `manifest-src` | `'self'` | The web-app manifest AppDeploy links. |
 | `object-src` | `'none'` | No plugins. |
 | `base-uri` | `'self'` | A slipped-in `<base>` tag cannot redirect the page's relative links to another site. |
 | `form-action` | `'self'` | No form can send what a reader types to another site. |
 | `upgrade-insecure-requests` | | Any `http://` address in a page is fetched as `https://`. |
 
-The full policy as it stands in every page:
+The full policy as it stands in every page (except the two studies above and the CV page `cv/index.html`, whose stricter policy
+allows no inline script and no AppDeploy origin and which has no referrer tag; checked 29 October 2026):
 
 ```
 default-src 'self'; script-src 'self' 'unsafe-inline' https://v2.appdeploy.ai https://unpkg.com/@khmyznikov/pwa-install@0.6.3/dist/pwa-install.bundle.js; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://appdeploy.ai; font-src 'self' data:; connect-src 'self' https://api-v2.appdeploy.ai; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests
@@ -85,24 +90,25 @@ default-src 'self'; script-src 'self' 'unsafe-inline' https://v2.appdeploy.ai ht
 **What it does and does not do.** It stops code and data from any other site: an injected `<script src="https://…">` would not
 load, and nothing the page knows could be sent elsewhere. It does not stop code written inside a page (`'unsafe-inline'`); that
 door is closed a different way: no reader input ever reaches a page as HTML. The catalog's search text is written with
-`textContent` ([simulations.html:285](../public/simulations.html#L285)), its field and year filters must match a
+`textContent` ([simulations.html:286](../public/simulations.html#L286)), its field and year filters must match a
 fixed list, and the `#…` part of an address is only used to look up an element by its `id` ([fold.js:260–263](../public/scripts/fold.js#L260-L263)). Checked by reading every place the pages take input from the address, on 16 October 2026.
 
 **Outside the AppDeploy app's reach** (on phyeinusul.com these are set: `public/_headers`, see [usul.md](usul.md#security)). Response headers (`Strict-Transport-Security`, `X-Frame-Options`, `X-Content-Type-Options`, a
 policy sent as a header) are set by the server, and AppDeploy serves the files from Amazon S3 through CloudFront with no
 setting for them (as of October 2026). A policy in a `meta` tag cannot forbid framing (`frame-ancestors` is ignored there), so
 another site can still show these pages inside a frame. The site's source files are not served (`AGENTS.md`, `package.json`,
-source maps: 403), and plain `http://` is redirected to `https://` (301). The strongest protection of all is not in the code:
+source maps: 403), and plain `http://` is redirected to `https://` (301). (The GitHub Pages backup, by contrast, serves every file of the
+repository, `AGENTS.md` included: status 200 on 29 October 2026. The repository is public anyway; [usul.md](usul.md#github-pages).) The strongest protection of all is not in the code:
 whoever signs in to the AppDeploy account can replace the app, and whoever signs in to the Cloudflare account or can push to this
 repository can replace phyeinusul.com, so those accounts and their e-mail need two-step sign-in.
 
 On phyeinusul.com the AppDeploy addresses in the policy are unused (nothing injects the overlay there), so they allow nothing that
 loads; they stay so that one page works on both hosts.
 
-**How it was tested.** On 16 October 2026, in headless Chromium, on all 15 pages, desktop and a phone profile, before and after
+**How it was tested.** On 16 October 2026, in headless Chromium, on all 15 pages of the time (51 HTML pages on 29 October), desktop and a phone profile, before and after
 the deploy: no request refused by the policy, no script error, no request to Google, and, read from Chromium's own font
 report, the same font for every sampled text element (83 to 413 per page) as with the Google-hosted fonts. To check the live
-site by hand: `curl -s https://numa-koudsie-website-0cyj78.v2.appdeploy.ai/ | grep -c Content-Security-Policy` prints `1`; in the
+site by hand (while the app existed): `curl -s https://numa-koudsie-website-0cyj78.v2.appdeploy.ai/ | grep -c Content-Security-Policy` printed `1`; in the
 browser's developer tools, the Network tab shows no request to `fonts.googleapis.com`.
 
 **Rules for later changes.**
@@ -153,7 +159,7 @@ unused-code cleanup.
 
 **Brought up to date on 14 October 2026.** The app's stored `tests/tests.json` was an older version: its first scenario
 looked for a footer reading "Claude version", while the footer reads "© 2026 Numa Koudsie"
-([index.html:621](../index.html#L621)); and the second scenario expected the catalog to open with ten full entries, while its
+([index.html:617](../index.html#L617), which since reads "© 2026 Numa Koudsie · Built with Claude (Anthropic) · …"); and the second scenario expected the catalog to open with ten full entries, while its
 cards now open as closed titles that a chip or a search opens. Both scenarios now describe the site as it is; the second was
 followed step by step in headless Chromium before it was written down (ten closed titles and "10 shown"; the chip Wave optics
 opens Figs. 1 and 3 with picture, equation and button, "2 of 10 shown"; the search "runge" opens Fig. 2 alone; the links go

@@ -1,11 +1,12 @@
 # The four research projects: `public/portfolios/`
 
 The Portfolios page ([`public/portfolios.html`](../public/portfolios.html), described in [pages.md](pages.md)) presents four
-research projects; the fourth, Iron, Cotton and the Head, is described [at the end](#iron-cotton-and-the-head-impact). Droplet Collection ([below](#droplet-collection-droplet-collection-since-23-october-2026)) and Rotor Pendula ([below](#rotor-pendula-rotor-pendula)) are, since 23 October 2026, generated from their sources in this repository,  the third, the Hydraulic Press
-Study, is generated from its own GitHub repository ([below](#the-hydraulic-press-study-hydraulics)). This website carries only
-a **built copy** of each one, so that a reader can open it here without leaving the site:
+research projects; the fourth, Iron, Cotton and the Head, is described [at the end](#iron-cotton-and-the-head-impact). Droplet Collection ([below](#droplet-collection-droplet-collection-since-23-october-2026)) and Rotor Pendula ([below](#rotor-pendula-rotor-pendula)) are, since 23 October 2026, generated from their sources in this repository; the third, the Hydraulic Press
+Study, is generated from its source in this repository too, `portfolios-src/hydraulics/` (moved here from the repository
+`Numa1997/Gergi-s-vision` on 21 October 2026; [below](#the-hydraulic-press-study-hydraulics)). The site serves the
+**generated pages**, never edited by hand:
 
-| Folder | Built from the app | What it is |
+| Folder | Generated from | What it is |
 |---|---|---|
 | [`public/portfolios/droplet-collection/`](../public/portfolios/droplet-collection/) | its source in [`portfolios-src/droplets/`](../portfolios-src/droplets/) (since 23 October 2026; before, the app `droplet-collection-yl7l26`) | Numa's Bachelor thesis (Leipzig) on how cloud droplets grow into rain, rebuilt as lecture notes: thirteen chapters from one drop to ice, energy and entropy, who eats whom, and a cloud with a shape, five simulations running in the browser, worked problems and checks. One self-contained page ([below](#droplet-collection-droplet-collection-since-23-october-2026)). |
 | [`public/portfolios/rotor-pendula/`](../public/portfolios/rotor-pendula/) | its source in [`portfolios-src/rotor-pendula/`](../portfolios-src/rotor-pendula/) | A second blade hinged at the tip of a wind-turbine blade as a sensor's power supply, told as a double pendulum whose first arm the wind holds: lecture notes in nine chapters, a simulation page and an animated turbulent-wind page, one generated page. |
@@ -79,20 +80,19 @@ Since 23 October 2026 the copy is generated from [`portfolios-src/droplets/`](..
 |---|---|
 | `index.html` | The whole project in one file, written by `portfolios-src/droplets/tools/build.py --site`: the lecture notes (maths typeset at build time with KaTeX 0.16.11), the model, the five simulations, the figures as inline SVG. It loads the site's `fonts/instrument-plex.css` and `vendor/katex/katex.min.css`. |
 | `fig/plate-fallspeed.svg`, `fig/plate-efficiency.svg`, `fig/plate-warm.svg`, `fig/plate-first.svg` | The four plates of the Portfolios page article, written by the same build from the same figures as the notes. |
-| `fig/c1_ice.svg`, `fig/ecoll_map.svg`, `fig/fallspeed_gk.svg`, `fig/golovin.svg`, `fig/w2_rain.svg`, `fig/w2_spectra.svg` | Left over from the app copy (its `static/` bundle was removed on 23 October 2026, once nothing loaded it). The German and Arabic Portfolios pages still show these old plates until the i18n generator is run again (`tools/i18n/build.py`), so they stay for now. |
 
 ### `rotor-pendula/`
 
 | Path | What it is |
 |---|---|
-| `index.html` | **Generated** by `portfolios-src/rotor-pendula/tools/build_combined.py --site` (3.57 MB): a tab bar with the lecture notes (`#notes`), the simulation (`#sim`) and the wind (`#wind`), each embedded unchanged in its own frame; described [below](#rotor-pendula-rotor-pendula). |
+| `index.html` | **Generated** by `portfolios-src/rotor-pendula/tools/build_combined.py --site` (4.45 MB, 29 October 2026): a tab bar with the lecture notes (`#notes`), the simulation (`#sim`) and the wind (`#wind`), each embedded unchanged in its own frame; described [below](#rotor-pendula-rotor-pendula). |
 | `LICENSE-fonts.txt` | Licences of the fonts embedded in `index.html` (written by the build). |
 
 The former app copy (`static/`, `fig/`, the delivered study `study/`) was removed on 23 October 2026.
 
 ## The Hydraulic Press Study: `hydraulics/`
 
-Unlike the other two, this project is not a Vite build of an app. It is one self-contained HTML page, generated from its
+This project was never a Vite build of an app. It is one self-contained HTML page (with German and Arabic versions), generated from its
 source, which lives in this repository in [`portfolios-src/hydraulics/`](../portfolios-src/hydraulics/) (its
 [`README.md`](../portfolios-src/hydraulics/README.md) describes it). Vite neither builds nor serves that folder. The study was
 written in the repository `Numa1997/Gergi-s-vision` and moved here on 21 October 2026, so that the whole site has one
@@ -122,7 +122,8 @@ every page; `X-Frame-Options: SAMEORIGIN` does not stop the page's own frames, w
 
 | Path | What it is |
 |---|---|
-| `index.html` | The whole study, 5.09 MB: the tab bar and the three embedded pages. |
+| `index.html` | The whole study, 5.16 MB (29 October 2026): the tab bar and the three embedded pages. |
+| `de.html`, `ar.html` | The study in German and Arabic, written by `tools/i18n/hydraulics.py` from `index.html` and the tables in `i18n/<lang>/` ([i18n.md](i18n.md)); never edited by hand. |
 | `LICENSE-fonts.txt` | The licences of the fonts embedded in the study (SIL Open Font License 1.1 for IBM Plex and Instrument Serif; MIT for KaTeX's fonts). |
 | `fig/01_press.webp` … `fig/04_map.webp` | The four plates of the Portfolios page (part 3.3), screenshots of the study at 600 px height: the press mid-cycle, the six time traces, Bode and Nyquist, and the block map of chapter 0. |
 
@@ -150,7 +151,7 @@ checks, 52 of 52 theory numbers, no request outside the site, the tab bar in the
 ### The data panel of the two simulations (since 23 October 2026)
 
 The ideal press and the servo press each carry the site's data panel ([scripts/datalog.md](scripts/datalog.md)), the same one as
-the ten simulations and Iron, Cotton and the Head. Each page is its own source, so the store and the panel's hooks are written into
+the eleven simulations and Iron, Cotton and the Head. Each page is its own source, so the store and the panel's hooks are written into
 it, after the page's user-interface code: `declareStore()`, `storeRun()` (and on the servo page `storeAnalysis()`), `setNow()` and
 `Sim.data`.
 
@@ -379,7 +380,10 @@ box kind; the tabs' rule is one block at the end of `rotor_sim.html`'s styleshee
 the read-back tests their pixels; the Wind tab's plot now sizes its drawing by `clientWidth`/`clientHeight` (inside the border) rather
 than the border box, and the Simulation's plot clicks measure from inside the border (`clientLeft`).
 
-## How to update a copy of an app
+## How to update a copy of an app (former procedure, unused since 23 October 2026)
+
+No app copy remains: all four projects are generated from `portfolios-src/`. The steps below are how the copies of Droplet
+Collection and Rotor Pendula were made until then, kept in case an app is ever copied again.
 
 1. Change the project in its own app and check it there.
 2. Make a website variant of its source, outside the app: remove the Saved runs page, its route and link, and the Save
@@ -391,7 +395,7 @@ than the border box, and the Simulation's plot clicks measure from inside the bo
    python3 tools/make_portfolio_copy.py /absolute/app-source /absolute/new-workdir
    ~~~
 
-   The two copies now in this repository were not made by the present version of the helper: its Simulate note ("This
+   The two copies that were in this repository until 23 October 2026 were not made by the present version of the helper: its Simulate note ("This
    website copy runs in your browser. Saving named runs is available in the standalone project.") and its back-link class
    `back-site` are in neither bundle. The source must have its existing dependencies available. The helper makes an isolated source copy, removes the saved-run route and controls, retains solver error messages, adds the backlink and title suffix, builds with a separate Vite configuration, patches the stylesheet loader, points the stylesheet's font import at the website's `fonts/` and adds the website's security policy and referrer rule (taken from `index.html`). It stops if the app loads other Google fonts than `public/fonts/instrument-plex.css` holds. It installs nothing. The output is `new-workdir/dist/`; the standalone app is not edited.
    Build with the KaTeX version the deployed app uses (0.16.47 today; it is the `content` of the `.katex-version` rule in the
@@ -413,10 +417,10 @@ than the border box, and the Simulation's plot clicks measure from inside the bo
 
 ## Notes for maintainers
 
-- The KaTeX fonts are shipped four times on this site: once in `public/vendor/katex/fonts/` (20 woff2 files, 0.26 MB, for
-  the simulation pages), embedded as `data:` addresses in the Hydraulic Press Study, and once inside each app copy's `static/` (59 files in woff2, woff and ttf; 2.1 MB for the two copies
-  together, measured with `du -cb public/portfolios/*/static/KaTeX_*`). They are kept because each copy must work as a sealed
-  parcel; sharing them would tie the copies to this site's folder layout.
+- The KaTeX fonts: once in `public/vendor/katex/fonts/` (20 woff2 files, 0.26 MB, for the simulation pages and Droplet
+  Collection, which links `vendor/katex/katex.min.css`), and embedded as `data:` addresses in the self-contained pages of the
+  Hydraulic Press Study and Rotor Pendula. Until 23 October 2026 each app copy also carried its own set in `static/` (59 files,
+  2.1 MB for the two); those folders are gone.
 
 
 ## Theory readability revision · 15 October 2026
@@ -436,8 +440,8 @@ changed. They were rebuilt once more the same day, after the second repairs of t
 
 ## Iron, Cotton and the Head: `impact/`
 
-Two pages, generated from [`portfolios-src/impact/`](../portfolios-src/impact/) (its [README](../portfolios-src/impact/README.md)
-lists every file) by `python3 portfolios-src/impact/build.py --site`. Never edit the two pages by hand.
+Three pages (English, German, Arabic), generated from [`portfolios-src/impact/`](../portfolios-src/impact/) (its [README](../portfolios-src/impact/README.md)
+lists every file) by `python3 portfolios-src/impact/build.py --site`. Never edit the three pages by hand.
 
 | Path | What it is |
 |---|---|
@@ -460,7 +464,7 @@ of about 98 J (`checks/energy_books.cjs`); halving the time step changes the pea
 
 ### The data panel of the study
 
-Since 23 October 2026 both pages carry the site's data panel, the same one as the ten simulations
+Since 23 October 2026 the pages carry the site's data panel (all three, measured 29 October 2026), the same one as the eleven simulations
 ([scripts/datalog.md](scripts/datalog.md)). Picture an assistant beside the drop with a notebook: the run is computed once, and
 every number of it is written into one store, a dataset in the sense of [scripts/dataset.md](scripts/dataset.md); the drawing, the
 gauges, the readouts, the plots and the energy bars only read that store, and the panel shows it, checks it and saves it.
@@ -553,7 +557,7 @@ how each model level was argued, attacked by an independent reviewer and checked
 
 - **One page, four tabs.** `index.html` holds the tabs Simulation (`#sim`), Lecture notes (`#book`), Problems (`#problems`) and
   Checks (`#checks`); any element id also works as an address (`#ch3`, `#fig-5-2`, `#eq-6.1`), opening its tab. The Portfolios
-  page links to `#book`, `#sim`, `#checks` and to four figures.
+  page links to `#book`, `#sim`, `#problems`, `#checks` and to four figures.
 - **The model runs in the page.** The code between `/*PHYSICS-BEGIN*/` and `/*PHYSICS-END*/` of `physics.cjs` is inlined; the
   same code runs in Node for the run tools and the checks. The five panels (collection equation in a box, droplet trajectories,
   an exact random cloud, a cloud with a shape, one energy landscape under three rules) change only on a click, a slider release or a

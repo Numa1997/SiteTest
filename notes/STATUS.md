@@ -1,6 +1,11 @@
 # Status of the ten notes
 
-Rule in force: judge first, change only what needs it (notes/STANDARD.md, "Numa's verdicts").
+Rule in force on 20 October 2026: judge first, change only what needs it (notes/STANDARD.md, "Numa's verdicts").
+Correction, 29 October 2026: this file is the record of 20 October and is not kept up to date. Since Numa's verdict of
+21 October 2026 (notes/STANDARD.md, last verdict) every note is rewritten as a textbook chapter; Fig. 11 (24 October) is not
+in the table below; the checks listed under "Checks after the last repair" are those of 20 October (on 29 October
+`node notes/walkcheck.cjs` found 753 of 758 quoted lines before the five were brought back in line the same day, and
+`notes/verify.mjs` now lists all eleven figures).
 Corrected on 20 October 2026, 22:00 UTC, after an independent audit of this record.
 
 ## What is done

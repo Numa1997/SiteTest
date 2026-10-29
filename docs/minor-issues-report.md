@@ -86,7 +86,7 @@ Readbacks respect the picture’s precision: stored/recomputed numbers match exa
 | rotor-pendula-gafw0f | left for Numa | Preserved as requested. |
 | physik-radar-xvy59b | left for Numa | Preserved as requested. |
 | numa-physics-lab-chatgpt-k0ixwk | left for Numa | Preserved as requested. |
-| GitHub Pages | superseded | Since 20 October 2026 the site is published from this repository by Cloudflare ([wrangler.jsonc](../wrangler.jsonc), [usul.md](usul.md)); nothing in the repository configures GitHub Pages. |
+| GitHub Pages | superseded | Since 20 October 2026 the site is published from this repository by Cloudflare ([wrangler.jsonc](../wrangler.jsonc), [usul.md](usul.md)); nothing in the repository configures GitHub Pages. Correction, 29 October 2026: the GitHub Pages setting was never switched off and has published `main` at <https://numa1997.github.io/SiteTest/> since 16 January 2026; Numa decided that day to keep it on as a backup ([usul.md](usul.md#github-pages)). |
 | Other maintainer notes outside the requested batches | left for Numa | Apostrophe consistency, xi naming, walkthrough path/header, unused catalog metadata, drawn_note, undeclared-value behavior, noscript listing, catalog debug state and cross-file CSS overrides remain. |
 
 Proposals for Numa (none applied):
@@ -116,7 +116,7 @@ Proposals for Numa (none applied):
 - **rotor-pendula-gafw0f:** Keep this app outside this website-maintenance change.
 - **physik-radar-xvy59b:** Keep this app outside this website-maintenance change.
 - **numa-physics-lab-chatgpt-k0ixwk:** Keep this app outside this website-maintenance change.
-- **GitHub Pages:** Choose a separate publishing task if this branch should later be served there. (Superseded: Cloudflare serves the site since 20 October 2026.)
+- **GitHub Pages:** Choose a separate publishing task if this branch should later be served there. (Superseded: Cloudflare serves the site since 20 October 2026. Correction, 29 October 2026: Pages was still on and stays on as a backup, [usul.md](usul.md#github-pages).)
 
 - **Other untriaged notes:** consider consistent apostrophes and displacement names; document the walkthrough’s required path; decide whether to expose catalog metadata; decide the dataset’s missing-value contract; make the no-JavaScript catalog complete; refresh the debug-state reference; review cross-file CSS overrides separately.
 
@@ -159,7 +159,7 @@ the live site. The shortfalls found were repaired in the app first (stored versi
 **Still open, newly noticed** (left for Numa): Fig. 4's longitudinal bead 11 fails its pixel read-back at 390 px (already so at
 `bad6513`); the lecture-note SVG labels render at about 5.7 px on a 390 px phone; Fig. 7's `Sim.live()` recomputes the effective
 α (`swMorph.checked ? morph.value : 1`) instead of reading the stored value (fixed since: `Sim.live()` reads `ds.get('alpha')`,
-[phasor-sums.html:1301](../public/simulations/phasor-sums.html#L1301); the stored `alpha` is still written in the frame function
-by evaluating the same expression again, [1340](../public/simulations/phasor-sums.html#L1340), not at the line of `morphStep()`
-that uses it, [864](../public/simulations/phasor-sums.html#L864)); after A9 the last two samples of a round are two
+[phasor-sums.html:1302](../public/simulations/phasor-sums.html#L1302); the stored `alpha` is still written in the frame function
+by evaluating the same expression again, [1341](../public/simulations/phasor-sums.html#L1341), not at the line of `morphStep()`
+that uses it, [865](../public/simulations/phasor-sums.html#L865)); after A9 the last two samples of a round are two
 frames apart instead of one.
