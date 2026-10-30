@@ -982,6 +982,57 @@ T['fig_torque'] = ('<figure class="fig">' + ''.join(svgT) +
     f'{tq["cross"]["8.0"]["nrel"]:.2f} and {tq["cross"]["10.0"]["nrel"]:.2f} rpm; at 6 m/s on the ramp, at {tq["cross"]["6.0"]["nrel"]:.2f} rpm, faster than the '
     f'{tq["cross"]["6.0"]["k2"]:.2f} rpm (open dot) the square law alone would give. A gust or a lull moves the wind\'s curve up or down. Just above the ramp, a lull drops the '
     f'rotor onto the ramp, whose torque falls steeply as the speed drops, so the rotor slows less than it speeds up in an equal gust: its mean speed rises.</figcaption></figure>')
+# ---- figure: the once-per-turn pushes of section 7.2 as turning arrows, for the three shapes (L5_air.json, slowed air) --------------
+_G7 = _A['G_torque']; PW7, PH7 = 186, 230; sc7 = 15.0                                 # 15 px per N m
+svg7 = []
+for key, title in (('rod', 'bare rod'), ('sym', 'streamlined'), ('wing', 'small wing')):
+    cs_ = _r3['cases'][key]; th7 = math.radians(cs_['lean_deg'])
+    ox, oy = PW7 - 40, 112                                                            # origin; cos-phi part to the left (it is negative), sin-phi part up
+    X7 = lambda a: ox + a*sc7; Y7 = lambda b: oy - b*sc7
+    gc, gs_ = -_G7*math.cos(th7), _G7*math.sin(th7)
+    tc, ss_ = cs_['A_tilt'], cs_['A_shear']
+    Ac, As = gc + tc, gs_ + ss_
+    g7 = [f'<svg viewBox="0 0 {PW7} {PH7}" style="flex:1 1 170px;min-width:0;max-width:200px" role="img" aria-label="Turning arrows of the once-per-turn pushes for the {title}: gravity\'s push turned by the lean, then the tilt\'s push along the cosine axis and the shear\'s along the sine axis; the total compared with a circle of gravity\'s push alone.">',
+         f'<circle cx="{ox}" cy="{oy}" r="{_G7*sc7:.1f}" fill="none" stroke="#dccdb4" stroke-dasharray="4 3"/>',
+         f'<line x1="{ox - _G7*sc7 - 8:.1f}" y1="{oy}" x2="{ox + 30}" y2="{oy}" stroke="#dccdb4"/><line x1="{ox}" y1="{oy + 20}" x2="{ox}" y2="{oy - _G7*sc7 - 8:.1f}" stroke="#dccdb4"/>',
+         f'<line x1="{ox}" y1="{oy}" x2="{X7(gc):.1f}" y2="{Y7(gs_):.1f}" stroke="#b5681c" stroke-width="2.4" marker-end="url(#a7)"/>',
+         f'<line x1="{X7(gc):.1f}" y1="{Y7(gs_):.1f}" x2="{X7(gc + tc):.1f}" y2="{Y7(gs_):.1f}" stroke="#33627f" stroke-width="2.4" marker-end="url(#a7)"/>',
+         f'<line x1="{X7(gc + tc):.1f}" y1="{Y7(gs_):.1f}" x2="{X7(Ac):.1f}" y2="{Y7(As):.1f}" stroke="#7d1d2f" stroke-width="2.4" marker-end="url(#a7)"/>',
+         f'<line x1="{ox}" y1="{oy}" x2="{X7(Ac):.1f}" y2="{Y7(As):.1f}" stroke="#23160f" stroke-width="1.4" stroke-dasharray="5 3"/>',
+         f'<text x="{PW7/2}" y="18" text-anchor="middle" class="svgd">{title}</text>',
+         f'<text x="{PW7/2}" y="{PH7 - 30}" text-anchor="middle" class="svgc">lean {cs_["lean_deg"]:+.1f}°</text>',
+         f'<text x="{PW7/2}" y="{PH7 - 14}" text-anchor="middle" class="svgc">power {100*(cs_["ratio"] - 1):+.0f} %</text></svg>']
+    svg7.append(''.join(g7))
+T['fig_pushes'] = ('<figure class="fig"><svg width="0" height="0" style="position:absolute"><defs><marker id="a7" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="context-stroke"/></marker></defs></svg>'
+    '<div style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center">' + ''.join(svg7) + '</div>'
+    f'<figcaption>Figure {{{{fig:pushes}}}}. The once-per-turn pushes of (7.2) as turning arrows (section 3.2), at 8 m/s in the slowed air, drawn at the same scale for the three shapes. '
+    f'Across: the part in step with $\\cos\\varphi$, $A_c$; up: the part in step with $\\sin\\varphi$, $A_s$. Ochre: gravity\'s push, of length $G_\\tau$ = {_G7:.2f} N m, turned by the lean '
+    '(the dashed circle is its length); blue: the tilt\'s push, added to $A_c$; wine: the shear\'s push, added to $A_s$; dashed ink: the total. '
+    'The power goes as the total\'s length squared, divided by the net stiffness $R/\\cos\\theta_s - 1$, which the lean raises. The rod: its tilt push shortens gravity\'s, '
+    'and its large lean stiffens the spring. The wing: its lean turns gravity\'s arrow upwards, and its shear push, large because its lift answers the wind, adds along the same line.</figcaption></figure>')
+# ---- figure: where the shaking's power comes from, section 8.2 (L3_response.json from notes/rotor-pendula/derive/L3_response.py) ----------
+rsp = J('L3_response.json'); RW, RH = 560, 300
+PXr, PYr = panel(RW, RH, 62, 16, 16, 50); flo, fhi, ylo, yhi = 0.4, 2.2, -8.0, 0.0
+fr_, dp_ = rsp['f_Hz'], rsp['dPdf_W_per_Hz']
+svgR8 = [f'<svg viewBox="0 0 {RW} {RH}" role="img" aria-label="The generator\'s power per unit frequency, on a logarithmic scale, from 0.4 to 2.2 hertz, for the 1 m second blade shaken by a 5 mm blade vibration: a sharp peak at the blade\'s edgewise mode, 1.08 hertz, and almost nothing at the second blade\'s own frequency, 1.47 hertz, marked by a line.">',
+         f'<rect x="62" y="16" width="{RW-78}" height="{RH-66}" fill="#fff" stroke="#3f2c23"/>',
+         f'<rect x="{PXr(0.7*rsp["f_mode"], flo, fhi):.1f}" y="17" width="{PXr(1.3*rsp["f_mode"], flo, fhi) - PXr(0.7*rsp["f_mode"], flo, fhi):.1f}" height="{RH-68}" fill="#f3ece0"/>',
+         '<polyline points="' + ' '.join(f'{PXr(x, flo, fhi):.1f},{PYr(max(math.log10(max(y, 1e-12)), ylo), ylo, yhi):.1f}' for x, y in zip(fr_, dp_)) + '" fill="none" stroke="#7d1d2f" stroke-width="2"/>',
+         f'<line x1="{PXr(rsp["f_own"], flo, fhi):.1f}" y1="17" x2="{PXr(rsp["f_own"], flo, fhi):.1f}" y2="{RH-51}" stroke="#33627f" stroke-dasharray="5 4"/>',
+         f'<text x="{PXr(rsp["f_own"], flo, fhi) + 6:.1f}" y="40" class="svgc" fill="#33627f">second blade\'s own</text><text x="{PXr(rsp["f_own"], flo, fhi) + 6:.1f}" y="54" class="svgc" fill="#33627f">swing, {rsp["f_own"]:.2f} Hz</text>',
+         f'<text x="{PXr(rsp["f_mode"], flo, fhi) - 8:.1f}" y="30" text-anchor="end" class="svgc" fill="#7d1d2f">blade\'s mode, {rsp["f_mode"]:.2f} Hz</text>',
+         f'<text x="{PXr(rsp["f_mode"], flo, fhi):.1f}" y="{RH-58}" text-anchor="middle" class="svgc">band of the model</text>']
+for x in (0.5, 1.0, 1.5, 2.0):
+    X = PXr(x, flo, fhi); svgR8.append(f'<line x1="{X:.1f}" y1="{RH-50}" x2="{X:.1f}" y2="{RH-45}" stroke="#3f2c23"/><text x="{X:.1f}" y="{RH-32}" text-anchor="middle" class="svgc">{x:g}</text>')
+for e in (-8, -6, -4, -2, 0):
+    Y = PYr(e, ylo, yhi); svgR8.append(f'<line x1="57" y1="{Y:.1f}" x2="62" y2="{Y:.1f}" stroke="#3f2c23"/><text x="53" y="{Y+4:.1f}" text-anchor="end" class="svgc">1e{e}</text>')
+svgR8.append(f'<text x="{(62+RW-16)/2}" y="{RH-10}" text-anchor="middle" class="svgd">frequency, Hz</text>')
+svgR8.append(f'<text x="16" y="{(16+RH-50)/2}" text-anchor="middle" class="svgd" transform="rotate(-90 16 {(16+RH-50)/2})">power per hertz, W/Hz</text></svg>')
+T['fig_response'] = ('<figure class="fig">' + ''.join(svgR8) +
+    f'<figcaption>Figure {{{{fig:response}}}}. Where the shaking\'s power comes from: the generator\'s power per unit frequency, $c\\,S_F|Y|^2$ per hertz, for the {S["L_B"]:g} m second blade at its best brake for the shaking, '
+    f'{rsp["c"]:.2f} N m s, with 0.5 % blade damping and a 5 mm tip vibration (logarithmic scale). Nearly all of it comes from a narrow band round the blade\'s edgewise mode, {rsp["f_mode"]:.2f} Hz, where the gusts make the blade ring; '
+    f'at the second blade\'s own frequency, $\\sqrt R\\,\\Omega/2\\pi$ = {rsp["f_own"]:.2f} Hz, there is almost nothing, because there the blade itself barely moves. Integrated over the shaded band, the band the model uses, '
+    f'it gives the {rsp["P_band_W"]*1e3:.2f} mW of the text. Beyond the band the curve assumes the gusts\' force stays as strong as near the mode, which overstates its tails.</figcaption></figure>')
 T['fig_betz'] = ('<figure class="fig"><div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center">' + ''.join(svgB1) + ''.join(svgB2) + '</div>'
     '<figcaption>Figure {{fig:betz}}. The Betz limit. First panel: the air that passes the rotor, seen from the side, at the best slowing $a = 1/3$. The same mass flows through every '
     'cross-section, so where the air is slower the tube is wider: far upstream it has $1-a$ = 2/3 of the disc\'s area, far downstream $(1-a)/(1-2a)$ = 2 of it, three times its upstream area (the arrows are to scale; the tube between follows the speed an ideal disc induces along its axis). '
