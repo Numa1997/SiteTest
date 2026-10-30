@@ -8,7 +8,7 @@ Arabic pages, never edited by hand ([i18n.md](i18n.md)).
 | File | Lines | Loaded by | Job |
 |---|---|---|---|
 | [`site.css`](../public/styles/site.css) | 887 | home, catalog, Portfolios | Tokens, base type, the home page (hero, timeline, plates), footer. |
-| [`sim.css`](../public/styles/sim.css) | 232 | the eleven simulation pages | Tokens again, the figure, controls, readouts, walkthrough; imports KaTeX's CSS and `paper.css`. |
+| [`sim.css`](../public/styles/sim.css) | 254 | the eleven simulation pages | Tokens again, the figure, controls, readouts, walkthrough; imports KaTeX's CSS and `paper.css`. |
 | [`paper.css`](../public/styles/paper.css) | 118 | simulation pages (through `sim.css`), catalog, Portfolios | Lecture notes set like LaTeX: Latin Modern, numbered equations, figures, boxes. |
 | [`catalog.css`](../public/styles/catalog.css) | 574 | catalog, Portfolios | Top bar, masthead, search bar, chips, catalog entries; switches titles to Instrument Serif. |
 | [`data.css`](../public/styles/data.css) | 455 | the eleven simulation pages | The data panel (a bookkeeper's ledger) and the Read values strip ([scripts/datalog.md](scripts/datalog.md)). |
@@ -473,4 +473,15 @@ Main figure, width × height in px, before → after, computed from the CSS (win
 | 11 (unchanged) | 816 × 643 | 696 × 548 | 536 × 422 |
 
 At these three sizes the height cap does not bind; it binds on shorter windows, such as a laptop window about 650 px high.
+
+## The parameter curve's styles · 30 October 2026
+
+Appended to `sim.css` ([241–254](../public/styles/sim.css#L241-L254)) for the curve group that `scripts/curve.js` builds in a
+simulation's control panel ([scripts/curve.md](scripts/curve.md)); `sim.rtl.css` regenerated. `.sel` is Fig. 7's dropdown
+style (Plex Mono 12 px, outlined, 6 px corners), until now written only in that page's own `<style>`; it is now shared, and
+also styles the number boxes. `.curve__why` (12.5 px text, its formula in `.curve__f`, burgundy Plex Mono), `.curve__plot`
+(a white plate 132 px high, outlined, 8 px corners, as the notes' charts; the canvas has a crosshair cursor and
+`touch-action: none` for dragging points), `.curve__hint`, `.curve__nums` (three equal columns: From, To, Time),
+`.curve__loop` (the Repeat box in the accent colour) and `.curve__st` (the status line, Plex Mono 11.5 px, at least three
+lines high so the panel does not jump when the words change). No new font and no new colour.
 

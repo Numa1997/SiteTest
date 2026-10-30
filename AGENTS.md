@@ -23,6 +23,8 @@ Out of bounds for writes: the ChatGPT version `numa-physics-lab-chatgpt-k0ixwk` 
 and the unrelated app `physik-radar-xvy59b`. This is a project instruction, not a technical access control.
 
 Layout (paths below are under `public/`, which the build serves at the site root; `index.html` and the build files sit at the root): `index.html`; `styles/site.css` and `styles/sim.css`;
+`scripts/curve.js` (since 30 October 2026, Fig. 1 first: a parameter curve, a knob that moves by itself along a chosen or
+drawn curve while the figure runs; every number in the page's store; `docs/scripts/curve.md`);
 `images/phyein-usul-mark.svg` (the logo: above the name with a short note on the home page, and linking home in the top bar of
 the catalog, Portfolios and every simulation page); `_headers` (Cloudflare's response headers); `scripts/sim.js` (shared helpers, lecture-note typesetting, walkthrough engine);
 `scripts/walk/<key>.js` ("From symbols to code", one file per page, chosen by the page's `data-walk` key:

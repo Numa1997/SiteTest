@@ -237,3 +237,18 @@ html:not(.tex-ready) .stage__cap .tx { visibility: hidden; }
   .sim__grid > .panel { position: sticky; top: 12px; max-height: calc(100vh - 24px); overflow-y: auto; overscroll-behavior: contain; }
   .stage__canvas { max-width: calc((100vh - 24px) * (var(--ar, 16 / 9))); margin-inline: auto; }
 }
+
+/* the parameter curve (scripts/curve.js): a knob that moves by itself; its chart is a white plate like the notes' charts */
+.sel { width: 100%; font-family: var(--mono); font-size: 12px; color: var(--ink); background: var(--card); border: 1px solid var(--rule); border-radius: 6px; padding: 5px 8px; }
+.sel:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.curve__why { margin: 0; font-size: 12.5px; line-height: 1.5; color: var(--ink-2); }
+.curve__f { display: block; margin-top: 4px; font-family: var(--mono); font-size: 11.5px; color: var(--accent); }
+.curve__plot { position: relative; height: 132px; border: 1px solid var(--rule); border-radius: 8px; overflow: hidden; background: #fff; }
+.curve__plot canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; cursor: crosshair; touch-action: none; }
+.curve__plot canvas:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+.curve__hint { margin: -6px 0 0; font-size: 11.5px; color: var(--muted); }
+.curve__nums { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.curve__nums label { display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: var(--ink-3); }
+.curve__loop { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--ink-2); }
+.curve__loop input { accent-color: var(--accent); }
+.curve__st { margin: 0; min-height: 3em; font-family: var(--mono); font-size: 11.5px; line-height: 1.5; color: var(--ink-3); }

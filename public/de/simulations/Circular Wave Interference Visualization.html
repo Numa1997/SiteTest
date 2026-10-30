@@ -17,7 +17,7 @@
     </style>
 
     <script src="../../scripts/i18n/strings-de.js"></script>
-    <meta name="translated-from" content="English public/simulations/Circular Wave Interference Visualization.html, commit 73866ed+" />
+    <meta name="translated-from" content="English public/simulations/Circular Wave Interference Visualization.html, commit f04e5a7+" />
   </head>
 <body>
     <header class="sim-top">
@@ -73,7 +73,7 @@
                     <p class="panel__label">Wellen</p>
                     <label class="ctl">
                         <span class="ctl__row"><span>Wellenlänge λ</span><output id="lambda-out" for="lambda"></output></span>
-                        <input type="range" id="lambda" min="16" max="64" step="1" value="30">
+                        <input type="range" id="lambda" min="16" max="64" step="0.1" value="30">
                     </label>
                     <label class="ctl">
                         <span class="ctl__row"><span>Frequenz f</span><output id="freq-out" for="freq"></output></span>
@@ -508,7 +508,7 @@
 
     <script src="../../scripts/fold.js"></script>
     <script src="../../scripts/sim.js"></script>
-    <script src="../../scripts/dataset.js"></script>
+    <script src="../../scripts/dataset.js"></script><script src="../../scripts/curve.js"></script>
     <script>
     (function () {
         'use strict';
@@ -528,7 +528,7 @@
 
         /* ---------- the store: every number this page computes is written here, at the place it is computed (scripts/dataset.js) ---------- */
         var ds = Sim.dataset({ title: 'Wave interference', attrs: { figure: 1, page: 'Circular Wave Interference Visualization.html', WORLD_W: WORLD_W, R: R, MAX_SOURCES: MAX_SOURCES, SOURCE_LIFT: SOURCE_LIFT, length_unit: 'px of the 800 px wide field' } });
-        ds.var('lambda', [], 'float', { symbol: 'λ', units: 'px', long_name: 'wavelength', computed_in: 'lambda slider', digits: 0 });
+        ds.var('lambda', [], 'float', { symbol: 'λ', units: 'px', long_name: 'wavelength', computed_in: 'lambda slider', digits: 1 });
         ds.var('f', [], 'float', { symbol: 'f', units: 'Hz', long_name: 'frequency of every source', computed_in: 'freq slider', digits: 2 });
         ds.var('damp', [], 'float', { symbol: 'γ', long_name: 'damping: e-foldings of amplitude over R = 300 px', computed_in: 'damp slider', digits: 2 });
         ds.var('N', [], 'int', { symbol: 'N', long_name: 'number of sources, at most 24', computed_in: 'precompute()', digits: 0 });
@@ -541,7 +541,7 @@
         ds.var('norm', [], 'float', { symbol: '1/N', long_name: 'normalisation that keeps |ψ| ≤ 1', computed_in: 'precompute()', formula: '1 / max(1, N)', digits: 4 });
         ds.var('omega', [], 'float', { symbol: 'ω', units: 'rad/s', long_name: 'angular frequency', computed_in: 'readouts()', formula: 'ω = 2π f', digits: 3 });
         ds.var('T', [], 'float', { symbol: 'T', units: 's', long_name: 'period', computed_in: 'readouts()', formula: 'T = 1 / f', digits: 3 });
-        ds.var('v', [], 'float', { symbol: 'v', units: 'px/s', long_name: 'phase speed', computed_in: 'readouts()', formula: 'v = f λ', digits: 1 });
+        ds.var('v', [], 'float', { symbol: 'v', units: 'px/s', long_name: 'phase speed', computed_in: 'readouts()', formula: 'v = f λ', digits: 1 }); ds.var('s2', [], 'float', { symbol: 's', units: 'px', long_name: 'spacing of the two sources; defined only when there are exactly two', computed_in: 'precompute()', formula: 's = |x<sub>2</sub> − x<sub>1</sub>|', digits: 1 }); ds.var('n_calm', [], 'int', { symbol: 'n<sub>calm</sub>', long_name: 'calm lines of two sources by equation (10): the whole numbers m with |m + ½| λ < s, counted on both sides', computed_in: 'precompute()', formula: 'n = 2 ⌈s/λ − ½⌉, and 0 when s < λ/2', digits: 0, drawn_note: 'Not drawn as a number: the calm lines are the cream lines of ψ that stay cream.' });
         ds.var('t', [], 'float', { symbol: 't', units: 's', long_name: 'play time since the page opened', computed_in: 'Sim.clock', digits: 2, source: 'The clock adds each frame’s Δt while playing; there is no formula to recompute.' });
         ds.var('omegaT', [], 'float', { symbol: 'ωt', units: 'rad', long_name: 'phase shared by all sources', computed_in: 'Sim.clock callback', formula: 'ωt ← ωt + 2π f Δt', digits: 3, source: 'Accumulated frame by frame, so there is no closed formula to recompute.' });
         ds.var('cos_wt', [], 'float', { symbol: 'cos ωt', long_name: 'the rotating pair, cosine', computed_in: 'render()', formula: 'cos(ωt)', digits: 4 });
@@ -599,7 +599,7 @@
         var freq = Sim.slider('freq', { format: function (v) { return v.toFixed(2) + ' Hz'; }, onInput: readouts });
         var damp = Sim.slider('damp', { format: function (v) { return v.toFixed(2); }, onInput: changed });
 
-        function changed() { dirty = true; readouts(); }
+        function changed() { dirty = true; readouts(); } var curve = Sim.curve({ ds: ds, after: document.querySelector('.sim__grid > .panel').querySelectorAll('.panel__group')[1], knobs: [{ id: 'lambda', slider: lambda, name: _t('Wavelength λ'), symbol: 'λ', units: 'px', digits: 1 }, { id: 'freq', slider: freq, name: _t('Frequency f'), symbol: 'f', units: 'Hz', digits: 2 }, { id: 'damp', slider: damp, name: _t('Damping γ'), symbol: 'γ', units: '', digits: 2 }], examples: [{ knob: 'lambda', shape: 'inv', from: 64, to: 16, T: 30, name: _t('Calm lines, one pair at a time'), why: _t('Press Reset first: two sources, s = 400 px apart. By equation (10) the calm lines are those with |m + ½| λ < s, so there are 2⌈s/λ − ½⌉ of them, a number that grows with 1/λ. This curve makes 1/λ grow at a steady rate, so a new pair is born at even intervals: from 12 calm lines at 64 px to 50 at 16 px, one pair about every 1.6 s. In a real ripple tank the same sweep is a steady rise in frequency, because there λ = v/f.') }, { knob: 'lambda', shape: 'exp', from: 64, to: 16, T: 30, name: _t('Exponential sweep: slow, then a rush'), why: _t('The same range swept exponentially: equal time for each halving of λ, 15 s from 64 to 32 px and 15 s from 32 to 16 px. With Reset’s two sources the calm lines go 12 → 24 → 50: six new pairs in the first half, thirteen in the second. Acousticians sweep a loudspeaker this way to measure a room (Farina, 2007).') }, { knob: 'lambda', shape: 'jerk', from: 30, to: 60, T: 6, name: _t('Exercise 5.1, done smoothly'), why: _t('The note’s Exercise 5.1 by itself: λ from 30 to 60 px along a minimum-jerk S-curve, which starts and stops at rest. With Reset’s two sources the calm lines go from 26 to 14. Far out, line m leaves the sources at the angle sin θ = (m + ½) λ / s from the vertical, so as λ grows every calm line swings outward and the outermost ones sink into the line of the sources.') }, { knob: 'damp', shape: 'jerk', from: 0, to: 0.6, T: 8, name: _t('Calm lines fill in'), why: _t('Damping from 0 to 0.6 along a minimum-jerk S-curve. At γ = 0 the two rings reach a calm line equally strong and cancel exactly. As γ rises the nearer source arrives stronger, and a small motion of amplitude |a₁ − a₂|/2 survives (§5): the outer calm lines, where one source is much nearer, begin to flicker, while those near the middle stay almost still.') }, { knob: 'freq', shape: 'exp', from: 0.2, to: 2, T: 20, name: _t('Frequency alone: the calm lines stay'), why: _t('Only the frequency changes, from 0.2 to 2 Hz, swept exponentially. The water flickers faster and the rings run outward faster, v = fλ (equation 8), but the calm lines do not move: in equation (9) their envelope cos(kΔr/2) holds k and no ω. On this page λ is a knob of its own; in a real tank a new f would also give a new λ = v/f.') }], play: function () { clk.set(true); }, playing: function () { return clk.playing; }, extra: function () { var n = ds.get('n_calm'); return n === n ? _t('{n} calm lines', { n: n }) : ''; } });
 
         function resize() {
             box.fit();
@@ -656,7 +656,7 @@
             for (p = 0; p < sumC.length; p++) ampl[p] = Math.sqrt(sumC[p] * sumC[p] + sumS[p] * sumS[p]);
             if (n === 0) { r1.fill(0); a1.fill(0); ph1.fill(0); }
             ds.touch('C'); ds.touch('S'); ds.touch('A'); ds.touch('r1'); ds.touch('a1'); ds.touch('ph1'); ds.touch('u'); ds.touch('x_s');
-            ds.set('builds', ++builds); ds.set('build_ms', performance.now() - t0); ds.set('trig_calls', 2 * n * cols * rows);
+            ds.set('builds', ++builds); ds.set('build_ms', performance.now() - t0); ds.set('trig_calls', 2 * n * cols * rows); var s2 = n === 2 ? Math.abs(xss[1] - xss[0]) : NaN; ds.set('s2', s2); ds.set('n_calm', n === 2 ? Math.max(0, 2 * Math.ceil(s2 / lambda.value - 0.5)) : NaN);
             dirty = false;
         }
 
@@ -760,7 +760,7 @@
         var clk = Sim.clock(function (dt, t) {
             simT = t;
             if (dt > 0) { frames++; lastDt = dt; fps = fps ? fps + (1 / dt - fps) * 0.1 : 1 / dt; }
-            ds.set('t', simT); ds.set('dt', lastDt); ds.set('fps', fps); ds.set('frames', frames); ds.set('playing', clk.playing);
+            ds.set('t', simT); ds.set('dt', lastDt); ds.set('fps', fps); ds.set('frames', frames); ds.set('playing', clk.playing); curve.step(dt);
             if (dirty) { precompute(); redraw = true; }
             if (dt > 0 || redraw) {
                 omegaT += 2 * Math.PI * freq.value * dt;
@@ -804,7 +804,7 @@
             playing: function () { return clk.playing; },
             groups: [
                 { title: _t('Physical parameters'), note: _t('what you set with the sliders, buttons and clicks'), vars: ['lambda', 'f', 'damp', 'N', 'u', 'x_s', 'y_s'] },
-                { title: _t('Derived physics'), note: _t('computed by the page from the parameters'), vars: ['k', 'omega', 'T', 'v', 'g', 'norm'] },
+                { title: _t('Derived physics'), note: _t('computed by the page from the parameters'), vars: ['k', 'omega', 'T', 'v', 'g', 'norm', 's2', 'n_calm'] },
                 { title: _t('Time'), note: _t('advances only while it plays'), vars: ['t', 'omegaT', 'cos_wt', 'sin_wt'] },
                 { title: _t('Centre of the field'), note: _t('the cell the walkthrough below reads'), vars: ['j_c', 'i_c', 'psi_c', 'n_c', 'rgb_c'] },
                 { title: _t('Arrays: the whole field'), note: _t('click a row to open it as a table; point at a cell to find it in the figure'), vars: ['C', 'S', 'psi', 'A', 'r1', 'a1', 'ph1', 'x', 'y', 'LUT'] },
@@ -838,7 +838,7 @@
                 return null;
             },
             check: {
-                lambda: function () { return sliderCheck(lambda.el, 'wavelength'); },
+                lambda: function () { return sliderCheck(lambda.el, 'wavelength'); }, s2: function () { var xs = ds.get('x_s'); return { formula: 's = |x<sub>2</sub> − x<sub>1</sub>|' + (xs.length === 2 ? '' : _t(', only for two sources')), inputs: xs.length === 2 ? [['x<sub>1</sub>', xs[0], 'px', 1], ['x<sub>2</sub>', xs[1], 'px', 1]] : [['N', xs.length, '', 0]], value: xs.length === 2 ? Math.abs(xs[1] - xs[0]) : NaN }; }, n_calm: function () { var s = ds.get('s2'), l = ds.get('lambda'); return { formula: 'n = 2 ⌈s/λ − ½⌉', inputs: [['s', s, 'px', 1], ['λ', l, 'px', 1]], value: s === s ? Math.max(0, 2 * Math.ceil(s / l - 0.5)) : NaN }; },
                 f: function () { return sliderCheck(freq.el, 'frequency'); },
                 damp: function () { return sliderCheck(damp.el, 'damping'); },
                 N: function () { return { formula: 'the length of the source list', inputs: [['sources', sources.length, '', 0]], value: sources.length }; },
@@ -894,11 +894,11 @@
                     return { what: _t('screen pixel at the source dot, (') + Math.round(sources[q] * box.w) + ', ' + Math.round(box.h - SOURCE_LIFT * box.w / WORLD_W) + _t(') css px'), drawn: 'rgb(' + px[0] + ', ' + px[1] + ', ' + px[2] + ')', expected: _t('the burgundy dot, rgb(122, 31, 43)'), ok: ok };
                 }
             },
-            round: { time: 't', label: function () { return _t('one period of the sources, T = ') + Sim.fmt(ds.get('T'), 3) + ' s'; }, length: function () { return ds.get('T'); },
-                columns: ['omegaT', 'cos_wt', 'sin_wt', 'psi_c'], point: function () { return { j: Math.floor(ds.dims.j / 2), i: Math.floor(ds.dims.i * 0.72) }; } },
+            round: curve.round({ time: 't', label: function () { return _t('one period of the sources, T = ') + Sim.fmt(ds.get('T'), 3) + ' s'; }, length: function () { return ds.get('T'); },
+                columns: ['omegaT', 'cos_wt', 'sin_wt', 'psi_c', 'n_calm'], point: function () { return { j: Math.floor(ds.dims.j / 2), i: Math.floor(ds.dims.i * 0.72) }; } }),
             play: function () { clk.set(true); },
-            about: _t('Here ψ reaches the screen through a colour table of 256 steps, so the picture carries ψ to one part in 128 while the store keeps float32, about seven significant figures. The image has one pixel per grid cell and the browser scales it up with smoothing, so a screen pixel between two cells shows a blend of both.')
-        };
+            about: _t('Here ψ reaches the screen through a colour table of 256 steps, so the picture carries ψ to one part in 128 while the store keeps float32, about seven significant figures. The image has one pixel per grid cell and the browser scales it up with smoothing, so a screen pixel between two cells shows a blend of both.') + ' ' + _t('A curve moves its slider in the slider’s own steps (λ in 0.1 px, f in 0.05 Hz, γ in 0.01), so the simulation follows p<sub>set</sub>, the curve’s value on those steps, not p(u) itself; the store keeps both.')
+        }; curve.extend(Sim.data);
 
         resize();
         readouts();

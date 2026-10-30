@@ -18,7 +18,8 @@ and it shows a visible error banner if any script on the page throws.
 
 Every simulation page loads the shared scripts at the end of `<body>`, in this order. The page's own inline script sits
 between `dataset.js` and `datalog.js`; Figs. 9, 10 and 11 load their data panel's ledger (`scripts/ledger/<page>.js`) just
-before `datalog.js`, on the same line. Line numbers measured 29 October 2026.
+before `datalog.js`, on the same line. Since 30 October 2026 Fig. 1 also loads the parameter curve, `scripts/curve.js`
+([curve.md](curve.md)), right after `dataset.js` on line 508. Line numbers measured 29 October 2026.
 
 | Fig. | Page | `fold.js` | `sim.js` | `dataset.js` | page script | `datalog.js` |
 |---|---|---|---|---|---|---|
