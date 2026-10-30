@@ -11,7 +11,7 @@ describe the notes change; the simulation and wind pages, stylesheets and every 
 - **Figures** are numbered at build time in caption order; no page outside the notes cites a figure number, so new figures may be
   inserted. Every new figure is inline SVG in the notes' existing drawing style.
 - **Every number** comes from `numbers.json` or is listed in `tools/typed_numbers.py`; `tools/check_numbers.py` enforces it.
-- **Every added step of algebra** is checked in `derive/R_revision.py` (SymPy, 40 checks, all PASS).
+- **Every added step of algebra** is checked in `derive/R_revision.py` (SymPy, 47 checks, all PASS).
 
 ## Diagnosis, chapter by chapter (where a BSc graduate stops, and the fix)
 
@@ -134,5 +134,25 @@ What was done with each (✔ fixed, ○ left, with the reason):
 35. Equality claim in 8.3 wrong for point masses. ✔ Corrected (a rod never; point masses hanging straight can).
 36. (9.1) with a gearbox. ✔ Why it still holds in the turning frame.
 
-After the fixes: `check_numbers.py` PASS, `R_revision.py` 40 checks PASS, `check_physics.py` ALL PASS, `check_combined.py` ALL PASS,
+After the fixes: `check_numbers.py` PASS, `R_revision.py` 40 checks PASS (47 after the second pass), `check_physics.py` ALL PASS, `check_combined.py` ALL PASS,
 headless Chromium at 1440 × 900 and 390 × 844: 20 figures, 97 displays, 0 KaTeX errors, 0 console errors, no sideways scroll.
+
+## Second pass (30 October 2026, later): derive what was only stated
+Asked again for a script a BSc graduate reads with nothing foreign to the eye. The first pass filled missing steps; this pass
+derives what was still only stated or cited:
+- 1.5: the adiabatic invariant derived (★): average dE/dφ over one swing, use ∂H/∂λ = −(∂H/∂p)(∂p/∂λ) on the orbit, get
+  d/dφ ∮p dθ = 0; where slowness enters, and why it fails near the hilltop.
+- 6.4: Kolmogorov's −5/3 from dimensions (the coffee-cup cascade, ε in W/kg, E(k) = C ε^{2/3} k^{−5/3}), carried to f by
+  Taylor's frozen turbulence; why the spectrum is flat below the large eddies.
+- 8.2: the vibration model's two linear equations written out (blade mode x, second blade χ, stator tilt β = Φ'x) and read term
+  by term; the same two hinge terms as the sag of 8.1; the Coriolis terms cancel at this order; the power integral.
+- Items left open by the first blind read: Figure 4's caption now takes its Γ values from the data (the 6 m/s run at Γ = 3.32 and
+  the sweep's neighbours), Figure 17's caption no longer leans on later text, Table 4's uneven shares explained (catalogue ratios),
+  and `teaching/export_notes.py` numbers figures as the build does.
+`derive/R_revision.py` now holds 47 SymPy checks, all PASS (new: Kolmogorov's exponents, the adiabatic identity and the harmonic
+action, the 8.2 equations re-derived from `L3_shake2.py`'s Lagrangian with no first-derivative terms).
+
+Coordination: another session works on the animations at the same time. This branch touches the notes' sources, their build output,
+the shared generated page `public/portfolios/rotor-pendula/index.html`, `docs/portfolios.md` and `docs/files.md`. Before each push the
+branch is checked against `origin/main`; if `main` has moved, the commits are rebased and the generated files are rebuilt with the
+study's scripts, never merged by hand.
