@@ -342,7 +342,7 @@ lists every file) by `python3 portfolios-src/impact/build.py --site`. Never edit
 | `impact/index.html` | The study in English: two balls of 1 kg, iron and cotton, dropped from 10 m onto a head drawn as a plate on a spring and damper, which is also the scale. A peak-hold force gauge and a digital panel under each ball, force curves, energy books, seven sections of derivations and a table of every parameter. |
 | `impact/ar.html` | The same study written in Arabic, right to left, set in Amiri and Noto Naskh Arabic ([assets.md](assets.md#arabic-faces-added-22-october-2026-on-numas-request)). |
 | `impact/de.html` | The same study in German (`text_de.py`, since 23 October 2026), house fonts; its sitebar links English · Deutsch · العربية and the German Portfolios page. |
-| `impact/fig/01_impact.webp` … `04_weight.webp` | The four plates of the Portfolios entry, screenshots of the English page. |
+| `impact/fig/01_impact.webp` … `04_weight.webp` | The four plates of the Portfolios entry, screenshots of the English page. The entry shows them as Figures 1–4 in the order `01_impact`, `04_weight`, `02_force`, `03_energy`: the two scenes (818 × 600) share the first row and the two plots (1252 × 600, 1468 × 600) the second, so the two plates of a row are nearly the same height. In file order a tall scene sat beside a short plot in each row, leaving 129 px and 187 px of blank under the plots at 1440 px (measured in headless Chromium, 30 October 2026); now at most 59 px, as in the other entries. |
 
 **How a page works.** The model (`physics.js`, copied into the page between `/*PHYSICS-BEGIN*/` and `/*PHYSICS-END*/`) runs once
 when the page opens, in slices of 14 ms so the page stays usable, and stores every particle's position every 1 ms up to 2.5 s and

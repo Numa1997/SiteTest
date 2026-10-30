@@ -187,6 +187,10 @@
   "src": "Read the derivations",
   "tr": "اقرأ الاشتقاقات"
  },
+ "389e5a254b59": {
+  "src": "<span class=\"pfig__n\">Figure 4</span>The energy books at the end: iron heats the head, cotton heats itself.",
+  "tr": "<span class=\"pfig__n\">الشكل 4</span>حساب الطاقة في النهاية: الحديد يسخّن الرأس، والقطن يسخّن نفسه."
+ },
  "38bfbe5a1389": {
   "src": "Push a small piston and a large one lifts a car: Pascal’s principle, the oldest trick in hydraulics. A modern press adds a servo valve and a computer, and the trick becomes a control problem. This study builds one such press from first principles: a pump held at 12 MPa, a four-way servo valve, two metres of hose, a cylinder carrying a 160 kg ram, and a specimen to squeeze, in a nonlinear model with eight state variables. A PID controller, sampled every millisecond, drives the ram to the specimen in position control, switches to force control at contact, ramps to 60 kN, holds and lets go. You watch every step with the oil coloured by its pressure, change any setting and see the whole cycle recomputed, and ask the linearized loop, with Bode, Nyquist and z-plane plots, whether it survives. A 23-chapter companion text derives every equation the animation integrates, starting from Pascal’s press.",
   "tr": "ادفع مكبسًا صغيرًا يرفعْ مكبسٌ كبير سيّارة: مبدأ باسكال، أقدم حيلة في الهيدروليك. ويضيف المكبس الحديث صمّامًا مؤازرًا وحاسوبًا، فتصير الحيلة مسألة تحكّم. تبني هذه الدراسة مكبسًا من هذا النوع من المبادئ الأولى: مضخّة مثبَّتة عند 12 MPa، وصمّام مؤازر رباعي المسالك، ومتران من الخرطوم، وأسطوانة تحمل مِدكًّا كتلته 160 kg، وعيّنة تُضغَط، في نموذج لاخطّي بثمانية متغيّرات حالة. متحكّمٌ PID يُعايَن كلّ ميليثانية يقود المِدكّ إلى العيّنة بالتحكّم في الموضع، ثمّ ينتقل إلى التحكّم في القوّة عند التلامس، ويرفع القوّة إلى 60 kN، ويحافظ عليها، ثمّ يُفلت. تشاهد كلّ خطوة والزيت ملوّنٌ بحسب ضغطه، وتغيّر أيَّ ضبط فترى الدورة كلّها محسوبة من جديد، وتسأل الحلقةَ بعد تقريبها خطّيًّا، بمخطّطات بودي ونايكويست ومستوي z، هل تبقى مستقرّة. ونصٌّ مرافق في 23 فصلًا يشتقّ كلّ معادلة تكاملها الرسوم المتحرّكة، بدءًا من مكبس باسكال."
@@ -206,6 +210,10 @@
  "40acd8393970": {
   "src": "Fall speed, collision efficiency, critical Stokes numbers and the Golovin test.",
   "tr": "سرعة السقوط، وكفاءة التصادم، وعددا ستوكس الحرجان، واختبار غولوفين."
+ },
+ "40da3b7a4ef9": {
+  "src": "<span class=\"pfig__n\">Figure 2</span>At rest: both scales read 9.81 N, 1.000 kg, and keep their very different peaks.",
+  "tr": "<span class=\"pfig__n\">الشكل 2</span>في السكون: الميزانان كلاهما يقرأ 9.81 N، أي 1.000 kg، ويحتفظان بذروتيهما المختلفتين جدًّا."
  },
  "419c773e1dee": {
   "src": "largest share of the turbine’s output, paid by the rotor",
@@ -578,6 +586,10 @@
  "9dd35bd1eabb": {
   "src": "Droplet Collection",
   "tr": "Droplet Collection"
+ },
+ "9f9b3ec46526": {
+  "src": "<span class=\"pfig__n\">Figure 3</span>The same blow twice: iron as a tall spike, cotton as a low, wide hump.",
+  "tr": "<span class=\"pfig__n\">الشكل 3</span>الضربة نفسها مرّتين: الحديد قمّةٌ عالية حادّة، والقطن حدبةٌ منخفضة عريضة."
  },
  "a01abbeeb83e": {
   "src": "Warm and cold clouds, four models of the same spectrum.",
