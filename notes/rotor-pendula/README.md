@@ -64,6 +64,12 @@ boxes in sections 5.4, 6.5 and 7.4 split into a box of results and a paragraph o
 statements (section 7.3 is now "The air as a brake"), the punctuation around (7.1) and (9.1) mended, Figure 13 referred to from
 the text, and Figure 8's caption shortened. Equation and figure numbers are unchanged.
 
+## Revision for a BSc reader (30 October 2026)
+The steps a reader with a bachelor's in physics would stop at were filled, chapter by chapter, without changing any result, number or
+equation number (the simulation and wind pages cite the numbers). Diagnosis, fixes and the blind reader's report: `revision.md`.
+Every added step is checked by `derive/R_revision.py` (SymPy, 32 checks). Three figures were added: the drive chain (chapter 5), the
+steady lean (chapter 7), the bent tip and the tilted stator (chapter 8).
+
 ## Results (second blade, 1 kg on 1 m)
 - Best power at the best brake: 268, 201 and 161 mW at 6, 8 and 10 m/s by (2.5); the full equation gives 267, 201 and 161 mW
   (within 0.31 %). The rotor pays every joule: the trail identity holds to 1e-12 in all nine runs.
