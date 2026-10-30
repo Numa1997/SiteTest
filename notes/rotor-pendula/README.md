@@ -67,7 +67,7 @@ the text, and Figure 8's caption shortened. Equation and figure numbers are unch
 ## Revision for a BSc reader (30 October 2026)
 The steps a reader with a bachelor's in physics would stop at were filled, chapter by chapter, without changing any result, number or
 equation number (the simulation and wind pages cite the numbers). Diagnosis, fixes and the blind reader's report: `revision.md`.
-Every added step is checked by `derive/R_revision.py` (SymPy, 32 checks). Three figures were added: the drive chain (chapter 5), the
+Every added step is checked by `derive/R_revision.py` (SymPy, 40 checks). Three figures were added: the drive chain (chapter 5), the
 steady lean (chapter 7), the bent tip and the tilted stator (chapter 8).
 
 ## Results (second blade, 1 kg on 1 m)

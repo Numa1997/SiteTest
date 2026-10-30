@@ -142,6 +142,25 @@ grad = [sp.simplify(ratio.diff(q).subs({x1s: xs[0], x2s: xs[1]})) for q in (x1s,
 check('8.3  qdot = M^-1 b is a stationary point of the ratio', sum(abs(gq) for gq in grad))
 check('8.3  rod on a hinge: (ml/2)^2/(ml^2/3) = 3m/4', (m*l/2)**2/I - sp.Rational(3, 4)*m)
 
+# 1.5: the action of a swing of amplitude a in u = -A cos(theta - theta_b): J = (8 sqrt A/pi)[E(k) - (1-k^2) K(k)], k = sin(a/2),
+#      checked against (1/2pi) * closed integral of theta' d theta at three amplitudes, and its two limits.
+Aa = sp.Integer(90)
+for amp in (sp.Rational(1, 2), 2, sp.Rational(29, 10)):
+    k2 = sp.sin(amp/2)**2
+    Jf = 8*sp.sqrt(Aa)/sp.pi*(sp.elliptic_e(k2) - (1 - k2)*sp.elliptic_k(k2))       # sympy's elliptic_k(m), m = k^2
+    u_ = sp.symbols('u_')
+    Jn = 2/(2*sp.pi)*sp.Integral(sp.sqrt(2*Aa*(sp.cos(u_) - sp.cos(amp))), (u_, -amp, amp))
+    check(f'1.5  elliptic action at a = {amp}', sp.N(Jf - Jn, 12) if abs(sp.N(Jf - Jn, 12)) > 1e-9 else 0)
+kk = sp.symbols('k', positive=True)
+Jk = 8/sp.pi*(sp.elliptic_e(kk**2) - (1 - kk**2)*sp.elliptic_k(kk**2))
+check('1.5  small swing: J -> 2 k^2 ~ a^2/2 (per sqrt A)', sp.limit(Jk/kk**2, kk, 0) - 2)
+check('1.5  a -> pi: J -> J_s = 8/pi (per sqrt A), numerically at k = 1 - 1e-14', 0 if abs(sp.N(Jk.subs(kk, 1 - sp.Rational(1, 10**14)) - 8/sp.pi, 20)) < 1e-10 else 1)
+# 1.5: near the top x'' = A x, x = x_min cosh(sqrt A (phi - phi0)) solves it with x' = 0 at phi0.
+xm, ph0 = sp.symbols('x_min varphi_0', positive=True)
+xs_ = xm*sp.cosh(sp.sqrt(Aa)*(phv - ph0))
+check('1.5  cosh solves x\'\' = A x', sp.simplify(xs_.diff(phv, 2) - Aa*xs_))
+check('1.5  arccosh(1/x) ~ ln(2/x) as x -> 0', sp.limit(sp.acosh(1/xm) - sp.log(2/xm), xm, 0))
+
 # 9.1: P*/(ceiling at that swing) = pi/(4 sqrt 2).
 check('9.1  ceiling fraction', (sp.Rational(1, 2)/sp.sqrt(2))/(2/sp.pi) - sp.pi/(4*sp.sqrt(2)))
 

@@ -11,7 +11,7 @@ describe the notes change; the simulation and wind pages, stylesheets and every 
 - **Figures** are numbered at build time in caption order; no page outside the notes cites a figure number, so new figures may be
   inserted. Every new figure is inline SVG in the notes' existing drawing style.
 - **Every number** comes from `numbers.json` or is listed in `tools/typed_numbers.py`; `tools/check_numbers.py` enforces it.
-- **Every added step of algebra** is checked in `derive/R_revision.py` (SymPy, 32 checks, all PASS).
+- **Every added step of algebra** is checked in `derive/R_revision.py` (SymPy, 40 checks, all PASS).
 
 ## Diagnosis, chapter by chapter (where a BSc graduate stops, and the fix)
 
@@ -88,3 +88,51 @@ Judgment: clear; the chain of losses is followed step by step. Missing picture:
 ## What is deliberately not changed
 The voice, the structure of every chapter (picture, idea boxes, derivation, "On our blade", remember, problems) and every result.
 Sections judged clear are not reworded (Numa's rule of 20 October 2026: no overkill), apart from the fixes above.
+
+## The blind read (30 October 2026)
+One independent reader (a subagent given only the built notes as text, with numbers filled in, and the 20 figures as images; never
+this plan) read all nine chapters as a BSc graduate and marked 36 places. It re-derived (1.1)–(8.4) and found no algebraic error.
+What was done with each (✔ fixed, ○ left, with the reason):
+
+1. Figure numbers in the text off by one or two. ○ An artifact of the text export made for the reader (it counted text references
+   as captions). The built page numbers its 20 captions 1–20 in order and every reference matches (checked in `rotor_notes.html`).
+2. "bowl", "hilltop", κ* used in 1.4 before 1.5. ✔ Defined where first used, κ* with a pointer to chapter 3.
+3. The R − 1 sentence of 1.4. ○ Rewritten in the first pass; it now names the reason (θ'' = −θ) and points to chapter 3.
+4. Light brakes forget faster than the best one (Table 1). ✔ One sentence: the best brake is ~5× critical, slow root ≈ −R/κ*.
+5. Figure 5 caption "above Γ ≈ 3.6" against 6 m/s (Γ = 3.32). ○ The caption is written by `tools/make_numbers.py`; reported, not changed.
+6. Radians to metres in the 14.4 s horizon. ✔ Stated: 1e-9 rad on a 1 m rod is 1e-9 m.
+7. Time near the top. ✔ Derived from x = x_min cosh(√A(φ−φ0)); the 0.1 and 0.26 turns named as whole periods.
+8. Action to amplitude needs elliptic integrals. ✔ J = (8√A/π)[E(k) − (1−k²)K(k)], k = sin(a/2), with both limits; checked in R_revision.py.
+9. Swing picture contradicted experience. ✔ Rewritten: a still palm the swing bounces off (in step with position) against a push that follows it.
+10. Why the rocking term is second order. ✔ Rewritten: lean and wobble of size GΘ/R; second pass gives a fraction (G/R)² ≈ Θ² of the swing; the lean named as chapter 4's trail.
+11. Symbols with several meanings. ✔ Complex amplitude in (3.2) renamed θ̂; ψ of 8.1 renamed χ; Veers' random numbers X_q, Y_q; the gust
+    component v flagged. ○ A (bowl stiffness, disc area), L, a, f stay: each lives in its own chapter and is defined there.
+12. Battery analogy against the real generator's wiring. ✔ A note on the mapping (resistance to motion, not R_L).
+13. "what remains … rms". ✔ Said what it is.
+14. "parts that average to zero". ✔ Points to the exact torque derived above it.
+15. j not divided by η in (5.4). ✔ Said why (estimate; j ≪ R − 1; the full (5.8) charges it).
+16. Rotor pays more than P* at 6 m/s. ✔ Explained by j lowering the net stiffness, about j/(R−1).
+17. "three brakes tried". ✔ Named: half, the formula's, twice (as `L4_check.py` runs them).
+18. Dips in Table 4's shares. ○ Left; they come from the discrete catalogue ratios and the torque limit. Reported.
+19. "311 times" not in a table; Θ* without its wind. ✔ Named the case (lightest blade, 10 m/s) and the wind.
+20. Promise to explain λ* = 7.55. ✔ Promise reworded; the 7.55 and 7.64 peaks reconciled (same flat top, two calculations; 7.48 was already explained).
+21. Betz side pressure argument circular. ✔ Stated as the model's assumption, with the condition under which it holds.
+22. Figure 17's caption names the 256 s record before the text. ○ Caption from `make_numbers.py`; reported.
+23. Which torque law the first wander belongs to. ✔ "Under the turbine's real torque law".
+24. Where 205 mW comes from. ✔ The same solver in steady sheared wind.
+25. Euler torque estimate. ✔ Measured by solving each run with and without the term.
+26. Two dynamic pressures. ✔ Remark added.
+27. (7.2) not reproducible. ✔ A_c and A_s written out, gravity's parts included, which air torque is which; verified: the formula
+    gives −23.6, −2.0, +43.8 % from `data/L5_air.json`, identical to the script.
+28. "its lean on its own would help". ✔ Wrong as written; replaced: a lean alone only turns gravity's arrow.
+29. F_t held fixed in the stiffness. ✔ Stated, with the reason.
+30. Half a degree of extra lean. ✔ Replaced with the trail's 0.42° accounting for more than half of the difference.
+31. Which lift term drives the gust gain. ✔ Both named; the W C_L term (lift turning forward) is the larger for the wing.
+32. Sag sign convention. ✔ Stated once, at the first display.
+33. Tip slope not given. ✔ The mode's tilt per metre of tip motion quoted where the tilt enters.
+34. 8.2's equations not given. ✔ Said where they are (`L3_shake2.py`) and that the notes give model and results only.
+35. Equality claim in 8.3 wrong for point masses. ✔ Corrected (a rod never; point masses hanging straight can).
+36. (9.1) with a gearbox. ✔ Why it still holds in the turning frame.
+
+After the fixes: `check_numbers.py` PASS, `R_revision.py` 40 checks PASS, `check_physics.py` ALL PASS, `check_combined.py` ALL PASS,
+headless Chromium at 1440 × 900 and 390 × 844: 20 figures, 97 displays, 0 KaTeX errors, 0 console errors, no sideways scroll.
