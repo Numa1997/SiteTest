@@ -101,4 +101,14 @@ $$P_{\rm in} \le \frac S2\,M_{\rm total}, \qquad\text{and for the second blade}\
 <li>The blade's own vibration adds power as the square of the tip's vibration: negligible at 5 mm, more than gravity at 100 mm. The real level for this blade is not known, so this stays open.</li>
 <li>White-noise shaking of strength $S$ feeds in $\tfrac S2$ times an effective mass, never more than the real mass, $\tfrac34m$ for a rod on a hinge, whatever the motion: chaos cannot beat the ceiling, and in the test it fell short of it.</li>
 </ul></div>
+<div class="problems"><div class="ctag">Problems</div><ol>
+<li>A point mass $m$ hangs on a massless rod of length $L$ from a pivot shaken along $\hat e$, and the rod makes the angle $\psi$ between $\hat e$ and the direction the mass moves. Find its effective mass, and say when it equals the whole mass.
+<details class="ans"><summary>Answer</summary>Turning the rod by $dq$ moves the mass by $L\,dq$ along its path, of which $L\cos\psi\,dq$ lies along $\hat e$: $b = mL\cos\psi$. The mass matrix is $mL^2$, so $m_{\rm eff} = b^2/(mL^2) = m\cos^2\psi$, the whole mass when the mass moves along the shaking, $\psi = 0$. A uniform rod reaches only $\tfrac34m$, because its pieces near the pivot move less than its end (8.3).</details></li>
+<li>Show that a hinge moved to and fro across the mother blade by $y = w\cos\varphi$ pushes the second blade with $\tfrac{ml}{2}\cdot2\Omega^2w\cos\varphi$, using the second equation of section 8.2.
+<details class="ans"><summary>Answer</summary>The hinge's terms on the right are $-\tfrac{ml}{2}(\ddot y - \Omega^2y)$. With $\varphi = \Omega t$, $\ddot y = -\Omega^2w\cos\varphi$, so
+$$-\frac{ml}{2}\big(-\Omega^2w\cos\varphi - \Omega^2w\cos\varphi\big) = \frac{ml}{2}\cdot2\Omega^2w\cos\varphi:$$
+half from the hinge's acceleration, as in the car, half from the outward pull turned by the hinge's shift.</details></li>
+<li>How long would a second blade have to be for its own swing, $\sqrt R$ times per turn, to match the blade's edgewise mode, 1.08 Hz, at {{n:rpm_O0}} rpm? Why is that tuning hard to keep?
+<details class="ans"><summary>Answer</summary>$\Omega\sqrt{3r_p/(2l)} = 2\pi f$ gives $l = 3r_p\Omega^2/[2(2\pi f)^2]$ = {{n:tu_L}} m. The tuning is hard to keep because gravity's term rocks the second blade's stiffness by $\pm1/(2\Gamma)$ once per turn, and the rotor's speed wanders by about a tenth (section 6.5), both more than the resonance's width of 1 to 6 %.</details></li>
+</ol></div>
 </section>
