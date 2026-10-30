@@ -47,7 +47,7 @@ window.WALK["driven"] = {
      "F",
      "F<sub>0</sub> cos Ωt",
      "drive(p, t)",
-     "drive force, N: F₀ cos Ωt, or F₀ cos θ with θ = 2π∫f dt under a curve of f; Now: at the sample on screen"
+     "Erregerkraft, N: F₀ cos Ωt, oder F₀ cos θ mit θ = 2π∫f dt unter einer Kurve von f; Jetzt: am Abtastwert auf dem Bildschirm"
     ],
     [
      "c",

@@ -392,6 +392,7 @@
  "drive angular frequency, rad/s": "Erreger-Kreisfrequenz, rad/s",
  "drive force shown now, N": "jetzt gezeigte Erregerkraft, N",
  "drive force, N": "Erregerkraft, N",
+ "drive force, N: F₀ cos Ωt, or F₀ cos θ with θ = 2π∫f dt under a curve of f; Now: at the sample on screen": "Erregerkraft, N: F₀ cos Ωt, oder F₀ cos θ mit θ = 2π∫f dt unter einer Kurve von f; Jetzt: am Abtastwert auf dem Bildschirm",
  "drive force, N; Now: at the sample on screen": "Erregerkraft, N; Jetzt: am Abtastwert auf dem Bildschirm",
  "end of compute() — the object G; storeDerived() — ratio, phi; readouts() — r-phi": "Ende von compute() — das Objekt G; storeDerived() — ratio, phi; readouts() — r-phi",
  "end of the bar in the drawing, px": "Ende des Balkens in der Zeichnung, px",

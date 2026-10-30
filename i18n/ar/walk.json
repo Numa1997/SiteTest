@@ -392,6 +392,7 @@
  "drive angular frequency, rad/s": "التردد الزاوي للتحريك، rad/s",
  "drive force shown now, N": "قوة التحريك المعروضة الآن، N",
  "drive force, N": "قوة التحريك، N",
+ "drive force, N: F₀ cos Ωt, or F₀ cos θ with θ = 2π∫f dt under a curve of f; Now: at the sample on screen": "قوة التحريك، N: F₀ cos Ωt، أو F₀ cos θ حيث θ = 2π∫f dt حين يتبع f منحنًى؛ الآن: عند العيّنة المعروضة",
  "drive force, N; Now: at the sample on screen": "قوة التحريك، N؛ الآن: عند العيّنة المعروضة",
  "end of compute() — the object G; storeDerived() — ratio, phi; readouts() — r-phi": "نهاية compute() — الكائن G؛ storeDerived() — ratio وphi؛ readouts() — r-phi",
  "end of the bar in the drawing, px": "نهاية الشريط في الرسم، بالبكسل",
