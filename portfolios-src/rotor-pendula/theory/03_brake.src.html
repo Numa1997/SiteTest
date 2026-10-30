@@ -6,7 +6,9 @@
 <div class="picture">Hang a weight on a stiff spring and move your hand slowly up and down, far slower than the spring's own bounce. The weight simply follows your hand. Put the weight in honey and it follows a little late. It never bounces, because you never push at its own rhythm.</div>
 <p>Let $\theta$ be small and expand the two pulls of (1.8):</p>
 $$R\sin\theta + G\cos(\varphi+\theta) = \underbrace{R\,\theta}_{\text{spring}} + \underbrace{G\cos\varphi}_{\text{push}} - \underbrace{G\,\theta\sin\varphi}_{\text{stiffness rocking}} + O(\theta^2).$$
-<p>The last term is not small beside $R\theta$: its relative size is $1/\Gamma$, up to {{n:invGam_max}}. But it acts at the wrong rhythm. The swing goes once per turn; multiplied by $\sin\varphi$, it gives a push that is partly steady and partly twice per turn, and neither rhythm drives a once-per-turn swing. It can act back on the swing only by passing through the same term a second time, so its effect is of second order (section 4.1 measures it). Drop it, and what is left is</p>
+<p>The last term is not small beside $R\theta$: its relative size is $1/\Gamma$, up to {{n:invGam_max}}. But it acts at the wrong rhythm. The swing goes once per turn, $\theta = -\Theta\cos(\varphi - \delta)$ (section 3.2 finds $\Theta$ and $\delta$), and the product rule $\cos a\sin b = \tfrac12[\sin(a+b) - \sin(a-b)]$ turns the rocking term into</p>
+$$G\,\theta\sin\varphi = -\frac{G\Theta}{2}\Big[\sin\delta + \sin(2\varphi - \delta)\Big]:$$
+<p>a steady push and one that comes twice per turn, and neither rhythm drives a once-per-turn swing. The steady push leans the second blade a little; the twice-per-turn push makes a small twice-per-turn wobble. Each acts back on the once-per-turn swing only by passing through the same term a second time, which multiplies it once more by the small swing, so its effect on the power is of second order in the swing (section 4.1 measures it). Drop it, and what is left is</p>
 $$\theta'' + \kappa\,\theta' + R\,\theta = -G\cos\varphi, \tag{3.1}$$
 <p>the driven, damped oscillator: spring $R$, damper $\kappa$, push $G$ once per turn.</p>
 

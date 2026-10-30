@@ -1,6 +1,38 @@
 <section id="watts" class="chapter">
 <h2><span class="chn">5</span> From swing to watts</h2>
-<p>Chapters 2 to 4 treated the generator as a perfect brake, $-c\dot\theta$, losing nothing. A real one is a small electric motor driven backwards, behind a gearbox. This chapter takes one from a catalogue, follows the power from the swinging second blade to the sensor's wires, and sizes the second blade to suit it.</p>
+<p>Chapters 2 to 4 treated the generator as a perfect brake, $-c\dot\theta$, losing nothing. A real one is a small electric motor driven backwards, behind a gearbox. This chapter takes one from a catalogue, follows the power from the swinging second blade to the sensor's wires, and sizes the second blade to suit it. Figure {{fig:chain}} shows the chain the power runs along.</p>
+<figure class="fig"><svg viewBox="0 0 560 250" role="img" aria-label="The drive chain. From left to right: the second blade swinging at the rate theta-dot about the hinge; the gearhead of ratio N to 1 with efficiency eta and friction; the motor run as a generator, with torque constant k_t equal to the voltage constant k_e, coil resistance R_c and rotor inertia J, turning at N times theta-dot; and the load resistance R_L. Under each link, what it does: the gearhead multiplies the speed by N and divides the torque by N, losing a share 1 minus eta and the friction; the motor makes the voltage k_e N theta-dot and the current i; the coil heats by i squared R_c and the load receives i squared R_L.">
+<defs><marker id="ch" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#23160f"/></marker></defs>
+<line x1="20" y1="70" x2="78" y2="40" stroke="#7d1d2f" stroke-width="8" stroke-linecap="round"/>
+<circle cx="78" cy="70" r="7" fill="#fff" stroke="#23160f" stroke-width="2"/>
+<path d="M44 92 A40 40 0 0 1 40 62" fill="none" stroke="#23160f" stroke-width="1.3" marker-end="url(#ch)"/>
+<text x="14" y="112" class="svgd">rate dθ/dt</text>
+<text x="48" y="140" text-anchor="middle" class="svgd">second blade</text>
+<line x1="86" y1="70" x2="128" y2="70" stroke="#23160f" stroke-width="1.5" marker-end="url(#ch)"/>
+<rect x="130" y="40" width="110" height="60" fill="#fff" stroke="#23160f"/>
+<text x="185" y="64" text-anchor="middle" class="svgd">gearhead</text>
+<text x="185" y="84" text-anchor="middle" class="svgd" font-style="italic">N : 1, η</text>
+<line x1="240" y1="70" x2="288" y2="70" stroke="#23160f" stroke-width="1.5" marker-end="url(#ch)"/>
+<text x="264" y="60" text-anchor="middle" class="svgc">N dθ/dt</text>
+<rect x="290" y="40" width="120" height="60" fill="#fff" stroke="#23160f"/>
+<text x="350" y="58" text-anchor="middle" class="svgd">motor</text>
+<text x="350" y="78" text-anchor="middle" class="svgd" font-style="italic">k<tspan dy="3" font-size="9">t</tspan><tspan dy="-3"></tspan> = k<tspan dy="3" font-size="9">e</tspan><tspan dy="-3"></tspan>, J</text>
+<text x="350" y="96" text-anchor="middle" class="svgd" font-style="italic">coil R<tspan dy="3" font-size="9">c</tspan><tspan dy="-3"></tspan></text>
+<line x1="410" y1="70" x2="458" y2="70" stroke="#23160f" stroke-width="1.5" marker-end="url(#ch)"/>
+<text x="434" y="60" text-anchor="middle" class="svgd" font-style="italic">i</text>
+<rect x="460" y="40" width="80" height="60" fill="#fff" stroke="#33627f" stroke-width="1.6"/>
+<text x="500" y="64" text-anchor="middle" class="svgd">load</text>
+<text x="500" y="84" text-anchor="middle" class="svgd" font-style="italic">R<tspan dy="3" font-size="9">L</tspan><tspan dy="-3"></tspan></text>
+<text x="185" y="140" text-anchor="middle" class="svgc">speed × N, torque ÷ N</text>
+<text x="185" y="158" text-anchor="middle" class="svgc">inertia felt: J N²</text>
+<text x="350" y="140" text-anchor="middle" class="svgc">voltage e = k<tspan dy="3" font-size="9">e</tspan><tspan dy="-3"></tspan> N dθ/dt</text>
+<text x="350" y="158" text-anchor="middle" class="svgc">torque k<tspan dy="3" font-size="9">t</tspan><tspan dy="-3"></tspan> i, back</text>
+<text x="500" y="140" text-anchor="middle" class="svgc">gets i² R<tspan dy="3" font-size="9">L</tspan><tspan dy="-3"></tspan></text>
+<line x1="185" y1="172" x2="185" y2="204" stroke="#b5681c" stroke-width="1.5" marker-end="url(#ch)"/>
+<text x="185" y="222" text-anchor="middle" class="svgc" fill="#b5681c">loses 1 − η and friction</text>
+<line x1="350" y1="172" x2="350" y2="204" stroke="#b5681c" stroke-width="1.5" marker-end="url(#ch)"/>
+<text x="350" y="222" text-anchor="middle" class="svgc" fill="#b5681c">coil heats by i² R<tspan dy="3" font-size="9">c</tspan><tspan dy="-3"></tspan></text>
+</svg><figcaption>Figure {{fig:chain}}. The drive chain from the swing to the sensor's wires. The second blade turns the gearhead's slow side at $\dot\theta$; the gearhead turns the motor $N$ times faster and hands back its torque multiplied by $N$, losing the share $1 - \eta$ of the power that passes and a friction torque; the motor, driven backwards, makes the voltage $e = k_eN\dot\theta$ and drives the current $i = e/(R_c + R_L)$ through its own coil and the load; the current makes the braking torque $k_ti$. The losses (ochre) are the subject of sections 5.2 and 5.3; Figure {{fig:flow}} measures them.</figcaption></figure>
 
 <h3 id="watts-brake">5.1 A motor driven backwards</h3>
 <p>A permanent-magnet motor is the generator of section 2.4 with two catalogue constants: turning at $\omega_m$ it makes the voltage $e = k_e\omega_m$, the <b>back-EMF</b> (electromotive force); a current $i$ gives the torque $k_ti$; and $k_t = k_e$ in SI units. (The coil's inductance delays the current by $L_c/R_c = 0.12$ ms, nothing next to a swing of seconds.) A gearbox of ratio $N$ makes the motor turn $N$ times per turn of the hinge, $\omega_m = N\dot\theta$, and hands its torque on multiplied by $N$. So the ratio enters twice:</p>
