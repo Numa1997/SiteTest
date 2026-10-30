@@ -38,7 +38,7 @@ catalogue generator serves fully.
 |---|---|---|---|
 | L0 | the second blade derived twice; small swings, best brake, P* = m g^2 l / [8 Omega (r_p - 2l/3)] | `blade.py` | |
 | L1 | full nonlinear motion, Radau IIA engine (`engine.RigidBlade`), chaos | `engine.py`, `L1_blade.py`, `L1_chaos_blade.py` | `L1_blade.json`, `L1_chaos_blade.json` |
-| L2 | gusts on the NREL 5 MW turbine with its controller | `L2_run.py`, `L2_scales.py`, `turbulence.py` | `L2_run_nrel.json`, `L2_run_k2.json`, `L2_scales.json` |
+| L2 | gusts on the NREL 5 MW turbine with its controller; the rotor's two torques against its speed (Figure 20 of the notes) | `L2_run.py`, `L2_scales.py`, `turbulence.py`, `L2_torque_curve.py` | `L2_run_nrel.json`, `L2_run_k2.json`, `L2_scales.json`, `L2_torque.json` |
 | L3 | the blade sags and shakes at the tip; the shaking ceiling | `L3_sag.py`, `L3_sag_tip.py`, `L3_shake2.py`, `power_theorem.py`, `nrel5mw.py` | `L3_sag_tip.json`, `L3_shake2.json` |
 | L4 | real geared generator: losses, friction, reflected inertia; sizes | `L4_generator.py`, `L4_full.py`, `L4_check.py`, `L4_converge.py`, `design.py`, `sizes.py` | `L4_*.json`, `design.json`, `sizes.json` |
 | L5 | the air on the second blade, three shapes | `L5_air.py` | `L5_air.json` |
@@ -63,6 +63,12 @@ long derivations given a sentence between their steps (the shaft torque of secti
 boxes in sections 5.4, 6.5 and 7.4 split into a box of results and a paragraph of explanation, rhetorical questions turned into
 statements (section 7.3 is now "The air as a brake"), the punctuation around (7.1) and (9.1) mended, Figure 13 referred to from
 the text, and Figure 8's caption shortened. Equation and figure numbers are unchanged.
+
+## Revision for a BSc reader (30 October 2026)
+The steps a reader with a bachelor's in physics would stop at were filled, chapter by chapter, without changing any result, number or
+equation number (the simulation and wind pages cite the numbers). Diagnosis, fixes and the blind reader's report: `revision.md`.
+Every added step is checked by `derive/R_revision.py` (SymPy, 47 checks). Three figures were added: the drive chain (chapter 5), the
+steady lean (chapter 7), the bent tip and the tilted stator (chapter 8).
 
 ## Results (second blade, 1 kg on 1 m)
 - Best power at the best brake: 268, 201 and 161 mW at 6, 8 and 10 m/s by (2.5); the full equation gives 267, 201 and 161 mW
