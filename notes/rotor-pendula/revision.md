@@ -243,3 +243,5 @@ Numa: leave nothing missing; deploy what is produced, and loop by the standards 
   resolve to the named work. Landau–Lifshitz and Betz 1920 have no free copy and stay without a link.
 - Chapter 8 had no Problems box (Numa's verdict of 21 October 2026 asks for one per chapter): three problems with folded answers
   (the effective mass of a point mass; the sag's push from the 8.2 equation; the tuned length, 1.85 m).
+- Section 5.3 had no picture of its central idea: Figure 15 now shows friction's square-wave torque, its first harmonic of height
+  4f/π and the swing's rate, from which (5.5) follows. Later figures move up by one; `docs/portfolios.md` follows the page.
