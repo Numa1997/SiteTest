@@ -272,7 +272,7 @@ A round is what the page says it is, in `Sim.data.round` ([datalog.js:27-29](../
 | 5 | one period, $T$ | `t` | sampled | no | [L880](../../public/simulations/water-wave.html#L880) |
 | 6 | one repeat of the pattern, at most 20 s | `t` | sampled | no | [L962](../../public/simulations/wave-interference.html#L962) |
 | 7 | one full figure (or part of it) in phasor time | `t` | sampled | yes, in the final-shape view | [L1464](../../public/simulations/phasor-sums.html#L1464) |
-| 8 | one loop of the circles | `t` | sampled | yes, until a shape is decomposed | [L1400](../../public/simulations/draw-decompose.html#L1400) |
+| 8 | one loop of the circles; while a parameter curve runs, the rest of its run | `t_play` (s; `t` in rad until 30 October 2026) | sampled | yes, until a shape is decomposed | [L1400–1402](../../public/simulations/draw-decompose.html#L1400-L1402) |
 | 9 | one drive period $1/f$ of the stored run | `t_play` | sampled | yes, near the end of the run | [L1914](../../public/simulations/driven-oscillator.html#L1914) |
 | 10 | one rotor turn of the stored run | `t_play` | sampled | yes, near the end of the run | [L1155](../../public/simulations/wind-turbine.html#L1155) |
 | 11 | two seconds of the stored run | `t_play` | sampled | yes, in the last two seconds of the run | [L1333](../../public/simulations/pendulum-control.html#L1333) |

@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | File | [public/scripts/curve.js](../../public/scripts/curve.js), 504 lines, 37.2 kB (37 165 bytes) |
-| Loaded by | Fig. 1 (line 508), Fig. 2 (`Double Pendulum.html`, line 453) and Fig. 3 (`Interactive Double-Slit Experiment Visualization.html`, line 549), each right after `dataset.js`, and their German and Arabic pages; more figures follow two at a time |
+| Loaded by | the simulation pages that have a parameter curve, right after `dataset.js` on the same line: Fig. 1 (line 508), Fig. 2 (`Double Pendulum.html`, 453), Fig. 3 (`Interactive Double-Slit Experiment Visualization.html`, 549), Fig. 8 (`draw-decompose.html`, 621); and their German and Arabic pages |
 | Defines | `Sim.curve(opts)` on `window.Sim` ([curve.js:102](../../public/scripts/curve.js#L102)) |
 | Uses | `Sim.theme`, `Sim.fmt`, `Sim.canvas2d`, `Sim.onResize`, `Sim.readPixel`, `Sim.isBurgundy` ([sim.md](sim.md)); the page's dataset ([dataset.md](dataset.md)); `_t()` for every word |
 | Since | 30 October 2026, on Numa's request: "a curve to change the parameters and watch the animation unfold as the parameter changes", with an option for one's own curve and well-known example curves |
@@ -50,7 +50,9 @@ does not.
   hand on the slider would restart the motion (Fig. 2's mass: [fig02-double-pendulum.md](../simulations/fig02-double-pendulum.md)).
   The slider is still moved and painted; a hand on it still restarts the page and stops the curve.
 - An example's `set: { id: value }` puts other sliders to those values when the run starts, through their own `input`
-  handlers (Fig. 3's examples fix b, d, λ or α first, so that the numbers in their explanations hold).
+  handlers (Fig. 3's examples fix b, d, λ or α first, so that the numbers in their explanations hold); for a checkbox it
+  ticks (true) or clears (false) it and fires `change`.
+- An example's `press: [selector, …]` clicks those buttons first, before `set`: Fig. 8's examples press their preset shape.
 
 ## The shapes
 

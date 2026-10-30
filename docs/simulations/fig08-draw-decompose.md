@@ -180,7 +180,7 @@ Zoom is clamped to $[1, 10^{1.8}]$ ([L908–911](../../public/simulations/draw-d
 | Restart loop | `reset-t` | — | `t = 0`, trail cleared ([L1017](../../public/simulations/draw-decompose.html#L1017)) |
 | Presets | `presets`, `data-shape` | heart (at load) | `SHAPES[s]()` then `play()` ([L894–900](../../public/simulations/draw-decompose.html#L894-L900)) |
 | Circles K | `K` | 1–120, step 1, default 24 | `rebuild()` on input ([L101](../../public/simulations/draw-decompose.html#L101), [L723](../../public/simulations/draw-decompose.html#L723)) |
-| Time per loop | `loop` | 4–30 s, step 1, default 12 | $T_\text{loop}$ in the clock ([L105](../../public/simulations/draw-decompose.html#L105), [L1277](../../public/simulations/draw-decompose.html#L1277)) |
+| Time per loop | `loop` | 4–30 s, step 0.1 (step 1 until 30 October 2026, finer so a curve brakes smoothly), default 12 | $T_\text{loop}$ in the clock ([L105](../../public/simulations/draw-decompose.html#L105), [L1277](../../public/simulations/draw-decompose.html#L1277)) |
 | Zoom | `zoom` | 0–1.8, step 0.01, default 0 (shown as $10^v$: 1× to 63×) | `zoom = 10^v` ([L109](../../public/simulations/draw-decompose.html#L109), [L727](../../public/simulations/draw-decompose.html#L727)) |
 | Follow the pen | `sw-follow` | off | view centre on the pen; turning it off pans to the pen ([L1019–1024](../../public/simulations/draw-decompose.html#L1019-L1024)) |
 | Reset view | `reset-view` | — | pan 0, zoom 1, follow off ([L1018](../../public/simulations/draw-decompose.html#L1018)) |
@@ -214,8 +214,8 @@ Measured at load on a 1440 px window for the heart: `L` = 5.42763, `E` = 0.51504
 0.005405966670666 and `errP` = 0.005405966670687; `extR` = 0.9435, so the scale is $S$ itself, 276.46 px per unit
 on a 770 × 601 canvas.
 
-**One round** (`Sim.data.round`, [L1401–1401](../../public/simulations/draw-decompose.html#L1401-L1401)): the time
-variable is `t` (rad), the length is $2\pi$, one loop of the circles, which takes `loop_s` seconds; columns `x`, `y`;
+**One round** (`Sim.data.round`, [L1400–1402](../../public/simulations/draw-decompose.html#L1400-L1402)): the time
+variable is `t_play` (s, the seconds the clock has played; `t` in rad until 30 October 2026), the length is `loop_s`, one loop of the circles, or the rest of a running parameter curve; *Restart loop* no longer ends a round; columns `x`, `y`;
 the point followed is the pen. Recording is blocked unless a shape is playing. See [datalog.md](../scripts/datalog.md).
 
 **Data-panel hooks.** `probe` ([L1315–1325](../../public/simulations/draw-decompose.html#L1315-L1325)) pins, while
@@ -346,3 +346,30 @@ After the independent referee and derivation checks (`notes/fig08/`), the lead m
 ## Second check round · 20 October 2026
 
 From the derivation checks and blind referees that ran after the usage limit lifted (`notes/fig08/`), each change on its existing line: §4: the samples are spaced L/(N − 1) apart ([L304](../../public/simulations/draw-decompose.html#L304)); §5: the opening sentence corrected (all N coefficients redraw the samples; (5) holds among N neighbouring frequencies) ([L323](../../public/simulations/draw-decompose.html#L323)); Figure 4 caption: fewer circles only down to an error of about 10⁻³ ([L473](../../public/simulations/draw-decompose.html#L473)); §9: moment of inertia per unit mass ([L596](../../public/simulations/draw-decompose.html#L596)). Checked with `notes/verify.mjs` at 1440 × 900, 1600 × 900 and 390 × 844.
+
+## Parameter curves · 30 October 2026
+
+The page loads [`scripts/curve.js`](../scripts/curve.md) after `dataset.js` ([L621](../../public/simulations/draw-decompose.html#L621)) and builds it after the switches are
+looked up ([L726](../../public/simulations/draw-decompose.html#L726)), placed after the group of K and the time per loop. Two knobs: K (its `rebuild()` keeps the loop's
+phase, so the ordinary `input` event is right) and the time per loop (read every frame). Zoom is not offered: wheel and pinch
+change it without an `input` event, so a hand could not stop a zoom curve. The curve steps in the clock, gated by the mode,
+`curve.step(mode === 'play' ? dt : 0)` ([L1273](../../public/simulations/draw-decompose.html#L1273)): while the reader draws, t stands still and so does the curve. Every
+example presses its preset and ticks *Full K-term curve* itself (the engine's `press` and checkbox `set`). Plan and numbers
+from a research agent, rerun by me (scripts in the session's scratchpad); every number below was computed with the page's
+own pipeline.
+
+| Example | Knob, curve | Numbers |
+|---|---|---|
+| Circles one at a time | K 1 → 64 in 30 s, exponential; Heart | RMS error 23.9, 19.9, 12.1, 4.1, 1.4, 0.49, 0.15 % at K = 1, 2 … 64; from K = 4 each doubling divides it by 2.85–3.25, near 2√2 (K<sup>−3/2</sup>, equation 12, §6.1) |
+| Square: symmetry picks every fourth circle | K 1 → 12 in 24 s, straight; Square | first nine k = 1, −3, 5 … 17 (k = 1 − 4m, Exercise 5.1); radii 0.803, 0.0903, 0.0317 against 0.802/k² (equation 14); k = 2, −2, −1 at 0.0025 from the closing step (§7.1); error 12.2 → 0.58 %; corners missed by 0.017–0.025 at K = 9 |
+| Gibbs: the overshoot that will not shrink | K 24 → 120 in 24 s, straight; Open wave | overshoot 0.0996, 0.1347, 0.1619 units (5.9, 7.9, 9.5 % of the 1.7 jump) at K = 24, 50, 120, against the Gibbs limit 8.95 % (Si(π)/π − ½ = 0.089490; Wikipedia, "Gibbs phenomenon"); 8.4 % from 65 536 samples, so the excess is aliasing (equation 6). The new store value `over` shows it live: 0.09954, 0.13434, 0.16188 in Chromium, its Check identical |
+| Compress the drawing, as JPEG does | K 120 → 3 in 30 s, exponential; Heart | kept energy above 99.9 % down to K = 10 (at 20.2 s); RMS error 0.07 → 2.9 %, 15.7 % at K = 3 (equation 9, §5); JPEG keeps the few large frequency components of each 8 × 8 block (G. K. Wallace, "The JPEG still picture compression standard", 1991) |
+| A steady brake: the shape stays | time per loop 4 → 30 s in 12 s, steady in 1/loop; Heart, K = 24 | loops per second 0.25 → 0.033; 1.70 loops in the run on 0.1 s steps (1.715 on whole seconds, whose first step came only after 1.55 s and was a 20 % jolt, hence the finer step); RMS error 0.005406 throughout (equation 15, §2) |
+
+New in the store: `over` (declared at [L677](../../public/simulations/draw-decompose.html#L677), computed in `rebuild()` at [L848](../../public/simulations/draw-decompose.html#L848) from the stored samples and the 601-point
+curve, with a Check that redoes it, in the group Coefficients) and `t_play` ([L717](../../public/simulations/draw-decompose.html#L717), set in the clock at [L1287](../../public/simulations/draw-decompose.html#L1287), in
+View and drawing), the time of a recorded round in seconds; the round wraps into the rest of a running curve
+([L1400–1402](../../public/simulations/draw-decompose.html#L1400-L1402)); `about` says the curve's steps ([L1404](../../public/simulations/draw-decompose.html#L1404)); `curve.extend(Sim.data)` closes the hooks ([L1405](../../public/simulations/draw-decompose.html#L1405)).
+The status line shows the overshoot only for an open stroke. Tested in headless Chromium in English, German and Arabic:
+every example runs, the curve's checks agree with the store, the chart's dot reads back burgundy, no page errors, no
+sideways scroll. The walkthrough check finds all 70 quoted lines.

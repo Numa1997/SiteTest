@@ -16,7 +16,8 @@
                      live(v), called instead of the page's 'input' handler, for a knob the page can change while it runs
                      (a page whose slider would otherwise restart the motion)
        examples: [{ knob: 'lambda', shape: 'inv', from: 64, to: 16, T: 30, loop: false, name, why, set: { b: 80 } }],
-           name, why: translated words; set: other sliders (by id) put to these values when the run starts
+           name, why: translated words; set: other sliders (by id) put to these values when the run starts, or a
+           checkbox (by id) ticked (true) or cleared (false); press: CSS selectors of buttons clicked first (a preset)
        play: function () { clk.set(true); },      starts the page's clock
        playing: function () { return clk.playing; },
        extra: function () { return text; }        optional: one more fact for the status line while a curve runs
@@ -174,8 +175,10 @@
         function begin() {
             if (SHAPES[st.shape].positive && !(st.a * st.b > 0)) { st.msg = _t('This curve needs From and To of the same sign, neither zero.'); show(true); return; }
             var ex = st.ex >= 0 ? examples[st.ex] : null;
+            if (ex && ex.press) ex.press.forEach(function (sel) { var el = document.querySelector(sel); if (el) el.click(); });
             if (ex && ex.set) Object.keys(ex.set).forEach(function (id) {
                 var el = document.getElementById(id);
+                if (el && el.type === 'checkbox') { if (el.checked !== !!ex.set[id]) { el.checked = !!ex.set[id]; el.dispatchEvent(new Event('change', { bubbles: true })); } return; }
                 if (!el || el.value === String(snap(el, ex.set[id]))) return;
                 el.value = String(snap(el, ex.set[id])); own = true; el.dispatchEvent(new Event('input', { bubbles: true })); own = false;
             });
