@@ -230,3 +230,11 @@ Left: the site and script references (the notes are published beside the simulat
 7.2 and a response figure for 8.2 (both would be new drawings from model output; the text now gives the formulas they would show).
 Checks: `check_numbers.py` PASS (741 numbers), `R_revision.py` ALL PASS, `check_combined.py` ALL PASS (360–1440 px), headless Chromium
 23 figures, 0 KaTeX and console errors.
+
+## The two missing figures (30 October 2026, after deployment)
+Numa: leave nothing missing; deploy what is produced, and loop by the standards without waiting for corrections.
+- Figure 22 (section 7.2): the once-per-turn pushes of (7.2) as turning arrows, for the rod, the streamlined blade and the wing, from
+  `data/L5_air.json`: gravity's push turned by the lean, the tilt's and the shear's pushes added, the total against gravity's circle.
+- Figure 25 (section 8.2): the generator's power per hertz under blade shaking, from `derive/L3_response.py` (uses `L3_shake2.py`'s
+  model unchanged; its band integral reproduces the stored 3.3848 mW exactly): a sharp peak at the blade's mode, 1.08 Hz, and almost
+  nothing at the second blade's own 1.47 Hz.
