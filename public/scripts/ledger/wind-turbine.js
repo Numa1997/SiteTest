@@ -24,23 +24,25 @@
         headline: [{ v: 'v_now', title: 'wind' }, { v: 'rpm_now', title: 'rotor speed' }, { v: 'lam_now', title: 'tip-speed ratio' }, { v: 'cp_now', title: 'share taken' },
             { v: 'P_now', title: 'power out' }, { v: 'Eg_now', title: 'energy out' }],
         sections: [
-            { title: 'What you set', note: 'the controller, the wind and the target speed, as used by the last solve', how: 'set', vars: ['ctrl', 'profile', 'v0', 'dv', 'rpm_ref'] },
+            { title: 'What you set', note: 'the controller, the wind and the target speed, as used by the last solve', how: 'set', vars: ['ctrl', 'profile', 'v0', 'dv', 'rpm_ref', 'sc_knob', 'sc_shape', 'sc_a', 'sc_b', 'sc_T', 'sc_loop', 't0c'] },
             { title: 'The turbine', note: 'fixed for this rotor', how: 'constant', vars: ['rho', 'R', 'J', 'cp_betz', 'lam_opt', 'cp_max', 'K_opt'] },
             { title: 'What follows from it', note: 'the controller tuned at the target speed, and the start', how: 'formula', vars: ['w_ref', 'dtau_dw', 'Kp', 'Ki', 'tau0', 'K0'] },
             { title: 'The state now', note: 'the stored sample on screen: the wind, the rotor, the power and where the energy went', how: 'run', vars: ['t_play', 'i_now', 'v_now', 'rpm_now', 'lam_now', 'cp_now', 'P_now', 'th_now', 'Ea_now', 'Eg_now', 'K_now', 'ebal_now', 'playing'] },
-            { title: 'The stored run', note: 'one row per stored sample, every 20 ms of the 120 s; the dot marks the sample on screen', how: 'run', vars: ['ts', 'vw', 'om', 'rpm', 'vtip', 'th', 'lam', 'cpv', 'ta', 'tg', 'Ictl', 'Pa', 'Pg', 'Eas', 'Eg', 'sw'] },
+            { title: 'The stored run', note: 'one row per stored sample, every 20 ms of the 120 s; the dot marks the sample on screen', how: 'run', vars: ['ts', 'vw', 'om', 'rpm', 'rpm_set', 'vtip', 'th', 'lam', 'cpv', 'ta', 'tg', 'Ictl', 'Pa', 'Pg', 'Eas', 'Eg', 'sw'] },
             { title: 'Over the whole run', note: 'totals and extremes of the 120 s', how: 'run', vars: ['Ew', 'Ea', 'Eg_end', 'captured_pct', 'P_mean', 'rpm_min', 'rpm_max', 'balance'] },
             { title: 'Power curve', note: 'the curve of the second figure', how: 'formula', folded: true, vars: ['lamL', 'cpL'] },
             { title: 'Solver', note: 'how the run was computed', how: 'solver', folded: true, vars: ['h', 'steps', 'solve_ms', 'stale'] },
             { title: 'Drawing', note: 'how stored values become pixels', how: 'drawing', folded: true, vars: ['v_hi', 'rpm_lo', 'rpm_hi', 'P_hi', 'px_per_m_air', 'hub_x', 'hub_y', 'r_px', 'box_w', 'box_h', 'fps'] }
         ],
-        how: { t_play: 'set', playing: 'set', K0: 'run', h: 'constant', steps: 'constant' },
+        how: { t_play: 'set', playing: 'set', K0: 'run', h: 'constant', steps: 'constant', t0c: 'constant' },
         books: [
             { title: 'Energy', short: 'energy', note: 'The wind’s work on the rotor either goes into the generator or changes how fast the rotor turns; what is left is the rotor’s kinetic energy.', rows: [[1, 'K0'], [1, 'Ea_now'], [-1, 'Eg_now']], total: 'K_now', residual: 'ebal_now', tol: 1e-6 }
         ],
-        deps: { w_ref: ['rpm_ref'], dtau_dw: ['rpm_ref', 'v0'], Kp: ['dtau_dw'], tau0: ['rpm_ref', 'v0', 'dv', 'profile'], K0: ['rpm_ref', 'v0', 'ctrl', 'profile'] },
+        deps: { w_ref: ['rpm_ref'], dtau_dw: ['rpm_ref', 'v0'], Kp: ['dtau_dw'], tau0: ['rpm_ref', 'v0', 'dv', 'profile', 'sc_a'], rpm_set: ['rpm_ref', 'sc_knob', 'sc_shape', 'sc_a', 'sc_b', 'sc_T', 'sc_loop', 't0c'], vw: ['profile', 'v0', 'dv', 'sc_shape', 'sc_a', 'sc_b', 'sc_T', 'sc_loop', 't0c'], K0: ['rpm_ref', 'v0', 'ctrl', 'profile'] },
         controls: { rpm: 'rpm_ref' },
         current: { n: 'i_now' },
         check: check
     };
+    /* the parameter curve (scripts/curve.js) adds its own group, checks and read-backs, after this ledger exists */
+    if (data.curve) data.curve.extend(data);
 })();

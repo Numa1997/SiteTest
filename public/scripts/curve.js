@@ -27,6 +27,20 @@
    curve.round(spec)           a page's round, which becomes the rest of the curve run while a curve plays
    curve.running()             true while a curve moves a knob
 
+   A page that solves its whole run first and then plays it back (Figs. 9, 10 and 11) never integrates while the reader
+   watches, so a curve cannot move its slider frame by frame. Play curve hands such a page the whole curve instead, frozen
+   at that moment: a function p(t) of the run's time t that also carries its description (knob, shape, name, a, b, T, loop,
+   your points ku, kp and slopes km). The page solves the run with it, stores the run, and plays it back. Two ways in:
+       knob.schedule(fn, name)    called at Play curve, again after an edit while it runs, and with (null, 'stop' | 'hand')
+                                  when Stop, a new curve or a hand ends it (Figs. 9 and 11)
+       opts.solve(sc), opts.ended(msg)   the same hand-over for a whole page (Fig. 10), with curve.params() and curve.playAt(t)
+       opts.time()                the run time of the stored sample on screen: the curve's dot follows the playback
+       knob.min, knob.max         the curve's own range when it may go past the slider; the slider then waits at its end
+       opts.shapes                the page's own shapes, { key: { name, formula, why, f(u, a, b) } }, for its examples
+   On such a knob the slider only shows the curve's value on its steps; it fires no 'input' event, so the run on screen is
+   never marked stale by the curve. curve.stop(msg) ends a curve from the page; curve.at(t) reads the curve back from the
+   store; Sim.curve.value(sc, t) and Sim.curve.fn(sc) evaluate a frozen curve.
+
    Shapes, with u = t / T the fraction of the run done, a the value at the start and b at the end:
      line   p = a + (b − a) u                                  a straight ramp
      jerk   p = a + (b − a)(10u³ − 15u⁴ + 6u⁵)                 minimum jerk (Flash & Hogan 1985): starts and stops at rest
@@ -34,6 +48,8 @@
      inv    p = 1 / (1/a + (1/b − 1/a) u)                      1/p changes at a steady rate
      tri    p = a + (b − a)(1 − |2u − 1|)                      there and back at a steady rate
      swell  p = a + (b − a)(1 − cos 2πu) / 2                   a smooth swell to b and back
+     gust   p = a − ½(b − a) sin 3πu (1 − cos 2πu)             IEC 61400-1 extreme operating gust (examples only)
+     rise   p = a + (b − a)(1 − cos πu) / 2                     half-cosine rise, IEC 61400-1 coherent gust (examples only)
      own    monotone cubic through the reader's points (Fritsch & Carlson 1980): never overshoots them */
 (function () {
     'use strict';
@@ -59,6 +75,12 @@
         swell: { name: _t('Swell and return'), formula: 'p = a + (b − a)(1 − cos 2πu) / 2',
                  why: _t('A smooth swell from a to b and back, at rest at both ends of the run and at the top: like breathing. With Repeat on it never jolts.'),
                  f: function (u, a, b) { return a + (b - a) * (1 - Math.cos(2 * Math.PI * u)) / 2; } },
+        gust:  { name: _t('IEC operating gust'), formula: 'p = a − ½(b − a) sin 3πu (1 − cos 2πu)',
+                 why: _t('The extreme operating gust of the wind-turbine standard IEC 61400-1, the “Mexican hat”: a dip, a rise to b at the middle of the run, a second dip, and back to a. In the standard’s words a = V_hub, b = V_hub + 0.74 V_gust and T = 10.5 s.'),
+                 f: function (u, a, b) { return a - 0.5 * (b - a) * Math.sin(3 * Math.PI * u) * (1 - Math.cos(2 * Math.PI * u)); } },
+        rise:  { name: _t('Half-cosine rise'), formula: 'p = a + (b − a)(1 − cos πu) / 2',
+                 why: _t('From a to b along half a cosine, starting and arriving at rest, then staying at b: the shape of the extreme coherent gust of IEC 61400-1, which rises by V_cg = 15 m/s in T = 10 s.'),
+                 f: function (u, a, b) { return a + (b - a) * (1 - Math.cos(Math.PI * u)) / 2; } },
         own:   { name: _t('Your own curve'), formula: _t('monotone cubic through your points'),
                  why: _t('Click the chart to add a point, drag a point to move it, double-click a point to remove it; the first and last points move only up and down. Between your points the curve is a monotone cubic (Fritsch and Carlson, SIAM J. Numer. Anal. 17, 238–246, 1980): it never overshoots them, so the knob stays between the values you set. Keys: ← → choose a point, ↑ ↓ move it, Delete removes it.') }
     };
@@ -91,6 +113,13 @@
         var h = xs[k + 1] - xs[k], s = (x - xs[k]) / h, s2 = s * s, s3 = s2 * s;
         return ys[k] * (2 * s3 - 3 * s2 + 1) + h * ms[k] * (s3 - 2 * s2 + s) + ys[k + 1] * (3 * s2 - 2 * s3) + h * ms[k + 1] * (s3 - s2);
     }
+    /* a frozen curve at time t of its run, from its description { shape, a, b, T, loop, ku, kp, km }: a before the run, b after
+       it (with Repeat, the next run); what a solver calls wherever it needs the knob */
+    function valueOf(sc, t) {
+        var u = sc.T > 0 ? Math.max(0, t) / sc.T : 1;
+        u = sc.loop ? u - Math.floor(u) : Math.min(1, u);
+        return sc.shape === 'own' ? hermite(sc.ku, sc.kp, sc.km && sc.km.length ? sc.km : slopes(sc.ku, sc.kp), u) : SHAPES[sc.shape].f(u, sc.a, sc.b);
+    }
     /* the value v put on a range slider's steps, counted from its minimum, inside its range, and written with as many decimals
        as the step has (0.1 → one), so that 16 + 397 · 0.1 is stored as 55.7 and not 55.70000000000001 */
     function snap(el, v) {
@@ -102,11 +131,14 @@
 
     Sim.curve = function (opts) {
         var ds = opts.ds, knobs = opts.knobs, examples = opts.examples || [];
+        if (opts.shapes) Object.keys(opts.shapes).forEach(function (k) { SHAPES[k] = opts.shapes[k]; });
+        var solved = typeof opts.solve === 'function';   /* a page that hands the whole curve to its solver (Fig. 10) */
         var st = { on: false, k: 0, shape: 'line', ex: -1, a: 0, b: 1, T: 10, loop: false, t: 0, runs: 0, pts: null, sel: -1, msg: '', shownAt: 0 };
         var C = Sim.theme;
         function knob() { return knobs[st.k]; }
-        function lo() { return parseFloat(knob().slider.el.min); }
-        function hi() { return parseFloat(knob().slider.el.max); }
+        function lo() { var kb = knob(); return kb.min !== undefined ? kb.min : parseFloat(kb.slider.el.min); }
+        function hi() { var kb = knob(); return kb.max !== undefined ? kb.max : parseFloat(kb.slider.el.max); }
+        function frozenKnob() { return solved || !!knob().schedule; }   /* the run is solved with the whole curve: the slider only shows it */
         function fmtv(v) { return knob().format ? knob().format(v) : Sim.fmt(v, knob().digits); }
 
         /* ---------- the store ---------- */
@@ -120,10 +152,10 @@
             ds.var('cv_b', [], 'float', { symbol: 'b', units: un, long_name: 'value of the curve at the end of a run, u = 1 (for There and back and Swell: at the turn)', computed_in: 'curve: To', digits: dg + 2 });
             ds.var('cv_T', [], 'float', { symbol: 'T<sub>c</sub>', units: 's', long_name: 'duration of one run of the curve', computed_in: 'curve: Time', digits: 1 });
             ds.var('cv_loop', [], 'bool', { symbol: _t('repeat'), long_name: 'the curve starts again at the end of a run', computed_in: 'curve: Repeat' });
-            ds.var('cv_t', [], 'float', { symbol: 't<sub>c</sub>', units: 's', long_name: 'time since the run began, on the page clock', computed_in: 'curve.step()', formula: 't<sub>c</sub> ← t<sub>c</sub> + Δt, back by T<sub>c</sub> when a repeated run ends', digits: 3, source: 'Accumulated frame by frame from the page clock.' });
+            ds.var('cv_t', [], 'float', { symbol: 't<sub>c</sub>', units: 's', long_name: frozenKnob() ? 'time of the curve in the stored sample on screen' : 'time since the run began, on the page clock', computed_in: 'curve.step()', formula: 't<sub>c</sub> ← t<sub>c</sub> + Δt, back by T<sub>c</sub> when a repeated run ends', digits: 3, source: 'Accumulated frame by frame from the page clock.' });
             ds.var('cv_u', [], 'float', { symbol: 'u', long_name: 'fraction of the run done', computed_in: 'curve.step()', formula: 'u = t<sub>c</sub> / T<sub>c</sub>', digits: 4 });
             ds.var('cv_p', [], 'float', { symbol: 'p(u)', units: un, long_name: 'the value of the curve now', computed_in: 'curve.step()', formula: 'the formula p(u) above', digits: dg + 3 });
-            ds.var('cv_set', [], 'float', { symbol: 'p<sub>set</sub>', units: un, long_name: 'the value the slider took: p(u) on the slider’s steps; this is what the simulation uses', computed_in: 'curve.step()', formula: 'min + round((p − min) / step) · step, kept inside the range', digits: dg + 2 });
+            ds.var('cv_set', [], 'float', { symbol: 'p<sub>set</sub>', units: un, long_name: frozenKnob() ? 'the value the slider shows: p(u) on the slider’s steps; the solver used p(u) itself' : 'the value the slider took: p(u) on the slider’s steps; this is what the simulation uses', computed_in: 'curve.step()', formula: 'min + round((p − min) / step) · step, kept inside the range', digits: dg + 2 });
             ds.var('cv_runs', [], 'int', { symbol: _t('runs'), long_name: 'runs of the curve finished since Play curve', computed_in: 'curve.step()', digits: 0, source: 'Counted at the end of each run.' });
             ds.var('cv_tq', ['cq'], Float64Array, { symbol: 't<sub>q</sub>', units: 's', long_name: 'times at which the curve is sampled for its chart', computed_in: 'curve: resample()', formula: 't<sub>q</sub> = q T<sub>c</sub> / 200', digits: 3, coordinate: true });
             ds.var('cv_pq', ['cq'], Float64Array, { symbol: 'p<sub>q</sub>', units: un, long_name: 'the curve at those times, as its chart draws it', computed_in: 'curve: resample()', formula: 'p(q / 200)', digits: dg + 3 });
@@ -160,11 +192,26 @@
             ds.set('cv_p', value(ds.get('cv_u')));
         }
         function currentName() { return st.ex >= 0 ? examples[st.ex].name : SHAPES[st.shape].name; }
+        /* the curve as it stands, as plain data (opts.solve and params(): a page may store or compare it as JSON), and as a
+           function of the run's time that carries the same data (knob.schedule) */
+        function described() {
+            var own = st.shape === 'own', sl = function (n) { return Array.prototype.slice.call(ds.get(n)); };
+            return { knob: knob().id, shape: st.shape, name: currentName(), a: st.a, b: st.b, T: st.T, loop: st.loop,
+                     ku: own ? sl('cv_ku') : [], kp: own ? sl('cv_kp') : [], km: own ? sl('cv_km') : [], ex: st.ex >= 0 ? examples[st.ex] : null };
+        }
+        function frozen() {
+            var d = described(), fn = function (t) { return valueOf(d, t); };
+            Object.keys(d).forEach(function (k) { Object.defineProperty(fn, k, { value: d[k], enumerable: true, configurable: true }); });   /* defineProperty: a function's own 'name' is read-only */
+            fn.fn = fn;
+            return fn;
+        }
+        function resched() { if (st.on && knob().schedule) knob().schedule(frozen(), currentName()); }
 
         /* ---------- moving the knob ---------- */
         var own = false;   /* true while this file moves the slider, so the page's 'input' handler is not taken for a hand */
         function apply(p) {
             if (!isFinite(p)) return;
+            if (frozenKnob()) { ds.set('cv_set', snap(knob().slider.el, p)); knob().slider.set(ds.get('cv_set')); return; }
             var kb = knob(), el = kb.slider.el, before = el.value;
             el.value = String(snap(el, p));
             ds.set('cv_set', parseFloat(el.value));
@@ -182,25 +229,31 @@
                 if (!el || el.value === String(snap(el, ex.set[id]))) return;
                 el.value = String(snap(el, ex.set[id])); own = true; el.dispatchEvent(new Event('input', { bubbles: true })); own = false;
             });
+            if (frozenKnob()) { st.a = snap(knob().slider.el, st.a); if (st.shape === 'own') st.pts[0].p = st.a; }   /* the run starts where the slider can stand */
             st.t = 0; st.runs = 0; st.on = true; st.msg = '';
             ds.set('cv_on', true); ds.set('cv_t', 0); ds.set('cv_runs', 0);
             resample();
             apply(ds.get('cv_p'));
+            if (knob().schedule) knob().schedule(frozen(), currentName());
+            if (solved) { paintButtons(); draw(); show(true); opts.solve(described()); return; }
             if (opts.play && opts.playing && !opts.playing()) opts.play();
             paintButtons(); draw(); show(true);
         }
-        function end(msg) {
+        function end(msg, why) {
             if (!st.on && !msg) return;
+            var was = st.on;
+            if (why && was && knob().schedule) knob().schedule(null, why);
             st.on = false; st.msg = msg || '';
             ds.set('cv_on', false);
+            if (was && solved && opts.ended) opts.ended(msg);
             paintButtons(); draw(); show(true);
         }
         function step(dt) {
             if (!st.on) return;
-            if (dt > 0) {
-                st.t += dt;
+            if (dt > 0 || opts.time) {
+                st.t = opts.time ? opts.time() : st.t + dt;
                 if (st.t >= st.T) {
-                    if (st.loop) { st.runs += Math.floor(st.t / st.T); st.t -= Math.floor(st.t / st.T) * st.T; }
+                    if (st.loop) { st.runs = (opts.time ? 0 : st.runs) + Math.floor(st.t / st.T); st.t -= Math.floor(st.t / st.T) * st.T; }
                     else { st.t = st.T; st.runs += 1; }
                 }
                 ds.set('cv_t', st.t); ds.set('cv_runs', st.runs);
@@ -212,6 +265,17 @@
             }
             draw();
             show(false);
+        }
+
+        /* ---------- a page that solves first and plays back: the curve shown where the stored run is (Fig. 10) ---------- */
+        function playAt(tc) {
+            if (!st.on) return;
+            st.runs = st.loop ? Math.max(0, Math.floor(tc / st.T)) : (tc >= st.T ? 1 : 0);
+            st.t = st.loop ? Math.max(0, tc - st.runs * st.T) : Math.max(0, Math.min(tc, st.T));
+            ds.set('cv_t', st.t); ds.set('cv_runs', st.runs); ds.set('cv_u', st.T > 0 ? st.t / st.T : 1);
+            ds.set('cv_p', valueOf(described(), tc));   /* the same function and inputs as the solver: equal to the stored sample */
+            apply(ds.get('cv_p'));
+            draw(); show(false);
         }
 
         /* ---------- the panel group ---------- */
@@ -258,7 +322,7 @@
         }
         function setInputs() {
             var el = knob().slider.el;
-            [inA, inB].forEach(function (inp) { inp.min = el.min; inp.max = el.max; inp.step = el.step || 'any'; });
+            [inA, inB].forEach(function (inp) { inp.min = lo(); inp.max = hi(); inp.step = el.step || 'any'; });
             inA.value = +st.a.toFixed(6); inB.value = +st.b.toFixed(6); inT.value = st.T; inLoop.checked = st.loop;
             inA.disabled = inB.disabled = false;
             selShape.value = st.ex >= 0 ? 'ex:' + st.ex : 'sh:' + st.shape;
@@ -276,7 +340,7 @@
             st.sel = -1;
         }
         function choose(v) {
-            if (st.on) end(_t('Stopped: you changed the curve.'));
+            if (st.on) end(_t('Stopped: you changed the curve.'), 'stop');
             if (v.slice(0, 3) === 'ex:') {
                 var ex = examples[+v.slice(3)];
                 st.ex = +v.slice(3);
@@ -293,7 +357,7 @@
         }
         selShape.addEventListener('change', function () { choose(selShape.value); });
         selKnob.addEventListener('change', function () {
-            if (st.on) end(_t('Stopped: you changed the curve.'));
+            if (st.on) end(_t('Stopped: you changed the curve.'), 'stop');
             st.k = +selKnob.value; st.ex = -1;
             st.a = lo(); st.b = hi();
             if (SHAPES[st.shape].positive && !(st.a * st.b > 0)) st.a = Math.max(lo(), parseFloat(knob().slider.el.step) || 1);
@@ -302,23 +366,24 @@
         });
         function readNums() {
             var a = parseFloat(inA.value), b = parseFloat(inB.value), T = parseFloat(inT.value);
-            if (isFinite(a)) st.a = Math.min(hi(), Math.max(lo(), a));
-            if (isFinite(b)) st.b = Math.min(hi(), Math.max(lo(), b));
+            var snapAB = !!knob().schedule && knob().min === undefined && knob().max === undefined;   /* a scheduled knob without a range of its own keeps both ends on its steps */
+            if (isFinite(a)) st.a = snapAB ? snap(knob().slider.el, a) : Math.min(hi(), Math.max(lo(), a));
+            if (isFinite(b)) st.b = snapAB ? snap(knob().slider.el, b) : Math.min(hi(), Math.max(lo(), b));
             if (isFinite(T)) st.T = Math.min(600, Math.max(1, T));
             if (st.shape === 'own') { st.pts[0].p = st.a; st.pts[st.pts.length - 1].p = st.b; }
             st.loop = inLoop.checked;
             if (st.t > st.T) st.t = st.T;
-            resample(); draw(); show(true);
+            resample(); draw(); show(true); resched();
         }
         [inA, inB, inT].forEach(function (inp) { inp.addEventListener('change', function () { readNums(); setInputs(); }); });
         inLoop.addEventListener('change', readNums);
         btnGo.addEventListener('click', begin);
-        btnStop.addEventListener('click', function () { end(_t('Stopped. The knob stays where the curve left it.')); });
+        btnStop.addEventListener('click', function () { end(_t('Stopped. The knob stays where the curve left it.'), 'stop'); });
         function paintButtons() { btnStop.disabled = !st.on; btnGo.textContent = st.on ? _t('Play again') : _t('Play curve'); }
 
         /* a hand on the knob wins: the curve stops */
         knobs.forEach(function (kb, i) {
-            kb.slider.el.addEventListener('input', function () { if (!own && st.on && st.k === i) end(_t('You took the knob, so the curve stopped.')); });
+            kb.slider.el.addEventListener('input', function () { if (!own && st.on && st.k === i) end(_t('You took the knob, so the curve stopped.'), 'hand'); });
         });
 
         /* the status line: words rewritten at most four times a second, like the data panel's */
@@ -331,7 +396,7 @@
                 txt = _t('{sym} = {v} {units} · {t} s of {T} s', { sym: kb.symbol, v: fmtv(ds.get('cv_set')), units: kb.format ? '' : kb.units || '', t: Sim.fmt(st.t, 1), T: Sim.fmt(st.T, 0) });
                 if (st.loop) txt += ' · ' + _t('run {n}', { n: st.runs + 1 });
                 if (opts.playing && !opts.playing()) txt += ' · ' + _t('paused: the curve goes on when the simulation plays');
-            } else txt = st.msg || _t('Press Play curve: the knob follows the curve while you watch the figure.');
+            } else txt = st.msg || (frozenKnob() ? _t('Press Play curve: the page solves the run with this curve, then plays it back; the knob shows where the curve is.') : _t('Press Play curve: the knob follows the curve while you watch the figure.'));
             var ex = st.on && opts.extra ? opts.extra() : '';
             if (ex) txt += ' · ' + ex;
             txt = txt.replace(/ {2,}/g, ' ').replace(/ ([·,.])/g, function (m, c) { return c === '·' ? ' ·' : c; });
@@ -423,13 +488,13 @@
             movePoint(drag, toU(m.x), toP(m.y));
             resample(); draw(); show(false);
         });
-        function release() { if (drag >= 0) { drag = -1; setInputs(); show(true); } }
+        function release() { if (drag >= 0) { drag = -1; setInputs(); show(true); resched(); } }
         plot.addEventListener('pointerup', release);
         plot.addEventListener('pointercancel', release);
         plot.addEventListener('dblclick', function (e) {
             if (st.shape !== 'own') return;
             var i = hit(at(e));
-            if (i > 0 && i < st.pts.length - 1) { st.pts.splice(i, 1); st.sel = -1; resample(); setInputs(); draw(); show(true); }
+            if (i > 0 && i < st.pts.length - 1) { st.pts.splice(i, 1); st.sel = -1; resample(); setInputs(); draw(); show(true); resched(); }
         });
         plot.addEventListener('keydown', function (e) {
             if (st.shape !== 'own' && /^Arrow/.test(e.key)) becomeOwn();
@@ -441,7 +506,7 @@
             else if ((e.key === 'Delete' || e.key === 'Backspace') && st.sel > 0 && st.sel < n - 1) { st.pts.splice(st.sel, 1); st.sel = -1; }
             else return;
             e.preventDefault();
-            resample(); setInputs(); draw(); show(true);
+            resample(); setInputs(); draw(); show(true); resched();
         });
 
         /* first state: the page's first example, or a straight ramp over the first knob's range */
@@ -505,6 +570,10 @@
                 length: function () { return st.on ? Math.max(0.1, st.T - st.t) : base.length(); }
             };
         }
-        return { step: step, extend: extend, round: round, running: function () { return st.on; } };
+        return { step: step, extend: extend, round: round, running: function () { return st.on; },
+                 stop: function (msg) { end(msg); }, at: function (t) { var T = ds.get('cv_T'), u = ds.get('cv_loop') ? (t / T) % 1 : t / T; return storedValue(u); },
+                 params: described, playAt: playAt };
     };
+    Sim.curve.value = valueOf;
+    Sim.curve.fn = function (sc) { return function (t) { return valueOf(sc, t); }; };
 })();

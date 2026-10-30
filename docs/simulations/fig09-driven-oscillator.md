@@ -553,3 +553,29 @@ from 901 px (`sim.css`, for every page). Computed from the CSS, not yet measured
 1440 × 900 (1052 × 802 before), the price of having every knob beside it. See [../styles.md](../styles.md), "Simulation pages use
 the whole screen".
 
+## Parameter curves · 30 October 2026
+
+A page that solves its run first never integrates while the reader watches, so a curve here does not move a slider frame by
+frame: Play curve hands the whole curve p(t) to the solver, the page solves the run with the knob on that curve, stores it,
+and plays it back; the slider only shows where the curve is, on its steps, and the curve's dot follows the stored sample
+on screen (the engine's solver interface, [curve.md](../scripts/curve.md)). A run without a curve is unchanged bit for bit.
+
+On this page every knob but the spring constant can be scheduled ([L814](../../public/simulations/driven-oscillator.html#L814)): the drive frequency, the target, the damping
+ratio, the force and the three gains. `solve(from, S)` ([L891](../../public/simulations/driven-oscillator.html#L891)) reads the scheduled knob at every RK4 stage, at t, t + h/2
+and t + h; a frequency curve drives F₀ cos θ with θ = 2π∫f dt, so the phase never jumps (the linear and exponential chirps
+of Wikipedia's "Chirp" are matched within 1.7×10⁻¹³ rad). The solver stores the knob as it used it, `ps[n]`, beside `xs[n]`,
+and the curve's description (`sc_*`, from [L656](../../public/simulations/driven-oscillator.html#L656)); the walkthrough's excerpt of the solver (`scripts/walk/driven.js`) was
+updated in the same change, since the lines it quotes changed, and finds all 75 quoted lines. The curve steps with the
+playback ([L1537](../../public/simulations/driven-oscillator.html#L1537)); the round wraps into the rest of a running curve ([L1914](../../public/simulations/driven-oscillator.html#L1914)). Cost: a plain solve 9.6 → 15.9 ms median
+in Node. Plan, patch and numbers from a research agent; its regression and example scripts rerun by me on the unified
+engine give byte-identical results.
+
+| Example | Knob, curve, preset | Numbers |
+|---|---|---|
+| Sine sweep through resonance | f 0.30 → 0.70 Hz in 60 s, straight; k = 9.87 N/m, ζ = 0.05, F₀ = 1 N, controller off | steady peak 1.01 m; the sweep reaches 0.84 m at t = 36.4 s, when f is already 0.54 Hz (τ = 6.4 s; 7.5 s in the half-power band); the standard way to find a resonance (E. Sauther, "Sine sweep vibration testing for modal response primer", University of Arizona, 2013) |
+| The same sweep, four times faster | f 0.30 → 0.70 Hz in 15 s | 0.61 m (60 %) at 0.61 Hz; swept down, 0.65 m at 0.37 Hz: the peak lags in the direction of the sweep, by twice the ring-down time in a slow sweep (Cowan, Morris-Costigliola and Nichols, arXiv:1910.10995, read) |
+| Move the target smoothly | r 0 → 0.30 m in 3 s, minimum jerk; P preset | a step overshoots x* = 0.20 m by 91 % and rings for 25 s; minimum jerk overshoots by 1.7 % (3.5 mm); a straight ramp by 9 % |
+| Ramp the target: the block trails it | r 0 → 0.40 m in 20 s, straight; PID preset | lag ṙ k / Kᵢ = 0.0197 m (0.0192 m at 10 s, 0.0197 m at 20 s); with PD, 0.134 m behind at 20 s |
+| Less damping at resonance | ζ 0.30 → 0.02 in 60 s, steady in 1/ζ; f = 0.50 Hz | the steady swing F₀/(2ζk) grows 0.17 → 2.5 m; the real swing follows at about four fifths (0.43 against 0.56 m at 10 s, 1.98 against 2.49 m at 59 s), since τ = 1/(ζω₀) itself grows 1.1 → 16 s |
+
+Tested in headless Chromium: every example solves, plays, and the curve's checks, dot and slider agree; no page errors.

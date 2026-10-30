@@ -198,3 +198,43 @@ This page's layout became the model for all eleven simulations: `sim.css` now gi
 page's own rules are unchanged (its line 39, `.sim, .sim-top { max-width: 1560px; }`, now repeats `sim.css`). See
 [../styles.md](../styles.md), "Simulation pages use the whole screen".
 
+## Parameter curves · 30 October 2026
+
+A page that solves its run first never integrates while the reader watches, so a curve here does not move a slider frame by
+frame: Play curve hands the whole curve p(t) to the solver, the page solves the run with the knob on that curve, stores it,
+and plays it back; the slider only shows where the curve is, on its steps, and the curve's dot follows the stored sample
+on screen (the engine's solver interface, [curve.md](../scripts/curve.md)). A run without a curve is unchanged bit for bit.
+
+The knob is the target r: the curve is a reference trajectory for the cart, the overhead-crane problem. `solve()` ([L728](../../public/simulations/pendulum-control.html#L728))
+evaluates the curve at every stored sample (every 10 ms) and holds it to the next; for each target rₙ it finds the rest
+y\*(rₙ) and the holding force F\*(rₙ) with the page's own `equilibrium()` (Newton's method) and stores them, `r_ref`,
+`th1_ref`, `th2_ref`, `F_ref` (from [L509](../../public/simulations/pendulum-control.html#L509)); the control law keeps its form, F = clamp(F\*ₙ − K(y − y\*ₙ), ±κI_max), with K
+designed at the rest where the curve ends (fixed gains stay stable for every rest from −0.6 to 0.6 m in the linear model).
+`control()` and the RK4 lines the walkthrough quotes are untouched (33 of 33 found). A run starts at rest at the curve's first
+value. The curve steps with the playback ([L1102](../../public/simulations/pendulum-control.html#L1102)); the flag, the pale pose and the setpoint lines show the stored
+staircase. Stop re-solves from the state on screen; a hand on the slider marks the run stale. Plan, patch and numbers from a
+research agent; its end-to-end check rerun by me on the unified engine: the plain run identical, every check equal to the
+store, the curve's dot equal to the stored target over 72 frames.
+
+Each example sets the crane case first, the Firm controller with the speed weight q_v = 0, which watches positions only and
+barely damps the swing ([L1173](../../public/simulations/pendulum-control.html#L1173)); move 0 → 0.5 m. Sway is each rod's angle about the rest the chain would take if the cart
+stopped where it is.
+
+| Example | Curve | Settled after | Peak sway lower / upper rod |
+|---|---|---|---|
+| Step: the swing a crane makes | step | 16.31 s | 3.47° / 6.86° |
+| ZV shaper: two steps, half a swing apart | 0.507 of the step at 0, 0.493 at 0.314 s | 9.66 s | 2.11° / 4.72° |
+| ZVD shaper: three steps, robust | 0.257, 0.500, 0.243 at 0, 0.314, 0.628 s | 5.67 s | 1.72° / 3.26° |
+| Minimum jerk, 2.5 s | 10u³ − 15u⁴ + 6u⁵ | 3.81 s | 0.49° / 0.69° |
+| Trapezoidal speed, 2.5 s | thirds: speed up, cruise, brake | 3.44 s | 0.41° / 0.54° |
+
+The shapers are tuned to the least damped pair of the closed loop at the start of the move, ω_d = 10.00 rad/s, ζ = 0.0089,
+K = e^(−ζπ/√(1−ζ²)) = 0.9724, Δt = π/ω_d = 0.314 s, computed by the page at load from its own `design()`, `linearise()`
+and `eig()`. Formulas from N. C. Singer and W. P. Seering, "Preshaping command inputs to reduce telerobotic system
+oscillations", NASA NTRS 19900020564 (read: eqs. 1–2 and Fig. 3), and T. Singh and W. Singhose, "Tutorial on input
+shaping/time delay control of maneuvering flexible structures", 2002 (read: eqs. 8, 11–13); the 1990 journal paper was not
+read. Shaping helps only partly: three swings are excited and their frequencies rise along the move as the strut pulls
+harder (10.0 → 13.6 rad/s); tuned to the open-loop pendulum swing (1.71 rad/s) instead, ZV settles only after 16.24 s. With
+the default Firm controller (q_v = 5) shaping does not help: the step settles first, 3.63 s, every gentler move later
+(3.79–5.06 s). Tested in headless Chromium: every example solves and plays (the ZV and ZVD curves end after 0.63 and 0.94 s,
+the run plays on); no page errors.

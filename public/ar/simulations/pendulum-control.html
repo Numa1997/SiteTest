@@ -44,7 +44,7 @@
 
     <link rel="stylesheet" href="../../fonts/arabic.css" />
     <script src="../../scripts/i18n/strings-ar.js"></script>
-    <meta name="translated-from" content="English public/simulations/pendulum-control.html, commit 73866ed" />
+    <meta name="translated-from" content="English public/simulations/pendulum-control.html, commit 73866ed+" />
   </head>
 <body>
     <header class="sim-top">
@@ -419,7 +419,7 @@
 
     <script src="../../scripts/fold.js"></script>
     <script src="../../scripts/sim.js"></script>
-    <script src="../../scripts/dataset.js"></script>
+    <script src="../../scripts/dataset.js"></script><script src="../../scripts/curve.js"></script>
     <script>
     (function () {
         'use strict';
@@ -507,7 +507,7 @@
         ds.var('Es', ['n'], Float64Array, { symbol: 'E<sub>n</sub>', units: 'J', long_name: 'energy of the rig: kinetic, gravity, the spring in the tubes and a touched stop', computed_in: 'energy(), in solve()', formula: 'T + V, (2) + (3)', digits: 6 });
         ds.var('Wc', ['n'], Float64Array, { symbol: 'W<sub>coil, n</sub>', units: 'J', long_name: 'work the coil has done on the cart since t = 0', computed_in: 'solve(), integrated with RK4', formula: '∫ F Ẋ dt', digits: 6 });
         ds.var('Qs', ['n'], Float64Array, { symbol: 'Q<sub>stop, n</sub>', units: 'J', long_name: 'heat the end stops have made since t = 0', computed_in: 'solve(), integrated with RK4', formula: '∫ c<sub>stop</sub> ℓ̇² dt while a stop is touched', digits: 6 });
-        ds.var('sat', ['n'], Uint8Array, { symbol: 'at limit', long_name: '1 where the controller asks for more than the coil can give', computed_in: 'solve()', digits: 0 });
+        ds.var('sat', ['n'], Uint8Array, { symbol: 'at limit', long_name: '1 where the controller asks for more than the coil can give', computed_in: 'solve()', digits: 0 }); ds.var('r_ref', ['n'], Float64Array, { symbol: 'r<sub>n</sub>', units: 'm', long_name: 'target the controller follows from t<sub>n</sub> to t<sub>n+1</sub>: the target curve at t<sub>n</sub>, held for 10 ms; r itself when no curve runs', computed_in: 'solve()', formula: 'r(t<sub>n</sub>)', digits: 6 }); ds.var('th1_ref', ['n'], Float64Array, { symbol: 'θ<sub>1, n</sub>*', units: 'rad', long_name: 'upper rod’s angle at the rest for the target r<sub>n</sub>: the setpoint of sample n', computed_in: 'equilibrium(), in solve()', formula: 'Newton’s method on the two pendulum equations with X = r<sub>n</sub>', digits: 6 }); ds.var('th2_ref', ['n'], Float64Array, { symbol: 'θ<sub>2, n</sub>*', units: 'rad', long_name: 'lower rod’s angle at the rest for the target r<sub>n</sub>', computed_in: 'equilibrium(), in solve()', formula: 'Newton’s method on the two pendulum equations with X = r<sub>n</sub>', digits: 6 }); ds.var('F_ref', ['n'], Float64Array, { symbol: 'F*<sub>n</sub>', units: 'N', long_name: 'holding force for the target r<sub>n</sub>: the steady part of the coil’s push', computed_in: 'equilibrium(), in solve()', formula: 'N* ∂ℓ/∂X at that rest', digits: 6 }); ds.var('sched', [], 'str', { symbol: _t('target curve'), long_name: 'the curve the target r follows in this run; none: r stays where you set it', computed_in: 'solve()' });
         ds.var('win_t0', [], 'float', { symbol: 't<sub>window</sub>', units: 's', long_name: 'left edge of the 10 s window chart', computed_in: 'chartGeom()', formula: 'clamp(t<sub>play</sub> − 3 s, 0, 20 s)', digits: 3 });
         ds.var('ylim', [], 'float', { symbol: 'y<sub>lim</sub>', long_name: 'half-height of the time chart: 1.1 × the largest |θ<sub>1</sub>|, |θ<sub>2</sub>|, |X| of the run (rad or m)', computed_in: 'solve()', digits: 4 });
         ds.var('Flim', [], 'float', { symbol: 'F<sub>lim</sub>', units: 'N', long_name: 'half-height of the force chart: 1.1 × the largest of |F|, |N| and κI<sub>max</sub>', computed_in: 'solve()', digits: 4 });
@@ -527,7 +527,7 @@
         ds.var('ell_now', [], 'float', { symbol: 'ℓ', units: 'm', long_name: 'strut length now', computed_in: 'the clock, or your hand', digits: 5 });
         ds.var('E_now', [], 'float', { symbol: 'E', units: 'J', long_name: 'energy now', computed_in: 'the clock, or your hand', digits: 5 });
         ds.var('Wc_now', [], 'float', { symbol: 'W<sub>coil</sub>', units: 'J', long_name: 'coil’s work up to now', computed_in: 'the clock', digits: 5 });
-        ds.var('Qs_now', [], 'float', { symbol: 'Q<sub>stop</sub>', units: 'J', long_name: 'stops’ heat up to now', computed_in: 'the clock', digits: 5 }); ds.var('E0', [], 'float', { symbol: 'E(0)', units: 'J', long_name: 'energy of the rig at the start of the stored run', computed_in: 'solve()', formula: 'E<sub>0</sub>, the first stored sample', digits: 6 }); ds.var('bal_now', [], 'float', { symbol: 'residual', units: 'J', long_name: 'energy book now: E(0) + W<sub>coil</sub> − Q<sub>stop</sub> − E, at the sample on screen; NaN while your hand holds the rig', computed_in: 'the clock', formula: 'E(0) + W<sub>coil</sub> − Q<sub>stop</sub> − E', digits: 12, sci: true });
+        ds.var('Qs_now', [], 'float', { symbol: 'Q<sub>stop</sub>', units: 'J', long_name: 'stops’ heat up to now', computed_in: 'the clock', digits: 5 }); ds.var('E0', [], 'float', { symbol: 'E(0)', units: 'J', long_name: 'energy of the rig at the start of the stored run', computed_in: 'solve()', formula: 'E<sub>0</sub>, the first stored sample', digits: 6 }); ds.var('bal_now', [], 'float', { symbol: 'residual', units: 'J', long_name: 'energy book now: E(0) + W<sub>coil</sub> − Q<sub>stop</sub> − E, at the sample on screen; NaN while your hand holds the rig', computed_in: 'the clock', formula: 'E(0) + W<sub>coil</sub> − Q<sub>stop</sub> − E', digits: 12, sci: true }); ds.var('r_now', [], 'float', { symbol: 'r<sub>now</sub>', units: 'm', long_name: 'target at the sample on screen: where the flag stands', computed_in: 'the clock', digits: 4 });
         ds.var('px_per_m', [], 'float', { symbol: 'px/m', units: 'css px', long_name: 'drawing scale of the rig', computed_in: 'geom()', digits: 3 });
         ds.var('px_per_N', [], 'float', { symbol: 'px/N', units: 'css px', long_name: 'scale of the force arrows: 30 N is drawn 0.6 m long', computed_in: 'geom()', formula: '0.02 m/N · px/m', digits: 3 });
         ds.var('pivot_px', [], 'float', { symbol: 'x<sub>O</sub>, y<sub>O</sub>', units: 'css px', long_name: 'screen position of the pivot (x; y is in pivot_py)', computed_in: 'geom()', digits: 1 });
@@ -558,7 +558,7 @@
         var Ims = Sim.slider('Imax', { format: function (v) { return v.toFixed(1) + ' A · ' + (KAPPA * v).toFixed(0) + ' N'; }, onInput: markStale });
         var speed = Sim.slider('speed', { format: function (v) { return v.toFixed(2) + '×'; } });
         var seek = Sim.slider('seek', { format: function (v) { return _t('t = {t} s of {T} s', { t: (v * EVERY * H).toFixed(1), T: TEND }); }, onInput: function (v) { playT = v * EVERY * H; frame(); } });
-        var ctrlOn = true, presetName = 'firm';
+        var ctrlOn = true, presetName = 'firm', sched = null, schedName = 'none';   // sched: the target curve r(t) of the run, from scripts/curve.js (Play curve); null: r stays put
         var PRESETS = { off: null, gentle: [5, 5, 5, -1], firm: [5, 5, 5, -1.7] };
         function weightsMoved() { presetName = null; markStale(); paintPresets(); }
 
@@ -567,7 +567,7 @@
             // the parameters of one run, read from the sliders at the moment of solving
             var p = { N0: N0s.value, ks: kss.value, Imax: Ims.value, r: rr.value, on: ctrlOn,
                       qa: qa.value, qx: qx.value, qv: qv.value, rho: Math.pow(10, rho.value) };
-            p.ell0 = H_RAIL - L1 - L2; p.L0 = p.ell0 - p.N0 / p.ks; p.Fmax = KAPPA * p.Imax;
+            p.ell0 = H_RAIL - L1 - L2; p.L0 = p.ell0 - p.N0 / p.ks; p.Fmax = KAPPA * p.Imax; if (sched) p.r = sched(TEND);   // a target curve: the rest, the gains and the eigenvalues are those of where it ends
             return p;
         }
         function strut(p, q, v) {
@@ -718,16 +718,16 @@
         function run(p, d, y0, h, every, onSample) {
             // the whole run from y0: every 'every'-th state is handed to onSample(n, y, acc)
             var y = y0.slice(), acc = { W: 0, Q: 0 }, nsteps = Math.round(TEND / h);
-            onSample(0, y, acc);
+            if (d.ref) d.ref(0); onSample(0, y, acc);   // d.ref(n), with a target curve: the setpoint of sample n, held until t_n+1
             for (var step = 1; step <= nsteps; step++) {
                 y = stepRK4(p, d, y, h, acc);
-                if (step % every === 0) onSample(step / every, y, acc);
+                if (step % every === 0) { if (d.ref) d.ref(step / every); onSample(step / every, y, acc); }
             }
         }
 
         /* ---------- solve the whole run, store it, then play it ---------- */
-        function solve(from) {
-            var t0 = performance.now(), p = rig(), d = design(p);
+        function solve(from) { if (from && sched) { sched = null; schedName = 'none'; if (curve.running()) curve.stop(_t('Stopped: the run starts again from the state on screen, and r stays where it is.')); }
+            var t0 = performance.now(), p = rig(), d = design(p); var d0 = d, rf = ds.alloc('r_ref'), r1f = ds.alloc('th1_ref'), r2f = ds.alloc('th2_ref'), Ff = ds.alloc('F_ref'), refs = [], memo = {}, rn; for (var n = 0; n < NS; n++) { rn = sched ? sched(n * EVERY * H) : p.r; if (!memo[rn]) memo[rn] = rn === p.r ? d0.eq : equilibrium(Object.assign({}, p, { r: rn })); refs.push(memo[rn]); rf[n] = rn; r1f[n] = memo[rn].y[0]; r2f[n] = memo[rn].y[1]; Ff[n] = memo[rn].F; } ['r_ref', 'th1_ref', 'th2_ref', 'F_ref'].forEach(function (k) { ds.touch(k); }); ds.set('sched', schedName); if (sched) d = Object.assign({}, d0, { ref: function (k) { d.eq = refs[k]; } });   // the setpoint y*(r_n), F*(r_n) of every stored sample, by the same Newton solve as the rest; control() reads it as d.eq
             ds.set('N0', p.N0); ds.set('ks', p.ks); ds.set('ell0', p.ell0); ds.set('L0', p.L0); ds.set('Imax', p.Imax); ds.set('Fmax', p.Fmax);
             ds.set('r', p.r); ds.set('ctrl_on', p.on); ds.set('qa', p.qa); ds.set('qx', p.qx); ds.set('qv', p.qv); ds.set('rho', p.rho);
             ds.set('th1_eq', d.eq.y[0]); ds.set('th2_eq', d.eq.y[1]); ds.set('F_eq', d.eq.F); ds.set('N_eq', d.eq.N); ds.set('ell_eq', d.eq.l);
@@ -737,7 +737,7 @@
             ds.set('rank', d.rank);
             var lam = p.on ? d.closed : d.open, slow = Math.max.apply(null, lam.map(function (z) { return z[0]; }));
             ds.set('slow', slow); ds.set('fp_kind', slow > 1e-6 ? 'unstable' : (slow > -1e-6 ? 'centre' : (lam.some(function (z) { return Math.abs(z[1]) > 1e-9; }) ? 'stable focus' : 'stable node')));
-            var y0 = from ? from.slice() : [0, 0, 0, 0, 0, 0];
+            var y0 = from ? from.slice() : [0, 0, 0, 0, 0, 0]; if (sched && !from) y0 = equilibrium(Object.assign({}, p, { r: sched.a })).y;   // a target curve starts from rest at its first value a
             for (j = 0; j < 6; j++) y0s[j] = y0[j]; ds.touch('y0s'); ds.set('released', !!from);
             var ts = ds.alloc('ts'), th1 = ds.alloc('th1'), th2 = ds.alloc('th2'), Xs = ds.alloc('Xs'), w1 = ds.alloc('w1'), w2 = ds.alloc('w2'), vX = ds.alloc('vX');
             var Fs = ds.alloc('Fs'), Is = ds.alloc('Is'), Ns = ds.alloc('Ns'), ells = ds.alloc('ells'), Es = ds.alloc('Es'), Wc = ds.alloc('Wc'), Qs = ds.alloc('Qs'), sat = ds.alloc('sat');
@@ -748,7 +748,7 @@
                 Fs[n] = F; Is[n] = F / KAPPA; Ns[n] = st.N; ells[n] = st.l; Es[n] = energy(p, y); Wc[n] = acc.W; Qs[n] = acc.Q;
                 var want = p.on ? d.eq.F - d.K.reduce(function (s, k, i) { return s + k * (y[i] - d.eq.y[i]); }, 0) : 0;
                 sat[n] = p.on && Math.abs(want) > p.Fmax ? 1 : 0; nsat += sat[n]; if (st.l > LMAX || st.l < LMIN) nstop++;
-                ymax = Math.max(ymax, Math.abs(y[0]), Math.abs(y[1]), Math.abs(y[2]), Math.abs(d.eq.y[0]), Math.abs(d.eq.y[1]), Math.abs(p.r));
+                ymax = Math.max(ymax, Math.abs(y[0]), Math.abs(y[1]), Math.abs(y[2]), Math.abs(d.eq.y[0]), Math.abs(d.eq.y[1]), Math.abs(p.r), Math.abs(d.eq.y[2]));
                 Fm = Math.max(Fm, Math.abs(F), Math.abs(st.N));
             });
             ['ts', 'th1', 'th2', 'Xs', 'w1', 'w2', 'vX', 'Fs', 'Is', 'Ns', 'ells', 'Es', 'Wc', 'Qs', 'sat'].forEach(function (k) { ds.touch(k); });
@@ -863,9 +863,9 @@
             c.strokeStyle = T.muted; c.lineWidth = 1; for (var k = -0.28; k < 0.28; k += 0.04) { c.beginPath(); c.moveTo(g.X(k), g.oy); c.lineTo(g.X(k + 0.04), g.oy - 8); c.stroke(); }
             // the rest the controller aims at, pale
             if (ds.get('ctrl_on')) {
-                var e1 = ds.get('th1_eq'), e2 = ds.get('th2_eq'), ex1 = g.X(L1 * Math.sin(e1)), ey1 = g.Y(-L1 * Math.cos(e1)), ex2 = ex1 + L2 * Math.sin(e2) * s, ey2 = ey1 + L2 * Math.cos(e2) * s;
+                var e1 = ds.get('th1_ref')[ds.get('i_now')], e2 = ds.get('th2_ref')[ds.get('i_now')], ex1 = g.X(L1 * Math.sin(e1)), ey1 = g.Y(-L1 * Math.cos(e1)), ex2 = ex1 + L2 * Math.sin(e2) * s, ey2 = ey1 + L2 * Math.cos(e2) * s;
                 c.save(); c.setLineDash([5, 4]); c.strokeStyle = ROSE; c.lineWidth = 2;
-                c.beginPath(); c.moveTo(g.ox, g.oy); c.lineTo(ex1, ey1); c.lineTo(ex2, ey2); c.lineTo(g.X(ds.get('r')), cy); c.stroke();
+                c.beginPath(); c.moveTo(g.ox, g.oy); c.lineTo(ex1, ey1); c.lineTo(ex2, ey2); c.lineTo(g.X(ds.get('r_now')), cy); c.stroke();
                 c.setLineDash([]); c.beginPath(); c.arc(ex1, ey1, rb, 0, 2 * Math.PI); c.arc(ex2, ey2, rb, 0, 2 * Math.PI); c.stroke(); c.restore();
             }
             // the magnet under the rail: a long gap from −1 m to +1 m, N above, S below; the coil on the cart rides in it
@@ -919,7 +919,7 @@
             var ry = g.rulerY; c.strokeStyle = T.muted; c.lineWidth = 1; c.beginPath(); c.moveTo(g.X(-XRAIL), ry); c.lineTo(g.X(XRAIL), ry); c.stroke();
             c.fillStyle = T.muted; c.textAlign = 'center';
             [-1, -0.5, 0, 0.5, 1].forEach(function (v) { c.beginPath(); c.moveTo(g.X(v), ry - 4); c.lineTo(g.X(v), ry + 4); c.stroke(); c.fillText(Sim.fmt(v, 1), g.X(v), ry + 15); });
-            var fx = flagX !== null ? flagX : g.X(ds.get('r')); ds.set('r_px', fx);
+            var fx = flagX !== null ? flagX : g.X(ds.get('r_now')); ds.set('r_px', fx);
             c.strokeStyle = ds.get('ctrl_on') ? BURG : T.muted; c.lineWidth = 2; c.beginPath(); c.moveTo(fx, ry); c.lineTo(fx, ry - 20); c.stroke();
             c.fillStyle = ds.get('ctrl_on') ? BURG : T.muted; c.beginPath(); c.moveTo(fx, ry - 20); c.lineTo(fx + 12, ry - 15); c.lineTo(fx, ry - 10); c.closePath(); c.fill();
             c.beginPath(); c.arc(fx, ry, 3.5, 0, 2 * Math.PI); c.fill();
@@ -962,7 +962,7 @@
             c.save(); c.beginPath(); c.rect(ch.l, ch.t, ch.r - ch.l, ch.b - ch.t); c.clip();
             if (ds.get('ctrl_on')) {
                 c.setLineDash([5, 4]); c.strokeStyle = ROSE; c.lineWidth = 1.5;
-                [ds.get('th1_eq'), ds.get('th2_eq'), ds.get('r')].forEach(function (v) { c.beginPath(); c.moveTo(ch.l, Y(v)); c.lineTo(ch.r, Y(v)); c.stroke(); });
+                ['th1_ref', 'th2_ref', 'r_ref'].forEach(function (k) { var a = ds.get(k), i0 = Math.max(0, Math.floor(t0 / (EVERY * H)) - 1), i1 = Math.min(NS - 1, Math.ceil((t0 + WIN) / (EVERY * H)) + 1); c.beginPath(); c.moveTo(X(ts[i0]), Y(a[i0])); for (var n = i0 + 1; n <= i1; n++) { c.lineTo(X(ts[n]), Y(a[n - 1])); c.lineTo(X(ts[n]), Y(a[n])); } c.stroke(); });   // the setpoint, held from sample to sample: flat unless a target curve runs
                 c.setLineDash([]);
             }
             var nA = Math.max(0, Math.floor(t0 / (EVERY * H)) - 1), nB = Math.min(NS - 1, Math.ceil((t0 + WIN) / (EVERY * H)) + 1);
@@ -1011,7 +1011,7 @@
             c.textAlign = 'left'; c.fillText(_t('force in N · t in s'), p.l + 4, p.t - 6);
             c.save(); c.setLineDash([2, 3]); c.strokeStyle = T.muted;
             [ds.get('Fmax'), -ds.get('Fmax')].forEach(function (v) { c.beginPath(); c.moveTo(p.l, p.Y(v)); c.lineTo(p.r, p.Y(v)); c.stroke(); });
-            if (ds.get('ctrl_on')) { c.setLineDash([5, 4]); c.strokeStyle = ROSE; c.beginPath(); c.moveTo(p.l, p.Y(ds.get('F_eq'))); c.lineTo(p.r, p.Y(ds.get('F_eq'))); c.stroke(); }
+            if (ds.get('ctrl_on')) { c.setLineDash([5, 4]); c.strokeStyle = ROSE; c.beginPath(); var Fr = ds.get('F_ref'); c.moveTo(p.l, p.Y(Fr[0])); for (var k = 1; k < NS; k++) { c.lineTo(p.X(ts[k]), p.Y(Fr[k - 1])); c.lineTo(p.X(ts[k]), p.Y(Fr[k])); } c.lineTo(p.r, p.Y(Fr[NS - 1])); c.stroke(); }   // F*, sample by sample
             c.restore();
             [['Ns', T.ink3], ['Fs', BURG]].forEach(function (sr) {
                 var a = ds.get(sr[0]); c.lineWidth = 1.6;
@@ -1054,7 +1054,7 @@
                     c.stroke();
                 }
                 c.globalAlpha = 1;
-                c.strokeStyle = ds.get('ctrl_on') ? BURG : T.muted; c.lineWidth = 2; var fx = P.X(P.e), fy = P.Y(0);
+                c.strokeStyle = ds.get('ctrl_on') ? BURG : T.muted; c.lineWidth = 2; var fx = P.X(ds.get(P.q === 'th1' ? 'th1_ref' : P.q === 'th2' ? 'th2_ref' : 'r_ref')[n0]), fy = P.Y(0);
                 c.beginPath(); c.moveTo(fx - 5, fy - 5); c.lineTo(fx + 5, fy + 5); c.moveTo(fx - 5, fy + 5); c.lineTo(fx + 5, fy - 5); c.stroke();
                 var nowQ = P.q === 'th1' ? 'th1_now' : P.q === 'th2' ? 'th2_now' : 'X_now', nowV = P.q === 'th1' ? 'w1_now' : P.q === 'th2' ? 'w2_now' : 'vX_now';
                 c.fillStyle = BURG; c.beginPath(); c.arc(P.X(ds.get(nowQ)), P.Y(ds.get(nowV)), 4.5, 0, 2 * Math.PI); c.fill();
@@ -1084,7 +1084,7 @@
         function frame() {
             if (!solved) return;
             var i = Math.min(NS - 1, Math.max(0, Math.round(playT / (EVERY * H))));
-            ds.set('i_now', i); ds.set('t_play', playT);
+            ds.set('i_now', i); ds.set('t_play', playT); ds.set('r_now', ds.get('r_ref')[i]);
             ds.set('th1_now', ds.get('th1')[i]); ds.set('th2_now', ds.get('th2')[i]); ds.set('X_now', ds.get('Xs')[i]);
             ds.set('w1_now', ds.get('w1')[i]); ds.set('w2_now', ds.get('w2')[i]); ds.set('vX_now', ds.get('vX')[i]);
             ds.set('F_now', ds.get('Fs')[i]); ds.set('I_now', ds.get('Is')[i]); ds.set('N_now', ds.get('Ns')[i]); ds.set('ell_now', ds.get('ells')[i]);
@@ -1100,7 +1100,7 @@
             if (playT > TEND) { playT = TEND; clk.set(false); }
             ds.set('fps', fps); ds.set('playing', clk.playing);
             document.getElementById('st-play').classList.toggle('is-done', clk.playing);
-            frame();
+            frame(); curve.step(speed.value * dt);
         });
 
         /* ---------- your hand: grab a ball or the cart, pull, let go. While you hold it the clock stops ---------- */
@@ -1171,7 +1171,7 @@
         Sim.playButton(document.getElementById('play'), clk);
         document.getElementById('solve').addEventListener('click', function () { solve(); });
         document.getElementById('restart').addEventListener('click', function () { playT = 0; clk.set(true); });
-        paintPresets(); takeHint();
+        paintPresets(); takeHint(); var CRANE = { N0: 3, ks: 100, Imax: 3, on: true, qa: 5, qx: 5, qv: 0, rho: Math.pow(10, -1.7) }, ZV = (function () { /* the least damped swing of the examples' controller at the start rest r = 0, with the gains of the end rest r = 0.5 */ var p = Object.assign(rig(), CRANE, { r: 0.5 }); p.L0 = p.ell0 - p.N0 / p.ks; p.Fmax = KAPPA * p.Imax; var K = design(p).K; p.r = 0; var eq = equilibrium(p), Lz = linearise(p, eq.y, eq.F), m = null; eig(Lz.A.map(function (row, i) { return row.map(function (x, j) { return x - Lz.B[i][0] * K[j]; }); })).forEach(function (z) { if (z[1] > 1e-9) { var ze = -z[0] / Math.hypot(z[0], z[1]); if (!m || ze < m.zeta) m = { wd: z[1], zeta: ze }; } }); m.K = Math.exp(-m.zeta * Math.PI / Math.sqrt(1 - m.zeta * m.zeta)); m.t2 = Math.PI / m.wd; return m; })(); var SHAPES11 = { step: { name: _t('Step'), formula: 'p = b from t = 0', why: _t('The target jumps to b at once.'), f: function (u, a, b) { return b; } }, zv: { name: _t('ZV input shaper'), formula: 'p = a + (b − a)/(1 + K) for u < ½, then b', why: _t('Two steps half a swing apart (Singer and Seering 1990).'), f: function (u, a, b) { return u < 0.5 ? a + (b - a) / (1 + ZV.K) : b; } }, zvd: { name: _t('ZVD input shaper'), formula: 'p = a + (b − a)·(1, 1 + 2K, (1 + K)²)/(1 + K)² for u < ⅓, < ⅔, then', why: _t('Three steps half a swing apart (Singer and Seering 1990).'), f: function (u, a, b) { var s = (1 + ZV.K) * (1 + ZV.K); return u < 1 / 3 ? a + (b - a) / s : u < 2 / 3 ? a + (b - a) * (1 + 2 * ZV.K) / s : b; } }, trap: { name: _t('Trapezoidal speed'), formula: 'speed rises for T/3, holds for T/3, falls for T/3', why: _t('The cart speeds up evenly, cruises, and brakes evenly.'), f: function (u, a, b) { var s = u <= 1 / 3 ? 2.25 * u * u : u <= 2 / 3 ? 0.25 + 1.5 * (u - 1 / 3) : 1 - 2.25 * (1 - u) * (1 - u); return a + (b - a) * s; } } }; var SET11 = { qa: 5, qx: 5, qv: 0, rho: -1.7, N0: 3, ks: 100, Imax: 3 }, EX11 = [ { knob: 'r', shape: 'step', from: 0, to: 0.5, T: 5, set: SET11, name: _t('Step: the swing a crane makes'), why: _t('The target jumps from 0 to 0.5 m. The controller here is Firm with the speed weight q<sub>v</sub> at 0: it watches positions only and hardly damps the swing, like a crane that just drives its trolley to the mark, so the chain swings for a long time. With q<sub>v</sub> = 5 (Firm) the same step swings far less and settles more than four times sooner: that controller damps the swing itself.') }, { knob: 'r', shape: 'zv', from: 0, to: 0.5, T: 2 * ZV.t2, set: SET11, name: _t('ZV shaper: two steps, half a swing apart'), why: _t('Singer and Seering’s zero-vibration shaper. The target moves {A} of the way at once and the rest {t} s later, half a period of the least damped swing ({w} rad/s, ζ = {z}). The swing started by the second step cancels the swing of the first.', { A: Sim.fmt(1 / (1 + ZV.K), 3), t: Sim.fmt(ZV.t2, 3), w: Sim.fmt(ZV.wd, 2), z: Sim.fmt(ZV.zeta, 4) }) }, { knob: 'r', shape: 'zvd', from: 0, to: 0.5, T: 3 * ZV.t2, set: SET11, name: _t('ZVD shaper: three steps, robust'), why: _t('The zero-vibration-and-derivative shaper: three steps, {t} s apart, in the ratio 1 : 2K : K² with K = {K}. It also cancels a swing whose frequency is a little off, and here the frequency drifts as the strut tightens on the way.', { t: Sim.fmt(ZV.t2, 3), K: Sim.fmt(ZV.K, 4) }) }, { knob: 'r', shape: 'jerk', from: 0, to: 0.5, T: 2.5, set: SET11, name: _t('Minimum jerk, 2.5 s'), why: _t('The target glides from 0 to 0.5 m in 2.5 s, starting and stopping at rest, the way a hand moves (Flash and Hogan 1985).') }, { knob: 'r', shape: 'trap', from: 0, to: 0.5, T: 2.5, set: SET11, name: _t('Trapezoidal speed, 2.5 s'), why: _t('The industrial move: the target speeds up evenly for a third of the time, cruises, and brakes evenly.') } ]; var curve = Sim.curve({ ds: ds, after: document.querySelector('.panel .solve'), time: function () { return ds.get('ts')[ds.get('i_now')]; }, shapes: SHAPES11, examples: EX11, knobs: [{ id: 'r', slider: rr, name: _t('Target position r'), symbol: 'r', units: 'm', digits: 2, schedule: function (fn, how) { if (fn) { sched = fn; schedName = how; solve(); } else if (sched) { sched = null; schedName = 'none'; if (how === 'stop' && solved) solve(fromNow()); else markStale(); } } }], play: function () { clk.set(true); }, playing: function () { return clk.playing; }, extra: function () { var t = ds.get('t_settle'); return isFinite(t) ? _t('this run settles after {t} s', { t: Sim.fmt(t, 2) }) : _t('this run does not settle within 30 s'); } });
 
         /* ---------- the data panel (scripts/datalog.js) reads the store; these hooks say where things are drawn and how to test a value ---------- */
         function storedRig() {
@@ -1185,12 +1185,12 @@
             // the same integrator, rerun from the stored start y(0) to sample n
             var S = storedDesign(), y0 = Array.prototype.slice.call(ds.get('y0s')), out = null;
             var y = y0.slice(), acc = { W: 0, Q: 0 };
-            for (var step = 1; step <= n * EVERY; step++) y = stepRK4(S.p, S.d, y, H, acc);
+            var dd = storedRef(S.d); for (var step = 1; step <= n * EVERY; step++) { if ((step - 1) % EVERY === 0) dd.ref((step - 1) / EVERY); y = stepRK4(S.p, dd, y, H, acc); }
             out = { y: y, acc: acc, p: S.p, d: S.d }; return out;
         }
-        var replayCache = {};
+        var replayCache = {}; function storedRef(d) { /* the setpoints of the stored run, rebuilt from the store alone */ var rf = ds.get('r_ref'), r1 = ds.get('th1_ref'), r2 = ds.get('th2_ref'), Ff = ds.get('F_ref'), dd = Object.assign({}, d, { ref: function (k) { dd.eq = { y: [r1[k], r2[k], rf[k], 0, 0, 0], F: Ff[k] }; } }); dd.ref(0); return dd; }
         function replayAt(n) { var key = n + '|' + Array.prototype.join.call(ds.get('y0s')) + '|' + storedDesign().key; if (!replayCache[key]) { replayCache = {}; replayCache[key] = replay(n); } return replayCache[key]; }
-        function sliderCheck(input, label, f) { return { formula: _t('read from the ') + _t(label) + _t(' slider at the last solve'), inputs: [[_t('slider now'), input.value, '']], value: ds.get('stale') ? NaN : (f ? f(parseFloat(input.value)) : parseFloat(input.value)) }; }
+        function sliderCheck(input, label, f) { return { formula: _t('read from the ') + _t(label) + _t(' slider at the last solve'), inputs: [[_t('slider now'), input.value, '']], value: ds.get('stale') ? NaN : (f ? f(parseFloat(input.value)) : parseFloat(input.value)) }; } function refCheck(j) { return function (n) { var r = ds.get('r_ref')[n], e = equilibrium(Object.assign(storedRig(), { r: r })); return { formula: _t('Newton’s method at X = r<sub>n</sub>, from the stored parameters'), inputs: [['r<sub>n</sub>', r, 'm', 6]], value: j === 2 ? e.F : e.y[j] }; }; }
         function constCheck(v) { return function () { return { formula: _t('a constant of the page code'), inputs: [], value: v }; }; }
         function stateCol(j) { return function (n) { var R = replayAt(n); return { formula: _t('the same RK4, rerun from y(0) to sample n'), inputs: [['n', n, '', 0], ['h', H, 's', 4]], value: R.y[j] }; }; }
         function readBack(b, what, pt, r, test, expected, note) {
@@ -1201,7 +1201,7 @@
         function roseInk(c) { return c[3] > 25 && c[0] > 180 && c[1] < 190 && c[0] - c[1] > 25; }
         function tanInk(c) { return c[3] > 25 && c[0] > 90 && c[1] > 45 && c[2] < 70 && c[1] - c[2] > 25; }
         function chartAt(name, n) { var g = chartGeom(geom()), t = ds.get('ts')[n]; return g.inWin(t) ? { x: g.cX(t), y: g.cY(ds.get(name)[n]) } : null; }
-        var NOW = { th1_now: 'th1', th2_now: 'th2', X_now: 'Xs', w1_now: 'w1', w2_now: 'w2', vX_now: 'vX', F_now: 'Fs', I_now: 'Is', N_now: 'Ns', ell_now: 'ells', E_now: 'Es', Wc_now: 'Wc', Qs_now: 'Qs' };
+        var NOW = { th1_now: 'th1', th2_now: 'th2', X_now: 'Xs', w1_now: 'w1', w2_now: 'w2', vX_now: 'vX', F_now: 'Fs', I_now: 'Is', N_now: 'Ns', ell_now: 'ells', E_now: 'Es', Wc_now: 'Wc', Qs_now: 'Qs', r_now: 'r_ref' };
         function nowCheck(name) {
             return function () {
                 var i = ds.get('i_now'), arr = NOW[name];
@@ -1213,13 +1213,13 @@
             ds: ds, kicker: _t('Fig. 11 · data'), file: 'fig11-pendulum-control',
             playing: function () { return clk.playing; }, play: function () { clk.set(true); },
             groups: [
-                { title: _t('Parameters'), note: _t('what you set with the sliders and buttons, as used by the last solve'), vars: ['N0', 'ks', 'Imax', 'r', 'ctrl_on', 'qa', 'qx', 'qv', 'rho'] },
+                { title: _t('Parameters'), note: _t('what you set with the sliders and buttons, as used by the last solve'), vars: ['N0', 'ks', 'Imax', 'r', 'sched', 'ctrl_on', 'qa', 'qx', 'qv', 'rho'] },
                 { title: _t('The rig'), note: _t('constants of the page code, and what follows from them'), vars: ['m1', 'm2', 'l1', 'l2', 'mc', 'Hr', 'g', 'kappa', 'lmin', 'lmax', 'kst', 'cst', 'ell0', 'L0', 'Fmax'] },
                 { title: _t('Rest and controller'), note: _t('the rest the controller aims at, the linear model there and the gains, §5–§9'), vars: ['th1_eq', 'th2_eq', 'F_eq', 'N_eq', 'ell_eq', 'Kg', 'lamo_re', 'lamo_im', 'lamc_re', 'lamc_im', 'rank', 'slow', 'fp_kind'] },
                 { title: _t('Start of the run'), note: _t('rest hanging straight down after Solve; where your hand let go after a drag'), vars: ['y0s', 'released', 'grabbed'] },
                 { title: _t('Solver'), note: _t('how the run was computed, and how good it is'), vars: ['h', 'steps', 'solve_ms', 'err_half', 'err_end', 'balance', 't_settle', 't_sat', 't_stop', 'stale'] },
-                { title: _t('Stored run'), note: _t('one row per stored sample, every 10 ms of the 30 s'), vars: ['ts', 'th1', 'th2', 'Xs', 'w1', 'w2', 'vX', 'Fs', 'Is', 'Ns', 'ells', 'Es', 'Wc', 'Qs', 'sat'] },
-                { title: _t('Playback'), note: _t('the sample on screen now, or the pose your hand holds'), vars: ['i_now', 't_play', 'th1_now', 'th2_now', 'X_now', 'w1_now', 'w2_now', 'vX_now', 'F_now', 'I_now', 'N_now', 'ell_now', 'E_now', 'Wc_now', 'Qs_now'] },
+                { title: _t('Stored run'), note: _t('one row per stored sample, every 10 ms of the 30 s'), vars: ['ts', 'r_ref', 'th1_ref', 'th2_ref', 'F_ref', 'th1', 'th2', 'Xs', 'w1', 'w2', 'vX', 'Fs', 'Is', 'Ns', 'ells', 'Es', 'Wc', 'Qs', 'sat'] },
+                { title: _t('Playback'), note: _t('the sample on screen now, or the pose your hand holds'), vars: ['i_now', 't_play', 'r_now', 'th1_now', 'th2_now', 'X_now', 'w1_now', 'w2_now', 'vX_now', 'F_now', 'I_now', 'N_now', 'ell_now', 'E_now', 'Wc_now', 'Qs_now'] },
                 { title: _t('Drawing'), note: _t('how stored values become pixels'), vars: ['px_per_m', 'px_per_N', 'pivot_px', 'pivot_py', 'b1_px', 'b1_py', 'b2_px', 'b2_py', 'cart_px', 'cart_py', 'r_px', 'F_px', 'win_t0', 'ylim', 'Flim', 'Escale', 'E_rest', 'box_w', 'box_h', 'fps', 'playing'] }
             ],
             probe: function (x, y) {
@@ -1251,7 +1251,7 @@
                 N0: function () { return sliderCheck(N0s.el, 'strut pull'); },
                 ks: function () { return sliderCheck(kss.el, 'spring stiffness'); },
                 Imax: function () { return sliderCheck(Ims.el, 'current limit'); },
-                r: function () { return sliderCheck(rr.el, 'target position'); },
+                r: function () { return ds.get('sched') !== 'none' ? { formula: _t('the target curve where the run ends, r<sub>n</sub> at t = 30 s'), inputs: [['r<sub>3000</sub>', ds.get('r_ref')[NS - 1], 'm', 6]], value: ds.get('r_ref')[NS - 1] } : sliderCheck(rr.el, 'target position'); }, r_ref: function (n) { return ds.get('sched') === 'none' ? { formula: _t('r, the same at every sample'), inputs: [['r', ds.get('r'), 'm', 2]], value: ds.get('r') } : { formula: _t('the curve from its stored a, b and T<sub>c</sub>, at t<sub>n</sub> = n · 10 ms'), inputs: [['n', n, '', 0], ['a', ds.get('cv_a'), 'm', 4], ['b', ds.get('cv_b'), 'm', 4], ['T<sub>c</sub>', ds.get('cv_T'), 's', 3]], value: curve.at(n * EVERY * H) }; }, th1_ref: refCheck(0), th2_ref: refCheck(1), F_ref: refCheck(2),
                 qa: function () { return sliderCheck(qa.el, 'swing weight'); },
                 qx: function () { return sliderCheck(qx.el, 'cart weight'); },
                 qv: function () { return sliderCheck(qv.el, 'speed weight'); },
@@ -1277,8 +1277,8 @@
                 slow: function () { var re = ds.get(ds.get('ctrl_on') ? 'lamc_re' : 'lamo_re'); return { formula: 'max Re λ', inputs: [], value: Math.max.apply(null, Array.prototype.slice.call(re)) }; },
                 th1: stateCol(0), th2: stateCol(1), Xs: stateCol(2), w1: stateCol(3), w2: stateCol(4), vX: stateCol(5),
                 ts: function (n) { return { formula: 'n · 20 h', inputs: [['n', n, '', 0], ['h', H, 's', 4]], value: n * EVERY * H }; },
-                Fs: function (n) { var S = storedDesign(), y = [ds.get('th1')[n], ds.get('th2')[n], ds.get('Xs')[n], ds.get('w1')[n], ds.get('w2')[n], ds.get('vX')[n]];
-                    return { formula: 'clamp(F* − K(y<sub>n</sub> − y*), ±F<sub>max</sub>)', inputs: [['F*', ds.get('F_eq'), 'N', 4], ['F<sub>max</sub>', ds.get('Fmax'), 'N', 1]], value: control(S.p, S.d, y) }; },
+                Fs: function (n) { var S = storedDesign(), y = [ds.get('th1')[n], ds.get('th2')[n], ds.get('Xs')[n], ds.get('w1')[n], ds.get('w2')[n], ds.get('vX')[n]]; var dd = storedRef(S.d); dd.ref(n);
+                    return { formula: 'clamp(F*<sub>n</sub> − K(y<sub>n</sub> − y*<sub>n</sub>), ±F<sub>max</sub>)', inputs: [['F*<sub>n</sub>', ds.get('F_ref')[n], 'N', 4], ['r<sub>n</sub>', ds.get('r_ref')[n], 'm', 4], ['F<sub>max</sub>', ds.get('Fmax'), 'N', 1]], value: control(S.p, dd, y) }; },
                 Is: function (n) { return { formula: 'F<sub>n</sub> / κ', inputs: [['F<sub>n</sub>', ds.get('Fs')[n], 'N', 6], ['κ', KAPPA, 'N/A', 1]], value: ds.get('Fs')[n] / KAPPA }; },
                 Ns: function (n) { var y = [ds.get('th1')[n], ds.get('th2')[n], ds.get('Xs')[n]], v = [ds.get('w1')[n], ds.get('w2')[n], ds.get('vX')[n]];
                     return { formula: 'k<sub>s</sub>(ℓ − L<sub>0</sub>) + stop', inputs: [['ℓ<sub>n</sub>', ds.get('ells')[n], 'm', 6]], value: strut(storedRig(), y, v).N }; },
@@ -1298,10 +1298,10 @@
                 F_px: function () { return { formula: 'F · px/N', inputs: [['F', ds.get('F_now'), 'N', 5], ['px/N', ds.get('px_per_N'), '', 3]], value: ds.get('F_now') * ds.get('px_per_N') }; },
                 y0s: function (j) { var a = ['th1', 'th2', 'Xs', 'w1', 'w2', 'vX'][j]; return { formula: _t('the first stored sample of the run'), inputs: [], value: ds.get(a)[0] }; },
                 ctrl_on: function () { return { formula: _t('the preset buttons: on unless Off is pressed'), inputs: [], value: ctrlOn }; },
-                released: function () { var y = ds.get('y0s'), z = Array.prototype.every.call(y, function (v) { return v === 0; }); return { formula: _t('a start other than straight-down rest came from your hand'), inputs: [], value: !z || ds.get('released') }; },
+                released: function () { var y = ds.get('y0s'), z = Array.prototype.every.call(y, function (v) { return v === 0; }); return { formula: _t('a start other than straight-down rest came from your hand'), inputs: [], value: (!z && ds.get('sched') === 'none') || ds.get('released') }; },
                 fp_kind: function () { var re = ds.get(ds.get('ctrl_on') ? 'lamc_re' : 'lamo_re'), im = ds.get(ds.get('ctrl_on') ? 'lamc_im' : 'lamo_im'), sl = Math.max.apply(null, Array.prototype.slice.call(re));
                     return { formula: _t('from the signs of Re λ and whether any Im λ is not zero'), inputs: [['max Re λ', sl, '1/s', 4]], value: sl > 1e-6 ? 'unstable' : (sl > -1e-6 ? 'centre' : (Array.prototype.some.call(im, function (v) { return Math.abs(v) > 1e-9; }) ? 'stable focus' : 'stable node')) }; },
-                sat: function (n) { var S = storedDesign(), y = [ds.get('th1')[n], ds.get('th2')[n], ds.get('Xs')[n], ds.get('w1')[n], ds.get('w2')[n], ds.get('vX')[n]], want = S.p.on ? S.d.eq.F - S.d.K.reduce(function (a, k, i) { return a + k * (y[i] - S.d.eq.y[i]); }, 0) : 0;
+                sat: function (n) { var S = storedDesign(), y = [ds.get('th1')[n], ds.get('th2')[n], ds.get('Xs')[n], ds.get('w1')[n], ds.get('w2')[n], ds.get('vX')[n]], dd = storedRef(S.d), want; dd.ref(n); want = S.p.on ? dd.eq.F - dd.K.reduce(function (a, k, i) { return a + k * (y[i] - dd.eq.y[i]); }, 0) : 0;
                     return { formula: '|F* − K(y<sub>n</sub> − y*)| > F<sub>max</sub>', inputs: [['F<sub>max</sub>', ds.get('Fmax'), 'N', 1]], value: S.p.on && Math.abs(want) > S.p.Fmax ? 1 : 0 }; },
                 t_sat: function () { var a = ds.get('sat'), c = 0; for (var n = 0; n < NS; n++) c += a[n]; return { formula: _t('number of stored samples at the limit × 10 ms'), inputs: [['samples', c, '', 0]], value: c * EVERY * H }; },
                 t_stop: function () { var a = ds.get('ells'), c = 0; for (var n = 0; n < NS; n++) if (a[n] > LMAX || a[n] < LMIN) c++; return { formula: _t('number of stored samples with ℓ outside [ℓ<sub>min</sub>, ℓ<sub>max</sub>] × 10 ms'), inputs: [['samples', c, '', 0]], value: c * EVERY * H }; },
@@ -1311,13 +1311,13 @@
                     return { formula: _t('the first stored time after which every number stays within 0.01 of y*'), inputs: [], value: t }; },
                 E_rest: function () { var y = [ds.get('th1_eq'), ds.get('th2_eq'), ds.get('r'), 0, 0, 0]; return { formula: 'T + V at y*', inputs: [['θ<sub>1</sub>*', y[0], 'rad', 6], ['θ<sub>2</sub>*', y[1], 'rad', 6], ['r', y[2], 'm', 2]], value: energy(storedRig(), y) }; },
                 Escale: function () { var E = ds.get('Es'), W = ds.get('Wc'), Q = ds.get('Qs'), m = 1e-9; for (var n = 0; n < NS; n++) m = Math.max(m, Math.abs(E[n] - ds.get('E_rest')), Math.abs(W[n]), Q[n]); return { formula: 'max(|E − E*|, |W<sub>coil</sub>|, Q<sub>stop</sub>)', inputs: [], value: m }; },
-                ylim: function () { var m = 1e-6, A = [ds.get('th1'), ds.get('th2'), ds.get('Xs')]; for (var n = 0; n < NS; n++) m = Math.max(m, Math.abs(A[0][n]), Math.abs(A[1][n]), Math.abs(A[2][n])); m = Math.max(m, Math.abs(ds.get('th1_eq')), Math.abs(ds.get('th2_eq')), Math.abs(ds.get('r'))); return { formula: '1.1 · max(|θ<sub>1</sub>|, |θ<sub>2</sub>|, |X|, |θ*|, |r|)', inputs: [], value: 1.1 * m }; },
+                ylim: function () { var m = 1e-6, A = [ds.get('th1'), ds.get('th2'), ds.get('Xs')]; for (var n = 0; n < NS; n++) m = Math.max(m, Math.abs(A[0][n]), Math.abs(A[1][n]), Math.abs(A[2][n]), Math.abs(ds.get('th1_ref')[n]), Math.abs(ds.get('th2_ref')[n]), Math.abs(ds.get('r_ref')[n])); m = Math.max(m, Math.abs(ds.get('th1_eq')), Math.abs(ds.get('th2_eq')), Math.abs(ds.get('r'))); return { formula: '1.1 · max(|θ<sub>1</sub>|, |θ<sub>2</sub>|, |X|, |θ*<sub>n</sub>|, |r<sub>n</sub>|, |θ*|, |r|)', inputs: [], value: 1.1 * m }; },
                 Flim: function () { var m = ds.get('Fmax'), F = ds.get('Fs'), N = ds.get('Ns'); for (var n = 0; n < NS; n++) m = Math.max(m, Math.abs(F[n]), Math.abs(N[n])); return { formula: '1.1 · max(F<sub>max</sub>, |F|, |N|)', inputs: [], value: 1.1 * m }; },
                 win_t0: function () { return { formula: 'clamp(t<sub>play</sub> − 3 s, 0, 20 s)', inputs: [['t<sub>play</sub>', ds.get('t_play'), 's', 3]], value: Math.max(0, Math.min(TEND - WIN, ds.get('t_play') - 0.3 * WIN)) }; },
                 err_half: function () { var S = storedDesign(), y0 = Array.prototype.slice.call(ds.get('y0s')), A = ['th1', 'th2', 'Xs', 'w1', 'w2', 'vX'].map(function (k) { return ds.get(k); }), e = 0;
-                    run(S.p, S.d, y0, H / 2, 2 * EVERY, function (n, y) { for (var j = 0; j < 6; j++) e = Math.max(e, Math.abs(y[j] - A[j][n])); });
+                    run(S.p, storedRef(S.d), y0, H / 2, 2 * EVERY, function (n, y) { for (var j = 0; j < 6; j++) e = Math.max(e, Math.abs(y[j] - A[j][n])); });
                     return { formula: _t('the run solved again with h/2; the largest difference from the stored samples'), inputs: [['h/2', H / 2, 's', 5]], value: e }; },
-                r_px: function () { return { formula: 'x<sub>O</sub> + r · px/m', inputs: [['x<sub>O</sub>', ds.get('pivot_px'), 'px', 1], ['r', ds.get('r'), 'm', 2]], value: ds.get('pivot_px') + ds.get('r') * ds.get('px_per_m') }; },
+                r_px: function () { return { formula: 'x<sub>O</sub> + r<sub>now</sub> · px/m', inputs: [['x<sub>O</sub>', ds.get('pivot_px'), 'px', 1], ['r<sub>now</sub>', ds.get('r_now'), 'm', 4]], value: ds.get('pivot_px') + ds.get('r_now') * ds.get('px_per_m') }; },
                 i_now: function () { return { formula: 'round(t<sub>play</sub> / 20h)', inputs: [['t<sub>play</sub>', ds.get('t_play'), 's', 3]], value: Math.min(NS - 1, Math.max(0, Math.round(ds.get('t_play') / (EVERY * H)))) }; }
             },
             drawn: {
@@ -1331,13 +1331,13 @@
                 th2: function (n) { var p = chartAt('th2', n); if (!p) return { what: _t('θ₂ on the time chart'), drawn: _t('outside the 10 s window'), expected: _t('not drawn now'), ok: null, note: _t('The window chart shows 10 s around the cursor; move the cursor to see this sample.') }; return readBack(box, _t('θ₂ on the time chart'), p, 2, function (c) { return Sim.isBurgundy(c) || (c[3] > 25 && c[0] > c[1] + 15); }, _t('the burgundy curve'), _t('After the cursor it is drawn pale.')); },
                 Xs: function (n) { var p = chartAt('Xs', n); if (!p) return { what: _t('X on the time chart'), drawn: _t('outside the 10 s window'), expected: _t('not drawn now'), ok: null, note: _t('The window chart shows 10 s around the cursor; move the cursor to see this sample.') }; return readBack(box, _t('X on the time chart'), p, 3, function (c) { return tanInk(c) || (c[3] > 25 && c[0] > c[2] + 20); }, _t('the brown dashed curve'), _t('The curve is dashed, so the search reaches 3 px along it.')); }
             },
-            round: { time: 't_play', label: function () { return _t('two seconds of the stored run'); }, length: function () { return 2; },
+            round: curve.round({ time: 't_play', label: function () { return _t('two seconds of the stored run'); }, length: function () { return 2; },
                 columns: ['th1_now', 'th2_now', 'X_now', 'F_now', 'N_now'], point: function () { return { what: 'ball 2' }; },
-                blocked: function () { return ds.get('t_play') > TEND - 2.05 ? _t('fewer than two seconds of the stored run are left; press From t = 0') : null; } },
-            about: _t('Nothing on this page is computed while you watch. The run is solved once with RK4 at h = 0.5 ms on the state (θ₁, θ₂, X, θ̇₁, θ̇₂, Ẋ), with the coil’s work and the stops’ heat carried along as two more states, and every twentieth state is stored with the coil’s force and current, the strut’s pull and length, and the energy. The same run is solved a second time with h/2 only to measure the error; that second run is not stored. Each frame draws the stored sample nearest to the playback time, without interpolation. The rig is drawn on one scale, px/m, the force arrows on 0.02 m per newton of that scale. The tubes, the stop marker, the wheels, the magnet and the coil are schematic: their sizes are not to scale and are not in the store; the strut’s outer tube is drawn half as long as the longest strut, and the inner tube fills the rest. The pale pendulum is the rest y* of the stored run. The energy bars are scaled to the largest of the three energies over the run. While you hold a ball or the cart, nothing is stored: the pose is your hand’s, the speeds are your hand’s smoothed over about 50 ms, and the force is what the controller would ask in that pose; when you let go, that state starts a new stored run. Poses that would stretch the strut past its stops are refused, so the pendulum stops following your hand there.')
+                blocked: function () { return ds.get('t_play') > TEND - 2.05 ? _t('fewer than two seconds of the stored run are left; press From t = 0') : null; } }),
+            about: _t('Nothing on this page is computed while you watch. The run is solved once with RK4 at h = 0.5 ms on the state (θ₁, θ₂, X, θ̇₁, θ̇₂, Ẋ), with the coil’s work and the stops’ heat carried along as two more states, and every twentieth state is stored with the coil’s force and current, the strut’s pull and length, and the energy. The same run is solved a second time with h/2 only to measure the error; that second run is not stored. Each frame draws the stored sample nearest to the playback time, without interpolation. The rig is drawn on one scale, px/m, the force arrows on 0.02 m per newton of that scale. The tubes, the stop marker, the wheels, the magnet and the coil are schematic: their sizes are not to scale and are not in the store; the strut’s outer tube is drawn half as long as the longest strut, and the inner tube fills the rest. The pale pendulum is the rest y* of the stored run. The energy bars are scaled to the largest of the three energies over the run. While you hold a ball or the cart, nothing is stored: the pose is your hand’s, the speeds are your hand’s smoothed over about 50 ms, and the force is what the controller would ask in that pose; when you let go, that state starts a new stored run. Poses that would stretch the strut past its stops are refused, so the pendulum stops following your hand there.') + ' ' + _t('With a target curve (Curve, Play curve) the curve is handed to the solver before anything is solved: the target is read at every stored sample, 10 ms apart, and held until the next, like a controller that updates its setpoint 100 times a second. At each sample the rest y*(r) and its holding force F*(r) come from the same Newton solve as the rest, and the gains K are those of the rest where the curve ends; the run starts at rest at the curve’s first value. The slider shows r on its 0.01 m steps; the flag, the pale pose and the dashed lines show the stored r<sub>n</sub>, θ*<sub>n</sub> and F*<sub>n</sub>, which the controller used.')
         };
 
-        Object.keys(NOW).forEach(function (k) { Sim.data.check[k] = nowCheck(k); });
+        Object.keys(NOW).forEach(function (k) { Sim.data.check[k] = nowCheck(k); }); Sim.data.curve = curve;   // the ledger file adds the curve to the panel once its sections exist (curve.extend)
         solve();
         Sim.onResize(stage, function () { box.fit(); draw(); });
         Sim.onResize(forceStage, function () { fbox.fit(); draw(); });

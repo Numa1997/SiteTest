@@ -33,11 +33,12 @@ var ⟦t|t = 0⟧, ⟦x|x = p.x0⟧, ⟦v|v = p.v0⟧, z = p.z0, win = 0, wloss 
                 where: 'accel(), just above solve()',
                 math: 'm ẍ + ⟦c|c⟧ ẋ + ⟦k|k⟧ x = ⟦F|F<sub>0</sub> ' + up('cos') + ' Ωt⟧' + tag(1) + '<br>⟹ &nbsp; ẍ = (F<sub>0</sub> ' + up('cos') + ' ⟦W|Ω⟧t − c v − k x) / m',
                 note: 'Equation (1) adds the three forces along the floor: the driver F<sub>0</sub> cos Ωt, the damper −c ẋ and the spring −k x. The solver needs only the acceleration, so the code solves (1) for ẍ and nothing else. accel(t, x, v, p) receives the clock time t in s, the state x in m and v in m/s, and the plant’s numbers in the object p of step 3: p.F0 is the force amplitude F<sub>0</sub> in N, p.W the drive angular frequency Ω in rad/s, p.c the damping coefficient c in kg/s and p.k the stiffness k in N/m; M is the mass m = 1 kg. The return line takes the drive force, subtracts the damper force and the spring force, and divides by the mass: newtons divided by kilograms, an acceleration in m/s². The time t appears on its own inside the cosine, and that is what makes the system driven: the force does not care where the block is, only what the clock says.',
-                code: `function accel(t, x, v, u, p) {
-return (⟦F|p.F0 * Math.cos(p.W * t)⟧ + u - ⟦c|p.c⟧ * v - ⟦k|p.k⟧ * x) / M;
+                code: `function drive(q, t) { return q.F0 * Math.cos(q.th === undefined ? q.W * t : q.th); }
+function accel(t, x, v, u, p) {
+return (⟦F|drive(p, t)⟧ + u - ⟦c|p.c⟧ * v - ⟦k|p.k⟧ * x) / M;
 }`,
                 syms: [
-                    ['F', 'F<sub>0</sub> cos Ωt', 'p.F0 * Math.cos(p.W * t)', 'drive force, N; Now: at the sample on screen'],
+                    ['F', 'F<sub>0</sub> cos Ωt', 'drive(p, t)', 'drive force, N: F₀ cos Ωt, or F₀ cos θ with θ = 2π∫f dt under a curve of f; Now: at the sample on screen'],
                     ['c', 'c', 'p.c', 'damping coefficient, kg/s'],
                     ['k', 'k', 'p.k', 'spring stiffness, N/m'],
                     ['W', 'Ω', 'p.W', 'drive angular frequency, rad/s']
@@ -132,11 +133,11 @@ ds.set('G_drive', ⟦X|1 / (M * Math.sqrt(Math.pow(w0 * w0 - p.W * p.W, 2) + Mat
                 code: `for (step = 0; step <= ⟦steps|TEND / H⟧; step++) {
 ...
 if (step === TEND / H) break;
-// RK4 on (x, v, z, W_in, W_loss); z = ∫(r − x) dt is the controller's memory, u its force at each stage
-var u1 = control(x, v, z, p), a1 = accel(t, x, v, u1, p), x2 = x + 0.5 * ⟦h|H⟧ * v, v2 = v + 0.5 * H * a1, z2 = z + 0.5 * H * (p.r - x);
-var u2 = control(x2, v2, z2, p), a2 = accel(t + 0.5 * H, x2, v2, u2, p), x3 = x + 0.5 * H * v2, v3 = v + 0.5 * H * a2, z3 = z + 0.5 * H * (p.r - x2);
-var u3 = control(x3, v3, z3, p), a3 = accel(t + 0.5 * H, x3, v3, u3, p), x4 = x + H * v3, v4 = v + H * a3, z4 = z + H * (p.r - x3);
-var u4 = control(x4, v4, z4, p), a4 = accel(t + H, x4, v4, u4, p);
+var pa = at(2 * step), pm = at(2 * step + 1), pb = at(2 * step + 2);   // RK4 on (x, v, z, W_in, W_loss), the parameters read at t, t + h/2 and t + h; z = ∫(r − x) dt is the controller's memory, u its force at each stage
+var u1 = control(x, v, z, pa), a1 = accel(t, x, v, u1, pa), x2 = x + 0.5 * ⟦h|H⟧ * v, v2 = v + 0.5 * H * a1, z2 = z + 0.5 * H * (pa.r - x);
+var u2 = control(x2, v2, z2, pm), a2 = accel(t + 0.5 * H, x2, v2, u2, pm), x3 = x + 0.5 * H * v2, v3 = v + 0.5 * H * a2, z3 = z + 0.5 * H * (pm.r - x2);
+var u3 = control(x3, v3, z3, pm), a3 = accel(t + 0.5 * H, x3, v3, u3, pm), x4 = x + H * v3, v4 = v + H * a3, z4 = z + H * (pm.r - x3);
+var u4 = control(x4, v4, z4, pb), a4 = accel(t + H, x4, v4, u4, pb);
 ...
 x += H / 6 * (v + 2 * v2 + 2 * v3 + v4);
 v += H / 6 * (a1 + 2 * a2 + 2 * a3 + a4);
@@ -151,9 +152,9 @@ t = (step + 1) * H;`,
                 where: 'solve(), inside the loop and after it',
                 math: 'E = ½ m ẋ² + ½ k x²<br>E(T) − E(0) = ⟦Win|W<sub>in</sub>⟧ − ⟦Wloss|W<sub>loss</sub>⟧, &nbsp; W<sub>in</sub> = ∫<sub>0</sub><sup>T</sup> F ẋ d<span style="font-style:normal">t</span>, &nbsp; W<sub>loss</sub> = ∫<sub>0</sub><sup>T</sup> c ẋ² d<span style="font-style:normal">t</span>' + tag(8) + '<br>⟦bal|balance⟧ = |E(T) − E(0) − (W<sub>in</sub> − W<sub>loss</sub>)| / W<sub>in</sub>',
                 note: 'The coil does work at the rate P<sub>in</sub> = F ẋ, with F the outside push plus the controller’s u, and the damper turns energy into heat at the rate P<sub>loss</sub> = c ẋ². Equation (8) says that the stored energy E changes over the run, T = 60 s, by the difference of their integrals. The code integrates both inside the same Runge–Kutta step as the motion and with the same weights 1, 2, 2, 1. Fa, Fm and Fb are the drive force in N at the start, the middle and the end of the step, and v, v2, v3, v4 are the four velocities of step 8, so Fa * v and the other products are powers in W, and H / 6 times their weighted sum is the work of one step in J. win is W<sub>in</sub> and wloss is W<sub>loss</sub>, both in J, and p.c is c in kg/s. After the loop both are stored, and Es[NS - 1] − Es[0] is E(T) − E(0), taken from the stored energies of step 10. The last line stores by how much (8) misses, as a fraction of W<sub>in</sub>. The work–energy theorem holds exactly for the true motion, so this one number tests the whole computation. With the defaults W<sub>in</sub> = 19.03 J, W<sub>loss</sub> = 17.93 J and E(T) − E(0) = 1.11 J, and the balance is 1.3 × 10⁻¹², the readout “Energy balance”.',
-                code: `var Fa = p.F0 * Math.cos(p.W * t), Fm = p.F0 * Math.cos(p.W * (t + 0.5 * H)), Fb = p.F0 * Math.cos(p.W * (t + H));
+                code: `var Fa = drive(pa, t), Fm = drive(pm, t + 0.5 * H), Fb = drive(pb, t + H);
 ⟦Win|win⟧ += H / 6 * ((Fa + u1) * v + 2 * (Fm + u2) * v2 + 2 * (Fm + u3) * v3 + (Fb + u4) * v4);
-⟦Wloss|wloss⟧ += H / 6 * p.c * (v * v + 2 * v2 * v2 + 2 * v3 * v3 + v4 * v4);
+⟦Wloss|wloss⟧ += H / 6 * (pa.c * v * v + 2 * pm.c * v2 * v2 + 2 * pm.c * v3 * v3 + pb.c * v4 * v4);
 ...
 ds.set('Win', win); ds.set('Wloss', wloss);
 ds.set('balance', ⟦bal|win > 0 ? Math.abs(Es[NS - 1] - Es[0] - (win - wloss)) / win : 0⟧);`,
@@ -169,8 +170,8 @@ ds.set('balance', ⟦bal|win > 0 ? Math.abs(Es[NS - 1] - Es[0] - (win - wloss)) 
                 math: '⟦n|n⟧ = step / 10, &nbsp; ⟦t|t<sub>n</sub>⟧ = n · 10h = n · 10 ' + up('ms') + '<br>⟦F|F<sub>n</sub>⟧ = F<sub>0</sub> ' + up('cos') + ' Ωt<sub>n</sub>, &nbsp; ⟦E|E<sub>n</sub>⟧ = ½ m v<sub>n</sub>² + ½ k x<sub>n</sub>², &nbsp; P<sub>in,n</sub> = F<sub>n</sub> v<sub>n</sub>, &nbsp; P<sub>loss,n</sub> = c v<sub>n</sub>²<br>⟦err|error⟧ = ' + up('max') + '<sub>n</sub> |⟦x|x<sub>n</sub>⟧ − x(t<sub>n</sub>)|, &nbsp; x(t) from (5)',
                 note: 'Sixty thousand states are far more than a picture needs, so the page keeps every tenth one. When step is a multiple of EVERY = 10, the first quoted block writes one row of the data store, at the moment that state is known: ts[n] is the time t<sub>n</sub> in s, xs[n] and vs[n] are the displacement in m and the velocity in m/s, Fs[n] is the drive force F<sub>n</sub> in N, Es[n] is the energy of the oscillator, kinetic plus spring, in J, and Pin[n] and Ploss[n] are the powers of the driver and of the damper in W, all at the same instant. Then n counts on to the next row. The run fills 6 001 rows, one every 10 ms from 0 s to 60 s. After the time loop, the second block evaluates the exact motion (5) of step 5 at every stored time, xex[n] in m, and keeps the largest difference from the Runge–Kutta displacement as err, in m. With the defaults it is 5.3 × 10⁻¹² m, the readout “RK4 vs exact”: over the whole minute the solver agrees with the pencil-and-paper answer to a few picometres. The playback of step 11 reads these rows and computes no state of its own.',
                 code: `if (step % EVERY === 0) {
-⟦t|ts[n] = t⟧; ⟦x|xs[n] = x⟧; vs[n] = v; zs[n] = z; ⟦F|Fpush[n] = p.F0 * Math.cos(p.W * t)⟧;
-⟦E|Es[n] = 0.5 * M * v * v + 0.5 * p.k * x * x⟧; Pin[n] = Fs[n] * v; Ploss[n] = p.c * v * v;
+var q = at(2 * step); ⟦t|ts[n] = t⟧; ⟦x|xs[n] = x⟧; vs[n] = v; zs[n] = z; ⟦F|Fpush[n] = drive(q, t)⟧; ps[n] = S ? q.val : NaN;
+⟦E|Es[n] = 0.5 * M * v * v + 0.5 * p.k * x * x⟧; Pin[n] = Fs[n] * v; Ploss[n] = q.c * v * v;
 ⟦n|n++⟧;
 }
 ...
@@ -221,11 +222,11 @@ return ⟦Kp|p.Kp⟧ * (⟦r|p.r⟧ - x) + ⟦Ki|p.Ki⟧ * ⟦z|z⟧ - ⟦Kd|p.K
 ...
 function equilibrium(p) { return p.Ki > 0 ? p.r : p.Kp * p.r / (p.k + p.Kp); }
 ...
-var u1 = control(x, v, z, p), a1 = accel(t, x, v, u1, p), x2 = x + 0.5 * H * v, v2 = v + 0.5 * H * a1, z2 = z + 0.5 * H * (p.r - x);
+var u1 = control(x, v, z, pa), a1 = accel(t, x, v, u1, pa), x2 = x + 0.5 * H * v, v2 = v + 0.5 * H * a1, z2 = z + 0.5 * H * (pa.r - x);
 ...
-z += H / 6 * ((p.r - x) + 2 * (p.r - x2) + 2 * (p.r - x3) + (p.r - x4));
+z += H / 6 * ((pa.r - x) + 2 * (pm.r - x2) + 2 * (pm.r - x3) + (pb.r - x4));
 ...
-uP[n] = p.Kp * (p.r - x); uI[n] = p.Ki * z; uD[n] = -p.Kd * v; ⟦u|us[n] = control(x, v, z, p)⟧; Fs[n] = Fpush[n] + us[n];
+uP[n] = q.Kp * (q.r - x); uI[n] = q.Ki * z; uD[n] = -q.Kd * v; ⟦u|us[n] = control(x, v, z, q)⟧; Fs[n] = Fpush[n] + us[n];
 ...
 ds.set('x_eq', ⟦xeq|xe⟧); ds.set('F_eq', p.k * xe); ds.set('t_blow', blew); ds.set('margin', (p.c + p.Kd) * (p.k + p.Kp) - M * p.Ki); ds.set('stable', (p.c + p.Kd) * (p.k + p.Kp) - M * p.Ki > 0);`,
                 syms: [
@@ -245,7 +246,7 @@ ds.set('x_eq', ⟦xeq|xe⟧); ds.set('F_eq', p.k * xe); ds.set('t_blow', blew); 
                 note: 'Equation (9) of the note is the coil’s force, F = Bℓ I. The page reads it the other way round: the slider sets F<sub>0</sub>, and the current the source must drive is I = F/(Bℓ), stored for every row as Is[n] in A. BL is the force constant Bℓ = 10 T·m = 10 N/A, so the default F<sub>0</sub> = 1 N needs I<sub>0</sub> = 0.1 A. In the same loop solve() stores the two other forces on the block, the damper’s −c v<sub>n</sub> and the spring’s −k x<sub>n</sub>, in N, so that the drawing has only to read them. The canvas is in CSS pixels, so the drawing needs a scale, and §12 says that it is kept from run to run: need is the half-range this run needs, the larger of its largest swing max |x<sub>n</sub>| and F<sub>0</sub>/k, in m, and setSpan() keeps the old span unless the new run needs more; Fit scale sets the span to need. In geom(), m.amp is A<sub>px</sub> = 0.11 W<sub>0</sub>, where W<sub>0</sub> is the width between the wall and the right margin in px, m.sc = A<sub>px</sub> / span is the scale in px/m, and m.fN = 2 px/m / k is the scale of the force arrows in px/N: a force is drawn twice as long as the stretch of the spring that would carry it. In draw(), bx = x<sub>eq</sub> + x<sub>n</sub> · px/m places the block, the coil’s tube follows it on its rod, and the three arrows over the block are the stored forces times px/N. The drawing differs from the store only by these two scales.',
                 code: `var ⟦BL|BL = 10⟧;   // the coil's force constant Bℓ in T·m = N/A: B = 1 T in the magnet's gap, ℓ = 10 m of wire
 ...
-⟦I|Is[n]⟧ = Fs[n] / BL; Fdamp[n] = -p.c * vs[n]; Fspr[n] = -p.k * xs[n];
+⟦I|Is[n]⟧ = Fs[n] / BL; Fdamp[n] = -qn.c * vs[n]; Fspr[n] = -p.k * xs[n];
 ...
 setSpan(had ? Math.max(before, ds.get('need')) : ds.get('need'), before, false);
 ...
@@ -270,7 +271,7 @@ ds.set('Fd_px', ds.get('F_now') * m.fN); ds.set('Fc_px', ds.get('Fc_now') * m.fN
                 where: 'solve(), in the RK4 loop; then draw() and drawWindow()',
                 math: '⟦Wc|W<sub>in, n</sub>⟧ = ∫<sub>0</sub><sup>t<sub>n</sub></sup> F v dt, &nbsp; ⟦Qc|W<sub>loss, n</sub>⟧ = ∫<sub>0</sub><sup>t<sub>n</sub></sup> c v² dt, &nbsp; E<sub>n</sub> = W<sub>in, n</sub> − W<sub>loss, n</sub> &nbsp; (8)<br>T<sub>window</sub> = ' + up('clamp') + '(4/f, 6 ' + up('s') + ', 20 ' + up('s') + '), &nbsp; guides at ±⟦X|X⟧ from (4)',
                 note: 'The bars at the top keep the books of (8) while the run plays. The RK4 loop already carries the coil’s work win and the damper’s heat wloss along with the motion (step 9), so solve() only has to write their values at every stored row into Wc[n] and Qc[n], in J. Each frame fills the first bar to W<sub>in, n</sub>, the second to W<sub>loss, n</sub> and the third to the stored energy E<sub>n</sub>, all three as fractions of the largest of them over the run; the third is the difference of the first two, to the accuracy of step 9. The damper’s oil is shaded by P<sub>loss, n</sub> = c v<sub>n</sub>² as a fraction of its largest value in the run. Below, the window chart follows the present row. draw() makes it four drive periods wide, Tw = 4/f in s, but never less than 6 s or more than 20 s (8.9 s with f = 0.45 Hz), and lets its left edge t0 trail the present instant by 0.7 of its width, except near the start and the end of the run. Inside it, x(t) is drawn from the stored xs, F(t)/k from the stored xqs, the previous run, dotted, from xs_prev, and the last quoted line draws the two dashed rose guides at ±X, the steady amplitude of (4) read from the store. Once the start of (5) has died away, the crests of x(t) touch these guides.',
-                code: `Es[n] = 0.5 * M * v * v + 0.5 * p.k * x * x; Pin[n] = Fs[n] * v; Ploss[n] = p.c * v * v; ⟦Wc|Wc[n] = win⟧; ⟦Qc|Qc[n] = wloss⟧;
+                code: `Es[n] = 0.5 * M * v * v + 0.5 * p.k * x * x; Pin[n] = Fs[n] * v; Ploss[n] = q.c * v * v; ⟦Wc|Wc[n] = win⟧; ⟦Qc|Qc[n] = wloss⟧;
 ...
 var Tw = Math.min(20, Math.max(6, 4 / ds.get('fd'))), t0 = Math.min(TEND - Tw, Math.max(0, ts[i] - 0.7 * Tw));
 ...

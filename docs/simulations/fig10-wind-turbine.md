@@ -478,3 +478,32 @@ After the independent referee and derivation checks (`notes/fig10/`), the lead m
 ## Second check round · 20 October 2026
 
 From the derivation checks and blind referees that ran after the usage limit lifted (`notes/fig10/`), each change on its existing line: Figure 1: the tip speed drawn out of the page ([L198](../../public/simulations/wind-turbine.html#L198)); Figure 3: labels fit, subscripts set ([L307](../../public/simulations/wind-turbine.html#L307)); §2: power is torque times angular speed ([L217](../../public/simulations/wind-turbine.html#L217)); §4: the inflow angle 7° for the undisturbed wind, about 6° for the slowed air; one repeated sentence removed ([L236](../../public/simulations/wind-turbine.html#L236)); §6.1: the code, not the fit, gives no torque at a standstill ([L341](../../public/simulations/wind-turbine.html#L341)); §6.2 and §7: the Step wind is a 2 s ramp; overshoot 0.39 rpm ([L347](../../public/simulations/wind-turbine.html#L347)); equation (8) reflowed so its number shows at 1600 px ([L341](../../public/simulations/wind-turbine.html#L341)). Checked with `notes/verify.mjs` at 1440 × 900, 1600 × 900 and 390 × 844.
+
+## Parameter curves · 30 October 2026
+
+A page that solves its run first never integrates while the reader watches, so a curve here does not move a slider frame by
+frame: Play curve hands the whole curve p(t) to the solver, the page solves the run with the knob on that curve, stores it,
+and plays it back; the slider only shows where the curve is, on its steps, and the curve's dot follows the stored sample
+on screen (the engine's solver interface, [curve.md](../scripts/curve.md)). A run without a curve is unchanged bit for bit.
+
+Here the curve is a fifth wind profile, or a schedule of the target speed: like Gust and Step, it begins 30 s into the run
+(`T0C`), after the rotor has settled. `wind(t, w)` ([L667](../../public/simulations/wind-turbine.html#L667)) reads the curve at every RK4 stage; the stored wind `vw[n]`
+already holds it, and `storeSched()` ([L741](../../public/simulations/wind-turbine.html#L741)) keeps the curve's description (`sc_*`) and the target `rpm_set[n]`, so the
+checks can rebuild it. The page hands the curve over through the engine's `opts.solve` ([L1161](../../public/simulations/wind-turbine.html#L1161)) and shows it with
+`curve.playAt` from its frame ([L955](../../public/simulations/wind-turbine.html#L955)); playback after Play curve starts at t = 27 s, three seconds before the curve,
+so nothing has to be waited for (Restart still plays from 0). The wind knob may go to 14 m/s, past the slider's 11 m/s: the
+slider then waits at its end and the wind chart shows the wind. All eight old runs (two controllers × four winds) are
+unchanged bit for bit. Plan, patch and numbers from a research agent; its 36 tests rerun by me on the unified engine pass.
+
+| Example | Curve, controller | Numbers |
+|---|---|---|
+| IEC operating gust, the "Mexican hat" | v: gust, 8 → 10.86 m/s, T = 10.5 s; hold 15 rpm | V_gust = 3.86 m/s (category C, D = 80 m, Λ₁ = 42 m; formula V = V_hub − 0.37 V_gust sin(3πt/T)(1 − cos 2πt/T) from Shirzadeh, Hangan and Crawford, Wind Energ. Sci. 5, 1755, 2020, eqs. 1–5, read); dip 6.97 m/s, top 10.86 m/s; holding, P_gen 522 kW–1.47 MW; following the wind, 677–999 kW |
+| IEC coherent gust, at half size | v: half-cosine rise 7 → 14 m/s in 10 s; hold 15 rpm | (Hannesdóttir et al., Wind Energ. Sci. 8, 231, 2023, eqs. 1–3, read) the blades stall: λ 8.98 → 4.49, c_p 0.463 → 0.199; settles at 1.68 MW; the direction change θ_cg = 103° is not modelled (no yaw) |
+| Wind ramp through rated speed | v: 8 → 14 m/s in 60 s, straight; follow the wind | torque limit reached at 12.82 m/s in steady wind (24.80 rpm, 3.12 MW), at 13.12 m/s on the ramp; ends at 30.6 rpm, 128 m/s tips |
+| Target speed raised, minimum jerk | n_ref 12 → 15.5 rpm in 10 s; hold, 8 m/s | 633 → 757 kW; peak torque rate 86.6 kN m/s against 144.8 for a straight ramp; but the power dips to 295 kW against 454 kW, since the peak rate is 15/8 of the mean |
+
+**Left for Numa:** the note's limits section says "above about 11 m/s nothing limits the power except the generator's torque
+limit"; with this page's own model the torque limit is reached at 12.8 m/s (steady wind, following the wind). The research
+agent's patch corrected the sentence; I restored the original, since the English of a note changes only on Numa's word.
+Tested in headless Chromium: every example solves and plays; at 2.16 s into the gust the stored wind and the curve agree,
+7.034 m/s; no page errors.

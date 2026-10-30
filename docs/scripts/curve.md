@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | File | [public/scripts/curve.js](../../public/scripts/curve.js), 504 lines, 37.2 kB (37 165 bytes) |
-| Loaded by | the simulation pages that have a parameter curve, right after `dataset.js` on the same line: Fig. 1 (line 508), Fig. 2 (`Double Pendulum.html`, 453), Fig. 3 (`Interactive Double-Slit Experiment Visualization.html`, 549), Fig. 4 (`Transverse and longitudinal waves.html`, 735), Fig. 5 (`water-wave.html`, 567), Fig. 6 (`wave-interference.html`, 492), Fig. 7 (`phasor-sums.html`, 663), Fig. 8 (`draw-decompose.html`, 621); and their German and Arabic pages |
+| Loaded by | the simulation pages that have a parameter curve, right after `dataset.js` on the same line: Fig. 1 (line 508), Fig. 2 (`Double Pendulum.html`, 453), Fig. 3 (`Interactive Double-Slit Experiment Visualization.html`, 549), Fig. 4 (`Transverse and longitudinal waves.html`, 735), Fig. 5 (`water-wave.html`, 567), Fig. 6 (`wave-interference.html`, 492), Fig. 7 (`phasor-sums.html`, 663), Fig. 8 (`draw-decompose.html`, 621), Fig. 9 (`driven-oscillator.html`, 601), Fig. 10 (`wind-turbine.html`, 550), Fig. 11 (`pendulum-control.html`, 421): all eleven; and their German and Arabic pages |
 | Defines | `Sim.curve(opts)` on `window.Sim` ([curve.js:102](../../public/scripts/curve.js#L102)) |
 | Uses | `Sim.theme`, `Sim.fmt`, `Sim.canvas2d`, `Sim.onResize`, `Sim.readPixel`, `Sim.isBurgundy` ([sim.md](sim.md)); the page's dataset ([dataset.md](dataset.md)); `_t()` for every word |
 | Since | 30 October 2026, on Numa's request: "a curve to change the parameters and watch the animation unfold as the parameter changes", with an option for one's own curve and well-known example curves |
@@ -143,3 +143,33 @@ and the Fig. 1 note (ruhige Linien / الخطوط الهادئة, Regler / ال�
   right-to-left layout. The status line is now kept left to right like the readouts (`styles/i18n.css`, a rule in `sim.css`
   would have been flipped by rtlcss), and the Arabic strings for "of", "at" and "run" carry left-to-right marks so the
   numbers keep their places. Script: `curvecheck.js` in the session's scratchpad.
+
+## Pages that solve first (Figs. 9, 10 and 11)
+
+These pages never integrate while the reader watches, so a curve cannot move their sliders frame by frame. Play curve
+hands the whole curve to the page instead, frozen at that moment, and the page solves its run with it. The research for
+the three pages proposed three hand-overs; the engine offers all three, built so that each page's own tests pass
+unchanged ([curve.js header](../../public/scripts/curve.js), `described()`, `frozen()`, `resched()`, `playAt()`):
+
+- `knob.schedule(fn, name)` (Figs. 9 and 11): `fn(t)` is the curve at run time t (a before the run, b after it, or the next
+  run with Repeat) and carries its description as properties (knob, shape, name, a, b, T, loop, ku, kp, km; `fn.fn` is
+  itself). Called at Play curve, again after an edit while it runs (one more solve), and with `(null, 'stop' | 'hand')`
+  when Stop, a new curve or a hand on the slider ends it. The page decides what that means (Fig. 11: Stop re-solves from
+  the state on screen; a hand marks the run stale).
+- `opts.solve(sc)` and `opts.ended(msg)` (Fig. 10): `sc` is the same description as plain data (Fig. 10 stores and compares
+  it as JSON; JSON of a function is nothing, which is why the two forms exist), with `curve.params()` and
+  `curve.playAt(t)`, which shows the curve at the time of the frame on screen.
+- `opts.time()` (Figs. 9 and 11): the run time of the stored sample on screen; the curve's time follows the playback, so a
+  seek moves the dot too.
+- On such a knob the slider only shows the curve's value on its steps, with no `input` event, so the run on screen is never
+  marked stale by the curve; the start value is put on the slider's steps; a `schedule` knob without a range of its own
+  keeps both ends on its steps; `knob.min`/`knob.max` give a curve its own range (Fig. 10's wind, to 14 m/s).
+- `opts.shapes` adds a page's own shapes (Fig. 11's step and input shapers); the engine itself now has `gust` and `rise`,
+  the IEC 61400-1 operating gust and the half-cosine rise of its coherent gust, offered only through Fig. 10's examples.
+- `curve.stop(msg)`, `curve.at(t)` (the curve read back from the store, for checks), `Sim.curve.value(sc, t)` and
+  `Sim.curve.fn(sc)` (a frozen curve evaluated by a solver or a check).
+
+Two faults surfaced while uniting them and are fixed: a function's own `name` is read-only, so the description is put on
+`fn` with `Object.defineProperty`; and Fig. 10's identity test (its built-in gust against the curve gust, b = 9.11 m/s)
+failed while both ends were snapped to the slider's 0.1 m/s steps, hence the rule above.
+
