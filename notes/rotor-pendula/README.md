@@ -39,7 +39,7 @@ catalogue generator serves fully.
 | L0 | the second blade derived twice; small swings, best brake, P* = m g^2 l / [8 Omega (r_p - 2l/3)] | `blade.py` | |
 | L1 | full nonlinear motion, Radau IIA engine (`engine.RigidBlade`), chaos | `engine.py`, `L1_blade.py`, `L1_chaos_blade.py` | `L1_blade.json`, `L1_chaos_blade.json` |
 | L2 | gusts on the NREL 5 MW turbine with its controller; the rotor's two torques against its speed (Figure 20 of the notes) | `L2_run.py`, `L2_scales.py`, `turbulence.py`, `L2_torque_curve.py` | `L2_run_nrel.json`, `L2_run_k2.json`, `L2_scales.json`, `L2_torque.json` |
-| L3 | the blade sags and shakes at the tip; the shaking ceiling | `L3_sag.py`, `L3_sag_tip.py`, `L3_shake2.py`, `power_theorem.py`, `nrel5mw.py` | `L3_sag_tip.json`, `L3_shake2.json` |
+| L3 | the blade sags and shakes at the tip; the shaking ceiling; the shaking's power spectrum (Figure 25 of the notes) | `L3_sag.py`, `L3_sag_tip.py`, `L3_shake2.py`, `L3_response.py`, `power_theorem.py`, `nrel5mw.py` | `L3_sag_tip.json`, `L3_shake2.json`, `L3_response.json` |
 | L4 | real geared generator: losses, friction, reflected inertia; sizes | `L4_generator.py`, `L4_full.py`, `L4_check.py`, `L4_converge.py`, `design.py`, `sizes.py` | `L4_*.json`, `design.json`, `sizes.json` |
 | L5 | the air on the second blade, three shapes | `L5_air.py` | `L5_air.json` |
 | L6 | a turbulent wind field over the disc (IEC Kaimal spectra, IEC coherence for u, TurbSim's smooth-model default for v and w, Veers synthesis with a seeded generator the Wind tab copies), checked against its own statistics and L2's disc averaging; the rotor and the second blade solved in it with the air at its middle; reference record for `tools/check_wind.js` | `L6_wind.py` | `L6_wind.json`, `L6_wind_ref.json` |

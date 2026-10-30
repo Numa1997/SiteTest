@@ -230,3 +230,18 @@ Left: the site and script references (the notes are published beside the simulat
 7.2 and a response figure for 8.2 (both would be new drawings from model output; the text now gives the formulas they would show).
 Checks: `check_numbers.py` PASS (741 numbers), `R_revision.py` ALL PASS, `check_combined.py` ALL PASS (360–1440 px), headless Chromium
 23 figures, 0 KaTeX and console errors.
+
+## The two missing figures (30 October 2026, after deployment)
+Numa: leave nothing missing; deploy what is produced, and loop by the standards without waiting for corrections.
+- Figure 22 (section 7.2): the once-per-turn pushes of (7.2) as turning arrows, for the rod, the streamlined blade and the wing, from
+  `data/L5_air.json`: gravity's push turned by the lean, the tilt's and the shear's pushes added, the total against gravity's circle.
+- Figure 25 (section 8.2): the generator's power per hertz under blade shaking, from `derive/L3_response.py` (uses `L3_shake2.py`'s
+  model unchanged; its band integral reproduces the stored 3.3848 mW exactly): a sharp peak at the blade's mode, 1.08 Hz, and almost
+  nothing at the second blade's own 1.47 Hz.
+- Against `notes/STANDARD.md`, point 8 (every source with a working link): links added for Veers (OSTI record of the conference
+  version), Taylor 1938, Kolmogorov 1941 (the English translation of 1991), Hairer and Wanner, Cottone et al.; each DOI checked to
+  resolve to the named work. Landau–Lifshitz and Betz 1920 have no free copy and stay without a link.
+- Chapter 8 had no Problems box (Numa's verdict of 21 October 2026 asks for one per chapter): three problems with folded answers
+  (the effective mass of a point mass; the sag's push from the 8.2 equation; the tuned length, 1.85 m).
+- Section 5.3 had no picture of its central idea: Figure 15 now shows friction's square-wave torque, its first harmonic of height
+  4f/π and the swing's rate, from which (5.5) follows. Later figures move up by one; `docs/portfolios.md` follows the page.

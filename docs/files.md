@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-900 files, 60.7 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+903 files, 61.2 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -27,7 +27,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Project copy: Hydraulic Press Study](#project-copy-hydraulic-press-study) | 8 |
 | [Iron, Cotton and the Head](#iron-cotton-and-the-head) | 7 |
 | [Source of the Hydraulic Press Study (not served)](#source-of-the-hydraulic-press-study-not-served) | 37 |
-| [Source of Rotor Pendula (not served)](#source-of-rotor-pendula-not-served) | 75 |
+| [Source of Rotor Pendula (not served)](#source-of-rotor-pendula-not-served) | 76 |
 | [Source of Iron, Cotton and the Head (not served)](#source-of-iron-cotton-and-the-head-not-served) | 19 |
 | [Source of the Droplet Collection study (not served)](#source-of-the-droplet-collection-study-not-served) | 96 |
 | [Template sources](#template-sources) | 2 |
@@ -35,7 +35,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Tools](#tools) | 8 |
 | [Translation tables](#translation-tables) | 48 |
 | [Agents of the lecture-note review](#agents-of-the-lecture-note-review) | 4 |
-| [Working notes of the Rotor Pendula study](#working-notes-of-the-rotor-pendula-study) | 84 |
+| [Working notes of the Rotor Pendula study](#working-notes-of-the-rotor-pendula-study) | 86 |
 | [Working notes of the Droplet Collection study](#working-notes-of-the-droplet-collection-study) | 121 |
 | [Record of the lecture-note review](#record-of-the-lecture-note-review) | 125 |
 
@@ -368,7 +368,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | File | Size | What it is | Explained in |
 |---|---|---|---|
 | [`public/portfolios/rotor-pendula/LICENSE-fonts.txt`](../public/portfolios/rotor-pendula/LICENSE-fonts.txt) | 8.5 kB | Licences of the fonts embedded in the generated page. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/rotor-pendula/index.html`](../public/portfolios/rotor-pendula/index.html) | 5.43 MB | Generated page: the lecture notes, the simulation and the wind in three tabs (portfolios-src/rotor-pendula/tools/build_combined.py). | [portfolios.md](portfolios.md) |
+| [`public/portfolios/rotor-pendula/index.html`](../public/portfolios/rotor-pendula/index.html) | 5.53 MB | Generated page: the lecture notes, the simulation and the wind in three tabs (portfolios-src/rotor-pendula/tools/build_combined.py). | [portfolios.md](portfolios.md) |
 
 ## Project copy: Hydraulic Press Study
 
@@ -444,7 +444,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`portfolios-src/rotor-pendula/README.md`](../portfolios-src/rotor-pendula/README.md) | 9.0 kB | The study's source: what it is, how the served page is generated, the checks. | [README.md](../portfolios-src/rotor-pendula/README.md) |
 | [`portfolios-src/rotor-pendula/check_physics.py`](../portfolios-src/rotor-pendula/check_physics.py) | 7.8 kB | Independent checks: SymPy derivations and SciPy re-integration with retyped constants. | [README.md](../portfolios-src/rotor-pendula/README.md) |
 
-<details><summary>28 files: Model output copied from notes/rotor-pendula/derive/, read by the number script or the simulation build.</summary>
+<details><summary>29 files: Model output copied from notes/rotor-pendula/derive/, read by the number script or the simulation build.</summary>
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
@@ -458,6 +458,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`portfolios-src/rotor-pendula/data/L2_scales.json`](../portfolios-src/rotor-pendula/data/L2_scales.json) | 168 B | Model output copied from notes/rotor-pendula/derive/, read by the number script or the simulation build. | [README.md](../portfolios-src/rotor-pendula/README.md) |
 | [`portfolios-src/rotor-pendula/data/L2_steady.json`](../portfolios-src/rotor-pendula/data/L2_steady.json) | 1.2 kB | Model output copied from notes/rotor-pendula/derive/, read by the number script or the simulation build. | [README.md](../portfolios-src/rotor-pendula/README.md) |
 | [`portfolios-src/rotor-pendula/data/L2_torque.json`](../portfolios-src/rotor-pendula/data/L2_torque.json) | 34.3 kB | Model output copied from notes/rotor-pendula/derive/, read by the number script or the simulation build. | [README.md](../portfolios-src/rotor-pendula/README.md) |
+| [`portfolios-src/rotor-pendula/data/L3_response.json`](../portfolios-src/rotor-pendula/data/L3_response.json) | 116.9 kB | Model output copied from notes/rotor-pendula/derive/, read by the number script or the simulation build. | [README.md](../portfolios-src/rotor-pendula/README.md) |
 | [`portfolios-src/rotor-pendula/data/L3_sag_tip.json`](../portfolios-src/rotor-pendula/data/L3_sag_tip.json) | 831 B | Model output copied from notes/rotor-pendula/derive/, read by the number script or the simulation build. | [README.md](../portfolios-src/rotor-pendula/README.md) |
 | [`portfolios-src/rotor-pendula/data/L3_shake2.json`](../portfolios-src/rotor-pendula/data/L3_shake2.json) | 3.5 kB | Model output copied from notes/rotor-pendula/derive/, read by the number script or the simulation build. | [README.md](../portfolios-src/rotor-pendula/README.md) |
 | [`portfolios-src/rotor-pendula/data/L4_check_2000.json`](../portfolios-src/rotor-pendula/data/L4_check_2000.json) | 10.0 kB | Model output copied from notes/rotor-pendula/derive/, read by the number script or the simulation build. | [README.md](../portfolios-src/rotor-pendula/README.md) |
@@ -492,19 +493,19 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`portfolios-src/rotor-pendula/fonts/ibm-plex-sans-400-italic-latin.woff2`](../portfolios-src/rotor-pendula/fonts/ibm-plex-sans-400-italic-latin.woff2) | 24.4 kB | Self-hosted font for the Rotor Pendula notes build: ibm-plex-sans-400-italic-latin.woff2. | [ibm-plex-sans-400-italic-latin.woff2](../portfolios-src/rotor-pendula/fonts/ibm-plex-sans-400-italic-latin.woff2) |
 | [`portfolios-src/rotor-pendula/fonts/instrument-serif-400-italic-latin.woff2`](../portfolios-src/rotor-pendula/fonts/instrument-serif-400-italic-latin.woff2) | 22.1 kB | Self-hosted font for the Rotor Pendula notes build: instrument-serif-400-italic-latin.woff2. | [instrument-serif-400-italic-latin.woff2](../portfolios-src/rotor-pendula/fonts/instrument-serif-400-italic-latin.woff2) |
 | [`portfolios-src/rotor-pendula/fonts/instrument-serif-400-normal-latin.woff2`](../portfolios-src/rotor-pendula/fonts/instrument-serif-400-normal-latin.woff2) | 21.0 kB | Self-hosted font for the Rotor Pendula notes build: instrument-serif-400-normal-latin.woff2. | [instrument-serif-400-normal-latin.woff2](../portfolios-src/rotor-pendula/fonts/instrument-serif-400-normal-latin.woff2) |
-| [`portfolios-src/rotor-pendula/numbers.json`](../portfolios-src/rotor-pendula/numbers.json) | 298.6 kB | Every computed number and table of the notes, written by tools/make_numbers.py. | [README.md](../portfolios-src/rotor-pendula/README.md) |
-| [`portfolios-src/rotor-pendula/rotor_notes.html`](../portfolios-src/rotor-pendula/rotor_notes.html) | 3.36 MB | A Second Blade on a Turning Blade, the lecture notes (chapters 1-9, the double pendulum held by the wind); generated by tools/build_theory.py. | [README.md](../portfolios-src/rotor-pendula/README.md) |
+| [`portfolios-src/rotor-pendula/numbers.json`](../portfolios-src/rotor-pendula/numbers.json) | 328.6 kB | Every computed number and table of the notes, written by tools/make_numbers.py. | [README.md](../portfolios-src/rotor-pendula/README.md) |
+| [`portfolios-src/rotor-pendula/rotor_notes.html`](../portfolios-src/rotor-pendula/rotor_notes.html) | 3.44 MB | A Second Blade on a Turning Blade, the lecture notes (chapters 1-9, the double pendulum held by the wind); generated by tools/build_theory.py. | [README.md](../portfolios-src/rotor-pendula/README.md) |
 | [`portfolios-src/rotor-pendula/rotor_sim.html`](../portfolios-src/rotor-pendula/rotor_sim.html) | 679.5 kB | The simulation page: physics block, solve-then-playback, Read values, worked solutions. | [README.md](../portfolios-src/rotor-pendula/README.md) |
 | [`portfolios-src/rotor-pendula/rotor_wind.html`](../portfolios-src/rotor-pendula/rotor_wind.html) | 600.3 kB | The wind page: a turbulent field synthesised in the browser (IEC Kaimal, Veers), the rotor and the second blade in it, data panel. | [README.md](../portfolios-src/rotor-pendula/README.md) |
 | [`portfolios-src/rotor-pendula/theory/01_double.src.html`](../portfolios-src/rotor-pendula/theory/01_double.src.html) | 72.2 kB | Source of the notes, part 01 (double): HTML with LaTeX maths and number placeholders. | [README.md](../portfolios-src/rotor-pendula/README.md) |
 | [`portfolios-src/rotor-pendula/theory/02_tip.src.html`](../portfolios-src/rotor-pendula/theory/02_tip.src.html) | 16.5 kB | Source of the notes, part 02 (tip): HTML with LaTeX maths and number placeholders. | [README.md](../portfolios-src/rotor-pendula/README.md) |
 | [`portfolios-src/rotor-pendula/theory/03_brake.src.html`](../portfolios-src/rotor-pendula/theory/03_brake.src.html) | 15.9 kB | Source of the notes, part 03 (brake): HTML with LaTeX maths and number placeholders. | [README.md](../portfolios-src/rotor-pendula/README.md) |
 | [`portfolios-src/rotor-pendula/theory/04_swings.src.html`](../portfolios-src/rotor-pendula/theory/04_swings.src.html) | 14.1 kB | Source of the notes, part 04 (swings): HTML with LaTeX maths and number placeholders. | [README.md](../portfolios-src/rotor-pendula/README.md) |
-| [`portfolios-src/rotor-pendula/theory/05_watts.src.html`](../portfolios-src/rotor-pendula/theory/05_watts.src.html) | 23.4 kB | Source of the notes, part 05 (watts): HTML with LaTeX maths and number placeholders. | [README.md](../portfolios-src/rotor-pendula/README.md) |
+| [`portfolios-src/rotor-pendula/theory/05_watts.src.html`](../portfolios-src/rotor-pendula/theory/05_watts.src.html) | 29.8 kB | Source of the notes, part 05 (watts): HTML with LaTeX maths and number placeholders. | [README.md](../portfolios-src/rotor-pendula/README.md) |
 | [`portfolios-src/rotor-pendula/theory/06_wind.src.html`](../portfolios-src/rotor-pendula/theory/06_wind.src.html) | 28.9 kB | Source of the notes, part 06 (wind): HTML with LaTeX maths and number placeholders. | [README.md](../portfolios-src/rotor-pendula/README.md) |
-| [`portfolios-src/rotor-pendula/theory/07_air.src.html`](../portfolios-src/rotor-pendula/theory/07_air.src.html) | 29.3 kB | Source of the notes, part 07 (air): HTML with LaTeX maths and number placeholders. | [README.md](../portfolios-src/rotor-pendula/README.md) |
-| [`portfolios-src/rotor-pendula/theory/08_shaking.src.html`](../portfolios-src/rotor-pendula/theory/08_shaking.src.html) | 25.4 kB | Source of the notes, part 08 (shaking): HTML with LaTeX maths and number placeholders. | [README.md](../portfolios-src/rotor-pendula/README.md) |
-| [`portfolios-src/rotor-pendula/theory/09_answer.src.html`](../portfolios-src/rotor-pendula/theory/09_answer.src.html) | 10.8 kB | Source of the notes, part 09 (answer): HTML with LaTeX maths and number placeholders. | [README.md](../portfolios-src/rotor-pendula/README.md) |
+| [`portfolios-src/rotor-pendula/theory/07_air.src.html`](../portfolios-src/rotor-pendula/theory/07_air.src.html) | 29.4 kB | Source of the notes, part 07 (air): HTML with LaTeX maths and number placeholders. | [README.md](../portfolios-src/rotor-pendula/README.md) |
+| [`portfolios-src/rotor-pendula/theory/08_shaking.src.html`](../portfolios-src/rotor-pendula/theory/08_shaking.src.html) | 27.5 kB | Source of the notes, part 08 (shaking): HTML with LaTeX maths and number placeholders. | [README.md](../portfolios-src/rotor-pendula/README.md) |
+| [`portfolios-src/rotor-pendula/theory/09_answer.src.html`](../portfolios-src/rotor-pendula/theory/09_answer.src.html) | 11.3 kB | Source of the notes, part 09 (answer): HTML with LaTeX maths and number placeholders. | [README.md](../portfolios-src/rotor-pendula/README.md) |
 | [`portfolios-src/rotor-pendula/tools/build_combined.py`](../portfolios-src/rotor-pendula/tools/build_combined.py) | 13.5 kB | Build and check tool of the Rotor Pendula notes, adapted from the Hydraulic Press Study's tools: build_combined.py. | [build_combined.py](../portfolios-src/rotor-pendula/tools/build_combined.py) |
 | [`portfolios-src/rotor-pendula/tools/build_fonts.py`](../portfolios-src/rotor-pendula/tools/build_fonts.py) | 9.7 kB | Build and check tool of the Rotor Pendula notes, adapted from the Hydraulic Press Study's tools: build_fonts.py. | [build_fonts.py](../portfolios-src/rotor-pendula/tools/build_fonts.py) |
 | [`portfolios-src/rotor-pendula/tools/build_sim.py`](../portfolios-src/rotor-pendula/tools/build_sim.py) | 4.1 kB | Build and check tool of the Rotor Pendula notes, adapted from the Hydraulic Press Study's tools: build_sim.py. | [build_sim.py](../portfolios-src/rotor-pendula/tools/build_sim.py) |
@@ -519,7 +520,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`portfolios-src/rotor-pendula/tools/compare.js`](../portfolios-src/rotor-pendula/tools/compare.js) | 1.7 kB | Build and check tool of the Rotor Pendula notes, adapted from the Hydraulic Press Study's tools: compare.js. | [compare.js](../portfolios-src/rotor-pendula/tools/compare.js) |
 | [`portfolios-src/rotor-pendula/tools/double_pendulum.js`](../portfolios-src/rotor-pendula/tools/double_pendulum.js) | 16.0 kB | Build and check tool of the Rotor Pendula notes, adapted from the Hydraulic Press Study's tools: double_pendulum.js. | [double_pendulum.js](../portfolios-src/rotor-pendula/tools/double_pendulum.js) |
 | [`portfolios-src/rotor-pendula/tools/katex_render.js`](../portfolios-src/rotor-pendula/tools/katex_render.js) | 613 B | Build and check tool of the Rotor Pendula notes, adapted from the Hydraulic Press Study's tools: katex_render.js. | [katex_render.js](../portfolios-src/rotor-pendula/tools/katex_render.js) |
-| [`portfolios-src/rotor-pendula/tools/make_numbers.py`](../portfolios-src/rotor-pendula/tools/make_numbers.py) | 109.8 kB | Build and check tool of the Rotor Pendula notes, adapted from the Hydraulic Press Study's tools: make_numbers.py. | [make_numbers.py](../portfolios-src/rotor-pendula/tools/make_numbers.py) |
+| [`portfolios-src/rotor-pendula/tools/make_numbers.py`](../portfolios-src/rotor-pendula/tools/make_numbers.py) | 117.0 kB | Build and check tool of the Rotor Pendula notes, adapted from the Hydraulic Press Study's tools: make_numbers.py. | [make_numbers.py](../portfolios-src/rotor-pendula/tools/make_numbers.py) |
 | [`portfolios-src/rotor-pendula/tools/package-lock.json`](../portfolios-src/rotor-pendula/tools/package-lock.json) | 1.1 kB | Build and check tool of the Rotor Pendula notes, adapted from the Hydraulic Press Study's tools: package-lock.json. | [package-lock.json](../portfolios-src/rotor-pendula/tools/package-lock.json) |
 | [`portfolios-src/rotor-pendula/tools/package.json`](../portfolios-src/rotor-pendula/tools/package.json) | 207 B | Build and check tool of the Rotor Pendula notes, adapted from the Hydraulic Press Study's tools: package.json. | [package.json](../portfolios-src/rotor-pendula/tools/package.json) |
 | [`portfolios-src/rotor-pendula/tools/physics_block.js`](../portfolios-src/rotor-pendula/tools/physics_block.js) | 804 B | Build and check tool of the Rotor Pendula notes, adapted from the Hydraulic Press Study's tools: physics_block.js. | [physics_block.js](../portfolios-src/rotor-pendula/tools/physics_block.js) |
@@ -672,7 +673,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`docs/minor-issues-report.md`](minor-issues-report.md) | 19.5 kB | Documentation: Minor issues · final verification report. | [minor-issues-report.md](minor-issues-report.md) |
 | [`docs/notes.md`](notes.md) | 5.4 kB | Documentation: The lecture-note review: `notes/` and `.claude/agents/`. | [notes.md](notes.md) |
 | [`docs/pages.md`](pages.md) | 51.7 kB | Documentation: The site's own pages: home, simulations catalog, Portfolios, robots.txt. | [pages.md](pages.md) |
-| [`docs/portfolios.md`](portfolios.md) | 54.1 kB | Documentation: The four research projects: `public/portfolios/`. | [portfolios.md](portfolios.md) |
+| [`docs/portfolios.md`](portfolios.md) | 54.2 kB | Documentation: The four research projects: `public/portfolios/`. | [portfolios.md](portfolios.md) |
 | [`docs/research-theory-audit.md`](research-theory-audit.md) | 30.0 kB | Documentation: Readability audit: Droplet Collection and Rotor Pendula. | [research-theory-audit.md](research-theory-audit.md) |
 | [`docs/scripts/catalog.md`](scripts/catalog.md) | 15.4 kB | Documentation: public/scripts/catalog.js. | [catalog.md](scripts/catalog.md) |
 | [`docs/scripts/curve.md`](scripts/curve.md) | 19.1 kB | Documentation: public/scripts/curve.js. | [curve.md](scripts/curve.md) |
@@ -774,9 +775,9 @@ to confirm that every file is described. Sizes are those of the files when the l
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
-| [`notes/rotor-pendula/README.md`](../notes/rotor-pendula/README.md) | 11.2 kB | Rotor Pendula study record: brief, status, contracts, skeptic and referee reports, dossiers. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/README.md`](../notes/rotor-pendula/README.md) | 11.3 kB | Rotor Pendula study record: brief, status, contracts, skeptic and referee reports, dossiers. | [portfolios.md](portfolios.md) |
 
-<details><summary>69 files: Rotor Pendula model or model run (L0-L6): script, its output or its log; see the script header.</summary>
+<details><summary>71 files: Rotor Pendula model or model run (L0-L6): script, its output or its log; see the script header.</summary>
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
@@ -805,6 +806,8 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/rotor-pendula/derive/L2_steady.py`](../notes/rotor-pendula/derive/L2_steady.py) | 1.5 kB | Rotor Pendula model or model run (L0-L6): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
 | [`notes/rotor-pendula/derive/L2_torque.json`](../notes/rotor-pendula/derive/L2_torque.json) | 34.3 kB | Rotor Pendula model or model run (L0-L6): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
 | [`notes/rotor-pendula/derive/L2_torque_curve.py`](../notes/rotor-pendula/derive/L2_torque_curve.py) | 2.4 kB | Rotor Pendula model or model run (L0-L6): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L3_response.json`](../notes/rotor-pendula/derive/L3_response.json) | 116.9 kB | Rotor Pendula model or model run (L0-L6): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/derive/L3_response.py`](../notes/rotor-pendula/derive/L3_response.py) | 3.4 kB | Rotor Pendula model or model run (L0-L6): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
 | [`notes/rotor-pendula/derive/L3_sag.py`](../notes/rotor-pendula/derive/L3_sag.py) | 2.9 kB | Rotor Pendula model or model run (L0-L6): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
 | [`notes/rotor-pendula/derive/L3_sag_tip.json`](../notes/rotor-pendula/derive/L3_sag_tip.json) | 831 B | Rotor Pendula model or model run (L0-L6): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
 | [`notes/rotor-pendula/derive/L3_sag_tip.py`](../notes/rotor-pendula/derive/L3_sag_tip.py) | 6.2 kB | Rotor Pendula model or model run (L0-L6): script, its output or its log; see the script header. | [portfolios.md](portfolios.md) |
@@ -859,7 +862,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/rotor-pendula/dossier-harvesting.md`](../notes/rotor-pendula/dossier-harvesting.md) | 33.8 kB | Rotor Pendula study record: brief, status, contracts, skeptic and referee reports, dossiers. | [portfolios.md](portfolios.md) |
 | [`notes/rotor-pendula/dossier-sensor.md`](../notes/rotor-pendula/dossier-sensor.md) | 5.3 kB | Rotor Pendula study record: brief, status, contracts, skeptic and referee reports, dossiers. | [portfolios.md](portfolios.md) |
 | [`notes/rotor-pendula/dossier-turbine.md`](../notes/rotor-pendula/dossier-turbine.md) | 54.8 kB | Rotor Pendula study record: brief, status, contracts, skeptic and referee reports, dossiers. | [portfolios.md](portfolios.md) |
-| [`notes/rotor-pendula/revision.md`](../notes/rotor-pendula/revision.md) | 22.0 kB | Rotor Pendula study record: brief, status, contracts, skeptic and referee reports, dossiers. | [portfolios.md](portfolios.md) |
+| [`notes/rotor-pendula/revision.md`](../notes/rotor-pendula/revision.md) | 23.6 kB | Rotor Pendula study record: brief, status, contracts, skeptic and referee reports, dossiers. | [portfolios.md](portfolios.md) |
 | [`notes/rotor-pendula/teaching/dossier-teaching.md`](../notes/rotor-pendula/teaching/dossier-teaching.md) | 111.1 kB | Rotor Pendula study record: brief, status, contracts, skeptic and referee reports, dossiers. | [portfolios.md](portfolios.md) |
 | [`notes/rotor-pendula/teaching/export_notes.py`](../notes/rotor-pendula/teaching/export_notes.py) | 1.9 kB | Exports the Rotor Pendula lecture notes as plain text, numbers filled in, for a blind reader. | [portfolios.md](portfolios.md) |
 | [`notes/rotor-pendula/teaching/learner-read-2.md`](../notes/rotor-pendula/teaching/learner-read-2.md) | 37.1 kB | Rotor Pendula study record: brief, status, contracts, skeptic and referee reports, dossiers. | [portfolios.md](portfolios.md) |
