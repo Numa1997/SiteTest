@@ -156,3 +156,50 @@ Coordination: another session works on the animations at the same time. This bra
 the shared generated page `public/portfolios/rotor-pendula/index.html`, `docs/portfolios.md` and `docs/files.md`. Before each push the
 branch is checked against `origin/main`; if `main` has moved, the commits are rebased and the generated files are rebuilt with the
 study's scripts, never merged by hand.
+
+## The second blind read and the third pass (30 October 2026)
+A second, fresh reader (given only the built notes and figures) re-derived every equation and found no wrong sign or factor, and
+marked 49 places where the script was still not one a BSc graduate reads with ease. Its verdict: chapters 2–4 read as a lecture
+script; chapter 1 front-loaded material from chapters 3–4, Part II thinned into assertions, and letters were reused. What was done:
+
+Fixed:
+- Ch. 1: the "Held" paragraph rewritten with nothing from later chapters (resonance said plainly; brake details moved to 4.1); the
+  sign of θ fixed in 1.2; "rate-derivatives" said plainly; the ★ adiabatic argument recast with its real small parameter, one swing
+  over one turn (ε = 1/√A ≈ 0.1), and the period renamed 𝒯; the elliptic action derived from its integral by sin(θ/2) = k sin ψ,
+  with upright E and K; ψ defined; J said to be the action, not a moment of inertia; the snapshot's landscape named (A0 at φ = 0); the
+  22.8 J / 22.8 m/s² coincidence explained (ml = 1 kg m); a new phase-plane figure (swings, separatrix, tumbling, action as area);
+  the thresholds of the chaos tests explained; the 9-of-9 chaotic starts near Γ ≈ 1 mentioned; Figure 3's clipped label and Figure 5's
+  units fixed.
+- Ch. 2: "cos(φ+θ) ≈ cos φ" stated in the push box; the prime of 2.2 marked as the turning frame's.
+- Ch. 3: the (G/R)² argument said to set the scaling, not the size; the battery paragraph simplified; Part I's use of g against
+  g cos 5° stated (under one per cent).
+- Ch. 4: Table 1's decay rates explained from the braked spring's roots: πκ per turn below critical damping, 2πR/κ above, fastest at
+  critical; reproduces −29.4, −2.9 and −6.4 per turn. The three engine checks said in full (what, relative to what). The sign of the
+  spring-softening effect explained. The trail-lever sentence split in two.
+- Ch. 5: the drive-chain figure puts friction in the motor; (5.8)'s x renamed τ_m and the sign of the power flow explained; "at every
+  wind"; the brush drop stated as unknown and possibly not small.
+- Ch. 6: the best tip-speed ratio estimated from two losses, the wake's swirl (2/(9λ²) at the Betz point) and drag (≈ λ C_D/C_L):
+  λ* ≈ (2α C_L/β C_D)^{1/3}, about four, with tip losses named as what pushes the real value to 7.55; one λ* for Part I stated;
+  C_L ≈ 2πα motivated; Kolmogorov's letters, the coherence constant and the frequency index of (6.8) renamed; the flat part of the
+  spectrum given a reason; a new torque-law figure (`derive/L2_torque_curve.py` → `L2_torque.json`), on which the sign of the gust
+  result rests; the 205 mW traced to the sheared wind's 7.91 m/s and 8.97 rpm.
+- Ch. 7: rotational sampling explained, with a figure, and why a push at random times adds power on average
+  (⟨|G + δ|²⟩ = G² + ⟨|δ|²⟩); Figure 21's caption and the table's column corrected; κ_air and γ0 defined.
+- Ch. 8: the vibration model's second-order Lagrangian written out, so its equations can be redone on paper; why no Coriolis term
+  survives (the single-rate terms are total derivatives); the mode's symbols renamed (y, m_b, c_b, k_b, Y) away from the generator's
+  c_e, k_e and the Cholesky H; the spectrum stated one-sided; the sag's quasi-static nature argued (two per cent); the sag's two
+  terms tied to the Lagrangian; the Itô–Stratonovich remark given its reason; the approximation and exact square told apart.
+- Ch. 9: (9.1) said honestly to bound power per unit of swing speed, not power alone; wording mended.
+- 1.1: the battery's real weakness is access, not energy, and the text now says so.
+
+Left, with the reason:
+- Figure 17's airfoil is small (a drawing detail; the caption says what is drawn).
+- Pointers to the site's own simulation and Wind tab stay: the notes are published beside them.
+- A frequency-response figure for 8.2: the text now states the ratio of the second blade's frequency to the blade's; a figure
+  would need new model output.
+- The letters A (bowl stiffness in chapter 1, disc area in chapter 6), J (J₁ against the action, now flagged), a and f stay where each
+  lives in its own chapter and is defined there.
+
+Checks after this pass: `check_numbers.py` PASS (731 numbers); `derive/R_revision.py` ALL PASS (with the new swirl, optimum,
+elliptic-action and 8.2 Lagrangian checks); `derive/L2_torque_curve.py` ALL PASS; headless Chromium at 1440 × 900 and 390 × 844:
+23 figures, 0 KaTeX errors, 0 console errors, no sideways scroll. A third fresh reader then read the result (below).
