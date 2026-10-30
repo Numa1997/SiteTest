@@ -21,4 +21,8 @@ for f in sorted((R / 'theory').glob('*.src.html')):
     s = re.sub(r'<(p|li|div|figcaption|details)\b[^>]*>', '\n', s)
     s = html.unescape(TAG.sub('', s))
     out.append(re.sub(r'\n\s*\n+', '\n\n', s))
-print('\n\n'.join(out))
+text = '\n\n'.join(out)
+# figure labels, numbered as tools/build_theory.py numbers them: in the order of their captions (a <figcaption> starting 'Figure {{fig:key}}.')
+src = ''.join(re.sub(r'\{\{table:([\w]+)\}\}', lambda m: T[m.group(1)], f.read_text()) for f in sorted((R / 'theory').glob('*.src.html')))
+FIG = {k: i + 1 for i, k in enumerate(re.findall(r'<figcaption>Figure \{\{fig:(\w+)\}\}\.', src))}
+print(re.sub(r'\{\{fig:(\w+)\}\}', lambda m: str(FIG[m.group(1)]), text))

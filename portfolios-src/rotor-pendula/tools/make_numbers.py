@@ -735,7 +735,7 @@ svgL.append(f'<text x="14" y="{(16+H2-48)/2}" text-anchor="middle" class="svgd" 
 # right: how many of nine starts end chaotic, the first arm held
 PXb, PYb = panel(W2, H2, 44, 14, 16, 48)
 gx = lambda G_: math.log10(G_)
-svgR = [f'<svg viewBox="0 0 {W2} {H2}" style="flex:1 1 300px;min-width:0;max-width:460px" role="img" aria-label="The first arm held to a steady turning: how many of nine starts end chaotic, against the outward pull at the hinge in units of gravity from 0.1 to 30. Equal arms: between one and six at every value. A 1 m rod on a 63 m arm: nine of nine near 1, falling to two of nine above about 3.6, the two starts near the inverted position. With the best brake, none, at the turbine\'s three winds.">',
+svgR = [f'<svg viewBox="0 0 {W2} {H2}" style="flex:1 1 300px;min-width:0;max-width:460px" role="img" aria-label="The first arm held to a steady turning: how many of nine starts end chaotic, against the outward pull at the hinge in units of gravity from 0.1 to 30. Equal arms: between one and six at every value. A 1 m rod on a 63 m arm: nine of nine near 1, falling to two of nine, the two starts near the inverted position, from about 3.3 up. With the best brake, none, at the turbine\'s three winds.">',
         f'<rect x="44" y="16" width="{W2-58}" height="{H2-64}" fill="#fff" stroke="#3f2c23"/>']
 xa, xb = gx(0.1), gx(31.62)
 svgR.append(f'<rect x="{PXb(gx(dp["turbine"][0]["Gamma"]), xa, xb):.1f}" y="16" width="{PXb(gx(dp["turbine"][2]["Gamma"]), xa, xb) - PXb(gx(dp["turbine"][0]["Gamma"]), xa, xb):.1f}" height="{H2-64}" fill="#f3dfdb"/>')
@@ -756,11 +756,13 @@ svgR.append(f'<line x1="52" y1="56" x2="64" y2="56" stroke="#7d1d2f" stroke-widt
 svgR.append(f'<rect x="54.5" y="68.5" width="7" height="7" fill="#3c6a46"/><text x="68" y="76" class="svgc">the same, best brake</text>')
 svgR.append(f'<text x="{(44+W2-14)/2}" y="{H2-10}" text-anchor="middle" class="svgd">outward pull over gravity, Γ = Ω²r/g</text>')
 svgR.append(f'<text x="12" y="{(16+H2-48)/2}" text-anchor="middle" class="svgd" transform="rotate(-90 12 {(16+H2-48)/2})">chaotic starts, of 9</text></svg>')
+_g6 = dp['turbine'][0]['Gamma']                                   # the 6 m/s run; the sweep's grid points on either side of it
+_sw_lo = max((x for x in rod if x['Gamma'] < _g6), key=lambda x: x['Gamma']); _sw_hi = min((x for x in rod if x['Gamma'] > _g6), key=lambda x: x['Gamma'])
 T['fig_double'] = ('<figure class="fig"><div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center">' + ''.join(svgL) + ''.join(svgR) + '</div>'
     f'<figcaption>Figure {{{{fig:double}}}}. The double pendulum, free and held. Left: the site\'s own double pendulum (Fig. 2 of the simulations, its code run unchanged), '
     f'two copies started $10^{{-9}}$ and $10^{{-3}}$ rad apart from 120° and 150°; their lower bobs drift apart as $e^{{\\Lambda t}}$ with $\\Lambda$ = {N["dp_free_lyap"]} per second, until they are as far apart as the pendulum allows. '
     f'Right: the first arm held to a steady turning, with $\\Gamma$ the outward pull at its end in units of gravity; of nine starts spread over angle and rate, how many end chaotic (a largest Lyapunov exponent above {thr} per turn over 400 turns). '
-    f'Equal arms sit at resonance, $R = 1$, and stay chaotic from some starts at every $\\Gamma$. The second blade of these notes, $R$ = {N["R"]}, keeps only the starts near the top of its spring\'s hill above $\\Gamma \\approx 3.6$, '
+    f'Equal arms sit at resonance, $R = 1$, and stay chaotic from some starts at every $\\Gamma$. The second blade of these notes, $R$ = {N["R"]}, keeps only the two starts near the top of its spring\'s hill from the turbine\'s lightest wind up ($\\Gamma$ = {N["Gam_6"]} at 6 m/s, where the run at the turbine\'s own settings finds two; the sweep\'s nearest points, {_sw_lo["Gamma"]:.2f} and {_sw_hi["Gamma"]:.2f}, find {_sw_lo["n_chaotic"]} and {_sw_hi["n_chaotic"]}), '
     'and with the best brake (squares, at the turbine\'s three winds) none at all.</figcaption></figure>')
 
 # ---- chapter 1, section 1.5: the moving hilltop, and once-per-turn snapshots (L0_double.json 'poincare', tools/double_pendulum.js) -----
@@ -913,7 +915,7 @@ svgS.append(f'<text x="{(64+SW-18)/2}" y="{SH-10}" text-anchor="middle" class="s
 svgS.append(f'<text x="16" y="{(16+SH-48)/2}" text-anchor="middle" class="svgd" transform="rotate(-90 16 {(16+SH-48)/2})">S(f), (m/s)² per Hz</text></svg>')
 T['fig_spectrum'] = ('<figure class="fig">' + ''.join(svgS) +
     f'<figcaption>Figure {{{{fig:spectrum}}}}. How the gusts along the shaft share their variance among frequencies, at the hub, 8 m/s, class A ($\\sigma_u$ = {N["wf_sig_u"]} m/s). '
-    f'Dashed, the Kaimal model (6.6): flat below $U/(6L_u)$ = {N["wf_fcorner"]} Hz, falling as $f^{{-5/3}}$ above. Blue, the same scaled up by 1/{band:.2f} over the record\'s 255 frequencies, 1/256 to 255/256 Hz, '
+    f'Dashed, the Kaimal model (6.6): flat below $U/(6L_u)$ = {N["wf_fcorner"]} Hz, falling as $f^{{-5/3}}$ above. Blue, the same scaled up by 1/{band:.2f} over the 255 frequencies that a record 256 s long can hold (section 6.4 builds it), 1/256 to 255/256 Hz, '
     f'so that they carry all of $\\sigma_u^2$: what the synthesis (6.8) aims at. Dots, the periodogram of forty synthesised records, averaged in bands. Half the variance lies below {N["wf_fhalf"]} Hz.</figcaption></figure>')
 
 # figure: the Betz stream tube at a = 1/3, and the power coefficient against a

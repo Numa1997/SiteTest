@@ -161,6 +161,42 @@ xs_ = xm*sp.cosh(sp.sqrt(Aa)*(phv - ph0))
 check('1.5  cosh solves x\'\' = A x', sp.simplify(xs_.diff(phv, 2) - Aa*xs_))
 check('1.5  arccosh(1/x) ~ ln(2/x) as x -> 0', sp.limit(sp.acosh(1/xm) - sp.log(2/xm), xm, 0))
 
+# 6.4: Kolmogorov's exponents from dimensions: E(k) [m^3 s^-2] = eps^a [m^2 s^-3]^a k^b [m^-b].
+aK, bK = sp.symbols('a_K b_K')
+solK = sp.solve([sp.Eq(2*aK - bK, 3), sp.Eq(-3*aK, -2)], [aK, bK])
+check('6.4  Kolmogorov: a = 2/3, b = -5/3', abs(solK[aK] - sp.Rational(2, 3)) + abs(solK[bK] + sp.Rational(5, 3)))
+
+# 1.5: the adiabatic step for the harmonic case H = p^2/2 + w(lam)^2 q^2/2: dH/dlam / dH/dp = -dp/dlam on the orbit,
+#      and the action (1/2pi) closed integral p dq = E/w.
+qq, pp, EE, lm = sp.symbols('q p E lambda', positive=True)
+wf = sp.Function('w')(lm)
+Hh = pp**2/2 + wf**2*qq**2/2
+porb = sp.sqrt(2*EE - wf**2*qq**2)
+check('1.5  on the orbit dH/dlam + dH/dp * dp/dlam = 0', sp.simplify((Hh.diff(lm) + Hh.diff(pp)*porb.diff(lm)).subs(pp, porb)))
+amp = sp.sqrt(2*EE)/wf
+Jh = 2*sp.integrate(sp.sqrt(2*EE - sp.Symbol('W', positive=True)**2*qq**2), (qq, -sp.sqrt(2*EE)/sp.Symbol('W', positive=True), sp.sqrt(2*EE)/sp.Symbol('W', positive=True)))/(2*sp.pi)
+check('1.5  harmonic action = E/w', sp.simplify(Jh - EE/sp.Symbol('W', positive=True)))
+
+# 8.2: the linear equations of the blade's edgewise mode x and the second blade's absolute angle chi (L3_shake2.py's Lagrangian,
+#      one rod, mode slope at the tip Phi = 1): the forms written in the notes, and no Coriolis (first-derivative) terms.
+Pp_, me_, ke_ = sp.symbols('Phi_p m_e k_e', positive=True)
+xx_, ch_ = sp.Function('x')(t), sp.Function('chi')(t)
+phw = Om*t
+er_ = sp.Matrix([sp.cos(phw), sp.sin(phw)]); et_ = sp.Matrix([-sp.sin(phw), sp.cos(phw)])
+pos_ = rp*er_ + Pp_*xx_*et_ + s*sp.Matrix([sp.cos(phw + ch_), sp.sin(phw + ch_)])
+v_ = pos_.diff(t)
+Lx = me_/2*xx_.diff(t)**2 + sp.integrate(m/l*v_.dot(v_)/2, (s, 0, l)) - ke_/2*xx_**2
+ep = sp.symbols('ep')
+def lin(gq):
+    E_ = sp.diff(Lx.diff(gq.diff(t)), t) - Lx.diff(gq)
+    return sp.expand(sp.trigsimp(sp.series(E_.subs({xx_: ep*xx_, ch_: ep*ch_}).doit(), ep, 0, 2).removeO().subs(ep, 1)))
+ex, ec = lin(xx_), lin(ch_)
+want_x = (me_ + m)*xx_.diff(t, 2) + (ke_ - m*Om**2)*xx_ + m*l/2*(ch_.diff(t, 2) - Om**2*ch_)
+want_c = I*ch_.diff(t, 2) + m*l/2*Om**2*rp*ch_ + m*l/2*(xx_.diff(t, 2) - Om**2*xx_)
+check('8.2  mode equation as written (Phi = 1)', sp.simplify(ex.subs(Pp_, 1) - want_x))
+check('8.2  second blade equation as written (Phi = 1)', sp.simplify(ec.subs(Pp_, 1) - want_c))
+check('8.2  no first-derivative (Coriolis) terms', sum(abs(e_.coeff(g_.diff(t))) for e_ in (ex, ec) for g_ in (xx_, ch_) if e_.coeff(g_.diff(t)) != 0) if any(e_.coeff(g_.diff(t)) != 0 for e_ in (ex, ec) for g_ in (xx_, ch_)) else 0)
+
 # 9.1: P*/(ceiling at that swing) = pi/(4 sqrt 2).
 check('9.1  ceiling fraction', (sp.Rational(1, 2)/sp.sqrt(2))/(2/sp.pi) - sp.pi/(4*sp.sqrt(2)))
 
