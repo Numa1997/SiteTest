@@ -366,3 +366,28 @@ After the independent referee and derivation checks (`notes/fig05/`), the lead m
 ## Second check round · 20 October 2026
 
 From the derivation checks and blind referees that ran after the usage limit lifted (`notes/fig05/`), each change on its existing line: §08: Δt capped at 0.05 s ([L510](../../public/simulations/water-wave.html#L510)); §09: the canvas antialiases, it does not round positions ([L532](../../public/simulations/water-wave.html#L532)). Checked with `notes/verify.mjs` at 1440 × 900, 1600 × 900 and 390 × 844.
+
+## Parameter curves · 30 October 2026
+
+The page loads [`scripts/curve.js`](../scripts/curve.md) after `dataset.js` ([L567](../../public/simulations/water-wave.html#L567)) and builds it after the dispersion
+switch's listener ([L652](../../public/simulations/water-wave.html#L652)), placed under the Water group, with five knobs: a, λ, the number of layers, the parcels per
+layer, and f. While *Deep-water dispersion* is on, the page takes f from ω² = gk and ignores the slider, so the f knob is
+`live`: its first step turns dispersion off. The examples turn the switch on or off themselves (the engine's checkbox
+`set`). The curve steps in the clock ([L795](../../public/simulations/water-wave.html#L795)), after the line the walkthrough quotes for equation (22). The λ slider now
+steps 0.1 px ([L72](../../public/simulations/water-wave.html#L72); it stepped 5 px, and near λ = 120 px each step turned the far right of the field by up to a quarter
+circle); the store shows λ with one decimal. Plan and numbers from a research agent, rerun by me; every number was computed
+with the page's own formulas.
+
+| Example | Knob, curve, preset | Numbers |
+|---|---|---|
+| Exercise 5.1, done smoothly: long waves run faster | λ 1.2 → 4.0 m in 8 s, minimum jerk; dispersion on, a 17 px | f 1.14 → 0.62 Hz by ω² = gk (equation 13); c 1.37 → 2.50 m/s, factor √(400/120) = 1.83 (equation 14); period 0.88 → 1.60 s; c<sub>g</sub> = c/2 (equation 15, §5.3) |
+| Exercise 6.1: from swell to chop, the deep water falls still | λ 4.0 → 1.2 m in 20 s, steady in 1/λ; five layers, a 17 px | orbits a e<sup>kz</sup> (equation 18) shrink by a fixed factor a second, about 10 % at 0.56 m depth, a third at 2.24 m; at 0.56 m from 41 % to 5 % of the surface orbit; *Deepest orbit* from 3.0 % to 0.0 % (from λ ≈ 1.85 m) |
+| Towards breaking: sharper crests, flatter troughs | a 5 → 50 px in 10 s, minimum jerk; λ 2.6 m, dispersion on | the trochoid (19): the part above the centre line shrinks from 46 % to 21 % of a wavelength; Miche's limit H/λ = 0.142 (ak = 0.446) passed at 3.9 s (J. Bosboom and M. J. F. Stive, *Coastal Dynamics*, §5.2.5, read: "In deep water … [H0/L0]max = 0.142 ≈ 1/7"); from 38 px (6 s) the cap holds a = 37.2 px, ak = 0.90 (§6.2); Stokes drift (21) ×55, valid only for small ak |
+| Gravity switched off: a wave no water could make | f 0.40 → 1.20 → 0.40 Hz in 16 s, there and back; dispersion off, λ 2.6 m, a 24 px | c = fλ 1.04 → 3.12 m/s; the deep-water f for λ = 2.6 m (0.775 Hz) is passed at 3.7 s and 12.2 s; water would make 9.8 m and 1.1 m waves at 0.40 and 1.20 Hz |
+
+New in the store, written in `readouts()` ([L664](../../public/simulations/water-wave.html#L664)) and declared at [L602](../../public/simulations/water-wave.html#L602): `crest_frac` = ½ − ak/π, the part of a
+wavelength above the line of orbit centres (exact for the trochoid), and `u_surf` = aω, the speed of a surface parcel on its
+circle, in Derived physics ([L817](../../public/simulations/water-wave.html#L817)), each with a Check ([L877](../../public/simulations/water-wave.html#L877)). The round wraps into the rest of a running curve and
+charts `f`, `c`, `ak` and `deep` ([L880–881](../../public/simulations/water-wave.html#L880-L881)); `about` adds that while λ changes a crest at x moves at c − x (dk/dt)/k
+([L883](../../public/simulations/water-wave.html#L883)). Headless Chromium, English and Arabic: every example runs, the curve's checks agree with the store, the chart's
+dot reads back burgundy, no page errors, no sideways scroll. The walkthrough check finds 47 of 48 quoted lines, as before.

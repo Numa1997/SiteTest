@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | File | [public/scripts/curve.js](../../public/scripts/curve.js), 504 lines, 37.2 kB (37 165 bytes) |
-| Loaded by | the simulation pages that have a parameter curve, right after `dataset.js` on the same line: Fig. 1 (line 508), Fig. 2 (`Double Pendulum.html`, 453), Fig. 3 (`Interactive Double-Slit Experiment Visualization.html`, 549), Fig. 8 (`draw-decompose.html`, 621); and their German and Arabic pages |
+| Loaded by | the simulation pages that have a parameter curve, right after `dataset.js` on the same line: Fig. 1 (line 508), Fig. 2 (`Double Pendulum.html`, 453), Fig. 3 (`Interactive Double-Slit Experiment Visualization.html`, 549), Fig. 4 (`Transverse and longitudinal waves.html`, 735), Fig. 5 (`water-wave.html`, 567), Fig. 8 (`draw-decompose.html`, 621); and their German and Arabic pages |
 | Defines | `Sim.curve(opts)` on `window.Sim` ([curve.js:102](../../public/scripts/curve.js#L102)) |
 | Uses | `Sim.theme`, `Sim.fmt`, `Sim.canvas2d`, `Sim.onResize`, `Sim.readPixel`, `Sim.isBurgundy` ([sim.md](sim.md)); the page's dataset ([dataset.md](dataset.md)); `_t()` for every word |
 | Since | 30 October 2026, on Numa's request: "a curve to change the parameters and watch the animation unfold as the parameter changes", with an option for one's own curve and well-known example curves |

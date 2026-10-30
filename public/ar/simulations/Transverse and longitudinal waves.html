@@ -15,7 +15,7 @@
 
     <link rel="stylesheet" href="../../fonts/arabic.css" />
     <script src="../../scripts/i18n/strings-ar.js"></script>
-    <meta name="translated-from" content="English public/simulations/Transverse and longitudinal waves.html, commit 73866ed" />
+    <meta name="translated-from" content="English public/simulations/Transverse and longitudinal waves.html, commit 73866ed+" />
   </head>
 <body>
     <header class="sim-top">
@@ -77,7 +77,7 @@
                     </label>
                     <label class="ctl">
                         <span class="ctl__row"><span>طول الموجة λ</span><output id="lambda-out" for="lambda"></output></span>
-                        <input type="range" id="lambda" min="100" max="400" step="10" value="220">
+                        <input type="range" id="lambda" min="100" max="400" step="0.1" value="220">
                     </label>
                     <label class="ctl">
                         <span class="ctl__row"><span>الجسيمات</span><output id="count-out" for="count"></output></span>
@@ -734,7 +734,7 @@
 
     <script src="../../scripts/fold.js"></script>
     <script src="../../scripts/sim.js"></script>
-    <script src="../../scripts/dataset.js"></script>
+    <script src="../../scripts/dataset.js"></script><script src="../../scripts/curve.js"></script>
     <script>
     (function () {
         'use strict';
@@ -750,7 +750,7 @@
         var ds = Sim.dataset({ title: 'Transverse and longitudinal waves', attrs: { figure: 4, page: 'Transverse and longitudinal waves.html', LENGTH: LENGTH, length_unit: 'px of the 640 px long medium', left_margin_px: 22 } });
         ds.var('A', [], 'float', { symbol: 'A', units: 'px', long_name: 'transverse amplitude', computed_in: 'amp slider', digits: 0 });
         ds.var('f', [], 'float', { symbol: 'f', units: 'Hz', long_name: 'frequency', computed_in: 'freq slider', digits: 2 });
-        ds.var('lambda', [], 'float', { symbol: 'λ', units: 'px', long_name: 'wavelength', computed_in: 'lambda slider', digits: 0 });
+        ds.var('lambda', [], 'float', { symbol: 'λ', units: 'px', long_name: 'wavelength', computed_in: 'lambda slider', digits: 1 });
         ds.var('N', [], 'int', { symbol: 'N', long_name: 'particles in each row', computed_in: 'count slider', digits: 0 });
         ds.var('k', [], 'float', { symbol: 'k', units: 'rad/px', long_name: 'wave number', computed_in: 'readouts()', formula: 'k = 2π / λ', digits: 5 });
         ds.var('omega', [], 'float', { symbol: 'ω', units: 'rad/s', long_name: 'angular frequency', computed_in: 'readouts()', formula: 'ω = 2π f', digits: 4 });
@@ -760,7 +760,7 @@
         ds.var('AL', [], 'float', { symbol: 'A<sub>L</sub>', units: 'px', long_name: 'longitudinal amplitude, capped so particles never pass each other', computed_in: 'longAmp(), in readouts()', formula: 'min(A, 0.8 λ / 2π)', digits: 2 });
         ds.var('cap', [], 'bool', { symbol: 'cap active', long_name: 'the longitudinal amplitude is capped', computed_in: 'readouts()', formula: 'A<sub>L</sub> < A' });
         ds.var('Ak', [], 'float', { symbol: 'Ak', long_name: 'largest slope of the transverse string', computed_in: 'readouts()', formula: 'A k', digits: 4 });
-        ds.var('ALk', [], 'float', { symbol: 'A<sub>L</sub>k', long_name: 'largest strain of the longitudinal row, below 1', computed_in: 'readouts()', formula: 'A<sub>L</sub> k', digits: 4 });
+        ds.var('ALk', [], 'float', { symbol: 'A<sub>L</sub>k', long_name: 'largest strain of the longitudinal row, below 1', computed_in: 'readouts()', formula: 'A<sub>L</sub> k', digits: 4 }); ds.var('rho_max', [], 'float', { symbol: 'ρ<sub>max</sub>/ρ₀', long_name: 'densest point of the longitudinal row, at the compression centres', computed_in: 'readouts()', formula: '1 / (1 − A<sub>L</sub>k)', digits: 3 }); ds.var('rho_min', [], 'float', { symbol: 'ρ<sub>min</sub>/ρ₀', long_name: 'thinnest point of the longitudinal row, in the rarefactions', computed_in: 'readouts()', formula: '1 / (1 + A<sub>L</sub>k)', digits: 3 }); ds.var('slope_deg', [], 'float', { symbol: 'θ<sub>max</sub>', units: '°', long_name: 'steepest angle of the transverse string', computed_in: 'readouts()', formula: 'atan(A k)', digits: 1 });
         ds.var('Aomega', [], 'float', { symbol: 'Aω', units: 'px/s', long_name: 'largest particle speed, transverse row', computed_in: 'readouts()', formula: 'A ω', digits: 2 });
         ds.var('t', [], 'float', { symbol: 't', units: 's', long_name: 'play time since the page opened', computed_in: 'Sim.clock', digits: 2, source: 'The clock adds each frame’s Δt while playing.' });
         ds.var('omegaT', [], 'float', { symbol: 'ωt', units: 'rad', long_name: 'phase of the source', computed_in: 'Sim.clock callback', formula: 'ωt ← ωt + 2π f Δt', digits: 3, source: 'Accumulated frame by frame.' });
@@ -797,7 +797,7 @@
         var amp = Sim.slider('amp', { format: function (v) { return v + ' px'; }, onInput: readouts });
         var freq = Sim.slider('freq', { format: function (v) { return v.toFixed(2) + ' Hz'; }, onInput: readouts });
         var lambda = Sim.slider('lambda', { format: function (v) { return v + ' px'; }, onInput: readouts });
-        var count = Sim.slider('count', { format: function (v) { return String(v); } });
+        var count = Sim.slider('count', { format: function (v) { return String(v); } }); var curve = Sim.curve({ ds: ds, after: document.querySelector('.sim__grid > .panel').querySelectorAll('.panel__group')[1], knobs: [{ id: 'amp', slider: amp, name: _t('Amplitude A'), symbol: 'A', units: 'px', digits: 0 }, { id: 'freq', slider: freq, name: _t('Frequency f'), symbol: 'f', units: 'Hz', digits: 2 }, { id: 'lambda', slider: lambda, name: _t('Wavelength λ'), symbol: 'λ', units: 'px', digits: 1 }, { id: 'count', slider: count, name: _t('Particles'), symbol: 'N', units: '', digits: 0 }], examples: [{ knob: 'amp', shape: 'jerk', from: 5, to: 40, T: 10, set: {lambda:220}, name: _t('Exercise 5.1: the lower row hits its cap'), why: _t('Exercise 5.1 as a curve, at λ = 220 px: the amplitude grows from 5 to 40 px along a minimum-jerk S-curve. The upper row just grows taller. The lower row crowds harder. By equation (10) its densest point is 1/(1 − A<sub>L</sub>k) times the rest density: 1.17 at A = 5 px, with the thinnest at 0.875, almost even. At 29 px, 6 s in, the cap (12) holds the lower row at A<sub>L</sub> = 28 px, where A<sub>L</sub>k = 0.8. Then the densest point is 5 and the thinnest 0.56, where the small-wave rule 1 ± A<sub>L</sub>k would say 1.8 and 0.2. The upper row climbs on to a slope of Ak = 1.14, or 49°, far past the small slopes of equation (4).') }, { knob: 'lambda', shape: 'inv', from: 400, to: 100, T: 30, set: {amp:26,freq:0.5}, name: _t('Shorter and steeper, at a steady rate'), why: _t('λ falls from 400 to 100 px so that k = 2π/λ grows at a steady rate, and with it the string’s steepest slope Ak (equation 3), from 0.41 to 1.63. The period stays 2 s and the top particle speed Aω stays 81.7 px/s, while the wave slows from v = 200 to 50 px/s (Exercise 3.1). Near 163 px, just before halfway, Ak passes 1: the upper particles now move faster than the pattern. The lower ones may not outrun it (§5): from about 204 px the cap (12) shrinks A<sub>L</sub>, to 12.7 px at the end. The pattern stretches about the left end (§7): crests enter there once a period but leave on the right only every 2.9 s, so the row fills from 1.6 to 6.4 wavelengths.') }, { knob: 'freq', shape: 'exp', from: 0.5, to: 2, T: 16, set: {lambda:220,amp:26}, name: _t('A frequency sweep: the pace changes, the shape does not'), why: _t('The frequency doubles every 8 s, from 0.5 to 2 Hz: the exponential sweep acousticians play through a room (Farina). The page adds up the phase frame by frame (equation 16), so the wave never jumps; in 16 s the source makes 17.3 cycles. The shape stays: a snapshot of (1) holds k, not ω, so the crests stay 220 px apart and the densest compression stays 3.88 times the rest density. The pace rises all together: the period falls from 2 to 0.5 s, v = fλ rises from 110 to 440 px/s and the top particle speed Aω from 81.7 to 327 px/s, so Aω/v = Ak stays 0.743 (equation 3). Here every particle hears the new frequency at once; on a real string it would travel out from the source (§4.4).') }, { knob: 'count', shape: 'line', from: 26, to: 10, T: 16, set: {lambda:100,freq:0.5}, name: _t('Too few particles: the dots tell a different story'), why: _t('The particles are only samples of the medium. Here λ = 100 px and their number falls from 26 to 10. Sampling needs more than two samples per wavelength (Shannon, 1949). With 14 particles, 49.2 px apart, the dots still show the wave. From 13 on (53.3 px apart, 12.5 s in) each particle lags its left neighbour by more than half a cycle, which looks just like leading by less: the dots seem to make a wave running left. In the lower row the bars crowd into a longer wave that runs left, 246 px long at 10 particles, while the tint and the triangles still run right at 50 px/s. The stored numbers stay exact; only the eye is fooled.') }], play: function () { clk.set(true); }, playing: function () { return clk.playing; }, extra: function () { return _t('v = {v} px/s', { v: Math.round(ds.get('v')) }) + (ds.get('cap') ? _t(' · lower row capped') : ''); } });
 
         function longAmp() { return Math.min(amp.value, 0.8 * lambda.value / (2 * Math.PI)); }
 
@@ -811,7 +811,7 @@
             document.getElementById('r-al').textContent = al.toFixed(0) + ' px' + (al < amp.value ? _t(' (cap)') : '');
             var kk = 2 * Math.PI / lambda.value, om = 2 * Math.PI * freq.value;
             ds.set('f', freq.value); ds.set('lambda', lambda.value); ds.set('A', amp.value); ds.set('v', v); ds.set('T', 1 / freq.value);
-            ds.set('k', kk); ds.set('omega', om); ds.set('AL', al); ds.set('cap', al < amp.value); ds.set('L_over_lam', LENGTH / lambda.value);
+            ds.set('k', kk); ds.set('omega', om); ds.set('AL', al); ds.set('cap', al < amp.value); ds.set('L_over_lam', LENGTH / lambda.value); ds.set('rho_max', 1 / (1 - al * kk)); ds.set('rho_min', 1 / (1 + al * kk)); ds.set('slope_deg', Math.atan(amp.value * kk) * 180 / Math.PI);
             ds.set('Ak', amp.value * kk); ds.set('ALk', al * kk); ds.set('Aomega', amp.value * om);
         }
 
@@ -979,7 +979,7 @@
         };
         var clk = Sim.clock(function (dt, t) {
             omegaT += 2 * Math.PI * freq.value * dt;
-            if (dt > 0) { frames++; fps = fps ? fps + (1 / dt - fps) * 0.1 : 1 / dt; }
+            if (dt > 0) { frames++; fps = fps ? fps + (1 / dt - fps) * 0.1 : 1 / dt; } curve.step(dt);
             ds.set('omegaT', omegaT); ds.set('periods', omegaT / (2 * Math.PI)); ds.set('t', t); ds.set('dt', dt); ds.set('fps', fps); ds.set('frames', frames); ds.set('playing', clk ? clk.playing : true);
             draw();
         });
@@ -1001,7 +1001,7 @@
             playing: function () { return clk.playing; },
             groups: [
                 { title: _t('Physical parameters'), note: _t('what you set with the sliders'), vars: ['A', 'f', 'lambda', 'N'] },
-                { title: _t('Derived physics'), note: _t('computed by the page from the parameters'), vars: ['k', 'omega', 'T', 'v', 'L_over_lam', 'AL', 'cap', 'Ak', 'ALk', 'Aomega'] },
+                { title: _t('Derived physics'), note: _t('computed by the page from the parameters'), vars: ['k', 'omega', 'T', 'v', 'L_over_lam', 'AL', 'cap', 'Ak', 'ALk', 'Aomega', 'rho_max', 'rho_min', 'slope_deg'] },
                 { title: _t('Time'), note: _t('advances only while it plays'), vars: ['t', 'omegaT', 'periods'] },
                 { title: _t('Particles'), note: _t('one row per particle; click to open, point at a cell to find the bead'), vars: ['follow', 'X', 'phase', 'xi', 'vxi', 'sL', 'xL', 'vs', 'rho', 'comp', 'yi_px', 'xl_px'] },
                 { title: _t('Crests and compressions'), note: _t('the small triangles'), vars: ['crest', 'crests', 'comp0', 'compressions'] },
@@ -1064,7 +1064,7 @@
                 compressions: function (q) { return { formula: 'X<sub>comp</sub> + q λ', inputs: [['X<sub>comp</sub>', ds.get('comp0'), 'px', 3], ['q', q, '', 0], ['λ', ds.get('lambda'), 'px', 0]], value: ds.get('comp0') + q * ds.get('lambda') }; },
                 s_px: function () { return { formula: '(stored box.w − 2 LEFT) / 640', inputs: [['box.w', ds.get('box_w'), 'css px', 0]], value: (ds.get('box_w') - 2 * LEFT) / LENGTH }; },
                 yT: function () { return { formula: '0.3 stored box.h', inputs: [['box.h', ds.get('box_h'), 'css px', 0]], value: ds.get('box_h') * 0.3 }; },
-                yL: function () { return { formula: '0.77 stored box.h', inputs: [['box.h', ds.get('box_h'), 'css px', 0]], value: ds.get('box_h') * 0.77 }; }
+                yL: function () { return { formula: '0.77 stored box.h', inputs: [['box.h', ds.get('box_h'), 'css px', 0]], value: ds.get('box_h') * 0.77 }; }, rho_max: function () { return { formula: '1 / (1 − A<sub>L</sub>k)', inputs: [['A<sub>L</sub>k', ds.get('ALk'), '', 4]], value: 1 / (1 - ds.get('ALk')) }; }, rho_min: function () { return { formula: '1 / (1 + A<sub>L</sub>k)', inputs: [['A<sub>L</sub>k', ds.get('ALk'), '', 4]], value: 1 / (1 + ds.get('ALk')) }; }, slope_deg: function () { return { formula: 'atan(A k) · 180/π', inputs: [['A k', ds.get('Ak'), '', 4]], value: Math.atan(ds.get('Ak')) * 180 / Math.PI }; }
             },
             drawn: {
                 xi: function (i) { return beadPixel(_t('transverse bead ') + i, tPos(i)); },
@@ -1073,11 +1073,11 @@
                 xl_px: function (i) { return beadPixel(_t('longitudinal bead ') + i, lPos(i)); },
                 xL: function (i) { return beadPixel(_t('longitudinal bead ') + i, lPos(i)); }
             },
-            round: { time: 't', label: function () { return _t('one period, T = ') + Sim.fmt(ds.get('T'), 3) + ' s'; }, length: function () { return ds.get('T'); },
-                columns: ['omegaT'], point: function () { return { row: 'T', i: ds.get('follow') }; } },
+            round: curve.round({ time: 't', label: function () { return _t('one period, T = ') + Sim.fmt(ds.get('T'), 3) + ' s'; }, length: function () { return ds.get('T'); },
+                columns: ['omegaT','v','AL','ALk','rho_max'], point: function () { return { row: 'T', i: ds.get('follow') }; } }),
             play: function () { clk.set(true); },
-            about: _t('Here every bead is drawn at its stored screen position, rounded to the pixel by the canvas. The smooth transverse curve and the compression shading are drawn through extra sample points, every 3 px and every 10 px, that are not particles and are not stored.')
-        };
+            about: _t('Here every bead is drawn at its stored screen position, rounded to the pixel by the canvas. The smooth transverse curve and the compression shading are drawn through extra sample points, every 3 px and every 10 px, that are not particles and are not stored.') + ' ' + _t('A curve moves its slider in the slider’s own steps (A in 1 px, f in 0.05 Hz, λ in 0.1 px, particles in 1), so the simulation follows p<sub>set</sub>, the curve’s value on those steps, not p(u) itself; the store keeps both. While λ changes, k changes along the whole row at once and the pattern stretches about the left end, so a crest at X moves at v − X (dk/dt)/k, not at the stored v = fλ: at the start of “Shorter and steeper” the crests at the right end move at 136 px/s while v = 200 px/s.')
+        }; curve.extend(Sim.data);
         readouts();
         draw();
         Sim.onResize(stage, function () { box.fit(); });

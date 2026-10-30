@@ -268,8 +268,8 @@ A round is what the page says it is, in `Sim.data.round` ([datalog.js:27-29](../
 | 1 | one period of the sources, $T$; while a parameter curve runs, the rest of its run ([curve.md](curve.md)) | `t` | sampled | no | [L894–895](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L894-L895) |
 | 2 | ten seconds of simulated motion; while a parameter curve runs, the rest of its run | `t` | sampled | no | [L913–914](../../public/simulations/Double%20Pendulum.html#L913-L914) |
 | 3 | ten seconds of slider changes; while a parameter curve runs, the rest of its run | `wall` | `'change'` | no | [L939–940](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L939-L940) |
-| 4 | one period, $T$ | `t` | sampled | no | [L1073](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L1073) |
-| 5 | one period, $T$ | `t` | sampled | no | [L880](../../public/simulations/water-wave.html#L880) |
+| 4 | one period, $T$; while a parameter curve runs, the rest of its run | `t` | sampled | no | [L1074–1075](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L1074-L1075) |
+| 5 | one period, $T$; while a parameter curve runs, the rest of its run | `t` | sampled | no | [L880–881](../../public/simulations/water-wave.html#L880-L881) |
 | 6 | one repeat of the pattern, at most 20 s | `t` | sampled | no | [L962](../../public/simulations/wave-interference.html#L962) |
 | 7 | one full figure (or part of it) in phasor time | `t` | sampled | yes, in the final-shape view | [L1464](../../public/simulations/phasor-sums.html#L1464) |
 | 8 | one loop of the circles; while a parameter curve runs, the rest of its run | `t_play` (s; `t` in rad until 30 October 2026) | sampled | yes, until a shape is decomposed | [L1400–1402](../../public/simulations/draw-decompose.html#L1400-L1402) |

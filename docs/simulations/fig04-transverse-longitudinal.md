@@ -362,3 +362,27 @@ no sideways scroll, all 15 folds open.
 ## Repair round · 20 October 2026
 
 After the independent referee and derivation checks (`notes/fig04/`), the lead made only these changes, each on its existing line, so no line link moved: §2: the caveat paragraph in plain words ([L138](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L138)); §2: both rows share the phase, not ξ ([L143](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L143)); Ex. 3.1: doubling f doubles v only because the page hands you a new medium ([L471](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L471)); §4.3: the ⁴⁄₃G paragraph in three sentences ([L494](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L494)); §8: y_T named ([L695](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L695)). Checked in headless Chromium at 1440 × 900 and 390 × 844: no console or KaTeX errors, no sideways scroll, no display equation wider than its box at 1440 px (`notes/verify.mjs`).
+
+## Parameter curves · 30 October 2026
+
+The page loads [`scripts/curve.js`](../scripts/curve.md) after `dataset.js` ([L735](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L735)) and builds it after the last slider
+([L798](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L798)) with four knobs, A, f, λ and the number of particles N; none restarts the motion, `draw()` reads them every frame.
+The curve steps in the clock ([L980](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L980)), after the line the walkthrough quotes for equation (16), so a frame's phase is
+advanced with the f that stood during that frame. The λ slider now steps 0.1 px ([L76](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L76); it stepped 10 px, and a sweep
+jumped the pattern by up to 58 px a step); the store shows λ with one decimal. Plan and numbers from a research agent,
+rerun by me; every number was computed with the page's own formulas.
+
+| Example | Knob, curve, preset | Numbers |
+|---|---|---|
+| Exercise 5.1: the lower row hits its cap | A 5 → 40 px in 10 s, minimum jerk; λ 220 | densest/thinnest 1.17/0.875 at A = 5 (equation 10); from 29 px (6 s) the cap (12) holds A<sub>L</sub> = 28 px, A<sub>L</sub>k = 0.8: densest 5, thinnest 0.56 against 1.8 and 0.2 from the small-wave rule; the string's slope reaches Ak = 1.14 (49°) |
+| Shorter and steeper, at a steady rate | λ 400 → 100 px in 30 s, steady in 1/λ; A 26, f 0.5 | Ak 0.41 → 1.63 (equation 3), passes 1 near 163 px; the cap acts from about 204 px, A<sub>L</sub> = 12.7 px at the end; v 200 → 50 px/s; the row fills 1.6 → 6.4 wavelengths |
+| A frequency sweep: the pace changes, the shape does not | f 0.5 → 2 Hz in 16 s, exponential; λ 220, A 26 | 17.3 source cycles in the run; densest compression 3.88 throughout; v 110 → 440 px/s, Aω 81.7 → 327 px/s, Ak = 0.743 throughout |
+| Too few particles: the dots tell a different story | N 26 → 10 in 16 s, straight; λ 100, f 0.5 | spacing 49.2 px at 14 particles, 53.3 px at 13 (12.5 s), past half a wavelength: the dots appear to run left (aliasing; C. E. Shannon, "Communication in the presence of noise", 1949, Theorem 1, read); 246 px apparent wave at 10 particles |
+
+New in the store, written in `readouts()` ([L812](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L812)) and declared at [L761](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L761): `rho_max` = 1/(1 − A<sub>L</sub>k),
+`rho_min` = 1/(1 + A<sub>L</sub>k) (equation 10) and `slope_deg` = atan(Ak), in the group Derived physics ([L1002](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L1002)), each
+with a Check from the stored inputs ([L1065](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L1065)). The round wraps into the rest of a running curve and charts `v`, `AL`, `ALk`
+and `rho_max` too ([L1074–1075](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L1074-L1075)); `about` explains that while λ changes a crest at X moves at v − X (dk/dt)/k, not at the
+stored v ([L1077](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L1077)). Headless Chromium, English and German: every example runs, the curve's checks agree with the store,
+the chart's dot reads back burgundy, no page errors, no sideways scroll. The walkthrough check finds 45 of 46 quoted lines,
+as before this change.
