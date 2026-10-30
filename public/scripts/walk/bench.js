@@ -27,7 +27,7 @@ field({ id: key + 'f', name: 'Frequency', min: 0.1, max: FMAX, step: 0.05, value
 field({ id: key + 'p', name: 'Phase', min: 0, max: 6.28, step: 0.05, value: w.phi }) +
 field({ id: key + 's', name: 'Speed', min: 0, max: 2, step: 0.05, value: w.s }) +
 ...
-Sim.slider(key + 'A', { format: function (v) { return v + ' px'; }, onInput: function (v) { ⟦A|w.A = v⟧; } });
+Sim.slider(key + 'A', { format: function (v) { return v.toFixed(0) + ' px'; }, onInput: function (v) { ⟦A|w.A = v⟧; } });
 ...
 add({ A: 20, f: 1 });`,
             syms: [

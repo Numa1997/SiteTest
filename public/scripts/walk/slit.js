@@ -14,9 +14,9 @@ window.WALK.slit = {
             note: 'The whole state of this page is four slider values: the distance d from the wall to P, the angle α of P from the normal to the wall, the slit separation b and the wavelength λ. Each slider calls update() when it moves, and nothing else changes the geometry. The first quoted line fixes the drawing’s frame: the wall lies at y = Y0 = 370, the midpoint M between the slits at x = X0 = 300, and DEG = π/180 converts degrees to radians. compute() then reads the sliders into d (px), a (the angle α in radians) and b (px) and places the slits and P by equation (1). The drawing’s y axis points down, so the note’s point (x, y) is drawn at (X0 + x, Y0 − y): S1 sits b/2 left of M, S2 b/2 right of it, and P lies d above the wall and d tan α to the left, on the side of S₁, as in the note.',
             code: `var X0 = 300, Y0 = 370, LEFT = 40, RIGHT = 560, DEG = Math.PI / 180;
 ...
-var dS = Sim.slider('d', { format: function (v) { return v + ' px'; }, onInput: update });
+var dS = Sim.slider('d', { format: function (v) { return v.toFixed(0) + ' px'; }, onInput: update });
 var aS = Sim.slider('alpha', { format: function (v) { return v.toFixed(1) + '°'; }, onInput: update });
-var bS = Sim.slider('b', { format: function (v) { return v + ' px'; }, onInput: update });
+var bS = Sim.slider('b', { format: function (v) { return v.toFixed(0) + ' px'; }, onInput: update });
 var lS = Sim.slider('lambda', { format: function (v) { return v.toFixed(1) + ' px'; }, onInput: update });
 ...
 var ⟦d|d = dS.value⟧, ⟦a|a = aS.value * DEG⟧, ⟦b|b = bS.value⟧;

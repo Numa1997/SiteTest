@@ -18,7 +18,7 @@ var DEFAULT = [0.25, 0.75];
 var ⟦N|sources⟧ = DEFAULT.slice();
 var ⟦wt|omegaT = 0⟧, dirty = true, redraw = true;
 ...
-var ⟦lam|lambda⟧ = Sim.slider('lambda', { format: function (v) { return v + ' px'; }, onInput: changed });
+var ⟦lam|lambda⟧ = Sim.slider('lambda', { format: function (v) { return v.toFixed(1) + ' px'; }, onInput: changed });
 var ⟦f|freq⟧ = Sim.slider('freq', { format: function (v) { return v.toFixed(2) + ' Hz'; }, onInput: readouts });
 var damp = Sim.slider('damp', { format: function (v) { return v.toFixed(2); }, onInput: changed });`,
             syms: [

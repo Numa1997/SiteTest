@@ -557,7 +557,7 @@ the whole screen".
 
 A page that solves its run first never integrates while the reader watches, so a curve here does not move a slider frame by
 frame: Play curve hands the whole curve p(t) to the solver, the page solves the run with the knob on that curve, stores it,
-and plays it back; the slider only shows where the curve is, on its steps, and the curve's dot follows the stored sample
+and plays it back; the slider shows the curve's exact value, the one the solver used, and the curve's dot follows the stored sample
 on screen (the engine's solver interface, [curve.md](../scripts/curve.md)). A run without a curve is unchanged bit for bit.
 
 On this page every knob but the spring constant can be scheduled ([L814](../../public/simulations/driven-oscillator.html#L814)): the drive frequency, the target, the damping
@@ -579,3 +579,10 @@ engine give byte-identical results.
 | Less damping at resonance | ζ 0.30 → 0.02 in 60 s, steady in 1/ζ; f = 0.50 Hz | the steady swing F₀/(2ζk) grows 0.17 → 2.5 m; the real swing follows at about four fifths (0.43 against 0.56 m at 10 s, 1.98 against 2.49 m at 59 s), since τ = 1/(ζω₀) itself grows 1.1 → 16 s |
 
 Tested in headless Chromium: every example solves, plays, and the curve's checks, dot and slider agree; no page errors.
+
+### Exact values on the sliders · 30 October 2026
+
+A curve now puts its exact value on the slider instead of the nearest step, so the thumb glides and the page follows p(u)
+itself; a hand on the slider puts it back on its steps ([curve.md](../scripts/curve.md), "Exact values on the slider"). On this page the slider shows exactly the value the solver used at the stored sample on screen; the
+descriptions of `sc_a` ([L656](../../public/simulations/driven-oscillator.html#L656)) and `p_now` ([L679](../../public/simulations/driven-oscillator.html#L679)) and the round's label ([L1918](../../public/simulations/driven-oscillator.html#L1918)) no longer say "on its steps",
+and the curve's ends are no longer put on the slider's steps.

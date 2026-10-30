@@ -397,3 +397,12 @@ While a curve runs, one recorded round is the rest of the run ([L913–914](../.
 in steps of 0.05 in ln(m₂/m₁), about 5 % at a time ([L916](../../public/simulations/Double%20Pendulum.html#L916)). Tested in jsdom with the page's scripts, in English and
 German: 32 checks each, among them m₂ = e^slider, simulated time running on through a sweep (no restart), E_sand booked and
 |ε| < 10⁻³, and every curve Check against the store. Not yet seen in a real browser.
+
+### Exact values on the sliders · 30 October 2026
+
+A curve now puts its exact value on the slider instead of the nearest step, so the thumb glides and the page follows p(u)
+itself; a hand on the slider puts it back on its steps ([curve.md](../scripts/curve.md), "Exact values on the slider"). On this page the mass ratio changes a little at every frame, each change booked into E_sand as before; the note on
+the panel says so ([L916](../../public/simulations/Double%20Pendulum.html#L916)). The 70.51 J of the "Sand pours" row above was computed offline on the slider's old 0.05 steps.
+Played in the page with the exact values (headless Chromium, three runs started at different moments; scratch test
+`sand.js`): the sand brought 122.41, 128.41 and 109.81 J (the motion is chaotic, so the amount depends on the start), the
+drift sampled every 0.25 s stayed below 8.9×10⁻⁵, and each of the 151–153 samples saw a different mass.

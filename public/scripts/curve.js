@@ -1,18 +1,22 @@
 /* Numa Koudsie · parameter curves
    A knob that turns by itself. The reader picks a curve p(t) and one of the page's sliders; while the simulation plays,
    the slider follows the curve exactly as if a hand moved it: the page hears an ordinary 'input' event and answers as it
-   always does. The curve's time runs on the page's own clock, so it pauses when the page pauses. A hand on the slider
+   always does. The slider takes the curve's exact value, not the nearest of its steps (its step is 'any' while the curve
+   owns it), so the thumb glides and the simulation gets p(t) itself. A knob marked steps keeps to the slider's own steps:
+   a count (circles, particles, layers) moves in whole steps, as it really does, and Fig. 7's ω₂ stays on the 0.01 rad/s
+   grid its period is computed from. A hand on the slider gives it back its own step. The curve's time runs on the page's own clock, so it pauses when the page pauses. A hand on the slider
    stops the curve at once.
 
    Every number of the curve is written into the page's store (scripts/dataset.js) where it is computed: the time of the
-   run, the value p(t), the value the slider took (a slider moves in steps), the curve sampled for its chart, the reader's
+   run, the value p(t), the value the slider took (p(t) itself, or on a stepped knob its nearest step), the curve sampled for its chart, the reader's
    own points and the slopes between them. The chart and the data panel only read the store.
 
    var curve = Sim.curve({
        ds: ds,                                     the page's dataset
        after: element,                             the panel group the curve's group is placed after
        knobs: [{ id: 'lambda', slider: lambda, name, symbol: 'λ', units: 'px', digits: 1 }],   name: the slider's label, translated
-           optional: format(v) → text, how the value is shown (a slider on a log scale shows the ratio);
+           optional: steps: true for a knob that keeps to the slider's steps (a count, or a value the page needs on its grid);
+                     format(v) → text, how the value is shown (a slider on a log scale shows the ratio);
                      live(v), called instead of the page's 'input' handler, for a knob the page can change while it runs
                      (a page whose slider would otherwise restart the motion)
        examples: [{ knob: 'lambda', shape: 'inv', from: 64, to: 16, T: 30, loop: false, name, why, set: { b: 80 } }],
@@ -35,9 +39,8 @@
                                   when Stop, a new curve or a hand ends it (Figs. 9 and 11)
        opts.solve(sc), opts.ended(msg)   the same hand-over for a whole page (Fig. 10), with curve.params() and curve.playAt(t)
        opts.time()                the run time of the stored sample on screen: the curve's dot follows the playback
-       knob.min, knob.max         the curve's own range when it may go past the slider; the slider then waits at its end
        opts.shapes                the page's own shapes, { key: { name, formula, why, f(u, a, b) } }, for its examples
-   On such a knob the slider only shows the curve's value on its steps; it fires no 'input' event, so the run on screen is
+   On such a knob the slider only shows the curve's value, the value the solver used; it fires no 'input' event, so the run on screen is
    never marked stale by the curve. curve.stop(msg) ends a curve from the page; curve.at(t) reads the curve back from the
    store; Sim.curve.value(sc, t) and Sim.curve.fn(sc) evaluate a frozen curve.
 
@@ -123,10 +126,29 @@
     /* the value v put on a range slider's steps, counted from its minimum, inside its range, and written with as many decimals
        as the step has (0.1 → one), so that 16 + 397 · 0.1 is stored as 55.7 and not 55.70000000000001 */
     function snap(el, v) {
-        var lo = parseFloat(el.min), hi = parseFloat(el.max), st = parseFloat(el.step) || 1;
-        var dec = (String(el.step || '1').split('.')[1] || '').length;
+        var lo = parseFloat(el.min), hi = parseFloat(el.max), s = stepOf(el), st = parseFloat(s) || 1;
+        var dec = (s.split('.')[1] || '').length;
         var q = Math.min(hi, Math.max(lo, lo + Math.round((v - lo) / st) * st));
         return +q.toFixed(dec);
+    }
+
+    /* A slider the curve owns can stand anywhere: its step becomes 'any', its own step is kept in data-cv-step, and the first
+       hand on it (a press, or a key that moves it) puts the step back and tells the page where that leaves the slider.
+       el is the input, or a page's wrapper whose node() returns the input as it is now (Figs. 6 and 7 rebuild their cards). */
+    function node(el) { return el && el.node ? el.node() : el; }
+    function stepOf(el) { var n = node(el); return (n && n.dataset && n.dataset.cvStep) || el.step || '1'; }
+    function inside(el, v) { return Math.min(parseFloat(el.max), Math.max(parseFloat(el.min), v)); }
+    function loosen(el) {
+        var n = node(el);
+        if (!n || !n.dataset || n.dataset.cvStep) return;
+        n.dataset.cvStep = n.step || '1'; n.step = 'any';
+        function touch(e) {
+            if (e.type === 'keydown' && !/^(Arrow|Page|Home|End)/.test(e.key)) return;
+            n.removeEventListener('pointerdown', touch, true); n.removeEventListener('keydown', touch, true);
+            var before = n.value; n.step = n.dataset.cvStep; delete n.dataset.cvStep;
+            if (n.value !== before) n.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+        n.addEventListener('pointerdown', touch, true); n.addEventListener('keydown', touch, true);
     }
 
     Sim.curve = function (opts) {
@@ -136,8 +158,8 @@
         var st = { on: false, k: 0, shape: 'line', ex: -1, a: 0, b: 1, T: 10, loop: false, t: 0, runs: 0, pts: null, sel: -1, msg: '', shownAt: 0 };
         var C = Sim.theme;
         function knob() { return knobs[st.k]; }
-        function lo() { var kb = knob(); return kb.min !== undefined ? kb.min : parseFloat(kb.slider.el.min); }
-        function hi() { var kb = knob(); return kb.max !== undefined ? kb.max : parseFloat(kb.slider.el.max); }
+        function lo() { return parseFloat(knob().slider.el.min); }
+        function hi() { return parseFloat(knob().slider.el.max); }
         function frozenKnob() { return solved || !!knob().schedule; }   /* the run is solved with the whole curve: the slider only shows it */
         function fmtv(v) { return knob().format ? knob().format(v) : Sim.fmt(v, knob().digits); }
 
@@ -152,10 +174,10 @@
             ds.var('cv_b', [], 'float', { symbol: 'b', units: un, long_name: 'value of the curve at the end of a run, u = 1 (for There and back and Swell: at the turn)', computed_in: 'curve: To', digits: dg + 2 });
             ds.var('cv_T', [], 'float', { symbol: 'T<sub>c</sub>', units: 's', long_name: 'duration of one run of the curve', computed_in: 'curve: Time', digits: 1 });
             ds.var('cv_loop', [], 'bool', { symbol: _t('repeat'), long_name: 'the curve starts again at the end of a run', computed_in: 'curve: Repeat' });
-            ds.var('cv_t', [], 'float', { symbol: 't<sub>c</sub>', units: 's', long_name: frozenKnob() ? 'time of the curve in the stored sample on screen' : 'time since the run began, on the page clock', computed_in: 'curve.step()', formula: 't<sub>c</sub> ← t<sub>c</sub> + Δt, back by T<sub>c</sub> when a repeated run ends', digits: 3, source: 'Accumulated frame by frame from the page clock.' });
+            ds.var('cv_t', [], 'float', { symbol: 't<sub>c</sub>', units: 's', long_name: frozenKnob() ? _t('time of the curve in the stored sample on screen') : _t('time since the run began, on the page clock'), computed_in: 'curve.step()', formula: 't<sub>c</sub> ← t<sub>c</sub> + Δt, back by T<sub>c</sub> when a repeated run ends', digits: 3, source: 'Accumulated frame by frame from the page clock.' });
             ds.var('cv_u', [], 'float', { symbol: 'u', long_name: 'fraction of the run done', computed_in: 'curve.step()', formula: 'u = t<sub>c</sub> / T<sub>c</sub>', digits: 4 });
             ds.var('cv_p', [], 'float', { symbol: 'p(u)', units: un, long_name: 'the value of the curve now', computed_in: 'curve.step()', formula: 'the formula p(u) above', digits: dg + 3 });
-            ds.var('cv_set', [], 'float', { symbol: 'p<sub>set</sub>', units: un, long_name: frozenKnob() ? 'the value the slider shows: p(u) on the slider’s steps; the solver used p(u) itself' : 'the value the slider took: p(u) on the slider’s steps; this is what the simulation uses', computed_in: 'curve.step()', formula: 'min + round((p − min) / step) · step, kept inside the range', digits: dg + 2 });
+            ds.var('cv_set', [], 'float', { symbol: 'p<sub>set</sub>', units: un, long_name: frozenKnob() ? _t('the value the slider shows: p(u) itself, the value the solver used') : _t('the value the slider took, which the simulation uses: p(u) itself, or on a knob that keeps its steps the nearest step'), computed_in: 'curve.step()', formula: 'p(u) kept inside the slider’s range; on a knob that keeps its steps, min + round((p − min) / step) · step', digits: dg + 3 });
             ds.var('cv_runs', [], 'int', { symbol: _t('runs'), long_name: 'runs of the curve finished since Play curve', computed_in: 'curve.step()', digits: 0, source: 'Counted at the end of each run.' });
             ds.var('cv_tq', ['cq'], Float64Array, { symbol: 't<sub>q</sub>', units: 's', long_name: 'times at which the curve is sampled for its chart', computed_in: 'curve: resample()', formula: 't<sub>q</sub> = q T<sub>c</sub> / 200', digits: 3, coordinate: true });
             ds.var('cv_pq', ['cq'], Float64Array, { symbol: 'p<sub>q</sub>', units: un, long_name: 'the curve at those times, as its chart draws it', computed_in: 'curve: resample()', formula: 'p(q / 200)', digits: dg + 3 });
@@ -211,9 +233,11 @@
         var own = false;   /* true while this file moves the slider, so the page's 'input' handler is not taken for a hand */
         function apply(p) {
             if (!isFinite(p)) return;
-            if (frozenKnob()) { ds.set('cv_set', snap(knob().slider.el, p)); knob().slider.set(ds.get('cv_set')); return; }
-            var kb = knob(), el = kb.slider.el, before = el.value;
-            el.value = String(snap(el, p));
+            var kb = knob(), el = kb.slider.el, v = kb.steps ? snap(el, p) : inside(el, p);
+            if (!kb.steps) loosen(el);
+            if (frozenKnob()) { kb.slider.set(v); ds.set('cv_set', parseFloat(el.value)); return; }
+            var before = el.value;
+            el.value = String(v);
             ds.set('cv_set', parseFloat(el.value));
             if (el.value === before) return;
             if (kb.live) { kb.slider.paint(); kb.live(parseFloat(el.value)); }
@@ -229,7 +253,6 @@
                 if (!el || el.value === String(snap(el, ex.set[id]))) return;
                 el.value = String(snap(el, ex.set[id])); own = true; el.dispatchEvent(new Event('input', { bubbles: true })); own = false;
             });
-            if (frozenKnob()) { st.a = snap(knob().slider.el, st.a); if (st.shape === 'own') st.pts[0].p = st.a; }   /* the run starts where the slider can stand */
             st.t = 0; st.runs = 0; st.on = true; st.msg = '';
             ds.set('cv_on', true); ds.set('cv_t', 0); ds.set('cv_runs', 0);
             resample();
@@ -261,7 +284,7 @@
                 ds.set('cv_u', u);
                 ds.set('cv_p', value(u));
                 apply(ds.get('cv_p'));
-                if (!st.loop && st.t >= st.T) { end(_t('Done: {sym} reached {v} {units}. Play again, change the curve, or pick another.', { sym: knob().symbol, v: fmtv(ds.get('cv_set')), units: knob().units || '' })); return; }
+                if (!st.loop && st.t >= st.T) { end(_t('Done: {sym} reached {v} {units}. Play again, change the curve, or pick another.', { sym: knob().symbol, v: fmtv(ds.get('cv_set')), units: knob().format ? '' : knob().units || '' })); return; }
             }
             draw();
             show(false);
@@ -322,7 +345,7 @@
         }
         function setInputs() {
             var el = knob().slider.el;
-            [inA, inB].forEach(function (inp) { inp.min = lo(); inp.max = hi(); inp.step = el.step || 'any'; });
+            [inA, inB].forEach(function (inp) { inp.min = lo(); inp.max = hi(); inp.step = 'any'; });
             inA.value = +st.a.toFixed(6); inB.value = +st.b.toFixed(6); inT.value = st.T; inLoop.checked = st.loop;
             inA.disabled = inB.disabled = false;
             selShape.value = st.ex >= 0 ? 'ex:' + st.ex : 'sh:' + st.shape;
@@ -350,7 +373,7 @@
                 var s = v.slice(3), from = st.shape;
                 st.ex = -1;
                 if (s === 'own') { if (from !== 'own') ownFrom(from); }
-                else if (SHAPES[s].positive && !(st.a * st.b > 0)) { st.a = Math.max(lo(), parseFloat(knob().slider.el.step) || 1); st.b = hi(); }
+                else if (SHAPES[s].positive && !(st.a * st.b > 0)) { st.a = Math.max(lo(), parseFloat(stepOf(knob().slider.el)) || 1); st.b = hi(); }
                 st.shape = s;
             }
             declare(); resample(); setInputs(); draw(); show(true);
@@ -360,15 +383,14 @@
             if (st.on) end(_t('Stopped: you changed the curve.'), 'stop');
             st.k = +selKnob.value; st.ex = -1;
             st.a = lo(); st.b = hi();
-            if (SHAPES[st.shape].positive && !(st.a * st.b > 0)) st.a = Math.max(lo(), parseFloat(knob().slider.el.step) || 1);
+            if (SHAPES[st.shape].positive && !(st.a * st.b > 0)) st.a = Math.max(lo(), parseFloat(stepOf(knob().slider.el)) || 1);
             if (st.shape === 'own') ownFrom('line');
             declare(); resample(); setInputs(); draw(); show(true);
         });
         function readNums() {
             var a = parseFloat(inA.value), b = parseFloat(inB.value), T = parseFloat(inT.value);
-            var snapAB = !!knob().schedule && knob().min === undefined && knob().max === undefined;   /* a scheduled knob without a range of its own keeps both ends on its steps */
-            if (isFinite(a)) st.a = snapAB ? snap(knob().slider.el, a) : Math.min(hi(), Math.max(lo(), a));
-            if (isFinite(b)) st.b = snapAB ? snap(knob().slider.el, b) : Math.min(hi(), Math.max(lo(), b));
+            if (isFinite(a)) st.a = Math.min(hi(), Math.max(lo(), a));
+            if (isFinite(b)) st.b = Math.min(hi(), Math.max(lo(), b));
             if (isFinite(T)) st.T = Math.min(600, Math.max(1, T));
             if (st.shape === 'own') { st.pts[0].p = st.a; st.pts[st.pts.length - 1].p = st.b; }
             st.loop = inLoop.checked;
@@ -381,7 +403,7 @@
         btnStop.addEventListener('click', function () { end(_t('Stopped. The knob stays where the curve left it.'), 'stop'); });
         function paintButtons() { btnStop.disabled = !st.on; btnGo.textContent = st.on ? _t('Play again') : _t('Play curve'); }
 
-        /* a hand on the knob wins: the curve stops */
+        /* a hand on the knob wins: the curve stops (and loosen() has given the slider its own step back) */
         knobs.forEach(function (kb, i) {
             kb.slider.el.addEventListener('input', function () { if (!own && st.on && st.k === i) end(_t('You took the knob, so the curve stopped.'), 'hand'); });
         });
@@ -540,8 +562,9 @@
             spec.check.cv_u = function () { return { formula: 'u = t<sub>c</sub> / T<sub>c</sub>', inputs: [['t<sub>c</sub>', ds.get('cv_t'), 's', 3], ['T<sub>c</sub>', ds.get('cv_T'), 's', 1]], value: ds.get('cv_t') / ds.get('cv_T') }; };
             spec.check.cv_p = function () { return { formula: ds.get('cv_formula') + ', u = ' + Sim.fmt(ds.get('cv_u'), 4), inputs: [['u', ds.get('cv_u'), '', 4]].concat(inputsAB()), value: storedValue(ds.get('cv_u')) }; };
             spec.check.cv_set = function () {
-                var el = knob().slider.el;
-                return { formula: 'min + round((p − min) / step) · step', inputs: [['p', ds.get('cv_p'), knob().units || '', knob().digits + 3], ['min', parseFloat(el.min), '', 3], ['step', parseFloat(el.step) || 1, '', 3]], value: snap(el, ds.get('cv_p')) };
+                var el = knob().slider.el, p = ds.get('cv_p'), inp = [['p', p, knob().units || '', knob().digits + 3], ['min', parseFloat(el.min), '', 3], ['max', parseFloat(el.max), '', 3]];
+                if (!knob().steps) return { formula: 'min(max, max(min, p))', inputs: inp, value: inside(el, p) };
+                return { formula: 'min + round((p − min) / step) · step', inputs: inp.concat([['step', parseFloat(stepOf(el)) || 1, '', 3]]), value: snap(el, p) };
             };
             spec.check.cv_tq = function (q) { return { formula: 'q T<sub>c</sub> / 200', inputs: [['q', q, '', 0], ['T<sub>c</sub>', ds.get('cv_T'), 's', 1]], value: q * ds.get('cv_T') / (NQ - 1) }; };
             spec.check.cv_pq = function (q) { return { formula: ds.get('cv_formula') + ', u = q / 200', inputs: [['q', q, '', 0]].concat(inputsAB()), value: storedValue(q / (NQ - 1)) }; };
@@ -575,5 +598,6 @@
                  params: described, playAt: playAt };
     };
     Sim.curve.value = valueOf;
+    Sim.curve.loosen = loosen;   /* for a slider a page moves by code with an exact value (a phase kept continuous, a frequency from dispersion) */
     Sim.curve.fn = function (sc) { return function (t) { return valueOf(sc, t); }; };
 })();

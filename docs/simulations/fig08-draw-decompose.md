@@ -369,7 +369,13 @@ own pipeline.
 New in the store: `over` (declared at [L677](../../public/simulations/draw-decompose.html#L677), computed in `rebuild()` at [L848](../../public/simulations/draw-decompose.html#L848) from the stored samples and the 601-point
 curve, with a Check that redoes it, in the group Coefficients) and `t_play` ([L717](../../public/simulations/draw-decompose.html#L717), set in the clock at [L1287](../../public/simulations/draw-decompose.html#L1287), in
 View and drawing), the time of a recorded round in seconds; the round wraps into the rest of a running curve
-([L1400–1402](../../public/simulations/draw-decompose.html#L1400-L1402)); `about` says the curve's steps ([L1404](../../public/simulations/draw-decompose.html#L1404)); `curve.extend(Sim.data)` closes the hooks ([L1405](../../public/simulations/draw-decompose.html#L1405)).
+([L1400–1402](../../public/simulations/draw-decompose.html#L1400-L1402)); `about` says how the curve sets the sliders ([L1404](../../public/simulations/draw-decompose.html#L1404)); `curve.extend(Sim.data)` closes the hooks ([L1405](../../public/simulations/draw-decompose.html#L1405)).
 The status line shows the overshoot only for an open stroke. Tested in headless Chromium in English, German and Arabic:
 every example runs, the curve's checks agree with the store, the chart's dot reads back burgundy, no page errors, no
 sideways scroll. The walkthrough check finds all 70 quoted lines.
+
+### Exact values on the sliders · 30 October 2026
+
+A curve now puts its exact value on the slider instead of the nearest step, so the thumb glides and the page follows p(u)
+itself; a hand on the slider puts it back on its steps ([curve.md](../scripts/curve.md), "Exact values on the slider"). On this page K keeps whole circles (`steps: true`, [L726](../../public/simulations/draw-decompose.html#L726)); the time per loop moves exactly and its label rounds to
+0.1 s ([L724](../../public/simulations/draw-decompose.html#L724)); the `about` sentence ([L1404](../../public/simulations/draw-decompose.html#L1404)).

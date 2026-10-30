@@ -128,7 +128,7 @@ stage ([L683](../../public/simulations/wind-turbine.html#L683)), so `optimum()` 
 
 Why RK4 with $h = 10$ ms: the code does not state the reason; the note gives it in section 8, item 1 ([L508](../../public/simulations/wind-turbine.html#L508)). What can be measured is the margin. When holding speed the
 linearised error equation (equation (10) of the note) has eigenvalues of modulus $\omega_n = 0.6$ s⁻¹ with damping ratio
-0.8; when following the wind the relaxation rate at the optimum is 0.11–0.30 s⁻¹ for winds of 4–11 m/s (computed with the
+0.8; when following the wind the relaxation rate at the optimum is 0.11–0.35 s⁻¹ for winds of 4–12.8 m/s, and 0.13–0.18 s⁻¹ above the torque limit, up to 14 m/s (computed with the
 page's own functions). So $|\lambda| h \le 0.01$, far inside RK4's stable region, and the fastest wind component (0.5 Hz) gets 200 steps
 per period. The torque clipping and the anti-windup switch make the right-hand side non-smooth at the limits; the code does
 nothing special there. With the defaults the energy balance $E_\text{aero} = E_\text{gen} + \Delta(\tfrac12 J\omega^2)$ holds
@@ -244,7 +244,7 @@ ticks every animation frame, the figure is redrawn at the display rate even whil
 | Controller | `ctrl` (buttons `data-v="pi"` / `"opt"`) | Hold speed (default, [L106](../../public/simulations/wind-turbine.html#L106), [L564](../../public/simulations/wind-turbine.html#L564)) / Follow the wind | `ctrl` ([L987](../../public/simulations/wind-turbine.html#L987)), used by `tauGen` and the start speed; marks stale. |
 | Target rotor speed | `rpm` | 8–21 rpm, step 0.5, default 15 ([L111](../../public/simulations/wind-turbine.html#L111)) | $\omega_\text{ref} = \text{rpm}\cdot2\pi/60$ at the next solve ([L697](../../public/simulations/wind-turbine.html#L697)); greyed and not marking stale when following the wind ([L743](../../public/simulations/wind-turbine.html#L743), [L983](../../public/simulations/wind-turbine.html#L983)). |
 | Wind | `prof` (buttons `steady`, `gust`, `step`, `turb`) | Turbulent (default, [L121](../../public/simulations/wind-turbine.html#L121), [L564](../../public/simulations/wind-turbine.html#L564)) | `prof` ([L988](../../public/simulations/wind-turbine.html#L988)), read by `wind()`; marks stale. |
-| Mean wind speed $v_0$ | `v0` | 4–11 m/s, step 0.1, default 8 ([L125](../../public/simulations/wind-turbine.html#L125)) | `c.v0`; marks stale. |
+| Mean wind speed $v_0$ | `v0` | 4–14 m/s (4–11 until 30 October 2026), step 0.1, default 8 ([L125](../../public/simulations/wind-turbine.html#L125)) | `c.v0`; marks stale. |
 | Turbulence σ / Gust size / Step size | `dv` | 0–4 m/s, step 0.1, default 1.5 ([L129](../../public/simulations/wind-turbine.html#L129)) | `c.dv`; label set by `controls()`; unused for steady wind; marks stale. |
 | Read values | added by datalog.js | switch, off | Appended to the first figure caption ([datalog.js:895–897](../../public/scripts/datalog.js#L895-L897)); see [datalog.md](../scripts/datalog.md). |
 
@@ -483,7 +483,7 @@ From the derivation checks and blind referees that ran after the usage limit lif
 
 A page that solves its run first never integrates while the reader watches, so a curve here does not move a slider frame by
 frame: Play curve hands the whole curve p(t) to the solver, the page solves the run with the knob on that curve, stores it,
-and plays it back; the slider only shows where the curve is, on its steps, and the curve's dot follows the stored sample
+and plays it back; the slider shows the curve's exact value, the one the solver used, and the curve's dot follows the stored sample
 on screen (the engine's solver interface, [curve.md](../scripts/curve.md)). A run without a curve is unchanged bit for bit.
 
 Here the curve is a fifth wind profile, or a schedule of the target speed: like Gust and Step, it begins 30 s into the run
@@ -491,8 +491,8 @@ Here the curve is a fifth wind profile, or a schedule of the target speed: like 
 already holds it, and `storeSched()` ([L741](../../public/simulations/wind-turbine.html#L741)) keeps the curve's description (`sc_*`) and the target `rpm_set[n]`, so the
 checks can rebuild it. The page hands the curve over through the engine's `opts.solve` ([L1161](../../public/simulations/wind-turbine.html#L1161)) and shows it with
 `curve.playAt` from its frame ([L955](../../public/simulations/wind-turbine.html#L955)); playback after Play curve starts at t = 27 s, three seconds before the curve,
-so nothing has to be waited for (Restart still plays from 0). The wind knob may go to 14 m/s, past the slider's 11 m/s: the
-slider then waits at its end and the wind chart shows the wind. All eight old runs (two controllers × four winds) are
+so nothing has to be waited for (Restart still plays from 0). The wind slider runs to 14 m/s (since
+30 October 2026; it stopped at 11), so it shows every wind a curve gives. All eight old runs (two controllers × four winds) are
 unchanged bit for bit. Plan, patch and numbers from a research agent; its 36 tests rerun by me on the unified engine pass.
 
 | Example | Curve, controller | Numbers |
@@ -502,8 +502,15 @@ unchanged bit for bit. Plan, patch and numbers from a research agent; its 36 tes
 | Wind ramp through rated speed | v: 8 → 14 m/s in 60 s, straight; follow the wind | torque limit reached at 12.82 m/s in steady wind (24.80 rpm, 3.12 MW), at 13.12 m/s on the ramp; ends at 30.6 rpm, 128 m/s tips |
 | Target speed raised, minimum jerk | n_ref 12 → 15.5 rpm in 10 s; hold, 8 m/s | 633 → 757 kW; peak torque rate 86.6 kN m/s against 144.8 for a straight ramp; but the power dips to 295 kW against 454 kW, since the peak rate is 15/8 of the mean |
 
-**Left for Numa:** the note's limits section says "above about 11 m/s nothing limits the power except the generator's torque
-limit"; with this page's own model the torque limit is reached at 12.8 m/s (steady wind, following the wind). The research
-agent's patch corrected the sentence; I restored the original, since the English of a note changes only on Numa's word.
+**The note corrected · 30 October 2026.** The limits section said "above about 11 m/s nothing limits the power except the
+generator's torque limit". Nothing in this model happens at 11 m/s. Computed with the page's own constants and functions
+(R = 40 m, τ_max = 1.2 MN m, the c_p fit and K_opt copied from [L555–557](../../public/simulations/wind-turbine.html#L555-L557) and [L644–657](../../public/simulations/wind-turbine.html#L644-L657); scratch
+script `fig10truth.js`): following the wind, K_opt ω² reaches the torque limit at 12.82 m/s (24.80 rpm, 3.12 MW); above it
+the generator cannot brake harder and the rotor speeds up until τ_aero falls back to the limit, 25.78 rpm at 13 m/s and
+30.61 rpm (tips at 128.2 m/s, 3.85 MW) at 14 m/s. Holding 15 rpm the limit is never reached: the blades stall, and the
+steady power peaks at 1.69 MW near 14.7 m/s (at 18 and 21 rpm the limit is reached at 12.44 and 12.32 m/s). On Numa's word
+("change to whatever the truth is") the sentence now says this ([L522](../../public/simulations/wind-turbine.html#L522)). The wind slider was widened to 14 m/s ([L125](../../public/simulations/wind-turbine.html#L125)),
+the curve's own range on the wind knob removed ([L1161](../../public/simulations/wind-turbine.html#L1161)), and the texts that described the slider waiting at 11 m/s
+rewritten: the `about` paragraph ([L1159](../../public/simulations/wind-turbine.html#L1159)) and the ramp example ([L1161](../../public/simulations/wind-turbine.html#L1161)).
 Tested in headless Chromium: every example solves and plays; at 2.16 s into the gust the stored wind and the curve agree,
 7.034 m/s; no page errors.

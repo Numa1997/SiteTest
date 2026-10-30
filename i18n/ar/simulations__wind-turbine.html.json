@@ -79,6 +79,10 @@
   "src": "Sometimes a constant speed is wanted: for a generator tied to the grid’s frequency, for quiet operation, or to stay away from a tower resonance. The controller then compares \\(\\omega\\) with a target \\(\\omega_\\text{ref}\\) and brakes harder the faster the rotor turns, adding a term that remembers past errors:",
   "tr": "تُطلب أحيانًا سرعة ثابتة: لمولّد مرتبط بتردّد الشبكة الكهربائية، أو لتشغيل هادئ، أو لتفادي رنين البرج. عندئذٍ يقارن المتحكّم \\(\\omega\\) بالقيمة المرجعية \\(\\omega_\\text{ref}\\)، ويكبح بشدّة أكبر كلّما دار الدوّار أسرع، ويضيف حدًّا يتذكّر الأخطاء الماضية:"
  },
+ "26c89350ac56": {
+  "src": "No pitch control. Holding a speed, the blades stall as the wind rises, and that alone caps the power: at 15 rpm it peaks at 1.69 MW near 14.7 m/s. Following the wind, the generator reaches its torque limit at 12.8 m/s; in stronger wind it cannot brake harder, and the rotor speeds up until its blades lose torque (30.6 rpm at 14 m/s, tips at 128 m/s). Real turbines pitch their blades above their rated wind speed instead.",
+  "tr": "لا تحكّم بزاوية خطوة الشفرات. ففي وضع «إبقاء السرعة» تفقد الشفرات رفعها كلما اشتدّت الريح، وهذا وحده يضع سقفًا للقدرة: عند 15 rpm تبلغ ذروتها 1.69 MW قرب 14.7 m/s. وفي وضع «تتبّع الريح» يبلغ المولّد حدّ عزمه عند 12.8 m/s؛ وفي ريح أشدّ لا يستطيع أن يكبح أكثر، فيتسارع الدوّار حتى تفقد شفراته عزمها (30.6 rpm عند 14 m/s، والأطراف بسرعة 128 m/s). أمّا العنفات الحقيقية فتغيّر بدلًا من ذلك زاوية خطوة شفراتها فوق سرعة الريح الاسمية."
+ },
  "2872dfa1b82f": {
   "src": "Wind turbine control: catching energy from a wind you cannot choose",
   "tr": "التحكّم في عنفة ريحية: التقاط الطاقة من ريح لا نملك اختيارها"

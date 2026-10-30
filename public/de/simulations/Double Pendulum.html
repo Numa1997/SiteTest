@@ -14,7 +14,7 @@
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%237a1f2b'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='38' fill='%23f5f1ea'%3EN%3C/text%3E%3C/svg%3E">
 
     <script src="../../scripts/i18n/strings-de.js"></script>
-    <meta name="translated-from" content="English public/simulations/Double Pendulum.html, commit 00858b2+" />
+    <meta name="translated-from" content="English public/simulations/Double Pendulum.html, commit fa80711+" />
   </head>
 <body>
     <header class="sim-top">
@@ -905,7 +905,7 @@
             round: curve.round({ time: 't', label: function () { return _t('ten seconds of simulated motion'); }, length: function () { return 10; },
                 columns: ['th1', 'th2', 'w1', 'w2', 'E', 'drift', 'sep'], point: function () { return { what: _t('bob 2') }; } }),
             play: function () { clk.set(true); },
-            about: _t('Here the rods and bobs are drawn at the stored pixel positions, so the picture and the store agree to the pixel. The trail is painted segment by segment at every RK4 step and fades away; it is not kept as an array; to keep the trajectory, record a round, which copies every frame of ten simulated seconds. The energy drift is the integrator’s own error, shown rather than hidden.') + ' ' + _t('While a curve changes the mass ratio, m₂ changes between frames and the store books the energy each change brings as E<sub>sand</sub>, adding it to E₀; the mass slider moves in steps of 0.05 in ln(m₂/m₁), so m₂ changes by about 5 % at a time.')
+            about: _t('Here the rods and bobs are drawn at the stored pixel positions, so the picture and the store agree to the pixel. The trail is painted segment by segment at every RK4 step and fades away; it is not kept as an array; to keep the trajectory, record a round, which copies every frame of ten simulated seconds. The energy drift is the integrator’s own error, shown rather than hidden.') + ' ' + _t('While a curve changes the mass ratio, m₂ changes between frames and the store books the energy each change brings as E<sub>sand</sub>, adding it to E₀; the mass slider takes the curve’s exact value of ln(m₂/m₁), so m₂ changes a little at every frame.')
         }; curve.extend(Sim.data);
 
         ['x1_twin_px', 'y1_twin_px', 'x2_twin_px', 'y2_twin_px'].forEach(function (name, i) {

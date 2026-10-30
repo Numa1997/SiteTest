@@ -79,6 +79,10 @@
   "src": "Sometimes a constant speed is wanted: for a generator tied to the grid’s frequency, for quiet operation, or to stay away from a tower resonance. The controller then compares \\(\\omega\\) with a target \\(\\omega_\\text{ref}\\) and brakes harder the faster the rotor turns, adding a term that remembers past errors:",
   "tr": "Manchmal ist eine konstante Drehzahl gewünscht: für einen Generator, der an die Netzfrequenz gekoppelt ist, für ruhigen Betrieb oder um eine Resonanz des Turms zu meiden. Der Regler vergleicht dann \\(\\omega\\) mit einem Sollwert \\(\\omega_\\text{ref}\\) und bremst umso stärker, je schneller sich der Rotor dreht; hinzu kommt ein Glied, das frühere Abweichungen speichert:"
  },
+ "26c89350ac56": {
+  "src": "No pitch control. Holding a speed, the blades stall as the wind rises, and that alone caps the power: at 15 rpm it peaks at 1.69 MW near 14.7 m/s. Following the wind, the generator reaches its torque limit at 12.8 m/s; in stronger wind it cannot brake harder, and the rotor speeds up until its blades lose torque (30.6 rpm at 14 m/s, tips at 128 m/s). Real turbines pitch their blades above their rated wind speed instead.",
+  "tr": "Keine Blattverstellung. Beim Halten einer Drehzahl reißt mit steigendem Wind die Strömung an den Blättern ab, und allein das begrenzt die Leistung: Bei 15 rpm erreicht sie bei etwa 14.7 m/s ihr Maximum von 1.69 MW. Beim Folgen des Windes erreicht der Generator seine Drehmomentgrenze bei 12.8 m/s; bei stärkerem Wind kann er nicht stärker bremsen, und der Rotor beschleunigt, bis seine Blätter an Drehmoment verlieren (30.6 rpm bei 14 m/s, Blattspitzen mit 128 m/s). Echte Turbinen verstellen stattdessen oberhalb ihrer Nennwindgeschwindigkeit ihre Blätter."
+ },
  "2872dfa1b82f": {
   "src": "Wind turbine control: catching energy from a wind you cannot choose",
   "tr": "Regelung einer Windturbine: Energie aus einem Wind einfangen, den man nicht wählen kann"

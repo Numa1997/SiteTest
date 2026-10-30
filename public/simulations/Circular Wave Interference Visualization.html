@@ -592,7 +592,7 @@
         })();
         ds.touch('LUT');
 
-        var lambda = Sim.slider('lambda', { format: function (v) { return v + ' px'; }, onInput: changed });
+        var lambda = Sim.slider('lambda', { format: function (v) { return v.toFixed(1) + ' px'; }, onInput: changed });
         var freq = Sim.slider('freq', { format: function (v) { return v.toFixed(2) + ' Hz'; }, onInput: readouts });
         var damp = Sim.slider('damp', { format: function (v) { return v.toFixed(2); }, onInput: changed });
 
@@ -894,7 +894,7 @@
             round: curve.round({ time: 't', label: function () { return _t('one period of the sources, T = ') + Sim.fmt(ds.get('T'), 3) + ' s'; }, length: function () { return ds.get('T'); },
                 columns: ['omegaT', 'cos_wt', 'sin_wt', 'psi_c', 'n_calm'], point: function () { return { j: Math.floor(ds.dims.j / 2), i: Math.floor(ds.dims.i * 0.72) }; } }),
             play: function () { clk.set(true); },
-            about: _t('Here ψ reaches the screen through a colour table of 256 steps, so the picture carries ψ to one part in 128 while the store keeps float32, about seven significant figures. The image has one pixel per grid cell and the browser scales it up with smoothing, so a screen pixel between two cells shows a blend of both.') + ' ' + _t('A curve moves its slider in the slider’s own steps (λ in 0.1 px, f in 0.05 Hz, γ in 0.01), so the simulation follows p<sub>set</sub>, the curve’s value on those steps, not p(u) itself; the store keeps both.')
+            about: _t('Here ψ reaches the screen through a colour table of 256 steps, so the picture carries ψ to one part in 128 while the store keeps float32, about seven significant figures. The image has one pixel per grid cell and the browser scales it up with smoothing, so a screen pixel between two cells shows a blend of both.') + ' ' + _t('A curve puts its exact value on the slider, between the slider’s own steps (λ 0.1 px, f 0.05 Hz, γ 0.01), so the simulation follows p(u) itself: p<sub>set</sub> is p(u), kept inside the slider’s range. A hand on the slider puts it back on its steps.')
         }; curve.extend(Sim.data);
 
         resize();

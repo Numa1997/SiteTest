@@ -386,3 +386,9 @@ and `rho_max` too ([L1074–1075](../../public/simulations/Transverse%20and%20lo
 stored v ([L1077](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L1077)). Headless Chromium, English and German: every example runs, the curve's checks agree with the store,
 the chart's dot reads back burgundy, no page errors, no sideways scroll. The walkthrough check finds 45 of 46 quoted lines,
 as before this change.
+
+### Exact values on the sliders · 30 October 2026
+
+A curve now puts its exact value on the slider instead of the nearest step, so the thumb glides and the page follows p(u)
+itself; a hand on the slider puts it back on its steps ([curve.md](../scripts/curve.md), "Exact values on the slider"). On this page: the `about` sentence ([L1077](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L1077)); Particles keeps whole steps (`steps: true`, [L798](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L798)), since it is a
+count; the labels of A and λ round to 1 px and 0.1 px ([L795](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L795), [L797](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L797)).

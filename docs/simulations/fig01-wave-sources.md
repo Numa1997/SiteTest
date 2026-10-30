@@ -361,10 +361,16 @@ sources (NaN unless there are exactly two), and `n_calm` = 2⌈s/λ − ½⌉ (N
 ([L804](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L804)), each with a Check from the stored inputs ([L838](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L838)). `n_calm` is not drawn as a number; the calm lines are the
 cream lines of ψ, and its attribute `drawn_note` says so. The curve's own eighteen variables, checks and read-backs come from
 `curve.extend(Sim.data)` ([L898](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L898)); the round becomes the rest of a running curve ([L894–895](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L894-L895)); the
-`about` paragraph gains one sentence: the simulation follows `cv_set`, the curve's value on the slider's steps (λ 0.1 px,
-f 0.05 Hz, γ 0.01), not p(u) itself ([L897](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L897)). `lambda` is now shown with one decimal ([L528](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L528)).
+`about` paragraph gains one sentence: the simulation now follows p(u) itself, put on the slider exactly ([L897](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L897)). `lambda` is now shown with one decimal ([L528](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L528)).
 
 Tested in jsdom with the page's real scripts (36 checks pass; see [curve.md](../scripts/curve.md)), and in German and
 Arabic (no English left in the tool, no page errors). Not yet seen in a real browser: the session's hook refused headless
 Chromium.
 
+### Exact values on the sliders · 30 October 2026
+
+A curve now puts its exact value on the slider instead of the nearest step, so the thumb glides and the page follows p(u)
+itself; a hand on the slider puts it back on its steps ([curve.md](../scripts/curve.md), "Exact values on the slider"). On this page: the `about` sentence says so ([L897](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L897)); the λ label rounds to 0.1 px ([L595](../../public/simulations/Circular%20Wave%20Interference%20Visualization.html#L595); it printed the raw value,
+which under a curve read "36.1039222 px"), and the walkthrough line that quotes it was updated. With λ continuous the
+number of calm lines changes exactly when s/λ crosses a half-integer, so "Calm lines, one pair at a time" no longer
+inherits a rhythm from the slider's steps.

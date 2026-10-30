@@ -202,7 +202,7 @@ page's own rules are unchanged (its line 39, `.sim, .sim-top { max-width: 1560px
 
 A page that solves its run first never integrates while the reader watches, so a curve here does not move a slider frame by
 frame: Play curve hands the whole curve p(t) to the solver, the page solves the run with the knob on that curve, stores it,
-and plays it back; the slider only shows where the curve is, on its steps, and the curve's dot follows the stored sample
+and plays it back; the slider shows the curve's exact value, the one the solver used, and the curve's dot follows the stored sample
 on screen (the engine's solver interface, [curve.md](../scripts/curve.md)). A run without a curve is unchanged bit for bit.
 
 The knob is the target r: the curve is a reference trajectory for the cart, the overhead-crane problem. `solve()` ([L728](../../public/simulations/pendulum-control.html#L728))
@@ -238,3 +238,10 @@ harder (10.0 → 13.6 rad/s); tuned to the open-loop pendulum swing (1.71 rad/s)
 the default Firm controller (q_v = 5) shaping does not help: the step settles first, 3.63 s, every gentler move later
 (3.79–5.06 s). Tested in headless Chromium: every example solves and plays (the ZV and ZVD curves end after 0.63 and 0.94 s,
 the run plays on); no page errors.
+
+### Exact values on the sliders · 30 October 2026
+
+A curve now puts its exact value on the slider instead of the nearest step, so the thumb glides and the page follows p(u)
+itself; a hand on the slider puts it back on its steps ([curve.md](../scripts/curve.md), "Exact values on the slider"). On this page the slider shows exactly the target r the solver used at the stored sample on screen, and the curve's ends
+are no longer put on the slider's 0.01 m steps; the five examples' ends lie on them anyway, so their numbers are unchanged
+(rerun in Chromium: settled after 16.31, 3.81 and 3.44 s, as above).

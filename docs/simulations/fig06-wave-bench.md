@@ -406,7 +406,7 @@ through a small wrapper, `w2knob()` ([L795](../../public/simulations/wave-interf
 card list, where `input` events bubble. Wave 2 because the beat length and the envelope speed, equations (8) and (9), are
 those of waves 1 and 2, and the note's exercises turn Wave 2. Amplitude and phase move as a hand would. Frequency and speed
 are `live`: the page computes each wave from its present f and s and the clock time t, so a new value late in the run
-would throw Wave 2 sideways at every step (by 50 to 350 px in the beat envelope); the curve instead keeps Wave 2's phase
+would throw Wave 2 sideways as it changes (by 50 to 350 px in the beat envelope); the curve instead keeps Wave 2's phase
 continuous (at the centre of the view for f₂, everywhere for s₂) and books the phase added as `dphi2`, which Wave 2's Phase
 slider shows. A hand on a slider behaves as before. The curve steps first in the clock ([L826](../../public/simulations/wave-interference.html#L826)). Each example presses
 its preset itself. Plan and numbers from a research agent; its number scripts rerun by me and reproduce exactly.
@@ -414,8 +414,8 @@ its preset itself. Plan and numbers from a research agent; its number scripts re
 | Example | Knob, curve, preset | Numbers |
 |---|---|---|
 | Noise cancelling: Wave 2 half a turn behind | φ₂ 0 → 3.15 rad in 10 s, minimum jerk; One wave, then Add wave + | C = 40 \|cos(φ₂/2)\| px (equation 6): 28.6 px at 5 s, 3.8 at 8 s, 0.17 at the end (3.15 misses π by 0.0084); active noise control plays the noise back inverted (Wikipedia, "Active noise control") |
-| Tune Wave 2 like a guitar string | f₂ 1.25 → 1.00 in 25 s, straight; Beats | beat period 1/\|ν₁ − ν₂\| 4, 5, 6.7, 10, 20 s (equation 8); beat length 800 → 4000 px; musicians tune by beats (Wikipedia, "Beat (acoustics)") |
-| The envelope stops, then runs backwards | s₂ 1.00 → 0.50 in 20 s, straight; Beats | envelope speed 1000 s₂ − 800 px/s (equation 9): 150 at 0.95, 0 at 0.80, −300 at 0.50, while the carrier slows only from 200 to 144 px/s (group velocity, §4.1) |
+| Tune Wave 2 like a guitar string | f₂ 1.25 → 1.00 in 25 s, straight; Beats | f₂ = 1.25 − 0.01 t: beat period 1/\|ν₁ − ν₂\| 4 s at the start, 5 s at 1.20, 10 s at 1.10, 20 s at 1.05 (equation 8); beat length 800, 1000, 2000, 4000 px; musicians tune by beats (Wikipedia, "Beat (acoustics)") |
+| The envelope stops, then runs backwards | s₂ 1.00 → 0.50 in 20 s, straight; Beats | s₂ = 1 − 0.025 t; envelope speed 1000 s₂ − 800 px/s (equation 9): 150 at 0.95 (2 s), 0 at 0.80 (8 s), −300 at 0.50, while the carrier slows only from 200 to 144 px/s (group velocity, §4.1) |
 | Fourier's amplitude is the best one | A₂ 0 → 20 px in 20 s, straight; Square wave | RMS gap to the ideal square wave (height 23.56 px, equation 11) least at Fourier's 10 px: 5.29 px, against 8.83 at 0 and 20; the lowest peak (26.4 px) is at 8 px instead: least squares, not least overshoot (Wikipedia, "Fourier series", least-squares property) |
 | Same spectrum, different shape | φ₂ 0 → 3.15 rad in 15 s, straight; Square wave | peak \|y\| 27.9 → 41.9 px at 2.60 rad, 41.7 at the end (Exercise 6.1); stems 30, 10, 6, 4.3 px and ½ Σ C² = 527.2 px² unchanged (equations 17, 18); Ohm's acoustic law (Wikipedia) |
 
@@ -424,3 +424,12 @@ checks; the round wraps into the rest of a running curve ([L962](../../public/si
 hooks close with `curve.extend(Sim.data)` ([L966](../../public/simulations/wave-interference.html#L966)). Headless Chromium, English and German: every example runs, the
 curve's checks agree with the store, the chart's dot reads back burgundy, no page errors, no sideways scroll. The
 walkthrough check finds all 70 quoted lines.
+
+### Exact values on the sliders · 30 October 2026
+
+A curve now puts its exact value on the slider instead of the nearest step, so the thumb glides and the page follows p(u)
+itself; a hand on the slider puts it back on its steps ([curve.md](../scripts/curve.md), "Exact values on the slider"). On this page: the wrapper `w2knob` gains `node()`, the input as it is now ([L795](../../public/simulations/wave-interference.html#L795)), and the Phase slider that keeps
+Wave 2 continuous shows the exact phase (`Sim.curve.loosen` in `w2shift`, same line). The two examples that described the
+stepped motion ("2 s on each step of 0.05", "about 5 s on each", "zero from 7 to 9 s") now give the continuous numbers in
+the table above, and the `about` sentence says how the curve sets the sliders ([L965](../../public/simulations/wave-interference.html#L965)). The amplitude labels round to
+1 px ([L611](../../public/simulations/wave-interference.html#L611), [L795](../../public/simulations/wave-interference.html#L795)), and the walkthrough line that quotes the first was updated.

@@ -391,3 +391,10 @@ circle, in Derived physics ([L817](../../public/simulations/water-wave.html#L817
 charts `f`, `c`, `ak` and `deep` ([L880–881](../../public/simulations/water-wave.html#L880-L881)); `about` adds that while λ changes a crest at x moves at c − x (dk/dt)/k
 ([L883](../../public/simulations/water-wave.html#L883)). Headless Chromium, English and Arabic: every example runs, the curve's checks agree with the store, the chart's
 dot reads back burgundy, no page errors, no sideways scroll. The walkthrough check finds 47 of 48 quoted lines, as before.
+
+### Exact values on the sliders · 30 October 2026
+
+A curve now puts its exact value on the slider instead of the nearest step, so the thumb glides and the page follows p(u)
+itself; a hand on the slider puts it back on its steps ([curve.md](../scripts/curve.md), "Exact values on the slider"). On this page: the `about` sentence ([L883](../../public/simulations/water-wave.html#L883)); Depth layers and Particles per layer keep whole steps (`steps: true`,
+[L652](../../public/simulations/water-wave.html#L652)); with deep-water dispersion on, the Frequency slider now shows f from ω² = gk exactly (`Sim.curve.loosen`,
+[L647](../../public/simulations/water-wave.html#L647)) instead of to 0.01 Hz; the labels of A and λ round to 1 px and 0.1 px ([L631](../../public/simulations/water-wave.html#L631), [L632](../../public/simulations/water-wave.html#L632)).

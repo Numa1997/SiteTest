@@ -392,7 +392,7 @@ From the derivation checks and blind referees that ran after the usage limit lif
 The one global slider, Speed, changes only the pace. The physics is on the circle cards, whose sliders restart the figure
 at every step of 0.01. So the page loads [`scripts/curve.js`](../scripts/curve.md) after `dataset.js` ([L663](../../public/simulations/phasor-sums.html#L663)) and gives
 it, besides Speed, Circle 2's radius and angular frequency through a wrapper with `live` handlers ([L798](../../public/simulations/phasor-sums.html#L798)): a curve turns
-Circle 2 without the restart, time and the trail run on, and turning ω₂ also shifts φ₂ by (ω₂ − ω₂′) t at each step so
+Circle 2 without the restart, time and the trail run on, and turning ω₂ also shifts φ₂ by (ω₂ − ω₂′) t at each change so
 that arm 2 does not jump; the running total is stored as `dphi2` and Circle 2's Phase slider shows it. A hand on a card
 restarts as before. The curve steps after `perform()` in the clock ([L1322](../../public/simulations/phasor-sums.html#L1322)). Each example presses its preset itself.
 Plan and numbers from a research agent; its number scripts rerun by me and reproduce exactly.
@@ -409,3 +409,12 @@ the round wraps into the rest of a running curve ([L1464](../../public/simulatio
 ([L1468](../../public/simulations/phasor-sums.html#L1468)); `curve.extend(Sim.data)` runs before the first resize ([L1471](../../public/simulations/phasor-sums.html#L1471)). Headless Chromium, English and Arabic:
 every example runs, the curve's checks agree with the store, the chart's dot reads back burgundy, no page errors, no
 sideways scroll. The walkthrough check finds all 158 quoted lines.
+
+### Exact values on the sliders · 30 October 2026
+
+A curve now puts its exact value on the slider instead of the nearest step, so the thumb glides and the page follows p(u)
+itself; a hand on the slider puts it back on its steps ([curve.md](../scripts/curve.md), "Exact values on the slider"). On this page the radius and Speed move exactly; ω₂ keeps its steps of 0.01 rad/s (`steps: true`, [L798](../../public/simulations/phasor-sums.html#L798)), because
+`structure()` and `activeW()` compute the period and the symmetry from 100 ω as an integer (the load-bearing step above);
+its steps are 0.04 px apart on the slider, and under a 4 s ramp it stayed within 0.003 rad/s of p(u) and moved on every
+frame. The wrapper `c2knob` gains `node()`, and the Phase slider of Circle 2 shows the exact phase (`Sim.curve.loosen` in
+`c2live`, same line). The `about` sentence says all this ([L1468](../../public/simulations/phasor-sums.html#L1468)).

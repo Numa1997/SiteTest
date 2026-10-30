@@ -369,8 +369,14 @@ page's own formulas: δs = 2bd tan α / (L₁ + L₂), I/I₀ = cos²(πδs/λ).
 | From near field to far field | d 100 → 300 px in 10 s, minimum jerk; b 80, α 30°, λ 13.5 px (the note's exercise) | δs from 38.27 to 39.80 px towards b sin α = 40 px (equation 4); I/I₀ at P from 0.754 to 0.974 towards 0.987; Fresnel number F = b²/(λd) from 4.74 to 1.58 (Wikipedia, "Fresnel number": F ≪ 1 far field, F ≳ 1 near field) |
 
 At the default b = 40 px and α = 20° the near-field effect is only 0.2 px in δs, which is why the last example uses the
-note's exercise setting. The round wraps into the rest of a running curve ([L939–940](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L939-L940)); the `about` paragraph names the
-sliders' steps ([L941](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L941)); `curve.extend(Sim.data)` sits at the start of the `update();` line ([L943](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L943)), not on the
+note's exercise setting. The round wraps into the rest of a running curve ([L939–940](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L939-L940)); the `about` paragraph says how the
+curve sets the sliders ([L941](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L941)); `curve.extend(Sim.data)` sits at the start of the `update();` line ([L943](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L943)), not on the
 closing `};`, which the walkthrough quotes. Tested in jsdom with the page's scripts in English and Arabic: 39 checks each,
 among them each example's preset, the stored I = cos²(πδs/λ) and every curve Check. Not yet seen in a real browser. The
 walkthrough check finds 63 of its 66 quoted lines, as before this change.
+
+### Exact values on the sliders · 30 October 2026
+
+A curve now puts its exact value on the slider instead of the nearest step, so the thumb glides and the page follows p(u)
+itself; a hand on the slider puts it back on its steps ([curve.md](../scripts/curve.md), "Exact values on the slider"). On this page: the `about` sentence ([L941](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L941)); the labels of d and b round to 1 px ([L610](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L610), [L612](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L612)), and the walkthrough
+lines that quote them were updated.
