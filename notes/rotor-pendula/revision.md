@@ -238,3 +238,8 @@ Numa: leave nothing missing; deploy what is produced, and loop by the standards 
 - Figure 25 (section 8.2): the generator's power per hertz under blade shaking, from `derive/L3_response.py` (uses `L3_shake2.py`'s
   model unchanged; its band integral reproduces the stored 3.3848 mW exactly): a sharp peak at the blade's mode, 1.08 Hz, and almost
   nothing at the second blade's own 1.47 Hz.
+- Against `notes/STANDARD.md`, point 8 (every source with a working link): links added for Veers (OSTI record of the conference
+  version), Taylor 1938, Kolmogorov 1941 (the English translation of 1991), Hairer and Wanner, Cottone et al.; each DOI checked to
+  resolve to the named work. Landau–Lifshitz and Betz 1920 have no free copy and stay without a link.
+- Chapter 8 had no Problems box (Numa's verdict of 21 October 2026 asks for one per chapter): three problems with folded answers
+  (the effective mass of a point mass; the sag's push from the 8.2 equation; the tuned length, 1.85 m).
