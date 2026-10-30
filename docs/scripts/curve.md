@@ -2,9 +2,9 @@
 
 | | |
 |---|---|
-| File | [public/scripts/curve.js](../../public/scripts/curve.js), 491 lines, 36.1 kB (36 062 bytes) |
-| Loaded by | Fig. 1 (`Circular Wave Interference Visualization.html`, line 508, right after `dataset.js`), and its German and Arabic pages; more figures follow one at a time |
-| Defines | `Sim.curve(opts)` on `window.Sim` ([curve.js:98](../../public/scripts/curve.js#L98)) |
+| File | [public/scripts/curve.js](../../public/scripts/curve.js), 504 lines, 37.2 kB (37 165 bytes) |
+| Loaded by | Fig. 1 (line 508), Fig. 2 (`Double Pendulum.html`, line 453) and Fig. 3 (`Interactive Double-Slit Experiment Visualization.html`, line 549), each right after `dataset.js`, and their German and Arabic pages; more figures follow two at a time |
+| Defines | `Sim.curve(opts)` on `window.Sim` ([curve.js:102](../../public/scripts/curve.js#L102)) |
 | Uses | `Sim.theme`, `Sim.fmt`, `Sim.canvas2d`, `Sim.onResize`, `Sim.readPixel`, `Sim.isBurgundy` ([sim.md](sim.md)); the page's dataset ([dataset.md](dataset.md)); `_t()` for every word |
 | Since | 30 October 2026, on Numa's request: "a curve to change the parameters and watch the animation unfold as the parameter changes", with an option for one's own curve and well-known example curves |
 
@@ -22,27 +22,37 @@ across, the knob's value up, a burgundy dot where the follower is now.
 ## What the reader sees
 
 A group in the control panel, after the page's own sliders (on Fig. 1 after "Waves"), labelled "Curve · a knob that moves
-by itself" ([curve.js:203-224](../../public/scripts/curve.js#L203-L224)):
+by itself" ([curve.js:215-235](../../public/scripts/curve.js#L215-L235)):
 
 - **Curve**: a list in two parts, the page's own examples first (each with the symbol of the knob it moves), then the
-  shapes for any knob, then "Your own curve" ([curve.js:228-243](../../public/scripts/curve.js#L228-L243)).
+  shapes for any knob, then "Your own curve" ([curve.js:240-255](../../public/scripts/curve.js#L240-L255)).
 - **Knob it moves**: the slider the curve drives. An example sets it; for a shape the reader chooses.
 - One paragraph on why this curve, with its formula in burgundy mono (`.curve__f`).
 - **The chart**: a white plate 132 px high. The curve is drawn from the stored samples `cv_pq`, the dot every frame
-  ([curve.js:326-360](../../public/scripts/curve.js#L326-L360)).
+  ([curve.js:339-373](../../public/scripts/curve.js#L339-L373)).
 - **From a, To b, Time T**: number boxes kept inside the slider's range, T between 1 and 600 s; **Repeat**.
 - **Play curve** / **Stop**, and a status line rewritten at most four times a second, like the data panel's: the knob's
   value, the time of the run, and one fact from the page (on Fig. 1, the number of calm lines)
-  ([curve.js:307-320](../../public/scripts/curve.js#L307-L320)).
+  ([curve.js:319-333](../../public/scripts/curve.js#L319-L333)).
 
 Play curve sets the knob to p(0) at once and starts the page's clock if it was paused
-([curve.js:168-176](../../public/scripts/curve.js#L168-L176)). At the end of a run the knob stays at p(T), or the run
+([curve.js:174-188](../../public/scripts/curve.js#L174-L188)). At the end of a run the knob stays at p(T), or the run
 starts again with Repeat. Changing the curve or the knob stops a run; editing your own points, a, b or T while it runs
 does not.
 
+## Options a page can give
+
+- A knob's `format(v)` shows its value in the page's own way: Fig. 2's mass slider is on a log scale, ln(m₂/m₁), and shows
+  the ratio (1/9.97 … 9.97) in the status line and on the chart.
+- A knob's `live(v)` is called instead of the page's `input` handler, for a value the page can change while it runs when a
+  hand on the slider would restart the motion (Fig. 2's mass: [fig02-double-pendulum.md](../simulations/fig02-double-pendulum.md)).
+  The slider is still moved and painted; a hand on it still restarts the page and stops the curve.
+- An example's `set: { id: value }` puts other sliders to those values when the run starts, through their own `input`
+  handlers (Fig. 3's examples fix b, d, λ or α first, so that the numbers in their explanations hold).
+
 ## The shapes
 
-u = t/T is the fraction of the run done, a the value at the start, b at the end ([curve.js:38-59](../../public/scripts/curve.js#L38-L59)).
+u = t/T is the fraction of the run done, a the value at the start, b at the end ([curve.js:42-63](../../public/scripts/curve.js#L42-L63)).
 
 | Key | Name | p(u) | Source and check |
 |---|---|---|---|
@@ -54,7 +64,7 @@ u = t/T is the fraction of the run done, a the value at the start, b at the end 
 | `swell` | Swell and return | a + (b − a)(1 − cos 2πu)/2 | — |
 | `own` | Your own curve | monotone cubic Hermite through the reader's points | Method of F. N. Fritsch and R. E. Carlson, SIAM J. Numer. Anal. 17 (1980) 238–246, implemented from the step-by-step statement in Wikipedia's "Monotone cubic interpolation" and checked against the SLATEC routine PCHIM's documentation (NIST GAMS), which cites the paper. The paper itself is behind SIAM's paywall and was not read. |
 
-**Your own curve** ([curve.js:64-88](../../public/scripts/curve.js#L64-L88), [255-259](../../public/scripts/curve.js#L255-L259), [363-426](../../public/scripts/curve.js#L363-L426)).
+**Your own curve** ([curve.js:68-83](../../public/scripts/curve.js#L68-L83), [267-271](../../public/scripts/curve.js#L267-L271), [376-439](../../public/scripts/curve.js#L376-L439)).
 Choosing it, or clicking or dragging on the chart of any other curve, turns the curve on screen into five points
 (u = 0, ¼, ½, ¾, 1) that the reader edits. A click adds a point, a drag moves it, a double-click removes it; the first and
 last points move only up and down; keys ← → choose a point, ↑ ↓ move it by 1 % of the range (10 % with Shift), Delete
@@ -67,7 +77,7 @@ every piece monotone (scratch test `curvetest.js`, run with Node on the function
 
 ## The knob's steps
 
-A slider moves in steps. `snap()` ([curve.js:91-96](../../public/scripts/curve.js#L91-L96)) puts the curve's value on the
+A slider moves in steps. `snap()` ([curve.js:95-100](../../public/scripts/curve.js#L95-L100)) puts the curve's value on the
 slider's steps counted from its minimum, inside its range, and writes it with as many decimals as the step has, so
 16 + 397 · 0.1 is stored as 55.7. The slider is set to that value, so the store, the slider and the simulation agree
 exactly in every browser (a test DOM that does not snap range inputs showed that leaving it to the browser does not). The
@@ -75,22 +85,22 @@ page's physics runs on this snapped value, `cv_set`; the curve's own value is `c
 
 ## What it writes into the store
 
-Declared in `declare()` ([curve.js:108-128](../../public/scripts/curve.js#L108-L128)), re-declared with the knob's units when
+Declared in `declare()` ([curve.js:112-132](../../public/scripts/curve.js#L112-L132)), re-declared with the knob's units when
 the knob changes (re-declaring keeps the data: [dataset.js:45-56](../../public/scripts/dataset.js#L45-L56)).
 
 | Name | Shape | Meaning | Written in |
 |---|---|---|---|
 | `cv_on`, `cv_knob`, `cv_name`, `cv_formula`, `cv_loop` | scalars | whether a run is on, the knob, the curve, its formula, Repeat | `begin()`, `end()`, `resample()` |
 | `cv_a`, `cv_b`, `cv_T` | scalars | value at u = 0, at u = 1 (at the turn for There and back and Swell), duration in s | `resample()` |
-| `cv_t`, `cv_u`, `cv_p`, `cv_set`, `cv_runs` | scalars | time of the run on the page clock, u = t/T, the curve's value, the slider's value, runs finished | `step()` ([curve.js:183-200](../../public/scripts/curve.js#L183-L200)) |
-| `cv_tq`, `cv_pq` | over `cq` (201) | the curve sampled for its chart, t = qT/200 | `resample()` ([curve.js:146-156](../../public/scripts/curve.js#L146-L156)) |
-| `cv_ku`, `cv_kp`, `cv_km` | over `ck` (number of points) | your points and the Fritsch–Carlson slopes at them | `storePoints()` ([curve.js:137-145](../../public/scripts/curve.js#L137-L145)) |
+| `cv_t`, `cv_u`, `cv_p`, `cv_set`, `cv_runs` | scalars | time of the run on the page clock, u = t/T, the curve's value, the slider's value, runs finished | `step()` ([curve.js:195-212](../../public/scripts/curve.js#L195-L212)) |
+| `cv_tq`, `cv_pq` | over `cq` (201) | the curve sampled for its chart, t = qT/200 | `resample()` ([curve.js:150-160](../../public/scripts/curve.js#L150-L160)) |
+| `cv_ku`, `cv_kp`, `cv_km` | over `ck` (number of points) | your points and the Fritsch–Carlson slopes at them | `storePoints()` ([curve.js:141-149](../../public/scripts/curve.js#L141-L149)) |
 
 The chart draws only from `cv_tq`, `cv_pq`, `cv_u` and `cv_p`.
 
 ## The data panel
 
-`curve.extend(Sim.data)` ([curve.js:450-478](../../public/scripts/curve.js#L450-L478)) adds:
+`curve.extend(Sim.data)` ([curve.js:463-491](../../public/scripts/curve.js#L463-L491)) adds:
 
 - a group (and, on a page with a ledger, a section) "Parameter curve" with all eighteen variables;
 - **Check** for `cv_u` (t/T), `cv_p` (the shape's formula from the stored a, b and u, or Fritsch–Carlson again from the
@@ -99,7 +109,7 @@ The chart draws only from `cv_tq`, `cv_pq`, `cv_u` and `cv_p`.
 - **read-backs** for `cv_p` (the chart's pixel at the dot must be burgundy, alpha first, through `Sim.readPixel`) and
   `cv_set` (the slider's position must equal the stored value).
 
-`curve.round(spec)` ([curve.js:479-488](../../public/scripts/curve.js#L479-L488)) wraps the page's round: while a curve
+`curve.round(spec)` ([curve.js:492-501](../../public/scripts/curve.js#L492-L501)) wraps the page's round: while a curve
 runs, one recorded round is the rest of the run (length T − t, its label names the curve and its ends), and the recorded
 columns gain `cv_p` and `cv_set`. Record pressed during a run therefore catches the parameter and the page's response side by
 side. Otherwise the round is the page's own.

@@ -546,7 +546,7 @@
 
     <script src="../scripts/fold.js"></script>
     <script src="../scripts/sim.js"></script>
-    <script src="../scripts/dataset.js"></script>
+    <script src="../scripts/dataset.js"></script><script src="../scripts/curve.js"></script>
     <script>
     (function () {
         'use strict';
@@ -611,7 +611,7 @@
         var aS = Sim.slider('alpha', { format: function (v) { return v.toFixed(1) + '°'; }, onInput: update });
         var bS = Sim.slider('b', { format: function (v) { return v + ' px'; }, onInput: update });
         var lS = Sim.slider('lambda', { format: function (v) { return v.toFixed(1) + ' px'; }, onInput: update });
-
+        var curve = Sim.curve({ ds: ds, after: document.querySelector('.sim__grid > .panel').querySelectorAll('.panel__group')[1], knobs: [{ id: 'alpha', slider: aS, name: _t('Angle α'), symbol: 'α', units: '°', digits: 1 }, { id: 'lambda', slider: lS, name: _t('Wavelength λ'), symbol: 'λ', units: 'px', digits: 1 }, { id: 'b', slider: bS, name: _t('Slit separation b'), symbol: 'b', units: 'px', digits: 0 }, { id: 'd', slider: dS, name: _t('Distance d'), symbol: 'd', units: 'px', digits: 0 }], examples: [{ knob: 'alpha', shape: 'line', from: 0, to: 30, T: 20, set: { d: 200, b: 40, lambda: 13.5 }, name: _t('Walk P across the fringes'), why: _t('P moves outward along the observation line at a steady angular rate, as a detector does when it scans Young’s fringes. With d = 200 px, b = 40 px and λ = 13.5 px the exact path difference δs reaches ½λ, a dark fringe, at α = 9.76°, and λ, the first bright fringe, at α = 19.81°; the far-field rule b sin θ = λ puts it at 19.72°. At 30° δs is 1.48 λ, just short of the next dark fringe.') }, { knob: 'lambda', shape: 'exp', from: 8, to: 40, T: 20, set: { d: 200, b: 40, alpha: 20 }, name: _t('Change the colour: longer waves turn farther'), why: _t('λ grows from 8 to 40 px exponentially, equal time for each doubling. P, held at α = 20°, goes dark at λ = 9.09 px (δs = 1.5 λ), bright at 13.63 px (δs = λ) and dark again at 27.26 px (δs = ½λ). The first bright direction θ₁ = asin(λ/b) moves out from 11.5° to 90°: longer waves make wider fringes, which is why fringes in white light have coloured edges, red on the outside.') }, { knob: 'b', shape: 'inv', from: 80, to: 20, T: 20, set: { lambda: 13.5 }, name: _t('Slits drawn together: the fringes open up'), why: _t('The slits move together from b = 80 to 20 px, with 1/b rising at a steady rate, so the fringe spacing λ/b in sin θ, and Δy = λD/b on a far screen (equation 9), grows at a steady rate: λ/b from 0.169 to 0.675, while the first bright direction θ₁ moves from 9.72° to 42.45°.') }, { knob: 'd', shape: 'jerk', from: 100, to: 300, T: 10, set: { b: 80, alpha: 30, lambda: 13.5 }, name: _t('From near field to far field'), why: _t('The note’s exercise setting, b = 80 px and α = 30°, with P carried away from the slits from d = 100 to 300 px along a minimum-jerk S-curve. The exact δs climbs from 38.27 to 39.80 px towards the far-field b sin α = 40 px (equation 4), and the intensity at P from 0.754 to 0.974 towards the far-field 0.987: the dashed curve of Fig. 3b closes on the burgundy one. The Fresnel number F = b²/(λd), with the slit spacing as the size, falls from 4.74 to 1.58; the far-field law holds when F ≪ 1.') }], play: function () { anim.checked = true; clk.set(true); }, playing: function () { return clk.playing; }, extra: function () { return _t('I/I₀ = {I} at P', { I: ds.get('I').toFixed(3) }); } });
         function n(v) { return v.toFixed(2); }
         function dist(p, q) { return Math.hypot(p.x - q.x, p.y - q.y); }
         function line(a, b, attrs) { return '<line x1="' + n(a.x) + '" y1="' + n(a.y) + '" x2="' + n(b.x) + '" y2="' + n(b.y) + '" ' + attrs + '/>'; }
@@ -813,7 +813,7 @@
                 drawWaves();
                 fps = fps ? fps + (1 / dt - fps) * 0.1 : 1 / dt;
             }
-            ds.set('clock_t', t); ds.set('wall', performance.now() / 1000); ds.set('fps', fps); ds.set('animate', clk ? clk.playing : true);
+            ds.set('clock_t', t); ds.set('wall', performance.now() / 1000); ds.set('fps', fps); ds.set('animate', clk ? clk.playing : true); curve.step(dt);
         });
         anim.addEventListener('change', function () { clk.set(anim.checked); });
 
@@ -936,11 +936,11 @@
                     return { what: _t('the burgundy bar S₂Q: its length in the SVG'), drawn: isFinite(len) ? len.toFixed(3) + ' px' : _t('no bar (δs ≤ 0.05 px)'), expected: ds.get('ds').toFixed(3) + ' px', ok: ok };
                 }
             },
-            round: { time: 'wall', mode: 'change', label: function () { return _t('ten seconds of slider changes: move a slider while it records'); }, length: function () { return 10; },
-                columns: ['d', 'alpha_deg', 'b', 'lambda', 'L1', 'L2', 'ds', 'ratio', 'I'], point: function () { return { pt: 3 }; } },
-            about: _t('Here nothing is sampled on a grid: the figure is drawn as SVG shapes from the stored points, with coordinates written to two decimals. The intensity plot samples 301 directions; the pattern is drawn as a smooth line through them. The wavelets are decoration: their radii are stored, but they carry no physics beyond λ.')
+            round: curve.round({ time: 'wall', mode: 'change', label: function () { return _t('ten seconds of slider changes: move a slider while it records'); }, length: function () { return 10; },
+                columns: ['d', 'alpha_deg', 'b', 'lambda', 'L1', 'L2', 'ds', 'ratio', 'I'], point: function () { return { pt: 3 }; } }),
+            about: _t('Here nothing is sampled on a grid: the figure is drawn as SVG shapes from the stored points, with coordinates written to two decimals. The intensity plot samples 301 directions; the pattern is drawn as a smooth line through them. The wavelets are decoration: their radii are stored, but they carry no physics beyond λ.') + ' ' + _t('A curve moves its slider in the slider’s own steps (α 0.5°, λ 0.5 px, b and d 1 px), so the figure follows p<sub>set</sub>, the curve’s value on those steps; the store keeps both.')
         };
-        update();
+        curve.extend(Sim.data); update();
     })();
     </script>
     <script src="../scripts/datalog.js"></script>

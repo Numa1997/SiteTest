@@ -12,7 +12,11 @@
        ds: ds,                                     the page's dataset
        after: element,                             the panel group the curve's group is placed after
        knobs: [{ id: 'lambda', slider: lambda, name, symbol: 'λ', units: 'px', digits: 1 }],   name: the slider's label, translated
-       examples: [{ knob: 'lambda', shape: 'inv', from: 64, to: 16, T: 30, loop: false, name, why }],   name, why: translated words
+           optional: format(v) → text, how the value is shown (a slider on a log scale shows the ratio);
+                     live(v), called instead of the page's 'input' handler, for a knob the page can change while it runs
+                     (a page whose slider would otherwise restart the motion)
+       examples: [{ knob: 'lambda', shape: 'inv', from: 64, to: 16, T: 30, loop: false, name, why, set: { b: 80 } }],
+           name, why: translated words; set: other sliders (by id) put to these values when the run starts
        play: function () { clk.set(true); },      starts the page's clock
        playing: function () { return clk.playing; },
        extra: function () { return text; }        optional: one more fact for the status line while a curve runs
@@ -102,7 +106,7 @@
         function knob() { return knobs[st.k]; }
         function lo() { return parseFloat(knob().slider.el.min); }
         function hi() { return parseFloat(knob().slider.el.max); }
-        function fmtv(v) { return Sim.fmt(v, knob().digits); }
+        function fmtv(v) { return knob().format ? knob().format(v) : Sim.fmt(v, knob().digits); }
 
         /* ---------- the store ---------- */
         function declare() {
@@ -160,13 +164,21 @@
         var own = false;   /* true while this file moves the slider, so the page's 'input' handler is not taken for a hand */
         function apply(p) {
             if (!isFinite(p)) return;
-            var el = knob().slider.el, before = el.value;
+            var kb = knob(), el = kb.slider.el, before = el.value;
             el.value = String(snap(el, p));
             ds.set('cv_set', parseFloat(el.value));
-            if (el.value !== before) { own = true; el.dispatchEvent(new Event('input', { bubbles: true })); own = false; }
+            if (el.value === before) return;
+            if (kb.live) { kb.slider.paint(); kb.live(parseFloat(el.value)); }
+            else { own = true; el.dispatchEvent(new Event('input', { bubbles: true })); own = false; }
         }
         function begin() {
             if (SHAPES[st.shape].positive && !(st.a * st.b > 0)) { st.msg = _t('This curve needs From and To of the same sign, neither zero.'); show(true); return; }
+            var ex = st.ex >= 0 ? examples[st.ex] : null;
+            if (ex && ex.set) Object.keys(ex.set).forEach(function (id) {
+                var el = document.getElementById(id);
+                if (!el || el.value === String(snap(el, ex.set[id]))) return;
+                el.value = String(snap(el, ex.set[id])); own = true; el.dispatchEvent(new Event('input', { bubbles: true })); own = false;
+            });
             st.t = 0; st.runs = 0; st.on = true; st.msg = '';
             ds.set('cv_on', true); ds.set('cv_t', 0); ds.set('cv_runs', 0);
             resample();
@@ -310,12 +322,13 @@
             st.shownAt = ms;
             var kb = knob(), txt;
             if (st.on) {
-                txt = _t('{sym} = {v} {units} · {t} s of {T} s', { sym: kb.symbol, v: fmtv(ds.get('cv_set')), units: kb.units || '', t: Sim.fmt(st.t, 1), T: Sim.fmt(st.T, 0) });
+                txt = _t('{sym} = {v} {units} · {t} s of {T} s', { sym: kb.symbol, v: fmtv(ds.get('cv_set')), units: kb.format ? '' : kb.units || '', t: Sim.fmt(st.t, 1), T: Sim.fmt(st.T, 0) });
                 if (st.loop) txt += ' · ' + _t('run {n}', { n: st.runs + 1 });
                 if (opts.playing && !opts.playing()) txt += ' · ' + _t('paused: the curve goes on when the simulation plays');
             } else txt = st.msg || _t('Press Play curve: the knob follows the curve while you watch the figure.');
             var ex = st.on && opts.extra ? opts.extra() : '';
             if (ex) txt += ' · ' + ex;
+            txt = txt.replace(/ {2,}/g, ' ').replace(/ ([·,.])/g, function (m, c) { return c === '·' ? ' ·' : c; });
             if (txt !== stEl.textContent) stEl.textContent = txt;
         }
 

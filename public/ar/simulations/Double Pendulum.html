@@ -15,7 +15,7 @@
 
     <link rel="stylesheet" href="../../fonts/arabic.css" />
     <script src="../../scripts/i18n/strings-ar.js"></script>
-    <meta name="translated-from" content="English public/simulations/Double Pendulum.html, commit 73866ed+" />
+    <meta name="translated-from" content="English public/simulations/Double Pendulum.html, commit f04e5a7+" />
   </head>
 <body>
     <header class="sim-top">
@@ -443,7 +443,7 @@
 
     <script src="../../scripts/fold.js"></script>
     <script src="../../scripts/sim.js"></script>
-    <script src="../../scripts/dataset.js"></script>
+    <script src="../../scripts/dataset.js"></script><script src="../../scripts/curve.js"></script>
     <script>
     (function () {
         'use strict';
@@ -488,7 +488,7 @@
         ds.var('V', [], 'float', { symbol: 'V', units: 'J', long_name: 'potential energy, zero at the pivot', computed_in: 'diagnostics()', formula: 'V = −(m₁+m₂) g l₁ cos θ₁ − m₂ g l₂ cos θ₂', digits: 4 });
         ds.var('L', [], 'float', { symbol: 'L', units: 'J', long_name: 'Lagrangian', computed_in: 'diagnostics()', formula: 'L = T − V', digits: 4 });
         ds.var('E', [], 'float', { symbol: 'E', units: 'J', long_name: 'total energy now', computed_in: 'energy(state), in diagnostics()', formula: 'kinetic + potential', digits: 6 });
-        ds.var('E0', [], 'float', { symbol: 'E<sub>0</sub>', units: 'J', long_name: 'total energy at restart', computed_in: 'energy(state), in restart()', digits: 6, source: 'Stored once at restart; the check recomputes E from the current state instead.' });
+        ds.var('E0', [], 'float', { symbol: 'E<sub>0</sub>', units: 'J', long_name: 'total energy at restart', computed_in: 'energy(state), in restart()', digits: 6, source: 'Stored once at restart; the check recomputes E from the current state instead.' }); ds.var('E_sand', [], 'float', { symbol: 'E<sub>sand</sub>', units: 'J', long_name: 'energy the sand has brought in (out, if negative) since restart, while a curve changes m₂', computed_in: 'sand(), the parameter curve', formula: 'Σ [E(state, m₂ after) − E(state, m₂ before)]', digits: 4, source: 'Summed at each change of m₂; the same amount is added to E₀, so the drift stays the integrator’s error.' });
         ds.var('drift', [], 'float', { symbol: 'ε', long_name: 'relative energy error of the integrator', computed_in: 'diagnostics()', formula: 'ε = (E − E₀) / ((m₁+m₂) g l₁ + m₂ g l₂)', digits: 4 });
         ds.var('x1', [], 'float', { symbol: 'x<sub>1</sub>', units: 'm', long_name: 'bob 1, right of the pivot', computed_in: 'diagnostics()', formula: 'l₁ sin θ₁', digits: 4 });
         ds.var('y1', [], 'float', { symbol: 'y<sub>1</sub>', units: 'm', long_name: 'bob 1, above the pivot', computed_in: 'diagnostics()', formula: '−l₁ cos θ₁', digits: 4 });
@@ -529,7 +529,7 @@
         var th2 = Sim.slider('th2', { format: deg, onInput: restart });
         var w1 = Sim.slider('w1', { format: rads, onInput: restart });
         var w2 = Sim.slider('w2', { format: rads, onInput: restart });
-        var speed = Sim.slider('speed', { format: function (v) { return v.toFixed(2) + '×'; } });
+        var speed = Sim.slider('speed', { format: function (v) { return v.toFixed(2) + '×'; } }); var Esand = 0; function sand(v) { var before = energy(state); m2 = m1 * Math.exp(v); var dE = energy(state) - before; E0 += dE; Esand += dE; ds.set('m2', m2); ds.set('E0', E0); ds.set('E_sand', Esand); } var curve = Sim.curve({ ds: ds, after: document.querySelector('.sim__grid > .panel').querySelectorAll('.panel__group')[1], knobs: [{ id: 'mass', slider: mass, name: _t('Mass ratio m₂/m₁'), symbol: 'm₂/m₁', units: '', digits: 2, format: ratio, live: sand }, { id: 'speed', slider: speed, name: _t('Time scale'), symbol: _t('time scale'), units: '×', digits: 2 }], examples: [{ knob: 'mass', shape: 'line', from: -2.3, to: 2.3, T: 40, name: _t('Sand pours into the lower bob'), why: _t('The lower bob fills with sand while it swings, from m₂/m₁ = 0.10 to 9.97 in 40 s, by the same factor every second: the slider is on a log scale, ln(m₂/m₁). The sand arrives moving with the bob, so it pushes nothing (in F + v<sub>rel</sub> dm/dt = m dv/dt the relative velocity is zero), and at every instant the equations of motion are the page’s own with the new m₂. Energy is no longer conserved: the sand brings its own, booked as E<sub>sand</sub>, so the drift still measures the integrator alone. Towards ratio 10 the heavy bob kicks the light upper rod hard, up to about 1300 rad/s² (§7), and the drift grows.') }, { knob: 'mass', shape: 'line', from: 2.3, to: -2.3, T: 40, name: _t('The lower bob runs empty'), why: _t('The reverse: sand leaves the lower bob with the bob’s own velocity, from m₂/m₁ = 9.97 down to 0.10 in 40 s. It carries energy away, so E<sub>sand</sub> turns negative, and the bob drawn for m₂ shrinks as it empties.') }, { knob: 'speed', shape: 'jerk', from: 1, to: 0.25, T: 3, name: _t('Slow motion, without a jolt'), why: _t('Only the playback slows, from 1× to 0.25× along a minimum-jerk S-curve, so that the change of speed itself does not jolt. The physics and its RK4 steps are untouched: the page simply advances fewer simulated seconds per real second, a quarter at the end.') }], play: function () { clk.set(true); }, playing: function () { return clk.playing; }, extra: function () { return Esand ? _t('sand brought {E} J', { E: Sim.fmt(Esand, 2) }) : ''; } });
 
         function deriv(s) {
             var t1 = s[0], t2 = s[1], o1 = s[2], o2 = s[3], d = t1 - t2;
@@ -590,7 +590,7 @@
             E0 = energy(state);
             simT = 0;
             acc = 0;
-            ds.set('m2', m2); ds.set('l2', l2); ds.set('E0', E0);
+            ds.set('m2', m2); ds.set('l2', l2); ds.set('E0', E0); Esand = 0; ds.set('E_sand', 0);
             ds.set('th1_0', state[0]); ds.set('th2_0', state[1]); ds.set('w1_0', state[2]); ds.set('w2_0', state[3]);
             layout();
             clearTrail();
@@ -771,7 +771,7 @@
                 }
                 fade(1 - Math.pow(1 - 0.008, dt * 60));
             }
-            diagnostics(dt);
+            curve.step(dt); diagnostics(dt);
             draw();
             if (frames++ % 6 === 0) readouts();
         });
@@ -827,7 +827,7 @@
                 { title: _t('Physical parameters'), note: _t('fixed constants are in the dataset attributes; these you set'), vars: ['m2', 'l2', 'th1_0', 'th2_0', 'w1_0', 'w2_0', 'speed'] },
                 { title: _t('State'), note: _t('the four numbers the integrator advances'), vars: ['y', 'dydt', 'th1', 'th2', 'w1', 'w2'] },
                 { title: _t('Equations of motion'), note: _t('what deriv() computes from the state'), vars: ['delta', 'den', 'alpha1', 'alpha2', 'M', 'detM', 'p1', 'p2'] },
-                { title: _t('Energy'), note: _t('conserved by the physics, so its drift measures the integrator'), vars: ['T', 'V', 'L', 'E', 'E0', 'drift'] },
+                { title: _t('Energy'), note: _t('conserved by the physics, so its drift measures the integrator'), vars: ['T', 'V', 'L', 'E', 'E0', 'E_sand', 'drift'] },
                 { title: _t('Bobs'), note: _t('metres with the pivot at the origin and y upwards; then the pixels as drawn'), vars: ['x1', 'y1', 'x2', 'y2', 'v1', 'v2', 'x1_px', 'y1_px', 'x2_px', 'y2_px'] },
                 { title: _t('Chaos twin'), note: _t('a copy started 0.001 rad away; its own stored screen positions locate its state'), vars: ['twin_on', 'y_twin', 'x1_twin_px', 'y1_twin_px', 'x2_twin_px', 'y2_twin_px', 'sep', 'log10sep'] },
                 { title: _t('Integrator and drawing'), note: _t('fourth-order Runge–Kutta at h = 1/600 s'), vars: ['t', 'n', 'steps', 'acc', 'scale', 'ox', 'oy', 'dt', 'fps', 'frames', 'playing'] }
@@ -903,11 +903,11 @@
                 th2: function () { return bobPixel('bob 2, placed from θ₂', ds.get('x2_px'), ds.get('y2_px')); },
                 th1: function () { return bobPixel('bob 1, placed from θ₁', ds.get('x1_px'), ds.get('y1_px')); }
             },
-            round: { time: 't', label: function () { return _t('ten seconds of simulated motion'); }, length: function () { return 10; },
-                columns: ['th1', 'th2', 'w1', 'w2', 'E', 'drift', 'sep'], point: function () { return { what: _t('bob 2') }; } },
+            round: curve.round({ time: 't', label: function () { return _t('ten seconds of simulated motion'); }, length: function () { return 10; },
+                columns: ['th1', 'th2', 'w1', 'w2', 'E', 'drift', 'sep'], point: function () { return { what: _t('bob 2') }; } }),
             play: function () { clk.set(true); },
-            about: _t('Here the rods and bobs are drawn at the stored pixel positions, so the picture and the store agree to the pixel. The trail is painted segment by segment at every RK4 step and fades away; it is not kept as an array; to keep the trajectory, record a round, which copies every frame of ten simulated seconds. The energy drift is the integrator’s own error, shown rather than hidden.')
-        };
+            about: _t('Here the rods and bobs are drawn at the stored pixel positions, so the picture and the store agree to the pixel. The trail is painted segment by segment at every RK4 step and fades away; it is not kept as an array; to keep the trajectory, record a round, which copies every frame of ten simulated seconds. The energy drift is the integrator’s own error, shown rather than hidden.') + ' ' + _t('While a curve changes the mass ratio, m₂ changes between frames and the store books the energy each change brings as E<sub>sand</sub>, adding it to E₀; the mass slider moves in steps of 0.05 in ln(m₂/m₁), so m₂ changes by about 5 % at a time.')
+        }; curve.extend(Sim.data);
 
         ['x1_twin_px', 'y1_twin_px', 'x2_twin_px', 'y2_twin_px'].forEach(function (name, i) {
             Sim.data.check[name] = function () { return twinPositionCheck(i); };

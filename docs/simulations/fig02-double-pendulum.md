@@ -369,3 +369,31 @@ After the independent referee and derivation checks (`notes/fig02/`), the lead m
 From the derivation checks and blind referees that ran after the usage limit lifted (`notes/fig02/`), each change on its existing line: §5: the matrix whose determinant must vanish written out, and why ([L269](../../public/simulations/Double%20Pendulum.html#L269)); §6: why two nearby starts part (linear small swings; balancing near the top) ([L388](../../public/simulations/Double%20Pendulum.html#L388)); §6: the rough and full Lyapunov rates in one sentence; "much of what that energy allows" ([L390](../../public/simulations/Double%20Pendulum.html#L390)); §9: the Lyapunov time defined ([L423](../../public/simulations/Double%20Pendulum.html#L423)); equations (6), (9), (11) reflowed so their numbers show at 1600 px ([L238](../../public/simulations/Double%20Pendulum.html#L238)). Checked with `notes/verify.mjs` at 1440 × 900, 1600 × 900 and 390 × 844.
 
 From the Fig. 2 derivation check (65 verified, 4 wrong, 1 unverifiable; `notes/fig02/check.md`): abstract: 600 steps a second, sixty frames a second ([L120](../../public/simulations/Double%20Pendulum.html#L120)); §7: drift peak +5.0 × 10⁻⁸ step by step, +4.7 × 10⁻⁸ as the readout samples it ([L409](../../public/simulations/Double%20Pendulum.html#L409)); §8: the trail as the canvas really fades it (half in 1.6 s, then a faint haze at a quarter opacity) ([L417](../../public/simulations/Double%20Pendulum.html#L417)); §9: the computed path stays true for 15–20 Lyapunov times, 11–14 s ([L423](../../public/simulations/Double%20Pendulum.html#L423)). The trail's haze is a page defect, reported in the audit, not changed.
+
+## Parameter curves · 30 October 2026
+
+The page loads [`scripts/curve.js`](../scripts/curve.md) after `dataset.js` ([L453](../../public/simulations/Double%20Pendulum.html#L453)) and builds it after the sliders
+([L539](../../public/simulations/Double%20Pendulum.html#L539)), with two knobs: the mass ratio and the time scale. The starting angles, the starting speeds and the length ratio
+are not offered: they say where the motion starts, so a curve on them could only restart it every frame. Every edit is on an
+existing line; the walkthrough's 51 quoted lines are all found.
+
+**The mass changes while the pendulum swings.** The mass slider restarts the motion when a hand moves it, as before. When a
+curve moves it, the knob is `live`: `sand(v)` ([L539](../../public/simulations/Double%20Pendulum.html#L539)) sets m₂ = m₁ e^v between frames and nothing restarts. Physically
+this is sand that arrives at, or leaves, the lower bob with the bob's own velocity. In the variable-mass equation
+F + v_rel dm/dt = m dv/dt (Wikipedia, "Variable-mass system") the thrust term vanishes when v_rel = 0, so at every instant
+the equations of motion are the page's own, `deriv()` with the new m₂ ([L541–548](../../public/simulations/Double%20Pendulum.html#L541-L548)). Energy is no longer conserved, so
+`sand()` books the change E(state, new m₂) − E(state, old m₂) both into the new store value `E_sand` ([L498](../../public/simulations/Double%20Pendulum.html#L498), in the
+Energy group, [L837](../../public/simulations/Double%20Pendulum.html#L837)) and into E₀; the drift ε = (E − E₀)/scale then still measures the integrator alone. `E_sand`
+restarts at 0 with the motion ([L600](../../public/simulations/Double%20Pendulum.html#L600)). The curve steps in the clock callback, after the frame's RK4 steps and before
+`diagnostics()` ([L781](../../public/simulations/Double%20Pendulum.html#L781)).
+
+| Example | Knob, curve | Numbers and where they come from |
+|---|---|---|
+| Sand pours into the lower bob | m₂/m₁ 0.10 → 9.97 in 40 s, a straight ramp in ln(m₂/m₁) | Run offline with the page's own `deriv`, `rk4` and `energy` from the default start, on the slider's 0.05 steps: the sand brought 70.51 J and the booked drift stayed below 3.0×10⁻⁵. In the page the amount depends on the moment the run starts (the motion is chaotic). §7 of the note gives the kicks near ratio 10: up to about 1300 rad/s². |
+| The lower bob runs empty | 9.97 → 0.10 in 40 s | Offline: −131.36 J, booked drift below 3.4×10⁻⁴, in line with the note's −3.6×10⁻⁴ within 20 s at ratio 10. |
+| Slow motion, without a jolt | time scale 1× → 0.25× in 3 s, minimum jerk | Playback only; the RK4 step h = 1/600 s is unchanged. |
+
+While a curve runs, one recorded round is the rest of the run ([L913–914](../../public/simulations/Double%20Pendulum.html#L913-L914)); the `about` paragraph says that m₂ changes
+in steps of 0.05 in ln(m₂/m₁), about 5 % at a time ([L916](../../public/simulations/Double%20Pendulum.html#L916)). Tested in jsdom with the page's scripts, in English and
+German: 32 checks each, among them m₂ = e^slider, simulated time running on through a sweep (no restart), E_sand booked and
+|ε| < 10⁻³, and every curve Check against the store. Not yet seen in a real browser.

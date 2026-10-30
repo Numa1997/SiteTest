@@ -352,3 +352,25 @@ Fixed on 2026-10-16 (second repairs): the single-photon paragraph has its pictur
 ## Repair round · 20 October 2026
 
 After the independent referee and derivation checks (`notes/fig03/`), the lead made only these changes, each on its existing line, so no line link moved: §5: λd/b = 67.5 px is the small-angle estimate; the exact first bright fringe lies 72 px out, at 19.8°, where the default P sits ([L350](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L350)); §7: why the classical intensity predicts single-photon counts for any arrangement of slits ([L491](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L491)); §8: the dashed curve's point given as a distance d tan θ from the centre line (no sign clash with §2's frame) ([L505](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L505)). Checked in headless Chromium at 1440 × 900 and 390 × 844: no console or KaTeX errors, no sideways scroll, no display equation wider than its box at 1440 px (`notes/verify.mjs`).
+
+## Parameter curves · 30 October 2026
+
+The page loads [`scripts/curve.js`](../scripts/curve.md) after `dataset.js` ([L549](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L549)) and builds it on the empty line after
+the sliders ([L614](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L614)) with four knobs, α, λ, b and d; every slider redraws the figure at once through `update()`, so the
+curve simply moves them. It steps in the wave clock ([L816](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L816)), so it pauses when *Animate* is off; Play curve turns
+*Animate* on. Each example first puts the other sliders where its numbers hold (`set`). All numbers were computed from the
+page's own formulas: δs = 2bd tan α / (L₁ + L₂), I/I₀ = cos²(πδs/λ).
+
+| Example | Knob, curve, preset | Numbers |
+|---|---|---|
+| Walk P across the fringes | α 0 → 30° in 20 s, straight; d 200, b 40, λ 13.5 px | dark (δs = ½λ) at 9.76°, first bright (δs = λ) at 19.81°, far field asin(λ/b) = 19.72°; δs = 1.477 λ at 30° |
+| Change the colour: longer waves turn farther | λ 8 → 40 px in 20 s, exponential; d 200, b 40, α 20° | dark at 9.09 px (1.5 λ), bright at 13.63 px (λ), dark at 27.26 px (½λ); θ₁ = asin(λ/b) from 11.5° to 90° |
+| Slits drawn together: the fringes open up | b 80 → 20 px in 20 s, steady in 1/b; λ 13.5 px | λ/b from 0.169 to 0.675 (the spacing of equation 9 grows at a steady rate); θ₁ from 9.72° to 42.45° |
+| From near field to far field | d 100 → 300 px in 10 s, minimum jerk; b 80, α 30°, λ 13.5 px (the note's exercise) | δs from 38.27 to 39.80 px towards b sin α = 40 px (equation 4); I/I₀ at P from 0.754 to 0.974 towards 0.987; Fresnel number F = b²/(λd) from 4.74 to 1.58 (Wikipedia, "Fresnel number": F ≪ 1 far field, F ≳ 1 near field) |
+
+At the default b = 40 px and α = 20° the near-field effect is only 0.2 px in δs, which is why the last example uses the
+note's exercise setting. The round wraps into the rest of a running curve ([L939–940](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L939-L940)); the `about` paragraph names the
+sliders' steps ([L941](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L941)); `curve.extend(Sim.data)` sits at the start of the `update();` line ([L943](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L943)), not on the
+closing `};`, which the walkthrough quotes. Tested in jsdom with the page's scripts in English and Arabic: 39 checks each,
+among them each example's preset, the stored I = cos²(πδs/λ) and every curve Check. Not yet seen in a real browser. The
+walkthrough check finds 63 of its 66 quoted lines, as before this change.
