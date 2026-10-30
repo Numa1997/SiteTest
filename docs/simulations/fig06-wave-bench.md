@@ -397,3 +397,30 @@ Note revision, 20 October 2026 (teacher team; working notes in `notes/fig06/`): 
 ## Repair round · 20 October 2026
 
 After the independent referee and derivation checks (`notes/fig06/`), the lead made only these changes, each on its existing line, so no line link moved: §3.1: why the cosine rule has a plus ([L200](../../public/simulations/wave-interference.html#L200)); eq. (5) on three lines so its number shows ([L199](../../public/simulations/wave-interference.html#L199)); §4.1: the bench has no medium; a real backward envelope would carry energy ([L306](../../public/simulations/wave-interference.html#L306)); §5: the one-term overshoot on the table's basis (6.4 px, 13.7 % of the jump) ([L325](../../public/simulations/wave-interference.html#L325)); §6: true vertical steps, not corners, cost infinite energy ([L429](../../public/simulations/wave-interference.html#L429)); §7: two sines per wave besides the curves ([L446](../../public/simulations/wave-interference.html#L446)). Checked in headless Chromium at 1440 × 900 and 390 × 844: no console or KaTeX errors, no sideways scroll, no display equation wider than its box at 1440 px (`notes/verify.mjs`).
+
+## Parameter curves · 30 October 2026
+
+The bench has no global slider: each wave's four sliders sit on its card and are rebuilt, with new ids, at every preset. The
+page loads [`scripts/curve.js`](../scripts/curve.md) after `dataset.js` ([L492](../../public/simulations/wave-interference.html#L492)) and gives it four knobs on Wave 2's card
+through a small wrapper, `w2knob()` ([L795](../../public/simulations/wave-interference.html#L795)), that finds Wave 2's slider each time and hears a hand on it through the
+card list, where `input` events bubble. Wave 2 because the beat length and the envelope speed, equations (8) and (9), are
+those of waves 1 and 2, and the note's exercises turn Wave 2. Amplitude and phase move as a hand would. Frequency and speed
+are `live`: the page computes each wave from its present f and s and the clock time t, so a new value late in the run
+would throw Wave 2 sideways at every step (by 50 to 350 px in the beat envelope); the curve instead keeps Wave 2's phase
+continuous (at the centre of the view for f₂, everywhere for s₂) and books the phase added as `dphi2`, which Wave 2's Phase
+slider shows. A hand on a slider behaves as before. The curve steps first in the clock ([L826](../../public/simulations/wave-interference.html#L826)). Each example presses
+its preset itself. Plan and numbers from a research agent; its number scripts rerun by me and reproduce exactly.
+
+| Example | Knob, curve, preset | Numbers |
+|---|---|---|
+| Noise cancelling: Wave 2 half a turn behind | φ₂ 0 → 3.15 rad in 10 s, minimum jerk; One wave, then Add wave + | C = 40 \|cos(φ₂/2)\| px (equation 6): 28.6 px at 5 s, 3.8 at 8 s, 0.17 at the end (3.15 misses π by 0.0084); active noise control plays the noise back inverted (Wikipedia, "Active noise control") |
+| Tune Wave 2 like a guitar string | f₂ 1.25 → 1.00 in 25 s, straight; Beats | beat period 1/\|ν₁ − ν₂\| 4, 5, 6.7, 10, 20 s (equation 8); beat length 800 → 4000 px; musicians tune by beats (Wikipedia, "Beat (acoustics)") |
+| The envelope stops, then runs backwards | s₂ 1.00 → 0.50 in 20 s, straight; Beats | envelope speed 1000 s₂ − 800 px/s (equation 9): 150 at 0.95, 0 at 0.80, −300 at 0.50, while the carrier slows only from 200 to 144 px/s (group velocity, §4.1) |
+| Fourier's amplitude is the best one | A₂ 0 → 20 px in 20 s, straight; Square wave | RMS gap to the ideal square wave (height 23.56 px, equation 11) least at Fourier's 10 px: 5.29 px, against 8.83 at 0 and 20; the lowest peak (26.4 px) is at 8 px instead: least squares, not least overshoot (Wikipedia, "Fourier series", least-squares property) |
+| Same spectrum, different shape | φ₂ 0 → 3.15 rad in 15 s, straight; Square wave | peak \|y\| 27.9 → 41.9 px at 2.60 rad, 41.7 at the end (Exercise 6.1); stems 30, 10, 6, 4.3 px and ½ Σ C² = 527.2 px² unchanged (equations 17, 18); Ohm's acoustic law (Wikipedia) |
+
+New in the store: `T_beat`, the beat period at a fixed point, `vcar`, the carrier speed, and `dphi2` ([L528](../../public/simulations/wave-interference.html#L528)), with
+checks; the round wraps into the rest of a running curve ([L962](../../public/simulations/wave-interference.html#L962)); `about` explains the phase-keeping ([L965](../../public/simulations/wave-interference.html#L965)); the
+hooks close with `curve.extend(Sim.data)` ([L966](../../public/simulations/wave-interference.html#L966)). Headless Chromium, English and German: every example runs, the
+curve's checks agree with the store, the chart's dot reads back burgundy, no page errors, no sideways scroll. The
+walkthrough check finds all 70 quoted lines.

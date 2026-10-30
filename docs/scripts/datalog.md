@@ -270,8 +270,8 @@ A round is what the page says it is, in `Sim.data.round` ([datalog.js:27-29](../
 | 3 | ten seconds of slider changes; while a parameter curve runs, the rest of its run | `wall` | `'change'` | no | [L939–940](../../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html#L939-L940) |
 | 4 | one period, $T$; while a parameter curve runs, the rest of its run | `t` | sampled | no | [L1074–1075](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L1074-L1075) |
 | 5 | one period, $T$; while a parameter curve runs, the rest of its run | `t` | sampled | no | [L880–881](../../public/simulations/water-wave.html#L880-L881) |
-| 6 | one repeat of the pattern, at most 20 s | `t` | sampled | no | [L962](../../public/simulations/wave-interference.html#L962) |
-| 7 | one full figure (or part of it) in phasor time | `t` | sampled | yes, in the final-shape view | [L1464](../../public/simulations/phasor-sums.html#L1464) |
+| 6 | one repeat of the pattern, at most 20 s; while a parameter curve runs, the rest of its run | `t` | sampled | no | [L962](../../public/simulations/wave-interference.html#L962) |
+| 7 | one full figure (or part of it) in phasor time; while a parameter curve runs, the rest of its run | `t` | sampled | yes, in the final-shape view | [L1464](../../public/simulations/phasor-sums.html#L1464) |
 | 8 | one loop of the circles; while a parameter curve runs, the rest of its run | `t_play` (s; `t` in rad until 30 October 2026) | sampled | yes, until a shape is decomposed | [L1400–1402](../../public/simulations/draw-decompose.html#L1400-L1402) |
 | 9 | one drive period $1/f$ of the stored run | `t_play` | sampled | yes, near the end of the run | [L1914](../../public/simulations/driven-oscillator.html#L1914) |
 | 10 | one rotor turn of the stored run | `t_play` | sampled | yes, near the end of the run | [L1155](../../public/simulations/wind-turbine.html#L1155) |

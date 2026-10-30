@@ -386,3 +386,26 @@ After the independent referee and derivation checks (`notes/fig07/`), the lead m
 ## Second check round · 20 October 2026
 
 From the derivation checks and blind referees that ran after the usage limit lifted (`notes/fig07/`), each change on its existing line: §7.1: blends are in-between curves for a change of radius, not for frequency or phase ([L610](../../public/simulations/phasor-sums.html#L610)); §8.1: the beat burst as the code applies it (1 + 0.9 d_burst, ten frames) ([L625](../../public/simulations/phasor-sums.html#L625)). Checked with `notes/verify.mjs` at 1440 × 900, 1600 × 900 and 390 × 844.
+
+## Parameter curves · 30 October 2026
+
+The one global slider, Speed, changes only the pace. The physics is on the circle cards, whose sliders restart the figure
+at every step of 0.01. So the page loads [`scripts/curve.js`](../scripts/curve.md) after `dataset.js` ([L663](../../public/simulations/phasor-sums.html#L663)) and gives
+it, besides Speed, Circle 2's radius and angular frequency through a wrapper with `live` handlers ([L798](../../public/simulations/phasor-sums.html#L798)): a curve turns
+Circle 2 without the restart, time and the trail run on, and turning ω₂ also shifts φ₂ by (ω₂ − ω₂′) t at each step so
+that arm 2 does not jump; the running total is stored as `dphi2` and Circle 2's Phase slider shows it. A hand on a card
+restarts as before. The curve steps after `perform()` in the clock ([L1322](../../public/simulations/phasor-sums.html#L1322)). Each example presses its preset itself.
+Plan and numbers from a research agent; its number scripts rerun by me and reproduce exactly.
+
+| Example | Knob, curve, preset | Numbers |
+|---|---|---|
+| Trefoil: through the cusps of the deltoid | A₂ 0.25 → 0.75 in 30 s, straight; Trefoil | the pen can stop only where A₁\|ω₁\| = A₂\|ω₂\| (equation 7): at A₂ = 0.50, 15 s in, it draws the three cusps of the deltoid (Wikipedia, "Deltoid curve"); beyond, retrograde loops, the motion epicycles were made for (§1; Wikipedia, "Deferent and epicycle") |
+| Tune by beats until they vanish | ω₂ 6 → 5 rad/s in 40 s, straight; Beating pair | \|z\| swells every 2π/\|ω₁ − ω₂\| s (equation 10): 6.3 s, 12.6 s at 5.50, 62.8 s at 5.10; the Period readout (equation 12) jumps, 628 s at 5.99, 12.57 s at 5.50 |
+| Unequal arms: the petals let go of the centre | A₂ 1 → 0 in 12 s, minimum jerk; 3-petal rose | the pen stays between \|A₁ − A₂\| and A₁ + A₂ (equation 11): a hole of radius 0.10, 0.50, 0.90 at 3, 6, 9 s; ⟨\|z\|²⟩ = Σ A² 2 → 1 (equation 15); Period 3.14 → 1.57 s |
+| Fast forward: the trail turns into chords | speed 0.25 → 4× in 16 s, exponential; 3-petal rose | the trail's chords sag as l²/8r (Wikipedia, "Sagitta (geometry)"): 0.00069, 0.0028, 0.011 at 1×, 2×, 4× at 60 frames a second, 0.09 → 1.5 px on a 1440 px screen (§7) |
+
+New in the store: `zdot`, the pen's speed, `Tb12`, the beat period of circles 1 and 2, and `dphi2` ([L770](../../public/simulations/phasor-sums.html#L770)), with checks;
+the round wraps into the rest of a running curve ([L1464](../../public/simulations/phasor-sums.html#L1464)); `about` explains the restart-free turning and the phase shift
+([L1468](../../public/simulations/phasor-sums.html#L1468)); `curve.extend(Sim.data)` runs before the first resize ([L1471](../../public/simulations/phasor-sums.html#L1471)). Headless Chromium, English and Arabic:
+every example runs, the curve's checks agree with the store, the chart's dot reads back burgundy, no page errors, no
+sideways scroll. The walkthrough check finds all 158 quoted lines.
