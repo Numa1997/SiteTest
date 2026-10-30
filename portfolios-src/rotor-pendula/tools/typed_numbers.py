@@ -130,7 +130,7 @@ TYPED = {
     }),
     '02': _merge('01', {'3': 'def', '7': 'input: deceleration of the braking car in the problem, m/s^2'}),
     '03': _merge('02', {'2': 'def'}),
-    '04': _merge('03', {'2.8': 'input: stability limit of the classical Runge-Kutta method on the negative real axis, h|mu| < 2.785 (textbook value)'}),
+    '04': _merge('03', {'20': 'input: the start-up check of notes/rotor-pendula/derive/L1_blade.py runs 20 turns from rest (eng20)', '2.8': 'input: stability limit of the classical Runge-Kutta method on the negative real axis, h|mu| < 2.785 (textbook value)'}),
     '05': _merge('05'),
     '06': _merge('00', '04', {
         '0.16': 'input: I_ref of turbulence class A (IEC 61400-1 ed. 3)', '0.75': WIND, '5.6': WIND, '0.8': WIND, '0.5': WIND,
@@ -147,6 +147,7 @@ TYPED = {
         '60': 'def: apparent wind at the tip, rounded (section 6.3)', '0.6': ('calc', "math.degrees((2/3)*math.cos(math.radians(5))/math.hypot(60.4, 5.31))", 0.05, 'inflow change for 1 m/s, deg'),
         '7': ('calc', "100*2*math.pi*math.radians(0.63)", 0.05, 'lift change for 1 m/s, %'), '1': 'def', '256': WIND + ' (record length, s)', '2': 'def',
         '90': 'def: angle in degrees (the mother blade pointing up, section 7.2)',
+        '126': ('calc', "2*S['R_ROT']", 1e-9, 'rotor diameter: the circle the tip runs round (section 7.4)'),
         '1.81': 'input: dynamic viscosity of air, 1.81e-5 Pa s, as notes/rotor-pendula/derive/L5_air.py uses it (Reynolds number, section 7.1)',
     }),
     '08': _merge('04', '05', {'5': 'def', '3': 'def'}),

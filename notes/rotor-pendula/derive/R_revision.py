@@ -197,6 +197,17 @@ check('8.2  mode equation as written (Phi = 1)', sp.simplify(ex.subs(Pp_, 1) - w
 check('8.2  second blade equation as written (Phi = 1)', sp.simplify(ec.subs(Pp_, 1) - want_c))
 check('8.2  no first-derivative (Coriolis) terms', sum(abs(e_.coeff(g_.diff(t))) for e_ in (ex, ec) for g_ in (xx_, ch_) if e_.coeff(g_.diff(t)) != 0) if any(e_.coeff(g_.diff(t)) != 0 for e_ in (ex, ec) for g_ in (xx_, ch_)) else 0)
 
+# 6.3: the wake's swirl as a share of the power, C_p/(4(1-a) lambda^2) = 2/(9 lambda^2) at the Betz point; the best ratio of
+#      alpha/lambda^2 + beta eps lambda is (2 alpha/(beta eps))^(1/3).
+Qs, md_, r_, v0, lm_, al_, be_, ep_ = sp.symbols('Q mdot r v lambda alpha beta epsilon', positive=True)
+a3, Cp3 = sp.symbols('a C_p', positive=True)
+frac_ = (md_*(Qs/(md_*r_))**2/2)/(Qs*Om)
+frac_ = sp.simplify(frac_.subs(Qs, Cp3*v0**2/(2*(1 - a3))*md_/Om).subs(Om, lm_*v0/r_))
+check('6.3  swirl share = C_p/(4(1-a) lambda^2)', sp.simplify(frac_ - Cp3/(4*(1 - a3)*lm_**2)))
+check('6.3  = 2/(9 lambda^2) at a = 1/3, C_p = 16/27', sp.simplify(frac_.subs({a3: sp.Rational(1, 3), Cp3: sp.Rational(16, 27)}) - sp.Rational(2, 9)/lm_**2))
+lopt = sp.solve(sp.diff(al_/lm_**2 + be_*ep_*lm_, lm_), lm_)[0]
+check('6.3  best ratio (2 alpha/(beta eps))^(1/3)', sp.simplify(lopt - (2*al_/(be_*ep_))**sp.Rational(1, 3)))
+
 # 9.1: P*/(ceiling at that swing) = pi/(4 sqrt 2).
 check('9.1  ceiling fraction', (sp.Rational(1, 2)/sp.sqrt(2))/(2/sp.pi) - sp.pi/(4*sp.sqrt(2)))
 

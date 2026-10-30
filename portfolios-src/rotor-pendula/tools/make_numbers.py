@@ -301,7 +301,7 @@ T['fig_bowl'] = ('<figure class="fig">' + ''.join(svg) +
     f'<figcaption>Figure {{{{fig:bowl}}}}. The second blade\'s potential energy (2.3) in the frame of the mother blade, at 6 m/s ($\\Gamma = {N["Gam_6"]}$), '
     f'at four positions of the rotor. Gravity tilts the bowl, and it also makes it shallower when the mother blade points up and deeper when it points down '
     f'(its stiffness at the bottom, $A$ of (1.10), runs from $R - G$ to $R + G$: ×{math.sqrt(1 - 2/Gam6 + 1/Gam6**2):.2f} to ×{math.sqrt(1 + 2/Gam6 + 1/Gam6**2):.2f} of $R$). Its lowest point '
-    f'(dots) swings between {N["tilt_6"]}° on one side and {N["tilt_6"]}° on the other, $\\arcsin(1/\\Gamma)$, and back, once per turn.</figcaption></figure>')
+    f'(dots, at the four positions drawn) swings to and fro once per turn; its extremes, {N["tilt_6"]}° to either side, $\\arcsin(1/\\Gamma)$, come at $\\sin\\varphi = 1/\\Gamma$, between the positions drawn.</figcaption></figure>')
 
 # ---- figure: the universal brake curve P/P* = 2x/(1+x^2), x = kappa/kappa*, on a log axis ----------------------------
 W_, H_, l_, r_, t_, b_ = 560, 300, 58, 20, 18, 46
@@ -820,7 +820,7 @@ svg5.append(f'<rect x="{W5-142}" y="{128}" width="18" height="10" fill="#f3dfdb"
 svg5.append(f'<text x="{(58+W5-150)/2}" y="{H5-10}" text-anchor="middle" class="svgd">angle θ of the second blade from the mother blade\'s line</text>')
 svg5.append(f'<text x="16" y="{(16+H5-48)/2}" text-anchor="middle" class="svgd" transform="rotate(-90 16 {(16+H5-48)/2})">potential energy U, J</text></svg>')
 T['fig_hill'] = ('<figure class="fig">' + ''.join(svg5) +
-    f'<figcaption>Figure {{{{fig:hill}}}}. The landscape (1.10) of the second blade at 6 m/s, over the whole circle, at four positions of the rotor. A bowl at the mother blade\'s line '
+    f'<figcaption>Figure {{{{fig:hill}}}}. The landscape (1.10) of the second blade at 6 m/s, drawn in joules, $U = I\\Omega^2u$ (chapter 2 meets it again as (2.3)), over the whole circle, at four positions of the rotor. A bowl at the mother blade\'s line '
     f'and a hill on the far side, where the second blade points back at the hub. The hill is lowest, {N["ps_hill_lo"]} J above the bowl\'s bottom, when the mother blade points up, '
     f'and highest, {N["ps_hill_hi"]} J, when it points down; the shaded band is the range of its top over a turn. The second blade\'s energy unit here is $I\\Omega^2$ = {N["ps_EU"]} J.</figcaption></figure>')
 
@@ -945,6 +945,43 @@ for v in (0, 0.2, 0.4, 0.6):
     Y = PYb2(v, 0, 0.65); svgB2.append(f'<line x1="41" y1="{Y:.1f}" x2="46" y2="{Y:.1f}" stroke="#3f2c23"/><text x="37" y="{Y+4:.1f}" text-anchor="end" class="svgc">{v:g}</text>')
 svgB2.append(f'<text x="{(46+BW-14)/2}" y="{BH-10}" text-anchor="middle" class="svgd">slowing at the disc, a</text>')
 svgB2.append(f'<text x="14" y="{(16+BH-48)/2}" text-anchor="middle" class="svgd" transform="rotate(-90 14 {(16+BH-48)/2})">power coefficient C_p</text></svg>')
+# ---- figure: the rotor's two torques against its speed (L2_torque.json from notes/rotor-pendula/derive/L2_torque_curve.py) -----------
+tq = J('L2_torque.json'); TW, TH = 560, 330
+PXt, PYt = panel(TW, TH, 58, 16, 16, 50); rlo, rhi, qhi = 5.5, 11.5, 4.0
+svgT = [f'<svg viewBox="0 0 {TW} {TH}" role="img" aria-label="The rotor\'s two torques against its speed, from 5.5 to 11.5 turns a minute. The main generator\'s torque law: zero below 6.9 rpm, a straight ramp up to 8.98 rpm, then the square law k Omega squared; the pure square law is drawn dashed below the ramp. The wind\'s torque at 6, 8 and 10 metres per second falls slowly with speed. Where a wind curve meets the torque law the rotor runs steadily: at 6 m/s on the ramp, at 7.91 rpm, faster than the square law\'s 6.80 rpm; at 8 and 10 m/s on the square law.">',
+        f'<rect x="58" y="16" width="{TW-74}" height="{TH-66}" fill="#fff" stroke="#3f2c23"/>',
+        f'<rect x="{PXt(tq["ramp"]["start_rpm"], rlo, rhi):.1f}" y="17" width="{PXt(tq["ramp"]["end_rpm"], rlo, rhi) - PXt(tq["ramp"]["start_rpm"], rlo, rhi):.1f}" height="{TH-68}" fill="#f3ece0"/>',
+        f'<text x="{(PXt(tq["ramp"]["start_rpm"], rlo, rhi) + PXt(tq["ramp"]["end_rpm"], rlo, rhi))/2:.1f}" y="32" text-anchor="middle" class="svgc">the ramp</text>']
+pl = lambda ys, col, w, dash='': ('<polyline points="' + ' '.join(f'{PXt(r, rlo, rhi):.1f},{PYt(min(q/1e6, qhi), 0, qhi):.1f}' for r, q in zip(tq['rpm'], ys)) +
+                                  f'" fill="none" stroke="{col}" stroke-width="{w}"' + (f' stroke-dasharray="{dash}"' if dash else '') + '/>')
+for vk, lab in (('6.0', '6 m/s'), ('8.0', '8 m/s'), ('10.0', '10 m/s')):
+    svgT.append(pl(tq['Q_aero'][vk], '#33627f', 1.4))
+    ylab = tq['Q_aero'][vk][12]/1e6
+    svgT.append(f'<text x="{PXt(tq["rpm"][12], rlo, rhi):.1f}" y="{PYt(ylab, 0, qhi) - 11:.1f}" class="svgc" fill="#33627f">wind, {lab}</text>')
+svgT.append(pl(tq['Q_k2'], '#3f2c23', 1.3, '5 4'))
+svgT.append(pl(tq['Q_gen'], '#7d1d2f', 2.6))
+for vk in ('6.0', '8.0', '10.0'):
+    for law, col in (('nrel', '#7d1d2f'), ('k2', '#3f2c23')):
+        r_ = tq['cross'][vk][law]
+        if r_ is None or (law == 'k2' and vk != '6.0'):
+            continue
+        q_ = float(np.interp(r_, tq['rpm'], tq['Q_aero'][vk]))/1e6
+        svgT.append(f'<circle cx="{PXt(r_, rlo, rhi):.1f}" cy="{PYt(q_, 0, qhi):.1f}" r="4" fill="{col if law == "nrel" else "#fff"}" stroke="{col}" stroke-width="1.6"/>')
+for r in (6, 7, 8, 9, 10, 11):
+    X = PXt(r, rlo, rhi); svgT.append(f'<line x1="{X:.1f}" y1="{TH-50}" x2="{X:.1f}" y2="{TH-45}" stroke="#3f2c23"/><text x="{X:.1f}" y="{TH-32}" text-anchor="middle" class="svgc">{r}</text>')
+for q in (0, 1, 2, 3, 4):
+    Y = PYt(q, 0, qhi); svgT.append(f'<line x1="53" y1="{Y:.1f}" x2="58" y2="{Y:.1f}" stroke="#3f2c23"/><text x="49" y="{Y+4:.1f}" text-anchor="end" class="svgc">{q}</text>')
+svgT.append(f'<line x1="{TW-190}" y1="{TH-120}" x2="{TW-176}" y2="{TH-120}" stroke="#7d1d2f" stroke-width="2.6"/><text x="{TW-172}" y="{TH-116}" class="svgc">torque law (NREL)</text>')
+svgT.append(f'<line x1="{TW-190}" y1="{TH-104}" x2="{TW-176}" y2="{TH-104}" stroke="#3f2c23" stroke-dasharray="5 4"/><text x="{TW-172}" y="{TH-100}" class="svgc">pure square law kΩ²</text>')
+svgT.append(f'<text x="{(58+TW-16)/2}" y="{TH-10}" text-anchor="middle" class="svgd">rotor speed, turns a minute</text>')
+svgT.append(f'<text x="16" y="{(16+TH-50)/2}" text-anchor="middle" class="svgd" transform="rotate(-90 16 {(16+TH-50)/2})">torque on the rotor, MN m</text></svg>')
+T['fig_torque'] = ('<figure class="fig">' + ''.join(svgT) +
+    f'<figcaption>Figure {{{{fig:torque}}}}. The rotor\'s two torques against its speed. Wine: the main generator\'s torque law, zero below {tq["ramp"]["start_rpm"]:.2f} rpm, '
+    f'a straight ramp (shaded) up to {tq["ramp"]["end_rpm"]:.2f} rpm, then the square law $k\\Omega^2$; dashed, the pure square law continued downwards. Blue: the wind\'s torque '
+    f'$Q_{{\\rm aero}}$ at 6, 8 and 10 m/s, from NREL\'s $C_p$ table. The rotor runs steadily where the two meet (dots): at 8 and 10 m/s on the square law, at '
+    f'{tq["cross"]["8.0"]["nrel"]:.2f} and {tq["cross"]["10.0"]["nrel"]:.2f} rpm; at 6 m/s on the ramp, at {tq["cross"]["6.0"]["nrel"]:.2f} rpm, faster than the '
+    f'{tq["cross"]["6.0"]["k2"]:.2f} rpm (open dot) the square law alone would give. A gust or a lull moves the wind\'s curve up or down. Just above the ramp, a lull drops the '
+    f'rotor onto the ramp, whose torque falls steeply as the speed drops, so the rotor slows less than it speeds up in an equal gust: its mean speed rises.</figcaption></figure>')
 T['fig_betz'] = ('<figure class="fig"><div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center">' + ''.join(svgB1) + ''.join(svgB2) + '</div>'
     '<figcaption>Figure {{fig:betz}}. The Betz limit. First panel: the air that passes the rotor, seen from the side, at the best slowing $a = 1/3$. The same mass flows through every '
     'cross-section, so where the air is slower the tube is wider: far upstream it has $1-a$ = 2/3 of the disc\'s area, far downstream $(1-a)/(1-2a)$ = 2 of it, three times its upstream area (the arrows are to scale; the tube between follows the speed an ideal disc induces along its axis). '
@@ -954,6 +991,8 @@ N['wf_spec_dev'] = f(wf['spec_dev_max']*100, 0)
 N['wf_var_eff'] = f(wf['var_eff'], 2); N['wf_var_chi'] = f(wf['var_eff_chi'], 2)
 gs = {r['shape']: r for r in wf['gusty_8A']}; cs = {r['shape']: r for r in wf['calm_8']}
 N['wf_om_sd'] = f(gs['none']['Om_sd']/gs['none']['Om_mean']*100, 1)
+_st8 = [r for r in J('L6_wind.json')['steady'] if r['U'] == 8.0][0]
+N['wf_rpm_calm8'] = f(_st8['Om0']*60/(2*math.pi), 2); N['wf_vbar8'] = f(_st8['vbar'], 2)   # steady sheared wind at 8 m/s: the disc-averaged wind and the rotor speed it sets
 N['wf_P_none'] = f(gs['none']['P_mean']*1e3, 0); N['wf_P_calm'] = f(cs['none']['P_mean']*1e3, 0)
 N['wf_P_none_pct'] = f(abs(gs['none']['P_mean']/cs['none']['P_mean'] - 1)*100, 1)
 N['wf_P_sym'] = f(gs['streamlined']['P_mean']*1e3, 0); N['wf_P_wing'] = f(gs['wing']['P_mean']*1e3, 0)
