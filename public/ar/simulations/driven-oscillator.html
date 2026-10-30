@@ -36,14 +36,14 @@
         @media (max-width: 900px) { .take__steps, .take__gains { grid-template-columns: 1fr; } }
         /* this simulation needs room to move: a wider page and a narrower control column */
         .sim, .sim-top { max-width: 1560px; }
-        @media (min-width: 901px) { .sim__grid { grid-template-columns: minmax(0, 1fr) 300px; } }
+        @media (min-width: 901px) { .sim__grid { grid-template-columns: minmax(0, 1fr) 300px; } } /* as in Fig. 11: when the page itself is at least 1200 px wide, the Take control box, the figures and the panel side by side, both control columns pinned while the figures scroll */ .sim { container: sim / inline-size; } @container sim (min-width: 1200px) { .sim__grid { grid-template-columns: 340px minmax(0, 1fr) 300px; column-gap: 20px; row-gap: 16px; } .sim__grid > div:first-child { display: contents; } .sim__grid .take, .sim__grid > .panel { grid-row: 1 / span 4; position: sticky; top: 12px; max-height: calc(100vh - 24px); overflow-y: auto; overscroll-behavior: contain; } .sim__grid .take { grid-column: 1; margin-bottom: 0; } .sim__grid > .panel { grid-column: 3; } .sim__grid > div:first-child > .stage { grid-column: 2; margin-top: 0 !important; } .sim__grid > div:first-child > .stage:nth-child(2) { grid-row: 1; } .sim__grid > div:first-child > .stage:nth-child(3) { grid-row: 2; } .sim__grid > div:first-child > .stage:nth-child(4) { grid-row: 3; } .sim__grid > div:first-child > .stage:nth-child(5) { grid-row: 4; } .take__steps, .take__gains { grid-template-columns: 1fr; } .take__steps { gap: 10px; } }
         .seek { display: grid; gap: 4px; }
         .seek__row { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 11px; color: var(--muted); }
     </style>
 
     <link rel="stylesheet" href="../../fonts/arabic.css" />
     <script src="../../scripts/i18n/strings-ar.js"></script>
-    <meta name="translated-from" content="English public/simulations/driven-oscillator.html, commit 73866ed+" />
+    <meta name="translated-from" content="English public/simulations/driven-oscillator.html, commit f04e5a7+" />
   </head>
 <body>
     <header class="sim-top">

@@ -43,7 +43,7 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
 ::selection { background: var(--accent-rose); color: var(--ink); }
 
 /* ================= top bar ================= */
-.sim-top { max-width: 1180px; margin: 0 auto; padding: 22px 32px 0; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px 20px; font-family: var(--mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.sim-top { max-width: 1560px; margin: 0 auto; padding: 22px 32px 0; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px 20px; font-family: var(--mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
 .sim-top a { color: var(--ink-3); }
 .sim-top a:hover { color: var(--accent); text-decoration: none; }
 .sim-nav { display: flex; align-items: center; gap: 4px; }
@@ -53,7 +53,7 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid 
 .sim-nav a[aria-current="page"] { color: var(--accent); border-color: var(--accent); }
 
 /* ================= page head ================= */
-.sim { max-width: 1180px; margin: 0 auto; padding: 36px 32px 72px; }
+.sim { max-width: 1560px; margin: 0 auto; padding: 36px 32px 72px; }
 .sim__head { max-width: 780px; margin-bottom: 28px; animation: rise .8s ease both; }
 .sim__num { font-family: var(--mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
 .sim__head h1 { font-weight: 400; font-size: clamp(38px, 5.6vw, 66px); line-height: 1; letter-spacing: -.025em; margin-bottom: 16px; }
@@ -202,7 +202,7 @@ input[type="range"]:disabled { opacity: .45; cursor: not-allowed; }
 }
 
 /* ================= footer ================= */
-.sim-foot { max-width: 1180px; margin: 0 auto; padding: 24px 32px 40px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; font-family: var(--mono); font-size: 11px; letter-spacing: .06em; color: var(--muted); }
+.sim-foot { max-width: 1560px; margin: 0 auto; padding: 24px 32px 40px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; font-family: var(--mono); font-size: 11px; letter-spacing: .06em; color: var(--muted); }
 .sim-foot a { color: var(--ink-3); }
 
 /* ================= motion ================= */
@@ -230,3 +230,10 @@ html:not(.tex-ready) .stage__cap .tx { visibility: hidden; }
 
 /* typeset walkthrough formulas: one line each; a long line scrolls inside its column instead of widening the page */
 .walk__line { overflow-x: auto; overflow-y: hidden; padding: 2px 0; }
+
+/* the figure and its controls on one screen (Fig. 11's layout, made the rule for every page): from 901 px the panel pins beside
+   the figures and scrolls inside itself when taller than the window; no figure is taller than the window, so it is seen whole */
+@media (min-width: 901px) {
+  .sim__grid > .panel { position: sticky; top: 12px; max-height: calc(100vh - 24px); overflow-y: auto; overscroll-behavior: contain; }
+  .stage__canvas { max-width: calc((100vh - 24px) * (var(--ar, 16 / 9))); margin-inline: auto; }
+}

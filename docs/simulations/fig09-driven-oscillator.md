@@ -27,8 +27,8 @@ metres and the phase difference $\varphi(f)$, from an even grid of 1281 frequenc
 (per newton, log axes, 241 frequencies). The closed loop is drawn in ink, the bare plant dashed behind it. A phase
 portrait plots the run as a path in the $(x, \dot x)$ plane with the fixed point $x^*$, the steady orbit (21), one strobe dot
 per drive period (the Poincaré section) and arrows of the free flow (17); its caption gives the eigenvalues (18) or (20), the
-kind of fixed point and the per-period multiplier $|\mu|$. The lecture note's §11 derives all of these. The page is wider
-than the other simulations (up to 1560 px), and the block's travel $A_\text{px}$ is fitted to the canvas: as large as the coil
+kind of fixed point and the per-period multiplier $|\mu|$. The lecture note's §11 derives all of these. The page is up to
+1560 px wide, like every simulation since 30 October 2026, and the block's travel $A_\text{px}$ is fitted to the canvas: as large as the coil
 drive, which needs about $3A_\text{px}$ to the right of the block, leaves room for. The page never integrates
 while the reader watches. It solves the whole run first with the classical fourth-order Runge–Kutta method (RK4), writes
 every sample into its dataset, and each frame then draws one stored row.
@@ -541,3 +541,15 @@ After the independent referee and derivation checks (`notes/fig09/`), the lead m
 ## Second check round · 20 October 2026
 
 From the derivation checks and blind referees that ran after the usage limit lifted (`notes/fig09/`), each change on its existing line: §3.1: the driving term, not the force, is the real part of (F₀/m)e^{iΩt} ([L294](../../public/simulations/driven-oscillator.html#L294)); equation (3) reflowed so its number shows at 1600 px ([L295](../../public/simulations/driven-oscillator.html#L295)). Checked with `notes/verify.mjs` at 1440 × 900, 1600 × 900 and 390 × 844.
+
+## Layout · 30 October 2026
+
+As on Fig. 11, from a page width of 1200 px (a 1280 px window) the grid has three columns: the "Take control" box (presets,
+target r, the three gains) on the left, the four figures in the middle, the panel on the right. Both side columns are
+`position: sticky` and scroll inside themselves when taller than the window. CSS only, appended to line 39 of the page's own
+`<style>` (the first column's wrapper becomes `display: contents`; its section and four figures are placed in the grid); no
+HTML moved and the page keeps 1934 lines. Below 1200 px the page is as before, with the panel now pinned beside the figures
+from 901 px (`sim.css`, for every page). Computed from the CSS, not yet measured in a browser: the main figure is 696 × 531 px at
+1440 × 900 (1052 × 802 before), the price of having every knob beside it. See [../styles.md](../styles.md), "Simulation pages use
+the whole screen".
+

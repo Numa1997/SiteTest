@@ -193,8 +193,8 @@ Expand / Collapse pair gets a 104 px top margin to match it ([fold.css:124](../p
 |---|---|---|
 | Base | box-sizing, `html`, `body`, headings, links, focus ring for links, buttons and inputs | [34–43](../public/styles/sim.css#L34-L43) |
 | Top bar | `.sim-top`, `.sim-nav` (the Fig. 1–11 links; `aria-current="page"` outlined in wine) | [46–53](../public/styles/sim.css#L46-L53) |
-| Page head | `.sim`, `.sim__head`, `.sim__num`, `h1` (38–66 px), `.sim__lede` (Latin Modern italic) | [56–61](../public/styles/sim.css#L56-L61) |
-| Figure and panel grid | `.sim__grid` (figure + 320 px panel), `.stack` | [63–64](../public/styles/sim.css#L63-L64) |
+| Page head | `.sim` (at most 1560 px wide, like `.sim-top` and `.sim-foot`; 1180 px until 30 October 2026), `.sim__head`, `.sim__num`, `h1` (38–66 px), `.sim__lede` (Latin Modern italic) | [56–61](../public/styles/sim.css#L56-L61) |
+| Figure and panel grid | `.sim__grid` (figure + 320 px panel), `.stack`; from 901 px the panel is pinned beside the figures and no figure is taller than the window (below) | [63–64](../public/styles/sim.css#L63-L64), [234–239](../public/styles/sim.css#L234-L239) |
 | Figure | `.stage`, `.stage__canvas` (aspect `--ar`, graph paper), `.stage__cap` (Latin Modern caption, mono figure number, tabular digits) | [67–74](../public/styles/sim.css#L67-L74) |
 | Controls | `.panel`, `.panel__group`, `.panel__label`, `.ctl`, `.ctl__row`, `.ctl output`, `.actions` | [77–85](../public/styles/sim.css#L77-L85) |
 | Sliders | `input[type=range]` for WebKit and Firefox: 4 px track filled to `--p`, 16 px thumb | [88–95](../public/styles/sim.css#L88-L95) |
@@ -210,6 +210,7 @@ Expand / Collapse pair gets a 104 px top margin to match it ([fold.css:124](../p
 
 | Width | What changes | Lines |
 |---|---|---|
+| ≥ 901 px | The panel is `position: sticky` 12 px below the top of the window, at most the window high less 24 px, and scrolls inside itself; each `.stage__canvas` is at most (window height − 24 px) × `--ar` wide, centred, so the whole figure fits on screen. | [234–239](../public/styles/sim.css#L234-L239) |
 | ≤ 900 px | Figure and panel stack; figures switch to `--ar-m`; walkthrough steps become a sideways-scrolling row above the card. | [177–182](../public/styles/sim.css#L177-L182), [213–216](../public/styles/sim.css#L213-L216) |
 | ≤ 560 px | 16 px side padding; tighter cards and panel. | [183–185](../public/styles/sim.css#L183-L185), [217–222](../public/styles/sim.css#L217-L222) |
 | reduced motion | No card, walkthrough or head animations. | [186–188](../public/styles/sim.css#L186-L188), [223–225](../public/styles/sim.css#L223-L225) |
@@ -441,3 +442,35 @@ panel (#1c1518, radius 18 px), entries in IBM Plex Sans 500 at 20 px, each with 
 and a pale bar along its foot fills as the reader moves through that section (`--p`, set by a short script on the line that
 loads fold.js, once per animation frame while scrolling). Portfolios and CV come last, at 16 px, under a thin rule (CSS
 `order`). On phones the index stays a scrolling bar, its links at 15 px with their icons.
+
+## Simulation pages use the whole screen · 30 October 2026
+
+Numa asked for every simulation to use the space the way Fig. 11 (the cart) does. Fig. 11's layout, described in
+[simulations/fig11-pendulum-control.md](simulations/fig11-pendulum-control.md) ("Layout and §1.1"), has three parts; each is now
+the rule for all eleven pages, in `sim.css` and its generated `sim.rtl.css`:
+
+- **Width.** `.sim-top`, `.sim` and `.sim-foot` are at most 1560 px wide (were 1180 px; Figs. 9 and 11 already set 1560 px in their
+  own `<style>`). The lecture note keeps its own 210 + 760 px grid, so its line length is unchanged.
+- **Controls beside the picture.** From 901 px wide the panel is pinned 12 px below the top of the window while the figures scroll,
+  and scrolls inside itself when taller than the window ([sim.css:234–239](../public/styles/sim.css#L234-L239)).
+- **The whole picture on screen.** From 901 px no figure is taller than the window less 24 px: its width is capped at
+  (window height − 24 px) × its aspect ratio `--ar` and centred in its card. Every page sizes its canvas from that box and redraws
+  on resize ([sim.js:32–45](../public/scripts/sim.js#L32-L45), [141–148](../public/scripts/sim.js#L141-L148)); Fig. 3 is SVG with a
+  viewBox. The aspect ratio is never changed.
+
+Fig. 9 (driven oscillator), the only other page with a "Take control" box, also takes Fig. 11's three columns: from a page width
+of 1200 px the box, the four figures and the panel stand side by side, both side columns pinned. It is CSS only, appended to
+line 39 of the page's `<style>`; the page keeps 1934 lines, so every line link into it still holds.
+
+Main figure, width × height in px, before → after, computed from the CSS (window widths 1920, 1440 and 1280 px with heights
+1080, 900 and 800 px; scroll bar taken as 0 px). Not yet measured in a browser: the session's hook refused headless Chromium.
+
+| Fig. | 1920 × 1080 | 1440 × 900 | 1280 × 800 |
+|---|---|---|---|
+| 1, 2, 3, 4, 5, 6, 7, 8, 10 (two columns) | 772 wide → 1152 wide | 772 → 1032 | 772 → 872 |
+| e.g. 7 and 8 (`--ar` 1 : 0.78) | 772 × 602 → 1152 × 899 | 772 × 602 → 1032 × 805 | 772 × 602 → 872 × 680 |
+| 9 (now three columns) | 1172 × 893 → 816 × 622 | 1052 × 802 → 696 × 531 | 892 × 680 → 536 × 409 |
+| 11 (unchanged) | 816 × 643 | 696 × 548 | 536 × 422 |
+
+At these three sizes the height cap does not bind; it binds on shorter windows, such as a laptop window about 650 px high.
+

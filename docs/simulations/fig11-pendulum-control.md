@@ -190,3 +190,11 @@ Two store attributes now show in the first section and are still English on the 
   about 95 px when the data panel opened at 1440 px, because the open panel pads the page by its own width
   (`data.css:383`). Now, with the panel open, the page falls back to two columns there (picture 450 px wide, as before
   this change); at 1920 px three columns still fit (534 px). `node notes/fig11/layout.cjs` measures the open-panel case too.
+
+## Its layout made the rule · 30 October 2026
+
+This page's layout became the model for all eleven simulations: `sim.css` now gives every page the 1560 px width and, from
+901 px, the panel pinned beside the figures and figures no taller than the window; Fig. 9 also took the three columns. This
+page's own rules are unchanged (its line 39, `.sim, .sim-top { max-width: 1560px; }`, now repeats `sim.css`). See
+[../styles.md](../styles.md), "Simulation pages use the whole screen".
+
