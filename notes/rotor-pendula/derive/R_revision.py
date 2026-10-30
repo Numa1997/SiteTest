@@ -208,6 +208,25 @@ check('6.3  = 2/(9 lambda^2) at a = 1/3, C_p = 16/27', sp.simplify(frac_.subs({a
 lopt = sp.solve(sp.diff(al_/lm_**2 + be_*ep_*lm_, lm_), lm_)[0]
 check('6.3  best ratio (2 alpha/(beta eps))^(1/3)', sp.simplify(lopt - (2*al_/(be_*ep_))**sp.Rational(1, 3)))
 
+# 6.3: the drag share averaged over the disc, weighted by r dr: (2/3) lambda C_D/C_L; and the best ratio (2/3 C_L/C_D)^(1/3).
+rr_, R0_ = sp.symbols('r R_0', positive=True)
+check('6.3  disc average of r/R weighted by r dr = 2/3', sp.integrate(rr_/R0_*rr_, (rr_, 0, R0_))/sp.integrate(rr_, (rr_, 0, R0_)) - sp.Rational(2, 3))
+check('6.3  2 c_s/c_d = 2/3', 2*sp.Rational(2, 9)/sp.Rational(2, 3) - sp.Rational(2, 3))
+
+# 8.2: the frequency-domain system. With y, chi ~ e^{i w t}, the two equations of 8.2 (generator torque -c(chidot - Phi' ydot) on
+#      the blade, +Phi' c(...) on the mode) become a symmetric 2x2 system; check it against the time-domain equations.
+w_, Ph_, c_, cb_, mb2, kb2, F_ = sp.symbols('omega Phi_d c c_b m_b k_b F', real=True)
+yh, chh = sp.symbols('yhat chihat')
+iw = sp.I*w_
+eq_y = (mb2 + m)*(iw**2*yh) + cb_*iw*yh + (kb2 - m*Om**2)*yh + m*l/2*(iw**2*chh - Om**2*chh) - Ph_*c_*(iw*chh - Ph_*iw*yh) - F_
+eq_c = I*iw**2*chh + m*l/2*Om**2*rp*chh + m*l/2*(iw**2*yh - Om**2*yh) + c_*(iw*chh - Ph_*iw*yh)
+Mw = sp.Matrix([[kb2 - m*Om**2 - (mb2 + m)*w_**2 + iw*(cb_ + Ph_**2*c_), -m*l/2*(w_**2 + Om**2) - iw*Ph_*c_],
+                [-m*l/2*(w_**2 + Om**2) - iw*Ph_*c_, m*l/2*Om**2*rp - I*w_**2 + iw*c_]])
+lhs_ = Mw*sp.Matrix([yh, chh]) - sp.Matrix([F_, 0])
+check('8.2  frequency system, mode row', sp.expand(lhs_[0] - eq_y))
+check('8.2  frequency system, second-blade row', sp.expand(lhs_[1] - eq_c))
+check('8.2  the matrix is symmetric', sp.expand(Mw[0, 1] - Mw[1, 0]))
+
 # 9.1: P*/(ceiling at that swing) = pi/(4 sqrt 2).
 check('9.1  ceiling fraction', (sp.Rational(1, 2)/sp.sqrt(2))/(2/sp.pi) - sp.pi/(4*sp.sqrt(2)))
 

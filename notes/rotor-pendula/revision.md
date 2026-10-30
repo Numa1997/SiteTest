@@ -203,3 +203,30 @@ Left, with the reason:
 Checks after this pass: `check_numbers.py` PASS (731 numbers); `derive/R_revision.py` ALL PASS (with the new swirl, optimum,
 elliptic-action and 8.2 Lagrangian checks); `derive/L2_torque_curve.py` ALL PASS; headless Chromium at 1440 × 900 and 390 × 844:
 23 figures, 0 KaTeX errors, 0 console errors, no sideways scroll. A third fresh reader then read the result (below).
+
+## The third blind read and the fourth pass (30 October 2026)
+A third fresh reader re-derived every equation again (all correct, every table value matched) and judged chapters 1–4 a lecture
+script it could redo line by line; it marked 59 smaller places and five larger ones. Fixed:
+- Table 1 read before its tools: the table's text names κ* as chapter 3's and points to the critical-damping explanation of 4.1; the
+  wrong "lightly damped" (0.1κ* has a damping ratio near one half) removed.
+- 3.1: the order-of-magnitude chain replaced by a clean statement and the measured cost (+1.43 % for this term, −0.31 % for all the
+  dropped terms together, at 6 m/s).
+- The first arm pinned down: the whole balanced rotor (M₁d₁ = 0); "most of τ" corrected accordingly.
+- 6.3: the loss coefficients named c_s = 2/9 and c_d = 2/3 (the drag share averaged over the disc, derived), so λ* ≈ (⅔ C_L/C_D)^{1/3}
+  ≈ 4 can be reproduced; α left to the angle of attack; tip losses explained (the leak round the tip, the tip vortex, the helix's
+  spacing 2πr/(Bλ)) as what pushes the real value to 7.55.
+- 8.2: the frequency-domain system written out as a symmetric 2×2 matrix and Y(ω) defined from it (checked in SymPy against the
+  time-domain equations).
+- Smaller: "takes the chaos away" softened; the harvester named in 1.1; rated wind explained; Part I's 6 m/s caveat at first use; the
+  site's double pendulum's T and V written out; why three dimensions suffice for chaos (Poincaré–Bendixson); which curve of Figure 4;
+  u, ψ reused letters renamed (ζ, σ); the pendulum's period formula; why a brake shrinks areas (divergence −κ); ★ explained at first
+  use; the resting line, not the braked blade, rocks by 17°; "ceiling" before chapter 9 reworded; the flywheel's cancellation argued;
+  Radau IIA's order attributed to collocation, not quadrature alone; why a gearbox enters the rotor's bill; no-load current as friction;
+  ν for the gear factor; stall glossed in 5.6; turbulence intensity defined; the flat part of the spectrum argued from a short
+  correlation; "held stiffer" corrected (G ∝ 1/Ω²); why c stays fixed; the dynamic-pressure sentence; δu's formula; the second pass of
+  the 256 s record explained; the gust arrow renamed A_air; the coffee picture marked as coming later; the sag's w is an amplitude;
+  why the shaking's feed equals the generator's power; Figure 14's labels, Figure 22's colours (now as Figure 19).
+Left: the site and script references (the notes are published beside the simulation and wind pages); a figure of the turning arrows of
+7.2 and a response figure for 8.2 (both would be new drawings from model output; the text now gives the formulas they would show).
+Checks: `check_numbers.py` PASS (741 numbers), `R_revision.py` ALL PASS, `check_combined.py` ALL PASS (360–1440 px), headless Chromium
+23 figures, 0 KaTeX and console errors.

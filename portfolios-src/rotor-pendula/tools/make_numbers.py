@@ -496,10 +496,10 @@ step_gap = max(abs(a/b - 1) for o in ch for a, b in zip(o['lyap'], o['lyap480'])
 verdict = ('Every exponent is negative: every start, at every wind and brake, ends on the same regular, periodic swing. '
            if regular else 'Some exponents are positive: the motion there is chaotic. ')
 verdict += (f'More than that, each exponent is the decay rate of a small disturbance of the braked centrifugal spring alone, to within {f(lin_gap*100, 1)} %: '
-            'the motion forgets its start as fast as a linear, damped spring forgets a nudge. ')
+            'the motion forgets its start as fast as a linear, damped spring forgets a nudge. That a tenth of the best brake forgets faster than the best one, and a hundredth more slowly again, is explained in section 4.1: forgetting is fastest at critical damping, and the best brake lies about five times above it. ')
 T['chaos_text'] = (
-    f'<div class="press"><div class="ctag">The second blade, braked</div>The full equation (1.8) at each wind, at the best brake and at a tenth and a hundredth of it, '
-    f'where the swing is lightly damped, each from {nstart} starts: the second blade at rest on the mother blade\'s line and {nstart - 1} at random '
+    f'<div class="press"><div class="ctag">The second blade, braked</div>The full equation (1.8) at each wind, at the best brake $\\kappa^*$ of chapter 3 and at a tenth and a hundredth of it, '
+    f'each from {nstart} starts: the second blade at rest on the mother blade\'s line and {nstart - 1} at random '
     'angles and rates, some tumbling right over at first. The exponent comes from two copies $10^{-8}$ apart, rescaled every quarter turn.\n' + '\n'.join(rows) + '\n' + verdict +
     f'Halving the step changes the exponents by at most {f(step_gap*100, 1)} % of their size.</div>')
 N['chaos_regular'] = 'regular' if regular else 'chaotic in part'
