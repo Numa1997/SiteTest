@@ -27,7 +27,9 @@ by itself" ([curve.js:215-235](../../public/scripts/curve.js#L215-L235)):
 - **Curve**: a list in two parts, the page's own examples first (each with the symbol of the knob it moves), then the
   shapes for any knob, then "Your own curve" ([curve.js:240-255](../../public/scripts/curve.js#L240-L255)).
 - **Knob it moves**: the slider the curve drives. An example sets it; for a shape the reader chooses.
-- One paragraph on why this curve, with its formula in burgundy mono (`.curve__f`).
+- Why this curve: its first sentence, with the rest folded behind it (a `<details>` the reader opens), and the formula in
+  burgundy mono (`.curve__f`) always shown. Folding kept the chart near the top: the group on Fig. 1 went from 726 to
+  576 px high at 1440 px wide.
 - **The chart**: a white plate 132 px high. The curve is drawn from the stored samples `cv_pq`, the dot every frame
   ([curve.js:339-373](../../public/scripts/curve.js#L339-L373)).
 - **From a, To b, Time T**: number boxes kept inside the slider's range, T between 1 and 600 s; **Repeat**.
@@ -129,6 +131,10 @@ and the Fig. 1 note (ruhige Linien / الخطوط الهادئة, Regler / ال�
   draws nothing: 36 checks pass, among them p(t) against its formula, slider = store = simulation, every new Check against
   the store, a hand stopping the curve, the round becoming the rest of the run, a click adding a point; the German and
   Arabic pages show no English in the tool and no page errors.
-- **Not tested in a real browser.** The session's hook refused headless Chromium ("Browser automation detected", then
-  "Opening a browser is almost never needed"). Pixels, layout, the read-back of the dot and the Arabic right-to-left
-  layout of the status line are therefore unmeasured.
+- Headless Chromium (allowed by Numa later on 30 October 2026), Figs. 1–3 at 1440 × 900 and Figs. 1 and 3 (Arabic) at
+  390 × 844: no page errors, the curve's checks `cv_u`, `cv_p`, `cv_set` agree with the store, the chart's dot reads back
+  burgundy rgb(122, 31, 43), the slider shows the stored value, no sideways scroll. The screenshots showed two faults, now
+  fixed: the explanations pushed the chart down (now folded), and in Arabic the status line was reordered by the
+  right-to-left layout. The status line is now kept left to right like the readouts (`styles/i18n.css`, a rule in `sim.css`
+  would have been flipped by rtlcss), and the Arabic strings for "of", "at" and "run" carry left-to-right marks so the
+  numbers keep their places. Script: `curvecheck.js` in the session's scratchpad.

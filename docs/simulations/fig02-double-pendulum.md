@@ -389,7 +389,7 @@ restarts at 0 with the motion ([L600](../../public/simulations/Double%20Pendulum
 
 | Example | Knob, curve | Numbers and where they come from |
 |---|---|---|
-| Sand pours into the lower bob | m₂/m₁ 0.10 → 9.97 in 40 s, a straight ramp in ln(m₂/m₁) | Run offline with the page's own `deriv`, `rk4` and `energy` from the default start, on the slider's 0.05 steps: the sand brought 70.51 J and the booked drift stayed below 3.0×10⁻⁵. In the page the amount depends on the moment the run starts (the motion is chaotic). §7 of the note gives the kicks near ratio 10: up to about 1300 rad/s². |
+| Sand pours into the lower bob | m₂/m₁ 0.10 → 9.97 in 40 s, a straight ramp in ln(m₂/m₁); `set` restarts the motion at 0.10 first, so the sand's books open at zero | Run offline with the page's own `deriv`, `rk4` and `energy` from the default start, on the slider's 0.05 steps: the sand brought 70.51 J and the booked drift stayed below 3.0×10⁻⁵. In the page the amount depends on the moment the run starts (the motion is chaotic). §7 of the note gives the kicks near ratio 10: up to about 1300 rad/s². |
 | The lower bob runs empty | 9.97 → 0.10 in 40 s | Offline: −131.36 J, booked drift below 3.4×10⁻⁴, in line with the note's −3.6×10⁻⁴ within 20 s at ratio 10. |
 | Slow motion, without a jolt | time scale 1× → 0.25× in 3 s, minimum jerk | Playback only; the RK4 step h = 1/600 s is unchanged. |
 

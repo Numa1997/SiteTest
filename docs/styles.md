@@ -485,3 +485,7 @@ also styles the number boxes. `.curve__why` (12.5 px text, its formula in `.curv
 `.curve__loop` (the Repeat box in the accent colour) and `.curve__st` (the status line, Plex Mono 11.5 px, at least three
 lines high so the panel does not jump when the words change). No new font and no new colour.
 
+The curve's explanation is folded to its first sentence (`.curve__why details`, the marker in the accent colour). In
+Arabic its status line is kept left to right like the readouts, by a rule in `styles/i18n.css`; the same rule in `sim.css`
+would be flipped by rtlcss when it writes `sim.rtl.css`.
+

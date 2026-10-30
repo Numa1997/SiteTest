@@ -220,7 +220,7 @@
             '<p class="panel__label">' + _t('Curve · a knob that moves by itself') + '</p>' +
             '<label class="ctl"><span class="ctl__row"><span>' + _t('Curve') + '</span></span><select class="sel" data-cv="shape"></select></label>' +
             '<label class="ctl"><span class="ctl__row"><span>' + _t('Knob it moves') + '</span></span><select class="sel" data-cv="knob"></select></label>' +
-            '<p class="curve__why" data-cv="why"></p>' +
+            '<div class="curve__why" data-cv="why"></div>' +
             '<div class="curve__plot"><canvas data-cv="plot" tabindex="0"></canvas></div>' +
             '<p class="curve__hint" data-cv="hint">' + _t('Click or drag on the chart to make this curve your own.') + '</p>' +
             '<div class="curve__nums">' +
@@ -262,7 +262,10 @@
             selKnob.value = String(st.k);
             hint.hidden = st.shape === 'own';
             var ex = st.ex >= 0 ? examples[st.ex] : null;
-            why.innerHTML = (ex ? ex.why + ' ' : '') + '<span class="curve__f">' + SHAPES[st.shape].formula + (st.shape === 'own' ? '' : ', u = t / T') + '</span>' + (ex ? '' : ' ' + SHAPES[st.shape].why);
+            /* the explanation folds to its first sentence; the rest opens on a click, so the chart stays near the top */
+            var txt = ex ? ex.why : SHAPES[st.shape].why, cut = txt.search(/[.:;!?。؛](\s|$)/), head = cut > 0 ? txt.slice(0, cut + 1) : txt, rest = cut > 0 ? txt.slice(cut + 1).trim() : '';
+            why.innerHTML = (rest ? '<details><summary>' + head + '</summary><p>' + rest + '</p></details>' : '<p>' + head + '</p>') +
+                '<span class="curve__f">' + SHAPES[st.shape].formula + (st.shape === 'own' ? '' : ', u = t / T') + '</span>';
         }
         function ownFrom(shape) {
             /* your own curve starts as the shape on screen, read at five points */

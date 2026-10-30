@@ -241,7 +241,7 @@ html:not(.tex-ready) .stage__cap .tx { visibility: hidden; }
 /* the parameter curve (scripts/curve.js): a knob that moves by itself; its chart is a white plate like the notes' charts */
 .sel { width: 100%; font-family: var(--mono); font-size: 12px; color: var(--ink); background: var(--card); border: 1px solid var(--rule); border-radius: 6px; padding: 5px 8px; }
 .sel:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.curve__why { margin: 0; font-size: 12.5px; line-height: 1.5; color: var(--ink-2); }
+.curve__why { margin: 0; font-size: 12.5px; line-height: 1.5; color: var(--ink-2); } .curve__why p { margin: 0; } .curve__why details p { margin-top: 4px; } .curve__why summary { cursor: pointer; } .curve__why summary::marker { color: var(--accent); } .curve__why details[open] summary { color: var(--ink); }
 .curve__f { display: block; margin-top: 4px; font-family: var(--mono); font-size: 11.5px; color: var(--accent); }
 .curve__plot { position: relative; height: 132px; border: 1px solid var(--rule); border-radius: 8px; overflow: hidden; background: #fff; }
 .curve__plot canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; cursor: crosshair; touch-action: none; }
