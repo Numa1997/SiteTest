@@ -115,8 +115,8 @@ and Cloudflare answers each with a 307 to the address without `.html`: one round
 on Slow 4G (measured); on a phone on 4G one round trip, typically 0.05 to 0.2 s (an estimate, not measured here). *Not changed: the fix is a Cloudflare setting; see "Not changed" below.*
 
 **4. Content that jumps.** The simulations list (CLS 0.28 in English, 0.29 in German), the Hydraulic Press Study (0.21) and
-Iron, Cotton and the Head (0.86) move their content while loading, beyond the 0.1 of a good page. *Changed for the simulations list (change 4); Iron, Cotton and the Head and the
-Hydraulic Press Study's tab bar are not changed yet.*
+Iron, Cotton and the Head (0.86) move their content while loading, beyond the 0.1 of a good page. *Changed for the simulations list (change 4) and Iron, Cotton and the Head (change 5); the
+Hydraulic Press Study's tab bar is not changed.*
 
 **5. Repeat visits gain little.** With `max-age=0`, a repeat visit re-asks for every stylesheet, script and font (15 to 39
 requests per page), and the simulations list takes 2.92 s on a repeat visit against 2.85 s on the first. *Changed for the font files: see change 2.*
@@ -339,6 +339,37 @@ screen when the list arrives, the list takes its place and the section appears b
 What is left on the Arabic page is another shift: the top bar grows when its Arabic font arrives (0.13 at 5.8 s), not the list. The
 finished page is pixel-identical before and after (screenshots at 390 and 1440 px, English, German, Arabic, a search with no
 results, whose message still shows, and a field filter once settled).
+
+## Change 5: Iron, Cotton and the Head stands still while it loads (31 October 2026)
+
+**What was measured.** The layout-shift entries (Slow 4G, CPU 4×): at about 4.2 s the cards moved 444 to 492 px and the figure's
+caption left the screen, when the page script ran. Every word of the page waited for it: the template leaves the headings,
+paragraphs and the derivations empty (`data-t="…"`, `#sections`) and the script fills them from the text table built into the page.
+Then the figure (a canvas of 300 × 150 px until the script sizes it to 644 or 684 px) and the title (it rewraps when Instrument Serif
+replaces the fallback serif) moved the page again.
+
+**What.** In [`portfolios-src/impact/build.py`](../portfolios-src/impact/build.py): the build writes each text into its element (the
+script still writes the same text at load); the site pages ask for `instrument-serif-400-latin.woff2` with a preload. In
+[`template.html`](../portfolios-src/impact/template.html): the figure's height is reserved in CSS, 644 px or, from 640 px of stage
+width (a container query, the script's own rule), 684 px. The pages are regenerated, never edited by hand.
+
+**Measured** (`measure.cjs`, Slow 4G, CPU 4×, median of 3):
+
+| Page | CLS, before → after | LCP, before → after |
+|---|---|---|
+| English | 0.826 → **0.029** | 4.14 → **2.15 s** |
+| German | 0.822 → **0.029** | 5.19 → **2.61 s** |
+| Arabic | 0.826 → **0.063** | 5.26 → **2.78 s** |
+
+(LCP improves because the largest text block is in the page at once instead of after the script.) The finished pages: text identical character for character, and pixel-identical at 390 and 1440 px with
+the canvases and the live progress line hidden. The study's checks: `checks/site_check.cjs` (fonts, no errors, no outside requests,
+peak forces 638.6 N and 188.0 N, weights 9.81 N, English and Arabic at 1100 and 390 px) and `checks/data_panel.cjs` (every Check
+"stored and recomputed identical", English and Arabic, 390 and 1100 px) pass; both hard-code a browser path that no longer exists
+(`chromium_headless_shell-1194`), so they were run from copies with that one argument removed.
+
+**Measured and not changed.** The drop is computed in chunks on the main thread when the page opens: 95 s at full speed, longer on a
+phone. A tap during it is answered in 56 ms (40 ms after), because each chunk yields; the page's frame loop also redraws every frame.
+Neither makes taps lag; moving the computation to a worker would be a restructure of the study, which the measurements do not call for.
 
 ## Not changed, and why
 

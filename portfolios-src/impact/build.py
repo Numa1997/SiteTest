@@ -71,7 +71,8 @@ def build(lang):
         body_start = out.index('<main')
         head_old, body = out[:body_start], out[body_start:]
         style = re.search(r'<style>.*?</style>', head_old, re.S).group(0)
-        fonts = '<link rel="stylesheet" href="../../fonts/instrument-plex.css" />' + ('\n    <link rel="stylesheet" href="../../fonts/arabic.css" />' if lang == 'ar' else '')
+        # the title's face, asked for at once: it otherwise arrives after the first paint and the title rewraps (docs/performance.md, change 5)
+        fonts = '<link rel="preload" href="../../fonts/instrument-serif/instrument-serif-400-latin.woff2" as="font" type="font/woff2" crossorigin />\n    <link rel="stylesheet" href="../../fonts/instrument-plex.css" />' + ('\n    <link rel="stylesheet" href="../../fonts/arabic.css" />' if lang == 'ar' else '')
         fonts += '\n    <link rel="stylesheet" href="../../styles/paper.css" />\n    <link rel="stylesheet" href="../../styles/data.css" />'
         if lang != 'en': fonts += '\n    <script src="../../scripts/i18n/strings-%s.js"></script>' % lang   # the data panel's words in this language
         desc = T['lede'] if lang != 'ar' else 'دراسة تفاعلية: كرة حديد وكرة قطن متساويتان في الكتلة تسقطان عشرة أمتار على رأس.'
@@ -85,6 +86,16 @@ def build(lang):
         d = os.path.join(ROOT, 'public', 'portfolios', 'impact'); os.makedirs(d, exist_ok=True)
         fn = os.path.join(d, PAGE[lang])
     assert '{{' not in out
+    # The words in the page itself, as the page script would write them (it still does, with the same text): an element that
+    # waited empty for the script made the page grow and jump once it ran (layout shift 0.8, docs/performance.md, change 5)
+    i = out.index('<main')
+    def fill(m):
+        assert m.group(3) in T, m.group(3)
+        return m.group(1) + T[m.group(3)] + m.group(4)
+    body, n = re.subn(r'(<(\w+)\b[^>]*\sdata-t="([A-Za-z0-9_]+)"[^>]*>)(</\2>)', fill, out[i:])
+    body, k = re.subn(r'(<div id="sections">)(</div>)', lambda m: m.group(1) + T['sections'] + m.group(2), body)
+    assert n == out[i:].count(' data-t="') and k == 1, (n, k)
+    out = out[:i] + body
     open(fn, 'w', encoding='utf-8').write(out)
     print(fn, len(out))
 

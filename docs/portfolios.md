@@ -343,7 +343,10 @@ than the border box, and the Simulation's plot clicks measure from inside the bo
 ## Iron, Cotton and the Head: `impact/`
 
 Three pages (English, German, Arabic), generated from [`portfolios-src/impact/`](../portfolios-src/impact/) (its [README](../portfolios-src/impact/README.md)
-lists every file) by `python3 portfolios-src/impact/build.py --site`. Never edit the three pages by hand.
+lists every file) by `python3 portfolios-src/impact/build.py --site`. Never edit the three pages by hand. Every word stands in the page as
+built (the build writes the text tables `text_<lang>.py` into the elements the page script fills, and the script writes the same text
+again), and the main figure's height is reserved in CSS before the script sizes it, so the page does not jump while it loads
+([performance.md](performance.md), change 5).
 
 | Path | What it is |
 |---|---|
