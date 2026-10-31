@@ -8,3 +8,9 @@
   Cross-Origin-Opener-Policy: same-origin
   Content-Security-Policy: frame-ancestors 'self'; object-src 'none'; base-uri 'self'; form-action 'self'
   Strict-Transport-Security: max-age=31536000
+
+# Font files: a font never changes under its name (a new or changed face gets a new file name), so the browser may keep each one
+# for a year without asking again. Pages, stylesheets and scripts keep Cloudflare's default (asked again on every visit), so a
+# change to them reaches readers at once. Measured in docs/performance.md (31 October 2026).
+/*.woff2
+  Cache-Control: public, max-age=31536000, immutable

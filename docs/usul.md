@@ -85,6 +85,7 @@ Two layers, both in the repository:
 | `Cross-Origin-Opener-Policy` | `same-origin` | A page opened from elsewhere cannot reach into this one. |
 | CSP `object-src`, `base-uri`, `form-action` | `'none'`, `'self'`, `'self'` | No plugins, no hijacked base address, no form posting elsewhere. |
 | `Strict-Transport-Security` | `max-age=31536000` | Browsers use https only, for a year. |
+| `Cache-Control` on `*.woff2` only (since 31 October 2026) | `public, max-age=31536000, immutable` | A font file is kept for a year without asking again; it never changes under its name, so a changed face needs a new file name. Every other file keeps Cloudflare's default, asked again on every visit ([performance.md](performance.md)). |
 
 Checked 20 October 2026 on the live site with `curl -sI`, and in headless Chromium on all 15 pages: no errors.
 

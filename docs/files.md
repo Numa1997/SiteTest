@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-912 files, 55.7 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+912 files, 55.8 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -60,7 +60,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
-| [`public/_headers`](../public/_headers) | 516 B | Security response headers Cloudflare sets on every file of phyeinusul.com; read by Cloudflare, never served. | [usul.md](usul.md) |
+| [`public/_headers`](../public/_headers) | 928 B | Response headers Cloudflare sets on phyeinusul.com: security headers on every file, a year of caching for font files; read by Cloudflare, never served. | [usul.md](usul.md) |
 | [`public/portfolios.html`](../public/portfolios.html) | 38.4 kB | The Portfolios page: the two research projects. | [pages.md](pages.md) |
 | [`public/robots.txt`](../public/robots.txt) | 58 B | Instructions for search-engine crawlers. | [pages.md](pages.md) |
 | [`public/simulations.html`](../public/simulations.html) | 20.6 kB | The simulations catalog: one titled fold card per simulation, search and chips. | [pages.md](pages.md) |
@@ -680,7 +680,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`docs/minor-issues-report.md`](minor-issues-report.md) | 19.5 kB | Documentation: Minor issues · final verification report. | [minor-issues-report.md](minor-issues-report.md) |
 | [`docs/notes.md`](notes.md) | 5.4 kB | Documentation: The lecture-note review: `notes/` and `.claude/agents/`. | [notes.md](notes.md) |
 | [`docs/pages.md`](pages.md) | 51.7 kB | Documentation: The site's own pages: home, simulations catalog, Portfolios, robots.txt. | [pages.md](pages.md) |
-| [`docs/performance.md`](performance.md) | 22.0 kB | Documentation: Performance: what was measured, what was slow, what changed. | [performance.md](performance.md) |
+| [`docs/performance.md`](performance.md) | 24.9 kB | Documentation: Performance: what was measured, what was slow, what changed. | [performance.md](performance.md) |
 | [`docs/portfolios.md`](portfolios.md) | 55.7 kB | Documentation: The four research projects: `public/portfolios/`. | [portfolios.md](portfolios.md) |
 | [`docs/research-theory-audit.md`](research-theory-audit.md) | 30.0 kB | Documentation: Readability audit: Droplet Collection and Rotor Pendula. | [research-theory-audit.md](research-theory-audit.md) |
 | [`docs/scripts/catalog.md`](scripts/catalog.md) | 15.4 kB | Documentation: public/scripts/catalog.js. | [catalog.md](scripts/catalog.md) |
@@ -702,7 +702,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`docs/simulations/fig10-wind-turbine.md`](simulations/fig10-wind-turbine.md) | 57.3 kB | Documentation: Fig. 10 · Wind Turbine Control. | [fig10-wind-turbine.md](simulations/fig10-wind-turbine.md) |
 | [`docs/simulations/fig11-pendulum-control.md`](simulations/fig11-pendulum-control.md) | 24.1 kB | Documentation: Fig. 11 · Double Pendulum under Control. | [fig11-pendulum-control.md](simulations/fig11-pendulum-control.md) |
 | [`docs/styles.md`](styles.md) | 51.2 kB | Documentation: Stylesheets: `public/styles/`. | [styles.md](styles.md) |
-| [`docs/usul.md`](usul.md) | 8.1 kB | Documentation: Phyein Usul · the website at phyeinusul.com. | [usul.md](usul.md) |
+| [`docs/usul.md`](usul.md) | 8.5 kB | Documentation: Phyein Usul · the website at phyeinusul.com. | [usul.md](usul.md) |
 
 ## Tools
 
@@ -715,7 +715,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/i18n/ingest.py`](../tools/i18n/ingest.py) | 1.9 kB | Stores checked translations made outside the tables (page pieces, script strings, walkthrough prose). | [i18n.md](i18n.md) |
 | [`tools/i18n/package.json`](../tools/i18n/package.json) | 285 B | The parser wrap.cjs needs (acorn); npm install --prefix tools/i18n. | [i18n.md](i18n.md) |
 | [`tools/i18n/wrap.cjs`](../tools/i18n/wrap.cjs) | 3.7 kB | Wraps the reader-visible strings of a page's scripts in _t(), with a JavaScript parser (acorn). | [i18n.md](i18n.md) |
-| [`tools/inventory.py`](../tools/inventory.py) | 43.8 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
+| [`tools/inventory.py`](../tools/inventory.py) | 43.9 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
 | [`tools/perf/interact.cjs`](../tools/perf/interact.cjs) | 6.1 kB | Clicks a reader makes (page to page, Solve, data panel, folds, study tabs), timed by the Event Timing API. | [performance.md](performance.md) |
 | [`tools/perf/loadtrace.cjs`](../tools/perf/loadtrace.cjs) | 1.6 kB | The long parse, layout and script pieces of a study page loading until its first tab is ready. | [performance.md](performance.md) |
 | [`tools/perf/margin.cjs`](../tools/perf/margin.cjs) | 2.3 kB | How close a study tab comes to the shell's 8 s limit: from its frame's creation to its ready message, on a slowed processor. | [performance.md](performance.md) |
