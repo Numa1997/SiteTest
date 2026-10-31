@@ -425,7 +425,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`portfolios-src/hydraulics/theory/01_ideal.src.html`](../portfolios-src/hydraulics/theory/01_ideal.src.html) | 23.5 kB | Source of the text, part 01 (ideal): HTML with LaTeX maths. | [README.md](../portfolios-src/hydraulics/README.md) |
 | [`portfolios-src/hydraulics/theory/02_servo.src.html`](../portfolios-src/hydraulics/theory/02_servo.src.html) | 46.1 kB | Source of the text, part 02 (servo): HTML with LaTeX maths. | [README.md](../portfolios-src/hydraulics/README.md) |
 | [`portfolios-src/hydraulics/theory/03_control.src.html`](../portfolios-src/hydraulics/theory/03_control.src.html) | 53.3 kB | Source of the text, part 03 (control): HTML with LaTeX maths. | [README.md](../portfolios-src/hydraulics/README.md) |
-| [`portfolios-src/hydraulics/tools/build_combined.py`](../portfolios-src/hydraulics/tools/build_combined.py) | 13.7 kB | Generates public/portfolios/hydraulics/index.html from the three pages (--site). | [README.md](../portfolios-src/hydraulics/README.md) |
+| [`portfolios-src/hydraulics/tools/build_combined.py`](../portfolios-src/hydraulics/tools/build_combined.py) | 14.0 kB | Generates public/portfolios/hydraulics/index.html from the three pages (--site). | [README.md](../portfolios-src/hydraulics/README.md) |
 | [`portfolios-src/hydraulics/tools/build_fonts.py`](../portfolios-src/hydraulics/tools/build_fonts.py) | 9.7 kB | Downloads the font subsets in fonts/ and writes their @font-face rules. | [README.md](../portfolios-src/hydraulics/README.md) |
 | [`portfolios-src/hydraulics/tools/build_theory.py`](../portfolios-src/hydraulics/tools/build_theory.py) | 6.9 kB | Builds hydraulic_theory.html from theory/*.src.html, typesetting every formula with KaTeX. | [README.md](../portfolios-src/hydraulics/README.md) |
 | [`portfolios-src/hydraulics/tools/check_combined.py`](../portfolios-src/hydraulics/tools/check_combined.py) | 10.2 kB | Browser check of the served page: 33 checks of completeness, working controls, links, layout. | [README.md](../portfolios-src/hydraulics/README.md) |
@@ -507,7 +507,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`portfolios-src/rotor-pendula/theory/07_air.src.html`](../portfolios-src/rotor-pendula/theory/07_air.src.html) | 29.4 kB | Source of the notes, part 07 (air): HTML with LaTeX maths and number placeholders. | [README.md](../portfolios-src/rotor-pendula/README.md) |
 | [`portfolios-src/rotor-pendula/theory/08_shaking.src.html`](../portfolios-src/rotor-pendula/theory/08_shaking.src.html) | 27.5 kB | Source of the notes, part 08 (shaking): HTML with LaTeX maths and number placeholders. | [README.md](../portfolios-src/rotor-pendula/README.md) |
 | [`portfolios-src/rotor-pendula/theory/09_answer.src.html`](../portfolios-src/rotor-pendula/theory/09_answer.src.html) | 11.3 kB | Source of the notes, part 09 (answer): HTML with LaTeX maths and number placeholders. | [README.md](../portfolios-src/rotor-pendula/README.md) |
-| [`portfolios-src/rotor-pendula/tools/build_combined.py`](../portfolios-src/rotor-pendula/tools/build_combined.py) | 14.2 kB | Build and check tool of the Rotor Pendula notes, adapted from the Hydraulic Press Study's tools: build_combined.py. | [build_combined.py](../portfolios-src/rotor-pendula/tools/build_combined.py) |
+| [`portfolios-src/rotor-pendula/tools/build_combined.py`](../portfolios-src/rotor-pendula/tools/build_combined.py) | 14.4 kB | Build and check tool of the Rotor Pendula notes, adapted from the Hydraulic Press Study's tools: build_combined.py. | [build_combined.py](../portfolios-src/rotor-pendula/tools/build_combined.py) |
 | [`portfolios-src/rotor-pendula/tools/build_fonts.py`](../portfolios-src/rotor-pendula/tools/build_fonts.py) | 9.7 kB | Build and check tool of the Rotor Pendula notes, adapted from the Hydraulic Press Study's tools: build_fonts.py. | [build_fonts.py](../portfolios-src/rotor-pendula/tools/build_fonts.py) |
 | [`portfolios-src/rotor-pendula/tools/build_sim.py`](../portfolios-src/rotor-pendula/tools/build_sim.py) | 4.1 kB | Build and check tool of the Rotor Pendula notes, adapted from the Hydraulic Press Study's tools: build_sim.py. | [build_sim.py](../portfolios-src/rotor-pendula/tools/build_sim.py) |
 | [`portfolios-src/rotor-pendula/tools/build_theory.py`](../portfolios-src/rotor-pendula/tools/build_theory.py) | 9.1 kB | Build and check tool of the Rotor Pendula notes, adapted from the Hydraulic Press Study's tools: build_theory.py. | [build_theory.py](../portfolios-src/rotor-pendula/tools/build_theory.py) |
@@ -658,7 +658,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
-| [`portfolios-src/site_fonts.py`](../portfolios-src/site_fonts.py) | 2.8 kB | Shared by the Rotor Pendula and Hydraulic Press Study builders' --site mode: links each embedded font to the byte-identical file the site serves. | [performance.md](performance.md) |
+| [`portfolios-src/site_fonts.py`](../portfolios-src/site_fonts.py) | 3.0 kB | Shared by the Rotor Pendula and Hydraulic Press Study builders' --site mode: links each embedded font to the byte-identical file the site serves. | [performance.md](performance.md) |
 
 ## Template sources
 
@@ -673,14 +673,14 @@ to confirm that every file is described. Sizes are those of the files when the l
 |---|---|---|---|
 | [`docs/architecture.md`](architecture.md) | 8.0 kB | Documentation: How the site fits together. | [architecture.md](architecture.md) |
 | [`docs/assets.md`](assets.md) | 11.1 kB | Documentation: Fonts, maths and pictures: `public/vendor/`, `public/fonts/`, `public/images/`. | [assets.md](assets.md) |
-| [`docs/build-and-deploy.md`](build-and-deploy.md) | 8.7 kB | Documentation: Build files and deployment. | [build-and-deploy.md](build-and-deploy.md) |
+| [`docs/build-and-deploy.md`](build-and-deploy.md) | 8.9 kB | Documentation: Build files and deployment. | [build-and-deploy.md](build-and-deploy.md) |
 | [`docs/files.md`](files.md) | this file | This list. Written by tools/inventory.py; do not edit by hand. | [files.md](files.md) |
 | [`docs/glossary.md`](glossary.md) | 8.5 kB | Documentation: Glossary: English, German, Arabic. | [glossary.md](glossary.md) |
 | [`docs/i18n.md`](i18n.md) | 16.8 kB | Documentation: The site in German and Arabic: `tools/i18n/`, `i18n/`, `public/de/`, `public/ar/`. | [i18n.md](i18n.md) |
 | [`docs/minor-issues-report.md`](minor-issues-report.md) | 19.5 kB | Documentation: Minor issues · final verification report. | [minor-issues-report.md](minor-issues-report.md) |
 | [`docs/notes.md`](notes.md) | 5.4 kB | Documentation: The lecture-note review: `notes/` and `.claude/agents/`. | [notes.md](notes.md) |
 | [`docs/pages.md`](pages.md) | 51.7 kB | Documentation: The site's own pages: home, simulations catalog, Portfolios, robots.txt. | [pages.md](pages.md) |
-| [`docs/performance.md`](performance.md) | 19.7 kB | Documentation: Performance: what was measured, what was slow, what changed. | [performance.md](performance.md) |
+| [`docs/performance.md`](performance.md) | 20.2 kB | Documentation: Performance: what was measured, what was slow, what changed. | [performance.md](performance.md) |
 | [`docs/portfolios.md`](portfolios.md) | 55.7 kB | Documentation: The four research projects: `public/portfolios/`. | [portfolios.md](portfolios.md) |
 | [`docs/research-theory-audit.md`](research-theory-audit.md) | 30.0 kB | Documentation: Readability audit: Droplet Collection and Rotor Pendula. | [research-theory-audit.md](research-theory-audit.md) |
 | [`docs/scripts/catalog.md`](scripts/catalog.md) | 15.4 kB | Documentation: public/scripts/catalog.js. | [catalog.md](scripts/catalog.md) |
@@ -716,11 +716,11 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/i18n/package.json`](../tools/i18n/package.json) | 285 B | The parser wrap.cjs needs (acorn); npm install --prefix tools/i18n. | [i18n.md](i18n.md) |
 | [`tools/i18n/wrap.cjs`](../tools/i18n/wrap.cjs) | 3.7 kB | Wraps the reader-visible strings of a page's scripts in _t(), with a JavaScript parser (acorn). | [i18n.md](i18n.md) |
 | [`tools/inventory.py`](../tools/inventory.py) | 43.7 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
-| [`tools/perf/interact.cjs`](../tools/perf/interact.cjs) | 6.0 kB | Clicks a reader makes (page to page, Solve, data panel, folds, study tabs), timed by the Event Timing API. | [performance.md](performance.md) |
+| [`tools/perf/interact.cjs`](../tools/perf/interact.cjs) | 6.1 kB | Clicks a reader makes (page to page, Solve, data panel, folds, study tabs), timed by the Event Timing API. | [performance.md](performance.md) |
 | [`tools/perf/loadtrace.cjs`](../tools/perf/loadtrace.cjs) | 1.6 kB | The long parse, layout and script pieces of a study page loading until its first tab is ready. | [performance.md](performance.md) |
 | [`tools/perf/measure.cjs`](../tools/perf/measure.cjs) | 6.0 kB | Page loads on a throttled phone (Slow 4G or 4G, CPU 4x): LCP, CLS, blocking time, bytes, a repeat visit; the median of several runs. | [performance.md](performance.md) |
-| [`tools/perf/serve.cjs`](../tools/perf/serve.cjs) | 4.4 kB | A local server that answers like Cloudflare does for phyeinusul.com (Brotli, _headers, no ETag on HTML, .html -> 307), for before-and-after measurements. | [performance.md](performance.md) |
-| [`tools/perf/tabs.cjs`](../tools/perf/tabs.cjs) | 3.6 kB | The study pages with tabs: time until the first tab is drawn, each tab switch, a repeat visit. | [performance.md](performance.md) |
+| [`tools/perf/serve.cjs`](../tools/perf/serve.cjs) | 4.8 kB | A local server that answers like Cloudflare does for phyeinusul.com (Brotli, _headers, no ETag on HTML, .html -> 307), for before-and-after measurements. | [performance.md](performance.md) |
+| [`tools/perf/tabs.cjs`](../tools/perf/tabs.cjs) | 3.9 kB | The study pages with tabs: time until the first tab is drawn, each tab switch, a repeat visit. | [performance.md](performance.md) |
 | [`tools/perf/trace.cjs`](../tools/perf/trace.cjs) | 2.8 kB | What fills the main thread while a page sits idle, at the top or scrolled down: trace totals, forced layouts, JS self time. | [performance.md](performance.md) |
 
 ## Translation tables

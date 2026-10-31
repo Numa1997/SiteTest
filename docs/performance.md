@@ -9,8 +9,8 @@ it "should" be faster.
 
 Everything below was measured in headless Chromium (the one preinstalled in the work environment) with a phone's screen, 390 × 844 px
 at 3× pixel density (Lighthouse's own mobile screen is 412 × 823 px at 1.75×), and Lighthouse's mobile processor and network: the
-processor slowed 4× (`Emulation.setCPUThrottlingRate`) and "Slow 4G" (562.5 ms round trip, 1.47 Mbit/s down, 0.66 Mbit/s up). Where a change trades download time
-against processor time, it is measured a second time on a faster "4G" network (85 ms round trip, 9 Mbit/s), closer to a phone on a
+processor slowed 4× (`Emulation.setCPUThrottlingRate`) and "Slow 4G" (562.5 ms round trip, 1.51 Mbit/s down, 0.69 Mbit/s up). Where a change trades download time
+against processor time, it is measured a second time on a faster "4G" network (85 ms round trip, 9.2 Mbit/s down), closer to a phone on a
 good mobile connection. Each number is the median of three runs unless a table says otherwise; kB are 1000 bytes.
 
 The scripts are in [`tools/perf/`](../tools/perf/); Playwright and Chromium must be installed.
@@ -137,7 +137,8 @@ are created about 3.5 s earlier and take longer to report ready (Slow 4G, CPU 6�
 Rotor Pendula's notes 6.35 and 6.93 s on `main`, 7.47 and 6.25 s now; the Hydraulic Press servo 4.79 and 5.31 s, now 5.36 and
 5.67 s), close to the 8 s; the reader still sees the tab sooner (Rotor Pendula's notes about 10.4 s after opening the page instead
 of 12.6 s). So the shell now replaces a frame only when the host refused its `srcdoc` (its document never became `about:srcdoc`);
-a frame that is merely slow is left to finish. Tested with `scripts/sim.js` held back 11 s: on `main` the simulation tab ends
+a frame that is merely slow is left to finish. This needs the shell to be able to read its frame, as on the site; a host that
+sandboxes the page without `allow-same-origin` hides the frame's document, and there the old 8 s replacement still applies. Tested with `scripts/sim.js` held back 11 s: on `main` the simulation tab ends
 blank; now it appears and runs; a refused `srcdoc` still triggers the replacement as before.
 
 **Proof that nothing else changed.** For each of the four pages, every tab is identical character for character once each font,
@@ -158,7 +159,10 @@ identical", one round recorded, no errors).
 `NET=4g node tools/perf/tabs.cjs <base> /portfolios/rotor-pendula/ notes,sim,wind 3` and
 `… /portfolios/hydraulics/ servo,ideal,theory 3` (without `NET=4g` for Slow 4G). "First tab" is the time from the start of
 navigation until the first tab (notes, servo) reports ready. Two measurers, three runs each: the first in this session; the second
-an independent review, which alternated old and new runs so that other work on the machine hit both alike.
+an independent review, which alternated old and new runs so that other work on the machine hit both alike. Both used the version of
+`tabs.cjs` of that day, which noticed the ready message by polling every 50 ms and so read it 0.2 to 1.5 s late (most on the long
+notes), on the old and the new page alike; the differences stand, the absolute times are that much too long. `tabs.cjs` now reads
+the frame's own time of the message.
 
 | | Rotor Pendula, before → after | Hydraulic Press Study, before → after | Reproduced? |
 |---|---|---|---|

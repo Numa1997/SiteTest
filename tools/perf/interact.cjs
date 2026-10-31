@@ -43,7 +43,7 @@ async function run(browser){ const R={};
  {const {ctx,page,net}=await setup(browser); await page.goto(base+'/portfolios/rotor-pendula/index.html',{waitUntil:'load',timeout:180000});
   await page.waitForFunction(()=>window.__ready&&window.__ready.notes!==undefined,null,{timeout:120000,polling:50}); await page.waitForTimeout(1500);
   // a tab is ready when its frame posts rotorReady to the shell (the shell's 'Loading…' is hidden only once); a tab seen before is ready at once
-  for(const tb of ['sim','wind','notes','sim']){ let readyMs=0; const d=await inp(page,async()=>{const t0=Date.now(); await page.locator('#tab-'+tb).click(); await page.waitForFunction(t=>window.__ready&&window.__ready[t]!==undefined,tb,{timeout:120000,polling:50}); readyMs=Date.now()-t0;},1000);
+  for(const tb of ['sim','wind','notes','sim']){ let readyMs=0; const d=await inp(page,async()=>{const t0=await page.evaluate(()=>performance.now()); await page.locator('#tab-'+tb).click(); await page.waitForFunction(t=>window.__ready&&window.__ready[t]!==undefined,tb,{timeout:120000,polling:50}); readyMs=Math.max(0,await page.evaluate(t=>__ready[t],tb)-t0);},1000);
     R['rotorTab_'+tb+(R['rotorTab_'+tb]?'_2':'')]={inp:d,readyMs};}
   R.rotorHeapMB=(await page.evaluate(()=>performance.memory?performance.memory.usedJSHeapSize/1048576:0));
   await ctx.close();}}catch(e){R.err3=e.message.slice(0,200)}

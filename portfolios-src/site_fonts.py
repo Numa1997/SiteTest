@@ -42,7 +42,8 @@ def link_fonts(html, site, depth='../../'):
         return f"url({depth}{table[md5]})"
 
     out = DATA_FONT.sub(one, html)
-    # any font still embedded in another form (font/woff, application/font-woff2, a charset, line breaks) stops the build too
-    left = re.search(r'data:(?:font/|application/(?:x-)?font)', out)
+    # any font still embedded in another form stops the build too: a font type (font/woff, application/font-woff2, a charset, line
+    # breaks, any letter case), or any data: address inside an @font-face rule, whatever type it names (octet-stream, none)
+    left = re.search(r'(?i)data:(?:font/|application/(?:x-)?font)|@font-face\s*\{[^}]*url\(\s*["\']?data:', out)
     assert not left, f'an embedded font in a form link_fonts does not read: {out[left.start():left.start() + 60]!r}'
     return out
