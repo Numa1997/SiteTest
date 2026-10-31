@@ -3,7 +3,8 @@ Usage: python3 checks/check_browser.py URL [shots_dir]"""
 import sys, os, json
 from playwright.sync_api import sync_playwright
 url = sys.argv[1]; shots = sys.argv[2] if len(sys.argv) > 2 else None
-EXE = '/opt/pw-browsers/chromium_headless_shell-1194/chrome-linux/headless_shell'
+# the image's Chromium (its path of 20 October 2026, else the current one, else Playwright's own), as the other studies' checks
+EXE = next((e for e in ('/opt/pw-browsers/chromium_headless_shell-1194/chrome-linux/headless_shell', '/opt/pw-browsers/chromium') if os.path.exists(e)), None)
 ok = True
 def wait_text(pg, sel, text, seconds):
     # poll from Python: the page's security policy (rightly) forbids evaluating strings, which wait_for_function would need
@@ -12,7 +13,7 @@ def wait_text(pg, sel, text, seconds):
         pg.wait_for_timeout(100)
     raise TimeoutError(sel)
 with sync_playwright() as p:
-    b = p.chromium.launch(executable_path=EXE if os.path.exists(EXE) else None)
+    b = p.chromium.launch(executable_path=EXE)
     for w in (360, 390, 1024, 1440):
         pg = b.new_page(viewport={'width': w, 'height': 900}); errs = []
         pg.on('pageerror', lambda e: errs.append(str(e))); pg.on('console', lambda m: errs.append(m.text) if m.type == 'error' else None)
