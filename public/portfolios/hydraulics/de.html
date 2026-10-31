@@ -86,9 +86,13 @@ main iframe.on { visibility: visible; }
     f.srcdoc = html(tab);
     stage.appendChild(f);
     frames[tab] = f;
-    // If this host refuses srcdoc frames, the page never reports in; fall back to a blob URL.
+    // If this host refuses srcdoc frames, the page never reports in; fall back to a blob URL. A frame that did take its srcdoc
+    // is only slow (a slow phone, a long page) and is left to finish: replacing it would throw its work away.
     setTimeout(function () {
       if (ready[tab]) return;
+      var d = null;
+      try { d = f.contentDocument; } catch (e) { /* not readable: treat as refused */ }
+      if (d && d.URL === 'about:srcdoc') return;
       f.removeAttribute('srcdoc');
       f.src = URL.createObjectURL(new Blob([html(tab)], { type: 'text/html' }));
     }, 8000);

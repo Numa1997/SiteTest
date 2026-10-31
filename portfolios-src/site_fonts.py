@@ -3,7 +3,7 @@
 A study page embeds its fonts as base64 data: URIs, so that the standalone file works anywhere. On Phyein Usul the same bytes are
 already served as files (public/fonts/, public/vendor/katex/fonts/): every embedded woff2 of Rotor Pendula and the Hydraulic Press
 Study is byte-identical to one of them (checked by MD5 on 31 October 2026). Embedded, the fonts are about 1.3 MB of base64 in each
-combined page (about three quarters of its compressed size, sent again on every visit because Cloudflare sends HTML without an
+combined page (about two thirds of its Brotli-compressed size, sent again on every visit because Cloudflare sends HTML without an
 ETag); linked, the browser fetches each file once and keeps it for every page and tab. See docs/performance.md.
 
 link_fonts(html, site) replaces each url(data:font/woff2;base64,...) whose bytes match a site file with url(../../<that file>),

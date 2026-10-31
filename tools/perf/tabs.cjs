@@ -1,5 +1,7 @@
 // The study pages with tabs (Rotor Pendula, Hydraulic Press Study): time until the first tab is drawn, each tab switch, a repeat visit.
 // node tools/perf/tabs.cjs <base URL> <path> <tab,tab,...> <runs>   (docs/performance.md)
+// Times run from the start of navigation (or the click, for a switch) to the tab's ready message, which its frame posts at the end of
+// its body. kB are 1000 bytes. tbt and maxTask: long tasks from navigation start until 1.5 s after the first tab is ready.
 const {chromium}=require('playwright');
 const [base,path,tabsS,runsS]=process.argv.slice(2); const TABS=tabsS.split(','); const RUNS=+runsS||3;
 const NET=process.env.NET==='4g'?{offline:false,latency:85,downloadThroughput:9000*1024/8,uploadThroughput:3000*1024/8}:{offline:false,latency:562.5,downloadThroughput:1474.56*1024/8,uploadThroughput:675*1024/8};
@@ -18,7 +20,7 @@ const INIT=`if(window.top===window){window.__ready={};addEventListener('message'
   const sw={}; for(const t of TABS.slice(1)){ const t1=Date.now(); await p.locator('#tab-'+t).click(); await ready(t); sw[t]=Date.now()-t1; await p.waitForTimeout(800);}
   const heap=await p.evaluate(()=>performance.memory.usedJSHeapSize/1048576);
   bytes=0; await p.goto('about:blank'); const t2=Date.now(); await p.goto(base+path+'#'+TABS[0],{waitUntil:'commit'}); await ready(TABS[0]); const warm=Date.now()-t2; await p.waitForTimeout(500);
-  rows.push({first,warm,coldKB:coldBytes/1024,warmKB:bytes/1024,maxTask:lt1.max,tbt:lt1.tbt,heap,...Object.fromEntries(Object.entries(sw).map(([k,v])=>['to_'+k,v])),errs:errs.length});
+  rows.push({first,warm,coldKB:coldBytes/1000,warmKB:bytes/1000,maxTask:lt1.max,tbt:lt1.tbt,heap,...Object.fromEntries(Object.entries(sw).map(([k,v])=>['to_'+k,v])),errs:errs.length});
   await ctx.close();}
  const keys=Object.keys(rows[0]); const m={}; for(const k of keys)m[k]=med(rows.map(x=>x[k]));
  console.log(base+path, Object.entries(m).map(([k,v])=>k+'='+(typeof v==='number'?Math.round(v):v)).join(' '));

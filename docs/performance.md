@@ -7,19 +7,19 @@ it "should" be faster.
 
 ## How it is measured
 
-Everything below was measured in headless Chromium (the one preinstalled in the work environment), set up as Lighthouse's mobile
-profile: a 390 × 844 px phone screen at 3× pixel density, the processor slowed 4× (`Emulation.setCPUThrottlingRate`), and the
-network of Lighthouse's "Slow 4G" (562.5 ms round trip, 1.47 Mbit/s down, 0.66 Mbit/s up). Where a change trades download time
+Everything below was measured in headless Chromium (the one preinstalled in the work environment) with a phone's screen, 390 × 844 px
+at 3× pixel density (Lighthouse's own mobile screen is 412 × 823 px at 1.75×), and Lighthouse's mobile processor and network: the
+processor slowed 4× (`Emulation.setCPUThrottlingRate`) and "Slow 4G" (562.5 ms round trip, 1.47 Mbit/s down, 0.66 Mbit/s up). Where a change trades download time
 against processor time, it is measured a second time on a faster "4G" network (85 ms round trip, 9 Mbit/s), closer to a phone on a
-good mobile connection. Each number is the median of three runs unless a table says otherwise.
+good mobile connection. Each number is the median of three runs unless a table says otherwise; kB are 1000 bytes.
 
 The scripts are in [`tools/perf/`](../tools/perf/); Playwright and Chromium must be installed.
 
 | Script | What it measures |
 |---|---|
-| `measure.cjs <base> <out.json> <runs> <path>…` | A first visit with an empty cache, then a repeat visit: LCP, CLS, total blocking time, the longest task, main-thread time, bytes over the network, and how busy the main thread is during 5 s in which the reader does nothing. |
+| `measure.cjs <base> <out.json> <runs> <path>…` | A first visit with an empty cache, then a repeat visit: LCP, CLS, blocking time, the longest task, main-thread time, bytes over the network, and how busy the main thread is during 5 s in which the reader does nothing (main-thread time divided by the measured length of that window). |
 | `interact.cjs <base> <out.json> <runs>` | What a reader does: home → simulations → Fig. 9 and back by links; Solve, the data panel, a fold, on Fig. 9; the three tabs of Rotor Pendula. Each interaction's duration comes from the browser's Event Timing API, which INP is built from. |
-| `tabs.cjs <base> <path> <tabs> <runs>` | The study pages with tabs: the time from the click until the first tab is drawn, each tab switch, a repeat visit. |
+| `tabs.cjs <base> <path> <tabs> <runs>` | The study pages with tabs: the time from the start of navigation until the first tab's frame reports ready (it posts a message at the end of its body; its fonts finish 0.04 to 0.7 s later), each tab switch (click to that tab's ready message), a repeat visit. |
 | `trace.cjs <url> [scrollY]` | What fills the main thread while a page sits idle (a 4 s trace and CPU profile), with the figure on screen or scrolled away. |
 | `loadtrace.cjs <url>` | The long parse, layout and script pieces of a study page loading. |
 | `serve.cjs <folder> <port>` | A local server that answers as Cloudflare does (below), so that a change can be measured before it is merged. |
@@ -28,7 +28,10 @@ The metrics, as [web.dev](https://web.dev/articles/vitals) defines them, with it
 page loads: **LCP** (Largest Contentful Paint), when the largest text block or image of the first screen is drawn, good within
 2.5 s; **CLS** (Cumulative Layout Shift), how far the content jumps while it loads, the sum of the shifted area times the shift
 distance, good up to 0.1; **INP** (Interaction to Next Paint), the time from a tap to the next drawn frame, good up to 200 ms.
-**TBT** (total blocking time) adds up every main-thread task beyond its first 50 ms; it is the laboratory stand-in for INP.
+**Blocking time** adds up, over the main-thread tasks of a window, each task's part beyond its first 50 ms; it is the laboratory
+stand-in for INP. Lighthouse's TBT takes the window from first paint to "time to interactive", which a page that never rests does
+not reach, so the window is stated with each number here: `measure.cjs` reports it from first paint to the load event (and, as in
+the baseline table, to 8 s after the load event); `tabs.cjs` from the start of navigation to 1.5 s after the first tab is ready.
 
 Three limits of the method, each a reason to read the numbers as comparisons rather than as a phone's exact experience:
 
@@ -40,18 +43,22 @@ Three limits of the method, each a reason to read the numbers as comparisons rat
    error, so repeat visits are timed over plain HTTP.
 3. **The live site's response headers**, which the local server copies (measured with `curl -sI`, 31 October 2026):
    Cloudflare sends every file with `Cache-Control: public, max-age=0, must-revalidate` (its documented default for static assets,
-   [Cloudflare: headers](https://developers.cloudflare.com/workers/static-assets/headers/)); CSS, scripts and fonts carry a weak
-   ETag, so a repeat visit asks for each and gets `304 Not Modified`; **HTML pages carry no ETag and no Last-Modified at all**, so a
-   repeat visit downloads every page again in full. A link to `x.html` is answered `307` with the address `x` (Cloudflare's
+   [Cloudflare: headers](https://developers.cloudflare.com/workers/static-assets/headers/)); fonts carry an ETag, CSS and scripts a
+   weak one when compressed, so a repeat visit asks for each and gets `304 Not Modified`; **HTML pages carry no ETag and no
+   Last-Modified at all**, so a repeat visit downloads every page again in full. `serve.cjs` copies this (it gives every non-HTML
+   file a weak ETag, which behaves the same for a browser), but its Brotli compresses about 5 % better than Cloudflare's
+   (Rotor Pendula 848 kB against 896 kB live), on both sides of a comparison alike. A link to `x.html` is answered `307` with the address `x` (Cloudflare's
    default `html_handling`, ["auto-trailing-slash"](https://developers.cloudflare.com/workers/static-assets/routing/advanced/html-handling/)).
 
 ## The live site before any change (31 October 2026)
 
-First visit, Slow 4G, CPU 4×, median of three runs (`measure.cjs https://phyeinusul.com … 3`). "Busy while idle" is the share of
-5 s, after the page has loaded, in which the main thread works although the reader does nothing. "Redirect" is the 307 answer to
-the `.html` address every link on the site uses.
+First visit, Slow 4G, CPU 4×, median of three runs (`measure.cjs https://phyeinusul.com … 3`). "Blocking" is the blocking time from
+first paint to 8 s after the load event (the window of this first run; on a page that never rests it grows with the window: Fig. 9
+gives 5.0 s up to the load event, 10.4 s up to 8 s after it). "Busy while idle" is the share of 5 s, after the page has loaded, in
+which the main thread works although the reader does nothing (this run divided by 5 s; the figures marked 100 % were 99.5 to
+101 %). "Redirect" is the 307 answer to the `.html` address every link on the site uses.
 
-| Page | LCP | CLS | TBT | Longest task | Busy while idle | Redirect |
+| Page | LCP | CLS | Blocking | Longest task | Busy while idle | Redirect |
 |---|---|---|---|---|---|---|
 | `/` | 3.45 s | 0.005 | 0.21 s | 0.25 s | 43 % | 0 ms |
 | `/simulations.html` | 2.85 s | **0.280** | 0.66 s | 0.36 s | 0 % | 618 ms |
@@ -82,10 +89,10 @@ it again 608 ms; all above the 200 ms of a good INP.
 99 to 100 % of the time while the reader does nothing, and every tap waits for the frame in progress: this is the "clicking lags"
 (Fig. 9's interactions above). A trace of Fig. 9 (`trace.cjs`) shows why: every frame redraws all five canvases (the mechanism,
 the time window, the whole-run overview, the force profile and the phase portrait), and `label()`
-(`public/simulations/driven-oscillator.html:1106`) measures text in every frame, which forces a full layout of the page each
+(`public/simulations/driven-oscillator.html:1107`) measures text in every frame, which forces a full layout of the page each
 time. The same 4 s trace with the figure scrolled 6000 px away, into the lecture note, shows the same work, frame for frame: the
 clock of `Sim.clock` (`public/scripts/sim.js:176`) runs and draws whether or not the figure is on screen (the hero pendulum of
-the home page, by contrast, already stops when it is out of view, `index.html:784`). Part of the per-frame cost is software
+the home page, by contrast, already stops when it is out of view, `index.html:783`). Part of the per-frame cost is software
 drawing (limit 1 above); the script part, about 34 ms per frame at 4× slowdown, and the work done off screen are real on a phone.
 Fig. 9's Solve integrates the whole run in one task on the main thread (1.25 s at 4×).
 *Not changed yet: it touches the figures' code, which another session is working on; see "Not changed" below.*
@@ -93,8 +100,8 @@ Fig. 9's Solve integrates the whole run in one task on the main thread (1.25 s a
 **2. Fonts sent again inside the study pages.** Rotor Pendula and the Hydraulic Press Study (English, German, Arabic) each carry
 59 fonts as base64 `data:` addresses, about 440 kB of fonts per tab, three tabs per page: 1.3 MB of text that compresses badly. Every
 one of those fonts is byte-identical (by MD5) to a file the site already serves from `public/fonts/` or
-`public/vendor/katex/fonts/`. Compressed, the fonts are about three quarters of each page (Rotor Pendula 1418 kB with them,
-398 kB without, zlib level 9), and since Cloudflare sends HTML without an ETag, a reader downloads them again on every visit.
+`public/vendor/katex/fonts/`. Compressed, the fonts are about two thirds of each page (with Brotli, as Cloudflare sends it: Rotor Pendula 848 kB with them,
+292 kB without; Hydraulic Press Study 551 and 196 kB), and since Cloudflare sends HTML without an ETag, a reader downloads them again on every visit.
 *Changed: see change 1.*
 
 **3. Every click pays a redirect.** Every internal link is written `….html` (so that the GitHub Pages copy and local files work),
@@ -120,39 +127,66 @@ standalone builds are unchanged and still carry their fonts. A font the site doe
 **Why it works.** A frame created with `srcdoc` resolves relative addresses against its parent page, so `../../fonts/…` from
 `portfolios/<study>/index.html` reaches `fonts/…`; the Arabic pages of the study already loaded their Arabic fonts that way. The
 browser then fetches each font file once, in parallel, and keeps it in its cache for all three tabs and every later page, instead of
-parsing the same 1.3 MB of base64 text inside the page on every visit.
+receiving the same 1.3 MB of base64 text inside the page on every visit.
 
-**Proof that nothing else changed.** For each of the four pages, the shell is identical, and every tab is identical character for
-character once each font, embedded or linked, is replaced by the MD5 of its bytes: 59 fonts replaced per page, nothing else
-different. Screenshots of every tab at 390 and 1440 px, before and after, once the fonts have loaded: the same font faces loaded,
-identical text and layout, no console errors, no sideways scroll; the only differing pixels are the moving parts (the oil dots of the
-ideal press, the running simulation and wind, the edge of the tab pill at the moment of the screenshot), which differ by as much
+**A guard that came with it.** The shell of each study page gave a tab 8 s to report ready, and otherwise replaced its frame by
+one loaded from a `blob:` address (for hosts that refuse `srcdoc` frames). On the site that replacement can never load: the page's
+security policy admits frames only from the site (`default-src 'self'`; the browser reports "Framing 'blob:…' violates … default-src
+'self'"), so a tab slower than 8 s was thrown away and left blank (`chrome-error://`), on `main` too. With linked fonts the frames
+are created about 3.5 s earlier and take longer to report ready (Slow 4G, CPU 6×, two runs each, from the frame's creation to its ready message:
+Rotor Pendula's notes 6.35 and 6.93 s on `main`, 7.47 and 6.25 s now; the Hydraulic Press servo 4.79 and 5.31 s, now 5.36 and
+5.67 s), close to the 8 s; the reader still sees the tab sooner (Rotor Pendula's notes about 10.4 s after opening the page instead
+of 12.6 s). So the shell now replaces a frame only when the host refused its `srcdoc` (its document never became `about:srcdoc`);
+a frame that is merely slow is left to finish. Tested with `scripts/sim.js` held back 11 s: on `main` the simulation tab ends
+blank; now it appears and runs; a refused `srcdoc` still triggers the replacement as before.
+
+**Proof that nothing else changed.** For each of the four pages, every tab is identical character for character once each font,
+embedded or linked, is replaced by the MD5 of its bytes (59 fonts per page, 21 distinct files); the shell differs only by the
+guard above. Screenshots of every tab at 390 and 1440 px, before and after, once the fonts have loaded: the same font faces loaded,
+identical text and layout, no console errors, no sideways scroll; the only differing pixels are the moving parts (the oil dots of
+the ideal press, the running simulation and wind, the edge of the tab pill at the moment of the screenshot), which differ by as much
 between two loads of the old page. Checks run on the new pages: Rotor Pendula `check_combined.py` (all pass: 1450 formulas, 0 KaTeX
 errors, the simulation solves, the wind runs, tabs and deep links, 360 to 1440 px), `check_numbers.py`, `check_sim.js`,
 `check_wind.js`, `check_newton.js`, `check_physics.py`, `R_revision.py` (all pass); Hydraulic Press Study `check_combined.py` on the
-English page (33 of 33), `check_theory_numbers.js` (52 of 52), `check_physics.py`, `check_control.py`, and the data-panel check
+English page (33 of 33; the check finds frames by their English titles, so it cannot run on `de.html` and `ar.html`, on `main`
+either), `check_theory_numbers.js` (52 of 52), `check_physics.py`, `check_control.py`, and the data-panel check
 `check_data_panel.cjs` for both presses at 390 and 1440 px (the pointer sweep paints nothing, pins, a Check "stored and recomputed
 identical", one round recorded, no errors).
 
-**Measured**, the old and the new pages on `serve.cjs` (Brotli, no ETag on HTML, as Cloudflare). Bytes are what crosses the
-network; "first tab" is the time from the click to the first tab drawn.
+**Measured**, the old and the new pages each served by `serve.cjs` (Brotli, no ETag on HTML, as Cloudflare). Commands:
+`node tools/perf/serve.cjs <dist> <port>` (with `H2=1` for HTTP/2), then
+`NET=4g node tools/perf/tabs.cjs <base> /portfolios/rotor-pendula/ notes,sim,wind 3` and
+`… /portfolios/hydraulics/ servo,ideal,theory 3` (without `NET=4g` for Slow 4G). "First tab" is the time from the start of
+navigation until the first tab (notes, servo) reports ready. Two measurers, three runs each: the first in this session; the second
+an independent review, which alternated old and new runs so that other work on the machine hit both alike.
 
-| | Rotor Pendula, before | after | Hydraulic Press Study, before | after |
-|---|---|---|---|---|
-| The page, Brotli | 848 kB | **292 kB** | 551 kB | **196 kB** |
-| First visit, 4G, HTTP/2: first tab | 7.29 s | **6.28 s** | 4.38 s | 4.30 s |
-| First visit, 4G: bytes | 895 kB | **549 kB** | 686 kB | **490 kB** |
-| First visit, 4G: total blocking time | 1.84 s | **1.41 s** | 1.46 s | 1.38 s |
-| Repeat visit, 4G, HTTP/1.1: first tab | 6.59 s | 6.40 s | 4.75 s | **3.49 s** |
-| Repeat visit, 4G: bytes | 831 kB | **297 kB** | 544 kB | **205 kB** |
-| First visit, Slow 4G, HTTP/2: first tab | 11.13 s | **9.07 s** | 7.98 s | **6.51 s** |
+| | Rotor Pendula, before → after | Hydraulic Press Study, before → after | Reproduced? |
+|---|---|---|---|
+| The page, Brotli | 848 → **292 kB** | 551 → **196 kB** | yes, exactly |
+| First visit, 4G: bytes | 916 → **562 kB** | 702 → **502 kB** | yes, exactly |
+| Repeat visit, 4G: bytes | 851 → **304 kB** | 557 → **210 kB** | yes, exactly |
+| First visit, Slow 4G, HTTP/2: first tab (1st / 2nd measurer) | 11.13 → **9.07 s** / 12.08 → **9.73 s** | 7.98 → **6.51 s** / 8.87 → **7.59 s** | yes, in every pair of runs |
+| First visit, 4G, HTTP/2: first tab | 7.29 → 6.28 s / 6.87 → 6.66 s | 4.38 → 4.30 s / 4.19 → 3.49 s | no clear change: within the run-to-run spread |
+| Repeat visit, 4G, HTTP/1.1: first tab | 6.59 → 6.40 s / 6.31 → 6.43 s | 4.75 → 3.49 s / 3.77 → 3.95 s | no clear change |
+| Blocking time, 4G | 1.84 → 1.41 s / 3.28 → 3.17 s | 1.46 → 1.38 s / 1.38 → 1.34 s | no clear change |
 
+So the change is a clear gain in what crosses the network (the page itself two thirds smaller; a first visit 28 to 39 % fewer bytes,
+a repeat visit 62 to 64 % fewer),
+and in time on a slow network, where the bytes dominate; on a good 4G network the time to the first tab does not change measurably.
 One cost, measured and kept in view: with linked fonts the notes are laid out once with the fallback font and again when the fonts
-arrive (a second full layout of about 0.9 to 1.2 s at 4× on Rotor Pendula's notes, `loadtrace.cjs`); with embedded fonts the
-fonts were there at the first layout. The longest single task varies between runs in both versions (0.5 to 2.2 s), so it is
-reported, not counted as a gain or a loss. Overall the first tab is drawn sooner or as soon on every network tried, with a third
-to two thirds fewer bytes. Preloading the fonts from the page's shell was tried and dropped: the frames do not reuse the shell's
-preloads, so the fonts were fetched twice (737 kB instead of 549 kB).
+arrive (a second full layout of about 0.9 to 1.2 s at 4× on Rotor Pendula's notes, `loadtrace.cjs`); with embedded fonts the fonts
+were there at the first layout. The longest single task varies widely between runs in both versions (0.5 to 3.6 s across both
+measurers), so it is reported, not counted as a gain or a loss. Preloading the fonts from the page's shell was tried and dropped:
+the frames do not reuse the shell's preloads, so the fonts were fetched twice (755 instead of 562 kB).
+
+**Review.** Before merging, three independent reviewers checked the change (page equivalence and the pages in a browser; the
+measurements and this page's claims; the code). What they found, and what was done: the local server served files outside its folder
+and stopped on a malformed address (fixed: `127.0.0.1` only, nothing outside the folder, 400); the tab-switch times measured only the
+click, because the shell's "Loading…" is hidden once (fixed: a tab counts as ready at its own ready message); the blocking-time
+window was not stated and "busy while idle" divided by a nominal 5 s (fixed, stated above); the 8 s replacement above (fixed); a
+font embedded in another form would have passed silently (now stops the build); units, line numbers, the "three quarters" (two thirds
+with Brotli) and descriptions in `docs/` and `tools/inventory.py` (corrected); and the timing gains on 4G claimed at first did not
+reproduce (the table above now shows both measurements).
 
 ## Not changed, and why
 

@@ -51,14 +51,16 @@ Principles*, a 23-chapter text with 63 numbered equations. `index.html#servo`, `
 the Portfolios page links to those three addresses.
 
 **How the page works.** Picture three finished pages packed into one envelope. Each of the three pages is stored inside
-`index.html` unchanged, as a JSON string, and shown in its own frame (`<iframe srcdoc>`, with a `blob:` frame as the fallback),
+`index.html` unchanged, as a JSON string, and shown in its own frame (`<iframe srcdoc>`; for a host that refuses `srcdoc` frames, a `blob:` frame replaces it after 8 s, but
+only then: a frame that is merely slow is left to finish, since 31 October 2026, and on the site the security policy would block a
+`blob:` frame anyway, [performance.md](performance.md)),
 so their styles, element ids and scripts cannot collide. A small script added to each embedded page turns the links between
 them into tab switches. The scripts and styles are inline; the text's maths is typeset when the page is generated, so no KaTeX
 runs in the browser. The fonts are the site's own files: the study's sources embed them as `data:` addresses so that a standalone
 copy works anywhere, and the site build (`--site`) replaces each one by a link to the byte-identical file in `public/fonts/` or
 `public/vendor/katex/fonts/` ([`portfolios-src/site_fonts.py`](../portfolios-src/site_fonts.py), since 31 October 2026). A phone
 then fetches each font once and keeps it for every tab and page, instead of receiving the same 59 fonts (1.3 MB of base64, about
-three quarters of the compressed page) inside the page on every visit; measured before and after in [performance.md](performance.md).
+two thirds of the compressed page) inside the page on every visit; measured before and after in [performance.md](performance.md).
 The page loads `../../fonts/instrument-plex.css` for its tab bar and those font files, and makes no request outside the site.
 
 **Its security policy has two additions.** The page carries the website's policy and referrer rule after its charset line,

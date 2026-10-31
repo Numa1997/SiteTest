@@ -25,7 +25,7 @@ panel of the two simulations".
 
 `tools/build_combined.py --site` embeds the three pages unchanged (except that each embedded font becomes a link to the
 byte-identical file the site serves, `../site_fonts.py`; the standalone build keeps them embedded), each as a JSON string, and shows each in its own frame
-(`srcdoc`, with a `blob:` fallback), so their styles, ids and scripts cannot collide. A small script added to each embedded
+(`srcdoc`, with a `blob:` fallback used only when a host refuses `srcdoc`), so their styles, ids and scripts cannot collide. A small script added to each embedded
 page turns links between the pages into tab switches. It writes `public/portfolios/hydraulics/index.html` and
 `LICENSE-fonts.txt` beside it, following the site's rules:
 

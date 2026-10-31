@@ -23,14 +23,17 @@ async function one(browser,p){
  page.on('console',m=>{if(m.type()==='error')errs.push(m.text().slice(0,160))}); page.on('pageerror',e=>errs.push('pageerror '+String(e).slice(0,160)));
  const t0=Date.now(); await page.goto(base+p,{waitUntil:'load',timeout:180000}); const loadWall=Date.now()-t0;
  await page.waitForTimeout(3000);
- const m1=await metric(cdp); await page.waitForTimeout(5000); const m2=await metric(cdp);
+ const m1=await metric(cdp); const w0=Date.now(); await page.waitForTimeout(5000); const m2=await metric(cdp); const idleS=(Date.now()-w0)/1000;
  const r=await page.evaluate(()=>{const n=performance.getEntriesByType('navigation')[0];const fcp=__m.fcp;
-   const tbt=__m.lt.filter(x=>x[0]>=fcp).reduce((a,x)=>a+Math.max(0,x[1]-50),0);
-   return {fcp,lcp:__m.lcp,cls:__m.cls,longTasks:__m.lt.length,maxTask:Math.max(0,...__m.lt.map(x=>x[1])),tbt,
+   // blocking time: each long task's part beyond 50 ms, for tasks that start between first paint and the load event (Lighthouse's TBT
+   // stops at time-to-interactive, which a page that never rests does not reach; the load event is a fixed, stated end instead)
+   const tbt=__m.lt.filter(x=>x[0]>=fcp&&x[0]<=n.loadEventEnd).reduce((a,x)=>a+Math.max(0,x[1]-50),0);
+   const tbtTo8s=__m.lt.filter(x=>x[0]>=fcp).reduce((a,x)=>a+Math.max(0,x[1]-50),0);
+   return {fcp,lcp:__m.lcp,cls:__m.cls,longTasks:__m.lt.length,maxTask:Math.max(0,...__m.lt.map(x=>x[1])),tbt,tbtTo8s,
      ttfb:n.responseStart,redirect:n.redirectEnd-n.redirectStart,domContentLoaded:n.domContentLoadedEventEnd,load:n.loadEventEnd,
      scrollW:document.documentElement.scrollWidth}});
  const cold={...r,bytes,htmlB,reqs,s3xx,loadWall,taskMs:m1.TaskDuration*1000,scriptMs:m1.ScriptDuration*1000,layoutMs:m1.LayoutDuration*1000,styleMs:m1.RecalcStyleDuration*1000,
-   heapMB:m1.JSHeapUsedSize/1048576,idleBusyPct:100*(m2.TaskDuration-m1.TaskDuration)/5,errs:[...new Set(errs)]};
+   heapMB:m1.JSHeapUsedSize/1048576,idleBusyPct:100*(m2.TaskDuration-m1.TaskDuration)/idleS,errs:[...new Set(errs)]};
  // warm: second visit in the same browser context (HTTP cache kept)
  bytes=0;htmlB=0;reqs=0;s304=0;s3xx=0; const t1=Date.now();
  await page.goto('about:blank'); await page.goto(base+p,{waitUntil:'load',timeout:180000}); const warmWall=Date.now()-t1;
@@ -45,6 +48,6 @@ const med=a=>{const s=[...a].sort((x,y)=>x-y);return s[Math.floor(s.length/2)]};
    const agg={cold:{},warm:{}}; for(const k of ['cold','warm'])for(const f of Object.keys(runs[0]?.[k]||{}))if(typeof runs[0][k][f]==='number')agg[k][f]=med(runs.map(r=>r[k][f]));
    if(!runs.length){console.log(p.padEnd(48)+' every run failed'); res[p]={failed:true}; continue;}
    agg.errs=runs[0]?.cold.errs; res[p]=agg;
-   const c=agg.cold,w=agg.warm; console.log(`${p.padEnd(48)} LCP ${(c.lcp/1000).toFixed(2)}s FCP ${(c.fcp/1000).toFixed(2)} CLS ${c.cls.toFixed(3)} TBT ${c.tbt|0}ms maxTask ${c.maxTask|0} task ${c.taskMs|0}ms heap ${c.heapMB.toFixed(1)}MB ${(c.bytes/1024)|0}kB/${c.reqs}req 3xx ${c.s3xx} idle ${c.idleBusyPct.toFixed(1)}% | warm LCP ${(w.lcp/1000).toFixed(2)}s ${(w.bytes/1024)|0}kB (html ${(w.htmlB/1024)|0}) ${w.reqs}req 304 ${w.s304} | errs ${(agg.errs||[]).length} sw ${c.scrollW}`);
+   const c=agg.cold,w=agg.warm; console.log(`${p.padEnd(48)} LCP ${(c.lcp/1000).toFixed(2)}s FCP ${(c.fcp/1000).toFixed(2)} CLS ${c.cls.toFixed(3)} TBT(to load) ${c.tbt|0}ms (to load+8s ${c.tbtTo8s|0}) maxTask ${c.maxTask|0} task ${c.taskMs|0}ms heap ${c.heapMB.toFixed(1)}MB ${(c.bytes/1000)|0}kB/${c.reqs}req 3xx ${c.s3xx} idle ${c.idleBusyPct.toFixed(1)}% | warm LCP ${(w.lcp/1000).toFixed(2)}s ${(w.bytes/1000)|0}kB (html ${(w.htmlB/1000)|0}) ${w.reqs}req 304 ${w.s304} | errs ${(agg.errs||[]).length} sw ${c.scrollW}`);
  }
  fs.writeFileSync(out,JSON.stringify(res,null,1)); await browser.close();})();
