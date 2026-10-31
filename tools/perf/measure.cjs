@@ -6,7 +6,7 @@ const [base,out,runsS,...paths]=process.argv.slice(2); const RUNS=+runsS||3;
 const NET=process.env.NET==='4g'?{offline:false,latency:85,downloadThroughput:9000*1024/8,uploadThroughput:3000*1024/8}:{offline:false,latency:562.5,downloadThroughput:1474.56*1024/8,uploadThroughput:675*1024/8};
 const INIT=`(()=>{window.__m={lcp:0,cls:0,lt:[],fcp:0};
  new PerformanceObserver(l=>{for(const e of l.getEntries())__m.lcp=e.startTime}).observe({type:'largest-contentful-paint',buffered:true});
- new PerformanceObserver(l=>{for(const e of l.getEntries())if(!e.hadRecentInput)__m.cls+=e.value}).observe({type:'layout-shift',buffered:true});
+ __m.ls=[]; new PerformanceObserver(l=>{for(const e of l.getEntries())if(!e.hadRecentInput){__m.cls+=e.value;__m.ls.push([e.startTime,e.value]);}}).observe({type:'layout-shift',buffered:true});
  new PerformanceObserver(l=>{for(const e of l.getEntries())__m.lt.push([e.startTime,e.duration])}).observe({type:'longtask',buffered:true});
  new PerformanceObserver(l=>{for(const e of l.getEntries())if(e.name==='first-contentful-paint')__m.fcp=e.startTime}).observe({type:'paint',buffered:true});})()`;
 async function metric(cdp){const r=await cdp.send('Performance.getMetrics');const o={};for(const m of r.metrics)o[m.name]=m.value;return o;}
@@ -17,7 +17,9 @@ async function one(browser,p){
  await cdp.send('Network.enable'); await cdp.send('Performance.enable');
  await cdp.send('Network.emulateNetworkConditions',NET); await cdp.send('Emulation.setCPUThrottlingRate',{rate:4});
  let bytes=0,reqs=0,s304=0,s3xx=0,errs=[],htmlB=0; const status={},net={},isDoc={};
- cdp.on('Network.responseReceived',e=>{status[e.requestId]=e.response.status; if(e.response.status===304)s304++;});
+ cdp.on('Network.responseReceived',e=>{status[e.requestId]=e.response.status;});
+ // a revalidated file reaches the page as 200 from the cache; the wire status (304) is in the extra info
+ cdp.on('Network.responseReceivedExtraInfo',e=>{if(e.statusCode===304)s304++;});
  cdp.on('Network.requestWillBeSent',e=>{if(!/^https?:/.test(e.request.url))return; net[e.requestId]=1; if(e.type==='Document')isDoc[e.requestId]=1; reqs++; if(e.redirectResponse)s3xx++;});
  cdp.on('Network.loadingFinished',e=>{if(!net[e.requestId])return; bytes+=e.encodedDataLength; if(isDoc[e.requestId])htmlB+=e.encodedDataLength;});
  page.on('console',m=>{if(m.type()==='error')errs.push(m.text().slice(0,160))}); page.on('pageerror',e=>errs.push('pageerror '+String(e).slice(0,160)));
@@ -29,7 +31,9 @@ async function one(browser,p){
    // stops at time-to-interactive, which a page that never rests does not reach; the load event is a fixed, stated end instead)
    const tbt=__m.lt.filter(x=>x[0]>=fcp&&x[0]<=n.loadEventEnd).reduce((a,x)=>a+Math.max(0,x[1]-50),0);
    const tbtTo8s=__m.lt.filter(x=>x[0]>=fcp).reduce((a,x)=>a+Math.max(0,x[1]-50),0);
-   return {fcp,lcp:__m.lcp,cls:__m.cls,longTasks:__m.lt.length,maxTask:Math.max(0,...__m.lt.map(x=>x[1])),tbt,tbtTo8s,
+   // CLS as web.dev defines it: the largest burst of shifts (each less than 1 s after the last, the burst at most 5 s long); clsSum adds every shift
+   let best=0,cur=0,w0=-1,last=-1; for(const [t,v] of __m.ls){ if(w0<0||t-last>=1000||t-w0>=5000){cur=0;w0=t;} cur+=v; last=t; best=Math.max(best,cur);}
+   return {fcp,lcp:__m.lcp,cls:best,clsSum:__m.cls,longTasks:__m.lt.length,maxTask:Math.max(0,...__m.lt.map(x=>x[1])),tbt,tbtTo8s,
      ttfb:n.responseStart,redirect:n.redirectEnd-n.redirectStart,domContentLoaded:n.domContentLoadedEventEnd,load:n.loadEventEnd,
      scrollW:document.documentElement.scrollWidth}});
  const cold={...r,bytes,htmlB,reqs,s3xx,loadWall,taskMs:m1.TaskDuration*1000,scriptMs:m1.ScriptDuration*1000,layoutMs:m1.LayoutDuration*1000,styleMs:m1.RecalcStyleDuration*1000,

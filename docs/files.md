@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-911 files, 55.7 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+912 files, 55.7 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -33,7 +33,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Shared by the portfolio sources (not served)](#shared-by-the-portfolio-sources-not-served) | 1 |
 | [Template sources](#template-sources) | 2 |
 | [Documentation](#documentation) | 32 |
-| [Tools](#tools) | 14 |
+| [Tools](#tools) | 15 |
 | [Translation tables](#translation-tables) | 48 |
 | [Agents of the lecture-note review](#agents-of-the-lecture-note-review) | 4 |
 | [Working notes of the Rotor Pendula study](#working-notes-of-the-rotor-pendula-study) | 86 |
@@ -680,7 +680,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`docs/minor-issues-report.md`](minor-issues-report.md) | 19.5 kB | Documentation: Minor issues · final verification report. | [minor-issues-report.md](minor-issues-report.md) |
 | [`docs/notes.md`](notes.md) | 5.4 kB | Documentation: The lecture-note review: `notes/` and `.claude/agents/`. | [notes.md](notes.md) |
 | [`docs/pages.md`](pages.md) | 51.7 kB | Documentation: The site's own pages: home, simulations catalog, Portfolios, robots.txt. | [pages.md](pages.md) |
-| [`docs/performance.md`](performance.md) | 20.2 kB | Documentation: Performance: what was measured, what was slow, what changed. | [performance.md](performance.md) |
+| [`docs/performance.md`](performance.md) | 21.5 kB | Documentation: Performance: what was measured, what was slow, what changed. | [performance.md](performance.md) |
 | [`docs/portfolios.md`](portfolios.md) | 55.7 kB | Documentation: The four research projects: `public/portfolios/`. | [portfolios.md](portfolios.md) |
 | [`docs/research-theory-audit.md`](research-theory-audit.md) | 30.0 kB | Documentation: Readability audit: Droplet Collection and Rotor Pendula. | [research-theory-audit.md](research-theory-audit.md) |
 | [`docs/scripts/catalog.md`](scripts/catalog.md) | 15.4 kB | Documentation: public/scripts/catalog.js. | [catalog.md](scripts/catalog.md) |
@@ -715,11 +715,12 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/i18n/ingest.py`](../tools/i18n/ingest.py) | 1.9 kB | Stores checked translations made outside the tables (page pieces, script strings, walkthrough prose). | [i18n.md](i18n.md) |
 | [`tools/i18n/package.json`](../tools/i18n/package.json) | 285 B | The parser wrap.cjs needs (acorn); npm install --prefix tools/i18n. | [i18n.md](i18n.md) |
 | [`tools/i18n/wrap.cjs`](../tools/i18n/wrap.cjs) | 3.7 kB | Wraps the reader-visible strings of a page's scripts in _t(), with a JavaScript parser (acorn). | [i18n.md](i18n.md) |
-| [`tools/inventory.py`](../tools/inventory.py) | 43.7 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
+| [`tools/inventory.py`](../tools/inventory.py) | 43.8 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
 | [`tools/perf/interact.cjs`](../tools/perf/interact.cjs) | 6.1 kB | Clicks a reader makes (page to page, Solve, data panel, folds, study tabs), timed by the Event Timing API. | [performance.md](performance.md) |
 | [`tools/perf/loadtrace.cjs`](../tools/perf/loadtrace.cjs) | 1.6 kB | The long parse, layout and script pieces of a study page loading until its first tab is ready. | [performance.md](performance.md) |
-| [`tools/perf/measure.cjs`](../tools/perf/measure.cjs) | 6.0 kB | Page loads on a throttled phone (Slow 4G or 4G, CPU 4x): LCP, CLS, blocking time, bytes, a repeat visit; the median of several runs. | [performance.md](performance.md) |
-| [`tools/perf/serve.cjs`](../tools/perf/serve.cjs) | 4.8 kB | A local server that answers like Cloudflare does for phyeinusul.com (Brotli, _headers, no ETag on HTML, .html -> 307), for before-and-after measurements. | [performance.md](performance.md) |
+| [`tools/perf/margin.cjs`](../tools/perf/margin.cjs) | 2.3 kB | How close a study tab comes to the shell's 8 s limit: from its frame's creation to its ready message, on a slowed processor. | [performance.md](performance.md) |
+| [`tools/perf/measure.cjs`](../tools/perf/measure.cjs) | 6.5 kB | Page loads on a throttled phone (Slow 4G or 4G, CPU 4x): LCP, CLS, blocking time, bytes, a repeat visit; the median of several runs. | [performance.md](performance.md) |
+| [`tools/perf/serve.cjs`](../tools/perf/serve.cjs) | 4.9 kB | A local server that answers like Cloudflare does for phyeinusul.com (Brotli, _headers, no ETag on HTML, .html -> 307), for before-and-after measurements. | [performance.md](performance.md) |
 | [`tools/perf/tabs.cjs`](../tools/perf/tabs.cjs) | 3.9 kB | The study pages with tabs: time until the first tab is drawn, each tab switch, a repeat visit. | [performance.md](performance.md) |
 | [`tools/perf/trace.cjs`](../tools/perf/trace.cjs) | 2.8 kB | What fills the main thread while a page sits idle, at the top or scrolled down: trace totals, forced layouts, JS self time. | [performance.md](performance.md) |
 

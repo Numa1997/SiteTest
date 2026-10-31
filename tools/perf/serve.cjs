@@ -16,12 +16,12 @@ const types={'.html':'text/html; charset=utf-8','.css':'text/css','.js':'applica
 const cache={};
 const realRoot=fs.realpathSync(root), inRoot=q=>q===realRoot||q.startsWith(realRoot+path.sep);
 const handler=(req,res)=>{try{serveOne(req,res);}catch(e){try{res.writeHead(500);res.end('error');}catch(e2){}}};   // one request never ends the server
-const serveOne=(req,res)=>{let u; try{u=decodeURIComponent(req.url.split('?')[0]);}catch(e){res.writeHead(400);return res.end('bad address');}
+const serveOne=(req,res)=>{let u; const qs=req.url.includes('?')?req.url.slice(req.url.indexOf('?')):''; try{u=decodeURIComponent(req.url.split('?')[0]);}catch(e){res.writeHead(400);return res.end('bad address');}
  if(u.includes('\0')){res.writeHead(400);return res.end('bad address');}
  u=path.posix.normalize('/'+u);   // from here on only the normalized path: no '..' can remain in it
  if(u==='/_headers'){res.writeHead(404);return res.end('nf');}   // Cloudflare reads _headers and never serves it
- if(redirectHtml&&u.endsWith('.html')){let t=u.slice(0,-5); if(t.endsWith('/index'))t=t.slice(0,-5); res.writeHead(307,{location:encodeURI(t)});return res.end();}
- let f=path.join(root,u); if(u.endsWith('/'))f=path.join(f,'index.html'); else if(!fs.existsSync(f)||fs.statSync(f).isDirectory()){ if(fs.existsSync(f+'.html'))f+='.html'; else if(fs.existsSync(path.join(f,'index.html'))){res.writeHead(307,{location:encodeURI(u+'/')});return res.end();} }
+ if(redirectHtml&&u.endsWith('.html')){let t=u.slice(0,-5); if(t.endsWith('/index'))t=t.slice(0,-5); res.writeHead(307,{location:encodeURI(t)+qs});return res.end();}
+ let f=path.join(root,u); if(u.endsWith('/'))f=path.join(f,'index.html'); else if(!fs.existsSync(f)||fs.statSync(f).isDirectory()){ if(fs.existsSync(f+'.html'))f+='.html'; else if(fs.existsSync(path.join(f,'index.html'))){res.writeHead(307,{location:encodeURI(u+'/')+qs});return res.end();} }
  if(!fs.existsSync(f)||fs.statSync(f).isDirectory()){res.writeHead(404);return res.end('nf');}
  if(!inRoot(fs.realpathSync(f))){res.writeHead(403);return res.end('outside');}   // nothing outside <folder>, links included
  const st=fs.statSync(f),key=f+st.mtimeMs; if(!cache[key]){const b=fs.readFileSync(f);const ext=path.extname(f);const comp=/\.(html|css|js|svg|json|txt)$/.test(f);cache[key]={b,br:comp?zlib.brotliCompressSync(b,{params:{[zlib.constants.BROTLI_PARAM_QUALITY]:5}}):null,etag:'W/"'+crypto.createHash('md5').update(b).digest('hex')+'"',type:types[ext]||'application/octet-stream'};}
