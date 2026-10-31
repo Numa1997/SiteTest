@@ -373,10 +373,22 @@ Neither makes taps lag; moving the computation to a worker would be a restructur
 
 ## Not changed, and why
 
-- **The `.html` → 307 redirect** (cause 3). Cloudflare's `html_handling: "none"` (in `wrangler.jsonc`) would serve `x.html`
-  directly; but then the addresses without `.html` that readers have been sent to since 20 October would stop working, unless
-  each is kept by a rule. Writing the links without `.html` would break the GitHub Pages copy and local files. Numa's decision; it is
-  a Cloudflare setting, which this work does not change.
+- **The `.html` → 307 redirect** (cause 3), one round trip on every click between pages (620 ms on Slow 4G; about 0.05 to 0.2 s on
+  a phone on 4G, estimated). Three ways out, each with its cost; Numa's decision, since the first two change Cloudflare's settings
+  (`wrangler.jsonc`), which this work does not touch:
+  1. `"html_handling": "none"` in `wrangler.jsonc`: `x.html` is served at once; but the addresses without `.html`, which every reader's
+     browser shows and shares since 20 October, would answer 404, unless a `_redirects` file maps each back (one rule per page).
+  2. `"html_handling": "drop-trailing-slash"` changes nothing for this: it also answers `x.html` with a 307.
+  3. Writing every internal link without `.html`: no redirect on Cloudflare, but the GitHub Pages copy and pages opened as local files
+     would no longer find each other.
+- **The Hydraulic Press Study's tab bar** (CLS 0.21 on the English page; the German and Arabic pages have none): the bar shrinks 26 px
+  when its two faces arrive. Preloading them from the page's head removed the shift (0.209 → 0.000), but on Slow 4G the first tab
+  then appeared later (median of four sets of three runs, about 6.6 → 7.1 s), because the fonts took bandwidth from the page. Since
+  change 2 the fonts stay in the reader's cache for a year, so the shift happens only on a first visit. Tried, measured, not merged.
+- **The Arabic simulations list** keeps a shift of 0.14 (change 4 removed the list's own): the top bar grows when its Arabic face
+  arrives. Not tried; the same trade-off as the tab bar above is likely (preloading takes bandwidth from the page).
+- **Iron, Cotton and the Head computes its drop on the main thread** for about 95 s at full speed after the page opens (change 5);
+  taps stay quick (56 ms), so it is left as the study designed it.
 - **No ETag on HTML** (limit 3). Cloudflare's behaviour, not a setting in this repository.
 - **The simulations' per-frame work on screen and Fig. 9's Solve** (cause 1). The off-screen work is gone (change 3). On screen, each
   figure still redraws all its canvases every frame, and Fig. 9's `label()` forces a layout every frame; Solve integrates the whole
