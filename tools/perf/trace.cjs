@@ -1,8 +1,7 @@
 // What fills the main thread while a page sits idle: 4 s of trace and CPU profile, at the top or scrolled to <scrollY>.
 // node tools/perf/trace.cjs <url> [scrollY]   (docs/performance.md)
-// node trace.js <url> [scrollY]  : 4 s of idle main-thread work after load, CPU 4x; event totals, forced-layout stacks, top JS self time
 const {chromium}=require('playwright');
-(async()=>{const [url,scroll]=process.argv.slice(2); const b=await chromium.launch(); const ctx=await b.newContext({viewport:{width:390,height:844},deviceScaleFactor:3,isMobile:true,hasTouch:true});
+(async()=>{const [url,scroll]=process.argv.slice(2); const b=await chromium.launch(); const ctx=await b.newContext({viewport:{width:390,height:844},deviceScaleFactor:3,isMobile:true,hasTouch:true,ignoreHTTPSErrors:true});
  const p=await ctx.newPage(); const c=await ctx.newCDPSession(p); await p.goto(url,{waitUntil:'load',timeout:120000}); await p.waitForTimeout(4000);
  if(scroll) {await p.evaluate(y=>scrollTo(0,+y),scroll); await p.waitForTimeout(1500);}
  await c.send('Emulation.setCPUThrottlingRate',{rate:4});
@@ -12,7 +11,7 @@ const {chromium}=require('playwright');
  await p.waitForTimeout(4000);
  const done=new Promise(r=>c.once('Tracing.tracingComplete',r)); await c.send('Tracing.end'); await done;
  const {profile}=await c.send('Profiler.stop');
- const main=ev.filter(e=>e.name==='TracingStartedInBrowser'); 
+
  const tot={},cnt={}; const layoutStacks={};
  for(const e of ev){ if(e.ph!=='X'||!e.dur)continue; if(!['Layout','UpdateLayoutTree','Paint','RasterTask','FunctionCall','EvaluateScript','Animation Frame Fired','FireAnimationFrame','CompositeLayers','PrePaint','Layerize','UpdateLayer','ScheduleStyleRecalculation','HitTest','ParseHTML','GPUTask','Commit'].includes(e.name))continue;
    tot[e.name]=(tot[e.name]||0)+e.dur/1000; cnt[e.name]=(cnt[e.name]||0)+1;

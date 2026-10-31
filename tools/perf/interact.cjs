@@ -1,10 +1,9 @@
 // Interactions a reader makes: page-to-page clicks, Solve, the data panel, folds, the study tabs; Event Timing durations (what INP is made of).
 // node tools/perf/interact.cjs <base URL> <out.json> <runs>   (docs/performance.md)
-// node interact.js <base> <out> <runs>
 const {chromium}=require('playwright'); const fs=require('fs');
 const [base,out,runsS]=process.argv.slice(2); const RUNS=+runsS||3;
 const NET=process.env.NET==='4g'?{offline:false,latency:85,downloadThroughput:9000*1024/8,uploadThroughput:3000*1024/8}:{offline:false,latency:562.5,downloadThroughput:1474.56*1024/8,uploadThroughput:675*1024/8};
-const INIT=`(()=>{window.__m={lcp:0,ev:[]};
+const INIT=`if(window.top===window){window.__ready={};addEventListener('message',function(e){var d=e.data||{};for(var k in d)if(/Ready$/.test(k)&&typeof d[k]==='string'&&!(d[k] in __ready))__ready[d[k]]=performance.now();});}(()=>{window.__m={lcp:0,ev:[]};
  new PerformanceObserver(l=>{for(const e of l.getEntries())__m.lcp=e.startTime}).observe({type:'largest-contentful-paint',buffered:true});
  try{new PerformanceObserver(l=>{for(const e of l.getEntries())if(e.interactionId)__m.ev.push({n:e.name,d:e.duration,id:e.interactionId,t:e.startTime,pd:e.processingStart-e.startTime,pr:e.processingEnd-e.processingStart})}).observe({type:'event',durationThreshold:16,buffered:true});}catch(e){}})()`;
 async function setup(browser){
@@ -42,9 +41,10 @@ async function run(browser){ const R={};
   await ctx.close();}}catch(e){R.err2=e.message.slice(0,200)}
  try{ // Flow 3: rotor tabs
  {const {ctx,page,net}=await setup(browser); await page.goto(base+'/portfolios/rotor-pendula/index.html',{waitUntil:'load',timeout:180000});
-  await page.waitForFunction(()=>document.getElementById('loading').hidden,null,{timeout:120000}); await page.waitForTimeout(1500);
-  for(const tb of ['sim','wind','notes','sim']){ const t0=Date.now(); let d=await inp(page,async()=>{await page.locator('#tab-'+tb).click(); await page.waitForFunction(()=>document.getElementById('loading').hidden,null,{timeout:120000});},1000);
-    R['rotorTab_'+tb+(R['rotorTab_'+tb]?'_2':'')]={inp:d,readyMs:Date.now()-t0-1000};}
+  await page.waitForFunction(()=>window.__ready&&window.__ready.notes!==undefined,null,{timeout:120000,polling:50}); await page.waitForTimeout(1500);
+  // a tab is ready when its frame posts rotorReady to the shell (the shell's 'Loading…' is hidden only once); a tab seen before is ready at once
+  for(const tb of ['sim','wind','notes','sim']){ let readyMs=0; const d=await inp(page,async()=>{const t0=Date.now(); await page.locator('#tab-'+tb).click(); await page.waitForFunction(t=>window.__ready&&window.__ready[t]!==undefined,tb,{timeout:120000,polling:50}); readyMs=Date.now()-t0;},1000);
+    R['rotorTab_'+tb+(R['rotorTab_'+tb]?'_2':'')]={inp:d,readyMs};}
   R.rotorHeapMB=(await page.evaluate(()=>performance.memory?performance.memory.usedJSHeapSize/1048576:0));
   await ctx.close();}}catch(e){R.err3=e.message.slice(0,200)}
  return R;}

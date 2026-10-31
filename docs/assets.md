@@ -29,7 +29,8 @@ The home page `index.html` does not use KaTeX.
 
 **Why it is self-hosted** rather than loaded from a public server: the pages then work offline from a saved copy, and they
 do not depend on a third party being reachable. Droplet Collection loads this copy too; the Hydraulic Press Study and Rotor Pendula typeset their maths with KaTeX when they
-are generated and carry its fonts inside the page ([portfolios.md](portfolios.md)).
+are generated; their sources carry its fonts inside the page, and since 31 October 2026 the site's copies link these same files
+instead ([portfolios.md](portfolios.md)).
 
 **To upgrade:** replace all four parts together (`katex.min.js`, `katex.min.css`, `contrib/auto-render.min.js`, `fonts/`) from
 the same release, cut the CSS down to woff2 again, and check a page with many equations (for example Fig. 2) for unchanged

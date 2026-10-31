@@ -1,6 +1,5 @@
 // Page loads as a phone sees them (docs/performance.md). node tools/perf/measure.cjs <base URL> <out.json> <runs> <path> [<path> ...]
 // Cold visit (empty cache) then a repeat visit in the same browser; the median of <runs> runs. NET=4g for 85 ms / 9 Mbit/s instead of Slow 4G.
-// Usage: node measure.js <base> <outfile> <runs> path1 path2 ...
 // Mobile profile: 390x844, DPR 3, CPU 4x, Lighthouse "Slow 4G" devtools throttling (562.5 ms RTT, 1474.56 kbit/s down, 675 kbit/s up).
 const {chromium}=require('playwright'); const fs=require('fs');
 const [base,out,runsS,...paths]=process.argv.slice(2); const RUNS=+runsS||3;
@@ -44,6 +43,7 @@ const med=a=>{const s=[...a].sort((x,y)=>x-y);return s[Math.floor(s.length/2)]};
 (async()=>{const browser=await chromium.launch(); const res={};
  for(const p of paths){const runs=[];for(let i=0;i<RUNS;i++){try{runs.push(await one(browser,p))}catch(e){console.error(p,e.message)}}
    const agg={cold:{},warm:{}}; for(const k of ['cold','warm'])for(const f of Object.keys(runs[0]?.[k]||{}))if(typeof runs[0][k][f]==='number')agg[k][f]=med(runs.map(r=>r[k][f]));
+   if(!runs.length){console.log(p.padEnd(48)+' every run failed'); res[p]={failed:true}; continue;}
    agg.errs=runs[0]?.cold.errs; res[p]=agg;
    const c=agg.cold,w=agg.warm; console.log(`${p.padEnd(48)} LCP ${(c.lcp/1000).toFixed(2)}s FCP ${(c.fcp/1000).toFixed(2)} CLS ${c.cls.toFixed(3)} TBT ${c.tbt|0}ms maxTask ${c.maxTask|0} task ${c.taskMs|0}ms heap ${c.heapMB.toFixed(1)}MB ${(c.bytes/1024)|0}kB/${c.reqs}req 3xx ${c.s3xx} idle ${c.idleBusyPct.toFixed(1)}% | warm LCP ${(w.lcp/1000).toFixed(2)}s ${(w.bytes/1024)|0}kB (html ${(w.htmlB/1024)|0}) ${w.reqs}req 304 ${w.s304} | errs ${(agg.errs||[]).length} sw ${c.scrollW}`);
  }

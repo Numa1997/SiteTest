@@ -10,7 +10,7 @@ Study, is generated from its source in this repository too, `portfolios-src/hydr
 |---|---|---|
 | [`public/portfolios/droplet-collection/`](../public/portfolios/droplet-collection/) | its source in [`portfolios-src/droplets/`](../portfolios-src/droplets/) | Numa's Bachelor thesis (Leipzig) on how cloud droplets grow into rain, rebuilt as lecture notes: thirteen chapters from one drop to ice, energy and entropy, who eats whom, and a cloud with a shape, five simulations running in the browser, worked problems and checks. One self-contained page ([below](#droplet-collection-droplet-collection-since-23-october-2026)). |
 | [`public/portfolios/rotor-pendula/`](../public/portfolios/rotor-pendula/) | its source in [`portfolios-src/rotor-pendula/`](../portfolios-src/rotor-pendula/) | A second blade hinged at the tip of a wind-turbine blade as a sensor's power supply, told as a double pendulum whose first arm the wind holds: lecture notes in nine chapters, a simulation page and an animated turbulent-wind page, one generated page. |
-| [`public/portfolios/hydraulics/`](../public/portfolios/hydraulics/) | its source in [`portfolios-src/hydraulics/`](../portfolios-src/hydraulics/) (not an app) | A servo-hydraulic press under digital control, from first principles: the animated press with its PID controller, loop analysis (Bode, Nyquist, z-plane), Pascal's ideal press, and a 23-chapter text deriving every equation. One self-contained page. |
+| [`public/portfolios/hydraulics/`](../public/portfolios/hydraulics/) | its source in [`portfolios-src/hydraulics/`](../portfolios-src/hydraulics/) (not an app) | A servo-hydraulic press under digital control, from first principles: the animated press with its PID controller, loop analysis (Bode, Nyquist, z-plane), Pascal's ideal press, and a 23-chapter text deriving every equation. One page, with the site's font files beside it. |
 
 Every project here is generated from its source in this repository.
 
@@ -37,7 +37,8 @@ The page is generated from [`portfolios-src/droplets/`](../portfolios-src/drople
 
 ## The Hydraulic Press Study: `hydraulics/`
 
-This project was never a Vite build of an app. It is one self-contained HTML page (with German and Arabic versions), generated from its
+This project was never a Vite build of an app. It is one HTML page (with German and Arabic versions) that needs only the site's
+font files beside it, generated from its
 source, which lives in this repository in [`portfolios-src/hydraulics/`](../portfolios-src/hydraulics/) (its
 [`README.md`](../portfolios-src/hydraulics/README.md) describes it). Vite neither builds nor serves that folder. The study was
 written in the repository `Numa1997/Gergi-s-vision` and moved here on 21 October 2026, so that the whole site has one

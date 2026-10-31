@@ -8,7 +8,7 @@ ETag); linked, the browser fetches each file once and keeps it for every page an
 
 link_fonts(html, site) replaces each url(data:font/woff2;base64,...) whose bytes match a site file with url(../../<that file>),
 the path from public/portfolios/<study>/ (srcdoc frames resolve relative addresses against the parent page). A font the site does
-not serve stops the build, so a page never silently loses a face.
+not serve, or a font embedded in any other form, stops the build, so a page never silently loses a face or keeps a copy.
 """
 import base64
 import hashlib
@@ -41,4 +41,8 @@ def link_fonts(html, site, depth='../../'):
         assert md5 in table, f'an embedded font (md5 {md5}) is not among the site files in public/fonts/ or public/vendor/katex/fonts/'
         return f"url({depth}{table[md5]})"
 
-    return DATA_FONT.sub(one, html)
+    out = DATA_FONT.sub(one, html)
+    # any font still embedded in another form (font/woff, application/font-woff2, a charset, line breaks) stops the build too
+    left = re.search(r'data:(?:font/|application/(?:x-)?font)', out)
+    assert not left, f'an embedded font in a form link_fonts does not read: {out[left.start():left.start() + 60]!r}'
+    return out
