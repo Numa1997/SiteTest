@@ -117,7 +117,7 @@ Iron, Cotton and the Head (0.86) move their content while loading, beyond the 0.
 still to be measured.*
 
 **5. Repeat visits gain little.** With `max-age=0`, a repeat visit re-asks for every stylesheet, script and font (15 to 39
-requests per page), and the simulations list takes 2.92 s on a repeat visit against 2.85 s on the first. *Not changed yet.*
+requests per page), and the simulations list takes 2.92 s on a repeat visit against 2.85 s on the first. *Changed for the font files: see change 2.*
 
 ## Change 1: the study pages link the site's fonts instead of carrying them (31 October 2026)
 
@@ -209,6 +209,46 @@ they are older than this change and are not about speed: a contents link tapped 
 script sits at the end of the tab) loads the whole study page inside the tab, which the 8 s replacement then blanks, on `main` as
 well; the tab frames' accessible names read doubled ("SimulationSimulation"), because the shell takes both the long and the short
 label.
+
+**On the live site** (merged 31 October 2026 as `87b3357`; Cloudflare served the new pages about 80 s later, byte-identical to the
+build, checked by SHA-256 for the four changed pages, three unchanged pages and two font files; `measure.cjs
+https://phyeinusul.com … 3`, Slow 4G, CPU 4×; before: the run of the same morning):
+
+| Live | Rotor Pendula, before → after | Hydraulic Press Study, before → after |
+|---|---|---|
+| First visit, bytes | 1145 → **663 kB** | 779 → **588 kB** |
+| Repeat visit, bytes | 1077 → **394 kB** | 621 → **277 kB** |
+
+Cloudflare compresses the page less than `serve.cjs` (Rotor Pendula's page 375 kB live against 292 kB locally). No new console
+error: the only one is still the analytics beacon.
+
+## Change 2: font files kept for a year (31 October 2026)
+
+**What.** One rule in [`public/_headers`](../public/_headers): every `*.woff2` is sent with `Cache-Control: public, max-age=31536000,
+immutable`. Pages, stylesheets and scripts keep Cloudflare's default (`max-age=0, must-revalidate`).
+
+**Why it works.** With `max-age=0` a browser keeps a copy of each file but asks the server before every use ("still the same?",
+answered `304`): one round trip each, and the fonts are needed before the text can be drawn. A font file never changes under its
+name (the fonts here have changed once in the repository's history, on 24 October, as new files), so the browser may use its copy
+without asking ([web.dev: HTTP cache](https://web.dev/articles/http-cache): `max-age=31536000` for files whose content never
+changes, `immutable` to skip revalidation; [Cloudflare: headers](https://developers.cloudflare.com/workers/static-assets/headers/):
+a `_headers` rule overrides the default, `/*.jpg` is its own example of a pattern by file type). A changed stylesheet or page still
+reaches readers at once. The one rule to keep: a font whose bytes change must get a new file name.
+
+**Measured**, repeat visits (the same browser, its cache kept) on `serve.cjs`, which applies `_headers` as Cloudflare does; HTTP/1.1;
+first visits unchanged:
+
+| Repeat visit | Files asked again, before → after | LCP, 4G (median of 3) | LCP, Slow 4G (two runs of 2) |
+|---|---|---|---|
+| Home | 13 → 7 | 0.65 → 0.58 s | 2.73, 2.66 → **2.02, 1.98 s** |
+| Simulations list | 24 → 13 | 0.59 → 0.60 s | 2.51, 2.54 → 2.50, 2.51 s |
+| Fig. 9 | 36 → 18 | 0.99 → **0.72 s** | 3.39, 3.32 → **2.64, 2.65 s** |
+| Portfolios | 26 → 15 | 0.79 → 0.82 s | |
+| Rotor Pendula | 18 → 1 | 0.42 → 0.41 s | |
+| Hydraulic Press Study | 21 → 6 | 0.72 → **0.52 s** | |
+
+Where the fonts lie on the path to the first drawing (home, Fig. 9, the Hydraulic Press Study) a repeat visit is drawn 0.2 to 0.7 s
+sooner; elsewhere the time does not change measurably, but half the round trips are gone.
 
 ## Not changed, and why
 
