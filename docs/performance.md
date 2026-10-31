@@ -196,14 +196,19 @@ measurers), so it is reported, not counted as a gain or a loss. Preloading the f
 tried and dropped: the frames do not reuse the shell's preloads, so fonts were fetched twice (over HTTP/2 755 instead of 562 kB; over
 HTTP/1.1, with a cache, 670 instead of 573 kB).
 
-**Review.** Before merging, three independent reviewers checked the change (page equivalence and the pages in a browser; the
-measurements and this page's claims; the code). What they found, and what was done: the local server served files outside its folder
-and stopped on a malformed address (fixed: `127.0.0.1` only, nothing outside the folder, 400); the tab-switch times measured only the
-click, because the shell's "Loading…" is hidden once (fixed: a tab counts as ready at its own ready message); the blocking-time
-window was not stated and "busy while idle" divided by a nominal 5 s (fixed, stated above); the 8 s replacement above (fixed); a
-font embedded in another form would have passed silently (now stops the build); units, line numbers, the "three quarters" (two thirds
-with Brotli) and descriptions in `docs/` and `tools/inventory.py` (corrected); and the timing gains on 4G claimed at first did not
-reproduce (the table above now shows both measurements).
+**Review.** Before merging, two rounds of three independent reviewers checked the change: what the reader gets in a browser, the
+measurements and this page's claims, and the code. Round 1 found: the local server served files outside its folder and stopped on a
+malformed address; the tab-switch times measured only the click; the 8 s replacement above; blocking-time windows not stated and
+"busy while idle" over a nominal 5 s; a font embedded in another form passing silently; the 4G timing gains first claimed did not
+reproduce; units, line numbers, the "three quarters" (two thirds with Brotli) and stale descriptions in `docs/` and
+`tools/inventory.py`. Round 2 found: `docs/files.md` not regenerated after the last builder edit; the server could still be stopped
+by one hand-made request, followed links out of its folder and served `/_headers`; the tab times read the ready message by polling,
+up to 1.5 s late; CLS summed every shift; the revalidation counter always read 0; the guard's numbers had no command and its
+explanation was too broad; units and labels. All of these were fixed or corrected in the text above. Found and left alone, because
+they are older than this change and are not about speed: a contents link tapped in a long tab before its link script has run (the
+script sits at the end of the tab) loads the whole study page inside the tab, which the 8 s replacement then blanks, on `main` as
+well; the tab frames' accessible names read doubled ("SimulationSimulation"), because the shell takes both the long and the short
+label.
 
 ## Not changed, and why
 
