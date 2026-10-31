@@ -23,6 +23,8 @@ The scripts are in [`tools/perf/`](../tools/perf/); Playwright and Chromium must
 | `trace.cjs <url> [scrollY]` | What fills the main thread while a page sits idle (a 4 s trace and CPU profile), with the figure on screen or scrolled away. |
 | `loadtrace.cjs <url>` | The long parse, layout and script pieces of a study page loading. |
 | `margin.cjs <base> <CPU slowdown> <runs>` | How close a study tab comes to the shell's 8 s limit: from its frame's creation to its ready message. |
+| `foldtap.cjs <base> <runs> <page>…` | A reader in a figure's lecture note: how busy the main thread is, and how long closing and opening a fold takes. |
+| `clockcheck.cjs <base> <page>…` | Each figure runs on screen, holds off screen, resumes; the store stays live for an open data panel and the walkthrough. |
 | `serve.cjs <folder> <port>` | A local server that answers as Cloudflare does (below), so that a change can be measured before it is merged. |
 
 The metrics, as [web.dev](https://web.dev/articles/vitals) defines them, with its thresholds for "good" at the 75th percentile of
@@ -99,7 +101,7 @@ clock of `Sim.clock` (`public/scripts/sim.js:176`) runs and draws whether or not
 the home page, by contrast, already stops when it is out of view, `index.html:783`). Part of the per-frame cost is software
 drawing (limit 1 above); the script part, about 34 ms per frame at 4× slowdown, and the work done off screen are real on a phone.
 Fig. 9's Solve integrates the whole run in one task on the main thread (1.25 s at 4×).
-*Not changed yet: it touches the figures' code, which another session is working on; see "Not changed" below.*
+*Changed for the work done off screen: see change 3. The per-frame cost on screen and Solve are not changed.*
 
 **2. Fonts sent again inside the study pages.** Rotor Pendula and the Hydraulic Press Study (English, German, Arabic) each carry
 59 fonts as base64 `data:` addresses, about 440 kB of fonts per tab, three tabs per page: 1.3 MB of text that compresses badly. Every
@@ -250,6 +252,53 @@ first visits unchanged:
 Where the fonts lie on the path to the first drawing (home, Fig. 9, the Hydraulic Press Study) a repeat visit is drawn 0.2 to 0.7 s
 sooner; elsewhere the time does not change measurably, but half the round trips are gone.
 
+**On the live site** (merged as `f92733a`; Cloudflare sent the new header about 40 s later: `curl -sI` shows
+`cache-control: public, max-age=31536000, immutable` on every `*.woff2` tried, the security headers still on them, and the default on
+pages, stylesheets and scripts). Repeat visits, Slow 4G, CPU 4×, median of 3 (`measure.cjs https://phyeinusul.com … 3`; before: the
+morning's baseline): home 3.04 → **2.19 s**, Fig. 9 3.85 → **3.08 s**; files asked again 7 of 15 and 18 of 39.
+
+## Change 3: a figure rests while nothing shows it (31 October 2026)
+
+**What.** `public/scripts/sim.js`, which every simulation page shares:
+
+- `Sim.clock` no longer calls the page's frame function while nothing that shows the run is on screen: neither the figure
+  (`.sim__head`, `.sim__grid`) nor the walkthrough with its live values (`#walk`), watched by an IntersectionObserver with a 200 px
+  margin, and the data panel neither open nor recording. While held it asks the browser for no frames; a timer looks again every
+  200 ms. The simulation's time stands still, as it already did in a hidden tab, and the first frame after the hold starts with
+  `dt = 0`, so the run goes on from the same instant.
+- The walkthrough's "Now" column, looked at every 200 ms, rewrites a cell only when its text changes, and nothing while it is out of
+  view: rewriting the same text made the browser lay the whole page out again, 5 times a second.
+
+Every existing line of `sim.js` keeps its number (the new helper sits at the end of the file), so the 310 citations of `sim.js` in
+`docs/` stay true.
+
+**Why it works.** A tap is answered only when the main thread is free. A running figure fills each frame with drawing; in the lecture
+note the reader does not see that drawing, but every tap there (a fold, a link) waited for it. An IntersectionObserver tells the page
+which parts are on screen without measuring the layout itself.
+
+**What does not change.** No physics and no number: while held, `tick` is not called at all, so the store holds the last frame, whole
+and consistent with the picture last drawn. The data panel open, or a round being recorded, keeps the clock running, so the panel's
+live table, Record, Check and Read values work as before; so does the walkthrough when it is on screen.
+
+**Measured** (`serve.cjs`, CPU 4×; the busy share over 3 s with the reader in the middle of the lecture note; each tap's Event
+Timing duration, median of 3; `node tools/perf/foldtap.cjs <base> 3 <page>…`):
+
+| Page | Main thread busy while reading the note | Close a fold in the note | Open it again |
+|---|---|---|---|
+| Fig. 9, driven oscillator | 56 → **1 %** | 320 → **176 ms** | 344 → **208 ms** |
+| Fig. 10, wind turbine | 100 → **1 %** | 296 → **216 ms** | 240 → **184 ms** |
+| Water wave | 57 → **1 %** | 144 → 152 ms | 136 → 144 ms |
+| Double pendulum | 88 → **2 %** | 224 → **176 ms** | 240 → **184 ms** |
+
+A 4 s trace of Fig. 9 scrolled 6000 px into the note: before, about 4 s of work (drawing, compositing, script); after, 74 ms of script
+and the rest idle. With the figure on screen nothing changes (the same work, frame for frame). What remains of a fold tap, about 150
+to 210 ms at 4×, is the fold itself laying out a long page.
+
+**Checked.** On all eleven figures, and German and Arabic pages, before and after (`node tools/perf/clockcheck.cjs <base> <page>…`): the figure runs at the top of the
+page; while the reader is in the note the store holds (before: it kept changing); with the data panel opened there, the store keeps
+changing (as before); the walkthrough's values move when it is on screen; the figure resumes when the reader scrolls back; no console
+errors. `notes/verify.mjs` (the eleven pages at 1440, 1600 and 390 px) and `notes/walkcheck.cjs` give the same result as on `main`.
+
 ## Not changed, and why
 
 - **The `.html` → 307 redirect** (cause 3). Cloudflare's `html_handling: "none"` (in `wrangler.jsonc`) would serve `x.html`
@@ -257,7 +306,8 @@ sooner; elsewhere the time does not change measurably, but half the round trips 
   each is kept by a rule. Writing the links without `.html` would break the GitHub Pages copy and local files. Numa's decision; it is
   a Cloudflare setting, which this work does not change.
 - **No ETag on HTML** (limit 3). Cloudflare's behaviour, not a setting in this repository.
-- **The simulations' per-frame work and the off-screen clock** (cause 1). Pausing the clock while no figure, walkthrough value or
-  open data panel is on screen would remove the off-screen work; it touches `sim.js` and the data panel's live reading, and the
-  figures are another session's current work. To be proposed, measured, separately.
+- **The simulations' per-frame work on screen and Fig. 9's Solve** (cause 1). The off-screen work is gone (change 3). On screen, each
+  figure still redraws all its canvases every frame, and Fig. 9's `label()` forces a layout every frame; Solve integrates the whole
+  run in one task. Making the drawing cheaper means changing each figure's own code, the figures' authors' work; it is the next
+  measured target, not done here.
 - **The analytics beacon** blocked by the security policy: a Cloudflare dashboard setting (Web Analytics), left to Numa.

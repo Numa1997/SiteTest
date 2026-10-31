@@ -172,10 +172,10 @@
         };
     }
 
-    /* requestAnimationFrame clock; tick(dt, t) gets dt = 0 while paused */
+    /* requestAnimationFrame clock; tick(dt, t) gets dt = 0 while paused; while nothing shows the run it holds (showing(), at the end) */
     function clock(tick) {
         var playing = !(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches), last = 0, t = 0, listeners = [];
-        function frame(ts) {
+        function frame(ts) { if (!showing()) { last = 0; return holdUntilShown(frame); }
             var dt = last ? Math.min((ts - last) / 1000, 0.05) : 0;
             last = ts;
             if (!playing) dt = 0;
@@ -391,16 +391,16 @@
         function read() {
             try { return window.Sim.live ? window.Sim.live() : {}; } catch (err) { return {}; }
         }
-        /* while held, every step shows the same frozen instant */
+        /* while held, every step shows the same frozen instant; a cell is written only when its text changes, and not while out of view */
         function update(force) {
-            if (held && !force) return;
+            if ((held || !walkInView) && !force) return;
             var vals = held && snap ? snap : read();
             Array.prototype.forEach.call(card.querySelectorAll('[data-v]'), function (td) {
-                var v = vals[td.getAttribute('data-v')];
-                td.textContent = v === undefined ? '—' : v;
+                var v = vals[td.getAttribute('data-v')], txt = v === undefined ? '—' : String(v);
+                if (td.textContent !== txt) td.textContent = txt;
             });
         }
-        setInterval(update, 200);
+        var walkInView = true; if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { walkInView = es[es.length - 1].isIntersecting; }, { rootMargin: '200px 0px' }).observe(host); setInterval(update, 200);
         show(0);
         /* KaTeX may arrive after the first step was drawn: draw the step again, typeset */
         document.addEventListener('typeset', function () { show(cur); });
@@ -505,4 +505,32 @@
         fmt: fmt,
         showError: showError
     };
+    /* Is anything that shows the run on screen? The figure (.sim__head, .sim__grid) or the walkthrough's live values (#walk), seen
+       by an IntersectionObserver (it asks for no layout); or the data panel, open or recording. While none is, the clock holds:
+       the simulation's time stands still, as in a hidden tab, and goes on from the same instant when the reader scrolls back.
+       Without those elements or IntersectionObserver the clock always runs. See docs/performance.md, change 3. */
+    var shown = null;
+    function showing() {
+        if (shown === null) {
+            shown = { n: 1 };   /* until the observer first reports, count the run as seen */
+            var els = [].slice.call(document.querySelectorAll('.sim__head, .sim__grid, #walk'));
+            if (!els.length || !('IntersectionObserver' in window)) shown.always = true;
+            else {
+                var vis = [];
+                var io = new IntersectionObserver(function (es) {
+                    es.forEach(function (e) { vis[els.indexOf(e.target)] = e.isIntersecting; });
+                    shown.n = vis.filter(Boolean).length;
+                }, { rootMargin: '200px 0px' });   /* wakes a little before the figure enters */
+                els.forEach(function (el) { io.observe(el); });
+            }
+        }
+        if (shown.always || shown.n > 0) return true;
+        var dp = window.__dataPanel, tab = document.querySelector('.dp-tab');
+        return !!(dp && dp.recording && dp.recording()) || !!(tab && tab.getAttribute('aria-expanded') === 'true');
+    }
+    /* while held: no frame is asked for; a timer looks again every 200 ms, and the first frame after it starts with dt = 0, so the run
+       goes on from the same instant */
+    function holdUntilShown(frame) {
+        setTimeout(function wait() { if (showing()) requestAnimationFrame(frame); else setTimeout(wait, 200); }, 200);
+    }
 })();

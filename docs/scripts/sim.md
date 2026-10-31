@@ -90,6 +90,12 @@ The page's own script then runs and uses the helpers: it sizes its canvases, wir
   redraw. The clock starts paused when the reader's system asks for reduced motion
   ([sim.js:177](../../public/scripts/sim.js#L177)). `playButton` ties a button to a clock: its label reads Pause while
   playing and Play while paused ([sim.js:199-207](../../public/scripts/sim.js#L199-L207)).
+  Since 31 October 2026 the clock also holds while nothing that shows the run is on screen: neither the figure (`.sim__head`,
+  `.sim__grid`) nor the walkthrough (`#walk`), watched by an IntersectionObserver with a 200 px margin, and the data panel neither
+  open nor recording (`showing()`, [sim.js:508-535](../../public/scripts/sim.js#L508-L535)). While held, `tick` is not called and no frame is asked for; a
+  timer looks again every 200 ms, and the first frame after it starts with `dt = 0`, so the simulation's time stands still, as in a
+  hidden tab, and goes on from the same instant ([sim.js:178](../../public/scripts/sim.js#L178)). Before, a figure kept the main
+  thread 56 to 100 % busy while the reader read the note below it ([performance.md](../performance.md), change 3).
 - **Numbers.** `fmt(v, digits)` is `toFixed` with a typographic minus sign (U+2212) and never prints `-0.00`
   ([sim.js:210-214](../../public/scripts/sim.js#L210-L214)).
 
@@ -125,7 +131,8 @@ The page's own script then runs and uses the helpers: it sizes its canvases, wir
      ([sim.js:327-331](../../public/scripts/sim.js#L327-L331));
    - `show(i)` fills the card with the step's title, place in the code, formula, note, code excerpt and a symbol table
      whose "Now" column is empty at first ([sim.js:360-384](../../public/scripts/sim.js#L360-L384));
-   - `update()` fills the "Now" column from `Sim.live()` every 200 ms ([sim.js:395-403](../../public/scripts/sim.js#L395-L403));
+   - `update()` fills the "Now" column from `Sim.live()` every 200 ms, writing a cell only when its text changes and skipping
+     while the walkthrough is out of view ([sim.js:395-403](../../public/scripts/sim.js#L395-L403));
    - finally it hands the section to `Fold.walk` so it becomes a fold ([sim.js:407](../../public/scripts/sim.js#L407)).
 
 ## Public interface
@@ -195,9 +202,9 @@ Which page uses which helper (occurrences of `Sim.<name>` counted with grep in t
 
 | What | Rate or delay | Where |
 |---|---|---|
-| Each `Sim.clock` | one `requestAnimationFrame` loop, every display frame, forever; `dt ≤ 0.05 s` | [sim.js:178-186](../../public/scripts/sim.js#L178-L186) |
+| Each `Sim.clock` | one `requestAnimationFrame` loop, every display frame while the figure, the walkthrough or the open data panel is on screen; otherwise held, looked at again every 200 ms; `dt ≤ 0.05 s` | [sim.js:178-186](../../public/scripts/sim.js#L178-L186), [sim.js:508-535](../../public/scripts/sim.js#L508-L535) |
 | `Sim.onResize` | 80 ms after the last size change | [sim.js:145](../../public/scripts/sim.js#L145) |
-| Walkthrough "Now" column | every 200 ms (5 rewrites per second), for the life of the page | [sim.js:403](../../public/scripts/sim.js#L403) |
+| Walkthrough "Now" column | looked at every 200 ms for the life of the page; a cell is rewritten only when its text changes, and nothing while the walkthrough is out of view | [sim.js:394-403](../../public/scripts/sim.js#L394-L403) |
 | Paper shown without KaTeX | after 4000 ms | [sim.js:430](../../public/scripts/sim.js#L430), [sim.js:471](../../public/scripts/sim.js#L471) |
 | `typeset` event | once, after both KaTeX scripts have loaded or failed | [sim.js:445](../../public/scripts/sim.js#L445) |
 
@@ -264,8 +271,9 @@ Listeners: `window` `error` ([sim.js:230](../../public/scripts/sim.js#L230)); `D
    plays. Whether this is intended is not determined from the code.
 6. The `error` listener ([sim.js:230](../../public/scripts/sim.js#L230)) reacts to any uncaught error on the page, also one
    thrown by `datalog.js` or a walkthrough file, and always says "This simulation stopped", even if the animation goes on.
-7. The "Now" column is rewritten every 200 ms ([sim.js:403](../../public/scripts/sim.js#L403)), 5 times a second, and the
-   interval keeps running while the walkthrough is folded away. CLAUDE.md asks for "about 4 per second" for readouts of a
+7. The "Now" column is looked at every 200 ms ([sim.js:403](../../public/scripts/sim.js#L403)), 5 times a second; since 31 October
+   2026 a cell is rewritten only when its text changes and not while the walkthrough is out of view, but the interval keeps running
+   while the walkthrough is folded away inside the view. CLAUDE.md asks for "about 4 per second" for readouts of a
    running figure; this column sits outside the figure, so the rule may not apply.
 
 ## The Algebra column is typeset (21 October 2026)
