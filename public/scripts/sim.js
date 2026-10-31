@@ -142,7 +142,7 @@
         var t = null;
         var run = function () {
             clearTimeout(t);
-            t = setTimeout(fn, 80);
+            t = setTimeout(function () { fn(); wakeClock(); }, 80);   /* a refit clears the canvas: let a held clock draw it again */
         };
         if ('ResizeObserver' in window) new ResizeObserver(run).observe(el);
         else window.addEventListener('resize', run);
@@ -509,10 +509,12 @@
        by an IntersectionObserver (it asks for no layout); or the data panel, open or recording. While none is, the clock holds:
        the simulation's time stands still, as in a hidden tab, and goes on from the same instant when the reader scrolls back.
        Without those elements or IntersectionObserver the clock always runs. See docs/performance.md, change 3. */
-    var shown = null;
+    var shown = null, wakeUntil = 0;
     function showing() {
         if (shown === null) {
             shown = { n: 1 };   /* until the observer first reports, count the run as seen */
+            /* before printing too, the held figure is drawn again (see wakeClock) */
+            window.addEventListener('beforeprint', wakeClock);
             var els = [].slice.call(document.querySelectorAll('.sim__head, .sim__grid, #walk'));
             if (!els.length || !('IntersectionObserver' in window)) shown.always = true;
             else {
@@ -524,13 +526,27 @@
                 els.forEach(function (el) { io.observe(el); });
             }
         }
-        if (shown.always || shown.n > 0) return true;
+        if (shown.always || shown.n > 0 || performance.now() < wakeUntil) return true;
         var dp = window.__dataPanel, tab = document.querySelector('.dp-tab');
         return !!(dp && dp.recording && dp.recording()) || !!(tab && tab.getAttribute('aria-expanded') === 'true');
+    }
+    /* Sim.onResize refits (and so clears) a canvas, and several pages draw it again only on their next tick: after a refit the clock
+       runs for a second even when nothing shows the run, so a held figure is never left blank (a page opened deep in the note,
+       a resize, a print) */
+    var heldClocks = [];
+    function wakeClock() {
+        wakeUntil = performance.now() + 1000;
+        var h = heldClocks; heldClocks = [];
+        h.forEach(function (frame) { requestAnimationFrame(frame); });   /* at once, not at the next look of the timer */
     }
     /* while held: no frame is asked for; a timer looks again every 200 ms, and the first frame after it starts with dt = 0, so the run
        goes on from the same instant */
     function holdUntilShown(frame) {
-        setTimeout(function wait() { if (showing()) requestAnimationFrame(frame); else setTimeout(wait, 200); }, 200);
+        heldClocks.push(frame);
+        setTimeout(function wait() {
+            var i = heldClocks.indexOf(frame);
+            if (i < 0) return;   /* woken already */
+            if (showing()) { heldClocks.splice(i, 1); requestAnimationFrame(frame); } else setTimeout(wait, 200);
+        }, 200);
     }
 })();

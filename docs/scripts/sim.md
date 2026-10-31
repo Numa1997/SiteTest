@@ -92,9 +92,11 @@ The page's own script then runs and uses the helpers: it sizes its canvases, wir
   playing and Play while paused ([sim.js:199-207](../../public/scripts/sim.js#L199-L207)).
   Since 31 October 2026 the clock also holds while nothing that shows the run is on screen: neither the figure (`.sim__head`,
   `.sim__grid`) nor the walkthrough (`#walk`), watched by an IntersectionObserver with a 200 px margin, and the data panel neither
-  open nor recording (`showing()`, [sim.js:508-535](../../public/scripts/sim.js#L508-L535)). While held, `tick` is not called and no frame is asked for; a
+  open nor recording (`showing()`, [sim.js:508-551](../../public/scripts/sim.js#L508-L551)). While held, `tick` is not called and no frame is asked for; a
   timer looks again every 200 ms, and the first frame after it starts with `dt = 0`, so the simulation's time stands still, as in a
-  hidden tab, and goes on from the same instant ([sim.js:178](../../public/scripts/sim.js#L178)). Before, a figure kept the main
+  hidden tab, and goes on from the same instant ([sim.js:178](../../public/scripts/sim.js#L178)). A refit by `Sim.onResize` clears a
+  canvas, and several pages draw it again only on their next tick, so after each refit (and before printing) a held clock runs for
+  a second ([sim.js:533-542](../../public/scripts/sim.js#L533-L542)); without that, a page opened deep in its note kept a blank figure. Before, a figure kept the main
   thread 56 to 100 % busy while the reader read the note below it ([performance.md](../performance.md), change 3).
 - **Numbers.** `fmt(v, digits)` is `toFixed` with a typographic minus sign (U+2212) and never prints `-0.00`
   ([sim.js:210-214](../../public/scripts/sim.js#L210-L214)).
@@ -202,8 +204,8 @@ Which page uses which helper (occurrences of `Sim.<name>` counted with grep in t
 
 | What | Rate or delay | Where |
 |---|---|---|
-| Each `Sim.clock` | one `requestAnimationFrame` loop, every display frame while the figure, the walkthrough or the open data panel is on screen; otherwise held, looked at again every 200 ms; `dt ≤ 0.05 s` | [sim.js:178-186](../../public/scripts/sim.js#L178-L186), [sim.js:508-535](../../public/scripts/sim.js#L508-L535) |
-| `Sim.onResize` | 80 ms after the last size change | [sim.js:145](../../public/scripts/sim.js#L145) |
+| Each `Sim.clock` | one `requestAnimationFrame` loop, every display frame while the figure, the walkthrough or the open data panel is on screen; otherwise held, looked at again every 200 ms; `dt ≤ 0.05 s` | [sim.js:178-186](../../public/scripts/sim.js#L178-L186), [sim.js:508-551](../../public/scripts/sim.js#L508-L551) |
+| `Sim.onResize` | 80 ms after the last size change; then a held clock runs for 1 s, so the refit (cleared) canvas is drawn again | [sim.js:145](../../public/scripts/sim.js#L145), [sim.js:533-542](../../public/scripts/sim.js#L533-L542) |
 | Walkthrough "Now" column | looked at every 200 ms for the life of the page; a cell is rewritten only when its text changes, and nothing while the walkthrough is out of view | [sim.js:394-403](../../public/scripts/sim.js#L394-L403) |
 | Paper shown without KaTeX | after 4000 ms | [sim.js:430](../../public/scripts/sim.js#L430), [sim.js:471](../../public/scripts/sim.js#L471) |
 | `typeset` event | once, after both KaTeX scripts have loaded or failed | [sim.js:445](../../public/scripts/sim.js#L445) |

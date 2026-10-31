@@ -299,6 +299,14 @@ page; while the reader is in the note the store holds (before: it kept changing)
 changing (as before); the walkthrough's values move when it is on screen; the figure resumes when the reader scrolls back; no console
 errors. `notes/verify.mjs` (the eleven pages at 1440, 1600 and 390 px) and `notes/walkcheck.cjs` give the same result as on `main`.
 
+**Review.** An independent reviewer found one defect before the merge: on four figures (water wave, transverse and longitudinal
+waves, phasor sums, double pendulum) the page's resize handler refits the canvas, which clears it, and leaves the drawing to the next
+tick; a page opened deep in its note (`#p-limits`) is refitted just after the clock has held, so the figure stayed blank, also when
+printed. Fixed: after every refit by `Sim.onResize`, and before printing, a held clock runs for one second, resumed at once. Tested:
+48 loads opened at `#p-limits` (six pages including German and Arabic, 390 and 1280 px, four runs each), none blank; before the fix
+all four pages were blank at both widths. On screens 1500 px and wider the data panel opens beside the page by default, so the clock
+keeps running there until the reader closes the panel: by design, the panel shows the live run.
+
 ## Not changed, and why
 
 - **The `.html` → 307 redirect** (cause 3). Cloudflare's `html_handling: "none"` (in `wrangler.jsonc`) would serve `x.html`
