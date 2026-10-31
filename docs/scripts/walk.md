@@ -84,7 +84,7 @@ else is copied from the page character for character, without the page's indenta
    formula and note, Code column, the symbol table, Previous and Next) and fills the "Now" column at once
    ([sim.js:360-384](../../public/scripts/sim.js#L360-L384)). It starts at step 1 ([sim.js:404](../../public/scripts/sim.js#L404)).
 4. **The "Now" column.** Every 200 ms, `update()` calls `Sim.live()` and writes, into each cell `td[data-v="<key>"]`, the value
-   for that key; a key the page does not return shows `—`, and an error in `Sim.live()` is caught and shows `—` everywhere
+   for that key (only when the text changes, and not while the walkthrough is out of view, since 31 October 2026); a key the page does not return shows `—`, and an error in `Sim.live()` is caught and shows `—` everywhere
    ([sim.js:391-403](../../public/scripts/sim.js#L391-L403)). `Sim.live()` is defined by each page next to its own state and
    returns ready-formatted strings with units, read from the page's dataset; for example
    `t1: f4(ds.get('th1'), 'rad')` in [Double Pendulum.html:746-758](../../public/simulations/Double%20Pendulum.html#L746-L758)
@@ -172,8 +172,9 @@ In all: 127 steps (measured 29 October 2026). The header comments of [circles.js
 2. On an English page the file is loaded from the relative path `../scripts/walk/` ([sim.js:487](../../public/scripts/sim.js#L487)), so a
    page that is not one folder below `public/` could not use a walkthrough without changing `sim.js`; a translated page loads
    `scripts/walk/<lang>/` from `ROOT` (see [sim.md](sim.md)).
-3. The "Now" column is refreshed every 200 ms, 5 times a second, as long as the page is open, also while the walkthrough is
-   folded away ([sim.js:403](../../public/scripts/sim.js#L403)).
+3. The "Now" column is looked at every 200 ms, 5 times a second, as long as the page is open, also while the walkthrough is
+   folded away ([sim.js:403](../../public/scripts/sim.js#L403)); a cell is rewritten only when its text changes, and nothing is
+   written while the walkthrough is out of view.
 4. `note` is inserted as HTML without `markup()` ([sim.js:374](../../public/scripts/sim.js#L374)), so a mark written in a note is
    not turned into a span and shows on the page as raw text. On 15 October one note had one (step 6 of `tl`); on 29 October 2026
    no note holds a mark.

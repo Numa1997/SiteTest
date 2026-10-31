@@ -142,7 +142,7 @@
         var t = null;
         var run = function () {
             clearTimeout(t);
-            t = setTimeout(fn, 80);
+            t = setTimeout(function () { fn(); wakeClock(); }, 80);   /* a refit clears the canvas: let a held clock draw it again */
         };
         if ('ResizeObserver' in window) new ResizeObserver(run).observe(el);
         else window.addEventListener('resize', run);
@@ -172,10 +172,10 @@
         };
     }
 
-    /* requestAnimationFrame clock; tick(dt, t) gets dt = 0 while paused */
+    /* requestAnimationFrame clock; tick(dt, t) gets dt = 0 while paused; while nothing shows the run it holds (showing(), at the end) */
     function clock(tick) {
         var playing = !(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches), last = 0, t = 0, listeners = [];
-        function frame(ts) {
+        function frame(ts) { if (!showing()) { last = 0; return holdUntilShown(frame); }
             var dt = last ? Math.min((ts - last) / 1000, 0.05) : 0;
             last = ts;
             if (!playing) dt = 0;
@@ -391,16 +391,16 @@
         function read() {
             try { return window.Sim.live ? window.Sim.live() : {}; } catch (err) { return {}; }
         }
-        /* while held, every step shows the same frozen instant */
+        /* while held, every step shows the same frozen instant; a cell is written only when its text changes, and not while out of view */
         function update(force) {
-            if (held && !force) return;
+            if ((held || !walkInView) && !force) return;
             var vals = held && snap ? snap : read();
             Array.prototype.forEach.call(card.querySelectorAll('[data-v]'), function (td) {
-                var v = vals[td.getAttribute('data-v')];
-                td.textContent = v === undefined ? '—' : v;
+                var v = vals[td.getAttribute('data-v')], txt = v === undefined ? '—' : String(v);
+                if (td.textContent !== txt) td.textContent = txt;
             });
         }
-        setInterval(update, 200);
+        var walkInView = true; if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { walkInView = es[es.length - 1].isIntersecting; }, { rootMargin: '200px 0px' }).observe(host); setInterval(update, 200);
         show(0);
         /* KaTeX may arrive after the first step was drawn: draw the step again, typeset */
         document.addEventListener('typeset', function () { show(cur); });
@@ -505,4 +505,48 @@
         fmt: fmt,
         showError: showError
     };
+    /* Is anything that shows the run on screen? The figure (.sim__head, .sim__grid) or the walkthrough's live values (#walk), seen
+       by an IntersectionObserver (it asks for no layout); or the data panel, open or recording. While none is, the clock holds:
+       the simulation's time stands still, as in a hidden tab, and goes on from the same instant when the reader scrolls back.
+       Without those elements or IntersectionObserver the clock always runs. See docs/performance.md, change 3. */
+    var shown = null, wakeUntil = 0;
+    function showing() {
+        if (shown === null) {
+            shown = { n: 1 };   /* until the observer first reports, count the run as seen */
+            /* before printing too, the held figure is drawn again (see wakeClock) */
+            window.addEventListener('beforeprint', wakeClock);
+            var els = [].slice.call(document.querySelectorAll('.sim__head, .sim__grid, #walk'));
+            if (!els.length || !('IntersectionObserver' in window)) shown.always = true;
+            else {
+                var vis = [];
+                var io = new IntersectionObserver(function (es) {
+                    es.forEach(function (e) { vis[els.indexOf(e.target)] = e.isIntersecting; });
+                    shown.n = vis.filter(Boolean).length;
+                }, { rootMargin: '200px 0px' });   /* wakes a little before the figure enters */
+                els.forEach(function (el) { io.observe(el); });
+            }
+        }
+        if (shown.always || shown.n > 0 || performance.now() < wakeUntil) return true;
+        var dp = window.__dataPanel, tab = document.querySelector('.dp-tab');
+        return !!(dp && dp.recording && dp.recording()) || !!(tab && tab.getAttribute('aria-expanded') === 'true');
+    }
+    /* Sim.onResize refits (and so clears) a canvas, and several pages draw it again only on their next tick: after a refit the clock
+       runs for a second even when nothing shows the run, so a held figure is never left blank (a page opened deep in the note,
+       a resize, a print) */
+    var heldClocks = [];
+    function wakeClock() {
+        wakeUntil = performance.now() + 1000;
+        var h = heldClocks; heldClocks = [];
+        h.forEach(function (frame) { requestAnimationFrame(frame); });   /* at once, not at the next look of the timer */
+    }
+    /* while held: no frame is asked for; a timer looks again every 200 ms, and the first frame after it starts with dt = 0, so the run
+       goes on from the same instant */
+    function holdUntilShown(frame) {
+        heldClocks.push(frame);
+        setTimeout(function wait() {
+            var i = heldClocks.indexOf(frame);
+            if (i < 0) return;   /* woken already */
+            if (showing()) { heldClocks.splice(i, 1); requestAnimationFrame(frame); } else setTimeout(wait, 200);
+        }, 200);
+    }
 })();
