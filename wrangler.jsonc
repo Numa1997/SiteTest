@@ -4,7 +4,9 @@
 {
   "name": "phyein-usul",
   "compatibility_date": "2026-10-06",
-  "assets": { "directory": "./dist" },
+  // "html_handling": "none" (31 October 2026, Numa's decision): x.html is served at once, without the 307 to x that cost a round
+  // trip on every click; the short addresses keep working through public/_redirects (tools/redirects.py). See docs/performance.md.
+  "assets": { "directory": "./dist", "html_handling": "none" },
   "workers_dev": true,
   "routes": [
     { "pattern": "phyeinusul.com", "custom_domain": true },

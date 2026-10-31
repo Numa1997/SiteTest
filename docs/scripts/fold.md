@@ -203,12 +203,13 @@ for `many` (Arabic has six forms). See [i18n.md](../i18n.md#words-inside-scripts
 
 ## State it keeps
 
-- `localStorage` key `fold:` + `location.pathname`, with a trailing `/index.html` replaced by `/`
-  ([fold.js:61](../../public/scripts/fold.js#L61)). The value is a JSON object `{ id: 1 | 0 }`, 1 open and 0 closed; ids not
+- `localStorage` key `fold:` + `location.pathname`, with a trailing `/index.html` replaced by `/` and a final `.html` dropped
+  ([fold.js:61](../../public/scripts/fold.js#L61)), so `x.html` and `x` share one key (since 31 October 2026 the site serves
+  both; the key is the one phyeinusul.com used before, when its addresses had no `.html`). The value is a JSON object `{ id: 1 | 0 }`, 1 open and 0 closed; ids not
   in it keep their default ([fold.js:60-72](../../public/scripts/fold.js#L60-L72)). An older format, a JSON array of closed
-  ids, is still read ([fold.js:65](../../public/scripts/fold.js#L65)). The path is the encoded one: measured keys are
-  `fold:/simulations/Double%20Pendulum.html` with value `{"p-model":0}` after closing section 2 of Fig. 2, and `fold:/` on the
-  home page served as `/`. Errors (private mode) are ignored.
+  ids, is still read ([fold.js:65](../../public/scripts/fold.js#L65)). The path is the encoded one: the key is
+  `fold:/simulations/Double%20Pendulum` with value `{"p-model":0}` after closing section 2 of Fig. 2, and `fold:/` on the
+  home page, at `/` or `/index.html`. Errors (private mode) are ignored.
 - In memory: `chosen` (the parsed object), `glideId`, `printOpen`, `moved` ([fold.js:62](../../public/scripts/fold.js#L62),
   [41](../../public/scripts/fold.js#L41), [277](../../public/scripts/fold.js#L277), [400](../../public/scripts/fold.js#L400)).
 - DOM written: the fold structure above; `data-fold-level`, `data-collapsed`, `data-open`, `inert`, `aria-expanded`,

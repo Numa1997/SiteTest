@@ -58,7 +58,7 @@
     }
 
     /* what this reader opened or closed, per page: id -> 1 open, 0 closed; anything else keeps its default */
-    var KEY = 'fold:' + location.pathname.replace(/\/index\.html$/, '/');
+    var KEY = 'fold:' + location.pathname.replace(/\/index\.html$/, '/').replace(/\.html$/, '');
     var chosen = {};
     try {
         var saved = JSON.parse(localStorage.getItem(KEY) || '{}');

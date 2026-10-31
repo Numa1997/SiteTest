@@ -41,6 +41,15 @@ The two commands above still work by hand from a computer signed in to Cloudflar
 to the same file in a fresh build. A branch other than `main` gets the same check in red, failing at once: only `main` is set up to
 build. So merging into `main` is deploying, and it happens only on Numa's word.
 
+**Addresses (since 31 October 2026).** `wrangler.jsonc` sets `"html_handling": "none"`: Cloudflare serves `x.html` and
+`folder/index.html` as they are, the addresses every link of the site uses, with no redirect. Before, it answered each with a 307
+to `x` or `folder/`, one round trip on every click ([performance.md](performance.md), change 6). The short addresses, which readers
+saw in the address bar and shared from 20 to 31 October, keep working through `public/_redirects`: a 200 rule per page serves
+the page there too (`/simulations` → `simulations.html`, `/` → `index.html`, `/ar/` → `ar/index.html`), and a 307 sends `folder`
+on to `folder/` and `x/` to `x`, as before. `tools/redirects.py` writes the file from the pages in `public/` (rerun it after
+adding, renaming or removing a page; `--check` fails if it is out of date). `node tools/perf/addresses.cjs https://phyeinusul.com dist`
+asks for every page at every form of its address and follows every link. GitHub Pages ignores both settings.
+
 Vite copies `public/` unchanged, so `dist/` is the file tree the visitor gets. Checked 20 October 2026: a fresh build of this
 repository gives 285 files, every one byte-identical to the files served by the live site. To check the live site by hand:
 `curl -sI https://phyeinusul.com/` shows status 200 and the security headers below.

@@ -26,6 +26,7 @@ The scripts are in [`tools/perf/`](../tools/perf/); Playwright and Chromium must
 | `foldtap.cjs <base> <runs> <page>…` | A reader in a figure's lecture note: how busy the main thread is, and how long closing and opening a fold takes. |
 | `clockcheck.cjs <base> <page>…` | Each figure runs on screen, holds off screen, resumes; the store stays live for an open data panel and the walkthrough. |
 | `film.cjs <URL> <prefix>` | A repeat visit as a reader sees it: screenshots at 2.5, 3, 3.5, 4.5, 6 and 8 s, and every LCP candidate with its element and text, to tell a change in the metric from a change on the screen. |
+| `addresses.cjs <base> <built folder>` | Every page at every form of its address (`x.html`, `x`, `x/`, `folder/`, `folder`), each answer followed to its end and compared byte for byte with the built page, and every link of every page; exits 1 on any wrong answer (change 6). |
 | `serve.cjs <folder> <port>` | A local server that answers as Cloudflare does (below), so that a change can be measured before it is merged. |
 
 The metrics, as [web.dev](https://web.dev/articles/vitals) defines them, with its thresholds for "good" at the 75th percentile of
@@ -417,16 +418,51 @@ heading block fades in from transparent (`animation: rise`, `styles/sim.css` lin
 drawn only during that fade. Why Chromium then never reports it is not established here; the films are the evidence that the reader
 waits no longer. Change 2 is kept.
 
+## Change 6: no redirect on a click (31 October 2026, Numa's decision)
+
+**What was measured.** Every link of the site names the `.html` file, and Cloudflare answered each with a 307 to the address
+without it: 620 ms per click on Slow 4G, before the page itself was asked for (cause 3; the "Redirect" column of the first run).
+
+**What.** `wrangler.jsonc` sets `"html_handling": "none"`, so Cloudflare serves `x.html` and `folder/index.html` as they are
+(its documentation, read 31 October 2026: <https://developers.cloudflare.com/workers/static-assets/routing/advanced/html-handling/>).
+With `none` Cloudflare no longer finds a page at its short address (`/simulations`, `/`, `/ar/`), which readers saw and shared
+from 20 to 31 October; [`public/_redirects`](../public/_redirects), written by [`tools/redirects.py`](../tools/redirects.py),
+serves each page there with a 200 rule (Cloudflare's "proxying",
+<https://developers.cloudflare.com/workers/static-assets/redirects/>), and sends `folder` on to `folder/` and `x/` to `x` with a
+307, as before: 101 rules of the 2,000 allowed. Two lines of the scripts read the address and would have changed: the key under
+which `fold.js` and the data panel remember a reader's folded sections ([fold.js:61](../public/scripts/fold.js#L61),
+[datalog.js:264](../public/scripts/datalog.js#L264), [770](../public/scripts/datalog.js#L770)), and the page name and address
+written into a saved data file ([datalog.js:1278](../public/scripts/datalog.js#L1278),
+[1293](../public/scripts/datalog.js#L1293)). Each now drops a final `.html` (and `/index.html`), so it reads as on
+phyeinusul.com before: no reader loses a stored choice, and a saved file names the page as before.
+
+**Why it works.** A click asked twice (the `.html` address, answered "go to `x`"; then `x`); now it asks once.
+
+**Checked before the merge,** on a local server that follows Cloudflare's two documentation pages (its answers for today's
+setting matched the live site on 15 of 16 addresses; the miss, a page that does not exist, answers 404 live and redirects first
+locally): `node tools/perf/addresses.cjs <base> <built folder>` asks for each of the 51 pages at every form of its address
+(`x.html`, `x`, `x/`; `folder/index.html`, `folder/`, `folder`), 152 addresses, and opens every page in Chromium. With the change:
+152 of 152 answer the right page, byte for byte, with the security headers; no page has a failed request or a script error;
+all 53 links reach their page with no redirect (today 50 of the site's links pass through one). Folding a section at
+`/simulations/water-wave.html` and reopening `/simulations/water-wave` finds it folded, under the key the live site used before
+(`fold:/simulations/water-wave`); the same for the catalog and the Arabic home page.
+
+**The live site before the merge** (the same check, `https://phyeinusul.com`): 152 of 152 addresses right, 51 of them through a
+redirect when asked at `.html`; 95 links, 50 of them through a redirect. The redirect's time (`measure.cjs`, navigation timing):
+625 ms on Slow 4G, 141 to 164 ms on 4G (85 ms round trip), on the simulations list, Fig. 5, the Portfolios page and Iron, Cotton
+and the Head.
+
+**Not answerable before the merge:** whether Cloudflare matches the rules of the twelve pages whose names hold spaces (written with
+`%20`), and whether it adds the security headers to a page served through a rule. Branches are not built (`docs/usul.md`), so the
+live site is the only test. **The rule set before merging:** revert at once if, live, any of the 152 addresses answers another page
+or no page, any answer lacks the security headers, or any page shows a failed request or a script error other than the analytics
+beacon.
+
+**What a reader sees.** The address bar shows the `.html` address after a click (`/simulations.html`); old short links still open
+their page directly.
+
 ## Not changed, and why
 
-- **The `.html` → 307 redirect** (cause 3), one round trip on every click between pages (620 ms on Slow 4G; about 0.05 to 0.2 s on
-  a phone on 4G, estimated). Three ways out, each with its cost; Numa's decision, since the first two change Cloudflare's settings
-  (`wrangler.jsonc`), which this work does not touch:
-  1. `"html_handling": "none"` in `wrangler.jsonc`: `x.html` is served at once; but the addresses without `.html`, which every reader's
-     browser shows and shares since 20 October, would answer 404, unless a `_redirects` file maps each back (one rule per page).
-  2. `"html_handling": "drop-trailing-slash"` changes nothing for this: it also answers `x.html` with a 307.
-  3. Writing every internal link without `.html`: no redirect on Cloudflare, but the GitHub Pages copy and pages opened as local files
-     would no longer find each other.
 - **The Hydraulic Press Study's tab bar** (CLS 0.21 on the English page; the German and Arabic pages have none): the bar shrinks 26 px
   when its two faces arrive. Preloading them from the page's head removed the shift (0.209 → 0.000), but on Slow 4G the first tab
   then appeared later (median of four sets of three runs, about 6.6 → 7.1 s), because the fonts took bandwidth from the page. Since
