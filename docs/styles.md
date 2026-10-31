@@ -10,7 +10,7 @@ Arabic pages, never edited by hand ([i18n.md](i18n.md)).
 | [`site.css`](../public/styles/site.css) | 887 | home, catalog, Portfolios | Tokens, base type, the home page (hero, timeline, plates), footer. |
 | [`sim.css`](../public/styles/sim.css) | 254 | the eleven simulation pages | Tokens again, the figure, controls, readouts, walkthrough; imports KaTeX's CSS and `paper.css`. |
 | [`paper.css`](../public/styles/paper.css) | 118 | simulation pages (through `sim.css`), catalog, Portfolios | Lecture notes set like LaTeX: Latin Modern, numbered equations, figures, boxes. |
-| [`catalog.css`](../public/styles/catalog.css) | 574 | catalog, Portfolios | Top bar, masthead, search bar, chips, catalog entries; switches titles to Instrument Serif. |
+| [`catalog.css`](../public/styles/catalog.css) | 585 | catalog, Portfolios | Top bar, masthead, search bar, chips, catalog entries; switches titles to Instrument Serif. |
 | [`data.css`](../public/styles/data.css) | 455 | the eleven simulation pages | The data panel (a bookkeeper's ledger) and the Read values strip ([scripts/datalog.md](scripts/datalog.md)). |
 | [`fold.css`](../public/styles/fold.css) | 168 | every page | Fold cards, header bands, toggles, Expand / Collapse all ([scripts/fold.md](scripts/fold.md)). |
 | [`portfolio.css`](../public/styles/portfolio.css) | 292 | Portfolios | The project cards. |
@@ -489,3 +489,6 @@ The curve's explanation is folded to its first sentence (`.curve__why details`, 
 Arabic its status line is kept left to right like the readouts, by a rule in `styles/i18n.css`; the same rule in `sim.css`
 would be flipped by rtlcss when it writes `sim.rtl.css`.
 
+**Until the simulations list is drawn** (since 31 October 2026): the last two rules of `catalog.css` (lines 576–585) hide what follows
+the list, and the footer of a page with `#catalog`, until the page marks itself `cat-drawn` after its first drawing (or after 8 s),
+so nothing on screen jumps down when the list appears ([performance.md](performance.md), change 4).
