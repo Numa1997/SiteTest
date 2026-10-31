@@ -573,3 +573,14 @@
     padding-left: 12px;
   }
 }
+
+/* Until the list has been drawn the first time (by the scripts at the end of the page, after the first paint), what follows it
+   waits: otherwise the section below and the footer showed first and jumped 600 px down when the list appeared (layout shift 0.26).
+   The page marks itself cat-drawn after the first drawing, or after 8 s in any case; without JavaScript nothing waits.
+   docs/performance.md, change 4. */
+.js:not(.cat-drawn) .cat__list ~ * {
+  display: none;
+}
+.js:not(.cat-drawn) body:has(#catalog) > footer {
+  display: none;
+}

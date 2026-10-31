@@ -115,8 +115,8 @@ and Cloudflare answers each with a 307 to the address without `.html`: one round
 on Slow 4G (measured); on a phone on 4G one round trip, typically 0.05 to 0.2 s (an estimate, not measured here). *Not changed: the fix is a Cloudflare setting; see "Not changed" below.*
 
 **4. Content that jumps.** The simulations list (CLS 0.28 in English, 0.29 in German), the Hydraulic Press Study (0.21) and
-Iron, Cotton and the Head (0.86) move their content while loading, beyond the 0.1 of a good page. *Not changed yet: the causes are
-still to be measured.*
+Iron, Cotton and the Head (0.86) move their content while loading, beyond the 0.1 of a good page. *Changed for the simulations list (change 4); Iron, Cotton and the Head and the
+Hydraulic Press Study's tab bar are not changed yet.*
 
 **5. Repeat visits gain little.** With `max-age=0`, a repeat visit re-asks for every stylesheet, script and font (15 to 39
 requests per page), and the simulations list takes 2.92 s on a repeat visit against 2.85 s on the first. *Changed for the font files: see change 2.*
@@ -306,6 +306,39 @@ printed. Fixed: after every refit by `Sim.onResize`, and before printing, a held
 48 loads opened at `#p-limits` (six pages including German and Arabic, 390 and 1280 px, four runs each), none blank; before the fix
 all four pages were blank at both widths. On screens 1500 px and wider the data panel opens beside the page by default, so the clock
 keeps running there until the reader closes the panel: by design, the panel shows the live run.
+
+## Change 4: the simulations list no longer pushes the page down (31 October 2026)
+
+**What was measured.** The browser's layout-shift entries (which elements moved, when, how far) on the simulations list, Slow 4G,
+CPU 4×: the section below the list ("anatomy") was painted at the first paint, about 2.7 s, and pushed 604 px down at 4.4 to 5.6 s,
+when the list of eleven cards appeared above it. The list is drawn by the page's own script at the end of the page, after
+`scripts/fold.js` and `scripts/catalog.js` arrive; on a slow network they arrive after the stylesheets and fonts, so after the
+first paint. Two fixes were tried and measured first and dropped, because they did not help: loading KaTeX deferred (the list
+appeared about 0.7 s sooner, but still after the first paint: CLS unchanged), and preloading the two scripts from the head (the list
+then appeared just after the first paint, CLS 0.32, worse).
+
+**What.** Until the list has been drawn the first time, what follows it waits: two rules at the end of
+[`public/styles/catalog.css`](../public/styles/catalog.css) hide the siblings after `.cat__list` and the page's footer while the
+document lacks the class `cat-drawn`; the page adds that class right after its first drawing (`simulations.html:349`), or after 8 s
+in any case (`simulations.html:25`), so a failing script cannot hide them for good; without JavaScript nothing waits. The German and
+Arabic pages and `catalog.rtl.css` follow from `tools/i18n/build.py`. The Portfolios page shares `catalog.css` and has no list; the
+footer rule is limited to a page with `#catalog`.
+
+**Why it works.** A layout shift is counted when something already on screen moves. If the section below the list is not yet on
+screen when the list arrives, the list takes its place and the section appears below it: nothing moves.
+
+**Measured** (`measure.cjs`, `serve.cjs`, Slow 4G, CPU 4×, median of 3; CLS by web.dev's worst-burst rule):
+
+| Page | CLS, before → after | LCP, before → after |
+|---|---|---|
+| Simulations list | 0.261 → **0.004** | 2.67 → 2.66 s |
+| German | 0.278 → **0.004** | 3.68 → 3.66 s |
+| Arabic | 0.537 → **0.139** | 3.76 → 3.74 s |
+| Portfolios (shares the stylesheet) | 0.026 → 0.026 | 3.30 → 3.36 s |
+
+What is left on the Arabic page is another shift: the top bar grows when its Arabic font arrives (0.13 at 5.8 s), not the list. The
+finished page is pixel-identical before and after (screenshots at 390 and 1440 px, English, German, Arabic, a search with no
+results, whose message still shows, and a field filter once settled).
 
 ## Not changed, and why
 
