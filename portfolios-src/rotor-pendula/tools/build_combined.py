@@ -142,9 +142,13 @@ main iframe.on { visibility: visible; }
     f.srcdoc = html(tab);
     stage.appendChild(f);
     frames[tab] = f;
-    // If this host refuses srcdoc frames, the page never reports in; fall back to a blob URL.
+    // If this host refuses srcdoc frames, the page never reports in; fall back to a blob URL. A frame that did take its srcdoc
+    // is only slow (a slow phone, a long page) and is left to finish: replacing it would throw its work away.
     setTimeout(function () {
       if (ready[tab]) return;
+      var d = null;
+      try { d = f.contentDocument; } catch (e) { /* not readable: treat as refused */ }
+      if (d && d.URL === 'about:srcdoc') return;
       f.removeAttribute('srcdoc');
       f.src = URL.createObjectURL(new Blob([html(tab)], { type: 'text/html' }));
     }, 8000);
@@ -197,6 +201,14 @@ main iframe.on { visibility: visible; }
 '''
 
 
+def link_fonts(src, site):
+    """The site's portfolios-src/site_fonts.py, taken from the site checkout being written (this folder may be a temporary copy, as
+    tools/i18n/hydraulics.py makes one); a checkout without it stops the build."""
+    sys.path.insert(0, str(pathlib.Path(site) / 'portfolios-src'))
+    from site_fonts import link_fonts as link
+    return link(src, site)
+
+
 def embed(tab, file, site=False):
     src = (ROOT / file).read_text()
     if site:
@@ -204,6 +216,8 @@ def embed(tab, file, site=False):
         # from this folder, ../../public/; in the served copy the frame's addresses resolve against
         # portfolios/rotor-pendula/index.html, where the same files are ../../.
         src = src.replace('"../../public/', '"../../')
+        # the fonts: linked to the site's own files instead of embedded (portfolios-src/site_fonts.py, docs/performance.md)
+        src = link_fonts(src, site)
     bridge = BRIDGE % {'tab': json.dumps(tab), 'files': json.dumps(FILE_TO_TAB)}
     i = src.rfind('</body>')
     assert i > 0, f'{file}: no </body>'
@@ -243,7 +257,8 @@ def site_copy(site):
     - the site's self-hosted fonts (../../fonts/instrument-plex.css) instead of Google Fonts;
     - the title suffix, the back link and the tab icon (from portfolios.html) the other pages use.
     The embedded pages are unchanged, except that the simulation's links to the site's data panel lose their ../../public/
-    prefix (see embed()). Writes public/portfolios/rotor-pendula/index.html and LICENSE-fonts.txt beside it.
+    prefix and every embedded font becomes a link to the byte-identical file the site serves (see embed() and
+    portfolios-src/site_fonts.py). Writes public/portfolios/rotor-pendula/index.html and LICENSE-fonts.txt beside it.
     """
     site = pathlib.Path(site)
     index = (site / 'index.html').read_text()
@@ -258,7 +273,7 @@ def site_copy(site):
     assert (site / 'public/fonts/instrument-plex.css').exists(), 'the site has no public/fonts/instrument-plex.css'
     out = build(head=head, title='Rotor Pendula · Numa Koudsie',
                 fonts='<link rel="stylesheet" href="../../fonts/instrument-plex.css">',
-                back='  <a class="back" href="../../portfolios.html">← Numa Koudsie · Portfolios</a>\n', site=True)
+                back='  <a class="back" href="../../portfolios.html">← Numa Koudsie · Portfolios</a>\n', site=site)
     folder = site / 'public/portfolios/rotor-pendula'
     folder.mkdir(parents=True, exist_ok=True)
     (folder / 'index.html').write_text(out)

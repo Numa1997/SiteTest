@@ -42,7 +42,7 @@ The policy, one directive per row:
 | `script-src` | `'self' 'unsafe-inline'` | The site's scripts, and code written inside the pages (every page keeps its code inline). |
 | `style-src` | `'self' 'unsafe-inline'` | The stylesheets; inline styles (KaTeX writes them). |
 | `img-src` | `'self' data: blob:` | Images of the site, the inline SVG favicons (`data:`), canvas exports (`blob:`). |
-| `font-src` | `'self' data:` | The self-hosted fonts ([assets.md](assets.md)); the fonts that the Hydraulic Press Study and Rotor Pendula carry inline as `data:` addresses. |
+| `font-src` | `'self' data:` | The self-hosted fonts ([assets.md](assets.md)). Until 31 October 2026 the Hydraulic Press Study and Rotor Pendula carried their fonts inline as `data:` addresses; since then their site pages link the site's font files ([portfolios.md](portfolios.md)), and no served page embeds a font, so `data:` could now be removed from `font-src`. That would make the policy stricter; it is left for Numa to decide. |
 | `connect-src` | `'self'` | Requests for the site's own files. |
 | `worker-src` | `'self'` | Workers from the site (the solver workers of the Hydraulic Press Study and Rotor Pendula start from `blob:` addresses, which their own policy adds). |
 | `object-src` | `'none'` | No plugins. |
