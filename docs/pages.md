@@ -16,9 +16,11 @@ The build copies everything under `public/` to the site root, so a page under `p
 
 Checked on 20 October 2026 on Cloudflare (https://phyeinusul.com and
 www.phyeinusul.com, [usul.md](usul.md)): the three HTML pages, the seven stylesheets and `robots.txt` are served byte for byte as
-in the repository, with nothing injected. Cloudflare answers an address ending in `.html` with a 307 redirect to the same
-address without it (`/simulations.html` → `/simulations`, `/index.html` → `/`), so on that host the pages' own addresses carry
-no `.html`.
+in the repository, with nothing injected. Until 31 October 2026 Cloudflare answered an address ending in `.html` with a 307
+redirect to the same address without it (`/simulations.html` → `/simulations`, `/index.html` → `/`), one round trip on every
+click. Since then it serves `x.html` at once (`"html_handling": "none"` in `wrangler.jsonc`), and serves each page at its short
+address too (`/simulations`, `/`, `/ar/`), through `public/_redirects`, written by `tools/redirects.py`
+([performance.md](performance.md), change 6). The address bar now shows the `.html` address after a click.
 
 Related pages: the fold mechanism is in [scripts/fold.md](scripts/fold.md), the registry the catalog draws from in
 [scripts/catalog.md](scripts/catalog.md), the stylesheets in [styles.md](styles.md), the research projects in
@@ -43,9 +45,9 @@ only under `.js`, so without JavaScript nothing waits for a fade-in.
 `fold.js` runs its `boot()` at `DOMContentLoaded` ([fold.js:404–411](../public/scripts/fold.js#L404-L411)). Each page's
 inline script sits after it and runs during parsing, so the inline script always runs first and fold.js then reshapes the
 finished DOM. What a reader opens or closes is stored in `localStorage` under `fold:` plus the path
-([fold.js:61](../public/scripts/fold.js#L61)); with a `.html` address the keys are `fold:/` for the home page and
-`fold:/simulations.html`. On phyeinusul.com the path has no `.html` (see above), so the catalog's key there is
-`fold:/simulations`; the two hosts are different origins and never share stored choices anyway.
+([fold.js:61](../public/scripts/fold.js#L61)), with a trailing `/index.html` replaced by `/` and a final `.html` dropped, so
+a page has one key whichever of its addresses opened it: `fold:/` for the home page, `fold:/simulations` for the catalog (the
+keys phyeinusul.com used before 31 October 2026, when its addresses had no `.html`, so no reader's choices were lost).
 
 **German and Arabic.** Each of the three pages also exists at `de/…` and `ar/…`, generated from it by `tools/i18n/build.py`
 ([i18n.md](i18n.md)). In the English source this adds two things, each on a line that already existed so no line number above
@@ -400,8 +402,8 @@ Each part's `h3` carries an `id` (`dc-cloud`, `dc-changes`, … `rp-pages`, … 
 `portfolios/droplet-collection/index.html#book`, `#sim`, `#problems`, `#checks` and four `#fig-…` figures;
 `portfolios/rotor-pendula/index.html` with `#notes`, `#sim` and `#wind`; `portfolios/hydraulics/index.html#servo`, `#ideal`
 and `#theory`; `portfolios/impact/index.html`, `de.html` and `ar.html`. Each page reads its tab or anchor from the address on
-load ([portfolios.md](portfolios.md)). Cloudflare redirects `…/index.html` to the folder with a 307, keeping the fragment, so the file links work (measured
-20 October 2026). The English pages of the four projects link back with
+load ([portfolios.md](portfolios.md)). Cloudflare serves `…/index.html` itself since 31 October 2026, and the folder address through `public/_redirects`, so both
+forms of the link work (until then it redirected `…/index.html` to the folder with a 307, keeping the fragment). The English pages of the four projects link back with
 `href="../../portfolios.html"`; their German and Arabic pages link back to the Portfolios page in their own language.
 The figure images come from each project's `fig/` folder (for example
 [`portfolios/droplet-collection/fig/plate-fallspeed.svg`](../public/portfolios/droplet-collection/fig/plate-fallspeed.svg), written by the

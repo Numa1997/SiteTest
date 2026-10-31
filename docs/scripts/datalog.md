@@ -518,7 +518,8 @@ The ten blocks: [Fig. 1 L799](../../public/simulations/Circular%20Wave%20Interfe
 ## State it keeps
 
 - `localStorage`: `datapanel.open` (`'1'`/`'0'`), `datapanel.hold` (`'1'` when the reader switched Live off; Live is on by
-  default), `datapanel.tab` (`'vars'`/`'rounds'`), and `datapanel.fold.<path>`, one `'1'`/`'0'` per section of that page
+  default), `datapanel.tab` (`'vars'`/`'rounds'`), and `datapanel.fold.<path>`, one `'1'`/`'0'` per section of that page (`<path>` as in `fold.js`: `/index.html` → `/`,
+  a final `.html` dropped, so both addresses of a page share it)
   ([datalog.js:1338](../../public/scripts/datalog.js#L1338), [1357](../../public/scripts/datalog.js#L1357),
   [1328](../../public/scripts/datalog.js#L1328), [770](../../public/scripts/datalog.js#L770)). `open`, `hold` and `tab` are the
   same for every page, so the choice carries from one figure to the next. The `datapanel.live` key of the earlier panel is no
@@ -572,7 +573,10 @@ array's table; an `IntersectionObserver` on the array rows.
 
 - **`dataset.js`**: the store and its fields `title`, `dims`, `vars`, `order`, methods `get`, `dtype`, `along`, `npz`; for a
   round archive, `Sim.dataset` and the new store's `dim`, `coord`, `var`, `set`, `has` and `npz`
-  ([datalog.js:1278-1286](../../public/scripts/datalog.js#L1278-L1286); [dataset.md](dataset.md)).
+  ([datalog.js:1278-1286](../../public/scripts/datalog.js#L1278-L1286); [dataset.md](dataset.md)). The archive's `page`
+  attribute and the "saved from" address in a saved file ([1293](../../public/scripts/datalog.js#L1293)) drop a final `.html`
+  (and `/index.html`), so a file names the page the same way whichever address opened it (`water-wave`,
+  `https://phyeinusul.com/simulations/water-wave`), as on phyeinusul.com before 31 October 2026.
 - **`sim.js`**: `Sim.fmt` for every number ([datalog.js:86](../../public/scripts/datalog.js#L86)); `readPixel` and
   `isBurgundy` are used by the `drawn` functions of Figs. 9, 10 and 11 ([sim.md](sim.md)).
 - **The page**: `Sim.data` (above), `#stage` with a sibling `.stage__cap`, and the CSS tokens. Each page's documentation

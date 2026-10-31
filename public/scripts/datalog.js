@@ -261,7 +261,7 @@
         '<th scope="col" class="c-val">' + T('Value now') + '</th><th scope="col" class="c-unit">' + T('Unit') + '</th>' +
         '<th scope="col" class="c-d" title="' + esc(T('change since the last rewrite, a quarter of a second ago')) + '">Δ</th>' +
         '<th scope="col" class="c-how">' + T('Obtained') + '</th><th scope="col" class="c-chk">' + T('Check') + '</th></tr></thead>';
-    var foldSaved = (load('fold.' + location.pathname) || '').split(',');
+    var foldSaved = (load('fold.' + location.pathname.replace(/\/index\.html$/, '/').replace(/\.html$/, '')) || '').split(',');
     sections.forEach(function (s, si) {
         var folded = foldSaved[si] === '1' ? true : foldSaved[si] === '0' ? false : s.folded;
         html += '<tbody class="dp-sec' + (folded ? ' is-folded' : '') + '" data-sec="' + si + '" style="--frac:' + fracOf(s.vars) + 'ch"><tr class="dp-sec__hd"><th colspan="7" scope="rowgroup">' +
@@ -767,7 +767,7 @@
         if (f) {
             var si = +f.getAttribute('data-fold'), on = !folded(si);
             secEls[si].classList.toggle('is-folded', on); f.setAttribute('aria-expanded', on ? 'false' : 'true');
-            store('fold.' + location.pathname, secEls.map(function (el) { return el.classList.contains('is-folded') ? '1' : '0'; }).join(','));
+            store('fold.' + location.pathname.replace(/\/index\.html$/, '/').replace(/\.html$/, ''), secEls.map(function (el) { return el.classList.contains('is-folded') ? '1' : '0'; }).join(','));
             paint(true);
             return;
         }
@@ -1275,7 +1275,7 @@
         if (!r) return;
         if (e.target.closest('[data-round-csv]')) { download(new Blob([roundCsv(r)], { type: 'text/csv' }), (spec.file || 'dataset') + '-round-' + r.no + '-' + stamp() + '.csv'); return; }
         if (e.target.closest('[data-round-save]')) {
-            var rd = Sim.dataset({ title: ds.title + ' · round ' + r.no, attrs: { page: location.pathname.split('/').pop(), round: r.label, samples: r.n, frames: r.frames, caught_at: r.at, time_variable: TV || 'wall clock', point: plain(r.pointTitle || '') } });
+            var rd = Sim.dataset({ title: ds.title + ' · round ' + r.no, attrs: { page: location.pathname.replace(/\/index\.html$/, '/').replace(/\.html$/, '').split('/').pop(), round: r.label, samples: r.n, frames: r.frames, caught_at: r.at, time_variable: TV || 'wall clock', point: plain(r.pointTitle || '') } });
             r.params.forEach(function (p) { rd.attrs['start_' + p[0]] = p[1]; });
             rd.dim('sample', r.n);
             rd.coord('time_into_round', 'sample', Float64Array, { units: timeUnit(), long_name: 'time since the round began' });
@@ -1290,7 +1290,7 @@
     /* ---------- Save ---------- */
     function readme(what, filename) {
         return [
-            ds.title + ' · ' + what + ' saved from ' + location.href.replace(/[#?].*$/, ''),
+            ds.title + ' · ' + what + ' saved from ' + location.href.replace(/[#?].*$/, '').replace(/\/index\.html$/, '/').replace(/\.html$/, ''),
             'Saved ' + new Date().toISOString(),
             '',
             'Each array variable is a NumPy .npy file; dataset.json lists every variable with its dimensions, dtype,',

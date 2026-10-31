@@ -12,7 +12,9 @@ and script is and how it works) and `tools/` sit beside them. It runs in two pla
   copy (this replaces the "no GitHub Pages" decision of 14 October 2026, which was written down but never switched off). It serves
   the repository as it is, without the Vite build: see `docs/usul.md`, "GitHub Pages".
 Change the repository first, build and check it, update the `docs/` pages that describe the change, and run
-`python3 tools/inventory.py` (it rewrites `docs/files.md` and fails if a file is undescribed). Work on a branch: merging into `main`
+`python3 tools/inventory.py` (it rewrites `docs/files.md` and fails if a file is undescribed). After adding, renaming or removing
+a page, run `python3 tools/redirects.py` (it rewrites `public/_redirects`, which serves each page at its short address on
+Cloudflare; `--check` fails if it is out of date). Work on a branch: merging into `main`
 deploys, so it happens only on Numa's word; a manual `wrangler deploy` only when Numa asks.
 Languages (since 23 October 2026): English is the only source. `tools/i18n/build.py` writes the German and Arabic pages into
 `public/de/` and `public/ar/` from the English pages and the tables in `i18n/<lang>/`; after changing an English page that has a
