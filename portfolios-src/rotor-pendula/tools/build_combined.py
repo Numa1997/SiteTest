@@ -204,6 +204,8 @@ def embed(tab, file, site=False):
         # from this folder, ../../public/; in the served copy the frame's addresses resolve against
         # portfolios/rotor-pendula/index.html, where the same files are ../../.
         src = src.replace('"../../public/', '"../../')
+        # the fonts: linked to the site's own files instead of embedded (portfolios-src/site_fonts.py, docs/performance.md)
+        src = link_fonts(src, site)
     bridge = BRIDGE % {'tab': json.dumps(tab), 'files': json.dumps(FILE_TO_TAB)}
     i = src.rfind('</body>')
     assert i > 0, f'{file}: no </body>'
@@ -243,9 +245,13 @@ def site_copy(site):
     - the site's self-hosted fonts (../../fonts/instrument-plex.css) instead of Google Fonts;
     - the title suffix, the back link and the tab icon (from portfolios.html) the other pages use.
     The embedded pages are unchanged, except that the simulation's links to the site's data panel lose their ../../public/
-    prefix (see embed()). Writes public/portfolios/rotor-pendula/index.html and LICENSE-fonts.txt beside it.
+    prefix and every embedded font becomes a link to the byte-identical file the site serves (see embed() and
+    portfolios-src/site_fonts.py). Writes public/portfolios/rotor-pendula/index.html and LICENSE-fonts.txt beside it.
     """
     site = pathlib.Path(site)
+    sys.path.insert(0, str(site / 'portfolios-src'))
+    global link_fonts
+    from site_fonts import link_fonts
     index = (site / 'index.html').read_text()
     csp = re.search(r'<meta http-equiv="Content-Security-Policy" content="([^"]+)"', index).group(1)
     csp = re.sub(r"script-src ([^;]*)", lambda m: "script-src " + m.group(1).replace("'unsafe-inline'", "'unsafe-inline' 'unsafe-eval'", 1), csp)
@@ -258,7 +264,7 @@ def site_copy(site):
     assert (site / 'public/fonts/instrument-plex.css').exists(), 'the site has no public/fonts/instrument-plex.css'
     out = build(head=head, title='Rotor Pendula · Numa Koudsie',
                 fonts='<link rel="stylesheet" href="../../fonts/instrument-plex.css">',
-                back='  <a class="back" href="../../portfolios.html">← Numa Koudsie · Portfolios</a>\n', site=True)
+                back='  <a class="back" href="../../portfolios.html">← Numa Koudsie · Portfolios</a>\n', site=site)
     folder = site / 'public/portfolios/rotor-pendula'
     folder.mkdir(parents=True, exist_ok=True)
     (folder / 'index.html').write_text(out)

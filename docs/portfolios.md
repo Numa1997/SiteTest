@@ -31,8 +31,8 @@ The page is generated from [`portfolios-src/droplets/`](../portfolios-src/drople
 
 | Path | What it is |
 |---|---|
-| `index.html` | **Generated** by `portfolios-src/rotor-pendula/tools/build_combined.py --site` (4.45 MB, 29 October 2026): a tab bar with the lecture notes (`#notes`), the simulation (`#sim`) and the wind (`#wind`), each embedded unchanged in its own frame; described [below](#rotor-pendula-rotor-pendula). |
-| `LICENSE-fonts.txt` | Licences of the fonts embedded in `index.html` (written by the build). |
+| `index.html` | **Generated** by `portfolios-src/rotor-pendula/tools/build_combined.py --site` (4.16 MB, 31 October 2026): a tab bar with the lecture notes (`#notes`), the simulation (`#sim`) and the wind (`#wind`), each embedded unchanged in its own frame; described [below](#rotor-pendula-rotor-pendula). |
+| `LICENSE-fonts.txt` | Licences of the fonts the page uses (written by the build). |
 
 
 ## The Hydraulic Press Study: `hydraulics/`
@@ -52,9 +52,13 @@ the Portfolios page links to those three addresses.
 **How the page works.** Picture three finished pages packed into one envelope. Each of the three pages is stored inside
 `index.html` unchanged, as a JSON string, and shown in its own frame (`<iframe srcdoc>`, with a `blob:` frame as the fallback),
 so their styles, element ids and scripts cannot collide. A small script added to each embedded page turns the links between
-them into tab switches. Everything is inline: the scripts, the styles, the fonts of the three pages and KaTeX's fonts (as
-`data:` addresses; the text's maths is typeset when the page is generated, so no KaTeX runs in the browser). The page loads
-nothing but `../../fonts/instrument-plex.css` for its tab bar, and makes no request outside the site.
+them into tab switches. The scripts and styles are inline; the text's maths is typeset when the page is generated, so no KaTeX
+runs in the browser. The fonts are the site's own files: the study's sources embed them as `data:` addresses so that a standalone
+copy works anywhere, and the site build (`--site`) replaces each one by a link to the byte-identical file in `public/fonts/` or
+`public/vendor/katex/fonts/` ([`portfolios-src/site_fonts.py`](../portfolios-src/site_fonts.py), since 31 October 2026). A phone
+then fetches each font once and keeps it for every tab and page, instead of receiving the same 59 fonts (1.3 MB of base64, about
+three quarters of the compressed page) inside the page on every visit; measured before and after in [performance.md](performance.md).
+The page loads `../../fonts/instrument-plex.css` for its tab bar and those font files, and makes no request outside the site.
 
 **Its security policy has two additions.** The page carries the website's policy and referrer rule after its charset line,
 taken from the root `index.html`, as every page does. The servo press runs its solver in a Web Worker that it builds from text
@@ -67,9 +71,9 @@ every page; `X-Frame-Options: SAMEORIGIN` does not stop the page's own frames, w
 
 | Path | What it is |
 |---|---|
-| `index.html` | The whole study, 5.16 MB (29 October 2026): the tab bar and the three embedded pages. |
+| `index.html` | The whole study, 3.79 MB (31 October 2026): the tab bar and the three embedded pages. |
 | `de.html`, `ar.html` | The study in German and Arabic, written by `tools/i18n/hydraulics.py` from `index.html` and the tables in `i18n/<lang>/` ([i18n.md](i18n.md)); never edited by hand. |
-| `LICENSE-fonts.txt` | The licences of the fonts embedded in the study (SIL Open Font License 1.1 for IBM Plex and Instrument Serif; MIT for KaTeX's fonts). |
+| `LICENSE-fonts.txt` | The licences of the fonts the study uses (SIL Open Font License 1.1 for IBM Plex and Instrument Serif; MIT for KaTeX's fonts). |
 | `fig/01_press.webp` … `fig/04_map.webp` | The four plates of the Portfolios page (part 3.3), screenshots of the study at 600 px height: the press mid-cycle, the six time traces, Bode and Nyquist, and the block map of chapter 0. |
 
 **How to update it.** Change the study in `portfolios-src/hydraulics/`, then, from that folder:
@@ -327,9 +331,10 @@ than the border box, and the Simulation's plot clicks measure from inside the bo
 
 ## Notes for maintainers
 
-- The KaTeX fonts: once in `public/vendor/katex/fonts/` (20 woff2 files, 0.26 MB, for the simulation pages and Droplet
-  Collection, which links `vendor/katex/katex.min.css`), and embedded as `data:` addresses in the self-contained pages of the
-  Hydraulic Press Study and Rotor Pendula.
+- The KaTeX fonts: once in `public/vendor/katex/fonts/` (20 woff2 files, 0.26 MB), for the simulation pages and Droplet
+  Collection, which link `vendor/katex/katex.min.css`, and, since 31 October 2026, for the Hydraulic Press Study and Rotor
+  Pendula too: their sources embed the fonts as `data:` addresses, and `build_combined.py --site` links the same files instead
+  (`portfolios-src/site_fonts.py`; the build stops if a study embeds a font the site does not serve).
 
 
 ## Iron, Cotton and the Head: `impact/`

@@ -197,8 +197,11 @@ main iframe.on { visibility: visible; }
 '''
 
 
-def embed(tab, file):
+def embed(tab, file, site=False):
     src = (ROOT / file).read_text()
+    if site:
+        # the fonts: linked to the site's own files instead of embedded (portfolios-src/site_fonts.py, docs/performance.md)
+        src = link_fonts(src, site)
     bridge = BRIDGE % {'tab': json.dumps(tab), 'files': json.dumps(FILE_TO_TAB)}
     i = src.rfind('</body>')
     assert i > 0, f'{file}: no </body>'
@@ -213,12 +216,12 @@ GOOGLE_FONTS = '''<link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600&family=Instrument+Serif&display=swap">'''
 
 
-def build(head='', title='Hydraulic Press Study', fonts=GOOGLE_FONTS, back=''):
+def build(head='', title='Hydraulic Press Study', fonts=GOOGLE_FONTS, back='', site=False):
     buttons = '\n'.join(
         f'    <button role="tab" id="tab-{t}" aria-selected="false">'
         f'<span class="long">{label}</span><span class="short">{short}</span></button>'
         for t, _, label, short in PAGES)
-    return SHELL % {'head': head, 'title': title, 'fonts': fonts, 'back': back, 'buttons': buttons, 'data': '\n'.join(embed(t, f) for t, f, _, _ in PAGES),
+    return SHELL % {'head': head, 'title': title, 'fonts': fonts, 'back': back, 'buttons': buttons, 'data': '\n'.join(embed(t, f, site) for t, f, _, _ in PAGES),
                     'tabs': json.dumps([t for t, _, _, _ in PAGES])}
 
 
@@ -237,9 +240,13 @@ def site_copy(site):
       blob: in worker-src (that worker is started from a blob: URL);
     - the site's self-hosted fonts (../../fonts/instrument-plex.css) instead of Google Fonts;
     - the title suffix, the back link and the tab icon (from portfolios.html) the other pages use.
-    The embedded pages are unchanged. Writes public/portfolios/hydraulics/index.html and LICENSE-fonts.txt beside it.
+    The embedded pages are unchanged, except that every embedded font becomes a link to the byte-identical file the site serves
+    (see embed() and portfolios-src/site_fonts.py). Writes public/portfolios/hydraulics/index.html and LICENSE-fonts.txt beside it.
     """
     site = pathlib.Path(site)
+    sys.path.insert(0, str(site / 'portfolios-src'))
+    global link_fonts
+    from site_fonts import link_fonts
     index = (site / 'index.html').read_text()
     csp = re.search(r'<meta http-equiv="Content-Security-Policy" content="([^"]+)"', index).group(1)
     csp = re.sub(r"script-src ([^;]*)", lambda m: "script-src " + m.group(1).replace("'unsafe-inline'", "'unsafe-inline' 'unsafe-eval'", 1), csp)
@@ -252,7 +259,7 @@ def site_copy(site):
     assert (site / 'public/fonts/instrument-plex.css').exists(), 'the site has no public/fonts/instrument-plex.css'
     out = build(head=head, title='Hydraulic Press Study · Numa Koudsie',
                 fonts='<link rel="stylesheet" href="../../fonts/instrument-plex.css">',
-                back='  <a class="back" href="../../portfolios.html">← Numa Koudsie · Portfolios</a>\n')
+                back='  <a class="back" href="../../portfolios.html">← Numa Koudsie · Portfolios</a>\n', site=site)
     folder = site / 'public/portfolios/hydraulics'
     folder.mkdir(parents=True, exist_ok=True)
     (folder / 'index.html').write_text(out)
