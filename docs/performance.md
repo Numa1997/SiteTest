@@ -452,11 +452,27 @@ redirect when asked at `.html`; 95 links, 50 of them through a redirect. The red
 625 ms on Slow 4G, 141 to 164 ms on 4G (85 ms round trip), on the simulations list, Fig. 5, the Portfolios page and Iron, Cotton
 and the Head.
 
-**Not answerable before the merge:** whether Cloudflare matches the rules of the twelve pages whose names hold spaces (written with
-`%20`), and whether it adds the security headers to a page served through a rule. Branches are not built (`docs/usul.md`), so the
-live site is the only test. **The rule set before merging:** revert at once if, live, any of the 152 addresses answers another page
-or no page, any answer lacks the security headers, or any page shows a failed request or a script error other than the analytics
-beacon.
+**Not answerable before the merge,** so set down first: whether Cloudflare matches the rules of the twelve pages whose names
+hold spaces (written with `%20`), and whether it adds the security headers to a page served through a rule. The rule: revert at
+once if, live, any of the 152 addresses answers another page or no page, any answer lacks the security headers, or any page shows
+a failed request or a script error other than the analytics beacon.
+
+**On the live site** (merged 31 October 2026 as `1195398`; Cloudflare served it 21 s later): 152 of 152 addresses right, the
+names with spaces included, every answer with the security headers, no page with a failed request or a script error, 53 links
+and none through a redirect. Kept. `fold.js` and `datalog.js` are byte-identical to the build; a section folded at
+`/simulations/water-wave.html` is still folded at `/simulations/water-wave`, under the key used before (`fold:/simulations/water-wave`),
+and the same for the catalog and the Arabic home page; `/_redirects` itself answers 404. First visit, median of 3
+(`measure.cjs`):
+
+| Page | Redirect, 4G | LCP, 4G | Redirect, Slow 4G | LCP, Slow 4G |
+|---|---|---|---|---|
+| `/simulations.html` | 164 → **0 ms** | 0.98 → **0.72 s** | 625 → **0 ms** | 2.85 → **2.22 s** |
+| `/simulations/water-wave.html` (Fig. 5) | 141 → **0 ms** | 1.37 → **1.12 s** | 625 → **0 ms** | 4.16 → **3.57 s** |
+| `/portfolios.html` | 146 → **0 ms** | 1.11 → **0.97 s** | 625 → **0 ms** | 3.56 → **2.99 s** |
+| `/portfolios/impact/index.html` | 147 → **0 ms** | 0.79 → **0.60 s** | 625 → **0 ms** | 2.28 → **1.82 s** |
+
+So a click between pages is 0.15 to 0.25 s sooner on a good phone connection and about 0.6 s on a slow one. To undo it: revert
+`1195398`.
 
 **What a reader sees.** The address bar shows the `.html` address after a click (`/simulations.html`); old short links still open
 their page directly.
