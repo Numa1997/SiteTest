@@ -25,6 +25,7 @@ The scripts are in [`tools/perf/`](../tools/perf/); Playwright and Chromium must
 | `margin.cjs <base> <CPU slowdown> <runs>` | How close a study tab comes to the shell's 8 s limit: from its frame's creation to its ready message. |
 | `foldtap.cjs <base> <runs> <page>…` | A reader in a figure's lecture note: how busy the main thread is, and how long closing and opening a fold takes. |
 | `clockcheck.cjs <base> <page>…` | Each figure runs on screen, holds off screen, resumes; the store stays live for an open data panel and the walkthrough. |
+| `film.cjs <URL> <prefix>` | A repeat visit as a reader sees it: screenshots at 2.5, 3, 3.5, 4.5, 6 and 8 s, and every LCP candidate with its element and text, to tell a change in the metric from a change on the screen. |
 | `serve.cjs <folder> <port>` | A local server that answers as Cloudflare does (below), so that a change can be measured before it is merged. |
 
 The metrics, as [web.dev](https://web.dev/articles/vitals) defines them, with its thresholds for "good" at the 75th percentile of
@@ -370,6 +371,51 @@ peak forces 638.6 N and 188.0 N, weights 9.81 N, English and Arabic at 1100 and 
 **Measured and not changed.** The drop is computed in chunks on the main thread when the page opens: 95 s at full speed, longer on a
 phone. A tap during it is answered in 56 ms (40 ms after), because each chunk yields; the page's frame loop also redraws every frame.
 Neither makes taps lag; moving the computation to a worker would be a restructure of the study, which the measurements do not call for.
+
+## The live site after all five changes (31 October 2026)
+
+The same thirteen pages as the first run, after the five merges (`main` at `c714829`), at 18:00 (`measure.cjs https://phyeinusul.com
+… 3`, Slow 4G, CPU 4×, median of 3). So that both columns use one rule, CLS is the sum of every shift and blocking time runs from
+first paint to 8 s after the load event, as in the first run.
+
+| Page | LCP, first visit | CLS | Blocking | LCP, repeat visit | Sent, repeat visit |
+|---|---|---|---|---|---|
+| `/` | 3.45 → 3.37 s | 0.005 → 0.005 | 0.21 → 0.16 s | 3.04 → **2.20 s** | 27 → 20 kB |
+| `/simulations.html` | 2.85 → 2.85 s | 0.280 → **0.004** | 0.66 → 0.56 s | 2.92 → 2.94 s | 33 → 22 kB |
+| `/simulations/driven-oscillator.html` (Fig. 9) | 4.20 → 4.12 s | 0.005 → 0.005 | 10.74 → 11.19 s | 3.85 → **3.14 s** | 130 → 111 kB |
+| `/simulations/wind-turbine.html` (Fig. 10) | 4.13 → 4.19 s | 0.004 → 0.004 | 4.54 → 5.33 s | 3.91 → **3.27 s** | 91 → 77 kB |
+| `/simulations/water-wave.html` | 4.18 → 4.16 s | 0.005 → 0.005 | 2.25 → 2.62 s | 4.04 → 7.82 s³ | 82 → 68 kB |
+| `/simulations/Double Pendulum.html` | 4.27 → 4.19 s | 0.004 → 0.004 | 3.13 → 3.61 s | 3.85 → **3.38 s** | 68 → 58 kB |
+| `/portfolios.html` | 3.60 → 3.56 s | 0.040 → 0.040 | 0.12 → 0.17 s | 3.63 → 3.64 s | 40 → 28 kB |
+| `/portfolios/rotor-pendula/index.html` | (2.26 → 2.05 s)¹ | 0.000 → 0.000 | 2.96 → 2.96 s | (2.25 → 2.19 s)¹ | 1077 → **376 kB**² |
+| `/portfolios/hydraulics/index.html#servo` | (2.06 → 2.00 s)¹ | 0.209 → 0.209 | 1.38 → 1.76 s | (2.04 → 1.99 s)¹ | 621 → **261 kB**² |
+| `/portfolios/droplet-collection/index.html` | 2.32 → 2.36 s | 0.002 → 0.002 | 0.65 → 0.70 s | 2.36 → 2.38 s | 276 → 268 kB |
+| `/portfolios/impact/index.html` | 4.68 → **2.28 s** | 0.862 → **0.029** | 6.31 → 6.33 s | 4.44 → **2.48 s** | 58 → 52 kB |
+| `/de/simulations.html` | 3.97 → 3.96 s | 0.290 → **0.004** | 0.40 → 0.47 s | 3.52 → 3.55 s | 34 → 23 kB |
+| `/ar/index.html` | 5.19 → 5.22 s | 0.020 → 0.020 | 0.39 → 0.54 s | 4.32 → 4.08 s | 33 → 24 kB |
+
+¹ The page's own LCP; the study draws inside frames, timed by `tabs.cjs` (change 1). ² The first run counted the fonts carried
+inside these pages as sent bytes; the corrected numbers of the same morning are those of change 1 (first visit 1145 → 661 kB and
+779 → 587 kB in this run). On every page the only console error is still the analytics beacon; none scrolls sideways.
+
+**What moved.** The layout shifts of the simulations lists and of Iron, Cotton and the Head are gone (changes 4 and 5); that study's
+text appears 2.4 s sooner on a first visit (change 5). On a repeat visit six pages show their largest text 0.2 to 2.0 s sooner, and
+every page but the droplet study (3 %) sends 10 to 35 % fewer bytes, because the fonts no longer ask the server again (change 2); the two study pages send 65 %
+and 58 % less (change 1). **What did not.** First-visit LCP elsewhere moved by at most 0.2 s, within the spread of three runs.
+Blocking time moved by −24 % to +39 %, and by as much on pages none of the changes touched (`/portfolios.html` +38 %,
+`/ar/index.html` +39 %): this is the difference between a morning and an evening run on the measuring machine, not an effect of the
+changes. On the figures, change 3 does not act in this window, because the figure is on screen; its effect is in its own section.
+
+³ **Water waves, repeat visit: the metric moved, the screen did not.** The 7.82 s repeated (7.88 s in a second live run), and a
+local before-and-after reproduced it: 3.3 to 3.4 s up to `87b3357`, 6.8 s from `f92733a` (change 2, fonts kept for a year), so
+change 2 causes it. What a reader sees is the same or earlier (`film.cjs`, local, before and after change 2): with the fonts in the
+cache, the title and lede are drawn in their final faces at 2.5 s, where before they were still in the fallback face; from 3 s on the
+two films match, and the figure appears between 4.5 and 6 s in both. What changed is which element the browser names: before, the
+lede (25 418 px²) was reported at 3.26 s; after, it is never reported, so LCP falls back to the figure's caption, which is drawn
+again when its formula is typeset at the end of the load (6.8 to 9.1 s; sometimes at 3.2 s, so the median flips between runs). The
+heading block fades in from transparent (`animation: rise`, `styles/sim.css` line 57), and with the font already there the lede is
+drawn only during that fade. Why Chromium then never reports it is not established here; the films are the evidence that the reader
+waits no longer. Change 2 is kept.
 
 ## Not changed, and why
 
