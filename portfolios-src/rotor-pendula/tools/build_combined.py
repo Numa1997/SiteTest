@@ -201,6 +201,14 @@ main iframe.on { visibility: visible; }
 '''
 
 
+def link_fonts(src, site):
+    """The site's portfolios-src/site_fonts.py, taken from the site checkout being written (this folder may be a temporary copy, as
+    tools/i18n/hydraulics.py makes one); a checkout without it stops the build."""
+    sys.path.insert(0, str(pathlib.Path(site) / 'portfolios-src'))
+    from site_fonts import link_fonts as link
+    return link(src, site)
+
+
 def embed(tab, file, site=False):
     src = (ROOT / file).read_text()
     if site:
@@ -253,9 +261,6 @@ def site_copy(site):
     portfolios-src/site_fonts.py). Writes public/portfolios/rotor-pendula/index.html and LICENSE-fonts.txt beside it.
     """
     site = pathlib.Path(site)
-    sys.path.insert(0, str(site / 'portfolios-src'))
-    global link_fonts
-    from site_fonts import link_fonts
     index = (site / 'index.html').read_text()
     csp = re.search(r'<meta http-equiv="Content-Security-Policy" content="([^"]+)"', index).group(1)
     csp = re.sub(r"script-src ([^;]*)", lambda m: "script-src " + m.group(1).replace("'unsafe-inline'", "'unsafe-inline' 'unsafe-eval'", 1), csp)
