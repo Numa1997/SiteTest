@@ -148,7 +148,7 @@ for (X = comp0; X <= LENGTH; X += lambda.value) marker(left + X * s, yL - band -
                 code: `function longAmp() { return ⟦AL|Math.min(amp.value, 0.8 * lambda.value / (2 * Math.PI))⟧; }
 ...
 var al = longAmp();
-document.getElementById('r-al').textContent = al.toFixed(0) + ' px' + (al < amp.value ? ' (cap)' : '');
+document.getElementById('r-al').textContent = al.toFixed(0) + ' px' + (al < amp.value ? _t(' (cap)') : '');
 ...
 ds.set('Ak', amp.value * kk); ⟦AkL|ds.set('ALk', al * kk)⟧; ...`,
                 syms: [

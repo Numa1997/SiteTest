@@ -305,7 +305,8 @@ RULES = [
     (r'public/portfolios/rotor-pendula/study/sources/access\.json', 'The same two sources as data.', 'docs/portfolios.md'),
 ]
 
-# Folder sections in reading order; a file goes to the first whose prefix it starts with.
+# Folder sections in reading order; a file goes to the first whose prefix it starts with. A file in no section is an error, as
+# a file without a description is (public/cv/ had none and was silently left out of docs/files.md until 31 October 2026).
 SECTIONS = [
     ('', 'Repository root', lambda p: '/' not in p),
     ('public/', 'Pages under public/', lambda p: p.startswith('public/') and p.count('/') == 1),
@@ -317,6 +318,7 @@ SECTIONS = [
     ('public/fonts/', 'IBM Plex, Instrument Serif, and the Arabic faces', None),
     ('public/images/sims/', 'Thumbnails', None),
     ('public/images/', 'Logo', None),
+    ('public/cv/', 'The CV page', None),
     ('public/portfolios/droplet-collection/', 'Project copy: Droplet Collection', None),
     ('public/portfolios/rotor-pendula/', 'Project copy: Rotor Pendula', None),
     ('public/portfolios/hydraulics/', 'Project copy: Hydraulic Press Study', None),
@@ -368,6 +370,8 @@ def render(paths):
             if (test(p) if test else p.startswith(prefix)):
                 groups.setdefault(title, []).append((p, d))
                 break
+        else:
+            missing.append(p + ' (in no section of SECTIONS)')
     total = sum(os.path.getsize(os.path.join(ROOT, p)) for p in paths)
     out = ['# Every file', '',
            'Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the repository; do not edit by hand.',

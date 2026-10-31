@@ -9,6 +9,10 @@
   3. Layout:   no sideways scrolling of the page or of any tab at 360, 390, 1024 and 1440 px.
 
 Usage: python3 tools/check_combined.py [path-or-url-of-combined-page]
+       e.g. http://127.0.0.1:8767/portfolios/hydraulics/index.html, or de.html, ar.html for the German and Arabic pages
+Nothing here depends on the page's language: the tabs are found by the tab id their frame reports, the cycle's outcome by
+the status markup, the force target by its number. A translated page is held to the English standalone pages' elements;
+its text, being another language, is only required not to be missing (at least half as long as the English).
 Needs Playwright for Python and a Chromium (uses /opt/pw-browsers/chromium if it exists).
 """
 import asyncio
@@ -43,10 +47,15 @@ def check(name, ok, detail=''):
     print(f"{'ok  ' if ok else 'FAIL'}  {name}{('  (' + detail + ')') if detail else ''}")
 
 
+# the servo page's status, once written: 'complete' when the cycle finished (no warning), else 'unfinished'; the text after it
+STATUS = """() => { const s = document.getElementById('status'); if (!s || !s.querySelector('div')) return '';
+  return (s.querySelector('.warn') ? 'unfinished: ' : 'complete: ') + s.textContent; }"""
+
+
 async def wait_status(frame, timeout=30):
     for _ in range(timeout * 10):
-        s = await frame.evaluate("() => (document.getElementById('status') || {}).textContent || ''")
-        if 'complete' in s.lower() or 'error' in s.lower():
+        s = await frame.evaluate(STATUS)
+        if s:
             return s
         await asyncio.sleep(0.1)
     return ''
@@ -58,12 +67,12 @@ async def frame_for(page, tab):
             if f is page.main_frame:
                 continue
             try:
-                title = await f.evaluate('() => document.title')
+                # the line the builder adds at the end of each tab (READY in build_combined.py) names the tab, in any language
+                mine = await f.evaluate("t => [...document.scripts].some(s => s.textContent.includes('hydraulicsReady: \"' + t + '\"'))", tab)
+                if mine and await f.evaluate("() => document.readyState") == 'complete':
+                    return f
             except Exception:
                 continue
-            want = {'servo': 'Servo-Hydraulic', 'ideal': 'Ideal Hydraulic', 'theory': 'Hydraulics from First'}[tab]
-            if want in title and await f.evaluate("() => document.readyState") == 'complete':
-                return f
         await asyncio.sleep(0.1)
     raise RuntimeError(f'no frame for {tab}')
 
@@ -101,6 +110,8 @@ async def main():
         page.on('pageerror', lambda e: errors.append(f'pageerror: {e}'))
         page.on('console', lambda m: errors.append(f'console: {m.text}') if m.type == 'error' else None)
         await page.goto(URL)
+        lang = await page.evaluate('() => document.documentElement.lang')
+        print(f'page language: {lang}')
         check('opens on the servo press tab', await selected(page) == 'servo')
 
         frames = {}
@@ -110,15 +121,19 @@ async def main():
             check(f'{tab}: tab selected after click', await selected(page) == tab)
             if tab == 'servo':
                 status = await wait_status(f)
-                check('servo: cycle computed in the background', 'complete' in status.lower(), status[:90])
+                check('servo: cycle computed in the background', status.startswith('complete'), status[:90])
                 check('servo: energy audit closes', '✓' in status)
             got = await f.evaluate(INVENTORY)
             same = {k: (got[k], ref[tab][k]) for k in got if k != 'text' and got[k] != ref[tab][k]}
             check(f'{tab}: same elements as the standalone page', not same, str(same) if same else
                   f"{got['h2']} h2, {got['canvas']} canvases, {got['figure']} figures, {got['katex']} formulas, "
                   f"{got['range']} sliders, {got['links']} links")
-            check(f'{tab}: same amount of text', abs(got['text'] - ref[tab]['text']) <= 2,
-                  f"{got['text']} vs {ref[tab]['text']} characters")
+            if lang == 'en':
+                check(f'{tab}: same amount of text', abs(got['text'] - ref[tab]['text']) <= 2,
+                      f"{got['text']} vs {ref[tab]['text']} characters")
+            else:
+                check(f'{tab}: text present ({lang})', got['text'] >= ref[tab]['text'] / 2,
+                      f"{got['text']} characters, English {ref[tab]['text']}")
 
         # ---- servo press works
         servo = frames['servo']
@@ -132,17 +147,17 @@ async def main():
         t1 = float(await servo.evaluate("() => document.getElementById('scrub').value"))
         check('servo: Play advances the animation', t1 > t0, f'{t0:.3f} -> {t1:.3f}')
         await servo.click('#play')
-        before = await servo.evaluate("() => document.getElementById('status').textContent")
+        before = await servo.evaluate(STATUS)
         await servo.evaluate("""() => { const s = document.getElementById('in_Fref');
             s.value = 40; s.dispatchEvent(new Event('input', {bubbles: true})); s.dispatchEvent(new Event('change', {bubbles: true})); }""")
         after = before
         for _ in range(200):
             await asyncio.sleep(0.1)
-            after = await servo.evaluate("() => document.getElementById('status').textContent")
-            if after != before and 'complete' in after.lower():
+            after = await servo.evaluate(STATUS)
+            if after != before and after.startswith('complete'):
                 break
-        check('servo: moving the force slider recomputes the cycle', after != before and 'target of 40' in after,
-              after[:80])
+        target40 = await servo.evaluate("() => [...document.querySelectorAll('#status .num')].some(n => /^40(?![0-9.,])/.test(n.textContent.trim()))")
+        check('servo: moving the force slider recomputes the cycle', after != before and target40, after[:80])
 
         # ---- ideal press works
         await page.click('#tab-ideal')

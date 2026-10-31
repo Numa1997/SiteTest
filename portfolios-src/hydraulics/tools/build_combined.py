@@ -30,7 +30,9 @@ PAGES = [  # tab id, file, tab label, short label for phones
 ]
 FILE_TO_TAB = {f: t for t, f, _, _ in PAGES}
 
-# Added to the end of each embedded page. It talks to the shell only through postMessage.
+# Added at the top of each embedded page, so that a link tapped while the page is still loading is already handled: a frame made
+# from srcdoc resolves '#x' against the shell's address, and an unhandled tap loaded the whole study inside the tab
+# (docs/performance.md, "Faults found and fixed"). It talks to the shell only through postMessage.
 BRIDGE = '''<script>
 (function () {
   var TAB = %(tab)s, FILES = %(files)s;
@@ -46,7 +48,12 @@ BRIDGE = '''<script>
     if (!a) return;
     var h = a.getAttribute('href');
     if (h.charAt(0) === '#') {
-      if (h.length > 1) { e.preventDefault(); scrollToId(decodeURIComponent(h.slice(1))); }
+      if (h.length > 1) {
+        e.preventDefault();
+        var id = decodeURIComponent(h.slice(1));
+        /* tapped before the page has been read to its target: go there once it has */
+        if (!scrollToId(id) && document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function () { scrollToId(id); }, { once: true });
+      }
       return;
     }
     var parts = h.split('#'), tab = FILES[parts[0]];
@@ -57,9 +64,11 @@ BRIDGE = '''<script>
     var d = e.data;
     if (d && typeof d.hydraulicsFrag === 'string') scrollToId(d.hydraulicsFrag);
   });
-  parent.postMessage({ hydraulicsReady: TAB }, '*');
 })();
 </script>
+'''
+# Added to the end of each embedded page: the page has been read to its end.
+READY = '''<script>parent.postMessage({ hydraulicsReady: %(tab)s }, '*');</script>
 '''
 
 SHELL = r'''<!doctype html>
@@ -138,17 +147,19 @@ main iframe.on { visibility: visible; }
   function frame(tab) {
     if (frames[tab]) return frames[tab];
     var f = document.createElement('iframe');
-    f.title = document.getElementById('tab-' + tab).textContent.trim();
+    var b = document.getElementById('tab-' + tab);
+    f.title = (b.querySelector('.long') || b).textContent.trim();   /* the long label only, not both */
     f.srcdoc = html(tab);
     stage.appendChild(f);
     frames[tab] = f;
-    // If this host refuses srcdoc frames, the page never reports in; fall back to a blob URL. A frame that did take its srcdoc
-    // is only slow (a slow phone, a long page) and is left to finish: replacing it would throw its work away.
+    // If this host refuses srcdoc frames, the frame stays empty (about:blank, or unreadable when the host sandboxes it) and the
+    // page never reports in; fall back to a blob URL. A frame that holds a document is only slow (a slow phone, a long page) and
+    // is left to finish: replacing it would throw its work away.
     setTimeout(function () {
       if (ready[tab]) return;
       var d = null;
       try { d = f.contentDocument; } catch (e) { /* not readable: treat as refused */ }
-      if (d && d.URL === 'about:srcdoc') return;
+      if (d && d.URL !== 'about:blank') return;
       f.removeAttribute('srcdoc');
       f.src = URL.createObjectURL(new Blob([html(tab)], { type: 'text/html' }));
     }, 8000);
@@ -215,9 +226,12 @@ def embed(tab, file, site=False):
         # the fonts: linked to the site's own files instead of embedded (portfolios-src/site_fonts.py, docs/performance.md)
         src = link_fonts(src, site)
     bridge = BRIDGE % {'tab': json.dumps(tab), 'files': json.dumps(FILE_TO_TAB)}
+    m = re.search(r'<meta charset="utf-8">\n?|<head>\n?', src)
+    assert m, f'{file}: no <head>'
+    src = src[:m.end()] + bridge + src[m.end():]
     i = src.rfind('</body>')
     assert i > 0, f'{file}: no </body>'
-    src = src[:i] + bridge + src[i:]
+    src = src[:i] + READY % {'tab': json.dumps(tab)} + src[i:]
     # JSON with every '<' escaped cannot end the <script> element early or open a comment.
     text = json.dumps(src, ensure_ascii=False).replace('<', '\\u003c')
     return f'<script type="application/json" id="page-{tab}">{text}</script>'

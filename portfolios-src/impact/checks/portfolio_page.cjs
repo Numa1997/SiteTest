@@ -1,6 +1,6 @@
 // Open the Portfolios page of the built site and screenshot the new project; check its links resolve.
 const { chromium } = require('playwright');
-(async()=>{const b=await chromium.launch({executablePath:'/opt/pw-browsers/chromium_headless_shell-1194/chrome-linux/headless_shell'});
+(async()=>{const b=await chromium.launch();
  for(const w of [1100,390]){const p=await b.newPage({viewport:{width:w,height:1000}});const errs=[];p.on('pageerror',e=>errs.push(e.message));
   const bad=[];p.on('response',r=>{if(r.status()>=400)bad.push(r.status()+' '+r.url())});
   await p.goto('http://localhost:8766/portfolios.html');await p.waitForTimeout(800);

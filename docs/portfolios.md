@@ -51,11 +51,13 @@ Principles*, a 23-chapter text with 63 numbered equations. `index.html#servo`, `
 the Portfolios page links to those three addresses.
 
 **How the page works.** Picture three finished pages packed into one envelope. Each of the three pages is stored inside
-`index.html` unchanged, as a JSON string, and shown in its own frame (`<iframe srcdoc>`; for a host that refuses `srcdoc` frames, a `blob:` frame replaces it after 8 s, but
-only then: a frame that is merely slow is left to finish, since 31 October 2026, and on the site the security policy would block a
-`blob:` frame anyway, [performance.md](performance.md)),
-so their styles, element ids and scripts cannot collide. A small script added to each embedded page turns the links between
-them into tab switches. The scripts and styles are inline; the text's maths is typeset when the page is generated, so no KaTeX
+`index.html` unchanged, as a JSON string, and shown in its own frame (`<iframe srcdoc>`; for a host that refuses `srcdoc` frames,
+so that the frame stays empty, a `blob:` frame replaces it after 8 s; a frame that holds a document, however slow, is left to finish,
+and on the site the security policy would block a `blob:` frame anyway, [performance.md](performance.md)),
+so their styles, element ids and scripts cannot collide. A small script added at the top of each embedded page turns the links between
+them into tab switches and keeps in-page links (`#…`) inside the frame, from the first moment a link can be tapped; one line at the
+end of each page tells the shell the tab is ready. (Until 31 October 2026 the whole script sat at the end, and a contents link tapped
+before it had run loaded the whole study inside the tab.) Each frame's title, which a screen reader reads, is the tab's long label. The scripts and styles are inline; the text's maths is typeset when the page is generated, so no KaTeX
 runs in the browser. The fonts are the site's own files: the study's sources embed them as `data:` addresses so that a standalone
 copy works anywhere, and the site build (`--site`) replaces each one by a link to the byte-identical file in `public/fonts/` or
 `public/vendor/katex/fonts/` ([`portfolios-src/site_fonts.py`](../portfolios-src/site_fonts.py), since 31 October 2026). A phone

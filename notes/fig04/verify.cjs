@@ -13,7 +13,7 @@ const server = http.createServer((q, s) => {
 const SPOTS = ['the price of not bulging', 'At rest that half', 'set <em>Particles</em> to 40', 'tilted to the slope', 'Section 5 gives the rule', 'any particle in the upper row', 'raises the pressure by', 'the last at its end', 'Free online edition'];
 (async () => {
     await new Promise(r => server.listen(0, '127.0.0.1', r));
-    const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' });
+    const browser = await chromium.launch();
     const R = {};
     for (const [w, h] of [[1440, 900], [390, 844]]) {
         const ctx = await browser.newContext({ viewport: { width: w, height: h } });

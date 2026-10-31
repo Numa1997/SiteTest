@@ -3,11 +3,10 @@
 const { execSync } = require('child_process');
 const { chromium } = require(execSync('npm root -g').toString().trim() + '/playwright');
 const URL = 'http://localhost:8701/simulations/' + encodeURIComponent('Circular Wave Interference Visualization.html');
-const exe = '/opt/pw-browsers/chromium-1194/chrome-linux/chrome';
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
 (async () => {
-  const browser = await chromium.launch({ executablePath: exe });
+  const browser = await chromium.launch();
   const out = {};
 
   // 1. grid on each screen

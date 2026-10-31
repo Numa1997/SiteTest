@@ -1,7 +1,7 @@
 const { chromium } = require('playwright');
 (async()=>{
  const file=process.argv[2],tag=process.argv[3];
- const b=await chromium.launch({executablePath:'/opt/pw-browsers/chromium_headless_shell-1194/chrome-linux/headless_shell'});
+ const b=await chromium.launch();
  for(const [w,h] of [[1100,950],[390,1200]]){
   const p=await b.newPage({viewport:{width:w,height:h}});
   const errs=[];p.on('pageerror',e=>errs.push(e.message));

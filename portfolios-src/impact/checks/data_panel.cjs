@@ -5,7 +5,7 @@ const { chromium } = require('playwright');
 const fs=require('fs');
 (async()=>{
  const page=process.argv[2]||'index.html',w=+(process.argv[3]||1100),out=process.argv[4]||'.';
- const b=await chromium.launch({executablePath:'/opt/pw-browsers/chromium_headless_shell-1194/chrome-linux/headless_shell'});
+ const b=await chromium.launch();
  const ctx=await b.newContext({viewport:{width:w,height:1000},acceptDownloads:true});
  const p=await ctx.newPage();const errs=[];
  p.on('pageerror',e=>errs.push('pageerror '+e.message));p.on('console',m=>{if(m.type()==='error')errs.push('console '+m.text())});

@@ -4,7 +4,6 @@
 const { execSync } = require('child_process');
 const { chromium } = require(execSync('npm root -g').toString().trim() + '/playwright');
 const URL = 'http://127.0.0.1:8702/simulations/Double%20Pendulum.html';
-const EXE = '/opt/pw-browsers/chromium-1194/chrome-linux/chrome';
 const mode = process.argv[2] || 'health';
 
 async function open(browser, w, h, fake) {
@@ -29,7 +28,7 @@ const HOOK = `(() => { window.__rec = { max: -Infinity, maxT: 0, min: Infinity, 
   requestAnimationFrame(f); })()`;
 
 (async () => {
-    const browser = await chromium.launch({ executablePath: EXE });
+    const browser = await chromium.launch();
     if (mode === 'health' || mode === 'shots') {
         for (const [w, h] of [[1440, 900], [390, 844]]) {
             const { page, errors } = await open(browser, w, h, false);

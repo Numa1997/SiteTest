@@ -8,7 +8,7 @@ const URL = 'http://127.0.0.1:8606/simulations/wave-interference.html';
 const wait = ms => new Promise(r => setTimeout(r, ms));
 
 async function run(vw, vh, full) {
-    const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' });
+    const browser = await chromium.launch();
     const page = await browser.newPage({ viewport: { width: vw, height: vh } });
     const errors = [];
     page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });

@@ -82,7 +82,7 @@ async function layout(browser, w, h, tag) {
 
 (async () => {
     await new Promise((r) => server.listen(PORT, '127.0.0.1', r));
-    const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' });
+    const browser = await chromium.launch();
     const out = {};
     // numbers, read from the page's own store
     const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
