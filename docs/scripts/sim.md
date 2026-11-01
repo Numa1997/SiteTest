@@ -309,12 +309,16 @@ typeset as `\displaystyle` inline maths, which the browser may break. The TeX of
 - A piece wider than the row by itself breaks at `+` and `−` between brackets; only if one bracket alone is still too wide does
   it break inside. The outermost `\left( … \right)` pairs are written as `\Bigl( … \Bigr)` (or `\bigl`) in rows, since nothing
   inside a `\left … \right` pair can break.
-- A row that runs on is indented 2em; the number stays at the right, centred on the rows; a piece no row can hold (a fraction or
+- A row that runs on is indented 2rem (the same in every language); the number stays at the right, centred on the rows; a piece no row can hold (a fraction or
   matrix wider than the column) scrolls inside its own space, clear of the number.
 - The choice is made per equation and again whenever its box changes width (a phone turned, a fold opened, the data panel opened
   beside the note), when a font arrives, and before printing. An equation that fits keeps its original one-line form.
 
 Measured on 1 November 2026 (`notes/verify.mjs`, and a probe of every display at 1440, 1600 and 390 px): equations wider than
 their box went from 1 to 0 at 1440 px, from 20 to 0 at 1600 px and from 112 to 9 at 390 px. The 9 are each one fraction or matrix
-wider than a phone column; making them fit needs the maths rewritten in the note. Every one of the 195 display equations of the
+wider than a phone column; making them fit needs the maths rewritten in the note. German: the same (0, 0, 9). Arabic: 1, 3 and 24,
+because the Arabic pages set the text, and so the maths, larger in the same column; the pieces left are single fractions,
+matrices or products of bracketed factors, which have no + or − to break at. The Arabic pages isolate every formula
+(`i18n.css:36`, `unicode-bidi: isolate`), which keeps it on one line; the rows lift that (`unicode-bidi: normal`), the maths
+being left to right anyway. Every one of the 195 display equations of the
 eleven notes, in every form, typesets without a KaTeX error.

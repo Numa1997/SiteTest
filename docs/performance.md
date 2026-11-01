@@ -501,7 +501,8 @@ One found fault is not fixed here, because it is a choice for Numa rather than a
 - **Display equations wider than their box** (fixed 1 November 2026, at Numa's instruction "a long equation gets multiple rows"):
   `node notes/verify.mjs` found 21, not six: one at 1440 px and 20 at 1600 px, where the data panel beside the page narrows the
   note's column to 541 to 579 px; at 390 px a probe found 112. Such an equation is now set in rows ([scripts/sim.md](scripts/sim.md),
-  "Long equations"): 0 left at 1440 and 1600 px, 9 at 390 px (one fraction or matrix wider than a phone column each).
+  "Long equations"): 0 left at 1440 and 1600 px, 9 at 390 px (one fraction or matrix wider than a phone column each); German the
+  same; Arabic 1, 3 and 24, its maths being set larger.
 - **The analytics beacon**: Cloudflare inserts it only for browsers (a `curl` of the page gets the page as built), and every page's
   policy (`script-src 'self' 'unsafe-inline'`) blocks it. Allowing it means sending readers' visits to Cloudflare's analytics.
 
