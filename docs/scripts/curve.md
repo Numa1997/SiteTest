@@ -113,8 +113,9 @@ frame.
 `Sim.curve.loosen(el)` does the same for a slider a page moves by code with an exact value: Fig. 5's Frequency slider under
 deep-water dispersion, and the Phase sliders that keep Wave 2 (Fig. 6) and Circle 2 (Fig. 7) continuous. Seven slider
 labels printed the raw value (`v + ' px'`), which under a curve read like "36.1039222 px"; they now round to the slider's
-own resolution (Figs. 1, 3, 4, 5, 6 and 8; the walkthroughs that quote those lines were updated, and still find the same
-754 of 759 lines). The "Done" message no longer doubles the units of a knob that formats its own value ("1.64 Hz Hz").
+own resolution (Figs. 1, 3, 4, 5, 6 and 8; the walkthroughs that quote those lines were updated, and still found the same
+754 of 759 lines). The five lines missing then were lines whose words had since been wrapped in `_t()` for translation (Figs. 3,
+4 and 5); their quotes were brought up to date on 31 October 2026, and `node notes/walkcheck.cjs` finds 759 of 759. The "Done" message no longer doubles the units of a knob that formats its own value ("1.64 Hz Hz").
 
 ## What it writes into the store
 

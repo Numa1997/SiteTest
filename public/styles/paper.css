@@ -116,3 +116,16 @@
   .paper__grid { display: block; }
   .paper:not(.is-typeset) .paper__body { visibility: visible; }
 }
+
+/* a display equation wider than its box is set in rows (scripts/sim.js, "Long equations"): the same TeX as inline maths, which breaks
+   at its relations (=, ≈, ⟹), and inside a term at + and − only where a stretch between relations does not fit (an aligned block is
+   first split into its rows); a row that runs on is indented 2rem, the number stays at the right, centred on the rows */
+.paper .katex-display[hidden] { display: none; }
+.paper .eq-rows { display: flex; align-items: center; gap: 0 .8em; text-align: start; }   /* start and inline-start follow the maths, left to right on every page */
+.paper .eq-rows__math { flex: 1 1 auto; min-width: 0; overflow-x: auto; overflow-y: hidden; }   /* a piece no row can hold scrolls here, clear of the number */
+.paper .eq-rows__row + .eq-rows__row { margin-top: .3em; }
+.paper .eq-rows__row { display: block; padding-inline-start: 2rem; text-indent: -2rem; line-height: 2.1; }   /* the same indent in every language */
+.paper .eq-p > span[hidden] { display: none; }
+.paper .eq-whole .katex { white-space: nowrap; unicode-bidi: normal; }
+.paper .eq-any .katex { white-space: normal; unicode-bidi: normal; }   /* the Arabic pages isolate every formula (i18n.css), which would keep it on one line */
+.paper .eq-rows__tag { flex: none; font-size: 1.06em; color: var(--muted); }

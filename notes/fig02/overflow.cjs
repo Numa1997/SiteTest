@@ -1,7 +1,7 @@
 const { execSync } = require('child_process');
 const { chromium } = require(execSync('npm root -g').toString().trim() + '/playwright');
 (async () => {
-  const b = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' });
+  const b = await chromium.launch();
   for (const [w, h] of [[390, 844], [1440, 900]]) {
     const p = await b.newPage({ viewport: { width: w, height: h } });
     await p.goto('http://127.0.0.1:8702/simulations/Double%20Pendulum.html'); await p.waitForTimeout(2000);

@@ -107,6 +107,7 @@ RULES = [
     (r'public/styles/i18n\.css', 'Language switch, Arabic fonts and the few right-to-left rules of the translated pages.', 'docs/styles.md'),
     (r'public/styles/([a-z]+)\.rtl\.css', lambda m: m.group(1) + '.css with left and right exchanged, for the Arabic pages; generated with rtlcss, do not edit.', 'docs/styles.md'),
     # the lecture-note review of 20 October 2026: not part of the site
+    (r'\.claude/skills/tune-with-numa/SKILL\.md', 'Claude Code skill: visual and feel changes are tuned by Numa on a ?tune=1 panel, not guessed by Claude; and how to write a sharper prompt.', 'CLAUDE.md'),
     (r'\.claude/agents/([a-z-]+)\.md', lambda m: 'Claude Code agent definition: ' + m.group(1) + ', one role of the lecture-note review.', 'docs/notes.md'),
     (r'notes/STANDARD\.md', 'The standard the lecture notes are judged against, and Numa\'s verdicts.', 'docs/notes.md'),
     (r'notes/STATUS\.md', 'Status of the lecture-note review, one row per figure.', 'docs/notes.md'),
@@ -305,7 +306,8 @@ RULES = [
     (r'public/portfolios/rotor-pendula/study/sources/access\.json', 'The same two sources as data.', 'docs/portfolios.md'),
 ]
 
-# Folder sections in reading order; a file goes to the first whose prefix it starts with.
+# Folder sections in reading order; a file goes to the first whose prefix it starts with. A file in no section is an error, as
+# a file without a description is (public/cv/ had none and was silently left out of docs/files.md until 31 October 2026).
 SECTIONS = [
     ('', 'Repository root', lambda p: '/' not in p),
     ('public/', 'Pages under public/', lambda p: p.startswith('public/') and p.count('/') == 1),
@@ -317,6 +319,7 @@ SECTIONS = [
     ('public/fonts/', 'IBM Plex, Instrument Serif, and the Arabic faces', None),
     ('public/images/sims/', 'Thumbnails', None),
     ('public/images/', 'Logo', None),
+    ('public/cv/', 'The CV page', None),
     ('public/portfolios/droplet-collection/', 'Project copy: Droplet Collection', None),
     ('public/portfolios/rotor-pendula/', 'Project copy: Rotor Pendula', None),
     ('public/portfolios/hydraulics/', 'Project copy: Hydraulic Press Study', None),
@@ -330,7 +333,7 @@ SECTIONS = [
     ('src/', 'Template sources', None),
     ('docs/', 'Documentation', None), ('tools/', 'Tools', None),
     ('i18n/', 'Translation tables', None),
-    ('.claude/agents/', 'Agents of the lecture-note review', None),
+    ('.claude/agents/', 'Agents of the lecture-note review', None), ('.claude/skills/', 'Skills for Claude Code', None),
     ('notes/rotor-pendula/', 'Working notes of the Rotor Pendula study', None), ('notes/droplets/', 'Working notes of the Droplet Collection study', None),
     ('notes/', 'Record of the lecture-note review', None),
 ]
@@ -368,6 +371,8 @@ def render(paths):
             if (test(p) if test else p.startswith(prefix)):
                 groups.setdefault(title, []).append((p, d))
                 break
+        else:
+            missing.append(p + ' (in no section of SECTIONS)')
     total = sum(os.path.getsize(os.path.join(ROOT, p)) for p in paths)
     out = ['# Every file', '',
            'Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the repository; do not edit by hand.',

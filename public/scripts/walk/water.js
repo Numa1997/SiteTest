@@ -147,7 +147,7 @@ if (X === -60) ctx.moveTo(sx, sy); else ctx.lineTo(sx, sy);
             note: 'Differentiating (19) along the surface gives dx/dx<sub>0</sub> = 1 − ak cos θ, which measures how closely neighbouring surface parcels crowd together. At ak = 1 it vanishes at the crest, θ = 0: the crest becomes a cusp, and beyond that the line would loop through itself. a() keeps the model short of that point. amp.value is the Amplitude slider, the note’s A in px, and 0.9 / k() is the largest amplitude allowed at this wave number, in px, so a never exceeds A and ak never exceeds 0.9. Every other line that needs the amplitude calls a(), so what you see always uses the capped value. The Steepness ak readout shows a k, a pure number (px times rad/px), and adds “(cap)” when a is below A. The last line stores a, whether the cap is active, and ak. At λ = 260 px an amplitude of 50 px would give ak = 1.21; the cap holds a at 37.2 px. Real waves break near ak ≈ 0.44, so the steeper shapes the page allows are already an idealisation.',
             code: `function ⟦a|a()⟧ { return Math.min(⟦A|amp.value⟧, 0.9 / ⟦k|k()⟧); }
 ...
-document.getElementById('r-ak').textContent = (⟦ak|a() * k()⟧).toFixed(2) + (a() < amp.value ? ' (cap)' : '');
+document.getElementById('r-ak').textContent = (⟦ak|a() * k()⟧).toFixed(2) + (a() < amp.value ? _t(' (cap)') : '');
 ...
 ds.set('a', aa); ds.set('cap', aa < amp.value); ds.set('ak', aa * kk); ...`,
             syms: [

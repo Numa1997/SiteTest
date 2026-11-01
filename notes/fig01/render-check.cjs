@@ -3,13 +3,12 @@
 const { execSync } = require('child_process');
 const { chromium } = require(execSync('npm root -g').toString().trim() + '/playwright');
 const URL = 'http://localhost:8701/simulations/' + encodeURIComponent('Circular Wave Interference Visualization.html');
-const exe = '/opt/pw-browsers/chromium-1194/chrome-linux/chrome';
 const OUT = process.argv[2] || '/tmp/fig01-shots';
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 require('fs').mkdirSync(OUT, { recursive: true });
 
 (async () => {
-  const browser = await chromium.launch({ executablePath: exe });
+  const browser = await chromium.launch();
   const report = [];
   for (const [w, h] of [[1440, 900], [390, 844]]) {
     const ctx = await browser.newContext({ viewport: { width: w, height: h } });

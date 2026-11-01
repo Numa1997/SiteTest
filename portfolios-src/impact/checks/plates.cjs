@@ -1,7 +1,7 @@
 // Make the four plates of the Portfolios entry from the built page (run from a local server of dist/).
 const { chromium } = require('playwright');
 (async()=>{
- const b=await chromium.launch({executablePath:'/opt/pw-browsers/chromium_headless_shell-1194/chrome-linux/headless_shell'});
+ const b=await chromium.launch();
  const p=await b.newPage({viewport:{width:1100,height:1000},deviceScaleFactor:2});
  await p.goto('http://localhost:8766/portfolios/impact/index.html');
  await p.waitForFunction(()=>computed>=NF,null,{timeout:300000});await p.evaluate(()=>document.fonts.ready);

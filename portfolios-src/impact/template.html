@@ -42,6 +42,8 @@ h2 .num{font:500 13px var(--f-mono);background:var(--wine);color:#fff;border-rad
 button.on{background:var(--wine);color:#fff}
   .hint{border:1.5px solid var(--wine-deep);background:var(--paper);border-radius:8px;padding:8px 12px;margin-bottom:10px;color:var(--wine-deep)}
 .hint b{font-weight:500}
+.airsel{font:500 14px var(--f-body);color:var(--wine-deep);white-space:nowrap}
+.airsel select{font:inherit;color:inherit;background:var(--paper);border:1.5px solid var(--line);border-radius:8px;padding:5px 8px}
 button.go{background:var(--wine-deep);color:#fff;font-size:16px;padding:8px 22px}
 button:disabled{opacity:.55;cursor:wait}
 .small{font-size:14px;color:var(--muted)}
@@ -92,6 +94,7 @@ a{color:var(--wine)}
     <button id="s1" data-t="speed1"></button>
     <button id="s4" class="on" data-t="speed4"></button>
     <button id="s20" data-t="speed20"></button>
+    <label class="airsel"><span data-t="air_label"></span> <select id="air"></select></label>
     <span class="small" id="clock"></span>
   </div>
   <div class="two">
@@ -159,6 +162,7 @@ const kOf=t=>t<=T1?Math.round(t/1e-3):Math.min(NF-1,NF1+Math.round((t-T1)/2e-3))
 const CK=125,NCK=Math.floor((NF-1)/CK)+1;   // a full-state checkpoint every 125 samples: Check reruns the model from the one before a sample
 const W0=4.0,WSHOW=6.5,KW0=kOf(W0);         // the scale's weight: average of its reading from 4 s on, shown from 6.5 s
 const BALLS=["iron","cot"];
+const AIR=Math.max(0,Math.min(3,+new URLSearchParams(location.search).get("air")||0));P.air.k=P.air.levels[AIR];   // the Air menu reopens the page with ?air=1, 2 or 3
 let iron,cot,body={},computed=0,steps=0,playing=false,tPlay=0,slow=4,last=null,ds,D={},wsum={iron:0,cot:0},wcnt={iron:0,cot:0},tStart=0;
 
 // ---------------- the store: every number of the run is written into it where it is computed (scripts/dataset.js) ----------------
@@ -204,6 +208,11 @@ function declare(){
   par("ch",P.head.ch,{symbol:"c<sub>h</sub>",units:"N·s/m",long_name:"head: damper (soft tissue)",digits:1,float:1});
   par("wc",P.head.wc,{symbol:"ω<sub>c</sub>",units:"rad/s",long_name:"skin contact: angular frequency of a particle on the plate",digits:0,float:1});
   par("zc",P.head.zc,{symbol:"ζ<sub>c</sub>",long_name:"skin contact: damping ratio",digits:2,float:1});
+  par("air_k",P.air.k,{symbol:"k<sub>air</sub>",long_name:"air: drag as a multiple of real air; 0 off, 1, 4 or 16 from the Air menu (?air=1, 2, 3)",digits:0});
+  par("rho_air",P.air.rho,{symbol:"ρ<sub>air</sub>",units:"kg/m³",long_name:"air: density",digits:2,float:1});
+  par("Cd",P.air.Cd,{symbol:"C<sub>d</sub>",long_name:"air: drag coefficient of a sphere",digits:2,float:1});
+  par("dens_iron",P.air.dens.iron,{symbol:"ρ<sub>Fe</sub>",units:"kg/m³",long_name:"air: density of real iron, for the size of a real 1 kg ball",digits:0,float:1});
+  par("dens_cot",P.air.dens.cot,{symbol:"ρ<sub>c</sub>",units:"kg/m³",long_name:"air: density of loose cotton wool, for the size of a real 1 kg ball",digits:0,float:1});
   // derived: computed once, when the two balls are built
   for(const s of BALLS){const b=body[s],F=s==="iron"?"Fe":"c",nm=s==="iron"?"iron":"cotton";
     v("N_"+s,[],"int",{symbol:"N<sub>"+F+"</sub>",long_name:nm+": particles",computed_in:s==="iron"?"makeIron()":"makeCotton()",digits:0});ds.set("N_"+s,b.N);
@@ -219,10 +228,16 @@ function declare(){
   v("ntri_cot",[],"int",{symbol:"n<sub>bend</sub>",long_name:"cotton: bending joints",computed_in:"makeCotton()",digits:0});ds.set("ntri_cot",cot.ntri);
   v("aj_cot",[],"float",{symbol:"α<sub>j</sub>",units:"1/m",long_name:"cotton: junction Morse width parameter",computed_in:"makeCotton()",formula:"k<sub>j</sub> / (4F<sub>j</sub>)",digits:3});ds.set("aj_cot",P.cot.kj/(4*P.cot.Fj));
   v("Dj_cot",[],"float",{symbol:"D<sub>j</sub>",units:"J",long_name:"cotton: junction Morse depth",computed_in:"makeCotton()",formula:"2F<sub>j</sub> / α<sub>j</sub>",digits:4});ds.set("Dj_cot",2*P.cot.Fj/ds.get("aj_cot"));
+  for(const s of BALLS){const b=body[s],nm=s==="iron"?"iron":"cotton",vt=Math.sqrt(2*P.M*P.g/(P.air.k*P.air.rho*P.air.Cd*b.Aair));
+    v("A_"+s,[],"float",{symbol:"A",units:"m²",long_name:nm+": cross-section of a real 1 kg ball of this material, met by the air",computed_in:"newBody()",formula:"π (3M / 4πρ)<sup>2/3</sup>",digits:6});ds.set("A_"+s,b.Aair);
+    v("vt_"+s,[],"float",{symbol:"v<sub>t</sub>",units:"m/s",long_name:nm+": terminal speed in this air, where drag equals weight (infinite with air off)",computed_in:"declare()",formula:"√(2Mg / (k<sub>air</sub> ρ<sub>air</sub> C<sub>d</sub> A))",digits:3});ds.set("vt_"+s,vt);
+    v("t_air_"+s,[],"float",{symbol:"t*<sub>air</sub>",units:"s",long_name:nm+": first touch predicted with air drag (closed form)",computed_in:"declare()",formula:"(v<sub>t</sub>/g) arcosh(e<sup>gh/v<sub>t</sub>²</sup>)",digits:4});ds.set("t_air_"+s,P.air.k?vt/P.g*Math.acosh(Math.exp(P.g*P.h/vt/vt)):Math.sqrt(2*P.h/P.g));
+    v("v_air_"+s,[],"float",{symbol:"v*<sub>air</sub>",units:"m/s",long_name:nm+": speed at that touch, with air drag (closed form)",computed_in:"declare()",formula:"v<sub>t</sub> √(1 − e<sup>−2gh/v<sub>t</sub>²</sup>)",digits:4});ds.set("v_air_"+s,P.air.k?vt*Math.sqrt(1-Math.exp(-2*P.g*P.h/vt/vt)):Math.sqrt(2*P.g*P.h));
+  }
   v("t_star",[],"float",{symbol:"t*",units:"s",long_name:"first touch predicted by Newton for a free fall",computed_in:"declare()",formula:"√(2h/g)",digits:4});ds.set("t_star",Math.sqrt(2*P.h/P.g));
   v("v_star",[],"float",{symbol:"v*",units:"m/s",long_name:"speed at that touch",computed_in:"declare()",formula:"√(2gh)",digits:4});ds.set("v_star",Math.sqrt(2*P.g*P.h));
   v("Mg",[],"float",{symbol:"Mg",units:"N",long_name:"weight of either ball",computed_in:"declare()",formula:"M g",digits:4});ds.set("Mg",P.M*P.g);
-  for(const s of BALLS)v("E0_"+s,[],"float",{symbol:"E<sub>0</sub>",units:"J",long_name:(s==="iron"?"iron":"cotton")+": energy at the first stored sample, the start of the books",computed_in:"init()",formula:"K + V + E<sub>el</sub> + E<sub>head</sub> + Q<sub>ball</sub> + Q<sub>head</sub> at n = 0",digits:6});
+  for(const s of BALLS)v("E0_"+s,[],"float",{symbol:"E<sub>0</sub>",units:"J",long_name:(s==="iron"?"iron":"cotton")+": energy at the first stored sample, the start of the books",computed_in:"init()",formula:"K + V + E<sub>el</sub> + E<sub>head</sub> + Q<sub>ball</sub> + Q<sub>head</sub> + Q<sub>air</sub> at n = 0",digits:6});
   // solver
   v("CK",[],"int",{symbol:"Δn<sub>ck</sub>",long_name:"samples between two checkpoints",computed_in:"constant CK",digits:0});ds.set("CK",CK);
   v("NF",[],"int",{symbol:"N<sub>s</sub>",long_name:"stored samples",computed_in:"constant NF",formula:"2500 at 1 ms + 3250 at 2 ms + 1",digits:0});ds.set("NF",NF);
@@ -256,8 +271,9 @@ function declare(){
     v("Eh_"+s,["n"],Float64Array,{symbol:"E<sub>head</sub>",units:"J",long_name:nm+": energy in the head spring and plate motion",computed_in:"sub(), recorded by record()",formula:"½ k<sub>h</sub> y<sub>p</sub>² + ½ m<sub>p</sub> v<sub>p</sub>²",digits:5});
     v("Qb_"+s,["n"],Float64Array,{symbol:"Q<sub>ball</sub>",units:"J",long_name:nm+": heat made inside the ball so far",computed_in:"sub(): ∫ damper power dt",digits:4});
     v("Qh_"+s,["n"],Float64Array,{symbol:"Q<sub>head</sub>",units:"J",long_name:nm+": heat made in the head and skin so far",computed_in:"sub(): ∫ damper power dt",digits:4});
+    v("Qa_"+s,["n"],Float64Array,{symbol:"Q<sub>air</sub>",units:"J",long_name:nm+": energy given to the air so far, the work against drag (0 with air off)",computed_in:"sub(): ∫ F·V dt",digits:4});
     v("Ein_"+s,["n"],Float64Array,{symbol:"E<sub>in</sub>",units:"J",long_name:nm+": energy the fall has handed over, the upper bar",computed_in:"record()",formula:"E<sub>0</sub> − V<sub>n</sub>",digits:4});
-    v("Esum_"+s,["n"],Float64Array,{symbol:"E<sub>now</sub>",units:"J",long_name:nm+": where it is now, the lower bar",computed_in:"record()",formula:"K + E<sub>el</sub> + E<sub>head</sub> + Q<sub>ball</sub> + Q<sub>head</sub>",digits:4});
+    v("Esum_"+s,["n"],Float64Array,{symbol:"E<sub>now</sub>",units:"J",long_name:nm+": where it is now, the lower bar",computed_in:"record()",formula:"K + E<sub>el</sub> + E<sub>head</sub> + Q<sub>ball</sub> + Q<sub>head</sub> + Q<sub>air</sub>",digits:4});
     v("books_"+s,["n"],Float64Array,{symbol:"Δ<sub>books</sub>",units:"J",long_name:nm+": gap in the energy books, the integrator's own error",computed_in:"record()",formula:"E<sub>now</sub> − E<sub>in</sub>",digits:4});
     v("W_"+s,["n"],Float64Array,{symbol:"W<sub>n</sub>",units:"N",long_name:nm+": weight so far, mean reading from 4 s to t<sub>n</sub> (undefined before 4 s)",computed_in:"record()",formula:"mean F<sub>j</sub>, 4 s ≤ t<sub>j</sub> ≤ t<sub>n</sub>",digits:4});
     v("bi_"+s,[B],Int32Array,{symbol:"i",long_name:nm+": first particle of each bond",computed_in:s==="iron"?"makeIron()":"makeCotton()",digits:0});
@@ -272,7 +288,7 @@ function declare(){
   for(const s of BALLS){const nm=s==="iron"?"iron":"cotton",P2=s==="iron"?"p_iron":"p_cot",B=s==="iron"?"b_iron":"b_cot";
     for(const [q,sy,u,ln] of [["x","x","m","horizontal positions"],["y","y","m","heights"],["u","u","m/s","horizontal velocities"],["v","v","m/s","vertical velocities"]])
       v("ck_"+q+"_"+s,["c",P2],Float64Array,{symbol:sy+"<sub>ck</sub>",units:u,long_name:nm+": checkpoint "+ln,computed_in:"record()",digits:6});
-    for(const [q,sy,u,ln] of [["t","t","s","model time"],["yp","y<sub>p</sub>","m","plate position"],["vp","v<sub>p</sub>","m/s","plate velocity"],["Fmax","F<sub>peak</sub>","N","peak hold"],["Qb","Q<sub>ball</sub>","J","heat in the ball"],["Qh","Q<sub>head</sub>","J","heat in the head"],["ti","t<sub>touch</sub>","s","first touch (undefined before it)"]])
+    for(const [q,sy,u,ln] of [["t","t","s","model time"],["yp","y<sub>p</sub>","m","plate position"],["vp","v<sub>p</sub>","m/s","plate velocity"],["Fmax","F<sub>peak</sub>","N","peak hold"],["Qb","Q<sub>ball</sub>","J","heat in the ball"],["Qh","Q<sub>head</sub>","J","heat in the head"],["Qa","Q<sub>air</sub>","J","energy given to the air"],["ti","t<sub>touch</sub>","s","first touch (undefined before it)"]])
       v("ck_"+q+"_"+s,["c"],Float64Array,{symbol:sy+"<sub>ck</sub>",units:u,long_name:nm+": checkpoint "+ln,computed_in:"record()",digits:6});
     v("ck_alive_"+s,["c",B],Uint8Array,{symbol:"alive<sub>ck</sub>",long_name:nm+": checkpoint, 1 for each bond still holding",computed_in:"record()",digits:0});
   }
@@ -306,7 +322,7 @@ function declare(){
   }
   ds.set("slow",slow);ds.set("playing",false);ds.set("t_play",0);
   const g=n=>ds.get(n);
-  for(const s of BALLS){D[s]={x:g("x_"+s),y:g("y_"+s),sp:g("sp_"+s),yp:g("yp_"+s),vp:g("vp_"+s),F:g("F_"+s),Fmax:g("Fmax_"+s),KE:g("KE_"+s),PE:g("PE_"+s),El:g("El_"+s),Eh:g("Eh_"+s),Qb:g("Qb_"+s),Qh:g("Qh_"+s),
+  for(const s of BALLS){D[s]={x:g("x_"+s),y:g("y_"+s),sp:g("sp_"+s),yp:g("yp_"+s),vp:g("vp_"+s),F:g("F_"+s),Fmax:g("Fmax_"+s),KE:g("KE_"+s),PE:g("PE_"+s),El:g("El_"+s),Eh:g("Eh_"+s),Qb:g("Qb_"+s),Qh:g("Qh_"+s),Qa:g("Qa_"+s),
     Ein:g("Ein_"+s),Esum:g("Esum_"+s),books:g("books_"+s),W:g("W_"+s),N:body[s].N}}
   const ts=ds.get("ts");for(let k=0;k<NF;k++)ts[k]=tOf(k);ds.touch("ts");
   for(const s of BALLS){const b=body[s];ds.get("bi_"+s).set(b.bi);ds.get("bj_"+s).set(b.bj);ds.get("l0_"+s).set(b.l0);for(const q of ["bi","bj","l0"])ds.touch(q+"_"+s)}
@@ -317,22 +333,22 @@ function record(k){
     const b=body[s],d=D[s],N=b.N,o=k*N,e=b.E;
     for(let i=0;i<N;i++){d.x[o+i]=b.x[i];d.y[o+i]=b.y[i];d.sp[o+i]=Math.sqrt(b.u[i]*b.u[i]+b.v[i]*b.v[i])}
     d.yp[k]=b.yp;d.vp[k]=b.vp;d.F[k]=b.Fs;d.Fmax[k]=b.Fmax;
-    d.KE[k]=e.KE;d.PE[k]=e.PE;d.El[k]=e.elastic;d.Eh[k]=e.head;d.Qb[k]=e.heatBall;d.Qh[k]=e.heatHead;
-    d.Ein[k]=b.E0-d.PE[k];d.Esum[k]=d.KE[k]+d.El[k]+d.Eh[k]+d.Qb[k]+d.Qh[k];d.books[k]=d.Esum[k]-d.Ein[k];
+    d.KE[k]=e.KE;d.PE[k]=e.PE;d.El[k]=e.elastic;d.Eh[k]=e.head;d.Qb[k]=e.heatBall;d.Qh[k]=e.heatHead;d.Qa[k]=e.heatAir;
+    d.Ein[k]=b.E0-d.PE[k];d.Esum[k]=d.KE[k]+d.El[k]+d.Eh[k]+d.Qb[k]+d.Qh[k]+d.Qa[k];d.books[k]=d.Esum[k]-d.Ein[k];
     if(k>=KW0){wsum[s]+=d.F[k];wcnt[s]++;d.W[k]=wsum[s]/wcnt[s]}else d.W[k]=NaN;
     if(b.tImpact!==null&&!(ds.get("t_touch_"+s)>=0))ds.set("t_touch_"+s,b.tImpact);
     if(k%CK===0){const c=k/CK,ck=n=>ds.get("ck_"+n+"_"+s);
       ck("x").set(b.x,c*N);ck("y").set(b.y,c*N);ck("u").set(b.u,c*N);ck("v").set(b.v,c*N);ck("alive").set(b.alive,c*b.nb);
-      ck("t")[c]=b.t;ck("yp")[c]=b.yp;ck("vp")[c]=b.vp;ck("Fmax")[c]=b.Fmax;ck("Qb")[c]=b.heatBall;ck("Qh")[c]=b.heatHead;ck("ti")[c]=b.tImpact===null?NaN:b.tImpact}
+      ck("t")[c]=b.t;ck("yp")[c]=b.yp;ck("vp")[c]=b.vp;ck("Fmax")[c]=b.Fmax;ck("Qb")[c]=b.heatBall;ck("Qh")[c]=b.heatHead;ck("Qa")[c]=b.heatAir;ck("ti")[c]=b.tImpact===null?NaN:b.tImpact}
   }
   ds.get("nstep")[k]=steps;
   if(k%CK===0){ds.get("ck_n")[k/CK]=k;ds.get("ck_step")[k/CK]=steps}
 }
-const RUN=["nstep","ck_n","ck_step"];for(const s of BALLS)for(const q of ["x","y","sp","yp","vp","F","Fmax","KE","PE","El","Eh","Qb","Qh","Ein","Esum","books","W","ck_x","ck_y","ck_u","ck_v","ck_t","ck_yp","ck_vp","ck_Fmax","ck_Qb","ck_Qh","ck_ti","ck_alive"])RUN.push(q+"_"+s);
+const RUN=["nstep","ck_n","ck_step"];for(const s of BALLS)for(const q of ["x","y","sp","yp","vp","F","Fmax","KE","PE","El","Eh","Qb","Qh","Qa","Ein","Esum","books","W","ck_x","ck_y","ck_u","ck_v","ck_t","ck_yp","ck_vp","ck_Fmax","ck_Qb","ck_Qh","ck_Qa","ck_ti","ck_alive"])RUN.push(q+"_"+s);
 function init(){
   iron=makeIron();cot=makeCotton();body={iron:iron,cot:cot};
   declare();
-  for(const s of BALLS){const b=body[s];b.Fs=step(b);const e=b.E;b.E0=e.KE+e.PE+e.elastic+e.head+e.heatBall+e.heatHead;ds.set("E0_"+s,b.E0)}
+  for(const s of BALLS){const b=body[s];b.Fs=step(b);const e=b.E;b.E0=e.KE+e.PE+e.elastic+e.head+e.heatBall+e.heatHead+e.heatAir;ds.set("E0_"+s,b.E0)}
   steps=1;record(0);computed=1;ds.set("computed",1);ds.set("steps",steps);ds.set("done",false);
   tStart=performance.now();setTimeout(work,0);
 }
@@ -365,7 +381,7 @@ function fitAll(){
   const d=devicePixelRatio||1;DPR=d;
   W=cv.getBoundingClientRect().width;HS=W<640?430:470;H=HS+GAUGE_H;
   cv.style.height=H+"px";cv.width=W*d;cv.height=H*d;cx.setTransform(d,0,0,d,0,0);
-  for(const id of ["pZoom","pAll","en"]){const c=document.getElementById(id),r=c.getBoundingClientRect(),h=+c.getAttribute("height");c.style.height=h+"px";c.width=r.width*d;c.height=h*d;c.getContext("2d").setTransform(d,0,0,d,0,0)}
+  for(const id of ["pZoom","pAll","en"]){const c=document.getElementById(id),r=c.getBoundingClientRect(),h=+(c.dataset.h||(c.dataset.h=c.getAttribute("height")));/* the design height, read once: the attribute is overwritten below with height × dpr, and reading it again grew the plot dpr-fold on every resize (a phone fires one whenever its address bar slides) */c.style.height=h+"px";c.width=r.width*d;c.height=h*d;c.getContext("2d").setTransform(d,0,0,d,0,0)}
   if(ds){ds.set("W_px",W);ds.set("H_px",H);ds.set("HS_px",HS);ds.set("dpr",d)}
 }
 function txt(c,s,x,y,font,color,align,ltr){c.font=font;c.fillStyle=color;c.textAlign=align||"center";c.direction=(RTL&&!ltr)?"rtl":"ltr";c.fillText(s,x,y)}
@@ -480,7 +496,7 @@ function drawSim(k){
   cx.strokeStyle="#dccdb4";cx.beginPath();cx.moveTo(RULER+colW,top);cx.lineTo(RULER+colW,H-8);cx.stroke();
   const hint=document.getElementById("hint");
   hint.hidden=playing||k>0;
-  if(!hint.hidden)hint.innerHTML=`<b>${T.open1}</b> ${computed<NF?T.open2wait.replace("{p}",Math.round(100*ds.get("computed")/NF)):T.open2}`;
+  if(!hint.hidden)hint.innerHTML=`<b>${T.open1}</b> ${computed<NF?T.open2wait.replace("{p}",Math.round(100*ds.get("computed")/NF)):T.open2}`+(P.air.k?` ${T.air_hint.replace("{k}",P.air.k)}`:"");
 }
 const plotGeom=(id,t0,t1)=>{const w=document.getElementById(id).getBoundingClientRect().width,h=220,L=46,B=34,Tp=26,R=10,fmax=700;
   return {w,h,L,B,Tp,R,X:t=>L+(w-L-R)*(t-t0)/(t1-t0),Y:f=>h-B-(h-B-Tp)*Math.max(0,f)/fmax}};
@@ -507,11 +523,18 @@ function drawPlot(id,t0,t1,title,k){
   c.fillStyle="#7d1d2f";c.fillText("— "+T.iron,lx,Tp+16);c.fillStyle="#33627f";c.fillText("— "+T.cotton,lx,Tp+32);c.fillStyle="#3c6a46";c.fillText("- - "+T.weightline,lx,Tp+48);
 }
 function drawEnergy(k){
-  const cvs=document.getElementById("en"),c=cvs.getContext("2d"),w=cvs.getBoundingClientRect().width,h=250,L=RTL?14:130,R=RTL?130:14,Emax=120;
+  const cvs=document.getElementById("en"),w=cvs.getBoundingClientRect().width,L=RTL?14:130,R=RTL?130:14,Emax=120;
+  let c=cvs.getContext("2d");
+  /* the key under the bars, laid out first: as many lines as the width needs, and the canvas just tall enough for them (a fixed
+     250 px left room for one line, and a narrow phone printed the labels over each other) */
+  const names=[T.en_ke,T.en_el,T.en_head,T.en_heatball,T.en_heathead].concat(P.air.k?[T.en_heatair]:[]);c.font=FONT.small;
+  const key=[];let kx=0,kl=0;names.forEach((n,j)=>{const tw=c.measureText(n).width+30;if(kx&&kx+tw>w-20){kl++;kx=0}key.push({n,j,x:kx,l:kl});kx+=tw});
+  const h=232+18*(kl+1);
+  if(Math.abs(cvs.getBoundingClientRect().height-h)>0.5){cvs.style.height=h+"px";cvs.height=h*DPR;c=cvs.getContext("2d");c.setTransform(DPR,0,0,DPR,0,0)}
   c.clearRect(0,0,w,h);
-  const X=e=>RTL?(w-R)-(w-L-R)*e/Emax:L+(w-L-R)*e/Emax,cols=["#ecc596","#7d1d2f","#33627f","#3c6a46","#c9783f","#b6aca1"];
+  const X=e=>RTL?(w-R)-(w-L-R)*e/Emax:L+(w-L-R)*e/Emax,cols=["#ecc596","#7d1d2f","#33627f","#3c6a46","#c9783f","#b6aca1","#8fb3c9"];
   for(const [s,name,y0] of [["iron",T.iron,20],["cot",T.cotton,130]]){
-    const d=D[s],released=d.Ein[k],parts=[d.KE[k],d.El[k],d.Eh[k],d.Qb[k],d.Qh[k]];
+    const d=D[s],released=d.Ein[k],parts=[d.KE[k],d.El[k],d.Eh[k],d.Qb[k],d.Qh[k]].concat(P.air.k?[d.Qa[k]]:[]);
     const ax=RTL?w-6:6,al=RTL?"right":"left";
     txt(c,name,ax,y0+12,FONT.titleSmall,"#5a0f21",al);
     txt(c,T.en_in,ax,y0+37,FONT.small,"#6f5b4c",al);
@@ -522,25 +545,26 @@ function drawEnergy(k){
     c.strokeRect(Math.min(X(0),X(Math.min(acc,Emax))),y0+52,Math.abs(X(Math.min(acc,Emax))-X(0)),18);
     c.font=FONT.mono10;c.fillStyle="#3f2c23";c.direction="ltr";c.textAlign=RTL?"right":"left";
     const err=d.books[k];
-    c.fillText(`${released.toFixed(2)} J  /  ${d.Esum[k].toFixed(2)} J   (Δ = ${err>=0?"+":""}${err.toFixed(2)} J)`,RTL?w-R:L,y0+90);
+    const narrow=w<440;   /* on a phone the numbers start at the edge, not after the labels, so that they fit */
+    c.fillText(`${released.toFixed(2)} J  /  ${d.Esum[k].toFixed(2)} J   (Δ = ${err>=0?"+":""}${err.toFixed(2)} J)`,narrow?(RTL?w-6:6):(RTL?w-R:L),y0+90);
   }
-  const names=[T.en_ke,T.en_el,T.en_head,T.en_heatball,T.en_heathead];let lx=RTL?w-10:10,ly=h-10;
   c.font=FONT.small;
-  names.forEach((n,j)=>{const tw=c.measureText(n).width;if(!RTL&&lx+tw+30>w){lx=10;ly+=0}
-    if(RTL){c.fillStyle=cols[j+1];c.fillRect(lx-12,ly-10,12,12);txt(c,n,lx-16,ly,FONT.small,"#3f2c23","right");lx-=tw+30}
-    else{c.fillStyle=cols[j+1];c.fillRect(lx,ly-10,12,12);txt(c,n,lx+16,ly,FONT.small,"#3f2c23","left");lx+=tw+30}});
+  key.forEach(({n,j,x,l})=>{const ly=244+18*l;
+    if(RTL){const lx=w-10-x;c.fillStyle=cols[j+1];c.fillRect(lx-12,ly-10,12,12);txt(c,n,lx-16,ly,FONT.small,"#3f2c23","right")}
+    else{const lx=10+x;c.fillStyle=cols[j+1];c.fillRect(lx,ly-10,12,12);txt(c,n,lx+16,ly,FONT.small,"#3f2c23","left")}});
 }
 function readout(s,k,el,name){
   const d=D[s],tt=ds.get("t_touch_"+s),hit=tt>=0&&ds.get("t_now")>=tt,w=ds.get("W_now_"+s);
   el.innerHTML=`<b>${name}</b><table>
   <tr><td>${T.r_mass}</td><td class="v">${ds.get("M").toFixed(3)} kg</td></tr>
   <tr><td>${T.r_contact}</td><td class="v">${hit?tt.toFixed(3)+" s":"…"}</td></tr>
-  <tr><td>${T.r_pred}</td><td class="v">${ds.get("t_star").toFixed(3)} s</td></tr>
+  <tr><td>${P.air.k?T.r_pred_air:T.r_pred}</td><td class="v">${ds.get(P.air.k?"t_air_"+s:"t_star").toFixed(3)} s</td></tr>
   <tr><td>${T.r_peak}</td><td class="v">${ds.get("Fmax_now_"+s).toFixed(0)} N</td></tr>
   <tr><td>${T.r_kg}</td><td class="v">${ds.get("kgpeak_now_"+s).toFixed(1)} kg</td></tr>
   <tr><td>${T.r_weight}</td><td class="v">${w!==w?(hit?T.r_settling:"…"):w.toFixed(2)+" N = "+ds.get("kgw_now_"+s).toFixed(3)+" kg"}</td></tr>
   <tr><td>${T.r_heatball}</td><td class="v">${d.Qb[k].toFixed(1)} J</td></tr>
-  <tr><td>${T.r_heathead}</td><td class="v">${d.Qh[k].toFixed(1)} J</td></tr></table>`;
+  <tr><td>${T.r_heathead}</td><td class="v">${d.Qh[k].toFixed(1)} J</td></tr>${P.air.k?`
+  <tr><td>${T.r_heatair}</td><td class="v">${d.Qa[k].toFixed(1)} J</td></tr>`:""}</table>`;
 }
 function frame(ts){
   requestAnimationFrame(frame);                // first, so the data panel's frame always runs after this one
@@ -559,6 +583,9 @@ function frame(ts){
 function setSpeed(s){slow=s;ds.set("slow",s);for(const [id,v] of [["s1",1],["s4",4],["s20",20]])document.getElementById(id).classList.toggle("on",v===s)}
 function startDrop(){tPlay=0;playing=true;last=null}   // last = null: the first frame of a drop advances nothing, so a recorded round starts at t = 0
 document.getElementById("drop").onclick=()=>{if(playing)return;startDrop()};
+{const a=document.getElementById("air");a.title=T.air_title;   // Air: off, real, 4x, 16x; the run is computed again for the chosen air
+  T.air_levels.forEach((n,i)=>{const o=document.createElement("option");o.value=i;o.textContent=n;a.append(o)});a.value=AIR;
+  a.onchange=()=>{const u=new URL(location.href);if(+a.value)u.searchParams.set("air",a.value);else u.searchParams.delete("air");location.replace(u.href)}}
 document.getElementById("s1").onclick=()=>setSpeed(1);
 document.getElementById("s4").onclick=()=>setSpeed(4);
 document.getElementById("s20").onclick=()=>setSpeed(20);

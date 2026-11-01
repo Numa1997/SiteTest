@@ -9,7 +9,7 @@ const server = http.createServer((req, res) => { const p = path.join(ROOT, decod
 (async () => {
     await new Promise(r => server.listen(0, r));
     const url = 'http://127.0.0.1:' + server.address().port + '/simulations/draw-decompose.html';
-    const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' });
+    const browser = await chromium.launch();
     for (const [w, h] of [[1440, 900], [390, 844]]) {
         const page = await browser.newPage({ viewport: { width: w, height: h } });
         await page.goto(url, { waitUntil: 'load' });

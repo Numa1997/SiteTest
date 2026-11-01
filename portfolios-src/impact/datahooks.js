@@ -15,11 +15,11 @@ function run(s,from,k){                         // the state of ball s at sample
   if(from>=0){const ck=n=>ds.get("ck_"+n+"_"+s);
     for(let i=0;i<N;i++){b.x[i]=ck("x")[from*N+i];b.y[i]=ck("y")[from*N+i];b.u[i]=ck("u")[from*N+i];b.v[i]=ck("v")[from*N+i]}
     b.alive.set(ck("alive").subarray(from*b.nb,(from+1)*b.nb));
-    b.t=ck("t")[from];b.yp=ck("yp")[from];b.vp=ck("vp")[from];b.Fmax=ck("Fmax")[from];b.heatBall=ck("Qb")[from];b.heatHead=ck("Qh")[from];b.heat=b.heatBall+b.heatHead;
+    b.t=ck("t")[from];b.yp=ck("yp")[from];b.vp=ck("vp")[from];b.Fmax=ck("Fmax")[from];b.heatBall=ck("Qb")[from];b.heatHead=ck("Qh")[from];b.heatAir=ck("Qa")[from];b.heat=b.heatBall+b.heatHead;
     const ti=ck("ti")[from];b.tImpact=ti===ti?ti:null;todo=ns[k]-ds.get("ck_step")[from]}
   for(let q=0;q<todo;q++)b.Fs=step(b);
   const snap={x:Float64Array.from(b.x),y:Float64Array.from(b.y),u:Float64Array.from(b.u),v:Float64Array.from(b.v),alive:Uint8Array.from(b.alive),
-    t:b.t,yp:b.yp,vp:b.vp,Fmax:b.Fmax,heatBall:b.heatBall,heatHead:b.heatHead,tImpact:b.tImpact,E:Object.assign({},b.E)};
+    t:b.t,yp:b.yp,vp:b.vp,Fmax:b.Fmax,heatBall:b.heatBall,heatHead:b.heatHead,heatAir:b.heatAir,tImpact:b.tImpact,E:Object.assign({},b.E)};
   const r={key,from,k,steps:todo,b:snap};runs.set(key,r);if(runs.size>24)runs.delete(runs.keys().next().value);return r;
 }
 const fromFor=k=>k%CK===0?k/CK-1:Math.floor(k/CK);        // the checkpoint before sample k (never k itself)
@@ -77,7 +77,8 @@ function curveBack(s,n){
 // ---- Check: recompute from the stored inputs ----
 const PMAP={g:"g",h:"h",M:"M",dt:"dt",tmax:"tmax",a_iron:"iron.a",R_iron:"iron.R",k_iron:"iron.k",ar0:"iron.ar0",c_iron:"iron.c",rad_iron:"iron.rad",sub_iron:"iron.sub",
   R_cot:"cot.R",nf:"cot.nf",nb:"cot.nb",s_cot:"cot.s",turn:"cot.turn",kax:"cot.kax",kb:"cot.kb",cb:"cot.cb",c_cot:"cot.c",jr:"cot.jr",kj:"cot.kj",Fj:"cot.Fj",drep:"cot.drep",krep:"cot.krep",crep:"cot.crep",
-  rad_cot:"cot.rad",seed:"cot.seed",sub_cot:"cot.sub",mp:"head.mp",kh:"head.kh",ch:"head.ch",wc:"head.wc",zc:"head.zc"};
+  rad_cot:"cot.rad",seed:"cot.seed",sub_cot:"cot.sub",mp:"head.mp",kh:"head.kh",ch:"head.ch",wc:"head.wc",zc:"head.zc",
+  air_k:"air.k",rho_air:"air.rho",Cd:"air.Cd",dens_iron:"air.dens.iron",dens_cot:"air.dens.cot"};
 const G=n=>ds.get(n),I=(sy,v,u,d)=>[sy,v,u||"",d===undefined?6:d];
 const check={};
 for(const n in PMAP)check[n]=()=>({formula:"the constant P."+PMAP[n]+" in the model",inputs:[],value:PMAP[n].split(".").reduce((o,k)=>o[k],P)});
@@ -91,7 +92,7 @@ for(const s of BALLS){
     ["m_"+s]:()=>({formula:"M / N",inputs:[I("M",G("M"),"kg",3),I("N",G("N_"+s),"",0)],value:G("M")/G("N_"+s)}),
     ["kc_"+s]:()=>({formula:"m ω<sub>c</sub>²",inputs:[I("m",G("m_"+s),"kg"),I("ω<sub>c</sub>",G("wc"),"rad/s",0)],value:G("m_"+s)*G("wc")*G("wc")}),
     ["cc_"+s]:()=>({formula:"2 ζ<sub>c</sub> m ω<sub>c</sub>",inputs:[I("ζ<sub>c</sub>",G("zc"),"",2),I("m",G("m_"+s),"kg"),I("ω<sub>c</sub>",G("wc"),"rad/s",0)],value:2*G("zc")*G("m_"+s)*G("wc")}),
-    ["E0_"+s]:()=>({formula:"K + V + E<sub>el</sub> + E<sub>head</sub> + Q<sub>ball</sub> + Q<sub>head</sub> at n = 0, from the stored arrays",inputs:[I("K<sub>0</sub>",d.KE[0],"J"),I("V<sub>0</sub>",d.PE[0],"J")],value:d.KE[0]+d.PE[0]+d.El[0]+d.Eh[0]+d.Qb[0]+d.Qh[0]}),
+    ["E0_"+s]:()=>({formula:"K + V + E<sub>el</sub> + E<sub>head</sub> + Q<sub>ball</sub> + Q<sub>head</sub> + Q<sub>air</sub> at n = 0, from the stored arrays",inputs:[I("K<sub>0</sub>",d.KE[0],"J"),I("V<sub>0</sub>",d.PE[0],"J")],value:d.KE[0]+d.PE[0]+d.El[0]+d.Eh[0]+d.Qb[0]+d.Qh[0]+d.Qa[0]}),
     ["t_touch_"+s]:()=>{const ti=G("ck_ti_"+s);let c=0;while(c<NCK&&!(ti[c]===ti[c]))c++;if(c>=NCK)return {formula:"not touched yet in the computed part of the run",inputs:[],value:NaN};
       const r=run(s,c-1,c*CK),b=r.b;   // run() stops at the checkpoint; the touch happened inside these steps
       return {formula:howRerun(r,s)+"; the model notes the time of the first step with a contact force",inputs:[I("checkpoint",c-1,"",0)],value:b.tImpact===null?NaN:b.tImpact}},
@@ -112,8 +113,9 @@ for(const s of BALLS){
     ["Eh_"+s]:n=>{const r=replay(s,n);return {formula:howRerun(r,s),inputs:[I("n",n,"",0)],value:r.b.E.head}},
     ["Qb_"+s]:n=>{const r=replay(s,n);return {formula:howRerun(r,s),inputs:[I("n",n,"",0)],value:r.b.E.heatBall}},
     ["Qh_"+s]:n=>{const r=replay(s,n);return {formula:howRerun(r,s),inputs:[I("n",n,"",0)],value:r.b.E.heatHead}},
+    ["Qa_"+s]:n=>{const r=replay(s,n);return {formula:howRerun(r,s),inputs:[I("n",n,"",0)],value:r.b.E.heatAir}},
     ["Ein_"+s]:n=>({formula:"E<sub>0</sub> − V<sub>n</sub>",inputs:[I("E<sub>0</sub>",G("E0_"+s),"J"),I("V<sub>n</sub>",d.PE[n],"J")],value:G("E0_"+s)-d.PE[n]}),
-    ["Esum_"+s]:n=>({formula:"K + E<sub>el</sub> + E<sub>head</sub> + Q<sub>ball</sub> + Q<sub>head</sub>",inputs:[I("K",d.KE[n],"J"),I("E<sub>el</sub>",d.El[n],"J"),I("E<sub>head</sub>",d.Eh[n],"J"),I("Q<sub>ball</sub>",d.Qb[n],"J"),I("Q<sub>head</sub>",d.Qh[n],"J")],value:d.KE[n]+d.El[n]+d.Eh[n]+d.Qb[n]+d.Qh[n]}),
+    ["Esum_"+s]:n=>({formula:"K + E<sub>el</sub> + E<sub>head</sub> + Q<sub>ball</sub> + Q<sub>head</sub> + Q<sub>air</sub>",inputs:[I("K",d.KE[n],"J"),I("E<sub>el</sub>",d.El[n],"J"),I("E<sub>head</sub>",d.Eh[n],"J"),I("Q<sub>ball</sub>",d.Qb[n],"J"),I("Q<sub>head</sub>",d.Qh[n],"J"),I("Q<sub>air</sub>",d.Qa[n],"J")],value:d.KE[n]+d.El[n]+d.Eh[n]+d.Qb[n]+d.Qh[n]+d.Qa[n]}),
     ["books_"+s]:n=>({formula:"E<sub>now</sub> − E<sub>in</sub>",inputs:[I("E<sub>now</sub>",d.Esum[n],"J"),I("E<sub>in</sub>",d.Ein[n],"J")],value:d.Esum[n]-d.Ein[n]}),
     ["W_"+s]:n=>({formula:"mean of the stored F<sub>j</sub>, 4 s ≤ t<sub>j</sub> ≤ t<sub>n</sub>",inputs:[I("t<sub>n</sub>",G("ts")[n],"s",3)],value:n<KW0?NaN:meanF(s,n)}),
     ["bi_"+s]:q=>({formula:"bond list of a fresh build",inputs:[I("bond",q,"",0)],value:fresh(s).bi[q]}),
@@ -125,6 +127,11 @@ for(const s of BALLS){
     ["ck_Fmax_"+s]:c=>{const r=replayCk(s,c);return {formula:howRerun(r,s),inputs:[I("c",c,"",0)],value:r.b.Fmax}},
     ["ck_Qb_"+s]:c=>{const r=replayCk(s,c);return {formula:howRerun(r,s),inputs:[I("c",c,"",0)],value:r.b.heatBall}},
     ["ck_Qh_"+s]:c=>{const r=replayCk(s,c);return {formula:howRerun(r,s),inputs:[I("c",c,"",0)],value:r.b.heatHead}},
+    ["ck_Qa_"+s]:c=>{const r=replayCk(s,c);return {formula:howRerun(r,s),inputs:[I("c",c,"",0)],value:r.b.heatAir}},
+    ["A_"+s]:fromBuild(s,b=>b.Aair,"cross-section of a real 1 kg ball, π (3M / 4πρ)^(2/3)"),
+    ["vt_"+s]:()=>({formula:"√(2Mg / (k<sub>air</sub> ρ<sub>air</sub> C<sub>d</sub> A))",inputs:[I("M",G("M"),"kg",3),I("g",G("g"),"m/s²",2),I("k<sub>air</sub>",G("air_k"),"",0),I("ρ<sub>air</sub>",G("rho_air"),"kg/m³",2),I("C<sub>d</sub>",G("Cd"),"",2),I("A",G("A_"+s),"m²")],value:Math.sqrt(2*G("M")*G("g")/(G("air_k")*G("rho_air")*G("Cd")*G("A_"+s)))}),
+    ["t_air_"+s]:()=>{const vt=G("vt_"+s),g=G("g"),h=G("h");return {formula:"(v<sub>t</sub>/g) arcosh(e<sup>gh/v<sub>t</sub>²</sup>); √(2h/g) with air off",inputs:[I("v<sub>t</sub>",vt,"m/s",3),I("g",g,"m/s²",2),I("h",h,"m",2)],value:G("air_k")?vt/g*Math.acosh(Math.exp(g*h/vt/vt)):Math.sqrt(2*h/g)}},
+    ["v_air_"+s]:()=>{const vt=G("vt_"+s),g=G("g"),h=G("h");return {formula:"v<sub>t</sub> √(1 − e<sup>−2gh/v<sub>t</sub>²</sup>); √(2gh) with air off",inputs:[I("v<sub>t</sub>",vt,"m/s",3),I("g",g,"m/s²",2),I("h",h,"m",2)],value:G("air_k")?vt*Math.sqrt(1-Math.exp(-2*g*h/vt/vt)):Math.sqrt(2*g*h)}},
     ["ck_ti_"+s]:c=>{const r=replayCk(s,c);return {formula:howRerun(r,s),inputs:[I("c",c,"",0)],value:r.b.tImpact===null?NaN:r.b.tImpact}},
     ["ck_alive_"+s]:idx=>{const nb=G("nbond_"+s),r=replayCk(s,Math.floor(idx/nb));return {formula:howRerun(r,s),inputs:[I("bond",idx%nb,"",0)],value:r.b.alive[idx%nb]}},
     ["F_now_"+s]:atNow("F_"+s,"F"),["Fmax_now_"+s]:atNow("Fmax_"+s,"F<sub>peak</sub>"),["yp_now_"+s]:atNow("yp_"+s,"y<sub>p</sub>"),["KE_now_"+s]:atNow("KE_"+s,"K"),["books_now_"+s]:atNow("books_"+s,"Δ"),
@@ -216,15 +223,15 @@ function locate(name,idx){
   return null;
 }
 
-const ball=s=>["x_"+s,"y_"+s,"sp_"+s,"yp_"+s,"vp_"+s,"F_"+s,"Fmax_"+s,"W_"+s,"KE_"+s,"PE_"+s,"El_"+s,"Eh_"+s,"Qb_"+s,"Qh_"+s,"Ein_"+s,"Esum_"+s,"books_"+s];
-const cks=s=>["ck_x_"+s,"ck_y_"+s,"ck_u_"+s,"ck_v_"+s,"ck_t_"+s,"ck_yp_"+s,"ck_vp_"+s,"ck_Fmax_"+s,"ck_Qb_"+s,"ck_Qh_"+s,"ck_ti_"+s,"ck_alive_"+s];
+const ball=s=>["x_"+s,"y_"+s,"sp_"+s,"yp_"+s,"vp_"+s,"F_"+s,"Fmax_"+s,"W_"+s,"KE_"+s,"PE_"+s,"El_"+s,"Eh_"+s,"Qb_"+s,"Qh_"+s,"Qa_"+s,"Ein_"+s,"Esum_"+s,"books_"+s];
+const cks=s=>["ck_x_"+s,"ck_y_"+s,"ck_u_"+s,"ck_v_"+s,"ck_t_"+s,"ck_yp_"+s,"ck_vp_"+s,"ck_Fmax_"+s,"ck_Qb_"+s,"ck_Qh_"+s,"ck_Qa_"+s,"ck_ti_"+s,"ck_alive_"+s];
 const both=f=>BALLS.map(f).flat();
 Sim.data={
   ds:ds,kicker:"Portfolios 04 · data",file:"impact-iron-cotton",
   playing:()=>playing,play:startDrop,
   groups:[
     {title:"Parameters",note:"the constants of the model, P",vars:Object.keys(PMAP)},
-    {title:"Derived physics",note:"computed once, when the two balls are built",vars:["N_iron","N_cot","m_iron","m_cot","nbond_iron","nbond_cot","alpha_iron","D_iron","nj_cot","ntri_cot","aj_cot","Dj_cot","kc_iron","cc_iron","kc_cot","cc_cot","y00_iron","y00_cot","E0_iron","E0_cot","t_star","v_star","Mg"]},
+    {title:"Derived physics",note:"computed once, when the two balls are built",vars:["N_iron","N_cot","m_iron","m_cot","nbond_iron","nbond_cot","alpha_iron","D_iron","nj_cot","ntri_cot","aj_cot","Dj_cot","kc_iron","cc_iron","kc_cot","cc_cot","y00_iron","y00_cot","E0_iron","E0_cot","t_star","v_star","Mg","A_iron","A_cot","vt_iron","vt_cot","t_air_iron","t_air_cot","v_air_iron","v_air_cot"]},
     {title:"Solver",note:"how the run is computed and stored",vars:["NF","CK","computed","steps","compute_ms","done"]},
     {title:"Results",note:"written when the run is complete",vars:both(s=>["t_touch_"+s,"Fpeak_"+s,"W_end_"+s,"w_rel_"+s,"books_max_"+s])},
     {title:"Stored run",note:"one row per stored sample: every 1 ms to 2.5 s, every 2 ms to 9 s",vars:["ts","nstep"].concat(ball("iron"),ball("cot"))},

@@ -7,7 +7,7 @@ const ROOT = '/tmp/fig09-dist', PORT = 47110;
 const server = http.createServer((q, r) => { const f = path.join(ROOT, decodeURIComponent(q.url.split('?')[0])); if (!fs.existsSync(f)) { r.writeHead(404); return r.end(); } r.writeHead(200, { 'Content-Type': f.endsWith('.html') ? 'text/html' : f.endsWith('.js') ? 'text/javascript' : f.endsWith('.css') ? 'text/css' : f.endsWith('.woff2') ? 'font/woff2' : 'application/octet-stream' }); fs.createReadStream(f).pipe(r); });
 (async () => {
     await new Promise(r => server.listen(PORT, '127.0.0.1', r));
-    const b = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' });
+    const b = await chromium.launch();
     const p = await b.newPage({ viewport: { width: 1440, height: 900 } });
     await p.goto(`http://127.0.0.1:${PORT}/simulations/driven-oscillator.html`, { waitUntil: 'networkidle' });
     await p.evaluate(() => document.fonts.ready);

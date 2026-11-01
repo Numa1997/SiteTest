@@ -106,7 +106,7 @@ async function setSlider(pg, id, v) {
 }
 (async () => {
     await new Promise(r => server.listen(0, '127.0.0.1', r));
-    const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' });
+    const browser = await chromium.launch();
     for (const [w, h] of [[1440, 900], [390, 844]]) {
         const { ctx, pg, errors } = await page(browser, w, h, true);   // reduced motion: clock starts paused at wt = 0
         const r = await pg.evaluate(() => {

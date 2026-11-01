@@ -549,4 +549,188 @@
             if (showing()) { heldClocks.splice(i, 1); requestAnimationFrame(frame); } else setTimeout(wait, 200);
         }, 200);
     }
+    /* Long equations: a display equation wider than its box is set again in rows, as a typeset page would break it. The same TeX
+       (without its \tag) is typeset as \displaystyle inline maths, which KaTeX lets the browser break after a relation (=, <, →) or
+       an operator (+, −) at the formula's top level, and after a top-level \quad or \qquad; the rows run downwards, each row after
+       the first indented, and the number stays at the right. Only an equation that does not fit is set in rows, and the choice is
+       made again whenever its box changes width (a phone turned, a fold opened, the data panel opened beside the note) or a font
+       arrives. The TeX of the note is not changed. See docs/scripts/sim.md, "Long equations". */
+    var eqs = [], eqFontGen = 0;
+    /* the TeX of an equation as rows that may each break: without its \tag; an aligned or gathered block split into its rows, its
+       alignment marks dropped and a second column moved to its own row; the outermost \left( … \right) pairs written as fixed
+       \Bigl( … \Bigr) (\bigl without a fraction inside), since nothing inside a \left … \right pair may break; \allowbreak after a
+       top-level \quad or \qquad */
+    function eqScan(tex) {   /* tokens with their depth: braces, \left … \right, \begin … \end */
+        var out = [], depth = 0, i = 0;
+        while (i < tex.length) {
+            var c = tex[i], t;
+            if (c === '\\') t = /^\\[a-zA-Z]+\*?|^\\./.exec(tex.slice(i))[0];
+            else t = c;
+            if (t === '}' || t === '\\right' || t === '\\end') depth--;
+            out.push({ t: t, d: depth, i: i });
+            if (t === '{' || t === '\\left' || t === '\\begin') depth++;
+            i += t.length;
+        }
+        return out;
+    }
+    function eqUntag(tex) {
+        var m, out = tex;
+        while ((m = /\\tag\*?\s*\{/.exec(out))) {
+            var j = m.index + m[0].length, d = 1;
+            while (j < out.length && d) { if (out[j] === '\\') j++; else if (out[j] === '{') d++; else if (out[j] === '}') d--; j++; }
+            out = out.slice(0, m.index) + out.slice(j);
+        }
+        return out.trim();
+    }
+    function eqSplit(tex, sep) {   /* split at a top-level separator ('\\' or '&') */
+        var parts = [], last = 0;
+        eqScan(tex).forEach(function (k) { if (k.d === 0 && k.t === sep) { parts.push(tex.slice(last, k.i)); last = k.i + sep.length; } });
+        parts.push(tex.slice(last));
+        return parts;
+    }
+    function eqLoosen(row) {
+        var ks = eqScan(row), out = '', skip = {};
+        ks.forEach(function (k, n) {
+            if (skip[n]) { out += skip[n]; return; }
+            if (k.t === '\\left' && k.d === 0) {
+                var m = n + 1, close = -1;
+                for (; m < ks.length; m++) if (ks[m].t === '\\right' && ks[m].d === 0) { close = m; break; }
+                var inner = close > 0 ? row.slice(k.i, ks[close].i) : '';
+                var delimOpen = ks[n + 1] && ks[n + 1].t, delimClose = close > 0 && ks[close + 1] && ks[close + 1].t;
+                if (close > 0 && delimOpen !== '.' && delimClose !== '.' && inner.indexOf('\\middle') < 0) {
+                    var big = /\\(d?frac|sum|int|prod|sqrt)\b/.test(inner) ? '\\Big' : '\\big';
+                    out += big + 'l'; skip[close] = big + 'r'; return;
+                }
+            }
+            out += k.t;
+            if ((k.t === '\\qquad' || k.t === '\\quad') && k.d === 0) out += '\\allowbreak ';
+        });
+        return out;
+    }
+    /* a row cut into pieces at its top-level relations (and after \quad, \qquad): the left-hand side with its first relation and
+       what follows, then each further relation of the chain with the stretch after it. A piece is kept whole, so a row breaks
+       before a later =, ≈, ⟹ first; only a piece wider than the row by itself also breaks inside, at + and − (eqFit) */
+    var EQ_REL = /^(=|<|>|\\(le|ge|leq|geq|ne|neq|approx|equiv|sim|simeq|cong|propto|to|mapsto|rightarrow|Rightarrow|Longrightarrow|longrightarrow|Leftrightarrow|Longleftrightarrow|iff|implies|ll|gg|coloneqq|eqqcolon))$/;
+    function eqPieces(row) {
+        var pieces = [], cur = { rel: '', body: '' };
+        eqScan(row).forEach(function (k) {
+            if (k.d === 0 && EQ_REL.test(k.t) && !cur.rel && !cur.lhs && cur.body.trim()) {
+                cur.body += k.t + ' '; cur.lhs = true; return;   /* a left-hand side stays with its first relation: "a =" never ends a line */
+            }
+            if (k.d === 0 && (EQ_REL.test(k.t) || k.t === '\\allowbreak')) {
+                if (cur.rel || cur.body.trim()) pieces.push(cur);
+                cur = { rel: k.t === '\\allowbreak' ? '' : k.t + (k.t.charAt(0) === '\\' ? ' ' : ''), body: '' };
+            } else cur.body += k.t;
+        });
+        if (cur.rel || cur.body.trim()) pieces.push(cur);
+        return pieces;
+    }
+    /* a piece's stretch with each top-level bracket pair, ( … ), [ … ] or a sized \bigl( … \bigr), made one group, so that it breaks
+       at + and − between brackets, not inside them */
+    function eqKeepBrackets(body) {
+        var ks = eqScan(body), out = '', open = 0, OPEN = /^(\(|\[|\\\{|\\langle|\\lvert|\\lVert)$/, CLOSE = /^(\)|\]|\\\}|\\rangle|\\rvert|\\rVert)$/;
+        for (var n = 0; n < ks.length; n++) {
+            var k = ks[n];
+            if (k.d === 0 && /^\\(big|Big|bigg|Bigg)[lrm]?$/.test(k.t)) {   /* a sized delimiter: the command and its delimiter as one */
+                var m = n + 1; while (m < ks.length && !/\S/.test(ks[m].t)) m++;
+                var del = m < ks.length ? ks[m].t : '', word = body.slice(k.i, m < ks.length ? ks[m].i + del.length : body.length);
+                var opens = /l$/.test(k.t) || (!/[rm]$/.test(k.t) && OPEN.test(del)), closes = /r$/.test(k.t) || (!/[lm]$/.test(k.t) && CLOSE.test(del));
+                if (opens) { if (!open) out += '{'; open++; out += word; }
+                else if (closes && open) { out += word; if (!--open) out += '}'; }
+                else out += word;
+                n = m; continue;
+            }
+            if (k.d === 0 && (k.t === '(' || k.t === '[')) { if (!open) out += '{'; open++; out += k.t; continue; }
+            if (k.d === 0 && (k.t === ')' || k.t === ']') && open) { out += k.t; if (!--open) out += '}'; continue; }
+            out += k.t;
+        }
+        return out + (open ? new Array(open + 1).join('}') : '');
+    }
+    function eqRowsTex(tex) {
+        var body = eqUntag(tex), rows = [body];
+        var env = /^\\begin\{(aligned|gathered|split|align\*?|gather\*?)\}([\s\S]*)\\end\{\1\}\s*([.,;]?)\s*$/.exec(body);
+        if (env && eqScan(body).filter(function (k) { return k.d === 0 && k.t === '\\end'; }).length === 1) {
+            rows = [];
+            eqSplit(env[2], '\\\\').forEach(function (r) {
+                r = r.replace(/^\s*\[[^\]]*\]/, '');   /* a row's own spacing, \\[4pt] */
+                if (!r.trim()) return;
+                if (/^align|^aligned|^split/.test(env[1])) {
+                    var cells = eqSplit(r, '&'), cols = [];
+                    for (var c = 0; c < cells.length; c += 2) cols.push(cells[c] + (cells[c + 1] || ''));
+                    cols.forEach(function (col) { if (col.trim()) rows.push(col); });
+                } else rows.push(r);
+            });
+            if (env[3] && rows.length) rows[rows.length - 1] += env[3];
+        }
+        return rows.map(eqLoosen);
+    }
+    function eqBuild() {
+        if (!window.katex) return;
+        Array.prototype.forEach.call(document.querySelectorAll('.paper .katex-display:not(.eq-rows)'), function (d) {
+            if (d.eqRows !== undefined) return;
+            var ann = d.querySelector('annotation[encoding="application/x-tex"]'), k = d.firstElementChild;
+            d.eqRows = null;
+            if (!ann || !k) return;
+            var tag = d.querySelector('.tag'), r = document.createElement('div');
+            r.className = 'katex-display eq-rows'; r.hidden = true; r.setAttribute('aria-hidden', 'true');   /* the original keeps its MathML */
+            var tex = function (t) { return window.katex.renderToString('\\displaystyle ' + t, { displayMode: false, throwOnError: false }); };
+            /* each piece twice: whole (its stretch one group), and breakable; a relation keeps its spaces through the empty {} before it */
+            r.innerHTML = '<span class="eq-rows__math">' + eqRowsTex(ann.textContent).map(function (row) {
+                return '<span class="eq-rows__row">' + eqPieces(row).map(function (pc) {
+                    var lead = pc.rel ? '{}' + pc.rel : '';
+                    return '<span class="eq-p"><span class="eq-whole">' + tex(lead + '{' + pc.body + '}') + '</span><span class="eq-any" hidden>' +
+                        tex(lead + eqKeepBrackets(pc.body)) + '</span><span class="eq-any" hidden>' + tex(lead + pc.body) + '</span></span>';
+                }).join('<wbr>') + '</span>';
+            }).join('') + '</span>' + (tag ? '<span class="eq-rows__tag"><span class="katex">' + tag.innerHTML + '</span></span>' : '');
+            d.parentNode.insertBefore(r, d.nextSibling);
+            d.eqRows = r; eqs.push(d);
+        });
+    }
+    function eqFit() {
+        /* reads first, then writes, so that all the equations of a page cost one layout */
+        var need = eqs.filter(function (d) { return d.eqNat === undefined || d.eqGen !== eqFontGen; });
+        need.forEach(function (d) { d.eqWas = d.hidden; d.hidden = false; d.firstElementChild.style.minWidth = '0'; });
+        need.forEach(function (d) { var w = d.firstElementChild.offsetWidth; if (w) { d.eqNat = w; d.eqGen = eqFontGen; } });
+        need.forEach(function (d) { d.firstElementChild.style.minWidth = ''; d.hidden = d.eqWas; });
+        var plan = eqs.map(function (d) {
+            var box = d.hidden ? d.eqRows : d, cs = getComputedStyle(box);
+            var room = box.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+            return box.clientWidth && d.eqNat ? d.eqNat > room + 1 : null;
+        });
+        eqs.forEach(function (d, i) { if (plan[i] !== null) { d.hidden = plan[i]; d.eqRows.hidden = !plan[i]; } });
+        /* in rows, every piece is first kept whole; a piece wider than its row's continued lines breaks at + and − between brackets,
+           and only if one bracket alone is still too wide, inside it too */
+        var ps = [];
+        eqs.forEach(function (d) { if (!d.eqRows.hidden) ps.push.apply(ps, d.eqRows.querySelectorAll('.eq-p')); });
+        var forms = function (p) { return p.children; }, room = function (p) {
+            var row = p.parentNode, cs = getComputedStyle(row); return row.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+        };
+        ps.forEach(function (p) { [].forEach.call(forms(p), function (f, j) { f.hidden = j > 0; }); });
+        var wide = ps.map(function (p) { return p.firstChild.getBoundingClientRect().width > room(p) + 1; });
+        ps.forEach(function (p, i) { if (wide[i]) { forms(p)[0].hidden = true; forms(p)[1].hidden = false; } });
+        /* the bracket-kept form fits if none of its unbreakable parts is wider than the room */
+        var still = ps.map(function (p, i) {
+            if (!wide[i]) return false;
+            var r = room(p); return [].some.call(forms(p)[1].querySelectorAll('.base'), function (b) { return b.getBoundingClientRect().width > r + 1; });
+        });
+        ps.forEach(function (p, i) { if (still[i]) { forms(p)[1].hidden = true; forms(p)[2].hidden = false; } });
+    }
+    var eqWidths = new Map(), eqRO = 'ResizeObserver' in window ? new ResizeObserver(function (es) {
+        var changed = false;
+        es.forEach(function (e) { var w = Math.round(e.contentRect.width); if (eqWidths.get(e.target) !== w) { eqWidths.set(e.target, w); changed = true; } });
+        if (changed) eqFit();
+    }) : null;
+    var eqWatching = false;
+    document.addEventListener('typeset', function () {   /* sent once for the notes, once more for the captions */
+        eqBuild(); eqFit();
+        if (eqRO) eqs.forEach(function (d) { eqRO.observe(d.parentNode); });   /* observing twice is harmless */
+        if (eqWatching) return;
+        eqWatching = true;
+        if (!eqRO) window.addEventListener('resize', eqFit);
+        if (document.fonts) {
+            document.fonts.addEventListener('loadingdone', function () { eqFontGen++; eqFit(); });
+            document.fonts.ready.then(function () { eqFontGen++; eqFit(); });
+        }
+        window.addEventListener('beforeprint', eqFit);
+    });
 })();

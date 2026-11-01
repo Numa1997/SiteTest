@@ -2,7 +2,7 @@
 const { chromium } = require('playwright');
 (async()=>{
  const base=process.argv[2]||'http://localhost:8766/portfolios/impact/';
- const b=await chromium.launch({executablePath:'/opt/pw-browsers/chromium_headless_shell-1194/chrome-linux/headless_shell'});
+ const b=await chromium.launch();
  for(const page of ['index.html','ar.html'])for(const w of [1100,390]){
   const p=await b.newPage({viewport:{width:w,height:1000}});const errs=[];
   p.on('pageerror',e=>errs.push(e.message));p.on('console',m=>{if(m.type()==='error')errs.push(m.text())});

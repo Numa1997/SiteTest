@@ -51,11 +51,13 @@ Principles*, a 23-chapter text with 63 numbered equations. `index.html#servo`, `
 the Portfolios page links to those three addresses.
 
 **How the page works.** Picture three finished pages packed into one envelope. Each of the three pages is stored inside
-`index.html` unchanged, as a JSON string, and shown in its own frame (`<iframe srcdoc>`; for a host that refuses `srcdoc` frames, a `blob:` frame replaces it after 8 s, but
-only then: a frame that is merely slow is left to finish, since 31 October 2026, and on the site the security policy would block a
-`blob:` frame anyway, [performance.md](performance.md)),
-so their styles, element ids and scripts cannot collide. A small script added to each embedded page turns the links between
-them into tab switches. The scripts and styles are inline; the text's maths is typeset when the page is generated, so no KaTeX
+`index.html` unchanged, as a JSON string, and shown in its own frame (`<iframe srcdoc>`; for a host that refuses `srcdoc` frames,
+so that the frame stays empty, a `blob:` frame replaces it after 8 s; a frame that holds a document, however slow, is left to finish,
+and on the site the security policy would block a `blob:` frame anyway, [performance.md](performance.md)),
+so their styles, element ids and scripts cannot collide. A small script added at the top of each embedded page turns the links between
+them into tab switches and keeps in-page links (`#…`) inside the frame, from the first moment a link can be tapped; one line at the
+end of each page tells the shell the tab is ready. (Until 31 October 2026 the whole script sat at the end, and a contents link tapped
+before it had run loaded the whole study inside the tab.) Each frame's title, which a screen reader reads, is the tab's long label. The scripts and styles are inline; the text's maths is typeset when the page is generated, so no KaTeX
 runs in the browser. The fonts are the site's own files: the study's sources embed them as `data:` addresses so that a standalone
 copy works anywhere, and the site build (`--site`) replaces each one by a link to the byte-identical file in `public/fonts/` or
 `public/vendor/katex/fonts/` ([`portfolios-src/site_fonts.py`](../portfolios-src/site_fonts.py), since 31 October 2026). A phone
@@ -366,6 +368,44 @@ makes no request outside the site, and links back to `../../portfolios.html`. Th
 scales settle at 9.81 N; the first touch at 1.428 s equals √(2h/g); the energy books close to 0.21 J (iron) and 0.51 J (cotton) out
 of about 98 J (`checks/energy_books.cjs`); halving the time step changes the peaks by 0.0 % (iron) and 1.5 % (cotton)
 (`checks/step_size.cjs`).
+
+### Air (1 November 2026)
+
+The menu **Air** beside Drop (off, real air, 4× denser, 16× denser) reopens the page with `?air=1`, `2` or `3` (or without) and computes
+the run again. Off, the model is the one described above, with no air. With air, each ball feels the drag of a real 1 kg ball of its
+material, F = k<sub>air</sub> ½ ρ<sub>air</sub> C<sub>d</sub> A V² against its centre-of-mass velocity V (`physics.js`, `sub()`), with
+k<sub>air</sub> = 1, 4 or 16 (`air_k`); A = π (3M / 4πρ)<sup>2/3</sup> from the density of real iron (7874 kg/m³, 6.2 cm across) and of loose
+cotton wool (30 kg/m³, the notes' value, 40 cm across); ρ<sub>air</sub> = 1.2 kg/m³, C<sub>d</sub> = 0.47. The air presses on the ball's
+**front**: the drag is shared by the forward-most particle of each strip across the motion (strips 0.10 m wide for iron, 0.08 m for
+cotton), so the cotton is pushed out of shape while its weight pulls on every fibre; iron's stiff bonds only tremble. The work
+against drag, the sum of −f·v over the front particles, is stored as `Qa_*` ("given to the air"), checkpointed (`ck_Qa_*`) and entered in
+the energy books as a sixth part of the lower bar. The readouts give the touch predicted by the closed form for a rigid ball,
+t = (v<sub>t</sub>/g) arcosh(e<sup>gh/v<sub>t</sub>²</sup>), v<sub>t</sub> = √(2Mg / (k<sub>air</sub> ρ<sub>air</sub> C<sub>d</sub> A)) (`vt_*`, `t_air_*`, `v_air_*`).
+
+Measured (Node and the built page, 1 November 2026):
+
+| Air | cotton touches (rigid closed form) | at | cotton height in the fall (2.45 m at rest) | iron touches (closed form) | at | bonds broken in the fall |
+|---|---|---|---|---|---|---|
+| off | 1.428 s (1.428) | 14.0 m/s | 2.44–2.46 m | 1.428 s (1.428) | 14.0 m/s | 0 |
+| real | 1.513 s (1.513) | 11.9 m/s | 2.40–2.46 m | 1.430 s (1.430) | 13.9 m/s | 0 |
+| 4× | 1.795 s (1.776) | 8.1 m/s | 2.13–2.54 m | 1.436 s (1.436) | 13.8 m/s | 0 |
+| 16× | 2.790 s (2.694) | 4.2 m/s | 1.93–3.24 m | 1.461 s (1.461) | 13.1 m/s | 0 |
+
+The cotton lands later than the rigid closed form in dense air because its front is pushed in; the iron's 0.866 m height changes by
+at most 2 mm. No fibre breaks in the fall at any level: in a drop from rest the drag grows only up to the weight, so the air presses
+on the cotton no harder than a table it lies on (the notes say so, with what would tear it). The books' gap is the integrator's at
+every level (largest 0.026 J). Every new value is "identical" under the panel's Check at every level, in English, German and Arabic.
+
+### The plots on a phone (fixed 1 November 2026)
+
+The two force plots and the energy bars are canvases sized by `fitAll()` (`template.html`). It took each plot's height from the
+canvas's `height` attribute, which it then overwrote with height × pixel density; every later call read the larger number, so on a
+phone (density 3) the plots tripled in height with each resize, and a phone resizes whenever its address bar slides away: the boxes
+"What the scale reads" and "Where the energy goes" kept growing downwards (660, 1980, 5940 px …). The design height (220 and 250 px)
+is now read once and kept in `data-h`. The energy bars' colour key now wraps into as many lines as the width needs, in both
+directions, and the canvas grows by 18 px per extra line (286 px on a 390 px phone); before, a second line was printed over the
+first. On a canvas narrower than 440 px the line of joules starts at the edge instead of after the labels, so that it fits. Checked
+at 390 px (English and Arabic) and 1440 px: heights unchanged through repeated resizes, no script errors.
 
 ### The data panel of the study
 

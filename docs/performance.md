@@ -155,7 +155,9 @@ it. The shell now replaces a frame only when the host refused its `srcdoc` (its 
 is merely slow is left to finish. This needs the shell to be able to read its frame, as on the site; a host that sandboxes the page
 without `allow-same-origin` hides the frame's document, and there the old 8 s replacement still applies. Tested with
 `scripts/sim.js` held back 11 s: on `main` the simulation tab ends blank; now it appears and runs (26 canvases drawn); a refused
-`srcdoc` still triggers the replacement as before.
+`srcdoc` still triggers the replacement as before. (Since then the rule is the other way round, and narrower: the shell replaces a
+frame only while it is still empty, `about:blank` or unreadable, so a frame that has navigated is not blanked either; see "Faults
+found outside performance" below.)
 
 **Proof that nothing else changed.** For each of the four pages, every tab is identical character for character once each font,
 embedded or linked, is replaced by the MD5 of its bytes (59 fonts per page, 21 distinct files); the shell differs only by the
@@ -165,8 +167,8 @@ the ideal press, the running simulation and wind, the edge of the tab pill at th
 between two loads of the old page. Checks run on the new pages: Rotor Pendula `check_combined.py` (all pass: 1450 formulas, 0 KaTeX
 errors, the simulation solves, the wind runs, tabs and deep links, 360 to 1440 px), `check_numbers.py`, `check_sim.js`,
 `check_wind.js`, `check_newton.js`, `check_physics.py`, `R_revision.py` (all pass); Hydraulic Press Study `check_combined.py` on the
-English page (33 of 33; the check finds frames by their English titles, so it cannot run on `de.html` and `ar.html`, on `main`
-either), `check_theory_numbers.js` (52 of 52), `check_physics.py`, `check_control.py`, and the data-panel check
+English page (33 of 33; the check then found frames by their English titles, so it could not run on `de.html` and `ar.html`; it
+can since, see "Faults found outside performance"), `check_theory_numbers.js` (52 of 52), `check_physics.py`, `check_control.py`, and the data-panel check
 `check_data_panel.cjs` for both presses at 390 and 1440 px (the pointer sweep paints nothing, pins, a Check "stored and recomputed
 identical", one round recorded, no errors).
 
@@ -212,7 +214,7 @@ explanation was too broad; units and labels. All of these were fixed or correcte
 they are older than this change and are not about speed: a contents link tapped in a long tab before its link script has run (the
 script sits at the end of the tab) loads the whole study page inside the tab, which the 8 s replacement then blanks, on `main` as
 well; the tab frames' accessible names read doubled ("SimulationSimulation"), because the shell takes both the long and the short
-label.
+label. Both are fixed since; see "Faults found outside performance".
 
 **On the live site** (merged 31 October 2026 as `87b3357`; Cloudflare served the new pages about 80 s later, byte-identical to the
 build, checked by SHA-256 for the four changed pages, three unchanged pages and two font files; `measure.cjs
@@ -367,7 +369,8 @@ width (a container query, the script's own rule), 684 px. The pages are regenera
 the canvases and the live progress line hidden. The study's checks: `checks/site_check.cjs` (fonts, no errors, no outside requests,
 peak forces 638.6 N and 188.0 N, weights 9.81 N, English and Arabic at 1100 and 390 px) and `checks/data_panel.cjs` (every Check
 "stored and recomputed identical", English and Arabic, 390 and 1100 px) pass; both hard-code a browser path that no longer exists
-(`chromium_headless_shell-1194`), so they were run from copies with that one argument removed.
+(`chromium_headless_shell-1194`), so they were run from copies with that one argument removed. (The path is gone from them since;
+see "Faults found outside performance".)
 
 **Measured and not changed.** The drop is computed in chunks on the main thread when the page opens: 95 s at full speed, longer on a
 phone. A tap during it is answered in 56 ms (40 ms after), because each chunk yields; the page's frame loop also redraws every frame.
@@ -476,6 +479,32 @@ So a click between pages is 0.15 to 0.25 s sooner on a good phone connection and
 
 **What a reader sees.** The address bar shows the `.html` address after a click (`/simulations.html`); old short links still open
 their page directly.
+
+## Faults found outside performance, and fixed (31 October 2026)
+
+An independent check of this page found the faults the work above had noted and left alone, and a few more. Each was reproduced
+first, then fixed, then checked again; the commands are given so that anyone can repeat them.
+
+| Fault | Reproduced | Fix | Checked after |
+|---|---|---|---|
+| A contents link tapped in a long study tab before the tab's link script had run loaded the whole study page inside the tab, and the 8 s guard then replaced it by a `blob:` frame, which the security policy blocks: a blank tab. Cause: a frame made from `srcdoc` resolves `#x` against the shell's address, and the script that handles such links sat at the end of the tab. | Rotor Pendula notes, Hydraulic Press Study theory, CPU 6×: the tap at once, then the frame `blob:` and unreadable 9.5 s later. | Both `build_combined.py`: the link script stands at the top of each tab (a target not yet read is reached once the page has been read); only the "ready" line stays at the end. The guard replaces a frame only while it is still empty (`about:blank`, or unreadable). | The same tap: the frame stays on its document and lands on the section (target 19 and 20 px below the top); a refused `srcdoc` still gets the `blob:` frame after 8 s; Rotor Pendula `check_combined.py` all pass; each tab differs from before only by the moved script. |
+| Frame titles doubled ("Lecture notesNotes", "SimulationSimulation", "TheoryTheory"): the shell took the text of both the long and the short label. | Read from the frames in Chromium. | The title is the long label only. | "Lecture notes", "Theory". |
+| The Hydraulic Press Study's `check_combined.py` could check only the English page. | It looked for English titles and English status words. | It finds each tab by the tab id its frame reports, the cycle's outcome by the status markup, the force target by its number; a translated page is held to the English elements, its text only required to be at least half as long. | 33 of 33 on `index.html`, `de.html` and `ar.html`. |
+| 27 checks and measurement scripts (`portfolios-src/impact/checks/`, `hydraulics/tools/check_data_panel.cjs`, 20 in `notes/fig01` to `fig10`) launched a Chromium at a path that no longer exists (`…-1194`), so they could not start. | `ls /opt/pw-browsers`: only `-1243`. | They launch Playwright's own Chromium. The droplets' `check_browser.py`, whose fallback handed Playwright no browser and so failed where Playwright's own browser is not installed, falls back to `/opt/pw-browsers/chromium`, as the other studies' Python checks do. (`notes/verify.mjs` already fell back correctly.) | Iron, Cotton and the Head: `checks/site_check.cjs` (forces 638.6 N and 188.0 N, no errors) and `checks/data_panel.cjs` (English 390 px, Arabic 1100 px: "stored and recomputed identical"); Hydraulic Press Study `check_data_panel.cjs servo 390` (the same); droplets `check_browser.py` passes at 360, 390, 1024 and 1440 px. |
+| `python3 tools/i18n/build.py --check` rewrote six generated files: the commit each names as its English source changes with every commit. | `git status` after the check. | `--check` writes nothing. It also fails if a generated file is not what the build would write now, commit stamps aside. | No file written; one generated page changed by hand is reported "stale" and the check exits 1. |
+| `docs/files.md` left out `public/cv/` (four files): they had descriptions but no section, and a file in no section was dropped without a word. | Not one `cv/` row in `docs/files.md`, yet `inventory.py --check` passed. | A section for the CV page; a file in no section is now an error, like a file without a description. | `docs/files.md` lists the four files. |
+| `node notes/walkcheck.cjs` found 754 of 759 quoted lines: five walkthrough lines (Figs. 3, 4, 5) quoted code whose words had since been wrapped in `_t()`. | 754 of 759. | The five quotes updated; the German and Arabic walkthroughs regenerated (their code is copied from the English). | 759 of 759. |
+| `font-src` allowed `data:` fonts, which no page has used since change 1. | No served page or script makes a font from a `data:` address. | `font-src 'self'` on all 51 pages (`index.html`, from which the builders copy it, and every page). | Every page at 390 and 1440 px, study tabs opened: no blocked font, no failed font, no console error. |
+
+One found fault is not fixed here, because it is a choice for Numa rather than a repair (the other, the wide equations, is fixed):
+
+- **Display equations wider than their box** (fixed 1 November 2026, at Numa's instruction "a long equation gets multiple rows"):
+  `node notes/verify.mjs` found 21, not six: one at 1440 px and 20 at 1600 px, where the data panel beside the page narrows the
+  note's column to 541 to 579 px; at 390 px a probe found 112. Such an equation is now set in rows ([scripts/sim.md](scripts/sim.md),
+  "Long equations"): 0 left at 1440 and 1600 px, 9 at 390 px (one fraction or matrix wider than a phone column each); German the
+  same; Arabic 1, 3 and 24, its maths being set larger.
+- **The analytics beacon**: Cloudflare inserts it only for browsers (a `curl` of the page gets the page as built), and every page's
+  policy (`script-src 'self' 'unsafe-inline'`) blocks it. Allowing it means sending readers' visits to Cloudflare's analytics.
 
 ## Not changed, and why
 

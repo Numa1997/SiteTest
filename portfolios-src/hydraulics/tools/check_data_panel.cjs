@@ -3,7 +3,7 @@
 const { chromium } = require('playwright');const fs=require('fs');
 (async()=>{
  const tab=process.argv[2],w=+process.argv[3],out=process.argv[4]||'.';
- const b=await chromium.launch({executablePath:'/opt/pw-browsers/chromium_headless_shell-1194/chrome-linux/headless_shell'});
+ const b=await chromium.launch();
  const ctx=await b.newContext({viewport:{width:w,height:1000},acceptDownloads:true});const p=await ctx.newPage();const errs=[];
  p.on('pageerror',e=>errs.push(e.message));p.on('console',m=>{if(m.type()==='error')errs.push(m.text())});
  await p.goto('http://localhost:8767/portfolios/hydraulics/index.html#'+tab,{timeout:120000});await p.waitForTimeout(3000);
