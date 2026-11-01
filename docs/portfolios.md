@@ -369,6 +369,23 @@ scales settle at 9.81 N; the first touch at 1.428 s equals √(2h/g); the energy
 of about 98 J (`checks/energy_books.cjs`); halving the time step changes the peaks by 0.0 % (iron) and 1.5 % (cotton)
 (`checks/step_size.cjs`).
 
+### Air (1 November 2026)
+
+The button **Air** beside Drop reopens the page with `?air=1` (or without it) and computes the run again. Off, the model is the one
+described above, with no air. On, each ball as a whole feels the drag of a real 1 kg ball of its material,
+F = −½ ρ<sub>air</sub> C<sub>d</sub> A |V| V on its centre-of-mass velocity V (`physics.js`, `sub()`), shared equally by its particles,
+so it slows the ball without bending it; A = π (3M / 4πρ)<sup>2/3</sup> from the density of real iron (7874 kg/m³, 6.2 cm across) and of
+loose cotton wool (30 kg/m³, the notes' value, 40 cm across); ρ<sub>air</sub> = 1.2 kg/m³, C<sub>d</sub> = 0.47, from the parameter table.
+The work against drag, ∫ F·V dt, is stored as `Qa_iron`, `Qa_cot` ("given to the air"), checkpointed (`ck_Qa_*`) and entered in the
+energy books, a sixth part of the lower bar. The readouts give the touch predicted with air by the notes' closed form,
+t = (v<sub>t</sub>/g) arcosh(e<sup>gh/v<sub>t</sub>²</sup>), with v<sub>t</sub> = √(2Mg / (ρ<sub>air</sub> C<sub>d</sub> A)) (`vt_*`, `t_air_*`, `v_air_*`).
+
+Measured (Node and the built page, 1 November 2026): iron touches at 1.42992 s against 1.42989 s predicted, at 13.946 m/s against
+13.947, giving 0.86 J to the air; cotton touches at 1.5128 s against 1.5132 s, at 11.860 m/s against 11.862, giving 27.7 J to the
+air by the touch (its lost motion energy, ½(14.007² − 11.860²) = 27.8 J); its peak force falls from 188 N to 134 N. The books' gap is
+the integrator's as before (iron 0.18 J at 2 s with or without air). Every new value is "identical" under the panel's Check,
+including Q<sub>air</sub> rerun from a checkpoint with air on.
+
 ### The plots on a phone (fixed 1 November 2026)
 
 The two force plots and the energy bars are canvases sized by `fitAll()` (`template.html`). It took each plot's height from the

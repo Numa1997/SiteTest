@@ -55,6 +55,13 @@ T['headnote'] = 'Each scale is the head itself: plate, spring and damper. Plate 
 T['r_settling'] = 'still shaking…'
 T['r_heatball'] = 'heat made inside the ball'
 T['r_heathead'] = 'heat made in the head'
+T['r_heatair'] = 'energy given to the air'
+T['r_pred_air'] = 'predicted with air ='
+T['en_heatair'] = 'given to the air'
+T['air_off'] = 'Air: off'
+T['air_on'] = 'Air: on'
+T['air_title'] = 'Add air drag on each ball, as a real 1 kg ball of its material would feel it; the run is computed again'
+T['air_hint'] = 'Air is on: each ball feels the drag ½ρC<sub>d</sub>Av² of a real 1 kg ball of its material (iron 6.2 cm across, cotton 40 cm), so the cotton arrives later and slower.'
 
 T['sections'] = r'''
 <div class="card">
@@ -73,7 +80,7 @@ T['sections'] = r'''
 <p>The ball reaches the plate when <span class="m">y = 0</span>:</p>
 <div class="eq key">t* = √(2h/g), &nbsp;&nbsp; v* = g t* = √(2gh)</div>
 <div class="box chk"><div class="tag">Check</div><p>Units: √(m / (m/s²)) = s. Energy gives the same speed without mentioning time: the height energy <span class="m">Mgh</span> becomes motion energy <span class="m">½Mv*²</span>, so <span class="m">v* = √(2gh)</span>.</p></div>
-<div class="box toy"><div class="tag">In our model</div><p>With <span class="m">h = 10 m</span>: <span class="m">t* = 1.428 s</span> and <span class="m">v* = 14.0 m/s</span>. The model integrates the particles step by step and records the first touch; the readout above lets you compare it with the formula. The model leaves out air, so both balls arrive with the same speed and the comparison isolates the material.</p></div>
+<div class="box toy"><div class="tag">In our model</div><p>With <span class="m">h = 10 m</span>: <span class="m">t* = 1.428 s</span> and <span class="m">v* = 14.0 m/s</span>. The model integrates the particles step by step and records the first touch; the readout above lets you compare it with the formula. Unless the Air button is on, the model leaves out air, so both balls arrive with the same speed and the comparison isolates the material. With Air on, each ball as a whole feels the drag below, and the cotton arrives 0.09 s later, at 11.9 m/s.</p></div>
 <h3>With air, for real balls</h3>
 <p>A real ball also feels air drag, <span class="m">½ ρ<sub>air</sub> C<sub>d</sub> A v²</span>, where <span class="m">A</span> is its cross-section and <span class="m">C<sub>d</sub> ≈ 0.47</span> for a sphere. Take <span class="m">y</span> as the distance fallen, write the acceleration as <span class="m">dv/dt = v dv/dy = ½ d(v²)/dy</span>, and define the terminal speed <span class="m">v<sub>t</sub> = √(2mg / (ρ<sub>air</sub> C<sub>d</sub> A))</span>, at which drag equals weight:</p>
 <div class="eq">½ d(v²)/dy = g (1 − v²/v<sub>t</sub>²) &nbsp;&nbsp;⇒&nbsp;&nbsp; v² = v<sub>t</sub>² (1 − e<sup>−2gy/v<sub>t</sub>²</sup>)</div>
@@ -159,7 +166,7 @@ T['sections'] = r'''
 
 <div class="card">
 <h2><span class="num">7</span>What the model leaves out</h2>
-<p>It is two-dimensional, a slice through a three-dimensional ball. Air is left out, so both balls arrive at the same speed. The head is a flat plate on a spring and a damper, not a curved skull around a brain. The toy iron is stiffer than the head by a much smaller factor than real iron, and the toy cotton is much stiffer than real cotton, so the model shows the mechanism with a peak ratio of about 3.4, where the real ratio of iron's peak to cotton's average force is about 120. The fibres' contacts in the slice stand in for contacts in three dimensions. The real-world numbers in sections 2 and 4 come from separate hand calculations, whose inputs are listed in the table.</p>
+<p>It is two-dimensional, a slice through a three-dimensional ball. Air is left out unless the Air button is on; then each ball as a whole feels the drag of a real 1 kg ball of its material, which slows the cotton by about 15 % and the iron by under 1 %, but does not change its shape. The head is a flat plate on a spring and a damper, not a curved skull around a brain. The toy iron is stiffer than the head by a much smaller factor than real iron, and the toy cotton is much stiffer than real cotton, so the model shows the mechanism with a peak ratio of about 3.4, where the real ratio of iron's peak to cotton's average force is about 120. The fibres' contacts in the slice stand in for contacts in three dimensions. The real-world numbers in sections 2 and 4 come from separate hand calculations, whose inputs are listed in the table.</p>
 </div>
 '''
 
@@ -191,6 +198,7 @@ T['rows'] = [
  ['m, h', '0.5 kg, 10 m', 'ball mass, drop height'],
  ['ρ', '7870, 1520, 30 kg/m³', 'iron, cellulose, loose cotton wool (the cotton value is my assumption)'],
  ['ρ<sub>air</sub>, C<sub>d</sub>', '1.2 kg/m³, 0.47', 'air density, drag coefficient of a sphere'],
+ ['ρ<sub>Fe</sub>, ρ<sub>c</sub>', '7874, 30 kg/m³', 'densities of real iron and of loose cotton wool: with Air on they give the cross-sections A of real 1 kg balls, 30.6 cm² and 1252 cm²'],
  ['k<sub>h</sub>', '4.0 MN/m', 'mean dynamic skull stiffness, Yoganandan et al.'],
  ['M<sub>h</sub>', '4.5 kg', 'mass of a head, assumed typical value'],
  ['E', '210 GPa, ~10 GPa', 'Young’s modulus of iron; of cellulose (rounded, assumed)'],

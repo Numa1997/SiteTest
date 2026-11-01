@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-918 files, 55.9 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+918 files, 56.0 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -399,13 +399,13 @@ to confirm that every file is described. Sizes are those of the files when the l
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
-| [`public/portfolios/impact/ar.html`](../public/portfolios/impact/ar.html) | 171.3 kB | Iron, Cotton and the Head in Arabic, generated from portfolios-src/impact/ by build.py --site. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/impact/de.html`](../public/portfolios/impact/de.html) | 158.1 kB | Iron, Cotton and the Head in German, generated from portfolios-src/impact/ by build.py --site. | [portfolios.md](portfolios.md) |
+| [`public/portfolios/impact/ar.html`](../public/portfolios/impact/ar.html) | 178.9 kB | Iron, Cotton and the Head in Arabic, generated from portfolios-src/impact/ by build.py --site. | [portfolios.md](portfolios.md) |
+| [`public/portfolios/impact/de.html`](../public/portfolios/impact/de.html) | 164.9 kB | Iron, Cotton and the Head in German, generated from portfolios-src/impact/ by build.py --site. | [portfolios.md](portfolios.md) |
 | [`public/portfolios/impact/fig/01_impact.webp`](../public/portfolios/impact/fig/01_impact.webp) | 16.9 kB | Plate 1 of the study on the Portfolios page, a screenshot of its English page, 600 px high. | [portfolios.md](portfolios.md) |
 | [`public/portfolios/impact/fig/02_force.webp`](../public/portfolios/impact/fig/02_force.webp) | 19.5 kB | Plate 2 of the study on the Portfolios page, a screenshot of its English page, 600 px high. | [portfolios.md](portfolios.md) |
 | [`public/portfolios/impact/fig/03_energy.webp`](../public/portfolios/impact/fig/03_energy.webp) | 20.2 kB | Plate 3 of the study on the Portfolios page, a screenshot of its English page, 600 px high. | [portfolios.md](portfolios.md) |
 | [`public/portfolios/impact/fig/04_weight.webp`](../public/portfolios/impact/fig/04_weight.webp) | 18.2 kB | Plate 4 of the study on the Portfolios page, a screenshot of its English page, 600 px high. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/impact/index.html`](../public/portfolios/impact/index.html) | 149.9 kB | Iron, Cotton and the Head in English, generated from portfolios-src/impact/ by build.py --site. | [portfolios.md](portfolios.md) |
+| [`public/portfolios/impact/index.html`](../public/portfolios/impact/index.html) | 156.6 kB | Iron, Cotton and the Head in English, generated from portfolios-src/impact/ by build.py --site. | [portfolios.md](portfolios.md) |
 
 ## Source of the Hydraulic Press Study (not served)
 
@@ -545,7 +545,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | File | Size | What it is | Explained in |
 |---|---|---|---|
 | [`portfolios-src/impact/.gitignore`](../portfolios-src/impact/.gitignore) | 11 B | Keeps the stand-alone build (out/) and screenshots out of git. | [README.md](../portfolios-src/impact/README.md) |
-| [`portfolios-src/impact/README.md`](../portfolios-src/impact/README.md) | 3.5 kB | The study's source: every file, how the two pages are generated, the checks. | [README.md](../portfolios-src/impact/README.md) |
+| [`portfolios-src/impact/README.md`](../portfolios-src/impact/README.md) | 3.9 kB | The study's source: every file, how the two pages are generated, the checks. | [README.md](../portfolios-src/impact/README.md) |
 | [`portfolios-src/impact/build.py`](../portfolios-src/impact/build.py) | 9.1 kB | Generates public/portfolios/impact/index.html, de.html and ar.html (--site), or stand-alone pages in out/. | [README.md](../portfolios-src/impact/README.md) |
 | [`portfolios-src/impact/checks/data_panel.cjs`](../portfolios-src/impact/checks/data_panel.cjs) | 10.0 kB | Check script data_panel (see the README). | [README.md](../portfolios-src/impact/README.md) |
 | [`portfolios-src/impact/checks/energy_books.cjs`](../portfolios-src/impact/checks/energy_books.cjs) | 1.1 kB | Check script energy_books (see the README). | [README.md](../portfolios-src/impact/README.md) |
@@ -556,13 +556,13 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`portfolios-src/impact/checks/step_size.cjs`](../portfolios-src/impact/checks/step_size.cjs) | 323 B | Check script step_size (see the README). | [README.md](../portfolios-src/impact/README.md) |
 | [`portfolios-src/impact/checks/walkthrough.cjs`](../portfolios-src/impact/checks/walkthrough.cjs) | 1.8 kB | Check script walkthrough (see the README). | [README.md](../portfolios-src/impact/README.md) |
 | [`portfolios-src/impact/checks/weights.cjs`](../portfolios-src/impact/checks/weights.cjs) | 588 B | Check script weights (see the README). | [README.md](../portfolios-src/impact/README.md) |
-| [`portfolios-src/impact/datahooks.js`](../portfolios-src/impact/datahooks.js) | 29.6 kB | The data panel's hooks for the study (Sim.data: Read values, Check, read-back, one round = one drop). | [portfolios.md](portfolios.md) |
-| [`portfolios-src/impact/physics.cjs`](../portfolios-src/impact/physics.cjs) | 10.6 kB | The model: Morse-bonded iron, fibre-network cotton, the head and scale, energy books (.cjs: the same file for the Node checks). | [README.md](../portfolios-src/impact/README.md) |
-| [`portfolios-src/impact/physics.js`](../portfolios-src/impact/physics.js) | 10.6 kB | The model: Morse-bonded iron, fibre-network cotton, the head and scale, energy books (.cjs: the same file for the Node checks). | [README.md](../portfolios-src/impact/README.md) |
-| [`portfolios-src/impact/template.html`](../portfolios-src/impact/template.html) | 52.1 kB | The page template: layout, the store filled by record(), drawing, playback, gauges, plots. | [README.md](../portfolios-src/impact/README.md) |
-| [`portfolios-src/impact/text_ar.py`](../portfolios-src/impact/text_ar.py) | 40.8 kB | Every word of the Arabic page. | [README.md](../portfolios-src/impact/README.md) |
-| [`portfolios-src/impact/text_de.py`](../portfolios-src/impact/text_de.py) | 35.0 kB | Every word of the German page. | [README.md](../portfolios-src/impact/README.md) |
-| [`portfolios-src/impact/text_en.py`](../portfolios-src/impact/text_en.py) | 30.4 kB | Every word of the English page. | [README.md](../portfolios-src/impact/README.md) |
+| [`portfolios-src/impact/datahooks.js`](../portfolios-src/impact/datahooks.js) | 31.1 kB | The data panel's hooks for the study (Sim.data: Read values, Check, read-back, one round = one drop). | [portfolios.md](portfolios.md) |
+| [`portfolios-src/impact/physics.cjs`](../portfolios-src/impact/physics.cjs) | 11.6 kB | The model: Morse-bonded iron, fibre-network cotton, the head and scale, energy books (.cjs: the same file for the Node checks). | [README.md](../portfolios-src/impact/README.md) |
+| [`portfolios-src/impact/physics.js`](../portfolios-src/impact/physics.js) | 11.6 kB | The model: Morse-bonded iron, fibre-network cotton, the head and scale, energy books (.cjs: the same file for the Node checks). | [README.md](../portfolios-src/impact/README.md) |
+| [`portfolios-src/impact/template.html`](../portfolios-src/impact/template.html) | 55.1 kB | The page template: layout, the store filled by record(), drawing, playback, gauges, plots. | [README.md](../portfolios-src/impact/README.md) |
+| [`portfolios-src/impact/text_ar.py`](../portfolios-src/impact/text_ar.py) | 42.2 kB | Every word of the Arabic page. | [README.md](../portfolios-src/impact/README.md) |
+| [`portfolios-src/impact/text_de.py`](../portfolios-src/impact/text_de.py) | 36.1 kB | Every word of the German page. | [README.md](../portfolios-src/impact/README.md) |
+| [`portfolios-src/impact/text_en.py`](../portfolios-src/impact/text_en.py) | 31.3 kB | Every word of the English page. | [README.md](../portfolios-src/impact/README.md) |
 
 ## Source of the Droplet Collection study (not served)
 
@@ -692,7 +692,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`docs/notes.md`](notes.md) | 5.4 kB | Documentation: The lecture-note review: `notes/` and `.claude/agents/`. | [notes.md](notes.md) |
 | [`docs/pages.md`](pages.md) | 52.2 kB | Documentation: The site's own pages: home, simulations catalog, Portfolios, robots.txt. | [pages.md](pages.md) |
 | [`docs/performance.md`](performance.md) | 51.8 kB | Documentation: Performance: what was measured, what was slow, what changed. | [performance.md](performance.md) |
-| [`docs/portfolios.md`](portfolios.md) | 57.5 kB | Documentation: The four research projects: `public/portfolios/`. | [portfolios.md](portfolios.md) |
+| [`docs/portfolios.md`](portfolios.md) | 59.2 kB | Documentation: The four research projects: `public/portfolios/`. | [portfolios.md](portfolios.md) |
 | [`docs/research-theory-audit.md`](research-theory-audit.md) | 30.0 kB | Documentation: Readability audit: Droplet Collection and Rotor Pendula. | [research-theory-audit.md](research-theory-audit.md) |
 | [`docs/scripts/catalog.md`](scripts/catalog.md) | 15.4 kB | Documentation: public/scripts/catalog.js. | [catalog.md](scripts/catalog.md) |
 | [`docs/scripts/curve.md`](scripts/curve.md) | 19.3 kB | Documentation: public/scripts/curve.js. | [curve.md](scripts/curve.md) |
