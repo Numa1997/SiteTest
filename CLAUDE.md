@@ -25,18 +25,21 @@ Project facts (layout, where the site runs, boundaries) are in AGENTS.md.
   commit. Do not answer a clear build request with option lists, theory or questions.
 - Ask only when different readings would lead to materially different work, and then ask one thing.
 
-## Work with Numa, not around Numa: minimise waste on both sides (Numa, 1 November 2026)
-- Ask what is the best use of each of us. Claude is fast at code, measurement and checks; Numa's eye is the judge of how a page looks
-  and feels. Do not spend Numa's tokens guessing what only Numa can see.
-- Visual and feel work (line breaks, spacing, sizes, colours, how strong an effect looks, animation speed): one attempt at most, then
-  stop and build a tuner, a `?tune=1` panel on the page itself with a slider or toggle for each parameter that matters, the live result,
-  and a "Copy settings" button. Numa finds the values; Claude writes them into the code once and checks them once. Use the skill
-  `.claude/skills/tune-with-numa/SKILL.md`.
-- Before such work, say in two lines what the knobs are and ask: "tune it yourself, or shall I pick?" Ask Numa for a screenshot of what
-  Numa sees rather than reconstructing it with probe scripts.
-- No pile of throwaway scripts. A script is written only to measure what cannot be seen, and its purpose is said in one line first.
-- After each round: what changed, one screenshot, the one decision needed. When a loop is not converging after two rounds, stop and say so.
-- Help Numa prompt: when a request is ambiguous or will be costly, say so in one line and offer the sharper prompt (template in the skill).
+## Eyes-on work is played together, like a game: a strict rule (Numa, 1 November 2026)
+- **The rule.** Whenever a task needs sight, judgement by eye, or many screenshots and tool calls to get right, but Numa could see or
+  set it in a second by looking (where a line breaks, a gap, a size, a colour, how strong an effect looks, an animation's speed, "does
+  this look right"), Claude does **not** grind through it alone. No screenshot loops, no probe scripts to reconstruct what Numa sees.
+- **Instead, Claude stops at once and says so** in one line ("this is eyes-on work; let's play it"), then sets up the game: an
+  interactive session on the page itself, `?tune=1`, with sliders, toggles, menus or drag handles for the few things that matter,
+  coarse steps (low, mid, high is often enough), the result live, and a "Copy settings" button.
+- **Numa plays, Claude builds and applies.** Numa turns the knobs on a phone or laptop, presses Copy settings and pastes the line back;
+  Claude writes those values in once, checks once, and deploys. If Numa only needs to look, Claude asks for a screenshot or a
+  one-line verdict instead of taking twenty of its own.
+- **Why:** each of us does what costs nothing: Claude writes code and checks numbers; Numa sees. A glance costs no tokens, energy,
+  water or money; a screenshot loop costs all four.
+- **Both ways.** Claude helps Numa prompt better (when a request is vague or costly, say so in one line and offer the sharper prompt);
+  Numa helps Claude not waste time (screenshot, device, chosen values, a yes or no).
+- How to build the game and the prompt template: `.claude/skills/tune-with-numa/SKILL.md`.
 
 ## Talk plainly
 - Short sentences, everyday words. Physics pictures where they help; formulas only when asked.
