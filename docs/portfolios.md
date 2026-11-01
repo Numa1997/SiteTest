@@ -371,30 +371,30 @@ of about 98 J (`checks/energy_books.cjs`); halving the time step changes the pea
 
 ### Air (1 November 2026)
 
-The menu **Air** beside Drop (off, real air, 4× denser, 16× denser) reopens the page with `?air=1`, `2` or `3` (or without) and computes
-the run again. Off, the model is the one described above, with no air. With air, each ball feels the drag of a real 1 kg ball of its
+The menu **Air** beside Drop reopens the page with `?air=1`, `2` or `3` (or without) and computes the run again. Its levels are air
+someone could meet, with sea level the most: off (vacuum, as on the Moon); 0.020 kg/m³, the ground on Mars (NASA Mars fact sheet);
+0.41 kg/m³, 10 km up (US Standard Atmosphere 1976); 1.2 kg/m³, sea level. Each ball feels the drag of a real 1 kg ball of its
 material, F = k<sub>air</sub> ½ ρ<sub>air</sub> C<sub>d</sub> A V² against its centre-of-mass velocity V (`physics.js`, `sub()`), with
-k<sub>air</sub> = 1, 4 or 16 (`air_k`); A = π (3M / 4πρ)<sup>2/3</sup> from the density of real iron (7874 kg/m³, 6.2 cm across) and of loose
-cotton wool (30 kg/m³, the notes' value, 40 cm across); ρ<sub>air</sub> = 1.2 kg/m³, C<sub>d</sub> = 0.47. The air presses on the ball's
-**front**: the drag is shared by the forward-most particle of each strip across the motion (strips 0.10 m wide for iron, 0.08 m for
-cotton), so the cotton is pushed out of shape while its weight pulls on every fibre; iron's stiff bonds only tremble. The work
-against drag, the sum of −f·v over the front particles, is stored as `Qa_*` ("given to the air"), checkpointed (`ck_Qa_*`) and entered in
-the energy books as a sixth part of the lower bar. The readouts give the touch predicted by the closed form for a rigid ball,
-t = (v<sub>t</sub>/g) arcosh(e<sup>gh/v<sub>t</sub>²</sup>), v<sub>t</sub> = √(2Mg / (k<sub>air</sub> ρ<sub>air</sub> C<sub>d</sub> A)) (`vt_*`, `t_air_*`, `v_air_*`).
+k<sub>air</sub> = ρ / 1.2 kg/m³ (`air_k`); A = π (3M / 4πρ<sub>ball</sub>)<sup>2/3</sup> from the density of real iron (7874 kg/m³, 6.2 cm
+across) and of loose cotton wool (30 kg/m³, the notes' value, 40 cm across); C<sub>d</sub> = 0.47. The air presses on the ball's front:
+the drag is shared by the forward-most particle of each strip across the motion (0.10 m for iron, 0.08 m for cotton). The work against
+drag is stored as `Qa_*` ("given to the air"), checkpointed (`ck_Qa_*`) and entered in the energy books as a sixth part of the lower
+bar. The readouts give the touch predicted by the closed form for a rigid ball, t = (v<sub>t</sub>/g) arcosh(e<sup>gh/v<sub>t</sub>²</sup>),
+v<sub>t</sub> = √(2Mg / (k<sub>air</sub> ρ<sub>air</sub> C<sub>d</sub> A)) (`vt_*`, `t_air_*`, `v_air_*`).
 
-Measured (Node and the built page, 1 November 2026):
+Measured in Node, 1 November 2026:
 
-| Air | cotton touches (rigid closed form) | at | cotton height in the fall (2.45 m at rest) | iron touches (closed form) | at | bonds broken in the fall |
+| Air | cotton touches | at | cotton height in the fall (2.45 m at rest) | iron touches | at | bonds broken in the fall |
 |---|---|---|---|---|---|---|
-| off | 1.428 s (1.428) | 14.0 m/s | 2.44–2.46 m | 1.428 s (1.428) | 14.0 m/s | 0 |
-| real | 1.513 s (1.513) | 11.9 m/s | 2.40–2.46 m | 1.430 s (1.430) | 13.9 m/s | 0 |
-| 4× | 1.795 s (1.776) | 8.1 m/s | 2.13–2.54 m | 1.436 s (1.436) | 13.8 m/s | 0 |
-| 16× | 2.790 s (2.694) | 4.2 m/s | 1.93–3.24 m | 1.461 s (1.461) | 13.1 m/s | 0 |
+| off | 1.428 s | 14.0 m/s | 2.44–2.46 m | 1.428 s | 14.0 m/s | 0 |
+| Mars, 0.020 kg/m³ | 1.429 s | 14.0 m/s | 2.44–2.46 m | 1.428 s | 14.0 m/s | 0 |
+| 10 km up, 0.41 kg/m³ | 1.456 s | 13.2 m/s | 2.44–2.46 m | 1.429 s | 14.0 m/s | 0 |
+| sea level, 1.2 kg/m³ | 1.513 s | 11.9 m/s | 2.40–2.46 m | 1.430 s | 13.9 m/s | 0 |
 
-The cotton lands later than the rigid closed form in dense air because its front is pushed in; the iron's 0.866 m height changes by
-at most 2 mm. No fibre breaks in the fall at any level: in a drop from rest the drag grows only up to the weight, so the air presses
-on the cotton no harder than a table it lies on (the notes say so, with what would tear it). The books' gap is the integrator's at
-every level (largest 0.026 J). Every new value is "identical" under the panel's Check at every level, in English, German and Arabic.
+Real air brakes the cotton (at sea level it is about 1 m above its head when the iron lands, and arrives 15 % slower) but barely
+changes its shape (5 cm at most), and breaks no fibre: in a drop from rest the drag grows only up to the weight. The cotton lands within
+0.001 s of the rigid closed form at every level. Air off is the study as before: peaks 638.6 N and 188.0 N. The books' gap is the
+integrator's at every level (largest 0.026 J); every new value is "identical" under the panel's Check.
 
 ### The plots on a phone (fixed 1 November 2026)
 

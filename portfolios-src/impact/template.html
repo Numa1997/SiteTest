@@ -208,7 +208,7 @@ function declare(){
   par("ch",P.head.ch,{symbol:"c<sub>h</sub>",units:"N·s/m",long_name:"head: damper (soft tissue)",digits:1,float:1});
   par("wc",P.head.wc,{symbol:"ω<sub>c</sub>",units:"rad/s",long_name:"skin contact: angular frequency of a particle on the plate",digits:0,float:1});
   par("zc",P.head.zc,{symbol:"ζ<sub>c</sub>",long_name:"skin contact: damping ratio",digits:2,float:1});
-  par("air_k",P.air.k,{symbol:"k<sub>air</sub>",long_name:"air: drag as a multiple of real air; 0 off, 1, 4 or 16 from the Air menu (?air=1, 2, 3)",digits:0});
+  par("air_k",P.air.k,{symbol:"k<sub>air</sub>",long_name:"air: its density as a share of sea-level air; 0 off, 0.0167 (Mars), 0.342 (10 km up) or 1 (sea level) from the Air menu (?air=1, 2, 3)",digits:4,float:1});
   par("rho_air",P.air.rho,{symbol:"ρ<sub>air</sub>",units:"kg/m³",long_name:"air: density",digits:2,float:1});
   par("Cd",P.air.Cd,{symbol:"C<sub>d</sub>",long_name:"air: drag coefficient of a sphere",digits:2,float:1});
   par("dens_iron",P.air.dens.iron,{symbol:"ρ<sub>Fe</sub>",units:"kg/m³",long_name:"air: density of real iron, for the size of a real 1 kg ball",digits:0,float:1});
@@ -496,7 +496,7 @@ function drawSim(k){
   cx.strokeStyle="#dccdb4";cx.beginPath();cx.moveTo(RULER+colW,top);cx.lineTo(RULER+colW,H-8);cx.stroke();
   const hint=document.getElementById("hint");
   hint.hidden=playing||k>0;
-  if(!hint.hidden)hint.innerHTML=`<b>${T.open1}</b> ${computed<NF?T.open2wait.replace("{p}",Math.round(100*ds.get("computed")/NF)):T.open2}`+(P.air.k?` ${T.air_hint.replace("{k}",P.air.k)}`:"");
+  if(!hint.hidden)hint.innerHTML=`<b>${T.open1}</b> ${computed<NF?T.open2wait.replace("{p}",Math.round(100*ds.get("computed")/NF)):T.open2}`+(P.air.k?` ${T.air_hint.replace("{rho}",(P.air.k*P.air.rho).toFixed(P.air.k<0.1?3:2))}`:"");
 }
 const plotGeom=(id,t0,t1)=>{const w=document.getElementById(id).getBoundingClientRect().width,h=220,L=46,B=34,Tp=26,R=10,fmax=700;
   return {w,h,L,B,Tp,R,X:t=>L+(w-L-R)*(t-t0)/(t1-t0),Y:f=>h-B-(h-B-Tp)*Math.max(0,f)/fmax}};
@@ -583,7 +583,7 @@ function frame(ts){
 function setSpeed(s){slow=s;ds.set("slow",s);for(const [id,v] of [["s1",1],["s4",4],["s20",20]])document.getElementById(id).classList.toggle("on",v===s)}
 function startDrop(){tPlay=0;playing=true;last=null}   // last = null: the first frame of a drop advances nothing, so a recorded round starts at t = 0
 document.getElementById("drop").onclick=()=>{if(playing)return;startDrop()};
-{const a=document.getElementById("air");a.title=T.air_title;   // Air: off, real, 4x, 16x; the run is computed again for the chosen air
+{const a=document.getElementById("air");a.title=T.air_title;   // Air: off, Mars, 10 km up, sea level; the run is computed again for the chosen air
   T.air_levels.forEach((n,i)=>{const o=document.createElement("option");o.value=i;o.textContent=n;a.append(o)});a.value=AIR;
   a.onchange=()=>{const u=new URL(location.href);if(+a.value)u.searchParams.set("air",a.value);else u.searchParams.delete("air");location.replace(u.href)}}
 document.getElementById("s1").onclick=()=>setSpeed(1);

@@ -7,9 +7,10 @@ const P={
        jr:0.07, kj:40, Fj:4, drep:0.06, krep:20, crep:0.4, rad:0.03, seed:5, sub:2},
   head:{mp:0.2, kh:6000, ch:62, wc:1350, zc:0.5},
   // Air (?air=1, 2, 3 on the page; off without): each ball feels the drag of a real 1 kg ball of its material,
-  // F = -k 1/2 rho Cd A |V| V on its centre-of-mass velocity V, k = 1, 4 or 16 times real air. The air pushes on the ball's front:
+  // F = -k 1/2 rho Cd A |V| V on its centre-of-mass velocity V, k = the air's density over sea-level air: 0.020 kg/m3 (the ground on
+  // Mars, NASA Mars fact sheet), 0.41 kg/m3 (10 km up, US Standard Atmosphere 1976), 1.2 kg/m3 (sea level). The air pushes on the ball's front:
   // the drag is shared by the forward-most particle of each strip across the motion, as air pressure acts on the surface it meets.
-  air:{k:0, levels:[0,1,4,16], rho:1.2, Cd:0.47, dens:{iron:7874, cot:30}, strip:{iron:0.10, cot:0.08}}
+  air:{k:0, levels:[0,0.020/1.2,0.41/1.2,1], rho:1.2, Cd:0.47, dens:{iron:7874, cot:30}, strip:{iron:0.10, cot:0.08}}
 };
 function rng(seed){return()=>{seed=(seed*16807)%2147483647;return(seed-1)/2147483646}}
 function gauss(r){let u=0;while(!u)u=r();const v=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)}
