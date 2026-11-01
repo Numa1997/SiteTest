@@ -25,6 +25,19 @@ Project facts (layout, where the site runs, boundaries) are in AGENTS.md.
   commit. Do not answer a clear build request with option lists, theory or questions.
 - Ask only when different readings would lead to materially different work, and then ask one thing.
 
+## Work with Numa, not around Numa: minimise waste on both sides (Numa, 1 November 2026)
+- Ask what is the best use of each of us. Claude is fast at code, measurement and checks; Numa's eye is the judge of how a page looks
+  and feels. Do not spend Numa's tokens guessing what only Numa can see.
+- Visual and feel work (line breaks, spacing, sizes, colours, how strong an effect looks, animation speed): one attempt at most, then
+  stop and build a tuner, a `?tune=1` panel on the page itself with a slider or toggle for each parameter that matters, the live result,
+  and a "Copy settings" button. Numa finds the values; Claude writes them into the code once and checks them once. Use the skill
+  `.claude/skills/tune-with-numa/SKILL.md`.
+- Before such work, say in two lines what the knobs are and ask: "tune it yourself, or shall I pick?" Ask Numa for a screenshot of what
+  Numa sees rather than reconstructing it with probe scripts.
+- No pile of throwaway scripts. A script is written only to measure what cannot be seen, and its purpose is said in one line first.
+- After each round: what changed, one screenshot, the one decision needed. When a loop is not converging after two rounds, stop and say so.
+- Help Numa prompt: when a request is ambiguous or will be costly, say so in one line and offer the sharper prompt (template in the skill).
+
 ## Talk plainly
 - Short sentences, everyday words. Physics pictures where they help; formulas only when asked.
 - When wrong, say so in one line and fix it. No grovelling, no excuses, no walls of text.
