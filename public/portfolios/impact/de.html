@@ -665,7 +665,7 @@ function fitAll(){
   const d=devicePixelRatio||1;DPR=d;
   W=cv.getBoundingClientRect().width;HS=W<640?430:470;H=HS+GAUGE_H;
   cv.style.height=H+"px";cv.width=W*d;cv.height=H*d;cx.setTransform(d,0,0,d,0,0);
-  for(const id of ["pZoom","pAll","en"]){const c=document.getElementById(id),r=c.getBoundingClientRect(),h=+c.getAttribute("height");c.style.height=h+"px";c.width=r.width*d;c.height=h*d;c.getContext("2d").setTransform(d,0,0,d,0,0)}
+  for(const id of ["pZoom","pAll","en"]){const c=document.getElementById(id),r=c.getBoundingClientRect(),h=+(c.dataset.h||(c.dataset.h=c.getAttribute("height")));/* the design height, read once: the attribute is overwritten below with height × dpr, and reading it again grew the plot dpr-fold on every resize (a phone fires one whenever its address bar slides) */c.style.height=h+"px";c.width=r.width*d;c.height=h*d;c.getContext("2d").setTransform(d,0,0,d,0,0)}
   if(ds){ds.set("W_px",W);ds.set("H_px",H);ds.set("HS_px",HS);ds.set("dpr",d)}
 }
 function txt(c,s,x,y,font,color,align,ltr){c.font=font;c.fillStyle=color;c.textAlign=align||"center";c.direction=(RTL&&!ltr)?"rtl":"ltr";c.fillText(s,x,y)}
@@ -807,7 +807,14 @@ function drawPlot(id,t0,t1,title,k){
   c.fillStyle="#7d1d2f";c.fillText("— "+T.iron,lx,Tp+16);c.fillStyle="#33627f";c.fillText("— "+T.cotton,lx,Tp+32);c.fillStyle="#3c6a46";c.fillText("- - "+T.weightline,lx,Tp+48);
 }
 function drawEnergy(k){
-  const cvs=document.getElementById("en"),c=cvs.getContext("2d"),w=cvs.getBoundingClientRect().width,h=250,L=RTL?14:130,R=RTL?130:14,Emax=120;
+  const cvs=document.getElementById("en"),w=cvs.getBoundingClientRect().width,L=RTL?14:130,R=RTL?130:14,Emax=120;
+  let c=cvs.getContext("2d");
+  /* the key under the bars, laid out first: as many lines as the width needs, and the canvas just tall enough for them (a fixed
+     250 px left room for one line, and a narrow phone printed the labels over each other) */
+  const names=[T.en_ke,T.en_el,T.en_head,T.en_heatball,T.en_heathead];c.font=FONT.small;
+  const key=[];let kx=0,kl=0;names.forEach((n,j)=>{const tw=c.measureText(n).width+30;if(kx&&kx+tw>w-20){kl++;kx=0}key.push({n,j,x:kx,l:kl});kx+=tw});
+  const h=232+18*(kl+1);
+  if(Math.abs(cvs.getBoundingClientRect().height-h)>0.5){cvs.style.height=h+"px";cvs.height=h*DPR;c=cvs.getContext("2d");c.setTransform(DPR,0,0,DPR,0,0)}
   c.clearRect(0,0,w,h);
   const X=e=>RTL?(w-R)-(w-L-R)*e/Emax:L+(w-L-R)*e/Emax,cols=["#ecc596","#7d1d2f","#33627f","#3c6a46","#c9783f","#b6aca1"];
   for(const [s,name,y0] of [["iron",T.iron,20],["cot",T.cotton,130]]){
@@ -822,13 +829,13 @@ function drawEnergy(k){
     c.strokeRect(Math.min(X(0),X(Math.min(acc,Emax))),y0+52,Math.abs(X(Math.min(acc,Emax))-X(0)),18);
     c.font=FONT.mono10;c.fillStyle="#3f2c23";c.direction="ltr";c.textAlign=RTL?"right":"left";
     const err=d.books[k];
-    c.fillText(`${released.toFixed(2)} J  /  ${d.Esum[k].toFixed(2)} J   (Δ = ${err>=0?"+":""}${err.toFixed(2)} J)`,RTL?w-R:L,y0+90);
+    const narrow=w<440;   /* on a phone the numbers start at the edge, not after the labels, so that they fit */
+    c.fillText(`${released.toFixed(2)} J  /  ${d.Esum[k].toFixed(2)} J   (Δ = ${err>=0?"+":""}${err.toFixed(2)} J)`,narrow?(RTL?w-6:6):(RTL?w-R:L),y0+90);
   }
-  const names=[T.en_ke,T.en_el,T.en_head,T.en_heatball,T.en_heathead];let lx=RTL?w-10:10,ly=h-10;
   c.font=FONT.small;
-  names.forEach((n,j)=>{const tw=c.measureText(n).width;if(!RTL&&lx+tw+30>w){lx=10;ly+=0}
-    if(RTL){c.fillStyle=cols[j+1];c.fillRect(lx-12,ly-10,12,12);txt(c,n,lx-16,ly,FONT.small,"#3f2c23","right");lx-=tw+30}
-    else{c.fillStyle=cols[j+1];c.fillRect(lx,ly-10,12,12);txt(c,n,lx+16,ly,FONT.small,"#3f2c23","left");lx+=tw+30}});
+  key.forEach(({n,j,x,l})=>{const ly=244+18*l;
+    if(RTL){const lx=w-10-x;c.fillStyle=cols[j+1];c.fillRect(lx-12,ly-10,12,12);txt(c,n,lx-16,ly,FONT.small,"#3f2c23","right")}
+    else{const lx=10+x;c.fillStyle=cols[j+1];c.fillRect(lx,ly-10,12,12);txt(c,n,lx+16,ly,FONT.small,"#3f2c23","left")}});
 }
 function readout(s,k,el,name){
   const d=D[s],tt=ds.get("t_touch_"+s),hit=tt>=0&&ds.get("t_now")>=tt,w=ds.get("W_now_"+s);

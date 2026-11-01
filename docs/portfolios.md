@@ -369,6 +369,17 @@ scales settle at 9.81 N; the first touch at 1.428 s equals √(2h/g); the energy
 of about 98 J (`checks/energy_books.cjs`); halving the time step changes the peaks by 0.0 % (iron) and 1.5 % (cotton)
 (`checks/step_size.cjs`).
 
+### The plots on a phone (fixed 1 November 2026)
+
+The two force plots and the energy bars are canvases sized by `fitAll()` (`template.html`). It took each plot's height from the
+canvas's `height` attribute, which it then overwrote with height × pixel density; every later call read the larger number, so on a
+phone (density 3) the plots tripled in height with each resize, and a phone resizes whenever its address bar slides away: the boxes
+"What the scale reads" and "Where the energy goes" kept growing downwards (660, 1980, 5940 px …). The design height (220 and 250 px)
+is now read once and kept in `data-h`. The energy bars' colour key now wraps into as many lines as the width needs, in both
+directions, and the canvas grows by 18 px per extra line (286 px on a 390 px phone); before, a second line was printed over the
+first. On a canvas narrower than 440 px the line of joules starts at the edge instead of after the labels, so that it fits. Checked
+at 390 px (English and Arabic) and 1440 px: heights unchanged through repeated resizes, no script errors.
+
 ### The data panel of the study
 
 Since 23 October 2026 the pages carry the site's data panel (all three, measured 29 October 2026), the same one as the eleven simulations
