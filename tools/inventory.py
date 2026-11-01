@@ -107,7 +107,6 @@ RULES = [
     (r'public/styles/i18n\.css', 'Language switch, Arabic fonts and the few right-to-left rules of the translated pages.', 'docs/styles.md'),
     (r'public/styles/([a-z]+)\.rtl\.css', lambda m: m.group(1) + '.css with left and right exchanged, for the Arabic pages; generated with rtlcss, do not edit.', 'docs/styles.md'),
     # the lecture-note review of 20 October 2026: not part of the site
-    (r'\.claude/skills/tune-with-numa/SKILL\.md', 'Claude Code skill: visual and feel changes are tuned by Numa on a ?tune=1 panel, not guessed by Claude; and how to write a sharper prompt.', 'CLAUDE.md'),
     (r'\.claude/agents/([a-z-]+)\.md', lambda m: 'Claude Code agent definition: ' + m.group(1) + ', one role of the lecture-note review.', 'docs/notes.md'),
     (r'notes/STANDARD\.md', 'The standard the lecture notes are judged against, and Numa\'s verdicts.', 'docs/notes.md'),
     (r'notes/STATUS\.md', 'Status of the lecture-note review, one row per figure.', 'docs/notes.md'),
@@ -333,7 +332,7 @@ SECTIONS = [
     ('src/', 'Template sources', None),
     ('docs/', 'Documentation', None), ('tools/', 'Tools', None),
     ('i18n/', 'Translation tables', None),
-    ('.claude/agents/', 'Agents of the lecture-note review', None), ('.claude/skills/', 'Skills for Claude Code', None),
+    ('.claude/agents/', 'Agents of the lecture-note review', None),
     ('notes/rotor-pendula/', 'Working notes of the Rotor Pendula study', None), ('notes/droplets/', 'Working notes of the Droplet Collection study', None),
     ('notes/', 'Record of the lecture-note review', None),
 ]
