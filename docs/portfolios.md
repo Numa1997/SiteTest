@@ -371,20 +371,30 @@ of about 98 J (`checks/energy_books.cjs`); halving the time step changes the pea
 
 ### Air (1 November 2026)
 
-The button **Air** beside Drop reopens the page with `?air=1` (or without it) and computes the run again. Off, the model is the one
-described above, with no air. On, each ball as a whole feels the drag of a real 1 kg ball of its material,
-F = −½ ρ<sub>air</sub> C<sub>d</sub> A |V| V on its centre-of-mass velocity V (`physics.js`, `sub()`), shared equally by its particles,
-so it slows the ball without bending it; A = π (3M / 4πρ)<sup>2/3</sup> from the density of real iron (7874 kg/m³, 6.2 cm across) and of
-loose cotton wool (30 kg/m³, the notes' value, 40 cm across); ρ<sub>air</sub> = 1.2 kg/m³, C<sub>d</sub> = 0.47, from the parameter table.
-The work against drag, ∫ F·V dt, is stored as `Qa_iron`, `Qa_cot` ("given to the air"), checkpointed (`ck_Qa_*`) and entered in the
-energy books, a sixth part of the lower bar. The readouts give the touch predicted with air by the notes' closed form,
-t = (v<sub>t</sub>/g) arcosh(e<sup>gh/v<sub>t</sub>²</sup>), with v<sub>t</sub> = √(2Mg / (ρ<sub>air</sub> C<sub>d</sub> A)) (`vt_*`, `t_air_*`, `v_air_*`).
+The menu **Air** beside Drop (off, real air, 4× denser, 16× denser) reopens the page with `?air=1`, `2` or `3` (or without) and computes
+the run again. Off, the model is the one described above, with no air. With air, each ball feels the drag of a real 1 kg ball of its
+material, F = k<sub>air</sub> ½ ρ<sub>air</sub> C<sub>d</sub> A V² against its centre-of-mass velocity V (`physics.js`, `sub()`), with
+k<sub>air</sub> = 1, 4 or 16 (`air_k`); A = π (3M / 4πρ)<sup>2/3</sup> from the density of real iron (7874 kg/m³, 6.2 cm across) and of loose
+cotton wool (30 kg/m³, the notes' value, 40 cm across); ρ<sub>air</sub> = 1.2 kg/m³, C<sub>d</sub> = 0.47. The air presses on the ball's
+**front**: the drag is shared by the forward-most particle of each strip across the motion (strips 0.10 m wide for iron, 0.08 m for
+cotton), so the cotton is pushed out of shape while its weight pulls on every fibre; iron's stiff bonds only tremble. The work
+against drag, the sum of −f·v over the front particles, is stored as `Qa_*` ("given to the air"), checkpointed (`ck_Qa_*`) and entered in
+the energy books as a sixth part of the lower bar. The readouts give the touch predicted by the closed form for a rigid ball,
+t = (v<sub>t</sub>/g) arcosh(e<sup>gh/v<sub>t</sub>²</sup>), v<sub>t</sub> = √(2Mg / (k<sub>air</sub> ρ<sub>air</sub> C<sub>d</sub> A)) (`vt_*`, `t_air_*`, `v_air_*`).
 
-Measured (Node and the built page, 1 November 2026): iron touches at 1.42992 s against 1.42989 s predicted, at 13.946 m/s against
-13.947, giving 0.86 J to the air; cotton touches at 1.5128 s against 1.5132 s, at 11.860 m/s against 11.862, giving 27.7 J to the
-air by the touch (its lost motion energy, ½(14.007² − 11.860²) = 27.8 J); its peak force falls from 188 N to 134 N. The books' gap is
-the integrator's as before (iron 0.18 J at 2 s with or without air). Every new value is "identical" under the panel's Check,
-including Q<sub>air</sub> rerun from a checkpoint with air on.
+Measured (Node and the built page, 1 November 2026):
+
+| Air | cotton touches (rigid closed form) | at | cotton height in the fall (2.45 m at rest) | iron touches (closed form) | at | bonds broken in the fall |
+|---|---|---|---|---|---|---|
+| off | 1.428 s (1.428) | 14.0 m/s | 2.44–2.46 m | 1.428 s (1.428) | 14.0 m/s | 0 |
+| real | 1.513 s (1.513) | 11.9 m/s | 2.40–2.46 m | 1.430 s (1.430) | 13.9 m/s | 0 |
+| 4× | 1.795 s (1.776) | 8.1 m/s | 2.13–2.54 m | 1.436 s (1.436) | 13.8 m/s | 0 |
+| 16× | 2.790 s (2.694) | 4.2 m/s | 1.93–3.24 m | 1.461 s (1.461) | 13.1 m/s | 0 |
+
+The cotton lands later than the rigid closed form in dense air because its front is pushed in; the iron's 0.866 m height changes by
+at most 2 mm. No fibre breaks in the fall at any level: in a drop from rest the drag grows only up to the weight, so the air presses
+on the cotton no harder than a table it lies on (the notes say so, with what would tear it). The books' gap is the integrator's at
+every level (largest 0.026 J). Every new value is "identical" under the panel's Check at every level, in English, German and Arabic.
 
 ### The plots on a phone (fixed 1 November 2026)
 

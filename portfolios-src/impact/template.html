@@ -42,6 +42,8 @@ h2 .num{font:500 13px var(--f-mono);background:var(--wine);color:#fff;border-rad
 button.on{background:var(--wine);color:#fff}
   .hint{border:1.5px solid var(--wine-deep);background:var(--paper);border-radius:8px;padding:8px 12px;margin-bottom:10px;color:var(--wine-deep)}
 .hint b{font-weight:500}
+.airsel{font:500 14px var(--f-body);color:var(--wine-deep);white-space:nowrap}
+.airsel select{font:inherit;color:inherit;background:var(--paper);border:1.5px solid var(--line);border-radius:8px;padding:5px 8px}
 button.go{background:var(--wine-deep);color:#fff;font-size:16px;padding:8px 22px}
 button:disabled{opacity:.55;cursor:wait}
 .small{font-size:14px;color:var(--muted)}
@@ -92,7 +94,7 @@ a{color:var(--wine)}
     <button id="s1" data-t="speed1"></button>
     <button id="s4" class="on" data-t="speed4"></button>
     <button id="s20" data-t="speed20"></button>
-    <button id="air"></button>
+    <label class="airsel"><span data-t="air_label"></span> <select id="air"></select></label>
     <span class="small" id="clock"></span>
   </div>
   <div class="two">
@@ -160,7 +162,7 @@ const kOf=t=>t<=T1?Math.round(t/1e-3):Math.min(NF-1,NF1+Math.round((t-T1)/2e-3))
 const CK=125,NCK=Math.floor((NF-1)/CK)+1;   // a full-state checkpoint every 125 samples: Check reruns the model from the one before a sample
 const W0=4.0,WSHOW=6.5,KW0=kOf(W0);         // the scale's weight: average of its reading from 4 s on, shown from 6.5 s
 const BALLS=["iron","cot"];
-P.air.on=new URLSearchParams(location.search).get("air")==="1"?1:0;   // the Air button reopens the page with ?air=1 (or without)
+const AIR=Math.max(0,Math.min(3,+new URLSearchParams(location.search).get("air")||0));P.air.k=P.air.levels[AIR];   // the Air menu reopens the page with ?air=1, 2 or 3
 let iron,cot,body={},computed=0,steps=0,playing=false,tPlay=0,slow=4,last=null,ds,D={},wsum={iron:0,cot:0},wcnt={iron:0,cot:0},tStart=0;
 
 // ---------------- the store: every number of the run is written into it where it is computed (scripts/dataset.js) ----------------
@@ -206,7 +208,7 @@ function declare(){
   par("ch",P.head.ch,{symbol:"c<sub>h</sub>",units:"N·s/m",long_name:"head: damper (soft tissue)",digits:1,float:1});
   par("wc",P.head.wc,{symbol:"ω<sub>c</sub>",units:"rad/s",long_name:"skin contact: angular frequency of a particle on the plate",digits:0,float:1});
   par("zc",P.head.zc,{symbol:"ζ<sub>c</sub>",long_name:"skin contact: damping ratio",digits:2,float:1});
-  par("air_on",P.air.on,{symbol:"air",long_name:"air drag: 1 on (the page opened with ?air=1), 0 off",digits:0});
+  par("air_k",P.air.k,{symbol:"k<sub>air</sub>",long_name:"air: drag as a multiple of real air; 0 off, 1, 4 or 16 from the Air menu (?air=1, 2, 3)",digits:0});
   par("rho_air",P.air.rho,{symbol:"ρ<sub>air</sub>",units:"kg/m³",long_name:"air: density",digits:2,float:1});
   par("Cd",P.air.Cd,{symbol:"C<sub>d</sub>",long_name:"air: drag coefficient of a sphere",digits:2,float:1});
   par("dens_iron",P.air.dens.iron,{symbol:"ρ<sub>Fe</sub>",units:"kg/m³",long_name:"air: density of real iron, for the size of a real 1 kg ball",digits:0,float:1});
@@ -226,11 +228,11 @@ function declare(){
   v("ntri_cot",[],"int",{symbol:"n<sub>bend</sub>",long_name:"cotton: bending joints",computed_in:"makeCotton()",digits:0});ds.set("ntri_cot",cot.ntri);
   v("aj_cot",[],"float",{symbol:"α<sub>j</sub>",units:"1/m",long_name:"cotton: junction Morse width parameter",computed_in:"makeCotton()",formula:"k<sub>j</sub> / (4F<sub>j</sub>)",digits:3});ds.set("aj_cot",P.cot.kj/(4*P.cot.Fj));
   v("Dj_cot",[],"float",{symbol:"D<sub>j</sub>",units:"J",long_name:"cotton: junction Morse depth",computed_in:"makeCotton()",formula:"2F<sub>j</sub> / α<sub>j</sub>",digits:4});ds.set("Dj_cot",2*P.cot.Fj/ds.get("aj_cot"));
-  for(const s of BALLS){const b=body[s],nm=s==="iron"?"iron":"cotton",vt=Math.sqrt(2*P.M*P.g/(P.air.rho*P.air.Cd*b.Aair));
+  for(const s of BALLS){const b=body[s],nm=s==="iron"?"iron":"cotton",vt=Math.sqrt(2*P.M*P.g/(P.air.k*P.air.rho*P.air.Cd*b.Aair));
     v("A_"+s,[],"float",{symbol:"A",units:"m²",long_name:nm+": cross-section of a real 1 kg ball of this material, met by the air",computed_in:"newBody()",formula:"π (3M / 4πρ)<sup>2/3</sup>",digits:6});ds.set("A_"+s,b.Aair);
-    v("vt_"+s,[],"float",{symbol:"v<sub>t</sub>",units:"m/s",long_name:nm+": terminal speed in air, where drag equals weight",computed_in:"declare()",formula:"√(2Mg / (ρ<sub>air</sub> C<sub>d</sub> A))",digits:3});ds.set("vt_"+s,vt);
-    v("t_air_"+s,[],"float",{symbol:"t*<sub>air</sub>",units:"s",long_name:nm+": first touch predicted with air drag (closed form)",computed_in:"declare()",formula:"(v<sub>t</sub>/g) arcosh(e<sup>gh/v<sub>t</sub>²</sup>)",digits:4});ds.set("t_air_"+s,vt/P.g*Math.acosh(Math.exp(P.g*P.h/vt/vt)));
-    v("v_air_"+s,[],"float",{symbol:"v*<sub>air</sub>",units:"m/s",long_name:nm+": speed at that touch, with air drag (closed form)",computed_in:"declare()",formula:"v<sub>t</sub> √(1 − e<sup>−2gh/v<sub>t</sub>²</sup>)",digits:4});ds.set("v_air_"+s,vt*Math.sqrt(1-Math.exp(-2*P.g*P.h/vt/vt)));
+    v("vt_"+s,[],"float",{symbol:"v<sub>t</sub>",units:"m/s",long_name:nm+": terminal speed in this air, where drag equals weight (infinite with air off)",computed_in:"declare()",formula:"√(2Mg / (k<sub>air</sub> ρ<sub>air</sub> C<sub>d</sub> A))",digits:3});ds.set("vt_"+s,vt);
+    v("t_air_"+s,[],"float",{symbol:"t*<sub>air</sub>",units:"s",long_name:nm+": first touch predicted with air drag (closed form)",computed_in:"declare()",formula:"(v<sub>t</sub>/g) arcosh(e<sup>gh/v<sub>t</sub>²</sup>)",digits:4});ds.set("t_air_"+s,P.air.k?vt/P.g*Math.acosh(Math.exp(P.g*P.h/vt/vt)):Math.sqrt(2*P.h/P.g));
+    v("v_air_"+s,[],"float",{symbol:"v*<sub>air</sub>",units:"m/s",long_name:nm+": speed at that touch, with air drag (closed form)",computed_in:"declare()",formula:"v<sub>t</sub> √(1 − e<sup>−2gh/v<sub>t</sub>²</sup>)",digits:4});ds.set("v_air_"+s,P.air.k?vt*Math.sqrt(1-Math.exp(-2*P.g*P.h/vt/vt)):Math.sqrt(2*P.g*P.h));
   }
   v("t_star",[],"float",{symbol:"t*",units:"s",long_name:"first touch predicted by Newton for a free fall",computed_in:"declare()",formula:"√(2h/g)",digits:4});ds.set("t_star",Math.sqrt(2*P.h/P.g));
   v("v_star",[],"float",{symbol:"v*",units:"m/s",long_name:"speed at that touch",computed_in:"declare()",formula:"√(2gh)",digits:4});ds.set("v_star",Math.sqrt(2*P.g*P.h));
@@ -494,7 +496,7 @@ function drawSim(k){
   cx.strokeStyle="#dccdb4";cx.beginPath();cx.moveTo(RULER+colW,top);cx.lineTo(RULER+colW,H-8);cx.stroke();
   const hint=document.getElementById("hint");
   hint.hidden=playing||k>0;
-  if(!hint.hidden)hint.innerHTML=`<b>${T.open1}</b> ${computed<NF?T.open2wait.replace("{p}",Math.round(100*ds.get("computed")/NF)):T.open2}`+(P.air.on?` ${T.air_hint}`:"");
+  if(!hint.hidden)hint.innerHTML=`<b>${T.open1}</b> ${computed<NF?T.open2wait.replace("{p}",Math.round(100*ds.get("computed")/NF)):T.open2}`+(P.air.k?` ${T.air_hint.replace("{k}",P.air.k)}`:"");
 }
 const plotGeom=(id,t0,t1)=>{const w=document.getElementById(id).getBoundingClientRect().width,h=220,L=46,B=34,Tp=26,R=10,fmax=700;
   return {w,h,L,B,Tp,R,X:t=>L+(w-L-R)*(t-t0)/(t1-t0),Y:f=>h-B-(h-B-Tp)*Math.max(0,f)/fmax}};
@@ -525,14 +527,14 @@ function drawEnergy(k){
   let c=cvs.getContext("2d");
   /* the key under the bars, laid out first: as many lines as the width needs, and the canvas just tall enough for them (a fixed
      250 px left room for one line, and a narrow phone printed the labels over each other) */
-  const names=[T.en_ke,T.en_el,T.en_head,T.en_heatball,T.en_heathead].concat(P.air.on?[T.en_heatair]:[]);c.font=FONT.small;
+  const names=[T.en_ke,T.en_el,T.en_head,T.en_heatball,T.en_heathead].concat(P.air.k?[T.en_heatair]:[]);c.font=FONT.small;
   const key=[];let kx=0,kl=0;names.forEach((n,j)=>{const tw=c.measureText(n).width+30;if(kx&&kx+tw>w-20){kl++;kx=0}key.push({n,j,x:kx,l:kl});kx+=tw});
   const h=232+18*(kl+1);
   if(Math.abs(cvs.getBoundingClientRect().height-h)>0.5){cvs.style.height=h+"px";cvs.height=h*DPR;c=cvs.getContext("2d");c.setTransform(DPR,0,0,DPR,0,0)}
   c.clearRect(0,0,w,h);
   const X=e=>RTL?(w-R)-(w-L-R)*e/Emax:L+(w-L-R)*e/Emax,cols=["#ecc596","#7d1d2f","#33627f","#3c6a46","#c9783f","#b6aca1","#8fb3c9"];
   for(const [s,name,y0] of [["iron",T.iron,20],["cot",T.cotton,130]]){
-    const d=D[s],released=d.Ein[k],parts=[d.KE[k],d.El[k],d.Eh[k],d.Qb[k],d.Qh[k]].concat(P.air.on?[d.Qa[k]]:[]);
+    const d=D[s],released=d.Ein[k],parts=[d.KE[k],d.El[k],d.Eh[k],d.Qb[k],d.Qh[k]].concat(P.air.k?[d.Qa[k]]:[]);
     const ax=RTL?w-6:6,al=RTL?"right":"left";
     txt(c,name,ax,y0+12,FONT.titleSmall,"#5a0f21",al);
     txt(c,T.en_in,ax,y0+37,FONT.small,"#6f5b4c",al);
@@ -556,12 +558,12 @@ function readout(s,k,el,name){
   el.innerHTML=`<b>${name}</b><table>
   <tr><td>${T.r_mass}</td><td class="v">${ds.get("M").toFixed(3)} kg</td></tr>
   <tr><td>${T.r_contact}</td><td class="v">${hit?tt.toFixed(3)+" s":"…"}</td></tr>
-  <tr><td>${P.air.on?T.r_pred_air:T.r_pred}</td><td class="v">${ds.get(P.air.on?"t_air_"+s:"t_star").toFixed(3)} s</td></tr>
+  <tr><td>${P.air.k?T.r_pred_air:T.r_pred}</td><td class="v">${ds.get(P.air.k?"t_air_"+s:"t_star").toFixed(3)} s</td></tr>
   <tr><td>${T.r_peak}</td><td class="v">${ds.get("Fmax_now_"+s).toFixed(0)} N</td></tr>
   <tr><td>${T.r_kg}</td><td class="v">${ds.get("kgpeak_now_"+s).toFixed(1)} kg</td></tr>
   <tr><td>${T.r_weight}</td><td class="v">${w!==w?(hit?T.r_settling:"…"):w.toFixed(2)+" N = "+ds.get("kgw_now_"+s).toFixed(3)+" kg"}</td></tr>
   <tr><td>${T.r_heatball}</td><td class="v">${d.Qb[k].toFixed(1)} J</td></tr>
-  <tr><td>${T.r_heathead}</td><td class="v">${d.Qh[k].toFixed(1)} J</td></tr>${P.air.on?`
+  <tr><td>${T.r_heathead}</td><td class="v">${d.Qh[k].toFixed(1)} J</td></tr>${P.air.k?`
   <tr><td>${T.r_heatair}</td><td class="v">${d.Qa[k].toFixed(1)} J</td></tr>`:""}</table>`;
 }
 function frame(ts){
@@ -581,8 +583,9 @@ function frame(ts){
 function setSpeed(s){slow=s;ds.set("slow",s);for(const [id,v] of [["s1",1],["s4",4],["s20",20]])document.getElementById(id).classList.toggle("on",v===s)}
 function startDrop(){tPlay=0;playing=true;last=null}   // last = null: the first frame of a drop advances nothing, so a recorded round starts at t = 0
 document.getElementById("drop").onclick=()=>{if(playing)return;startDrop()};
-{const a=document.getElementById("air");a.textContent=P.air.on?T.air_on:T.air_off;a.title=T.air_title;a.classList.toggle("on",!!P.air.on);a.setAttribute("aria-pressed",P.air.on?"true":"false");
-  a.onclick=()=>{const u=new URL(location.href);if(P.air.on)u.searchParams.delete("air");else u.searchParams.set("air","1");location.replace(u.href)}}   // the run is computed again, with or without air
+{const a=document.getElementById("air");a.title=T.air_title;   // Air: off, real, 4x, 16x; the run is computed again for the chosen air
+  T.air_levels.forEach((n,i)=>{const o=document.createElement("option");o.value=i;o.textContent=n;a.append(o)});a.value=AIR;
+  a.onchange=()=>{const u=new URL(location.href);if(+a.value)u.searchParams.set("air",a.value);else u.searchParams.delete("air");location.replace(u.href)}}
 document.getElementById("s1").onclick=()=>setSpeed(1);
 document.getElementById("s4").onclick=()=>setSpeed(4);
 document.getElementById("s20").onclick=()=>setSpeed(20);

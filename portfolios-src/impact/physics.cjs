@@ -6,9 +6,10 @@ const P={
   cot:{R:1.3, nf:18, nb:34, s:0.08, turn:0.35, kax:300, kb:0.25, cb:0.004, c:0.3,
        jr:0.07, kj:40, Fj:4, drep:0.06, krep:20, crep:0.4, rad:0.03, seed:5, sub:2},
   head:{mp:0.2, kh:6000, ch:62, wc:1350, zc:0.5},
-  // Air (off unless the page is opened with ?air=1): each ball as a whole feels the drag of a real 1 kg ball of its material,
-  // F = -1/2 rho Cd A |V| V on its centre-of-mass velocity V, shared equally by its particles; A from the real ball's size.
-  air:{on:0, rho:1.2, Cd:0.47, dens:{iron:7874, cot:30}}
+  // Air (?air=1, 2, 3 on the page; off without): each ball feels the drag of a real 1 kg ball of its material,
+  // F = -k 1/2 rho Cd A |V| V on its centre-of-mass velocity V, k = 1, 4 or 16 times real air. The air pushes on the ball's front:
+  // the drag is shared by the forward-most particle of each strip across the motion, as air pressure acts on the surface it meets.
+  air:{k:0, levels:[0,1,4,16], rho:1.2, Cd:0.47, dens:{iron:7874, cot:30}, strip:{iron:0.10, cot:0.08}}
 };
 function rng(seed){return()=>{seed=(seed*16807)%2147483647;return(seed-1)/2147483646}}
 function gauss(r){let u=0;while(!u)u=r();const v=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)}
@@ -160,11 +161,20 @@ function sub(b,dt){
   const H=P.head,{x,y,u,v,fx,fy}=b,N=b.N,m=b.m;
   for(let i=0;i<N;i++){fx[i]=0;fy[i]=-m*P.g}                      // Newton: weight on every particle
   b.Pair=0;
-  if(P.air.on){                                                      // air drag on the ball as a whole, shared by its particles
+  if(P.air.k){                                                       // air drag on the ball, pressed on its front
     let U=0,V=0;for(let i=0;i<N;i++){U+=u[i];V+=v[i]}U/=N;V/=N;
-    const c=0.5*P.air.rho*P.air.Cd*b.Aair*Math.hypot(U,V),Fx=-c*U,Fy=-c*V;
-    for(let i=0;i<N;i++){fx[i]+=Fx/N;fy[i]+=Fy/N}
-    b.Pair=-(Fx*U+Fy*V);                                             // power given to the air: the sum of f_i . v_i = F . V
+    const sp=Math.hypot(U,V);
+    if(sp>1e-9){
+      const ex=U/sp,ey=V/sp,Fd=P.air.k*0.5*P.air.rho*P.air.Cd*b.Aair*sp*sp,w=P.air.strip[b.kind==='iron'?'iron':'cot'];
+      let pmin=Infinity;for(let i=0;i<N;i++)pmin=Math.min(pmin,-x[i]*ey+y[i]*ex);   // position across the motion
+      const front=b.front||(b.front=new Int32Array(N)),best=b.best||(b.best=new Float64Array(N));front.fill(-1);
+      let nb=0;for(let i=0;i<N;i++){const j=Math.floor((-x[i]*ey+y[i]*ex-pmin)/w),q=x[i]*ex+y[i]*ey;   // q: how far forward
+        if(front[j]<0){front[j]=i;best[j]=q;nb=Math.max(nb,j+1)}else if(q>best[j]){front[j]=i;best[j]=q}}
+      let ns=0;for(let j=0;j<nb;j++)if(front[j]>=0)ns++;
+      const f=Fd/ns;let Pw=0;
+      for(let j=0;j<nb;j++){const i=front[j];if(i<0)continue;fx[i]-=f*ex;fy[i]-=f*ey;Pw+=f*(ex*u[i]+ey*v[i])}
+      b.Pair=Pw;                                                     // power given to the air: the sum of -f_i . v_i over the front
+    }
   }
   b.Pd=0;b.Pdh=0;b.Ebend=0;b.Erep=0;
   bondForces(b);

@@ -78,7 +78,7 @@ function curveBack(s,n){
 const PMAP={g:"g",h:"h",M:"M",dt:"dt",tmax:"tmax",a_iron:"iron.a",R_iron:"iron.R",k_iron:"iron.k",ar0:"iron.ar0",c_iron:"iron.c",rad_iron:"iron.rad",sub_iron:"iron.sub",
   R_cot:"cot.R",nf:"cot.nf",nb:"cot.nb",s_cot:"cot.s",turn:"cot.turn",kax:"cot.kax",kb:"cot.kb",cb:"cot.cb",c_cot:"cot.c",jr:"cot.jr",kj:"cot.kj",Fj:"cot.Fj",drep:"cot.drep",krep:"cot.krep",crep:"cot.crep",
   rad_cot:"cot.rad",seed:"cot.seed",sub_cot:"cot.sub",mp:"head.mp",kh:"head.kh",ch:"head.ch",wc:"head.wc",zc:"head.zc",
-  air_on:"air.on",rho_air:"air.rho",Cd:"air.Cd",dens_iron:"air.dens.iron",dens_cot:"air.dens.cot"};
+  air_k:"air.k",rho_air:"air.rho",Cd:"air.Cd",dens_iron:"air.dens.iron",dens_cot:"air.dens.cot"};
 const G=n=>ds.get(n),I=(sy,v,u,d)=>[sy,v,u||"",d===undefined?6:d];
 const check={};
 for(const n in PMAP)check[n]=()=>({formula:"the constant P."+PMAP[n]+" in the model",inputs:[],value:PMAP[n].split(".").reduce((o,k)=>o[k],P)});
@@ -129,9 +129,9 @@ for(const s of BALLS){
     ["ck_Qh_"+s]:c=>{const r=replayCk(s,c);return {formula:howRerun(r,s),inputs:[I("c",c,"",0)],value:r.b.heatHead}},
     ["ck_Qa_"+s]:c=>{const r=replayCk(s,c);return {formula:howRerun(r,s),inputs:[I("c",c,"",0)],value:r.b.heatAir}},
     ["A_"+s]:fromBuild(s,b=>b.Aair,"cross-section of a real 1 kg ball, π (3M / 4πρ)^(2/3)"),
-    ["vt_"+s]:()=>({formula:"√(2Mg / (ρ<sub>air</sub> C<sub>d</sub> A))",inputs:[I("M",G("M"),"kg",3),I("g",G("g"),"m/s²",2),I("ρ<sub>air</sub>",G("rho_air"),"kg/m³",2),I("C<sub>d</sub>",G("Cd"),"",2),I("A",G("A_"+s),"m²")],value:Math.sqrt(2*G("M")*G("g")/(G("rho_air")*G("Cd")*G("A_"+s)))}),
-    ["t_air_"+s]:()=>{const vt=G("vt_"+s),g=G("g"),h=G("h");return {formula:"(v<sub>t</sub>/g) arcosh(e<sup>gh/v<sub>t</sub>²</sup>)",inputs:[I("v<sub>t</sub>",vt,"m/s",3),I("g",g,"m/s²",2),I("h",h,"m",2)],value:vt/g*Math.acosh(Math.exp(g*h/vt/vt))}},
-    ["v_air_"+s]:()=>{const vt=G("vt_"+s),g=G("g"),h=G("h");return {formula:"v<sub>t</sub> √(1 − e<sup>−2gh/v<sub>t</sub>²</sup>)",inputs:[I("v<sub>t</sub>",vt,"m/s",3),I("g",g,"m/s²",2),I("h",h,"m",2)],value:vt*Math.sqrt(1-Math.exp(-2*g*h/vt/vt))}},
+    ["vt_"+s]:()=>({formula:"√(2Mg / (k<sub>air</sub> ρ<sub>air</sub> C<sub>d</sub> A))",inputs:[I("M",G("M"),"kg",3),I("g",G("g"),"m/s²",2),I("k<sub>air</sub>",G("air_k"),"",0),I("ρ<sub>air</sub>",G("rho_air"),"kg/m³",2),I("C<sub>d</sub>",G("Cd"),"",2),I("A",G("A_"+s),"m²")],value:Math.sqrt(2*G("M")*G("g")/(G("air_k")*G("rho_air")*G("Cd")*G("A_"+s)))}),
+    ["t_air_"+s]:()=>{const vt=G("vt_"+s),g=G("g"),h=G("h");return {formula:"(v<sub>t</sub>/g) arcosh(e<sup>gh/v<sub>t</sub>²</sup>); √(2h/g) with air off",inputs:[I("v<sub>t</sub>",vt,"m/s",3),I("g",g,"m/s²",2),I("h",h,"m",2)],value:G("air_k")?vt/g*Math.acosh(Math.exp(g*h/vt/vt)):Math.sqrt(2*h/g)}},
+    ["v_air_"+s]:()=>{const vt=G("vt_"+s),g=G("g"),h=G("h");return {formula:"v<sub>t</sub> √(1 − e<sup>−2gh/v<sub>t</sub>²</sup>); √(2gh) with air off",inputs:[I("v<sub>t</sub>",vt,"m/s",3),I("g",g,"m/s²",2),I("h",h,"m",2)],value:G("air_k")?vt*Math.sqrt(1-Math.exp(-2*g*h/vt/vt)):Math.sqrt(2*g*h)}},
     ["ck_ti_"+s]:c=>{const r=replayCk(s,c);return {formula:howRerun(r,s),inputs:[I("c",c,"",0)],value:r.b.tImpact===null?NaN:r.b.tImpact}},
     ["ck_alive_"+s]:idx=>{const nb=G("nbond_"+s),r=replayCk(s,Math.floor(idx/nb));return {formula:howRerun(r,s),inputs:[I("bond",idx%nb,"",0)],value:r.b.alive[idx%nb]}},
     ["F_now_"+s]:atNow("F_"+s,"F"),["Fmax_now_"+s]:atNow("Fmax_"+s,"F<sub>peak</sub>"),["yp_now_"+s]:atNow("yp_"+s,"y<sub>p</sub>"),["KE_now_"+s]:atNow("KE_"+s,"K"),["books_now_"+s]:atNow("books_"+s,"Δ"),
