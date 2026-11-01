@@ -1,12 +1,28 @@
 ---
 name: tune-with-numa
-description: Use for any change judged by eye on Phyein Usul (layout, line breaks, spacing, sizes, colours, how strong an effect looks, animation speed, "make it look right"). Instead of iterating alone with screenshots, build a ?tune=1 panel with live sliders, let Numa find the values, then apply them once. Also how to help Numa write sharper prompts.
+description: Use for any change judged by eye on Phyein Usul (layout, line breaks, spacing, sizes, colours, how strong an effect looks, animation speed, "make it look right"), and whenever a fix loop is not converging. Stop and review; instead of iterating alone with screenshots and scripts, build a ?tune=1 panel with live sliders, include Numa, let Numa find the values, then apply them once. Also how Claude helps Numa prompt better and how Numa helps Claude not waste time.
 ---
 
 # Tune with Numa
 
 Numa's rule (1 November 2026): minimise waste on both sides. Claude builds and measures; Numa's eye decides how it looks.
 Seven rounds of "build, screenshot, find a flaw, patch" cost more than one tuner and two minutes of Numa's time.
+
+## The deal, in Numa's words
+
+1. **Stop and review.** Before each new round, ask: is what I am doing now ridiculous? If it is, stop, say so in one line, and
+   change the method instead of trying harder.
+2. **Visual edits are done differently:** not by Claude guessing, but on a human interface, a `?tune=1` panel where Numa tests
+   and finds the right parameters.
+3. **Include Numa** in any edit judged by eye, from the start, not after five rounds.
+4. **Best use of one another.** Always ask: what is Claude fast at (code, measurement, checks), and what can only Numa do (see,
+   judge, decide)? Give each the part they are good at.
+5. **No endless scripts.** Never write a script without knowing what it is for; say its purpose in one line first. No pile of
+   throwaway probes.
+6. **Minimise waste on both sides.**
+7. **Claude helps Numa prompt better:** when a request is vague or costly, say so in one line and offer the sharper prompt (below).
+8. **Numa helps Claude not waste time:** Claude asks for what only Numa has (a screenshot, the device, the values from the tuner, a
+   yes or no) instead of reconstructing it.
 
 ## When this applies
 

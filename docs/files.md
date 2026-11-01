@@ -807,7 +807,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
-| [`.claude/skills/tune-with-numa/SKILL.md`](../.claude/skills/tune-with-numa/SKILL.md) | 5.5 kB | Claude Code skill: visual and feel changes are tuned by Numa on a ?tune=1 panel, not guessed by Claude; and how to write a sharper prompt. | [CLAUDE.md](../CLAUDE.md) |
+| [`.claude/skills/tune-with-numa/SKILL.md`](../.claude/skills/tune-with-numa/SKILL.md) | 6.7 kB | Claude Code skill: visual and feel changes are tuned by Numa on a ?tune=1 panel, not guessed by Claude; and how to write a sharper prompt. | [CLAUDE.md](../CLAUDE.md) |
 
 ## Working notes of the Rotor Pendula study
 
