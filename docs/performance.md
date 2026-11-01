@@ -496,12 +496,12 @@ first, then fixed, then checked again; the commands are given so that anyone can
 | `node notes/walkcheck.cjs` found 754 of 759 quoted lines: five walkthrough lines (Figs. 3, 4, 5) quoted code whose words had since been wrapped in `_t()`. | 754 of 759. | The five quotes updated; the German and Arabic walkthroughs regenerated (their code is copied from the English). | 759 of 759. |
 | `font-src` allowed `data:` fonts, which no page has used since change 1. | No served page or script makes a font from a `data:` address. | `font-src 'self'` on all 51 pages (`index.html`, from which the builders copy it, and every page). | Every page at 390 and 1440 px, study tabs opened: no blocked font, no failed font, no console error. |
 
-Two found faults are not fixed here, because each is a choice for Numa rather than a repair:
+One found fault is not fixed here, because it is a choice for Numa rather than a repair (the other, the wide equations, is fixed):
 
-- **Display equations wider than their box**: `node notes/verify.mjs` finds 21, one at 1440 px (Fig. 2, equation 8) and 20 at 1600
-  px (Figs. 2, 6, 8, 9 and 11), not six. At 1500 px and wider the data panel opens beside the page and takes 640 px, so the
-  note's column is 541 to 579 px instead of 671; the equation scrolls inside its box and its number is out of sight until the
-  reader scrolls.
+- **Display equations wider than their box** (fixed 1 November 2026, at Numa's instruction "a long equation gets multiple rows"):
+  `node notes/verify.mjs` found 21, not six: one at 1440 px and 20 at 1600 px, where the data panel beside the page narrows the
+  note's column to 541 to 579 px; at 390 px a probe found 112. Such an equation is now set in rows ([scripts/sim.md](scripts/sim.md),
+  "Long equations"): 0 left at 1440 and 1600 px, 9 at 390 px (one fraction or matrix wider than a phone column each).
 - **The analytics beacon**: Cloudflare inserts it only for browsers (a `curl` of the page gets the page as built), and every page's
   policy (`script-src 'self' 'unsafe-inline'`) blocks it. Allowing it means sending readers' visits to Cloudflare's analytics.
 
