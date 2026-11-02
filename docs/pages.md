@@ -4,7 +4,7 @@ Four files make the frame around the eleven simulation pages:
 
 | File | Served at | Lines | What it is |
 |---|---|---|---|
-| [`index.html`](../index.html) | `/` | 1493 | The home page: the Phyein Usul logo and note, CV, projects, eleven figure plates (one per simulation), a live double pendulum. |
+| [`index.html`](../index.html) | `/` | 1579 | The home page: the Phyein Usul logo and note, CV, projects, eleven figure plates (one per simulation), a live double pendulum. |
 | [`public/simulations.html`](../public/simulations.html) | `/simulations.html` | 354 | The catalog: one fold card per simulation, search, field and year chips. |
 | [`public/portfolios.html`](../public/portfolios.html) | `/portfolios.html` | 439 | The Projects page (address `portfolios.html`, kept so old links work): the Bachelor thesis and three studies, and the links into their pages. |
 | [`public/robots.txt`](../public/robots.txt) | `/robots.txt` | 4 | Rules for search-engine crawlers. |
@@ -196,20 +196,28 @@ fades by `1 − 0.99^(dt·60)`, which removes 1 % per 1/60 s whatever the frame 
 | `sketches.pendctl` | [1342–1361](../index.html#L1342-L1361) | A double pendulum from a fixed pivot with a dashed trail, its lower ball tied by a zigzag spring (the strut) to a cart on a rail, and an arrow for the force on the cart. |
 | fill loop | [1363–1369](../index.html#L1363-L1369) | For each `.plate__fig[data-sketch]`, looks up the function by name and sets `innerHTML`; an unknown name leaves the plate blank. |
 
-**The plates as a shelf** ([1425–1491](../index.html#L1425-L1491), styles at the end of
-[site.css:888–1053](../public/styles/site.css#L888-L1053); since 2 November 2026). The eleven plates sit in one row that
-scrolls sideways and snaps plate by plate (CSS `scroll-snap-type: x mandatory`): 3 in view when the row is wider than 760 px,
-2 down to 561 px, and on a phone one plate at 82 % of the row with the edge of the next. Measured in Chromium: 218 px plates
-in a 691 px row at 1440 px, 232 of 731 at 820 px, 244 of 301 at 390 px; the page never scrolls sideways. Inside the shelf
-the plates are smaller (figure 128 px, title 19 px, text 13.5 px). The script reads which plates show at least 60 % in the
-row (an `IntersectionObserver` with the row as root), draws a dot per plate (long and wine for those in view; a click
-brings that plate to the start edge), a counter "1–3 / 11", and arrows that move by as many plates as are in view,
-disabled at either end. It fades 40 px of the edge already passed and 56 px of the edge still to come (`--fade-l`,
-`--fade-r` on a mask; `/*rtl:ignore*/` keeps the gradient physical, and the script swaps the sides on Arabic pages, where
-the row starts at the right). It also marks the plates in view `is-visible`, since the page's reveal observer cannot see
-plates clipped by the row. Without JavaScript the controls stay hidden and the row is a plain sideways scroll with its
-scrollbar; in print the plates fall back to two columns. The arrows' labels are translated pieces; the dots take their
-labels from each plate's "Fig. n".
+**The plates as a shelf** ([1425–1577](../index.html#L1425-L1577), styles at the end of
+[site.css:888–1169](../public/styles/site.css#L888-L1169); since 2 November 2026). The eleven plates sit in one row
+that scrolls sideways and snaps plate by plate (CSS `scroll-snap-type: x mandatory`): 3 in view when the row is wider than
+760 px, 2 down to 561 px, and on a phone one plate at 82 % of the row with the edge of the next. Measured in Chromium: 218 px
+plates in a 691 px row at 1440 px, 232 of 731 at 820 px, 244 of 301 at 390 px; the page never scrolls sideways. Inside the
+shelf the plates are smaller (figure 128 px, title 19 px, text 13.5 px).
+
+The script wraps the row in `div.shelf` and puts a **rail** on its end edge (the right; the left in Arabic): a pill with one
+8 px dot per plate, wine with a soft ring for the plates in view (at least 60 % showing, read by an `IntersectionObserver`
+with the row as root). The dots never change size, so they cannot move under a finger. Running the mouse along the rail, or
+pressing it and sliding a finger (scrubbing, as on the page dots of a phone's home screen; `touch-action: none` keeps the
+page still, measured 0 px of page scroll during a scrub), picks the dot nearest the pointer: the dots swell by
+$1 + 1.1\,e^{-(d/20\,\text{px})^2}$ at distance $d$, a bubble (`.shelf__tip`) beside the rail shows that plate's sketch,
+number and title, the row jumps to that plate without animation (smooth steps lag under a fast scrub), the plate gets a
+wine edge (`.is-picked`), and phones that allow it give a 4 ms tick. Each dot is also a button: a click or keyboard focus
+brings its plate smoothly. Below the row, arrows move by as many plates as are in view, disabled at either end, around a
+counter "1–3 / 11" (`.shelf__dots`, empty, is the spacer between them). The row fades 40 px of the edge already passed and
+56 px of the edge still to come (`--fade-l`, `--fade-r` on a mask; `/*rtl:ignore*/` keeps the gradient physical, and the
+script swaps the sides in Arabic). It also marks plates in view `is-visible`, since the page's reveal observer cannot see
+plates clipped by the row. Without JavaScript the rail and arrows are absent and the row is a plain sideways scroll with
+its scrollbar; in print the plates fall back to two columns. The arrows' labels are translated pieces; the dots and the
+bubble take their words from each plate's "Fig. n" and title.
 
 **Reveal on scroll and the active index link** ([1371–1422](../index.html#L1371-L1422)).
 
@@ -237,7 +245,7 @@ the eleven plate figures stay empty (only the grid background shows), and everyt
 - **Add a research project.** Copy an `article.project.reveal` in `.projects` ([247–270](../index.html#L247-L270)); the grid
   has two columns ([site.css](../public/styles/site.css)), one at 980 px and below. Keep its title, summary and project link consistent with the actual portfolio. A finished long
   project belongs on the Projects page (`portfolios.html`); label it "Bachelor thesis", "Study" or what it is, not "research" unless it is; also update the intro sentence at [237–245](../index.html#L237-L245).
-- **Add a plate.** (The shelf picks it up: one more dot, the counter counts it.) Copy an `article.plate.reveal` in `.plates` ([287–661](../index.html#L287-L661)), set `p.plate__num`, both
+- **Add a plate.** (The shelf picks it up: one more dot on the rail, the counter counts it.) Copy an `article.plate.reveal` in `.plates` ([287–661](../index.html#L287-L661)), set `p.plate__num`, both
   hrefs and the three tags, and give `.plate__fig` a `data-sketch` name. Add a function of that name to `sketches`
   ([957–1361](../index.html#L957-L1361)) returning `svg(…)`; use the classes `ink`, `acc`, `soft`, `grey`, `acc-fill`,
   `grey-fill`. Plates are written by hand: they do not read [catalog.js](../public/scripts/catalog.js), and their titles

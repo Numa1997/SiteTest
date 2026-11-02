@@ -7,7 +7,7 @@ Arabic pages, never edited by hand ([i18n.md](i18n.md)).
 
 | File | Lines | Loaded by | Job |
 |---|---|---|---|
-| [`site.css`](../public/styles/site.css) | 1053 | home, catalog, Projects | Tokens, base type, the home page (hero, timeline, plates, and since 2 November 2026 the plates as a sideways shelf with dots, lines 888–1053), footer. |
+| [`site.css`](../public/styles/site.css) | 1169 | home, catalog, Projects | Tokens, base type, the home page (hero, timeline, plates, and since 2 November 2026 the plates as a sideways shelf with a rail of dots, lines 888–1169), footer. |
 | [`sim.css`](../public/styles/sim.css) | 254 | the eleven simulation pages | Tokens again, the figure, controls, readouts, walkthrough; imports KaTeX's CSS and `paper.css`. |
 | [`paper.css`](../public/styles/paper.css) | 118 | simulation pages (through `sim.css`), catalog, Portfolios | Lecture notes set like LaTeX: Latin Modern, numbered equations, figures, boxes. |
 | [`catalog.css`](../public/styles/catalog.css) | 585 | catalog, Portfolios | Top bar, masthead, search bar, chips, catalog entries; switches titles to Instrument Serif. |

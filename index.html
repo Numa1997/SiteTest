@@ -1423,41 +1423,61 @@
       })();
     </script>
     <script>
-      /* the simulation plates as a shelf: 3, 2 or one and a bit in view (site.css, end), a dot per plate (long for those in
-         view), arrows, a counter, and a fade on the side where more plates wait. Scroll-snap does the moving, so swiping
-         and the trackpad work the same; the script only reads what is in view and asks the row to scroll. */
+      /* the simulation plates as a shelf: 3, 2 or one and a bit in view (site.css, end), arrows and a counter below, and a
+         rail of dots at the edge where the hidden plates wait, one dot per plate. Run the mouse along the rail, or press it
+         and slide a finger (scrubbing, as on the page dots of a phone's home screen): the dots swell under the pointer, a
+         bubble shows the plate's sketch and title, and the row jumps to that plate. Scroll-snap does the moving, so swiping
+         and the trackpad work as well; the script only reads what is in view and asks the row to scroll. */
       (function () {
         var shelf = document.querySelector('#simulations .plates');
         var nav = document.querySelector('#simulations .shelf-nav');
         if (!shelf || !nav || !('IntersectionObserver' in window)) return;
         var plates = [].slice.call(shelf.querySelectorAll('.plate'));
-        var dotsBox = nav.querySelector('.shelf__dots'), count = nav.querySelector('.shelf__count');
-        var btns = nav.querySelectorAll('.shelf__btn'), seen = [], first = 0, last = 0;
+        var count = nav.querySelector('.shelf__count'), btns = nav.querySelectorAll('.shelf__btn');
+        var seen = plates.map(function () { return false; }), first = 0, last = 0;
+        var still = matchMedia('(prefers-reduced-motion: reduce)');
         var rtl = function () { return getComputedStyle(shelf).direction === 'rtl'; };
-        var dots = plates.map(function (pl, i) {
+        var esc = function (t) { return t.replace(/[&<>"]/g, function (c) { return '&#' + c.charCodeAt(0) + ';'; }); };
+
+        var wrap = document.createElement('div');
+        wrap.className = 'shelf';
+        shelf.parentNode.insertBefore(wrap, shelf);
+        wrap.appendChild(shelf);
+        var rail = document.createElement('div');
+        rail.className = 'shelf__rail';
+        rail.setAttribute('role', 'group');
+        rail.setAttribute('aria-label', shelf.getAttribute('aria-label') || '');
+        var tip = document.createElement('div');
+        tip.className = 'shelf__tip';
+        tip.setAttribute('aria-hidden', 'true');
+        wrap.appendChild(rail);
+        wrap.appendChild(tip);
+
+        var info = plates.map(function (pl, i) {
+          var num = ((pl.querySelector('.plate__num') || {}).textContent || String(i + 1)).trim();
+          var h = pl.querySelector('h3'), title = h ? h.textContent.replace(/\s+/g, ' ').trim() : '';
           var b = document.createElement('button');
           b.type = 'button';
           b.className = 'shelf__dot';
-          b.setAttribute('aria-label', ((pl.querySelector('.plate__num') || {}).textContent || String(i + 1)).trim());
-          b.addEventListener('click', function () { go(i); });
-          dotsBox.appendChild(b);
-          return b;
+          b.setAttribute('aria-label', num + ': ' + title);
+          b.addEventListener('click', function () { go(i, true); });
+          b.addEventListener('focus', function () { if (!pressing && !hovering) { show(i); go(i, true); } });
+          b.addEventListener('blur', function () { if (!pressing && !hovering) hide(); });
+          rail.appendChild(b);
+          return { num: num, title: title, fig: (pl.querySelector('.plate__fig') || {}).innerHTML || '', dot: b };
         });
+
         /* bring plate i to the start edge of the row (the left edge, the right one in Arabic); snapping does the rest */
-        function go(i) {
+        function go(i, smooth) {
           i = Math.max(0, Math.min(plates.length - 1, i));
           var s = shelf.getBoundingClientRect(), p = plates[i].getBoundingClientRect();
           var dx = rtl() ? p.right - (s.right - 2) : p.left - (s.left + 2);
-          shelf.scrollBy({ left: dx, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+          shelf.scrollBy({ left: dx, behavior: smooth && !still.matches ? 'smooth' : 'auto' });
         }
         function paint() {
           first = seen.indexOf(true); last = seen.lastIndexOf(true);
           if (first < 0) return;
-          dots.forEach(function (d, i) {
-            var on = i >= first && i <= last;
-            d.classList.toggle('is-on', on);
-            if (on) d.setAttribute('aria-current', 'true'); else d.removeAttribute('aria-current');
-          });
+          info.forEach(function (o, i) { o.dot.classList.toggle('is-on', i >= first && i <= last); });
           count.textContent = (first === last ? String(first + 1) : first + 1 + '–' + (last + 1)) + ' / ' + plates.length;
           btns[0].disabled = first === 0;
           btns[1].disabled = last === plates.length - 1;
@@ -1470,9 +1490,75 @@
           });
           paint();
         }, { root: shelf, threshold: [0, 0.6, 1] });
-        plates.forEach(function (p) { seen.push(false); io.observe(p); });
-        btns[0].addEventListener('click', function () { go(first - Math.max(1, last - first + 1)); });
-        btns[1].addEventListener('click', function () { go(last + 1); });
+        plates.forEach(function (p) { io.observe(p); });
+        btns[0].addEventListener('click', function () { go(first - Math.max(1, last - first + 1), true); });
+        btns[1].addEventListener('click', function () { go(last + 1, true); });
+
+        /* the bubble beside the rail: the plate's sketch, its number and title, level with its dot */
+        var cur = -1, picked = null, hovering = false, pressing = false, hideT = 0;
+        function show(i) {
+          clearTimeout(hideT);
+          var o = info[i];
+          tip.innerHTML = '<div class="shelf__tipfig">' + o.fig + '</div><p class="shelf__tipnum">' + esc(o.num) +
+            '</p><p class="shelf__tiptitle">' + esc(o.title) + '</p>';
+          var y = rail.offsetTop + o.dot.offsetTop + o.dot.offsetHeight / 2;
+          tip.style.top = Math.max(tip.offsetHeight / 2 + 4, Math.min(wrap.clientHeight - tip.offsetHeight / 2 - 4, y)) + 'px';
+          tip.classList.add('is-on');
+          if (picked) picked.classList.remove('is-picked');
+          picked = plates[i];
+          picked.classList.add('is-picked');
+        }
+        function hide() {
+          tip.classList.remove('is-on');
+          info.forEach(function (o) { o.dot.style.transform = ''; });
+          cur = -1;
+          var p = picked;
+          hideT = setTimeout(function () { if (p) p.classList.remove('is-picked'); }, 700);
+        }
+        /* which dot is nearest the pointer, and the swelling: scale 1 + 1.1 e^(−(d/20 px)²) at distance d from it */
+        function centre(o) { return rail.getBoundingClientRect().top + o.dot.offsetTop + o.dot.offsetHeight / 2; }
+        function at(y) {
+          var best = 0, bd = Infinity;
+          info.forEach(function (o, i) { var d = Math.abs(y - centre(o)); if (d < bd) { bd = d; best = i; } });
+          return best;
+        }
+        function swell(y) {
+          if (still.matches) return;
+          var top = rail.getBoundingClientRect().top;
+          info.forEach(function (o) {
+            var d = y - (top + o.dot.offsetTop + o.dot.offsetHeight / 2);
+            o.dot.style.transform = 'scale(' + (1 + 1.1 * Math.exp(-(d * d) / 400)).toFixed(3) + ')';
+          });
+        }
+        function scrub(y, haptic) {
+          swell(y);
+          var i = at(y);
+          if (i === cur) return;
+          cur = i;
+          show(i);
+          go(i, false);
+          if (haptic && navigator.vibrate) navigator.vibrate(4);
+        }
+        rail.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse') { hovering = true; scrub(e.clientY); } });
+        rail.addEventListener('pointermove', function (e) {
+          if (e.pointerType === 'mouse' || pressing) { e.preventDefault(); scrub(e.clientY, pressing && e.pointerType !== 'mouse'); }
+        });
+        rail.addEventListener('pointerleave', function (e) { if (e.pointerType === 'mouse') { hovering = false; hide(); } });
+        rail.addEventListener('pointerdown', function (e) {
+          if (e.pointerType === 'mouse') return;
+          pressing = true;
+          try { rail.setPointerCapture(e.pointerId); } catch (x) {}
+          e.preventDefault();
+          scrub(e.clientY, true);
+        });
+        ['pointerup', 'pointercancel'].forEach(function (t) {
+          rail.addEventListener(t, function (e) {
+            if (e.pointerType === 'mouse' || !pressing) return;
+            pressing = false;
+            hideT = setTimeout(hide, 500);
+          });
+        });
+
         /* fade the edge where more plates wait: 40 px on the side already passed, 56 px on the side still to come */
         function fade() {
           var s = Math.abs(shelf.scrollLeft), max = shelf.scrollWidth - shelf.clientWidth, r = rtl();
