@@ -91,6 +91,10 @@
   "src": "Visualizations of waves, interference, classical mechanics, Fourier methods and control, written in vanilla JavaScript, React, and HTML5 Canvas. Each plate opens the live simulation in a new tab. The <a href=\"simulations.html\">simulations page</a> lists them all by field, with the question each one answers and a search.",
   "tr": "تصوّرات للأمواج والتداخل والميكانيك الكلاسيكي وطرائق فورييه والتحكّم، مكتوبة بلغة JavaScript الخالصة وReact وHTML5 Canvas. كلّ لوحة تفتح المحاكاة الحيّة في تبويب جديد. و<a href=\"simulations.html\">صفحة المحاكاة</a> تعرضها كلّها بحسب المجال، مع السؤال الذي تجيب عنه كلٌّ منها، وأداةٍ للبحث."
  },
+ "1e44fb1d6c3d": {
+  "src": "Previous simulations",
+  "tr": "المحاكاة السابقة"
+ },
  "22b8e2294018": {
   "src": "Pandas, NumPy, SciPy, TensorFlow, PyTorch",
   "tr": "Pandas، NumPy، SciPy، TensorFlow، PyTorch"
@@ -402,6 +406,10 @@
  "8adccc3872ec": {
   "src": "How this site is made",
   "tr": "كيف صُنع هذا الموقع"
+ },
+ "8c45c40d1792": {
+  "src": "Next simulations",
+  "tr": "المحاكاة التالية"
  },
  "8eaecb2b9802": {
   "src": "Dhillons Irish Pub and Grill",

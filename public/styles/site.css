@@ -885,3 +885,169 @@ footer a {
     min-height: 0;
   }
 }
+
+/* ================= the simulation plates as a shelf (since 2 November 2026) =================
+   One row that scrolls sideways and snaps plate by plate: 3 plates in view from 701 px of column, 2 below that, and on a
+   phone one plate with the edge of the next. index.html adds dots, arrows, a counter and the edge fade; without JavaScript
+   the row is a plain sideways scroll with its scrollbar. In print the plates fall back to two columns. */
+.plates {
+  grid-template-columns: none;
+  grid-auto-flow: column;
+  grid-auto-columns: calc((100% - 2 * 16px) / 3);
+  gap: 16px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: 2px;
+  padding: 8px 2px 14px;
+  margin: -8px -2px 0;
+}
+.plates > .plate {
+  scroll-snap-align: start;
+}
+.plates:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+  border-radius: 12px;
+}
+.plates .plate__fig {
+  height: 128px;
+  padding: 10px 12px 4px;
+}
+.plates .plate__body {
+  padding: 14px 16px 16px;
+}
+.plates .plate h3 {
+  font-size: 19px;
+  line-height: 1.2;
+}
+.plates .plate p {
+  font-size: 13.5px;
+  line-height: 1.55;
+}
+.plates .plate__tags .tag {
+  font-size: 10px;
+}
+.js .plates.is-shelf {
+  scrollbar-width: none;
+  /*rtl:ignore*/
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 var(--fade-l, 0px), #000 calc(100% - var(--fade-r, 0px)), transparent 100%);
+  /*rtl:ignore*/
+  mask-image: linear-gradient(to right, transparent 0, #000 var(--fade-l, 0px), #000 calc(100% - var(--fade-r, 0px)), transparent 100%);
+}
+.js .plates.is-shelf::-webkit-scrollbar {
+  display: none;
+}
+.shelf-nav {
+  display: none;
+}
+.js .shelf-nav {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 10px;
+}
+.shelf__btn {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--rule);
+  border-radius: 50%;
+  background: var(--card);
+  color: var(--accent);
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+.shelf__btn svg {
+  width: 18px;
+  height: 18px;
+}
+[dir='rtl'] .shelf__btn svg {
+  transform: scaleX(-1);
+}
+.shelf__btn:hover:not(:disabled) {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+.shelf__btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+.shelf__dots {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+  min-width: 0;
+  justify-content: center;
+}
+.shelf__dot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: 0;
+  border-radius: 4px;
+  background: var(--rule);
+  cursor: pointer;
+  transition: width 0.3s ease, background 0.3s ease;
+}
+.shelf__dot:hover {
+  background: var(--accent-rose);
+}
+.shelf__dot.is-on {
+  width: 22px;
+  background: var(--accent);
+}
+.shelf__dot:focus-visible,
+.shelf__btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.shelf__count {
+  flex: none;
+  min-width: 5.5ch;
+  font: 500 12px/1 var(--mono);
+  color: var(--muted);
+  text-align: center;
+}
+@media (max-width: 760px) {
+  .plates {
+    grid-auto-columns: calc((100% - 16px) / 2);
+  }
+}
+@media (max-width: 560px) {
+  .plates {
+    grid-auto-columns: 82%;
+  }
+  .shelf__dot {
+    width: 6px;
+    height: 6px;
+  }
+  .shelf__dot.is-on {
+    width: 16px;
+  }
+  .shelf-nav {
+    gap: 8px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .shelf__dot,
+  .shelf__btn {
+    transition: none;
+  }
+}
+@media print {
+  .plates {
+    grid-auto-flow: row;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    overflow: visible;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+  .shelf-nav {
+    display: none !important;
+  }
+}
