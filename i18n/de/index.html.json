@@ -19,6 +19,14 @@
   "src": "Skip to content",
   "tr": "Zum Inhalt springen"
  },
+ "0b963f2de1ab": {
+  "src": "RK4",
+  "tr": "RK4"
+ },
+ "108eeca052f5": {
+  "src": "Open the projects",
+  "tr": "Zu den Projekten"
+ },
  "11826f821795": {
   "src": "Fig. 3",
   "tr": "Abb. 3"
@@ -31,9 +39,17 @@
   "src": "Building AND/OR gates operations to specify component-wise power consumption of the system",
   "tr": "Aufbau von UND/ODER-Gatterlogik, um den Stromverbrauch des Systems nach Komponenten aufzuschlüsseln"
  },
+ "1219f2a146e0": {
+  "src": "All projects ↗",
+  "tr": "Alle Projekte ↗"
+ },
  "142cd31b719b": {
   "src": "<b>Fig. 0</b> · double pendulum · RK4 · live",
   "tr": "<b>Abb. 0</b> · Doppelpendel · RK4 · live"
+ },
+ "144844dd47af": {
+  "src": "Betz limit",
+  "tr": "Betz-Grenze"
  },
  "1497a320cba1": {
   "src": "Wave Interference – Multiple Sources",
@@ -42,6 +58,10 @@
  "156798c59fda": {
   "src": "Iron, Cotton and the Head",
   "tr": "Eisen, Baumwolle und der Kopf"
+ },
+ "15727c1379a6": {
+  "src": "Resonance",
+  "tr": "Resonanz"
  },
  "19300c13439d": {
   "src": "Portfolios ↗",
@@ -67,6 +87,10 @@
   "src": "02.2023 – present <span class=\"tag\">current</span> <span class=\"tag tag--soft\">minijob</span>",
   "tr": "02.2023 – heute <span class=\"tag\">aktuell</span> <span class=\"tag tag--soft\">Minijob</span>"
  },
+ "1dffb10ba3ee": {
+  "src": "Visualizations of waves, interference, classical mechanics, Fourier methods and control, written in vanilla JavaScript, React, and HTML5 Canvas. Each plate opens the live simulation in a new tab. The <a href=\"simulations.html\">simulations page</a> lists them all by field, with the question each one answers and a search.",
+  "tr": "Visualisierungen zu Wellen, Interferenz, klassischer Mechanik, Fourier-Methoden und Regelung, geschrieben in reinem JavaScript, React und HTML5 Canvas. Jede Tafel öffnet die laufende Simulation in einem neuen Tab. Die <a href=\"simulations.html\">Simulationsseite</a> führt sie alle nach Gebieten auf, mit der Frage, die jede beantwortet, und einer Suche."
+ },
  "22b8e2294018": {
   "src": "Pandas, NumPy, SciPy, TensorFlow, PyTorch",
   "tr": "Pandas, NumPy, SciPy, TensorFlow, PyTorch"
@@ -78,6 +102,10 @@
  "2365a132b4ee": {
   "src": "Fig. 2",
   "tr": "Abb. 2"
+ },
+ "239122e08126": {
+  "src": "Bachelor thesis · cloud physics · stochastic collection · numerical methods",
+  "tr": "Bachelorarbeit · Wolkenphysik · stochastische Koaleszenz · numerische Methoden"
  },
  "2392054b4832": {
   "src": "Rotor Pendula",
@@ -106,6 +134,10 @@
  "2a72a62fd10b": {
   "src": "Open the simulations",
   "tr": "Zu den Simulationen"
+ },
+ "2dbe6766fdb9": {
+  "src": "LQR",
+  "tr": "LQR"
  },
  "3006b416f6fa": {
   "src": "Faiveley Transport",
@@ -147,6 +179,10 @@
   "src": "Analysis and report generation based on several different datasets",
   "tr": "Analysen und Berichte auf der Grundlage mehrerer unterschiedlicher Datensätze"
  },
+ "3b75588ebc4f": {
+  "src": "Fig. 10",
+  "tr": "Abb. 10"
+ },
  "3e5aa58f3a51": {
   "src": "The classic experiment, step by step. Adjust slit separation and viewing angle to see how the path difference builds the interference pattern.",
   "tr": "Das klassische Experiment, Schritt für Schritt. Stellen Sie Spaltabstand und Beobachtungswinkel ein und sehen Sie, wie der Gangunterschied das Interferenzmuster aufbaut."
@@ -167,9 +203,17 @@
   "src": "Fig. 8",
   "tr": "Abb. 8"
  },
+ "447de2f408c8": {
+  "src": "Wind turns the rotor, the generator brakes it, and a controller decides how hard: constant speed against the best tip-speed ratio, in turbulent wind.",
+  "tr": "Der Wind dreht den Rotor, der Generator bremst ihn, und ein Regler entscheidet, wie stark: konstante Drehzahl gegen die beste Schnelllaufzahl, in turbulentem Wind."
+ },
  "46ece4595914": {
   "src": "Physics graduate with expertise in data analysis, modeling, and software development, and experience in the production of energy storage and distribution systems.",
   "tr": "Abschluss in Physik (B.Sc.), Schwerpunkt Datenanalyse, Modellierung und Softwareentwicklung, mit Erfahrung in der Produktion von Energiespeicher- und Energieverteilungssystemen."
+ },
+ "4819505bf07e": {
+  "src": "Underactuated control",
+  "tr": "Unteraktuierte Regelung"
  },
  "4ad48a02590f": {
   "src": "Launch",
@@ -215,17 +259,33 @@
   "src": "during studies",
   "tr": "während des Studiums"
  },
+ "53e890d5f0ff": {
+  "src": "Projects",
+  "tr": "Projekte"
+ },
  "5408b8f65095": {
   "src": "This list is read from the site’s own code every time the site is built, most recently on <span data-tools=\"date\"></span>, from <span data-tools=\"files\"></span> files. A tool added to the code appears here by itself; one the reader cannot yet name is listed under “Also found”.",
   "tr": "Diese Liste wird bei jedem Bau der Seite aus dem eigenen Code der Seite gelesen, zuletzt am <span data-tools=\"date\"></span>, aus <span data-tools=\"files\"></span> Dateien. Ein Werkzeug, das dem Code hinzugefügt wird, erscheint hier von selbst; ein Werkzeug, das sich noch nicht benennen lässt, steht unter „Außerdem gefunden“."
+ },
+ "5afa4abe8c78": {
+  "src": "Study · rotating mechanics · energy harvesting · nonlinear dynamics",
+  "tr": "Studie · rotierende Mechanik · Energiegewinnung · nichtlineare Dynamik"
  },
  "5cf5911bdad4": {
   "src": "Transverse &amp; Longitudinal Waves",
   "tr": "Transversal- &amp; Longitudinalwellen"
  },
+ "6176dabae73b": {
+  "src": "Bode plot",
+  "tr": "Bode-Diagramm"
+ },
  "64472dd0fbfb": {
   "src": "Visualizations of wave mechanics, classical mechanics, and interference, written in vanilla JavaScript, React, and HTML5 Canvas. Each plate opens the live simulation in a new tab. The <a href=\"simulations.html\">simulations page</a> lists them all by field, with the question each one answers and a search.",
   "tr": "Visualisierungen zu Wellenmechanik, klassischer Mechanik und Interferenz, geschrieben in reinem JavaScript, React und HTML5 Canvas. Jede Tafel öffnet die laufende Simulation in einem neuen Tab. Die <a href=\"simulations.html\">Simulationsseite</a> führt sie alle nach Gebieten auf, mit der Frage, die jede beantwortet, und einer Suche."
+ },
+ "65de8421a385": {
+  "src": "Study · impact mechanics · interatomic bonds · fibre networks",
+  "tr": "Studie · Stoßmechanik · interatomare Bindungen · Fasernetze"
  },
  "6d18c7faff29": {
   "src": "Automated inventory tracking, website development",
@@ -331,6 +391,10 @@
   "src": "Also found",
   "tr": "Außerdem gefunden"
  },
+ "8a800b0fed31": {
+  "src": "A double pendulum tied by a sprung strut to a cart that a moving coil drives. Pushing only the cart, LQR feedback brings the chain back to rest.",
+  "tr": "Ein Doppelpendel, über eine gefederte Strebe mit einem Wagen verbunden, den eine Tauchspule antreibt. Nur über den Wagen bringt eine LQR-Rückführung die Kette zurück in die Ruhe."
+ },
  "8aa7881300c3": {
   "src": "Laser-Induced Breakdown Spectroscopy (LIBS) on lake sediments; atomic emission spectra analysis",
   "tr": "Laserinduzierte Plasmaspektroskopie (LIBS) an Seesedimenten; Analyse atomarer Emissionsspektren"
@@ -343,9 +407,17 @@
   "src": "Dhillons Irish Pub and Grill",
   "tr": "Dhillons Irish Pub and Grill"
  },
+ "8eb5170dea9a": {
+  "src": "Study · fluid power · digital control · numerical simulation",
+  "tr": "Studie · Fluidtechnik · digitale Regelung · numerische Simulation"
+ },
  "8f8c63d75e8d": {
   "src": "Stochastic differential equations for viscoelastic properties",
   "tr": "Stochastische Differentialgleichungen für viskoelastische Eigenschaften"
+ },
+ "90f3e7e2bd5b": {
+  "src": "Driven Oscillator",
+  "tr": "Erzwungene Schwingung"
  },
  "9233728e6188": {
   "src": "Real-time plotting",
@@ -427,6 +499,10 @@
   "src": "Phasor Sums – Epicycles &amp; Roses",
   "tr": "Zeigersummen – Epizykel &amp; Rosen"
  },
+ "aa9a09d07546": {
+  "src": "Work of months rather than afternoons, each piece with its derivations, solver and checks, on the <a href=\"portfolios.html\">Projects page</a>: my Bachelor thesis on how cloud droplets become rain, and three studies built from first principles: whether a pendulum on a turbine blade can power a sensor, a servo-hydraulic press under digital control, and, in English, German and Arabic, why an iron ball hurts and a cotton ball of the same mass does not.",
+  "tr": "Arbeiten von Monaten statt Nachmittagen, jede mit ihren Herleitungen, ihrem Löser und ihren Prüfungen, auf der <a href=\"portfolios.html\">Projektseite</a>: meine Bachelorarbeit darüber, wie aus Wolkentröpfchen Regen wird, und drei Studien, aus ersten Prinzipien aufgebaut: ob ein Pendel auf einem Turbinenblatt einen Sensor versorgen kann, eine digital geregelte servohydraulische Presse und, auf Englisch, Deutsch und Arabisch, warum eine Eisenkugel wehtut und eine Baumwollkugel derselben Masse nicht."
+ },
  "aaf87fe57ae6": {
   "src": "Education",
   "tr": "Ausbildung"
@@ -455,6 +531,10 @@
   "src": "CAD &amp; analysis",
   "tr": "CAD &amp; Analyse"
  },
+ "b1e5ba0fb5f1": {
+  "src": "All projects →",
+  "tr": "Alle Projekte →"
+ },
  "b60b20f0f1ab": {
   "src": "SVG animation",
   "tr": "SVG-Animation"
@@ -462,6 +542,10 @@
  "b795817627df": {
   "src": "Synthetic data generation for lemur interactions",
   "tr": "Erzeugung synthetischer Daten für Interaktionen zwischen Lemuren"
+ },
+ "b84e4957075d": {
+  "src": "A mass on a spring, pushed by an outside force: resonance, phase lag, beats and the Bode plot, with the error against the exact solution shown.",
+  "tr": "Eine Masse an einer Feder, von einer äußeren Kraft angetrieben: Resonanz, Phasenverschiebung, Schwebungen und das Bode-Diagramm, mit dem Fehler gegenüber der exakten Lösung."
  },
  "bbd80cf7e2de": {
   "src": "Build",
@@ -503,9 +587,17 @@
   "src": "RK4 integration",
   "tr": "RK4-Integration"
  },
+ "c6b8defecbee": {
+  "src": "Fig. 9",
+  "tr": "Abb. 9"
+ },
  "c7080a85a336": {
   "src": "Huygens' principle",
   "tr": "Huygens’sches Prinzip"
+ },
+ "c70a2d65879a": {
+  "src": "Double Pendulum under Control",
+  "tr": "Geregeltes Doppelpendel"
  },
  "c73d272e6489": {
   "src": "See positions",
@@ -571,6 +663,10 @@
   "src": "Compare the two kinds of wave propagation side by side. Adjust amplitude, frequency, and wavelength to see how each property shapes the motion.",
   "tr": "Die beiden Arten der Wellenausbreitung nebeneinander. Stellen Sie Amplitude, Frequenz und Wellenlänge ein und sehen Sie, wie jede Größe die Bewegung formt."
  },
+ "e1abefda4fd2": {
+  "src": "Lagrangian mechanics",
+  "tr": "Lagrange-Mechanik"
+ },
  "e22a2f611be6": {
   "src": "Languages, in files",
   "tr": "Sprachen, nach Dateien"
@@ -586,6 +682,10 @@
  "e7137ce08df4": {
   "src": "Focus: computational physics",
   "tr": "Schwerpunkt: Computational Physics"
+ },
+ "e79e34736327": {
+  "src": "PI control",
+  "tr": "PI-Regelung"
  },
  "e84ef0bf0497": {
   "src": "Drop Population Dynamics",
@@ -614,6 +714,10 @@
  "ed9d90ec7f5e": {
   "src": "Skills &amp; languages",
   "tr": "Kenntnisse &amp; Sprachen"
+ },
+ "ef884025e8a4": {
+  "src": "Fig. 11",
+  "tr": "Abb. 11"
  },
  "f037aaacfa82": {
   "src": "Data-driven sales analysis",
@@ -654,6 +758,10 @@
  "fc1030798a1a": {
   "src": "Claude, an AI model made by Anthropic, writes the code of every page: the simulations, the lecture notes, the tests, the tools, and the German and Arabic translations. Numa Koudsie directs and leads the work: chooses what is built and to what standard, writes the briefs, reads the pages and the physics, sends back what is wrong, and decides what is published.",
   "tr": "Claude, ein KI-Modell von Anthropic, schreibt den Code jeder Seite: die Simulationen, die Skripte, die Tests, die Werkzeuge sowie die deutschen und arabischen Übersetzungen. Numa Koudsie leitet und führt die Arbeit: bestimmt, was gebaut wird und nach welchem Maßstab, schreibt die Aufträge, liest die Seiten und die Physik, schickt zurück, was falsch ist, und entscheidet, was veröffentlicht wird."
+ },
+ "fc5b36231250": {
+  "src": "Wind Turbine Control",
+  "tr": "Regelung einer Windturbine"
  },
  "fc8a068be442": {
   "src": "Completed projects, rebuilt in full with their derivations, solver and checks, are on the <a href=\"portfolios.html\">Portfolios page</a>: the Bachelor thesis on how cloud droplets become rain, a corrected study of whether a pendulum on a turbine blade can power a sensor, a servo-hydraulic press under digital control, built from first principles, and a study, in English, German and Arabic, of why an iron ball hurts and a cotton ball of the same mass does not.",

@@ -196,7 +196,7 @@ if SITE:
             '    <link rel="stylesheet" href="../../vendor/katex/katex.min.css" /> <link rel="stylesheet" href="../../styles/paper.css" /> <link rel="stylesheet" href="../../styles/data.css" />')
     # the data panel: the site's shared helpers and store before the page script, the panel after it (datahooks.js says what it shows)
     pre, post = '<script src="../../scripts/sim.js"></script><script src="../../scripts/dataset.js"></script>', '<script src="../../scripts/datalog.js"></script>'
-    bar = '<a class="back" href="../../portfolios.html">← Numa Koudsie · Portfolios</a>'
+    bar = '<a class="back" href="../../portfolios.html">← Numa Koudsie · Projects</a>'
     fn = ROOT / 'public' / 'portfolios' / 'droplet-collection' / 'index.html'
 else:
     kcss = TOOLS / 'node_modules' / 'katex' / 'dist' / 'katex.min.css'
@@ -213,7 +213,7 @@ if SITE:
 fn.parent.mkdir(parents=True, exist_ok=True)
 fn.write_text(out, encoding='utf-8')
 if SITE:
-    # four plates for the Portfolios page article: the same SVGs as in the notes, with their text styles carried inside
+    # four plates for the Projects page article: the same SVGs as in the notes, with their text styles carried inside
     style = ('<style>.tick{font:11px "IBM Plex Mono",Menlo,Consolas,monospace;fill:#4a3a30}'
              '.axl{font:12.5px "IBM Plex Sans","Helvetica Neue",Arial,sans-serif;fill:#23160f}'
              '.leg{font:12px "IBM Plex Sans","Helvetica Neue",Arial,sans-serif;fill:#23160f}</style>')

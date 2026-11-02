@@ -133,7 +133,7 @@ CSS custom properties, all on `:root` unless noted.
 | `--dp-w` | `600px`; `640px` from 1500 px | [data.css:7–8](../public/styles/data.css#L7-L8) | Data panel width. |
 | `--p`, `--c` | `50%`, `var(--accent)` on each range input | [sim.css:88](../public/styles/sim.css#L88); `--p` set by [sim.js:159](../public/scripts/sim.js#L159) | Slider fill up to the thumb. |
 | `--ar`, `--ar-m` | per figure, inline `style` | e.g. [water-wave.html:45](../public/simulations/water-wave.html#L45) | Figure aspect ratio, wide and at 900 px or less. |
-| `--d` | `(i mod 5) × 80 ms` per `.reveal` | [index.html:1216](../index.html#L1216) | Fade-in delay on the home page. |
+| `--d` | `(i mod 5) × 80 ms` per `.reveal` | [index.html:1381](../index.html#L1381) | Fade-in delay on the home page. |
 
 Five formerly undefined tokens were replaced with their unchanged fallback colours: `--on-accent` (`#fff`, in catalog.css and
 data.css), `--tag-soft` (`#f0eae0`, data.css), `--tan-line` (`#e3cfa3`, [data.css:294](../public/styles/data.css#L294)),
@@ -378,8 +378,8 @@ repeats those two rules for the folded layout. Keep each pair in step.
 
 [`src/styles.css`](../src/styles.css) holds the three Tailwind directives and a placeholder comment. Its only importer is
 [`src/main.ts:1`](../src/main.ts#L1), and no page loads `src/main.ts`: `index.html` has no module script
-(its only scripts are [index.html:21–23](../index.html#L21-L23), [621](../index.html#L621) and
-[622–1253](../index.html#L622-L1253)), and a search of the repository for `main.ts` finds only that file's own line. On the live
+(its only scripts are [index.html:21–23](../index.html#L21-L23), [717](../index.html#L717) and
+[718–1418](../index.html#L718-L1418)), and a search of the repository for `main.ts` finds only that file's own line. On the live
 site <https://phyeinusul.com> `/src/main.ts` answers 404 (measured 20 October 2026). The file comes from the Vite template; see
 [build-and-deploy.md](build-and-deploy.md#build-files-at-the-root).
 

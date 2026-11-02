@@ -287,7 +287,7 @@ def site_copy(site):
     assert (site / 'public/fonts/instrument-plex.css').exists(), 'the site has no public/fonts/instrument-plex.css'
     out = build(head=head, title='Rotor Pendula · Numa Koudsie',
                 fonts='<link rel="stylesheet" href="../../fonts/instrument-plex.css">',
-                back='  <a class="back" href="../../portfolios.html">← Numa Koudsie · Portfolios</a>\n', site=site)
+                back='  <a class="back" href="../../portfolios.html">← Numa Koudsie · Projects</a>\n', site=site)
     folder = site / 'public/portfolios/rotor-pendula'
     folder.mkdir(parents=True, exist_ok=True)
     (folder / 'index.html').write_text(out)

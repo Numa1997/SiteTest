@@ -227,7 +227,7 @@ const ball=s=>["x_"+s,"y_"+s,"sp_"+s,"yp_"+s,"vp_"+s,"F_"+s,"Fmax_"+s,"W_"+s,"KE
 const cks=s=>["ck_x_"+s,"ck_y_"+s,"ck_u_"+s,"ck_v_"+s,"ck_t_"+s,"ck_yp_"+s,"ck_vp_"+s,"ck_Fmax_"+s,"ck_Qb_"+s,"ck_Qh_"+s,"ck_Qa_"+s,"ck_ti_"+s,"ck_alive_"+s];
 const both=f=>BALLS.map(f).flat();
 Sim.data={
-  ds:ds,kicker:"Portfolios 04 · data",file:"impact-iron-cotton",
+  ds:ds,kicker:"Projects 04 · data",file:"impact-iron-cotton",
   playing:()=>playing,play:startDrop,
   groups:[
     {title:"Parameters",note:"the constants of the model, P",vars:Object.keys(PMAP)},

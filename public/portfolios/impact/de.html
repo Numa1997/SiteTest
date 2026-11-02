@@ -92,7 +92,7 @@ a{color:var(--wine)}
   </head>
   <body>
 <main lang="de" dir="ltr">
-<nav class="sitebar" aria-label="Site"><a href="../../de/portfolios.html">← Numa Koudsie · Portfolios</a><span class="langs"><a href="index.html" lang="en">English</a> · <a href="de.html" lang="de" aria-current="page">Deutsch</a> · <a href="ar.html" lang="ar">العربية</a></span></nav>
+<nav class="sitebar" aria-label="Site"><a href="../../de/portfolios.html">← Numa Koudsie · Projekte</a><span class="langs"><a href="index.html" lang="en">English</a> · <a href="de.html" lang="de" aria-current="page">Deutsch</a> · <a href="ar.html" lang="ar">العربية</a></span></nav>
 <div class="eyebrow" data-t="eyebrow">Newton · Morse · Hooke · eine interaktive Studie</div>
 <h1 data-t="title">Warum eine Eisenkugel weh tut und eine Baumwollkugel nicht</h1>
 <p class="lede" data-t="lede">Zwei Kugeln gleicher Masse fallen aus gleicher Höhe auf einen Kopf, der als Platte auf einer Feder und einem Dämpfer gezeichnet ist. Die Eisenkugel ist ein Gitter aus Atomen, die durch steife Bindungen verbunden sind. Die Baumwollkugel ist ein Knäuel dünner Fasern, die sich biegen, an ihren Kreuzungsstellen haften und aneinander reiben. Das Modell läuft einmal beim Öffnen der Seite, und jede Kurve und jede Zahl auf dieser Seite stammt daraus; der Text unten leitet her, was das Modell tut, und vergleicht es mit echtem Eisen, echter Baumwolle und einem echten Schädel.</p>
@@ -1144,7 +1144,7 @@ const ball=s=>["x_"+s,"y_"+s,"sp_"+s,"yp_"+s,"vp_"+s,"F_"+s,"Fmax_"+s,"W_"+s,"KE
 const cks=s=>["ck_x_"+s,"ck_y_"+s,"ck_u_"+s,"ck_v_"+s,"ck_t_"+s,"ck_yp_"+s,"ck_vp_"+s,"ck_Fmax_"+s,"ck_Qb_"+s,"ck_Qh_"+s,"ck_Qa_"+s,"ck_ti_"+s,"ck_alive_"+s];
 const both=f=>BALLS.map(f).flat();
 Sim.data={
-  ds:ds,kicker:"Portfolios 04 · data",file:"impact-iron-cotton",
+  ds:ds,kicker:"Projects 04 · data",file:"impact-iron-cotton",
   playing:()=>playing,play:startDrop,
   groups:[
     {title:"Parameters",note:"the constants of the model, P",vars:Object.keys(PMAP)},

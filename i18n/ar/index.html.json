@@ -19,6 +19,14 @@
   "src": "Skip to content",
   "tr": "انتقل إلى المحتوى"
  },
+ "0b963f2de1ab": {
+  "src": "RK4",
+  "tr": "RK4"
+ },
+ "108eeca052f5": {
+  "src": "Open the projects",
+  "tr": "افتح المشاريع"
+ },
  "11826f821795": {
   "src": "Fig. 3",
   "tr": "الشكل 3"
@@ -31,9 +39,17 @@
   "src": "Building AND/OR gates operations to specify component-wise power consumption of the system",
   "tr": "بناء منطق بوّابات AND/OR لتفصيل استهلاك النظام للطاقة بحسب مكوّناته"
  },
+ "1219f2a146e0": {
+  "src": "All projects ↗",
+  "tr": "كلّ المشاريع ↗"
+ },
  "142cd31b719b": {
   "src": "<b>Fig. 0</b> · double pendulum · RK4 · live",
   "tr": "<b>الشكل 0</b> · نوّاس مزدوج · RK4 · مباشر"
+ },
+ "144844dd47af": {
+  "src": "Betz limit",
+  "tr": "حدّ بيتز"
  },
  "1497a320cba1": {
   "src": "Wave Interference – Multiple Sources",
@@ -42,6 +58,10 @@
  "156798c59fda": {
   "src": "Iron, Cotton and the Head",
   "tr": "الحديد والقطن والرأس"
+ },
+ "15727c1379a6": {
+  "src": "Resonance",
+  "tr": "الرنين"
  },
  "19300c13439d": {
   "src": "Portfolios ↗",
@@ -67,6 +87,10 @@
   "src": "02.2023 – present <span class=\"tag\">current</span> <span class=\"tag tag--soft\">minijob</span>",
   "tr": "02.2023 – حتى الآن <span class=\"tag\">حاليًّا</span> <span class=\"tag tag--soft\">عمل جزئي</span>"
  },
+ "1dffb10ba3ee": {
+  "src": "Visualizations of waves, interference, classical mechanics, Fourier methods and control, written in vanilla JavaScript, React, and HTML5 Canvas. Each plate opens the live simulation in a new tab. The <a href=\"simulations.html\">simulations page</a> lists them all by field, with the question each one answers and a search.",
+  "tr": "تصوّرات للأمواج والتداخل والميكانيك الكلاسيكي وطرائق فورييه والتحكّم، مكتوبة بلغة JavaScript الخالصة وReact وHTML5 Canvas. كلّ لوحة تفتح المحاكاة الحيّة في تبويب جديد. و<a href=\"simulations.html\">صفحة المحاكاة</a> تعرضها كلّها بحسب المجال، مع السؤال الذي تجيب عنه كلٌّ منها، وأداةٍ للبحث."
+ },
  "22b8e2294018": {
   "src": "Pandas, NumPy, SciPy, TensorFlow, PyTorch",
   "tr": "Pandas، NumPy، SciPy، TensorFlow، PyTorch"
@@ -78,6 +102,10 @@
  "2365a132b4ee": {
   "src": "Fig. 2",
   "tr": "الشكل 2"
+ },
+ "239122e08126": {
+  "src": "Bachelor thesis · cloud physics · stochastic collection · numerical methods",
+  "tr": "رسالة بكالوريوس · فيزياء الغيوم · الالتقاط العشوائي · الطرائق العددية"
  },
  "2392054b4832": {
   "src": "Rotor Pendula",
@@ -106,6 +134,10 @@
  "2a72a62fd10b": {
   "src": "Open the simulations",
   "tr": "افتح المحاكاة"
+ },
+ "2dbe6766fdb9": {
+  "src": "LQR",
+  "tr": "LQR"
  },
  "3006b416f6fa": {
   "src": "Faiveley Transport",
@@ -147,6 +179,10 @@
   "src": "Analysis and report generation based on several different datasets",
   "tr": "تحليلات وتقارير مبنيّة على عدّة مجموعات بيانات مختلفة"
  },
+ "3b75588ebc4f": {
+  "src": "Fig. 10",
+  "tr": "الشكل 10"
+ },
  "3e5aa58f3a51": {
   "src": "The classic experiment, step by step. Adjust slit separation and viewing angle to see how the path difference builds the interference pattern.",
   "tr": "التجربة الكلاسيكية خطوةً بخطوة. اضبط المسافة بين الشقّين وزاوية الرصد لترى كيف يبني فرقُ المسار نمطَ التداخل."
@@ -167,9 +203,17 @@
   "src": "Fig. 8",
   "tr": "الشكل 8"
  },
+ "447de2f408c8": {
+  "src": "Wind turns the rotor, the generator brakes it, and a controller decides how hard: constant speed against the best tip-speed ratio, in turbulent wind.",
+  "tr": "الريح تدير الدوّار، والمولّد يكبحه، والمتحكّم يقرّر بأيّ قدر: سرعة ثابتة مقابل أفضل نسبة لسرعة الطرف، في ريح مضطربة."
+ },
  "46ece4595914": {
   "src": "Physics graduate with expertise in data analysis, modeling, and software development, and experience in the production of energy storage and distribution systems.",
   "tr": "إجازة في الفيزياء (بكالوريوس) بتخصّصٍ في تحليل البيانات والنمذجة وتطوير البرمجيات، مع خبرةٍ في إنتاج أنظمة تخزين الطاقة وتوزيعها."
+ },
+ "4819505bf07e": {
+  "src": "Underactuated control",
+  "tr": "التحكّم الناقص التشغيل"
  },
  "4ad48a02590f": {
   "src": "Launch",
@@ -215,17 +259,33 @@
   "src": "during studies",
   "tr": "أثناء الدراسة"
  },
+ "53e890d5f0ff": {
+  "src": "Projects",
+  "tr": "المشاريع"
+ },
  "5408b8f65095": {
   "src": "This list is read from the site’s own code every time the site is built, most recently on <span data-tools=\"date\"></span>, from <span data-tools=\"files\"></span> files. A tool added to the code appears here by itself; one the reader cannot yet name is listed under “Also found”.",
   "tr": "تُقرأ هذه القائمة من شيفرة الموقع نفسها في كلّ مرّة يُبنى فيها الموقع، وآخر مرّة في <span data-tools=\"date\"></span>، من <span data-tools=\"files\"></span> من الملفات. وأيّ أداة تُضاف إلى الشيفرة تظهر هنا من تلقاء نفسها؛ والأداة التي لا يعرف القارئ اسمها بعدُ تُدرَج تحت «وُجد أيضًا»."
+ },
+ "5afa4abe8c78": {
+  "src": "Study · rotating mechanics · energy harvesting · nonlinear dynamics",
+  "tr": "دراسة · الميكانيك الدوّار · حصاد الطاقة · الديناميك اللاخطّي"
  },
  "5cf5911bdad4": {
   "src": "Transverse &amp; Longitudinal Waves",
   "tr": "الأمواج المستعرضة والطولية"
  },
+ "6176dabae73b": {
+  "src": "Bode plot",
+  "tr": "مخطّط بودي"
+ },
  "64472dd0fbfb": {
   "src": "Visualizations of wave mechanics, classical mechanics, and interference, written in vanilla JavaScript, React, and HTML5 Canvas. Each plate opens the live simulation in a new tab. The <a href=\"simulations.html\">simulations page</a> lists them all by field, with the question each one answers and a search.",
   "tr": "تصوّرات لميكانيك الأمواج والميكانيك الكلاسيكي والتداخل، مكتوبة بلغة JavaScript الخالصة وReact وHTML5 Canvas. كلّ لوحة تفتح المحاكاة الحيّة في تبويب جديد. و<a href=\"simulations.html\">صفحة المحاكاة</a> تعرضها كلّها بحسب المجال، مع السؤال الذي تجيب عنه كلٌّ منها، وأداةٍ للبحث."
+ },
+ "65de8421a385": {
+  "src": "Study · impact mechanics · interatomic bonds · fibre networks",
+  "tr": "دراسة · ميكانيك الصدم · الروابط بين الذرّات · شبكات الألياف"
  },
  "6d18c7faff29": {
   "src": "Automated inventory tracking, website development",
@@ -331,6 +391,10 @@
   "src": "Also found",
   "tr": "وُجد أيضًا"
  },
+ "8a800b0fed31": {
+  "src": "A double pendulum tied by a sprung strut to a cart that a moving coil drives. Pushing only the cart, LQR feedback brings the chain back to rest.",
+  "tr": "نوّاس مزدوج مربوط بدعامة نابضية إلى عربة يحرّكها ملفّ متحرّك. بدفع العربة وحدها، تعيد تغذية LQR الراجعة السلسلة إلى السكون."
+ },
  "8aa7881300c3": {
   "src": "Laser-Induced Breakdown Spectroscopy (LIBS) on lake sediments; atomic emission spectra analysis",
   "tr": "مطيافية الانهيار المحرَّض بالليزر (LIBS) على رواسب البحيرات؛ وتحليل أطياف الإصدار الذرّي"
@@ -343,9 +407,17 @@
   "src": "Dhillons Irish Pub and Grill",
   "tr": "Dhillons Irish Pub and Grill"
  },
+ "8eb5170dea9a": {
+  "src": "Study · fluid power · digital control · numerical simulation",
+  "tr": "دراسة · القدرة الهيدروليكية · التحكّم الرقمي · المحاكاة العددية"
+ },
  "8f8c63d75e8d": {
   "src": "Stochastic differential equations for viscoelastic properties",
   "tr": "معادلات تفاضلية عشوائية للخواصّ اللزجة المرنة"
+ },
+ "90f3e7e2bd5b": {
+  "src": "Driven Oscillator",
+  "tr": "المهتزّ القسري"
  },
  "9233728e6188": {
   "src": "Real-time plotting",
@@ -427,6 +499,10 @@
   "src": "Phasor Sums – Epicycles &amp; Roses",
   "tr": "مجاميع الطوريّات – أفلاك التدوير والورود"
  },
+ "aa9a09d07546": {
+  "src": "Work of months rather than afternoons, each piece with its derivations, solver and checks, on the <a href=\"portfolios.html\">Projects page</a>: my Bachelor thesis on how cloud droplets become rain, and three studies built from first principles: whether a pendulum on a turbine blade can power a sensor, a servo-hydraulic press under digital control, and, in English, German and Arabic, why an iron ball hurts and a cotton ball of the same mass does not.",
+  "tr": "أعمال أشهرٍ لا أمسيات، لكلٍّ منها اشتقاقاته وحلّاله وفحوصه، في <a href=\"portfolios.html\">صفحة المشاريع</a>: رسالة البكالوريوس عن كيفيّة تحوّل قُطيرات الغيمة إلى مطر، وثلاث دراسات مبنيّة من المبادئ الأولى: هل يستطيع نوّاسٌ على شفرة عنفة تغذية حسّاس، ومكبس هيدروليكي مؤازَر بتحكّم رقمي، و، بالإنجليزية والألمانية والعربية، لماذا تؤلم كرة الحديد ولا تؤلم كرة القطن ذات الكتلة نفسها."
+ },
  "aaf87fe57ae6": {
   "src": "Education",
   "tr": "التعليم"
@@ -455,6 +531,10 @@
   "src": "CAD &amp; analysis",
   "tr": "التصميم بالحاسوب والتحليل"
  },
+ "b1e5ba0fb5f1": {
+  "src": "All projects →",
+  "tr": "كلّ المشاريع ←"
+ },
  "b60b20f0f1ab": {
   "src": "SVG animation",
   "tr": "تحريك SVG"
@@ -462,6 +542,10 @@
  "b795817627df": {
   "src": "Synthetic data generation for lemur interactions",
   "tr": "توليد بيانات اصطناعية لتفاعلات الليمور"
+ },
+ "b84e4957075d": {
+  "src": "A mass on a spring, pushed by an outside force: resonance, phase lag, beats and the Bode plot, with the error against the exact solution shown.",
+  "tr": "كتلة على نابض تدفعها قوّة خارجية: الرنين وتأخّر الطور والضربات ومخطّط بودي، مع الخطأ مقارنةً بالحلّ الدقيق."
  },
  "bbd80cf7e2de": {
   "src": "Build",
@@ -503,9 +587,17 @@
   "src": "RK4 integration",
   "tr": "تكامل RK4"
  },
+ "c6b8defecbee": {
+  "src": "Fig. 9",
+  "tr": "الشكل 9"
+ },
  "c7080a85a336": {
   "src": "Huygens' principle",
   "tr": "مبدأ هويغنز"
+ },
+ "c70a2d65879a": {
+  "src": "Double Pendulum under Control",
+  "tr": "النوّاس المزدوج تحت التحكّم"
  },
  "c73d272e6489": {
   "src": "See positions",
@@ -571,6 +663,10 @@
   "src": "Compare the two kinds of wave propagation side by side. Adjust amplitude, frequency, and wavelength to see how each property shapes the motion.",
   "tr": "قارن نوعي انتشار الأمواج جنبًا إلى جنب. اضبط السعة والتردّد وطول الموجة لترى كيف تشكّل كلُّ خاصّيةٍ الحركة."
  },
+ "e1abefda4fd2": {
+  "src": "Lagrangian mechanics",
+  "tr": "ميكانيك لاغرانج"
+ },
  "e22a2f611be6": {
   "src": "Languages, in files",
   "tr": "اللغات، بحسب الملفات"
@@ -586,6 +682,10 @@
  "e7137ce08df4": {
   "src": "Focus: computational physics",
   "tr": "التخصّص: الفيزياء الحاسوبية"
+ },
+ "e79e34736327": {
+  "src": "PI control",
+  "tr": "تحكّم PI"
  },
  "e84ef0bf0497": {
   "src": "Drop Population Dynamics",
@@ -614,6 +714,10 @@
  "ed9d90ec7f5e": {
   "src": "Skills &amp; languages",
   "tr": "المهارات واللغات"
+ },
+ "ef884025e8a4": {
+  "src": "Fig. 11",
+  "tr": "الشكل 11"
  },
  "f037aaacfa82": {
   "src": "Data-driven sales analysis",
@@ -654,6 +758,10 @@
  "fc1030798a1a": {
   "src": "Claude, an AI model made by Anthropic, writes the code of every page: the simulations, the lecture notes, the tests, the tools, and the German and Arabic translations. Numa Koudsie directs and leads the work: chooses what is built and to what standard, writes the briefs, reads the pages and the physics, sends back what is wrong, and decides what is published.",
   "tr": "يكتب Claude، وهو نموذج ذكاء اصطناعي من Anthropic، شيفرة كلّ صفحة: المحاكاة، ومذكّرات المحاضرات، والاختبارات، والأدوات، والترجمتين الألمانية والعربية. أمّا توجيه العمل وقيادته فلنعمة سائر قدسية: اختيار ما يُبنى وبأيّ مستوى، وكتابة التكليفات، وقراءة الصفحات والفيزياء، وإعادة ما فيه خطأ، والبتّ فيما يُنشَر."
+ },
+ "fc5b36231250": {
+  "src": "Wind Turbine Control",
+  "tr": "التحكّم في عنفة ريحية"
  },
  "fc8a068be442": {
   "src": "Completed projects, rebuilt in full with their derivations, solver and checks, are on the <a href=\"portfolios.html\">Portfolios page</a>: the Bachelor thesis on how cloud droplets become rain, a corrected study of whether a pendulum on a turbine blade can power a sensor, a servo-hydraulic press under digital control, built from first principles, and a study, in English, German and Arabic, of why an iron ball hurts and a cotton ball of the same mass does not.",

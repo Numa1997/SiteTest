@@ -131,6 +131,10 @@
   "src": "Mean harvested power at the 18 mountings against rotor speed, single and double pendulum, small and large rotors.",
   "tr": "Mittlere geerntete Leistung an den 18 Befestigungen gegen die Rotordrehzahl, Einzel- und Doppelpendel, kleine und große Rotoren."
  },
+ "2ab2baaec6d7": {
+  "src": "Projects<span class=\"dot\">.</span>",
+  "tr": "Projekte<span class=\"dot\">.</span>"
+ },
  "2ba9806477f0": {
   "src": "Any mounting or your own values, solved with RK4 in your browser.",
   "tr": "Jede Befestigung oder Ihre eigenen Werte, mit RK4 in Ihrem Browser gelöst."
@@ -310,6 +314,10 @@
  "57ae169069dd": {
   "src": "Left: power against damping for the matched group; right: all 54 scanned cases.",
   "tr": "Links: Leistung gegen Dämpfung für die abgeglichene Gruppe; rechts: alle 54 untersuchten Fälle."
+ },
+ "580852f97eaf": {
+  "src": "Projects by Numa Koudsie, each with its derivations, solver and results: Droplet Collection, the remodel of a Bachelor thesis on how cloud droplets become rain; Rotor Pendula, whether a second blade hinged at the tip of a turbine blade can power a sensor; the Hydraulic Press Study, a servo-hydraulic press under digital control, built from first principles; and Iron, Cotton and the Head, why an iron ball hurts and a cotton ball of the same mass does not, in English, German and Arabic.",
+  "tr": "Projekte von Numa Koudsie, jedes mit Herleitungen, Löser und Ergebnissen: Droplet Collection, die Neumodellierung einer Bachelorarbeit darüber, wie aus Wolkentröpfchen Regen wird; Rotor Pendula, die Frage, ob ein zweites Blatt, an der Spitze eines Turbinenblatts angelenkt, einen Sensor versorgen kann; die Studie einer hydraulischen Presse, einer servohydraulischen Presse unter digitaler Regelung, aus ersten Prinzipien aufgebaut; und Eisen, Baumwolle und der Kopf, warum eine Eisenkugel wehtut und eine Baumwollkugel derselben Masse nicht, auf Englisch, Deutsch und Arabisch."
  },
  "589a176dc4c8": {
   "src": "The question, the answer in three numbers, and the best mounting in motion.",
@@ -603,6 +611,10 @@
   "src": "<span class=\"pfig__n\">Figure 3</span>The whole cloud: water in drops of 40 µm or more, for two kernels and two kinds of bookkeeping (chapter 5).",
   "tr": "<span class=\"pfig__n\">Abbildung 3</span>Die ganze Wolke: Wasser in Tropfen von 40 µm und mehr, für zwei Kerne und zwei Arten der Buchführung (Kapitel 5)."
  },
+ "a1d655a1d1c1": {
+  "src": "A thesis and three studies",
+  "tr": "Eine Abschlussarbeit und drei Studien"
+ },
  "a27650cb8d41": {
   "src": "<b>Where the energy goes.</b> The pump does 26.3 kJ of work; the valve turns 24.4 kJ of it into heat, because a valve throttling a constant-pressure supply is a brake. The energy books close to \\(2\\times10^{-14}\\) of the pump’s work.",
   "tr": "<b>Wohin die Energie geht.</b> Die Pumpe verrichtet 26.3 kJ Arbeit; das Ventil macht daraus 24.4 kJ Wärme, denn ein Ventil, das eine Versorgung mit konstantem Druck drosselt, ist eine Bremse. Die Energiebilanz schließt auf \\(2\\times10^{-14}\\) der Pumpenarbeit."
@@ -830,6 +842,10 @@
  "e4e201469918": {
   "src": "Key figures",
   "tr": "Kennzahlen"
+ },
+ "eb368b420396": {
+  "src": "Projects · Numa Koudsie",
+  "tr": "Projekte · Numa Koudsie"
  },
  "ebdb648bf16b": {
   "src": "<span class=\"pfig__n\">Figure 1</span>The press at 1.45 s, under the force law: set-point 32.6 kN on its way to 60, spool 6.4 % open, oil coloured by pressure.",

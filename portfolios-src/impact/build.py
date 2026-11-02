@@ -3,7 +3,7 @@
     python3 build.py            -> out/iron-vs-cotton-en.html, out/iron-vs-cotton-ar.html (stand-alone pages, Google Fonts)
     python3 build.py --site     -> ../../public/portfolios/impact/index.html (English), de.html (German) and ar.html (Arabic):
                                    the site's security policy and referrer rule, the site's own fonts, a back link
-                                   to the Portfolios page and a language switch.
+                                   to the Projects page and a language switch.
 The physics is physics.js (between PHYSICS-BEGIN/END), the page is template.html, the words are text_en.py / text_ar.py,
 the data panel's hooks are datahooks.js. The pages load the site's shared sim.js, dataset.js, datalog.js, paper.css and data.css.
 """
@@ -39,7 +39,7 @@ GF = {'en': 'https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500
 
 PAGE = {'en': 'index.html', 'de': 'de.html', 'ar': 'ar.html'}
 NAME = {'en': 'Numa Koudsie', 'de': 'Numa Koudsie', 'ar': 'نعمة سائر قدسية'}
-BACK = {'en': '← Numa Koudsie · Portfolios', 'de': '← Numa Koudsie · Portfolios', 'ar': '→ نعمة سائر قدسية · الملفّات'}
+BACK = {'en': '← Numa Koudsie · Projects', 'de': '← Numa Koudsie · Projekte', 'ar': '→ نعمة سائر قدسية · المشاريع'}
 
 def build(lang):
     T = importlib.import_module('text_' + lang).T

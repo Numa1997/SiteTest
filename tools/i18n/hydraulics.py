@@ -20,7 +20,7 @@ import build as B
 STUDY = os.path.join(B.ROOT, 'portfolios-src', 'hydraulics')
 PAGES = ['hydraulic_control.html', 'hydraulic.html']
 THEORY = sorted('theory/' + f for f in os.listdir(os.path.join(STUDY, 'theory')) if f.endswith('.src.html'))
-TABS = {'Servo press', 'Servo', 'Ideal press', 'Ideal', 'Theory', 'Hydraulic Press Study', '← Numa Koudsie · Portfolios'}
+TABS = {'Servo press', 'Servo', 'Ideal press', 'Ideal', 'Theory', 'Hydraulic Press Study', '← Numa Koudsie · Projects'}
 NAME = {'de': 'Numa Koudsie', 'ar': 'نعمة سائر قدسية'}
 ARABIC = 'U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0898-08FF, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC'
 
@@ -138,7 +138,7 @@ def build(lang):
     c = c.replace('<b>Hydraulic Press Study</b><span>from Pascal to a servo loop</span>', '<b>%s</b><span>%s</span>' % (tr('Hydraulic Press Study'), tr('from Pascal to a servo loop')))
     c = c.replace('<html lang="en">', '<html lang="%s" dir="%s">' % (lang, dirattr), 1)
     c = c.replace("title='Hydraulic Press Study · Numa Koudsie'", 'title=' + json.dumps(tr('Hydraulic Press Study') + ' · ' + NAME[lang], ensure_ascii=False))
-    c = c.replace('href="../../portfolios.html">← Numa Koudsie · Portfolios</a>', 'href="../../%s/portfolios.html">%s</a>' % (lang, tr('← Numa Koudsie · Portfolios')))
+    c = c.replace('href="../../portfolios.html">← Numa Koudsie · Projects</a>', 'href="../../%s/portfolios.html">%s</a>' % (lang, tr('← Numa Koudsie · Projects')))
     c = c.replace("(folder / 'index.html')", "(folder / '%s.html')" % lang).replace("folder / 'index.html', out", "folder / '%s.html', out" % lang)
     if lang == 'ar': c = c.replace("fonts='<link rel=\"stylesheet\" href=\"../../fonts/instrument-plex.css\">'",
                                    "fonts='<link rel=\"stylesheet\" href=\"../../fonts/instrument-plex.css\"><link rel=\"stylesheet\" href=\"../../fonts/arabic.css\">'")
