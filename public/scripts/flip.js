@@ -2,7 +2,8 @@
    on the graphics card; no script runs per frame. A change of language turns the page over: half a turn about the vertical axis
    maps x to -x, the same mirror that takes an English page to its Arabic one (type "lang"). Every other link lets the old page
    settle back and fade while the new one rises into place (type "page"; Numa, 3 November 2026). The arriving page then skips its
-   own entrance animation (class "vt-arrive" on <html>), so the reader sees one motion, not two. Browsers without view
+   own entrance animation for good (class "vt-arrive" on <html>; "vt-arriving" lasts only for the motion and holds the home
+   page's scroll reveals), so the reader sees one motion, not two. Browsers without view
    transitions, and readers who ask for reduced motion, simply load the page.
    Loaded in <head>, before the first paint, so the arriving page can join the motion. */
 (function () {
@@ -19,8 +20,8 @@
         if (!e.viewTransition) return;
         var from = window.navigation && navigation.activation && navigation.activation.from;
         name(e.viewTransition, from && from.url);
-        var root = document.documentElement;
-        root.classList.add('vt-arrive');
-        e.viewTransition.finished.then(function () { root.classList.remove('vt-arrive'); }, function () { root.classList.remove('vt-arrive'); });
+        var root = document.documentElement, done = function () { root.classList.remove('vt-arriving'); };
+        root.classList.add('vt-arrive', 'vt-arriving');   /* vt-arrive stays: taking it off would start the entrance animations over */
+        e.viewTransition.finished.then(done, done);
     });
 })();
