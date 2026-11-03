@@ -69,4 +69,5 @@ html[dir='rtl'] .curve__st { direction: ltr; unicode-bidi: isolate; text-align: 
 /* the arriving page has moved in already: its own entrance animations would be a second motion */
 .vt-arrive .sim__head, .vt-arrive .stage, .vt-arrive .panel, .vt-arrive .hero__name, .vt-arrive .hero__tag, .vt-arrive .hero__meta,
 .vt-arrive .hero__cta, .vt-arrive .figure { animation: none; }
+.vt-arriving .reveal { transition: none; }   /* what is on the first screen shows with the page, not after it */
 @media (prefers-reduced-motion: reduce) { @view-transition { navigation: none; } }
