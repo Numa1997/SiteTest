@@ -22,7 +22,7 @@
     </style>
 
     <script src="../../scripts/i18n/strings-de.js"></script>
-    <meta name="translated-from" content="English public/simulations/double-inverted-pendulum.html, commit c7c4894" />
+    <meta name="translated-from" content="English public/simulations/double-inverted-pendulum.html, commit c7c4894+" />
   </head>
 <body>
     <header class="sim-top">
@@ -192,7 +192,7 @@
 
                     <section class="psec" id="p-machine">
                         <h3><span class="psec__n">02</span>Die Maschine</h3>
-                        <p>Abbildung 1 zeigt die Teile. Der <b>Wagen</b> der Masse \(m_0\) rollt auf einer geraden, waagerechten <b>Schiene</b>; seine Position entlang der Schiene ist \(x\). Ein <b>Motor</b> schiebt ihn mit einer waagerechten Kraft \(u\), positiv nach rechts, dem Betrag nach nie größer als \(u_\text{max}\). Oben auf dem Wagen sitzt ein <b>Gelenk</b>, ein Bolzen in einem Lager, das die untere Stange frei in der Bildebene drehen lässt und auf keine andere Weise. Die <b>untere Stange</b> ist ein homogener Stab der Masse \(m_1\) und der Länge \(L_1\). An ihrem oberen Ende trägt ein zweites freies Gelenk die <b>obere Stange</b>, einen homogenen Stab der Masse \(m_2\) und der Länge \(L_2\). In keinem der beiden Gelenke sitzt ein Motor.</p>
+                        <p>Abbildung 1 zeigt die Teile. Der <b>Wagen</b> der Masse \(m_0\) rollt auf einer geraden, waagerechten <b>Schiene</b>; seine Position entlang der Schiene ist \(x\). Ein <b>Motor</b> schiebt ihn mit einer waagerechten Kraft \(u\), positiv nach rechts, dem Betrag nach nie größer als \(u_\text{max}\). Durch die Mitte des Wagens läuft ein <b>Schlitz</b>, oben und unten offen, und der Wagen fährt auf zwei Schienen, je einer zu beiden Seiten des Schlitzes. Quer über dem Schlitz sitzt oben ein <b>Gelenk</b>, ein Bolzen in einem Lager, das die untere Stange frei in der Bildebene drehen lässt und auf keine andere Weise. Die <b>untere Stange</b> ist ein homogener Stab der Masse \(m_1\) und der Länge \(L_1\). An ihrem oberen Ende trägt ein zweites freies Gelenk die <b>obere Stange</b>, einen homogenen Stab der Masse \(m_2\) und der Länge \(L_2\). In keinem der beiden Gelenke sitzt ein Motor.</p>
                         <figure class="pfig">
                             <div class="pfig__plate">
                                 <svg viewBox="0 0 720 360" role="img" aria-label="Cart on a rail with force u; lower rod at angle theta1 from the upward vertical hinged on the cart, upper rod at angle theta2 hinged on the lower rod; centres of mass at the middle of each rod; gravity down.">
@@ -338,7 +338,7 @@
 
                     <section class="psec" id="p-num">
                         <h3><span class="psec__n">09</span>Auf dem Bildschirm, und was fehlt</h3>
-                        <p>Die Seite integriert (9) mit dem klassischen Runge-Kutta-Verfahren vierter Ordnung mit einer festen Schrittweite von 1 ms, mehrere Schritte je Bildschirmbild, in Echtzeit. Bei ausgeschaltetem Regler hält derselbe Integrator, geprüft gegen einen hochgenauen Löser, die Energie \(T + V\) über 10 s auf \(2\times10^{-10}\) J konstant. Wenn eine Stange 60° überschreitet, gilt der Lauf als verloren: Der lineare Regler wurde für kleine Winkel entworfen, und die Seite lässt die Stangen dann frei fallen, bis eine flach liegt. Lagen werden maßstabsgetreu gezeichnet; die Ansicht folgt dem Wagen.</p>
+                        <p>Die Seite integriert (9) mit dem klassischen Runge-Kutta-Verfahren vierter Ordnung mit einer festen Schrittweite von 1 ms, mehrere Schritte je Bildschirmbild, in Echtzeit. Bei ausgeschaltetem Regler hält derselbe Integrator, geprüft gegen einen hochgenauen Löser, die Energie \(T + V\) über 10 s auf \(2\times10^{-10}\) J konstant. Wenn eine Stange 60° überschreitet, gilt der Lauf als verloren: Der lineare Regler wurde für kleine Winkel entworfen, also hört der Motor auf zu schieben (\(u = 0\)), und die Seite löst (9) genau wie zuvor weiter. Die Stangen fallen ganz herunter, schwingen durch den Schlitz in der Mitte des Wagens zwischen seinen beiden Schienen hindurch und schwingen weiter als Doppelpendel, das an einem freien Wagen hängt, ohne Reibung, sodass sie nie zur Ruhe kommen. Die Ansicht weitet sich, damit sie sichtbar bleiben. Lagen werden maßstabsgetreu gezeichnet; die Ansicht folgt dem Wagen.</p>
                         <p>Weggelassen: Reibung in den Gelenken und Rädern, die eigene Dynamik des Motors (ein wirklicher Motor kann seine Kraft nicht sofort ändern), Sensorrauschen, das Ende der Schiene und das Aufschwingen aus der hängenden Lage. Jedes davon ist eine bekannte Erweiterung dieses Modells [1, 3].</p>
                         <div class="pbox pbox--ex">
                             <span class="pbox__t">Aufgaben</span>
@@ -429,7 +429,7 @@
             var a = M11 * M22 - M12 * M12, b = -(M11 * p.f[1] + M22 * p.f[0]), c = p.f[0] * p.f[1], disc = Math.sqrt(b * b - 4 * a * c);
             return [Math.sqrt((-b + disc) / (2 * a)), Math.sqrt((-b - disc) / (2 * a))]; }
 
-        var p, K, s, u = 0, xref = 0, on = true, lost = false, flat = false, tSim = 0, tCtl = 0, acc = 0, trace = [], held = 0, geo = null;
+        var vy = 0, p, K, s, u = 0, xref = 0, on = true, lost = false, flat = false, tSim = 0, tCtl = 0, acc = 0, trace = [], held = 0, geo = null;
         function redesign() {
             p = par(); var L = linear(p); K = lqr(L.A, L.B, Math.pow(10, sR.value));
             var Acl = L.A.map(function (row, i) { return row.map(function (x, j) { return x - L.B[i][0] * K[j]; }); });
@@ -454,7 +454,6 @@
                 if (tSim >= tCtl - 1e-9) { u = control(); tCtl += Ts; }
                 s = rk4(p, s, u, H); tSim += H;
                 if (!lost && (Math.abs(s[1]) > LOST || Math.abs(s[2]) > LOST)) { lost = true; u = 0; }
-                if (lost && (Math.abs(s[1]) > Math.PI / 2 || Math.abs(s[2]) > Math.PI / 2)) flat = true;
                 if (Math.round(tSim * 1000) % 20 === 0) { trace.push([tSim, s[1], s[2], u]); if (trace.length > 400) trace.shift(); } }
         }
         function flick(J) {   // Δθ̇ = D⁻¹ (1, L1 cos θ1, L2 cos θ2)ᵀ J
@@ -465,7 +464,8 @@
         var cv = Sim.canvas2d(document.getElementById('cv')), tr = Sim.canvas2d(document.getElementById('tr')), camX = 0;
         function draw() {
             var c = cv.ctx, W = cv.w, Hh = cv.h; c.clearRect(0, 0, W, Hh);
-            var tall = Math.max(1.4, p.L1 + p.L2 + 0.25), sc = Math.min(W / 3.2, (Hh - 90) / tall), y0 = Hh - 62;
+            vy += ((lost ? 1 : 0) - vy) * 0.06;   /* after a fall the view widens and the rail moves up, so rods hanging below it stay in sight */
+            var tall = Math.max(1.4, p.L1 + p.L2 + 0.25), up = (Hh - 90) / tall, down = (Hh / 2 - 24) / (p.L1 + p.L2), sc = Math.min(W / (3.2 + 2 * vy), up + (down - up) * vy), y0 = (Hh - 62) + (Hh / 2 - (Hh - 62)) * vy;
             camX += (s[0] - camX) * 0.08; var X = function (x) { return W / 2 + (x - camX) * sc; };
             c.strokeStyle = TH.ruleSoft; c.lineWidth = 1; c.fillStyle = TH.muted; c.font = TH.mono; c.textAlign = 'center';
             for (var g = Math.floor(camX - 4); g <= camX + 4; g += 0.5) { var gx = X(g); if (gx < -20 || gx > W + 20) continue; c.beginPath(); c.moveTo(gx, y0 + 14); c.lineTo(gx, y0 + (Number.isInteger(g) ? 26 : 20)); c.stroke(); if (Number.isInteger(g)) c.fillText(Sim.fmt(g, 0) + ' m', gx, y0 + 40); }
@@ -473,6 +473,8 @@
             var tx = X(xref); c.fillStyle = TH.accent; c.beginPath(); c.moveTo(tx, y0 + 15); c.lineTo(tx - 7, y0 + 27); c.lineTo(tx + 7, y0 + 27); c.closePath(); c.fill(); c.textAlign = 'center'; c.fillText('target', tx, y0 + 54);
             var cx = X(s[0]), cw = Math.max(46, 0.36 * sc), ch = Math.max(20, 0.12 * sc);
             c.fillStyle = TH.card; c.strokeStyle = TH.ink; c.lineWidth = 2; c.beginPath(); c.rect(cx - cw / 2, y0 - ch + 4, cw, ch); c.fill(); c.stroke();
+            /* the slot through the middle of the cart: the rods swing down through it, between the two rails */
+            var sw = Math.max(10, cw * 0.22); c.fillStyle = TH.paper; c.fillRect(cx - sw / 2, y0 - ch + 4, sw, ch + 12); c.lineWidth = 1.4; c.beginPath(); c.moveTo(cx - sw / 2, y0 - ch + 4); c.lineTo(cx - sw / 2, y0 + 4); c.moveTo(cx + sw / 2, y0 - ch + 4); c.lineTo(cx + sw / 2, y0 + 4); c.stroke(); c.lineWidth = 2.4; c.beginPath(); c.moveTo(cx - sw / 2 - 4, y0 - ch + 4); c.lineTo(cx + sw / 2 + 4, y0 - ch + 4); c.stroke();
             [-1, 1].forEach(function (k) { c.beginPath(); c.arc(cx + k * cw * 0.3, y0 + 7, 6, 0, 2 * Math.PI); c.fillStyle = '#fff'; c.fill(); c.stroke(); });
             var hx = cx, hy = y0 - ch + 4, ex = hx + p.L1 * sc * Math.sin(s[1]), ey = hy - p.L1 * sc * Math.cos(s[1]), tx2 = ex + p.L2 * sc * Math.sin(s[2]), ty2 = ey - p.L2 * sc * Math.cos(s[2]);
             geo = { hx: hx, hy: hy, ex: ex, ey: ey, tx: tx2, ty: ty2 };
