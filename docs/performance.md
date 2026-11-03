@@ -123,6 +123,17 @@ Hydraulic Press Study's tab bar is not changed.*
 **5. Repeat visits gain little.** With `max-age=0`, a repeat visit re-asks for every stylesheet, script and font (15 to 39
 requests per page), and the simulations list takes 2.92 s on a repeat visit against 2.85 s on the first. *Changed for the font files: see change 2.*
 
+## Change 1b: the study pages join the site's page motion (3 November 2026)
+
+**What.** In `--site` mode both `build_combined.py` add to the shell's `<head>` the motion rules of `styles/i18n.css` (only those:
+`@view-transition`, the page-out and page-in keyframes, the reduced-motion opt-out; the backdrop in the study's own paper, `#efe6d6`)
+and `scripts/flip.js`. Projects → a study is now the same slide as every other link, not a cut. The standalone builds are unchanged.
+
+**Measured, live, phone at 4G and CPU 4×, before this change.** Rotor Pendula: the shell received 0.93 s after the click, read
+1.49 s; the notes frame made at 1.4 s draws its first text at 2.1 s and has read its end at 9.3 s. The notes are 2.97 MB of
+HTML, almost all pre-rendered KaTeX (54 956 `<span>`); the simulation and wind tabs are 0.25 and 0.17 MB. The motion hides the cut,
+not the 2 s: that time is the notes' size.
+
 ## Change 1: the study pages link the site's fonts instead of carrying them (31 October 2026)
 
 **What.** In `--site` mode only, `portfolios-src/rotor-pendula/tools/build_combined.py` and

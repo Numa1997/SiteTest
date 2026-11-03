@@ -283,7 +283,18 @@ def site_copy(site):
     icon = re.search(r'<link\s+rel="icon"\s+href="([^"]+)"', (site / 'public/portfolios.html').read_text()).group(1)
     head = (f'<meta http-equiv="Content-Security-Policy" content="{csp}">\n'
             '<meta name="referrer" content="strict-origin-when-cross-origin">\n'
-            f'<link rel="icon" href="{icon}">\n')
+            f'<link rel="icon" href="{icon}">\n'
+            # the site's page motion (styles/i18n.css, scripts/flip.js): arriving from Projects is the same slide as every other page,
+            # not a cut (Numa, 3 November 2026). Only the motion rules are copied: the study keeps its own look.
+            '<style>@view-transition { navigation: auto; }\n'
+            '::view-transition { background: #efe6d6; }\n'
+            '::view-transition-group(root) { animation-duration: 0.34s; }\n'
+            '::view-transition-old(root) { animation: page-out 0.16s cubic-bezier(.4, 0, 1, 1) both; transform-origin: 50% 30%; }\n'
+            '::view-transition-new(root) { animation: page-in 0.28s cubic-bezier(0, 0, .2, 1) 0.06s both; }\n'
+            '@keyframes page-out { from { opacity: 1; transform: scale(1); } to { opacity: 0; transform: scale(.985); } }\n'
+            '@keyframes page-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }\n'
+            '@media (prefers-reduced-motion: reduce) { @view-transition { navigation: none; } }</style>\n'
+            '<script src="../../scripts/flip.js"></script>\n')
     assert (site / 'public/fonts/instrument-plex.css').exists(), 'the site has no public/fonts/instrument-plex.css'
     out = build(head=head, title='Rotor Pendula · Numa Koudsie',
                 fonts='<link rel="stylesheet" href="../../fonts/instrument-plex.css">',

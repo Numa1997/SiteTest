@@ -5,6 +5,15 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%237a1f2b'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='34' font-weight='700' fill='%23fff'%3ENK%3C/text%3E%3C/svg%3E">
+<style>@view-transition { navigation: auto; }
+::view-transition { background: #efe6d6; }
+::view-transition-group(root) { animation-duration: 0.34s; }
+::view-transition-old(root) { animation: page-out 0.16s cubic-bezier(.4, 0, 1, 1) both; transform-origin: 50% 30%; }
+::view-transition-new(root) { animation: page-in 0.28s cubic-bezier(0, 0, .2, 1) 0.06s both; }
+@keyframes page-out { from { opacity: 1; transform: scale(1); } to { opacity: 0; transform: scale(.985); } }
+@keyframes page-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { @view-transition { navigation: none; } }</style>
+<script src="../../scripts/flip.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>دراسة المكبس الهيدروليكي · نعمة سائر قدسية</title>
 <link rel="stylesheet" href="../../fonts/instrument-plex.css"><link rel="stylesheet" href="../../fonts/arabic.css">
