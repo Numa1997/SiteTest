@@ -123,11 +123,14 @@ ul {
 }
 
 /* ================= hero ================= */
+/* The first screen fits the screen (Numa, 3 November 2026): logo, note, name, tagline, contacts and the three buttons all show
+   without scrolling. Each size is the smaller of a width share and a height share, so a short laptop screen (720 to 800 px tall)
+   shrinks the name and the gaps instead of pushing the buttons below the edge; a tall screen keeps the sizes it had. */
 .hero {
   max-width: 1100px;
   margin: 0 auto;
-  padding: 48px 32px 40px;
-  min-height: min(100vh, 860px);
+  padding: clamp(16px, 4svh, 48px) 32px clamp(16px, 4svh, 40px);
+  min-height: min(100svh, 860px);
   display: grid;
   grid-template-columns: 1.15fr 0.85fr;
   gap: 56px;
@@ -136,10 +139,10 @@ ul {
 .hero__name {
   font-family: var(--serif);
   font-weight: 600;
-  font-size: clamp(60px, 9vw, 124px);
+  font-size: clamp(52px, min(9vw, 12.4svh), 124px);
   line-height: 0.94;
   letter-spacing: -0.03em;
-  margin: 0 0 22px;
+  margin: 0 0 clamp(10px, 2.4svh, 22px);
   animation: rise 0.9s ease both;
 }
 .hero__name span {
@@ -152,11 +155,11 @@ ul {
 .hero__tag {
   font-family: var(--serif);
   font-style: italic;
-  font-size: clamp(20px, 2.2vw, 27px);
+  font-size: clamp(18px, min(2.2vw, 3svh), 27px);
   line-height: 1.3;
   color: var(--ink-2);
   max-width: 560px;
-  margin: 0 0 28px;
+  margin: 0 0 clamp(12px, 3svh, 28px);
   animation: rise 0.9s 0.12s ease both;
 }
 .hero__meta {
@@ -166,11 +169,27 @@ ul {
   font-family: var(--mono);
   font-size: 12px;
   color: var(--ink-3);
-  margin-bottom: 30px;
+  margin-bottom: clamp(14px, 3.2svh, 30px);
   animation: rise 0.9s 0.22s ease both;
 }
 .hero__meta a {
   color: var(--accent);
+}
+.hero__mark {
+  display: inline-block;
+  line-height: 0;
+  margin-bottom: clamp(8px, 2svh, 18px);
+}
+.hero__mark img {
+  height: clamp(64px, 13svh, 120px);
+  width: auto;
+}
+.hero__usul {
+  margin: 0 0 clamp(10px, 2.4svh, 22px);
+  max-width: 46ch;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--muted, #6f655f);
 }
 .hero__cta {
   display: flex;
