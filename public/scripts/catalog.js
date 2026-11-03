@@ -214,5 +214,22 @@
             has: ALL,
             added: '2026-10-14'
         },
+        {
+            id: 'double-inverted-pendulum',
+            fig: 11,
+            title: 'Balancing Two Rods on a Cart',
+            file: 'simulations/double-inverted-pendulum.html',
+            field: 'control',
+            stage: 2,
+            subject: 'control systems · classical mechanics',
+            summary: 'Two rods stand one on the other on a cart, hinged and free to fall. Only the cart, pushed along its rail, can hold them up. Flick the top, send the cart somewhere, or weaken the motor and slow the controller, and see when balancing stops being possible.',
+            equation: '\\mathbf D(\\boldsymbol\\theta)\\ddot{\\boldsymbol\\theta} + \\mathbf C(\\boldsymbol\\theta,\\dot{\\boldsymbol\\theta})\\dot{\\boldsymbol\\theta} + \\mathbf G(\\boldsymbol\\theta) = \\mathbf H u, \\qquad u = -\\mathbf K\\mathbf s',
+            model: 'double inverted pendulum on a cart with uniform rods (Bogdanov 2004), Lagrange’s equations',
+            method: 'RK4 at 1 ms in real time; LQR from the Riccati equation, sampled and saturated',
+            controls: 'flick, cart target, controller on/off, motor force limit, loop period, cost of force, masses and lengths',
+            concepts: ['inverted pendulum', 'feedback', 'LQR', 'Riccati equation', 'controllability', 'non-minimum phase', 'Lagrangian mechanics'],
+            has: ALL,
+            added: '2026-11-03'
+        },
     ];
 })();

@@ -55,8 +55,9 @@ The eleven entries, in the order of the array, which is also figure order:
 | 8 | `draw-decompose` | Draw & Decompose | `simulations/draw-decompose.html` | methods | 2 | 2026-10-06 | [166](../../public/scripts/catalog.js#L166) |
 | 9 | `driven-oscillator` | Driven Oscillator | `simulations/driven-oscillator.html` | control | 1 | 2026-10-14 | [183](../../public/scripts/catalog.js#L183) |
 | 10 | `wind-turbine` | Wind Turbine Control | `simulations/wind-turbine.html` | control | 2 | 2026-10-14 | [200](../../public/scripts/catalog.js#L200) |
+| 11 | `double-inverted-pendulum` | Balancing Two Rods on a Cart | `simulations/double-inverted-pendulum.html` | control | 2 | 2026-11-03 | [217](../../public/scripts/catalog.js#L217) |
 
-Every entry has `has: ALL`. All ten thumbnails exist in [public/images/sims/](../../public/images/sims/).
+Every entry has `has: ALL`. All eleven thumbnails exist in [public/images/sims/](../../public/images/sims/).
 
 ### `SIM_FIELDS`
 

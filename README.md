@@ -15,7 +15,7 @@ Beside the site's files, `docs/` explains every file and every script and how th
 | Path | What it holds | Explained in |
 |---|---|---|
 | `index.html` | The home page. | [docs/pages.md](docs/pages.md) |
-| `public/simulations/` | The ten simulation pages, one self-contained HTML file each. | [docs/simulations/](docs/simulations/) |
+| `public/simulations/` | The eleven simulation pages, one self-contained HTML file each. | [docs/simulations/](docs/simulations/) |
 | `public/simulations.html`, `public/portfolios.html` | The simulations catalog and the Portfolios page. | [docs/pages.md](docs/pages.md) |
 | `public/scripts/` | Shared JavaScript: helpers, data store, data panel, folds, the catalog registry, and the walkthroughs in `walk/`. | [docs/scripts/](docs/scripts/) |
 | `public/styles/` | The eight stylesheets, and the right-to-left copies `*.rtl.css` that `tools/i18n/build.py` writes for the Arabic pages. | [docs/styles.md](docs/styles.md) |
