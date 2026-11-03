@@ -123,6 +123,17 @@ Hydraulic Press Study's tab bar is not changed.*
 **5. Repeat visits gain little.** With `max-age=0`, a repeat visit re-asks for every stylesheet, script and font (15 to 39
 requests per page), and the simulations list takes 2.92 s on a repeat visit against 2.85 s on the first. *Changed for the font files: see change 2.*
 
+## Change 1c: a tap to Projects is a quick hop (3 November 2026)
+
+**Seen.** Live, phone at 4G and CPU 4×, home → Projects: the home page stood frozen 2.2 s under the browser's small spinner; the
+Projects cards then showed open for 0.3 s and snapped shut. **Causes, measured.** Every stylesheet and script was asked again of
+Cloudflare on every visit (`max-age=0, must-revalidate`): twelve round trips before the first frame (first paint 1.44 s). And
+`fold.js` folded the cards at `DOMContentLoaded`, after KaTeX had loaded, so the first frames showed them open.
+**Change.** `_headers`: `.css`, `.js`, `.svg` kept 10 minutes (`max-age=600`; cost: up to 10 minutes after a deploy a returning
+reader may get the old stylesheet with a new page). `portfolios.html` (and de/ar): `fold.js` with `data-now` folds at once, and
+`<link rel="expect" href="#folded" blocking="render">` holds the first frame until it has. **Result** (local build, same
+throttling, files cached): the motion starts 0.72 s after the tap and the page stands still at 0.84 s, cards closed from the first frame.
+
 ## Change 1b: the study pages join the site's page motion (3 November 2026)
 
 **What.** In `--site` mode both `build_combined.py` add to the shell's `<head>` the motion rules of `styles/i18n.css` (only those:
