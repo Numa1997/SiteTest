@@ -80,152 +80,12 @@
   font: italic 20px/1.5 var(--tex);
   color: var(--ink-2);
 }
-.cat__stats {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-.cat__stats li {
-  padding: 4px 0 4px 16px;
-  border-left: 1px solid var(--line-strong);
-}
-.cat__stats li:first-child {
-  border-left: 0;
-  padding-left: 0;
-}
-.cat__stats b {
-  display: block;
-  font: 400 44px/1 var(--serif);
-  color: var(--ink);
-}
-.cat__stats span {
-  display: block;
-  margin-top: 6px;
-  font: 500 10.5px var(--mono);
-  color: var(--muted);
-}
 
-/* ================= search and filters ================= */
-.cat__bar {
-  position: sticky;
-  top: 0;
-  z-index: 20;
-  margin: 0 -32px;
-  padding: 12px 32px;
-  background: rgba(245, 241, 234, 0.95);
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
-  border-bottom: 1px solid var(--line-strong);
-  display: grid;
-  grid-template-columns: minmax(220px, 340px) auto minmax(0, 1fr);
-  grid-template-areas:
-    'search stage count'
-    'field field field';
-  gap: 10px 18px;
-  align-items: center;
-}
-.cat__search {
-  grid-area: search;
-  position: relative;
-}
-.cat__search svg {
-  position: absolute;
-  left: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--muted);
-  pointer-events: none;
-}
-.cat__search input {
-  width: 100%;
-  font: 15px var(--sans);
-  color: var(--ink);
-  background: var(--card);
-  border: 1px solid var(--line-strong);
-  border-radius: 4px;
-  padding: 9px 40px 9px 36px;
-  -webkit-appearance: none;
-  appearance: none;
-}
-.cat__search input::placeholder {
-  color: var(--muted);
-}
-.cat__search input:focus {
-  outline: none;
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(122, 31, 43, 0.14);
-}
-.cat__search input::-webkit-search-cancel-button {
-  display: none;
-}
-.cat__search kbd {
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  font: 11px var(--mono);
-  color: var(--muted);
-  border: 1px solid var(--line-strong);
-  border-radius: 4px;
-  padding: 0 6px;
-  line-height: 18px;
-  pointer-events: none;
-}
-.cat__search input:focus ~ kbd,
-.cat__search input:not(:placeholder-shown) ~ kbd {
-  display: none;
-}
-.cat__filters {
-  display: contents;
-}
-.cat__chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  min-width: 0;
-}
 #fields {
   grid-area: field;
 }
 #stages {
   grid-area: stage;
-}
-.chip {
-  font: 13px var(--sans);
-  line-height: 1;
-  color: var(--ink-2);
-  background: transparent;
-  border: 1px solid var(--line-strong);
-  border-radius: 999px;
-  padding: 7px 12px;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
-}
-.chip:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-}
-.chip:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
-}
-.chip[aria-pressed='true'] {
-  background: var(--ink);
-  border-color: var(--ink);
-  color: var(--paper);
-}
-.chip small {
-  font: 11px var(--mono);
-  margin-left: 5px;
-  opacity: 0.7;
-}
-.cat__count {
-  grid-area: count;
-  justify-self: end;
-  margin: 0;
-  font: 12px var(--mono);
-  color: var(--ink-3);
-  white-space: nowrap;
 }
 
 /* ================= entries: one paper abstract per simulation ================= */
@@ -407,27 +267,6 @@
   color: var(--accent);
 }
 
-/* ================= empty state ================= */
-.cat__empty {
-  margin: 40px 0 0;
-  padding: 26px;
-  border: 1px dashed var(--line-strong);
-  border-radius: 6px;
-  text-align: center;
-  font: 17px var(--tex);
-  color: var(--ink-2);
-}
-.cat__empty button {
-  font: inherit;
-  color: var(--accent);
-  background: none;
-  border: 0;
-  padding: 0;
-  cursor: pointer;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-
 /* ================= how each note is built ================= */
 .cat__anatomy {
   margin-top: 80px;
@@ -499,38 +338,12 @@
     padding-left: 16px;
     padding-right: 16px;
   }
-  .cat__bar {
-    margin: 0 -16px;
-    padding: 10px 16px 8px;
-    grid-template-columns: minmax(0, 1fr) auto;
-    grid-template-areas:
-      'search count'
-      'chips chips';
-    gap: 8px 12px;
-  }
-  .cat__filters {
-    grid-area: chips;
-    display: flex;
-    gap: 12px;
-    overflow-x: auto;
-    margin: 0 -16px;
-    padding: 2px 16px 4px;
-    scrollbar-width: none;
-  }
-  .cat__filters::-webkit-scrollbar {
-    display: none;
-  }
-  .cat__chips {
-    flex: none;
-    flex-wrap: nowrap;
-  }
+
   #stages {
     padding-left: 12px;
     border-left: 1px solid var(--line-strong);
   }
-  .cat__stats b {
-    font-size: 34px;
-  }
+
   .cat__lede {
     font-size: 18px;
   }
@@ -562,14 +375,6 @@
   footer {
     padding-left: 16px;
     padding-right: 16px;
-  }
-}
-@media (hover: none) {
-  .cat__search kbd {
-    display: none;
-  }
-  .cat__search input {
-    padding-right: 12px;
   }
 }
 
