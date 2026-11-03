@@ -408,7 +408,10 @@
         papers();
         if (location.hash) openTo(targetOf(location.hash), false);
     }
-    if (doc.readyState === 'loading') doc.addEventListener('DOMContentLoaded', boot); else boot();
+    /* A page that loads this script after everything it folds (data-now on the tag) folds at once, before its first frame, and the
+       reader never sees the cards open and then snap shut while the rest of the page still loads (Numa, 3 November 2026). */
+    var now = doc.currentScript && doc.currentScript.hasAttribute('data-now');
+    if (doc.readyState === 'loading' && !now) doc.addEventListener('DOMContentLoaded', boot); else boot();
 
     var Fold = window.Fold = { make: make, walk: walk, all: all, openTo: openTo, setCard: setCard, onCard: null, onAll: null, tools: tools };
 })();

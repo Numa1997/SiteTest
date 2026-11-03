@@ -128,7 +128,7 @@ Each level-1 header is watched by a `ResizeObserver` that writes its height to `
 
 ### Adapters: what becomes a fold on each page
 
-`boot()` runs at `DOMContentLoaded`: `measureTop`, then the three adapters, then `openTo(hash)`
+`boot()` runs at `DOMContentLoaded`, or at once when the script tag carries `data-now` (the Projects page, whose tag stands after everything it folds and whose `<link rel="expect" href="#folded" blocking="render">` holds the first frame until the cards are folded, so they never show open and snap shut): `measureTop`, then the three adapters, then `openTo(hash)`
 ([fold.js:404-411](../../public/scripts/fold.js#L404-L411)). Each adapter returns at once on a page without its structure.
 
 | Adapter | Page | Level 1 | Level 2 | Counts line | Default |
@@ -200,7 +200,7 @@ for `many` (Arabic has six forms). See [i18n.md](../i18n.md#words-inside-scripts
 | `measureTop`, `watchBars` | [291-304](../../public/scripts/fold.js#L291-L304) | Height of the sticky page bar. |
 | `plural`, `count`, `join` | [307-308](../../public/scripts/fold.js#L307-L308) | Counts-line helpers ("3 equations · 1 box"). |
 | `papers`, `walk`, `home`, `portfolios` | [313-396](../../public/scripts/fold.js#L313-L396) | Adapters. |
-| `boot` | [404-410](../../public/scripts/fold.js#L404-L410) | Start-up. |
+| `boot` | [404-414](../../public/scripts/fold.js#L404-L414) | Start-up; `data-now` on the tag folds at once. |
 
 ## State it keeps
 
