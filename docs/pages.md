@@ -1,6 +1,6 @@
 # The site's own pages: home, simulations catalog, Portfolios, robots.txt
 
-Four files make the frame around the ten simulation pages:
+Four files make the frame around the eleven simulation pages:
 
 | File | Served at | Lines | What it is |
 |---|---|---|---|
@@ -35,7 +35,7 @@ Related pages: the fold mechanism is in [scripts/fold.md](scripts/fold.md), the 
 | Security policy and referrer rule, right after the charset line ([build-and-deploy.md](build-and-deploy.md#security)) | [5–6](../index.html#L5-L6) | [5–6](../public/simulations.html#L5-L6) | [5–6](../public/portfolios.html#L5-L6) |
 | Favicon: an inline SVG, a wine square with a letter | "N" [17–20](../index.html#L17-L20) | "NK" [20–23](../public/simulations.html#L20-L23) | "NK" [22–25](../public/portfolios.html#L22-L25) |
 | Skip link (`.skip-link`) | to `#main` [27](../index.html#L27) | to `#catalog` [30](../public/simulations.html#L30) | to `#projects` [32](../public/portfolios.html#L32) |
-| Phyein Usul logo [`images/phyein-usul-mark.svg`](../public/images/phyein-usul-mark.svg) in an `a` to `index.html` (the ten simulation pages carry the same 87 × 48 logo in their top bar, linking to `../index.html`) | top of the hero, 217 × 120 [31](../index.html#L31) | top bar, 87 × 48 [33](../public/simulations.html#L33) | top bar, 87 × 48 [35](../public/portfolios.html#L35) |
+| Phyein Usul logo [`images/phyein-usul-mark.svg`](../public/images/phyein-usul-mark.svg) in an `a` to `index.html` (the eleven simulation pages carry the same 87 × 48 logo in their top bar, linking to `../index.html`) | top of the hero, 217 × 120 [31](../index.html#L31) | top bar, 87 × 48 [33](../public/simulations.html#L33) | top bar, 87 × 48 [35](../public/portfolios.html#L35) |
 | `scripts/fold.js` at the end of `<body>` | [723](../index.html#L691) | [124](../public/simulations.html#L124) | [420](../public/portfolios.html#L453) |
 | Footer: © line and "Back to top" | [718–721](../index.html#L686-L689) | [119–122](../public/simulations.html#L119-L122) | [415–418](../public/portfolios.html#L448-L451) |
 
@@ -61,7 +61,7 @@ Words that the inline scripts write go through `T('…')` and `i18n/<lang>/strin
 
 **Purpose.** A one-page CV in the look of a physics journal: the Phyein Usul logo and a short note on what the site is, name
 and tagline, a live double pendulum (Fig. 0), positions,
-education, projects, ten simulation plates and skills. It is the entry page of the site and of the Vite build.
+education, projects, eleven simulation plates and skills. It is the entry page of the site and of the Vite build.
 
 ### Head
 
@@ -111,7 +111,7 @@ the files in `fonts/ibm-plex-*/` ([assets.md](assets.md#publicfonts--ibm-plex-an
 | `#positions` "Positions" | [78–202](../index.html#L78-L202) | `.timeline` with `.timeline__line` (the wine line that grows) and seven `article.entry.reveal`: `.entry__when` (dates, optional `.tag` "current", `.tag.tag--soft`), `h3`, `.entry__org`, `ul.bullets`. The current one also has `.entry--current` (filled pulsing dot). | "7 roles" (`article.entry`) |
 | `#education` "Education" | [204–233](../index.html#L204-L233) | `.ledger` with three `.row.reveal`: `.row__when`, `h3`, `.row__org`, optional `.row__note` | "3 qualifications" (`h3`) |
 | `#research` "Projects" | [235–280](../index.html#L235-L280) | `.section__intro` linking to the Projects page, `.projects` with four `article.project.reveal`: Droplet Collection, Rotor Pendula, Hydraulic Press Study, and Iron, Cotton and the Head. Each has a field label that starts with its kind ("Bachelor thesis" or "Study"), linked title, summary and direct project link; then an `All projects →` button in `p.plates__more` | "4 projects" (`article`) |
-| `#simulations` "Interactive physics simulations" | [277–674](../index.html#L277-L642) | `.section__intro`, `.plates` with ten `article.plate.reveal` (Figs. 1–10, every simulation in the catalog) as a sideways shelf, its controls `.shelf-nav` ([663–668](../index.html#L631-L636)), then `All simulations →` | "10 figures" (`article`) |
+| `#simulations` "Interactive physics simulations" | [277–674](../index.html#L277-L642) | `.section__intro`, `.plates` with eleven `article.plate.reveal` (Figs. 1–11, every simulation in the catalog) as a sideways shelf, its controls `.shelf-nav` ([663–668](../index.html#L631-L636)), then `All simulations →` | "11 figures" (`article`) |
 | `#skills` "Skills & languages" | [676–714](../index.html#L644-L682) | `dl.skills`, seven `div.reveal` each with `dt` and `dd`; language levels in `span.lvl` | "7 areas" (`dt`) |
 
 A plate ([e.g. 287–321](../index.html#L287-L321)) is `article.plate.reveal` > `div.plate__fig[data-sketch="…"]` (empty in the
@@ -196,7 +196,7 @@ fades by `1 − 0.99^(dt·60)`, which removes 1 % per 1/60 s whatever the frame 
 | fill loop | [1363–1369](../index.html#L1331-L1337) | For each `.plate__fig[data-sketch]`, looks up the function by name and sets `innerHTML`; an unknown name leaves the plate blank. |
 
 **The plates as a shelf** ([1425–1577](../index.html#L1393-L1545), styles at the end of
-[site.css:888–1169](../public/styles/site.css#L888-L1169); since 2 November 2026). The ten plates sit in one row
+[site.css:888–1169](../public/styles/site.css#L888-L1169); since 2 November 2026). The eleven plates sit in one row
 that scrolls sideways and snaps plate by plate (CSS `scroll-snap-type: x mandatory`): 3 in view when the row is wider than
 760 px, 2 down to 561 px, and on a phone one plate at 82 % of the row with the edge of the next. Measured in Chromium: 218 px
 plates in a 691 px row at 1440 px, 232 of 731 at 820 px, 244 of 301 at 390 px; the page never scrolls sideways. Inside the
@@ -232,7 +232,7 @@ bubble take their words from each plate's "Fig. n" and title.
 
 Measured with scripting off: the root keeps `no-js`, `.reveal` blocks show at full opacity, no folds are made, the five
 sections read as plain sections with their `h2` and wine bar, the index links are ordinary anchors, the hero canvas and
-the ten plate figures stay empty (only the grid background shows), and everything else is complete.
+the eleven plate figures stay empty (only the grid background shows), and everything else is complete.
 
 ### How to change it
 
@@ -257,8 +257,8 @@ the ten plate figures stay empty (only the grid background shows), and everythin
 
 ## 2. `public/simulations.html` · the catalog
 
-**Purpose.** The list of every simulation. It opens as a column of ten closed titles, "01 Wave Interference" to
-"10 Wind Turbine Control", in figure order (Fig. 11 became a project on 3 November 2026), under Expand all / Collapse all. A title opens to a paper abstract: thumbnail, field
+**Purpose.** The list of every simulation. It opens as a column of eleven closed titles, "01 Wave Interference" to
+"11 Balancing Two Rods on a Cart", in figure order (the old Fig. 11 became a project on 3 November 2026 and a new Fig. 11 took its place), under Expand all / Collapse all. A title opens to a paper abstract: thumbnail, field
 and year, summary, the key equation set by KaTeX, and links to the figure and to its lecture note. Since 3 November 2026 there
 is no search, no field or year chips, no "n shown" counter and no numbers line (removed at Numa's request; the address takes no
 `?q=&field=&stage=` any more). Everything is drawn from the registry [`scripts/catalog.js`](../public/scripts/catalog.js)

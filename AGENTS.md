@@ -31,7 +31,7 @@ drawn curve while the figure runs; every number in the page's store; `docs/scrip
 the catalog, Portfolios and every simulation page); `_headers` (Cloudflare's response headers); `scripts/sim.js` (shared helpers, lecture-note typesetting, walkthrough engine);
 `scripts/walk/<key>.js` ("From symbols to code", one file per page, chosen by the page's `data-walk` key:
 each equation paired with the page's own code lines; keep the excerpts identical to the page code when either
-changes; live values come from `Sim.live()` in each page); `simulations/*.html` (ten pages; Fig. 11, Double Pendulum under Control, became a project on 3 November 2026: `portfolios/pendulum-control/index.html`, written by hand like a simulation page, English only, figures from `tools/fig11/`).
+changes; live values come from `Sim.live()` in each page); `simulations/*.html` (eleven pages; the old Fig. 11, Double Pendulum under Control, became a project on 3 November 2026: `portfolios/pendulum-control/index.html`, written by hand like a simulation page, English only, figures from `tools/fig11/`; the new Fig. 11, Balancing Two Rods on a Cart, `simulations/double-inverted-pendulum.html`, was added the same evening, a small real-time page without data panel or walkthrough, docs/simulations/fig11-double-inverted-pendulum.md).
 Folds: `scripts/fold.js` + `styles/fold.css`, the fold-out mechanism of Physik Radar and the project apps, in one colour (no colour
 coding). Level 1 is a section card with a header band (number, title, a line of counts, round toggle) that pins to the top of the window
 while open; level 2 is a part inside it, pinned under its section's band; cards keep details behind More / Less. It turns, at load:

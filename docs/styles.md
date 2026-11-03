@@ -8,10 +8,10 @@ Arabic pages, never edited by hand ([i18n.md](i18n.md)).
 | File | Lines | Loaded by | Job |
 |---|---|---|---|
 | [`site.css`](../public/styles/site.css) | 1175 | home, catalog, Projects | Tokens, base type, the home page (hero, timeline, plates, and since 2 November 2026 the plates as a sideways shelf with a rail of dots, lines 888–1169), footer. |
-| [`sim.css`](../public/styles/sim.css) | 254 | the ten simulation pages | Tokens again, the figure, controls, readouts, walkthrough; imports KaTeX's CSS and `paper.css`. |
+| [`sim.css`](../public/styles/sim.css) | 254 | the eleven simulation pages | Tokens again, the figure, controls, readouts, walkthrough; imports KaTeX's CSS and `paper.css`. |
 | [`paper.css`](../public/styles/paper.css) | 118 | simulation pages (through `sim.css`), catalog, Portfolios | Lecture notes set like LaTeX: Latin Modern, numbered equations, figures, boxes. |
 | [`catalog.css`](../public/styles/catalog.css) | 390 | catalog, Projects | Top bar, masthead, catalog entries; switches titles to Instrument Serif. |
-| [`data.css`](../public/styles/data.css) | 455 | the ten simulation pages | The data panel (a bookkeeper's ledger) and the Read values strip ([scripts/datalog.md](scripts/datalog.md)). |
+| [`data.css`](../public/styles/data.css) | 455 | the eleven simulation pages | The data panel (a bookkeeper's ledger) and the Read values strip ([scripts/datalog.md](scripts/datalog.md)). |
 | [`fold.css`](../public/styles/fold.css) | 169 | every page | Fold cards, header bands, toggles, Expand / Collapse all ([scripts/fold.md](scripts/fold.md)). |
 | [`portfolio.css`](../public/styles/portfolio.css) | 292 | Portfolios | The project cards. |
 | [`i18n.css`](../public/styles/i18n.css) | 59 | home, catalog, Portfolios, the ten simulation pages | The language switch and what the German and Arabic pages need (for example the Arabic title faces). |
@@ -70,7 +70,7 @@ The departures are listed under [Notes for maintainers](#notes-for-maintainers).
 **The Phyein Usul mark** ([assets.md](assets.md#publicimagesphyein-usul-marksvg--the-phyein-usul-logo-1-file-018-mb)) has no
 rule in any stylesheet: every page sizes and places it with inline `style` attributes. On the home page it is a 217 × 120 image
 link to `index.html` above the name, with a 14 px note in `var(--muted)` under it ("Phyein Usul · φύειν أصول, roots that grow. …")
-([index.html:31–32](../index.html#L31-L32)). In the top bar of the catalog, Portfolios and the ten simulation pages it is an
+([index.html:31–32](../index.html#L31-L32)). In the top bar of the catalog, Portfolios and the eleven simulation pages it is an
 87 × 48 image link to the home page, set before the back link in a `span` with `display: inline-flex` and a 14 px gap
 ([simulations.html:33](../public/simulations.html#L33), [portfolios.html:35](../public/portfolios.html#L35),
 [water-wave.html:18](../public/simulations/water-wave.html#L18)). Its strokes are `#7a1f2b` and `#4d0f18`, the values of
@@ -183,7 +183,7 @@ Expand / Collapse pair gets a 104 px top margin to match it ([fold.css:124](../p
 
 ## `sim.css` · the simulation pages
 
-**Loaded by** the ten pages in `public/simulations/`, line 11 of each. It begins by importing the fonts
+**Loaded by** the eleven pages in `public/simulations/`, line 11 of each. It begins by importing the fonts
 ([7](../public/styles/sim.css#L7)), KaTeX's stylesheet ([8](../public/styles/sim.css#L8)) and `paper.css`
 ([9](../public/styles/sim.css#L9)), so a simulation page needs only this `<link>` for type and notes. Its tokens
 ([11–32](../public/styles/sim.css#L11-L32)) repeat `site.css` value for value except `--serif`, which is Instrument Serif;
@@ -278,7 +278,7 @@ is removed.
 
 ## `data.css` · the data panel
 
-**Loaded by** the ten simulation pages, line 12 of each, after `sim.css`. It uses the tokens of `sim.css`, `--tex` from
+**Loaded by** the eleven simulation pages, line 12 of each, after `sim.css`. It uses the tokens of `sim.css`, `--tex` from
 `paper.css`, and literal colours formerly supplied by three undefined-token fallbacks ([data.css:5](../public/styles/data.css#L5)). What the panel does
 is in [scripts/datalog.md](scripts/datalog.md). Since 24 October 2026 it styles the panel as a bookkeeper: a headline of live
 numbers, a toolbar, one table in causal sections and the books. On Arabic pages `data.rtl.css` (made by `rtlcss`) mirrors it,
@@ -396,7 +396,7 @@ site <https://phyeinusul.com> `/src/main.ts` answers 404 (measured 20 October 20
    400 on the simulation, catalog and Portfolios pages, IBM Plex Serif at weight 600 on the home page alone (AGENTS.md, "Design";
    CLAUDE.md, "Design and explanations"). `catalog.css` redefines `--serif` as Instrument Serif after `site.css`
    ([catalog.css:9–11](../public/styles/catalog.css#L9-L11)), so `--serif` is IBM Plex Serif only on the home page and
-   Instrument Serif on the other twelve pages (catalog, Portfolios, ten simulations).
+   Instrument Serif on the other thirteen pages (catalog, Portfolios, eleven simulations).
 2. **Shadows elsewhere, against the "no card shadows" comments** in [paper.css:7](../public/styles/paper.css#L7),
    [catalog.css:5](../public/styles/catalog.css#L5) and [portfolio.css:5](../public/styles/portfolio.css#L5): every open fold card
    ([fold.css:25](../public/styles/fold.css#L25)), the simulation figure and panel ([sim.css:67](../public/styles/sim.css#L67),
@@ -444,7 +444,7 @@ loads fold.js, once per animation frame while scrolling). Portfolios and CV come
 
 Numa asked for every simulation to use the space the way Fig. 11 (the cart) does. Fig. 11's layout, described in
 [simulations/fig11-pendulum-control.md](simulations/fig11-pendulum-control.md) ("Layout and §1.1"), has three parts; each is now
-the rule for all ten pages, in `sim.css` and its generated `sim.rtl.css`:
+the rule for all eleven pages, in `sim.css` and its generated `sim.rtl.css`:
 
 - **Width.** `.sim-top`, `.sim` and `.sim-foot` are at most 1560 px wide (were 1180 px; Figs. 9 and 11 already set 1560 px in their
   own `<style>`). The lecture note keeps its own 210 + 760 px grid, so its line length is unchanged.

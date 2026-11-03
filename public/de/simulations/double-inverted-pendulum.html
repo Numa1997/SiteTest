@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="de" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zwei Stangen auf einem Wagen balancieren · Numa Koudsie</title>
+    <meta name="description" content="Zwei Stangen stehen übereinander auf einem Wagen, frei, umzufallen. Das Einzige, was sie oben halten kann, ist der Wagen, der auf seiner Schiene geschoben wird. Schnippen Sie gegen die Spitze, ändern Sie Massen, Längen, Motorstärke und Taktzeit, und sehen Sie zu, wie der Regler gewinnt oder verliert.">
+    <meta name="theme-color" content="#f5f1ea">
+    <link rel="stylesheet" href="../../styles/sim.css">
+    <link rel="stylesheet" href="../../styles/fold.css"><link rel="stylesheet" href="../../styles/i18n.css"><script src="../../scripts/flip.js"></script>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%237a1f2b'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='38' fill='%23f5f1ea'%3EN%3C/text%3E%3C/svg%3E">
+    <style>
+        .seg { display: flex; flex-wrap: wrap; gap: 4px; padding: 3px; border: 1px solid var(--rule); border-radius: 8px; }
+        .seg button { flex: 1 1 auto; padding: 6px 9px; border: 0; border-radius: 6px; background: transparent; font-family: var(--sans); font-size: 13px; color: var(--ink-3); cursor: pointer; }
+        .seg button[aria-pressed="true"] { background: var(--accent); color: #fff; }
+        .state { margin: 0; font-size: 13px; line-height: 1.5; color: var(--ink-2); }
+        .state b { color: var(--accent); }
+        .ptable { border-collapse: collapse; margin: 12px 0 16px; font-size: 15px; }
+        .ptable th, .ptable td { border-bottom: 1px solid var(--rule); padding: 5px 12px 5px 0; text-align: left; vertical-align: top; }
+    </style>
+
+    <script src="../../scripts/i18n/strings-de.js"></script>
+    <meta name="translated-from" content="English public/simulations/double-inverted-pendulum.html, commit c7c4894" />
+  </head>
+<body>
+    <header class="sim-top">
+        <span style="display:inline-flex;align-items:center;gap:14px"><a href="../index.html" aria-label="Phyein Usul, Startseite" style="display:inline-block;line-height:0"><img src="../../images/phyein-usul-mark.svg" alt="Phyein Usul" width="87" height="48" /></a><a href="../simulations.html">← Alle Simulationen</a></span>
+        <nav class="sim-nav" aria-label="Simulationen">
+            <span>Abb.</span>
+            <a href="Circular Wave Interference Visualization.html">1</a>
+            <a href="Double Pendulum.html">2</a>
+            <a href="Interactive Double-Slit Experiment Visualization.html">3</a>
+            <a href="Transverse and longitudinal waves.html">4</a>
+            <a href="water-wave.html">5</a>
+            <a href="wave-interference.html">6</a>
+            <a href="phasor-sums.html">7</a>
+            <a href="draw-decompose.html">8</a>
+            <a href="driven-oscillator.html">9</a>
+            <a href="wind-turbine.html">10</a>
+            <a href="double-inverted-pendulum.html" aria-current="page">11</a>
+        </nav>
+    </header>
+
+    <main class="sim">
+        <noscript><p class="sim-error"><b>Diese Simulation braucht JavaScript.</b> <a href="../simulations.html">Zurück zu den Simulationen</a></p></noscript>
+        <div class="sim__head">
+            <p class="sim__num">Abb. 11 · Regelungstechnik · klassische Mechanik</p>
+            <h1>Zwei Stangen auf einem Wagen balancieren<span class="dot">.</span></h1>
+            <p class="sim__lede">Zwei Stangen stehen übereinander auf einem Wagen, mit Gelenken verbunden und frei, umzufallen. Nichts hält sie oben außer dem Wagen: Ein Motor schiebt ihn auf einer Schiene nach links und rechts, und ein Regler entscheidet hundertmal pro Sekunde, wie stark. Schnippen Sie gegen die obere Stange, schicken Sie den Wagen irgendwohin, oder machen Sie den Motor schwach und den Regler langsam, und sehen Sie, wann das Balancieren unmöglich wird.</p>
+        </div>
+
+        <div class="sim__grid">
+            <div>
+                <figure class="stage">
+                    <div class="stage__canvas" id="stage" style="--ar: 16 / 8.5; --ar-m: 1 / 1.05;">
+                        <canvas id="cv" style="touch-action: pan-y; cursor: grab;" aria-label="Ein Wagen auf einer Schiene mit zwei Stangen darauf, die eine gelenkig auf der anderen; ein Pfeil am Wagen zeigt die Motorkraft. Ziehen Sie an einer Stange, um sie zu kippen, und lassen Sie los."></canvas>
+                    </div>
+                    <figcaption class="stage__cap">
+                        <span><b>Abb. 11</b> · <span class="tx">\(\mathbf D(\boldsymbol\theta)\,\ddot{\boldsymbol\theta} + \mathbf C(\boldsymbol\theta,\dot{\boldsymbol\theta})\,\dot{\boldsymbol\theta} + \mathbf G(\boldsymbol\theta) = \mathbf H u\)</span> · live, RK4</span>
+                        <span id="cap-t"><i>t</i> = —</span>
+                    </figcaption>
+                </figure>
+                <figure class="stage" style="margin-top: 16px;">
+                    <div class="stage__canvas" id="stage-tr" style="--ar: 16 / 5; --ar-m: 16 / 9;">
+                        <canvas id="tr" aria-label="Die letzten acht Sekunden der beiden Stangenwinkel und der Motorkraft."></canvas>
+                    </div>
+                    <figcaption class="stage__cap">
+                        <span><b>Letzte 8 s</b> · Stangenwinkel <span class="tx">\(\theta_1, \theta_2\)</span> und Motorkraft <span class="tx">\(u\)</span></span>
+                        <span id="cap-u"><i>u</i> = —</span>
+                    </figcaption>
+                </figure>
+            </div>
+
+            <aside class="panel" aria-label="Bedienelemente">
+                <div class="panel__group">
+                    <p class="panel__label">Spielen</p>
+                    <div class="actions">
+                        <button type="button" class="btn" id="flickL">← Oben schnippen</button>
+                        <button type="button" class="btn" id="flickR">Oben schnippen →</button>
+                    </div>
+                    <div class="actions">
+                        <button type="button" class="btn btn--ghost" data-go="-1">Wagen nach −1 m</button>
+                        <button type="button" class="btn btn--ghost" data-go="0">nach 0</button>
+                        <button type="button" class="btn btn--ghost" data-go="1">nach +1 m</button>
+                    </div>
+                    <div class="actions">
+                        <button type="button" class="btn btn--ghost" id="tilt">Kippen und loslassen</button>
+                        <button type="button" class="btn btn--ghost" id="play">Pause</button>
+                        <button type="button" class="btn btn--ghost" id="reset">Zurücksetzen</button>
+                    </div>
+                    <p class="state" id="state" aria-live="polite">—</p>
+                    <p class="state">Oder fassen Sie eine der Stangen in der Abbildung, ziehen Sie sie um und lassen Sie los.</p>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>Stärke des Schnippens <i>J</i></span><output id="J-out" for="J"></output></span>
+                        <input type="range" id="J" min="0.05" max="0.5" step="0.01" value="0.15">
+                    </label>
+                </div>
+
+                <div class="panel__group">
+                    <p class="panel__label">Regler · legt die Motorkraft fest</p>
+                    <div class="seg" role="group" aria-label="Regler" id="ctrl">
+                        <button type="button" data-v="on" aria-pressed="true">Ein</button>
+                        <button type="button" data-v="off" aria-pressed="false">Aus</button>
+                    </div>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>Grenze der Motorkraft <i>u</i><sub>max</sub></span><output id="Fmax-out" for="Fmax"></output></span>
+                        <input type="range" id="Fmax" min="5" max="200" step="1" value="60">
+                    </label>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>Taktzeit des Reglers <i>T</i><sub>s</sub></span><output id="Ts-out" for="Ts"></output></span>
+                        <input type="range" id="Ts" min="1" max="80" step="1" value="10">
+                    </label>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>Kosten der Kraft <i>ρ</i></span><output id="rho-out" for="rho"></output></span>
+                        <input type="range" id="rho" min="-2" max="2" step="0.1" value="0">
+                    </label>
+                </div>
+
+                <div class="panel__group">
+                    <p class="panel__label">Die Maschine · der Regler wird bei jeder Änderung neu entworfen</p>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>Wagenmasse <i>m</i><sub>0</sub></span><output id="m0-out" for="m0"></output></span>
+                        <input type="range" id="m0" min="0.3" max="6" step="0.1" value="1.5">
+                    </label>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>Masse der unteren Stange <i>m</i><sub>1</sub></span><output id="m1-out" for="m1"></output></span>
+                        <input type="range" id="m1" min="0.1" max="2" step="0.05" value="0.5">
+                    </label>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>Masse der oberen Stange <i>m</i><sub>2</sub></span><output id="m2-out" for="m2"></output></span>
+                        <input type="range" id="m2" min="0.1" max="2" step="0.05" value="0.75">
+                    </label>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>Länge der unteren Stange <i>L</i><sub>1</sub></span><output id="L1-out" for="L1"></output></span>
+                        <input type="range" id="L1" min="0.2" max="1.5" step="0.05" value="0.5">
+                    </label>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>Länge der oberen Stange <i>L</i><sub>2</sub></span><output id="L2-out" for="L2"></output></span>
+                        <input type="range" id="L2" min="0.2" max="1.5" step="0.05" value="0.75">
+                    </label>
+                    <div class="actions"><button type="button" class="btn btn--ghost" id="defaults">Bogdanovs Maschine</button></div>
+                </div>
+
+                <dl class="readouts">
+                    <div><dt>Fallraten, Regler aus</dt><dd id="r-sig">—</dd></div>
+                    <div><dt>Eine Neigung wächst um den Faktor e in</dt><dd id="r-tau">—</dd></div>
+                    <div><dt>Langsamstes Abklingen, Regler ein</dt><dd id="r-set">—</dd></div>
+                    <div><dt>Verstärkungen für θ₁, θ₂</dt><dd id="r-K">—</dd></div>
+                    <div><dt>Stangenwinkel</dt><dd id="r-th">—</dd></div>
+                    <div><dt>Wagenposition</dt><dd id="r-x">—</dd></div>
+                </dl>
+
+                <ul class="legend">
+                    <li><span class="sw sw--ink"></span>untere Stange <i>θ</i><sub>1</sub></li>
+                    <li><span class="sw"></span>obere Stange <i>θ</i><sub>2</sub></li>
+                    <li><span class="sw sw--dash"></span>Motorkraft <i>u</i></li>
+                </ul>
+            </aside>
+        </div>
+
+        <article class="paper" id="paper" aria-labelledby="paper-title">
+            <header class="paper__head">
+                <p class="paper__kicker">Skript · Abb. 11 · Regelungstechnik</p>
+                <h2 class="paper__title" id="paper-title">Zwei Stangen auf einem Wagen: aufrecht halten, was fallen will</h2>
+                <p class="paper__by">Numa Koudsie · für Leserinnen und Leser, die Newtons Gesetze und etwas Analysis kennen</p>
+                <div class="paper__abstract"><b>Zusammenfassung.</b> Eine Stange, die auf ihrem Ende steht, fällt um; zwei Stangen, mit Gelenken aufeinandergesetzt, fallen schneller und verheddern sich dabei. Hier bekommen sie Hilfe nur von unten: von einem Wagen, den ein Motor auf einer Schiene schiebt. Wir beschreiben die Maschine, schreiben ihre Energie auf, leiten ihre Bewegungsgleichungen mit dem Verfahren von Lagrange her und prüfen jeden Term am klassischen Bericht von Bogdanov (2004). Dann linearisieren wir um die aufrechte Lage, um zu finden, wie schnell die Stangen fallen, zeigen, dass ein einziger Schub entlang der Schiene genügt, um beide zu steuern, und bauen den Regler, der das tut, indem er Kosten minimiert. Das Skript endet mit dem, was jeder Schieberegler lehrt: warum lange Stangen leichter sind, warum der Motor stark und der Regelkreis schnell sein muss, und warum der Wagen zuerst in die falsche Richtung fahren muss.</div>
+            </header>
+            <div class="paper__grid">
+                <nav class="paper__toc" aria-label="Inhalt">
+                    <p>Inhalt</p>
+                    <ol>
+                        <li><a href="#p-why"><span>1</span>Balancieren von unten</a></li>
+                        <li><a href="#p-machine"><span>2</span>Die Maschine</a></li>
+                        <li><a href="#p-energy"><span>3</span>Lagen und Energie</a></li>
+                        <li><a href="#p-eom"><span>4</span>Bewegungsgleichungen</a></li>
+                        <li><a href="#p-fall"><span>5</span>Wie schnell sie fällt</a></li>
+                        <li><a href="#p-steer"><span>6</span>Ein Schub, zwei Stangen</a></li>
+                        <li><a href="#p-lqr"><span>7</span>Der Regler</a></li>
+                        <li><a href="#p-play"><span>8</span>Was die Schieberegler lehren</a></li>
+                        <li><a href="#p-num"><span>9</span>Auf dem Bildschirm, und was fehlt</a></li>
+                    </ol>
+                </nav>
+                <div class="paper__body">
+                    <section class="psec" id="p-why">
+                        <h3><span class="psec__n">01</span>Balancieren von unten</h3>
+                        <p class="psec__lead">Stellen Sie einen Besen auf Ihre Handfläche. Er beginnt zu kippen, und ohne nachzudenken bewegen Sie die Hand unter ihn, in die Richtung, in die er fällt. Ihre Hand kann den Besen nicht hochziehen; sie kann nur das untere Ende bewegen, und indem sie das untere Ende bewegt, dreht sie den Besen zurück.</p>
+                        <p>Das ist die ganze Idee dieser Seite. Der Wagen ist die Hand, die Schiene ist die einzige Richtung, in die er sich bewegen kann, und die Stangen sind der Besen. Mit einer Stange ist das Problem das klassische <em>Wagen-Pendel</em>; mit zwei Stangen, die aufeinander gelenkig gelagert sind, ist es das <em>doppelte inverse Pendel auf einem Wagen</em>, ein Standardprüfstand der Regelungstechnik, weil es instabil und nichtlinear ist und mehr zu halten hat (zwei Winkel) als zu schieben (eine Kraft) [1, 2, 3].</p>
+                        <p>Dasselbe Problem tritt außerhalb des Labors auf. Ein zweirädriges, selbstbalancierendes Fahrzeug ist ein inverses Pendel, dessen Räder die Rolle des Wagens spielen: Grasser und Kollegen bauten an der EPFL eines und balancierten es mit Zustandsrückführung [4]. Ein stillstehender Mensch kommt der doppelten Version näher: Messungen, wie Menschen gegen den Boden drücken, lassen sich nur mit zwei Gliedern erklären, den Beinen, die sich im Sprunggelenk drehen, und dem Rumpf, der sich in der Hüfte dreht, nicht mit einem [5]. Der Unterschied ist, dass ein Mensch die Gelenke direkt mit Muskeln antreibt, während hier die Gelenke frei sind und nur der Wagen angetrieben wird. Das macht unser Problem zum schwereren.</p>
+                    </section>
+
+                    <section class="psec" id="p-machine">
+                        <h3><span class="psec__n">02</span>Die Maschine</h3>
+                        <p>Abbildung 1 zeigt die Teile. Der <b>Wagen</b> der Masse \(m_0\) rollt auf einer geraden, waagerechten <b>Schiene</b>; seine Position entlang der Schiene ist \(x\). Ein <b>Motor</b> schiebt ihn mit einer waagerechten Kraft \(u\), positiv nach rechts, dem Betrag nach nie größer als \(u_\text{max}\). Oben auf dem Wagen sitzt ein <b>Gelenk</b>, ein Bolzen in einem Lager, das die untere Stange frei in der Bildebene drehen lässt und auf keine andere Weise. Die <b>untere Stange</b> ist ein homogener Stab der Masse \(m_1\) und der Länge \(L_1\). An ihrem oberen Ende trägt ein zweites freies Gelenk die <b>obere Stange</b>, einen homogenen Stab der Masse \(m_2\) und der Länge \(L_2\). In keinem der beiden Gelenke sitzt ein Motor.</p>
+                        <figure class="pfig">
+                            <div class="pfig__plate">
+                                <svg viewBox="0 0 720 360" role="img" aria-label="Cart on a rail with force u; lower rod at angle theta1 from the upward vertical hinged on the cart, upper rod at angle theta2 hinged on the lower rod; centres of mass at the middle of each rod; gravity down.">
+                                    <rect x="0" y="0" width="720" height="360" fill="#fff"/>
+                                    <line x1="40" y1="300" x2="680" y2="300" stroke="#1c1518" stroke-width="2"/>
+                                    <g stroke="#cdc1ae" stroke-width="1"><line x1="60" y1="300" x2="52" y2="310"/><line x1="100" y1="300" x2="92" y2="310"/><line x1="140" y1="300" x2="132" y2="310"/><line x1="180" y1="300" x2="172" y2="310"/><line x1="220" y1="300" x2="212" y2="310"/><line x1="260" y1="300" x2="252" y2="310"/><line x1="300" y1="300" x2="292" y2="310"/><line x1="340" y1="300" x2="332" y2="310"/><line x1="380" y1="300" x2="372" y2="310"/><line x1="420" y1="300" x2="412" y2="310"/><line x1="460" y1="300" x2="452" y2="310"/><line x1="500" y1="300" x2="492" y2="310"/><line x1="540" y1="300" x2="532" y2="310"/><line x1="580" y1="300" x2="572" y2="310"/><line x1="620" y1="300" x2="612" y2="310"/><line x1="660" y1="300" x2="652" y2="310"/></g>
+                                    <rect x="230" y="248" width="100" height="40" rx="4" fill="#fffaf3" stroke="#1c1518" stroke-width="2"/>
+                                    <circle cx="252" cy="292" r="8" fill="#fff" stroke="#1c1518" stroke-width="2"/>
+                                    <circle cx="308" cy="292" r="8" fill="#fff" stroke="#1c1518" stroke-width="2"/>
+                                    <line x1="140" y1="268" x2="222" y2="268" stroke="#7a1f2b" stroke-width="2.4"/>
+                                    <path d="M216 262 L228 268 L216 274 Z" fill="#7a1f2b"/>
+                                    <text class="m" x="160" y="258">u</text>
+                                    <line x1="280" y1="248" x2="280" y2="60" stroke="#8b8079" stroke-width="1.2" stroke-dasharray="4 4"/>
+                                    <line x1="280" y1="248" x2="350" y2="118" stroke="#1c1518" stroke-width="7" stroke-linecap="round"/>
+                                    <line x1="350" y1="118" x2="372" y2="12" stroke="#7a1f2b" stroke-width="7" stroke-linecap="round"/>
+                                    <line x1="350" y1="118" x2="350" y2="18" stroke="#8b8079" stroke-width="1.2" stroke-dasharray="4 4"/>
+                                    <circle cx="280" cy="248" r="5" fill="#fff" stroke="#1c1518" stroke-width="2"/>
+                                    <circle cx="350" cy="118" r="5" fill="#fff" stroke="#1c1518" stroke-width="2"/>
+                                    <circle cx="315" cy="183" r="4" fill="#1c1518"/>
+                                    <circle cx="361" cy="65" r="4" fill="#fff" stroke="#7a1f2b" stroke-width="2"/>
+                                    <path d="M280 198 A50 50 0 0 1 303.7 204" fill="none" stroke="#7a1f2b" stroke-width="1.6"/>
+                                    <path d="M350 78 A40 40 0 0 1 357.3 78.7" fill="none" stroke="#7a1f2b" stroke-width="1.6"/>
+                                    <text class="m" x="286" y="192">θ<tspan class="mu" font-size="12" dy="4">1</tspan></text>
+                                    <text class="m" x="356" y="70">θ<tspan class="mu" font-size="12" dy="4">2</tspan></text>
+                                    <text class="m" x="330" y="200">m<tspan class="mu" font-size="12" dy="4">1</tspan></text>
+                                    <text class="m" x="376" y="64">m<tspan class="mu" font-size="12" dy="4">2</tspan></text>
+                                    <text class="m" x="336" y="160">L<tspan class="mu" font-size="12" dy="4">1</tspan></text>
+                                    <text class="m" x="384" y="104">L<tspan class="mu" font-size="12" dy="4">2</tspan></text>
+                                    <text class="m" x="240" y="240">m<tspan class="mu" font-size="12" dy="4">0</tspan></text>
+                                    <line x1="280" y1="330" x2="280" y2="312" stroke="#1c1518" stroke-width="1.2"/>
+                                    <line x1="80" y1="330" x2="80" y2="312" stroke="#1c1518" stroke-width="1.2"/>
+                                    <line x1="80" y1="325" x2="276" y2="325" stroke="#8b8079" stroke-width="1.2"/>
+                                    <path d="M272 321 L280 325 L272 329 Z" fill="#8b8079"/>
+                                    <text class="m" x="170" y="347">x</text>
+                                    <text class="lbl" x="58" y="347">x = 0</text>
+                                    <line x1="620" y1="70" x2="620" y2="140" stroke="#1c1518" stroke-width="2"/>
+                                    <path d="M613 128 L620 142 L627 128 Z" fill="#1c1518"/>
+                                    <text class="m" x="632" y="112">g</text>
+                                    <text class="lbl" x="400" y="252">hinge on the cart</text>
+                                    <text class="lbl" x="410" y="140">hinge between the rods</text>
+                                    <text class="lbl" x="560" y="290">rail</text>
+                                </svg>
+                            </div>
+                            <figcaption><span class="pfig__n">Abbildung 1</span>Das Modell. Jeder Winkel wird von der <em>nach oben</em> zeigenden Senkrechten (gestrichelt) aus gemessen, positiv, wenn sich die Stange nach rechts neigt, in dieselbe Richtung wie \(x\) und \(u\). Die Punkte sind die Schwerpunkte, in der Mitte jeder homogenen Stange.</figcaption>
+                        </figure>
+                        <p><b>Wie sie sich bei ausgeschaltetem Motor bewegt.</b> Nichts schiebt den Wagen von außen seitlich, also bleibt der gesamte waagerechte Impuls von Wagen und Stangen, was er war. Wenn die Stangen aufrecht und in Ruhe starten, bleiben sie nur im Prinzip dort: Die kleinste Neigung wächst, die Stangen knicken ein und fallen, und während ihre Schwerpunkte zur einen Seite schwingen, rollt der Wagen zur anderen, damit der Gesamtimpuls null bleibt. Drücken Sie <i>Aus</i> und sehen Sie, wie der Wagen zurückweicht.</p>
+                        <p><b>Wie sie sich bei eingeschaltetem Motor bewegt.</b> Die Kraft \(u\) beschleunigt den Wagen. Über das untere Gelenk zieht der Wagen dann das untere Ende der unteren Stange mit, und eine Stange, deren unteres Ende nach rechts gezogen wird, dreht sich um ihre Mitte nach links, genau wie der Besen, wenn Sie die Hand bewegen. Die obere Stange spürt das nur über das Gelenk zwischen den Stangen. Eine Kraft unten erreicht also beide Winkel, aber indirekt und unterschiedlich; den Schub zu finden, der beide zugleich zurückbringt, ist die Aufgabe des Reglers.</p>
+                        <table class="ptable">
+                            <tr><th>Symbol</th><th>Bedeutung</th><th>Voreinstellung (Bogdanov [1])</th></tr>
+                            <tr><td>\(m_0\)</td><td>Wagenmasse</td><td>1.5 kg</td></tr>
+                            <tr><td>\(m_1, L_1\)</td><td>Masse und Länge der unteren Stange</td><td>0.5 kg, 0.5 m</td></tr>
+                            <tr><td>\(m_2, L_2\)</td><td>Masse und Länge der oberen Stange</td><td>0.75 kg, 0.75 m</td></tr>
+                            <tr><td>\(g\)</td><td>Erdbeschleunigung</td><td>9.81 m/s²</td></tr>
+                            <tr><td>\(u, u_\text{max}\)</td><td>Motorkraft auf den Wagen, und ihre Grenze</td><td>Schieberegler, 60 N</td></tr>
+                        </table>
+                    </section>
+
+                    <section class="psec" id="p-energy">
+                        <h3><span class="psec__n">03</span>Lagen und Energie</h3>
+                        <p>Drei Zahlen legen fest, wo alles ist: \(x\), \(\theta_1\) und \(\theta_2\). Wir fassen sie zusammen als \(\boldsymbol\theta = (x, \theta_1, \theta_2)\). Den Nullpunkt der Höhe legen wir in das untere Gelenk, \(y\) nach oben. Das untere Gelenk liegt bei \((x, 0)\). Bei einer Stange, die um \(\theta\) gegen die nach oben zeigende Senkrechte geneigt ist, ist das ferne Ende um \(L\sin\theta\) seitlich und um \(L\cos\theta\) nach oben versetzt. Der Schwerpunkt einer homogenen Stange liegt in ihrer Mitte, also</p>
+                        \[ \begin{aligned} x_1 &= x + \tfrac12 L_1\sin\theta_1, & y_1 &= \tfrac12 L_1\cos\theta_1, \\ x_2 &= x + L_1\sin\theta_1 + \tfrac12 L_2\sin\theta_2, & y_2 &= L_1\cos\theta_1 + \tfrac12 L_2\cos\theta_2 . \end{aligned} \tag{1} \]
+                        <h4><span class="psub__n">3.1</span>Geschwindigkeiten</h4>
+                        <p>Leiten Sie (1) nach der Zeit ab. Nur \(x\) und die Winkel ändern sich; nach der Kettenregel ändert sich \(\sin\theta\) mit der Rate \(\dot\theta\cos\theta\) und \(\cos\theta\) mit \(-\dot\theta\sin\theta\):</p>
+                        \[ \begin{aligned} \dot x_1 &= \dot x + \tfrac12 L_1\dot\theta_1\cos\theta_1, & \dot y_1 &= -\tfrac12 L_1\dot\theta_1\sin\theta_1, \\ \dot x_2 &= \dot x + L_1\dot\theta_1\cos\theta_1 + \tfrac12 L_2\dot\theta_2\cos\theta_2, & \dot y_2 &= -L_1\dot\theta_1\sin\theta_1 - \tfrac12 L_2\dot\theta_2\sin\theta_2 . \end{aligned} \tag{2} \]
+                        <p>Quadrieren und addieren, mit \(\cos^2+\sin^2 = 1\) und, für den gemischten Term der oberen Stange, \(\cos a\cos b + \sin a\sin b = \cos(a-b)\):</p>
+                        \[ \begin{aligned} v_1^2 &= \dot x^2 + L_1\dot x\dot\theta_1\cos\theta_1 + \tfrac14 L_1^2\dot\theta_1^2, \\ v_2^2 &= \dot x^2 + L_1^2\dot\theta_1^2 + \tfrac14 L_2^2\dot\theta_2^2 + 2L_1\dot x\dot\theta_1\cos\theta_1 + L_2\dot x\dot\theta_2\cos\theta_2 + L_1L_2\dot\theta_1\dot\theta_2\cos(\theta_1-\theta_2). \end{aligned} \tag{3} \]
+                        <h4><span class="psub__n">3.2</span>Kinetische Energie</h4>
+                        <p>Eine Stange, die sich bewegt und dreht, trägt zwei Arten kinetischer Energie (Satz von König): die ihres Schwerpunkts, \(\tfrac12 m v^2\), und die der Drehung um den Schwerpunkt, \(\tfrac12 I\dot\theta^2\). Für eine homogene Stange der Länge \(L\) ist das Trägheitsmoment um ihre Mitte \(I = \int_{-L/2}^{L/2} (m/L)\,s^2\,\mathrm ds = mL^2/12\). Der Wagen gleitet nur. Also</p>
+                        \[ T = \tfrac12 m_0\dot x^2 + \tfrac12 m_1 v_1^2 + \tfrac1{24} m_1L_1^2\dot\theta_1^2 + \tfrac12 m_2 v_2^2 + \tfrac1{24} m_2 L_2^2\dot\theta_2^2 . \tag{4} \]
+                        <p>Setzen Sie (3) ein und ordnen Sie nach Produkten von Geschwindigkeiten. Die beiden Drehanteile verbinden sich mit den \(\tfrac14 L^2\)-Anteilen aus (3): \(\tfrac18 + \tfrac1{24} = \tfrac16\), das vertraute \(\tfrac12\cdot\tfrac13 mL^2\) einer Stange, die sich um ihr Ende dreht. Das Ergebnis ist eine quadratische Form,</p>
+                        \[ T = \tfrac12\,\dot{\boldsymbol\theta}^{\mathsf T}\,\mathbf D(\boldsymbol\theta)\,\dot{\boldsymbol\theta}, \qquad \mathbf D = \begin{pmatrix} d_1 & d_2\cos\theta_1 & d_3\cos\theta_2 \\ d_2\cos\theta_1 & d_4 & d_5\cos(\theta_1-\theta_2) \\ d_3\cos\theta_2 & d_5\cos(\theta_1-\theta_2) & d_6 \end{pmatrix}, \tag{5} \]
+                        \[ \begin{aligned} d_1 &= m_0+m_1+m_2, & d_2 &= \left(\tfrac12 m_1+m_2\right)L_1, & d_3 &= \tfrac12 m_2L_2, \\ d_4 &= \left(\tfrac13 m_1+m_2\right)L_1^2, & d_5 &= \tfrac12 m_2L_1L_2, & d_6 &= \tfrac13 m_2L_2^2 . \end{aligned} \tag{6} \]
+                        <p>Jede Konstante hat eine Bedeutung, die man von Hand prüfen kann. \(d_1\) ist alles, was sich bewegt, wenn sich der Wagen bewegt. \(d_4\) ist die untere Stange, die sich um ihr unteres Ende dreht und die ganze Masse der oberen Stange im Abstand \(L_1\) mitträgt. \(d_2\) koppelt den Wagen und den unteren Winkel: Der Faktor \(\tfrac12 m_1 + m_2\) ist die Masse der unteren Stange in ihrer Mitte plus die obere Stange, die an ihrem oberen Ende hängt. Der Faktor 2 vor einem gemischten Produkt in (3) wird von den zwei symmetrischen Plätzen außerhalb der Diagonale von \(\mathbf D\) aufgenommen.</p>
+                        <h4><span class="psub__n">3.3</span>Potentielle Energie</h4>
+                        <p>Jede Stange speichert \(mg\) mal die Höhe ihres Schwerpunkts. Aus (1),</p>
+                        \[ V = m_1 g y_1 + m_2 g y_2 = f_1\cos\theta_1 + f_2\cos\theta_2, \qquad f_1 = \left(\tfrac12 m_1+m_2\right)L_1 g, \quad f_2 = \tfrac12 m_2 L_2 g . \tag{7} \]
+                        <p>\(V\) ist am größten, wenn beide Stangen aufrecht stehen, \(\cos\theta = 1\). Die balancierte Lage ist die Spitze eines Energiehügels, und deshalb ist sie instabil: Jeder Schritt von ihr weg setzt Energie in Bewegung frei.</p>
+                    </section>
+
+                    <section class="psec" id="p-eom">
+                        <h3><span class="psec__n">04</span>Bewegungsgleichungen</h3>
+                        <p>Die Lagrange-Gleichungen, eine je Koordinate, lauten \(\frac{\mathrm d}{\mathrm dt}\frac{\partial \mathcal L}{\partial\dot q_i} - \frac{\partial\mathcal L}{\partial q_i} = Q_i\) mit \(\mathcal L = T - V\) und \(Q_i\) der verallgemeinerten Kraft: der Arbeit, die eine kleine Änderung \(\delta q_i\) die äußeren Kräfte verrichten lässt, geteilt durch \(\delta q_i\). Die Motorkraft \(u\) verrichtet die Arbeit \(u\,\delta x\), wenn sich der Wagen bewegt, und keine, wenn sich nur ein Winkel ändert, also \(\mathbf Q = (u, 0, 0)^{\mathsf T}\). Die Gelenkkräfte verrichten keine Arbeit, weil sie an Punkten angreifen, die nicht an ihnen entlanggleiten; deshalb braucht das Verfahren von Lagrange sie nie.</p>
+                        <p>Als durchgerechneten Fall nehmen wir den unteren Winkel. Aus (5) folgt \(\partial T/\partial\dot\theta_1 = d_2\cos\theta_1\,\dot x + d_4\dot\theta_1 + d_5\cos(\theta_1-\theta_2)\dot\theta_2\). Seine Zeitableitung ist</p>
+                        \[ d_2\cos\theta_1\,\ddot x + d_4\ddot\theta_1 + d_5\cos(\theta_1-\theta_2)\ddot\theta_2 - d_2\sin\theta_1\,\dot\theta_1\dot x - d_5\sin(\theta_1-\theta_2)(\dot\theta_1-\dot\theta_2)\dot\theta_2 . \]
+                        <p>Die andere Hälfte ist \(\partial T/\partial\theta_1 = -d_2\sin\theta_1\,\dot x\dot\theta_1 - d_5\sin(\theta_1-\theta_2)\dot\theta_1\dot\theta_2\) und \(\partial V/\partial\theta_1 = -f_1\sin\theta_1\). Beim Subtrahieren heben sich die Terme in \(\dot x\dot\theta_1\) auf, ebenso \(\dot\theta_1\dot\theta_2\), und es bleibt</p>
+                        \[ d_2\cos\theta_1\,\ddot x + d_4\ddot\theta_1 + d_5\cos(\theta_1-\theta_2)\ddot\theta_2 + d_5\sin(\theta_1-\theta_2)\dot\theta_2^2 - f_1\sin\theta_1 = 0 . \tag{8} \]
+                        <p>Dieselben drei Schritte für \(x\) und für \(\theta_2\) liefern die anderen beiden Zeilen. Alle drei zusammen lauten</p>
+                        <div class="pbox"><span class="pbox__t">Kernergebnis · die Bewegungsgleichungen</span> \[ \mathbf D(\boldsymbol\theta)\,\ddot{\boldsymbol\theta} + \mathbf C(\boldsymbol\theta,\dot{\boldsymbol\theta})\,\dot{\boldsymbol\theta} + \mathbf G(\boldsymbol\theta) = \mathbf H u, \tag{9} \] \[ \mathbf C = \begin{pmatrix} 0 & -d_2\sin\theta_1\,\dot\theta_1 & -d_3\sin\theta_2\,\dot\theta_2 \\ 0 & 0 & d_5\sin(\theta_1-\theta_2)\,\dot\theta_2 \\ 0 & -d_5\sin(\theta_1-\theta_2)\,\dot\theta_1 & 0 \end{pmatrix}, \quad \mathbf G = \begin{pmatrix} 0 \\ -f_1\sin\theta_1 \\ -f_2\sin\theta_2 \end{pmatrix}, \quad \mathbf H = \begin{pmatrix} 1 \\ 0 \\ 0 \end{pmatrix}. \] <p>Das sind die Gleichungen (2)–(9) in Moysis’ Wiedergabe [2] von Bogdanovs Bericht [1], Buchstabe für Buchstabe. Wir haben sie auf einem zweiten Weg geprüft: (4)–(7) symbolisch mit SymPy herzuleiten und daraus die Lagrange-Gleichungen zu bilden, ergibt \(\mathbf D\), \(\mathbf C\), \(\mathbf G\) und \(\mathbf H\) mit null Abweichung in jedem Eintrag.</p></div>
+                        <p>Lesen Sie Zeile 1 als Newtons Gesetz für die ganze Maschine in seitlicher Richtung: \(d_1\ddot x\) plus die seitlichen Beschleunigungen der beiden Schwerpunkte ist gleich der einzigen äußeren seitlichen Kraft, \(u\). Die Terme in \(\mathbf C\) sind die Zentripetalanteile dieser Beschleunigungen: Der Schwerpunkt einer sich drehenden Stange wird zu ihrem Gelenk hin beschleunigt, und wenn die Stange geneigt ist, hat dieser Zug einen seitlichen Anteil. In den Zeilen 2 und 3 ist \(-f\sin\theta\) das Drehmoment der Schwerkraft, das eine geneigte Stange weiter umdrückt.</p>
+                        <p>Die Matrix \(\mathbf D\) ist die Matrix der kinetischen Energie und positiv definit (\(T > 0\) für jede Bewegung), also lässt sie sich immer invertieren: Die Seite berechnet die Beschleunigungen in jedem Schritt als \(\ddot{\boldsymbol\theta} = \mathbf D^{-1}(\mathbf Hu - \mathbf C\dot{\boldsymbol\theta} - \mathbf G)\).</p>
+                    </section>
+
+                    <section class="psec" id="p-fall">
+                        <h3><span class="psec__n">05</span>Wie schnell sie fällt</h3>
+                        <p>Nahe der Spitze ist \(\sin\theta\approx\theta\) und \(\cos\theta\approx 1\), und Produkte kleiner Geschwindigkeiten sind vernachlässigbar, also fällt \(\mathbf C\dot{\boldsymbol\theta}\) weg. Dann wird (9) linear,</p>
+                        \[ \mathbf D_0\,\ddot{\boldsymbol\theta} = \mathbf F\boldsymbol\theta + \mathbf H u, \qquad \mathbf D_0 = \mathbf D(\mathbf 0), \quad \mathbf F = \operatorname{diag}(0, f_1, f_2). \tag{10} \]
+                        <p>Mit dem Zustand \(\mathbf s = (\boldsymbol\theta, \dot{\boldsymbol\theta})\) ist das \(\dot{\mathbf s} = \mathbf A\mathbf s + \mathbf B u\) mit</p>
+                        \[ \mathbf A = \begin{pmatrix} \mathbf 0 & \mathbf I \\ \mathbf D_0^{-1}\mathbf F & \mathbf 0 \end{pmatrix}, \qquad \mathbf B = \begin{pmatrix} \mathbf 0 \\ \mathbf D_0^{-1}\mathbf H \end{pmatrix}. \tag{11} \]
+                        <p>Für Bogdanovs Werte mit \(g = 10\ \mathrm{m/s^2}\) liefert (11) die Zeilen \((0, -7.500, 0.804)\), \((0, 75.00, -33.75)\), \((0, -60.00, 52.14)\) für \(\ddot x, \ddot\theta_1, \ddot\theta_2\), die mit der in [2] abgedruckten Matrix auf 0.2 % übereinstimmen.</p>
+                        <h4><span class="psub__n">5.1</span>Die Fallraten</h4>
+                        <p>Schalten Sie den Motor aus, \(u = 0\). Zeile 1 von (10) besagt, dass der seitliche Impuls erhalten bleibt; aus der Ruhe heraus gilt \(d_1\dot x = -d_2\dot\theta_1 - d_3\dot\theta_2\). Damit \(\ddot x\) aus den Zeilen 2 und 3 entfernt, bleiben zwei Gleichungen für die Winkel allein,</p>
+                        \[ \mathbf M\ddot{\boldsymbol\varphi} = \operatorname{diag}(f_1, f_2)\,\boldsymbol\varphi, \qquad \boldsymbol\varphi = \begin{pmatrix}\theta_1\\ \theta_2\end{pmatrix}, \quad \mathbf M = \begin{pmatrix} d_4 - d_2^2/d_1 & d_5 - d_2d_3/d_1 \\ d_5 - d_2d_3/d_1 & d_6 - d_3^2/d_1 \end{pmatrix}. \tag{12} \]
+                        <p>Versuchen Sie \(\boldsymbol\varphi \propto e^{\sigma t}\). Eine Lösung existiert, wenn \(\det(\sigma^2\mathbf M - \operatorname{diag}(f_1,f_2)) = 0\), eine quadratische Gleichung in \(\sigma^2\):</p>
+                        \[ \det\mathbf M\;\sigma^4 - \left(M_{11}f_2 + M_{22}f_1\right)\sigma^2 + f_1f_2 = 0 . \tag{13} \]
+                        <p>Beide Wurzeln \(\sigma^2\) sind positiv, also liefert jede ein Paar \(\pm\sigma\): eine Bewegung, die abklingt, und eine, die wie \(e^{\sigma t}\) wächst. Für die voreingestellte Maschine ist \(\sigma = 10.39\ \mathrm{s^{-1}}\) und \(4.10\ \mathrm{s^{-1}}\). Die schnelle dominiert: Eine Neigung wächst alle \(1/\sigma = 96\) ms um den Faktor \(e\). Das Bedienfeld zeigt beide Raten live.</p>
+                        <p><b>Eine Probe.</b> Entfernen Sie die obere Stange, \(m_2 \to 0\). Dann lässt (13) \(\sigma^2 = f_1/M_{11} = 6g(m_0+m_1)/[L_1(4m_0+m_1)]\) übrig. Für einen Wagen, der viel schwerer als die Stange ist, strebt das gegen \(3g/(2L_1)\), die Rate, mit der eine Stange über ihr festes unteres Ende fällt, und das ist der richtige Grenzfall: Ein sehr schwerer Wagen weicht nicht zurück.</p>
+                        <p><b>Warum lange Stangen leichter sind.</b> Jedes \(d\) und \(f\) in (13) skaliert so mit den Längen, dass \(\sigma^2 \propto g/L\) gilt, wenn beide Längen um denselben Faktor wachsen. Verdoppelt man beide Längen, wird der Fall um \(\sqrt2\) langsamer (voreingestellte Maschine: 10.39 auf 7.35 s⁻¹). Genau deshalb ist ein Besen leichter zu balancieren als ein Bleistift.</p>
+                    </section>
+
+                    <section class="psec" id="p-steer">
+                        <h3><span class="psec__n">06</span>Ein Schub, zwei Stangen</h3>
+                        <p>Kann eine Kraft unten wirklich zwei Winkel <em>und</em> den Wagen zurückbringen? Kalmans Test beantwortet das: Das System (11) lässt sich genau dann von jedem Zustand in jeden anderen steuern, wenn die sechs Vektoren \(\mathbf B, \mathbf A\mathbf B, \dots, \mathbf A^5\mathbf B\) linear unabhängig sind, das heißt, wenn die Matrix \([\mathbf B\;\mathbf A\mathbf B\;\cdots\;\mathbf A^5\mathbf B]\) den Rang 6 hat [3]. Die Idee dahinter: \(\mathbf B\) ist die Richtung, in die ein Schub den Zustand sofort bringt, \(\mathbf A\mathbf B\) die, in die die Bewegung das einen Augenblick später trägt, und so weiter; füllen diese Richtungen alle sechs Dimensionen, kann eine geeignete Folge von Schüben jeden Zustand erreichen. Für die voreingestellte Maschine ist der Rang 6. Der Wagen erreicht die obere Stange nur über die untere, aber weil die beiden Stangen mit verschiedenen Raten fallen (5.1), kann der Wagen sie auseinanderhalten.</p>
+                    </section>
+
+                    <section class="psec" id="p-lqr">
+                        <h3><span class="psec__n">07</span>Der Regler</h3>
+                        <p>Der Regler liest den ganzen Zustand und schiebt proportional dazu, \(u = -\mathbf K(\mathbf s - \mathbf s_\text{ref})\), wobei \(\mathbf s_\text{ref}\) aufrecht und in Ruhe an der Zielposition \(x_\text{ref}\) der Knöpfe ist. Die sechs Verstärkungen in \(\mathbf K\) wählt der linear-quadratische Regler (LQR) [1, 3]: Unter allen Schüben nimm denjenigen, der die Gesamtkosten</p>
+                        \[ J = \int_0^\infty \left( \mathbf s^{\mathsf T}\mathbf Q\,\mathbf s + \rho\,u^2 \right)\mathrm dt \tag{14} \]
+                        <p>am kleinsten macht. Der erste Term berechnet Kosten für die Abweichung vom Ziel, mit den Gewichten \(\mathbf Q = \operatorname{diag}(50, 50, 50, 20, 700, 700)\) auf \((x, \theta_1, \theta_2, \dot x, \dot\theta_1, \dot\theta_2)\) (die von Bogdanov [1, 2], wobei das Gewicht auf \(x\) von 5 auf 50 erhöht ist, damit der Wagen sein Ziel in Sekunden statt in zehn Sekunden und mehr erreicht). Der zweite berechnet Kosten für die Kraft, mit der Rate \(\rho\) des Schiebereglers.</p>
+                        <h4><span class="psub__n">7.1</span>Warum die Antwort eine Riccati-Gleichung ist&nbsp;★</h4>
+                        <p>Angenommen, eine symmetrische Matrix \(\mathbf P\) erfüllt</p>
+                        \[ \mathbf A^{\mathsf T}\mathbf P + \mathbf P\mathbf A - \rho^{-1}\mathbf P\mathbf B\mathbf B^{\mathsf T}\mathbf P + \mathbf Q = \mathbf 0 . \tag{15} \]
+                        <p>Entlang jeder Bewegung von (11) gilt \(\frac{\mathrm d}{\mathrm dt}(\mathbf s^{\mathsf T}\mathbf P\mathbf s) = \mathbf s^{\mathsf T}(\mathbf A^{\mathsf T}\mathbf P + \mathbf P\mathbf A)\mathbf s + 2u\,\mathbf B^{\mathsf T}\mathbf P\mathbf s\). Ersetzen Sie \(\mathbf A^{\mathsf T}\mathbf P + \mathbf P\mathbf A\) mit (15) und ergänzen Sie quadratisch:</p>
+                        \[ \mathbf s^{\mathsf T}\mathbf Q\mathbf s + \rho u^2 = -\frac{\mathrm d}{\mathrm dt}\left(\mathbf s^{\mathsf T}\mathbf P\mathbf s\right) + \rho\left(u + \rho^{-1}\mathbf B^{\mathsf T}\mathbf P\mathbf s\right)^2 . \]
+                        <p>Integrieren Sie von 0 bis \(\infty\) für eine Bewegung, die zur Ruhe kommt: \(J = \mathbf s(0)^{\mathsf T}\mathbf P\,\mathbf s(0) + \rho\int(u + \rho^{-1}\mathbf B^{\mathsf T}\mathbf P\mathbf s)^2\,\mathrm dt\). Der erste Term hängt nicht davon ab, was wir tun; der zweite ist nie negativ und nur dann null, wenn</p>
+                        <div class="pbox"><span class="pbox__t">Kernergebnis · das Balancier-Gesetz</span> \[ u = -\mathbf K\mathbf s, \qquad \mathbf K = \rho^{-1}\mathbf B^{\mathsf T}\mathbf P . \tag{16} \]</div>
+                        <p>Die Seite löst (15) mit der Matrix-Vorzeichenfunktion der Hamilton-Matrix, jedes Mal, wenn sich ein Schieberegler ändert [3]. Für die voreingestellte Maschine und \(\rho = 1\) sind die Verstärkungen auf \((x, \theta_1, \theta_2, \dot x, \dot\theta_1, \dot\theta_2)\) gleich \((7.07,\ -504.0,\ 625.9,\ 15.32,\ -14.69,\ 97.94)\) in N je m, rad, m/s bzw. rad/s; die langsamste Bewegung des geschlossenen Regelkreises klingt in 1.23 s ab.</p>
+                        <p>Die Vorzeichen sagen, was die Hand mit einem Besen tut. Neigt sich nur die untere Stange nach rechts (\(\theta_1 &gt; 0\)), ergibt das \(u = -K_2\theta_1 = +504\,\theta_1\): nach rechts schieben, unter die Neigung. Neigt sich nur die obere Stange nach rechts (\(\theta_2 &gt; 0\)), ergibt das \(u = -K_3\theta_2 = -626\,\theta_2\): nach <em>links</em> schieben. Das zieht das untere Ende der unteren Stange nach links, sodass die untere Stange nach rechts kippt und das mittlere Gelenk unter die obere Stange trägt. Die beiden großen Verstärkungen mit entgegengesetztem Vorzeichen sind der Regler, der die eine Stange gegen die andere ausspielt.</p>
+                        <h4><span class="psub__n">7.2</span>Ein wirklicher Regler tastet ab</h4>
+                        <p>Ein Rechner liest die Sensoren und stellt den Motor zu festen Zeitpunkten ein, alle \(T_s\), und hält \(u\) dazwischen konstant. Die Seite tut dasselbe. Solange \(T_s\) viel kürzer ist als die Fallzeit \(1/\sigma\), spielt das kaum eine Rolle; wenn nicht, kommt der Schub zu spät und der Regler macht es schlimmer. Der Motor geht außerdem in die Sättigung: Die Kraft wird auf \(\pm u_\text{max}\) begrenzt.</p>
+                    </section>
+
+                    <section class="psec" id="p-play">
+                        <h3><span class="psec__n">08</span>Was die Schieberegler lehren</h3>
+                        <p>Jedes Ergebnis unten wurde mit den Gleichungen dieser Seite berechnet, RK4 mit 1 ms, vom Start \(\theta_1 = 2°\), \(\theta_2 = -1°\) aus, sofern nicht anders gesagt.</p>
+                        <p><b>Die Taktzeit.</b> Bei der voreingestellten Maschine hält der Regler die Stangen für \(T_s\) bis 32.5 ms und verliert sie bei 35 ms, etwa einem Drittel der Fallzeit von 96 ms. Verdoppelt man beide Längen, steigt die Grenze auf 65 ms; halbiert man sie, sinkt sie auf 22.5 ms. Langsame Gehirne brauchen lange Besen.</p>
+                        <p><b>Die Motorgrenze.</b> Bei \(u_\text{max} = 60\) N fängt der Regler ein Schnippen gegen die Spitze von \(J = 0.2\) N·s ab und verliert eines von 0.3 N·s. Ein Schnippen ist ein kurzer waagerechter Stoß am oberen Ende; es ändert die Geschwindigkeiten sofort um \(\Delta\dot{\boldsymbol\theta} = \mathbf D^{-1}(1, L_1\cos\theta_1, L_2\cos\theta_2)^{\mathsf T}J\), den verallgemeinerten Kraftstoß geteilt durch die Trägheit, bevor sich irgendeine Lage verschieben kann.</p>
+                        <p><b>Umziehen und loslassen.</b> Fassen Sie eine Stange in der Abbildung und kippen Sie sie; solange Sie sie halten, steht alles in Ruhe still. Lassen Sie los, und der Regler beginnt aus dieser geneigten Lage. Bei der voreingestellten Maschine und \(u_\text{max} = 60\) N kommt die obere Stange, auf 13° gezogen, zurück, ebenso die untere Stange, auf −10° gezogen. Die obere Stange, auf 45° gezogen, geht verloren: Der Regler verlangt mehr als 60 N, der Motor geht in die Sättigung, und die Stangen fallen, bevor der Wagen unter sie kommen kann. Erhöhen Sie \(u_\text{max}\) und versuchen Sie es noch einmal.</p>
+                        <p><b>Der Start in die falsche Richtung.</b> Drücken Sie <i>nach +1 m</i>. Der Wagen kriecht zuerst 3 mm vorwärts, fährt dann eine halbe Sekunde nach dem Drücken 2.3 cm zurück, während beide Stangen um etwa 2° zum Ziel hin kippen. Erst dann fährt er vorwärts, in die Bewegung hineingelehnt, und am Ende lehnen sich die Stangen um etwa 1.2° zurück, um zu bremsen. Er muss das: Um mit im Mittel aufrechten Stangen nach rechts zu beschleunigen, müssen sich die Stangen nach rechts neigen, und der einzige Weg, sie nach rechts zu kippen, ist, ihr unteres Ende zuerst nach links wegzuziehen. Ingenieure nennen das ein nichtminimalphasiges System [3]; mit einem Besen tun Sie dasselbe, wenn Sie mit ihm vorwärtsgehen wollen.</p>
+                        <p><b>Die Kosten der Kraft.</b> Erhöhen Sie \(\rho\), und der Regler schiebt sanfter und lässt die Stangen weiter wandern; senken Sie es, und die Schübe werden heftig und die Motorgrenze wird früher erreicht. Die Verstärkungen im Bedienfeld zeigen das direkt.</p>
+                        <p><b>Die Massen.</b> Ein schwererer Wagen weicht weniger zurück, also fallen die Stangen näher an der Rate eines festen Gelenks. Eine schwerere obere Stange belastet die untere und ändert, in welche Richtung der Regler sie ausspielen muss. Beobachten Sie die Fallraten im Bedienfeld, während Sie jeden Schieberegler bewegen.</p>
+                    </section>
+
+                    <section class="psec" id="p-num">
+                        <h3><span class="psec__n">09</span>Auf dem Bildschirm, und was fehlt</h3>
+                        <p>Die Seite integriert (9) mit dem klassischen Runge-Kutta-Verfahren vierter Ordnung mit einer festen Schrittweite von 1 ms, mehrere Schritte je Bildschirmbild, in Echtzeit. Bei ausgeschaltetem Regler hält derselbe Integrator, geprüft gegen einen hochgenauen Löser, die Energie \(T + V\) über 10 s auf \(2\times10^{-10}\) J konstant. Wenn eine Stange 60° überschreitet, gilt der Lauf als verloren: Der lineare Regler wurde für kleine Winkel entworfen, und die Seite lässt die Stangen dann frei fallen, bis eine flach liegt. Lagen werden maßstabsgetreu gezeichnet; die Ansicht folgt dem Wagen.</p>
+                        <p>Weggelassen: Reibung in den Gelenken und Rädern, die eigene Dynamik des Motors (ein wirklicher Motor kann seine Kraft nicht sofort ändern), Sensorrauschen, das Ende der Schiene und das Aufschwingen aus der hängenden Lage. Jedes davon ist eine bekannte Erweiterung dieses Modells [1, 3].</p>
+                        <div class="pbox pbox--ex">
+                            <span class="pbox__t">Aufgaben</span>
+                            <p><b>9.1</b> Führen Sie die drei Schritte aus Abschnitt 4 für die Koordinate \(x\) durch und zeigen Sie, dass Zeile 1 von (9) die Summe der seitlichen Kräfte auf Wagen und Stangen ist.</p>
+                            <p><b>9.2</b> Zeigen Sie aus (12)–(13), dass eine Skalierung beider Längen um \(\lambda\) beide Fallraten um \(\lambda^{-1/2}\) skaliert.</p>
+                            <p><b>9.3</b> Leiten Sie die Formel für das Schnippen aus Abschnitt 8 her, indem Sie (9) über einen Stoß der Dauer \(\varepsilon \to 0\) am oberen Ende integrieren.</p>
+                        </div>
+                        <h4><span class="psub__n">9.1</span>Quellen</h4>
+                        <ol class="prefs">
+                            <li>A. Bogdanov, <a href="https://www.researchgate.net/publication/250107215_Optimal_Control_of_a_Double_Inverted_Pendulum_on_a_Cart"><em>Optimal Control of a Double Inverted Pendulum on a Cart</em></a>, Technischer Bericht CSE-04-006, OGI School of Science and Engineering, OHSU, 2004.</li>
+                            <li>L. Moysis, <a href="https://ikee.lib.auth.gr/record/282764/files/balancing%20a%20double%20inverted%20pendulum%20using%20optimal%20control%20and%20Laguerre%20functions.pdf"><em>Balancing a double inverted pendulum using optimal control and Laguerre functions</em></a>, technischer Bericht, Aristoteles-Universität Thessaloniki, 2016: das Modell aus [1] vollständig ausgeschrieben, mit seiner Linearisierung und den LQR-Verstärkungen.</li>
+                            <li>R. Tedrake, <a href="https://underactuated.mit.edu/acrobot.html"><em>Underactuated Robotics</em>, Kapitel 3: Acrobots, Cart-Poles, and Quadrotors</a>, Vorlesungsskript des MIT, 2024: Manipulatorgleichungen, Linearisierung, Steuerbarkeit und LQR-Balancieren des Wagen-Pendels.</li>
+                            <li>F. Grasser, A. D’Arrigo, S. Colombi und A. Rufer, <a href="https://doi.org/10.1109/41.982254">„JOE: a mobile, inverted pendulum“</a>, <em>IEEE Transactions on Industrial Electronics</em> 49, 107–114 (2002).</li>
+                            <li>K. Shiozawa, J. Lee, M. Russo, D. Sternad und N. Hogan, <a href="https://doi.org/10.1186/s12984-021-00907-2">„Frequency-dependent force direction elucidates neural control of balance“</a>, <em>Journal of NeuroEngineering and Rehabilitation</em> 18, 145 (2021).</li>
+                        </ol>
+                    </section>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <footer class="sim-foot"><a href="../simulations.html">← Alle Simulationen</a></footer>
+
+    <script src="../../scripts/fold.js"></script>
+    <script src="../../scripts/sim.js"></script>
+    <script>
+    (function () {
+        'use strict';
+        var TH = Sim.theme, G = 9.81, H = 0.001, Q = [50, 50, 50, 20, 700, 700], LOST = Math.PI / 3;
+        var sl = {};
+        ['m0', 'm1', 'm2', 'L1', 'L2'].forEach(function (k) { sl[k] = Sim.slider(k, { format: function (v) { return v.toFixed(2) + (k[0] === 'm' ? ' kg' : ' m'); }, onInput: redesign }); });
+        var sF = Sim.slider('Fmax', { format: function (v) { return v.toFixed(0) + ' N'; } });
+        var sT = Sim.slider('Ts', { format: function (v) { return v.toFixed(0) + ' ms'; } });
+        var sR = Sim.slider('rho', { format: function (v) { return Sim.fmt(Math.pow(10, v), v < 0 ? 2 : 1); }, onInput: redesign });
+        var sJ = Sim.slider('J', { format: function (v) { return v.toFixed(2) + ' N·s'; } });
+
+        /* ---------- the model (5)–(9) ---------- */
+        function par() { var m0 = sl.m0.value, m1 = sl.m1.value, m2 = sl.m2.value, L1 = sl.L1.value, L2 = sl.L2.value;
+            return { m0: m0, m1: m1, m2: m2, L1: L1, L2: L2, d: [m0 + m1 + m2, (m1 / 2 + m2) * L1, m2 * L2 / 2, (m1 / 3 + m2) * L1 * L1, m2 * L1 * L2 / 2, m2 * L2 * L2 / 3], f: [(m1 / 2 + m2) * L1 * G, m2 * L2 * G / 2] }; }
+        function Dm(p, a, b) { var d = p.d, c1 = Math.cos(a), c2 = Math.cos(b), c12 = Math.cos(a - b); return [[d[0], d[1] * c1, d[2] * c2], [d[1] * c1, d[3], d[4] * c12], [d[2] * c2, d[4] * c12, d[5]]]; }
+        function solve3(M, r) { var A = M.map(function (row, i) { return row.concat([r[i]]); }), i, j, k;
+            for (i = 0; i < 3; i++) { var piv = i; for (j = i + 1; j < 3; j++) if (Math.abs(A[j][i]) > Math.abs(A[piv][i])) piv = j; var t = A[i]; A[i] = A[piv]; A[piv] = t;
+                for (j = i + 1; j < 3; j++) { var f = A[j][i] / A[i][i]; for (k = i; k < 4; k++) A[j][k] -= f * A[i][k]; } }
+            var x = [0, 0, 0]; for (i = 2; i >= 0; i--) { var s = A[i][3]; for (j = i + 1; j < 3; j++) s -= A[i][j] * x[j]; x[i] = s / A[i][i]; } return x; }
+        function rhs(p, s, u) { var a = s[1], b = s[2], ad = s[4], bd = s[5], d = p.d, sab = Math.sin(a - b);
+            var Cq = [-d[1] * Math.sin(a) * ad * ad - d[2] * Math.sin(b) * bd * bd, d[4] * sab * bd * bd, -d[4] * sab * ad * ad];   // C θ̇, row by row
+            var Gv = [0, -p.f[0] * Math.sin(a), -p.f[1] * Math.sin(b)];
+            var q = solve3(Dm(p, a, b), [u - Cq[0] - Gv[0], -Cq[1] - Gv[1], -Cq[2] - Gv[2]]);
+            return [s[3], s[4], s[5], q[0], q[1], q[2]]; }
+        function rk4(p, s, u, h) { var k1 = rhs(p, s, u), k2 = rhs(p, add(s, k1, h / 2), u), k3 = rhs(p, add(s, k2, h / 2), u), k4 = rhs(p, add(s, k3, h), u);
+            return s.map(function (v, i) { return v + h / 6 * (k1[i] + 2 * k2[i] + 2 * k3[i] + k4[i]); }); }
+        function add(s, k, h) { return s.map(function (v, i) { return v + h * k[i]; }); }
+
+        /* ---------- linearisation (10)–(11), LQR (15)–(16), fall rates (13) ---------- */
+        function zeros(n, m) { var A = []; for (var i = 0; i < n; i++) A.push(new Array(m).fill(0)); return A; }
+        function mul(A, B) { var n = A.length, m = B[0].length, k = B.length, C = zeros(n, m); for (var i = 0; i < n; i++) for (var j = 0; j < m; j++) { var s = 0; for (var l = 0; l < k; l++) s += A[i][l] * B[l][j]; C[i][j] = s; } return C; }
+        function inv(A) { var n = A.length, W = A.map(function (row, i) { var e = new Array(n).fill(0); e[i] = 1; return row.concat(e); });
+            for (var c = 0; c < n; c++) { var piv = c; for (var r = c + 1; r < n; r++) if (Math.abs(W[r][c]) > Math.abs(W[piv][c])) piv = r;
+                var tmp = W[c]; W[c] = W[piv]; W[piv] = tmp; var d = W[c][c]; for (var j = 0; j < 2 * n; j++) W[c][j] /= d;
+                for (r = 0; r < n; r++) if (r !== c) { var f = W[r][c]; if (f) for (j = 0; j < 2 * n; j++) W[r][j] -= f * W[c][j]; } }
+            return W.map(function (row) { return row.slice(n); }); }
+        function linear(p) { var Di = inv(Dm(p, 0, 0)), A = zeros(6, 6), B = zeros(6, 1), i;
+            for (i = 0; i < 3; i++) { A[i][i + 3] = 1; A[i + 3][1] = Di[i][1] * p.f[0]; A[i + 3][2] = Di[i][2] * p.f[1]; B[i + 3][0] = Di[i][0]; } return { A: A, B: B }; }
+        function lqr(A, B, R) {   // AᵀP + PA − PBR⁻¹BᵀP + Q = 0 by the sign function of the Hamiltonian matrix
+            var n = 6, Hm = zeros(12, 12), i, j;
+            for (i = 0; i < n; i++) for (j = 0; j < n; j++) { Hm[i][j] = A[i][j]; Hm[i][n + j] = -B[i][0] * B[j][0] / R; Hm[n + i][j] = -(i === j ? Q[i] : 0); Hm[n + i][n + j] = -A[j][i]; }
+            var Z = Hm;
+            for (var it = 0; it < 100; it++) { var Zi = inv(Z), dn = 0, Zn = zeros(12, 12);
+                for (i = 0; i < 12; i++) for (j = 0; j < 12; j++) { Zn[i][j] = 0.5 * (Z[i][j] + Zi[i][j]); dn += Math.abs(Zn[i][j] - Z[i][j]); } Z = Zn; if (dn < 1e-12) break; }
+            var Lm = zeros(12, n), Rm = zeros(12, n);
+            for (i = 0; i < n; i++) for (j = 0; j < n; j++) { Lm[i][j] = Z[i][n + j]; Lm[n + i][j] = Z[n + i][n + j] + (i === j ? 1 : 0); Rm[i][j] = -(Z[i][j] + (i === j ? 1 : 0)); Rm[n + i][j] = -Z[n + i][j]; }
+            var Lt = Lm[0].map(function (_, c) { return Lm.map(function (row) { return row[c]; }); });
+            var P = mul(inv(mul(Lt, Lm)), mul(Lt, Rm)), K = [];
+            for (j = 0; j < n; j++) { var s = 0; for (i = 0; i < n; i++) s += B[i][0] * P[i][j]; K.push(s / R); } return K; }
+        function eig(A) {   // characteristic polynomial (Faddeev–LeVerrier), roots by Durand–Kerner
+            var n = A.length, Mk = zeros(n, n), c = [1], i, j, k;
+            for (k = 1; k <= n; k++) { var AM = mul(A, Mk); for (i = 0; i < n; i++) AM[i][i] += c[k - 1]; Mk = AM; var AMk = mul(A, Mk), tr = 0; for (i = 0; i < n; i++) tr += AMk[i][i]; c.push(-tr / k); }
+            var z = []; for (i = 0; i < n; i++) z.push([2 * Math.cos(2 * Math.PI * i / n + 0.4), 2 * Math.sin(2 * Math.PI * i / n + 0.4)]);
+            for (var it = 0; it < 3000; it++) { var mv = 0;
+                for (i = 0; i < n; i++) { var pr = 1, pi = 0, dr = 1, di = 0, t;
+                    for (k = 1; k <= n; k++) { t = pr * z[i][0] - pi * z[i][1]; pi = pr * z[i][1] + pi * z[i][0]; pr = t + c[k]; }
+                    for (j = 0; j < n; j++) if (j !== i) { var er = z[i][0] - z[j][0], ei = z[i][1] - z[j][1]; t = dr * er - di * ei; di = dr * ei + di * er; dr = t; }
+                    var dd = dr * dr + di * di, qr = (pr * dr + pi * di) / dd, qi = (pi * dr - pr * di) / dd; z[i] = [z[i][0] - qr, z[i][1] - qi]; mv = Math.max(mv, Math.hypot(qr, qi)); }
+                if (mv < 1e-13) break; }
+            return z; }
+        function fallRates(p) {   // (12)–(13)
+            var d = p.d, M11 = d[3] - d[1] * d[1] / d[0], M12 = d[4] - d[1] * d[2] / d[0], M22 = d[5] - d[2] * d[2] / d[0];
+            var a = M11 * M22 - M12 * M12, b = -(M11 * p.f[1] + M22 * p.f[0]), c = p.f[0] * p.f[1], disc = Math.sqrt(b * b - 4 * a * c);
+            return [Math.sqrt((-b + disc) / (2 * a)), Math.sqrt((-b - disc) / (2 * a))]; }
+
+        var p, K, s, u = 0, xref = 0, on = true, lost = false, flat = false, tSim = 0, tCtl = 0, acc = 0, trace = [], held = 0, geo = null;
+        function redesign() {
+            p = par(); var L = linear(p); K = lqr(L.A, L.B, Math.pow(10, sR.value));
+            var Acl = L.A.map(function (row, i) { return row.map(function (x, j) { return x - L.B[i][0] * K[j]; }); });
+            var slow = Math.min.apply(null, eig(Acl).map(function (z) { return -z[0]; })), sg = fallRates(p);
+            document.getElementById('r-sig').textContent = Sim.fmt(sg[0], 2) + ', ' + Sim.fmt(sg[1], 2) + ' s⁻¹';
+            document.getElementById('r-tau').textContent = Sim.fmt(1000 / sg[0], 0) + ' ms';
+            document.getElementById('r-set').textContent = slow > 0 ? Sim.fmt(1 / slow, 2) + ' s' : _t('unstable');
+            document.getElementById('r-K').textContent = Sim.fmt(K[1], 0) + ', ' + Sim.fmt(K[2], 0) + ' N/rad';
+        }
+        function reset() { s = [0, 2 * Math.PI / 180, -1 * Math.PI / 180, 0, 0, 0]; xref = 0; lost = false; flat = false; tSim = 0; tCtl = 0; u = 0; trace = []; }
+        redesign(); reset();
+
+        function control() {
+            if (!on || lost) return 0;
+            var e = s.slice(); e[0] -= xref; var v = 0; for (var i = 0; i < 6; i++) v -= K[i] * e[i];
+            var F = sF.value; return Math.max(-F, Math.min(F, v)); }
+        function step(dt) {
+            acc += dt; var Ts = sT.value / 1000;
+            while (acc >= H) { acc -= H;
+                if (flat) break;
+                if (held) { s[3] = s[4] = s[5] = 0; u = 0; tSim += H; tCtl = tSim; if (Math.round(tSim * 1000) % 20 === 0) { trace.push([tSim, s[1], s[2], 0]); if (trace.length > 400) trace.shift(); } continue; }
+                if (tSim >= tCtl - 1e-9) { u = control(); tCtl += Ts; }
+                s = rk4(p, s, u, H); tSim += H;
+                if (!lost && (Math.abs(s[1]) > LOST || Math.abs(s[2]) > LOST)) { lost = true; u = 0; }
+                if (lost && (Math.abs(s[1]) > Math.PI / 2 || Math.abs(s[2]) > Math.PI / 2)) flat = true;
+                if (Math.round(tSim * 1000) % 20 === 0) { trace.push([tSim, s[1], s[2], u]); if (trace.length > 400) trace.shift(); } }
+        }
+        function flick(J) {   // Δθ̇ = D⁻¹ (1, L1 cos θ1, L2 cos θ2)ᵀ J
+            if (flat) return; var dq = solve3(Dm(p, s[1], s[2]), [J, p.L1 * Math.cos(s[1]) * J, p.L2 * Math.cos(s[2]) * J]);
+            s[3] += dq[0]; s[4] += dq[1]; s[5] += dq[2]; }
+
+        /* ---------- drawing ---------- */
+        var cv = Sim.canvas2d(document.getElementById('cv')), tr = Sim.canvas2d(document.getElementById('tr')), camX = 0;
+        function draw() {
+            var c = cv.ctx, W = cv.w, Hh = cv.h; c.clearRect(0, 0, W, Hh);
+            var tall = Math.max(1.4, p.L1 + p.L2 + 0.25), sc = Math.min(W / 3.2, (Hh - 90) / tall), y0 = Hh - 62;
+            camX += (s[0] - camX) * 0.08; var X = function (x) { return W / 2 + (x - camX) * sc; };
+            c.strokeStyle = TH.ruleSoft; c.lineWidth = 1; c.fillStyle = TH.muted; c.font = TH.mono; c.textAlign = 'center';
+            for (var g = Math.floor(camX - 4); g <= camX + 4; g += 0.5) { var gx = X(g); if (gx < -20 || gx > W + 20) continue; c.beginPath(); c.moveTo(gx, y0 + 14); c.lineTo(gx, y0 + (Number.isInteger(g) ? 26 : 20)); c.stroke(); if (Number.isInteger(g)) c.fillText(Sim.fmt(g, 0) + ' m', gx, y0 + 40); }
+            c.strokeStyle = TH.ink; c.lineWidth = 2; c.beginPath(); c.moveTo(0, y0 + 14); c.lineTo(W, y0 + 14); c.stroke();
+            var tx = X(xref); c.fillStyle = TH.accent; c.beginPath(); c.moveTo(tx, y0 + 15); c.lineTo(tx - 7, y0 + 27); c.lineTo(tx + 7, y0 + 27); c.closePath(); c.fill(); c.textAlign = 'center'; c.fillText('target', tx, y0 + 54);
+            var cx = X(s[0]), cw = Math.max(46, 0.36 * sc), ch = Math.max(20, 0.12 * sc);
+            c.fillStyle = TH.card; c.strokeStyle = TH.ink; c.lineWidth = 2; c.beginPath(); c.rect(cx - cw / 2, y0 - ch + 4, cw, ch); c.fill(); c.stroke();
+            [-1, 1].forEach(function (k) { c.beginPath(); c.arc(cx + k * cw * 0.3, y0 + 7, 6, 0, 2 * Math.PI); c.fillStyle = '#fff'; c.fill(); c.stroke(); });
+            var hx = cx, hy = y0 - ch + 4, ex = hx + p.L1 * sc * Math.sin(s[1]), ey = hy - p.L1 * sc * Math.cos(s[1]), tx2 = ex + p.L2 * sc * Math.sin(s[2]), ty2 = ey - p.L2 * sc * Math.cos(s[2]);
+            geo = { hx: hx, hy: hy, ex: ex, ey: ey, tx: tx2, ty: ty2 };
+            c.lineCap = 'round'; c.lineWidth = 4 + 6 * Math.min(1, p.m1); c.strokeStyle = TH.ink; c.beginPath(); c.moveTo(hx, hy); c.lineTo(ex, ey); c.stroke();
+            c.lineWidth = 4 + 6 * Math.min(1, p.m2); c.strokeStyle = TH.accent; c.beginPath(); c.moveTo(ex, ey); c.lineTo(tx2, ty2); c.stroke();
+            [[hx, hy], [ex, ey]].forEach(function (q) { c.beginPath(); c.arc(q[0], q[1], 5, 0, 2 * Math.PI); c.fillStyle = '#fff'; c.fill(); c.lineWidth = 2; c.strokeStyle = TH.ink; c.stroke(); });
+            if (Math.abs(u) > 0.05) { var len = Math.sign(u) * Math.min(1, Math.abs(u) / sF.value) * cw * 1.6, ay = y0 - ch / 2 + 4, ax = u > 0 ? cx - cw / 2 - 6 : cx + cw / 2 + 6;
+                c.strokeStyle = TH.accent; c.fillStyle = TH.accent; c.lineWidth = 3; c.beginPath(); c.moveTo(ax - len, ay); c.lineTo(ax, ay); c.stroke();
+                c.beginPath(); c.moveTo(ax, ay); c.lineTo(ax - Math.sign(u) * 9, ay - 6); c.lineTo(ax - Math.sign(u) * 9, ay + 6); c.closePath(); c.fill(); }
+            c.textAlign = 'left'; c.fillStyle = TH.ink3; c.fillText('u = ' + Sim.fmt(u, 1) + ' N', 12, 20);
+            drawTrace();
+        }
+        function drawTrace() {
+            var c = tr.ctx, W = tr.w, Hh = tr.h; c.clearRect(0, 0, W, Hh); var l = 46, r = W - 46, t = 12, b = Hh - 22, tEnd = tSim, A = 10;
+            c.strokeStyle = TH.ruleSoft; c.lineWidth = 1; c.font = TH.mono; c.fillStyle = TH.muted; c.textAlign = 'right';
+            [-A, 0, A].forEach(function (v) { var y = t + (b - t) * (A - v) / (2 * A); c.beginPath(); c.moveTo(l, y); c.lineTo(r, y); c.stroke(); c.fillText(v + '°', l - 6, y + 4); });
+            c.textAlign = 'left'; c.fillText('±' + sF.value.toFixed(0) + ' N', r + 6, t + 8);
+            function line(k, scale, col, dash) { c.strokeStyle = col; c.lineWidth = 1.8; c.setLineDash(dash || []); c.beginPath(); var first = true;
+                trace.forEach(function (q) { var x = r - (tEnd - q[0]) / 8 * (r - l); if (x < l) return; var v = Math.max(-1.05, Math.min(1.05, q[k] * scale)), y = t + (b - t) * (1 - v) / 2; if (first) { c.moveTo(x, y); first = false; } else c.lineTo(x, y); }); c.stroke(); c.setLineDash([]); }
+            line(1, 180 / Math.PI / A, TH.ink); line(2, 180 / Math.PI / A, TH.accent); line(3, 1 / sF.value, TH.muted, [5, 4]);
+        }
+        Sim.onResize(document.getElementById('stage'), function () { cv = Sim.canvas2d(document.getElementById('cv')); });
+        Sim.onResize(document.getElementById('stage-tr'), function () { tr = Sim.canvas2d(document.getElementById('tr')); });
+
+        var stEl = document.getElementById('state'), lastTxt = 0;
+        var clk = Sim.clock(function (dt) { step(dt); draw();
+            if (performance.now() - lastTxt > 250) { lastTxt = performance.now();
+                document.getElementById('cap-t').innerHTML = '<i>t</i> = ' + tSim.toFixed(1) + ' s';
+                document.getElementById('cap-u').innerHTML = '<i>u</i> = ' + Sim.fmt(u, 1) + ' N';
+                document.getElementById('r-th').textContent = Sim.fmt(s[1] * 180 / Math.PI, 1) + '°, ' + Sim.fmt(s[2] * 180 / Math.PI, 1) + '°';
+                document.getElementById('r-x').textContent = Sim.fmt(s[0], 2) + ' m';
+                stEl.innerHTML = held ? _t('<b>Held.</b> Let go and the controller takes over.') : lost ? _t('<b>Fallen.</b> A rod passed 60°; the controller gave up. Press Reset.') : !on ? _t('<b>Controller off.</b> The rods fall; the cart recoils.') : Math.abs(u) >= sF.value - 1e-9 ? _t('<b>Motor at its limit.</b> Holding on…') : _t('Balancing.'); } });
+        Sim.playButton(document.getElementById('play'), clk);
+        document.getElementById('flickL').addEventListener('click', function () { flick(-sJ.value); });
+        document.getElementById('flickR').addEventListener('click', function () { flick(sJ.value); });
+        Array.prototype.forEach.call(document.querySelectorAll('[data-go]'), function (bt) { bt.addEventListener('click', function () { xref = parseFloat(bt.getAttribute('data-go')); }); });
+        document.getElementById('reset').addEventListener('click', reset);
+        Array.prototype.forEach.call(document.querySelectorAll('#ctrl button'), function (bt) { bt.addEventListener('click', function () {
+            on = bt.getAttribute('data-v') === 'on'; Array.prototype.forEach.call(document.querySelectorAll('#ctrl button'), function (x) { x.setAttribute('aria-pressed', x === bt ? 'true' : 'false'); }); }); });
+        document.getElementById('defaults').addEventListener('click', function () { sl.m0.set(1.5); sl.m1.set(0.5); sl.m2.set(0.75); sl.L1.set(0.5); sl.L2.set(0.75); sR.set(0); redesign(); reset(); });
+        /* pull a rod out of balance and let go: while held the state stands still at rest; on release the controller takes over */
+        var cvEl = document.getElementById('cv');
+        function local(e) { var r = cvEl.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; }
+        function segDist(q, a, b) { var dx = b[0] - a[0], dy = b[1] - a[1], t = Math.max(0, Math.min(1, ((q[0] - a[0]) * dx + (q[1] - a[1]) * dy) / (dx * dx + dy * dy))); return Math.hypot(q[0] - a[0] - t * dx, q[1] - a[1] - t * dy); }
+        function aim(q) { var M = 80 * Math.PI / 180;
+            if (held === 1) { s[1] = Math.max(-M, Math.min(M, Math.atan2(q[0] - geo.hx, geo.hy - q[1]))); }
+            else { s[2] = Math.max(-M, Math.min(M, Math.atan2(q[0] - geo.ex, geo.ey - q[1]))); } }
+        cvEl.addEventListener('pointerdown', function (e) { if (!geo) return; var q = local(e), d1 = segDist(q, [geo.hx, geo.hy], [geo.ex, geo.ey]), d2 = segDist(q, [geo.ex, geo.ey], [geo.tx, geo.ty]);
+            if (Math.min(d1, d2) > 24) return; if (flat || lost) { reset(); }
+            held = d2 <= d1 ? 2 : 1; cvEl.setPointerCapture(e.pointerId); cvEl.style.cursor = 'grabbing'; aim(q); e.preventDefault(); clk.set(true); });
+        cvEl.addEventListener('pointermove', function (e) { if (held) aim(local(e)); });
+        function release() { if (!held) return; held = 0; cvEl.style.cursor = 'grab'; lost = Math.abs(s[1]) > LOST || Math.abs(s[2]) > LOST; }
+        cvEl.addEventListener('pointerup', release); cvEl.addEventListener('pointercancel', release);
+        document.getElementById('tilt').addEventListener('click', function () { reset(); s[1] = 6 * Math.PI / 180; s[2] = -4 * Math.PI / 180; tCtl = 0; });
+        window.DIPC = { get geo() { return geo; }, get held() { return held; }, get s() { return s; }, get K() { return K; }, get p() { return p; }, fallRates: fallRates, rhs: rhs, flick: flick, get lost() { return lost; }, set xref(v) { xref = v; } };
+    })();
+    </script>
+</body>
+</html>
