@@ -38,7 +38,7 @@ while open; level 2 is a part inside it, pinned under its section's band; cards 
 each lecture-note section `.psec` (and each `h4` part in it), the walkthrough `#walk` (called by `sim.js` once drawn), the home page
 sections, each Portfolios project and its numbered parts. The simulations list is one card per simulation, titled with its name and
 numbered by its figure, in figure order; it opens as a column of closed titles, and a search or chip opens what it finds without changing
-what the reader chose. Numa's choice: no sorting into fields or course years until the library is large. Elsewhere everything starts open. What a reader opens or closes is remembered per page in localStorage; Expand all / Collapse all act without animation; a link into a
+what the reader chose. Numa's choice: no sorting into fields or course years until the library is large. Everywhere every card starts closed, and what a reader opens or closes lasts for that visit only (Numa, 3 November 2026); Expand all / Collapse all move as one smooth motion; a link into a
 closed fold opens it first and lands below the pinned headers; printing opens everything. A page bar that sticks across the whole width
 (the home index on phones) carries `data-fold-bar`, so the headers pin below it. Without JavaScript every page reads fully open.
 Simulations page: `simulations.html` lists every simulation as one fold card, in one column in figure order (see Folds above); an open card

@@ -6,7 +6,7 @@
 | Loaded by | [index.html:723](../../index.html#L723) (the home page); [portfolios.html:420](../../public/portfolios.html#L420); [simulations.html:124](../../public/simulations.html#L124), before `catalog.js`; the eleven simulation pages, first of the shared scripts (load-order table in [sim.md](sim.md#load-order-on-the-pages)) |
 | Defines | `window.Fold = { make, walk, all, openTo, setCard, onCard, onAll, tools }` ([fold.js:413](../../public/scripts/fold.js#L413)) |
 | Sets on `<html>` | CSS variables `--fold-open`, `--fold-close`, `--fold-ease` ([fold.js:21-23](../../public/scripts/fold.js#L21-L23)) and `--fold-top` ([fold.js:297](../../public/scripts/fold.js#L297)) |
-| Stores | `localStorage['fold:<path>']` ([fold.js:61](../../public/scripts/fold.js#L61)) |
+| Stores | nothing across visits since 3 November 2026; removes the old `localStorage['fold:<path>']` ([fold.js:64-67](../../public/scripts/fold.js#L64-L67)) |
 | Styles | [styles/fold.css](../../public/styles/fold.css) |
 
 `fold.js` turns the long pages of the site into fold-out sections, the mechanism of the Physik Radar app and the two project
@@ -87,10 +87,11 @@ too. With reduced motion it waits two frames, so the new layout exists, and then
 
 ### Expand all, Collapse all
 
-`all(open)` ([fold.js:150-163](../../public/scripts/fold.js#L150-L163)) acts at once, without animation, because many heights
-moving together carry no information. It adds `fold-no-anim` to `<html>` (which switches the transitions off,
-[fold.css:63](../../public/styles/fold.css#L63)), sets every fold and card, remembers every fold, calls `Fold.onAll`, forces a
-layout, and removes the class on the next frame. Collapsing first jumps to the top of the first fold if the reader is below
+`all(open)` ([fold.js:150-163](../../public/scripts/fold.js#L150-L163)) moves every fold as one motion (since 3 November 2026,
+at Numa's request; before, it switched the transitions off): it reads where each fold is, gives each fold on screen (or within
+200 px of it) a start 28 ms after the one above it, at most 0.3 s (`--fold-delay`, read by the transitions in
+[fold.css:53-59](../../public/styles/fold.css#L53-L59)), sets every fold and card, remembers every fold for this visit, calls
+`Fold.onAll`, and removes the delays once the motion has ended. Collapsing first jumps to the top of the first fold if the reader is below
 it. `tools(host, where)` ([fold.js:227-240](../../public/scripts/fold.js#L227-L240)) puts the two buttons once per page,
 `'before'` (default), `'after'` or `'append'` to `host`.
 
@@ -153,7 +154,7 @@ page opens with 10 folds, all closed; `?q=chaos` shows 1 fold, open.
 
 | Name | Lines | Arguments | What it does / returns |
 |---|---|---|---|
-| `Fold.make` | [169-202](../../public/scripts/fold.js#L169-L202) | `node, { level (1), id, head: [nodes], counts, label, defaultOpen (true), forceOpen }` | Builds the fold (once; a second call returns `node` unchanged). Open state: `forceOpen`, else the remembered choice, else `defaultOpen`. Returns `node`. |
+| `Fold.make` | [169-202](../../public/scripts/fold.js#L169-L202) | `node, { level (1), id, head: [nodes], counts, label, defaultOpen (false since 3 November 2026), forceOpen }` | Builds the fold (once; a second call returns `node` unchanged). Open state: `forceOpen`, else this visit's choice, else `defaultOpen`. Returns `node`. |
 | `Fold.walk` | [342-350](../../public/scripts/fold.js#L342-L350) | `host` | Folds the walkthrough section; adds the tools if the page has none; re-aims at the hash. |
 | `Fold.all` | [150-163](../../public/scripts/fold.js#L150-L163) | `open` | Opens or closes every fold and card at once. |
 | `Fold.openTo` | [243-259](../../public/scripts/fold.js#L243-L259) | `target, smooth` | Opens the folds around `target` and scrolls to it. |
@@ -203,13 +204,9 @@ for `many` (Arabic has six forms). See [i18n.md](../i18n.md#words-inside-scripts
 
 ## State it keeps
 
-- `localStorage` key `fold:` + `location.pathname`, with a trailing `/index.html` replaced by `/` and a final `.html` dropped
-  ([fold.js:61](../../public/scripts/fold.js#L61)), so `x.html` and `x` share one key (since 31 October 2026 the site serves
-  both; the key is the one phyeinusul.com used before, when its addresses had no `.html`). The value is a JSON object `{ id: 1 | 0 }`, 1 open and 0 closed; ids not
-  in it keep their default ([fold.js:60-72](../../public/scripts/fold.js#L60-L72)). An older format, a JSON array of closed
-  ids, is still read ([fold.js:65](../../public/scripts/fold.js#L65)). The path is the encoded one: the key is
-  `fold:/simulations/Double%20Pendulum` with value `{"p-model":0}` after closing section 2 of Fig. 2, and `fold:/` on the
-  home page, at `/` or `/index.html`. Errors (private mode) are ignored.
+- Nothing is stored across visits (since 3 November 2026): `chosen` holds what the reader opened or closed during this visit
+  ([fold.js:60-72](../../public/scripts/fold.js#L60-L72)), so a list that redraws (a search) keeps it; on load the keys that
+  earlier versions stored (`fold:` + the path, with and without `.html`) are removed. Errors (private mode) are ignored.
 - In memory: `chosen` (the parsed object), `glideId`, `printOpen`, `moved` ([fold.js:62](../../public/scripts/fold.js#L62),
   [41](../../public/scripts/fold.js#L41), [277](../../public/scripts/fold.js#L277), [400](../../public/scripts/fold.js#L400)).
 - DOM written: the fold structure above; `data-fold-level`, `data-collapsed`, `data-open`, `inert`, `aria-expanded`,
@@ -223,7 +220,8 @@ for `many` (Arabic has six forms). See [i18n.md](../i18n.md#words-inside-scripts
 | Open | 320 ms, `cubic-bezier(0.4, 0, 0.2, 1)` | [fold.js:20](../../public/scripts/fold.js#L20) |
 | Close | 240 ms, up to 420 ms when the page must scroll | [fold.js:38](../../public/scripts/fold.js#L38) |
 | Glide | same curve; one animation frame per step | [fold.js:49-57](../../public/scripts/fold.js#L49-L57) |
-| Expand / Collapse all, `openTo` | no animation; transitions back on the next frame | [fold.js:157-162](../../public/scripts/fold.js#L157-L162), [249-254](../../public/scripts/fold.js#L249-L254) |
+| Expand / Collapse all | one motion, each fold on screen 28 ms after the one above (0.3 s at most) | [fold.js:157-162](../../public/scripts/fold.js#L157-L162) |
+| `openTo` | no animation; transitions back on the next frame | [249-254](../../public/scripts/fold.js#L249-L254) |
 | Reduced motion | glide jumps after two frames; CSS transitions 0.01 ms | [fold.js:48-52](../../public/scripts/fold.js#L48-L52), [fold.css:95-97](../../public/styles/fold.css#L95-L97) |
 
 Listeners: `click` on each header and toggle; `click` on `document` for `.fs-more` and for `#` links; `hashchange`;

@@ -57,19 +57,19 @@
         })(performance.now());
     }
 
-    /* what this reader opened or closed, per page: id -> 1 open, 0 closed; anything else keeps its default */
-    var KEY = 'fold:' + location.pathname.replace(/\/index\.html$/, '/').replace(/\.html$/, '');
+    /* what this reader opened or closed on this page during this visit: id -> 1 open, 0 closed. Every page arrives with its
+       cards closed (Numa, 3 November 2026): nothing is carried from one visit to the next, and a card opens by itself only
+       when its page asks for it (opt.defaultOpen === true), a search shows it, or the address points into it */
     var chosen = {};
-    try {
-        var saved = JSON.parse(localStorage.getItem(KEY) || '{}');
-        if (Array.isArray(saved)) saved.forEach(function (id) { chosen[id] = 0; });   /* the first format: a list of closed ids */
-        else if (saved && typeof saved === 'object') chosen = saved;
+    try {   /* the choices earlier versions kept in localStorage ('fold:<path>') are removed, so no page reopens them */
+        var p0 = location.pathname, b0 = p0.replace(/\/index\.html$/, '/');
+        [p0, b0, b0.replace(/\.html$/, '')].forEach(function (k) { localStorage.removeItem('fold:' + k); });
     } catch (e) { /* private mode */ }
     function remember(id, open) {
         if (!id) return;
-        chosen[id] = open ? 1 : 0;
-        try { localStorage.setItem(KEY, JSON.stringify(chosen)); } catch (e) { /* private mode */ }
+        chosen[id] = open ? 1 : 0;   /* this visit only: a list that redraws (a search) keeps what the reader chose */
     }
+
 
     function el(tag, cls, text) {
         var n = doc.createElement(tag);
@@ -146,7 +146,7 @@
         fold(node, open, true);
     }
 
-    /* all at once, without animation: many heights moving together is noise, not information */
+    /* all at once, as one motion: each fold on screen starts 28 ms after the one above it (0.3 s at most), so the page settles from the top down (Numa, 3 November 2026) */
     function all(open) {
         var nodes = doc.querySelectorAll('[data-fold-level]'), cards = doc.querySelectorAll('[data-card]');
         if (!nodes.length && !cards.length) return;
@@ -154,12 +154,12 @@
             var first = nodes[0].getBoundingClientRect().top + window.scrollY - top0() - 12;
             if (window.scrollY > first) window.scrollTo({ top: first, behavior: 'instant' });
         }
-        root.classList.add('fold-no-anim');
-        Array.prototype.forEach.call(nodes, function (n) { setFold(n, open); remember(n.id, open); });
+        var k = 0, wait = 0, delay = Array.prototype.map.call(nodes, function (n) {   /* read every position first, then write */
+            var r = n.getBoundingClientRect(), d = r.bottom > -200 && r.top < window.innerHeight + 200 ? Math.min(28 * k++, 300) : 0; wait = Math.max(wait, d); return d; });
+        Array.prototype.forEach.call(nodes, function (n, i) { n.style.setProperty('--fold-delay', delay[i] + 'ms'); setFold(n, open); remember(n.id, open); });
         Array.prototype.forEach.call(cards, function (c) { setCard(c, open); });
         if (Fold.onAll) Fold.onAll(open);
-        void root.offsetWidth;
-        requestAnimationFrame(function () { root.classList.remove('fold-no-anim'); });
+        setTimeout(function () { Array.prototype.forEach.call(nodes, function (n) { n.style.removeProperty('--fold-delay'); }); }, wait + FOLD.open + 60);
     }
 
     /**
@@ -171,7 +171,7 @@
         var level = opt.level || 1, id = node.id || opt.id;
         if (!node.id && id) node.id = id;
         /* a filter can show a fold open without changing what the reader chose */
-        var open = opt.forceOpen ? true : id in chosen ? chosen[id] === 1 : opt.defaultOpen !== false;
+        var open = opt.forceOpen ? true : id in chosen ? chosen[id] === 1 : opt.defaultOpen === true;
         var head = el('div', 'fs-head'), main = el('div', 'fs-main'), side = el('div', 'fs-side');
         (opt.head || []).forEach(function (h) { if (h) main.appendChild(h); });
         if (opt.counts) { var c = el('p', 'fs-counts'); c.textContent = opt.counts; main.appendChild(c); }
