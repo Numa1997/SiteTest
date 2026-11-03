@@ -8,13 +8,13 @@ Arabic pages, never edited by hand ([i18n.md](i18n.md)).
 | File | Lines | Loaded by | Job |
 |---|---|---|---|
 | [`site.css`](../public/styles/site.css) | 1175 | home, catalog, Projects | Tokens, base type, the home page (hero, timeline, plates, and since 2 November 2026 the plates as a sideways shelf with a rail of dots, lines 888–1169), footer. |
-| [`sim.css`](../public/styles/sim.css) | 254 | the eleven simulation pages | Tokens again, the figure, controls, readouts, walkthrough; imports KaTeX's CSS and `paper.css`. |
+| [`sim.css`](../public/styles/sim.css) | 254 | the ten simulation pages | Tokens again, the figure, controls, readouts, walkthrough; imports KaTeX's CSS and `paper.css`. |
 | [`paper.css`](../public/styles/paper.css) | 118 | simulation pages (through `sim.css`), catalog, Portfolios | Lecture notes set like LaTeX: Latin Modern, numbered equations, figures, boxes. |
-| [`catalog.css`](../public/styles/catalog.css) | 585 | catalog, Portfolios | Top bar, masthead, search bar, chips, catalog entries; switches titles to Instrument Serif. |
-| [`data.css`](../public/styles/data.css) | 455 | the eleven simulation pages | The data panel (a bookkeeper's ledger) and the Read values strip ([scripts/datalog.md](scripts/datalog.md)). |
-| [`fold.css`](../public/styles/fold.css) | 168 | every page | Fold cards, header bands, toggles, Expand / Collapse all ([scripts/fold.md](scripts/fold.md)). |
+| [`catalog.css`](../public/styles/catalog.css) | 390 | catalog, Projects | Top bar, masthead, catalog entries; switches titles to Instrument Serif. |
+| [`data.css`](../public/styles/data.css) | 455 | the ten simulation pages | The data panel (a bookkeeper's ledger) and the Read values strip ([scripts/datalog.md](scripts/datalog.md)). |
+| [`fold.css`](../public/styles/fold.css) | 169 | every page | Fold cards, header bands, toggles, Expand / Collapse all ([scripts/fold.md](scripts/fold.md)). |
 | [`portfolio.css`](../public/styles/portfolio.css) | 292 | Portfolios | The project cards. |
-| [`i18n.css`](../public/styles/i18n.css) | 59 | home, catalog, Portfolios, the eleven simulation pages | The language switch and what the German and Arabic pages need (for example the Arabic title faces). |
+| [`i18n.css`](../public/styles/i18n.css) | 59 | home, catalog, Portfolios, the ten simulation pages | The language switch and what the German and Arabic pages need (for example the Arabic title faces). |
 
 The pages that use them are described in [pages.md](pages.md); the fonts and KaTeX files in [assets.md](assets.md).
 
@@ -70,7 +70,7 @@ The departures are listed under [Notes for maintainers](#notes-for-maintainers).
 **The Phyein Usul mark** ([assets.md](assets.md#publicimagesphyein-usul-marksvg--the-phyein-usul-logo-1-file-018-mb)) has no
 rule in any stylesheet: every page sizes and places it with inline `style` attributes. On the home page it is a 217 × 120 image
 link to `index.html` above the name, with a 14 px note in `var(--muted)` under it ("Phyein Usul · φύειν أصول, roots that grow. …")
-([index.html:31–32](../index.html#L31-L32)). In the top bar of the catalog, Portfolios and the eleven simulation pages it is an
+([index.html:31–32](../index.html#L31-L32)). In the top bar of the catalog, Portfolios and the ten simulation pages it is an
 87 × 48 image link to the home page, set before the back link in a `span` with `display: inline-flex` and a 14 px gap
 ([simulations.html:33](../public/simulations.html#L33), [portfolios.html:35](../public/portfolios.html#L35),
 [water-wave.html:18](../public/simulations/water-wave.html#L18)). Its strokes are `#7a1f2b` and `#4d0f18`, the values of
@@ -183,7 +183,7 @@ Expand / Collapse pair gets a 104 px top margin to match it ([fold.css:124](../p
 
 ## `sim.css` · the simulation pages
 
-**Loaded by** the eleven pages in `public/simulations/`, line 11 of each. It begins by importing the fonts
+**Loaded by** the ten pages in `public/simulations/`, line 11 of each. It begins by importing the fonts
 ([7](../public/styles/sim.css#L7)), KaTeX's stylesheet ([8](../public/styles/sim.css#L8)) and `paper.css`
 ([9](../public/styles/sim.css#L9)), so a simulation page needs only this `<link>` for type and notes. Its tokens
 ([11–32](../public/styles/sim.css#L11-L32)) repeat `site.css` value for value except `--serif`, which is Instrument Serif;
@@ -255,22 +255,19 @@ after `site.css` and `paper.css` ([catalog.css:3](../public/styles/catalog.css#L
 | Purpose | Selectors | Lines |
 |---|---|---|
 | Fonts, title face | `@import` (Instrument Serif, Plex Sans, Plex Mono), `--serif` | [8–11](../public/styles/catalog.css#L8-L11) |
-| Accessibility | `.visually-hidden` (the search label) | [13–20](../public/styles/catalog.css#L13-L20) |
+| Accessibility | `.visually-hidden` | [13–20](../public/styles/catalog.css#L13-L20) |
 | Top bar | `.cat-top`, its `nav` | [23–46](../public/styles/catalog.css#L23-L46) |
-| Masthead | `.cat`, `.cat__head` (text + stats), `.cat__kicker`, `h1` (56–104 px, weight 400), `.cat__lede`, `.cat__stats` | [49–105](../public/styles/catalog.css#L49-L105) |
-| Search bar | `.cat__bar` (sticky, translucent, a grid with areas `search stage count` / `field field field`), `.cat__search` (icon, input, `kbd` hint hidden while typing), `.cat__filters` (`display: contents`), `.cat__chips`, `#fields`, `#stages`, `.chip` (pill; `aria-pressed="true"` turns it ink), `.chip small` (count), `.cat__count` | [108–229](../public/styles/catalog.css#L108-L229) |
-| Entries | `.cat__list` (two-column grid), `.entry` (outlined card), `.entry__fig`, `.entry__plate` (8 : 5, white, outlined), `.entry__ph` (the "Fig. n" stand-in under the image), `.entry__cap`, `.entry__body`, `.entry__kicker`, `.entry h3`, `.entry__abs`, `.entry__eq` (hidden until `.is-typeset`), `.entry__facts`, `.entry__tags`, `.entry__foot`, `.entry__open`, `.entry__note` | [232–408](../public/styles/catalog.css#L232-L408) |
-| Empty state | `.cat__empty` (dashed outline), its button | [411–429](../public/styles/catalog.css#L411-L429) |
-| The four parts | `.cat__anatomy`, `.cat__parts` (two columns, one at 640 px and below; no native markers, margin or padding), `.cat__parts > li` (20 px padding; 18 px vertically and 16 px horizontally on phones; 3 px wine top edge) | [432–475](../public/styles/catalog.css#L432-L475) |
-| No-JS notice | `.cat-error` | [480–484](../public/styles/catalog.css#L480-L484) |
+| Masthead | `.cat`, `.cat__head`, `.cat__kicker`, `h1` (56–104 px, weight 400), `.cat__lede` | [49–82](../public/styles/catalog.css#L49-L82) |
+| Entries | `.cat__list` (two-column grid), `.entry` (outlined card), `.entry__fig`, `.entry__plate` (8 : 5, white, outlined), `.entry__ph` (the "Fig. n" stand-in under the image), `.entry__cap`, `.entry__body`, `.entry__kicker`, `.entry h3`, `.entry__abs`, `.entry__eq` (hidden until `.is-typeset`), `.entry__facts`, `.entry__tags`, `.entry__foot`, `.entry__open`, `.entry__note` | [92–268](../public/styles/catalog.css#L92-L268) |
+| The four parts | `.cat__anatomy`, `.cat__parts` (two columns, one at 640 px and below; no native markers, margin or padding), `.cat__parts > li` (20 px padding; 18 px vertically and 16 px horizontally on phones; 3 px wine top edge) | [271–318](../public/styles/catalog.css#L271-L318) |
+| No-JS notice | `.cat-error` | [319–323](../public/styles/catalog.css#L319-L323) |
 
 **Breakpoints.**
 
 | Width | What changes | Lines |
 |---|---|---|
-| ≤ 860 px | Masthead one column; list one column. | [487–495](../public/styles/catalog.css#L487-L495) |
-| ≤ 640 px | 16 px side padding; the bar becomes `search count` over one sideways-scrolling row of all chips, the year chips after a thin line; smaller stats, lede and entry text; facts stack; parts one column; footer padding. | [496–566](../public/styles/catalog.css#L496-L566) |
-| no hover (touch) | The `/` hint is hidden. | [567–574](../public/styles/catalog.css#L567-L574) |
+| ≤ 860 px | Masthead one column; list one column. | [326–334](../public/styles/catalog.css#L326-L334) |
+| ≤ 640 px | 16 px side padding; smaller lede and entry text; facts stack; parts one column. | [335–379](../public/styles/catalog.css#L335-L379) |
 
 No print rules.
 
@@ -281,7 +278,7 @@ is removed.
 
 ## `data.css` · the data panel
 
-**Loaded by** the eleven simulation pages, line 12 of each, after `sim.css`. It uses the tokens of `sim.css`, `--tex` from
+**Loaded by** the ten simulation pages, line 12 of each, after `sim.css`. It uses the tokens of `sim.css`, `--tex` from
 `paper.css`, and literal colours formerly supplied by three undefined-token fallbacks ([data.css:5](../public/styles/data.css#L5)). What the panel does
 is in [scripts/datalog.md](scripts/datalog.md). Since 24 October 2026 it styles the panel as a bookkeeper: a headline of live
 numbers, a toolbar, one table in causal sections and the books. On Arabic pages `data.rtl.css` (made by `rtlcss`) mirrors it,
@@ -399,7 +396,7 @@ site <https://phyeinusul.com> `/src/main.ts` answers 404 (measured 20 October 20
    400 on the simulation, catalog and Portfolios pages, IBM Plex Serif at weight 600 on the home page alone (AGENTS.md, "Design";
    CLAUDE.md, "Design and explanations"). `catalog.css` redefines `--serif` as Instrument Serif after `site.css`
    ([catalog.css:9–11](../public/styles/catalog.css#L9-L11)), so `--serif` is IBM Plex Serif only on the home page and
-   Instrument Serif on the other thirteen pages (catalog, Portfolios, eleven simulations).
+   Instrument Serif on the other twelve pages (catalog, Portfolios, ten simulations).
 2. **Shadows elsewhere, against the "no card shadows" comments** in [paper.css:7](../public/styles/paper.css#L7),
    [catalog.css:5](../public/styles/catalog.css#L5) and [portfolio.css:5](../public/styles/portfolio.css#L5): every open fold card
    ([fold.css:25](../public/styles/fold.css#L25)), the simulation figure and panel ([sim.css:67](../public/styles/sim.css#L67),
@@ -447,7 +444,7 @@ loads fold.js, once per animation frame while scrolling). Portfolios and CV come
 
 Numa asked for every simulation to use the space the way Fig. 11 (the cart) does. Fig. 11's layout, described in
 [simulations/fig11-pendulum-control.md](simulations/fig11-pendulum-control.md) ("Layout and §1.1"), has three parts; each is now
-the rule for all eleven pages, in `sim.css` and its generated `sim.rtl.css`:
+the rule for all ten pages, in `sim.css` and its generated `sim.rtl.css`:
 
 - **Width.** `.sim-top`, `.sim` and `.sim-foot` are at most 1560 px wide (were 1180 px; Figs. 9 and 11 already set 1560 px in their
   own `<style>`). The lecture note keeps its own 210 + 760 px grid, so its line length is unchanged.
@@ -489,6 +486,6 @@ The curve's explanation is folded to its first sentence (`.curve__why details`, 
 Arabic its status line is kept left to right like the readouts, by a rule in `styles/i18n.css`; the same rule in `sim.css`
 would be flipped by rtlcss when it writes `sim.rtl.css`.
 
-**Until the simulations list is drawn** (since 31 October 2026): the last two rules of `catalog.css` (lines 576–585) hide what follows
+**Until the simulations list is drawn** (since 31 October 2026): the last two rules of `catalog.css` (lines 381–390) hide what follows
 the list, and the footer of a page with `#catalog`, until the page marks itself `cat-drawn` after its first drawing (or after 8 s),
 so nothing on screen jumps down when the list appears ([performance.md](performance.md), change 4).
