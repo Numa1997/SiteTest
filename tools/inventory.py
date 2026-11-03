@@ -141,7 +141,7 @@ RULES = [
     (r'public/cv/Numa_Koudsie_CV\.pdf', 'The CV as a two-page PDF (German, then English), linked from the CV page.', 'docs/pages.md'),
     (r'public/cv/cv-(de|en)\.webp', 'One page of the CV rendered at 170 dpi, shown on the CV page.', 'docs/pages.md'),
     (r'public/simulations/.+\.html',
-     lambda m: ('Fig. %d · %s: the simulation, its data panel, walkthrough and lecture note.' if 'double-inverted' not in m.group(0) else 'Fig. %d · %s: the real-time simulation and its lecture note (no data panel, no walkthrough).') % SIMS[m.group(0)][::2]
+     lambda m: ('Fig. %d · %s: the simulation, its data panel, walkthrough and lecture note.' if 'double-inverted' not in m.group(0) else 'Fig. %d · %s: the real-time simulation, its walkthrough and lecture note (no data panel).') % SIMS[m.group(0)][::2]
      if m.group(0) in SIMS else 'Simulation page not registered in catalog.js.',
      lambda m: sim_doc(SIMS[m.group(0)][0], SIMS[m.group(0)][1]) if m.group(0) in SIMS else None),
     # shared scripts and styles
