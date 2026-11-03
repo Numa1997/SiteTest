@@ -23,7 +23,7 @@
     </script>
   
     <script src="../scripts/i18n/strings-de.js"></script>
-    <meta name="translated-from" content="English index.html, commit b814e78" />
+    <meta name="translated-from" content="English index.html, commit c7c4894" />
   </head>
 
   <body>
@@ -527,6 +527,35 @@
                 <a
                   class="plate__launch"
                   href="simulations/wind-turbine.html"
+                  target="_blank"
+                  rel="noopener"
+                  >Öffnen</a
+                >
+              </div>
+            </article>
+            <article class="plate reveal">
+              <div
+                class="plate__fig"
+                data-sketch="dipc"
+                aria-hidden="true"
+              ></div>
+              <div class="plate__body">
+                <p class="plate__num">Abb. 11</p>
+                <h3>
+                  <a
+                    href="simulations/double-inverted-pendulum.html"
+                    target="_blank"
+                    rel="noopener"
+                    >Zwei Stangen auf einem Wagen balancieren</a
+                  >
+                </h3>
+                <p>Zwei Stangen stehen auf einem Wagen, mit Gelenken verbunden und frei, umzufallen; nur der Wagen, auf einer Schiene geschoben, kann sie oben halten. Schnippen Sie dagegen, bewegen Sie den Wagen, schwächen Sie den Motor.</p>
+                <div class="plate__tags">
+                  <span class="tag tag--soft">RK4</span><span class="tag tag--soft">LQR</span><span class="tag tag--soft">inverses Pendel</span>
+                </div>
+                <a
+                  class="plate__launch"
+                  href="simulations/double-inverted-pendulum.html"
                   target="_blank"
                   rel="noopener"
                   >Öffnen</a
@@ -1205,6 +1234,19 @@
               '<path class="grey" d="M112 ' + Y(16 / 27).toFixed(1) + 'H196" stroke-dasharray="2 3" stroke-width="1"/>' +
               '<path class="acc" d="' + d + '" fill="none" stroke-width="2"/>' +
               '<circle cx="' + X(best[0]).toFixed(1) + '" cy="' + Y(best[1]).toFixed(1) + '" r="3" class="acc-fill"/>';
+            return svg(s);
+          },
+          dipc: function () {
+            /* a cart on a rail with two rods standing on it, one hinged on the other, and the motor's push */
+            var cx = 96, cy = 88, x1 = cx + 12, y1 = cy - 40, x2 = x1 - 6, y2 = y1 - 44;
+            var s = '<path class="grey" d="M12 104H196" stroke-width="1.5"/>' +
+              '<rect x="' + (cx - 22) + '" y="' + (cy - 2) + '" width="44" height="12" rx="2" class="ink" fill="none" stroke-width="1.6"/>' +
+              '<circle cx="' + (cx - 13) + '" cy="' + (cy + 13) + '" r="3.5" class="ink" fill="none" stroke-width="1.4"/><circle cx="' + (cx + 13) + '" cy="' + (cy + 13) + '" r="3.5" class="ink" fill="none" stroke-width="1.4"/>' +
+              '<path class="ink" d="M' + cx + ' ' + (cy - 2) + 'L' + x1 + ' ' + y1 + '" stroke-width="3" stroke-linecap="round"/>' +
+              '<path class="acc" d="M' + x1 + ' ' + y1 + 'L' + x2 + ' ' + y2 + '" stroke-width="3" stroke-linecap="round"/>' +
+              '<circle cx="' + cx + '" cy="' + (cy - 2) + '" r="2.6" class="grey-fill"/><circle cx="' + x1 + '" cy="' + y1 + '" r="2.6" class="grey-fill"/>' +
+              '<path class="soft" d="M' + cx + ' ' + (cy - 2) + 'V8" stroke-dasharray="2 3" stroke-width="1"/>' +
+              '<path class="acc" d="M' + (cx - 58) + ' ' + (cy + 4) + 'H' + (cx - 28) + 'm-5 -4l5 4l-5 4" fill="none" stroke-width="1.6"/>';
             return svg(s);
           },
           pendctl: function () {

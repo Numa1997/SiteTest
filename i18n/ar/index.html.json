@@ -23,6 +23,10 @@
   "src": "RK4",
   "tr": "RK4"
  },
+ "108230a47802": {
+  "src": "Balancing Two Rods on a Cart",
+  "tr": "موازنة قضيبين على عربة"
+ },
  "108eeca052f5": {
   "src": "Open the projects",
   "tr": "افتح المشاريع"
@@ -62,6 +66,10 @@
  "15727c1379a6": {
   "src": "Resonance",
   "tr": "الرنين"
+ },
+ "1689c9895707": {
+  "src": "Two rods stand on a cart, hinged and free to fall; only the cart, pushed along a rail, can hold them up. Flick them, move the cart, weaken the motor.",
+  "tr": "يقف قضيبان على عربة، موصولان بمفصلين وحرّان في السقوط؛ ولا يستطيع إبقاءهما قائمين إلا العربة، تُدفع على سكّة. انقرهما، وحرّك العربة، وأضعف المحرّك."
  },
  "19300c13439d": {
   "src": "Portfolios ↗",
@@ -686,6 +694,10 @@
  "e3eef1f8c910": {
   "src": "Team Coordinator",
   "tr": "تنسيق فريق العمل"
+ },
+ "e580725cfdee": {
+  "src": "inverted pendulum",
+  "tr": "النوّاس المقلوب"
  },
  "e7137ce08df4": {
   "src": "Focus: computational physics",
