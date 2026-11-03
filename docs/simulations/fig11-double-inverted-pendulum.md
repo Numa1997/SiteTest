@@ -14,8 +14,10 @@ The old Fig. 11 (Double Pendulum under Control) moved to Projects the same day: 
 
 A double inverted pendulum on a cart, with uniform rods: the model of Bogdanov (2004, OGI report CSE-04-006), written out in
 Moysis (2016). The cart is pushed by a motor force `u`, clipped to `±u_max`; the hinges are free. The page integrates the full nonlinear
-equations `D(θ) θ̈ + C(θ, θ̇) θ̇ + G(θ) = H u` with RK4 at a fixed 1 ms step in real time (no solve-then-play, no data panel, no walkthrough:
-Numa asked for a small page).
+equations `D(θ) θ̈ + C(θ, θ̇) θ̇ + G(θ) = H u` with RK4 at a fixed 1 ms step in real time (no solve-then-play and no data panel: Numa asked for a small page). Since 3 November 2026, late evening, it has a walkthrough,
+`public/scripts/walk/dipc.js` (nine steps, equation beside the page's code, `Sim.live()` for the Now column; `node notes/walkcheck.cjs`
+finds all 29 quoted lines), and the note writes out all three Lagrange rows (8a), (8), (8b), the linearisation to first order, the
+reduced fall-rate problem, the sign-function solution of the Riccati equation, the flick impulse (17) and the RK4 step (18).
 
 ## Controller
 
