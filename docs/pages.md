@@ -44,10 +44,9 @@ only under `.js`, so without JavaScript nothing waits for a fade-in.
 
 `fold.js` runs its `boot()` at `DOMContentLoaded` ([fold.js:404–411](../public/scripts/fold.js#L404-L411)). Each page's
 inline script sits after it and runs during parsing, so the inline script always runs first and fold.js then reshapes the
-finished DOM. What a reader opens or closes is stored in `localStorage` under `fold:` plus the path
-([fold.js:61](../public/scripts/fold.js#L61)), with a trailing `/index.html` replaced by `/` and a final `.html` dropped, so
-a page has one key whichever of its addresses opened it: `fold:/` for the home page, `fold:/simulations` for the catalog (the
-keys phyeinusul.com used before 31 October 2026, when its addresses had no `.html`, so no reader's choices were lost).
+finished DOM. Every page arrives with its cards closed (since 3 November 2026, at Numa's request): what a reader opens or
+closes lasts for that visit only, and the choices earlier versions kept in `localStorage` (`fold:` plus the path) are removed
+([fold.js:60-72](../public/scripts/fold.js#L60-L72)). A link into a card still opens it.
 
 **German and Arabic.** Each of the three pages also exists at `de/…` and `ar/…`, generated from it by `tools/i18n/build.py`
 ([i18n.md](i18n.md)). In the English source this adds two things, each on a line that already existed so no line number above
