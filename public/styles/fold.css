@@ -145,6 +145,7 @@
 .entry__more { padding-top: 2px; }
 
 .fold-tools:has(+ #catalog) { margin: 22px 0 -14px; }
+.cat__head + .fold-tools { margin-top: 22px; }   /* Projects: the buttons stand clear of the line under the description, as on the simulations list */
 .paper .psec > .fs-head h3 { display: block; }
 .paper .psec > .fs-head .psec__n { display: inline-block; position: relative; margin-right: 12px; vertical-align: .2em; top: 0; }
 .paper .psec > .fs-head .star { margin-left: 8px; }
