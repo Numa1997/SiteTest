@@ -10,7 +10,18 @@
   Strict-Transport-Security: max-age=31536000
 
 # Font files: a font never changes under its name (a new or changed face gets a new file name), so the browser may keep each one
-# for a year without asking again. Pages, stylesheets and scripts keep Cloudflare's default (asked again on every visit), so a
-# change to them reaches readers at once. Measured in docs/performance.md (31 October 2026).
+# for a year without asking again. Pages keep Cloudflare's default (asked again on every visit), so a change reaches readers at once.
+# Measured in docs/performance.md (31 October 2026).
 /*.woff2
   Cache-Control: public, max-age=31536000, immutable
+
+# Stylesheets, scripts and drawings: kept 10 minutes. Asked again on every visit, each tap from page to page waited for about twelve
+# round trips to Cloudflare before the new page could draw (live, phone at 4G: first paint 1.4 s after the tap, the old page frozen
+# meanwhile). From the cache it draws at once (Numa, 3 November 2026). Cost: for up to 10 minutes after a deploy a returning
+# reader may see a new page with the old stylesheet.
+/*.css
+  Cache-Control: public, max-age=600
+/*.js
+  Cache-Control: public, max-age=600
+/*.svg
+  Cache-Control: public, max-age=600
