@@ -2,7 +2,7 @@
    Each step pairs an equation with the lines of this site's code that compute it.
    ⟦key|text⟧ marks a quantity; the same key in the formula, the code and the table lights up together.
    The "Now" column is filled from Sim.live(), which each page defines next to its own state.
-   Fig. 11, double pendulum under control: the steps follow the lecture note's order and its equation numbers (1)–(15). */
+   Fig. 11, double pendulum under control: the steps follow the lecture note's order and its equation numbers. */
 window.WALK = window.WALK || {};
 
 (function () {
@@ -14,10 +14,10 @@ window.WALK = window.WALK || {};
         intro: 'Nine steps from the lecture note to the code of this page, in the order of the note: the rig and its strut, the equations of motion and the energy, the rest the controller aims at, the linear model and the controllability test, the Riccati equation and the gains, the control law, and the solver that stores the run. Each step sets an equation of the note, with its number, beside the lines of this page that evaluate it, quoted character for character; a line that reads “...” stands for page lines left out. Point at a coloured symbol and the same quantity lights up in the formula, the code and the table. The “Now” column is read from the page’s data store five times a second: the quantities of the motion show the stored sample on screen at this moment, everything else belongs to the whole solved run.',
         steps: [
             {
-                title: 'Equation (1): the coordinates and the strut',
+                title: 'Equations (3) and (4): the coordinates and the strut',
                 where: 'strut(), under the rig constants',
                 math: 'q = (⟦th1|θ<sub>1</sub>⟧, ⟦th2|θ<sub>2</sub>⟧, ⟦X|X⟧), &nbsp; r<sub>2</sub> = l<sub>1</sub>(' + up('sin') + ' θ<sub>1</sub>, −' + up('cos') + ' θ<sub>1</sub>) + l<sub>2</sub>(' + up('sin') + ' θ<sub>2</sub>, −' + up('cos') + ' θ<sub>2</sub>)' + tag(1) + '<br>⟦ell|ℓ⟧ = |r<sub>2</sub> − (X, −H)|, &nbsp; ⟦N|N⟧ = k<sub>s</sub>(ℓ − L<sub>0</sub>) + stop' + tag(6),
-                note: 'The three generalised coordinates of §2 are the array q: q[0] = θ₁ and q[1] = θ₂ in radians from straight down, q[2] = X, the cart’s position in metres. The first two lines find ball 2, (x2, y2), from (1), and the strut’s length ℓ as the distance from ball 2 to the cart’s hinge at (X, −H); H_RAIL is H = 1.65 m. J0, J1 and J2 are ∂ℓ/∂q, the rates at which each coordinate stretches the strut, and ld = ℓ̇. The pull N is the spring of §4, k_s(ℓ − L₀), plus an end stop when ℓ leaves [0.5 m, 0.95 m]: a stiff spring KST with a damper CST that acts only while the stop is touched.',
+                note: 'The three generalised coordinates of §2 are the array q: q[0] = θ₁ and q[1] = θ₂ in radians from straight down, q[2] = X, the cart’s position in metres. The first two lines find ball 2, (x2, y2), from (3), and the strut’s length ℓ as the distance from ball 2 to the cart’s hinge at (X, −H); H_RAIL is H = 1.65 m. J0, J1 and J2 are ∂ℓ/∂q, the rates at which each coordinate stretches the strut, and ld = ℓ̇. The pull N is the spring of §1.2, k_s(ℓ − L₀), plus an end stop when ℓ leaves [0.5 m, 0.95 m]: a stiff spring KST with a damper CST that acts only while the stop is touched.',
                 code: `function strut(p, q, v) {
 var x2 = L1 * Math.sin(q[0]) + L2 * Math.sin(q[1]), y2 = -L1 * Math.cos(q[0]) - L2 * Math.cos(q[1]);
 var dx = x2 - q[2], dy = y2 + H_RAIL, ⟦ell|l = Math.sqrt(dx * dx + dy * dy)⟧;
@@ -33,10 +33,10 @@ else if (l < LMIN) stop = -KST * (LMIN - l) + CST * ld;`,
                 ]
             },
             {
-                title: 'Equations (5) and (6): Lagrange’s equations, solved for the accelerations',
+                title: 'Equations (15) and (9): Lagrange’s equations, solved for the accelerations',
                 where: 'accel(), under strut()',
-                math: 'M(q) q̈ + C(q, q̇) q̇ + ∇V = (0, 0, ⟦F|F⟧)' + tag(5) + '<br>∂V<sub>spring</sub>/∂q<sub>i</sub> = N ∂ℓ/∂q<sub>i</sub>' + tag(6),
-                note: 'a, b and d are the entries of the 2 × 2 pendulum block of the mass matrix M in (5); the cart’s entry is MC = M = 1 kg and does not mix with them. r1 and r2 are the right-hand sides of the two angle equations: the centrifugal term of C q̇, gravity, and the strut’s part of ∇V, which by (6) is the pull N times ∂ℓ/∂θ. Cramer’s rule solves the 2 × 2 block in the return line. The cart’s acceleration is the coil’s force F minus the strut’s pull projected on the rail, divided by its mass. This is the only place where cart and chain meet.',
+                math: 'M(q) q̈ + c(q, q̇) + ∇V = (0, 0, ⟦F|F⟧)' + tag(15) + '<br>∂V<sub>spring</sub>/∂q<sub>i</sub> = N ∂ℓ/∂q<sub>i</sub>' + tag(9),
+                note: 'a, b and d are the entries of the 2 × 2 pendulum block of the mass matrix M in (15); the cart’s entry is MC = M, the cart’s mass, and does not mix with them. r1 and r2 are the right-hand sides of the two angle equations: the centrifugal term c of (15), gravity, and the strut’s part of ∇V, which by (9) is the pull N times ∂ℓ/∂θ. Cramer’s rule solves the 2 × 2 block in the return line. The cart’s acceleration is the coil’s force F minus the strut’s pull projected on the rail, divided by its mass. This is the only place where cart and chain meet.',
                 code: `var a = (M1 + M2) * L1 * L1, b = M2 * L1 * L2 * c, d = M2 * L2 * L2;
 var r1 = -M2 * L1 * L2 * s * v[1] * v[1] - (M1 + M2) * G * L1 * Math.sin(q[0]) - st.N * st.J0;
 var r2 = M2 * L1 * L2 * s * v[0] * v[0] - M2 * G * L2 * Math.sin(q[1]) - st.N * st.J1;
@@ -48,10 +48,10 @@ return [(d * r1 - b * r2) / det, (a * r2 - b * r1) / det, (⟦F|F⟧ - st.N * st
                 ]
             },
             {
-                title: 'Equations (2) and (3): the energy',
+                title: 'Equations (5) and (6): the energy',
                 where: 'energy(), under accel()',
-                math: '⟦E|E⟧ = T + V, &nbsp; T = ½(m<sub>1</sub> + m<sub>2</sub>)l<sub>1</sub>²θ̇<sub>1</sub>² + ½m<sub>2</sub>l<sub>2</sub>²θ̇<sub>2</sub>² + m<sub>2</sub>l<sub>1</sub>l<sub>2</sub> ' + up('cos') + '(θ<sub>1</sub> − θ<sub>2</sub>) θ̇<sub>1</sub>θ̇<sub>2</sub> + ½MẊ²' + tag(2) + '<br>V = −(m<sub>1</sub> + m<sub>2</sub>) g l<sub>1</sub> ' + up('cos') + ' θ<sub>1</sub> − m<sub>2</sub> g l<sub>2</sub> ' + up('cos') + ' θ<sub>2</sub> + ½k<sub>s</sub>(ℓ − L<sub>0</sub>)²' + tag(3),
-                note: 'The energy is not needed to solve the motion; it is the first of two books that check it. y is the state (θ₁, θ₂, X, θ̇₁, θ̇₂, Ẋ). The first line is the kinetic energy (2), the second gravity and the spring in the tubes (3). The last line adds the elastic energy of a touched stop, so that E stays the full energy of the rig while the tubes knock. Without the controller and without a stop, E is conserved; with them, E(0) + W_coil − Q_stop − E(t) must be zero, step 8.',
+                math: '⟦E|E⟧ = T + V, &nbsp; T = ½(m<sub>1</sub> + m<sub>2</sub>)l<sub>1</sub>²θ̇<sub>1</sub>² + ½m<sub>2</sub>l<sub>2</sub>²θ̇<sub>2</sub>² + m<sub>2</sub>l<sub>1</sub>l<sub>2</sub> ' + up('cos') + '(θ<sub>1</sub> − θ<sub>2</sub>) θ̇<sub>1</sub>θ̇<sub>2</sub> + ½MẊ²' + tag(5) + '<br>V = −(m<sub>1</sub> + m<sub>2</sub>) g l<sub>1</sub> ' + up('cos') + ' θ<sub>1</sub> − m<sub>2</sub> g l<sub>2</sub> ' + up('cos') + ' θ<sub>2</sub> + ½k<sub>s</sub>(ℓ − L<sub>0</sub>)²' + tag(6),
+                note: 'The energy is not needed to solve the motion; it is the first of two books that check it. y is the state (θ₁, θ₂, X, θ̇₁, θ̇₂, Ẋ). The first line is the kinetic energy (5), the second gravity and the spring in the tubes (6). The last line adds the elastic energy of a touched stop, so that E stays the full energy of the rig while the tubes knock. Without the controller and without a stop, E is conserved; with them, E(0) + W_coil − Q_stop − E(t) must be zero, step 8.',
                 code: `e = 0.5 * (M1 + M2) * L1 * L1 * y[3] * y[3] + 0.5 * M2 * L2 * L2 * y[4] * y[4] + M2 * L1 * L2 * c * y[3] * y[4] + 0.5 * MC * y[5] * y[5];
 e += -(M1 + M2) * G * L1 * Math.cos(y[0]) - M2 * G * L2 * Math.cos(y[1]) + 0.5 * p.ks * Math.pow(st.l - p.L0, 2);
 if (st.l > LMAX) e += 0.5 * KST * Math.pow(st.l - LMAX, 2); else if (st.l < LMIN) e += 0.5 * KST * Math.pow(LMIN - st.l, 2);`,
@@ -60,10 +60,10 @@ if (st.l > LMAX) e += 0.5 * KST * Math.pow(st.l - LMAX, 2); else if (st.l < LMIN
                 ]
             },
             {
-                title: 'Equation (7): the rest the controller aims at',
+                title: 'Equations (16) and (17): the rest the controller aims at',
                 where: 'equilibrium(), under energy()',
-                math: '∂V/∂θ<sub>1</sub> = ∂V/∂θ<sub>2</sub> = 0 &nbsp; ' + up('at') + ' &nbsp; X = ⟦r|r⟧, &nbsp; ⟦Feq|F*⟧ = −N* (x<sub>2</sub>* − r)/ℓ*' + tag(7),
-                note: 'At a rest all speeds and accelerations vanish, so the two angle equations of (5) say only ∂V/∂θ = 0. G2 returns the two angular accelerations at zero speed with the cart at r; Newton’s method drives them to zero, with the Jacobian j00 … j11 taken by forward differences of step 1e−7 rad, until a correction is smaller than 10⁻¹⁵ rad. The last line stores the rest y* and the steady force F* the coil must give to hold the cart there: the strut’s pull projected on the rail, with N times ∂ℓ/∂X = −(x₂ − r)/ℓ.',
+                math: '∂V/∂θ<sub>1</sub> = ∂V/∂θ<sub>2</sub> = 0 &nbsp; ' + up('at') + ' &nbsp; X = ⟦r|r⟧, &nbsp; ⟦Feq|F*⟧ = −N* (x<sub>2</sub>* − r)/ℓ*' + tag(17),
+                note: 'At a rest all speeds and accelerations vanish, so the two angle equations of (15) say only ∂V/∂θ = 0. G2 returns the two angular accelerations at zero speed with the cart at r; Newton’s method drives them to zero, with the Jacobian j00 … j11 taken by forward differences of step 1e−7 rad, until a correction is smaller than 10⁻¹⁵ rad. The last line stores the rest y* and the steady force F* the coil must give to hold the cart there: the strut’s pull projected on the rail, with N times ∂ℓ/∂X = −(x₂ − r)/ℓ.',
                 code: `function G2(tt) { var a = accel(p, [tt[0], tt[1], p.r], Z, 0); return [a[0], a[1]]; }
 t[0] -= d0; t[1] -= d1; if (Math.abs(d0) + Math.abs(d1) < 1e-15) break;
 return { y: [t[0], t[1], ⟦r|p.r⟧, 0, 0, 0], ⟦Feq|F: st.N * st.J2⟧, N: st.N, l: st.l };`,
@@ -73,9 +73,9 @@ return { y: [t[0], t[1], ⟦r|p.r⟧, 0, 0, 0], ⟦Feq|F: st.N * st.J2⟧, N: st
                 ]
             },
             {
-                title: 'Equations (9) and (10): the linear model and the controllability test',
+                title: 'Equations (21) and (22): the linear model and the controllability test',
                 where: 'linearise() and rankOf(), under the matrix helpers',
-                math: 'ỹ̇ = A ỹ + B F̃' + tag(9) + '<br>' + up('rank') + ' [B, AB, A²B, …, A⁵B] = ⟦rank|6⟧' + tag(10),
+                math: 'ỹ̇ = A ỹ + B F̃' + tag(21) + '<br>' + up('rank') + ' [B, AB, A²B, …, A⁵B] = ⟦rank|6⟧' + tag(22),
                 note: 'A is ∂f/∂y and B is ∂f/∂F at the rest, where f is the right-hand side of the six first-order equations (q̇ = v, v̇ = accel). The code takes them by central differences of the full nonlinear equations, so the same lines serve any rest you choose. rankOf builds the six columns B, AB, …, A⁵B, scales each to unit length (their sizes differ by orders of magnitude), and counts the pivots of Gaussian elimination larger than 10⁻⁸. With the strut under tension the count is 6: one push reaches every motion near the rest.',
                 code: `for (j = 0; j < 6; j++) { var yp = ys.slice(), ym = ys.slice(); yp[j] += e; ym[j] -= e; var fp = rhs(p, yp, Fs), fm = rhs(p, ym, Fs); for (i = 0; i < 6; i++) A[i][j] = (fp[i] - fm[i]) / (2 * e); }
 var bp = rhs(p, ys, Fs + e), bm = rhs(p, ys, Fs - e); for (i = 0; i < 6; i++) B[i][0] = (bp[i] - bm[i]) / (2 * e);
@@ -86,10 +86,10 @@ for (j = 0; j < 6; j++) { var nv = Math.hypot.apply(null, v) || 1; cols.push(v.m
                 ]
             },
             {
-                title: 'Equations (12)–(14): the Riccati equation and the gains',
+                title: 'Equations (24), (25) and (27): the Riccati equation and the gains',
                 where: 'lqr(), under linearise()',
-                math: 'J = ∫(ỹᵀQỹ + ρF̃²) dt' + tag(12) + '<br>AᵀP + PA − ρ<sup>−1</sup>PBBᵀP + Q = 0' + tag(13) + '<br>⟦K|K⟧ = ρ<sup>−1</sup>BᵀP' + tag(14),
-                note: 'The first quoted line fills the 12 × 12 Hamiltonian matrix of §8: A in the top left, −BBᵀ/ρ top right, −Q bottom left, −Aᵀ bottom right; Qd holds the diagonal (q_θ, q_θ, q_X, q_v, q_v, q_v) and R is ρ. The sign iteration Z ← (Z + Z⁻¹)/2 turns every eigenvalue into +1 or −1; when it has converged, P solves the linear system built from the blocks of Z (least squares, since it has twelve equations for six columns). The last line is (14): each gain is the column of P seen through B, divided by ρ.',
+                math: 'J = ∫(ỹᵀQỹ + ρF̃²) dt' + tag(24) + '<br>AᵀP + PA − ρ<sup>−1</sup>PBBᵀP + Q = 0' + tag(25) + '<br>⟦K|K⟧ = ρ<sup>−1</sup>BᵀP' + tag(27),
+                note: 'The first quoted line fills the 12 × 12 Hamiltonian matrix of §12: A in the top left, −BBᵀ/ρ top right, −Q bottom left, −Aᵀ bottom right; Qd holds the diagonal (q_θ, q_θ, q_X, q_v, q_v, q_v) and R is ρ. The sign iteration Z ← (Z + Z⁻¹)/2 turns every eigenvalue into +1 or −1; when it has converged, P solves the linear system built from the blocks of Z (least squares, since it has twelve equations for six columns). The last line is (27): each gain is the column of P seen through B, divided by ρ.',
                 code: `Hm[i][j] = A[i][j]; Hm[i][n + j] = -B[i][0] * B[j][0] / R; Hm[n + i][j] = -(i === j ? Qd[i] : 0); Hm[n + i][n + j] = -A[j][i];
 ...
 for (i = 0; i < 2 * n; i++) for (j = 0; j < 2 * n; j++) { Zn[i][j] = 0.5 * (Z[i][j] + Zi[i][j]); dn += Math.abs(Zn[i][j] - Z[i][j]); }
@@ -100,9 +100,9 @@ for (j = 0; j < n; j++) { var s = 0; for (i = 0; i < n; i++) s += B[i][0] * P[i]
                 ]
             },
             {
-                title: 'Equation (11): the control law',
+                title: 'Equation (23): the control law',
                 where: 'control(), under design()',
-                math: '⟦F|F⟧ = ⟦Feq|F*⟧ − ⟦K|K⟧(y − y*), &nbsp; |F| ≤ κI<sub>max</sub>' + tag(11),
+                math: '⟦F|F⟧ = ⟦Feq|F*⟧ − ⟦K|K⟧(y − y*), &nbsp; |F| ≤ κI<sub>max</sub>' + tag(23),
                 note: 'The coil’s force is the holding force F* plus a weighted sum of the six errors, with the weights K of the previous step. The last line is the current limit: the source gives at most I_max, so the force is clamped at ±κI_max = ±30 N with the defaults. With the controller off, the coil carries no current and the rig swings freely.',
                 code: `if (!p.on) return 0;
 var F = d.eq.F;
@@ -118,7 +118,7 @@ return Math.max(-p.Fmax, Math.min(p.Fmax, F));`,
                 title: 'Runge–Kutta, with the energy books carried along',
                 where: 'stepRK4(), under control()',
                 math: 'y<sub>n+1</sub> = y<sub>n</sub> + (⟦h|h⟧/6)(k<sub>1</sub> + 2k<sub>2</sub> + 2k<sub>3</sub> + k<sub>4</sub>)<br>W<sub>coil</sub> = ∫FẊ dt, &nbsp; Q<sub>stop</sub> = ∫c<sub>stop</sub>ℓ̇² dt, &nbsp; E(0) + W<sub>coil</sub> − Q<sub>stop</sub> − E(T) = ⟦bal|0⟧',
-                note: 'Each step evaluates the force and the accelerations at the four stages of the classical Runge–Kutta method, so the controller acts continuously, as (11) says. Two more numbers ride along with the state: the coil’s power F·Ẋ and the heat of a touched stop c_stop·ℓ̇², integrated with the same weights as the motion. That makes the energy book of §10 exact up to the error of the method itself; the Now column shows the book at the end of the run.',
+                note: 'Each step evaluates the force and the accelerations at the four stages of the classical Runge–Kutta method, so the controller acts continuously, as (23) says. Two more numbers ride along with the state: the coil’s power F·Ẋ and the heat of a touched stop c_stop·ℓ̇², integrated with the same weights as the motion. That makes the energy book of §15 exact up to the error of the method itself; the Now column shows the book at the end of the run.',
                 code: `var F = control(p, d, ys), a = accel(p, [ys[0], ys[1], ys[2]], [ys[3], ys[4], ys[5]], F), sv = a[3];
 k.push([ys[3], ys[4], ys[5], a[0], a[1], a[2], F * ys[5], heat]);
 var out = []; for (i = 0; i < 6; i++) out.push(y[i] + h / 6 * (k[0][i] + 2 * k[1][i] + 2 * k[2][i] + k[3][i]));`,

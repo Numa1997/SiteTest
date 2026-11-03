@@ -1,6 +1,6 @@
 # Phyein Usul · Numa Koudsie's physics website — source and documentation
 
-This repository is the source of Numa Koudsie's physics website, **Phyein Usul**: eleven interactive simulations, each with a
+This repository is the source of Numa Koudsie's physics website, **Phyein Usul**: ten interactive simulations, each with a
 lecture note and a data panel, four research projects, and a CV, in English, German and Arabic. One source, two places where it runs:
 
 | | Address | Built from | Doc |
@@ -15,7 +15,7 @@ Beside the site's files, `docs/` explains every file and every script and how th
 | Path | What it holds | Explained in |
 |---|---|---|
 | `index.html` | The home page. | [docs/pages.md](docs/pages.md) |
-| `public/simulations/` | The eleven simulation pages, one self-contained HTML file each. | [docs/simulations/](docs/simulations/) |
+| `public/simulations/` | The ten simulation pages, one self-contained HTML file each. | [docs/simulations/](docs/simulations/) |
 | `public/simulations.html`, `public/portfolios.html` | The simulations catalog and the Portfolios page. | [docs/pages.md](docs/pages.md) |
 | `public/scripts/` | Shared JavaScript: helpers, data store, data panel, folds, the catalog registry, and the walkthroughs in `walk/`. | [docs/scripts/](docs/scripts/) |
 | `public/styles/` | The eight stylesheets, and the right-to-left copies `*.rtl.css` that `tools/i18n/build.py` writes for the Arabic pages. | [docs/styles.md](docs/styles.md) |
@@ -56,7 +56,7 @@ Beside the site's files, `docs/` explains every file and every script and how th
 | 8 | Draw & Decompose | [`draw-decompose.html`](public/simulations/draw-decompose.html) | [fig08-draw-decompose.md](docs/simulations/fig08-draw-decompose.md) |
 | 9 | Driven Oscillator | [`driven-oscillator.html`](public/simulations/driven-oscillator.html) | [fig09-driven-oscillator.md](docs/simulations/fig09-driven-oscillator.md) |
 | 10 | Wind Turbine Control | [`wind-turbine.html`](public/simulations/wind-turbine.html) | [fig10-wind-turbine.md](docs/simulations/fig10-wind-turbine.md) |
-| 11 | Double Pendulum under Control | [`pendulum-control.html`](public/simulations/pendulum-control.html) | [fig11-pendulum-control.md](docs/simulations/fig11-pendulum-control.md) |
+| 11 | Double Pendulum under Control | [`pendulum-control.html`](public/portfolios/pendulum-control/index.html) | [fig11-pendulum-control.md](docs/simulations/fig11-pendulum-control.md) |
 
 ## Running the site on your own computer
 

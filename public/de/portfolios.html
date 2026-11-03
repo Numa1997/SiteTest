@@ -28,7 +28,7 @@
     </script>
   
     <script src="../scripts/i18n/strings-de.js"></script>
-    <meta name="translated-from" content="English public/portfolios.html, commit af4488f" />
+    <meta name="translated-from" content="English public/portfolios.html, commit af4488f+" />
   </head>
 
   <body>
@@ -48,7 +48,7 @@
     <main class="cat" id="projects">
       <div class="cat__head" style="grid-template-columns: minmax(0, 1fr);">
         <div>
-          <p class="cat__kicker">Eine Abschlussarbeit und drei Studien</p>
+          <p class="cat__kicker">Eine Abschlussarbeit und vier Studien</p>
           <h1>Projekte<span class="dot">.</span></h1>
           <p class="cat__lede">Projekte von Monaten statt Nachmittagen: eine Frage aus der Forschung, ein Modell, Schritt für Schritt neu aufgebaut und geprüft, ein Löser, den Sie selbst laufen lassen können, und Ergebnisse, die sich nachrechnen lassen. Jedes Projekt hat seine eigenen Seiten; diese Seite stellt sie vor.</p>
         </div>
@@ -328,6 +328,32 @@
             </ul>
             <p class="proj__note">Zwei in sich geschlossene Seiten, erzeugt aus ihrer Quelle im Repository dieser Website, <a href="https://github.com/Numa1997/SiteTest/tree/main/portfolios-src/impact">portfolios-src/impact</a>. Der Fall wird beim Öffnen der Seite in Ihrem Browser berechnet, und nichts wird gespeichert.</p>
           </section>
+        </div>
+      </article>
+
+      <article class="proj" id="pendulum-control" aria-labelledby="pc-title">
+        <div class="proj__band">
+          <span class="proj__num">05</span>
+          <p>Eine interaktive Studie · aus ersten Prinzipien · 2026</p>
+          <span>Lagrange-Mechanik · LQR · unteraktuierte Regelung</span>
+        </div>
+        <div class="proj__body">
+          <div class="proj__head">
+            <div>
+              <h2 id="pc-title">Geregeltes Doppelpendel</h2>
+              <p class="proj__sub">Ein Doppelpendel ruhig halten, indem man nur einen Wagen schiebt</p>
+              <p class="proj__abs">Ein Doppelpendel hängt an einem festen Drehpunkt. Eine Teleskopstrebe mit einer Feder darin verbindet seine untere Kugel mit einem Wagen auf einer Schiene, und eine Spule am Wagen, die im Spalt einer Magnetschiene sitzt, schiebt den Wagen. Die Spule ist das Einzige, was man schieben kann, und doch muss sie drei Körper zur Ruhe bringen. Die Studie zeigt die Maschine Teil für Teil in Abbildungen, die aus einem 3D-Modell gerendert sind, leitet ihre Gleichungen Schritt für Schritt her, wobei jede Masse und jede Länge als Symbol stehen bleibt, und entwirft den Regler durch quadratische Ergänzung. Jeder Parameter ist ein Schieberegler, und der ganze Lauf wird in Ihrem Browser gelöst, bevor er abgespielt wird.</p>
+              <div class="proj__actions">
+                <a class="proj__btn" href="../portfolios/pendulum-control/index.html">Die Simulation starten</a>
+                <a class="proj__btn proj__btn--ghost" href="../portfolios/pendulum-control/index.html#paper">Das Vorlesungsskript lesen</a>
+              </div>
+            </div>
+            <dl class="proj__tally" aria-label="Kennzahlen">
+              <div><dt>3</dt><dd>Körper, mit einem einzigen Schub zur Ruhe gebracht</dd></div>
+              <div><dt>28</dt><dd>nummerierte Gleichungen, jeder Term hergeleitet</dd></div>
+              <div><dt>4</dt><dd>Abbildungen der Maschine, aus einem 3D-Modell gerendert</dd></div>
+            </dl>
+          </div>
         </div>
       </article>
     </main>

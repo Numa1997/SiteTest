@@ -5,7 +5,7 @@
 | Page | [public/simulations/wind-turbine.html](../../public/simulations/wind-turbine.html) (1 172 lines, 187 918 bytes) |
 | Walkthrough | [public/scripts/walk/turbine.js](../../public/scripts/walk/turbine.js) (281 lines, 13 steps, key `turbine`) |
 | Thumbnail | [public/images/sims/wind-turbine.webp](../../public/images/sims/wind-turbine.webp) (WebP, 800 × 500 px, 15.4 kB) |
-| Catalog entry | [public/scripts/catalog.js#L200](../../public/scripts/catalog.js#L200-L233) (`id: 'wind-turbine'`, `fig: 10`, `field: 'control'`, `stage: 2`, lines 200–216) |
+| Catalog entry | [public/scripts/catalog.js#L200](../../public/scripts/catalog.js#L200-L217) (`id: 'wind-turbine'`, `fig: 10`, `field: 'control'`, `stage: 2`, lines 200–216) |
 
 A three-bladed rotor with 40 m blades turns in a wind that changes with time. A generator brakes it, and a controller sets
 how hard: either hold the rotor at a target speed (a PI controller) or let it follow the wind at the best tip-speed ratio

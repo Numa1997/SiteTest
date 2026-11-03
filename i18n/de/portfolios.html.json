@@ -95,6 +95,10 @@
   "src": "<b>There is enough power.</b> The second blade gives 161–267 mW of mechanical power at steady winds of 10 and 6 m/s, more in weak wind, and the rotor pays for every joule through the blade’s trail, at most \\(3.4\\times10^{-7}\\) of the turbine’s output.",
   "tr": "<b>Es gibt genug Leistung.</b> Das zweite Blatt liefert 161–267 mW mechanische Leistung bei stetigem Wind von 10 und 6 m/s, mehr bei schwachem Wind, und der Rotor bezahlt jedes Joule über das Nachschleppen des Blatts, höchstens \\(3.4\\times10^{-7}\\) der Turbinenleistung."
  },
+ "16957deeaaf1": {
+  "src": "A double pendulum hangs from a fixed pivot. A telescopic strut with a spring inside ties its lower ball to a cart on a rail, and a coil on the cart, sitting in the gap of a magnet track, pushes the cart. The coil is the only thing anyone can push, yet it must bring three bodies to rest. The study shows the machine part by part in figures rendered from a 3D model, derives its equations step by step with every mass and length kept as a symbol, and designs the controller by completing a square. Every parameter is a slider, and the whole run is solved in your browser before it plays.",
+  "tr": "Ein Doppelpendel hängt an einem festen Drehpunkt. Eine Teleskopstrebe mit einer Feder darin verbindet seine untere Kugel mit einem Wagen auf einer Schiene, und eine Spule am Wagen, die im Spalt einer Magnetschiene sitzt, schiebt den Wagen. Die Spule ist das Einzige, was man schieben kann, und doch muss sie drei Körper zur Ruhe bringen. Die Studie zeigt die Maschine Teil für Teil in Abbildungen, die aus einem 3D-Modell gerendert sind, leitet ihre Gleichungen Schritt für Schritt her, wobei jede Masse und jede Länge als Symbol stehen bleibt, und entwirft den Regler durch quadratische Ergänzung. Jeder Parameter ist ein Schieberegler, und der ganze Lauf wird in Ihrem Browser gelöst, bevor er abgespielt wird."
+ },
  "175c25b985de": {
   "src": "Nine chapters from the energy of moving air to a real generator, 35 numbered equations and six figures, theory set against the full solution, every number computed by the models.",
   "tr": "Neun Kapitel von der Energie bewegter Luft bis zu einem realen Generator, 35 nummerierte Gleichungen und sechs Abbildungen, die Theorie gegen die vollständige Lösung gestellt, jede Zahl von den Modellen berechnet."
@@ -110,6 +114,10 @@
  "1d700bf81c4f": {
   "src": "One self-contained page, generated from its source in this site’s repository, <a href=\"https://github.com/Numa1997/SiteTest/tree/main/portfolios-src/hydraulics\">portfolios-src/hydraulics</a>. Everything is computed in your browser, and nothing is stored.",
   "tr": "Eine in sich geschlossene Seite, erzeugt aus ihrer Quelle im Repository dieser Website, <a href=\"https://github.com/Numa1997/SiteTest/tree/main/portfolios-src/hydraulics\">portfolios-src/hydraulics</a>. Alles wird in Ihrem Browser berechnet, und nichts wird gespeichert."
+ },
+ "1fdbfe5396ae": {
+  "src": "A thesis and four studies",
+  "tr": "Eine Abschlussarbeit und vier Studien"
  },
  "2392054b4832": {
   "src": "Rotor Pendula",
@@ -230,6 +238,10 @@
  "433b03ed321c": {
   "src": "<span class=\"psub__n\">4.1</span>One drop, 9 seconds",
   "tr": "<span class=\"psub__n\">4.1</span>Ein Fall, 9 Sekunden"
+ },
+ "437018c1b855": {
+  "src": "numbered equations, every term derived",
+  "tr": "nummerierte Gleichungen, jeder Term hergeleitet"
  },
  "43d5b098a7af": {
   "src": "The equations are derived twice, by Lagrange with the kinetic energy integrated along the blade and by Newton summed over it, and solved with an implicit solver that agrees with an independent one to \\(2\\times10^{-12}\\). A referee checked each derivation, and the notes say where a model was corrected: a smoothing band in the geared generator, set on gravity’s scale, was a thousand times too wide and made the power the rotor pays 16 % low; it now sits on the gear’s own power scale. An independent script, with every constant typed again, re-derives the main formulas in SymPy and re-integrates the runs with SciPy.",
@@ -371,6 +383,10 @@
   "src": "Results",
   "tr": "Ergebnisse"
  },
+ "6172ca380b07": {
+  "src": "Lagrangian mechanics · LQR · underactuated control",
+  "tr": "Lagrange-Mechanik · LQR · unteraktuierte Regelung"
+ },
  "6194e957e761": {
   "src": "<span class=\"psub__n\">3.1</span>One press cycle, 4.4 seconds",
   "tr": "<span class=\"psub__n\">3.1</span>Ein Pressenzyklus, 4.4 Sekunden"
@@ -494,6 +510,10 @@
  "8373958aa734": {
   "src": "<b>Fall speed.</b> Stokes’ law breaks its own assumption at \\(41\\ \\mathrm{\\mu m}\\), where its Reynolds number reaches 1. A drag balance through the Davies number matches the measurements of Gunn and Kinzer within 2.1 % from 0.3 mm up, and in the full population it slows growth by a factor 1.76, far more than for a single drop.",
   "tr": "<b>Fallgeschwindigkeit.</b> Das Stokes-Gesetz verletzt seine eigene Annahme bei \\(41\\ \\mathrm{\\mu m}\\), wo seine Reynolds-Zahl 1 erreicht. Eine Widerstandsbilanz über die Davies-Zahl trifft die Messungen von Gunn und Kinzer ab 0.3 mm auf 2.1 % genau, und in der ganzen Population bremst sie das Wachstum um den Faktor 1.76, weit mehr als bei einem einzelnen Tropfen."
+ },
+ "869bd4b37aeb": {
+  "src": "Holding a double pendulum still by pushing only a cart",
+  "tr": "Ein Doppelpendel ruhig halten, indem man nur einen Wagen schiebt"
  },
  "86ac000bebfe": {
   "src": "Share of volumes holding a drop of 100 µm against time: exact runs and the Poisson prediction.",
@@ -647,6 +667,10 @@
   "src": "<b>Luck.</b> The exact random process, sampled drop by drop in volumes up to a litre, makes the first \\(100\\ \\mathrm{\\mu m}\\) drop through mergers of collectors with each other, in every one of 230 runs; a Poisson argument carries it to a cubic metre.",
   "tr": "<b>Glück.</b> Der exakte Zufallsprozess, Tropfen für Tropfen in Volumina bis zu einem Liter abgetastet, bildet den ersten \\(100\\ \\mathrm{\\mu m}\\)-Tropfen durch Verschmelzen von Sammeltropfen untereinander, in jedem einzelnen von 230 Läufen; ein Poisson-Argument trägt das Ergebnis bis zu einem Kubikmeter."
  },
+ "ab6238725c5f": {
+  "src": "bodies brought to rest through one push",
+  "tr": "Körper, mit einem einzigen Schub zur Ruhe gebracht"
+ },
  "acd3f7630174": {
   "src": "<span class=\"pfig__n\">Figure 3</span>The energy books at the end: iron heats the head, cotton heats itself.",
   "tr": "<span class=\"pfig__n\">Abbildung 3</span>Die Energiebilanz am Ende: Eisen erwärmt den Kopf, Baumwolle erwärmt sich selbst."
@@ -730,6 +754,10 @@
  "c703295f9613": {
   "src": "Portfolios · Numa Koudsie",
   "tr": "Portfolios · Numa Koudsie"
+ },
+ "c70a2d65879a": {
+  "src": "Double Pendulum under Control",
+  "tr": "Geregeltes Doppelpendel"
  },
  "cbb8cae7abce": {
   "src": "<span class=\"psub__n\">4.3</span>Four figures from the study",
@@ -827,6 +855,10 @@
   "src": "<span class=\"pfig__n\">Figure 2</span>Collision efficiency for water on water at \\(10\\,{}^{\\circ}\\mathrm{C}\\), \\(850\\ \\mathrm{hPa}\\), on the \\(45 \\times 40\\) grid used by the solver.",
   "tr": "<span class=\"pfig__n\">Abbildung 2</span>Kollisionseffizienz für Wasser auf Wasser bei \\(10\\,{}^{\\circ}\\mathrm{C}\\) und \\(850\\ \\mathrm{hPa}\\), auf dem \\(45 \\times 40\\)-Gitter, das der Löser verwendet."
  },
+ "e39334564ec5": {
+  "src": "figures of the machine rendered from a 3D model",
+  "tr": "Abbildungen der Maschine, aus einem 3D-Modell gerendert"
+ },
  "e3948ca02084": {
   "src": "Two self-contained pages, generated from their source in this site’s repository, <a href=\"https://github.com/Numa1997/SiteTest/tree/main/portfolios-src/impact\">portfolios-src/impact</a>. The drop is computed in your browser when the page opens, and nothing is stored.",
   "tr": "Zwei in sich geschlossene Seiten, erzeugt aus ihrer Quelle im Repository dieser Website, <a href=\"https://github.com/Numa1997/SiteTest/tree/main/portfolios-src/impact\">portfolios-src/impact</a>. Der Fall wird beim Öffnen der Seite in Ihrem Browser berechnet, und nichts wird gespeichert."
@@ -874,6 +906,10 @@
  "f1d2de8ca8a8": {
   "src": "<span class=\"psub__n\">3.2</span>What the model keeps",
   "tr": "<span class=\"psub__n\">3.2</span>Was das Modell enthält"
+ },
+ "f1fd8bebe4e3": {
+  "src": "Run the simulation",
+  "tr": "Die Simulation starten"
  },
  "f220aa376b5a": {
   "src": "Block diagram of the servo press: controller, torque motor and spool, valve edges, hose, cap chamber, ram, rod chamber, pump, specimen and sensors, joined by arrows.",
