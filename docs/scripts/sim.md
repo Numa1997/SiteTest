@@ -33,7 +33,7 @@ before `datalog.js`, on the same line. Since 30 October 2026 the pages with a pa
 | 8 | [draw-decompose.html](../../public/simulations/draw-decompose.html#L619) | L619 | L620 | L621 | L622 | L1414 |
 | 9 | [driven-oscillator.html](../../public/simulations/driven-oscillator.html#L599) | L599 | L600 | L601 | L602 | L1931, after `ledger/driven-oscillator.js` on the same line |
 | 10 | [wind-turbine.html](../../public/simulations/wind-turbine.html#L548) | L548 | L549 | L550 | L551 | L1169, after `ledger/wind-turbine.js` on the same line |
-| 11 | [pendulum-control.html](../../public/simulations/pendulum-control.html#L419) | L419 | L420 | L421 | L422 | L1347, after `ledger/pendulum-control.js` on the same line |
+| 11 | [pendulum-control.html](../../public/portfolios/pendulum-control/index.html#L607) | L419 | L420 | L421 | L422 | L1347, after `ledger/pendulum-control.js` on the same line |
 
 The scripts are plain `<script src>` tags at the end of the body, so they run while the document is still loading. That is
 why `sim.js` defers its own start to `DOMContentLoaded` ([sim.js:491](../../public/scripts/sim.js#L491)), and why
@@ -126,7 +126,7 @@ The page's own script then runs and uses the helpers: it sizes its canvases, wir
    - Independently, an `IntersectionObserver` marks the contents-list link of the section being read with `is-here`. A
      section counts as "being read" while it crosses the band from 20 % to 30 % of the window height, the margins
      `-20% 0px -70% 0px` ([sim.js:449-460](../../public/scripts/sim.js#L449-L460)).
-2. The walkthrough. If the page has `#walk`, `boot()` appends a script tag for `../scripts/walk/<data-walk>.js` and, once it
+2. The walkthrough. If the page has `#walk`, `boot()` appends a script tag for `scripts/walk/<data-walk>.js` under the site root and, once it
    has loaded, calls `walkthrough(window.WALK[<key>])` ([sim.js:483-489](../../public/scripts/sim.js#L483-L489)). The engine is
    described in [walk.md](walk.md); in short:
    - it writes the section's HTML: heading, intro, a "Hold the numbers" switch, a numbered step list and one card
@@ -263,9 +263,10 @@ Listeners: `window` `error` ([sim.js:230](../../public/scripts/sim.js#L230)); `D
 
 1. Fixed on 2026-10-15: the unused derivation-card builder, boot call and unused selectors were removed; active equation and walkthrough styles remain (commit [8982ed3](https://github.com/Numa1997/SiteTest/commit/8982ed35e78161ea7cdd82ae1794f44ccfe39f3c)).
 2. Fixed on 2026-10-15: the unused isInk helper and export were removed (commit [8982ed3](https://github.com/Numa1997/SiteTest/commit/8982ed35e78161ea7cdd82ae1794f44ccfe39f3c)).
-3. On an English page the walkthrough file is loaded from the relative path `'../scripts/walk/'` ([sim.js:487](../../public/scripts/sim.js#L487)),
-   while KaTeX and the translated walkthroughs use `ROOT` ([sim.js:431](../../public/scripts/sim.js#L431)). A page that is not exactly one folder below
-   `public/` would fail to load its walkthrough.
+3. Since 3 November 2026 the walkthrough file is loaded from `ROOT + 'scripts/walk/'` ([sim.js:487](../../public/scripts/sim.js#L487)),
+   like KaTeX and the translated walkthroughs ([sim.js:431](../../public/scripts/sim.js#L431)), so a page at any depth finds it; before, the
+   relative path `'../scripts/walk/'` worked only one folder below `public/`. The project Double Pendulum under Control, two folders
+   down, needed the change; for the simulation pages the address is the same.
 4. The header comment ([sim.js:1-2](../../public/scripts/sim.js#L1-L2)) lists only the helpers, not the typesetting and the
    walkthrough engine that make up half the file.
 5. `playButton` sets `aria-pressed="true"` while the clock is paused and the label reads "Play"
@@ -293,7 +294,7 @@ object of plural forms is chosen with `Intl.PluralRules` for the page's language
 and checked is in [i18n.md](../i18n.md).
 
 On a translated page `boot()` also loads the walkthrough in the page's language: when `window.I18N_WALK` is set, the file is
-`scripts/walk/<lang>/<key>.js` instead of `../scripts/walk/<key>.js` ([sim.js:487](../../public/scripts/sim.js#L487)).
+`scripts/walk/<lang>/<key>.js` instead of `scripts/walk/<key>.js` ([sim.js:487](../../public/scripts/sim.js#L487)).
 
 
 ## Long equations (1 November 2026)

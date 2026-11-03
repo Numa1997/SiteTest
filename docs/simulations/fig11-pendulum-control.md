@@ -1,12 +1,42 @@
-# Fig. 11 · Double Pendulum under Control
+# Double Pendulum under Control (project; Fig. 11 until 3 November 2026)
 
 | | |
 |---|---|
-| Page | [public/simulations/pendulum-control.html](../../public/simulations/pendulum-control.html) (1 349 lines, 185 085 bytes) |
+| Page | [public/portfolios/pendulum-control/index.html](../../public/portfolios/pendulum-control/index.html) (1550 lines, 207471 bytes), a project page since 3 November 2026 |
 | Walkthrough | [public/scripts/walk/pendcontrol.js](../../public/scripts/walk/pendcontrol.js) (147 lines, 9 steps, key `pendcontrol`) |
-| Thumbnail | [public/images/sims/pendulum-control.webp](../../public/images/sims/pendulum-control.webp) (WebP, 800 × 500 px, 14.0 kB) |
-| Catalog entry | [public/scripts/catalog.js#L217](../../public/scripts/catalog.js#L217-L234) (`id: 'pendulum-control'`, `fig: 11`, `field: 'control'`, `stage: 2`) |
-| Translations | `public/de/simulations/pendulum-control.html`, `public/ar/simulations/pendulum-control.html`, written by `tools/i18n/build.py` from `i18n/<lang>/simulations__pendulum-control.html.json` |
+| Figures | [public/images/fig11/](../../public/images/fig11/): `fig-machine.webp`, `fig-ends.webp`, `fig-strut.webp`, `fig-motor.webp`, rendered by [tools/fig11/](../../tools/fig11/) |
+| Projects entry | [public/portfolios.html](../../public/portfolios.html), `#pendulum-control`, project 05 |
+| Old address | `/simulations/pendulum-control.html` (and `/de/…`, `/ar/…`) answers with a 301 to `/portfolios/pendulum-control/`, written by `MOVED` in [tools/redirects.py](../../tools/redirects.py) |
+| Translations | none: the project page is English only. The walkthrough's German and Arabic prose is kept current in `i18n/<lang>/walk.json`. |
+
+## Moved to Projects, 3 November 2026
+
+Fig. 11 left the Simulations list and became project 05 on the Projects page, at Numa's request. What changed:
+
+- **The machine is tunable.** The masses \(m_1, m_2\), rod lengths \(l_1, l_2\), cart mass \(M\), depth \(H\) and force constant \(\kappa\) are
+  sliders ("Machine · masses and lengths", and κ under "Coil"). `rig()` copies them into `M1, M2, L1, L2, MC, H_RAIL, KAPPA` when
+  the run is solved, and writes them to the store; between solves the picture keeps the machine of the stored run. `fitH()` keeps
+  the strut's resting length \(\ell_0 = H - l_1 - l_2\) between 0.55 and 0.85 m. `constCheck` reads the current values.
+- **The lecture note is rewritten** to derive every term in order: §1 the machine part by part with four rendered figures
+  (the whole machine; the strut's joints, an axle through the centre of ball 2 so that the strut pulls on \((x_2, y_2)\) as the
+  model says, and a clevis with a rod end on the cart; the strut cut open, at the model's own stops 0.50 and 0.95 m; the magnet
+  track and coil, with how the cart moves with the coil off and on), then coordinates, energies, the coil in the Lagrangian,
+  Lagrange's equations with every term, rests (both cases of \(N(x_2 - X)/\ell = 0\)), the expansion where \(k_s\) drops out and
+  where it does not, linearisation, controllability and LQR by completing the square, with the source of each step. Equations are
+  numbered (1)–(28); the walkthrough, the data panel's formulas and the code comments use the new numbers.
+- **sim.js** loads a page's walkthrough from `ROOT + 'scripts/walk/'` (it used `'../scripts/walk/'`, which only works one folder
+  down); the address is the same for the simulation pages.
+- **Removed:** the Simulations card (`scripts/catalog.js`), its thumbnail `images/sims/pendulum-control.webp`, the home page's
+  Fig. 11 plate, the Fig. 11 link in every simulation page's figure bar (each link's line is kept empty, so the docs' line links
+  stay right), and the German and Arabic copies of the old page.
+- **The figures** are rendered with Blender 5.2 as a Python module (`pip install bpy==5.2.3` in a Python 3.13 venv):
+  `python tools/fig11/rig.py <out>` and `python tools/fig11/joints.py <out>` write the renders and their label anchors
+  (`SCENES=…` picks scenes), and `python tools/fig11/figs.py` composes the four figures with numbered balloons; it expects the
+  renders in `blender/out/` and the IBM Plex TTF files in `fonts/` of the working folder. Materials (carbon fibre, steel,
+  bronze, aluminium, neodymium) are choices of this design; the model needs only massless, frictionless parts pinned at the
+  ball's centre and the cart's pin.
+
+Below, the description of the page from before the move; line links point to the new file.
 
 **The aim of the page:** the cart, and only the cart, brings the double pendulum back to equilibrium. A double pendulum
 hangs from a fixed pivot. A strut of two sliding tubes with a spring inside ties its lower ball to a cart on a rail, and the
@@ -15,7 +45,7 @@ should rest (the target `r`, a slider or a flag on the ruler), grabs a ball or t
 controller, which can push only the cart, brings the whole chain back to rest. As in Figs. 9 and 10, the whole run is solved
 first with RK4 and stored; each frame draws one stored row.
 
-In this page, a link such as [L572](../../public/simulations/pendulum-control.html#L572) points to a line of
+In this page, a link such as [L572](../../public/portfolios/pendulum-control/index.html#L773) points to a line of
 `pendulum-control.html`. Other files are named in the link text.
 
 ## The physics in one picture
@@ -55,31 +85,31 @@ and rejected in the note: its best slowest decay is 0.009 1/s against LQR's 0.60
 
 | Lines | Function | What it does |
 |---|---|---|
-| [L442](../../public/simulations/pendulum-control.html#L442) | `ds` | the store: parameters, the rig's constants, rest and controller, start, solver, stored run (dimension `n`, 1501 rows), playback and drawing |
-| [L565](../../public/simulations/pendulum-control.html#L565) | `rig()` | the parameters of one run, read from the sliders at the moment of solving; `L0 = ℓ0 − N0/ks`, `Fmax = κ Imax` |
-| [L572](../../public/simulations/pendulum-control.html#L572) | `strut()` | ball 2, the strut's length ℓ, ℓ̇, ∂ℓ/∂q and its pull N (spring plus a touched stop) |
-| [L582](../../public/simulations/pendulum-control.html#L582) | `accel()` | (5) solved for q̈: Cramer's rule on the 2 × 2 pendulum block, one division for the cart |
-| [L591](../../public/simulations/pendulum-control.html#L591) | `energy()` | T + V of (2) and (3), with a touched stop's elastic energy |
-| [L599](../../public/simulations/pendulum-control.html#L599) | `equilibrium()` | the rest at X = r, (7), by Newton's method; its holding force F* |
-| [L626](../../public/simulations/pendulum-control.html#L626) | `linearise()` | A and B of (9) by central differences of the full equations |
-| [L633](../../public/simulations/pendulum-control.html#L633) | `lqr()` | (13)–(14) by the matrix sign function |
-| [L655](../../public/simulations/pendulum-control.html#L655) | `eig()` | eigenvalues: Faddeev–LeVerrier polynomial, Durand–Kerner roots |
-| [L676](../../public/simulations/pendulum-control.html#L676) | `rankOf()` | rank of the controllability matrix (10) |
-| [L690](../../public/simulations/pendulum-control.html#L690) | `design()` | rest, linear model, gains, open and closed eigenvalues, rank |
-| [L696](../../public/simulations/pendulum-control.html#L696) | `control()` | (11): `F* − K(y − y*)`, clamped; 0 with the controller off |
-| [L703](../../public/simulations/pendulum-control.html#L703) | `stepRK4()` | one RK4 step of the closed loop; the coil's work and the stops' heat ride along |
-| [L717](../../public/simulations/pendulum-control.html#L717) | `run()` | the whole 30 s, handing every `every`-th state to a callback |
-| [L728](../../public/simulations/pendulum-control.html#L728) | `solve(from)` | design, solve at h, store, solve again at h/2 for the error, settle time, books, scales |
-| [L834](../../public/simulations/pendulum-control.html#L834) | `geom()` | the rig's scale (px/m) and the chart areas |
-| [L855](../../public/simulations/pendulum-control.html#L855) | `drawRig()` | pivot, pale rest pose, magnet, rail, cart and coil, strut (two tubes and the stop), rods and balls, force arrows, ruler and flag, energy bars |
-| [L944](../../public/simulations/pendulum-control.html#L944), [L953](../../public/simulations/pendulum-control.html#L953) | `chartGeom()`, `drawChart()` | the 10 s window chart of θ1, θ2, X and the strip of the whole run (coil at its limit, strut at a stop) |
-| [L1003](../../public/simulations/pendulum-control.html#L1003) | `drawForces()` | F, F*, ±κ Imax and N over the run |
-| [L1042](../../public/simulations/pendulum-control.html#L1042) | `drawPhase()` | the three phase-space shadows with the fixed point and the state now |
-| [L1083](../../public/simulations/pendulum-control.html#L1083) | `frame()` | copies the stored sample nearest to the playback time into the `*_now` values |
-| [L1109](../../public/simulations/pendulum-control.html#L1109) | `pose()` | the hand: ball 1 turns the upper rod, ball 2 bends both rods (two-link inverse kinematics), the cart slides; poses beyond the stops are refused |
-| [L1130](../../public/simulations/pendulum-control.html#L1130) | `holdState()` | while held: the clock stops, the controller's force for the held pose is shown, nothing is stored |
-| [L1161](../../public/simulations/pendulum-control.html#L1161) | `release()` | solve a new run from the released pose and the hand's smoothed speeds (about 50 ms) |
-| [L1211](../../public/simulations/pendulum-control.html#L1211) | `Sim.data` | the data panel's hooks |
+| [L442](../../public/portfolios/pendulum-control/index.html#L630) | `ds` | the store: parameters, the rig's constants, rest and controller, start, solver, stored run (dimension `n`, 1501 rows), playback and drawing |
+| [L565](../../public/portfolios/pendulum-control/index.html#L764) | `rig()` | the parameters of one run, read from the sliders at the moment of solving; `L0 = ℓ0 − N0/ks`, `Fmax = κ Imax` |
+| [L572](../../public/portfolios/pendulum-control/index.html#L773) | `strut()` | ball 2, the strut's length ℓ, ℓ̇, ∂ℓ/∂q and its pull N (spring plus a touched stop) |
+| [L582](../../public/portfolios/pendulum-control/index.html#L783) | `accel()` | (5) solved for q̈: Cramer's rule on the 2 × 2 pendulum block, one division for the cart |
+| [L591](../../public/portfolios/pendulum-control/index.html#L792) | `energy()` | T + V of (2) and (3), with a touched stop's elastic energy |
+| [L599](../../public/portfolios/pendulum-control/index.html#L800) | `equilibrium()` | the rest at X = r, (7), by Newton's method; its holding force F* |
+| [L626](../../public/portfolios/pendulum-control/index.html#L827) | `linearise()` | A and B of (9) by central differences of the full equations |
+| [L633](../../public/portfolios/pendulum-control/index.html#L834) | `lqr()` | (13)–(14) by the matrix sign function |
+| [L655](../../public/portfolios/pendulum-control/index.html#L856) | `eig()` | eigenvalues: Faddeev–LeVerrier polynomial, Durand–Kerner roots |
+| [L676](../../public/portfolios/pendulum-control/index.html#L877) | `rankOf()` | rank of the controllability matrix (10) |
+| [L690](../../public/portfolios/pendulum-control/index.html#L891) | `design()` | rest, linear model, gains, open and closed eigenvalues, rank |
+| [L696](../../public/portfolios/pendulum-control/index.html#L897) | `control()` | (11): `F* − K(y − y*)`, clamped; 0 with the controller off |
+| [L703](../../public/portfolios/pendulum-control/index.html#L904) | `stepRK4()` | one RK4 step of the closed loop; the coil's work and the stops' heat ride along |
+| [L717](../../public/portfolios/pendulum-control/index.html#L918) | `run()` | the whole 30 s, handing every `every`-th state to a callback |
+| [L728](../../public/portfolios/pendulum-control/index.html#L929) | `solve(from)` | design, solve at h, store, solve again at h/2 for the error, settle time, books, scales |
+| [L834](../../public/portfolios/pendulum-control/index.html#L1035) | `geom()` | the rig's scale (px/m) and the chart areas |
+| [L855](../../public/portfolios/pendulum-control/index.html#L1056) | `drawRig()` | pivot, pale rest pose, magnet, rail, cart and coil, strut (two tubes and the stop), rods and balls, force arrows, ruler and flag, energy bars |
+| [L944](../../public/portfolios/pendulum-control/index.html#L1145), [L953](../../public/portfolios/pendulum-control/index.html#L1154) | `chartGeom()`, `drawChart()` | the 10 s window chart of θ1, θ2, X and the strip of the whole run (coil at its limit, strut at a stop) |
+| [L1003](../../public/portfolios/pendulum-control/index.html#L1204) | `drawForces()` | F, F*, ±κ Imax and N over the run |
+| [L1042](../../public/portfolios/pendulum-control/index.html#L1243) | `drawPhase()` | the three phase-space shadows with the fixed point and the state now |
+| [L1083](../../public/portfolios/pendulum-control/index.html#L1284) | `frame()` | copies the stored sample nearest to the playback time into the `*_now` values |
+| [L1109](../../public/portfolios/pendulum-control/index.html#L1310) | `pose()` | the hand: ball 1 turns the upper rod, ball 2 bends both rods (two-link inverse kinematics), the cart slides; poses beyond the stops are refused |
+| [L1130](../../public/portfolios/pendulum-control/index.html#L1331) | `holdState()` | while held: the clock stops, the controller's force for the held pose is shown, nothing is stored |
+| [L1161](../../public/portfolios/pendulum-control/index.html#L1362) | `release()` | solve a new run from the released pose and the hand's smoothed speeds (about 50 ms) |
+| [L1211](../../public/portfolios/pendulum-control/index.html#L1412) | `Sim.data` | the data panel's hooks |
 
 ## The store and its checks
 
@@ -87,10 +117,10 @@ Groups (in the panel's order): Parameters, The rig, Rest and controller, Start o
 Drawing. Every derived scalar and every array has a check that recomputes it from stored inputs only:
 
 - the stored state arrays (`th1`, `th2`, `Xs`, `w1`, `w2`, `vX`) and the work and heat integrals (`Wc`, `Qs`) by rerunning the
-  same RK4 from the stored start `y0s` to sample n (`replay()`, [L1183](../../public/simulations/pendulum-control.html#L1183));
+  same RK4 from the stored start `y0s` to sample n (`replay()`, [L1183](../../public/portfolios/pendulum-control/index.html#L1384));
 - `Fs`, `Is`, `Ns`, `ells`, `Es` from the stored state at row n with the page's pure functions;
 - the rest, the gains, the eigenvalues and the rank by redesigning from the stored parameters (`storedDesign()`,
-  [L1182](../../public/simulations/pendulum-control.html#L1182));
+  [L1182](../../public/portfolios/pendulum-control/index.html#L1383));
 - `err_half` by solving the run again with h/2; `t_settle`, `t_sat`, `t_stop`, the chart scales and `E_rest` from the stored arrays;
 - the `*_now` values against the stored arrays at `i_now` (or as "set by your hand" while a ball or the cart is held).
 
@@ -205,19 +235,19 @@ frame: Play curve hands the whole curve p(t) to the solver, the page solves the 
 and plays it back; the slider shows the curve's exact value, the one the solver used, and the curve's dot follows the stored sample
 on screen (the engine's solver interface, [curve.md](../scripts/curve.md)). A run without a curve is unchanged bit for bit.
 
-The knob is the target r: the curve is a reference trajectory for the cart, the overhead-crane problem. `solve()` ([L728](../../public/simulations/pendulum-control.html#L728))
+The knob is the target r: the curve is a reference trajectory for the cart, the overhead-crane problem. `solve()` ([L728](../../public/portfolios/pendulum-control/index.html#L929))
 evaluates the curve at every stored sample (every 10 ms) and holds it to the next; for each target rₙ it finds the rest
 y\*(rₙ) and the holding force F\*(rₙ) with the page's own `equilibrium()` (Newton's method) and stores them, `r_ref`,
-`th1_ref`, `th2_ref`, `F_ref` (from [L509](../../public/simulations/pendulum-control.html#L509)); the control law keeps its form, F = clamp(F\*ₙ − K(y − y\*ₙ), ±κI_max), with K
+`th1_ref`, `th2_ref`, `F_ref` (from [L509](../../public/portfolios/pendulum-control/index.html#L697)); the control law keeps its form, F = clamp(F\*ₙ − K(y − y\*ₙ), ±κI_max), with K
 designed at the rest where the curve ends (fixed gains stay stable for every rest from −0.6 to 0.6 m in the linear model).
 `control()` and the RK4 lines the walkthrough quotes are untouched (33 of 33 found). A run starts at rest at the curve's first
-value. The curve steps with the playback ([L1102](../../public/simulations/pendulum-control.html#L1102)); the flag, the pale pose and the setpoint lines show the stored
+value. The curve steps with the playback ([L1102](../../public/portfolios/pendulum-control/index.html#L1303)); the flag, the pale pose and the setpoint lines show the stored
 staircase. Stop re-solves from the state on screen; a hand on the slider marks the run stale. Plan, patch and numbers from a
 research agent; its end-to-end check rerun by me on the unified engine: the plain run identical, every check equal to the
 store, the curve's dot equal to the stored target over 72 frames.
 
 Each example sets the crane case first, the Firm controller with the speed weight q_v = 0, which watches positions only and
-barely damps the swing ([L1173](../../public/simulations/pendulum-control.html#L1173)); move 0 → 0.5 m. Sway is each rod's angle about the rest the chain would take if the cart
+barely damps the swing ([L1173](../../public/portfolios/pendulum-control/index.html#L1374)); move 0 → 0.5 m. Sway is each rod's angle about the rest the chain would take if the cart
 stopped where it is.
 
 | Example | Curve | Settled after | Peak sway lower / upper rod |

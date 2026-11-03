@@ -4,10 +4,10 @@ window.WALK["pendcontrol"] = {
  "intro": "Neun Schritte vom Skript zum Code dieser Seite, in der Reihenfolge des Skripts: der Aufbau und seine Strebe, die Bewegungsgleichungen und die Energie, die Ruhelage, die der Regler anstrebt, das lineare Modell und der Steuerbarkeitstest, die Riccati-Gleichung und die Verstärkungen, das Regelgesetz und der Löser, der den Lauf speichert. Jeder Schritt setzt eine Gleichung des Skripts mit ihrer Nummer neben die Zeilen dieser Seite, die sie auswerten, Zeichen für Zeichen zitiert; eine Zeile, die „...“ lautet, steht für ausgelassene Zeilen der Seite. Zeigen Sie auf ein farbiges Symbol, und dieselbe Größe leuchtet in der Formel, im Code und in der Tabelle auf. Die Spalte „Jetzt“ wird fünfmal pro Sekunde aus dem Datenspeicher der Seite gelesen: Die Größen der Bewegung zeigen den Abtastwert, der in diesem Moment auf dem Bildschirm ist, alles andere gehört zum ganzen gelösten Lauf.",
  "steps": [
   {
-   "title": "Gleichung (1): die Koordinaten und die Strebe",
+   "title": "Gleichungen (3) und (4): die Koordinaten und die Strebe",
    "where": "strut(), unter den Konstanten des Aufbaus",
    "math": "q = (⟦th1|θ<sub>1</sub>⟧, ⟦th2|θ<sub>2</sub>⟧, ⟦X|X⟧), &nbsp; r<sub>2</sub> = l<sub>1</sub>(<span style=\"font-style:normal\">sin</span> θ<sub>1</sub>, −<span style=\"font-style:normal\">cos</span> θ<sub>1</sub>) + l<sub>2</sub>(<span style=\"font-style:normal\">sin</span> θ<sub>2</sub>, −<span style=\"font-style:normal\">cos</span> θ<sub>2</sub>) &emsp; <span style=\"font-style:normal\">(1)</span><br>⟦ell|ℓ⟧ = |r<sub>2</sub> − (X, −H)|, &nbsp; ⟦N|N⟧ = k<sub>s</sub>(ℓ − L<sub>0</sub>) + stop &emsp; <span style=\"font-style:normal\">(6)</span>",
-   "note": "Die drei generalisierten Koordinaten aus §2 sind das Array q: q[0] = θ₁ und q[1] = θ₂ in Radiant von der Senkrechten nach unten, q[2] = X, die Position des Wagens in Metern. Die ersten beiden Zeilen bestimmen Kugel 2, (x2, y2), aus (1), und die Länge ℓ der Strebe als Abstand von Kugel 2 zum Gelenk des Wagens bei (X, −H); H_RAIL ist H = 1.65 m. J0, J1 und J2 sind ∂ℓ/∂q, die Raten, mit denen jede Koordinate die Strebe dehnt, und ld = ℓ̇. Der Zug N ist die Feder aus §4, k_s(ℓ − L₀), plus ein Endanschlag, wenn ℓ das Intervall [0.5 m, 0.95 m] verlässt: eine steife Feder KST mit einem Dämpfer CST, der nur wirkt, solange der Anschlag berührt wird.",
+   "note": "Die drei generalisierten Koordinaten aus §2 sind das Array q: q[0] = θ₁ und q[1] = θ₂ in Radiant von der Senkrechten nach unten, q[2] = X, die Position des Wagens in Metern. Die ersten beiden Zeilen bestimmen Kugel 2, (x2, y2), aus (3), und die Länge ℓ der Strebe als Abstand von Kugel 2 zum Gelenk des Wagens bei (X, −H); H_RAIL ist H = 1.65 m. J0, J1 und J2 sind ∂ℓ/∂q, die Raten, mit denen jede Koordinate die Strebe dehnt, und ld = ℓ̇. Der Zug N ist die Feder aus §1.2, k_s(ℓ − L₀), plus ein Endanschlag, wenn ℓ das Intervall [0.5 m, 0.95 m] verlässt: eine steife Feder KST mit einem Dämpfer CST, der nur wirkt, solange der Anschlag berührt wird.",
    "code": "function strut(p, q, v) {\nvar x2 = L1 * Math.sin(q[0]) + L2 * Math.sin(q[1]), y2 = -L1 * Math.cos(q[0]) - L2 * Math.cos(q[1]);\nvar dx = x2 - q[2], dy = y2 + H_RAIL, ⟦ell|l = Math.sqrt(dx * dx + dy * dy)⟧;\nvar ld = J0 * v[0] + J1 * v[1] + J2 * v[2], ⟦N|N = p.ks * (l - p.L0)⟧, stop = 0;\nif (l > LMAX) stop = KST * (l - LMAX) + CST * ld;\nelse if (l < LMIN) stop = -KST * (LMIN - l) + CST * ld;",
    "syms": [
     [
@@ -43,10 +43,10 @@ window.WALK["pendcontrol"] = {
    ]
   },
   {
-   "title": "Gleichungen (5) und (6): die Lagrange-Gleichungen, nach den Beschleunigungen aufgelöst",
+   "title": "Gleichungen (15) und (9): die Lagrange-Gleichungen, nach den Beschleunigungen aufgelöst",
    "where": "accel(), unter strut()",
-   "math": "M(q) q̈ + C(q, q̇) q̇ + ∇V = (0, 0, ⟦F|F⟧) &emsp; <span style=\"font-style:normal\">(5)</span><br>∂V<sub>spring</sub>/∂q<sub>i</sub> = N ∂ℓ/∂q<sub>i</sub> &emsp; <span style=\"font-style:normal\">(6)</span>",
-   "note": "a, b und d sind die Einträge des 2 × 2-Pendelblocks der Massenmatrix M in (5); der Eintrag des Wagens ist MC = M = 1 kg und mischt sich nicht mit ihnen. r1 und r2 sind die rechten Seiten der beiden Winkelgleichungen: der Zentrifugalterm von C q̇, die Schwerkraft und der Anteil der Strebe an ∇V, der nach (6) der Zug N mal ∂ℓ/∂θ ist. Die Cramersche Regel löst den 2 × 2-Block in der return-Zeile. Die Beschleunigung des Wagens ist die Kraft F der Spule minus den auf die Schiene projizierten Zug der Strebe, geteilt durch seine Masse. Dies ist die einzige Stelle, an der Wagen und Kette zusammentreffen.",
+   "math": "M(q) q̈ + c(q, q̇) + ∇V = (0, 0, ⟦F|F⟧) &emsp; <span style=\"font-style:normal\">(15)</span><br>∂V<sub>spring</sub>/∂q<sub>i</sub> = N ∂ℓ/∂q<sub>i</sub> &emsp; <span style=\"font-style:normal\">(9)</span>",
+   "note": "a, b und d sind die Einträge des 2 × 2-Pendelblocks der Massenmatrix M in (15); der Eintrag des Wagens ist MC = M und mischt sich nicht mit ihnen. r1 und r2 sind die rechten Seiten der beiden Winkelgleichungen: der Zentrifugalterm c aus (15), die Schwerkraft und der Anteil der Strebe an ∇V, der nach (9) der Zug N mal ∂ℓ/∂θ ist. Die Cramersche Regel löst den 2 × 2-Block in der return-Zeile. Die Beschleunigung des Wagens ist die Kraft F der Spule minus den auf die Schiene projizierten Zug der Strebe, geteilt durch seine Masse. Dies ist die einzige Stelle, an der Wagen und Kette zusammentreffen.",
    "code": "var a = (M1 + M2) * L1 * L1, b = M2 * L1 * L2 * c, d = M2 * L2 * L2;\nvar r1 = -M2 * L1 * L2 * s * v[1] * v[1] - (M1 + M2) * G * L1 * Math.sin(q[0]) - st.N * st.J0;\nvar r2 = M2 * L1 * L2 * s * v[0] * v[0] - M2 * G * L2 * Math.sin(q[1]) - st.N * st.J1;\nvar det = a * d - b * b;\nreturn [(d * r1 - b * r2) / det, (a * r2 - b * r1) / det, (⟦F|F⟧ - st.N * st.J2) / MC, st];",
    "syms": [
     [
@@ -64,10 +64,10 @@ window.WALK["pendcontrol"] = {
    ]
   },
   {
-   "title": "Gleichungen (2) und (3): die Energie",
+   "title": "Gleichungen (5) und (6): die Energie",
    "where": "energy(), unter accel()",
-   "math": "⟦E|E⟧ = T + V, &nbsp; T = ½(m<sub>1</sub> + m<sub>2</sub>)l<sub>1</sub>²θ̇<sub>1</sub>² + ½m<sub>2</sub>l<sub>2</sub>²θ̇<sub>2</sub>² + m<sub>2</sub>l<sub>1</sub>l<sub>2</sub> <span style=\"font-style:normal\">cos</span>(θ<sub>1</sub> − θ<sub>2</sub>) θ̇<sub>1</sub>θ̇<sub>2</sub> + ½MẊ² &emsp; <span style=\"font-style:normal\">(2)</span><br>V = −(m<sub>1</sub> + m<sub>2</sub>) g l<sub>1</sub> <span style=\"font-style:normal\">cos</span> θ<sub>1</sub> − m<sub>2</sub> g l<sub>2</sub> <span style=\"font-style:normal\">cos</span> θ<sub>2</sub> + ½k<sub>s</sub>(ℓ − L<sub>0</sub>)² &emsp; <span style=\"font-style:normal\">(3)</span>",
-   "note": "Die Energie wird zum Lösen der Bewegung nicht gebraucht; sie ist die erste von zwei Bilanzen, die sie prüfen. y ist der Zustand (θ₁, θ₂, X, θ̇₁, θ̇₂, Ẋ). Die erste Zeile ist die kinetische Energie (2), die zweite Schwerkraft und Feder in den Rohren (3). Die letzte Zeile addiert die elastische Energie eines berührten Anschlags, sodass E die volle Energie des Aufbaus bleibt, während die Rohre anschlagen. Ohne Regler und ohne Anschlag bleibt E erhalten; mit ihnen muss E(0) + W_coil − Q_stop − E(t) null sein, Schritt 8.",
+   "math": "⟦E|E⟧ = T + V, &nbsp; T = ½(m<sub>1</sub> + m<sub>2</sub>)l<sub>1</sub>²θ̇<sub>1</sub>² + ½m<sub>2</sub>l<sub>2</sub>²θ̇<sub>2</sub>² + m<sub>2</sub>l<sub>1</sub>l<sub>2</sub> <span style=\"font-style:normal\">cos</span>(θ<sub>1</sub> − θ<sub>2</sub>) θ̇<sub>1</sub>θ̇<sub>2</sub> + ½MẊ² &emsp; <span style=\"font-style:normal\">(5)</span><br>V = −(m<sub>1</sub> + m<sub>2</sub>) g l<sub>1</sub> <span style=\"font-style:normal\">cos</span> θ<sub>1</sub> − m<sub>2</sub> g l<sub>2</sub> <span style=\"font-style:normal\">cos</span> θ<sub>2</sub> + ½k<sub>s</sub>(ℓ − L<sub>0</sub>)² &emsp; <span style=\"font-style:normal\">(6)</span>",
+   "note": "Die Energie wird zum Lösen der Bewegung nicht gebraucht; sie ist die erste von zwei Bilanzen, die sie prüfen. y ist der Zustand (θ₁, θ₂, X, θ̇₁, θ̇₂, Ẋ). Die erste Zeile ist die kinetische Energie (5), die zweite Schwerkraft und Feder in den Rohren (6). Die letzte Zeile addiert die elastische Energie eines berührten Anschlags, sodass E die volle Energie des Aufbaus bleibt, während die Rohre anschlagen. Ohne Regler und ohne Anschlag bleibt E erhalten; mit ihnen muss E(0) + W_coil − Q_stop − E(t) null sein, Schritt 8.",
    "code": "e = 0.5 * (M1 + M2) * L1 * L1 * y[3] * y[3] + 0.5 * M2 * L2 * L2 * y[4] * y[4] + M2 * L1 * L2 * c * y[3] * y[4] + 0.5 * MC * y[5] * y[5];\ne += -(M1 + M2) * G * L1 * Math.cos(y[0]) - M2 * G * L2 * Math.cos(y[1]) + 0.5 * p.ks * Math.pow(st.l - p.L0, 2);\nif (st.l > LMAX) e += 0.5 * KST * Math.pow(st.l - LMAX, 2); else if (st.l < LMIN) e += 0.5 * KST * Math.pow(LMIN - st.l, 2);",
    "syms": [
     [
@@ -79,10 +79,10 @@ window.WALK["pendcontrol"] = {
    ]
   },
   {
-   "title": "Gleichung (7): die Ruhelage, die der Regler anstrebt",
+   "title": "Gleichungen (16) und (17): die Ruhelage, die der Regler anstrebt",
    "where": "equilibrium(), unter energy()",
-   "math": "∂V/∂θ<sub>1</sub> = ∂V/∂θ<sub>2</sub> = 0 &nbsp; <span style=\"font-style:normal\">at</span> &nbsp; X = ⟦r|r⟧, &nbsp; ⟦Feq|F*⟧ = −N* (x<sub>2</sub>* − r)/ℓ* &emsp; <span style=\"font-style:normal\">(7)</span>",
-   "note": "In einer Ruhelage verschwinden alle Geschwindigkeiten und Beschleunigungen, also sagen die beiden Winkelgleichungen von (5) nur ∂V/∂θ = 0. G2 liefert die beiden Winkelbeschleunigungen bei Geschwindigkeit null mit dem Wagen bei r; das Newton-Verfahren treibt sie gegen null, mit der Jacobi-Matrix j00 … j11 aus Vorwärtsdifferenzen der Schrittweite 1e−7 rad, bis eine Korrektur kleiner als 10⁻¹⁵ rad ist. Die letzte Zeile speichert die Ruhelage y* und die stationäre Kraft F*, die die Spule aufbringen muss, um den Wagen dort zu halten: der auf die Schiene projizierte Zug der Strebe, mit N mal ∂ℓ/∂X = −(x₂ − r)/ℓ.",
+   "math": "∂V/∂θ<sub>1</sub> = ∂V/∂θ<sub>2</sub> = 0 &nbsp; <span style=\"font-style:normal\">at</span> &nbsp; X = ⟦r|r⟧, &nbsp; ⟦Feq|F*⟧ = −N* (x<sub>2</sub>* − r)/ℓ* &emsp; <span style=\"font-style:normal\">(17)</span>",
+   "note": "In einer Ruhelage verschwinden alle Geschwindigkeiten und Beschleunigungen, also sagen die beiden Winkelgleichungen von (15) nur ∂V/∂θ = 0. G2 liefert die beiden Winkelbeschleunigungen bei Geschwindigkeit null mit dem Wagen bei r; das Newton-Verfahren treibt sie gegen null, mit der Jacobi-Matrix j00 … j11 aus Vorwärtsdifferenzen der Schrittweite 1e−7 rad, bis eine Korrektur kleiner als 10⁻¹⁵ rad ist. Die letzte Zeile speichert die Ruhelage y* und die stationäre Kraft F*, die die Spule aufbringen muss, um den Wagen dort zu halten: der auf die Schiene projizierte Zug der Strebe, mit N mal ∂ℓ/∂X = −(x₂ − r)/ℓ.",
    "code": "function G2(tt) { var a = accel(p, [tt[0], tt[1], p.r], Z, 0); return [a[0], a[1]]; }\nt[0] -= d0; t[1] -= d1; if (Math.abs(d0) + Math.abs(d1) < 1e-15) break;\nreturn { y: [t[0], t[1], ⟦r|p.r⟧, 0, 0, 0], ⟦Feq|F: st.N * st.J2⟧, N: st.N, l: st.l };",
    "syms": [
     [
@@ -100,9 +100,9 @@ window.WALK["pendcontrol"] = {
    ]
   },
   {
-   "title": "Gleichungen (9) und (10): das lineare Modell und der Steuerbarkeitstest",
+   "title": "Gleichungen (21) und (22): das lineare Modell und der Steuerbarkeitstest",
    "where": "linearise() und rankOf(), unter den Matrix-Hilfsfunktionen",
-   "math": "ỹ̇ = A ỹ + B F̃ &emsp; <span style=\"font-style:normal\">(9)</span><br><span style=\"font-style:normal\">rank</span> [B, AB, A²B, …, A⁵B] = ⟦rank|6⟧ &emsp; <span style=\"font-style:normal\">(10)</span>",
+   "math": "ỹ̇ = A ỹ + B F̃ &emsp; <span style=\"font-style:normal\">(21)</span><br><span style=\"font-style:normal\">rank</span> [B, AB, A²B, …, A⁵B] = ⟦rank|6⟧ &emsp; <span style=\"font-style:normal\">(22)</span>",
    "note": "A ist ∂f/∂y und B ist ∂f/∂F in der Ruhelage, wobei f die rechte Seite der sechs Gleichungen erster Ordnung ist (q̇ = v, v̇ = accel). Der Code bildet sie durch zentrale Differenzen der vollen nichtlinearen Gleichungen, sodass dieselben Zeilen für jede Ruhelage dienen, die Sie wählen. rankOf bildet die sechs Spalten B, AB, …, A⁵B, skaliert jede auf Einheitslänge (ihre Größen unterscheiden sich um Größenordnungen) und zählt die Pivotelemente der Gauß-Elimination, die größer als 10⁻⁸ sind. Steht die Strebe unter Zug, ist die Anzahl 6: Ein einziger Stoß erreicht jede Bewegung nahe der Ruhelage.",
    "code": "for (j = 0; j < 6; j++) { var yp = ys.slice(), ym = ys.slice(); yp[j] += e; ym[j] -= e; var fp = rhs(p, yp, Fs), fm = rhs(p, ym, Fs); for (i = 0; i < 6; i++) A[i][j] = (fp[i] - fm[i]) / (2 * e); }\nvar bp = rhs(p, ys, Fs + e), bm = rhs(p, ys, Fs - e); for (i = 0; i < 6; i++) B[i][0] = (bp[i] - bm[i]) / (2 * e);\n...\nfor (j = 0; j < 6; j++) { var nv = Math.hypot.apply(null, v) || 1; cols.push(v.map(function (x) { return x / nv; })); v = A.map(function (row) { return row.reduce(function (s, a, l) { return s + a * v[l]; }, 0); }); }",
    "syms": [
@@ -115,10 +115,10 @@ window.WALK["pendcontrol"] = {
    ]
   },
   {
-   "title": "Gleichungen (12)–(14): die Riccati-Gleichung und die Verstärkungen",
+   "title": "Gleichungen (24), (25) und (27): die Riccati-Gleichung und die Verstärkungen",
    "where": "lqr(), unter linearise()",
-   "math": "J = ∫(ỹᵀQỹ + ρF̃²) dt &emsp; <span style=\"font-style:normal\">(12)</span><br>AᵀP + PA − ρ<sup>−1</sup>PBBᵀP + Q = 0 &emsp; <span style=\"font-style:normal\">(13)</span><br>⟦K|K⟧ = ρ<sup>−1</sup>BᵀP &emsp; <span style=\"font-style:normal\">(14)</span>",
-   "note": "Die erste zitierte Zeile füllt die 12 × 12-Hamilton-Matrix aus §8: A oben links, −BBᵀ/ρ oben rechts, −Q unten links, −Aᵀ unten rechts; Qd enthält die Diagonale (q_θ, q_θ, q_X, q_v, q_v, q_v), und R ist ρ. Die Signum-Iteration Z ← (Z + Z⁻¹)/2 macht jeden Eigenwert zu +1 oder −1; ist sie konvergiert, so löst P das lineare System, das aus den Blöcken von Z gebildet wird (nach der Methode der kleinsten Quadrate, da es zwölf Gleichungen für sechs Spalten hat). Die letzte Zeile ist (14): Jede Verstärkung ist die Spalte von P, durch B gesehen, geteilt durch ρ.",
+   "math": "J = ∫(ỹᵀQỹ + ρF̃²) dt &emsp; <span style=\"font-style:normal\">(24)</span><br>AᵀP + PA − ρ<sup>−1</sup>PBBᵀP + Q = 0 &emsp; <span style=\"font-style:normal\">(25)</span><br>⟦K|K⟧ = ρ<sup>−1</sup>BᵀP &emsp; <span style=\"font-style:normal\">(27)</span>",
+   "note": "Die erste zitierte Zeile füllt die 12 × 12-Hamilton-Matrix aus §12: A oben links, −BBᵀ/ρ oben rechts, −Q unten links, −Aᵀ unten rechts; Qd enthält die Diagonale (q_θ, q_θ, q_X, q_v, q_v, q_v), und R ist ρ. Die Signum-Iteration Z ← (Z + Z⁻¹)/2 macht jeden Eigenwert zu +1 oder −1; ist sie konvergiert, so löst P das lineare System, das aus den Blöcken von Z gebildet wird (nach der Methode der kleinsten Quadrate, da es zwölf Gleichungen für sechs Spalten hat). Die letzte Zeile ist (27): Jede Verstärkung ist die Spalte von P, durch B gesehen, geteilt durch ρ.",
    "code": "Hm[i][j] = A[i][j]; Hm[i][n + j] = -B[i][0] * B[j][0] / R; Hm[n + i][j] = -(i === j ? Qd[i] : 0); Hm[n + i][n + j] = -A[j][i];\n...\nfor (i = 0; i < 2 * n; i++) for (j = 0; j < 2 * n; j++) { Zn[i][j] = 0.5 * (Z[i][j] + Zi[i][j]); dn += Math.abs(Zn[i][j] - Z[i][j]); }\n...\nfor (j = 0; j < n; j++) { var s = 0; for (i = 0; i < n; i++) s += B[i][0] * P[i][j]; ⟦K|K.push(s / R)⟧; }",
    "syms": [
     [
@@ -130,9 +130,9 @@ window.WALK["pendcontrol"] = {
    ]
   },
   {
-   "title": "Gleichung (11): das Regelgesetz",
+   "title": "Gleichung (23): das Regelgesetz",
    "where": "control(), unter design()",
-   "math": "⟦F|F⟧ = ⟦Feq|F*⟧ − ⟦K|K⟧(y − y*), &nbsp; |F| ≤ κI<sub>max</sub> &emsp; <span style=\"font-style:normal\">(11)</span>",
+   "math": "⟦F|F⟧ = ⟦Feq|F*⟧ − ⟦K|K⟧(y − y*), &nbsp; |F| ≤ κI<sub>max</sub> &emsp; <span style=\"font-style:normal\">(23)</span>",
    "note": "Die Kraft der Spule ist die Haltekraft F* plus eine gewichtete Summe der sechs Abweichungen, mit den Gewichten K aus dem vorigen Schritt. Die letzte Zeile ist die Strombegrenzung: Die Quelle liefert höchstens I_max, also wird die Kraft mit den Voreinstellungen auf ±κI_max = ±30 N begrenzt. Bei ausgeschaltetem Regler führt die Spule keinen Strom, und der Aufbau schwingt frei.",
    "code": "if (!p.on) return 0;\nvar F = d.eq.F;\nfor (var j = 0; j < 6; j++) F -= d.K[j] * (y[j] - d.eq.y[j]);\nreturn Math.max(-p.Fmax, Math.min(p.Fmax, F));",
    "syms": [
@@ -160,7 +160,7 @@ window.WALK["pendcontrol"] = {
    "title": "Runge-Kutta, mit mitgeführter Energiebilanz",
    "where": "stepRK4(), unter control()",
    "math": "y<sub>n+1</sub> = y<sub>n</sub> + (⟦h|h⟧/6)(k<sub>1</sub> + 2k<sub>2</sub> + 2k<sub>3</sub> + k<sub>4</sub>)<br>W<sub>coil</sub> = ∫FẊ dt, &nbsp; Q<sub>stop</sub> = ∫c<sub>stop</sub>ℓ̇² dt, &nbsp; E(0) + W<sub>coil</sub> − Q<sub>stop</sub> − E(T) = ⟦bal|0⟧",
-   "note": "Jeder Schritt wertet Kraft und Beschleunigungen in den vier Stufen des klassischen Runge-Kutta-Verfahrens aus, sodass der Regler kontinuierlich wirkt, wie (11) es sagt. Zwei weitere Zahlen reisen mit dem Zustand mit: die Leistung der Spule F·Ẋ und die Wärme eines berührten Anschlags c_stop·ℓ̇², integriert mit denselben Gewichten wie die Bewegung. Das macht die Energiebilanz aus §10 bis auf den Fehler des Verfahrens selbst exakt; die Spalte „Jetzt“ zeigt die Bilanz am Ende des Laufs.",
+   "note": "Jeder Schritt wertet Kraft und Beschleunigungen in den vier Stufen des klassischen Runge-Kutta-Verfahrens aus, sodass der Regler kontinuierlich wirkt, wie (23) es sagt. Zwei weitere Zahlen reisen mit dem Zustand mit: die Leistung der Spule F·Ẋ und die Wärme eines berührten Anschlags c_stop·ℓ̇², integriert mit denselben Gewichten wie die Bewegung. Das macht die Energiebilanz aus §15 bis auf den Fehler des Verfahrens selbst exakt; die Spalte „Jetzt“ zeigt die Bilanz am Ende des Laufs.",
    "code": "var F = control(p, d, ys), a = accel(p, [ys[0], ys[1], ys[2]], [ys[3], ys[4], ys[5]], F), sv = a[3];\nk.push([ys[3], ys[4], ys[5], a[0], a[1], a[2], F * ys[5], heat]);\nvar out = []; for (i = 0; i < 6; i++) out.push(y[i] + h / 6 * (k[0][i] + 2 * k[1][i] + 2 * k[2][i] + k[3][i]));",
    "syms": [
     [

@@ -484,7 +484,7 @@
         if (!host || !host.getAttribute('data-walk')) return;   /* only an element that names its walkthrough */
         var s = document.createElement('script');
         s.charset = 'utf-8';
-        s.src = (window.I18N_WALK ? ROOT + 'scripts/walk/' + document.documentElement.lang + '/' : '../scripts/walk/') + host.getAttribute('data-walk') + '.js';
+        s.src = (window.I18N_WALK ? ROOT + 'scripts/walk/' + document.documentElement.lang + '/' : ROOT + 'scripts/walk/') + host.getAttribute('data-walk') + '.js';
         s.onload = function () { walkthrough((window.WALK || {})[host.getAttribute('data-walk')]); };
         document.body.appendChild(s);
     }

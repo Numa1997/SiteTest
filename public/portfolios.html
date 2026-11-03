@@ -45,7 +45,7 @@
     <main class="cat" id="projects">
       <div class="cat__head" style="grid-template-columns: minmax(0, 1fr);">
         <div>
-          <p class="cat__kicker">A thesis and three studies</p>
+          <p class="cat__kicker">A thesis and four studies</p>
           <h1>Projects<span class="dot">.</span></h1>
           <p class="cat__lede">
             Projects of months rather than afternoons: a question from research,
@@ -408,6 +408,39 @@
             </ul>
             <p class="proj__note">Two self-contained pages, generated from their source in this site’s repository, <a href="https://github.com/Numa1997/SiteTest/tree/main/portfolios-src/impact">portfolios-src/impact</a>. The drop is computed in your browser when the page opens, and nothing is stored.</p>
           </section>
+        </div>
+      </article>
+
+      <article class="proj" id="pendulum-control" aria-labelledby="pc-title">
+        <div class="proj__band">
+          <span class="proj__num">05</span>
+          <p>An interactive study · from first principles · 2026</p>
+          <span>Lagrangian mechanics · LQR · underactuated control</span>
+        </div>
+        <div class="proj__body">
+          <div class="proj__head">
+            <div>
+              <h2 id="pc-title">Double Pendulum under Control</h2>
+              <p class="proj__sub">Holding a double pendulum still by pushing only a cart</p>
+              <p class="proj__abs">
+                A double pendulum hangs from a fixed pivot. A telescopic strut with a spring inside ties its lower ball
+                to a cart on a rail, and a coil on the cart, sitting in the gap of a magnet track, pushes the cart. The
+                coil is the only thing anyone can push, yet it must bring three bodies to rest. The study shows the
+                machine part by part in figures rendered from a 3D model, derives its equations step by step with every
+                mass and length kept as a symbol, and designs the controller by completing a square. Every parameter is
+                a slider, and the whole run is solved in your browser before it plays.
+              </p>
+              <div class="proj__actions">
+                <a class="proj__btn" href="portfolios/pendulum-control/index.html">Run the simulation</a>
+                <a class="proj__btn proj__btn--ghost" href="portfolios/pendulum-control/index.html#paper">Read the lecture notes</a>
+              </div>
+            </div>
+            <dl class="proj__tally" aria-label="Key figures">
+              <div><dt>3</dt><dd>bodies brought to rest through one push</dd></div>
+              <div><dt>28</dt><dd>numbered equations, every term derived</dd></div>
+              <div><dt>4</dt><dd>figures of the machine rendered from a 3D model</dd></div>
+            </dl>
+          </div>
         </div>
       </article>
     </main>

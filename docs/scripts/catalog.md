@@ -14,7 +14,7 @@ data only. `simulations.html` draws its whole list, its search and its filter ch
 
 ## How it works
 
-The file is one IIFE that assigns three globals and returns ([catalog.js:23-235](../../public/scripts/catalog.js#L23-L235)).
+The file is one IIFE that assigns three globals and returns ([catalog.js:23-235](../../public/scripts/catalog.js#L23-L218)).
 There is no logic apart from the constant `ALL`, the list of all six tool names, which every entry uses as its `has`
 ([catalog.js:44](../../public/scripts/catalog.js#L44)).
 
@@ -55,9 +55,8 @@ The eleven entries, in the order of the array, which is also figure order:
 | 8 | `draw-decompose` | Draw & Decompose | `simulations/draw-decompose.html` | methods | 2 | 2026-10-06 | [166](../../public/scripts/catalog.js#L166) |
 | 9 | `driven-oscillator` | Driven Oscillator | `simulations/driven-oscillator.html` | control | 1 | 2026-10-14 | [183](../../public/scripts/catalog.js#L183) |
 | 10 | `wind-turbine` | Wind Turbine Control | `simulations/wind-turbine.html` | control | 2 | 2026-10-14 | [200](../../public/scripts/catalog.js#L200) |
-| 11 | `pendulum-control` | Double Pendulum under Control | `simulations/pendulum-control.html` | control | 2 | 2026-10-24 | [217](../../public/scripts/catalog.js#L217) |
 
-Every entry has `has: ALL`. All eleven thumbnails exist in [public/images/sims/](../../public/images/sims/).
+Every entry has `has: ALL`. All ten thumbnails exist in [public/images/sims/](../../public/images/sims/).
 
 ### `SIM_FIELDS`
 
@@ -120,7 +119,7 @@ field 0.
 |---|---|---|---|
 | `window.SIM_TOOLS` | [26-33](../../public/scripts/catalog.js#L26-L33) | `{ key: description }` | The shared tools a page can carry. |
 | `window.SIM_FIELDS` | [35-42](../../public/scripts/catalog.js#L35-L42) | `[{ id, name, blurb }]` | Fields, in chip order. |
-| `window.SIMULATIONS` | [46-234](../../public/scripts/catalog.js#L46-L234) | `[entry]` | One entry per simulation (fields above). |
+| `window.SIMULATIONS` | [46-234](../../public/scripts/catalog.js#L46-L217) | `[entry]` | One entry per simulation (fields above). |
 
 ## Internal functions
 
