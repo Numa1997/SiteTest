@@ -503,6 +503,10 @@
   "src": "The controller reads the whole state and pushes in proportion to it, \\(u = -\\mathbf K(\\mathbf s - \\mathbf s_\\text{ref})\\), where \\(\\mathbf s_\\text{ref}\\) is upright and at rest at the target position \\(x_\\text{ref}\\) of the buttons. The six gains in \\(\\mathbf K\\) are chosen by the linear-quadratic regulator (LQR) [1, 3]: among all pushes, take the one that makes the total cost",
   "tr": "يقرأ المتحكّم الحالة كلّها ويدفع بما يتناسب معها، \\(u = -\\mathbf K(\\mathbf s - \\mathbf s_\\text{ref})\\)، حيث \\(\\mathbf s_\\text{ref}\\) هي الوضع القائم الساكن عند الموضع الهدف \\(x_\\text{ref}\\) الذي تحدّده الأزرار. ويختار المنظِّم الخطّي التربيعي (LQR) [1, 3] الكسوب الستّة في \\(\\mathbf K\\): من بين كلّ الدفعات، خذ الدفعة التي تجعل الكلفة الكلّية"
  },
+ "d8bd930bdb09": {
+  "src": "The page integrates (9) with the classical fourth-order Runge–Kutta method at a fixed step of 1 ms, several steps per screen frame, in real time. With the controller off, the same integrator tested against a high-accuracy solver keeps the energy \\(T + V\\) constant to \\(2\\times10^{-10}\\) J over 10 s. When a rod passes 60° the run is called lost: the linear controller was designed for small angles, so the motor stops pushing (\\(u = 0\\)) and the page keeps solving (9) exactly as before. The rods fall all the way, swing down through the slot in the middle of the cart, between its two rails, and go on swinging as a double pendulum hanging from a free cart, without friction, so they never come to rest. The view widens to keep them in sight. Positions are drawn to scale; the view follows the cart.",
+  "tr": "تكامل الصفحة (9) بطريقة رونغه–كوتا الكلاسيكية من الرتبة الرابعة بخطوة ثابتة قدرها 1 ms، بعدّة خطوات في كلّ إطار من إطارات الشاشة، في الزمن الحقيقي. ومع إيقاف المتحكّم يُبقي المكامِل نفسه، مختبرًا مقابل حلّال عالي الدقّة، الطاقة \\(T + V\\) ثابتة في حدود \\(2\\times10^{-10}\\) J على مدى 10 s. وحين يتجاوز قضيب 60° تُعدّ الجولة خاسرة: فالمتحكّم الخطّي صُمّم للزوايا الصغيرة، فيكفّ المحرّك عن الدفع (\\(u = 0\\)) وتواصل الصفحة حلّ (9) تمامًا كما من قبل. فيسقط القضيبان حتى النهاية، ويتأرجحان نازلين عبر الشقّ في وسط العربة بين سكّتيها، ثم يواصلان التأرجح كبندول مزدوج معلّق بعربة حرّة، بلا احتكاك، فلا يسكنان أبدًا. ويتّسع المنظر ليبقيا في مجال الرؤية. وتُرسم المواضع بمقياس صحيح؛ ويتبع المنظرُ العربة."
+ },
  "d929322e4b16": {
   "src": "Fig.",
   "tr": "الشكل"
@@ -594,6 +598,10 @@
  "f72f0eda6052": {
   "src": "Simulations",
   "tr": "المحاكاة"
+ },
+ "f7a8477c922d": {
+  "src": "Figure 1 shows the parts. The <b>cart</b>, of mass \\(m_0\\), rolls on a straight horizontal <b>rail</b>; its position along the rail is \\(x\\). A <b>motor</b> pushes it with a horizontal force \\(u\\), positive to the right, never larger in size than \\(u_\\text{max}\\). Through the middle of the cart runs a <b>slot</b>, open at the top and bottom, and the cart rides on two rails, one on each side of it. Across the top of the slot sits a <b>hinge</b>, a pin through a bearing, which lets the lower rod turn freely in the plane of the picture and in no other way. The <b>lower rod</b> is a uniform bar of mass \\(m_1\\) and length \\(L_1\\). At its top end a second free hinge carries the <b>upper rod</b>, a uniform bar of mass \\(m_2\\) and length \\(L_2\\). No motor sits in either hinge.",
+  "tr": "يبيّن الشكل 1 الأجزاء. <b>العربة</b>، وكتلتها \\(m_0\\)، تتدحرج على <b>سكّة</b> مستقيمة أفقية؛ وموضعها على السكّة هو \\(x\\). يدفعها <b>محرّك</b> بقوّة أفقية \\(u\\)، موجبة نحو اليمين، لا يتجاوز مقدارها أبدًا \\(u_\\text{max}\\). ويخترق وسطَ العربة <b>شِقّ</b> مفتوح من أعلى ومن أسفل، والعربة تسير على سكّتين، واحدة على كلّ جانب منه. وفوق الشقّ، عرضًا، <b>مفصل</b>، محور يمرّ في محمل، يتيح للقضيب السفلي أن يدور بحرّية في مستوى الصورة ولا يتيح له غير ذلك. <b>القضيب السفلي</b> قضيب متجانس كتلته \\(m_1\\) وطوله \\(L_1\\). وعند طرفه العلوي يحمل مفصلٌ حرّ ثانٍ <b>القضيب العلوي</b>، وهو قضيب متجانس كتلته \\(m_2\\) وطوله \\(L_2\\). ولا محرّك في أيّ من المفصلين."
  },
  "fb57a7ac8366": {
   "src": "This simulation needs JavaScript.",

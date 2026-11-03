@@ -22,7 +22,7 @@ Numa asked for a small page).
 LQR on the linearisation at the upright rest, `Q = diag(50, 50, 50, 20, 700, 700)` on `(x, θ1, θ2, ẋ, θ̇1, θ̇2)` (Bogdanov's weights with the
 `x` weight raised from 5 to 50), `R = ρ` from the slider (10^−2 … 10^2). The Riccati equation is solved by the sign function of the
 Hamiltonian matrix (same routine as the Projects page of the old Fig. 11) every time a slider changes. The controller is sampled every `T_s`
-and holds `u` between samples; when a rod passes 60° the run is lost and `u = 0`; the run stops when a rod passes 90°.
+and holds `u` between samples; when a rod passes 60° the run is lost and `u = 0`; the equations keep being solved, so the rods fall through the slot in the middle of the cart (between its two rails) and swing on freely (fixed 3 November 2026: before, the page froze when a rod passed 90°, leaving the upper rod hanging mid-fall).
 
 ## Interaction
 
