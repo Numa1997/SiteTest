@@ -8,9 +8,9 @@
     <title>Double Pendulum under Control</title>
     <meta name="description" content="A double pendulum hanging from a fixed pivot, tied by a sprung telescopic strut to a cart that a moving coil drives along a rail. Pull it anywhere and let go: full-state feedback brings it back to the position you choose. Solved first with RK4 and stored, then played back.">
     <meta name="theme-color" content="#f5f1ea">
-    <link rel="stylesheet" href="../../styles/sim.css">
-    <link rel="stylesheet" href="../../styles/data.css">
-    <link rel="stylesheet" href="../../styles/fold.css"><link rel="stylesheet" href="../../styles/i18n.css"><script src="../../scripts/flip.js"></script>
+    <link rel="stylesheet" href="../styles/sim.css">
+    <link rel="stylesheet" href="../styles/data.css">
+    <link rel="stylesheet" href="../styles/fold.css"><link rel="stylesheet" href="../styles/i18n.css"><script src="../scripts/flip.js"></script>
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%237a1f2b'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='38' fill='%23f5f1ea'%3EN%3C/text%3E%3C/svg%3E">
     <style>
         .solve { display: grid; gap: 10px; }
@@ -47,20 +47,20 @@
 .ptable table { border-collapse: collapse; width: 100%; font-size: .95em; }
 .ptable th, .ptable td { border-bottom: 1px solid #e3d9cc; padding: .35em .6em; text-align: left; vertical-align: top; }
 .ptable th { font-family: 'IBM Plex Mono', monospace; font-size: .78em; font-weight: 500; color: #6a5e59; text-transform: uppercase; letter-spacing: .04em; }
-.pfig__plate--narrow img { max-width: 520px; margin: 0 auto; }
+.pfig__plate--narrow img { max-width: 520px; margin: 0 auto; } .paper td, .paper th { hyphens: auto; overflow-wrap: anywhere; } /* long German compounds in the parameter table may break on a phone */
 .ctl__note { font-size: 12px; color: #6a5e59; margin: 4px 0 0; line-height: 1.4; }
 </style>
 </head>
 <body>
     <header class="sim-top">
-        <span style="display:inline-flex;align-items:center;gap:14px"><a href="../../index.html" aria-label="Phyein Usul, home page" style="display:inline-block;line-height:0"><img src="../../images/phyein-usul-mark.svg" alt="Phyein Usul" width="87" height="48" /></a><a href="../../portfolios.html#pendulum-control">← All projects</a></span>
-        <nav class="sim-nav" aria-label="Section"><a href="../../portfolios.html#pendulum-control">Projects</a></nav>
+        <span style="display:inline-flex;align-items:center;gap:14px"><a href="../index.html" aria-label="Phyein Usul, home page" style="display:inline-block;line-height:0"><img src="../images/phyein-usul-mark.svg" alt="Phyein Usul" width="87" height="48" /></a><a href="../simulations.html">← All simulations</a></span>
+        <nav class="sim-nav" aria-label="Simulations"><span>Fig.</span> <a href="Circular Wave Interference Visualization.html">1</a> <a href="Double Pendulum.html">2</a> <a href="Interactive Double-Slit Experiment Visualization.html">3</a> <a href="Transverse and longitudinal waves.html">4</a> <a href="water-wave.html">5</a> <a href="wave-interference.html">6</a> <a href="phasor-sums.html">7</a> <a href="draw-decompose.html">8</a> <a href="driven-oscillator.html">9</a> <a href="wind-turbine.html">10</a> <a href="pendulum-control.html" aria-current="page">11</a></nav>
     </header>
 
     <main class="sim">
-        <noscript><p class="sim-error"><b>This simulation needs JavaScript.</b> <a href="../../portfolios.html#pendulum-control">Back to the projects</a></p></noscript>
+        <noscript><p class="sim-error"><b>This simulation needs JavaScript.</b> <a href="../simulations.html">Back to the simulations</a></p></noscript>
         <div class="sim__head">
-            <p class="sim__num">Project · control systems · underactuated mechanics</p>
+            <p class="sim__num">Fig. 11 · control systems · underactuated mechanics</p>
             <h1>Double Pendulum under Control<span class="dot">.</span></h1>
             <p class="sim__lede">A double pendulum hangs from a fixed pivot. A sprung telescopic strut ties its lower ball to a cart, and a moving coil drives the cart along a rail. Pull the pendulum anywhere and let go: the controller, which can push only the cart, brings the whole chain back to rest where you chose. The motion is solved first and stored; the animation plays the stored run back.</p>
         </div>
@@ -214,7 +214,7 @@
 
         <article class="paper" id="paper" aria-labelledby="paper-title">
             <header class="paper__head">
-                <p class="paper__kicker">Project · lecture notes · control systems</p>
+                <p class="paper__kicker">Lecture note · Fig. 11 · control systems</p>
                 <h2 class="paper__title" id="paper-title">A double pendulum on a leash: holding a chain still by pushing only a cart</h2>
                 <p class="paper__by">Numa Koudsie</p>
                 <div class="paper__abstract"><b>Abstract.</b> A double pendulum hangs from a fixed pivot. A telescopic strut with a spring inside ties its lower ball to a cart on a rail, and a coil on the cart, sitting in the gap of a magnet track, pushes the cart. The coil is the only thing anyone can push, yet it must bring three bodies to rest. We first look at the machine part by part, in pictures rendered from a 3D model: how the strut is pinned to the ball and to the cart, what the strut is made of, and how the magnets and the coil push the cart, with the coil off and on. Then we derive its equations step by step, keeping every mass and length as a symbol: positions, velocities, the kinetic and potential energy, the coil in the Lagrangian, and Lagrange's equations with every term written out. We find where the chain can rest, expand about the hanging rest, linearise, test whether one push can reach every motion, and derive the controller by completing a square. Every parameter is a slider on the page; numbers in the text are for the sliders' starting values.</div>
@@ -249,13 +249,13 @@
 <p class="psec__lead">Hold a heavy lamp that hangs from the ceiling on two links, not by the lamp but by a stretched cord tied to its bottom, and you can only steer it by moving the far end of the cord. This machine is that situation, built so that every part can be named and seen.</p>
 <p>A crane driver knows the problem from the cab. The hook hangs from the trolley, the load hangs from the hook, and the only thing the driver commands is the motor that moves the trolley; every swing of the load has to be taken out through that one motor. Here a double pendulum plays the load, a cart on a rail plays the trolley, and a stretched spring strut is the only thing that joins them.</p>
 <div class="pbox"><p class="pbox__title">The aim of this page</p><p>The cart, and only the cart, brings the pendulum back to rest at the place you choose. The controller measures where both balls and the cart are and how fast they move, sets the current in the coil, and so pushes the cart; through the strut the cart pulls the chain until all three bodies rest. This section shows the machine in pictures; §2–§11 derive what the cart can do to the chain; §12 designs the push; §14 shows the chain coming home in phase space.</p></div>
-<figure class="pfig"><div class="pfig__plate pfig__plate--narrow"><img src="../../images/fig11/fig-machine.webp" width="1467" height="1560" alt="Rendered view of the whole machine: a pivot bracket at the top, two dark rods with two wine-red balls, a telescopic strut from the lower ball down to a cart on a rail, and a magnet track beside the rail."></div>
+<figure class="pfig"><div class="pfig__plate pfig__plate--narrow"><img src="../images/fig11/fig-machine.webp" width="1467" height="1560" alt="Rendered view of the whole machine: a pivot bracket at the top, two dark rods with two wine-red balls, a telescopic strut from the lower ball down to a cart on a rail, and a magnet track beside the rail."></div>
 <figcaption><span class="pfig__n">Figure 1</span>The whole machine, rendered from a 3D model. <b>1</b> fixed pivot O on its bracket; <b>2</b> rod 1, length \(l_1\); <b>3</b> ball 1, mass \(m_1\); <b>4</b> rod 2, length \(l_2\); <b>5</b> ball 2, mass \(m_2\); <b>6</b> the axle through ball 2's centre, where the strut is pinned; <b>7</b> the strut, two tubes with a spring inside; <b>8</b> the cart, mass \(M\), with its coil underneath; <b>9</b> the magnet track; <b>10</b> the rail. The machine is drawn at the sliders' starting values.</figcaption></figure>
 <p>At the top is a pivot O, bolted to a frame that never moves. From it hangs a rod of length \(l_1\) on a frictionless hinge, ending in a ball of mass \(m_1\). From that ball hangs a second rod of length \(l_2\) on a second hinge, ending in ball 2, of mass \(m_2\). The rods are carbon-fibre tubes, stiff and so light next to the balls that we neglect their mass; the balls are small enough to treat as points. Below runs a straight, level rail with a cart of mass \(M\) on nylon wheels. Beside the rail lies a magnet track, and a coil fixed under the cart hangs into its gap. The cart carries a pin that travels along the rail at a fixed depth \(H\) below the pivot. Nothing rubs anywhere: the hinges, the wheels and the sliding tubes are taken as frictionless, so with the controller off the machine swings for ever.</p>
 <p>The chain and the cart touch in one place only: the strut. The next three figures take its two ends, its inside, and the motor that pushes the cart apart.</p>
 
 <h4 id="p-joints"><span class="psub__n">1.1</span>How ball 2 is tied to the cart</h4>
-<figure class="pfig"><div class="pfig__plate"><img src="../../images/fig11/fig-ends.webp" width="1442" height="1280" alt="Two rendered close-ups. Left: ball 2 with an axle through its centre, a steel fork straddling the ball on that axle, and the strut's inner tube below. Right: the strut's outer tube ending in a rod-end eye, a steel pin, a U-shaped clevis and the cart's top plate, drawn pulled apart. A small sketch between them marks where the two joints sit."></div>
+<figure class="pfig"><div class="pfig__plate"><img src="../images/fig11/fig-ends.webp" width="1442" height="1280" alt="Two rendered close-ups. Left: ball 2 with an axle through its centre, a steel fork straddling the ball on that axle, and the strut's inner tube below. Right: the strut's outer tube ending in a rod-end eye, a steel pin, a U-shaped clevis and the cart's top plate, drawn pulled apart. A small sketch between them marks where the two joints sit."></div>
 <figcaption><span class="pfig__n">Figure 2</span>The strut's two joints, rendered from the 3D model at the same scale and from the same viewpoint; the small sketch in the middle shows where they sit. <b>A, at ball 2:</b> <b>1</b> rod 2, fixed into the ball; <b>2</b> ball 2; <b>3</b> the bore through the ball's centre; <b>4</b> the axle, hardened steel, drawn pulled out along its own line; <b>5</b> bronze bushing in the fork's cheek; <b>6</b> fork cheek, one on each side of the ball; <b>7</b> bridge joining the cheeks; <b>8</b> boss, threaded onto the inner tube; <b>9</b> inner tube. <b>B, at the cart</b>, drawn pulled apart along the strut's axis: <b>10</b> outer tube; <b>11</b> threaded shank; <b>12</b> rod end, a steel eye; <b>13</b> bronze ball bearing inside the eye; <b>14</b> pin, hardened steel; <b>15</b> bore for the pin; <b>16</b> clevis; <b>17</b> one of two cap screws; <b>18</b> top plate of the cart.</figcaption></figure>
 <p><b>At ball 2 (panel A).</b> A steel axle passes straight through a bore in the centre of ball 2, at right angles to the plane of the swing. The strut's upper end is a fork: two steel cheeks, one on each side of the ball, with bronze bushings that ride on the two ends of the axle, joined below the ball by a bridge whose boss is screwed onto the strut's inner tube. Rod 2 is fixed into the top of the ball and passes between the cheeks, so the fork can swing through nearly a full turn about the ball; only when the strut points straight back up along rod 2 would its bridge meet the rod.</p>
 <p>The axle goes through the <i>centre</i> of the ball on purpose. The model in §2 puts the strut's upper end at the ball's centre, the point \((x_2, y_2)\). Had we screwed a bracket under the ball instead, the strut would pull on a point a few centimetres below the centre, fixed to rod 2: its length would have to be measured to that point, and its pull would twist rod 2 about the ball. With the axle through the centre, the drawing and the equations describe the same machine.</p>
@@ -264,7 +264,7 @@
 <p class="psrc">Two-force member: <a href="https://mechanicsmap.psu.edu/websites/5_structures/5-2_two_force_members/twoforcemembers.html">Mechanics Map (Penn State), §5.2</a>, argued there for a body at rest; with zero mass and zero moment of inertia, \(\sum F = ma\) and \(\sum\tau = I\alpha\) vanish at every instant, so it holds in motion too.</p>
 
 <h4 id="p-strutin"><span class="psub__n">1.2</span>The strut, cut open</h4>
-<figure class="pfig"><div class="pfig__plate"><img src="../../images/fig11/fig-strut.webp" width="1538" height="371" alt="Rendered strut lying on its side with the front half of its tubes cut away: a rod end at the left, the aluminium outer tube with a plug at its end, a long open-coiled spring running inside both tubes, the steel inner tube with a collar, a bronze bushing at the mouth of the outer tube, and the fork around ball 2 at the right."></div>
+<figure class="pfig"><div class="pfig__plate"><img src="../images/fig11/fig-strut.webp" width="1538" height="371" alt="Rendered strut lying on its side with the front half of its tubes cut away: a rod end at the left, the aluminium outer tube with a plug at its end, a long open-coiled spring running inside both tubes, the steel inner tube with a collar, a bronze bushing at the mouth of the outer tube, and the fork around ball 2 at the right."></div>
 <figcaption><span class="pfig__n">Figure 3</span>The strut lying on its side, the front half of its tubes cut away, at its resting length \(\ell_0 = H - l_1 - l_2\) between the cart's pin and the ball's centre. <b>1</b> rod end on the cart's pin; <b>2</b> bottom plug of the outer tube: the spring's lower anchor and the lower stop; <b>3</b> spring; <b>4</b> collar on the inner tube; <b>5</b> inner tube, stainless steel; <b>6</b> outer tube, aluminium; <b>7</b> bronze guide bushing in the mouth of the outer tube: the upper stop; <b>8</b> plug inside the inner tube: the spring's upper anchor; <b>9</b> fork; <b>10</b> axle; <b>11</b> ball 2.</figcaption></figure>
 <p>The strut is two tubes, one sliding inside the other. The outer tube, on the cart's side, is aluminium; the inner tube, on the ball's side, is stainless steel and slides in a bronze bushing pressed into the mouth of the outer tube. A long spring of steel wire runs inside both: one end is hooked to the plug that closes the bottom of the outer tube, the other to a plug deep inside the inner tube. Pull the strut longer and the inner tube slides out, carrying the spring's upper anchor with it: the spring stretches and pulls back. Push the strut shorter and the spring is squeezed and pushes back. Its coils are wound open, with gaps between them, so it can do both. Either way the force is</p>
 \[ N = k_s(\ell - L_0) , \]
@@ -272,7 +272,7 @@
 <p>The tubes cannot slide for ever. Pulled out, the collar on the inner tube (4) meets the bronze bushing (7): the strut is then at its longest, \(\ell_\text{max} = 0.95\ \mathrm m\). Pushed in, the end of the inner tube meets the bottom plug (2): the strut is at its shortest, \(\ell_\text{min} = 0.50\ \mathrm m\). The page draws each stop as a very stiff spring, \(k_\text{stop} = 2\times10^4\ \mathrm{N/m}\), with a damper, \(c_\text{stop} = 40\ \mathrm{kg/s}\), that acts only while the stop is touched. The damper turns the knock into heat, \(Q_\text{stop} = \int c_\text{stop}\dot\ell^2\, dt\), the only loss in the machine apart from the coil.</p>
 
 <h4 id="p-motor"><span class="psub__n">1.3</span>The magnet track and the coil</h4>
-<figure class="pfig"><div class="pfig__plate"><img src="../../images/fig11/fig-motor.webp" width="1193" height="870" alt="Rendered linear motor: a steel U-channel lined on both inner walls with alternating red and blue magnets, small blue arrows across the gap, a rectangular copper coil hanging into the gap from under the cart, an orange arrow up its left leg and down its right leg, and a red arrow pointing along the rail from the cart."></div>
+<figure class="pfig"><div class="pfig__plate"><img src="../images/fig11/fig-motor.webp" width="1193" height="870" alt="Rendered linear motor: a steel U-channel lined on both inner walls with alternating red and blue magnets, small blue arrows across the gap, a rectangular copper coil hanging into the gap from under the cart, an orange arrow up its left leg and down its right leg, and a red arrow pointing along the rail from the cart."></div>
 <figcaption><span class="pfig__n">Figure 4</span>The linear motor that pushes the cart, with the front wall of the channel cut away over the coil. <b>1</b> underside of the cart; <b>2</b> coil, copper wire wound flat on a glass-fibre former and hung under the cart; <b>3</b> the magnetic field across the gap (blue arrows), reversing from one magnet pair to the next; <b>4</b> a magnet with its north pole facing the gap (red); <b>5</b> a magnet with its south pole facing the gap (blue); <b>6</b> steel U-channel; <b>7</b> current up the coil's left leg; <b>8</b> current down its right leg; <b>9</b> the force on the coil, and so on the cart, \(F = \kappa I\), along the rail.</figcaption></figure>
 <p>The cart is pushed by a linear motor, which works like a loudspeaker laid along a rail. The track is a U-shaped steel channel. On the inside of both walls sit neodymium magnets, alternating every few centimetres, and opposite every north face on one wall is a south face on the other. So across the narrow gap the field points straight from one wall to the other: towards you over one pair, away from you over the next (3). The steel channel carries the field round behind the magnets, so almost all of it crosses the gap.</p>
 <p>Into the gap hangs the coil (2). Its two upright legs are one magnet pair apart, so they always sit in fields that point opposite ways. When the controller asks for a current \(I\), the current source drives it up one leg and down the other (7, 8). A wire of length \(\boldsymbol\ell_w\) carrying current across a magnetic field feels the Lorentz force \(I\,\boldsymbol\ell_w\times\mathbf B\). In the left leg the current runs up and the field points towards you; in the right leg the current runs down and the field points away. Both reversals together leave both forces pointing the same way, to the right along the rail (9). Reverse the current and the cart is pushed to the left. The push grows in step with the current,</p>
@@ -601,12 +601,12 @@
 
     <footer class="sim-foot">
         <span>© 2026 Numa Koudsie</span>
-        <span><a href="../../portfolios.html#pendulum-control">All projects ↑</a> · <a href="../../index.html">Home page</a></span>
+        <span><a href="../simulations.html">← All simulations</a> · <a href="../index.html">Home page</a></span>
     </footer>
 
-    <script src="../../scripts/fold.js"></script>
-    <script src="../../scripts/sim.js"></script>
-    <script src="../../scripts/dataset.js"></script><script src="../../scripts/curve.js"></script>
+    <script src="../scripts/fold.js"></script>
+    <script src="../scripts/sim.js"></script>
+    <script src="../scripts/dataset.js"></script><script src="../scripts/curve.js"></script>
     <script>
     (function () {
         'use strict';
@@ -1545,6 +1545,6 @@
         if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { if (solved) draw(); });
     })();
     </script>
-    <script src="../../scripts/ledger/pendulum-control.js"></script><script src="../../scripts/datalog.js"></script>
+    <script src="../scripts/ledger/pendulum-control.js"></script><script src="../scripts/datalog.js"></script>
 </body>
 </html>

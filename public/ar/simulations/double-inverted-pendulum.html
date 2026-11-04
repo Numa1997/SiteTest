@@ -23,31 +23,31 @@
 
     <link rel="stylesheet" href="../../fonts/arabic.css" />
     <script src="../../scripts/i18n/strings-ar.js"></script>
-    <meta name="translated-from" content="English public/simulations/double-inverted-pendulum.html, commit e1ee4a6+" />
+    <meta name="translated-from" content="English public/simulations/double-inverted-pendulum.html, commit 770cd1c+" />
   </head>
 <body>
     <header class="sim-top">
-        <span style="display:inline-flex;align-items:center;gap:14px"><a href="../index.html" aria-label="Phyein Usul، الصفحة الرئيسية" style="display:inline-block;line-height:0"><img src="../../images/phyein-usul-mark.svg" alt="Phyein Usul" width="87" height="48" /></a><a href="../simulations.html">→ جميع المحاكاة</a></span>
-        <nav class="sim-nav" aria-label="المحاكاة">
-            <span>الشكل</span>
-            <a href="Circular Wave Interference Visualization.html">1</a>
-            <a href="Double Pendulum.html">2</a>
-            <a href="Interactive Double-Slit Experiment Visualization.html">3</a>
-            <a href="Transverse and longitudinal waves.html">4</a>
-            <a href="water-wave.html">5</a>
-            <a href="wave-interference.html">6</a>
-            <a href="phasor-sums.html">7</a>
-            <a href="draw-decompose.html">8</a>
-            <a href="driven-oscillator.html">9</a>
-            <a href="wind-turbine.html">10</a>
-            <a href="double-inverted-pendulum.html" aria-current="page">11</a>
-        </nav>
+        <span style="display:inline-flex;align-items:center;gap:14px"><a href="../index.html" aria-label="Phyein Usul، الصفحة الرئيسية" style="display:inline-block;line-height:0"><img src="../../images/phyein-usul-mark.svg" alt="Phyein Usul" width="87" height="48" /></a><a href="../portfolios.html#double-inverted-pendulum">← جميع المشاريع</a></span>
+        <nav class="sim-nav" aria-label="القسم"><a href="../portfolios.html#double-inverted-pendulum">المشاريع</a></nav>
+
+
+
+
+
+
+
+
+
+
+
+
+
     </header>
 
     <main class="sim">
-        <noscript><p class="sim-error"><b>تحتاج هذه المحاكاة إلى JavaScript.</b> <a href="../simulations.html">العودة إلى المحاكاة</a></p></noscript>
+        <noscript><p class="sim-error"><b>تحتاج هذه المحاكاة إلى JavaScript.</b> <a href="../portfolios.html#double-inverted-pendulum">العودة إلى المشاريع</a></p></noscript>
         <div class="sim__head">
-            <p class="sim__num">الشكل 11 · أنظمة التحكّم · الميكانيك الكلاسيكي</p>
+            <p class="sim__num">مشروع · أنظمة التحكّم · الميكانيكا الكلاسيكية</p>
             <h1>موازنة قضيبين على عربة<span class="dot">.</span></h1>
             <p class="sim__lede">يقف قضيبان أحدهما فوق الآخر على عربة، موصولان بمفصلين وحرّان في السقوط. لا يمسكهما شيء سوى العربة: محرّك يدفعها يمينًا ويسارًا على سكّة، ومتحكّم يقرّر شدّة الدفع مئة مرّة في الثانية. انقر طرف القضيب العلوي، أو أرسل العربة إلى موضع ما، أو اجعل المحرّك ضعيفًا والمتحكّم بطيئًا، وانظر متى تصبح الموازنة مستحيلة.</p>
         </div>
@@ -181,7 +181,7 @@
 
         <article class="paper" id="paper" aria-labelledby="paper-title">
             <header class="paper__head">
-                <p class="paper__kicker">مذكّرة المحاضرة · الشكل 11 · أنظمة التحكّم</p>
+                <p class="paper__kicker">مشروع · مذكّرة · أنظمة التحكّم</p>
                 <h2 class="paper__title" id="paper-title">قضيبان على عربة: إبقاء ما يريد السقوط قائمًا</h2>
                 <p class="paper__by">نعمة سائر قدسية · لقرّاء يعرفون قوانين نيوتن وشيئًا من التفاضل والتكامل</p>
                 <div class="paper__abstract"><b>الخلاصة.</b> القضيب القائم على طرفه يسقط؛ والقضيبان المركّبان أحدهما فوق الآخر بمفصلين يسقطان أسرع ويتشابكان. ولا عون لهما هنا إلّا من تحت: عربة يدفعها محرّك على سكّة. نصف الآلة، ونكتب طاقتها، ونشتقّ معادلات حركتها بطريقة لاغرانج، ونطابق كلّ حدّ مع التقرير الكلاسيكي لبوغدانوف (2004). ثمّ نخطّط حول الوضع القائم لنعرف سرعة سقوط القضيبين، ونبيّن أنّ دفعًا واحدًا على السكّة يكفي لتوجيههما معًا، ونبني المتحكّم الذي يفعل ذلك بتقليل كلفة. وتنتهي المذكّرة بما يعلّمه كلّ منزلق: لماذا القضبان الطويلة أسهل، ولماذا يجب أن يكون المحرّك قويًّا والحلقة سريعة، ولماذا على العربة أن تسير في الاتّجاه الخاطئ أوّلًا. وإذا سقط القضيبان مع ذلك، تبيّن المذكّرة أين يفوز متحكّم الموازنة يقينًا، وكيف تسحب العربة طاقة القضيبين حتّى يتدلّيا ساكنين، وكيف تعيدهما أرجحة مخطَّطة إلى القمّة. والمتحكّم الحقيقي لا ينظر إلّا في لحظات ثابتة؛ فنشتقّ النموذج الدقيق للآلة بين نظرتين، والكلفة التي تدفعها، والكسوب التي تلائم دور الحلقة، وندع متحكّم الموازنة يمسك القضيبين على عربة تتابع تدحرجها.</div>
@@ -537,7 +537,7 @@
         <section class="walk" id="walk" data-walk="dipc" aria-label="من الرموز إلى الشيفرة"></section>
     </main>
 
-    <footer class="sim-foot"><a href="../simulations.html">→ جميع المحاكاة</a></footer>
+    <footer class="sim-foot"><a href="../portfolios.html#double-inverted-pendulum">← جميع المشاريع</a></footer>
 
     <script src="../../scripts/fold.js"></script>
     <script src="../../scripts/sim.js"></script>

@@ -215,21 +215,21 @@
             added: '2026-10-14'
         },
         {
-            id: 'double-inverted-pendulum',
+            id: 'pendulum-control',
             fig: 11,
-            title: 'Balancing Two Rods on a Cart',
-            file: 'simulations/double-inverted-pendulum.html',
+            title: 'Double Pendulum under Control',
+            file: 'simulations/pendulum-control.html',
             field: 'control',
             stage: 2,
-            subject: 'control systems · classical mechanics',
-            summary: 'Two rods stand one on the other on a cart, hinged and free to fall. Only the cart, pushed along its rail, can hold them up. Flick the top, send the cart somewhere, or weaken the motor and slow the controller, and see when balancing stops being possible.',
-            equation: '\\mathbf D(\\boldsymbol\\theta)\\ddot{\\boldsymbol\\theta} + \\mathbf C(\\boldsymbol\\theta,\\dot{\\boldsymbol\\theta})\\dot{\\boldsymbol\\theta} + \\mathbf G(\\boldsymbol\\theta) = \\mathbf H u, \\qquad u = -\\mathbf K\\mathbf s',
-            model: 'double inverted pendulum on a cart with uniform rods (Bogdanov 2004), Lagrange’s equations',
-            method: 'RK4 at 1 ms in real time; LQR from the Riccati equation, sampled and saturated',
-            controls: 'flick, cart target, controller on/off, motor force limit, loop period, cost of force, masses and lengths',
-            concepts: ['inverted pendulum', 'feedback', 'LQR', 'Riccati equation', 'controllability', 'non-minimum phase', 'Lagrangian mechanics'],
+            subject: 'control systems · underactuated mechanics',
+            summary: 'A double pendulum hangs from a fixed pivot; a sprung telescopic strut ties its lower ball to a cart that a moving coil drives. The aim: pushing only the cart, bring the whole chain back to rest where you choose. Pull it anywhere and let go; full-state feedback designed by LQR brings it home.',
+            equation: '\\mathbf M(\\mathbf q)\\ddot{\\mathbf q} + \\mathbf C\\dot{\\mathbf q} + \\nabla V = (0, 0, F), \\qquad F = F^* - \\mathbf K(\\mathbf y - \\mathbf y^*)',
+            model: 'Lagrangian double pendulum coupled to a cart by a two-force strut with a spring and end stops; moving-coil actuator with a current limit',
+            method: 'RK4, solved and stored before playback; graded against a half-step run; energy books checked',
+            controls: 'controller on or off, target position r, LQR weights for swing, cart, speed and effort, strut pull and stiffness, current limit, masses, lengths, cart depth and coil constant; drag a ball or the cart',
+            concepts: ['underactuated control', 'Lagrangian mechanics', 'generalised coordinates', 'controllability', 'LQR', 'Riccati equation', 'normal modes', 'phase space', 'Lyapunov function', 'region of attraction'],
             has: ALL,
-            added: '2026-11-03'
+            added: '2026-10-24'
         },
     ];
 })();

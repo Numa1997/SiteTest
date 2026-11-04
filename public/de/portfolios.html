@@ -28,7 +28,7 @@
     </script>
   
     <script src="../scripts/i18n/strings-de.js"></script>
-    <meta name="translated-from" content="English public/portfolios.html, commit 0abbd73" />
+    <meta name="translated-from" content="English public/portfolios.html, commit 0abbd73+" />
   </head>
 
   <body>
@@ -331,27 +331,27 @@
         </div>
       </article>
 
-      <article class="proj" id="pendulum-control" aria-labelledby="pc-title">
+      <article class="proj" id="double-inverted-pendulum" aria-labelledby="dip-title">
         <div class="proj__band">
           <span class="proj__num">05</span>
           <p>Eine interaktive Studie · aus ersten Prinzipien · 2026</p>
-          <span>Lagrange-Mechanik · LQR · unteraktuierte Regelung</span>
+          <span>Lagrange-Mechanik · abgetastete LQR · Aufschwingen</span>
         </div>
         <div class="proj__body">
           <div class="proj__head">
             <div>
-              <h2 id="pc-title">Geregeltes Doppelpendel</h2>
-              <p class="proj__sub">Ein Doppelpendel ruhig halten, indem man nur einen Wagen schiebt</p>
-              <p class="proj__abs">Ein Doppelpendel hängt an einem festen Drehpunkt. Eine Teleskopstrebe mit einer Feder darin verbindet seine untere Kugel mit einem Wagen auf einer Schiene, und eine Spule am Wagen, die im Spalt einer Magnetschiene sitzt, schiebt den Wagen. Die Spule ist das Einzige, was man schieben kann, und doch muss sie drei Körper zur Ruhe bringen. Die Studie zeigt die Maschine Teil für Teil in Abbildungen, die aus einem 3D-Modell gerendert sind, leitet ihre Gleichungen Schritt für Schritt her, wobei jede Masse und jede Länge als Symbol stehen bleibt, und entwirft den Regler durch quadratische Ergänzung. Jeder Parameter ist ein Schieberegler, und der ganze Lauf wird in Ihrem Browser gelöst, bevor er abgespielt wird.</p>
+              <h2 id="dip-title">Zwei Stangen auf einem Wagen balancieren</h2>
+              <p class="proj__sub">Zwei übereinander gestapelte Stangen aufrecht halten, indem man nur den Wagen darunter schiebt</p>
+              <p class="proj__abs">Zwei Stangen stehen übereinander auf einem Wagen, gelenkig verbunden und frei, umzufallen; die einzige Hilfe ist ein Motor, der den Wagen entlang seiner Schiene schiebt. Die Studie leitet die Bewegungsgleichungen mit der Lagrange-Methode her, ermittelt, wie schnell die Stangen fallen, und baut den Balancierregler durch Minimierung von Kosten. Anschließend behandelt sie den Regler so, wie ein echter Computer arbeitet: Er schaut nur alle T<sub>s</sub> hin, deshalb leitet das Skript das exakte Modell zwischen zwei Blicken her und die Verstärkungen, die zur Taktzeit passen. Fallen die Stangen trotzdem, entzieht der Wagen ihnen Energie, plant ein Aufschwingen, führt es nach und übergibt dort, wo eine gesicherte Prüfung zeigt, dass der Balancierregler sicher gewinnt, auch wenn der Wagen noch rollt.</p>
               <div class="proj__actions">
-                <a class="proj__btn" href="../portfolios/pendulum-control/index.html">Die Simulation starten</a>
-                <a class="proj__btn proj__btn--ghost" href="../portfolios/pendulum-control/index.html#paper">Das Vorlesungsskript lesen</a>
+                <a class="proj__btn" href="simulations/double-inverted-pendulum.html">Die Simulation starten</a>
+                <a class="proj__btn proj__btn--ghost" href="simulations/double-inverted-pendulum.html#paper">Das Vorlesungsskript lesen</a>
               </div>
             </div>
             <dl class="proj__tally" aria-label="Kennzahlen">
-              <div><dt>3</dt><dd>Körper, mit einem einzigen Schub zur Ruhe gebracht</dd></div>
-              <div><dt>28</dt><dd>nummerierte Gleichungen, jeder Term hergeleitet</dd></div>
-              <div><dt>4</dt><dd>Abbildungen der Maschine, aus einem 3D-Modell gerendert</dd></div>
+              <div><dt>34</dt><dd>ms: die längste Taktzeit, die die kontinuierlichen Verstärkungen überstehen</dd></div>
+              <div><dt>260</dt><dd>ms: dasselbe mit Verstärkungen, die für die Taktzeit entworfen sind</dd></div>
+              <div><dt>40/40</dt><dd>zufällige Stürze, in Tests wieder aufgeschwungen und gefangen</dd></div>
             </dl>
           </div>
         </div>

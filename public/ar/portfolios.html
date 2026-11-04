@@ -29,7 +29,7 @@
   
     <link rel="stylesheet" href="../fonts/arabic.css" />
     <script src="../scripts/i18n/strings-ar.js"></script>
-    <meta name="translated-from" content="English public/portfolios.html, commit 0abbd73" />
+    <meta name="translated-from" content="English public/portfolios.html, commit 0abbd73+" />
   </head>
 
   <body>
@@ -332,27 +332,27 @@
         </div>
       </article>
 
-      <article class="proj" id="pendulum-control" aria-labelledby="pc-title">
+      <article class="proj" id="double-inverted-pendulum" aria-labelledby="dip-title">
         <div class="proj__band">
           <span class="proj__num">05</span>
           <p>دراسة تفاعلية · من المبادئ الأولى · 2026</p>
-          <span>ميكانيك لاغرانج · LQR · التحكّم الناقص التشغيل</span>
+          <span>ميكانيكا لاغرانج · LQR بالعيّنات · الأرجحة إلى الأعلى</span>
         </div>
         <div class="proj__body">
           <div class="proj__head">
             <div>
-              <h2 id="pc-title">النوّاس المزدوج تحت التحكّم</h2>
-              <p class="proj__sub">تثبيت نوّاس مزدوج بدفع عربة وحدها</p>
-              <p class="proj__abs">يتدلّى نوّاس مزدوج من محور ثابت. وتربط دعامةٌ تلسكوبية في داخلها نابض كرتَه السفلى بعربة على سكّة، ويدفع العربةَ ملفٌّ مثبّت عليها يقع في فجوة مسار مغناطيسي. الملفّ هو الشيء الوحيد الذي يمكن دفعه، ومع ذلك عليه أن يعيد ثلاثة أجسام إلى السكون. تعرض الدراسة الآلة جزءًا جزءًا في أشكال مُصيَّرة من نموذج ثلاثي الأبعاد، وتشتقّ معادلاتها خطوة خطوة مع إبقاء كل كتلة وكل طول رمزًا، وتصمّم المتحكّم بإكمال المربّع. كل معامل منزلق، ويُحلّ المسار كله في متصفّحك قبل أن يُعرض.</p>
+              <h2 id="dip-title">موازنة قضيبين على عربة</h2>
+              <p class="proj__sub">إمساك قضيبين مركّبين أحدهما فوق الآخر قائمَين بدفع العربة التي تحتهما وحدها</p>
+              <p class="proj__abs">قضيبان يقف أحدهما فوق الآخر على عربة، متّصلان بمفصلين وحرّان في السقوط؛ والعون الوحيد محرّك يدفع العربة على سكّتها. تشتقّ الدراسة معادلات الحركة بطريقة لاغرانج، وتحدّد سرعة سقوط القضيبين، وتبني متحكّم الموازنة بتقليل كلفة. ثمّ تعامل المتحكّم كما يعمل حاسوب حقيقي: فهو لا ينظر إلّا كلّ T<sub>s</sub>، ولذا تشتقّ المذكّرة النموذج الدقيق بين نظرتين والكسوب التي تلائم دور الحلقة. وإذا سقط القضيبان مع ذلك، تسحب العربة طاقتهما، وتخطّط أرجحة إلى الأعلى، وتتتبّعها، وتسلّم حيث يقول اختبار مضمون إنّ متحكّم الموازنة سيفوز يقينًا، حتّى والعربة لا تزال تتدحرج.</p>
               <div class="proj__actions">
-                <a class="proj__btn" href="../portfolios/pendulum-control/index.html">شغّل المحاكاة</a>
-                <a class="proj__btn proj__btn--ghost" href="../portfolios/pendulum-control/index.html#paper">اقرأ مذكّرات المحاضرة</a>
+                <a class="proj__btn" href="simulations/double-inverted-pendulum.html">شغّل المحاكاة</a>
+                <a class="proj__btn proj__btn--ghost" href="simulations/double-inverted-pendulum.html#paper">اقرأ مذكّرات المحاضرة</a>
               </div>
             </div>
             <dl class="proj__tally" aria-label="أرقام رئيسية">
-              <div><dt>3</dt><dd>أجسام تُعاد إلى السكون بدفعة واحدة</dd></div>
-              <div><dt>28</dt><dd>معادلة مرقّمة، كل حدّ فيها مشتقّ</dd></div>
-              <div><dt>4</dt><dd>أشكال للآلة مُصيَّرة من نموذج ثلاثي الأبعاد</dd></div>
+              <div><dt>34</dt><dd>ms: أطول دور للحلقة تصمد فيه الكسوب المتّصلة</dd></div>
+              <div><dt>260</dt><dd>ms: الشيء نفسه بكسوب مصمَّمة للدور</dd></div>
+              <div><dt>40/40</dt><dd>سقطات عشوائية أُعيدت بالأرجحة إلى الأعلى والتُقطت في الاختبارات</dd></div>
             </dl>
           </div>
         </div>
