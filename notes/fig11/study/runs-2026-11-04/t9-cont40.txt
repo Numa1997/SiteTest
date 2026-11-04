@@ -1,0 +1,11 @@
+2
+  0 NOT {"s0":[-0.23,-1.52,0.66,-0.17,-0.81,0.87],"mode":"calm","th":[-3,2.545],"umax":60,"xmax":2.81,"tcaught":null,"ms":[529,2906,3004,1776],"evs":"rescue,track,plan-end,rescue,late,late,noplan,track,plan-end,rescue,late,late,track,plan-end,rescue,track,plan-end,rescue,late,late"}
+  1 NOT {"s0":[-0.48,-1.01,2.33,-0.23,1.29,0.2],"mode":"track","th":[0.061,0.062],"umax":60,"xmax":3.84,"tcaught":null,"ms":[8885,445,1258,1848],"evs":"rescue,noplan,track,plan-end,rescue,late,late,track,plan-end,rescue,late,track,plan-end,rescue,late,late,track"}
+  2 NOT {"s0":[-0.18,-2.42,0.7,0.16,2.22,1.9],"mode":"track","th":[0.613,0.736],"umax":60,"xmax":5.23,"tcaught":null,"ms":[3049,1871,8304,1110],"evs":"rescue,late,late,track,plan-end,rescue,late,late,track,plan-end,rescue,late,late,noplan,track,plan-end,rescue,track"}
+  3 NOT {"s0":[0.44,-0.4,2.78,-0.24,1.52,-0.92],"mode":"calm","th":[-3.041,-3.066],"umax":60,"xmax":2.97,"tcaught":null,"ms":[6844,3075,2932],"evs":"rescue,late,late,noplan,track,plan-end,rescue,late,track,plan-end,rescue,late,late,track,plan-end,rescue,late,late"}
+  4 NOT {"s0":[0.13,-3.11,-1.15,0.05,0.77,-1.51],"mode":"calm","th":[-2.64,-2.739],"umax":60,"xmax":3.42,"tcaught":null,"ms":[7069,2198,2372,1656,450],"evs":"rescue,noplan,track,plan-end,rescue,track,plan-end,rescue,track,plan-end,rescue,track,plan-end,rescue,late,track,plan-end,rescue,late,late"}
+  5 NOT {"s0":[0.02,-0.76,1.5,-0.09,-1.01,2.86],"mode":"calm","th":[2.4,-3.094],"umax":60,"xmax":4.3,"tcaught":null,"ms":[8824,2508,525,2024],"evs":"rescue,noplan,track,plan-end,rescue,track,plan-end,rescue,late,track,plan-end,rescue,late,late,track,plan-end,rescue,noplan,late"}
+{"Ts":40} c=0: 0/6 balanced; time to catch median undefined s, max undefined s; successful plans took 445–8885 ms (median 2372)
+errors: none
+
+[exited with code 0]

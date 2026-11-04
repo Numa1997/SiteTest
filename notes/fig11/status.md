@@ -1,4 +1,22 @@
-# Fig. 11 · status and handoff (4 November 2026, 09:00)
+# Fig. 11 · status and handoff (4 November 2026, evening)
+
+## Done this evening (branch `fig11-sampled`, PR into main)
+
+- Browser tests rerun on the sampled-gain version (raw outputs in `study/runs-2026-11-04/`): 40/40 random, rolling and stopping; 8 machines × 6,
+  48/48 rolling and 48/48 stopping; continuous gains at 40 ms 0/6, c* = 0; `t7.cjs` en/de/ar at 1280/390: 0 errors, 0 KaTeX errors, 0 pending.
+- Lecture note: §7.2–7.5 with (16a)–(16h) and Table 1; §8 "The loop period" recomputed (`study/sec8b.js`: continuous gains rest to 34 ms,
+  designed to 260 ms; doubled 58/342.5 ms, halved 19/195 ms); §9 rewritten with (19a) and the argument for maps; §11.2 (23) with Δ; §11.3 new
+  tests; §11.4 "Arriving moving" with (25), (26) and the measured glide lean (`study/glide.js`); problems 12.5, 12.6; sources [9] Van Loan
+  (report PDF read from eCommons, bitstream of TR 77-298), [10] Guo et al. (eq. (3), (4) read), [11] Wolfram documentation (read).
+- Walkthrough 15 steps (walkcheck 65/65), German and Arabic (build.py --check clean), docs (fig11 doc, walk.md, inventory).
+
+## Still to do
+
+- Request 4, the swap (separate branch): this simulation to Projects, "Double Pendulum under Control" back to Simulations as Fig. 11, with DE/AR.
+
+---
+
+## Earlier handoff (4 November 2026, 09:00)
 
 Page: `public/simulations/double-inverted-pendulum.html` (double inverted pendulum on a cart). Live version: PR #77 (merged, `b917f12`):
 rescue after a fall (calm → planned swing-up → time-varying LQR → hand-over at W < 0.9 c*), lecture note §9–§11, walkthrough steps 10–12, DE/AR.

@@ -1,0 +1,5 @@
+playwright ok
+{} c=37: 40/40 balanced; time to catch median 11.5 s, max 23.1 s; successful plans took 369–8461 ms (median 1442)
+errors: none
+
+[exited with code 0]

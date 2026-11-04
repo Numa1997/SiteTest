@@ -1,0 +1,6 @@
+en/1280 {"kerr":0,"pend":0,"sw":1280,"cw":1280,"rc":"37","walk":1,"swing":"Hang down, swing up","after":{"mode":"balance","t":8.9,"state":"Balancing while rolling at −1.73 m/s, a moving equilibrium."}} errors:none
+en/390 {"kerr":0,"pend":0,"sw":390,"cw":390,"rc":"37","walk":1,"swing":"Hang down, swing up","after":{"mode":"balance","t":8.7,"state":"Balancing while rolling at −1.73 m/s, a moving equilibrium."}} errors:none
+de/1280 {"kerr":0,"pend":0,"sw":1280,"cw":1280,"rc":"37","walk":1,"swing":"Hängen lassen, aufschwingen","after":{"mode":"balance","t":9,"state":"Balanciert bei −1.73 m/s Fahrt, ein bewegtes Gleichgewicht."}} errors:none
+de/390 {"kerr":0,"pend":0,"sw":390,"cw":390,"rc":"37","walk":1,"swing":"Hängen lassen, aufschwingen","after":{"mode":"balance","t":8.7,"state":"Balanciert bei −1.73 m/s Fahrt, ein bewegtes Gleichgewicht."}} errors:none
+ar/1280 {"kerr":0,"pend":0,"sw":1280,"cw":1280,"rc":"37","walk":1,"swing":"أنزِلهما ثم أرجِحهما إلى الأعلى","after":{"mode":"balance","t":8.9,"state":"يوازن والعربة تسير بسرعة −1.73 m/s، توازن متحرّك."}} errors:none
+ar/390 {"kerr":0,"pend":0,"sw":390,"cw":390,"rc":"37","walk":1,"swing":"أنزِلهما ثم أرجِحهما إلى الأعلى","after":{"mode":"balance","t":8.7,"state":"يوازن والعربة تسير بسرعة −1.73 m/s، توازن متحرّك."}} errors:none

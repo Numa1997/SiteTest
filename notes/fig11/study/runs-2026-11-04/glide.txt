@@ -1,0 +1,3 @@
+e0=-1 m, v=0 m/s: largest lean lower 0.93°, upper 0.89°, largest force 0.5 N, reference within 1 cm after 13.28 s, end x 1.0000 m
+e0=-1 m, v=-1 m/s: largest lean lower 5.35°, upper 5.17°, largest force 2.7 N, reference within 1 cm after 15.6 s, end x 1.0000 m
+e0=-1 m, v=1 m/s: largest lean lower 3.54°, upper 3.43°, largest force 1.8 N, reference within 1 cm after 1.95 s, end x 1.0000 m
