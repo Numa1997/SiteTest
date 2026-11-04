@@ -1,7 +1,7 @@
 # Phyein Usul · Numa Koudsie's physics website — source and documentation
 
 This repository is the source of Numa Koudsie's physics website, **Phyein Usul**: ten interactive simulations, each with a
-lecture note and a data panel, four research projects, and a CV, in English, German and Arabic. One source, two places where it runs:
+lecture note and a data panel, five research projects, and a CV, in English, German and Arabic. One source, two places where it runs:
 
 | | Address | Built from | Doc |
 |---|---|---|---|
@@ -20,7 +20,7 @@ Beside the site's files, `docs/` explains every file and every script and how th
 | `public/scripts/` | Shared JavaScript: helpers, data store, data panel, folds, the catalog registry, and the walkthroughs in `walk/`. | [docs/scripts/](docs/scripts/) |
 | `public/styles/` | The eight stylesheets, and the right-to-left copies `*.rtl.css` that `tools/i18n/build.py` writes for the Arabic pages. | [docs/styles.md](docs/styles.md) |
 | `public/vendor/katex/`, `public/fonts/`, `public/images/` | The maths typesetter, the typefaces (Latin Modern, IBM Plex, Instrument Serif, all served by the site itself), the thumbnails in `images/sims/` and the logo `images/phyein-usul-mark.svg`. | [docs/assets.md](docs/assets.md) |
-| `public/portfolios/` | The four research projects, each generated from its source in `portfolios-src/` and never edited by hand: Droplet Collection, Rotor Pendula, the Hydraulic Press Study and Iron, Cotton and the Head (the last two also in German and Arabic, `de.html`, `ar.html`). | [docs/portfolios.md](docs/portfolios.md) |
+| `public/portfolios/` | Four of the five research projects, each generated from its source in `portfolios-src/` and never edited by hand: Droplet Collection, Rotor Pendula, the Hydraulic Press Study and Iron, Cotton and the Head (the last two also in German and Arabic, `de.html`, `ar.html`). The fifth, Balancing Two Rods on a Cart, is written by hand like a simulation page and lives at `public/simulations/double-inverted-pendulum.html`, so that the translation build makes its German and Arabic pages. | [docs/portfolios.md](docs/portfolios.md) |
 | `portfolios-src/droplets/`, `portfolios-src/rotor-pendula/` | The sources of Droplet Collection and Rotor Pendula: texts, models, generators and checks. Not served. | [docs/portfolios.md](docs/portfolios.md) |
 | `portfolios-src/hydraulics/` | The Hydraulic Press Study's source: its three pages, the textbook's sources, the generator and its checks. Not served. | [docs/portfolios.md](docs/portfolios.md#the-hydraulic-press-study-hydraulics) |
 | `portfolios-src/impact/` | Source of Iron, Cotton and the Head: the model, the page template, the English, German and Arabic texts, the generator and its checks. Not served. | [docs/portfolios.md](docs/portfolios.md#iron-cotton-and-the-head-impact) |
@@ -56,7 +56,7 @@ Beside the site's files, `docs/` explains every file and every script and how th
 | 8 | Draw & Decompose | [`draw-decompose.html`](public/simulations/draw-decompose.html) | [fig08-draw-decompose.md](docs/simulations/fig08-draw-decompose.md) |
 | 9 | Driven Oscillator | [`driven-oscillator.html`](public/simulations/driven-oscillator.html) | [fig09-driven-oscillator.md](docs/simulations/fig09-driven-oscillator.md) |
 | 10 | Wind Turbine Control | [`wind-turbine.html`](public/simulations/wind-turbine.html) | [fig10-wind-turbine.md](docs/simulations/fig10-wind-turbine.md) |
-| 11 | Double Pendulum under Control | [`pendulum-control.html`](public/portfolios/pendulum-control/index.html) | [fig11-pendulum-control.md](docs/simulations/fig11-pendulum-control.md) |
+| 11 | Double Pendulum under Control | [`pendulum-control.html`](public/simulations/pendulum-control.html) | [fig11-pendulum-control.md](docs/simulations/fig11-pendulum-control.md) |
 
 ## Running the site on your own computer
 
