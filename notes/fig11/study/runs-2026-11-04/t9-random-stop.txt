@@ -1,0 +1,5 @@
+4
+{} c=37: 40/40 balanced; time to catch median 0 s, max 11.5 s; successful plans took 374–8862 ms (median 1509)
+errors: none
+
+[exited with code 0]

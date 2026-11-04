@@ -1,0 +1,12 @@
+default (cont): rests up to 34 ms; first not at rest 34.5 ms: {"late":0.020185763961637043,"um":60}
+lengths doubled (cont): rests up to 58 ms; first not at rest 58.5 ms: {"late":0.02078738766214798,"um":60}
+lengths halved (cont): rests up to 19 ms; first not at rest 19.5 ms: {"late":0.02472911052103162,"um":60}
+default, continuous gains at 40 ms: {"late":0.08138424921970995,"um":60}
+default, continuous gains at 60 ms: {"lost":0.79}
+default, continuous gains at 80 ms: {"lost":0.348}
+default, designed gains at 80 ms: {"late":1.6194902064163577e-19,"um":4.707883590755958e-18}
+default (designed): rests up to 260 ms; first not at rest 262.5 ms: {"lost":2.35}
+lengths doubled (designed): rests up to 342.5 ms; first not at rest 345 ms: {"lost":3.929}
+lengths halved (designed): rests up to 195 ms; first not at rest 197.5 ms: {"lost":1.555}
+
+[exited with code 0]

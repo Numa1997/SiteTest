@@ -15,16 +15,37 @@ The old Fig. 11 (Double Pendulum under Control) moved to Projects the same day: 
 A double inverted pendulum on a cart, with uniform rods: the model of Bogdanov (2004, OGI report CSE-04-006), written out in
 Moysis (2016). The cart is pushed by a motor force `u`, clipped to `±u_max`; the hinges are free. The page integrates the full nonlinear
 equations `D(θ) θ̈ + C(θ, θ̇) θ̇ + G(θ) = H u` with RK4 at a fixed 1 ms step in real time (no solve-then-play and no data panel: Numa asked for a small page). Since 3 November 2026, late evening, it has a walkthrough,
-`public/scripts/walk/dipc.js` ( equation beside the page's code, `Sim.live()` for the Now column; `node notes/walkcheck.cjs`
-finds all 40 quoted lines; twelve steps since 4 November 2026), and the note writes out all three Lagrange rows (8a), (8), (8b), the linearisation to first order, the
+`public/scripts/walk/dipc.js` (equation beside the page's code, `Sim.live()` for the Now column; `node notes/walkcheck.cjs`
+finds all 65 quoted lines; fifteen steps since 4 November 2026, evening), and the note writes out all three Lagrange rows (8a), (8), (8b), the linearisation to first order, the
 reduced fall-rate problem, the sign-function solution of the Riccati equation, the flick impulse (17) and the RK4 step (18).
 
 ## Controller
 
 LQR on the linearisation at the upright rest, `Q = diag(50, 50, 50, 20, 700, 700)` on `(x, θ1, θ2, ẋ, θ̇1, θ̇2)` (Bogdanov's weights with the
-`x` weight raised from 5 to 50), `R = ρ` from the slider (10^−2 … 10^2). The Riccati equation is solved by the sign function of the
-Hamiltonian matrix (same routine as the Projects page of the old Fig. 11) every time a slider changes. The controller is sampled every `T_s`
-and holds `u` between samples.
+`x` weight raised from 5 to 50), `R = ρ` from the slider (10^−2 … 10^2). The controller is sampled every `T_s` and holds `u` between samples
+(zero-order hold). Two designs, chosen by the switch **Gains designed for** (`#gmode`, variable `gmode`):
+
+- **The loop period** (default, since 4 November 2026): `sampledModel(A, B, R, T)` builds the exact zero-order-hold model Φ = e^{AT}, Γ = ∫e^{Aτ}dτ B
+  from one exponential of the 7 × 7 matrix [[A, B], [0, 0]]T (note (16a), (16b)), and the exact cost of one period Q_d, N_d, R_d from one exponential of
+  the 14 × 14 matrix [[−Āᵀ, Q̄], [0, Ā]]T, integral = F22ᵀF12 (Van Loan's identity, (16f)); `expm()` is scaling and squaring with 18 Taylor terms.
+  `dlqr()` solves the discrete Riccati equation with cross term (16g) by the structure-preserving doubling algorithm (Guo, Chu, Liang, Lin,
+  arXiv:2005.08288, eq. (4), read) and returns K_d of (16h) and P.
+- **Continuous time**: `lqr()`, the continuous Riccati equation (15) by the sign function of the Hamiltonian matrix, whatever `T_s` is.
+
+Readout **Largest factor per look |λ|** (`r-lam`): spectral radius of Φ − ΓK by `specRad()` (‖Mⁿ‖^{1/n}, n = 2^40, repeated squaring), stored once
+in `lamNow`; the settling time beside it is −T_s/ln|λ|.
+
+Checked (4 November 2026): K_d equals Wolfram `DiscreteLQRegulatorGains[StateSpaceModel[{A, B}], {Q, {{1}}}, T]` to 8e−12 relative at 10 ms
+(5.322, −408.009, 493.663, 11.556, −13.147, 76.277) and 1e−13 at 40 ms (2.528, −251.393, 279.000, 5.540, −10.590, 41.286); the JavaScript in Node
+equals the earlier scipy run (`notes/fig11/study/samp.js`) to 2e−13. In Wolfram: (16b) and (16f) against direct numerical integrals to 4e−16 and
+8e−16; the completed square of (16g) exact on random matrices; the doubling iterate H_k equals the 2^k-period recursion for k ≤ 5 to 1e−15;
+P − A_clᵀPA_cl equals the period cost [I; −K]ᵀ M [I; −K] to 2e−15. With continuous gains the sampled loop flips (eigenvalue through −1) just
+below 34.4 ms; the one-mode model gives T* = (1/σ) ln((γ+σ)/(γ−σ)) = 38 ms (σ = 10.39, γ = 53.0 s⁻¹). Table 1 of the note lists |λ| and gains
+from 1 to 260 ms.
+
+The note's §8 numbers (`notes/fig11/study/sec8b.js`, from θ1 = 2°, θ2 = −1°, 60 N, at rest = largest angle in the last 10 s of 60 s below 1 mrad):
+continuous gains rest up to 34 ms (not at 34.5), lengths doubled 58 ms, halved 19 ms; at 40 ms a limit cycle ±4.9°, ±60 N, lost from 60 ms;
+designed gains rest up to 260 ms (lost at 262.5), doubled 342.5 ms, halved 195 ms; at 80 ms designed gains rest exactly.
 
 ## Rescue (4 November 2026)
 
@@ -34,11 +55,32 @@ Numa: "as soon as the arms go down, it stops being able to balance it" and "what
 - **calm**: cart acceleration `a = 2𝒫 − 4(x − x_c) − 4ẋ`, `|a| ≤ 8 m/s²`, `𝒫 = d2 cos θ1 θ̇1 + d3 cos θ2 θ̇2`; since `dE_p/dt = −a𝒫` (verified symbolically in Mathematica, equals Åström–Furuta's eq. 3 for one rod) this drains the rods' energy. `uFor()` converts `a` into the motor force via rows 2–3 then row 1 of (9).
 - **track**: a plan made by multiple shooting (`PlanJob`: 0.1 s pieces, 8 RK4 substeps each, Levenberg–Marquardt on the residuals (22), weights 100/30/20/1/0.02/0.02, rail ±1.5 m), followed by a time-varying LQR (23)–(24) on a 10 ms grid with the balancer's `P` as final cost. Plans are made 8 ms per frame for the state predicted `hp` seconds ahead under calming (3 s, ×1.5 after a late plan, at most 8 s); when the clock arrives the state is checked against the prediction to 1e−6. Hand-over to the balancer at `W < 0.9 c*`; at the end of a plan the balancer gets its chance and the 4 s check decides.
 
-`catchLevel()` (certified catch level `c*`, panel readout): `dW/dt` of the clipped nonlinear loop at 8000 random points of the surface `W = c` and, for every fourth direction, on five surfaces inside it (the Lyapunov argument needs `dW/dt < 0` in the whole ellipsoid, not only on its surface), a gradient climb from the worst 12 (ranked by `dW/dt / W`), bisection; about 0.7 s in Chromium. Default machine: 31.4 on the page; Mathematica `FindMaximum` brackets 30.56–30.69, the same at 30, 60 and 200 N. Random sampling alone gave about 140 (wrong: the bad patch is thin, near upright with both rods leaning about 4° the same way).
+**Certificate for the sampled loop (since 4 November 2026).** `catchGen()` (a generator run between frames by `think()`; while it runs `cLevel = null`
+and the supervisor skips the W checks) computes the largest c with W(F(s)) < W(s) for all 0 < W(s) ≤ c, note (19a), where F is one loop period of
+the true equations with u = sat(−Ks) held: 1500 random directions on four shells (W = c, 0.7c, 0.4c, 0.15c), climbs from the three weakest
+directions of the linear fall per look (eigenvectors of P − A_clᵀPA_cl in sphere coordinates, `jacobi()`) both ways on every shell, and from the
+worst six; 13 bisection steps in [1, 1e4]. Default machine: 31.6 at 1 ms, 37.3 at 10 ms, 116 at 40 ms, 144 at 60 ms (a longer Node.js search: 36.9 and
+114); continuous gains at 40 ms: 0; 0.2–0.35 s in Chromium. The earlier continuous-time test, described next, is kept in the note as §9's first step.
+
+The earlier `catchLevel()` (replaced by `catchGen()`): `dW/dt` of the clipped nonlinear loop at 8000 random points of the surface `W = c` and, for every fourth direction, on five surfaces inside it (the Lyapunov argument needs `dW/dt < 0` in the whole ellipsoid, not only on its surface), a gradient climb from the worst 12 (ranked by `dW/dt / W`), bisection; about 0.7 s in Chromium. Default machine: 31.4 on the page; Mathematica `FindMaximum` brackets 30.56–30.69, the same at 30, 60 and 200 N. Random sampling alone gave about 140 (wrong: the bad patch is thin, near upright with both rods leaning about 4° the same way).
 
 Buttons: *Hang down, swing up* (`swingUp()`), *If the rods fall: Swing back up / Let them fall* (`#resc`).
 
-Tests (headless Chromium, frame-by-frame driver: 1/60 s of simulation and 8 ms of planning per frame, 4 November 2026): 40 of 40 random states (any angles, rates ±3 rad/s, cart ±0.5 m/s) balanced within 60 s at 60 N; six other machines (m0 = 3 kg; m1 = 1, m2 = 1.5 kg; L = 1/1.2 m; L = 0.3/0.4 m; u_max = 30 and 120 N) 36 of 36; with T_s = 40 ms 0 of 6, because the sampled balancer itself loses above about 35 ms (§8) and the certificate assumes continuous action, as §9 now says. Working notes with every Wolfram check: `notes/fig11/checked.html`.
+## Moving equilibria (4 November 2026)
+
+Numa: "a steady state where it moves at a constant velocity"; "every time you plan a trajectory where you … arrive at a non zero velocity …, you force
+yourself to decelerate later". The equations of motion contain ẍ but neither x nor ẋ, so every s* = (x0 + vt, 0, 0, v, 0, 0), u* = 0 is an equilibrium
+(note (25)). The balancer measures its error from a reference `ref` of this family: `fixed` (a place, the target buttons), `cruise` (x0 + vt, the
+speed at the hand-over) or `glide` (critically damped return to a resting target, ω = `GLIDE` = 0.5 s⁻¹, note (26), closed form in `refXV(t)`);
+`err(st, t)`, `Wof(st, t)`, `lqrU(st, t)` use it. Switch **After a swing-up: Keep rolling | Stop the cart** (`#after`, `rolling`): with Keep rolling
+(default) the planner's terminal speed weight `lim.vw` is 0, the hand-over tests `Wred()` (W with the x and ẋ errors zero) and the reference becomes a
+cruise at the cart's speed; with Stop the cart `lim.vw = 0.3` as before. A target button pressed while the reference moves starts a glide; pressed at
+rest it steps the target. Measured (`notes/fig11/study/exp.js`, outputs `exp-{A,B}-{calm,raw}.txt`): from 25 calmed starts ∫u² 944 → 844 N² s
+(−11 %), total speed change 22.1 → 19.4 m/s (−12 %), same peak force; from 40 raw starts no gain (31.2 m/s both, ∫u² +6 %). Glide lean, measured
+(`notes/fig11/study/glide.js`, page equations, 10 ms gains): 0.9° from 1 m at rest, 5.3° when also moving away at 1 m/s (tangent rule 1.5°
+and 7.3°). The tracking LQR (23) now uses the stage cost Q·Δ, ρ·Δ with Δ = 10 ms (rectangle rule), so its units match the final cost P.
+
+Tests (headless Chromium, frame-by-frame driver `notes/fig11/study/t9.cjs`: 1/60 s of simulation and 8 ms of planning per frame, rerun 4 November 2026 evening on the sampled-gain version; raw outputs in `notes/fig11/study/runs-2026-11-04/`): 40 of 40 random states (any angles, rates ±3 rad/s, cart ±0.5 m/s) balanced within 60 s at 60 N, both with Keep rolling (c = 37; plans 0.37–8.5 s, median 1.4 s) and with Stop the cart (plans 0.37–8.9 s); eight other machines (T_s = 40 and 60 ms with designed gains; m0 = 3 kg; m1 = 1, m2 = 1.5 kg; L = 1/1.2 m; L = 0.3/0.4 m; u_max = 30 and 120 N), six random states each, 48 of 48 with Keep rolling and 48 of 48 with Stop the cart (cart within ±1.54 m when stopping, 6–200 m away when rolling); continuous gains at T_s = 40 ms: 0 of 6, c = 0. `t7.cjs` in English, German and Arabic at 1280 and 390 px: no page errors, 0 KaTeX errors, 0 untranslated pieces, no sideways scroll, swing-up from hanging caught in about 9 s. Before 4 November evening (continuous gains at every T_s): 36 of 36 machines, 0 of 6 at 40 ms. Working notes with every Wolfram check: `notes/fig11/checked.html`.
 
 ## Interaction
 
