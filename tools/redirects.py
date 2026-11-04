@@ -25,7 +25,10 @@ OUT = PUBLIC / '_redirects'
 # Pages that moved: (old address without .html, new address). Each old address, with and without .html and in every language,
 # is sent on with a 301, so links and bookmarks from before the move keep working.
 MOVED = [
-    ('/simulations/pendulum-control', '/portfolios/pendulum-control/'),   # Fig. 11 became a project on 3 November 2026
+    ('/portfolios/pendulum-control', '/simulations/pendulum-control.html'),   # Fig. 11 was a project from 3 to 4 November 2026
+]
+EXACT = [   # addresses of a removed folder page, answered with a 301 too
+    ('/portfolios/pendulum-control/index.html', '/simulations/pendulum-control.html'),
 ]
 
 
@@ -36,7 +39,10 @@ def rules():
            '/ /index.html 200']
     for old, new in MOVED:
         for lang in ('', '/de', '/ar'):
-            out += [f'{q(lang + old)}.html {q(new)} 301', f'{q(lang + old)} {q(new)} 301', f'{q(lang + old)}/ {q(new)} 301']
+            to = lang + new if (PUBLIC / (lang + new).lstrip('/')).exists() else new   # the same language when that page exists
+            out += [f'{q(lang + old)}.html {q(to)} 301', f'{q(lang + old)} {q(to)} 301', f'{q(lang + old)}/ {q(to)} 301']
+    for old, new in EXACT:
+        out += [f'{q(old)} {q(new)} 301']
     for f in sorted(PUBLIC.rglob('*.html')):
         rel = '/' + f.relative_to(PUBLIC).as_posix()
         if f.name == 'index.html':

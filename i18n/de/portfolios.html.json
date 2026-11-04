@@ -3,6 +3,10 @@
   "src": "How it is checked",
   "tr": "Wie es geprüft wird"
  },
+ "0405344f6bdb": {
+  "src": "Lagrangian mechanics · sampled-data LQR · swing-up",
+  "tr": "Lagrange-Mechanik · abgetastete LQR · Aufschwingen"
+ },
  "04e22db50e7d": {
   "src": "Why an iron ball hurts and a cotton ball of the same mass does not",
   "tr": "Warum eine Eisenkugel wehtut und eine Baumwollkugel derselben Masse nicht"
@@ -50,6 +54,10 @@
  "0f7b5d8dd0d3": {
   "src": "The 18 mountings, one rod against two, chaos, and the sensor.",
   "tr": "Die 18 Befestigungen, eine Stange gegen zwei, Chaos und der Sensor."
+ },
+ "108230a47802": {
+  "src": "Balancing Two Rods on a Cart",
+  "tr": "Zwei Stangen auf einem Wagen balancieren"
  },
  "10ec1a05a8ed": {
   "src": "<b>Chaos does not help.</b> Every start, at every wind and brake tried, ends on one regular swing: the centrifugal spring is 3 to 9 times stronger than gravity’s push, and resonance is out of reach.",
@@ -106,6 +114,10 @@
  "19b1098bb9da": {
   "src": "impact mechanics · interatomic bonds · fibre networks",
   "tr": "Stoßmechanik · interatomare Bindungen · Fasernetzwerke"
+ },
+ "1a6f3bda03d7": {
+  "src": "ms: the same with gains designed for the period",
+  "tr": "ms: dasselbe mit Verstärkungen, die für die Taktzeit entworfen sind"
  },
  "1b5dbf161208": {
   "src": "The question, the warm cloud in two pictures, and the droplets falling.",
@@ -287,6 +299,10 @@
   "src": "An interactive study · English, German and Arabic · 2026",
   "tr": "Eine interaktive Studie · Englisch, Deutsch und Arabisch · 2026"
  },
+ "5075d8fcd395": {
+  "src": "random falls swung back up and caught in tests",
+  "tr": "zufällige Stürze, in Tests wieder aufgeschwungen und gefangen"
+ },
  "508340303282": {
   "src": "<b>Chaos does not help.</b> 2 of 54 scanned double pendula are chaotic; at matched forcing the regular orbit harvests about 0.379 W, the chaotic one about 0.24–0.25 W. The catch is force, not power: a fast rotor’s pivot sits in 18–215 g, beyond a ±8 g accelerometer.",
   "tr": "<b>Chaos hilft nicht.</b> 2 von 54 untersuchten Doppelpendeln sind chaotisch; bei gleicher Anregung erntet die reguläre Bahn etwa 0.379 W, die chaotische etwa 0.24–0.25 W. Der Haken ist die Kraft, nicht die Leistung: Bei einem schnellen Rotor liegt der Drehpunkt bei 18–215 g, jenseits eines Beschleunigungssensors für ±8 g."
@@ -350,6 +366,10 @@
  "5b6825d3c67a": {
   "src": "Site",
   "tr": "Website"
+ },
+ "5b911a0572c0": {
+  "src": "ms: the longest loop period the continuous gains survive",
+  "tr": "ms: die längste Taktzeit, die die kontinuierlichen Verstärkungen überstehen"
  },
  "5ba7d18d1c32": {
   "src": "<span class=\"psub__n\">1.1</span>The cloud and the three questions",
@@ -430,6 +450,10 @@
  "6f8e259f02f0": {
   "src": "rotating mechanics · energy harvesting · nonlinear dynamics",
   "tr": "Mechanik rotierender Systeme · Energy Harvesting · nichtlineare Dynamik"
+ },
+ "6fe138745715": {
+  "src": "Holding two stacked rods upright by pushing only the cart below them",
+  "tr": "Zwei übereinander gestapelte Stangen aufrecht halten, indem man nur den Wagen darunter schiebt"
  },
  "702b201c4b40": {
   "src": "Phyein Usul",
@@ -578,6 +602,10 @@
  "91a8ffbb25c7": {
   "src": "Nine chapters from the energy of moving air to a real generator, written for readers new to wind turbines, with warm-ups and problems: 36 numbered equations and eight figures, theory set against the full solution, every number computed by the models.",
   "tr": "Neun Kapitel von der Energie bewegter Luft bis zu einem realen Generator, geschrieben für Leser, die Windturbinen noch nicht kennen, mit Aufwärmaufgaben und Übungsaufgaben: 36 nummerierte Gleichungen und acht Abbildungen, die Theorie gegen die vollständige Lösung gestellt, jede Zahl von den Modellen berechnet."
+ },
+ "9249b9f72537": {
+  "src": "Two rods stand one on the other on a cart, hinged and free to fall; the only help is a motor that pushes the cart along its rail. The study derives the equations of motion with Lagrange’s method, finds how fast the rods fall, and builds the balancer by minimising a cost. It then treats the controller as a real computer does: it looks only every T<sub>s</sub>, so the note derives the exact model between two looks and the gains that fit the loop period. When the rods fall anyway, the cart drains their energy, plans a swing-up, tracks it and hands over where a certified test says the balancer is sure to win, even with the cart still rolling.",
+  "tr": "Zwei Stangen stehen übereinander auf einem Wagen, gelenkig verbunden und frei, umzufallen; die einzige Hilfe ist ein Motor, der den Wagen entlang seiner Schiene schiebt. Die Studie leitet die Bewegungsgleichungen mit der Lagrange-Methode her, ermittelt, wie schnell die Stangen fallen, und baut den Balancierregler durch Minimierung von Kosten. Anschließend behandelt sie den Regler so, wie ein echter Computer arbeitet: Er schaut nur alle T<sub>s</sub> hin, deshalb leitet das Skript das exakte Modell zwischen zwei Blicken her und die Verstärkungen, die zur Taktzeit passen. Fallen die Stangen trotzdem, entzieht der Wagen ihnen Energie, plant ein Aufschwingen, führt es nach und übergibt dort, wo eine gesicherte Prüfung zeigt, dass der Balancierregler sicher gewinnt, auch wenn der Wagen noch rollt."
  },
  "935fb231e528": {
   "src": "<span class=\"psub__n\">2.3</span>Four figures from the study",

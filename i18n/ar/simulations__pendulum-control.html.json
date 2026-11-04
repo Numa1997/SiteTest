@@ -1,7 +1,23 @@
 {
+ "00335fbf2591": {
+  "src": "Nothing is computed while you watch. When you press Solve, release the flag or let go of the chain, the page reads every slider, designs the controller, and integrates (15) with the feedback (23) by the classical fourth-order Runge–Kutta method, step \\(h = 0.5\\ \\mathrm{ms}\\), for 30 s: 60 000 steps. The force is evaluated at all four stages of each step, as a continuous controller would act. Every twentieth state, one every 10 ms, is stored with the force, the current, the strut's pull and length, and the energy; the animation then plays the stored samples back. Moving a slider of the machine marks the stored run as stale; the picture keeps the old machine until you solve again.",
+  "tr": "لا يُحسب شيء وأنت تشاهد. حين تضغط احسب، أو تُفلت الراية أو السلسلة، تقرأ الصفحة كلّ منزلق، وتصمّم المتحكّم، وتكامل (15) مع التغذية الراجعة (23) بطريقة رونغه–كوتا الكلاسيكية من الرتبة الرابعة، بخطوة \\(h = 0.5\\ \\mathrm{ms}\\)، مدّة 30 s: 60 000 خطوة. وتُحسب القوّة في المراحل الأربع لكلّ خطوة، كما يعمل متحكّم متّصل. وتُخزَّن كلّ حالة عشرين، واحدة كلّ 10 ms، مع القوّة والتيار وشدّ الدعامة وطولها والطاقة؛ ثمّ يعرض التحريك العيّنات المخزَّنة. وتحريك منزلق من منزلقات الآلة يعلّم الجريان المخزَّن بأنّه قديم؛ وتبقي الصورة الآلة القديمة حتّى تحسب من جديد."
+ },
+ "00661c1cabc6": {
+  "src": "Both joints let the strut turn freely in the plane of the swing; the ball in the rod end also lets it tilt a little out of that plane, so that a slightly bent machine does not bind. Neither joint can hold a twist. That fixes the direction of the strut's force. Hold a light stick between two pins: if the pins pushed on it along two different lines, the two forces would form a couple and spin the stick, and a stick with no mass and no moment of inertia would have to spin infinitely fast. So the two end forces of a massless strut are equal, opposite, and along the line through the two joint centres. Engineers call such a part a <i>two-force member</i>. Call \\(N\\) the pull it carries, positive when it pulls, and \\(\\ell\\) its length, the distance from the cart's pin to the ball's centre.",
+  "tr": "يدع المفصلان كلاهما الدعامة تدور بحرّية في مستوى التأرجح؛ وتدعها الكرة في رأس القضيب أيضًا تميل قليلًا خارج هذا المستوى، فلا تنحشر آلة منحنية قليلًا. ولا يستطيع أيّ من المفصلين أن يمسك عزم لَيّ. وهذا يحدّد اتّجاه قوّة الدعامة. أمسك عصا خفيفة بين دبوسين: لو دفعها الدبوسان على خطّين مختلفين لشكّلت القوّتان مزدوجة ولأدارتا العصا، ولوجب على عصا بلا كتلة ولا عزم عطالة أن تدور بسرعة لا نهائية. لذا فالقوّتان الطرفيتان لدعامة عديمة الكتلة متساويتان ومتعاكستان، وتقعان على الخطّ المارّ بمركزي المفصلين. ويسمّي المهندسون مثل هذا الجزء <i>عضوًا ثنائيّ القوّة</i>. لنسمِّ \\(N\\) الشدّ الذي تحمله، موجبًا حين تشدّ، و\\(\\ell\\) طولها، أي المسافة من مسمار العربة إلى مركز الكرة."
+ },
  "006e12764e24": {
   "src": "The page sets the spring by the pull it carries when the chain hangs straight over the cart, \\(N_0\\), and by its stiffness \\(k_s\\); the rest length follows, \\(L_0 = \\ell_0 - N_0/k_s\\). With the defaults, \\(N_0 = 3\\ \\mathrm{N}\\) and \\(k_s = 100\\ \\mathrm{N/m}\\), so \\(L_0 = 0.62\\ \\mathrm{m}\\): at rest the tubes are pulled 3 cm past the spring's natural length.",
   "tr": "تضبط الصفحة النابض بالشدّ الذي يحمله حين تتدلّى السلسلة فوق العربة تمامًا، \\(N_0\\)، وبصلابته \\(k_s\\)؛ ويترتّب على ذلك الطول الطبيعي، \\(L_0 = \\ell_0 - N_0/k_s\\). وبالقيم الافتراضية، \\(N_0 = 3\\ \\mathrm{N}\\) و\\(k_s = 100\\ \\mathrm{N/m}\\)، يكون \\(L_0 = 0.62\\ \\mathrm{m}\\): ففي السكون يكون الأنبوبان مسحوبين 3 cm بعد الطول الطبيعي للنابض."
+ },
+ "027969c88a63": {
+  "src": "Hold a heavy lamp that hangs from the ceiling on two links, not by the lamp but by a stretched cord tied to its bottom, and you can only steer it by moving the far end of the cord. This machine is that situation, built so that every part can be named and seen.",
+  "tr": "أمسك مصباحًا ثقيلًا معلّقًا من السقف بحلقتين، لا من المصباح نفسه بل من حبل مشدود مربوط بأسفله، فلن تستطيع توجيهه إلّا بتحريك الطرف البعيد من الحبل. هذه الآلة هي تلك الحال، مبنيّة بحيث يمكن تسمية كلّ جزء منها ورؤيته."
+ },
+ "027baeceff0b": {
+  "src": "<span class=\"pfig__n\">Figure 3</span>The strut lying on its side, the front half of its tubes cut away, at its resting length \\(\\ell_0 = H - l_1 - l_2\\) between the cart's pin and the ball's centre. <b>1</b> rod end on the cart's pin; <b>2</b> bottom plug of the outer tube: the spring's lower anchor and the lower stop; <b>3</b> spring; <b>4</b> collar on the inner tube; <b>5</b> inner tube, stainless steel; <b>6</b> outer tube, aluminium; <b>7</b> bronze guide bushing in the mouth of the outer tube: the upper stop; <b>8</b> plug inside the inner tube: the spring's upper anchor; <b>9</b> fork; <b>10</b> axle; <b>11</b> ball 2.",
+  "tr": "<span class=\"pfig__n\">الشكل 3</span>الدعامة ملقاة على جانبها، وقد قُطع النصف الأمامي من أنبوبيها، بطولها في السكون \\(\\ell_0 = H - l_1 - l_2\\) بين مسمار العربة ومركز الكرة. <b>1</b> رأس القضيب على مسمار العربة؛ <b>2</b> السدادة السفلى للأنبوب الخارجي: مرساة النابض السفلى والموقف السفلي؛ <b>3</b> النابض؛ <b>4</b> الطوق على الأنبوب الداخلي؛ <b>5</b> الأنبوب الداخلي، فولاذ لا يصدأ؛ <b>6</b> الأنبوب الخارجي، ألومنيوم؛ <b>7</b> جلبة توجيه برونزية في فم الأنبوب الخارجي: الموقف العلوي؛ <b>8</b> سدادة داخل الأنبوب الداخلي: مرساة النابض العليا؛ <b>9</b> الشوكة؛ <b>10</b> المحور؛ <b>11</b> الكرة 2."
  },
  "02fe6c1466f2": {
   "src": "<span>6</span>Small swings: the guitar string&nbsp;★",
@@ -11,21 +27,65 @@
   "src": "<span>7</span>Can one push reach everything?&nbsp;★",
   "tr": "<span>7</span>هل تبلغ دفعة واحدة كلّ شيء؟&nbsp;★"
  },
+ "04c4df802899": {
+  "src": "With \\(F = 0\\), the cart's equation (14) with (11) says \\(N\\,(x_2 - X)/\\ell = 0\\). A product is zero when either factor is, so there are two cases.",
+  "tr": "مع \\(F = 0\\) تقول معادلة العربة (14) مع (11) \\(N\\,(x_2 - X)/\\ell = 0\\). والجداء ينعدم حين ينعدم أحد عامليه، فهناك حالتان."
+ },
  "05a4eb407f17": {
   "src": "The balls are points and the rods, tubes and spring are massless. Real rods have moments of inertia, and a strut with mass carries sideways forces and swings on its own.",
   "tr": "الكرتان نقطتان، والقضبان والأنابيب والنابض عديمة الكتلة. للقضبان الحقيقية عزوم عطالة، والدعامة ذات الكتلة تحمل قوى جانبية وتتأرجح من تلقاء نفسها."
+ },
+ "0645869c2b7c": {
+  "src": "When the chain hangs straight down over the cart, \\(a = 0\\) and \\(b = H - l_1 - l_2\\), so the strut is \\(\\ell_0 = H - l_1 - l_2\\) long. The page keeps \\(\\ell_0\\) between the stops: moving \\(l_1\\), \\(l_2\\) or \\(H\\) moves the others' limits with it.",
+  "tr": "حين تتدلّى السلسلة مستقيمة إلى الأسفل فوق العربة يكون \\(a = 0\\) و\\(b = H - l_1 - l_2\\)، فطول الدعامة \\(\\ell_0 = H - l_1 - l_2\\). وتُبقي الصفحة \\(\\ell_0\\) بين الموقفين: فتحريك \\(l_1\\) أو \\(l_2\\) أو \\(H\\) يحرّك حدود الأخرى معه."
  },
  "0675d4c1ea15": {
   "src": "Write the state as \\(\\mathbf y = (\\theta_1, \\theta_2, X, \\dot\\theta_1, \\dot\\theta_2, \\dot X)\\) and its distance from a rest as \\(\\tilde{\\mathbf y} = \\mathbf y - \\mathbf y^*\\), with \\(\\tilde F = F - F^*\\). For small \\(\\tilde{\\mathbf y}\\), (5) becomes a linear system,",
   "tr": "نكتب الحالة \\(\\mathbf y = (\\theta_1, \\theta_2, X, \\dot\\theta_1, \\dot\\theta_2, \\dot X)\\) وبُعدها عن وضع سكون \\(\\tilde{\\mathbf y} = \\mathbf y - \\mathbf y^*\\)، مع \\(\\tilde F = F - F^*\\). ولقيم \\(\\tilde{\\mathbf y}\\) الصغيرة تصبح (5) نظامًا خطّيًا،"
  },
+ "07cd9dec7f70": {
+  "src": "force constant of the coil",
+  "tr": "ثابت قوّة الملفّ"
+ },
+ "07f8b6c9d472": {
+  "src": "stops of the strut",
+  "tr": "موقفا الدعامة"
+ },
  "092c462d6d36": {
   "src": "R. Tedrake, <a href=\"https://underactuated.csail.mit.edu/acrobot.html\"><em>Underactuated Robotics</em>, chapter 3: Acrobots, Cart-Poles, and Quadrotors</a>, MIT course notes, 2024: the manipulator equations, linearisation at a fixed point, the controllability test and LQR for a pendulum pushed through one actuator (Sections 3, 7 and 8).",
   "tr": "R. Tedrake، <a href=\"https://underactuated.csail.mit.edu/acrobot.html\"><em>Underactuated Robotics</em>، الفصل 3: Acrobots, Cart-Poles, and Quadrotors</a>، ملاحظات مقرّر في MIT، 2024: معادلات المناولة، والتقريب الخطّي عند نقطة ثابتة، واختبار قابلية التحكّم، وLQR لنوّاس يُدفع عبر مشغّل واحد (الأقسام 3 و7 و8)."
  },
+ "095b5fb3dcd7": {
+  "src": "1 kg",
+  "tr": "1 kg"
+ },
+ "095c15a99d91": {
+  "src": "Machine · masses and lengths",
+  "tr": "الآلة · الكتل والأطوال"
+ },
+ "0981d8d39cc6": {
+  "src": "<b>Step 1, gravity.</b> With \\(\\cos\\theta = 1 - \\tfrac12\\theta^2 + \\dots\\), the gravity part of (6) becomes",
+  "tr": "<b>الخطوة 1، الجاذبية.</b> مع \\(\\cos\\theta = 1 - \\tfrac12\\theta^2 + \\dots\\) يصير جزء الجاذبية من (6)"
+ },
+ "0be13c6f3863": {
+  "src": "Rendered strut lying on its side with the front half of its tubes cut away: a rod end at the left, the aluminium outer tube with a plug at its end, a long open-coiled spring running inside both tubes, the steel inner tube with a collar, a bronze bushing at the mouth of the outer tube, and the fork around ball 2 at the right.",
+  "tr": "دعامة مولَّدة ملقاة على جانبها وقد قُطع النصف الأمامي من أنبوبيها: رأس قضيب على اليسار، والأنبوب الخارجي من الألومنيوم بسدادة في طرفه، ونابض طويل مفتوح اللفّات يمتدّ داخل الأنبوبين، والأنبوب الداخلي الفولاذي بطوقه، وجلبة برونزية في فم الأنبوب الخارجي، والشوكة حول الكرة 2 على اليمين."
+ },
  "0c1f0638843e": {
   "src": "<span class=\"psec__n\">01</span>A chain on a leash",
   "tr": "<span class=\"psec__n\">01</span>سلسلة مربوطة برسن"
+ },
+ "0efdccc08be2": {
+  "src": "By the chain rule, \\(\\dot c = -s\\,(\\dot\\theta_1 - \\dot\\theta_2)\\).",
+  "tr": "وبقاعدة السلسلة، \\(\\dot c = -s\\,(\\dot\\theta_1 - \\dot\\theta_2)\\)."
+ },
+ "0f7069149c1f": {
+  "src": "<span>8</span>Where the chain can rest",
+  "tr": "<span>8</span>أين يمكن أن تسكن السلسلة"
+ },
+ "0f82d8fe0ece": {
+  "src": "stiffness of the spring",
+  "tr": "صلابة النابض"
  },
  "1119ea59b2e2": {
   "src": "Newton's laws would make us find the tension in each rod, forces we do not care about. Lagrange's method uses the coordinates (1) and lets the constraints do their work silently. We need the kinetic and potential energies in terms of \\(\\mathbf q\\) and \\(\\dot{\\mathbf q}\\). Differentiating (1), the velocity of ball 2 is the velocity of ball 1 plus a turn of the lower rod, and the cross term between them carries the cosine of the angle between the rods:",
@@ -39,6 +99,14 @@
   "src": "The current comes from a <em>current source</em>, an electronic driver that delivers exactly the current it is told to deliver, whatever the coil is doing. A garden pump that always delivers the same number of litres per second, however long the hose, is a current source for water. The current cannot exceed \\(I_\\text{max} = 3\\ \\mathrm{A}\\), so the coil can push with at most 30 N either way. When the controller asks for more, it gets 30 N and no more: the coil is then <em>saturated</em>, the way a car is when the accelerator pedal is already on the floor and pressing harder does nothing. With 30 N on 1 kg the cart can gain speed at 30 m/s², about three times as fast as a falling stone.",
   "tr": "يأتي التيار من <em>مصدر التيار</em>، وهو مشغّل إلكتروني يعطي بالضبط التيار المطلوب منه، مهما كان الملفّ يفعل. مضخّة الحديقة التي تعطي دائمًا عدد اللترات نفسه في الثانية، مهما كان طول الخرطوم، هي مصدر تيار للماء. لا يستطيع التيار أن يتجاوز \\(I_\\text{max} = 3\\ \\mathrm{A}\\)، فيدفع الملفّ بـ 30 N على الأكثر في أيّ من الاتجاهين. وحين يطلب المتحكّم أكثر من ذلك، يحصل على 30 N لا أكثر: ويكون الملفّ عندئذ <em>مشبَعًا</em>، كالسيّارة حين تكون دوّاسة الوقود مضغوطة إلى آخرها فلا يفيد الضغط أكثر. وبقوّة 30 N على كتلة 1 kg تستطيع العربة أن تزيد سرعتها بمعدّل 30 m/s²، أي نحو ثلاثة أضعاف تسارع حجر ساقط."
  },
+ "12b47202630a": {
+  "src": "Two things follow, and both can be seen on the page. The cart must move, and it moves first, towards the ball: a string whose end stands still can only give back what it takes. And the coil is not a brake that is simply on; it is a pump that runs both ways, a little more out than in on every swing. The bars at the top left of the picture keep this account: \\(E - E^*\\) is the energy above the rest, \\(W_\\text{coil}\\) the coil’s work since the run began. Set the target to 0, pull ball 2 aside and let go: \\(W_\\text{coil}\\) falls by just what \\(E - E^*\\) loses. Switch the controller off and do the same: \\(W_\\text{coil}\\) stays at zero, and the energy stays in the chain for ever. How hard the coil may pump is the controller’s design (§12). Gentle charges the coil’s effort five times more than Firm (\\(\\rho = 0.1\\) against \\(0.02\\)), so it pushes less and the chain takes longer to come home.",
+  "tr": "يلزم عن ذلك أمران، وكلاهما يُرى في الصفحة. يجب أن تتحرّك العربة، وهي تتحرّك أوّلًا، نحو الكرة: فالوتر الذي يقف طرفه ساكنًا لا يستطيع إلّا أن يعيد ما يأخذ. والملفّ ليس مكبحًا مشدودًا وحسب؛ إنّه مضخّة تعمل في الاتّجاهين، تُخرج في كلّ تأرجح أكثر ممّا تُدخل بقليل. والأعمدة في أعلى يسار الصورة تمسك هذا الحساب: \\(E - E^*\\) الطاقة فوق السكون، و\\(W_\\text{coil}\\) شغل الملفّ منذ بدء الجريان. اضبط الهدف على 0، واسحب الكرة 2 جانبًا وأفلِتها: تنخفض \\(W_\\text{coil}\\) بقدر ما تفقد \\(E - E^*\\) بالضبط. أوقف المتحكّم وافعل الشيء نفسه: تبقى \\(W_\\text{coil}\\) صفرًا، وتبقى الطاقة في السلسلة إلى الأبد. وكم يحقّ للملفّ أن يضخّ هو تصميم المتحكّم (§12). فـ ليّن يحسب جهد الملفّ بخمسة أضعاف ما يحسبه حازم (\\(\\rho = 0.1\\) مقابل \\(0.02\\))، فيدفع أقلّ وتحتاج السلسلة وقتًا أطول لتعود."
+ },
+ "12f75197c1c0": {
+  "src": "Figure 6 follows one release, computed with the linear model of §9–§12 at the straight-hanging rest (target \\(r = 0\\)) and the coil’s limit of 30 N. Ball 2 is moved 10 cm to the right, everything else held still, and let go. The swing then holds 0.102 J: 0.079 J in the chain (0.049 J of it is gravity, because ball 2 has been lifted by 1.0 cm, and 0.030 J is the spring, stretched by as much as the ball rose), and 0.023 J in the string’s sideways stretch. In the first tenth of a second the coil shoves the cart after the ball, at its full 30 N for the first 3.5 ms, and pours 0.50 J into the cart, five times what the swing holds. By 0.2 s the cart has run 12 cm, past the ball, which is now swinging back; the string pulls ball 2 to the right, against its motion, while the coil brakes the cart and takes the 0.50 J back, and a little more. So it goes, swing after swing, each smaller than the last. After 8 s the coil has put 2.30 J into the cart and taken 2.40 J out; the difference, 0.102 J, is the energy the swing held. Over the same 8 s the string did −0.079 J of work on the chain, all of the chain’s swing, and +0.102 J on the cart.",
+  "tr": "يتتبّع الشكل 6 إفلاتًا واحدًا، محسوبًا بالنموذج الخطّي في §9–§12 عند السكون المتدلّي المستقيم (الهدف \\(r = 0\\)) وحدّ الملفّ البالغ 30 N. تُزاح الكرة 2 مسافة 10 cm إلى اليمين، ويُمسَك كلّ شيء آخر ساكنًا، ثمّ تُفلَت. فيحمل التأرجح 0.102 J: منها 0.079 J في السلسلة (0.049 J جاذبية، لأنّ الكرة 2 رُفعت 1.0 cm، و0.030 J في النابض، الممدود بقدر ما ارتفعت الكرة)، و0.023 J في التمدّد الجانبي للوتر. وفي العُشر الأوّل من الثانية يدفع الملفّ العربة وراء الكرة، بكامل 30 N في أوّل 3.5 ms، ويصبّ في العربة 0.50 J، خمسة أضعاف ما يحمله التأرجح. وبحلول 0.2 s تكون العربة قد قطعت 12 cm، متجاوزة الكرة التي تعود الآن؛ فيشدّ الوتر الكرة 2 إلى اليمين، عكس حركتها، بينما يكبح الملفّ العربة ويسترجع الـ 0.50 J وقليلًا فوقها. وهكذا، تأرجحًا بعد تأرجح، كلّ واحد أصغر من سابقه. وبعد 8 s يكون الملفّ قد أدخل 2.30 J في العربة وأخرج 2.40 J؛ والفرق، 0.102 J، هو الطاقة التي حملها التأرجح. وفي الثواني الـ 8 نفسها بذل الوتر شغلًا قدره −0.079 J على السلسلة، أي تأرجح السلسلة كلّه، و+0.102 J على العربة."
+ },
  "13847417f986": {
   "src": "<b>The aim:</b> the cart is the only thing the controller can push, and through the strut it must bring the whole pendulum back to rest, at the position you choose, from wherever you leave it.",
   "tr": "<b>الهدف:</b> العربة هي الشيء الوحيد الذي يستطيع المتحكّم أن يدفعه، وعليه من خلال الدعامة أن يعيد النوّاس كلّه إلى السكون، في الموضع الذي تختاره، من أيّ وضع تتركه فيه."
@@ -51,6 +119,14 @@
   "src": "Numa Koudsie · for school students and first- and second-year undergraduates",
   "tr": "نعمة سائر قدسية · لطلاب المدارس وطلاب السنتين الأولى والثانية في الجامعة"
  },
+ "16970ad480d6": {
+  "src": "Three bodies move in a vertical plane: two balls and the cart. A free point in a plane needs two numbers, so three free bodies need six. Each rigid rod fixes one distance and the rail fixes the cart's height: three conditions on positions alone. Six minus three leaves three degrees of freedom. The strut adds none, because its length follows from where ball 2 and the cart are.",
+  "tr": "ثلاثة أجسام تتحرّك في مستوى رأسي: كرتان والعربة. والنقطة الحرّة في مستوى تحتاج إلى عددين، فالأجسام الحرّة الثلاثة تحتاج إلى ستّة. كلّ قضيب صلب يثبّت مسافة واحدة، والسكّة تثبّت ارتفاع العربة: ثلاثة شروط على المواضع وحدها. ستّة ناقص ثلاثة تبقى ثلاث درجات حرّية. ولا تضيف الدعامة شيئًا، لأنّ طولها يلزم من موضعي الكرة 2 والعربة."
+ },
+ "16e4f7db3063": {
+  "src": "The first term multiplies \\(\\mathbf b = 0\\) and vanishes at the rest: the mass matrix tilts as the angles change, but it multiplies a net force that is zero, so its change matters only at second order. In the second term the speed-squared part still carries \\(\\dot\\theta^2\\) and vanishes, leaving \\(-\\mathbf M^{-1}\\mathbf S\\). With respect to the speeds, the speed-squared part gives terms with one factor \\(\\dot\\theta\\), which vanish too. With respect to \\(F\\), the derivative is \\(\\mathbf M^{-1}\\mathbf e_3\\), with \\(\\mathbf e_3 = (0, 0, 1)^{\\mathsf T}\\). So",
+  "tr": "الحدّ الأوّل يضرب \\(\\mathbf b = 0\\) فيتلاشى عند السكون: فمصفوفة الكتلة تميل حين تتغيّر الزاويتان، لكنّها تضرب قوّة صافية منعدمة، فلا يهمّ تغيّرها إلّا في الرتبة الثانية. وفي الحدّ الثاني يظلّ جزء مربّع السرعة حاملًا \\(\\dot\\theta^2\\) فيتلاشى، تاركًا \\(-\\mathbf M^{-1}\\mathbf S\\). وبالنسبة إلى السرعات يعطي جزء مربّع السرعة حدودًا فيها عامل واحد \\(\\dot\\theta\\)، فتتلاشى هي أيضًا. وبالنسبة إلى \\(F\\) المشتقّة هي \\(\\mathbf M^{-1}\\mathbf e_3\\)، مع \\(\\mathbf e_3 = (0, 0, 1)^{\\mathsf T}\\). إذن"
+ },
  "179bfe27ad09": {
   "src": "Coil · <span style=\"text-transform:none\">F = κI, κ = 10 N/A</span>",
   "tr": "الملفّ · <span style=\"text-transform:none\"><bdi>F = κI</bdi>، <bdi>κ = 10 N/A</bdi></span>"
@@ -59,9 +135,21 @@
   "src": "<span class=\"sw sw--dot\"></span>target r",
   "tr": "<span class=\"sw sw--dot\"></span>الهدف r"
  },
+ "18ec267ac872": {
+  "src": "Widnall, L20, eq. (30): the same result without the cart.",
+  "tr": "Widnall، L20، المعادلة (30): النتيجة نفسها دون العربة."
+ },
  "19b2acbb46d8": {
   "src": "<b>The cart and the rail.</b> At the bottom runs a cart of mass \\(M = 1\\ \\mathrm{kg}\\), carrying the coil, on a straight, level rail. Its hinge, where the strut is fixed, runs 1.65 m below the pivot. The page measures the cart’s place along the rail by \\(X\\), the distance from the point straight under the pivot, positive to the right. The wheels roll without friction. <em>Friction</em> is the rubbing that slows things down when surfaces slide or roll on each other: a book pushed across a table stops after a few centimetres because of it, while a puck on ice slides much further because there is less. On our rail there is none, so a cart given one push would roll on for ever.",
   "tr": "<b>العربة والسكّة.</b> في الأسفل تسير عربة كتلتها \\(M = 1\\ \\mathrm{kg}\\)، تحمل الملفّ، على سكّة مستقيمة أفقية. ويقع مفصلها، حيث تُثبَّت الدعامة، على بعد 1.65 m تحت نقطة الارتكاز. وتقيس الصفحة موضع العربة على السكّة بـ \\(X\\)، أي المسافة من النقطة الواقعة تحت نقطة الارتكاز مباشرة، وهي موجبة نحو اليمين. وعجلاتها تدور بلا احتكاك. <em>الاحتكاك</em> هو الحكّ الذي يُبطئ الأشياء حين تنزلق الأسطح أو تتدحرج بعضها على بعض: كتاب يُدفَع على طاولة يتوقف بعد بضعة سنتيمترات بسببه، بينما يمضي قرص على الجليد أبعد بكثير لأن الاحتكاك أقلّ. وليس على سكّتنا أيّ احتكاك، فالعربة التي تُدفع دفعة واحدة تتدحرج إلى الأبد."
+ },
+ "19cd7d185cfd": {
+  "src": "Meaning",
+  "tr": "المعنى"
+ },
+ "1ab6a8fa21ee": {
+  "src": "<span class=\"psec__n\">06</span>How the spring pushes on each coordinate",
+  "tr": "<span class=\"psec__n\">06</span>كيف يدفع النابض كلّ إحداثي"
  },
  "1afaf2d4f37c": {
   "src": "<b>How it all connects.</b> Now follow one turn of the loop, the chain of causes that goes round and round, every half millisecond, while the chain comes home.",
@@ -71,29 +159,105 @@
   "src": "A double pendulum hangs from a fixed pivot; a telescopic strut runs from its lower ball down to a cart on a rail, and a coil on the cart sits in the gap of a long magnet under the rail. Arrows show the coil's force and the strut's pull; bars the energy; below, the stored angles and cart position of the whole run with a cursor at the frame being shown.",
   "tr": "يتدلّى نوّاس مزدوج من نقطة ارتكاز ثابتة؛ وتمتدّ دعامة تلسكوبية من كرته السفلى نزولًا إلى عربة على سكّة، ويقع ملفّ على العربة في فجوة مغناطيس طويل تحت السكّة. تُظهر الأسهم قوّة الملفّ وشدّ الدعامة، والأشرطةُ الطاقة؛ وفي الأسفل الزاويتان المخزَّنتان وموضع العربة للحلّ كلّه، مع مؤشّر عند الإطار المعروض."
  },
+ "1c57049cbdfa": {
+  "src": "−6 to 10 N",
+  "tr": "من −6 إلى 10 N"
+ },
  "1c698f7b3d67": {
   "src": "The controller measures all six numbers exactly and at once. A real one needs sensors on both rods and the cart; speeds are usually estimated by an observer such as a Kalman filter, and every sample of delay costs stability.",
   "tr": "يقيس المتحكّم الأعداد الستّة كلّها بدقّة وفي آن واحد. أمّا المتحكّم الحقيقي فيحتاج مستشعرات على القضيبين والعربة؛ وتُقدَّر السرعات عادةً بمراقِب مثل مرشّح كالمان، وكلّ عيّنة تأخير تكلّف شيئًا من الاستقرار."
+ },
+ "1c8358862d58": {
+  "src": "<a href=\"https://cimec.org.ar/~mstorti/MECOM2018/paper-5657.pdf\">Manhães, Sampaio, Lima, Hagedorn and Deü, Mecánica Computacional XXXVI (2018)</a>: coupling term from the force law, eqs. (69)–(73); Lagrangian, eq. (84); electrical equation, eq. (96), for a rotary motor, where the cart's \\(X\\) is an angle.",
+  "tr": "<a href=\"https://cimec.org.ar/~mstorti/MECOM2018/paper-5657.pdf\">Manhães, Sampaio, Lima, Hagedorn and Deü, Mecánica Computacional XXXVI (2018)</a>: حدّ الاقتران من قانون القوّة، المعادلات (69)–(73)؛ دالّة لاغرانج، المعادلة (84)؛ المعادلة الكهربائية، المعادلة (96)، لمحرّك دوّار حيث \\(X\\) العربة زاوية."
+ },
+ "1c888af0a0f7": {
+  "src": "<span>7</span>Lagrange's equations&nbsp;★",
+  "tr": "<span>7</span>معادلات لاغرانج&nbsp;★"
  },
  "1ca3a9a7ea13": {
   "src": "<b>Force profile</b> · the coil’s force <span class=\"tx\">\\(F\\)</span>, its steady value <span class=\"tx\">\\(F^*\\)</span> and limit <span class=\"tx\">\\(\\pm\\kappa I_\\text{max}\\)</span>, and the strut’s pull <span class=\"tx\">\\(N\\)</span>",
   "tr": "<b>مخطّط القوّة</b> · قوّة الملفّ <span class=\"tx\">\\(F\\)</span>، وقيمتها المستقرّة <span class=\"tx\">\\(F^*\\)</span> وحدّها <span class=\"tx\">\\(\\pm\\kappa I_\\text{max}\\)</span>، وشدّ الدعامة <span class=\"tx\">\\(N\\)</span>"
  },
+ "1d29a6eec994": {
+  "src": "J. R. Taylor, <a href=\"https://books.google.com/books/about/Classical_Mechanics.html?id=P1kCtNr-pJsC\"><em>Classical Mechanics</em></a>, University Science Books, 2005: chapter 7, Lagrange's equations, and chapter 11, coupled oscillators and normal modes.",
+  "tr": "J. R. Taylor، <a href=\"https://books.google.com/books/about/Classical_Mechanics.html?id=P1kCtNr-pJsC\"><em>Classical Mechanics</em></a>، University Science Books، 2005: الفصل 7، معادلات لاغرانج، والفصل 11، المهتزّات المقترنة والأنماط الذاتية."
+ },
+ "1d3e16c2989c": {
+  "src": "Its time derivative needs the product rule on the second term, \\(\\tfrac{d}{dt}(c\\,\\dot\\theta_2) = \\dot c\\,\\dot\\theta_2 + c\\,\\ddot\\theta_2\\):",
+  "tr": "تحتاج مشتقّته الزمنية إلى قاعدة الضرب في الحدّ الثاني، \\(\\tfrac{d}{dt}(c\\,\\dot\\theta_2) = \\dot c\\,\\dot\\theta_2 + c\\,\\ddot\\theta_2\\):"
+ },
  "1d44863eaeca": {
   "src": "Fig. 11 · control systems · underactuated mechanics",
   "tr": "الشكل 11 · أنظمة التحكّم · ميكانيك الأنظمة ناقصة التشغيل"
+ },
+ "1d56b9d2c614": {
+  "src": "<span class=\"psub__n\">7.5</span>All three together",
+  "tr": "<span class=\"psub__n\">7.5</span>الثلاثة معًا"
+ },
+ "1e4482e44719": {
+  "src": "<span class=\"psub__n\">8.2</span>Coil on",
+  "tr": "<span class=\"psub__n\">8.2</span>الملفّ يعمل"
+ },
+ "1e5066b45695": {
+  "src": "Two-force member: <a href=\"https://mechanicsmap.psu.edu/websites/5_structures/5-2_two_force_members/twoforcemembers.html\">Mechanics Map (Penn State), §5.2</a>, argued there for a body at rest; with zero mass and zero moment of inertia, \\(\\sum F = ma\\) and \\(\\sum\\tau = I\\alpha\\) vanish at every instant, so it holds in motion too.",
+  "tr": "العضو ثنائيّ القوّة: <a href=\"https://mechanicsmap.psu.edu/websites/5_structures/5-2_two_force_members/twoforcemembers.html\">Mechanics Map (Penn State)، §5.2</a>، حيث يُبرهَن لجسم ساكن؛ ومع كتلة صفرية وعزم عطالة صفري يتلاشى \\(\\sum F = ma\\) و\\(\\sum\\tau = I\\alpha\\) في كلّ لحظة، فيصحّ في الحركة أيضًا."
  },
  "1e87db54ee9c": {
   "src": "A double pendulum on a leash: holding a chain still by pushing only a cart",
   "tr": "نوّاس مزدوج مربوط برسن: تثبيت سلسلة بدفع عربة وحدها"
  },
+ "1eda3b281f82": {
+  "src": "mass of the cart with its coil",
+  "tr": "كتلة العربة مع ملفّها"
+ },
+ "20017906287e": {
+  "src": "Positions: <a href=\"https://ocw.mit.edu/courses/16-07-dynamics-fall-2009/b39e882f1524a0f6a98553ee33ea6f35_MIT16_07F09_Lec20.pdf\">Widnall, MIT 16.07, Lecture L20</a>, eqs. (26)–(29), with the cart added.",
+  "tr": "المواضع: <a href=\"https://ocw.mit.edu/courses/16-07-dynamics-fall-2009/b39e882f1524a0f6a98553ee33ea6f35_MIT16_07F09_Lec20.pdf\">Widnall, MIT 16.07, Lecture L20</a>، المعادلات (26)–(29)، مع إضافة العربة."
+ },
  "205b6fddc55d": {
   "src": "All of this changes the six numbers of the state, and the loop begins again.",
   "tr": "كلّ هذا يغيّر الأعداد الستّة للحالة، وتبدأ الحلقة من جديد."
  },
+ "20b69eea4f98": {
+  "src": "clipped to \\(|F| \\le \\kappa I_\\text{max}\\). It chooses the six gains \\(\\mathbf K\\) to make a bill as small as possible:",
+  "tr": "مقصوصًا إلى \\(|F| \\le \\kappa I_\\text{max}\\). ويختار الكسوب الستّة \\(\\mathbf K\\) ليجعل فاتورة أصغر ما يمكن:"
+ },
+ "20fb0b3f8d19": {
+  "src": "The two mixed terms are equal because \\(\\mathbf P\\) is symmetric and \\(\\tilde F\\) is a number.",
+  "tr": "والحدّان المختلطان متساويان لأنّ \\(\\mathbf P\\) متناظرة و\\(\\tilde F\\) عدد."
+ },
+ "21b1a7441872": {
+  "src": "Each ball rises by \\(l(1 - \\cos\\theta) \\approx \\tfrac12 l\\theta^2\\) as its rod swings, and gravity charges for the rise.",
+  "tr": "ترتفع كلّ كرة بمقدار \\(l(1 - \\cos\\theta) \\approx \\tfrac12 l\\theta^2\\) حين يتأرجح قضيبها، والجاذبية تتقاضى ثمن الارتفاع."
+ },
+ "226246c060f1": {
+  "src": "The cart, and only the cart, brings the pendulum back to rest at the place you choose. The controller measures where both balls and the cart are and how fast they move, sets the current in the coil, and so pushes the cart; through the strut the cart pulls the chain until all three bodies rest. This section shows the machine in pictures; §2–§11 derive what the cart can do to the chain; §12 designs the push; §14 shows the chain coming home in phase space.",
+  "tr": "العربة، والعربة وحدها، هي التي تعيد النوّاس إلى السكون في المكان الذي تختاره. يقيس المتحكّم أين الكرتان والعربة وبأيّ سرعة تتحرّك، ويضبط التيار في الملفّ، فيدفع العربة؛ ومن خلال الدعامة تسحب العربة السلسلة حتّى تسكن الأجسام الثلاثة. يعرض هذا القسم الآلة بالصور؛ وتشتقّ §2–§11 ما تستطيع العربة أن تفعله بالسلسلة؛ وتصمّم §12 الدفع؛ وتُظهر §14 السلسلة عائدة إلى بيتها في فضاء الطور."
+ },
+ "22f84b46389b": {
+  "src": "<span>15</span>Solve first, then play",
+  "tr": "<span>15</span>احسب أوّلًا، ثمّ اعرض"
+ },
+ "23d23469c514": {
+  "src": "<b>The strut stands vertical</b>, \\(x_2 = X\\). Then \\(a = 0\\) and \\(\\ell = b\\), so (11) gives \\(\\partial\\ell/\\partial\\theta_1 = l_1\\sin\\theta_1\\) and \\(\\partial\\ell/\\partial\\theta_2 = l_2\\sin\\theta_2\\), and (12), (13) at rest become",
+  "tr": "<b>الدعامة قائمة رأسيًّا</b>، \\(x_2 = X\\). عندئذ \\(a = 0\\) و\\(\\ell = b\\)، فتعطي (11) \\(\\partial\\ell/\\partial\\theta_1 = l_1\\sin\\theta_1\\) و\\(\\partial\\ell/\\partial\\theta_2 = l_2\\sin\\theta_2\\)، وتصير (12) و(13) في السكون"
+ },
+ "2507260c3db4": {
+  "src": "The axle goes through the <i>centre</i> of the ball on purpose. The model in §2 puts the strut's upper end at the ball's centre, the point \\((x_2, y_2)\\). Had we screwed a bracket under the ball instead, the strut would pull on a point a few centimetres below the centre, fixed to rod 2: its length would have to be measured to that point, and its pull would twist rod 2 about the ball. With the axle through the centre, the drawing and the equations describe the same machine.",
+  "tr": "يمرّ المحور عبر <i>مركز</i> الكرة عن قصد. فالنموذج في §2 يضع الطرف العلوي للدعامة في مركز الكرة، أي النقطة \\((x_2, y_2)\\). ولو ثبّتنا بدلًا من ذلك حاملًا تحت الكرة، لشدّت الدعامة نقطة على بعد بضعة سنتيمترات تحت المركز، مثبّتة في القضيب 2: ولوجب قياس طولها إلى تلك النقطة، ولأدار شدّها القضيب 2 حول الكرة. ومع مرور المحور بالمركز يصف الرسم والمعادلات الآلة نفسها."
+ },
  "257145e27fc0": {
   "src": "Firm",
   "tr": "حازم"
+ },
+ "2622c0923863": {
+  "src": "<span class=\"psub__n\">7.2</span>The lower rod, \\(\\theta_2\\)",
+  "tr": "<span class=\"psub__n\">7.2</span>القضيب السفلي، \\(\\theta_2\\)"
+ },
+ "2638e16da09d": {
+  "src": "With \\(\\partial V/\\partial\\theta_2 = m_2gl_2\\sin\\theta_2 + N\\,\\partial\\ell/\\partial\\theta_2\\),",
+  "tr": "مع \\(\\partial V/\\partial\\theta_2 = m_2gl_2\\sin\\theta_2 + N\\,\\partial\\ell/\\partial\\theta_2\\)،"
  },
  "2700cc152567": {
   "src": "Gentle",
@@ -106,6 +270,10 @@
  "2af0114db97d": {
   "src": "A string of tension \\(N_0\\) and length \\(\\ell_0\\) is pulled sideways at one end by \\(\\delta\\). Show that the restoring force is \\(N_0\\delta/\\ell_0\\) to first order, and explain why the spring stiffness \\(k_s\\) does not appear.",
   "tr": "يُسحب وترٌ مشدود بشدّ \\(N_0\\) وطوله \\(\\ell_0\\) جانبًا من أحد طرفيه بمقدار \\(\\delta\\). بيّن أن قوّة الإرجاع هي \\(N_0\\delta/\\ell_0\\) في الرتبة الأولى، وفسّر لماذا لا تظهر صلابة النابض \\(k_s\\)."
+ },
+ "2b2bd957e333": {
+  "src": "<span class=\"pfig__n\">Figure 6</span>Where the energy of one swing goes, for the release of §1.4 over 8 s. Inside the boxes: the energy at the release, 0.079 J in the chain and 0.023 J in the string’s sideways stretch. On the arrows: the energy that crosses each link. The string drains the chain and hands that energy, with its own, to the cart. The coil pumps energy out of the cart (burgundy, 2.40 J) and into it (grey, 2.30 J) on every swing; the difference, 0.102 J, is the whole swing, and it ends in the current source.",
+  "tr": "<span class=\"pfig__n\">الشكل 6</span>أين تذهب طاقة تأرجح واحد، للإفلات في §1.4 خلال 8 s. داخل المربّعات: الطاقة عند الإفلات، 0.079 J في السلسلة و0.023 J في التمدّد الجانبي للوتر. وعلى الأسهم: الطاقة التي تعبر كلّ وصلة. يُفرغ الوتر السلسلة ويسلّم تلك الطاقة، مع طاقته، إلى العربة. ويضخّ الملفّ الطاقة من العربة (عنّابي، 2.40 J) وإليها (رمادي، 2.30 J) في كلّ تأرجح؛ والفرق، 0.102 J، هو التأرجح كلّه، وينتهي في مصدر التيار."
  },
  "2bfe1488e413": {
   "src": "Picture the strut without its spring: two smooth tubes, one sliding inside the other, hinged at both ends. Pull on it and the inner tube simply slides out; push and it slides in. Between its stops it carries no force at all. The chain would swing without dragging the cart, and the coil could not reach the chain. Only when the collar reached the stop would the strut act, suddenly and like a rigid rod. So the spring is what makes the tubes an elastic link. Real versions exist: the gas strut that holds a car's tailgate open, the spring strut of a bicycle's suspension.",
@@ -127,9 +295,25 @@
   "src": "Switch the controller on.",
   "tr": "شغّل المتحكّم."
  },
+ "2f0009e1892e": {
+  "src": "The cart is pushed by a linear motor, which works like a loudspeaker laid along a rail. The track is a U-shaped steel channel. On the inside of both walls sit neodymium magnets, alternating every few centimetres, and opposite every north face on one wall is a south face on the other. So across the narrow gap the field points straight from one wall to the other: towards you over one pair, away from you over the next (3). The steel channel carries the field round behind the magnets, so almost all of it crosses the gap.",
+  "tr": "تُدفع العربة بمحرّك خطّي يعمل كمكبّر صوت ممدود على طول سكّة. والمسار قناة فولاذية على شكل U. وعلى الوجه الداخلي لكلا الجدارين مغانط نيوديميوم تتناوب كلّ بضعة سنتيمترات، ويقابل كلَّ وجه شمالي على أحد الجدارين وجهٌ جنوبي على الآخر. فيشير المجال عبر الفجوة الضيّقة مستقيمًا من جدار إلى الآخر: نحوك فوق زوج، وبعيدًا عنك فوق الزوج التالي (3). وتحمل القناة الفولاذية المجال دائرًا خلف المغانط، فيعبر معظمه الفجوة."
+ },
  "2f7e4a93b7fc": {
   "src": "Key result · why not a PID on the cart",
   "tr": "نتيجة أساسية · لماذا لا يكفي متحكّم PID على العربة"
+ },
+ "306ee4a859cb": {
+  "src": "<b>Step 3, the spring.</b> At the hanging rest the spring is already stretched by \\(\\ell_0 - L_0 = N_0/k_s\\), so \\(\\ell - L_0 = N_0/k_s + \\delta\\), and",
+  "tr": "<b>الخطوة 3، النابض.</b> عند السكون المتدلّي يكون النابض ممدودًا أصلًا بمقدار \\(\\ell_0 - L_0 = N_0/k_s\\)، إذن \\(\\ell - L_0 = N_0/k_s + \\delta\\)، و"
+ },
+ "31894d88f894": {
+  "src": "The state of the machine is a point in a six-dimensional <em>phase space</em>, and a run is a path through it. We cannot draw six dimensions, so the page draws three shadows: the angle against the angular speed for each rod, and the position against the speed for the cart. In each the rest is a cross, and a run that settles is a path that spirals into it.",
+  "tr": "حالة الآلة نقطة في <em>فضاء طور</em> سداسي الأبعاد، والجريان مسار فيه. ولا نستطيع رسم ستّة أبعاد، فترسم الصفحة ثلاثة ظلال: الزاوية مقابل السرعة الزاوية لكلّ قضيب، والموضع مقابل السرعة للعربة. وفي كلّ منها السكون صليب، والجريان الذي يستقرّ مسار يلتفّ حلزونيًّا إليه."
+ },
+ "31ea4051b0c3": {
+  "src": "All of this holds where the strut stands vertical. At a rest with the cart off to one side, \\(r \\neq 0\\), the strut leans, \\(\\partial\\ell/\\partial X = -a^*/\\ell^* \\neq 0\\), and moving the cart changes the strut's length already at first order. Then \\(\\tfrac12 k_s\\delta^2\\) is second order and \\(k_s\\) stays, as §8.2 showed.",
+  "tr": "كلّ هذا يصحّ حيث تقف الدعامة رأسية. وعند سكون تكون فيه العربة إلى جانب، \\(r \\neq 0\\)، تميل الدعامة، \\(\\partial\\ell/\\partial X = -a^*/\\ell^* \\neq 0\\)، وتحريك العربة يغيّر طول الدعامة من الرتبة الأولى. عندئذ يكون \\(\\tfrac12 k_s\\delta^2\\) من الرتبة الثانية ويبقى \\(k_s\\)، كما بيّنت §8.2."
  },
  "326e054e26ce": {
   "src": "<span class=\"psec__n\">04</span>The strut: two tubes and a spring",
@@ -139,9 +323,33 @@
   "src": "© 2026 Numa Koudsie",
   "tr": "© 2026 نعمة سائر قدسية"
  },
+ "33e9cf002092": {
+  "src": "Gravity: Widnall, L20, eq. (31). Spring between two moving points: <a href=\"http://research.cs.wisc.edu/graphics/Courses/cs777-2003/Readings/physics-notes.pdf\">Witkin, \"Particle System Dynamics\", SIGGRAPH 2001 notes</a>, §6, energy \\(\\tfrac{k_s}{2}C^2\\) with \\(C = \\ell - L_0\\).",
+  "tr": "الجاذبية: Widnall، L20، المعادلة (31). نابض بين نقطتين متحرّكتين: <a href=\"http://research.cs.wisc.edu/graphics/Courses/cs777-2003/Readings/physics-notes.pdf\">Witkin, \"Particle System Dynamics\", SIGGRAPH 2001 notes</a>، §6، الطاقة \\(\\tfrac{k_s}{2}C^2\\) مع \\(C = \\ell - L_0\\)."
+ },
  "33f709bbf78b": {
   "src": "<b>The controller.</b> The controller is the brain of the rig, and it is nothing but a rule: at every instant it reads the six numbers of the state and decides the current. This is <em>feedback</em>, an action that depends on a measurement of the very thing being acted on. A thermostat is feedback: it measures the room and switches the heating on when the room is too cold. Riding a bicycle is feedback: you feel yourself lean and steer to catch it. Our controller looks at all six numbers, not just at the cart, so it is called <em>full-state feedback</em>. Its rule is equation (11). It takes the difference between each of the six numbers and its value at the rest, multiplies each difference by a fixed number called a <em>gain</em>, and adds up the six products; that sum, together with the holding force, is the push. A gain says how strongly the controller reacts to one kind of error. A large gain on the cart’s position means: push hard as soon as the cart is a little out of place, the way a strict driving instructor grabs the wheel as soon as you drift a few centimetres. The six gains are chosen by the linear–quadratic regulator of §8, which works like a bill that must be kept as small as possible. The bill charges for every second the rig spends away from the rest, at the rates \\(q_\\theta\\), \\(q_X\\) and \\(q_v\\) set by the sliders, and for every newton the coil pushes, at the rate \\(\\rho\\). Raise \\(\\rho\\) and pushing becomes expensive, so the controller pushes gently and takes its time; lower it and the controller pushes hard and fast. The buttons Gentle and Firm set two such bills; Off sets the current to zero.",
   "tr": "<b>المتحكّم.</b> المتحكّم هو دماغ الجهاز، وهو ليس سوى قاعدة: في كلّ لحظة يقرأ الأعداد الستّة للحالة ويقرّر التيار. هذه هي <em>التغذية الراجعة</em>: فعل يعتمد على قياس الشيء نفسه الذي نؤثّر فيه. منظّم الحرارة تغذية راجعة: يقيس حرارة الغرفة ويشغّل التدفئة حين تكون الغرفة باردة جدًّا. وركوب الدرّاجة تغذية راجعة: تحسّ بنفسك تميل فتوجّه المقود لتلحق بالميل. يطّلع متحكّمنا على الأعداد الستّة كلّها، لا على العربة وحدها، ولذلك يسمّى <em>تغذية راجعة بالحالة الكاملة</em>. وقاعدته هي المعادلة (11). يأخذ الفرق بين كلّ عدد من الأعداد الستّة وقيمته عند وضع السكون، ويضرب كلّ فرق في عدد ثابت يسمّى <em>معامل الكسب</em>، ثم يجمع الحواصل الستّة؛ وهذا المجموع، مع قوّة الإمساك، هو الدفع. ومعامل الكسب يقول بأيّ شدّة يتفاعل المتحكّم مع نوع واحد من الخطأ. ومعامل الكسب الكبير على موضع العربة يعني: ادفع بقوّة بمجرّد أن تبتعد العربة قليلًا عن مكانها، كما يمسك مدرّب القيادة الصارم بالمقود بمجرّد أن تنحرف بضعة سنتيمترات. وتُختار معاملات الكسب الستّة بالمنظّم الخطّي التربيعي في §8، وهو يعمل كفاتورة يجب إبقاؤها أصغر ما يمكن. تحاسب الفاتورة على كلّ ثانية يقضيها الجهاز بعيدًا عن وضع السكون، بالأسعار \\(q_\\theta\\) و\\(q_X\\) و\\(q_v\\) التي تضبطها المنزلقات، وعلى كلّ نيوتن يدفعه الملفّ، بالسعر \\(\\rho\\). ارفع \\(\\rho\\) فيصير الدفع غاليًا، فيدفع المتحكّم بلطف ويأخذ وقته؛ وأنزله فيدفع المتحكّم بقوّة وسرعة. يضبط الزرّان «ليّن» و«حازم» فاتورتين من هذا النوع؛ أمّا «إيقاف» فيجعل التيار صفرًا."
+ },
+ "34541f40fcaf": {
+  "src": "<span>1</span>The machine, part by part",
+  "tr": "<span>1</span>الآلة، قطعةً قطعةً"
+ },
+ "346f3fef59e6": {
+  "src": "with the force constant \\(\\kappa = B\\ell_w\\): the field \\(B\\) in the gap times the total length \\(\\ell_w\\) of wire sitting in it, both legs together. The current comes from a current source, an electronic driver that delivers exactly the current it is told, whatever the coil is doing, up to \\(I_\\text{max}\\).",
+  "tr": "بثابت القوّة \\(\\kappa = B\\ell_w\\): المجال \\(B\\) في الفجوة مضروبًا في الطول الكلّي \\(\\ell_w\\) للسلك الواقع فيها، الساقين معًا. ويأتي التيار من مصدر تيار، مشغّل إلكتروني يعطي التيار المطلوب منه بالضبط، أيًّا كان ما يفعله الملفّ، حتّى \\(I_\\text{max}\\)."
+ },
+ "34c7b80d7d5c": {
+  "src": "<span class=\"psec__n\">01</span>The machine, part by part",
+  "tr": "<span class=\"psec__n\">01</span>الآلة، قطعةً قطعةً"
+ },
+ "34ccf6c8231f": {
+  "src": "<span class=\"pfig__n\">Figure 1</span>The whole machine, rendered from a 3D model. <b>1</b> fixed pivot O on its bracket; <b>2</b> rod 1, length \\(l_1\\); <b>3</b> ball 1, mass \\(m_1\\); <b>4</b> rod 2, length \\(l_2\\); <b>5</b> ball 2, mass \\(m_2\\); <b>6</b> the axle through ball 2's centre, where the strut is pinned; <b>7</b> the strut, two tubes with a spring inside; <b>8</b> the cart, mass \\(M\\), with its coil underneath; <b>9</b> the magnet track; <b>10</b> the rail. The machine is drawn at the sliders' starting values.",
+  "tr": "<span class=\"pfig__n\">الشكل 1</span>الآلة كلّها، مولَّدة من نموذج 3D. <b>1</b> نقطة الارتكاز الثابتة O على حاملها؛ <b>2</b> القضيب 1، طوله \\(l_1\\)؛ <b>3</b> الكرة 1، كتلتها \\(m_1\\)؛ <b>4</b> القضيب 2، طوله \\(l_2\\)؛ <b>5</b> الكرة 2، كتلتها \\(m_2\\)؛ <b>6</b> المحور المارّ بمركز الكرة 2، حيث تُثبَّت الدعامة؛ <b>7</b> الدعامة، أنبوبان في داخلهما نابض؛ <b>8</b> العربة، كتلتها \\(M\\)، وملفّها تحتها؛ <b>9</b> المسار المغناطيسي؛ <b>10</b> السكّة. رُسمت الآلة بالقيم الابتدائية للمنزلقات."
+ },
+ "354d63c8fb2a": {
+  "src": "<span class=\"psec__n\">14</span>Phase space and the region of rescue",
+  "tr": "<span class=\"psec__n\">14</span>فضاء الطور ومنطقة الإنقاذ"
  },
  "35ce0503d0e7": {
   "src": "The tubes cannot slide for ever. Pushed together, the strut is 0.5 m long; pulled apart, it ends at 0.95 m, where a collar on the inner tube meets a stop, like a drawer that runs out to its end and halts with a knock. The page draws these <em>end stops</em> as a very stiff spring of 20 000 N/m with a <em>damper</em> beside it. A damper is a part that resists motion more the faster it goes and turns that motion into heat: the closer at the top of a door that stops it slamming, or the shock absorber of a car that stops it bouncing after a bump. The damper acts only while a stop is being touched, and the heat it makes, \\(Q_\\text{stop}\\), is the only way the rig can lose energy, apart from the coil.",
@@ -155,33 +363,85 @@
   "src": "The potential energy has gravity, with height measured upwards from the pivot, and the spring inside the tubes, of stiffness \\(k_s\\) and rest length \\(L_0\\):",
   "tr": "تتضمّن الطاقة الكامنة الجاذبية، مع قياس الارتفاع نحو الأعلى من نقطة الارتكاز، والنابضَ داخل الأنابيب، ذا الصلابة \\(k_s\\) والطول الطبيعي \\(L_0\\):"
  },
+ "37045a7e008f": {
+  "src": "Near the hanging rest the motion is small, so we expand \\(V\\) in powers of \\(\\theta_1, \\theta_2, X\\) and keep terms up to second order: enough for the forces to first order. Four steps.",
+  "tr": "قرب السكون المتدلّي تكون الحركة صغيرة، فنفكّ \\(V\\) في قوى \\(\\theta_1, \\theta_2, X\\) ونُبقي الحدود حتّى الرتبة الثانية: وهذا يكفي للقوى في الرتبة الأولى. أربع خطوات."
+ },
  "385cb65f3739": {
   "src": "Effort weight ρ",
   "tr": "وزن الجهد ρ"
+ },
+ "3862218861a6": {
+  "src": "With a resistance \\(R\\) in the coil and a voltage \\(U\\) across it, Lagrange's equation for \\(\\eta\\) reads \\(\\Lambda\\dot I + RI + \\kappa\\dot X = U\\), and \\(\\kappa\\dot X\\) is the back-emf. The current source sets \\(I\\) and supplies whatever voltage that takes. Then \\(\\eta\\) is no longer free: this equation only says what voltage the source must give, and on the mechanical side \\(F = \\kappa I\\) acts as a given push on the cart.",
+  "tr": "ومع مقاومة \\(R\\) في الملفّ وجهد \\(U\\) بين طرفيه تقول معادلة لاغرانج لـ \\(\\eta\\) \\(\\Lambda\\dot I + RI + \\kappa\\dot X = U\\)، و\\(\\kappa\\dot X\\) هي القوّة الدافعة العكسية. ومصدر التيار يثبّت \\(I\\) ويعطي أيّ جهد يلزم لذلك. عندئذ لا تعود \\(\\eta\\) حرّة: فهذه المعادلة لا تقول إلّا أيّ جهد يجب أن يعطيه المصدر، وعلى الجانب الميكانيكي تعمل \\(F = \\kappa I\\) دفعًا معطًى على العربة."
  },
  "391884aa87dd": {
   "src": "A double pendulum hanging from a fixed pivot, tied by a sprung telescopic strut to a cart that a moving coil drives along a rail. Pull it anywhere and let go: full-state feedback brings it back to the position you choose. Solved first with RK4 and stored, then played back.",
   "tr": "نوّاس مزدوج يتدلّى من نقطة ارتكاز ثابتة، وتربطه دعامة تلسكوبية ذات نابض بعربة يدفعها ملفّ متحرّك على طول سكّة. اسحبه إلى أيّ مكان ثم أفلته: فالتغذية الراجعة للحالة الكاملة تعيده إلى الموضع الذي تختاره. يُحلّ أوّلًا بطريقة RK4 ويُخزَّن، ثم يُعاد تشغيله."
  },
+ "39587f6b88bd": {
+  "src": "<span>11</span>Can one push reach everything?",
+  "tr": "<span>11</span>هل تبلغ دفعة واحدة كلّ شيء؟"
+ },
+ "3989ff53352d": {
+  "src": "<span>5</span>The coil in the Lagrangian",
+  "tr": "<span>5</span>الملفّ في دالّة لاغرانج"
+ },
+ "3c0931f1e1df": {
+  "src": "<span class=\"pfig__n\">Figure 2</span>The strut's two joints, rendered from the 3D model at the same scale and from the same viewpoint; the small sketch in the middle shows where they sit. <b>A, at ball 2:</b> <b>1</b> rod 2, fixed into the ball; <b>2</b> ball 2; <b>3</b> the bore through the ball's centre; <b>4</b> the axle, hardened steel, drawn pulled out along its own line; <b>5</b> bronze bushing in the fork's cheek; <b>6</b> fork cheek, one on each side of the ball; <b>7</b> bridge joining the cheeks; <b>8</b> boss, threaded onto the inner tube; <b>9</b> inner tube. <b>B, at the cart</b>, drawn pulled apart along the strut's axis: <b>10</b> outer tube; <b>11</b> threaded shank; <b>12</b> rod end, a steel eye; <b>13</b> bronze ball bearing inside the eye; <b>14</b> pin, hardened steel; <b>15</b> bore for the pin; <b>16</b> clevis; <b>17</b> one of two cap screws; <b>18</b> top plate of the cart.",
+  "tr": "<span class=\"pfig__n\">الشكل 2</span>مفصلا الدعامة، مولَّدان من النموذج 3D بالمقياس نفسه ومن زاوية الرؤية نفسها؛ ويبيّن الرسم الصغير في الوسط موضعيهما. <b>A، عند الكرة 2:</b> <b>1</b> القضيب 2، مثبّت في الكرة؛ <b>2</b> الكرة 2؛ <b>3</b> الثقب المارّ بمركز الكرة؛ <b>4</b> المحور، من الفولاذ المقسّى، مرسومًا مسحوبًا على امتداد خطّه؛ <b>5</b> جلبة برونزية في جانب الشوكة؛ <b>6</b> جانب الشوكة، واحد على كلّ جانب من الكرة؛ <b>7</b> الجسر الذي يصل الجانبين؛ <b>8</b> البروز، الملولب على الأنبوب الداخلي؛ <b>9</b> الأنبوب الداخلي. <b>B، عند العربة</b>، مرسومًا مفكّكًا على امتداد محور الدعامة: <b>10</b> الأنبوب الخارجي؛ <b>11</b> ساق ملولبة؛ <b>12</b> رأس القضيب، عين فولاذية؛ <b>13</b> كرة برونزية داخل العين؛ <b>14</b> مسمار، من الفولاذ المقسّى؛ <b>15</b> ثقب المسمار؛ <b>16</b> شوكة الوصل؛ <b>17</b> أحد برغيين برأس أسطواني؛ <b>18</b> اللوحة العلوية للعربة."
+ },
  "3c6a93169bb0": {
   "src": "Near a rest, every smooth system behaves like a set of coupled springs. Expand \\(V\\) to second order about the straight-hanging rest, using \\(\\cos\\theta \\approx 1 - \\theta^2/2\\) and \\(x_2 \\approx l_1\\theta_1 + l_2\\theta_2\\). The strut's length changes only to second order when the chain swings, and SymPy reduces the potential to",
   "tr": "قرب وضع السكون يتصرّف كلّ نظام أملس كمجموعة من النوابض المقترنة. انشر \\(V\\) حتى الرتبة الثانية حول وضع السكون المتدلّي شاقوليًا، مستعملًا \\(\\cos\\theta \\approx 1 - \\theta^2/2\\) و\\(x_2 \\approx l_1\\theta_1 + l_2\\theta_2\\). لا يتغيّر طول الدعامة إلا في الرتبة الثانية حين تتأرجح السلسلة، ويختزل SymPy الطاقة الكامنة إلى"
+ },
+ "3c6d7edec42f": {
+  "src": "0.2–5 kg",
+  "tr": "0.2–5 kg"
+ },
+ "3d142eafef8a": {
+  "src": "One push can steer all six numbers if and only if \\(\\boldsymbol\\Gamma\\) has rank 6. The page computes the rank in <code>rankOf()</code>. With any pull or push in the strut, \\(N_0 \\neq 0\\), it is 6; with \\(N_0 = 0\\) it is 2, because \\(\\mathbf A\\) splits into a chain block and a cart block and \\(\\mathbf B\\) reaches only the cart's.",
+  "tr": "تستطيع دفعة واحدة أن توجّه الأعداد الستّة كلّها إذا وفقط إذا كانت رتبة \\(\\boldsymbol\\Gamma\\) هي 6. وتحسب الصفحة الرتبة في <code>rankOf()</code>. مع أيّ شدّ أو دفع في الدعامة، \\(N_0 \\neq 0\\)، تكون 6؛ ومع \\(N_0 = 0\\) تكون 2، لأنّ \\(\\mathbf A\\) تنقسم إلى كتلة للسلسلة وكتلة للعربة، و\\(\\mathbf B\\) لا تبلغ إلّا كتلة العربة."
+ },
+ "3d2ea13c1ef7": {
+  "src": "Squaring a sum gives two squares and a cross term. Adding the two squared components, the squares combine as for ball 1, and the cross terms combine into",
+  "tr": "مربّع المجموع يعطي مربّعين وحدًّا متقاطعًا. وبجمع المركّبتين المربّعتين تجتمع المربّعات كما في الكرة 1، وتجتمع الحدود المتقاطعة في"
  },
  "3d6a01b092c6": {
   "src": "2 store",
   "tr": "2 خزّن"
  },
+ "3d92da811372": {
+  "src": "keeps \\(\\ell_0\\) within 0.55–0.85 m",
+  "tr": "تُبقي \\(\\ell_0\\) بين 0.55 و0.85 m"
+ },
  "3dc29a2ac9a2": {
   "src": "The rig works the same way, part for part. The cord is the strut. To first order its sideways pull is that of a stretched string (§6): the pull \\(N_0\\) along the strut, tilted by the offset between ball 2 and the cart, gives a sideways force \\((N_0/\\ell_0)\\,(X - x_2)\\) on ball 2, about 4.6 N for every metre that the cart stands beside the ball, and the opposite force on the cart. The hand is the cart. The arm is the coil: it pushes the cart with \\(F\\), and its power \\(F\\dot X\\) is positive when it speeds the cart along and negative when it brakes it; braking sends the energy back into the current source. Nothing else touches the chain. So the energy of a swing has exactly one way out: from the chain through the string into the cart, and from the cart through the coil into the source.",
   "tr": "يعمل الجهاز بالطريقة نفسها، جزءًا بجزء. الحبل هو الدعامة. وشدّها الجانبي هو، في الرتبة الأولى، شدّ وتر مشدود (§6): الشدّ \\(N_0\\) على امتداد الدعامة، وقد مال بمقدار الإزاحة بين الكرة 2 والعربة، يعطي قوّة جانبية \\((N_0/\\ell_0)\\,(X - x_2)\\) على الكرة 2، نحو 4.6 N لكلّ متر تبعد فيه العربة جانبًا عن الكرة، وقوّة معاكسة لها على العربة. اليد هي العربة. والذراع هي الملفّ: يدفع العربة بالقوّة \\(F\\)، وقدرته \\(F\\dot X\\) موجبة حين يسرّع العربة في اتجاه حركتها وسالبة حين يكبحها؛ والكبح يعيد الطاقة إلى مصدر التيار. ولا شيء آخر يمسّ السلسلة. فلطاقة التأرجح مخرج واحد لا غير: من السلسلة عبر الوتر إلى العربة، ومن العربة عبر الملفّ إلى مصدر التيار."
+ },
+ "3e8a7f73c1bf": {
+  "src": "<span class=\"psec__n\">03</span>Velocities and kinetic energy",
+  "tr": "<span class=\"psec__n\">03</span>السرعات والطاقة الحركية"
  },
  "3e9fcdb4c320": {
   "src": "Nothing else touches the chain. The rods turn without friction, the floor is smooth, the tubes slide without friction. Left alone, the rig swings for ever. You can test that with your hand: switch the controller off, grab a ball or the cart, pull it anywhere, let go.",
   "tr": "لا شيء آخر يلمس السلسلة. تدور القضبان بلا احتكاك، والأرضية ملساء، وتنزلق الأنابيب بلا احتكاك. وإذا تُرك الجهاز وشأنه تأرجح إلى الأبد. يمكنك أن تختبر ذلك بيدك: أوقف المتحكّم، وأمسك كرةً أو العربة، واسحبها إلى أيّ مكان، ثم أفلتها."
  },
+ "3ea7eb25ee89": {
+  "src": "At a rest every speed and acceleration is zero, so the speed-squared terms vanish and (15) leaves \\(\\nabla V = (0, 0, F)\\).",
+  "tr": "في السكون تنعدم كلّ سرعة وكلّ تسارع، فتتلاشى حدود مربّع السرعة وتُبقي (15) على \\(\\nabla V = (0, 0, F)\\)."
+ },
  "3f6bd3bf6eea": {
   "src": "<span>11</span>On screen",
   "tr": "<span>11</span>على الشاشة"
+ },
+ "3f84ef531f9d": {
+  "src": "Symbol",
+  "tr": "الرمز"
+ },
+ "3f92dbe05098": {
+  "src": "<span class=\"psec__n\">02</span>Coordinates",
+  "tr": "<span class=\"psec__n\">02</span>الإحداثيات"
  },
  "4020e4c6081f": {
   "src": "<b>Your hand.</b> You can grab either ball or the cart with the pointer and drag it. While you hold it, the stored run stops playing and the rig follows your hand. When you let go, the page takes the state your hand left as the start of a new run, computes the next 30 s and plays them. Pulling is how you put energy into the rig: you lift a ball against gravity, stretch the spring, and give the parts speed.",
@@ -190,6 +450,10 @@
  "40255139816b": {
   "src": "has full rank, 6. The idea is a chain of influences. \\(\\mathbf B\\) is what a push does at once: it accelerates the cart. \\(\\mathbf A\\mathbf B\\) is what that does a moment later: the cart moves, stretches the string sideways, and starts to tug ball 2. Each further power reaches one link further into the chain. If some combination of the state never appears in this chain, no push can ever touch it. With the defaults the rank is 6; with \\(N_0 = 0\\) it falls to 2, the cart's own two numbers, as Section 6 predicted. The page computes the rank in <code>rankOf()</code> and prints it under the phase portrait.",
   "tr": "ذات رتبة كاملة، 6. الفكرة سلسلة من التأثيرات. \\(\\mathbf B\\) هي ما تفعله الدفعة فورًا: تسرّع العربة. و\\(\\mathbf A\\mathbf B\\) هي ما يفعله ذلك بعد لحظة: تتحرّك العربة، فتشدّ الوتر جانبًا، وتبدأ بجذب الكرة 2. وكلّ قوّة أعلى تصل حلقةً أبعد في السلسلة. فإن كان ثمّة تركيب من الحالة لا يظهر أبدًا في هذه السلسلة، فلن تستطيع أيّ دفعة أن تمسّه. وبالقيم الافتراضية تكون الرتبة 6؛ ومع \\(N_0 = 0\\) تهبط إلى 2، أي عددَي العربة الخاصّين بها، كما تنبّأ القسم 6. تحسب الصفحة الرتبة في <code>rankOf()</code> وتطبعها تحت صورة الطور."
+ },
+ "40c459376d5f": {
+  "src": "Run the motor of §1.3 backwards. When the cart moves at \\(\\dot X\\), the coil's legs sweep through the field, and a voltage \\(\\kappa\\dot X\\) appears in the coil, the <i>back-emf</i>, with the same constant as the force. It has to be the same constant for energy to balance: the power the source spends driving \\(I\\) against \\(\\kappa\\dot X\\) is \\(\\kappa I\\dot X\\), exactly the power \\(F\\dot X\\) the coil delivers to the cart.",
+  "tr": "شغّل محرّك §1.3 معكوسًا. حين تتحرّك العربة بسرعة \\(\\dot X\\) تكنس ساقا الملفّ المجال، فيظهر في الملفّ جهد \\(\\kappa\\dot X\\)، هو <i>القوّة الدافعة الكهربائية العكسية</i>، بالثابت نفسه الذي للقوّة. ويجب أن يكون الثابت نفسه لتتوازن الطاقة: فالقدرة التي يبذلها المصدر ليدفع \\(I\\) ضدّ \\(\\kappa\\dot X\\) هي \\(\\kappa I\\dot X\\)، وهي بالضبط القدرة \\(F\\dot X\\) التي يسلّمها الملفّ للعربة."
  },
  "415a0131dcef": {
   "src": "Nothing is computed while you watch. When you press Solve, release the flag or let go of the chain, the page designs the controller, then integrates (5) with the feedback (11) by the classical fourth-order Runge–Kutta method, step \\(h = 0.5\\ \\mathrm{ms}\\), for 30 s: 60 000 steps. The force is evaluated at all four stages of each step, as a continuous controller would act. Every twentieth state, one every 10 ms, is stored with the force, the current, the strut's pull and length, and the energy; the animation then plays the stored samples back.",
@@ -203,25 +467,77 @@
   "src": "Each ball is pulled down by gravity with its <em>weight</em>, its mass times the strength of gravity, \\(mg = 0.5 \\times 9.81 = 4.9\\) newtons. A <em>newton</em>, written N, is the unit of force; it is roughly the weight of a small apple of 100 g lying in your palm. So each ball pulls down on its rod as five small apples would.",
   "tr": "تشدّ الجاذبية كلّ كرة إلى الأسفل بقوّة هي <em>وزنها</em>، أي كتلتها مضروبة في شدّة الجاذبية، \\(mg = 0.5 \\times 9.81 = 4.9\\) نيوتن. <em>النيوتن</em>، ويُكتب N، هو وحدة القوّة؛ ويساوي تقريبًا وزن تفاحة صغيرة كتلتها 100 g موضوعة على كفّك. فكلّ كرة تشدّ قضيبها إلى الأسفل كما تفعل خمس تفاحات صغيرة."
  },
+ "4302b3765bdf": {
+  "src": "The stretch \\(\\delta\\) has no first-order part. Tilt a vertical string sideways by \\(a\\) and it gets longer only by \\(a^2/2\\ell_0\\), the way a ladder leaned a little off the wall barely changes its height; lift its top by \\(\\beta\\) and it gets longer by \\(\\beta\\).",
+  "tr": "ليس للتمدّد \\(\\delta\\) جزء من الرتبة الأولى. أمِل خيطًا رأسيًّا جانبًا بمقدار \\(a\\) فلا يطول إلّا \\(a^2/2\\ell_0\\)، كما أنّ سلّمًا أُميل قليلًا عن الجدار لا يكاد يتغيّر ارتفاعه؛ وارفع طرفه العلوي \\(\\beta\\) فيطول \\(\\beta\\)."
+ },
+ "44176c931d8f": {
+  "src": "0.5 kg",
+  "tr": "0.5 kg"
+ },
  "444c750bdd3a": {
   "src": "A double pendulum hangs from a fixed pivot. A sprung telescopic strut ties its lower ball to a cart, and a moving coil drives the cart along a rail. Pull the pendulum anywhere and let go: the controller, which can push only the cart, brings the whole chain back to rest where you chose. The motion is solved first and stored; the animation plays the stored run back.",
   "tr": "يتدلّى نوّاس مزدوج من نقطة ارتكاز ثابتة. وتربط دعامةٌ تلسكوبية ذات نابض كرتَه السفلى بعربة، ويدفع ملفٌّ متحرّك العربةَ على طول سكّة. اسحب النوّاس إلى أيّ مكان ثم أفلته: فالمتحكّم، الذي لا يستطيع أن يدفع إلا العربة، يعيد السلسلة كلّها إلى السكون في الموضع الذي اخترته. تُحلّ الحركة أوّلًا وتُخزَّن، ثم يعيد التحريك تشغيل الحلّ المخزَّن."
+ },
+ "4460708dbab6": {
+  "src": "Two rendered close-ups. Left: ball 2 with an axle through its centre, a steel fork straddling the ball on that axle, and the strut's inner tube below. Right: the strut's outer tube ending in a rod-end eye, a steel pin, a U-shaped clevis and the cart's top plate, drawn pulled apart. A small sketch between them marks where the two joints sit.",
+  "tr": "صورتان مقرّبتان مولَّدتان. يسارًا: الكرة 2 ومحور يمرّ بمركزها، وشوكة فولاذية تحيط بالكرة على ذلك المحور، والأنبوب الداخلي للدعامة تحتها. يمينًا: الأنبوب الخارجي للدعامة منتهيًا بعين رأس القضيب، ومسمار فولاذي، وشوكة وصل على شكل U، واللوحة العلوية للعربة، مرسومة مفكّكة. ويعلّم رسم صغير بينهما موضع المفصلين."
+ },
+ "44c27d2af69c": {
+  "src": "R. Tedrake, <a href=\"https://underactuated.mit.edu/acrobot.html\"><em>Underactuated Robotics</em>, chapter 3: Acrobots, Cart-Poles, and Quadrotors</a>, MIT course notes: the manipulator equations, linearisation at a fixed point, the controllability test and LQR for a pendulum pushed through one actuator.",
+  "tr": "R. Tedrake، <a href=\"https://underactuated.mit.edu/acrobot.html\"><em>Underactuated Robotics</em>, chapter 3: Acrobots, Cart-Poles, and Quadrotors</a>، مذكّرات مقرّر في MIT: معادلات المناول، والتخطيط عند نقطة ثابتة، واختبار قابلية التحكّم، وLQR لنوّاس يُدفع عبر مشغّل واحد."
+ },
+ "4568fe97594f": {
+  "src": "<span>14</span>Phase space and the region of rescue",
+  "tr": "<span>14</span>فضاء الطور ومنطقة الإنقاذ"
  },
  "459f58d99beb": {
   "src": "The lower ball is pulled by gravity, by its rod and by the strut; it moves, and through its rod it pulls on the upper ball, which is pulled by gravity and by the upper rod as well. The chain swings in a new way.",
   "tr": "تؤثّر في الكرة السفلى الجاذبية وقضيبها والدعامة؛ فتتحرّك، وتشدّ بقضيبها الكرة العلوية، التي تؤثّر فيها الجاذبية والقضيب العلوي كذلك. فتتأرجح السلسلة تأرجحًا مختلفًا."
  },
+ "466134981177": {
+  "src": "Spin the upper rod fast. Ball 1 runs round a circle, and ball 2, hanging from it, is flung outwards along rod 1 with the force \\(m_2l_1\\dot\\theta_1^2\\). Unless rod 2 lies along rod 1, that fling has a lever arm \\(l_2\\sin(\\theta_1 - \\theta_2)\\) about ball 1 and twists rod 2: that is \\(-\\mu s\\,\\dot\\theta_1^2\\) in (13). The term \\(\\mu s\\,\\dot\\theta_2^2\\) in (12) is the mirror image: ball 2 whirling about ball 1 pulls ball 1 outwards along rod 2. Both are centrifugal. The mixed terms \\(\\dot\\theta_1\\dot\\theta_2\\), which would have been Coriolis forces, cancelled exactly.",
+  "tr": "أدِر القضيب العلوي بسرعة. تجري الكرة 1 على دائرة، والكرة 2 المعلّقة بها تُقذف إلى الخارج على امتداد القضيب 1 بالقوّة \\(m_2l_1\\dot\\theta_1^2\\). وما لم يقع القضيب 2 على امتداد القضيب 1 يكون لهذا القذف ذراع \\(l_2\\sin(\\theta_1 - \\theta_2)\\) حول الكرة 1 فيُدير القضيب 2: هذا هو \\(-\\mu s\\,\\dot\\theta_1^2\\) في (13). والحدّ \\(\\mu s\\,\\dot\\theta_2^2\\) في (12) صورته في المرآة: الكرة 2 الدائرة حول الكرة 1 تشدّ الكرة 1 إلى الخارج على امتداد القضيب 2. وكلاهما طرد مركزي. أمّا الحدود المختلطة \\(\\dot\\theta_1\\dot\\theta_2\\)، التي كانت ستكون قوى كوريوليس، فقد تلاشت تمامًا."
+ },
+ "4826b11fe210": {
+  "src": "<b>At ball 2 (panel A).</b> A steel axle passes straight through a bore in the centre of ball 2, at right angles to the plane of the swing. The strut's upper end is a fork: two steel cheeks, one on each side of the ball, with bronze bushings that ride on the two ends of the axle, joined below the ball by a bridge whose boss is screwed onto the strut's inner tube. Rod 2 is fixed into the top of the ball and passes between the cheeks, so the fork can swing through nearly a full turn about the ball; only when the strut points straight back up along rod 2 would its bridge meet the rod.",
+  "tr": "<b>عند الكرة 2 (اللوحة A).</b> يمرّ محور فولاذي مستقيمًا عبر ثقب في مركز الكرة 2، عموديًّا على مستوى التأرجح. والطرف العلوي للدعامة شوكة: جانبان فولاذيان، واحد على كلّ جانب من الكرة، بجلبتين برونزيتين تدوران على طرفي المحور، يصلهما تحت الكرة جسر برّاغيّ البروز على الأنبوب الداخلي للدعامة. والقضيب 2 مثبّت في أعلى الكرة ويمرّ بين الجانبين، فتستطيع الشوكة أن تتأرجح دورة كاملة تقريبًا حول الكرة؛ ولا يلتقي جسرها بالقضيب إلّا إذا أشارت الدعامة مستقيمة إلى الأعلى على امتداد القضيب 2."
+ },
+ "4852575f681a": {
+  "src": "The potential gives \\(\\partial V/\\partial\\theta_1 = (m_1 + m_2)gl_1\\sin\\theta_1 + N\\,\\partial\\ell/\\partial\\theta_1\\), from (6) and (9). So",
+  "tr": "وتعطي الطاقة الكامنة \\(\\partial V/\\partial\\theta_1 = (m_1 + m_2)gl_1\\sin\\theta_1 + N\\,\\partial\\ell/\\partial\\theta_1\\)، من (6) و(9). إذن"
+ },
  "48b21b55072d": {
   "src": "the pull \\(N\\) of the strut times the rate at which each coordinate stretches it. On the cart this is \\(N\\,\\partial\\ell/\\partial X = -N (x_2 - X)/\\ell\\): the strut's pull, projected onto the rail. That one term, and its partners in the two angle equations, are all the strut does. The code solves (5) for \\(\\ddot{\\mathbf q}\\) in <code>accel()</code>: the \\(2\\times2\\) pendulum block by Cramer's rule, the cart by one division. As a check, the same accelerations come out of Newton's laws with the two rod tensions as unknowns; at a random state with the cart pushed, the two routes agree to 13 significant figures.",
   "tr": "أي شدّ الدعامة \\(N\\) مضروبًا في المعدّل الذي يمطّها به كلّ إحداثي. وعلى العربة يكون هذا \\(N\\,\\partial\\ell/\\partial X = -N (x_2 - X)/\\ell\\): شدّ الدعامة مُسقَطًا على السكّة. هذا الحدّ الواحد، ونظيراه في معادلتي الزاويتين، هما كلّ ما تفعله الدعامة. تحلّ الشيفرة (5) لإيجاد \\(\\ddot{\\mathbf q}\\) في <code>accel()</code>: كتلة النوّاس \\(2\\times2\\) بقاعدة كرامر، والعربة بقسمة واحدة. وللتحقّق، تخرج التسارعات نفسها من قوانين نيوتن مع شدّي القضيبين مجهولين؛ وعند حالة عشوائية والعربة مدفوعة، يتّفق الطريقان حتى 13 رقمًا معنويًا."
+ },
+ "48f965b1f20e": {
+  "src": "From (19), show that with \\(N_0 = 0\\) the cart's equation is \\(M\\ddot X = \\tilde F\\) and that the chain's equations do not contain \\(X\\). Which two columns of (22) survive?",
+  "tr": "بيّن من (19) أنّه مع \\(N_0 = 0\\) تكون معادلة العربة \\(M\\ddot X = \\tilde F\\) وأنّ معادلات السلسلة لا تحوي \\(X\\). أيّ عمودين من (22) يبقيان؟"
+ },
+ "490102501abf": {
+  "src": "The controller pushes with the holding force plus a weighted sum of the six errors,",
+  "tr": "يدفع المتحكّم بقوّة الإمساك مضافًا إليها مجموع موزون للأخطاء الستّة،"
  },
  "4914a194b59d": {
   "src": "The page solves (13) in <code>lqr()</code> by the matrix sign function of the \\(12\\times12\\) Hamiltonian matrix \\(\\left(\\begin{smallmatrix}\\mathbf A & -\\rho^{-1}\\mathbf B\\mathbf B^{\\mathsf T} \\\\ -\\mathbf Q & -\\mathbf A^{\\mathsf T}\\end{smallmatrix}\\right)\\): the iteration \\(\\mathbf Z \\leftarrow \\tfrac12(\\mathbf Z + \\mathbf Z^{-1})\\) converges in a handful of steps, and its blocks give \\(\\mathbf P\\). For the default rest (\\(r = 0.30\\ \\mathrm{m}\\)) and weights \\(q_\\theta = q_X = q_v = 5\\), \\(\\rho = 0.02\\), the gains are \\(\\mathbf K = (19.22,\\ -201.70,\\ 120.09,\\ 0.04,\\ 0.52,\\ 22.14)\\), in newtons per radian or metre and per radian or metre per second; SciPy's Riccati solver gives the same numbers. The large gain on \\(\\theta_2\\) is the hand under the stick: when ball 2 swings right, the cart is pulled the other way at first, which sets the string against the swing.",
   "tr": "تحلّ الصفحة (13) في <code>lqr()</code> بدالّة الإشارة المصفوفية للمصفوفة الهاملتونية ذات الأبعاد \\(12\\times12\\)، \\(\\left(\\begin{smallmatrix}\\mathbf A & -\\rho^{-1}\\mathbf B\\mathbf B^{\\mathsf T} \\\\ -\\mathbf Q & -\\mathbf A^{\\mathsf T}\\end{smallmatrix}\\right)\\): فالتكرار \\(\\mathbf Z \\leftarrow \\tfrac12(\\mathbf Z + \\mathbf Z^{-1})\\) يتقارب في خطوات قليلة، وتعطي كتلُه \\(\\mathbf P\\). ولوضع السكون الافتراضي (\\(r = 0.30\\ \\mathrm{m}\\)) والأوزان \\(q_\\theta = q_X = q_v = 5\\)، \\(\\rho = 0.02\\)، تكون معاملات الكسب \\(\\mathbf K = (19.22,\\ -201.70,\\ 120.09,\\ 0.04,\\ 0.52,\\ 22.14)\\)، بالنيوتن لكلّ راديان أو متر، ولكلّ راديان أو متر في الثانية؛ ويعطي حلّال ريكاتي في SciPy الأعداد نفسها. والكسب الكبير على \\(\\theta_2\\) هو اليد تحت العصا: حين تتأرجح الكرة 2 إلى اليمين، تُسحب العربة في البداية إلى الاتجاه الآخر، فيصير الوتر في مواجهة التأرجح."
  },
+ "49a034f6a80a": {
+  "src": "The mass matrix has a zero block: the cart's inertia does not mix with the chain's. Everything that ties the cart to the chain sits in \\(\\nabla V\\), through the strut's pull \\(N\\); the coil pushes only the cart. The page solves (15) for the accelerations in <code>accel()</code>.",
+  "tr": "لمصفوفة الكتلة كتلة صفرية: فعطالة العربة لا تختلط بعطالة السلسلة. وكلّ ما يربط العربة بالسلسلة يقع في \\(\\nabla V\\)، عبر شدّ الدعامة \\(N\\)؛ والملفّ لا يدفع إلّا العربة. وتحلّ الصفحة (15) لإيجاد التسارعات في <code>accel()</code>."
+ },
  "4a1af19c50cf": {
   "src": "The coil can also take energy out of the rig. When it pushes against the way the cart is moving, it slows the cart down, and the energy of motion goes back into the electrical supply instead of being wasted. This is <em>regenerative braking</em>; an electric car does the same when it slows down and recharges its battery. It is how the controller finally gets rid of a swing, as §1.2 shows.",
   "tr": "يستطيع الملفّ أيضًا أن يسحب الطاقة من الجهاز. فحين يدفع عكس اتجاه حركة العربة يُبطئها، وتعود طاقة الحركة إلى مصدر الكهرباء بدل أن تُهدَر. هذا هو <em>الكبح التجديدي</em>؛ والسيّارة الكهربائية تفعل الشيء نفسه حين تُبطئ فتشحن بطاريتها. وبه يتخلّص المتحكّم أخيرًا من التأرجح، كما يبيّن §1.2."
+ },
+ "4a36b79bbc31": {
+  "src": "<span>9</span>Small swings: the guitar string&nbsp;★",
+  "tr": "<span>9</span>التأرجحات الصغيرة: وتر الغيتار&nbsp;★"
+ },
+ "4b294c9d0681": {
+  "src": "Rod 1 length l₁",
+  "tr": "طول القضيب 1 l₁"
  },
  "4b8b36d54a01": {
   "src": "<span>4</span>The strut: two tubes and a spring",
@@ -239,13 +555,29 @@
   "src": "Phase portraits: three projections of the six-dimensional state, angle against angular speed for each rod and position against speed for the cart, with the fixed point the controller holds.",
   "tr": "صور الطور: ثلاثة إسقاطات للحالة السداسية الأبعاد، الزاوية مقابل السرعة الزاوية لكلّ قضيب، والموضع مقابل السرعة للعربة، مع النقطة الثابتة التي يمسكها المتحكّم."
  },
+ "4fcd3f1cac08": {
+  "src": "<span class=\"psub__n\">1.3</span>The magnet track and the coil",
+  "tr": "<span class=\"psub__n\">1.3</span>المسار المغناطيسي والملفّ"
+ },
  "50073409a937": {
   "src": "Cart weight q<sub>X</sub>",
   "tr": "وزن العربة q<sub>X</sub>"
  },
+ "5171297544bc": {
+  "src": "We choose the angle of each rod from straight down, positive to the right, and the cart's position along the rail, measured from the point under the pivot:",
+  "tr": "نختار زاوية كلّ قضيب عن الشاقول إلى الأسفل، موجبة إلى اليمين، وموضع العربة على السكّة، مقيسًا من النقطة التي تحت نقطة الارتكاز:"
+ },
  "520cf30d1f1e": {
   "src": "A tilted strut that pulls along its own line pulls partly sideways. Its sideways part tugs the lower ball towards the cart and, equally and oppositely, tugs the cart towards the ball. This sideways tug, near the straight-hanging rest about 4.6 N for every metre by which the cart stands beside the ball, is the only way in which the cart can act on the chain.",
   "tr": "الدعامة المائلة، وهي تشدّ على امتداد خطّها، تشدّ جزئيًا إلى الجانب. ويشدّ جزؤها الجانبي الكرة السفلى نحو العربة، ويشدّ العربة نحو الكرة بالقدر نفسه وفي الاتجاه المعاكس. وهذا الشدّ الجانبي، نحو 4.6 N لكلّ متر تبعد فيه العربة جانبًا عن الكرة قرب وضع السكون المتدلّي شاقوليًا، هو الطريقة الوحيدة التي تؤثّر بها العربة في السلسلة."
+ },
+ "527a88ffc7f4": {
+  "src": "Below the machine, a window of 10 s follows the playback: \\(\\theta_1\\) dark, \\(\\theta_2\\) burgundy and \\(X\\) brown dashed, dark up to now and pale after, with the rest values as rose lines. The strip under it is the whole run, the window shaded, with marks where the coil sits at its limit and where the strut touches a stop. The force profile shows \\(F\\), its steady value \\(F^*\\) (rose) and its limits \\(\\pm\\kappa I_\\text{max}\\) (dotted), and the strut's pull \\(N\\). The phase-space panels are scaled to each run; the caption gives the eigenvalues, the kind of rest and the rank of (22).",
+  "tr": "وتحت الآلة نافذة من 10 s تتبع العرض: \\(\\theta_1\\) داكن، و\\(\\theta_2\\) عنّابي، و\\(X\\) بنّي متقطّع، داكنة حتّى الآن وباهتة بعده، وقيم السكون خطوط ورديّة. والشريط تحتها الجريان كلّه، والنافذة مظلّلة، وعليه علامات حيث يكون الملفّ عند حدّه وحيث تلمس الدعامة موقفًا. ويُظهر ملفّ القوّة \\(F\\)، وقيمتها الثابتة \\(F^*\\) (وردي) وحدّيها \\(\\pm\\kappa I_\\text{max}\\) (منقّط)، وشدّ الدعامة \\(N\\). ولوحات فضاء الطور مقيسة على كلّ جريان؛ ويذكر التعليق القيم الذاتية ونوع السكون ورتبة (22)."
+ },
+ "52afeb4e8d09": {
+  "src": "W. Manhães, R. Sampaio, R. Lima, P. Hagedorn and J.-F. Deü, <a href=\"https://cimec.org.ar/~mstorti/MECOM2018/paper-5657.pdf\">Lagrangians for Electromechanical Systems</a>, Mecánica Computacional XXXVI, 2018: how a motor's coupling term enters the Lagrangian.",
+  "tr": "W. Manhães وR. Sampaio وR. Lima وP. Hagedorn وJ.-F. Deü، <a href=\"https://cimec.org.ar/~mstorti/MECOM2018/paper-5657.pdf\">Lagrangians for Electromechanical Systems</a>، Mecánica Computacional XXXVI، 2018: كيف يدخل حدّ اقتران المحرّك في دالّة لاغرانج."
  },
  "53541d584947": {
   "src": "Count first. Three bodies move in a plane: two balls, which we treat as points, and the cart. A free point in a plane needs two numbers, so three free bodies would need six. The rigid rods remove one each, \\(|\\mathbf r_1| = l_1\\) and \\(|\\mathbf r_2 - \\mathbf r_1| = l_2\\), and the rail removes one more, since the cart's height is fixed. These three are <em>holonomic</em> constraints, rules about positions alone, and each can push as well as pull. Six minus three leaves three degrees of freedom.",
@@ -255,9 +587,33 @@
   "src": "Controllable does not mean easy. The obvious first try is the controller of Fig. 9 on the cart alone, \\(F = K_p(r - X) - K_d\\dot X\\). It damps the chain only through the soft string, and only by accident of timing. Searching \\(K_p\\) and \\(K_d\\) over a wide grid, the best choice leaves the slowest motion decaying at 0.009 per second, a time constant of nearly two minutes. The controller has to look at the chain itself.",
   "tr": "قابلية التحكّم لا تعني السهولة. المحاولة الأولى البديهية هي متحكّم الشكل 9 على العربة وحدها، \\(F = K_p(r - X) - K_d\\dot X\\). فهو لا يخمّد السلسلة إلا عبر الوتر الليّن، ولا يفعل ذلك إلا بمصادفة التوقيت. وبالبحث عن \\(K_p\\) و\\(K_d\\) على شبكة واسعة، يترك أفضلُ اختيار أبطأَ حركة تضمحلّ بمعدّل 0.009 في الثانية، أي بثابت زمني يقارب دقيقتين. على المتحكّم أن ينظر إلى السلسلة نفسها."
  },
+ "55b6d25cb3ff": {
+  "src": "<span class=\"psec__n\">08</span>Where the chain can rest",
+  "tr": "<span class=\"psec__n\">08</span>أين يمكن أن تسكن السلسلة"
+ },
+ "55f7b008a497": {
+  "src": "Witkin, §6: an energy \\(\\tfrac{k_s}{2}C^2\\) gives the force \\(-k_sC\\,\\partial C/\\partial x_i\\); §4.2, eq. (1): a spring pulls its two ends equally and oppositely along the line joining them.",
+  "tr": "Witkin، §6: الطاقة \\(\\tfrac{k_s}{2}C^2\\) تعطي القوّة \\(-k_sC\\,\\partial C/\\partial x_i\\)؛ §4.2، المعادلة (1): النابض يشدّ طرفيه بقوّتين متساويتين ومتعاكستين على الخطّ الواصل بينهما."
+ },
+ "56297747ef19": {
+  "src": "One simplification, said openly. A single coil over alternating magnets pushes hardest when its legs sit over the middle of the magnets and not at all when they sit over the joins between them. Real long-stroke motors use three coils side by side, and the driver shares the current between them so that the push is the same everywhere. The page models that ideal motor, with one constant \\(\\kappa\\).",
+  "tr": "تبسيط واحد، نقوله صراحة. الملفّ الواحد فوق مغانط متناوبة يدفع أشدّ ما يدفع حين تقع ساقاه فوق منتصف المغانط، ولا يدفع إطلاقًا حين تقعان فوق مواضع التقائها. والمحرّكات الحقيقية طويلة الشوط تستعمل ثلاثة ملفّات متجاورة، ويوزّع المشغّل التيار بينها حتّى يكون الدفع واحدًا في كلّ مكان. والصفحة تنمذج ذلك المحرّك المثالي، بثابت واحد \\(\\kappa\\)."
+ },
  "56da20b587a6": {
   "src": "Nothing in the loop is magic, and nothing is hidden: there are three bodies, gravity, one spring, one push, and one rule that sets the push. The next subsection follows the energy round the same loop and shows why the cart must move in step with the swing to bring it to rest.",
   "tr": "ليس في الحلقة شيء سحري، ولا شيء مخفيّ: ثلاثة أجسام، والجاذبية، ونابض واحد، ودفع واحد، وقاعدة واحدة تحدّد الدفع. ويتتبّع القسم الفرعي التالي الطاقة حول الحلقة نفسها ويبيّن لماذا يجب أن تتحرّك العربة مع التأرجح لتوصله إلى السكون."
+ },
+ "5763860079f4": {
+  "src": "<span class=\"psub__n\">17.1</span>Further reading",
+  "tr": "<span class=\"psub__n\">17.1</span>قراءات أخرى"
+ },
+ "5808244de6da": {
+  "src": "Square and add, and use \\(\\cos^2 + \\sin^2 = 1\\):",
+  "tr": "ربّع واجمع، واستعمل \\(\\cos^2 + \\sin^2 = 1\\):"
+ },
+ "584d3a675982": {
+  "src": "<span class=\"psub__n\">1.1</span>How ball 2 is tied to the cart",
+  "tr": "<span class=\"psub__n\">1.1</span>كيف تُربط الكرة 2 بالعربة"
  },
  "585cb7df2237": {
   "src": "Coil · F = κI, κ = 10 N/A",
@@ -271,9 +627,17 @@
   "src": "It multiplies the six differences by the six gains, adds the holding force, and asks the current source for the current that gives that push, cut off at 3 A.",
   "tr": "يضرب الفروق الستّة في معاملات الكسب الستّة، ويضيف قوّة الإمساك، ويطلب من مصدر التيار التيار الذي يعطي ذلك الدفع، على ألّا يزيد على 3 A."
  },
+ "59a433233988": {
+  "src": "with \\(\\mathbf M\\) and \\(\\mathbf S\\) taken at the rest. At the hanging rest \\(\\mathbf S\\) comes from (19); at any other rest, from the full (6). The page builds \\(\\mathbf A\\) and \\(\\mathbf B\\) numerically in <code>linearise()</code>.",
+  "tr": "مع أخذ \\(\\mathbf M\\) و\\(\\mathbf S\\) عند السكون. عند السكون المتدلّي تأتي \\(\\mathbf S\\) من (19)؛ وعند أيّ سكون آخر من (6) كاملة. وتبني الصفحة \\(\\mathbf A\\) و\\(\\mathbf B\\) عدديًّا في <code>linearise()</code>."
+ },
  "59bbc88022c4": {
   "src": "We choose three <em>generalised coordinates</em> that fix the whole picture: the two absolute angles and the cart's position,",
   "tr": "نختار ثلاثة <em>إحداثيات معمَّمة</em> تحدّد الصورة كلّها: الزاويتين المطلقتين وموضع العربة،"
+ },
+ "59fb6bbd49cb": {
+  "src": "The right side is negative whenever the machine is away from the rest, because the weights in \\(\\mathbf Q\\) are positive. So \\(\\tilde{\\mathbf y}^{\\mathsf T}\\mathbf P\\tilde{\\mathbf y}\\), the bill still to pay from the present state, is a bowl whose height falls along every path of the controlled linear model: a Lyapunov function. For the real machine the proof holds only near the rest, where (21) is good and the coil is below its limit. The phase-space panels on the page show the paths spiralling into the rest.",
+  "tr": "الطرف الأيمن سالب كلّما ابتعدت الآلة عن السكون، لأنّ الأوزان في \\(\\mathbf Q\\) موجبة. فـ \\(\\tilde{\\mathbf y}^{\\mathsf T}\\mathbf P\\tilde{\\mathbf y}\\)، الفاتورة الباقية من الحالة الحاضرة، وعاء ينخفض ارتفاعه على كلّ مسار للنموذج الخطّي المتحكَّم فيه: دالّة ليابونوف. وفي الآلة الحقيقية لا يصحّ البرهان إلّا قرب السكون، حيث (21) جيّدة والملفّ دون حدّه. وتُظهر لوحات فضاء الطور في الصفحة المسارات وهي تلتفّ حلزونيًّا إلى السكون."
  },
  "5b2c1e109e7b": {
   "src": "<b>The strut.</b> From the lower ball a third link runs down to the cart: the strut. It is made of two tubes, one sliding inside the other, like the two halves of a telescopic umbrella handle or a selfie stick, so it can become longer or shorter. Inside the tubes sits a spring, like the spring inside a ballpoint pen but bigger. Each end of the strut is on a hinge, one at the lower ball and one at the cart, so the strut can tilt freely at both ends. Because it is light and hinged at both ends, the strut can only push or pull along its own length, never sideways. Engineers call such a part a <em>two-force member</em>: it carries one force along its own line, pulling or pushing equally at its two ends. A rope is the simplest example, since it can only pull along itself; a strut is a rope that can also push.",
@@ -282,6 +646,10 @@
  "5b408d25f21e": {
   "src": "RK4, h vs h/2",
   "tr": "RK4، h مقابل h/2"
+ },
+ "5b4680b51f5d": {
+  "src": "The fraction under the root is second order, and \\(\\sqrt{1 + u} \\approx 1 + \\tfrac12 u\\) for small \\(u\\):",
+  "tr": "والكسر تحت الجذر من الرتبة الثانية، و\\(\\sqrt{1 + u} \\approx 1 + \\tfrac12 u\\) لـ \\(u\\) صغير:"
  },
  "5bcca40becc7": {
   "src": "Double Pendulum under Control<span class=\"dot\">.</span>",
@@ -299,6 +667,18 @@
   "src": "Two things follow, and both can be seen on the page. The cart must move, and it moves first, towards the ball: a string whose end stands still can only give back what it takes. And the coil is not a brake that is simply on; it is a pump that runs both ways, a little more out than in on every swing. The bars at the top left of the rig keep this account: \\(E - E^*\\) is the energy above the rest, \\(W_\\text{coil}\\) the coil’s work since the run began. Set the target to 0, pull ball 2 aside and let go: \\(W_\\text{coil}\\) falls by just what \\(E - E^*\\) loses. Switch the controller off and do the same: \\(W_\\text{coil}\\) stays at zero, and the energy stays in the chain for ever. How hard the coil may pump is the controller’s design (§8). Gentle charges the coil’s effort five times more than Firm (\\(\\rho = 0.1\\) against \\(0.02\\)), so it pushes less and the chain takes longer to come home.",
   "tr": "ينتج عن ذلك أمران، ويمكن رؤيتهما معًا في الصفحة. أولهما أن العربة يجب أن تتحرّك، وتتحرّك أولًا نحو الكرة: فالوتر الذي يثبت طرفه لا يستطيع إلا أن يردّ ما أخذه. وثانيهما أن الملفّ ليس مكبحًا يعمل وحسب؛ إنه مضخّة تعمل في الاتجاهين، تُخرج أكثر قليلًا مما تُدخل في كلّ تأرجحة. تحتفظ الأشرطة في أعلى يسار الجهاز بهذا الحساب: \\(E - E^*\\) هي الطاقة فوق وضع السكون، و\\(W_\\text{coil}\\) شغل الملفّ منذ بداية الحلّ. اجعل الهدف 0، واسحب الكرة 2 جانبًا ثم اتركها: يهبط \\(W_\\text{coil}\\) بمقدار ما تخسره \\(E - E^*\\) بالضبط. أوقف المتحكّم وافعل الشيء نفسه: يبقى \\(W_\\text{coil}\\) صفرًا، وتبقى الطاقة في السلسلة إلى الأبد. وشدّة ضخّ الملفّ من تصميم المتحكّم (§8). يحاسب «ليّن» على جهد الملفّ بخمسة أضعاف ما يحاسب «حازم» (\\(\\rho = 0.1\\) مقابل \\(0.02\\))، فيدفع أقلّ وتستغرق السلسلة وقتًا أطول لتعود إلى موضع سكونها."
  },
+ "5dc136bdb46f": {
+  "src": "<span class=\"psec__n\">07</span>Lagrange's equations, every term<span class=\"star\" title=\"heavier mathematics\">★</span>",
+  "tr": "<span class=\"psec__n\">07</span>معادلات لاغرانج، حدًّا حدًّا<span class=\"star\" title=\"heavier mathematics\">★</span>"
+ },
+ "5dfc0c1e2f13": {
+  "src": "<b>Step 2, the strut's length.</b> With \\(\\sin\\theta \\approx \\theta\\), the offset and span of the strut are",
+  "tr": "<b>الخطوة 2، طول الدعامة.</b> مع \\(\\sin\\theta \\approx \\theta\\) تكون إزاحة الدعامة وامتدادها"
+ },
+ "6198cf113adc": {
+  "src": "Write the state as \\(\\mathbf y = (\\mathbf q, \\dot{\\mathbf q})\\), six numbers. Solving (15) for the accelerations, \\(\\ddot{\\mathbf q} = \\mathbf M^{-1}\\mathbf b\\), with the net generalised force",
+  "tr": "اكتب الحالة \\(\\mathbf y = (\\mathbf q, \\dot{\\mathbf q})\\)، ستّة أعداد. وبحلّ (15) لإيجاد التسارعات، \\(\\ddot{\\mathbf q} = \\mathbf M^{-1}\\mathbf b\\)، مع القوّة المعمّمة الصافية"
+ },
  "628e5037e0d0": {
   "src": "The current source is ideal. A real amplifier has a voltage limit, and the back-emf \\(\\kappa\\dot X\\) eats into it when the cart moves fast. A long stroke of 2 m also needs a commutated linear motor rather than one coil in one long gap.",
   "tr": "مصدر التيار مثالي. للمضخّم الحقيقي حدٌّ للجهد، والقوّة الدافعة العكسية \\(\\kappa\\dot X\\) تأكل منه حين تتحرّك العربة بسرعة. كما أن شوطًا طويلًا قدره 2 m يحتاج محرّكًا خطّيًا مُبدَّلًا بدل ملفّ واحد في فجوة طويلة واحدة."
@@ -310,6 +690,22 @@
  "635d7e4f4470": {
   "src": "<span class=\"pfig__n\">Figure 2</span>Where the energy of one swing goes, for the release of §1.1 over 8 s. Inside the boxes: the energy at the release, 0.079 J in the chain and 0.023 J in the string’s sideways stretch. On the arrows: the energy that crosses each link. The string drains the chain and hands that energy, with its own, to the cart. The coil pumps energy out of the cart (burgundy, 2.40 J) and into it (grey, 2.30 J) on every swing; the difference, 0.102 J, is the whole swing, and it ends in the current source.",
   "tr": "<span class=\"pfig__n\">الشكل 2</span>أين تذهب طاقة تأرجحة واحدة، للإطلاق في §1.1 على مدى 8 s. داخل الصناديق: الطاقة عند الإطلاق، 0.079 J في السلسلة و0.023 J في تمدّد الوتر الجانبي. وعلى الأسهم: الطاقة التي تعبر كلّ وصلة. يستنزف الوتر السلسلة ويسلّم تلك الطاقة، مع طاقته هو، إلى العربة. ويضخّ الملفّ الطاقة خارجًا من العربة (عنّابي، 2.40 J) وإليها (رمادي، 2.30 J) في كلّ تأرجحة؛ والفرق، 0.102 J، هو التأرجح كلّه، وينتهي في مصدر التيار."
+ },
+ "636a06f1104a": {
+  "src": "The strut is two tubes, one sliding inside the other. The outer tube, on the cart's side, is aluminium; the inner tube, on the ball's side, is stainless steel and slides in a bronze bushing pressed into the mouth of the outer tube. A long spring of steel wire runs inside both: one end is hooked to the plug that closes the bottom of the outer tube, the other to a plug deep inside the inner tube. Pull the strut longer and the inner tube slides out, carrying the spring's upper anchor with it: the spring stretches and pulls back. Push the strut shorter and the spring is squeezed and pushes back. Its coils are wound open, with gaps between them, so it can do both. Either way the force is",
+  "tr": "تتكوّن الدعامة من أنبوبين، ينزلق أحدهما داخل الآخر. الأنبوب الخارجي، من جهة العربة، من الألومنيوم؛ والأنبوب الداخلي، من جهة الكرة، من الفولاذ الذي لا يصدأ، وينزلق في جلبة برونزية مكبوسة في فم الأنبوب الخارجي. ويمتدّ داخلهما نابض طويل من سلك فولاذي: أحد طرفيه معلّق بالسدادة التي تغلق أسفل الأنبوب الخارجي، والآخر بسدادة في عمق الأنبوب الداخلي. أطِل الدعامة فينزلق الأنبوب الداخلي إلى الخارج حاملًا معه مرساة النابض العليا: فيتمدّد النابض ويشدّ إلى الوراء. وقصِّرها فينضغط النابض ويدفع إلى الوراء. ولفّاته ملفوفة مفتوحة، بينها فراغات، فيستطيع الأمرين كليهما. وفي الحالتين تكون القوّة"
+ },
+ "63db6e402d9b": {
+  "src": "The bill is an entry fee plus fines: the fee is set by where you start, every moment you push differently from the rule costs a fine, and obeying the rule costs only the fee.",
+  "tr": "الفاتورة رسم دخول وغرامات: الرسم يحدّده مكان البدء، وكلّ لحظة تدفع فيها خلاف القاعدة تكلّف غرامة، واتّباع القاعدة لا يكلّف إلّا الرسم."
+ },
+ "64383a61bb5e": {
+  "src": "The tubes cannot slide for ever. Pulled out, the collar on the inner tube (4) meets the bronze bushing (7): the strut is then at its longest, \\(\\ell_\\text{max} = 0.95\\ \\mathrm m\\). Pushed in, the end of the inner tube meets the bottom plug (2): the strut is at its shortest, \\(\\ell_\\text{min} = 0.50\\ \\mathrm m\\). The page draws each stop as a very stiff spring, \\(k_\\text{stop} = 2\\times10^4\\ \\mathrm{N/m}\\), with a damper, \\(c_\\text{stop} = 40\\ \\mathrm{kg/s}\\), that acts only while the stop is touched. The damper turns the knock into heat, \\(Q_\\text{stop} = \\int c_\\text{stop}\\dot\\ell^2\\, dt\\), the only loss in the machine apart from the coil.",
+  "tr": "لا يستطيع الأنبوبان أن ينزلقا بلا نهاية. فإذا سُحبا إلى الخارج التقى الطوق على الأنبوب الداخلي (4) بالجلبة البرونزية (7): وتكون الدعامة عندئذ في أطول طولها، \\(\\ell_\\text{max} = 0.95\\ \\mathrm m\\). وإذا دُفعا إلى الداخل التقى طرف الأنبوب الداخلي بالسدادة السفلى (2): وتكون الدعامة في أقصر طولها، \\(\\ell_\\text{min} = 0.50\\ \\mathrm m\\). وترسم الصفحة كلّ موقف نابضًا شديد الصلابة، \\(k_\\text{stop} = 2\\times10^4\\ \\mathrm{N/m}\\)، مع مخمِّد، \\(c_\\text{stop} = 40\\ \\mathrm{kg/s}\\)، لا يعمل إلّا ما دام الموقف ملموسًا. ويحوّل المخمِّد الصدمة إلى حرارة، \\(Q_\\text{stop} = \\int c_\\text{stop}\\dot\\ell^2\\, dt\\)، وهي الخسارة الوحيدة في الآلة سوى الملفّ."
+ },
+ "662b570b5831": {
+  "src": "S. Widnall, <a href=\"https://ocw.mit.edu/courses/16-07-dynamics-fall-2009/b39e882f1524a0f6a98553ee33ea6f35_MIT16_07F09_Lec20.pdf\">MIT 16.07 Dynamics, Lecture L20: Energy Methods, Lagrange's Equations</a>, 2009: the double pendulum by Lagrange's equations, every term (eqs. 26–41).",
+  "tr": "S. Widnall، <a href=\"https://ocw.mit.edu/courses/16-07-dynamics-fall-2009/b39e882f1524a0f6a98553ee33ea6f35_MIT16_07F09_Lec20.pdf\">MIT 16.07 Dynamics, Lecture L20: Energy Methods, Lagrange's Equations</a>، 2009: النوّاس المزدوج بمعادلات لاغرانج، حدًّا حدًّا (المعادلات 26–41)."
  },
  "66407a2d2c27": {
   "src": "<span class=\"psec__n\">06</span>Small swings: the guitar string<span class=\"star\" title=\"heavier mathematics\">★</span>",
@@ -323,13 +719,37 @@
   "src": "The spring stiffness \\(k_s\\) has dropped out. To first order in the motion, only the pull \\(N_0\\) matters, and each term has a picture. The first two are gravity. The third is the strut pulling ball 2 down, an extra weight \\(N_0\\) hung on it. The last is a guitar string: a string under tension \\(N_0\\) and of length \\(\\ell_0\\) resists a sideways offset \\(\\delta\\) of its end with the force \\(N_0\\delta/\\ell_0\\), and here the offset is ball 2's horizontal distance from the cart, \\(x_2 - X\\). With the defaults the string stiffness is \\(N_0/\\ell_0 = 4.62\\ \\mathrm{N/m}\\), soft compared with the pendulum's own gravity stiffness.",
   "tr": "لقد اختفت صلابة النابض \\(k_s\\). ففي الرتبة الأولى من الحركة لا يهمّ إلا الشدّ \\(N_0\\)، ولكلّ حدّ صورة. الحدّان الأوّلان هما الجاذبية. والثالث هو الدعامة تشدّ الكرة 2 إلى الأسفل، أي ثقلٌ إضافي \\(N_0\\) معلّق بها. والأخير وتر غيتار: فالوتر المشدود بشدّ \\(N_0\\) وطوله \\(\\ell_0\\) يقاوم إزاحةً جانبية \\(\\delta\\) لطرفه بالقوّة \\(N_0\\delta/\\ell_0\\)، والإزاحة هنا هي المسافة الأفقية للكرة 2 عن العربة، \\(x_2 - X\\). وبالقيم الافتراضية تكون صلابة الوتر \\(N_0/\\ell_0 = 4.62\\ \\mathrm{N/m}\\)، وهي ليّنة مقارنةً بصلابة الجاذبية الخاصّة بالنوّاس."
  },
+ "679934086978": {
+  "src": "Nothing rubs. Real pins, bushings, the sliding tubes and the wheels have friction, which would damp the uncontrolled swing and add a dead zone the controller must push through.",
+  "tr": "لا شيء يحتكّ. فللمسامير والجلبات والأنابيب المنزلقة والعجلات الحقيقية احتكاك، كان سيُخمد التأرجح غير المتحكَّم فيه ويضيف منطقة ميتة على المتحكّم أن يدفع عبرها."
+ },
+ "67acac4e8e1b": {
+  "src": "The bowl of §13 proves stability only near the rest. Far from it two things break the guarantee: the coil's current limit, which cuts the push off at \\(\\kappa I_\\text{max}\\), and the nonlinearity of (15), which grows with the angles. The set of starts from which the controller still brings the chain home is the <em>region of attraction</em>, and it has to be measured: drag a ball far out and let go. After a hard yank, ball 1 can circle its pivot faster than the leash can follow, and the status line says so.",
+  "tr": "وعاء §13 لا يثبت الاستقرار إلّا قرب السكون. وبعيدًا عنه يكسر أمران الضمان: حدّ تيار الملفّ، الذي يقطع الدفع عند \\(\\kappa I_\\text{max}\\)، ولاخطّية (15)، التي تكبر مع الزوايا. ومجموعة البدايات التي لا يزال المتحكّم يعيد منها السلسلة إلى بيتها هي <em>منطقة الجذب</em>، ويجب قياسها: اسحب كرة بعيدًا وأفلِتها. وبعد جذبة قويّة قد تدور الكرة 1 حول نقطة ارتكازها أسرع ممّا يستطيع الرسن أن يتبع، ويقول سطر الحالة ذلك."
+ },
  "67b7724f11a3": {
   "src": "Solve",
   "tr": "احسب"
  },
+ "691366588a16": {
+  "src": "<span class=\"pfig__n\">Figure 5</span>The coordinates. The angles \\(\\theta_1, \\theta_2\\) are measured from straight down; \\(X\\) is the cart's position along the rail, measured from the point under the pivot; the cart's pin lies a depth \\(H\\) below the pivot. The strut has length \\(\\ell\\) and pulls ball 2 and the cart towards each other with the force \\(N\\) along its line.",
+  "tr": "<span class=\"pfig__n\">الشكل 5</span>الإحداثيات. تُقاس الزاويتان \\(\\theta_1, \\theta_2\\) عن الشاقول إلى الأسفل؛ و\\(X\\) موضع العربة على السكّة، مقيسًا من النقطة التي تحت نقطة الارتكاز؛ ويقع مسمار العربة على عمق \\(H\\) تحت نقطة الارتكاز. طول الدعامة \\(\\ell\\)، وهي تشدّ الكرة 2 والعربة نحو بعضهما بالقوّة \\(N\\) على امتداد خطّها."
+ },
  "6973c4d89511": {
   "src": "The step is small because of the stops: a touched stop is a spring of \\(2\\times10^4\\ \\mathrm{N/m}\\) on half a kilogram, a vibration of about 200 rad/s, and RK4 needs \\(\\omega h\\) well below 2.8 to stay stable. To grade the run, the page solves it a second time with \\(h/2\\) and stores the largest difference; from rest it is about \\(10^{-11}\\), after a drag a few times \\(10^{-10}\\), and larger, around \\(10^{-6}\\), when the coil hits its limit, because the clamp in (11) has a kink that RK4 steps across. The energy books are a second check. The coil's work \\(W_\\text{coil} = \\int F\\dot X\\,dt\\) and the stops' heat are integrated with the same RK4 weights as the state, and at the end \\(E(0) + W_\\text{coil} - Q_\\text{stop} - E(T)\\) is a few times \\(10^{-10}\\ \\mathrm{J}\\).",
   "tr": "الخطوة صغيرة بسبب المصدّين: فالمصدّ الملموس نابضٌ صلابته \\(2\\times10^4\\ \\mathrm{N/m}\\) على نصف كيلوغرام، أي اهتزاز بنحو 200 rad/s، وتحتاج RK4 أن يبقى \\(\\omega h\\) دون 2.8 بكثير لتبقى مستقرّة. ولتقييم الحلّ تحلّه الصفحة مرّة ثانية بـ \\(h/2\\) وتخزّن أكبر فرق؛ وهو من السكون نحو \\(10^{-11}\\)، وبعد السحب بضعة أضعاف \\(10^{-10}\\)، وأكبر، نحو \\(10^{-6}\\)، حين يبلغ الملفّ حدّه، لأن القصّ في (11) فيه انكسار تتخطّاه خطوات RK4. وموازنات الطاقة تحقّقٌ ثانٍ. فشغل الملفّ \\(W_\\text{coil} = \\int F\\dot X\\,dt\\) وحرارة المصدّين يُكامَلان بأوزان RK4 نفسها التي تُكامَل بها الحالة، وفي النهاية يكون \\(E(0) + W_\\text{coil} - Q_\\text{stop} - E(T)\\) بضعة أضعاف \\(10^{-10}\\ \\mathrm{J}\\)."
+ },
+ "69f3b952eb34": {
+  "src": "<span class=\"psec__n\">04</span>Potential energy",
+  "tr": "<span class=\"psec__n\">04</span>الطاقة الكامنة"
+ },
+ "6a78b197ffae": {
+  "src": "<span>13</span>The bowl that always falls",
+  "tr": "<span>13</span>الوعاء الذي تنحدر فيه الكلفة دائمًا"
+ },
+ "6aa9d89c7d41": {
+  "src": "<b>Step 2.</b> Write \\(z = \\mathbf B^{\\mathsf T}\\mathbf P\\tilde{\\mathbf y}\\). Take \\(\\mathbf Q\\) from (25), put it into the integrand of (24), and use step 1:",
+  "tr": "<b>الخطوة 2.</b> اكتب \\(z = \\mathbf B^{\\mathsf T}\\mathbf P\\tilde{\\mathbf y}\\). خذ \\(\\mathbf Q\\) من (25)، وضعها في المكامَل في (24)، واستعمل الخطوة 1:"
  },
  "6b4352a139b7": {
   "src": "The gains come from the linear model at the target. Far from the rest the nonlinear rig can escape, as the whirl shows. Swinging a chain up from far away needs other ideas, such as pumping energy in or out deliberately before handing over to LQR.",
@@ -339,6 +759,22 @@
   "src": "<span class=\"psub__n\">1.2</span>How the cart brings the chain home",
   "tr": "<span class=\"psub__n\">1.2</span>كيف تعيد العربة السلسلة إلى موضع سكونها"
  },
+ "6c53dad57885": {
+  "src": "Picture ball 2's velocity as two arrows laid end to end: ball 1's velocity, at right angles to rod 1, and ball 2's own turning about ball 1, at right angles to rod 2. When the rods are parallel the arrows point the same way and add fully, and the cosine is 1. When the rods are at right angles the arrows are too, the cross term vanishes, and only Pythagoras remains. The cart moves along the rail with speed \\(\\dot X\\). Adding \\(\\tfrac12 mv^2\\) for the three bodies,",
+  "tr": "تخيّل سرعة الكرة 2 سهمين موضوعين طرفًا لطرف: سرعة الكرة 1، عمودية على القضيب 1، ودوران الكرة 2 نفسها حول الكرة 1، عمودي على القضيب 2. حين يتوازى القضيبان يشير السهمان في الاتّجاه نفسه ويجتمعان كاملين، وجيب التمام 1. وحين يتعامد القضيبان يتعامد السهمان، فيتلاشى الحدّ المتقاطع ولا يبقى إلّا فيثاغورس. وتتحرّك العربة على السكّة بسرعة \\(\\dot X\\). وبجمع \\(\\tfrac12 mv^2\\) للأجسام الثلاثة،"
+ },
+ "6d8c2f7df491": {
+  "src": "At a rest \\(\\mathbf b = 0\\), and so are the speeds. Let \\(\\tilde{\\mathbf y} = \\mathbf y - \\mathbf y^*\\) and \\(\\tilde F = F - F^*\\) be small, and keep first order. By the product rule,",
+  "tr": "عند السكون \\(\\mathbf b = 0\\)، وكذلك السرعات. ليكن \\(\\tilde{\\mathbf y} = \\mathbf y - \\mathbf y^*\\) و\\(\\tilde F = F - F^*\\) صغيرين، ونُبقي الرتبة الأولى. وبقاعدة الضرب،"
+ },
+ "6da16efb94ab": {
+  "src": "Only at the hanging rest",
+  "tr": "عند السكون المتدلّي وحده"
+ },
+ "6e71805755e7": {
+  "src": "<b>With the coil off</b>, \\(I = 0\\) and the coil pushes nothing; it rides along in the gap as a passenger. The only thing that moves the cart along the rail is the strut. Its pull \\(N\\) acts along its own line; the rail takes the vertical part, and the horizontal part is \\(N\\) times the strut's lean. If ball 2 sits a horizontal distance \\(x_2 - X\\) to the right of the cart's pin, the strut leans by that much over its length \\(\\ell\\), so",
+  "tr": "<b>والملفّ متوقّف</b> يكون \\(I = 0\\) ولا يدفع الملفّ شيئًا؛ إنّه يسير في الفجوة راكبًا. والشيء الوحيد الذي يحرّك العربة على السكّة هو الدعامة. يعمل شدّها \\(N\\) على امتداد خطّها؛ فتتحمّل السكّة الجزء الرأسي، والجزء الأفقي هو \\(N\\) مضروبًا في ميل الدعامة. فإذا كانت الكرة 2 على مسافة أفقية \\(x_2 - X\\) يمين مسمار العربة، مالت الدعامة بهذا القدر على طولها \\(\\ell\\)، إذن"
+ },
  "6eb15ba245c8": {
   "src": "Choose where the cart should rest: set <b>r</b> here, or drag the flag on the ruler. The pale pendulum shows the rest it will reach.",
   "tr": "اختر أين ينبغي أن تستقرّ العربة: اضبط <b>r</b> هنا، أو اسحب العلَم على المسطرة. يُظهر النوّاس الباهت وضعَ السكون الذي سيبلغه."
@@ -347,13 +783,29 @@
   "src": "Playback speed",
   "tr": "سرعة التشغيل"
  },
+ "701638d41408": {
+  "src": "<span class=\"psec__n\">11</span>Can one push reach everything?",
+  "tr": "<span class=\"psec__n\">11</span>هل تبلغ دفعة واحدة كلّ شيء؟"
+ },
  "702b201c4b40": {
   "src": "Phyein Usul",
   "tr": "Phyein Usul"
  },
+ "70e4f1e174e4": {
+  "src": "<span class=\"pfig__n\">Figure 4</span>The linear motor that pushes the cart, with the front wall of the channel cut away over the coil. <b>1</b> underside of the cart; <b>2</b> coil, copper wire wound flat on a glass-fibre former and hung under the cart; <b>3</b> the magnetic field across the gap (blue arrows), reversing from one magnet pair to the next; <b>4</b> a magnet with its north pole facing the gap (red); <b>5</b> a magnet with its south pole facing the gap (blue); <b>6</b> steel U-channel; <b>7</b> current up the coil's left leg; <b>8</b> current down its right leg; <b>9</b> the force on the coil, and so on the cart, \\(F = \\kappa I\\), along the rail.",
+  "tr": "<span class=\"pfig__n\">الشكل 4</span>المحرّك الخطّي الذي يدفع العربة، وقد قُطع الجدار الأمامي للقناة فوق الملفّ. <b>1</b> أسفل العربة؛ <b>2</b> الملفّ، سلك نحاسي ملفوف مسطّحًا على قالب من الألياف الزجاجية ومعلّق تحت العربة؛ <b>3</b> المجال المغناطيسي عبر الفجوة (الأسهم الزرقاء)، ينعكس من زوج مغانط إلى الذي يليه؛ <b>4</b> مغنطيس قطبه الشمالي نحو الفجوة (أحمر)؛ <b>5</b> مغنطيس قطبه الجنوبي نحو الفجوة (أزرق)؛ <b>6</b> قناة فولاذية على شكل U؛ <b>7</b> التيار صاعدًا في ساق الملفّ اليسرى؛ <b>8</b> التيار نازلًا في ساقه اليمنى؛ <b>9</b> القوّة على الملفّ، ومن ثمّ على العربة، \\(F = \\kappa I\\)، على طول السكّة."
+ },
  "70fd1348c1b1": {
   "src": "A controller that looks at everything is <em>full-state feedback</em>: the coil's force is the holding force plus a weighted sum of all six errors,",
   "tr": "المتحكّم الذي ينظر إلى كلّ شيء هو <em>التغذية الراجعة للحالة الكاملة</em>: قوّة الملفّ هي قوّة التثبيت مضافًا إليها مجموعٌ موزون للأخطاء الستّة كلّها،"
+ },
+ "71691bb05f8d": {
+  "src": "The chain and the cart touch in one place only: the strut. The next three figures take its two ends, its inside, and the motor that pushes the cart apart.",
+  "tr": "لا تتلامس السلسلة والعربة إلّا في موضع واحد: الدعامة. وتفكّك الأشكال الثلاثة التالية طرفيها، وداخلها، والمحرّك الذي يدفع العربة."
+ },
+ "7197928b2044": {
+  "src": "Lagrange's equations need \\(\\partial V/\\partial q\\) for each coordinate. The gravity part is direct; the spring needs the chain rule:",
+  "tr": "تحتاج معادلات لاغرانج إلى \\(\\partial V/\\partial q\\) لكلّ إحداثي. جزء الجاذبية مباشر؛ والنابض يحتاج إلى قاعدة السلسلة:"
  },
  "72a14057f790": {
   "src": "<b>The two rods and the two balls.</b> From the pivot hangs a rod 0.5 m long with a ball of 0.5 kg at its end. From that ball, on a second frictionless hinge, hangs a second rod of 0.5 m with a second ball of 0.5 kg. One rod with one ball is a <em>pendulum</em>: a weight that hangs from a point and can swing, like the weight in a grandfather clock or a child on a swing. Two of them, one hanging from the other, make a <em>double pendulum</em>, like a lamp hanging from a hook by two links of chain. The page treats the rods as <em>rigid</em> and <em>massless</em>. Rigid means that a rod never bends or stretches: it keeps its ball at exactly 0.5 m from the point it hangs from, as a broom handle keeps the brush at the same distance from your hand however you wave it. Massless means that the rods are so light compared with the balls that their own weight can be forgotten, as the weight of the string can be forgotten when you swing a bunch of keys on it. The balls are treated as <em>point masses</em>: all their mass is counted as sitting at one point, their centre. That is a fair picture of a small, heavy ball on a long rod, just as the Earth, seen from the Sun, can be treated as a point.",
@@ -367,6 +819,10 @@
   "src": "<span>5</span>Where the chain can rest",
   "tr": "<span>5</span>أين يمكن للسلسلة أن تسكن"
  },
+ "76698bc88ebb": {
+  "src": "and the cart's pin is at \\((X, -H)\\). Two lengths describe the strut: its horizontal offset and its vertical span,",
+  "tr": "ومسمار العربة عند \\((X, -H)\\). ويصف الدعامةَ طولان: إزاحتها الأفقية وامتدادها الرأسي،"
+ },
  "781961bc81c2": {
   "src": "Pause",
   "tr": "إيقاف مؤقّت"
@@ -379,6 +835,10 @@
   "src": "Swing weight q<sub>θ</sub>",
   "tr": "وزن التأرجح q<sub>θ</sub>"
  },
+ "7bc555991dba": {
+  "src": "fixed",
+  "tr": "ثابت"
+ },
  "7c1e914ddb13": {
   "src": "Coil at its limit",
   "tr": "الملفّ عند حدّه"
@@ -386,6 +846,10 @@
  "7c42606e161e": {
   "src": "Nothing rubs. Real hinges, tubes and wheels have friction, which would damp the uncontrolled swing and would add a dead zone the controller must push through.",
   "tr": "لا شيء يحتكّ. للمفاصل والأنابيب والعجلات الحقيقية احتكاك، يخمّد التأرجح غير المتحكَّم فيه ويضيف منطقةً ميتة على المتحكّم أن يدفع عبرها."
+ },
+ "7ce578a16e65": {
+  "src": "<b>At the cart (panel B).</b> A U-shaped steel bracket, a <i>clevis</i>, is screwed to the cart's top plate with two cap screws. A hardened steel pin passes through its two cheeks. The strut's lower end is a <i>rod end</i>: a steel eye on a threaded shank, with a bronze ball inside it, and the pin passes through that ball. The pin's centre is the point \\((X, -H)\\) of §2: it is the cart's hinge, and the depth \\(H\\) is measured to it.",
+  "tr": "<b>عند العربة (اللوحة B).</b> حامل فولاذي على شكل حرف U، يُسمّى <i>شوكة الوصل</i>، مثبّت باللوحة العلوية للعربة ببرغيين برأس أسطواني. ويمرّ مسمار من الفولاذ المقسّى عبر جانبيه. والطرف السفلي للدعامة <i>رأس قضيب</i>: عين فولاذية على ساق ملولبة، في داخلها كرة برونزية، ويمرّ المسمار عبر تلك الكرة. ومركز المسمار هو النقطة \\((X, -H)\\) في §2: إنّه مفصل العربة، وإليه يُقاس العمق \\(H\\)."
  },
  "7d252cd594b3": {
   "src": "All simulations ↑",
@@ -395,9 +859,17 @@
   "src": "<b>The fixed pivot.</b> At the top sits a point O that never moves, bolted to the ceiling or to a heavy frame. The upper rod hangs from it on a <em>hinge</em>. A hinge is a joint that lets two parts turn against each other while holding them together, the way a door turns on its hinges but cannot fall out of its frame. Our hinge lets the upper rod swing in the plane of the picture and in no other way. It can pull or push on the rod in any direction, which is how it holds the rod up, but it does nothing to stop the rod turning, because it is <em>frictionless</em>: there is no rubbing in it at all. A well-oiled bicycle wheel that keeps spinning for a minute after one flick is nearly frictionless; our hinge is the perfect version of that wheel.",
   "tr": "<b>نقطة الارتكاز الثابتة.</b> في الأعلى توجد نقطة O لا تتحرّك أبدًا، مثبَّتة بالمسامير في السقف أو في إطار ثقيل. يتدلّى منها القضيب العلوي على <em>مفصل</em>. المفصل وصلة تسمح لجزأين بأن يدور أحدهما على الآخر وتُبقيهما معًا، كما يدور الباب على مفصّلاته ولا يسقط من إطاره. يسمح مفصلنا للقضيب العلوي بالتأرجح في مستوى الصورة فقط. يستطيع أن يشدّ القضيب أو يدفعه في أيّ اتجاه، وبهذا يحمله، لكنه لا يمنعه من الدوران، لأنه <em>عديم الاحتكاك</em>: لا شيء يحتكّ فيه على الإطلاق. عجلة الدرّاجة الجيّدة التزييت، التي تظلّ تدور دقيقة بعد نقرة واحدة، تكاد تكون عديمة الاحتكاك؛ ومفصلنا هو النسخة المثالية من تلك العجلة."
  },
+ "7f331dde81aa": {
+  "src": "Rendered view of the whole machine: a pivot bracket at the top, two dark rods with two wine-red balls, a telescopic strut from the lower ball down to a cart on a rail, and a magnet track beside the rail.",
+  "tr": "منظر مولَّد للآلة كلّها: حامل نقطة الارتكاز في الأعلى، وقضيبان داكنان بكرتين بلون النبيذ، ودعامة تلسكوبية من الكرة السفلى نزولًا إلى عربة على سكّة، ومسار مغناطيسي بجانب السكّة."
+ },
  "7f9c1bfaf3b7": {
   "src": "Grab a ball or the cart, pull it anywhere, and let go. The controller brings the chain back.",
   "tr": "أمسك كرةً أو العربة، واسحبها إلى أيّ مكان، ثم أفلتها. يعيد المتحكّم السلسلة إلى موضعها."
+ },
+ "7fa69269ccaf": {
+  "src": "<span class=\"psec__n\">16</span>On screen",
+  "tr": "<span class=\"psec__n\">16</span>على الشاشة"
  },
  "7fe2045e49f2": {
   "src": "<span>9</span>Phase space and the region of rescue",
@@ -435,13 +907,29 @@
   "src": "<b>Fig. 11</b> · <span class=\"tx\">\\(\\mathbf M(\\mathbf q)\\ddot{\\mathbf q} + \\mathbf C\\dot{\\mathbf q} + \\nabla V = (0, 0, F)\\)</span> · played from the stored run",
   "tr": "<b>الشكل 11</b> · <span class=\"tx\">\\(\\mathbf M(\\mathbf q)\\ddot{\\mathbf q} + \\mathbf C\\dot{\\mathbf q} + \\nabla V = (0, 0, F)\\)</span> · يُعرض من الحلّ المخزَّن"
  },
+ "83a2061a238b": {
+  "src": "<span class=\"psec__n\">17</span>What the model leaves out",
+  "tr": "<span class=\"psec__n\">17</span>ما يُغفله النموذج"
+ },
  "83d807e85787": {
   "src": "<b>Rest, and the target.</b> A <em>rest</em>, also called an <em>equilibrium</em>, is a state in which nothing moves and nothing starts to move, because every force is balanced by another. A marble at the bottom of a bowl is at rest, and if you nudge it, it rolls back: that rest is <em>stable</em>. A pencil standing on its tip is also at rest in principle, but the smallest nudge makes it fall: that rest is <em>unstable</em>. With the coil off, the only rest the tubes allow is the chain hanging straight down over the cart. It is stable in the sense that a nudged chain swings about it and never runs away, but without friction it never settles either. With the coil on, the controller can hold the cart anywhere between −0.6 m and +0.6 m. You choose the place with the slider r or with the flag on the ruler, and r is called the <em>target</em>. When the cart rests away from the point under the pivot, the strut leans and pulls the lower ball sideways, so the chain leans a little too, until gravity’s pull back and the strut’s sideways pull balance; for r = 0.30 m the rods lean 5.78° and 8.36°. To keep the cart there against the strut’s pull, the coil must push steadily with \\(F^* = 1.59\\ \\mathrm{N}\\), the <em>holding force</em>, as your arm must pull steadily to hold a dog that leans on its lead. The pale pendulum on the screen draws this rest.",
   "tr": "<b>السكون والهدف.</b> <em>وضع السكون</em>، ويسمّى أيضًا <em>وضع التوازن</em>، هو حالة لا يتحرّك فيها شيء ولا يبدأ شيء بالحركة، لأن كلّ قوّة توازنها قوّة أخرى. بلّية في قاع وعاء في وضع سكون، وإن دفعتها قليلًا عادت متدحرجة: هذا السكون <em>مستقرّ</em>. وقلم رصاص واقف على رأسه في وضع سكون من حيث المبدأ أيضًا، لكن أصغر دفعة تُسقطه: هذا السكون <em>غير مستقرّ</em>. وحين يكون الملفّ مطفأً، فإن وضع السكون الوحيد الذي تسمح به الأنابيب هو أن تتدلّى السلسلة شاقوليًا فوق العربة. وهو مستقرّ بمعنى أن السلسلة إذا دُفعت تأرجحت حوله ولم تبتعد عنه أبدًا، لكنها من دون احتكاك لا تهدأ أبدًا. وحين يعمل الملفّ، يستطيع المتحكّم أن يمسك العربة في أيّ مكان بين −0.6 m و+0.6 m. تختار المكان بالمنزلق r أو بالعلَم على المسطرة، ويسمّى r <em>الهدف</em>. وحين تستقرّ العربة بعيدًا عن النقطة التي تحت نقطة الارتكاز، تميل الدعامة وتشدّ الكرة السفلى جانبًا، فتميل السلسلة قليلًا هي أيضًا، إلى أن تتوازن قوّة الجاذبية التي تردّها مع الشدّ الجانبي للدعامة؛ وعند r = 0.30 m يميل القضيبان بزاويتين 5.78° و8.36°. ولكي تبقى العربة هناك رغم شدّ الدعامة، يجب أن يدفع الملفّ بثبات بقوّة \\(F^* = 1.59\\ \\mathrm{N}\\)، أي <em>قوّة الإمساك</em>، كما يجب أن تشدّ ذراعك بثبات لتمسك كلبًا يشدّ مقوده. ويرسم النوّاس الباهت على الشاشة وضع السكون هذا."
  },
+ "8481ee513341": {
+  "src": "Collect the accelerations into a mass matrix:",
+  "tr": "نجمع التسارعات في مصفوفة كتلة:"
+ },
+ "85819793a9b4": {
+  "src": "masses of the two balls",
+  "tr": "كتلتا الكرتين"
+ },
  "85c745e7244a": {
   "src": "The cart speeds up or slows down. As it moves, the lower end of the strut moves with it, so the strut tilts.",
   "tr": "تتسارع العربة أو تتباطأ. وحين تتحرّك يتحرّك معها الطرف السفلي للدعامة، فتميل الدعامة."
+ },
+ "864932ccabe2": {
+  "src": "depth of the cart's pin below the pivot",
+  "tr": "عمق مسمار العربة تحت نقطة الارتكاز"
  },
  "86add19de064": {
   "src": "Without control the rest is a <em>centre</em>: all six eigenvalues of \\(\\mathbf A\\) are imaginary, \\(\\pm1.71i\\), \\(\\pm5.05i\\) and \\(\\pm10.00i\\) per second at the hanging rest, and the energy (2) + (3) is conserved, so a disturbed chain circles for ever on a surface of constant energy. With the controller the eigenvalues of \\(\\mathbf A - \\mathbf B\\mathbf K\\) move into the left half-plane. For the default target they are \\(-14.98\\), \\(-1.83 \\pm 6.58i\\), \\(-1.19 \\pm 11.65i\\) and \\(-1.13\\) per second: two decaying swings and two plain decays. The rest has become a <em>stable focus</em>, and the slowest decay, \\(1.13\\) per second, sets the time scale on which the chain comes to rest, about a second per factor of three.",
@@ -459,6 +947,22 @@
   "src": "The controller reads the six numbers of the state and compares them with the rest it aims at.",
   "tr": "يقرأ المتحكّم الأعداد الستّة للحالة ويقارنها بوضع السكون الذي يستهدفه."
  },
+ "88522b81baea": {
+  "src": "The machine is drawn to scale, in pixels per metre, as seen from the front, with the strut as a line from the cart's pin to the centre of ball 2. The pale dashed pendulum is the rest \\(\\mathbf y^*\\) the controller aims at, joined to the target \\(r\\) on the rail. The burgundy arrow on the cart is the coil's force \\(F\\), drawn 0.02 m long per newton on the machine's scale; the grey arrows beside the strut are its pull \\(N\\) on ball 2 and on the cart, equal and opposite. The stop marker on the outer tube turns burgundy while a stop is touched. The small circles on the coil appear while current flows. The bars at the top left are the energy books: the energy above the rest, the coil's work and the stops' heat.",
+  "tr": "تُرسم الآلة بمقياس صحيح، بالبكسل لكلّ متر، كما تُرى من الأمام، والدعامة خطّ من مسمار العربة إلى مركز الكرة 2. والنوّاس الباهت المتقطّع هو السكون \\(\\mathbf y^*\\) الذي يقصده المتحكّم، موصولًا بالهدف \\(r\\) على السكّة. والسهم العنّابي على العربة قوّة الملفّ \\(F\\)، مرسومًا بطول 0.02 m لكلّ نيوتن بمقياس الآلة؛ والسهمان الرماديان بجانب الدعامة شدّها \\(N\\) على الكرة 2 وعلى العربة، متساويان ومتعاكسان. وتصير علامة الموقف على الأنبوب الخارجي عنّابية ما دام موقف ملموسًا. وتظهر الدوائر الصغيرة على الملفّ ما دام التيار يجري. والأعمدة في أعلى اليسار دفاتر الطاقة: الطاقة فوق السكون، وشغل الملفّ، وحرارة الموقفين."
+ },
+ "89353e62e108": {
+  "src": "<span>4</span>Potential energy",
+  "tr": "<span>4</span>الطاقة الكامنة"
+ },
+ "89455b2e066d": {
+  "src": "From (3), \\(\\partial a/\\partial\\theta_1 = l_1\\cos\\theta_1\\) and \\(\\partial b/\\partial\\theta_1 = l_1\\sin\\theta_1\\); the same with index 2 for \\(\\theta_2\\); and \\(\\partial a/\\partial X = -1\\), \\(\\partial b/\\partial X = 0\\). So",
+  "tr": "من (3)، \\(\\partial a/\\partial\\theta_1 = l_1\\cos\\theta_1\\) و\\(\\partial b/\\partial\\theta_1 = l_1\\sin\\theta_1\\)؛ والشيء نفسه بالدليل 2 لـ \\(\\theta_2\\)؛ و\\(\\partial a/\\partial X = -1\\)، \\(\\partial b/\\partial X = 0\\). إذن"
+ },
+ "8a901e36c1ed": {
+  "src": "<span>3</span>Velocities and kinetic energy",
+  "tr": "<span>3</span>السرعات والطاقة الحركية"
+ },
  "8bfb4e1aa590": {
   "src": "cart",
   "tr": "العربة"
@@ -466,6 +970,10 @@
  "8c35bfc9e093": {
   "src": "From (8), show that with \\(N_0 = 0\\) the cart's equation is \\(M\\ddot X = \\tilde F\\) and that the chain's equations do not contain \\(X\\). Which two columns of (10) survive?",
   "tr": "انطلاقًا من (8)، بيّن أنه مع \\(N_0 = 0\\) تكون معادلة العربة \\(M\\ddot X = \\tilde F\\) وأن معادلات السلسلة لا تحتوي \\(X\\). أيّ عمودين من (10) يبقيان؟"
+ },
+ "8d5bead7b3d7": {
+  "src": "<span class=\"psec__n\">13</span>The bowl that always falls",
+  "tr": "<span class=\"psec__n\">13</span>الوعاء الذي تنحدر فيه الكلفة دائمًا"
  },
  "8e6b86dce8c4": {
   "src": "Problems",
@@ -483,6 +991,18 @@
   "src": "Controller · F = F* − K (y − y*), K from LQR with the weights below",
   "tr": "المتحكّم · <bdi>F = F* − K (y − y*)</bdi>، و<bdi>K</bdi> من LQR بالأوزان أدناه"
  },
+ "91b234bd64c6": {
+  "src": "<span class=\"psec__n\">10</span>The linear model<span class=\"star\" title=\"heavier mathematics\">★</span>",
+  "tr": "<span class=\"psec__n\">10</span>النموذج الخطّي<span class=\"star\" title=\"heavier mathematics\">★</span>"
+ },
+ "91ffa2192bf4": {
+  "src": "Into the gap hangs the coil (2). Its two upright legs are one magnet pair apart, so they always sit in fields that point opposite ways. When the controller asks for a current \\(I\\), the current source drives it up one leg and down the other (7, 8). A wire of length \\(\\boldsymbol\\ell_w\\) carrying current across a magnetic field feels the Lorentz force \\(I\\,\\boldsymbol\\ell_w\\times\\mathbf B\\). In the left leg the current runs up and the field points towards you; in the right leg the current runs down and the field points away. Both reversals together leave both forces pointing the same way, to the right along the rail (9). Reverse the current and the cart is pushed to the left. The push grows in step with the current,",
+  "tr": "وفي الفجوة يتدلّى الملفّ (2). وساقاه القائمتان بينهما زوج مغانط واحد، فهما دائمًا في مجالين متعاكسَي الاتّجاه. وحين يطلب المتحكّم تيارًا \\(I\\)، يدفعه مصدر التيار صاعدًا في ساق ونازلًا في الأخرى (7، 8). والسلك الذي طوله \\(\\boldsymbol\\ell_w\\) ويحمل تيارًا عبر مجال مغناطيسي يشعر بقوّة لورنتز \\(I\\,\\boldsymbol\\ell_w\\times\\mathbf B\\). في الساق اليسرى يصعد التيار ويشير المجال نحوك؛ وفي اليمنى ينزل التيار ويشير المجال بعيدًا عنك. والانعكاسان معًا يتركان القوّتين في الاتّجاه نفسه، إلى اليمين على طول السكّة (9). اعكس التيار تُدفَع العربة إلى اليسار. ويكبر الدفع مع التيار خطوة بخطوة،"
+ },
+ "925ff8becb1d": {
+  "src": "<span>12</span>The controller&nbsp;★",
+  "tr": "<span>12</span>المتحكّم&nbsp;★"
+ },
  "93a8161c11f4": {
   "src": "Back to the simulations",
   "tr": "العودة إلى المحاكاة"
@@ -499,9 +1019,25 @@
   "src": "Home page",
   "tr": "الصفحة الرئيسية"
  },
+ "9529bda12b5e": {
+  "src": "Depth of the cart's pin H",
+  "tr": "عمق مسمار العربة H"
+ },
+ "952f375412e8": {
+  "src": "Start",
+  "tr": "البداية"
+ },
  "95a0bb03a503": {
   "src": "Current limit I<sub>max</sub>",
   "tr": "حدّ التيار I<sub>max</sub>"
+ },
+ "95fb05ab01a2": {
+  "src": "where \\(k_s\\) is its stiffness and \\(L_0\\) the strut length at which the spring is slack. The spring is fitted already stretched, so that it pulls even when the chain hangs at rest, like a guitar string tightened before it is played. A pull set this way is a <i>pre-tension</i>; the page sets it by the pull \\(N_0\\) the strut carries when the chain hangs straight down over the cart.",
+  "tr": "حيث \\(k_s\\) صلابته و\\(L_0\\) طول الدعامة الذي يكون عنده النابض مرتخيًا. ويُركَّب النابض ممدودًا مسبقًا، فيشدّ حتّى حين تتدلّى السلسلة ساكنة، كوتر الغيتار المشدود قبل العزف عليه. والشدّ المضبوط بهذه الطريقة <i>شدّ مسبق</i>؛ وتضبطه الصفحة بالشدّ \\(N_0\\) الذي تحمله الدعامة حين تتدلّى السلسلة مستقيمة إلى الأسفل فوق العربة."
+ },
+ "967fbd77719c": {
+  "src": "lengths of the two rods",
+  "tr": "طولا القضيبين"
  },
  "9692ae150530": {
   "src": "A rest, or <em>fixed point</em>, is a state with all speeds and accelerations zero. Set them to zero in (5): what remains is \\(\\nabla V = (0, 0, F)\\). With the coil off, \\(F = 0\\), and the cart's equation says \\(N(x_2 - X) = 0\\): the strut must stand vertical under ball 2, since a tilted strut would pull the cart sideways and nothing would hold it. A vertical strut pulls ball 2 straight down, so the rods must point straight down or straight up, \\(\\theta_i \\in \\{0, \\pi\\}\\). Of these four arrangements, only straight down fits the tubes; the others need a strut far longer than 0.95 m.",
@@ -511,9 +1047,33 @@
   "src": "Picture a child on a swing, and suppose the only way you may touch the seat is through a long, soft rubber cord tied to it. Hold the end of the cord still and the swing goes on for ever: the cord stretches and relaxes, takes a little energy and gives it back, and a hand that does not move does no work. To stop the swing you must move your hand. Follow the seat, give way to the cord a little more slowly than it pulls, and the cord ends up pulling against the seat’s motion; your arm takes in the work, as a damper would. Every swing loses a little, and the seat comes to rest.",
   "tr": "تخيّل طفلًا على أرجوحة، ولنفرض أن الطريقة الوحيدة المسموح لك بها أن تلمس المقعد هي حبلٌ مطّاطي طويل ليّن مربوط به. أمسِكْ طرف الحبل ثابتًا فتستمرّ الأرجوحة إلى الأبد: يتمدّد الحبل ويرتخي، يأخذ شيئًا من الطاقة ويردّه، واليد التي لا تتحرّك لا تبذل شغلًا. ولكي توقف الأرجوحة يجب أن تحرّك يدك. اتبع المقعد، وانسق مع الحبل أبطأ قليلًا مما يجذبك، فينتهي الحبل إلى أن يشدّ المقعد ضدّ حركته؛ وتتلقّى ذراعك الشغل، كما يفعل المخمّد. تخسر كلّ تأرجحة شيئًا قليلًا، ويصل المقعد إلى السكون."
  },
+ "981c99fa6da7": {
+  "src": "Here \\((a/\\ell,\\ b/\\ell)\\) is the unit vector along the strut, and \\((\\partial a/\\partial q,\\ \\partial b/\\partial q)\\) is how its end moves when \\(q\\) changes. So the strut grows only by the part of its end's motion that points along it; motion across it only turns it on its pins. Move ball 2 sideways a centimetre when the strut is vertical and its length hardly changes; move ball 2 up a centimetre and it grows by a centimetre.",
+  "tr": "هنا \\((a/\\ell,\\ b/\\ell)\\) متّجه الوحدة على امتداد الدعامة، و\\((\\partial a/\\partial q,\\ \\partial b/\\partial q)\\) كيف يتحرّك طرفها حين يتغيّر \\(q\\). فالدعامة لا تطول إلّا بجزء حركة طرفها الذي يشير على امتدادها؛ والحركة العرضية تديرها على مسماريها فقط. حرّك الكرة 2 سنتيمترًا جانبًا والدعامة رأسية فلا يكاد طولها يتغيّر؛ وحرّك الكرة 2 سنتيمترًا إلى الأعلى فتطول سنتيمترًا."
+ },
+ "98aa2e8d763b": {
+  "src": "At the starting values, \\(\\omega = 1.71,\\ 5.05,\\ 10.00\\) rad/s at the hanging rest, whatever \\(k_s\\) is.",
+  "tr": "عند القيم الابتدائية \\(\\omega = 1.71,\\ 5.05,\\ 10.00\\) rad/s عند السكون المتدلّي، أيًّا كانت \\(k_s\\)."
+ },
+ "9907ec66a266": {
+  "src": "<a href=\"http://www.cds.caltech.edu/~murray/books/AM08/pdf/am08-complete_22Feb09.pdf\">Åström and Murray, <i>Feedback Systems</i> (2008)</a>, §6.1, Theorem 6.1, eq. (6.3), p. 170, with the same impulse argument.",
+  "tr": "<a href=\"http://www.cds.caltech.edu/~murray/books/AM08/pdf/am08-complete_22Feb09.pdf\">Åström and Murray, <i>Feedback Systems</i> (2008)</a>، §6.1، المبرهنة 6.1، المعادلة (6.3)، ص. 170، بحجّة الضربة نفسها."
+ },
  "990849eadc38": {
   "src": "<span class=\"psec__n\">10</span>Solve first, then play",
   "tr": "<span class=\"psec__n\">10</span>احسب أوّلًا، ثم شغّل"
+ },
+ "998efabf5667": {
+  "src": "Step 3: <a href=\"https://www.derek-hasted.co.uk/hago/faqs/formulae-2/\">Hasted, \"Guitar string deflection, tension and force\"</a>: each half of a plucked string of tension \\(T\\) pulls back with \\(T\\,d/(L/2)\\), and for small \\(d\\) the tension is not altered significantly.",
+  "tr": "الخطوة 3: <a href=\"https://www.derek-hasted.co.uk/hago/faqs/formulae-2/\">Hasted, \"Guitar string deflection, tension and force\"</a>: كلّ نصف من وتر مقروص شدّه \\(T\\) يشدّ عائدًا بـ \\(T\\,d/(L/2)\\)، ولـ \\(d\\) صغير لا يتغيّر الشدّ تغيّرًا يُذكر."
+ },
+ "99b8bd2f2cc4": {
+  "src": "largest current the source gives",
+  "tr": "أكبر تيار يعطيه المصدر"
+ },
+ "9a322baf9405": {
+  "src": "<span>6</span>How the spring pushes on each coordinate",
+  "tr": "<span>6</span>كيف يدفع النابض كلّ إحداثي"
  },
  "9c4bf50f401d": {
   "src": "Controllable",
@@ -523,9 +1083,17 @@
   "src": "<span>8</span>The controller",
   "tr": "<span>8</span>المتحكّم"
  },
+ "9d1906f0287e": {
+  "src": "Rendered linear motor: a steel U-channel lined on both inner walls with alternating red and blue magnets, small blue arrows across the gap, a rectangular copper coil hanging into the gap from under the cart, an orange arrow up its left leg and down its right leg, and a red arrow pointing along the rail from the cart.",
+  "tr": "محرّك خطّي مولَّد: قناة فولاذية على شكل U مبطّنة على جداريها الداخليين بمغانط حمراء وزرقاء متناوبة، وأسهم زرقاء صغيرة عبر الفجوة، وملفّ نحاسي مستطيل يتدلّى في الفجوة من تحت العربة، وسهم برتقالي صاعد في ساقه اليسرى ونازل في اليمنى، وسهم أحمر يشير على طول السكّة من العربة."
+ },
  "9d5a10a9440c": {
   "src": "On the page both balls weigh \\(m_1 = m_2 = 0.5\\ \\mathrm{kg}\\), both rods are \\(l_1 = l_2 = 0.5\\ \\mathrm{m}\\), the cart with its coil weighs \\(M = 1\\ \\mathrm{kg}\\), and its hinge runs \\(H = 1.65\\ \\mathrm{m}\\) below the pivot. When the chain hangs straight down over the cart, the strut has the length \\(\\ell_0 = H - l_1 - l_2 = 0.65\\ \\mathrm{m}\\), comfortably between its stops.",
   "tr": "في الصفحة تزن كلّ من الكرتين \\(m_1 = m_2 = 0.5\\ \\mathrm{kg}\\)، وطول كلّ من القضيبين \\(l_1 = l_2 = 0.5\\ \\mathrm{m}\\)، وتزن العربة مع ملفّها \\(M = 1\\ \\mathrm{kg}\\)، ويجري مفصلها على عمق \\(H = 1.65\\ \\mathrm{m}\\) تحت نقطة الارتكاز. وحين تتدلّى السلسلة شاقوليًا فوق العربة تمامًا، يكون طول الدعامة \\(\\ell_0 = H - l_1 - l_2 = 0.65\\ \\mathrm{m}\\)، أي بين مصدّيها بهامش مريح."
+ },
+ "9d92d5d95aad": {
+  "src": "Set \\(\\rho\\) ten times larger on the page and solve again. How do the gains, the slowest decay and the time at the current limit change? Explain with (24).",
+  "tr": "اجعل \\(\\rho\\) في الصفحة أكبر عشر مرّات واحسب من جديد. كيف تتغيّر الكسوب وأبطأ خمود والزمن عند حدّ التيار؟ اشرح ذلك بـ (24)."
  },
  "9de50c54f62a": {
   "src": "Controller presets",
@@ -535,13 +1103,45 @@
   "src": "Target position r",
   "tr": "الموضع المستهدف r"
  },
+ "9fbb0cb34e72": {
+  "src": "In \\(T\\) only \\(c\\) depends on \\(\\theta_1\\) itself, and \\(\\partial c/\\partial\\theta_1 = -s\\), so \\(\\partial T/\\partial\\theta_1 = -\\mu s\\,\\dot\\theta_1\\dot\\theta_2\\). Subtract: the term \\(-\\mu s\\,\\dot\\theta_1\\dot\\theta_2\\) in \\(\\dot p_1\\) meets \\(+\\mu s\\,\\dot\\theta_1\\dot\\theta_2\\), and the two cancel:",
+  "tr": "في \\(T\\) لا يتعلّق بـ \\(\\theta_1\\) نفسها إلّا \\(c\\)، و\\(\\partial c/\\partial\\theta_1 = -s\\)، إذن \\(\\partial T/\\partial\\theta_1 = -\\mu s\\,\\dot\\theta_1\\dot\\theta_2\\). اطرح: يلتقي الحدّ \\(-\\mu s\\,\\dot\\theta_1\\dot\\theta_2\\) في \\(\\dot p_1\\) بـ \\(+\\mu s\\,\\dot\\theta_1\\dot\\theta_2\\)، فيتلاشيان:"
+ },
+ "a087179431bd": {
+  "src": "<span>10</span>The linear model&nbsp;★",
+  "tr": "<span>10</span>النموذج الخطّي&nbsp;★"
+ },
+ "a0a327399fd6": {
+  "src": "<a href=\"https://underactuated.mit.edu/acrobot.html\">Tedrake, <i>Underactuated Robotics</i>, Ch. 3</a>: the term with the derivative of \\(\\mathbf M^{-1}\\) disappears because the bracket it multiplies is zero at a fixed point, and the velocity terms drop because the speeds are zero there.",
+  "tr": "<a href=\"https://underactuated.mit.edu/acrobot.html\">Tedrake, <i>Underactuated Robotics</i>, Ch. 3</a>: يختفي الحدّ الذي فيه مشتقّة \\(\\mathbf M^{-1}\\) لأنّ القوس الذي يضربه منعدم عند نقطة ثابتة، وتسقط حدود السرعة لأنّ السرعات منعدمة هناك."
+ },
  "a0fbd2e119cd": {
   "src": "The free motions are the solutions of \\(\\mathbf M\\ddot{\\mathbf q} + \\mathbf K\\mathbf q = 0\\), with \\(\\mathbf K\\) the matrix of second derivatives of (8). Trying \\(\\mathbf q = \\mathbf u\\, e^{i\\omega t}\\) gives \\(\\det(\\mathbf K - \\omega^2\\mathbf M) = 0\\). With the defaults there are three normal modes, at \\(\\omega = 1.71\\), \\(5.05\\) and \\(10.00\\ \\mathrm{rad/s}\\) (0.27, 0.80 and 1.59 Hz). In the slowest the cart and the chain sway together on the soft string, the cart moving most. In the middle one the chain swings as a whole while the cart moves a little against it. In the fastest the two rods swing against each other, as in the faster mode of a bare double pendulum. Without the strut the bare pendulum has only two, at 3.39 and 8.18 rad/s; the strut's pull stiffens the chain and adds the third mode through the cart.",
   "tr": "الحركات الحرّة هي حلول \\(\\mathbf M\\ddot{\\mathbf q} + \\mathbf K\\mathbf q = 0\\)، حيث \\(\\mathbf K\\) مصفوفة المشتقّات الثانية لـ (8). وتجربة \\(\\mathbf q = \\mathbf u\\, e^{i\\omega t}\\) تعطي \\(\\det(\\mathbf K - \\omega^2\\mathbf M) = 0\\). وبالقيم الافتراضية توجد ثلاثة أنماط طبيعية، عند \\(\\omega = 1.71\\) و\\(5.05\\) و\\(10.00\\ \\mathrm{rad/s}\\) (0.27 و0.80 و1.59 Hz). في أبطئها تتمايل العربة والسلسلة معًا على الوتر الليّن، والعربة هي الأكثر حركة. وفي الأوسط تتأرجح السلسلة كتلةً واحدة بينما تتحرّك العربة قليلًا عكسها. وفي الأسرع يتأرجح القضيبان أحدهما عكس الآخر، كما في النمط الأسرع لنوّاس مزدوج عارٍ. ومن دون الدعامة لا يملك النوّاس العاري إلا نمطين، عند 3.39 و8.18 rad/s؛ فشدّ الدعامة يقوّي السلسلة ويضيف النمط الثالث عبر العربة."
  },
+ "a21dd350964b": {
+  "src": "Cart mass M",
+  "tr": "كتلة العربة M"
+ },
+ "a27c13f1b70b": {
+  "src": "The page solves (16) by Newton's method in <code>equilibrium()</code>. At the starting values and \\(r = 0.30\\) m the rods lean \\(5.78^\\circ\\) and \\(8.36^\\circ\\), the strut pulls with 6.12 N, and the coil holds the cart with 1.59 N. This rest depends on \\(k_s\\), because the strut leans: with \\(k_s = 1000\\) N/m the rods lean \\(8.80^\\circ\\) and \\(10.02^\\circ\\).",
+  "tr": "تحلّ الصفحة (16) بطريقة نيوتن في <code>equilibrium()</code>. وعند القيم الابتدائية و\\(r = 0.30\\) m يميل القضيبان \\(5.78^\\circ\\) و\\(8.36^\\circ\\)، وتشدّ الدعامة بـ 6.12 N، ويمسك الملفّ العربة بـ 1.59 N. ويتوقّف هذا السكون على \\(k_s\\) لأنّ الدعامة مائلة: مع \\(k_s = 1000\\) N/m يميل القضيبان \\(8.80^\\circ\\) و\\(10.02^\\circ\\)."
+ },
  "a2f6c06c1737": {
   "src": "From t = 0",
   "tr": "من t = 0"
+ },
+ "a38bd9632a35": {
+  "src": "Kick the cart with one sharp blow. The state jumps at once in the direction \\(\\mathbf B\\): only the cart's speed changes. Now give a blow and its exact reverse a moment later. The state jumps along \\(\\mathbf A\\mathbf B\\): the cart has moved, and the strut has begun to tug ball 2. Each further step of this kind reaches one link further into the chain, \\(\\mathbf A^2\\mathbf B\\), \\(\\mathbf A^3\\mathbf B\\), and so on; by the Cayley–Hamilton theorem nothing new appears after \\(\\mathbf A^5\\mathbf B\\). Any push is built from such pieces, so the states a push can reach are the combinations of six columns,",
+  "tr": "اضرب العربة ضربة حادّة واحدة. تقفز الحالة فورًا في الاتّجاه \\(\\mathbf B\\): لا تتغيّر إلّا سرعة العربة. والآن اضرب ضربة ثمّ عكسها تمامًا بعد لحظة. تقفز الحالة على امتداد \\(\\mathbf A\\mathbf B\\): لقد تحرّكت العربة، وبدأت الدعامة تجرّ الكرة 2. وكلّ خطوة أخرى من هذا النوع تبلغ حلقة أبعد في السلسلة، \\(\\mathbf A^2\\mathbf B\\)، \\(\\mathbf A^3\\mathbf B\\)، وهكذا؛ وبمبرهنة كايلي–هاملتون لا يظهر شيء جديد بعد \\(\\mathbf A^5\\mathbf B\\). وكلّ دفع مبنيّ من مثل هذه القطع، فالحالات التي يبلغها الدفع هي تراكيب ستّة أعمدة،"
+ },
+ "a40a342ae2b1": {
+  "src": "The offset \\(a\\) is first order; the rise \\(\\beta\\) of ball 2 is second order. Now Pythagoras, dropping \\(\\beta^2\\), which is fourth order:",
+  "tr": "الإزاحة \\(a\\) من الرتبة الأولى؛ وارتفاع الكرة 2 \\(\\beta\\) من الرتبة الثانية. والآن فيثاغورس، مع إسقاط \\(\\beta^2\\) لأنّه من الرتبة الرابعة:"
+ },
+ "a420e8a12293": {
+  "src": "Ball 1 runs on a circle, so its speed is the radius times the rate of turning. For ball 2 each component is a sum of two terms:",
+  "tr": "تجري الكرة 1 على دائرة، فسرعتها نصف القطر مضروبًا في معدّل الدوران. وللكرة 2 كلّ مركّبة مجموع حدّين:"
  },
  "a4404918a094": {
   "src": "<b>Abstract.</b> Our aim is to bring a double pendulum back to rest, at a place we choose, by pushing nothing but a cart. The pendulum hangs from a fixed pivot. A strut made of two sliding tubes, with a spring inside, ties its lower ball to a cart, and a moving coil pushes the cart along a rail. The coil is the only thing anyone can push, yet it must bring three bodies to rest at a place we choose. We count the degrees of freedom, write the Lagrangian, and find that the strut must be under tension: to first order its spring stiffness drops out, and only the pull it carries couples the cart to the chain, like a guitar string. We find the family of rests the coil can hold, linearise around one of them, test whether a single push can reach every motion, and design the push by the linear–quadratic regulator. Then we look at the result in the six-dimensional phase space: a stable focus, a Lyapunov function that comes with the design, and the edge of the region the controller can rescue. The page solves the whole run first and stores it, and the note says how good that stored run is. Sections marked ★ carry the heavier mathematics and can be skipped on a first reading.",
@@ -555,13 +1155,25 @@
   "src": "← All simulations",
   "tr": "→ جميع المحاكاة"
  },
+ "a53f22db79d5": {
+  "src": "Force constant κ",
+  "tr": "ثابت القوّة κ"
+ },
  "a5e7933ea71f": {
   "src": "The coil adds the electromechanical terms we met in Fig. 9: with \\(q_e\\) the charge that has flowed through the winding, \\(\\dot q_e = I\\), and \\(\\Lambda\\) its inductance,",
   "tr": "ويضيف الملفّ الحدود الكهروميكانيكية التي التقيناها في الشكل 9: حيث \\(q_e\\) الشحنة التي سرت عبر اللفّة، و\\(\\dot q_e = I\\)، و\\(\\Lambda\\) محاثّتها،"
  },
+ "a60f64d78ecd": {
+  "src": "Then (12)–(14) read",
+  "tr": "فتصير (12)–(14)"
+ },
  "a6cf85afa000": {
   "src": "The strut is not a constraint. Its tubes are so light that we take them as massless, and a massless bar hinged at both ends can only push or pull along its own line: any sideways force on it would give an infinite angular acceleration. Such a bar is a <em>two-force member</em>. Its length is set by where ball 2 and the cart are, so it brings no coordinate of its own, and its spring enters through a potential energy. The tubes do impose two <em>unilateral</em> constraints, inequalities that act only when they are reached: the strut is never shorter than \\(\\ell_\\text{min} = 0.5\\ \\mathrm{m}\\) (inner tube pushed all the way in) and never longer than \\(\\ell_\\text{max} = 0.95\\ \\mathrm{m}\\) (its collar against the stop). Section 4 says how the page treats them.",
   "tr": "الدعامة ليست قيدًا. أنابيبها خفيفة إلى حدّ أننا نعدّها عديمة الكتلة، والقضيب عديم الكتلة المفصليّ عند طرفيه لا يستطيع إلا أن يدفع أو يشدّ على امتداد خطّه: فأيّ قوّة جانبية عليه تعطيه تسارعًا زاويًا لانهائيًا. يُسمّى مثل هذا القضيب <em>عنصرًا ثنائي القوّة</em>. يتحدّد طوله بموضعي الكرة 2 والعربة، فلا يأتي بإحداثي خاصّ به، ويدخل نابضه عبر طاقة كامنة. لكنّ الأنابيب تفرض قيدين <em>أحاديَّي الجانب</em>، أي متباينتين لا تعملان إلا حين تُبلَغان: لا تقصر الدعامة أبدًا عن \\(\\ell_\\text{min} = 0.5\\ \\mathrm{m}\\) (الأنبوب الداخلي مدفوع إلى آخره)، ولا تطول أبدًا عن \\(\\ell_\\text{max} = 0.95\\ \\mathrm{m}\\) (طوقها مستند إلى المصدّ). يبيّن القسم 4 كيف تعالجهما الصفحة."
+ },
+ "a83e6cd9e47d": {
+  "src": "Coil · <span style=\"text-transform:none\">F = κI</span>",
+  "tr": "الملفّ · <span style=\"text-transform:none\">F = κI</span>"
  },
  "a9b75cb42bf9": {
   "src": "<span class=\"sw\"></span>now",
@@ -575,9 +1187,33 @@
   "src": "<span class=\"pfig__n\">Figure 2</span>Where the energy of one swing goes, for the release of §1.2 over 8 s. Inside the boxes: the energy at the release, 0.079 J in the chain and 0.023 J in the string’s sideways stretch. On the arrows: the energy that crosses each link. The string drains the chain and hands that energy, with its own, to the cart. The coil pumps energy out of the cart (burgundy, 2.40 J) and into it (grey, 2.30 J) on every swing; the difference, 0.102 J, is the whole swing, and it ends in the current source.",
   "tr": "<span class=\"pfig__n\">الشكل 2</span>أين تذهب طاقة تأرجحة واحدة، للإطلاق في §1.2 على مدى 8 s. داخل الصناديق: الطاقة عند الإطلاق، 0.079 J في السلسلة و0.023 J في تمدّد الوتر الجانبي. وعلى الأسهم: الطاقة التي تعبر كلّ وصلة. يستنزف الوتر السلسلة ويسلّم تلك الطاقة، مع طاقته هو، إلى العربة. ويضخّ الملفّ الطاقة خارجًا من العربة (عنّابي، 2.40 J) وإليها (رمادي، 2.30 J) في كلّ تأرجحة؛ والفرق، 0.102 J، هو التأرجح كلّه، وينتهي في مصدر التيار."
  },
+ "ab82374a39e1": {
+  "src": "By Pythagoras the strut, from the cart's pin to the ball's centre, is",
+  "tr": "وبفيثاغورس يكون طول الدعامة، من مسمار العربة إلى مركز الكرة،"
+ },
+ "acbb5f4296fd": {
+  "src": "Without the strut, (12) and (13) are Widnall, L20, eqs. (36)–(41); her (40)–(41) are (12) and (13) divided by \\(l_1\\) and \\(l_2\\).",
+  "tr": "ودون الدعامة تكون (12) و(13) هما Widnall، L20، المعادلات (36)–(41)؛ ومعادلتاها (40)–(41) هما (12) و(13) مقسومتين على \\(l_1\\) و\\(l_2\\)."
+ },
+ "accf804f96bd": {
+  "src": "Put the best push, \\(\\tilde F = -\\mathbf K\\tilde{\\mathbf y}\\), into (26). The square vanishes, and \\(\\rho\\tilde F^2 = \\rho\\,\\tilde{\\mathbf y}^{\\mathsf T}\\mathbf K^{\\mathsf T}\\mathbf K\\tilde{\\mathbf y}\\), so",
+  "tr": "ضع أفضل دفع، \\(\\tilde F = -\\mathbf K\\tilde{\\mathbf y}\\)، في (26). يتلاشى المربّع، و\\(\\rho\\tilde F^2 = \\rho\\,\\tilde{\\mathbf y}^{\\mathsf T}\\mathbf K^{\\mathsf T}\\mathbf K\\tilde{\\mathbf y}\\)، إذن"
+ },
+ "ae25c741643c": {
+  "src": "Call \\(\\mathbf S\\) the matrix of second derivatives of \\(V\\) at the rest, the stiffness matrix, and \\(\\mathbf M_0\\) the mass matrix there. Small free motions obey \\(\\mathbf M_0\\ddot{\\mathbf q} + \\mathbf S\\mathbf q = 0\\); trying \\(\\mathbf q = \\mathbf u\\,e^{i\\omega t}\\) gives",
+  "tr": "لنسمِّ \\(\\mathbf S\\) مصفوفة المشتقّات الثانية لـ \\(V\\) عند السكون، أي مصفوفة الصلابة، و\\(\\mathbf M_0\\) مصفوفة الكتلة هناك. تخضع الحركات الحرّة الصغيرة لـ \\(\\mathbf M_0\\ddot{\\mathbf q} + \\mathbf S\\mathbf q = 0\\)؛ وتجربة \\(\\mathbf q = \\mathbf u\\,e^{i\\omega t}\\) تعطي"
+ },
  "af59fae5d6ae": {
   "src": "The aim of this page",
   "tr": "هدف هذه الصفحة"
+ },
+ "b1a58280258d": {
+  "src": "<span class=\"psub__n\">1.4</span>How the cart brings the chain home",
+  "tr": "<span class=\"psub__n\">1.4</span>كيف تعيد العربة السلسلة إلى بيتها"
+ },
+ "b1d87c7e0536": {
+  "src": "<b>The strut carries no pull</b>, \\(N = 0\\): the spring sits at its slack length, \\(\\ell = L_0\\). Only gravity acts on the chain, so both rods hang straight down, \\(b = \\ell_0\\), and the cart stands where \\(\\sqrt{(x_2 - X)^2 + \\ell_0^2} = L_0\\). That needs \\(L_0 \\ge \\ell_0\\), that is \\(N_0 \\le 0\\): a strut that pushes. With a pulling strut this case cannot happen, and hanging straight down is the only rest. With a pushing strut it can: the cart rests at \\(X = \\pm\\sqrt{L_0^2 - \\ell_0^2}\\) under a chain hanging straight down (\\(\\pm0.16\\) m at \\(N_0 = -2\\) N with the other sliders at their starting values). The middle rest is then like a pencil on its tip: a strut that pushes shoves the cart away from under the ball as soon as it leans. At a side rest the spring is slack, and any small motion of the cart either stretches or squeezes it, so the rest is stable. With a pushing strut and no control the machine swings about one of the side rests.",
+  "tr": "<b>الدعامة لا تحمل شدًّا</b>، \\(N = 0\\): النابض عند طول ارتخائه، \\(\\ell = L_0\\). لا تؤثّر في السلسلة إلّا الجاذبية، فيتدلّى القضيبان مستقيمين إلى الأسفل، \\(b = \\ell_0\\)، وتقف العربة حيث \\(\\sqrt{(x_2 - X)^2 + \\ell_0^2} = L_0\\). وهذا يحتاج إلى \\(L_0 \\ge \\ell_0\\)، أي \\(N_0 \\le 0\\): دعامة تدفع. ومع دعامة تشدّ لا يمكن أن تقع هذه الحالة، والتدلّي المستقيم هو السكون الوحيد. ومع دعامة تدفع يمكن: تسكن العربة عند \\(X = \\pm\\sqrt{L_0^2 - \\ell_0^2}\\) تحت سلسلة متدلّية مستقيمة (\\(\\pm0.16\\) m عند \\(N_0 = -2\\) N والمنزلقات الأخرى على قيمها الابتدائية). ويكون السكون الأوسط عندئذ كقلم رصاص على رأسه: فالدعامة الدافعة تزيح العربة من تحت الكرة حالما تميل. وعند سكون جانبي يكون النابض مرتخيًا، وأيّ حركة صغيرة للعربة تمدّه أو تضغطه، فيكون السكون مستقرًّا. ومع دعامة دافعة ودون تحكّم تتأرجح الآلة حول أحد السكونين الجانبيين."
  },
  "b257af45fbc9": {
   "src": "magnet",
@@ -586,6 +1222,10 @@
  "b2ab43f67958": {
   "src": "<span>3</span>Lagrangian and equations of motion&nbsp;★",
   "tr": "<span>3</span>اللاغرانجيان ومعادلات الحركة&nbsp;★"
+ },
+ "b2cd7157f9f5": {
+  "src": "So each rod points straight down or straight up. Only straight down fits the tubes; the three other arrangements need a strut of length \\(H - l_1 + l_2\\), \\(H + l_1 - l_2\\) or \\(H + l_1 + l_2\\), longer than \\(\\ell_\\text{max}\\) for every setting the sliders allow.",
+  "tr": "فكلّ قضيب يشير مستقيمًا إلى الأسفل أو مستقيمًا إلى الأعلى. ولا يلائم الأنبوبين إلّا الأسفل؛ فالترتيبات الثلاثة الأخرى تحتاج إلى دعامة طولها \\(H - l_1 + l_2\\) أو \\(H + l_1 - l_2\\) أو \\(H + l_1 + l_2\\)، أطول من \\(\\ell_\\text{max}\\) في كلّ ضبط تسمح به المنزلقات."
  },
  "b327ddd25f9f": {
   "src": "<span class=\"psec__n\">12</span>What the model leaves out",
@@ -598,6 +1238,10 @@
  "b4382736d458": {
   "src": "Lecture note · Fig. 11 · control systems",
   "tr": "مذكّرة المحاضرة · الشكل 11 · أنظمة التحكّم"
+ },
+ "b54c669f084f": {
+  "src": "H is kept so that the strut's resting length ℓ₀ = H − l₁ − l₂ stays between 0.55 and 0.85 m.",
+  "tr": "تُضبط H بحيث يبقى طول الدعامة في السكون ℓ₀ = H − l₁ − l₂ بين 0.55 و0.85 m."
  },
  "b59908c7fcec": {
   "src": "Is one push enough to steer six numbers? The test is Kalman's: the system (9) is <em>controllable</em>, meaning that some force history can carry any state to any other, if and only if the matrix",
@@ -615,9 +1259,33 @@
   "src": "Set \\(\\rho\\) ten times larger on the page and solve again. How do the gains, the slowest decay and the time at the current limit change? Explain with (12).",
   "tr": "اجعل \\(\\rho\\) أكبر بعشر مرّات في الصفحة واحسب من جديد. كيف تتغيّر معاملات الكسب، وأبطأ اضمحلال، والزمن الذي يقضيه الملفّ عند حدّ التيار؟ فسّر ذلك بـ (12)."
  },
+ "b67dd8a825ce": {
+  "src": "Put the pivot at the origin, \\(x\\) to the right and \\(y\\) upwards. Reading the positions off Figure 5,",
+  "tr": "ضع نقطة الارتكاز في نقطة الأصل، و\\(x\\) إلى اليمين و\\(y\\) إلى الأعلى. وبقراءة المواضع من الشكل 5،"
+ },
+ "bb16d350c938": {
+  "src": "The machine works the same way, part for part. The cord is the strut. To first order its sideways pull is that of a stretched string (§9); at the starting values, the pull \\(N_0\\) along the strut, tilted by the offset between ball 2 and the cart, gives a sideways force \\((N_0/\\ell_0)\\,(X - x_2)\\) on ball 2, about 4.6 N for every metre that the cart stands beside the ball, and the opposite force on the cart. The hand is the cart. The arm is the coil: it pushes the cart with \\(F\\), and its power \\(F\\dot X\\) is positive when it speeds the cart along and negative when it brakes it; braking sends the energy back into the current source. Nothing else touches the chain. So the energy of a swing has exactly one way out: from the chain through the string into the cart, and from the cart through the coil into the source.",
+  "tr": "تعمل الآلة بالطريقة نفسها، جزءًا جزءًا. الحبل هو الدعامة. وشدّها الجانبي في الرتبة الأولى هو شدّ وتر مشدود (§9)؛ وعند القيم الابتدائية يعطي الشدّ \\(N_0\\) على امتداد الدعامة، مائلًا بالإزاحة بين الكرة 2 والعربة، قوّة جانبية \\((N_0/\\ell_0)\\,(X - x_2)\\) على الكرة 2، نحو 4.6 N لكلّ متر تقف فيه العربة بجانب الكرة، والقوّة المعاكسة على العربة. واليد هي العربة. والذراع هي الملفّ: يدفع العربة بـ \\(F\\)، وقدرته \\(F\\dot X\\) موجبة حين يسرّع العربة وسالبة حين يكبحها؛ والكبح يعيد الطاقة إلى مصدر التيار. ولا شيء آخر يلمس السلسلة. فلطاقة التأرجح مخرج واحد بالضبط: من السلسلة عبر الوتر إلى العربة، ومن العربة عبر الملفّ إلى المصدر."
+ },
+ "bc298b02fe7d": {
+  "src": "Ball 1 mass m₁",
+  "tr": "كتلة الكرة 1 m₁"
+ },
+ "bd2961021f9c": {
+  "src": "gravitational acceleration",
+  "tr": "تسارع الجاذبية"
+ },
+ "be3c91fca133": {
+  "src": "Gravity's energy is \\(mgy\\) for each ball, with the heights \\(y_1, y_2\\) from (3). The cart's height never changes, so its gravity energy is a constant we drop. The spring stores \\(\\tfrac12 k_s(\\ell - L_0)^2\\). So",
+  "tr": "طاقة الجاذبية \\(mgy\\) لكلّ كرة، والارتفاعان \\(y_1, y_2\\) من (3). وارتفاع العربة لا يتغيّر أبدًا، فطاقة جاذبيتها ثابت نُسقطه. ويخزّن النابض \\(\\tfrac12 k_s(\\ell - L_0)^2\\). إذن"
+ },
  "be49d8a185a4": {
   "src": "<span class=\"psec__n\">05</span>Where the chain can rest",
   "tr": "<span class=\"psec__n\">05</span>أين يمكن للسلسلة أن تسكن"
+ },
+ "bea49adefb5d": {
+  "src": "Without control the hanging rest is a <em>centre</em>: all six eigenvalues of \\(\\mathbf A\\) in (21) are imaginary, at the starting values \\(\\pm1.71i\\), \\(\\pm5.05i\\) and \\(\\pm10.00i\\) per second, the normal modes of (20), and the energy \\(T + V\\) of (5) and (6) is conserved, so a disturbed chain circles for ever on a surface of constant energy. At the target \\(r = 0.30\\ \\mathrm m\\) the coil must hold the cart, and the open-loop eigenvalues there are \\(\\pm2.73i\\), \\(\\pm6.71i\\) and \\(\\pm11.57i\\). With the controller the eigenvalues of \\(\\mathbf A - \\mathbf B\\mathbf K\\) move into the left half-plane. For the starting values and \\(r = 0.30\\ \\mathrm m\\) they are \\(-14.98\\), \\(-1.83 \\pm 6.58i\\), \\(-1.19 \\pm 11.65i\\) and \\(-1.13\\) per second: two decaying swings and two plain decays. The rest has become a <em>stable focus</em>, and the slowest decay, 1.13 per second, sets the time on which the chain comes to rest, about a second for each factor of three.",
+  "tr": "دون تحكّم يكون السكون المتدلّي <em>مركزًا</em>: فالقيم الذاتية الستّ لـ \\(\\mathbf A\\) في (21) كلّها تخيّلية، وهي عند القيم الابتدائية \\(\\pm1.71i\\) و\\(\\pm5.05i\\) و\\(\\pm10.00i\\) في الثانية، الأنماط الذاتية لـ (20)، والطاقة \\(T + V\\) من (5) و(6) محفوظة، فالسلسلة المضطربة تدور إلى الأبد على سطح طاقة ثابتة. وعند الهدف \\(r = 0.30\\ \\mathrm m\\) يجب أن يمسك الملفّ العربة، والقيم الذاتية للحلقة المفتوحة هناك \\(\\pm2.73i\\) و\\(\\pm6.71i\\) و\\(\\pm11.57i\\). ومع المتحكّم تنتقل القيم الذاتية لـ \\(\\mathbf A - \\mathbf B\\mathbf K\\) إلى النصف الأيسر من المستوى. وللقيم الابتدائية و\\(r = 0.30\\ \\mathrm m\\) هي \\(-14.98\\) و\\(-1.83 \\pm 6.58i\\) و\\(-1.19 \\pm 11.65i\\) و\\(-1.13\\) في الثانية: تأرجحان خامدان وخمودان بسيطان. لقد صار السكون <em>بؤرة مستقرّة</em>، وأبطأ خمود، 1.13 في الثانية، يحدّد الزمن الذي تسكن فيه السلسلة، نحو ثانية لكلّ عامل ثلاثة."
  },
  "bebf46d1b1a7": {
   "src": "The cart, and only the cart, brings the pendulum back to equilibrium. The controller measures where both balls and the cart are and how fast they move, sets the current in the coil, and so pushes the cart; through the strut the cart pulls the chain until all three bodies rest at the position you chose. Every section below serves this aim: the model says what the cart can do to the chain (§3–§6), the test of §7 says whether one push can reach every motion, §8 designs the push, and §9 shows the chain coming home in phase space.",
@@ -639,41 +1307,129 @@
   "src": "Rest angles θ₁*, θ₂*",
   "tr": "زاويتا السكون θ₁*، θ₂*"
  },
+ "c1bec69f7a2d": {
+  "src": "Now \\(\\partial c/\\partial\\theta_2 = +s\\), so \\(\\partial T/\\partial\\theta_2 = +\\mu s\\,\\dot\\theta_1\\dot\\theta_2\\). Subtracting, the mixed terms cancel again:",
+  "tr": "والآن \\(\\partial c/\\partial\\theta_2 = +s\\)، إذن \\(\\partial T/\\partial\\theta_2 = +\\mu s\\,\\dot\\theta_1\\dot\\theta_2\\). وبالطرح تتلاشى الحدود المختلطة من جديد:"
+ },
  "c1cd35a3402c": {
   "src": "<b>The coil, the magnet and the current.</b> Nobody holds the cart; it is pushed by a <em>linear motor</em>, which works like a loudspeaker. Under the rail lies a long magnet with a narrow gap, and in that gap sits a coil of copper wire fixed to the cart. When an electric <em>current</em> flows through the wire, the magnet pushes the wire along the rail, and the wire takes the cart with it. A current is a flow of electric charge through a wire, measured in amperes, written A; picture water flowing through a hose, measured in litres per second. A phone charger delivers about 1 to 3 A. The push grows in step with the current, \\(F = \\kappa I\\), and the <em>force constant</em> \\(\\kappa = 10\\ \\mathrm{N/A}\\) says how many newtons each ampere gives: 1 A pushes with 10 N, 2 A with 20 N, and a current flowing the other way pushes the other way. In a loudspeaker the same push moves the paper cone back and forth to make sound.",
   "tr": "<b>الملفّ والمغناطيس والتيار.</b> لا أحد يمسك العربة؛ إنما يدفعها <em>محرّك خطّي</em>، يعمل مثل مكبّر الصوت. تحت السكّة مغناطيس طويل فيه فجوة ضيقة، وفي تلك الفجوة ملفّ من سلك نحاسي مثبّت في العربة. وحين يسري <em>تيار</em> كهربائي في السلك يدفع المغناطيس السلك على طول السكّة، ويأخذ السلك العربة معه. التيار هو سريان الشحنة الكهربائية في سلك، ويُقاس بالأمبير، ويُكتب A؛ تخيّل ماءً يجري في خرطوم، يُقاس باللترات في الثانية. وشاحن الهاتف يعطي نحو 1 إلى 3 A. ويزداد الدفع بازدياد التيار، \\(F = \\kappa I\\)، و<em>ثابت القوّة</em> \\(\\kappa = 10\\ \\mathrm{N/A}\\) يقول كم نيوتن يعطي كلّ أمبير: 1 A يدفع بـ 10 N، و2 A بـ 20 N، والتيار الذي يسري في الاتجاه المعاكس يدفع في الاتجاه المعاكس. وفي مكبّر الصوت يحرّك الدفع نفسه مخروط الورق ذهابًا وإيابًا فيصدر الصوت."
+ },
+ "c200f6c420a8": {
+  "src": "<span class=\"psec__n\">09</span>Small swings: the guitar string<span class=\"star\" title=\"heavier mathematics\">★</span>",
+  "tr": "<span class=\"psec__n\">09</span>التأرجحات الصغيرة: وتر الغيتار<span class=\"star\" title=\"heavier mathematics\">★</span>"
+ },
+ "c288774e1025": {
+  "src": "The first term is a constant, the second is second order, and the third, the square of a second-order quantity, is fourth order and dropped. <b>This is where \\(k_s\\) leaves.</b> The spring already pulls with \\(N_0\\), so a small extra stretch \\(\\delta\\) costs the work \\(N_0\\delta\\) at nearly constant pull; the pull itself changes only by \\(k_s\\delta\\), and the work of that change is far smaller.",
+  "tr": "الحدّ الأوّل ثابت، والثاني من الرتبة الثانية، والثالث، مربّع كمّية من الرتبة الثانية، من الرتبة الرابعة فيُسقَط. <b>هنا يخرج \\(k_s\\).</b> فالنابض يشدّ أصلًا بـ \\(N_0\\)، فيكلّف تمدّد إضافي صغير \\(\\delta\\) الشغل \\(N_0\\delta\\) بشدّ يكاد يكون ثابتًا؛ والشدّ نفسه لا يتغيّر إلّا بمقدار \\(k_s\\delta\\)، وشغل هذا التغيّر أصغر بكثير."
  },
  "c313f91f9735": {
   "src": "<b>Phase space</b> · three shadows of the six-dimensional state <span class=\"tx\">\\((\\theta_1, \\theta_2, X, \\dot\\theta_1, \\dot\\theta_2, \\dot X)\\)</span> and the fixed point <span class=\"tx\">\\(\\mathbf y^*\\)</span>",
   "tr": "<b>فضاء الطور</b> · ثلاثة ظلال للحالة السداسية الأبعاد <span class=\"tx\">\\((\\theta_1, \\theta_2, X, \\dot\\theta_1, \\dot\\theta_2, \\dot X)\\)</span> والنقطة الثابتة <span class=\"tx\">\\(\\mathbf y^*\\)</span>"
  },
+ "c329e9174ed0": {
+  "src": "Slider range",
+  "tr": "مدى المنزلق"
+ },
  "c4df62143e45": {
   "src": "Effort weight, log10 of ρ",
   "tr": "وزن الجهد، log10 لـ ρ"
+ },
+ "c54254e1db4d": {
+  "src": "<b>Step 4, add up</b> step 1 and \\(N_0\\delta\\), with \\(\\delta\\) from (18):",
+  "tr": "<b>الخطوة 4، اجمع</b> الخطوة 1 و\\(N_0\\delta\\)، مع \\(\\delta\\) من (18):"
+ },
+ "c5bff702eac2": {
+  "src": "<span>17</span>What the model leaves out",
+  "tr": "<span>17</span>ما يُغفله النموذج"
+ },
+ "c70a2d65879a": {
+  "src": "Double Pendulum under Control",
+  "tr": "النوّاس المزدوج تحت التحكّم"
+ },
+ "c794fc175ca0": {
+  "src": "<span class=\"psub__n\">1.5</span>The parameters",
+  "tr": "<span class=\"psub__n\">1.5</span>المعلمات"
  },
  "c7f189fe1a24": {
   "src": "The rig is drawn to scale, in pixels per metre. The pale dashed pendulum is the rest \\(\\mathbf y^*\\) the controller aims at, joined to the target \\(r\\) on the rail. The burgundy arrow on the cart is the coil's force \\(F\\), drawn 0.02 m long per newton on the rig's scale; the grey arrows beside the strut are its pull \\(N\\) on ball 2 and on the cart, equal and opposite. The stop marker on the outer tube turns burgundy while a stop is touched. The small circles on the coil appear while current flows. The bars at the top left are the energy books: the energy above the rest, the coil's work and the stops' heat.",
   "tr": "يُرسم الجهاز بمقياس رسم، بالبكسلات لكلّ متر. النوّاس الباهت المتقطّع هو وضع السكون \\(\\mathbf y^*\\) الذي يستهدفه المتحكّم، موصولًا بالهدف \\(r\\) على السكّة. والسهم العنّابي على العربة هو قوّة الملفّ \\(F\\)، مرسومًا بطول 0.02 m لكلّ نيوتن بمقياس الجهاز؛ والسهمان الرماديان بجانب الدعامة هما شدّها \\(N\\) على الكرة 2 وعلى العربة، متساويان ومتعاكسان. وتصير علامة المصدّ على الأنبوب الخارجي عنّابيةً ما دام مصدٌّ ملموسًا. وتظهر الدوائر الصغيرة على الملفّ ما دام التيار يسري. والأشرطة في أعلى اليسار هي موازنات الطاقة: الطاقة فوق وضع السكون، وشغل الملفّ، وحرارة المصدّين."
  },
+ "c8c08f28c4de": {
+  "src": "<b>With the coil on</b>, the controller sets the current and the coil adds its push:",
+  "tr": "<b>والملفّ يعمل</b> يضبط المتحكّم التيار ويضيف الملفّ دفعه:"
+ },
  "c97bb887ba7e": {
   "src": "<span>1</span>A chain on a leash",
   "tr": "<span>1</span>سلسلة مربوطة برسن"
+ },
+ "cad0bf5db05b": {
+  "src": "<span class=\"psub__n\">1.2</span>The strut, cut open",
+  "tr": "<span class=\"psub__n\">1.2</span>الدعامة مشقوقة"
  },
  "cad2dda3032c": {
   "src": "heavier mathematics",
   "tr": "رياضيات أعمق"
  },
+ "cc1cc12c7e76": {
+  "src": "Differentiate the positions (3) in time. The angles change in time, so by the chain rule \\(\\tfrac{d}{dt}\\sin\\theta = \\dot\\theta\\cos\\theta\\) and \\(\\tfrac{d}{dt}\\cos\\theta = -\\dot\\theta\\sin\\theta\\). For ball 1,",
+  "tr": "اشتقّ المواضع (3) بالنسبة إلى الزمن. الزاويتان تتغيّران مع الزمن، فبقاعدة السلسلة \\(\\tfrac{d}{dt}\\sin\\theta = \\dot\\theta\\cos\\theta\\) و\\(\\tfrac{d}{dt}\\cos\\theta = -\\dot\\theta\\sin\\theta\\). وللكرة 1،"
+ },
+ "cd77644662b1": {
+  "src": "Every quantity that defines the machine is a slider on the page. The derivations below keep them all as symbols; numbers in the text are for the starting values in this table.",
+  "tr": "كلّ كمّية تحدّد الآلة منزلق في الصفحة. وتُبقي الاشتقاقات أدناه عليها كلّها رموزًا؛ والأرقام في النصّ هي للقيم الابتدائية في هذا الجدول."
+ },
+ "cd9f4a669ac3": {
+  "src": "Each line has a picture. The first is gravity. The second has the form of ball 2's gravity term, \\(\\tfrac12 m_2g(l_1\\theta_1^2 + l_2\\theta_2^2)\\), with \\(m_2g\\) replaced by \\(N_0\\): the strut's pull acts like an extra weight \\(N_0\\) hung on ball 2. The third is a stretched guitar string. Differentiate it with respect to \\(X\\), and the cart feels \\(N_0(x_2 - X)/\\ell_0\\): the sideways force of a string under tension \\(N_0\\) and length \\(\\ell_0\\) whose end is pulled aside by \\(x_2 - X\\). It is the only term that contains \\(X\\): with no pull, \\(N_0 = 0\\), the cart and the chain no longer feel each other.",
+  "tr": "لكلّ سطر صورة. الأوّل الجاذبية. والثاني على شكل حدّ جاذبية الكرة 2، \\(\\tfrac12 m_2g(l_1\\theta_1^2 + l_2\\theta_2^2)\\)، مع \\(N_0\\) مكان \\(m_2g\\): فشدّ الدعامة يعمل كوزن إضافي \\(N_0\\) معلّق بالكرة 2. والثالث وتر غيتار مشدود. اشتقّه بالنسبة إلى \\(X\\) تشعر العربة بـ \\(N_0(x_2 - X)/\\ell_0\\): القوّة الجانبية لوتر تحت شدّ \\(N_0\\) وطوله \\(\\ell_0\\) يُسحب طرفه جانبًا بمقدار \\(x_2 - X\\). وهو الحدّ الوحيد الذي يحوي \\(X\\): فبلا شدّ، \\(N_0 = 0\\)، لا تعود العربة والسلسلة تشعران إحداهما بالأخرى."
+ },
+ "cdb7d6ad687d": {
+  "src": "Numa Koudsie",
+  "tr": "نعمة سائر قدسية"
+ },
+ "cdd20781c7f2": {
+  "src": "One thing was assumed: that a symmetric \\(\\mathbf P\\) solving (25) exists at all. It does, and it is the only positive-definite solution, whenever one push can reach every motion (rank 6 in §11) and every weight in \\(\\mathbf Q\\) is positive; the Toronto notes state this as their Theorem 6.1 and point to Wonham for the proof. The page solves (25) in <code>lqr()</code> each time you press Solve; at the starting values and \\(r = 0.30\\) m the gains are \\(\\mathbf K = (19.22,\\ -201.70,\\ 120.09,\\ 0.04,\\ 0.52,\\ 22.14)\\). The large gain on \\(\\theta_2\\) is the hand that follows the swing: when ball 2 swings right, the coil shoves the cart after it, the cart runs past the ball, and the strut then pulls the ball back against its motion.",
+  "tr": "افترضنا أمرًا واحدًا: أنّ \\(\\mathbf P\\) متناظرة تحلّ (25) موجودة أصلًا. وهي موجودة، وهي الحلّ الوحيد الموجب التعريف، كلّما استطاعت دفعة واحدة أن تبلغ كلّ حركة (الرتبة 6 في §11) وكان كلّ وزن في \\(\\mathbf Q\\) موجبًا؛ وتذكر مذكّرات تورنتو ذلك مبرهنتَها 6.1 وتحيل إلى Wonham للبرهان. وتحلّ الصفحة (25) في <code>lqr()</code> كلّما ضغطت احسب؛ وعند القيم الابتدائية و\\(r = 0.30\\) m تكون الكسوب \\(\\mathbf K = (19.22,\\ -201.70,\\ 120.09,\\ 0.04,\\ 0.52,\\ 22.14)\\). والكسب الكبير على \\(\\theta_2\\) هو اليد التي تتبع التأرجح: حين تتأرجح الكرة 2 إلى اليمين يدفع الملفّ العربة وراءها، فتتجاوز العربة الكرة، ثمّ تشدّ الدعامة الكرة إلى الوراء عكس حركتها."
+ },
  "cdd9b078db1f": {
   "src": "K. J. Åström and R. M. Murray, <em>Feedback Systems: An Introduction for Scientists and Engineers</em>, Princeton University Press, 2008: chapter 6, reachability and state feedback (Section 6.1) and the linear–quadratic regulator (Section 6.3). <a href=\"http://www.cds.caltech.edu/~murray/books/AM08/pdf/am08-complete_22Feb09.pdf\">The authors’ free electronic edition</a>.",
   "tr": "K. J. Åström وR. M. Murray، <em>Feedback Systems: An Introduction for Scientists and Engineers</em>، Princeton University Press، 2008: الفصل 6، قابلية الوصول والتغذية الراجعة للحالة (القسم 6.1)، والمنظّم الخطّي التربيعي (القسم 6.3). <a href=\"http://www.cds.caltech.edu/~murray/books/AM08/pdf/am08-complete_22Feb09.pdf\">النسخة الإلكترونية المجانية التي يتيحها المؤلّفان</a>."
+ },
+ "cfd0d1b8e166": {
+  "src": "<span>16</span>On screen",
+  "tr": "<span>16</span>على الشاشة"
+ },
+ "d024dd6b4221": {
+  "src": "The cart can now be driven ahead of the swing or held back against it, and through the strut that is the only way to reach the chain.",
+  "tr": "والآن يمكن أن تُساق العربة متقدّمة على التأرجح أو تُمسَك متأخّرة عنه، وهذا عبر الدعامة الطريق الوحيد إلى السلسلة."
  },
  "d1622a8321e0": {
   "src": "Phyein Usul, home page",
   "tr": "Phyein Usul، الصفحة الرئيسية"
  },
+ "d1ec82c5984e": {
+  "src": "The cart is dragged towards the point under ball 2, like a sled tied to someone walking along a balcony above it. When ball 2 swings right the strut leans right and tugs the cart right; when the ball swings back, so does the cart. The cart moves although nobody pushes it.",
+  "tr": "تُجرّ العربة نحو النقطة التي تحت الكرة 2، كزلّاجة مربوطة بشخص يمشي على شرفة فوقها. وحين تتأرجح الكرة 2 إلى اليمين تميل الدعامة إلى اليمين وتجرّ العربة إلى اليمين؛ وحين تعود الكرة تعود العربة. فالعربة تتحرّك وإن لم يدفعها أحد."
+ },
+ "d3e9cf68097d": {
+  "src": "<span class=\"psec__n\">05</span>The coil in the Lagrangian",
+  "tr": "<span class=\"psec__n\">05</span>الملفّ في دالّة لاغرانج"
+ },
  "d40bcebbc9bf": {
   "src": "K. J. Åström and R. M. Murray, <em>Feedback Systems: An Introduction for Scientists and Engineers</em>, Princeton University Press, 2008: chapter 6, reachability and state feedback, and chapter 7, the linear–quadratic regulator. <a href=\"http://www.cds.caltech.edu/~murray/books/AM08/pdf/am08-complete_22Feb09.pdf\">The authors’ free electronic edition</a>.",
   "tr": "K. J. Åström وR. M. Murray، <em>Feedback Systems: An Introduction for Scientists and Engineers</em>، Princeton University Press، 2008: الفصل 6، قابلية الوصول والتغذية الراجعة للحالة، والفصل 7، المنظّم الخطّي التربيعي. <a href=\"http://www.cds.caltech.edu/~murray/books/AM08/pdf/am08-complete_22Feb09.pdf\">النسخة الإلكترونية المجانية التي يتيحها المؤلّفان</a>."
+ },
+ "d4892ac12186": {
+  "src": "A steady push \\(F^*\\) can hold the cart at any point \\(X = r\\) along the rail, the target you set with the slider r. The chain then leans until gravity and the tilted strut balance:",
+  "tr": "يستطيع دفع ثابت \\(F^*\\) أن يمسك العربة عند أيّ نقطة \\(X = r\\) على السكّة، الهدف الذي تضبطه بالمنزلق r. ثمّ تميل السلسلة حتّى تتوازن الجاذبية والدعامة المائلة:"
+ },
+ "d4feaaea8de1": {
+  "src": "To bring the coil into Lagrange's method we need one more coordinate, the charge \\(\\eta\\) that has flowed through the coil, so that \\(\\dot\\eta = I\\). The coupling energy is built from the force law: its derivative with respect to the cart's position must be the force \\(\\kappa\\dot\\eta\\), at every position, and integrating along the rail gives \\(\\kappa X\\dot\\eta\\). Adding the coil's own magnetic energy \\(\\tfrac12\\Lambda\\dot\\eta^2\\), with \\(\\Lambda\\) its inductance, the Lagrangian of the whole machine is",
+  "tr": "لإدخال الملفّ في طريقة لاغرانج نحتاج إلى إحداثي آخر، الشحنة \\(\\eta\\) التي جرت في الملفّ، بحيث \\(\\dot\\eta = I\\). وتُبنى طاقة الاقتران من قانون القوّة: يجب أن تكون مشتقّتها بالنسبة إلى موضع العربة هي القوّة \\(\\kappa\\dot\\eta\\) عند كلّ موضع، والتكامل على طول السكّة يعطي \\(\\kappa X\\dot\\eta\\). وبإضافة الطاقة المغناطيسية للملفّ نفسه \\(\\tfrac12\\Lambda\\dot\\eta^2\\)، حيث \\(\\Lambda\\) محاثّته، تكون دالّة لاغرانج للآلة كلّها"
+ },
+ "d7884acabab9": {
+  "src": "<span class=\"psub__n\">8.1</span>Coil off",
+  "tr": "<span class=\"psub__n\">8.1</span>الملفّ متوقّف"
  },
  "d85eba7b2b37": {
   "src": "1 solve",
@@ -682,6 +1438,10 @@
  "d929322e4b16": {
   "src": "Fig.",
   "tr": "الشكل"
+ },
+ "d9f8e6ac8ef1": {
+  "src": "The step is small because of the stops: a touched stop is a spring of \\(2\\times10^4\\ \\mathrm{N/m}\\) on a ball of a few hundred grams, a vibration of a few hundred radians per second, and RK4 needs \\(\\omega h\\) well below 2.8 to stay stable. To grade the run, the page solves it a second time with \\(h/2\\) and shows the largest difference under \"RK4, h vs h/2\". The energy books are a second check: the coil's work \\(W_\\text{coil} = \\int F\\dot X\\,dt\\) and the stops' heat are integrated with the same RK4 weights as the state, and \\(E(0) + W_\\text{coil} - Q_\\text{stop} - E(T)\\) is shown under \"Energy balance\".",
+  "tr": "الخطوة صغيرة بسبب الموقفين: فالموقف الملموس نابض قدره \\(2\\times10^4\\ \\mathrm{N/m}\\) على كرة من بضع مئات من الغرامات، اهتزاز من بضع مئات من الراديان في الثانية، ويحتاج RK4 إلى \\(\\omega h\\) دون 2.8 بكثير ليبقى مستقرًّا. ولتقييم الجريان تحلّه الصفحة مرّة ثانية بـ \\(h/2\\) وتعرض أكبر فرق تحت «RK4, h vs h/2». ودفاتر الطاقة فحص ثانٍ: يُكامل شغل الملفّ \\(W_\\text{coil} = \\int F\\dot X\\,dt\\) وحرارة الموقفين بأوزان RK4 نفسها التي للحالة، وتُعرض \\(E(0) + W_\\text{coil} - Q_\\text{stop} - E(T)\\) تحت «توازن الطاقة»."
  },
  "db2dfb7cb56e": {
   "src": "coil",
@@ -695,6 +1455,18 @@
   "src": "where \\(\\kappa = B\\ell_w = 10\\ \\mathrm{N/A}\\) is the force constant: the field in the magnet's gap times the length \\(\\ell_w\\) of wire in it. The term \\(\\kappa X \\dot q_e\\) is the whole coupling between the winding and the field. Its derivative with respect to \\(X\\), \\(\\kappa\\dot q_e = \\kappa I\\), is the force on the cart; its time derivative of \\(\\partial\\mathcal L/\\partial\\dot q_e\\) gives the back-emf \\(\\kappa\\dot X\\) in the circuit. The page drives the coil from a current source, which delivers the current it is told whatever the back-emf, so the electrical equation drops out and \\(F = \\kappa I\\) becomes the input. The Euler–Lagrange equations \\(\\frac{d}{dt}\\partial\\mathcal L/\\partial\\dot q_i = \\partial\\mathcal L/\\partial q_i\\) then read, in matrix form,",
   "tr": "حيث \\(\\kappa = B\\ell_w = 10\\ \\mathrm{N/A}\\) ثابت القوّة: الحقل في فجوة المغناطيس مضروبًا في طول السلك \\(\\ell_w\\) الموجود فيها. والحدّ \\(\\kappa X \\dot q_e\\) هو كلّ الاقتران بين اللفّة والحقل. مشتقّه بالنسبة إلى \\(X\\)، أي \\(\\kappa\\dot q_e = \\kappa I\\)، هو القوّة المؤثّرة في العربة؛ والمشتقّ الزمني لـ \\(\\partial\\mathcal L/\\partial\\dot q_e\\) يعطي القوّة الدافعة الكهربائية العكسية \\(\\kappa\\dot X\\) في الدارة. تغذّي الصفحة الملفّ من مصدر تيار، يعطي التيار المطلوب منه مهما كانت القوّة الدافعة العكسية، فتسقط المعادلة الكهربائية ويصبح \\(F = \\kappa I\\) هو الدخل. عندئذ تُكتب معادلات أويلر–لاغرانج \\(\\frac{d}{dt}\\partial\\mathcal L/\\partial\\dot q_i = \\partial\\mathcal L/\\partial q_i\\) بصيغة المصفوفات هكذا،"
  },
+ "dc4150b4316d": {
+  "src": "<span class=\"psub__n\">7.3</span>The cart, \\(X\\)",
+  "tr": "<span class=\"psub__n\">7.3</span>العربة، \\(X\\)"
+ },
+ "dcbbcef15f72": {
+  "src": "<span class=\"psec__n\">12</span>The controller<span class=\"star\" title=\"heavier mathematics\">★</span>",
+  "tr": "<span class=\"psec__n\">12</span>المتحكّم<span class=\"star\" title=\"heavier mathematics\">★</span>"
+ },
+ "dd363eebfc96": {
+  "src": "strut",
+  "tr": "الدعامة"
+ },
  "dd693460ff5d": {
   "src": "The first term charges for being away from the rest, the second for pushing. The sliders set the weights: \\(q_\\theta\\) for the angles, \\(q_X\\) for the cart's position, \\(q_v\\) for all three speeds, and \\(\\rho\\) for the coil's effort. Raise \\(\\rho\\) and the controller pushes more gently and takes longer; raise \\(q_v\\) and it damps harder. The answer is a quadratic bowl in the state, \\(J_\\text{min} = \\tilde{\\mathbf y}_0^{\\mathsf T}\\mathbf P\\,\\tilde{\\mathbf y}_0\\), where \\(\\mathbf P\\) solves the algebraic <em>Riccati equation</em>, and the best gains follow from it:",
   "tr": "يحاسب الحدّ الأول على البعد عن وضع السكون، والثاني على الدفع. وتضبط المنزلقات الأوزان: \\(q_\\theta\\) للزاويتين، و\\(q_X\\) لموضع العربة، و\\(q_v\\) للسرعات الثلاث، و\\(\\rho\\) لجهد الملفّ. ارفع \\(\\rho\\) فيدفع المتحكّم بلطف أكبر ويستغرق وقتًا أطول؛ وارفع \\(q_v\\) فيخمّد بقوّة أكبر. والنتيجة وعاءٌ تربيعي في الحالة، \\(J_\\text{min} = \\tilde{\\mathbf y}_0^{\\mathsf T}\\mathbf P\\,\\tilde{\\mathbf y}_0\\)، حيث \\(\\mathbf P\\) يحلّ <em>معادلة ريكاتي</em> الجبرية، ومنه تنتج أفضل معاملات الكسب:"
@@ -703,9 +1475,17 @@
   "src": "Stored run",
   "tr": "الحلّ المخزَّن"
  },
+ "e00bee74522f": {
+  "src": "<b>Step 3, complete the square.</b> The last three terms are \\(\\rho\\,(\\tilde F + z/\\rho)^2\\); multiply it out to check. So",
+  "tr": "<b>الخطوة 3، أكمل المربّع.</b> الحدود الثلاثة الأخيرة هي \\(\\rho\\,(\\tilde F + z/\\rho)^2\\)؛ فكّها لتتحقّق. إذن"
+ },
  "e062a3e6d2cf": {
   "src": "Figure 2 follows one release, computed with the linear model of §6–§8 at the straight-hanging rest (target \\(r = 0\\)) and the coil’s limit of 30 N. Ball 2 is moved 10 cm to the right, everything else held still, and let go. The swing then holds 0.102 J: 0.079 J in the chain, whose lower ball has been lifted by 1.0 cm, and 0.023 J in the string’s sideways stretch. In the first tenth of a second the coil shoves the cart after the ball, at its full 30 N for the first 3.5 ms, and pours 0.50 J into the cart, five times what the swing holds. By 0.2 s the cart has run 12 cm, past the ball, which is now swinging back; the string pulls ball 2 to the right, against its motion, while the coil brakes the cart and takes the 0.50 J back, and a little more. So it goes, swing after swing, each smaller than the last. After 8 s the coil has put 2.30 J into the cart and taken 2.40 J out; the difference, 0.102 J, is the energy the swing held. Over the same 8 s the string did −0.079 J of work on the chain, all of the chain’s swing, and +0.102 J on the cart.",
   "tr": "يتتبّع الشكل 2 إطلاقًا واحدًا، محسوبًا بالنموذج الخطّي في §6–§8 عند وضع السكون المتدلّي مستقيمًا (الهدف \\(r = 0\\)) وحدّ الملفّ 30 N. تُزاح الكرة 2 مسافة 10 cm إلى اليمين، ويُمسَك كلّ شيء آخر ساكنًا، ثم تُترك. عندئذ يحمل التأرجح 0.102 J: منها 0.079 J في السلسلة، التي رُفعت كرتها السفلى بمقدار 1.0 cm، و0.023 J في تمدّد الوتر الجانبي. وفي أول عُشر من الثانية يدفع الملفّ العربة وراء الكرة، بكامل قوّته البالغة 30 N طوال أول 3.5 ms، ويصبّ في العربة 0.50 J، أي خمسة أضعاف ما يحمله التأرجح. وعند 0.2 s تكون العربة قد قطعت 12 cm، متجاوزةً الكرة التي صارت ترتدّ راجعة؛ فيشدّ الوتر الكرة 2 إلى اليمين، ضدّ حركتها، بينما يكبح الملفّ العربة ويستردّ منها 0.50 J وأكثر قليلًا. وهكذا يستمرّ الأمر، تأرجحةً بعد تأرجحة، كلّ واحدة أصغر من سابقتها. بعد 8 s يكون الملفّ قد ضخّ 2.30 J في العربة وسحب منها 2.40 J؛ والفرق، 0.102 J، هو الطاقة التي كان يحملها التأرجح. وفي المدّة نفسها، 8 s، بذل الوتر شغلًا مقداره −0.079 J على السلسلة، وهو كلّ تأرجح السلسلة، و+0.102 J على العربة."
+ },
+ "e17301ed8d1c": {
+  "src": "<span class=\"psec__n\">15</span>Solve first, then play",
+  "tr": "<span class=\"psec__n\">15</span>احسب أوّلًا، ثمّ اعرض"
  },
  "e1d329a7394b": {
   "src": "From symbols to code",
@@ -715,21 +1495,69 @@
   "src": "Settled after",
   "tr": "استقرّ بعد"
  },
+ "e2d853fdc548": {
+  "src": "<span class=\"psub__n\">7.4</span>What the speed-squared terms mean",
+  "tr": "<span class=\"psub__n\">7.4</span>ما معنى حدود مربّع السرعة"
+ },
  "e3de5ab0ca4c": {
   "src": "Off",
   "tr": "إيقاف"
+ },
+ "e3e230ca0eb9": {
+  "src": "At the top is a pivot O, bolted to a frame that never moves. From it hangs a rod of length \\(l_1\\) on a frictionless hinge, ending in a ball of mass \\(m_1\\). From that ball hangs a second rod of length \\(l_2\\) on a second hinge, ending in ball 2, of mass \\(m_2\\). The rods are carbon-fibre tubes, stiff and so light next to the balls that we neglect their mass; the balls are small enough to treat as points. Below runs a straight, level rail with a cart of mass \\(M\\) on nylon wheels. Beside the rail lies a magnet track, and a coil fixed under the cart hangs into its gap. The cart carries a pin that travels along the rail at a fixed depth \\(H\\) below the pivot. Nothing rubs anywhere: the hinges, the wheels and the sliding tubes are taken as frictionless, so with the controller off the machine swings for ever.",
+  "tr": "في الأعلى نقطة ارتكاز O، مثبّتة بمسامير إلى إطار لا يتحرّك أبدًا. يتدلّى منها قضيب طوله \\(l_1\\) على مفصل بلا احتكاك، ينتهي بكرة كتلتها \\(m_1\\). ومن تلك الكرة يتدلّى قضيب ثانٍ طوله \\(l_2\\) على مفصل ثانٍ، ينتهي بالكرة 2 وكتلتها \\(m_2\\). القضيبان أنبوبان من ألياف الكربون، صلبان وخفيفان جدًّا بجانب الكرتين حتّى إنّنا نهمل كتلتهما؛ والكرتان صغيرتان بما يكفي لنعاملهما نقطتين. وفي الأسفل تمتدّ سكّة مستقيمة أفقية عليها عربة كتلتها \\(M\\) على عجلات من النايلون. وبجانب السكّة مسار مغناطيسي، وملفّ مثبّت تحت العربة يتدلّى في فجوته. وتحمل العربة مسمارًا يسير على طول السكّة على عمق ثابت \\(H\\) تحت نقطة الارتكاز. لا شيء يحتكّ في أيّ مكان: تُعدّ المفاصل والعجلات والأنابيب المنزلقة بلا احتكاك، فتتأرجح الآلة إلى الأبد والمتحكّم متوقّف."
+ },
+ "e5c2aa2e14c4": {
+  "src": "<b>Step 1.</b> Along any motion of (21), by the product rule,",
+  "tr": "<b>الخطوة 1.</b> على امتداد أيّ حركة لـ (21)، وبقاعدة الضرب،"
  },
  "e5c8361b5af6": {
   "src": "Spring stiffness kₛ",
   "tr": "صلابة النابض kₛ"
  },
+ "e60ec7b6ed5c": {
+  "src": "<span>2</span>Coordinates",
+  "tr": "<span>2</span>الإحداثيات"
+ },
  "e70691bb54fa": {
   "src": "Pull at rest N₀",
   "tr": "الشدّ في السكون N₀"
  },
+ "e712172f25fb": {
+  "src": "\\(T\\) contains \\(\\dot X\\) only in \\(\\tfrac12 M\\dot X^2\\), and the coupling term \\(\\kappa X\\dot\\eta\\) contains \\(X\\) but not \\(\\dot X\\). So \\(\\partial\\mathcal L/\\partial\\dot X = M\\dot X\\) and \\(\\partial\\mathcal L/\\partial X = -N\\,\\partial\\ell/\\partial X + \\kappa I\\):",
+  "tr": "\\(T\\) لا تحوي \\(\\dot X\\) إلّا في \\(\\tfrac12 M\\dot X^2\\)، وحدّ الاقتران \\(\\kappa X\\dot\\eta\\) يحوي \\(X\\) ولا يحوي \\(\\dot X\\). إذن \\(\\partial\\mathcal L/\\partial\\dot X = M\\dot X\\) و\\(\\partial\\mathcal L/\\partial X = -N\\,\\partial\\ell/\\partial X + \\kappa I\\):"
+ },
  "e725208e7ef4": {
   "src": "The last term is the only one that contains \\(X\\). With no tension, \\(N_0 = 0\\), the cart vanishes from the chain's equations and the chain from the cart's. No push on the cart could reach the swing. Tension is everything.",
   "tr": "الحدّ الأخير هو الوحيد الذي يحتوي \\(X\\). فمن دون شدّ، \\(N_0 = 0\\)، تختفي العربة من معادلات السلسلة وتختفي السلسلة من معادلة العربة. ولا تستطيع أيّ دفعة للعربة أن تبلغ التأرجح. الشدّ هو كلّ شيء."
+ },
+ "e7ab00eace94": {
+  "src": "Check that it gives back both effects. The coupling term contains \\(X\\), so \\(\\partial\\mathcal L/\\partial X\\) contains \\(\\kappa\\dot\\eta = \\kappa I\\): the force on the cart. It also contains \\(\\dot\\eta\\), so",
+  "tr": "تحقّق من أنّها تعيد الأثرين كليهما. حدّ الاقتران يحوي \\(X\\)، فيحوي \\(\\partial\\mathcal L/\\partial X\\) الحدّ \\(\\kappa\\dot\\eta = \\kappa I\\): القوّة على العربة. ويحوي أيضًا \\(\\dot\\eta\\)، إذن"
+ },
+ "e8f324723f15": {
+  "src": "strut's pull with the chain hanging straight down",
+  "tr": "شدّ الدعامة والسلسلة متدلّية مستقيمة إلى الأسفل"
+ },
+ "e9930256eadd": {
+  "src": "The first term charges for being away from the rest, \\(\\mathbf Q\\) being a diagonal of weights set by the sliders; the second charges for pushing, at the rate \\(\\rho\\). Suppose a symmetric matrix \\(\\mathbf P\\) satisfies the Riccati equation",
+  "tr": "الحدّ الأوّل يحاسب على البعد عن السكون، و\\(\\mathbf Q\\) قطر من أوزان تضبطها المنزلقات؛ والثاني يحاسب على الدفع، بالسعر \\(\\rho\\). لنفترض أنّ مصفوفة متناظرة \\(\\mathbf P\\) تحقّق معادلة ريكاتي"
+ },
+ "ea7a38be3037": {
+  "src": "<b>Abstract.</b> A double pendulum hangs from a fixed pivot. A telescopic strut with a spring inside ties its lower ball to a cart on a rail, and a coil on the cart, sitting in the gap of a magnet track, pushes the cart. The coil is the only thing anyone can push, yet it must bring three bodies to rest. We first look at the machine part by part, in pictures rendered from a 3D model: how the strut is pinned to the ball and to the cart, what the strut is made of, and how the magnets and the coil push the cart, with the coil off and on. Then we derive its equations step by step, keeping every mass and length as a symbol: positions, velocities, the kinetic and potential energy, the coil in the Lagrangian, and Lagrange's equations with every term written out. We find where the chain can rest, expand about the hanging rest, linearise, test whether one push can reach every motion, and derive the controller by completing a square. Every parameter is a slider on the page; numbers in the text are for the sliders' starting values.",
+  "tr": "<b>الخلاصة.</b> يتدلّى نوّاس مزدوج من نقطة ارتكاز ثابتة. وتربط دعامة تلسكوبية في داخلها نابض كرتَه السفلى بعربة على سكّة، ويدفع العربةَ ملفٌّ مثبّت عليها يجلس في فجوة مسار مغناطيسي. والملفّ هو الشيء الوحيد الذي يمكن دفعه، ومع ذلك عليه أن يُسكِن ثلاثة أجسام. ننظر أوّلًا إلى الآلة قطعةً قطعةً، في صور مولَّدة من نموذج 3D: كيف تُثبَّت الدعامة بالكرة وبالعربة، وممّ تُصنع الدعامة، وكيف تدفع المغانط والملفّ العربة، والملفّ متوقّف ثمّ يعمل. ثمّ نشتقّ معادلاتها خطوة خطوة، مبقين كلّ كتلة وكلّ طول رمزًا: المواضع، والسرعات، والطاقة الحركية والطاقة الكامنة، والملفّ في دالّة لاغرانج، ومعادلات لاغرانج بكلّ حدودها مكتوبة. نجد أين يمكن أن تسكن السلسلة، ونفكّ حول السكون المتدلّي، ونخطّط، ونختبر هل تستطيع دفعة واحدة أن تبلغ كلّ حركة، ونشتقّ المتحكّم بإكمال مربّع. وكلّ معلمة منزلق في الصفحة؛ والأرقام في النصّ هي للقيم الابتدائية للمنزلقات."
+ },
+ "eaebb2e9a7bf": {
+  "src": "The pull times the rate at which the strut stretches when that coordinate changes. To find the rate, differentiate \\(\\ell^2 = a^2 + b^2\\) from (4):",
+  "tr": "الشدّ مضروبًا في معدّل تمدّد الدعامة حين يتغيّر ذلك الإحداثي. ولإيجاد المعدّل نشتقّ \\(\\ell^2 = a^2 + b^2\\) من (4):"
+ },
+ "eb04015a7e13": {
+  "src": "The motor is ideal: one constant \\(\\kappa\\) all along the rail, as if three coils were shared by a driver (§1.3), and a current source with no voltage limit. A real amplifier runs out of voltage when the back-emf \\(\\kappa\\dot X\\) grows.",
+  "tr": "المحرّك مثالي: ثابت واحد \\(\\kappa\\) على طول السكّة، كأنّ مشغّلًا يوزّع ثلاثة ملفّات (§1.3)، ومصدر تيار بلا حدّ للجهد. والمضخّم الحقيقي ينفد جهده حين تكبر القوّة الدافعة العكسية \\(\\kappa\\dot X\\)."
+ },
+ "eb042fe553eb": {
+  "src": "Rod 2 length l₂",
+  "tr": "طول القضيب 2 l₂"
  },
  "eb4f41a24feb": {
   "src": "Slowest decay",
@@ -739,9 +1567,21 @@
   "src": "The spring sets how hard the strut pulls. Its <em>stiffness</em> \\(k_s = 100\\ \\mathrm{N/m}\\) says how much force it takes to stretch it: 100 newtons per metre, which is 1 newton for every centimetre of stretch. A soft spring has a small stiffness, like the springs in a mattress; a hard spring has a large one, like the springs of a car. The spring is fitted already stretched, so that when the chain hangs straight down over the cart the strut pulls with \\(N_0 = 3\\ \\mathrm{N}\\), about the weight of three apples. A part that carries a pull even while everything is at rest is said to be under <em>pre-tension</em>, the way a guitar string is tightened before it is ever played, or a washing line is pulled taut before anything hangs on it. This pre-tension is the secret of the whole rig. Section 6 shows that without it the cart could not reach the chain at all: a slack rope cannot pass on a sideways tug, but a taut one can, as you feel when you pluck a tight washing line and the pegs at the far end shake.",
   "tr": "النابض هو ما يحدّد مقدار شدّ الدعامة. تقول <em>صلابته</em> \\(k_s = 100\\ \\mathrm{N/m}\\) كم من القوّة يلزم لمطّه: 100 نيوتن لكلّ متر، أي 1 نيوتن لكلّ سنتيمتر من التمدّد. النابض الليّن صلابته صغيرة، مثل نوابض الفراش؛ والنابض القاسي صلابته كبيرة، مثل نوابض السيّارة. يُركَّب النابض وهو ممطوط من قبل، فحين تتدلّى السلسلة شاقوليًا فوق العربة تشدّ الدعامة بقوّة \\(N_0 = 3\\ \\mathrm{N}\\)، أي نحو وزن ثلاث تفاحات. ويقال عن الجزء الذي يحمل شدًّا حتى حين يكون كلّ شيء في سكون إنه تحت <em>شدّ مسبق</em>، كما يُشدّ وتر الغيتار قبل أن يُعزَف عليه أبدًا، أو يُشدّ حبل الغسيل قبل أن يُعلَّق عليه شيء. وهذا الشدّ المسبق هو سرّ الجهاز كلّه. يبيّن القسم 6 أنه من دونه لا تستطيع العربة أن تبلغ السلسلة أبدًا: فالحبل المرتخي لا ينقل شدّة جانبية، أمّا الحبل المشدود فينقلها، كما تحسّ حين تنقر حبل غسيل مشدودًا فتهتزّ المشابك عند طرفه الآخر."
  },
+ "ec6c679dd78b": {
+  "src": "Ball 2 mass m₂",
+  "tr": "كتلة الكرة 2 m₂"
+ },
+ "ec82d5d2850e": {
+  "src": "<b>Step 4, integrate</b> from 0 to \\(\\infty\\), for any push that brings the machine to rest:",
+  "tr": "<b>الخطوة 4، كامِل</b> من 0 إلى \\(\\infty\\)، لأيّ دفع يُسكِن الآلة:"
+ },
  "ecb252044b5e": {
   "src": "string",
   "tr": "الوتر"
+ },
+ "ee9d7e4854d5": {
+  "src": "For each coordinate, \\(\\tfrac{d}{dt}\\,\\partial\\mathcal L/\\partial\\dot q - \\partial\\mathcal L/\\partial q = 0\\). To keep lines short, write",
+  "tr": "لكلّ إحداثي، \\(\\tfrac{d}{dt}\\,\\partial\\mathcal L/\\partial\\dot q - \\partial\\mathcal L/\\partial q = 0\\). ولتقصير السطور نكتب"
  },
  "eeaa994bd826": {
   "src": "Holding force F*",
@@ -763,9 +1603,17 @@
   "src": "<span class=\"psec__n\">11</span>On screen",
   "tr": "<span class=\"psec__n\">11</span>على الشاشة"
  },
+ "f038cc8f270e": {
+  "src": "Put in \\(\\partial\\ell/\\partial X = -a/\\ell\\) from (11): \\(M\\ddot X = F + N(x_2 - X)/\\ell\\). That is (2), found in §1.3 from the picture of the motor and the strut alone. Lagrange and Newton agree on the cart, as they must.",
+  "tr": "عوّض \\(\\partial\\ell/\\partial X = -a/\\ell\\) من (11): \\(M\\ddot X = F + N(x_2 - X)/\\ell\\). وهذه هي (2)، التي وُجدت في §1.3 من صورة المحرّك والدعامة وحدها. ولاغرانج ونيوتن متّفقان على العربة، كما يجب."
+ },
  "f06c85e009e5": {
   "src": "<span>10</span>Solve first, then play",
   "tr": "<span>10</span>احسب أوّلًا، ثم شغّل"
+ },
+ "f07f56bd327c": {
+  "src": "with \\(\\ell\\) from (4). The pre-tension fixes the slack length: at the hanging rest the pull is \\(N_0 = k_s(\\ell_0 - L_0)\\), so \\(L_0 = \\ell_0 - N_0/k_s\\). At the starting values the spring is then stretched by 3 cm at rest.",
+  "tr": "مع \\(\\ell\\) من (4). ويثبّت الشدّ المسبق طول الارتخاء: عند السكون المتدلّي يكون الشدّ \\(N_0 = k_s(\\ell_0 - L_0)\\)، إذن \\(L_0 = \\ell_0 - N_0/k_s\\). وعند القيم الابتدائية يكون النابض عندئذ ممدودًا 3 cm في السكون."
  },
  "f08802ae0daf": {
   "src": "<b>The state: six numbers.</b> To know everything about the rig at one moment you need three positions, \\(\\theta_1\\), \\(\\theta_2\\) and \\(X\\), and three speeds: how fast each rod turns, \\(\\dot\\theta_1\\) and \\(\\dot\\theta_2\\), and how fast the cart moves, \\(\\dot X\\). A dot over a letter means how fast that quantity changes in time, as a car’s speed is how fast its position changes. Together these six numbers are the <em>state</em> of the rig. Knowing the state is like having both a photograph and a speedometer reading for every moving part: from it and the laws of motion, everything that happens next follows. The three positions alone are not enough, just as a photograph of a thrown ball does not tell you whether it is going up or coming down. The number of positions that can change independently, here three, is the number of <em>degrees of freedom</em>, the ways in which the machine can move. A train on its track has one, a boat on a lake has two, and our rig has three, because the rods and the rail forbid every other motion.",
@@ -775,9 +1623,29 @@
   "src": "Key result · the equations of motion",
   "tr": "نتيجة أساسية · معادلات الحركة"
  },
+ "f1975b1ba469": {
+  "src": "The first term depends only on where the machine starts; no push can change it. The second is never negative, and it is zero exactly when \\(\\tilde F = -\\rho^{-1}\\mathbf B^{\\mathsf T}\\mathbf P\\tilde{\\mathbf y}\\) at every instant. So the cheapest push is (23) with",
+  "tr": "الحدّ الأوّل لا يتعلّق إلّا بمكان بدء الآلة؛ ولا يستطيع أيّ دفع أن يغيّره. والثاني لا يكون سالبًا أبدًا، وينعدم بالضبط حين \\(\\tilde F = -\\rho^{-1}\\mathbf B^{\\mathsf T}\\mathbf P\\tilde{\\mathbf y}\\) في كلّ لحظة. فأرخص دفع هو (23) مع"
+ },
+ "f23fe4e28341": {
+  "src": "<a href=\"https://www.control.utoronto.ca/people/profs/kwong/ece410/2008/notes/chap6-08.pdf\">University of Toronto ECE410 notes (2008), Ch. 6</a>, pp. 89–90, eqs. (6.8)–(6.13): the same derivation by completing the square, with the same signs; Åström and Murray, eq. (6.27), p. 191.",
+  "tr": "<a href=\"https://www.control.utoronto.ca/people/profs/kwong/ece410/2008/notes/chap6-08.pdf\">University of Toronto ECE410 notes (2008), Ch. 6</a>، ص. 89–90، المعادلات (6.8)–(6.13): الاشتقاق نفسه بإكمال المربّع، بالإشارات نفسها؛ Åström وMurray، المعادلة (6.27)، ص. 191."
+ },
+ "f2471e121e54": {
+  "src": "fixed by the tubes",
+  "tr": "يحدّدهما الأنبوبان"
+ },
+ "f27a2e65839b": {
+  "src": "The gains come from the linear model at the target. Far from the rest the nonlinear machine can escape, as the whirl shows. Swinging a chain up from far away needs other ideas, such as pumping energy in or out deliberately before handing over to the regulator.",
+  "tr": "تأتي الكسوب من النموذج الخطّي عند الهدف. وبعيدًا عن السكون قد تفلت الآلة اللاخطّية، كما يُظهر الدوران. وأرجحة سلسلة إلى الأعلى من بعيد تحتاج إلى أفكار أخرى، كضخّ الطاقة إلى الداخل أو الخارج عمدًا قبل التسليم إلى المنظِّم."
+ },
  "f33a57b938fb": {
   "src": "Take control",
   "tr": "تحكّم بنفسك"
+ },
+ "f38e626445be": {
+  "src": "The bracket is \\(\\cos(\\theta_1 - \\theta_2)\\), by the addition formula. So",
+  "tr": "وما بين القوسين هو \\(\\cos(\\theta_1 - \\theta_2)\\)، بصيغة الجمع. إذن"
  },
  "f3f38b281faf": {
   "src": "The current flows through the coil, the magnet pushes the coil, and the coil pushes the cart with \\(F = \\kappa I\\).",
@@ -795,9 +1663,17 @@
   "src": "Double Pendulum under Control · Numa Koudsie",
   "tr": "النوّاس المزدوج تحت التحكّم · نعمة سائر قدسية"
  },
+ "f708ec03e386": {
+  "src": "A crane driver knows the problem from the cab. The hook hangs from the trolley, the load hangs from the hook, and the only thing the driver commands is the motor that moves the trolley; every swing of the load has to be taken out through that one motor. Here a double pendulum plays the load, a cart on a rail plays the trolley, and a stretched spring strut is the only thing that joins them.",
+  "tr": "يعرف سائق الرافعة هذه المسألة من كابينته. فالخطّاف معلّق بالعربة الجارية، والحمولة معلّقة بالخطّاف، والشيء الوحيد الذي يأمره السائق هو المحرّك الذي يحرّك العربة الجارية؛ فكلّ تأرجح للحمولة يجب إخراجه عبر ذلك المحرّك الواحد. وهنا يؤدّي النوّاس المزدوج دور الحمولة، وتؤدّي العربة على السكّة دور العربة الجارية، والدعامة النابضية المشدودة هي الشيء الوحيد الذي يصل بينهما."
+ },
  "f72f0eda6052": {
   "src": "Simulations",
   "tr": "المحاكاة"
+ },
+ "f7f3ac78774a": {
+  "src": "<span class=\"psub__n\">7.1</span>The upper rod, \\(\\theta_1\\)",
+  "tr": "<span class=\"psub__n\">7.1</span>القضيب العلوي، \\(\\theta_1\\)"
  },
  "f8033b444ece": {
   "src": "Energy balance",
@@ -807,13 +1683,29 @@
   "src": "The page lets the controller know the state exactly and at once. A real machine would measure the angles and the cart’s position with sensors, such as the <em>encoders</em> that count small steps of turning inside the wheel of a computer mouse, and would work out the speeds from those measurements; §12 says what that costs.",
   "tr": "تتيح الصفحة للمتحكّم أن يعرف الحالة بدقّة وفي الآن نفسه. أمّا الآلة الحقيقية فتقيس الزوايا وموضع العربة بمستشعرات، مثل <em>المرمّزات</em> التي تعدّ خطوات الدوران الصغيرة داخل عجلة فأرة الحاسوب، وتحسب السرعات من هذه القياسات؛ ويبيّن §12 كم يكلّف ذلك."
  },
+ "f907611666bf": {
+  "src": "K. J. Åström and R. M. Murray, <em>Feedback Systems: An Introduction for Scientists and Engineers</em>, Princeton University Press, 2008: reachability (Section 6.1) and the linear–quadratic regulator (Section 6.3). <a href=\"http://www.cds.caltech.edu/~murray/books/AM08/pdf/am08-complete_22Feb09.pdf\">The authors' free electronic edition</a>.",
+  "tr": "K. J. Åström وR. M. Murray، <em>Feedback Systems: An Introduction for Scientists and Engineers</em>، Princeton University Press، 2008: قابلية البلوغ (القسم 6.1) والمنظِّم الخطّي التربيعي (القسم 6.3). <a href=\"http://www.cds.caltech.edu/~murray/books/AM08/pdf/am08-complete_22Feb09.pdf\">النسخة الإلكترونية المجّانية من المؤلّفَين</a>."
+ },
+ "f9f09048f41d": {
+  "src": "Double \\(M\\) on the page and solve again. Which entry of \\(\\mathbf B\\) in (21) changes, and how does the controller answer?",
+  "tr": "ضاعف \\(M\\) في الصفحة واحسب من جديد. أيّ مدخل من \\(\\mathbf B\\) في (21) يتغيّر، وبماذا يجيب المتحكّم؟"
+ },
  "fa84f7a6978a": {
   "src": "Before any equation, let us walk round the rig of Figure 1 slowly, the way you would walk round a machine in a workshop, and look at each part in turn: what it is, what it does, what it cannot do, and which other parts it touches. Every word that sounds like engineering is explained where it first appears, with an example from ordinary life. At the end of the walk we follow one push of the coil all the way round the machine and back to the controller.",
   "tr": "قبل أيّ معادلة، لنتجوّل حول الجهاز في الشكل 1 ببطء، كما تتجوّل حول آلة في ورشة، ولننظر إلى كلّ جزء بدوره: ما هو، وماذا يفعل، وما الذي لا يستطيعه، وأيّ الأجزاء الأخرى يلمس. كلّ كلمة تبدو هندسية نشرحها حيث تظهر أوّل مرّة، بمثال من الحياة اليومية. وفي نهاية الجولة نتتبّع دفعة واحدة من الملفّ حول الجهاز كلّه، ثم نعود بها إلى المتحكّم."
  },
+ "fb25d494051a": {
+  "src": "Force and back-emf with one constant: <a href=\"https://ocw.mit.edu/courses/2-003-modeling-dynamics-and-control-i-spring-2005/d0ab0a486cb597a0df54da1881953f2d_prelab4.pdf\">MIT 2.003 (2005), Prelab 4</a>, eqs. (1)–(2). A cart that moves with no force applied: <a href=\"https://sharpneat.sourceforge.io/research/cart-pole/cart-pole-equations.html\">Green (2020)</a>, cart and pole.",
+  "tr": "القوّة والقوّة الدافعة الكهربائية العكسية بثابت واحد: <a href=\"https://ocw.mit.edu/courses/2-003-modeling-dynamics-and-control-i-spring-2005/d0ab0a486cb597a0df54da1881953f2d_prelab4.pdf\">MIT 2.003 (2005)، Prelab 4</a>، المعادلتان (1)–(2). عربة تتحرّك دون قوّة مؤثّرة: <a href=\"https://sharpneat.sourceforge.io/research/cart-pole/cart-pole-equations.html\">Green (2020)</a>، العربة والعمود."
+ },
  "fb57a7ac8366": {
   "src": "This simulation needs JavaScript.",
   "tr": "تحتاج هذه المحاكاة إلى JavaScript."
+ },
+ "fb9607e5ae37": {
+  "src": "0.1–2 kg",
+  "tr": "0.1–2 kg"
  },
  "fd8327111a77": {
   "src": "Strut · two tubes with a spring inside",

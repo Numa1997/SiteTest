@@ -142,6 +142,7 @@ RULES = [
     (r'public/cv/index\.html', 'The CV page (phyeinusul.com/cv/): both pages of the CV as images, with Open and Download PDF.', 'docs/pages.md'),
     (r'public/cv/Numa_Koudsie_CV\.pdf', 'The CV as a two-page PDF (German, then English), linked from the CV page.', 'docs/pages.md'),
     (r'public/cv/cv-(de|en)\.webp', 'One page of the CV rendered at 170 dpi, shown on the CV page.', 'docs/pages.md'),
+    (r'public/simulations/double-inverted-pendulum\.html', 'Project 05 · Balancing Two Rods on a Cart (Fig. 11 from 3 to 4 November 2026): the real-time simulation, its walkthrough and lecture note (no data panel); listed on the Projects page, kept at this address so that its German and Arabic pages are generated with the simulations.', 'docs/simulations/fig11-double-inverted-pendulum.md'),
     (r'public/simulations/.+\.html',
      lambda m: ('Fig. %d · %s: the simulation, its data panel, walkthrough and lecture note.' if 'double-inverted' not in m.group(0) else 'Fig. %d · %s: the real-time simulation, its walkthrough and lecture note (no data panel).') % SIMS[m.group(0)][::2]
      if m.group(0) in SIMS else 'Simulation page not registered in catalog.js.',
@@ -184,7 +185,6 @@ RULES = [
     (r'public/fonts/(ibm-plex-mono|ibm-plex-sans|ibm-plex-serif|instrument-serif)/.+\.woff2',
      lambda m: 'A face of ' + {'ibm-plex-mono': 'IBM Plex Mono', 'ibm-plex-sans': 'IBM Plex Sans', 'ibm-plex-serif': 'IBM Plex Serif',
                                'instrument-serif': 'Instrument Serif'}[m.group(1)] + ' for one script range (name: weight, i for italic, range).', 'docs/assets.md'),
-    (r'public/portfolios/pendulum-control/index\.html', 'Double Pendulum under Control, a project page since 3 November 2026 (Fig. 11 until then): the simulation with every mass and length a slider, and its lecture notes with four figures rendered from a 3D model. Written by hand; English only.', 'docs/simulations/fig11-pendulum-control.md'),
     (r'public/images/fig11/fig-(machine|ends|strut|motor)\.webp',
      lambda m: 'Figure of Double Pendulum under Control, rendered in Blender by tools/fig11/: ' + {'machine': 'the whole machine', 'ends': 'the strut\u2019s two joints', 'strut': 'the strut cut open', 'motor': 'the magnet track and the coil'}[m.group(1)] + '.', 'docs/simulations/fig11-pendulum-control.md'),
     (r'tools/fig11/rig\.py', 'Blender scenes for Double Pendulum under Control: the whole machine, the strut cut open, the motor (bpy 5.2).', 'docs/simulations/fig11-pendulum-control.md'),

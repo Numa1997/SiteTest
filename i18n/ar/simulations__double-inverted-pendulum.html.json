@@ -219,6 +219,10 @@
   "src": "<span class=\"psub__n\">7.2</span>A real controller samples",
   "tr": "<span class=\"psub__n\">7.2</span>المتحكّم الحقيقي يأخذ عيّنات"
  },
+ "2f4bcda081a6": {
+  "src": "Project · lecture note · control systems",
+  "tr": "مشروع · مذكّرة · أنظمة التحكّم"
+ },
  "2fc628d753ed": {
   "src": "Treat the cart’s acceleration \\(a = \\ddot x\\) as the input. The rods alone, hinged on a cart that moves as prescribed, carry the energy",
   "tr": "لنعدّ تسارع العربة \\(a = \\ddot x\\) هو المُدخل. القضيبان وحدهما، معلّقان بمفصل في عربة تتحرّك كما يُفرض عليها، يحملان الطاقة"
@@ -370,6 +374,14 @@
  "50196f4fd0a5": {
   "src": "<b>The wrong-way start.</b> Press <i>to +1 m</i>. The cart first creeps 3 mm forward, then backs up by 2.3 cm, half a second after the press, while both rods tip about 2° toward the target. Only then does it drive forward, leaning into the motion, and at the end the rods lean back about 1.2° to brake. It has to: to accelerate to the right with the rods upright on average, the rods must lean right, and the only way to tip them right is to pull their bottom out to the left first. Engineers call this a non-minimum-phase system [3]; you do the same with a broom when you want to walk forward with it.",
   "tr": "<b>البداية في الاتجاه الخاطئ.</b> اضغط <i>إلى +1 m</i>. تزحف العربة أوّلًا 3 mm إلى الأمام، ثم ترجع 2.3 cm بعد نصف ثانية من الضغط، بينما يميل القضيبان كلاهما نحو 2° باتجاه الهدف. وبعد ذلك فقط تنطلق إلى الأمام مائلة مع الحركة، وفي النهاية يميل القضيبان نحو 1.2° إلى الوراء لتكبح. ولا بدّ لها من ذلك: فلكي تتسارع نحو اليمين والقضيبان قائمان في المتوسّط، يجب أن يميل القضيبان نحو اليمين، والطريقة الوحيدة لإمالتهما نحو اليمين هي سحب طرفهما السفلي نحو اليسار أوّلًا. ويسمّي المهندسون هذا نظامًا غير أدنى الطور [3]؛ وأنت تفعل الشيء نفسه بالمكنسة حين تريد أن تمشي بها إلى الأمام."
+ },
+ "52b12908b753": {
+  "src": "← All projects",
+  "tr": "← جميع المشاريع"
+ },
+ "53e890d5f0ff": {
+  "src": "Projects",
+  "tr": "المشاريع"
  },
  "5561b25d09a8": {
   "src": "If the rods fall",
@@ -723,6 +735,10 @@
   "src": "Controller",
   "tr": "المتحكّم"
  },
+ "a3769d7261a1": {
+  "src": "Project · control systems · classical mechanics",
+  "tr": "مشروع · أنظمة التحكّم · الميكانيكا الكلاسيكية"
+ },
  "a3addf4eefea": {
   "src": "<span class=\"sw\"></span>upper rod <i>θ</i><sub>2</sub>",
   "tr": "<span class=\"sw\"></span>القضيب العلوي <i>θ</i><sub>2</sub>"
@@ -1071,6 +1087,10 @@
   "src": "<b>12.1</b> Carry out the three steps of section 4 for the coordinate \\(x\\) and show that row 1 of (9) is the sum of the sideways forces on cart and rods.",
   "tr": "<b>12.1</b> نفّذ الخطوات الثلاث في القسم 4 للإحداثي \\(x\\) وبيّن أن الصفّ 1 من (9) هو مجموع القوى الجانبية على العربة والقضيبين."
  },
+ "e7c4a328ca35": {
+  "src": "Back to the projects",
+  "tr": "العودة إلى المشاريع"
+ },
  "e8cc80b0d92e": {
   "src": "<span class=\"pbox__t\">Key result · the equations of motion</span> \\[ \\mathbf D(\\boldsymbol\\theta)\\,\\ddot{\\boldsymbol\\theta} + \\mathbf C(\\boldsymbol\\theta,\\dot{\\boldsymbol\\theta})\\,\\dot{\\boldsymbol\\theta} + \\mathbf G(\\boldsymbol\\theta) = \\mathbf H u, \\tag{9} \\] \\[ \\mathbf C = \\begin{pmatrix} 0 & -d_2\\sin\\theta_1\\,\\dot\\theta_1 & -d_3\\sin\\theta_2\\,\\dot\\theta_2 \\\\ 0 & 0 & d_5\\sin(\\theta_1-\\theta_2)\\,\\dot\\theta_2 \\\\ 0 & -d_5\\sin(\\theta_1-\\theta_2)\\,\\dot\\theta_1 & 0 \\end{pmatrix}, \\quad \\mathbf G = \\begin{pmatrix} 0 \\\\ -f_1\\sin\\theta_1 \\\\ -f_2\\sin\\theta_2 \\end{pmatrix}, \\quad \\mathbf H = \\begin{pmatrix} 1 \\\\ 0 \\\\ 0 \\end{pmatrix}. \\] <p>These are equations (2)–(9) of Moysis’s reproduction [2] of Bogdanov’s report [1], letter for letter. We checked them a second way: deriving (4)–(7) symbolically with SymPy and forming Lagrange’s equations reproduces \\(\\mathbf D\\), \\(\\mathbf C\\), \\(\\mathbf G\\) and \\(\\mathbf H\\) with zero difference in every entry.</p>",
   "tr": "<span class=\"pbox__t\">نتيجة أساسية · معادلات الحركة</span> \\[ \\mathbf D(\\boldsymbol\\theta)\\,\\ddot{\\boldsymbol\\theta} + \\mathbf C(\\boldsymbol\\theta,\\dot{\\boldsymbol\\theta})\\,\\dot{\\boldsymbol\\theta} + \\mathbf G(\\boldsymbol\\theta) = \\mathbf H u, \\tag{9} \\] \\[ \\mathbf C = \\begin{pmatrix} 0 & -d_2\\sin\\theta_1\\,\\dot\\theta_1 & -d_3\\sin\\theta_2\\,\\dot\\theta_2 \\\\ 0 & 0 & d_5\\sin(\\theta_1-\\theta_2)\\,\\dot\\theta_2 \\\\ 0 & -d_5\\sin(\\theta_1-\\theta_2)\\,\\dot\\theta_1 & 0 \\end{pmatrix}, \\quad \\mathbf G = \\begin{pmatrix} 0 \\\\ -f_1\\sin\\theta_1 \\\\ -f_2\\sin\\theta_2 \\end{pmatrix}, \\quad \\mathbf H = \\begin{pmatrix} 1 \\\\ 0 \\\\ 0 \\end{pmatrix}. \\] <p>هذه هي المعادلات (2)–(9) في نقل مويسيس [2] لتقرير بوغدانوف [1]، حرفًا بحرف. وقد تحقّقنا منها بطريق ثانٍ: اشتقاق (4)–(7) رمزيًّا باستعمال SymPy وتكوين معادلات لاغرانج منها يعيد \\(\\mathbf D\\) و\\(\\mathbf C\\) و\\(\\mathbf G\\) و\\(\\mathbf H\\) بفرق صفر في كلّ مدخل.</p>"
@@ -1110,6 +1130,10 @@
  "f2c1196fe1d4": {
   "src": "60 ms",
   "tr": "60 ms"
+ },
+ "f2c6b564bd81": {
+  "src": "Section",
+  "tr": "القسم"
  },
  "f411997d893e": {
   "src": "The page computes \\(e^{\\mathbf M}\\) by scaling and squaring: it halves \\(\\mathbf M\\) \\(q\\) times until its entries are below 0.25, sums 18 terms of the series, and squares the result \\(q\\) times, since \\(e^{\\mathbf M} = (e^{\\mathbf M/2^q})^{2^q}\\). We checked (16b) in Wolfram against the integral computed directly: the two agree to \\(4\\times10^{-16}\\).",

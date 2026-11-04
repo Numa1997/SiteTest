@@ -33,7 +33,7 @@ before `datalog.js`, on the same line. Since 30 October 2026 the pages with a pa
 | 8 | [draw-decompose.html](../../public/simulations/draw-decompose.html#L619) | L619 | L620 | L621 | L622 | L1414 |
 | 9 | [driven-oscillator.html](../../public/simulations/driven-oscillator.html#L599) | L599 | L600 | L601 | L602 | L1931, after `ledger/driven-oscillator.js` on the same line |
 | 10 | [wind-turbine.html](../../public/simulations/wind-turbine.html#L548) | L548 | L549 | L550 | L551 | L1169, after `ledger/wind-turbine.js` on the same line |
-| 11 | [pendulum-control.html](../../public/portfolios/pendulum-control/index.html#L607) | L419 | L420 | L421 | L422 | L1347, after `ledger/pendulum-control.js` on the same line |
+| 11 | [pendulum-control.html](../../public/simulations/pendulum-control.html#L607) | L419 | L420 | L421 | L422 | L1347, after `ledger/pendulum-control.js` on the same line |
 
 The scripts are plain `<script src>` tags at the end of the body, so they run while the document is still loading. That is
 why `sim.js` defers its own start to `DOMContentLoaded` ([sim.js:491](../../public/scripts/sim.js#L491)), and why
