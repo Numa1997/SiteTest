@@ -117,6 +117,8 @@ RULES = [
     (r'notes/fig(\d\d)/check\.md', lambda m: 'Fig. %d: the derivation checker\'s table of equations and numbers.' % int(m.group(1)), 'docs/notes.md'),
     (r'notes/fig(\d\d)/referee\.md', lambda m: 'Fig. %d: the blind referee\'s report on the note.' % int(m.group(1)), 'docs/notes.md'),
     (r'notes/fig(\d\d)/walk\.md', lambda m: 'Fig. %d: the walkthrough check and its proposed fixes.' % int(m.group(1)), 'docs/notes.md'),
+    (r'notes/fig11/checked\.html', lambda m: 'Fig. 11: working notes of 4 November 2026, every term of the model and of the rescue with its Wolfram check and the code that was run.', 'docs/notes.md'),
+    (r'notes/fig11/status\.md', lambda m: 'Fig. 11: status of the rescue work (done with evidence, open items, decisions for Numa).', 'docs/notes.md'),
     (r'notes/fig(\d\d)/.+', lambda m: 'Fig. %d: a measuring script of the review, or its saved output.' % int(m.group(1)), 'docs/notes.md'),
     # root of the app
     (r'AGENTS\.md', "The maintainer's summary: ownership, layout, design rules, folds, the data pipeline, platform quirks.", 'docs/build-and-deploy.md'),

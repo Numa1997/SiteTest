@@ -22,7 +22,7 @@
     </style>
 
     <script src="../../scripts/i18n/strings-de.js"></script>
-    <meta name="translated-from" content="English public/simulations/double-inverted-pendulum.html, commit b9bab09" />
+    <meta name="translated-from" content="English public/simulations/double-inverted-pendulum.html, commit be61c54+" />
   </head>
 <body>
     <header class="sim-top">
@@ -86,6 +86,7 @@
                         <button type="button" class="btn btn--ghost" data-go="1">nach +1 m</button>
                     </div>
                     <div class="actions">
+                        <button type="button" class="btn" id="swing">Hängen lassen, aufschwingen</button>
                         <button type="button" class="btn btn--ghost" id="tilt">Kippen und loslassen</button>
                         <button type="button" class="btn btn--ghost" id="play">Pause</button>
                         <button type="button" class="btn btn--ghost" id="reset">Zurücksetzen</button>
@@ -103,6 +104,11 @@
                     <div class="seg" role="group" aria-label="Regler" id="ctrl">
                         <button type="button" data-v="on" aria-pressed="true">Ein</button>
                         <button type="button" data-v="off" aria-pressed="false">Aus</button>
+                    </div>
+                    <p class="panel__label">Wenn die Stangen fallen</p>
+                    <div class="seg" role="group" aria-label="Rettung" id="resc">
+                        <button type="button" data-v="on" aria-pressed="true">Wieder aufschwingen</button>
+                        <button type="button" data-v="off" aria-pressed="false">Fallen lassen</button>
                     </div>
                     <label class="ctl">
                         <span class="ctl__row"><span>Grenze der Motorkraft <i>u</i><sub>max</sub></span><output id="Fmax-out" for="Fmax"></output></span>
@@ -148,6 +154,7 @@
                     <div><dt>Eine Neigung wächst um den Faktor e in</dt><dd id="r-tau">—</dd></div>
                     <div><dt>Langsamstes Abklingen, Regler ein</dt><dd id="r-set">—</dd></div>
                     <div><dt>Verstärkungen für θ₁, θ₂</dt><dd id="r-K">—</dd></div>
+                    <div><dt>Gesicherte Fanggrenze <i>c</i>*</dt><dd id="r-c">—</dd></div>
                     <div><dt>Stangenwinkel</dt><dd id="r-th">—</dd></div>
                     <div><dt>Wagenposition</dt><dd id="r-x">—</dd></div>
                 </dl>
@@ -165,7 +172,7 @@
                 <p class="paper__kicker">Skript · Abb. 11 · Regelungstechnik</p>
                 <h2 class="paper__title" id="paper-title">Zwei Stangen auf einem Wagen: aufrecht halten, was fallen will</h2>
                 <p class="paper__by">Numa Koudsie · für Leserinnen und Leser, die Newtons Gesetze und etwas Analysis kennen</p>
-                <div class="paper__abstract"><b>Zusammenfassung.</b> Eine Stange, die auf ihrem Ende steht, fällt um; zwei Stangen, mit Gelenken aufeinandergesetzt, fallen schneller und verheddern sich dabei. Hier bekommen sie Hilfe nur von unten: von einem Wagen, den ein Motor auf einer Schiene schiebt. Wir beschreiben die Maschine, schreiben ihre Energie auf, leiten ihre Bewegungsgleichungen mit dem Verfahren von Lagrange her und prüfen jeden Term am klassischen Bericht von Bogdanov (2004). Dann linearisieren wir um die aufrechte Lage, um zu finden, wie schnell die Stangen fallen, zeigen, dass ein einziger Schub entlang der Schiene genügt, um beide zu steuern, und bauen den Regler, der das tut, indem er Kosten minimiert. Das Skript endet mit dem, was jeder Schieberegler lehrt: warum lange Stangen leichter sind, warum der Motor stark und der Regelkreis schnell sein muss, und warum der Wagen zuerst in die falsche Richtung fahren muss.</div>
+                <div class="paper__abstract"><b>Zusammenfassung.</b> Eine Stange, die auf ihrem Ende steht, fällt um; zwei Stangen, mit Gelenken aufeinandergesetzt, fallen schneller und verheddern sich dabei. Hier bekommen sie Hilfe nur von unten: von einem Wagen, den ein Motor auf einer Schiene schiebt. Wir beschreiben die Maschine, schreiben ihre Energie auf, leiten ihre Bewegungsgleichungen mit dem Verfahren von Lagrange her und prüfen jeden Term am klassischen Bericht von Bogdanov (2004). Dann linearisieren wir um die aufrechte Lage, um zu finden, wie schnell die Stangen fallen, zeigen, dass ein einziger Schub entlang der Schiene genügt, um beide zu steuern, und bauen den Regler, der das tut, indem er Kosten minimiert. Das Skript endet mit dem, was jeder Schieberegler lehrt: warum lange Stangen leichter sind, warum der Motor stark und der Regelkreis schnell sein muss, und warum der Wagen zuerst in die falsche Richtung fahren muss. Fallen die Stangen trotzdem, zeigt das Skript, wo der Balancierregler sicher gewinnt, wie der Wagen den Stangen ihre Energie entziehen kann, bis sie ruhig hängen, und wie ein geplantes Aufschwingen sie wieder nach oben bringt.</div>
             </header>
             <div class="paper__grid">
                 <nav class="paper__toc" aria-label="Inhalt">
@@ -179,7 +186,10 @@
                         <li><a href="#p-steer"><span>6</span>Ein Schub, zwei Stangen</a></li>
                         <li><a href="#p-lqr"><span>7</span>Der Regler</a></li>
                         <li><a href="#p-play"><span>8</span>Was die Schieberegler lehren</a></li>
-                        <li><a href="#p-num"><span>9</span>Auf dem Bildschirm, und was fehlt</a></li>
+                        <li><a href="#p-catch"><span>9</span>Wo der Balancierregler sicher gewinnt</a></li>
+                        <li><a href="#p-calm"><span>10</span>Beruhigen: Der Wagen entzieht den Stangen Energie</a></li>
+                        <li><a href="#p-swing"><span>11</span>Das Aufschwingen: planen, nachführen, fangen</a></li>
+                        <li><a href="#p-num"><span>12</span>Auf dem Bildschirm, und was fehlt</a></li>
                     </ol>
                 </nav>
                 <div class="paper__body">
@@ -339,32 +349,111 @@
                         <p><b>Die Taktzeit.</b> Bei der voreingestellten Maschine hält der Regler die Stangen für \(T_s\) bis 32.5 ms und verliert sie bei 35 ms, etwa einem Drittel der Fallzeit von 96 ms. Verdoppelt man beide Längen, steigt die Grenze auf 65 ms; halbiert man sie, sinkt sie auf 22.5 ms. Langsame Gehirne brauchen lange Besen.</p>
                         <p><b>Die Motorgrenze.</b> Bei \(u_\text{max} = 60\) N fängt der Regler ein Schnippen gegen die Spitze von \(J = 0.2\) N·s ab und verliert bei einem von 0.3 N·s. Ein Schnippen ist ein kurzer waagerechter Schlag auf das obere Ende, eine Kraft \(F(t)\), die während der Zeit \(\varepsilon\) wirkt und den Impuls \(J = \int F\,\mathrm dt\) überträgt. Das obere Ende liegt bei \(x_\text{top} = x + L_1\sin\theta_1 + L_2\sin\theta_2\); nach der Regel aus Abschnitt 4 ist die verallgemeinerte Kraft des Schlags daher \(F\,\partial x_\text{top}/\partial\boldsymbol\theta = F\,(1, L_1\cos\theta_1, L_2\cos\theta_2)^{\mathsf T}\). Integrieren Sie (9) über den Schlag: Die Lagen können sich in einer Zeit \(\varepsilon \to 0\) nicht ändern, also bleibt \(\mathbf D\) fest und \(\int\mathbf D\ddot{\boldsymbol\theta}\,\mathrm dt = \mathbf D\,\Delta\dot{\boldsymbol\theta}\), während \(\mathbf C\dot{\boldsymbol\theta}\), \(\mathbf G\) und \(u\) endlich bleiben und nur \(O(\varepsilon)\) beitragen. Also gilt</p>
                         \[ \Delta\dot{\boldsymbol\theta} = \mathbf D^{-1}\begin{pmatrix}1\\ L_1\cos\theta_1\\ L_2\cos\theta_2\end{pmatrix} J . \tag{17} \]
-                        <p><b>Umziehen und loslassen.</b> Fassen Sie eine Stange in der Abbildung und kippen Sie sie; solange Sie sie halten, steht alles in Ruhe still. Lassen Sie los, und der Regler beginnt aus dieser geneigten Lage. Bei der voreingestellten Maschine und \(u_\text{max} = 60\) N kommt die obere Stange, auf 13° gezogen, zurück, ebenso die untere Stange, auf −10° gezogen. Die obere Stange, auf 45° gezogen, geht verloren: Der Regler verlangt mehr als 60 N, der Motor geht in die Sättigung, und die Stangen fallen, bevor der Wagen unter sie kommen kann. Erhöhen Sie \(u_\text{max}\) und versuchen Sie es noch einmal.</p>
+                        <p><b>Umziehen und loslassen.</b> Fassen Sie eine Stange in der Abbildung und kippen Sie sie; solange Sie sie halten, steht alles in Ruhe still. Lassen Sie los, und der Regler beginnt aus dieser geneigten Lage. Bei der voreingestellten Maschine und \(u_\text{max} = 60\) N kommt die obere Stange, auf 13° gezogen, zurück, ebenso die untere Stange, auf −10° gezogen. Die obere Stange, auf 45° gezogen, ist dem Balancierregler zu viel: Er verlangt mehr als 60 N, der Motor geht in die Sättigung, und die Stangen fallen, bevor der Wagen unter sie kommen kann. Die Seite beruhigt die Stangen dann und schwingt sie wieder auf (Abschnitte 9–11); schalten Sie <i>Fallen lassen</i> ein, um den Fall selbst zu sehen, oder erhöhen Sie \(u_\text{max}\) und versuchen Sie es noch einmal.</p>
                         <p><b>Der Start in die falsche Richtung.</b> Drücken Sie <i>nach +1 m</i>. Der Wagen kriecht zuerst 3 mm vorwärts, fährt dann eine halbe Sekunde nach dem Drücken 2.3 cm zurück, während beide Stangen um etwa 2° zum Ziel hin kippen. Erst dann fährt er vorwärts, in die Bewegung hineingelehnt, und am Ende lehnen sich die Stangen um etwa 1.2° zurück, um zu bremsen. Er muss das: Um mit im Mittel aufrechten Stangen nach rechts zu beschleunigen, müssen sich die Stangen nach rechts neigen, und der einzige Weg, sie nach rechts zu kippen, ist, ihr unteres Ende zuerst nach links wegzuziehen. Ingenieure nennen das ein nichtminimalphasiges System [3]; mit einem Besen tun Sie dasselbe, wenn Sie mit ihm vorwärtsgehen wollen.</p>
                         <p><b>Die Kosten der Kraft.</b> Erhöhen Sie \(\rho\), und der Regler schiebt sanfter und lässt die Stangen weiter wandern; senken Sie es, und die Schübe werden heftig und die Motorgrenze wird früher erreicht. Die Verstärkungen im Bedienfeld zeigen das direkt.</p>
                         <p><b>Die Massen.</b> Ein schwererer Wagen weicht weniger zurück, also fallen die Stangen näher an der Rate eines festen Gelenks. Eine schwerere obere Stange belastet die untere und ändert, in welche Richtung der Regler sie ausspielen muss. Beobachten Sie die Fallraten im Bedienfeld, während Sie jeden Schieberegler bewegen.</p>
                     </section>
 
+                    <section class="psec" id="p-catch">
+                        <h3><span class="psec__n">09</span>Wo der Balancierregler sicher gewinnt</h3>
+                        <p>Ziehen Sie eine Stange vor dem Loslassen immer weiter hinüber. Bei irgendeiner Neigung verliert der Balancierregler, nicht wegen einer Regel über Winkel, sondern weil die Kraft, die er bräuchte, \(u_\text{max}\) übersteigt, oder weil das lineare Bild (10), für das er entworfen wurde, die wirkliche Bewegung (9) nicht mehr beschreibt. Die erste Fassung dieser Seite gab bei 60° auf. Diese Zahl kam aus dem Nichts, und sie war in beide Richtungen falsch: Aus der Ruhe gemessen, bringt der Balancierregler bei der voreingestellten Maschine eine größte Neigung zwischen 14° und 44° zurück, je nach Richtung der Neigung; manche Zustände unter 60° waren also schon hoffnungslos, und bei bewegten Stangen hätten sich manche Zustände jenseits von 60° retten lassen. Gebraucht wird ein Test auf den ganzen Zustand, alle sechs Zahlen, der sagt: Von hier aus gewinnt der Balancierregler sicher.</p>
+                        <p>Abschnitt 7.1 hat uns das Werkzeug gegeben. Die Größe</p>
+                        \[ W(\mathbf s) = (\mathbf s - \mathbf s_\text{ref})^{\mathsf T}\mathbf P\,(\mathbf s - \mathbf s_\text{ref}) \tag{19} \]
+                        <p>gibt die Kosten an, die der Balancierregler vom Zustand \(\mathbf s\) aus noch zu zahlen hat. Ihre Niveaumengen \(W = c\) sind ineinanderliegende Ellipsoide um die aufrechte Ruhelage. Im linearen Modell geben (15) und (16) \(\dot W = -\mathbf s^{\mathsf T}(\mathbf Q + \rho\mathbf K^{\mathsf T}\mathbf K)\mathbf s\), überall negativ: Die Kosten fallen immer. An der wirklichen Maschine, mit den wirklichen Gleichungen (9) und dem bei \(u_\text{max}\) begrenzten Motor, muss das nicht so sein. Deshalb berechnet die Seite \(\dot W = 2(\mathbf s-\mathbf s_\text{ref})^{\mathsf T}\mathbf P\,\mathbf f(\mathbf s, \operatorname{sat}(-\mathbf K\mathbf s))\) an 8000 zufälligen Punkten der Fläche \(W = c\) und an je 2000 weiteren auf fünf kleineren Flächen in ihrem Inneren, mit \(\mathbf f\) der wahren rechten Seite aus Abschnitt 12, steigt von den zwölf schlechtesten aus in \(\dot W\) bergauf und findet durch Bisektion das größte \(c\), für das \(\dot W < 0\) überall gilt, wo sie gesucht hat. Nennen wir es \(c^\ast\). Der Aufstieg ist nötig: Zufällige Punkte allein ergaben \(c^\ast \approx 140\), weil die Zustände, in denen die Garantie versagt, ein dünnes Gebiet bilden, das 8000 zufällige Punkte verfehlen.</p>
+                        <p>Darum bescheinigt \(c^\ast\) einen Fang. Angenommen, \(\dot W < 0\) gilt an jedem Punkt mit \(0 < W \le c^\ast\), im ganzen Ellipsoid außer seinem Mittelpunkt. Eine Bewegung, die innen beginnt, kann nie hinaus: Um die Fläche \(W = c^\ast\) nach außen zu kreuzen, müsste \(W\) dort steigen, und das kann es nicht. Innen fällt \(W\) ständig, und da es nach unten durch null beschränkt ist und abseits des Mittelpunkts mit einer Rate fällt, die nicht erlischt, kann es nur bei \(W = 0\) enden, der aufrechten Ruhelage. Das ist Ljapunows Argument: eine Schale, in der die Murmel nur bergab rollen kann. Ein negatives \(\dot W\) allein auf der Fläche hielte die Bewegung nur innen; erst das Innere bringt sie nach Hause, und darum prüft die Seite auch die inneren Schalen. Die Seite zeigt \(c^\ast\) im Bedienfeld und berechnet es bei jeder Änderung eines Schiebereglers neu. Für die voreingestellte Maschine ist es auf der Seite 31.4; eine unabhängige Suche in Mathematica, die \(\dot W\) auf jeder Fläche mit <code>FindMaximum</code> von mehreren Startpunkten aus maximiert, schließt es zwischen 30.56 und 30.69 ein. Die Seite übergibt deshalb erst unterhalb von \(0.9\,c^\ast\), mit einem Spielraum von 10 %. Der schlechteste Punkt liegt nahe der aufrechten Lage, beide Stangen um etwa 4° in dieselbe Richtung geneigt und fast in Ruhe, wo der Balancierregler nur einen Bruchteil eines Newton verlangt: Dort lässt die Krümmung von (9), die Kosinus- und Zentripetalterme, die (10) weggeworfen hat, \(W\) kurz steigen.</p>
+                        <p>Zwei ehrliche Grenzen. Der Test ist eine Suche, kein Beweis: Eine schlechte Stelle, die er nicht gefunden hat, könnte es geben, und dafür ist der Spielraum von 10 % da. Und er ist vorsichtig. In der Simulation bringt der Balancierregler Zustände mit vierzigmal größerem \(W\) zurück, weil eine Bewegung \(W\) für einen Augenblick steigen lassen und trotzdem heimkommen kann. \(c^\ast\) markiert, wo das Fangen <em>sicher</em> ist, nicht die ganze Menge, die gefangen werden kann. Es ist bei 30 N, 60 N und 200 N dasselbe: Nicht die Motorgrenze legt es fest, sondern die Krümmung von (9). Und es setzt einen Balancierregler voraus, der stetig eingreift; der abgetastete Balancierregler der Seite kommt dem nur nahe, solange \(T_s\) viel kürzer ist als die Fallzeit (Abschnitt 7.2).</p>
+                        <p>Die Seite verwendet \(c^\ast\) an zwei Stellen. Beim Balancieren prüft sie alle 0.1 s, ob \(W > c^\ast\) ist; wenn ja, rechnet sie die Gleichungen 4 s voraus, mit dem Balancierregler am Werk, und liegt die Bewegung dann noch außerhalb von \(c^\ast\), erklärt sie den Balancierregler für geschlagen und beginnt die Rettung der nächsten beiden Abschnitte. Beim Aufschwingen übergibt sie an den Balancierregler, sobald \(W < 0.9\,c^\ast\) ist.</p>
+                    </section>
+
+                    <section class="psec" id="p-calm">
+                        <h3><span class="psec__n">10</span>Beruhigen: Der Wagen entzieht den Stangen Energie</h3>
+                        <p>Sind die Stangen einmal gefallen, schwingen sie als Doppelpendel am Wagen, ohne Reibung, für immer. Um sie wieder hochzubringen, bringen wir sie zuerst zur Ruhe, senkrecht nach unten hängend, und das ist eine Frage der Energie. Denken Sie an ein Kind auf einer Schaukel. Bewegt man den Sitz nach vorn, während er nach vorn geht, nährt man die Schaukel; bewegt man ihn nach vorn, während er zurückkommt, nimmt man ihr Energie. Der Wagen tut über das untere Gelenk dasselbe mit den Stangen.</p>
+                        <p>Nehmen wir die Beschleunigung des Wagens \(a = \ddot x\) als Eingang. Die Stangen allein, angelenkt an einem Wagen, der sich wie vorgegeben bewegt, tragen die Energie</p>
+                        \[ E_p = \tfrac12\dot{\boldsymbol\varphi}^{\mathsf T}\mathbf D_{pp}\dot{\boldsymbol\varphi} + f_1\cos\theta_1 + f_2\cos\theta_2, \qquad \mathbf D_{pp} = \begin{pmatrix} d_4 & d_5\cos(\theta_1-\theta_2) \\ d_5\cos(\theta_1-\theta_2) & d_6 \end{pmatrix}, \tag{20} \]
+                        <p>den rechten unteren Block von (5) und das ganze (7). Leiten Sie sie entlang der Zeilen 2 und 3 von (9) mit \(\ddot x = a\) ab. Die Zentripetalterme verrichten keine Arbeit, weil \(\mathbf C\) so gebaut ist, dass \(\dot{\mathbf D} - 2\mathbf C\) schiefsymmetrisch ist; die Arbeit der Schwerkraft ist schon in \(V\) gezählt. Übrig bleibt die Arbeit, die der Wagen über das Gelenk an den Stangen verrichtet:</p>
+                        <div class="pbox"><span class="pbox__t">Kernergebnis · das Energiegesetz</span> \[ \frac{\mathrm dE_p}{\mathrm dt} = -a\,\mathcal P, \qquad \mathcal P = d_2\cos\theta_1\,\dot\theta_1 + d_3\cos\theta_2\,\dot\theta_2 . \tag{21} \]</div>
+                        <p>Hier ist \(\mathcal P\) der seitliche Impuls, den die Stangen tragen, weil sie sich drehen, der Teil von Zeile 1 von (9), der zu den Stangen gehört. Beschleunigt man den Wagen ihm entgegen, pumpt man Energie hinein, so wie man eine Schaukel anschwingt. Beschleunigt man mit ihm, \(a = k\mathcal P\), entzieht man Energie mit der Rate \(k\mathcal P^2 \ge 0\), ohne jeden Plan, aus jedem Zustand: Das ist das Beruhigen. Die tiefste Energie ist die hängende Ruhelage, \(E_p = -(f_1+f_2)\), also endet das Beruhigen immer dort. Wir haben (21) symbolisch in Mathematica geprüft, wo sich \(\dot E_p + a\mathcal P\) zu null vereinfacht, und am Gesetz von Åström und Furuta für eine Stange [6], dessen \(\mathrm dE/\mathrm dt = -mul\dot\theta\cos\theta\) genau (21) ohne die obere Stange ist.</p>
+                        <p>Die Seite verwendet \(a = k\mathcal P - 4(x - x_c) - 4\dot x\) mit \(k = 2\ \mathrm{kg^{-1}s^{-1}}\), die beiden zusätzlichen Terme eine sanfte Feder und ein Dämpfer, die den Wagen nahe seinem Posten \(x_c\) halten, und \(|a| \le 8\ \mathrm{m/s^2}\); die Motorkraft, die diese Beschleunigung erzeugt, folgt aus (9): Die Zeilen 2–3 geben die Winkelbeschleunigungen, Zeile 1 die Kraft. Aus einem schnellen Schwingen heraus sind die Stangen nach 15 bis 22 s bis auf 0.05 J an der hängenden Ruhelage, der Wagen nie weiter als 0.65 m von seinem Posten. Pumpen allein kann die umgekehrte Aufgabe nicht leisten, zu wählen, wie herum jede Stange endet; unsere eigenen Pumpversuche endeten nahe dem Hängen, außerhalb der Schiene oder mit einer Stange oben und einer unten. Entziehen gelingt jedes Mal, weil der Boden eines Energietals ein einziger Ort ist.</p>
+                    </section>
+
+                    <section class="psec" id="p-swing">
+                        <h3><span class="psec__n">11</span>Das Aufschwingen: planen, nachführen, fangen</h3>
+                        <p>Aus der hängenden Ruhelage, oder aus jedem anderen Zustand, suchen wir nun einen Kraftverlauf \(u(t)\), \(0 \le t \le T\), der mit beiden Stangen aufrecht und in Ruhe endet, \(|u| \le u_\text{max}\) einhält und den Wagen auf der Schiene lässt. Labore lösen das mit zwei zusammenwirkenden Teilen: einer im Voraus berechneten geplanten Bewegung und einer linearen Rückführung, die die wirkliche Maschine auf ihr hält. Graichen, Treuer und Zeitz haben so ein wirkliches Doppelpendel auf einem Wagen aus dem Hängen aufgeschwungen und es im Experiment gezeigt [7]; Al Juboori und Kollegen geben einen Überblick über diese Familie von Verfahren [8]. Die Seite folgt demselben Plan mit einem anderen Weg, die geplante Bewegung zu berechnen. Abbildung 2 zeigt die drei Stufen.</p>
+                        <figure class="pfig">
+                            <div class="pfig__plate">
+                                <svg viewBox="0 0 720 300" role="img" aria-label="Left: the energy hill of the rods, a cosine with its top at the upright position and its valleys at hanging; calming rolls the state down into the valley, the planned swing-up carries it up the hill. Right: nested ellipses of constant W around the top, the certified level c-star marked; the plan ends inside it, where the balancer takes over.">
+                                    <rect x="0" y="0" width="720" height="300" fill="#fff"/>
+                                    <path d="M40 240 C 110 240, 150 60, 240 60 S 370 240, 440 240" fill="none" stroke="#1c1518" stroke-width="2"/>
+                                    <line x1="40" y1="260" x2="440" y2="260" stroke="#8b8079" stroke-width="1.2"/>
+                                    <text class="lbl" x="30" y="278">θ = −π (hanging)</text>
+                                    <text class="lbl" x="214" y="278">θ = 0 (upright)</text>
+                                    <text class="lbl" x="388" y="278">θ = +π</text>
+                                    <text class="m" x="20" y="150">V</text>
+                                    <circle cx="86" cy="206" r="6" fill="#fff" stroke="#1c1518" stroke-width="2"/>
+                                    <path d="M86 196 C 70 170, 58 215, 48 238" fill="none" stroke="#7a1f2b" stroke-width="1.6" stroke-dasharray="4 3"/>
+                                    <circle cx="48" cy="238" r="5" fill="#1c1518"/>
+                                    <text class="lbl" x="62" y="176">1 · calm</text>
+                                    <path d="M50 232 C 120 200, 170 120, 236 66" fill="none" stroke="#7a1f2b" stroke-width="2.2"/>
+                                    <path d="M228 72 L238 64 L230 60 Z" fill="#7a1f2b"/>
+                                    <text class="lbl" x="120" y="128">2 · planned swing-up</text>
+                                    <ellipse cx="240" cy="60" rx="26" ry="12" fill="none" stroke="#7a1f2b" stroke-width="1.6"/>
+                                    <text class="lbl" x="268" y="48">3 · catch</text>
+                                    <line x1="480" y1="60" x2="480" y2="260" stroke="#8b8079" stroke-width="1.2"/>
+                                    <line x1="480" y1="160" x2="700" y2="160" stroke="#8b8079" stroke-width="1.2"/>
+                                    <text class="m" x="690" y="180">θ</text>
+                                    <text class="m" x="486" y="70">θ̇</text>
+                                    <ellipse cx="590" cy="160" rx="96" ry="78" fill="none" stroke="#cdc1ae" stroke-width="1.2" transform="rotate(-25 590 160)"/>
+                                    <ellipse cx="590" cy="160" rx="64" ry="52" fill="none" stroke="#cdc1ae" stroke-width="1.2" transform="rotate(-25 590 160)"/>
+                                    <ellipse cx="590" cy="160" rx="38" ry="31" fill="#fffaf3" stroke="#7a1f2b" stroke-width="2" transform="rotate(-25 590 160)"/>
+                                    <text class="lbl" x="598" y="112">W = c*</text>
+                                    <path d="M690 250 C 650 230, 600 215, 596 186" fill="none" stroke="#7a1f2b" stroke-width="2.2"/>
+                                    <path d="M590 190 L598 184 L600 194 Z" fill="#7a1f2b"/>
+                                    <text class="lbl" x="612" y="262">plan ends inside</text>
+                                    <circle cx="590" cy="160" r="3" fill="#1c1518"/>
+                                </svg>
+                            </div>
+                            <figcaption><span class="pfig__n">Abbildung 2</span>Eine Skizze der Rettung. Links: der Energieberg \(V\) der Stangen über einer Neigung (beide Stangen zusammen), sein Gipfel bei aufrecht, seine Täler bei hängend; das Beruhigen (1) lässt den Zustand ins Tal rollen, der Plan (2) trägt ihn den Berg hinauf. Rechts: die ineinanderliegenden Flächen \(W = c\) um den Gipfel in einer Ebene des Zustandsraums; der Plan muss innerhalb der gesicherten enden, \(W < c^\ast\), wo der Balancierregler (3) die Arbeit sicher zu Ende bringt. Die Formen sind schematisch; die Zahlen stehen im Text.</figcaption>
+                        </figure>
+                        <h4><span class="psub__n">11.1</span>Planen</h4>
+                        <p>\(u(t)\) zu raten und (9) vom Start an vorwärts zu integrieren, kann nicht gelingen: Abschnitt 5 sagt, dass ein kleiner Fehler nahe dem Gipfel wie \(e^{10t}\) wächst, zehnfach alle 0.22 s, also hängt das Ende der Bewegung hoffnungslos empfindlich von ihrem Anfang ab. Stattdessen zerlegt die Seite die Zeit in \(M = 10T\) Stücke von 0.1 s und behandelt den Zustand an jedem Schnitt, \(\mathbf z_1, \dots, \mathbf z_M\), als Unbekannte, zusammen mit einer konstanten Kraft \(u_k\) je Stück: <em>Mehrfachschießen</em>, das Verfahren, das Tedrakes Skript als Grenzfall der direkten Transkription beschreibt [3]. Über ein Stück trägt (18) mit acht Teilschritten \(\mathbf z_k\) nach \(\Phi(\mathbf z_k, u_k)\). Die Unbekannten werden so gewählt, dass die folgenden Residuen im Sinne der kleinsten Quadrate so klein wie möglich werden:</p>
+                        \[ \begin{aligned} &w_d\big(\mathbf z_{k+1} - \Phi(\mathbf z_k, u_k)\big) && \text{obey the equations of motion}\\ &w_T\big(\theta_{1,M} - \theta_1^\ast,\ \theta_{2,M} - \theta_2^\ast,\ \dot\theta_{1,M},\ \dot\theta_{2,M},\ 0.3\,\dot x_M\big) && \text{end upright, at rest}\\ &w_\ell\max(0, |x_k| - 1.5\ \mathrm m),\quad w_u\max(0, |u_k| - u_\text{max}) && \text{stay on the rail, within the motor}\\ &w_r\,u_k,\quad w_s\,(u_k - u_{k-1}) && \text{prefer gentle, smooth forces} \end{aligned} \tag{22} \]
+                        <p>mit den Zielen \(\theta^\ast = 2\pi\operatorname{round}(\theta/2\pi)\), der nächsten aufrechten Lage. Die Gewichte \(w_d = 100\), \(w_T = 30\), \(w_\ell = 20\), \(w_u = 1\), \(w_r = w_s = 0.02\) sind unsere Wahl; mit ihnen kostet ein Defekt von einem Milliradiant so viel wie drei Milliradiant Endfehler, sodass die Physik über den Wunsch siegt. Die erste Schätzung ist eine Gerade in den Winkeln. Levenberg–Marquardt verbessert sie dann Schritt für Schritt aus den Normalgleichungen \(\mathbf J^{\mathsf T}\mathbf J\,\delta = -\mathbf J^{\mathsf T}\mathbf r\), mit der Jacobi-Matrix \(\mathbf J\) von (22) aus finiten Differenzen von \(\Phi\). Ein Plan wird angenommen, wenn jeder Defekt unter \(3\times10^{-3}\) liegt und das Ende bis auf 0.02 rad und 0.02 rad/s an der aufrechten Ruhelage ist.</p>
+                        <p>Die Planung läuft im Browser zwischen den Bildern, 8 ms auf einmal, während sich die Maschine weiterbewegt. Das wirft eine Frage auf: Ein Plan wird für einen Startzustand gemacht, aber wenn er fertig ist, hat sich die Maschine weiterbewegt. Die Seite beantwortet sie mit Determinismus. Das Beruhigen (21) ist ein festes Gesetz, und der Integrator (18) ist exakte Arithmetik, also kann die Seite die nächsten 3 s des Beruhigens im Voraus rechnen, vom dort gefundenen Zustand aus planen und, wenn die Uhr ankommt, prüfen, dass die Maschine bis auf \(10^{-6}\) in diesem Zustand ist. Sie ist es immer, außer Sie haben sie dazwischen angestoßen; dann wird der Plan verworfen und ein neuer begonnen. Ist ein Plan nicht rechtzeitig fertig, oder wurde kein Plan gefunden (die Suche beginnt bei einer einzigen geraden Schätzung und kann scheitern), plant die Seite erneut von weiter voraus, mit einem längeren \(T\) (4 s, dann 6 s), während das Beruhigen weitergeht.</p>
+                        <h4><span class="psub__n">11.2</span>Nachführen</h4>
+                        <p>Spielt man den Plan ohne Rückführung ab, endet man Dutzende Meter weiter auf der Schiene, aus dem oben genannten Grund. Darum folgt ein Regler dem Plan. Alle 10 ms linearisiert die Seite (9) entlang der geplanten Bewegung, \(\mathbf s_{k+1} - \mathbf s^\text{plan}_{k+1} \approx \mathbf F_k(\mathbf s_k - \mathbf s^\text{plan}_k) + \mathbf G_k(u_k - u^\text{plan}_k)\), mit \(\mathbf F_k, \mathbf G_k\) aus finiten Differenzen eines 10-ms-Schritts, und löst das LQR-Problem mit endlichem Horizont rückwärts vom Ende her, wo das eigene \(\mathbf P\) des Balancierreglers aus (15) die Endkosten sind [3]:</p>
+                        \[ \mathbf K_k = \frac{\mathbf G_k^{\mathsf T}\mathbf P_{k+1}\mathbf F_k}{1 + \mathbf G_k^{\mathsf T}\mathbf P_{k+1}\mathbf G_k}, \qquad \mathbf P_k = \mathbf F_k^{\mathsf T}\mathbf P_{k+1}\mathbf F_k + \mathbf Q - \mathbf F_k^{\mathsf T}\mathbf P_{k+1}\mathbf G_k\,\mathbf K_k, \qquad \mathbf P_M = \mathbf P, \tag{23} \]
+                        <p>die diskrete Form desselben Arguments der quadratischen Ergänzung wie in 7.1, mit den Kosten über Schritte summiert statt integriert. Die Kraft ist dann</p>
+                        <div class="pbox"><span class="pbox__t">Kernergebnis · das Nachführgesetz</span> \[ u_k = u^\text{plan}_k - \mathbf K_k\,(\mathbf s_k - \mathbf s^\text{plan}_k), \tag{24} \]</div>
+                        <p>begrenzt auf \(\pm u_\text{max}\). Die Verstärkungen \(\mathbf K_k\) sind groß, wo der Plan nahe am Gipfel vorbeiführt, und klein, solange die Stangen noch hängen, wie es sein soll.</p>
+                        <h4><span class="psub__n">11.3</span>Fangen, und was die Tests sagen</h4>
+                        <p>Unterwegs beobachtet die Seite \(W\) aus (19). Sobald \(W < 0.9\,c^\ast\) ist, übergibt sie an den Balancierregler (16), der von dort aus sicher zu Ende kommt. Läuft der Plan bis zu seinem Ende, ohne \(c^\ast\) zu erreichen, bekommt der Balancierregler trotzdem seine Chance, und die Prüfung aus Abschnitt 9 entscheidet binnen 4 s, ob neu begonnen wird; in den Tests geschah das oft, und der Balancierregler gewann jedes Mal, was die Vorsicht von \(c^\ast\) bei der Arbeit zeigt. In headless Chromium, mit derselben Schleife Bild für Bild wie in Ihrem Browser, endeten 40 zufällige Zustände, beliebige Winkel, Drehraten bis \(\pm3\) rad/s und Wagengeschwindigkeiten bis \(\pm0.5\) m/s, bei 60 N alle binnen 60 s balanciert. Ein Plan brauchte zwischen 0.4 und 12 s Browserzeit. Aus der hängenden Ruhelage dauert die ganze Rettung etwa 7 s: 3 s Beruhigen, während der Plan berechnet wird, 4 s Aufschwingen. Sechs andere Maschinen (ein schwererer Wagen, schwerere, längere oder kürzere Stangen, \(u_\text{max}\) = 30 oder 120 N), mit je sechs zufälligen Zuständen, wurden ebenfalls gefangen. Bei \(T_s\) = 40 ms keine: Die Rettung brachte die Stangen jedes Mal hoch, und der Balancierregler, der schon bei 35 ms verliert (Abschnitt 8), ließ sie wieder fallen. Dieselbe Studie in Node.js, ohne die Stufe des Beruhigens, fand nur für 16 der 40 Zustände einen direkten Plan, und deshalb kommt das Beruhigen zuerst. Vierzig Fälle sind ein Beleg, kein Beweis: Ein sehr schwacher Motor, ein sehr schwerer Wagen oder ein Stoß, der den Wagen gegen das Ende der Schiene wirft, kann es noch besiegen.</p>
+                    </section>
+
                     <section class="psec" id="p-num">
-                        <h3><span class="psec__n">09</span>Auf dem Bildschirm, und was fehlt</h3>
+                        <h3><span class="psec__n">12</span>Auf dem Bildschirm, und was fehlt</h3>
                         <p>Schreiben Sie (9) als sechs Gleichungen erster Ordnung für \(\mathbf s = (\boldsymbol\theta, \dot{\boldsymbol\theta})\): \(\dot{\mathbf s} = \mathbf f(\mathbf s, u)\), deren erste drei Komponenten \(\dot{\boldsymbol\theta}\) sind und deren letzte drei \(\ddot{\boldsymbol\theta} = \mathbf D^{-1}(\mathbf Hu - \mathbf C\dot{\boldsymbol\theta} - \mathbf G)\) sind. Ein Schritt der Länge \(h\) des klassischen Runge-Kutta-Verfahrens vierter Ordnung tastet die Steigung viermal ab, am Anfang, zweimal in der Mitte und am Ende,</p>
                         \[ \mathbf k_1 = \mathbf f(\mathbf s_n),\ \ \mathbf k_2 = \mathbf f(\mathbf s_n + \tfrac h2\mathbf k_1),\ \ \mathbf k_3 = \mathbf f(\mathbf s_n + \tfrac h2\mathbf k_2),\ \ \mathbf k_4 = \mathbf f(\mathbf s_n + h\mathbf k_3),\qquad \mathbf s_{n+1} = \mathbf s_n + \tfrac h6(\mathbf k_1 + 2\mathbf k_2 + 2\mathbf k_3 + \mathbf k_4), \tag{18} \]
                         <p>wobei \(u\) während des Schritts festgehalten wird, wie es der abgetastete Regler tut. Sein Fehler pro Zeiteinheit fällt wie \(h^4\).</p>
-                        <p>Die Seite integriert (9) mit (18) bei einer festen Schrittweite von 1 ms, mehrere Schritte pro Bildschirmbild, in Echtzeit. Der Durchgang unten stellt jede Gleichung dieses Skripts neben die Zeilen des Programmcodes der Seite, die sie berechnen. Bei ausgeschaltetem Regler hält derselbe Integrator, gegen einen hochgenauen Löser getestet, die Energie \(T + V\) über 10 s auf \(2\times10^{-10}\) J konstant. Passiert eine Stange 60°, gilt der Lauf als verloren: Der lineare Regler wurde für kleine Winkel entworfen, also hört der Motor auf zu schieben (\(u = 0\)), und die Seite löst (9) weiter genau wie zuvor. Die Stangen fallen ganz herunter, schwingen durch den Schlitz in der Mitte des Wagens zwischen seinen beiden Schienen nach unten und schwingen als Doppelpendel an einem freien Wagen weiter, ohne Reibung, sodass sie nie zur Ruhe kommen. Die Ansicht weitet sich, damit sie im Bild bleiben. Die Positionen sind maßstabsgetreu gezeichnet; die Ansicht folgt dem Wagen.</p>
-                        <p>Weggelassen: Reibung in den Gelenken und Rädern, die eigene Dynamik des Motors (ein wirklicher Motor kann seine Kraft nicht sofort ändern), Sensorrauschen, das Ende der Schiene und das Aufschwingen aus der hängenden Lage. Jedes davon ist eine bekannte Erweiterung dieses Modells [1, 3].</p>
+                        <p>Die Seite integriert (9) mit (18) bei einer festen Schrittweite von 1 ms, mehrere Schritte pro Bildschirmbild, in Echtzeit. Der Durchgang unten stellt jede Gleichung dieses Skripts neben die Zeilen des Programmcodes der Seite, die sie berechnen. Bei ausgeschaltetem Regler hält derselbe Integrator, gegen einen hochgenauen Löser getestet, die Energie \(T + V\) über 10 s auf \(2\times10^{-10}\) J konstant; gegen eine Referenzlösung mit 30 Stellen in Mathematica stimmen die Winkel frei wirbelnder Stangen nach 2 s auf \(3\times10^{-6}\) rad überein, und die halbe Schrittweite verkleinert diesen Fehler auf ein Achtzehntel, die \(2^4\) eines Verfahrens vierter Ordnung. Die Seite lässt immer eines von drei Gesetzen arbeiten: den Balancierregler (16), das Beruhigen (21) oder die Nachführung (24), nach den Regeln der Abschnitte 9 und 11. Ist <i>Fallen lassen</i> eingeschaltet und der Balancierregler geschlagen, hört der Motor auf zu schieben (\(u = 0\)), und die Seite löst (9) weiter genau wie zuvor: Die Stangen fallen ganz herunter, schwingen durch den Schlitz in der Mitte des Wagens zwischen seinen beiden Schienen nach unten und schwingen als Doppelpendel an einem freien Wagen weiter, ohne Reibung, sodass sie nie zur Ruhe kommen. Die Ansicht weitet sich, damit sie im Bild bleiben. Die Positionen sind maßstabsgetreu gezeichnet; die Ansicht folgt dem Wagen.</p>
+                        <p>Weggelassen: Reibung in den Gelenken und Rädern, die eigene Dynamik des Motors (ein wirklicher Motor kann seine Kraft nicht sofort ändern), Sensorrauschen und ein hartes Ende der Schiene (der Planer hält den Wagen innerhalb von ±1.5 m; Beruhigen und Balancieren tun das nicht). Jedes davon ist eine bekannte Erweiterung dieses Modells [1, 3]. Jede Zahl auf dieser Seite, die weder hergeleitet noch einer Quelle entnommen ist, ist unsere Wahl, und der Text sagt das dort, wo sie getroffen wird: das Gewicht auf \(x\), die Bereiche der Schieberegler, \(u_\text{max} = 60\) N, die Gewichte und die Schienengrenze des Planers, die Verstärkungen des Beruhigens und die Abtastung des Zertifikats.</p>
                         <div class="pbox pbox--ex">
                             <span class="pbox__t">Aufgaben</span>
-                            <p><b>9.1</b> Führen Sie die drei Schritte aus Abschnitt 4 für die Koordinate \(x\) durch und zeigen Sie, dass Zeile 1 von (9) die Summe der seitlichen Kräfte auf Wagen und Stangen ist.</p>
-                            <p><b>9.2</b> Zeigen Sie aus (12)–(13), dass eine Skalierung beider Längen um \(\lambda\) beide Fallraten um \(\lambda^{-1/2}\) skaliert.</p>
-                            <p><b>9.3</b> Ein Schlag auf das mittlere Gelenk statt auf das obere Ende: Wiederholen Sie die Herleitung von (17) und zeigen Sie, dass sich die obere Stange dann in die entgegengesetzte Richtung zur unteren Stange zu drehen beginnt.</p>
+                            <p><b>12.1</b> Führen Sie die drei Schritte aus Abschnitt 4 für die Koordinate \(x\) durch und zeigen Sie, dass Zeile 1 von (9) die Summe der seitlichen Kräfte auf Wagen und Stangen ist.</p>
+                            <p><b>12.2</b> Zeigen Sie aus (12)–(13), dass eine Skalierung beider Längen um \(\lambda\) beide Fallraten um \(\lambda^{-1/2}\) skaliert.</p>
+                            <p><b>12.3</b> Ein Schlag auf das mittlere Gelenk statt auf die Spitze: Wiederholen Sie die Herleitung von (17) und zeigen Sie, dass sich die obere Stange dann zuerst in die andere Richtung dreht als die untere.</p>
+                            <p><b>12.4</b> Leiten Sie (21) her: Differenzieren Sie (20) entlang der Zeilen 2 und 3 von (9) mit \(\ddot x = a\) und zeigen Sie, dass sich die Terme mit \(d_5\sin(\theta_1-\theta_2)\) paarweise aufheben.</p>
                         </div>
-                        <h4><span class="psub__n">9.1</span>Quellen</h4>
+                        <h4><span class="psub__n">12.5</span>Quellen</h4>
                         <ol class="prefs">
                             <li>A. Bogdanov, <a href="https://www.researchgate.net/publication/250107215_Optimal_Control_of_a_Double_Inverted_Pendulum_on_a_Cart"><em>Optimal Control of a Double Inverted Pendulum on a Cart</em></a>, Technischer Bericht CSE-04-006, OGI School of Science and Engineering, OHSU, 2004.</li>
                             <li>L. Moysis, <a href="https://ikee.lib.auth.gr/record/282764/files/balancing%20a%20double%20inverted%20pendulum%20using%20optimal%20control%20and%20Laguerre%20functions.pdf"><em>Balancing a double inverted pendulum using optimal control and Laguerre functions</em></a>, technischer Bericht, Aristoteles-Universität Thessaloniki, 2016: das Modell aus [1] vollständig ausgeschrieben, mit seiner Linearisierung und den LQR-Verstärkungen.</li>
-                            <li>R. Tedrake, <a href="https://underactuated.mit.edu/acrobot.html"><em>Underactuated Robotics</em>, Kapitel 3: Acrobots, Cart-Poles, and Quadrotors</a>, Vorlesungsskript des MIT, 2024: Manipulatorgleichungen, Linearisierung, Steuerbarkeit und LQR-Balancieren des Wagen-Pendels.</li>
+                            <li>R. Tedrake, <a href="https://underactuated.mit.edu/acrobot.html"><em>Underactuated Robotics</em>, Kapitel 3: Acrobots, Cart-Poles, and Quadrotors</a>, Vorlesungsskript des MIT, 2024: Manipulatorgleichungen, Linearisierung, Steuerbarkeit und LQR-Balancieren des Wagen-Pendels; und <a href="https://underactuated.mit.edu/trajopt.html">Kapitel 10: Trajectory Optimization</a>: direkte Transkription als Grenzfall des Mehrfachschießens, und LQR mit endlichem Horizont entlang einer geplanten Bahn.</li>
                             <li>F. Grasser, A. D’Arrigo, S. Colombi und A. Rufer, <a href="https://doi.org/10.1109/41.982254">„JOE: a mobile, inverted pendulum“</a>, <em>IEEE Transactions on Industrial Electronics</em> 49, 107–114 (2002).</li>
                             <li>K. Shiozawa, J. Lee, M. Russo, D. Sternad und N. Hogan, <a href="https://doi.org/10.1186/s12984-021-00907-2">„Frequency-dependent force direction elucidates neural control of balance“</a>, <em>Journal of NeuroEngineering and Rehabilitation</em> 18, 145 (2021).</li>
+                            <li>K. J. Åström und K. Furuta, <a href="https://www.control.utoronto.ca/~broucke/ece1653s/Intro/ast_fur96.pdf">„Swinging up a pendulum by energy control“</a>, IFAC World Congress, 1996; <em>Automatica</em> 36, 287–295 (2000): das Energiegesetz für eine Stange an einem beschleunigten Drehpunkt, Gleichungen (1)–(4).</li>
+                            <li>K. Graichen, M. Treuer und M. Zeitz, <a href="https://doi.org/10.1016/j.automatica.2006.07.023">„Swing-up of the double pendulum on a cart by feedforward and feedback control with experimental validation“</a>, <em>Automatica</em> 43, 63–71 (2007): das Aufschwingen als Randwertproblem plus stabilisierende lineare Rückführung, an einer Labormaschine ausgeführt.</li>
+                            <li>A. M. Al Juboori, M. T. Hussein und A. S. G. Qanber, <a href="https://ms.copernicus.org/articles/15/47/2024/">„Swing-up control of double-inverted pendulum systems“</a>, <em>Mechanical Sciences</em> 15, 47 (2024): ein Überblick über Verfahren des Aufschwingens, mit dem hängenden Start (0, π, π) und LQR-Verstärkungen, die entlang der geplanten Bewegung berechnet werden.</li>
                         </ol>
                     </section>
                 </div>
@@ -381,10 +470,10 @@
     <script>
     (function () {
         'use strict';
-        var TH = Sim.theme, G = 9.81, H = 0.001, Q = [50, 50, 50, 20, 700, 700], LOST = Math.PI / 3;
+        var TH = Sim.theme, G = 9.81, H = 0.001, Q = [50, 50, 50, 20, 700, 700];
         var sl = {};
         ['m0', 'm1', 'm2', 'L1', 'L2'].forEach(function (k) { sl[k] = Sim.slider(k, { format: function (v) { return v.toFixed(2) + (k[0] === 'm' ? ' kg' : ' m'); }, onInput: redesign }); });
-        var sF = Sim.slider('Fmax', { format: function (v) { return v.toFixed(0) + ' N'; } });
+        var sF = Sim.slider('Fmax', { format: function (v) { return v.toFixed(0) + ' N'; }, onInput: function () { recatch(); } });
         var sT = Sim.slider('Ts', { format: function (v) { return v.toFixed(0) + ' ms'; } });
         var sR = Sim.slider('rho', { format: function (v) { return Sim.fmt(Math.pow(10, v), v < 0 ? 2 : 1); }, onInput: redesign });
         var sJ = Sim.slider('J', { format: function (v) { return v.toFixed(2) + ' N·s'; } });
@@ -426,7 +515,9 @@
             for (i = 0; i < n; i++) for (j = 0; j < n; j++) { Lm[i][j] = Z[i][n + j]; Lm[n + i][j] = Z[n + i][n + j] + (i === j ? 1 : 0); Rm[i][j] = -(Z[i][j] + (i === j ? 1 : 0)); Rm[n + i][j] = -Z[n + i][j]; }
             var Lt = Lm[0].map(function (_, c) { return Lm.map(function (row) { return row[c]; }); });
             var P = mul(inv(mul(Lt, Lm)), mul(Lt, Rm)), K = [];
-            for (j = 0; j < n; j++) { var s = 0; for (i = 0; i < n; i++) s += B[i][0] * P[i][j]; K.push(s / R); } return K; }
+            for (j = 0; j < n; j++) { var s = 0; for (i = 0; i < n; i++) s += B[i][0] * P[i][j]; K.push(s / R); }
+            for (i = 0; i < n; i++) for (j = 0; j < i; j++) P[i][j] = P[j][i] = (P[i][j] + P[j][i]) / 2;
+            return { K: K, P: P }; }
         function eig(A) {   // characteristic polynomial (Faddeev–LeVerrier), roots by Durand–Kerner
             var n = A.length, Mk = zeros(n, n), c = [1], i, j, k;
             for (k = 1; k <= n; k++) { var AM = mul(A, Mk); for (i = 0; i < n; i++) AM[i][i] += c[k - 1]; Mk = AM; var AMk = mul(A, Mk), tr = 0; for (i = 0; i < n; i++) tr += AMk[i][i]; c.push(-tr / k); }
@@ -443,42 +534,221 @@
             var a = M11 * M22 - M12 * M12, b = -(M11 * p.f[1] + M22 * p.f[0]), c = p.f[0] * p.f[1], disc = Math.sqrt(b * b - 4 * a * c);
             return [Math.sqrt((-b + disc) / (2 * a)), Math.sqrt((-b - disc) / (2 * a))]; }
 
-        var vy = 0, p, K, s, u = 0, xref = 0, on = true, lost = false, flat = false, tSim = 0, tCtl = 0, acc = 0, trace = [], held = 0, geo = null;
+        /* ---------- the catch region: W = xᵀPx and its largest safe level c (19) ---------- */
+        function chol(A) { var n = A.length, L = zeros(n, n), i, j, k; for (i = 0; i < n; i++) for (j = 0; j <= i; j++) { var s = A[i][j]; for (k = 0; k < j; k++) s -= L[i][k] * L[j][k]; L[i][j] = i === j ? Math.sqrt(s) : s / L[j][j]; } return L; }
+        function backsolve(L, v) { var n = v.length, x = new Array(n).fill(0); for (var i = n - 1; i >= 0; i--) { var s = v[i]; for (var k = i + 1; k < n; k++) s -= L[k][i] * x[k]; x[i] = s / L[i][i]; } return x; }   // Lᵀx = v
+        function wrapAngle(a) { return a - 2 * Math.PI * Math.round(a / (2 * Math.PI)); }
+        function wrapState(x) { var w = x.slice(); w[1] = wrapAngle(w[1]); w[2] = wrapAngle(w[2]); return w; }
+        function quad(P, x) { var t = 0; for (var i = 0; i < 6; i++) for (var j = 0; j < 6; j++) t += x[i] * P[i][j] * x[j]; return t; }
+        function catchLevel() {   // the largest c, found by bisection, for which dW/dt < 0 at every one of 8000 sampled points of the surface W = c, with the motor clipped at u_max
+            var Lc = chol(Pm), seed = 12345, dirs = [], i, j, k, F = sF.value, lo = 1, hi = 1e5;
+            function rnd() { seed = (seed * 1664525 + 1013904223) % 4294967296; return seed / 4294967296; }
+            for (k = 0; k < 8000; k++) { var v = [], nv = 0; for (i = 0; i < 6; i++) { v.push(Math.sqrt(-2 * Math.log(rnd() + 1e-12)) * Math.cos(2 * Math.PI * rnd())); nv += v[i] * v[i]; } nv = Math.sqrt(nv); dirs.push(v.map(function (a) { return a / nv; })); }
+            function wdot(dir, c) {   // dW/dt at the point x = L⁻ᵀ(√c · dir) of the surface W = c (W = xᵀLLᵀx = c·|dir|²), under the clipped balancing law
+                var x = backsolve(Lc, dir.map(function (a) { return a * Math.sqrt(c); })), uu = 0, wd = 0, a, b;   // own loop variables: the callers' i, j, k must survive
+                for (a = 0; a < 6; a++) uu -= K[a] * x[a]; uu = Math.max(-F, Math.min(F, uu));
+                var fx = rhs(p, x, uu); for (a = 0; a < 6; a++) { var Px = 0; for (b = 0; b < 6; b++) Px += Pm[a][b] * x[b]; wd += 2 * Px * fx[a]; }
+                return wd; }
+            var SHELL = [1, 0.8, 0.6, 0.4, 0.2, 0.08];   // dW/dt must be negative in the whole ellipsoid W ≤ c, not only on its surface: every direction is tested on the surface, every fourth also on five shells inside
+            function safe(c) {   // false as soon as one point of the ellipsoid has dW/dt ≥ 0: random points first, then a climb from the worst twelve of them
+                var worst = [], m;
+                for (k = 0; k < dirs.length; k++) for (var sh = 0; sh < (k % 4 === 0 ? SHELL.length : 1); sh++) { var cl = c * SHELL[sh], wd = wdot(dirs[k], cl); if (wd >= 0) return false;
+                    var sc = wd / cl;   // dW/dt grows like W, so rank the points by dW/dt per unit W
+                    if (worst.length < 12 || sc > worst[11].sc) { worst.push({ wd: wd, sc: sc, d: dirs[k], cl: cl }); worst.sort(function (a, b) { return b.sc - a.sc; }); if (worst.length > 12) worst.pop(); } }
+                for (m = 0; m < worst.length; m++) { var d = worst[m].d.slice(), w0 = worst[m].wd, h = 0.05, lev = worst[m].cl;
+                    for (var it2 = 0; it2 < 100 && h > 1e-6; it2++) { var g = [], gn = 0;
+                        for (j = 0; j < 6; j++) { var dd = d.slice(); dd[j] += 1e-5; var nn = Math.sqrt(dd.reduce(function (q, v) { return q + v * v; }, 0)); g.push((wdot(dd.map(function (v) { return v / nn; }), lev) - w0) / 1e-5); gn += g[j] * g[j]; }
+                        gn = Math.sqrt(gn) || 1; var dn = d.map(function (v, q) { return v + h * g[q] / gn; }), n2 = Math.sqrt(dn.reduce(function (q, v) { return q + v * v; }, 0)); dn = dn.map(function (v) { return v / n2; });
+                        var w1 = wdot(dn, lev); if (w1 > w0) { d = dn; w0 = w1; h *= 1.5; if (w0 >= 0) return false; } else h /= 2; } }
+                return true; }
+            if (!safe(lo)) return 0;
+            for (var it = 0; it < 20; it++) { var mid = Math.sqrt(lo * hi); if (safe(mid)) lo = mid; else hi = mid; }
+            return lo; }
+
+        /* ---------- the swing-up: plan the whole move, track it, hand over to the balancer (20)–(24) ---------- */
+        var kk1 = new Float64Array(6), kk2 = new Float64Array(6), kk3 = new Float64Array(6), kk4 = new Float64Array(6), tmp6 = new Float64Array(6);
+        function rhsF(p, s, u, o) {   // the equations (9) once more, written without allocating arrays: the planner calls them millions of times
+            var a = s[1], b = s[2], ad = s[4], bd = s[5], d = p.d, sa = Math.sin(a), sb = Math.sin(b), sab = Math.sin(a - b);
+            var A01 = d[1] * Math.cos(a), A02 = d[2] * Math.cos(b), A12 = d[4] * Math.cos(a - b);
+            var r0 = u + d[1] * sa * ad * ad + d[2] * sb * bd * bd, r1 = -d[4] * sab * bd * bd + p.f[0] * sa, r2 = d[4] * sab * ad * ad + p.f[1] * sb;
+            var l00 = Math.sqrt(d[0]), l10 = A01 / l00, l20 = A02 / l00, l11 = Math.sqrt(d[3] - l10 * l10), l21 = (A12 - l20 * l10) / l11, l22 = Math.sqrt(d[5] - l20 * l20 - l21 * l21);
+            var y0 = r0 / l00, y1 = (r1 - l10 * y0) / l11, y2 = (r2 - l20 * y0 - l21 * y1) / l22, q2 = y2 / l22, q1 = (y1 - l21 * q2) / l11, q0 = (y0 - l10 * q1 - l20 * q2) / l00;
+            o[0] = s[3]; o[1] = s[4]; o[2] = s[5]; o[3] = q0; o[4] = q1; o[5] = q2; }
+        function stepF(p, s, u, h, n, o) {   // n RK4 steps of length h with u held; the result goes to o (which may be s)
+            for (var m = 0; m < n; m++) { var i;
+                rhsF(p, s, u, kk1); for (i = 0; i < 6; i++) tmp6[i] = s[i] + h / 2 * kk1[i];
+                rhsF(p, tmp6, u, kk2); for (i = 0; i < 6; i++) tmp6[i] = s[i] + h / 2 * kk2[i];
+                rhsF(p, tmp6, u, kk3); for (i = 0; i < 6; i++) tmp6[i] = s[i] + h * kk3[i];
+                rhsF(p, tmp6, u, kk4); for (i = 0; i < 6; i++) o[i] = s[i] + h / 6 * (kk1[i] + 2 * kk2[i] + 2 * kk3[i] + kk4[i]);
+                s = o; } }
+        function cholSolve(A, n, b) {   // A (flat n×n, symmetric positive definite, overwritten) x = b
+            var i, j, k;
+            for (j = 0; j < n; j++) { var dj = A[j * n + j]; for (k = 0; k < j; k++) dj -= A[j * n + k] * A[j * n + k]; if (!(dj > 0)) return null; dj = Math.sqrt(dj); A[j * n + j] = dj;
+                for (i = j + 1; i < n; i++) { var s = A[i * n + j]; for (k = 0; k < j; k++) s -= A[i * n + k] * A[j * n + k]; A[i * n + j] = s / dj; } }
+            var y = new Float64Array(n); for (i = 0; i < n; i++) { var t = b[i]; for (k = 0; k < i; k++) t -= A[i * n + k] * y[k]; y[i] = t / A[i * n + i]; }
+            for (i = n - 1; i >= 0; i--) { var t2 = y[i]; for (k = i + 1; k < n; k++) t2 -= A[k * n + i] * y[k]; y[i] = t2 / A[i * n + i]; }
+            return y; }
+        var WD = 100, WT = 30, WL = 20, WU = 1, WR = 0.02, WS = 0.02;   // weights of the residuals (22), a numerical choice
+        function PlanJob(p, s0, T, lim) {
+            var M = Math.round(T * 10), dt = T / M, NS = 8, nz = 6 * M, nx = 7 * M, job = this, i, k;
+            var tgt1 = 2 * Math.PI * Math.round(s0[1] / (2 * Math.PI)), tgt2 = 2 * Math.PI * Math.round(s0[2] / (2 * Math.PI));
+            var X = new Float64Array(nx), A = new Float64Array(nx * nx), g = new Float64Array(nx), cols = new Int32Array(16), vals = new Float64Array(16);
+            var z = new Float64Array(6), zz = new Float64Array(6), base = new Float64Array(6), st = new Float64Array(6), Fm = zeros(6, 6), Gv = new Float64Array(6);
+            for (k = 1; k <= M; k++) { var o = 6 * (k - 1), fr = k / M; X[o] = s0[0]; X[o + 1] = s0[1] + (tgt1 - s0[1]) * fr; X[o + 2] = s0[2] + (tgt2 - s0[2]) * fr; X[o + 4] = (tgt1 - s0[1]) / T; X[o + 5] = (tgt2 - s0[2]) / T; }
+            function node(Xv, kn, out) { if (kn === 0) { for (var q = 0; q < 6; q++) out[q] = s0[q]; } else for (var q2 = 0; q2 < 6; q2++) out[q2] = Xv[6 * (kn - 1) + q2]; }
+            function acc(nc, r) { for (var a = 0; a < nc; a++) { var ca = cols[a], va = vals[a]; g[ca] += va * r; for (var b = 0; b < nc; b++) A[ca * nx + cols[b]] += va * vals[b]; } }
+            function build(Xv, R, wantJ) {   // fills the residual vector R and, if wanted, the normal equations JᵀJ δ = −Jᵀr
+                var ri = 0, j, cost = 0, nc;
+                if (wantJ) { A.fill(0); g.fill(0); }
+                for (k = 0; k < M; k++) { node(Xv, k, z); var u = Xv[nz + k], zn0 = 6 * k;
+                    for (j = 0; j < 6; j++) zz[j] = z[j]; stepF(p, zz, u, dt / NS, NS, base);
+                    if (wantJ) { for (j = 0; j < 6; j++) { var e = 1e-6; for (i = 0; i < 6; i++) zz[i] = z[i]; zz[j] += e; stepF(p, zz, u, dt / NS, NS, st); for (i = 0; i < 6; i++) Fm[i][j] = (st[i] - base[i]) / e; }
+                        for (i = 0; i < 6; i++) zz[i] = z[i]; stepF(p, zz, u + 1e-6, dt / NS, NS, st); for (i = 0; i < 6; i++) Gv[i] = (st[i] - base[i]) / 1e-6; }
+                    for (i = 0; i < 6; i++) { R[ri] = WD * (Xv[zn0 + i] - base[i]);
+                        if (wantJ) { nc = 0; cols[nc] = zn0 + i; vals[nc++] = WD; if (k > 0) for (j = 0; j < 6; j++) { cols[nc] = 6 * (k - 1) + j; vals[nc++] = -WD * Fm[i][j]; } cols[nc] = nz + k; vals[nc++] = -WD * Gv[i]; acc(nc, R[ri]); }
+                        ri++; } }
+                var t0 = 6 * (M - 1);
+                R[ri] = WT * (Xv[t0 + 1] - tgt1); if (wantJ) { cols[0] = t0 + 1; vals[0] = WT; acc(1, R[ri]); } ri++;
+                R[ri] = WT * (Xv[t0 + 2] - tgt2); if (wantJ) { cols[0] = t0 + 2; vals[0] = WT; acc(1, R[ri]); } ri++;
+                R[ri] = WT * Xv[t0 + 4]; if (wantJ) { cols[0] = t0 + 4; vals[0] = WT; acc(1, R[ri]); } ri++;
+                R[ri] = WT * Xv[t0 + 5]; if (wantJ) { cols[0] = t0 + 5; vals[0] = WT; acc(1, R[ri]); } ri++;
+                R[ri] = WT * 0.3 * Xv[t0 + 3]; if (wantJ) { cols[0] = t0 + 3; vals[0] = WT * 0.3; acc(1, R[ri]); } ri++;
+                for (k = 1; k <= M; k++) { var xv = Xv[6 * (k - 1)], ex = Math.abs(xv) - lim.x; R[ri] = WL * Math.max(0, ex); if (wantJ && ex > 0) { cols[0] = 6 * (k - 1); vals[0] = WL * (xv > 0 ? 1 : -1); acc(1, R[ri]); } ri++; }
+                for (k = 0; k < M; k++) { var uv = Xv[nz + k], eu = Math.abs(uv) - lim.u;
+                    R[ri] = WU * Math.max(0, eu); if (wantJ && eu > 0) { cols[0] = nz + k; vals[0] = WU * (uv > 0 ? 1 : -1); acc(1, R[ri]); } ri++;
+                    R[ri] = WR * uv; if (wantJ) { cols[0] = nz + k; vals[0] = WR; acc(1, R[ri]); } ri++;
+                    if (k > 0) { R[ri] = WS * (uv - Xv[nz + k - 1]); if (wantJ) { cols[0] = nz + k; vals[0] = WS; cols[1] = nz + k - 1; vals[1] = -WS; acc(2, R[ri]); } ri++; } }
+                for (j = 0; j < ri; j++) cost += R[j] * R[j];
+                return cost; }
+            var m = 10 * M + 4, R = new Float64Array(m), Rn = new Float64Array(m), lam = 1e-2, c = build(X, R, true), needJ = false, Xn = new Float64Array(nx), Al = new Float64Array(nx * nx), nb = new Float64Array(nx);
+            this.it = 0; this.done = false; this.ok = false; this.T = T; this.M = M; this.dt = dt; this.tgt = [tgt1, tgt2];
+            function check() {   // the measures that decide success
+                var dmax = 0, kq, jq, qq = new Float64Array(6), ww = new Float64Array(6);
+                for (kq = 0; kq < M; kq++) { node(X, kq, qq); stepF(p, qq, X[nz + kq], dt / NS, NS, ww); for (jq = 0; jq < 6; jq++) dmax = Math.max(dmax, Math.abs(X[6 * kq + jq] - ww[jq])); }
+                var um = 0, xm = 0; for (kq = 0; kq < M; kq++) um = Math.max(um, Math.abs(X[nz + kq])); for (kq = 0; kq < M; kq++) xm = Math.max(xm, Math.abs(X[6 * kq]));
+                var te = Math.max(Math.abs(X[6 * (M - 1) + 1] - tgt1), Math.abs(X[6 * (M - 1) + 2] - tgt2), Math.abs(X[6 * (M - 1) + 4]), Math.abs(X[6 * (M - 1) + 5]));
+                return { dmax: dmax, umax: um, xmax: xm, term: te }; }
+            this.work = function (ms) {
+                var t0 = performance.now();
+                while (!job.done && performance.now() - t0 < ms) {
+                    if (needJ) { c = build(X, R, true); needJ = false; }
+                    var ok = false, tr, b2;
+                    for (tr = 0; tr < 12; tr++) {
+                        for (b2 = 0; b2 < nx; b2++) nb[b2] = -g[b2];
+                        for (b2 = 0; b2 < nx * nx; b2++) Al[b2] = A[b2]; for (b2 = 0; b2 < nx; b2++) Al[b2 * nx + b2] += lam * (1e-6 + A[b2 * nx + b2]);
+                        var dlt = cholSolve(Al, nx, nb);
+                        if (dlt) { for (b2 = 0; b2 < nx; b2++) Xn[b2] = X[b2] + dlt[b2]; var cn = build(Xn, Rn, false);
+                            if (cn < c) { for (b2 = 0; b2 < nx; b2++) X[b2] = Xn[b2]; for (b2 = 0; b2 < m; b2++) R[b2] = Rn[b2]; c = cn; lam = Math.max(lam / 4, 1e-9); ok = true; needJ = true; break; } }
+                        lam *= 4; }
+                    job.it++;
+                    var ch = check();
+                    if (!ok || job.it >= 200 || (ch.dmax < 5e-4 && ch.term < 2e-3 && job.it > 3)) { job.done = true; job.res = ch; job.ok = ch.dmax < 3e-3 && ch.term < 0.02 && ch.umax <= 1.03 * lim.u && ch.xmax <= 1.05 * lim.x; }
+                    if (needJ && !job.done) { c = build(X, R, true); needJ = false; } }
+                return job.done; };
+            this.track = function (Rr) {   // time-varying LQR around the plan, on the 10 ms grid of the sampled controller (23)–(24)
+                var n = Math.round(T / 0.01), per = Math.round(dt / 0.01), nom = new Float64Array((n + 1) * 6), un = new Float64Array(n), Kt = new Float64Array(n * 6), Fs = [], Gs = [], q = new Float64Array(6), b0 = new Float64Array(6), o2 = new Float64Array(6), j, kq, i2;
+                for (kq = 0; kq < n; kq++) { var iv = Math.min(M - 1, Math.floor(kq / per)), jj = kq - iv * per; node(X, iv, q); un[kq] = X[nz + iv];
+                    for (j = 0; j < 6; j++) o2[j] = q[j]; if (jj > 0) stepF(p, o2, un[kq], 0.002, jj * 5, o2); for (j = 0; j < 6; j++) nom[6 * kq + j] = o2[j]; }
+                node(X, M, q); for (j = 0; j < 6; j++) nom[6 * n + j] = q[j];
+                for (kq = 0; kq < n; kq++) { for (j = 0; j < 6; j++) q[j] = nom[6 * kq + j]; stepF(p, q, un[kq], 0.002, 5, b0); var Fk = zeros(6, 6), Gk = new Float64Array(6);
+                    for (j = 0; j < 6; j++) { for (i2 = 0; i2 < 6; i2++) zz[i2] = q[i2]; zz[j] += 1e-6; stepF(p, zz, un[kq], 0.002, 5, st); for (i2 = 0; i2 < 6; i2++) Fk[i2][j] = (st[i2] - b0[i2]) / 1e-6; }
+                    for (i2 = 0; i2 < 6; i2++) zz[i2] = q[i2]; stepF(p, zz, un[kq] + 1e-6, 0.002, 5, st); for (i2 = 0; i2 < 6; i2++) Gk[i2] = (st[i2] - b0[i2]) / 1e-6; Fs.push(Fk); Gs.push(Gk); }
+                var Pn = Pm.map(function (r) { return r.slice(); });
+                for (kq = n - 1; kq >= 0; kq--) { var F = Fs[kq], Gk2 = Gs[kq], PG = [], den = Rr, PF = mul(Pn, F), GPF = [], Kk = [];
+                    for (i2 = 0; i2 < 6; i2++) { var s2 = 0; for (j = 0; j < 6; j++) s2 += Pn[i2][j] * Gk2[j]; PG.push(s2); den += Gk2[i2] * s2; }
+                    for (j = 0; j < 6; j++) { var s3 = 0; for (i2 = 0; i2 < 6; i2++) s3 += Gk2[i2] * PF[i2][j]; GPF.push(s3); Kk.push(s3 / den); Kt[6 * kq + j] = Kk[j]; }
+                    var FtPF = zeros(6, 6); for (i2 = 0; i2 < 6; i2++) for (j = 0; j < 6; j++) { var s4 = 0; for (var l = 0; l < 6; l++) s4 += F[l][i2] * PF[l][j]; FtPF[i2][j] = s4; }
+                    var Pk = zeros(6, 6); for (i2 = 0; i2 < 6; i2++) for (j = 0; j < 6; j++) Pk[i2][j] = FtPF[i2][j] + (i2 === j ? Q[i2] : 0) - GPF[i2] * Kk[j];
+                    for (i2 = 0; i2 < 6; i2++) for (j = 0; j < 6; j++) Pn[i2][j] = (Pk[i2][j] + Pk[j][i2]) / 2; }
+                return { n: n, nom: nom, un: un, Kt: Kt, T: T }; };
+        }
+
+        var vy = 0, p, K, Pm, cLevel = 0, s, u = 0, xref = 0, on = true, rescue = true, lost = false, flat = false, tSim = 0, tCtl = 0, acc = 0, trace = [], held = 0, geo = null;
+        /* the supervisor's state: mode is 'balance' (LQR), 'calm' (drain the rods' energy while a plan is being made) or 'track' (follow a plan) */
+        var mode = 'balance', job = null, tv = null, tPlan = 0, sPred = null, xc = 0, attempt = 0, nextCheck = 0, CALM_K = 2, hp = 3, log = [];
         function redesign() {
-            p = par(); var L = linear(p); K = lqr(L.A, L.B, Math.pow(10, sR.value));
+            p = par(); var L = linear(p), Lq = lqr(L.A, L.B, Math.pow(10, sR.value)); K = Lq.K; Pm = Lq.P;
             var Acl = L.A.map(function (row, i) { return row.map(function (x, j) { return x - L.B[i][0] * K[j]; }); });
             var slow = Math.min.apply(null, eig(Acl).map(function (z) { return -z[0]; })), sg = fallRates(p);
             document.getElementById('r-sig').textContent = Sim.fmt(sg[0], 2) + ', ' + Sim.fmt(sg[1], 2) + ' s⁻¹';
             document.getElementById('r-tau').textContent = Sim.fmt(1000 / sg[0], 0) + ' ms';
             document.getElementById('r-set').textContent = slow > 0 ? Sim.fmt(1 / slow, 2) + ' s' : _t('unstable');
             document.getElementById('r-K').textContent = Sim.fmt(K[1], 0) + ', ' + Sim.fmt(K[2], 0) + ' N/rad';
+            recatch();
         }
-        function reset() { s = [0, 2 * Math.PI / 180, -1 * Math.PI / 180, 0, 0, 0]; xref = 0; lost = false; flat = false; tSim = 0; tCtl = 0; u = 0; trace = []; }
-        redesign(); reset();
+        function recatch() { cLevel = catchLevel(); document.getElementById('r-c').textContent = Sim.fmt(cLevel, 0); abandon(); }
+        function abandon() { job = null; tv = null; sPred = null; if (mode !== 'balance' && s) { mode = 'calm'; startAttempt(); } }   // any change of the machine, or a push, spoils the plan: start again from calming
+        function reset() { s = [0, 2 * Math.PI / 180, -1 * Math.PI / 180, 0, 0, 0]; xref = 0; lost = false; flat = false; tSim = 0; tCtl = 0; u = 0; trace = []; mode = 'balance'; job = null; tv = null; sPred = null; nextCheck = 0; attempt = 0; }
 
+        /* ---------- the laws: balance (16), calm (21), track (24) ---------- */
+        function clampF(v) { var F = sF.value; return Math.max(-F, Math.min(F, v)); }
+        function Wof(st) { var e = wrapState(st); e[0] -= xref; return quad(Pm, e); }   // the remaining LQR cost (19); below cLevel the balancer is certain to catch
+        function lqrU(st) { var e = wrapState(st); e[0] -= xref; var v = 0; for (var i = 0; i < 6; i++) v -= K[i] * e[i]; return clampF(v); }
+        function Ep(st) { var d = p.d, c12 = Math.cos(st[1] - st[2]); return 0.5 * (d[3] * st[4] * st[4] + 2 * d[4] * c12 * st[4] * st[5] + d[5] * st[5] * st[5]) + p.f[0] * Math.cos(st[1]) + p.f[1] * Math.cos(st[2]); }   // (20)
+        function uFor(st, a) {   // the motor force that gives the cart the acceleration a: rows 2–3 of (9) give the angular accelerations, row 1 the force
+            var d = p.d, s1 = Math.sin(st[1]), s2 = Math.sin(st[2]), s12 = Math.sin(st[1] - st[2]), D = Dm(p, st[1], st[2]);
+            var r2 = -D[1][0] * a - d[4] * s12 * st[5] * st[5] + p.f[0] * s1, r3 = -D[2][0] * a + d[4] * s12 * st[4] * st[4] + p.f[1] * s2;
+            var det = D[1][1] * D[2][2] - D[1][2] * D[2][1], b1 = (r2 * D[2][2] - D[1][2] * r3) / det, b2 = (D[1][1] * r3 - D[2][1] * r2) / det;
+            return D[0][0] * a + D[0][1] * b1 + D[0][2] * b2 - d[1] * s1 * st[4] * st[4] - d[2] * s2 * st[5] * st[5]; }
+        function calmU(st) {   // a = k𝒫 makes dE_p/dt = −k𝒫² ≤ 0 (21); the two other terms keep the cart near x_c
+            var d = p.d, P = d[1] * Math.cos(st[1]) * st[4] + d[2] * Math.cos(st[2]) * st[5];
+            var a = Math.max(-8, Math.min(8, CALM_K * P - 4 * (st[0] - xc) - 4 * st[3])); return clampF(uFor(st, a)); }
+        function trackU() {   // u = u_plan − K(t)(s − s_plan) on the 10 ms grid of the plan (24)
+            var k = Math.round((tSim - tPlan) / 0.01); if (k >= tv.n) return 'end';
+            var v = tv.un[k], dev = 0; for (var j = 0; j < 6; j++) { var e = s[j] - (j === 0 ? xc : 0) - tv.nom[6 * k + j]; dev += e * e; v -= tv.Kt[6 * k + j] * e; }
+            return dev > 0.25 ? null : clampF(v); }
         function control() {
             if (!on || lost) return 0;
-            var e = s.slice(); e[0] -= xref; var v = 0; for (var i = 0; i < 6; i++) v -= K[i] * e[i];
-            var F = sF.value; return Math.max(-F, Math.min(F, v)); }
+            if (mode === 'track') { var v = trackU(); if (typeof v === 'number') return v;
+                if (v === 'end') { mode = 'balance'; tv = null; nextCheck = tSim; log.push({ t: tSim, ev: 'plan-end' }); }   // at the end of the plan the balancer gets its chance; the supervisor checks it at once
+                else { mode = 'calm'; tv = null; log.push({ t: tSim, ev: 'left-plan' }); startAttempt(); } }   // the rods left the plan: calm again
+            return mode === 'calm' ? calmU(s) : lqrU(s); }
+        function period() { return mode === 'balance' ? sT.value / 1000 : 0.01; }
+        /* the same loop that moves the machine also predicts it: run(state, until, law) is deterministic, so a plan made for
+           the state predicted a few seconds (hp, longer after a plan came too late) ahead starts exactly where the machine will be (checked when it arrives) */
+        function run(st, until, law) { var q = st.s.slice(), t = st.t, tc = st.tc, uu = st.u;
+            while (t < until - 1e-9) { if (t >= tc - 1e-9) { uu = law(q); tc += law === lqrU ? sT.value / 1000 : 0.01; } q = rk4(p, q, uu, H); t += H; }
+            return { s: q, t: t, tc: tc, u: uu }; }
+        function startAttempt() {   // plan from where calming will have brought the machine hp seconds from now
+            var pr = run({ s: s, t: tSim, tc: tCtl, u: u }, tSim + hp, calmU), s0 = pr.s.slice(); s0[0] -= xc;
+            sPred = pr; tPlan = pr.t; attempt++; job && !job.done && (hp = Math.min(8, hp * 1.5));
+            job = new PlanJob(p, s0, attempt % 2 ? 4 : 6, { x: 1.5, u: sF.value }); job.t0 = performance.now(); }
+        function supervise() {
+            if (!on || held) return;
+            if (mode === 'balance' && !lost && tSim >= nextCheck) { nextCheck = tSim + 0.1;
+                if (Wof(s) > cLevel) {   // outside the certified region: ask the model whether the balancer still wins within 4 s
+                    var pr = run({ s: s, t: tSim, tc: tCtl, u: u }, tSim + 4, lqrU);
+                    if (Wof(pr.s) > cLevel) { if (rescue) { mode = 'calm'; xc = xref; log.push({ t: tSim, ev: 'rescue' }); startAttempt(); } else { lost = true; u = 0; } } } }
+            if (mode === 'calm' && sPred && tSim >= tPlan - 1e-9) {
+                var ok = tv && Math.abs(s[0] - sPred.s[0]) + Math.abs(s[1] - sPred.s[1]) + Math.abs(s[2] - sPred.s[2]) < 1e-6;
+                if (ok) { mode = 'track'; tCtl = tSim; hp = 3; log.push({ t: tSim, ev: 'track', T: job.T, attempt: attempt, ms: Math.round(job.ms) }); job = null; }
+                else { log.push({ t: tSim, ev: tv ? 'mismatch' : job && job.done ? 'noplan' : 'late', attempt: attempt }); tv = null; startAttempt(); } }
+            if (mode === 'track' && Wof(s) < 0.9 * cLevel && tSim - tPlan > 0.05) {   // inside the certified region, with 10 % to spare for what the sampled search may miss: hand over
+                mode = 'balance'; s[1] = wrapAngle(s[1]); s[2] = wrapAngle(s[2]); tv = null; nextCheck = tSim + 0.1; tCtl = tSim; log.push({ t: tSim, ev: 'caught' }); } }
+        function think(ms) {   // planning work between frames
+            if (!job || job.done) return; job.work(ms);
+            if (job.done) { job.ms = performance.now() - job.t0; if (job.ok) tv = job.track(1); } }
         function step(dt) {
-            acc += dt; var Ts = sT.value / 1000;
+            acc += dt;
             while (acc >= H) { acc -= H;
                 if (flat) break;
                 if (held) { s[3] = s[4] = s[5] = 0; u = 0; tSim += H; tCtl = tSim; if (Math.round(tSim * 1000) % 20 === 0) { trace.push([tSim, s[1], s[2], 0]); if (trace.length > 400) trace.shift(); } continue; }
-                if (tSim >= tCtl - 1e-9) { u = control(); tCtl += Ts; }
+                supervise();
+                if (tSim >= tCtl - 1e-9) { u = control(); tCtl += period(); }
                 s = rk4(p, s, u, H); tSim += H;
-                if (!lost && (Math.abs(s[1]) > LOST || Math.abs(s[2]) > LOST)) { lost = true; u = 0; }
-                if (Math.round(tSim * 1000) % 20 === 0) { trace.push([tSim, s[1], s[2], u]); if (trace.length > 400) trace.shift(); } }
+                if (Math.round(tSim * 1000) % 20 === 0) { trace.push([tSim, wrapAngle(s[1]), wrapAngle(s[2]), u]); if (trace.length > 400) trace.shift(); } }
         }
         function flick(J) {   // Δθ̇ = D⁻¹ (1, L1 cos θ1, L2 cos θ2)ᵀ J
             if (flat) return; var dq = solve3(Dm(p, s[1], s[2]), [J, p.L1 * Math.cos(s[1]) * J, p.L2 * Math.cos(s[2]) * J]);
-            s[3] += dq[0]; s[4] += dq[1]; s[5] += dq[2]; }
+            s[3] += dq[0]; s[4] += dq[1]; s[5] += dq[2]; nextCheck = tSim; abandon(); }
+        function swingUp() { reset(); s = [0, Math.PI, Math.PI, 0, 0, 0]; mode = 'calm'; xc = 0; startAttempt(); }
+        redesign(); reset();
 
         /* ---------- drawing ---------- */
         var cv = Sim.canvas2d(document.getElementById('cv')), tr = Sim.canvas2d(document.getElementById('tr')), camX = 0;
         function draw() {
             var c = cv.ctx, W = cv.w, Hh = cv.h; c.clearRect(0, 0, W, Hh);
-            vy += ((lost ? 1 : 0) - vy) * 0.06;   /* after a fall the view widens and the rail moves up, so rods hanging below it stay in sight */
+            vy += ((lost || mode !== 'balance' || Math.cos(s[1]) < 0.3 || Math.cos(s[2]) < 0.3 ? 1 : 0) - vy) * 0.06;   /* when the rods are down or swinging, the view widens and the rail moves up, so rods below it stay in sight */
             var tall = Math.max(1.4, p.L1 + p.L2 + 0.25), up = (Hh - 90) / tall, down = (Hh / 2 - 24) / (p.L1 + p.L2), sc = Math.min(W / (3.2 + 2 * vy), up + (down - up) * vy), y0 = (Hh - 62) + (Hh / 2 - (Hh - 62)) * vy;
             camX += (s[0] - camX) * 0.08; var X = function (x) { return W / 2 + (x - camX) * sc; };
             c.strokeStyle = TH.ruleSoft; c.lineWidth = 1; c.fillStyle = TH.muted; c.font = TH.mono; c.textAlign = 'center';
@@ -514,13 +784,15 @@
         Sim.onResize(document.getElementById('stage-tr'), function () { tr = Sim.canvas2d(document.getElementById('tr')); });
 
         var stEl = document.getElementById('state'), lastTxt = 0;
-        var clk = Sim.clock(function (dt) { step(dt); draw();
+        var clk = Sim.clock(function (dt) { step(dt); think(8); draw();
             if (performance.now() - lastTxt > 250) { lastTxt = performance.now();
                 document.getElementById('cap-t').innerHTML = '<i>t</i> = ' + tSim.toFixed(1) + ' s';
                 document.getElementById('cap-u').innerHTML = '<i>u</i> = ' + Sim.fmt(u, 1) + ' N';
-                document.getElementById('r-th').textContent = Sim.fmt(s[1] * 180 / Math.PI, 1) + '°, ' + Sim.fmt(s[2] * 180 / Math.PI, 1) + '°';
+                document.getElementById('r-th').textContent = Sim.fmt(wrapAngle(s[1]) * 180 / Math.PI, 1) + '°, ' + Sim.fmt(wrapAngle(s[2]) * 180 / Math.PI, 1) + '°';
                 document.getElementById('r-x').textContent = Sim.fmt(s[0], 2) + ' m';
-                stEl.innerHTML = held ? _t('<b>Held.</b> Let go and the controller takes over.') : lost ? _t('<b>Fallen.</b> A rod passed 60°; the controller gave up. Press Reset.') : !on ? _t('<b>Controller off.</b> The rods fall; the cart recoils.') : Math.abs(u) >= sF.value - 1e-9 ? _t('<b>Motor at its limit.</b> Holding on…') : _t('Balancing.'); } });
+                stEl.innerHTML = held ? _t('<b>Held.</b> Let go and the controller takes over.') : !on ? _t('<b>Controller off.</b> The rods fall; the cart recoils.') : lost ? _t('<b>Fallen.</b> The balancer can no longer win, and rescue is off. Choose <i>Swing back up</i>, or press Reset.')
+                    : mode === 'track' ? _t('<b>Swinging up.</b> Following the planned force; the tracking controller corrects the drift.') : mode === 'calm' ? (tv ? _t('<b>Plan ready.</b> The swing-up starts the moment the machine reaches the predicted state.') : job && !job.done ? _t('<b>Calming and planning.</b> The cart drains the rods’ energy while a swing-up is computed.') : _t('<b>Calming.</b> The cart drains the rods’ energy; the next plan starts soon.'))
+                    : Math.abs(u) >= sF.value - 1e-9 ? _t('<b>Motor at its limit.</b> Holding on…') : _t('Balancing.'); } });
         Sim.playButton(document.getElementById('play'), clk);
         document.getElementById('flickL').addEventListener('click', function () { flick(-sJ.value); });
         document.getElementById('flickR').addEventListener('click', function () { flick(sJ.value); });
@@ -537,17 +809,22 @@
             if (held === 1) { s[1] = Math.max(-M, Math.min(M, Math.atan2(q[0] - geo.hx, geo.hy - q[1]))); }
             else { s[2] = Math.max(-M, Math.min(M, Math.atan2(q[0] - geo.ex, geo.ey - q[1]))); } }
         cvEl.addEventListener('pointerdown', function (e) { if (!geo) return; var q = local(e), d1 = segDist(q, [geo.hx, geo.hy], [geo.ex, geo.ey]), d2 = segDist(q, [geo.ex, geo.ey], [geo.tx, geo.ty]);
-            if (Math.min(d1, d2) > 24) return; if (flat || lost) { reset(); }
+            if (Math.min(d1, d2) > 24) return; if (flat || lost || mode !== 'balance') { reset(); }
             held = d2 <= d1 ? 2 : 1; cvEl.setPointerCapture(e.pointerId); cvEl.style.cursor = 'grabbing'; aim(q); e.preventDefault(); clk.set(true); });
         cvEl.addEventListener('pointermove', function (e) { if (held) aim(local(e)); });
-        function release() { if (!held) return; held = 0; cvEl.style.cursor = 'grab'; lost = Math.abs(s[1]) > LOST || Math.abs(s[2]) > LOST; }
+        function release() { if (!held) return; held = 0; cvEl.style.cursor = 'grab'; nextCheck = tSim; }
         cvEl.addEventListener('pointerup', release); cvEl.addEventListener('pointercancel', release);
         document.getElementById('tilt').addEventListener('click', function () { reset(); s[1] = 6 * Math.PI / 180; s[2] = -4 * Math.PI / 180; tCtl = 0; });
+        document.getElementById('swing').addEventListener('click', function () { swingUp(); clk.set(true); });
+        Array.prototype.forEach.call(document.querySelectorAll('#resc button'), function (bt) { bt.addEventListener('click', function () {
+            rescue = bt.getAttribute('data-v') === 'on'; Array.prototype.forEach.call(document.querySelectorAll('#resc button'), function (x) { x.setAttribute('aria-pressed', x === bt ? 'true' : 'false'); }); if (rescue && lost) { lost = false; nextCheck = tSim; } }); });
         /* the walkthrough's "Now" column (scripts/walk/dipc.js): read from the running state, never recomputed for show */
         Sim.live = function () { var f = function (v, n, un) { return Sim.fmt(v, n) + (un ? ' ' + un : ''); }, q = rhs(p, s, u), sg = fallRates(p);
             return { d1: f(p.d[0], 3, 'kg'), f1: f(p.f[0], 3, 'N m'), t1: f(s[1], 4, 'rad'), t2: f(s[2], 4, 'rad'), acc: '(' + q.slice(3).map(function (v) { return Sim.fmt(v, 2); }).join(', ') + ')',
-                u: f(u, 2, 'N'), h: '0.001 s', sig: f(sg[0], 3, '1/s'), K: '(' + K.map(function (v) { return Sim.fmt(v, 1); }).join(', ') + ')', Ts: f(sT.value / 1000, 3, 's'), J: f(sJ.value, 2, 'N s') }; };
-        window.DIPC = { get geo() { return geo; }, get held() { return held; }, get s() { return s; }, get K() { return K; }, get p() { return p; }, fallRates: fallRates, rhs: rhs, flick: flick, get lost() { return lost; }, set xref(v) { xref = v; } };
+                u: f(u, 2, 'N'), h: '0.001 s', sig: f(sg[0], 3, '1/s'), K: '(' + K.map(function (v) { return Sim.fmt(v, 1); }).join(', ') + ')', Ts: f(sT.value / 1000, 3, 's'), J: f(sJ.value, 2, 'N s'),
+                W: f(Wof(s), 1), c: f(cLevel, 1), Ep: f(Ep(s), 3, 'J') }; };
+        window.DIPC = { get geo() { return geo; }, get held() { return held; }, get s() { return s; }, set s(v) { s = v.slice(); nextCheck = tSim; }, get K() { return K; }, get P() { return Pm; }, get p() { return p; }, fallRates: fallRates, rhs: rhs, rhsF: rhsF, flick: flick, get lost() { return lost; }, set xref(v) { xref = v; },
+            get mode() { return mode; }, get cLevel() { return cLevel; }, get t() { return tSim; }, get u() { return u; }, W: function () { return Wof(s); }, Ep: function () { return Ep(s); }, get log() { return log; }, swingUp: swingUp, step: step, think: think, get job() { return job; }, PlanJob: PlanJob, catchLevel: catchLevel };
     })();
     </script>
 </body>

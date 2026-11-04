@@ -5,14 +5,14 @@
 window.WALK = window.WALK || {};
 
 window.WALK.dipc = {
-    intro: 'Nine steps from the lecture note to the moving picture, in the order the page uses them: the constants of the machine (6) and (7), the matrix D of (5), the equations of motion (9), the Runge–Kutta step (18), the linearisation (10) and (11), the fall rates (12) and (13), the controller from the Riccati equation (15) and (16), the sampled and limited push, and the flick (17). Each step sets the equation beside the lines of this page’s script that evaluate it, copied character for character; a line that is only “...” stands for page lines left out. The table gives each symbol, its name in the code, its value now, and its meaning with its unit. Hover over or tap a symbol to light it in all three places.',
+    intro: 'Twelve steps from the lecture note to the moving picture, in the order the page uses them: the constants of the machine (6) and (7), the matrix D of (5), the equations of motion (9), the Runge–Kutta step (18), the linearisation (10) and (11), the fall rates (12) and (13), the controller from the Riccati equation (15) and (16), the sampled and limited push, the flick (17), the certified catch level (19), calming (21), and the planned swing-up with its tracking law (24). Each step sets the equation beside the lines of this page’s script that evaluate it, copied character for character; a line that is only “...” stands for page lines left out. The table gives each symbol, its name in the code, its value now, and its meaning with its unit. Hover over or tap a symbol to light it in all three places.',
     steps: [
         {
             title: 'The constants of the machine',
             where: 'par(): read from the sliders whenever one moves',
             math: '⟦d1|d<sub>1</sub>⟧ = m<sub>0</sub>+m<sub>1</sub>+m<sub>2</sub>, d<sub>2</sub> = (½m<sub>1</sub>+m<sub>2</sub>)L<sub>1</sub>, d<sub>3</sub> = ½m<sub>2</sub>L<sub>2</sub>,<br>d<sub>4</sub> = (⅓m<sub>1</sub>+m<sub>2</sub>)L<sub>1</sub>², d<sub>5</sub> = ½m<sub>2</sub>L<sub>1</sub>L<sub>2</sub>, d<sub>6</sub> = ⅓m<sub>2</sub>L<sub>2</sub>²<span style="font-style:normal;margin-left:1.5em">(6)</span><br>⟦f1|f<sub>1</sub>⟧ = (½m<sub>1</sub>+m<sub>2</sub>)L<sub>1</sub>g, f<sub>2</sub> = ½m<sub>2</sub>L<sub>2</sub>g<span style="font-style:normal;margin-left:1.5em">(7)</span>',
             note: 'The masses m<sub>0</sub>, m<sub>1</sub>, m<sub>2</sub> in kg and the lengths L<sub>1</sub>, L<sub>2</sub> in m are read from their sliders, and the eight constants of the note are computed once, in the order of (6) and (7): the array d holds d<sub>1</sub> … d<sub>6</sub> (d[0] is d<sub>1</sub>, because arrays count from 0), in kg, kg m and kg m², and the array f holds f<sub>1</sub>, f<sub>2</sub> in N m. G is g = 9.81 m/s², fixed at the top of the script together with the Runge–Kutta step H = h = 1 ms, the weights Q of (14) and the angle LOST = 60° at which the controller gives up. Every other function reads only p.d and p.f, so a slider changes the physics everywhere at once.',
-            code: `var TH = Sim.theme, G = 9.81, H = 0.001, Q = [50, 50, 50, 20, 700, 700], LOST = Math.PI / 3;
+            code: `var TH = Sim.theme, G = 9.81, H = 0.001, Q = [50, 50, 50, 20, 700, 700];
 ...
 function par() { var m0 = sl.m0.value, m1 = sl.m1.value, m2 = sl.m2.value, L1 = sl.L1.value, L2 = sl.L2.value;
 return { m0: m0, m1: m1, m2: m2, L1: L1, L2: L2, ⟦d1|d: [m0 + m1 + m2⟧, (m1 / 2 + m2) * L1, m2 * L2 / 2, (m1 / 3 + m2) * L1 * L1, m2 * L1 * L2 / 2, m2 * L2 * L2 / 3], ⟦f1|f: [(m1 / 2 + m2) * L1 * G⟧, m2 * L2 * G / 2] }; }`,
@@ -73,27 +73,28 @@ return [⟦sig|Math.sqrt((-b + disc) / (2 * a))⟧, Math.sqrt((-b - disc) / (2 *
             title: 'The gains from the Riccati equation',
             where: 'lqr(A, B, R), called by redesign() whenever a slider moves',
             math: 'Z = [[A, −ρ<sup>−1</sup>BB<sup>T</sup>], [−Q, −A<sup>T</sup>]],  Z ← ½(Z + Z<sup>−1</sup>) → W<br>[W<sub>12</sub>; W<sub>22</sub>+I] P = −[W<sub>11</sub>+I; W<sub>21</sub>]<span style="font-style:normal;margin-left:1.5em">(15)</span><br>⟦K|K⟧ = ρ<sup>−1</sup>B<sup>T</sup>P<span style="font-style:normal;margin-left:1.5em">(16)</span>',
-            note: 'Hm is the 12 × 12 Hamiltonian matrix of §7.1 and R is ρ. The loop replaces Z by the mean of Z and its inverse until nothing changes by more than 10<sup>−12</sup> in total; the limit is the matrix sign W. Lm and Rm are the two 12 × 6 blocks of the last equation, and P = (Lm<sup>T</sup>Lm)<sup>−1</sup>Lm<sup>T</sup>Rm is its least-squares solution. The last line is (16): K<sub>j</sub> = Σ<sub>i</sub> B<sub>i</sub>P<sub>ij</sub>/ρ. The gains are recomputed for every slider change, so the controller always knows the machine it holds.',
+            note: 'Hm is the 12 × 12 Hamiltonian matrix of §7.1 and R is ρ. The loop replaces Z by the mean of Z and its inverse until nothing changes by more than 10<sup>−12</sup> in total; the limit is the matrix sign W. Lm and Rm are the two 12 × 6 blocks of the last equation, and P = (Lm<sup>T</sup>Lm)<sup>−1</sup>Lm<sup>T</sup>Rm is its least-squares solution. The last line is (16): K<sub>j</sub> = Σ<sub>i</sub> B<sub>i</sub>P<sub>ij</sub>/ρ. The gains are recomputed for every slider change, so the controller always knows the machine it holds. P is returned too, made exactly symmetric, because the catch level of §9 is built from it.',
             code: `for (i = 0; i < n; i++) for (j = 0; j < n; j++) { Hm[i][j] = A[i][j]; Hm[i][n + j] = -B[i][0] * B[j][0] / R; Hm[n + i][j] = -(i === j ? Q[i] : 0); Hm[n + i][n + j] = -A[j][i]; }
 ...
 for (var it = 0; it < 100; it++) { var Zi = inv(Z), dn = 0, Zn = zeros(12, 12);
 for (i = 0; i < 12; i++) for (j = 0; j < 12; j++) { Zn[i][j] = 0.5 * (Z[i][j] + Zi[i][j]); dn += Math.abs(Zn[i][j] - Z[i][j]); } Z = Zn; if (dn < 1e-12) break; }
 ...
 var P = mul(inv(mul(Lt, Lm)), mul(Lt, Rm)), K = [];
-for (j = 0; j < n; j++) { var s = 0; for (i = 0; i < n; i++) s += B[i][0] * P[i][j]; K.push(s / R); } return ⟦K|K⟧; }`,
+for (j = 0; j < n; j++) { var s = 0; for (i = 0; i < n; i++) s += B[i][0] * P[i][j]; K.push(s / R); }
+for (i = 0; i < n; i++) for (j = 0; j < i; j++) P[i][j] = P[j][i] = (P[i][j] + P[j][i]) / 2;
+return { K: ⟦K|K⟧, P: P }; }`,
             syms: [['K', 'K', 'K', 'gains on (x, θ₁, θ₂, ẋ, θ̇₁, θ̇₂), N/m, N/rad, N s/m, N s/rad']]
         },
         {
             title: 'The push: sampled and limited',
             where: 'control() and step()',
             math: '⟦u|u⟧ = clip(−K(s − s<sub>ref</sub>), ±u<sub>max</sub>), held for ⟦Ts|T<sub>s</sub>⟧',
-            note: 'control() forms the error e = s − s<sub>ref</sub> (only x has a target, xref, set by the buttons), multiplies by −K and clips the result to ±u<sub>max</sub> from the slider: the motor cannot push harder. It returns 0 when the controller is off or the run is lost. step() asks for a new u only when the simulated time tSim has reached the next sampling instant tCtl, then moves tCtl on by T<sub>s</sub>; between samples the old u is held, exactly the zero-order hold of §7.2. When a rod passes 60° the run is lost, u is set to 0, and the equations keep being solved, so the rods fall all the way and swing on.',
-            code: `var e = s.slice(); e[0] -= xref; var v = 0; for (var i = 0; i < 6; i++) v -= K[i] * e[i];
-var F = sF.value; return Math.max(-F, Math.min(F, v)); }
+            note: 'lqrU() forms the error e = s − s<sub>ref</sub> (only x has a target, xref, set by the buttons; the angles are first brought into −π…π, so a rod that has turned over once is upright again), multiplies by −K and clips the result to ±u<sub>max</sub> from the slider: the motor cannot push harder. step() asks for a new u only when the simulated time tSim has reached the next sampling instant tCtl, then moves tCtl on by the period: T<sub>s</sub> from the slider while balancing, 10 ms while calming or tracking; between samples the old u is held, exactly the zero-order hold of §7.2. Before that, supervise() decides which law is in charge (the steps below).',
+            code: `function lqrU(st) { var e = wrapState(st); e[0] -= xref; var v = 0; for (var i = 0; i < 6; i++) v -= K[i] * e[i]; return clampF(v); }
 ...
-if (tSim >= tCtl - 1e-9) { ⟦u|u = control()⟧; tCtl += ⟦Ts|Ts⟧; }
-...
-if (!lost && (Math.abs(s[1]) > LOST || Math.abs(s[2]) > LOST)) { lost = true; u = 0; }`,
+supervise();
+if (tSim >= tCtl - 1e-9) { ⟦u|u = control()⟧; tCtl += period(); }
+s = rk4(p, s, u, H); tSim += H;`,
             syms: [['u', 'u', 'u', 'motor force now, N'], ['Ts', 'T<sub>s</sub>', 'Ts', 'loop period, s']]
         },
         {
@@ -102,8 +103,40 @@ if (!lost && (Math.abs(s[1]) > LOST || Math.abs(s[2]) > LOST)) { lost = true; u 
             math: 'Δθ̇ = D<sup>−1</sup> (1, L<sub>1</sub> cos θ<sub>1</sub>, L<sub>2</sub> cos θ<sub>2</sub>)<sup>T</sup> ⟦J|J⟧<span style="font-style:normal;margin-left:1.5em">(17)</span>',
             note: 'The right-hand side is the generalised impulse of a horizontal blow J at the top end, in N s. Solving with D at the current angles gives the jump of the three rates, which is added to s[3], s[4] and s[5]; the positions do not jump. A blow to the right sets the cart moving right, the lower rod turning left and the upper rod turning right, the same pattern the note derives.',
             code: `var dq = solve3(Dm(p, s[1], s[2]), [⟦J|J⟧, p.L1 * Math.cos(s[1]) * J, p.L2 * Math.cos(s[2]) * J]);
-s[3] += dq[0]; s[4] += dq[1]; s[5] += dq[2]; }`,
+s[3] += dq[0]; s[4] += dq[1]; s[5] += dq[2]; nextCheck = tSim; abandon(); }`,
             syms: [['J', 'J', 'J', 'impulse of the blow at the top end, N s']]
+        },
+        {
+            title: 'Where the balancer is certain to win',
+            where: 'Wof(st) and catchLevel(), recomputed with the gains; supervise() every 0.1 s',
+            math: '⟦W|W⟧ = (s − s<sub>ref</sub>)<sup>T</sup> P (s − s<sub>ref</sub>)<span style="font-style:normal;margin-left:1.5em">(19)</span><br>⟦c|c*⟧ = largest c with dW/dt = 2(s − s<sub>ref</sub>)<sup>T</sup>P f(s, clip(−Ks)) &lt; 0 on all of W = c',
+            note: 'Wof() is the cost (19) still to pay from the state st, with the angles brought into −π…π. catchLevel() writes P = LL<sup>T</sup> (Cholesky); a point x = L<sup>−T</sup>(√c · d) with |d| = 1 then lies on the surface W = c. It tests 8000 random directions d on the surface W = c, every fourth of them also on five surfaces inside it (SHELL), climbs uphill in dW/dt from the worst twelve, and bisects for the largest c at which dW/dt stays negative everywhere in the ellipsoid. supervise() uses c*: outside it, the equations are run 4 s ahead with the balancer in charge, and if the state is still outside c* then, the rescue starts.',
+            code: `function Wof(st) { var e = wrapState(st); e[0] -= xref; return quad(Pm, e); }
+...
+if (Wof(s) > cLevel) {
+var pr = run({ s: s, t: tSim, tc: tCtl, u: u }, tSim + 4, lqrU);
+if (Wof(pr.s) > cLevel) { if (rescue) { mode = 'calm'; xc = xref; log.push({ t: tSim, ev: 'rescue' }); startAttempt(); } else { lost = true; u = 0; } } } }`,
+            syms: [['W', 'W', 'W', 'remaining balancing cost now'], ['c', 'c*', 'c', 'certified catch level']]
+        },
+        {
+            title: 'Calming: draining the rods’ energy',
+            where: 'calmU(st), every 10 ms while the mode is calm',
+            math: 'd⟦Ep|E<sub>p</sub>⟧/dt = −a 𝒫,  𝒫 = d<sub>2</sub> cos θ<sub>1</sub> θ̇<sub>1</sub> + d<sub>3</sub> cos θ<sub>2</sub> θ̇<sub>2</sub><span style="font-style:normal;margin-left:1.5em">(21)</span><br>a = k𝒫 − 4(x − x<sub>c</sub>) − 4ẋ,  |a| ≤ 8 m/s²',
+            note: 'P here is the rods’ turning momentum 𝒫 of (21), in kg m/s. With k = CALM_K = 2 the cart accelerates with the rods’ momentum, so their energy (20) can only fall; the two other terms keep the cart near its post x<sub>c</sub>. uFor() turns the wanted acceleration into a motor force: rows 2 and 3 of (9) give the angular accelerations for that a, row 1 then gives u.',
+            code: `var d = p.d, P = d[1] * Math.cos(st[1]) * st[4] + d[2] * Math.cos(st[2]) * st[5];
+var a = Math.max(-8, Math.min(8, CALM_K * P - 4 * (st[0] - xc) - 4 * st[3])); return clampF(uFor(st, a)); }`,
+            syms: [['Ep', 'E<sub>p</sub>', 'Ep', 'energy of the rods now, J']]
+        },
+        {
+            title: 'Plan, track, catch',
+            where: 'startAttempt(), PlanJob(...).work(ms) between frames, trackU() every 10 ms',
+            math: 'minimise Σ |residuals (22)|² over z<sub>1…M</sub>, u<sub>0…M−1</sub><br>⟦u|u⟧<sub>k</sub> = u<sup>plan</sup><sub>k</sub> − K<sub>k</sub>(s<sub>k</sub> − s<sup>plan</sup><sub>k</sub>)<span style="font-style:normal;margin-left:1.5em">(24)</span>',
+            note: 'startAttempt() runs the calming law hp seconds ahead (3 s at first) with run(), the same loop that moves the machine, and plans from the state it finds there, with the cart’s post xc subtracted. The plan is made a few milliseconds per frame. When the clock reaches that moment, supervise() checks that the machine is where the prediction said, to 10<sup>−6</sup>, and switches to tracking. trackU() looks up the plan’s force, state and gain K<sub>k</sub> of (23) for the current 10 ms step; if the state has strayed more than 0.5 from the plan it calms again, and when W falls below 0.9 c* the balancer takes over.',
+            code: `var pr = run({ s: s, t: tSim, tc: tCtl, u: u }, tSim + hp, calmU), s0 = pr.s.slice(); s0[0] -= xc;
+...
+var k = Math.round((tSim - tPlan) / 0.01); if (k >= tv.n) return 'end';
+var v = tv.un[k], dev = 0; for (var j = 0; j < 6; j++) { var e = s[j] - (j === 0 ? xc : 0) - tv.nom[6 * k + j]; dev += e * e; v -= tv.Kt[6 * k + j] * e; }`,
+            syms: [['u', 'u', 'u', 'motor force now, N']]
         }
     ]
 };
