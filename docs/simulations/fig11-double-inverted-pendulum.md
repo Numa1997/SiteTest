@@ -15,8 +15,8 @@ The old Fig. 11 (Double Pendulum under Control) moved to Projects the same day: 
 A double inverted pendulum on a cart, with uniform rods: the model of Bogdanov (2004, OGI report CSE-04-006), written out in
 Moysis (2016). The cart is pushed by a motor force `u`, clipped to `±u_max`; the hinges are free. The page integrates the full nonlinear
 equations `D(θ) θ̈ + C(θ, θ̇) θ̇ + G(θ) = H u` with RK4 at a fixed 1 ms step in real time (no solve-then-play and no data panel: Numa asked for a small page). Since 3 November 2026, late evening, it has a walkthrough,
-`public/scripts/walk/dipc.js` (nine steps, equation beside the page's code, `Sim.live()` for the Now column; `node notes/walkcheck.cjs`
-finds all 29 quoted lines), and the note writes out all three Lagrange rows (8a), (8), (8b), the linearisation to first order, the
+`public/scripts/walk/dipc.js` ( equation beside the page's code, `Sim.live()` for the Now column; `node notes/walkcheck.cjs`
+finds all 40 quoted lines; twelve steps since 4 November 2026), and the note writes out all three Lagrange rows (8a), (8), (8b), the linearisation to first order, the
 reduced fall-rate problem, the sign-function solution of the Riccati equation, the flick impulse (17) and the RK4 step (18).
 
 ## Controller
@@ -24,7 +24,21 @@ reduced fall-rate problem, the sign-function solution of the Riccati equation, t
 LQR on the linearisation at the upright rest, `Q = diag(50, 50, 50, 20, 700, 700)` on `(x, θ1, θ2, ẋ, θ̇1, θ̇2)` (Bogdanov's weights with the
 `x` weight raised from 5 to 50), `R = ρ` from the slider (10^−2 … 10^2). The Riccati equation is solved by the sign function of the
 Hamiltonian matrix (same routine as the Projects page of the old Fig. 11) every time a slider changes. The controller is sampled every `T_s`
-and holds `u` between samples; when a rod passes 60° the run is lost and `u = 0`; the equations keep being solved, so the rods fall through the slot in the middle of the cart (between its two rails) and swing on freely (fixed 3 November 2026: before, the page froze when a rod passed 90°, leaving the upper rod hanging mid-fall).
+and holds `u` between samples.
+
+## Rescue (4 November 2026)
+
+Numa: "as soon as the arms go down, it stops being able to balance it" and "what if the push is arbitrary?". The 60° give-up rule is gone. A supervisor (`supervise()`) runs one of three laws:
+
+- **balance**: the LQR above. Every 0.1 s, if `W = (s − s_ref)ᵀ P (s − s_ref) > c*`, the page runs the equations 4 s ahead under the balancer (`run()`); if `W` is still above `c*` then, the rescue starts (or, with *Let them fall*, `u = 0` and the rods fall as before).
+- **calm**: cart acceleration `a = 2𝒫 − 4(x − x_c) − 4ẋ`, `|a| ≤ 8 m/s²`, `𝒫 = d2 cos θ1 θ̇1 + d3 cos θ2 θ̇2`; since `dE_p/dt = −a𝒫` (verified symbolically in Mathematica, equals Åström–Furuta's eq. 3 for one rod) this drains the rods' energy. `uFor()` converts `a` into the motor force via rows 2–3 then row 1 of (9).
+- **track**: a plan made by multiple shooting (`PlanJob`: 0.1 s pieces, 8 RK4 substeps each, Levenberg–Marquardt on the residuals (22), weights 100/30/20/1/0.02/0.02, rail ±1.5 m), followed by a time-varying LQR (23)–(24) on a 10 ms grid with the balancer's `P` as final cost. Plans are made 8 ms per frame for the state predicted `hp` seconds ahead under calming (3 s, ×1.5 after a late plan, at most 8 s); when the clock arrives the state is checked against the prediction to 1e−6. Hand-over to the balancer at `W < 0.9 c*`; at the end of a plan the balancer gets its chance and the 4 s check decides.
+
+`catchLevel()` (certified catch level `c*`, panel readout): `dW/dt` of the clipped nonlinear loop at 8000 random points of the surface `W = c` and, for every fourth direction, on five surfaces inside it (the Lyapunov argument needs `dW/dt < 0` in the whole ellipsoid, not only on its surface), a gradient climb from the worst 12 (ranked by `dW/dt / W`), bisection; about 0.7 s in Chromium. Default machine: 31.4 on the page; Mathematica `FindMaximum` brackets 30.56–30.69, the same at 30, 60 and 200 N. Random sampling alone gave about 140 (wrong: the bad patch is thin, near upright with both rods leaning about 4° the same way).
+
+Buttons: *Hang down, swing up* (`swingUp()`), *If the rods fall: Swing back up / Let them fall* (`#resc`).
+
+Tests (headless Chromium, frame-by-frame driver: 1/60 s of simulation and 8 ms of planning per frame): see the end of this file. Working notes with every Wolfram check: `notes/fig11-checked.html`.
 
 ## Interaction
 
