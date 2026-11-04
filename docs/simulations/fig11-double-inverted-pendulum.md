@@ -38,7 +38,7 @@ Numa: "as soon as the arms go down, it stops being able to balance it" and "what
 
 Buttons: *Hang down, swing up* (`swingUp()`), *If the rods fall: Swing back up / Let them fall* (`#resc`).
 
-Tests (headless Chromium, frame-by-frame driver: 1/60 s of simulation and 8 ms of planning per frame): see the end of this file. Working notes with every Wolfram check: `notes/fig11-checked.html`.
+Tests (headless Chromium, frame-by-frame driver: 1/60 s of simulation and 8 ms of planning per frame, 4 November 2026): 40 of 40 random states (any angles, rates ±3 rad/s, cart ±0.5 m/s) balanced within 60 s at 60 N; six other machines (m0 = 3 kg; m1 = 1, m2 = 1.5 kg; L = 1/1.2 m; L = 0.3/0.4 m; u_max = 30 and 120 N) 36 of 36; with T_s = 40 ms 0 of 6, because the sampled balancer itself loses above about 35 ms (§8) and the certificate assumes continuous action, as §9 now says. Working notes with every Wolfram check: `notes/fig11/checked.html`.
 
 ## Interaction
 
