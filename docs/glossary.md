@@ -78,6 +78,7 @@ then into the tables. Machine tables: [i18n/de/strings.json](../i18n/de/strings.
 | tip-speed ratio, power coefficient | Schnelllaufzahl, Leistungsbeiwert | نسبة سرعة طرف الشفرة، معامل القدرة |
 | Betz limit | Betz-Grenze | حدّ بيتز |
 | feedback, PI controller | Rückkopplung, PI-Regler | التغذية الراجعة، متحكّم تناسبي تكاملي (PI) |
+| "Take control" (heading of the box where the reader switches the controller on, Figs. 9 and 11) | Selbst steuern | تولَّ التحكّم |
 | gust | Böe | هبّة ريح |
 | collision efficiency | Kollisionseffizienz | كفاءة التصادم |
 | (stochastic) collection equation | (stochastische) Koaleszenzgleichung | معادلة الالتقاط (العشوائي) |
@@ -110,3 +111,4 @@ then into the tables. Machine tables: [i18n/de/strings.json](../i18n/de/strings.
 - Mechanics and dynamics are الميكانيك and الديناميك (Levant forms), on every page.
 - One simulation has one name: the home page plates use the catalog's titles.
 - The name: نعمة سائر قدسية on Arabic pages, Numa Koudsie in English and German.
+- "Take control" is تولَّ التحكّم (4 November 2026). The first rendering, تحكّم بنفسك, is a word-for-word copy and means "restrain yourself, keep your temper" in Arabic. The noun التحكّم is the one Microsoft's Arabic Teams pages use for "control" (طلب / منح / استعادة التحكم, support.microsoft.com/ar-sa); the verb تولَّ ("take over") is the one DeepL gives in its idiom for "take the controls". The phrase as a whole is not printed in either source.
