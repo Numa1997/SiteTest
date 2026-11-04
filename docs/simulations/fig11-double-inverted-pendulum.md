@@ -100,3 +100,10 @@ phone still scrolls), sliders for `u_max`, `T_s`, `ρ`, `m0`, `m1`, `m2`, `L1`, 
   printed.
 - Headless Chromium at 1366 and 390 px: no page errors, 0 KaTeX errors, no sideways scroll; flick 0.15 N·s caught; cart reaches +1 m;
   controller off falls; `T_s` = 40 ms lost, 30 ms held; upper rod pulled to 13° and lower to −10° recovered, upper to 45° lost.
+- The two tables of the note (class `ptable`) scroll sideways by themselves when they are wider than the column (`display: block`,
+  `max-width: 100%`, `overflow-x: auto`), and carry `position: relative` so that KaTeX's hidden MathML copy of each header, an
+  absolutely positioned span, stays inside them. Before (fixed 4 November 2026), on a 390 px phone with the folds open, Table 1
+  (|λ| against the loop period) was 375 px (English), 492 px (German) or 304 px (Arabic) wide in a 299 px column. Its fold clipped
+  the right-hand columns out of sight, and in German the escaped MathML spans widened the page to 478 px. Measured after, in headless
+  Chromium at 390 and 1280 px in all three languages: page width equals window width, the table scrolls on the phone and fits on the
+  desktop, no page errors.

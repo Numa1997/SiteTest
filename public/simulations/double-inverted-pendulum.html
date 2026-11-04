@@ -17,7 +17,7 @@
         .seg button[aria-pressed="true"] { background: var(--accent); color: #fff; }
         .state { margin: 0; font-size: 13px; line-height: 1.5; color: var(--ink-2); }
         .state b { color: var(--accent); }
-        .ptable { border-collapse: collapse; margin: 12px 0 16px; font-size: 15px; }
+        .ptable { display: block; width: max-content; max-width: 100%; overflow-x: auto; position: relative; border-collapse: collapse; margin: 12px 0 16px; font-size: 15px; }   /* a table wider than the column scrolls by itself; position keeps KaTeX's hidden MathML inside it */
         .ptable th, .ptable td { border-bottom: 1px solid var(--rule); padding: 5px 12px 5px 0; text-align: left; vertical-align: top; }
     </style>
 </head>
