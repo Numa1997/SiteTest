@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-934 files, 56.8 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+960 files, 56.9 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -41,7 +41,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Agents of the lecture-note review](#agents-of-the-lecture-note-review) | 4 |
 | [Working notes of the Rotor Pendula study](#working-notes-of-the-rotor-pendula-study) | 86 |
 | [Working notes of the Droplet Collection study](#working-notes-of-the-droplet-collection-study) | 121 |
-| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 127 |
+| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 153 |
 
 ## Repository root
 
@@ -115,7 +115,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/simulations/Double Pendulum.html`](../public/simulations/Double%20Pendulum.html) | 133.0 kB | Fig. 2 · Double Pendulum: the simulation, its data panel, walkthrough and lecture note. | [fig02-double-pendulum.md](simulations/fig02-double-pendulum.md) |
 | [`public/simulations/Interactive Double-Slit Experiment Visualization.html`](../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html) | 178.4 kB | Fig. 3 · Double-Slit Interference: the simulation, its data panel, walkthrough and lecture note. | [fig03-double-slit.md](simulations/fig03-double-slit.md) |
 | [`public/simulations/Transverse and longitudinal waves.html`](../public/simulations/Transverse%20and%20longitudinal%20waves.html) | 209.2 kB | Fig. 4 · Transverse & Longitudinal: the simulation, its data panel, walkthrough and lecture note. | [fig04-transverse-longitudinal.md](simulations/fig04-transverse-longitudinal.md) |
-| [`public/simulations/double-inverted-pendulum.html`](../public/simulations/double-inverted-pendulum.html) | 120.0 kB | Fig. 11 · Balancing Two Rods on a Cart: the real-time simulation, its walkthrough and lecture note (no data panel). | [fig11-double-inverted-pendulum.md](simulations/fig11-double-inverted-pendulum.md) |
+| [`public/simulations/double-inverted-pendulum.html`](../public/simulations/double-inverted-pendulum.html) | 130.4 kB | Fig. 11 · Balancing Two Rods on a Cart: the real-time simulation, its walkthrough and lecture note (no data panel). | [fig11-double-inverted-pendulum.md](simulations/fig11-double-inverted-pendulum.md) |
 | [`public/simulations/draw-decompose.html`](../public/simulations/draw-decompose.html) | 224.0 kB | Fig. 8 · Draw & Decompose: the simulation, its data panel, walkthrough and lecture note. | [fig08-draw-decompose.md](simulations/fig08-draw-decompose.md) |
 | [`public/simulations/driven-oscillator.html`](../public/simulations/driven-oscillator.html) | 342.6 kB | Fig. 9 · Driven Oscillator: the simulation, its data panel, walkthrough and lecture note. | [fig09-driven-oscillator.md](simulations/fig09-driven-oscillator.md) |
 | [`public/simulations/phasor-sums.html`](../public/simulations/phasor-sums.html) | 273.1 kB | Fig. 7 · Phasor Sums: the simulation, its data panel, walkthrough and lecture note. | [fig07-phasor-sums.md](simulations/fig07-phasor-sums.md) |
@@ -1179,8 +1179,44 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/fig11/layout.cjs`](../notes/fig11/layout.cjs) | 3.3 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig11/ledger.cjs`](../notes/fig11/ledger.cjs) | 6.2 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig11/note-shot.cjs`](../notes/fig11/note-shot.cjs) | 3.7 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
-| [`notes/fig11/status.md`](../notes/fig11/status.md) | 1.5 kB | Fig. 11: status of the rescue work (done with evidence, open items, decisions for Numa). | [notes.md](notes.md) |
+| [`notes/fig11/status.md`](../notes/fig11/status.md) | 9.3 kB | Fig. 11: status of the rescue work (done with evidence, open items, decisions for Numa). | [notes.md](notes.md) |
+
+<details><summary>27 files: Fig. 11: a measuring script of the review, or its saved output.</summary>
+
+| File | Size | What it is | Explained in |
+|---|---|---|---|
+| [`notes/fig11/study/PK.json`](../notes/fig11/study/PK.json) | 857 B | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig11/study/calm.js`](../notes/fig11/study/calm.js) | 1.9 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig11/study/calm3.js`](../notes/fig11/study/calm3.js) | 1.4 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig11/study/calmlib.js`](../notes/fig11/study/calmlib.js) | 1.2 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig11/study/cert.js`](../notes/fig11/study/cert.js) | 3.5 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig11/study/cert3.js`](../notes/fig11/study/cert3.js) | 5.0 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig11/study/colloc.js`](../notes/fig11/study/colloc.js) | 4.6 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig11/study/colloc2.js`](../notes/fig11/study/colloc2.js) | 4.6 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig11/study/exp-A-calm.txt`](../notes/fig11/study/exp-A-calm.txt) | 4.7 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig11/study/exp-A-raw.txt`](../notes/fig11/study/exp-A-raw.txt) | 4.0 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig11/study/exp-B-calm.txt`](../notes/fig11/study/exp-B-calm.txt) | 4.7 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig11/study/exp-B-raw.txt`](../notes/fig11/study/exp-B-raw.txt) | 4.0 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig11/study/exp.js`](../notes/fig11/study/exp.js) | 2.7 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig11/study/gains.json`](../notes/fig11/study/gains.json) | 1.8 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig11/study/gate.js`](../notes/fig11/study/gate.js) | 639 B | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig11/study/hold.js`](../notes/fig11/study/hold.js) | 721 B | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig11/study/hold2.js`](../notes/fig11/study/hold2.js) | 1.1 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig11/study/model.py`](../notes/fig11/study/model.py) | 1.8 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig11/study/replay.js`](../notes/fig11/study/replay.js) | 3.5 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig11/study/samp.js`](../notes/fig11/study/samp.js) | 4.2 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig11/study/sim.js`](../notes/fig11/study/sim.js) | 1.9 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig11/study/t2.cjs`](../notes/fig11/study/t2.cjs) | 2.9 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig11/study/t7.cjs`](../notes/fig11/study/t7.cjs) | 1.8 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig11/study/t8.cjs`](../notes/fig11/study/t8.cjs) | 1.7 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig11/study/t9.cjs`](../notes/fig11/study/t9.cjs) | 3.1 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig11/study/table.json`](../notes/fig11/study/table.json) | 2.8 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig11/test.cjs`](../notes/fig11/test.cjs) | 6.5 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+
+</details>
+
+| File | Size | What it is | Explained in |
+|---|---|---|---|
 | [`notes/home/longlines.cjs`](../notes/home/longlines.cjs) | 1.2 kB | Browser measurements of the home page: index size, column widths, characters per line, section screenshots. | [styles.md](styles.md) |
 | [`notes/home/measure.cjs`](../notes/home/measure.cjs) | 2.6 kB | Browser measurements of the home page: index size, column widths, characters per line, section screenshots. | [styles.md](styles.md) |
 | [`notes/home/sections.cjs`](../notes/home/sections.cjs) | 891 B | Browser measurements of the home page: index size, column widths, characters per line, section screenshots. | [styles.md](styles.md) |
