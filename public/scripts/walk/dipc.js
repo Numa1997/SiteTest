@@ -193,10 +193,26 @@ function Wred(st) { return quad(Pm, [0, wrapAngle(st[1]), wrapAngle(st[2]), 0, s
 ...
 if (mode === 'track' && cLevel && tSim - tPlan > 0.05 && (rolling ? ⟦Wr|Wred(s)⟧ : Wof(s, tSim)) < 0.9 * cLevel) {   // inside the certified region, with 10 % to spare for what the search may miss: hand over
 ...
-if (rolling) ref = { kind: 'cruise', x: s[0], v: s[3], t0: tSim };   // keep the speed it arrived with: a moving equilibrium (25)
+if (rolling) ref = { kind: 'cruise', x: s[0], v: s[3], t0: tSim, brake: true };   // keep the speed it arrived with: a moving equilibrium (25), then brake it away bite by bite (27)
 ...
 else { var rv = refXV(tSim); ref = { kind: 'glide', target: tg, e0: rv[0] - tg, v: rv[1], t0: tSim }; }   // moving: glide along the family of equilibria (26)`,
             syms: [['xr', 'x<sub>ref</sub>', 'refXV(tSim)[0]', 'place of the reference equilibrium now, m'], ['Wr', 'W<sub>red</sub>', 'Wred(s)', 'remaining cost about the moving equilibrium the cart is on']]
+        },
+        {
+            title: 'Braking to rest, one certified bite at a time',
+            where: 'govern(), called by control() at every look while the cart brakes after a rolling catch',
+            math: 'W(e + Δ e<sub>4</sub>) = W(e) + 2Δ (Pe)<sub>4</sub> + Δ<sup>2</sup> P<sub>44</sub><span style="font-style:normal;margin-left:1.5em">(27)</span><br>Δ<sub>max</sub> = [−(Pe)<sub>4</sub> + √((Pe)<sub>4</sub><sup>2</sup> − P<sub>44</sub>(W(e) − γc<sup>∗</sup>))] / P<sub>44</sub>,  ⟦eps|ε⟧ = √(γc<sup>∗</sup>/P<sub>44</sub>),  γ = 0.5<span style="font-style:normal;margin-left:1.5em">(27a)</span>',
+            note: 'Lowering the reference speed by Δ at a look changes nothing in the machine but adds Δ to the error in ẋ, which the balancer cannot tell from a shove. The code first moves the reference to the cart (the error in x becomes zero, which (25) allows), forms the error e with the present speed, and takes the largest bite toward zero that keeps W within γc<sup>∗</sup>. After the bite the reference is again a member of (25), so the certificate (19a) holds over the next period. If no bite fits, the old reference stays. At zero speed the reference becomes a fixed place where the cart stands.',
+            code: `function govern() {   // (27): at a look, put the reference at the cart and take the largest bite of its speed toward zero with W ≤ γ c* (a reference governor)
+...
+var v0 = refXV(tSim)[1], sg = v0 > 0 ? 1 : -1, e = wrapState(s), Pe4 = 0, i; e[0] = 0; e[3] -= v0;   // the error from the member of (25) at the cart with the present speed
+for (i = 0; i < 6; i++) Pe4 += Pm[3][i] * e[i];
+var disc = Pe4 * Pe4 - Pm[3][3] * (quad(Pm, e) - GAMMA * cLevel); if (disc < 0) return;   // no bite fits: the old reference stays, and the certificate goes on
+var hi = (-sg * Pe4 + Math.sqrt(disc)) / Pm[3][3], lo = (-sg * Pe4 - Math.sqrt(disc)) / Pm[3][3], D = Math.min(Math.abs(v0), hi);
+if (D < Math.max(0, lo)) return;
+bite = D; vBefore = v0; var vn = v0 - sg * D;
+if (vn === 0) { ref = { kind: 'fixed', x: s[0] }; xref = s[0]; } else ref = { kind: 'cruise', x: s[0], v: vn, t0: tSim, brake: true }; }`,
+            syms: [['eps', 'ε', 'Math.sqrt(GAMMA * cLevel / Pm[3][3])', 'certified bite of speed from rest at γ = 0.5, m/s']]
         }
     ]
 };

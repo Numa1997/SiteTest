@@ -1,3 +1,15 @@
+# Project 05 · braking to rest (5 November 2026, later)
+
+- Numa: a rolling catch left the cart cruising; bring it to rest without knocking the rods over, and say how big a change of speed
+  ("epsilon") the balancer can take. Done: note 11.5 (equations (27), (27a), (28), problem 12.7, source [12] Garone et al. 2017),
+  `govern()` in the page (a reference governor at γ = 0.5, place at the cart), readout ε, store `gamma`, `eps_rest`, `braking`,
+  `cs_bite`, `cs_vb`, walkthrough step 16, German and Arabic (DeepL, checked against the glossary). Docs:
+  `docs/simulations/fig11-double-inverted-pendulum.md`, "Braking to rest".
+- Every equation came out of Wolfram first (`Solve` on the quadratic, `DiscreteRiccatiSolve` for P, the steady braking (28), the
+  Lagrangian with ẍ = a); the measured edge is from `notes/fig11/study/brake.cjs` (independent equations), output `brake-out.txt`.
+- Certified versus measured: ε = 0.33 m/s per look at γ = 0.5 (0.44 at γ = 0.9) is certain; a single drop of 8.48 m/s is measured to
+  be survived at 10 ms. γ = 0.5 is our choice. Past the edge the rods fall; that is not chaos.
+
 # Project 05 · data panel (5 November 2026)
 
 - The page has the data panel: store (125 variables; logs of every 1 ms step and every controller sample; frame values; an energy

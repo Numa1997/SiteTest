@@ -19,8 +19,8 @@ const EXTRACT = (a) => {
     if (row.kind === 0 && row.ver === ver) { const q = DIPC.rk4(DIPC.p, row.s0, row.u, 0.001); b1n++; if (q.every((v, k) => v === row.s1[k])) b1x++; } else if (row.kind === 0) b1skip++;
     st.push(row); }
   for (let r = 0; r < g('cs_n'); r++) { const i = g('cs_i')[r]; if (i <= a.lastJ) continue;
-    cs.push({ i, t: g('cs_t')[r], k: g('cs_k')[r], due: g('cs_due')[r], next: g('cs_next')[r], s: A('cs_s', r, 6), u: g('cs_u')[r], mode: g('cs_mode')[r], rk: g('cs_rk')[r], rx: g('cs_rx')[r], rv: g('cs_rv')[r], rt0: g('cs_rt0')[r], re0: g('cs_re0')[r], xc: g('cs_xc')[r], tp: g('cs_tp')[r], pl: g('cs_pl')[r], ver: g('cs_ver')[r], umax: g('cs_umax')[r] }); }
-  const ctx = { ver, d: Array.from(g('d')), f: Array.from(g('f')), K: Array.from(g('K')), Ts: g('Ts'), gw: g('glide_w'), kc: g('calm_k') };
+    cs.push({ i, t: g('cs_t')[r], k: g('cs_k')[r], due: g('cs_due')[r], next: g('cs_next')[r], s: A('cs_s', r, 6), u: g('cs_u')[r], mode: g('cs_mode')[r], rk: g('cs_rk')[r], rx: g('cs_rx')[r], rv: g('cs_rv')[r], rt0: g('cs_rt0')[r], re0: g('cs_re0')[r], xc: g('cs_xc')[r], tp: g('cs_tp')[r], pl: g('cs_pl')[r], ver: g('cs_ver')[r], umax: g('cs_umax')[r], bite: g('cs_bite')[r], vb: g('cs_vb')[r] }); }
+  const ctx = { ver, d: Array.from(g('d')), f: Array.from(g('f')), K: Array.from(g('K')), P: Array.from(g('P')), cs: g('c_star'), gamma: g('gamma'), Ts: g('Ts'), gw: g('glide_w'), kc: g('calm_k') };
   const pl = g('pl_serial'), plan = pl && pl !== a.plSerial ? { serial: pl, u: Array.from(g('pl_u')), K: Array.from(g('pl_K')), nom: Array.from(g('pl_nom')) } : null;
   return { st, cs, ctx, plan, sig: g('sig')[0], b1: { n: b1n, exact: b1x, skip: b1skip }, t: DIPC.t, mode: DIPC.mode };
 };
@@ -104,6 +104,16 @@ function checkLogs(acc) {
     nc++; const d = Math.abs(v - r.u); if (d > mc) { mc = d; worstRow = r; } }
   const okc = mc <= 1e-9 && unc === 0; if (!okc) ok = false;
   lines.push(`  c force recomputed from each stored sample (state, reference, gains, limit, plan): ${nc} samples (balance ${modes[0]}, calm ${modes[1]}, track ${modes[2]}, off ${modes[3]}, cut ${modes[4]}), max |Δu| = ${fmt(mc)} N${worstRow ? ' (law ' + worstRow.mode + ')' : ''}, ${unc} unchecked ${okc ? 'PASS' : 'FAIL'}`);
+  // c: the governor's bites (27), each from its own row: the error from the member of (25) at the cart with the speed before the bite
+  let nb = 0, mb = 0, wworst = 0, ub = 0;
+  for (const r of cs) { if (!(r.bite === r.bite)) continue; const c = acc.ctx[r.ver]; if (!c || !(c.cs > 0)) { ub++; continue; }
+    const e = [0, R.wrap(r.s[1]), R.wrap(r.s[2]), r.s[3] - r.vb, r.s[4], r.s[5]], P = (i, j) => c.P[6 * i + j], sg = r.vb > 0 ? 1 : -1;
+    let Pe4 = 0, W = 0; for (let i = 0; i < 6; i++) { Pe4 += P(3, i) * e[i]; for (let j = 0; j < 6; j++) W += e[i] * P(i, j) * e[j]; }
+    const D = Math.min(Math.abs(r.vb), (-sg * Pe4 + Math.sqrt(Pe4 * Pe4 - P(3, 3) * (W - c.gamma * c.cs))) / P(3, 3));
+    const ep = e.slice(); ep[3] += sg * r.bite; let Wp = 0; for (let i = 0; i < 6; i++) for (let j = 0; j < 6; j++) Wp += ep[i] * P(i, j) * ep[j];
+    nb++; mb = Math.max(mb, Math.abs(D - r.bite)); wworst = Math.max(wworst, Wp / c.cs); }
+  if (nb) { const okb = mb < 1e-9 && wworst <= cs.filter((r) => r.bite === r.bite).reduce((a, r) => Math.max(a, acc.ctx[r.ver] ? acc.ctx[r.ver].gamma : 0), 0) + 1e-9 && ub === 0; if (!okb) ok = false;
+    lines.push(`  c governor (27): ${nb} bites recomputed from their rows, max |ΔD| = ${fmt(mb)} m/s; after every bite W ≤ ${fmt(wworst)} c* (allowed γ); ${ub} unchecked ${okb ? 'PASS' : 'FAIL'}`); }
   // c: zero-order hold
   let zh = 0, zbad = 0, held = 0, hbad = 0, firstBad = null;
   for (const r of st) { if (r.kind === 1) { held++; if (r.u !== 0 || r.j !== -1) hbad++; continue; }
@@ -164,9 +174,14 @@ async function main() {
       await start(); const v0 = await pg.evaluate(() => DIPC.ds.get('xd') || DIPC.s[3]); await pg.click('[data-go="1"]'); const k1 = await pg.evaluate(() => DIPC.ref.kind); await drive(8); const a = await pic('gliding'); await drive(6);
       const m = await pg.evaluate(() => ({ ref: DIPC.ref.kind, x: DIPC.s[0], v: DIPC.s[3], mode: DIPC.mode })); out(`  e glide: reference ${k1} after the button (cart moving at ${fmt(v0)} m/s), 14 s later cart at ${fmt(m.x)} m moving ${fmt(m.v)} m/s, mode ${m.mode}`); return a && k1 === 'glide'; },
     ts40: async () => { await set({ Ts: 40 }); await pg.evaluate(() => DIPC.finishCatch()); const r = await scen.random(false); const tilt = await (async () => { await pause(false); await pg.click('#tilt'); await start(); await drive(6); return pic('T_s = 40 ms, tilt and let go'); })(); await set({ Ts: 10 }); await pg.evaluate(() => DIPC.finishCatch()); return r && tilt; },
+    brake: async () => { await pause(false); let s0, got = false; for (let k = 0; k < 8 && !got; k++) { s0 = randomState(); await pg.evaluate((s0) => { DIPC.finishCatch(); document.getElementById('reset').click(); DIPC.rolling = true; DIPC.s = s0; }, s0);
+        for (let t = 0; t < 60; t += 1) { await pg.evaluate(() => { for (let i = 0; i < 60; i++) { DIPC.step(1 / 60); DIPC.think(8); } }); const r = await pg.evaluate(() => ({ b: !!DIPC.ref.brake, v: DIPC.ref.v || 0 })); if (r.b && Math.abs(r.v) > 1) { got = true; break; } } }
+      await start(); const v0 = await pg.evaluate(() => DIPC.ref.v); let t = 0; for (; t < 20; t += 2) { await drive(2); if ((await pg.evaluate(() => DIPC.ref.kind)) === 'fixed') break; } await drive(6);   // the reference is at rest; let the balancer settle the last bite
+      const m = await pg.evaluate(() => ({ ref: DIPC.ref.kind, v: DIPC.s[3], mode: DIPC.mode })); out(`  e brake: braking from ${fmt(v0)} m/s; reference ${m.ref} after about ${t + 2} s, cart speed 6 s later ${fmt(m.v)} m/s, mode ${m.mode}`);
+      return (await pic('braked to rest')) && m.ref === 'fixed' && Math.abs(m.v) < 0.01; },
     limit: async () => { await pause(false); await pg.click('#tilt'); await start(); await drive(1); await set({ Fmax: 25 }); await drive(3); await set({ Fmax: 60 }); await pg.evaluate(() => DIPC.finishCatch()); await drive(2); return pic('force limit changed while balancing'); }
   };
-  const order = want.length ? want : ['rest', 'flick', 'drag', 'swingup', 'random', 'randomSTOP', 'ts40', 'glide', 'limit'];
+  const order = want.length ? want : ['rest', 'flick', 'drag', 'swingup', 'random', 'randomSTOP', 'ts40', 'glide', 'brake', 'limit'];
   for (const name of order) { out(`== ${name}${dpr !== 1 ? ' (device pixel ratio ' + dpr + ')' : ''}`); const okPic = await (name === 'randomSTOP' ? scen.random(true) : scen[name]());
     await frame(); const bk = await pg.evaluate(() => { const g = (n) => DIPC.ds.get(n), rows = [g('E0'), g('W_motor'), g('E_ext'), g('E_wait')]; return { rows, E: g('E'), bal: g('bal'), rel: Math.abs(g('bal')) / (rows.reduce((a, v) => a + Math.abs(v), 0) + Math.abs(g('E'))) }; });
     out(`  energy book: E0 ${fmt(bk.rows[0])} + W_motor ${fmt(bk.rows[1])} + E_ext ${fmt(bk.rows[2])} + E_wait ${fmt(bk.rows[3])} − E ${fmt(bk.E)} = ${fmt(bk.bal)} J, ${fmt(bk.rel)} of the flows`);
