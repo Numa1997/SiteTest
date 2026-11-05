@@ -91,6 +91,21 @@ N['w_M'] = infow['M']; N['w_ml'] = infow['ml']; N['w_Me'] = infow['Me']; N['w_m1
 N['w_peak_mm'] = ew * 1000; N['w_settle'] = tw; N['w_Fmax'] = Fw; N['w_Imax'] = Fw / Cw.CAR['Bl']; N['w_hand3_mm'] = eh3 * 1000; N['w_hand22_mm'] = eh22 * 1000
 N['w_tau_cl'] = -Cw.CAR['Ts'] / np.log(np.abs(np.linalg.eigvals(Adw - Bdw @ Kw)).max()); N['w_tau_open'] = 1 / mdw[0]['gam']
 N['w_freeboard_mm'] = 160 - N['zs_mm'] - 18
+# calming an existing 5 mm slosh, and an open-loop third-order path
+def _calm(hold=True):
+    n_ = Aw.shape[0]; y = np.zeros(n_); y[2] = 0.005; h_ = 1e-3; F_ = 0.0; om0 = mdw[0]['om']; amp = []
+    for k in range(int(6 / h_)):
+        if hold and k % 10 == 0: F_ = float(np.clip(-(Kw @ y)[0], -Cw.CAR['Bl'] * Cw.CAR['Imax'], Cw.CAR['Bl'] * Cw.CAR['Imax']))
+        f_ = lambda z: Aw @ z + Bw[:, 0] * F_; k1 = f_(y); k2 = f_(y + h_/2*k1); k3 = f_(y + h_/2*k2); k4 = f_(y + h_*k3); y = y + h_/6*(k1 + 2*k2 + 2*k3 + k4); amp.append(math.hypot(y[2], y[3] / om0))
+    amp = np.array(amp); return next(((i + 1) * h_ for i in range(len(amp)) if np.all(amp[i:] < 0.0005)), None)
+N['w_calm10'] = _calm(); N['w_held10'] = math.log(10) / mdw[0]['gam']
+def _path3(dist=0.2, Wr=3.0, T=5.0):
+    n_ = Aw.shape[0]; y = np.zeros(n_); h_ = 1e-3; r = rv = ra = 0.0; pk = 0.0
+    for k in range(int(T / h_)):
+        rj = Wr**3*(dist - r) - 3*Wr*Wr*rv - 3*Wr*ra; ra += rj*h_; rv += ra*h_; r += rv*h_
+        f_ = lambda z: Aw @ z + Bw[:, 0] * (infow['Me'] * (ra - Aw[1, 2:] @ z[2:])); k1 = f_(y); k2 = f_(y + h_/2*k1); k3 = f_(y + h_/2*k2); k4 = f_(y + h_*k3); y = y + h_/6*(k1 + 2*k2 + 2*k3 + k4); pk = max(pk, abs(y[2::2].sum()))
+    return pk
+N['w_path3_mm'] = _path3() * 1000
 xi = 1.841183781; N['m11_cyl_frac'] = 2 * math.tanh(xi * N['D_mm'] / N['a_mm']) / (xi * (xi**2 - 1)); N['m11_cyl_g'] = N['m11_cyl_frac'] * P['rho'] * math.pi * (N['a_mm'] / 1000)**3 * 1000
 os.makedirs('notes/fig12/figs', exist_ok=True)
 json.dump(N, open('notes/fig12/numbers.json', 'w'), indent=1)

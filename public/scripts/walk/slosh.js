@@ -93,7 +93,7 @@ var zl = geo.zs + best, zf = zl + P.hf;`,
             where: 'deriv(t, y, out): the carriage when the waiter carries',
             math: '⟦Me|M<sub>e</sub>⟧ ẍ<sub>g</sub> = F + Σ ρπQ<sub>n</sub>N<sub>n</sub>(2γ<sub>n</sub>ȧ<sub>n</sub> + ω<sub>n</sub>²a<sub>n</sub>)<span style="font-style:normal;margin-left:1.5em">(20)</span>',
             note: 'Wt.cr[q] is ρπQ<sub>n</sub>N<sub>n</sub> of the q-th m = 1 mode, in kg; y[6 + 2NK + k] is its rate ȧ and y[6 + k] its amplitude a. The force the motor holds, Wt.Fx, is added to the push of the sloshing stout, and the sum divided by the mass the motor feels, M<sub>e</sub>, the carriage, glass and stout less the sloshing masses.',
-            code: `if (P.ctl === 'waiter') {   // the motor drives the carriage: M_e x'' = F + Σ ρπ Q N (2γ a' + ω²(1 + z''/g) a), the stout pushing back (section 10)
+            code: `if (P.ctl === 'waiter') {   // the motor drives the carriage: M_e x'' = F + Σ ρπ Q N (2γ a' + O2 a), the stout pushing back (section 10); O2 holds the vertical acceleration, as in (12)
 var AZw = az + sz, fx = Wt.Fx, fy = Wt.Fy;
 ...
 fx += Wt.cr[q] * (2 * gam[k] * y[6 + 2 * NK + k] + O2w * y[6 + k]); fy += Wt.cr[q] * (2 * gam[k] * y[6 + 3 * NK + k] + O2w * y[6 + NK + k]); });

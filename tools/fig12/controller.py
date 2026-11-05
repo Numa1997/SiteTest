@@ -31,7 +31,7 @@ def modes(p):
         muf = Mf * lam / p['rho']; om = math.sqrt((g * lam + p['sig'] * lam ** 3 / p['rho']) / (1 + muf)); sq = 0.5 * math.sqrt(nu * om / 2)
         gam = sq * (L('Iw') + L('Ib')) + p['cs'] * sq * L('Is') + 2 * nu * lam ** 2 + p['gc'] + p['kf'] * (0.016 / a) * (1 - math.exp(-lam * p['hf']))
         out.append(dict(n=ma['n'], lam=lam, Q=Q, N=N, om=om, gam=gam, muf=muf, msl=p['rho'] * math.pi * lam * Q * Q * N / (1 + muf)))
-    return out, a, p['rho'] * p['V'] * 1e-6
+    return out, a, p['rho'] * p['V'] * 1e-6 + Mf * math.pi * a * a      # the stout and its head (the head rides with the glass)
 def model(p=P, car=CAR):
     md, a, ml = modes(p); M = car['Mc'] + car['mg'] + ml; Msl = sum(m['msl'] for m in md); Me = M - Msl
     n = 2 + 2 * len(md); A = np.zeros((n, n)); Bv = np.zeros(n)
