@@ -131,6 +131,10 @@
   "src": "A statement with a number in square brackets, such as [3], is a fact taken from that source, listed at the end. A statement marked <span class=\"fact\">computed</span> is a fact produced by this page’s own code or by the scripts in <code>tools/fig12/</code>, which anyone can rerun. <span class=\"fact\">Inference</span> marks reasoning from those facts, and <span class=\"fact\">opinion</span> marks a judgement. Everything else is derived on the page.",
   "tr": "العبارة المصحوبة بعدد بين قوسين معقوفين، مثل [3]، حقيقةٌ مأخوذة من ذلك المصدر المذكور في النهاية. والعبارة المعلَّمة بـ <span class=\"fact\">محسوب</span> حقيقةٌ أنتجتها شيفرة هذه الصفحة نفسها أو النصوص البرمجية في <code>tools/fig12/</code>، التي يستطيع أيّ أحد أن يعيد تشغيلها. وتعلّم <span class=\"fact\">استنتاج</span> استدلالًا من تلك الحقائق، وتعلّم <span class=\"fact\">رأي</span> حكمًا تقديريًّا. وكلّ ما عدا ذلك مشتقّ في الصفحة."
  },
+ "29fdb0237338": {
+  "src": "with \\(\\Phi_\\ell\\) the derivative along the wall’s profile and \\(I_b\\) the same integral over the floor. Here \\(E\\) stands for \\(\\iint|\\nabla\\Phi|^2\\,r\\,dr\\,dz\\), the energy (14) without the factors \\(\\tfrac12\\rho\\), the amplitude and the angular integral, which cancel in the ratio. The program evaluates \\(I_w\\), \\(I_b\\) and \\(E\\) for each mode of the tulip glass.",
+  "tr": "حيث \\(\\Phi_\\ell\\) المشتقّ على امتداد المقطع الجانبي للجدار، و\\(I_b\\) التكامل نفسه على القاع. وهنا يرمز \\(E\\) إلى \\(\\iint|\\nabla\\Phi|^2\\,r\\,dr\\,dz\\)، أي الطاقة (14) بلا العوامل \\(\\tfrac12\\rho\\) والسعة والتكامل الزاوي، التي تختزل في النسبة. ويحسب البرنامج \\(I_w\\) و\\(I_b\\) و\\(E\\) لكلّ نمط من أنماط كأس التوليب."
+ },
  "2b670f12a70e": {
   "src": "18 to 20 mm for a correct pour [11]. Firm enough.",
   "tr": "18 إلى 20 mm للصبّ الصحيح [11]. موثوقة بما يكفي."
@@ -255,6 +259,10 @@
   "src": "The measured coefficient is 1.42 times the clean-wall theory. That is no contradiction: Miles showed that the damping observed in the classic experiments exceeds wall damping alone by factors of up to two or three, and traced the excess to surface films and to the contact line [5]. Those are the next two terms.",
   "tr": "المعامل المقيس 1.42 ضعف نظرية الجدار النظيف. وليس في ذلك تناقض: فقد بيّن مايلز أنّ التخامد المرصود في التجارب الكلاسيكية يزيد على تخامد الجدار وحده بعوامل تصل إلى اثنين أو ثلاثة، وردّ الزيادة إلى أغشية السطح وإلى خط التماس [5]. وهذان هما الحدّان التاليان."
  },
+ "4b2d6526e6c5": {
+  "src": "If the glass is shaken sideways as \\(x = A\\sin\\Omega t\\) at the mode’s own frequency (the page eases the shaking in over 0.3 s, \\(x = A(1 - e^{-t/0.3\\,\\mathrm s})\\sin\\Omega t\\), so that it starts without a jolt; the steady state is the same), \\(\\Omega = \\omega_n\\), the steady amplitude of (12) is the push divided by the damping, \\(a_n = \\lambda_nQ_nA\\omega_n^2/[(1 + \\mu_f)\\,2\\gamma_n\\omega_n]\\).",
+  "tr": "إذا هُزّت الكأس جانبيًّا وفق \\(x = A\\sin\\Omega t\\) بالتردد الخاصّ للنمط (تُدخِل الصفحة الهزّ تدريجيًّا خلال 0.3 s، \\(x = A(1 - e^{-t/0.3\\,\\mathrm s})\\sin\\Omega t\\)، كي يبدأ بلا رجّة؛ والحالة المستقرّة هي نفسها)، \\(\\Omega = \\omega_n\\)، فإنّ السعة المستقرّة لـ (12) هي الدفع مقسومًا على التخامد، \\(a_n = \\lambda_nQ_nA\\omega_n^2/[(1 + \\mu_f)\\,2\\gamma_n\\omega_n]\\)."
+ },
  "4bf5cde00ac5": {
   "src": "Three things are already visible in that experience. First, the stout has a rhythm of its own: it rocks at a definite frequency, about three times a second in a pint glass, whatever your hand does. Second, your hand can feed that rhythm: if your steps come at a rate close to it, each step adds to the swing, and the amplitude grows. Third, something takes the energy away again, because the rocking dies when you stand still. A physicist recognises a driven, damped oscillator. This note shows that the stout in a glass is a whole family of such oscillators, called <em>sloshing modes</em>, derives their frequencies from the laws of fluid motion and the shape of the glass, and works out, one by one, the processes that damp them.",
   "tr": "ثلاثة أمور تظهر منذ الآن في هذه التجربة. أولًا، للستاوت إيقاع خاصّ به: فهو يتأرجح بتردد محدّد، نحو ثلاث مرات في الثانية في كأس الباينت، أيًّا كان ما تفعله يدك. ثانيًا، تستطيع يدك أن تغذّي هذا الإيقاع: فإن جاءت خطواتك بمعدّل قريب منه، أضافت كلّ خطوة إلى التأرجح، فتكبر السعة. ثالثًا، شيءٌ ما يسلب الطاقة من جديد، لأنّ التأرجح يخبو حين تقف ساكنًا. ويتعرّف الفيزيائي هنا على مهتزّ قسري متخامد. تبيّن هذه المذكّرة أنّ الستاوت في الكأس عائلة كاملة من هذه المهتزّات، تُسمّى <em>أنماط التخضخض</em>، وتشتقّ تردداتها من قوانين حركة الموائع ومن شكل الكأس، وتحسب، واحدةً تلو الأخرى، العمليات التي تخمدها."
@@ -270,6 +278,10 @@
  "4effa0074b9e": {
   "src": "<i>Straight</i>: a cylinder with the same surface radius and depth, where the modes are exact Bessel functions (section 4).",
   "tr": "<i>مستقيمة</i>: أسطوانة لها نصف قطر السطح نفسه والعمق نفسه، وأنماطها فيها دوالّ بسل دقيقة (القسم 4)."
+ },
+ "4fbf0d0a06ab": {
+  "src": "scaled like water’s viscosity \\(\\mu_w\\) (Vogel’s equation). <span class=\"fact\">Inference</span>: beer is mostly water; it gives a 31 % fall from 6 to 20 °C, close to the measured trend of beers [12].",
+  "tr": "تتغيّر كما تتغيّر لزوجة الماء \\(\\mu_w\\) (معادلة فوغل). <span class=\"fact\">استنتاج</span>: الجعة ماء في معظمها؛ ويعطي ذلك انخفاضًا بنسبة 31 % من 6 إلى 20 °C، قريبًا من الاتجاه المقيس في أنواع الجعة [12]."
  },
  "5038e41d34d7": {
   "src": "A pint of stout in a Guinness tulip glass, carried by hand. Drag the glass, shake it, and watch the stout slosh: the surface, the head and the velocity field inside, from the linear modes of the real glass shape, with every source of damping derived.",
@@ -334,6 +346,10 @@
  "69c83c5f7387": {
   "src": "Outside boundary layers 0.45 mm thick, the velocity of the stout relative to the glass is the gradient of a <em>velocity potential</em>, \\(\\mathbf u = \\nabla\\phi\\), and incompressibility makes it obey Laplace’s equation, \\(\\nabla^2\\phi = 0\\). Viscosity drops out of the interior entirely: for \\(\\mathbf u = \\nabla\\phi\\), \\(\\mu\\nabla^2\\mathbf u = \\mu\\nabla(\\nabla^2\\phi) = 0\\). It acts only in the layers, where it takes energy away (section 7).",
   "tr": "خارج طبقات حدّية سمكها 0.45 mm، تكون سرعة الستاوت بالنسبة إلى الكأس تدرّجَ <em>جهد السرعة</em>، \\(\\mathbf u = \\nabla\\phi\\)، ويجعله عدمُ الانضغاط يحقّق معادلة لابلاس، \\(\\nabla^2\\phi = 0\\). وتختفي اللزوجة من الداخل تمامًا: فمن أجل \\(\\mathbf u = \\nabla\\phi\\) يكون \\(\\mu\\nabla^2\\mathbf u = \\mu\\nabla(\\nabla^2\\phi) = 0\\). ولا تعمل إلا في الطبقات، حيث تسلب الطاقة (القسم 7)."
+ },
+ "6aef68393260": {
+  "src": "Michael Faraday saw these waves in 1831, at half the frequency of the vibration that drove them. For the default pint the threshold is \\(A = 0.58\\) mm at \\(\\Omega = 2\\omega_1\\); the button <i>Up and down at 2f₁</i> shakes 2 mm, for which (13) predicts a net growth rate of 1.2 per second. Run on the page’s own integrator, a micrometre of initial disorder first falls about tenfold, because a seed at rest lies mostly in the decaying solution; from about two seconds on it grows at 1.21 per second, as (13) predicts <span class=\"fact\">computed</span>, <code>notes/fig12/gate.cjs</code> and an independent SciPy run [<code>notes/fig12/check-derivations.md</code>]. (A linear model gives no seed by itself: the page starts every mode at about a micrometre, standing for the disorder a real surface always has.)",
+  "tr": "رأى مايكل فاراداي هذه الموجات سنة 1831، بنصف تردد الاهتزاز الذي قادها. في الباينت الافتراضي تكون العتبة \\(A = 0.58\\) mm عند \\(\\Omega = 2\\omega_1\\)؛ ويهزّ الزرّ <i>صعودًا وهبوطًا بـ 2f₁</i> بسعة 2 mm، فتتنبّأ (13) بمعدّل نموّ صافٍ قدره 1.2 في الثانية. وحين يُشغَّل ذلك على مُكامِل الصفحة نفسه، يهبط اضطراب ابتدائي قدره ميكرومتر أوّلًا إلى نحو العُشر، لأنّ بذرةً ساكنة تقع في معظمها في الحلّ المتخامد؛ ثم ينمو ابتداءً من الثانية الثانية تقريبًا بمعدّل 1.21 في الثانية، كما تتنبّأ (13) <span class=\"fact\">محسوب</span>، <code>notes/fig12/gate.cjs</code> وتشغيل مستقلّ بـ SciPy [<code>notes/fig12/check-derivations.md</code>]. (النموذج الخطّي لا يعطي بذرة من تلقاء نفسه: تبدأ الصفحة كلّ نمط عند نحو ميكرومتر، تمثيلًا للاضطراب الذي يحمله كلّ سطح حقيقي دائمًا.)"
  },
  "6c6daefa74a0": {
   "src": "If the glass is shaken sideways as \\(x = A\\sin\\Omega t\\) at the mode’s own frequency, \\(\\Omega = \\omega_n\\), the steady amplitude of (12) is the push divided by the damping, \\(a_n = \\lambda_nQ_nA\\omega_n^2/[(1 + \\mu_f)\\,2\\gamma_n\\omega_n]\\).",
@@ -427,6 +443,10 @@
   "src": "Head <i>h</i><sub>f</sub>",
   "tr": "الرغوة <i>h</i><sub>f</sub>"
  },
+ "82dd43d0e1db": {
+  "src": "Two checks say the result is the real glass. The widest diameter comes out as 84.1 mm, against the published 85 mm, a difference of 1 %. And the volume agrees with the glass’s purpose: taking a wall 2.0 mm thick and a solid base 8 mm thick (both read from the photograph), the cavity holds 603.7 mL to the brim, and 568 mL fills it to 151.9 mm, eight millimetres below the rim, where a lined pint glass puts its line <span class=\"fact\">computed</span>. Blender revolved the same profile into a closed mesh of 96 sides and measured 603.3 mL; the 0.4 mL difference is exactly what a 96-sided polygon loses against a circle, a factor \\(\\tfrac{96}{2\\pi}\\sin\\tfrac{2\\pi}{96} = 0.99929\\) <span class=\"fact\">computed</span>.",
+  "tr": "يؤكّد فحصان أنّ النتيجة هي الكأس الحقيقية. يخرج أعرض قطر 84.1 mm، مقابل 85 mm المنشورة، بفرق 1 %. ويتّفق الحجم مع غاية الكأس: إذا أخذنا جدارًا سمكه 2.0 mm وقاعدة مصمتة سمكها 8 mm (كلاهما مقروء من الصورة)، فإنّ التجويف يتّسع لـ 603.7 mL حتى الحافّة، وتملؤه 568 mL حتى 151.9 mm، أي ثمانية مليمترات تحت الحافّة، حيث تضع كأس الباينت المدرّجة خطّها <span class=\"fact\">محسوب</span>. وقد أدار Blender المقطع الجانبي نفسه حول محوره ليصنع شبكة مغلقة من 96 ضلعًا، وقاس 603.3 mL؛ والفرق 0.4 mL هو بالضبط ما يخسره مضلّع ذو 96 ضلعًا مقارنةً بالدائرة، أي العامل \\(\\tfrac{96}{2\\pi}\\sin\\tfrac{2\\pi}{96} = 0.99929\\) <span class=\"fact\">محسوب</span>."
+ },
  "832912da381f": {
   "src": "density of the liquid",
   "tr": "كثافة السائل"
@@ -446,6 +466,10 @@
  "885003619dae": {
   "src": "Product photograph of the glass, <a href=\"https://www.mbswholesale.co.uk/guinness-pint-glass-568ml-20oz-ukca-ce/\">MBS Wholesale</a>; the profile extraction is <code>tools/fig12/profile_from_photo.py</code> and <code>glass.py</code>.",
   "tr": "صورة المنتج للكأس، <a href=\"https://www.mbswholesale.co.uk/guinness-pint-glass-568ml-20oz-ukca-ce/\">MBS Wholesale</a>؛ واستخراج المقطع الجانبي هو <code>tools/fig12/profile_from_photo.py</code> و<code>glass.py</code>."
+ },
+ "89d5829a2d4b": {
+  "src": "A program that has not reproduced a known answer has proved nothing. For a cylinder of 40 mm radius and 100 mm depth the exact eigenvalues are \\(\\lambda = k\\tanh kD\\) from (8). On a mesh of 16 × 40 quadratic cells the program gives \\(\\lambda_{11} = 46.02036\\) m⁻¹ against the exact 46.02035, a relative error of \\(3\\times10^{-7}\\); the worst of nine modes, (0,3), is off by \\(2.4\\times10^{-4}\\), and halving the cells reduces every error <span class=\"fact\">computed</span>, <code>tools/fig12/check_cylinder.py</code>. The integrals the damping needs (section 7) agree with the exact Bessel integrals, evaluated independently in Wolfram Language, to \\(3\\times10^{-5}\\) for the slowest mode and to \\(3\\times10^{-3}\\) for the other modes kept.",
+  "tr": "البرنامج الذي لم يُعِد إنتاج جواب معروف لم يُثبت شيئًا. في أسطوانة نصف قطرها 40 mm وعمقها 100 mm تكون القيم الذاتية الدقيقة \\(\\lambda = k\\tanh kD\\) من (8). وعلى شبكة من 16 × 40 خليّة تربيعية يعطي البرنامج \\(\\lambda_{11} = 46.02036\\) m⁻¹ مقابل القيمة الدقيقة 46.02035، بخطأ نسبي \\(3\\times10^{-7}\\)؛ وأسوأ الأنماط التسعة، (0,3)، ينحرف بـ \\(2.4\\times10^{-4}\\)، وتنصيف الخلايا يقلّل كلّ خطأ <span class=\"fact\">محسوب</span>، <code>tools/fig12/check_cylinder.py</code>. وتتّفق التكاملات التي يحتاجها التخامد (القسم 7) مع تكاملات بسل الدقيقة، المحسوبة باستقلال في Wolfram Language، حتى \\(3\\times10^{-5}\\) لأبطأ نمط وحتى \\(3\\times10^{-3}\\) للأنماط الأخرى المحتفَظ بها."
  },
  "8a396a4cd168": {
   "src": "Checking the program on the cylinder",
@@ -519,6 +543,10 @@
   "src": "18 mm",
   "tr": "18 mm"
  },
+ "9926edec6e88": {
+  "src": "The 3D view draws the glass from the measured profile and the stout’s surface from \\(\\eta(r, \\theta)\\) at 16 radii and 72 angles. The head is drawn as a layer of constant thickness on top of the surface, which is how the model treats its mass; a real head bends. The cut uses the velocity fields of the nearest of the six stored fills: its grid points are placed on the present fill’s depth and wall, but the velocities are those of the stored fill. Arrows longer than 34 px are cut short and drawn pink. While the arrows are shown, the stout is drawn see-through, which real stout is not.",
+  "tr": "يرسم المنظر الثلاثي الأبعاد (3D) الكأسَ من المقطع الجانبي المقيس، وسطحَ الستاوت من \\(\\eta(r, \\theta)\\) عند 16 نصف قطر و72 زاوية. وتُرسم الرغوة طبقةً ثابتة السماكة فوق السطح، وهكذا يعامل النموذج كتلتها؛ أمّا الرغوة الحقيقية فتنثني. ويستعمل المقطع حقول السرعة لأقرب التعبئات الستّ المخزّنة: توضع نقاط شبكتها على عمق التعبئة الحالية وجدارها، أمّا السرعات فهي سرعات التعبئة المخزّنة. والأسهم الأطول من 34 px تُقصَّر وتُرسم باللون الوردي. وما دامت الأسهم معروضة، يُرسم الستاوت شفّافًا، والستاوت الحقيقي ليس كذلك."
+ },
  "9a37c54b867b": {
   "src": "First let the glass stand still. In a cylinder of radius \\(a\\) and depth \\(D\\), with \\(r, \\theta\\) polar coordinates and \\(z\\) measured from the calm surface, Laplace’s equation separates. Trying \\(\\phi = \\Phi(r)\\,\\cos(m\\theta)\\,Z(z)\\,e^{i\\omega t}\\) gives Bessel’s equation for \\(\\Phi\\) and \\(Z'' = k^2 Z\\); the solution that is finite on the axis and has no flow through the floor at \\(z = -D\\) is",
   "tr": "لندع الكأس أولًا ساكنة. في أسطوانة نصف قطرها \\(a\\) وعمقها \\(D\\)، حيث \\(r, \\theta\\) إحداثيات قطبية و\\(z\\) يُقاس من السطح الهادئ، تنفصل متغيّرات معادلة لابلاس. وتجربة \\(\\phi = \\Phi(r)\\,\\cos(m\\theta)\\,Z(z)\\,e^{i\\omega t}\\) تعطي معادلة بسل لـ \\(\\Phi\\) و\\(Z'' = k^2 Z\\)؛ والحلّ المنتهي على المحور الذي لا جريان فيه عبر القاع عند \\(z = -D\\) هو"
@@ -555,6 +583,10 @@
   "src": "A well-poured pint carries 18 to 20 mm of head (section 2).",
   "tr": "يحمل الباينت المصبوب جيدًا 18 إلى 20 mm من الرغوة (القسم 2)."
  },
+ "a483064890da": {
+  "src": "<span class=\"pfig__n\">Figure 2</span>Frequency \\(f_1\\) of the slowest mode, (1,1), against the volume of stout. Ink: the tulip glass without a head. Wine: the tulip glass under 18 mm of head. Dashed: a straight glass with the same surface radius and depth as the tulip at each fill, also with the head. The curves cross near 475 mL, with the surface at 132.5 mm, about 12 mm above the widest point of the glass, where the tulip’s wall is vertical (dotted line; the surface reaches it at 415 mL): what matters is the wall’s lean over the top centimetres, where the slosh lives.",
+  "tr": "<span class=\"pfig__n\">الشكل 2</span>التردد \\(f_1\\) لأبطأ نمط، (1,1)، مقابل حجم الستاوت. باللون الحبري: كأس التوليب بلا رغوة. باللون النبيذي: كأس التوليب تحت 18 mm من الرغوة. بخطّ متقطّع: كأس مستقيمة لها نصف قطر السطح وعمق كأس التوليب نفسيهما عند كلّ تعبئة، مع الرغوة أيضًا. تتقاطع المنحنيات قرب 475 mL، والسطح عند 132.5 mm، أي نحو 12 mm فوق أعرض نقطة في الكأس حيث يكون جدار التوليب رأسيًّا (الخطّ المنقّط؛ يبلغه السطح عند 415 mL): فالمهمّ هو ميل الجدار في السنتيمترات العليا حيث يحدث التخضخض."
+ },
  "a4c03d201bc8": {
   "src": "The boundary layers on wall and floor ★",
   "tr": "الطبقتان الحدّيتان على الجدار والقاع ★"
@@ -566,6 +598,10 @@
  "a532c7d9e131": {
   "src": "<b>The aim:</b> see why a pint slops over when you walk, and why the head keeps it calm. Nothing steers the glass yet but your hand.",
   "tr": "<b>الهدف:</b> أن ترى لماذا ينسكب الباينت حين تمشي به، ولماذا تُبقيه الرغوة هادئًا. لا شيء يوجّه الكأس بعدُ سوى يدك."
+ },
+ "a5fae43e2ab8": {
+  "src": "Live, the page integrates the hand’s follower and the 14 equations (12) with the classical fourth-order Runge–Kutta method at a fixed step \\(h = 1\\) ms. The fastest mode kept, (1,3) at about 6.4 Hz, has \\(\\omega h = 0.04\\), far inside the method’s stability limit (\\(|\\omega h| \\lt 2.8\\)), with a phase error per step of order \\((\\omega h)^5/120\\), about \\(10^{-9}\\). Each frame runs as many steps as real time has passed, capped at 50 ms per frame. If a wave ever exceeds twice the surface radius, far outside the model, the page calms the stout back to its micrometre seed and says so.",
+  "tr": "مباشرةً، تكامل الصفحة تابعَ اليد والمعادلات الـ 14 (12) بطريقة رونغه–كوتا الكلاسيكية من المرتبة الرابعة بخطوة ثابتة \\(h = 1\\) ms. وأسرع نمط محتفَظ به، (1,3) عند نحو 6.4 Hz، له \\(\\omega h = 0.04\\)، أي داخل حدّ استقرار الطريقة بكثير (\\(|\\omega h| \\lt 2.8\\))، مع خطأ طور لكلّ خطوة من رتبة \\((\\omega h)^5/120\\)، أي نحو \\(10^{-9}\\). ويُجري كلّ إطار من الخطوات قدر الزمن الحقيقي الذي مضى، بحدّ أقصى 50 ms لكلّ إطار. وإذا تجاوزت موجةٌ يومًا ضعفَ نصف قطر السطح، وهذا بعيد خارج النموذج، تُهدّئ الصفحة الستاوت إلى بذرته الميكرومترية وتقول ذلك."
  },
  "a6c7e973c7ba": {
   "src": "The eigenvalue problem",
@@ -830,6 +866,10 @@
  "db2ebedc7462": {
   "src": "<span>8</span>The velocity field in the cut",
   "tr": "<span>8</span>حقل السرعة في المقطع"
+ },
+ "dc93c8d1f1db": {
+  "src": "Even an irrotational flow dissipates, because its parcels are stretched. The dissipation is \\(2\\mu\\int e_{ij}e_{ij}\\,dV\\) with the strain rate \\(e_{ij} = \\partial_i\\partial_j\\phi\\); for a mode that decays with depth as \\(e^{\\lambda z}\\) this gives \\(\\gamma_b = 2\\nu\\lambda^2\\), the damping of deep-water waves. (In a round glass the exact value for the slowest mode is \\(1.88\\nu k^2\\), 6 % lower; on the total damping that is 0.1 %.) For the slowest mode it is 0.009 per second, 2 % of the total: negligible for the slowest mode, but it grows as \\(\\lambda^2\\), so short waves feel it most <span class=\"fact\">computed</span>.",
+  "tr": "حتى الجريان اللادوّامي يبدّد الطاقة، لأنّ عناصره تُمَطّ. والتبديد هو \\(2\\mu\\int e_{ij}e_{ij}\\,dV\\) مع معدّل الانفعال \\(e_{ij} = \\partial_i\\partial_j\\phi\\)؛ ولنمط يضمحلّ مع العمق كـ \\(e^{\\lambda z}\\) يعطي هذا \\(\\gamma_b = 2\\nu\\lambda^2\\)، أي تخامد أمواج المياه العميقة. (في كأس مستديرة تكون القيمة الدقيقة لأبطأ نمط \\(1.88\\nu k^2\\)، أقلّ بـ 6 %؛ وأثر ذلك على التخامد الكلّي 0.1 %.) وهو لأبطأ نمط 0.009 في الثانية، أي 2 % من المجموع: مهمَل لأبطأ نمط، لكنّه يكبر كـ \\(\\lambda^2\\)، فالأمواج القصيرة تشعر به أكثر من غيرها <span class=\"fact\">محسوب</span>."
  },
  "dcb0c712fba0": {
   "src": "Before any equation we need two things: the shape of the container, and the properties of what is in it.",

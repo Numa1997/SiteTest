@@ -29,9 +29,9 @@ Ro[zz < z.min()] = spl(z.min()); top = zz > z.max(); Ro[top] = spl(z.max()) + sp
 slope = np.gradient(Ro, zz)
 Ri = Ro - T_W * np.sqrt(1 + slope ** 2)   # thickness measured normal to the wall
 Ri[zz < Z_F] = np.nan
-def vol(h):                                # cavity volume below z = h, mm^3
-    m = (zz >= Z_F) & (zz <= h)
-    return np.trapezoid(np.pi * Ri[m] ** 2, zz[m])
+def vol(h):                                # cavity volume below z = h, mm^3 (R interpolated up to h itself, not only to the last grid point)
+    mm = ~np.isnan(Ri); q = np.linspace(Z_F, h, 4001)
+    return np.trapezoid(np.pi * np.interp(q, zz[mm], Ri[mm]) ** 2, q)
 V_brim = vol(H)
 hs = np.arange(Z_F, H, 0.05); Vs = np.array([vol(h) for h in hs])
 h568 = np.interp(568e3, Vs, hs); h500 = np.interp(500e3, Vs, hs)

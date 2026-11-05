@@ -25,7 +25,7 @@ b.append('<path d="M' + ' L'.join(f'{p[0]:.1f},{p[1]:.1f}' for p in hd) + f'Z" f
 def hline(zz, lab, col=INK, dash='4 3', right=True):
     r = float(np.interp(zz, z, Ro)); return f'<line x1="{X(-r)-6:.1f}" y1="{Y(zz):.1f}" x2="{X(r)+60:.1f}" y2="{Y(zz):.1f}" stroke="{col}" stroke-dasharray="{dash}" stroke-width="1"/>' + text(X(r) + 64, Y(zz) + 4, lab, 11, 'start', col)
 b.append(hline(160, 'rim, 160 mm (published height)', WINE, 'none'))
-b.append(hline(152.0, '568 mL (one pint) reaches 152.0 mm', MUTED))
+b.append(hline(152.0, '568 mL (one pint) reaches 151.9 mm', MUTED))
 b.append(hline(zs, f'500 mL: surface {zs:.1f} mm, a = {N["a_mm"]:.1f} mm', INK))
 b.append(hline(GL['floor_mm'], 'floor of the cavity, 8 mm of solid glass below', MUTED))
 iw = int(np.nanargmax(Ro)); b.append(f'<line x1="{X(-Ro[iw]):.1f}" y1="{Y(z[iw]):.1f}" x2="{X(Ro[iw]):.1f}" y2="{Y(z[iw]):.1f}" stroke="{WINE}" stroke-width="1"/>' + text(X(0), Y(z[iw]) - 5, f'{2*Ro[iw]:.1f} mm', 10, 'middle', WINE))

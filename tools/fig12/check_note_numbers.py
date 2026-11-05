@@ -39,6 +39,7 @@ rows = [  # (what, formatted computed value, text that must contain it)
     ('no head 5%', f"{N['nohead']['t5pct']:.1f}", 'takes 3.7 s and 11.1 s'),
     ('clean tau', f"{N['clean']['tau']:.1f}", 'it would be 8.9 s'),
     ('brim volume', f"{N['V_brim']:.1f}", 'holds 603.7 mL'),
+    ('Faraday measured', '1.21', 'grows at 1.21 per second'),
     ('decay length', f"{N['decay_len_mm']:.0f}", '\\(1/\\lambda = 21\\) mm'),
 ]
 bad = 0

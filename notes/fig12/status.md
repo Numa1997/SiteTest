@@ -1,7 +1,7 @@
 # Fig. 12 · A Pint of Stout, Carried — status (5 November 2026)
 
 ## Done, with evidence
-- Glass geometry from a photograph, rebuilt in Blender 5.2.3 (bpy): brim 603.7 mL (integral) vs 603.3 mL (Blender mesh, 96 sides, factor 0.99929); 568 mL at 152.0 mm, 8 mm below the rim; widest 84.1 mm vs published 85 mm. `tools/fig12/glass.py`.
+- Glass geometry from a photograph, rebuilt in Blender 5.2.3 (bpy): brim 603.7 mL (integral) vs 603.3 mL (Blender mesh, 96 sides, factor 0.99929); 568 mL at 151.9 mm, 8.1 mm below the rim; widest 84.1 mm vs published 85 mm. `tools/fig12/glass.py`.
 - FEM mode solver gated against the exact cylinder: 9 eigenvalues within 2.4e-4 (λ11 within 3e-7); Q equals 2R/((ξ²−1)J1(ξ)) = 0.057528 m; damping integrals equal Wolfram's exact Bessel integrals to 7e-5. `python3 tools/fig12/check_cylinder.py` → PASS.
 - Wolfram Language: ξ11 = 1.841183781, β = 0.05752775 m, f1 = 3.3816 Hz for R = 40 mm, h = 99.5 mm (the brief's 3.382 Hz confirmed).
 - Live RK4 gated against SciPy DOP853: 5e-8 (sideways resonance) and 7e-7 (Faraday) of the largest amplitude. `notes/fig12/gate.cjs` + `tools/fig12/check_dynamics.py` → PASS.

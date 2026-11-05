@@ -25,7 +25,7 @@ No drawing of the glass is published; retailers give 160 × 85 mm and 568 mL.
    are 160 mm apart (0.3926 mm/px), drops the rows distorted by the ellipses, smooths with a spline to 0.2 mm rms, takes the
    wall 2.0 mm thick (normal to the wall) and the cavity floor 8 mm above the foot, and writes `glass_profile.json`. It then
    revolves the cavity in Blender (bpy 5.2.3, 96 segments) and measures its volume independently: 603.3 mL against 603.7 mL by
-   integration (the difference is the polygon factor 0.99929). 568 mL reaches 152.0 mm, 8 mm below the rim. Widest outer
+   integration (the difference is the polygon factor 0.99929). 568 mL reaches 151.9 mm, 8.1 mm below the rim. Widest outer
    diameter 84.1 mm (published 85 mm). It also exports `glass.glb`.
 
 ## The modes

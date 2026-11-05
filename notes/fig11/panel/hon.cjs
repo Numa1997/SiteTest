@@ -2,7 +2,8 @@
 // b  replay: every stored step again, with the page's own rk4 (bit for bit) and with the independent RK4 of ref.cjs; continuity of the step log; a chained replay
 // c  controller: every stored force recomputed from the stored sample alone; zero-order hold of every 1 ms step; sample times on the loop period's grid
 // d  picture: cart, hinge between the rods and top of the upper rod found in the canvas pixels (alpha first) and compared with the stored state turned into pixels
-// e  scenarios: rest, flick, drag, swing-up, random falls (rolling and STOP), T_s = 10 and 40 ms, a glide, a change of the force limit
+// e  scenarios: rest, flick, drag, swing-up, random falls (rolling and STOP), T_s = 10 and 40 ms, a glide, a change of the force limit;
+//    wind (Kármán street in air), water (a swell), windcart (the cart in your hand in a breeze): section 13
 // Usage: NODE_PATH=$(npm root -g) node hon.cjs [scenario ...]     ROOT=<repo>  PAGE=<file in public/simulations>  DPR=1|2
 'use strict';
 const { chromium } = require('playwright'); const path = require('path'); const R = require('./ref.cjs');
@@ -16,11 +17,11 @@ const EXTRACT = (a) => {
   const st = [], cs = []; let b1n = 0, b1x = 0, b1skip = 0;
   for (let r = 0; r < g('st_n'); r++) { const i = g('st_i')[r]; if (i <= a.lastI) continue;
     const row = { i, t: g('st_t')[r], s0: A('st_s0', r, 6), s1: A('st_s1', r, 6), u: g('st_u')[r], xh: g('st_xh')[r], j: g('st_j')[r], kind: g('st_kind')[r], jump: g('st_jump')[r], ver: g('st_ver')[r] };
-    if ((row.kind === 0 || row.kind === 2) && row.ver === ver) { const q = DIPC.rk4(DIPC.p, row.s0, row.u, 0.001); b1n++; if (q.every((v, k) => v === row.s1[k])) b1x++; } else if (row.kind === 0 || row.kind === 2) b1skip++;
+    if ((row.kind === 0 || row.kind === 2) && row.ver === ver) { const q = DIPC.rk4(DIPC.p, row.s0, row.u, 0.001, row.t); b1n++; if (q.every((v, k) => v === row.s1[k])) b1x++; } else if (row.kind === 0 || row.kind === 2) b1skip++;
     st.push(row); }
   for (let r = 0; r < g('cs_n'); r++) { const i = g('cs_i')[r]; if (i <= a.lastJ) continue;
     cs.push({ i, t: g('cs_t')[r], k: g('cs_k')[r], due: g('cs_due')[r], next: g('cs_next')[r], s: A('cs_s', r, 6), u: g('cs_u')[r], mode: g('cs_mode')[r], rk: g('cs_rk')[r], rx: g('cs_rx')[r], rv: g('cs_rv')[r], rt0: g('cs_rt0')[r], re0: g('cs_re0')[r], xc: g('cs_xc')[r], tp: g('cs_tp')[r], pl: g('cs_pl')[r], ver: g('cs_ver')[r], umax: g('cs_umax')[r], bite: g('cs_bite')[r], vb: g('cs_vb')[r] }); }
-  const ctx = { ver, d: Array.from(g('d')), f: Array.from(g('f')), K: Array.from(g('K')), P: Array.from(g('P')), cs: g('c_star'), gamma: g('gamma'), Ts: g('Ts'), gw: g('glide_w'), kc: g('calm_k'), hw: g('hand_w'), ha: g('hand_amax') };
+  const ctx = { ver, d: Array.from(g('d')), f: Array.from(g('f')), K: Array.from(g('K')), P: Array.from(g('P')), cs: g('c_star'), gamma: g('gamma'), Ts: g('Ts'), gw: g('glide_w'), kc: g('calm_k'), hw: g('hand_w'), ha: g('hand_amax'), fl: g('medium') === 'vacuum' ? null : { flow: g('flow'), U: g('U_f'), nu: g('mu_f') / g('rho_f'), xi: Array.from(g('xi_r')), cq: g('c_q'), cl: g('c_lin'), cc: g('c_quad'), L1: g('L1'), L2: g('L2') } };
   const pl = g('pl_serial'), plan = pl && pl !== a.plSerial ? { serial: pl, u: Array.from(g('pl_u')), K: Array.from(g('pl_K')), nom: Array.from(g('pl_nom')) } : null;
   return { st, cs, ctx, plan, sig: g('sig')[0], b1: { n: b1n, exact: b1x, skip: b1skip }, t: DIPC.t, mode: DIPC.mode };
 };
@@ -77,7 +78,7 @@ function checkLogs(acc) {
   lines.push(`  b page's own rk4 on every stored step: ${b1.exact}/${b1.n} bit-identical (${b1.skip} steps of an earlier machine not replayed) ${b1.exact === b1.n ? 'PASS' : 'FAIL'}`);
   let n2 = 0, m2 = 0, m2rel = 0, skip2 = 0;
   for (const r of st) { if (r.kind !== 0 && r.kind !== 2) continue; const c = acc.ctx[r.ver]; if (!c) { skip2++; continue; }
-    const q = R.rk4(c.d, c.f, r.s0, r.u, H); n2++; for (let k = 0; k < 6; k++) { const d = Math.abs(q[k] - r.s1[k]); m2 = Math.max(m2, d); m2rel = Math.max(m2rel, d / Math.max(1e-300, Math.abs(r.s1[k] - r.s0[k]) || Math.abs(r.s1[k]))); } }
+    const q = R.rk4(c.d, c.f, r.s0, r.u, H, r.t, c.fl); n2++; for (let k = 0; k < 6; k++) { const d = Math.abs(q[k] - r.s1[k]); m2 = Math.max(m2, d); m2rel = Math.max(m2rel, d / Math.max(1e-300, Math.abs(r.s1[k] - r.s0[k]) || Math.abs(r.s1[k]))); } }
   const ok2 = m2 < 1e-12; if (!ok2) ok = false;
   lines.push(`  b independent RK4 (Cramer, from (8a), (8), (8b)) on every stored step: ${n2} steps, max |Δs| = ${fmt(m2)}, max |Δs| / |step change| = ${fmt(m2rel)} ${ok2 ? 'PASS (float64 rounding)' : 'FAIL'}`);
   // b: continuity of the step log
@@ -89,7 +90,7 @@ function checkLogs(acc) {
   // b: chained replay over the longest stretch of RK4 steps without an outside change, with the stored forces
   let best = [0, 0], a0 = 0; for (let n = 1; n <= st.length; n++) { if (n === st.length || st[n].kind !== 0 || st[n].jump || st[n].ver !== st[a0].ver || st[n].i !== st[n - 1].i + 1 || st[a0].kind !== 0) { if (n - a0 > best[1] - best[0]) best = [a0, n]; a0 = n; } }
   if (best[1] - best[0] > 10) { const c = acc.ctx[st[best[0]].ver]; let q = st[best[0]].s0.slice(), worst = 0, marks = []; const T0 = st[best[0]].t;
-    for (let n = best[0]; n < best[1]; n++) { q = R.rk4(c.d, c.f, q, st[n].u, H); const d = Math.max(...q.map((v, k) => Math.abs(v - st[n].s1[k]))); worst = Math.max(worst, d);
+    for (let n = best[0]; n < best[1]; n++) { q = R.rk4(c.d, c.f, q, st[n].u, H, st[n].t, c.fl); const d = Math.max(...q.map((v, k) => Math.abs(v - st[n].s1[k]))); worst = Math.max(worst, d);
       const el = st[n].t + H - T0; if ([0.1, 0.5, 1, 1.5, 2, 2.5, 3, 4, 6, 8].some((m) => Math.abs(el - m) < H / 2)) marks.push([+el.toFixed(1), d]); }
     const rates = []; for (let k = 1; k < marks.length; k++) if (marks[k - 1][1] > 1e-15 && marks[k][1] < 1e-3) rates.push((Math.log(marks[k][1] / marks[k - 1][1]) / (marks[k][0] - marks[k - 1][0])).toFixed(1));
     lines.push(`  b chained independent replay from one stored state with the stored forces, ${best[1] - best[0]} steps (${fmt((best[1] - best[0]) * H)} s): max |Δs| ${marks.map((m) => m[0] + ' s: ' + fmt(m[1])).join(', ')}; growth rate of the gap between marks ${rates.join(', ')} 1/s (open loop: the gap grows as fast as nearby motions part, at the fall rate σ₁ = ${fmt(acc.sig || NaN)} 1/s near upright, slower while hanging or caught)`); }
@@ -117,7 +118,7 @@ function checkLogs(acc) {
   // c: your hand on the cart: each step's force from (29) and row 1 of (9), from the stored state and pointer alone (the independent forceFor of ref.cjs)
   let nh = 0, mh = 0, uh = 0;
   for (const r of st) { if (r.kind !== 2) continue; const c = acc.ctx[r.ver]; if (!c || !(c.hw > 0)) { uh++; continue; }
-    const a = Math.max(-c.ha, Math.min(c.ha, c.hw * c.hw * (r.xh - r.s0[0]) - 2 * c.hw * r.s0[3])); nh++; mh = Math.max(mh, Math.abs(R.forceFor(c.d, c.f, r.s0, a) - r.u)); }
+    const a = Math.max(-c.ha, Math.min(c.ha, c.hw * c.hw * (r.xh - r.s0[0]) - 2 * c.hw * r.s0[3])); nh++; mh = Math.max(mh, Math.abs(R.forceFor(c.d, c.f, r.s0, a, r.t, c.fl) - r.u)); }
   if (nh) { const okh = mh < 1e-9 && uh === 0; if (!okh) ok = false;
     lines.push(`  c hand on the cart (29)-(30): ${nh} steps, force recomputed from each stored row, max |Δu| = ${fmt(mh)} N, ${uh} unchecked ${okh ? 'PASS' : 'FAIL'}`); }
   // c: zero-order hold
@@ -158,6 +159,7 @@ async function main() {
   const pic = async (label) => { await pause(false); await frame(); const P = await pg.evaluate(PICTURE); const r = checkPicture(P, label); r.lines.forEach((l) => out(l)); return r.ok; };
   let seed = 7; const rnd = () => { seed = (seed * 1664525 + 1013904223) % 4294967296; return seed / 4294967296; };
   const randomState = () => [(rnd() - 0.5), (rnd() * 2 - 1) * Math.PI, (rnd() * 2 - 1) * Math.PI, (rnd() - 0.5), (rnd() - 0.5) * 6, (rnd() - 0.5) * 6];
+  const medium = (m, f, U) => pg.evaluate((a) => { const M = document.getElementById('med'), F = document.getElementById('flow'), S = document.getElementById('Uf'); S.value = a.U; S.dispatchEvent(new Event('input', { bubbles: true })); M.value = a.m; M.dispatchEvent(new Event('change')); F.value = a.f; F.dispatchEvent(new Event('change')); }, { m, f, U });
   const results = [];
   const scen = {
     rest: async () => { await pause(true); await pg.click('#reset'); await start(); await live(5000); await pull(); return pic('rest'); },
@@ -192,6 +194,9 @@ async function main() {
       await start(); const v0 = await pg.evaluate(() => DIPC.ref.v); let t = 0; for (; t < 20; t += 2) { await drive(2); if ((await pg.evaluate(() => DIPC.ref.kind)) === 'fixed') break; } await drive(6);   // the reference is at rest; let the balancer settle the last bite
       const m = await pg.evaluate(() => ({ ref: DIPC.ref.kind, v: DIPC.s[3], mode: DIPC.mode })); out(`  e brake: braking from ${fmt(v0)} m/s; reference ${m.ref} after about ${t + 2} s, cart speed 6 s later ${fmt(m.v)} m/s, mode ${m.mode}`);
       return (await pic('braked to rest')) && m.ref === 'fixed' && Math.abs(m.v) < 0.01; },
+    wind: async () => { await medium('air', 'street', 2); await pause(true); await pg.click('#reset'); await start(); await drive(8); const a = await pic('in a Kármán street, U = 2 m/s'); await medium('vacuum', 'still', 2); return a; },
+    water: async () => { await medium('water', 'waves', 0.4); await pause(true); await pg.click('#reset'); await start(); await drive(8); const a = await pic('in a swell, U = 0.4 m/s'); await medium('vacuum', 'still', 2); return a; },
+    windcart: async () => { await medium('air', 'breeze', 3); const a = await scen.cart(); await medium('vacuum', 'still', 2); return a; },
     limit: async () => { await pause(false); await pg.click('#tilt'); await start(); await drive(1); await set({ Fmax: 25 }); await drive(3); await set({ Fmax: 60 }); await pg.evaluate(() => DIPC.finishCatch()); await drive(2); return pic('force limit changed while balancing'); }
   };
   const order = want.length ? want : ['rest', 'flick', 'drag', 'cart', 'swingup', 'random', 'randomSTOP', 'ts40', 'glide', 'brake', 'limit'];

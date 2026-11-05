@@ -84,6 +84,18 @@ then into the tables. Machine tables: [i18n/de/strings.json](../i18n/de/strings.
 | (stochastic) collection equation | (stochastische) Koaleszenzgleichung | معادلة الالتقاط (العشوائي) |
 | kernel | Kern | النواة |
 | fall speed, drag coefficient | Fallgeschwindigkeit, Widerstandsbeiwert | سرعة السقوط، معامل الكبح |
+| fluid, medium, flow | Fluid, Medium, Strömung | المائع، الوسط، الجريان |
+| velocity field, stream function | Geschwindigkeitsfeld, Stromfunktion | حقل السرعة، دالّة الجريان |
+| density, viscosity, kinematic viscosity | Dichte, Viskosität, kinematische Viskosität | الكثافة، اللزوجة، اللزوجة الحركية |
+| Reynolds number | Reynolds-Zahl | عدد رينولدز |
+| drag (viscous, pressure, Stokes) | Widerstand (viskoser, Druck-, Stokes-Widerstand) | الكبح (اللزج، كبح الضغط، كبح ستوكس) |
+| buoyancy, added mass | Auftrieb, hydrodynamische (mitbewegte) Masse | الطفو، الكتلة المضافة |
+| resistive force theory, Stokeslet | Widerstandskrafttheorie, Stokeslet | نظرية قوّة المقاومة، الستوكسليت |
+| traction (σ·n), generalised force | Spannungsvektor, verallgemeinerte Kraft | متّجه الإجهاد، القوّة المعمّمة |
+| vortex, eddy, Kármán vortex street | Wirbel, Wirbelwalze, Kármánsche Wirbelstraße | دوّامة، دوّامة متدحرجة، شارع دوّامات كارمان |
+| shear flow, stagnation point, plane jet | Scherströmung, Staupunkt, ebener Freistrahl | جريان القصّ، نقطة الركود، النفث المستوي |
+| boundary layer, eddy viscosity | Grenzschicht, Wirbelviskosität | الطبقة الحدّية، لزوجة الاضطراب |
+| swell (sea) | Dünung | موج متعاقب |
 | energy harvesting | Energy Harvesting | حصاد الطاقة |
 | servo valve, spool | Servoventil, Ventilschieber | صمّام مؤازر، المِزلاج |
 | ram (of a press) | Stößel | المِدكّ |

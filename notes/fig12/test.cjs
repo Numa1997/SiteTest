@@ -5,7 +5,7 @@ const { chromium } = require('playwright');
   const b = await chromium.launch({ args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] });
   const pg = await (await b.newContext({ viewport: { width: W, height: W < 600 ? 844 : 900 } })).newPage(); const errs = [];
   pg.on('pageerror', e => errs.push(e.message)); pg.on('console', m => { if (m.type() === 'error') errs.push('console: ' + m.text()); });
-  await pg.goto('http://localhost:8765/simulations/beer-slosh.html', { waitUntil: 'networkidle' });
+  await pg.goto('http://localhost:8765/' + (process.argv[4] || '') + 'simulations/beer-slosh.html', { waitUntil: 'networkidle' });
   await pg.waitForTimeout(1500);
   // scripted drag of the glass: pointer down on the glass, move 60 px right, release
   const box = await (await pg.$('#stage3d canvas')).boundingBox();
@@ -27,7 +27,7 @@ const { chromium } = require('playwright');
     res.ungrouped = Object.keys(ds.vars ? ds.vars : {}).length; return res;
   });
   const bad = r.checks.filter(c => c[3] === 'DIFFER');
-  console.log(`width ${W}: errors ${errs.length}, katex errors ${r.katex}, overflow ${r.over}px, walkthrough ${r.walk}`);
+  console.log(`${process.argv[4] || 'en/'} width ${W}: errors ${errs.length}, katex errors ${r.katex}, overflow ${r.over}px, walkthrough ${r.walk}`);
   console.log(`checks: ${r.checks.length - bad.length}/${r.checks.length} agree` + (bad.length ? ' DIFFER: ' + JSON.stringify(bad) : ''));
   console.log('drawn:', JSON.stringify(r.drawn));
   console.log(`drag: glass target x = ${(r.glass.Tx * 1000).toFixed(1)} mm, glass at ${(r.glass.x * 1000).toFixed(1)} mm; wave at wall after release ${(r.eta * 1000).toFixed(2)} mm`);
