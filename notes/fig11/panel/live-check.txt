@@ -1,0 +1,6 @@
+en/1280: {"tab":true,"lang":"en","dir":"ltr","open":true,"ledgerRows":141,"recording":true,"rounds":1,"sw":1280,"cw":1280} width equal errors: none
+en/390: {"tab":true,"lang":"en","dir":"ltr","open":true,"ledgerRows":141,"recording":true,"rounds":1,"sw":390,"cw":390} width equal errors: none
+de/1280: {"tab":true,"lang":"de","dir":"ltr","open":true,"ledgerRows":141,"recording":true,"rounds":1,"sw":1280,"cw":1280} width equal errors: none
+de/390: {"tab":true,"lang":"de","dir":"ltr","open":true,"ledgerRows":141,"recording":true,"rounds":1,"sw":390,"cw":390} width equal errors: none
+ar/1280: {"tab":true,"lang":"ar","dir":"rtl","open":true,"ledgerRows":141,"recording":true,"rounds":1,"sw":1280,"cw":1280} width equal errors: none
+ar/390: {"tab":true,"lang":"ar","dir":"rtl","open":true,"ledgerRows":141,"recording":true,"rounds":1,"sw":390,"cw":390} width equal errors: none

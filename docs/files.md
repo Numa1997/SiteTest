@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-993 files, 58.5 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+995 files, 58.5 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -40,7 +40,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Agents of the lecture-note review](#agents-of-the-lecture-note-review) | 4 |
 | [Working notes of the Rotor Pendula study](#working-notes-of-the-rotor-pendula-study) | 86 |
 | [Working notes of the Droplet Collection study](#working-notes-of-the-droplet-collection-study) | 121 |
-| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 183 |
+| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 185 |
 
 ## Repository root
 
@@ -1190,6 +1190,8 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/fig11/panel/final.py`](../notes/fig11/panel/final.py) | 26.6 kB | Project 05: an honesty test of the data panel (origin, replay, controller, picture, falsification, cost), or the masking and checked translations of its strings. | [README.md](../notes/fig11/panel/README.md) |
 | [`notes/fig11/panel/g-cost.txt`](../notes/fig11/panel/g-cost.txt) | 2.4 kB | Project 05: raw output of an honesty test or behaviour test of the data panel, 5 November 2026. | [README.md](../notes/fig11/panel/README.md) |
 | [`notes/fig11/panel/hon.cjs`](../notes/fig11/panel/hon.cjs) | 23.9 kB | Project 05: an honesty test of the data panel (origin, replay, controller, picture, falsification, cost), or the masking and checked translations of its strings. | [README.md](../notes/fig11/panel/README.md) |
+| [`notes/fig11/panel/live-check.txt`](../notes/fig11/panel/live-check.txt) | 879 B | Project 05: raw output of an honesty test or behaviour test of the data panel, 5 November 2026. | [README.md](../notes/fig11/panel/README.md) |
+| [`notes/fig11/panel/live.cjs`](../notes/fig11/panel/live.cjs) | 2.2 kB | Project 05: an honesty test of the data panel (origin, replay, controller, picture, falsification, cost), or the masking and checked translations of its strings. | [README.md](../notes/fig11/panel/README.md) |
 | [`notes/fig11/panel/mask.py`](../notes/fig11/panel/mask.py) | 1.4 kB | Project 05: an honesty test of the data panel (origin, replay, controller, picture, falsification, cost), or the masking and checked translations of its strings. | [README.md](../notes/fig11/panel/README.md) |
 | [`notes/fig11/panel/origin.cjs`](../notes/fig11/panel/origin.cjs) | 8.6 kB | Project 05: an honesty test of the data panel (origin, replay, controller, picture, falsification, cost), or the masking and checked translations of its strings. | [README.md](../notes/fig11/panel/README.md) |
 | [`notes/fig11/panel/ref.cjs`](../notes/fig11/panel/ref.cjs) | 4.4 kB | Project 05: an honesty test of the data panel (origin, replay, controller, picture, falsification, cost), or the masking and checked translations of its strings. | [README.md](../notes/fig11/panel/README.md) |
