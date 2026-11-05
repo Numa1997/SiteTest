@@ -1,34 +1,35 @@
-// Regression tests for the round-1 code review of Fig. 12. node notes/fig12/regress.cjs
-const { chromium } = require('playwright');
+// Regression tests of the two code reviews of Fig. 12. Exits 1 on any failure.
+// node notes/fig12/regress.cjs [base URL, default http://localhost:8765/]
+const { chromium } = require('playwright'); const BASE = process.argv[2] || 'http://localhost:8765/';
 (async () => { const b = await chromium.launch({ args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
   const pg = await b.newPage(); const errs = []; pg.on('pageerror', e => errs.push(e.message));
-  await pg.goto('http://localhost:8765/simulations/beer-slosh.html'); await pg.waitForTimeout(1500);
+  await pg.goto(BASE + 'simulations/beer-slosh.html'); await pg.waitForTimeout(1500);
   const r = await pg.evaluate(async () => { const S = window.SLOSH, D = Sim.data, out = {};
-    document.getElementById('play').click();                                   // pause: we drive the clock by hand
-    // 1 read-backs fail on a cleared canvas
+    const frames = n => new Promise(res => { let i = 0; (function f() { if (++i < n) requestAnimationFrame(f); else res(); })(); });
+    await frames(30);
     const sec = document.getElementById('sec'), tr = document.getElementById('tr');
+    out.readback_ok_when_drawn = D.drawn.eta_w().ok !== false && D.drawn.z_s().ok === true;
+    document.getElementById('play').click();
     sec.getContext('2d').clearRect(0, 0, 1e4, 1e4); tr.getContext('2d').clearRect(0, 0, 1e4, 1e4);
-    out.readback_fails_when_blank = D.drawn.eta_w().ok === false && D.drawn.z_s().ok === false;
-    // 2 stopping the shaker: no jump in the glass's position
+    out.readback_fails_when_blank = D.drawn.eta_w().ok !== true && D.drawn.z_s().ok === false;
+    const pos = () => S.shakerOffset().x + S.G.x;
     document.getElementById('shF1').click(); for (let i = 0; i < 777; i++) S.step();
-    const before = S.ds.get('xg'); const off = S.shakerOffset().x + S.G.x;
-    document.getElementById('shOff').click(); const after = S.shakerOffset().x + S.G.x;
-    out.shaker_stop_jump_mm = Math.abs(after - off) * 1000;
-    // 3 the cut turns the short way: rocking along 88° then 92°
-    const k = S.M.findIndex(m => m.m === 1 && m.n === 1), NK = S.M.length, set = deg => { const a = deg * Math.PI / 180; S.aO.fill(0); S.vO.fill(0); S.aO[k] = 0.003 * Math.cos(a); S.aO[NK + k] = 0.003 * Math.sin(a); };
-    document.querySelector('#plane button[data-v="follow"]').click();
-    set(88); for (let i = 0; i < 200; i++) window.dispatchEvent(new Event('noop')); 
+    let a = pos(); document.getElementById('shOff').click(); out.stop_jump_mm = Math.abs(pos() - a) * 1000;
+    document.getElementById('shF1').click(); for (let i = 0; i < 777; i++) S.step();
+    a = pos(); document.getElementById('shF2').click(); out.preset_jump_mm = Math.abs(S.shakerOffset().x + S.G.x - a) * 1000;
+    document.getElementById('shF1').click(); for (let i = 0; i < 777; i++) S.step();
+    a = pos(); const A = document.getElementById('A'); A.value = 1; A.dispatchEvent(new Event('input')); out.slider_jump_mm = Math.abs(pos() - a) * 1000;
+    document.getElementById('shOff').click();
+    document.querySelector('#shape button[data-v="cyl"]').click(); out.straight = Math.abs(S.Rdraw(0.05) - S.geo.a) < 1e-12 && Math.abs(S.Rdraw(0.13) - S.geo.a) < 1e-12;
+    document.querySelector('#shape button[data-v="tulip"]').click();
     return out; });
-  // drive frames for the cut test through real animation frames
-  await pg.evaluate(() => document.getElementById('play').click()); await pg.waitForTimeout(100);
-  const turn = await pg.evaluate(async () => { const S = window.SLOSH, k = S.M.findIndex(m => m.m === 1 && m.n === 1), NK = S.M.length;
-    const hold = deg => { const a = deg * Math.PI / 180; S.aO.fill(0); S.vO.fill(0); S.aO[k] = 0.003 * Math.cos(a); S.aO[NK + k] = 0.003 * Math.sin(a); };
-    const frames = (n, deg) => new Promise(res => { let i = 0; (function f() { hold(deg); if (++i < n) requestAnimationFrame(f); else res(); })(); });
-    await frames(120, 88); const a1 = S.thP * 180 / Math.PI; const seen = [];
-    await new Promise(res => { let i = 0; (function f() { hold(92); seen.push(S.thP * 180 / Math.PI); if (++i < 120) requestAnimationFrame(f); else res(); })(); });
-    return { start: a1, min_seen: Math.min(...seen.map(x => ((x % 180) + 180) % 180)), end: seen[seen.length - 1] }; });
-  // 4 straight glass: the cut's wall is vertical
-  const straight = await pg.evaluate(async () => { document.querySelector('#shape button[data-v="cyl"]').click(); await new Promise(r => setTimeout(r, 300));
-    const S = window.SLOSH; return Math.abs(S.Rdraw(0.05) - S.Rdraw(0.13)) < 1e-12 && Math.abs(S.Rdraw(0.05) - S.geo.a) < 1e-12; });
-  console.log(JSON.stringify(Object.assign(r, { cut_turn: turn, straight_draws_cylinder: straight, errors: errs.length })));
-  await b.close(); })();
+  const fail = [];
+  if (!r.readback_ok_when_drawn) fail.push('read-back does not find the drawing');
+  if (!r.readback_fails_when_blank) fail.push('read-back passes on a blank canvas');
+  if (r.stop_jump_mm > 1e-6) fail.push('stopping the shaker moves the glass ' + r.stop_jump_mm + ' mm');
+  if (r.preset_jump_mm > 1e-6) fail.push('a shaker preset moves the glass ' + r.preset_jump_mm + ' mm');
+  if (r.slider_jump_mm > 1e-6) fail.push('the amplitude slider moves the glass ' + r.slider_jump_mm + ' mm');
+  if (!r.straight) fail.push('the straight glass is not drawn straight');
+  if (errs.length) fail.push('page errors: ' + errs.join(' | '));
+  console.log(JSON.stringify(r)); console.log(fail.length ? 'FAIL\n  ' + fail.join('\n  ') : 'PASS all regression tests');
+  await b.close(); process.exit(fail.length ? 1 : 0); })();

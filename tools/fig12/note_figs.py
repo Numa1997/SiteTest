@@ -48,7 +48,7 @@ def curve(col, idx, dash=''):
 b += [curve(INK, 3), curve(WINE, 1), curve(WINE, 2, '5 4')]
 lx = L + 14; b.append(f'<line x1="{lx}" y1="{T+16}" x2="{lx+24}" y2="{T+16}" stroke="{INK}" stroke-width="1.8"/>' + text(lx + 30, T + 20, 'tulip glass, no head', 10))
 b.append(f'<line x1="{lx}" y1="{T+32}" x2="{lx+24}" y2="{T+32}" stroke="{WINE}" stroke-width="1.8"/>' + text(lx + 30, T + 36, 'tulip glass, 18 mm head', 10, fill=WINE))
-b.append(f'<line x1="{lx}" y1="{T+48}" x2="{lx+24}" y2="{T+48}" stroke="{WINE}" stroke-width="1.8" stroke-dasharray="5 4"/>' + text(lx + 30, T + 52, 'straight glass of the same a and D, 18 mm head', 10, fill=WINE))
+b.append(f'<line x1="{lx}" y1="{T+48}" x2="{lx+24}" y2="{T+48}" stroke="{WINE}" stroke-width="1.8" stroke-dasharray="5 4"/>' + text(lx + 30, T + 52, 'straight glass of the same R and D, 18 mm head', 10, fill=WINE))
 vi = list(V).index(420); b.append(f'<line x1="{x(420):.1f}" y1="{T}" x2="{x(420):.1f}" y2="{H-B}" stroke="{RULE}" stroke-dasharray="3 3"/>' + text(x(420) + 4, H - B - 8, 'widest point of the glass', 9, 'start', MUTED))
 open('notes/fig12/figs/f_vs_V.svg', 'w').write(svg(W, H, ''.join(b), 'Frequency of the slowest mode against the volume of stout: tulip glass with and without head, and a straight glass of the same surface radius and depth.'))
 
@@ -89,7 +89,7 @@ open('notes/fig12/figs/mode11.svg', 'w').write(svg(W, H, ''.join(b), 'The slowes
 
 # Figure 4: damping budget of the (1,1) mode
 W, H = 720, 230; L = 190; R = 90
-rows = [('wall and floor layers γ|w', N['gw11']), ('surface skin γ|s', N['gs11']), ('interior, 2νλ²: γ|b', N['gb11']), ('contact line γ|c', N['gc11']), ('head friction γ|f', N['gf11'])]
+rows = [('wall and floor layers γ|w', N['gw11']), ('surface skin γ|s', N['gs11']), ('interior, 2νλ²: γ|v', N['gb11']), ('contact line γ|c', N['gc11']), ('head friction γ|f', N['gf11'])]
 tot = N['gam11']; xs = lambda v: L + v / 0.26 * (W - L - R)
 b = []
 for k, (lab, v) in enumerate(rows):

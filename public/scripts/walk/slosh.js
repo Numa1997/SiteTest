@@ -10,9 +10,9 @@ window.WALK.slosh = {
         {
             title: 'The calm surface',
             where: 'interpTulip(): from the precomputed fills, whenever a slider moves',
-            math: 'V = ∫<sub>Z<sub>floor</sub></sub><sup>⟦zs|Z<sub>s</sub>⟧</sup> π R<sub>i</sub>(Z)² dZ,  ⟦a|R⟧ = R<sub>i</sub>(Z<sub>s</sub>)',
+            math: '⟦V|V⟧ = ∫<sub>Z<sub>floor</sub></sub><sup>⟦zs|Z<sub>s</sub>⟧</sup> π R<sub>i</sub>(Z)² dZ,  ⟦a|R⟧ = R<sub>i</sub>(Z<sub>s</sub>)',
             note: 'The offline script tools/fig12/build_modes.py solved the volume integral for 30 fills, from 300 to 590 mL, and stored the height Z<sub>s</sub> of the calm surface and its radius R for each, in metres. The page finds the two stored fills on either side of the volume V you set and interpolates linearly between them; w is the weight of the upper one.',
-            code: `var vs = MD.vols_mL, i = 0; while (i < vs.length - 2 && vs[i + 1] < P.V) i++;
+            code: `var vs = MD.vols_mL, i = 0; while (i < vs.length - 2 && vs[i + 1] < ⟦V|P.V⟧) i++;
 var w = Math.max(0, Math.min(1, (P.V - vs[i]) / (vs[i + 1] - vs[i]))), A = MD.fills[i], B = MD.fills[i + 1];
 ⟦zs|geo.zs = A.zs + w * (B.zs - A.zs)⟧; ⟦a|geo.a = A.a + w * (B.a - A.a)⟧;`,
             syms: [['V', 'V', 'P.V', 'volume of stout, mL'], ['zs', 'Z<sub>s</sub>', 'geo.zs', 'height of the calm surface above the foot, m'], ['a', 'R', 'geo.a', 'radius of the calm surface, m']]
@@ -40,7 +40,7 @@ var mu = P.mu6 * muWater(P.T) / muWater(6), ⟦nu|nu = mu / P.rho⟧, Mf = P.ef 
         {
             title: 'Where the energy goes',
             where: 'setup(): each damping term on its own',
-            math: '⟦gw|γ<sub>w</sub>⟧ = ½(νω/2)<sup>½</sup>(I<sub>w</sub>+I<sub>b</sub>)/E (16),  ⟦gs|γ<sub>s</sub>⟧ = c<sub>s</sub> ½(νω/2)<sup>½</sup>I<sub>s</sub>/E,  ⟦gb|γ<sub>b</sub>⟧ = 2νλ²,<br>⟦gf|γ<sub>f</sub>⟧ = c<sub>f</sub>(u<sub>f</sub>/R)(1 − e<sup>−λh<sub>f</sub></sup>) (18),  ⟦gam|γ⟧ = γ<sub>w</sub> + γ<sub>s</sub> + γ<sub>b</sub> + γ<sub>c</sub> + γ<sub>f</sub>',
+            math: '⟦gw|γ<sub>w</sub>⟧ = ½(νω/2)<sup>½</sup>(I<sub>w</sub>+I<sub>b</sub>)/E<sub>Φ</sub> (16),  ⟦gs|γ<sub>s</sub>⟧ = c<sub>s</sub> ½(νω/2)<sup>½</sup>I<sub>s</sub>/E<sub>Φ</sub>,  ⟦gb|γ<sub>v</sub>⟧ = 2νλ²,<br>⟦gf|γ<sub>f</sub>⟧ = c<sub>f</sub>(u<sub>f</sub>/R)(1 − e<sup>−λh<sub>f</sub></sup>) (18),  ⟦gam|γ⟧ = γ<sub>w</sub> + γ<sub>s</sub> + γ<sub>v</sub> + γ<sub>c</sub> + γ<sub>f</sub>',
             note: 'md.Iw, md.Ib and md.Is are the wall, floor and surface integrals of (16), already divided by the energy integral E by the offline program, in 1/m. sq is ½(νω/2)<sup>½</sup> in m/s. Each rate is an amplitude decay rate in 1/s; the damping ratio is ζ = γ/ω.',
             code: `var sq = 0.5 * Math.sqrt(nu * omA[k] / 2);
 ⟦gw|gw[k] = P.wall ? sq * (md.Iw + md.Ib) : 0⟧;
@@ -49,18 +49,18 @@ var mu = P.mu6 * muWater(P.T) / muWater(6), ⟦nu|nu = mu / P.rho⟧, Mf = P.ef 
 gcA[k] = P.gc;
 ⟦gf|gf[k] = P.kf * (U_F / geo.a) * (1 - Math.exp(-md.lam * P.hf))⟧;
 ⟦gam|gam[k] = gw[k] + gs[k] + gb[k] + gcA[k] + gf[k]⟧;
-zeta[k] = gam[k] / omA[k];`,
-            syms: [['gw', 'γ<sub>w</sub>', 'gw[k]', 'wall and floor layers, 1/s'], ['gs', 'γ<sub>s</sub>', 'gs[k]', 'surface skin, 1/s'], ['gb', 'γ<sub>b</sub>', 'gb[k]', 'viscous loss in the interior of the stout, 1/s'], ['gf', 'γ<sub>f</sub>', 'gf[k]', 'head friction on the wall, 1/s'], ['gam', 'γ<sub>11</sub>', 'gam[k]', 'total amplitude decay rate of the slowest mode, 1/s'], ['zeta', 'ζ<sub>11</sub>', 'zeta[k]', 'its damping ratio']]
+⟦zeta|zeta[k] = gam[k] / omA[k]⟧;`,
+            syms: [['gw', 'γ<sub>w</sub>', 'gw[k]', 'wall and floor layers, 1/s'], ['gs', 'γ<sub>s</sub>', 'gs[k]', 'surface skin, 1/s'], ['gb', 'γ<sub>v</sub>', 'gb[k]', 'viscous loss in the interior of the stout, 1/s'], ['gf', 'γ<sub>f</sub>', 'gf[k]', 'head friction on the wall, 1/s'], ['gam', 'γ<sub>11</sub>', 'gam[k]', 'total amplitude decay rate of the slowest mode, 1/s'], ['zeta', 'ζ<sub>11</sub>', 'zeta[k]', 'its damping ratio']]
         },
         {
             title: 'The modal equation',
             where: 'deriv(t, y, out): the right-hand side for the Runge–Kutta step',
-            math: 'ä<sub>n</sub> + 2γ<sub>n</sub>ȧ<sub>n</sub> + ω<sub>n</sub>²(1 + z̈<sub>g</sub>/g) a<sub>n</sub> = −λ<sub>n</sub>Q<sub>n</sub> ⟦ax|ẍ<sub>g</sub>⟧/(1 + κ<sub>n</sub>)<span style="font-style:normal;margin-left:1.5em">(12)</span>',
-            note: 'AX and AZ are the glass’s sideways and vertical accelerations, the hand’s follower plus the shaker, in m/s². O2 is the spring constant ω<sub>n</sub>²(1 + z̈/g) per unit mass, including surface tension and the head; Fc and Fs are the pushes on the cos and sin copies of an m = 1 mode. For each mode the state holds the wall amplitude a (m) and its rate ȧ (m/s).',
+            math: 'ä<sub>n</sub> + 2γ<sub>n</sub>ȧ<sub>n</sub> + ω<sub>n</sub>²(1 + ⟦az|z̈<sub>g</sub>⟧/g) a<sub>n</sub> = −λ<sub>n</sub>⟦Q|Q<sub>n</sub>⟧ ⟦ax|ẍ<sub>g</sub>⟧/(1 + κ<sub>n</sub>)<span style="font-style:normal;margin-left:1.5em">(12)</span>',
+            note: 'AX and AZ are the glass’s sideways and vertical accelerations, the hand’s follower plus the shaker, in m/s². O2 is the spring constant per unit mass, (λ(g + z̈) + σλ³/ρ)/(1 + κ): the vertical acceleration scales only the gravity part, not the surface tension; Fc and Fs are the pushes on the cos and sin copies of an m = 1 mode. For each mode the state holds the wall amplitude a (m) and its rate ȧ (m/s).',
             code: `var AX = ax + sx, AY = ay, AZ = az + sz;      // the glass's whole acceleration: hand plus shaker
 ...
-var md = M[k], O2 = (lamA[k] * (g + AZ) + P.sig * Math.pow(lamA[k], 3) / P.rho) / (1 + muA[k]), G2 = 2 * gam[k];
-var Fc = md.m === 1 ? -lamA[k] * QA[k] * AX / (1 + muA[k]) : 0, Fs = md.m === 1 ? -lamA[k] * QA[k] * AY / (1 + muA[k]) : 0;
+var md = M[k], O2 = (lamA[k] * (g + ⟦az|AZ⟧) + P.sig * Math.pow(lamA[k], 3) / P.rho) / (1 + muA[k]), G2 = 2 * gam[k];
+var Fc = md.m === 1 ? -lamA[k] * ⟦Q|QA[k]⟧ * ⟦ax|AX⟧ / (1 + muA[k]) : 0, Fs = md.m === 1 ? -lamA[k] * QA[k] * AY / (1 + muA[k]) : 0;
 ...
 out[vc] = -G2 * y[vc] - O2 * y[ic] + Fc;`,
             syms: [['ax', 'ẍ', 'AX', 'sideways acceleration of the glass now, m/s²'], ['az', 'z̈', 'AZ', 'vertical acceleration of the glass now, m/s²'], ['Q', 'Q<sub>11</sub>', 'QA[k]', 'coupling of the slowest mode to ẍ, m']]
@@ -70,7 +70,7 @@ out[vc] = -G2 * y[vc] - O2 * y[ic] + Fc;`,
             where: 'step(): called once per millisecond of simulated time',
             math: 'y<sub>n+1</sub> = y<sub>n</sub> + (⟦h|h⟧/6)(k<sub>1</sub> + 2k<sub>2</sub> + 2k<sub>3</sub> + k<sub>4</sub>)',
             note: 'The state y holds the glass position and velocity and, for each of the 14 oscillators, its amplitude and rate. The four slopes k<sub>1</sub> … k<sub>4</sub> are the classical fourth-order Runge–Kutta stages. With h = 1 ms the fastest mode kept has ωh = 0.04 (section 9).',
-            code: `var i, A0 = deriv(tSim, Y, k1);
+            code: `var i, A0 = deriv(⟦t|tSim⟧, Y, k1);
 for (i = 0; i < NY; i++) Yt[i] = Y[i] + 0.5 * h * k1[i]; deriv(tSim + 0.5 * h, Yt, k2);
 for (i = 0; i < NY; i++) Yt[i] = Y[i] + 0.5 * h * k2[i]; deriv(tSim + 0.5 * h, Yt, k3);
 for (i = 0; i < NY; i++) Yt[i] = Y[i] + h * k3[i]; deriv(tSim + h, Yt, k4);
@@ -113,7 +113,7 @@ var Fm = P.Bl * P.Imax; return Math.max(-Fm, Math.min(Fm, F));`,
         {
             title: 'The velocity in the cut',
             where: 'fieldAt(i, j, th): at grid point (i, j) of the cut at angle θ',
-            math: '<b>u</b> = Σ<sub>n</sub> (ȧ<sub>n</sub>/λ<sub>n</sub>) ∇(Φ<sub>n</sub> cos mθ)',
+            math: '⟦umax|<b>u</b>⟧ = Σ<sub>n</sub> (ȧ<sub>n</sub>/λ<sub>n</sub>) ∇(Φ<sub>n</sub> cos mθ)',
             note: 'F holds Φ, ∂Φ/∂r and ∂Φ/∂z of the mode on the 12 × 20 grid of the cut, from the finite-element solution. c and s are ȧ/λ of the cos and sin copies, so that C and S combine them for the direction of the cut. The page draws (u<sub>r</sub>, u<sub>z</sub>) as arrows and u<sub>θ</sub> as rings.',
             code: `var m = M[k].m, F = M[k].field, c = vO[k] / lamA[k], s = m ? vO[NK + k] / lamA[k] : 0;
 var C = c * Math.cos(m * th) + s * Math.sin(m * th), S = -c * Math.sin(m * th) + s * Math.cos(m * th);

@@ -30,7 +30,7 @@ rows = [  # (what, formatted computed value, text that must contain it)
     ('Faraday predicted gain', f"{N['faraday_A2mm_gain']:.1f}", 'predicts a net growth rate of 1.2 per second'),
     ('theory coefficient', f"{N['delta_theory_coef']:.2f}", '3.50\\,\\nu^{1/2}'),
     ('ratio 4.98/3.50', f"{4.98/N['delta_theory_coef']:.2f}", '1.42 times the clean-wall theory'),
-    ('gamma_b', f"{N['gb11']:.3f}", '\\(\\gamma_b\\) is 0.009 per second'),
+    ('gamma_b', f"{N['gb11']:.3f}", '\\(\\gamma_v\\) is 0.009 per second'),
     ('gamma total', f"{N['gam11']:.2f}", '\\(\\gamma = 0.50\\)'),
     ('tau', f"{N['tau11']:.1f}", 'falls to 1/e in 2.0 s'),
     ('t 5%', f"{N['t5pct']:.1f}", 'to 5 % in 6.0 s'),
