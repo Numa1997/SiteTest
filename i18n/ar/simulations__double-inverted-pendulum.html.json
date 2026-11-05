@@ -15,6 +15,10 @@
   "src": "<span>2</span>The machine",
   "tr": "<span>2</span>الآلة"
  },
+ "02f310097bca": {
+  "src": "How often the computer reads the angles and sets the motor, in milliseconds. In between, the force stays as it was set (7.2).",
+  "tr": "كلّ كم يقرأ الحاسوب الزاويتين ويضبط المحرّك، بالمللي ثانية. وفي ما بين ذلك تبقى القوّة كما ضُبطت (7.2)."
+ },
  "032541304874": {
   "src": "For Bogdanov’s values with \\(g = 10\\ \\mathrm{m/s^2}\\), (11) gives the rows \\((0, -7.500, 0.804)\\), \\((0, 75.00, -33.75)\\), \\((0, -60.00, 52.14)\\) for \\(\\ddot x, \\ddot\\theta_1, \\ddot\\theta_2\\), which agree with the matrix printed in [2] to within 0.2 %.",
   "tr": "ولقيم بوغدانوف مع \\(g = 10\\ \\mathrm{m/s^2}\\) تعطي (11) الصفوف \\((0, -7.500, 0.804)\\) و\\((0, 75.00, -33.75)\\) و\\((0, -60.00, 52.14)\\) لـ\\(\\ddot x, \\ddot\\theta_1, \\ddot\\theta_2\\)، وهي توافق المصفوفة المطبوعة في [2] في حدود 0.2 %."
@@ -58,6 +62,10 @@
  "0b87b86f24b0": {
   "src": "The plan (22) ends with the cart at rest, \\(0.3\\,\\dot x_M\\) among the residuals. Nothing in the physics asks for that. Look at (9) once more: it contains \\(\\ddot x\\), the angles and their rates, but neither \\(x\\) nor \\(\\dot x\\). Add a constant speed \\(v\\) to the whole motion, \\(x \\to x + vt\\), and every term is unchanged: the rods do not know how fast the cart is going, only how hard it is being accelerated. This is Galileo’s observation that a ship’s cabin under way feels like one at anchor; a waiter balances a tray on a train at full speed exactly as on the platform. So the upright rest is not one state but a whole family,",
   "tr": "تنتهي الخطّة (22) والعربة ساكنة، و\\(0.3\\,\\dot x_M\\) بين البواقي. ولا شيء في الفيزياء يطلب ذلك. انظر إلى (9) مرّة أخرى: فيها \\(\\ddot x\\) والزوايا ومعدّلاتها، لكن ليس فيها \\(x\\) ولا \\(\\dot x\\). أضف سرعة ثابتة \\(v\\) إلى الحركة كلّها، \\(x \\to x + vt\\)، فيبقى كلّ حدّ على حاله: القضيبان لا يعرفان مدى سرعة العربة، بل مدى شدّة تسارعها فقط. هذه ملاحظة غاليليو أنّ مقصورة السفينة السائرة تُحَسّ كمقصورة السفينة الراسية؛ والنادل يوازن صينيّة في قطار بأقصى سرعته كما يوازنها على الرصيف تمامًا. فالسكون القائم ليس حالة واحدة بل عائلة كاملة،"
+ },
+ "0c6237f89207": {
+  "src": "<b>Pull it over and let go.</b> Grab a rod in the figure and tilt it; while you hold a rod, everything stands still at rest. Let go, and the controller starts from that leaning state. With the default machine and \\(u_\\text{max} = 60\\) N, the upper rod pulled to 13° comes back, and so does the lower rod pulled to −10°. The upper rod pulled to 45° is beyond the balancer: it asks for more than 60 N, the motor saturates, and the rods fall before the cart can get under them. The page then calms the rods and swings them back up (sections 9–11); switch <i>Let them fall</i> on to see the fall itself, or raise \\(u_\\text{max}\\) and try again.",
+  "tr": "<b>اسحبه مائلًا ثم أفلته.</b> أمسك قضيبًا في الشكل وأمِله؛ وما دمت ممسكًا بقضيب يبقى كلّ شيء ساكنًا. أفلته، فيبدأ المتحكّم من تلك الحالة المائلة. مع الآلة الافتراضية و\\(u_\\text{max} = 60\\) N يعود القضيب العلوي المسحوب إلى 13°، وكذلك القضيب السفلي المسحوب إلى −10°. أمّا القضيب العلوي المسحوب إلى 45° فيتجاوز قدرة متحكّم الموازنة: يطلب أكثر من 60 N، فيبلغ المحرّك حدّ الإشباع، ويسقط القضيبان قبل أن تتمكّن العربة من الوصول تحتهما. عندئذ تهدّئ الصفحة القضيبين وتؤرجحهما إلى الأعلى من جديد (الأقسام 9–11)؛ فعّل <i>دَعهما يسقطان</i> لترى السقوط نفسه، أو ارفع \\(u_\\text{max}\\) وحاول مجدّدًا."
  },
  "0c87155fc47a": {
   "src": "A. M. Al Juboori, M. T. Hussein and A. S. G. Qanber, <a href=\"https://ms.copernicus.org/articles/15/47/2024/\">“Swing-up control of double-inverted pendulum systems”</a>, <em>Mechanical Sciences</em> 15, 47 (2024): a review of swing-up methods, with the hanging start (0, π, π) and LQR gains computed along the planned motion.",
@@ -175,6 +183,10 @@
   "src": "Along the way the page watches \\(W\\) of (19). The moment \\(W < 0.9\\,c^\\ast\\) it hands over to the balancer (16), which from there is certain to finish. If the plan runs to its end without reaching \\(c^\\ast\\), the balancer gets its chance anyway, and the check of section 9 decides within 4 s whether to start over; in the tests this happened often and the balancer won every time, which is the conservatism of \\(c^\\ast\\) at work. In headless Chromium, with the same frame-by-frame loop as in your browser, 40 random states, any angles, rates up to \\(\\pm3\\) rad/s and cart speeds up to \\(\\pm0.5\\) m/s, all ended balanced at 60 N within 60 s. A plan took between 0.4 and 12 s of browser time. From hanging rest the whole rescue takes about 7 s: 3 s of calming while the plan is computed, 4 s of swing-up. Seven other machines (a heavier cart, heavier or longer or shorter rods, \\(u_\\text{max}\\) = 30 or 120 N, \\(T_s\\) = 40 ms), six random states each, were caught as well. The same study in Node.js, without the calming stage, found a direct plan for only 16 of the 40 states, which is why calming comes first. Forty cases are evidence, not a proof: a very weak motor, a very heavy cart or a push that throws the cart against the end of the rail can still beat it.",
   "tr": "وفي أثناء الطريق تراقب الصفحة \\(W\\) من (19). ولحظة يصير \\(W < 0.9\\,c^\\ast\\) تسلّم القيادة لمتحكّم الموازنة (16)، الذي يُتمّ المهمّة من هناك يقينًا. وإذا بلغت الخطّة نهايتها دون أن تصل إلى \\(c^\\ast\\)، أخذ متحكّم الموازنة فرصته مع ذلك، وتقرّر الفحوص الموصوفة في القسم 9 خلال 4 s هل يُبدأ من جديد؛ وقد حدث هذا كثيرًا في الاختبارات وفاز متحكّم الموازنة في كلّ مرّة، وهذا هو تحفّظ \\(c^\\ast\\) يعمل. في Chromium بلا واجهة، وبالحلقة نفسها إطارًا بإطار كما في متصفّحك، انتهت 40 حالة عشوائية، بزوايا كيفما اتّفق ومعدّلات دوران حتى \\(\\pm3\\) rad/s وسرعات للعربة حتى \\(\\pm0.5\\) m/s، كلّها متوازنة عند 60 N خلال 60 s. واستغرقت الخطّة بين 0.4 و12 s من زمن المتصفّح. ومن السكون المتدلّي يستغرق الإنقاذ كلّه نحو 7 s: 3 s من التهدئة بينما تُحسب الخطّة، و4 s من الأرجحة إلى الأعلى. وسبع آلات أخرى (عربة أثقل، وقضبان أثقل أو أطول أو أقصر، و\\(u_\\text{max}\\) = 30 أو 120 N، و\\(T_s\\) = 40 ms)، بستّ حالات عشوائية لكلّ منها، التُقطت كذلك. والدراسة نفسها في Node.js، بلا مرحلة التهدئة، وجدت خطّة مباشرة لـ16 حالة فقط من الأربعين، ولهذا تأتي التهدئة أوّلًا. أربعون حالة دليل لا برهان: فمحرّك ضعيف جدًّا، أو عربة ثقيلة جدًّا، أو دفعة ترمي العربة نحو نهاية السكّة، قد تغلبها مع ذلك."
  },
+ "21137c3c1a78": {
+  "src": "Below this value of the remaining cost <i>W</i> the balancer is certain to win, motor limit and loop period included (section 9).",
+  "tr": "تحت هذه القيمة من الكلفة المتبقّية <i>W</i> يفوز متحكّم الموازنة يقينًا، بما في ذلك حدّ المحرّك ودور الحلقة (القسم 9)."
+ },
  "225e1e2b077a": {
   "src": "Upper rod length <i>L</i><sub>2</sub>",
   "tr": "طول القضيب العلوي <i>L</i><sub>2</sub>"
@@ -199,9 +211,17 @@
   "src": "<span class=\"sw sw--dash\"></span>motor force <i>u</i>",
   "tr": "<span class=\"sw sw--dash\"></span>قوّة المحرّك <i>u</i>"
  },
+ "26ad4fc1a372": {
+  "src": "The two numbers are our choices. The damping \\(2\\omega_h\\) is the critical one, so the cart never overshoots the pointer: after a jump \\(D\\) of the pointer it follows \\(x = D\\,[1 - (1 + \\omega_h t)\\,e^{-\\omega_h t}]\\), 95 % of the way in 0.32 s, and it trails a pointer moving steadily at speed \\(c\\) by \\(2c/\\omega_h\\), 13 cm at 1 m/s (Wolfram’s <code>DSolve</code> on (29) gives both). With \\(\\ddot x\\) given, the Euler–Lagrange equations of the rods, rows 2 and 3 of (9), no longer contain the force: they are two equations for the rods alone, driven by the cart,",
+  "tr": "الرقمان من اختيارنا. والتخامد \\(2\\omega_h\\) هو التخامد الحرج، فلا تتجاوز العربة المؤشّر أبدًا: بعد قفزة \\(D\\) للمؤشّر تتبعه وفق \\(x = D\\,[1 - (1 + \\omega_h t)\\,e^{-\\omega_h t}]\\)، فتقطع 95 % من المسافة في 0.32 s، وتتأخّر عن مؤشّر يتحرّك بثبات بسرعة \\(c\\) بمقدار \\(2c/\\omega_h\\)، أي 13 cm عند 1 m/s (يعطي <code>DSolve</code> من Wolfram على (29) كلتا النتيجتين). ومع \\(\\ddot x\\) معلومًا، لا تعود معادلات أويلر–لاغرانج للقضيبين، أي الصفّان 2 و3 من (9)، تحتوي على القوّة: إنّهما معادلتان للقضيبين وحدهما، تقودهما العربة،"
+ },
  "275fd4b5f642": {
   "src": "Here is why \\(c^\\ast\\) certifies a catch. Suppose \\(\\dot W < 0\\) at every point with \\(0 < W \\le c^\\ast\\), the whole ellipsoid except its centre. A motion that starts inside can never leave: to cross the surface \\(W = c^\\ast\\) outward, \\(W\\) would have to rise there, and it cannot. Inside, \\(W\\) falls all the time, and since it is bounded below by zero and falls at a rate that does not die out away from the centre, it can only end at \\(W = 0\\), the upright rest. This is Lyapunov’s argument: a bowl in which the marble can only roll downhill. Negative \\(\\dot W\\) on the surface alone would only keep the motion inside; it is the inside that brings it home, which is why the page tests the shells inside too. The page shows \\(c^\\ast\\) in the panel and recomputes it whenever a slider changes. For the default machine it is 31.4 on the page; an independent search in Mathematica, maximising \\(\\dot W\\) on each surface with <code>FindMaximum</code> from several starts, brackets it between 30.56 and 30.69. The page therefore hands over only below \\(0.9\\,c^\\ast\\), a margin of 10 %. The worst point lies close to upright, both rods leaning about 4° the same way and almost at rest, where the balancer asks for a fraction of a newton: there the curvature of (9), the cosines and centripetal terms that (10) threw away, briefly makes \\(W\\) rise.",
   "tr": "وإليك لماذا يضمن \\(c^\\ast\\) الالتقاط. افترض أن \\(\\dot W < 0\\) عند كلّ نقطة يكون فيها \\(0 < W \\le c^\\ast\\)، أي في المجسّم الناقصي كلّه ما عدا مركزه. إن الحركة التي تبدأ في الداخل لا تستطيع الخروج أبدًا: فلكي تعبر السطح \\(W = c^\\ast\\) إلى الخارج يجب أن يرتفع \\(W\\) هناك، وهو لا يستطيع. وفي الداخل يتناقص \\(W\\) طوال الوقت، وبما أنه محدود من الأسفل بالصفر ويتناقص بمعدّل لا يتلاشى بعيدًا عن المركز، فلا يمكن أن ينتهي إلا عند \\(W = 0\\)، أي السكون القائم. هذه حجّة لْيابونوف: وعاء لا تستطيع فيه الكرة إلا أن تتدحرج نزولًا. ولو كان \\(\\dot W\\) سالبًا على السطح وحده لأبقى الحركة في الداخل فقط؛ أمّا ما يعيدها إلى المركز فهو الداخل، ولهذا تختبر الصفحة القشور الداخلية أيضًا. وتعرض الصفحة \\(c^\\ast\\) في اللوحة وتعيد حسابه كلّما تغيّر منزلق. للآلة الافتراضية قيمته على الصفحة 31.4؛ وبحث مستقلّ في Mathematica، يجعل \\(\\dot W\\) أعظميًّا على كلّ سطح بالدالّة <code>FindMaximum</code> من عدّة نقاط بدء، يحصره بين 30.56 و30.69. لذلك لا تسلّم الصفحة القيادة إلا تحت \\(0.9\\,c^\\ast\\)، بهامش 10 %. وتقع أسوأ نقطة قرب الوضع القائم، والقضيبان مائلان نحو 4° في الاتجاه نفسه وساكنان تقريبًا، حيث لا يطلب متحكّم الموازنة إلا جزءًا من النيوتن: هناك يجعل انحناء (9)، أي حدود جيب التمام والحدود المركزية التي أهملتها (10)، \\(W\\) يرتفع لحظة."
+ },
+ "27776eea437d": {
+  "src": "How the swing-up hands the rods to the balancer. <i>Arrive moving</i>: the cart is still rolling at the catch, and is then braked to rest in small certified steps (11.4–11.5). <i>Arrive at rest</i>: the plan must also stop the cart, which is harder to find.",
+  "tr": "كيف تسلّم الأرجحةُ إلى الأعلى القضيبين إلى متحكّم الموازنة. <i>الوصول متحرّكًا</i>: تكون العربة ما تزال تتدحرج عند الالتقاط، ثم تُكبح حتى السكون بخطوات صغيرة مضمونة (11.4–11.5). <i>الوصول ساكنًا</i>: على الخطّة أن توقف العربة أيضًا، وخطّة كهذه أصعب إيجادًا."
  },
  "29404de7e4d9": {
   "src": "Near the top every angle and every velocity is small, of some size \\(\\epsilon\\). Keep in (9) only what is of first order in \\(\\epsilon\\): \\(\\sin\\theta = \\theta + O(\\epsilon^3)\\); \\(\\cos\\theta = 1 + O(\\epsilon^2)\\), so \\(\\mathbf D(\\boldsymbol\\theta)\\ddot{\\boldsymbol\\theta} = \\mathbf D(\\mathbf 0)\\ddot{\\boldsymbol\\theta} + O(\\epsilon^3)\\); and every entry of \\(\\mathbf C\\dot{\\boldsymbol\\theta}\\) is a sine times a squared velocity, \\(O(\\epsilon^3)\\), so it drops out. With \\(\\mathbf G \\approx -\\operatorname{diag}(0, f_1, f_2)\\boldsymbol\\theta\\), (9) becomes linear,",
@@ -222,6 +242,10 @@
  "2baf0fa9e2d6": {
   "src": "<span class=\"psub__n\">3.2</span>Kinetic energy",
   "tr": "<span class=\"psub__n\">3.2</span>الطاقة الحركية"
+ },
+ "2d5c7f213a1a": {
+  "src": "Certified catch level",
+  "tr": "حدّ الالتقاط المضمون"
  },
  "2d7deb82a432": {
   "src": "<span class=\"psec__n\">05</span>How fast it falls",
@@ -274,6 +298,10 @@
  "3631ec1733dd": {
   "src": "The loop period",
   "tr": "دور الحلقة"
+ },
+ "36931210f679": {
+  "src": "The gains are the controller’s six numbers: how many newtons it pushes per unit of each error (per metre, radian, m/s, rad/s). <i>The loop period</i>: designed knowing that the computer looks only every <i>T</i><sub>s</sub> (7.5). <i>Continuous time</i>: designed as if it looked all the time (7), which fails for slow loops (8).",
+  "tr": "الكسوب هي أرقام المتحكّم الستّة: كم نيوتنًا يدفع لكلّ وحدة من كلّ خطأ (لكلّ متر، وراديان، وm/s، وrad/s). <i>دور الحلقة</i>: صُمّمت مع العلم أنّ الحاسوب لا ينظر إلّا كلّ <i>T</i><sub>s</sub> (7.5). <i>الزمن المتّصل</i>: صُمّمت كأنّه ينظر طوال الوقت (7)، وهذا يفشل في الحلقات البطيئة (8)."
  },
  "36ce6e9e7f21": {
   "src": "<b>The row for \\(\\theta_2\\).</b> From (5), \\(\\partial T/\\partial\\dot\\theta_2 = d_3\\cos\\theta_2\\,\\dot x + d_5\\cos(\\theta_1-\\theta_2)\\dot\\theta_1 + d_6\\dot\\theta_2\\). Its time derivative is",
@@ -375,9 +403,17 @@
   "src": "<span class=\"psub__n\">7.1</span>Why the answer is a Riccati equation&nbsp;★",
   "tr": "<span class=\"psub__n\">7.1</span>لماذا يكون الجواب معادلة ريكاتي&nbsp;★"
  },
+ "4945ee4a067b": {
+  "src": "What the readouts mean",
+  "tr": "ما تعنيه القراءات"
+ },
  "499f60e045d3": {
   "src": "<b>Pull it over and let go.</b> Grab a rod in the figure and tilt it; while you hold it, everything stands still at rest. Let go, and the controller starts from that leaning state. With the default machine and \\(u_\\text{max} = 60\\) N, the upper rod pulled to 13° comes back, and so does the lower rod pulled to −10°. The upper rod pulled to 45° is beyond the balancer: it asks for more than 60 N, the motor saturates, and the rods fall before the cart can get under them. The page then calms the rods and swings them back up (sections 9–11); switch <i>Let them fall</i> on to see the fall itself, or raise \\(u_\\text{max}\\) and try again.",
   "tr": "<b>اسحبه مائلًا ثم أفلته.</b> أمسك قضيبًا في الشكل وأمِله؛ وما دمت ممسكًا به يبقى كلّ شيء ساكنًا. أفلته، فيبدأ المتحكّم من تلك الحالة المائلة. مع الآلة الافتراضية و\\(u_\\text{max} = 60\\) N يعود القضيب العلوي المسحوب إلى 13°، وكذلك القضيب السفلي المسحوب إلى −10°. أمّا القضيب العلوي المسحوب إلى 45° فيتجاوز قدرة متحكّم الموازنة: يطلب أكثر من 60 N، فيبلغ المحرّك حدّ الإشباع، ويسقط القضيبان قبل أن تتمكّن العربة من الوصول تحتهما. عندئذ تهدّئ الصفحة القضيبين وتؤرجحهما إلى الأعلى من جديد (الأقسام 9–11)؛ فعّل <i>دَعهما يسقطان</i> لترى السقوط نفسه، أو ارفع \\(u_\\text{max}\\) وحاول مجدّدًا."
+ },
+ "4b83b818fbe6": {
+  "src": "1/<i>σ</i> of the faster fall: the time in which an uncorrected lean grows 2.7-fold.",
+  "tr": "1/<i>σ</i> للسقوط الأسرع: الزمن الذي يكبر فيه ميلٌ غير مصحَّح 2.7 مرّة."
  },
  "4be717614118": {
   "src": "Pull a rod further and further over before letting go. At some lean the balancer loses: not because of a rule about angles, but because the force it would need exceeds \\(u_\\text{max}\\), or because the linear picture (10) it was designed on no longer describes the real motion (9). The first version of this page gave up at 60°. That number came from nowhere, and it was wrong both ways: measured from rest with the default machine, the largest lean the balancer brings back is between 14° and 44° depending on the direction of the lean, so some states under 60° were already hopeless, and with the rods moving some states past 60° could have been saved. What is needed is a test on the whole state, all six numbers, that says: from here, the balancer wins for certain.",
@@ -407,6 +443,10 @@
   "src": "<b>The wrong-way start.</b> Press <i>to +1 m</i>. The cart first creeps 3 mm forward, then backs up by 2.3 cm, half a second after the press, while both rods tip about 2° toward the target. Only then does it drive forward, leaning into the motion, and at the end the rods lean back about 1.2° to brake. It has to: to accelerate to the right with the rods upright on average, the rods must lean right, and the only way to tip them right is to pull their bottom out to the left first. Engineers call this a non-minimum-phase system [3]; you do the same with a broom when you want to walk forward with it.",
   "tr": "<b>البداية في الاتجاه الخاطئ.</b> اضغط <i>إلى +1 m</i>. تزحف العربة أوّلًا 3 mm إلى الأمام، ثم ترجع 2.3 cm بعد نصف ثانية من الضغط، بينما يميل القضيبان كلاهما نحو 2° باتجاه الهدف. وبعد ذلك فقط تنطلق إلى الأمام مائلة مع الحركة، وفي النهاية يميل القضيبان نحو 1.2° إلى الوراء لتكبح. ولا بدّ لها من ذلك: فلكي تتسارع نحو اليمين والقضيبان قائمان في المتوسّط، يجب أن يميل القضيبان نحو اليمين، والطريقة الوحيدة لإمالتهما نحو اليمين هي سحب طرفهما السفلي نحو اليسار أوّلًا. ويسمّي المهندسون هذا نظامًا غير أدنى الطور [3]؛ وأنت تفعل الشيء نفسه بالمكنسة حين تريد أن تمشي بها إلى الأمام."
  },
+ "50f39deb7d4f": {
+  "src": "A cart of mass <i>m</i><sub>0</sub> on a rail. Each rod is a uniform bar of mass <i>m</i> and length <i>L</i>, free to turn about a hinge at its lower end: rod 1 on the cart, rod 2 on top of rod 1 (section 2).",
+  "tr": "عربة كتلتها <i>m</i><sub>0</sub> على سكّة. وكلّ قضيب قضيبٌ متجانس كتلته <i>m</i> وطوله <i>L</i>، حرّ الدوران حول مفصل عند طرفه السفلي: القضيب 1 على العربة، والقضيب 2 فوق القضيب 1 (القسم 2)."
+ },
  "52b12908b753": {
   "src": "← All projects",
   "tr": "← جميع المشاريع"
@@ -427,9 +467,17 @@
   "src": "Cart to −1 m",
   "tr": "العربة إلى −1 m"
  },
+ "58056b982a6d": {
+  "src": "When the balancer can no longer win, the page either calms the rods and swings them back up (sections 10–11), or switches the motor off and lets them fall.",
+  "tr": "حين يعجز متحكّم الموازنة عن الفوز، فإمّا أن تهدّئ الصفحة القضيبين وتؤرجحهما إلى الأعلى من جديد (القسمان 10–11)، وإمّا أن توقف المحرّك وتدعهما يسقطان."
+ },
  "59c800f53691": {
   "src": "The page integrates (9) with (18) at a fixed step of 1 ms, several steps per screen frame, in real time. The walkthrough below sets each equation of this note beside the lines of the page’s script that compute it. With the controller off, the same integrator tested against a high-accuracy solver keeps the energy \\(T + V\\) constant to \\(2\\times10^{-10}\\) J over 10 s. When a rod passes 60° the run is called lost: the linear controller was designed for small angles, so the motor stops pushing (\\(u = 0\\)) and the page keeps solving (9) exactly as before. The rods fall all the way, swing down through the slot in the middle of the cart, between its two rails, and go on swinging as a double pendulum hanging from a free cart, without friction, so they never come to rest. The view widens to keep them in sight. Positions are drawn to scale; the view follows the cart.",
   "tr": "تكامل الصفحة (9) بالمعادلة (18) بخطوة ثابتة قدرها 1 ms، وعدّة خطوات في كلّ إطار من إطارات الشاشة، في الزمن الحقيقي. ويضع الشرح المتدرّج أدناه كلّ معادلة من هذه المذكّرة بجانب سطور شيفرة الصفحة التي تحسبها. ومع إيقاف المتحكّم، يُبقي المكامِل نفسه، وقد اختُبر بمحلّل عالي الدقّة، الطاقة \\(T + V\\) ثابتة بدقّة \\(2\\times10^{-10}\\) J على مدى 10 s. وحين يتجاوز قضيب 60° تُعدّ الجولة خاسرة: فالمتحكّم الخطّي صُمّم للزوايا الصغيرة، فيكفّ المحرّك عن الدفع (\\(u = 0\\)) وتواصل الصفحة حلّ (9) تمامًا كما من قبل. فيسقط القضيبان حتى النهاية، ويتأرجحان نزولًا عبر الشِقّ الذي في منتصف العربة بين سكّتيها، ثم يواصلان التأرجح بندولًا مزدوجًا معلّقًا في عربة حرّة، بلا احتكاك، فلا يستقرّان أبدًا. ويتّسع المشهد ليبقيا في مجال الرؤية. وتُرسم المواضع بمقياس رسم؛ ويتبع المشهد العربة."
+ },
+ "5ae811dfa68b": {
+  "src": "<i>Hang down, swing up</i>: both rods start hanging, and the page swings them up and catches them (sections 10–11). <i>Tilt and let go</i>: the rods start leaning 6° and −4°.",
+  "tr": "<i>أنزِلهما ثم أرجِحهما إلى الأعلى</i>: يبدأ القضيبان متدلّيين، فتؤرجحهما الصفحة إلى الأعلى وتلتقطهما (القسمان 10–11). <i>أمِل ثم أفلت</i>: يبدأ القضيبان مائلين بزاويتي 6° و−4°."
  },
  "5bdec5a64185": {
   "src": "Here \\(\\mathcal P\\) is the sideways momentum the rods carry because they turn, the part of row 1 of (9) that belongs to the rods. Accelerating the cart against it pumps energy in, the way you pump a swing. Accelerating with it, \\(a = k\\mathcal P\\), drains energy at the rate \\(k\\mathcal P^2 \\ge 0\\), without any plan, from any state: that is calming. The lowest energy is the hanging rest, \\(E_p = -(f_1+f_2)\\), so calming always ends there. We checked (21) symbolically in Mathematica, where \\(\\dot E_p + a\\mathcal P\\) simplifies to zero, and against Åström and Furuta’s law for one rod [6], whose \\(\\mathrm dE/\\mathrm dt = -mul\\dot\\theta\\cos\\theta\\) is exactly (21) with the upper rod removed.",
@@ -438,6 +486,10 @@
  "5c7c982c0b7c": {
   "src": "<span>1</span>Balancing from below",
   "tr": "<span>1</span>الموازنة من الأسفل"
+ },
+ "5cb1bd930ea1": {
+  "src": "With the motor off, a small lean grows like e<sup><i>σt</i></sup>; the two rates <i>σ</i> belong to the two ways the pair can fall (section 5).",
+  "tr": "والمحرّك متوقّف، يكبر الميل الصغير مثل e<sup><i>σt</i></sup>؛ والمعدّلان <i>σ</i> يخصّان الطريقتين اللتين يمكن أن يسقط بهما الزوج (القسم 5)."
  },
  "5d12bd53552c": {
   "src": "Play",
@@ -462,6 +514,10 @@
  "61d22d2b8d02": {
   "src": "<span>5</span>How fast it falls",
   "tr": "<span>5</span>ما سرعة السقوط"
+ },
+ "61e481b92811": {
+  "src": "A flick is a short sideways blow at the top of the upper rod, of strength <i>J</i> (the last slider of this group). The controller has to catch it.",
+  "tr": "النقرة ضربة جانبية قصيرة على الطرف العلوي للقضيب العلوي، شدّتها <i>J</i> (آخر منزلق في هذه المجموعة). وعلى المتحكّم أن يلتقطها."
  },
  "623bd668bb95": {
   "src": "Default (Bogdanov [1])",
@@ -507,6 +563,10 @@
   "src": "10 ms",
   "tr": "10 ms"
  },
+ "6a55f5a4db5b": {
+  "src": "The largest change of the cart’s speed, in one go, that the balancer is certain to survive from rest, at half the catch level (11.5).",
+  "tr": "أكبر تغيّر في سرعة العربة دفعةً واحدة يتحمّله متحكّم الموازنة يقينًا انطلاقًا من السكون، عند نصف حدّ الالتقاط (11.5)."
+ },
  "6a5da7147407": {
   "src": "Rescue",
   "tr": "الإنقاذ"
@@ -526,6 +586,10 @@
  "6b9e8f8929db": {
   "src": "<span class=\"psub__n\">12.7</span>Sources",
   "tr": "<span class=\"psub__n\">12.7</span>المصادر"
+ },
+ "6befad41add5": {
+  "src": "The price of force in the controller’s cost (14), against the price of leaning and of being away from the target; the slider is logarithmic, from 0.01 to 100. Large <i>ρ</i>: gentle pushes, rods that wander further. Small <i>ρ</i>: hard pushes that reach the motor limit sooner.",
+  "tr": "ثمن القوّة في كلفة المتحكّم (14)، مقابل ثمن الميل والبعد عن الهدف؛ والمنزلق لوغاريتمي، من 0.01 إلى 100. <i>ρ</i> كبيرة: دفعات لطيفة، وقضيبان يبتعدان أكثر. <i>ρ</i> صغيرة: دفعات قويّة تبلغ حدّ المحرّك أسرع."
  },
  "6d2d3b90287a": {
   "src": "C. F. Van Loan, <a href=\"https://ecommons.cornell.edu/handle/1813/7095\"><em>Computing Integrals Involving the Matrix Exponential</em></a>, Technical Report TR 77-298, Department of Computer Science, Cornell University, December 1976 (<em>IEEE Transactions on Automatic Control</em> 23, 395–404, 1978): the integrals (1.1)–(1.4), Theorem 1 and its proof by the block differential equations, and the identity \\(\\mathbf Q = \\mathbf F_3^{\\mathsf T}\\mathbf G_2\\) of the algorithm’s step 2, our (16f).",
@@ -547,6 +611,10 @@
   "src": "Flick top →",
   "tr": "نقرة إلى اليمين →"
  },
+ "71671cbfb71f": {
+  "src": "e-fold",
+  "tr": "التضاعف بالعامل e"
+ },
  "71c847a084a0": {
   "src": "The matrix \\(\\mathbf D\\) is the kinetic energy’s matrix and is positive definite (\\(T > 0\\) for any motion), so it can always be inverted: the page computes the accelerations as \\(\\ddot{\\boldsymbol\\theta} = \\mathbf D^{-1}(\\mathbf Hu - \\mathbf C\\dot{\\boldsymbol\\theta} - \\mathbf G)\\) at every step.",
   "tr": "المصفوفة \\(\\mathbf D\\) هي مصفوفة الطاقة الحركية، وهي موجبة التعريف (\\(T > 0\\) لأيّ حركة)، فيمكن دائمًا عكسها: تحسب الصفحة التسارعات في كلّ خطوة على أنها \\(\\ddot{\\boldsymbol\\theta} = \\mathbf D^{-1}(\\mathbf Hu - \\mathbf C\\dot{\\boldsymbol\\theta} - \\mathbf G)\\)."
@@ -562,6 +630,10 @@
  "737e6a301a0f": {
   "src": "<b>9.3</b> A blow at the middle hinge instead of the top: repeat the derivation of (17) and show that the upper rod then starts turning the other way from the lower rod.",
   "tr": "<b>9.3</b> ضربة على المفصل الأوسط بدلًا من القمة: أعد اشتقاق (17) وأثبت أنّ القضيب العلوي يبدأ حينئذٍ بالدوران في الاتجاه المعاكس للقضيب السفلي."
+ },
+ "73a08103f0aa": {
+  "src": "The largest force the motor can give, in newtons. A larger push is cut to this value.",
+  "tr": "أكبر قوّة يستطيع المحرّك أن يعطيها، بالنيوتن. وأيّ دفعة أكبر تُقصّ إلى هذه القيمة."
  },
  "740ecb73ad2c": {
   "src": "<b>The cost of force.</b> Raise \\(\\rho\\) and the controller pushes more gently and lets the rods wander further; lower it and the pushes become violent and the motor limit is reached sooner. The gains in the panel show this directly.",
@@ -607,6 +679,10 @@
   "src": "<b>How the page solves (15)&nbsp;★.</b> Put \\(\\mathbf A\\), \\(\\mathbf B\\), \\(\\rho\\) and \\(\\mathbf Q\\) into the \\(12\\times12\\) Hamiltonian matrix \\(\\mathbf Z = \\begin{pmatrix}\\mathbf A & -\\rho^{-1}\\mathbf B\\mathbf B^{\\mathsf T}\\\\ -\\mathbf Q & -\\mathbf A^{\\mathsf T}\\end{pmatrix}\\). Suppose the six columns of \\(\\begin{pmatrix}\\mathbf I\\\\ \\mathbf P\\end{pmatrix}\\) span a space that \\(\\mathbf Z\\) maps into itself, \\(\\mathbf Z\\begin{pmatrix}\\mathbf I\\\\ \\mathbf P\\end{pmatrix} = \\begin{pmatrix}\\mathbf I\\\\ \\mathbf P\\end{pmatrix}\\boldsymbol\\Lambda\\). The top row says \\(\\boldsymbol\\Lambda = \\mathbf A - \\rho^{-1}\\mathbf B\\mathbf B^{\\mathsf T}\\mathbf P\\), the closed-loop matrix; the bottom row says \\(-\\mathbf Q - \\mathbf A^{\\mathsf T}\\mathbf P = \\mathbf P\\boldsymbol\\Lambda\\), and inserting \\(\\boldsymbol\\Lambda\\) gives exactly (15). So \\(\\mathbf P\\) comes from the space of \\(\\mathbf Z\\) whose eigenvalues have negative real parts, which is also the one that makes the closed loop stable. To find it, the page iterates \\(\\mathbf Z \\leftarrow \\tfrac12(\\mathbf Z + \\mathbf Z^{-1})\\), Newton’s method for the square root of \\(\\mathbf I\\): each eigenvalue \\(\\lambda\\) moves as \\(\\tfrac12(\\lambda + 1/\\lambda)\\), which drives eigenvalues with negative real part to \\(-1\\) and the others to \\(+1\\). The limit \\(\\mathbf W\\) therefore satisfies \\(\\mathbf W\\begin{pmatrix}\\mathbf I\\\\ \\mathbf P\\end{pmatrix} = -\\begin{pmatrix}\\mathbf I\\\\ \\mathbf P\\end{pmatrix}\\), that is \\(\\begin{pmatrix}\\mathbf W_{12}\\\\ \\mathbf W_{22}+\\mathbf I\\end{pmatrix}\\mathbf P = -\\begin{pmatrix}\\mathbf W_{11}+\\mathbf I\\\\ \\mathbf W_{21}\\end{pmatrix}\\), twelve equations for the six columns of \\(\\mathbf P\\), which the page solves by least squares. Then (16) gives \\(\\mathbf K\\).",
   "tr": "<b>كيف تحلّ الصفحة (15)&nbsp;★.</b> ضع \\(\\mathbf A\\) و\\(\\mathbf B\\) و\\(\\rho\\) و\\(\\mathbf Q\\) في المصفوفة الهاملتونية \\(12\\times12\\) المعرَّفة بالعلاقة \\(\\mathbf Z = \\begin{pmatrix}\\mathbf A & -\\rho^{-1}\\mathbf B\\mathbf B^{\\mathsf T}\\\\ -\\mathbf Q & -\\mathbf A^{\\mathsf T}\\end{pmatrix}\\). افترض أنّ الأعمدة الستّة للمصفوفة \\(\\begin{pmatrix}\\mathbf I\\\\ \\mathbf P\\end{pmatrix}\\) تولّد فضاءً تحوّله \\(\\mathbf Z\\) إلى نفسه، \\(\\mathbf Z\\begin{pmatrix}\\mathbf I\\\\ \\mathbf P\\end{pmatrix} = \\begin{pmatrix}\\mathbf I\\\\ \\mathbf P\\end{pmatrix}\\boldsymbol\\Lambda\\). يقول الصفّ العلوي إنّ \\(\\boldsymbol\\Lambda = \\mathbf A - \\rho^{-1}\\mathbf B\\mathbf B^{\\mathsf T}\\mathbf P\\)، وهي مصفوفة الحلقة المغلقة؛ ويقول الصفّ السفلي إنّ \\(-\\mathbf Q - \\mathbf A^{\\mathsf T}\\mathbf P = \\mathbf P\\boldsymbol\\Lambda\\)، وبتعويض \\(\\boldsymbol\\Lambda\\) نحصل على (15) تمامًا. إذن تأتي \\(\\mathbf P\\) من ذلك الفضاء من فضاءات \\(\\mathbf Z\\) الذي تكون قيمه الذاتية ذات أجزاء حقيقية سالبة، وهو أيضًا الفضاء الذي يجعل الحلقة المغلقة مستقرّة. وللعثور عليه تكرّر الصفحة \\(\\mathbf Z \\leftarrow \\tfrac12(\\mathbf Z + \\mathbf Z^{-1})\\)، وهي طريقة نيوتن للجذر التربيعي للمصفوفة \\(\\mathbf I\\): فكلّ قيمة ذاتية \\(\\lambda\\) تنتقل إلى \\(\\tfrac12(\\lambda + 1/\\lambda)\\)، ويدفع ذلك القيم الذاتية ذات الجزء الحقيقي السالب إلى \\(-1\\) وسائرها إلى \\(+1\\). ومن ثمّ تحقّق النهاية \\(\\mathbf W\\) العلاقة \\(\\mathbf W\\begin{pmatrix}\\mathbf I\\\\ \\mathbf P\\end{pmatrix} = -\\begin{pmatrix}\\mathbf I\\\\ \\mathbf P\\end{pmatrix}\\)، أي \\(\\begin{pmatrix}\\mathbf W_{12}\\\\ \\mathbf W_{22}+\\mathbf I\\end{pmatrix}\\mathbf P = -\\begin{pmatrix}\\mathbf W_{11}+\\mathbf I\\\\ \\mathbf W_{21}\\end{pmatrix}\\)، وهي اثنتا عشرة معادلة للأعمدة الستّة من \\(\\mathbf P\\)، تحلّها الصفحة بطريقة المربّعات الصغرى. ثم تعطي (16) المصفوفة \\(\\mathbf K\\)."
  },
+ "7bbab13077cc": {
+  "src": "Slowest settling",
+  "tr": "أبطأ استقرار"
+ },
  "7bc35abf45ae": {
   "src": "<b>How it moves with the motor off.</b> Nothing pushes the cart sideways from outside, so the total horizontal momentum of cart and rods stays what it was. If the rods start upright and at rest, they stay there only in principle: the smallest lean grows, the rods fold and fall, and as their centres of mass swing to one side the cart rolls the other way to keep the total momentum at zero. Press <i>Off</i> and watch the cart recoil.",
   "tr": "<b>كيف تتحرّك والمحرّك متوقّف.</b> لا شيء يدفع العربة جانبيًّا من الخارج، فتبقى كمية الحركة الأفقية الكلّية للعربة والقضيبين على ما كانت عليه. وإذا بدأ القضيبان قائمين ساكنين، فإنهما يبقيان كذلك نظريًّا فقط: إذ يكبر أصغر ميل، وينثني القضيبان ويسقطان، وبينما تتأرجح مراكز كتلتهما نحو جانب تتدحرج العربة نحو الجانب الآخر لتبقى كمية الحركة الكلّية صفرًا. اضغط <i>إيقاف</i> وشاهد العربة ترتدّ."
@@ -647,6 +723,10 @@
   "src": "Here \\(e^{\\mathbf A t}\\) is the matrix exponential, the same series as for numbers, \\(\\mathbf I + \\mathbf A t + \\tfrac12\\mathbf A^2t^2 + \\cdots\\); for the falling mode of section 5 it is the factor \\(e^{\\sigma t}\\) by which a lean grows. \\(\\boldsymbol\\Phi\\) says where the machine drifts on its own in one period, \\(\\boldsymbol\\Gamma\\) what one newton held for one period does to it. For a short period \\(\\boldsymbol\\Phi \\approx \\mathbf I + \\mathbf A T_s\\) and \\(\\boldsymbol\\Gamma \\approx \\mathbf B T_s\\), Euler’s step; (16a) itself is exact for every period. The page needs both matrices and gets them from one exponential. Put the force into the state, \\(\\mathbf z = (\\mathbf s, u)\\), with the rule \\(\\dot u = 0\\) that says “held”; then \\(\\dot{\\mathbf z} = \\bar{\\mathbf A}\\mathbf z\\) with \\(\\bar{\\mathbf A} = \\begin{pmatrix}\\mathbf A &amp; \\mathbf B\\\\ \\mathbf 0 &amp; 0\\end{pmatrix}\\), a free linear motion, so \\(\\mathbf z(T_s) = e^{\\bar{\\mathbf A}T_s}\\mathbf z(0)\\). Reading off the top block row,",
   "tr": "هنا \\(e^{\\mathbf A t}\\) هي الأسّية المصفوفية، وهي المتسلسلة نفسها التي للأعداد، \\(\\mathbf I + \\mathbf A t + \\tfrac12\\mathbf A^2t^2 + \\cdots\\)؛ وهي للنمط الساقط في القسم 5 العامل \\(e^{\\sigma t}\\) الذي يكبر به الميل. تقول \\(\\boldsymbol\\Phi\\) إلى أين تنجرف الآلة وحدها في دور واحد، وتقول \\(\\boldsymbol\\Gamma\\) ماذا يفعل بها نيوتن واحد ممسوك دورًا واحدًا. ولدور قصير \\(\\boldsymbol\\Phi \\approx \\mathbf I + \\mathbf A T_s\\) و\\(\\boldsymbol\\Gamma \\approx \\mathbf B T_s\\)، أي خطوة أويلر؛ أمّا (16a) نفسها فدقيقة لكلّ دور. وتحتاج الصفحة إلى المصفوفتين كلتيهما وتحصل عليهما من أسّية واحدة. ندخل القوّة في الحالة، \\(\\mathbf z = (\\mathbf s, u)\\)، مع القاعدة \\(\\dot u = 0\\) التي تعني «ممسوكة»؛ فيصبح \\(\\dot{\\mathbf z} = \\bar{\\mathbf A}\\mathbf z\\) مع \\(\\bar{\\mathbf A} = \\begin{pmatrix}\\mathbf A &amp; \\mathbf B\\\\ \\mathbf 0 &amp; 0\\end{pmatrix}\\)، حركة خطّية حرّة، ومن ثمّ \\(\\mathbf z(T_s) = e^{\\bar{\\mathbf A}T_s}\\mathbf z(0)\\). وبقراءة صفّ الكتل العلوي،"
  },
+ "82c615a34b3e": {
+  "src": "<b>Take the cart.</b> Grab the cart in the figure and drag it. While you hold it, your hand moves the cart, not the motor: the controller lets go, and the rods answer the cart’s motion alone. Carry a broom upright on your palm and jerk your hand to the right: the broom does not come along at once, it falls to the left. That is what you see here, with a twist. The page models your hand as a stiff spring with a damper that pulls the cart toward the pointer \\(x_h\\), as hard as a quick hand can:",
+  "tr": "<b>خذ العربة.</b> أمسك العربة في الشكل واسحبها. ما دمت ممسكًا بها، فيدك هي التي تحرّك العربة لا المحرّك: يتخلّى المتحكّم عنها، ويستجيب القضيبان لحركة العربة وحدها. احمل مكنسة قائمة على راحة يدك وحرّك يدك بسرعة إلى اليمين: لا تتبعك المكنسة على الفور، بل تسقط إلى اليسار. هذا ما تراه هنا، مع مفاجأة. تمثّل الصفحة يدك بزنبرك صلب مع مُخمِّد يسحب العربة نحو المؤشّر \\(x_h\\)، بأقصى ما تستطيعه يد سريعة:"
+ },
  "83ba44da541c": {
   "src": "Tilt and let go",
   "tr": "أمِل ثم أفلت"
@@ -658,6 +738,10 @@
  "8516c0c22d0a": {
   "src": "Slowest settling, on",
   "tr": "أبطأ استقرار، والمتحكّم يعمل"
+ },
+ "854fae531441": {
+  "src": "Factor per look",
+  "tr": "العامل في كلّ نظرة"
  },
  "881ec0408ede": {
   "src": "34.4 ms",
@@ -735,9 +819,21 @@
   "src": "Cart position",
   "tr": "موضع العربة"
  },
+ "94b09bc7cfa3": {
+  "src": "The impulse of a flick, <i>J</i> = ∫<i>F</i> d<i>t</i>: how hard the blow pushes times how long it lasts, in newton-seconds (N·s). With a 60 N motor, 0.2 N·s is caught and 0.3 N·s is not.",
+  "tr": "دفعة النقرة، <i>J</i> = ∫<i>F</i> d<i>t</i>: شدّة دفع الضربة مضروبةً في مدّة دوامها، بالنيوتن·ثانية (N·s). مع محرّك قدره 60 N تُلتقط نقرة قدرها 0.2 N·s ولا تُلتقط نقرة قدرها 0.3 N·s."
+ },
  "9681f0ace4c2": {
   "src": "<b>12.6</b> Show that (25) solves (9) with \\(u = 0\\) for every \\(v\\), and that a cart accelerating steadily at \\(a\\) holds both rods still only if \\(\\tan\\theta_1 = \\tan\\theta_2 = a/g\\). What motor force does that take?",
   "tr": "<b>12.6</b> بيّن أنّ (25) تحلّ (9) مع \\(u = 0\\) لكلّ \\(v\\)، وأنّ عربة تتسارع بانتظام بـ \\(a\\) لا تمسك القضيبين ساكنين إلّا إذا \\(\\tan\\theta_1 = \\tan\\theta_2 = a/g\\). ما قوّة المحرّك التي يتطلّبها ذلك؟"
+ },
+ "97e1ceba053c": {
+  "src": "The newtons the motor pushes per radian of lean of each rod.",
+  "tr": "النيوتنات التي يدفعها المحرّك لكلّ راديان من ميل كلّ قضيب."
+ },
+ "99878d25db3b": {
+  "src": "How much the worst error is multiplied by from one look of the computer to the next. Below 1 the loop holds, above 1 it breaks (7.3).",
+  "tr": "العدد الذي يُضرب فيه أسوأ خطأ من نظرة للحاسوب إلى التي تليها. إن كان أقلّ من 1 صمدت الحلقة، وإن زاد على 1 انهارت (7.3)."
  },
  "99bb6b307821": {
   "src": "Table 1: the default machine, \\(\\rho = 1\\). With the continuous gains the loop (16a) holds up to 34.4 ms and then flips; designed for the period, it is stable at every period in the table, and the gains fall as the period grows, because a push that lasts long must be gentle. All numbers from Wolfram (<code>DiscreteLQRegulatorGains</code> and the eigenvalues of \\(\\boldsymbol\\Phi - \\boldsymbol\\Gamma\\mathbf K\\)); the page’s own values agree to the digits shown.",
@@ -839,6 +935,10 @@
   "src": "is the cost the balancer still has to pay from the state \\(\\mathbf s\\). Its level sets \\(W = c\\) are nested ellipsoids around the upright rest. On the linear model, (15) and (16) give \\(\\dot W = -\\mathbf s^{\\mathsf T}(\\mathbf Q + \\rho\\mathbf K^{\\mathsf T}\\mathbf K)\\mathbf s\\), negative everywhere: the cost always falls. On the real machine, with the real equations (9) and the motor clipped at \\(u_\\text{max}\\), it need not. Suppose we find a level \\(c^\\ast\\) such that \\(\\dot W &lt; 0\\) at every point with \\(0 &lt; W \\le c^\\ast\\), the whole ellipsoid except its centre. Then a motion that starts inside can never leave: to cross the surface \\(W = c^\\ast\\) outward, \\(W\\) would have to rise there, and it cannot. Inside, \\(W\\) falls all the time, and since it is bounded below by zero and falls at a rate that does not die out away from the centre, it can only end at \\(W = 0\\), the upright rest. This is Lyapunov’s argument: a bowl in which the marble can only roll downhill. Negative \\(\\dot W\\) on the surface alone would only keep the motion inside; it is the inside that brings it home, so the inside must be tested too.",
   "tr": "هي الكلفة التي لا يزال على متحكّم الموازنة أن يدفعها من الحالة \\(\\mathbf s\\). ومجموعات مستوياتها \\(W = c\\) قطوع ناقصة مجسّمة متداخلة حول السكون القائم. وفي النموذج الخطّي تعطي (15) و(16) \\(\\dot W = -\\mathbf s^{\\mathsf T}(\\mathbf Q + \\rho\\mathbf K^{\\mathsf T}\\mathbf K)\\mathbf s\\)، وهي سالبة في كلّ مكان: الكلفة تنخفض دائمًا. أمّا في الآلة الحقيقية، بالمعادلات الحقيقية (9) والمحرّك المقصوص عند \\(u_\\text{max}\\)، فلا يلزم ذلك. لنفترض أنّنا وجدنا مستوى \\(c^\\ast\\) بحيث \\(\\dot W &lt; 0\\) عند كلّ نقطة فيها \\(0 &lt; W \\le c^\\ast\\)، أي في المجسّم كلّه ما عدا مركزه. عندئذ لا تستطيع حركة تبدأ داخله أن تغادره أبدًا: فلكي تعبر السطح \\(W = c^\\ast\\) إلى الخارج يجب أن ترتفع \\(W\\) هناك، وهي لا تستطيع. وفي الداخل تنخفض \\(W\\) طوال الوقت، ولأنّها محدودة من أسفل بالصفر وتنخفض بمعدّل لا يخبو بعيدًا عن المركز، فلا يمكن أن تنتهي إلّا عند \\(W = 0\\)، السكون القائم. هذه حجّة ليابونوف: وعاء لا تستطيع الكرة فيه إلّا أن تتدحرج نزولًا. ولو كانت \\(\\dot W\\) سالبة على السطح وحده لأبقت الحركة في الداخل فقط؛ أمّا الداخل فهو الذي يعيدها إلى البيت، ولذا يجب اختبار الداخل أيضًا."
  },
+ "aaf204be271a": {
+  "src": "Certified bite",
+  "tr": "الاقتطاع المضمون"
+ },
  "abce5333f695": {
   "src": "\\(|\\lambda|\\), continuous gains (16)",
   "tr": "\\(|\\lambda|\\)، الكسوب المتّصلة (16)"
@@ -875,6 +975,10 @@
   "src": "Playing the plan back open loop ends tens of metres down the rail, for the reason above. So a controller follows the plan. Every 10 ms the page linearises (9) along the planned motion, \\(\\mathbf s_{k+1} - \\mathbf s^\\text{plan}_{k+1} \\approx \\mathbf F_k(\\mathbf s_k - \\mathbf s^\\text{plan}_k) + \\mathbf G_k(u_k - u^\\text{plan}_k)\\), with \\(\\mathbf F_k, \\mathbf G_k\\) from finite differences of one 10 ms step, and solves the finite-horizon LQR problem backwards from the end, where the balancer’s own \\(\\mathbf P\\) of (15) is the final cost [3]:",
   "tr": "تشغيل الخطّة بلا تغذية راجعة ينتهي بعد عشرات الأمتار على السكّة، للسبب المذكور أعلاه. لذلك يتبع متحكّمٌ الخطّةَ. كلّ 10 ms تخطّط الصفحة (9) على طول الحركة المخطّطة، \\(\\mathbf s_{k+1} - \\mathbf s^\\text{plan}_{k+1} \\approx \\mathbf F_k(\\mathbf s_k - \\mathbf s^\\text{plan}_k) + \\mathbf G_k(u_k - u^\\text{plan}_k)\\)، مع \\(\\mathbf F_k, \\mathbf G_k\\) من فروق منتهية لخطوة واحدة طولها 10 ms، وتحلّ مسألة LQR ذات الأفق المنتهي رجوعًا من النهاية، حيث تكون \\(\\mathbf P\\) الخاصّة بمتحكّم الموازنة من (15) هي الكلفة النهائية [3]:"
  },
+ "b15ce6ebb321": {
+  "src": "Arriving moving has a price: the cart keeps going. Until 5 November 2026 the page let it, and in the browser tests of 11.3 the cart got between 6 and 200 m from where it started within the 60 s of a run (with the plan made to arrive at rest, it never left \\(\\pm1.54\\) m). A real rail has an end, so the page now brings the cart to rest after the catch, carefully. With the braking, the same tests keep the cart within 1 to 16 m of its start. How carefully is the subject of the next subsection.",
+  "tr": "للوصول متحرّكًا ثمن: العربة تمضي. وحتّى 5 نوفمبر 2026 تركتها الصفحة تمضي، وفي اختبارات المتصفّح في 11.3 ابتعدت العربة بين 6 و200 m عن موضع انطلاقها خلال الـ 60 s من التشغيل (ومع خطّة مصنوعة لتصل ساكنة لم تغادر قطّ \\(\\pm1.54\\) m). والسكّة الحقيقية لها نهاية، لذا تُوقف الصفحة العربة الآن بعد الالتقاط، بحذر. ومع الكبح، تبقى العربة في الاختبارات نفسها على بُعد 1 إلى 16 m من موضع انطلاقها. وكم من الحذر هو موضوع القسم الفرعي التالي."
+ },
  "b3a406020f59": {
   "src": "The planning runs in the browser between frames, 8 ms at a time, while the machine keeps moving. That raises a question: a plan is made for one starting state, but by the time it is ready the machine has moved on. The page answers it with determinism. Calming (21) is a fixed law, and the integrator (18) is exact arithmetic, so the page can run the next 3 s of calming ahead of time, plan from the state it finds there, and when the clock arrives check that the machine is at that state to \\(10^{-6}\\). It always is, unless you pushed it in between; then the plan is dropped and a new one begun. If a plan is not ready in time, or no plan was found (the search starts from one straight-line guess and can fail), the page plans again from further ahead, with a longer \\(T\\) (4 s, then 6 s), while calming goes on.",
   "tr": "يجري التخطيط في المتصفّح بين الإطارات، 8 ms في كلّ مرّة، بينما تواصل الآلة حركتها. وهذا يطرح سؤالًا: الخطّة تُصنع لحالة بدء واحدة، لكن الآلة تكون قد تحرّكت حين تجهز. وتجيب الصفحة بالحتمية. فالتهدئة (21) قانون ثابت، والمكامِل (18) حساب دقيق، فتستطيع الصفحة أن تحسب الثواني الثلاث التالية من التهدئة مسبقًا، وتخطّط من الحالة التي تجدها هناك، وحين يبلغ الزمن تلك اللحظة تتحقّق من أن الآلة في تلك الحالة بدقّة \\(10^{-6}\\). وهي كذلك دائمًا، إلا إذا دفعتها أنت في الأثناء؛ عندئذ تُسقط الخطّة وتبدأ خطّة جديدة. وإذا لم تجهز الخطّة في وقتها، أو لم توجد خطّة (فالبحث يبدأ من تخمين مستقيم واحد وقد يفشل)، خطّطت الصفحة من جديد من مسافة أبعد إلى الأمام، بـ\\(T\\) أطول (4 s ثم 6 s)، والتهدئة مستمرّة."
@@ -903,6 +1007,10 @@
   "src": "A rod that moves and turns carries two kinds of kinetic energy (König’s theorem): that of its centre of mass, \\(\\tfrac12 m v^2\\), and that of turning about the centre of mass, \\(\\tfrac12 I\\dot\\theta^2\\). For a uniform rod of length \\(L\\) the moment of inertia about its middle is \\(I = \\int_{-L/2}^{L/2} (m/L)\\,s^2\\,\\mathrm ds = mL^2/12\\). The cart only slides. So",
   "tr": "القضيب الذي ينتقل ويدور يحمل نوعين من الطاقة الحركية (مبرهنة كونيغ): طاقة مركز كتلته، \\(\\tfrac12 m v^2\\)، وطاقة دورانه حول مركز الكتلة، \\(\\tfrac12 I\\dot\\theta^2\\). ولقضيب متجانس طوله \\(L\\) يكون عزم القصور الذاتي حول منتصفه \\(I = \\int_{-L/2}^{L/2} (m/L)\\,s^2\\,\\mathrm ds = mL^2/12\\). أمّا العربة فتنزلق فقط. ولذلك"
  },
+ "b5a31514b78b": {
+  "src": "Moves the target, the red mark under the rail. The cart drives there with the rods balanced, and backs up a little first (section 8).",
+  "tr": "يحرّك الهدف، أي العلامة الحمراء أسفل السكّة. تمضي العربة إلى هناك والقضيبان متوازنان، وترجع قليلًا أولًا (القسم 8)."
+ },
  "b5bc04c45c71": {
   "src": "<b>Abstract.</b> A rod standing on its end falls; two rods stacked on hinges fall faster and in a tangle. Here the only help they get is from below: a cart that a motor pushes along a rail. We describe the machine, write its energy, derive its equations of motion with Lagrange’s method and check every term against the classic report of Bogdanov (2004). We then linearise around the upright position to find how fast the rods fall, show that one push along the rail is enough to steer both, and build the controller that does it by minimising a cost. The note ends with what each slider teaches: why long rods are easier, why the motor must be strong and the loop fast, and why the cart has to drive the wrong way first. When the rods fall anyway, the note shows where the balancer is certain to win, how the cart can drain the rods’ energy until they hang still, and how a planned swing-up brings them back to the top. A real controller looks only at fixed instants; we derive the exact model of the machine between two looks, the cost it pays, and the gains that fit the loop period, and we let the balancer hold the rods on a cart that keeps rolling, and then work out how much speed may be taken away at each look without knocking them over, so that the cart comes to rest with certainty.",
   "tr": "<b>الخلاصة.</b> القضيب القائم على طرفه يسقط؛ والقضيبان المركّبان أحدهما فوق الآخر بمفصلين يسقطان أسرع ويتشابكان. ولا عون لهما هنا إلّا من تحت: عربة يدفعها محرّك على سكّة. نصف الآلة، ونكتب طاقتها، ونشتقّ معادلات حركتها بطريقة لاغرانج، ونطابق كلّ حدّ مع التقرير الكلاسيكي لبوغدانوف (2004). ثمّ نخطّط حول الوضع القائم لنعرف سرعة سقوط القضيبين، ونبيّن أنّ دفعًا واحدًا على السكّة يكفي لتوجيههما معًا، ونبني المتحكّم الذي يفعل ذلك بتقليل كلفة. وتنتهي المذكّرة بما يعلّمه كلّ منزلق: لماذا القضبان الطويلة أسهل، ولماذا يجب أن يكون المحرّك قويًّا والحلقة سريعة، ولماذا على العربة أن تسير في الاتّجاه الخاطئ أوّلًا. وإذا سقط القضيبان مع ذلك، تبيّن المذكّرة أين يفوز متحكّم الموازنة يقينًا، وكيف تسحب العربة طاقة القضيبين حتّى يتدلّيا ساكنين، وكيف تعيدهما أرجحة مخطَّطة إلى القمّة. والمتحكّم الحقيقي لا ينظر إلّا في لحظات ثابتة؛ فنشتقّ النموذج الدقيق للآلة بين نظرتين، والكلفة التي تدفعها، والكسوب التي تلائم دور الحلقة، وندع متحكّم الموازنة يمسك القضيبين على عربة تتابع تدحرجها، ثمّ نحسب مقدار السرعة الذي يجوز اقتطاعه عند كلّ نظرة دون أن يسقط القضيبان، بحيث تقف العربة يقينًا."
@@ -910,6 +1018,10 @@
  "b6d1c7e900d0": {
   "src": "<span class=\"psec__n\">04</span>Equations of motion",
   "tr": "<span class=\"psec__n\">04</span>معادلات الحركة"
+ },
+ "b94d61621ef1": {
+  "src": "Leans from upright, positive to the right.",
+  "tr": "الميل عن الوضع القائم، موجبًا نحو اليمين."
  },
  "ba7ae7e5bbd1": {
   "src": "<span class=\"pfig__n\">Figure 1</span>The model. Each angle is measured from the <em>upward</em> vertical (dashed), positive when the rod leans to the right, the same way as \\(x\\) and \\(u\\). The dots are the centres of mass, half-way along each uniform rod.",
@@ -1007,6 +1119,10 @@
   "src": "<span>8</span>What the sliders teach",
   "tr": "<span>8</span>ما تعلّمه المنزلقات"
  },
+ "cd971600cc90": {
+  "src": "Fall rates",
+  "tr": "معدّلا السقوط"
+ },
  "cf1709014ebf": {
   "src": "Each constant has a meaning you can check by hand. \\(d_1\\) is everything that moves when the cart moves. \\(d_4\\) is the lower rod turning about its bottom end, carrying the upper rod’s whole mass at distance \\(L_1\\). \\(d_2\\) couples the cart and the lower angle: the factor \\(\\tfrac12 m_1 + m_2\\) is the mass of the lower rod at its middle plus the upper rod hanging on its top. The factor 2 in front of a mixed product in (3) is absorbed by the two symmetric off-diagonal places of \\(\\mathbf D\\).",
   "tr": "لكلّ ثابت معنى يمكنك التحقّق منه باليد. \\(d_1\\) هو كلّ ما يتحرّك حين تتحرّك العربة. \\(d_4\\) هو القضيب السفلي يدور حول طرفه السفلي حاملًا كتلة القضيب العلوي كلّها على بعد \\(L_1\\). \\(d_2\\) يربط العربة بالزاوية السفلية: العامل \\(\\tfrac12 m_1 + m_2\\) هو كتلة القضيب السفلي عند منتصفه مضافًا إليها القضيب العلوي المعلّق على طرفه الأعلى. أمّا العامل 2 أمام حاصل الضرب المختلط في (3) فيستوعبه الموضعان المتناظران خارج قطر \\(\\mathbf D\\)."
@@ -1038,6 +1154,18 @@
  "d23f88fa5326": {
   "src": "<span>9</span>Where the balancer is certain to win",
   "tr": "<span>9</span>حيث يفوز متحكّم الموازنة يقينًا"
+ },
+ "d2c7a424c7f5": {
+  "src": "Back to the machine of Bogdanov’s report [1]: 1.5, 0.5 and 0.75 kg, rods of 0.5 and 0.75 m, <i>ρ</i> = 1.",
+  "tr": "العودة إلى آلة تقرير بوغدانوف [1]: 1.5 و0.5 و0.75 kg، وقضيبان طولهما 0.5 و0.75 m، و<i>ρ</i> = 1."
+ },
+ "d4313ac1cf77": {
+  "src": "Off: the motor gives no force at all, and the rods fall.",
+  "tr": "متوقّف: لا يعطي المحرّك أيّ قوّة على الإطلاق، فيسقط القضيبان."
+ },
+ "d575af51ef0f": {
+  "src": "With the controller on, the time in which the slowest error shrinks 2.7-fold.",
+  "tr": "والمتحكّم يعمل، الزمن الذي يصغر فيه أبطأ خطأ 2.7 مرّة."
  },
  "d58178d589bb": {
   "src": "<span>11</span>The swing-up: plan, track, catch",
@@ -1183,6 +1311,14 @@
   "src": "Both roots \\(\\sigma^2\\) are positive, so each gives a pair \\(\\pm\\sigma\\): one motion that dies away and one that grows as \\(e^{\\sigma t}\\). For the default machine, \\(\\sigma = 10.39\\ \\mathrm{s^{-1}}\\) and \\(4.10\\ \\mathrm{s^{-1}}\\). The fast one dominates: a lean grows by a factor \\(e\\) every \\(1/\\sigma = 96\\) ms. The panel shows both rates live.",
   "tr": "الجذران \\(\\sigma^2\\) كلاهما موجب، فيعطي كلّ منهما زوجًا \\(\\pm\\sigma\\): حركة تخمد وأخرى تنمو مثل \\(e^{\\sigma t}\\). وللآلة الافتراضية \\(\\sigma = 10.39\\ \\mathrm{s^{-1}}\\) و\\(4.10\\ \\mathrm{s^{-1}}\\). والسريع هو الغالب: يكبر الميل بالعامل \\(e\\) كلّ \\(1/\\sigma = 96\\) ms. وتعرض اللوحة المعدّلين مباشرة."
  },
+ "eca8b613d02b": {
+  "src": "Left out: friction in the hinges and wheels, the motor’s own dynamics (a real motor cannot change its force instantly), sensor noise, and a hard end of the rail (the planner keeps the cart within ±1.5 m; calming and balancing do not). Each is a known extension of this model [1, 3]. Every number on this page that is not derived or taken from a source is a choice of ours, and the text says so where it is made: the weight on \\(x\\), the ranges of the sliders, \\(u_\\text{max} = 60\\) N, the planner’s weights and rail limit, the calming gains, the glide rate of (26), the share \\(\\gamma = 0.5\\) of the certified level in the braking (27a), the spring and the largest acceleration of your hand in (29), the rectangle rule in (23), and the shells, directions and climbs of the certificate (19a).",
+  "tr": "ما أُغفل: الاحتكاك في المفاصل والعجلات، وديناميكا المحرّك نفسه (المحرّك الحقيقي لا يغيّر قوّته فورًا)، وضجيج الحسّاسات، ونهاية صلبة للسكّة (يُبقي المخطِّط العربة ضمن ±1.5 m؛ أمّا التهدئة والموازنة فلا). وكلّ منها امتداد معروف لهذا النموذج [1، 3]. وكلّ رقم في هذه الصفحة لم يُشتقّ ولم يُؤخذ من مصدر فهو اختيار منّا، والنصّ يقول ذلك حيث يُتّخذ: الوزن على \\(x\\)، ومدى المنزلقات، و\\(u_\\text{max} = 60\\) N، وأوزان المخطِّط وحدّ سكّته، وكسوب التهدئة، ومعدّل الانزلاق في (26)، والحصّة \\(\\gamma = 0.5\\) من المستوى المضمون في الكبح (27a)، والزنبرك وأقصى تسارع ليدك في (29)، وقاعدة المستطيل في (23)، وقشور الشهادة (19a) واتّجاهاتها وصعودها."
+ },
+ "ee4c322a9d78": {
+  "src": "Grab a rod in the figure, pull it over and let go. Or grab the cart and drag it: while you hold it the motor lets go, and you see what the cart’s motion alone does to the rods.",
+  "tr": "أمسك قضيبًا في الشكل، واسحبه مائلًا، ثم أفلته. أو أمسك العربة واسحبها: ما دمت ممسكًا بها يتخلّى المحرّك عنها، فترى ما تفعله حركة العربة وحدها بالقضيبين."
+ },
  "ee623274982b": {
   "src": "The last eight seconds of the two rod angles and of the motor force.",
   "tr": "الثواني الثماني الأخيرة لزاويتي القضيبين ولقوّة المحرّك."
@@ -1250,6 +1386,10 @@
  "f7a8477c922d": {
   "src": "Figure 1 shows the parts. The <b>cart</b>, of mass \\(m_0\\), rolls on a straight horizontal <b>rail</b>; its position along the rail is \\(x\\). A <b>motor</b> pushes it with a horizontal force \\(u\\), positive to the right, never larger in size than \\(u_\\text{max}\\). Through the middle of the cart runs a <b>slot</b>, open at the top and bottom, and the cart rides on two rails, one on each side of it. Across the top of the slot sits a <b>hinge</b>, a pin through a bearing, which lets the lower rod turn freely in the plane of the picture and in no other way. The <b>lower rod</b> is a uniform bar of mass \\(m_1\\) and length \\(L_1\\). At its top end a second free hinge carries the <b>upper rod</b>, a uniform bar of mass \\(m_2\\) and length \\(L_2\\). No motor sits in either hinge.",
   "tr": "يبيّن الشكل 1 الأجزاء. <b>العربة</b>، وكتلتها \\(m_0\\)، تتدحرج على <b>سكّة</b> مستقيمة أفقية؛ وموضعها على السكّة هو \\(x\\). يدفعها <b>محرّك</b> بقوّة أفقية \\(u\\)، موجبة نحو اليمين، لا يتجاوز مقدارها أبدًا \\(u_\\text{max}\\). ويخترق وسطَ العربة <b>شِقّ</b> مفتوح من أعلى ومن أسفل، والعربة تسير على سكّتين، واحدة على كلّ جانب منه. وفوق الشقّ، عرضًا، <b>مفصل</b>، محور يمرّ في محمل، يتيح للقضيب السفلي أن يدور بحرّية في مستوى الصورة ولا يتيح له غير ذلك. <b>القضيب السفلي</b> قضيب متجانس كتلته \\(m_1\\) وطوله \\(L_1\\). وعند طرفه العلوي يحمل مفصلٌ حرّ ثانٍ <b>القضيب العلوي</b>، وهو قضيب متجانس كتلته \\(m_2\\) وطوله \\(L_2\\). ولا محرّك في أيّ من المفصلين."
+ },
+ "f7c95322585d": {
+  "src": "and row 1 says how hard your hand pushes, the same row the calming law uses to turn an acceleration into a force (21). Wolfram derived (30) from the Lagrangian (4)–(7) with \\(x(t)\\) prescribed. The cart’s acceleration enters like a sideways gravity: in the cart’s frame every mass feels \\(-\\ddot x\\) besides \\(-g\\). From upright and at rest, (30) gives \\(\\ddot\\theta_1 = -2.47\\,\\ddot x\\) and \\(\\ddot\\theta_2 = +0.47\\,\\ddot x\\) (in rad/s² per m/s², default machine). Here is the twist: jerk the cart right, and the lower rod falls back so fast that the middle hinge moves left, by \\(\\ddot x\\,(1 - 2.47 \\times 0.5) = -0.24\\,\\ddot x\\), so the upper rod tips forward. The pair buckles like a folding ruler before gravity takes over. Your hand feels this too: at that first instant the force is \\(m_\\text{eff}\\ddot x\\) with \\(m_\\text{eff} = d_1 - \\mathbf h^{\\mathsf T}\\mathbf D_{\\theta\\theta}^{-1}\\mathbf h = 1.65\\) kg, where \\(\\mathbf h = (d_2, d_3)^{\\mathsf T}\\) and \\(\\mathbf D_{\\theta\\theta}\\) is the matrix of (30), and not the 2.75 kg the machine weighs, because the rods turn instead of following. Let go, and the controller starts from the state you leave behind. If the rods can still be caught, it catches them and brakes the cart to rest (11.5), or brings it back to where you let go; if not, it calms them and swings them up again.",
+  "tr": "ويقول الصفّ 1 كم تدفع يدك، وهو الصفّ نفسه الذي يستعمله قانون التهدئة ليحوّل تسارعًا إلى قوّة (21). وقد استنتج Wolfram (30) من دالّة لاغرانج (4)–(7) مع \\(x(t)\\) مفروضًا. يدخل تسارع العربة كأنّه جاذبية جانبية: في إطار العربة تشعر كلّ كتلة بـ\\(-\\ddot x\\) إلى جانب \\(-g\\). من الوضع القائم والسكون، تعطي (30) القيمتين \\(\\ddot\\theta_1 = -2.47\\,\\ddot x\\) و\\(\\ddot\\theta_2 = +0.47\\,\\ddot x\\) (بوحدة rad/s² لكلّ m/s²، الآلة الافتراضية). وهنا المفاجأة: إذا هززت العربة إلى اليمين، يسقط القضيب السفلي إلى الخلف بسرعة كبيرة حتى إنّ المفصل الأوسط يتحرّك إلى اليسار بمقدار \\(\\ddot x\\,(1 - 2.47 \\times 0.5) = -0.24\\,\\ddot x\\)، فيميل القضيب العلوي إلى الأمام. ينثني الزوج كمسطرة قابلة للطيّ قبل أن تتولّى الجاذبية الأمر. وتشعر يدك بذلك أيضًا: في تلك اللحظة الأولى تكون القوّة \\(m_\\text{eff}\\ddot x\\) مع \\(m_\\text{eff} = d_1 - \\mathbf h^{\\mathsf T}\\mathbf D_{\\theta\\theta}^{-1}\\mathbf h = 1.65\\) kg، حيث \\(\\mathbf h = (d_2, d_3)^{\\mathsf T}\\) و\\(\\mathbf D_{\\theta\\theta}\\) هي مصفوفة (30)، لا الـ2.75 kg التي تزنها الآلة، لأنّ القضيبين يدوران بدل أن يتبعا العربة. أفلتها، فيبدأ المتحكّم من الحالة التي تتركها. فإن كان التقاط القضيبين ما يزال ممكنًا التقطهما وكبح العربة حتى السكون (11.5)، أو أعادها إلى حيث أفلتّها؛ وإلّا هدّأهما وأرجحهما إلى الأعلى من جديد."
  },
  "f9030061ee14": {
   "src": "A computer does not watch the rods all the time. It reads the sensors at fixed instants, every \\(T_s\\), computes a force, sets the motor to it and holds it there until the next look. The page does exactly this: \\(u\\) changes only every \\(T_s\\) (the slider; 10 ms by default) and stays constant in between, while the rods keep falling according to (9). Engineers call the held force a <em>zero-order hold</em>: a staircase instead of a curve. Section 7.1 designed \\(\\mathbf K\\) as if the controller acted at every instant. Here we ask what the machine does between two looks, why a loop with those gains breaks when \\(T_s\\) grows, and how to design gains for the loop period itself. A reader who wants the result alone can jump to (16h) and Table 1.",

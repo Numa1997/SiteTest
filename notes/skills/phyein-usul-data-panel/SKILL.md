@@ -225,7 +225,8 @@ stored state with your own formulas (not from the drawing's stored pixels) and c
 "Fully painted" means alpha 255 and the colour within 2 or 3 of the expected value: alpha first. Also compare the drawing's stored
 pixels with the state turned into pixels (expect identical). Repeat at device pixel ratio 2.
 
-**e. Scenarios.** At least: rest; a flick; a drag with the real mouse; the swing-up from hanging; catches from random falls,
+**e. Scenarios.** At least: rest; a flick; a drag with the real mouse (of each thing the reader can grab: in project 05 a rod, held at
+rest, and the cart, whose hand force is an ordinary RK4 input that the force check must recompute from its own row); the swing-up from hanging; catches from random falls,
 with the supervisor's options both ways (project 05: Arrive moving, then brake and Arrive at rest), and long enough for any governor
 to finish (project 05: 6 s after the reference stops); two loop periods (10 and 40 ms); a moving
 (glide) reference; a change of the force limit while balancing. Each runs a–d's log and picture checks.

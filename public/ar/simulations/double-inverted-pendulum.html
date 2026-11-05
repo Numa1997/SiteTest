@@ -18,13 +18,17 @@
         .seg button[aria-pressed="true"] { background: var(--accent); color: #fff; }
         .state { margin: 0; font-size: 13px; line-height: 1.5; color: var(--ink-2); }
         .state b { color: var(--accent); }
+        .ctl__note { font-size: 12px; color: var(--ink-3); margin: 0; line-height: 1.45; }   /* what a control does, in one line under it */
+        .defs { margin: 0; font-size: 12px; line-height: 1.45; color: var(--ink-3); }
+        .defs dt { font-family: var(--mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-top: 8px; }
+        .defs dd { margin: 1px 0 0; }
         .ptable { display: block; width: max-content; max-width: 100%; overflow-x: auto; position: relative; border-collapse: collapse; margin: 12px 0 16px; font-size: 15px; }   /* a table wider than the column scrolls by itself; position keeps KaTeX's hidden MathML inside it */
         .ptable th, .ptable td { border-bottom: 1px solid var(--rule); padding: 5px 12px 5px 0; text-align: left; vertical-align: top; }
     </style>
 
     <link rel="stylesheet" href="../../fonts/arabic.css" />
     <script src="../../scripts/i18n/strings-ar.js"></script>
-    <meta name="translated-from" content="English public/simulations/double-inverted-pendulum.html, commit b5dbf12+" />
+    <meta name="translated-from" content="English public/simulations/double-inverted-pendulum.html, commit d51b1da+" />
   </head>
 <body>
     <header class="sim-top">
@@ -82,23 +86,27 @@
                         <button type="button" class="btn" id="flickL">← نقرة إلى اليسار</button>
                         <button type="button" class="btn" id="flickR">نقرة إلى اليمين →</button>
                     </div>
+                    <p class="ctl__note">النقرة ضربة جانبية قصيرة على الطرف العلوي للقضيب العلوي، شدّتها <i>J</i> (آخر منزلق في هذه المجموعة). وعلى المتحكّم أن يلتقطها.</p>
                     <div class="actions">
                         <button type="button" class="btn btn--ghost" data-go="-1">العربة إلى ⁦−1 m⁩</button>
                         <button type="button" class="btn btn--ghost" data-go="0">إلى 0</button>
                         <button type="button" class="btn btn--ghost" data-go="1">إلى +⁦1 m⁩</button>
                     </div>
+                    <p class="ctl__note">يحرّك الهدف، أي العلامة الحمراء أسفل السكّة. تمضي العربة إلى هناك والقضيبان متوازنان، وترجع قليلًا أولًا (القسم 8).</p>
                     <div class="actions">
                         <button type="button" class="btn" id="swing">أنزِلهما ثم أرجِحهما إلى الأعلى</button>
                         <button type="button" class="btn btn--ghost" id="tilt">أمِل ثم أفلت</button>
                         <button type="button" class="btn btn--ghost" id="play">إيقاف مؤقّت</button>
                         <button type="button" class="btn btn--ghost" id="reset">إعادة الضبط</button>
                     </div>
+                    <p class="ctl__note"><i>أنزِلهما ثم أرجِحهما إلى الأعلى</i>: يبدأ القضيبان متدلّيين، فتؤرجحهما الصفحة إلى الأعلى وتلتقطهما (القسمان ⁦10–11⁩). <i>أمِل ثم أفلت</i>: يبدأ القضيبان مائلين بزاويتي ⁦6°⁩ و⁦−4°⁩.</p>
                     <p class="state" id="state" aria-live="polite">—</p>
-                    <p class="state">أو أمسك أيّ قضيب في الشكل، واسحبه مائلًا، ثم أفلته.</p>
+                    <p class="state">أمسك قضيبًا في الشكل، واسحبه مائلًا، ثم أفلته. أو أمسك العربة واسحبها: ما دمت ممسكًا بها يتخلّى المحرّك عنها، فترى ما تفعله حركة العربة وحدها بالقضيبين.</p>
                     <label class="ctl">
                         <span class="ctl__row"><span>شدّة النقرة <i>J</i></span><output id="J-out" for="J"></output></span>
                         <input type="range" id="J" min="0.05" max="0.5" step="0.01" value="0.15">
                     </label>
+                    <p class="ctl__note">دفعة النقرة، <i>J</i> = ∫<i>F</i> d<i>t</i>: شدّة دفع الضربة مضروبةً في مدّة دوامها، بالنيوتن·ثانية (N·s). مع محرّك قدره ⁦60 N⁩ تُلتقط نقرة قدرها ⁦0.2 N⁩·s ولا تُلتقط نقرة قدرها ⁦0.3 N⁩·s.</p>
                 </div>
 
                 <div class="panel__group">
@@ -107,37 +115,45 @@
                         <button type="button" data-v="on" aria-pressed="true">تشغيل</button>
                         <button type="button" data-v="off" aria-pressed="false">إيقاف</button>
                     </div>
+                    <p class="ctl__note">متوقّف: لا يعطي المحرّك أيّ قوّة على الإطلاق، فيسقط القضيبان.</p>
                     <p class="panel__label">إذا سقط القضيبان</p>
                     <div class="seg" role="group" aria-label="الإنقاذ" id="resc">
                         <button type="button" data-v="on" aria-pressed="true">أرجِحهما إلى الأعلى من جديد</button>
                         <button type="button" data-v="off" aria-pressed="false">دَعهما يسقطان</button>
                     </div>
+                    <p class="ctl__note">حين يعجز متحكّم الموازنة عن الفوز، فإمّا أن تهدّئ الصفحة القضيبين وتؤرجحهما إلى الأعلى من جديد (القسمان ⁦10–11⁩)، وإمّا أن توقف المحرّك وتدعهما يسقطان.</p>
                     <p class="panel__label">بعد الأرجحة إلى الأعلى</p>
                     <div class="seg" role="group" aria-label="بعد الأرجحة إلى الأعلى" id="after">
                         <button type="button" data-v="roll" aria-pressed="true">الوصول متحرّكًا ثمّ الكبح</button>
                         <button type="button" data-v="stop" aria-pressed="false">الوصول ساكنًا</button>
                     </div>
+                    <p class="ctl__note">كيف تسلّم الأرجحةُ إلى الأعلى القضيبين إلى متحكّم الموازنة. <i>الوصول متحرّكًا</i>: تكون العربة ما تزال تتدحرج عند الالتقاط، ثم تُكبح حتى السكون بخطوات صغيرة مضمونة (⁦11.4–11.5⁩). <i>الوصول ساكنًا</i>: على الخطّة أن توقف العربة أيضًا، وخطّة كهذه أصعب إيجادًا.</p>
                     <p class="panel__label">الكسوب مصمَّمة لـ</p>
                     <div class="seg" role="group" aria-label="الكسوب مصمَّمة لـ" id="gmode">
                         <button type="button" data-v="sampled" aria-pressed="true">دور الحلقة</button>
                         <button type="button" data-v="cont" aria-pressed="false">الزمن المتّصل</button>
                     </div>
+                    <p class="ctl__note">الكسوب هي أرقام المتحكّم الستّة: كم نيوتنًا يدفع لكلّ وحدة من كلّ خطأ (لكلّ متر، وراديان، وm/s، وrad/s). <i>دور الحلقة</i>: صُمّمت مع العلم أنّ الحاسوب لا ينظر إلّا كلّ <i>T</i><sub>s</sub> (7.5). <i>الزمن المتّصل</i>: صُمّمت كأنّه ينظر طوال الوقت (7)، وهذا يفشل في الحلقات البطيئة (8).</p>
                     <label class="ctl">
                         <span class="ctl__row"><span>حدّ قوّة المحرّك <i>u</i><sub>max</sub></span><output id="Fmax-out" for="Fmax"></output></span>
                         <input type="range" id="Fmax" min="5" max="200" step="1" value="60">
                     </label>
+                    <p class="ctl__note">أكبر قوّة يستطيع المحرّك أن يعطيها، بالنيوتن. وأيّ دفعة أكبر تُقصّ إلى هذه القيمة.</p>
                     <label class="ctl">
                         <span class="ctl__row"><span>دور حلقة التحكّم <i>T</i><sub>s</sub></span><output id="Ts-out" for="Ts"></output></span>
                         <input type="range" id="Ts" min="1" max="80" step="1" value="10">
                     </label>
+                    <p class="ctl__note">كلّ كم يقرأ الحاسوب الزاويتين ويضبط المحرّك، بالمللي ثانية. وفي ما بين ذلك تبقى القوّة كما ضُبطت (7.2).</p>
                     <label class="ctl">
                         <span class="ctl__row"><span>كلفة القوّة <i>ρ</i></span><output id="rho-out" for="rho"></output></span>
                         <input type="range" id="rho" min="-2" max="2" step="0.1" value="0">
                     </label>
+                    <p class="ctl__note">ثمن القوّة في كلفة المتحكّم (14)، مقابل ثمن الميل والبعد عن الهدف؛ والمنزلق لوغاريتمي، من 0.01 إلى 100. <i>ρ</i> كبيرة: دفعات لطيفة، وقضيبان يبتعدان أكثر. <i>ρ</i> صغيرة: دفعات قويّة تبلغ حدّ المحرّك أسرع.</p>
                 </div>
 
                 <div class="panel__group">
                     <p class="panel__label">الآلة · يُعاد تصميم المتحكّم عند كلّ تغيير</p>
+                    <p class="ctl__note">عربة كتلتها <i>m</i><sub>0</sub> على سكّة. وكلّ قضيب قضيبٌ متجانس كتلته <i>m</i> وطوله <i>L</i>، حرّ الدوران حول مفصل عند طرفه السفلي: القضيب 1 على العربة، والقضيب 2 فوق القضيب 1 (القسم 2).</p>
                     <label class="ctl">
                         <span class="ctl__row"><span>كتلة العربة <i>m</i><sub>0</sub></span><output id="m0-out" for="m0"></output></span>
                         <input type="range" id="m0" min="0.3" max="6" step="0.1" value="1.5">
@@ -159,6 +175,7 @@
                         <input type="range" id="L2" min="0.2" max="1.5" step="0.05" value="0.75">
                     </label>
                     <div class="actions"><button type="button" class="btn btn--ghost" id="defaults">آلة بوغدانوف</button></div>
+                    <p class="ctl__note">العودة إلى آلة تقرير بوغدانوف [1]: 1.5 و0.5 و⁦0.75 kg⁩، وقضيبان طولهما 0.5 و⁦0.75 m⁩، و<i>ρ</i> = 1.</p>
                 </div>
 
                 <dl class="readouts">
@@ -171,6 +188,16 @@
                     <div><dt>اقتطاع السرعة المضمون <i>ε</i></dt><dd id="r-eps">—</dd></div>
                     <div><dt>زاويتا القضيبين</dt><dd id="r-th">—</dd></div>
                     <div><dt>موضع العربة</dt><dd id="r-x">—</dd></div>
+                </dl>
+                <dl class="defs" aria-label="ما تعنيه القراءات">
+                    <dt>معدّلا السقوط</dt><dd>والمحرّك متوقّف، يكبر الميل الصغير مثل e<sup><i>σt</i></sup>؛ والمعدّلان <i>σ</i> يخصّان الطريقتين اللتين يمكن أن يسقط بهما الزوج (القسم 5).</dd>
+                    <dt>التضاعف بالعامل e</dt><dd>1/<i>σ</i> للسقوط الأسرع: الزمن الذي يكبر فيه ميلٌ غير مصحَّح 2.7 مرّة.</dd>
+                    <dt>أبطأ استقرار</dt><dd>والمتحكّم يعمل، الزمن الذي يصغر فيه أبطأ خطأ 2.7 مرّة.</dd>
+                    <dt>العامل في كلّ نظرة</dt><dd>العدد الذي يُضرب فيه أسوأ خطأ من نظرة للحاسوب إلى التي تليها. إن كان أقلّ من 1 صمدت الحلقة، وإن زاد على 1 انهارت (7.3).</dd>
+                    <dt>الكسبان على θ₁ وθ₂</dt><dd>النيوتنات التي يدفعها المحرّك لكلّ راديان من ميل كلّ قضيب.</dd>
+                    <dt>حدّ الالتقاط المضمون</dt><dd>تحت هذه القيمة من الكلفة المتبقّية <i>W</i> يفوز متحكّم الموازنة يقينًا، بما في ذلك حدّ المحرّك ودور الحلقة (القسم 9).</dd>
+                    <dt>الاقتطاع المضمون</dt><dd>أكبر تغيّر في سرعة العربة دفعةً واحدة يتحمّله متحكّم الموازنة يقينًا انطلاقًا من السكون، عند نصف حدّ الالتقاط (11.5).</dd>
+                    <dt>زاويتا القضيبين</dt><dd>الميل عن الوضع القائم، موجبًا نحو اليمين.</dd>
                 </dl>
 
                 <ul class="legend">
@@ -408,7 +435,12 @@
                         <p><b>دور الحلقة.</b> «يصمد» هنا معناه أنّ القضيبين يسكنان: في جريان مدّته ⁦60 s⁩ تكون أكبر زاوية في آخر ⁦10 s⁩ دون ⁦1 mrad⁩. بالكسوب المتّصلة (16) يمسك المتحكّم القضيبين لـ \(T_s\) حتّى ⁦34 ms⁩ ولا يمسكهما عند ⁦34.5 ms⁩ (اختُبر بخطوات من ⁦0.5 ms⁩)، تمامًا حيث تنقلب الحلقة الخطّية في 7.3: نحو ثلث زمن السقوط البالغ ⁦96 ms⁩. وفوق ذلك يهتزّ القضيبان في دورة حدّية، عند ⁦40 ms⁩ بمقدار \(\pm4.9°\) والمحرّك عند \(\pm60\) N، ومن ⁦60 ms⁩ يسقطان خلال ثانية. ضاعِف الطولين يرتفع الحدّ إلى ⁦58 ms⁩؛ ونصِّفهما ينخفض إلى ⁦19 ms⁩. العقول البطيئة تحتاج إلى مكانس طويلة. وبكسوب مصمَّمة للدور (⁦16h⁩) تكون الحلقة الخطّية مستقرّة عند كلّ دور جرّبناه، حتّى ثانية واحدة، حيث يبقى العامل في كلّ نظرة 0.47؛ وما ينهيها في الآلة الحقيقية هو حدّ المحرّك. ومن البداية المعيارية تصمد الكسوب المصمَّمة حتّى ⁦260 ms⁩، أي زمني سقوط ونصفًا، وتفقد القضيبين عند ⁦262.5 ms⁩: ففي ربع ثانية بين نظرتين يكبر الميل \(e^{10.39 \times 0.26} = 15\) ضعفًا، وما يستطيع دفع ممسوك واحد لا يزيد على ⁦60 N⁩ أن يردّه محدود. والطولان المضاعَفان ينقلان هذا الحدّ إلى ⁦342.5 ms⁩، والطولان المنصَّفان إلى ⁦195 ms⁩. اضبط \(T_s\) على ⁦80 ms⁩، نهاية المنزلق، وبدّل بين التصميمين: مع <i>الزمن المتّصل</i> يفقد متحكّم الموازنة القضيبين خلال ⁦0.35 s⁩، ومع <i>دور الحلقة</i> يمسكهما ساكنين.</p>
                         <p><b>حدّ المحرّك.</b> عند \(u_\text{max} = 60\) N يلتقط المتحكّم نقرةً على القمة قدرها \(J = 0.2\) N·s ويفقد نقرةً قدرها ⁦0.3 N⁩·s. والنقرة ضربة أفقية قصيرة على الطرف العلوي، قوّة \(F(t)\) تعمل مدّة \(\varepsilon\) بدفعة \(J = \int F\,\mathrm dt\). ويقع الطرف العلوي عند \(x_\text{top} = x + L_1\sin\theta_1 + L_2\sin\theta_2\)، ولذلك فبقاعدة القسم 4 تكون القوّة المعمَّمة للضربة \(F\,\partial x_\text{top}/\partial\boldsymbol\theta = F\,(1, L_1\cos\theta_1, L_2\cos\theta_2)^{\mathsf T}\). كامِل (9) على مدى الضربة: لا تستطيع المواضع أن تتحرّك في زمن \(\varepsilon \to 0\)، فتبقى \(\mathbf D\) ثابتة و\(\int\mathbf D\ddot{\boldsymbol\theta}\,\mathrm dt = \mathbf D\,\Delta\dot{\boldsymbol\theta}\)، بينما تبقى \(\mathbf C\dot{\boldsymbol\theta}\) و\(\mathbf G\) و\(u\) محدودة فلا تسهم إلا بحدّ من الرتبة \(O(\varepsilon)\). ومن ثمّ</p>
                         \[ \Delta\dot{\boldsymbol\theta} = \mathbf D^{-1}\begin{pmatrix}1\\ L_1\cos\theta_1\\ L_2\cos\theta_2\end{pmatrix} J . \tag{17} \]
-                        <p><b>اسحبه مائلًا ثم أفلته.</b> أمسك قضيبًا في الشكل وأمِله؛ وما دمت ممسكًا به يبقى كلّ شيء ساكنًا. أفلته، فيبدأ المتحكّم من تلك الحالة المائلة. مع الآلة الافتراضية و\(u_\text{max} = 60\) N يعود القضيب العلوي المسحوب إلى ⁦13°⁩، وكذلك القضيب السفلي المسحوب إلى ⁦−10°⁩. أمّا القضيب العلوي المسحوب إلى ⁦45°⁩ فيتجاوز قدرة متحكّم الموازنة: يطلب أكثر من ⁦60 N⁩، فيبلغ المحرّك حدّ الإشباع، ويسقط القضيبان قبل أن تتمكّن العربة من الوصول تحتهما. عندئذ تهدّئ الصفحة القضيبين وتؤرجحهما إلى الأعلى من جديد (الأقسام ⁦9–11⁩)؛ فعّل <i>دَعهما يسقطان</i> لترى السقوط نفسه، أو ارفع \(u_\text{max}\) وحاول مجدّدًا.</p>
+                        <p><b>اسحبه مائلًا ثم أفلته.</b> أمسك قضيبًا في الشكل وأمِله؛ وما دمت ممسكًا بقضيب يبقى كلّ شيء ساكنًا. أفلته، فيبدأ المتحكّم من تلك الحالة المائلة. مع الآلة الافتراضية و\(u_\text{max} = 60\) N يعود القضيب العلوي المسحوب إلى ⁦13°⁩، وكذلك القضيب السفلي المسحوب إلى ⁦−10°⁩. أمّا القضيب العلوي المسحوب إلى ⁦45°⁩ فيتجاوز قدرة متحكّم الموازنة: يطلب أكثر من ⁦60 N⁩، فيبلغ المحرّك حدّ الإشباع، ويسقط القضيبان قبل أن تتمكّن العربة من الوصول تحتهما. عندئذ تهدّئ الصفحة القضيبين وتؤرجحهما إلى الأعلى من جديد (الأقسام ⁦9–11⁩)؛ فعّل <i>دَعهما يسقطان</i> لترى السقوط نفسه، أو ارفع \(u_\text{max}\) وحاول مجدّدًا.</p>
+                        <p><b>خذ العربة.</b> أمسك العربة في الشكل واسحبها. ما دمت ممسكًا بها، فيدك هي التي تحرّك العربة لا المحرّك: يتخلّى المتحكّم عنها، ويستجيب القضيبان لحركة العربة وحدها. احمل مكنسة قائمة على راحة يدك وحرّك يدك بسرعة إلى اليمين: لا تتبعك المكنسة على الفور، بل تسقط إلى اليسار. هذا ما تراه هنا، مع مفاجأة. تمثّل الصفحة يدك بزنبرك صلب مع مُخمِّد يسحب العربة نحو المؤشّر \(x_h\)، بأقصى ما تستطيعه يد سريعة:</p>
+                        \[ \ddot x = \operatorname{clip}\!\left(\omega_h^2\,(x_h - x) - 2\omega_h\,\dot x,\ \pm a_h\right), \qquad \omega_h = 15\ \text{s}^{-1},\quad a_h = 30\ \text{m/s}^2 . \tag{29} \]
+                        <p>الرقمان من اختيارنا. والتخامد \(2\omega_h\) هو التخامد الحرج، فلا تتجاوز العربة المؤشّر أبدًا: بعد قفزة \(D\) للمؤشّر تتبعه وفق \(x = D\,[1 - (1 + \omega_h t)\,e^{-\omega_h t}]\)، فتقطع ⁦95 %⁩ من المسافة في ⁦0.32 s⁩، وتتأخّر عن مؤشّر يتحرّك بثبات بسرعة \(c\) بمقدار \(2c/\omega_h\)، أي ⁦13 cm⁩ عند ⁦1 m/s⁩ (يعطي <code>DSolve</code> من Wolfram على (29) كلتا النتيجتين). ومع \(\ddot x\) معلومًا، لا تعود معادلات أويلر–لاغرانج للقضيبين، أي الصفّان 2 و3 من (9)، تحتوي على القوّة: إنّهما معادلتان للقضيبين وحدهما، تقودهما العربة،</p>
+                        \[ \begin{pmatrix} d_4 & d_5\cos(\theta_1-\theta_2)\\ d_5\cos(\theta_1-\theta_2) & d_6\end{pmatrix}\ddot{\boldsymbol\theta} = -\begin{pmatrix} d_2\cos\theta_1\\ d_3\cos\theta_2\end{pmatrix}\ddot x - \begin{pmatrix} d_5\sin(\theta_1-\theta_2)\,\dot\theta_2^2\\ -d_5\sin(\theta_1-\theta_2)\,\dot\theta_1^2\end{pmatrix} + \begin{pmatrix} f_1\sin\theta_1\\ f_2\sin\theta_2\end{pmatrix}, \tag{30} \]
+                        <p>ويقول الصفّ 1 كم تدفع يدك، وهو الصفّ نفسه الذي يستعمله قانون التهدئة ليحوّل تسارعًا إلى قوّة (21). وقد استنتج Wolfram (30) من دالّة لاغرانج (4)–(7) مع \(x(t)\) مفروضًا. يدخل تسارع العربة كأنّه جاذبية جانبية: في إطار العربة تشعر كلّ كتلة بـ\(-\ddot x\) إلى جانب \(-g\). من الوضع القائم والسكون، تعطي (30) القيمتين \(\ddot\theta_1 = -2.47\,\ddot x\) و\(\ddot\theta_2 = +0.47\,\ddot x\) (بوحدة rad/s² لكلّ m/s²، الآلة الافتراضية). وهنا المفاجأة: إذا هززت العربة إلى اليمين، يسقط القضيب السفلي إلى الخلف بسرعة كبيرة حتى إنّ المفصل الأوسط يتحرّك إلى اليسار بمقدار \(\ddot x\,(1 - 2.47 \times 0.5) = -0.24\,\ddot x\)، فيميل القضيب العلوي إلى الأمام. ينثني الزوج كمسطرة قابلة للطيّ قبل أن تتولّى الجاذبية الأمر. وتشعر يدك بذلك أيضًا: في تلك اللحظة الأولى تكون القوّة \(m_\text{eff}\ddot x\) مع \(m_\text{eff} = d_1 - \mathbf h^{\mathsf T}\mathbf D_{\theta\theta}^{-1}\mathbf h = 1.65\) kg، حيث \(\mathbf h = (d_2, d_3)^{\mathsf T}\) و\(\mathbf D_{\theta\theta}\) هي مصفوفة (30)، لا الـ⁦2.75 kg⁩ التي تزنها الآلة، لأنّ القضيبين يدوران بدل أن يتبعا العربة. أفلتها، فيبدأ المتحكّم من الحالة التي تتركها. فإن كان التقاط القضيبين ما يزال ممكنًا التقطهما وكبح العربة حتى السكون (11.5)، أو أعادها إلى حيث أفلتّها؛ وإلّا هدّأهما وأرجحهما إلى الأعلى من جديد.</p>
                         <p><b>البداية في الاتجاه الخاطئ.</b> اضغط <i>إلى +⁦1 m⁩</i>. تزحف العربة أوّلًا ⁦3 mm⁩ إلى الأمام، ثم ترجع ⁦2.3 cm⁩ بعد نصف ثانية من الضغط، بينما يميل القضيبان كلاهما نحو ⁦2°⁩ باتجاه الهدف. وبعد ذلك فقط تنطلق إلى الأمام مائلة مع الحركة، وفي النهاية يميل القضيبان نحو ⁦1.2°⁩ إلى الوراء لتكبح. ولا بدّ لها من ذلك: فلكي تتسارع نحو اليمين والقضيبان قائمان في المتوسّط، يجب أن يميل القضيبان نحو اليمين، والطريقة الوحيدة لإمالتهما نحو اليمين هي سحب طرفهما السفلي نحو اليسار أوّلًا. ويسمّي المهندسون هذا نظامًا غير أدنى الطور [3]؛ وأنت تفعل الشيء نفسه بالمكنسة حين تريد أن تمشي بها إلى الأمام.</p>
                         <p><b>كلفة القوّة.</b> ارفع \(\rho\) فيدفع المتحكّم بلطف أكبر ويدع القضيبين يبتعدان أكثر؛ واخفضها فتصبح الدفعات عنيفة ويُبلغ حدّ المحرّك أسرع. والكسوب في اللوحة تُظهر ذلك مباشرة.</p>
                         <p><b>الكتل.</b> العربة الأثقل ترتدّ أقلّ، فيسقط القضيبان بمعدّل أقرب إلى معدّل المفصل الثابت. والقضيب العلوي الأثقل يُحمّل السفلي ويغيّر الاتجاه الذي يجب أن يلاعبهما به المتحكّم. راقب معدّلي السقوط في اللوحة وأنت تحرّك كلّ منزلق.</p>
@@ -498,7 +530,7 @@
                         <p><b>مغادرة توازن متحرّك.</b> حين تسير العربة لا تعود أزرار الهدف تجعل المرجع يقفز: فالقفز من توازن متحرّك إلى توازن ساكن يطلب من متحكّم الموازنة توقّفًا فوريًّا ودفعًا كبيرًا وميلًا كبيرًا. بدلًا من ذلك ينزلق المرجع من فرد (25) الذي هو عليه إلى الفرد الساكن عند الهدف، على الحركة المخمَّدة تخميدًا حرجًا \(\ddot e + 2\omega\dot e + \omega^2 e = 0\) للمسافة \(e = x_\text{ref} - x_\text{target}\)، وهي أسرع عودة بلا تجاوز، بدءًا من \(e(0) = e_0\) و\(\dot e(0) = v\):</p>
                         \[ e(\tau) = \left(e_0 + (v + \omega e_0)\,\tau\right)e^{-\omega\tau}, \qquad \omega = 0.5\ \mathrm{s^{-1}}, \tag{26} \]
                         <p>مع \(\dot x_\text{ref} = \dot e\) معها (تحقّق: \(\dot e(0) = (v + \omega e_0) - \omega e_0 = v\)). والمعدّل \(\omega\) اختيارنا؛ والانزلاق من بُعد متر في سكون يقترب إلى سنتيمتر بعد ⁦13 s⁩. وأكبر تسارع له في البداية، \(\ddot e(0) = -\omega^2 e_0 - 2\omega v\): ⁦0.25 m/s²⁩ من متر في سكون، و⁦1.25 m/s²⁩ حين تبتعد العربة أيضًا بسرعة ⁦1 m/s⁩. والعربة التي تتسارع بـ \(a\) لا تستطيع أن تمسك قضيبيها إلّا مائلين: ففي إطار العربة تميل الجاذبية بالزاوية التي ظلّها \(a/g\)، ويجب أن يقف القضيبان كلاهما على امتدادها. وتعطي القاعدة ⁦1.5°⁩ عند ⁦0.25 m/s²⁩ و⁦7.3°⁩ عند ⁦1.25 m/s²⁩. ومرجع متحكّم الموازنة يُبقي \(\theta = 0\) مع ذلك، فيتلقّى الميل خطأً صغيرًا ويتركه قائمًا. وبالقياس بمعادلات الصفحة وكسوب ⁦10 ms⁩ يميل القضيبان على الأكثر ⁦0.9°⁩ في الانزلاق الأوّل و⁦5.3°⁩ في الثاني، أقلّ ممّا تقوله القاعدة، لأنّ العربة لا تستطيع أن تأخذ تسارع المرجع دفعة واحدة فلا تبلغ ذروته أبدًا؛ ولا يحتاج المحرّك إلى أكثر من 0.5 و⁦2.7 N⁩. وحين يصير المرجع على بعد سنتيمتر من الهدف تعود اللوحة فتقول <i>يوازن</i>.</p>
-                        <p>للوصول متحرّكًا ثمن: العربة تمضي. وحتّى 5 نوفمبر 2026 تركتها الصفحة تمضي، وفي اختبارات المتصفّح في 11.3 ابتعدت العربة بين 6 و⁦200 m⁩ عن موضع انطلاقها خلال الـ ⁦60 s⁩ من التشغيل (ومع خطّة مصنوعة لتصل ساكنة لم تغادر قطّ \(\pm1.54\) m). والسكّة الحقيقية لها نهاية، لذا تُوقف الصفحة العربة الآن بعد الالتقاط، بحذر. وكم من الحذر هو موضوع القسم الفرعي التالي.</p>
+                        <p>للوصول متحرّكًا ثمن: العربة تمضي. وحتّى 5 نوفمبر 2026 تركتها الصفحة تمضي، وفي اختبارات المتصفّح في 11.3 ابتعدت العربة بين 6 و⁦200 m⁩ عن موضع انطلاقها خلال الـ ⁦60 s⁩ من التشغيل (ومع خطّة مصنوعة لتصل ساكنة لم تغادر قطّ \(\pm1.54\) m). والسكّة الحقيقية لها نهاية، لذا تُوقف الصفحة العربة الآن بعد الالتقاط، بحذر. ومع الكبح، تبقى العربة في الاختبارات نفسها على بُعد 1 إلى ⁦16 m⁩ من موضع انطلاقها. وكم من الحذر هو موضوع القسم الفرعي التالي.</p>
                         <h4><span class="psub__n">11.5</span>التوقّف دون أن يسقط القضيبان</h4>
                         <p>احمل صينية عليها أكواب مكدّسة وانزل بها عن ممرّ متحرّك. لا يمكنك أن تقف فجأة: ستقف قدماك ولن تقف الأكواب. فتميل إلى الخلف قليلًا وتكبح على مدى بضع خطوات، وتعرف دون تفكير إلى أيّ حدّ يجوز لك أن تكبح قبل أن تنقلب الكومة. ولمتحكّم الموازنة المشكلة نفسها، ويستطيع أن يجيب عنها بالأرقام.</p>
                         <p><b>تغيير السرعة دفعة.</b> لا يرى متحكّم الموازنة سرعة العربة بذاتها أبدًا؛ إنّما يرى الخطأ \(\mathbf e = \mathbf s - \mathbf s^\ast\) عن الفرد من (25) الذي يمسكه. لنفترض أنّنا أخبرناه عند نظرة ما أنّ المرجع يتحرّك الآن بـ \(v - \Delta\) بدلًا من \(v\). لم يتغيّر شيء في الآلة، لكنّ الخطأ تغيّر: فمكوّنه الرابع، \(\dot x - v\)، زاد بمقدار \(\Delta\). وبحسب (25) لا يستطيع متحكّم الموازنة أن يميّز هذا عن دفعة مفاجئة جعلت العربة أسرع بمقدار \(\Delta\): فخفض سرعة المرجع ركلة في الخطأ، \(\mathbf e \to \mathbf e + \Delta\,\mathbf e_4\) عندما \(v &gt; 0\)، مع \(\mathbf e_4 = (0, 0, 0, 1, 0, 0)\). ويصير السؤال «إلى أيّ حدّ يجوز أن نكبح؟» هو السؤال «ما أكبر ركلة يجوز أن نعطيها؟».</p>
@@ -521,7 +553,7 @@
                         \[ \mathbf k_1 = \mathbf f(\mathbf s_n),\ \ \mathbf k_2 = \mathbf f(\mathbf s_n + \tfrac h2\mathbf k_1),\ \ \mathbf k_3 = \mathbf f(\mathbf s_n + \tfrac h2\mathbf k_2),\ \ \mathbf k_4 = \mathbf f(\mathbf s_n + h\mathbf k_3),\qquad \mathbf s_{n+1} = \mathbf s_n + \tfrac h6(\mathbf k_1 + 2\mathbf k_2 + 2\mathbf k_3 + \mathbf k_4), \tag{18} \]
                         <p>مع إبقاء \(u\) ثابتة طوال الخطوة، كما يُبقيها المتحكّم الذي يأخذ عيّنات. ويتناقص خطؤها في وحدة الزمن كما \(h^4\).</p>
                         <p>تكامل الصفحة (9) بالمعادلة (18) بخطوة ثابتة قدرها ⁦1 ms⁩، وعدّة خطوات في كلّ إطار من إطارات الشاشة، في الزمن الحقيقي. ويضع الشرح المتدرّج أدناه كلّ معادلة من هذه المذكّرة بجانب سطور شيفرة الصفحة التي تحسبها. ومع إيقاف المتحكّم، يُبقي المكامِل نفسه، وقد اختُبر بمحلّل عالي الدقّة، الطاقة \(T + V\) ثابتة حتّى \(2\times10^{-10}\) J خلال ⁦10 s⁩؛ ومقابل حلّ مرجعي بـ 30 رقمًا في Mathematica تتّفق زوايا القضيبين الدوّارين بحرّية حتّى \(3\times10^{-6}\) rad بعد ⁦2 s⁩، وتنصيف الخطوة يقلّل هذا الخطأ 18 مرّة، وهو الـ \(2^4\) لطريقة من الرتبة الرابعة. وتشغّل الصفحة قانونًا واحدًا من ثلاثة في كلّ مرّة: متحكّم الموازنة (⁦16h⁩) حول فرد من العائلة (25)، أو التهدئة (21)، أو التتبّع (24)، وفق قواعد القسمين 9 و11. وحين يكون <i>دَعهما يسقطان</i> مفعَّلًا ويُهزم متحكّم الموازنة، يكفّ المحرّك عن الدفع (\(u = 0\)) وتتابع الصفحة حلّ (9) كما كانت تمامًا: يسقط القضيبان إلى آخرهما، ويتأرجحان نازلين عبر الشقّ الذي في وسط العربة بين سكّتيها، ويتابعان التأرجح نواسًا مزدوجًا معلّقًا بعربة حرّة، بلا احتكاك، فلا يسكنان أبدًا. ويتّسع المنظر ليبقيا فيه. وتُرسم المواضع بمقياس صحيح؛ والمنظر يتبع العربة.</p>
-                        <p>ما أُغفل: الاحتكاك في المفاصل والعجلات، وديناميكا المحرّك نفسه (المحرّك الحقيقي لا يغيّر قوّته فورًا)، وضجيج الحسّاسات، ونهاية صلبة للسكّة (يُبقي المخطِّط العربة ضمن ⁦±1.5 m⁩؛ أمّا التهدئة والموازنة فلا). وكلّ منها امتداد معروف لهذا النموذج [1، 3]. وكلّ رقم في هذه الصفحة لم يُشتقّ ولم يُؤخذ من مصدر فهو اختيار منّا، والنصّ يقول ذلك حيث يُتّخذ: الوزن على \(x\)، ومدى المنزلقات، و\(u_\text{max} = 60\) N، وأوزان المخطِّط وحدّ سكّته، وكسوب التهدئة، ومعدّل الانزلاق في (26)، والحصّة \(\gamma = 0.5\) من المستوى المضمون في الكبح (⁦27a⁩)، وقاعدة المستطيل في (23)، وقشور الشهادة (⁦19a⁩) واتّجاهاتها وصعودها.</p>
+                        <p>ما أُغفل: الاحتكاك في المفاصل والعجلات، وديناميكا المحرّك نفسه (المحرّك الحقيقي لا يغيّر قوّته فورًا)، وضجيج الحسّاسات، ونهاية صلبة للسكّة (يُبقي المخطِّط العربة ضمن ⁦±1.5 m⁩؛ أمّا التهدئة والموازنة فلا). وكلّ منها امتداد معروف لهذا النموذج [1، 3]. وكلّ رقم في هذه الصفحة لم يُشتقّ ولم يُؤخذ من مصدر فهو اختيار منّا، والنصّ يقول ذلك حيث يُتّخذ: الوزن على \(x\)، ومدى المنزلقات، و\(u_\text{max} = 60\) N، وأوزان المخطِّط وحدّ سكّته، وكسوب التهدئة، ومعدّل الانزلاق في (26)، والحصّة \(\gamma = 0.5\) من المستوى المضمون في الكبح (⁦27a⁩)، والزنبرك وأقصى تسارع ليدك في (29)، وقاعدة المستطيل في (23)، وقشور الشهادة (⁦19a⁩) واتّجاهاتها وصعودها.</p>
                         <div class="pbox pbox--ex">
                             <span class="pbox__t">التمارين</span>
                             <p><b>12.1</b> نفّذ الخطوات الثلاث في القسم 4 للإحداثي \(x\) وبيّن أن الصفّ 1 من (9) هو مجموع القوى الجانبية على العربة والقضيبين.</p>
@@ -862,7 +894,12 @@
         ds.var('qdd', ['a3'], Float64Array, { symbol: 'q̈', long_name: 'accelerations now: ẍ in m/s², θ̈₁ and θ̈₂ in rad/s²', computed_in: 'rhs(), in diagnostics()', formula: 'D⁻¹ (H u − C θ̇ − G)', digits: 5 });
         ds.var('u', [], 'float', { symbol: 'u', units: 'N', long_name: 'motor force now, held since the last sample', computed_in: 'control(), at the last controller sample', digits: 4 });
         ds.var('mode', [], 'str', { symbol: 'mode', long_name: 'the supervisor’s law: balance, calm or track', computed_in: 'supervise() and control()' });
-        ds.var('held', [], 'int', { symbol: 'held', long_name: 'rod held by your hand: 0 none, 1 lower, 2 upper', computed_in: 'the pointer on the figure', digits: 0 });
+        ds.var('held', [], 'int', { symbol: 'held', long_name: 'what your hand holds: 0 nothing, 1 the lower rod, 2 the upper rod, 3 the cart', computed_in: 'the pointer on the figure', digits: 0 });
+        ds.var('hand_x', [], 'float', { symbol: 'x<sub>h</sub>', units: 'm', long_name: 'where your hand pulls the cart: the pointer, on the rail; undefined unless you hold the cart', computed_in: 'step(), from the pointer', formula: 'x<sub>cam</sub> + (pointer − w/2)/σ', digits: 4 });
+        ds.var('hand_a', [], 'float', { symbol: 'ẍ<sub>h</sub>', units: 'm/s²', long_name: 'the acceleration your hand gives the cart in the next step (29)', computed_in: 'handA(), in diagnostics()', formula: 'clip(ω<sub>h</sub>²(x<sub>h</sub> − x) − 2ω<sub>h</sub> ẋ, ±a<sub>h</sub>)', digits: 4 });
+        ds.var('hand_u', [], 'float', { symbol: 'u<sub>h</sub>', units: 'N', long_name: 'the force your hand gives the cart in the next step: row 1 of (9) with the rods from (30)', computed_in: 'forceFor(), in diagnostics()', digits: 4 });
+        ds.var('hand_w', [], 'float', { symbol: 'ω<sub>h</sub>', units: '1/s', long_name: 'the rate of the hand’s spring (29); our choice', computed_in: 'the constant HAND_W', digits: 1 });
+        ds.var('hand_amax', [], 'float', { symbol: 'a<sub>h</sub>', units: 'm/s²', long_name: 'the hardest the hand accelerates the cart (29); our choice', computed_in: 'the constant HAND_A', digits: 1 });
         ds.var('lost', [], 'bool', { symbol: 'lost', long_name: 'fallen while rescue is off', computed_in: 'supervise()' });
         ds.var('braking', [], 'bool', { symbol: 'braking', long_name: 'the reference is being braked to rest, one certified bite per look (27)', computed_in: 'govern(), in control()' });
         ds.var('ref_kind', [], 'str', { symbol: 'ref', long_name: 'the balancer’s reference: fixed, cruise or glide (25)–(26)', computed_in: 'the buttons, supervise() and control()' });
@@ -921,16 +958,17 @@
         ds.var('cs_vb', ['j'], Float64Array, { symbol: 'v<sub>before</sub>', units: 'm/s', long_name: 'reference speed before the bite', computed_in: 'govern()', digits: 5 });
         ds.var('cs_ver', ['j'], Int32Array, { symbol: 'design', long_name: 'design number of the gains', computed_in: 'logSample()', digits: 0 });
         /* the physics steps: one row per 1 ms RK4 step (or held step), written at the step */
-        var ST = ['st_i', 'st_t', 'st_s0', 'st_s1', 'st_u', 'st_j', 'st_kind', 'st_jump', 'st_ver'];
+        var ST = ['st_i', 'st_t', 'st_s0', 'st_s1', 'st_u', 'st_xh', 'st_j', 'st_kind', 'st_jump', 'st_ver'];
         ds.var('st_n', [], 'int', { symbol: 'rows', long_name: 'steps kept in the log', computed_in: 'logStep()', digits: 0 });
         ds.var('st_last', [], 'int', { symbol: 'last', long_name: 'row of the newest step', computed_in: 'logStep()', digits: 0 });
         ds.coord('st_i', 'k', Int32Array, { symbol: 'k', long_name: 'step number since the page loaded', computed_in: 'logStep()', digits: 0 });
         ds.var('st_t', ['k'], Float64Array, { symbol: 't<sub>k</sub>', units: 's', long_name: 'time at the start of the step', computed_in: 'logStep()', digits: 3 });
         ds.var('st_s0', ['k', 'q'], Float64Array, { symbol: 's<sub>k</sub>', long_name: 'state before the step', computed_in: 'logStep()', digits: 6, cw: 84 });
         ds.var('st_s1', ['k', 'q'], Float64Array, { symbol: 's<sub>k+1</sub>', long_name: 'state after the step', computed_in: 'rk4(), in step()', digits: 6, cw: 84 });
-        ds.var('st_u', ['k'], Float64Array, { symbol: 'u<sub>k</sub>', units: 'N', long_name: 'force held over the step', computed_in: 'logStep()', digits: 5 });
-        ds.var('st_j', ['k'], Int32Array, { symbol: 'j(k)', long_name: 'number of the sample whose force is held; −1 while your hand holds a rod', computed_in: 'logStep()', digits: 0 });
-        ds.var('st_kind', ['k'], Uint8Array, { symbol: 'kind', long_name: 'step: 0 RK4, 1 held by your hand (not integrated)', computed_in: 'logStep()', digits: 0 });
+        ds.var('st_u', ['k'], Float64Array, { symbol: 'u<sub>k</sub>', units: 'N', long_name: 'force held over the step: the motor’s, or your hand’s on the cart', computed_in: 'logStep()', digits: 5 });
+        ds.var('st_xh', ['k'], Float64Array, { symbol: 'x<sub>h,k</sub>', units: 'm', long_name: 'where your hand pulled the cart in this step; undefined unless you held the cart', computed_in: 'logStep()', digits: 4 });
+        ds.var('st_j', ['k'], Int32Array, { symbol: 'j(k)', long_name: 'number of the sample whose force is held; −1 while your hand holds a rod or the cart', computed_in: 'logStep()', digits: 0 });
+        ds.var('st_kind', ['k'], Uint8Array, { symbol: 'kind', long_name: 'step: 0 RK4 with the motor, 1 a rod held by your hand (not integrated), 2 RK4 with your hand on the cart', computed_in: 'logStep()', digits: 0 });
         ds.var('st_jump', ['k'], Uint8Array, { symbol: 'jump', long_name: 'outside change before the step: 0 none, 1 flick, 2 hand, 3 reset or new state, 4 wrap at hand-over, 9 unexplained', computed_in: 'logStep()', digits: 0 });
         ds.var('st_ver', ['k'], Int32Array, { symbol: 'design', long_name: 'design number of the machine', computed_in: 'logStep()', digits: 0 });
         /* the trace in the lower figure: every 20 ms */
@@ -998,7 +1036,8 @@
         function Wred(st) { return quad(Pm, [0, wrapAngle(st[1]), wrapAngle(st[2]), 0, st[4], st[5]]); }   // (19) about the moving equilibrium the cart is on now (25)
         function lqrU(st, t) { var e = err(st, t), v = 0; for (var i = 0; i < 6; i++) v -= K[i] * e[i]; return clampF(v); }
         function Ep(st) { var d = p.d, c12 = Math.cos(st[1] - st[2]); return 0.5 * (d[3] * st[4] * st[4] + 2 * d[4] * c12 * st[4] * st[5] + d[5] * st[5] * st[5]) + p.f[0] * Math.cos(st[1]) + p.f[1] * Math.cos(st[2]); }   // (20)
-        function uFor(st, a) {   // the motor force that gives the cart the acceleration a: rows 2–3 of (9) give the angular accelerations, row 1 the force
+        function uFor(st, a) { return forceFor(p, st, a); }
+        function forceFor(p, st, a) {   // the force that gives the cart the acceleration a: rows 2–3 of (9) give the angular accelerations (30), row 1 the force
             var d = p.d, s1 = Math.sin(st[1]), s2 = Math.sin(st[2]), s12 = Math.sin(st[1] - st[2]), D = Dm(p, st[1], st[2]);
             var r2 = -D[1][0] * a - d[4] * s12 * st[5] * st[5] + p.f[0] * s1, r3 = -D[2][0] * a + d[4] * s12 * st[4] * st[4] + p.f[1] * s2;
             var det = D[1][1] * D[2][2] - D[1][2] * D[2][1], b1 = (r2 * D[2][2] - D[1][2] * r3) / det, b2 = (D[1][1] * r3 - D[2][1] * r2) / det;
@@ -1010,6 +1049,8 @@
             var k = Math.round((tSim - tPlan) / 0.01); if (k >= tv.n) return 'end';
             var v = tv.un[k], dev = 0; for (var j = 0; j < 6; j++) { var e = s[j] - (j === 0 ? xc : 0) - tv.nom[6 * k + j]; dev += e * e; v -= tv.Kt[6 * k + j] * e; }
             return dev > 0.25 ? null : clampF(v); }
+        var HAND_W = 15, HAND_A = 30, handX = 0, handPx = 0, uh = 0;   // your hand on the cart (29): a critically damped spring of rate ω_h toward the pointer, at most a_h; our choices
+        function handA(st, xh, w, am) { return Math.max(-am, Math.min(am, w * w * (xh - st[0]) - 2 * w * st[3])); }   // (29)
         var GAMMA = 0.5, bite = NaN, vBefore = NaN;   // the share of the certified level c* that one bite of the reference speed may fill: our choice, half
         function govern() {   // (27): at a look, put the reference at the cart and take the largest bite of its speed toward zero with W ≤ γ c* (a reference governor)
             if (cLevel === null) return;   // no certificate yet: keep the cruise
@@ -1058,9 +1099,10 @@
             ms -= performance.now() - t0; if (!job || job.done || ms <= 0) return; job.work(ms);
             if (job.done) { job.ms = performance.now() - job.t0; if (job.ok) { tv = job.track(Math.pow(10, sR.value)); planStore(); } } }
         function step(dt) {
-            acc += dt;
+            acc += dt; if (held === 3) handX = ds.get('cam_x') + (handPx - ds.get('box_w') / 2) / ds.get('sc');   // where the pointer is on the rail, from the picture the hand sees (the camera stands still while you hold the cart)
             while (acc >= H) { acc -= H;
                 if (flat) break;
+                if (held === 3) { var c3 = s, t3 = tSim; uh = forceFor(p, s, handA(s, handX, HAND_W, HAND_A)); u = 0; s = rk4(p, s, uh, H); tSim += H; tCtl = tSim; logStep(c3, t3, 2); continue; }   // your hand moves the cart; the motor is off and the rods follow (30)
                 if (held) { var h0 = s.slice(), th0 = tSim; s[3] = s[4] = s[5] = 0; u = 0; tSim += H; tCtl = tSim; logStep(h0, th0, 1); continue; }   // your hand holds the rods still; logStep also writes the trace
                 var s0 = s, t0 = tSim, c0 = tCtl, u0 = u;   // the state, time, due time and force before this step, for the logs
                 supervise();
@@ -1088,15 +1130,15 @@
             LG.cs_rk[r] = ref.kind === 'fixed' ? 0 : ref.kind === 'cruise' ? 1 : 2; LG.cs_rx[r] = ref.kind === 'glide' ? ref.target : ref.x; LG.cs_rv[r] = ref.v || 0; LG.cs_rt0[r] = ref.t0 || 0; LG.cs_re0[r] = ref.e0 || 0;
             LG.cs_xc[r] = xc; LG.cs_tp[r] = tPlan; LG.cs_pl[r] = plSerial; LG.cs_ver[r] = ver; LG.cs_umax[r] = sF.value; LG.cs_bite[r] = bite; LG.cs_vb[r] = vBefore; nSamp++; ds.set('cs_n', csN); ds.set('cs_last', r); }   // the count is written with the row it counts
         function differs(a, b) { for (var i = 0; i < 6; i++) if (a[i] !== b[i]) return true; return false; }
-        function logStep(s0, t0, kind, c0, u0) {   // one row of the step log, after the step: s0 before, s after; kind 0 an RK4 step, 1 a step your hand held
+        function logStep(s0, t0, kind, c0, u0) {   // one row of the step log, after the step: s0 before, s after; kind 0 an RK4 step, 1 a step your hand held, 2 an RK4 step with your hand on the cart
             if (kind === 0) { if (tCtl !== c0) logSample(s0, t0, false); else if (u !== u0) logSample(s0, t0, true); }   // the controller looked in this step, or the motor was cut outside a look
             var jump = sPost && differs(s0, sPost) ? why || 9 : 0, i;
             if (!book) { E0 = energy(s0); Wm = 0; Eext = 0; book = true; } else if (jump) Eext += energy(s0) - energy(sPost);   // the energy book opens at a reset or a change of the machine
-            if (kind === 0) Wm += u * (s[0] - s0[0]); else Eext += energy(s) - energy(s0);   // u is held over the step, so its work is u Δx exactly; a held step is all the hand's
+            if (kind === 0) Wm += u * (s[0] - s0[0]); else Eext += kind === 2 ? uh * (s[0] - s0[0]) : energy(s) - energy(s0);   // the hand on the cart is a force held over the step too, so its work is u_h Δx   // u is held over the step, so its work is u Δx exactly; a held step is all the hand's
             why = 0;
             if (stN === NK) { dropHalf(ST, NK); stN = NK / 2; }
             var r = stN++;
-            LG.st_i[r] = nStep; LG.st_t[r] = t0; LG.st_u[r] = u; LG.st_j[r] = kind === 0 ? nSamp - 1 : -1; LG.st_kind[r] = kind; LG.st_jump[r] = jump; LG.st_ver[r] = ver;
+            LG.st_i[r] = nStep; LG.st_t[r] = t0; LG.st_u[r] = kind === 2 ? uh : u; LG.st_xh[r] = kind === 2 ? handX : NaN; LG.st_j[r] = kind === 0 ? nSamp - 1 : -1; LG.st_kind[r] = kind; LG.st_jump[r] = jump; LG.st_ver[r] = ver;
             for (i = 0; i < 6; i++) { LG.st_s0[6 * r + i] = s0[i]; LG.st_s1[6 * r + i] = s[i]; }
             sPost = LG.st_s1.subarray(6 * r, 6 * r + 6); nStep++; ds.set('st_n', stN); ds.set('st_last', r);
             if (Math.round(tSim * 1000) % 20 === 0) { if (trN === NTR) { dropHalf(TRn, NTR); trN = NTR / 2; }   // the trace of the lower figure, every 20 ms
@@ -1108,7 +1150,7 @@
             var S = ds.get('s_now'), A3 = ds.get('qdd'), q = rhs(p, s, u), rv = refXV(tSim), E = energy(s), i;
             for (i = 0; i < 6; i++) S[i] = s[i]; for (i = 0; i < 3; i++) A3[i] = q[3 + i]; ds.touch('s_now'); ds.touch('qdd');
             ds.set('t', tSim); ds.set('x', s[0]); ds.set('xd', s[3]); ds.set('th1w', wrapAngle(s[1])); ds.set('th2w', wrapAngle(s[2])); ds.set('u', u);
-            ds.set('mode', mode); ds.set('held', held); ds.set('lost', lost); ds.set('ref_kind', ref.kind); ds.set('braking', !!ref.brake); ds.set('x_r', rv[0]); ds.set('v_r', rv[1]); ds.get('ref_p').set([ref.kind === 'glide' ? ref.target : ref.x, ref.v || 0, ref.t0 || 0, ref.e0 || 0]); ds.touch('ref_p');
+            ds.set('mode', mode); ds.set('held', held); ds.set('hand_x', held === 3 ? handX : NaN); ds.set('hand_a', held === 3 ? handA(s, handX, HAND_W, HAND_A) : NaN); ds.set('hand_u', held === 3 ? forceFor(p, s, ds.get('hand_a')) : NaN); ds.set('lost', lost); ds.set('ref_kind', ref.kind); ds.set('braking', !!ref.brake); ds.set('x_r', rv[0]); ds.set('v_r', rv[1]); ds.get('ref_p').set([ref.kind === 'glide' ? ref.target : ref.x, ref.v || 0, ref.t0 || 0, ref.e0 || 0]); ds.touch('ref_p');
             ds.set('W', Wof(s, tSim)); ds.set('W_red', Wred(s)); ds.set('Ep', Ep(s)); ds.set('E', E);
             var wait = book && sPost && differs(s, sPost) ? E - energy(sPost) : 0;   // an outside change made while the clock stands still: booked by the next step
             ds.set('E0', book ? E0 : NaN); ds.set('W_motor', book ? Wm : NaN); ds.set('E_ext', book ? Eext : NaN); ds.set('E_wait', book ? wait : NaN); ds.set('bal', book ? E0 + Wm + Eext + wait - E : NaN);
@@ -1116,7 +1158,7 @@
             ds.set('u_max', sF.value); ds.set('J', sJ.value); ds.set('ctrl_on', on); ds.set('rescue_on', rescue); ds.set('rolling', rolling); ds.set('gmode', gmode); ds.set('x_target', xref); ds.set('playing', clk ? clk.playing : true);
             CS.concat(ST, TRn).forEach(function (n) { ds.touch(n); });
             if (dt > 0) fps = fps ? fps + (1 / dt - fps) * 0.1 : 1 / dt; frames++; ds.set('fps', fps); ds.set('frames', frames); }
-        ds.set('glide_w', GLIDE); ds.set('calm_k', CALM_K); ds.set('gamma', GAMMA); ds.set('c_busy', true);
+        ds.set('hand_w', HAND_W); ds.set('hand_amax', HAND_A); ds.set('glide_w', GLIDE); ds.set('calm_k', CALM_K); ds.set('gamma', GAMMA); ds.set('c_busy', true);
         redesign(); reset();
 
         /* ---------- drawing ---------- */
@@ -1125,7 +1167,7 @@
             var c = cv.ctx, W = cv.w, Hh = cv.h, g2 = function (n) { return ds.get(n); }, S = g2('s_now'), u = g2('u'), L1 = g2('L1'), L2 = g2('L2'); c.clearRect(0, 0, W, Hh);
             vy += ((g2('lost') || g2('mode') !== 'balance' || Math.cos(S[1]) < 0.3 || Math.cos(S[2]) < 0.3 ? 1 : 0) - vy) * 0.06;   /* when the rods are down or swinging, the view widens and the rail moves up, so rods below it stay in sight */
             var tall = Math.max(1.4, L1 + L2 + 0.25), up = (Hh - 90) / tall, down = (Hh / 2 - 24) / (L1 + L2), sc = Math.min(W / (3.2 + 2 * vy), up + (down - up) * vy), y0 = (Hh - 62) + (Hh / 2 - (Hh - 62)) * vy;
-            camX += (S[0] - camX) * 0.08; var X = function (x) { return W / 2 + (x - camX) * sc; };
+            if (g2('held') !== 3) camX += (S[0] - camX) * 0.08; var X = function (x) { return W / 2 + (x - camX) * sc; };
             c.strokeStyle = TH.ruleSoft; c.lineWidth = 1; c.fillStyle = TH.muted; c.font = TH.mono; c.textAlign = 'center';
             for (var g = Math.floor(camX - 4); g <= camX + 4; g += 0.5) { var gx = X(g); if (gx < -20 || gx > W + 20) continue; c.beginPath(); c.moveTo(gx, y0 + 14); c.lineTo(gx, y0 + (Number.isInteger(g) ? 26 : 20)); c.stroke(); if (Number.isInteger(g)) c.fillText(Sim.fmt(g, 0) + ' m', gx, y0 + 40); }
             c.strokeStyle = TH.ink; c.lineWidth = 2; c.beginPath(); c.moveTo(0, y0 + 14); c.lineTo(W, y0 + 14); c.stroke();
@@ -1136,7 +1178,7 @@
             var sw = Math.max(10, cw * 0.22); c.fillStyle = TH.paper; c.fillRect(cx - sw / 2, y0 - ch + 4, sw, ch + 12); c.lineWidth = 1.4; c.beginPath(); c.moveTo(cx - sw / 2, y0 - ch + 4); c.lineTo(cx - sw / 2, y0 + 4); c.moveTo(cx + sw / 2, y0 - ch + 4); c.lineTo(cx + sw / 2, y0 + 4); c.stroke(); c.lineWidth = 2.4; c.beginPath(); c.moveTo(cx - sw / 2 - 4, y0 - ch + 4); c.lineTo(cx + sw / 2 + 4, y0 - ch + 4); c.stroke();
             [-1, 1].forEach(function (k) { c.beginPath(); c.arc(cx + k * cw * 0.3, y0 + 7, 6, 0, 2 * Math.PI); c.fillStyle = '#fff'; c.fill(); c.stroke(); });
             var hx = cx, hy = y0 - ch + 4, ex = hx + L1 * sc * Math.sin(S[1]), ey = hy - L1 * sc * Math.cos(S[1]), tx2 = ex + L2 * sc * Math.sin(S[2]), ty2 = ey - L2 * sc * Math.cos(S[2]);
-            geo = { hx: hx, hy: hy, ex: ex, ey: ey, tx: tx2, ty: ty2 };
+            geo = { hx: hx, hy: hy, ex: ex, ey: ey, tx: tx2, ty: ty2, cw: cw, y0: y0 };
             ds.set('box_w', W); ds.set('box_h', Hh); ds.set('vy', vy); ds.set('sc', sc); ds.set('y0', y0); ds.set('cam_x', camX); ds.set('cart_px', cx); ds.set('cart_py', hy); ds.set('cart_w', cw); ds.set('cart_h', ch);
             ds.set('mid_px', ex); ds.set('mid_py', ey); ds.set('tip_px', tx2); ds.set('tip_py', ty2); ds.set('target_px', tx);
             c.lineCap = 'round'; c.lineWidth = 4 + 6 * Math.min(1, g2('m1')); c.strokeStyle = TH.ink; c.beginPath(); c.moveTo(hx, hy); c.lineTo(ex, ey); c.stroke();
@@ -1145,7 +1187,13 @@
             if (Math.abs(u) > 0.05) { var len = Math.sign(u) * Math.min(1, Math.abs(u) / g2('u_max')) * cw * 1.6, ay = y0 - ch / 2 + 4, ax = u > 0 ? cx - cw / 2 - 6 : cx + cw / 2 + 6;
                 c.strokeStyle = TH.accent; c.fillStyle = TH.accent; c.lineWidth = 3; c.beginPath(); c.moveTo(ax - len, ay); c.lineTo(ax, ay); c.stroke();
                 c.beginPath(); c.moveTo(ax, ay); c.lineTo(ax - Math.sign(u) * 9, ay - 6); c.lineTo(ax - Math.sign(u) * 9, ay + 6); c.closePath(); c.fill(); }
+            var hu = g2('hand_u');
+            if (g2('held') === 3) { c.setLineDash([3, 2]); c.strokeStyle = TH.ink; c.lineWidth = 1.4; c.strokeRect(cx - cw / 2 - 4, y0 - ch, cw + 8, ch + 18); c.setLineDash([]);   // your hand on the cart, and its force
+                if (Math.abs(hu) > 0.05) { var hl = Math.sign(hu) * Math.min(1, Math.abs(hu) / g2('u_max')) * cw * 1.6, hy2 = y0 - ch / 2 + 4, hx2 = hu > 0 ? cx - cw / 2 - 6 : cx + cw / 2 + 6;
+                    c.strokeStyle = TH.ink; c.fillStyle = TH.ink; c.lineWidth = 3; c.beginPath(); c.moveTo(hx2 - hl, hy2); c.lineTo(hx2, hy2); c.stroke();
+                    c.beginPath(); c.moveTo(hx2, hy2); c.lineTo(hx2 - Math.sign(hu) * 9, hy2 - 6); c.lineTo(hx2 - Math.sign(hu) * 9, hy2 + 6); c.closePath(); c.fill(); } }
             c.textAlign = 'left'; c.fillStyle = TH.ink3; c.fillText('u = ' + Sim.fmt(u, 1) + ' N', 12, 20);
+            c.fillText(g2('held') === 3 ? _t('your hand: {F} N', { F: '\u2066' + Sim.fmt(hu, 1) + '\u2069' }) : '⇆ ' + _t('drag the cart, or pull a rod'), 12, 36);
             drawTrace();
         }
         function drawTrace() {   // the stored trace: tr_t, tr_th1, tr_th2, tr_u
@@ -1167,7 +1215,7 @@
                 document.getElementById('cap-u').innerHTML = '<i>u</i> = ' + Sim.fmt(u, 1) + ' N';
                 document.getElementById('r-th').textContent = Sim.fmt(g('th1w') * 180 / Math.PI, 1) + '°, ' + Sim.fmt(g('th2w') * 180 / Math.PI, 1) + '°';
                 document.getElementById('r-x').textContent = Sim.fmt(g('x'), 2) + ' m';
-                stEl.innerHTML = held ? _t('<b>Held.</b> Let go and the controller takes over.') : !on ? _t('<b>Controller off.</b> The rods fall; the cart recoils.') : lost ? _t('<b>Fallen.</b> The balancer can no longer win, and rescue is off. Choose <i>Swing back up</i>, or press Reset.')
+                stEl.innerHTML = held === 3 ? _t('<b>You hold the cart.</b> The motor is off, and the rods answer the cart’s motion alone. Let go and the controller takes over.') : held ? _t('<b>Held.</b> Let go and the controller takes over.') : !on ? _t('<b>Controller off.</b> The rods fall; the cart recoils.') : lost ? _t('<b>Fallen.</b> The balancer can no longer win, and rescue is off. Choose <i>Swing back up</i>, or press Reset.')
                     : mode === 'track' ? _t('<b>Swinging up.</b> Following the planned force; the tracking controller corrects the drift.') : mode === 'calm' ? (g('plan_ready') ? _t('<b>Plan ready.</b> The swing-up starts the moment the machine reaches the predicted state.') : g('plan_busy') ? _t('<b>Calming and planning.</b> The cart drains the rods’ energy while a swing-up is computed.') : _t('<b>Calming.</b> The cart drains the rods’ energy; the next plan starts soon.'))
                     : Math.abs(u) >= g('u_max') - 1e-9 ? _t('<b>Motor at its limit.</b> Holding on…') : g('braking') ? _t('Braking from {v} m/s to rest, each bite within half the certified level.', { v: Sim.fmt(g('v_r'), 2) }) : g('ref_kind') === 'cruise' ? _t('Balancing while rolling at {v} m/s, a moving equilibrium.', { v: Sim.fmt(g('v_r'), 2) })
                     : g('ref_kind') === 'glide' && Math.abs(g('x_r') - g('x_target')) > 0.01 ? _t('Balancing while gliding to the target.') : _t('Balancing.'); } });
@@ -1193,11 +1241,18 @@
         function aim(q) { var M = 80 * Math.PI / 180; why = 2;
             if (held === 1) { s[1] = Math.max(-M, Math.min(M, Math.atan2(q[0] - geo.hx, geo.hy - q[1]))); }
             else { s[2] = Math.max(-M, Math.min(M, Math.atan2(q[0] - geo.ex, geo.ey - q[1]))); } }
+        function onCart(q) { return Math.abs(q[0] - geo.hx) <= geo.cw / 2 + 6 && q[1] > geo.hy + 3 && q[1] <= geo.y0 + 14; }   // the cart's body and wheels, below the hinge
+        function pointerX(q) { return Math.max(geo.cw / 2, Math.min(cv.w - geo.cw / 2, q[0])); }   // the pointer kept on the visible rail
+        cvEl.addEventListener('pointerdown', function (e) { if (!geo) return; var q0 = local(e); if (!onCart(q0)) return;
+            held = 3; handPx = pointerX(q0); handX = s[0]; cvEl.setPointerCapture(e.pointerId); cvEl.style.cursor = 'grabbing'; e.preventDefault(); clk.set(true); e.stopImmediatePropagation(); });   // take the cart: the motor lets go, your hand moves it (29)
         cvEl.addEventListener('pointerdown', function (e) { if (!geo) return; var q = local(e), d1 = segDist(q, [geo.hx, geo.hy], [geo.ex, geo.ey]), d2 = segDist(q, [geo.ex, geo.ey], [geo.tx, geo.ty]);
             if (Math.min(d1, d2) > 24) return; if (flat || lost || mode !== 'balance') { reset(); }
             held = d2 <= d1 ? 2 : 1; cvEl.setPointerCapture(e.pointerId); cvEl.style.cursor = 'grabbing'; aim(q); e.preventDefault(); clk.set(true); });
-        cvEl.addEventListener('pointermove', function (e) { if (held) aim(local(e)); });
-        function release() { if (!held) return; held = 0; cvEl.style.cursor = 'grab'; nextCheck = tSim; }
+        cvEl.addEventListener('pointermove', function (e) { if (held === 3) handPx = pointerX(local(e)); else if (held) aim(local(e)); });
+        function release() { if (!held) return; var cart = held === 3; held = 0; uh = 0; cvEl.style.cursor = 'grab'; nextCheck = tSim;
+            if (!cart) return; tCtl = tSim;   // let go of the cart: the controller looks at once, from the state your hand left
+            if (mode === 'balance') { if (rolling && Math.abs(s[3]) > 0.01) ref = { kind: 'cruise', x: s[0], v: s[3], t0: tSim, brake: true }; else ref = { kind: 'fixed', x: s[0] }; xref = s[0]; }   // a new rest where you let go, braked to as after a catch
+            else { xc = s[0]; xref = s[0]; ref = { kind: 'fixed', x: xc }; abandon(); } }   // a plan was spoiled: calm again, here
         cvEl.addEventListener('pointerup', release); cvEl.addEventListener('pointercancel', release);
         document.getElementById('tilt').addEventListener('click', function () { reset(); s[1] = 6 * Math.PI / 180; s[2] = -4 * Math.PI / 180; tCtl = 0; });
         document.getElementById('swing').addEventListener('click', function () { swingUp(); clk.set(true); });
@@ -1251,10 +1306,10 @@
         var midNote = _t('The hinge between the rods is a white disc of radius 5 px with an ink ring, drawn last, so the pixel at its stored centre is white.'), tipNote = _t('The upper rod is a burgundy line with round ends, at least 4.6 px thick, so the pixel at its stored top is burgundy.');
         var groups = [
             { title: 'What you set', note: 'the sliders and switches, as the last redesign and this frame used them', how: 'set', vars: ['m0', 'm1', 'm2', 'L1', 'L2', 'u_max', 'Ts', 'rho', 'J', 'ctrl_on', 'rescue_on', 'rolling', 'gmode', 'x_target', 'playing'] },
-            { title: 'Constants of the code', note: 'fixed numbers of the page: weights, the glide’s rate, the calming gain', how: 'constant', vars: ['Qw', 'glide_w', 'calm_k'] },
+            { title: 'Constants of the code', note: 'fixed numbers of the page: weights, the glide’s rate, the calming gain, the hand on the cart', how: 'constant', vars: ['Qw', 'glide_w', 'calm_k', 'hand_w', 'hand_amax'] },
             { title: 'What follows from the machine', note: 'the constants of the equations (5)–(9) and how fast the rods fall', how: 'formula', vars: ['d', 'f', 'sig', 't_efold'] },
             { title: 'The controller', note: 'the gains for the loop period, the machine between two looks, and the certified catch level', how: 'formula', vars: ['K', 'P', 'Phi', 'Gam', 'Rd', 'lam', 't_settle', 'ver', 'c_star', 'c_hand', 'c_busy', 'gamma', 'eps_rest'] },
-            { title: 'The state now', note: 'written once per frame, after the frame’s 1 ms steps', how: 'run', vars: ['t', 's_now', 'x', 'xd', 'th1w', 'th2w', 'qdd', 'u', 'mode', 'held', 'lost', 'braking', 'ref_kind', 'ref_p', 'x_r', 'v_r', 'W', 'W_red', 'Ep'] },
+            { title: 'The state now', note: 'written once per frame, after the frame’s 1 ms steps', how: 'run', vars: ['t', 's_now', 'x', 'xd', 'th1w', 'th2w', 'qdd', 'u', 'mode', 'held', 'hand_x', 'hand_a', 'hand_u', 'lost', 'braking', 'ref_kind', 'ref_p', 'x_r', 'v_r', 'W', 'W_red', 'Ep'] },
             { title: 'The energy book', note: 'what the motor, the flicks and your hand put in, against what the machine holds', how: 'run', vars: ['E', 'E0', 'W_motor', 'E_ext', 'E_wait', 'bal'] },
             { title: 'The supervisor and the swing-up', note: 'which law runs, the plan and when it starts', how: 'run', vars: ['attempt', 'hp', 'x_c', 't_plan', 'plan_busy', 'plan_ready', 'next_check', 'pl_serial', 'pl_n', 'pl_t0', 'pl_xc', 'pl_u', 'pl_K', 'pl_nom'] },
             { title: 'The controller’s samples', note: 'one row each time the controller looks, every T_s while balancing and every 10 ms while calming or tracking', how: 'run', vars: ['cs_n', 'cs_last', 'cs_i', 'cs_t', 'cs_k', 'cs_due', 'cs_next', 'cs_s', 'cs_u', 'cs_mode', 'cs_rk', 'cs_rx', 'cs_rv', 'cs_rt0', 'cs_re0', 'cs_xc', 'cs_tp', 'cs_pl', 'cs_ver', 'cs_umax', 'cs_bite', 'cs_vb'] },
@@ -1304,11 +1359,15 @@
                     value: 0.5 * (d[0] * v * v + d[3] * a * a + d[5] * b * b) + d[1] * Math.cos(S[1]) * v * a + d[2] * Math.cos(S[2]) * v * b + d[4] * Math.cos(S[1] - S[2]) * a * b + f[0] * Math.cos(S[1]) + f[1] * Math.cos(S[2]) }; },
                 bal: function () { return { formula: ds.vars.bal.attrs.formula, inputs: [inp('E0'), inp('W_motor'), inp('E_ext'), inp('E_wait'), inp('E')], value: G2('E0') + G2('W_motor') + G2('E_ext') + G2('E_wait') - G2('E') }; },
                 cs_u: function (r) { return lawAt(r); },
+                hand_a: function () { var S = Array.prototype.slice.call(G2('s_now')); return { formula: ds.vars.hand_a.attrs.formula, inputs: [inp('hand_x', 5), inp('x', 5), inp('xd', 5), inp('hand_w', 1), inp('hand_amax', 1)], value: G2('held') === 3 ? handA(S, G2('hand_x'), G2('hand_w'), G2('hand_amax')) : NaN }; },
+                hand_u: function () { var S = Array.prototype.slice.call(G2('s_now')); return { formula: _t('row 1 of (9), with the rods’ accelerations from (30)'), inputs: [inp('hand_a', 5)].concat(S.map(function (v, k) { return [QN[k], v, QU[k], 6]; })), value: G2('held') === 3 ? forceFor(machine(), S, G2('hand_a')) : NaN }; },
                 st_s1: function (ri) { var r = Math.floor(ri / 6), i = ri % 6, s0 = row6('st_s0', r), u0 = G2('st_u')[r];
                     if (G2('st_kind')[r] === 1) return { formula: _t('a held step: the state is kept, its rates set to zero'), inputs: [[QN[i], s0[i], QU[i], 6]], value: i < 3 ? s0[i] : 0 };
                     if (G2('st_ver')[r] !== G2('ver')) return { formula: _t('a step of an earlier machine'), inputs: [], value: undefined };
                     return { formula: _t('one RK4 step of 1 ms from the stored state before it, with the stored force held'), inputs: [['u<sub>k</sub>', u0, 'N', 6]].concat(s0.map(function (v, k) { return [QN[k], v, QU[k], 6]; })), value: rk4(machine(), s0, u0, H)[i] }; },
                 st_u: function (r) { var j = G2('st_j')[r], q = j >= 0 ? sampleRow(j) : -1;
+                    if (G2('st_kind')[r] === 2) { var s0 = row6('st_s0', r), xh = G2('st_xh')[r], a = handA(s0, xh, G2('hand_w'), G2('hand_amax'));
+                        return { formula: _t('your hand on the cart: (29) gives the acceleration, row 1 of (9) the force'), inputs: [['x<sub>h,k</sub>', xh, 'm', 5], ['ẍ<sub>h</sub>', a, 'm/s²', 5]].concat(s0.map(function (v, k) { return [QN[k], v, QU[k], 6]; })), value: forceFor(machine(), s0, a) }; }
                     if (j < 0) return { formula: _t('your hand holds the rods: no force'), inputs: [], value: 0 };
                     return { formula: _t('the force of sample j(k), held'), inputs: [['j(k)', j, '']], value: q >= 0 ? G2('cs_u')[q] : undefined }; },
                 cart_px: function () { return { formula: ds.vars.cart_px.attrs.formula, inputs: [inp('box_w', 1), inp('x', 6), inp('cam_x', 6), inp('sc', 4)], value: G2('box_w') / 2 + (G2('x') - G2('cam_x')) * G2('sc') }; },
@@ -1362,7 +1421,7 @@
             }
         };
 
-        window.DIPC = { get ds() { return ds; }, rk4: rk4, draw: draw, get geo() { return geo; }, get held() { return held; }, get s() { return s; }, set s(v) { s = v.slice(); why = 3; nextCheck = tSim; }, get K() { return K; }, get P() { return Pm; }, get p() { return p; }, fallRates: fallRates, rhs: rhs, rhsF: rhsF, flick: flick, get lost() { return lost; }, set xref(v) { xref = v; ref = { kind: 'fixed', x: v }; }, get ref() { return ref; }, set rolling(v) { rolling = v; }, set gmode(v) { gmode = v; redesign(); },
+        window.DIPC = { get ds() { return ds; }, rk4: rk4, draw: draw, get geo() { return geo; }, get held() { return held; }, get uh() { return uh; }, get handX() { return handX; }, get s() { return s; }, set s(v) { s = v.slice(); why = 3; nextCheck = tSim; }, get K() { return K; }, get P() { return Pm; }, get p() { return p; }, fallRates: fallRates, rhs: rhs, rhsF: rhsF, flick: flick, get lost() { return lost; }, set xref(v) { xref = v; ref = { kind: 'fixed', x: v }; }, get ref() { return ref; }, set rolling(v) { rolling = v; }, set gmode(v) { gmode = v; redesign(); },
             finishCatch: function () { while (catchIt) think(1000); return cLevel; }, Wred: function () { return Wred(s); }, specRad: specRad, dlqr: dlqr, sampledModel: sampledModel, linear: linear,
             get mode() { return mode; }, get cLevel() { return cLevel; }, get t() { return tSim; }, get u() { return u; }, W: function () { return Wof(s, tSim); }, Ep: function () { return Ep(s); }, get log() { return log; }, swingUp: swingUp, step: step, think: think, get job() { return job; }, PlanJob: PlanJob };
     })();

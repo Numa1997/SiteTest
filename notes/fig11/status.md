@@ -1,3 +1,14 @@
+# Project 05 · defined controls and the cart in your hand (5 November 2026, evening)
+
+- Numa: some sliders were not defined, and the cart could not be dragged as in the other simulations. Done: a one-line definition under
+  every control and a definition list under the readouts; grab the cart and drag it, the motor lets go and the rods fall under the cart's
+  motion alone (hand law (29), rods (30), both from Wolfram; note section 8, *Take the cart*). Store `hand_x`, `hand_a`, `hand_u`,
+  `hand_w`, `hand_amax`, `st_xh`; `held` = 3; `st_kind` = 2. German and Arabic (DeepL, then checked against the glossary and the page's own
+  terms; DeepL's raw output had "Herbsttarife" for fall rates and a ball-game player catching the flick). Docs: "Defined controls and the
+  cart in your hand". Tests: `hon.cjs` scenario `cart` and the hand-force check, all pass; raw outputs in `notes/fig11/panel/`.
+- One open observation: in a first run of `hon.cjs cart drag` the rod-drag picture check once found the stored pixels 2.8 × 10⁻¹⁴ px from
+  the Node formula (the check demands exactly 0); rerun, it was 0. Not reproduced since; the rod-hold path is unchanged.
+
 # Project 05 · braking to rest (5 November 2026, later)
 
 - Numa: a rolling catch left the cart cruising; bring it to rest without knocking the rods over, and say how big a change of speed
@@ -9,6 +20,8 @@
   Lagrangian with ẍ = a); the measured edge is from `notes/fig11/study/brake.cjs` (independent equations), output `brake-out.txt`.
 - Certified versus measured: ε = 0.33 m/s per look at γ = 0.5 (0.44 at γ = 0.9) is certain; a single drop of 8.48 m/s is measured to
   be survived at 10 ms. γ = 0.5 is our choice. Past the edge the rods fall; that is not chaos.
+- Reruns after the change (`study/t9t7-brake-out.txt`): 40/40 and 40/40 random, 48/48 and 48/48 on eight machines, t7 clean; on the eight
+  machines the cart now ends 0.99–15.7 m from its start (median 3.5 m), against 6.1–201 m (median 91 m) before.
 
 # Project 05 · data panel (5 November 2026)
 

@@ -1,0 +1,19 @@
+before (main), run 1: 899 frames in 15 s, script time per frame mean 0.333 ms, median 0.300, p95 0.500, max 8.800 ms; step+think per frame (driven) 0.085 ms; panel present, open false, loop running false; errors none
+after (branch), run 1: 900 frames in 15 s, script time per frame mean 0.326 ms, median 0.300, p95 0.500, max 4.600 ms; step+think per frame (driven) 0.057 ms; panel present, open false, loop running false; errors none
+before (main), run 2: 901 frames in 15 s, script time per frame mean 0.304 ms, median 0.300, p95 0.500, max 1.500 ms; step+think per frame (driven) 0.067 ms; panel present, open false, loop running false; errors none
+after (branch), run 2: 901 frames in 15 s, script time per frame mean 0.308 ms, median 0.300, p95 0.500, max 8.800 ms; step+think per frame (driven) 0.054 ms; panel present, open false, loop running false; errors none
+  panel loop running false · closed (panel closed, clock playing)
+  panel loop running true  · open, Live on, playing (panel open, clock playing)
+  panel loop running false · open, Live on, paused, 1.8 s after the last action (panel open, clock paused)
+  panel loop running false · closed again, playing (panel closed, clock playing)
+  panel loop running true  · panel closed while a round records (panel closed, clock playing)
+  rounds recorded: 1
+  panel loop running true  · after the round (the finished round opens the panel to show its charts) (panel open, clock playing)
+  sweep across the running figure, Read values off: overlay pixels painted at most 0, rod grabbed no
+  panel loop running true  · Read values on, nothing pinned (panel open, clock playing)
+  sweep across the running figure, Read values on, nothing pinned: overlay pixels painted at most 0, rod grabbed no
+  panel loop running true  · Read values on, the top of the upper rod pinned (panel open, clock playing)
+  pin: a press on the upper rod with Read values on grabbed nothing; the strip under the figure changed 11 times in 3 s over 181 frames: “Click a point in the figure to pin it; drag to move the pin. Esc stops reading.upper rod · t = 26.70 sθ20.00000radθ̇20.0”
+  the pin's marker: 444 overlay pixels painted (drawn every frame on the overlay, not on the figure)
+  panel loop running true  · Read values off again (panel open, clock playing)
+  panel loop running false · panel closed at the end (panel closed, clock playing)

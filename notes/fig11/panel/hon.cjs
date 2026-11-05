@@ -15,12 +15,12 @@ const EXTRACT = (a) => {
   const ds = DIPC.ds, g = (n) => ds.get(n), ver = g('ver'), A = (n, r, w) => Array.from(g(n).subarray(r * w, (r + 1) * w));
   const st = [], cs = []; let b1n = 0, b1x = 0, b1skip = 0;
   for (let r = 0; r < g('st_n'); r++) { const i = g('st_i')[r]; if (i <= a.lastI) continue;
-    const row = { i, t: g('st_t')[r], s0: A('st_s0', r, 6), s1: A('st_s1', r, 6), u: g('st_u')[r], j: g('st_j')[r], kind: g('st_kind')[r], jump: g('st_jump')[r], ver: g('st_ver')[r] };
-    if (row.kind === 0 && row.ver === ver) { const q = DIPC.rk4(DIPC.p, row.s0, row.u, 0.001); b1n++; if (q.every((v, k) => v === row.s1[k])) b1x++; } else if (row.kind === 0) b1skip++;
+    const row = { i, t: g('st_t')[r], s0: A('st_s0', r, 6), s1: A('st_s1', r, 6), u: g('st_u')[r], xh: g('st_xh')[r], j: g('st_j')[r], kind: g('st_kind')[r], jump: g('st_jump')[r], ver: g('st_ver')[r] };
+    if ((row.kind === 0 || row.kind === 2) && row.ver === ver) { const q = DIPC.rk4(DIPC.p, row.s0, row.u, 0.001); b1n++; if (q.every((v, k) => v === row.s1[k])) b1x++; } else if (row.kind === 0 || row.kind === 2) b1skip++;
     st.push(row); }
   for (let r = 0; r < g('cs_n'); r++) { const i = g('cs_i')[r]; if (i <= a.lastJ) continue;
     cs.push({ i, t: g('cs_t')[r], k: g('cs_k')[r], due: g('cs_due')[r], next: g('cs_next')[r], s: A('cs_s', r, 6), u: g('cs_u')[r], mode: g('cs_mode')[r], rk: g('cs_rk')[r], rx: g('cs_rx')[r], rv: g('cs_rv')[r], rt0: g('cs_rt0')[r], re0: g('cs_re0')[r], xc: g('cs_xc')[r], tp: g('cs_tp')[r], pl: g('cs_pl')[r], ver: g('cs_ver')[r], umax: g('cs_umax')[r], bite: g('cs_bite')[r], vb: g('cs_vb')[r] }); }
-  const ctx = { ver, d: Array.from(g('d')), f: Array.from(g('f')), K: Array.from(g('K')), P: Array.from(g('P')), cs: g('c_star'), gamma: g('gamma'), Ts: g('Ts'), gw: g('glide_w'), kc: g('calm_k') };
+  const ctx = { ver, d: Array.from(g('d')), f: Array.from(g('f')), K: Array.from(g('K')), P: Array.from(g('P')), cs: g('c_star'), gamma: g('gamma'), Ts: g('Ts'), gw: g('glide_w'), kc: g('calm_k'), hw: g('hand_w'), ha: g('hand_amax') };
   const pl = g('pl_serial'), plan = pl && pl !== a.plSerial ? { serial: pl, u: Array.from(g('pl_u')), K: Array.from(g('pl_K')), nom: Array.from(g('pl_nom')) } : null;
   return { st, cs, ctx, plan, sig: g('sig')[0], b1: { n: b1n, exact: b1x, skip: b1skip }, t: DIPC.t, mode: DIPC.mode };
 };
@@ -76,7 +76,7 @@ function checkLogs(acc) {
   const b1 = acc.b1; if (b1.exact !== b1.n) ok = false;
   lines.push(`  b page's own rk4 on every stored step: ${b1.exact}/${b1.n} bit-identical (${b1.skip} steps of an earlier machine not replayed) ${b1.exact === b1.n ? 'PASS' : 'FAIL'}`);
   let n2 = 0, m2 = 0, m2rel = 0, skip2 = 0;
-  for (const r of st) { if (r.kind !== 0) continue; const c = acc.ctx[r.ver]; if (!c) { skip2++; continue; }
+  for (const r of st) { if (r.kind !== 0 && r.kind !== 2) continue; const c = acc.ctx[r.ver]; if (!c) { skip2++; continue; }
     const q = R.rk4(c.d, c.f, r.s0, r.u, H); n2++; for (let k = 0; k < 6; k++) { const d = Math.abs(q[k] - r.s1[k]); m2 = Math.max(m2, d); m2rel = Math.max(m2rel, d / Math.max(1e-300, Math.abs(r.s1[k] - r.s0[k]) || Math.abs(r.s1[k]))); } }
   const ok2 = m2 < 1e-12; if (!ok2) ok = false;
   lines.push(`  b independent RK4 (Cramer, from (8a), (8), (8b)) on every stored step: ${n2} steps, max |Δs| = ${fmt(m2)}, max |Δs| / |step change| = ${fmt(m2rel)} ${ok2 ? 'PASS (float64 rounding)' : 'FAIL'}`);
@@ -114,9 +114,15 @@ function checkLogs(acc) {
     nb++; mb = Math.max(mb, Math.abs(D - r.bite)); wworst = Math.max(wworst, Wp / c.cs); }
   if (nb) { const okb = mb < 1e-9 && wworst <= cs.filter((r) => r.bite === r.bite).reduce((a, r) => Math.max(a, acc.ctx[r.ver] ? acc.ctx[r.ver].gamma : 0), 0) + 1e-9 && ub === 0; if (!okb) ok = false;
     lines.push(`  c governor (27): ${nb} bites recomputed from their rows, max |ΔD| = ${fmt(mb)} m/s; after every bite W ≤ ${fmt(wworst)} c* (allowed γ); ${ub} unchecked ${okb ? 'PASS' : 'FAIL'}`); }
+  // c: your hand on the cart: each step's force from (29) and row 1 of (9), from the stored state and pointer alone (the independent forceFor of ref.cjs)
+  let nh = 0, mh = 0, uh = 0;
+  for (const r of st) { if (r.kind !== 2) continue; const c = acc.ctx[r.ver]; if (!c || !(c.hw > 0)) { uh++; continue; }
+    const a = Math.max(-c.ha, Math.min(c.ha, c.hw * c.hw * (r.xh - r.s0[0]) - 2 * c.hw * r.s0[3])); nh++; mh = Math.max(mh, Math.abs(R.forceFor(c.d, c.f, r.s0, a) - r.u)); }
+  if (nh) { const okh = mh < 1e-9 && uh === 0; if (!okh) ok = false;
+    lines.push(`  c hand on the cart (29)-(30): ${nh} steps, force recomputed from each stored row, max |Δu| = ${fmt(mh)} N, ${uh} unchecked ${okh ? 'PASS' : 'FAIL'}`); }
   // c: zero-order hold
   let zh = 0, zbad = 0, held = 0, hbad = 0, firstBad = null;
-  for (const r of st) { if (r.kind === 1) { held++; if (r.u !== 0 || r.j !== -1) hbad++; continue; }
+  for (const r of st) { if (r.kind === 2) continue; if (r.kind === 1) { held++; if (r.u !== 0 || r.j !== -1) hbad++; continue; }
     const n = byI.get(r.j); if (n === undefined) continue; const c = cs[n], nx = cs[n + 1];
     const inWin = c.k <= r.i && (!nx || nx.k > r.i); if (r.u === c.u && inWin) zh++; else { zbad++; if (!firstBad) firstBad = { step: r.i, u: r.u, sample: c.i, cu: c.u }; } }
   if (zbad || hbad) ok = false;
@@ -161,6 +167,13 @@ async function main() {
       const gx = box.x + (tp.mx + tp.x) / 2, gy = box.y + (tp.my + tp.y) / 2; await pg.mouse.move(gx, gy); await pg.mouse.down();
       for (let k = 1; k <= 10; k++) { await pg.mouse.move(gx - 6 * k, gy + 2 * k); await pg.waitForTimeout(60); }
       await pg.waitForTimeout(600); const heldNow = await pg.evaluate(() => DIPC.held); const a = await pic('while held'); await pause(true); await pg.mouse.up(); await live(4000); await pull(); out(`  e drag: rod held by the mouse = ${heldNow} (2 = upper)`); return a && heldNow === 2; },
+    cart: async () => { await pause(true); await pg.click('#reset'); await pg.waitForTimeout(1000); await start();
+      const box = await (await pg.$('#cv')).boundingBox(), cp = await pg.evaluate(() => ({ x: DIPC.ds.get('cart_px'), y: DIPC.ds.get('cart_py') + 10 }));
+      const gx = box.x + cp.x, gy = box.y + cp.y; await pg.mouse.move(gx, gy); await pg.mouse.down();
+      for (let k = 1; k <= 10; k++) { await pg.mouse.move(gx + 8 * k, gy); await pg.waitForTimeout(30); }
+      await pg.waitForTimeout(300); const h = await pg.evaluate(() => ({ held: DIPC.held, th1: DIPC.ds.get('th1w'), u: DIPC.ds.get('u'), uh: DIPC.ds.get('hand_u') })); const a = await pic('cart in your hand');
+      await pause(true); await pg.mouse.up(); await live(4000); await pull();
+      out(`  e cart: held by the mouse = ${h.held} (3 = cart), motor ${fmt(h.u)} N, hand ${fmt(h.uh)} N, lower rod at ${fmt(h.th1 * 180 / Math.PI)}° 0.6 s after the grab`); return a && h.held === 3 && h.u === 0; },
     swingup: async () => { await pause(false); await pg.evaluate(() => { DIPC.finishCatch(); DIPC.swingUp(); }); await start(); let t = 0, a = true;
       for (; t < 40; t += 2) { await drive(2); if (t === 4) a = (await pic('swing-up, rods hanging')) && a; const m = await pg.evaluate(() => DIPC.mode); if (m === 'balance' && t > 6) break; }
       await drive(2); const m = await pg.evaluate(() => ({ mode: DIPC.mode, W: DIPC.W(), t: DIPC.t })); out(`  e swing-up: mode ${m.mode} at t = ${fmt(m.t)} s, W = ${fmt(m.W)}`); return (await pic('after the swing-up')) && a && m.mode === 'balance'; },
@@ -181,7 +194,7 @@ async function main() {
       return (await pic('braked to rest')) && m.ref === 'fixed' && Math.abs(m.v) < 0.01; },
     limit: async () => { await pause(false); await pg.click('#tilt'); await start(); await drive(1); await set({ Fmax: 25 }); await drive(3); await set({ Fmax: 60 }); await pg.evaluate(() => DIPC.finishCatch()); await drive(2); return pic('force limit changed while balancing'); }
   };
-  const order = want.length ? want : ['rest', 'flick', 'drag', 'swingup', 'random', 'randomSTOP', 'ts40', 'glide', 'brake', 'limit'];
+  const order = want.length ? want : ['rest', 'flick', 'drag', 'cart', 'swingup', 'random', 'randomSTOP', 'ts40', 'glide', 'brake', 'limit'];
   for (const name of order) { out(`== ${name}${dpr !== 1 ? ' (device pixel ratio ' + dpr + ')' : ''}`); const okPic = await (name === 'randomSTOP' ? scen.random(true) : scen[name]());
     await frame(); const bk = await pg.evaluate(() => { const g = (n) => DIPC.ds.get(n), rows = [g('E0'), g('W_motor'), g('E_ext'), g('E_wait')]; return { rows, E: g('E'), bal: g('bal'), rel: Math.abs(g('bal')) / (rows.reduce((a, v) => a + Math.abs(v), 0) + Math.abs(g('E'))) }; });
     out(`  energy book: E0 ${fmt(bk.rows[0])} + W_motor ${fmt(bk.rows[1])} + E_ext ${fmt(bk.rows[2])} + E_wait ${fmt(bk.rows[3])} − E ${fmt(bk.E)} = ${fmt(bk.bal)} J, ${fmt(bk.rel)} of the flows`);

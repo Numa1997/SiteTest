@@ -1,0 +1,7 @@
+== en/
+{"handSteps":1466,"maxForceDiff":0,"maxReplayDiff":0,"hand_u":[-4.363281805163735,-4.363281805163735],"hand_a":[-0.6014576277426844,-0.6014576277426844],"bal":-1.0134982630916056e-8,"Eext":2.321719568
+== de/
+{"handSteps":1417,"maxForceDiff":0,"maxReplayDiff":0,"hand_u":[-14.901622135451952,-14.901622135451952],"hand_a":[-0.9193314042285188,-0.9193314042285188],"bal":-8.325487854676794e-9,"Eext":2.53236540
+== ar/
+{"handSteps":1534,"maxForceDiff":0,"maxReplayDiff":0,"hand_u":[-9.326821682230634,-9.326821682230634],"hand_a":[-0.5413578626541717,-0.5413578626541717],"bal":1.0896578217511887e-7,"Eext":2.3515949210
+press on the cart with Read values on: held = 0 ; with Read values off: held = 3 ; errors none

@@ -18,6 +18,10 @@
         .seg button[aria-pressed="true"] { background: var(--accent); color: #fff; }
         .state { margin: 0; font-size: 13px; line-height: 1.5; color: var(--ink-2); }
         .state b { color: var(--accent); }
+        .ctl__note { font-size: 12px; color: var(--ink-3); margin: 0; line-height: 1.45; }   /* what a control does, in one line under it */
+        .defs { margin: 0; font-size: 12px; line-height: 1.45; color: var(--ink-3); }
+        .defs dt { font-family: var(--mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-top: 8px; }
+        .defs dd { margin: 1px 0 0; }
         .ptable { display: block; width: max-content; max-width: 100%; overflow-x: auto; position: relative; border-collapse: collapse; margin: 12px 0 16px; font-size: 15px; }   /* a table wider than the column scrolls by itself; position keeps KaTeX's hidden MathML inside it */
         .ptable th, .ptable td { border-bottom: 1px solid var(--rule); padding: 5px 12px 5px 0; text-align: left; vertical-align: top; }
     </style>
@@ -78,23 +82,27 @@
                         <button type="button" class="btn" id="flickL">← Flick top</button>
                         <button type="button" class="btn" id="flickR">Flick top →</button>
                     </div>
+                    <p class="ctl__note">A flick is a short sideways blow at the top of the upper rod, of strength <i>J</i> (the last slider of this group). The controller has to catch it.</p>
                     <div class="actions">
                         <button type="button" class="btn btn--ghost" data-go="-1">Cart to −1 m</button>
                         <button type="button" class="btn btn--ghost" data-go="0">to 0</button>
                         <button type="button" class="btn btn--ghost" data-go="1">to +1 m</button>
                     </div>
+                    <p class="ctl__note">Moves the target, the red mark under the rail. The cart drives there with the rods balanced, and backs up a little first (section 8).</p>
                     <div class="actions">
                         <button type="button" class="btn" id="swing">Hang down, swing up</button>
                         <button type="button" class="btn btn--ghost" id="tilt">Tilt and let go</button>
                         <button type="button" class="btn btn--ghost" id="play">Pause</button>
                         <button type="button" class="btn btn--ghost" id="reset">Reset</button>
                     </div>
+                    <p class="ctl__note"><i>Hang down, swing up</i>: both rods start hanging, and the page swings them up and catches them (sections 10–11). <i>Tilt and let go</i>: the rods start leaning 6° and −4°.</p>
                     <p class="state" id="state" aria-live="polite">—</p>
-                    <p class="state">Or grab either rod in the figure, pull it over and let go.</p>
+                    <p class="state">Grab a rod in the figure, pull it over and let go. Or grab the cart and drag it: while you hold it the motor lets go, and you see what the cart’s motion alone does to the rods.</p>
                     <label class="ctl">
                         <span class="ctl__row"><span>Flick strength <i>J</i></span><output id="J-out" for="J"></output></span>
                         <input type="range" id="J" min="0.05" max="0.5" step="0.01" value="0.15">
                     </label>
+                    <p class="ctl__note">The impulse of a flick, <i>J</i> = ∫<i>F</i> d<i>t</i>: how hard the blow pushes times how long it lasts, in newton-seconds (N·s). With a 60 N motor, 0.2 N·s is caught and 0.3 N·s is not.</p>
                 </div>
 
                 <div class="panel__group">
@@ -103,37 +111,45 @@
                         <button type="button" data-v="on" aria-pressed="true">On</button>
                         <button type="button" data-v="off" aria-pressed="false">Off</button>
                     </div>
+                    <p class="ctl__note">Off: the motor gives no force at all, and the rods fall.</p>
                     <p class="panel__label">If the rods fall</p>
                     <div class="seg" role="group" aria-label="Rescue" id="resc">
                         <button type="button" data-v="on" aria-pressed="true">Swing back up</button>
                         <button type="button" data-v="off" aria-pressed="false">Let them fall</button>
                     </div>
+                    <p class="ctl__note">When the balancer can no longer win, the page either calms the rods and swings them back up (sections 10–11), or switches the motor off and lets them fall.</p>
                     <p class="panel__label">After a swing-up</p>
                     <div class="seg" role="group" aria-label="After a swing-up" id="after">
                         <button type="button" data-v="roll" aria-pressed="true">Arrive moving, then brake</button>
                         <button type="button" data-v="stop" aria-pressed="false">Arrive at rest</button>
                     </div>
+                    <p class="ctl__note">How the swing-up hands the rods to the balancer. <i>Arrive moving</i>: the cart is still rolling at the catch, and is then braked to rest in small certified steps (11.4–11.5). <i>Arrive at rest</i>: the plan must also stop the cart, which is harder to find.</p>
                     <p class="panel__label">Gains designed for</p>
                     <div class="seg" role="group" aria-label="Gains designed for" id="gmode">
                         <button type="button" data-v="sampled" aria-pressed="true">The loop period</button>
                         <button type="button" data-v="cont" aria-pressed="false">Continuous time</button>
                     </div>
+                    <p class="ctl__note">The gains are the controller’s six numbers: how many newtons it pushes per unit of each error (per metre, radian, m/s, rad/s). <i>The loop period</i>: designed knowing that the computer looks only every <i>T</i><sub>s</sub> (7.5). <i>Continuous time</i>: designed as if it looked all the time (7), which fails for slow loops (8).</p>
                     <label class="ctl">
                         <span class="ctl__row"><span>Motor force limit <i>u</i><sub>max</sub></span><output id="Fmax-out" for="Fmax"></output></span>
                         <input type="range" id="Fmax" min="5" max="200" step="1" value="60">
                     </label>
+                    <p class="ctl__note">The largest force the motor can give, in newtons. A larger push is cut to this value.</p>
                     <label class="ctl">
                         <span class="ctl__row"><span>Loop period <i>T</i><sub>s</sub></span><output id="Ts-out" for="Ts"></output></span>
                         <input type="range" id="Ts" min="1" max="80" step="1" value="10">
                     </label>
+                    <p class="ctl__note">How often the computer reads the angles and sets the motor, in milliseconds. In between, the force stays as it was set (7.2).</p>
                     <label class="ctl">
                         <span class="ctl__row"><span>Cost of force <i>ρ</i></span><output id="rho-out" for="rho"></output></span>
                         <input type="range" id="rho" min="-2" max="2" step="0.1" value="0">
                     </label>
+                    <p class="ctl__note">The price of force in the controller’s cost (14), against the price of leaning and of being away from the target; the slider is logarithmic, from 0.01 to 100. Large <i>ρ</i>: gentle pushes, rods that wander further. Small <i>ρ</i>: hard pushes that reach the motor limit sooner.</p>
                 </div>
 
                 <div class="panel__group">
                     <p class="panel__label">The machine · the controller is redesigned for every change</p>
+                    <p class="ctl__note">A cart of mass <i>m</i><sub>0</sub> on a rail. Each rod is a uniform bar of mass <i>m</i> and length <i>L</i>, free to turn about a hinge at its lower end: rod 1 on the cart, rod 2 on top of rod 1 (section 2).</p>
                     <label class="ctl">
                         <span class="ctl__row"><span>Cart mass <i>m</i><sub>0</sub></span><output id="m0-out" for="m0"></output></span>
                         <input type="range" id="m0" min="0.3" max="6" step="0.1" value="1.5">
@@ -155,6 +171,7 @@
                         <input type="range" id="L2" min="0.2" max="1.5" step="0.05" value="0.75">
                     </label>
                     <div class="actions"><button type="button" class="btn btn--ghost" id="defaults">Bogdanov’s machine</button></div>
+                    <p class="ctl__note">Back to the machine of Bogdanov’s report [1]: 1.5, 0.5 and 0.75 kg, rods of 0.5 and 0.75 m, <i>ρ</i> = 1.</p>
                 </div>
 
                 <dl class="readouts">
@@ -167,6 +184,16 @@
                     <div><dt>Certified bite of speed <i>ε</i></dt><dd id="r-eps">—</dd></div>
                     <div><dt>Rod angles</dt><dd id="r-th">—</dd></div>
                     <div><dt>Cart position</dt><dd id="r-x">—</dd></div>
+                </dl>
+                <dl class="defs" aria-label="What the readouts mean">
+                    <dt>Fall rates</dt><dd>With the motor off, a small lean grows like e<sup><i>σt</i></sup>; the two rates <i>σ</i> belong to the two ways the pair can fall (section 5).</dd>
+                    <dt>e-fold</dt><dd>1/<i>σ</i> of the faster fall: the time in which an uncorrected lean grows 2.7-fold.</dd>
+                    <dt>Slowest settling</dt><dd>With the controller on, the time in which the slowest error shrinks 2.7-fold.</dd>
+                    <dt>Factor per look</dt><dd>How much the worst error is multiplied by from one look of the computer to the next. Below 1 the loop holds, above 1 it breaks (7.3).</dd>
+                    <dt>Gains on θ₁, θ₂</dt><dd>The newtons the motor pushes per radian of lean of each rod.</dd>
+                    <dt>Certified catch level</dt><dd>Below this value of the remaining cost <i>W</i> the balancer is certain to win, motor limit and loop period included (section 9).</dd>
+                    <dt>Certified bite</dt><dd>The largest change of the cart’s speed, in one go, that the balancer is certain to survive from rest, at half the catch level (11.5).</dd>
+                    <dt>Rod angles</dt><dd>Leans from upright, positive to the right.</dd>
                 </dl>
 
                 <ul class="legend">
@@ -418,7 +445,12 @@
                         <p><b>The loop period.</b> Here “holds” means that the rods come to rest: in a 60 s run the largest angle in the last 10 s is below 1 mrad. With the continuous gains (16) the controller holds the rods for \(T_s\) up to 34 ms and not at 34.5 ms (tested in steps of 0.5 ms), exactly where the linear loop flips in 7.3: about a third of the 96 ms fall time. Above it the rods rattle in a limit cycle, at 40 ms by \(\pm4.9°\) with the motor at \(\pm60\) N, and from 60 ms they fall within a second. Double both lengths and the limit rises to 58 ms; halve them and it drops to 19 ms. Slow brains need long brooms. With gains designed for the period (16h) the linear loop is stable at every period we tried, up to one second, where the factor per look is still 0.47; what ends it on the real machine is the motor limit. From the standard start the designed gains hold up to 260 ms, two and a half fall times, and lose the rods at 262.5 ms: in a quarter of a second between looks a lean grows \(e^{10.39 \times 0.26} = 15\)-fold, and what one held push of at most 60 N can undo is bounded. Doubled lengths move that limit to 342.5 ms, halved lengths to 195 ms. Set \(T_s\) to 80 ms, the end of the slider, and switch between the two designs: with <i>Continuous time</i> the balancer loses the rods in 0.35 s, with <i>The loop period</i> it holds them still.</p>
                         <p><b>The motor limit.</b> At \(u_\text{max} = 60\) N the controller catches a flick of the top of \(J = 0.2\) N·s and loses one of 0.3 N·s. A flick is a short horizontal blow at the top end, a force \(F(t)\) acting for a time \(\varepsilon\) with impulse \(J = \int F\,\mathrm dt\). The top end sits at \(x_\text{top} = x + L_1\sin\theta_1 + L_2\sin\theta_2\), so by the rule of section 4 the blow’s generalised force is \(F\,\partial x_\text{top}/\partial\boldsymbol\theta = F\,(1, L_1\cos\theta_1, L_2\cos\theta_2)^{\mathsf T}\). Integrate (9) over the blow: the positions cannot move in a time \(\varepsilon \to 0\), so \(\mathbf D\) stays fixed and \(\int\mathbf D\ddot{\boldsymbol\theta}\,\mathrm dt = \mathbf D\,\Delta\dot{\boldsymbol\theta}\), while \(\mathbf C\dot{\boldsymbol\theta}\), \(\mathbf G\) and \(u\) stay finite and contribute only \(O(\varepsilon)\). Hence</p>
                         \[ \Delta\dot{\boldsymbol\theta} = \mathbf D^{-1}\begin{pmatrix}1\\ L_1\cos\theta_1\\ L_2\cos\theta_2\end{pmatrix} J . \tag{17} \]
-                        <p><b>Pull it over and let go.</b> Grab a rod in the figure and tilt it; while you hold it, everything stands still at rest. Let go, and the controller starts from that leaning state. With the default machine and \(u_\text{max} = 60\) N, the upper rod pulled to 13° comes back, and so does the lower rod pulled to −10°. The upper rod pulled to 45° is beyond the balancer: it asks for more than 60 N, the motor saturates, and the rods fall before the cart can get under them. The page then calms the rods and swings them back up (sections 9–11); switch <i>Let them fall</i> on to see the fall itself, or raise \(u_\text{max}\) and try again.</p>
+                        <p><b>Pull it over and let go.</b> Grab a rod in the figure and tilt it; while you hold a rod, everything stands still at rest. Let go, and the controller starts from that leaning state. With the default machine and \(u_\text{max} = 60\) N, the upper rod pulled to 13° comes back, and so does the lower rod pulled to −10°. The upper rod pulled to 45° is beyond the balancer: it asks for more than 60 N, the motor saturates, and the rods fall before the cart can get under them. The page then calms the rods and swings them back up (sections 9–11); switch <i>Let them fall</i> on to see the fall itself, or raise \(u_\text{max}\) and try again.</p>
+                        <p><b>Take the cart.</b> Grab the cart in the figure and drag it. While you hold it, your hand moves the cart, not the motor: the controller lets go, and the rods answer the cart’s motion alone. Carry a broom upright on your palm and jerk your hand to the right: the broom does not come along at once, it falls to the left. That is what you see here, with a twist. The page models your hand as a stiff spring with a damper that pulls the cart toward the pointer \(x_h\), as hard as a quick hand can:</p>
+                        \[ \ddot x = \operatorname{clip}\!\left(\omega_h^2\,(x_h - x) - 2\omega_h\,\dot x,\ \pm a_h\right), \qquad \omega_h = 15\ \text{s}^{-1},\quad a_h = 30\ \text{m/s}^2 . \tag{29} \]
+                        <p>The two numbers are our choices. The damping \(2\omega_h\) is the critical one, so the cart never overshoots the pointer: after a jump \(D\) of the pointer it follows \(x = D\,[1 - (1 + \omega_h t)\,e^{-\omega_h t}]\), 95 % of the way in 0.32 s, and it trails a pointer moving steadily at speed \(c\) by \(2c/\omega_h\), 13 cm at 1 m/s (Wolfram’s <code>DSolve</code> on (29) gives both). With \(\ddot x\) given, the Euler–Lagrange equations of the rods, rows 2 and 3 of (9), no longer contain the force: they are two equations for the rods alone, driven by the cart,</p>
+                        \[ \begin{pmatrix} d_4 & d_5\cos(\theta_1-\theta_2)\\ d_5\cos(\theta_1-\theta_2) & d_6\end{pmatrix}\ddot{\boldsymbol\theta} = -\begin{pmatrix} d_2\cos\theta_1\\ d_3\cos\theta_2\end{pmatrix}\ddot x - \begin{pmatrix} d_5\sin(\theta_1-\theta_2)\,\dot\theta_2^2\\ -d_5\sin(\theta_1-\theta_2)\,\dot\theta_1^2\end{pmatrix} + \begin{pmatrix} f_1\sin\theta_1\\ f_2\sin\theta_2\end{pmatrix}, \tag{30} \]
+                        <p>and row 1 says how hard your hand pushes, the same row the calming law uses to turn an acceleration into a force (21). Wolfram derived (30) from the Lagrangian (4)–(7) with \(x(t)\) prescribed. The cart’s acceleration enters like a sideways gravity: in the cart’s frame every mass feels \(-\ddot x\) besides \(-g\). From upright and at rest, (30) gives \(\ddot\theta_1 = -2.47\,\ddot x\) and \(\ddot\theta_2 = +0.47\,\ddot x\) (in rad/s² per m/s², default machine). Here is the twist: jerk the cart right, and the lower rod falls back so fast that the middle hinge moves left, by \(\ddot x\,(1 - 2.47 \times 0.5) = -0.24\,\ddot x\), so the upper rod tips forward. The pair buckles like a folding ruler before gravity takes over. Your hand feels this too: at that first instant the force is \(m_\text{eff}\ddot x\) with \(m_\text{eff} = d_1 - \mathbf h^{\mathsf T}\mathbf D_{\theta\theta}^{-1}\mathbf h = 1.65\) kg, where \(\mathbf h = (d_2, d_3)^{\mathsf T}\) and \(\mathbf D_{\theta\theta}\) is the matrix of (30), and not the 2.75 kg the machine weighs, because the rods turn instead of following. Let go, and the controller starts from the state you leave behind. If the rods can still be caught, it catches them and brakes the cart to rest (11.5), or brings it back to where you let go; if not, it calms them and swings them up again.</p>
                         <p><b>The wrong-way start.</b> Press <i>to +1 m</i>. The cart first creeps 3 mm forward, then backs up by 2.3 cm, half a second after the press, while both rods tip about 2° toward the target. Only then does it drive forward, leaning into the motion, and at the end the rods lean back about 1.2° to brake. It has to: to accelerate to the right with the rods upright on average, the rods must lean right, and the only way to tip them right is to pull their bottom out to the left first. Engineers call this a non-minimum-phase system [3]; you do the same with a broom when you want to walk forward with it.</p>
                         <p><b>The cost of force.</b> Raise \(\rho\) and the controller pushes more gently and lets the rods wander further; lower it and the pushes become violent and the motor limit is reached sooner. The gains in the panel show this directly.</p>
                         <p><b>The masses.</b> A heavier cart recoils less, so the rods fall closer to the rate of a fixed hinge. A heavier upper rod loads the lower one and changes which way the controller must play them. Watch the fall rates in the panel as you move each slider.</p>
@@ -514,7 +546,7 @@
                         <p><b>Leaving a moving equilibrium.</b> Once the cart cruises, the target buttons no longer jump the reference: a step from a moving equilibrium to a resting one would ask the balancer for an instant stop, a large push and a large lean. Instead the reference glides from the member of (25) it is on to the resting member at the target, along the critically damped motion \(\ddot e + 2\omega\dot e + \omega^2 e = 0\) of the distance \(e = x_\text{ref} - x_\text{target}\), the fastest return without overshoot, from \(e(0) = e_0\) and \(\dot e(0) = v\):</p>
                         \[ e(\tau) = \left(e_0 + (v + \omega e_0)\,\tau\right)e^{-\omega\tau}, \qquad \omega = 0.5\ \mathrm{s^{-1}}, \tag{26} \]
                         <p>with \(\dot x_\text{ref} = \dot e\) along with it (check: \(\dot e(0) = (v + \omega e_0) - \omega e_0 = v\)). The rate \(\omega\) is our choice; the glide from one metre away at rest comes within a centimetre after 13 s. Its largest acceleration is at the start, \(\ddot e(0) = -\omega^2 e_0 - 2\omega v\): 0.25 m/s² from one metre at rest, 1.25 m/s² when the cart also moves away at 1 m/s. A cart that accelerates at \(a\) can hold its rods only leaning: in the cart’s frame gravity tilts by the angle whose tangent is \(a/g\), and both rods must stand along it. The rule gives 1.5° at 0.25 m/s² and 7.3° at 1.25 m/s². The balancer’s reference keeps \(\theta = 0\) all the same, so it meets the lean as a small error and lets it stand. Measured with the page’s equations and the 10 ms gains, the rods lean at most 0.9° in the first glide and 5.3° in the second, less than the rule says, because the cart cannot take up the reference’s acceleration at once and never reaches its peak; the motor needs at most 0.5 and 2.7 N. When the reference is within a centimetre of the target the panel says <i>Balancing</i> again.</p>
-                        <p>Arriving moving has a price: the cart keeps going. Until 5 November 2026 the page let it, and in the browser tests of 11.3 the cart got between 6 and 200 m from where it started within the 60 s of a run (with the plan made to arrive at rest, it never left \(\pm1.54\) m). A real rail has an end, so the page now brings the cart to rest after the catch, carefully. How carefully is the subject of the next subsection.</p>
+                        <p>Arriving moving has a price: the cart keeps going. Until 5 November 2026 the page let it, and in the browser tests of 11.3 the cart got between 6 and 200 m from where it started within the 60 s of a run (with the plan made to arrive at rest, it never left \(\pm1.54\) m). A real rail has an end, so the page now brings the cart to rest after the catch, carefully. With the braking, the same tests keep the cart within 1 to 16 m of its start. How carefully is the subject of the next subsection.</p>
                         <h4><span class="psub__n">11.5</span>Coming to rest without being knocked over</h4>
                         <p>Carry a tray of stacked glasses off a moving walkway. You cannot stop dead: your feet would stop and the glasses would not. You lean back a little and brake over a few steps, and you know without thinking how hard you may brake before the stack topples. The balancer has the same problem, and it can answer it with numbers.</p>
                         <p><b>A change of speed is a shove.</b> The balancer never sees the cart’s speed as such; it sees only the error \(\mathbf e = \mathbf s - \mathbf s^\ast\) from the member of (25) it holds. Suppose at one look we tell it that the reference now moves at \(v - \Delta\) instead of \(v\). Nothing in the machine has changed, but the error has: its fourth component, \(\dot x - v\), has grown by \(\Delta\). By (25) the balancer cannot tell this from a sudden shove that made the cart \(\Delta\) faster: lowering the reference speed is a kick in the error, \(\mathbf e \to \mathbf e + \Delta\,\mathbf e_4\) for \(v &gt; 0\), with \(\mathbf e_4 = (0, 0, 0, 1, 0, 0)\). The question “how hard may we brake?” becomes “how big a kick may we give?”.</p>
@@ -537,7 +569,7 @@
                         \[ \mathbf k_1 = \mathbf f(\mathbf s_n),\ \ \mathbf k_2 = \mathbf f(\mathbf s_n + \tfrac h2\mathbf k_1),\ \ \mathbf k_3 = \mathbf f(\mathbf s_n + \tfrac h2\mathbf k_2),\ \ \mathbf k_4 = \mathbf f(\mathbf s_n + h\mathbf k_3),\qquad \mathbf s_{n+1} = \mathbf s_n + \tfrac h6(\mathbf k_1 + 2\mathbf k_2 + 2\mathbf k_3 + \mathbf k_4), \tag{18} \]
                         <p>with \(u\) held fixed through the step, as the sampled controller holds it. Its error per unit time falls as \(h^4\).</p>
                         <p>The page integrates (9) with (18) at a fixed step of 1 ms, several steps per screen frame, in real time. The walkthrough below sets each equation of this note beside the lines of the page’s script that compute it. With the controller off, the same integrator tested against a high-accuracy solver keeps the energy \(T + V\) constant to \(2\times10^{-10}\) J over 10 s; against a 30-digit reference solution in Mathematica, the angles of freely whirling rods agree to \(3\times10^{-6}\) rad after 2 s, and halving the step cuts that error 18-fold, the \(2^4\) of a fourth-order method. The page runs one of three laws at a time: the balancer (16h) about a member of the family (25), calming (21) or tracking (24), under the rules of sections 9 and 11. When <i>Let them fall</i> is on and the balancer is beaten, the motor stops pushing (\(u = 0\)) and the page keeps solving (9) exactly as before: the rods fall all the way, swing down through the slot in the middle of the cart, between its two rails, and go on swinging as a double pendulum hanging from a free cart, without friction, so they never come to rest. The view widens to keep them in sight. Positions are drawn to scale; the view follows the cart.</p>
-                        <p>Left out: friction in the hinges and wheels, the motor’s own dynamics (a real motor cannot change its force instantly), sensor noise, and a hard end of the rail (the planner keeps the cart within ±1.5 m; calming and balancing do not). Each is a known extension of this model [1, 3]. Every number on this page that is not derived or taken from a source is a choice of ours, and the text says so where it is made: the weight on \(x\), the ranges of the sliders, \(u_\text{max} = 60\) N, the planner’s weights and rail limit, the calming gains, the glide rate of (26), the share \(\gamma = 0.5\) of the certified level in the braking (27a), the rectangle rule in (23), and the shells, directions and climbs of the certificate (19a).</p>
+                        <p>Left out: friction in the hinges and wheels, the motor’s own dynamics (a real motor cannot change its force instantly), sensor noise, and a hard end of the rail (the planner keeps the cart within ±1.5 m; calming and balancing do not). Each is a known extension of this model [1, 3]. Every number on this page that is not derived or taken from a source is a choice of ours, and the text says so where it is made: the weight on \(x\), the ranges of the sliders, \(u_\text{max} = 60\) N, the planner’s weights and rail limit, the calming gains, the glide rate of (26), the share \(\gamma = 0.5\) of the certified level in the braking (27a), the spring and the largest acceleration of your hand in (29), the rectangle rule in (23), and the shells, directions and climbs of the certificate (19a).</p>
                         <div class="pbox pbox--ex">
                             <span class="pbox__t">Problems</span>
                             <p><b>12.1</b> Carry out the three steps of section 4 for the coordinate \(x\) and show that row 1 of (9) is the sum of the sideways forces on cart and rods.</p>
@@ -878,7 +910,12 @@
         ds.var('qdd', ['a3'], Float64Array, { symbol: 'q̈', long_name: 'accelerations now: ẍ in m/s², θ̈₁ and θ̈₂ in rad/s²', computed_in: 'rhs(), in diagnostics()', formula: 'D⁻¹ (H u − C θ̇ − G)', digits: 5 });
         ds.var('u', [], 'float', { symbol: 'u', units: 'N', long_name: 'motor force now, held since the last sample', computed_in: 'control(), at the last controller sample', digits: 4 });
         ds.var('mode', [], 'str', { symbol: 'mode', long_name: 'the supervisor’s law: balance, calm or track', computed_in: 'supervise() and control()' });
-        ds.var('held', [], 'int', { symbol: 'held', long_name: 'rod held by your hand: 0 none, 1 lower, 2 upper', computed_in: 'the pointer on the figure', digits: 0 });
+        ds.var('held', [], 'int', { symbol: 'held', long_name: 'what your hand holds: 0 nothing, 1 the lower rod, 2 the upper rod, 3 the cart', computed_in: 'the pointer on the figure', digits: 0 });
+        ds.var('hand_x', [], 'float', { symbol: 'x<sub>h</sub>', units: 'm', long_name: 'where your hand pulls the cart: the pointer, on the rail; undefined unless you hold the cart', computed_in: 'step(), from the pointer', formula: 'x<sub>cam</sub> + (pointer − w/2)/σ', digits: 4 });
+        ds.var('hand_a', [], 'float', { symbol: 'ẍ<sub>h</sub>', units: 'm/s²', long_name: 'the acceleration your hand gives the cart in the next step (29)', computed_in: 'handA(), in diagnostics()', formula: 'clip(ω<sub>h</sub>²(x<sub>h</sub> − x) − 2ω<sub>h</sub> ẋ, ±a<sub>h</sub>)', digits: 4 });
+        ds.var('hand_u', [], 'float', { symbol: 'u<sub>h</sub>', units: 'N', long_name: 'the force your hand gives the cart in the next step: row 1 of (9) with the rods from (30)', computed_in: 'forceFor(), in diagnostics()', digits: 4 });
+        ds.var('hand_w', [], 'float', { symbol: 'ω<sub>h</sub>', units: '1/s', long_name: 'the rate of the hand’s spring (29); our choice', computed_in: 'the constant HAND_W', digits: 1 });
+        ds.var('hand_amax', [], 'float', { symbol: 'a<sub>h</sub>', units: 'm/s²', long_name: 'the hardest the hand accelerates the cart (29); our choice', computed_in: 'the constant HAND_A', digits: 1 });
         ds.var('lost', [], 'bool', { symbol: 'lost', long_name: 'fallen while rescue is off', computed_in: 'supervise()' });
         ds.var('braking', [], 'bool', { symbol: 'braking', long_name: 'the reference is being braked to rest, one certified bite per look (27)', computed_in: 'govern(), in control()' });
         ds.var('ref_kind', [], 'str', { symbol: 'ref', long_name: 'the balancer’s reference: fixed, cruise or glide (25)–(26)', computed_in: 'the buttons, supervise() and control()' });
@@ -937,16 +974,17 @@
         ds.var('cs_vb', ['j'], Float64Array, { symbol: 'v<sub>before</sub>', units: 'm/s', long_name: 'reference speed before the bite', computed_in: 'govern()', digits: 5 });
         ds.var('cs_ver', ['j'], Int32Array, { symbol: 'design', long_name: 'design number of the gains', computed_in: 'logSample()', digits: 0 });
         /* the physics steps: one row per 1 ms RK4 step (or held step), written at the step */
-        var ST = ['st_i', 'st_t', 'st_s0', 'st_s1', 'st_u', 'st_j', 'st_kind', 'st_jump', 'st_ver'];
+        var ST = ['st_i', 'st_t', 'st_s0', 'st_s1', 'st_u', 'st_xh', 'st_j', 'st_kind', 'st_jump', 'st_ver'];
         ds.var('st_n', [], 'int', { symbol: 'rows', long_name: 'steps kept in the log', computed_in: 'logStep()', digits: 0 });
         ds.var('st_last', [], 'int', { symbol: 'last', long_name: 'row of the newest step', computed_in: 'logStep()', digits: 0 });
         ds.coord('st_i', 'k', Int32Array, { symbol: 'k', long_name: 'step number since the page loaded', computed_in: 'logStep()', digits: 0 });
         ds.var('st_t', ['k'], Float64Array, { symbol: 't<sub>k</sub>', units: 's', long_name: 'time at the start of the step', computed_in: 'logStep()', digits: 3 });
         ds.var('st_s0', ['k', 'q'], Float64Array, { symbol: 's<sub>k</sub>', long_name: 'state before the step', computed_in: 'logStep()', digits: 6, cw: 84 });
         ds.var('st_s1', ['k', 'q'], Float64Array, { symbol: 's<sub>k+1</sub>', long_name: 'state after the step', computed_in: 'rk4(), in step()', digits: 6, cw: 84 });
-        ds.var('st_u', ['k'], Float64Array, { symbol: 'u<sub>k</sub>', units: 'N', long_name: 'force held over the step', computed_in: 'logStep()', digits: 5 });
-        ds.var('st_j', ['k'], Int32Array, { symbol: 'j(k)', long_name: 'number of the sample whose force is held; −1 while your hand holds a rod', computed_in: 'logStep()', digits: 0 });
-        ds.var('st_kind', ['k'], Uint8Array, { symbol: 'kind', long_name: 'step: 0 RK4, 1 held by your hand (not integrated)', computed_in: 'logStep()', digits: 0 });
+        ds.var('st_u', ['k'], Float64Array, { symbol: 'u<sub>k</sub>', units: 'N', long_name: 'force held over the step: the motor’s, or your hand’s on the cart', computed_in: 'logStep()', digits: 5 });
+        ds.var('st_xh', ['k'], Float64Array, { symbol: 'x<sub>h,k</sub>', units: 'm', long_name: 'where your hand pulled the cart in this step; undefined unless you held the cart', computed_in: 'logStep()', digits: 4 });
+        ds.var('st_j', ['k'], Int32Array, { symbol: 'j(k)', long_name: 'number of the sample whose force is held; −1 while your hand holds a rod or the cart', computed_in: 'logStep()', digits: 0 });
+        ds.var('st_kind', ['k'], Uint8Array, { symbol: 'kind', long_name: 'step: 0 RK4 with the motor, 1 a rod held by your hand (not integrated), 2 RK4 with your hand on the cart', computed_in: 'logStep()', digits: 0 });
         ds.var('st_jump', ['k'], Uint8Array, { symbol: 'jump', long_name: 'outside change before the step: 0 none, 1 flick, 2 hand, 3 reset or new state, 4 wrap at hand-over, 9 unexplained', computed_in: 'logStep()', digits: 0 });
         ds.var('st_ver', ['k'], Int32Array, { symbol: 'design', long_name: 'design number of the machine', computed_in: 'logStep()', digits: 0 });
         /* the trace in the lower figure: every 20 ms */
@@ -1014,7 +1052,8 @@
         function Wred(st) { return quad(Pm, [0, wrapAngle(st[1]), wrapAngle(st[2]), 0, st[4], st[5]]); }   // (19) about the moving equilibrium the cart is on now (25)
         function lqrU(st, t) { var e = err(st, t), v = 0; for (var i = 0; i < 6; i++) v -= K[i] * e[i]; return clampF(v); }
         function Ep(st) { var d = p.d, c12 = Math.cos(st[1] - st[2]); return 0.5 * (d[3] * st[4] * st[4] + 2 * d[4] * c12 * st[4] * st[5] + d[5] * st[5] * st[5]) + p.f[0] * Math.cos(st[1]) + p.f[1] * Math.cos(st[2]); }   // (20)
-        function uFor(st, a) {   // the motor force that gives the cart the acceleration a: rows 2–3 of (9) give the angular accelerations, row 1 the force
+        function uFor(st, a) { return forceFor(p, st, a); }
+        function forceFor(p, st, a) {   // the force that gives the cart the acceleration a: rows 2–3 of (9) give the angular accelerations (30), row 1 the force
             var d = p.d, s1 = Math.sin(st[1]), s2 = Math.sin(st[2]), s12 = Math.sin(st[1] - st[2]), D = Dm(p, st[1], st[2]);
             var r2 = -D[1][0] * a - d[4] * s12 * st[5] * st[5] + p.f[0] * s1, r3 = -D[2][0] * a + d[4] * s12 * st[4] * st[4] + p.f[1] * s2;
             var det = D[1][1] * D[2][2] - D[1][2] * D[2][1], b1 = (r2 * D[2][2] - D[1][2] * r3) / det, b2 = (D[1][1] * r3 - D[2][1] * r2) / det;
@@ -1026,6 +1065,8 @@
             var k = Math.round((tSim - tPlan) / 0.01); if (k >= tv.n) return 'end';
             var v = tv.un[k], dev = 0; for (var j = 0; j < 6; j++) { var e = s[j] - (j === 0 ? xc : 0) - tv.nom[6 * k + j]; dev += e * e; v -= tv.Kt[6 * k + j] * e; }
             return dev > 0.25 ? null : clampF(v); }
+        var HAND_W = 15, HAND_A = 30, handX = 0, handPx = 0, uh = 0;   // your hand on the cart (29): a critically damped spring of rate ω_h toward the pointer, at most a_h; our choices
+        function handA(st, xh, w, am) { return Math.max(-am, Math.min(am, w * w * (xh - st[0]) - 2 * w * st[3])); }   // (29)
         var GAMMA = 0.5, bite = NaN, vBefore = NaN;   // the share of the certified level c* that one bite of the reference speed may fill: our choice, half
         function govern() {   // (27): at a look, put the reference at the cart and take the largest bite of its speed toward zero with W ≤ γ c* (a reference governor)
             if (cLevel === null) return;   // no certificate yet: keep the cruise
@@ -1074,9 +1115,10 @@
             ms -= performance.now() - t0; if (!job || job.done || ms <= 0) return; job.work(ms);
             if (job.done) { job.ms = performance.now() - job.t0; if (job.ok) { tv = job.track(Math.pow(10, sR.value)); planStore(); } } }
         function step(dt) {
-            acc += dt;
+            acc += dt; if (held === 3) handX = ds.get('cam_x') + (handPx - ds.get('box_w') / 2) / ds.get('sc');   // where the pointer is on the rail, from the picture the hand sees (the camera stands still while you hold the cart)
             while (acc >= H) { acc -= H;
                 if (flat) break;
+                if (held === 3) { var c3 = s, t3 = tSim; uh = forceFor(p, s, handA(s, handX, HAND_W, HAND_A)); u = 0; s = rk4(p, s, uh, H); tSim += H; tCtl = tSim; logStep(c3, t3, 2); continue; }   // your hand moves the cart; the motor is off and the rods follow (30)
                 if (held) { var h0 = s.slice(), th0 = tSim; s[3] = s[4] = s[5] = 0; u = 0; tSim += H; tCtl = tSim; logStep(h0, th0, 1); continue; }   // your hand holds the rods still; logStep also writes the trace
                 var s0 = s, t0 = tSim, c0 = tCtl, u0 = u;   // the state, time, due time and force before this step, for the logs
                 supervise();
@@ -1104,15 +1146,15 @@
             LG.cs_rk[r] = ref.kind === 'fixed' ? 0 : ref.kind === 'cruise' ? 1 : 2; LG.cs_rx[r] = ref.kind === 'glide' ? ref.target : ref.x; LG.cs_rv[r] = ref.v || 0; LG.cs_rt0[r] = ref.t0 || 0; LG.cs_re0[r] = ref.e0 || 0;
             LG.cs_xc[r] = xc; LG.cs_tp[r] = tPlan; LG.cs_pl[r] = plSerial; LG.cs_ver[r] = ver; LG.cs_umax[r] = sF.value; LG.cs_bite[r] = bite; LG.cs_vb[r] = vBefore; nSamp++; ds.set('cs_n', csN); ds.set('cs_last', r); }   // the count is written with the row it counts
         function differs(a, b) { for (var i = 0; i < 6; i++) if (a[i] !== b[i]) return true; return false; }
-        function logStep(s0, t0, kind, c0, u0) {   // one row of the step log, after the step: s0 before, s after; kind 0 an RK4 step, 1 a step your hand held
+        function logStep(s0, t0, kind, c0, u0) {   // one row of the step log, after the step: s0 before, s after; kind 0 an RK4 step, 1 a step your hand held, 2 an RK4 step with your hand on the cart
             if (kind === 0) { if (tCtl !== c0) logSample(s0, t0, false); else if (u !== u0) logSample(s0, t0, true); }   // the controller looked in this step, or the motor was cut outside a look
             var jump = sPost && differs(s0, sPost) ? why || 9 : 0, i;
             if (!book) { E0 = energy(s0); Wm = 0; Eext = 0; book = true; } else if (jump) Eext += energy(s0) - energy(sPost);   // the energy book opens at a reset or a change of the machine
-            if (kind === 0) Wm += u * (s[0] - s0[0]); else Eext += energy(s) - energy(s0);   // u is held over the step, so its work is u Δx exactly; a held step is all the hand's
+            if (kind === 0) Wm += u * (s[0] - s0[0]); else Eext += kind === 2 ? uh * (s[0] - s0[0]) : energy(s) - energy(s0);   // the hand on the cart is a force held over the step too, so its work is u_h Δx   // u is held over the step, so its work is u Δx exactly; a held step is all the hand's
             why = 0;
             if (stN === NK) { dropHalf(ST, NK); stN = NK / 2; }
             var r = stN++;
-            LG.st_i[r] = nStep; LG.st_t[r] = t0; LG.st_u[r] = u; LG.st_j[r] = kind === 0 ? nSamp - 1 : -1; LG.st_kind[r] = kind; LG.st_jump[r] = jump; LG.st_ver[r] = ver;
+            LG.st_i[r] = nStep; LG.st_t[r] = t0; LG.st_u[r] = kind === 2 ? uh : u; LG.st_xh[r] = kind === 2 ? handX : NaN; LG.st_j[r] = kind === 0 ? nSamp - 1 : -1; LG.st_kind[r] = kind; LG.st_jump[r] = jump; LG.st_ver[r] = ver;
             for (i = 0; i < 6; i++) { LG.st_s0[6 * r + i] = s0[i]; LG.st_s1[6 * r + i] = s[i]; }
             sPost = LG.st_s1.subarray(6 * r, 6 * r + 6); nStep++; ds.set('st_n', stN); ds.set('st_last', r);
             if (Math.round(tSim * 1000) % 20 === 0) { if (trN === NTR) { dropHalf(TRn, NTR); trN = NTR / 2; }   // the trace of the lower figure, every 20 ms
@@ -1124,7 +1166,7 @@
             var S = ds.get('s_now'), A3 = ds.get('qdd'), q = rhs(p, s, u), rv = refXV(tSim), E = energy(s), i;
             for (i = 0; i < 6; i++) S[i] = s[i]; for (i = 0; i < 3; i++) A3[i] = q[3 + i]; ds.touch('s_now'); ds.touch('qdd');
             ds.set('t', tSim); ds.set('x', s[0]); ds.set('xd', s[3]); ds.set('th1w', wrapAngle(s[1])); ds.set('th2w', wrapAngle(s[2])); ds.set('u', u);
-            ds.set('mode', mode); ds.set('held', held); ds.set('lost', lost); ds.set('ref_kind', ref.kind); ds.set('braking', !!ref.brake); ds.set('x_r', rv[0]); ds.set('v_r', rv[1]); ds.get('ref_p').set([ref.kind === 'glide' ? ref.target : ref.x, ref.v || 0, ref.t0 || 0, ref.e0 || 0]); ds.touch('ref_p');
+            ds.set('mode', mode); ds.set('held', held); ds.set('hand_x', held === 3 ? handX : NaN); ds.set('hand_a', held === 3 ? handA(s, handX, HAND_W, HAND_A) : NaN); ds.set('hand_u', held === 3 ? forceFor(p, s, ds.get('hand_a')) : NaN); ds.set('lost', lost); ds.set('ref_kind', ref.kind); ds.set('braking', !!ref.brake); ds.set('x_r', rv[0]); ds.set('v_r', rv[1]); ds.get('ref_p').set([ref.kind === 'glide' ? ref.target : ref.x, ref.v || 0, ref.t0 || 0, ref.e0 || 0]); ds.touch('ref_p');
             ds.set('W', Wof(s, tSim)); ds.set('W_red', Wred(s)); ds.set('Ep', Ep(s)); ds.set('E', E);
             var wait = book && sPost && differs(s, sPost) ? E - energy(sPost) : 0;   // an outside change made while the clock stands still: booked by the next step
             ds.set('E0', book ? E0 : NaN); ds.set('W_motor', book ? Wm : NaN); ds.set('E_ext', book ? Eext : NaN); ds.set('E_wait', book ? wait : NaN); ds.set('bal', book ? E0 + Wm + Eext + wait - E : NaN);
@@ -1132,7 +1174,7 @@
             ds.set('u_max', sF.value); ds.set('J', sJ.value); ds.set('ctrl_on', on); ds.set('rescue_on', rescue); ds.set('rolling', rolling); ds.set('gmode', gmode); ds.set('x_target', xref); ds.set('playing', clk ? clk.playing : true);
             CS.concat(ST, TRn).forEach(function (n) { ds.touch(n); });
             if (dt > 0) fps = fps ? fps + (1 / dt - fps) * 0.1 : 1 / dt; frames++; ds.set('fps', fps); ds.set('frames', frames); }
-        ds.set('glide_w', GLIDE); ds.set('calm_k', CALM_K); ds.set('gamma', GAMMA); ds.set('c_busy', true);
+        ds.set('hand_w', HAND_W); ds.set('hand_amax', HAND_A); ds.set('glide_w', GLIDE); ds.set('calm_k', CALM_K); ds.set('gamma', GAMMA); ds.set('c_busy', true);
         redesign(); reset();
 
         /* ---------- drawing ---------- */
@@ -1141,7 +1183,7 @@
             var c = cv.ctx, W = cv.w, Hh = cv.h, g2 = function (n) { return ds.get(n); }, S = g2('s_now'), u = g2('u'), L1 = g2('L1'), L2 = g2('L2'); c.clearRect(0, 0, W, Hh);
             vy += ((g2('lost') || g2('mode') !== 'balance' || Math.cos(S[1]) < 0.3 || Math.cos(S[2]) < 0.3 ? 1 : 0) - vy) * 0.06;   /* when the rods are down or swinging, the view widens and the rail moves up, so rods below it stay in sight */
             var tall = Math.max(1.4, L1 + L2 + 0.25), up = (Hh - 90) / tall, down = (Hh / 2 - 24) / (L1 + L2), sc = Math.min(W / (3.2 + 2 * vy), up + (down - up) * vy), y0 = (Hh - 62) + (Hh / 2 - (Hh - 62)) * vy;
-            camX += (S[0] - camX) * 0.08; var X = function (x) { return W / 2 + (x - camX) * sc; };
+            if (g2('held') !== 3) camX += (S[0] - camX) * 0.08; var X = function (x) { return W / 2 + (x - camX) * sc; };
             c.strokeStyle = TH.ruleSoft; c.lineWidth = 1; c.fillStyle = TH.muted; c.font = TH.mono; c.textAlign = 'center';
             for (var g = Math.floor(camX - 4); g <= camX + 4; g += 0.5) { var gx = X(g); if (gx < -20 || gx > W + 20) continue; c.beginPath(); c.moveTo(gx, y0 + 14); c.lineTo(gx, y0 + (Number.isInteger(g) ? 26 : 20)); c.stroke(); if (Number.isInteger(g)) c.fillText(Sim.fmt(g, 0) + ' m', gx, y0 + 40); }
             c.strokeStyle = TH.ink; c.lineWidth = 2; c.beginPath(); c.moveTo(0, y0 + 14); c.lineTo(W, y0 + 14); c.stroke();
@@ -1152,7 +1194,7 @@
             var sw = Math.max(10, cw * 0.22); c.fillStyle = TH.paper; c.fillRect(cx - sw / 2, y0 - ch + 4, sw, ch + 12); c.lineWidth = 1.4; c.beginPath(); c.moveTo(cx - sw / 2, y0 - ch + 4); c.lineTo(cx - sw / 2, y0 + 4); c.moveTo(cx + sw / 2, y0 - ch + 4); c.lineTo(cx + sw / 2, y0 + 4); c.stroke(); c.lineWidth = 2.4; c.beginPath(); c.moveTo(cx - sw / 2 - 4, y0 - ch + 4); c.lineTo(cx + sw / 2 + 4, y0 - ch + 4); c.stroke();
             [-1, 1].forEach(function (k) { c.beginPath(); c.arc(cx + k * cw * 0.3, y0 + 7, 6, 0, 2 * Math.PI); c.fillStyle = '#fff'; c.fill(); c.stroke(); });
             var hx = cx, hy = y0 - ch + 4, ex = hx + L1 * sc * Math.sin(S[1]), ey = hy - L1 * sc * Math.cos(S[1]), tx2 = ex + L2 * sc * Math.sin(S[2]), ty2 = ey - L2 * sc * Math.cos(S[2]);
-            geo = { hx: hx, hy: hy, ex: ex, ey: ey, tx: tx2, ty: ty2 };
+            geo = { hx: hx, hy: hy, ex: ex, ey: ey, tx: tx2, ty: ty2, cw: cw, y0: y0 };
             ds.set('box_w', W); ds.set('box_h', Hh); ds.set('vy', vy); ds.set('sc', sc); ds.set('y0', y0); ds.set('cam_x', camX); ds.set('cart_px', cx); ds.set('cart_py', hy); ds.set('cart_w', cw); ds.set('cart_h', ch);
             ds.set('mid_px', ex); ds.set('mid_py', ey); ds.set('tip_px', tx2); ds.set('tip_py', ty2); ds.set('target_px', tx);
             c.lineCap = 'round'; c.lineWidth = 4 + 6 * Math.min(1, g2('m1')); c.strokeStyle = TH.ink; c.beginPath(); c.moveTo(hx, hy); c.lineTo(ex, ey); c.stroke();
@@ -1161,7 +1203,13 @@
             if (Math.abs(u) > 0.05) { var len = Math.sign(u) * Math.min(1, Math.abs(u) / g2('u_max')) * cw * 1.6, ay = y0 - ch / 2 + 4, ax = u > 0 ? cx - cw / 2 - 6 : cx + cw / 2 + 6;
                 c.strokeStyle = TH.accent; c.fillStyle = TH.accent; c.lineWidth = 3; c.beginPath(); c.moveTo(ax - len, ay); c.lineTo(ax, ay); c.stroke();
                 c.beginPath(); c.moveTo(ax, ay); c.lineTo(ax - Math.sign(u) * 9, ay - 6); c.lineTo(ax - Math.sign(u) * 9, ay + 6); c.closePath(); c.fill(); }
+            var hu = g2('hand_u');
+            if (g2('held') === 3) { c.setLineDash([3, 2]); c.strokeStyle = TH.ink; c.lineWidth = 1.4; c.strokeRect(cx - cw / 2 - 4, y0 - ch, cw + 8, ch + 18); c.setLineDash([]);   // your hand on the cart, and its force
+                if (Math.abs(hu) > 0.05) { var hl = Math.sign(hu) * Math.min(1, Math.abs(hu) / g2('u_max')) * cw * 1.6, hy2 = y0 - ch / 2 + 4, hx2 = hu > 0 ? cx - cw / 2 - 6 : cx + cw / 2 + 6;
+                    c.strokeStyle = TH.ink; c.fillStyle = TH.ink; c.lineWidth = 3; c.beginPath(); c.moveTo(hx2 - hl, hy2); c.lineTo(hx2, hy2); c.stroke();
+                    c.beginPath(); c.moveTo(hx2, hy2); c.lineTo(hx2 - Math.sign(hu) * 9, hy2 - 6); c.lineTo(hx2 - Math.sign(hu) * 9, hy2 + 6); c.closePath(); c.fill(); } }
             c.textAlign = 'left'; c.fillStyle = TH.ink3; c.fillText('u = ' + Sim.fmt(u, 1) + ' N', 12, 20);
+            c.fillText(g2('held') === 3 ? _t('your hand: {F} N', { F: '\u2066' + Sim.fmt(hu, 1) + '\u2069' }) : '⇆ ' + _t('drag the cart, or pull a rod'), 12, 36);
             drawTrace();
         }
         function drawTrace() {   // the stored trace: tr_t, tr_th1, tr_th2, tr_u
@@ -1183,7 +1231,7 @@
                 document.getElementById('cap-u').innerHTML = '<i>u</i> = ' + Sim.fmt(u, 1) + ' N';
                 document.getElementById('r-th').textContent = Sim.fmt(g('th1w') * 180 / Math.PI, 1) + '°, ' + Sim.fmt(g('th2w') * 180 / Math.PI, 1) + '°';
                 document.getElementById('r-x').textContent = Sim.fmt(g('x'), 2) + ' m';
-                stEl.innerHTML = held ? _t('<b>Held.</b> Let go and the controller takes over.') : !on ? _t('<b>Controller off.</b> The rods fall; the cart recoils.') : lost ? _t('<b>Fallen.</b> The balancer can no longer win, and rescue is off. Choose <i>Swing back up</i>, or press Reset.')
+                stEl.innerHTML = held === 3 ? _t('<b>You hold the cart.</b> The motor is off, and the rods answer the cart’s motion alone. Let go and the controller takes over.') : held ? _t('<b>Held.</b> Let go and the controller takes over.') : !on ? _t('<b>Controller off.</b> The rods fall; the cart recoils.') : lost ? _t('<b>Fallen.</b> The balancer can no longer win, and rescue is off. Choose <i>Swing back up</i>, or press Reset.')
                     : mode === 'track' ? _t('<b>Swinging up.</b> Following the planned force; the tracking controller corrects the drift.') : mode === 'calm' ? (g('plan_ready') ? _t('<b>Plan ready.</b> The swing-up starts the moment the machine reaches the predicted state.') : g('plan_busy') ? _t('<b>Calming and planning.</b> The cart drains the rods’ energy while a swing-up is computed.') : _t('<b>Calming.</b> The cart drains the rods’ energy; the next plan starts soon.'))
                     : Math.abs(u) >= g('u_max') - 1e-9 ? _t('<b>Motor at its limit.</b> Holding on…') : g('braking') ? _t('Braking from {v} m/s to rest, each bite within half the certified level.', { v: Sim.fmt(g('v_r'), 2) }) : g('ref_kind') === 'cruise' ? _t('Balancing while rolling at {v} m/s, a moving equilibrium.', { v: Sim.fmt(g('v_r'), 2) })
                     : g('ref_kind') === 'glide' && Math.abs(g('x_r') - g('x_target')) > 0.01 ? _t('Balancing while gliding to the target.') : _t('Balancing.'); } });
@@ -1209,11 +1257,18 @@
         function aim(q) { var M = 80 * Math.PI / 180; why = 2;
             if (held === 1) { s[1] = Math.max(-M, Math.min(M, Math.atan2(q[0] - geo.hx, geo.hy - q[1]))); }
             else { s[2] = Math.max(-M, Math.min(M, Math.atan2(q[0] - geo.ex, geo.ey - q[1]))); } }
+        function onCart(q) { return Math.abs(q[0] - geo.hx) <= geo.cw / 2 + 6 && q[1] > geo.hy + 3 && q[1] <= geo.y0 + 14; }   // the cart's body and wheels, below the hinge
+        function pointerX(q) { return Math.max(geo.cw / 2, Math.min(cv.w - geo.cw / 2, q[0])); }   // the pointer kept on the visible rail
+        cvEl.addEventListener('pointerdown', function (e) { if (!geo) return; var q0 = local(e); if (!onCart(q0)) return;
+            held = 3; handPx = pointerX(q0); handX = s[0]; cvEl.setPointerCapture(e.pointerId); cvEl.style.cursor = 'grabbing'; e.preventDefault(); clk.set(true); e.stopImmediatePropagation(); });   // take the cart: the motor lets go, your hand moves it (29)
         cvEl.addEventListener('pointerdown', function (e) { if (!geo) return; var q = local(e), d1 = segDist(q, [geo.hx, geo.hy], [geo.ex, geo.ey]), d2 = segDist(q, [geo.ex, geo.ey], [geo.tx, geo.ty]);
             if (Math.min(d1, d2) > 24) return; if (flat || lost || mode !== 'balance') { reset(); }
             held = d2 <= d1 ? 2 : 1; cvEl.setPointerCapture(e.pointerId); cvEl.style.cursor = 'grabbing'; aim(q); e.preventDefault(); clk.set(true); });
-        cvEl.addEventListener('pointermove', function (e) { if (held) aim(local(e)); });
-        function release() { if (!held) return; held = 0; cvEl.style.cursor = 'grab'; nextCheck = tSim; }
+        cvEl.addEventListener('pointermove', function (e) { if (held === 3) handPx = pointerX(local(e)); else if (held) aim(local(e)); });
+        function release() { if (!held) return; var cart = held === 3; held = 0; uh = 0; cvEl.style.cursor = 'grab'; nextCheck = tSim;
+            if (!cart) return; tCtl = tSim;   // let go of the cart: the controller looks at once, from the state your hand left
+            if (mode === 'balance') { if (rolling && Math.abs(s[3]) > 0.01) ref = { kind: 'cruise', x: s[0], v: s[3], t0: tSim, brake: true }; else ref = { kind: 'fixed', x: s[0] }; xref = s[0]; }   // a new rest where you let go, braked to as after a catch
+            else { xc = s[0]; xref = s[0]; ref = { kind: 'fixed', x: xc }; abandon(); } }   // a plan was spoiled: calm again, here
         cvEl.addEventListener('pointerup', release); cvEl.addEventListener('pointercancel', release);
         document.getElementById('tilt').addEventListener('click', function () { reset(); s[1] = 6 * Math.PI / 180; s[2] = -4 * Math.PI / 180; tCtl = 0; });
         document.getElementById('swing').addEventListener('click', function () { swingUp(); clk.set(true); });
@@ -1267,10 +1322,10 @@
         var midNote = _t('The hinge between the rods is a white disc of radius 5 px with an ink ring, drawn last, so the pixel at its stored centre is white.'), tipNote = _t('The upper rod is a burgundy line with round ends, at least 4.6 px thick, so the pixel at its stored top is burgundy.');
         var groups = [
             { title: 'What you set', note: 'the sliders and switches, as the last redesign and this frame used them', how: 'set', vars: ['m0', 'm1', 'm2', 'L1', 'L2', 'u_max', 'Ts', 'rho', 'J', 'ctrl_on', 'rescue_on', 'rolling', 'gmode', 'x_target', 'playing'] },
-            { title: 'Constants of the code', note: 'fixed numbers of the page: weights, the glide’s rate, the calming gain', how: 'constant', vars: ['Qw', 'glide_w', 'calm_k'] },
+            { title: 'Constants of the code', note: 'fixed numbers of the page: weights, the glide’s rate, the calming gain, the hand on the cart', how: 'constant', vars: ['Qw', 'glide_w', 'calm_k', 'hand_w', 'hand_amax'] },
             { title: 'What follows from the machine', note: 'the constants of the equations (5)–(9) and how fast the rods fall', how: 'formula', vars: ['d', 'f', 'sig', 't_efold'] },
             { title: 'The controller', note: 'the gains for the loop period, the machine between two looks, and the certified catch level', how: 'formula', vars: ['K', 'P', 'Phi', 'Gam', 'Rd', 'lam', 't_settle', 'ver', 'c_star', 'c_hand', 'c_busy', 'gamma', 'eps_rest'] },
-            { title: 'The state now', note: 'written once per frame, after the frame’s 1 ms steps', how: 'run', vars: ['t', 's_now', 'x', 'xd', 'th1w', 'th2w', 'qdd', 'u', 'mode', 'held', 'lost', 'braking', 'ref_kind', 'ref_p', 'x_r', 'v_r', 'W', 'W_red', 'Ep'] },
+            { title: 'The state now', note: 'written once per frame, after the frame’s 1 ms steps', how: 'run', vars: ['t', 's_now', 'x', 'xd', 'th1w', 'th2w', 'qdd', 'u', 'mode', 'held', 'hand_x', 'hand_a', 'hand_u', 'lost', 'braking', 'ref_kind', 'ref_p', 'x_r', 'v_r', 'W', 'W_red', 'Ep'] },
             { title: 'The energy book', note: 'what the motor, the flicks and your hand put in, against what the machine holds', how: 'run', vars: ['E', 'E0', 'W_motor', 'E_ext', 'E_wait', 'bal'] },
             { title: 'The supervisor and the swing-up', note: 'which law runs, the plan and when it starts', how: 'run', vars: ['attempt', 'hp', 'x_c', 't_plan', 'plan_busy', 'plan_ready', 'next_check', 'pl_serial', 'pl_n', 'pl_t0', 'pl_xc', 'pl_u', 'pl_K', 'pl_nom'] },
             { title: 'The controller’s samples', note: 'one row each time the controller looks, every T_s while balancing and every 10 ms while calming or tracking', how: 'run', vars: ['cs_n', 'cs_last', 'cs_i', 'cs_t', 'cs_k', 'cs_due', 'cs_next', 'cs_s', 'cs_u', 'cs_mode', 'cs_rk', 'cs_rx', 'cs_rv', 'cs_rt0', 'cs_re0', 'cs_xc', 'cs_tp', 'cs_pl', 'cs_ver', 'cs_umax', 'cs_bite', 'cs_vb'] },
@@ -1320,11 +1375,15 @@
                     value: 0.5 * (d[0] * v * v + d[3] * a * a + d[5] * b * b) + d[1] * Math.cos(S[1]) * v * a + d[2] * Math.cos(S[2]) * v * b + d[4] * Math.cos(S[1] - S[2]) * a * b + f[0] * Math.cos(S[1]) + f[1] * Math.cos(S[2]) }; },
                 bal: function () { return { formula: ds.vars.bal.attrs.formula, inputs: [inp('E0'), inp('W_motor'), inp('E_ext'), inp('E_wait'), inp('E')], value: G2('E0') + G2('W_motor') + G2('E_ext') + G2('E_wait') - G2('E') }; },
                 cs_u: function (r) { return lawAt(r); },
+                hand_a: function () { var S = Array.prototype.slice.call(G2('s_now')); return { formula: ds.vars.hand_a.attrs.formula, inputs: [inp('hand_x', 5), inp('x', 5), inp('xd', 5), inp('hand_w', 1), inp('hand_amax', 1)], value: G2('held') === 3 ? handA(S, G2('hand_x'), G2('hand_w'), G2('hand_amax')) : NaN }; },
+                hand_u: function () { var S = Array.prototype.slice.call(G2('s_now')); return { formula: _t('row 1 of (9), with the rods’ accelerations from (30)'), inputs: [inp('hand_a', 5)].concat(S.map(function (v, k) { return [QN[k], v, QU[k], 6]; })), value: G2('held') === 3 ? forceFor(machine(), S, G2('hand_a')) : NaN }; },
                 st_s1: function (ri) { var r = Math.floor(ri / 6), i = ri % 6, s0 = row6('st_s0', r), u0 = G2('st_u')[r];
                     if (G2('st_kind')[r] === 1) return { formula: _t('a held step: the state is kept, its rates set to zero'), inputs: [[QN[i], s0[i], QU[i], 6]], value: i < 3 ? s0[i] : 0 };
                     if (G2('st_ver')[r] !== G2('ver')) return { formula: _t('a step of an earlier machine'), inputs: [], value: undefined };
                     return { formula: _t('one RK4 step of 1 ms from the stored state before it, with the stored force held'), inputs: [['u<sub>k</sub>', u0, 'N', 6]].concat(s0.map(function (v, k) { return [QN[k], v, QU[k], 6]; })), value: rk4(machine(), s0, u0, H)[i] }; },
                 st_u: function (r) { var j = G2('st_j')[r], q = j >= 0 ? sampleRow(j) : -1;
+                    if (G2('st_kind')[r] === 2) { var s0 = row6('st_s0', r), xh = G2('st_xh')[r], a = handA(s0, xh, G2('hand_w'), G2('hand_amax'));
+                        return { formula: _t('your hand on the cart: (29) gives the acceleration, row 1 of (9) the force'), inputs: [['x<sub>h,k</sub>', xh, 'm', 5], ['ẍ<sub>h</sub>', a, 'm/s²', 5]].concat(s0.map(function (v, k) { return [QN[k], v, QU[k], 6]; })), value: forceFor(machine(), s0, a) }; }
                     if (j < 0) return { formula: _t('your hand holds the rods: no force'), inputs: [], value: 0 };
                     return { formula: _t('the force of sample j(k), held'), inputs: [['j(k)', j, '']], value: q >= 0 ? G2('cs_u')[q] : undefined }; },
                 cart_px: function () { return { formula: ds.vars.cart_px.attrs.formula, inputs: [inp('box_w', 1), inp('x', 6), inp('cam_x', 6), inp('sc', 4)], value: G2('box_w') / 2 + (G2('x') - G2('cam_x')) * G2('sc') }; },
@@ -1378,7 +1437,7 @@
             }
         };
 
-        window.DIPC = { get ds() { return ds; }, rk4: rk4, draw: draw, get geo() { return geo; }, get held() { return held; }, get s() { return s; }, set s(v) { s = v.slice(); why = 3; nextCheck = tSim; }, get K() { return K; }, get P() { return Pm; }, get p() { return p; }, fallRates: fallRates, rhs: rhs, rhsF: rhsF, flick: flick, get lost() { return lost; }, set xref(v) { xref = v; ref = { kind: 'fixed', x: v }; }, get ref() { return ref; }, set rolling(v) { rolling = v; }, set gmode(v) { gmode = v; redesign(); },
+        window.DIPC = { get ds() { return ds; }, rk4: rk4, draw: draw, get geo() { return geo; }, get held() { return held; }, get uh() { return uh; }, get handX() { return handX; }, get s() { return s; }, set s(v) { s = v.slice(); why = 3; nextCheck = tSim; }, get K() { return K; }, get P() { return Pm; }, get p() { return p; }, fallRates: fallRates, rhs: rhs, rhsF: rhsF, flick: flick, get lost() { return lost; }, set xref(v) { xref = v; ref = { kind: 'fixed', x: v }; }, get ref() { return ref; }, set rolling(v) { rolling = v; }, set gmode(v) { gmode = v; redesign(); },
             finishCatch: function () { while (catchIt) think(1000); return cLevel; }, Wred: function () { return Wred(s); }, specRad: specRad, dlqr: dlqr, sampledModel: sampledModel, linear: linear,
             get mode() { return mode; }, get cLevel() { return cLevel; }, get t() { return tSim; }, get u() { return u; }, W: function () { return Wof(s, tSim); }, Ep: function () { return Ep(s); }, get log() { return log; }, swingUp: swingUp, step: step, think: think, get job() { return job; }, PlanJob: PlanJob };
     })();
