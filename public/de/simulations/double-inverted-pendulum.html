@@ -27,7 +27,7 @@
     </style>
 
     <script src="../../scripts/i18n/strings-de.js"></script>
-    <meta name="translated-from" content="English public/simulations/double-inverted-pendulum.html, commit d51b1da+" />
+    <meta name="translated-from" content="English public/simulations/double-inverted-pendulum.html, commit f0900c4+" />
   </head>
 <body>
     <header class="sim-top">
@@ -59,8 +59,8 @@
         <div class="sim__grid">
             <div>
                 <figure class="stage">
-                    <div class="stage__canvas" id="stage" style="--ar: 16 / 8.5; --ar-m: 1 / 1.05;">
-                        <canvas id="cv" style="touch-action: pan-y; cursor: grab;" aria-label="Ein Wagen auf einer Schiene mit zwei Stangen darauf, die eine gelenkig auf der anderen; ein Pfeil am Wagen zeigt die Motorkraft. Ziehen Sie an einer Stange, um sie zu kippen, und lassen Sie los."></canvas>
+                    <div class="stage__canvas" id="stage" style="--ar: 16 / 6.5; --ar-m: 1 / 1.05;">
+                        <canvas id="cv" style="touch-action: pan-y;" aria-label="Ein Wagen auf einer Schiene mit zwei Stangen darauf, die eine gelenkig auf der anderen; ein Pfeil am Wagen zeigt die Motorkraft. Ziehen Sie an einer Stange, um sie zu kippen, und lassen Sie los."></canvas>
                     </div>
                     <figcaption class="stage__cap">
                         <span><b>Abb. 11</b> · <span class="tx">\(\mathbf D(\boldsymbol\theta)\,\ddot{\boldsymbol\theta} + \mathbf C(\boldsymbol\theta,\dot{\boldsymbol\theta})\,\dot{\boldsymbol\theta} + \mathbf G(\boldsymbol\theta) = \mathbf H u\)</span> · live, RK4</span>
@@ -993,6 +993,7 @@
         ds.var('mid_py', [], 'float', { symbol: 'y<sub>mid</sub> px', units: 'css px', long_name: 'hinge between the rods, from the top', computed_in: 'draw()', formula: 'y<sub>hinge</sub> − L₁ σ cos θ₁', digits: 2 });
         ds.var('tip_px', [], 'float', { symbol: 'x<sub>tip</sub> px', units: 'css px', long_name: 'top of the upper rod, from the left', computed_in: 'draw()', formula: 'x<sub>mid</sub> + L₂ σ sin θ₂', digits: 2 });
         ds.var('tip_py', [], 'float', { symbol: 'y<sub>tip</sub> px', units: 'css px', long_name: 'top of the upper rod, from the top', computed_in: 'draw()', formula: 'y<sub>mid</sub> − L₂ σ cos θ₂', digits: 2 });
+        ds.var('hand_px', [], 'float', { symbol: 'x<sub>h</sub> px', units: 'css px', long_name: 'where your hand pulls the cart, as drawn on the rail; undefined unless you hold the cart', computed_in: 'draw()', formula: 'w/2 + (x<sub>h</sub> − x<sub>cam</sub>) σ', digits: 2 });
         ds.var('target_px', [], 'float', { symbol: 'x<sub>target</sub> px', units: 'css px', long_name: 'target marker under the rail, from the left', computed_in: 'draw()', digits: 2 });
         ds.var('fps', [], 'float', { symbol: 'frame rate', units: 'Hz', long_name: 'frames per second, smoothed over about ten frames', computed_in: 'diagnostics()', digits: 1 });
         ds.var('frames', [], 'int', { symbol: 'frames', long_name: 'frames drawn so far', computed_in: 'diagnostics()', digits: 0 });
@@ -1187,6 +1188,9 @@
                 c.strokeStyle = TH.accent; c.fillStyle = TH.accent; c.lineWidth = 3; c.beginPath(); c.moveTo(ax - len, ay); c.lineTo(ax, ay); c.stroke();
                 c.beginPath(); c.moveTo(ax, ay); c.lineTo(ax - Math.sign(u) * 9, ay - 6); c.lineTo(ax - Math.sign(u) * 9, ay + 6); c.closePath(); c.fill(); }
             var hu = g2('hand_u');
+            var hpx = g2('held') === 3 ? X(g2('hand_x')) : NaN; ds.set('hand_px', hpx);
+            if (hpx === hpx) { c.strokeStyle = TH.ink; c.lineWidth = 1.5; c.setLineDash([5, 4]); c.beginPath(); c.moveTo(cx, y0 + 14); c.lineTo(hpx, y0 + 14); c.stroke(); c.setLineDash([]);
+                c.beginPath(); c.arc(hpx, y0 + 14, 7, 0, 2 * Math.PI); c.fillStyle = TH.ink; c.fill(); c.lineWidth = 2; c.strokeStyle = '#fff'; c.stroke(); }
             if (g2('held') === 3) { c.setLineDash([3, 2]); c.strokeStyle = TH.ink; c.lineWidth = 1.4; c.strokeRect(cx - cw / 2 - 4, y0 - ch, cw + 8, ch + 18); c.setLineDash([]);   // your hand on the cart, and its force
                 if (Math.abs(hu) > 0.05) { var hl = Math.sign(hu) * Math.min(1, Math.abs(hu) / g2('u_max')) * cw * 1.6, hy2 = y0 - ch / 2 + 4, hx2 = hu > 0 ? cx - cw / 2 - 6 : cx + cw / 2 + 6;
                     c.strokeStyle = TH.ink; c.fillStyle = TH.ink; c.lineWidth = 3; c.beginPath(); c.moveTo(hx2 - hl, hy2); c.lineTo(hx2, hy2); c.stroke();
@@ -1243,12 +1247,18 @@
         function onCart(q) { return Math.abs(q[0] - geo.hx) <= geo.cw / 2 + 6 && q[1] > geo.hy + 3 && q[1] <= geo.y0 + 14; }   // the cart's body and wheels, below the hinge
         function pointerX(q) { return Math.max(geo.cw / 2, Math.min(cv.w - geo.cw / 2, q[0])); }   // the pointer kept on the visible rail
         cvEl.addEventListener('pointerdown', function (e) { if (!geo) return; var q0 = local(e); if (!onCart(q0)) return;
-            held = 3; handPx = pointerX(q0); handX = s[0]; cvEl.setPointerCapture(e.pointerId); cvEl.style.cursor = 'grabbing'; e.preventDefault(); clk.set(true); e.stopImmediatePropagation(); });   // take the cart: the motor lets go, your hand moves it (29)
+            held = 3; handPx = pointerX(q0); handX = s[0]; cvEl.setPointerCapture(e.pointerId); setCursor(q0); e.preventDefault(); clk.set(true); e.stopImmediatePropagation(); });   // take the cart: the motor lets go, your hand moves it (29)
         cvEl.addEventListener('pointerdown', function (e) { if (!geo) return; var q = local(e), d1 = segDist(q, [geo.hx, geo.hy], [geo.ex, geo.ey]), d2 = segDist(q, [geo.ex, geo.ey], [geo.tx, geo.ty]);
             if (Math.min(d1, d2) > 24) return; if (flat || lost || mode !== 'balance') { reset(); }
-            held = d2 <= d1 ? 2 : 1; cvEl.setPointerCapture(e.pointerId); cvEl.style.cursor = 'grabbing'; aim(q); e.preventDefault(); clk.set(true); });
-        cvEl.addEventListener('pointermove', function (e) { if (held === 3) handPx = pointerX(local(e)); else if (held) aim(local(e)); });
-        function release() { if (!held) return; var cart = held === 3; held = 0; uh = 0; cvEl.style.cursor = 'grab'; nextCheck = tSim;
+            held = d2 <= d1 ? 2 : 1; cvEl.setPointerCapture(e.pointerId); setCursor(q); aim(q); e.preventDefault(); clk.set(true); });
+        function cursorAt(q) {   // the system's own cursors, which every computer draws clearly: ↔ on the cart, a hand on a rod, the arrow elsewhere
+            if (cvEl.parentNode.classList.contains('dp-reading')) return '';   // Read values: the data panel's crosshair
+            if (held === 3) return 'ew-resize'; if (held) return 'move'; if (!geo || !q) return 'default'; if (onCart(q)) return 'ew-resize';
+            return Math.min(segDist(q, [geo.hx, geo.hy], [geo.ex, geo.ey]), segDist(q, [geo.ex, geo.ey], [geo.tx, geo.ty])) <= 24 ? 'pointer' : 'default'; }
+        function setCursor(q) { var c = cursorAt(q); if (cvEl.style.cursor !== c) cvEl.style.cursor = c; }
+        cvEl.addEventListener('pointermove', function (e) { var q = local(e); if (held === 3) handPx = pointerX(q); else if (held) aim(q); setCursor(q); });
+        cvEl.addEventListener('pointerleave', function () { if (!held) setCursor(null); });
+        function release(e) { if (!held) return; var cart = held === 3; held = 0; uh = 0; setCursor(e && e.clientX !== undefined ? local(e) : null); nextCheck = tSim;
             if (!cart) return; tCtl = tSim;   // let go of the cart: the controller looks at once, from the state your hand left
             if (mode === 'balance') { if (rolling && Math.abs(s[3]) > 0.01) ref = { kind: 'cruise', x: s[0], v: s[3], t0: tSim, brake: true }; else ref = { kind: 'fixed', x: s[0] }; xref = s[0]; }   // a new rest where you let go, braked to as after a catch
             else { xc = s[0]; xref = s[0]; ref = { kind: 'fixed', x: xc }; abandon(); } }   // a plan was spoiled: calm again, here
@@ -1314,7 +1324,7 @@
             { title: 'The controller’s samples', note: 'one row each time the controller looks, every T_s while balancing and every 10 ms while calming or tracking', how: 'run', vars: ['cs_n', 'cs_last', 'cs_i', 'cs_t', 'cs_k', 'cs_due', 'cs_next', 'cs_s', 'cs_u', 'cs_mode', 'cs_rk', 'cs_rx', 'cs_rv', 'cs_rt0', 'cs_re0', 'cs_xc', 'cs_tp', 'cs_pl', 'cs_ver', 'cs_umax', 'cs_bite', 'cs_vb'] },
             { title: 'The physics steps', note: 'one row per 1 ms step of RK4, the last 4 to 8 s', how: 'solver', folded: true, vars: ['st_n', 'st_last', 'st_i', 'st_t', 'st_s0', 'st_s1', 'st_u', 'st_j', 'st_kind', 'st_jump', 'st_ver'] },
             { title: 'The trace', note: 'the lower figure: every 20 ms, the last 8 to 16 s', how: 'run', folded: true, vars: ['tr_n', 'tr_last', 'tr_t', 'tr_th1', 'tr_th2', 'tr_u'] },
-            { title: 'Drawing', note: 'how stored values become pixels', how: 'drawing', folded: true, vars: ['box_w', 'box_h', 'vy', 'sc', 'y0', 'cam_x', 'cart_px', 'cart_py', 'cart_w', 'cart_h', 'mid_px', 'mid_py', 'tip_px', 'tip_py', 'target_px', 'fps', 'frames'] }
+            { title: 'Drawing', note: 'how stored values become pixels', how: 'drawing', folded: true, vars: ['box_w', 'box_h', 'vy', 'sc', 'y0', 'cam_x', 'cart_px', 'cart_py', 'cart_w', 'cart_h', 'mid_px', 'mid_py', 'tip_px', 'tip_py', 'target_px', 'hand_px', 'fps', 'frames'] }
         ];
         var inp = function (n, d) { return [ds.vars[n].attrs.symbol, G2(n), ds.vars[n].attrs.units || '', d === undefined ? 6 : d]; };
         Sim.data = {
@@ -1369,6 +1379,7 @@
                         return { formula: _t('your hand on the cart: (29) gives the acceleration, row 1 of (9) the force'), inputs: [['x<sub>h,k</sub>', xh, 'm', 5], ['ẍ<sub>h</sub>', a, 'm/s²', 5]].concat(s0.map(function (v, k) { return [QN[k], v, QU[k], 6]; })), value: forceFor(machine(), s0, a) }; }
                     if (j < 0) return { formula: _t('your hand holds the rods: no force'), inputs: [], value: 0 };
                     return { formula: _t('the force of sample j(k), held'), inputs: [['j(k)', j, '']], value: q >= 0 ? G2('cs_u')[q] : undefined }; },
+                hand_px: function () { return { formula: ds.vars.hand_px.attrs.formula, inputs: [inp('box_w', 1), inp('hand_x', 6), inp('cam_x', 6), inp('sc', 4)], value: G2('held') === 3 ? G2('box_w') / 2 + (G2('hand_x') - G2('cam_x')) * G2('sc') : NaN }; },
                 cart_px: function () { return { formula: ds.vars.cart_px.attrs.formula, inputs: [inp('box_w', 1), inp('x', 6), inp('cam_x', 6), inp('sc', 4)], value: G2('box_w') / 2 + (G2('x') - G2('cam_x')) * G2('sc') }; },
                 cart_py: function () { return { formula: ds.vars.cart_py.attrs.formula, inputs: [inp('y0', 3), inp('cart_h', 3)], value: G2('y0') - G2('cart_h') + 4 }; },
                 cart_w: function () { return { formula: 'max(46, 0.36 σ)', inputs: [inp('sc', 4)], value: Math.max(46, 0.36 * G2('sc')) }; },

@@ -1,0 +1,83 @@
+== rest
+  d rest: stored px vs state→px (Node formulas): max |Δ| = 0 px
+  d rest: cart: cream from 405 to 465 px, centre 435 vs x→px 434.9 (Δ 0.05843 px, alpha at centre 255) PASS
+  d rest: hinge between the rods: white centroid (434.9, 186.3) of 37 px vs θ₁→px (434.9, 186.3) (Δ 0.04794 px) PASS
+  d rest: top of the upper rod at θ₂→px (434.9, 54.79): along the rod, fully burgundy to 3.75 px beyond it and transparent from 4.8 px, round cap radius 4.25 px; across the rod 6 px below the top the burgundy (7.95 px wide) is centred 0.125 px off the axis PASS
+  energy book: E0 7.661 + W_motor 0.003419 + E_ext 0 + E_wait 0 − E 7.664 = 5.36e-13 J, 3.49e-14 of the flows
+  b page's own rk4 on every stored step: 6317/6317 bit-identical (0 steps of an earlier machine not replayed) PASS
+  b independent RK4 (Cramer, from (8a), (8), (8b)) on every stored step: 6317 steps, max |Δs| = 5.55e-17, max |Δs| / |step change| = 5.38e-11 PASS (float64 rounding)
+  b step log continuity: 6316 joins exact, 0 broken, 0 gaps; outside changes by code {} (1 flick, 2 hand, 3 reset/new state, 4 wrap at hand-over, 9 unexplained) PASS
+  b chained independent replay from one stored state with the stored forces, 6317 steps (6.317 s): max |Δs| 0.1 s: 5.55e-17, 0.5 s: 1.72e-15, 1 s: 3.10e-13, 1.5 s: 5.61e-11, 2 s: 1.01e-8, 2.5 s: 1.82e-6, 3 s: 3.28e-4, 4 s: 3.275, 6 s: 13.9; growth rate of the gap between marks 10.4, 10.4, 10.4, 10.4, 10.4 1/s (open loop: the gap grows as fast as nearby motions part, at the fall rate σ₁ = 10.39 1/s near upright, slower while hanging or caught)
+  c force recomputed from each stored sample (state, reference, gains, limit, plan): 632 samples (balance 632, calm 0, track 0, off 0, cut 0), max |Δu| = 0 N, 0 unchecked PASS
+  c zero-order hold: 6317 RK4 steps hold exactly the force of the latest sample, 0 do not; 0 held steps with u = 0, 0 not PASS
+  c sample times: 631 intervals on the grid (steps per interval: {"10":631}), 0 off it, 0 restarts of the clock (reset, release, track start, hand-over), 0 samples away from their due time PASS
+  rest: 6317 steps (0.05–6.367 s), 632 samples → ALL PASS
+== drag
+  d while held: stored px vs state→px (Node formulas): max |Δ| = 0 px
+  d while held: cart: cream from 405 to 465 px, centre 435 vs x→px 435 (Δ 0.003379 px, alpha at centre 255) PASS
+  d while held: hinge between the rods: white centroid (436.3, 186.4) of 40 px vs θ₁→px (436.2, 186.3) (Δ 0.1343 px) PASS
+  d while held: top of the upper rod at θ₂→px (328.8, 110.5): along the rod, fully burgundy to 3.4 px beyond it and transparent from 4.65 px, round cap radius 4.25 px; across the rod 6 px below the top the burgundy (7.3 px wide) is centred -0.05 px off the axis PASS
+  e drag: rod held by the mouse = 2 (2 = upper)
+  energy book: E0 7.661 + W_motor -11.79 + E_ext -1.191 + E_wait 0 − E -5.32 = -1.11e-7 J, 4.27e-9 of the flows
+  b page's own rk4 on every stored step: 4999/4999 bit-identical (0 steps of an earlier machine not replayed) PASS
+  b independent RK4 (Cramer, from (8a), (8), (8b)) on every stored step: 4999 steps, max |Δs| = 1.78e-15, max |Δs| / |step change| = 1.63e-10 PASS (float64 rounding)
+  b step log continuity: 6438 joins exact, 0 broken, 0 gaps; outside changes by code {"2":10} (1 flick, 2 hand, 3 reset/new state, 4 wrap at hand-over, 9 unexplained) PASS
+  b chained independent replay from one stored state with the stored forces, 4899 steps (4.899 s): max |Δs| 0.1 s: 6.66e-16, 0.5 s: 7.11e-15, 1 s: 5.06e-14, 1.5 s: 1.76e-13, 2 s: 1.04e-13, 2.5 s: 1.18e-13, 3 s: 3.44e-13, 4 s: 4.64e-12; growth rate of the gap between marks 3.9, 2.5, -1.1, 0.3, 2.1, 2.6 1/s (open loop: the gap grows as fast as nearby motions part, at the fall rate σ₁ = 10.39 1/s near upright, slower while hanging or caught)
+  c force recomputed from each stored sample (state, reference, gains, limit, plan): 500 samples (balance 10, calm 490, track 0, off 0, cut 0), max |Δu| = 1.42e-14 N (law 1), 0 unchecked PASS
+  c zero-order hold: 4996 RK4 steps hold exactly the force of the latest sample, 0 do not; 1450 held steps with u = 0, 0 not PASS
+  c sample times: 498 intervals on the grid (steps per interval: {"10":498}), 0 off it, 1 restarts of the clock (reset, release, track start, hand-over), 0 samples away from their due time PASS
+  drag: 6449 steps (1.017–7.466 s), 500 samples → ALL PASS
+== cart
+  d cart in your hand: stored px vs state→px (Node formulas): max |Δ| = 0 px
+  d cart in your hand: cart: cream from 482 to 526 px, centre 504 vs x→px 503.8 (Δ 0.2485 px, alpha at centre 255) PASS
+  d cart in your hand: hinge between the rods: white centroid (481.5, 239.5) of 37 px vs θ₁→px (481.5, 239.6) (Δ 0.05823 px) PASS
+  d cart in your hand: top of the upper rod at θ₂→px (575.8, 265.3): along the rod, fully burgundy to 3.3 px beyond it and transparent from 4.4 px, round cap radius 4.25 px; across the rod 6 px below the top the burgundy (7.2 px wide) is centred -0.2 px off the axis PASS
+  e cart: held by the mouse = 3 (3 = cart), motor 0 N, hand 5.45 N, lower rod at -156.5° 0.6 s after the grab
+  energy book: E0 7.661 + W_motor -14.78 + E_ext 2.75 + E_wait 0 − E -4.368 = 1.57e-8 J, 5.32e-10 of the flows
+  b page's own rk4 on every stored step: 6016/6016 bit-identical (0 steps of an earlier machine not replayed) PASS
+  b independent RK4 (Cramer, from (8a), (8), (8b)) on every stored step: 6016 steps, max |Δs| = 1.78e-15, max |Δs| / |step change| = 3.14e-13 PASS (float64 rounding)
+  b step log continuity: 6015 joins exact, 0 broken, 0 gaps; outside changes by code {} (1 flick, 2 hand, 3 reset/new state, 4 wrap at hand-over, 9 unexplained) PASS
+  b chained independent replay from one stored state with the stored forces, 5083 steps (5.083 s): max |Δs| 0.1 s: 3.55e-15, 0.5 s: 1.78e-14, 1 s: 7.61e-14, 1.5 s: 1.81e-13, 2 s: 2.91e-13, 2.5 s: 5.34e-13, 3 s: 1.61e-12, 4 s: 9.05e-12; growth rate of the gap between marks 4.0, 2.9, 1.7, 0.9, 1.2, 2.2, 1.7 1/s (open loop: the gap grows as fast as nearby motions part, at the fall rate σ₁ = 10.39 1/s near upright, slower while hanging or caught)
+  c force recomputed from each stored sample (state, reference, gains, limit, plan): 516 samples (balance 7, calm 450, track 59, off 0, cut 0), max |Δu| = 1.42e-14 N (law 1), 0 unchecked PASS
+  c hand on the cart (29)-(30): 867 steps, force recomputed from each stored row, max |Δu| = 1.42e-14 N, 0 unchecked PASS
+  c zero-order hold: 5149 RK4 steps hold exactly the force of the latest sample, 0 do not; 0 held steps with u = 0, 0 not PASS
+  c sample times: 513 intervals on the grid (steps per interval: {"10":513}), 0 off it, 2 restarts of the clock (reset, release, track start, hand-over), 0 samples away from their due time PASS
+  cart: 6016 steps (1.1–7.116 s), 516 samples → ALL PASS
+== swingup
+  d swing-up, rods hanging: stored px vs state→px (Node formulas): max |Δ| = 0 px
+  d swing-up, rods hanging: cart: cream from 464 to 507 px, centre 485.5 vs x→px 485.6 (Δ -0.05262 px, alpha at centre 255) PASS
+  d swing-up, rods hanging: hinge between the rods: white centroid (464.1, 103.5) of 39 px vs θ₁→px (464.1, 103.4) (Δ 0.0973 px) PASS
+  d swing-up, rods hanging: top of the upper rod at θ₂→px (432.2, 17.62): along the rod, fully burgundy to 3.85 px beyond it and transparent from 4.95 px, round cap radius 4.25 px; across the rod 6 px below the top the burgundy (7.45 px wide) is centred 0.175 px off the axis PASS
+  e swing-up: mode balance at t = 12 s, W = 0.1249
+  d after the swing-up: stored px vs state→px (Node formulas): max |Δ| = 0 px
+  d after the swing-up: cart: cream from 409 to 469 px, centre 439 vs x→px 439.1 (Δ -0.1199 px, alpha at centre 255) PASS
+  d after the swing-up: hinge between the rods: white centroid (438.4, 185.3) of 40 px vs θ₁→px (438.4, 185.4) (Δ 0.05487 px) PASS
+  d after the swing-up: top of the upper rod at θ₂→px (437.4, 54.32): along the rod, fully burgundy to 4.3 px beyond it and transparent from 4.35 px, round cap radius 4.25 px; across the rod 6 px below the top the burgundy (6.95 px wide) is centred 0.125 px off the axis PASS
+  energy book: E0 -7.664 + W_motor 15.33 + E_ext 0 + E_wait 0 − E 7.67 = 8.00e-10 J, 2.61e-11 of the flows
+  b page's own rk4 on every stored step: 12000/12000 bit-identical (0 steps of an earlier machine not replayed) PASS
+  b independent RK4 (Cramer, from (8a), (8), (8b)) on every stored step: 12000 steps, max |Δs| = 8.88e-16, max |Δs| / |step change| = 0.102 PASS (float64 rounding)
+  b step log continuity: 11998 joins exact, 0 broken, 0 gaps; outside changes by code {"4":1} (1 flick, 2 hand, 3 reset/new state, 4 wrap at hand-over, 9 unexplained) PASS
+  b chained independent replay from one stored state with the stored forces, 6733 steps (6.733 s): max |Δs| 0.1 s: 1.85e-32, 0.5 s: 1.48e-31, 1 s: 1.48e-31, 1.5 s: 1.97e-31, 2 s: 7.10e-30, 2.5 s: 7.10e-30, 3 s: 7.89e-30, 4 s: 4.83e-15, 6 s: 1.74e-11; growth rate of the gap between marks 4.1 1/s (open loop: the gap grows as fast as nearby motions part, at the fall rate σ₁ = 10.39 1/s near upright, slower while hanging or caught)
+  c force recomputed from each stored sample (state, reference, gains, limit, plan): 1201 samples (balance 527, calm 300, track 374, off 0, cut 0), max |Δu| = 0 N, 0 unchecked PASS
+  c governor (27): 183 bites recomputed from their rows, max |ΔD| = 0 m/s; after every bite W ≤ 0.5 c* (allowed γ); 0 unchecked PASS
+  c zero-order hold: 12000 RK4 steps hold exactly the force of the latest sample, 0 do not; 0 held steps with u = 0, 0 not PASS
+  c sample times: 1198 intervals on the grid (steps per interval: {"10":1198}), 0 off it, 2 restarts of the clock (reset, release, track start, hand-over), 0 samples away from their due time PASS
+  swingup: 12000 steps (0–12 s), 1201 samples → ALL PASS
+== brake
+  e brake: braking from 1.24 m/s; reference fixed after about 4 s, cart speed 6 s later -2.18e-4 m/s, mode balance
+  d braked to rest: stored px vs state→px (Node formulas): max |Δ| = 0 px
+  d braked to rest: cart: cream from 405 to 465 px, centre 435 vs x→px 435.1 (Δ -0.05696 px, alpha at centre 255) PASS
+  d braked to rest: hinge between the rods: white centroid (435, 186.3) of 36 px vs θ₁→px (435, 186.3) (Δ 0.07482 px) PASS
+  d braked to rest: top of the upper rod at θ₂→px (435, 54.78): along the rod, fully burgundy to 3.75 px beyond it and transparent from 4.8 px, round cap radius 4.25 px; across the rod 6 px below the top the burgundy (7.95 px wide) is centred -0.025 px off the axis PASS
+  energy book: E0 -6.491 + W_motor 14.15 + E_ext 0 + E_wait 0 − E 7.664 = 1.04e-9 J, 3.67e-11 of the flows
+  b page's own rk4 on every stored step: 10000/10000 bit-identical (0 steps of an earlier machine not replayed) PASS
+  b independent RK4 (Cramer, from (8a), (8), (8b)) on every stored step: 10000 steps, max |Δs| = 2.22e-16, max |Δs| / |step change| = 1.04e-9 PASS (float64 rounding)
+  b step log continuity: 9999 joins exact, 0 broken, 0 gaps; outside changes by code {} (1 flick, 2 hand, 3 reset/new state, 4 wrap at hand-over, 9 unexplained) PASS
+  b chained independent replay from one stored state with the stored forces, 10000 steps (10 s): max |Δs| 0.1 s: 1.39e-17, 0.5 s: 3.05e-16, 1 s: 7.75e-14, 1.5 s: 1.40e-11, 2 s: 2.53e-9, 2.5 s: 4.58e-7, 3 s: 8.27e-5, 4 s: 2.014, 6 s: 14.26, 8 s: 29.32; growth rate of the gap between marks 10.4, 10.4, 10.4, 10.4 1/s (open loop: the gap grows as fast as nearby motions part, at the fall rate σ₁ = 10.39 1/s near upright, slower while hanging or caught)
+  c force recomputed from each stored sample (state, reference, gains, limit, plan): 1000 samples (balance 1000, calm 0, track 0, off 0, cut 0), max |Δu| = 0 N, 0 unchecked PASS
+  c governor (27): 201 bites recomputed from their rows, max |ΔD| = 0 m/s; after every bite W ≤ 0.5 c* (allowed γ); 0 unchecked PASS
+  c zero-order hold: 9995 RK4 steps hold exactly the force of the latest sample, 0 do not; 0 held steps with u = 0, 0 not PASS
+  c sample times: 999 intervals on the grid (steps per interval: {"10":999}), 0 off it, 0 restarts of the clock (reset, release, track start, hand-over), 0 samples away from their due time PASS
+  brake: 10000 steps (7–17 s), 1000 samples → ALL PASS
+summary: 5/5 scenarios pass: rest ✓, drag ✓, cart ✓, swingup ✓, brake ✓
+page errors: none
