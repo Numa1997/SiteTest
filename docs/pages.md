@@ -508,17 +508,17 @@ replace the PDF, re-render the two images (`pdftoppm -r 170 -png Numa_Koudsie_CV
 English only; it is not in the translation build.
 
 
-## The Lucretius band on the home page (5 November 2026)
+## Lucretius beside the name, and the smaller title (5 November 2026)
 
-Right under the hero, between `<!--LUCRETIUS-->` markers in `index.html`, a full-width band holds Lucretius, *On the Nature of Things*,
-Book I, lines 146–158 (Numa: "the very first quote… where he concludes that we will not attribute anything to gods… and adopt the
-principle that nothing comes from nothing"). The Latin is set as an inscription in Instrument Serif on a stone-coloured ground, line
-numbers in the margin; each of its four sentences (`p.lq-s`, `translate="no"`, `lang="la"`) shows, when the mouse rests on it (150 ms;
-70 ms from one sentence to the next; hidden 240 ms after leaving, so a sweep never flickers) or when it is tapped or focused, one card
-with that sentence in a published translation: Leonard (1916) on the English and Arabic pages, Diels (1924) on the German page; on
-wide screens the card stands beside the verse, otherwise above or below it; a click pins it, Esc or a second click closes it. Its
-style and script live inside the band. The text comes from `notes/lucretius/poem-146-224.json`, written into the page by
-`notes/lucretius/make_home.py`; sources and corrections are in `notes/lucretius/README.md`. A standalone page with the whole passage
-(146–224) was published earlier that day and removed at Numa's word; the rest of the passage is to be placed on other pages later.
-Tested on the built site (headless Chromium, 1440 × 900 and 390 × 844, English, German, Arabic): the hover and the tap show the right
-card, no errors, the page as wide as the window.
+Numa: the quote belongs in the first screen, next to the name; the name was too big ("narcissistic vibes") and the page should be
+called something like a notebook or a work and study archive. The hero now reads: the logo and the Phyein Usul note; the name as a
+small line (`p.hero__who`, IBM Plex Serif 600, 17–21 px); the title "Work and study archive." (`h1.hero__name`, 32–56 px, was the name
+at 52–124 px); the tag, contacts and buttons as before. The right column (`div.hero__side`) holds, between `<!--LUCRETIUS-->` markers,
+Lucretius I 146–158 as an inscription (Instrument Serif, a wine rule on its left, a one-line caption) above the live pendulum, whose
+stage is 4 : 3 there. Each of the four sentences (`p.lq-s`, `translate="no"`, `lang="la"`) shows, on a resting mouse (150 ms; 70 ms
+from one sentence to the next; hidden 240 ms after leaving), a tap or keyboard focus, one card with its published translation: Leonard
+(1916) on the English and Arabic pages (with a note that no free Arabic translation exists), Diels (1924) on the German page, with the
+source of the Latin under it; on desktop the card rises over the left column beside the verse, otherwise just below the sentence; a
+click pins it, Esc or a second click closes it. Written by `notes/lucretius/make_home.py` from `notes/lucretius/poem-146-224.json`.
+Measured on the built site: at 1366 × 768, 1440 × 900 and 1920 × 1080, in English, German and Arabic, the quote and the buttons are in
+the first screen, no errors, no sideways scroll; on a phone the quote follows the buttons.

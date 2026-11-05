@@ -139,14 +139,22 @@ ul {
 .hero__name {
   font-family: var(--serif);
   font-weight: 600;
-  font-size: clamp(52px, min(9vw, 12.4svh), 124px);
-  line-height: 0.94;
-  letter-spacing: -0.03em;
+  font-size: clamp(32px, min(4.2vw, 6.2svh), 56px);
+  line-height: 1;
+  letter-spacing: -0.02em;
   margin: 0 0 clamp(10px, 2.4svh, 22px);
   animation: rise 0.9s ease both;
 }
 .hero__name span {
   display: block;
+}
+/* the name, small, over the title (5 November 2026: the large name read as self-praise) */
+.hero__who {
+  margin: 0 0 6px;
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: clamp(17px, 1.6vw, 21px);
+  color: var(--ink-2);
 }
 .hero__name .dot {
   display: inline;
@@ -860,7 +868,7 @@ footer a {
 }
 @media (max-width: 480px) {
   .hero__name {
-    font-size: 56px;
+    font-size: 34px;
   }
   .skills > div {
     grid-template-columns: 1fr;
