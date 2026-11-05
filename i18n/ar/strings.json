@@ -2337,6 +2337,7 @@
  "where the run starts: 0 after Solve, where your hand let go after a drag": "موضع بداية الحلّ: 0 بعد «احسب»، والموضع الذي أفلتت فيه يدك الكتلة بعد السحب",
  "where the stroke came from": "مصدر الخط",
  "where your hand pulled the cart in this step; undefined unless you held the cart": "حيث سحبت يدك العربة في هذه الخطوة؛ غير معرَّف ما لم تكن تمسك العربة",
+ "where your hand pulls the cart, as drawn on the rail; undefined unless you hold the cart": "حيث تسحب يدك العربة، كما هي مرسومة على السكّة؛ غير معرَّف ما لم تمسك العربة",
  "where your hand pulls the cart: the pointer, on the rail; undefined unless you hold the cart": "حيث تسحب يدك العربة: المؤشّر، على السكّة؛ غير معرَّف ما لم تمسك العربة",
  "which law runs, the plan and when it starts": "أيّ قانون يعمل، والخطة ومتى تبدأ",
  "while your hand holds the block, this comes from the drag, not from the stored run": "ما دامت يدك تمسك الكتلة، تأتي هذه القيمة من السحب لا من الحلّ المخزَّن",
