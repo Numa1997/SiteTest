@@ -19,6 +19,15 @@
         .state { margin: 0; font-size: 13px; line-height: 1.5; color: var(--ink-2); }
         .state b { color: var(--accent); }
         .ctl__note { font-size: 12px; color: var(--ink-3); margin: 0; line-height: 1.45; }   /* what a control does, in one line under it */
+        /* the parameters under the figure, where a change is seen at once; long notes keep to two lines, the whole text on hover */
+        .pg { margin-top: 12px; padding: 10px 14px 12px; background: var(--card); border: 1px solid var(--rule); border-radius: 12px; display: flex; flex-direction: column; gap: 6px; }
+        .pg-h { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+        .pg-h .btn { padding: 4px 10px; font-size: 12.5px; }
+        .pg-g { display: grid; gap: 4px 18px; } .pg-g--5 { grid-template-columns: repeat(5, minmax(0, 1fr)); } .pg-g--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        .pg-c { min-width: 0; display: flex; flex-direction: column; gap: 2px; } .pg-c .ctl { font-size: 13px; gap: 0; }
+        .pg .ctl__note { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; font-size: 11.5px; line-height: 1.35; }
+        .pg .pg-n { display: block; -webkit-line-clamp: unset; }
+        @media (max-width: 900px) { .pg-g--5, .pg-g--3 { grid-template-columns: repeat(2, minmax(0, 1fr)); } .pg .ctl__note { -webkit-line-clamp: unset; display: block; } }
         .defs { margin: 0; font-size: 12px; line-height: 1.45; color: var(--ink-3); }
         .defs dt { font-family: var(--mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-top: 8px; }
         .defs dd { margin: 1px 0 0; }
@@ -56,7 +65,7 @@
         <div class="sim__grid">
             <div>
                 <figure class="stage">
-                    <div class="stage__canvas" id="stage" style="--ar: 16 / 6.5; --ar-m: 1 / 1.05;">
+                    <div class="stage__canvas" id="stage" style="--ar: 16 / 4.8; --ar-m: 1 / 1.05;">
                         <canvas id="cv" style="touch-action: pan-y;" aria-label="A cart on a rail with two rods standing on it, one hinged on the other; an arrow on the cart shows the motor force. Drag a rod to tilt it, release to let go."></canvas>
                     </div>
                     <figcaption class="stage__cap">
@@ -64,8 +73,39 @@
                         <span id="cap-t"><i>t</i> = —</span>
                     </figcaption>
                 </figure>
-                <figure class="stage" style="margin-top: 16px;">
-                    <div class="stage__canvas" id="stage-tr" style="--ar: 16 / 5; --ar-m: 16 / 9;">
+                <section class="pg" aria-label="Parameters">
+                    <div class="pg-h"><p class="panel__label">The machine · the controller is redesigned for every change</p><button type="button" class="btn btn--ghost" id="defaults">Bogdanov’s machine</button></div>
+                    <div class="pg-g pg-g--5"><div class="pg-c"><label class="ctl">
+                        <span class="ctl__row"><span>Cart mass <i>m</i><sub>0</sub></span><output id="m0-out" for="m0"></output></span>
+                        <input type="range" id="m0" min="0.3" max="6" step="0.1" value="1.5">
+                    </label></div><div class="pg-c"><label class="ctl">
+                        <span class="ctl__row"><span>Lower rod mass <i>m</i><sub>1</sub></span><output id="m1-out" for="m1"></output></span>
+                        <input type="range" id="m1" min="0.1" max="2" step="0.05" value="0.5">
+                    </label></div><div class="pg-c"><label class="ctl">
+                        <span class="ctl__row"><span>Upper rod mass <i>m</i><sub>2</sub></span><output id="m2-out" for="m2"></output></span>
+                        <input type="range" id="m2" min="0.1" max="2" step="0.05" value="0.75">
+                    </label></div><div class="pg-c"><label class="ctl">
+                        <span class="ctl__row"><span>Lower rod length <i>L</i><sub>1</sub></span><output id="L1-out" for="L1"></output></span>
+                        <input type="range" id="L1" min="0.2" max="1.5" step="0.05" value="0.5">
+                    </label></div><div class="pg-c"><label class="ctl">
+                        <span class="ctl__row"><span>Upper rod length <i>L</i><sub>2</sub></span><output id="L2-out" for="L2"></output></span>
+                        <input type="range" id="L2" min="0.2" max="1.5" step="0.05" value="0.75">
+                    </label></div></div>
+                    <p class="ctl__note pg-n">A cart of mass <i>m</i><sub>0</sub> on a rail. Each rod is a uniform bar of mass <i>m</i> and length <i>L</i>, free to turn about a hinge at its lower end: rod 1 on the cart, rod 2 on top of rod 1 (section 2).</p> <p class="ctl__note pg-n">Back to the machine of Bogdanov’s report [1]: 1.5, 0.5 and 0.75 kg, rods of 0.5 and 0.75 m, <i>ρ</i> = 1.</p>
+                    <div class="pg-h"><p class="panel__label">Controller · sets the motor force</p></div>
+                    <div class="pg-g pg-g--3"><div class="pg-c"><label class="ctl">
+                        <span class="ctl__row"><span>Motor force limit <i>u</i><sub>max</sub></span><output id="Fmax-out" for="Fmax"></output></span>
+                        <input type="range" id="Fmax" min="5" max="200" step="1" value="60">
+                    </label><p class="ctl__note">The largest force the motor can give, in newtons. A larger push is cut to this value.</p></div><div class="pg-c"><label class="ctl">
+                        <span class="ctl__row"><span>Loop period <i>T</i><sub>s</sub></span><output id="Ts-out" for="Ts"></output></span>
+                        <input type="range" id="Ts" min="1" max="80" step="1" value="10">
+                    </label><p class="ctl__note">How often the computer reads the angles and sets the motor, in milliseconds. In between, the force stays as it was set (7.2).</p></div><div class="pg-c"><label class="ctl">
+                        <span class="ctl__row"><span>Cost of force <i>ρ</i></span><output id="rho-out" for="rho"></output></span>
+                        <input type="range" id="rho" min="-2" max="2" step="0.1" value="0">
+                    </label><p class="ctl__note">The price of force in the controller’s cost (14), against the price of leaning and of being away from the target; the slider is logarithmic, from 0.01 to 100. Large <i>ρ</i>: gentle pushes, rods that wander further. Small <i>ρ</i>: hard pushes that reach the motor limit sooner.</p></div></div>
+                </section>
+                <figure class="stage" style="margin-top: 12px;">
+                    <div class="stage__canvas" id="stage-tr" style="--ar: 16 / 3.4; --ar-m: 16 / 9;">
                         <canvas id="tr" aria-label="The last eight seconds of the two rod angles and of the motor force."></canvas>
                     </div>
                     <figcaption class="stage__cap">
@@ -130,49 +170,8 @@
                         <button type="button" data-v="cont" aria-pressed="false">Continuous time</button>
                     </div>
                     <p class="ctl__note">The gains are the controller’s six numbers: how many newtons it pushes per unit of each error (per metre, radian, m/s, rad/s). <i>The loop period</i>: designed knowing that the computer looks only every <i>T</i><sub>s</sub> (7.5). <i>Continuous time</i>: designed as if it looked all the time (7), which fails for slow loops (8).</p>
-                    <label class="ctl">
-                        <span class="ctl__row"><span>Motor force limit <i>u</i><sub>max</sub></span><output id="Fmax-out" for="Fmax"></output></span>
-                        <input type="range" id="Fmax" min="5" max="200" step="1" value="60">
-                    </label>
-                    <p class="ctl__note">The largest force the motor can give, in newtons. A larger push is cut to this value.</p>
-                    <label class="ctl">
-                        <span class="ctl__row"><span>Loop period <i>T</i><sub>s</sub></span><output id="Ts-out" for="Ts"></output></span>
-                        <input type="range" id="Ts" min="1" max="80" step="1" value="10">
-                    </label>
-                    <p class="ctl__note">How often the computer reads the angles and sets the motor, in milliseconds. In between, the force stays as it was set (7.2).</p>
-                    <label class="ctl">
-                        <span class="ctl__row"><span>Cost of force <i>ρ</i></span><output id="rho-out" for="rho"></output></span>
-                        <input type="range" id="rho" min="-2" max="2" step="0.1" value="0">
-                    </label>
-                    <p class="ctl__note">The price of force in the controller’s cost (14), against the price of leaning and of being away from the target; the slider is logarithmic, from 0.01 to 100. Large <i>ρ</i>: gentle pushes, rods that wander further. Small <i>ρ</i>: hard pushes that reach the motor limit sooner.</p>
                 </div>
 
-                <div class="panel__group">
-                    <p class="panel__label">The machine · the controller is redesigned for every change</p>
-                    <p class="ctl__note">A cart of mass <i>m</i><sub>0</sub> on a rail. Each rod is a uniform bar of mass <i>m</i> and length <i>L</i>, free to turn about a hinge at its lower end: rod 1 on the cart, rod 2 on top of rod 1 (section 2).</p>
-                    <label class="ctl">
-                        <span class="ctl__row"><span>Cart mass <i>m</i><sub>0</sub></span><output id="m0-out" for="m0"></output></span>
-                        <input type="range" id="m0" min="0.3" max="6" step="0.1" value="1.5">
-                    </label>
-                    <label class="ctl">
-                        <span class="ctl__row"><span>Lower rod mass <i>m</i><sub>1</sub></span><output id="m1-out" for="m1"></output></span>
-                        <input type="range" id="m1" min="0.1" max="2" step="0.05" value="0.5">
-                    </label>
-                    <label class="ctl">
-                        <span class="ctl__row"><span>Upper rod mass <i>m</i><sub>2</sub></span><output id="m2-out" for="m2"></output></span>
-                        <input type="range" id="m2" min="0.1" max="2" step="0.05" value="0.75">
-                    </label>
-                    <label class="ctl">
-                        <span class="ctl__row"><span>Lower rod length <i>L</i><sub>1</sub></span><output id="L1-out" for="L1"></output></span>
-                        <input type="range" id="L1" min="0.2" max="1.5" step="0.05" value="0.5">
-                    </label>
-                    <label class="ctl">
-                        <span class="ctl__row"><span>Upper rod length <i>L</i><sub>2</sub></span><output id="L2-out" for="L2"></output></span>
-                        <input type="range" id="L2" min="0.2" max="1.5" step="0.05" value="0.75">
-                    </label>
-                    <div class="actions"><button type="button" class="btn btn--ghost" id="defaults">Bogdanov’s machine</button></div>
-                    <p class="ctl__note">Back to the machine of Bogdanov’s report [1]: 1.5, 0.5 and 0.75 kg, rods of 0.5 and 0.75 m, <i>ρ</i> = 1.</p>
-                </div>
 
                 <dl class="readouts">
                     <div><dt>Fall rates, controller off</dt><dd id="r-sig">—</dd></div>
@@ -1271,6 +1270,7 @@
             on = bt.getAttribute('data-v') === 'on'; Array.prototype.forEach.call(document.querySelectorAll('#ctrl button'), function (x) { x.setAttribute('aria-pressed', x === bt ? 'true' : 'false'); }); }); });
         document.getElementById('defaults').addEventListener('click', function () { sl.m0.set(1.5); sl.m1.set(0.5); sl.m2.set(0.75); sl.L1.set(0.5); sl.L2.set(0.75); sR.set(0); redesign(); reset(); });
         /* pull a rod out of balance and let go: while held the state stands still at rest; on release the controller takes over */
+        Array.prototype.forEach.call(document.querySelectorAll('.pg .ctl__note'), function (n) { n.title = n.textContent.replace(/\s+/g, ' ').trim(); });   // the whole note on hover where it is cut to two lines
         var cvEl = document.getElementById('cv');
         function local(e) { var r = cvEl.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; }
         function segDist(q, a, b) { var dx = b[0] - a[0], dy = b[1] - a[1], t = Math.max(0, Math.min(1, ((q[0] - a[0]) * dx + (q[1] - a[1]) * dy) / (dx * dx + dy * dy))); return Math.hypot(q[0] - a[0] - t * dx, q[1] - a[1] - t * dy); }
