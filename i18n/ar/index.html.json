@@ -15,6 +15,10 @@
   "src": "Testing",
   "tr": "الاختبار"
  },
+ "0822e88772cb": {
+  "src": "Hermann Diels, 1924",
+  "tr": "هيرمان ديلس، 1924"
+ },
  "0a4470d64e9d": {
   "src": "Skip to content",
   "tr": "انتقل إلى المحتوى"
@@ -343,6 +347,10 @@
   "src": "Mathematics",
   "tr": "الرياضيات"
  },
+ "79b2b02826a3": {
+  "src": "William Ellery Leonard, 1916",
+  "tr": "ويليام إليري ليونارد، 1916"
+ },
  "7a1b5cbf43eb": {
   "src": "Chaos theory",
   "tr": "نظرية الفوضى"
@@ -399,6 +407,10 @@
   "src": "Hosting",
   "tr": "الاستضافة"
  },
+ "886936386490": {
+  "src": "Lucretius · On the Nature of Things · Book I, lines 146–158",
+  "tr": "لوكريتيوس · في طبيعة الأشياء · الكتاب الأول، الأبيات 146–158"
+ },
  "89b043e519bd": {
   "src": "Also found",
   "tr": "وُجد أيضًا"
@@ -414,6 +426,10 @@
  "8adccc3872ec": {
   "src": "How this site is made",
   "tr": "كيف صُنع هذا الموقع"
+ },
+ "8b885888d603": {
+  "src": "Kept open · click again or press Esc to close",
+  "tr": "تبقى البطاقة مفتوحة · انقر مرة أخرى أو اضغط Esc لإغلاقها"
  },
  "8c45c40d1792": {
   "src": "Next simulations",
@@ -434,6 +450,10 @@
  "90f3e7e2bd5b": {
   "src": "Driven Oscillator",
   "tr": "المهتزّ القسري"
+ },
+ "91b95ccb9593": {
+  "src": "Rest the pointer on a line, or tap it, to read its sentence in a published translation.",
+  "tr": "ضع المؤشر فوق بيت، أو المسه، لتقرأ جملته في ترجمة منشورة."
  },
  "9233728e6188": {
   "src": "Real-time plotting",
@@ -607,6 +627,10 @@
   "src": "Fig. 9",
   "tr": "الشكل 9"
  },
+ "c6fd3870c86e": {
+  "src": "Lines",
+  "tr": "الأبيات"
+ },
  "c7080a85a336": {
   "src": "Huygens' principle",
   "tr": "مبدأ هويغنز"
@@ -675,6 +699,10 @@
   "src": "Skills",
   "tr": "المهارات"
  },
+ "e099fdc6d40a": {
+  "src": "Latin: <a href=\"https://www.thelatinlibrary.com/lucretius/lucretius1.shtml\">The Latin Library</a>, checked against Hermann Diels’ edition (Berlin, 1923). English: William Ellery Leonard (1916, <a href=\"https://www.gutenberg.org/ebooks/785\">Project Gutenberg</a>). German: Hermann Diels (1924). The manuscripts give line 155 after 158.",
+  "tr": "اللاتينية: <a href=\"https://www.thelatinlibrary.com/lucretius/lucretius1.shtml\">The Latin Library</a>، روجعت على طبعة هيرمان ديلس (برلين، 1923). الإنجليزية: ويليام إليري ليونارد (1916، <a href=\"https://www.gutenberg.org/ebooks/785\">مشروع غوتنبرغ</a>). الألمانية: هيرمان ديلس (1924). وتورد المخطوطات البيت 155 بعد البيت 158."
+ },
  "e1589bdf46b3": {
   "src": "Compare the two kinds of wave propagation side by side. Adjust amplitude, frequency, and wavelength to see how each property shapes the motion.",
   "tr": "قارن نوعي انتشار الأمواج جنبًا إلى جنب. اضبط السعة والتردّد وطول الموجة لترى كيف تشكّل كلُّ خاصّيةٍ الحركة."
@@ -734,6 +762,10 @@
  "ed9d90ec7f5e": {
   "src": "Skills &amp; languages",
   "tr": "المهارات واللغات"
+ },
+ "ee2f45b1b08b": {
+  "src": "No free Arabic translation of these lines exists; the card shows the English of Leonard.",
+  "tr": "لا توجد ترجمة عربية حرّة لهذه الأبيات؛ فالبطاقة تعرض نصّ ليونارد الإنجليزي."
  },
  "ef884025e8a4": {
   "src": "Fig. 11",

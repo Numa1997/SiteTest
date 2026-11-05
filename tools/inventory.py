@@ -142,7 +142,10 @@ RULES = [
     # pages
     (r'public/simulations\.html', 'The simulations catalog: one titled fold card per simulation, search and chips.', 'docs/pages.md'),
     (r'public/portfolios\.html', 'The Portfolios page: the two research projects.', 'docs/pages.md'),
-    (r'public/lucretius\.html', 'Lucretius, Book I 146-224 in Latin on a wall; a published translation of each sentence appears on hover or tap (Leonard, Diels).', 'docs/pages.md'),
+    (r'notes/lucretius/README\.md', 'Lucretius I 146-224 kept for the site: sources, corrections, what is where.', 'notes/lucretius/README.md'),
+    (r'notes/lucretius/poem-146-224\.json', 'Lucretius I 146-224 per Latin sentence: Latin, Leonard (English), Diels (German), cut from the sources.', 'notes/lucretius/README.md'),
+    (r'notes/lucretius/extract\.py', 'Cuts Lucretius I 146-224 out of the downloaded sources without retyping.', 'notes/lucretius/README.md'),
+    (r'notes/lucretius/make_home\.py', 'Writes the Lucretius band of the home page from the first four sentences.', 'notes/lucretius/README.md'),
     (r'public/robots\.txt', 'Instructions for search-engine crawlers.', 'docs/pages.md'),
     (r'public/cv/index\.html', 'The CV page (phyeinusul.com/cv/): both pages of the CV as images, with Open and Download PDF.', 'docs/pages.md'),
     (r'public/cv/Numa_Koudsie_CV\.pdf', 'The CV as a two-page PDF (German, then English), linked from the CV page.', 'docs/pages.md'),
