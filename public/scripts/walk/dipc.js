@@ -11,11 +11,11 @@ window.WALK.dipc = {
             title: 'The constants of the machine',
             where: 'par(): read from the sliders whenever one moves',
             math: '⟦d1|d<sub>1</sub>⟧ = m<sub>0</sub>+m<sub>1</sub>+m<sub>2</sub>, d<sub>2</sub> = (½m<sub>1</sub>+m<sub>2</sub>)L<sub>1</sub>, d<sub>3</sub> = ½m<sub>2</sub>L<sub>2</sub>,<br>d<sub>4</sub> = (⅓m<sub>1</sub>+m<sub>2</sub>)L<sub>1</sub>², d<sub>5</sub> = ½m<sub>2</sub>L<sub>1</sub>L<sub>2</sub>, d<sub>6</sub> = ⅓m<sub>2</sub>L<sub>2</sub>²<span style="font-style:normal;margin-left:1.5em">(6)</span><br>⟦f1|f<sub>1</sub>⟧ = (½m<sub>1</sub>+m<sub>2</sub>)L<sub>1</sub>g, f<sub>2</sub> = ½m<sub>2</sub>L<sub>2</sub>g<span style="font-style:normal;margin-left:1.5em">(7)</span>',
-            note: 'The masses m<sub>0</sub>, m<sub>1</sub>, m<sub>2</sub> in kg and the lengths L<sub>1</sub>, L<sub>2</sub> in m are read from their sliders, and the eight constants of the note are computed once, in the order of (6) and (7): the array d holds d<sub>1</sub> … d<sub>6</sub> (d[0] is d<sub>1</sub>, because arrays count from 0), in kg, kg m and kg m², and the array f holds f<sub>1</sub>, f<sub>2</sub> in N m. G is g = 9.81 m/s², fixed at the top of the script together with the Runge–Kutta step H = h = 1 ms and the weights Q of (14). Every other function reads only p.d and p.f, so a slider changes the physics everywhere at once.',
+            note: 'The masses m<sub>0</sub>, m<sub>1</sub>, m<sub>2</sub> in kg and the lengths L<sub>1</sub>, L<sub>2</sub> in m are read from their sliders, and the eight constants of the note are computed once, in the order of (6) and (7): the array d holds d<sub>1</sub> … d<sub>6</sub> (d[0] is d<sub>1</sub>, because arrays count from 0), in kg, kg m and kg m², and the array f holds f<sub>1</sub>, f<sub>2</sub> in N m. G is g = 9.81 m/s², fixed at the top of the script together with the Runge–Kutta step H = h = 1 ms and the weights Q of (14). Every other function reads only p.d and p.f, so a slider changes the physics everywhere at once. With a medium (section 13), par also builds p.fl, the medium’s density and viscosity and the drag constants of (33)–(34), and takes the buoyancy (37) off f: the rods weigh less in water.',
             code: `var TH = Sim.theme, G = 9.81, H = 0.001, Q = [50, 50, 50, 20, 700, 700];
 ...
-function par() { var m0 = sl.m0.value, m1 = sl.m1.value, m2 = sl.m2.value, L1 = sl.L1.value, L2 = sl.L2.value;
-return { m0: m0, m1: m1, m2: m2, L1: L1, L2: L2, ⟦d1|d: [m0 + m1 + m2⟧, (m1 / 2 + m2) * L1, m2 * L2 / 2, (m1 / 3 + m2) * L1 * L1, m2 * L1 * L2 / 2, m2 * L2 * L2 / 3], ⟦f1|f: [(m1 / 2 + m2) * L1 * G⟧, m2 * L2 * G / 2] }; }`,
+function par() { var m0 = sl.m0.value, m1 = sl.m1.value, m2 = sl.m2.value, L1 = sl.L1.value, L2 = sl.L2.value, fl = fluidPar(L1, L2), bA = fl ? fl.rho * Math.PI * ROD_R * ROD_R * G : 0;
+return { m0: m0, m1: m1, m2: m2, L1: L1, L2: L2, ⟦d1|d: [m0 + m1 + m2⟧, (m1 / 2 + m2) * L1, m2 * L2 / 2, (m1 / 3 + m2) * L1 * L1, m2 * L1 * L2 / 2, m2 * L2 * L2 / 3], ⟦f1|f: [(m1 / 2 + m2) * L1 * G⟧ - bA * (L1 * L1 / 2 + L1 * L2), m2 * L2 * G / 2 - bA * L2 * L2 / 2], fl: fl }; }`,
             syms: [['d1', 'd<sub>1</sub>', 'p.d[0]', 'everything that moves with the cart, kg'], ['f1', 'f<sub>1</sub>', 'p.f[0]', 'gravity’s torque factor of the lower rod, N m']]
         },
         {
@@ -28,25 +28,27 @@ return { m0: m0, m1: m1, m2: m2, L1: L1, L2: L2, ⟦d1|d: [m0 + m1 + m2⟧, (m1 
         },
         {
             title: 'The equations of motion',
-            where: 'rhs(p, s, u): the right-hand side ṡ = f(s, u)',
+            where: 'rhs(p, s, u, t): the right-hand side ṡ = f(s, u, t)',
             math: 'D(θ) ⟦acc|θ̈⟧ = H ⟦u|u⟧ − C(θ, θ̇) θ̇ − G(θ)<span style="font-style:normal;margin-left:1.5em">(9)</span><br>C θ̇ = (−d<sub>2</sub> sin θ<sub>1</sub> θ̇<sub>1</sub>² − d<sub>3</sub> sin θ<sub>2</sub> θ̇<sub>2</sub>², d<sub>5</sub> sin(θ<sub>1</sub>−θ<sub>2</sub>) θ̇<sub>2</sub>², −d<sub>5</sub> sin(θ<sub>1</sub>−θ<sub>2</sub>) θ̇<sub>1</sub>²)<br>G = (0, −f<sub>1</sub> sin θ<sub>1</sub>, −f<sub>2</sub> sin θ<sub>2</sub>)',
-            note: 'The state s holds six numbers: s[0] = x in m, s[1] = θ<sub>1</sub> and s[2] = θ<sub>2</sub> in rad, and their rates s[3] = ẋ in m/s, s[4] = θ̇<sub>1</sub> and s[5] = θ̇<sub>2</sub> in rad/s. rhs returns how fast each of them changes. The page never forms the matrix C: it multiplies it by θ̇ on paper first (the second line of the formula, which is (8a), (8) and (8b) read off) and computes the three products directly as Cq, in N. Gv is the gravity vector G in N m. solve3 then solves the 3 × 3 linear system D θ̈ = Hu − Cθ̇ − G for the accelerations q = (ẍ, θ̈<sub>1</sub>, θ̈<sub>2</sub>) by Gaussian elimination with pivoting, which is cheaper and more accurate than forming D<sup>−1</sup>. The force u enters only the first row, because H = (1, 0, 0): the motor pushes the cart and nothing else.',
-            code: `function rhs(p, s, u) { var a = s[1], b = s[2], ad = s[4], bd = s[5], d = p.d, sab = Math.sin(a - b);
+            note: 'The state s holds six numbers: s[0] = x in m, s[1] = θ<sub>1</sub> and s[2] = θ<sub>2</sub> in rad, and their rates s[3] = ẋ in m/s, s[4] = θ̇<sub>1</sub> and s[5] = θ̇<sub>2</sub> in rad/s. rhs returns how fast each of them changes. The page never forms the matrix C: it multiplies it by θ̇ on paper first (the second line of the formula, which is (8a), (8) and (8b) read off) and computes the three products directly as Cq, in N. Gv is the gravity vector G in N m. solve3 then solves the 3 × 3 linear system D θ̈ = Hu − Cθ̇ − G for the accelerations q = (ẍ, θ̈<sub>1</sub>, θ̈<sub>2</sub>) by Gaussian elimination with pivoting, which is cheaper and more accurate than forming D<sup>−1</sup>. The force u enters only the first row, because H = (1, 0, 0): the motor pushes the cart and nothing else. With a medium, fluidQ adds the fluid’s generalised forces Q of (35), in N and N m, to the right-hand side; the extra argument t is the time, because a flow can change from moment to moment.',
+            code: `function rhs(p, s, u, t) { var a = s[1], b = s[2], ad = s[4], bd = s[5], d = p.d, sab = Math.sin(a - b), Qf = p.fl ? fluidQ(p, s, t) : null;
 var Cq = [-d[1] * Math.sin(a) * ad * ad - d[2] * Math.sin(b) * bd * bd, d[4] * sab * bd * bd, -d[4] * sab * ad * ad];   // C θ̇, row by row
 var Gv = [0, -p.f[0] * Math.sin(a), -p.f[1] * Math.sin(b)];
-var ⟦acc|q = solve3(Dm(p, a, b), [u - Cq[0] - Gv[0], -Cq[1] - Gv[1], -Cq[2] - Gv[2]])⟧;
-return [s[3], s[4], s[5], q[0], q[1], q[2]]; }`,
+if (Qf) { Gv[0] -= Qf[0]; Gv[1] -= Qf[1]; Gv[2] -= Qf[2]; }   // (35): the fluid's Q on the right of (9), moved to the left with G
+var ⟦acc|q = solve3(Dm(p, a, b), [u - Cq[0] - Gv[0], -Cq[1] - Gv[1], -Cq[2] - Gv[2]])⟧, k = [s[3], s[4], s[5], q[0], q[1], q[2]]; k.P = Qf ? Qf[3] : 0;
+return k; }`,
             syms: [['acc', 'θ̈', 'q', 'accelerations (ẍ, θ̈₁, θ̈₂), m/s² and rad/s²'], ['u', 'u', 'u', 'motor force on the cart, N']]
         },
         {
             title: 'One Runge–Kutta step',
-            where: 'rk4(p, s, u, h), called from step() every 1 ms of simulated time',
+            where: 'rk4(p, s, u, h, t), called from step() every 1 ms of simulated time',
             math: 'k<sub>1</sub> = f(s<sub>n</sub>), k<sub>2</sub> = f(s<sub>n</sub> + ½h k<sub>1</sub>), k<sub>3</sub> = f(s<sub>n</sub> + ½h k<sub>2</sub>), k<sub>4</sub> = f(s<sub>n</sub> + h k<sub>3</sub>)<br>s<sub>n+1</sub> = s<sub>n</sub> + ⟦h|h⟧/6 (k<sub>1</sub> + 2k<sub>2</sub> + 2k<sub>3</sub> + k<sub>4</sub>)<span style="font-style:normal;margin-left:1.5em">(18)</span>',
-            note: 'rk4 evaluates the slope of step 3 four times, at the start of the step, twice at its middle and at its end, and advances the state by their weighted mean. add(s, k, h) is the state s moved along the slope k for a time h. The force u is the same in all four evaluations, because the sampled controller holds it constant between its samples. The screen asks for a new picture about 60 times a second; step() runs as many 1 ms steps as real time has passed since the last picture (acc collects the time), so the simulation keeps real time whatever the frame rate.',
-            code: `function rk4(p, s, u, h) { var k1 = rhs(p, s, u), k2 = rhs(p, add(s, k1, h / 2), u), k3 = rhs(p, add(s, k2, h / 2), u), k4 = rhs(p, add(s, k3, h), u);
+            note: 'rk4 evaluates the slope of step 3 four times, at the start of the step, twice at its middle and at its end, and advances the state by their weighted mean. add(s, k, h) is the state s moved along the slope k for a time h. The force u is the same in all four evaluations, because the sampled controller holds it constant between its samples. The screen asks for a new picture about 60 times a second; step() runs as many 1 ms steps as real time has passed since the last picture (acc collects the time), so the simulation keeps real time whatever the frame rate. The time t goes along, so that a changing flow is taken at the start, the middle and the end of the step; rk4.W is the fluid’s work in the step, summed with the same weights as the state, for the energy book.',
+            code: `function rk4(p, s, u, h, t) { var k1 = rhs(p, s, u, t), k2 = rhs(p, add(s, k1, h / 2), u, t + h / 2), k3 = rhs(p, add(s, k2, h / 2), u, t + h / 2), k4 = rhs(p, add(s, k3, h), u, t + h);
+rk4.W = h / 6 * (k1.P + 2 * k2.P + 2 * k3.P + k4.P);   // the fluid's work in the step, (36), with the weights RK4 gives the state
 return s.map(function (v, i) { return v + h / 6 * (k1[i] + 2 * k2[i] + 2 * k3[i] + k4[i]); }); }
 ...
-s = rk4(p, s, u, H); tSim += H;`,
+s = rk4(p, s, u, H, tSim); Wfl += rk4.W; tSim += H;`,
             syms: [['h', 'h', 'H', 'Runge–Kutta step, s']]
         },
         {
@@ -126,7 +128,7 @@ function lqrU(st, t) { var e = err(st, t), v = 0; for (var i = 0; i < 6; i++) v 
 ...
 supervise();
 if (tSim >= tCtl - 1e-9) { ⟦u|u = control()⟧; tCtl += period(); }
-s = rk4(p, s, u, H); tSim += H;`,
+s = rk4(p, s, u, H, tSim); Wfl += rk4.W; tSim += H;`,
             syms: [['u', 'u', 'u', 'motor force now, N'], ['Ts', 'T<sub>s</sub>', 'Ts', 'loop period, s']]
         },
         {
