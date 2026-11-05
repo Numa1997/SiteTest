@@ -186,6 +186,13 @@ with the rods up (scale 219 px/m at 1440 wide, from 305) and 6.6 m with the rods
 unchanged. Tests: `notes/fig11/panel/cursor.cjs` (cursor over empty space, cart, rod, while held and after; hand mark; fit at four screen
 sizes), `hon.cjs rest drag cart swingup brake` and `origin.cjs` at the new shape, all pass (`view-*.txt`).
 
+**Gauges (5 November 2026, evening).** Numa: the figure was a large empty frame around a small cart. The empty upper right now holds two
+live gauges drawn by `gauges()` from the store: the remaining cost against the certified level, W / c*, a bar full at c* with marks at
+γ (the braking share), 0.9 (the hand-over level) and 1, dark when W ≥ c* (outside the certificate; the supervisor's model then decides),
+and "—" unless balancing, when W is not the quantity that matters; and the motor's |u| / u_max with the force in newtons. Stored as
+`gauge_w`, `gauge_u`, `gauge_x` in the drawing section, each checked from its inputs. Tests: `hon.cjs rest flick cart` and `origin.cjs` pass
+with the gauges (`notes/fig11/panel/gauges-*.txt`).
+
 ## Interaction
 
 Flick the top (horizontal impulse `J` at the upper tip: `Δθ̇ = D⁻¹ (1, L1 cos θ1, L2 cos θ2)ᵀ J`), cart target −1/0/+1 m, Tilt and let go
@@ -196,9 +203,9 @@ phone still scrolls), grab the cart and drag it (since 5 November 2026; see belo
 
 At Numa's request the page carries the site's data panel, like the eleven figures: the store `Sim.dataset()` (`scripts/dataset.js`),
 the bookkeeper `scripts/datalog.js` with `styles/data.css`, and a ledger declared inside the page's own `Sim.data`
-([double-inverted-pendulum.html:1305](../../public/simulations/double-inverted-pendulum.html#L1305), ledger at
-[:1438](../../public/simulations/double-inverted-pendulum.html#L1438)). The store is declared from
-[:859](../../public/simulations/double-inverted-pendulum.html#L859); 137 variables in 11 sections.
+([double-inverted-pendulum.html:1321](../../public/simulations/double-inverted-pendulum.html#L1321), ledger at
+[:1457](../../public/simulations/double-inverted-pendulum.html#L1457)). The store is declared from
+[:859](../../public/simulations/double-inverted-pendulum.html#L859); 140 variables in 11 sections.
 
 **The picture.** The page integrates live while a controller looks only every loop period, so it runs on three clocks: the 1 ms
 physics step, the controller's sample, and the frame. The store keeps a record of each, the way a lab keeps a fast data logger,
@@ -206,23 +213,23 @@ a log book of every command sent to the motor, and a photograph per frame:
 
 | Rate | What is stored | Written in |
 |---|---|---|
-| every 1 ms step | step number, time, state before and after (`st_s0`, `st_s1`), force held (`st_u`), the sample whose force it holds (`st_j`), kind (0 RK4 with the motor, 1 a rod held by the hand, 2 RK4 with the hand on the cart), where the hand pulled the cart (`st_xh`, NaN otherwise), an outside change before the step (`st_jump`: 1 flick, 2 hand, 3 reset or new state, 4 wrap of the angles at hand-over, 9 unexplained), design number | `logStep()` [:1150](../../public/simulations/double-inverted-pendulum.html#L1150), called on the line after `s = rk4(p, s, u, H); tSim += H;` |
-| every controller sample (every T_s while balancing, every 10 ms while calming or tracking) | sample number, time, step number, due time, next due time, the state seen (`cs_s`), the force chosen (`cs_u`), the law (0 balance, 1 calm, 2 track, 3 off, 4 motor cut by the supervisor outside a sample), the reference's numbers (kind, place or target, speed, start time, glide's starting distance), the governor's bite and the speed before it (`cs_bite`, `cs_vb`, NaN without a bite), centre of calming, plan start, plan number, force limit, design number | `logSample()` [:1141](../../public/simulations/double-inverted-pendulum.html#L1141), from `logStep()` when `tCtl` moved in the step |
-| every frame | state, wrapped angles, accelerations from `rhs()`, force, law, reference now (`x_r`, `v_r`, `ref_p`), W, W_red, E_p, the energy book, the supervisor's state, the settings | `diagnostics()` [:1166](../../public/simulations/double-inverted-pendulum.html#L1166), between `think()` and `draw()` |
-| every frame, by the drawing | scale, axle line, camera, view widening, cart, hinge and tip positions in css px | `draw()` [:1183](../../public/simulations/double-inverted-pendulum.html#L1183) |
-| on change | d, f, fall rates, K, P, Φ, Γ, R_d, \|λ\|, settling time, design number (`redesign()`); c*, 0.9 c*, busy flag, ε = √(γc*/P₄₄) (`recatch()`, `think()`); γ at start; the plan the tracker follows, as the very arrays `trackU()` reads (`planStore()` [:1163](../../public/simulations/double-inverted-pendulum.html#L1163)) | |
+| every 1 ms step | step number, time, state before and after (`st_s0`, `st_s1`), force held (`st_u`), the sample whose force it holds (`st_j`), kind (0 RK4 with the motor, 1 a rod held by the hand, 2 RK4 with the hand on the cart), where the hand pulled the cart (`st_xh`, NaN otherwise), an outside change before the step (`st_jump`: 1 flick, 2 hand, 3 reset or new state, 4 wrap of the angles at hand-over, 9 unexplained), design number | `logStep()` [:1153](../../public/simulations/double-inverted-pendulum.html#L1153), called on the line after `s = rk4(p, s, u, H); tSim += H;` |
+| every controller sample (every T_s while balancing, every 10 ms while calming or tracking) | sample number, time, step number, due time, next due time, the state seen (`cs_s`), the force chosen (`cs_u`), the law (0 balance, 1 calm, 2 track, 3 off, 4 motor cut by the supervisor outside a sample), the reference's numbers (kind, place or target, speed, start time, glide's starting distance), the governor's bite and the speed before it (`cs_bite`, `cs_vb`, NaN without a bite), centre of calming, plan start, plan number, force limit, design number | `logSample()` [:1144](../../public/simulations/double-inverted-pendulum.html#L1144), from `logStep()` when `tCtl` moved in the step |
+| every frame | state, wrapped angles, accelerations from `rhs()`, force, law, reference now (`x_r`, `v_r`, `ref_p`), W, W_red, E_p, the energy book, the supervisor's state, the settings | `diagnostics()` [:1169](../../public/simulations/double-inverted-pendulum.html#L1169), between `think()` and `draw()` |
+| every frame, by the drawing | scale, axle line, camera, view widening, cart, hinge and tip positions in css px | `draw()` [:1186](../../public/simulations/double-inverted-pendulum.html#L1186) |
+| on change | d, f, fall rates, K, P, Φ, Γ, R_d, \|λ\|, settling time, design number (`redesign()`); c*, 0.9 c*, busy flag, ε = √(γc*/P₄₄) (`recatch()`, `think()`); γ at start; the plan the tracker follows, as the very arrays `trackU()` reads (`planStore()` [:1166](../../public/simulations/double-inverted-pendulum.html#L1166)) | |
 | every 20 ms | the trace of the lower figure (`tr_t`, `tr_th1`, `tr_th2`, `tr_u`) | `logStep()` |
 
 The logs hold 8192 rows (800 for the trace); a full log keeps its newer half (`copyWithin`), so it always holds the last 4 to 8 s
 (trace 8 to 16 s). Row counts are written with the rows (they were first written once per frame, and the driven test caught the stale
 count after a log dropped its half). The walkthrough quotes the three lines of the control loop as one block, so nothing was put
 between them: the state, time, due time and force are taken before `supervise()`
-([:1124](../../public/simulations/double-inverted-pendulum.html#L1124)), the due time of a sample is recorded inside `period()`
-(JavaScript reads `tCtl` before it calls `period()` in `tCtl += period()`, [:1089](../../public/simulations/double-inverted-pendulum.html#L1089)),
-and the step and sample are written after the integrator ([:1128](../../public/simulations/double-inverted-pendulum.html#L1128)).
+([:1127](../../public/simulations/double-inverted-pendulum.html#L1127)), the due time of a sample is recorded inside `period()`
+(JavaScript reads `tCtl` before it calls `period()` in `tCtl += period()`, [:1092](../../public/simulations/double-inverted-pendulum.html#L1092)),
+and the step and sample are written after the integrator ([:1131](../../public/simulations/double-inverted-pendulum.html#L1131)).
 
 **The energy book.** The force is constant over a step, so its work in that step is exactly u (x_after − x_before). The book reads
-E₀ + W_motor + E_ext + E_wait = E, with E = ½ θ̇ᵀDθ̇ + f₁ cos θ₁ + f₂ cos θ₂ (`energy()`, [:1137](../../public/simulations/double-inverted-pendulum.html#L1137)); E_ext
+E₀ + W_motor + E_ext + E_wait = E, with E = ½ θ̇ᵀDθ̇ + f₁ cos θ₁ + f₂ cos θ₂ (`energy()`, [:1140](../../public/simulations/double-inverted-pendulum.html#L1140)); E_ext
 adds the energy of every flick, hand step and wrap; E_wait is an outside change made while the clock stands still, booked by the
 next step. The book opens again at a reset and at every change of the machine (until the next step it shows no numbers). Measured:
 it misses by 3.5 × 10⁻¹⁴ of the flows at rest and up to 4 × 10⁻⁹ after a drag and a fall (RK4's own error); the ledger's tolerance is 10⁻⁷.
@@ -233,7 +240,7 @@ and the drawing read the page's own state. Headline: θ₁, θ₂, x, u, W, E. R
 top of the upper rod or the target. One round is ten seconds of simulated motion (`t`), columns x, θ₁, θ₂, u, W, E and the book's
 miss. Checks recompute every derived value from stored inputs (gains, P, Φ, Γ, R_d by designing again; |λ| from the stored Φ, Γ, K;
 W, W_red, E_p, E, x_r, v_r, the accelerations, the drawing's positions; a stored step by one RK4 step from the state before it;
-a stored force by the law of its row, `lawAt()` [:1301](../../public/simulations/double-inverted-pendulum.html#L1301)). Read-backs: the
+a stored force by the law of its row, `lawAt()` [:1317](../../public/simulations/double-inverted-pendulum.html#L1317)). Read-backs: the
 cart's cream body inside both edges and not outside, the white hinge disc, the burgundy top of the upper rod, the force arrow, the
 target. What differs between store and picture is in the `about` paragraph: one state per frame of about 17 steps, the camera that
 follows at 8 % per frame, the view that widens when the rods hang, thicker rods for heavier masses, clipped arrow and trace.

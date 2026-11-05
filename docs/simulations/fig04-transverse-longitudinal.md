@@ -123,7 +123,7 @@ derived scalars ([page:802–814](../../public/simulations/Transverse%20and%20lo
 **Precomputation and caching.** None. Measured in Chromium: the canvas is 770 × 481 CSS px in a 1440 × 900 window ($s$ =
 1.134375) and 356 × 374 in a 390 px wide window ($s$ = 0.4875), as Section 8 of the note says
 ([page:694](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L694)). The aspect ratios come from
-`--ar: 16 / 10` and, below 900 px, `--ar-m: 1 / 1.05` ([page:45](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L45),
+`--ar: 16 / 8` (16 / 10 until 5 November 2026, with an empty band under the longitudinal row) and, below 900 px, `--ar-m: 1 / 1.05` ([page:45](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L45),
 [sim.css:68](../../public/styles/sim.css#L68), [sim.css:215](../../public/styles/sim.css#L215)).
 
 ## Function map
@@ -392,3 +392,7 @@ as before this change.
 A curve now puts its exact value on the slider instead of the nearest step, so the thumb glides and the page follows p(u)
 itself; a hand on the slider puts it back on its steps ([curve.md](../scripts/curve.md), "Exact values on the slider"). On this page: the `about` sentence ([L1077](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L1077)); Particles keeps whole steps (`steps: true`, [L798](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L798)), since it is a
 count; the labels of A and λ round to 1 px and 0.1 px ([L795](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L795), [L797](../../public/simulations/Transverse%20and%20longitudinal%20waves.html#L797)).
+
+## Figure size (5 November 2026)
+
+At Numa's request ("the screen is too big") the figures of every simulation were measured at 1440 × 900: the box of each figure, and how much of a 16 × 10 grid laid over it holds anything drawn. Square drawings stretched over the 1030 px column and figures with an empty band were made shorter: this figure went from 16 : 10 (1030 × 644 px) to 16 : 8 (1030 × 515 px), removing the empty band under the longitudinal row. The drawing scales to the new height by its own fitting rule, so nothing else changed; the page loads without errors, maths errors or sideways scroll in English, German and Arabic at 1440 and 390 px.

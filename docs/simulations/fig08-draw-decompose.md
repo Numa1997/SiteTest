@@ -379,3 +379,7 @@ sideways scroll. The walkthrough check finds all 70 quoted lines.
 A curve now puts its exact value on the slider instead of the nearest step, so the thumb glides and the page follows p(u)
 itself; a hand on the slider puts it back on its steps ([curve.md](../scripts/curve.md), "Exact values on the slider"). On this page K keeps whole circles (`steps: true`, [L726](../../public/simulations/draw-decompose.html#L726)); the time per loop moves exactly and its label rounds to
 0.1 s ([L724](../../public/simulations/draw-decompose.html#L724)); the `about` sentence ([L1404](../../public/simulations/draw-decompose.html#L1404)).
+
+## Figure size (5 November 2026)
+
+At Numa's request ("the screen is too big") the figures of every simulation were measured at 1440 × 900: the box of each figure, and how much of a 16 × 10 grid laid over it holds anything drawn. Square drawings stretched over the 1030 px column and figures with an empty band were made shorter: this figure went from 1 : 0.78 (1030 × 803 px) to 16 : 10 (1030 × 644 px); below 900 px it stays square. The drawing scales to the new height by its own fitting rule, so nothing else changed; the page loads without errors, maths errors or sideways scroll in English, German and Arabic at 1440 and 390 px.

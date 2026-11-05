@@ -8,6 +8,7 @@ Four files make the frame around the eleven simulation pages:
 | [`public/simulations.html`](../public/simulations.html) | `/simulations.html` | 212 | The catalog: one fold card per simulation, no search and no chips since 3 November 2026. |
 | [`public/portfolios.html`](../public/portfolios.html) | `/portfolios.html` | 472 | The Projects page (address `portfolios.html`, kept so old links work): the Bachelor thesis and four studies, and the links into their pages. |
 | [`public/robots.txt`](../public/robots.txt) | `/robots.txt` | 4 | Rules for search-engine crawlers. |
+| [`public/lucretius.html`](../public/lucretius.html) | `/lucretius.html` | 174 | Lucretius, *On the Nature of Things*, Book I 146–224, in Latin; each sentence's published translation appears on hover or tap (since 5 November 2026; section 5). |
 
 The build copies everything under `public/` to the site root, so a page under `public/` links to `styles/…` and
 `scripts/…` without a `public/` prefix (see [build-and-deploy.md](build-and-deploy.md)). The same folder also holds
@@ -506,3 +507,35 @@ phyeinusul.com (20 October 2026). To keep a path out of search engines, add a `D
 any phone, and offers the PDF itself, `Numa_Koudsie_CV.pdf`, to open or download. The top bar of the home page index, the simulations catalog and the Portfolios page links to it (German "Lebenslauf", Arabic "السيرة الذاتية"); simulation pages keep their figure bar only. To update the CV:
 replace the PDF, re-render the two images (`pdftoppm -r 170 -png Numa_Koudsie_CV.pdf p`, then save each as WebP), build and deploy.
 English only; it is not in the translation build.
+
+## 5. `public/lucretius.html` · Lucretius, Book I 146–224
+
+Added 5 November 2026 at Numa's request: "the original in Latin shall be there on the wall; when hovering above it a translation shall
+appear, a dynamic and smooth popup, depending on the language", from the original Latin and the best published translations on the
+web, not a translation of ours and not DeepL's. Not linked from another page yet (where it belongs is Numa's decision); it is served
+at `/lucretius.html` and, after `tools/redirects.py`, at `/lucretius`.
+
+**The text.** The Latin of lines 146–224 is The Latin Library's text of Book I, in the manuscripts' order (155 after 158), checked at
+lines 149, 155–158 and 218 against Diels' edition (vol. 1, Berlin 1923, scan on archive.org). English: William Ellery Leonard's
+metrical translation (1916, Project Gutenberg eBook 785, public domain). German: Hermann Diels, *Lukrez: Von der Natur* (1924, ed.
+Mewaldt), line for line, from textlog.de, compared with the excerpt in Falter (Heureka 4/2013); two slips of the online copy corrected
+("wild" for "wird", line 156; a line break one word late, line 147), line 173 left as printed online and flagged. Arabic: the only
+published translation found (المركز القومي للترجمة, Cairo 2018) is under copyright, so the Arabic page shows Leonard's English with a
+note. The page names all of this under "The text and the translations". The poem is cut from the downloaded sources by a script and
+never retyped; the version Numa first had (from Gemini) misquoted lines 149 and 218, attributed to Leonard an English text that is not his, and left out lines 192–214.
+
+**The wall.** Each Latin sentence is one `p.lu-s` (`translate="no"`, `lang="la"`, `dir="ltr"`, focusable) holding its lines (`span.lu-l`
+with the line number in the margin every fifth line and at 146, 155, 156). The translations sit in the inline script as data: per
+sentence the line range and the English and German lines. The build leaves the Latin and the data alone and translates only the page's
+own words (`i18n/<lang>/lucretius.html.json`, DeepL then checked: "Verse", الأبيات, الشعر المرسل).
+
+**The card.** One card (`#card`) for the whole wall. A mouse resting on a sentence shows it after 150 ms (70 ms when moving from one
+sentence to the next), and leaving the wall hides it after 240 ms, so a sweep shows one card and never a flicker; the sentence darkens.
+A click or tap pins the card (a second click on the same sentence, a click elsewhere or Esc closes it); keyboard focus shows it too.
+Where the wall has 340 px or more free on the right of the verse (wide screens) the card stands beside the sentence, kept inside the
+window; otherwise above it, or below it near the top of the window. It rises 8 px and fades in (opacity 0.18 s, rise and moves
+0.26 s; only the fade under reduced motion). The card's language follows `<html lang>`: German shows Diels, English and Arabic show
+Leonard; the credit, the word for "lines" and the Arabic note come from hidden elements the build translates.
+
+**Tested** (headless Chromium, 1440 × 900 and 390 × 844, English, German, Arabic): no errors, page as wide as the window, the hover
+shows the right card (lines 151–154; Leonard in English and Arabic, Diels in German), the tap pins it on the phone.
