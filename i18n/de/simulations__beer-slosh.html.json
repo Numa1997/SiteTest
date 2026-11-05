@@ -539,6 +539,10 @@
   "src": "<span class=\"psec__n\">07</span>Where the energy goes",
   "tr": "<span class=\"psec__n\">07</span>Wohin die Energie geht"
  },
+ "a0ead37e43dc": {
+  "src": "1 is the wall friction Sauret and co-workers measured for foams (section 7); the least certain number on this page.",
+  "tr": "1 ist die Wandreibung, die Sauret und Mitarbeiter für Schäume gemessen haben (Abschnitt 7); die unsicherste Zahl auf dieser Seite."
+ },
  "a15c3bcd7af7": {
   "src": "the unsteady Bernoulli equation. The function \\(C(t)\\) can be absorbed into \\(\\phi\\), which is defined only up to a function of time.",
   "tr": "die instationäre Bernoulli-Gleichung. Die Funktion \\(C(t)\\) lässt sich in \\(\\phi\\) aufnehmen, das ohnehin nur bis auf eine Funktion der Zeit bestimmt ist."

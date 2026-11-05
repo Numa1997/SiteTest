@@ -5,7 +5,7 @@
 window.WALK = window.WALK || {};
 
 window.WALK.slosh = {
-    intro: 'Eight steps from the lecture note to the moving stout, in the order the page uses them: the calm surface for a given volume (section 2), the viscosity at the chosen temperature, the frequency of each mode with surface tension and the head (11), the damping terms (16) to (18), the modal equation (12), the Runge–Kutta step, the height of the stout at the wall, and the velocity in the cut (section 8). Each step sets the equation beside the lines of this page’s script that evaluate it, copied character for character; a line that is only “...” stands for page lines left out. The table gives each symbol, its name in the code, its value now, and its meaning with its unit. Hover over or tap a symbol to light it in all three places.',
+    intro: 'Eight steps from the lecture note to the moving stout, in the order the page uses them: the calm surface for a given volume (section 2), the viscosity at the chosen temperature, the frequency of each mode with surface tension and the head (11), the damping terms of section 7, (16) and (18) with the skin, bulk and contact-line terms beside them, the modal equation (12), the Runge–Kutta step, the height of the stout at the wall, and the velocity in the cut (section 8). Each step sets the equation beside the lines of this page’s script that evaluate it, copied character for character; a line that is only “...” stands for page lines left out. The table gives each symbol, its name in the code, its value now, and its meaning with its unit. Hover over or tap a symbol to light it in all three places.',
     steps: [
         {
             title: 'The calm surface',
@@ -50,7 +50,7 @@ gcA[k] = P.gc;
 ⟦gf|gf[k] = P.kf * (U_F / geo.a) * (1 - Math.exp(-md.lam * P.hf))⟧;
 ⟦gam|gam[k] = gw[k] + gs[k] + gb[k] + gcA[k] + gf[k]⟧;
 zeta[k] = gam[k] / omA[k];`,
-            syms: [['gw', 'γ<sub>w</sub>', 'gw[k]', 'wall and floor layers, 1/s'], ['gs', 'γ<sub>s</sub>', 'gs[k]', 'surface skin, 1/s'], ['gb', 'γ<sub>b</sub>', 'gb[k]', 'bulk viscosity, 1/s'], ['gf', 'γ<sub>f</sub>', 'gf[k]', 'head friction on the wall, 1/s'], ['gam', 'γ<sub>11</sub>', 'gam[k]', 'total amplitude decay rate of the slowest mode, 1/s'], ['zeta', 'ζ<sub>11</sub>', 'zeta[k]', 'its damping ratio']]
+            syms: [['gw', 'γ<sub>w</sub>', 'gw[k]', 'wall and floor layers, 1/s'], ['gs', 'γ<sub>s</sub>', 'gs[k]', 'surface skin, 1/s'], ['gb', 'γ<sub>b</sub>', 'gb[k]', 'viscous loss in the interior of the stout, 1/s'], ['gf', 'γ<sub>f</sub>', 'gf[k]', 'head friction on the wall, 1/s'], ['gam', 'γ<sub>11</sub>', 'gam[k]', 'total amplitude decay rate of the slowest mode, 1/s'], ['zeta', 'ζ<sub>11</sub>', 'zeta[k]', 'its damping ratio']]
         },
         {
             title: 'The modal equation',

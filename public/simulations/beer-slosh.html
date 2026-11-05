@@ -165,7 +165,7 @@
                         <input type="range" id="gc" min="0" max="0.3" step="0.01" value="0.05"></label>
                     <label class="ctl"><span class="ctl__row"><span>Head friction factor <i>k</i><sub>f</sub></span><output id="kf-out" for="kf"></output></span>
                         <input type="range" id="kf" min="0" max="5" step="0.1" value="1"></label>
-                    <p class="ctl__note">1 is the wall friction Sauret and co-workers measured for foams (section 6); the least certain number on this page.</p>
+                    <p class="ctl__note">1 is the wall friction Sauret and co-workers measured for foams (section 7); the least certain number on this page.</p>
                     <table class="gam" aria-label="Damping rates of the slowest mode"><thead><tr><th>mode (1,1)</th><th><i>γ</i>, 1/s</th><th>share</th></tr></thead><tbody id="gam"></tbody></table>
                 </div>
 
@@ -478,7 +478,7 @@
         A_('f_n', 'k', { symbol: '<i>f</i><sub>n</sub>', units: 'Hz', long_name: 'frequency', computed_in: 'setup()', formula: 'f = ω/2π', digits: 4 });
         A_('g_w', 'k', { symbol: '<i>γ</i><sub>w</sub>', units: '1/s', long_name: 'wall and floor boundary layers', computed_in: 'setup()', formula: '½ (νω/2)<sup>½</sup> (I<sub>w</sub> + I<sub>b</sub>)/E', digits: 4 });
         A_('g_s', 'k', { symbol: '<i>γ</i><sub>s</sub>', units: '1/s', long_name: 'surface skin', computed_in: 'setup()', formula: 'c<sub>s</sub> ½ (νω/2)<sup>½</sup> I<sub>s</sub>/E', digits: 4 });
-        A_('g_b', 'k', { symbol: '<i>γ</i><sub>b</sub>', units: '1/s', long_name: 'bulk viscosity', computed_in: 'setup()', formula: '2νλ²', digits: 5 });
+        A_('g_b', 'k', { symbol: '<i>γ</i><sub>b</sub>', units: '1/s', long_name: 'viscous loss in the interior of the stout', computed_in: 'setup()', formula: '2νλ²', digits: 5 });
         A_('g_c', 'k', { symbol: '<i>γ</i><sub>c</sub>', units: '1/s', long_name: 'contact line', computed_in: 'setup()', formula: 'γ<sub>c</sub> (same for every mode)', digits: 4 });
         A_('g_f', 'k', { symbol: '<i>γ</i><sub>f</sub>', units: '1/s', long_name: 'head friction on the wall', computed_in: 'setup()', formula: 'k<sub>f</sub> (U<sub>f</sub>/a)(1 − e<sup>−λ h<sub>f</sub></sup>)', digits: 4 });
         A_('gam', 'k', { symbol: '<i>γ</i><sub>n</sub>', units: '1/s', long_name: 'total damping rate of the amplitude', computed_in: 'setup()', formula: 'γ<sub>w</sub> + γ<sub>s</sub> + γ<sub>b</sub> + γ<sub>c</sub> + γ<sub>f</sub>', digits: 4 });
@@ -790,7 +790,7 @@
         seg('shake', 'shake', function () { tShake = 0; ds.set('shaker', P.shake); if (P.shake === 'z') seed(); });
         function setRange(id, v) { var I = document.getElementById(id); I.value = v; I.dispatchEvent(new Event('input')); }
         document.getElementById('shF1').addEventListener('click', function () { setRange('f', fA[K11].toFixed(2)); setRange('A', 0.2); P.shake = 'x'; setSeg('shake', 'x'); tShake = 0; hintEl.textContent = _t('Sideways at f₁ = ') + Sim.fmt(fA[K11], 2) + _t(' Hz: each push arrives in step with the slosh, and the wave grows until damping eats what the shaker gives.'); });
-        document.getElementById('shF2').addEventListener('click', function () { setRange('f', (2 * fA[K11]).toFixed(2)); setRange('A', 2); P.shake = 'z'; setSeg('shake', 'z'); tShake = 0; seed(); hintEl.textContent = _t('Up and down at 2f₁: gravity itself is pumped twice per slosh. A wave of a micrometre grows if the pumping beats the damping (section 8). Give it a few seconds.'); });
+        document.getElementById('shF2').addEventListener('click', function () { setRange('f', (2 * fA[K11]).toFixed(2)); setRange('A', 2); P.shake = 'z'; setSeg('shake', 'z'); tShake = 0; seed(); hintEl.textContent = _t('Up and down at 2f₁: gravity itself is pumped twice per slosh. A wave of a micrometre grows if the pumping beats the damping (section 6). Give it a few seconds.'); });
         document.getElementById('shOff').addEventListener('click', function () { P.shake = 'off'; setSeg('shake', 'off'); hintEl.textContent = _t('Shaker off: watch how fast the slosh dies, and compare with the time in the readouts.'); });
         document.getElementById('calm').addEventListener('click', function () { seed(); nSF = nSL = 0; hist.length = 0; });
         document.getElementById('nohead').addEventListener('click', function () { var on = P.hf > 0; setRange('hf', on ? 0 : 18); this.textContent = on ? _t('Pour a head') : _t('No head'); hintEl.textContent = on ? _t('No head: the damping falls to the boundary layers alone; the slosh rings several times longer.') : _t('With 18 mm of head the foam rubs on the glass and the slosh dies within seconds.'); });
@@ -850,14 +850,14 @@
             },
             drawn: {
                 eta_w: function () {
-                    if (!trMap) return { what: 'the trace', ok: null, note: 'not drawn yet' };
+                    if (!trMap) return { what: _t('the trace'), ok: null, note: _t('not drawn yet') };
                     var px = Sim.readPixel(tr, trMap.x, trMap.y(ds.get('eta_w')), 3, isInk);
-                    return { what: 'last point of the black trace', drawn: px ? 'ink at the predicted height' : 'no ink', expected: Sim.fmt(ds.get('eta_w') * 1000, 2) + ' mm', ok: !!px };
+                    return { what: _t('last point of the black trace'), drawn: px ? _t('ink at the predicted height') : _t('no ink'), expected: Sim.fmt(ds.get('eta_w') * 1000, 2) + ' mm', ok: !!px };
                 },
                 z_s: function () {
-                    if (!secMap) return { what: 'the cut', ok: null, note: 'not drawn yet' };
+                    if (!secMap) return { what: _t('the cut'), ok: null, note: _t('not drawn yet') };
                     var e = etaAt(0, 0), y = secMap.by - (geo.zs + e) * secMap.sc + 4, px = Sim.readPixel(sec, secMap.cx + 3, y, 1, isStout);
-                    return { what: 'stout just below the surface, on the axis of the cut', drawn: px ? 'stout colour' : 'no stout', expected: 'stout below ' + Sim.fmt((geo.zs + e) * 1000, 1) + ' mm', ok: !!px };
+                    return { what: _t('stout just below the surface, on the axis of the cut'), drawn: px ? _t('stout colour') : _t('no stout'), expected: _t('stout below {z} mm', { z: Sim.fmt((geo.zs + e) * 1000, 1) }), ok: !!px };
                 }
             },
             probe: function (x, y) {
@@ -867,11 +867,11 @@
             },
             inspect: function (ref) {
                 var th = ref.sd > 0 ? thP : thP + Math.PI, U = fieldAt(ref.i, ref.j, th), p = gridPos(ref.i, ref.j);
-                return { title: 'stout ' + Sim.fmt((geo.zs - p[1]) * 1000, 1) + ' mm below the calm surface, ' + Sim.fmt(p[0] * 1000, 1) + ' mm from the axis',
+                return { title: _t('stout {d} mm below the calm surface, {r} mm from the axis', { d: Sim.fmt((geo.zs - p[1]) * 1000, 1), r: Sim.fmt(p[0] * 1000, 1) }),
                     at: { x: secMap.cx + ref.sd * p[0] * secMap.sc, y: secMap.by - p[1] * secMap.sc },
                     rows: [['u<sub>r</sub>', U[0], 'm/s', null, null], ['u<sub>θ</sub>', U[1], 'm/s', null, null], ['u<sub>z</sub>', U[2], 'm/s', null, null], ['|u|', Math.hypot(U[0], U[1], U[2]), 'm/s', null, null]] };
             },
-            round: { time: 't', label: function () { return 'one period of the slowest mode, 1/f<sub>11</sub> = ' + Sim.fmt(1 / fA[K11], 3) + ' s'; }, length: function () { return 1 / fA[K11]; },
+            round: { time: 't', label: function () { return _t('one period of the slowest mode, 1/f<sub>11</sub> = {T} s', { T: Sim.fmt(1 / fA[K11], 3) }); }, length: function () { return 1 / fA[K11]; },
                 columns: ['eta_w', 'ax', 'az', 'geff', 'top_f'], point: function () { return null; } },
             about: 'The store holds the model; the drawing differs from it in these ways. The 3D view samples the surface at 16 radii and 72 angles and draws the head as a layer of constant thickness on it. The cut draws arrows on every second row of the 12 × 20 grid, from the stored velocity fields of the nearest of six fills (360 to 590 mL), placed on the present fill’s depth; arrows longer than 34 px are cut short and drawn pink, and the flow across the cut is drawn as rings. While arrows are shown in 3D, the stout is drawn see-through. The trace keeps the last 480 frames, which is about 8 s at 60 frames per second. The modal amplitudes start at a micrometre in every mode, a seed for the parametric growth, not a measured disorder.'
         };
