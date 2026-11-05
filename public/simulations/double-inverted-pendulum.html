@@ -23,10 +23,10 @@
         .pg { margin-top: 8px; padding: 8px 14px 9px; background: var(--card); border: 1px solid var(--rule); border-radius: 12px; display: flex; flex-direction: column; gap: 4px; }
         .pg-h { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
         .pg-h .btn { padding: 4px 10px; font-size: 12.5px; }
-        .pg-g { display: grid; gap: 4px 18px; } .pg-g--4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+        .pg-g { display: grid; gap: 6px 18px; } .pg-g--4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
         .pg-c { min-width: 0; display: flex; flex-direction: column; gap: 2px; } .pg-c .ctl { font-size: 13px; gap: 0; }
-        .pg .ctl__note { margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 11.5px; line-height: 1.35; } .pg .pg-c .ctl__row > span:first-child { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        /* from 901 px the figure and the trace take their heights from the window, so figure, sliders and trace fit one screen */ @media (min-width: 901px) { #stage { aspect-ratio: auto; height: clamp(150px, 31vh, 380px); max-width: none; } #stage-tr { aspect-ratio: auto; height: clamp(84px, 15vh, 190px); max-width: none; } }
+        .pg .ctl__note { margin: 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; font-size: 11.5px; line-height: 1.35; } .pg .pg-c .ctl__row > span:first-child { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        /* from 901 px the sliders stand beside the cart figure (the cart needs no full-width rail), heights from the window: all on one screen */ @media (min-width: 901px) { .dtop { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 10px; align-items: stretch; } .dtop > .pg { margin-top: 0; } .dtop > .stage { display: flex; flex-direction: column; } #stage { aspect-ratio: auto; flex: 1 1 auto; width: 100%; height: auto; min-height: clamp(220px, 46vh, 520px); max-width: none; } #stage-tr { aspect-ratio: auto; height: clamp(84px, 15vh, 190px); max-width: none; } }
         @media (max-width: 900px) { .pg-g--4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } .pg .ctl__note { white-space: normal; } }
         .defs { margin: 0; font-size: 12px; line-height: 1.45; color: var(--ink-3); }
         .defs dt { font-family: var(--mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-top: 8px; }
@@ -64,7 +64,7 @@
 
         <div class="sim__grid">
             <div>
-                <figure class="stage">
+                <div class="dtop"><figure class="stage">
                     <div class="stage__canvas" id="stage" style="--ar: 16 / 4.8; --ar-m: 1 / 1.05;">
                         <canvas id="cv" style="touch-action: pan-y;" aria-label="A cart on a rail with two rods standing on it, one hinged on the other; an arrow on the cart shows the motor force. Drag a rod to tilt it, release to let go."></canvas>
                     </div>
@@ -103,7 +103,7 @@
                     </label><p class="ctl__note">The price of force in the controller’s cost (14), against the price of leaning and of being away from the target; the slider is logarithmic, from 0.01 to 100. Large <i>ρ</i>: gentle pushes, rods that wander further. Small <i>ρ</i>: hard pushes that reach the motor limit sooner.</p></div></div>
                     <p class="ctl__note pg-n">A cart of mass <i>m</i><sub>0</sub> on a rail. Each rod is a uniform bar of mass <i>m</i> and length <i>L</i>, free to turn about a hinge at its lower end: rod 1 on the cart, rod 2 on top of rod 1 (section 2).</p>
                     <p class="ctl__note pg-n">Back to the machine of Bogdanov’s report [1]: 1.5, 0.5 and 0.75 kg, rods of 0.5 and 0.75 m, <i>ρ</i> = 1.</p>
-                </section>
+                </section></div>
                 <figure class="stage" style="margin-top: 8px;">
                     <div class="stage__canvas" id="stage-tr" style="--ar: 16 / 3.4; --ar-m: 16 / 9;">
                         <canvas id="tr" aria-label="The last eight seconds of the two rod angles and of the motor force."></canvas>
