@@ -138,3 +138,7 @@ the right. It is a plain SVG of 1 738 paths, `viewBox="104 0 452 250"`, in the t
 
 No stylesheet styles it: size, spacing and the surrounding `inline-flex` span are inline `style` attributes on each page
 ([styles.md](styles.md#design-rules)).
+
+## `public/vendor/three/` · three.js (since 5 November 2026)
+
+three.js r181 (MIT, `LICENSE.txt`), copied unchanged from the npm package `three@0.181.0`: `three.module.min.js` (355 kB), which imports `three.core.min.js` (380 kB); 186 kB together when gzipped. Only Fig. 12 loads it, as an ES module, so the security policy (`script-src 'self'`) needs no change. The thumbnail `images/sims/beer-slosh.webp` is rendered from that page's 3D view.

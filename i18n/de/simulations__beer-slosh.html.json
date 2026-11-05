@@ -1,0 +1,1034 @@
+{
+ "0138db99eb49": {
+  "src": "Amplitude <i>A</i>",
+  "tr": "Amplitude <i>A</i>"
+ },
+ "01ffde0d6031": {
+  "src": "Back to the middle",
+  "tr": "Zurück in die Mitte"
+ },
+ "06ad4c11cc69": {
+  "src": "A. Sauret, F. Boulogne, J. Cappello, E. Dressaire, H. A. Stone, “Damping of liquid sloshing by foams”, <i>Phys. Fluids</i> 27, 022103 (2015); <a href=\"https://arxiv.org/abs/1411.6542\">arXiv:1411.6542</a>. Read in full: Eq. (8), Sec. IV.",
+  "tr": "A. Sauret, F. Boulogne, J. Cappello, E. Dressaire, H. A. Stone, „Damping of liquid sloshing by foams“, <i>Phys. Fluids</i> 27, 022103 (2015); <a href=\"https://arxiv.org/abs/1411.6542\">arXiv:1411.6542</a>. Vollständig gelesen: Gl. (8), Abschn. IV."
+ },
+ "0706025b2bbc": {
+  "src": "max",
+  "tr": "max"
+ },
+ "094085b1592c": {
+  "src": "<span class=\"pfig__n\">Figure 4</span>The slowest mode in the cut, from the finite-element solution at 480 mL. The flow wells up on the side that is rising, crosses below the surface, and sinks on the other side. It fades with depth as \\(e^{-\\lambda d}\\): one decay length \\(1/\\lambda = 21\\) mm below the surface it has lost 63 %, and the lower half of the glass hardly moves.",
+  "tr": "<span class=\"pfig__n\">Abbildung 4</span>Die langsamste Mode im Schnitt, aus der Finite-Elemente-Lösung bei 480 mL. Die Strömung quillt auf der steigenden Seite empor, kreuzt unter der Oberfläche hinüber und sinkt auf der anderen Seite ab. Sie klingt mit der Tiefe wie \\(e^{-\\lambda d}\\) ab: Eine Abklinglänge \\(1/\\lambda = 21\\) mm unter der Oberfläche hat sie 63 % verloren, und die untere Hälfte des Glases bewegt sich kaum."
+ },
+ "0ba1d915eb94": {
+  "src": "Serving temperature 6 to 7 °C, Guinness web store <a href=\"https://guinnesswebstore.com/pages/faq\">FAQ</a>; head height 18 to 20 mm, “The physics of fizz”, <i>Nat. Rev. Phys.</i> (2023), <a href=\"https://www.nature.com/articles/s42254-023-00579-y\">link</a> (snippet only).",
+  "tr": "Ausschanktemperatur 6 bis 7 °C, Guinness-Webshop, <a href=\"https://guinnesswebstore.com/pages/faq\">FAQ</a>; Höhe der Schaumkrone 18 bis 20 mm, „The physics of fizz“, <i>Nat. Rev. Phys.</i> (2023), <a href=\"https://www.nature.com/articles/s42254-023-00579-y\">Link</a> (nur ein Auszug)."
+ },
+ "0bc531851f3f": {
+  "src": "Shake the glass up and down, \\(z = A\\sin\\Omega t\\), and (12) for one mode becomes \\(\\ddot a + 2\\gamma\\dot a + \\omega^2(1 - \\epsilon\\sin\\Omega t)\\,a = 0\\) with \\(\\epsilon = A\\Omega^2/g\\): a pendulum whose gravity is modulated, the Mathieu equation. Its strongest instability lies at \\(\\Omega = 2\\omega\\), twice the mode’s frequency. There a slosh of amplitude \\(a\\cos(\\omega t + \\varphi)\\), with the right phase, gains energy each half cycle, at an amplitude growth rate \\(\\epsilon\\omega/4\\), as averaging the modulated spring over one period shows. It grows when the gain beats the damping,",
+  "tr": "Schüttelt man das Glas auf und ab, \\(z = A\\sin\\Omega t\\), so wird (12) für eine Mode zu \\(\\ddot a + 2\\gamma\\dot a + \\omega^2(1 - \\epsilon\\sin\\Omega t)\\,a = 0\\) mit \\(\\epsilon = A\\Omega^2/g\\): ein Pendel mit modulierter Schwerkraft, die Mathieu-Gleichung. Ihre stärkste Instabilität liegt bei \\(\\Omega = 2\\omega\\), der doppelten Frequenz der Mode. Dort gewinnt ein Schwappen der Amplitude \\(a\\cos(\\omega t + \\varphi)\\) mit der richtigen Phase in jeder halben Periode Energie, mit einer Anwachsrate der Amplitude von \\(\\epsilon\\omega/4\\), wie die Mittelung der modulierten Feder über eine Periode zeigt. Es wächst, wenn der Gewinn die Dämpfung übertrifft,"
+ },
+ "0caf03dc0928": {
+  "src": "0: a clean surface; 1: a skin that cannot stretch (proteins, or the underside of the head).",
+  "tr": "0: eine saubere Oberfläche; 1: eine Haut, die sich nicht dehnen kann (Proteine oder die Unterseite der Schaumkrone)."
+ },
+ "0fd634e00cd2": {
+  "src": "The glass is still a body of revolution, so each mode still varies as \\(\\cos m\\theta\\); write \\(\\phi = \\Phi(r, z)\\cos m\\theta\\cos\\omega t\\). In the meridional plane, the region \\(0 \\le r \\le R_i(z)\\) between the floor and the calm surface, with \\(R_i\\) the inner radius of the glass, \\(\\Phi\\) satisfies",
+  "tr": "Das Glas ist noch immer ein Rotationskörper, also variiert jede Mode noch immer wie \\(\\cos m\\theta\\); wir schreiben \\(\\phi = \\Phi(r, z)\\cos m\\theta\\cos\\omega t\\). In der Meridianebene, dem Gebiet \\(0 \\le r \\le R_i(z)\\) zwischen dem Boden und der ruhigen Oberfläche, mit \\(R_i\\) dem Innenradius des Glases, erfüllt \\(\\Phi\\)"
+ },
+ "10bcbe0a962f": {
+  "src": "beers measure 41 to 48 mN/m [12]; no Guinness value was found. Matters little here (section 5).",
+  "tr": "Biere messen 41 bis 48 mN/m [12]; ein Wert für Guinness wurde nicht gefunden. Spielt hier kaum eine Rolle (Abschnitt 5)."
+ },
+ "1151b5ae8619": {
+  "src": "On a train that brakes, your coffee leans forward as if gravity had tipped. That is the first idea: in the frame of the glass, the glass’s acceleration acts like an extra gravity pointing the other way.",
+  "tr": "In einem bremsenden Zug neigt sich Ihr Kaffee nach vorn, als hätte sich die Schwerkraft geneigt. Das ist der erste Gedanke: Im Bezugssystem des Glases wirkt die Beschleunigung des Glases wie eine zusätzliche Schwerkraft, die in die Gegenrichtung zeigt."
+ },
+ "12601b41a9f4": {
+  "src": "Even an irrotational flow dissipates, because its parcels are stretched. The dissipation is \\(2\\mu\\int e_{ij}e_{ij}\\,dV\\) with the strain rate \\(e_{ij} = \\partial_i\\partial_j\\phi\\); for a mode that decays with depth as \\(e^{\\lambda z}\\) this gives \\(\\gamma_b = 2\\nu\\lambda^2\\), the damping of deep-water waves. For the slowest mode it is 0.009 per second, 2 % of the total: negligible for the slowest mode, but it grows as \\(\\lambda^2\\), so short waves feel it most <span class=\"fact\">computed</span>.",
+  "tr": "Selbst eine wirbelfreie Strömung dissipiert, weil ihre Pakete gedehnt werden. Die Dissipation ist \\(2\\mu\\int e_{ij}e_{ij}\\,dV\\) mit der Dehnungsrate \\(e_{ij} = \\partial_i\\partial_j\\phi\\); für eine Mode, die mit der Tiefe wie \\(e^{\\lambda z}\\) abklingt, ergibt das \\(\\gamma_b = 2\\nu\\lambda^2\\), die Dämpfung von Tiefwasserwellen. Für die langsamste Mode beträgt sie 0.009 pro Sekunde, 2 % des Ganzen: vernachlässigbar für die langsamste Mode, aber sie wächst wie \\(\\lambda^2\\), sodass kurze Wellen sie am stärksten spüren <span class=\"fact\">berechnet</span>."
+ },
+ "14c8560cadb3": {
+  "src": "Cut plane",
+  "tr": "Schnittebene"
+ },
+ "15727c1379a6": {
+  "src": "Resonance",
+  "tr": "Resonanz"
+ },
+ "17896b37ee92": {
+  "src": "<b>At the surface, kinematics:</b> a parcel on the surface stays on the surface, so the surface rises at the vertical speed of the stout there: \\(\\partial_t\\eta = \\partial_z\\phi\\) to first order in the small amplitude.",
+  "tr": "<b>An der Oberfläche, Kinematik:</b> Ein Paket an der Oberfläche bleibt an der Oberfläche, also steigt die Oberfläche mit der senkrechten Geschwindigkeit des Stouts dort: \\(\\partial_t\\eta = \\partial_z\\phi\\) in erster Ordnung der kleinen Amplitude."
+ },
+ "17db7004bc6e": {
+  "src": "<b>Check.</b> For the deep cylinder and \\(m = 1\\), with \\(\\Phi = J_1(kr)e^{kz}\\), the integrals are elementary: \\(I_w/E = (1 + 1/\\xi^2)/[a(1 - 1/\\xi^2)] = 1.837/a\\). The logarithmic decrement \\(\\Delta = 2\\pi\\gamma/\\omega\\) is then",
+  "tr": "<b>Kontrolle.</b> Für den tiefen Zylinder und \\(m = 1\\), mit \\(\\Phi = J_1(kr)e^{kz}\\), sind die Integrale elementar: \\(I_w/E = (1 + 1/\\xi^2)/[a(1 - 1/\\xi^2)] = 1.837/a\\). Das logarithmische Dekrement \\(\\Delta = 2\\pi\\gamma/\\omega\\) ist dann"
+ },
+ "189a74889ec8": {
+  "src": "No head",
+  "tr": "Ohne Schaumkrone"
+ },
+ "19cd7d185cfd": {
+  "src": "Meaning",
+  "tr": "Bedeutung"
+ },
+ "1a4d049420ce": {
+  "src": "In a deep glass the slowest mode rocks at \\(\\omega_{11} \\approx \\sqrt{1.84\\,g/a}\\), set only by the radius of the surface: like a pendulum of length \\(a/1.84\\), about 21 mm for a pint. A wider glass sloshes more slowly.",
+  "tr": "In einem tiefen Glas schaukelt die langsamste Mode mit \\(\\omega_{11} \\approx \\sqrt{1.84\\,g/a}\\), allein bestimmt durch den Radius der Oberfläche: wie ein Pendel der Länge \\(a/1.84\\), bei einem Pint etwa 21 mm. Ein breiteres Glas schwappt langsamer."
+ },
+ "1a7cb86b434b": {
+  "src": "liquid fraction of the head",
+  "tr": "Flüssigkeitsanteil der Schaumkrone"
+ },
+ "1afa48987cca": {
+  "src": "500 mL of stout fills the tulip to \\(z_s = 137.5\\) mm, where the surface has radius \\(a = 39.4\\) mm and the stout is \\(D = 129.5\\) mm deep. The program gives \\(\\lambda_{11} = 47.27\\) m⁻¹, so the bare frequency is \\(\\sqrt{9.81\\times47.27}/2\\pi = 3.427\\) Hz; surface tension raises it to 3.445 Hz, and the head lowers it to 3.244 Hz <span class=\"fact\">computed</span>.",
+  "tr": "500 mL Stout füllen die Tulpe bis \\(z_s = 137.5\\) mm, wo die Oberfläche den Radius \\(a = 39.4\\) mm hat und das Stout \\(D = 129.5\\) mm tief ist. Das Programm liefert \\(\\lambda_{11} = 47.27\\) m⁻¹, die bloße Frequenz ist also \\(\\sqrt{9.81\\times47.27}/2\\pi = 3.427\\) Hz; die Oberflächenspannung hebt sie auf 3.445 Hz, und die Schaumkrone senkt sie auf 3.244 Hz <span class=\"fact\">berechnet</span>."
+ },
+ "1c21f71bd165": {
+  "src": "The head and the surface tension",
+  "tr": "Die Schaumkrone und die Oberflächenspannung"
+ },
+ "1d4bbb1c2113": {
+  "src": "Your steps come at 1.6 Hz. Which harmonic of your step lies nearest to \\(f_1\\) of the default pint, and why does the head make a spill less likely?",
+  "tr": "Ihre Schritte kommen mit 1.6 Hz. Welche Oberschwingung Ihres Schritts liegt am nächsten an \\(f_1\\) des Standard-Pints, und warum macht die Schaumkrone ein Überschwappen weniger wahrscheinlich?"
+ },
+ "207efbac3b12": {
+  "src": "Key result · irrotational interior",
+  "tr": "Kernergebnis · wirbelfreies Inneres"
+ },
+ "22d9f252ba29": {
+  "src": "Laplace’s equation alone has no waves in it. The waves come from the free surface, where gravity pulls a raised patch of stout back down, and the stout below must move to let it.",
+  "tr": "Die Laplace-Gleichung allein enthält keine Wellen. Die Wellen kommen von der freien Oberfläche, wo die Schwerkraft einen angehobenen Fleck Stout wieder herunterzieht und das Stout darunter ausweichen muss, um das zuzulassen."
+ },
+ "235fe4e6ecc4": {
+  "src": "<span>7</span>Where the energy goes",
+  "tr": "<span>7</span>Wohin die Energie geht"
+ },
+ "2501c6529210": {
+  "src": "Straight",
+  "tr": "Gerade"
+ },
+ "26f4b7f8d090": {
+  "src": "The energy of a mode is its kinetic energy at the moment the surface passes level, \\(E = \\tfrac12\\rho\\int|\\nabla\\phi|^2\\,dV\\). If a process dissipates the average power \\(\\bar P\\), the energy decays as \\(e^{-2\\gamma t}\\) and the amplitude as \\(e^{-\\gamma t}\\), with",
+  "tr": "Die Energie einer Mode ist ihre kinetische Energie in dem Moment, in dem die Oberfläche waagerecht durchläuft, \\(E = \\tfrac12\\rho\\int|\\nabla\\phi|^2\\,dV\\). Wenn ein Vorgang die mittlere Leistung \\(\\bar P\\) dissipiert, klingt die Energie wie \\(e^{-2\\gamma t}\\) und die Amplitude wie \\(e^{-\\gamma t}\\) ab, mit"
+ },
+ "271c5a3b6556": {
+  "src": "Shaker",
+  "tr": "Schütteltisch"
+ },
+ "27f156c9932b": {
+  "src": "No flow through the side wall requires \\(J_m'(ka) = 0\\), so \\(ka\\) must be one of the zeros \\(\\xi_{mn}\\) of \\(J_m'\\): \\(\\xi_{11} = 1.8412\\), \\(\\xi_{21} = 3.0542\\), \\(\\xi_{01} = 3.8317\\), \\(\\xi_{12} = 5.3314\\) (computed with Wolfram Language and SciPy, which agree to all digits). Eliminating \\(\\eta\\) between the two surface conditions with the glass at rest gives \\(\\partial_t^2\\phi + g\\,\\partial_z\\phi = 0\\) at \\(z = 0\\), and putting (7) in,",
+  "tr": "Kein Fluss durch die Seitenwand verlangt \\(J_m'(ka) = 0\\), also muss \\(ka\\) eine der Nullstellen \\(\\xi_{mn}\\) von \\(J_m'\\) sein: \\(\\xi_{11} = 1.8412\\), \\(\\xi_{21} = 3.0542\\), \\(\\xi_{01} = 3.8317\\), \\(\\xi_{12} = 5.3314\\) (berechnet mit Wolfram Language und SciPy, die in allen Stellen übereinstimmen). Eliminiert man \\(\\eta\\) zwischen den beiden Oberflächenbedingungen bei ruhendem Glas, folgt \\(\\partial_t^2\\phi + g\\,\\partial_z\\phi = 0\\) bei \\(z = 0\\), und mit (7) eingesetzt"
+ },
+ "2844acc7df08": {
+  "src": "Guinness tulip",
+  "tr": "Guinness-Tulpe"
+ },
+ "289c4aa8f76f": {
+  "src": "What the tulip shape does",
+  "tr": "Was die Tulpenform bewirkt"
+ },
+ "28af334bb6e8": {
+  "src": "A statement with a number in square brackets, such as [3], is a fact taken from that source, listed at the end. A statement marked <span class=\"fact\">computed</span> is a fact produced by this page’s own code or by the scripts in <code>tools/fig12/</code>, which anyone can rerun. <span class=\"fact\">Inference</span> marks reasoning from those facts, and <span class=\"fact\">opinion</span> marks a judgement. Everything else is derived on the page.",
+  "tr": "Eine Aussage mit einer Zahl in eckigen Klammern, etwa [3], ist eine Tatsache aus dieser Quelle, die am Ende aufgeführt ist. Eine Aussage mit der Marke <span class=\"fact\">berechnet</span> ist eine Tatsache, die der eigene Code dieser Seite oder die Skripte in <code>tools/fig12/</code> liefern, die jeder erneut ausführen kann. <span class=\"fact\">Folgerung</span> kennzeichnet Schlüsse aus diesen Tatsachen, und <span class=\"fact\">Meinung</span> kennzeichnet ein Urteil. Alles andere wird auf der Seite hergeleitet."
+ },
+ "29fdb0237338": {
+  "src": "with \\(\\Phi_\\ell\\) the derivative along the wall’s profile and \\(I_b\\) the same integral over the floor. Here \\(E\\) stands for \\(\\iint|\\nabla\\Phi|^2\\,r\\,dr\\,dz\\), the energy (14) without the factors \\(\\tfrac12\\rho\\), the amplitude and the angular integral, which cancel in the ratio. The program evaluates \\(I_w\\), \\(I_b\\) and \\(E\\) for each mode of the tulip glass.",
+  "tr": "mit \\(\\Phi_\\ell\\) der Ableitung entlang des Wandprofils und \\(I_b\\) demselben Integral über den Boden. Hier steht \\(E\\) für \\(\\iint|\\nabla\\Phi|^2\\,r\\,dr\\,dz\\), die Energie (14) ohne die Faktoren \\(\\tfrac12\\rho\\), die Amplitude und das Winkelintegral, die sich im Verhältnis kürzen. Das Programm wertet \\(I_w\\), \\(I_b\\) und \\(E\\) für jede Mode des Tulpenglases aus."
+ },
+ "2b670f12a70e": {
+  "src": "18 to 20 mm for a correct pour [11]. Firm enough.",
+  "tr": "18 bis 20 mm bei korrektem Zapfen [11]. Hinreichend gesichert."
+ },
+ "2b7b656319c7": {
+  "src": "Sideways at <i>f</i><sub>1</sub>",
+  "tr": "Seitwärts mit <i>f</i><sub>1</sub>"
+ },
+ "2e7e9b55d14b": {
+  "src": "45 mN/m",
+  "tr": "45 mN/m"
+ },
+ "2eb56be3c2d9": {
+  "src": "Sources",
+  "tr": "Quellen"
+ },
+ "302405b5afc7": {
+  "src": "A sloshing pint stops within seconds; an ideal fluid would rock for ever. Each loss below is computed on its own and has its own switch on the page.",
+  "tr": "Ein schwappendes Pint kommt innerhalb von Sekunden zur Ruhe; eine ideale Flüssigkeit würde ewig schaukeln. Jeder der folgenden Verluste wird für sich berechnet und hat auf der Seite seinen eigenen Schalter."
+ },
+ "303509efc55e": {
+  "src": "The 3D view draws the glass from the measured profile and the stout’s surface from \\(\\eta(r, \\theta)\\) at 16 radii and 72 angles. The head is drawn as a layer of constant thickness on top of the surface, which is how the model treats its mass; a real head bends. The cut uses the velocity fields of the nearest of the six stored fills, scaled to the present one. Arrows longer than 34 px are cut short and drawn pink. While the arrows are shown, the stout is drawn see-through, which real stout is not.",
+  "tr": "Die 3D-Ansicht zeichnet das Glas aus dem gemessenen Profil und die Oberfläche des Stouts aus \\(\\eta(r, \\theta)\\) an 16 Radien und 72 Winkeln. Die Schaumkrone wird als Schicht konstanter Dicke auf der Oberfläche gezeichnet, so wie das Modell ihre Masse behandelt; eine echte Schaumkrone biegt sich. Der Schnitt verwendet die Geschwindigkeitsfelder der nächstgelegenen der sechs gespeicherten Füllungen, auf die aktuelle skaliert. Pfeile, die länger als 34 px sind, werden gekürzt und rosa gezeichnet. Solange die Pfeile gezeigt werden, wird das Stout durchsichtig gezeichnet, was echtes Stout nicht ist."
+ },
+ "30c606f0771f": {
+  "src": "<span>4</span>Linear sloshing in a straight glass",
+  "tr": "<span>4</span>Lineares Schwappen in einem geraden Glas"
+ },
+ "32489005afe3": {
+  "src": "Effective gravity <i>g</i><sub>eff</sub>/<i>g</i>",
+  "tr": "Effektive Schwerkraft <i>g</i><sub>eff</sub>/<i>g</i>"
+ },
+ "325862042943": {
+  "src": "<span class=\"psec__n\">05</span>The real glass, by finite elements",
+  "tr": "<span class=\"psec__n\">05</span>Das echte Glas, mit finiten Elementen"
+ },
+ "32cbfa8c762d": {
+  "src": "The numerical method",
+  "tr": "Das numerische Verfahren"
+ },
+ "34ef984f572c": {
+  "src": "Sauret and co-workers measured how a layer of foam damps sloshing in a narrow tank [1]. The foam adds a damping rate that grows with its thickness and saturates once the foam is about as thick as the depth the wave reaches, \\(1/k\\). They traced the loss to the foam’s films sliding on the glass walls, so it scales as the wall area per volume of foam: as \\(1/w\\) for their tank of width \\(w\\), with \\(w\\gamma_f = 1.6 \\pm 0.3\\) cm/s measured [1]. For a round glass the wall per volume is \\(2/a\\) instead of \\(2/w\\), so we take",
+  "tr": "Sauret und Mitarbeiter haben gemessen, wie eine Schaumschicht das Schwappen in einem schmalen Tank dämpft [1]. Der Schaum fügt eine Dämpfungsrate hinzu, die mit seiner Dicke wächst und sättigt, sobald der Schaum etwa so dick ist wie die Tiefe, bis zu der die Welle reicht, \\(1/k\\). Sie führten den Verlust auf die Schaumlamellen zurück, die an den Glaswänden gleiten, sodass er mit der Wandfläche pro Schaumvolumen skaliert: wie \\(1/w\\) für ihren Tank der Breite \\(w\\), mit gemessenem \\(w\\gamma_f = 1.6 \\pm 0.3\\) cm/s [1]. Für ein rundes Glas ist die Wand pro Volumen \\(2/a\\) statt \\(2/w\\), also setzen wir an"
+ },
+ "359de8777c25": {
+  "src": "Pumping: Faraday’s waves ★",
+  "tr": "Pumpen: Faraday-Wellen ★"
+ },
+ "3624de9e76f4": {
+  "src": "Pick up a full glass and walk. For a few steps nothing happens; then the surface starts to rock, a little higher on each step, until the stout climbs the side of the glass and the head spills over your fingers. Stop walking and the rocking does not stop at once: it dies away over a few seconds, and the dark liquid settles back under its cream-coloured head.",
+  "tr": "Nehmen Sie ein volles Glas und gehen Sie los. Ein paar Schritte lang passiert nichts; dann beginnt die Oberfläche zu schaukeln, mit jedem Schritt ein wenig höher, bis das Stout an der Glaswand hinaufklettert und die Schaumkrone über Ihre Finger läuft. Bleiben Sie stehen, und das Schaukeln hört nicht sofort auf: Es klingt über einige Sekunden ab, und die dunkle Flüssigkeit kommt unter ihrer cremefarbenen Schaumkrone wieder zur Ruhe."
+ },
+ "37f26572c3d9": {
+  "src": "<span class=\"pfig__n\">Figure 3</span>The damping of the slowest mode, term by term, for the default pint. The head takes almost half. The table in the panel beside the figure shows the same numbers live.",
+  "tr": "<span class=\"pfig__n\">Abbildung 3</span>Die Dämpfung der langsamsten Mode, Term für Term, für das Standard-Pint. Die Schaumkrone nimmt fast die Hälfte. Die Tabelle im Bedienfeld neben der Abbildung zeigt dieselben Zahlen live."
+ },
+ "390dbe7faa94": {
+  "src": "The modes of a cylinder",
+  "tr": "Die Moden eines Zylinders"
+ },
+ "3b467f75ede4": {
+  "src": "<span class=\"pfig__n\">Figure 1</span>The measured profile of the Guinness tulip glass, to scale. The waist sits 27 mm above the foot, the widest point 121 mm up; above it the wall leans inward to the 78 mm rim. The page’s default pour, 500 mL of stout under 18 mm of head, is drawn in.",
+  "tr": "<span class=\"pfig__n\">Abbildung 1</span>Das gemessene Profil des Guinness-Tulpenglases, maßstabsgetreu. Die Taille sitzt 27 mm über dem Fuß, die breiteste Stelle 121 mm hoch; darüber neigt sich die Wand nach innen bis zum Rand von 78 mm. Eingezeichnet ist die Standardfüllung der Seite, 500 mL Stout unter 18 mm Schaumkrone."
+ },
+ "3cb8075bdda7": {
+  "src": "Guinness Draught, <a href=\"https://www.guinness.com/en/beers/guinness-draught\">guinness.com</a>: 4.2 % alcohol.",
+  "tr": "Guinness Draught, <a href=\"https://www.guinness.com/en/beers/guinness-draught\">guinness.com</a>: 4.2 % Alkohol."
+ },
+ "3d33cba514c0": {
+  "src": "Wall and floor layers <i>γ</i><sub>w</sub>",
+  "tr": "Randschichten an Wand und Boden <i>γ</i><sub>w</sub>"
+ },
+ "3de8f9fc212b": {
+  "src": "Source, and how sure",
+  "tr": "Quelle, und wie sicher"
+ },
+ "3f6672a65f52": {
+  "src": "Take the curl of (1). The curl of any gradient is zero, so both \\(\\nabla p\\) and \\(\\rho\\nabla\\Psi\\) drop out (\\(\\rho\\) is constant). With the vorticity \\(\\boldsymbol\\omega = \\nabla\\times\\mathbf u\\) and the identity \\((\\mathbf u\\cdot\\nabla)\\mathbf u = \\nabla(\\tfrac12 u^2) - \\mathbf u\\times\\boldsymbol\\omega\\), we are left with",
+  "tr": "Bilden wir die Rotation von (1). Die Rotation jedes Gradienten ist null, also fallen \\(\\nabla p\\) und \\(\\rho\\nabla\\Psi\\) beide heraus (\\(\\rho\\) ist konstant). Mit der Wirbelstärke \\(\\boldsymbol\\omega = \\nabla\\times\\mathbf u\\) und der Identität \\((\\mathbf u\\cdot\\nabla)\\mathbf u = \\nabla(\\tfrac12 u^2) - \\mathbf u\\times\\boldsymbol\\omega\\) bleibt"
+ },
+ "3f84ef531f9d": {
+  "src": "Symbol",
+  "tr": "Symbol"
+ },
+ "3ff656e269bf": {
+  "src": "Retail listing of the Guinness tulip pint glass, CE marked: 160 × 85 mm, 568 mL; <a href=\"https://www.nisbets.ie/guinness-pint-tulip-glasses-ce-marked/ja936\">Nisbets JA936</a>.",
+  "tr": "Händlerangebot für das Guinness-Tulpenglas (Pint) mit CE-Kennzeichnung: 160 × 85 mm, 568 mL; <a href=\"https://www.nisbets.ie/guinness-pint-tulip-glasses-ce-marked/ja936\">Nisbets JA936</a>."
+ },
+ "40603241328d": {
+  "src": "Falls to 1/e in",
+  "tr": "Fällt auf 1/e in"
+ },
+ "410070528be6": {
+  "src": "T. Watamura, F. Iwatsubo, K. Sugiyama, K. Yamamoto, Y. Yotsumoto, T. Shiono, “Bubble cascade in Guinness beer is caused by gravity current instability”, <i>Sci. Rep.</i> 9, 5718 (2019); <a href=\"https://www.nature.com/articles/s41598-019-42094-0\">open</a>. Read.",
+  "tr": "T. Watamura, F. Iwatsubo, K. Sugiyama, K. Yamamoto, Y. Yotsumoto, T. Shiono, „Bubble cascade in Guinness beer is caused by gravity current instability“, <i>Sci. Rep.</i> 9, 5718 (2019); <a href=\"https://www.nature.com/articles/s41598-019-42094-0\">frei zugänglich</a>. Gelesen."
+ },
+ "4335ff198d8e": {
+  "src": "No measured decay time of sloshing in a beer glass was found in the sources searched; the walking-with-coffee study gives a computed, not measured, decrement for a cup [2]. A real test of this note is therefore within anyone’s reach: film a pint after a tap on the glass and count the swings.",
+  "tr": "In den durchsuchten Quellen fand sich keine gemessene Abklingzeit des Schwappens in einem Bierglas; die Studie über das Gehen mit Kaffee gibt für eine Tasse ein berechnetes, kein gemessenes Dekrement an [2]. Eine echte Prüfung dieses Skripts liegt daher in jedermanns Reichweite: Filmen Sie ein Pint nach einem Klopfen gegen das Glas und zählen Sie die Schwingungen."
+ },
+ "43e54f06ca79": {
+  "src": "Surface tension <i>σ</i>",
+  "tr": "Oberflächenspannung <i>σ</i>"
+ },
+ "44921f65bede": {
+  "src": "Example 6.1 · a fifth of a millimetre",
+  "tr": "Beispiel 6.1 · ein Fünftel Millimeter"
+ },
+ "46a5b685bdd0": {
+  "src": "Fixed between runs, never rescaled by itself: a slow slosh draws short arrows. The key in the cut gives the scale.",
+  "tr": "Zwischen den Läufen fest, nie von selbst neu skaliert: Ein langsames Schwappen zeichnet kurze Pfeile. Die Legende im Schnitt gibt den Maßstab an."
+ },
+ "48e00a5d4228": {
+  "src": "Live, the page integrates the hand’s follower and the 14 equations (12) with the classical fourth-order Runge–Kutta method at a fixed step \\(h = 1\\) ms. The fastest mode kept, (1,3) at about 6.4 Hz, has \\(\\omega h = 0.04\\), far inside the method’s stability limit (\\(|\\omega h| \\lt 2.8\\)), with a phase error per step of order \\((\\omega h)^5/120\\), about \\(10^{-9}\\). Each frame runs as many steps as real time has passed, capped at 50 ms per frame.",
+  "tr": "Live integriert die Seite den Folger der Hand und die 14 Gleichungen (12) mit dem klassischen Runge-Kutta-Verfahren vierter Ordnung bei einer festen Schrittweite \\(h = 1\\) ms. Die schnellste behaltene Mode, (1,3) bei etwa 6.4 Hz, hat \\(\\omega h = 0.04\\), weit innerhalb der Stabilitätsgrenze des Verfahrens (\\(|\\omega h| \\lt 2.8\\)), mit einem Phasenfehler pro Schritt der Größenordnung \\((\\omega h)^5/120\\), etwa \\(10^{-9}\\). Jedes Bild rechnet so viele Schritte, wie Echtzeit vergangen ist, höchstens 50 ms pro Bild."
+ },
+ "48f66b54fbda": {
+  "src": "<span>5</span>The real glass, by finite elements",
+  "tr": "<span>5</span>Das echte Glas, mit finiten Elementen"
+ },
+ "4a69e6490be5": {
+  "src": "The measured coefficient is 1.42 times the clean-wall theory. That is no contradiction: Miles showed that the damping observed in the classic experiments exceeds wall damping alone by factors of up to two or three, and traced the excess to surface films and to the contact line [5]. Those are the next two terms.",
+  "tr": "Der gemessene Koeffizient ist das 1.42-Fache der Theorie für die saubere Wand. Das ist kein Widerspruch: Miles zeigte, dass die in den klassischen Experimenten beobachtete Dämpfung die Wanddämpfung allein um Faktoren bis zu zwei oder drei übersteigt, und führte den Überschuss auf Oberflächenfilme und auf die Kontaktlinie zurück [5]. Das sind die nächsten beiden Terme."
+ },
+ "4b2d6526e6c5": {
+  "src": "If the glass is shaken sideways as \\(x = A\\sin\\Omega t\\) at the mode’s own frequency (the page eases the shaking in over 0.3 s, \\(x = A(1 - e^{-t/0.3\\,\\mathrm s})\\sin\\Omega t\\), so that it starts without a jolt; the steady state is the same), \\(\\Omega = \\omega_n\\), the steady amplitude of (12) is the push divided by the damping, \\(a_n = \\lambda_nQ_nA\\omega_n^2/[(1 + \\mu_f)\\,2\\gamma_n\\omega_n]\\).",
+  "tr": "Wird das Glas seitwärts geschüttelt, \\(x = A\\sin\\Omega t\\), mit der eigenen Frequenz der Mode (die Seite blendet das Schütteln über 0.3 s ein, \\(x = A(1 - e^{-t/0.3\\,\\mathrm s})\\sin\\Omega t\\), damit es ohne Ruck beginnt; der stationäre Zustand ist derselbe), \\(\\Omega = \\omega_n\\), so ist die stationäre Amplitude von (12) der Antrieb geteilt durch die Dämpfung, \\(a_n = \\lambda_nQ_nA\\omega_n^2/[(1 + \\mu_f)\\,2\\gamma_n\\omega_n]\\)."
+ },
+ "4bf5cde00ac5": {
+  "src": "Three things are already visible in that experience. First, the stout has a rhythm of its own: it rocks at a definite frequency, about three times a second in a pint glass, whatever your hand does. Second, your hand can feed that rhythm: if your steps come at a rate close to it, each step adds to the swing, and the amplitude grows. Third, something takes the energy away again, because the rocking dies when you stand still. A physicist recognises a driven, damped oscillator. This note shows that the stout in a glass is a whole family of such oscillators, called <em>sloshing modes</em>, derives their frequencies from the laws of fluid motion and the shape of the glass, and works out, one by one, the processes that damp them.",
+  "tr": "Drei Dinge sind in dieser Erfahrung schon zu sehen. Erstens hat das Stout einen eigenen Rhythmus: Es schaukelt mit einer bestimmten Frequenz, in einem Pint-Glas etwa dreimal pro Sekunde, was Ihre Hand auch tut. Zweitens kann Ihre Hand diesen Rhythmus speisen: Kommen Ihre Schritte in einem Takt nahe daran, verstärkt jeder Schritt das Schaukeln, und die Amplitude wächst. Drittens nimmt etwas die Energie wieder weg, denn das Schaukeln erstirbt, wenn Sie stillstehen. Ein Physiker erkennt darin einen angetriebenen, gedämpften Oszillator. Dieses Skript zeigt, dass das Stout in einem Glas eine ganze Familie solcher Oszillatoren ist, die <em>Schwappmoden</em>, leitet ihre Frequenzen aus den Gesetzen der Flüssigkeitsbewegung und der Form des Glases her und arbeitet nacheinander die Vorgänge aus, die sie dämpfen."
+ },
+ "4d7537772922": {
+  "src": "Each loss is then a matter of computing \\(\\bar P\\) with the flow of the lossless mode. This is accurate as long as the losses are small, \\(\\gamma \\ll \\omega\\); here \\(\\gamma/\\omega\\) is 2 to 4 %.",
+  "tr": "Jeder Verlust ist dann eine Frage der Berechnung von \\(\\bar P\\) mit der Strömung der verlustfreien Mode. Das ist genau, solange die Verluste klein sind, \\(\\gamma \\ll \\omega\\); hier ist \\(\\gamma/\\omega\\) 2 bis 4 %."
+ },
+ "4edd16ba5c1c": {
+  "src": "Key result · how long a pint rocks",
+  "tr": "Kernergebnis · wie lange ein Pint schaukelt"
+ },
+ "4effa0074b9e": {
+  "src": "<i>Straight</i>: a cylinder with the same surface radius and depth, where the modes are exact Bessel functions (section 4).",
+  "tr": "<i>Gerade</i>: ein Zylinder mit demselben Oberflächenradius und derselben Tiefe, in dem die Moden exakte Bessel-Funktionen sind (Abschnitt 4)."
+ },
+ "4fbf0d0a06ab": {
+  "src": "scaled like water’s viscosity \\(\\mu_w\\) (Vogel’s equation). <span class=\"fact\">Inference</span>: beer is mostly water; it gives a 31 % fall from 6 to 20 °C, close to the measured trend of beers [12].",
+  "tr": "skaliert wie die Viskosität von Wasser \\(\\mu_w\\) (Vogel-Gleichung). <span class=\"fact\">Folgerung</span>: Bier ist größtenteils Wasser; das ergibt einen Abfall um 31 % von 6 auf 20 °C, nahe am gemessenen Verlauf bei Bieren [12]."
+ },
+ "5038e41d34d7": {
+  "src": "A pint of stout in a Guinness tulip glass, carried by hand. Drag the glass, shake it, and watch the stout slosh: the surface, the head and the velocity field inside, from the linear modes of the real glass shape, with every source of damping derived.",
+  "tr": "Ein Pint Stout in einem Guinness-Tulpenglas, von Hand getragen. Ziehen Sie das Glas, schütteln Sie es und sehen Sie dem Stout beim Schwappen zu: die Oberfläche, die Schaumkrone und das Geschwindigkeitsfeld im Inneren, aus den linearen Moden der echten Glasform, mit jeder Dämpfungsquelle hergeleitet."
+ },
+ "54934f7f685d": {
+  "src": "with the eigenvalue \\(\\lambda = \\omega^2/g\\) appearing only in the surface condition. Mathematicians call this a <em>Steklov problem</em>. Multiply the equation by any smooth function \\(\\psi\\) and by \\(r\\), integrate over the region and integrate by parts once. The wall and floor terms vanish because \\(\\partial_n\\Phi = 0\\), and the surface term is replaced using its condition:",
+  "tr": "wobei der Eigenwert \\(\\lambda = \\omega^2/g\\) nur in der Oberflächenbedingung auftritt. Mathematiker nennen das ein <em>Steklov-Problem</em>. Multipliziert man die Gleichung mit einer beliebigen glatten Funktion \\(\\psi\\) und mit \\(r\\), integriert über das Gebiet und integriert einmal partiell, so verschwinden die Terme an Wand und Boden, weil \\(\\partial_n\\Phi = 0\\), und der Oberflächenterm wird mithilfe seiner Bedingung ersetzt:"
+ },
+ "56d14ec766d1": {
+  "src": "Density <i>ρ</i>",
+  "tr": "Dichte <i>ρ</i>"
+ },
+ "57212991c63c": {
+  "src": "Example 4.1 · the brief’s straight glass",
+  "tr": "Beispiel 4.1 · das gerade Glas aus der Aufgabenstellung"
+ },
+ "5726b128ca3b": {
+  "src": "What is drawn",
+  "tr": "Was gezeichnet wird"
+ },
+ "5929ede57b5f": {
+  "src": "with \\(p\\) the pressure, \\(\\mu\\) the viscosity and \\(\\mathbf g = (0, 0, -g)\\). This is the Navier–Stokes equation; the only new thing is the term \\(-\\rho\\mathbf a_g\\), the inertial force of the accelerating frame. Because the stout is incompressible, \\(\\nabla\\cdot\\mathbf u = 0\\). The two body forces combine into the gradient of one potential,",
+  "tr": "mit dem Druck \\(p\\), der Viskosität \\(\\mu\\) und \\(\\mathbf g = (0, 0, -g)\\). Das ist die Navier-Stokes-Gleichung; neu ist nur der Term \\(-\\rho\\mathbf a_g\\), die Trägheitskraft des beschleunigten Bezugssystems. Weil das Stout inkompressibel ist, gilt \\(\\nabla\\cdot\\mathbf u = 0\\). Die beiden Volumenkräfte lassen sich zum Gradienten eines einzigen Potentials zusammenfassen,"
+ },
+ "59770c70095f": {
+  "src": "A Guinness tulip glass, measured from a photograph and rebuilt in Blender, holds half a litre of stout under its head. Carry it: drag the glass across the table, lift it, shake it. The stout sloshes in the modes of this very glass shape, the head rides on top, and a cut through the glass shows the velocity field inside. The damping is not a fudge factor: each loss is derived on its own and can be switched off.",
+  "tr": "Ein Guinness-Tulpenglas, nach einem Foto vermessen und in Blender nachgebaut, enthält einen halben Liter Stout unter seiner Schaumkrone. Tragen Sie es: Ziehen Sie das Glas über den Tisch, heben Sie es an, schütteln Sie es. Das Stout schwappt in den Moden genau dieser Glasform, die Schaumkrone schwimmt obenauf, und ein Schnitt durch das Glas zeigt das Geschwindigkeitsfeld im Inneren. Die Dämpfung ist kein Korrekturfaktor: Jeder Verlust wird einzeln hergeleitet und lässt sich abschalten."
+ },
+ "5a262b418f29": {
+  "src": "Boundary conditions",
+  "tr": "Randbedingungen"
+ },
+ "5aa829cda8a9": {
+  "src": "<b>Sideways acceleration drives.</b> The term \\(\\ddot x\\,x\\) in (6) is a tilt of the effective gravity; it pushes on every mode whose shape has a sideways lean, which in a round glass means \\(m = 1\\) only, through the coupling \\(Q_n\\). <b>Vertical acceleration pumps.</b> \\(\\ddot z\\) multiplies \\(a_n\\): it changes the strength of gravity, the spring constant of every mode, without pushing any of them. It can only amplify a slosh that is already there.",
+  "tr": "<b>Seitliche Beschleunigung treibt an.</b> Der Term \\(\\ddot x\\,x\\) in (6) ist eine Neigung der effektiven Schwerkraft; er drückt auf jede Mode, deren Form eine seitliche Neigung hat, was in einem runden Glas nur \\(m = 1\\) bedeutet, über die Kopplung \\(Q_n\\). <b>Senkrechte Beschleunigung pumpt.</b> \\(\\ddot z\\) multipliziert \\(a_n\\): Sie ändert die Stärke der Schwerkraft, die Federkonstante jeder Mode, ohne eine von ihnen anzustoßen. Sie kann nur ein Schwappen verstärken, das schon da ist."
+ },
+ "5c1cdb506669": {
+  "src": "Calm the stout",
+  "tr": "Das Stout beruhigen"
+ },
+ "5ce8fa776ba0": {
+  "src": "Just outside the Stokes layer the flow slides along the glass with the velocity \\(U\\cos\\omega t\\) given by the potential. Inside, at distance \\(s\\) from the glass, the solution of the diffusion equation that sticks to the glass is \\(u = U[\\cos\\omega t - e^{-s/\\delta}\\cos(\\omega t - s/\\delta)]\\). The power per unit area turned into heat is \\(\\mu\\int(\\partial u/\\partial s)^2 ds\\). The square of the gradient averages over a period to \\((U^2/\\delta^2)\\,e^{-2s/\\delta}\\), and the integral to \\(U^2/(2\\delta)\\), so",
+  "tr": "Gerade außerhalb der Stokes-Schicht gleitet die Strömung mit der vom Potential gegebenen Geschwindigkeit \\(U\\cos\\omega t\\) am Glas entlang. Innen, im Abstand \\(s\\) vom Glas, ist die Lösung der Diffusionsgleichung, die am Glas haftet, \\(u = U[\\cos\\omega t - e^{-s/\\delta}\\cos(\\omega t - s/\\delta)]\\). Die pro Flächeneinheit in Wärme umgesetzte Leistung ist \\(\\mu\\int(\\partial u/\\partial s)^2 ds\\). Das Quadrat des Gradienten mittelt sich über eine Periode zu \\((U^2/\\delta^2)\\,e^{-2s/\\delta}\\) und das Integral zu \\(U^2/(2\\delta)\\), also"
+ },
+ "60ece1d6363f": {
+  "src": "measured [3]; 2.1 mPa·s in [4]. Firm.",
+  "tr": "gemessen [3]; 2.1 mPa·s in [4]. Gesichert."
+ },
+ "67cd2344f100": {
+  "src": "Run on the measured glass for every fill from 300 to 590 mL, the program gives the frequencies of Figure 2. Below the widest point the wall leans outward as it rises; above it, the wall leans inward. Compared with a straight glass of the same surface radius and depth, the outward-leaning glass sloshes more slowly (3.14 against 3.25 Hz at 300 mL) and the inward-leaning one faster (3.37 against 3.30 Hz at 590 mL) <span class=\"fact\">computed</span>. <span class=\"fact\">Inference</span>: near the surface, where the sloshing flow lives, an outward-leaning wall gives the stout more room to swing sideways for the same rise at the wall, which acts like a heavier pendulum bob; an inward-leaning wall squeezes the same flow into less room, a stiffer spring.",
+  "tr": "Auf das gemessene Glas angewandt, für jede Füllung von 300 bis 590 mL, liefert das Programm die Frequenzen von Abbildung 2. Unterhalb der breitesten Stelle neigt sich die Wand beim Aufsteigen nach außen, oberhalb nach innen. Verglichen mit einem geraden Glas mit demselben Oberflächenradius und derselben Tiefe schwappt das sich nach außen neigende Glas langsamer (3.14 gegenüber 3.25 Hz bei 300 mL) und das sich nach innen neigende schneller (3.37 gegenüber 3.30 Hz bei 590 mL) <span class=\"fact\">berechnet</span>. <span class=\"fact\">Folgerung</span>: Nahe der Oberfläche, wo die Schwappströmung sitzt, gibt eine nach außen geneigte Wand dem Stout bei gleichem Anstieg an der Wand mehr Raum, seitwärts zu schwingen, was wie ein schwererer Pendelkörper wirkt; eine nach innen geneigte Wand presst dieselbe Strömung in weniger Raum, eine steifere Feder."
+ },
+ "67ed2ce957cf": {
+  "src": "The stout",
+  "tr": "Das Stout"
+ },
+ "685b39ed3ed9": {
+  "src": "surface tension",
+  "tr": "Oberflächenspannung"
+ },
+ "69c83c5f7387": {
+  "src": "Outside boundary layers 0.45 mm thick, the velocity of the stout relative to the glass is the gradient of a <em>velocity potential</em>, \\(\\mathbf u = \\nabla\\phi\\), and incompressibility makes it obey Laplace’s equation, \\(\\nabla^2\\phi = 0\\). Viscosity drops out of the interior entirely: for \\(\\mathbf u = \\nabla\\phi\\), \\(\\mu\\nabla^2\\mathbf u = \\mu\\nabla(\\nabla^2\\phi) = 0\\). It acts only in the layers, where it takes energy away (section 7).",
+  "tr": "Außerhalb der 0.45 mm dicken Randschichten ist die Geschwindigkeit des Stouts relativ zum Glas der Gradient eines <em>Geschwindigkeitspotentials</em>, \\(\\mathbf u = \\nabla\\phi\\), und die Inkompressibilität lässt es der Laplace-Gleichung gehorchen, \\(\\nabla^2\\phi = 0\\). Die Viskosität fällt aus dem Inneren vollständig heraus: Für \\(\\mathbf u = \\nabla\\phi\\) ist \\(\\mu\\nabla^2\\mathbf u = \\mu\\nabla(\\nabla^2\\phi) = 0\\). Sie wirkt nur in den Randschichten, wo sie Energie entzieht (Abschnitt 7)."
+ },
+ "6aef68393260": {
+  "src": "Michael Faraday saw these waves in 1831, at half the frequency of the vibration that drove them. For the default pint the threshold is \\(A = 0.58\\) mm at \\(\\Omega = 2\\omega_1\\); the button <i>Up and down at 2f₁</i> shakes 2 mm, for which (13) predicts a net growth rate of 1.2 per second. Run on the page’s own integrator, a micrometre of initial disorder first falls about tenfold, because a seed at rest lies mostly in the decaying solution; from about two seconds on it grows at 1.21 per second, as (13) predicts <span class=\"fact\">computed</span>, <code>notes/fig12/gate.cjs</code> and an independent SciPy run [<code>notes/fig12/check-derivations.md</code>]. (A linear model gives no seed by itself: the page starts every mode at about a micrometre, standing for the disorder a real surface always has.)",
+  "tr": "Michael Faraday sah diese Wellen 1831, mit der halben Frequenz der Vibration, die sie antrieb. Für das Standard-Pint liegt die Schwelle bei \\(A = 0.58\\) mm für \\(\\Omega = 2\\omega_1\\); die Schaltfläche <i>Auf und ab mit 2f₁</i> schüttelt mit 2 mm, wofür (13) eine Netto-Anwachsrate von 1.2 pro Sekunde vorhersagt. Mit dem eigenen Integrator der Seite fällt eine Anfangsstörung von einem Mikrometer zunächst etwa auf ein Zehntel, weil ein ruhender Keim überwiegend in der abklingenden Lösung liegt; ab etwa zwei Sekunden wächst sie mit 1.21 pro Sekunde, wie (13) vorhersagt <span class=\"fact\">berechnet</span>, <code>notes/fig12/gate.cjs</code> und ein unabhängiger SciPy-Lauf [<code>notes/fig12/check-derivations.md</code>]. (Ein lineares Modell liefert von sich aus keinen Keim: Die Seite startet jede Mode bei etwa einem Mikrometer, stellvertretend für die Unordnung, die eine echte Oberfläche immer hat.)"
+ },
+ "6c6daefa74a0": {
+  "src": "If the glass is shaken sideways as \\(x = A\\sin\\Omega t\\) at the mode’s own frequency, \\(\\Omega = \\omega_n\\), the steady amplitude of (12) is the push divided by the damping, \\(a_n = \\lambda_nQ_nA\\omega_n^2/[(1 + \\mu_f)\\,2\\gamma_n\\omega_n]\\).",
+  "tr": "Wird das Glas seitwärts geschüttelt, \\(x = A\\sin\\Omega t\\), mit der eigenen Frequenz der Mode, \\(\\Omega = \\omega_n\\), so ist die stationäre Amplitude von (12) der Antrieb geteilt durch die Dämpfung, \\(a_n = \\lambda_nQ_nA\\omega_n^2/[(1 + \\mu_f)\\,2\\gamma_n\\omega_n]\\)."
+ },
+ "6da60eae2190": {
+  "src": "The empirical decrement 4.98 ν<sup>1/2</sup>a<sup>−3/4</sup>g<sup>−1/4</sup> of NASA SP-8009 (1968), quoted in T. Irvine, “Damping in liquid sloshing”, <a href=\"http://www.vibrationdata.com/tutorials/slosh_damping.pdf\">tutorial</a>. Secondary source; the NASA document itself was not opened.",
+  "tr": "Das empirische Dekrement 4.98 ν<sup>1/2</sup>a<sup>−3/4</sup>g<sup>−1/4</sup> aus NASA SP-8009 (1968), zitiert in T. Irvine, „Damping in liquid sloshing“, <a href=\"http://www.vibrationdata.com/tutorials/slosh_damping.pdf\">Tutorial</a>. Sekundärquelle; das NASA-Dokument selbst wurde nicht geöffnet."
+ },
+ "6e0d57e09298": {
+  "src": "Michael Faraday saw these waves in 1831, at half the frequency of the vibration that drove them. For the default pint the threshold is \\(A = 0.58\\) mm at \\(\\Omega = 2\\omega_1\\); the button <i>Up and down at 2f₁</i> shakes 2 mm, for which (13) predicts a net growth rate of 1.2 per second. Run on the page’s own integrator, a micrometre of initial disorder grows at 0.6 per second in the first two seconds, while the part of the seed with the wrong phase dies away, and at 1.1 per second from the fifth second on <span class=\"fact\">computed</span>, <code>notes/fig12/gate.cjs</code>. (A linear model gives no seed by itself: the page starts every mode at about a micrometre, standing for the disorder a real surface always has.)",
+  "tr": "Michael Faraday sah diese Wellen 1831, mit der halben Frequenz der Vibration, die sie antrieb. Für das Standard-Pint liegt die Schwelle bei \\(A = 0.58\\) mm für \\(\\Omega = 2\\omega_1\\); die Schaltfläche <i>Auf und ab mit 2f₁</i> schüttelt mit 2 mm, wofür (13) eine Netto-Anwachsrate von 1.2 pro Sekunde vorhersagt. Mit dem eigenen Integrator der Seite wächst eine Anfangsstörung von einem Mikrometer in den ersten zwei Sekunden mit 0.6 pro Sekunde, während der Anteil des Keims mit der falschen Phase abklingt, und ab der fünften Sekunde mit 1.1 pro Sekunde <span class=\"fact\">berechnet</span>, <code>notes/fig12/gate.cjs</code>. (Ein lineares Modell liefert von sich aus keinen Keim: Die Seite startet jede Mode bei etwa einem Mikrometer, stellvertretend für die Unordnung, die eine echte Oberfläche immer hat.)"
+ },
+ "6e5336ed0543": {
+  "src": "This <em>weak form</em> is what the finite-element method solves. The region is cut into triangles; on each, \\(\\Phi\\) is a quadratic polynomial fixed by its values at six nodes; requiring (10) for every such basis function \\(\\psi\\) gives a matrix equation \\(\\mathsf K\\boldsymbol\\Phi = \\lambda\\,\\mathsf M\\boldsymbol\\Phi\\), in which \\(\\mathsf M\\) has entries only at the surface nodes. Eliminating the interior nodes leaves a small symmetric eigenvalue problem on the surface <span class=\"fact\">computed</span>, <code>tools/fig12/modes.py</code>.",
+  "tr": "Diese <em>schwache Form</em> ist es, was die Finite-Elemente-Methode löst. Das Gebiet wird in Dreiecke zerlegt; auf jedem ist \\(\\Phi\\) ein quadratisches Polynom, festgelegt durch seine Werte an sechs Knoten; verlangt man (10) für jede solche Basisfunktion \\(\\psi\\), erhält man eine Matrixgleichung \\(\\mathsf K\\boldsymbol\\Phi = \\lambda\\,\\mathsf M\\boldsymbol\\Phi\\), in der \\(\\mathsf M\\) nur an den Oberflächenknoten Einträge hat. Eliminiert man die inneren Knoten, bleibt ein kleines symmetrisches Eigenwertproblem auf der Oberfläche <span class=\"fact\">berechnet</span>, <code>tools/fig12/modes.py</code>."
+ },
+ "6ecb5986bebe": {
+  "src": "<span>1</span>Carrying a pint",
+  "tr": "<span>1</span>Ein Pint tragen"
+ },
+ "702b201c4b40": {
+  "src": "Phyein Usul",
+  "tr": "Phyein Usul"
+ },
+ "73b55235e370": {
+  "src": "with the factor \\(k_f\\), default 1, on a slider. <span class=\"fact\">Inference</span>: this transfer from a slot to a round glass, from 3 mm bubbles in dish soap to sub-millimetre bubbles in stout, is the least certain step on this page; it could be off by a factor of three either way [1].",
+  "tr": "mit dem Faktor \\(k_f\\), voreingestellt 1, auf einem Schieberegler. <span class=\"fact\">Folgerung</span>: Diese Übertragung von einem Spalt auf ein rundes Glas, von 3-mm-Blasen in Spülmittel auf Blasen unter einem Millimeter in Stout, ist der unsicherste Schritt auf dieser Seite; sie könnte in jeder Richtung um einen Faktor drei danebenliegen [1]."
+ },
+ "73ed6c030b6e": {
+  "src": "The model is linear: it holds while the wave at the wall is small compared with the radius. Beyond about a fifth of the radius, real sloshing in a round glass turns into a swirl, the surface rotating around the glass, an effect of the nonlinear terms that this page leaves out. The contact line is treated as a constant damping, the head as a rigid mass with wall friction, and the glass as perfectly smooth. The next model would keep the quadratic terms of the surface conditions (giving swirl and the bending of the resonance curve), give the head an elasticity of its own, and measure its damping in a real glass.",
+  "tr": "Das Modell ist linear: Es gilt, solange die Welle an der Wand klein gegen den Radius ist. Jenseits von etwa einem Fünftel des Radius geht echtes Schwappen in einem runden Glas in einen Wirbel über, bei dem die Oberfläche um das Glas rotiert, eine Wirkung der nichtlinearen Terme, die diese Seite weglässt. Die Kontaktlinie wird als konstante Dämpfung behandelt, die Schaumkrone als starre Masse mit Wandreibung und das Glas als vollkommen glatt. Das nächste Modell würde die quadratischen Terme der Oberflächenbedingungen behalten (was den Wirbel und die Verbiegung der Resonanzkurve ergibt), der Schaumkrone eine eigene Elastizität geben und ihre Dämpfung in einem echten Glas messen."
+ },
+ "743cd4a1299a": {
+  "src": "Glass shape",
+  "tr": "Glasform"
+ },
+ "74c10e573f1a": {
+  "src": "Two checks say the result is the real glass. The widest diameter comes out as 84.1 mm, against the published 85 mm, a difference of 1 %. And the volume agrees with the glass’s purpose: taking a wall 2.0 mm thick and a solid base 8 mm thick (both read from the photograph), the cavity holds 603.7 mL to the brim, and 568 mL fills it to 152.0 mm, eight millimetres below the rim, where a lined pint glass puts its line <span class=\"fact\">computed</span>. Blender revolved the same profile into a closed mesh of 96 sides and measured 603.3 mL; the 0.4 mL difference is exactly what a 96-sided polygon loses against a circle, a factor \\(\\tfrac{96}{2\\pi}\\sin\\tfrac{2\\pi}{96} = 0.99929\\) <span class=\"fact\">computed</span>.",
+  "tr": "Zwei Prüfungen zeigen, dass das Ergebnis das echte Glas ist. Der größte Durchmesser ergibt sich zu 84.1 mm, gegenüber den veröffentlichten 85 mm, ein Unterschied von 1 %. Und das Volumen passt zum Zweck des Glases: Mit einer 2.0 mm dicken Wand und einem 8 mm dicken massiven Boden (beides aus dem Foto abgelesen) fasst der Hohlraum 603.7 mL bis zum Rand, und 568 mL füllen ihn bis 152.0 mm, acht Millimeter unter dem Rand, wo ein geeichtes Pint-Glas seinen Eichstrich hat <span class=\"fact\">berechnet</span>. Blender drehte dasselbe Profil zu einem geschlossenen Netz mit 96 Seiten und maß 603.3 mL; der Unterschied von 0.4 mL ist genau das, was ein 96-seitiges Vieleck gegenüber einem Kreis verliert, ein Faktor \\(\\tfrac{96}{2\\pi}\\sin\\tfrac{2\\pi}{96} = 0.99929\\) <span class=\"fact\">berechnet</span>."
+ },
+ "75d514f107fd": {
+  "src": "With \\(\\mathbf u = \\nabla\\phi\\), equation (1) can be integrated once in space. Using \\((\\mathbf u\\cdot\\nabla)\\mathbf u = \\nabla(\\tfrac12|\\nabla\\phi|^2)\\) when \\(\\boldsymbol\\omega = 0\\), every term is a gradient, and",
+  "tr": "Mit \\(\\mathbf u = \\nabla\\phi\\) lässt sich Gleichung (1) einmal im Raum integrieren. Mit \\((\\mathbf u\\cdot\\nabla)\\mathbf u = \\nabla(\\tfrac12|\\nabla\\phi|^2)\\) für \\(\\boldsymbol\\omega = 0\\) ist jeder Term ein Gradient, und"
+ },
+ "76014f7b4957": {
+  "src": "Glass and pour",
+  "tr": "Glas und Füllung"
+ },
+ "781961bc81c2": {
+  "src": "Pause",
+  "tr": "Pause"
+ },
+ "781c237a8c2a": {
+  "src": "A Pint of Stout, Carried · Numa Koudsie",
+  "tr": "Ein Pint Stout unterwegs · Numa Koudsie"
+ },
+ "789ae5f8cc0f": {
+  "src": "<b>On the wall and the floor</b> the stout cannot pass through the glass: \\(\\partial\\phi/\\partial n = 0\\), with \\(n\\) the direction normal to the glass.",
+  "tr": "<b>An Wand und Boden</b> kann das Stout nicht durch das Glas hindurch: \\(\\partial\\phi/\\partial n = 0\\), mit \\(n\\) der Richtung normal zum Glas."
+ },
+ "78b9bc5febc6": {
+  "src": "The skin of the surface",
+  "tr": "Die Haut der Oberfläche"
+ },
+ "7bef2bd4a5fd": {
+  "src": "Viscosity at 6 °C <i>μ</i><sub>6</sub>",
+  "tr": "Viskosität bei 6 °C <i>μ</i><sub>6</sub>"
+ },
+ "7d8e59e0e708": {
+  "src": "Example 5.1 · the default pint",
+  "tr": "Beispiel 5.1 · das Standard-Pint"
+ },
+ "7debb3df3c49": {
+  "src": "Using (13), estimate the vertical shaking at 2 f₁ needed to start Faraday waves in the pint without a head. Check your answer with the page.",
+  "tr": "Schätzen Sie mit (13) ab, welches senkrechte Schütteln bei 2 f₁ nötig ist, um im Pint ohne Schaumkrone Faraday-Wellen anzuregen. Prüfen Sie Ihre Antwort mit der Seite."
+ },
+ "801f806143a3": {
+  "src": "Beer is full of proteins that gather at the surface, and under a head the stout touches the underside of a foam. Either way, the surface resists being stretched. If it cannot stretch at all, the surface is a wall for horizontal motion, and its own Stokes layer dissipates by the same formula (15), now integrated over the surface: \\(\\gamma_s = c_s\\,\\tfrac12\\sqrt{\\nu\\omega/2}\\,I_s/E\\), with \\(c_s = 0\\) for a clean surface and \\(c_s = 1\\) for one that cannot stretch [5]. For the default pint the skin, at \\(c_s = 1\\), takes about as much as the wall.",
+  "tr": "Bier ist voller Proteine, die sich an der Oberfläche sammeln, und unter einer Schaumkrone berührt das Stout die Unterseite eines Schaums. So oder so widersteht die Oberfläche einer Dehnung. Kann sie sich gar nicht dehnen, ist die Oberfläche für waagerechte Bewegung eine Wand, und ihre eigene Stokes-Schicht dissipiert nach derselben Formel (15), nun über die Oberfläche integriert: \\(\\gamma_s = c_s\\,\\tfrac12\\sqrt{\\nu\\omega/2}\\,I_s/E\\), mit \\(c_s = 0\\) für eine saubere Oberfläche und \\(c_s = 1\\) für eine, die sich nicht dehnen kann [5]. Beim Standard-Pint nimmt die Haut bei \\(c_s = 1\\) etwa so viel wie die Wand."
+ },
+ "813f15bc80bc": {
+  "src": "scaled like water’s viscosity \\(\\mu_w\\) (Vogel’s equation). <span class=\"fact\">Inference</span>: beer is mostly water; it gives a 32 % fall from 6 to 20 °C, close to the measured trend of beers [12].",
+  "tr": "skaliert wie die Viskosität von Wasser \\(\\mu_w\\) (Vogel-Gleichung). <span class=\"fact\">Folgerung</span>: Bier ist größtenteils Wasser; das ergibt einen Abfall um 32 % von 6 auf 20 °C, nahe am gemessenen Verlauf bei Bieren [12]."
+ },
+ "82ac1ff2de9f": {
+  "src": "<span class=\"psec__n\">03</span>A fluid in a moving glass",
+  "tr": "<span class=\"psec__n\">03</span>Eine Flüssigkeit in einem bewegten Glas"
+ },
+ "82ac9d3abf35": {
+  "src": "Head <i>h</i><sub>f</sub>",
+  "tr": "Schaumkrone <i>h</i><sub>f</sub>"
+ },
+ "82dd43d0e1db": {
+  "src": "Two checks say the result is the real glass. The widest diameter comes out as 84.1 mm, against the published 85 mm, a difference of 1 %. And the volume agrees with the glass’s purpose: taking a wall 2.0 mm thick and a solid base 8 mm thick (both read from the photograph), the cavity holds 603.7 mL to the brim, and 568 mL fills it to 151.9 mm, eight millimetres below the rim, where a lined pint glass puts its line <span class=\"fact\">computed</span>. Blender revolved the same profile into a closed mesh of 96 sides and measured 603.3 mL; the 0.4 mL difference is exactly what a 96-sided polygon loses against a circle, a factor \\(\\tfrac{96}{2\\pi}\\sin\\tfrac{2\\pi}{96} = 0.99929\\) <span class=\"fact\">computed</span>.",
+  "tr": "Zwei Prüfungen zeigen, dass das Ergebnis das echte Glas ist. Der größte Durchmesser ergibt sich zu 84.1 mm, gegenüber den veröffentlichten 85 mm, ein Unterschied von 1 %. Und das Volumen passt zum Zweck des Glases: Mit einer 2.0 mm dicken Wand und einem 8 mm dicken massiven Boden (beides aus dem Foto abgelesen) fasst der Hohlraum 603.7 mL bis zum Rand, und 568 mL füllen ihn bis 151.9 mm, acht Millimeter unter dem Rand, wo ein geeichtes Pint-Glas seinen Eichstrich hat <span class=\"fact\">berechnet</span>. Blender drehte dasselbe Profil zu einem geschlossenen Netz mit 96 Seiten und maß 603.3 mL; der Unterschied von 0.4 mL ist genau das, was ein 96-seitiges Vieleck gegenüber einem Kreis verliert, ein Faktor \\(\\tfrac{96}{2\\pi}\\sin\\tfrac{2\\pi}{96} = 0.99929\\) <span class=\"fact\">berechnet</span>."
+ },
+ "832912da381f": {
+  "src": "density of the liquid",
+  "tr": "Dichte der Flüssigkeit"
+ },
+ "85980845168c": {
+  "src": "Damping, each loss on its own",
+  "tr": "Dämpfung, jeder Verlust für sich"
+ },
+ "86e0183c57ce": {
+  "src": "<span class=\"pfig__n\">Figure 2</span>Frequency \\(f_1\\) of the slowest mode, (1,1), against the volume of stout. Ink: the tulip glass without a head. Wine: the tulip glass under 18 mm of head. Dashed: a straight glass with the same surface radius and depth as the tulip at each fill, also with the head. The curves cross near the widest point of the glass, where the tulip’s wall is vertical.",
+  "tr": "<span class=\"pfig__n\">Abbildung 2</span>Frequenz \\(f_1\\) der langsamsten Mode, (1,1), über dem Volumen des Stouts. Tinte: das Tulpenglas ohne Schaumkrone. Weinrot: das Tulpenglas unter 18 mm Schaumkrone. Gestrichelt: ein gerades Glas mit demselben Oberflächenradius und derselben Tiefe wie die Tulpe bei jeder Füllung, ebenfalls mit Schaumkrone. Die Kurven kreuzen sich nahe der breitesten Stelle des Glases, wo die Wand der Tulpe senkrecht steht."
+ },
+ "87baa708b7f7": {
+  "src": "Value on the page",
+  "tr": "Wert auf der Seite"
+ },
+ "885003619dae": {
+  "src": "Product photograph of the glass, <a href=\"https://www.mbswholesale.co.uk/guinness-pint-glass-568ml-20oz-ukca-ce/\">MBS Wholesale</a>; the profile extraction is <code>tools/fig12/profile_from_photo.py</code> and <code>glass.py</code>.",
+  "tr": "Produktfoto des Glases, <a href=\"https://www.mbswholesale.co.uk/guinness-pint-glass-568ml-20oz-ukca-ce/\">MBS Wholesale</a>; die Profilextraktion steht in <code>tools/fig12/profile_from_photo.py</code> und <code>glass.py</code>."
+ },
+ "89d5829a2d4b": {
+  "src": "A program that has not reproduced a known answer has proved nothing. For a cylinder of 40 mm radius and 100 mm depth the exact eigenvalues are \\(\\lambda = k\\tanh kD\\) from (8). On a mesh of 16 × 40 quadratic cells the program gives \\(\\lambda_{11} = 46.02036\\) m⁻¹ against the exact 46.02035, a relative error of \\(3\\times10^{-7}\\); the worst of nine modes, (0,3), is off by \\(2.4\\times10^{-4}\\), and halving the cells reduces every error <span class=\"fact\">computed</span>, <code>tools/fig12/check_cylinder.py</code>. The integrals the damping needs (section 7) agree with the exact Bessel integrals, evaluated independently in Wolfram Language, to \\(3\\times10^{-5}\\) for the slowest mode and to \\(3\\times10^{-3}\\) for the other modes kept.",
+  "tr": "Ein Programm, das keine bekannte Antwort reproduziert hat, hat nichts bewiesen. Für einen Zylinder mit 40 mm Radius und 100 mm Tiefe sind die exakten Eigenwerte \\(\\lambda = k\\tanh kD\\) aus (8). Auf einem Netz aus 16 × 40 quadratischen Zellen liefert das Programm \\(\\lambda_{11} = 46.02036\\) m⁻¹ gegenüber dem exakten Wert 46.02035, ein relativer Fehler von \\(3\\times10^{-7}\\); die schlechteste von neun Moden, (0,3), weicht um \\(2.4\\times10^{-4}\\) ab, und eine Halbierung der Zellen verkleinert jeden Fehler <span class=\"fact\">berechnet</span>, <code>tools/fig12/check_cylinder.py</code>. Die Integrale, die die Dämpfung braucht (Abschnitt 7), stimmen mit den exakten Bessel-Integralen, unabhängig in Wolfram Language ausgewertet, auf \\(3\\times10^{-5}\\) für die langsamste Mode und auf \\(3\\times10^{-3}\\) für die anderen behaltenen Moden überein."
+ },
+ "8a396a4cd168": {
+  "src": "Checking the program on the cylinder",
+  "tr": "Das Programm am Zylinder prüfen"
+ },
+ "8ad11ae048b2": {
+  "src": "<b>Fig. 12</b> · <span class=\"tx\">\\(\\ddot a_n + 2\\gamma_n\\dot a_n + \\omega_n^2\\left(1+\\ddot z/g\\right)a_n = -\\lambda_n Q_n\\,\\ddot x\\)</span> · live, RK4",
+  "tr": "<b>Abb. 12</b> · <span class=\"tx\">\\(\\ddot a_n + 2\\gamma_n\\dot a_n + \\omega_n^2\\left(1+\\ddot z/g\\right)a_n = -\\lambda_n Q_n\\,\\ddot x\\)</span> · live, RK4"
+ },
+ "8dd49681bd32": {
+  "src": "viscosity at temperature \\(T\\)",
+  "tr": "Viskosität bei der Temperatur \\(T\\)"
+ },
+ "8e6b86dce8c4": {
+  "src": "Problems",
+  "tr": "Aufgaben"
+ },
+ "8f27a805f7a0": {
+  "src": "The figure under the glass is a vertical cut through it along the direction in which the stout rocks. The arrows are the velocity \\(\\mathbf u = \\nabla\\phi\\) of the stout relative to the glass.",
+  "tr": "Die Abbildung unter dem Glas ist ein senkrechter Schnitt hindurch, entlang der Richtung, in der das Stout schaukelt. Die Pfeile sind die Geschwindigkeit \\(\\mathbf u = \\nabla\\phi\\) des Stouts relativ zum Glas."
+ },
+ "8fda888e96a5": {
+  "src": "A Pint of Stout, Carried<span class=\"dot\">.</span>",
+  "tr": "Ein Pint Stout unterwegs<span class=\"dot\">.</span>"
+ },
+ "8feef71c6008": {
+  "src": "The head’s mass per area is <i>ε</i><sub>f</sub><i>ρ h</i><sub>f</sub>; it loads the surface and lowers the frequencies (section 5).",
+  "tr": "Die Masse der Schaumkrone pro Fläche ist <i>ε</i><sub>f</sub><i>ρ h</i><sub>f</sub>; sie belastet die Oberfläche und senkt die Frequenzen (Abschnitt 5)."
+ },
+ "909180960798": {
+  "src": "spills —",
+  "tr": "läuft über —"
+ },
+ "91e7a41c1f84": {
+  "src": "Up and down at 2<i>f</i><sub>1</sub>",
+  "tr": "Auf und ab mit 2<i>f</i><sub>1</sub>"
+ },
+ "91e896e94b08": {
+  "src": "For the slowest slosh of our pint, \\(\\omega = 20.4\\) rad/s, this is \\(\\delta = 0.45\\) mm, about one percent of the glass’s radius <span class=\"fact\">computed</span>. Outside that skin the flow is irrotational.",
+  "tr": "Für das langsamste Schwappen unseres Pints, \\(\\omega = 20.4\\) rad/s, ist das \\(\\delta = 0.45\\) mm, etwa ein Prozent des Glasradius <span class=\"fact\">berechnet</span>. Außerhalb dieser Haut ist die Strömung wirbelfrei."
+ },
+ "933a9deb1d89": {
+  "src": "Guinness Draught is a stout of 4.2 % alcohol [10], served at 6 to 7 °C [11], and gassed with a mixture of nitrogen and carbon dioxide that gives it its fine, long-lived head of 18 to 20 mm [11]. The numbers the physics needs are collected below.",
+  "tr": "Guinness Draught ist ein Stout mit 4.2 % Alkohol [10], wird bei 6 bis 7 °C ausgeschenkt [11] und mit einer Mischung aus Stickstoff und Kohlendioxid begast, die ihm seine feine, langlebige Schaumkrone von 18 bis 20 mm gibt [11]. Die Zahlen, die die Physik braucht, sind unten zusammengestellt."
+ },
+ "93a8161c11f4": {
+  "src": "Back to the simulations",
+  "tr": "Zurück zu den Simulationen"
+ },
+ "94f1a806dc3b": {
+  "src": "Damping rates of the slowest mode",
+  "tr": "Dämpfungsraten der langsamsten Mode"
+ },
+ "96440faaf8aa": {
+  "src": "Liquid in the head <i>ε</i><sub>f</sub>",
+  "tr": "Flüssigkeit in der Schaumkrone <i>ε</i><sub>f</sub>"
+ },
+ "9656148c793b": {
+  "src": "Grab the glass in the picture and drag it across the table. Drag elsewhere to turn the view. <i>Lift</i>, the mouse wheel or Shift-drag move it up and down.",
+  "tr": "Fassen Sie das Glas im Bild und ziehen Sie es über den Tisch. Ziehen Sie anderswo, um die Ansicht zu drehen. <i>Anheben</i>, das Mausrad oder Ziehen mit gedrückter Umschalttaste bewegen es auf und ab."
+ },
+ "96d0c13395a3": {
+  "src": "The tulip glass is not a cylinder: it narrows to a waist, swells, and leans inward again near the rim. Separation of variables fails, but the problem keeps its structure, and a computer can solve it on the measured shape.",
+  "tr": "Das Tulpenglas ist kein Zylinder: Es verengt sich zu einer Taille, baucht sich aus und neigt sich nahe am Rand wieder nach innen. Die Trennung der Variablen versagt, aber das Problem behält seine Struktur, und ein Computer kann es auf der gemessenen Form lösen."
+ },
+ "97e5f4560a57": {
+  "src": "The shape, from a photograph",
+  "tr": "Die Form, aus einem Foto"
+ },
+ "9913dfc0767e": {
+  "src": "18 mm",
+  "tr": "18 mm"
+ },
+ "9926edec6e88": {
+  "src": "The 3D view draws the glass from the measured profile and the stout’s surface from \\(\\eta(r, \\theta)\\) at 16 radii and 72 angles. The head is drawn as a layer of constant thickness on top of the surface, which is how the model treats its mass; a real head bends. The cut uses the velocity fields of the nearest of the six stored fills: its grid points are placed on the present fill’s depth and wall, but the velocities are those of the stored fill. Arrows longer than 34 px are cut short and drawn pink. While the arrows are shown, the stout is drawn see-through, which real stout is not.",
+  "tr": "Die 3D-Ansicht zeichnet das Glas aus dem gemessenen Profil und die Oberfläche des Stouts aus \\(\\eta(r, \\theta)\\) an 16 Radien und 72 Winkeln. Die Schaumkrone wird als Schicht konstanter Dicke auf der Oberfläche gezeichnet, so wie das Modell ihre Masse behandelt; eine echte Schaumkrone biegt sich. Der Schnitt verwendet die Geschwindigkeitsfelder der nächstgelegenen der sechs gespeicherten Füllungen: Ihre Gitterpunkte liegen auf der Tiefe und der Wand der aktuellen Füllung, die Geschwindigkeiten aber sind die der gespeicherten Füllung. Pfeile, die länger als 34 px sind, werden gekürzt und rosa gezeichnet. Solange die Pfeile gezeigt werden, wird das Stout durchsichtig gezeichnet, was echtes Stout nicht ist."
+ },
+ "9a37c54b867b": {
+  "src": "First let the glass stand still. In a cylinder of radius \\(a\\) and depth \\(D\\), with \\(r, \\theta\\) polar coordinates and \\(z\\) measured from the calm surface, Laplace’s equation separates. Trying \\(\\phi = \\Phi(r)\\,\\cos(m\\theta)\\,Z(z)\\,e^{i\\omega t}\\) gives Bessel’s equation for \\(\\Phi\\) and \\(Z'' = k^2 Z\\); the solution that is finite on the axis and has no flow through the floor at \\(z = -D\\) is",
+  "tr": "Zuerst stehe das Glas still. In einem Zylinder mit Radius \\(a\\) und Tiefe \\(D\\), mit den Polarkoordinaten \\(r, \\theta\\) und \\(z\\) von der ruhigen Oberfläche aus gemessen, separiert die Laplace-Gleichung. Der Ansatz \\(\\phi = \\Phi(r)\\,\\cos(m\\theta)\\,Z(z)\\,e^{i\\omega t}\\) ergibt die Besselsche Differentialgleichung für \\(\\Phi\\) und \\(Z'' = k^2 Z\\); die Lösung, die auf der Achse endlich ist und keinen Fluss durch den Boden bei \\(z = -D\\) hat, lautet"
+ },
+ "9d0d4ef109f5": {
+  "src": "Surface skin <i>c</i><sub>s</sub>",
+  "tr": "Oberflächenhaut <i>c</i><sub>s</sub>"
+ },
+ "9e253470c876": {
+  "src": "Stop",
+  "tr": "Stopp"
+ },
+ "9e6a498fdd64": {
+  "src": "For a straight glass the coupling has a closed form: with \\(f = J_1(kr)/J_1(\\xi)\\) and the Bessel integrals \\(\\int_0^a r^2J_1(kr)\\,dr = a^2J_2(\\xi)/k\\) and \\(\\int_0^a rJ_1^2\\,dr = \\tfrac{a^2}{2}(1 - 1/\\xi^2)J_1^2(\\xi)\\), using \\(J_2(\\xi) = J_1(\\xi)/\\xi\\) at a zero of \\(J_1'\\), one finds \\(Q = 2a/(\\xi^2 - 1)\\). The finite-element program reproduces the equivalent coefficient \\(2a/((\\xi^2-1)J_1(\\xi)) = 0.057528\\) m of the brief to all six digits <span class=\"fact\">computed</span>.",
+  "tr": "Für ein gerades Glas hat die Kopplung eine geschlossene Form: Mit \\(f = J_1(kr)/J_1(\\xi)\\) und den Bessel-Integralen \\(\\int_0^a r^2J_1(kr)\\,dr = a^2J_2(\\xi)/k\\) und \\(\\int_0^a rJ_1^2\\,dr = \\tfrac{a^2}{2}(1 - 1/\\xi^2)J_1^2(\\xi)\\), unter Verwendung von \\(J_2(\\xi) = J_1(\\xi)/\\xi\\) an einer Nullstelle von \\(J_1'\\), findet man \\(Q = 2a/(\\xi^2 - 1)\\). Das Finite-Elemente-Programm reproduziert den gleichwertigen Koeffizienten \\(2a/((\\xi^2-1)J_1(\\xi)) = 0.057528\\) m aus der Aufgabenstellung in allen sechs Stellen <span class=\"fact\">berechnet</span>."
+ },
+ "9eef2aeb85ee": {
+  "src": "<span class=\"psec__n\">07</span>Where the energy goes",
+  "tr": "<span class=\"psec__n\">07</span>Wohin die Energie geht"
+ },
+ "a0ead37e43dc": {
+  "src": "1 is the wall friction Sauret and co-workers measured for foams (section 7); the least certain number on this page.",
+  "tr": "1 ist die Wandreibung, die Sauret und Mitarbeiter für Schäume gemessen haben (Abschnitt 7); die unsicherste Zahl auf dieser Seite."
+ },
+ "a15c3bcd7af7": {
+  "src": "the unsteady Bernoulli equation. The function \\(C(t)\\) can be absorbed into \\(\\phi\\), which is defined only up to a function of time.",
+  "tr": "die instationäre Bernoulli-Gleichung. Die Funktion \\(C(t)\\) lässt sich in \\(\\phi\\) aufnehmen, das ohnehin nur bis auf eine Funktion der Zeit bestimmt ist."
+ },
+ "a470e6044235": {
+  "src": "E. S. Benilov, C. P. Cummins, W. T. Lee, “Why do bubbles in Guinness sink?”, <i>Am. J. Phys.</i> 81 (2013); <a href=\"https://arxiv.org/abs/1205.5233\">arXiv:1205.5233</a>, Sec. II. Read.",
+  "tr": "E. S. Benilov, C. P. Cummins, W. T. Lee, „Why do bubbles in Guinness sink?“, <i>Am. J. Phys.</i> 81 (2013); <a href=\"https://arxiv.org/abs/1205.5233\">arXiv:1205.5233</a>, Abschn. II. Gelesen."
+ },
+ "a47a90bd25d2": {
+  "src": "A well-poured pint carries 18 to 20 mm of head (section 2).",
+  "tr": "Ein gut gezapftes Pint trägt 18 bis 20 mm Schaumkrone (Abschnitt 2)."
+ },
+ "a483064890da": {
+  "src": "<span class=\"pfig__n\">Figure 2</span>Frequency \\(f_1\\) of the slowest mode, (1,1), against the volume of stout. Ink: the tulip glass without a head. Wine: the tulip glass under 18 mm of head. Dashed: a straight glass with the same surface radius and depth as the tulip at each fill, also with the head. The curves cross near 475 mL, with the surface at 132.5 mm, about 12 mm above the widest point of the glass, where the tulip’s wall is vertical (dotted line; the surface reaches it at 415 mL): what matters is the wall’s lean over the top centimetres, where the slosh lives.",
+  "tr": "<span class=\"pfig__n\">Abbildung 2</span>Frequenz \\(f_1\\) der langsamsten Mode, (1,1), über dem Volumen des Stouts. Tinte: das Tulpenglas ohne Schaumkrone. Weinrot: das Tulpenglas unter 18 mm Schaumkrone. Gestrichelt: ein gerades Glas mit demselben Oberflächenradius und derselben Tiefe wie die Tulpe bei jeder Füllung, ebenfalls mit Schaumkrone. Die Kurven kreuzen sich nahe 475 mL, mit der Oberfläche bei 132.5 mm, etwa 12 mm über der breitesten Stelle des Glases, wo die Wand der Tulpe senkrecht steht (gepunktete Linie; die Oberfläche erreicht sie bei 415 mL): Entscheidend ist die Neigung der Wand in den obersten Zentimetern, wo das Schwappen stattfindet."
+ },
+ "a4c03d201bc8": {
+  "src": "The boundary layers on wall and floor ★",
+  "tr": "Die Randschichten an Wand und Boden ★"
+ },
+ "a4ce3a9be794": {
+  "src": "← All simulations",
+  "tr": "← Alle Simulationen"
+ },
+ "a532c7d9e131": {
+  "src": "<b>The aim:</b> see why a pint slops over when you walk, and why the head keeps it calm. Nothing steers the glass yet but your hand.",
+  "tr": "<b>Das Ziel:</b> sehen, warum ein Pint beim Gehen überschwappt und warum die Schaumkrone es ruhig hält. Noch steuert nichts das Glas außer Ihrer Hand."
+ },
+ "a5fae43e2ab8": {
+  "src": "Live, the page integrates the hand’s follower and the 14 equations (12) with the classical fourth-order Runge–Kutta method at a fixed step \\(h = 1\\) ms. The fastest mode kept, (1,3) at about 6.4 Hz, has \\(\\omega h = 0.04\\), far inside the method’s stability limit (\\(|\\omega h| \\lt 2.8\\)), with a phase error per step of order \\((\\omega h)^5/120\\), about \\(10^{-9}\\). Each frame runs as many steps as real time has passed, capped at 50 ms per frame. If a wave ever exceeds twice the surface radius, far outside the model, the page calms the stout back to its micrometre seed and says so.",
+  "tr": "Live integriert die Seite den Folger der Hand und die 14 Gleichungen (12) mit dem klassischen Runge-Kutta-Verfahren vierter Ordnung bei einer festen Schrittweite \\(h = 1\\) ms. Die schnellste behaltene Mode, (1,3) bei etwa 6.4 Hz, hat \\(\\omega h = 0.04\\), weit innerhalb der Stabilitätsgrenze des Verfahrens (\\(|\\omega h| \\lt 2.8\\)), mit einem Phasenfehler pro Schritt der Größenordnung \\((\\omega h)^5/120\\), etwa \\(10^{-9}\\). Jedes Bild rechnet so viele Schritte, wie Echtzeit vergangen ist, höchstens 50 ms pro Bild. Übersteigt eine Welle je das Doppelte des Oberflächenradius, weit außerhalb des Modells, beruhigt die Seite das Stout zurück auf seinen Mikrometer-Keim und sagt es."
+ },
+ "a6c7e973c7ba": {
+  "src": "The eigenvalue problem",
+  "tr": "Das Eigenwertproblem"
+ },
+ "a82c45ef1f1f": {
+  "src": "Numa Koudsie · for readers who know Newton’s laws, a little calculus and the idea of a normal mode",
+  "tr": "Numa Koudsie · für Leserinnen und Leser, die Newtons Gesetze, etwas Analysis und den Begriff der Eigenschwingung kennen"
+ },
+ "a82fbe5ae82e": {
+  "src": "Head friction factor <i>k</i><sub>f</sub>",
+  "tr": "Reibungsfaktor der Schaumkrone <i>k</i><sub>f</sub>"
+ },
+ "a939903dde07": {
+  "src": "Stout <i>V</i>",
+  "tr": "Stout <i>V</i>"
+ },
+ "a97ad98db0fe": {
+  "src": "Guinness publishes no drawing of its glass, and retail listings give only an overall size: 160 mm tall and 85 mm across at the widest, holding 568 mL, one imperial pint [8]. So we measured the shape from a side-on product photograph [9]. In each row of pixels the outermost dark pixels mark the edge of the glass, and half their distance is the outer radius at that height. The rim and the foot appear in the photograph as thin ellipses, because the camera looks slightly down on the glass; their centres, not their lowest points, mark the planes of rim and foot. Setting the distance between those planes to the published 160 mm fixes the scale at 0.393 mm per pixel <span class=\"fact\">computed</span>. The outline was then smoothed to 0.2 mm, about half a pixel, so that the photograph’s pixel steps do not appear as ripples in the wall.",
+  "tr": "Guinness veröffentlicht keine Zeichnung seines Glases, und Händlerangaben nennen nur die Gesamtmaße: 160 mm hoch und an der breitesten Stelle 85 mm im Durchmesser, mit 568 mL Inhalt, einem britischen Pint [8]. Also haben wir die Form aus einem seitlich aufgenommenen Produktfoto vermessen [9]. In jeder Pixelzeile markieren die äußersten dunklen Pixel den Rand des Glases, und ihr halber Abstand ist der Außenradius in dieser Höhe. Rand und Fuß erscheinen im Foto als schmale Ellipsen, weil die Kamera leicht von oben auf das Glas blickt; ihre Mittelpunkte, nicht ihre tiefsten Punkte, markieren die Ebenen von Rand und Fuß. Setzt man den Abstand dieser Ebenen auf die veröffentlichten 160 mm, liegt der Maßstab bei 0.393 mm pro Pixel fest <span class=\"fact\">berechnet</span>. Der Umriss wurde dann auf 0.2 mm geglättet, etwa ein halbes Pixel, damit die Pixelstufen des Fotos nicht als Wellen in der Wand erscheinen."
+ },
+ "aa0b2b8b2058": {
+  "src": "as differentiating \\(\\Psi\\) shows. So the stout feels an <em>effective gravity</em> \\(\\mathbf g_\\text{eff} = -\\nabla\\Psi\\): tilted when the glass speeds up sideways, stronger when the glass is lifted with increasing speed, weaker when it is lowered. If \\(g + \\ddot z\\) turns negative, the glass falls faster than free fall and the stout leaves the floor; the page warns when that happens.",
+  "tr": "wie man durch Ableiten von \\(\\Psi\\) sieht. Das Stout spürt also eine <em>effektive Schwerkraft</em> \\(\\mathbf g_\\text{eff} = -\\nabla\\Psi\\): geneigt, wenn das Glas seitwärts schneller wird, stärker, wenn das Glas mit zunehmender Geschwindigkeit angehoben wird, schwächer, wenn es abgesenkt wird. Wird \\(g + \\ddot z\\) negativ, fällt das Glas schneller als im freien Fall, und das Stout hebt vom Boden ab; die Seite warnt, wenn das geschieht."
+ },
+ "aab90dfe8c6f": {
+  "src": "share",
+  "tr": "Anteil"
+ },
+ "ab9aec9a5a1e": {
+  "src": "A vertical cut through the glass along the sloshing direction: the stout, its surface and head, and arrows of the velocity of the stout relative to the glass.",
+  "tr": "Ein senkrechter Schnitt durch das Glas entlang der Schwapprichtung: das Stout, seine Oberfläche und Schaumkrone und Pfeile der Geschwindigkeit des Stouts relativ zum Glas."
+ },
+ "ac4449d4d149": {
+  "src": "<span class=\"psec__n\">02</span>The glass and the stout",
+  "tr": "<span class=\"psec__n\">02</span>Das Glas und das Stout"
+ },
+ "ace5ea1601ce": {
+  "src": "The contact line",
+  "tr": "Die Kontaktlinie"
+ },
+ "ad3ef29b0ce0": {
+  "src": "<span>9</span>On the screen, and what is left out",
+  "tr": "<span>9</span>Auf dem Bildschirm, und was weggelassen ist"
+ },
+ "ad461da153fa": {
+  "src": "How claims are marked",
+  "tr": "Wie Aussagen gekennzeichnet sind"
+ },
+ "ad89d020ebcd": {
+  "src": "Limits of the model",
+  "tr": "Grenzen des Modells"
+ },
+ "ade2c96ab109": {
+  "src": "Now let the glass move. The motion enters only through the surface condition (6), and there it does two different things.",
+  "tr": "Nun bewege sich das Glas. Die Bewegung geht nur über die Oberflächenbedingung (6) ein, und dort bewirkt sie zwei verschiedene Dinge."
+ },
+ "ae53b43baf6b": {
+  "src": "mode (1,1)",
+  "tr": "Mode (1,1)"
+ },
+ "aec7cb54003a": {
+  "src": "Write the surface displacement as a sum over modes, \\(\\eta = \\sum_n a_n(t)\\,f_n(r)\\cos m\\theta\\) plus the matching \\(\\sin m\\theta\\) copies, where \\(f_n(r) = \\Phi_n(r, z_s)\\) is the mode’s surface shape, scaled so that \\(f_n = 1\\) at the wall: then \\(a_n\\) is the rise of the stout at the wall, in metres. The potential is \\(\\phi = \\sum_n (\\dot a_n/\\lambda_n)\\,\\Phi_n\\cos m\\theta\\), because the kinematic condition requires \\(\\partial_t\\eta = \\partial_z\\phi = \\lambda_n\\phi\\) at the surface for each mode. Put both into (6), multiply by \\(f_k\\cos m\\theta\\, r\\) and integrate over the surface. The modes are orthogonal on the surface (a consequence of (10) being symmetric), so one equation is left for each mode:",
+  "tr": "Wir schreiben die Auslenkung der Oberfläche als Summe über die Moden, \\(\\eta = \\sum_n a_n(t)\\,f_n(r)\\cos m\\theta\\) plus die zugehörigen \\(\\sin m\\theta\\)-Kopien, wobei \\(f_n(r) = \\Phi_n(r, z_s)\\) die Oberflächenform der Mode ist, so skaliert, dass \\(f_n = 1\\) an der Wand: Dann ist \\(a_n\\) der Anstieg des Stouts an der Wand, in Metern. Das Potential ist \\(\\phi = \\sum_n (\\dot a_n/\\lambda_n)\\,\\Phi_n\\cos m\\theta\\), weil die kinematische Bedingung für jede Mode \\(\\partial_t\\eta = \\partial_z\\phi = \\lambda_n\\phi\\) an der Oberfläche verlangt. Setzt man beides in (6) ein, multipliziert mit \\(f_k\\cos m\\theta\\, r\\) und integriert über die Oberfläche, so bleibt, weil die Moden auf der Oberfläche orthogonal sind (eine Folge der Symmetrie von (10)), eine Gleichung für jede Mode:"
+ },
+ "afc8d8602d48": {
+  "src": "Show from (8) that in a deep glass \\(f_{11}\\) scales as \\(a^{-1/2}\\). By how much does the frequency fall if you pour the same stout into a glass 20 % wider?",
+  "tr": "Zeigen Sie aus (8), dass \\(f_{11}\\) in einem tiefen Glas wie \\(a^{-1/2}\\) skaliert. Um wie viel fällt die Frequenz, wenn Sie dasselbe Stout in ein 20 % breiteres Glas gießen?"
+ },
+ "afd4c55618c7": {
+  "src": "The hand",
+  "tr": "Die Hand"
+ },
+ "b6feece2e782": {
+  "src": "Shake the default pint sideways by \\(A = 0.2\\) mm at \\(f_1 = 3.24\\) Hz. The glass’s acceleration is only \\(A\\omega^2 = 0.083\\) m/s², under a hundredth of \\(g\\); yet the steady wave at the wall is 5.6 mm <span class=\"fact\">computed</span>, 28 times the shaking. That is what the button <i>Sideways at f₁</i> does.",
+  "tr": "Schütteln Sie das Standard-Pint seitwärts um \\(A = 0.2\\) mm mit \\(f_1 = 3.24\\) Hz. Die Beschleunigung des Glases beträgt nur \\(A\\omega^2 = 0.083\\) m/s², weniger als ein Hundertstel von \\(g\\); dennoch ist die stationäre Welle an der Wand 5.6 mm hoch <span class=\"fact\">berechnet</span>, das 28-Fache des Schüttelwegs. Genau das tut die Schaltfläche <i>Seitwärts mit f₁</i>."
+ },
+ "b85e1ef87122": {
+  "src": "Sloshing in a pint glass",
+  "tr": "Schwappen in einem Pint-Glas"
+ },
+ "b9181c7e3d00": {
+  "src": "The energy method",
+  "tr": "Die Energiemethode"
+ },
+ "bad00d130f8e": {
+  "src": "Every term on the right contains \\(\\boldsymbol\\omega\\). A stout that starts at rest, \\(\\boldsymbol\\omega = 0\\), therefore stays free of vorticity, however the glass is shaken, except where something outside (3) creates it. That something is the wall: the stout must stick to the glass (no slip), while a flow without vorticity slides along it. The conflict is settled in a thin <em>Stokes layer</em>, where the velocity drops to zero and all the vorticity lives. Vorticity spreads by viscosity, a diffusion with coefficient \\(\\nu\\), so in one oscillation period of angular frequency \\(\\omega\\) it reaches a distance",
+  "tr": "Jeder Term auf der rechten Seite enthält \\(\\boldsymbol\\omega\\). Ein Stout, das in Ruhe beginnt, \\(\\boldsymbol\\omega = 0\\), bleibt deshalb wirbelfrei, wie man das Glas auch schüttelt, außer wo etwas außerhalb von (3) Wirbel erzeugt. Dieses Etwas ist die Wand: Das Stout muss am Glas haften (Haftbedingung), während eine wirbelfreie Strömung an ihr entlanggleitet. Der Widerspruch wird in einer dünnen <em>Stokes-Schicht</em> aufgelöst, in der die Geschwindigkeit auf null abfällt und die gesamte Wirbelstärke sitzt. Wirbelstärke breitet sich durch Viskosität aus, als Diffusion mit dem Koeffizienten \\(\\nu\\), sodass sie in einer Schwingungsperiode der Kreisfrequenz \\(\\omega\\) eine Strecke erreicht von"
+ },
+ "bb6b18df4773": {
+  "src": "<b>The cut</b> · velocity <span class=\"tx\">\\(\\mathbf u = \\nabla\\phi\\)</span> relative to the glass, in the plane <span id=\"cap-plane\">—</span>",
+  "tr": "<b>Der Schnitt</b> · Geschwindigkeit <span class=\"tx\">\\(\\mathbf u = \\nabla\\phi\\)</span> relativ zum Glas, in der Ebene <span id=\"cap-plane\">—</span>"
+ },
+ "bd86f92c08c7": {
+  "src": "Hand stiffness <i>Ω</i><sub>h</sub>",
+  "tr": "Steifigkeit der Hand <i>Ω</i><sub>h</sub>"
+ },
+ "bdc9f710a00a": {
+  "src": "Cut follows the slosh",
+  "tr": "Schnitt folgt dem Schwappen"
+ },
+ "bdfc5157502f": {
+  "src": "<span>3</span>A fluid in a moving glass",
+  "tr": "<span>3</span>Eine Flüssigkeit in einem bewegten Glas"
+ },
+ "be3782714c6b": {
+  "src": "thickness of the head",
+  "tr": "Dicke der Schaumkrone"
+ },
+ "be6626b0bbcc": {
+  "src": "The fading with depth follows from (7): \\(\\cosh k(z + D)/\\cosh kD \\approx e^{kz}\\) when \\(kD \\gg 1\\). Laplace’s equation trades variation along the surface for variation with depth: a pattern that changes over a distance \\(a\\) across the glass must also die out over a distance of order \\(a/\\xi\\) downward. That is why a pint sloshes only in its top two or three centimetres, and why the shape of the lower glass hardly changes the frequency.",
+  "tr": "Das Abklingen mit der Tiefe folgt aus (7): \\(\\cosh k(z + D)/\\cosh kD \\approx e^{kz}\\) für \\(kD \\gg 1\\). Die Laplace-Gleichung tauscht Änderung entlang der Oberfläche gegen Änderung mit der Tiefe: Ein Muster, das sich über eine Strecke \\(a\\) quer durch das Glas ändert, muss auch über eine Strecke der Größenordnung \\(a/\\xi\\) nach unten abklingen. Darum schwappt ein Pint nur in seinen obersten zwei oder drei Zentimetern, und darum ändert die Form des unteren Glases die Frequenz kaum."
+ },
+ "bec67a9bc659": {
+  "src": "Put coordinates on the glass: \\(x\\) and \\(y\\) horizontal, \\(z\\) up from the foot, and let the glass move without turning, its acceleration being \\(\\mathbf a_g = (\\ddot x, \\ddot y, \\ddot z)\\). A small parcel of stout of density \\(\\rho\\) and velocity \\(\\mathbf u\\) relative to the glass obeys Newton’s second law. In the laboratory, its acceleration is that of the glass plus its own, so in the glass’s frame",
+  "tr": "Legen wir Koordinaten in das Glas: \\(x\\) und \\(y\\) waagerecht, \\(z\\) vom Fuß aus nach oben, und das Glas bewege sich, ohne sich zu drehen, mit der Beschleunigung \\(\\mathbf a_g = (\\ddot x, \\ddot y, \\ddot z)\\). Ein kleines Stout-Paket der Dichte \\(\\rho\\) mit der Geschwindigkeit \\(\\mathbf u\\) relativ zum Glas gehorcht dem zweiten Newtonschen Gesetz. Im Labor ist seine Beschleunigung die des Glases plus seine eigene, also gilt im Bezugssystem des Glases"
+ },
+ "bee136491d93": {
+  "src": "Head top to rim, now",
+  "tr": "Schaumkrone bis Rand, jetzt"
+ },
+ "bee75ca77f75": {
+  "src": "Controls",
+  "tr": "Bedienelemente"
+ },
+ "bf65b3ff19a1": {
+  "src": "Stout / glass to brim",
+  "tr": "Stout / Glas bis zum Rand"
+ },
+ "c0f7850f317a": {
+  "src": "<span class=\"psec__n\">01</span>Carrying a pint",
+  "tr": "<span class=\"psec__n\">01</span>Ein Pint tragen"
+ },
+ "c1a868af96b2": {
+  "src": "The glass follows your pointer like a mass on a critically damped spring of natural frequency <i>Ω</i><sub>h</sub>: a stiff hand jerks, a soft hand glides.",
+  "tr": "Das Glas folgt Ihrem Zeiger wie eine Masse an einer kritisch gedämpften Feder der Eigenfrequenz <i>Ω</i><sub>h</sub>: Eine steife Hand ruckt, eine weiche Hand gleitet."
+ },
+ "c2073f536e5d": {
+  "src": "Fig. 12 · control systems · fluid dynamics",
+  "tr": "Abb. 12 · Regelungstechnik · Strömungsmechanik"
+ },
+ "c2508a75dd73": {
+  "src": "The bulk",
+  "tr": "Im Inneren der Flüssigkeit"
+ },
+ "c25e309938c4": {
+  "src": "Warm the stout from 6 to 20 °C. By what factor does \\(\\gamma_w\\) change, according to (16)? Check with the table on the page.",
+  "tr": "Erwärmen Sie das Stout von 6 auf 20 °C. Um welchen Faktor ändert sich \\(\\gamma_w\\) nach (16)? Prüfen Sie es mit der Tabelle auf der Seite."
+ },
+ "c269f7b7e77e": {
+  "src": "Key result · deep sloshing",
+  "tr": "Kernergebnis · Schwappen im tiefen Glas"
+ },
+ "c2cff7826005": {
+  "src": "Hand and shaker",
+  "tr": "Hand und Schütteltisch"
+ },
+ "c2e059dc3dfc": {
+  "src": "Linearisation means evaluating both surface conditions at the calm level \\(z_s\\) rather than at \\(z_s + \\eta\\). The error is of the order of the wave slope; the page warns when the wave at the wall exceeds a fifth of the radius.",
+  "tr": "Linearisierung heißt, beide Oberflächenbedingungen auf der ruhigen Höhe \\(z_s\\) statt bei \\(z_s + \\eta\\) auszuwerten. Der Fehler ist von der Ordnung der Wellensteilheit; die Seite warnt, wenn die Welle an der Wand ein Fünftel des Radius überschreitet."
+ },
+ "c3ddd9061162": {
+  "src": "The last eight seconds of the highest point of the stout at the wall, with the rim and the top of the head.",
+  "tr": "Die letzten acht Sekunden des höchsten Punkts des Stouts an der Wand, mit dem Rand und der Oberkante der Schaumkrone."
+ },
+ "c49c44fdbbe2": {
+  "src": "Fig. 12 · lecture note · fluid dynamics",
+  "tr": "Abb. 12 · Skript · Strömungsmechanik"
+ },
+ "c4cbaa98a14f": {
+  "src": "Arrow scale",
+  "tr": "Pfeilmaßstab"
+ },
+ "c617908dc304": {
+  "src": "Frequency <i>f</i>",
+  "tr": "Frequenz <i>f</i>"
+ },
+ "c69547fd8d43": {
+  "src": "Watch the velocity field in the cut below the glass, and the height at the wall against the rim. Then take the head away and do it again.",
+  "tr": "Beobachten Sie das Geschwindigkeitsfeld im Schnitt unter dem Glas und die Höhe an der Wand im Vergleich zum Rand. Nehmen Sie dann die Schaumkrone weg und tun Sie es noch einmal."
+ },
+ "c896cccafea8": {
+  "src": "Where the surface meets the glass, the edge of the liquid has to creep up and down the wall. A wetting liquid loses somewhat more energy than viscous theory predicts, and non-wetting combinations lose several times more [7]; the loss depends on the amplitude, rising as the waves get smaller until the edge sticks [7]. No first-principles formula for a stout under a head exists. The page uses a constant rate \\(\\gamma_c\\), default 0.05 per second, at the low end of the 0.05 to 0.25 per second measured in a water tank [7]. <span class=\"fact\">Opinion</span>: under a head the edge of the stout is hidden in foam, and the head term below probably absorbs most of this.",
+  "tr": "Wo die Oberfläche auf das Glas trifft, muss der Rand der Flüssigkeit an der Wand auf und ab kriechen. Eine benetzende Flüssigkeit verliert etwas mehr Energie, als die Theorie der Viskosität vorhersagt, und nicht benetzende Paarungen verlieren ein Mehrfaches [7]; der Verlust hängt von der Amplitude ab und steigt, je kleiner die Wellen werden, bis der Rand haften bleibt [7]. Eine Formel aus ersten Prinzipien für ein Stout unter einer Schaumkrone gibt es nicht. Die Seite verwendet eine konstante Rate \\(\\gamma_c\\), voreingestellt 0.05 pro Sekunde, am unteren Ende der 0.05 bis 0.25 pro Sekunde, die in einem Wassertank gemessen wurden [7]. <span class=\"fact\">Meinung</span>: Unter einer Schaumkrone ist der Rand des Stouts im Schaum verborgen, und der Term der Schaumkrone weiter unten nimmt das meiste davon wahrscheinlich mit auf."
+ },
+ "c8b2f0fdb9c1": {
+  "src": "From these, the kinematic viscosity at 6 °C is \\(\\nu = \\mu/\\rho = 2.05\\times10^{-6}\\) m²/s, twice that of water at room temperature. The head is treated as a layer of foam of mass \\(M_f = \\varepsilon_f\\rho h_f = 2.72\\) kg per square metre of surface, riding on the stout <span class=\"fact\">computed</span>.",
+  "tr": "Daraus ergibt sich die kinematische Viskosität bei 6 °C zu \\(\\nu = \\mu/\\rho = 2.05\\times10^{-6}\\) m²/s, doppelt so groß wie die von Wasser bei Raumtemperatur. Die Schaumkrone wird als Schaumschicht der Masse \\(M_f = \\varepsilon_f\\rho h_f = 2.72\\) kg pro Quadratmeter Oberfläche behandelt, die auf dem Stout schwimmt <span class=\"fact\">berechnet</span>."
+ },
+ "cab260d46e3e": {
+  "src": "Two corrections change the surface condition (6). Surface tension adds a pressure \\(-\\sigma\\nabla^2\\eta\\) under a curved surface, which raises \\(\\omega^2\\) by the fraction \\(\\sigma\\lambda^2/(\\rho g)\\); for our pint that is 1.0 % in \\(\\omega^2\\) <span class=\"fact\">computed</span>. The head is heavier. Treat it as a layer of mass \\(M_f\\) per area that rides up and down with the surface: Newton’s law for the layer says the stout must push on it with an extra pressure \\(M_f\\,\\ddot\\eta\\), which enters (6) as an inertia. With both,",
+  "tr": "Zwei Korrekturen ändern die Oberflächenbedingung (6). Die Oberflächenspannung fügt unter einer gekrümmten Oberfläche einen Druck \\(-\\sigma\\nabla^2\\eta\\) hinzu, der \\(\\omega^2\\) um den Bruchteil \\(\\sigma\\lambda^2/(\\rho g)\\) anhebt; für unser Pint sind das 1.0 % in \\(\\omega^2\\) <span class=\"fact\">berechnet</span>. Die Schaumkrone wiegt schwerer. Behandeln wir sie als Schicht der Masse \\(M_f\\) pro Fläche, die mit der Oberfläche auf und ab fährt: Das Newtonsche Gesetz für die Schicht besagt, dass das Stout mit einem zusätzlichen Druck \\(M_f\\,\\ddot\\eta\\) auf sie drücken muss, der als Trägheit in (6) eingeht. Mit beiden gilt"
+ },
+ "cb13d2e33b79": {
+  "src": "The added-mass ratio \\(\\mu_f\\) compares the head’s mass with the mass of stout that sloshes, a layer of depth \\(1/\\lambda\\). For the default pour, \\(\\mu_{f,11} = 0.128\\), and the head lowers \\(f_1\\) from 3.445 to 3.244 Hz <span class=\"fact\">computed</span>. <span class=\"fact\">Opinion</span>: this is the crudest piece of the model. A real head also has a little stiffness of its own, and its liquid fraction is not measured; the slider for \\(\\varepsilon_f\\) lets you see how much it matters.",
+  "tr": "Das Verhältnis der Zusatzmasse \\(\\mu_f\\) vergleicht die Masse der Schaumkrone mit der Masse des schwappenden Stouts, einer Schicht der Tiefe \\(1/\\lambda\\). Für die Standardfüllung ist \\(\\mu_{f,11} = 0.128\\), und die Schaumkrone senkt \\(f_1\\) von 3.445 auf 3.244 Hz <span class=\"fact\">berechnet</span>. <span class=\"fact\">Meinung</span>: Das ist das gröbste Stück des Modells. Eine echte Schaumkrone hat auch ein wenig eigene Steifigkeit, und ihr Flüssigkeitsanteil ist nicht gemessen; mit dem Schieberegler für \\(\\varepsilon_f\\) können Sie sehen, wie viel das ausmacht."
+ },
+ "ccd00ae1f941": {
+  "src": "The head",
+  "tr": "Die Schaumkrone"
+ },
+ "ccdaba0b6c19": {
+  "src": "not found in any source opened. <span class=\"fact\">Opinion</span>: a wet foam, between 0.05 and 0.3. Uncertain.",
+  "tr": "in keiner der geöffneten Quellen gefunden. <span class=\"fact\">Meinung</span>: ein nasser Schaum, zwischen 0.05 und 0.3. Unsicher."
+ },
+ "d1622a8321e0": {
+  "src": "Phyein Usul, home page",
+  "tr": "Phyein Usul, Startseite"
+ },
+ "d1d0feb45aac": {
+  "src": "<b>At the surface, dynamics:</b> the pressure just under the surface equals the air pressure (we come back to surface tension and the head in section 5). Putting \\(p = p_\\text{air}\\) in (5) at \\(z = z_s + \\eta\\), dropping the square of the small velocity and moving the constant into \\(\\phi\\),",
+  "tr": "<b>An der Oberfläche, Dynamik:</b> Der Druck direkt unter der Oberfläche ist gleich dem Luftdruck (auf die Oberflächenspannung und die Schaumkrone kommen wir in Abschnitt 5 zurück). Setzt man \\(p = p_\\text{air}\\) in (5) bei \\(z = z_s + \\eta\\) ein, lässt das Quadrat der kleinen Geschwindigkeit weg und nimmt die Konstante in \\(\\phi\\) auf, so folgt"
+ },
+ "d2c9dccca845": {
+  "src": "A program that has not reproduced a known answer has proved nothing. For a cylinder of 40 mm radius and 100 mm depth the exact eigenvalues are \\(\\lambda = k\\tanh kD\\) from (8). On a mesh of 16 × 40 quadratic cells the program gives \\(\\lambda_{11} = 46.02036\\) m⁻¹ against the exact 46.02035, a relative error of \\(3\\times10^{-7}\\); the worst of nine modes, (0,3), is off by \\(2.4\\times10^{-4}\\), and halving the cells reduces every error <span class=\"fact\">computed</span>, <code>tools/fig12/check_cylinder.py</code>. The integrals the damping needs (section 7) agree with the exact Bessel integrals, evaluated independently in Wolfram Language, to \\(7\\times10^{-5}\\).",
+  "tr": "Ein Programm, das keine bekannte Antwort reproduziert hat, hat nichts bewiesen. Für einen Zylinder mit 40 mm Radius und 100 mm Tiefe sind die exakten Eigenwerte \\(\\lambda = k\\tanh kD\\) aus (8). Auf einem Netz aus 16 × 40 quadratischen Zellen liefert das Programm \\(\\lambda_{11} = 46.02036\\) m⁻¹ gegenüber dem exakten Wert 46.02035, ein relativer Fehler von \\(3\\times10^{-7}\\); die schlechteste von neun Moden, (0,3), weicht um \\(2.4\\times10^{-4}\\) ab, und eine Halbierung der Zellen verkleinert jeden Fehler <span class=\"fact\">berechnet</span>, <code>tools/fig12/check_cylinder.py</code>. Die Integrale, die die Dämpfung braucht (Abschnitt 7), stimmen mit den exakten Bessel-Integralen, unabhängig in Wolfram Language ausgewertet, auf \\(7\\times10^{-5}\\) überein."
+ },
+ "d3b35a6b989b": {
+  "src": "<b>Abstract.</b> Anyone who has carried a full pint through a crowded pub knows that the stout does not simply ride along: it rocks, it climbs the wall on one side, and the head goes over the rim. We build the physics of that rocking from Newton’s second law for a fluid. In the frame of the moving glass the stout feels gravity plus the glass’s acceleration; inside it the flow has no rotation, so its velocity is the gradient of a potential that obeys Laplace’s equation; at the surface, gravity pulls the stout back to level. The result is a set of sloshing modes, each an oscillator driven by the glass’s sideways acceleration and pumped by its vertical acceleration. For a straight glass the modes are Bessel functions; for the real Guinness tulip, measured from a photograph and rebuilt in Blender, we compute them by finite elements and check the program against the straight glass. Then we follow the energy: into the thin boundary layers on the wall, into the skin of the surface, and into the friction of the head on the glass, which turns out to be the largest loss of all. A pint with its head settles in about six seconds; without it, in about eleven.",
+  "tr": "<b>Zusammenfassung.</b> Wer je ein volles Pint durch einen überfüllten Pub getragen hat, weiß, dass das Stout nicht einfach mitfährt: Es schaukelt, es klettert auf einer Seite die Wand hinauf, und die Schaumkrone läuft über den Rand. Wir bauen die Physik dieses Schaukelns aus dem zweiten Newtonschen Gesetz für eine Flüssigkeit auf. Im Bezugssystem des bewegten Glases spürt das Stout die Schwerkraft und dazu die Beschleunigung des Glases; in seinem Inneren ist die Strömung wirbelfrei, ihre Geschwindigkeit ist also der Gradient eines Potentials, das der Laplace-Gleichung gehorcht; an der Oberfläche zieht die Schwerkraft das Stout in die Waagerechte zurück. Das Ergebnis ist eine Schar von Schwappmoden, jede ein Oszillator, angetrieben von der seitlichen Beschleunigung des Glases und gepumpt von seiner senkrechten Beschleunigung. Für ein gerades Glas sind die Moden Bessel-Funktionen; für die echte Guinness-Tulpe, nach einem Foto vermessen und in Blender nachgebaut, berechnen wir sie mit finiten Elementen und prüfen das Programm am geraden Glas. Dann folgen wir der Energie: in die dünnen Randschichten an der Wand, in die Haut der Oberfläche und in die Reibung der Schaumkrone am Glas, die sich als der größte Verlust von allen erweist. Ein Pint mit Schaumkrone kommt in etwa sechs Sekunden zur Ruhe, ohne sie in etwa elf."
+ },
+ "d3d8ade7bfdb": {
+  "src": "<span class=\"psec__n\">06</span>Driving the modes: hand and shaker",
+  "tr": "<span class=\"psec__n\">06</span>Die Moden antreiben: Hand und Schütteltisch"
+ },
+ "d5319f39ed93": {
+  "src": "For \\(a = 40\\) mm and \\(D = 99.5\\) mm, \\(k_{11} = 46.03\\) m⁻¹ and \\(\\tanh(k_{11}D) = 1.000\\): the glass is “deep”, since \\(\\tanh\\) has saturated. Then \\(\\omega_{11} = \\sqrt{9.81\\times46.03} = 21.25\\) rad/s and \\(f_{11} = 3.382\\) Hz, confirmed with Wolfram Language. The depth no longer matters once \\(kD \\gt 3\\); in our pint \\(kD = 6.1\\) <span class=\"fact\">computed</span>.",
+  "tr": "Für \\(a = 40\\) mm und \\(D = 99.5\\) mm ist \\(k_{11} = 46.03\\) m⁻¹ und \\(\\tanh(k_{11}D) = 1.000\\): Das Glas ist „tief“, denn \\(\\tanh\\) ist gesättigt. Dann ist \\(\\omega_{11} = \\sqrt{9.81\\times46.03} = 21.25\\) rad/s und \\(f_{11} = 3.382\\) Hz, bestätigt mit Wolfram Language. Die Tiefe spielt keine Rolle mehr, sobald \\(kD \\gt 3\\); in unserem Pint ist \\(kD = 6.1\\) <span class=\"fact\">berechnet</span>."
+ },
+ "d63797b74bf9": {
+  "src": "<span class=\"psec__n\">09</span>On the screen, and what is left out",
+  "tr": "<span class=\"psec__n\">09</span>Auf dem Bildschirm, und was weggelassen ist"
+ },
+ "d6e44e7cb5d5": {
+  "src": "with the damping rate \\(\\gamma_n\\) of section 7 added. (For clarity the \\(\\sigma\\) term of (11) is not repeated; the page keeps it.) The \\(\\sin\\) copies obey the same equation with \\(\\ddot y\\) in place of \\(\\ddot x\\).",
+  "tr": "mit der Dämpfungsrate \\(\\gamma_n\\) aus Abschnitt 7 hinzugefügt. (Der Übersichtlichkeit halber wird der \\(\\sigma\\)-Term aus (11) nicht wiederholt; die Seite behält ihn.) Die \\(\\sin\\)-Kopien gehorchen derselben Gleichung mit \\(\\ddot y\\) anstelle von \\(\\ddot x\\)."
+ },
+ "d7562e7336db": {
+  "src": "Derive \\(Q = 2a/(\\xi^2 - 1)\\) for a straight glass, using \\(J_2(\\xi) = J_1(\\xi)/\\xi\\) at a zero of \\(J_1'\\).",
+  "tr": "Leiten Sie \\(Q = 2a/(\\xi^2 - 1)\\) für ein gerades Glas her, mit \\(J_2(\\xi) = J_1(\\xi)/\\xi\\) an einer Nullstelle von \\(J_1'\\)."
+ },
+ "d76bbbb3d6f0": {
+  "src": "Temperature <i>T</i>",
+  "tr": "Temperatur <i>T</i>"
+ },
+ "d8d3204d8a12": {
+  "src": "Sideways",
+  "tr": "Seitwärts"
+ },
+ "d929322e4b16": {
+  "src": "Fig.",
+  "tr": "Abb."
+ },
+ "d9c02f9e457c": {
+  "src": "Key result · two ways in",
+  "tr": "Kernergebnis · zwei Wege hinein"
+ },
+ "daa3bcd00e5b": {
+  "src": "L. Jiang, M. Perlin, W. W. Schultz, “Contact-line dynamics and damping for oscillating free surface flows”, <i>Phys. Fluids</i> 16, 748 (2004); <a href=\"https://doi.org/10.1063/1.1644151\">doi</a>. Read; with G. H. Keulegan, <i>J. Fluid Mech.</i> 6, 33 (1959), abstract only.",
+  "tr": "L. Jiang, M. Perlin, W. W. Schultz, „Contact-line dynamics and damping for oscillating free surface flows“, <i>Phys. Fluids</i> 16, 748 (2004); <a href=\"https://doi.org/10.1063/1.1644151\">doi</a>. Gelesen; dazu G. H. Keulegan, <i>J. Fluid Mech.</i> 6, 33 (1959), nur die Zusammenfassung."
+ },
+ "db2ebedc7462": {
+  "src": "<span>8</span>The velocity field in the cut",
+  "tr": "<span>8</span>Das Geschwindigkeitsfeld im Schnitt"
+ },
+ "dc93c8d1f1db": {
+  "src": "Even an irrotational flow dissipates, because its parcels are stretched. The dissipation is \\(2\\mu\\int e_{ij}e_{ij}\\,dV\\) with the strain rate \\(e_{ij} = \\partial_i\\partial_j\\phi\\); for a mode that decays with depth as \\(e^{\\lambda z}\\) this gives \\(\\gamma_b = 2\\nu\\lambda^2\\), the damping of deep-water waves. (In a round glass the exact value for the slowest mode is \\(1.88\\nu k^2\\), 6 % lower; on the total damping that is 0.1 %.) For the slowest mode it is 0.009 per second, 2 % of the total: negligible for the slowest mode, but it grows as \\(\\lambda^2\\), so short waves feel it most <span class=\"fact\">computed</span>.",
+  "tr": "Selbst eine wirbelfreie Strömung dissipiert, weil ihre Pakete gedehnt werden. Die Dissipation ist \\(2\\mu\\int e_{ij}e_{ij}\\,dV\\) mit der Dehnungsrate \\(e_{ij} = \\partial_i\\partial_j\\phi\\); für eine Mode, die mit der Tiefe wie \\(e^{\\lambda z}\\) abklingt, ergibt das \\(\\gamma_b = 2\\nu\\lambda^2\\), die Dämpfung von Tiefwasserwellen. (In einem runden Glas ist der exakte Wert für die langsamste Mode \\(1.88\\nu k^2\\), 6 % niedriger; an der gesamten Dämpfung macht das 0.1 % aus.) Für die langsamste Mode beträgt sie 0.009 pro Sekunde, 2 % des Ganzen: vernachlässigbar für die langsamste Mode, aber sie wächst wie \\(\\lambda^2\\), sodass kurze Wellen sie am stärksten spüren <span class=\"fact\">berechnet</span>."
+ },
+ "dcb0c712fba0": {
+  "src": "Before any equation we need two things: the shape of the container, and the properties of what is in it.",
+  "tr": "Vor jeder Gleichung brauchen wir zwei Dinge: die Form des Gefäßes und die Eigenschaften dessen, was darin ist."
+ },
+ "ddb94be3af16": {
+  "src": "H. C. Mayer, R. Krechetnikov, “Walking with coffee: Why does it spill?”, <i>Phys. Rev. E</i> 85, 046117 (2012); <a href=\"https://www.math.ualberta.ca/~rkrechet/files/publications/pre2012.pdf\">open PDF</a>. Read in full.",
+  "tr": "H. C. Mayer, R. Krechetnikov, „Walking with coffee: Why does it spill?“, <i>Phys. Rev. E</i> 85, 046117 (2012); <a href=\"https://www.math.ualberta.ca/~rkrechet/files/publications/pre2012.pdf\">frei zugängliches PDF</a>. Vollständig gelesen."
+ },
+ "de4a60789be2": {
+  "src": "Where the drawing differs from the model",
+  "tr": "Wo die Zeichnung vom Modell abweicht"
+ },
+ "e07e73848f6b": {
+  "src": "Damping ratio <i>ζ</i><sub>1</sub>",
+  "tr": "Dämpfungsgrad <i>ζ</i><sub>1</sub>"
+ },
+ "e1d329a7394b": {
+  "src": "From symbols to code",
+  "tr": "Von den Symbolen zum Code"
+ },
+ "e2202aa5e548": {
+  "src": "Slosh frequency <i>f</i><sub>1</sub>",
+  "tr": "Schwappfrequenz <i>f</i><sub>1</sub>"
+ },
+ "e3b82040565b": {
+  "src": "Now",
+  "tr": "Jetzt"
+ },
+ "e3cf82b9fc2c": {
+  "src": "With its head, the default pint’s slowest slosh decays as \\(e^{-\\gamma t}\\) with \\(\\gamma = 0.50\\) s⁻¹: its amplitude falls to 1/e in 2.0 s and to 5 % in 6.0 s. Without the head the rate is 0.27 s⁻¹, and the same fall takes 3.7 s and 11.1 s. With clean walls alone it would be 8.9 s to 1/e <span class=\"fact\">computed</span>. <span class=\"fact\">Inference</span>: the walls set the floor of the damping, and everything else in a real pint at least doubles it.",
+  "tr": "Mit Schaumkrone klingt das langsamste Schwappen des Standard-Pints wie \\(e^{-\\gamma t}\\) mit \\(\\gamma = 0.50\\) s⁻¹ ab: Seine Amplitude fällt in 2.0 s auf 1/e und in 6.0 s auf 5 %. Ohne Schaumkrone ist die Rate 0.27 s⁻¹, und derselbe Abfall dauert 3.7 s und 11.1 s. Mit sauberen Wänden allein wären es 8.9 s bis 1/e <span class=\"fact\">berechnet</span>. <span class=\"fact\">Folgerung</span>: Die Wände legen die Untergrenze der Dämpfung fest, und alles andere in einem echten Pint verdoppelt sie mindestens."
+ },
+ "e3de5ab0ca4c": {
+  "src": "Off",
+  "tr": "Aus"
+ },
+ "e57e82f4ecda": {
+  "src": "1 is the wall friction Sauret and co-workers measured for foams (section 6); the least certain number on this page.",
+  "tr": "1 ist die Wandreibung, die Sauret und Mitarbeiter für Schäume gemessen haben (Abschnitt 6); die unsicherste Zahl auf dieser Seite."
+ },
+ "e5f3c5d529b6": {
+  "src": "Why the interior has no rotation ★",
+  "tr": "Warum das Innere wirbelfrei ist ★"
+ },
+ "e66360fb8c8a": {
+  "src": "<span>2</span>The glass and the stout",
+  "tr": "<span>2</span>Das Glas und das Stout"
+ },
+ "e771a07036ee": {
+  "src": "with \\(\\nabla_t\\phi\\) the slip velocity amplitude along the glass. Dividing by \\(2E\\) and using Green’s identity \\(\\int|\\nabla\\Phi|^2dV = \\lambda\\int f^2 dS\\) for the energy,",
+  "tr": "mit \\(\\nabla_t\\phi\\) der Amplitude der Gleitgeschwindigkeit entlang des Glases. Teilt man durch \\(2E\\) und verwendet für die Energie die Greensche Identität \\(\\int|\\nabla\\Phi|^2dV = \\lambda\\int f^2 dS\\), so folgt"
+ },
+ "e77b101f4b16": {
+  "src": "Offline, <code>tools/fig12/build_modes.py</code> solves (9) for 30 fills from 300 to 590 mL and keeps eight radial shapes: \\(m = 0\\) with \\(n = 1, 2\\); \\(m = 1\\) with \\(n = 1, 2, 3\\); \\(m = 2\\) with \\(n = 1, 2\\); and \\(m = 3\\) with \\(n = 1\\). With the \\(\\sin\\) copies of \\(m \\ge 1\\) that makes 14 oscillators. For each it stores \\(\\lambda_n\\), \\(Q_n\\), the damping integrals, the surface shape \\(f_n\\) at 25 radii, and, for six fills, \\(\\Phi\\), \\(\\Phi_r\\) and \\(\\Phi_z\\) on a 12 × 20 grid in the cut. The page interpolates between fills; for the straight glass it computes the same quantities from Bessel functions.",
+  "tr": "Vorab löst <code>tools/fig12/build_modes.py</code> (9) für 30 Füllungen von 300 bis 590 mL und behält acht radiale Formen: \\(m = 0\\) mit \\(n = 1, 2\\); \\(m = 1\\) mit \\(n = 1, 2, 3\\); \\(m = 2\\) mit \\(n = 1, 2\\); und \\(m = 3\\) mit \\(n = 1\\). Mit den \\(\\sin\\)-Kopien für \\(m \\ge 1\\) ergibt das 14 Oszillatoren. Für jeden speichert es \\(\\lambda_n\\), \\(Q_n\\), die Dämpfungsintegrale, die Oberflächenform \\(f_n\\) an 25 Radien und, für sechs Füllungen, \\(\\Phi\\), \\(\\Phi_r\\) und \\(\\Phi_z\\) auf einem Gitter von 12 × 20 Punkten im Schnitt. Die Seite interpoliert zwischen den Füllungen; für das gerade Glas berechnet sie dieselben Größen aus Bessel-Funktionen."
+ },
+ "e7dd56900a7e": {
+  "src": "Up and down",
+  "tr": "Auf und ab"
+ },
+ "e955a76caec6": {
+  "src": "<span>6</span>Driving the modes: hand and shaker",
+  "tr": "<span>6</span>Die Moden antreiben: Hand und Schütteltisch"
+ },
+ "ec4674884c12": {
+  "src": "Contact line <i>γ</i><sub>c</sub>",
+  "tr": "Kontaktlinie <i>γ</i><sub>c</sub>"
+ },
+ "ecaafd8d7804": {
+  "src": "Carry the glass",
+  "tr": "Das Glas tragen"
+ },
+ "ecc33e35c337": {
+  "src": "<span class=\"psec__n\">04</span>Linear sloshing in a straight glass",
+  "tr": "<span class=\"psec__n\">04</span>Lineares Schwappen in einem geraden Glas"
+ },
+ "ee83379cdc79": {
+  "src": "Your pointer does not move the glass directly. The glass follows it like a mass on a critically damped spring of natural frequency \\(\\Omega_h\\), \\(\\ddot{\\mathbf x}_g = \\Omega_h^2(\\mathbf x_\\text{hand} - \\mathbf x_g) - 2\\Omega_h\\dot{\\mathbf x}_g\\), so a sudden jerk of the pointer becomes a finite acceleration. <span class=\"fact\">Opinion</span>: this is a cartoon of a human arm, not a model of one; its one honest content is that a stiff hand (large \\(\\Omega_h\\)) transmits sharp accelerations and a soft hand filters them. People walk at about 1 to 2.5 steps per second, and a coffee cup sloshes at 2.6 to 4.3 Hz [2], close enough for the steps to excite the cup on their harmonics; the same holds for a pint.",
+  "tr": "Ihr Zeiger bewegt das Glas nicht direkt. Das Glas folgt ihm wie eine Masse an einer kritisch gedämpften Feder der Eigenfrequenz \\(\\Omega_h\\), \\(\\ddot{\\mathbf x}_g = \\Omega_h^2(\\mathbf x_\\text{hand} - \\mathbf x_g) - 2\\Omega_h\\dot{\\mathbf x}_g\\), sodass ein plötzlicher Ruck des Zeigers zu einer endlichen Beschleunigung wird. <span class=\"fact\">Meinung</span>: Das ist eine Karikatur eines menschlichen Arms, kein Modell davon; sein einziger ehrlicher Gehalt ist, dass eine steife Hand (großes \\(\\Omega_h\\)) scharfe Beschleunigungen überträgt und eine weiche Hand sie filtert. Menschen gehen mit etwa 1 bis 2.5 Schritten pro Sekunde, und Kaffee in einer Tasse schwappt mit 2.6 bis 4.3 Hz [2], nahe genug, dass die Schritte die Tasse über ihre Oberschwingungen anregen; dasselbe gilt für ein Pint."
+ },
+ "efc266fc0b4c": {
+  "src": "The number \\(m\\) counts the nodal diameters, lines across the surface that stay level: \\(m = 1\\) is the familiar rocking, with one side up while the other is down; \\(m = 2\\) has two nodal diameters; \\(m = 0\\) is a ring wave that heaves the middle against the edge. The number \\(n\\) counts nodal circles.",
+  "tr": "Die Zahl \\(m\\) zählt die Knotendurchmesser, Linien quer über die Oberfläche, die waagerecht bleiben: \\(m = 1\\) ist das vertraute Schaukeln, bei dem eine Seite oben ist, während die andere unten ist; \\(m = 2\\) hat zwei Knotendurchmesser; \\(m = 0\\) ist eine Ringwelle, die die Mitte gegen den Rand hebt und senkt. Die Zahl \\(n\\) zählt die Knotenkreise."
+ },
+ "efd0976a0ad5": {
+  "src": "Lift",
+  "tr": "Anheben"
+ },
+ "f177e39e2c37": {
+  "src": "1007 kg/m³",
+  "tr": "1007 kg/m³"
+ },
+ "f1ab6165558b": {
+  "src": "<span class=\"psec__n\">08</span>The velocity field in the cut",
+  "tr": "<span class=\"psec__n\">08</span>Das Geschwindigkeitsfeld im Schnitt"
+ },
+ "f315c0db8ae6": {
+  "src": "Arrows in the 3D view too",
+  "tr": "Pfeile auch in der 3D-Ansicht"
+ },
+ "f3727c272aa1": {
+  "src": "Each mode contributes \\((\\dot a_n/\\lambda_n)\\nabla(\\Phi_n\\cos m\\theta)\\): the arrows are largest when the surface passes level and vanish at the extremes of the swing, when the stout is momentarily at rest and all its energy sits in the raised surface. In the cut, the component \\(\\partial_r\\Phi\\) points along the cut and \\(\\partial_z\\Phi\\) up; the component across the cut, \\(-m\\Phi\\sin(m\\theta)/r\\), is drawn as a ring whose size is its speed.",
+  "tr": "Jede Mode trägt \\((\\dot a_n/\\lambda_n)\\nabla(\\Phi_n\\cos m\\theta)\\) bei: Die Pfeile sind am größten, wenn die Oberfläche waagerecht durchläuft, und verschwinden an den Umkehrpunkten des Schaukelns, wenn das Stout für einen Augenblick ruht und seine ganze Energie in der angehobenen Oberfläche steckt. Im Schnitt zeigt die Komponente \\(\\partial_r\\Phi\\) entlang des Schnitts und \\(\\partial_z\\Phi\\) nach oben; die Komponente quer zum Schnitt, \\(-m\\Phi\\sin(m\\theta)/r\\), wird als Ring gezeichnet, dessen Größe ihr Betrag ist."
+ },
+ "f5646bad3057": {
+  "src": "We use the glass Guinness serves its draught stout in, the 20-ounce tulip pint, and the stout itself at its serving temperature. Nothing steers the glass yet except your hand or a shaker table; a controller that carries a pint without spilling is a later chapter of this collection.",
+  "tr": "Wir verwenden das Glas, in dem Guinness sein Draught-Stout ausschenkt, das 20-Unzen-Tulpenglas für ein Pint, und das Stout selbst bei seiner Ausschanktemperatur. Noch steuert nichts das Glas außer Ihrer Hand oder einem Schütteltisch; ein Regler, der ein Pint trägt, ohne zu verschütten, ist ein späteres Kapitel dieser Sammlung."
+ },
+ "f5cbdf6bfb51": {
+  "src": "Contents",
+  "tr": "Inhalt"
+ },
+ "f61a7d8e5870": {
+  "src": "Let the calm surface lie at height \\(z_s\\), and let the stout surface be raised by \\(\\eta(x, y, t)\\) above it. Three conditions close the problem.",
+  "tr": "Die ruhige Oberfläche liege in der Höhe \\(z_s\\), und die Oberfläche des Stouts sei um \\(\\eta(x, y, t)\\) darüber angehoben. Drei Bedingungen schließen das Problem."
+ },
+ "f65e5d01846f": {
+  "src": "E. Chatzigiannakis et al., <i>Phys. Fluids</i> 37, 082139 (2025), Table I: surface tension and viscosity of beers; <a href=\"https://pubs.aip.org/aip/pof/article/37/8/082139/3360405\">link</a>.",
+  "tr": "E. Chatzigiannakis et al., <i>Phys. Fluids</i> 37, 082139 (2025), Tabelle I: Oberflächenspannung und Viskosität von Bieren; <a href=\"https://pubs.aip.org/aip/pof/article/37/8/082139/3360405\">Link</a>."
+ },
+ "f6e93992fb2e": {
+  "src": "2.06 mPa·s",
+  "tr": "2.06 mPa·s"
+ },
+ "f72f0eda6052": {
+  "src": "Simulations",
+  "tr": "Simulationen"
+ },
+ "f91505b905ff": {
+  "src": "measured at 6 °C [3]; 1006 kg/m³ in [4]. Firm.",
+  "tr": "gemessen bei 6 °C [3]; 1006 kg/m³ in [4]. Gesichert."
+ },
+ "f9683f767c08": {
+  "src": "Or let a shaker table move it, at the glass’s own sloshing frequency <i>f</i><sub>1</sub> sideways, or at 2<i>f</i><sub>1</sub> up and down (Faraday’s experiment).",
+  "tr": "Oder lassen Sie einen Schütteltisch es bewegen, mit der eigenen Schwappfrequenz <i>f</i><sub>1</sub> des Glases seitwärts oder mit 2<i>f</i><sub>1</sub> auf und ab (Faradays Experiment)."
+ },
+ "f99b1bf16337": {
+  "src": "J. W. Miles, “Surface-wave damping in closed basins”, <i>Proc. R. Soc. A</i> 297, 459 (1967); <a href=\"https://doi.org/10.1098/rspa.1967.0081\">doi</a>. Abstract only; the derivation in section 7 is our own and is checked against exact Bessel integrals.",
+  "tr": "J. W. Miles, „Surface-wave damping in closed basins“, <i>Proc. R. Soc. A</i> 297, 459 (1967); <a href=\"https://doi.org/10.1098/rspa.1967.0081\">doi</a>. Nur die Zusammenfassung; die Herleitung in Abschnitt 7 ist unsere eigene und wird an exakten Bessel-Integralen geprüft."
+ },
+ "f9b3349b61b0": {
+  "src": "<b>Last 8 s</b> · highest stout at the wall <span class=\"tx\">\\(\\eta_{\\max}\\)</span>, head top, rim",
+  "tr": "<b>Letzte 8 s</b> · höchster Stand des Stouts an der Wand <span class=\"tx\">\\(\\eta_{\\max}\\)</span>, Oberkante der Schaumkrone, Rand"
+ },
+ "fb57a7ac8366": {
+  "src": "This simulation needs JavaScript.",
+  "tr": "Diese Simulation benötigt JavaScript."
+ },
+ "fc7024ac096c": {
+  "src": "loading the 3D view…",
+  "tr": "3D-Ansicht wird geladen…"
+ },
+ "fde9923da392": {
+  "src": "dynamic viscosity at 6 °C",
+  "tr": "dynamische Viskosität bei 6 °C"
+ },
+ "fdfc8842041d": {
+  "src": "with \\(\\Phi_\\ell\\) the derivative along the wall’s profile and \\(I_b\\) the same integral over the floor. The program evaluates \\(I_w\\), \\(I_b\\) and \\(E\\) for each mode of the tulip glass.",
+  "tr": "mit \\(\\Phi_\\ell\\) der Ableitung entlang des Wandprofils und \\(I_b\\) demselben Integral über den Boden. Das Programm wertet \\(I_w\\), \\(I_b\\) und \\(E\\) für jede Mode des Tulpenglases aus."
+ }
+}

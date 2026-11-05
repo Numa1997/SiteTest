@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Pint of Stout, Carried · Numa Koudsie</title>
+    <meta name="description" content="A pint of stout in a Guinness tulip glass, carried by hand. Drag the glass, shake it, and watch the stout slosh: the surface, the head and the velocity field inside, from the linear modes of the real glass shape, with every source of damping derived.">
+    <meta name="theme-color" content="#f5f1ea">
+    <link rel="stylesheet" href="../styles/sim.css">
+    <link rel="stylesheet" href="../styles/fold.css"><link rel="stylesheet" href="../styles/i18n.css"><script src="../scripts/flip.js"></script>
+    <link rel="stylesheet" href="../styles/data.css">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%237a1f2b'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='38' fill='%23f5f1ea'%3EN%3C/text%3E%3C/svg%3E">
+    <style>
+        .take { background: var(--card); border: 1px solid var(--rule); border-left: 3px solid var(--accent); border-radius: 10px; padding: 14px 18px 16px; margin-bottom: 16px; }
+        .take__title { margin: 0 0 8px; font-family: var(--serif); font-size: 26px; line-height: 1.1; color: var(--accent-dark); }
+        .take__aim { margin: 0 0 12px; font-size: 15px; line-height: 1.5; color: var(--ink); }
+        .take__steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr; gap: 12px; font-size: 14px; line-height: 1.45; color: var(--ink-2); }
+        .take__steps li { display: flex; flex-direction: column; gap: 8px; }
+        .take__n { display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--accent); color: var(--card); font-family: var(--mono); font-size: 12px; }
+        .take__hint { margin: 12px 0 0; font-size: 13px; color: var(--accent); min-height: 1.4em; }
+        .take .actions .btn.is-on, .panel .actions .btn.is-on { background: var(--accent); color: var(--card); border-color: var(--accent); }
+        .seg { display: flex; flex-wrap: wrap; gap: 4px; padding: 3px; border: 1px solid var(--rule); border-radius: 8px; }
+        .seg button { flex: 1 1 auto; padding: 6px 9px; border: 0; border-radius: 6px; background: transparent; font-family: var(--sans); font-size: 13px; color: var(--ink-3); cursor: pointer; }
+        .seg button[aria-pressed="true"] { background: var(--accent); color: #fff; }
+        .ctl__note { font-size: 12px; color: var(--ink-3); margin: 2px 0 0; line-height: 1.45; }
+        .state { margin: 0; font-size: 13px; line-height: 1.5; color: var(--ink-2); }
+        .state.is-warn { color: var(--accent); font-weight: 600; }
+        .gam { width: 100%; border-collapse: collapse; font-family: var(--mono); font-size: 11.5px; color: var(--ink-2); }
+        .gam th, .gam td { padding: 2px 4px; text-align: right; border-bottom: 1px solid var(--rule-soft, #e6dfd2); white-space: nowrap; }
+        .gam th { font-weight: 500; color: var(--muted); } .gam td:first-child, .gam th:first-child { text-align: left; }
+        #stage3d canvas { display: block; width: 100%; height: 100%; touch-action: none; cursor: grab; }
+        #stage3d canvas.is-grab { cursor: grabbing; }
+        .s3-fallback { position: absolute; inset: 0; display: grid; place-items: center; font-family: var(--mono); font-size: 12px; color: var(--muted); }
+        .sim, .sim-top { max-width: 1560px; }
+        @media (min-width: 901px) { .sim__grid { grid-template-columns: minmax(0, 1fr) 300px; } }
+        .sim { container: sim / inline-size; }
+        @container sim (min-width: 1200px) {
+            .sim__grid { grid-template-columns: 300px minmax(0, 1fr) 300px; column-gap: 20px; row-gap: 16px; }
+            .sim__grid > div:first-child { display: contents; }
+            .sim__grid .take, .sim__grid > .panel { grid-row: 1 / span 3; position: sticky; top: 12px; max-height: calc(100vh - 24px); overflow-y: auto; overscroll-behavior: contain; }
+            .sim__grid .take { grid-column: 1; margin-bottom: 0; }
+            .sim__grid > .panel { grid-column: 3; }
+            .sim__grid > div:first-child > .stage { grid-column: 2; margin-top: 0 !important; }
+            .sim__grid > div:first-child > .stage:nth-child(2) { grid-row: 1; }
+            .sim__grid > div:first-child > .stage:nth-child(3) { grid-row: 2; }
+            .sim__grid > div:first-child > .stage:nth-child(4) { grid-row: 3; }
+        }
+        .ptable { display: block; width: max-content; max-width: 100%; overflow-x: auto; position: relative; border-collapse: collapse; margin: 12px 0 16px; font-size: 15px; }
+        .ptable th, .ptable td { border-bottom: 1px solid var(--rule); padding: 5px 12px 5px 0; text-align: left; vertical-align: top; }
+        .ptable th { font-family: var(--mono); font-size: 11px; font-weight: 500; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+        .fact { font-family: var(--mono); font-size: .72em; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); }
+    </style>
+</head>
+<body>
+    <header class="sim-top">
+        <span style="display:inline-flex;align-items:center;gap:14px"><a href="../index.html" aria-label="Phyein Usul, home page" style="display:inline-block;line-height:0"><img src="../images/phyein-usul-mark.svg" alt="Phyein Usul" width="87" height="48" /></a><a href="../simulations.html">← All simulations</a></span>
+        <nav class="sim-nav" aria-label="Simulations"><span>Fig.</span> <a href="Circular Wave Interference Visualization.html">1</a> <a href="Double Pendulum.html">2</a> <a href="Interactive Double-Slit Experiment Visualization.html">3</a> <a href="Transverse and longitudinal waves.html">4</a> <a href="water-wave.html">5</a> <a href="wave-interference.html">6</a> <a href="phasor-sums.html">7</a> <a href="draw-decompose.html">8</a> <a href="driven-oscillator.html">9</a> <a href="wind-turbine.html">10</a> <a href="pendulum-control.html">11</a> <a href="beer-slosh.html" aria-current="page">12</a></nav>
+    </header>
+
+    <main class="sim">
+        <noscript><p class="sim-error"><b>This simulation needs JavaScript.</b> <a href="../simulations.html">Back to the simulations</a></p></noscript>
+        <div class="sim__head">
+            <p class="sim__num">Fig. 12 · control systems · fluid dynamics</p>
+            <h1>A Pint of Stout, Carried<span class="dot">.</span></h1>
+            <p class="sim__lede">A Guinness tulip glass, measured from a photograph and rebuilt in Blender, holds half a litre of stout under its head. Carry it: drag the glass across the table, lift it, shake it. The stout sloshes in the modes of this very glass shape, the head rides on top, and a cut through the glass shows the velocity field inside. The damping is not a fudge factor: each loss is derived on its own and can be switched off.</p>
+        </div>
+
+        <div class="sim__grid">
+            <div>
+                <section class="take" aria-labelledby="take-title">
+                    <p class="take__title" id="take-title">Carry the glass</p>
+                    <p class="take__aim"><b>The aim:</b> see why a pint slops over when you walk, and why the head keeps it calm. Nothing steers the glass yet but your hand.</p>
+                    <ol class="take__steps">
+                        <li><span class="take__n">1</span><span>Grab the glass in the picture and drag it across the table. Drag elsewhere to turn the view. <i>Lift</i>, the mouse wheel or Shift-drag move it up and down.</span>
+                            <span class="actions"><button type="button" class="btn btn--ghost" id="lift">Lift</button><button type="button" class="btn btn--ghost" id="home">Back to the middle</button></span></li>
+                        <li><span class="take__n">2</span><span>Or let a shaker table move it, at the glass’s own sloshing frequency <i>f</i><sub>1</sub> sideways, or at 2<i>f</i><sub>1</sub> up and down (Faraday’s experiment).</span>
+                            <span class="actions"><button type="button" class="btn btn--ghost" id="shF1">Sideways at <i>f</i><sub>1</sub></button><button type="button" class="btn btn--ghost" id="shF2">Up and down at 2<i>f</i><sub>1</sub></button><button type="button" class="btn btn--ghost" id="shOff">Stop</button></span></li>
+                        <li><span class="take__n">3</span><span>Watch the velocity field in the cut below the glass, and the height at the wall against the rim. Then take the head away and do it again.</span>
+                            <span class="actions"><button type="button" class="btn btn--ghost" id="calm">Calm the stout</button><button type="button" class="btn btn--ghost" id="nohead">No head</button></span></li>
+                    </ol>
+                    <p class="take__hint" id="hint" aria-live="polite"></p>
+                </section>
+                <figure class="stage">
+                    <div class="stage__canvas" id="stage3d" style="--ar: 16 / 10; --ar-m: 1 / 1.05; position: relative;">
+                        <p class="s3-fallback" id="s3-fallback">loading the 3D view…</p>
+                    </div>
+                    <figcaption class="stage__cap">
+                        <span><b>Fig. 12</b> · <span class="tx">\(\ddot a_n + 2\gamma_n\dot a_n + \omega_n^2\left(1+\ddot z/g\right)a_n = -\lambda_n Q_n\,\ddot x\)</span> · live, RK4</span>
+                        <span id="cap-t"><i>t</i> = —</span>
+                    </figcaption>
+                </figure>
+                <figure class="stage" style="margin-top: 8px;">
+                    <div class="stage__canvas" id="stage" style="--ar: 16 / 8.5; --ar-m: 1 / 1.1;">
+                        <canvas id="sec" aria-label="A vertical cut through the glass along the sloshing direction: the stout, its surface and head, and arrows of the velocity of the stout relative to the glass."></canvas>
+                    </div>
+                    <figcaption class="stage__cap">
+                        <span><b>The cut</b> · velocity <span class="tx">\(\mathbf u = \nabla\phi\)</span> relative to the glass, in the plane <span id="cap-plane">—</span></span>
+                        <span id="cap-u">|<i>u</i>|<sub>max</sub> = —</span>
+                    </figcaption>
+                </figure>
+                <figure class="stage" style="margin-top: 8px;">
+                    <div class="stage__canvas" id="stage-tr" style="--ar: 16 / 4; --ar-m: 16 / 8;">
+                        <canvas id="tr" aria-label="The last eight seconds of the highest point of the stout at the wall, with the rim and the top of the head."></canvas>
+                    </div>
+                    <figcaption class="stage__cap">
+                        <span><b>Last 8 s</b> · highest stout at the wall <span class="tx">\(\eta_{\max}\)</span>, head top, rim</span>
+                        <span id="cap-spill">spills —</span>
+                    </figcaption>
+                </figure>
+            </div>
+
+            <aside class="panel" aria-label="Controls">
+                <div class="panel__group">
+                    <p class="panel__label">Now</p>
+                    <p class="state" id="state" aria-live="polite">—</p>
+                    <dl class="readouts">
+                        <div><dt>Slosh frequency <i>f</i><sub>1</sub></dt><dd id="r-f1">—</dd></div>
+                        <div><dt>Damping ratio <i>ζ</i><sub>1</sub></dt><dd id="r-z1">—</dd></div>
+                        <div><dt>Falls to 1/e in</dt><dd id="r-tau">—</dd></div>
+                        <div><dt>Effective gravity <i>g</i><sub>eff</sub>/<i>g</i></dt><dd id="r-geff">—</dd></div>
+                        <div><dt>Stout / glass to brim</dt><dd id="r-vol">—</dd></div>
+                        <div><dt>Head top to rim, now</dt><dd id="r-fb">—</dd></div>
+                    </dl>
+                    <div class="actions"><button type="button" class="btn btn--ghost" id="play">Pause</button></div>
+                </div>
+
+                <div class="panel__group">
+                    <p class="panel__label">Glass and pour</p>
+                    <div class="seg" role="group" aria-label="Glass shape" id="shape">
+                        <button type="button" data-v="tulip" aria-pressed="true">Guinness tulip</button>
+                        <button type="button" data-v="cyl" aria-pressed="false">Straight</button>
+                    </div>
+                    <p class="ctl__note"><i>Straight</i>: a cylinder with the same surface radius and depth, where the modes are exact Bessel functions (section 4).</p>
+                    <label class="ctl"><span class="ctl__row"><span>Stout <i>V</i></span><output id="V-out" for="V"></output></span>
+                        <input type="range" id="V" min="300" max="590" step="5" value="500"></label>
+                    <label class="ctl"><span class="ctl__row"><span>Head <i>h</i><sub>f</sub></span><output id="hf-out" for="hf"></output></span>
+                        <input type="range" id="hf" min="0" max="30" step="0.5" value="18"></label>
+                    <p class="ctl__note">A well-poured pint carries 18 to 20 mm of head (section 2).</p>
+                </div>
+
+                <div class="panel__group">
+                    <p class="panel__label">The stout</p>
+                    <label class="ctl"><span class="ctl__row"><span>Temperature <i>T</i></span><output id="TC-out" for="TC"></output></span>
+                        <input type="range" id="TC" min="2" max="25" step="0.5" value="6"></label>
+                    <label class="ctl"><span class="ctl__row"><span>Viscosity at 6 °C <i>μ</i><sub>6</sub></span><output id="mu-out" for="mu"></output></span>
+                        <input type="range" id="mu" min="1.0" max="4.0" step="0.02" value="2.06"></label>
+                    <label class="ctl"><span class="ctl__row"><span>Density <i>ρ</i></span><output id="rho-out" for="rho"></output></span>
+                        <input type="range" id="rho" min="990" max="1030" step="1" value="1007"></label>
+                    <label class="ctl"><span class="ctl__row"><span>Surface tension <i>σ</i></span><output id="sig-out" for="sig"></output></span>
+                        <input type="range" id="sig" min="30" max="72" step="0.5" value="45"></label>
+                    <label class="ctl"><span class="ctl__row"><span>Liquid in the head <i>ε</i><sub>f</sub></span><output id="ef-out" for="ef"></output></span>
+                        <input type="range" id="ef" min="0" max="0.4" step="0.01" value="0.15"></label>
+                    <p class="ctl__note">The head’s mass per area is <i>ε</i><sub>f</sub><i>ρ h</i><sub>f</sub>; it loads the surface and lowers the frequencies (section 5).</p>
+                </div>
+
+                <div class="panel__group">
+                    <p class="panel__label">Damping, each loss on its own</p>
+                    <label class="switch"><span>Wall and floor layers <i>γ</i><sub>w</sub></span><input type="checkbox" id="dw" checked></label>
+                    <label class="ctl"><span class="ctl__row"><span>Surface skin <i>c</i><sub>s</sub></span><output id="cs-out" for="cs"></output></span>
+                        <input type="range" id="cs" min="0" max="1" step="0.05" value="1"></label>
+                    <p class="ctl__note">0: a clean surface; 1: a skin that cannot stretch (proteins, or the underside of the head).</p>
+                    <label class="ctl"><span class="ctl__row"><span>Contact line <i>γ</i><sub>c</sub></span><output id="gc-out" for="gc"></output></span>
+                        <input type="range" id="gc" min="0" max="0.3" step="0.01" value="0.05"></label>
+                    <label class="ctl"><span class="ctl__row"><span>Head friction factor <i>k</i><sub>f</sub></span><output id="kf-out" for="kf"></output></span>
+                        <input type="range" id="kf" min="0" max="5" step="0.1" value="1"></label>
+                    <p class="ctl__note">1 is the wall friction Sauret and co-workers measured for foams (section 7); the least certain number on this page.</p>
+                    <table class="gam" aria-label="Damping rates of the slowest mode"><thead><tr><th>mode (1,1)</th><th><i>γ</i>, 1/s</th><th>share</th></tr></thead><tbody id="gam"></tbody></table>
+                </div>
+
+                <div class="panel__group">
+                    <p class="panel__label">Hand and shaker</p>
+                    <label class="ctl"><span class="ctl__row"><span>Hand stiffness <i>Ω</i><sub>h</sub></span><output id="Om-out" for="Om"></output></span>
+                        <input type="range" id="Om" min="4" max="60" step="1" value="22"></label>
+                    <p class="ctl__note">The glass follows your pointer like a mass on a critically damped spring of natural frequency <i>Ω</i><sub>h</sub>: a stiff hand jerks, a soft hand glides.</p>
+                    <div class="seg" role="group" aria-label="Shaker" id="shake">
+                        <button type="button" data-v="off" aria-pressed="true">Off</button>
+                        <button type="button" data-v="x" aria-pressed="false">Sideways</button>
+                        <button type="button" data-v="z" aria-pressed="false">Up and down</button>
+                    </div>
+                    <label class="ctl"><span class="ctl__row"><span>Amplitude <i>A</i></span><output id="A-out" for="A"></output></span>
+                        <input type="range" id="A" min="0" max="5" step="0.05" value="0.2"></label>
+                    <label class="ctl"><span class="ctl__row"><span>Frequency <i>f</i></span><output id="f-out" for="f"></output></span>
+                        <input type="range" id="f" min="0.5" max="12" step="0.01" value="3.4"></label>
+                </div>
+
+                <div class="panel__group">
+                    <p class="panel__label">What is drawn</p>
+                    <div class="seg" role="group" aria-label="Cut plane" id="plane">
+                        <button type="button" data-v="follow" aria-pressed="true">Cut follows the slosh</button>
+                        <button type="button" data-v="x" aria-pressed="false">x–z</button>
+                        <button type="button" data-v="y" aria-pressed="false">y–z</button>
+                    </div>
+                    <label class="switch"><span>Arrows in the 3D view too</span><input type="checkbox" id="arrows3d" checked></label>
+                    <label class="ctl"><span class="ctl__row"><span>Arrow scale</span><output id="as-out" for="as"></output></span>
+                        <input type="range" id="as" min="-1" max="1.5" step="0.05" value="0"></label>
+                    <p class="ctl__note">Fixed between runs, never rescaled by itself: a slow slosh draws short arrows. The key in the cut gives the scale.</p>
+                </div>
+            </aside>
+        </div>
+
+        <article class="paper" id="paper" aria-labelledby="paper-title">
+            <header class="paper__head">
+                <p class="paper__kicker">Fig. 12 · lecture note · fluid dynamics</p>
+                <h2 class="paper__title" id="paper-title">Sloshing in a pint glass</h2>
+                <p class="paper__by">Numa Koudsie · for readers who know Newton’s laws, a little calculus and the idea of a normal mode</p>
+                <div class="paper__abstract"><b>Abstract.</b> Anyone who has carried a full pint through a crowded pub knows that the stout does not simply ride along: it rocks, it climbs the wall on one side, and the head goes over the rim. We build the physics of that rocking from Newton’s second law for a fluid. In the frame of the moving glass the stout feels gravity plus the glass’s acceleration; inside it the flow has no rotation, so its velocity is the gradient of a potential that obeys Laplace’s equation; at the surface, gravity pulls the stout back to level. The result is a set of sloshing modes, each an oscillator driven by the glass’s sideways acceleration and pumped by its vertical acceleration. For a straight glass the modes are Bessel functions; for the real Guinness tulip, measured from a photograph and rebuilt in Blender, we compute them by finite elements and check the program against the straight glass. Then we follow the energy: into the thin boundary layers on the wall, into the skin of the surface, and into the friction of the head on the glass, which turns out to be the largest loss of all. A pint with its head settles in about six seconds; without it, in about eleven.</div>
+            </header>
+            <div class="paper__grid">
+                <nav class="paper__toc" aria-label="Contents">
+                    <p>Contents</p>
+                    <ol>
+                        <li><a href="#p-carry"><span>1</span>Carrying a pint</a></li>
+                        <li><a href="#p-glass"><span>2</span>The glass and the stout</a></li>
+                        <li><a href="#p-frame"><span>3</span>A fluid in a moving glass</a></li>
+                        <li><a href="#p-modes"><span>4</span>Linear sloshing in a straight glass</a></li>
+                        <li><a href="#p-fem"><span>5</span>The real glass, by finite elements</a></li>
+                        <li><a href="#p-drive"><span>6</span>Driving the modes: hand and shaker</a></li>
+                        <li><a href="#p-damp"><span>7</span>Where the energy goes</a></li>
+                        <li><a href="#p-field"><span>8</span>The velocity field in the cut</a></li>
+                        <li><a href="#p-num"><span>9</span>On the screen, and what is left out</a></li>
+                    </ol>
+                </nav>
+                <div class="paper__body">
+                    <section class="psec" id="p-carry">
+                        <h3><span class="psec__n">01</span>Carrying a pint</h3>
+                        <p class="psec__lead">Pick up a full glass and walk. For a few steps nothing happens; then the surface starts to rock, a little higher on each step, until the stout climbs the side of the glass and the head spills over your fingers. Stop walking and the rocking does not stop at once: it dies away over a few seconds, and the dark liquid settles back under its cream-coloured head.</p>
+                        <p>Three things are already visible in that experience. First, the stout has a rhythm of its own: it rocks at a definite frequency, about three times a second in a pint glass, whatever your hand does. Second, your hand can feed that rhythm: if your steps come at a rate close to it, each step adds to the swing, and the amplitude grows. Third, something takes the energy away again, because the rocking dies when you stand still. A physicist recognises a driven, damped oscillator. This note shows that the stout in a glass is a whole family of such oscillators, called <em>sloshing modes</em>, derives their frequencies from the laws of fluid motion and the shape of the glass, and works out, one by one, the processes that damp them.</p>
+                        <p>We use the glass Guinness serves its draught stout in, the 20-ounce tulip pint, and the stout itself at its serving temperature. Nothing steers the glass yet except your hand or a shaker table; a controller that carries a pint without spilling is a later chapter of this collection.</p>
+                        <div class="pbox"><p class="pbox__title">How claims are marked</p><p>A statement with a number in square brackets, such as [3], is a fact taken from that source, listed at the end. A statement marked <span class="fact">computed</span> is a fact produced by this page’s own code or by the scripts in <code>tools/fig12/</code>, which anyone can rerun. <span class="fact">Inference</span> marks reasoning from those facts, and <span class="fact">opinion</span> marks a judgement. Everything else is derived on the page.</p></div>
+                    </section>
+
+                    <section class="psec" id="p-glass">
+                        <h3><span class="psec__n">02</span>The glass and the stout</h3>
+                        <p class="psec__lead">Before any equation we need two things: the shape of the container, and the properties of what is in it.</p>
+                        <h4>The shape, from a photograph</h4>
+                        <p>Guinness publishes no drawing of its glass, and retail listings give only an overall size: 160 mm tall and 85 mm across at the widest, holding 568 mL, one imperial pint [8]. So we measured the shape from a side-on product photograph [9]. In each row of pixels the outermost dark pixels mark the edge of the glass, and half their distance is the outer radius at that height. The rim and the foot appear in the photograph as thin ellipses, because the camera looks slightly down on the glass; their centres, not their lowest points, mark the planes of rim and foot. Setting the distance between those planes to the published 160 mm fixes the scale at 0.393 mm per pixel <span class="fact">computed</span>. The outline was then smoothed to 0.2 mm, about half a pixel, so that the photograph’s pixel steps do not appear as ripples in the wall.</p>
+                        <p>Two checks say the result is the real glass. The widest diameter comes out as 84.1 mm, against the published 85 mm, a difference of 1 %. And the volume agrees with the glass’s purpose: taking a wall 2.0 mm thick and a solid base 8 mm thick (both read from the photograph), the cavity holds 603.7 mL to the brim, and 568 mL fills it to 151.9 mm, eight millimetres below the rim, where a lined pint glass puts its line <span class="fact">computed</span>. Blender revolved the same profile into a closed mesh of 96 sides and measured 603.3 mL; the 0.4 mL difference is exactly what a 96-sided polygon loses against a circle, a factor \(\tfrac{96}{2\pi}\sin\tfrac{2\pi}{96} = 0.99929\) <span class="fact">computed</span>.</p>
+                        <figure class="pfig"><div class="pfig__plate"><svg viewBox="0 0 720 450" role="img" aria-label="The measured profile of the Guinness tulip glass: outer and inner wall, 500 mL of stout under 18 mm of head, the pint line at 152 mm and the rim at 160 mm."><rect x="0" y="0" width="720" height="450" fill="#fff"/><path d="M110.7,410.0 L110.7,405.2 L110.7,400.4 L110.7,395.6 L110.7,390.8 L111.3,386.0 L112.3,381.2 L113.2,376.4 L113.9,371.6 L114.5,366.8 L114.9,362.0 L115.3,357.2 L115.5,352.4 L115.6,347.6 L115.6,342.8 L115.5,338.0 L115.3,333.2 L115.0,328.4 L114.7,323.6 L114.3,318.8 L113.8,314.0 L113.3,309.2 L112.7,304.4 L112.0,299.6 L111.3,294.8 L110.6,290.0 L109.8,285.2 L109.0,280.4 L108.2,275.6 L107.4,270.8 L106.5,266.0 L105.7,261.2 L104.8,256.4 L103.9,251.6 L103.1,246.8 L102.2,242.0 L101.3,237.2 L100.5,232.4 L99.6,227.6 L98.8,222.8 L98.0,218.0 L97.2,213.2 L96.5,208.4 L95.7,203.6 L95.0,198.8 L94.3,194.0 L93.7,189.2 L93.1,184.4 L92.5,179.6 L92.0,174.8 L91.5,170.0 L91.1,165.2 L90.7,160.4 L90.3,155.6 L90.0,150.8 L89.7,146.0 L89.5,141.2 L89.3,136.4 L89.2,131.6 L89.1,126.8 L89.0,122.0 L89.0,117.2 L89.1,112.4 L89.2,107.6 L89.3,102.8 L89.5,98.0 L89.7,93.2 L90.0,88.4 L90.3,83.6 L90.6,78.8 L91.0,74.0 L91.4,69.2 L91.8,64.4 L92.3,59.6 L92.8,54.8 L93.4,50.0 L93.9,45.2 L94.5,40.4 L95.1,35.6 L95.7,30.8 L96.3,26.0 L101.2,26.0 L100.6,30.8 L100.0,35.6 L99.3,40.4 L98.8,45.2 L98.2,50.0 L97.7,54.8 L97.1,59.6 L96.7,64.4 L96.2,69.2 L95.8,74.0 L95.4,78.8 L95.1,83.6 L94.8,88.4 L94.5,93.2 L94.3,98.0 L94.1,102.8 L94.0,107.6 L93.9,112.4 L93.8,117.2 L93.8,122.0 L93.9,126.8 L94.0,131.6 L94.1,136.4 L94.3,141.2 L94.5,146.0 L94.8,150.8 L95.1,155.6 L95.5,160.4 L95.9,165.2 L96.3,170.0 L96.8,174.8 L97.4,179.6 L97.9,184.4 L98.5,189.2 L99.2,194.0 L99.9,198.8 L100.6,203.6 L101.3,208.4 L102.1,213.2 L102.9,218.0 L103.7,222.8 L104.5,227.6 L105.3,232.4 L106.2,237.2 L107.1,242.0 L107.9,246.8 L108.8,251.6 L109.7,256.4 L110.6,261.2 L111.4,266.0 L112.3,270.8 L113.1,275.6 L113.9,280.4 L114.7,285.2 L115.5,290.0 L116.2,294.8 L116.9,299.6 L117.5,304.4 L118.1,309.2 L118.6,314.0 L119.1,318.8 L119.5,323.6 L119.8,328.4 L120.1,333.2 L120.3,338.0 L120.4,342.8 L120.4,347.6 L120.3,352.4 L120.1,357.2 L119.7,362.0 L119.3,366.8 L118.7,371.6 L118.0,376.4 L117.2,381.2 L116.2,386.0 L115.5,390.8 L190.0,390.8 L190.0,410.0Z" fill="#e6eff1" stroke="#1c1518" stroke-width="1.2"/><path d="M269.3,410.0 L269.3,405.2 L269.3,400.4 L269.3,395.6 L269.3,390.8 L268.7,386.0 L267.7,381.2 L266.8,376.4 L266.1,371.6 L265.5,366.8 L265.1,362.0 L264.7,357.2 L264.5,352.4 L264.4,347.6 L264.4,342.8 L264.5,338.0 L264.7,333.2 L265.0,328.4 L265.3,323.6 L265.7,318.8 L266.2,314.0 L266.7,309.2 L267.3,304.4 L268.0,299.6 L268.7,294.8 L269.4,290.0 L270.2,285.2 L271.0,280.4 L271.8,275.6 L272.6,270.8 L273.5,266.0 L274.3,261.2 L275.2,256.4 L276.1,251.6 L276.9,246.8 L277.8,242.0 L278.7,237.2 L279.5,232.4 L280.4,227.6 L281.2,222.8 L282.0,218.0 L282.8,213.2 L283.5,208.4 L284.3,203.6 L285.0,198.8 L285.7,194.0 L286.3,189.2 L286.9,184.4 L287.5,179.6 L288.0,174.8 L288.5,170.0 L288.9,165.2 L289.3,160.4 L289.7,155.6 L290.0,150.8 L290.3,146.0 L290.5,141.2 L290.7,136.4 L290.8,131.6 L290.9,126.8 L291.0,122.0 L291.0,117.2 L290.9,112.4 L290.8,107.6 L290.7,102.8 L290.5,98.0 L290.3,93.2 L290.0,88.4 L289.7,83.6 L289.4,78.8 L289.0,74.0 L288.6,69.2 L288.2,64.4 L287.7,59.6 L287.2,54.8 L286.6,50.0 L286.1,45.2 L285.5,40.4 L284.9,35.6 L284.3,30.8 L283.7,26.0 L278.8,26.0 L279.4,30.8 L280.0,35.6 L280.7,40.4 L281.2,45.2 L281.8,50.0 L282.3,54.8 L282.9,59.6 L283.3,64.4 L283.8,69.2 L284.2,74.0 L284.6,78.8 L284.9,83.6 L285.2,88.4 L285.5,93.2 L285.7,98.0 L285.9,102.8 L286.0,107.6 L286.1,112.4 L286.2,117.2 L286.2,122.0 L286.1,126.8 L286.0,131.6 L285.9,136.4 L285.7,141.2 L285.5,146.0 L285.2,150.8 L284.9,155.6 L284.5,160.4 L284.1,165.2 L283.7,170.0 L283.2,174.8 L282.6,179.6 L282.1,184.4 L281.5,189.2 L280.8,194.0 L280.1,198.8 L279.4,203.6 L278.7,208.4 L277.9,213.2 L277.1,218.0 L276.3,222.8 L275.5,227.6 L274.7,232.4 L273.8,237.2 L272.9,242.0 L272.1,246.8 L271.2,251.6 L270.3,256.4 L269.4,261.2 L268.6,266.0 L267.7,270.8 L266.9,275.6 L266.1,280.4 L265.3,285.2 L264.5,290.0 L263.8,294.8 L263.1,299.6 L262.5,304.4 L261.9,309.2 L261.4,314.0 L260.9,318.8 L260.5,323.6 L260.2,328.4 L259.9,333.2 L259.7,338.0 L259.6,342.8 L259.6,347.6 L259.7,352.4 L259.9,357.2 L260.3,362.0 L260.7,366.8 L261.3,371.6 L262.0,376.4 L262.8,381.2 L263.8,386.0 L264.5,390.8 L190.0,390.8 L190.0,410.0Z" fill="#e6eff1" stroke="#1c1518" stroke-width="1.2"/><path d="M95.1,83.6 L94.8,88.4 L94.5,93.2 L94.3,98.0 L94.1,102.8 L94.0,107.6 L93.9,112.4 L93.8,117.2 L93.8,122.0 L93.9,126.8 L94.0,131.6 L94.1,136.4 L94.3,141.2 L94.5,146.0 L94.8,150.8 L95.1,155.6 L95.5,160.4 L95.9,165.2 L96.3,170.0 L96.8,174.8 L97.4,179.6 L97.9,184.4 L98.5,189.2 L99.2,194.0 L99.9,198.8 L100.6,203.6 L101.3,208.4 L102.1,213.2 L102.9,218.0 L103.7,222.8 L104.5,227.6 L105.3,232.4 L106.2,237.2 L107.1,242.0 L107.9,246.8 L108.8,251.6 L109.7,256.4 L110.6,261.2 L111.4,266.0 L112.3,270.8 L113.1,275.6 L113.9,280.4 L114.7,285.2 L115.5,290.0 L116.2,294.8 L116.9,299.6 L117.5,304.4 L118.1,309.2 L118.6,314.0 L119.1,318.8 L119.5,323.6 L119.8,328.4 L120.1,333.2 L120.3,338.0 L120.4,342.8 L120.4,347.6 L120.3,352.4 L120.1,357.2 L119.7,362.0 L119.3,366.8 L118.7,371.6 L118.0,376.4 L117.2,381.2 L116.2,386.0 L115.5,390.8 L264.5,390.8 L263.8,386.0 L262.8,381.2 L262.0,376.4 L261.3,371.6 L260.7,366.8 L260.3,362.0 L259.9,357.2 L259.7,352.4 L259.6,347.6 L259.6,342.8 L259.7,338.0 L259.9,333.2 L260.2,328.4 L260.5,323.6 L260.9,318.8 L261.4,314.0 L261.9,309.2 L262.5,304.4 L263.1,299.6 L263.8,294.8 L264.5,290.0 L265.3,285.2 L266.1,280.4 L266.9,275.6 L267.7,270.8 L268.6,266.0 L269.4,261.2 L270.3,256.4 L271.2,251.6 L272.1,246.8 L272.9,242.0 L273.8,237.2 L274.7,232.4 L275.5,227.6 L276.3,222.8 L277.1,218.0 L277.9,213.2 L278.7,208.4 L279.4,203.6 L280.1,198.8 L280.8,194.0 L281.5,189.2 L282.1,184.4 L282.6,179.6 L283.2,174.8 L283.7,170.0 L284.1,165.2 L284.5,160.4 L284.9,155.6 L285.2,150.8 L285.5,146.0 L285.7,141.2 L285.9,136.4 L286.0,131.6 L286.1,126.8 L286.2,122.0 L286.2,117.2 L286.1,112.4 L286.0,107.6 L285.9,102.8 L285.7,98.0 L285.5,93.2 L285.2,88.4 L284.9,83.6Z" fill="#2b1210"/><path d="M99.3,40.4 L98.8,45.2 L98.2,50.0 L97.7,54.8 L97.1,59.6 L96.7,64.4 L96.2,69.2 L95.8,74.0 L95.4,78.8 L284.6,78.8 L284.2,74.0 L283.8,69.2 L283.3,64.4 L282.9,59.6 L282.3,54.8 L281.8,50.0 L281.2,45.2 L280.7,40.4Z" fill="#efe2c6" stroke="#b08a50" stroke-width="0.8"/><line x1="90.3" y1="26.0" x2="343.7" y2="26.0" stroke="#7a1f2b" stroke-dasharray="none" stroke-width="1"/><text x="347.7" y="30.0" font-family="IBM Plex Mono, monospace" font-size="11" text-anchor="start" fill="#7a1f2b" >rim, 160 mm (published height)</text><line x1="87.9" y1="45.2" x2="346.1" y2="45.2" stroke="#8b8079" stroke-dasharray="4 3" stroke-width="1"/><text x="350.1" y="49.2" font-family="IBM Plex Mono, monospace" font-size="11" text-anchor="start" fill="#8b8079" >568 mL (one pint) reaches 151.9 mm</text><line x1="84.5" y1="79.9" x2="349.5" y2="79.9" stroke="#1c1518" stroke-dasharray="4 3" stroke-width="1"/><text x="353.5" y="83.9" font-family="IBM Plex Mono, monospace" font-size="11" text-anchor="start" fill="#1c1518" >500 mL: surface 137.5 mm, a = 39.4 mm</text><line x1="104.7" y1="390.8" x2="329.3" y2="390.8" stroke="#8b8079" stroke-dasharray="4 3" stroke-width="1"/><text x="333.3" y="394.8" font-family="IBM Plex Mono, monospace" font-size="11" text-anchor="start" fill="#8b8079" >floor of the cavity, 8 mm of solid glass below</text><line x1="89.0" y1="122.0" x2="291.0" y2="122.0" stroke="#7a1f2b" stroke-width="1"/><text x="190.0" y="117.0" font-family="IBM Plex Mono, monospace" font-size="10" text-anchor="middle" fill="#7a1f2b" >84.1 mm</text><text x="190.0" y="18.0" font-family="IBM Plex Mono, monospace" font-size="10" text-anchor="middle" fill="#7a1f2b" >78.0 mm</text><line x1="62" y1="410.0" x2="68" y2="410.0" stroke="#8b8079"/><text x="58.0" y="414.0" font-family="IBM Plex Mono, monospace" font-size="10" text-anchor="end" fill="#8b8079" >0</text><line x1="62" y1="314.0" x2="68" y2="314.0" stroke="#8b8079"/><text x="58.0" y="318.0" font-family="IBM Plex Mono, monospace" font-size="10" text-anchor="end" fill="#8b8079" >40</text><line x1="62" y1="218.0" x2="68" y2="218.0" stroke="#8b8079"/><text x="58.0" y="222.0" font-family="IBM Plex Mono, monospace" font-size="10" text-anchor="end" fill="#8b8079" >80</text><line x1="62" y1="122.0" x2="68" y2="122.0" stroke="#8b8079"/><text x="58.0" y="126.0" font-family="IBM Plex Mono, monospace" font-size="10" text-anchor="end" fill="#8b8079" >120</text><line x1="62" y1="26.0" x2="68" y2="26.0" stroke="#8b8079"/><text x="58.0" y="30.0" font-family="IBM Plex Mono, monospace" font-size="10" text-anchor="end" fill="#8b8079" >160</text><text x="30.0" y="218.0" font-family="IBM Plex Mono, monospace" font-size="10" text-anchor="middle" fill="#8b8079" transform="rotate(-90 30 218.0)">z, mm</text><text x="12.0" y="434.0" font-family="IBM Plex Mono, monospace" font-size="10" text-anchor="start" fill="#8b8079" >outer radius from the photograph; inner = outer − 2.0 mm normal to the wall</text></svg></div>
+                            <figcaption><span class="pfig__n">Figure 1</span>The measured profile of the Guinness tulip glass, to scale. The waist sits 27 mm above the foot, the widest point 121 mm up; above it the wall leans inward to the 78 mm rim. The page’s default pour, 500 mL of stout under 18 mm of head, is drawn in.</figcaption></figure>
+                        <h4>The stout</h4>
+                        <p>Guinness Draught is a stout of 4.2 % alcohol [10], served at 6 to 7 °C [11], and gassed with a mixture of nitrogen and carbon dioxide that gives it its fine, long-lived head of 18 to 20 mm [11]. The numbers the physics needs are collected below.</p>
+                        <table class="ptable">
+                            <tr><th>Symbol</th><th>Meaning</th><th>Value on the page</th><th>Source, and how sure</th></tr>
+                            <tr><td>\(\rho\)</td><td>density of the liquid</td><td>1007 kg/m³</td><td>measured at 6 °C [3]; 1006 kg/m³ in [4]. Firm.</td></tr>
+                            <tr><td>\(\mu_6\)</td><td>dynamic viscosity at 6 °C</td><td>2.06 mPa·s</td><td>measured [3]; 2.1 mPa·s in [4]. Firm.</td></tr>
+                            <tr><td>\(\mu(T)\)</td><td>viscosity at temperature \(T\)</td><td>\(\mu_6\,\mu_w(T)/\mu_w(6\,{}^\circ\mathrm C)\)</td><td>scaled like water’s viscosity \(\mu_w\) (Vogel’s equation). <span class="fact">Inference</span>: beer is mostly water; it gives a 31 % fall from 6 to 20 °C, close to the measured trend of beers [12].</td></tr>
+                            <tr><td>\(\sigma\)</td><td>surface tension</td><td>45 mN/m</td><td>beers measure 41 to 48 mN/m [12]; no Guinness value was found. Matters little here (section 5).</td></tr>
+                            <tr><td>\(h_f\)</td><td>thickness of the head</td><td>18 mm</td><td>18 to 20 mm for a correct pour [11]. Firm enough.</td></tr>
+                            <tr><td>\(\varepsilon_f\)</td><td>liquid fraction of the head</td><td>0.15</td><td>not found in any source opened. <span class="fact">Opinion</span>: a wet foam, between 0.05 and 0.3. Uncertain.</td></tr>
+                        </table>
+                        <p>From these, the kinematic viscosity at 6 °C is \(\nu = \mu/\rho = 2.05\times10^{-6}\) m²/s, twice that of water at room temperature. The head is treated as a layer of foam of mass \(M_f = \varepsilon_f\rho h_f = 2.72\) kg per square metre of surface, riding on the stout <span class="fact">computed</span>.</p>
+                    </section>
+
+                    <section class="psec" id="p-frame">
+                        <h3><span class="psec__n">03</span>A fluid in a moving glass</h3>
+                        <p class="psec__lead">On a train that brakes, your coffee leans forward as if gravity had tipped. That is the first idea: in the frame of the glass, the glass’s acceleration acts like an extra gravity pointing the other way.</p>
+                        <p>Put coordinates on the glass: \(x\) and \(y\) horizontal, \(z\) up from the foot, and let the glass move without turning, its acceleration being \(\mathbf a_g = (\ddot x, \ddot y, \ddot z)\). A small parcel of stout of density \(\rho\) and velocity \(\mathbf u\) relative to the glass obeys Newton’s second law. In the laboratory, its acceleration is that of the glass plus its own, so in the glass’s frame</p>
+                        \[ \rho\left(\frac{\partial\mathbf u}{\partial t} + (\mathbf u\cdot\nabla)\mathbf u\right) = -\nabla p + \mu\nabla^2\mathbf u + \rho\left(\mathbf g - \mathbf a_g\right), \tag{1} \]
+                        <p>with \(p\) the pressure, \(\mu\) the viscosity and \(\mathbf g = (0, 0, -g)\). This is the Navier–Stokes equation; the only new thing is the term \(-\rho\mathbf a_g\), the inertial force of the accelerating frame. Because the stout is incompressible, \(\nabla\cdot\mathbf u = 0\). The two body forces combine into the gradient of one potential,</p>
+                        \[ \mathbf g - \mathbf a_g = -\nabla\Psi, \qquad \Psi = (g + \ddot z)\,z + \ddot x\,x + \ddot y\,y , \tag{2} \]
+                        <p>as differentiating \(\Psi\) shows. So the stout feels an <em>effective gravity</em> \(\mathbf g_\text{eff} = -\nabla\Psi\): tilted when the glass speeds up sideways, stronger when the glass is lifted with increasing speed, weaker when it is lowered. If \(g + \ddot z\) turns negative, the glass falls faster than free fall and the stout leaves the floor; the page warns when that happens.</p>
+                        <h4>Why the interior has no rotation ★</h4>
+                        <p>Take the curl of (1). The curl of any gradient is zero, so both \(\nabla p\) and \(\rho\nabla\Psi\) drop out (\(\rho\) is constant). With the vorticity \(\boldsymbol\omega = \nabla\times\mathbf u\) and the identity \((\mathbf u\cdot\nabla)\mathbf u = \nabla(\tfrac12 u^2) - \mathbf u\times\boldsymbol\omega\), we are left with</p>
+                        \[ \frac{\partial\boldsymbol\omega}{\partial t} = \nabla\times(\mathbf u\times\boldsymbol\omega) + \nu\nabla^2\boldsymbol\omega . \tag{3} \]
+                        <p>Every term on the right contains \(\boldsymbol\omega\). A stout that starts at rest, \(\boldsymbol\omega = 0\), therefore stays free of vorticity, however the glass is shaken, except where something outside (3) creates it. That something is the wall: the stout must stick to the glass (no slip), while a flow without vorticity slides along it. The conflict is settled in a thin <em>Stokes layer</em>, where the velocity drops to zero and all the vorticity lives. Vorticity spreads by viscosity, a diffusion with coefficient \(\nu\), so in one oscillation period of angular frequency \(\omega\) it reaches a distance</p>
+                        \[ \delta = \sqrt{2\nu/\omega} . \tag{4} \]
+                        <p>For the slowest slosh of our pint, \(\omega = 20.4\) rad/s, this is \(\delta = 0.45\) mm, about one percent of the glass’s radius <span class="fact">computed</span>. Outside that skin the flow is irrotational.</p>
+                        <div class="pbox"><p class="pbox__title">Key result · irrotational interior</p><p>Outside boundary layers 0.45 mm thick, the velocity of the stout relative to the glass is the gradient of a <em>velocity potential</em>, \(\mathbf u = \nabla\phi\), and incompressibility makes it obey Laplace’s equation, \(\nabla^2\phi = 0\). Viscosity drops out of the interior entirely: for \(\mathbf u = \nabla\phi\), \(\mu\nabla^2\mathbf u = \mu\nabla(\nabla^2\phi) = 0\). It acts only in the layers, where it takes energy away (section 7).</p></div>
+                        <p>With \(\mathbf u = \nabla\phi\), equation (1) can be integrated once in space. Using \((\mathbf u\cdot\nabla)\mathbf u = \nabla(\tfrac12|\nabla\phi|^2)\) when \(\boldsymbol\omega = 0\), every term is a gradient, and</p>
+                        \[ \frac{\partial\phi}{\partial t} + \tfrac12|\nabla\phi|^2 + \frac{p}{\rho} + \Psi = C(t), \tag{5} \]
+                        <p>the unsteady Bernoulli equation. The function \(C(t)\) can be absorbed into \(\phi\), which is defined only up to a function of time.</p>
+                    </section>
+
+                    <section class="psec" id="p-modes">
+                        <h3><span class="psec__n">04</span>Linear sloshing in a straight glass</h3>
+                        <p class="psec__lead">Laplace’s equation alone has no waves in it. The waves come from the free surface, where gravity pulls a raised patch of stout back down, and the stout below must move to let it.</p>
+                        <h4>Boundary conditions</h4>
+                        <p>Let the calm surface lie at height \(z_s\), and let the stout surface be raised by \(\eta(x, y, t)\) above it. Three conditions close the problem.</p>
+                        <p><b>On the wall and the floor</b> the stout cannot pass through the glass: \(\partial\phi/\partial n = 0\), with \(n\) the direction normal to the glass.</p>
+                        <p><b>At the surface, kinematics:</b> a parcel on the surface stays on the surface, so the surface rises at the vertical speed of the stout there: \(\partial_t\eta = \partial_z\phi\) to first order in the small amplitude.</p>
+                        <p><b>At the surface, dynamics:</b> the pressure just under the surface equals the air pressure (we come back to surface tension and the head in section 5). Putting \(p = p_\text{air}\) in (5) at \(z = z_s + \eta\), dropping the square of the small velocity and moving the constant into \(\phi\),</p>
+                        \[ \frac{\partial\phi}{\partial t} + (g + \ddot z)\,\eta + \ddot x\,x + \ddot y\,y = 0 \quad\text{at } z = z_s . \tag{6} \]
+                        <p>Linearisation means evaluating both surface conditions at the calm level \(z_s\) rather than at \(z_s + \eta\). The error is of the order of the wave slope; the page warns when the wave at the wall exceeds a fifth of the radius.</p>
+                        <h4>The modes of a cylinder</h4>
+                        <p>First let the glass stand still. In a cylinder of radius \(a\) and depth \(D\), with \(r, \theta\) polar coordinates and \(z\) measured from the calm surface, Laplace’s equation separates. Trying \(\phi = \Phi(r)\,\cos(m\theta)\,Z(z)\,e^{i\omega t}\) gives Bessel’s equation for \(\Phi\) and \(Z'' = k^2 Z\); the solution that is finite on the axis and has no flow through the floor at \(z = -D\) is</p>
+                        \[ \phi = A\,J_m(kr)\cos(m\theta)\,\frac{\cosh k(z + D)}{\cosh kD}\,\cos\omega t . \tag{7} \]
+                        <p>No flow through the side wall requires \(J_m'(ka) = 0\), so \(ka\) must be one of the zeros \(\xi_{mn}\) of \(J_m'\): \(\xi_{11} = 1.8412\), \(\xi_{21} = 3.0542\), \(\xi_{01} = 3.8317\), \(\xi_{12} = 5.3314\) (computed with Wolfram Language and SciPy, which agree to all digits). Eliminating \(\eta\) between the two surface conditions with the glass at rest gives \(\partial_t^2\phi + g\,\partial_z\phi = 0\) at \(z = 0\), and putting (7) in,</p>
+                        \[ \omega_{mn}^2 = g\,k_{mn}\tanh(k_{mn}D), \qquad k_{mn} = \xi_{mn}/a . \tag{8} \]
+                        <p>The number \(m\) counts the nodal diameters, lines across the surface that stay level: \(m = 1\) is the familiar rocking, with one side up while the other is down; \(m = 2\) has two nodal diameters; \(m = 0\) is a ring wave that heaves the middle against the edge. The number \(n\) counts nodal circles.</p>
+                        <div class="pbox"><p class="pbox__title">Example 4.1 · the brief’s straight glass</p><p>For \(a = 40\) mm and \(D = 99.5\) mm, \(k_{11} = 46.03\) m⁻¹ and \(\tanh(k_{11}D) = 1.000\): the glass is “deep”, since \(\tanh\) has saturated. Then \(\omega_{11} = \sqrt{9.81\times46.03} = 21.25\) rad/s and \(f_{11} = 3.382\) Hz, confirmed with Wolfram Language. The depth no longer matters once \(kD \gt 3\); in our pint \(kD = 6.1\) <span class="fact">computed</span>.</p></div>
+                        <div class="pbox"><p class="pbox__title">Key result · deep sloshing</p><p>In a deep glass the slowest mode rocks at \(\omega_{11} \approx \sqrt{1.84\,g/a}\), set only by the radius of the surface: like a pendulum of length \(a/1.84\), about 21 mm for a pint. A wider glass sloshes more slowly.</p></div>
+                    </section>
+
+                    <section class="psec" id="p-fem">
+                        <h3><span class="psec__n">05</span>The real glass, by finite elements</h3>
+                        <p class="psec__lead">The tulip glass is not a cylinder: it narrows to a waist, swells, and leans inward again near the rim. Separation of variables fails, but the problem keeps its structure, and a computer can solve it on the measured shape.</p>
+                        <h4>The eigenvalue problem</h4>
+                        <p>The glass is still a body of revolution, so each mode still varies as \(\cos m\theta\); write \(\phi = \Phi(r, z)\cos m\theta\cos\omega t\). In the meridional plane, the region \(0 \le r \le R_i(z)\) between the floor and the calm surface, with \(R_i\) the inner radius of the glass, \(\Phi\) satisfies</p>
+                        \[ \frac{1}{r}\frac{\partial}{\partial r}\!\left(r\frac{\partial\Phi}{\partial r}\right) + \frac{\partial^2\Phi}{\partial z^2} - \frac{m^2}{r^2}\Phi = 0, \qquad \frac{\partial\Phi}{\partial n} = 0 \text{ on glass}, \qquad \frac{\partial\Phi}{\partial z} = \lambda\Phi \text{ at } z = z_s , \tag{9} \]
+                        <p>with the eigenvalue \(\lambda = \omega^2/g\) appearing only in the surface condition. Mathematicians call this a <em>Steklov problem</em>. Multiply the equation by any smooth function \(\psi\) and by \(r\), integrate over the region and integrate by parts once. The wall and floor terms vanish because \(\partial_n\Phi = 0\), and the surface term is replaced using its condition:</p>
+                        \[ \int\!\!\int\left(\Phi_r\psi_r + \Phi_z\psi_z + \frac{m^2}{r^2}\Phi\psi\right) r\,dr\,dz = \lambda\int_0^{a}\Phi\,\psi\;r\,dr . \tag{10} \]
+                        <p>This <em>weak form</em> is what the finite-element method solves. The region is cut into triangles; on each, \(\Phi\) is a quadratic polynomial fixed by its values at six nodes; requiring (10) for every such basis function \(\psi\) gives a matrix equation \(\mathsf K\boldsymbol\Phi = \lambda\,\mathsf M\boldsymbol\Phi\), in which \(\mathsf M\) has entries only at the surface nodes. Eliminating the interior nodes leaves a small symmetric eigenvalue problem on the surface <span class="fact">computed</span>, <code>tools/fig12/modes.py</code>.</p>
+                        <h4>Checking the program on the cylinder</h4>
+                        <p>A program that has not reproduced a known answer has proved nothing. For a cylinder of 40 mm radius and 100 mm depth the exact eigenvalues are \(\lambda = k\tanh kD\) from (8). On a mesh of 16 × 40 quadratic cells the program gives \(\lambda_{11} = 46.02036\) m⁻¹ against the exact 46.02035, a relative error of \(3\times10^{-7}\); the worst of nine modes, (0,3), is off by \(2.4\times10^{-4}\), and halving the cells reduces every error <span class="fact">computed</span>, <code>tools/fig12/check_cylinder.py</code>. The integrals the damping needs (section 7) agree with the exact Bessel integrals, evaluated independently in Wolfram Language, to \(3\times10^{-5}\) for the slowest mode and to \(3\times10^{-3}\) for the other modes kept.</p>
+                        <h4>What the tulip shape does</h4>
+                        <p>Run on the measured glass for every fill from 300 to 590 mL, the program gives the frequencies of Figure 2. Below the widest point the wall leans outward as it rises; above it, the wall leans inward. Compared with a straight glass of the same surface radius and depth, the outward-leaning glass sloshes more slowly (3.14 against 3.25 Hz at 300 mL) and the inward-leaning one faster (3.37 against 3.30 Hz at 590 mL) <span class="fact">computed</span>. <span class="fact">Inference</span>: near the surface, where the sloshing flow lives, an outward-leaning wall gives the stout more room to swing sideways for the same rise at the wall, which acts like a heavier pendulum bob; an inward-leaning wall squeezes the same flow into less room, a stiffer spring.</p>
+                        <figure class="pfig"><div class="pfig__plate"><svg viewBox="0 0 720 330" role="img" aria-label="Frequency of the slowest mode against the volume of stout: tulip glass with and without head, and a straight glass of the same surface radius and depth."><rect x="0" y="0" width="720" height="330" fill="#fff"/><rect x="70" y="20" width="620" height="260" fill="none" stroke="#cdc1ae"/><line x1="70" y1="280.0" x2="690" y2="280.0" stroke="#f0ebe3"/><text x="64.0" y="284.0" font-family="IBM Plex Mono, monospace" font-size="10" text-anchor="end" fill="#8b8079" >3.1</text><line x1="70" y1="236.7" x2="690" y2="236.7" stroke="#f0ebe3"/><text x="64.0" y="240.7" font-family="IBM Plex Mono, monospace" font-size="10" text-anchor="end" fill="#8b8079" >3.2</text><line x1="70" y1="193.3" x2="690" y2="193.3" stroke="#f0ebe3"/><text x="64.0" y="197.3" font-family="IBM Plex Mono, monospace" font-size="10" text-anchor="end" fill="#8b8079" >3.3</text><line x1="70" y1="150.0" x2="690" y2="150.0" stroke="#f0ebe3"/><text x="64.0" y="154.0" font-family="IBM Plex Mono, monospace" font-size="10" text-anchor="end" fill="#8b8079" >3.4</text><line x1="70" y1="106.7" x2="690" y2="106.7" stroke="#f0ebe3"/><text x="64.0" y="110.7" font-family="IBM Plex Mono, monospace" font-size="10" text-anchor="end" fill="#8b8079" >3.5</text><line x1="70" y1="63.3" x2="690" y2="63.3" stroke="#f0ebe3"/><text x="64.0" y="67.3" font-family="IBM Plex Mono, monospace" font-size="10" text-anchor="end" fill="#8b8079" >3.6</text><line x1="70" y1="20.0" x2="690" y2="20.0" stroke="#f0ebe3"/><text x="64.0" y="24.0" font-family="IBM Plex Mono, monospace" font-size="10" text-anchor="end" fill="#8b8079" >3.7</text><text x="70.0" y="296.0" font-family="IBM Plex Mono, monospace" font-size="10" text-anchor="middle" fill="#8b8079" >300</text><text x="176.9" y="296.0" font-family="IBM Plex Mono, monospace" font-size="10" text-anchor="middle" fill="#8b8079" >350</text><text x="283.8" y="296.0" font-family="IBM Plex Mono, monospace" font-size="10" text-anchor="middle" fill="#8b8079" >400</text><text x="390.7" y="296.0" font-family="IBM Plex Mono, monospace" font-size="10" text-anchor="middle" fill="#8b8079" >450</text><text x="497.6" y="296.0" font-family="IBM Plex Mono, monospace" font-size="10" text-anchor="middle" fill="#8b8079" >500</text><text x="604.5" y="296.0" font-family="IBM Plex Mono, monospace" font-size="10" text-anchor="middle" fill="#8b8079" >550</text><text x="380.0" y="320.0" font-family="IBM Plex Mono, monospace" font-size="10" text-anchor="middle" fill="#8b8079" >stout V, mL</text><text x="16.0" y="150.0" font-family="IBM Plex Mono, monospace" font-size="10" text-anchor="middle" fill="#8b8079" transform="rotate(-90 16 150.0)">f₁, Hz</text><polyline fill="none" stroke="#1c1518" stroke-width="1.8"  points="70.0,182.4 91.4,184.0 112.8,185.0 134.1,185.6 155.5,185.6 176.9,185.1 198.3,184.2 219.7,182.9 241.0,181.1 262.4,178.9 283.8,176.3 305.2,173.4 326.6,170.0 347.9,166.3 369.3,162.3 390.7,157.9 412.1,153.1 433.4,148.0 454.8,142.6 476.2,136.8 497.6,130.7 519.0,124.3 540.3,117.5 561.7,110.5 583.1,103.2 604.5,95.6 625.9,87.7 647.2,79.6 668.6,71.2 690.0,62.6"/><polyline fill="none" stroke="#7a1f2b" stroke-width="1.8"  points="70.0,261.2 91.4,262.6 112.8,263.4 134.1,263.9 155.5,263.9 176.9,263.5 198.3,262.7 219.7,261.6 241.0,260.1 262.4,258.3 283.8,256.1 305.2,253.6 326.6,250.8 347.9,247.6 369.3,244.2 390.7,240.5 412.1,236.5 433.4,232.2 454.8,227.6 476.2,222.8 497.6,217.7 519.0,212.3 540.3,206.7 561.7,200.8 583.1,194.8 604.5,188.4 625.9,181.8 647.2,175.1 668.6,168.2 690.0,161.1"/><polyline fill="none" stroke="#7a1f2b" stroke-width="1.8" stroke-dasharray="5 4" points="70.0,214.3 91.4,217.9 112.8,221.2 134.1,224.1 155.5,226.7 176.9,228.9 198.3,230.8 219.7,232.4 241.0,233.6 262.4,234.6 283.8,235.3 305.2,235.6 326.6,235.7 347.9,235.4 369.3,234.9 390.7,234.1 412.1,233.0 433.4,231.6 454.8,229.9 476.2,227.9 497.6,225.6 519.0,223.1 540.3,220.2 561.7,217.0 583.1,213.6 604.5,209.8 625.9,205.7 647.2,201.4 668.6,196.7 690.0,191.8"/><line x1="84" y1="36" x2="108" y2="36" stroke="#1c1518" stroke-width="1.8"/><text x="114.0" y="40.0" font-family="IBM Plex Mono, monospace" font-size="10" text-anchor="start" fill="#1c1518" >tulip glass, no head</text><line x1="84" y1="52" x2="108" y2="52" stroke="#7a1f2b" stroke-width="1.8"/><text x="114.0" y="56.0" font-family="IBM Plex Mono, monospace" font-size="10" text-anchor="start" fill="#7a1f2b" >tulip glass, 18 mm head</text><line x1="84" y1="68" x2="108" y2="68" stroke="#7a1f2b" stroke-width="1.8" stroke-dasharray="5 4"/><text x="114.0" y="72.0" font-family="IBM Plex Mono, monospace" font-size="10" text-anchor="start" fill="#7a1f2b" >straight glass of the same a and D, 18 mm head</text><line x1="326.6" y1="20" x2="326.6" y2="280" stroke="#cdc1ae" stroke-dasharray="3 3"/><text x="330.6" y="272.0" font-family="IBM Plex Mono, monospace" font-size="9" text-anchor="start" fill="#8b8079" >widest point of the glass</text></svg></div>
+                            <figcaption><span class="pfig__n">Figure 2</span>Frequency \(f_1\) of the slowest mode, (1,1), against the volume of stout. Ink: the tulip glass without a head. Wine: the tulip glass under 18 mm of head. Dashed: a straight glass with the same surface radius and depth as the tulip at each fill, also with the head. The curves cross near 475 mL, with the surface at 132.5 mm, about 12 mm above the widest point of the glass, where the tulip’s wall is vertical (dotted line; the surface reaches it at 415 mL): what matters is the wall’s lean over the top centimetres, where the slosh lives.</figcaption></figure>
+                        <h4>The head and the surface tension</h4>
+                        <p>Two corrections change the surface condition (6). Surface tension adds a pressure \(-\sigma\nabla^2\eta\) under a curved surface, which raises \(\omega^2\) by the fraction \(\sigma\lambda^2/(\rho g)\); for our pint that is 1.0 % in \(\omega^2\) <span class="fact">computed</span>. The head is heavier. Treat it as a layer of mass \(M_f\) per area that rides up and down with the surface: Newton’s law for the layer says the stout must push on it with an extra pressure \(M_f\,\ddot\eta\), which enters (6) as an inertia. With both,</p>
+                        \[ \omega_n^2 = \frac{g\lambda_n + \sigma\lambda_n^3/\rho}{1 + \mu_{f,n}}, \qquad \mu_{f,n} = \frac{M_f\lambda_n}{\rho} . \tag{11} \]
+                        <p>The added-mass ratio \(\mu_f\) compares the head’s mass with the mass of stout that sloshes, a layer of depth \(1/\lambda\). For the default pour, \(\mu_{f,11} = 0.128\), and the head lowers \(f_1\) from 3.445 to 3.244 Hz <span class="fact">computed</span>. <span class="fact">Opinion</span>: this is the crudest piece of the model. A real head also has a little stiffness of its own, and its liquid fraction is not measured; the slider for \(\varepsilon_f\) lets you see how much it matters.</p>
+                        <div class="pbox"><p class="pbox__title">Example 5.1 · the default pint</p><p>500 mL of stout fills the tulip to \(z_s = 137.5\) mm, where the surface has radius \(a = 39.4\) mm and the stout is \(D = 129.5\) mm deep. The program gives \(\lambda_{11} = 47.27\) m⁻¹, so the bare frequency is \(\sqrt{9.81\times47.27}/2\pi = 3.427\) Hz; surface tension raises it to 3.445 Hz, and the head lowers it to 3.244 Hz <span class="fact">computed</span>.</p></div>
+                    </section>
+
+                    <section class="psec" id="p-drive">
+                        <h3><span class="psec__n">06</span>Driving the modes: hand and shaker</h3>
+                        <p class="psec__lead">Now let the glass move. The motion enters only through the surface condition (6), and there it does two different things.</p>
+                        <p>Write the surface displacement as a sum over modes, \(\eta = \sum_n a_n(t)\,f_n(r)\cos m\theta\) plus the matching \(\sin m\theta\) copies, where \(f_n(r) = \Phi_n(r, z_s)\) is the mode’s surface shape, scaled so that \(f_n = 1\) at the wall: then \(a_n\) is the rise of the stout at the wall, in metres. The potential is \(\phi = \sum_n (\dot a_n/\lambda_n)\,\Phi_n\cos m\theta\), because the kinematic condition requires \(\partial_t\eta = \partial_z\phi = \lambda_n\phi\) at the surface for each mode. Put both into (6), multiply by \(f_k\cos m\theta\, r\) and integrate over the surface. The modes are orthogonal on the surface (a consequence of (10) being symmetric), so one equation is left for each mode:</p>
+                        \[ \ddot a_n + 2\gamma_n\dot a_n + \omega_n^2\left(1 + \frac{\ddot z}{g}\right)a_n = -\frac{\lambda_n Q_n}{1 + \mu_{f,n}}\,\ddot x, \qquad Q_n = \frac{\int_0^a f_n\,r^2\,dr}{\int_0^a f_n^2\,r\,dr} , \tag{12} \]
+                        <p>with the damping rate \(\gamma_n\) of section 7 added. (For clarity the \(\sigma\) term of (11) is not repeated; the page keeps it.) The \(\sin\) copies obey the same equation with \(\ddot y\) in place of \(\ddot x\).</p>
+                        <div class="pbox"><p class="pbox__title">Key result · two ways in</p><p><b>Sideways acceleration drives.</b> The term \(\ddot x\,x\) in (6) is a tilt of the effective gravity; it pushes on every mode whose shape has a sideways lean, which in a round glass means \(m = 1\) only, through the coupling \(Q_n\). <b>Vertical acceleration pumps.</b> \(\ddot z\) multiplies \(a_n\): it changes the strength of gravity, the spring constant of every mode, without pushing any of them. It can only amplify a slosh that is already there.</p></div>
+                        <p>For a straight glass the coupling has a closed form: with \(f = J_1(kr)/J_1(\xi)\) and the Bessel integrals \(\int_0^a r^2J_1(kr)\,dr = a^2J_2(\xi)/k\) and \(\int_0^a rJ_1^2\,dr = \tfrac{a^2}{2}(1 - 1/\xi^2)J_1^2(\xi)\), using \(J_2(\xi) = J_1(\xi)/\xi\) at a zero of \(J_1'\), one finds \(Q = 2a/(\xi^2 - 1)\). The finite-element program reproduces the equivalent coefficient \(2a/((\xi^2-1)J_1(\xi)) = 0.057528\) m of the brief to all six digits <span class="fact">computed</span>.</p>
+                        <h4>Resonance</h4>
+                        <p>If the glass is shaken sideways as \(x = A\sin\Omega t\) at the mode’s own frequency (the page eases the shaking in over 0.3 s, \(x = A(1 - e^{-t/0.3\,\mathrm s})\sin\Omega t\), so that it starts without a jolt; the steady state is the same), \(\Omega = \omega_n\), the steady amplitude of (12) is the push divided by the damping, \(a_n = \lambda_nQ_nA\omega_n^2/[(1 + \mu_f)\,2\gamma_n\omega_n]\).</p>
+                        <div class="pbox"><p class="pbox__title">Example 6.1 · a fifth of a millimetre</p><p>Shake the default pint sideways by \(A = 0.2\) mm at \(f_1 = 3.24\) Hz. The glass’s acceleration is only \(A\omega^2 = 0.083\) m/s², under a hundredth of \(g\); yet the steady wave at the wall is 5.6 mm <span class="fact">computed</span>, 28 times the shaking. That is what the button <i>Sideways at f₁</i> does.</p></div>
+                        <h4>Pumping: Faraday’s waves ★</h4>
+                        <p>Shake the glass up and down, \(z = A\sin\Omega t\), and (12) for one mode becomes \(\ddot a + 2\gamma\dot a + \omega^2(1 - \epsilon\sin\Omega t)\,a = 0\) with \(\epsilon = A\Omega^2/g\): a pendulum whose gravity is modulated, the Mathieu equation. Its strongest instability lies at \(\Omega = 2\omega\), twice the mode’s frequency. There a slosh of amplitude \(a\cos(\omega t + \varphi)\), with the right phase, gains energy each half cycle, at an amplitude growth rate \(\epsilon\omega/4\), as averaging the modulated spring over one period shows. It grows when the gain beats the damping,</p>
+                        \[ \frac{\epsilon\,\omega}{4} \gt \gamma \quad\Longleftrightarrow\quad A \gt \frac{4\zeta g}{\Omega^2}, \qquad \zeta = \gamma/\omega . \tag{13} \]
+                        <p>Michael Faraday saw these waves in 1831, at half the frequency of the vibration that drove them. For the default pint the threshold is \(A = 0.58\) mm at \(\Omega = 2\omega_1\); the button <i>Up and down at 2f₁</i> shakes 2 mm, for which (13) predicts a net growth rate of 1.2 per second. Run on the page’s own integrator, a micrometre of initial disorder first falls about tenfold, because a seed at rest lies mostly in the decaying solution; from about two seconds on it grows at 1.21 per second, as (13) predicts <span class="fact">computed</span>, <code>notes/fig12/gate.cjs</code> and an independent SciPy run [<code>notes/fig12/check-derivations.md</code>]. (A linear model gives no seed by itself: the page starts every mode at about a micrometre, standing for the disorder a real surface always has.)</p>
+                        <h4>The hand</h4>
+                        <p>Your pointer does not move the glass directly. The glass follows it like a mass on a critically damped spring of natural frequency \(\Omega_h\), \(\ddot{\mathbf x}_g = \Omega_h^2(\mathbf x_\text{hand} - \mathbf x_g) - 2\Omega_h\dot{\mathbf x}_g\), so a sudden jerk of the pointer becomes a finite acceleration. <span class="fact">Opinion</span>: this is a cartoon of a human arm, not a model of one; its one honest content is that a stiff hand (large \(\Omega_h\)) transmits sharp accelerations and a soft hand filters them. People walk at about 1 to 2.5 steps per second, and a coffee cup sloshes at 2.6 to 4.3 Hz [2], close enough for the steps to excite the cup on their harmonics; the same holds for a pint.</p>
+                    </section>
+
+                    <section class="psec" id="p-damp">
+                        <h3><span class="psec__n">07</span>Where the energy goes</h3>
+                        <p class="psec__lead">A sloshing pint stops within seconds; an ideal fluid would rock for ever. Each loss below is computed on its own and has its own switch on the page.</p>
+                        <h4>The energy method</h4>
+                        <p>The energy of a mode is its kinetic energy at the moment the surface passes level, \(E = \tfrac12\rho\int|\nabla\phi|^2\,dV\). If a process dissipates the average power \(\bar P\), the energy decays as \(e^{-2\gamma t}\) and the amplitude as \(e^{-\gamma t}\), with</p>
+                        \[ \gamma = \frac{\bar P}{2E} . \tag{14} \]
+                        <p>Each loss is then a matter of computing \(\bar P\) with the flow of the lossless mode. This is accurate as long as the losses are small, \(\gamma \ll \omega\); here \(\gamma/\omega\) is 2 to 4 %.</p>
+                        <h4>The boundary layers on wall and floor ★</h4>
+                        <p>Just outside the Stokes layer the flow slides along the glass with the velocity \(U\cos\omega t\) given by the potential. Inside, at distance \(s\) from the glass, the solution of the diffusion equation that sticks to the glass is \(u = U[\cos\omega t - e^{-s/\delta}\cos(\omega t - s/\delta)]\). The power per unit area turned into heat is \(\mu\int(\partial u/\partial s)^2 ds\). The square of the gradient averages over a period to \((U^2/\delta^2)\,e^{-2s/\delta}\), and the integral to \(U^2/(2\delta)\), so</p>
+                        \[ \bar P_w = \frac{\rho}{2}\sqrt{\frac{\nu\omega}{2}}\int_\text{wall + floor}|\nabla_t\phi|^2\,dS , \tag{15} \]
+                        <p>with \(\nabla_t\phi\) the slip velocity amplitude along the glass. Dividing by \(2E\) and using Green’s identity \(\int|\nabla\Phi|^2dV = \lambda\int f^2 dS\) for the energy,</p>
+                        \[ \gamma_w = \frac12\sqrt{\frac{\nu\omega}{2}}\;\frac{I_w + I_b}{E}, \qquad I_w = \int_\text{wall}\left(\Phi_\ell^2 + \frac{m^2\Phi^2}{r^2}\right)r\,d\ell , \tag{16} \]
+                        <p>with \(\Phi_\ell\) the derivative along the wall’s profile and \(I_b\) the same integral over the floor. Here \(E\) stands for \(\iint|\nabla\Phi|^2\,r\,dr\,dz\), the energy (14) without the factors \(\tfrac12\rho\), the amplitude and the angular integral, which cancel in the ratio. The program evaluates \(I_w\), \(I_b\) and \(E\) for each mode of the tulip glass.</p>
+                        <p><b>Check.</b> For the deep cylinder and \(m = 1\), with \(\Phi = J_1(kr)e^{kz}\), the integrals are elementary: \(I_w/E = (1 + 1/\xi^2)/[a(1 - 1/\xi^2)] = 1.837/a\). The logarithmic decrement \(\Delta = 2\pi\gamma/\omega\) is then</p>
+                        \[ \Delta_{11} = 3.50\,\nu^{1/2}a^{-3/4}g^{-1/4} \quad\text{(clean walls, theory)}, \qquad \Delta_{11} = 4.98\,\nu^{1/2}a^{-3/4}g^{-1/4}\quad\text{(experiments in tanks [6])} . \tag{17} \]
+                        <p>The measured coefficient is 1.42 times the clean-wall theory. That is no contradiction: Miles showed that the damping observed in the classic experiments exceeds wall damping alone by factors of up to two or three, and traced the excess to surface films and to the contact line [5]. Those are the next two terms.</p>
+                        <h4>The skin of the surface</h4>
+                        <p>Beer is full of proteins that gather at the surface, and under a head the stout touches the underside of a foam. Either way, the surface resists being stretched. If it cannot stretch at all, the surface is a wall for horizontal motion, and its own Stokes layer dissipates by the same formula (15), now integrated over the surface: \(\gamma_s = c_s\,\tfrac12\sqrt{\nu\omega/2}\,I_s/E\), with \(c_s = 0\) for a clean surface and \(c_s = 1\) for one that cannot stretch [5]. For the default pint the skin, at \(c_s = 1\), takes about as much as the wall.</p>
+                        <h4>The bulk</h4>
+                        <p>Even an irrotational flow dissipates, because its parcels are stretched. The dissipation is \(2\mu\int e_{ij}e_{ij}\,dV\) with the strain rate \(e_{ij} = \partial_i\partial_j\phi\); for a mode that decays with depth as \(e^{\lambda z}\) this gives \(\gamma_b = 2\nu\lambda^2\), the damping of deep-water waves. (In a round glass the exact value for the slowest mode is \(1.88\nu k^2\), 6 % lower; on the total damping that is 0.1 %.) For the slowest mode it is 0.009 per second, 2 % of the total: negligible for the slowest mode, but it grows as \(\lambda^2\), so short waves feel it most <span class="fact">computed</span>.</p>
+                        <h4>The contact line</h4>
+                        <p>Where the surface meets the glass, the edge of the liquid has to creep up and down the wall. A wetting liquid loses somewhat more energy than viscous theory predicts, and non-wetting combinations lose several times more [7]; the loss depends on the amplitude, rising as the waves get smaller until the edge sticks [7]. No first-principles formula for a stout under a head exists. The page uses a constant rate \(\gamma_c\), default 0.05 per second, at the low end of the 0.05 to 0.25 per second measured in a water tank [7]. <span class="fact">Opinion</span>: under a head the edge of the stout is hidden in foam, and the head term below probably absorbs most of this.</p>
+                        <h4>The head</h4>
+                        <p>Sauret and co-workers measured how a layer of foam damps sloshing in a narrow tank [1]. The foam adds a damping rate that grows with its thickness and saturates once the foam is about as thick as the depth the wave reaches, \(1/k\). They traced the loss to the foam’s films sliding on the glass walls, so it scales as the wall area per volume of foam: as \(1/w\) for their tank of width \(w\), with \(w\gamma_f = 1.6 \pm 0.3\) cm/s measured [1]. For a round glass the wall per volume is \(2/a\) instead of \(2/w\), so we take</p>
+                        \[ \gamma_f = k_f\,\frac{U_f}{a}\left(1 - e^{-\lambda h_f}\right), \qquad U_f = 1.6\text{ cm/s} , \tag{18} \]
+                        <p>with the factor \(k_f\), default 1, on a slider. <span class="fact">Inference</span>: this transfer from a slot to a round glass, from 3 mm bubbles in dish soap to sub-millimetre bubbles in stout, is the least certain step on this page; it could be off by a factor of three either way [1].</p>
+                        <figure class="pfig"><div class="pfig__plate"><svg viewBox="0 0 720 236" role="img" aria-label="Damping rates of the slowest mode, term by term, at 6 °C with 500 mL of stout and 18 mm of head."><rect x="0" y="0" width="720" height="236" fill="#fff"/><text x="180.0" y="35.0" font-family="IBM Plex Mono, monospace" font-size="11" text-anchor="end" fill="#1c1518" >wall and floor layers γ_w</text><rect x="190" y="22" width="169.2" height="18" fill="#1c1518" opacity="0.75"/><text x="365.2" y="35.0" font-family="IBM Plex Mono, monospace" font-size="10" text-anchor="start" fill="#1c1518" >0.100 1/s  (20 %)</text><text x="180.0" y="65.0" font-family="IBM Plex Mono, monospace" font-size="11" text-anchor="end" fill="#1c1518" >surface skin γ_s</text><rect x="190" y="52" width="178.3" height="18" fill="#1c1518" opacity="0.75"/><text x="374.3" y="65.0" font-family="IBM Plex Mono, monospace" font-size="10" text-anchor="start" fill="#1c1518" >0.105 1/s  (21 %)</text><text x="180.0" y="95.0" font-family="IBM Plex Mono, monospace" font-size="11" text-anchor="end" fill="#1c1518" >bulk 2νλ² γ_b</text><rect x="190" y="82" width="15.5" height="18" fill="#1c1518" opacity="0.75"/><text x="211.5" y="95.0" font-family="IBM Plex Mono, monospace" font-size="10" text-anchor="start" fill="#1c1518" >0.009 1/s  (2 %)</text><text x="180.0" y="125.0" font-family="IBM Plex Mono, monospace" font-size="11" text-anchor="end" fill="#1c1518" >contact line γ_c</text><rect x="190" y="112" width="84.6" height="18" fill="#1c1518" opacity="0.75"/><text x="280.6" y="125.0" font-family="IBM Plex Mono, monospace" font-size="10" text-anchor="start" fill="#1c1518" >0.050 1/s  (10 %)</text><text x="180.0" y="155.0" font-family="IBM Plex Mono, monospace" font-size="11" text-anchor="end" fill="#1c1518" >head friction γ_f</text><rect x="190" y="142" width="393.3" height="18" fill="#7a1f2b" opacity="0.9"/><text x="589.3" y="155.0" font-family="IBM Plex Mono, monospace" font-size="10" text-anchor="start" fill="#1c1518" >0.232 1/s  (47 %)</text><text x="180.0" y="184.0" font-family="IBM Plex Mono, monospace" font-size="11" text-anchor="end" fill="#7a1f2b" >total γ₁₁</text><text x="190.0" y="184.0" font-family="IBM Plex Mono, monospace" font-size="11" text-anchor="start" fill="#7a1f2b" >0.497 1/s: amplitude falls to 1/e in 2.01 s, to 5 % in 6.0 s</text><line x1="190.0" y1="16" x2="190.0" y2="166" stroke="#f0ebe3"/><text x="190.0" y="12.0" font-family="IBM Plex Mono, monospace" font-size="9" text-anchor="middle" fill="#8b8079" >0.00</text><line x1="274.6" y1="16" x2="274.6" y2="166" stroke="#f0ebe3"/><text x="274.6" y="12.0" font-family="IBM Plex Mono, monospace" font-size="9" text-anchor="middle" fill="#8b8079" >0.05</text><line x1="359.2" y1="16" x2="359.2" y2="166" stroke="#f0ebe3"/><text x="359.2" y="12.0" font-family="IBM Plex Mono, monospace" font-size="9" text-anchor="middle" fill="#8b8079" >0.10</text><line x1="443.8" y1="16" x2="443.8" y2="166" stroke="#f0ebe3"/><text x="443.8" y="12.0" font-family="IBM Plex Mono, monospace" font-size="9" text-anchor="middle" fill="#8b8079" >0.15</text><line x1="528.5" y1="16" x2="528.5" y2="166" stroke="#f0ebe3"/><text x="528.5" y="12.0" font-family="IBM Plex Mono, monospace" font-size="9" text-anchor="middle" fill="#8b8079" >0.20</text><line x1="613.1" y1="16" x2="613.1" y2="166" stroke="#f0ebe3"/><text x="613.1" y="12.0" font-family="IBM Plex Mono, monospace" font-size="9" text-anchor="middle" fill="#8b8079" >0.25</text></svg></div>
+                            <figcaption><span class="pfig__n">Figure 3</span>The damping of the slowest mode, term by term, for the default pint. The head takes almost half. The table in the panel beside the figure shows the same numbers live.</figcaption></figure>
+                        <div class="pbox"><p class="pbox__title">Key result · how long a pint rocks</p><p>With its head, the default pint’s slowest slosh decays as \(e^{-\gamma t}\) with \(\gamma = 0.50\) s⁻¹: its amplitude falls to 1/e in 2.0 s and to 5 % in 6.0 s. Without the head the rate is 0.27 s⁻¹, and the same fall takes 3.7 s and 11.1 s. With clean walls alone it would be 8.9 s to 1/e <span class="fact">computed</span>. <span class="fact">Inference</span>: the walls set the floor of the damping, and everything else in a real pint at least doubles it.</p></div>
+                        <p>No measured decay time of sloshing in a beer glass was found in the sources searched; the walking-with-coffee study gives a computed, not measured, decrement for a cup [2]. A real test of this note is therefore within anyone’s reach: film a pint after a tap on the glass and count the swings.</p>
+                    </section>
+
+                    <section class="psec" id="p-field">
+                        <h3><span class="psec__n">08</span>The velocity field in the cut</h3>
+                        <p class="psec__lead">The figure under the glass is a vertical cut through it along the direction in which the stout rocks. The arrows are the velocity \(\mathbf u = \nabla\phi\) of the stout relative to the glass.</p>
+                        <p>Each mode contributes \((\dot a_n/\lambda_n)\nabla(\Phi_n\cos m\theta)\): the arrows are largest when the surface passes level and vanish at the extremes of the swing, when the stout is momentarily at rest and all its energy sits in the raised surface. In the cut, the component \(\partial_r\Phi\) points along the cut and \(\partial_z\Phi\) up; the component across the cut, \(-m\Phi\sin(m\theta)/r\), is drawn as a ring whose size is its speed.</p>
+                        <figure class="pfig"><div class="pfig__plate"><svg viewBox="0 0 720 400" role="img" aria-label="The slowest sloshing mode in a vertical cut through the glass: the tilted surface, and the velocity arrows from the finite-element solution, strongest near the surface and fading with depth."><rect x="0" y="0" width="720" height="400" fill="#fff"/><polyline fill="none" stroke="#1c1518" stroke-width="1.2" points="290.2,362.0 290.8,357.5 291.7,353.0 292.5,348.5 293.2,344.0 293.7,339.5 294.1,335.0 294.4,330.5 294.6,326.0 294.7,321.5 294.7,317.0 294.6,312.5 294.5,308.0 294.2,303.5 293.9,299.0 293.5,294.5 293.1,290.0 292.6,285.5 292.0,281.0 291.4,276.5 290.8,272.0 290.1,267.5 289.4,263.0 288.7,258.5 287.9,254.0 287.1,249.5 286.3,245.0 285.5,240.5 284.7,236.0 283.9,231.5 283.1,227.0 282.2,222.5 281.4,218.0 280.6,213.5 279.8,209.0 279.1,204.5 278.3,200.0 277.6,195.5 276.9,191.0 276.2,186.5 275.5,182.0 274.9,177.5 274.3,173.0 273.7,168.5 273.2,164.0 272.7,159.5 272.2,155.0 271.8,150.5 271.4,146.0 271.1,141.5 270.8,137.0 270.5,132.5 270.3,128.0 270.1,123.5 270.0,119.0 269.9,114.5 269.8,110.0 269.8,105.5 269.9,101.0 270.0,96.5 270.1,92.0 270.3,87.5 270.5,83.0 270.7,78.5 271.0,74.0 271.3,69.5 271.7,65.0 272.1,60.5 272.5,56.0 273.0,51.5 273.4,47.0 273.9,42.5 274.5,38.0 275.0,33.5 275.6,29.0 276.2,24.5 276.7,20.0"/><polyline fill="none" stroke="#1c1518" stroke-width="1.2" points="429.8,362.0 429.2,357.5 428.3,353.0 427.5,348.5 426.8,344.0 426.3,339.5 425.9,335.0 425.6,330.5 425.4,326.0 425.3,321.5 425.3,317.0 425.4,312.5 425.5,308.0 425.8,303.5 426.1,299.0 426.5,294.5 426.9,290.0 427.4,285.5 428.0,281.0 428.6,276.5 429.2,272.0 429.9,267.5 430.6,263.0 431.3,258.5 432.1,254.0 432.9,249.5 433.7,245.0 434.5,240.5 435.3,236.0 436.1,231.5 436.9,227.0 437.8,222.5 438.6,218.0 439.4,213.5 440.2,209.0 440.9,204.5 441.7,200.0 442.4,195.5 443.1,191.0 443.8,186.5 444.5,182.0 445.1,177.5 445.7,173.0 446.3,168.5 446.8,164.0 447.3,159.5 447.8,155.0 448.2,150.5 448.6,146.0 448.9,141.5 449.2,137.0 449.5,132.5 449.7,128.0 449.9,123.5 450.0,119.0 450.1,114.5 450.2,110.0 450.2,105.5 450.1,101.0 450.0,96.5 449.9,92.0 449.7,87.5 449.5,83.0 449.3,78.5 449.0,74.0 448.7,69.5 448.3,65.0 447.9,60.5 447.5,56.0 447.0,51.5 446.6,47.0 446.1,42.5 445.5,38.0 445.0,33.5 444.4,29.0 443.8,24.5 443.3,20.0"/><path d="M290.2,362.0 L290.8,357.5 L291.7,353.0 L292.5,348.5 L293.2,344.0 L293.7,339.5 L294.1,335.0 L294.4,330.5 L294.6,326.0 L294.7,321.5 L294.7,317.0 L294.6,312.5 L294.5,308.0 L294.2,303.5 L293.9,299.0 L293.5,294.5 L293.1,290.0 L292.6,285.5 L292.0,281.0 L291.4,276.5 L290.8,272.0 L290.1,267.5 L289.4,263.0 L288.7,258.5 L287.9,254.0 L287.1,249.5 L286.3,245.0 L285.5,240.5 L284.7,236.0 L283.9,231.5 L283.1,227.0 L282.2,222.5 L281.4,218.0 L280.6,213.5 L279.8,209.0 L279.1,204.5 L278.3,200.0 L277.6,195.5 L276.9,191.0 L276.2,186.5 L275.5,182.0 L274.9,177.5 L274.3,173.0 L273.7,168.5 L273.2,164.0 L272.7,159.5 L272.2,155.0 L271.8,150.5 L271.4,146.0 L271.1,141.5 L270.8,137.0 L270.5,132.5 L270.3,128.0 L270.1,123.5 L270.0,119.0 L269.9,114.5 L269.8,110.0 L269.8,105.5 L269.9,101.0 L270.0,96.5 L270.1,92.0 L270.3,87.5 L270.5,83.0 L270.7,79.7 L449.3,79.7 L449.5,83.0 L449.7,87.5 L449.9,92.0 L450.0,96.5 L450.1,101.0 L450.2,105.5 L450.2,110.0 L450.1,114.5 L450.0,119.0 L449.9,123.5 L449.7,128.0 L449.5,132.5 L449.2,137.0 L448.9,141.5 L448.6,146.0 L448.2,150.5 L447.8,155.0 L447.3,159.5 L446.8,164.0 L446.3,168.5 L445.7,173.0 L445.1,177.5 L444.5,182.0 L443.8,186.5 L443.1,191.0 L442.4,195.5 L441.7,200.0 L440.9,204.5 L440.2,209.0 L439.4,213.5 L438.6,218.0 L437.8,222.5 L436.9,227.0 L436.1,231.5 L435.3,236.0 L434.5,240.5 L433.7,245.0 L432.9,249.5 L432.1,254.0 L431.3,258.5 L430.6,263.0 L429.9,267.5 L429.2,272.0 L428.6,276.5 L428.0,281.0 L427.4,285.5 L426.9,290.0 L426.5,294.5 L426.1,299.0 L425.8,303.5 L425.5,308.0 L425.4,312.5 L425.3,317.0 L425.3,321.5 L425.4,326.0 L425.6,330.5 L425.9,335.0 L426.3,339.5 L426.8,344.0 L427.5,348.5 L428.3,353.0 L429.2,357.5 L429.8,362.0Z" fill="#2b1210" opacity="0.92"/><polyline fill="none" stroke="#7a1f2b" stroke-width="1.4" stroke-dasharray="5 3" points="270.7,99.9 274.4,100.0 278.1,99.9 281.8,99.7 285.5,99.5 289.3,99.1 293.0,98.7 296.7,98.1 300.4,97.5 304.2,96.8 307.9,96.1 311.6,95.2 315.3,94.3 319.1,93.3 322.8,92.3 326.5,91.2 330.2,90.1 333.9,88.9 337.7,87.6 341.4,86.4 345.1,85.1 348.8,83.7 352.6,82.4 356.3,81.0 360.0,79.7 363.7,78.3 367.4,77.0 371.2,75.6 374.9,74.3 378.6,73.0 382.3,71.7 386.1,70.5 389.8,69.3 393.5,68.2 397.2,67.1 400.9,66.0 404.7,65.0 408.4,64.1 412.1,63.3 415.8,62.5 419.6,61.8 423.3,61.2 427.0,60.7 430.7,60.3 434.5,59.9 438.2,59.6 441.9,59.5 445.6,59.4 449.3,59.4"/><line x1="360.0" y1="82.2" x2="376.6" y2="82.2" stroke="#f5f1ea" stroke-width="1.1"/><path d="M376.6,82.2 L372.1,84.4 L372.1,80.0Z" fill="#f5f1ea"/><line x1="368.1" y1="82.2" x2="384.5" y2="79.5" stroke="#f5f1ea" stroke-width="1.1"/><path d="M384.5,79.5 L380.4,82.3 L379.7,78.1Z" fill="#f5f1ea"/><line x1="351.9" y1="82.2" x2="368.2" y2="85.0" stroke="#f5f1ea" stroke-width="1.1"/><path d="M368.2,85.0 L363.4,86.4 L364.2,82.1Z" fill="#f5f1ea"/><line x1="376.3" y1="82.2" x2="392.1" y2="76.7" stroke="#f5f1ea" stroke-width="1.1"/><path d="M392.1,76.7 L388.6,80.3 L387.2,76.2Z" fill="#f5f1ea"/><line x1="343.7" y1="82.2" x2="359.6" y2="87.7" stroke="#f5f1ea" stroke-width="1.1"/><path d="M359.6,87.7 L354.6,88.3 L356.0,84.2Z" fill="#f5f1ea"/><line x1="384.4" y1="82.2" x2="399.4" y2="74.2" stroke="#f5f1ea" stroke-width="1.1"/><path d="M399.4,74.2 L396.5,78.2 L394.4,74.4Z" fill="#f5f1ea"/><line x1="335.6" y1="82.2" x2="350.6" y2="90.3" stroke="#f5f1ea" stroke-width="1.1"/><path d="M350.6,90.3 L345.6,90.1 L347.6,86.2Z" fill="#f5f1ea"/><line x1="392.5" y1="82.2" x2="406.3" y2="71.7" stroke="#f5f1ea" stroke-width="1.1"/><path d="M406.3,71.7 L404.1,76.2 L401.4,72.7Z" fill="#f5f1ea"/><line x1="327.5" y1="82.2" x2="341.3" y2="92.7" stroke="#f5f1ea" stroke-width="1.1"/><path d="M341.3,92.7 L336.4,91.7 L339.0,88.2Z" fill="#f5f1ea"/><line x1="400.7" y1="82.2" x2="413.0" y2="69.5" stroke="#f5f1ea" stroke-width="1.1"/><path d="M413.0,69.5 L411.4,74.3 L408.3,71.2Z" fill="#f5f1ea"/><line x1="319.3" y1="82.2" x2="331.6" y2="94.9" stroke="#f5f1ea" stroke-width="1.1"/><path d="M331.6,94.9 L326.9,93.2 L330.1,90.2Z" fill="#f5f1ea"/><line x1="408.8" y1="82.2" x2="419.4" y2="67.6" stroke="#f5f1ea" stroke-width="1.1"/><path d="M419.4,67.6 L418.5,72.5 L415.0,70.0Z" fill="#f5f1ea"/><line x1="311.2" y1="82.2" x2="321.8" y2="96.8" stroke="#f5f1ea" stroke-width="1.1"/><path d="M321.8,96.8 L317.4,94.4 L320.9,91.9Z" fill="#f5f1ea"/><line x1="416.9" y1="82.2" x2="425.6" y2="66.0" stroke="#f5f1ea" stroke-width="1.1"/><path d="M425.6,66.0 L425.4,71.0 L421.5,69.0Z" fill="#f5f1ea"/><line x1="303.1" y1="82.2" x2="311.7" y2="98.4" stroke="#f5f1ea" stroke-width="1.1"/><path d="M311.7,98.4 L307.6,95.5 L311.5,93.4Z" fill="#f5f1ea"/><line x1="425.1" y1="82.2" x2="431.5" y2="64.8" stroke="#f5f1ea" stroke-width="1.1"/><path d="M431.5,64.8 L432.0,69.7 L427.9,68.2Z" fill="#f5f1ea"/><line x1="294.9" y1="82.2" x2="301.4" y2="99.7" stroke="#f5f1ea" stroke-width="1.1"/><path d="M301.4,99.7 L297.8,96.2 L301.9,94.7Z" fill="#f5f1ea"/><line x1="433.2" y1="82.2" x2="437.4" y2="63.9" stroke="#f5f1ea" stroke-width="1.1"/><path d="M437.4,63.9 L438.5,68.8 L434.2,67.8Z" fill="#f5f1ea"/><line x1="286.8" y1="82.2" x2="290.9" y2="100.6" stroke="#f5f1ea" stroke-width="1.1"/><path d="M290.9,100.6 L287.8,96.6 L292.1,95.7Z" fill="#f5f1ea"/><line x1="441.3" y1="82.2" x2="443.0" y2="63.4" stroke="#f5f1ea" stroke-width="1.1"/><path d="M443.0,63.4 L444.8,68.1 L440.5,67.7Z" fill="#f5f1ea"/><line x1="278.7" y1="82.2" x2="280.4" y2="101.0" stroke="#f5f1ea" stroke-width="1.1"/><path d="M280.4,101.0 L277.8,96.7 L282.1,96.3Z" fill="#f5f1ea"/><line x1="449.5" y1="82.2" x2="448.6" y2="63.5" stroke="#f5f1ea" stroke-width="1.1"/><path d="M448.6,63.5 L451.0,67.9 L446.6,68.1Z" fill="#f5f1ea"/><line x1="270.5" y1="82.2" x2="269.6" y2="100.9" stroke="#f5f1ea" stroke-width="1.1"/><path d="M269.6,100.9 L267.7,96.3 L272.0,96.5Z" fill="#f5f1ea"/><line x1="360.0" y1="94.4" x2="372.9" y2="94.4" stroke="#f5f1ea" stroke-width="1.1"/><path d="M372.9,94.4 L368.4,96.6 L368.4,92.2Z" fill="#f5f1ea"/><line x1="368.2" y1="94.4" x2="380.9" y2="92.3" stroke="#f5f1ea" stroke-width="1.1"/><path d="M380.9,92.3 L376.8,95.2 L376.1,90.9Z" fill="#f5f1ea"/><line x1="351.8" y1="94.4" x2="364.6" y2="96.6" stroke="#f5f1ea" stroke-width="1.1"/><path d="M364.6,96.6 L359.8,98.0 L360.5,93.7Z" fill="#f5f1ea"/><line x1="376.4" y1="94.4" x2="388.7" y2="90.1" stroke="#f5f1ea" stroke-width="1.1"/><path d="M388.7,90.1 L385.1,93.7 L383.7,89.6Z" fill="#f5f1ea"/><line x1="343.6" y1="94.4" x2="356.0" y2="98.7" stroke="#f5f1ea" stroke-width="1.1"/><path d="M356.0,98.7 L351.0,99.3 L352.4,95.1Z" fill="#f5f1ea"/><line x1="384.5" y1="94.4" x2="396.2" y2="88.1" stroke="#f5f1ea" stroke-width="1.1"/><path d="M396.2,88.1 L393.2,92.2 L391.2,88.4Z" fill="#f5f1ea"/><line x1="335.5" y1="94.4" x2="347.1" y2="100.7" stroke="#f5f1ea" stroke-width="1.1"/><path d="M347.1,100.7 L342.1,100.5 L344.2,96.6Z" fill="#f5f1ea"/><line x1="392.7" y1="94.4" x2="403.4" y2="86.3" stroke="#f5f1ea" stroke-width="1.1"/><path d="M403.4,86.3 L401.2,90.7 L398.5,87.3Z" fill="#f5f1ea"/><line x1="327.3" y1="94.4" x2="338.0" y2="102.6" stroke="#f5f1ea" stroke-width="1.1"/><path d="M338.0,102.6 L333.1,101.6 L335.7,98.1Z" fill="#f5f1ea"/><line x1="400.9" y1="94.4" x2="410.5" y2="84.6" stroke="#f5f1ea" stroke-width="1.1"/><path d="M410.5,84.6 L408.9,89.3 L405.8,86.3Z" fill="#f5f1ea"/><line x1="319.1" y1="94.4" x2="328.7" y2="104.2" stroke="#f5f1ea" stroke-width="1.1"/><path d="M328.7,104.2 L324.0,102.5 L327.1,99.5Z" fill="#f5f1ea"/><line x1="409.1" y1="94.4" x2="417.3" y2="83.1" stroke="#f5f1ea" stroke-width="1.1"/><path d="M417.3,83.1 L416.4,88.0 L412.9,85.5Z" fill="#f5f1ea"/><line x1="310.9" y1="94.4" x2="319.1" y2="105.7" stroke="#f5f1ea" stroke-width="1.1"/><path d="M319.1,105.7 L314.7,103.3 L318.2,100.8Z" fill="#f5f1ea"/><line x1="417.3" y1="94.4" x2="423.9" y2="81.9" stroke="#f5f1ea" stroke-width="1.1"/><path d="M423.9,81.9 L423.7,86.9 L419.9,84.8Z" fill="#f5f1ea"/><line x1="302.7" y1="94.4" x2="309.4" y2="106.9" stroke="#f5f1ea" stroke-width="1.1"/><path d="M309.4,106.9 L305.4,104.0 L309.2,101.9Z" fill="#f5f1ea"/><line x1="425.4" y1="94.4" x2="430.4" y2="81.0" stroke="#f5f1ea" stroke-width="1.1"/><path d="M430.4,81.0 L430.9,85.9 L426.8,84.4Z" fill="#f5f1ea"/><line x1="294.6" y1="94.4" x2="299.6" y2="107.9" stroke="#f5f1ea" stroke-width="1.1"/><path d="M299.6,107.9 L296.0,104.4 L300.0,102.9Z" fill="#f5f1ea"/><line x1="433.6" y1="94.4" x2="436.8" y2="80.3" stroke="#f5f1ea" stroke-width="1.1"/><path d="M436.8,80.3 L438.0,85.2 L433.7,84.2Z" fill="#f5f1ea"/><line x1="286.4" y1="94.4" x2="289.6" y2="108.5" stroke="#f5f1ea" stroke-width="1.1"/><path d="M289.6,108.5 L286.5,104.6 L290.7,103.6Z" fill="#f5f1ea"/><line x1="441.8" y1="94.4" x2="443.2" y2="80.1" stroke="#f5f1ea" stroke-width="1.1"/><path d="M443.2,80.1 L444.9,84.8 L440.6,84.4Z" fill="#f5f1ea"/><line x1="278.2" y1="94.4" x2="279.6" y2="108.7" stroke="#f5f1ea" stroke-width="1.1"/><path d="M279.6,108.7 L277.0,104.5 L281.4,104.0Z" fill="#f5f1ea"/><line x1="450.0" y1="94.4" x2="449.6" y2="80.2" stroke="#f5f1ea" stroke-width="1.1"/><path d="M449.6,80.2 L451.9,84.7 L447.6,84.8Z" fill="#f5f1ea"/><line x1="270.0" y1="94.4" x2="269.7" y2="108.6" stroke="#f5f1ea" stroke-width="1.1"/><path d="M269.7,108.6 L267.6,104.0 L272.0,104.1Z" fill="#f5f1ea"/><line x1="360.0" y1="113.0" x2="368.8" y2="113.0" stroke="#f5f1ea" stroke-width="1.1"/><path d="M368.8,113.0 L365.2,114.8 L365.2,111.3Z" fill="#f5f1ea"/><line x1="368.2" y1="113.0" x2="376.9" y2="111.6" stroke="#f5f1ea" stroke-width="1.1"/><path d="M376.9,111.6 L373.7,113.9 L373.1,110.5Z" fill="#f5f1ea"/><line x1="351.8" y1="113.0" x2="360.5" y2="114.5" stroke="#f5f1ea" stroke-width="1.1"/><path d="M360.5,114.5 L356.7,115.6 L357.3,112.2Z" fill="#f5f1ea"/><line x1="376.4" y1="113.0" x2="384.8" y2="110.1" stroke="#f5f1ea" stroke-width="1.1"/><path d="M384.8,110.1 L382.0,113.0 L380.8,109.7Z" fill="#f5f1ea"/><line x1="343.6" y1="113.0" x2="352.0" y2="115.9" stroke="#f5f1ea" stroke-width="1.1"/><path d="M352.0,115.9 L348.1,116.4 L349.2,113.1Z" fill="#f5f1ea"/><line x1="384.6" y1="113.0" x2="392.5" y2="108.8" stroke="#f5f1ea" stroke-width="1.1"/><path d="M392.5,108.8 L390.1,112.1 L388.5,108.9Z" fill="#f5f1ea"/><line x1="335.4" y1="113.0" x2="343.4" y2="117.3" stroke="#f5f1ea" stroke-width="1.1"/><path d="M343.4,117.3 L339.3,117.1 L341.0,114.0Z" fill="#f5f1ea"/><line x1="392.8" y1="113.0" x2="400.1" y2="107.5" stroke="#f5f1ea" stroke-width="1.1"/><path d="M400.1,107.5 L398.2,111.2 L396.1,108.3Z" fill="#f5f1ea"/><line x1="327.2" y1="113.0" x2="334.6" y2="118.5" stroke="#f5f1ea" stroke-width="1.1"/><path d="M334.6,118.5 L330.5,117.7 L332.7,114.9Z" fill="#f5f1ea"/><line x1="401.0" y1="113.0" x2="407.5" y2="106.4" stroke="#f5f1ea" stroke-width="1.1"/><path d="M407.5,106.4 L406.2,110.4 L403.6,107.8Z" fill="#f5f1ea"/><line x1="319.0" y1="113.0" x2="325.6" y2="119.7" stroke="#f5f1ea" stroke-width="1.1"/><path d="M325.6,119.7 L321.6,118.3 L324.2,115.7Z" fill="#f5f1ea"/><line x1="409.2" y1="113.0" x2="414.8" y2="105.4" stroke="#f5f1ea" stroke-width="1.1"/><path d="M414.8,105.4 L414.0,109.6 L411.0,107.4Z" fill="#f5f1ea"/><line x1="310.8" y1="113.0" x2="316.5" y2="120.7" stroke="#f5f1ea" stroke-width="1.1"/><path d="M316.5,120.7 L312.7,118.7 L315.7,116.5Z" fill="#f5f1ea"/><line x1="417.4" y1="113.0" x2="422.0" y2="104.6" stroke="#f5f1ea" stroke-width="1.1"/><path d="M422.0,104.6 L421.8,108.9 L418.5,107.1Z" fill="#f5f1ea"/><line x1="302.6" y1="113.0" x2="307.3" y2="121.5" stroke="#f5f1ea" stroke-width="1.1"/><path d="M307.3,121.5 L303.8,119.0 L307.1,117.1Z" fill="#f5f1ea"/><line x1="425.5" y1="113.0" x2="429.1" y2="104.0" stroke="#f5f1ea" stroke-width="1.1"/><path d="M429.1,104.0 L429.4,108.3 L425.9,106.9Z" fill="#f5f1ea"/><line x1="294.5" y1="113.0" x2="298.0" y2="122.1" stroke="#f5f1ea" stroke-width="1.1"/><path d="M298.0,122.1 L294.8,119.1 L298.3,117.7Z" fill="#f5f1ea"/><line x1="433.7" y1="113.0" x2="436.2" y2="103.6" stroke="#f5f1ea" stroke-width="1.1"/><path d="M436.2,103.6 L437.0,107.9 L433.3,106.9Z" fill="#f5f1ea"/><line x1="286.3" y1="113.0" x2="288.7" y2="122.5" stroke="#f5f1ea" stroke-width="1.1"/><path d="M288.7,122.5 L285.8,119.1 L289.6,118.2Z" fill="#f5f1ea"/><line x1="441.9" y1="113.0" x2="443.2" y2="103.4" stroke="#f5f1ea" stroke-width="1.1"/><path d="M443.2,103.4 L444.6,107.5 L440.8,107.0Z" fill="#f5f1ea"/><line x1="278.1" y1="113.0" x2="279.3" y2="122.7" stroke="#f5f1ea" stroke-width="1.1"/><path d="M279.3,122.7 L276.9,119.0 L280.7,118.5Z" fill="#f5f1ea"/><line x1="450.1" y1="113.0" x2="450.3" y2="103.4" stroke="#f5f1ea" stroke-width="1.1"/><path d="M450.3,103.4 L452.1,107.3 L448.3,107.3Z" fill="#f5f1ea"/><line x1="269.9" y1="113.0" x2="270.0" y2="122.7" stroke="#f5f1ea" stroke-width="1.1"/><path d="M270.0,122.7 L268.1,118.8 L271.8,118.7Z" fill="#f5f1ea"/><line x1="360.0" y1="136.8" x2="365.4" y2="136.8" stroke="#f5f1ea" stroke-width="1.1"/><path d="M365.4,136.8 L363.2,137.9 L363.2,135.8Z" fill="#f5f1ea"/><line x1="368.1" y1="136.8" x2="373.5" y2="135.9" stroke="#f5f1ea" stroke-width="1.1"/><path d="M373.5,135.9 L371.5,137.4 L371.1,135.2Z" fill="#f5f1ea"/><line x1="351.9" y1="136.8" x2="357.3" y2="137.7" stroke="#f5f1ea" stroke-width="1.1"/><path d="M357.3,137.7 L354.9,138.4 L355.3,136.3Z" fill="#f5f1ea"/><line x1="376.2" y1="136.8" x2="381.5" y2="135.1" stroke="#f5f1ea" stroke-width="1.1"/><path d="M381.5,135.1 L379.7,136.8 L379.0,134.8Z" fill="#f5f1ea"/><line x1="343.8" y1="136.8" x2="349.0" y2="138.6" stroke="#f5f1ea" stroke-width="1.1"/><path d="M349.0,138.6 L346.5,138.9 L347.2,136.8Z" fill="#f5f1ea"/><line x1="384.3" y1="136.8" x2="389.3" y2="134.3" stroke="#f5f1ea" stroke-width="1.1"/><path d="M389.3,134.3 L387.8,136.3 L386.8,134.3Z" fill="#f5f1ea"/><line x1="335.7" y1="136.8" x2="340.6" y2="139.4" stroke="#f5f1ea" stroke-width="1.1"/><path d="M340.6,139.4 L338.1,139.3 L339.1,137.4Z" fill="#f5f1ea"/><line x1="392.5" y1="136.8" x2="397.0" y2="133.5" stroke="#f5f1ea" stroke-width="1.1"/><path d="M397.0,133.5 L395.8,135.7 L394.5,133.9Z" fill="#f5f1ea"/><line x1="327.5" y1="136.8" x2="332.1" y2="140.1" stroke="#f5f1ea" stroke-width="1.1"/><path d="M332.1,140.1 L329.6,139.7 L330.9,137.9Z" fill="#f5f1ea"/><line x1="400.6" y1="136.8" x2="404.7" y2="132.8" stroke="#f5f1ea" stroke-width="1.1"/><path d="M404.7,132.8 L403.8,135.2 L402.2,133.6Z" fill="#f5f1ea"/><line x1="319.4" y1="136.8" x2="323.6" y2="140.8" stroke="#f5f1ea" stroke-width="1.1"/><path d="M323.6,140.8 L321.1,140.0 L322.7,138.4Z" fill="#f5f1ea"/><line x1="408.7" y1="136.8" x2="412.3" y2="132.2" stroke="#f5f1ea" stroke-width="1.1"/><path d="M412.3,132.2 L411.7,134.8 L409.9,133.4Z" fill="#f5f1ea"/><line x1="311.3" y1="136.8" x2="314.9" y2="141.4" stroke="#f5f1ea" stroke-width="1.1"/><path d="M314.9,141.4 L312.6,140.3 L314.4,138.9Z" fill="#f5f1ea"/><line x1="416.8" y1="136.8" x2="419.8" y2="131.7" stroke="#f5f1ea" stroke-width="1.1"/><path d="M419.8,131.7 L419.6,134.3 L417.6,133.2Z" fill="#f5f1ea"/><line x1="303.2" y1="136.8" x2="306.2" y2="142.0" stroke="#f5f1ea" stroke-width="1.1"/><path d="M306.2,142.0 L304.0,140.5 L306.0,139.3Z" fill="#f5f1ea"/><line x1="424.9" y1="136.8" x2="427.3" y2="131.3" stroke="#f5f1ea" stroke-width="1.1"/><path d="M427.3,131.3 L427.4,134.0 L425.2,133.1Z" fill="#f5f1ea"/><line x1="295.1" y1="136.8" x2="297.5" y2="142.4" stroke="#f5f1ea" stroke-width="1.1"/><path d="M297.5,142.4 L295.4,140.6 L297.6,139.6Z" fill="#f5f1ea"/><line x1="433.0" y1="136.8" x2="434.7" y2="131.0" stroke="#f5f1ea" stroke-width="1.1"/><path d="M434.7,131.0 L435.2,133.7 L432.9,133.0Z" fill="#f5f1ea"/><line x1="287.0" y1="136.8" x2="288.7" y2="142.7" stroke="#f5f1ea" stroke-width="1.1"/><path d="M288.7,142.7 L286.8,140.6 L289.1,140.0Z" fill="#f5f1ea"/><line x1="441.1" y1="136.8" x2="442.2" y2="130.8" stroke="#f5f1ea" stroke-width="1.1"/><path d="M442.2,130.8 L442.9,133.5 L440.6,133.0Z" fill="#f5f1ea"/><line x1="278.9" y1="136.8" x2="279.9" y2="142.8" stroke="#f5f1ea" stroke-width="1.1"/><path d="M279.9,142.8 L278.3,140.6 L280.7,140.2Z" fill="#f5f1ea"/><line x1="449.3" y1="136.8" x2="449.6" y2="130.8" stroke="#f5f1ea" stroke-width="1.1"/><path d="M449.6,130.8 L450.7,133.3 L448.3,133.1Z" fill="#f5f1ea"/><line x1="270.7" y1="136.8" x2="271.1" y2="142.9" stroke="#f5f1ea" stroke-width="1.1"/><path d="M271.1,142.9 L269.8,140.5 L272.2,140.3Z" fill="#f5f1ea"/><line x1="360.0" y1="165.1" x2="363.1" y2="165.1" stroke="#f5f1ea" stroke-width="1.1"/><path d="M363.1,165.1 L361.8,165.7 L361.8,164.5Z" fill="#f5f1ea"/><line x1="367.9" y1="165.1" x2="370.9" y2="164.6" stroke="#f5f1ea" stroke-width="1.1"/><path d="M370.9,164.6 L369.8,165.4 L369.6,164.2Z" fill="#f5f1ea"/><line x1="352.1" y1="165.1" x2="355.2" y2="165.6" stroke="#f5f1ea" stroke-width="1.1"/><path d="M355.2,165.6 L353.8,166.0 L354.0,164.8Z" fill="#f5f1ea"/><line x1="375.8" y1="165.1" x2="378.7" y2="164.1" stroke="#f5f1ea" stroke-width="1.1"/><path d="M378.7,164.1 L377.7,165.1 L377.4,163.9Z" fill="#f5f1ea"/><line x1="344.2" y1="165.1" x2="347.2" y2="166.0" stroke="#f5f1ea" stroke-width="1.1"/><path d="M347.2,166.0 L345.8,166.2 L346.2,165.1Z" fill="#f5f1ea"/><line x1="383.6" y1="165.1" x2="386.5" y2="163.7" stroke="#f5f1ea" stroke-width="1.1"/><path d="M386.5,163.7 L385.6,164.8 L385.1,163.7Z" fill="#f5f1ea"/><line x1="336.4" y1="165.1" x2="339.2" y2="166.5" stroke="#f5f1ea" stroke-width="1.1"/><path d="M339.2,166.5 L337.8,166.5 L338.3,165.4Z" fill="#f5f1ea"/><line x1="391.5" y1="165.1" x2="394.2" y2="163.3" stroke="#f5f1ea" stroke-width="1.1"/><path d="M394.2,163.3 L393.5,164.5 L392.8,163.5Z" fill="#f5f1ea"/><line x1="328.5" y1="165.1" x2="331.1" y2="166.9" stroke="#f5f1ea" stroke-width="1.1"/><path d="M331.1,166.9 L329.7,166.7 L330.4,165.7Z" fill="#f5f1ea"/><line x1="399.4" y1="165.1" x2="401.8" y2="162.9" stroke="#f5f1ea" stroke-width="1.1"/><path d="M401.8,162.9 L401.3,164.2 L400.4,163.3Z" fill="#f5f1ea"/><line x1="320.6" y1="165.1" x2="323.0" y2="167.3" stroke="#f5f1ea" stroke-width="1.1"/><path d="M323.0,167.3 L321.6,166.9 L322.5,165.9Z" fill="#f5f1ea"/><line x1="407.3" y1="165.1" x2="409.4" y2="162.5" stroke="#f5f1ea" stroke-width="1.1"/><path d="M409.4,162.5 L409.1,164.0 L408.1,163.1Z" fill="#f5f1ea"/><line x1="312.7" y1="165.1" x2="314.8" y2="167.7" stroke="#f5f1ea" stroke-width="1.1"/><path d="M314.8,167.7 L313.5,167.0 L314.5,166.2Z" fill="#f5f1ea"/><line x1="415.2" y1="165.1" x2="417.0" y2="162.2" stroke="#f5f1ea" stroke-width="1.1"/><path d="M417.0,162.2 L416.8,163.7 L415.7,163.0Z" fill="#f5f1ea"/><line x1="304.8" y1="165.1" x2="306.7" y2="168.0" stroke="#f5f1ea" stroke-width="1.1"/><path d="M306.7,168.0 L305.3,167.2 L306.5,166.4Z" fill="#f5f1ea"/><line x1="423.1" y1="165.1" x2="424.6" y2="162.0" stroke="#f5f1ea" stroke-width="1.1"/><path d="M424.6,162.0 L424.6,163.5 L423.3,162.9Z" fill="#f5f1ea"/><line x1="296.9" y1="165.1" x2="298.4" y2="168.2" stroke="#f5f1ea" stroke-width="1.1"/><path d="M298.4,168.2 L297.2,167.3 L298.4,166.7Z" fill="#f5f1ea"/><line x1="430.9" y1="165.1" x2="432.1" y2="161.8" stroke="#f5f1ea" stroke-width="1.1"/><path d="M432.1,161.8 L432.3,163.3 L431.0,162.9Z" fill="#f5f1ea"/><line x1="289.1" y1="165.1" x2="290.2" y2="168.4" stroke="#f5f1ea" stroke-width="1.1"/><path d="M290.2,168.4 L289.1,167.3 L290.4,166.8Z" fill="#f5f1ea"/><line x1="438.8" y1="165.1" x2="439.6" y2="161.6" stroke="#f5f1ea" stroke-width="1.1"/><path d="M439.6,161.6 L440.0,163.2 L438.6,162.9Z" fill="#f5f1ea"/><line x1="281.2" y1="165.1" x2="282.0" y2="168.6" stroke="#f5f1ea" stroke-width="1.1"/><path d="M282.0,168.6 L281.0,167.3 L282.3,167.0Z" fill="#f5f1ea"/><line x1="446.7" y1="165.1" x2="447.1" y2="161.5" stroke="#f5f1ea" stroke-width="1.1"/><path d="M447.1,161.5 L447.7,163.1 L446.3,162.9Z" fill="#f5f1ea"/><line x1="273.3" y1="165.1" x2="273.7" y2="168.7" stroke="#f5f1ea" stroke-width="1.1"/><path d="M273.7,168.7 L272.8,167.3 L274.2,167.1Z" fill="#f5f1ea"/><line x1="360.0" y1="197.4" x2="361.6" y2="197.4" stroke="#f5f1ea" stroke-width="1.1"/><path d="M361.6,197.4 L361.0,197.7 L361.0,197.1Z" fill="#f5f1ea"/><line x1="367.5" y1="197.4" x2="369.1" y2="197.2" stroke="#f5f1ea" stroke-width="1.1"/><path d="M369.1,197.2 L368.5,197.6 L368.4,197.0Z" fill="#f5f1ea"/><line x1="352.5" y1="197.4" x2="354.1" y2="197.7" stroke="#f5f1ea" stroke-width="1.1"/><path d="M354.1,197.7 L353.4,197.9 L353.5,197.3Z" fill="#f5f1ea"/><line x1="374.9" y1="197.4" x2="376.5" y2="196.9" stroke="#f5f1ea" stroke-width="1.1"/><path d="M376.5,196.9 L376.0,197.5 L375.8,196.8Z" fill="#f5f1ea"/><line x1="345.1" y1="197.4" x2="346.6" y2="197.9" stroke="#f5f1ea" stroke-width="1.1"/><path d="M346.6,197.9 L345.9,198.0 L346.1,197.4Z" fill="#f5f1ea"/><line x1="382.4" y1="197.4" x2="383.9" y2="196.7" stroke="#f5f1ea" stroke-width="1.1"/><path d="M383.9,196.7 L383.4,197.3 L383.1,196.7Z" fill="#f5f1ea"/><line x1="337.6" y1="197.4" x2="339.1" y2="198.1" stroke="#f5f1ea" stroke-width="1.1"/><path d="M339.1,198.1 L338.4,198.2 L338.6,197.6Z" fill="#f5f1ea"/><line x1="389.9" y1="197.4" x2="391.3" y2="196.5" stroke="#f5f1ea" stroke-width="1.1"/><path d="M391.3,196.5 L390.9,197.2 L390.5,196.6Z" fill="#f5f1ea"/><line x1="330.1" y1="197.4" x2="331.6" y2="198.4" stroke="#f5f1ea" stroke-width="1.1"/><path d="M331.6,198.4 L330.8,198.3 L331.2,197.7Z" fill="#f5f1ea"/><line x1="397.3" y1="197.4" x2="398.6" y2="196.3" stroke="#f5f1ea" stroke-width="1.1"/><path d="M398.6,196.3 L398.3,197.0 L397.9,196.5Z" fill="#f5f1ea"/><line x1="322.7" y1="197.4" x2="324.0" y2="198.6" stroke="#f5f1ea" stroke-width="1.1"/><path d="M324.0,198.6 L323.2,198.4 L323.7,197.9Z" fill="#f5f1ea"/><line x1="404.8" y1="197.4" x2="406.0" y2="196.1" stroke="#f5f1ea" stroke-width="1.1"/><path d="M406.0,196.1 L405.8,196.9 L405.2,196.4Z" fill="#f5f1ea"/><line x1="315.2" y1="197.4" x2="316.4" y2="198.8" stroke="#f5f1ea" stroke-width="1.1"/><path d="M316.4,198.8 L315.6,198.5 L316.2,198.0Z" fill="#f5f1ea"/><line x1="412.3" y1="197.4" x2="413.3" y2="195.9" stroke="#f5f1ea" stroke-width="1.1"/><path d="M413.3,195.9 L413.2,196.7 L412.6,196.3Z" fill="#f5f1ea"/><line x1="307.7" y1="197.4" x2="308.8" y2="198.9" stroke="#f5f1ea" stroke-width="1.1"/><path d="M308.8,198.9 L308.1,198.5 L308.6,198.1Z" fill="#f5f1ea"/><line x1="419.7" y1="197.4" x2="420.6" y2="195.8" stroke="#f5f1ea" stroke-width="1.1"/><path d="M420.6,195.8 L420.6,196.6 L419.9,196.3Z" fill="#f5f1ea"/><line x1="300.3" y1="197.4" x2="301.1" y2="199.1" stroke="#f5f1ea" stroke-width="1.1"/><path d="M301.1,199.1 L300.5,198.6 L301.1,198.2Z" fill="#f5f1ea"/><line x1="427.2" y1="197.4" x2="427.9" y2="195.7" stroke="#f5f1ea" stroke-width="1.1"/><path d="M427.9,195.7 L427.9,196.5 L427.3,196.2Z" fill="#f5f1ea"/><line x1="292.8" y1="197.4" x2="293.5" y2="199.2" stroke="#f5f1ea" stroke-width="1.1"/><path d="M293.5,199.2 L292.9,198.6 L293.6,198.3Z" fill="#f5f1ea"/><line x1="434.7" y1="197.4" x2="435.2" y2="195.6" stroke="#f5f1ea" stroke-width="1.1"/><path d="M435.2,195.6 L435.3,196.4 L434.6,196.2Z" fill="#f5f1ea"/><line x1="285.3" y1="197.4" x2="285.9" y2="199.3" stroke="#f5f1ea" stroke-width="1.1"/><path d="M285.9,199.3 L285.3,198.6 L286.0,198.4Z" fill="#f5f1ea"/><line x1="442.1" y1="197.4" x2="442.4" y2="195.5" stroke="#f5f1ea" stroke-width="1.1"/><path d="M442.4,195.5 L442.7,196.3 L441.9,196.2Z" fill="#f5f1ea"/><line x1="277.9" y1="197.4" x2="278.2" y2="199.4" stroke="#f5f1ea" stroke-width="1.1"/><path d="M278.2,199.4 L277.7,198.7 L278.5,198.5Z" fill="#f5f1ea"/><circle cx="360.0" cy="233.5" r="0.9" fill="#f5f1ea"/><circle cx="366.9" cy="233.5" r="0.9" fill="#f5f1ea"/><circle cx="353.1" cy="233.5" r="0.9" fill="#f5f1ea"/><circle cx="373.8" cy="233.5" r="0.9" fill="#f5f1ea"/><circle cx="346.2" cy="233.5" r="0.9" fill="#f5f1ea"/><circle cx="380.7" cy="233.5" r="0.9" fill="#f5f1ea"/><circle cx="339.3" cy="233.5" r="0.9" fill="#f5f1ea"/><circle cx="387.5" cy="233.5" r="0.9" fill="#f5f1ea"/><circle cx="332.5" cy="233.5" r="0.9" fill="#f5f1ea"/><circle cx="394.4" cy="233.5" r="0.9" fill="#f5f1ea"/><circle cx="325.6" cy="233.5" r="0.9" fill="#f5f1ea"/><circle cx="401.3" cy="233.5" r="0.9" fill="#f5f1ea"/><circle cx="318.7" cy="233.5" r="0.9" fill="#f5f1ea"/><circle cx="408.2" cy="233.5" r="0.9" fill="#f5f1ea"/><circle cx="311.8" cy="233.5" r="0.9" fill="#f5f1ea"/><circle cx="415.1" cy="233.5" r="0.9" fill="#f5f1ea"/><circle cx="304.9" cy="233.5" r="0.9" fill="#f5f1ea"/><circle cx="422.0" cy="233.5" r="0.9" fill="#f5f1ea"/><circle cx="298.0" cy="233.5" r="0.9" fill="#f5f1ea"/><circle cx="428.9" cy="233.5" r="0.9" fill="#f5f1ea"/><circle cx="291.1" cy="233.5" r="0.9" fill="#f5f1ea"/><circle cx="435.7" cy="233.5" r="0.9" fill="#f5f1ea"/><circle cx="284.3" cy="233.5" r="0.9" fill="#f5f1ea"/><circle cx="360.0" cy="273.1" r="0.9" fill="#f5f1ea"/><circle cx="366.3" cy="273.1" r="0.9" fill="#f5f1ea"/><circle cx="353.7" cy="273.1" r="0.9" fill="#f5f1ea"/><circle cx="372.6" cy="273.1" r="0.9" fill="#f5f1ea"/><circle cx="347.4" cy="273.1" r="0.9" fill="#f5f1ea"/><circle cx="378.8" cy="273.1" r="0.9" fill="#f5f1ea"/><circle cx="341.2" cy="273.1" r="0.9" fill="#f5f1ea"/><circle cx="385.1" cy="273.1" r="0.9" fill="#f5f1ea"/><circle cx="334.9" cy="273.1" r="0.9" fill="#f5f1ea"/><circle cx="391.4" cy="273.1" r="0.9" fill="#f5f1ea"/><circle cx="328.6" cy="273.1" r="0.9" fill="#f5f1ea"/><circle cx="397.7" cy="273.1" r="0.9" fill="#f5f1ea"/><circle cx="322.3" cy="273.1" r="0.9" fill="#f5f1ea"/><circle cx="403.9" cy="273.1" r="0.9" fill="#f5f1ea"/><circle cx="316.1" cy="273.1" r="0.9" fill="#f5f1ea"/><circle cx="410.2" cy="273.1" r="0.9" fill="#f5f1ea"/><circle cx="309.8" cy="273.1" r="0.9" fill="#f5f1ea"/><circle cx="416.5" cy="273.1" r="0.9" fill="#f5f1ea"/><circle cx="303.5" cy="273.1" r="0.9" fill="#f5f1ea"/><circle cx="422.8" cy="273.1" r="0.9" fill="#f5f1ea"/><circle cx="297.2" cy="273.1" r="0.9" fill="#f5f1ea"/><circle cx="429.1" cy="273.1" r="0.9" fill="#f5f1ea"/><circle cx="290.9" cy="273.1" r="0.9" fill="#f5f1ea"/><circle cx="360.0" cy="316.0" r="0.9" fill="#f5f1ea"/><circle cx="365.9" cy="316.0" r="0.9" fill="#f5f1ea"/><circle cx="354.1" cy="316.0" r="0.9" fill="#f5f1ea"/><circle cx="371.9" cy="316.0" r="0.9" fill="#f5f1ea"/><circle cx="348.1" cy="316.0" r="0.9" fill="#f5f1ea"/><circle cx="377.8" cy="316.0" r="0.9" fill="#f5f1ea"/><circle cx="342.2" cy="316.0" r="0.9" fill="#f5f1ea"/><circle cx="383.7" cy="316.0" r="0.9" fill="#f5f1ea"/><circle cx="336.3" cy="316.0" r="0.9" fill="#f5f1ea"/><circle cx="389.7" cy="316.0" r="0.9" fill="#f5f1ea"/><circle cx="330.3" cy="316.0" r="0.9" fill="#f5f1ea"/><circle cx="395.6" cy="316.0" r="0.9" fill="#f5f1ea"/><circle cx="324.4" cy="316.0" r="0.9" fill="#f5f1ea"/><circle cx="401.5" cy="316.0" r="0.9" fill="#f5f1ea"/><circle cx="318.5" cy="316.0" r="0.9" fill="#f5f1ea"/><circle cx="407.5" cy="316.0" r="0.9" fill="#f5f1ea"/><circle cx="312.5" cy="316.0" r="0.9" fill="#f5f1ea"/><circle cx="413.4" cy="316.0" r="0.9" fill="#f5f1ea"/><circle cx="306.6" cy="316.0" r="0.9" fill="#f5f1ea"/><circle cx="419.4" cy="316.0" r="0.9" fill="#f5f1ea"/><circle cx="300.6" cy="316.0" r="0.9" fill="#f5f1ea"/><circle cx="425.3" cy="316.0" r="0.9" fill="#f5f1ea"/><circle cx="294.7" cy="316.0" r="0.9" fill="#f5f1ea"/><circle cx="360.0" cy="362.0" r="0.9" fill="#f5f1ea"/><circle cx="366.3" cy="362.0" r="0.9" fill="#f5f1ea"/><circle cx="353.7" cy="362.0" r="0.9" fill="#f5f1ea"/><circle cx="372.7" cy="362.0" r="0.9" fill="#f5f1ea"/><circle cx="347.3" cy="362.0" r="0.9" fill="#f5f1ea"/><circle cx="379.0" cy="362.0" r="0.9" fill="#f5f1ea"/><circle cx="341.0" cy="362.0" r="0.9" fill="#f5f1ea"/><circle cx="385.4" cy="362.0" r="0.9" fill="#f5f1ea"/><circle cx="334.6" cy="362.0" r="0.9" fill="#f5f1ea"/><circle cx="391.7" cy="362.0" r="0.9" fill="#f5f1ea"/><circle cx="328.3" cy="362.0" r="0.9" fill="#f5f1ea"/><circle cx="398.1" cy="362.0" r="0.9" fill="#f5f1ea"/><circle cx="321.9" cy="362.0" r="0.9" fill="#f5f1ea"/><circle cx="404.4" cy="362.0" r="0.9" fill="#f5f1ea"/><circle cx="315.6" cy="362.0" r="0.9" fill="#f5f1ea"/><circle cx="410.8" cy="362.0" r="0.9" fill="#f5f1ea"/><circle cx="309.2" cy="362.0" r="0.9" fill="#f5f1ea"/><circle cx="417.1" cy="362.0" r="0.9" fill="#f5f1ea"/><circle cx="302.9" cy="362.0" r="0.9" fill="#f5f1ea"/><circle cx="423.5" cy="362.0" r="0.9" fill="#f5f1ea"/><circle cx="296.5" cy="362.0" r="0.9" fill="#f5f1ea"/><circle cx="429.8" cy="362.0" r="0.9" fill="#f5f1ea"/><circle cx="290.2" cy="362.0" r="0.9" fill="#f5f1ea"/><text x="461.3" y="63.4" font-family="IBM Plex Mono, monospace" font-size="10" text-anchor="start" fill="#7a1f2b" >tilt, 9 mm at the wall</text><text x="461.3" y="131.4" font-family="IBM Plex Mono, monospace" font-size="10" text-anchor="start" fill="#8b8079" >1/λ = 21 mm below</text><line x1="453.34075" y1="128.0" x2="459.34075" y2="128.0" stroke="#8b8079"/><text x="360.0" y="18.0" font-family="IBM Plex Mono, monospace" font-size="10" text-anchor="middle" fill="#8b8079" >mode (1,1), 480 mL: velocity as the surface passes level; dashed: the tilt a quarter period later</text></svg></div>
+                            <figcaption><span class="pfig__n">Figure 4</span>The slowest mode in the cut, from the finite-element solution at 480 mL. The flow wells up on the side that is rising, crosses below the surface, and sinks on the other side. It fades with depth as \(e^{-\lambda d}\): one decay length \(1/\lambda = 21\) mm below the surface it has lost 63 %, and the lower half of the glass hardly moves.</figcaption></figure>
+                        <p>The fading with depth follows from (7): \(\cosh k(z + D)/\cosh kD \approx e^{kz}\) when \(kD \gg 1\). Laplace’s equation trades variation along the surface for variation with depth: a pattern that changes over a distance \(a\) across the glass must also die out over a distance of order \(a/\xi\) downward. That is why a pint sloshes only in its top two or three centimetres, and why the shape of the lower glass hardly changes the frequency.</p>
+                    </section>
+
+                    <section class="psec" id="p-num">
+                        <h3><span class="psec__n">09</span>On the screen, and what is left out</h3>
+                        <h4>The numerical method</h4>
+                        <p>Offline, <code>tools/fig12/build_modes.py</code> solves (9) for 30 fills from 300 to 590 mL and keeps eight radial shapes: \(m = 0\) with \(n = 1, 2\); \(m = 1\) with \(n = 1, 2, 3\); \(m = 2\) with \(n = 1, 2\); and \(m = 3\) with \(n = 1\). With the \(\sin\) copies of \(m \ge 1\) that makes 14 oscillators. For each it stores \(\lambda_n\), \(Q_n\), the damping integrals, the surface shape \(f_n\) at 25 radii, and, for six fills, \(\Phi\), \(\Phi_r\) and \(\Phi_z\) on a 12 × 20 grid in the cut. The page interpolates between fills; for the straight glass it computes the same quantities from Bessel functions.</p>
+                        <p>Live, the page integrates the hand’s follower and the 14 equations (12) with the classical fourth-order Runge–Kutta method at a fixed step \(h = 1\) ms. The fastest mode kept, (1,3) at about 6.4 Hz, has \(\omega h = 0.04\), far inside the method’s stability limit (\(|\omega h| \lt 2.8\)), with a phase error per step of order \((\omega h)^5/120\), about \(10^{-9}\). Each frame runs as many steps as real time has passed, capped at 50 ms per frame. If a wave ever exceeds twice the surface radius, far outside the model, the page calms the stout back to its micrometre seed and says so.</p>
+                        <h4>Where the drawing differs from the model</h4>
+                        <p>The 3D view draws the glass from the measured profile and the stout’s surface from \(\eta(r, \theta)\) at 16 radii and 72 angles. The head is drawn as a layer of constant thickness on top of the surface, which is how the model treats its mass; a real head bends. The cut uses the velocity fields of the nearest of the six stored fills: its grid points are placed on the present fill’s depth and wall, but the velocities are those of the stored fill. Arrows longer than 34 px are cut short and drawn pink. While the arrows are shown, the stout is drawn see-through, which real stout is not.</p>
+                        <h4>Limits of the model</h4>
+                        <p>The model is linear: it holds while the wave at the wall is small compared with the radius. Beyond about a fifth of the radius, real sloshing in a round glass turns into a swirl, the surface rotating around the glass, an effect of the nonlinear terms that this page leaves out. The contact line is treated as a constant damping, the head as a rigid mass with wall friction, and the glass as perfectly smooth. The next model would keep the quadratic terms of the surface conditions (giving swirl and the bending of the resonance curve), give the head an elasticity of its own, and measure its damping in a real glass.</p>
+                        <div class="pbox pbox--ex"><p class="pbox__title">Problems</p><ol>
+                            <li>Show from (8) that in a deep glass \(f_{11}\) scales as \(a^{-1/2}\). By how much does the frequency fall if you pour the same stout into a glass 20 % wider?</li>
+                            <li>Derive \(Q = 2a/(\xi^2 - 1)\) for a straight glass, using \(J_2(\xi) = J_1(\xi)/\xi\) at a zero of \(J_1'\).</li>
+                            <li>Using (13), estimate the vertical shaking at 2 f₁ needed to start Faraday waves in the pint without a head. Check your answer with the page.</li>
+                            <li>Your steps come at 1.6 Hz. Which harmonic of your step lies nearest to \(f_1\) of the default pint, and why does the head make a spill less likely?</li>
+                            <li>Warm the stout from 6 to 20 °C. By what factor does \(\gamma_w\) change, according to (16)? Check with the table on the page.</li>
+                        </ol></div>
+                        <h4>Sources</h4>
+                        <ol class="prefs">
+                            <li>A. Sauret, F. Boulogne, J. Cappello, E. Dressaire, H. A. Stone, “Damping of liquid sloshing by foams”, <i>Phys. Fluids</i> 27, 022103 (2015); <a href="https://arxiv.org/abs/1411.6542">arXiv:1411.6542</a>. Read in full: Eq. (8), Sec. IV.</li>
+                            <li>H. C. Mayer, R. Krechetnikov, “Walking with coffee: Why does it spill?”, <i>Phys. Rev. E</i> 85, 046117 (2012); <a href="https://www.math.ualberta.ca/~rkrechet/files/publications/pre2012.pdf">open PDF</a>. Read in full.</li>
+                            <li>E. S. Benilov, C. P. Cummins, W. T. Lee, “Why do bubbles in Guinness sink?”, <i>Am. J. Phys.</i> 81 (2013); <a href="https://arxiv.org/abs/1205.5233">arXiv:1205.5233</a>, Sec. II. Read.</li>
+                            <li>T. Watamura, F. Iwatsubo, K. Sugiyama, K. Yamamoto, Y. Yotsumoto, T. Shiono, “Bubble cascade in Guinness beer is caused by gravity current instability”, <i>Sci. Rep.</i> 9, 5718 (2019); <a href="https://www.nature.com/articles/s41598-019-42094-0">open</a>. Read.</li>
+                            <li>J. W. Miles, “Surface-wave damping in closed basins”, <i>Proc. R. Soc. A</i> 297, 459 (1967); <a href="https://doi.org/10.1098/rspa.1967.0081">doi</a>. Abstract only; the derivation in section 7 is our own and is checked against exact Bessel integrals.</li>
+                            <li>The empirical decrement 4.98 ν<sup>1/2</sup>a<sup>−3/4</sup>g<sup>−1/4</sup> of NASA SP-8009 (1968), quoted in T. Irvine, “Damping in liquid sloshing”, <a href="http://www.vibrationdata.com/tutorials/slosh_damping.pdf">tutorial</a>. Secondary source; the NASA document itself was not opened.</li>
+                            <li>L. Jiang, M. Perlin, W. W. Schultz, “Contact-line dynamics and damping for oscillating free surface flows”, <i>Phys. Fluids</i> 16, 748 (2004); <a href="https://doi.org/10.1063/1.1644151">doi</a>. Read; with G. H. Keulegan, <i>J. Fluid Mech.</i> 6, 33 (1959), abstract only.</li>
+                            <li>Retail listing of the Guinness tulip pint glass, CE marked: 160 × 85 mm, 568 mL; <a href="https://www.nisbets.ie/guinness-pint-tulip-glasses-ce-marked/ja936">Nisbets JA936</a>.</li>
+                            <li>Product photograph of the glass, <a href="https://www.mbswholesale.co.uk/guinness-pint-glass-568ml-20oz-ukca-ce/">MBS Wholesale</a>; the profile extraction is <code>tools/fig12/profile_from_photo.py</code> and <code>glass.py</code>.</li>
+                            <li>Guinness Draught, <a href="https://www.guinness.com/en/beers/guinness-draught">guinness.com</a>: 4.2 % alcohol.</li>
+                            <li>Serving temperature 6 to 7 °C, Guinness web store <a href="https://guinnesswebstore.com/pages/faq">FAQ</a>; head height 18 to 20 mm, “The physics of fizz”, <i>Nat. Rev. Phys.</i> (2023), <a href="https://www.nature.com/articles/s42254-023-00579-y">link</a> (snippet only).</li>
+                            <li>E. Chatzigiannakis et al., <i>Phys. Fluids</i> 37, 082139 (2025), Table I: surface tension and viscosity of beers; <a href="https://pubs.aip.org/aip/pof/article/37/8/082139/3360405">link</a>.</li>
+                        </ol>
+                    </section>
+                </div>
+            </div>
+        </article>
+
+        <section class="walk" id="walk" data-walk="slosh" aria-label="From symbols to code"></section>
+    </main>
+
+    <script src="../scripts/fold.js"></script>
+    <script src="../scripts/sim.js"></script>
+    <script src="../scripts/dataset.js"></script>
+    <script src="../scripts/slosh-modes.js"></script>
+    <script>
+    (function () {
+        'use strict';
+        var _t = window.T || function (s) { return s; };
+        var MD = window.SLOSH_MODES, GL = MD.glass;
+        var g = 9.81;                                   // m/s², standard gravity
+        var H = GL.H_mm / 1000, ZF = GL.floor_mm / 1000; // glass height and floor of the cavity above the foot, m
+        var GZ = GL.z_mm.map(function (v) { return v / 1000; }), GRI = GL.R_inner_mm.map(function (v) { return v === null ? null : v / 1000; }), GRO = GL.R_outer_mm.map(function (v) { return v / 1000; });
+        function Rin(z) {                                // inner radius of the glass at height z (m), linear between the profile points
+            for (var i = 1; i < GZ.length; i++) if (GZ[i] >= z || i === GZ.length - 1) {
+                var j = i - 1; while (GRI[j] === null) j++; if (j >= i) return GRI[i];
+                var w = (z - GZ[j]) / (GZ[i] - GZ[j]); return GRI[j] + w * (GRI[i] - GRI[j]);
+            }
+        }
+
+        /* ---- Bessel functions, for the straight glass (section 4) ---- */
+        function Jn(n, x) { var N = 64, s = 0; for (var i = 0; i < N; i++) { var t = 2 * Math.PI * i / N; s += Math.cos(n * t - x * Math.sin(t)); } return s / N; }
+        function Jnp(n, x) { return n === 0 ? -Jn(1, x) : 0.5 * (Jn(n - 1, x) - Jn(n + 1, x)); }
+        var XI = { 0: [3.831705970, 7.015586670], 1: [1.841183781, 5.331442774, 8.536316366], 2: [3.054236928, 6.706133194], 3: [4.201188941] };
+        var KEEP = MD.keep;                              // [[m, n], ...]: the radial shapes kept, each with a cos and a sin copy if m ≥ 1
+        var NK = KEEP.length, NS = MD.field_grid.ns, NZ = MD.field_grid.nz, NR = 25;
+
+        /* ---- the store: every number the page shows is written here where it is computed ---- */
+        var ds = Sim.dataset({ title: 'A pint of stout, carried', attrs: { figure: 12, page: 'beer-slosh.html', model: 'linear potential-flow sloshing modes of the measured Guinness tulip glass, damped by boundary layers, surface skin, contact line and head', integrator: 'fourth-order Runge–Kutta, fixed step 1 ms, live', units: 'SI unless stated: m, s, kg; volumes in mL' } });
+        ds.dim('k', NK); ds.dim('j', NR); ds.dim('osc', 2 * NK);
+        function V_(name, attrs) { ds.var(name, [], 'float', attrs); }
+        V_('V_mL', { symbol: '<i>V</i>', units: 'mL', long_name: 'volume of stout (liquid, without the head)', computed_in: 'slider V', digits: 0 });
+        ds.var('shape', [], 'str', { symbol: 'shape', long_name: 'glass: Guinness tulip (measured) or straight cylinder', computed_in: 'buttons' });
+        V_('hf', { symbol: '<i>h</i><sub>f</sub>', units: 'm', long_name: 'head (foam) thickness', computed_in: 'slider hf', digits: 4 });
+        V_('T_C', { symbol: '<i>T</i>', units: '°C', long_name: 'temperature of the stout', computed_in: 'slider TC', digits: 1 });
+        V_('mu6', { symbol: '<i>μ</i><sub>6</sub>', units: 'Pa·s', long_name: 'dynamic viscosity at 6 °C', computed_in: 'slider mu', source: 'Benilov et al. 2012 (Guinness Draught, 6 °C)', digits: 6 });
+        V_('rho', { symbol: '<i>ρ</i>', units: 'kg/m³', long_name: 'density of the stout', computed_in: 'slider rho', source: 'Benilov et al. 2012; Watamura et al. 2019', digits: 0 });
+        V_('sigma', { symbol: '<i>σ</i>', units: 'N/m', long_name: 'surface tension', computed_in: 'slider sig', digits: 4 });
+        V_('eps_f', { symbol: '<i>ε</i><sub>f</sub>', units: '', long_name: 'liquid fraction of the head', computed_in: 'slider ef', digits: 2 });
+        ds.var('wall_on', [], 'bool', { symbol: 'wall', long_name: 'wall and floor boundary layers on', computed_in: 'switch dw' });
+        V_('c_s', { symbol: '<i>c</i><sub>s</sub>', units: '', long_name: 'surface skin: 0 clean, 1 inextensible', computed_in: 'slider cs', digits: 2 });
+        V_('gam_c', { symbol: '<i>γ</i><sub>c</sub>', units: '1/s', long_name: 'contact-line damping rate (empirical)', computed_in: 'slider gc', digits: 3 });
+        V_('k_f', { symbol: '<i>k</i><sub>f</sub>', units: '', long_name: 'factor on the measured foam wall friction', computed_in: 'slider kf', digits: 2 });
+        V_('Om_h', { symbol: '<i>Ω</i><sub>h</sub>', units: 'rad/s', long_name: 'stiffness of the hand (natural frequency of the follower)', computed_in: 'slider Om', digits: 1 });
+        ds.var('shaker', [], 'str', { symbol: 'shaker', long_name: 'shaker table: off, sideways (x) or up and down (z)', computed_in: 'buttons' });
+        V_('A_sh', { symbol: '<i>A</i>', units: 'm', long_name: 'shaker amplitude', computed_in: 'slider A', digits: 5 });
+        V_('f_sh', { symbol: '<i>f</i>', units: 'Hz', long_name: 'shaker frequency', computed_in: 'slider f', digits: 3 });
+        // derived from the parameters
+        V_('z_s', { symbol: '<i>z</i><sub>s</sub>', units: 'm', long_name: 'height of the calm stout surface above the foot', computed_in: 'setup()', formula: 'V = ∫ π R<sub>i</sub>(z)² dz from the floor to z<sub>s</sub>', digits: 5 });
+        V_('a', { symbol: '<i>a</i>', units: 'm', long_name: 'radius of the calm surface', computed_in: 'setup()', formula: 'a = R<sub>i</sub>(z<sub>s</sub>)', digits: 5 });
+        V_('D', { symbol: '<i>D</i>', units: 'm', long_name: 'depth of stout', computed_in: 'setup()', formula: 'D = z<sub>s</sub> − z<sub>floor</sub>', digits: 5 });
+        V_('mu', { symbol: '<i>μ</i>', units: 'Pa·s', long_name: 'dynamic viscosity at T', computed_in: 'setup()', formula: 'μ = μ<sub>6</sub> μ<sub>w</sub>(T)/μ<sub>w</sub>(6 °C), Vogel law for water', digits: 6 });
+        V_('nu', { symbol: '<i>ν</i>', units: 'm²/s', long_name: 'kinematic viscosity', computed_in: 'setup()', formula: 'ν = μ/ρ', digits: 9 });
+        V_('M_f', { symbol: '<i>M</i><sub>f</sub>', units: 'kg/m²', long_name: 'mass of the head per area of surface', computed_in: 'setup()', formula: 'M<sub>f</sub> = ε<sub>f</sub> ρ h<sub>f</sub>', digits: 4 });
+        V_('V_brim', { symbol: '<i>V</i><sub>brim</sub>', units: 'mL', long_name: 'volume of the glass to the brim (Blender and integral agree)', computed_in: 'tools/fig12/glass.py', digits: 1 });
+        function A_(name, dim, attrs) { ds.var(name, [dim], Float64Array, attrs); }
+        A_('m_k', 'k', { symbol: '<i>m</i>', long_name: 'azimuthal number: cos mθ', computed_in: 'KEEP', digits: 0 });
+        A_('n_k', 'k', { symbol: '<i>n</i>', long_name: 'radial number', computed_in: 'KEEP', digits: 0 });
+        A_('lam', 'k', { symbol: '<i>λ</i><sub>n</sub>', units: '1/m', long_name: 'eigenvalue ω²/g of the bare mode', computed_in: 'setup()', formula: 'FEM (tulip) or (ξ/a) tanh(ξD/a) (straight)', digits: 4 });
+        A_('Q', 'k', { symbol: '<i>Q</i><sub>n</sub>', units: 'm', long_name: 'coupling of a sideways acceleration to the mode (m = 1)', computed_in: 'setup()', formula: '∫ f r² dr / ∫ f² r dr', digits: 6 });
+        A_('mu_f', 'k', { symbol: '<i>μ</i><sub>f,n</sub>', units: '', long_name: 'added mass of the head', computed_in: 'setup()', formula: 'μ<sub>f</sub> = M<sub>f</sub> λ/ρ', digits: 4 });
+        A_('omega', 'k', { symbol: '<i>ω</i><sub>n</sub>', units: 'rad/s', long_name: 'angular frequency at rest', computed_in: 'setup()', formula: 'ω² = (gλ + σλ³/ρ)/(1 + μ<sub>f</sub>)', digits: 4 });
+        A_('f_n', 'k', { symbol: '<i>f</i><sub>n</sub>', units: 'Hz', long_name: 'frequency', computed_in: 'setup()', formula: 'f = ω/2π', digits: 4 });
+        A_('g_w', 'k', { symbol: '<i>γ</i><sub>w</sub>', units: '1/s', long_name: 'wall and floor boundary layers', computed_in: 'setup()', formula: '½ (νω/2)<sup>½</sup> (I<sub>w</sub> + I<sub>b</sub>)/E', digits: 4 });
+        A_('g_s', 'k', { symbol: '<i>γ</i><sub>s</sub>', units: '1/s', long_name: 'surface skin', computed_in: 'setup()', formula: 'c<sub>s</sub> ½ (νω/2)<sup>½</sup> I<sub>s</sub>/E', digits: 4 });
+        A_('g_b', 'k', { symbol: '<i>γ</i><sub>b</sub>', units: '1/s', long_name: 'viscous loss in the interior of the stout', computed_in: 'setup()', formula: '2νλ²', digits: 5 });
+        A_('g_c', 'k', { symbol: '<i>γ</i><sub>c</sub>', units: '1/s', long_name: 'contact line', computed_in: 'setup()', formula: 'γ<sub>c</sub> (same for every mode)', digits: 4 });
+        A_('g_f', 'k', { symbol: '<i>γ</i><sub>f</sub>', units: '1/s', long_name: 'head friction on the wall', computed_in: 'setup()', formula: 'k<sub>f</sub> (U<sub>f</sub>/a)(1 − e<sup>−λ h<sub>f</sub></sup>)', digits: 4 });
+        A_('gam', 'k', { symbol: '<i>γ</i><sub>n</sub>', units: '1/s', long_name: 'total damping rate of the amplitude', computed_in: 'setup()', formula: 'γ<sub>w</sub> + γ<sub>s</sub> + γ<sub>b</sub> + γ<sub>c</sub> + γ<sub>f</sub>', digits: 4 });
+        A_('zeta', 'k', { symbol: '<i>ζ</i><sub>n</sub>', units: '', long_name: 'damping ratio', computed_in: 'setup()', formula: 'ζ = γ/ω', digits: 5 });
+        A_('a_osc', 'osc', { symbol: '<i>a</i>', units: 'm', long_name: 'wall amplitude of each oscillator (cos copies then sin copies)', computed_in: 'step()', digits: 6 });
+        A_('v_osc', 'osc', { symbol: '<i>ȧ</i>', units: 'm/s', long_name: 'its rate of change', computed_in: 'step()', digits: 6 });
+        A_('r_j', 'j', { symbol: '<i>r</i><sub>j</sub>', units: 'm', long_name: 'radii where the surface shapes are sampled', computed_in: 'setup()', digits: 5 });
+        // the state now
+        V_('t', { symbol: '<i>t</i>', units: 's', long_name: 'simulated time', computed_in: 'step()', digits: 3 });
+        ['x', 'y', 'z'].forEach(function (c) {
+            V_(c + 'g', { symbol: '<i>' + c + '</i>', units: 'm', long_name: 'glass position, ' + c, computed_in: 'step()', digits: 4 });
+            V_('a' + c, { symbol: '<i>' + c + '̈</i>', units: 'm/s²', long_name: 'glass acceleration, ' + c, computed_in: 'step()', digits: 3 });
+        });
+        V_('geff', { symbol: '<i>g</i><sub>eff</sub>', units: 'm/s²', long_name: 'effective gravity in the glass', computed_in: 'step()', formula: 'g + z̈', digits: 3 });
+        V_('eta_w', { symbol: '<i>η</i><sub>max</sub>', units: 'm', long_name: 'highest elevation of the stout at the wall (over all directions)', computed_in: 'wallScan()', formula: 'max<sub>θ</sub> Σ (a<sub>c</sub> cos mθ + a<sub>s</sub> sin mθ)', digits: 5 });
+        V_('th_w', { symbol: '<i>θ</i><sub>max</sub>', units: 'rad', long_name: 'direction of that highest point', computed_in: 'wallScan()', digits: 3 });
+        V_('top_l', { symbol: '<i>z</i><sub>l</sub>', units: 'm', long_name: 'highest stout at the wall, above the foot', computed_in: 'wallScan()', formula: 'z<sub>s</sub> + η<sub>max</sub>', digits: 5 });
+        V_('top_f', { symbol: '<i>z</i><sub>f</sub>', units: 'm', long_name: 'top of the head at that point', computed_in: 'wallScan()', formula: 'z<sub>l</sub> + h<sub>f</sub>', digits: 5 });
+        V_('n_spill_f', { symbol: '<i>N</i><sub>head</sub>', units: '', long_name: 'times the head went over the rim', computed_in: 'wallScan()', digits: 0 });
+        V_('n_spill_l', { symbol: '<i>N</i><sub>stout</sub>', units: '', long_name: 'times the stout itself went over the rim', computed_in: 'wallScan()', digits: 0 });
+        V_('theta_p', { symbol: '<i>θ</i><sub>p</sub>', units: 'rad', long_name: 'direction of the cut plane', computed_in: 'drawSection()', digits: 3 });
+        V_('u_max', { symbol: '|<i>u</i>|<sub>max</sub>', units: 'm/s', long_name: 'largest speed among the arrows of the cut', computed_in: 'drawSection()', digits: 4 });
+        V_('px_per_mps', { symbol: 's<sub>u</sub>', units: 'px/(m/s)', long_name: 'arrow scale in the cut', computed_in: 'slider as', formula: '10<sup>as</sup> × 400', digits: 1 });
+        V_('mm_px', { symbol: 's<sub>g</sub>', units: 'px/m', long_name: 'drawing scale of the cut', computed_in: 'drawSection()', digits: 1 });
+
+        /* ---- parameters ---- */
+        var P = { V: 500, shape: 'tulip', hf: 0.018, T: 6, mu6: 2.06e-3, rho: 1007, sig: 0.045, ef: 0.15, wall: true, cs: 1, gc: 0.05, kf: 1, Om: 22, shake: 'off', A: 0.0002, f: 3.4, plane: 'follow', as: 0, arrows3d: true };
+        var U_F = 0.016;                                 // m/s: w/τ_f of Sauret et al. (2015), exponential fit, foam wall friction
+        function muWater(T) { return 2.414e-5 * Math.pow(10, 247.8 / (T + 273.15 - 140)); }   // Vogel equation for water, Pa·s
+
+        /* ---- the modes for the current fill and glass ---- */
+        var M = [];                                      // per radial shape: m, n, lam, Q, Iw, Ib, Is, f (NR samples), field
+        var geo = {};
+        function interpTulip() {
+            var vs = MD.vols_mL, i = 0; while (i < vs.length - 2 && vs[i + 1] < P.V) i++;
+            var w = Math.max(0, Math.min(1, (P.V - vs[i]) / (vs[i + 1] - vs[i]))), A = MD.fills[i], B = MD.fills[i + 1];
+            geo.zs = A.zs + w * (B.zs - A.zs); geo.a = A.a + w * (B.a - A.a);
+            var fv = MD.field_vols_mL, best = 0; for (var q = 1; q < fv.length; q++) if (Math.abs(fv[q] - P.V) < Math.abs(fv[best] - P.V)) best = q;
+            var FF = MD.fills[vs.indexOf(fv[best])];
+            return KEEP.map(function (mn, k) {
+                var a = A.modes[k], b = B.modes[k], L = function (p) { return a[p] + w * (b[p] - a[p]); };
+                return { m: mn[0], n: mn[1], lam: L('lam'), Q: L('Q'), Iw: L('Iw'), Ib: L('Ib'), Is: L('Is'), f: a.f.map(function (v, j) { return v + w * (b.f[j] - v); }), field: FF.modes[k].field };
+            });
+        }
+        function cylinder() {                            // a straight glass: radius a, depth D; exact modes (section 4)
+            var a = geo.a, D = geo.D;
+            return KEEP.map(function (mn) {
+                var m = mn[0], xi = XI[m][mn[1] - 1], k = xi / a, th = Math.tanh(k * D), Jx = Jn(m, xi), S2 = Math.sinh(2 * k * D), C2 = Math.cosh(k * D) * Math.cosh(k * D);
+                var lam = k * th, N = a * a / 2 * (1 - m * m / (xi * xi));              // ∫ f² r dr with f = J_m(kr)/J_m(ξ)
+                var Iw = a * (k * k * (S2 / (4 * k) - D / 2) + m * m / (a * a) * (S2 / (4 * k) + D / 2)) / C2;
+                var f = [], field = [];
+                for (var j = 0; j < NR; j++) f.push(Jn(m, k * a * j / (NR - 1)) / Jx);
+                for (var i = 0; i < NZ; i++) for (var jj = 0; jj < NS; jj++) {
+                    var r = Math.max(1e-7, a * jj / (NS - 1)), d = D * Math.pow(i / (NZ - 1), 1.6), ch = Math.cosh(k * (D - d)) / Math.cosh(k * D), sh = Math.sinh(k * (D - d)) / Math.cosh(k * D);
+                    field.push(Jn(m, k * r) / Jx * ch, k * Jnp(m, k * r) / Jx * ch, k * Jn(m, k * r) / Jx * sh);
+                }
+                return { m: m, n: mn[1], lam: lam, Q: m === 1 ? 2 * a / (xi * xi - 1) : 0, Iw: Iw / (lam * N), Ib: k * k * N / C2 / (lam * N), Is: k * k * N / (lam * N), f: f, field: field };
+            });
+        }
+        var lamA = ds.alloc('lam'), QA = ds.alloc('Q'), muA = ds.alloc('mu_f'), omA = ds.alloc('omega'), fA = ds.alloc('f_n'), gw = ds.alloc('g_w'), gs = ds.alloc('g_s'), gb = ds.alloc('g_b'), gcA = ds.alloc('g_c'), gf = ds.alloc('g_f'), gam = ds.alloc('gam'), zeta = ds.alloc('zeta'), mk = ds.alloc('m_k'), nk = ds.alloc('n_k'), rj = ds.alloc('r_j');
+        var aO = ds.alloc('a_osc'), vO = ds.alloc('v_osc');
+        function setup() {
+            var t = interpTulip();                       // the tulip fill fixes z_s and a for both glasses
+            geo.D = geo.zs - ZF;
+            M = P.shape === 'tulip' ? t : cylinder();
+            ds.set('z_s', geo.zs); ds.set('a', geo.a); ds.set('D', geo.D);
+            var mu = P.mu6 * muWater(P.T) / muWater(6), nu = mu / P.rho, Mf = P.ef * P.rho * P.hf;
+            ds.set('mu', mu); ds.set('nu', nu); ds.set('M_f', Mf); ds.set('V_brim', GL.V_brim_mL);
+            for (var j = 0; j < NR; j++) rj[j] = geo.a * j / (NR - 1);
+            M.forEach(function (md, k) {
+                mk[k] = md.m; nk[k] = md.n; lamA[k] = md.lam; QA[k] = md.Q;
+                muA[k] = Mf * md.lam / P.rho;
+                omA[k] = Math.sqrt((g * md.lam + P.sig * Math.pow(md.lam, 3) / P.rho) / (1 + muA[k]));
+                fA[k] = omA[k] / (2 * Math.PI);
+                var sq = 0.5 * Math.sqrt(nu * omA[k] / 2);
+                gw[k] = P.wall ? sq * (md.Iw + md.Ib) : 0;
+                gs[k] = P.cs * sq * md.Is;
+                gb[k] = 2 * nu * md.lam * md.lam;
+                gcA[k] = P.gc;
+                gf[k] = P.kf * (U_F / geo.a) * (1 - Math.exp(-md.lam * P.hf));
+                gam[k] = gw[k] + gs[k] + gb[k] + gcA[k] + gf[k];
+                zeta[k] = gam[k] / omA[k];
+            });
+            ['lam', 'Q', 'mu_f', 'omega', 'f_n', 'g_w', 'g_s', 'g_b', 'g_c', 'g_f', 'gam', 'zeta', 'm_k', 'n_k', 'r_j'].forEach(function (n) { ds.touch(n); });
+            ['V_mL', 'hf', 'T_C', 'mu6', 'rho', 'sigma', 'eps_f', 'c_s', 'gam_c', 'k_f', 'Om_h', 'A_sh', 'f_sh'].forEach(function (n, i) { ds.set(n, [P.V, P.hf, P.T, P.mu6, P.rho, P.sig, P.ef, P.cs, P.gc, P.kf, P.Om, P.A, P.f][i]); });
+            ds.set('shape', P.shape); ds.set('shaker', P.shake); ds.set('wall_on', P.wall);
+            readGam();
+        }
+
+        /* ---- the motion: hand (critically damped follower), shaker, and the modes; RK4 at h = 1 ms ---- */
+        var G = { x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0 }, Tg = { x: 0, y: 0, z: 0 }, tSim = 0, tShake = 0, acc = { x: 0, y: 0, z: 0 };
+        var h = 1e-3, held = false;
+        function shakerAcc(t) {                          // s(t) = A w(t) sin Ωt, w = 1 − e^(−t/τ): eased in over τ = 0.3 s
+            if (P.shake === 'off') return 0;
+            var W = 2 * Math.PI * P.f, tau = 0.3, e = Math.exp(-t / tau), w = 1 - e, wd = e / tau, wdd = -e / (tau * tau);
+            return P.A * (wdd * Math.sin(W * t) + 2 * wd * W * Math.cos(W * t) - w * W * W * Math.sin(W * t));
+        }
+        function shakerPos(t) { if (P.shake === 'off') return 0; return P.A * (1 - Math.exp(-t / 0.3)) * Math.sin(2 * Math.PI * P.f * t); }
+        // y = [x, y, z, vx, vy, vz, a_osc (2NK), v_osc (2NK)]
+        var NY = 6 + 4 * NK, Y = new Float64Array(NY), k1 = new Float64Array(NY), k2 = new Float64Array(NY), k3 = new Float64Array(NY), k4 = new Float64Array(NY), Yt = new Float64Array(NY);
+        function deriv(t, y, out) {
+            var Om = P.Om, sx = 0, sz = 0, sa = shakerAcc(tShake + (t - tSim));
+            if (P.shake === 'x') sx = sa; else if (P.shake === 'z') sz = sa;
+            var ax = Om * Om * (Tg.x - y[0]) - 2 * Om * y[3], ay = Om * Om * (Tg.y - y[1]) - 2 * Om * y[4], az = Om * Om * (Tg.z - y[2]) - 2 * Om * y[5];
+            out[0] = y[3]; out[1] = y[4]; out[2] = y[5]; out[3] = ax; out[4] = ay; out[5] = az;
+            var AX = ax + sx, AY = ay, AZ = az + sz;      // the glass's whole acceleration: hand plus shaker
+            for (var k = 0; k < NK; k++) {
+                var md = M[k], O2 = (lamA[k] * (g + AZ) + P.sig * Math.pow(lamA[k], 3) / P.rho) / (1 + muA[k]), G2 = 2 * gam[k];
+                var Fc = md.m === 1 ? -lamA[k] * QA[k] * AX / (1 + muA[k]) : 0, Fs = md.m === 1 ? -lamA[k] * QA[k] * AY / (1 + muA[k]) : 0;
+                var ic = 6 + k, is = 6 + NK + k, vc = 6 + 2 * NK + k, vs = 6 + 3 * NK + k;
+                out[ic] = y[vc]; out[is] = y[vs];
+                out[vc] = -G2 * y[vc] - O2 * y[ic] + Fc;
+                out[vs] = md.m === 0 ? 0 : -G2 * y[vs] - O2 * y[is] + Fs;   // m = 0 has no sin copy
+                if (md.m === 0) out[is] = 0;
+            }
+            return [AX, AY, AZ];
+        }
+        function step() {
+            Y[0] = G.x; Y[1] = G.y; Y[2] = G.z; Y[3] = G.vx; Y[4] = G.vy; Y[5] = G.vz;
+            for (var k = 0; k < 2 * NK; k++) { Y[6 + k] = aO[k]; Y[6 + 2 * NK + k] = vO[k]; }
+            var i, A0 = deriv(tSim, Y, k1);
+            for (i = 0; i < NY; i++) Yt[i] = Y[i] + 0.5 * h * k1[i]; deriv(tSim + 0.5 * h, Yt, k2);
+            for (i = 0; i < NY; i++) Yt[i] = Y[i] + 0.5 * h * k2[i]; deriv(tSim + 0.5 * h, Yt, k3);
+            for (i = 0; i < NY; i++) Yt[i] = Y[i] + h * k3[i]; deriv(tSim + h, Yt, k4);
+            for (i = 0; i < NY; i++) Y[i] += h / 6 * (k1[i] + 2 * k2[i] + 2 * k3[i] + k4[i]);
+            G.x = Y[0]; G.y = Y[1]; G.z = Y[2]; G.vx = Y[3]; G.vy = Y[4]; G.vz = Y[5];
+            for (k = 0; k < 2 * NK; k++) { aO[k] = Y[6 + k]; vO[k] = Y[6 + 2 * NK + k]; }
+            acc.x = A0[0]; acc.y = A0[1]; acc.z = A0[2];
+            tSim += h; tShake += h;
+        }
+        function seed() {                                // a micrometre of disorder in every mode: what a real surface always has, and what Faraday's growth needs to start from
+            for (var k = 0; k < 2 * NK; k++) { aO[k] = 1e-6 * Math.sin(1.7 * k + 0.3); vO[k] = 0; }
+            ds.touch('a_osc'); ds.touch('v_osc');
+        }
+
+        /* ---- the surface: η(r, θ) = Σ f_n(r) (a_c cos mθ + a_s sin mθ), with f_n(a) = 1 ---- */
+        function etaWall(th) { var s = 0; for (var k = 0; k < NK; k++) { var m = M[k].m; s += aO[k] * Math.cos(m * th) + (m ? aO[NK + k] * Math.sin(m * th) : 0); } return s; }
+        function etaAt(rFrac, th) {
+            var x = rFrac * (NR - 1), j = Math.min(NR - 2, Math.floor(x)), w = x - j, s = 0;
+            for (var k = 0; k < NK; k++) { var m = M[k].m, f = M[k].f[j] + w * (M[k].f[j + 1] - M[k].f[j]); s += f * (aO[k] * Math.cos(m * th) + (m ? aO[NK + k] * Math.sin(m * th) : 0)); }
+            return s;
+        }
+        var spillF = false, spillL = false, nSF = 0, nSL = 0;
+        function wallScan() {
+            var best = -1e9, bt = 0;
+            for (var q = 0; q < 72; q++) { var th = 2 * Math.PI * q / 72, e = etaWall(th); if (e > best) { best = e; bt = th; } }
+            var zl = geo.zs + best, zf = zl + P.hf;
+            var sf = zf > H, sl = zl > H;
+            if (sf && !spillF) nSF++; if (sl && !spillL) nSL++; spillF = sf; spillL = sl;
+            ds.set('eta_w', best); ds.set('th_w', bt); ds.set('top_l', zl); ds.set('top_f', zf); ds.set('n_spill_f', nSF); ds.set('n_spill_l', nSL);
+        }
+
+        /* ---- velocity in the glass frame: u = Σ (ȧ_n/λ_n) ∇(Φ_n cos mθ), from the stored fields (section 7) ---- */
+        function fieldAt(i, j, th) {                     // grid point (depth row i, radius column j) in the plane at angle th → [u_r, u_θ, u_z]
+            var ur = 0, ut = 0, uz = 0, o = 3 * (i * NS + j), r = Math.max(1e-6, geo.a * j / (NS - 1));
+            for (var k = 0; k < NK; k++) {
+                var m = M[k].m, F = M[k].field, c = vO[k] / lamA[k], s = m ? vO[NK + k] / lamA[k] : 0;
+                var C = c * Math.cos(m * th) + s * Math.sin(m * th), S = -c * Math.sin(m * th) + s * Math.cos(m * th);
+                ur += C * F[o + 1]; uz += C * F[o + 2]; ut += m * S * F[o] / r;
+            }
+            return [ur, ut, uz];
+        }
+        function gridPos(i, j) {                         // where grid point (i, j) sits now: depth below the calm surface and radius
+            var d = geo.D * Math.pow(i / (NZ - 1), 1.6), z = geo.zs - d; return [Rin(z) * j / (NS - 1), z];
+        }
+
+        /* ---- 2D figures: the cut and the trace ---- */
+        var sec = Sim.canvas2d(document.getElementById('sec')), tr = Sim.canvas2d(document.getElementById('tr'));
+        Sim.onResize(document.getElementById('stage'), function () { sec = Sim.canvas2d(document.getElementById('sec')); });
+        Sim.onResize(document.getElementById('stage-tr'), function () { tr = Sim.canvas2d(document.getElementById('tr')); });
+        var CSS = getComputedStyle(document.documentElement), INK = '#1c1518', WINE = '#7a1f2b', STOUT = '#2b1210', HEAD = '#efe2c6', RULE = '#d9d0c2';
+        function planeAngle() {
+            if (P.plane === 'x') return 0; if (P.plane === 'y') return Math.PI / 2;
+            var c = 0, s = 0; for (var k = 0; k < NK; k++) if (M[k].m === 1) { c += aO[k] * aO[k] + vO[k] * vO[k] / (omA[k] * omA[k]); s += aO[NK + k] * aO[NK + k] + vO[NK + k] * vO[NK + k] / (omA[k] * omA[k]); }
+            var cs = 0; for (k = 0; k < NK; k++) if (M[k].m === 1) cs += aO[k] * aO[NK + k] + vO[k] * vO[NK + k] / (omA[k] * omA[k]);
+            return c + s < 1e-14 ? 0 : 0.5 * Math.atan2(2 * cs, c - s);   // principal axis of the m = 1 motion
+        }
+        var thP = 0, secMap = null;
+        function drawSection() {
+            var c = sec.ctx, W = sec.w, Hh = sec.h; c.clearRect(0, 0, W, Hh);
+            var target = planeAngle(); thP += 0.08 * Math.atan2(Math.sin(target - thP), Math.cos(target - thP)); if (P.plane !== 'follow') thP = target;
+            ds.set('theta_p', thP);
+            var pad = 22, sc = Math.min((Hh - 2 * pad) / (H * 1.08), (W * 0.62) / (2 * 0.045));   // px per m: the glass fits the height
+            var cx = W * 0.5, by = Hh - pad, X = function (r) { return cx + r * sc; }, Z = function (z) { return by - z * sc; };
+            secMap = { sc: sc, cx: cx, by: by }; ds.set('mm_px', sc);
+            // glass walls (outer and inner), drawn as a section: both sides
+            c.fillStyle = 'rgba(205, 222, 226, 0.55)'; c.strokeStyle = 'rgba(28, 21, 24, 0.55)'; c.lineWidth = 1;
+            [-1, 1].forEach(function (sd) {
+                c.beginPath(); c.moveTo(X(0), Z(0));
+                for (var i = 0; i < GZ.length; i++) c.lineTo(X(sd * GRO[i]), Z(GZ[i]));
+                for (i = GZ.length - 1; i >= 0; i--) { var ri = GRI[i] === null ? 0 : GRI[i]; c.lineTo(X(sd * ri), Z(Math.max(GZ[i], ZF))); }
+                c.closePath(); c.fill(); c.stroke();
+            });
+            // stout and head: the surface along the cut (θ = θ_p to the right, θ_p + π to the left)
+            var pts = [], q, NQ = 48;
+            for (q = 0; q <= NQ; q++) { var u = -1 + 2 * q / NQ, th = u >= 0 ? thP : thP + Math.PI, e = etaAt(Math.abs(u), th), zz = geo.zs + e; pts.push([u * Rin(zz), zz]); }
+            c.fillStyle = STOUT; c.beginPath(); c.moveTo(X(-Rin(ZF + 1e-4)), Z(ZF));
+            var nz = 40; for (q = 0; q <= nz; q++) { var zq = ZF + (pts[0][1] - ZF) * q / nz; c.lineTo(X(-Rin(zq)), Z(zq)); }
+            pts.forEach(function (p) { c.lineTo(X(p[0]), Z(p[1])); });
+            for (q = nz; q >= 0; q--) { zq = ZF + (pts[NQ][1] - ZF) * q / nz; c.lineTo(X(Rin(zq)), Z(zq)); }
+            c.closePath(); c.fill();
+            if (P.hf > 0) {
+                c.fillStyle = HEAD; c.beginPath();
+                pts.forEach(function (p, i) { var zt = Math.min(p[1] + P.hf, H + 0.004), rr = Math.sign(p[0]) * Rin(Math.min(zt, H)) * Math.abs(p[0]) / Math.max(1e-9, Rin(p[1])); if (i === 0) c.moveTo(X(rr), Z(zt)); else c.lineTo(X(rr), Z(zt)); });
+                for (q = NQ; q >= 0; q--) c.lineTo(X(pts[q][0]), Z(pts[q][1]));
+                c.closePath(); c.fill(); c.strokeStyle = 'rgba(122, 75, 18, 0.5)'; c.stroke();
+            }
+            // calm level and rim
+            c.setLineDash([4, 4]); c.strokeStyle = 'rgba(28,21,24,0.35)'; c.beginPath(); c.moveTo(X(-geo.a), Z(geo.zs)); c.lineTo(X(geo.a), Z(geo.zs)); c.stroke(); c.setLineDash([]);
+            // arrows: (u_r, u_z) in the plane, pale on the dark stout; u_θ (across the plane) as a ring whose size is its speed
+            var spx = 400 * Math.pow(10, P.as); ds.set('px_per_mps', spx);
+            var umax = 0; c.lineWidth = 1.3;
+            for (var i = 1; i < NZ; i += 2) for (var j = 0; j < NS; j += 1) [1, -1].forEach(function (sd) {
+                if (sd < 0 && j === 0) return;
+                var th = sd > 0 ? thP : thP + Math.PI, U = fieldAt(i, j, th), p = gridPos(i, j);
+                var r = sd * p[0], z = p[1], ur = sd * U[0], uz = U[2], sp = Math.hypot(U[0], U[1], U[2]); umax = Math.max(umax, sp);
+                var x0 = X(r), y0 = Z(z), dx = ur * spx, dy = -uz * spx, L = Math.hypot(dx, dy), Lm = 34;
+                if (L > Lm) { dx *= Lm / L; dy *= Lm / L; }
+                c.strokeStyle = L > Lm ? '#e2a2aa' : '#f5f1ea'; c.fillStyle = c.strokeStyle;
+                if (L > 1.2) { var an = Math.atan2(dy, dx); c.beginPath(); c.moveTo(x0, y0); c.lineTo(x0 + dx, y0 + dy); c.stroke();
+                    var hh = Math.min(5, 0.45 * Math.hypot(dx, dy)); c.beginPath(); c.moveTo(x0 + dx, y0 + dy); c.lineTo(x0 + dx - hh * Math.cos(an - 0.45), y0 + dy - hh * Math.sin(an - 0.45)); c.lineTo(x0 + dx - hh * Math.cos(an + 0.45), y0 + dy - hh * Math.sin(an + 0.45)); c.closePath(); c.fill(); }
+                else { c.beginPath(); c.arc(x0, y0, 0.9, 0, 7); c.fill(); }
+                var ut = Math.abs(U[1]) * spx; if (ut > 2) { c.strokeStyle = 'rgba(226,162,170,0.7)'; c.beginPath(); c.arc(x0, y0, Math.min(ut, 12) / 2, 0, 7); c.stroke(); }
+            });
+            ds.set('u_max', umax);
+            // key and labels
+            c.font = '11px "IBM Plex Mono", monospace'; c.fillStyle = INK; c.textAlign = 'left';
+            var narrow = W < 560, kx = narrow ? 8 : 12, ky = narrow ? Hh - 64 : 18, kl = 0.05 * spx;   // on phones the key sits low, beside the foot, clear of the glass c.strokeStyle = INK; c.beginPath(); c.moveTo(kx, ky); c.lineTo(kx + Math.min(kl, 120), ky); c.stroke();
+            c.fillText(kl <= 120 ? '50 mm/s' : _t('50 mm/s (cut short)'), kx + Math.min(kl, 120) + 6, ky + 4);
+            if (narrow) c.font = '10px "IBM Plex Mono", monospace'; c.fillText(narrow ? _t('pink arrow: cut short') : _t('pink arrow: longer than drawn'), kx, ky + 16); c.fillText(narrow ? _t('pink ring: across') : _t('pink ring: flow across the cut'), kx, ky + 30); c.font = '11px "IBM Plex Mono", monospace';
+            c.textAlign = 'right'; c.fillText(_t('rim'), X(-GRO[GRO.length - 1]) - 6, Z(H) + 4);
+            c.beginPath(); c.moveTo(X(-GRO[GRO.length - 1]) - 4, Z(H)); c.lineTo(X(GRO[GRO.length - 1]) + 4, Z(H)); c.strokeStyle = WINE; c.stroke();
+            c.textAlign = 'left'; var fitX = function (t, x) { return Math.min(x, W - 4 - c.measureText(t).width); };   // labels right of the glass stay inside a narrow canvas
+            c.fillText(_t('calm level'), fitX(_t('calm level'), X(geo.a) + 10), Z(geo.zs) - 6);
+            var mm = function (v) { return (v * 1000).toFixed(0); };
+            var thl = 'θ = ' + (thP * 180 / Math.PI).toFixed(0) + '°  →'; c.fillText(thl, fitX(thl, X(geo.a) + 10), Z(geo.zs * 0.5));
+            c.textAlign = 'center'; c.fillStyle = 'rgba(28,21,24,0.6)'; c.fillText('0', X(0), by + 14); c.fillText('+' + mm(0.04) + ' mm', X(0.04), by + 14); c.fillText('−' + mm(0.04) + ' mm', X(-0.04), by + 14);
+            document.getElementById('cap-plane').textContent = P.plane === 'follow' ? _t('along the slosh, θ = ') + (thP * 180 / Math.PI).toFixed(0) + '°' : (P.plane === 'x' ? 'x–z' : 'y–z');
+            var capU = document.getElementById('cap-u'); if (frameN % 15 === 0) capU.innerHTML = '|<i>u</i>|<sub>max</sub> = ' + Sim.fmt(umax * 1000, 1) + ' mm/s';
+        }
+        var hist = [], HN = 480;
+        function drawTrace() {
+            var c = tr.ctx, W = tr.w, Hh = tr.h; c.clearRect(0, 0, W, Hh);
+            hist.push([ds.get('eta_w'), P.hf]); if (hist.length > HN) hist.shift();
+            var L = 40, R = 10, T = 10, B = 18, fb = H - geo.zs, span = Math.max(0.02, fb + 0.004);
+            var y = function (e) { return T + (Hh - T - B) * (1 - (e + span * 0.35) / (span * 1.35)); }, x = function (i) { return L + (W - L - R) * i / (HN - 1); };
+            c.font = '10px "IBM Plex Mono", monospace'; c.fillStyle = 'rgba(28,21,24,0.6)'; c.textAlign = 'right';
+            Sim.ticks(-span * 0.35 * 1000, span * 1000, 4).values.forEach(function (v) { var e = v / 1000; c.fillText(v.toFixed(0), L - 6, y(e) + 3); c.strokeStyle = 'rgba(122,31,43,0.08)'; c.beginPath(); c.moveTo(L, y(e)); c.lineTo(W - R, y(e)); c.stroke(); });
+            c.textAlign = 'left'; c.fillText(_t('mm above calm'), 2, Hh - 4);
+            c.strokeStyle = WINE; c.setLineDash([5, 4]); c.beginPath(); c.moveTo(L, y(fb)); c.lineTo(W - R, y(fb)); c.stroke(); c.setLineDash([]); c.fillStyle = WINE; c.fillText(_t('rim'), W - R - 22, y(fb) - 4);
+            c.save(); c.beginPath(); c.rect(L, T - 2, W - L - R, Hh - T - B + 4); c.clip();
+            c.strokeStyle = 'rgba(122,75,18,0.6)'; c.beginPath(); hist.forEach(function (p, i) { var v = p[0] + p[1]; if (i) c.lineTo(x(i + HN - hist.length), y(v)); else c.moveTo(x(i + HN - hist.length), y(v)); }); c.stroke();
+            c.strokeStyle = INK; c.lineWidth = 1.5; c.beginPath(); hist.forEach(function (p, i) { if (i) c.lineTo(x(i + HN - hist.length), y(p[0])); else c.moveTo(x(i + HN - hist.length), y(p[0])); }); c.stroke(); c.lineWidth = 1;
+            c.restore(); c.fillStyle = INK; c.fillText(_t('stout at the wall'), L + 6, T + 10);
+            trMap = { x: x(HN - 1), y: y }; c.fillStyle = 'rgba(122,75,18,0.9)'; c.fillText(_t('top of the head'), L + 130, T + 10);
+        }
+
+        /* ---- readouts ---- */
+        var gamBody = document.getElementById('gam');
+        function readGam() {
+            var k = KEEP.findIndex(function (mn) { return mn[0] === 1 && mn[1] === 1; });
+            var rows = [['wall, floor', gw[k]], ['skin', gs[k]], ['bulk', gb[k]], ['contact line', gcA[k]], ['head', gf[k]], ['total', gam[k]]];
+            gamBody.innerHTML = rows.map(function (r) { return '<tr><td>' + _t(r[0]) + '</td><td>' + Sim.fmt(r[1], 3) + '</td><td>' + (r[0] === 'total' ? '' : Sim.fmt(100 * r[1] / gam[k], 0) + ' %') + '</td></tr>'; }).join('');
+            document.getElementById('r-f1').textContent = Sim.fmt(fA[k], 3) + ' Hz';
+            document.getElementById('r-z1').textContent = Sim.fmt(100 * zeta[k], 2) + ' %';
+            document.getElementById('r-tau').textContent = Sim.fmt(1 / gam[k], 2) + ' s';
+            document.getElementById('r-vol').textContent = P.V.toFixed(0) + ' / ' + GL.V_brim_mL.toFixed(0) + ' mL';
+            K11 = k;
+        }
+        var K11 = 0, frameN = 0, stateEl = document.getElementById('state'), hintEl = document.getElementById('hint');
+        function readouts() {
+            var ge = ds.get('geff'), fb = H - ds.get('top_l'), aMax = Math.abs(ds.get('eta_w'));
+            document.getElementById('r-geff').textContent = Sim.fmt(ge / g, 2);
+            document.getElementById('r-fb').textContent = Sim.fmt(1000 * (H - ds.get('top_f')), 1) + ' mm';
+            document.getElementById('cap-t').innerHTML = '<i>t</i> = ' + Sim.fmt(tSim, 1) + ' s';
+            document.getElementById('cap-spill').textContent = _t('head over the rim: ') + nSF + ' · ' + _t('stout over the rim: ') + nSL;
+            var msg, warn = true;
+            if (ge < 0) msg = _t('g_eff < 0: the glass falls faster than gravity, the stout leaves the floor. The model does not hold here.');
+            else if (spillL) msg = _t('The stout itself is going over the rim.');
+            else if (spillF) msg = _t('The head is going over the rim.');
+            else if (aMax > 0.2 * geo.a) msg = _t('The wave at the wall is more than a fifth of the radius: beyond linear theory, read the picture as a sketch.');
+            else { msg = _t('Linear regime: the wave at the wall is ') + Sim.fmt(aMax * 1000, 1) + _t(' mm, ') + Sim.fmt(100 * aMax / geo.a, 1) + _t(' % of the radius.'); warn = false; }
+            stateEl.textContent = msg; stateEl.classList.toggle('is-warn', warn);
+        }
+
+        /* ---- controls ---- */
+        function sl(id, key, scale, fmt) { Sim.slider(id, { format: fmt, onInput: function (v) { P[key] = v * scale; setup(); } }); }
+        sl('V', 'V', 1, function (v) { return v.toFixed(0) + ' mL'; });
+        sl('hf', 'hf', 1e-3, function (v) { return v.toFixed(1) + ' mm'; });
+        sl('TC', 'T', 1, function (v) { return v.toFixed(1) + ' °C'; });
+        sl('mu', 'mu6', 1e-3, function (v) { return v.toFixed(2) + ' mPa·s'; });
+        sl('rho', 'rho', 1, function (v) { return v.toFixed(0) + ' kg/m³'; });
+        sl('sig', 'sig', 1e-3, function (v) { return v.toFixed(1) + ' mN/m'; });
+        sl('ef', 'ef', 1, function (v) { return v.toFixed(2); });
+        sl('cs', 'cs', 1, function (v) { return v.toFixed(2); });
+        sl('gc', 'gc', 1, function (v) { return v.toFixed(2) + ' 1/s'; });
+        sl('kf', 'kf', 1, function (v) { return v.toFixed(1) + '×'; });
+        sl('Om', 'Om', 1, function (v) { return v.toFixed(0) + ' rad/s'; });
+        sl('A', 'A', 1e-3, function (v) { return v.toFixed(2) + ' mm'; });
+        sl('f', 'f', 1, function (v) { return v.toFixed(2) + ' Hz'; });
+        Sim.slider('as', { format: function (v) { return Sim.fmt(400 * Math.pow(10, v) / 1000, 2) + ' px per mm/s'; }, onInput: function (v) { P.as = v; } });
+        document.getElementById('dw').addEventListener('change', function (e) { P.wall = e.target.checked; setup(); });
+        document.getElementById('arrows3d').addEventListener('change', function (e) { P.arrows3d = e.target.checked; });
+        function seg(id, key, after) {
+            var el = document.getElementById(id);
+            el.addEventListener('click', function (e) { var b = e.target.closest('button'); if (!b) return; setSeg(id, b.dataset.v); P[key] = b.dataset.v; if (after) after(); });
+        }
+        function setSeg(id, v) { document.querySelectorAll('#' + id + ' button').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.v === v)); }); }
+        seg('shape', 'shape', setup); seg('plane', 'plane');
+        seg('shake', 'shake', function () { tShake = 0; ds.set('shaker', P.shake); if (P.shake === 'z') seed(); });
+        function setRange(id, v) { var I = document.getElementById(id); I.value = v; I.dispatchEvent(new Event('input')); }
+        document.getElementById('shF1').addEventListener('click', function () { setRange('f', fA[K11].toFixed(2)); setRange('A', 0.2); P.shake = 'x'; setSeg('shake', 'x'); tShake = 0; hintEl.textContent = _t('Sideways at f₁ = ') + Sim.fmt(fA[K11], 2) + _t(' Hz: each push arrives in step with the slosh, and the wave grows until damping eats what the shaker gives.'); });
+        document.getElementById('shF2').addEventListener('click', function () { setRange('f', (2 * fA[K11]).toFixed(2)); setRange('A', 2); P.shake = 'z'; setSeg('shake', 'z'); tShake = 0; seed(); hintEl.textContent = _t('Up and down at 2f₁: gravity itself is pumped twice per slosh. A wave of a micrometre grows if the pumping beats the damping (section 6). Give it a few seconds.'); });
+        document.getElementById('shOff').addEventListener('click', function () { P.shake = 'off'; setSeg('shake', 'off'); hintEl.textContent = _t('Shaker off: watch how fast the slosh dies, and compare with the time in the readouts.'); });
+        document.getElementById('calm').addEventListener('click', function () { seed(); nSF = nSL = 0; hist.length = 0; });
+        document.getElementById('nohead').addEventListener('click', function () { var on = P.hf > 0; setRange('hf', on ? 0 : 18); this.textContent = on ? _t('Pour a head') : _t('No head'); hintEl.textContent = on ? _t('No head: the damping falls to the boundary layers alone; the slosh rings several times longer.') : _t('With 18 mm of head the foam rubs on the glass and the slosh dies within seconds.'); });
+        document.getElementById('home').addEventListener('click', function () { Tg.x = Tg.y = Tg.z = 0; });
+        var liftBtn = document.getElementById('lift'), lift = false;
+        liftBtn.addEventListener('click', function () { lift = !lift; liftBtn.classList.toggle('is-on', lift); hintEl.textContent = lift ? _t('Lift: dragging now moves the glass up and down.') : ''; });
+        setup(); seed();
+        var clk = Sim.clock(function (dt) {
+            var n = Math.round(dt / h);
+            for (var i = 0; i < n; i++) step();
+            var big = false; for (var k = 0; k < 2 * NK; k++) if (Math.abs(aO[k]) > 2 * geo.a) big = true;
+            if (big) { seed(); hintEl.textContent = _t('The wave grew past twice the radius, where nothing here is valid; the stout was calmed.'); }
+            ds.set('t', tSim); ds.set('xg', G.x); ds.set('yg', G.y); ds.set('zg', G.z + shakerPos(tShake) * (P.shake === 'z' ? 1 : 0));
+            ds.set('ax', acc.x); ds.set('ay', acc.y); ds.set('az', acc.z); ds.set('geff', g + acc.z);
+            ds.touch('a_osc'); ds.touch('v_osc');
+            wallScan(); drawSection(); drawTrace();
+            if (window.SLOSH3D) window.SLOSH3D.render();
+            if (frameN++ % 15 === 0) readouts();
+        });
+        Sim.playButton(document.getElementById('play'), clk);
+
+        /* ---- the data panel (scripts/datalog.js): groups, checks from the stored inputs, read-backs from the picture ---- */
+        function k11() { return K11; }
+        function chk(formula, inputs, value) { return { formula: formula, inputs: inputs, value: value }; }
+        function isInk(c) { return c[3] > 0 && c[0] < 110 && c[1] < 100 && c[2] < 100; }
+        function isStout(c) { return c[3] > 200 && c[0] < 90 && c[1] < 50 && c[2] < 50; }
+        var trMap = null;
+        Sim.data = {
+            ds: ds, kicker: 'Fig. 12 · data', file: 'fig12-beer-slosh',
+            playing: function () { return clk.playing; }, play: function () { clk.set(true); },
+            groups: [
+                { title: 'What you set', note: 'the sliders and buttons', vars: ['V_mL', 'shape', 'hf', 'T_C', 'mu6', 'rho', 'sigma', 'eps_f', 'wall_on', 'c_s', 'gam_c', 'k_f', 'Om_h', 'shaker', 'A_sh', 'f_sh'] },
+                { title: 'The glass and the pour', note: 'from the measured profile', vars: ['V_brim', 'z_s', 'a', 'D', 'mu', 'nu', 'M_f'] },
+                { title: 'The modes', note: 'one row per radial shape (m, n); the slowest is (1,1)', vars: ['m_k', 'n_k', 'lam', 'Q', 'mu_f', 'omega', 'f_n', 'r_j'] },
+                { title: 'The damping', note: 'amplitude decay rates, term by term (section 7)', vars: ['g_w', 'g_s', 'g_b', 'g_c', 'g_f', 'gam', 'zeta'] },
+                { title: 'The state now', note: 'written every frame', vars: ['t', 'xg', 'yg', 'zg', 'ax', 'ay', 'az', 'geff', 'a_osc', 'v_osc', 'eta_w', 'th_w', 'top_l', 'top_f', 'n_spill_f', 'n_spill_l'] },
+                { title: 'The drawing', note: 'how numbers become pixels', vars: ['theta_p', 'u_max', 'px_per_mps', 'mm_px'] }
+            ],
+            check: {
+                D: function () { return chk('D = z<sub>s</sub> − z<sub>floor</sub>', [['z<sub>s</sub>', ds.get('z_s'), 'm', 5], ['z<sub>floor</sub>', ZF, 'm', 4]], ds.get('z_s') - ZF); },
+                nu: function () { return chk('ν = μ/ρ', [['μ', ds.get('mu'), 'Pa·s', 6], ['ρ', ds.get('rho'), 'kg/m³', 0]], ds.get('mu') / ds.get('rho')); },
+                mu: function () { return chk('μ = μ<sub>6</sub> μ<sub>w</sub>(T)/μ<sub>w</sub>(6 °C)', [['μ<sub>6</sub>', ds.get('mu6'), 'Pa·s', 6], ['T', ds.get('T_C'), '°C', 1]], ds.get('mu6') * muWater(ds.get('T_C')) / muWater(6)); },
+                M_f: function () { return chk('M<sub>f</sub> = ε<sub>f</sub> ρ h<sub>f</sub>', [['ε<sub>f</sub>', ds.get('eps_f'), '', 2], ['ρ', ds.get('rho'), 'kg/m³', 0], ['h<sub>f</sub>', ds.get('hf'), 'm', 4]], ds.get('eps_f') * ds.get('rho') * ds.get('hf')); },
+                mu_f: function (k) { return chk('μ<sub>f</sub> = M<sub>f</sub> λ/ρ', [['M<sub>f</sub>', ds.get('M_f'), 'kg/m²', 4], ['λ', lamA[k], '1/m', 4], ['ρ', ds.get('rho'), 'kg/m³', 0]], ds.get('M_f') * lamA[k] / ds.get('rho')); },
+                omega: function (k) { var l = lamA[k]; return chk('ω = [(gλ + σλ³/ρ)/(1 + μ<sub>f</sub>)]<sup>½</sup>', [['λ', l, '1/m', 4], ['σ', ds.get('sigma'), 'N/m', 4], ['ρ', ds.get('rho'), 'kg/m³', 0], ['μ<sub>f</sub>', muA[k], '', 4]], Math.sqrt((g * l + ds.get('sigma') * l * l * l / ds.get('rho')) / (1 + muA[k]))); },
+                f_n: function (k) { return chk('f = ω/2π', [['ω', omA[k], 'rad/s', 4]], omA[k] / (2 * Math.PI)); },
+                g_b: function (k) { return chk('γ<sub>b</sub> = 2νλ²', [['ν', ds.get('nu'), 'm²/s', 9], ['λ', lamA[k], '1/m', 4]], 2 * ds.get('nu') * lamA[k] * lamA[k]); },
+                g_f: function (k) { return chk('γ<sub>f</sub> = k<sub>f</sub>(U<sub>f</sub>/a)(1 − e<sup>−λh<sub>f</sub></sup>), U<sub>f</sub> = 0.016 m/s', [['k<sub>f</sub>', ds.get('k_f'), '', 2], ['a', ds.get('a'), 'm', 5], ['λ', lamA[k], '1/m', 4], ['h<sub>f</sub>', ds.get('hf'), 'm', 4]], ds.get('k_f') * (U_F / ds.get('a')) * (1 - Math.exp(-lamA[k] * ds.get('hf')))); },
+                g_w: function (k) { return chk('γ<sub>w</sub> = ½(νω/2)<sup>½</sup>(I<sub>w</sub> + I<sub>b</sub>)/E', [['ν', ds.get('nu'), 'm²/s', 9], ['ω', omA[k], 'rad/s', 4], ['(I<sub>w</sub>+I<sub>b</sub>)/E', M[k].Iw + M[k].Ib, '1/m', 4]], ds.get('wall_on') ? 0.5 * Math.sqrt(ds.get('nu') * omA[k] / 2) * (M[k].Iw + M[k].Ib) : 0); },
+                g_s: function (k) { return chk('γ<sub>s</sub> = c<sub>s</sub> ½(νω/2)<sup>½</sup> I<sub>s</sub>/E', [['c<sub>s</sub>', ds.get('c_s'), '', 2], ['ν', ds.get('nu'), 'm²/s', 9], ['ω', omA[k], 'rad/s', 4], ['I<sub>s</sub>/E', M[k].Is, '1/m', 4]], ds.get('c_s') * 0.5 * Math.sqrt(ds.get('nu') * omA[k] / 2) * M[k].Is); },
+                gam: function (k) { return chk('γ = γ<sub>w</sub> + γ<sub>s</sub> + γ<sub>b</sub> + γ<sub>c</sub> + γ<sub>f</sub>', [['γ<sub>w</sub>', gw[k], '1/s', 4], ['γ<sub>s</sub>', gs[k], '1/s', 4], ['γ<sub>b</sub>', gb[k], '1/s', 5], ['γ<sub>c</sub>', gcA[k], '1/s', 3], ['γ<sub>f</sub>', gf[k], '1/s', 4]], gw[k] + gs[k] + gb[k] + gcA[k] + gf[k]); },
+                zeta: function (k) { return chk('ζ = γ/ω', [['γ', gam[k], '1/s', 4], ['ω', omA[k], 'rad/s', 4]], gam[k] / omA[k]); },
+                geff: function () { return chk('g<sub>eff</sub> = g + z̈', [['g', g, 'm/s²', 2], ['z̈', ds.get('az'), 'm/s²', 3]], g + ds.get('az')); },
+                eta_w: function () { var th = ds.get('th_w'); return chk('η(θ<sub>max</sub>) = Σ (a<sub>c</sub> cos mθ + a<sub>s</sub> sin mθ)', [['θ<sub>max</sub>', th, 'rad', 3]], etaWall(th)); },
+                top_l: function () { return chk('z<sub>l</sub> = z<sub>s</sub> + η<sub>max</sub>', [['z<sub>s</sub>', ds.get('z_s'), 'm', 5], ['η<sub>max</sub>', ds.get('eta_w'), 'm', 5]], ds.get('z_s') + ds.get('eta_w')); },
+                top_f: function () { return chk('z<sub>f</sub> = z<sub>l</sub> + h<sub>f</sub>', [['z<sub>l</sub>', ds.get('top_l'), 'm', 5], ['h<sub>f</sub>', ds.get('hf'), 'm', 4]], ds.get('top_l') + ds.get('hf')); }
+            },
+            drawn: {
+                eta_w: function () {
+                    if (!trMap) return { what: _t('the trace'), ok: null, note: _t('not drawn yet') };
+                    var px = Sim.readPixel(tr, trMap.x, trMap.y(ds.get('eta_w')), 3, isInk);
+                    return { what: _t('last point of the black trace'), drawn: px ? _t('ink at the predicted height') : _t('no ink'), expected: Sim.fmt(ds.get('eta_w') * 1000, 2) + ' mm', ok: !!px };
+                },
+                z_s: function () {
+                    if (!secMap) return { what: _t('the cut'), ok: null, note: _t('not drawn yet') };
+                    var e = etaAt(0, 0), y = secMap.by - (geo.zs + e) * secMap.sc + 4, px = Sim.readPixel(sec, secMap.cx + 3, y, 1, isStout);
+                    return { what: _t('stout just below the surface, on the axis of the cut'), drawn: px ? _t('stout colour') : _t('no stout'), expected: _t('stout below {z} mm', { z: Sim.fmt((geo.zs + e) * 1000, 1) }), ok: !!px };
+                }
+            },
+            probe: function (x, y) {
+                if (!secMap) return null; var best = null, bd = 18;
+                for (var i = 1; i < NZ; i++) for (var j = 0; j < NS; j++) [1, -1].forEach(function (sd) { var p = gridPos(i, j), X0 = secMap.cx + sd * p[0] * secMap.sc, Y0 = secMap.by - p[1] * secMap.sc, d = Math.hypot(X0 - x, Y0 - y); if (d < bd) { bd = d; best = { i: i, j: j, sd: sd }; } });
+                return best;
+            },
+            inspect: function (ref) {
+                var th = ref.sd > 0 ? thP : thP + Math.PI, U = fieldAt(ref.i, ref.j, th), p = gridPos(ref.i, ref.j);
+                return { title: _t('stout {d} mm below the calm surface, {r} mm from the axis', { d: Sim.fmt((geo.zs - p[1]) * 1000, 1), r: Sim.fmt(p[0] * 1000, 1) }),
+                    at: { x: secMap.cx + ref.sd * p[0] * secMap.sc, y: secMap.by - p[1] * secMap.sc },
+                    rows: [['u<sub>r</sub>', U[0], 'm/s', null, null], ['u<sub>θ</sub>', U[1], 'm/s', null, null], ['u<sub>z</sub>', U[2], 'm/s', null, null], ['|u|', Math.hypot(U[0], U[1], U[2]), 'm/s', null, null]] };
+            },
+            round: { time: 't', label: function () { return _t('one period of the slowest mode, 1/f<sub>11</sub> = {T} s', { T: Sim.fmt(1 / fA[K11], 3) }); }, length: function () { return 1 / fA[K11]; },
+                columns: ['eta_w', 'ax', 'az', 'geff', 'top_f'], point: function () { return null; } },
+            about: 'The store holds the model; the drawing differs from it in these ways. The 3D view samples the surface at 16 radii and 72 angles and draws the head as a layer of constant thickness on it. The cut draws arrows on every second row of the 12 × 20 grid, from the stored velocity fields of the nearest of six fills (360 to 590 mL), placed on the present fill’s depth; arrows longer than 34 px are cut short and drawn pink, and the flow across the cut is drawn as rings. While arrows are shown in 3D, the stout is drawn see-through. The trace keeps the last 480 frames, which is about 8 s at 60 frames per second. The modal amplitudes start at a micrometre in every mode, a seed for the parametric growth, not a measured disorder.'
+        };
+
+        /* ---- what the 3D view needs ---- */
+        window.SLOSH = {
+            ds: ds, P: P, geo: geo, G: G, Tg: Tg, H: H, ZF: ZF, GZ: GZ, GRI: GRI, GRO: GRO, Rin: Rin, NR: NR, NS: NS, NZ: NZ,
+            get M() { return M; }, get aO() { return aO; }, get vO() { return vO; }, get thP() { return thP; }, get lift() { return lift; }, get t() { return tSim; },
+            shakerOffset: function () { var s = shakerPos(tShake); return { x: P.shake === 'x' ? s : 0, z: P.shake === 'z' ? s : 0 }; },
+            etaAt: etaAt, etaWall: etaWall, fieldAt: fieldAt, gridPos: gridPos, setHeld: function (v) { held = v; },
+            hint: function (s) { hintEl.textContent = s; }, step: step, resetShake: function () { tShake = 0; }, setup: setup, seed: seed, deriv: deriv, lamA: lamA, QA: QA, omA: omA, gam: gam, muA: muA
+        };
+
+        /* ---- Sim.live: the walkthrough's numbers, read from the store ---- */
+        Sim.live = function () {
+            var f = function (v, n, u) { return Sim.fmt(v, n) + (u ? ' ' + u : ''); }, G_ = function (n) { return ds.get(n); };
+            return { V: f(G_('V_mL'), 0, 'mL'), zs: f(G_('z_s') * 1000, 1, 'mm'), a: f(G_('a') * 1000, 2, 'mm'), nu: f(G_('nu') * 1e6, 3, 'mm²/s'),
+                lam: f(lamA[K11], 2, '1/m'), om: f(omA[K11], 3, 'rad/s'), f1: f(fA[K11], 3, 'Hz'), Q: f(QA[K11] * 1000, 3, 'mm'), gam: f(gam[K11], 3, '1/s'), zeta: f(100 * zeta[K11], 2, '%'),
+                gw: f(gw[K11], 4, '1/s'), gs: f(gs[K11], 4, '1/s'), gf: f(gf[K11], 4, '1/s'), gb: f(gb[K11], 5, '1/s'),
+                ax: f(G_('ax'), 2, 'm/s²'), az: f(G_('az'), 2, 'm/s²'), eta: f(G_('eta_w') * 1000, 2, 'mm'), t: f(G_('t'), 2, 's'), h: '1 ms', Om: f(P.Om, 0, 'rad/s') };
+        };
+    })();
+    </script>
+    <script type="module">
+    /* The 3D view: three.js r181 (MIT), self-hosted. It only draws what the page's script has computed (window.SLOSH). */
+    const S = window.SLOSH, host = document.getElementById('stage3d');
+    try {
+        // the library's address from where sim.js was loaded, so the German and Arabic pages (one folder deeper) find it too
+        const THREE = await import(document.querySelector('script[src$="scripts/sim.js"]').src.replace(/scripts\/sim\.js$/, 'vendor/three/three.module.min.js'));
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setPixelRatio(Math.min(2, window.devicePixelRatio || 1));
+        host.appendChild(renderer.domElement); document.getElementById('s3-fallback').remove();
+        const scene = new THREE.Scene(), cam = new THREE.PerspectiveCamera(30, 1, 0.01, 5);
+        scene.add(new THREE.HemisphereLight(0xfff6ea, 0x6b5a50, 1.6));
+        const sun = new THREE.DirectionalLight(0xffffff, 2.2); sun.position.set(0.4, 0.9, 0.6); scene.add(sun);
+        const back = new THREE.DirectionalLight(0xffe9d0, 1.0); back.position.set(-0.5, 0.3, -0.7); scene.add(back);
+        // the table: a faint grid on the plane z = 0 (three.js y up: physics (x, y, z) → three (x, z, −y))
+        const grid = new THREE.GridHelper(0.6, 24, 0xc9b9a8, 0xe6dfd2); grid.material.transparent = true; grid.material.opacity = 0.7; scene.add(grid);
+        const shadow = new THREE.Mesh(new THREE.CircleGeometry(0.036, 48), new THREE.MeshBasicMaterial({ color: 0x1c1518, transparent: true, opacity: 0.12, depthWrite: false }));
+        shadow.rotation.x = -Math.PI / 2; shadow.position.y = 0.0005; scene.add(shadow);
+        const glassG = new THREE.Group(); scene.add(glassG);
+        // glass: the measured profile, revolved (the same profile Blender revolved to check the volume)
+        const prof = (r, z) => r.map((v, i) => new THREE.Vector2(v, z[i]));
+        const outerPts = prof(S.GRO, S.GZ);
+        const innerPts = []; S.GZ.forEach((z, i) => { if (S.GRI[i] !== null) innerPts.push(new THREE.Vector2(S.GRI[i], Math.max(z, S.ZF))); });
+        const glassMat = new THREE.MeshPhysicalMaterial({ color: 0xe8f1f2, roughness: 0.04, metalness: 0, transparent: true, opacity: 0.16, depthWrite: false, side: THREE.DoubleSide, clearcoat: 1, specularIntensity: 1 });
+        const outer = new THREE.Mesh(new THREE.LatheGeometry(outerPts, 96), glassMat), inner = new THREE.Mesh(new THREE.LatheGeometry(innerPts, 96), glassMat);
+        outer.renderOrder = 3; inner.renderOrder = 2; glassG.add(outer, inner);
+        const foot = new THREE.Mesh(new THREE.CylinderGeometry(S.GRO[0], S.GRO[0], S.ZF, 96, 1), new THREE.MeshPhysicalMaterial({ color: 0xdfeaea, roughness: 0.1, transparent: true, opacity: 0.35, depthWrite: false }));
+        foot.position.y = S.ZF / 2; glassG.add(foot);
+        // ink outlines: the silhouette meridians and the rim, as the house drawings do
+        const lineMat = new THREE.LineBasicMaterial({ color: 0x1c1518, transparent: true, opacity: 0.35 });
+        const rimR = S.GRO[S.GRO.length - 1], rimPts = []; for (let q = 0; q <= 96; q++) { const a = 2 * Math.PI * q / 96; rimPts.push(new THREE.Vector3(rimR * Math.cos(a), S.H, rimR * Math.sin(a))); }
+        glassG.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(rimPts), lineMat));
+        // the stout: wall band and surface, rebuilt every frame from η(r, θ)
+        const NT = 72, NRr = 16, NZw = 18, KIN = 0.985;   // the stout is drawn 1.5 % inside the glass's inner surface, so the two never fight for the same pixel
+        const stoutMat = new THREE.MeshStandardMaterial({ color: 0x170606, emissive: 0x1a0303, roughness: 0.22, metalness: 0, transparent: true, opacity: 0.93, side: THREE.DoubleSide });
+        const headMat = new THREE.MeshStandardMaterial({ color: 0xeedfc0, roughness: 0.95, transparent: true, opacity: 0.97, side: THREE.DoubleSide });
+        function polarGrid() {
+            const g = new THREE.BufferGeometry(), n = (NRr + 1) * NT, pos = new Float32Array(3 * n), idx = [];
+            for (let i = 0; i < NRr; i++) for (let q = 0; q < NT; q++) { const a = i * NT + q, b = i * NT + (q + 1) % NT, c = (i + 1) * NT + (q + 1) % NT, d = (i + 1) * NT + q; idx.push(a, b, c, a, c, d); }
+            g.setIndex(idx); g.setAttribute('position', new THREE.BufferAttribute(pos, 3)); return g;
+        }
+        function wallBand(nz) {
+            const g = new THREE.BufferGeometry(), n = (nz + 1) * NT, pos = new Float32Array(3 * n), idx = [];
+            for (let i = 0; i < nz; i++) for (let q = 0; q < NT; q++) { const a = i * NT + q, b = i * NT + (q + 1) % NT, c = (i + 1) * NT + (q + 1) % NT, d = (i + 1) * NT + q; idx.push(a, b, c, a, c, d); }
+            g.setIndex(idx); g.setAttribute('position', new THREE.BufferAttribute(pos, 3)); return g;
+        }
+        const surfG = polarGrid(), wallG = wallBand(NZw), headTopG = polarGrid(), headSideG = wallBand(2), floorG = new THREE.CircleGeometry(1, NT);
+        const surf = new THREE.Mesh(surfG, stoutMat), wall = new THREE.Mesh(wallG, stoutMat), headTop = new THREE.Mesh(headTopG, headMat), headSide = new THREE.Mesh(headSideG, headMat);
+        const floor = new THREE.Mesh(floorG, stoutMat); floor.rotation.x = -Math.PI / 2;
+        [surf, wall, headTop, headSide, floor].forEach(m => { m.renderOrder = 1; glassG.add(m); });
+        // velocity arrows in the cut plane
+        const MAXA = S.NZ * (2 * S.NS) * 3 * 2, arrowPos = new Float32Array(3 * MAXA), arrowG = new THREE.BufferGeometry();
+        arrowG.setAttribute('position', new THREE.BufferAttribute(arrowPos, 3));
+        const arrows = new THREE.LineSegments(arrowG, new THREE.LineBasicMaterial({ color: 0xf5f1ea, transparent: true, opacity: 0.95, depthTest: false }));
+        arrows.renderOrder = 4; glassG.add(arrows);
+        const cutG = new THREE.BufferGeometry(); cutG.setAttribute('position', new THREE.BufferAttribute(new Float32Array(3 * 5), 3));
+        const cut = new THREE.Line(cutG, new THREE.LineDashedMaterial({ color: 0x7a1f2b, dashSize: 0.004, gapSize: 0.003 })); glassG.add(cut);
+        // camera on a sphere around the glass
+        const view = { az: -0.55, el: 0.30, dist: 0.40 };
+        function placeCam() {
+            const c = Math.cos(view.el); cam.position.set(view.dist * c * Math.sin(view.az), 0.075 + view.dist * Math.sin(view.el), view.dist * c * Math.cos(view.az)); cam.lookAt(0, 0.075, 0);
+        }
+        function resize() { const w = host.clientWidth, hh = host.clientHeight; renderer.setSize(w, hh, false); cam.aspect = w / hh; cam.updateProjectionMatrix(); }
+        new ResizeObserver(resize).observe(host); resize(); placeCam();
+        // pointer: on the glass = carry it; elsewhere = turn the view; wheel or Shift or Lift = up and down
+        const ray = new THREE.Raycaster(), ndc = new THREE.Vector2(), el = renderer.domElement;
+        let drag = null;
+        function ndcOf(e) { const r = el.getBoundingClientRect(); ndc.set((e.clientX - r.left) / r.width * 2 - 1, -(e.clientY - r.top) / r.height * 2 + 1); }
+        function onPlane(e, y0) { ndcOf(e); ray.setFromCamera(ndc, cam); const p = new THREE.Vector3(); return ray.ray.intersectPlane(new THREE.Plane(new THREE.Vector3(0, 1, 0), -y0), p) ? p : null; }
+        el.addEventListener('pointerdown', e => {
+            ndcOf(e); ray.setFromCamera(ndc, cam);
+            const hit = ray.intersectObjects([outer, surf, wall, headTop], false)[0];
+            el.setPointerCapture(e.pointerId);
+            if (hit) {
+                const vert = S.lift || e.shiftKey;
+                drag = { kind: vert ? 'lift' : 'move', y0: hit.point.y, start: hit.point.clone(), sy: e.clientY, T0: { x: S.Tg.x, y: S.Tg.y, z: S.Tg.z } };
+                el.classList.add('is-grab'); S.setHeld(true);
+                S.hint(vert ? 'Up and down: the stout feels a stronger or weaker gravity while the glass speeds up or slows down.' : 'Carrying: a quick start and a sudden stop are what make a pint slop.');
+            } else drag = { kind: 'turn', x: e.clientX, y: e.clientY, az: view.az, el: view.el };
+        });
+        el.addEventListener('pointermove', e => {
+            if (!drag) return;
+            if (drag.kind === 'turn') { view.az = drag.az - (e.clientX - drag.x) * 0.008; view.el = Math.max(-0.1, Math.min(1.45, drag.el + (e.clientY - drag.y) * 0.006)); placeCam(); return; }
+            if (drag.kind === 'move') { const p = onPlane(e, drag.y0); if (!p) return; S.Tg.x = Math.max(-0.2, Math.min(0.2, drag.T0.x + p.x - drag.start.x)); S.Tg.y = Math.max(-0.2, Math.min(0.2, drag.T0.y - (p.z - drag.start.z))); }
+            if (drag.kind === 'lift') { const r = el.getBoundingClientRect(), px = 0.5 / r.height; S.Tg.z = Math.max(0, Math.min(0.25, drag.T0.z - (e.clientY - drag.sy) * px)); }
+        });
+        const up = () => { if (drag && drag.kind !== 'turn') S.setHeld(false); drag = null; el.classList.remove('is-grab'); };
+        el.addEventListener('pointerup', up); el.addEventListener('pointercancel', up);
+        el.addEventListener('wheel', e => { e.preventDefault(); S.Tg.z = Math.max(0, Math.min(0.25, S.Tg.z - e.deltaY * 0.0002)); }, { passive: false });
+        // one frame
+        function render() {
+            const sh = S.shakerOffset(), gx = S.G.x + sh.x, gy = S.G.y, gz = S.G.z + sh.z;
+            glassG.position.set(gx, gz, -gy); shadow.position.set(gx, 0.0005, -gy); shadow.material.opacity = 0.12 / (1 + 30 * gz);
+            const zs = S.geo.zs, a = S.geo.a, hf = S.P.hf, Rin = S.Rin;
+            const sp = surfG.attributes.position.array, hp = headTopG.attributes.position.array, wp = wallG.attributes.position.array, hs = headSideG.attributes.position.array;
+            for (let q = 0; q < NT; q++) {
+                const th = 2 * Math.PI * q / NT, ew = S.etaWall(th), zw = zs + ew, rw = KIN * Rin(Math.min(zw, S.H)), c = Math.cos(th), s = Math.sin(th);
+                for (let i = 0; i <= NRr; i++) {
+                    const u = i / NRr, e = S.etaAt(u, th), z = zs + e, r = u * rw, o = 3 * (i * NT + q);
+                    sp[o] = r * c; sp[o + 1] = z; sp[o + 2] = -r * s;
+                    const zt = Math.min(z + hf, S.H + 0.006), rt = u * KIN * Rin(Math.min(zw + hf, S.H));
+                    hp[o] = rt * c; hp[o + 1] = zt + 0.0002; hp[o + 2] = -rt * s;
+                }
+                for (let i = 0; i <= NZw; i++) { const z = S.ZF + (zw - S.ZF) * i / NZw, r = Rin(Math.min(z, S.H)) * KIN, o = 3 * (i * NT + q); wp[o] = r * c; wp[o + 1] = z; wp[o + 2] = -r * s; }
+                for (let i = 0; i <= 2; i++) { const z = Math.min(zw + hf * i / 2, S.H + 0.006), r = Rin(Math.min(z, S.H)) * KIN, o = 3 * (i * NT + q); hs[o] = r * c; hs[o + 1] = z; hs[o + 2] = -r * s; }
+            }
+            [surfG, headTopG, wallG, headSideG].forEach(g => { g.attributes.position.needsUpdate = true; g.computeVertexNormals(); g.computeBoundingSphere(); });
+            const rf = KIN * Rin(S.ZF + 1e-4); floor.scale.set(rf, rf, 1); floor.position.y = S.ZF + 0.0002;
+            headTop.visible = headSide.visible = hf > 0;
+            // see-through stout while the arrows are shown
+            const xray = S.P.arrows3d; stoutMat.opacity = xray ? 0.55 : 0.94; stoutMat.depthWrite = !xray; headMat.opacity = xray ? 0.5 : 0.97; headMat.depthWrite = !xray;
+            // arrows in the cut plane θ_p
+            let n = 0; const thP = S.thP, spx = 400 * Math.pow(10, S.P.as) * 0.00025;   // m of arrow per m/s
+            if (xray) for (let i = 1; i < S.NZ; i += 2) for (let j = 1; j < S.NS; j += 2) for (const sd of [1, -1]) {
+                const th = sd > 0 ? thP : thP + Math.PI, U = S.fieldAt(i, j, th), p = S.gridPos(i, j), r = p[0], z = p[1];
+                const cx = Math.cos(th), sx = Math.sin(th), x0 = r * cx, y0 = r * sx;
+                let dx = (U[0] * cx - U[1] * sx) * spx, dy = (U[0] * sx + U[1] * cx) * spx, dz = U[2] * spx; const L = Math.hypot(dx, dy, dz), Lm = 0.012;
+                if (L < 4e-4) continue; if (L > Lm) { dx *= Lm / L; dy *= Lm / L; dz *= Lm / L; }
+                const P0 = [x0, z, -y0], P1 = [x0 + dx, z + dz, -(y0 + dy)];
+                const bx = P1[0] - P0[0], by = P1[1] - P0[1], bz = P1[2] - P0[2], bl = Math.hypot(bx, by, bz), hl = Math.min(0.0025, 0.4 * bl);
+                const ux = bx / bl, uy = by / bl, uz = bz / bl, wx = -uy * 0 + uz * 0, side = [-(uz), 0, ux];   // a head in the vertical plane of the arrow
+                const sl = Math.hypot(side[0], side[1], side[2]) || 1; side[0] /= sl; side[2] /= sl;
+                const put = (A, B) => { arrowPos.set(A, 6 * n); arrowPos.set(B, 6 * n + 3); n++; };
+                put(P0, P1);
+                const bxh = P1[0] - ux * hl, byh = P1[1] - uy * hl, bzh = P1[2] - uz * hl, w = hl * 0.45;
+                put(P1, [bxh + side[0] * w + 0 * wx, byh + 0.45 * hl * (Math.abs(uy) < 0.9 ? 1 : 0), bzh + side[2] * w]);
+                put(P1, [bxh - side[0] * w, byh - 0.45 * hl * (Math.abs(uy) < 0.9 ? 1 : 0), bzh - side[2] * w]);
+            }
+            arrowG.setDrawRange(0, 2 * n); arrowG.attributes.position.needsUpdate = true; arrows.visible = xray;
+            // the cut plane outline
+            const cp = cutG.attributes.position.array, R = 0.044, c0 = Math.cos(thP), s0 = Math.sin(thP);
+            const pts = [[-R, S.ZF], [R, S.ZF], [R, S.H], [-R, S.H], [-R, S.ZF]];
+            pts.forEach((p, i) => { cp[3 * i] = p[0] * c0; cp[3 * i + 1] = p[1]; cp[3 * i + 2] = -p[0] * s0; });
+            cutG.attributes.position.needsUpdate = true; cut.computeLineDistances(); cut.visible = xray;
+            renderer.render(scene, cam);
+        }
+        window.SLOSH3D = { render, renderer, scene, cam, view, placeCam, get canvas() { return el; } };
+        render();
+    } catch (err) {
+        const fb = document.getElementById('s3-fallback') || host.appendChild(Object.assign(document.createElement('p'), { className: 's3-fallback' })); fb.textContent = 'The 3D view needs WebGL, which this browser does not offer. The cut and the trace below still run.';
+        console.error(err);
+    }
+    </script>
+    <script src="../scripts/datalog.js"></script>
+</body>
+</html>
