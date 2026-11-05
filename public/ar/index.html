@@ -24,7 +24,7 @@
   
     <link rel="stylesheet" href="../fonts/arabic.css" />
     <script src="../scripts/i18n/strings-ar.js"></script>
-    <meta name="translated-from" content="English index.html, commit c7c4894+" />
+    <meta name="translated-from" content="English index.html, commit 630a2fc+" />
   </head>
 
   <body>
@@ -59,6 +59,88 @@
         </figcaption>
       </figure>
     </header>
+
+    <!--LUCRETIUS-->
+    <section class="lq" aria-labelledby="lq-h">
+      <style>
+        /* Lucretius on the home page: the Latin as an inscription; a published translation of each sentence rises beside it */
+        .lq { max-width: 1100px; margin: 0 auto; padding: 0 32px 56px; box-sizing: border-box; } .lq *, .lq *::before, .lq *::after { box-sizing: border-box; }
+        .lq-wall { position: relative; padding: clamp(20px, 3.4vw, 40px) clamp(14px, 3.4vw, 48px); background: linear-gradient(180deg, #f8f2e7, #f1e9db); border: 1px solid var(--rule); border-radius: 14px; }
+        .lq-k { margin: 0 0 16px; padding-left: 3rem; font-family: var(--mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); }
+        .lq-s { width: fit-content; max-width: 100%; margin: 0 0 .45em; padding: 2px 14px 2px 0; border-radius: 8px; cursor: default; outline: none; transition: background-color .25s ease; }
+        .lq-l { position: relative; display: block; padding-left: 3rem; font-family: 'Instrument Serif', Georgia, serif; font-size: clamp(19px, 2.2vw, 27px); line-height: 1.42; color: var(--ink); transition: color .25s ease; }
+        .lq-n { position: absolute; left: 0; top: .6em; width: 2.3rem; text-align: right; font-family: var(--mono); font-size: 10.5px; line-height: 1; color: var(--muted); }
+        .lq-s.is-on { background: rgba(122, 31, 43, .055); } .lq-s.is-on .lq-l { color: var(--accent-dark); } .lq-s:focus-visible { box-shadow: 0 0 0 2px var(--accent); }
+        .lq-how { margin: 14px 0 0; padding-left: 3rem; font-size: 13px; color: var(--ink-3); }
+        .lq-card { position: absolute; z-index: 5; left: clamp(14px, 3.4vw, 48px); width: min(560px, calc(100% - 2 * clamp(14px, 3.4vw, 48px))); padding: 13px 18px; background: var(--card); border: 1px solid var(--rule); border-left: 3px solid var(--accent); border-radius: 10px; box-shadow: 0 10px 30px rgba(60, 40, 20, .12); opacity: 0; transform: translateY(8px); pointer-events: none; transition: opacity .18s ease, transform .26s cubic-bezier(.2, .7, .2, 1), top .26s cubic-bezier(.2, .7, .2, 1); }
+        .lq-card.is-shown { opacity: 1; transform: none; } .lq-card.is-pinned { pointer-events: auto; }
+        .lq-card__h { display: block; margin-bottom: 7px; font-family: var(--mono); font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+        .lq-card__l { display: block; font-family: var(--serif); font-style: italic; font-size: 16px; line-height: 1.5; color: var(--ink-2); }
+        .lq-card__note, .lq-card__pin { display: block; margin-top: 8px; font-size: 12.5px; line-height: 1.5; color: var(--ink-3); } .lq-card__pin { font-family: var(--mono); font-size: 10.5px; color: var(--muted); }
+        .lq-src { margin: 10px 0 0; font-size: 12px; line-height: 1.55; color: var(--muted); max-width: none; }
+        .lq-src a { color: inherit; } .lq-hide { display: none; }
+        @media (max-width: 560px) { .lq { padding: 0 16px 40px; } .lq-wall { padding: 16px 8px 16px 4px; } .lq-l { font-size: clamp(15px, 4.2vw, 19px); } .lq-l, .lq-k, .lq-how { padding-left: 2.1rem; } .lq-n { width: 1.6rem; font-size: 9.5px; } .lq-card { left: 6px; width: calc(100% - 12px); } }
+        @media (prefers-reduced-motion: reduce) { .lq-card { transition: opacity .12s linear; transform: none; } }
+      </style>
+      <div class="lq-wall" id="lq-wall" dir="ltr">
+        <p class="lq-k" id="lq-h" dir="auto">لوكريتيوس · في طبيعة الأشياء · الكتاب الأول، الأبيات ⁦146–158⁩</p>
+        <p class="lq-s" data-g="0" tabindex="0" translate="no" lang="la"><span class="lq-l"><span class="lq-n" aria-hidden="true">146</span>hunc igitur terrorem animi tenebrasque necessest</span><span class="lq-l"><span class="lq-n" aria-hidden="true"></span>non radii solis neque lucida tela diei</span><span class="lq-l"><span class="lq-n" aria-hidden="true"></span>discutiant, sed naturae species ratioque.</span></p>
+        <p class="lq-s" data-g="1" tabindex="0" translate="no" lang="la"><span class="lq-l"><span class="lq-n" aria-hidden="true"></span>Principium cuius hinc nobis exordia sumet,</span><span class="lq-l"><span class="lq-n" aria-hidden="true">150</span>nullam rem e nihilo gigni divinitus umquam.</span></p>
+        <p class="lq-s" data-g="2" tabindex="0" translate="no" lang="la"><span class="lq-l"><span class="lq-n" aria-hidden="true"></span>quippe ita formido mortalis continet omnis,</span><span class="lq-l"><span class="lq-n" aria-hidden="true"></span>quod multa in terris fieri caeloque tuentur,</span><span class="lq-l"><span class="lq-n" aria-hidden="true"></span>quorum operum causas nulla ratione videre</span><span class="lq-l"><span class="lq-n" aria-hidden="true"></span>possunt ac fieri divino numine rentur.</span></p>
+        <p class="lq-s" data-g="3" tabindex="0" translate="no" lang="la"><span class="lq-l"><span class="lq-n" aria-hidden="true">156</span>quas ob res ubi viderimus nil posse creari</span><span class="lq-l"><span class="lq-n" aria-hidden="true"></span>de nihilo, tum quod sequimur iam rectius inde</span><span class="lq-l"><span class="lq-n" aria-hidden="true"></span>perspiciemus, et unde queat res quaeque creari</span><span class="lq-l"><span class="lq-n" aria-hidden="true">155</span>et quo quaeque modo fiant opera sine divom.</span></p>
+        <p class="lq-how" dir="auto">ضع المؤشر فوق بيت، أو المسه، لتقرأ جملته في ترجمة منشورة.</p>
+        <div class="lq-card" id="lq-card" role="status" aria-live="polite" hidden><span class="lq-card__h"></span><span class="lq-card__b"></span><span class="lq-card__note"></span><span class="lq-card__pin"></span></div>
+      </div>
+      <p class="lq-src">اللاتينية: <a href="https://www.thelatinlibrary.com/lucretius/lucretius1.shtml">The Latin Library</a>، روجعت على طبعة هيرمان ديلس (برلين، 1923). الإنجليزية: ويليام إليري ليونارد (1916، <a href="https://www.gutenberg.org/ebooks/785">مشروع غوتنبرغ</a>). الألمانية: هيرمان ديلس (1924). وتورد المخطوطات البيت 155 بعد البيت 158.</p>
+      <div class="lq-hide" aria-hidden="true"><span id="lq-w-lines">الأبيات</span><span id="lq-cr-en">ويليام إليري ليونارد، 1916</span><span id="lq-cr-de">هيرمان ديلس، 1924</span><span id="lq-w-pin">تبقى البطاقة مفتوحة · انقر مرة أخرى أو اضغط Esc لإغلاقها</span><span id="lq-w-ar">لا توجد ترجمة عربية حرّة لهذه الأبيات؛ فالبطاقة تعرض نصّ ليونارد الإنجليزي.</span></div>
+      <script>
+      (function () {
+        'use strict';
+        var P = [{"n": [146, 148], "en": ["This terror, then, this darkness of the mind,", "Not sunrise with its flaring spokes of light,", "Nor glittering arrows of morning can disperse,", "But only Nature's aspect and her law,"], "de": ["Jene Gemütsangst nun und die lastende Geistesverfinstrung", "Kann nicht der Sonnenstrahl und des Tages leuchtende Helle", "Scheuchen, sondern allein die Naturanschauung und Forschung."]}, {"n": [149, 150], "en": ["Which, teaching us, hath this exordium:", "Nothing from nothing ever yet was born."], "de": ["Sie muß füglich beginnen mit folgendem obersten Leitsatz;", "Nichts kann je aus dem Nichts entstehn durch göttliche Schöpfung."]}, {"n": [151, 154], "en": ["Fear holds dominion over mortality", "Only because, seeing in land and sky", "So much the cause whereof no wise they know,", "Men think Divinities are working there."], "de": ["Denn nur darum beherrschet die Furcht die Sterblichen alle,", "Weil sie am Himmel und hier auf Erden gar vieles geschehen", "Sehen, von dem sie den Grund durchaus nicht zu fassen vermögen.", "Darum schreiben sie solches Geschehn wohl der göttlichen Macht zu."]}, {"n": [155, 158], "en": ["Meantime, when once we know from nothing still", "Nothing can be create, we shall divine", "More clearly what we seek: those elements", "From which alone all things created are,", "And how accomplished by no tool of Gods."], "de": ["Haben wir also gesehen, daß nichts aus dem Nichts wird geschaffen,", "Dann wird richtiger auch die Folgerung draus sich ergeben,", "Woraus füglich ein jegliches Ding zu entstehen im Stand ist", "Und wie alles sich bildet auch ohne die Hilfe der Götter."]}];
+        var lang = (document.documentElement.lang || 'en').slice(0, 2), useDe = lang === 'de';
+        var wall = document.getElementById('lq-wall'), card = document.getElementById('lq-card');
+        var hEl = card.querySelector('.lq-card__h'), bEl = card.querySelector('.lq-card__b'), nEl = card.querySelector('.lq-card__note'), pEl = card.querySelector('.lq-card__pin');
+        var word = function (id) { return document.getElementById(id).textContent.replace(/\s+/g, ' ').trim(); };
+        var credit = word(useDe ? 'lq-cr-de' : 'lq-cr-en'), linesW = word('lq-w-lines'), pinW = word('lq-w-pin'), arW = word('lq-w-ar');
+        var blocks = Array.prototype.slice.call(wall.querySelectorAll('.lq-s')), cur = -1, pinned = false, tShow = 0, tHide = 0;
+        function mark(k) { blocks.forEach(function (b) { b.classList.toggle('is-on', +b.getAttribute('data-g') === k); }); }
+        function fill(k) {
+          var g = P[k], tr = useDe ? g.de : g.en;
+          hEl.textContent = linesW + ' \u2066' + g.n[0] + '–' + g.n[1] + '\u2069 · ' + credit; hEl.dir = lang === 'ar' ? 'rtl' : 'ltr';
+          bEl.textContent = ''; tr.forEach(function (l) { var s = document.createElement('span'); s.className = 'lq-card__l'; s.textContent = l; bEl.appendChild(s); }); bEl.lang = useDe ? 'de' : 'en'; bEl.dir = 'ltr';
+          nEl.textContent = lang === 'ar' ? arW : ''; nEl.hidden = lang !== 'ar'; nEl.dir = lang === 'ar' ? 'rtl' : 'ltr';
+          pEl.textContent = pinned ? pinW : ''; pEl.hidden = !pinned; pEl.dir = lang === 'ar' ? 'rtl' : 'ltr';
+        }
+        function place(b) {   // beside the sentence where the wall has room on its right; otherwise above it, or below it near the top of the window
+          var wr = wall.getBoundingClientRect(), r = b.getBoundingClientRect(), right = 0, h;
+          blocks.forEach(function (x) { right = Math.max(right, x.getBoundingClientRect().right - wr.left); });
+          var room = wr.width - right - parseFloat(getComputedStyle(wall).paddingRight);
+          if (room >= 320) { card.style.left = (right + 24) + 'px'; card.style.width = Math.min(520, room - 24) + 'px'; h = card.offsetHeight;
+            var top = Math.min(r.top - wr.top, window.innerHeight - 12 - h - wr.top); card.style.top = Math.max(8, Math.min(top, wall.clientHeight - h - 8)) + 'px'; return; }
+          card.style.left = ''; card.style.width = ''; h = card.offsetHeight;
+          card.style.top = (r.top - h - 12 >= 8 ? r.top - wr.top - h - 12 : r.bottom - wr.top + 12) + 'px';
+        }
+        function show(k) {
+          clearTimeout(tHide); var b = blocks[k], first = card.hidden || !card.classList.contains('is-shown'); mark(k); fill(k); card.hidden = false; cur = k;
+          if (first) { card.style.transition = 'none'; place(b); void card.offsetHeight; card.style.transition = ''; requestAnimationFrame(function () { card.classList.add('is-shown'); }); } else place(b);
+          card.classList.toggle('is-pinned', pinned);
+        }
+        function hide(force) { if (pinned && !force) return; pinned = false; card.classList.remove('is-shown', 'is-pinned'); mark(-1); cur = -1; }
+        function blockOf(el) { while (el && el !== wall) { if (el.classList && el.classList.contains('lq-s')) return el; el = el.parentNode; } return null; }
+        wall.addEventListener('pointerover', function (e) { if (e.pointerType !== 'mouse' || pinned) return; var b = blockOf(e.target); if (!b) return;
+          clearTimeout(tHide); clearTimeout(tShow); var k = +b.getAttribute('data-g'); tShow = setTimeout(function () { show(k); }, cur < 0 ? 150 : 70); });
+        wall.addEventListener('pointerout', function (e) { if (e.pointerType !== 'mouse' || pinned) return; if (blockOf(e.relatedTarget)) return; clearTimeout(tShow); tHide = setTimeout(function () { hide(); }, 240); });
+        wall.addEventListener('click', function (e) { var b = blockOf(e.target); if (!b) return; var k = +b.getAttribute('data-g'); clearTimeout(tShow); if (pinned && k === cur) { hide(true); return; } pinned = true; show(k); });
+        document.addEventListener('click', function (e) { if (pinned && !wall.contains(e.target)) hide(true); });
+        document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && cur >= 0) hide(true); });
+        blocks.forEach(function (b) { b.addEventListener('focus', function () { if (!pinned) show(+b.getAttribute('data-g')); }); b.addEventListener('blur', function () { if (!pinned) hide(); });
+          b.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); b.click(); } }); });
+        window.addEventListener('resize', function () { if (cur >= 0) place(blocks[cur]); });
+        window.LQ = { show: show, hide: hide, get cur() { return cur; }, get pinned() { return pinned; } };
+      })();
+      </script>
+    </section>
+    <!--/LUCRETIUS-->
 
     <div class="layout">
       <nav class="index" aria-label="الأقسام" data-fold-bar>
