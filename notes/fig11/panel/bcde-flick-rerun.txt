@@ -1,0 +1,16 @@
+== flick
+  d flick, 2.5 s after: stored px vs state→px (Node formulas): max |Δ| = 0 px
+  d flick, 2.5 s after: cart: cream from 374 to 460 px, centre 417 vs x→px 416.9 (Δ 0.09082 px, alpha at centre 255) PASS
+  d flick, 2.5 s after: hinge between the rods: white centroid (418.4, 250.3) of 40 px vs θ₁→px (418.4, 250.2) (Δ 0.05412 px) PASS
+  d flick, 2.5 s after: top of the upper rod at θ₂→px (420.3, 64.26): along the rod, fully burgundy to 4.25 px beyond it and transparent from 4.3 px, round cap radius 4.25 px; across the rod 6 px below the top the burgundy (6.95 px wide) is centred 0.225 px off the axis PASS
+  energy book: E0 7.661 + W_motor 0.05333 + E_ext 0.1644 + E_wait 0 − E 7.878 = 1.87e-10 J, 1.19e-11 of the flows
+  b page's own rk4 on every stored step: 6900/6900 bit-identical (0 steps of an earlier machine not replayed) PASS
+  b independent RK4 (Cramer, from (8a), (8), (8b)) on every stored step: 6900 steps, max |Δs| = 4.44e-16, max |Δs| / |step change| = 1.71e-11 PASS (float64 rounding)
+  b step log continuity: 6897 joins exact, 0 broken, 0 gaps; outside changes by code {"1":2} (1 flick, 2 hand, 3 reset/new state, 4 wrap at hand-over, 9 unexplained) PASS
+  b chained independent replay from one stored state with the stored forces, 3617 steps (3.617 s): max |Δs| 0.1 s: 2.22e-16, 0.5 s: 2.78e-15, 1 s: 3.19e-13, 1.5 s: 5.71e-11, 2 s: 1.03e-8, 2.5 s: 1.86e-6, 3 s: 3.35e-4; growth rate of the gap between marks 9.5, 10.4, 10.4, 10.4, 10.4 1/s (open loop: the gap grows as fast as nearby motions part, at the fall rate σ₁ = 10.39 1/s near upright, slower while hanging or caught)
+  c force recomputed from each stored sample (state, reference, gains, limit, plan): 690 samples (balance 690, calm 0, track 0, off 0, cut 0), max |Δu| = 0 N, 0 unchecked PASS
+  c zero-order hold: 6896 RK4 steps hold exactly the force of the latest sample, 0 do not; 0 held steps with u = 0, 0 not PASS
+  c sample times: 689 intervals on the grid (steps per interval: {"10":689}), 0 off it, 0 restarts of the clock (reset, release, track start, hand-over), 0 samples away from their due time PASS
+  flick: 6900 steps (1.516–8.416 s), 690 samples → ALL PASS
+summary: 1/1 scenarios pass: flick ✓
+page errors: none

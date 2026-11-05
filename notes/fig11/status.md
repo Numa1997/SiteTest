@@ -1,3 +1,12 @@
+# Project 05 · data panel (5 November 2026)
+
+- The page has the data panel: store (125 variables; logs of every 1 ms step and every controller sample; frame values; an energy
+  book), ledger inside `Sim.data`, German and Arabic strings (DeepL, checked against the glossary). Docs:
+  `docs/simulations/fig11-double-inverted-pendulum.md`, "Data panel".
+- Honesty tests a–g in `notes/fig11/panel/` with raw outputs; the revised skill is `notes/skills/phyein-usul-data-panel/SKILL.md`
+  (Numa must upload it to his account: the synced copy in a session is read-only).
+- Not changed: the stage caption still says "Fig. 11" although the page is project 05 since 4 November (left for Numa to decide).
+
 # Fig. 11 · status and handoff (4 November 2026, evening)
 
 ## Done this evening (branch `fig11-sampled`, PR into main)

@@ -119,6 +119,10 @@ RULES = [
     (r'notes/fig(\d\d)/walk\.md', lambda m: 'Fig. %d: the walkthrough check and its proposed fixes.' % int(m.group(1)), 'docs/notes.md'),
     (r'notes/fig11/checked\.html', lambda m: 'Fig. 11: working notes of 4 November 2026, every term of the model and of the rescue with its Wolfram check and the code that was run.', 'docs/notes.md'),
     (r'notes/fig11/status\.md', lambda m: 'Fig. 11: status of the rescue work (done with evidence, open items, decisions for Numa).', 'docs/notes.md'),
+    (r'notes/fig11/panel/README\.md', 'Project 05: what each honesty test of the data panel checks, and how to run it.', 'docs/simulations/fig11-double-inverted-pendulum.md'),
+    (r'notes/fig11/panel/.+\.(cjs|py)', 'Project 05: an honesty test of the data panel (origin, replay, controller, picture, falsification, cost), or the masking and checked translations of its strings.', 'notes/fig11/panel/README.md'),
+    (r'notes/fig11/panel/.+\.txt', 'Project 05: raw output of an honesty test or behaviour test of the data panel, 5 November 2026.', 'notes/fig11/panel/README.md'),
+    (r'notes/skills/([a-z-]+)/SKILL\.md', lambda m: 'The revised skill ' + m.group(1) + ', to be uploaded to Numa\'s account (the synced copy in a session is read-only).', 'notes/fig11/panel/README.md'),
     (r'notes/fig(\d\d)/.+', lambda m: 'Fig. %d: a measuring script of the review, or its saved output.' % int(m.group(1)), 'docs/notes.md'),
     # root of the app
     (r'AGENTS\.md', "The maintainer's summary: ownership, layout, design rules, folds, the data pipeline, platform quirks.", 'docs/build-and-deploy.md'),

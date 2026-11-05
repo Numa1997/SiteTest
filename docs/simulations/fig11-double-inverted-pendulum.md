@@ -18,7 +18,7 @@ and back links say Project.
 
 A double inverted pendulum on a cart, with uniform rods: the model of Bogdanov (2004, OGI report CSE-04-006), written out in
 Moysis (2016). The cart is pushed by a motor force `u`, clipped to `±u_max`; the hinges are free. The page integrates the full nonlinear
-equations `D(θ) θ̈ + C(θ, θ̇) θ̇ + G(θ) = H u` with RK4 at a fixed 1 ms step in real time (no solve-then-play and no data panel: Numa asked for a small page). Since 3 November 2026, late evening, it has a walkthrough,
+equations `D(θ) θ̈ + C(θ, θ̇) θ̇ + G(θ) = H u` with RK4 at a fixed 1 ms step in real time (no solve-then-play: Numa asked for a small page; since 5 November 2026 it has a data panel, see [Data panel](#data-panel-5-november-2026)). Since 3 November 2026, late evening, it has a walkthrough,
 `public/scripts/walk/dipc.js` (equation beside the page's code, `Sim.live()` for the Now column; `node notes/walkcheck.cjs`
 finds all 65 quoted lines; fifteen steps since 4 November 2026, evening), and the note writes out all three Lagrange rows (8a), (8), (8b), the linearisation to first order, the
 reduced fall-rate problem, the sign-function solution of the Riccati equation, the flick impulse (17) and the RK4 step (18).
@@ -90,7 +90,80 @@ Tests (headless Chromium, frame-by-frame driver `notes/fig11/study/t9.cjs`: 1/60
 
 Flick the top (horizontal impulse `J` at the upper tip: `Δθ̇ = D⁻¹ (1, L1 cos θ1, L2 cos θ2)ᵀ J`), cart target −1/0/+1 m, Tilt and let go
 (θ1 = 6°, θ2 = −4°), controller on/off, grab either rod with the pointer (held at rest while pressed; `touch-action: pan-y` on the canvas so a
-phone still scrolls), sliders for `u_max`, `T_s`, `ρ`, `m0`, `m1`, `m2`, `L1`, `L2`. `window.DIPC` exposes the state for tests.
+phone still scrolls), sliders for `u_max`, `T_s`, `ρ`, `m0`, `m1`, `m2`, `L1`, `L2`. `window.DIPC` exposes the state for tests, and since 5 November 2026 also the store (`DIPC.ds`), the page's own `rk4` and `draw`.
+
+## Data panel (5 November 2026)
+
+At Numa's request the page carries the site's data panel, like the eleven figures: the store `Sim.dataset()` (`scripts/dataset.js`),
+the bookkeeper `scripts/datalog.js` with `styles/data.css`, and a ledger declared inside the page's own `Sim.data`
+([double-inverted-pendulum.html:1240](../../public/simulations/double-inverted-pendulum.html#L1240), ledger at
+[:1324](../../public/simulations/double-inverted-pendulum.html#L1324)). The store is declared from
+[:810](../../public/simulations/double-inverted-pendulum.html#L810); 125 variables in 11 sections.
+
+**The picture.** The page integrates live while a controller looks only every loop period, so it runs on three clocks: the 1 ms
+physics step, the controller's sample, and the frame. The store keeps a record of each, the way a lab keeps a fast data logger,
+a log book of every command sent to the motor, and a photograph per frame:
+
+| Rate | What is stored | Written in |
+|---|---|---|
+| every 1 ms step | step number, time, state before and after (`st_s0`, `st_s1`), force held (`st_u`), the sample whose force it holds (`st_j`), kind (0 RK4, 1 held by the hand), an outside change before the step (`st_jump`: 1 flick, 2 hand, 3 reset or new state, 4 wrap of the angles at hand-over, 9 unexplained), design number | `logStep()` [:1073](../../public/simulations/double-inverted-pendulum.html#L1073), called on the line after `s = rk4(p, s, u, H); tSim += H;` |
+| every controller sample (every T_s while balancing, every 10 ms while calming or tracking) | sample number, time, step number, due time, next due time, the state seen (`cs_s`), the force chosen (`cs_u`), the law (0 balance, 1 calm, 2 track, 3 off, 4 motor cut by the supervisor outside a sample), the reference's numbers (kind, place or target, speed, start time, glide's starting distance), centre of calming, plan start, plan number, force limit, design number | `logSample()` [:1064](../../public/simulations/double-inverted-pendulum.html#L1064), from `logStep()` when `tCtl` moved in the step |
+| every frame | state, wrapped angles, accelerations from `rhs()`, force, law, reference now (`x_r`, `v_r`, `ref_p`), W, W_red, E_p, the energy book, the supervisor's state, the settings | `diagnostics()` [:1089](../../public/simulations/double-inverted-pendulum.html#L1089), between `think()` and `draw()` |
+| every frame, by the drawing | scale, axle line, camera, view widening, cart, hinge and tip positions in css px | `draw()` [:1106](../../public/simulations/double-inverted-pendulum.html#L1106) |
+| on change | d, f, fall rates, K, P, Φ, Γ, R_d, \|λ\|, settling time, design number (`redesign()`); c*, 0.9 c*, busy flag (`recatch()`, `think()`); the plan the tracker follows, as the very arrays `trackU()` reads (`planStore()` [:1086](../../public/simulations/double-inverted-pendulum.html#L1086)) | |
+| every 20 ms | the trace of the lower figure (`tr_t`, `tr_th1`, `tr_th2`, `tr_u`) | `logStep()` |
+
+The logs hold 8192 rows (800 for the trace); a full log keeps its newer half (`copyWithin`), so it always holds the last 4 to 8 s
+(trace 8 to 16 s). Row counts are written with the rows (they were first written once per frame, and the driven test caught the stale
+count after a log dropped its half). The walkthrough quotes the three lines of the control loop as one block, so nothing was put
+between them: the state, time, due time and force are taken before `supervise()`
+([:1047](../../public/simulations/double-inverted-pendulum.html#L1047)), the due time of a sample is recorded inside `period()`
+(JavaScript reads `tCtl` before it calls `period()` in `tCtl += period()`, [:1013](../../public/simulations/double-inverted-pendulum.html#L1013)),
+and the step and sample are written after the integrator ([:1051](../../public/simulations/double-inverted-pendulum.html#L1051)).
+
+**The energy book.** The force is constant over a step, so its work in that step is exactly u (x_after − x_before). The book reads
+E₀ + W_motor + E_ext + E_wait = E, with E = ½ θ̇ᵀDθ̇ + f₁ cos θ₁ + f₂ cos θ₂ (`energy()`, [:1060](../../public/simulations/double-inverted-pendulum.html#L1060)); E_ext
+adds the energy of every flick, hand step and wrap; E_wait is an outside change made while the clock stands still, booked by the
+next step. The book opens again at a reset and at every change of the machine (until the next step it shows no numbers). Measured:
+it misses by 3.5 × 10⁻¹⁴ of the flows at rest and up to 4 × 10⁻⁹ after a drag and a fall (RK4's own error); the ledger's tolerance is 10⁻⁷.
+
+**What the reader sees, and what reads the store.** `draw()`, `drawTrace()`, the readouts beside the figure, the state sentence and
+`Sim.live` (the walkthrough's Now column) read the store only; before 5 November `Sim.live` called `rhs()` and `fallRates()` again,
+and the drawing read the page's own state. Headline: θ₁, θ₂, x, u, W, E. Read values pins the cart, the hinge between the rods, the
+top of the upper rod or the target. One round is ten seconds of simulated motion (`t`), columns x, θ₁, θ₂, u, W, E and the book's
+miss. Checks recompute every derived value from stored inputs (gains, P, Φ, Γ, R_d by designing again; |λ| from the stored Φ, Γ, K;
+W, W_red, E_p, E, x_r, v_r, the accelerations, the drawing's positions; a stored step by one RK4 step from the state before it;
+a stored force by the law of its row, `lawAt()` [:1202](../../public/simulations/double-inverted-pendulum.html#L1202)). Read-backs: the
+cart's cream body inside both edges and not outside, the white hinge disc, the burgundy top of the upper rod, the force arrow, the
+target. What differs between store and picture is in the `about` paragraph: one state per frame of about 17 steps, the camera that
+follows at 8 % per frame, the view that widens when the rods hang, thicker rods for heavier masses, clipped arrow and trace.
+
+**Proofs (5 November 2026, headless Chromium; scripts and raw outputs in [notes/fig11/panel/](../../notes/fig11/panel/)).**
+
+- a, origin (`origin.cjs`): every write into the store listed by its function, statically and at run time; `draw()` writes only its 15
+  drawing numbers; the display code calls no physics and reads no page state; `datalog.js`, `Sim.live` and the panel hooks write
+  nothing. θ₁ raised by 0.3 rad in the store alone and `draw()` called: the white hinge disc is drawn at the new place, not the old;
+  `Sim.live` shows the edit; the page's state is unchanged.
+- b, replay (`hon.cjs`, `ref.cjs`): every stored step replayed with the page's own `rk4`, bit-identical in every scenario
+  (6 000 to 16 000 steps each); with an independent RK4 written from rows (8a), (8), (8b) and solved by Cramer's rule, at most
+  1.8 × 10⁻¹⁵; the step log continuous to the bit except at logged outside changes, no gap, no unexplained change. A chained replay
+  from one stored state with the stored forces drifts apart open loop: the gap grows at 10.3 to 10.5 s⁻¹ near upright, the fall
+  rate σ₁ = 10.39 s⁻¹, slower while the rods hang.
+- c, controller: every stored force recomputed from its own row (balance, calm, track, off) to at most 1.4 × 10⁻¹⁴ N; every 1 ms step
+  holds exactly the force of its sample (zero-order hold); every interval between samples exactly T_s/h steps (10 at 10 ms, 40 at
+  40 ms) or 10 steps while calming or tracking, apart from logged restarts of the clock.
+- d, picture (device pixel ratio 1 and 2): cart centre within 0.35 px, hinge disc within 0.25 px, the top's round cap where it must be and
+  centred across the rod within 0.35 px, scans centred on the stored state turned into pixels; the drawing's stored pixels equal the state turned into pixels exactly.
+- e, scenarios: rest, flick, drag with the mouse, swing-up from hanging, random falls with Keep rolling and Stop the cart, T_s = 40 ms
+  (random fall and tilt), a glide after a cruise, a change of the force limit while balancing: all pass.
+- f, falsification (`fals.cjs`): a stored force +10⁻⁹ N, a stored state +10⁻¹² rad, and a page copy whose `draw()` uses its own state
+  with x + 1 cm each make the matching checks fail; reverted, all pass.
+- g, cost (`cost.cjs`): with the panel closed, script time per frame median 0.2 to 0.3 ms and p95 0.4 ms, before and after alike (two
+  runs each); the driven physics with the logs 0.049 to 0.055 ms per frame against 0.047 to 0.056 ms before. The panel's loop runs only while open
+  and live, recording, or showing a pin. A sweep across the running figure paints nothing with Read values off or on and grabs no rod;
+  a press with Read values on pins without grabbing; the strip changes 11 times in 3 s.
+- Behaviour unchanged: `t9.cjs` 40/40 random falls with Keep rolling and with Stop the cart, 48/48 and 48/48 on the eight other
+  machines; `t7.cjs` in English, German and Arabic at 1280 and 390 px without errors.
 
 ## Verified (3 November 2026)
 

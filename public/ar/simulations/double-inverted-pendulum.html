@@ -10,6 +10,7 @@
     <meta name="theme-color" content="#f5f1ea">
     <link rel="stylesheet" href="../../styles/sim.rtl.css">
     <link rel="stylesheet" href="../../styles/fold.rtl.css"><link rel="stylesheet" href="../../styles/i18n.css"><script src="../../scripts/flip.js"></script>
+    <link rel="stylesheet" href="../../styles/data.rtl.css">
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%237a1f2b'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='38' fill='%23f5f1ea'%3EN%3C/text%3E%3C/svg%3E">
     <style>
         .seg { display: flex; flex-wrap: wrap; gap: 4px; padding: 3px; border: 1px solid var(--rule); border-radius: 8px; }
@@ -23,7 +24,7 @@
 
     <link rel="stylesheet" href="../../fonts/arabic.css" />
     <script src="../../scripts/i18n/strings-ar.js"></script>
-    <meta name="translated-from" content="English public/simulations/double-inverted-pendulum.html, commit 630a2fc+" />
+    <meta name="translated-from" content="English public/simulations/double-inverted-pendulum.html, commit a6541c6+" />
   </head>
 <body>
     <header class="sim-top">
@@ -541,6 +542,7 @@
 
     <script src="../../scripts/fold.js"></script>
     <script src="../../scripts/sim.js"></script>
+    <script src="../../scripts/dataset.js"></script>
     <script>
     (function () {
         'use strict';
@@ -789,7 +791,156 @@
                 return { n: n, nom: nom, un: un, Kt: Kt, T: T }; };
         }
 
-        var vy = 0, p, K, Pm, Smod, lamNow = NaN, cLevel = null, catchIt = null, gmode = 'sampled', rolling = true, s, u = 0, xref = 0, on = true, rescue = true, lost = false, flat = false, tSim = 0, tCtl = 0, acc = 0, trace = [], held = 0, geo = null;
+        /* ---------- the store: every number this page computes is written here, at the line that computes it (scripts/dataset.js);
+           the drawing, the readouts, the walkthrough's live numbers and the data panel (scripts/datalog.js) only read it ---------- */
+        var NK = 8192, NJ = 8192, NTR = 800;   // rows kept of the step log, the sample log and the trace; when a log is full its older half is dropped
+        var ds = Sim.dataset({ title: 'Balancing two rods on a cart', attrs: { project: 5, page: 'double-inverted-pendulum.html', g: G, h: H, model: 'D(θ) θ̈ + C(θ, θ̇) θ̇ + G(θ) = H u (Bogdanov 2004)', integrator: 'fourth-order Runge–Kutta, fixed step 1 ms, live', controller: 'sampled every T_s; the force is held between samples (zero-order hold)', state: '(x, θ1, θ2, ẋ, θ̇1, θ̇2)', units: 'SI: kg, m, s, rad, N, J' } });
+        ds.dim('q', 6); ds.dim('q2', 6); ds.dim('dk', 6); ds.dim('two', 2); ds.dim('a3', 3); ds.dim('k', NK); ds.dim('j', NJ); ds.dim('n', NTR); ds.dim('p', 0); ds.dim('p1', 0);
+        /* what you set */
+        ds.var('m0', [], 'float', { symbol: 'm<sub>0</sub>', units: 'kg', long_name: 'cart mass', computed_in: 'm0 slider, read by par() in redesign()', digits: 3 });
+        ds.var('m1', [], 'float', { symbol: 'm<sub>1</sub>', units: 'kg', long_name: 'lower rod mass', computed_in: 'm1 slider, read by par() in redesign()', digits: 3 });
+        ds.var('m2', [], 'float', { symbol: 'm<sub>2</sub>', units: 'kg', long_name: 'upper rod mass', computed_in: 'm2 slider, read by par() in redesign()', digits: 3 });
+        ds.var('L1', [], 'float', { symbol: 'L<sub>1</sub>', units: 'm', long_name: 'lower rod length', computed_in: 'L1 slider, read by par() in redesign()', digits: 3 });
+        ds.var('L2', [], 'float', { symbol: 'L<sub>2</sub>', units: 'm', long_name: 'upper rod length', computed_in: 'L2 slider, read by par() in redesign()', digits: 3 });
+        ds.var('u_max', [], 'float', { symbol: 'u<sub>max</sub>', units: 'N', long_name: 'motor force limit', computed_in: 'Fmax slider, in diagnostics()', digits: 0 });
+        ds.var('Ts', [], 'float', { symbol: 'T<sub>s</sub>', units: 's', long_name: 'loop period: the balancer looks once every T_s', computed_in: 'Ts slider, in redesign()', formula: 'slider / 1000', digits: 3 });
+        ds.var('rho', [], 'float', { symbol: 'ρ', long_name: 'cost of force in the cost (14)', computed_in: 'rho slider, in redesign()', formula: 'ρ = 10<sup>slider</sup>', digits: 4 });
+        ds.var('J', [], 'float', { symbol: 'J', units: 'N s', long_name: 'flick strength', computed_in: 'J slider, in diagnostics()', digits: 2 });
+        ds.var('ctrl_on', [], 'bool', { symbol: 'on', long_name: 'controller on', computed_in: 'the Controller switch' });
+        ds.var('rescue_on', [], 'bool', { symbol: 'rescue', long_name: 'swing back up when the rods fall', computed_in: 'the If the rods fall switch' });
+        ds.var('rolling', [], 'bool', { symbol: 'rolling', long_name: 'keep rolling after a swing-up', computed_in: 'the After a swing-up switch' });
+        ds.var('gmode', [], 'str', { symbol: 'gains', long_name: 'gains designed for the loop period (sampled) or for continuous time (cont)', computed_in: 'the Gains designed for switch' });
+        ds.var('x_target', [], 'float', { symbol: 'x<sub>target</sub>', units: 'm', long_name: 'cart target from the buttons', computed_in: 'the target buttons', digits: 2 });
+        ds.var('playing', [], 'bool', { symbol: 'playing', long_name: 'the clock runs', computed_in: 'Sim.clock' });
+        /* constants of the page code */
+        ds.var('Qw', ['q'], Float64Array, { symbol: 'Q', long_name: 'weights of the state in the cost (14), on (x, θ₁, θ₂, ẋ, θ̇₁, θ̇₂)', computed_in: 'the constant Q', digits: 0 });
+        ds.var('glide_w', [], 'float', { symbol: 'ω<sub>g</sub>', units: '1/s', long_name: 'rate of the glide to a new target (26)', computed_in: 'the constant GLIDE', digits: 2 });
+        ds.var('calm_k', [], 'float', { symbol: 'k<sub>c</sub>', units: '1/(kg s)', long_name: 'gain of the calming law (21)', computed_in: 'the constant CALM_K', digits: 2 });
+        /* what follows from the machine */
+        ds.var('d', ['dk'], Float64Array, { symbol: 'd<sub>i</sub>', long_name: 'the six constants of the kinetic energy (5): kg, kg m, kg m, kg m², kg m², kg m²', computed_in: 'par(), in redesign()', formula: 'd₁ = m₀+m₁+m₂, d₂ = (m₁/2+m₂)L₁, d₃ = m₂L₂/2, d₄ = (m₁/3+m₂)L₁², d₅ = m₂L₁L₂/2, d₆ = m₂L₂²/3', digits: 5 });
+        ds.var('f', ['two'], Float64Array, { symbol: 'f<sub>i</sub>', units: 'N m', long_name: 'the two constants of the potential energy (7)', computed_in: 'par(), in redesign()', formula: 'f₁ = (m₁/2+m₂)L₁g, f₂ = m₂L₂g/2', digits: 5 });
+        ds.var('sig', ['two'], Float64Array, { symbol: 'σ<sub>i</sub>', units: '1/s', long_name: 'fall rates with the controller off (13)', computed_in: 'fallRates(), in redesign()', digits: 5 });
+        ds.var('t_efold', [], 'float', { symbol: 'τ', units: 's', long_name: 'a lean grows e-fold in', computed_in: 'redesign()', formula: 'τ = 1/σ₁', digits: 4 });
+        /* the controller */
+        ds.var('K', ['q'], Float64Array, { symbol: 'K', long_name: 'gains of the balancer: u = −K (s − s<sub>r</sub>); N/m, N/rad, N/rad, N s/m, N s/rad, N s/rad', computed_in: 'dlqr() or lqr(), in redesign()', digits: 5 });
+        ds.var('P', ['q', 'q2'], Float64Array, { symbol: 'P', long_name: 'cost-to-go matrix: W = (s − s<sub>r</sub>)ᵀ P (s − s<sub>r</sub>)', computed_in: 'dlqr() or lqr(), in redesign()', digits: 5, cw: 90 });
+        ds.var('Phi', ['q', 'q2'], Float64Array, { symbol: 'Φ', long_name: 'the linear machine over one loop period (16b)', computed_in: 'sampledModel(), in redesign()', formula: 'Φ = e<sup>AT<sub>s</sub></sup>', digits: 6, cw: 90 });
+        ds.var('Gam', ['q'], Float64Array, { symbol: 'Γ', long_name: 'what one held push of 1 N does over one period (16b)', computed_in: 'sampledModel(), in redesign()', formula: 'Γ = ∫₀<sup>T<sub>s</sub></sup> e<sup>Aτ</sup> dτ B', digits: 6 });
+        ds.var('Rd', [], 'float', { symbol: 'R<sub>d</sub>', long_name: 'cost of the held push over one period (16f)', computed_in: 'sampledModel(), in redesign()', digits: 6 });
+        ds.var('lam', [], 'float', { symbol: '|λ|', long_name: 'largest factor per look of the sampled loop', computed_in: 'specRad(Φ − ΓK), in redesign()', digits: 5 });
+        ds.var('t_settle', [], 'float', { symbol: 't<sub>set</sub>', units: 's', long_name: 'slowest settling time; undefined when |λ| ≥ 1', computed_in: 'redesign()', formula: '−T<sub>s</sub> / ln|λ|', digits: 3 });
+        ds.var('ver', [], 'int', { symbol: 'design', long_name: 'design number: redesigns since the page loaded', computed_in: 'redesign()', digits: 0 });
+        ds.var('c_star', [], 'float', { symbol: 'c*', long_name: 'certified catch level (19a); undefined while it is being computed', computed_in: 'catchGen(), run by think()', digits: 2 });
+        ds.var('c_busy', [], 'bool', { symbol: 'c* busy', long_name: 'the catch level is being computed', computed_in: 'recatch() and think()' });
+        ds.var('c_hand', [], 'float', { symbol: '0.9 c*', long_name: 'hand-over level: tracking hands over to the balancer below it', computed_in: 'think()', formula: '0.9 c*', digits: 2 });
+        /* the state now, once per frame */
+        ds.var('t', [], 'float', { symbol: 't', units: 's', long_name: 'simulated time', computed_in: 'step(): t ← t + h', digits: 3 });
+        ds.var('s_now', ['q'], Float64Array, { symbol: 's', long_name: 'the state (x, θ₁, θ₂, ẋ, θ̇₁, θ̇₂) at the end of the frame', computed_in: 'rk4() in step(), stored in diagnostics()', digits: 6 });
+        ds.var('x', [], 'float', { symbol: 'x', units: 'm', long_name: 'cart position', computed_in: 'diagnostics()', formula: 's[0]', digits: 4 });
+        ds.var('xd', [], 'float', { symbol: 'ẋ', units: 'm/s', long_name: 'cart velocity', computed_in: 'diagnostics()', formula: 's[3]', digits: 4 });
+        ds.var('th1w', [], 'float', { symbol: 'θ<sub>1</sub>', units: 'rad', long_name: 'lower rod lean from upright, wrapped to ±π', computed_in: 'diagnostics()', formula: 'wrap(s[1])', digits: 5 });
+        ds.var('th2w', [], 'float', { symbol: 'θ<sub>2</sub>', units: 'rad', long_name: 'upper rod lean from upright, wrapped to ±π', computed_in: 'diagnostics()', formula: 'wrap(s[2])', digits: 5 });
+        ds.var('qdd', ['a3'], Float64Array, { symbol: 'q̈', long_name: 'accelerations now: ẍ in m/s², θ̈₁ and θ̈₂ in rad/s²', computed_in: 'rhs(), in diagnostics()', formula: 'D⁻¹ (H u − C θ̇ − G)', digits: 5 });
+        ds.var('u', [], 'float', { symbol: 'u', units: 'N', long_name: 'motor force now, held since the last sample', computed_in: 'control(), at the last controller sample', digits: 4 });
+        ds.var('mode', [], 'str', { symbol: 'mode', long_name: 'the supervisor’s law: balance, calm or track', computed_in: 'supervise() and control()' });
+        ds.var('held', [], 'int', { symbol: 'held', long_name: 'rod held by your hand: 0 none, 1 lower, 2 upper', computed_in: 'the pointer on the figure', digits: 0 });
+        ds.var('lost', [], 'bool', { symbol: 'lost', long_name: 'fallen while rescue is off', computed_in: 'supervise()' });
+        ds.var('ref_kind', [], 'str', { symbol: 'ref', long_name: 'the balancer’s reference: fixed, cruise or glide (25)–(26)', computed_in: 'the buttons, supervise() and control()' });
+        ds.var('x_r', [], 'float', { symbol: 'x<sub>r</sub>', units: 'm', long_name: 'reference position now', computed_in: 'refXV(t), in diagnostics()', digits: 4 });
+        ds.dim('r4', 4);
+        ds.var('ref_p', ['r4'], Float64Array, { symbol: 'ref', long_name: 'the reference’s numbers: place (or target), speed, start time, glide’s starting distance', computed_in: 'the buttons, supervise() and control(); stored in diagnostics()', digits: 4 });
+        ds.var('v_r', [], 'float', { symbol: 'v<sub>r</sub>', units: 'm/s', long_name: 'reference speed now', computed_in: 'refXV(t), in diagnostics()', digits: 4 });
+        ds.var('W', [], 'float', { symbol: 'W', long_name: 'remaining cost (19), measured from the reference', computed_in: 'Wof(), in diagnostics()', formula: '(s − s<sub>r</sub>)ᵀ P (s − s<sub>r</sub>)', digits: 4 });
+        ds.var('W_red', [], 'float', { symbol: 'W<sub>red</sub>', long_name: 'remaining cost with the cart’s errors set to zero, for the hand-over while rolling', computed_in: 'Wred(), in diagnostics()', digits: 4 });
+        ds.var('Ep', [], 'float', { symbol: 'E<sub>p</sub>', units: 'J', long_name: 'the rods’ energy in the cart’s frame (20)', computed_in: 'Ep(), in diagnostics()', digits: 5 });
+        /* the energy book: the motor’s work, the hand’s and the flicks’ go into the machine; the integrator’s error is what is left */
+        ds.var('E', [], 'float', { symbol: 'E', units: 'J', long_name: 'energy of cart and rods, T + V', computed_in: 'energy(), in diagnostics()', formula: '½ θ̇ᵀ D θ̇ + f₁ cos θ₁ + f₂ cos θ₂', digits: 6 });
+        ds.var('E0', [], 'float', { symbol: 'E<sub>0</sub>', units: 'J', long_name: 'energy when the book was opened, at a reset or a change of the machine', computed_in: 'logStep()', digits: 6 });
+        ds.var('W_motor', [], 'float', { symbol: 'W<sub>motor</sub>', units: 'J', long_name: 'work of the motor since then; the force is constant over a step, so its work is u Δx', computed_in: 'logStep(), every step', formula: 'Σ u (x<sub>after</sub> − x<sub>before</sub>)', digits: 6 });
+        ds.var('E_ext', [], 'float', { symbol: 'E<sub>ext</sub>', units: 'J', long_name: 'energy put in from outside since then: flicks, your hand, a wrap', computed_in: 'logStep(), at each outside change and each held step', digits: 6 });
+        ds.var('E_wait', [], 'float', { symbol: 'E<sub>wait</sub>', units: 'J', long_name: 'energy of an outside change not yet booked by a step (while paused)', computed_in: 'diagnostics()', digits: 6 });
+        ds.var('bal', [], 'float', { symbol: 'ε<sub>E</sub>', units: 'J', long_name: 'what the book misses: the integrator’s error', computed_in: 'diagnostics()', formula: 'E<sub>0</sub> + W<sub>motor</sub> + E<sub>ext</sub> + E<sub>wait</sub> − E', digits: 3, sci: true });
+        /* the supervisor */
+        ds.var('attempt', [], 'int', { symbol: 'attempt', long_name: 'swing-up plans started', computed_in: 'startAttempt()', digits: 0 });
+        ds.var('hp', [], 'float', { symbol: 'h<sub>p</sub>', units: 's', long_name: 'how far ahead the next plan starts', computed_in: 'startAttempt() and supervise()', digits: 2 });
+        ds.var('x_c', [], 'float', { symbol: 'x<sub>c</sub>', units: 'm', long_name: 'centre of calming and of the plan', computed_in: 'supervise() and swingUp()', digits: 3 });
+        ds.var('t_plan', [], 'float', { symbol: 't<sub>plan</sub>', units: 's', long_name: 'time the plan starts or started', computed_in: 'startAttempt()', digits: 3 });
+        ds.var('plan_busy', [], 'bool', { symbol: 'planning', long_name: 'a plan is being computed', computed_in: 'think()' });
+        ds.var('plan_ready', [], 'bool', { symbol: 'ready', long_name: 'a plan is ready and waits for its start', computed_in: 'think()' });
+        ds.var('next_check', [], 'float', { symbol: 't<sub>check</sub>', units: 's', long_name: 'time of the next check of W', computed_in: 'supervise()', digits: 2 });
+        /* the plan being tracked (stored when it is made; these are the very arrays trackU() reads) */
+        ds.var('pl_serial', [], 'int', { symbol: 'plan', long_name: 'plans made so far; the last one is stored', computed_in: 'think()', digits: 0 });
+        ds.var('pl_n', [], 'int', { symbol: 'n<sub>plan</sub>', long_name: 'number of 10 ms steps in the stored plan', computed_in: 'PlanJob.track()', digits: 0 });
+        ds.var('pl_t0', [], 'float', { symbol: 't<sub>0</sub>', units: 's', long_name: 'time the stored plan starts', computed_in: 'startAttempt()', digits: 3 });
+        ds.var('pl_xc', [], 'float', { symbol: 'x<sub>c</sub>', units: 'm', long_name: 'cart centre of the stored plan', computed_in: 'supervise()', digits: 3 });
+        ds.var('pl_u', ['p'], Float64Array, { symbol: 'u<sub>plan</sub>', units: 'N', long_name: 'planned force on the 10 ms grid', computed_in: 'PlanJob.track()', digits: 4 });
+        ds.var('pl_K', ['p', 'q'], Float64Array, { symbol: 'K(t)', long_name: 'time-varying gains of the tracking controller (23)–(24)', computed_in: 'PlanJob.track()', digits: 4, cw: 80 });
+        ds.var('pl_nom', ['p1', 'q'], Float64Array, { symbol: 's<sub>plan</sub>', long_name: 'planned state, cart measured from x_c', computed_in: 'PlanJob.track()', digits: 5, cw: 80 });
+        /* the controller's samples: one row each time it looks, written as it looks */
+        var CS = ['cs_i', 'cs_t', 'cs_k', 'cs_due', 'cs_next', 'cs_s', 'cs_u', 'cs_mode', 'cs_rk', 'cs_rx', 'cs_rv', 'cs_rt0', 'cs_re0', 'cs_xc', 'cs_tp', 'cs_pl', 'cs_ver', 'cs_umax'];
+        ds.var('cs_n', [], 'int', { symbol: 'rows', long_name: 'samples kept in the log', computed_in: 'logSample()', digits: 0 });
+        ds.var('cs_last', [], 'int', { symbol: 'last', long_name: 'row of the newest sample', computed_in: 'logSample()', digits: 0 });
+        ds.coord('cs_i', 'j', Int32Array, { symbol: 'j', long_name: 'sample number since the page loaded', computed_in: 'logSample()', digits: 0 });
+        ds.var('cs_t', ['j'], Float64Array, { symbol: 't<sub>j</sub>', units: 's', long_name: 'time of the sample', computed_in: 'logSample()', digits: 3 });
+        ds.var('cs_k', ['j'], Int32Array, { symbol: 'k<sub>j</sub>', long_name: 'number of the physics step that starts at the sample', computed_in: 'logSample()', digits: 0 });
+        ds.var('cs_due', ['j'], Float64Array, { symbol: 't<sub>due</sub>', units: 's', long_name: 'time the sample was due; undefined for a cut', computed_in: 'step(), the value of tCtl', digits: 4 });
+        ds.var('cs_next', ['j'], Float64Array, { symbol: 't<sub>next</sub>', units: 's', long_name: 'time the next sample is due', computed_in: 'step(): tCtl += period()', digits: 4 });
+        ds.var('cs_s', ['j', 'q'], Float64Array, { symbol: 's<sub>j</sub>', long_name: 'the state the controller saw', computed_in: 'logSample()', digits: 6, cw: 84 });
+        ds.var('cs_u', ['j'], Float64Array, { symbol: 'u<sub>j</sub>', units: 'N', long_name: 'the force it chose, held until the next sample', computed_in: 'control()', digits: 5 });
+        ds.var('cs_mode', ['j'], Int8Array, { symbol: 'law', long_name: 'law used: 0 balance, 1 calm, 2 track, 3 off, 4 motor cut', computed_in: 'control() and supervise()', digits: 0 });
+        ds.var('cs_rk', ['j'], Int8Array, { symbol: 'ref', long_name: 'reference: 0 fixed, 1 cruise, 2 glide', computed_in: 'logSample()', digits: 0 });
+        ds.var('cs_rx', ['j'], Float64Array, { symbol: 'x<sub>0</sub>', units: 'm', long_name: 'reference place: fixed or start of the cruise, or the glide’s target', computed_in: 'logSample()', digits: 4 });
+        ds.var('cs_rv', ['j'], Float64Array, { symbol: 'v<sub>0</sub>', units: 'm/s', long_name: 'reference speed at the start of a cruise or glide', computed_in: 'logSample()', digits: 4 });
+        ds.var('cs_rt0', ['j'], Float64Array, { symbol: 't<sub>0</sub>', units: 's', long_name: 'start time of the cruise or glide', computed_in: 'logSample()', digits: 3 });
+        ds.var('cs_re0', ['j'], Float64Array, { symbol: 'e<sub>0</sub>', units: 'm', long_name: 'glide’s starting distance from its target', computed_in: 'logSample()', digits: 4 });
+        ds.var('cs_xc', ['j'], Float64Array, { symbol: 'x<sub>c</sub>', units: 'm', long_name: 'centre of calming and of the plan', computed_in: 'logSample()', digits: 3 });
+        ds.var('cs_tp', ['j'], Float64Array, { symbol: 't<sub>plan</sub>', units: 's', long_name: 'start of the plan', computed_in: 'logSample()', digits: 3 });
+        ds.var('cs_pl', ['j'], Int32Array, { symbol: 'plan', long_name: 'number of the stored plan', computed_in: 'logSample()', digits: 0 });
+        ds.var('cs_umax', ['j'], Float64Array, { symbol: 'u<sub>max</sub>', units: 'N', long_name: 'force limit at the sample', computed_in: 'logSample()', digits: 0 });
+        ds.var('cs_ver', ['j'], Int32Array, { symbol: 'design', long_name: 'design number of the gains', computed_in: 'logSample()', digits: 0 });
+        /* the physics steps: one row per 1 ms RK4 step (or held step), written at the step */
+        var ST = ['st_i', 'st_t', 'st_s0', 'st_s1', 'st_u', 'st_j', 'st_kind', 'st_jump', 'st_ver'];
+        ds.var('st_n', [], 'int', { symbol: 'rows', long_name: 'steps kept in the log', computed_in: 'logStep()', digits: 0 });
+        ds.var('st_last', [], 'int', { symbol: 'last', long_name: 'row of the newest step', computed_in: 'logStep()', digits: 0 });
+        ds.coord('st_i', 'k', Int32Array, { symbol: 'k', long_name: 'step number since the page loaded', computed_in: 'logStep()', digits: 0 });
+        ds.var('st_t', ['k'], Float64Array, { symbol: 't<sub>k</sub>', units: 's', long_name: 'time at the start of the step', computed_in: 'logStep()', digits: 3 });
+        ds.var('st_s0', ['k', 'q'], Float64Array, { symbol: 's<sub>k</sub>', long_name: 'state before the step', computed_in: 'logStep()', digits: 6, cw: 84 });
+        ds.var('st_s1', ['k', 'q'], Float64Array, { symbol: 's<sub>k+1</sub>', long_name: 'state after the step', computed_in: 'rk4(), in step()', digits: 6, cw: 84 });
+        ds.var('st_u', ['k'], Float64Array, { symbol: 'u<sub>k</sub>', units: 'N', long_name: 'force held over the step', computed_in: 'logStep()', digits: 5 });
+        ds.var('st_j', ['k'], Int32Array, { symbol: 'j(k)', long_name: 'number of the sample whose force is held; −1 while your hand holds a rod', computed_in: 'logStep()', digits: 0 });
+        ds.var('st_kind', ['k'], Uint8Array, { symbol: 'kind', long_name: 'step: 0 RK4, 1 held by your hand (not integrated)', computed_in: 'logStep()', digits: 0 });
+        ds.var('st_jump', ['k'], Uint8Array, { symbol: 'jump', long_name: 'outside change before the step: 0 none, 1 flick, 2 hand, 3 reset or new state, 4 wrap at hand-over, 9 unexplained', computed_in: 'logStep()', digits: 0 });
+        ds.var('st_ver', ['k'], Int32Array, { symbol: 'design', long_name: 'design number of the machine', computed_in: 'logStep()', digits: 0 });
+        /* the trace in the lower figure: every 20 ms */
+        var TRn = ['tr_t', 'tr_th1', 'tr_th2', 'tr_u'];
+        ds.var('tr_n', [], 'int', { symbol: 'rows', long_name: 'trace samples kept', computed_in: 'logStep()', digits: 0 });
+        ds.var('tr_last', [], 'int', { symbol: 'last', long_name: 'row of the newest trace sample', computed_in: 'logStep()', digits: 0 });
+        ds.coord('tr_t', 'n', Float64Array, { symbol: 't<sub>n</sub>', units: 's', long_name: 'time of the trace sample, every 20 ms', computed_in: 'logStep()', digits: 2 });
+        ds.var('tr_th1', ['n'], Float64Array, { symbol: 'θ<sub>1</sub>', units: 'rad', long_name: 'lower rod lean, wrapped', computed_in: 'logStep()', digits: 5 });
+        ds.var('tr_th2', ['n'], Float64Array, { symbol: 'θ<sub>2</sub>', units: 'rad', long_name: 'upper rod lean, wrapped', computed_in: 'logStep()', digits: 5 });
+        ds.var('tr_u', ['n'], Float64Array, { symbol: 'u', units: 'N', long_name: 'motor force', computed_in: 'logStep()', digits: 4 });
+        /* the drawing */
+        ds.var('box_w', [], 'float', { symbol: 'w', units: 'css px', long_name: 'width of the figure', computed_in: 'Sim.canvas2d', digits: 0 });
+        ds.var('box_h', [], 'float', { symbol: 'h<sub>box</sub>', units: 'css px', long_name: 'height of the figure', computed_in: 'Sim.canvas2d', digits: 0 });
+        ds.var('vy', [], 'float', { symbol: 'v<sub>y</sub>', long_name: 'how far the view has widened for rods below the rail, 0 to 1 (eases at 6 % per frame)', computed_in: 'draw()', digits: 4 });
+        ds.var('sc', [], 'float', { symbol: 'σ', units: 'px/m', long_name: 'pixels per metre', computed_in: 'draw()', formula: 'min(w/(3.2 + 2v<sub>y</sub>), up + (down − up) v<sub>y</sub>)', digits: 3 });
+        ds.var('y0', [], 'float', { symbol: 'y<sub>0</sub>', units: 'css px', long_name: 'height of the wheels’ axle line, from the top', computed_in: 'draw()', digits: 2 });
+        ds.var('cam_x', [], 'float', { symbol: 'x<sub>cam</sub>', units: 'm', long_name: 'where the camera looks; it follows the cart at 8 % per frame', computed_in: 'draw()', digits: 4 });
+        ds.var('cart_px', [], 'float', { symbol: 'x<sub>cart</sub> px', units: 'css px', long_name: 'cart centre and lower hinge, from the left', computed_in: 'draw()', formula: 'w/2 + (x − x<sub>cam</sub>) σ', digits: 2 });
+        ds.var('cart_py', [], 'float', { symbol: 'y<sub>hinge</sub> px', units: 'css px', long_name: 'top of the cart and lower hinge, from the top', computed_in: 'draw()', formula: 'y<sub>0</sub> − h<sub>cart</sub> + 4', digits: 2 });
+        ds.var('cart_w', [], 'float', { symbol: 'w<sub>cart</sub>', units: 'css px', long_name: 'cart width as drawn', computed_in: 'draw()', formula: 'max(46, 0.36 σ)', digits: 2 });
+        ds.var('cart_h', [], 'float', { symbol: 'h<sub>cart</sub>', units: 'css px', long_name: 'cart height as drawn', computed_in: 'draw()', formula: 'max(20, 0.12 σ)', digits: 2 });
+        ds.var('mid_px', [], 'float', { symbol: 'x<sub>mid</sub> px', units: 'css px', long_name: 'hinge between the rods, from the left', computed_in: 'draw()', formula: 'x<sub>cart</sub> + L₁ σ sin θ₁', digits: 2 });
+        ds.var('mid_py', [], 'float', { symbol: 'y<sub>mid</sub> px', units: 'css px', long_name: 'hinge between the rods, from the top', computed_in: 'draw()', formula: 'y<sub>hinge</sub> − L₁ σ cos θ₁', digits: 2 });
+        ds.var('tip_px', [], 'float', { symbol: 'x<sub>tip</sub> px', units: 'css px', long_name: 'top of the upper rod, from the left', computed_in: 'draw()', formula: 'x<sub>mid</sub> + L₂ σ sin θ₂', digits: 2 });
+        ds.var('tip_py', [], 'float', { symbol: 'y<sub>tip</sub> px', units: 'css px', long_name: 'top of the upper rod, from the top', computed_in: 'draw()', formula: 'y<sub>mid</sub> − L₂ σ cos θ₂', digits: 2 });
+        ds.var('target_px', [], 'float', { symbol: 'x<sub>target</sub> px', units: 'css px', long_name: 'target marker under the rail, from the left', computed_in: 'draw()', digits: 2 });
+        ds.var('fps', [], 'float', { symbol: 'frame rate', units: 'Hz', long_name: 'frames per second, smoothed over about ten frames', computed_in: 'diagnostics()', digits: 1 });
+        ds.var('frames', [], 'int', { symbol: 'frames', long_name: 'frames drawn so far', computed_in: 'diagnostics()', digits: 0 });
+        var LG = {}; CS.concat(ST, TRn).forEach(function (n) { LG[n] = ds.get(n); });   // the log arrays themselves; they are written in place and never reallocated
+        ds.get('Qw').set(Q);
+
+        var vy = 0, p, K, Pm, Smod, lamNow = NaN, cLevel = null, catchIt = null, gmode = 'sampled', rolling = true, s, u = 0, xref = 0, on = true, rescue = true, lost = false, flat = false, tSim = 0, tCtl = 0, acc = 0, held = 0, geo = null;
         /* the supervisor's state: mode is 'balance' (LQR), 'calm' (drain the rods' energy while a plan is being made) or 'track' (follow a plan) */
         var mode = 'balance', job = null, tv = null, tPlan = 0, sPred = null, xc = 0, attempt = 0, nextCheck = 0, CALM_K = 2, hp = 3, log = [];
         /* the balancer's reference, an equilibrium of the family (25): fixed at a place, cruising at a constant speed, or gliding from one to a resting place (26) */
@@ -801,16 +952,22 @@
             p = par(); var L = linear(p), Rr = Math.pow(10, sR.value), Ts = sT.value / 1000, Lq = gmode === 'sampled' ? dlqr(L.A, L.B, Rr, Ts) : lqr(L.A, L.B, Rr); K = Lq.K; Pm = Lq.P; Smod = sampledModel(L.A, L.B, Rr, Ts);
             var Acl = Smod.Phi.map(function (row, i) { return row.map(function (x, j) { return x - Smod.Gam[i][0] * K[j]; }); });   // the sampled loop (16a) with these gains
             var lam = lamNow = specRad(Acl), sg = fallRates(p);
-            document.getElementById('r-sig').textContent = Sim.fmt(sg[0], 2) + ', ' + Sim.fmt(sg[1], 2) + ' s⁻¹';
-            document.getElementById('r-tau').textContent = Sim.fmt(1000 / sg[0], 0) + ' ms';
-            document.getElementById('r-set').textContent = lam < 1 ? Sim.fmt(-Ts / Math.log(lam), 2) + ' s' : _t('unstable');
-            document.getElementById('r-lam').textContent = Sim.fmt(lam, 4);
-            document.getElementById('r-K').textContent = Sim.fmt(K[1], 0) + ', ' + Sim.fmt(K[2], 0) + ' N/rad';
+            ver++; book = false;   // a new machine or new gains: a new design number, and the energy book opens again at the next step
+            ['m0', 'm1', 'm2', 'L1', 'L2'].forEach(function (k) { ds.set(k, p[k]); }); ds.set('rho', Rr); ds.set('Ts', Ts); ds.set('gmode', gmode); ds.set('ver', ver);
+            ds.get('d').set(p.d); ds.get('f').set(p.f); ds.get('sig').set(sg); ds.get('K').set(K); ds.get('Gam').set(Smod.Gam.map(function (r) { return r[0]; }));
+            ds.get('P').set([].concat.apply([], Pm)); ds.get('Phi').set([].concat.apply([], Smod.Phi)); ['d', 'f', 'sig', 'K', 'Gam', 'P', 'Phi'].forEach(function (n) { ds.touch(n); });
+            ds.set('Rd', Smod.Rd); ds.set('lam', lam); ds.set('t_settle', lam < 1 ? -Ts / Math.log(lam) : NaN); ds.set('t_efold', 1 / sg[0]);
+            var g = function (n) { return ds.get(n); }, gs = g('sig'), gk = g('K');   // the readouts read the store
+            document.getElementById('r-sig').textContent = Sim.fmt(gs[0], 2) + ', ' + Sim.fmt(gs[1], 2) + ' s⁻¹';
+            document.getElementById('r-tau').textContent = Sim.fmt(1000 * g('t_efold'), 0) + ' ms';
+            document.getElementById('r-set').textContent = g('t_settle') === g('t_settle') ? Sim.fmt(g('t_settle'), 2) + ' s' : _t('unstable');
+            document.getElementById('r-lam').textContent = Sim.fmt(g('lam'), 4);
+            document.getElementById('r-K').textContent = Sim.fmt(gk[1], 0) + ', ' + Sim.fmt(gk[2], 0) + ' N/rad';
             recatch();
         }
-        function recatch() { cLevel = null; catchIt = catchGen(); document.getElementById('r-c').textContent = '…'; abandon(); }   // computed between frames by think()
+        function recatch() { cLevel = null; catchIt = catchGen(); ds.set('c_star', NaN); ds.set('c_hand', NaN); ds.set('c_busy', true); document.getElementById('r-c').textContent = '…'; abandon(); }   // computed between frames by think()
         function abandon() { job = null; tv = null; sPred = null; if (mode !== 'balance' && s) { mode = 'calm'; startAttempt(); } }   // any change of the machine, or a push, spoils the plan: start again from calming
-        function reset() { s = [0, 2 * Math.PI / 180, -1 * Math.PI / 180, 0, 0, 0]; xref = 0; lost = false; flat = false; tSim = 0; tCtl = 0; u = 0; trace = []; mode = 'balance'; job = null; tv = null; sPred = null; nextCheck = 0; attempt = 0; ref = { kind: 'fixed', x: 0 }; }
+        function reset() { why = 3; book = false; trN = 0; ds.set('tr_n', 0); ds.set('tr_last', -1); s = [0, 2 * Math.PI / 180, -1 * Math.PI / 180, 0, 0, 0]; xref = 0; lost = false; flat = false; tSim = 0; tCtl = 0; u = 0; mode = 'balance'; job = null; tv = null; sPred = null; nextCheck = 0; attempt = 0; ref = { kind: 'fixed', x: 0 }; }
 
         /* ---------- the laws: balance (16), calm (21), track (24) ---------- */
         function clampF(v) { var F = sF.value; return Math.max(-F, Math.min(F, v)); }
@@ -837,7 +994,7 @@
                 if (v === 'end') { mode = 'balance'; tv = null; nextCheck = tSim; if (rolling) ref = { kind: 'cruise', x: s[0], v: s[3], t0: tSim }; log.push({ t: tSim, ev: 'plan-end' }); }   // at the end of the plan the balancer gets its chance; the supervisor checks it at once
                 else { mode = 'calm'; tv = null; log.push({ t: tSim, ev: 'left-plan' }); startAttempt(); } }   // the rods left the plan: calm again
             return mode === 'calm' ? calmU(s) : lqrU(s, tSim); }
-        function period() { return mode === 'balance' ? sT.value / 1000 : 0.01; }
+        function period() { cDue = tCtl; return mode === 'balance' ? sT.value / 1000 : 0.01; }   // called inside tCtl += period(), so tCtl is still the time this sample was due
         /* the same loop that moves the machine also predicts it: run(state, until, law) is deterministic, so a plan made for
            the state predicted a few seconds (hp, longer after a plan came too late) ahead starts exactly where the machine will be (checked when it arrives) */
         function run(st, until, law) { var q = st.s.slice(), t = st.t, tc = st.tc, uu = st.u;
@@ -858,80 +1015,128 @@
                 if (ok) { mode = 'track'; tCtl = tSim; hp = 3; log.push({ t: tSim, ev: 'track', T: job.T, attempt: attempt, ms: Math.round(job.ms) }); job = null; }
                 else { log.push({ t: tSim, ev: tv ? 'mismatch' : job && job.done ? 'noplan' : 'late', attempt: attempt }); tv = null; startAttempt(); } }
             if (mode === 'track' && cLevel && tSim - tPlan > 0.05 && (rolling ? Wred(s) : Wof(s, tSim)) < 0.9 * cLevel) {   // inside the certified region, with 10 % to spare for what the search may miss: hand over
-                mode = 'balance'; s[1] = wrapAngle(s[1]); s[2] = wrapAngle(s[2]); tv = null; nextCheck = tSim + 0.1; tCtl = tSim;
+                mode = 'balance'; why = 4; s[1] = wrapAngle(s[1]); s[2] = wrapAngle(s[2]); tv = null; nextCheck = tSim + 0.1; tCtl = tSim;
                 if (rolling) ref = { kind: 'cruise', x: s[0], v: s[3], t0: tSim };   // keep the speed it arrived with: a moving equilibrium (25)
                 log.push({ t: tSim, ev: 'caught', v: s[3] }); } }
         function think(ms) {   // work between frames: first the certificate, then the plan
             var t0 = performance.now();
-            while (catchIt && performance.now() - t0 < ms) { var r = catchIt.next(); if (r.done) { cLevel = r.value; catchIt = null; document.getElementById('r-c').textContent = Sim.fmt(cLevel, 0); } }
+            while (catchIt && performance.now() - t0 < ms) { var r = catchIt.next(); if (r.done) { cLevel = r.value; catchIt = null; ds.set('c_star', cLevel); ds.set('c_hand', 0.9 * cLevel); ds.set('c_busy', false); document.getElementById('r-c').textContent = Sim.fmt(ds.get('c_star'), 0); } }
             ms -= performance.now() - t0; if (!job || job.done || ms <= 0) return; job.work(ms);
-            if (job.done) { job.ms = performance.now() - job.t0; if (job.ok) tv = job.track(Math.pow(10, sR.value)); } }
+            if (job.done) { job.ms = performance.now() - job.t0; if (job.ok) { tv = job.track(Math.pow(10, sR.value)); planStore(); } } }
         function step(dt) {
             acc += dt;
             while (acc >= H) { acc -= H;
                 if (flat) break;
-                if (held) { s[3] = s[4] = s[5] = 0; u = 0; tSim += H; tCtl = tSim; if (Math.round(tSim * 1000) % 20 === 0) { trace.push([tSim, s[1], s[2], 0]); if (trace.length > 400) trace.shift(); } continue; }
+                if (held) { var h0 = s.slice(), th0 = tSim; s[3] = s[4] = s[5] = 0; u = 0; tSim += H; tCtl = tSim; logStep(h0, th0, 1); continue; }   // your hand holds the rods still; logStep also writes the trace
+                var s0 = s, t0 = tSim, c0 = tCtl, u0 = u;   // the state, time, due time and force before this step, for the logs
                 supervise();
                 if (tSim >= tCtl - 1e-9) { u = control(); tCtl += period(); }
                 s = rk4(p, s, u, H); tSim += H;
-                if (Math.round(tSim * 1000) % 20 === 0) { trace.push([tSim, wrapAngle(s[1]), wrapAngle(s[2]), u]); if (trace.length > 400) trace.shift(); } }
+                logStep(s0, t0, 0, c0, u0); }   // the step, and the controller's sample if it looked in this step, into the store
         }
         function flick(J) {   // Δθ̇ = D⁻¹ (1, L1 cos θ1, L2 cos θ2)ᵀ J
-            if (flat) return; var dq = solve3(Dm(p, s[1], s[2]), [J, p.L1 * Math.cos(s[1]) * J, p.L2 * Math.cos(s[2]) * J]);
+            if (flat) return; why = 1; var dq = solve3(Dm(p, s[1], s[2]), [J, p.L1 * Math.cos(s[1]) * J, p.L2 * Math.cos(s[2]) * J]);
             s[3] += dq[0]; s[4] += dq[1]; s[5] += dq[2]; nextCheck = tSim; abandon(); }
         function swingUp() { reset(); s = [0, Math.PI, Math.PI, 0, 0, 0]; mode = 'calm'; xc = 0; ref = { kind: 'fixed', x: 0 }; startAttempt(); }
+
+        /* ---------- the logs: every physics step and every controller sample is written into the store at the moment it happens ---------- */
+        var cDue = 0, ver = 0, nStep = 0, nSamp = 0, stN = 0, csN = 0, trN = 0, why = 0, book = false, E0 = 0, Wm = 0, Eext = 0, sPost = null, plSerial = 0, fps = 0, frames = 0;
+        function energy(st) {   // T + V of cart and rods, (5) and (7): ½ θ̇ᵀ D θ̇ + f₁ cos θ₁ + f₂ cos θ₂
+            var d = p.d, c1 = Math.cos(st[1]), c2 = Math.cos(st[2]), v = st[3], a = st[4], b = st[5];
+            return 0.5 * (d[0] * v * v + d[3] * a * a + d[5] * b * b) + d[1] * c1 * v * a + d[2] * c2 * v * b + d[4] * Math.cos(st[1] - st[2]) * a * b + p.f[0] * c1 + p.f[1] * c2; }
+        function dropHalf(names, N) { names.forEach(function (n) { var a = LG[n], w = a.length / N; a.copyWithin(0, (N / 2) * w); }); }   // a full log keeps its newer half
+        function logSample(s0, t0, cut) {   // one row of the sample log: what the controller saw, what it chose, by which law, against which reference
+            if (csN === NJ) { dropHalf(CS, NJ); csN = NJ / 2; }
+            var r = csN++, i;
+            LG.cs_i[r] = nSamp; LG.cs_t[r] = t0; LG.cs_k[r] = nStep; LG.cs_due[r] = cut ? NaN : cDue; LG.cs_next[r] = tCtl; LG.cs_u[r] = u;
+            for (i = 0; i < 6; i++) LG.cs_s[6 * r + i] = s0[i];
+            LG.cs_mode[r] = cut ? 4 : !on || lost ? 3 : mode === 'balance' ? 0 : mode === 'calm' ? 1 : 2;
+            LG.cs_rk[r] = ref.kind === 'fixed' ? 0 : ref.kind === 'cruise' ? 1 : 2; LG.cs_rx[r] = ref.kind === 'glide' ? ref.target : ref.x; LG.cs_rv[r] = ref.v || 0; LG.cs_rt0[r] = ref.t0 || 0; LG.cs_re0[r] = ref.e0 || 0;
+            LG.cs_xc[r] = xc; LG.cs_tp[r] = tPlan; LG.cs_pl[r] = plSerial; LG.cs_ver[r] = ver; LG.cs_umax[r] = sF.value; nSamp++; ds.set('cs_n', csN); ds.set('cs_last', r); }   // the count is written with the row it counts
+        function differs(a, b) { for (var i = 0; i < 6; i++) if (a[i] !== b[i]) return true; return false; }
+        function logStep(s0, t0, kind, c0, u0) {   // one row of the step log, after the step: s0 before, s after; kind 0 an RK4 step, 1 a step your hand held
+            if (kind === 0) { if (tCtl !== c0) logSample(s0, t0, false); else if (u !== u0) logSample(s0, t0, true); }   // the controller looked in this step, or the motor was cut outside a look
+            var jump = sPost && differs(s0, sPost) ? why || 9 : 0, i;
+            if (!book) { E0 = energy(s0); Wm = 0; Eext = 0; book = true; } else if (jump) Eext += energy(s0) - energy(sPost);   // the energy book opens at a reset or a change of the machine
+            if (kind === 0) Wm += u * (s[0] - s0[0]); else Eext += energy(s) - energy(s0);   // u is held over the step, so its work is u Δx exactly; a held step is all the hand's
+            why = 0;
+            if (stN === NK) { dropHalf(ST, NK); stN = NK / 2; }
+            var r = stN++;
+            LG.st_i[r] = nStep; LG.st_t[r] = t0; LG.st_u[r] = u; LG.st_j[r] = kind === 0 ? nSamp - 1 : -1; LG.st_kind[r] = kind; LG.st_jump[r] = jump; LG.st_ver[r] = ver;
+            for (i = 0; i < 6; i++) { LG.st_s0[6 * r + i] = s0[i]; LG.st_s1[6 * r + i] = s[i]; }
+            sPost = LG.st_s1.subarray(6 * r, 6 * r + 6); nStep++; ds.set('st_n', stN); ds.set('st_last', r);
+            if (Math.round(tSim * 1000) % 20 === 0) { if (trN === NTR) { dropHalf(TRn, NTR); trN = NTR / 2; }   // the trace of the lower figure, every 20 ms
+                LG.tr_t[trN] = tSim; LG.tr_th1[trN] = wrapAngle(s[1]); LG.tr_th2[trN] = wrapAngle(s[2]); LG.tr_u[trN] = u; trN++; ds.set('tr_n', trN); ds.set('tr_last', trN - 1); } }
+        function planStore() {   // the plan trackU() follows, stored as the very arrays it reads
+            plSerial++; ds.dim('p', tv.n); ds.dim('p1', tv.n + 1);
+            ds.set('pl_u', tv.un); ds.set('pl_K', tv.Kt); ds.set('pl_nom', tv.nom); ds.set('pl_n', tv.n); ds.set('pl_t0', tPlan); ds.set('pl_xc', xc); ds.set('pl_serial', plSerial); }
+        function diagnostics(dt) {   // once per frame, after the steps: the state now and what follows from it
+            var S = ds.get('s_now'), A3 = ds.get('qdd'), q = rhs(p, s, u), rv = refXV(tSim), E = energy(s), i;
+            for (i = 0; i < 6; i++) S[i] = s[i]; for (i = 0; i < 3; i++) A3[i] = q[3 + i]; ds.touch('s_now'); ds.touch('qdd');
+            ds.set('t', tSim); ds.set('x', s[0]); ds.set('xd', s[3]); ds.set('th1w', wrapAngle(s[1])); ds.set('th2w', wrapAngle(s[2])); ds.set('u', u);
+            ds.set('mode', mode); ds.set('held', held); ds.set('lost', lost); ds.set('ref_kind', ref.kind); ds.set('x_r', rv[0]); ds.set('v_r', rv[1]); ds.get('ref_p').set([ref.kind === 'glide' ? ref.target : ref.x, ref.v || 0, ref.t0 || 0, ref.e0 || 0]); ds.touch('ref_p');
+            ds.set('W', Wof(s, tSim)); ds.set('W_red', Wred(s)); ds.set('Ep', Ep(s)); ds.set('E', E);
+            var wait = book && sPost && differs(s, sPost) ? E - energy(sPost) : 0;   // an outside change made while the clock stands still: booked by the next step
+            ds.set('E0', book ? E0 : NaN); ds.set('W_motor', book ? Wm : NaN); ds.set('E_ext', book ? Eext : NaN); ds.set('E_wait', book ? wait : NaN); ds.set('bal', book ? E0 + Wm + Eext + wait - E : NaN);
+            ds.set('attempt', attempt); ds.set('hp', hp); ds.set('x_c', xc); ds.set('t_plan', tPlan); ds.set('plan_busy', !!(job && !job.done)); ds.set('plan_ready', !!tv && mode === 'calm'); ds.set('next_check', nextCheck);
+            ds.set('u_max', sF.value); ds.set('J', sJ.value); ds.set('ctrl_on', on); ds.set('rescue_on', rescue); ds.set('rolling', rolling); ds.set('gmode', gmode); ds.set('x_target', xref); ds.set('playing', clk ? clk.playing : true);
+            CS.concat(ST, TRn).forEach(function (n) { ds.touch(n); });
+            if (dt > 0) fps = fps ? fps + (1 / dt - fps) * 0.1 : 1 / dt; frames++; ds.set('fps', fps); ds.set('frames', frames); }
+        ds.set('glide_w', GLIDE); ds.set('calm_k', CALM_K); ds.set('c_busy', true);
         redesign(); reset();
 
         /* ---------- drawing ---------- */
         var cv = Sim.canvas2d(document.getElementById('cv')), tr = Sim.canvas2d(document.getElementById('tr')), camX = 0;
-        function draw() {
-            var c = cv.ctx, W = cv.w, Hh = cv.h; c.clearRect(0, 0, W, Hh);
-            vy += ((lost || mode !== 'balance' || Math.cos(s[1]) < 0.3 || Math.cos(s[2]) < 0.3 ? 1 : 0) - vy) * 0.06;   /* when the rods are down or swinging, the view widens and the rail moves up, so rods below it stay in sight */
-            var tall = Math.max(1.4, p.L1 + p.L2 + 0.25), up = (Hh - 90) / tall, down = (Hh / 2 - 24) / (p.L1 + p.L2), sc = Math.min(W / (3.2 + 2 * vy), up + (down - up) * vy), y0 = (Hh - 62) + (Hh / 2 - (Hh - 62)) * vy;
-            camX += (s[0] - camX) * 0.08; var X = function (x) { return W / 2 + (x - camX) * sc; };
+        function draw() {   // reads the store only; what it works out on the way to the pixels it writes back (the drawing section of the store)
+            var c = cv.ctx, W = cv.w, Hh = cv.h, g2 = function (n) { return ds.get(n); }, S = g2('s_now'), u = g2('u'), L1 = g2('L1'), L2 = g2('L2'); c.clearRect(0, 0, W, Hh);
+            vy += ((g2('lost') || g2('mode') !== 'balance' || Math.cos(S[1]) < 0.3 || Math.cos(S[2]) < 0.3 ? 1 : 0) - vy) * 0.06;   /* when the rods are down or swinging, the view widens and the rail moves up, so rods below it stay in sight */
+            var tall = Math.max(1.4, L1 + L2 + 0.25), up = (Hh - 90) / tall, down = (Hh / 2 - 24) / (L1 + L2), sc = Math.min(W / (3.2 + 2 * vy), up + (down - up) * vy), y0 = (Hh - 62) + (Hh / 2 - (Hh - 62)) * vy;
+            camX += (S[0] - camX) * 0.08; var X = function (x) { return W / 2 + (x - camX) * sc; };
             c.strokeStyle = TH.ruleSoft; c.lineWidth = 1; c.fillStyle = TH.muted; c.font = TH.mono; c.textAlign = 'center';
             for (var g = Math.floor(camX - 4); g <= camX + 4; g += 0.5) { var gx = X(g); if (gx < -20 || gx > W + 20) continue; c.beginPath(); c.moveTo(gx, y0 + 14); c.lineTo(gx, y0 + (Number.isInteger(g) ? 26 : 20)); c.stroke(); if (Number.isInteger(g)) c.fillText(Sim.fmt(g, 0) + ' m', gx, y0 + 40); }
             c.strokeStyle = TH.ink; c.lineWidth = 2; c.beginPath(); c.moveTo(0, y0 + 14); c.lineTo(W, y0 + 14); c.stroke();
-            var tx = X(ref.kind === 'cruise' ? refXV(tSim)[0] : xref); c.fillStyle = TH.accent; c.beginPath(); c.moveTo(tx, y0 + 15); c.lineTo(tx - 7, y0 + 27); c.lineTo(tx + 7, y0 + 27); c.closePath(); c.fill(); c.textAlign = 'center'; c.fillText(_t('target'), tx, y0 + 54);
-            var cx = X(s[0]), cw = Math.max(46, 0.36 * sc), ch = Math.max(20, 0.12 * sc);
+            var tx = X(g2('ref_kind') === 'cruise' ? g2('x_r') : g2('x_target')); c.fillStyle = TH.accent; c.beginPath(); c.moveTo(tx, y0 + 15); c.lineTo(tx - 7, y0 + 27); c.lineTo(tx + 7, y0 + 27); c.closePath(); c.fill(); c.textAlign = 'center'; c.fillText(_t('target'), tx, y0 + 54);
+            var cx = X(S[0]), cw = Math.max(46, 0.36 * sc), ch = Math.max(20, 0.12 * sc);
             c.fillStyle = TH.card; c.strokeStyle = TH.ink; c.lineWidth = 2; c.beginPath(); c.rect(cx - cw / 2, y0 - ch + 4, cw, ch); c.fill(); c.stroke();
             /* the slot through the middle of the cart: the rods swing down through it, between the two rails */
             var sw = Math.max(10, cw * 0.22); c.fillStyle = TH.paper; c.fillRect(cx - sw / 2, y0 - ch + 4, sw, ch + 12); c.lineWidth = 1.4; c.beginPath(); c.moveTo(cx - sw / 2, y0 - ch + 4); c.lineTo(cx - sw / 2, y0 + 4); c.moveTo(cx + sw / 2, y0 - ch + 4); c.lineTo(cx + sw / 2, y0 + 4); c.stroke(); c.lineWidth = 2.4; c.beginPath(); c.moveTo(cx - sw / 2 - 4, y0 - ch + 4); c.lineTo(cx + sw / 2 + 4, y0 - ch + 4); c.stroke();
             [-1, 1].forEach(function (k) { c.beginPath(); c.arc(cx + k * cw * 0.3, y0 + 7, 6, 0, 2 * Math.PI); c.fillStyle = '#fff'; c.fill(); c.stroke(); });
-            var hx = cx, hy = y0 - ch + 4, ex = hx + p.L1 * sc * Math.sin(s[1]), ey = hy - p.L1 * sc * Math.cos(s[1]), tx2 = ex + p.L2 * sc * Math.sin(s[2]), ty2 = ey - p.L2 * sc * Math.cos(s[2]);
+            var hx = cx, hy = y0 - ch + 4, ex = hx + L1 * sc * Math.sin(S[1]), ey = hy - L1 * sc * Math.cos(S[1]), tx2 = ex + L2 * sc * Math.sin(S[2]), ty2 = ey - L2 * sc * Math.cos(S[2]);
             geo = { hx: hx, hy: hy, ex: ex, ey: ey, tx: tx2, ty: ty2 };
-            c.lineCap = 'round'; c.lineWidth = 4 + 6 * Math.min(1, p.m1); c.strokeStyle = TH.ink; c.beginPath(); c.moveTo(hx, hy); c.lineTo(ex, ey); c.stroke();
-            c.lineWidth = 4 + 6 * Math.min(1, p.m2); c.strokeStyle = TH.accent; c.beginPath(); c.moveTo(ex, ey); c.lineTo(tx2, ty2); c.stroke();
+            ds.set('box_w', W); ds.set('box_h', Hh); ds.set('vy', vy); ds.set('sc', sc); ds.set('y0', y0); ds.set('cam_x', camX); ds.set('cart_px', cx); ds.set('cart_py', hy); ds.set('cart_w', cw); ds.set('cart_h', ch);
+            ds.set('mid_px', ex); ds.set('mid_py', ey); ds.set('tip_px', tx2); ds.set('tip_py', ty2); ds.set('target_px', tx);
+            c.lineCap = 'round'; c.lineWidth = 4 + 6 * Math.min(1, g2('m1')); c.strokeStyle = TH.ink; c.beginPath(); c.moveTo(hx, hy); c.lineTo(ex, ey); c.stroke();
+            c.lineWidth = 4 + 6 * Math.min(1, g2('m2')); c.strokeStyle = TH.accent; c.beginPath(); c.moveTo(ex, ey); c.lineTo(tx2, ty2); c.stroke();
             [[hx, hy], [ex, ey]].forEach(function (q) { c.beginPath(); c.arc(q[0], q[1], 5, 0, 2 * Math.PI); c.fillStyle = '#fff'; c.fill(); c.lineWidth = 2; c.strokeStyle = TH.ink; c.stroke(); });
-            if (Math.abs(u) > 0.05) { var len = Math.sign(u) * Math.min(1, Math.abs(u) / sF.value) * cw * 1.6, ay = y0 - ch / 2 + 4, ax = u > 0 ? cx - cw / 2 - 6 : cx + cw / 2 + 6;
+            if (Math.abs(u) > 0.05) { var len = Math.sign(u) * Math.min(1, Math.abs(u) / g2('u_max')) * cw * 1.6, ay = y0 - ch / 2 + 4, ax = u > 0 ? cx - cw / 2 - 6 : cx + cw / 2 + 6;
                 c.strokeStyle = TH.accent; c.fillStyle = TH.accent; c.lineWidth = 3; c.beginPath(); c.moveTo(ax - len, ay); c.lineTo(ax, ay); c.stroke();
                 c.beginPath(); c.moveTo(ax, ay); c.lineTo(ax - Math.sign(u) * 9, ay - 6); c.lineTo(ax - Math.sign(u) * 9, ay + 6); c.closePath(); c.fill(); }
             c.textAlign = 'left'; c.fillStyle = TH.ink3; c.fillText('u = ' + Sim.fmt(u, 1) + ' N', 12, 20);
             drawTrace();
         }
-        function drawTrace() {
-            var c = tr.ctx, W = tr.w, Hh = tr.h; c.clearRect(0, 0, W, Hh); var l = 46, r = W - 46, t = 12, b = Hh - 22, tEnd = tSim, A = 10;
+        function drawTrace() {   // the stored trace: tr_t, tr_th1, tr_th2, tr_u
+            var c = tr.ctx, W = tr.w, Hh = tr.h, Fm = ds.get('u_max'), tt = ds.get('tr_t'), cols = [null, ds.get('tr_th1'), ds.get('tr_th2'), ds.get('tr_u')], nT = ds.get('tr_n'); c.clearRect(0, 0, W, Hh); var l = 46, r = W - 46, t = 12, b = Hh - 22, tEnd = ds.get('t'), A = 10;
             c.strokeStyle = TH.ruleSoft; c.lineWidth = 1; c.font = TH.mono; c.fillStyle = TH.muted; c.textAlign = 'right';
             [-A, 0, A].forEach(function (v) { var y = t + (b - t) * (A - v) / (2 * A); c.beginPath(); c.moveTo(l, y); c.lineTo(r, y); c.stroke(); c.fillText(v + '°', l - 6, y + 4); });
-            c.textAlign = 'left'; c.fillText('±' + sF.value.toFixed(0) + ' N', r + 6, t + 8);
+            c.textAlign = 'left'; c.fillText('±' + Fm.toFixed(0) + ' N', r + 6, t + 8);
             function line(k, scale, col, dash) { c.strokeStyle = col; c.lineWidth = 1.8; c.setLineDash(dash || []); c.beginPath(); var first = true;
-                trace.forEach(function (q) { var x = r - (tEnd - q[0]) / 8 * (r - l); if (x < l) return; var v = Math.max(-1.05, Math.min(1.05, q[k] * scale)), y = t + (b - t) * (1 - v) / 2; if (first) { c.moveTo(x, y); first = false; } else c.lineTo(x, y); }); c.stroke(); c.setLineDash([]); }
-            line(1, 180 / Math.PI / A, TH.ink); line(2, 180 / Math.PI / A, TH.accent); line(3, 1 / sF.value, TH.muted, [5, 4]);
+                for (var i = 0; i < nT; i++) { var x = r - (tEnd - tt[i]) / 8 * (r - l); if (x < l) continue; var v = Math.max(-1.05, Math.min(1.05, cols[k][i] * scale)), y = t + (b - t) * (1 - v) / 2; if (first) { c.moveTo(x, y); first = false; } else c.lineTo(x, y); } c.stroke(); c.setLineDash([]); }
+            line(1, 180 / Math.PI / A, TH.ink); line(2, 180 / Math.PI / A, TH.accent); line(3, 1 / Fm, TH.muted, [5, 4]);
         }
         Sim.onResize(document.getElementById('stage'), function () { cv = Sim.canvas2d(document.getElementById('cv')); });
         Sim.onResize(document.getElementById('stage-tr'), function () { tr = Sim.canvas2d(document.getElementById('tr')); });
 
         var stEl = document.getElementById('state'), lastTxt = 0;
-        var clk = Sim.clock(function (dt) { step(dt); think(8); draw();
-            if (performance.now() - lastTxt > 250) { lastTxt = performance.now();
-                document.getElementById('cap-t').innerHTML = '<i>t</i> = ' + tSim.toFixed(1) + ' s';
+        var clk = Sim.clock(function (dt) { step(dt); think(8); diagnostics(dt); draw();
+            if (performance.now() - lastTxt > 250) { lastTxt = performance.now(); var g = function (n) { return ds.get(n); }, held = g('held'), on = g('ctrl_on'), lost = g('lost'), mode = g('mode'), u = g('u');   // the words read the store
+                document.getElementById('cap-t').innerHTML = '<i>t</i> = ' + g('t').toFixed(1) + ' s';
                 document.getElementById('cap-u').innerHTML = '<i>u</i> = ' + Sim.fmt(u, 1) + ' N';
-                document.getElementById('r-th').textContent = Sim.fmt(wrapAngle(s[1]) * 180 / Math.PI, 1) + '°, ' + Sim.fmt(wrapAngle(s[2]) * 180 / Math.PI, 1) + '°';
-                document.getElementById('r-x').textContent = Sim.fmt(s[0], 2) + ' m';
+                document.getElementById('r-th').textContent = Sim.fmt(g('th1w') * 180 / Math.PI, 1) + '°, ' + Sim.fmt(g('th2w') * 180 / Math.PI, 1) + '°';
+                document.getElementById('r-x').textContent = Sim.fmt(g('x'), 2) + ' m';
                 stEl.innerHTML = held ? _t('<b>Held.</b> Let go and the controller takes over.') : !on ? _t('<b>Controller off.</b> The rods fall; the cart recoils.') : lost ? _t('<b>Fallen.</b> The balancer can no longer win, and rescue is off. Choose <i>Swing back up</i>, or press Reset.')
-                    : mode === 'track' ? _t('<b>Swinging up.</b> Following the planned force; the tracking controller corrects the drift.') : mode === 'calm' ? (tv ? _t('<b>Plan ready.</b> The swing-up starts the moment the machine reaches the predicted state.') : job && !job.done ? _t('<b>Calming and planning.</b> The cart drains the rods’ energy while a swing-up is computed.') : _t('<b>Calming.</b> The cart drains the rods’ energy; the next plan starts soon.'))
-                    : Math.abs(u) >= sF.value - 1e-9 ? _t('<b>Motor at its limit.</b> Holding on…') : ref.kind === 'cruise' ? _t('Balancing while rolling at {v} m/s, a moving equilibrium.', { v: Sim.fmt(ref.v, 2) })
-                    : ref.kind === 'glide' && Math.abs(refXV(tSim)[0] - ref.target) > 0.01 ? _t('Balancing while gliding to the target.') : _t('Balancing.'); } });
+                    : mode === 'track' ? _t('<b>Swinging up.</b> Following the planned force; the tracking controller corrects the drift.') : mode === 'calm' ? (g('plan_ready') ? _t('<b>Plan ready.</b> The swing-up starts the moment the machine reaches the predicted state.') : g('plan_busy') ? _t('<b>Calming and planning.</b> The cart drains the rods’ energy while a swing-up is computed.') : _t('<b>Calming.</b> The cart drains the rods’ energy; the next plan starts soon.'))
+                    : Math.abs(u) >= g('u_max') - 1e-9 ? _t('<b>Motor at its limit.</b> Holding on…') : g('ref_kind') === 'cruise' ? _t('Balancing while rolling at {v} m/s, a moving equilibrium.', { v: Sim.fmt(g('v_r'), 2) })
+                    : g('ref_kind') === 'glide' && Math.abs(g('x_r') - g('x_target')) > 0.01 ? _t('Balancing while gliding to the target.') : _t('Balancing.'); } });
         Sim.playButton(document.getElementById('play'), clk);
         document.getElementById('flickL').addEventListener('click', function () { flick(-sJ.value); });
         document.getElementById('flickR').addEventListener('click', function () { flick(sJ.value); });
@@ -951,7 +1156,7 @@
         var cvEl = document.getElementById('cv');
         function local(e) { var r = cvEl.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; }
         function segDist(q, a, b) { var dx = b[0] - a[0], dy = b[1] - a[1], t = Math.max(0, Math.min(1, ((q[0] - a[0]) * dx + (q[1] - a[1]) * dy) / (dx * dx + dy * dy))); return Math.hypot(q[0] - a[0] - t * dx, q[1] - a[1] - t * dy); }
-        function aim(q) { var M = 80 * Math.PI / 180;
+        function aim(q) { var M = 80 * Math.PI / 180; why = 2;
             if (held === 1) { s[1] = Math.max(-M, Math.min(M, Math.atan2(q[0] - geo.hx, geo.hy - q[1]))); }
             else { s[2] = Math.max(-M, Math.min(M, Math.atan2(q[0] - geo.ex, geo.ey - q[1]))); } }
         cvEl.addEventListener('pointerdown', function (e) { if (!geo) return; var q = local(e), d1 = segDist(q, [geo.hx, geo.hy], [geo.ex, geo.ey]), d2 = segDist(q, [geo.ex, geo.ey], [geo.tx, geo.ty]);
@@ -965,14 +1170,159 @@
         Array.prototype.forEach.call(document.querySelectorAll('#resc button'), function (bt) { bt.addEventListener('click', function () {
             rescue = bt.getAttribute('data-v') === 'on'; Array.prototype.forEach.call(document.querySelectorAll('#resc button'), function (x) { x.setAttribute('aria-pressed', x === bt ? 'true' : 'false'); }); if (rescue && lost) { lost = false; nextCheck = tSim; } }); });
         /* the walkthrough's "Now" column (scripts/walk/dipc.js): read from the running state, never recomputed for show */
-        Sim.live = function () { var f = function (v, n, un) { return Sim.fmt(v, n) + (un ? ' ' + un : ''); }, q = rhs(p, s, u), sg = fallRates(p);
-            return { d1: f(p.d[0], 3, 'kg'), f1: f(p.f[0], 3, 'N m'), t1: f(s[1], 4, 'rad'), t2: f(s[2], 4, 'rad'), acc: '(' + q.slice(3).map(function (v) { return Sim.fmt(v, 2); }).join(', ') + ')',
-                u: f(u, 2, 'N'), h: '0.001 s', sig: f(sg[0], 3, '1/s'), K: '(' + K.map(function (v) { return Sim.fmt(v, 1); }).join(', ') + ')', Ts: f(sT.value / 1000, 3, 's'), J: f(sJ.value, 2, 'N s'),
-                W: f(Wof(s, tSim), 1), c: cLevel === null ? '…' : f(cLevel, 1), Ep: f(Ep(s), 3, 'J'), lam: f(lamNow, 4), Rd: Sim.fmt(Smod.Rd, 4), Gam: '(' + Smod.Gam.map(function (r) { return Sim.fmt(r[0], 4); }).join(', ') + ')', Phi: _t('6 × 6 matrix'), Wr: f(Wred(s), 1), xr: f(refXV(tSim)[0], 3, 'm'), vr: f(refXV(tSim)[1], 3, 'm/s') }; };
-        window.DIPC = { get geo() { return geo; }, get held() { return held; }, get s() { return s; }, set s(v) { s = v.slice(); nextCheck = tSim; }, get K() { return K; }, get P() { return Pm; }, get p() { return p; }, fallRates: fallRates, rhs: rhs, rhsF: rhsF, flick: flick, get lost() { return lost; }, set xref(v) { xref = v; ref = { kind: 'fixed', x: v }; }, get ref() { return ref; }, set rolling(v) { rolling = v; }, set gmode(v) { gmode = v; redesign(); },
+        Sim.live = function () { var f = function (v, n, un) { return Sim.fmt(v, n) + (un ? ' ' + un : ''); }, g = function (n) { return ds.get(n); }, S = g('s_now'), cs = g('c_star');   // read from the store, never recomputed for show
+            return { d1: f(g('d')[0], 3, 'kg'), f1: f(g('f')[0], 3, 'N m'), t1: f(S[1], 4, 'rad'), t2: f(S[2], 4, 'rad'), acc: '(' + Array.prototype.map.call(g('qdd'), function (v) { return Sim.fmt(v, 2); }).join(', ') + ')',
+                u: f(g('u'), 2, 'N'), h: '0.001 s', sig: f(g('sig')[0], 3, '1/s'), K: '(' + Array.prototype.map.call(g('K'), function (v) { return Sim.fmt(v, 1); }).join(', ') + ')', Ts: f(g('Ts'), 3, 's'), J: f(g('J'), 2, 'N s'),
+                W: f(g('W'), 1), c: cs === cs ? f(cs, 1) : '…', Ep: f(g('Ep'), 3, 'J'), lam: f(g('lam'), 4), Rd: Sim.fmt(g('Rd'), 4), Gam: '(' + Array.prototype.map.call(g('Gam'), function (v) { return Sim.fmt(v, 4); }).join(', ') + ')', Phi: _t('6 × 6 matrix'), Wr: f(g('W_red'), 1), xr: f(g('x_r'), 3, 'm'), vr: f(g('v_r'), 3, 'm/s') }; };
+        /* ---------- the data panel (scripts/datalog.js) reads the store; these hooks only say how to recompute a value from the stored inputs and where it is drawn ---------- */
+        var G2 = function (n) { return ds.get(n); }, QN = ['x', 'θ₁', 'θ₂', 'ẋ', 'θ̇₁', 'θ̇₂'], QU = ['m', 'rad', 'rad', 'm/s', 'rad/s', 'rad/s'];
+        function machine() { return { d: Array.prototype.slice.call(G2('d')), f: Array.prototype.slice.call(G2('f')), L1: G2('L1'), L2: G2('L2') }; }   // the stored machine, in the form the page's formulas take
+        function row6(name, r) { return Array.prototype.slice.call(G2(name), 6 * r, 6 * r + 6); }
+        function design() { var mS = machine(), L = linear(mS), Ts = G2('Ts'), R = G2('rho'); return { L: L, S: sampledModel(L.A, L.B, R, Ts), D: G2('gmode') === 'sampled' ? dlqr(L.A, L.B, R, Ts) : lqr(L.A, L.B, R) }; }
+        var dCache = null; function designNow() { if (!dCache || dCache.ver !== G2('ver')) { dCache = design(); dCache.ver = G2('ver'); } return dCache; }
+        function refAt(rk, x0, v0, t0, e0, t) {   // (25)–(26) from the stored numbers of the reference
+            if (rk === 0) return [x0, 0]; var tau = t - t0; if (rk === 1) return [x0 + v0 * tau, v0];
+            var ex = Math.exp(-G2('glide_w') * tau), b = v0 + G2('glide_w') * e0; return [x0 + (e0 + b * tau) * ex, (b - G2('glide_w') * (e0 + b * tau)) * ex]; }
+        function lawAt(r) {   // the force the controller should have chosen at sample row r, from that row's stored numbers alone
+            var m = G2('cs_mode')[r], st = row6('cs_s', r), t = G2('cs_t')[r], F = G2('cs_umax')[r], cl = function (v) { return Math.max(-F, Math.min(F, v)); }, i;
+            var ins = [['law', m, ''], ['u<sub>max</sub>', F, 'N', 0], ['t', t, 's', 4]].concat(st.map(function (v, k) { return [QN[k], v, QU[k], 6]; }));
+            if (m >= 3) return { formula: m === 3 ? _t('controller off or fallen: u = 0') : _t('motor cut by the supervisor outside a sample: u = 0'), inputs: ins, value: 0 };
+            if (G2('cs_ver')[r] !== G2('ver')) return { formula: _t('taken with the gains of an earlier design, which are no longer stored'), inputs: ins, value: undefined };
+            if (m === 0) { var rv = refAt(G2('cs_rk')[r], G2('cs_rx')[r], G2('cs_rv')[r], G2('cs_rt0')[r], G2('cs_re0')[r], t), e = wrapState(st), v = 0, Kq = G2('K'); e[0] -= rv[0]; e[3] -= rv[1];
+                for (i = 0; i < 6; i++) v -= Kq[i] * e[i]; return { formula: 'u = sat(−K (s − s<sub>r</sub>)), s<sub>r</sub> = (x<sub>r</sub>, 0, 0, v<sub>r</sub>, 0, 0)', inputs: ins.concat([['x<sub>r</sub>', rv[0], 'm', 5], ['v<sub>r</sub>', rv[1], 'm/s', 5]]), value: cl(v) }; }
+            if (m === 1) { var d = G2('d'), xc0 = G2('cs_xc')[r], Pw = d[1] * Math.cos(st[1]) * st[4] + d[2] * Math.cos(st[2]) * st[5], a = Math.max(-8, Math.min(8, G2('calm_k') * Pw - 4 * (st[0] - xc0) - 4 * st[3]));
+                return { formula: 'u = sat(u<sub>for</sub>(s, a)), a = clip(k<sub>c</sub>𝒫 − 4(x − x<sub>c</sub>) − 4ẋ, ±8 m/s²) (21)', inputs: ins.concat([['x<sub>c</sub>', xc0, 'm', 4], ['a', a, 'm/s²', 5]]), value: cl(uFor(st, a)) }; }
+            if (G2('cs_pl')[r] !== G2('pl_serial')) return { formula: _t('tracked an earlier plan, which is no longer stored'), inputs: ins, value: undefined };
+            var k = Math.round((t - G2('cs_tp')[r]) / 0.01), Kt = G2('pl_K'), nom = G2('pl_nom'), w = G2('pl_u')[k], xc1 = G2('cs_xc')[r];
+            for (i = 0; i < 6; i++) w -= Kt[6 * k + i] * (st[i] - (i === 0 ? xc1 : 0) - nom[6 * k + i]);
+            return { formula: 'u = sat(u<sub>plan</sub>[k] − K(t<sub>k</sub>)(s − x<sub>c</sub>e₁ − s<sub>plan</sub>[k])), k = round((t − t<sub>plan</sub>)/0.01 s) (24)', inputs: ins.concat([['k', k, ''], ['u<sub>plan</sub>', G2('pl_u')[k], 'N', 5]]), value: cl(w) }; }
+        function sampleRow(j) { var ci = G2('cs_i'), r = j - ci[0]; return r >= 0 && r < G2('cs_n') && ci[r] === j ? r : -1; }
+        function isCol(c, rgb, tol) { return c[3] > 0 && Math.abs(c[0] - rgb[0]) <= tol && Math.abs(c[1] - rgb[1]) <= tol && Math.abs(c[2] - rgb[2]) <= tol; }   // alpha first: a transparent pixel is nothing drawn
+        function pix(x, y) { var q = Sim.readPixel(cv, x, y, 0); return q.rgba; }
+        function shown(c) { return c[3] === 0 ? _t('nothing (transparent)') : 'rgb(' + c[0] + ', ' + c[1] + ', ' + c[2] + '), α ' + c[3]; }
+        var CARD = [255, 250, 243], WHITE = [255, 255, 255], ACC = [122, 31, 43];
+        function cartPixels() {   // the cart's body, 3 px inside each side edge, and the line 4 px outside it, 4 px below the top
+            var cx = G2('cart_px'), w2 = G2('cart_w') / 2, y = G2('cart_py') + 4, a = pix(cx - w2 + 3, y), b = pix(cx + w2 - 3, y), o1 = pix(cx - w2 - 4, y), o2 = pix(cx + w2 + 4, y), ok = isCol(a, CARD, 3) && isCol(b, CARD, 3) && !isCol(o1, CARD, 3) && !isCol(o2, CARD, 3);
+            return { what: _t('the cart body 3 px inside both side edges, and 4 px outside them'), drawn: shown(a) + ' | ' + shown(b) + ' · ' + _t('outside') + ': ' + shown(o1) + ' | ' + shown(o2), expected: _t('cream card rgb(255, 250, 243) inside, anything else outside'), ok: ok,
+                note: _t('The cart is drawn from x<sub>cart</sub> px = w/2 + (x − x<sub>cam</sub>) σ; its body is cream with a 2 px ink border, so the cream ends between 3 px inside and 4 px outside each stored edge.') }; }
+        function discPixel(name, x, y, rgb, note) { var c = pix(x, y); return { what: name + ', (' + Sim.fmt(x, 1) + ', ' + Sim.fmt(y, 1) + _t(') css px'), drawn: shown(c), expected: 'rgb(' + rgb.join(', ') + ')', ok: isCol(c, rgb, 3), note: note }; }
+        var midNote = _t('The hinge between the rods is a white disc of radius 5 px with an ink ring, drawn last, so the pixel at its stored centre is white.'), tipNote = _t('The upper rod is a burgundy line with round ends, at least 4.6 px thick, so the pixel at its stored top is burgundy.');
+        var groups = [
+            { title: 'What you set', note: 'the sliders and switches, as the last redesign and this frame used them', how: 'set', vars: ['m0', 'm1', 'm2', 'L1', 'L2', 'u_max', 'Ts', 'rho', 'J', 'ctrl_on', 'rescue_on', 'rolling', 'gmode', 'x_target', 'playing'] },
+            { title: 'Constants of the code', note: 'fixed numbers of the page: weights, the glide’s rate, the calming gain', how: 'constant', vars: ['Qw', 'glide_w', 'calm_k'] },
+            { title: 'What follows from the machine', note: 'the constants of the equations (5)–(9) and how fast the rods fall', how: 'formula', vars: ['d', 'f', 'sig', 't_efold'] },
+            { title: 'The controller', note: 'the gains for the loop period, the machine between two looks, and the certified catch level', how: 'formula', vars: ['K', 'P', 'Phi', 'Gam', 'Rd', 'lam', 't_settle', 'ver', 'c_star', 'c_hand', 'c_busy'] },
+            { title: 'The state now', note: 'written once per frame, after the frame’s 1 ms steps', how: 'run', vars: ['t', 's_now', 'x', 'xd', 'th1w', 'th2w', 'qdd', 'u', 'mode', 'held', 'lost', 'ref_kind', 'ref_p', 'x_r', 'v_r', 'W', 'W_red', 'Ep'] },
+            { title: 'The energy book', note: 'what the motor, the flicks and your hand put in, against what the machine holds', how: 'run', vars: ['E', 'E0', 'W_motor', 'E_ext', 'E_wait', 'bal'] },
+            { title: 'The supervisor and the swing-up', note: 'which law runs, the plan and when it starts', how: 'run', vars: ['attempt', 'hp', 'x_c', 't_plan', 'plan_busy', 'plan_ready', 'next_check', 'pl_serial', 'pl_n', 'pl_t0', 'pl_xc', 'pl_u', 'pl_K', 'pl_nom'] },
+            { title: 'The controller’s samples', note: 'one row each time the controller looks, every T_s while balancing and every 10 ms while calming or tracking', how: 'run', vars: ['cs_n', 'cs_last', 'cs_i', 'cs_t', 'cs_k', 'cs_due', 'cs_next', 'cs_s', 'cs_u', 'cs_mode', 'cs_rk', 'cs_rx', 'cs_rv', 'cs_rt0', 'cs_re0', 'cs_xc', 'cs_tp', 'cs_pl', 'cs_ver', 'cs_umax'] },
+            { title: 'The physics steps', note: 'one row per 1 ms step of RK4, the last 4 to 8 s', how: 'solver', folded: true, vars: ['st_n', 'st_last', 'st_i', 'st_t', 'st_s0', 'st_s1', 'st_u', 'st_j', 'st_kind', 'st_jump', 'st_ver'] },
+            { title: 'The trace', note: 'the lower figure: every 20 ms, the last 8 to 16 s', how: 'run', folded: true, vars: ['tr_n', 'tr_last', 'tr_t', 'tr_th1', 'tr_th2', 'tr_u'] },
+            { title: 'Drawing', note: 'how stored values become pixels', how: 'drawing', folded: true, vars: ['box_w', 'box_h', 'vy', 'sc', 'y0', 'cam_x', 'cart_px', 'cart_py', 'cart_w', 'cart_h', 'mid_px', 'mid_py', 'tip_px', 'tip_py', 'target_px', 'fps', 'frames'] }
+        ];
+        var inp = function (n, d) { return [ds.vars[n].attrs.symbol, G2(n), ds.vars[n].attrs.units || '', d === undefined ? 6 : d]; };
+        Sim.data = {
+            ds: ds, kicker: 'Project 05 · data', file: 'project05-double-inverted-pendulum',
+            playing: function () { return clk.playing; }, play: function () { clk.set(true); },
+            groups: groups,
+            rowLabel: { q: function (i) { return QN[i]; }, dk: function (i) { return 'd' + (i + 1); }, two: function (i) { return String(i + 1); }, a3: function (i) { return ['ẍ', 'θ̈₁', 'θ̈₂'][i]; }, r4: function (i) { return ['x₀', 'v₀', 't₀', 'e₀'][i]; } },
+            colLabel: { P: function (i) { return QN[i]; }, Phi: function (i) { return QN[i]; }, cs_s: function (i) { return QN[i]; }, st_s0: function (i) { return QN[i]; }, st_s1: function (i) { return QN[i]; }, pl_K: function (i) { return QN[i]; }, pl_nom: function (i) { return QN[i]; } },
+            check: {
+                d: function (i) { var m0 = G2('m0'), m1 = G2('m1'), m2 = G2('m2'), L1 = G2('L1'), L2 = G2('L2');
+                    return { formula: ds.vars.d.attrs.formula, inputs: [inp('m0', 4), inp('m1', 4), inp('m2', 4), inp('L1', 4), inp('L2', 4)], value: [m0 + m1 + m2, (m1 / 2 + m2) * L1, m2 * L2 / 2, (m1 / 3 + m2) * L1 * L1, m2 * L1 * L2 / 2, m2 * L2 * L2 / 3][i] }; },
+                f: function (i) { var m1 = G2('m1'), m2 = G2('m2'), L1 = G2('L1'), L2 = G2('L2'), g = ds.attrs.g; return { formula: ds.vars.f.attrs.formula, inputs: [inp('m1', 4), inp('m2', 4), inp('L1', 4), inp('L2', 4), ['g', g, 'm/s²', 3]], value: [(m1 / 2 + m2) * L1 * g, m2 * L2 * g / 2][i] }; },
+                sig: function (i) { return { formula: _t('the two positive roots of (13), from the stored d and f'), inputs: [], value: fallRates(machine())[i] }; },
+                t_efold: function () { return { formula: 'τ = 1/σ₁', inputs: [['σ₁', G2('sig')[0], '1/s', 6]], value: 1 / G2('sig')[0] }; },
+                K: function (i) { return { formula: _t('the gains designed again from the stored machine, ρ, T_s and the switch'), inputs: [inp('rho', 4), inp('Ts', 3), ['gains', G2('gmode'), '']], value: designNow().D.K[i] }; },
+                P: function (ij) { return { formula: _t('P designed again from the stored machine, ρ, T_s and the switch'), inputs: [inp('rho', 4), inp('Ts', 3)], value: designNow().D.P[Math.floor(ij / 6)][ij % 6] }; },
+                Phi: function (ij) { return { formula: 'Φ = e<sup>AT<sub>s</sub></sup> (16b), again from the stored machine', inputs: [inp('Ts', 3)], value: designNow().S.Phi[Math.floor(ij / 6)][ij % 6] }; },
+                Gam: function (i) { return { formula: 'Γ (16b), again from the stored machine', inputs: [inp('Ts', 3)], value: designNow().S.Gam[i][0] }; },
+                Rd: function () { return { formula: 'R<sub>d</sub> (16f), again from the stored machine', inputs: [inp('rho', 4), inp('Ts', 3)], value: designNow().S.Rd }; },
+                lam: function () { var Ph = G2('Phi'), Gm = G2('Gam'), Kq = G2('K'), M = []; for (var i = 0; i < 6; i++) { M.push([]); for (var j = 0; j < 6; j++) M[i].push(Ph[6 * i + j] - Gm[i] * Kq[j]); }
+                    return { formula: _t('largest |λ| of Φ − ΓK, from the stored Φ, Γ and K'), inputs: [], value: specRad(M) }; },
+                t_settle: function () { var l = G2('lam'); return { formula: '−T<sub>s</sub> / ln|λ|', inputs: [inp('Ts', 3), inp('lam', 6)], value: l < 1 ? -G2('Ts') / Math.log(l) : NaN }; },
+                c_hand: function () { return { formula: '0.9 c*', inputs: [inp('c_star', 4)], value: 0.9 * G2('c_star') }; },
+                s_now: function (i) { var r = G2('st_last'); return { formula: _t('the state after the last logged step'), inputs: [['k', G2('st_i')[r], ''], ['E<sub>wait</sub>', G2('E_wait'), 'J', 3]], value: G2('st_s1')[6 * r + i] }; },
+                x: function () { return { formula: 's[0]', inputs: [['s[0]', G2('s_now')[0], 'm', 6]], value: G2('s_now')[0] }; },
+                xd: function () { return { formula: 's[3]', inputs: [['s[3]', G2('s_now')[3], 'm/s', 6]], value: G2('s_now')[3] }; },
+                th1w: function () { return { formula: 'wrap(s[1])', inputs: [['s[1]', G2('s_now')[1], 'rad', 6]], value: wrapAngle(G2('s_now')[1]) }; },
+                th2w: function () { return { formula: 'wrap(s[2])', inputs: [['s[2]', G2('s_now')[2], 'rad', 6]], value: wrapAngle(G2('s_now')[2]) }; },
+                qdd: function (i) { var S = Array.prototype.slice.call(G2('s_now')); return { formula: ds.vars.qdd.attrs.formula + _t(', from the stored state, force and machine'), inputs: [inp('u', 5)].concat(S.map(function (v, k) { return [QN[k], v, QU[k], 6]; })), value: rhs(machine(), S, G2('u'))[3 + i] }; },
+                x_r: function () { var rp = G2('ref_p'), k = ['fixed', 'cruise', 'glide'].indexOf(G2('ref_kind')); return { formula: _t('(25)–(26) from the stored reference'), inputs: [['ref', G2('ref_kind'), ''], ['x₀', rp[0], 'm', 4], ['v₀', rp[1], 'm/s', 4], ['t₀', rp[2], 's', 3], ['e₀', rp[3], 'm', 4], inp('t', 4)], value: refAt(k, rp[0], rp[1], rp[2], rp[3], G2('t'))[0] }; },
+                v_r: function () { var rp = G2('ref_p'), k = ['fixed', 'cruise', 'glide'].indexOf(G2('ref_kind')); return { formula: _t('(25)–(26) from the stored reference'), inputs: [['ref', G2('ref_kind'), ''], ['v₀', rp[1], 'm/s', 4], inp('t', 4)], value: refAt(k, rp[0], rp[1], rp[2], rp[3], G2('t'))[1] }; },
+                W: function () { var e = wrapState(Array.prototype.slice.call(G2('s_now'))), Pq = G2('P'), t = 0, i, j; e[0] -= G2('x_r'); e[3] -= G2('v_r'); for (i = 0; i < 6; i++) for (j = 0; j < 6; j++) t += e[i] * Pq[6 * i + j] * e[j];
+                    return { formula: ds.vars.W.attrs.formula, inputs: [inp('x_r', 5), inp('v_r', 5)], value: t }; },
+                W_red: function () { var S = G2('s_now'), e = [0, wrapAngle(S[1]), wrapAngle(S[2]), 0, S[4], S[5]], Pq = G2('P'), t = 0, i, j; for (i = 0; i < 6; i++) for (j = 0; j < 6; j++) t += e[i] * Pq[6 * i + j] * e[j];
+                    return { formula: '(0, θ₁, θ₂, 0, θ̇₁, θ̇₂) P (0, θ₁, θ₂, 0, θ̇₁, θ̇₂)ᵀ', inputs: [], value: t }; },
+                Ep: function () { var S = G2('s_now'), d = G2('d'), f = G2('f'); return { formula: '½(d₄θ̇₁² + 2d₅ cos(θ₁−θ₂) θ̇₁θ̇₂ + d₆θ̇₂²) + f₁ cos θ₁ + f₂ cos θ₂ (20)', inputs: [],
+                    value: 0.5 * (d[3] * S[4] * S[4] + 2 * d[4] * Math.cos(S[1] - S[2]) * S[4] * S[5] + d[5] * S[5] * S[5]) + f[0] * Math.cos(S[1]) + f[1] * Math.cos(S[2]) }; },
+                E: function () { var S = G2('s_now'), d = G2('d'), f = G2('f'), v = S[3], a = S[4], b = S[5]; return { formula: ds.vars.E.attrs.formula, inputs: [],
+                    value: 0.5 * (d[0] * v * v + d[3] * a * a + d[5] * b * b) + d[1] * Math.cos(S[1]) * v * a + d[2] * Math.cos(S[2]) * v * b + d[4] * Math.cos(S[1] - S[2]) * a * b + f[0] * Math.cos(S[1]) + f[1] * Math.cos(S[2]) }; },
+                bal: function () { return { formula: ds.vars.bal.attrs.formula, inputs: [inp('E0'), inp('W_motor'), inp('E_ext'), inp('E_wait'), inp('E')], value: G2('E0') + G2('W_motor') + G2('E_ext') + G2('E_wait') - G2('E') }; },
+                cs_u: function (r) { return lawAt(r); },
+                st_s1: function (ri) { var r = Math.floor(ri / 6), i = ri % 6, s0 = row6('st_s0', r), u0 = G2('st_u')[r];
+                    if (G2('st_kind')[r] === 1) return { formula: _t('a held step: the state is kept, its rates set to zero'), inputs: [[QN[i], s0[i], QU[i], 6]], value: i < 3 ? s0[i] : 0 };
+                    if (G2('st_ver')[r] !== G2('ver')) return { formula: _t('a step of an earlier machine'), inputs: [], value: undefined };
+                    return { formula: _t('one RK4 step of 1 ms from the stored state before it, with the stored force held'), inputs: [['u<sub>k</sub>', u0, 'N', 6]].concat(s0.map(function (v, k) { return [QN[k], v, QU[k], 6]; })), value: rk4(machine(), s0, u0, H)[i] }; },
+                st_u: function (r) { var j = G2('st_j')[r], q = j >= 0 ? sampleRow(j) : -1;
+                    if (j < 0) return { formula: _t('your hand holds the rods: no force'), inputs: [], value: 0 };
+                    return { formula: _t('the force of sample j(k), held'), inputs: [['j(k)', j, '']], value: q >= 0 ? G2('cs_u')[q] : undefined }; },
+                cart_px: function () { return { formula: ds.vars.cart_px.attrs.formula, inputs: [inp('box_w', 1), inp('x', 6), inp('cam_x', 6), inp('sc', 4)], value: G2('box_w') / 2 + (G2('x') - G2('cam_x')) * G2('sc') }; },
+                cart_py: function () { return { formula: ds.vars.cart_py.attrs.formula, inputs: [inp('y0', 3), inp('cart_h', 3)], value: G2('y0') - G2('cart_h') + 4 }; },
+                cart_w: function () { return { formula: 'max(46, 0.36 σ)', inputs: [inp('sc', 4)], value: Math.max(46, 0.36 * G2('sc')) }; },
+                cart_h: function () { return { formula: 'max(20, 0.12 σ)', inputs: [inp('sc', 4)], value: Math.max(20, 0.12 * G2('sc')) }; },
+                mid_px: function () { return { formula: ds.vars.mid_px.attrs.formula, inputs: [inp('cart_px', 3), inp('L1', 4), inp('sc', 4), inp('th1w', 6)], value: G2('cart_px') + G2('L1') * G2('sc') * Math.sin(G2('s_now')[1]) }; },
+                mid_py: function () { return { formula: ds.vars.mid_py.attrs.formula, inputs: [inp('cart_py', 3), inp('L1', 4), inp('sc', 4), inp('th1w', 6)], value: G2('cart_py') - G2('L1') * G2('sc') * Math.cos(G2('s_now')[1]) }; },
+                tip_px: function () { return { formula: ds.vars.tip_px.attrs.formula, inputs: [inp('mid_px', 3), inp('L2', 4), inp('sc', 4), inp('th2w', 6)], value: G2('mid_px') + G2('L2') * G2('sc') * Math.sin(G2('s_now')[2]) }; },
+                tip_py: function () { return { formula: ds.vars.tip_py.attrs.formula, inputs: [inp('mid_py', 3), inp('L2', 4), inp('sc', 4), inp('th2w', 6)], value: G2('mid_py') - G2('L2') * G2('sc') * Math.cos(G2('s_now')[2]) }; },
+                sc: function () { var W = G2('box_w'), Hh = G2('box_h'), L = G2('L1') + G2('L2'), vv = G2('vy'), up = (Hh - 90) / Math.max(1.4, L + 0.25), down = (Hh / 2 - 24) / L;
+                    return { formula: ds.vars.sc.attrs.formula, inputs: [inp('box_w', 0), inp('box_h', 0), inp('L1', 4), inp('L2', 4), inp('vy', 6)], value: Math.min(W / (3.2 + 2 * vv), up + (down - up) * vv) }; },
+                y0: function () { var Hh = G2('box_h'), vv = G2('vy'); return { formula: '(h − 62) + (h/2 − (h − 62)) v<sub>y</sub>', inputs: [inp('box_h', 0), inp('vy', 6)], value: (Hh - 62) + (Hh / 2 - (Hh - 62)) * vv }; }
+            },
+            drawn: {
+                x: cartPixels, cart_px: cartPixels,
+                mid_px: function () { return discPixel(_t('the hinge between the rods'), G2('mid_px'), G2('mid_py'), WHITE, midNote); }, mid_py: function () { return discPixel(_t('the hinge between the rods'), G2('mid_px'), G2('mid_py'), WHITE, midNote); },
+                th1w: function () { return discPixel(_t('the hinge between the rods, placed from θ₁'), G2('mid_px'), G2('mid_py'), WHITE, midNote); },
+                tip_px: function () { return discPixel(_t('the top of the upper rod'), G2('tip_px'), G2('tip_py'), ACC, tipNote); }, tip_py: function () { return discPixel(_t('the top of the upper rod'), G2('tip_px'), G2('tip_py'), ACC, tipNote); },
+                th2w: function () { return discPixel(_t('the top of the upper rod, placed from θ₂'), G2('tip_px'), G2('tip_py'), ACC, tipNote); },
+                u: function () { var uu = G2('u'); if (Math.abs(uu) <= 0.05) return { what: _t('the force arrow'), drawn: _t('no arrow'), expected: _t('no arrow below 0.05 N'), ok: null, note: _t('Forces of 0.05 N or less are not drawn.') };
+                    var len = Math.sign(uu) * Math.min(1, Math.abs(uu) / G2('u_max')) * G2('cart_w') * 1.6, ax = uu > 0 ? G2('cart_px') - G2('cart_w') / 2 - 6 : G2('cart_px') + G2('cart_w') / 2 + 6, ay = G2('y0') - G2('cart_h') / 2 + 4;
+                    return discPixel(_t('the middle of the force arrow'), ax - len / 2, ay, ACC, _t('The arrow is a burgundy line 3 px thick beside the cart, as long as 1.6 cart widths at the force limit.')); },
+                target_px: function () { return discPixel(_t('the target marker'), G2('target_px'), G2('y0') + 23, ACC, _t('The target is a burgundy triangle under the rail.')); }
+            },
+            probe: function (x, y) {
+                var c = [['tip', G2('tip_px'), G2('tip_py')], ['mid', G2('mid_px'), G2('mid_py')], ['cart', G2('cart_px'), G2('cart_py') + G2('cart_h') / 2 - 2], ['target', G2('target_px'), G2('y0') + 23]], best = null, bd = 28;
+                c.forEach(function (q) { var dd = Math.hypot(x - q[1], y - q[2]); if (dd < bd) { bd = dd; best = q[0]; } }); return best ? { what: best } : null; },
+            inspect: function (ref) {
+                var S = G2('s_now'), A3 = G2('qdd'), w = ref.what;
+                if (w === 'tip') return { title: _t('upper rod'), at: { x: G2('tip_px'), y: G2('tip_py') }, rows: [['θ<sub>2</sub>', G2('th2w'), 'rad', 'th2w'], ['θ̇<sub>2</sub>', S[5], 'rad/s', 's_now', 5], ['θ̈<sub>2</sub>', A3[2], 'rad/s²', 'qdd', 2], ['W', G2('W'), '', 'W'], ['E', G2('E'), 'J', 'E']] };
+                if (w === 'mid') return { title: _t('lower rod and the hinge between the rods'), at: { x: G2('mid_px'), y: G2('mid_py') }, rows: [['θ<sub>1</sub>', G2('th1w'), 'rad', 'th1w'], ['θ̇<sub>1</sub>', S[4], 'rad/s', 's_now', 4], ['θ̈<sub>1</sub>', A3[1], 'rad/s²', 'qdd', 1], ['E<sub>p</sub>', G2('Ep'), 'J', 'Ep']] };
+                if (w === 'cart') return { title: _t('cart'), at: { x: G2('cart_px'), y: G2('cart_py') + G2('cart_h') / 2 - 2 }, rows: [['x', G2('x'), 'm', 'x'], ['ẋ', G2('xd'), 'm/s', 'xd'], ['ẍ', A3[0], 'm/s²', 'qdd', 0], ['u', G2('u'), 'N', 'u'], ['x<sub>r</sub>', G2('x_r'), 'm', 'x_r'], ['v<sub>r</sub>', G2('v_r'), 'm/s', 'v_r']] };
+                return { title: _t('target'), at: { x: G2('target_px'), y: G2('y0') + 23 }, rows: [['x<sub>target</sub>', G2('x_target'), 'm', 'x_target'], ['x<sub>r</sub>', G2('x_r'), 'm', 'x_r'], ['v<sub>r</sub>', G2('v_r'), 'm/s', 'v_r'], ['ref', G2('ref_kind'), '', 'ref_kind']] }; },
+            locate: function (name, idx) {
+                var at = function (k) { return k === 0 ? { x: G2('cart_px'), y: G2('cart_py') + G2('cart_h') / 2 - 2 } : k === 1 ? { x: G2('mid_px'), y: G2('mid_py') } : { x: G2('tip_px'), y: G2('tip_py') }; };
+                if (name === 's_now') return at(idx % 3); if (name === 'qdd') return at(idx); return null; },
+            round: { time: 't', label: function () { return _t('ten seconds of simulated motion'); }, length: function () { return 10; },
+                columns: ['x', 'th1w', 'th2w', 'u', 'W', 'E', 'bal'], point: function () { return { what: 'tip' }; } },
+            about: 'The page integrates live: every frame takes the 1 ms RK4 steps its time needs (about 17 at 60 frames a second), and the store keeps every one of them in the step log, every look of the controller in the sample log, and the state at the end of the frame. The picture shows only that last state; the steps between two frames are in the log, not on the screen. The camera follows the cart at 8 % of the distance per frame and the view widens when the rods hang down, so a cart at rest is drawn off centre for a moment after it moved; both are stored (x_cam, v_y) and used in the read-back. The rods are drawn thicker for heavier rods, the force arrow is clipped at the force limit, and the lower figure plots the trace every 20 ms with the angles clipped at ±10.5° and the force at ±1.05 u_max. The logs keep their newer half when they are full, so they always hold the last 4 to 8 s.',
+            ledger: {
+                headline: [{ v: 'th1w', title: 'lower rod' }, { v: 'th2w', title: 'upper rod' }, { v: 'x', title: 'cart' }, { v: 'u', title: 'motor force' }, { v: 'W', title: 'remaining cost' }, { v: 'E', title: 'energy' }],
+                sections: groups,
+                books: [{ title: 'Energy', short: 'energy', note: 'The motor’s work u Δx in every step, and what flicks and your hand put in, must add up to the energy of cart and rods; what is left is the integrator’s error.',
+                    rows: [[1, 'E0'], [1, 'W_motor'], [1, 'E_ext'], [1, 'E_wait']], total: 'E', residual: 'bal', tol: 1e-7 }],
+                deps: { d: ['m0', 'm1', 'm2', 'L1', 'L2'], f: ['m1', 'm2', 'L1', 'L2'], sig: ['d', 'f'], t_efold: ['sig'], K: ['d', 'f', 'rho', 'Ts', 'gmode'], P: ['d', 'f', 'rho', 'Ts', 'gmode'], Phi: ['d', 'f', 'Ts'], Gam: ['d', 'f', 'Ts'], Rd: ['d', 'f', 'rho', 'Ts'],
+                    lam: ['Phi', 'Gam', 'K'], t_settle: ['lam', 'Ts'], c_star: ['P', 'K', 'u_max', 'Ts'], c_hand: ['c_star'], W: ['P', 'x_r', 'v_r'], W_red: ['P'] },
+                controls: { Fmax: 'u_max' },
+                current: { j: 'cs_last', k: 'st_last', n: 'tr_last' },
+                how: { ver: 'solver', c_busy: 'solver', s_now: 'run', E_wait: 'run' }
+            }
+        };
+
+        window.DIPC = { get ds() { return ds; }, rk4: rk4, draw: draw, get geo() { return geo; }, get held() { return held; }, get s() { return s; }, set s(v) { s = v.slice(); why = 3; nextCheck = tSim; }, get K() { return K; }, get P() { return Pm; }, get p() { return p; }, fallRates: fallRates, rhs: rhs, rhsF: rhsF, flick: flick, get lost() { return lost; }, set xref(v) { xref = v; ref = { kind: 'fixed', x: v }; }, get ref() { return ref; }, set rolling(v) { rolling = v; }, set gmode(v) { gmode = v; redesign(); },
             finishCatch: function () { while (catchIt) think(1000); return cLevel; }, Wred: function () { return Wred(s); }, specRad: specRad, dlqr: dlqr, sampledModel: sampledModel, linear: linear,
             get mode() { return mode; }, get cLevel() { return cLevel; }, get t() { return tSim; }, get u() { return u; }, W: function () { return Wof(s, tSim); }, Ep: function () { return Ep(s); }, get log() { return log; }, swingUp: swingUp, step: step, think: think, get job() { return job; }, PlanJob: PlanJob };
     })();
     </script>
+    <script src="../../scripts/datalog.js"></script>
 </body>
 </html>
