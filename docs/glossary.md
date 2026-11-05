@@ -90,6 +90,7 @@ then into the tables. Machine tables: [i18n/de/strings.json](../i18n/de/strings.
 | Reynolds number | Reynolds-Zahl | عدد رينولدز |
 | drag (viscous, pressure, Stokes) | Widerstand (viskoser, Druck-, Stokes-Widerstand) | الكبح (اللزج، كبح الضغط، كبح ستوكس) |
 | buoyancy, added mass | Auftrieb, hydrodynamische (mitbewegte) Masse | الطفو، الكتلة المضافة |
+| Froude–Krylov force, Morison equation | Froude-Krylow-Kraft, Morison-Gleichung | قوّة فرود–كريلوف، معادلة موريسون |
 | resistive force theory, Stokeslet | Widerstandskrafttheorie, Stokeslet | نظرية قوّة المقاومة، الستوكسليت |
 | traction (σ·n), generalised force | Spannungsvektor, verallgemeinerte Kraft | متّجه الإجهاد، القوّة المعمّمة |
 | vortex, eddy, Kármán vortex street | Wirbel, Wirbelwalze, Kármánsche Wirbelstraße | دوّامة، دوّامة متدحرجة، شارع دوّامات كارمان |

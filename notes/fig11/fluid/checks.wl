@@ -56,3 +56,26 @@ Qof[fld_, xi1_, xi2_, cq_, cl_, cc_, nu_] := Module[{Qr, um, wc},
 air = SetPrecision[#, 30] & /@ {0.0000594265054278, 0.0000538456274232, 0.014208, 0.0000395212355822, 0.01818624, 0.000015625};
 Qof["fan", Sequence @@ air]
 (* -> {0.00352356781818455, 0.00213261470063140, 0.00112510608998566} *)
+
+(* 6. Added mass (38): C_a of a cylinder and a sphere from the kinetic energy of potential flow *)
+phiC = -U a^2 Cos[t]/r; gC = {D[phiC, r], D[phiC, t]/r};
+TC = Simplify[1/2 rho Integrate[(gC . gC) r, {r, a, Infinity}, {t, 0, 2 Pi}, Assumptions -> a > 0 && U > 0]];
+phiS = -U a^3 Cos[t]/(2 r^2); gS = {D[phiS, r], D[phiS, t]/r};
+TS = Simplify[1/2 rho Integrate[(gS . gS) 2 Pi r^2 Sin[t], {r, a, Infinity}, {t, 0, Pi}, Assumptions -> a > 0 && U > 0]];
+{2 TC/U^2/(rho Pi a^2), 2 TS/U^2/(rho 4/3 Pi a^3)}
+(* -> {1, 1/2} *)
+
+(* 7. The added-mass matrix, its velocity terms (Lagrange and Christoffel), energy, and the cart's Tuckerman kappa_x *)
+q = {x, a, b}; qd = {xd, ad, bd};
+v1n[s_] := xd Cos[a] + s ad;  v2n[s_] := xd Cos[b] + L1 Cos[a - b] ad + s bd;
+Ta = Simplify[mu1/2 Integrate[v1n[s]^2, {s, 0, L1}] + mu2/2 Integrate[v2n[s]^2, {s, 0, L2}] + mc/2 xd^2];
+Ma = Table[D[Ta, qd[[i]], qd[[j]]], {i, 3}, {j, 3}] // Simplify;
+dt[f_] := D[f, x] xd + D[f, a] ad + D[f, b] bd;
+Ca = Simplify[Table[dt[D[Ta, qd[[i]]]] - D[Ta, q[[i]]], {i, 3}]];
+qdd = {xdd, add, bdd}; eq = Ma . qdd + Ca;
+dTa = Simplify[dt[Ta] + Total[D[Ta, qd[[#]]] qdd[[#]] & /@ {1, 2, 3}] - (qd . eq)];
+Chr = Simplify[Table[Sum[(D[Ma[[i, j]], q[[k]]] - 1/2 D[Ma[[j, k]], q[[i]]]) qd[[j]] qd[[k]], {j, 3}, {k, 3}], {i, 3}]];
+{r1, r2, r3} = {18/100, 6/100, 10/100};
+kx = NIntegrate[r1 r2 r3/Sqrt[(r1^2 + l)^3 (r2^2 + l) (r3^2 + l)], {l, 0, Infinity}, WorkingPrecision -> 30];
+{Ca // InputForm, dTa, Simplify[Ca - Chr], N[kx, 16], N[kx/(2 - kx), 16]}
+(* -> Ca as in addedC() of the page, 0, {0,0,0}, 0.2876184832457318, 0.1679640199521062 *)

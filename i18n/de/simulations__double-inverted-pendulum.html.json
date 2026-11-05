@@ -207,6 +207,10 @@
   "src": "a rolling eddy",
   "tr": "eine rollende Wirbelwalze"
  },
+ "18703d3c792a": {
+  "src": "Wikipedia, <a href=\"https://en.wikipedia.org/wiki/Added_mass\">“Added mass”</a>: \\(\\tfrac23\\pi r^3\\rho\\) for a sphere.",
+  "tr": "Wikipedia, <a href=\"https://en.wikipedia.org/wiki/Added_mass\">„Added mass“</a>: \\(\\tfrac23\\pi r^3\\rho\\) für eine Kugel."
+ },
  "1933892d15c2": {
   "src": "Near the top, \\(\\sin\\theta\\approx\\theta\\) and \\(\\cos\\theta\\approx 1\\), and products of small velocities are negligible, so \\(\\mathbf C\\dot{\\boldsymbol\\theta}\\) drops out. Then (9) becomes linear,",
   "tr": "Nahe der Spitze ist \\(\\sin\\theta\\approx\\theta\\) und \\(\\cos\\theta\\approx 1\\), und Produkte kleiner Geschwindigkeiten sind vernachlässigbar, also fällt \\(\\mathbf C\\dot{\\boldsymbol\\theta}\\) weg. Dann wird (9) linear,"
@@ -226,6 +230,10 @@
  "1a967eaa7a6f": {
   "src": "<span class=\"psub__n\">3.1</span>Velocities",
   "tr": "<span class=\"psub__n\">3.1</span>Geschwindigkeiten"
+ },
+ "1ad98a3309a7": {
+  "src": "and on the cart \\((\\rho V_e + m_c)\\) times the flow's acceleration along the rail. With both, the equations of motion (9) become",
+  "tr": "und auf den Wagen \\((\\rho V_e + m_c)\\) mal die Beschleunigung der Strömung längs der Schiene. Mit beidem werden die Bewegungsgleichungen (9) zu"
  },
  "1ae2f5951c6b": {
   "src": "<b>The machine between two looks.</b> Between the look at time \\(t_k = kT_s\\) and the next, the linear model (11) runs with a constant input: \\(\\dot{\\mathbf s} = \\mathbf A\\mathbf s + \\mathbf B u_k\\). This is a linear equation with a constant forcing, and we solve it the way one solves \\(\\dot z = az + b\\): the free motion grows as \\(e^{\\mathbf A t}\\), and the forcing is carried forward from every instant \\(\\tau\\) at which it acted, each slice \\(\\mathbf B u_k\\,\\mathrm d\\tau\\) then growing freely for the remaining time \\(t - \\tau\\). This is the variation of constants, and it gives \\(\\mathbf s(t_k + t) = e^{\\mathbf A t}\\mathbf s_k + \\int_0^{t} e^{\\mathbf A(t-\\tau)}\\,\\mathrm d\\tau\\;\\mathbf B u_k\\). At the next look, \\(t = T_s\\):",
@@ -291,6 +299,10 @@
   "src": "Hang down, swing up",
   "tr": "Hängen lassen, aufschwingen"
  },
+ "25729dd6e31c": {
+  "src": "Push a hand sideways through a bath and the water does more than resist: some of it comes along and has to be speeded up too. Potential flow makes this exact. A cylinder of radius \\(a\\) moving across still fluid at speed \\(U\\) sets the fluid moving with kinetic energy \\(\\tfrac12\\rho\\pi a^2 U^2\\) per metre (Wolfram integrates \\(\\tfrac12\\rho|\\nabla\\phi|^2\\) for \\(\\phi = -Ua^2\\cos\\vartheta/r\\); the same integral for a sphere gives \\(\\tfrac23\\pi a^3\\rho\\), the textbook value [26]). So each metre of rod carries an added mass \\(\\mu_a = C_a\\rho\\pi r^2\\) with \\(C_a = 1\\), but only for motion across it: a thin rod moving along itself sets almost no water moving, as an oar slices edge-on. The water's share of the kinetic energy is",
+  "tr": "Schieben Sie eine Hand seitlich durch eine Badewanne, und das Wasser tut mehr, als nur zu bremsen: Ein Teil davon kommt mit und muss ebenfalls beschleunigt werden. Die Potentialströmung macht das genau. Ein Zylinder vom Radius \\(a\\), der sich mit der Geschwindigkeit \\(U\\) quer durch ruhendes Fluid bewegt, setzt das Fluid mit der kinetischen Energie \\(\\tfrac12\\rho\\pi a^2 U^2\\) pro Meter in Bewegung (Wolfram integriert \\(\\tfrac12\\rho|\\nabla\\phi|^2\\) für \\(\\phi = -Ua^2\\cos\\vartheta/r\\); dasselbe Integral ergibt für eine Kugel \\(\\tfrac23\\pi a^3\\rho\\), den Lehrbuchwert [26]). Jeder Meter Stange trägt also eine hydrodynamische Masse \\(\\mu_a = C_a\\rho\\pi r^2\\) mit \\(C_a = 1\\), aber nur für Bewegung quer zu ihr: Eine dünne Stange, die sich längs bewegt, setzt fast kein Wasser in Bewegung, so wie ein Ruderblatt, das mit der Kante durchs Wasser schneidet. Der Anteil des Wassers an der kinetischen Energie ist"
+ },
  "258c68a823a7": {
   "src": "K. Graichen, M. Treuer and M. Zeitz, <a href=\"https://doi.org/10.1016/j.automatica.2006.07.023\">“Swing-up of the double pendulum on a cart by feedforward and feedback control with experimental validation”</a>, <em>Automatica</em> 43, 63–71 (2007): the swing-up as a boundary-value problem plus stabilising linear feedback, run on a laboratory machine.",
   "tr": "K. Graichen, M. Treuer und M. Zeitz, <a href=\"https://doi.org/10.1016/j.automatica.2006.07.023\">„Swing-up of the double pendulum on a cart by feedforward and feedback control with experimental validation“</a>, <em>Automatica</em> 43, 63–71 (2007): das Aufschwingen als Randwertproblem plus stabilisierende lineare Rückführung, an einer Labormaschine ausgeführt."
@@ -315,9 +327,17 @@
   "src": "How the swing-up hands the rods to the balancer. <i>Arrive moving</i>: the cart is still rolling at the catch, and is then braked to rest in small certified steps (11.4–11.5). <i>Arrive at rest</i>: the plan must also stop the cart, which is harder to find.",
   "tr": "Wie das Aufschwingen die Stangen an den Balancierregler übergibt. <i>In Bewegung ankommen</i>: Der Wagen rollt beim Fangen noch und wird dann in kleinen gesicherten Schritten bis zum Stillstand gebremst (11.4–11.5). <i>In Ruhe ankommen</i>: Der Plan muss auch den Wagen anhalten, und ein solcher Plan ist schwerer zu finden."
  },
+ "28b391091019": {
+  "src": "where \\(m_c = \\rho V_e\\,\\kappa_x/(2 - \\kappa_x)\\) is the added mass of the cart taken as an ellipsoid of its size, semi-axes 0.18, 0.06 and 0.10 m, with Tuckerman's \\(\\kappa_x = 0.2876\\) as MuJoCo computes it [16]: 0.76 kg in water, half the cart's own mass. \\(\\mathbf M_a\\) depends on the angles because \\(\\mathbf v\\cdot\\mathbf n\\) does: when the cart moves, an upright rod moves across itself and carries its full share of water, a rod lying along the rail moves along itself and carries almost none. Lagrange's equations with \\(T + T_a\\) give the velocity terms \\(\\mathbf C_a\\) of (40); Wolfram checks that they keep \\(T_a\\) constant when nothing else acts, and that they equal the terms built from the Christoffel symbols of \\(\\mathbf M_a\\), the road the independent reference takes.",
+  "tr": "wobei \\(m_c = \\rho V_e\\,\\kappa_x/(2 - \\kappa_x)\\) die hydrodynamische Masse des Wagens ist, gerechnet als Ellipsoid seiner Größe mit den Halbachsen 0.18, 0.06 und 0.10 m und mit Tuckermans \\(\\kappa_x = 0.2876\\), wie MuJoCo es berechnet [16]: 0.76 kg in Wasser, die Hälfte der Masse des Wagens selbst. \\(\\mathbf M_a\\) hängt von den Winkeln ab, weil \\(\\mathbf v\\cdot\\mathbf n\\) es tut: Wenn der Wagen fährt, bewegt sich eine aufrechte Stange quer zu sich selbst und nimmt ihren vollen Anteil Wasser mit, eine längs der Schiene liegende Stange bewegt sich längs und nimmt fast keines mit. Die Lagrange-Gleichungen mit \\(T + T_a\\) geben die Geschwindigkeitsterme \\(\\mathbf C_a\\) von (40); Wolfram prüft, dass sie \\(T_a\\) konstant halten, wenn sonst nichts wirkt, und dass sie gleich den Termen aus den Christoffel-Symbolen von \\(\\mathbf M_a\\) sind, dem Weg, den die unabhängige Referenz nimmt."
+ },
  "29404de7e4d9": {
   "src": "Near the top every angle and every velocity is small, of some size \\(\\epsilon\\). Keep in (9) only what is of first order in \\(\\epsilon\\): \\(\\sin\\theta = \\theta + O(\\epsilon^3)\\); \\(\\cos\\theta = 1 + O(\\epsilon^2)\\), so \\(\\mathbf D(\\boldsymbol\\theta)\\ddot{\\boldsymbol\\theta} = \\mathbf D(\\mathbf 0)\\ddot{\\boldsymbol\\theta} + O(\\epsilon^3)\\); and every entry of \\(\\mathbf C\\dot{\\boldsymbol\\theta}\\) is a sine times a squared velocity, \\(O(\\epsilon^3)\\), so it drops out. With \\(\\mathbf G \\approx -\\operatorname{diag}(0, f_1, f_2)\\boldsymbol\\theta\\), (9) becomes linear,",
   "tr": "Nahe der Spitze sind alle Winkel und alle Geschwindigkeiten klein, von einer Größe \\(\\epsilon\\). Behalten Sie in (9) nur, was von erster Ordnung in \\(\\epsilon\\) ist: \\(\\sin\\theta = \\theta + O(\\epsilon^3)\\); \\(\\cos\\theta = 1 + O(\\epsilon^2)\\), also \\(\\mathbf D(\\boldsymbol\\theta)\\ddot{\\boldsymbol\\theta} = \\mathbf D(\\mathbf 0)\\ddot{\\boldsymbol\\theta} + O(\\epsilon^3)\\); und jeder Eintrag von \\(\\mathbf C\\dot{\\boldsymbol\\theta}\\) ist ein Sinus mal ein Geschwindigkeitsquadrat, \\(O(\\epsilon^3)\\), und fällt daher heraus. Mit \\(\\mathbf G \\approx -\\operatorname{diag}(0, f_1, f_2)\\boldsymbol\\theta\\) wird (9) linear,"
+ },
+ "29a0c71be577": {
+  "src": "Stand at a bus stop as a lorry goes by: the gust pushes you, then pulls. Wade into a river: the water leans on your legs, harder the faster it runs, and harder on a leg standing across the stream than on a pole held along it. This section gives the machine such a fluid. Its particles move with a velocity field \\(\\mathbf v_f(x, y, t)\\), chosen in the menu under the figure, and every piece of the cart and the rods that moves at a different velocity is pushed. The flow is given: the bodies feel it but do not change it. That one-way coupling is the right picture while the bodies are small next to the scale of the flow; section 13.5 says what it leaves out.",
+  "tr": "Stehen Sie an einer Bushaltestelle, während ein Lkw vorbeifährt: Die Böe drückt Sie, dann zieht sie. Waten Sie in einen Fluss: Das Wasser stemmt sich gegen Ihre Beine, umso stärker, je schneller es fließt, und stärker gegen ein Bein, das quer zur Strömung steht, als gegen einen Stab, der längs gehalten wird. Dieser Abschnitt gibt der Maschine ein solches Fluid. Seine Teilchen bewegen sich mit einem Geschwindigkeitsfeld \\(\\mathbf v_f(x, y, t)\\), das im Menü unter der Abbildung gewählt wird, und jedes Stück des Wagens und der Stangen, das sich mit einer anderen Geschwindigkeit bewegt, wird geschoben. Die Strömung ist vorgegeben: Die Körper spüren sie, verändern sie aber nicht. Diese einseitige Kopplung ist das richtige Bild, solange die Körper klein sind gegen die Größe der Strömung; Abschnitt 13.5 sagt, was sie weglässt."
  },
  "29d9f584ee09": {
   "src": "1 ms",
@@ -654,6 +674,10 @@
  "5f0591c93e96": {
   "src": "\\(\\mathbf K_d\\) on \\(\\theta_1, \\theta_2\\) (N/rad)",
   "tr": "\\(\\mathbf K_d\\) für \\(\\theta_1, \\theta_2\\) (N/rad)"
+ },
+ "5f9d7401ef5f": {
+  "src": "<b>How it is checked.</b> The data panel recomputes \\(\\mathbf Q\\) from the stored state by Simpson's rule with 400 slices per rod. In Wolfram, at a fixed test state, an adaptive integral of (35) agrees with the page's 24 points to all 15 digits for the swell and the ground wind and to \\(7\\times10^{-5}\\) of the force or better for the jet, the eddy, the cells and the vortex street; what is left is the kink of \\(|w_n|\\,w_n\\) where the flow across a rod changes sign. With 8 points per rod the vortex street was 1.2 % off, which is why the page uses 24. The honesty tests replay every stored step bit for bit, and an independent reference, written from this note with the published table of Gauss points, agrees to \\(10^{-15}\\) in a vortex street, in a swell and with the cart in your hand in a breeze. For the added mass of 13.5 it takes the other road, the Christoffel symbols of \\(\\mathbf M_a\\), and still agrees to \\(10^{-15}\\), in still water and in a swell.",
+  "tr": "<b>Wie es geprüft wird.</b> Das Datenpanel berechnet \\(\\mathbf Q\\) aus dem gespeicherten Zustand mit der Simpson-Regel und 400 Abschnitten pro Stange neu. In Wolfram stimmt bei einem festen Testzustand ein adaptives Integral von (35) mit den 24 Punkten der Seite für die Dünung und den Bodenwind in allen 15 Stellen überein, für den Strahl, die Wirbelwalze, die Zellen und die Wirbelstraße auf \\(7\\times10^{-5}\\) der Kraft oder besser; was bleibt, ist der Knick von \\(|w_n|\\,w_n\\), wo die Strömung quer zu einer Stange ihr Vorzeichen wechselt. Mit 8 Punkten pro Stange lag die Wirbelstraße 1.2 % daneben; deshalb nimmt die Seite 24. Die Ehrlichkeitstests spielen jeden gespeicherten Schritt Bit für Bit nach, und eine unabhängige Referenz, aus diesem Skript mit der veröffentlichten Tabelle der Gauß-Punkte geschrieben, stimmt auf \\(10^{-15}\\) überein, in einer Wirbelstraße, in einer Dünung und mit dem Wagen in Ihrer Hand in einer Brise. Für die hydrodynamische Masse von 13.5 nimmt sie den anderen Weg, die Christoffel-Symbole von \\(\\mathbf M_a\\), und stimmt trotzdem auf \\(10^{-15}\\) überein, in ruhendem Wasser und in einer Dünung."
  },
  "6077c45469fa": {
   "src": "Lagrange’s equations, one per coordinate, are \\(\\frac{\\mathrm d}{\\mathrm dt}\\frac{\\partial \\mathcal L}{\\partial\\dot q_i} - \\frac{\\partial\\mathcal L}{\\partial q_i} = Q_i\\) with \\(\\mathcal L = T - V\\) and \\(Q_i\\) the generalised force: the work a small change \\(\\delta q_i\\) lets the outside forces do, divided by \\(\\delta q_i\\). The motor force \\(u\\) does work \\(u\\,\\delta x\\) when the cart moves and none when only an angle changes, so \\(\\mathbf Q = (u, 0, 0)^{\\mathsf T}\\). The hinge forces do no work, because they act at points that do not slide along them; that is why Lagrange’s method never needs them.",
@@ -1111,6 +1135,14 @@
   "src": "<span>10</span>Calming: the cart drains the rods’ energy",
   "tr": "<span>10</span>Beruhigen: Der Wagen entzieht den Stangen Energie"
  },
+ "9dfb231129c2": {
+  "src": "The fluid stands still; the cart and the rods feel it only by moving through it: as drag (33)–(34), and as the water they carry along (38).",
+  "tr": "Das Fluid steht still; Wagen und Stangen spüren es nur, indem sie sich hindurchbewegen: als Widerstand (33)–(34) und als das Wasser, das sie mitnehmen (38)."
+ },
+ "9f37d3c188ed": {
+  "src": "<b>13.4</b> Derive \\(\\mathbf M_a\\) of (38) for one rod hinged on the cart, and show that its \\(xx\\) entry \\(\\mu_a L\\cos^2\\theta\\) vanishes for a rod lying along the rail. Why does the added mass of the rod's turning, \\(\\mu_a L^3/3\\), not depend on \\(\\theta\\)?",
+  "tr": "<b>13.4</b> Leiten Sie \\(\\mathbf M_a\\) aus (38) für eine einzelne, am Wagen angelenkte Stange her und zeigen Sie, dass ihr \\(xx\\)-Element \\(\\mu_a L\\cos^2\\theta\\) für eine längs der Schiene liegende Stange verschwindet. Warum hängt die hydrodynamische Masse des Drehens der Stange, \\(\\mu_a L^3/3\\), nicht von \\(\\theta\\) ab?"
+ },
  "9f50381895e4": {
   "src": "Gains on θ₁, θ₂",
   "tr": "Verstärkungen für θ₁, θ₂"
@@ -1126,6 +1158,10 @@
  "a0fda8360aa6": {
   "src": "<b>Pull it over and let go.</b> Grab a rod in the figure and tilt it; while you hold it, everything stands still at rest. Let go, and the controller starts from that leaning state. With the default machine and \\(u_\\text{max} = 60\\) N, the upper rod pulled to 13° comes back, and so does the lower rod pulled to −10°. The upper rod pulled to 45° is lost: the controller asks for more than 60 N, the motor saturates, and the rods fall before the cart can get under them. Raise \\(u_\\text{max}\\) and try again.",
   "tr": "<b>Umziehen und loslassen.</b> Fassen Sie eine Stange in der Abbildung und kippen Sie sie; solange Sie sie halten, steht alles in Ruhe still. Lassen Sie los, und der Regler beginnt aus dieser geneigten Lage. Bei der voreingestellten Maschine und \\(u_\\text{max} = 60\\) N kommt die obere Stange, auf 13° gezogen, zurück, ebenso die untere Stange, auf −10° gezogen. Die obere Stange, auf 45° gezogen, geht verloren: Der Regler verlangt mehr als 60 N, der Motor geht in die Sättigung, und die Stangen fallen, bevor der Wagen unter sie kommen kann. Erhöhen Sie \\(u_\\text{max}\\) und versuchen Sie es noch einmal."
+ },
+ "a284b42f7300": {
+  "src": "with (39) inside \\(\\mathbf Q\\). The page takes \\(D\\mathbf v_f/Dt\\) by central differences 0.1 mm and 0.1 ms wide; Wolfram's exact derivative of each flow at a test point agrees to \\(6\\times10^{-7}\\) of it or better. The controller is redesigned with \\(\\mathbf M_a\\), as with the buoyancy, and so are its certificate and the swing-up planner, which use the same machine; the flow they are still not told. In water, buoyancy and added mass together slow both fall rates of (13) by 17 %: from 10.39 to 8.61 and from 4.10 to 3.40 per second.",
+  "tr": "mit (39) in \\(\\mathbf Q\\). Die Seite bildet \\(D\\mathbf v_f/Dt\\) mit zentralen Differenzen von 0.1 mm und 0.1 ms Breite; Wolframs exakte Ableitung jeder Strömung an einem Testpunkt stimmt auf \\(6\\times10^{-7}\\) davon oder besser überein. Der Regler wird mit \\(\\mathbf M_a\\) neu entworfen, wie beim Auftrieb, und ebenso sein Zertifikat und der Planer des Aufschwingens, die dieselbe Maschine benutzen; die Strömung erfahren sie weiterhin nicht. In Wasser verlangsamen Auftrieb und hydrodynamische Masse zusammen beide Fallraten von (13) um 17 %: von 10.39 auf 8.61 und von 4.10 auf 3.40 pro Sekunde."
  },
  "a33cf95f60e4": {
   "src": "Left out: friction in the hinges and wheels, the motor’s own dynamics (a real motor cannot change its force instantly), sensor noise, and a hard end of the rail (the planner keeps the cart within ±1.5 m; calming and balancing do not). Each is a known extension of this model [1, 3]. Every number on this page that is not derived or taken from a source is a choice of ours, and the text says so where it is made: the weight on \\(x\\), the ranges of the sliders, \\(u_\\text{max} = 60\\) N, the planner’s weights and rail limit, the calming gains, the glide rate of (26), the share \\(\\gamma = 0.5\\) of the certified level in the braking (27a), the rectangle rule in (23), and the shells, directions and climbs of the certificate (19a).",
@@ -1154,6 +1190,10 @@
  "a4ce3a9be794": {
   "src": "← All simulations",
   "tr": "← Alle Simulationen"
+ },
+ "a4f688a39254": {
+  "src": "<b>Left out.</b> The parts of the added mass that mix the rod's own motion with the flow's velocity as the rod turns; the rods' own wakes and the vortices they shed; the bodies changing the flow; the water's surface; and the rail's own drag. Morison's equation is itself an approximation, poor where drag and inertia are of the same size [25]. The motor's 60 N cannot hold the default rods in a river running at 2 m/s: by (34) the water pushes about 48 N on every metre.",
+  "tr": "<b>Weggelassen.</b> Die Anteile der hydrodynamischen Masse, die die Eigenbewegung der Stange mit der Geschwindigkeit der Strömung mischen, während sich die Stange dreht; die eigenen Nachläufe der Stangen und die Wirbel, die sie ablösen; die Rückwirkung der Körper auf die Strömung; die Wasseroberfläche; und der Widerstand der Schiene. Die Morison-Gleichung ist selbst eine Näherung, schlecht dort, wo Widerstand und Trägheit gleich groß sind [25]. Die 60 N des Motors halten die voreingestellten Stangen in einem Fluss mit 2 m/s nicht: Nach (34) drückt das Wasser mit etwa 48 N auf jeden Meter."
  },
  "a55213029d8b": {
   "src": "\\(\\mu\\) (Pa s)",
@@ -1379,6 +1419,10 @@
   "src": "For slow, small or very viscous motion the fluid obeys the Stokes equations, with pressure \\(p\\):",
   "tr": "Bei langsamer, kleiner oder sehr zäher Bewegung gehorcht das Fluid den Stokes-Gleichungen, mit dem Druck \\(p\\):"
  },
+ "c14b3adb9f16": {
+  "src": "A flow that speeds up pushes too. Its own pressure gradient, \\(-\\nabla p = \\rho\\,D\\mathbf v_f/Dt\\) with \\(D\\mathbf v_f/Dt = \\partial_t\\mathbf v_f + (\\mathbf v_f\\cdot\\nabla)\\mathbf v_f\\) the acceleration of the fluid's particles, acts on the volume of the rod (the Froude–Krylov force), and the water the rod would carry is accelerated by the flow as well. Per metre of rod, across it, as in Morison's equation [25],",
+  "tr": "Eine Strömung, die schneller wird, drückt ebenfalls. Ihr eigener Druckgradient, \\(-\\nabla p = \\rho\\,D\\mathbf v_f/Dt\\), mit \\(D\\mathbf v_f/Dt = \\partial_t\\mathbf v_f + (\\mathbf v_f\\cdot\\nabla)\\mathbf v_f\\) der Beschleunigung der Fluidteilchen, wirkt auf das Volumen der Stange (die Froude-Krylow-Kraft), und das Wasser, das die Stange mitnähme, wird von der Strömung ebenfalls beschleunigt. Pro Meter Stange, quer zu ihr, wie in der Morison-Gleichung [25],"
+ },
  "c14c44ff4c24": {
   "src": "Take the lower angle as the worked case. From (5), \\(\\partial T/\\partial\\dot\\theta_1 = d_2\\cos\\theta_1\\,\\dot x + d_4\\dot\\theta_1 + d_5\\cos(\\theta_1-\\theta_2)\\dot\\theta_2\\). Its time derivative is",
   "tr": "Als durchgerechneten Fall nehmen wir den unteren Winkel. Aus (5) folgt \\(\\partial T/\\partial\\dot\\theta_1 = d_2\\cos\\theta_1\\,\\dot x + d_4\\dot\\theta_1 + d_5\\cos(\\theta_1-\\theta_2)\\dot\\theta_2\\). Seine Zeitableitung ist"
@@ -1426,6 +1470,10 @@
  "c86facfedfd4": {
   "src": "<b>What a kick costs.</b> The remaining cost (19) after the kick is a quadratic in \\(\\Delta\\). Expanding \\((\\mathbf e + \\Delta\\mathbf e_4)^{\\mathsf T}\\mathbf P(\\mathbf e + \\Delta\\mathbf e_4)\\) and using \\(\\mathbf P = \\mathbf P^{\\mathsf T}\\):",
   "tr": "<b>Was ein Stoß kostet.</b> Die verbleibenden Kosten (19) nach dem Stoß sind quadratisch in \\(\\Delta\\). Ausmultiplizieren von \\((\\mathbf e + \\Delta\\mathbf e_4)^{\\mathsf T}\\mathbf P(\\mathbf e + \\Delta\\mathbf e_4)\\) unter Verwendung von \\(\\mathbf P = \\mathbf P^{\\mathsf T}\\) ergibt:"
+ },
+ "c9f12fb1c88b": {
+  "src": "Wikipedia, <a href=\"https://en.wikipedia.org/wiki/Morison_equation\">“Morison equation”</a>: \\(F = \\rho V\\dot u + \\rho C_a V(\\dot u - \\dot v) + \\tfrac12\\rho C_d A(u - v)|u - v|\\), the first term the Froude–Krylov force; its limits.",
+  "tr": "Wikipedia, <a href=\"https://en.wikipedia.org/wiki/Morison_equation\">„Morison equation“</a>: \\(F = \\rho V\\dot u + \\rho C_a V(\\dot u - \\dot v) + \\tfrac12\\rho C_d A(u - v)|u - v|\\), das erste Glied die Froude-Krylow-Kraft; ihre Grenzen."
  },
  "ca8a78aa7675": {
   "src": "<span class=\"psub__n\">9.1</span>Sources",
@@ -1602,6 +1650,10 @@
  "dfa644ba81f4": {
   "src": "\\(\\rho\\) (kg/m³)",
   "tr": "\\(\\rho\\) (kg/m³)"
+ },
+ "dfc5de4f4b58": {
+  "src": "<span class=\"psub__n\">13.5</span>The water a rod carries, and the push of an accelerating flow",
+  "tr": "<span class=\"psub__n\">13.5</span>Das Wasser, das eine Stange mitnimmt, und der Druck einer beschleunigten Strömung"
  },
  "dff2ee0cd0b1": {
   "src": "Air and water at everyday speeds are not slow: by the table of 13.1, a 2 cm rod moving at 1 m/s has \\(\\mathrm{Re} \\approx 1300\\) in air and 20 000 in water. Inertia then wins: the fluid piles up in front of the rod and leaves a wake behind it, and the push grows with the square of the speed across the rod. Per metre of rod,",
