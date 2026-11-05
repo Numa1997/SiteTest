@@ -210,6 +210,15 @@ row is gone), each note on one line with the whole text on hover. The block is n
 all five, in English, German and Arabic (German 554–708, Arabic 564–718). Below 900 px nothing changed (2 columns, the page scrolls).
 Ids, texts and the page's line count (1477) unchanged; `hon.cjs rest cart drag limit` passes 4/4, pixel read-back included.
 
+**Sliders beside the cart (5 November 2026, evening).** Numa: the cart figure was still far too wide for a cart that moves a metre or
+two, with the sliders under it. From 901 px the cart figure and the parameter grid now stand side by side (`.dtop`, columns 1.15 : 1),
+the eight sliders in two columns with each note on two lines; the figure stretches to the grid's height (at least `clamp(220px, 46vh,
+520px)`), the trace stays full width below. Measured, figure top to trace bottom: 491, 510, 602, 559 and 669 px at 1366 × 625,
+1280 × 650, 1536 × 730, 1440 × 780 and 1920 × 960 (German and Arabic within 20 px of these). The size test now also counts the canvas's
+drawn pixels: a first version left the canvas 0 px wide (the shared `margin-inline: auto` of `.stage__canvas` shrinks a flex child whose
+canvas is absolutely positioned), which only the screenshot showed; `width: 100%` fixes it, and every case now has 7 500–10 600 drawn
+pixels. Line count still 1477; `hon.cjs rest drag` passes with the pixel read-back.
+
 ## Interaction
 
 Flick the top (horizontal impulse `J` at the upper tip: `Δθ̇ = D⁻¹ (1, L1 cos θ1, L2 cos θ2)ᵀ J`), cart target −1/0/+1 m, Tilt and let go
