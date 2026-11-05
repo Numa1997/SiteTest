@@ -231,5 +231,22 @@
             has: ALL,
             added: '2026-10-24'
         },
+        {
+            id: 'beer-slosh',
+            fig: 12,
+            title: 'A Pint of Stout, Carried',
+            file: 'simulations/beer-slosh.html',
+            field: 'control',
+            stage: 2,
+            subject: 'control systems · fluid dynamics',
+            summary: 'Carry a pint and it slops. Here a Guinness tulip glass, measured from a photograph and rebuilt in Blender, sloshes in the modes of its real shape, computed by finite elements, while you drag, lift and shake it. A cut shows the velocity field inside; every source of damping, from the wall’s boundary layers to the friction of the head, is derived on its own.',
+            equation: '\\ddot a_n + 2\\gamma_n\\dot a_n + \\omega_n^2\\left(1 + \\frac{\\ddot z}{g}\\right) a_n = -\\lambda_n Q_n\\,\\ddot x, \\qquad \\nabla^2\\phi = 0',
+            model: 'linear potential flow in the accelerating glass; sloshing modes of the measured glass shape; Stokes boundary layers, surface skin, contact line and foam friction as separate damping terms',
+            method: 'modes by P2 finite elements (offline, checked against the exact Bessel modes of a cylinder); modal equations by RK4 at 1 ms, live',
+            controls: 'drag, lift or shake the glass; fill volume, head thickness, temperature, viscosity, density, surface tension, each damping term, hand stiffness, shaker amplitude and frequency, the cut plane',
+            concepts: ['sloshing', 'potential flow', 'Laplace equation', 'Bessel functions', 'finite elements', 'Steklov eigenvalue problem', 'Stokes boundary layer', 'damping', 'parametric resonance', 'Faraday waves', 'Mathieu equation', 'foam'],
+            has: ALL,
+            added: '2026-11-05'
+        },
     ];
 })();

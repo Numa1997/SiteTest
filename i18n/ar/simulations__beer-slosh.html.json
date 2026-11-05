@@ -1,0 +1,282 @@
+{
+ "0138db99eb49": {
+  "src": "Amplitude <i>A</i>",
+  "tr": "السعة <i>A</i>"
+ },
+ "01ffde0d6031": {
+  "src": "Back to the middle",
+  "tr": "العودة إلى الوسط"
+ },
+ "0706025b2bbc": {
+  "src": "max",
+  "tr": "max"
+ },
+ "0caf03dc0928": {
+  "src": "0: a clean surface; 1: a skin that cannot stretch (proteins, or the underside of the head).",
+  "tr": "0: سطح نظيف؛ 1: غشاء لا يتمدّد (بروتينات، أو الوجه السفلي للرغوة)."
+ },
+ "189a74889ec8": {
+  "src": "No head",
+  "tr": "بلا رغوة"
+ },
+ "2501c6529210": {
+  "src": "Straight",
+  "tr": "مستقيمة"
+ },
+ "2844acc7df08": {
+  "src": "Guinness tulip",
+  "tr": "توليب Guinness"
+ },
+ "2b7b656319c7": {
+  "src": "Sideways at <i>f</i><sub>1</sub>",
+  "tr": "جانبيًّا بـ <i>f</i><sub>1</sub>"
+ },
+ "32489005afe3": {
+  "src": "Effective gravity <i>g</i><sub>eff</sub>/<i>g</i>",
+  "tr": "الجاذبية الفعّالة <i>g</i><sub>eff</sub>/<i>g</i>"
+ },
+ "3d33cba514c0": {
+  "src": "Wall and floor layers <i>γ</i><sub>w</sub>",
+  "tr": "طبقتا الجدار والقاع <i>γ</i><sub>w</sub>"
+ },
+ "40603241328d": {
+  "src": "Falls to 1/e in",
+  "tr": "تهبط إلى 1/e خلال"
+ },
+ "43e54f06ca79": {
+  "src": "Surface tension <i>σ</i>",
+  "tr": "التوتر السطحي <i>σ</i>"
+ },
+ "46a5b685bdd0": {
+  "src": "Fixed between runs, never rescaled by itself: a slow slosh draws short arrows. The key in the cut gives the scale.",
+  "tr": "ثابت بين التشغيلات، ولا يُعاد ضبطه من تلقاء نفسه: التخضخض البطيء يرسم أسهمًا قصيرة. ويعطي المفتاح في المقطع المقياس."
+ },
+ "4effa0074b9e": {
+  "src": "<i>Straight</i>: a cylinder with the same surface radius and depth, where the modes are exact Bessel functions (section 4).",
+  "tr": "<i>مستقيمة</i>: أسطوانة لها نصف قطر السطح نفسه والعمق نفسه، وأنماطها فيها دوالّ بسل دقيقة (القسم 4)."
+ },
+ "56d14ec766d1": {
+  "src": "Density <i>ρ</i>",
+  "tr": "الكثافة <i>ρ</i>"
+ },
+ "5726b128ca3b": {
+  "src": "What is drawn",
+  "tr": "ما يُرسم"
+ },
+ "59770c70095f": {
+  "src": "A Guinness tulip glass, measured from a photograph and rebuilt in Blender, holds half a litre of stout under its head. Carry it: drag the glass across the table, lift it, shake it. The stout sloshes in the modes of this very glass shape, the head rides on top, and a cut through the glass shows the velocity field inside. The damping is not a fudge factor: each loss is derived on its own and can be switched off.",
+  "tr": "كأسُ Guinness على شكل زهرة التوليب، قيس شكلها من صورة فوتوغرافية وأُعيد بناؤها في Blender، تحمل نصف لتر من الستاوت تحت رغوته. احملها: اسحب الكأس على الطاولة، وارفعها، وهزّها. يتخضخض الستاوت في أنماط هذا الشكل بعينه من الكؤوس، وتطفو الرغوة فوقه، ويُظهر مقطعٌ عبر الكأس حقلَ السرعة في داخلها. وليس التخامد معاملًا مُلفَّقًا لضبط النتيجة: فكلّ خسارة مشتقّة وحدها، ويمكن إيقافها."
+ },
+ "5c1cdb506669": {
+  "src": "Calm the stout",
+  "tr": "هدّئ الستاوت"
+ },
+ "67ed2ce957cf": {
+  "src": "The stout",
+  "tr": "الستاوت"
+ },
+ "76014f7b4957": {
+  "src": "Glass and pour",
+  "tr": "الكأس والصبّ"
+ },
+ "781961bc81c2": {
+  "src": "Pause",
+  "tr": "إيقاف مؤقّت"
+ },
+ "781c237a8c2a": {
+  "src": "A Pint of Stout, Carried · Numa Koudsie",
+  "tr": "باينت من الستاوت، محمولًا · نعمة سائر قدسية"
+ },
+ "7bef2bd4a5fd": {
+  "src": "Viscosity at 6 °C <i>μ</i><sub>6</sub>",
+  "tr": "اللزوجة عند 6 °C <i>μ</i><sub>6</sub>"
+ },
+ "82ac9d3abf35": {
+  "src": "Head <i>h</i><sub>f</sub>",
+  "tr": "الرغوة <i>h</i><sub>f</sub>"
+ },
+ "85980845168c": {
+  "src": "Damping, each loss on its own",
+  "tr": "التخامد، كلّ خسارة على حدة"
+ },
+ "8ad11ae048b2": {
+  "src": "<b>Fig. 12</b> · <span class=\"tx\">\\(\\ddot a_n + 2\\gamma_n\\dot a_n + \\omega_n^2\\left(1+\\ddot z/g\\right)a_n = -\\lambda_n Q_n\\,\\ddot x\\)</span> · live, RK4",
+  "tr": "<b>الشكل 12</b> · <span class=\"tx\">\\(\\ddot a_n + 2\\gamma_n\\dot a_n + \\omega_n^2\\left(1+\\ddot z/g\\right)a_n = -\\lambda_n Q_n\\,\\ddot x\\)</span> · مباشر، RK4"
+ },
+ "8fda888e96a5": {
+  "src": "A Pint of Stout, Carried<span class=\"dot\">.</span>",
+  "tr": "باينت من الستاوت، محمولًا<span class=\"dot\">.</span>"
+ },
+ "8feef71c6008": {
+  "src": "The head’s mass per area is <i>ε</i><sub>f</sub><i>ρ h</i><sub>f</sub>; it loads the surface and lowers the frequencies (section 5).",
+  "tr": "كتلة الرغوة لكلّ وحدة مساحة هي <i>ε</i><sub>f</sub><i>ρ h</i><sub>f</sub>؛ وهي تُثقل السطح وتخفض الترددات (القسم 5)."
+ },
+ "909180960798": {
+  "src": "spills —",
+  "tr": "الانسكابات —"
+ },
+ "91e7a41c1f84": {
+  "src": "Up and down at 2<i>f</i><sub>1</sub>",
+  "tr": "صعودًا وهبوطًا بـ 2<i>f</i><sub>1</sub>"
+ },
+ "93a8161c11f4": {
+  "src": "Back to the simulations",
+  "tr": "العودة إلى المحاكيات"
+ },
+ "96440faaf8aa": {
+  "src": "Liquid in the head <i>ε</i><sub>f</sub>",
+  "tr": "السائل في الرغوة <i>ε</i><sub>f</sub>"
+ },
+ "9656148c793b": {
+  "src": "Grab the glass in the picture and drag it across the table. Drag elsewhere to turn the view. <i>Lift</i>, the mouse wheel or Shift-drag move it up and down.",
+  "tr": "أمسك الكأس في الصورة واسحبها على الطاولة. واسحب في أيّ موضع آخر لتدوير المنظر. ويحرّكها زرّ <i>ارفع</i>، أو عجلة الفأرة، أو السحب مع Shift، إلى أعلى وأسفل."
+ },
+ "9d0d4ef109f5": {
+  "src": "Surface skin <i>c</i><sub>s</sub>",
+  "tr": "غشاء السطح <i>c</i><sub>s</sub>"
+ },
+ "9e253470c876": {
+  "src": "Stop",
+  "tr": "إيقاف"
+ },
+ "a47a90bd25d2": {
+  "src": "A well-poured pint carries 18 to 20 mm of head (section 2).",
+  "tr": "يحمل الباينت المصبوب جيدًا 18 إلى 20 mm من الرغوة (القسم 2)."
+ },
+ "a4ce3a9be794": {
+  "src": "← All simulations",
+  "tr": "→ جميع المحاكيات"
+ },
+ "a532c7d9e131": {
+  "src": "<b>The aim:</b> see why a pint slops over when you walk, and why the head keeps it calm. Nothing steers the glass yet but your hand.",
+  "tr": "<b>الهدف:</b> أن ترى لماذا ينسكب الباينت حين تمشي به، ولماذا تُبقيه الرغوة هادئًا. لا شيء يوجّه الكأس بعدُ سوى يدك."
+ },
+ "a82fbe5ae82e": {
+  "src": "Head friction factor <i>k</i><sub>f</sub>",
+  "tr": "معامل احتكاك الرغوة <i>k</i><sub>f</sub>"
+ },
+ "a939903dde07": {
+  "src": "Stout <i>V</i>",
+  "tr": "الستاوت <i>V</i>"
+ },
+ "aab90dfe8c6f": {
+  "src": "share",
+  "tr": "الحصّة"
+ },
+ "ae53b43baf6b": {
+  "src": "mode (1,1)",
+  "tr": "النمط (1,1)"
+ },
+ "bb6b18df4773": {
+  "src": "<b>The cut</b> · velocity <span class=\"tx\">\\(\\mathbf u = \\nabla\\phi\\)</span> relative to the glass, in the plane <span id=\"cap-plane\">—</span>",
+  "tr": "<b>المقطع</b> · السرعة <span class=\"tx\">\\(\\mathbf u = \\nabla\\phi\\)</span> بالنسبة إلى الكأس، في المستوي <span id=\"cap-plane\">—</span>"
+ },
+ "bd86f92c08c7": {
+  "src": "Hand stiffness <i>Ω</i><sub>h</sub>",
+  "tr": "صلابة اليد <i>Ω</i><sub>h</sub>"
+ },
+ "bdc9f710a00a": {
+  "src": "Cut follows the slosh",
+  "tr": "المقطع يتبع التخضخض"
+ },
+ "bee136491d93": {
+  "src": "Head top to rim, now",
+  "tr": "من قمّة الرغوة إلى الحافّة، الآن"
+ },
+ "bf65b3ff19a1": {
+  "src": "Stout / glass to brim",
+  "tr": "الستاوت / الكأس حتى الحافّة"
+ },
+ "c1a868af96b2": {
+  "src": "The glass follows your pointer like a mass on a critically damped spring of natural frequency <i>Ω</i><sub>h</sub>: a stiff hand jerks, a soft hand glides.",
+  "tr": "تتبع الكأسُ مؤشّرك ككتلة على نابض متخامد تخامدًا حرجًا تردده الطبيعي <i>Ω</i><sub>h</sub>: اليد الصلبة ترجّها رجًّا، واليد الليّنة تنقلها بانسياب."
+ },
+ "c2073f536e5d": {
+  "src": "Fig. 12 · control systems · fluid dynamics",
+  "tr": "الشكل 12 · أنظمة التحكّم · ديناميك الموائع"
+ },
+ "c2cff7826005": {
+  "src": "Hand and shaker",
+  "tr": "اليد والهزّاز"
+ },
+ "c4cbaa98a14f": {
+  "src": "Arrow scale",
+  "tr": "مقياس الأسهم"
+ },
+ "c617908dc304": {
+  "src": "Frequency <i>f</i>",
+  "tr": "التردد <i>f</i>"
+ },
+ "c69547fd8d43": {
+  "src": "Watch the velocity field in the cut below the glass, and the height at the wall against the rim. Then take the head away and do it again.",
+  "tr": "راقب حقل السرعة في المقطع تحت الكأس، وارتفاع السائل عند الجدار مقارنةً بالحافّة. ثم أزل الرغوة وأعد التجربة."
+ },
+ "d76bbbb3d6f0": {
+  "src": "Temperature <i>T</i>",
+  "tr": "درجة الحرارة <i>T</i>"
+ },
+ "d8d3204d8a12": {
+  "src": "Sideways",
+  "tr": "جانبيًّا"
+ },
+ "d929322e4b16": {
+  "src": "Fig.",
+  "tr": "الشكل"
+ },
+ "e07e73848f6b": {
+  "src": "Damping ratio <i>ζ</i><sub>1</sub>",
+  "tr": "نسبة التخامد <i>ζ</i><sub>1</sub>"
+ },
+ "e2202aa5e548": {
+  "src": "Slosh frequency <i>f</i><sub>1</sub>",
+  "tr": "تردد التخضخض <i>f</i><sub>1</sub>"
+ },
+ "e3b82040565b": {
+  "src": "Now",
+  "tr": "الآن"
+ },
+ "e3de5ab0ca4c": {
+  "src": "Off",
+  "tr": "إيقاف"
+ },
+ "e57e82f4ecda": {
+  "src": "1 is the wall friction Sauret and co-workers measured for foams (section 6); the least certain number on this page.",
+  "tr": "1 هو احتكاك الجدار الذي قاسه سوريه وزملاؤه للرغوات (القسم 6)؛ وهو أقلّ الأعداد يقينًا في هذه الصفحة."
+ },
+ "e7dd56900a7e": {
+  "src": "Up and down",
+  "tr": "صعودًا وهبوطًا"
+ },
+ "ec4674884c12": {
+  "src": "Contact line <i>γ</i><sub>c</sub>",
+  "tr": "خط التماس <i>γ</i><sub>c</sub>"
+ },
+ "ecaafd8d7804": {
+  "src": "Carry the glass",
+  "tr": "احمل الكأس"
+ },
+ "efd0976a0ad5": {
+  "src": "Lift",
+  "tr": "ارفع"
+ },
+ "f315c0db8ae6": {
+  "src": "Arrows in the 3D view too",
+  "tr": "الأسهم في المنظر الثلاثي الأبعاد (3D) أيضًا"
+ },
+ "f9683f767c08": {
+  "src": "Or let a shaker table move it, at the glass’s own sloshing frequency <i>f</i><sub>1</sub> sideways, or at 2<i>f</i><sub>1</sub> up and down (Faraday’s experiment).",
+  "tr": "أو دَع طاولةً هزّازة تحرّكها، بتردد التخضخض الخاص بالكأس <i>f</i><sub>1</sub> جانبيًّا، أو بـ 2<i>f</i><sub>1</sub> صعودًا وهبوطًا (تجربة فاراداي)."
+ },
+ "f9b3349b61b0": {
+  "src": "<b>Last 8 s</b> · highest stout at the wall <span class=\"tx\">\\(\\eta_{\\max}\\)</span>, head top, rim",
+  "tr": "<b>آخر 8 s</b> · أعلى ارتفاع للستاوت عند الجدار <span class=\"tx\">\\(\\eta_{\\max}\\)</span>، وقمّة الرغوة، والحافّة"
+ },
+ "fb57a7ac8366": {
+  "src": "This simulation needs JavaScript.",
+  "tr": "تحتاج هذه المحاكاة إلى JavaScript."
+ },
+ "fc7024ac096c": {
+  "src": "loading the 3D view…",
+  "tr": "جارٍ تحميل المنظر الثلاثي الأبعاد (3D)…"
+ }
+}

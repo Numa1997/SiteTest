@@ -384,6 +384,8 @@ site <https://phyeinusul.com> `/src/main.ts` answers 404 (measured 20 October 20
 
 ## Notes for maintainers
 
+- **The Fig. links in the top bar wrap (5 November 2026).** With twelve figures the row `.sim-nav` no longer fit a 390 px phone (it reached 414 px and the page scrolled sideways). [sim.css:49](../public/styles/sim.css#L49) now lets it wrap (`flex-wrap: wrap`) and, below 440 px, tightens the gap to 2 px and the links to 23 px; measured in Chromium at 390 px: no sideways scroll on Fig. 12.
+
 1. **The home page breaks the house design.** It loads only `site.css`, whose `--serif` is IBM Plex Serif
    ([site.css:22](../public/styles/site.css#L22); the header comment at [site.css:3](../public/styles/site.css#L3) says so) and
    whose titles are weight 600 ([138](../public/styles/site.css#L138), [336](../public/styles/site.css#L336),

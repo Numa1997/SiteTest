@@ -7,7 +7,7 @@ This page is the map. Every box on it has its own page in `docs/`; the links say
 ```
 index.html  (home: logo and note, CV, research, simulation plates)
   ├── public/simulations.html      the catalog: one card per simulation, in figure order
-  │     └── public/simulations/*.html   eleven simulation pages (Figs. 1–11)
+  │     └── public/simulations/*.html   twelve simulation pages (Figs. 1–12)
   └── public/portfolios.html       the four research projects
         ├── public/portfolios/droplet-collection/index.html#book|sim|problems|checks   one page, generated from portfolios-src/droplets/
         ├── public/portfolios/rotor-pendula/index.html#notes|sim|wind   one page, generated from portfolios-src/rotor-pendula/
@@ -21,7 +21,7 @@ Research projects: [portfolios.md](portfolios.md). German and Arabic pages: [i18
 
 ## Anatomy of a simulation page
 
-Each of the eleven pages is one self-contained HTML file: its own markup, its own simulation script inline, and links to the
+Each of the twelve pages is one self-contained HTML file: its own markup, its own simulation script inline, and links to the
 shared files. Read from top to bottom, a page holds:
 
 1. **The figure** (`<figure class="stage">`): a canvas or SVG that the page's script draws every frame, with a caption.
