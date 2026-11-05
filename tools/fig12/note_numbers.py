@@ -70,6 +70,18 @@ for V in D_['vols_mL']:
     pick = lambda MM: [m for m in MM['modes'] if m['m'] == 1 and m['n'] == 1][0]['f']
     fs.append((V, pick(t), pick(cy), pick(h0), t['a'] * 1e3, t['zs'] * 1e3))
 N['f_vs_V'] = fs
+
+# walking: steps at 1.6 Hz, second harmonic 3.2 Hz; steady response per unit sideways acceleration, with and without head
+def resp(mm, Om):
+    om = mm['om']; return mm['lam'] * mm['Q'] / (1 + mm['muf']) / math.sqrt((om**2 - Om**2)**2 + (2 * mm['gam'] * Om)**2)
+Om2 = 2 * math.pi * 3.2
+N['walk_resp_head'] = resp(m11, Om2); N['walk_resp_nohead'] = resp(n11, Om2); N['walk_ratio'] = N['walk_resp_head'] / N['walk_resp_nohead']
+# the hand: a critically damped follower of rate Omega_h passes a motion at the slosh frequency with gain Omega_h^2/(Omega_h^2 + omega^2)
+Oh = 22.0; N['hand_gain_f1'] = Oh**2 / (Oh**2 + m11['om']**2)
+# steady sideways acceleration: the modes must add up to the tilted plane, sum_n Q_n psi_n(r) = r (wall-normalised), checked at the wall
+F500 = [f for f in D_['fills'] if f['V_mL'] == 500][0]
+N['tilt_sum_at_wall_over_R'] = sum(md['Q'] for md in F500['modes'] if md['m'] == 1) / F500['a']
+N['walls_bulk_only_tau'] = 1 / N['clean']['gam']
 os.makedirs('notes/fig12/figs', exist_ok=True)
 json.dump(N, open('notes/fig12/numbers.json', 'w'), indent=1)
 for k, v in N.items():

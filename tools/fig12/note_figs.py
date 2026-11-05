@@ -26,12 +26,12 @@ def hline(zz, lab, col=INK, dash='4 3', right=True):
     r = float(np.interp(zz, z, Ro)); return f'<line x1="{X(-r)-6:.1f}" y1="{Y(zz):.1f}" x2="{X(r)+60:.1f}" y2="{Y(zz):.1f}" stroke="{col}" stroke-dasharray="{dash}" stroke-width="1"/>' + text(X(r) + 64, Y(zz) + 4, lab, 11, 'start', col)
 b.append(hline(160, 'rim, 160 mm (published height)', WINE, 'none'))
 b.append(hline(152.0, '568 mL (one pint) reaches 151.9 mm', MUTED))
-b.append(hline(zs, f'500 mL: surface {zs:.1f} mm, a = {N["a_mm"]:.1f} mm', INK))
+b.append(hline(zs, f'500 mL: calm surface Z = {zs:.1f} mm, R = {N["a_mm"]:.1f} mm', INK))
 b.append(hline(GL['floor_mm'], 'floor of the cavity, 8 mm of solid glass below', MUTED))
-iw = int(np.nanargmax(Ro)); b.append(f'<line x1="{X(-Ro[iw]):.1f}" y1="{Y(z[iw]):.1f}" x2="{X(Ro[iw]):.1f}" y2="{Y(z[iw]):.1f}" stroke="{WINE}" stroke-width="1"/>' + text(X(0), Y(z[iw]) - 5, f'{2*Ro[iw]:.1f} mm', 10, 'middle', WINE))
+iw = int(np.nanargmax(Ro)); b.append(f'<line x1="{X(-Ro[iw]):.1f}" y1="{Y(z[iw]):.1f}" x2="{X(Ro[iw])+60:.1f}" y2="{Y(z[iw]):.1f}" stroke="{WINE}" stroke-width="1" stroke-dasharray="2 2"/>' + text(X(Ro[iw]) + 64, Y(z[iw]) + 4, f'widest: {2*Ro[iw]:.1f} mm across, Z = {z[iw]:.0f} mm', 11, 'start', WINE))
 b.append(text(X(0), Y(160) - 8, f'{2*Ro[-1]:.1f} mm', 10, 'middle', WINE))
 for t in range(0, 161, 40): b.append(f'<line x1="{cx-128}" y1="{Y(t):.1f}" x2="{cx-122}" y2="{Y(t):.1f}" stroke="{MUTED}"/>' + text(cx - 132, Y(t) + 4, str(t), 10, 'end', MUTED))
-b.append(text(cx - 160, Y(80), 'z, mm', 10, 'middle', MUTED, f'transform="rotate(-90 {cx-160} {Y(80)})"'))
+b.append(text(cx - 160, Y(80), 'Z, mm', 10, 'middle', MUTED, f'transform="rotate(-90 {cx-160} {Y(80)})"'))
 b.append(text(12, by + 24, 'outer radius from the photograph; inner = outer − 2.0 mm normal to the wall', 10, 'start', MUTED))
 open('notes/fig12/figs/profile.svg', 'w').write(svg(W, H + 10, ''.join(b), 'The measured profile of the Guinness tulip glass: outer and inner wall, 500 mL of stout under 18 mm of head, the pint line at 152 mm and the rim at 160 mm.'))
 
@@ -82,20 +82,20 @@ for i in range(1, nz, 2):
             if L_ < 1.2: b.append(f'<circle cx="{x0:.1f}" cy="{y0:.1f}" r="0.9" fill="#f5f1ea"/>'); continue
             x1, y1 = x0 + ur, y0 - uz; an = math.atan2(y1 - y0, x1 - x0); hh = min(5, 0.45 * L_)
             b.append(f'<line x1="{x0:.1f}" y1="{y0:.1f}" x2="{x1:.1f}" y2="{y1:.1f}" stroke="#f5f1ea" stroke-width="1.1"/><path d="M{x1:.1f},{y1:.1f} L{x1-hh*math.cos(an-0.45):.1f},{y1-hh*math.sin(an-0.45):.1f} L{x1-hh*math.cos(an+0.45):.1f},{y1-hh*math.sin(an+0.45):.1f}Z" fill="#f5f1ea"/>')
-b.append(text(X(a) + 12, Y(zs + amp) + 4, 'tilt, 9 mm at the wall', 10, 'start', WINE)); b.append(text(X(a) + 12, Y(zs - 21.2) + 4, f'1/λ = {1000/md["lam"]:.0f} mm below', 10, 'start', MUTED))
+b.append(text(X(a) + 12, Y(zs + amp) + 4, 'tilt, 9 mm at the wall', 10, 'start', WINE)); b.append(text(X(a) + 12, Y(zs - 1000/md['lam']) + 4, f'depth 1/λ = {1000/md["lam"]:.0f} mm', 10, 'start', MUTED))
 b.append(f'<line x1="{X(a)+4}" y1="{Y(zs-1000/md["lam"]):.1f}" x2="{X(a)+10}" y2="{Y(zs-1000/md["lam"]):.1f}" stroke="{MUTED}"/>')
 b.append(text(cx, 18, 'mode (1,1), 480 mL: velocity as the surface passes level; dashed: the tilt a quarter period later', 10, 'middle', MUTED))
 open('notes/fig12/figs/mode11.svg', 'w').write(svg(W, H, ''.join(b), 'The slowest sloshing mode in a vertical cut through the glass: the tilted surface, and the velocity arrows from the finite-element solution, strongest near the surface and fading with depth.'))
 
 # Figure 4: damping budget of the (1,1) mode
 W, H = 720, 230; L = 190; R = 90
-rows = [('wall and floor layers γ_w', N['gw11']), ('surface skin γ_s', N['gs11']), ('bulk 2νλ² γ_b', N['gb11']), ('contact line γ_c', N['gc11']), ('head friction γ_f', N['gf11'])]
+rows = [('wall and floor layers γ|w', N['gw11']), ('surface skin γ|s', N['gs11']), ('interior, 2νλ²: γ|b', N['gb11']), ('contact line γ|c', N['gc11']), ('head friction γ|f', N['gf11'])]
 tot = N['gam11']; xs = lambda v: L + v / 0.26 * (W - L - R)
 b = []
 for k, (lab, v) in enumerate(rows):
-    yy = 22 + k * 30; b.append(text(L - 10, yy + 13, lab, 11, 'end'))
-    b.append(f'<rect x="{L}" y="{yy}" width="{xs(v)-L:.1f}" height="18" fill="{WINE if "head" in lab else INK}" opacity="{0.9 if "head" in lab else 0.75}"/>' + text(xs(v) + 6, yy + 13, f'{v:.3f} 1/s  ({100*v/tot:.0f} %)', 10))
-yy = 22 + 5 * 30 + 8; b.append(text(L - 10, yy + 4, 'total γ₁₁', 11, 'end', WINE)); b.append(text(L, yy + 4, f'{tot:.3f} 1/s: amplitude falls to 1/e in {1/tot:.2f} s, to 5 % in {math.log(20)/tot:.1f} s', 11, 'start', WINE))
+    yy = 22 + k * 30; main, sub = lab.split('|'); b.append(text(L - 10, yy + 13, main + f'<tspan baseline-shift="sub" font-size="8">{sub}</tspan>', 11, 'end'))
+    b.append(f'<rect x="{L}" y="{yy}" width="{xs(v)-L:.1f}" height="18" fill="{WINE if "head" in lab else INK}" opacity="{0.9 if "head" in lab else 0.75}"/>' + text(xs(v) + 6, yy + 13, f'{v:.3f} s⁻¹  ({100*v/tot:.0f} %)', 10))
+yy = 22 + 5 * 30 + 8; b.append(text(L - 10, yy + 4, 'total γ<tspan baseline-shift="sub" font-size="8">11</tspan>', 11, 'end', WINE)); b.append(text(L, yy + 4, f'{tot:.3f} s⁻¹: amplitude falls to 1/e in {1/tot:.2f} s, to 5 % in {math.log(20)/tot:.1f} s', 11, 'start', WINE))
 for v in (0, 0.05, 0.1, 0.15, 0.2, 0.25): b.append(f'<line x1="{xs(v):.1f}" y1="16" x2="{xs(v):.1f}" y2="{22+5*30-6}" stroke="#f0ebe3"/>' + text(xs(v), 12, f'{v:.2f}', 9, 'middle', MUTED))
 open('notes/fig12/figs/budget.svg', 'w').write(svg(W, H + 6, ''.join(b), 'Damping rates of the slowest mode, term by term, at 6 °C with 500 mL of stout and 18 mm of head.'))
 print('wrote notes/fig12/figs/{profile,f_vs_V,mode11,budget}.svg')
