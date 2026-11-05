@@ -1,20 +1,14 @@
-// node notes/fig12/shot.cjs <outdir> [width] [actions]: open Fig. 12, run, screenshot; print errors and store numbers
+// render the catalog thumbnail of Fig. 12: the cart mid-bump under the LQR, 800 x 500
 const { chromium } = require('playwright');
 (async () => {
-  const out = process.argv[2], W = +(process.argv[3] || 1440), act = process.argv[4] || '';
+  const out = process.argv[2];
   const b = await chromium.launch({ args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] });
-  const ctx = await b.newContext({ viewport: { width: W, height: W < 600 ? 844 : 900 }, deviceScaleFactor: 1 });
-  const pg = await ctx.newPage(); const errs = [];
-  pg.on('pageerror', e => errs.push('pageerror: ' + e.message)); pg.on('console', m => { if (m.type() === 'error') errs.push('console: ' + m.text()); });
-  await pg.goto('http://localhost:8765/simulations/beer-slosh.html', { waitUntil: 'networkidle' });
-  await pg.waitForTimeout(800);
-  if (act.includes('f1')) await pg.click('#shF1');
-  if (act.includes('f2')) await pg.click('#shF2');
-  await pg.waitForTimeout(+(process.env.WAIT || 4000));
-  const info = await pg.evaluate(() => { const d = window.SLOSH && window.SLOSH.ds; if (!d) return 'no SLOSH'; const g = n => d.get(n);
-    return { t: g('t'), f11: document.getElementById('r-f1').textContent, z1: document.getElementById('r-z1').textContent, tau: document.getElementById('r-tau').textContent, eta_mm: g('eta_w') * 1000, umax: g('u_max'), state: document.getElementById('state').textContent, webgl: !!window.SLOSH3D, katexErr: document.querySelectorAll('.katex-error').length, sw: document.documentElement.scrollWidth, cw: document.documentElement.clientWidth }; });
-  console.log(JSON.stringify(info)); console.log(errs.slice(0, 8).join('\n') || 'no errors');
-  await pg.screenshot({ path: `${out}/slosh-${W}${act ? '-' + act : ''}.png` });
-  for (const id of ['stage3d', 'stage', 'stage-tr']) { const e = await pg.$('#' + id); await e.scrollIntoViewIfNeeded(); await e.screenshot({ path: `${out}/el-${id}-${W}.png` }); }
-  await b.close();
+  const pg = await (await b.newContext({ viewport: { width: 1600, height: 1000 }, deviceScaleFactor: 1 })).newPage();
+  await pg.goto('http://localhost:8765/simulations/beer-slosh.html', { waitUntil: 'networkidle' }); await pg.waitForFunction(() => window.SLOSH3D, { timeout: 60000 }); await pg.waitForTimeout(600);
+  await pg.evaluate(() => { const S = window.SLOSH; document.getElementById('play').click(); document.querySelector('#law button[data-v="passive"]').click(); document.querySelector('#road button[data-v="bump"]').click(); S.restart(); for (let i = 0; i < 1150; i++) S.step(); const V = window.SLOSH3D.view; V.az = -0.95; V.el = 0.3; V.dist = 1.8; window.SLOSH3D.placeCam(); window.SLOSH3D.render(); });
+  await pg.waitForTimeout(300); await pg.evaluate(() => window.SLOSH3D.render());
+  const c = await pg.$('#stage3d canvas'); await c.scrollIntoViewIfNeeded(); await pg.waitForTimeout(300); await pg.evaluate(() => window.SLOSH3D.render()); const box = await c.boundingBox();
+  const w = box.width, h = w * 500 / 800, y0 = box.y + (box.height - h) / 2;
+  await pg.screenshot({ path: out, clip: { x: box.x, y: y0, width: w, height: h } });
+  console.log('thumb', w, h); await b.close();
 })();

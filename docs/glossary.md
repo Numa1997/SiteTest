@@ -120,6 +120,17 @@ then into the tables. Machine tables: [i18n/de/strings.json](../i18n/de/strings.
 | current limit | Strombegrenzung | حدّ التيار |
 | linear-quadratic regulator (LQR), Riccati equation | linear-quadratischer Regler (LQR), Riccati-Gleichung | المنظّم الخطّي التربيعي (LQR)، معادلة ريكاتي |
 | gains (of a controller) | Verstärkungen | معاملات الكسب |
+| half-car model, cart (Fig. 12) | Halbfahrzeugmodell, Wagen | نموذج نصف المركبة، العربة |
+| suspension, active suspension | Fahrwerk, aktives Fahrwerk | نظام التعليق، التعليق الفعّال |
+| strut, spring, damper | Federbein, Feder, Dämpfer | الدعامة، النابض، المخمِّد |
+| wheel, tyre, unsprung mass | Rad, Reifen, ungefederte Masse | العجلة، الإطار، الكتلة غير المعلّقة |
+| heave, pitch (of the body) | Hubbewegung, Nicken | الارتفاع، الانعطاف الطولي |
+| strut deflection, tyre deflection | Federweg, Reifeneinfederung | انضغاط الدعامة، انضغاط الإطار |
+| skyhook damper | Skyhook-Dämpfer (Himmelshaken) | مخمِّد سكاي هوك (المعلَّق بالسماء) |
+| road profile, speed bump, kerb, cobbles | Fahrbahnprofil, Bremsschwelle, Bordstein, Kopfsteinpflaster | مقطع الطريق، المطبّ، الرصيف، الحصى المرصوف |
+| Stokes–Joukowski potential, inertia | Stokes-Joukowski-Potential, -Trägheit | كمون ستوكس–جوكوفسكي، عزم القصور الذاتي |
+| sculpted panels (of the Guinness glass) | die eingeprägten Flächen | اللوحان المنحوتان |
+| dome (of the head above the rim) | die Kuppel der Schaumkrone | قبّة الرغوة |
 | metering edges (valve) | Steuerkanten | حوافّ التحكّم |
 | centrifugal | Zentrifugal- | الطرد المركزي |
 | matched forcing | gleiche Anregung | قسرٌ متطابق |
