@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-1061 files, 63.7 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+1062 files, 63.7 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -36,7 +36,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Shared by the portfolio sources (not served)](#shared-by-the-portfolio-sources-not-served) | 1 |
 | [Template sources](#template-sources) | 2 |
 | [Documentation](#documentation) | 34 |
-| [Tools](#tools) | 35 |
+| [Tools](#tools) | 36 |
 | [Translation tables](#translation-tables) | 52 |
 | [Agents of the lecture-note review](#agents-of-the-lecture-note-review) | 4 |
 | [Working notes of the Rotor Pendula study](#working-notes-of-the-rotor-pendula-study) | 86 |
@@ -762,6 +762,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/fig12/check_cylinder.py`](../tools/fig12/check_cylinder.py) | 1.4 kB | Fig. 12: gate of modes.py against the exact Bessel modes of a cylinder; prints PASS or FAIL. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/check_dynamics.py`](../tools/fig12/check_dynamics.py) | 2.0 kB | Fig. 12: gate of the page’s RK4 against SciPy DOP853 on the modal equations; prints PASS or FAIL. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/check_note_numbers.py`](../tools/fig12/check_note_numbers.py) | 3.5 kB | Fig. 12: finds every quoted number of the note in the page and compares it with the computation; prints PASS or FAIL. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`tools/fig12/controller.py`](../tools/fig12/controller.py) | 6.8 kB | Fig. 12: the waiter: carriage, moving-coil motor and the stout’s reaction; LQR design and a carry test, the reference for the page’s controller. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/glass.glb`](../tools/fig12/glass.glb) | 2.16 MB | Fig. 12: the glass as revolved in Blender (outer and inner surfaces), written by glass.py. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/glass.py`](../tools/fig12/glass.py) | 5.0 kB | Fig. 12: the photograph profile to the glass: scale, smoothing, wall and floor, volumes, and the Blender solid of revolution (bpy 5.2). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/glass_profile.json`](../tools/fig12/glass_profile.json) | 7.3 kB | Fig. 12: the glass profile on a 0.5 mm grid with its volumes, written by glass.py. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
@@ -777,7 +778,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/i18n/ingest.py`](../tools/i18n/ingest.py) | 1.9 kB | Stores checked translations made outside the tables (page pieces, script strings, walkthrough prose). | [i18n.md](i18n.md) |
 | [`tools/i18n/package.json`](../tools/i18n/package.json) | 285 B | The parser wrap.cjs needs (acorn); npm install --prefix tools/i18n. | [i18n.md](i18n.md) |
 | [`tools/i18n/wrap.cjs`](../tools/i18n/wrap.cjs) | 3.7 kB | Wraps the reader-visible strings of a page's scripts in _t(), with a JavaScript parser (acorn). | [i18n.md](i18n.md) |
-| [`tools/inventory.py`](../tools/inventory.py) | 51.2 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
+| [`tools/inventory.py`](../tools/inventory.py) | 51.4 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
 | [`tools/perf/addresses.cjs`](../tools/perf/addresses.cjs) | 6.1 kB | Every page at every address a reader can use (x.html, x, x/, folder/), and every link of every page, on a running site; exits 1 on any wrong answer. | [performance.md](performance.md) |
 | [`tools/perf/clockcheck.cjs`](../tools/perf/clockcheck.cjs) | 3.2 kB | Each figure runs on screen, holds off screen, resumes; the store stays live for an open data panel and the walkthrough. | [performance.md](performance.md) |
 | [`tools/perf/film.cjs`](../tools/perf/film.cjs) | 3.1 kB | A repeat visit as a reader sees it: screenshots at fixed times and every LCP candidate with its element, to tell a metric from the screen. | [performance.md](performance.md) |

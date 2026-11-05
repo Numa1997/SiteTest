@@ -211,6 +211,7 @@ RULES = [
     (r'tools/fig12/check_dynamics\.py', 'Fig. 12: gate of the page\u2019s RK4 against SciPy DOP853 on the modal equations; prints PASS or FAIL.', 'docs/simulations/fig12-beer-slosh.md'),
     (r'tools/fig12/note_numbers\.py', 'Fig. 12: every number the lecture note quotes, computed from the page\u2019s data and formulas.', 'docs/simulations/fig12-beer-slosh.md'),
     (r'tools/fig12/note_figs\.py', 'Fig. 12: the SVG figures of the lecture note, drawn from the same data.', 'docs/simulations/fig12-beer-slosh.md'),
+    (r'tools/fig12/controller\.py', 'Fig. 12: the waiter: carriage, moving-coil motor and the stout\u2019s reaction; LQR design and a carry test, the reference for the page\u2019s controller.', 'docs/simulations/fig12-beer-slosh.md'),
     (r'tools/fig12/check_note_numbers\.py', 'Fig. 12: finds every quoted number of the note in the page and compares it with the computation; prints PASS or FAIL.', 'docs/simulations/fig12-beer-slosh.md'),
     (r'tools/fig11/figs\.py', 'Composes the Blender renders of tools/fig11/ into the four figures with numbered balloons (Pillow).', 'docs/simulations/fig11-pendulum-control.md'),
     (r'public/images/sims/([a-z0-9-]+)\.webp',
