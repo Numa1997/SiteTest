@@ -21,4 +21,4 @@ for ns, nz in [(8, 20), (16, 40)]:
                 line += f' | Px/(c*N) {I["Px"]/(c*Nn):.6f} vs beta {beta:.6f} | E/lam {I["E"]/md["lam"]:.6f}'
             print(line)
             if ns == 16 and abs(err) > (1e-4 if k < 2 else 3e-4): ok = False
-print('PASS' if ok else 'FAIL', 'cylinder eigenvalues within 1e-4 on the fine mesh')
+print('PASS' if ok else 'FAIL', 'cylinder eigenvalues on the fine mesh within 1e-4 (n = 1, 2) and 3e-4 (n = 3)')

@@ -1,0 +1,35 @@
+// Regression tests of the two code reviews of Fig. 12. Exits 1 on any failure.
+// node notes/fig12/regress.cjs [base URL, default http://localhost:8765/]
+const { chromium } = require('playwright'); const BASE = process.argv[2] || 'http://localhost:8765/';
+(async () => { const b = await chromium.launch({ args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
+  const pg = await b.newPage(); const errs = []; pg.on('pageerror', e => errs.push(e.message));
+  await pg.goto(BASE + 'simulations/beer-slosh.html'); await pg.waitForTimeout(1500);
+  const r = await pg.evaluate(async () => { const S = window.SLOSH, D = Sim.data, out = {};
+    const frames = n => new Promise(res => { let i = 0; (function f() { if (++i < n) requestAnimationFrame(f); else res(); })(); });
+    await frames(30);
+    const sec = document.getElementById('sec'), tr = document.getElementById('tr');
+    out.readback_ok_when_drawn = D.drawn.eta_w().ok !== false && D.drawn.z_s().ok === true;
+    document.getElementById('play').click();
+    sec.getContext('2d').clearRect(0, 0, 1e4, 1e4); tr.getContext('2d').clearRect(0, 0, 1e4, 1e4);
+    out.readback_fails_when_blank = D.drawn.eta_w().ok !== true && D.drawn.z_s().ok === false;
+    const pos = () => S.shakerOffset().x + S.G.x;
+    document.getElementById('shF1').click(); for (let i = 0; i < 777; i++) S.step();
+    let a = pos(); document.getElementById('shOff').click(); out.stop_jump_mm = Math.abs(pos() - a) * 1000;
+    document.getElementById('shF1').click(); for (let i = 0; i < 777; i++) S.step();
+    a = pos(); document.getElementById('shF2').click(); out.preset_jump_mm = Math.abs(S.shakerOffset().x + S.G.x - a) * 1000;
+    document.getElementById('shF1').click(); for (let i = 0; i < 777; i++) S.step();
+    a = pos(); const A = document.getElementById('A'); A.value = 1; A.dispatchEvent(new Event('input')); out.slider_jump_mm = Math.abs(pos() - a) * 1000;
+    document.getElementById('shOff').click();
+    document.querySelector('#shape button[data-v="cyl"]').click(); out.straight = Math.abs(S.Rdraw(0.05) - S.geo.a) < 1e-12 && Math.abs(S.Rdraw(0.13) - S.geo.a) < 1e-12;
+    document.querySelector('#shape button[data-v="tulip"]').click();
+    return out; });
+  const fail = [];
+  if (!r.readback_ok_when_drawn) fail.push('read-back does not find the drawing');
+  if (!r.readback_fails_when_blank) fail.push('read-back passes on a blank canvas');
+  if (r.stop_jump_mm > 1e-6) fail.push('stopping the shaker moves the glass ' + r.stop_jump_mm + ' mm');
+  if (r.preset_jump_mm > 1e-6) fail.push('a shaker preset moves the glass ' + r.preset_jump_mm + ' mm');
+  if (r.slider_jump_mm > 1e-6) fail.push('the amplitude slider moves the glass ' + r.slider_jump_mm + ' mm');
+  if (!r.straight) fail.push('the straight glass is not drawn straight');
+  if (errs.length) fail.push('page errors: ' + errs.join(' | '));
+  console.log(JSON.stringify(r)); console.log(fail.length ? 'FAIL\n  ' + fail.join('\n  ') : 'PASS all regression tests');
+  await b.close(); process.exit(fail.length ? 1 : 0); })();
