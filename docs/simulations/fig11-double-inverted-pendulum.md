@@ -200,6 +200,16 @@ The machine's five sliders (m₀, m₁, m₂, L₁, L₂) with Bogdanov's machin
 figure, sliders and trace are all in the window; at 1366 × 768 the figure and the sliders are, the trace ends 75 px below. Ids and texts
 unchanged; `hon.cjs rest cart limit` passes (`notes/fig11/panel/fit-honesty.txt`).
 
+**One real screen (5 November 2026, later).** Numa: still too big. The earlier sizes were measured with the whole screen as the
+window; a browser window is about 130 px shorter than its screen (tabs, address bar, taskbar). Measured again at real viewports,
+1366 × 625, 1280 × 650, 1536 × 730, 1440 × 780 and 1920 × 960: before, the block from the figure's top to the trace's bottom was
+835, 806, 721, 852 and 806 px, too tall at the first four. Now, from 901 px, the cart figure is `clamp(150px, 31vh, 380px)` high
+and the trace `clamp(84px, 15vh, 190px)` (heights from the window, widths from the column; the drawing scales from the canvas's
+measured box, `Sim.canvas2d`), and the eight sliders are one 4-column grid of two rows (`.pg-g--4`; the controller's own header
+row is gone), each note on one line with the whole text on hover. The block is now 553, 564, 635, 624 and 707 px, inside the window at
+all five, in English, German and Arabic (German 554–708, Arabic 564–718). Below 900 px nothing changed (2 columns, the page scrolls).
+Ids, texts and the page's line count (1477) unchanged; `hon.cjs rest cart drag limit` passes 4/4, pixel read-back included.
+
 ## Interaction
 
 Flick the top (horizontal impulse `J` at the upper tip: `Δθ̇ = D⁻¹ (1, L1 cos θ1, L2 cos θ2)ᵀ J`), cart target −1/0/+1 m, Tilt and let go
