@@ -5,7 +5,7 @@
 window.WALK = window.WALK || {};
 
 window.WALK.slosh = {
-    intro: 'Eight steps from the lecture note to the moving stout, in the order the page uses them: the calm surface for a given volume (section 2), the viscosity at the chosen temperature, the frequency of each mode with surface tension and the head (11), the damping terms of section 7, (16) and (18) with the skin, bulk and contact-line terms beside them, the modal equation (12), the Runge–Kutta step, the height of the stout at the wall, and the velocity in the cut (section 8). Each step sets the equation beside the lines of this page’s script that evaluate it, copied character for character; a line that is only “...” stands for page lines left out. The table gives each symbol, its name in the code, its value now, and its meaning with its unit. Hover over or tap a symbol to light it in all three places.',
+    intro: 'Ten steps from the lecture note to the moving stout, in the order the page uses them: the calm surface for a given volume (section 2), the viscosity at the chosen temperature, the frequency of each mode with surface tension and the head (11), the damping terms of section 7, (16) and (18) with the skin, bulk and contact-line terms beside them, the modal equation (12), the Runge–Kutta step, the height of the stout at the wall, the velocity in the cut (section 8), and the waiter of section 10: the carriage with the stout pushing back (20) and the force it sets. Each step sets the equation beside the lines of this page’s script that evaluate it, copied character for character; a line that is only “...” stands for page lines left out. The table gives each symbol, its name in the code, its value now, and its meaning with its unit. Hover over or tap a symbol to light it in all three places.',
     steps: [
         {
             title: 'The calm surface',
@@ -87,6 +87,28 @@ for (i = 0; i < NY; i++) Y[i] += ⟦h|h⟧ / 6 * (k1[i] + 2 * k2[i] + 2 * k3[i] 
 for (var q = 0; q < 72; q++) { var th = 2 * Math.PI * q / 72, e = etaWall(th); if (e > best) { best = e; bt = th; } }
 var zl = geo.zs + best, zf = zl + P.hf;`,
             syms: [['eta', 'η<sub>max</sub>', 'best', 'highest stout at the wall above the calm level, m']]
+        },
+        {
+            title: 'The waiter: the stout pushes back',
+            where: 'deriv(t, y, out): the carriage when the waiter carries',
+            math: '⟦Me|M<sub>e</sub>⟧ ẍ<sub>g</sub> = F + Σ ρπQ<sub>n</sub>N<sub>n</sub>(2γ<sub>n</sub>ȧ<sub>n</sub> + ω<sub>n</sub>²a<sub>n</sub>)<span style="font-style:normal;margin-left:1.5em">(20)</span>',
+            note: 'Wt.cr[q] is ρπQ<sub>n</sub>N<sub>n</sub> of the q-th m = 1 mode, in kg; y[6 + 2NK + k] is its rate ȧ and y[6 + k] its amplitude a. The force the motor holds, Wt.Fx, is added to the push of the sloshing stout, and the sum divided by the mass the motor feels, M<sub>e</sub>, the carriage, glass and stout less the sloshing masses.',
+            code: `if (P.ctl === 'waiter') {   // the motor drives the carriage: M_e x'' = F + Σ ρπ Q N (2γ a' + ω²(1 + z''/g) a), the stout pushing back (section 10)
+var AZw = az + sz, fx = Wt.Fx, fy = Wt.Fy;
+...
+fx += Wt.cr[q] * (2 * gam[k] * y[6 + 2 * NK + k] + O2w * y[6 + k]); fy += Wt.cr[q] * (2 * gam[k] * y[6 + 3 * NK + k] + O2w * y[6 + NK + k]); });
+ax = fx / ⟦Me|Wt.Me⟧; ay = fy / Wt.Me;`,
+            syms: [['Me', 'M<sub>e</sub>', 'Wt.Me', 'mass the motor feels, kg']]
+        },
+        {
+            title: 'The waiter: the force it sets',
+            where: 'waiterForce(): every T<sub>s</sub>, for each axis',
+            math: '⟦F|F⟧ = M r̈ − K(s − s<sub>path</sub>), limited to |F| ≤ Bℓ I<sub>max</sub>,  r̈ = Ω<sub>r</sub>²(x<sub>target</sub> − r) − 2Ω<sub>r</sub>ṙ',
+            note: 'e is the state minus the planned path: the carriage’s distance from the path and its speed relative to it, then each m = 1 mode’s amplitude and rate, whose planned values are zero. K are the eight gains from the Riccati equation, computed by design() whenever a slider moves. Wt.Mtot · ra is the force the path itself needs. The result is clipped to the motor’s limit, Bℓ I<sub>max</sub>.',
+            code: `var e = [x - rx, v - rv]; Wt.idx.forEach(function (k) { e.push(aO[off + k], vO[off + k]); });
+var F = Wt.Mtot * ra; for (var i = 0; i < e.length; i++) F -= Wt.K[i] * e[i];
+var Fm = P.Bl * P.Imax; return Math.max(-Fm, Math.min(Fm, F));`,
+            syms: [['F', 'F<sub>x</sub>', 'Wt.Fx', 'motor force along x, N'], ['I', 'I', 'Fx / Bl', 'motor current, A']]
         },
         {
             title: 'The velocity in the cut',

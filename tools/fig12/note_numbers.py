@@ -82,6 +82,16 @@ Oh = 22.0; N['hand_gain_f1'] = Oh**2 / (Oh**2 + m11['om']**2)
 F500 = [f for f in D_['fills'] if f['V_mL'] == 500][0]
 N['tilt_sum_at_wall_over_R'] = sum(md['Q'] for md in F500['modes'] if md['m'] == 1) / F500['a']
 N['walls_bulk_only_tau'] = 1 / N['clean']['gam']
+
+# section 10: the waiter (tools/fig12/controller.py)
+import sys as _s; _s.path.insert(0, 'tools/fig12'); import controller as Cw
+Aw, Bw, mdw, infow = Cw.model(); Kw, Adw, Bdw = Cw.lqr(Aw, Bw)
+ew, tw, Fw = Cw.carry(Aw, Bw, Kw, Adw, Bdw, infow, 0.20); eh3, th3, _ = Cw.carry(Aw, Bw, Kw, Adw, Bdw, infow, 0.20, mode='hand', Om=3, T=5); eh22, _, _ = Cw.carry(Aw, Bw, Kw, Adw, Bdw, infow, 0.20, mode='hand', Om=22, T=5)
+N['w_M'] = infow['M']; N['w_ml'] = infow['ml']; N['w_Me'] = infow['Me']; N['w_m1_g'] = mdw[0]['msl'] * 1000; N['w_m2_g'] = mdw[1]['msl'] * 1000; N['w_m3_g'] = mdw[2]['msl'] * 1000
+N['w_peak_mm'] = ew * 1000; N['w_settle'] = tw; N['w_Fmax'] = Fw; N['w_Imax'] = Fw / Cw.CAR['Bl']; N['w_hand3_mm'] = eh3 * 1000; N['w_hand22_mm'] = eh22 * 1000
+N['w_tau_cl'] = -Cw.CAR['Ts'] / np.log(np.abs(np.linalg.eigvals(Adw - Bdw @ Kw)).max()); N['w_tau_open'] = 1 / mdw[0]['gam']
+N['w_freeboard_mm'] = 160 - N['zs_mm'] - 18
+xi = 1.841183781; N['m11_cyl_frac'] = 2 * math.tanh(xi * N['D_mm'] / N['a_mm']) / (xi * (xi**2 - 1)); N['m11_cyl_g'] = N['m11_cyl_frac'] * P['rho'] * math.pi * (N['a_mm'] / 1000)**3 * 1000
 os.makedirs('notes/fig12/figs', exist_ok=True)
 json.dump(N, open('notes/fig12/numbers.json', 'w'), indent=1)
 for k, v in N.items():

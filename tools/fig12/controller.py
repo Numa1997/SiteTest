@@ -54,7 +54,7 @@ def lqr(A, B, car=CAR, w=W):
     Q = C.T @ np.diag([w['qx'], w['qv'], w['qe']]) @ C; R = np.array([[w['rF']]])
     S = solve_discrete_are(Ad, Bd, Q, R); K = np.linalg.solve(R + Bd.T @ S @ Bd, Bd.T @ S @ Ad)
     return K, Ad, Bd
-def carry(A, B, K, Ad, Bd, info, dist=0.15, T=4.0, mode='waiter', Om=22.0, car=CAR, Wr=WR):
+def carry(A, B, K, Ad, Bd, info, dist=0.15, T=4.0, mode='waiter', Om=22.0, car=CAR, Wr=WR, series=False):
     """The target jumps by dist at t = 0. waiter: a planned path r(t) (critically damped, rate Wr) with feedforward M r'' and the
     sampled LQR on the error from the path, current-limited; hand: the page's critically damped follower of rate Om, no feedback."""
     n = A.shape[0]; y = np.zeros(n); Fmax = car['Bl'] * car['Imax']; h = 1e-3; per = round(car['Ts'] / h)
@@ -72,6 +72,7 @@ def carry(A, B, K, Ad, Bd, info, dist=0.15, T=4.0, mode='waiter', Om=22.0, car=C
                 return A @ z + B[:, 0] * F_
         k1 = f(y); k2 = f(y + h / 2 * k1); k3 = f(y + h / 2 * k2); k4 = f(y + h * k3); y = y + h / 6 * (k1 + 2 * k2 + 2 * k3 + k4)
         eta.append(y[2::2].sum()); xs.append(y[0] - dist); Fs.append(F)
+    if series: return np.arange(1, len(eta) + 1) * h, np.array(eta), np.array(xs) + dist, np.array(Fs)
     eta = np.abs(np.array(eta)); xs = np.array(xs)
     settle = next((i * h for i in range(len(xs)) if np.all(np.abs(xs[i:]) < 0.002)), None)
     return eta.max(), settle, max(map(abs, Fs))
@@ -80,6 +81,7 @@ if __name__ == '__main__':
     print(f"M = {info['M']:.3f} kg (stout {info['ml']:.3f} kg), sloshing mass sum m_n = {info['Msl']*1000:.1f} g, effective {info['Me']:.3f} kg")
     for m in md: print(f"  mode (1,{m['n']}): f {m['om']/2/math.pi:.3f} Hz, gamma {m['gam']:.3f}/s, N {m['N']:.4e} m^2, Q {m['Q']*1e3:.3f} mm, sloshing mass {m['msl']*1000:.1f} g")
     print('K =', np.array2string(K[0], precision=4))
+    Cc = np.hstack([np.linalg.matrix_power(A, i) @ B for i in range(A.shape[0])]); print('controllability: rank', np.linalg.matrix_rank(Cc), 'of', A.shape[0], '; smallest/largest singular value', '%.2e' % (np.linalg.svd(Cc, compute_uv=False)[-1] / np.linalg.svd(Cc, compute_uv=False)[0]))
     ev = np.linalg.eigvals(Ad - Bd @ K); print('closed-loop |z| max', np.abs(ev).max().round(5), ' slowest time constant', round(-CAR['Ts'] / np.log(np.abs(ev).max()), 3), 's')
     for d in (0.10, 0.20):
         ew, tw, Fw = carry(A, B, K, Ad, Bd, info, d)
