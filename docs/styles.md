@@ -210,7 +210,7 @@ Expand / Collapse pair gets a 104 px top margin to match it ([fold.css:124](../p
 
 | Width | What changes | Lines |
 |---|---|---|
-| ≥ 901 px | The panel is `position: sticky` 12 px below the top of the window, at most the window high less 24 px, and scrolls inside itself; each `.stage__canvas` is at most (window height − 24 px) × `--ar` wide, centred, so the whole figure fits on screen. | [234–239](../public/styles/sim.css#L234-L239) |
+| ≥ 901 px | The panel is `position: sticky` 12 px below the top of the window, at most the window high less 24 px, and scrolls inside itself; each `.stage__canvas` is at most (window height − 88 px) × `--ar` wide, centred, so the whole figure with its caption fits on screen. | [234–239](../public/styles/sim.css#L234-L239) |
 | ≤ 900 px | Figure and panel stack; figures switch to `--ar-m`; walkthrough steps become a sideways-scrolling row above the card. | [177–182](../public/styles/sim.css#L177-L182), [213–216](../public/styles/sim.css#L213-L216) |
 | ≤ 560 px | 16 px side padding; tighter cards and panel. | [183–185](../public/styles/sim.css#L183-L185), [217–222](../public/styles/sim.css#L217-L222) |
 | reduced motion | No card, walkthrough or head animations. | [186–188](../public/styles/sim.css#L186-L188), [223–225](../public/styles/sim.css#L223-L225) |
@@ -450,8 +450,9 @@ the rule for all eleven pages, in `sim.css` and its generated `sim.rtl.css`:
   own `<style>`). The lecture note keeps its own 210 + 760 px grid, so its line length is unchanged.
 - **Controls beside the picture.** From 901 px wide the panel is pinned 12 px below the top of the window while the figures scroll,
   and scrolls inside itself when taller than the window ([sim.css:234–239](../public/styles/sim.css#L234-L239)).
-- **The whole picture on screen.** From 901 px no figure is taller than the window less 24 px: its width is capped at
-  (window height − 24 px) × its aspect ratio `--ar` and centred in its card. Every page sizes its canvas from that box and redraws
+- **The whole picture on screen.** From 901 px no figure is taller than the window less 88 px: its width is capped at
+  (window height − 88 px) × its aspect ratio `--ar` and centred in its card, so the figure and its caption (about 48 px) fit the window
+  together. Until 5 November 2026 the cap was 24 px, which left the caption below the window on a laptop. Every page sizes its canvas from that box and redraws
   on resize ([sim.js:32–45](../public/scripts/sim.js#L32-L45), [141–148](../public/scripts/sim.js#L141-L148)); Fig. 3 is SVG with a
   viewBox. The aspect ratio is never changed.
 
@@ -470,6 +471,12 @@ Main figure, width × height in px, before → after, computed from the CSS (win
 | 11 (unchanged) | 816 × 643 | 696 × 548 | 536 × 422 |
 
 At these three sizes the height cap does not bind; it binds on shorter windows, such as a laptop window about 650 px high.
+
+**Measured at real viewports (5 November 2026).** A browser window is about 130 px shorter than its screen, so the sizes are
+measured at 1366 × 625, 1280 × 650 and 1440 × 780 in headless Chromium, scrolled to the first figure: figure top to caption bottom.
+With the 24 px cap six pages were too tall at 1366 × 625, by 37–40 px: Double Pendulum, the double-slit page, draw-decompose, phasor-sums, wave-interference and wind-turbine. With the 88 px
+cap every first figure fits at all three: the tallest is 585 px of 609 at 1366 × 625, 610 of 634 at 1280 × 650, 740 of 764 at
+1440 × 780. Fig. 11 sets its own heights from the window (its doc, "One real screen").
 
 ## The parameter curve's styles · 30 October 2026
 

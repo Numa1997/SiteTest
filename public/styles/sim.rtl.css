@@ -233,10 +233,10 @@ html:not(.tex-ready) .stage__cap .tx { visibility: hidden; }
 .walk__line { overflow-x: auto; overflow-y: hidden; padding: 2px 0; }
 
 /* the figure and its controls on one screen (Fig. 11's layout, made the rule for every page): from 901 px the panel pins beside
-   the figures and scrolls inside itself when taller than the window; no figure is taller than the window, so it is seen whole */
+   the figures and scrolls inside itself when taller than the window; a figure with its caption fits the window (88 px for caption and margins) */
 @media (min-width: 901px) {
   .sim__grid > .panel { position: sticky; top: 12px; max-height: calc(100vh - 24px); overflow-y: auto; overscroll-behavior: contain; }
-  .stage__canvas { max-width: calc((100vh - 24px) * (var(--ar, 16 / 9))); margin-inline: auto; }
+  .stage__canvas { max-width: calc((100vh - 88px) * (var(--ar, 16 / 9))); margin-inline: auto; }
 }
 
 /* the parameter curve (scripts/curve.js): a knob that moves by itself; its chart is a white plate like the notes' charts */
