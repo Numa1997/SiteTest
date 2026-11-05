@@ -250,7 +250,7 @@ favicon ([L14](../../public/simulations/Double%20Pendulum.html#L14)). No inline 
 - Top bar: one span holding the Phyein Usul logo (a link to `../index.html` with `../images/phyein-usul-mark.svg`, 87 × 48) and
   "← All simulations" ([L18](../../public/simulations/Double%20Pendulum.html#L18)), then the hand-written Fig. 1–11 links ([L17–33](../../public/simulations/Double%20Pendulum.html#L17-L33)); a `<noscript>` message ([L36](../../public/simulations/Double%20Pendulum.html#L36)).
 - Heading: "Fig. 2 · classical mechanics · chaos", the title, the lede ([L37–41](../../public/simulations/Double%20Pendulum.html#L37-L41)).
-- The figure: `#stage` with aspect ratio 4 : 3, and 1 : 1.05 below 900 px ([L45](../../public/simulations/Double%20Pendulum.html#L45), [sim.css:213–215](../../public/styles/sim.css#L213-L215)); the canvas `#pend`
+- The figure: `#stage` with aspect ratio 16 : 10 (4 : 3 until 5 November 2026; see "Figure size"), and 1 : 1.05 below 900 px ([L45](../../public/simulations/Double%20Pendulum.html#L45), [sim.css:213–215](../../public/styles/sim.css#L213-L215)); the canvas `#pend`
   ([L46](../../public/simulations/Double%20Pendulum.html#L46)); the caption with `cap-t` ([L48–51](../../public/simulations/Double%20Pendulum.html#L48-L51)). The canvas is transparent where nothing is drawn, so the stage's grid
   background shows through ([L685](../../public/simulations/Double%20Pendulum.html#L685), [sim.css:68](../../public/styles/sim.css#L68)). `datalog.js` adds the Read values switch to the caption and the reading
   strip under the stage ([datalog.js:874–898](../../public/scripts/datalog.js#L874-L898)).
@@ -406,3 +406,7 @@ the panel says so ([L916](../../public/simulations/Double%20Pendulum.html#L916))
 Played in the page with the exact values (headless Chromium, three runs started at different moments; scratch test
 `sand.js`): the sand brought 122.41, 128.41 and 109.81 J (the motion is chaotic, so the amount depends on the start), the
 drift sampled every 0.25 s stayed below 8.9×10⁻⁵, and each of the 151–153 samples saw a different mass.
+
+## Figure size (5 November 2026)
+
+At Numa's request ("the screen is too big") the figures of every simulation were measured at 1440 × 900: the box of each figure, and how much of a 16 × 10 grid laid over it holds anything drawn. Square drawings stretched over the 1030 px column and figures with an empty band were made shorter: this figure went from 4 : 3 (1030 × 773 px) to 16 : 10 (1030 × 644 px); the circle of the angles fills its height. The drawing scales to the new height by its own fitting rule, so nothing else changed; the page loads without errors, maths errors or sideways scroll in English, German and Arabic at 1440 and 390 px.

@@ -1010,6 +1010,9 @@
         ds.var('mid_py', [], 'float', { symbol: 'y<sub>mid</sub> px', units: 'css px', long_name: 'hinge between the rods, from the top', computed_in: 'draw()', formula: 'y<sub>hinge</sub> − L₁ σ cos θ₁', digits: 2 });
         ds.var('tip_px', [], 'float', { symbol: 'x<sub>tip</sub> px', units: 'css px', long_name: 'top of the upper rod, from the left', computed_in: 'draw()', formula: 'x<sub>mid</sub> + L₂ σ sin θ₂', digits: 2 });
         ds.var('tip_py', [], 'float', { symbol: 'y<sub>tip</sub> px', units: 'css px', long_name: 'top of the upper rod, from the top', computed_in: 'draw()', formula: 'y<sub>mid</sub> − L₂ σ cos θ₂', digits: 2 });
+        ds.var('gauge_w', [], 'float', { symbol: 'W/c* bar', long_name: 'filled share of the cost gauge in the figure: W / c*, full at c* (marks at γ, 0.9 and 1); undefined unless balancing', computed_in: 'gauges(), in draw()', formula: 'min(W / c*, 1)', digits: 4 });
+        ds.var('gauge_u', [], 'float', { symbol: '|u| bar', long_name: 'filled share of the motor gauge in the figure', computed_in: 'gauges(), in draw()', formula: 'min(|u| / u<sub>max</sub>, 1)', digits: 4 });
+        ds.var('gauge_x', [], 'float', { symbol: 'x<sub>gauge</sub>', units: 'css px', long_name: 'left edge of the two gauges, from the left', computed_in: 'gauges(), in draw()', formula: 'w − 244', digits: 1 });
         ds.var('hand_px', [], 'float', { symbol: 'x<sub>h</sub> px', units: 'css px', long_name: 'where your hand pulls the cart, as drawn on the rail; undefined unless you hold the cart', computed_in: 'draw()', formula: 'w/2 + (x<sub>h</sub> − x<sub>cam</sub>) σ', digits: 2 });
         ds.var('target_px', [], 'float', { symbol: 'x<sub>target</sub> px', units: 'css px', long_name: 'target marker under the rail, from the left', computed_in: 'draw()', digits: 2 });
         ds.var('fps', [], 'float', { symbol: 'frame rate', units: 'Hz', long_name: 'frames per second, smoothed over about ten frames', computed_in: 'diagnostics()', digits: 1 });
@@ -1214,8 +1217,21 @@
                     c.beginPath(); c.moveTo(hx2, hy2); c.lineTo(hx2 - Math.sign(hu) * 9, hy2 - 6); c.lineTo(hx2 - Math.sign(hu) * 9, hy2 + 6); c.closePath(); c.fill(); } }
             c.textAlign = 'left'; c.fillStyle = TH.ink3; c.fillText('u = ' + Sim.fmt(u, 1) + ' N', 12, 20);
             c.fillText(g2('held') === 3 ? _t('your hand: {F} N', { F: '\u2066' + Sim.fmt(hu, 1) + '\u2069' }) : '⇆ ' + _t('drag the cart, or pull a rod'), 12, 36);
+            gauges(c, W);
             drawTrace();
         }
+        function gauges(c, W) {   // the empty upper right of the figure: how near the balancer is to losing (W / c*), and how hard the motor works (|u| / u_max)
+            var g2 = function (n) { return ds.get(n); }, cs = g2('c_star'), w = cs === cs && g2('mode') === 'balance' ? g2('W') / cs : NaN, f = Math.abs(g2('u')) / g2('u_max'), bw = 170, x0 = W - bw - 74, y = 18;
+            ds.set('gauge_w', w === w ? Math.min(w, 1) : NaN); ds.set('gauge_u', Math.min(f, 1)); ds.set('gauge_x', x0);
+            c.font = TH.mono; c.textBaseline = 'middle';
+            [[_t('cost W / c*'), g2('gauge_w'), w === w ? (w > 99 ? '>99' : Sim.fmt(w, 2)) : g2('mode') === 'balance' ? '…' : '—', [[g2('gamma'), 'γ'], [0.9, '0.9'], [1, '']]],
+             [_t('motor |u| / u_max'), g2('gauge_u'), Sim.fmt(Math.abs(g2('u')), 1) + ' N', [[1, '']]]].forEach(function (r, i) {
+                var yy = y + i * 46; c.textAlign = 'left'; c.fillStyle = TH.ink3; c.fillText(r[0], x0, yy);
+                c.fillStyle = TH.ruleSoft || 'rgba(0,0,0,.08)'; c.fillRect(x0, yy + 9, bw, 7);
+                if (r[1] === r[1]) { c.fillStyle = i === 0 && w >= 1 ? TH.accentDark : TH.accent; c.fillRect(x0, yy + 9, bw * r[1], 7); }
+                c.strokeStyle = TH.ink; c.lineWidth = 1; r[3].forEach(function (m) { var xm = x0 + bw * m[0]; c.beginPath(); c.moveTo(xm, yy + 6); c.lineTo(xm, yy + 19); c.stroke(); if (m[1]) { c.fillStyle = TH.muted; c.textAlign = 'center'; c.fillText(m[1], xm, yy + 26); } });
+                c.textAlign = 'left'; c.fillStyle = TH.ink; c.fillText(r[2], x0 + bw + 8, yy + 12); });
+            c.textBaseline = 'alphabetic'; }
         function drawTrace() {   // the stored trace: tr_t, tr_th1, tr_th2, tr_u
             var c = tr.ctx, W = tr.w, Hh = tr.h, Fm = ds.get('u_max'), tt = ds.get('tr_t'), cols = [null, ds.get('tr_th1'), ds.get('tr_th2'), ds.get('tr_u')], nT = ds.get('tr_n'); c.clearRect(0, 0, W, Hh); var l = 46, r = W - 46, t = 12, b = Hh - 22, tEnd = ds.get('t'), A = 10;
             c.strokeStyle = TH.ruleSoft; c.lineWidth = 1; c.font = TH.mono; c.fillStyle = TH.muted; c.textAlign = 'right';
@@ -1341,7 +1357,7 @@
             { title: 'The controller’s samples', note: 'one row each time the controller looks, every T_s while balancing and every 10 ms while calming or tracking', how: 'run', vars: ['cs_n', 'cs_last', 'cs_i', 'cs_t', 'cs_k', 'cs_due', 'cs_next', 'cs_s', 'cs_u', 'cs_mode', 'cs_rk', 'cs_rx', 'cs_rv', 'cs_rt0', 'cs_re0', 'cs_xc', 'cs_tp', 'cs_pl', 'cs_ver', 'cs_umax', 'cs_bite', 'cs_vb'] },
             { title: 'The physics steps', note: 'one row per 1 ms step of RK4, the last 4 to 8 s', how: 'solver', folded: true, vars: ['st_n', 'st_last', 'st_i', 'st_t', 'st_s0', 'st_s1', 'st_u', 'st_j', 'st_kind', 'st_jump', 'st_ver'] },
             { title: 'The trace', note: 'the lower figure: every 20 ms, the last 8 to 16 s', how: 'run', folded: true, vars: ['tr_n', 'tr_last', 'tr_t', 'tr_th1', 'tr_th2', 'tr_u'] },
-            { title: 'Drawing', note: 'how stored values become pixels', how: 'drawing', folded: true, vars: ['box_w', 'box_h', 'vy', 'sc', 'y0', 'cam_x', 'cart_px', 'cart_py', 'cart_w', 'cart_h', 'mid_px', 'mid_py', 'tip_px', 'tip_py', 'target_px', 'hand_px', 'fps', 'frames'] }
+            { title: 'Drawing', note: 'how stored values become pixels', how: 'drawing', folded: true, vars: ['box_w', 'box_h', 'vy', 'sc', 'y0', 'cam_x', 'cart_px', 'cart_py', 'cart_w', 'cart_h', 'mid_px', 'mid_py', 'tip_px', 'tip_py', 'target_px', 'hand_px', 'gauge_w', 'gauge_u', 'gauge_x', 'fps', 'frames'] }
         ];
         var inp = function (n, d) { return [ds.vars[n].attrs.symbol, G2(n), ds.vars[n].attrs.units || '', d === undefined ? 6 : d]; };
         Sim.data = {
@@ -1396,6 +1412,9 @@
                         return { formula: _t('your hand on the cart: (29) gives the acceleration, row 1 of (9) the force'), inputs: [['x<sub>h,k</sub>', xh, 'm', 5], ['ẍ<sub>h</sub>', a, 'm/s²', 5]].concat(s0.map(function (v, k) { return [QN[k], v, QU[k], 6]; })), value: forceFor(machine(), s0, a) }; }
                     if (j < 0) return { formula: _t('your hand holds the rods: no force'), inputs: [], value: 0 };
                     return { formula: _t('the force of sample j(k), held'), inputs: [['j(k)', j, '']], value: q >= 0 ? G2('cs_u')[q] : undefined }; },
+                gauge_w: function () { var cs = G2('c_star'); return { formula: ds.vars.gauge_w.attrs.formula, inputs: [inp('W', 5), inp('c_star', 4), ['mode', G2('mode'), '']], value: cs === cs && G2('mode') === 'balance' ? Math.min(G2('W') / cs, 1) : NaN }; },
+                gauge_u: function () { return { formula: ds.vars.gauge_u.attrs.formula, inputs: [inp('u', 5), inp('u_max', 1)], value: Math.min(Math.abs(G2('u')) / G2('u_max'), 1) }; },
+                gauge_x: function () { return { formula: ds.vars.gauge_x.attrs.formula, inputs: [inp('box_w', 0)], value: G2('box_w') - 244 }; },
                 hand_px: function () { return { formula: ds.vars.hand_px.attrs.formula, inputs: [inp('box_w', 1), inp('hand_x', 6), inp('cam_x', 6), inp('sc', 4)], value: G2('held') === 3 ? G2('box_w') / 2 + (G2('hand_x') - G2('cam_x')) * G2('sc') : NaN }; },
                 cart_px: function () { return { formula: ds.vars.cart_px.attrs.formula, inputs: [inp('box_w', 1), inp('x', 6), inp('cam_x', 6), inp('sc', 4)], value: G2('box_w') / 2 + (G2('x') - G2('cam_x')) * G2('sc') }; },
                 cart_py: function () { return { formula: ds.vars.cart_py.attrs.formula, inputs: [inp('y0', 3), inp('cart_h', 3)], value: G2('y0') - G2('cart_h') + 4 }; },

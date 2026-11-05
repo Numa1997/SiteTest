@@ -418,3 +418,7 @@ itself; a hand on the slider puts it back on its steps ([curve.md](../scripts/cu
 its steps are 0.04 px apart on the slider, and under a 4 s ramp it stayed within 0.003 rad/s of p(u) and moved on every
 frame. The wrapper `c2knob` gains `node()`, and the Phase slider of Circle 2 shows the exact phase (`Sim.curve.loosen` in
 `c2live`, same line). The `about` sentence says all this ([L1468](../../public/simulations/phasor-sums.html#L1468)).
+
+## Figure size (5 November 2026)
+
+At Numa's request ("the screen is too big") the figures of every simulation were measured at 1440 × 900: the box of each figure, and how much of a 16 × 10 grid laid over it holds anything drawn. Square drawings stretched over the 1030 px column and figures with an empty band were made shorter: this figure went from 1 : 0.78 (1030 × 803 px) to 16 : 10 (1030 × 644 px); below 900 px it stays square. The drawing scales to the new height by its own fitting rule, so nothing else changed; the page loads without errors, maths errors or sideways scroll in English, German and Arabic at 1440 and 390 px.
