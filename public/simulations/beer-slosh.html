@@ -1194,8 +1194,10 @@
         const cut = new THREE.Line(cutG, new THREE.LineDashedMaterial({ color: 0x7a1f2b, dashSize: 0.004, gapSize: 0.003 })); glassG.add(cut);
         // camera on a sphere around the glass
         const view = { az: -0.55, el: 0.30, dist: 0.40 };
+        const look = { x: 0, y: 0, d: 0 };          // the camera looks at the glass and its target together, and backs off when they are far apart
         function placeCam() {
-            const c = Math.cos(view.el); cam.position.set(view.dist * c * Math.sin(view.az), 0.075 + view.dist * Math.sin(view.el), view.dist * c * Math.cos(view.az)); cam.lookAt(0, 0.075, 0);
+            const d = view.dist + look.d, c = Math.cos(view.el);
+            cam.position.set(look.x + d * c * Math.sin(view.az), 0.075 + d * Math.sin(view.el), -look.y + d * c * Math.cos(view.az)); cam.lookAt(look.x, 0.075, -look.y);
         }
         function resize() { const w = host.clientWidth, hh = host.clientHeight; renderer.setSize(w, hh, false); cam.aspect = w / hh; cam.updateProjectionMatrix(); }
         new ResizeObserver(resize).observe(host); resize(); placeCam();
@@ -1230,6 +1232,8 @@
             showShape(); const sh = S.shakerOffset(), gx = S.G.x + sh.x, gy = S.G.y, gz = S.G.z + sh.z;
             glassG.position.set(gx, gz, -gy); shadow.position.set(gx, 0.0005, -gy); shadow.material.opacity = 0.12 / (1 + 30 * gz);
             const w = S.P.ctl === 'waiter'; carriage.visible = target.visible = w;
+            const fx = w ? (gx + S.Tg.x) / 2 : gx, fy = w ? (gy + S.Tg.y) / 2 : gy, fd = w ? Math.min(0.5, 1.2 * Math.hypot(gx - S.Tg.x, gy - S.Tg.y)) : 0;
+            look.x += 0.06 * (fx - look.x); look.y += 0.06 * (fy - look.y); look.d += 0.06 * (fd - look.d); placeCam();
             if (w) { carriage.position.set(gx, gz - 0.003, -gy); target.position.set(S.Tg.x, -0.0055, -S.Tg.y); }
             const zs = S.geo.zs, a = S.geo.a, hf = S.P.hf, Rin = S.Rdraw;
             const sp = surfG.attributes.position.array, hp = headTopG.attributes.position.array, wp = wallG.attributes.position.array, hs = headSideG.attributes.position.array;
