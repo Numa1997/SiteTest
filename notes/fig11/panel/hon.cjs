@@ -21,7 +21,7 @@ const EXTRACT = (a) => {
     st.push(row); }
   for (let r = 0; r < g('cs_n'); r++) { const i = g('cs_i')[r]; if (i <= a.lastJ) continue;
     cs.push({ i, t: g('cs_t')[r], k: g('cs_k')[r], due: g('cs_due')[r], next: g('cs_next')[r], s: A('cs_s', r, 6), u: g('cs_u')[r], mode: g('cs_mode')[r], rk: g('cs_rk')[r], rx: g('cs_rx')[r], rv: g('cs_rv')[r], rt0: g('cs_rt0')[r], re0: g('cs_re0')[r], xc: g('cs_xc')[r], tp: g('cs_tp')[r], pl: g('cs_pl')[r], ver: g('cs_ver')[r], umax: g('cs_umax')[r], bite: g('cs_bite')[r], vb: g('cs_vb')[r] }); }
-  const ctx = { ver, d: Array.from(g('d')), f: Array.from(g('f')), K: Array.from(g('K')), P: Array.from(g('P')), cs: g('c_star'), gamma: g('gamma'), Ts: g('Ts'), gw: g('glide_w'), kc: g('calm_k'), hw: g('hand_w'), ha: g('hand_amax'), fl: g('medium') === 'vacuum' ? null : { flow: g('flow'), U: g('U_f'), nu: g('mu_f') / g('rho_f'), xi: Array.from(g('xi_r')), cq: g('c_q'), cl: g('c_lin'), cc: g('c_quad'), L1: g('L1'), L2: g('L2') } };
+  const ctx = { ver, d: Array.from(g('d')), f: Array.from(g('f')), K: Array.from(g('K')), P: Array.from(g('P')), cs: g('c_star'), gamma: g('gamma'), Ts: g('Ts'), gw: g('glide_w'), kc: g('calm_k'), hw: g('hand_w'), ha: g('hand_amax'), fl: g('medium') === 'vacuum' ? null : { flow: g('flow'), U: g('U_f'), nu: g('mu_f') / g('rho_f'), xi: Array.from(g('xi_r')), cq: g('c_q'), cl: g('c_lin'), cc: g('c_quad'), L1: g('L1'), L2: g('L2'), kr: g('rho_f') * Math.PI * 1e-4 + g('mu_a'), kc: g('rho_f') * 4 / 3 * Math.PI * 0.18 * 0.06 * 0.10 + g('m_ac'), acc: g('flow') !== 'still', ma: { mu: g('mu_a'), mc: g('m_ac') } } };
   const pl = g('pl_serial'), plan = pl && pl !== a.plSerial ? { serial: pl, u: Array.from(g('pl_u')), K: Array.from(g('pl_K')), nom: Array.from(g('pl_nom')) } : null;
   return { st, cs, ctx, plan, sig: g('sig')[0], b1: { n: b1n, exact: b1x, skip: b1skip }, t: DIPC.t, mode: DIPC.mode };
 };
@@ -100,7 +100,7 @@ function checkLogs(acc) {
     if (r.mode >= 3) v = 0;
     else if (!c) { unc++; continue; }
     else if (r.mode === 0) { const rv = R.refAt(r.rk, r.rx, r.rv, r.rt0, r.re0, r.t, c.gw); v = R.lawBalance(c.K, r.s, rv[0], rv[1], r.umax); }
-    else if (r.mode === 1) v = R.lawCalm(c.d, c.f, r.s, r.xc, c.kc, r.umax);
+    else if (r.mode === 1) v = R.lawCalm(c.d, c.f, r.s, r.xc, c.kc, r.umax, c.fl ? { ma: c.fl.ma, L1: c.fl.L1, L2: c.fl.L2 } : null);
     else { const p = acc.plans[r.pl]; if (!p) { unc++; continue; } v = R.lawTrack(p, r.s, r.t, r.tp, r.xc, r.umax); }
     nc++; const d = Math.abs(v - r.u); if (d > mc) { mc = d; worstRow = r; } }
   const okc = mc <= 1e-9 && unc === 0; if (!okc) ok = false;
@@ -196,6 +196,7 @@ async function main() {
       return (await pic('braked to rest')) && m.ref === 'fixed' && Math.abs(m.v) < 0.01; },
     wind: async () => { await medium('air', 'street', 2); await pause(true); await pg.click('#reset'); await start(); await drive(8); const a = await pic('in a Kármán street, U = 2 m/s'); await medium('vacuum', 'still', 2); return a; },
     water: async () => { await medium('water', 'waves', 0.4); await pause(true); await pg.click('#reset'); await start(); await drive(8); const a = await pic('in a swell, U = 0.4 m/s'); await medium('vacuum', 'still', 2); return a; },
+    stillwater: async () => { await medium('water', 'still', 2); await pause(true); await pg.click('#reset'); await start(); await drive(4); await pg.click('#flickR'); await drive(4); const a = await pic('in still water, after a flick'); await medium('vacuum', 'still', 2); return a; },
     windcart: async () => { await medium('air', 'breeze', 3); const a = await scen.cart(); await medium('vacuum', 'still', 2); return a; },
     limit: async () => { await pause(false); await pg.click('#tilt'); await start(); await drive(1); await set({ Fmax: 25 }); await drive(3); await set({ Fmax: 60 }); await pg.evaluate(() => DIPC.finishCatch()); await drive(2); return pic('force limit changed while balancing'); }
   };
