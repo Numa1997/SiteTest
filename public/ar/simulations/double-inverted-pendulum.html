@@ -19,6 +19,15 @@
         .state { margin: 0; font-size: 13px; line-height: 1.5; color: var(--ink-2); }
         .state b { color: var(--accent); }
         .ctl__note { font-size: 12px; color: var(--ink-3); margin: 0; line-height: 1.45; }   /* what a control does, in one line under it */
+        /* the parameters under the figure, where a change is seen at once; long notes keep to two lines, the whole text on hover */
+        .pg { margin-top: 12px; padding: 10px 14px 12px; background: var(--card); border: 1px solid var(--rule); border-radius: 12px; display: flex; flex-direction: column; gap: 6px; }
+        .pg-h { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+        .pg-h .btn { padding: 4px 10px; font-size: 12.5px; }
+        .pg-g { display: grid; gap: 4px 18px; } .pg-g--5 { grid-template-columns: repeat(5, minmax(0, 1fr)); } .pg-g--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        .pg-c { min-width: 0; display: flex; flex-direction: column; gap: 2px; } .pg-c .ctl { font-size: 13px; gap: 0; }
+        .pg .ctl__note { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; font-size: 11.5px; line-height: 1.35; }
+        .pg .pg-n { display: block; -webkit-line-clamp: unset; }
+        @media (max-width: 900px) { .pg-g--5, .pg-g--3 { grid-template-columns: repeat(2, minmax(0, 1fr)); } .pg .ctl__note { -webkit-line-clamp: unset; display: block; } }
         .defs { margin: 0; font-size: 12px; line-height: 1.45; color: var(--ink-3); }
         .defs dt { font-family: var(--mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-top: 8px; }
         .defs dd { margin: 1px 0 0; }
@@ -28,7 +37,7 @@
 
     <link rel="stylesheet" href="../../fonts/arabic.css" />
     <script src="../../scripts/i18n/strings-ar.js"></script>
-    <meta name="translated-from" content="English public/simulations/double-inverted-pendulum.html, commit 25d5a3d+" />
+    <meta name="translated-from" content="English public/simulations/double-inverted-pendulum.html, commit 7274fa0+" />
   </head>
 <body>
     <header class="sim-top">
@@ -60,7 +69,7 @@
         <div class="sim__grid">
             <div>
                 <figure class="stage">
-                    <div class="stage__canvas" id="stage" style="--ar: 16 / 6.5; --ar-m: 1 / 1.05;">
+                    <div class="stage__canvas" id="stage" style="--ar: 16 / 4.8; --ar-m: 1 / 1.05;">
                         <canvas id="cv" style="touch-action: pan-y;" aria-label="عربة على سكّة يقف عليها قضيبان، أحدهما موصول بالآخر بمفصل؛ ويُظهر سهم على العربة قوّة المحرّك. اسحب قضيبًا لتميله، ثم أفلته."></canvas>
                     </div>
                     <figcaption class="stage__cap">
@@ -68,8 +77,39 @@
                         <span id="cap-t"><i>t</i> = —</span>
                     </figcaption>
                 </figure>
-                <figure class="stage" style="margin-top: 16px;">
-                    <div class="stage__canvas" id="stage-tr" style="--ar: 16 / 5; --ar-m: 16 / 9;">
+                <section class="pg" aria-label="المعلمات">
+                    <div class="pg-h"><p class="panel__label">الآلة · يُعاد تصميم المتحكّم عند كلّ تغيير</p><button type="button" class="btn btn--ghost" id="defaults">آلة بوغدانوف</button></div>
+                    <div class="pg-g pg-g--5"><div class="pg-c"><label class="ctl">
+                        <span class="ctl__row"><span>كتلة العربة <i>m</i><sub>0</sub></span><output id="m0-out" for="m0"></output></span>
+                        <input type="range" id="m0" min="0.3" max="6" step="0.1" value="1.5">
+                    </label></div><div class="pg-c"><label class="ctl">
+                        <span class="ctl__row"><span>كتلة القضيب السفلي <i>m</i><sub>1</sub></span><output id="m1-out" for="m1"></output></span>
+                        <input type="range" id="m1" min="0.1" max="2" step="0.05" value="0.5">
+                    </label></div><div class="pg-c"><label class="ctl">
+                        <span class="ctl__row"><span>كتلة القضيب العلوي <i>m</i><sub>2</sub></span><output id="m2-out" for="m2"></output></span>
+                        <input type="range" id="m2" min="0.1" max="2" step="0.05" value="0.75">
+                    </label></div><div class="pg-c"><label class="ctl">
+                        <span class="ctl__row"><span>طول القضيب السفلي <i>L</i><sub>1</sub></span><output id="L1-out" for="L1"></output></span>
+                        <input type="range" id="L1" min="0.2" max="1.5" step="0.05" value="0.5">
+                    </label></div><div class="pg-c"><label class="ctl">
+                        <span class="ctl__row"><span>طول القضيب العلوي <i>L</i><sub>2</sub></span><output id="L2-out" for="L2"></output></span>
+                        <input type="range" id="L2" min="0.2" max="1.5" step="0.05" value="0.75">
+                    </label></div></div>
+                    <p class="ctl__note pg-n">عربة كتلتها <i>m</i><sub>0</sub> على سكّة. وكلّ قضيب قضيبٌ متجانس كتلته <i>m</i> وطوله <i>L</i>، حرّ الدوران حول مفصل عند طرفه السفلي: القضيب 1 على العربة، والقضيب 2 فوق القضيب 1 (القسم 2).</p> <p class="ctl__note pg-n">العودة إلى آلة تقرير بوغدانوف [1]: 1.5 و0.5 و⁦0.75 kg⁩، وقضيبان طولهما 0.5 و⁦0.75 m⁩، و<i>ρ</i> = 1.</p>
+                    <div class="pg-h"><p class="panel__label">المتحكّم · يضبط قوّة المحرّك</p></div>
+                    <div class="pg-g pg-g--3"><div class="pg-c"><label class="ctl">
+                        <span class="ctl__row"><span>حدّ قوّة المحرّك <i>u</i><sub>max</sub></span><output id="Fmax-out" for="Fmax"></output></span>
+                        <input type="range" id="Fmax" min="5" max="200" step="1" value="60">
+                    </label><p class="ctl__note">أكبر قوّة يستطيع المحرّك أن يعطيها، بالنيوتن. وأيّ دفعة أكبر تُقصّ إلى هذه القيمة.</p></div><div class="pg-c"><label class="ctl">
+                        <span class="ctl__row"><span>دور حلقة التحكّم <i>T</i><sub>s</sub></span><output id="Ts-out" for="Ts"></output></span>
+                        <input type="range" id="Ts" min="1" max="80" step="1" value="10">
+                    </label><p class="ctl__note">كلّ كم يقرأ الحاسوب الزاويتين ويضبط المحرّك، بالمللي ثانية. وفي ما بين ذلك تبقى القوّة كما ضُبطت (7.2).</p></div><div class="pg-c"><label class="ctl">
+                        <span class="ctl__row"><span>كلفة القوّة <i>ρ</i></span><output id="rho-out" for="rho"></output></span>
+                        <input type="range" id="rho" min="-2" max="2" step="0.1" value="0">
+                    </label><p class="ctl__note">ثمن القوّة في كلفة المتحكّم (14)، مقابل ثمن الميل والبعد عن الهدف؛ والمنزلق لوغاريتمي، من 0.01 إلى 100. <i>ρ</i> كبيرة: دفعات لطيفة، وقضيبان يبتعدان أكثر. <i>ρ</i> صغيرة: دفعات قويّة تبلغ حدّ المحرّك أسرع.</p></div></div>
+                </section>
+                <figure class="stage" style="margin-top: 12px;">
+                    <div class="stage__canvas" id="stage-tr" style="--ar: 16 / 3.4; --ar-m: 16 / 9;">
                         <canvas id="tr" aria-label="الثواني الثماني الأخيرة لزاويتي القضيبين ولقوّة المحرّك."></canvas>
                     </div>
                     <figcaption class="stage__cap">
@@ -134,49 +174,8 @@
                         <button type="button" data-v="cont" aria-pressed="false">الزمن المتّصل</button>
                     </div>
                     <p class="ctl__note">الكسوب هي أرقام المتحكّم الستّة: كم نيوتنًا يدفع لكلّ وحدة من كلّ خطأ (لكلّ متر، وراديان، وm/s، وrad/s). <i>دور الحلقة</i>: صُمّمت مع العلم أنّ الحاسوب لا ينظر إلّا كلّ <i>T</i><sub>s</sub> (7.5). <i>الزمن المتّصل</i>: صُمّمت كأنّه ينظر طوال الوقت (7)، وهذا يفشل في الحلقات البطيئة (8).</p>
-                    <label class="ctl">
-                        <span class="ctl__row"><span>حدّ قوّة المحرّك <i>u</i><sub>max</sub></span><output id="Fmax-out" for="Fmax"></output></span>
-                        <input type="range" id="Fmax" min="5" max="200" step="1" value="60">
-                    </label>
-                    <p class="ctl__note">أكبر قوّة يستطيع المحرّك أن يعطيها، بالنيوتن. وأيّ دفعة أكبر تُقصّ إلى هذه القيمة.</p>
-                    <label class="ctl">
-                        <span class="ctl__row"><span>دور حلقة التحكّم <i>T</i><sub>s</sub></span><output id="Ts-out" for="Ts"></output></span>
-                        <input type="range" id="Ts" min="1" max="80" step="1" value="10">
-                    </label>
-                    <p class="ctl__note">كلّ كم يقرأ الحاسوب الزاويتين ويضبط المحرّك، بالمللي ثانية. وفي ما بين ذلك تبقى القوّة كما ضُبطت (7.2).</p>
-                    <label class="ctl">
-                        <span class="ctl__row"><span>كلفة القوّة <i>ρ</i></span><output id="rho-out" for="rho"></output></span>
-                        <input type="range" id="rho" min="-2" max="2" step="0.1" value="0">
-                    </label>
-                    <p class="ctl__note">ثمن القوّة في كلفة المتحكّم (14)، مقابل ثمن الميل والبعد عن الهدف؛ والمنزلق لوغاريتمي، من 0.01 إلى 100. <i>ρ</i> كبيرة: دفعات لطيفة، وقضيبان يبتعدان أكثر. <i>ρ</i> صغيرة: دفعات قويّة تبلغ حدّ المحرّك أسرع.</p>
                 </div>
 
-                <div class="panel__group">
-                    <p class="panel__label">الآلة · يُعاد تصميم المتحكّم عند كلّ تغيير</p>
-                    <p class="ctl__note">عربة كتلتها <i>m</i><sub>0</sub> على سكّة. وكلّ قضيب قضيبٌ متجانس كتلته <i>m</i> وطوله <i>L</i>، حرّ الدوران حول مفصل عند طرفه السفلي: القضيب 1 على العربة، والقضيب 2 فوق القضيب 1 (القسم 2).</p>
-                    <label class="ctl">
-                        <span class="ctl__row"><span>كتلة العربة <i>m</i><sub>0</sub></span><output id="m0-out" for="m0"></output></span>
-                        <input type="range" id="m0" min="0.3" max="6" step="0.1" value="1.5">
-                    </label>
-                    <label class="ctl">
-                        <span class="ctl__row"><span>كتلة القضيب السفلي <i>m</i><sub>1</sub></span><output id="m1-out" for="m1"></output></span>
-                        <input type="range" id="m1" min="0.1" max="2" step="0.05" value="0.5">
-                    </label>
-                    <label class="ctl">
-                        <span class="ctl__row"><span>كتلة القضيب العلوي <i>m</i><sub>2</sub></span><output id="m2-out" for="m2"></output></span>
-                        <input type="range" id="m2" min="0.1" max="2" step="0.05" value="0.75">
-                    </label>
-                    <label class="ctl">
-                        <span class="ctl__row"><span>طول القضيب السفلي <i>L</i><sub>1</sub></span><output id="L1-out" for="L1"></output></span>
-                        <input type="range" id="L1" min="0.2" max="1.5" step="0.05" value="0.5">
-                    </label>
-                    <label class="ctl">
-                        <span class="ctl__row"><span>طول القضيب العلوي <i>L</i><sub>2</sub></span><output id="L2-out" for="L2"></output></span>
-                        <input type="range" id="L2" min="0.2" max="1.5" step="0.05" value="0.75">
-                    </label>
-                    <div class="actions"><button type="button" class="btn btn--ghost" id="defaults">آلة بوغدانوف</button></div>
-                    <p class="ctl__note">العودة إلى آلة تقرير بوغدانوف [1]: 1.5 و0.5 و⁦0.75 kg⁩، وقضيبان طولهما 0.5 و⁦0.75 m⁩، و<i>ρ</i> = 1.</p>
-                </div>
 
                 <dl class="readouts">
                     <div><dt>معدّلا السقوط، والمتحكّم متوقّف</dt><dd id="r-sig">—</dd></div>
@@ -1255,6 +1254,7 @@
             on = bt.getAttribute('data-v') === 'on'; Array.prototype.forEach.call(document.querySelectorAll('#ctrl button'), function (x) { x.setAttribute('aria-pressed', x === bt ? 'true' : 'false'); }); }); });
         document.getElementById('defaults').addEventListener('click', function () { sl.m0.set(1.5); sl.m1.set(0.5); sl.m2.set(0.75); sl.L1.set(0.5); sl.L2.set(0.75); sR.set(0); redesign(); reset(); });
         /* pull a rod out of balance and let go: while held the state stands still at rest; on release the controller takes over */
+        Array.prototype.forEach.call(document.querySelectorAll('.pg .ctl__note'), function (n) { n.title = n.textContent.replace(/\s+/g, ' ').trim(); });   // the whole note on hover where it is cut to two lines
         var cvEl = document.getElementById('cv');
         function local(e) { var r = cvEl.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; }
         function segDist(q, a, b) { var dx = b[0] - a[0], dy = b[1] - a[1], t = Math.max(0, Math.min(1, ((q[0] - a[0]) * dx + (q[1] - a[1]) * dy) / (dx * dx + dy * dy))); return Math.hypot(q[0] - a[0] - t * dx, q[1] - a[1] - t * dy); }
