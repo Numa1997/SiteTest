@@ -90,6 +90,7 @@ then into the tables. Machine tables: [i18n/de/strings.json](../i18n/de/strings.
 | Reynolds number | Reynolds-Zahl | عدد رينولدز |
 | drag (viscous, pressure, Stokes) | Widerstand (viskoser, Druck-, Stokes-Widerstand) | الكبح (اللزج، كبح الضغط، كبح ستوكس) |
 | buoyancy, added mass | Auftrieb, hydrodynamische (mitbewegte) Masse | الطفو، الكتلة المضافة |
+| added mass of the head (Fig. 12) | Zusatzmasse der Schaumkrone | الكتلة المضافة للرغوة |
 | resistive force theory, Stokeslet | Widerstandskrafttheorie, Stokeslet | نظرية قوّة المقاومة، الستوكسليت |
 | traction (σ·n), generalised force | Spannungsvektor, verallgemeinerte Kraft | متّجه الإجهاد، القوّة المعمّمة |
 | vortex, eddy, Kármán vortex street | Wirbel, Wirbelwalze, Kármánsche Wirbelstraße | دوّامة، دوّامة متدحرجة، شارع دوّامات كارمان |
@@ -108,6 +109,16 @@ then into the tables. Machine tables: [i18n/de/strings.json](../i18n/de/strings.
 | Morse potential | Morse-Potential | كمون مورس |
 | linearization | Linearisierung | التقريب الخطّي |
 | sample, sampling period (control) | Abtastung, Abtastperiode | المعاينة، فترة المعاينة |
+| sloshing, sloshing mode | Schwappen, Schwappmode | التخضخض، نمط التخضخض |
+| head (of a stout) | Schaumkrone | الرغوة |
+| the waiter (the controller of Fig. 12) | der Kellner (Regler) | النادل (المتحكّم) |
+| carriage, moving-coil motor | Schlitten, Tauchspulenmotor | العربة، محرّك الملفّ المتحرّك |
+| planned path, target ring | geplante Bahn, Zielring | المسار المخطّط، حلقة الهدف |
+| sloshing mass | schwappende Masse | الكتلة المتخضخضة |
+| feedforward | Vorsteuerung | التغذية الأمامية |
+| current limit | Strombegrenzung | حدّ التيار |
+| linear-quadratic regulator (LQR), Riccati equation | linear-quadratischer Regler (LQR), Riccati-Gleichung | المنظّم الخطّي التربيعي (LQR)، معادلة ريكاتي |
+| gains (of a controller) | Verstärkungen | معاملات الكسب |
 | metering edges (valve) | Steuerkanten | حوافّ التحكّم |
 | centrifugal | Zentrifugal- | الطرد المركزي |
 | matched forcing | gleiche Anregung | قسرٌ متطابق |
