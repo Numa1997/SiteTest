@@ -2,7 +2,7 @@
 
 A Guinness tulip pint glass with 500 mL of stout under 18 mm of head, carried by the reader's pointer or shaken by a shaker
 table. The stout sloshes in the linear modes of the measured glass shape; a vertical cut shows the velocity field inside; every
-source of damping has its own term and switch. Catalog field `control` (no controller yet: a later chapter adds one). Added 5 November 2026.
+source of damping has its own term and switch. Catalog field `control`: since the second version (5 November 2026, later) a waiter, a carriage driven by a moving-coil motor under an LQR controller, can carry the glass instead of the reader's hand (note section 10). Added 5 November 2026.
 
 ## Files
 
@@ -68,3 +68,22 @@ The head's liquid fraction (0.15, no source), the transfer of Sauret et al.'s fo
 round glass of stout (a factor of three either way), the contact-line rate (0.05 1/s, from a water tank), and Guinness's own
 surface tension (beers 41–48 mN/m). The glass profile carries the photograph's perspective (widest diameter 84.1 mm against the
 published 85 mm).
+
+## The waiter (section 10 of the note)
+
+`design()` builds, for the present fill and stout, the state-space model of the carriage and the three m = 1 modes per axis: the
+carriage equation (19), M ẍ + Σ ρπ Q_n N_n ä_n = F with N_n = ∫ ψ_n² r dr (Simpson on the 25 stored radii), reduced to (20) with
+the sloshing masses m_n; the modal equation (12). It discretises with a zero-order hold over T_s (matrix exponential by scaling and
+squaring), solves the discrete Riccati equation by iteration, and estimates the slowest closed-loop time constant from Gelfand's
+formula. Every T_s, `waiterForce()` sets F = M r̈ − K(s − s_path), limited to Bℓ I_max, for x (cos copies) and y (sin copies); the
+planned path follows the target with rate Ω_r. Carriage 0.60 kg, glass 0.42 kg, Bℓ = 12 N/A (page constants, P.Mc, P.mg, P.Bl).
+Offline reference: `tools/fig12/controller.py`; `tools/fig12/waiter_fig.py` draws Figure 5. Gate: `node notes/fig12/gate-waiter.cjs out.json`
+gives the page's gains (equal to SciPy's to 3e-10) and a 20 cm carry (peak 2.626 mm, arrival 1.453 s, both as offline).
+
+## Reviews (5 November 2026)
+
+Two rounds of independent review of the note (referee, `notes/fig12/referee-r1.md`, `referee-r2.md`) and of the code
+(`code-review-r1.md`, `code-review-r2.md`), and one of the waiter (`waiter-review.md`); each finding fixed or answered.
+`node notes/fig12/regress.cjs` re-runs the code findings as tests and exits 1 on a failure. Kept on purpose: the 3D view keeps
+`touch-action: none`, so a finger on it carries the glass in both directions on a phone (the page scrolls everywhere else);
+per-frame allocations in the drawing are small and were measured not to matter.
