@@ -95,6 +95,10 @@
   "src": "© 2026 Numa Koudsie · Built with Claude (Anthropic) · Directed and led by Numa Koudsie",
   "tr": "© 2026 نعمة سائر قدسية · بُني باستخدام Claude (Anthropic) · التوجيه والقيادة لـ نعمة سائر قدسية"
  },
+ "1d6a76dfc200": {
+  "src": "Work and study archive<span class=\"dot\">.</span>",
+  "tr": "أرشيف العمل والدراسة<span class=\"dot\">.</span>"
+ },
  "1da4c927a185": {
   "src": "02.2023 – present <span class=\"tag\">current</span> <span class=\"tag tag--soft\">minijob</span>",
   "tr": "02.2023 – حتى الآن <span class=\"tag\">حاليًّا</span> <span class=\"tag tag--soft\">عمل جزئي</span>"
@@ -571,6 +575,10 @@
   "src": "All projects →",
   "tr": "كلّ المشاريع ←"
  },
+ "b4ae5172597d": {
+  "src": "Latin: The Latin Library, checked against Hermann Diels’ edition (Berlin, 1923). The manuscripts give line 155 after 158.",
+  "tr": "اللاتينية: The Latin Library، روجعت على طبعة هيرمان ديلس (برلين، 1923). وتورد المخطوطات البيت 155 بعد البيت 158."
+ },
  "b60b20f0f1ab": {
   "src": "SVG animation",
   "tr": "تحريك SVG"
@@ -818,6 +826,10 @@
  "fc8a068be442": {
   "src": "Completed projects, rebuilt in full with their derivations, solver and checks, are on the <a href=\"portfolios.html\">Portfolios page</a>: the Bachelor thesis on how cloud droplets become rain, a corrected study of whether a pendulum on a turbine blade can power a sensor, a servo-hydraulic press under digital control, built from first principles, and a study, in English, German and Arabic, of why an iron ball hurts and a cotton ball of the same mass does not.",
   "tr": "المشاريع المكتملة، بعد إعادة بنائها كاملةً مع اشتقاقاتها وحلّالاتها وفحوصها، موجودة في <a href=\"portfolios.html\">صفحة الملفّات</a>: رسالة البكالوريوس عن كيفيّة تحوّل قُطيرات الغيمة إلى مطر، ودراسة مصحَّحة عمّا إذا كان نوّاسٌ على شفرة عنفة قادرًا على تغذية حسّاس، ومكبس هيدروليكي مؤازَر بتحكّم رقمي مبنيّ من المبادئ الأولى، ودراسة، بالإنجليزية والألمانية والعربية، عن سبب إيلام كرة الحديد وعدم إيلام كرة القطن ذات الكتلة نفسها."
+ },
+ "fde2e5c57738": {
+  "src": "Lucretius, On the Nature of Things I 146–158 · rest the pointer on a sentence for a translation",
+  "tr": "لوكريتيوس، في طبيعة الأشياء، الكتاب الأول، الأبيات 146–158 · ضع المؤشر فوق جملة لتقرأ ترجمتها"
  },
  "fde7a78a09c4": {
   "src": "Hydraulic Press Study",

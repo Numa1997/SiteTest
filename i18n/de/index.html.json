@@ -95,6 +95,10 @@
   "src": "© 2026 Numa Koudsie · Built with Claude (Anthropic) · Directed and led by Numa Koudsie",
   "tr": "© 2026 Numa Koudsie · Gebaut mit Claude (Anthropic) · Geleitet und geführt von Numa Koudsie"
  },
+ "1d6a76dfc200": {
+  "src": "Work and study archive<span class=\"dot\">.</span>",
+  "tr": "Arbeits- und Studienarchiv<span class=\"dot\">.</span>"
+ },
  "1da4c927a185": {
   "src": "02.2023 – present <span class=\"tag\">current</span> <span class=\"tag tag--soft\">minijob</span>",
   "tr": "02.2023 – heute <span class=\"tag\">aktuell</span> <span class=\"tag tag--soft\">Minijob</span>"
@@ -571,6 +575,10 @@
   "src": "All projects →",
   "tr": "Alle Projekte →"
  },
+ "b4ae5172597d": {
+  "src": "Latin: The Latin Library, checked against Hermann Diels’ edition (Berlin, 1923). The manuscripts give line 155 after 158.",
+  "tr": "Latein: The Latin Library, abgeglichen mit der Ausgabe von Hermann Diels (Berlin, 1923). In den Handschriften folgt Vers 155 auf Vers 158."
+ },
  "b60b20f0f1ab": {
   "src": "SVG animation",
   "tr": "SVG-Animation"
@@ -818,6 +826,10 @@
  "fc8a068be442": {
   "src": "Completed projects, rebuilt in full with their derivations, solver and checks, are on the <a href=\"portfolios.html\">Portfolios page</a>: the Bachelor thesis on how cloud droplets become rain, a corrected study of whether a pendulum on a turbine blade can power a sensor, a servo-hydraulic press under digital control, built from first principles, and a study, in English, German and Arabic, of why an iron ball hurts and a cotton ball of the same mass does not.",
   "tr": "Abgeschlossene Projekte, vollständig neu aufgebaut mit ihren Herleitungen, Lösern und Prüfungen, stehen auf der <a href=\"portfolios.html\">Portfolios-Seite</a>: die Bachelorarbeit darüber, wie aus Wolkentröpfchen Regen wird, eine korrigierte Studie, ob ein Pendel auf einem Turbinenblatt einen Sensor versorgen kann, eine digital geregelte servohydraulische Presse, aus ersten Prinzipien aufgebaut, und eine Studie, auf Englisch, Deutsch und Arabisch, warum eine Eisenkugel wehtut und eine Baumwollkugel derselben Masse nicht."
+ },
+ "fde2e5c57738": {
+  "src": "Lucretius, On the Nature of Things I 146–158 · rest the pointer on a sentence for a translation",
+  "tr": "Lukrez, Über die Natur der Dinge I 146–158 · Mauszeiger auf einen Satz legen, um eine Übersetzung zu lesen"
  },
  "fde7a78a09c4": {
   "src": "Hydraulic Press Study",
