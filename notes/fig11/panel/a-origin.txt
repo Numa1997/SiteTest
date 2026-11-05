@@ -1,0 +1,34 @@
+a1 writes into the store, by the function that holds the line (static, from the page source):
+   (top level)  Qw, glide_w, calm_k, c_busy
+   redesign     rho, Ts, gmode, ver, d, f, sig, K, Gam, P, Phi, Rd, lam, t_settle, t_efold
+   recatch      c_star, c_hand, c_busy
+   reset        tr_n, tr_last
+   think        c_star, c_hand, c_busy
+   logSample    cs_i, cs_t, cs_k, cs_due, cs_next, cs_u, cs_s, cs_mode, cs_rk, cs_rx, cs_rv, cs_rt0, cs_re0, cs_xc, cs_tp, cs_pl, cs_ver, cs_umax, cs_n, cs_last
+   logStep      st_i, st_t, st_u, st_j, st_kind, st_jump, st_ver, st_s0, st_s1, st_n, st_last, tr_t, tr_th1, tr_th2, tr_u, tr_n, tr_last
+   planStore    pl_u, pl_K, pl_nom, pl_n, pl_t0, pl_xc, pl_serial
+   diagnostics  s_now, qdd, t, x, xd, th1w, th2w, u, mode, held, lost, ref_kind, x_r, v_r, ref_p, W, W_red, Ep, E, E0, W_motor, E_ext, E_wait, bal, attempt, hp, x_c, t_plan, plan_busy, plan_ready, next_check, u_max, J, ctrl_on, rescue_on, rolling, gmode, x_target, playing, fps, frames
+   draw         box_w, box_h, vy, sc, y0, cam_x, cart_px, cart_py, cart_w, cart_h, mid_px, mid_py, tip_px, tip_py, target_px
+a2 the display code reads only the store (no physics call, no read of the page’s own state):
+   draw()        line 1106: store only
+   drawTrace()   line 1133: store only
+   Sim.live      line 1189: store only
+   clock: words  line 1146: store only
+   draw() writes only the drawing section: box_w, box_h, vy, sc, y0, cam_x, cart_px, cart_py, cart_w, cart_h, mid_px, mid_py, tip_px, tip_py, target_px; drawTrace and Sim.live write nothing
+   datalog.js calls on the store that write: none (it reads with ds.get, ds.vars, ds.along, ds.npz)
+a3 writers seen at run time (panel open and live, a flick, the start of a swing-up), function → variables:
+   (page script, top level)     3 variables: glide_w, calm_k, c_busy
+   recatch                      3 variables: c_busy, c_star, c_hand
+   think                        3 variables: c_busy, c_star, c_hand
+   redesign                     20 variables: m0, m1, m2, L1, L2, rho, Ts, gmode, ver, d, f, sig, K, Gam, …
+   diagnostics                  72 variables: gmode, s_now, qdd, t, x, xd, th1w, th2w, u, mode, held, lost, ref_kind, x_r, …
+   reset                        2 variables: tr_n, tr_last
+   logStep                      4 variables: tr_n, tr_last, st_n, st_last
+   draw                         15 variables: box_w, box_h, vy, sc, y0, cam_x, cart_px, cart_py, cart_w, cart_h, mid_px, mid_py, tip_px, tip_py, …
+   logSample                    2 variables: cs_n, cs_last
+   planStore                    7 variables: pl_u, pl_K, pl_nom, pl_n, pl_t0, pl_xc, pl_serial
+   writes from the panel, Sim.live or the panel hooks: none
+a4 store edit: θ₁ in the store raised by 0.3 rad (the page’s own state left at 3.1314 rad), then draw():
+   hinge between the rods stored at (576.04,393.53) → (543.32,388.93); white disc found at the new place: (543.50,389.00), 38 px; at the old place: no
+   Sim.live().t1 3.1314 rad → 3.4314 rad; the page’s state unchanged: true
+a: PASS; page errors: none

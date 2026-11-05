@@ -31,7 +31,7 @@ drawn curve while the figure runs; every number in the page's store; `docs/scrip
 the catalog, Portfolios and every simulation page); `_headers` (Cloudflare's response headers); `scripts/sim.js` (shared helpers, lecture-note typesetting, walkthrough engine);
 `scripts/walk/<key>.js` ("From symbols to code", one file per page, chosen by the page's `data-walk` key:
 each equation paired with the page's own code lines; keep the excerpts identical to the page code when either
-changes; live values come from `Sim.live()` in each page); `simulations/*.html` (twelve pages: the eleven figures, Fig. 11 being Double Pendulum under Control, `simulations/pendulum-control.html`, figures from `tools/fig11/`; and the project Balancing Two Rods on a Cart, `simulations/double-inverted-pendulum.html`, a real-time page with walkthrough `dipc` and no data panel, kept in this folder so that `tools/i18n/build.py` makes its German and Arabic pages, docs/simulations/fig11-double-inverted-pendulum.md. On 4 November 2026 the two swapped back: Double Pendulum under Control is Fig. 11 again, in all three languages, and the old address `portfolios/pendulum-control/` answers with a 301 redirect, `tools/redirects.py`).
+changes; live values come from `Sim.live()` in each page); `simulations/*.html` (twelve pages: the eleven figures, Fig. 11 being Double Pendulum under Control, `simulations/pendulum-control.html`, figures from `tools/fig11/`; and the project Balancing Two Rods on a Cart, `simulations/double-inverted-pendulum.html`, a real-time page with walkthrough `dipc` and, since 5 November 2026, a data panel (logs of every 1 ms step and every controller sample; its ledger sits in the page's own `Sim.data`), kept in this folder so that `tools/i18n/build.py` makes its German and Arabic pages, docs/simulations/fig11-double-inverted-pendulum.md. On 4 November 2026 the two swapped back: Double Pendulum under Control is Fig. 11 again, in all three languages, and the old address `portfolios/pendulum-control/` answers with a 301 redirect, `tools/redirects.py`).
 Folds: `scripts/fold.js` + `styles/fold.css`, the fold-out mechanism of Physik Radar and the project apps, in one colour (no colour
 coding). Level 1 is a section card with a header band (number, title, a line of counts, round toggle) that pins to the top of the window
 while open; level 2 is a part inside it, pinned under its section's band; cards keep details behind More / Less. It turns, at load:
@@ -76,7 +76,7 @@ store and does no work while closed (since 24 October 2026 a bookkeeper, skill `
 numbers the animation is about, live, with sparklines; one table in causal sections (symbol, meaning, value aligned on the decimal
 point, unit, Δ, how obtained, check), its words rewritten at most 4 times a second while the simulation plays, Live on by default;
 the books, each balance with its residual stored by the page and added again by the panel; arrays as rows that open in place into
-tables copied at one instant. A page declares this in `Sim.data.ledger` (Figs. 9, 10 and 11 and the simulation and wind tabs of Rotor Pendula, in `scripts/ledger/<page>.js`; Droplet Collection, in its `datahooks.js`); without
+tables copied at one instant. A page declares this in `Sim.data.ledger` (Figs. 9, 10 and 11 and the simulation and wind tabs of Rotor Pendula, in `scripts/ledger/<page>.js`; Droplet Collection, in its `datahooks.js`; project 05, Balancing Two Rods on a Cart, inside the page); without
 it the panel shows the page's `groups` in the same table. Read values:
 a switch in each figure's caption, off by default (a hover readout over the running figure proved disruptive and was removed); while on, a click
 or tap pins the object under it (rings up to 22 px around the point), a drag moves the pin, the page's own pointer actions are held back,
@@ -85,7 +85,7 @@ value, the formula recomputed from the stored inputs, the pixel or SVG element r
 `Sim.data.round` says what a round is (one period, one loop, ten seconds); every frame of it is copied (all scalars and the pinned point,
 at most 600 samples), then shown as charts and a table and saved as .npz + CSV; at most five rounds are kept. Save: the store as .npz +
 dataset.json + the rounds as CSV + README. The contract is at the top of datalog.js. A page loads dataset.js after sim.js and datalog.js
-after its own script (all eleven figures, the Droplet Collection page, the three pages (English, German, Arabic) of Iron, Cotton and the Head, whose hooks are in
+after its own script (all eleven figures, project 05 Balancing Two Rods on a Cart (`simulations/double-inverted-pendulum.html`, whose store is proved honest by the tests in `notes/fig11/panel/`), the Droplet Collection page, the three pages (English, German, Arabic) of Iron, Cotton and the Head, whose hooks are in
 `portfolios-src/impact/datahooks.js`, and the ideal and servo presses of the Hydraulic Press Study, whose store and hooks sit in their
 own pages, and the simulation and wind tabs of Rotor Pendula, whose stores sit in `portfolios-src/rotor-pendula/rotor_sim.html` and `rotor_wind.html` and
 whose links to the shared files `tools/build_combined.py --site` rewrites). `Sim.live()` reads the store too. Keep the taps where the page computes a value; keep the

@@ -1,0 +1,129 @@
+== random rolling
+{} c=37: 40/40 balanced; time to catch median 11.5 s, max 23.1 s; successful plans took 349–7780 ms (median 1475)
+errors: none
+== random STOP=1
+{} c=37: 40/40 balanced; time to catch median 0 s, max 11.5 s; successful plans took 233–7862 ms (median 1240)
+errors: none
+== machines rolling
+  0 ok {"s0":[-0.23,-1.52,0.66,-0.17,-0.81,0.87],"mode":"balance","th":[0,0],"umax":48,"xmax":27.91,"tcaught":6.2,"ms":[487],"evs":"rescue,track,caught"}
+  1 ok {"s0":[-0.48,-1.01,2.33,-0.23,1.29,0.2],"mode":"balance","th":[0,0],"umax":60,"xmax":155.99,"tcaught":19.3,"ms":[7830],"evs":"rescue,noplan,late,late,track,caught"}
+  2 ok {"s0":[-0.18,-2.42,0.7,0.16,2.22,1.9],"mode":"balance","th":[0,0],"umax":46,"xmax":200.63,"tcaught":14.4,"ms":[2655],"evs":"rescue,late,late,track,caught"}
+  3 ok {"s0":[0.44,-0.4,2.78,-0.24,1.52,-0.92],"mode":"balance","th":[0,0],"umax":60,"xmax":111.19,"tcaught":22.9,"ms":[5919],"evs":"rescue,late,late,noplan,track,caught"}
+  4 ok {"s0":[0.13,-3.11,-1.15,0.05,0.77,-1.51],"mode":"balance","th":[0,0],"umax":38,"xmax":86.3,"tcaught":6.3,"ms":[525],"evs":"rescue,track,caught"}
+  5 ok {"s0":[0.02,-0.76,1.5,-0.09,-1.01,2.86],"mode":"balance","th":[0,0],"umax":60,"xmax":67.63,"tcaught":5.2,"ms":[2315],"evs":"rescue,track,caught"}
+{"Ts":40} c=116: 6/6 balanced; time to catch median 14.4 s, max 22.9 s; successful plans took 487–7830 ms (median 2655)
+  0 ok {"s0":[-0.09,0.32,2.66,-0.43,1.46,-2.05],"mode":"balance","th":[0,0],"umax":60,"xmax":183.68,"tcaught":14.4,"ms":[2598],"evs":"rescue,late,late,track,caught"}
+  1 ok {"s0":[0.49,2.61,2.33,-0.42,-0.62,2.31],"mode":"balance","th":[0,0],"umax":41,"xmax":100.48,"tcaught":6.2,"ms":[454],"evs":"rescue,track,caught"}
+  2 ok {"s0":[0.28,0.45,-2.02,-0.22,2.36,1.99],"mode":"balance","th":[0,0],"umax":60,"xmax":43,"tcaught":6.5,"ms":[741],"evs":"rescue,track,caught"}
+  3 ok {"s0":[0.02,-1.14,2.96,-0.13,-1.29,-0.86],"mode":"balance","th":[0,0],"umax":59,"xmax":81.63,"tcaught":13.8,"ms":[396],"evs":"rescue,late,late,track,caught"}
+  4 ok {"s0":[-0.28,-2.14,-2.49,0.33,0.63,-0.35],"mode":"balance","th":[0,0],"umax":37,"xmax":104.46,"tcaught":6.1,"ms":[614],"evs":"rescue,track,caught"}
+  5 ok {"s0":[-0.27,0.03,1.87,0.04,0.46,2.21],"mode":"balance","th":[0,0],"umax":60,"xmax":30.63,"tcaught":11.6,"ms":[4153],"evs":"rescue,late,track,caught"}
+{"Ts":60} c=144: 6/6 balanced; time to catch median 11.6 s, max 14.4 s; successful plans took 396–4153 ms (median 741)
+  0 ok {"s0":[-0.3,-2.09,1.36,0.46,-2.94,2.74],"mode":"balance","th":[0,0],"umax":49,"xmax":53.33,"tcaught":5.8,"ms":[2639],"evs":"rescue,track,caught"}
+  1 ok {"s0":[0.18,2.45,-1.13,-0.18,2.21,1.14],"mode":"balance","th":[0,0],"umax":60,"xmax":195.97,"tcaught":14.4,"ms":[2672],"evs":"rescue,late,late,track,caught"}
+  2 ok {"s0":[0.12,1.9,-0.16,0.03,-1.6,0.1],"mode":"balance","th":[0,0],"umax":58,"xmax":72.64,"tcaught":6.3,"ms":[617],"evs":"rescue,track,caught"}
+  3 ok {"s0":[-0.38,-1.52,0.62,-0.11,1.01,1.64],"mode":"balance","th":[0,0],"umax":60,"xmax":107.99,"tcaught":23,"ms":[7771],"evs":"rescue,late,late,noplan,track,caught"}
+  4 ok {"s0":[-0.13,-1.66,-0.33,0.34,1.51,2.84],"mode":"balance","th":[0,0],"umax":60,"xmax":51.29,"tcaught":11.3,"ms":[2608],"evs":"rescue,noplan,track,caught"}
+  5 ok {"s0":[-0.25,-1.83,0.64,-0.1,2.58,-1.59],"mode":"balance","th":[0,0],"umax":60,"xmax":112.45,"tcaught":6.3,"ms":[326],"evs":"rescue,track,caught"}
+{"m0":3} c=52: 6/6 balanced; time to catch median 11.3 s, max 23 s; successful plans took 326–7771 ms (median 2639)
+  0 ok {"s0":[-0.36,-0.66,-0.4,-0.16,-1.02,0.06],"mode":"balance","th":[0,0],"umax":60,"xmax":8.12,"tcaught":6.7,"ms":[625],"evs":"rescue,track,caught"}
+  1 ok {"s0":[0.08,2.94,-1.16,-0.28,2.55,2.79],"mode":"balance","th":[0,0],"umax":60,"xmax":81.42,"tcaught":12.7,"ms":[623],"evs":"rescue,noplan,late,track,caught"}
+  2 ok {"s0":[-0.12,-0.85,0.16,-0.05,-0.58,0.07],"mode":"balance","th":[0,0],"umax":60,"xmax":76.33,"tcaught":11.2,"ms":[1406],"evs":"rescue,noplan,track,caught"}
+  3 ok {"s0":[-0.02,0.76,1.45,-0.18,-0.17,-1.96],"mode":"balance","th":[0,0],"umax":60,"xmax":86.7,"tcaught":11.2,"ms":[1444],"evs":"rescue,late,track,caught"}
+  4 ok {"s0":[0.45,-2.59,1.86,-0.42,-2.94,-2.4],"mode":"balance","th":[0,0],"umax":56,"xmax":91.52,"tcaught":14.2,"ms":[478],"evs":"rescue,late,late,track,caught"}
+  5 ok {"s0":[0.01,-2.85,0.68,-0.08,1.36,2.48],"mode":"balance","th":[0,0],"umax":60,"xmax":173.15,"tcaught":14.5,"ms":[2799],"evs":"rescue,late,late,track,caught"}
+{"m1":1,"m2":1.5} c=31: 6/6 balanced; time to catch median 12.7 s, max 14.5 s; successful plans took 478–2799 ms (median 1406)
+  0 ok {"s0":[0.36,-1.65,-1.8,0.19,0.83,-2.81],"mode":"balance","th":[0,0],"umax":29,"xmax":63.37,"tcaught":6.2,"ms":[583],"evs":"rescue,track,caught"}
+  1 ok {"s0":[0.26,-2.39,-2.61,0.48,-2.71,2.23],"mode":"balance","th":[0,0],"umax":30,"xmax":36.19,"tcaught":6.2,"ms":[413],"evs":"rescue,track,caught"}
+  2 ok {"s0":[-0.29,0.04,2.37,0.32,0.55,2.06],"mode":"balance","th":[0,0],"umax":60,"xmax":13.73,"tcaught":35.3,"ms":[686],"evs":"rescue,late,late,noplan,noplan,noplan,track,caught"}
+  3 ok {"s0":[-0.39,2.91,0.13,-0.48,0.84,2.94],"mode":"balance","th":[0,0],"umax":40,"xmax":50.53,"tcaught":6.7,"ms":[340],"evs":"rescue,track,caught"}
+  4 ok {"s0":[-0.31,0.98,-2.12,-0.01,1.37,-0.33],"mode":"balance","th":[0,0],"umax":60,"xmax":23.26,"tcaught":11.7,"ms":[1295],"evs":"rescue,late,track,caught"}
+  5 ok {"s0":[0.19,-1.19,-2.07,-0.26,2.92,1.19],"mode":"balance","th":[0,0],"umax":50,"xmax":33.49,"tcaught":6,"ms":[1468],"evs":"rescue,track,caught"}
+{"L1":1,"L2":1.2} c=29: 6/6 balanced; time to catch median 6.7 s, max 35.3 s; successful plans took 340–1468 ms (median 686)
+  0 ok {"s0":[0.2,-2.78,-0.26,-0.49,1.22,0.46],"mode":"balance","th":[0,0],"umax":40,"xmax":109.35,"tcaught":11.7,"ms":[3978],"evs":"rescue,late,track,caught"}
+  1 ok {"s0":[-0.45,-1.53,0.32,0.24,-1.25,1.89],"mode":"balance","th":[0,0],"umax":60,"xmax":6.13,"tcaught":6.7,"ms":[1555],"evs":"rescue,track,caught"}
+  2 ok {"s0":[-0.45,0.77,0,0.43,-2.71,1.73],"mode":"balance","th":[0,0],"umax":58,"xmax":176.86,"tcaught":6.8,"ms":[1496],"evs":"rescue,track,caught"}
+  3 ok {"s0":[0.29,2.9,0.69,0.09,-0.51,-0.56],"mode":"balance","th":[0,0],"umax":44,"xmax":117.07,"tcaught":11.7,"ms":[3154],"evs":"rescue,late,track,caught"}
+  4 ok {"s0":[0.26,-1.33,0.16,-0.25,1.27,2.27],"mode":"balance","th":[0,0],"umax":60,"xmax":114.98,"tcaught":22.9,"ms":[3489],"evs":"rescue,late,late,noplan,track,caught"}
+  5 ok {"s0":[-0.05,-2.53,-2.84,-0.48,-2.69,-2.02],"mode":"balance","th":[0,0],"umax":43,"xmax":171.03,"tcaught":6.8,"ms":[821],"evs":"rescue,track,caught"}
+{"L1":0.3,"L2":0.4} c=53: 6/6 balanced; time to catch median 11.7 s, max 22.9 s; successful plans took 821–3978 ms (median 3154)
+  0 ok {"s0":[-0.19,-0.04,1.5,-0.42,2.48,2.76],"mode":"balance","th":[0,0],"umax":30,"xmax":94.97,"tcaught":11.5,"ms":[1667],"evs":"rescue,late,track,caught"}
+  1 ok {"s0":[-0.28,-2.6,-0.43,-0.4,-2.36,-2.57],"mode":"balance","th":[0,0],"umax":30,"xmax":90.23,"tcaught":6.7,"ms":[446],"evs":"rescue,track,caught"}
+  2 ok {"s0":[0.07,-1.16,2.05,0.03,-0.35,0.47],"mode":"balance","th":[0,0],"umax":30,"xmax":50.62,"tcaught":6.3,"ms":[671],"evs":"rescue,track,caught"}
+  3 ok {"s0":[0.13,-0.48,2.55,-0.35,0.22,-0.33],"mode":"balance","th":[0,0],"umax":30,"xmax":93.29,"tcaught":12.7,"ms":[345],"evs":"rescue,noplan,late,track,caught"}
+  4 ok {"s0":[-0.36,-2.02,-0.06,-0.24,1.25,0.2],"mode":"balance","th":[0,0],"umax":30,"xmax":142.4,"tcaught":6.5,"ms":[282],"evs":"rescue,track,caught"}
+  5 ok {"s0":[-0.33,0.79,1.12,-0.28,-2.24,0.63],"mode":"balance","th":[0,0],"umax":30,"xmax":111.54,"tcaught":6.5,"ms":[303],"evs":"rescue,track,caught"}
+{"Fmax":30} c=37: 6/6 balanced; time to catch median 6.7 s, max 12.7 s; successful plans took 282–1667 ms (median 446)
+  0 ok {"s0":[0.24,-1.14,-1.56,-0.38,-1.62,-0.86],"mode":"balance","th":[0,0],"umax":39,"xmax":69.97,"tcaught":6.7,"ms":[285],"evs":"rescue,track,caught"}
+  1 ok {"s0":[0.22,0.82,0.49,-0.1,2.51,1.47],"mode":"balance","th":[0,0],"umax":53,"xmax":96.23,"tcaught":11.2,"ms":[895],"evs":"rescue,late,track,caught"}
+  2 ok {"s0":[0.06,-0.5,3.13,0.42,-0.95,0.65],"mode":"balance","th":[0,0],"umax":73,"xmax":61.55,"tcaught":19.1,"ms":[3272],"evs":"rescue,noplan,late,late,track,caught"}
+  3 ok {"s0":[-0.41,0.97,-1.05,0.29,-1.14,1.89],"mode":"balance","th":[0,0],"umax":101,"xmax":182.68,"tcaught":14.4,"ms":[2554],"evs":"rescue,late,late,track,caught"}
+  4 ok {"s0":[-0.36,-2.56,-3.07,0.46,-1.3,-0.71],"mode":"balance","th":[0,0],"umax":42,"xmax":122.17,"tcaught":6.7,"ms":[563],"evs":"rescue,track,caught"}
+  5 ok {"s0":[-0.43,2.09,-0.57,-0.15,-2.77,-0.52],"mode":"balance","th":[0,0],"umax":39,"xmax":95.64,"tcaught":12.7,"ms":[418],"evs":"rescue,noplan,late,track,caught"}
+{"Fmax":120} c=37: 6/6 balanced; time to catch median 12.7 s, max 19.1 s; successful plans took 285–3272 ms (median 895)
+errors: none
+== machines STOP=1
+  0 ok {"s0":[-0.23,-1.52,0.66,-0.17,-0.81,0.87],"mode":"balance","th":[0,0],"umax":60,"xmax":1.34,"tcaught":null,"ms":[254],"evs":"rescue,noplan,late,track,plan-end"}
+  1 ok {"s0":[-0.48,-1.01,2.33,-0.23,1.29,0.2],"mode":"balance","th":[0,0],"umax":52,"xmax":1.52,"tcaught":null,"ms":[7798],"evs":"rescue,late,late,noplan,track,plan-end"}
+  2 ok {"s0":[-0.18,-2.42,0.7,0.16,2.22,1.9],"mode":"balance","th":[0,0],"umax":45,"xmax":1.47,"tcaught":null,"ms":[270],"evs":"rescue,late,late,track,plan-end"}
+  3 ok {"s0":[0.44,-0.4,2.78,-0.24,1.52,-0.92],"mode":"balance","th":[0,0],"umax":60,"xmax":0.79,"tcaught":11.1,"ms":[1468],"evs":"rescue,late,track,caught"}
+  4 ok {"s0":[0.13,-3.11,-1.15,0.05,0.77,-1.51],"mode":"balance","th":[0,0],"umax":29,"xmax":1.54,"tcaught":null,"ms":[7733],"evs":"rescue,late,late,noplan,track,plan-end"}
+  5 ok {"s0":[0.02,-0.76,1.5,-0.09,-1.01,2.86],"mode":"balance","th":[0,0],"umax":60,"xmax":1.18,"tcaught":4.7,"ms":[1815],"evs":"rescue,track,caught"}
+{"Ts":40} c=116: 6/6 balanced; time to catch median 0 s, max 11.1 s; successful plans took 254–7798 ms (median 1815)
+  0 ok {"s0":[-0.09,0.32,2.66,-0.43,1.46,-2.05],"mode":"balance","th":[0,0],"umax":60,"xmax":1.52,"tcaught":null,"ms":[2802],"evs":"rescue,late,late,track,plan-end"}
+  1 ok {"s0":[0.49,2.61,2.33,-0.42,-0.62,2.31],"mode":"balance","th":[0,0],"umax":43,"xmax":1.49,"tcaught":null,"ms":[323],"evs":"rescue,track,plan-end"}
+  2 ok {"s0":[0.28,0.45,-2.02,-0.22,2.36,1.99],"mode":"balance","th":[0,0],"umax":60,"xmax":1.16,"tcaught":6.8,"ms":[549],"evs":"rescue,track,caught"}
+  3 ok {"s0":[0.02,-1.14,2.96,-0.13,-1.29,-0.86],"mode":"balance","th":[0,0],"umax":59,"xmax":1.49,"tcaught":null,"ms":[294],"evs":"rescue,late,late,track,plan-end"}
+  4 ok {"s0":[-0.28,-2.14,-2.49,0.33,0.63,-0.35],"mode":"balance","th":[0,0],"umax":38,"xmax":1.5,"tcaught":null,"ms":[469],"evs":"rescue,track,plan-end"}
+  5 ok {"s0":[-0.27,0.03,1.87,0.04,0.46,2.21],"mode":"balance","th":[0,0],"umax":60,"xmax":1.51,"tcaught":22.9,"ms":[1242],"evs":"rescue,late,late,noplan,track,caught"}
+{"Ts":60} c=144: 6/6 balanced; time to catch median 0 s, max 22.9 s; successful plans took 294–2802 ms (median 549)
+  0 ok {"s0":[-0.3,-2.09,1.36,0.46,-2.94,2.74],"mode":"balance","th":[0,0],"umax":60,"xmax":1.31,"tcaught":null,"ms":[337],"evs":"rescue,late,late,track,plan-end"}
+  1 ok {"s0":[0.18,2.45,-1.13,-0.18,2.21,1.14],"mode":"balance","th":[0,0],"umax":60,"xmax":1.5,"tcaught":35.8,"ms":[3329],"evs":"rescue,late,late,noplan,noplan,noplan,track,caught"}
+  2 ok {"s0":[0.12,1.9,-0.16,0.03,-1.6,0.1],"mode":"balance","th":[0,0],"umax":50,"xmax":1.1,"tcaught":null,"ms":[508],"evs":"rescue,noplan,late,track,plan-end"}
+  3 ok {"s0":[-0.38,-1.52,0.62,-0.11,1.01,1.64],"mode":"balance","th":[0,0],"umax":60,"xmax":1.25,"tcaught":10.2,"ms":[2462],"evs":"rescue,noplan,track,caught"}
+  4 ok {"s0":[-0.13,-1.66,-0.33,0.34,1.51,2.84],"mode":"balance","th":[0,0],"umax":60,"xmax":1.48,"tcaught":null,"ms":[308],"evs":"rescue,track,plan-end"}
+  5 ok {"s0":[-0.25,-1.83,0.64,-0.1,2.58,-1.59],"mode":"balance","th":[0,0],"umax":60,"xmax":1.51,"tcaught":6,"ms":[363],"evs":"rescue,track,caught"}
+{"m0":3} c=52: 6/6 balanced; time to catch median 6 s, max 35.8 s; successful plans took 308–3329 ms (median 508)
+  0 ok {"s0":[-0.36,-0.66,-0.4,-0.16,-1.02,0.06],"mode":"balance","th":[0,0],"umax":60,"xmax":1.5,"tcaught":null,"ms":[1813],"evs":"rescue,track,plan-end"}
+  1 ok {"s0":[0.08,2.94,-1.16,-0.28,2.55,2.79],"mode":"balance","th":[0,0],"umax":60,"xmax":1.47,"tcaught":null,"ms":[331],"evs":"rescue,noplan,late,track,plan-end"}
+  2 ok {"s0":[-0.12,-0.85,0.16,-0.05,-0.58,0.07],"mode":"balance","th":[0,0],"umax":60,"xmax":0.99,"tcaught":null,"ms":[2758],"evs":"rescue,late,track,plan-end"}
+  3 ok {"s0":[-0.02,0.76,1.45,-0.18,-0.17,-1.96],"mode":"balance","th":[0,0],"umax":60,"xmax":1.46,"tcaught":null,"ms":[1716],"evs":"rescue,noplan,track,plan-end"}
+  4 ok {"s0":[0.45,-2.59,1.86,-0.42,-2.94,-2.4],"mode":"balance","th":[0,0],"umax":60,"xmax":1.47,"tcaught":null,"ms":[297],"evs":"rescue,late,late,track,plan-end"}
+  5 ok {"s0":[0.01,-2.85,0.68,-0.08,1.36,2.48],"mode":"balance","th":[0,0],"umax":60,"xmax":1.53,"tcaught":null,"ms":[2718],"evs":"rescue,late,late,track,plan-end"}
+{"m1":1,"m2":1.5} c=31: 6/6 balanced; time to catch median 0 s, max 0 s; successful plans took 297–2758 ms (median 1813)
+  0 ok {"s0":[0.36,-1.65,-1.8,0.19,0.83,-2.81],"mode":"balance","th":[0,0],"umax":38,"xmax":1.05,"tcaught":10.5,"ms":[827],"evs":"rescue,late,track,caught"}
+  1 ok {"s0":[0.26,-2.39,-2.61,0.48,-2.71,2.23],"mode":"balance","th":[0,0],"umax":30,"xmax":0.81,"tcaught":6.2,"ms":[332],"evs":"rescue,track,caught"}
+  2 ok {"s0":[-0.29,0.04,2.37,0.32,0.55,2.06],"mode":"balance","th":[0,0],"umax":60,"xmax":1.43,"tcaught":null,"ms":[268],"evs":"rescue,track,plan-end"}
+  3 ok {"s0":[-0.39,2.91,0.13,-0.48,0.84,2.94],"mode":"balance","th":[0,0],"umax":39,"xmax":1.04,"tcaught":13.5,"ms":[294],"evs":"rescue,late,late,track,caught"}
+  4 ok {"s0":[-0.31,0.98,-2.12,-0.01,1.37,-0.33],"mode":"balance","th":[0,0],"umax":58,"xmax":1.51,"tcaught":10.2,"ms":[1019],"evs":"rescue,late,track,caught"}
+  5 ok {"s0":[0.19,-1.19,-2.07,-0.26,2.92,1.19],"mode":"balance","th":[0,0],"umax":60,"xmax":1.5,"tcaught":11.4,"ms":[2380],"evs":"rescue,noplan,track,caught"}
+{"L1":1,"L2":1.2} c=29: 6/6 balanced; time to catch median 10.5 s, max 13.5 s; successful plans took 268–2380 ms (median 827)
+  0 ok {"s0":[0.2,-2.78,-0.26,-0.49,1.22,0.46],"mode":"balance","th":[0,0],"umax":37,"xmax":1.52,"tcaught":null,"ms":[2538],"evs":"rescue,late,late,track,plan-end"}
+  1 ok {"s0":[-0.45,-1.53,0.32,0.24,-1.25,1.89],"mode":"balance","th":[0,0],"umax":60,"xmax":1.51,"tcaught":19.2,"ms":[4103],"evs":"rescue,noplan,late,late,track,caught"}
+  2 ok {"s0":[-0.45,0.77,0,0.43,-2.71,1.73],"mode":"balance","th":[0,0],"umax":54,"xmax":0.98,"tcaught":null,"ms":[2553],"evs":"rescue,track,plan-end"}
+  3 ok {"s0":[0.29,2.9,0.69,0.09,-0.51,-0.56],"mode":"balance","th":[0,0],"umax":44,"xmax":1.52,"tcaught":null,"ms":[2524],"evs":"rescue,late,late,track,plan-end"}
+  4 ok {"s0":[0.26,-1.33,0.16,-0.25,1.27,2.27],"mode":"balance","th":[0,0],"umax":53,"xmax":1.52,"tcaught":null,"ms":[2483],"evs":"rescue,late,late,track,plan-end"}
+  5 ok {"s0":[-0.05,-2.53,-2.84,-0.48,-2.69,-2.02],"mode":"balance","th":[0,0],"umax":40,"xmax":1.39,"tcaught":null,"ms":[395],"evs":"rescue,track,plan-end"}
+{"L1":0.3,"L2":0.4} c=53: 6/6 balanced; time to catch median 0 s, max 19.2 s; successful plans took 395–4103 ms (median 2538)
+  0 ok {"s0":[-0.19,-0.04,1.5,-0.42,2.48,2.76],"mode":"balance","th":[0,0],"umax":30,"xmax":1.27,"tcaught":null,"ms":[285],"evs":"rescue,late,late,track,plan-end"}
+  1 ok {"s0":[-0.28,-2.6,-0.43,-0.4,-2.36,-2.57],"mode":"balance","th":[0,0],"umax":30,"xmax":1.5,"tcaught":null,"ms":[1197],"evs":"rescue,track,plan-end"}
+  2 ok {"s0":[0.07,-1.16,2.05,0.03,-0.35,0.47],"mode":"balance","th":[0,0],"umax":30,"xmax":1.37,"tcaught":null,"ms":[380],"evs":"rescue,track,plan-end"}
+  3 ok {"s0":[0.13,-0.48,2.55,-0.35,0.22,-0.33],"mode":"balance","th":[0,0],"umax":30,"xmax":1.51,"tcaught":null,"ms":[7775],"evs":"rescue,noplan,late,late,track,plan-end"}
+  4 ok {"s0":[-0.36,-2.02,-0.06,-0.24,1.25,0.2],"mode":"balance","th":[0,0],"umax":30,"xmax":0.68,"tcaught":6.7,"ms":[1641],"evs":"rescue,track,caught"}
+  5 ok {"s0":[-0.33,0.79,1.12,-0.28,-2.24,0.63],"mode":"balance","th":[0,0],"umax":30,"xmax":1.51,"tcaught":null,"ms":[1677],"evs":"rescue,late,track,plan-end"}
+{"Fmax":30} c=37: 6/6 balanced; time to catch median 0 s, max 6.7 s; successful plans took 285–7775 ms (median 1641)
+  0 ok {"s0":[0.24,-1.14,-1.56,-0.38,-1.62,-0.86],"mode":"balance","th":[0,0],"umax":40,"xmax":1.43,"tcaught":null,"ms":[425],"evs":"rescue,track,plan-end"}
+  1 ok {"s0":[0.22,0.82,0.49,-0.1,2.51,1.47],"mode":"balance","th":[0,0],"umax":56,"xmax":1.35,"tcaught":null,"ms":[813],"evs":"rescue,track,plan-end"}
+  2 ok {"s0":[0.06,-0.5,3.13,0.42,-0.95,0.65],"mode":"balance","th":[0,0],"umax":73,"xmax":1.48,"tcaught":null,"ms":[378],"evs":"rescue,noplan,late,track,plan-end"}
+  3 ok {"s0":[-0.41,0.97,-1.05,0.29,-1.14,1.89],"mode":"balance","th":[0,0],"umax":46,"xmax":0.96,"tcaught":11.6,"ms":[3521],"evs":"rescue,late,track,caught"}
+  4 ok {"s0":[-0.36,-2.56,-3.07,0.46,-1.3,-0.71],"mode":"balance","th":[0,0],"umax":43,"xmax":1.49,"tcaught":null,"ms":[298],"evs":"rescue,track,plan-end"}
+  5 ok {"s0":[-0.43,2.09,-0.57,-0.15,-2.77,-0.52],"mode":"balance","th":[0,0],"umax":55,"xmax":1.52,"tcaught":null,"ms":[2404],"evs":"rescue,noplan,late,late,noplan,track,plan-end"}
+{"Fmax":120} c=37: 6/6 balanced; time to catch median 0 s, max 11.6 s; successful plans took 298–3521 ms (median 813)
+errors: none
+== t7
+en/1280 {"kerr":0,"pend":0,"sw":1280,"cw":1280,"rc":"37","walk":1,"swing":"Hang down, swing up","after":{"mode":"balance","t":9,"state":"Balancing while rolling at −1.73 m/s, a moving equilibrium."}} errors:none
+en/390 {"kerr":0,"pend":0,"sw":390,"cw":390,"rc":"37","walk":1,"swing":"Hang down, swing up","after":{"mode":"balance","t":8.8,"state":"Balancing while rolling at −1.73 m/s, a moving equilibrium."}} errors:none
+de/1280 {"kerr":0,"pend":0,"sw":1280,"cw":1280,"rc":"37","walk":1,"swing":"Hängen lassen, aufschwingen","after":{"mode":"balance","t":9,"state":"Balanciert bei −1.73 m/s Fahrt, ein bewegtes Gleichgewicht."}} errors:none
+de/390 {"kerr":0,"pend":0,"sw":390,"cw":390,"rc":"37","walk":1,"swing":"Hängen lassen, aufschwingen","after":{"mode":"balance","t":8.7,"state":"Balanciert bei −1.73 m/s Fahrt, ein bewegtes Gleichgewicht."}} errors:none
+ar/1280 {"kerr":0,"pend":0,"sw":1280,"cw":1280,"rc":"37","walk":1,"swing":"أنزِلهما ثم أرجِحهما إلى الأعلى","after":{"mode":"balance","t":9,"state":"يوازن والعربة تسير بسرعة −1.73 m/s، توازن متحرّك."}} errors:none
+ar/390 {"kerr":0,"pend":0,"sw":390,"cw":390,"rc":"37","walk":1,"swing":"أنزِلهما ثم أرجِحهما إلى الأعلى","after":{"mode":"balance","t":8.8,"state":"يوازن والعربة تسير بسرعة −1.73 m/s، توازن متحرّك."}} errors:none

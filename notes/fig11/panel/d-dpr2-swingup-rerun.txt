@@ -1,0 +1,21 @@
+== swingup (device pixel ratio 2)
+  d swing-up, rods hanging: stored px vs state→px (Node formulas): max |Δ| = 0 px
+  d swing-up, rods hanging: cart: cream from 492.5 to 550 px, centre 521.3 vs x→px 521.3 (Δ -0.061 px, alpha at centre 255) PASS
+  d swing-up, rods hanging: hinge between the rods: white centroid (492, 139.3) of 172 px vs θ₁→px (492, 139.3) (Δ 0.04785 px) PASS
+  d swing-up, rods hanging: top of the upper rod at θ₂→px (448.5, 22.06): along the rod, fully burgundy to 3.75 px beyond it and transparent from 4.35 px, round cap radius 4.25 px; across the rod 6 px below the top the burgundy (7.4 px wide) is centred -0.05 px off the axis PASS
+  e swing-up: mode balance at t = 12 s, W = 0.01546
+  d after the swing-up: stored px vs state→px (Node formulas): max |Δ| = 0 px
+  d after the swing-up: cart: cream from 173.5 to 260 px, centre 216.8 vs x→px 216.7 (Δ 0.05042 px, alpha at centre 255) PASS
+  d after the swing-up: hinge between the rods: white centroid (217, 248.2) of 165 px vs θ₁→px (217, 248.2) (Δ 0.008768 px) PASS
+  d after the swing-up: top of the upper rod at θ₂→px (217.4, 63.25): along the rod, fully burgundy to 3.7 px beyond it and transparent from 4.25 px, round cap radius 4.25 px; across the rod 6 px below the top the burgundy (7.95 px wide) is centred 0.125 px off the axis PASS
+  energy book: E0 -7.664 + W_motor 19.45 + E_ext 0 + E_wait 0 − E 11.79 = 8.00e-10 J, 2.06e-11 of the flows
+  b page's own rk4 on every stored step: 12000/12000 bit-identical (0 steps of an earlier machine not replayed) PASS
+  b independent RK4 (Cramer, from (8a), (8), (8b)) on every stored step: 12000 steps, max |Δs| = 8.88e-16, max |Δs| / |step change| = 0.102 PASS (float64 rounding)
+  b step log continuity: 11998 joins exact, 0 broken, 0 gaps; outside changes by code {"4":1} (1 flick, 2 hand, 3 reset/new state, 4 wrap at hand-over, 9 unexplained) PASS
+  b chained independent replay from one stored state with the stored forces, 6733 steps (6.733 s): max |Δs| 0.1 s: 1.85e-32, 0.5 s: 1.48e-31, 1 s: 1.48e-31, 1.5 s: 1.97e-31, 2 s: 7.10e-30, 2.5 s: 7.10e-30, 3 s: 7.89e-30, 4 s: 4.83e-15, 6 s: 1.74e-11; growth rate of the gap between marks 4.1 1/s (open loop: the gap grows as fast as nearby motions part, at the fall rate σ₁ = 10.39 1/s near upright, slower while hanging or caught)
+  c force recomputed from each stored sample (state, reference, gains, limit, plan): 1201 samples (balance 527, calm 300, track 374, off 0, cut 0), max |Δu| = 0 N, 0 unchecked PASS
+  c zero-order hold: 12000 RK4 steps hold exactly the force of the latest sample, 0 do not; 0 held steps with u = 0, 0 not PASS
+  c sample times: 1198 intervals on the grid (steps per interval: {"10":1198}), 0 off it, 2 restarts of the clock (reset, release, track start, hand-over), 0 samples away from their due time PASS
+  swingup: 12000 steps (0–12 s), 1201 samples → ALL PASS
+summary: 1/1 scenarios pass: swingup ✓
+page errors: none
