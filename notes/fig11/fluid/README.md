@@ -32,3 +32,12 @@ What is left is the kink of \(|w_n|\,w_n\) where the flow across a rod changes s
 street was 1.2 % off (\(Q_{\theta_1}\) 0.00744786 against 0.00735971): the cores are about 9 cm wide, finer than 8 points on a rod.
 
 **Scripts.** `gate.cjs` prints the page's Q at the test state above; `flows.cjs` runs every flow in air and water in headless Chromium and prints, per flow, page errors, Q against the in-page Simpson check, P, the book and the replay of the last 300 steps (`OUT=<folder>` for its screenshots). The honesty run with the three fluid scenarios is in `../panel/fluid-honesty.txt`.
+
+**Added mass and the flow's acceleration (section 13.5).**
+
+| Check | Result |
+|---|---|
+| Kinetic energy of potential flow round a moving cylinder, \(\phi = -Ua^2\cos\vartheta/r\) | \(\tfrac12\rho\pi a^2 U^2\) per metre: \(C_a = 1\); sphere \(C_a = \tfrac12\) (\(\tfrac23\pi a^3\rho\)) |
+| \(\mathbf M_a\) and velocity terms from \(T_a = \tfrac12\mu\int(\mathbf v\cdot\mathbf n)^2 ds + \tfrac12 m_c\dot x^2\) | Lagrange = Christoffel form; \(dT_a/dt = 0\) when nothing else acts |
+| Tuckerman \(\kappa_x\) for the cart's ellipsoid (0.18, 0.06, 0.10 m) | 0.287618483245732, \(V_e = 4.52389\times10^{-3}\) m³, \(m_c/\rho V_e = 0.167964\) |
+| Page's \(D\mathbf v_f/Dt\) (central differences) against Wolfram's exact derivative at (0.3, 0.9) m, 1.7 s, U = 2 m/s | street 6.1e-7, gusts 4.3e-8, fan 2.4e-8, cells 1.6e-8, swell 4.2e-9, eddy 5.2e-10, jets 0 |

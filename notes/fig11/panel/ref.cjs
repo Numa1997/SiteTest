@@ -32,16 +32,29 @@ function flow(k, X, Y, t, U, nu) {
     const a = vrow(x0 + l / 2, 0.6 + h / 2, -G), b = vrow(x0, 0.6 - h / 2, G); return [U + a[0] + b[0], a[1] + b[1]]; }
   return [0, 0];
 }
+// (39): the flow's acceleration Dv/Dt = dv/dt + (v.grad)v, by central differences of step 1e-4 (written apart from the page's accelF)
+function flowAcc(fl, X, Y, t) { const h = 1e-4, f = (dx, dy, dt) => flow(fl.flow, X + dx, Y + dy, t + dt, fl.U, fl.nu), v = f(0, 0, 0);
+  const dT = [0, 1].map((k) => (f(0, 0, h)[k] - f(0, 0, -h)[k]) / (2 * h)), dX = [0, 1].map((k) => (f(h, 0, 0)[k] - f(-h, 0, 0)[k]) / (2 * h)), dY = [0, 1].map((k) => (f(0, h, 0)[k] - f(0, -h, 0)[k]) / (2 * h));
+  return [0, 1].map((k) => dT[k] + v[0] * dX[k] + v[1] * dY[k]); }
+// (38): the added mass of the rods and the cart, M_a(a, b), and its derivatives along a and b; the velocity terms by Christoffel symbols
+function addedM(ma, L1, L2, a, b) { const m = ma.mu, c1 = Math.cos(a), c2 = Math.cos(b), s1 = Math.sin(a), s2 = Math.sin(b), c12 = Math.cos(a - b), s12 = Math.sin(a - b);
+  const M = [[m * (L1 * c1 * c1 + L2 * c2 * c2) + ma.mc, m * L1 * (L1 * c1 / 2 + L2 * c2 * c12), m * L2 * L2 * c2 / 2], [0, m * L1 * L1 * (L1 / 3 + L2 * c12 * c12), m * L1 * L2 * L2 * c12 / 2], [0, 0, m * L2 * L2 * L2 / 3]];
+  const Ma = [[-2 * m * L1 * c1 * s1, m * L1 * (-L1 * s1 / 2 - L2 * c2 * s12), 0], [0, -2 * m * L1 * L1 * L2 * c12 * s12, -m * L1 * L2 * L2 * s12 / 2], [0, 0, 0]];   // d/da
+  const Mb = [[-2 * m * L2 * c2 * s2, m * L1 * L2 * (-s2 * c12 + c2 * s12), -m * L2 * L2 * s2 / 2], [0, 2 * m * L1 * L1 * L2 * c12 * s12, m * L1 * L2 * L2 * s12 / 2], [0, 0, 0]];  // d/db
+  for (const X of [M, Ma, Mb]) { X[1][0] = X[0][1]; X[2][0] = X[0][2]; X[2][1] = X[1][2]; } return { M, dM: [null, Ma, Mb] }; }
+function christoffel(dM, qd) { const C = [0, 0, 0];   // C_i = sum_jk (d_k M_ij - 1/2 d_i M_jk) qd_j qd_k, with d_x M = 0
+  for (let i = 0; i < 3; i++) for (let j = 0; j < 3; j++) for (let k = 0; k < 3; k++) C[i] += ((dM[k] ? dM[k][i][j] : 0) - 0.5 * (dM[i] ? dM[i][j][k] : 0)) * qd[j] * qd[k]; return C; }
 function fluidQ(fl, s, t) {   // rods as lines from the hinge; f = -xi_perp w_n n - (xi_perp/2) w_t t - c_q |w_n| w_n n; the cart: -c_lin w - c_quad |w| w on its face
   const [x, a, b, xd, ad, bd] = s, Q = [0, 0, 0];
   for (let k = 0; k < 2; k++) { const L = k ? fl.L2 : fl.L1, th = k ? b : a, om = k ? bd : ad, t1 = [Math.sin(th), Math.cos(th)], n1 = [Math.cos(th), -Math.sin(th)];
     const bx = k ? x + fl.L1 * Math.sin(a) : x, by = k ? fl.L1 * Math.cos(a) : 0, bvx = k ? xd + fl.L1 * Math.cos(a) * ad : xd, bvy = k ? -fl.L1 * Math.sin(a) * ad : 0;
     for (const [xn, wn] of RODN) { const sg = xn * L, P = [bx + sg * t1[0], by + sg * t1[1]], V = [bvx + sg * om * n1[0], bvy + sg * om * n1[1]], F = flow(fl.flow, P[0], P[1], t, fl.U, fl.nu);
       const w = [V[0] - F[0], V[1] - F[1]], wt = w[0] * t1[0] + w[1] * t1[1], wnn = w[0] * n1[0] + w[1] * n1[1];
-      const fn = -fl.xi[k] * wnn - fl.cq * Math.abs(wnn) * wnn, ft = -0.5 * fl.xi[k] * wt, fv = [ft * t1[0] + fn * n1[0], ft * t1[1] + fn * n1[1]], q = wn * L;
+      let fn = -fl.xi[k] * wnn - fl.cq * Math.abs(wnn) * wnn; if (fl.acc) { const A = flowAcc(fl, P[0], P[1], t); fn += fl.kr * (A[0] * n1[0] + A[1] * n1[1]); }
+      const ft = -0.5 * fl.xi[k] * wt, fv = [ft * t1[0] + fn * n1[0], ft * t1[1] + fn * n1[1]], q = wn * L;
       Q[0] += q * fv[0]; if (k === 0) Q[1] += q * sg * fn; else { Q[1] += q * fl.L1 * (fv[0] * Math.cos(a) - fv[1] * Math.sin(a)); Q[2] += q * sg * fn; } } }
   let um = 0; for (const [xn, wn] of NODES) um += wn * flow(fl.flow, x, -CH * xn, t, fl.U, fl.nu)[0];
-  const wc = xd - um; Q[0] += -fl.cl * wc - fl.cc * Math.abs(wc) * wc; return Q;
+  const wc = xd - um; Q[0] += -fl.cl * wc - fl.cc * Math.abs(wc) * wc + (fl.acc ? fl.kc * flowAcc(fl, x, -CH / 2, t)[0] : 0); return Q;
 }
 // (8a), (8), (8b):  M q'' = r, with q = (x, th1, th2); with a medium, Q of (35) on the right
 function accel(d, f, s, u, t, fl) {
@@ -50,7 +63,8 @@ function accel(d, f, s, u, t, fl) {
   const r = [u + d[1] * s1 * ad * ad + d[2] * s2 * bd * bd,      // (8a): d1 x'' + d2 c1 th1'' + d3 c2 th2'' - d2 s1 th1'^2 - d3 s2 th2'^2 = u
              f[0] * s1 - d[4] * s12 * bd * bd,                    // (8):  d2 c1 x'' + d4 th1'' + d5 c12 th2'' + d5 s12 th2'^2 - f1 s1 = 0
              f[1] * s2 + d[4] * s12 * ad * ad];                   // (8b): d3 c2 x'' + d5 c12 th1'' + d6 th2'' - d5 s12 th1'^2 - f2 s2 = 0
-  if (fl) { const Q = fluidQ(fl, s, t); r[0] += Q[0]; r[1] += Q[1]; r[2] += Q[2]; }
+  if (fl) { const Q = fluidQ(fl, s, t); r[0] += Q[0]; r[1] += Q[1]; r[2] += Q[2];
+    if (fl.ma) { const A = addedM(fl.ma, fl.L1, fl.L2, a, b), C = christoffel(A.dM, [xd, ad, bd]); for (let i = 0; i < 3; i++) { r[i] -= C[i]; for (let j = 0; j < 3; j++) M[i][j] += A.M[i][j]; } } }
   const det3 = (A) => A[0][0] * (A[1][1] * A[2][2] - A[1][2] * A[2][1]) - A[0][1] * (A[1][0] * A[2][2] - A[1][2] * A[2][0]) + A[0][2] * (A[1][0] * A[2][1] - A[1][1] * A[2][0]);
   const D = det3(M), col = (k) => M.map((row, i) => row.map((v, j) => (j === k ? r[i] : v)));
   return [det3(col(0)) / D, det3(col(1)) / D, det3(col(2)) / D];
@@ -71,13 +85,15 @@ const sat = (v, F) => Math.max(-F, Math.min(F, v));
 // (16): u = sat(-K (s - s_r)), s_r = (x_r, 0, 0, v_r, 0, 0), angles measured after wrapping
 function lawBalance(K, s, xr, vr, F) { const e = [s[0] - xr, wrap(s[1]), wrap(s[2]), s[3] - vr, s[4], s[5]]; let v = 0; for (let i = 0; i < 6; i++) v -= K[i] * e[i]; return sat(v, F); }
 // (21): a = clip(k P - 4 (x - xc) - 4 x', +-8), P = d2 c1 th1' + d3 c2 th2'; the force that gives the cart this acceleration, from rows (8), (8b) then (8a)
-function forceFor(d, f, s, a, t, fl) {   // with a medium (your hand in a flow), Q of (35) joins rows (8), (8b) and (8a)
+function forceFor(d, f, s, a, t, fl) {   // with a medium, its added mass (38)-(40) and, when a flow is given, Q of (35) join rows (8), (8b) and (8a)
   const [x, t1, t2, xd, w1, w2] = s, c1 = Math.cos(t1), c2 = Math.cos(t2), s1 = Math.sin(t1), s2 = Math.sin(t2), c12 = Math.cos(t1 - t2), s12 = Math.sin(t1 - t2);
-  const Q = fl ? fluidQ(fl, s, t) : [0, 0, 0], b1 = f[0] * s1 - d[4] * s12 * w2 * w2 - d[1] * c1 * a + Q[1], b2 = f[1] * s2 + d[4] * s12 * w1 * w1 - d[2] * c2 * a + Q[2];
-  const A = d[3], B = d[4] * c12, C = d[5], det = A * C - B * B, q1 = (b1 * C - B * b2) / det, q2 = (A * b2 - B * b1) / det;
-  return d[0] * a + d[1] * c1 * q1 + d[2] * c2 * q2 - d[1] * s1 * w1 * w1 - d[2] * s2 * w2 * w2 - Q[0];
+  const M = [[d[0], d[1] * c1, d[2] * c2], [d[1] * c1, d[3], d[4] * c12], [d[2] * c2, d[4] * c12, d[5]]], Q = fl && fl.flow ? fluidQ(fl, s, t) : [0, 0, 0];
+  let C = [0, 0, 0]; if (fl && fl.ma) { const A = addedM(fl.ma, fl.L1, fl.L2, t1, t2); C = christoffel(A.dM, [xd, w1, w2]); for (let i = 0; i < 3; i++) for (let j = 0; j < 3; j++) M[i][j] += A.M[i][j]; }
+  const b1 = f[0] * s1 - d[4] * s12 * w2 * w2 - M[1][0] * a + Q[1] - C[1], b2 = f[1] * s2 + d[4] * s12 * w1 * w1 - M[2][0] * a + Q[2] - C[2];
+  const det = M[1][1] * M[2][2] - M[1][2] * M[2][1], q1 = (b1 * M[2][2] - M[1][2] * b2) / det, q2 = (M[1][1] * b2 - M[2][1] * b1) / det;
+  return M[0][0] * a + M[0][1] * q1 + M[0][2] * q2 - d[1] * s1 * w1 * w1 - d[2] * s2 * w2 * w2 + C[0] - Q[0];
 }
-function lawCalm(d, f, s, xc, kc, F) { const P = d[1] * Math.cos(s[1]) * s[4] + d[2] * Math.cos(s[2]) * s[5], a = Math.max(-8, Math.min(8, kc * P - 4 * (s[0] - xc) - 4 * s[3])); return sat(forceFor(d, f, s, a), F); }
+function lawCalm(d, f, s, xc, kc, F, ma) { const P = d[1] * Math.cos(s[1]) * s[4] + d[2] * Math.cos(s[2]) * s[5], a = Math.max(-8, Math.min(8, kc * P - 4 * (s[0] - xc) - 4 * s[3])); return sat(forceFor(d, f, s, a, 0, ma), F); }   // ma: the medium's added mass, known to the controller (not the flow)
 // (24): u = sat(u_plan[k] - K_k (s - x_c e1 - s_plan[k])), k = round((t - t_plan) / 10 ms)
 function lawTrack(plan, s, t, tp, xc, F) {
   const k = Math.round((t - tp) / 0.01); let v = plan.u[k];
