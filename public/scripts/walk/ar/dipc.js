@@ -259,7 +259,7 @@ window.WALK["dipc"] = {
    "where": "refXV(t) وWred(st) والتسليم في supervise() وأزرار الهدف",
    "math": "s<sup>∗</sup>(t) = (x<sub>0</sub> + vt, 0, 0, v, 0, 0),  u<sup>∗</sup> = 0<span style=\"font-style:normal;margin-left:1.5em\">(25)</span><br>e(τ) = (e<sub>0</sub> + (v + ωe<sub>0</sub>)τ) e<sup>−ωτ</sup>,  e = ⟦xr|x<sub>ref</sub>⟧ − x<sub>target</sub>,  ω = 0.5 s<sup>−1</sup><span style=\"font-style:normal;margin-left:1.5em\">(26)</span><br>⟦Wr|W<sub>red</sub>⟧ = W with the x and ẋ errors set to zero",
    "note": "ref هو فرد العائلة (25) الذي يمسكه متحكّم الموازنة. وتعيد refXV(t) مكانه وسرعته في اللحظة t: لمكان ثابت المكانَ و0؛ ولسير x<sub>0</sub> + vτ وv؛ ولانزلاق (26) مكتوبة بالتفصيل، مع b = v + ωe<sub>0</sub> بحيث e = (e<sub>0</sub> + bτ)e<sup>−ωτ</sup> وسرعته (b − ω(e<sub>0</sub> + bτ))e<sup>−ωτ</sup>. وGLIDE هي ω. وحين تُلتقط أرجحة و«تابِع التدحرج» مفعَّل، يختبر التسليم Wred()، أي الكلفة (19) دون خطأي مكان العربة وسرعتها، ثمّ يضبط المرجع على سير بالمكان والسرعة اللذين للعربة في تلك اللحظة. وزرّ الهدف، إذا ضُغط والمرجع يتحرّك، يبدأ انزلاقًا من مكان المرجع وسرعته الحاضرين إلى الفرد الساكن عند الهدف؛ وإذا ضُغط في السكون نقل الهدف خطوة واحدة كما من قبل.",
-   "code": "function refXV(t) { if (ref.kind === 'fixed') return [ref.x, 0];\nvar tau = t - ref.t0; if (ref.kind === 'cruise') return [ref.x + ref.v * tau, ref.v];\nvar ex = Math.exp(-GLIDE * tau), b = ref.v + GLIDE * ref.e0; return [ref.target + (ref.e0 + b * tau) * ex, (b - GLIDE * (ref.e0 + b * tau)) * ex]; }\n...\nfunction Wred(st) { return quad(Pm, [0, wrapAngle(st[1]), wrapAngle(st[2]), 0, st[4], st[5]]); }   // (19) about the moving equilibrium the cart is on now (25)\n...\nif (mode === 'track' && cLevel && tSim - tPlan > 0.05 && (rolling ? ⟦Wr|Wred(s)⟧ : Wof(s, tSim)) < 0.9 * cLevel) {   // inside the certified region, with 10 % to spare for what the search may miss: hand over\n...\nif (rolling) ref = { kind: 'cruise', x: s[0], v: s[3], t0: tSim };   // keep the speed it arrived with: a moving equilibrium (25)\n...\nelse { var rv = refXV(tSim); ref = { kind: 'glide', target: tg, e0: rv[0] - tg, v: rv[1], t0: tSim }; }   // moving: glide along the family of equilibria (26)",
+   "code": "function refXV(t) { if (ref.kind === 'fixed') return [ref.x, 0];\nvar tau = t - ref.t0; if (ref.kind === 'cruise') return [ref.x + ref.v * tau, ref.v];\nvar ex = Math.exp(-GLIDE * tau), b = ref.v + GLIDE * ref.e0; return [ref.target + (ref.e0 + b * tau) * ex, (b - GLIDE * (ref.e0 + b * tau)) * ex]; }\n...\nfunction Wred(st) { return quad(Pm, [0, wrapAngle(st[1]), wrapAngle(st[2]), 0, st[4], st[5]]); }   // (19) about the moving equilibrium the cart is on now (25)\n...\nif (mode === 'track' && cLevel && tSim - tPlan > 0.05 && (rolling ? ⟦Wr|Wred(s)⟧ : Wof(s, tSim)) < 0.9 * cLevel) {   // inside the certified region, with 10 % to spare for what the search may miss: hand over\n...\nif (rolling) ref = { kind: 'cruise', x: s[0], v: s[3], t0: tSim, brake: true };   // keep the speed it arrived with: a moving equilibrium (25), then brake it away bite by bite (27)\n...\nelse { var rv = refXV(tSim); ref = { kind: 'glide', target: tg, e0: rv[0] - tg, v: rv[1], t0: tSim }; }   // moving: glide along the family of equilibria (26)",
    "syms": [
     [
      "xr",
@@ -272,6 +272,21 @@ window.WALK["dipc"] = {
      "W<sub>red</sub>",
      "Wred(s)",
      "الكلفة الباقية حول التوازن المتحرّك الذي عليه العربة"
+    ]
+   ]
+  },
+  {
+   "title": "الكبح حتّى السكون، اقتطاعًا مضمونًا بعد اقتطاع",
+   "where": "govern()، يستدعيها control() عند كلّ نظرة بينما تكبح العربة بعد التقاط متدحرج",
+   "math": "W(e + Δ e<sub>4</sub>) = W(e) + 2Δ (Pe)<sub>4</sub> + Δ<sup>2</sup> P<sub>44</sub><span style=\"font-style:normal;margin-left:1.5em\">(27)</span><br>Δ<sub>max</sub> = [−(Pe)<sub>4</sub> + √((Pe)<sub>4</sub><sup>2</sup> − P<sub>44</sub>(W(e) − γc<sup>∗</sup>))] / P<sub>44</sub>,  ⟦eps|ε⟧ = √(γc<sup>∗</sup>/P<sub>44</sub>),  γ = 0.5<span style=\"font-style:normal;margin-left:1.5em\">(27a)</span>",
+   "note": "خفض سرعة المرجع بمقدار Δ عند نظرة لا يغيّر شيئًا في الآلة لكنّه يضيف Δ إلى الخطأ في ẋ، ولا يستطيع متحكّم الموازنة أن يميّز ذلك عن دفعة. ينقل الكود أوّلًا المرجع إلى العربة (يصير الخطأ في x صفرًا، وهو ما يسمح به (25))، ويكوّن الخطأ e بالسرعة الحاضرة، ويأخذ أكبر اقتطاع نحو الصفر يُبقي W في حدود γc<sup>∗</sup>. وبعد الاقتطاع يكون المرجع مرّة أخرى فردًا من (25)، فتصحّ الشهادة (⁦19a⁩) على الدور التالي. وإن لم يتّسع أيّ اقتطاع بقي المرجع القديم. وعند السرعة صفر يصير المرجع مكانًا ثابتًا حيث تقف العربة.",
+   "code": "function govern() {   // (27): at a look, put the reference at the cart and take the largest bite of its speed toward zero with W ≤ γ c* (a reference governor)\n...\nvar v0 = refXV(tSim)[1], sg = v0 > 0 ? 1 : -1, e = wrapState(s), Pe4 = 0, i; e[0] = 0; e[3] -= v0;   // the error from the member of (25) at the cart with the present speed\nfor (i = 0; i < 6; i++) Pe4 += Pm[3][i] * e[i];\nvar disc = Pe4 * Pe4 - Pm[3][3] * (quad(Pm, e) - GAMMA * cLevel); if (disc < 0) return;   // no bite fits: the old reference stays, and the certificate goes on\nvar hi = (-sg * Pe4 + Math.sqrt(disc)) / Pm[3][3], lo = (-sg * Pe4 - Math.sqrt(disc)) / Pm[3][3], D = Math.min(Math.abs(v0), hi);\nif (D < Math.max(0, lo)) return;\nbite = D; vBefore = v0; var vn = v0 - sg * D;\nif (vn === 0) { ref = { kind: 'fixed', x: s[0] }; xref = s[0]; } else ref = { kind: 'cruise', x: s[0], v: vn, t0: tSim, brake: true }; }",
+   "syms": [
+    [
+     "eps",
+     "ε",
+     "Math.sqrt(GAMMA * cLevel / Pm[3][3])",
+     "اقتطاع السرعة المضمون من السكون عند γ = 0.5، m/s"
     ]
    ]
   }

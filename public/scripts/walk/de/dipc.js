@@ -259,7 +259,7 @@ window.WALK["dipc"] = {
    "where": "refXV(t), Wred(st), die Übergabe in supervise(), die Zielknöpfe",
    "math": "s<sup>∗</sup>(t) = (x<sub>0</sub> + vt, 0, 0, v, 0, 0),  u<sup>∗</sup> = 0<span style=\"font-style:normal;margin-left:1.5em\">(25)</span><br>e(τ) = (e<sub>0</sub> + (v + ωe<sub>0</sub>)τ) e<sup>−ωτ</sup>,  e = ⟦xr|x<sub>ref</sub>⟧ − x<sub>target</sub>,  ω = 0.5 s<sup>−1</sup><span style=\"font-style:normal;margin-left:1.5em\">(26)</span><br>⟦Wr|W<sub>red</sub>⟧ = W with the x and ẋ errors set to zero",
    "note": "ref ist das Mitglied der Schar (25), das der Balancierregler hält. refXV(t) gibt seinen Ort und seine Geschwindigkeit zur Zeit t zurück: für einen festen Ort den Ort und 0; für eine Fahrt x<sub>0</sub> + vτ und v; für ein Gleiten (26) ausgeschrieben, mit b = v + ωe<sub>0</sub>, sodass e = (e<sub>0</sub> + bτ)e<sup>−ωτ</sup> und seine Geschwindigkeit (b − ω(e<sub>0</sub> + bτ))e<sup>−ωτ</sup>. GLIDE ist ω. Wird ein Aufschwingen mit eingeschaltetem Weiterrollen gefangen, prüft die Übergabe Wred(), die Kosten (19) ohne die Fehler in Ort und Geschwindigkeit des Wagens, und setzt die Referenz dann auf eine Fahrt mit dem Ort und der Geschwindigkeit, die der Wagen in diesem Moment hat. Ein Zielknopf, gedrückt, während sich die Referenz bewegt, startet ein Gleiten vom gegenwärtigen Ort und der gegenwärtigen Geschwindigkeit der Referenz zum ruhenden Mitglied am Ziel; in Ruhe gedrückt, verschiebt er das Ziel wie bisher in einem Schritt.",
-   "code": "function refXV(t) { if (ref.kind === 'fixed') return [ref.x, 0];\nvar tau = t - ref.t0; if (ref.kind === 'cruise') return [ref.x + ref.v * tau, ref.v];\nvar ex = Math.exp(-GLIDE * tau), b = ref.v + GLIDE * ref.e0; return [ref.target + (ref.e0 + b * tau) * ex, (b - GLIDE * (ref.e0 + b * tau)) * ex]; }\n...\nfunction Wred(st) { return quad(Pm, [0, wrapAngle(st[1]), wrapAngle(st[2]), 0, st[4], st[5]]); }   // (19) about the moving equilibrium the cart is on now (25)\n...\nif (mode === 'track' && cLevel && tSim - tPlan > 0.05 && (rolling ? ⟦Wr|Wred(s)⟧ : Wof(s, tSim)) < 0.9 * cLevel) {   // inside the certified region, with 10 % to spare for what the search may miss: hand over\n...\nif (rolling) ref = { kind: 'cruise', x: s[0], v: s[3], t0: tSim };   // keep the speed it arrived with: a moving equilibrium (25)\n...\nelse { var rv = refXV(tSim); ref = { kind: 'glide', target: tg, e0: rv[0] - tg, v: rv[1], t0: tSim }; }   // moving: glide along the family of equilibria (26)",
+   "code": "function refXV(t) { if (ref.kind === 'fixed') return [ref.x, 0];\nvar tau = t - ref.t0; if (ref.kind === 'cruise') return [ref.x + ref.v * tau, ref.v];\nvar ex = Math.exp(-GLIDE * tau), b = ref.v + GLIDE * ref.e0; return [ref.target + (ref.e0 + b * tau) * ex, (b - GLIDE * (ref.e0 + b * tau)) * ex]; }\n...\nfunction Wred(st) { return quad(Pm, [0, wrapAngle(st[1]), wrapAngle(st[2]), 0, st[4], st[5]]); }   // (19) about the moving equilibrium the cart is on now (25)\n...\nif (mode === 'track' && cLevel && tSim - tPlan > 0.05 && (rolling ? ⟦Wr|Wred(s)⟧ : Wof(s, tSim)) < 0.9 * cLevel) {   // inside the certified region, with 10 % to spare for what the search may miss: hand over\n...\nif (rolling) ref = { kind: 'cruise', x: s[0], v: s[3], t0: tSim, brake: true };   // keep the speed it arrived with: a moving equilibrium (25), then brake it away bite by bite (27)\n...\nelse { var rv = refXV(tSim); ref = { kind: 'glide', target: tg, e0: rv[0] - tg, v: rv[1], t0: tSim }; }   // moving: glide along the family of equilibria (26)",
    "syms": [
     [
      "xr",
@@ -272,6 +272,21 @@ window.WALK["dipc"] = {
      "W<sub>red</sub>",
      "Wred(s)",
      "verbleibende Kosten um das bewegte Gleichgewicht, auf dem der Wagen ist"
+    ]
+   ]
+  },
+  {
+   "title": "Bremsen bis zur Ruhe, ein gesicherter Abzug nach dem anderen",
+   "where": "govern(), von control() bei jedem Blick aufgerufen, während der Wagen nach einem rollenden Fang bremst",
+   "math": "W(e + Δ e<sub>4</sub>) = W(e) + 2Δ (Pe)<sub>4</sub> + Δ<sup>2</sup> P<sub>44</sub><span style=\"font-style:normal;margin-left:1.5em\">(27)</span><br>Δ<sub>max</sub> = [−(Pe)<sub>4</sub> + √((Pe)<sub>4</sub><sup>2</sup> − P<sub>44</sub>(W(e) − γc<sup>∗</sup>))] / P<sub>44</sub>,  ⟦eps|ε⟧ = √(γc<sup>∗</sup>/P<sub>44</sub>),  γ = 0.5<span style=\"font-style:normal;margin-left:1.5em\">(27a)</span>",
+   "note": "Die Referenzgeschwindigkeit bei einem Blick um Δ zu senken ändert nichts an der Maschine, fügt aber dem Fehler in ẋ Δ hinzu, was der Balancierregler nicht von einem Schubs unterscheiden kann. Der Code setzt zuerst die Referenz an den Wagen (der Fehler in x wird null, was (25) erlaubt), bildet den Fehler e mit der gegenwärtigen Geschwindigkeit und nimmt den größten Abzug in Richtung null, der W innerhalb von γc<sup>∗</sup> hält. Nach dem Abzug ist die Referenz wieder ein Mitglied von (25), also gilt das Zertifikat (19a) über die nächste Periode. Passt kein Abzug, bleibt die alte Referenz. Bei Geschwindigkeit null wird die Referenz ein fester Ort, dort, wo der Wagen steht.",
+   "code": "function govern() {   // (27): at a look, put the reference at the cart and take the largest bite of its speed toward zero with W ≤ γ c* (a reference governor)\n...\nvar v0 = refXV(tSim)[1], sg = v0 > 0 ? 1 : -1, e = wrapState(s), Pe4 = 0, i; e[0] = 0; e[3] -= v0;   // the error from the member of (25) at the cart with the present speed\nfor (i = 0; i < 6; i++) Pe4 += Pm[3][i] * e[i];\nvar disc = Pe4 * Pe4 - Pm[3][3] * (quad(Pm, e) - GAMMA * cLevel); if (disc < 0) return;   // no bite fits: the old reference stays, and the certificate goes on\nvar hi = (-sg * Pe4 + Math.sqrt(disc)) / Pm[3][3], lo = (-sg * Pe4 - Math.sqrt(disc)) / Pm[3][3], D = Math.min(Math.abs(v0), hi);\nif (D < Math.max(0, lo)) return;\nbite = D; vBefore = v0; var vn = v0 - sg * D;\nif (vn === 0) { ref = { kind: 'fixed', x: s[0] }; xref = s[0]; } else ref = { kind: 'cruise', x: s[0], v: vn, t0: tSim, brake: true }; }",
+   "syms": [
+    [
+     "eps",
+     "ε",
+     "Math.sqrt(GAMMA * cLevel / Pm[3][3])",
+     "gesicherter Geschwindigkeitsabzug aus der Ruhe bei γ = 0.5, m/s"
     ]
    ]
   }

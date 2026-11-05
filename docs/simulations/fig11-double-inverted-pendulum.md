@@ -20,7 +20,7 @@ A double inverted pendulum on a cart, with uniform rods: the model of Bogdanov (
 Moysis (2016). The cart is pushed by a motor force `u`, clipped to `±u_max`; the hinges are free. The page integrates the full nonlinear
 equations `D(θ) θ̈ + C(θ, θ̇) θ̇ + G(θ) = H u` with RK4 at a fixed 1 ms step in real time (no solve-then-play: Numa asked for a small page; since 5 November 2026 it has a data panel, see [Data panel](#data-panel-5-november-2026)). Since 3 November 2026, late evening, it has a walkthrough,
 `public/scripts/walk/dipc.js` (equation beside the page's code, `Sim.live()` for the Now column; `node notes/walkcheck.cjs`
-finds all 65 quoted lines; fifteen steps since 4 November 2026, evening), and the note writes out all three Lagrange rows (8a), (8), (8b), the linearisation to first order, the
+finds all 73 quoted lines; sixteen steps since 5 November 2026, the sixteenth on braking to rest), and the note writes out all three Lagrange rows (8a), (8), (8b), the linearisation to first order, the
 reduced fall-rate problem, the sign-function solution of the Riccati equation, the flick impulse (17) and the RK4 step (18).
 
 ## Controller
@@ -76,9 +76,9 @@ Numa: "a steady state where it moves at a constant velocity"; "every time you pl
 yourself to decelerate later". The equations of motion contain ẍ but neither x nor ẋ, so every s* = (x0 + vt, 0, 0, v, 0, 0), u* = 0 is an equilibrium
 (note (25)). The balancer measures its error from a reference `ref` of this family: `fixed` (a place, the target buttons), `cruise` (x0 + vt, the
 speed at the hand-over) or `glide` (critically damped return to a resting target, ω = `GLIDE` = 0.5 s⁻¹, note (26), closed form in `refXV(t)`);
-`err(st, t)`, `Wof(st, t)`, `lqrU(st, t)` use it. Switch **After a swing-up: Keep rolling | Stop the cart** (`#after`, `rolling`): with Keep rolling
+`err(st, t)`, `Wof(st, t)`, `lqrU(st, t)` use it. Switch **After a swing-up: Arrive moving, then brake | Arrive at rest** (`#after`, `rolling`; until 5 November 2026 named Keep rolling | Stop the cart): with Arrive moving
 (default) the planner's terminal speed weight `lim.vw` is 0, the hand-over tests `Wred()` (W with the x and ẋ errors zero) and the reference becomes a
-cruise at the cart's speed; with Stop the cart `lim.vw = 0.3` as before. A target button pressed while the reference moves starts a glide; pressed at
+cruise at the cart's speed, marked `brake: true`, which the governor of [Braking to rest](#braking-to-rest-5-november-2026) then brakes to rest; with Arrive at rest `lim.vw = 0.3` as before. A target button pressed while the reference moves starts a glide; pressed at
 rest it steps the target. Measured (`notes/fig11/study/exp.js`, outputs `exp-{A,B}-{calm,raw}.txt`): from 25 calmed starts ∫u² 944 → 844 N² s
 (−11 %), total speed change 22.1 → 19.4 m/s (−12 %), same peak force; from 40 raw starts no gain (31.2 m/s both, ∫u² +6 %). Glide lean, measured
 (`notes/fig11/study/glide.js`, page equations, 10 ms gains): 0.9° from 1 m at rest, 5.3° when also moving away at 1 m/s (tangent rule 1.5°
@@ -86,19 +86,107 @@ and 7.3°). The tracking LQR (23) now uses the stage cost Q·Δ, ρ·Δ with Δ 
 
 Tests (headless Chromium, frame-by-frame driver `notes/fig11/study/t9.cjs`: 1/60 s of simulation and 8 ms of planning per frame, rerun 4 November 2026 evening on the sampled-gain version; raw outputs in `notes/fig11/study/runs-2026-11-04/`): 40 of 40 random states (any angles, rates ±3 rad/s, cart ±0.5 m/s) balanced within 60 s at 60 N, both with Keep rolling (c = 37; plans 0.37–8.5 s, median 1.4 s) and with Stop the cart (plans 0.37–8.9 s); eight other machines (T_s = 40 and 60 ms with designed gains; m0 = 3 kg; m1 = 1, m2 = 1.5 kg; L = 1/1.2 m; L = 0.3/0.4 m; u_max = 30 and 120 N), six random states each, 48 of 48 with Keep rolling and 48 of 48 with Stop the cart (cart within ±1.54 m when stopping, 6–200 m away when rolling); continuous gains at T_s = 40 ms: 0 of 6, c = 0. `t7.cjs` in English, German and Arabic at 1280 and 390 px: no page errors, 0 KaTeX errors, 0 untranslated pieces, no sideways scroll, swing-up from hanging caught in about 9 s. Before 4 November evening (continuous gains at every T_s): 36 of 36 machines, 0 of 6 at 40 ms. Working notes with every Wolfram check: `notes/fig11/checked.html`.
 
+## Braking to rest (5 November 2026)
+
+Numa: "the cart keeps going at a non zero velocity … after arriving at a stable point. We must decelerate it to zero, but be extremely careful
+with that deceleration"; "how much can we pick and bully on the velocity before it spirals out of stability, how much would epsilon have to be";
+and the equations were to come from Wolfram, not be checked by it afterwards. Until this change a rolling catch left the cart cruising for
+good (6 to 200 m from the start within the 60 s of a test run).
+
+**The idea (note 11.5).** Lowering the reference speed by Δ at a look changes nothing in the machine; it adds Δ to the fourth component of the
+error, exactly like a shove (Galilean invariance, (25)). The remaining cost after that kick is a quadratic in Δ (27),
+W(e + Δe₄) = W(e) + 2Δ(Pe)₄ + Δ²P₄₄, and after the kick the reference is again a member of (25), so the sampled certificate (19a) holds for it:
+W ≤ c* right after the kick means the balancer wins. The page allows, at each look, the largest kick with W ≤ γc*, γ = `GAMMA` = 0.5 (our
+choice), the larger root of (27) = γc* (27a, Wolfram's `Solve`); from a resting error that is ε = √(γc*/P₄₄). At the same look the reference's
+place is set to the cart (x error zero), which (25) allows and which roughly triples the braking rate. In control engineering this is a
+Lyapunov-function-based reference governor (Garone, Di Cairano and Kolmanovsky, Automatica 75, 306–328, 2017, eq. (46), read in the MERL
+manuscript TR2016-102); re-placing the reference at each look is ours.
+
+**Numbers from Wolfram** (default machine; `notes/fig11/study/brake.cjs` holds K and P from `DiscreteRiccatiSolve` with the exact period
+cost; the gains equal the page's to every printed digit): P₄₄ = 172.46 at 10 ms and 173.60 at 40 ms; with c* = 37.3 and 116, ε = 0.44 m/s
+(γ = 0.9) and 0.33 m/s (γ = 0.5) at 10 ms, 0.78 and 0.58 m/s at 40 ms. Steady braking (28), e⁺ = Δ(I − ΠA_cl)⁻¹e₄, a = Δ/T_s: 0.65 m/s²
+(γ = 0.5) and 0.88 m/s² (γ = 0.9) at 10 ms, 1.14 and 1.52 m/s² at 40 ms; with the place kept only 0.24 and 0.32 m/s²; the W-minimising
+place gains 1 %. In the rhythm both rods lean by arctan(a/g) and u = (m₀ + m₁ + m₂)a, which Wolfram also derives from the Lagrangian with
+ẍ = a (problem 12.6).
+
+**Measured edge** (`notes/fig11/study/brake.cjs`, the independent equations of `notes/fig11/panel/ref.cjs`, RK4 at 1 ms, zero-order hold,
+60 N; output `brake-out.txt`): one drop of the reference speed from a balanced cruise is caught up to 8.48 m/s at 10 ms and 7.36 m/s at
+40 ms (no loss below these in a 0.1 m/s scan; lean 49° at the edge); a steady deceleration up to 9.2 m/s² (place kept) and 12.0 m/s² (place at
+the cart) at 10 ms, 7.1 and 9.0 m/s² at 40 ms (lean about 56°). The certified ε is about nineteen times smaller than the largest drop
+survived. Past the edge the rods fall (the unstable direction of section 5); that is loss of the basin, not chaos.
+
+**Code.** `govern()` (just before `control()`), called by `control()` at every look while `mode === 'balance' && ref.brake`: the error with
+the place at the cart and the present reference speed, `Pe4` from row 4 of `Pm`, the discriminant of (27) = γc*, the bite
+`D = min(|v|, hi)` with `hi`, `lo` the two roots; no bite when the discriminant is negative or `D < max(0, lo)`; the new reference is
+`cruise` (place at the cart, speed v − sgn(v)·D, `brake: true`) or, at zero, `fixed` at the cart. `bite` and `vBefore` are NaN at looks
+without a bite. The readout **Certified bite of speed ε** (`r-eps`) shows √(γc*/P₄₄), '…' while c* is being searched.
+
+**Store.** Scalars `gamma` (γ), `eps_rest` (ε, formula √(γc*/P₄₄), set in `think()` when c* is found, NaN in `recatch()`), `braking`
+(every frame, `!!ref.brake`); per controller sample `cs_bite` (Δ, NaN without a bite) and `cs_vb` (the reference speed before it), written in
+`logSample()`. Checks: `eps_rest` recomputed from the stored γ, c* and P; `cs_bite` by `biteAt(r)`, which recomputes the bite from the
+stored sample, P, c* and γ. State sentence while braking: "Braking from v m/s to rest, each bite within half the certified level."
+
+**Tests.** `notes/fig11/study/brake-page.cjs` (the page itself, frame-by-frame driver, 8 random falls at 10 ms): all balanced and at rest,
+for example caught at 3.49 m/s, at rest after 5.43 s, rolled 12.96 m, lean ≤ 3.82°, |u| ≤ 8.9 N, W ≤ 0.50 c* after the bites. The honesty
+tests `notes/fig11/panel/hon.cjs` gained a `brake` scenario and a governor check (every stored bite recomputed from its own row; W after
+the bite ≤ γc*). Browser reruns after the change (`t9.cjs`, `t7.cjs`; raw output
+`notes/fig11/study/t9t7-brake-out.txt`): 40/40 random falls balanced with *Arrive moving, then brake* (catch median 11.5 s, at most
+23.1 s) and 40/40 with *Arrive at rest*; 48/48 on the eight other machines in each setting. How far the cart got from its start in the
+60 s of a run on those machines, rolling: 0.99 to 15.7 m, median 3.5 m, against 6.1 to 201 m, median 91 m, from the same starts before the
+braking (`notes/fig11/panel/behaviour-branch.txt`). `t7.cjs`: English, German and Arabic at 1280 and 390 px with no KaTeX errors, no
+pending pieces, the page exactly as wide as the window and no page errors. `brake-page.cjs` rerun on the final page:
+`notes/fig11/study/brake-page-out.txt`.
+
+## Defined controls and the cart in your hand (5 November 2026)
+
+Numa: some sliders and switches were not defined for the reader, and the cart could not be dragged as in the other simulations.
+
+**Every control says what it does.** One line under each control or group (`.ctl__note`, page style): the flick and its strength `J`
+(impulse in N·s, with the 0.2 / 0.3 N·s catch/lose pair of section 8), the target buttons, Hang down/Tilt, the controller switch, the
+rescue switch, the arrival switch, the two gain designs (what a gain is, in newtons per unit of error), `u_max`, `T_s`, `ρ` (the price of
+force in the cost (14), logarithmic slider 0.01 to 100), the machine (what m and L are) and Bogdanov's machine (its numbers). Under the
+readouts a definition list (`.defs`): fall rates, e-fold time, slowest settling, factor per look, gains on θ, certified catch level,
+certified bite, rod angles (positive to the right), each with the section that derives it.
+
+**The cart in your hand.** Press on the cart's body or wheels (`onCart()`, below the lower hinge) and drag. While held (`held = 3`)
+the motor gives nothing (`u = 0`) and the supervisor and controller are skipped; your hand is a critically damped spring toward the pointer,
+ẍ = clip(ω_h²(x_h − x) − 2ω_h ẋ, ±a_h), ω_h = 15 s⁻¹, a_h = 30 m/s² (`handA()`, our choices; (29) of the note), turned into a force by
+row 1 of (9) with the rods' rows 2–3 solved for the angular accelerations (`forceFor(p, st, a)`, (30); `uFor()` now calls it). Each 1 ms
+step is an ordinary RK4 step with that force (`st_kind` 2), so the rods fall exactly as the cart's motion makes them. The pointer becomes
+x_h through the stored picture (`cam_x`, `box_w`, `sc`), and the camera stands still while you hold the cart, so the cart stays under the
+pointer even while the view widens. On release the controller looks at once: balancing, the reference becomes the cart where you let go
+(braked from its speed as after a catch when *Arrive moving* is on); calming or tracking, the plan is abandoned and calming restarts there.
+The figure shows a dashed box round the held cart, the hand's force as a dark arrow and "your hand: F N" under `u`; otherwise the hint
+"⇆ drag the cart, or pull a rod". The note gained paragraph *Take the cart* in section 8 with (29)–(30): the step response
+x = D[1 − (1 + ω_h t)e^(−ω_h t)] (95 % in 0.32 s) and the lag 2c/ω_h at steady speed c from Wolfram's `DSolve`; the rods' equations with
+x(t) prescribed from the Lagrangian; from upright rest θ̈₁ = −2.47 ẍ, θ̈₂ = +0.47 ẍ (the middle hinge moves back, by −0.24 ẍ); the force
+the hand first feels m_eff ẍ with m_eff = d₁ − hᵀD_θθ⁻¹h = 1.65 kg against the machine's 2.75 kg (all from Wolfram, default machine).
+
+**Store.** `held` now 0–3 (3 the cart); `hand_x` (x_h), `hand_a` (the acceleration (29) for the next step), `hand_u` (its force), set in
+`diagnostics()`, NaN unless the cart is held; constants `hand_w`, `hand_amax`; step log column `st_xh`. Checks: `hand_a` and `hand_u`
+from the stored state, x_h and constants; `st_u` of a hand step from its own row (`st_s0`, `st_xh`) through (29) and `forceFor(machine())`;
+the RK4 replay as for any step. The hand's work goes into `E_ext` as u_h Δx per step, exactly like the motor's.
+
+**Tests.** `notes/fig11/panel/hon.cjs cart` (a real mouse drag of 80 px, held 0.3 s, released): picture checks pass while held; 833 hand
+steps, each force recomputed independently with `ref.cjs` to at most 4.3 × 10⁻¹⁴ N; all 6183 steps replayed by the page's and an
+independent RK4 to 3.6 × 10⁻¹⁵; energy book closes to 2.3 × 10⁻⁷ J (7 × 10⁻⁹ of the flows) after the swing-up that follows.
+`origin.cjs`: every new number written by its own function, the drawing still reads only the store. A drag of 160 px in 0.3 s in English,
+German and Arabic: lower rod past −30° and upper past −70° within 0.7 s, both hanging about 1.1 s after the grab, the panel's own checks of all ~1500 hand steps
+identical (difference 0), and the page calms and swings them up again after the release.
+
 ## Interaction
 
 Flick the top (horizontal impulse `J` at the upper tip: `Δθ̇ = D⁻¹ (1, L1 cos θ1, L2 cos θ2)ᵀ J`), cart target −1/0/+1 m, Tilt and let go
 (θ1 = 6°, θ2 = −4°), controller on/off, grab either rod with the pointer (held at rest while pressed; `touch-action: pan-y` on the canvas so a
-phone still scrolls), sliders for `u_max`, `T_s`, `ρ`, `m0`, `m1`, `m2`, `L1`, `L2`. `window.DIPC` exposes the state for tests, and since 5 November 2026 also the store (`DIPC.ds`), the page's own `rk4` and `draw`.
+phone still scrolls), grab the cart and drag it (since 5 November 2026; see below), sliders for `u_max`, `T_s`, `ρ`, `m0`, `m1`, `m2`, `L1`, `L2`. `window.DIPC` exposes the state for tests, and since 5 November 2026 also the store (`DIPC.ds`), the page's own `rk4` and `draw`.
 
 ## Data panel (5 November 2026)
 
 At Numa's request the page carries the site's data panel, like the eleven figures: the store `Sim.dataset()` (`scripts/dataset.js`),
 the bookkeeper `scripts/datalog.js` with `styles/data.css`, and a ledger declared inside the page's own `Sim.data`
-([double-inverted-pendulum.html:1240](../../public/simulations/double-inverted-pendulum.html#L1240), ledger at
-[:1324](../../public/simulations/double-inverted-pendulum.html#L1324)). The store is declared from
-[:810](../../public/simulations/double-inverted-pendulum.html#L810); 125 variables in 11 sections.
+([double-inverted-pendulum.html:1295](../../public/simulations/double-inverted-pendulum.html#L1295), ledger at
+[:1427](../../public/simulations/double-inverted-pendulum.html#L1427)). The store is declared from
+[:859](../../public/simulations/double-inverted-pendulum.html#L859); 136 variables in 11 sections.
 
 **The picture.** The page integrates live while a controller looks only every loop period, so it runs on three clocks: the 1 ms
 physics step, the controller's sample, and the frame. The store keeps a record of each, the way a lab keeps a fast data logger,
@@ -106,23 +194,23 @@ a log book of every command sent to the motor, and a photograph per frame:
 
 | Rate | What is stored | Written in |
 |---|---|---|
-| every 1 ms step | step number, time, state before and after (`st_s0`, `st_s1`), force held (`st_u`), the sample whose force it holds (`st_j`), kind (0 RK4, 1 held by the hand), an outside change before the step (`st_jump`: 1 flick, 2 hand, 3 reset or new state, 4 wrap of the angles at hand-over, 9 unexplained), design number | `logStep()` [:1073](../../public/simulations/double-inverted-pendulum.html#L1073), called on the line after `s = rk4(p, s, u, H); tSim += H;` |
-| every controller sample (every T_s while balancing, every 10 ms while calming or tracking) | sample number, time, step number, due time, next due time, the state seen (`cs_s`), the force chosen (`cs_u`), the law (0 balance, 1 calm, 2 track, 3 off, 4 motor cut by the supervisor outside a sample), the reference's numbers (kind, place or target, speed, start time, glide's starting distance), centre of calming, plan start, plan number, force limit, design number | `logSample()` [:1064](../../public/simulations/double-inverted-pendulum.html#L1064), from `logStep()` when `tCtl` moved in the step |
-| every frame | state, wrapped angles, accelerations from `rhs()`, force, law, reference now (`x_r`, `v_r`, `ref_p`), W, W_red, E_p, the energy book, the supervisor's state, the settings | `diagnostics()` [:1089](../../public/simulations/double-inverted-pendulum.html#L1089), between `think()` and `draw()` |
-| every frame, by the drawing | scale, axle line, camera, view widening, cart, hinge and tip positions in css px | `draw()` [:1106](../../public/simulations/double-inverted-pendulum.html#L1106) |
-| on change | d, f, fall rates, K, P, Φ, Γ, R_d, \|λ\|, settling time, design number (`redesign()`); c*, 0.9 c*, busy flag (`recatch()`, `think()`); the plan the tracker follows, as the very arrays `trackU()` reads (`planStore()` [:1086](../../public/simulations/double-inverted-pendulum.html#L1086)) | |
+| every 1 ms step | step number, time, state before and after (`st_s0`, `st_s1`), force held (`st_u`), the sample whose force it holds (`st_j`), kind (0 RK4 with the motor, 1 a rod held by the hand, 2 RK4 with the hand on the cart), where the hand pulled the cart (`st_xh`, NaN otherwise), an outside change before the step (`st_jump`: 1 flick, 2 hand, 3 reset or new state, 4 wrap of the angles at hand-over, 9 unexplained), design number | `logStep()` [:1149](../../public/simulations/double-inverted-pendulum.html#L1149), called on the line after `s = rk4(p, s, u, H); tSim += H;` |
+| every controller sample (every T_s while balancing, every 10 ms while calming or tracking) | sample number, time, step number, due time, next due time, the state seen (`cs_s`), the force chosen (`cs_u`), the law (0 balance, 1 calm, 2 track, 3 off, 4 motor cut by the supervisor outside a sample), the reference's numbers (kind, place or target, speed, start time, glide's starting distance), the governor's bite and the speed before it (`cs_bite`, `cs_vb`, NaN without a bite), centre of calming, plan start, plan number, force limit, design number | `logSample()` [:1140](../../public/simulations/double-inverted-pendulum.html#L1140), from `logStep()` when `tCtl` moved in the step |
+| every frame | state, wrapped angles, accelerations from `rhs()`, force, law, reference now (`x_r`, `v_r`, `ref_p`), W, W_red, E_p, the energy book, the supervisor's state, the settings | `diagnostics()` [:1165](../../public/simulations/double-inverted-pendulum.html#L1165), between `think()` and `draw()` |
+| every frame, by the drawing | scale, axle line, camera, view widening, cart, hinge and tip positions in css px | `draw()` [:1182](../../public/simulations/double-inverted-pendulum.html#L1182) |
+| on change | d, f, fall rates, K, P, Φ, Γ, R_d, \|λ\|, settling time, design number (`redesign()`); c*, 0.9 c*, busy flag, ε = √(γc*/P₄₄) (`recatch()`, `think()`); γ at start; the plan the tracker follows, as the very arrays `trackU()` reads (`planStore()` [:1162](../../public/simulations/double-inverted-pendulum.html#L1162)) | |
 | every 20 ms | the trace of the lower figure (`tr_t`, `tr_th1`, `tr_th2`, `tr_u`) | `logStep()` |
 
 The logs hold 8192 rows (800 for the trace); a full log keeps its newer half (`copyWithin`), so it always holds the last 4 to 8 s
 (trace 8 to 16 s). Row counts are written with the rows (they were first written once per frame, and the driven test caught the stale
 count after a log dropped its half). The walkthrough quotes the three lines of the control loop as one block, so nothing was put
 between them: the state, time, due time and force are taken before `supervise()`
-([:1047](../../public/simulations/double-inverted-pendulum.html#L1047)), the due time of a sample is recorded inside `period()`
-(JavaScript reads `tCtl` before it calls `period()` in `tCtl += period()`, [:1013](../../public/simulations/double-inverted-pendulum.html#L1013)),
-and the step and sample are written after the integrator ([:1051](../../public/simulations/double-inverted-pendulum.html#L1051)).
+([:1123](../../public/simulations/double-inverted-pendulum.html#L1123)), the due time of a sample is recorded inside `period()`
+(JavaScript reads `tCtl` before it calls `period()` in `tCtl += period()`, [:1088](../../public/simulations/double-inverted-pendulum.html#L1088)),
+and the step and sample are written after the integrator ([:1127](../../public/simulations/double-inverted-pendulum.html#L1127)).
 
 **The energy book.** The force is constant over a step, so its work in that step is exactly u (x_after − x_before). The book reads
-E₀ + W_motor + E_ext + E_wait = E, with E = ½ θ̇ᵀDθ̇ + f₁ cos θ₁ + f₂ cos θ₂ (`energy()`, [:1060](../../public/simulations/double-inverted-pendulum.html#L1060)); E_ext
+E₀ + W_motor + E_ext + E_wait = E, with E = ½ θ̇ᵀDθ̇ + f₁ cos θ₁ + f₂ cos θ₂ (`energy()`, [:1136](../../public/simulations/double-inverted-pendulum.html#L1136)); E_ext
 adds the energy of every flick, hand step and wrap; E_wait is an outside change made while the clock stands still, booked by the
 next step. The book opens again at a reset and at every change of the machine (until the next step it shows no numbers). Measured:
 it misses by 3.5 × 10⁻¹⁴ of the flows at rest and up to 4 × 10⁻⁹ after a drag and a fall (RK4's own error); the ledger's tolerance is 10⁻⁷.
@@ -133,7 +221,7 @@ and the drawing read the page's own state. Headline: θ₁, θ₂, x, u, W, E. R
 top of the upper rod or the target. One round is ten seconds of simulated motion (`t`), columns x, θ₁, θ₂, u, W, E and the book's
 miss. Checks recompute every derived value from stored inputs (gains, P, Φ, Γ, R_d by designing again; |λ| from the stored Φ, Γ, K;
 W, W_red, E_p, E, x_r, v_r, the accelerations, the drawing's positions; a stored step by one RK4 step from the state before it;
-a stored force by the law of its row, `lawAt()` [:1202](../../public/simulations/double-inverted-pendulum.html#L1202)). Read-backs: the
+a stored force by the law of its row, `lawAt()` [:1291](../../public/simulations/double-inverted-pendulum.html#L1291)). Read-backs: the
 cart's cream body inside both edges and not outside, the white hinge disc, the burgundy top of the upper rod, the force arrow, the
 target. What differs between store and picture is in the `about` paragraph: one state per frame of about 17 steps, the camera that
 follows at 8 % per frame, the view that widens when the rods hang, thicker rods for heavier masses, clipped arrow and trace.
@@ -154,7 +242,7 @@ follows at 8 % per frame, the view that widens when the rods hang, thicker rods 
   40 ms) or 10 steps while calming or tracking, apart from logged restarts of the clock.
 - d, picture (device pixel ratio 1 and 2): cart centre within 0.35 px, hinge disc within 0.25 px, the top's round cap where it must be and
   centred across the rod within 0.35 px, scans centred on the stored state turned into pixels; the drawing's stored pixels equal the state turned into pixels exactly.
-- e, scenarios: rest, flick, drag with the mouse, swing-up from hanging, random falls with Keep rolling and Stop the cart, T_s = 40 ms
+- e, scenarios: rest, flick, drag with the mouse, swing-up from hanging, random falls with Keep rolling and Stop the cart (the switch is now *Arrive moving, then brake* / *Arrive at rest*), T_s = 40 ms
   (random fall and tilt), a glide after a cruise, a change of the force limit while balancing: all pass.
 - f, falsification (`fals.cjs`): a stored force +10⁻⁹ N, a stored state +10⁻¹² rad, and a page copy whose `draw()` uses its own state
   with x + 1 cm each make the matching checks fail; reverted, all pass.

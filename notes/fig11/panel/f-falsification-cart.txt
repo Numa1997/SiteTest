@@ -1,0 +1,49 @@
+f0 clean store: ALL PASS
+  b page's own rk4 on every stored step: 4816/4816 bit-identical (0 steps of an earlier machine not replayed) PASS
+  b independent RK4 (Cramer, from (8a), (8), (8b)) on every stored step: 4816 steps, max |Δs| = 5.55e-17, max |Δs| / |step change| = 6.43e-12 PASS (float64 rounding)
+  b step log continuity: 4814 joins exact, 0 broken, 0 gaps; outside changes by code {"3":1} (1 flick, 2 hand, 3 reset/new state, 4 wrap at hand-over, 9 unexplained) PASS
+  c force recomputed from each stored sample (state, reference, gains, limit, plan): 483 samples (balance 483, calm 0, track 0, off 0, cut 0), max |Δu| = 0 N, 0 unchecked PASS
+  c zero-order hold: 4816 RK4 steps hold exactly the force of the latest sample, 0 do not; 0 held steps with u = 0, 0 not PASS
+  c sample times: 481 intervals on the grid (steps per interval: {"10":481}), 0 off it, 1 restarts of the clock (reset, release, track start, hand-over), 0 samples away from their due time PASS
+f1 corrupt: sample j = 241, stored force 0.5146179914300553 N raised by 1e-9 N
+f1 corrupted: FAILS
+  b page's own rk4 on every stored step: 4816/4816 bit-identical (0 steps of an earlier machine not replayed) PASS
+  b independent RK4 (Cramer, from (8a), (8), (8b)) on every stored step: 4816 steps, max |Δs| = 5.55e-17, max |Δs| / |step change| = 6.43e-12 PASS (float64 rounding)
+  b step log continuity: 4814 joins exact, 0 broken, 0 gaps; outside changes by code {"3":1} (1 flick, 2 hand, 3 reset/new state, 4 wrap at hand-over, 9 unexplained) PASS
+  c force recomputed from each stored sample (state, reference, gains, limit, plan): 483 samples (balance 483, calm 0, track 0, off 0, cut 0), max |Δu| = 1.00e-9 N (law 0), 0 unchecked PASS
+  c zero-order hold: 4806 RK4 steps hold exactly the force of the latest sample, 10 do not (first: {"step":2403,"u":0.5146179914300553,"sample":241,"cu":0.5146179924300552}); 0 held steps with u = 0, 0 not FAIL
+  c sample times: 481 intervals on the grid (steps per interval: {"10":481}), 0 off it, 1 restarts of the clock (reset, release, track start, hand-over), 0 samples away from their due time PASS
+f1 reverted: ALL PASS
+  b page's own rk4 on every stored step: 4816/4816 bit-identical (0 steps of an earlier machine not replayed) PASS
+  b independent RK4 (Cramer, from (8a), (8), (8b)) on every stored step: 4816 steps, max |Δs| = 5.55e-17, max |Δs| / |step change| = 6.43e-12 PASS (float64 rounding)
+  b step log continuity: 4814 joins exact, 0 broken, 0 gaps; outside changes by code {"3":1} (1 flick, 2 hand, 3 reset/new state, 4 wrap at hand-over, 9 unexplained) PASS
+  c force recomputed from each stored sample (state, reference, gains, limit, plan): 483 samples (balance 483, calm 0, track 0, off 0, cut 0), max |Δu| = 0 N, 0 unchecked PASS
+  c zero-order hold: 4816 RK4 steps hold exactly the force of the latest sample, 0 do not; 0 held steps with u = 0, 0 not PASS
+  c sample times: 481 intervals on the grid (steps per interval: {"10":481}), 0 off it, 1 restarts of the clock (reset, release, track start, hand-over), 0 samples away from their due time PASS
+f2 corrupt: step k = 2408, stored θ₁ after the step 0.015877134587347685 rad raised by 1e-12 rad
+f2 corrupted: FAILS
+  b page's own rk4 on every stored step: 4815/4816 bit-identical (0 steps of an earlier machine not replayed) FAIL
+  b independent RK4 (Cramer, from (8a), (8), (8b)) on every stored step: 4816 steps, max |Δs| = 1.00e-12, max |Δs| / |step change| = 9.08e-8 PASS (float64 rounding)
+  b step log continuity: 4813 joins exact, 1 broken, 0 gaps; outside changes by code {"3":1} (1 flick, 2 hand, 3 reset/new state, 4 wrap at hand-over, 9 unexplained) FAIL
+  c force recomputed from each stored sample (state, reference, gains, limit, plan): 483 samples (balance 483, calm 0, track 0, off 0, cut 0), max |Δu| = 0 N, 0 unchecked PASS
+  c zero-order hold: 4816 RK4 steps hold exactly the force of the latest sample, 0 do not; 0 held steps with u = 0, 0 not PASS
+  c sample times: 481 intervals on the grid (steps per interval: {"10":481}), 0 off it, 1 restarts of the clock (reset, release, track start, hand-over), 0 samples away from their due time PASS
+f2 reverted: ALL PASS
+  b page's own rk4 on every stored step: 4816/4816 bit-identical (0 steps of an earlier machine not replayed) PASS
+  b independent RK4 (Cramer, from (8a), (8), (8b)) on every stored step: 4816 steps, max |Δs| = 5.55e-17, max |Δs| / |step change| = 6.43e-12 PASS (float64 rounding)
+  b step log continuity: 4814 joins exact, 0 broken, 0 gaps; outside changes by code {"3":1} (1 flick, 2 hand, 3 reset/new state, 4 wrap at hand-over, 9 unexplained) PASS
+  c force recomputed from each stored sample (state, reference, gains, limit, plan): 483 samples (balance 483, calm 0, track 0, off 0, cut 0), max |Δu| = 0 N, 0 unchecked PASS
+  c zero-order hold: 4816 RK4 steps hold exactly the force of the latest sample, 0 do not; 0 held steps with u = 0, 0 not PASS
+  c sample times: 481 intervals on the grid (steps per interval: {"10":481}), 0 off it, 1 restarts of the clock (reset, release, track start, hand-over), 0 samples away from their due time PASS
+f3 display recomputes (x + 1 cm): FAILS
+  d f3 display recomputes (x + 1 cm): stored px vs state→px (Node formulas): max |Δ| = 2.48 px
+  d f3 display recomputes (x + 1 cm): cart: cream from 394 to 481 px, centre 437.5 vs x→px 435 (Δ 2.479 px, alpha at centre 255) FAIL
+  d f3 display recomputes (x + 1 cm): hinge between the rods: white centroid (437.9, 250.3) of 37 px vs θ₁→px (435.5, 250.2) (Δ 2.435 px) FAIL
+  d f3 display recomputes (x + 1 cm): top of the upper rod at θ₂→px (436.2, 64.24): along the rod, fully burgundy to 3.2 px beyond it and transparent from 4.25 px, round cap radius 4.25 px; across the rod 6 px below the top the burgundy (6.95 px wide) is centred 2.325 px off the axis FAIL
+f3 reverted (the real page): ALL PASS
+  d f3 reverted (the real page): stored px vs state→px (Node formulas): max |Δ| = 0 px
+  d f3 reverted (the real page): cart: cream from 395 to 481 px, centre 438 vs x→px 437.7 (Δ 0.2837 px, alpha at centre 255) PASS
+  d f3 reverted (the real page): hinge between the rods: white centroid (438.2, 250.4) of 39 px vs θ₁→px (438.2, 250.2) (Δ 0.1642 px) PASS
+  d f3 reverted (the real page): top of the upper rod at θ₂→px (438.9, 64.24): along the rod, fully burgundy to 3.2 px beyond it and transparent from 4.25 px, round cap radius 4.25 px; across the rod 6 px below the top the burgundy (7.95 px wide) is centred 0.125 px off the axis PASS
+removed _falsify-f3.html: true
+DONE

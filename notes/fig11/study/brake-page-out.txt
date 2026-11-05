@@ -1,0 +1,19 @@
+Ts 10 ms, c* = 37.3: 8/8 balanced and at rest after 60 s
+  0 ok  caught at 6.6 s moving 0.54 m/s; at rest after 0.68 s, rolled 0.50 m; while braking lean ≤ 2.78°, |u| ≤ 2.3 N, W ≤ 0.50 c*; end speed 0 m/s
+  1 ok  caught at 19.4 s moving 3.49 m/s; at rest after 5.43 s, rolled 12.96 m; while braking lean ≤ 3.82°, |u| ≤ 8.9 N, W ≤ 0.50 c*; end speed 0 m/s
+  2 ok  caught at 14.4 s moving -3.60 m/s; at rest after 5.63 s, rolled -13.83 m; while braking lean ≤ 3.82°, |u| ≤ 11.0 N, W ≤ 0.50 c*; end speed 0 m/s
+  3 ok  caught at 23.0 s moving -3.16 m/s; at rest after 4.73 s, rolled -10.18 m; while braking lean ≤ 4.20°, |u| ≤ 5.5 N, W ≤ 0.77 c*; end speed 0 m/s
+  4 ok  caught at 6.7 s moving 1.50 m/s; at rest after 2.30 s, rolled 3.08 m; while braking lean ≤ 3.79°, |u| ≤ 8.4 N, W ≤ 0.50 c*; end speed 0 m/s
+  5 ok  caught at – s moving 0.00 m/s; at rest after never, rolled – m; while braking lean ≤ 0.00°, |u| ≤ 0.0 N, W ≤ 0.00 c*; end speed 0 m/s
+  6 ok  caught at 14.4 s moving -3.33 m/s; at rest after 5.22 s, rolled -12.10 m; while braking lean ≤ 3.82°, |u| ≤ 10.9 N, W ≤ 0.50 c*; end speed 0 m/s
+  7 ok  caught at 6.7 s moving -1.92 m/s; at rest after 2.93 s, rolled -4.55 m; while braking lean ≤ 3.81°, |u| ≤ 3.6 N, W ≤ 0.50 c*; end speed 0 m/s
+Ts 40 ms, c* = 115.9: 8/8 balanced and at rest after 60 s
+  0 ok  caught at 6.6 s moving -0.85 m/s; at rest after 0.08 s, rolled -0.06 m; while braking lean ≤ 5.30°, |u| ≤ 9.8 N, W ≤ 0.84 c*; end speed 0 m/s
+  1 ok  caught at 13.9 s moving -1.93 m/s; at rest after 1.80 s, rolled -3.25 m; while braking lean ≤ 10.92°, |u| ≤ 10.7 N, W ≤ 0.89 c*; end speed 0 m/s
+  2 ok  caught at 6.2 s moving 2.05 m/s; at rest after 2.28 s, rolled 4.73 m; while braking lean ≤ 9.99°, |u| ≤ 5.5 N, W ≤ 0.90 c*; end speed 0 m/s
+  3 ok  caught at 11.7 s moving 0.68 m/s; at rest after 0.88 s, rolled 1.04 m; while braking lean ≤ 5.42°, |u| ≤ 6.5 N, W ≤ 0.84 c*; end speed 0 m/s
+  4 ok  caught at – s moving 0.00 m/s; at rest after never, rolled – m; while braking lean ≤ 0.00°, |u| ≤ 0.0 N, W ≤ 0.00 c*; end speed 0 m/s
+  5 ok  caught at 22.5 s moving -1.14 m/s; at rest after 1.32 s, rolled -1.78 m; while braking lean ≤ 11.09°, |u| ≤ 7.3 N, W ≤ 0.87 c*; end speed 0 m/s
+  6 ok  caught at 6.6 s moving -0.59 m/s; at rest after 0.33 s, rolled -0.34 m; while braking lean ≤ 5.07°, |u| ≤ 4.4 N, W ≤ 0.50 c*; end speed 0 m/s
+  7 ok  caught at 23.0 s moving -3.05 m/s; at rest after 2.68 s, rolled -6.69 m; while braking lean ≤ 7.12°, |u| ≤ 8.1 N, W ≤ 0.80 c*; end speed 0 m/s
+page errors: none

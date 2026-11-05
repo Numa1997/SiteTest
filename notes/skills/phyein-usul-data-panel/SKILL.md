@@ -143,6 +143,9 @@ logStep(s0, t0, 0, c0, u0);                               // a sample if tCtl mo
   hand-over level `c_hand = 0.9 c*`); calming, planning and tracking (`mode`, `x_c`, `t_plan`, `plan_busy`, `plan_ready`, the plan
   arrays); the hand-over at W < 0.9 c* (`W`, `W_red` per frame, the wrap logged as code 4); the moving references fixed, cruise
   and glide (kind and numbers per sample and per frame, `x_r`, `v_r` per frame, recomputed in the checks from (25)–(26)).
+  A governor that changes the reference at a look (project 05's braking to rest, note (27)–(27a)) stores what it did in the
+  sample's row (`cs_bite`, the speed before it `cs_vb`, NaN at looks without a bite) and its constants (`gamma`, `eps_rest`); the
+  check recomputes each bite from that row, P, c* and γ alone, and confirms W after the bite stays within γ c*.
 - **The energy book under a zero-order hold.** The force is constant over a step, so its work in that step is exactly
   u (x_after − x_before). The book is E₀ + W_motor + E_ext + E_wait = E, where E_ext adds the energy of every outside change and
   every held step, and E_wait is an outside change made while the clock is paused, not yet booked by a step (the clock calls the
@@ -222,8 +225,10 @@ stored state with your own formulas (not from the drawing's stored pixels) and c
 "Fully painted" means alpha 255 and the colour within 2 or 3 of the expected value: alpha first. Also compare the drawing's stored
 pixels with the state turned into pixels (expect identical). Repeat at device pixel ratio 2.
 
-**e. Scenarios.** At least: rest; a flick; a drag with the real mouse; the swing-up from hanging; catches from random falls,
-with the supervisor's options both ways (project 05: Keep rolling and Stop the cart); two loop periods (10 and 40 ms); a moving
+**e. Scenarios.** At least: rest; a flick; a drag with the real mouse (of each thing the reader can grab: in project 05 a rod, held at
+rest, and the cart, whose hand force is an ordinary RK4 input that the force check must recompute from its own row); the swing-up from hanging; catches from random falls,
+with the supervisor's options both ways (project 05: Arrive moving, then brake and Arrive at rest), and long enough for any governor
+to finish (project 05: 6 s after the reference stops); two loop periods (10 and 40 ms); a moving
 (glide) reference; a change of the force limit while balancing. Each runs a–d's log and picture checks.
 
 **f. Falsification** (`fals.cjs`). Corrupt one thing at a time, show the tests fail, revert, show they pass: one stored force

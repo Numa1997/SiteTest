@@ -1,0 +1,12 @@
+const { chromium } = require('playwright'); const path = require('path');
+(async () => { const b = await chromium.launch(), pg = await b.newPage({ viewport: { width: 1280, height: 900 } }), errs = []; pg.on('pageerror', e => errs.push(e.message));
+  await pg.goto('file://' + path.join(process.env.ROOT, 'public/simulations/double-inverted-pendulum.html')); await pg.waitForTimeout(2500);
+  await pg.evaluate(() => { if (!document.body.classList.contains('dp-open')) document.querySelector('.dp-tab').click(); }); await pg.waitForTimeout(800);
+  await pg.evaluate(() => document.querySelector('.dp-readbtn').click()); await pg.waitForTimeout(300);
+  const cv = await pg.$('#cv'); await cv.scrollIntoViewIfNeeded(); const box = await cv.boundingBox(), g = await pg.evaluate(() => DIPC.geo);
+  await pg.mouse.move(box.x + g.hx, box.y + g.hy + 12); await pg.mouse.down(); await pg.waitForTimeout(300);
+  const onRead = await pg.evaluate(() => DIPC.held); await pg.mouse.up();
+  await pg.evaluate(() => document.querySelector('.dp-readbtn').click()); await pg.waitForTimeout(300); const g2 = await pg.evaluate(() => DIPC.geo);
+  await pg.mouse.move(box.x + g2.hx, box.y + g2.hy + 12); await pg.mouse.down(); await pg.waitForTimeout(300);
+  const offRead = await pg.evaluate(() => DIPC.held); await pg.mouse.up();
+  console.log('press on the cart with Read values on: held =', onRead, '; with Read values off: held =', offRead, '; errors', errs.join('|') || 'none'); await b.close(); })();
