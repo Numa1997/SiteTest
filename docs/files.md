@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-1197 files, 61.3 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+1200 files, 61.3 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -40,7 +40,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Agents of the lecture-note review](#agents-of-the-lecture-note-review) | 4 |
 | [Working notes of the Rotor Pendula study](#working-notes-of-the-rotor-pendula-study) | 86 |
 | [Working notes of the Droplet Collection study](#working-notes-of-the-droplet-collection-study) | 121 |
-| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 367 |
+| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 370 |
 
 ## Repository root
 
@@ -117,7 +117,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/simulations/Interactive Double-Slit Experiment Visualization.html`](../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html) | 178.4 kB | Fig. 3 · Double-Slit Interference: the simulation, its data panel, walkthrough and lecture note. | [fig03-double-slit.md](simulations/fig03-double-slit.md) |
 | [`public/simulations/Transverse and longitudinal waves.html`](../public/simulations/Transverse%20and%20longitudinal%20waves.html) | 209.2 kB | Fig. 4 · Transverse & Longitudinal: the simulation, its data panel, walkthrough and lecture note. | [fig04-transverse-longitudinal.md](simulations/fig04-transverse-longitudinal.md) |
 | [`public/simulations/beer-slosh.html`](../public/simulations/beer-slosh.html) | 227.5 kB | Fig. 12 · A Pint of Guinness on a One-Wheel Cart: the simulation, its data panel, walkthrough and lecture note. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
-| [`public/simulations/double-inverted-pendulum.html`](../public/simulations/double-inverted-pendulum.html) | 347.4 kB | Project 05 · Balancing Two Rods on a Cart (Fig. 11 from 3 to 4 November 2026): the real-time simulation, its walkthrough and lecture note (no data panel); listed on the Projects page, kept at this address so that its German and Arabic pages are generated with the simulations. | [fig11-double-inverted-pendulum.md](simulations/fig11-double-inverted-pendulum.md) |
+| [`public/simulations/double-inverted-pendulum.html`](../public/simulations/double-inverted-pendulum.html) | 357.9 kB | Project 05 · Balancing Two Rods on a Cart (Fig. 11 from 3 to 4 November 2026): the real-time simulation, its walkthrough and lecture note (no data panel); listed on the Projects page, kept at this address so that its German and Arabic pages are generated with the simulations. | [fig11-double-inverted-pendulum.md](simulations/fig11-double-inverted-pendulum.md) |
 | [`public/simulations/draw-decompose.html`](../public/simulations/draw-decompose.html) | 224.0 kB | Fig. 8 · Draw & Decompose: the simulation, its data panel, walkthrough and lecture note. | [fig08-draw-decompose.md](simulations/fig08-draw-decompose.md) |
 | [`public/simulations/driven-oscillator.html`](../public/simulations/driven-oscillator.html) | 342.6 kB | Fig. 9 · Driven Oscillator: the simulation, its data panel, walkthrough and lecture note. | [fig09-driven-oscillator.md](simulations/fig09-driven-oscillator.md) |
 | [`public/simulations/pendulum-control.html`](../public/simulations/pendulum-control.html) | 208.0 kB | Fig. 11 · Double Pendulum under Control: the simulation, its data panel, walkthrough and lecture note. | [fig11-pendulum-control.md](simulations/fig11-pendulum-control.md) |
@@ -737,7 +737,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`docs/simulations/fig08-draw-decompose.md`](simulations/fig08-draw-decompose.md) | 40.2 kB | Documentation: Fig. 8 · Draw & Decompose. | [fig08-draw-decompose.md](simulations/fig08-draw-decompose.md) |
 | [`docs/simulations/fig09-driven-oscillator.md`](simulations/fig09-driven-oscillator.md) | 62.1 kB | Documentation: Fig. 9 · Driven Oscillator. | [fig09-driven-oscillator.md](simulations/fig09-driven-oscillator.md) |
 | [`docs/simulations/fig10-wind-turbine.md`](simulations/fig10-wind-turbine.md) | 57.3 kB | Documentation: Fig. 10 · Wind Turbine Control. | [fig10-wind-turbine.md](simulations/fig10-wind-turbine.md) |
-| [`docs/simulations/fig11-double-inverted-pendulum.md`](simulations/fig11-double-inverted-pendulum.md) | 51.2 kB | Documentation: Project 05 · Balancing Two Rods on a Cart (Fig. 11 from 3 to 4 November 2026). | [fig11-double-inverted-pendulum.md](simulations/fig11-double-inverted-pendulum.md) |
+| [`docs/simulations/fig11-double-inverted-pendulum.md`](simulations/fig11-double-inverted-pendulum.md) | 55.2 kB | Documentation: Project 05 · Balancing Two Rods on a Cart (Fig. 11 from 3 to 4 November 2026). | [fig11-double-inverted-pendulum.md](simulations/fig11-double-inverted-pendulum.md) |
 | [`docs/simulations/fig11-pendulum-control.md`](simulations/fig11-pendulum-control.md) | 28.8 kB | Documentation: Fig. 11 · Double Pendulum under Control (Fig. 11 again since 4 November 2026; a project from 3 to 4 November). | [fig11-pendulum-control.md](simulations/fig11-pendulum-control.md) |
 | [`docs/simulations/fig12-beer-slosh.md`](simulations/fig12-beer-slosh.md) | 21.7 kB | Documentation: Fig. 12 · A Pint of Guinness on a One-Wheel Cart (`public/simulations/beer-slosh.html`). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`docs/styles.md`](styles.md) | 52.1 kB | Documentation: Stylesheets: `public/styles/`. | [styles.md](styles.md) |
@@ -800,7 +800,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`i18n/ar/simulations__Double Pendulum.html.json`](../i18n/ar/simulations__Double%20Pendulum.html.json) | 107.8 kB | Arabic table of simulations__Double Pendulum.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
 | [`i18n/ar/simulations__Interactive Double-Slit Experiment Visualization.html.json`](../i18n/ar/simulations__Interactive%20Double-Slit%20Experiment%20Visualization.html.json) | 83.7 kB | Arabic table of simulations__Interactive Double-Slit Experiment Visualization.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
 | [`i18n/ar/simulations__Transverse and longitudinal waves.html.json`](../i18n/ar/simulations__Transverse%20and%20longitudinal%20waves.html.json) | 84.7 kB | Arabic table of simulations__Transverse and longitudinal waves.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
-| [`i18n/ar/simulations__double-inverted-pendulum.html.json`](../i18n/ar/simulations__double-inverted-pendulum.html.json) | 386.5 kB | Arabic table of simulations__double-inverted-pendulum.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
+| [`i18n/ar/simulations__double-inverted-pendulum.html.json`](../i18n/ar/simulations__double-inverted-pendulum.html.json) | 388.2 kB | Arabic table of simulations__double-inverted-pendulum.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
 | [`i18n/ar/simulations__draw-decompose.html.json`](../i18n/ar/simulations__draw-decompose.html.json) | 84.2 kB | Arabic table of simulations__draw-decompose.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
 | [`i18n/ar/simulations__driven-oscillator.html.json`](../i18n/ar/simulations__driven-oscillator.html.json) | 165.7 kB | Arabic table of simulations__driven-oscillator.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
 | [`i18n/ar/simulations__pendulum-control.html.json`](../i18n/ar/simulations__pendulum-control.html.json) | 269.2 kB | Arabic table of simulations__pendulum-control.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
@@ -808,7 +808,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`i18n/ar/simulations__water-wave.html.json`](../i18n/ar/simulations__water-wave.html.json) | 93.9 kB | Arabic table of simulations__water-wave.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
 | [`i18n/ar/simulations__wave-interference.html.json`](../i18n/ar/simulations__wave-interference.html.json) | 88.0 kB | Arabic table of simulations__wave-interference.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
 | [`i18n/ar/simulations__wind-turbine.html.json`](../i18n/ar/simulations__wind-turbine.html.json) | 68.7 kB | Arabic table of simulations__wind-turbine.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
-| [`i18n/ar/strings.json`](../i18n/ar/strings.json) | 469.9 kB | Arabic words of the scripts and of the catalog, with plural forms. | [i18n.md](i18n.md) |
+| [`i18n/ar/strings.json`](../i18n/ar/strings.json) | 472.1 kB | Arabic words of the scripts and of the catalog, with plural forms. | [i18n.md](i18n.md) |
 | [`i18n/ar/walk.json`](../i18n/ar/walk.json) | 545.7 kB | Arabic prose of the ten walkthroughs, keyed by the English. | [i18n.md](i18n.md) |
 | [`i18n/de/hydraulics__00_map.json`](../i18n/de/hydraulics__00_map.json) | 28.7 kB | German table of hydraulics__00_map: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
 | [`i18n/de/hydraulics__01_ideal.json`](../i18n/de/hydraulics__01_ideal.json) | 41.0 kB | German table of hydraulics__01_ideal: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
@@ -825,7 +825,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`i18n/de/simulations__Double Pendulum.html.json`](../i18n/de/simulations__Double%20Pendulum.html.json) | 97.2 kB | German table of simulations__Double Pendulum.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
 | [`i18n/de/simulations__Interactive Double-Slit Experiment Visualization.html.json`](../i18n/de/simulations__Interactive%20Double-Slit%20Experiment%20Visualization.html.json) | 74.7 kB | German table of simulations__Interactive Double-Slit Experiment Visualization.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
 | [`i18n/de/simulations__Transverse and longitudinal waves.html.json`](../i18n/de/simulations__Transverse%20and%20longitudinal%20waves.html.json) | 76.6 kB | German table of simulations__Transverse and longitudinal waves.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
-| [`i18n/de/simulations__double-inverted-pendulum.html.json`](../i18n/de/simulations__double-inverted-pendulum.html.json) | 351.7 kB | German table of simulations__double-inverted-pendulum.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
+| [`i18n/de/simulations__double-inverted-pendulum.html.json`](../i18n/de/simulations__double-inverted-pendulum.html.json) | 353.3 kB | German table of simulations__double-inverted-pendulum.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
 | [`i18n/de/simulations__draw-decompose.html.json`](../i18n/de/simulations__draw-decompose.html.json) | 74.9 kB | German table of simulations__draw-decompose.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
 | [`i18n/de/simulations__driven-oscillator.html.json`](../i18n/de/simulations__driven-oscillator.html.json) | 148.3 kB | German table of simulations__driven-oscillator.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
 | [`i18n/de/simulations__pendulum-control.html.json`](../i18n/de/simulations__pendulum-control.html.json) | 241.5 kB | German table of simulations__pendulum-control.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
@@ -833,7 +833,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`i18n/de/simulations__water-wave.html.json`](../i18n/de/simulations__water-wave.html.json) | 85.2 kB | German table of simulations__water-wave.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
 | [`i18n/de/simulations__wave-interference.html.json`](../i18n/de/simulations__wave-interference.html.json) | 79.2 kB | German table of simulations__wave-interference.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
 | [`i18n/de/simulations__wind-turbine.html.json`](../i18n/de/simulations__wind-turbine.html.json) | 61.3 kB | German table of simulations__wind-turbine.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
-| [`i18n/de/strings.json`](../i18n/de/strings.json) | 406.9 kB | German words of the scripts and of the catalog, with plural forms. | [i18n.md](i18n.md) |
+| [`i18n/de/strings.json`](../i18n/de/strings.json) | 409.0 kB | German words of the scripts and of the catalog, with plural forms. | [i18n.md](i18n.md) |
 | [`i18n/de/walk.json`](../i18n/de/walk.json) | 478.4 kB | German prose of the ten walkthroughs, keyed by the English. | [i18n.md](i18n.md) |
 
 ## Agents of the lecture-note review
@@ -1193,7 +1193,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/fig10/walk.md`](../notes/fig10/walk.md) | 14.7 kB | Fig. 10: the walkthrough check and its proposed fixes. | [notes.md](notes.md) |
 | [`notes/fig11/checked.html`](../notes/fig11/checked.html) | 160.0 kB | Fig. 11: working notes of 4 November 2026, every term of the model and of the rescue with its Wolfram check and the code that was run. | [notes.md](notes.md) |
 
-<details><summary>98 files: Fig. 11: a measuring script of the review, or its saved output.</summary>
+<details><summary>101 files: Fig. 11: a measuring script of the review, or its saved output.</summary>
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
@@ -1219,6 +1219,9 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/fig11/fluid-ns-handover/twoway/fix/TO-MOTHER.md`](../notes/fig11/fluid-ns-handover/twoway/fix/TO-MOTHER.md) | 13.2 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig11/fluid-ns-handover/twoway/fix/chrome_book.cjs`](../notes/fig11/fluid-ns-handover/twoway/fix/chrome_book.cjs) | 1.8 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig11/fluid-ns-handover/twoway/fix/chrome_cost.cjs`](../notes/fig11/fluid-ns-handover/twoway/fix/chrome_cost.cjs) | 1.6 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig11/fluid-ns-handover/twoway/fix/chrome_dbgbox.cjs`](../notes/fig11/fluid-ns-handover/twoway/fix/chrome_dbgbox.cjs) | 1.2 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig11/fluid-ns-handover/twoway/fix/chrome_err.cjs`](../notes/fig11/fluid-ns-handover/twoway/fix/chrome_err.cjs) | 510 B | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig11/fluid-ns-handover/twoway/fix/chrome_own.cjs`](../notes/fig11/fluid-ns-handover/twoway/fix/chrome_own.cjs) | 2.7 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig11/fluid-ns-handover/twoway/fix/chrome_shots.cjs`](../notes/fig11/fluid-ns-handover/twoway/fix/chrome_shots.cjs) | 2.5 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig11/fluid-ns-handover/twoway/fix/ext1.txt`](../notes/fig11/fluid-ns-handover/twoway/fix/ext1.txt) | 726 B | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig11/fluid-ns-handover/twoway/fix/long_glycerol.txt`](../notes/fig11/fluid-ns-handover/twoway/fix/long_glycerol.txt) | 821 B | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |

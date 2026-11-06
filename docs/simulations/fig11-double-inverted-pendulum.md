@@ -265,6 +265,36 @@ with a field \(\mathbf v_f(x, y, t)\) pushes every piece of the 2D bodies that m
   paragraph). Still left out: the rods' wakes and shed vortices; the bodies changing the flow; the water's surface. The page grew from 1477 to 1685
   lines; the line links in this doc, `docs/scripts/datalog.md` and `docs/scripts/walk.md` were remapped by content.
 
+**Your own field (6 November 2026).** Numa asked to impose a field of his own, written as a 2D function, with the arrows in red and
+black shades.
+- **Control.** The Flow menu has a group "Yours" with one entry, "your own field" ([84](../../public/simulations/double-inverted-pendulum.html#L84)). Choosing it shows two formula boxes
+  under the flow note ([92](../../public/simulations/double-inverted-pendulum.html#L92)), u = … and v = …, in metres per second; the variables are x (along the rail, 0 at the
+  rail's centre), y (up, 0 at the rail), t (s) and U (the Flow speed slider). The default is a swirl, u = −U(y − 0.6)e^−r²,
+  v = Ux e^−r², r² = x² + (y − 0.6)², which turns round the middle of the rods.
+- **Reading the formula.** The page's content security policy forbids `eval`, so `ownCompile` ([826](../../public/simulations/double-inverted-pendulum.html#L826)) is a small
+  recursive-descent parser (sum, product, sign, right-associative power, atom) that turns the text into nested closures. It knows
+  sin, cos, tan, asin, acos, atan, atan2, sinh, cosh, tanh, exp, log, ln, sqrt, abs, min, max, floor, ceil, sign, the names x y t U,
+  and pi and e; it accepts −, ×, · and π as typed on a phone. A formula that does not parse leaves the last good field running, marks
+  the box and says why in a fixed line under it ("a bracket is not closed", "unknown name “z”: use x, y, t, U, pi, e", …).
+  `ownAt` ([826](../../public/simulations/double-inverted-pendulum.html#L826)) returns 0 for a value that is not finite and counts it. `fieldV` reaches it through `case 'own'`
+  ([821](../../public/simulations/double-inverted-pendulum.html#L821)), so the rods, the cart, the work book and every check use the reader's field exactly as they use the built-in ones.
+- **Is it a flow?** A liquid cannot pile up or empty out of a point: its velocity must have ∇·v = 0. Each frame the page takes the
+  central difference (h = 10⁻⁴ m) of the field at every arrow and stores the largest |∇·v| as own_div and the largest velocity gradient
+  as own_grad ([1477](../../public/simulations/double-inverted-pendulum.html#L1477)); four times a second it writes under the boxes "∇·v is at most … 1/s on the arrow grid, where the
+  speed changes by up to … 1/s: a liquid could flow so" (when own_div ≤ 10⁻⁵ of own_grad) or "… no liquid flows so" (`ownVerdict`,
+  [770](../../public/simulations/double-inverted-pendulum.html#L770)). A uniform field gets its own sentence. The field still drives the rods either way: the drag law (33)–(34) only needs
+  the velocity at each point of the body. Measured: the swirl 3.6 × 10⁻⁹ 1/s (rounding of the central difference); u = Ux, v = Uy
+  gives 4.000 1/s = 2U at U = 2 m/s, as it must.
+- **Arrow colours.** All arrows, built-in flows included, now run from near-black (28, 22, 24) through the site's wine (122, 31, 43) at
+  0.75 of the reference speed to red (214, 43, 43) at 1.5 times it and above, opacity 0.85 (`arrowCol`, [1515](../../public/simulations/double-inverted-pendulum.html#L1515), used at
+  [1517](../../public/simulations/double-inverted-pendulum.html#L1517)); before they were one translucent blue. The reference speed is U for the built-in flows (at least 0.2 m/s; 0.2 m/s for the solved fluid) and, for your own field,
+  the fastest arrow on screen (at least 0.05 m/s), so a slow field still shows its shape.
+- **Store.** own_u and own_v (the text of the two formulas), own_div and own_grad in the group "Air and water"
+  ([1146](../../public/simulations/double-inverted-pendulum.html#L1146)); the 13.3 table has a row for the own field ([677](../../public/simulations/double-inverted-pendulum.html#L677)).
+- **Tested.** Headless Chromium, en/de/ar at 1100 and 390 px: the swirl, the source field, a typo, a uniform gust, the messages in
+  German and Arabic; 0 page errors, 0 KaTeX errors, 0 untranslated pieces, no sideways scroll; `hon.cjs` 5/5. Translations: 5 page
+  pieces and 14 script strings in each language.
+
 **Added mass and the push of an accelerating flow (5 November 2026, night).** Numa: yes to the full Morison picture. Lecture-note
 section 13.5 derives (38)–(40).
 - **Added mass (38).** Wolfram integrates the kinetic energy of potential flow round a moving cylinder, ½ρπa²U² per metre, so
