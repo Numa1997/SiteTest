@@ -265,6 +265,14 @@ with a field \(\mathbf v_f(x, y, t)\) pushes every piece of the 2D bodies that m
   paragraph). Still left out: the rods' wakes and shed vortices; the bodies changing the flow; the water's surface. The page grew from 1477 to 1685
   lines; the line links in this doc, `docs/scripts/datalog.md` and `docs/scripts/walk.md` were remapped by content.
 
+**The Vector field panel (6 November 2026, late).** Numa could not find the formula boxes: they hid until both menus were set, and the
+page starts in vacuum. The strip under the figure is now a panel titled *Vector field* ([76–92](../../public/simulations/double-inverted-pendulum.html#L76)):
+a row of five medium buttons shaded by density, with ρ in kg/m³ under each name; a row of chips, one per flow; and the field written as a
+column vector, v(x, y, t) = (u, v), with the two formula boxes always visible. The `#med` and `#flow` menus stay in the page, hidden, as the
+state and the carrier of the translations; the buttons and chips are built from them and only set them
+([770](../../public/simulations/double-inverted-pendulum.html#L770): `vfPick`, `vfSync`). Choosing a flow in vacuum fills the rig with water;
+clicking into a formula box chooses *your own field* (and *given*, if *solved* was on). The field arrows are 1.8 px wide (were 1.2).
+
 **Your own field (6 November 2026).** Numa asked to impose a field of his own, written as a 2D function, with the arrows in red and
 black shades.
 - **Control.** The Flow menu has a group "Yours" with one entry, "your own field" ([84](../../public/simulations/double-inverted-pendulum.html#L84)). Choosing it shows two formula boxes
