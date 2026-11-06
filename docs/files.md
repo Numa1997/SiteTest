@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-1262 files, 62.2 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+1264 files, 62.2 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -40,7 +40,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Agents of the lecture-note review](#agents-of-the-lecture-note-review) | 4 |
 | [Working notes of the Rotor Pendula study](#working-notes-of-the-rotor-pendula-study) | 86 |
 | [Working notes of the Droplet Collection study](#working-notes-of-the-droplet-collection-study) | 121 |
-| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 426 |
+| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 428 |
 
 ## Repository root
 
@@ -117,7 +117,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/simulations/Interactive Double-Slit Experiment Visualization.html`](../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html) | 178.4 kB | Fig. 3 · Double-Slit Interference: the simulation, its data panel, walkthrough and lecture note. | [fig03-double-slit.md](simulations/fig03-double-slit.md) |
 | [`public/simulations/Transverse and longitudinal waves.html`](../public/simulations/Transverse%20and%20longitudinal%20waves.html) | 209.2 kB | Fig. 4 · Transverse & Longitudinal: the simulation, its data panel, walkthrough and lecture note. | [fig04-transverse-longitudinal.md](simulations/fig04-transverse-longitudinal.md) |
 | [`public/simulations/beer-slosh.html`](../public/simulations/beer-slosh.html) | 288.4 kB | Fig. 12 · A Pint of Guinness on a One-Wheel Cart: the simulation, its data panel, walkthrough and lecture note. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
-| [`public/simulations/double-inverted-pendulum.html`](../public/simulations/double-inverted-pendulum.html) | 374.6 kB | Project 05 · Balancing Two Rods on a Cart (Fig. 11 from 3 to 4 November 2026): the real-time simulation, its walkthrough and lecture note (no data panel); listed on the Projects page, kept at this address so that its German and Arabic pages are generated with the simulations. | [fig11-double-inverted-pendulum.md](simulations/fig11-double-inverted-pendulum.md) |
+| [`public/simulations/double-inverted-pendulum.html`](../public/simulations/double-inverted-pendulum.html) | 377.7 kB | Project 05 · Balancing Two Rods on a Cart (Fig. 11 from 3 to 4 November 2026): the real-time simulation, its walkthrough and lecture note (no data panel); listed on the Projects page, kept at this address so that its German and Arabic pages are generated with the simulations. | [fig11-double-inverted-pendulum.md](simulations/fig11-double-inverted-pendulum.md) |
 | [`public/simulations/draw-decompose.html`](../public/simulations/draw-decompose.html) | 224.0 kB | Fig. 8 · Draw & Decompose: the simulation, its data panel, walkthrough and lecture note. | [fig08-draw-decompose.md](simulations/fig08-draw-decompose.md) |
 | [`public/simulations/driven-oscillator.html`](../public/simulations/driven-oscillator.html) | 342.6 kB | Fig. 9 · Driven Oscillator: the simulation, its data panel, walkthrough and lecture note. | [fig09-driven-oscillator.md](simulations/fig09-driven-oscillator.md) |
 | [`public/simulations/pendulum-control.html`](../public/simulations/pendulum-control.html) | 208.0 kB | Fig. 11 · Double Pendulum under Control: the simulation, its data panel, walkthrough and lecture note. | [fig11-pendulum-control.md](simulations/fig11-pendulum-control.md) |
@@ -1339,18 +1339,20 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/fig11/panel/mask.py`](../notes/fig11/panel/mask.py) | 1.4 kB | Project 05: an honesty test of the data panel (origin, replay, controller, picture, falsification, cost), or the masking and checked translations of its strings. | [README.md](../notes/fig11/panel/README.md) |
 | [`notes/fig11/panel/origin.cjs`](../notes/fig11/panel/origin.cjs) | 8.6 kB | Project 05: an honesty test of the data panel (origin, replay, controller, picture, falsification, cost), or the masking and checked translations of its strings. | [README.md](../notes/fig11/panel/README.md) |
 | [`notes/fig11/panel/readcart.cjs`](../notes/fig11/panel/readcart.cjs) | 1.5 kB | Project 05: an honesty test of the data panel (origin, replay, controller, picture, falsification, cost), or the masking and checked translations of its strings. | [README.md](../notes/fig11/panel/README.md) |
-| [`notes/fig11/panel/ref.cjs`](../notes/fig11/panel/ref.cjs) | 12.0 kB | Project 05: an honesty test of the data panel (origin, replay, controller, picture, falsification, cost), or the masking and checked translations of its strings. | [README.md](../notes/fig11/panel/README.md) |
+| [`notes/fig11/panel/ref.cjs`](../notes/fig11/panel/ref.cjs) | 13.3 kB | Project 05: an honesty test of the data panel (origin, replay, controller, picture, falsification, cost), or the masking and checked translations of its strings. | [README.md](../notes/fig11/panel/README.md) |
 | [`notes/fig11/panel/shots.cjs`](../notes/fig11/panel/shots.cjs) | 1.8 kB | Project 05: an honesty test of the data panel (origin, replay, controller, picture, falsification, cost), or the masking and checked translations of its strings. | [README.md](../notes/fig11/panel/README.md) |
 | [`notes/fig11/panel/view-cursor.txt`](../notes/fig11/panel/view-cursor.txt) | 1.2 kB | Project 05: raw output of an honesty test or behaviour test of the data panel, 5 November 2026. | [README.md](../notes/fig11/panel/README.md) |
 | [`notes/fig11/panel/view-honesty.txt`](../notes/fig11/panel/view-honesty.txt) | 12.4 kB | Project 05: raw output of an honesty test or behaviour test of the data panel, 5 November 2026. | [README.md](../notes/fig11/panel/README.md) |
 | [`notes/fig11/panel/view-origin.txt`](../notes/fig11/panel/view-origin.txt) | 3.2 kB | Project 05: raw output of an honesty test or behaviour test of the data panel, 5 November 2026. | [README.md](../notes/fig11/panel/README.md) |
 
-<details><summary>17 files: Fig. 11: a measuring script of the review, or its saved output.</summary>
+<details><summary>19 files: Fig. 11: a measuring script of the review, or its saved output.</summary>
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
 | [`notes/fig11/project05/README.md`](../notes/fig11/project05/README.md) | 3.0 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig11/project05/challenge.cjs`](../notes/fig11/project05/challenge.cjs) | 2.8 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig11/project05/cstar.cjs`](../notes/fig11/project05/cstar.cjs) | 928 B | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig11/project05/deepflows.cjs`](../notes/fig11/project05/deepflows.cjs) | 1.6 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig11/project05/flowlift.cjs`](../notes/fig11/project05/flowlift.cjs) | 2.0 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig11/project05/flowlift2.cjs`](../notes/fig11/project05/flowlift2.cjs) | 2.2 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig11/project05/hold.cjs`](../notes/fig11/project05/hold.cjs) | 1.5 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
