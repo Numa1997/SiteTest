@@ -295,16 +295,31 @@
         empty[c] = cnt[c] === 0 && xc * xc + yc * yc < Rc * Rc ? 1 : 0;
       }
     }
+    // "near": within two cells (in each index) of an empty cell, found by dilating the empty mask by 2 along x, then y,
+    // then z (the same set as testing the 5 x 5 x 5 block around each cell, at 15 reads per cell instead of 125)
+    const nearA = this.nearA || (this.nearA = new Uint8Array(nc)), nearB = this.nearB || (this.nearB = new Uint8Array(nc));
+    const dilate = (src, dst, axis) => {
+      const st = axis === 0 ? 1 : axis === 1 ? nx : nx * ny, n = axis === 0 ? nx : axis === 1 ? ny : nz;
+      for (let k = 0, c = 0; k < nz; k++) for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++, c++) {
+        const a = axis === 0 ? i : axis === 1 ? j : k, lo = a < 2 ? -a : -2, hi = a + 2 >= n ? n - 1 - a : 2;
+        let v = 0;
+        for (let d = lo; d <= hi; d++) if (src[c + d * st]) { v = 1; break; }
+        dst[c] = v;
+      }
+    };
+    dilate(empty, nearA, 0); dilate(nearA, nearB, 1); dilate(nearB, nearA, 2);
+    // a cell with no particle anywhere in its 5 x 5 x 5 block reads phi = 3 dx without a search (no particle, no image
+    // in reach): the air above the liquid, most of the near cells
+    const occ = this.occA || (this.occA = new Uint8Array(nc)), occB = this.occB || (this.occB = new Uint8Array(nc));
+    for (let c = 0; c < nc; c++) occ[c] = cnt[c] > 0 ? 1 : 0;
+    dilate(occ, occB, 0); dilate(occB, occ, 1); dilate(occ, occB, 2);
+    const fast = this.kernel === 2;
+    if (fast) this.levelSetParticles(Rk);
     for (let k = 0; k < nz; k++) for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) {
       const c = i + nx * (j + ny * k);
-      let near = false;
-      for (let kk = Math.max(0, k - 2); kk <= Math.min(nz - 1, k + 2) && !near; kk++)
-        for (let jj = Math.max(0, j - 2); jj <= Math.min(ny - 1, j + 2) && !near; jj++)
-          for (let ii = Math.max(0, i - 2); ii <= Math.min(nx - 1, i + 2); ii++) if (empty[ii + nx * (jj + ny * kk)]) { near = true; break; }
-      if (!near) { this.phi[c] = cnt[c] > 0 ? -2 * dx : 2 * dx; continue; }
-      const xc = this.x0 + (i + 0.5) * dx, yc = (j + 0.5) * dx, zc = (k + 0.5) * dx;
-      const ph = this.phiAt(xc, yc, zc, Rk, R2, r);
-      this.phi[c] = ph;
+      if (!nearA[c]) { this.phi[c] = cnt[c] > 0 ? -2 * dx : 2 * dx; continue; }
+      if (!fast) { this.phi[c] = this.phiAt(this.x0 + (i + 0.5) * dx, (j + 0.5) * dx, (k + 0.5) * dx, Rk, R2, r); continue; }
+      this.phi[c] = occB[c] ? this.phiCell(i, j, k, R2, r) : 3 * dx;
     }
     // Liquid cells: inside the level set, or holding particles (so that no particle is left without pressure). A cell
     // that holds particles but reads phi >= 0 gets phi = -0.05 dx. Measured: -0.5 dx here broke the slosh (4.3 Hz
@@ -401,6 +416,79 @@
     }
   };
 
+  // Per particle, once per step: its image in the wall (x, y scaled by fw = (2R - r)/r) and whether it has one (within the
+  // kernel radius of the wall, below the rim); per cell, whether any of its particles has a wall image. The same numbers
+  // phiAt computes for every pair, computed once.
+  Fluid.prototype.levelSetParticles = function (Rk) {
+    const np = this.np, nc = this.nc, px = this.px, py = this.py, pz = this.pz;
+    if (!this.imgF || this.imgF.length < np) { this.imgF = new Float64Array(this.px.length); this.imgN = new Uint8Array(this.px.length); }
+    const cellImg = this.cellImg || (this.cellImg = new Uint8Array(nc)); cellImg.fill(0);
+    const fwA = this.imgF, nA = this.imgN, pcell = this.pcell;
+    for (let p = 0; p < np; p++) {
+      const ppx = px[p], ppy = py[p], ppz = pz[p], rr = Math.sqrt(ppx * ppx + ppy * ppy);
+      const Rw = this.Rz(ppz), nImg = this.wallImages && ppz < this.zRim && rr > Rw - Rk ? 4 : 2;
+      fwA[p] = rr > 1e-9 ? (2 * Rw - rr) / rr : 0; nA[p] = nImg;
+      if (nImg === 4) cellImg[pcell[p]] = 1;
+    }
+    // the same numbers in cell order (sorted), so that the search below reads memory in sequence
+    const L = this.px.length;
+    if (!this.sX || this.sX.length < L) { this.sX = new Float64Array(L); this.sY = new Float64Array(L); this.sZ = new Float64Array(L); this.sF = new Float64Array(L); this.sN = new Uint8Array(L); }
+    const sorted = this.sorted, sX = this.sX, sY = this.sY, sZ = this.sZ, sF = this.sF, sN = this.sN;
+    for (let s = 0; s < np; s++) { const p = sorted[s]; sX[s] = px[p]; sY[s] = py[p]; sZ[s] = pz[p]; sF[s] = fwA[p]; sN[s] = nA[p]; }
+    // the cells of the 5 x 5 x 5 block around a cell centre that the kernel sphere (radius 2 dx) can reach: a cell is
+    // skipped when its nearest point is at least 2 dx away and none of its particles has a wall image (those can land
+    // anywhere near the wall). Same order as the full block, so the sums are added in the same order.
+    if (!this.blockOff) {
+      const off = [];
+      for (let dk = -2; dk <= 2; dk++) for (let dj = -2; dj <= 2; dj++) for (let di = -2; di <= 2; di++) {
+        const g = (d) => { const a = Math.abs(d); return a < 1 ? 0 : (a - 0.5) * (a - 0.5); };
+        off.push(di, dj, dk, g(di) + g(dj) + g(dk) < 4 ? 1 : 0);   // in units of dx^2; R_k^2 = 4 dx^2
+      }
+      this.blockOff = Int32Array.from(off);
+    }
+  };
+  // phi at the centre of cell (i, j, k): phiAt with the per-particle numbers of levelSetParticles (kernel radius 2 cells)
+  Fluid.prototype.phiCell = function (ic, jc, kc, R2, r) {
+    const nx = this.nx, ny = this.ny, nz = this.nz, dx = this.dx;
+    const x = this.x0 + (ic + 0.5) * dx, y = (jc + 0.5) * dx, z = (kc + 0.5) * dx;
+    const off = this.blockOff, cs = this.cellStart, sX = this.sX, sY = this.sY, sZ = this.sZ, sF = this.sF, sN = this.sN;
+    const cellImg = this.cellImg;
+    // mirror images lie at y <= 0, at least y = (j + 1/2) dx from this centre: out of reach (2 dx) from the third row on
+    const mirror = jc < 2;
+    let W = 0, sx = 0, sy = 0, sz = 0;
+    for (let o = 0; o < off.length; o += 4) {
+      const i = ic + off[o], j = jc + off[o + 1], k = kc + off[o + 2];
+      if (i < 0 || i >= nx || j < 0 || j >= ny || k < 0 || k >= nz) continue;
+      const c = i + nx * (j + ny * k), reach = off[o + 3];
+      if (!reach && !cellImg[c]) continue;
+      for (let s = cs[c], e = cs[c + 1]; s < e; s++) {
+        // the particle, its mirror image in y = 0, and, near the wall, its image in the wall and that image's mirror
+        // image, in that order (the order of the sums is the order of phiAt's)
+        const ppx = sX[s], ppy = sY[s], ppz = sZ[s], ddz = ppz - z, dz2 = ddz * ddz;
+        let ddx = ppx - x, ddy, d2;
+        if (reach) {
+          ddy = ppy - y; d2 = ddx * ddx + ddy * ddy + dz2;
+          if (d2 < R2) { const q = 1 - d2 / R2, wt = q * q * q; W += wt; sx += wt * ppx; sy += wt * ppy; sz += wt * ppz; }
+          if (mirror) {
+            ddy = -ppy - y; d2 = ddx * ddx + ddy * ddy + dz2;
+            if (d2 < R2) { const q = 1 - d2 / R2, wt = q * q * q; W += wt; sx += wt * ppx; sy += wt * -ppy; sz += wt * ppz; }
+          }
+        }
+        if (sN[s] === 4) {
+          const fw = sF[s], qx = ppx * fw, qy = ppy * fw;
+          ddx = qx - x; ddy = qy - y; d2 = ddx * ddx + ddy * ddy + dz2;
+          if (d2 < R2) { const q = 1 - d2 / R2, wt = q * q * q; W += wt; sx += wt * qx; sy += wt * qy; sz += wt * ppz; }
+          if (mirror) {
+            ddy = -qy - y; d2 = ddx * ddx + ddy * ddy + dz2;
+            if (d2 < R2) { const q = 1 - d2 / R2, wt = q * q * q; W += wt; sx += wt * qx; sy += wt * -qy; sz += wt * ppz; }
+          }
+        }
+      }
+    }
+    if (W < 1e-12) return 3 * dx;
+    const mx = sx / W - x, my = sy / W - y, mz = sz / W - z;
+    return Math.sqrt(mx * mx + my * my + mz * mz) - r;
+  };
   // phi(x) = |x - xbar| - r, xbar the kernel-weighted mean of nearby particles (mirror images included)
   Fluid.prototype.phiAt = function (x, y, z, Rk, R2, r) {
     const nx = this.nx, ny = this.ny, nz = this.nz, dx = this.dx;
@@ -541,36 +629,50 @@
       if (e < sigma * Ad[c]) e = Ad[c];
       pc[c] = e > 1e-30 ? 1 / Math.sqrt(e) : 0;
     }
-    // A x and the MIC(0) preconditioner, in nested loops (no division or modulo in the inner loop)
+    // The liquid cells in index order, each with its six "has a neighbour on this side" bits; every loop below runs over
+    // this list only (about 4 000 of the 9 000 cells at 4 mm). The arithmetic and its order are those of a loop over all
+    // cells that skips the air: the air entries of r, z, s and the work vector are zero and stay zero.
+    const L = this.cgList || (this.cgList = new Int32Array(nc)), B = this.cgBits || (this.cgBits = new Uint8Array(nc));
+    let nf = 0;
+    for (let k = 0, c = 0; k < nz; k++) for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++, c++) {
+      if (!fl[c]) continue;
+      L[nf] = c; B[nf] = (i > 0 ? 1 : 0) | (i + 1 < nx ? 2 : 0) | (j > 0 ? 4 : 0) | (j + 1 < ny ? 8 : 0) | (k > 0 ? 16 : 0) | (k + 1 < nz ? 32 : 0);
+      nf++;
+    }
+    const t = this.tmpPre || (this.tmpPre = new Float64Array(nc));
+    r.fill(0); z.fill(0); s.fill(0); t.fill(0);
+    // the products A_off * pc the triangular sweeps use, once per solve instead of once per sweep ((A pc) t is how the
+    // sweeps multiplied anyway, left to right)
+    const Px = this.cgPx || (this.cgPx = new Float64Array(nc)), Py = this.cgPy || (this.cgPy = new Float64Array(nc)), Pz = this.cgPz || (this.cgPz = new Float64Array(nc));
+    for (let c = 0; c < nc; c++) { Px[c] = Ax[c] * pc[c]; Py[c] = Ay[c] * pc[c]; Pz[c] = Az[c] * pc[c]; }
     const applyA = (x, out) => {
-      for (let k = 0, c = 0; k < nz; k++) for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++, c++) {
-        if (!fl[c]) { out[c] = 0; continue; }
+      for (let n = 0; n < nf; n++) {
+        const c = L[n], bb = B[n];
         let v = Ad[c] * x[c];
-        if (i + 1 < nx) v += Ax[c] * x[c + 1];
-        if (i > 0) v += Ax[c - 1] * x[c - 1];
-        if (j + 1 < ny) v += Ay[c] * x[c + nx];
-        if (j > 0) v += Ay[c - nx] * x[c - nx];
-        if (k + 1 < nz) v += Az[c] * x[c + nxy];
-        if (k > 0) v += Az[c - nxy] * x[c - nxy];
+        if (bb & 2) v += Ax[c] * x[c + 1];
+        if (bb & 1) v += Ax[c - 1] * x[c - 1];
+        if (bb & 8) v += Ay[c] * x[c + nx];
+        if (bb & 4) v += Ay[c - nx] * x[c - nx];
+        if (bb & 32) v += Az[c] * x[c + nxy];
+        if (bb & 16) v += Az[c - nxy] * x[c - nxy];
         out[c] = v;
       }
     };
     const precond = (rr, out) => {
-      const t = this.tmpPre || (this.tmpPre = new Float64Array(nc));
-      for (let k = 0, c = 0; k < nz; k++) for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++, c++) {
-        if (!fl[c]) { t[c] = 0; continue; }
+      for (let n = 0; n < nf; n++) {
+        const c = L[n], bb = B[n];
         let v = rr[c];
-        if (i > 0) v -= Ax[c - 1] * pc[c - 1] * t[c - 1];
-        if (j > 0) v -= Ay[c - nx] * pc[c - nx] * t[c - nx];
-        if (k > 0) v -= Az[c - nxy] * pc[c - nxy] * t[c - nxy];
+        if (bb & 1) v -= Px[c - 1] * t[c - 1];
+        if (bb & 4) v -= Py[c - nx] * t[c - nx];
+        if (bb & 16) v -= Pz[c - nxy] * t[c - nxy];
         t[c] = v * pc[c];
       }
-      for (let k = nz - 1, c = nc - 1; k >= 0; k--) for (let j = ny - 1; j >= 0; j--) for (let i = nx - 1; i >= 0; i--, c--) {
-        if (!fl[c]) { out[c] = 0; continue; }
+      for (let n = nf - 1; n >= 0; n--) {
+        const c = L[n], bb = B[n];
         let v = t[c];
-        if (i + 1 < nx) v -= Ax[c] * pc[c] * out[c + 1];
-        if (j + 1 < ny) v -= Ay[c] * pc[c] * out[c + nx];
-        if (k + 1 < nz) v -= Az[c] * pc[c] * out[c + nxy];
+        if (bb & 2) v -= Px[c] * out[c + 1];
+        if (bb & 8) v -= Py[c] * out[c + nx];
+        if (bb & 32) v -= Pz[c] * out[c + nxy];
         out[c] = v * pc[c];
       }
     };
@@ -578,23 +680,23 @@
     let bmax = 0; for (let c = 0; c < nc; c++) { if (!fl[c]) q[c] = 0; if (Math.abs(b[c]) > bmax) bmax = Math.abs(b[c]); }
     if (bmax < 1e-14) { q.fill(0); this.cgIters = 0; return; }
     applyA(q, r);
-    let rmax = 0; for (let c = 0; c < nc; c++) { r[c] = fl[c] ? b[c] - r[c] : 0; if (Math.abs(r[c]) > rmax) rmax = Math.abs(r[c]); }
+    let rmax = 0; for (let n = 0; n < nf; n++) { const c = L[n]; r[c] = b[c] - r[c]; if (Math.abs(r[c]) > rmax) rmax = Math.abs(r[c]); }
     const tol = 1e-7 * bmax;
     if (rmax < tol) { this.cgIters = 0; return; }
     precond(r, z); s.set(z);
-    let sigmaR = 0; for (let c = 0; c < nc; c++) sigmaR += z[c] * r[c];
+    let sigmaR = 0; for (let n = 0; n < nf; n++) { const c = L[n]; sigmaR += z[c] * r[c]; }
     let it = 0;
     for (; it < 300; it++) {
       applyA(s, z);
-      let sz = 0; for (let c = 0; c < nc; c++) sz += s[c] * z[c];
+      let sz = 0; for (let n = 0; n < nf; n++) { const c = L[n]; sz += s[c] * z[c]; }
       const alpha = sigmaR / sz;
       rmax = 0;
-      for (let c = 0; c < nc; c++) { q[c] += alpha * s[c]; r[c] -= alpha * z[c]; if (Math.abs(r[c]) > rmax) rmax = Math.abs(r[c]); }
+      for (let n = 0; n < nf; n++) { const c = L[n]; q[c] += alpha * s[c]; r[c] -= alpha * z[c]; if (Math.abs(r[c]) > rmax) rmax = Math.abs(r[c]); }
       if (rmax < tol) break;
       precond(r, z);
-      let sn = 0; for (let c = 0; c < nc; c++) sn += z[c] * r[c];
+      let sn = 0; for (let n = 0; n < nf; n++) { const c = L[n]; sn += z[c] * r[c]; }
       const beta = sn / sigmaR; sigmaR = sn;
-      for (let c = 0; c < nc; c++) s[c] = z[c] + beta * s[c];
+      for (let n = 0; n < nf; n++) { const c = L[n]; s[c] = z[c] + beta * s[c]; }
     }
     this.cgIters = it + 1; this.cgResidual = rmax;
   };
@@ -626,14 +728,38 @@
     }
   };
 
+  // Second-order Runge–Kutta (midpoint) through the grid velocity. The three components are sampled by one closure each,
+  // made once per step with the grid's numbers bound (the same arithmetic as Fluid.sample, without its dispatch).
+  function sampler(a, sx, sy, sz, ox, oy, oz, x0, dx) {
+    const sxy = sx * sy, inv = 1 / dx;
+    return function (x, y, z) {
+      const fx = (x - x0) / dx - ox, fy = y / dx - oy, fz = z / dx - oz;
+      const i = Math.floor(fx), j = Math.floor(fy), k = Math.floor(fz), tx = fx - i, ty = fy - j, tz = fz - k;
+      const i0 = i < 0 ? 0 : i >= sx ? sx - 1 : i, i1 = i + 1 < 0 ? 0 : i + 1 >= sx ? sx - 1 : i + 1;
+      const j0 = j < 0 ? 0 : j >= sy ? sy - 1 : j, j1 = j + 1 < 0 ? 0 : j + 1 >= sy ? sy - 1 : j + 1;
+      const k0 = k < 0 ? 0 : k >= sz ? sz - 1 : k, k1 = k + 1 < 0 ? 0 : k + 1 >= sz ? sz - 1 : k + 1;
+      const b00 = j0 * sx + k0 * sxy, b10 = j1 * sx + k0 * sxy, b01 = j0 * sx + k1 * sxy, b11 = j1 * sx + k1 * sxy;
+      const c00 = a[i0 + b00] + tx * (a[i1 + b00] - a[i0 + b00]), c10 = a[i0 + b10] + tx * (a[i1 + b10] - a[i0 + b10]);
+      const c01 = a[i0 + b01] + tx * (a[i1 + b01] - a[i0 + b01]), c11 = a[i0 + b11] + tx * (a[i1 + b11] - a[i0 + b11]);
+      const d0 = c00 + ty * (c10 - c00), d1 = c01 + ty * (c11 - c01);
+      return d0 + tz * (d1 - d0);
+    };
+  }
   Fluid.prototype.advect = function (dt) {
-    for (let p = 0; p < this.np; p++) {
-      let x = this.px[p], y = this.py[p], z = this.pz[p];
-      const u1 = this.sample(0, x, y, z), v1 = this.sample(1, x, y, z), w1 = this.sample(2, x, y, z);
-      const xm = x + 0.5 * dt * u1, ym = Math.abs(y + 0.5 * dt * v1), zm = z + 0.5 * dt * w1;
-      x += dt * this.sample(0, xm, ym, zm); y += dt * this.sample(1, xm, ym, zm); z += dt * this.sample(2, xm, ym, zm);
-      if (y < 0) { y = -y; this.pv[p] = -this.pv[p]; }           // mirror plane
-      this.px[p] = x; this.py[p] = y; this.pz[p] = z;
+    const nx = this.nx, ny = this.ny, nz = this.nz, x0 = this.x0, dx = this.dx;
+    if (!this.sU) {
+      this.sU = sampler(this.u, nx + 1, ny, nz, 0, 0.5, 0.5, x0, dx);
+      this.sV = sampler(this.v, nx, ny + 1, nz, 0.5, 0, 0.5, x0, dx);
+      this.sW = sampler(this.w, nx, ny, nz + 1, 0.5, 0.5, 0, x0, dx);
+    }
+    const sU = this.sU, sV = this.sV, sW = this.sW, px = this.px, py = this.py, pz = this.pz, pv = this.pv, h = 0.5 * dt;
+    for (let p = 0, np = this.np; p < np; p++) {
+      let x = px[p], y = py[p], z = pz[p];
+      const u1 = sU(x, y, z), v1 = sV(x, y, z), w1 = sW(x, y, z);
+      const xm = x + h * u1, ym = Math.abs(y + h * v1), zm = z + h * w1;
+      x += dt * sU(xm, ym, zm); y += dt * sV(xm, ym, zm); z += dt * sW(xm, ym, zm);
+      if (y < 0) { y = -y; pv[p] = -pv[p]; }           // mirror plane
+      px[p] = x; py[p] = y; pz[p] = z;
     }
     this.collide();
   };

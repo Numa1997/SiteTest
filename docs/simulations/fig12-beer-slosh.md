@@ -12,7 +12,8 @@ glass's frame, in the measured shape of the glass, open at the top: stout that r
 on the body or the road. The cart follows Newton's laws with a DC gear motor on a current-controlled drive, a PI speed loop
 (or open loop), an optional skyhook active suspension, and the reader's push (buttons, ← →) or hand (drag the cart). The two
 are coupled both ways. Grid 4 mm (default, faster) or 3 mm (`?grid=3`, closer). The caption shows the seconds simulated per
-second (measured in headless Chromium on the build machine: 0.15–0.18 at 4 mm).
+second (measured in headless Chromium on the build machine, 4 mm: 0.24, up from 0.17 before the speed-up of 6 November 2026;
+see "Speed").
 
 ## Files
 
@@ -24,6 +25,8 @@ second (measured in headless Chromium on the build machine: 0.15–0.18 at 4 mm)
 | `public/scripts/stout-view.js` | the drawing (canvas 2D); reads the solver's state and computes nothing physical |
 | `tools/fig12/glass_profile.py`, `irish-imperial-pint.svg`, `glass_profile.json` | the glass measured from dimensions.com's section and scaled to 160 × 85 mm |
 | `tools/fig12/check.cjs` | offline checks: `node tools/fig12/check.cjs rest|tilt|cyltilt|cylfreq|freq|spill [dx] [steps/s]` |
+| `tools/fig12/profile.cjs` | time of one fluid step by phase: `node tools/fig12/profile.cjs [dx] [steps]` |
+| `tools/fig12/same.cjs` | fingerprint of the state after 1 s with a push (SHA-256 of particles, φ, pressure): a speed-up must not change it |
 | `notes/fig12/test.cjs` | browser test (desktop, phone): run, push with and without the speed loop, drag, no errors, no sideways scroll |
 | `notes/fig12/panel-test.cjs`, `panel-test2.cjs`, `spill-test.cjs` | data panel: every check and read-back; on a bump at three widths, Read values, a round, Save, idle; while spilling |
 | `notes/fig12/clip.html`, `clip.cjs` | renders a clip of the run (PNG frames, MP4) |
@@ -74,6 +77,34 @@ particles counts as liquid with φ ≥ −0.05 dx. Pressure by PCG with MIC(0), 
 - Wall images need the test `z < z_rim`, not `R < R_box` (the cylinder lost them: 3.12 Hz instead of 3.39).
 - A level-set extension into wall cells (constant or linear) and a particle-density volume correction were tried and rejected:
   both broke the free swing (measured); the volume correction exists, off (`volumeCorrection: 0`).
+
+## Speed (measured 6 November 2026)
+
+One fluid step at 4 mm (25 649 particles, 9 000 cells), Node on the build machine, `profile.cjs`, 200 steps, three runs
+alternating old and new code: 24.7–26.1 ms before, 17.5–20.2 ms after. In headless Chromium (`World.advance` timed on the
+running page, 10 s): 26.7 → 19.0 ms per step, 0.171 → 0.237 s simulated per s; drawing takes 1.6 ms a frame, the solver 90 % of
+the time. After: level set ≈ 4.6 ms, pressure ≈ 4.4 ms (33 CG iterations), advection and wall ≈ 4.9 ms, transfers ≈ 4.2 ms.
+
+The changes compute the same numbers in the same order: `same.cjs` prints `sha256 7747da757ea9d800` (np 21 948, 3 718 spilled,
+6 462 CG iterations over 200 steps) before and after; at 3 mm, `node tools/fig12/same.cjs 0.003`, `c1469868437cbd69` (np 52 464,
+8 943 spilled, 7 411 CG iterations) before and after. Browser tests after: `test.cjs`, `spill-test.cjs`, `panel-test2.cjs`
+(123 checks, none differ; no errors).
+
+- Level set: the "near an empty cell" test and a new "particle within reach" test are 2-cell dilations of masks, done axis by axis
+  (15 reads a cell instead of 125). A cell with no particle in its 5 × 5 × 5 block gets φ = 3 dx without a search: that is what the
+  search returned there. Each particle's wall image (factor (2R − r)/r) and whether it has one are computed once per step
+  (`levelSetParticles`), not once per pair. The particles are copied in cell order so the search reads memory in sequence. Cells
+  of the block whose nearest point is 2 dx or more away are skipped unless one of their particles has a wall image; mirror images
+  are skipped from the third row (y ≥ 2.5 dx) on. All of these drop only terms that fail the test d² < R_k².
+  (`phiCell`; `phiAt` is the plain version, used when `kernel` is not 2.)
+- Pressure: the conjugate gradient loops run over a list of the liquid cells (about 4 000 of 9 000), with each cell's
+  six neighbour bits; the products A·pc of the MIC(0) sweeps are formed once per solve.
+- Advection: one sampling closure per velocity component (same formula as `Fluid.sample`, without its dispatch).
+- Tried and dropped: one pass over the particles for all three components in the transfers (slower, 2.7 against 2.2 ms).
+
+What would go further: the page is limited by one processor core. Splitting the particle and cell loops over Web Workers needs
+shared memory, which browsers allow only on a page served with `Cross-Origin-Embedder-Policy` (the site already sends
+`Cross-Origin-Opener-Policy: same-origin`, and the page loads nothing from other origins).
 
 ## Checks (measured)
 
