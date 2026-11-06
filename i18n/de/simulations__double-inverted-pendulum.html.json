@@ -595,6 +595,10 @@
   "src": "Potential flow gives the same added mass exactly. For the cart's section moving along its length a panel method gives, per unit density and depth,",
   "tr": "Die Potentialströmung ergibt dieselbe hydrodynamische Masse exakt. Für den Querschnitt des Wagens, der sich längs bewegt, ergibt ein Panelverfahren pro Einheit von Dichte und Tiefe"
  },
+ "411cdf15cae3": {
+  "src": "Vector field",
+  "tr": "Vektorfeld"
+ },
  "421371c4230e": {
   "src": "Each result below was computed with this page’s equations, RK4 at 1 ms, from the start \\(\\theta_1 = 2°\\), \\(\\theta_2 = -1°\\) unless said otherwise.",
   "tr": "Jedes Ergebnis unten wurde mit den Gleichungen dieser Seite berechnet, RK4 mit 1 ms, vom Start \\(\\theta_1 = 2°\\), \\(\\theta_2 = -1°\\) aus, sofern nicht anders gesagt."
@@ -1186,6 +1190,10 @@
  "93e6d34aa18d": {
   "src": "<b>The masses.</b> A heavier cart recoils less, so the rods fall closer to the rate of a fixed hinge. A heavier upper rod loads the lower one and changes which way the controller must play them. Watch the fall rates in the panel as you move each slider.",
   "tr": "<b>Die Massen.</b> Ein schwererer Wagen weicht weniger zurück, also fallen die Stangen näher an der Rate eines festen Gelenks. Eine schwerere obere Stange belastet die untere und ändert, in welche Richtung der Regler sie ausspielen muss. Beobachten Sie die Fallraten im Bedienfeld, während Sie jeden Schieberegler bewegen."
+ },
+ "93eed5b94bc5": {
+  "src": "Vector field <span class=\"panel__label\">Air and water · section 13</span>",
+  "tr": "Vektorfeld <span class=\"panel__label\">Luft und Wasser · Abschnitt 13</span>"
  },
  "93efffbe72d1": {
   "src": "A swell: Airy waves 20 m long over 6.7 m of water; each bit of water runs round an ellipse, U at the surface, less deeper down.",
