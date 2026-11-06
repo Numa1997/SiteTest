@@ -21,6 +21,10 @@ speed-up of 6 November 2026; see "Speed").
 |---|---|
 | `public/simulations/beer-slosh.html` | the page: figure, controls, readouts, lecture note, store and data panel; the run loop (`Sim.clock`, 28 ms of solving per frame) |
 | `public/scripts/stout-cart.js` | the solver: `Fluid` (APIC on a MAC grid, wall R(z), spillage), `Road`, `Cart` (motor, controller, suspension, hand), `World` (coupling, drops). Runs in the browser and in Node |
+| `public/scripts/stout-nm.js` | the nonlinear live model's coefficients (Narimanov–Moiseev five-mode equations, h/R = 3.197), written by `tools/fig12/nm_coeffs.py`; do not edit |
+| `tools/fig12/nm_coeffs.py` | derives those coefficients from FLT 2016 eqs. (2.12)–(2.14) through the Lagrangian T − V and the Narimanov–Moiseev ordering; checks FLT Table 1; `python3 tools/fig12/nm_coeffs.py [h ...]` (≈ 1 min per depth) |
+| `tools/fig12/swirl.cjs` | shakes the nonlinear live model near resonance: does it swirl? `node tools/fig12/swirl.cjs [A] [f/f11,...] [T]` |
+| `notes/fig12/swirl-shots.cjs` | screenshots of the live model swirling (1280, 390 px) |
 | `public/scripts/guinness-glass.js` | the glass's inner radius every 0.5 mm, written by `tools/fig12/glass_profile.py`; do not edit |
 | `public/scripts/stout-view.js` | the drawing (canvas 2D) through a pinhole camera (22° down, turned 18° to the front, 2.2 m away) that rides with the cart; the surface as a bicubic Catmull–Rom spline through the column heights (16 × 64 polar points; beyond R(h) − 3.5 Δx extended over a 3.5 Δx baseline: the drawn edge at rest varies by 2.1 mm instead of 5.3 mm; the lean readout and `eta_front`, `eta_back`, `dw` stay the solver's `columnHeightAt`), lit by one light; the stout's colour by Beer–Lambert across the glass (a drawing constant); drops as 8 ms streaks. Reads the solver's state and computes nothing physical; writes the camera's constants and the drawn points into the store, and the page's checks recompute every point from them (`proj`, `hDraw` in the page) |
 | `tools/fig12/glass_profile.py`, `irish-imperial-pint.svg`, `glass_profile.json` | the glass measured from dimensions.com's section and scaled to 160 × 85 mm |
@@ -298,3 +302,27 @@ stout's state directly; both models are controlled the same way.
 - **Part 2 started**: `tools/fig12/nm_coeffs.py` derives Lukovsky's five-mode Narimanov–Moiseev equations (FLT 2016 eq. 2.23)
   from FLT's integrals (2.12)–(2.14) via the Lagrangian T − V; it reproduces FLT Table 1 at h = 1, Ir = 1 (d1 = 1.758023,
   d2 = −1.083355); for the glass, h/R = 3.197: d1 = 1.563298, d2 = −1.210550 (`notes/fig12/runs/nm_coeffs.txt`).
+
+## Part 2: the nonlinear live model (7 November 2026)
+
+`NMFluid` in `stout-cart.js` (the page's live model since part 2; `ModalFluid` stays for `linearity.cjs modal` and
+`control.cjs modal`): Lukovsky's five-mode Narimanov–Moiseev system (FLT 2016 eqs. 2.17–2.18 with Ir = 1 = eq. 2.23) for
+(p0, p1, r1, p2, r2) of the cylinder of the surface radius, over the whole glass, plus the linear m = 1 modes n = 2, 3. The
+coefficients were derived here (`tools/fig12/nm_coeffs.py`), because FLT's supplementary material with the formulas could not be
+reached; they reproduce FLT Table 1 (h = 1, Ir = 1) to every printed digit: d1 = 1.758023, d2 = −1.083355. For the glass
+(h/R = 3.197): d1 = 1.5633, d2 = −1.2106, σ1² = 1.8412. Each 0.5 ms substep solves a 5 × 5 linear system for the accelerations;
+symplectic Euler; heave as σ² → σ²(1 + a_z/g); damping 2ζσβ̇; swirl seed r1 = 1e−5 R. Surface (N1) over a full-disc column grid
+(`y0`); pour by the weir law at each angle of the wall, the crest's volume shrunk by what poured. Push on the cart: the m = 1
+modes along the road (unchanged formula); the swirl's sideways push and the second-order vertical push are not passed on.
+
+- **Softening against the 3D solver** (`linearity.cjs nm`, `linfit.cjs`): free swing 3.418 → 3.258 Hz (−4.7 %) from 3.8 to
+  34.7 mm; 3D 3.202 → 3.056 Hz (−4.5 %); linear modes constant. Peak leans within 12 % of the 3D at every amplitude. 25 mm bump,
+  open loop: lean 50.8 mm (3D 60.7, linear 73.9), spilled 16.1 g (3D 11.9, linear 9.9).
+- **Swirl** (`swirl.cjs 0.3 0.97,1.0,1.03,1.06 20`, `notes/fig12/runs/swirl-nm.txt`): at 0.97 and 1.00 f11 the sideways swing
+  grows from the seed to 18–20 mm in 12–15 s; at 1.03 and 1.06 it stays planar for 20 s. Whether the ranges match FLT's steady
+  state (stable swirl just above f11) is not established.
+- **Controllers on it** (`control.cjs nm`, `notes/fig12/runs/control-nm.txt`): 25 mm bump, slosh feedback 1.7 mm lean; switched on
+  while swinging, ζ = 0.45.
+- **Page**: store adds s1, ṡ1, c0, c2, s2; `Q_wall` is now the highest rise at the wall over 72 angles; checks recompute every
+  column height, the drawn surface, the probes and the wall maximum from the stored wall heights (`panel-test2.cjs`: 213 checks,
+  none differ, read-backs true at 1600, 1100, 390 px). Note §11.9 ★, equations (N1)–(N5), Table 5, source [17].

@@ -1,17 +1,17 @@
-// Where the linear modes fail, measured from rest: node tools/fig12/linearity.cjs [model 3d|modal] [A1,A2,...] [Tp s] [T s]
+// Where the linear modes fail, measured from rest: node tools/fig12/linearity.cjs [model 3d|modal|nm] [A1,A2,...] [Tp s] [T s]
 // The glass is at rest at t = 0; it is given one half-sine acceleration pulse a_x(t) = A sin(pi t / Tp) for t < Tp (a hard
 // forward start: speed gain 2 A Tp / pi), and nothing after. Both models get exactly this a_x(t) (no cart, no coupling).
 // Printed per amplitude: the largest lean (front − back wall height at r = R(h)), lean / A (constant if the response is
 // linear), the free swing's frequency after the pulse (from zero crossings of the lean, t > Tp + 0.1 s), and the spill.
 const fs = require('fs'), path = require('path');
 const load = (f) => { const m = { exports: {} }; new Function('module', fs.readFileSync(path.join(__dirname, '../../public/scripts', f), 'utf8'))(m); return m.exports; };
-const { Fluid, ModalFluid } = load('stout-cart.js'), G = load('guinness-glass.js');
+const { Fluid, ModalFluid, NMFluid } = load('stout-cart.js'), G = load('guinness-glass.js'), NM = load('stout-nm.js');
 const model = process.argv[2] || 'modal', amps = (process.argv[3] || '0.5,1,2,4,6').split(',').map(Number);
 const Tp = +(process.argv[4] || 0.3), T = +(process.argv[5] || 2.0), dt = 1 / 200;
 const out = [];
 for (const A of amps) {
   const o = { dx: 0.004, profile: G, h0: 0.125, H: (G.R.length - 1) * G.dz + 0.03 };
-  const f = model === '3d' ? new Fluid(o) : new ModalFluid(o);
+  const f = model === '3d' ? new Fluid(o) : model === 'nm' ? new NMFluid(Object.assign({ nmCoeffs: NM }, o)) : new ModalFluid(o);
   const Rs = f.Rz(Math.min(f.h0, f.zRim)), t0 = Date.now();
   let lean = 0, tl = 0, prev = null, cross = [];
   const series = [];

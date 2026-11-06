@@ -1180,6 +1180,151 @@
   };
   function h_over(f, Q) { return f.h + Math.abs(Q) - f.zRim; }
 
+  /* ---------------------------------------------------- nonlinear modal fluid */
+  // The stout as the Narimanov–Moiseev five-mode system of an upright circular cylinder of the surface's radius R(h)
+  // (Faltinsen, Lukovsky & Timokha, JFM 804 (2016), eqs. 2.17–2.18 with Ir = 1, which is Lukovsky's eq. 2.23; lecture note
+  // §14.4), over the whole glass, so it can swirl. Coordinates beta = (p0, p1, r1, p2, r2), lengths in units of R, time in
+  // sqrt(R/g): the surface is
+  //     eta = h + R [ R01 p0 + R11 (p1 cos th + r1 sin th) + R21 (p2 cos 2th + r2 sin 2th) ],   R_Mi(rho) = alpha_M J_M(k_M rho),
+  // plus the m = 1 modes n = 2, 3 of the linear live model (q[1], q[2]), which carry the wall's finer shape. The equations'
+  // coefficients come from tools/fig12/nm_coeffs.py (scripts/stout-nm.js), which derives them from FLT's integrals and
+  // reproduces their Table 1. The equations are linear in the accelerations: each substep solves a 5 x 5 system for them,
+  // then symplectic Euler. Heave scales gravity, sigma^2 -> sigma^2 (1 + a_z/g). Linear damping 2 zeta sigma beta' per mode
+  // (zeta of mode 1 from the wall's boundary layer, as in ModalFluid; the others scaled by (sigma_1/sigma)^1/2). A swirl is a
+  // broken left–right symmetry; a real glass always has a little asymmetry, so r1 starts at 1e-5 R (0.4 um), the seed.
+  const NMNAMES = ['p0', 'p1', 'r1', 'p2', 'r2'];
+  function Jm(m, x) { let t = Math.pow(x / 2, m); for (let k = 1; k <= m; k++) t /= k; let s = 0; for (let k = 0; k < 80; k++) { s += t; t *= -(x * x / 4) / ((k + 1) * (k + 1 + m)); if (Math.abs(t) < 1e-17) break; } return s; }
+  function NMFluid(o) {
+    o = o || {};
+    ModalFluid.call(this, o);
+    const C = o.nmCoeffs || (typeof STOUT_NM !== 'undefined' ? STOUT_NM : (typeof require === 'function' ? require('./stout-nm.js') : null));
+    if (!C) throw new Error('NMFluid needs scripts/stout-nm.js');
+    this.nm = true; this.C = C;
+    this.k = [C.k['0'], C.k['1'], C.k['2']]; this.Rw = [C.R0, C.R1, C.R2];            // R_M1(1): the mode's height at the wall
+    this.alpha = [0, 1, 2].map((m) => this.Rw[m] / Jm(m, this.k[m]));
+    this.sig2 = NMNAMES.map((n) => C.sigma2[n]);
+    const z1 = this.zeta[0];
+    this.zetaNM = this.sig2.map((s2) => z1 * Math.sqrt(Math.sqrt(this.sig2[1] / s2)));
+    // the equations: [coef, index of the acceleration it multiplies or -1, factors [[var, power]...], isLinear, isForce]
+    const vars = {}; NMNAMES.forEach((n, i) => { vars[n] = i; vars[n + 'd'] = 5 + i; vars[n + 'dd'] = 10 + i; });
+    this.eqs = NMNAMES.map((n) => C.eqs[n].map(([c, mon]) => {
+      let dd = -1, force = false; const fac = [];
+      for (const tok of mon.replace(/\*\*/g, '^').split('*')) {
+        const [v, pw] = tok.split('^'); if (v === 'a_x') { force = true; continue; }
+        const id = vars[v]; if (id >= 10) dd = id - 10; else fac.push([id, pw ? +pw : 1]);
+      }
+      return [c, dd, fac, mon === n, force];
+    }));
+    this.b = new Float64Array(5); this.bd = new Float64Array(5);
+    this.b[2] = o.swirlSeed != null ? o.swirlSeed : 1e-5;
+    // the whole glass: columns over -R..R in y (the half-glass grid of the 3D solver cannot hold a swirl)
+    this.ny = 2 * Math.ceil(this.R / this.dx); this.y0 = -(this.ny / 2) * this.dx;
+    this.colH = new Float64Array(this.nx * this.ny);
+    this.ax2 = 0; this.tauScale = Math.sqrt(this.g / this.Rs);
+    this.syncQ();
+  }
+  NMFluid.prototype = Object.create(ModalFluid.prototype);
+  NMFluid.prototype.constructor = NMFluid;
+  // wall heights in metres: q[0] = R R11(1) p1 (the swing at theta = 0, as in ModalFluid), s1 = R R11(1) r1 (the swing at
+  // theta = pi/2: the swirl's part), c0 = R R01(1) p0, c2 = R R21(1) p2, s2 = R R21(1) r2
+  NMFluid.prototype.syncQ = function () {
+    const R = this.Rs, ts = Math.sqrt(this.g / R), W = this.Rw;
+    this.q[0] = R * W[1] * this.b[1]; this.qd[0] = R * W[1] * this.bd[1] * ts;
+    this.s1 = R * W[1] * this.b[2]; this.s1d = R * W[1] * this.bd[2] * ts;
+    this.c0 = R * W[0] * this.b[0]; this.c2 = R * W[2] * this.b[3]; this.s2 = R * W[2] * this.b[4];
+  };
+  NMFluid.prototype.shape = function (m, rho) { return this.alpha[m] * Jm(m, this.k[m] * rho); };
+  NMFluid.prototype.heightAt = function (x, y) {
+    const r = Math.hypot(x, y), Rs = this.Rs, rho = Math.min(r, Rs) / Rs, th = Math.atan2(y, x), b = this.b;
+    let e = this.shape(0, rho) * b[0] + this.shape(1, rho) * (b[1] * Math.cos(th) + b[2] * Math.sin(th)) + this.shape(2, rho) * (b[3] * Math.cos(2 * th) + b[4] * Math.sin(2 * th));
+    e *= Rs;
+    for (let n = 1; n < this.N; n++) e += this.q[n] * J1(XI[n] * rho) / this.J1xi[n] * Math.cos(th);
+    return this.h + e;
+  };
+  NMFluid.prototype.columnHeightAt = NMFluid.prototype.heightAt;
+  NMFluid.prototype.columnHeights = function () {
+    const nx = this.nx, ny = this.ny, dx = this.dx, H = this.colH;
+    for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) H[i + nx * j] = this.heightAt(this.x0 + (i + 0.5) * dx, this.y0 + (j + 0.5) * dx);
+    return H;
+  };
+  // the height of the stout at the wall at angle th, above the floor
+  NMFluid.prototype.wallAt = function (th) {
+    const b = this.b, W = this.Rw; let e = this.Rs * (W[0] * b[0] + W[1] * (b[1] * Math.cos(th) + b[2] * Math.sin(th)) + W[2] * (b[3] * Math.cos(2 * th) + b[4] * Math.sin(2 * th)));
+    for (let n = 1; n < this.N; n++) e += this.q[n] * Math.cos(th);
+    return this.h + e;
+  };
+  NMFluid.prototype.wallLift = function () { let m = 0; for (let k = 0; k < 72; k++) m = Math.max(m, this.wallAt(2 * Math.PI * k / 72) - this.h); return m; };
+  // relative momentum along the road: rho d/dt int int x zeta dA, exact for a single-valued surface; only the m = 1 modes
+  // contribute, rho pi R^3 / xi_n^2 times the rate of each wall height (note, eq. 18), as in ModalFluid. Across (P_y, from s1)
+  // it is kept for the store; the cart has no sideways motion. The vertical part, rho d/dt int int zeta^2/2 dA, is of second
+  // order in the swing and is not handed to the cart (as in the linear model).
+  NMFluid.prototype.momentum = function () { this.Py = this.Pc[0] * this.s1d; return ModalFluid.prototype.momentum.call(this); };
+  // the accelerations of the five coordinates at the present state, forcing ax, az (m/s^2): solves the 5 x 5 system
+  NMFluid.prototype.accel = function (ax, az, out) {
+    const st = new Float64Array(15); for (let i = 0; i < 5; i++) { st[i] = this.b[i]; st[5 + i] = this.bd[i]; }
+    const A = [[], [], [], [], []], rhs = [0, 0, 0, 0, 0], gf = 1 + az / this.g, axn = ax / this.g;
+    for (let i = 0; i < 5; i++) {
+      for (let j = 0; j < 5; j++) A[i][j] = 0;
+      for (const [c, dd, fac, lin, force] of this.eqs[i]) {
+        let v = c; for (const [id, pw] of fac) v *= pw === 1 ? st[id] : Math.pow(st[id], pw);
+        if (force) { rhs[i] -= v * axn; continue; }
+        if (dd >= 0) A[i][dd] += v; else rhs[i] -= lin ? v * gf : v;
+      }
+      rhs[i] -= 2 * this.zetaNM[i] * Math.sqrt(this.sig2[i]) * this.bd[i];
+    }
+    if (this.ay) rhs[2] -= this.C.eqs.p1.find((t) => t[1] === 'a_x')[0] * this.ay / this.g;
+    // Gaussian elimination with partial pivoting
+    for (let c = 0; c < 5; c++) {
+      let p = c; for (let r = c + 1; r < 5; r++) if (Math.abs(A[r][c]) > Math.abs(A[p][c])) p = r;
+      [A[c], A[p]] = [A[p], A[c]]; [rhs[c], rhs[p]] = [rhs[p], rhs[c]];
+      for (let r = c + 1; r < 5; r++) { const f = A[r][c] / A[c][c]; for (let k = c; k < 5; k++) A[r][k] -= f * A[c][k]; rhs[r] -= f * rhs[c]; }
+    }
+    for (let c = 4; c >= 0; c--) { let s = rhs[c]; for (let k = c + 1; k < 5; k++) s -= A[c][k] * out[k]; out[c] = s / A[c][c]; }
+    return out;
+  };
+  NMFluid.prototype.step = function (dt, ax, az) {
+    const n = Math.max(1, Math.ceil(dt / 0.0005)), hs = dt / n, gf = 1 + az / this.g, ts = Math.sqrt(this.g / this.Rs), ht = hs * ts;
+    const acc = new Float64Array(5);
+    for (let s = 0; s < n; s++) {
+      for (let m = 1; m < this.N; m++) {                                   // the linear modes n = 2, 3 along the road
+        const w = this.w[m];
+        this.qd[m] += hs * (-w * w * gf * this.q[m] - 2 * this.zeta[m] * w * this.qd[m] - this.beta[m] * ax);
+        this.q[m] += hs * this.qd[m];
+      }
+      this.accel(ax, az, acc);
+      for (let i = 0; i < 5; i++) { this.bd[i] += ht * acc[i]; this.b[i] += ht * this.bd[i]; }
+    }
+    this.syncQ();
+    // the pour over the rim, as in ModalFluid, with the wall height of all modes at each angle
+    const g = this.g; let dV = 0, dPx = 0;
+    if (this.h + this.wallLift() > this.zRim) {
+      const K = 72;
+      for (let k = 0; k < K; k++) {
+        const th = 2 * Math.PI * (k + 0.5) / K, D = this.wallAt(th) - this.zRim;
+        if (D <= 0) continue;
+        const qw = this.Cd * (2 / 3) * Math.sqrt(2 * g) * Math.pow(D, 1.5), dVk = qw * this.Rrim * (2 * Math.PI / K) * dt;
+        dV += dVk; dPx += this.rho * dVk * Math.sqrt(2 * g * D) * Math.cos(th);
+      }
+      dV = Math.min(dV, 0.5 * this.V);
+      // the crest's volume above the mean, over the whole surface: shrink every mode by the share that poured out
+      let Vc = 0; const NR = 12, NT = 48;                               // int int max(0, eta - h) dA, midpoint rule
+      for (let i = 0; i < NR; i++) for (let k = 0; k < NT; k++) { const rr = this.Rs * (i + 0.5) / NR, th = 2 * Math.PI * (k + 0.5) / NT; Vc += Math.max(0, this.heightAt(rr * Math.cos(th), rr * Math.sin(th)) - this.h) * rr; }
+      Vc *= (this.Rs / NR) * (2 * Math.PI / NT);
+      const f = Vc > 1e-12 ? Math.max(0, 1 - dV / Vc) : 1;
+      for (let i = 0; i < 5; i++) { this.b[i] *= f; this.bd[i] *= f; }
+      for (let m = 1; m < this.N; m++) { this.q[m] *= f; this.qd[m] *= f; }
+      this.V -= dV; this.h = this.heightOf(this.V); this.modes(); this.syncQ();
+    }
+    this.spillNow = dV > 0 ? 1 : 0; this.spillV += dV; this.spillRate = dV / dt; this.spillPx = dPx; this.spillPz = 0;
+    this.t += dt;
+    const D = this.ds;
+    if (D) {
+      for (let m = 0; m < this.N; m++) { D.set('q' + (m + 1), this.q[m]); D.set('qd' + (m + 1), this.qd[m]); D.set('w' + (m + 1), this.w[m]); }
+      D.set('h_l', this.h); D.set('V_l', this.V); D.set('R_s', this.Rs); D.set('spill_rate', this.spillRate); D.set('Q_wall', this.wallLift());
+      if (D.has('s1')) { D.set('s1', this.s1); D.set('c0', this.c0); D.set('c2', this.c2); D.set('s2', this.s2); D.set('s1d', this.s1d); }
+    }
+  };
+
   /* ------------------------------------------------------------------- road */
   function Road(o) {
     o = o || {};
@@ -1499,7 +1644,7 @@
   /* --------------------------------------------------------------- coupling */
   function World(o) {
     o = o || {};
-    this.fluid = o.fluid && o.fluid.modal ? new ModalFluid(o.fluid) : new Fluid(o.fluid);
+    this.fluid = o.fluid && o.fluid.nm ? new NMFluid(Object.assign({ modal: true }, o.fluid)) : o.fluid && o.fluid.modal ? new ModalFluid(o.fluid) : new Fluid(o.fluid);
     const co = Object.assign({}, o.cart || {});
     co.ml = this.fluid.mLiquid;
     if (o.road) co.road = new Road(o.road);
@@ -1628,5 +1773,5 @@
     f.columnHeights(); ds.touch('h_col');
   };
 
-  return { Fluid, ModalFluid, Road, Cart, World, Observer, mat, Rng };
+  return { Fluid, ModalFluid, NMFluid, Road, Cart, World, Observer, mat, Rng };
 });
