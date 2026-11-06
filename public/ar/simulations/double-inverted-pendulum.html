@@ -38,7 +38,7 @@
 
     <link rel="stylesheet" href="../../fonts/arabic.css" />
     <script src="../../scripts/i18n/strings-ar.js"></script>
-    <meta name="translated-from" content="English public/simulations/double-inverted-pendulum.html, commit 33e284c+" />
+    <meta name="translated-from" content="English public/simulations/double-inverted-pendulum.html, commit 4d565dc+" />
   </head>
 <body>
     <header class="sim-top">
@@ -712,6 +712,25 @@
                         <p>ما لا يزال غير صحيح، مقيسًا. يزيل كل قضيب اضطرابه الخاص كلّه، وكذلك الأثر الذي تركه قبل أرجحة؛ والقضيب الحقيقي الذي يعود متأرجحًا إلى أثره القديم كان سيشعر به. ويُحدّ مقدار ما قد يعنيه ذلك بإزالة اضطراب القضيب كلّيًّا: في قضيبين يُحمَلان ذهابًا وإيابًا في ماء ساكن يغيّر ذلك قوّتهما بـ ⁦1–3 %⁩. وفي حالة المقارنة، عند 39 خلية لكل قطر، يقلّ \(\Delta p\) بـ ⁦2 %⁩ عن النطاق المنشور ويزيد \(c_D\) عليه بـ ⁦0.5–1 %⁩؛ وخطوة النقل لا تحفظ الزخم تمامًا، بنحو ⁦1–2 %⁩ من كبح الأسطوانة. وأسطوانة في تيّار يتذبذب بلطف تبقى أدنى بـ ⁦2 %⁩ وأعلى بـ ⁦5.5 %⁩ في جزأي قوّة ستوكس غير المستقرّة الدقيقة (ويتّفق Wolfram واشتقاق مستقلّ على القيمة الدقيقة) ولا تتحسّن على خلايا أنعم؛ ولم يُعثر على سبب ذلك. وقد أُصلح خطآن سابقان: كان الماء الداخل إلى قناة حالة المقارنة حرًّا في أن ينعطف عند دخوله، حيث تُدخله حالة المقارنة مستقيمًا، وهذا وحده جعل الجريان أضعف بـ ⁦5 %⁩ على كل شبكة؛ وكان دفع الماء اللزج على الجسم موزونًا بحصّة المائع من كل وجه خلية، فغاب جزء من قصّ الجدار. وقوّة الجسم الآن هي ما تغيّره خطوة اللزوجة في الماء المجاور له، فيتبادل الجسم والماء زخمًا متساويًا تمامًا.</p>
                         <p><b>الموازنات.</b> تحفظ مجموعة <i>المائع المحلول</i> في لوحة البيانات موازنة الماء الخاصة: شغل المحرّك وما يُدخله التيّار عبر طرفي الخزّان يساويان طاقة الآلة، والطاقة الحركية للماء \(K_f = \tfrac12\rho b\sum w\,u^2\Delta^2\)، وحرارة القضيبين (43) وحرارة اللزوجة في الجريان المحلول، زائد باقٍ \(R\) يفقده المخطّط، ويُقسَم \(R\) على أسبابه. في الغليسرول، بعد ميل قدره ⁦4.6°⁩ و ⁦2.9°⁩ وتوازن مدّته ⁦3 s⁩، يبذل المحرّك ⁦1.33 J⁩: تبقى ⁦0.012 J⁩ في الآلة، و ⁦0.005 J⁩ في الماء، ويولّد كبح القضيبين ⁦0.107 J⁩ حرارةً تحت مستوى الشبكة، واللزوجة ⁦0.98 J⁩ في الجريان، و\(R\) يساوي ⁦0.23 J⁩، أي ⁦17 %⁩. تزيل خطوة الضغط ⁦0.21 J⁩ مع جزء الجريان الذي تُسقطه، وأقلّ مع خطوات مائع أقصر (⁦0.12 J⁩ عند ⁦10 ms⁩)؛ وتفقد خطوة النقل ⁦0.09 J⁩ على مقياس الخلية، وهي نفسها لأي خطوة؛ وإجبار الماء في الوجوه التي تقطعها العربة على سرعة العربة يكلّف ⁦0.05 J⁩؛ ويعيد اقتران العربة ⁦0.11 J⁩، لأن الآلة تشعر بالضغط عند سرعتها المتوسّطة خلال الخطوة بينما يتلقّى الماء شغله عند السرعة النهائية، \(J\,\Delta\dot x/2\) لكل خطوة لدفعة ضغط \(J\) (Wolfram). و\(R\) يساوي ⁦8 %⁩ في العسل. وفي الماء يبلغ ⁦80 %⁩: عند خلايا من ⁦2.5 cm⁩ يكون الماء أرقّ كثيرًا من أن تحلّه الشبكة، وتنتهي دوّاماته عند حجم الخلية، ويقوم فقد المخطّط مقام التسلسل إلى الدوّامات الصغيرة الذي كان سيحوّل الطاقة نفسها إلى حرارة. فالجريان المرسوم في الماء صحيح في دوّاماته الكبيرة، لا في تفاصيله الدقيقة. وعلى مدى ⁦60 s⁩، مع دفع القضيبين كل ⁦15 s⁩، يبقى \(R\) بالحصّة نفسها في كل سائل، وتصمد الموازنة.</p>
                         <p>مع حساب الاضطراب الخاص بكل قضيب إلى جانب الماء، تكلّف خطوة مائع من ⁦20 ms⁩ نحو ⁦30 ms⁩ في Chromium على هذا الحاسوب، فتعمل الصفحة بحركة بطيئة، نحو 0.7 من الزمن الحقيقي، ويقول التعليق ذلك؛ وهذا يترك وقتًا لمشاهدة المتحكّم وهو يعمل. <b>ما أُهمل.</b> الجريان عبر العمق حول القضيبين وأي تغيّر للجريان على امتداد العمق؛ والاحتكاك على جداري الخزّان الأمامي والخلفي؛ والسكّة؛ وسطح الماء؛ وفي الهواء والماء، الدوّامات الأصغر من خلية.</p>
+                        <h4><span class="psub__n">13.7</span>رفع القضيبين في سائل: أين تذهب طاقة المحرّك</h4>
+                        <p>حرّك ملعقة في العسل فتشعر بذلك فورًا: لا يهمّ العسل كم لديك من طاقة، بل كم تريد أن تتحرّك بسرعة. والأمر نفسه مع العربة. لنقل القضيبين كليهما من التدلّي إلى الانتصاب، على المحرّك أن يرفع وزنهما، مطروحًا منه الطفو (37)، بمقدار</p>
+                        \[ \Delta V = 2\,(f_1 + f_2) , \tag{47} \]
+                        <p>⁦10.5 J⁩ في الماء و⁦9.3 J⁩ في الغليسرين و⁦8.5 J⁩ في العسل للآلة الافتراضية. وهذا قليل جدًا. محرّك قوّته ⁦60 N⁩ يدفع العربة في الماء يبلغ السرعة التي يأخذ عندها كبح العربة نفسها قوّته كلّها، \(c_2 v^2 = u_{\max}\)، أي \(v = 1.98\) m/s، ويعطي المحرّك ⁦119 W⁩: في عُشر ثانية يستطيع أن يدفع ثمن الرفع كلّه. ليست الطاقة هي الناقصة.</p>
+                        <p><b>لقد جرّبنا الدفع بأقصى قوّة.</b> دُفعت العربة عند حدّها في الاتجاه الذي يغذّي القضيبين، \(u = -u_{\max}\,\mathrm{sign}\,\mathcal P\) مع \(\mathcal P\) من (21)، أي عكس التهدئة، مع الرجوع قبل نهاية السكّة، مدّة ⁦20 s⁩، مع الكبح الكامل (33)–(35). يبيّن الجدول ما أدخله المحرّك، وأين ذهب، وإلى أيّ ارتفاع وصل القضيبان: أكبر قيمة بلغتها \(f_1\cos\theta_1 + f_2\cos\theta_2\)، كنسبة من الطريق بين التدلّي (0) والانتصاب (1).</p>
+                        <table class="ptable">
+                            <tr><th>الوسط، \(u_{\max}\)</th><th>شغل المحرّك، J</th><th>حرارة كبح العربة</th><th>حرارة كبح القضيبين</th><th>أعلى ما بلغه القضيبان</th></tr>
+                            <tr><td>ماء، ⁦60 N⁩</td><td>1965</td><td>91 %</td><td>9 %</td><td>0.29</td></tr>
+                            <tr><td>غليسرين، ⁦60 N⁩</td><td>1703</td><td>88 %</td><td>11 %</td><td>0.31</td></tr>
+                            <tr><td>عسل، ⁦60 N⁩</td><td>1325</td><td>79 %</td><td>20 %</td><td>0.33</td></tr>
+                            <tr><td>ماء، ⁦200 N⁩</td><td>11 995</td><td>93 %</td><td>7 %</td><td>0.71</td></tr>
+                            <tr><td>غليسرين، ⁦200 N⁩</td><td>10 705</td><td>92 %</td><td>8 %</td><td>0.80</td></tr>
+                            <tr><td>عسل، ⁦200 N⁩</td><td>9154</td><td>86 %</td><td>14 %</td><td>0.35</td></tr>
+                        </table>
+                        <p>أدخل المحرّك نحو مئتي ضعف ما يحتاجه الرفع، ومع ذلك لم يبلغ القضيبان إلا ثلث الطريق. ذهبت تسعة أعشار الشغل إلى السائل حول صندوق العربة نفسها؛ وفقد القضيبان الباقي بالسرعة التي أُعطياه بها. ولا يجد مخطّط الرفع في القسم 11، وقد كُتب الكبح نفسه في نموذجه، طريقًا هو أيضًا، لا عند ⁦60 N⁩ ولا عند ⁦200 N⁩، على مدى 4 أو 6 أو ⁦8 s⁩، في أيّ من السوائل الثلاثة: تبقى الفجوات بين مقاطع الرمي عنده بين 0.04 و⁦0.14 rad⁩، بينما يغلقها الخطّ الذي يقبله إلى ما دون 0.003.</p>
+                        <p><b>السبب: القضيب الخارجي مجداف لا بندول.</b> القضيب المتدلّي يتجاوز القمّة بالتأرجح: عليه أن يمرّ بالأسفل بسرعة تكفي ليدفع طاقته الحركية ثمن الصعود، \(\tfrac12 I\omega^2 = 2f\)، أي</p>
+                        \[ \omega_{\text{need}} = 2\sqrt{f/I} , \qquad \xi_\perp\frac{L^3}{3}\,\omega_t + c_q\frac{L^4}{4}\,\omega_t^2 = f , \tag{48} \]
+                        <p>حيث تشمل \(I\) الماء الذي يحمله (38). لكنّ السائل لا يدع القضيب يدور أسرع من المعدّل \(\omega_t\) الذي يساوي عنده عزمُ كبحه، من (33)–(34) مكاملًا على طول القضيب، شدَّ وزنه كلّه. للقضيب الخارجي الافتراضي (⁦0.75 kg⁩، ⁦0.75 m⁩) تكون \(\omega_{\text{need}}\) مساوية 6.4 و5.8 و⁦5.5 rad/s⁩، و\(\omega_t\) مساوية 1.41 و0.96 و⁦0.44 rad/s⁩ في الماء والغليسرين والعسل: يسقط القضيب في السائل أبطأ بخمس إلى اثنتي عشرة مرّة ممّا يلزمه ليتأرجح. ولا تستطيع العربة أن تجرّه فوق القمّة ببساطة، لأنّ دفعة جانبية لا ترفع قضيبًا ممدّدًا جانبيًا: حين يكون القضيب أفقيًا يعمل الكبح ودفعة القصور من حركة العربة كلاهما على طوله ولا يعطيان عزمًا حول مفصله. هذا مقياس تقريبي، لقضيب منفرد على مفصل ثابت، لا برهان؛ لكنّه يقول في أيّ اتجاه تُغيَّر الآلة. وبما أنّ \(\omega_t/\omega_{\text{need}}\) تنمو مثل \(\sqrt{m/(\rho d L^3)}\)، فالقضبان القصيرة الثقيلة هي التي يدعها السائل تتأرجح. مع قضيبين من ⁦2 kg⁩، طولهما ⁦0.20 m⁩ و⁦0.25 m⁩، تبلغ النسبة 0.96 في الماء و0.79 في الغليسرين و0.57 في العسل؛ ومع محرّك قوّته ⁦200 N⁩ يجد المخطّط رفعًا في الماء، فترفع الصفحة القضيبين وتلتقطهما بعد ⁦14 s⁩ من الضغط على الزرّ ثم تحمل العربة إلى +⁦1 m⁩. أمّا في الغليسرين والعسل فلا يجد شيئًا بعد: بمحرّك هذه الصفحة وقضيبيها، الرفع هناك بعيد المنال.</p>
+                        <p><b>ما تفعله الصفحة في سائل.</b> حين يفشل خطّ، تفعل العربة ما فعلناه أعلاه: تضخّ بكامل قوّتها، \(a = -3\,\mathcal P\tanh\bigl(3(V_{\text{top}} - E)/V_{\text{top}}\bigr)\) بوحدة m/s² مع \(\mathcal P\) بوحدة kg m²/s، فتغذّي القضيبين حتى طاقة القمّة ولا أكثر، بينما يحاول المخطّط من جديد. والقضيبان المنتصبان أصلًا يبقيان منتصبين. يسأل الحارس في القسم 11 النموذجَ هل يُدخل متحكّم الموازنة الآلةَ إلى المنطقة المضمونة \(c^*\) من القسم 9 خلال ⁦4 s⁩. في السائل تكون \(c^*\) صغيرة (0.04 في الماء و0.12 في الغليسرين و0.56 في العسل للآلة الافتراضية) ويجعل الكبح متحكّم الموازنة بطيئًا، فكان ذلك الاختبار يتخلّى عن قضيبين مائلين بمقدار ⁦0.8°⁩. أمّا الآن ففي الوسط يترك الحارس متحكّم الموازنة يعمل ما دام النموذج يبيّن أنّه يخفض \(W\) بعُشر على الأقلّ في تلك الثواني الأربع؛ وبهذا تحمل العربة القضيبين المنتصبين إلى ما دون ⁦2 cm⁩ من +⁦1 m⁩ بعد ⁦16 s⁩ من الضغط على الزرّ في الماء والغليسرين؛ وفي العسل تكون عند ⁦0.84 m⁩ بعد ⁦24 s⁩، وما زالت تزحف. والخطّ الذي ينتهي والعربة تتحرّك يسلّم إلى متحكّم موازنة يُمسك العربة حيث التُقطت، لا إلى السير المنتظم في (25)، لأنّ السير المنتظم في السائل يحتاج دفعًا منتظمًا ضدّ الكبح لا تحسبه (25).</p>
                         <div class="pbox pbox--ex">
                             <span class="pbox__t">التمارين</span>
                             <p><b>13.1</b> قضيبان قائمان ساكنان في نسيم ثابت \(U\)، مع \(\xi_\perp\) واحد للقضيبين و(33) وحدها: بيّن من (35) أن \(\mathbf Q = \xi_\perp U\,\bigl(L_1 + L_2,\ \tfrac12 L_1(L_1 + 2L_2),\ \tfrac12 L_2^2\bigr)\)، وقارنه في الغليسرين بقيم \(Q_i\) في المخزن.</p>
@@ -853,7 +872,7 @@
                 for (r = 0; r < n; r++) if (r !== c) { var f = W[r][c]; if (f) for (j = 0; j < 2 * n; j++) W[r][j] -= f * W[c][j]; } }
             return W.map(function (row) { return row.slice(n); }); }
         function linear(p) { var Di = inv(Dm(p, 0, 0)), A = zeros(6, 6), B = zeros(6, 1), i;
-            for (i = 0; i < 3; i++) { A[i][i + 3] = 1; A[i + 3][1] = Di[i][1] * p.f[0]; A[i + 3][2] = Di[i][2] * p.f[1]; B[i + 3][0] = Di[i][0]; } return { A: A, B: B }; }
+            for (i = 0; i < 3; i++) { A[i][i + 3] = 1; A[i + 3][1] = Di[i][1] * p.f[0]; A[i + 3][2] = Di[i][2] * p.f[1]; B[i + 3][0] = Di[i][0]; }   /* in a medium the balancer also knows its drag at upright: Q ≈ −C q̇ (33)–(34), whose linear part is the viscous one; the quadratic part has no slope at rest */ if (p.fl) { var dp = new Float64Array(3), dmn = new Float64Array(3), j, k, e = 1e-6; for (j = 0; j < 3; j++) { var sv = [0, 0, 0, 0, 0, 0]; sv[3 + j] = e; dragF(p, sv, dp); sv[3 + j] = -e; dragF(p, sv, dmn); for (i = 0; i < 3; i++) for (k = 0; k < 3; k++) A[i + 3][j + 3] += Di[i][k] * (dp[k] - dmn[k]) / (2 * e); } } return { A: A, B: B }; }
         function lqr(A, B, R) {   // AᵀP + PA − PBR⁻¹BᵀP + Q = 0 by the sign function of the Hamiltonian matrix
             var n = 6, Hm = zeros(12, 12), i, j;
             for (i = 0; i < n; i++) for (j = 0; j < n; j++) { Hm[i][j] = A[i][j]; Hm[i][n + j] = -B[i][0] * B[j][0] / R; Hm[n + i][j] = -(i === j ? Q[i] : 0); Hm[n + i][n + j] = -A[j][i]; }
@@ -961,7 +980,7 @@
                 for (m = 0; m < weak.length; m++) for (var sg = -1; sg <= 1; sg += 2) for (sh = 0; sh < SH.length; sh++) { var d0 = weak[m].map(function (v) { return sg * v; }); if ((yield* climb(d0, c * SH[sh])) >= 0) return false; }
                 for (m = 0; m < top.length; m++) if ((yield* climb(top[m].d, top[m].cl)) >= 0) return false;
                 return true; }
-            var lo = 1, hi = 1e4;
+            var lo = CLO, hi = 1e4;
             if (!(yield* safe(lo))) return 0;
             for (var bi = 0; bi < 13; bi++) { var mid = Math.sqrt(lo * hi); if (yield* safe(mid)) lo = mid; else hi = mid; }
             return lo; }
@@ -976,10 +995,18 @@
                 A00 += m * (L1 * ca * ca + L2 * cb * cb) + p.ma.mc; A01 += m * L1 * (L1 * ca / 2 + L2 * cb * cab); A02 += m * L2 * L2 * cb / 2; A11 += m * L1 * L1 * (L1 / 3 + L2 * cab * cab); A12 += m * L1 * L2 * L2 * cab / 2; A22 += m * L2 * L2 * L2 / 3;
                 r0 -= (-ad * ad * L1 * (L1 + L2) * m * sa - 2 * ad * L1 * m * xd * Math.sin(2 * a) - L2 * m * (ad * (ad - 2 * bd) * L1 * s2b + bd * (bd * L2 + 4 * xd * cb) * sb)) / 2;
                 r1 -= L1 * m * (xd * xd * Math.sin(2 * a) + L2 * (2 * bd * xd * s2b + (bd * bd * L2 - 2 * ad * (ad - 2 * bd) * L1 * cab) * sab)) / 2;
-                r2 -= -L2 * m * (2 * ad * L1 * xd * s2b + ad * ad * L1 * L2 * sab + ad * ad * L1 * L1 * Math.sin(2 * (a - b)) - xd * xd * Math.sin(2 * b)) / 2; }
+                r2 -= -L2 * m * (2 * ad * L1 * xd * s2b + ad * ad * L1 * L2 * sab + ad * ad * L1 * L1 * Math.sin(2 * (a - b)) - xd * xd * Math.sin(2 * b)) / 2; }   /* the medium's drag in still fluid, (33)–(34) with the flow left out: the plan is made for the honey it will move through */ if (p.fl) { dragF(p, s, dq3); r0 += dq3[0]; r1 += dq3[1]; r2 += dq3[2]; }
             var l00 = Math.sqrt(A00), l10 = A01 / l00, l20 = A02 / l00, l11 = Math.sqrt(A11 - l10 * l10), l21 = (A12 - l20 * l10) / l11, l22 = Math.sqrt(A22 - l20 * l20 - l21 * l21);
             var y0 = r0 / l00, y1 = (r1 - l10 * y0) / l11, y2 = (r2 - l20 * y0 - l21 * y1) / l22, q2 = y2 / l22, q1 = (y1 - l21 * q2) / l11, q0 = (y0 - l10 * q1 - l20 * q2) / l00;
             o[0] = s[3]; o[1] = s[4]; o[2] = s[5]; o[3] = q0; o[4] = q1; o[5] = q2; }
+        function dragF(p, s, o) {   // the drag of a still medium on rods and cart, (33)–(35) with v_f = 0, by 4-point Gauss–Legendre per rod: cheap enough for the planner
+            var F = p.fl, s1 = Math.sin(s[1]), c1 = Math.cos(s[1]), s2 = Math.sin(s[2]), c2 = Math.cos(s[2]), xd = s[3], ad = s[4], bd = s[5], Q0 = 0, Q1 = 0, Q2 = 0, i, k;
+            for (k = 0; k < 2; k++) { var L = k ? p.L2 : p.L1, sn = k ? s2 : s1, cs = k ? c2 : c1, xi = F.xi[k], om = k ? bd : ad;
+                for (i = 0; i < 4; i++) { var sg = GL4.x[i] * L, wq = GL4.w[i] * L, vx = xd + (k ? p.L1 * c1 * ad : 0) + sg * cs * om, vy = -(k ? p.L1 * s1 * ad : 0) - sg * sn * om;
+                    var wt = vx * sn + vy * cs, wn = vx * cs - vy * sn, fn = -xi * wn - F.cq * Math.abs(wn) * wn, ft = -xi / 2 * wt, fx = ft * sn + fn * cs, fy = ft * cs - fn * sn;
+                    Q0 += wq * fx; if (k) { Q1 += wq * p.L1 * (fx * c1 - fy * s1); Q2 += wq * sg * fn; } else Q1 += wq * sg * fn; } }
+            o[0] = Q0 - F.cl * xd - F.cc * Math.abs(xd) * xd; o[1] = Q1; o[2] = Q2; }
+        var GL4 = { x: [0.0694318442029737, 0.3300094782075719, 0.6699905217924281, 0.9305681557970263], w: [0.1739274225687269, 0.3260725774312731, 0.3260725774312731, 0.1739274225687269] }, dq3 = new Float64Array(3), CLO = 1e-4;   // the certified-level search may start below W = 1: in a liquid c* can be small
         function stepF(p, s, u, h, n, o) {   // n RK4 steps of length h with u held; the result goes to o (which may be s)
             for (var m = 0; m < n; m++) { var i;
                 rhsF(p, s, u, kk1); for (i = 0; i < 6; i++) tmp6[i] = s[i] + h / 2 * kk1[i];
@@ -1278,7 +1305,7 @@
 
         var vy = 0, p, K, Pm, Smod, lamNow = NaN, cLevel = null, catchIt = null, gmode = 'sampled', rolling = true, s, u = 0, xref = 0, on = true, rescue = true, lost = false, flat = false, tSim = 0, tCtl = 0, acc = 0, held = 0, geo = null;
         /* the supervisor's state: mode is 'balance' (LQR), 'calm' (drain the rods' energy while a plan is being made) or 'track' (follow a plan) */
-        var mode = 'balance', job = null, tv = null, tPlan = 0, sPred = null, xc = 0, attempt = 0, nextCheck = 0, CALM_K = 2, hp = 3, log = [];
+        var mode = 'balance', job = null, tv = null, tPlan = 0, sPred = null, xc = 0, attempt = 0, nextCheck = 0, CALM_K = 2, hp = 3, log = [], pump = false, att0 = 0, PUMP_K = 3;
         /* the balancer's reference, an equilibrium of the family (25): fixed at a place, cruising at a constant speed, or gliding from one to a resting place (26) */
         var ref = { kind: 'fixed', x: 0 }, GLIDE = 0.5;
         function refXV(t) { if (ref.kind === 'fixed') return [ref.x, 0];
@@ -1305,7 +1332,7 @@
             recatch(); if (s) twSync(false);
         }
         function recatch() { cLevel = null; catchIt = catchGen(); ds.set('c_star', NaN); ds.set('c_hand', NaN); ds.set('eps_rest', NaN); ds.set('c_busy', true); document.getElementById('r-c').textContent = '…'; document.getElementById('r-eps').textContent = '…'; abandon(); }   // computed between frames by think()
-        function abandon() { job = null; tv = null; sPred = null; if (mode !== 'balance' && s) { mode = 'calm'; startAttempt(); } }   // any change of the machine, or a push, spoils the plan: start again from calming
+        function abandon() { job = null; tv = null; sPred = null; if (mode !== 'balance' && s) { mode = 'calm'; att0 = attempt; startAttempt(); } }   // any change of the machine, or a push, spoils the plan: start again from calming
         /* ---------- the solved fluid (section 13.6): twoway.js holds the tank; the page's 1 ms steps, controller and logs run inside its 20 ms steps ---------- */
         var tw = null, twKey = '', twKind = 0, twC0 = 0, twU0 = 0, twE0 = 0, twK0 = 0, twX0 = 0, twSpeed = 1, twSim = 0, twWall = 0;
         function twSync(force) {   // a new tank when the machine, the medium or the stream changed (or at a reset); none unless the fluid is solved
@@ -1345,7 +1372,7 @@
             return D[0][0] * a + D[0][1] * b1 + D[0][2] * b2 - d[1] * s1 * st[4] * st[4] - d[2] * s2 * st[5] * st[5] - Qf[0] + Ca[0]; }
         function calmU(st) {   // a = k𝒫 makes dE_p/dt = −k𝒫² ≤ 0 (21); the two other terms keep the cart near x_c
             var d = p.d, P = d[1] * Math.cos(st[1]) * st[4] + d[2] * Math.cos(st[2]) * st[5];
-            var a = Math.max(-8, Math.min(8, CALM_K * P - 4 * (st[0] - xc) - 4 * st[3])); return clampF(uFor(st, a)); }
+            var a = Math.max(-8, Math.min(8, kCalm(st) * P - 4 * (st[0] - xc) - 4 * st[3])); return clampF(uFor(st, a)); }   /* after a failed plan: pump instead, a = −k𝒫 tanh(3(V_top − E)/V_top), which feeds the rods' energy up to the top's and no further */ function kCalm(st) { if (!pump) return CALM_K; var Et = p.f[0] + p.f[1], E = energy(st) - 0.5 * p.d[0] * st[3] * st[3]; return -PUMP_K * Math.tanh(3 * (Et - E) / Et); }
         function trackU() {   // u = u_plan − K(t)(s − s_plan) on the 10 ms grid of the plan (24)
             var k = Math.round((tSim - tPlan) / 0.01); if (k >= tv.n) return 'end';
             var v = tv.un[k], dev = 0; for (var j = 0; j < 6; j++) { var e = s[j] - (j === 0 ? xc : 0) - tv.nom[6 * k + j]; dev += e * e; v -= tv.Kt[6 * k + j] * e; }
@@ -1377,7 +1404,7 @@
             while (t < until - 1e-9) { if (t >= tc - 1e-9) { uu = law(q, t); tc += law === lqrU ? sT.value / 1000 : 0.01; } q = rk4(p, q, uu, H, t); t += H; }
             return { s: q, t: t, tc: tc, u: uu }; }
         function startAttempt() {   // plan from where calming will have brought the machine hp seconds from now
-            var pr = run({ s: s, t: tSim, tc: tCtl, u: u }, tSim + hp, calmU), s0 = pr.s.slice(); s0[0] -= xc;
+            pump = attempt > att0; var pr = run({ s: s, t: tSim, tc: tCtl, u: u }, tSim + hp, calmU), s0 = pr.s.slice(); s0[0] -= xc;
             sPred = pr; tPlan = pr.t; attempt++; job && !job.done && (hp = Math.min(8, hp * 1.5));
             job = new PlanJob(p, s0, attempt % 2 ? 4 : 6, { x: 1.5, u: sF.value, vw: rolling ? 0 : 0.3 }); job.t0 = performance.now(); }
         function supervise() {
@@ -1385,15 +1412,16 @@
             if (mode === 'balance' && !lost && tSim >= nextCheck && cLevel !== null) { nextCheck = tSim + 0.1;
                 if (Wof(s, tSim) > cLevel) {   // outside the certified region: ask the model whether the balancer still wins within 4 s
                     var pr = run({ s: s, t: tSim, tc: tCtl, u: u }, tSim + 4, lqrU);
-                    if (Wof(pr.s, pr.t) > cLevel) { if (rescue) { mode = 'calm'; xc = rolling ? s[0] : xref; ref = { kind: 'fixed', x: xc }; log.push({ t: tSim, ev: 'rescue' }); startAttempt(); } else { lost = true; u = 0; } } } }
+                    var wNow = Wof(s, tSim), wPr = Wof(pr.s, pr.t);   /* in a medium the drag slows the balancer down: it may need longer than 4 s to reach the certified region, so there it is left alone while the model shows it lowering W by at least a tenth in those 4 s (honey: about a third) */
+                    if (wPr > cLevel && !(p.fl && wPr < 0.9 * wNow)) { if (rescue) { mode = 'calm'; xc = rolling ? s[0] : xref; ref = { kind: 'fixed', x: xc }; log.push({ t: tSim, ev: 'rescue' }); att0 = attempt; startAttempt(); } else { lost = true; u = 0; } } } }
             if (mode === 'calm' && sPred && tSim >= tPlan - 1e-9) {
                 var ok = tv && Math.abs(s[0] - sPred.s[0]) + Math.abs(s[1] - sPred.s[1]) + Math.abs(s[2] - sPred.s[2]) < 1e-6;
                 if (ok) { mode = 'track'; tCtl = tSim; hp = 3; log.push({ t: tSim, ev: 'track', T: job.T, attempt: attempt, ms: Math.round(job.ms) }); job = null; }
                 else { log.push({ t: tSim, ev: tv ? 'mismatch' : job && job.done ? 'noplan' : 'late', attempt: attempt }); tv = null; startAttempt(); } }
             if (mode === 'track' && cLevel && tSim - tPlan > 0.05 && (rolling ? Wred(s) : Wof(s, tSim)) < 0.9 * cLevel) {   // inside the certified region, with 10 % to spare for what the search may miss: hand over
                 mode = 'balance'; why = 4; s[1] = wrapAngle(s[1]); s[2] = wrapAngle(s[2]); tv = null; nextCheck = tSim + 0.1; tCtl = tSim;
-                if (rolling) ref = { kind: 'cruise', x: s[0], v: s[3], t0: tSim, brake: true };   // keep the speed it arrived with: a moving equilibrium (25), then brake it away bite by bite (27)
-                log.push({ t: tSim, ev: 'caught', v: s[3] }); } }
+                if (rolling) ref = p.fl ? { kind: 'fixed', x: s[0] } : { kind: 'cruise', x: s[0], v: s[3], t0: tSim, brake: true };   // in a liquid a steady cruise needs a steady push against drag, which (25) leaves out; the drag brakes the cart anyway, so the balancer holds it where it was caught   // keep the speed it arrived with: a moving equilibrium (25), then brake it away bite by bite (27)
+                log.push({ t: tSim, ev: 'caught', v: s[3] }); pump = false; } }
         function think(ms) {   // work between frames: first the certificate, then the plan
             var t0 = performance.now();
             while (catchIt && performance.now() - t0 < ms) { var r = catchIt.next(); if (r.done) { cLevel = r.value; catchIt = null; ds.set('c_star', cLevel); ds.set('c_hand', 0.9 * cLevel); ds.set('eps_rest', Math.sqrt(GAMMA * cLevel / Pm[3][3])); ds.set('c_busy', false); document.getElementById('r-c').textContent = Sim.fmt(ds.get('c_star'), 0); document.getElementById('r-eps').textContent = Sim.fmt(ds.get('eps_rest'), 2) + ' m/s'; } }
@@ -1415,7 +1443,7 @@
         function flick(J) {   // Δθ̇ = D⁻¹ (1, L1 cos θ1, L2 cos θ2)ᵀ J
             if (flat) return; why = 1; var dq = solve3(Dm(p, s[1], s[2]), [J, p.L1 * Math.cos(s[1]) * J, p.L2 * Math.cos(s[2]) * J]);
             s[3] += dq[0]; s[4] += dq[1]; s[5] += dq[2]; nextCheck = tSim; abandon(); }
-        function swingUp() { reset(); s = [0, Math.PI, Math.PI, 0, 0, 0]; mode = 'calm'; xc = 0; ref = { kind: 'fixed', x: 0 }; startAttempt(); }
+        function swingUp() { reset(); s = [0, Math.PI, Math.PI, 0, 0, 0]; mode = 'calm'; xc = 0; ref = { kind: 'fixed', x: 0 }; att0 = attempt; startAttempt(); }
 
         /* ---------- the logs: every physics step and every controller sample is written into the store at the moment it happens ---------- */
         var Wfl = 0, WflB = 0, cDue = 0, ver = 0, nStep = 0, nSamp = 0, stN = 0, csN = 0, trN = 0, why = 0, book = false, E0 = 0, Wm = 0, Eext = 0, sPost = null, plSerial = 0, fps = 0, frames = 0;
@@ -1815,7 +1843,7 @@
 
         window.DIPC = { get ds() { return ds; }, get tw() { return tw; }, rk4: rk4, fluidQ: fluidQ, fieldV: fieldV, fluidPar: fluidPar, accelF: accelF, draw: draw, get geo() { return geo; }, get held() { return held; }, get uh() { return uh; }, get handX() { return handX; }, get s() { return s; }, set s(v) { s = v.slice(); why = 3; nextCheck = tSim; }, get K() { return K; }, get P() { return Pm; }, get p() { return p; }, fallRates: fallRates, rhs: rhs, rhsF: rhsF, flick: flick, get lost() { return lost; }, set xref(v) { xref = v; ref = { kind: 'fixed', x: v }; }, get ref() { return ref; }, set rolling(v) { rolling = v; }, set gmode(v) { gmode = v; redesign(); },
             finishCatch: function () { while (catchIt) think(1000); return cLevel; }, Wred: function () { return Wred(s); }, specRad: specRad, dlqr: dlqr, sampledModel: sampledModel, linear: linear,
-            get mode() { return mode; }, get cLevel() { return cLevel; }, get t() { return tSim; }, get u() { return u; }, W: function () { return Wof(s, tSim); }, Ep: function () { return Ep(s); }, get log() { return log; }, swingUp: swingUp, step: step, think: think, get job() { return job; }, PlanJob: PlanJob };
+            get mode() { return mode; }, get cLevel() { return cLevel; }, get t() { return tSim; }, get u() { return u; }, W: function () { return Wof(s, tSim); }, Ep: function () { return Ep(s); }, get log() { return log; }, swingUp: swingUp, step: step, think: think, get job() { return job; }, PlanJob: PlanJob, dragF: dragF, get sF() { return sF; } };
     })();
     </script>
     <script src="../../scripts/datalog.js"></script>

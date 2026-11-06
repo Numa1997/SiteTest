@@ -461,3 +461,28 @@ Newton's third law), with the cart moving, on a CPU in the browser. Lecture-note
   The fluid step costs about 30 ms in Chromium, so the page runs in slow motion (about 0.7 of real time).
 - **Translations.** 40 page pieces and 24 strings in German and Arabic, written for this change; maths, numbers and tags
   checked equal to the English; the two edited paragraphs of 13 and 13.5 keep their reviewed text with only the change added.
+
+## Lifting the rods in a liquid (6 November 2026, section 13.7)
+
+Numa: "the cart does not lift the arms … did you shoot? does it take way too much energy?" What the page now does in a medium:
+
+- **Drag in the controller's models.** `dragF(p, s, o)` is the still-medium drag (33)–(35) by 4-point Gauss–Legendre per rod and
+  the cart's (13.2) drag. `rhsF` adds it, so the swing-up planner (`PlanJob`) and the certificate (`catchGen`) plan for the liquid;
+  `linear(p)` adds its slope at upright (the viscous part; the quadratic part has none), so the LQR is designed with it. The
+  linearisation was checked against `rhs` and `rhsF` to three digits (notes/fig11/project05/lin.cjs).
+- **The c* search** starts at `CLO = 1e-4` instead of 1: in a liquid c* is 0.04 (water), 0.12 (glycerol), 0.56 (honey).
+- **The guard** (`supervise()`): outside c* it runs the model 4 s ahead with the balancer; in a medium it now also keeps the
+  balancer when that prediction lowers W by at least a tenth (`wPr < 0.9 * wNow`). Before, it gave up on rods tilted 0.8°.
+  In vacuum nothing changed.
+- **Catch in a medium** hands over to `ref = { kind: 'fixed', x: s[0] }` instead of the braking cruise (25), which needs a push
+  against drag that (25) leaves out (measured: the cruise kept going at 0.45 m/s with the rods leaning 2°).
+- **After a failed plan** the calming law pumps instead (`kCalm`: −3 𝒫 tanh(3(V_top − E)/V_top)) until the next plan.
+- The test switches of the work-in-progress branch are gone; `window.DIPC` exposes `PlanJob`, `dragF`, `sF` for tests.
+
+Measured (Chromium, notes/fig11/project05/): with the default machine and 60 N the upright rods are carried to within 2 cm of +1 m
+16 s after the button in water and glycerol; in honey 0.84 m after 24 s (target.cjs). A bang-bang energy pump for 20 s (shoot.cjs):
+the motor puts in 1965 / 1703 / 1325 J in water / glycerol / honey, 79–93 % of it heat round the cart's box, and the rods reach
+only 0.29 / 0.31 / 0.33 of the lift (0.71 / 0.80 / 0.35 at 200 N); the lift itself is 10.5 / 9.3 / 8.5 J. The planner finds no
+swing-up with the default machine at 60 or 200 N (plan.cjs). With rods 2 kg, 0.20 m and 0.25 m and 200 N it finds one in water,
+and the page swings up, catches at 14 s and reaches +1 m (swing.cjs, machine.cjs); none in glycerol or honey. Section 13.7
+explains this with ω_t (the drag-limited turning rate of the outer rod) against ω_need = 2√(f/I), eq. (47)–(48).
