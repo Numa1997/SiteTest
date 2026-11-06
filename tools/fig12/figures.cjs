@@ -28,7 +28,7 @@ const INK = '#1c1518', MUTED = '#8b8079', GRID = '#eee6d9', WINE = '#7a1f2b', DA
   const Rh = Rz(h0), Rmax = Math.max(...P), zmax = P.indexOf(Rmax) * dz;
   const tick = (z, lab) => `<line x1="${f1(X(-0.052))}" x2="${f1(X(-0.048))}" y1="${f1(Z(z))}" y2="${f1(Z(z))}" stroke="${MUTED}"/><text class="tick" x="${f1(X(-0.054))}" y="${f1(Z(z) + 4)}" text-anchor="end">${lab}</text>`;
   let ticks = ''; for (let z = 0; z <= 0.15 + 1e-9; z += 0.025) ticks += tick(z, (z * 1000).toFixed(0));
-  const svg = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Section of the Guinness tulip glass used by the page: the inner radius R(z) on both sides of the axis, from the floor of the cavity to the rim at 147.5 mm; the stout filled to 125 mm; the widest point 39.3 mm at 113 mm; the coordinates x along the road and z up.">
+  const svg = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Section of the Guinness tulip glass used by the page: the inner radius R(z) on both sides of the axis, from the floor of the cavity to the rim at 147.5 mm; the stout filled to 125 mm; the widest point 39.3 mm at 116 mm; the coordinates x along the road and z up.">
 <rect x="0" y="0" width="${W}" height="${H}" fill="#fff"/>
 <line x1="${f1(X(-0.05))}" x2="${f1(X(-0.05))}" y1="${f1(Z(0))}" y2="${f1(Z(0.15))}" stroke="${MUTED}"/>
 ${ticks}
@@ -75,7 +75,7 @@ ${ticks}
     return g + `<defs><clipPath id="${id}"><rect x="${L}" y="${T}" width="${R - L}" height="${B - T}"/></clipPath></defs><g clip-path="url(#${id})">` + line(off, DARK, 1.6) + line(on, WINE, 2.0) + '</g>';
   };
   // the time the wheel is on the bump: the axle path rises above its level between these times (open loop; speed control is within 0.01 s)
-  const svg = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Two panels against time over 2.3 s. Top: the glass's horizontal acceleration, a single sine-like cycle of about plus and minus 1.2 m/s² in open loop as the wheel crosses the bump between 0.375 and 0.625 s, and a smaller cycle of about 0.5 m/s² with speed control. Bottom: the stout's lean, front minus back wall: in open loop it swings up to 25 mm and keeps swinging at about 3.2 Hz; with speed control it stays within about 4 mm.">
+  const svg = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Two panels against time over 2.3 s. Top: the glass's horizontal acceleration, a single sine-like cycle, down to −1.24 and up to +0.84 m/s², in open loop as the wheel crosses the bump between 0.375 and 0.625 s, and a cycle about half as large with speed control. Bottom: the stout's lean, front minus back wall: in open loop it swings up to 25 mm and keeps swinging at about 3.2 Hz; with speed control it stays below 5.8 mm.">
 <rect x="0" y="0" width="${W}" height="${H}" fill="#fff"/>
 <rect x="${f1(X(0.375))}" y="${T1}" width="${f1(X(0.625) - X(0.375))}" height="${B1 - T1}" fill="#f5f1ea"/>
 <rect x="${f1(X(0.375))}" y="${T2}" width="${f1(X(0.625) - X(0.375))}" height="${B2 - T2}" fill="#f5f1ea"/>
