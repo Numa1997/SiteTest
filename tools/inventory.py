@@ -158,6 +158,7 @@ RULES = [
     # shared scripts and styles
     (r'public/scripts/sim\.js', 'Shared helpers of the simulation pages: KaTeX typesetting of the notes, the walkthrough engine.', 'docs/scripts/sim.md'),
     (r'public/scripts/dataset\.js', 'Sim.dataset(): the one named data store each simulation writes its numbers into.', 'docs/scripts/dataset.md'),
+    (r'public/scripts/twoway\.js', 'The solved, two-way fluid of project 05: a tank as deep as the cart, 2D Navier–Stokes on a MAC grid, the cart coupled through the pressure, the rods as lines of forces; runs the page\'s 1 ms machine steps inside its 20 ms fluid steps.', 'docs/scripts/twoway.md'),
     (r'public/scripts/curve\.js', 'Parameter curves: a knob that moves by itself along a chosen or drawn curve while the figure runs; writes every number into the page\'s store.', 'docs/scripts/curve.md'),
     (r'public/scripts/datalog\.js', 'The data panel as a bookkeeper: headline, ledger table, books, Read values, Check, Record one round, Save (.npz + CSV).', 'docs/scripts/datalog.md'),
     (r'public/scripts/ledger/([a-z0-9-]+)\.js', lambda m: 'The data panel\'s ledger of %s: headline, sections in causal order, books, checks of the numbers copied from the run.' % m.group(1), 'docs/scripts/datalog.md'),

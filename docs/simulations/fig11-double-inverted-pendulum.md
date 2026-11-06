@@ -385,3 +385,35 @@ follows at 8 % per frame, the view that widens when the rods hang, thicker rods 
   the right-hand columns out of sight, and in German the escaped MathML spans widened the page to 478 px. Measured after, in headless
   Chromium at 390 and 1280 px in all three languages: page width equals window width, the table scrolls on the phone and fits on the
   desktop, no page errors.
+
+## The solved fluid: the water answers back (6 November 2026)
+
+Numa asked for a fluid that is a velocity field acting on every point of the bodies **and** pushed by them (two-way,
+Newton's third law), with the cart moving, on a CPU in the browser. Lecture-note section 13.6, equations (41)–(46), store group
+*The solved fluid*, solver [public/scripts/twoway.js](../../public/scripts/twoway.js) ([docs](../scripts/twoway.md)).
+- **Control.** A fourth select in the *Air and water* strip, *The fluid*: `given` (sections 13.1–13.5, as before) or `solved`.
+  Solved offers still water or a stream U from the left (`cplOptions()`); a change of it resets the machine.
+- **Tank.** `TW`: 4.0 × 2.8 m on 2.5 cm cells (160 × 112), x from −2 m, y from −1.4 m (room for the rods hanging in a
+  swing-up), one fluid step every 20 ms. `twSync()` makes a new tank when the machine, medium or stream changes and at a reset.
+- **Loop.** `step()` hands over to `twFrame()`: at most three fluid steps a frame; the clock is held back when the computer
+  cannot keep up (`tw_slow`, caption *slow motion*). Inside each fluid step the tank calls `twCtrl()` before every 1 ms step
+  (the page's own loop body: supervisor, controller, your hand) and `twSub()` after it (state, fluid work, `logStep`), so the
+  step log, the sample log and the energy book run as before; `energy()` then leaves the cart's added mass to the water.
+- **Controller's model.** `par()` gives the cart the 2D added mass of (46), ρ b · 0.020539 m², when solved.
+- **Drawing.** `drawTank()` paints the stored vorticity `tw_w` (wine anticlockwise, blue clockwise, full strength from 2 1/s)
+  under the arrows, and the tank's wall, floor, lid and open end; the arrows read the solved velocity (0.2 m long at 0.2 m/s).
+- **Measured** (headless Chromium, this container): 21.6 ms per 20 ms fluid step for the solver alone; divergence ≤ 2 × 10⁻⁴ 1/s;
+  the page's energy book closes to 10⁻¹² J. In glycerol, sending the cart to +1 m or a 0.2 m/s stream topples the rods in both
+  the given and the solved fluid (the balancer has no integral action); that behaviour predates this work.
+- **Development history** of the fluid work (spectral and MAC attempts, WaterLily): `notes/fig11/fluid-ns-handover/HANDOVER.md`.
+- **Data panel.** Group *The solved fluid* (`tw_*`); recompute hooks for `tw_ma2` (ρ b A₂) and `tw_res` (the water's book), both
+  identical to the stored values in Chromium. The check of `E` now leaves the cart's added mass out when the fluid is solved
+  (it is the water's, on the grid); before the fix it disagreed by ½ m_a ẋ² (0.009 J in a test), after it to 10⁻¹⁵.
+- **Phone layout.** The strip's selects and the Reynolds readout may now shrink and wrap below 900 px; the German readout
+  "der Druckwiderstand überwiegt" had made the page 11 px too wide at 390 px with water (in the given fluid too).
+- **Checked** (6 November 2026, headless Chromium): en/de/ar at 1100 and 390 px with water solved: no page errors, no KaTeX
+  errors, no pending translations, no horizontal overflow. `hon.cjs rest flick wind water stillwater`: 5/5 pass (the given
+  fluid is unchanged). The solved fluid is not in `hon.cjs` yet: its steps are the tank's RK4 with the water's forces, which the
+  replay with the page's `rk4` cannot reproduce.
+- **Translations.** 40 page pieces and 24 strings in German and Arabic, written for this change; maths, numbers and tags
+  checked equal to the English; the two edited paragraphs of 13 and 13.5 keep their reviewed text with only the change added.

@@ -30,3 +30,7 @@ def added_mass(P):
     return (phi * nrm[:, 0] * L).sum() * -1   # m11/rho with the sign of the outward-normal convention used here
 for n in (200, 400, 800): print('circle a=0.1, n', n, 'm/(rho pi a^2) =', added_mass(panels_circle(0.1, n)) / (np.pi * 0.01))
 for n in (400, 800, 1600, 3200): m = added_mass(panels_rect(0.36, 0.12, n)); print('rect 0.36 x 0.12 along x, n', n, 'm/rho =', m, ' in units of rho pi (h/2)^2:', m / (np.pi * 0.06 ** 2))
+# Check on a shape that is not a circle: ellipse with semi-axes a = 0.18 (along the motion), b = 0.06: exact m = rho pi b^2 (Lamb, Hydrodynamics, §72)
+for n in (400, 800, 1600):
+    t = np.linspace(0, 2 * np.pi, n + 1)[:-1]; t = t + 0.0 * np.sin(2 * t)
+    m = added_mass(np.c_[0.18 * np.cos(t), 0.06 * np.sin(t)]); print('ellipse 0.18 x 0.06 along x, n', n, 'm/(rho pi b^2) =', m / (np.pi * 0.06 ** 2))
