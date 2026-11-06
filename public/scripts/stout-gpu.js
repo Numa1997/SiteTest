@@ -26,7 +26,7 @@
   const COMMON = /* wgsl */`
 struct P {
   nx: i32, ny: i32, nz: i32, nc: i32,
-  np: i32, npCap: i32, nf: i32, pad0: i32,
+  np: i32, npCap: i32, oV: i32, oW: i32,
   dx: f32, x0: f32, y0: f32, H: f32,
   dt: f32, ax: f32, az: f32, g: f32,
   nu: f32, rp: f32, Rk: f32, zRim: f32,
@@ -35,19 +35,22 @@ struct P {
   nProf: i32, dzProf: f32, pad1: f32, pad2: f32,
 };
 @group(0) @binding(0) var<uniform> P_: P;
-@group(0) @binding(1) var<storage, read> prof: array<f32>;        // the glass's inner radius every dzProf (the measured tulip)
+@group(0) @binding(1) var<uniform> profV: array<vec4f, 128>;      // the glass's inner radius every dzProf (the measured tulip), 4 to a vec4
+fn prof(i: i32) -> f32 { return profV[i >> 2u][i & 3]; }
+// the three face arrays of a MAC quantity live in one buffer: u from 0, v from oV, w from oW
+fn off(comp: i32) -> i32 { return select(select(P_.oW, P_.oV, comp == 1), 0, comp == 0); }
 
 // inner radius of the glass at height z; above the rim there is no wall
 fn Rz(z: f32) -> f32 {
   if (z > P_.zRim) { return 10.0; }
   let f = max(z, 0.0) / P_.dzProf; let i = i32(floor(f));
-  if (i >= P_.nProf - 1) { return prof[P_.nProf - 1]; }
-  return prof[i] + (f - f32(i)) * (prof[i + 1] - prof[i]);
+  if (i >= P_.nProf - 1) { return prof(P_.nProf - 1); }
+  return prof(i) + (f - f32(i)) * (prof(i + 1) - prof(i));
 }
 fn dRz(z: f32) -> f32 {
   if (z >= P_.zRim) { return 0.0; }
   let f = max(z, 0.0) / P_.dzProf; let i = min(P_.nProf - 2, i32(floor(f)));
-  return (prof[i + 1] - prof[i]) / P_.dzProf;
+  return (prof(i + 1) - prof(i)) / P_.dzProf;
 }
 fn cellId(i: i32, j: i32, k: i32) -> i32 { return i + P_.nx * (j + P_.ny * k); }
 fn U(i: i32, j: i32, k: i32) -> i32 { return i + (P_.nx + 1) * (j + P_.ny * k); }
@@ -107,16 +110,17 @@ fn sortCell(@builtin(global_invocation_id) id: vec3u) {
 `;
   // 2. Permute the particle arrays into cell order (the sorted arrays are the step's working set and next step's input).
   const PERMUTE = COMMON + /* wgsl */`
-@group(0) @binding(2) var<storage, read> order: array<i32>;
-@group(0) @binding(3) var<storage, read> posA: array<vec4f>;
-@group(0) @binding(4) var<storage, read> velA: array<vec4f>;
-@group(0) @binding(5) var<storage, read> cA: array<vec4f>;      // 3 vec4 per particle: rows of the APIC gradient (du/dx,du/dy,du/dz), (dv/..), (dw/..)
-@group(0) @binding(6) var<storage, read_write> posB: array<vec4f>;
-@group(0) @binding(7) var<storage, read_write> velB: array<vec4f>;
-@group(0) @binding(8) var<storage, read_write> cB: array<vec4f>;
+@group(0) @binding(2) var<storage, read> cellStart: array<i32>;
+@group(0) @binding(3) var<storage, read> order: array<i32>;
+@group(0) @binding(4) var<storage, read> posA: array<vec4f>;
+@group(0) @binding(5) var<storage, read> velA: array<vec4f>;
+@group(0) @binding(6) var<storage, read> cA: array<vec4f>;      // 3 vec4 per particle: rows of the APIC gradient (du/dx,du/dy,du/dz), (dv/..), (dw/..)
+@group(0) @binding(7) var<storage, read_write> posB: array<vec4f>;
+@group(0) @binding(8) var<storage, read_write> velB: array<vec4f>;
+@group(0) @binding(9) var<storage, read_write> cB: array<vec4f>;
 @compute @workgroup_size(${WG})
 fn permute(@builtin(global_invocation_id) id: vec3u) {
-  let s = i32(id.x); if (s >= P_.nf) { return; }   // nf here: the number of live particles (cellStart[nc]), written by the host after the scan
+  let s = i32(id.x); if (s >= cellStart[P_.nc]) { return; }   // the live particles: those the sort counted
   let p = order[s];
   posB[s] = posA[p]; velB[s] = velA[p]; cB[3 * s] = cA[3 * p]; cB[3 * s + 1] = cA[3 * p + 1]; cB[3 * s + 2] = cA[3 * p + 2];
 }
@@ -235,13 +239,14 @@ fn flags(@builtin(global_invocation_id) id: vec3u) {
   // 3b. The wall cells: a cut cell is liquid when it shares an open face with liquid beside it, or above it well below the
   //     surface (Fluid.inheritWallPhi). Jacobi form: reads the flags of the previous pass (maskB used as the copy).
   const INHERIT = COMMON + /* wgsl */`
-@group(0) @binding(2) var<storage, read> au: array<f32>;
-@group(0) @binding(3) var<storage, read> av: array<f32>;
-@group(0) @binding(4) var<storage, read> aw: array<f32>;
-@group(0) @binding(5) var<storage, read_write> phi: array<f32>;
-@group(0) @binding(6) var<storage, read_write> fluid: array<u32>;
-@group(0) @binding(7) var<storage, read_write> flagCopy: array<u32>;
-@group(0) @binding(8) var<storage, read_write> phiCopy: array<f32>;
+@group(0) @binding(2) var<storage, read> faces: array<f32>;   // open fractions: u faces, then v from oV, w from oW
+@group(0) @binding(3) var<storage, read_write> phi: array<f32>;
+@group(0) @binding(4) var<storage, read_write> fluid: array<u32>;
+@group(0) @binding(5) var<storage, read_write> flagCopy: array<u32>;
+@group(0) @binding(6) var<storage, read_write> phiCopy: array<f32>;
+fn au(n: i32) -> f32 { return faces[n]; }
+fn av(n: i32) -> f32 { return faces[P_.oV + n]; }
+fn aw(n: i32) -> f32 { return faces[P_.oW + n]; }
 fn ijk(c: i32) -> vec3i { let nxy = P_.nx * P_.ny; return vec3i(c % P_.nx, (c / P_.nx) % P_.ny, c / nxy); }
 @compute @workgroup_size(${WG})
 fn copy(@builtin(global_invocation_id) id: vec3u) { let c = i32(id.x); if (c >= P_.nc) { return; } flagCopy[c] = fluid[c]; phiCopy[c] = phi[c]; }
@@ -253,11 +258,11 @@ fn inherit(@builtin(global_invocation_id) id: vec3u) {
   let x = P_.x0 + (f32(q.x) + 0.5) * dx; let y = P_.y0 + (f32(q.y) + 0.5) * dx; let R = Rz((f32(q.z) + 0.5) * dx);
   if (R > P_.Rbox || x * x + y * y < (R - 0.5 * dx) * (R - 0.5 * dx)) { return; }   // only cells cut by the wall
   var best = 1.0; let nxy = P_.nx * P_.ny;
-  if (q.x > 0 && au[U(q.x, q.y, q.z)] > 0.0 && flagCopy[c - 1] != 0u) { best = min(best, phiCopy[c - 1]); }
-  if (q.x < P_.nx - 1 && au[U(q.x + 1, q.y, q.z)] > 0.0 && flagCopy[c + 1] != 0u) { best = min(best, phiCopy[c + 1]); }
-  if (q.y > 0 && av[V(q.x, q.y, q.z)] > 0.0 && flagCopy[c - P_.nx] != 0u) { best = min(best, phiCopy[c - P_.nx]); }
-  if (q.y < P_.ny - 1 && av[V(q.x, q.y + 1, q.z)] > 0.0 && flagCopy[c + P_.nx] != 0u) { best = min(best, phiCopy[c + P_.nx]); }
-  if (q.z < P_.nz - 1 && aw[Wf(q.x, q.y, q.z + 1)] > 0.0 && flagCopy[c + nxy] != 0u && phiCopy[c + nxy] < -0.5 * dx) { best = min(best, phiCopy[c + nxy]); }
+  if (q.x > 0 && au(U(q.x, q.y, q.z)) > 0.0 && flagCopy[c - 1] != 0u) { best = min(best, phiCopy[c - 1]); }
+  if (q.x < P_.nx - 1 && au(U(q.x + 1, q.y, q.z)) > 0.0 && flagCopy[c + 1] != 0u) { best = min(best, phiCopy[c + 1]); }
+  if (q.y > 0 && av(V(q.x, q.y, q.z)) > 0.0 && flagCopy[c - P_.nx] != 0u) { best = min(best, phiCopy[c - P_.nx]); }
+  if (q.y < P_.ny - 1 && av(V(q.x, q.y + 1, q.z)) > 0.0 && flagCopy[c + P_.nx] != 0u) { best = min(best, phiCopy[c + P_.nx]); }
+  if (q.z < P_.nz - 1 && aw(Wf(q.x, q.y, q.z + 1)) > 0.0 && flagCopy[c + nxy] != 0u && phiCopy[c + nxy] < -0.5 * dx) { best = min(best, phiCopy[c + nxy]); }
   if (best < 1.0) { fluid[c] = 1u; phi[c] = min(best, -0.05 * dx); }
 }
 `;
@@ -268,9 +273,7 @@ fn inherit(@builtin(global_invocation_id) id: vec3u) {
 @group(0) @binding(3) var<storage, read> pos: array<vec4f>;
 @group(0) @binding(4) var<storage, read> vel: array<vec4f>;
 @group(0) @binding(5) var<storage, read> cg: array<vec4f>;
-@group(0) @binding(6) var<storage, read_write> u: array<f32>;
-@group(0) @binding(7) var<storage, read_write> v: array<f32>;
-@group(0) @binding(8) var<storage, read_write> w: array<f32>;
+@group(0) @binding(6) var<storage, read_write> grid: array<f32>;   // u, then v from oV, w from oW
 fn gather(comp: i32, n: i32) -> f32 {
   let nx = P_.nx; let ny = P_.ny; let nz = P_.nz; let dx = P_.dx; let inv = 1.0 / dx;
   var sx = nx; var sy = ny; var sz = nz; var ox = 0.5; var oy = 0.5; var oz = 0.5;
@@ -301,50 +304,54 @@ fn gather(comp: i32, n: i32) -> f32 {
   return select(0.0, S / M, M > 1e-9);
 }
 @compute @workgroup_size(${WG})
-fn p2gU(@builtin(global_invocation_id) id: vec3u) { let n = i32(id.x); if (n >= (P_.nx + 1) * P_.ny * P_.nz) { return; } u[n] = gather(0, n); }
+fn p2gU(@builtin(global_invocation_id) id: vec3u) { let n = i32(id.x); if (n >= (P_.nx + 1) * P_.ny * P_.nz) { return; } grid[n] = gather(0, n); }
 @compute @workgroup_size(${WG})
-fn p2gV(@builtin(global_invocation_id) id: vec3u) { let n = i32(id.x); if (n >= P_.nx * (P_.ny + 1) * P_.nz) { return; } v[n] = gather(1, n); }
+fn p2gV(@builtin(global_invocation_id) id: vec3u) { let n = i32(id.x); if (n >= P_.nx * (P_.ny + 1) * P_.nz) { return; } grid[P_.oV + n] = gather(1, n); }
 @compute @workgroup_size(${WG})
-fn p2gW(@builtin(global_invocation_id) id: vec3u) { let n = i32(id.x); if (n >= P_.nx * P_.ny * (P_.nz + 1)) { return; } w[n] = gather(2, n); }
+fn p2gW(@builtin(global_invocation_id) id: vec3u) { let n = i32(id.x); if (n >= P_.nx * P_.ny * (P_.nz + 1)) { return; } grid[P_.oW + n] = gather(2, n); }
 `;
   // 5. Body force (gravity and the fictitious force of the glass's acceleration) and explicit viscosity on open faces.
   const FORCES = COMMON + /* wgsl */`
-@group(0) @binding(2) var<storage, read> open: array<f32>;
-@group(0) @binding(3) var<storage, read_write> a: array<f32>;
-@group(0) @binding(4) var<storage, read_write> t: array<f32>;
+@group(0) @binding(2) var<storage, read> faces: array<f32>;
+@group(0) @binding(3) var<storage, read_write> grid: array<f32>;
+@group(0) @binding(4) var<storage, read_write> tgrid: array<f32>;
 @group(0) @binding(5) var<uniform> which: vec4i;    // comp, sx, sy, sz
+fn open(n: i32) -> f32 { return faces[off(which.x) + n]; }
 @compute @workgroup_size(${WG})
 fn force(@builtin(global_invocation_id) id: vec3u) {
   let n = i32(id.x); if (n >= which.y * which.z * which.w) { return; }
-  if (open[n] <= 0.0) { return; }
-  if (which.x == 0) { a[n] += P_.dt * (-P_.ax); } else if (which.x == 2) { a[n] += P_.dt * (-P_.g - P_.az); }
+  if (open(n) <= 0.0) { return; }
+  let o = off(which.x);
+  if (which.x == 0) { grid[o + n] += P_.dt * (-P_.ax); } else if (which.x == 2) { grid[o + n] += P_.dt * (-P_.g - P_.az); }
 }
 @compute @workgroup_size(${WG})
-fn copyT(@builtin(global_invocation_id) id: vec3u) { let n = i32(id.x); if (n >= which.y * which.z * which.w) { return; } t[n] = a[n]; }
+fn copyT(@builtin(global_invocation_id) id: vec3u) { let n = i32(id.x); if (n >= which.y * which.z * which.w) { return; } let o = off(which.x); tgrid[o + n] = grid[o + n]; }
 @compute @workgroup_size(${WG})
 fn visc(@builtin(global_invocation_id) id: vec3u) {
   let n = i32(id.x); let sx = which.y; let sy = which.z; let sz = which.w; if (n >= sx * sy * sz) { return; }
   let i = n % sx; let j = (n / sx) % sy; let k = n / (sx * sy);
   if (i < 1 || i >= sx - 1 || j < 1 || j >= sy - 1 || k < 1 || k >= sz - 1) { return; }
-  if (open[n] <= 0.0) { return; }
-  let c = P_.nu * P_.dt / (P_.dx * P_.dx);
-  let lap = t[n - 1] + t[n + 1] + t[n - sx] + t[n + sx] + t[n - sx * sy] + t[n + sx * sy] - 6.0 * t[n];
-  a[n] += c * lap;
+  if (open(n) <= 0.0) { return; }
+  let c = P_.nu * P_.dt / (P_.dx * P_.dx); let m = off(which.x) + n;
+  let lap = tgrid[m - 1] + tgrid[m + 1] + tgrid[m - sx] + tgrid[m + sx] + tgrid[m - sx * sy] + tgrid[m + sx * sy] - 6.0 * tgrid[m];
+  grid[m] += c * lap;
 }
 `;
   // 6. The pressure system: A q = b on the liquid cells (q = p dt/rho), face weights the open fractions, ghost-fluid
   //    surface (theta >= thetaMin). Then a list of the liquid cells (scan) and Jacobi-preconditioned CG in one workgroup.
   const PRESSURE = COMMON + /* wgsl */`
-@group(0) @binding(2) var<storage, read> au: array<f32>;
-@group(0) @binding(3) var<storage, read> av: array<f32>;
-@group(0) @binding(4) var<storage, read> aw: array<f32>;
-@group(0) @binding(5) var<storage, read> u: array<f32>;
-@group(0) @binding(6) var<storage, read> v: array<f32>;
-@group(0) @binding(7) var<storage, read> w: array<f32>;
-@group(0) @binding(8) var<storage, read> phi: array<f32>;
-@group(0) @binding(9) var<storage, read> fluid: array<u32>;
-@group(0) @binding(10) var<storage, read_write> A: array<vec4f>;    // per cell: Ad, Ax, Ay, Az
-@group(0) @binding(11) var<storage, read_write> b: array<f32>;
+@group(0) @binding(2) var<storage, read> faces: array<f32>;
+@group(0) @binding(3) var<storage, read> grid: array<f32>;
+@group(0) @binding(4) var<storage, read> phi: array<f32>;
+@group(0) @binding(5) var<storage, read> fluid: array<u32>;
+@group(0) @binding(6) var<storage, read_write> A: array<vec4f>;    // per cell: Ad, Ax, Ay, Az
+@group(0) @binding(7) var<storage, read_write> b: array<f32>;
+fn au(n: i32) -> f32 { return faces[n]; }
+fn av(n: i32) -> f32 { return faces[P_.oV + n]; }
+fn aw(n: i32) -> f32 { return faces[P_.oW + n]; }
+fn u(n: i32) -> f32 { return grid[n]; }
+fn v(n: i32) -> f32 { return grid[P_.oV + n]; }
+fn w(n: i32) -> f32 { return grid[P_.oW + n]; }
 fn ijk(c: i32) -> vec3i { let nxy = P_.nx * P_.ny; return vec3i(c % P_.nx, (c / P_.nx) % P_.ny, c / nxy); }
 fn th(c: i32, n: i32) -> f32 { let t = phi[c] / (phi[c] - phi[n]); return clamp(t, P_.thetaMin, 1.0); }
 @compute @workgroup_size(${WG})
@@ -353,12 +360,12 @@ fn assemble(@builtin(global_invocation_id) id: vec3u) {
   if (fluid[c] == 0u) { A[c] = vec4f(0.0); b[c] = 0.0; return; }
   let q = ijk(c); let i = q.x; let j = q.y; let k = q.z; let nx = P_.nx; let ny = P_.ny; let nz = P_.nz; let nxy = nx * ny;
   var Ad = 0.0; var Ax = 0.0; var Ay = 0.0; var Az = 0.0; var div = 0.0; var wt = 0.0;
-  wt = au[U(i + 1, j, k)]; if (wt > 0.0) { div += wt * u[U(i + 1, j, k)]; if (i + 1 < nx) { if (fluid[c + 1] != 0u) { Ad += wt; Ax = -wt; } else { Ad += wt / th(c, c + 1); } } }
-  wt = au[U(i, j, k)]; if (wt > 0.0) { div -= wt * u[U(i, j, k)]; if (i > 0) { if (fluid[c - 1] != 0u) { Ad += wt; } else { Ad += wt / th(c, c - 1); } } }
-  wt = av[V(i, j + 1, k)]; if (wt > 0.0) { div += wt * v[V(i, j + 1, k)]; if (j + 1 < ny) { if (fluid[c + nx] != 0u) { Ad += wt; Ay = -wt; } else { Ad += wt / th(c, c + nx); } } }
-  wt = av[V(i, j, k)]; if (wt > 0.0) { div -= wt * v[V(i, j, k)]; if (j > 0) { if (fluid[c - nx] != 0u) { Ad += wt; } else { Ad += wt / th(c, c - nx); } } }
-  wt = aw[Wf(i, j, k + 1)]; if (wt > 0.0) { div += wt * w[Wf(i, j, k + 1)]; if (k + 1 < nz) { if (fluid[c + nxy] != 0u) { Ad += wt; Az = -wt; } else { Ad += wt / th(c, c + nxy); } } }
-  wt = aw[Wf(i, j, k)]; if (wt > 0.0) { div -= wt * w[Wf(i, j, k)]; if (k > 0) { if (fluid[c - nxy] != 0u) { Ad += wt; } else { Ad += wt / th(c, c - nxy); } } }
+  wt = au(U(i + 1, j, k)); if (wt > 0.0) { div += wt * u(U(i + 1, j, k)); if (i + 1 < nx) { if (fluid[c + 1] != 0u) { Ad += wt; Ax = -wt; } else { Ad += wt / th(c, c + 1); } } }
+  wt = au(U(i, j, k)); if (wt > 0.0) { div -= wt * u(U(i, j, k)); if (i > 0) { if (fluid[c - 1] != 0u) { Ad += wt; } else { Ad += wt / th(c, c - 1); } } }
+  wt = av(V(i, j + 1, k)); if (wt > 0.0) { div += wt * v(V(i, j + 1, k)); if (j + 1 < ny) { if (fluid[c + nx] != 0u) { Ad += wt; Ay = -wt; } else { Ad += wt / th(c, c + nx); } } }
+  wt = av(V(i, j, k)); if (wt > 0.0) { div -= wt * v(V(i, j, k)); if (j > 0) { if (fluid[c - nx] != 0u) { Ad += wt; } else { Ad += wt / th(c, c - nx); } } }
+  wt = aw(Wf(i, j, k + 1)); if (wt > 0.0) { div += wt * w(Wf(i, j, k + 1)); if (k + 1 < nz) { if (fluid[c + nxy] != 0u) { Ad += wt; Az = -wt; } else { Ad += wt / th(c, c + nxy); } } }
+  wt = aw(Wf(i, j, k)); if (wt > 0.0) { div -= wt * w(Wf(i, j, k)); if (k > 0) { if (fluid[c - nxy] != 0u) { Ad += wt; } else { Ad += wt / th(c, c - nxy); } } }
   A[c] = vec4f(Ad, Ax, Ay, Az); b[c] = -P_.dx * div;
 }
 `;
@@ -368,33 +375,33 @@ fn assemble(@builtin(global_invocation_id) id: vec3u) {
 @group(0) @binding(4) var<storage, read> b: array<f32>;
 @group(0) @binding(5) var<storage, read_write> q: array<f32>;      // the solution, warm-started from the last step
 @group(0) @binding(6) var<storage, read_write> L: array<i32>;      // the liquid cells, then (nc + 0) nf
-@group(0) @binding(7) var<storage, read_write> r: array<f32>;
-@group(0) @binding(8) var<storage, read_write> z: array<f32>;
-@group(0) @binding(9) var<storage, read_write> s: array<f32>;
-@group(0) @binding(10) var<storage, read_write> stat: array<f32>;  // [iterations, residual, |b|max, nf]
+@group(0) @binding(7) var<storage, read_write> work: array<f32>;   // r, z, s: three vectors of nc
+@group(0) @binding(8) var<storage, read_write> stat: array<f32>;  // [iterations, residual, |b|max, nf]
 var<workgroup> sh: array<f32, ${WG}>;
 var<workgroup> shi: array<i32, ${WG}>;
 var<workgroup> flag: i32;
 fn reduce(t: i32, vv: f32) -> f32 {      // sum over the workgroup, fixed tree order
   sh[t] = vv; workgroupBarrier();
   for (var h = ${WG / 2}; h > 0; h = h / 2) { if (t < h) { sh[t] = sh[t] + sh[t + h]; } workgroupBarrier(); }
-  let out = sh[0]; workgroupBarrier(); return out;
+  let out = workgroupUniformLoad(&sh[0]); workgroupBarrier(); return out;
 }
 fn reduceMax(t: i32, vv: f32) -> f32 {
   sh[t] = vv; workgroupBarrier();
   for (var h = ${WG / 2}; h > 0; h = h / 2) { if (t < h) { sh[t] = max(sh[t], sh[t + h]); } workgroupBarrier(); }
-  let out = sh[0]; workgroupBarrier(); return out;
+  let out = workgroupUniformLoad(&sh[0]); workgroupBarrier(); return out;
 }
-fn applyA(c: i32, x: ptr<storage, array<f32>, read_write>) -> f32 {
+// A x at cell c, x the vector at offset xo of q (xo < 0) or of work
+fn xv(xo: i32, c: i32) -> f32 { if (xo < 0) { return q[c]; } return work[xo + c]; }
+fn applyA(c: i32, xo: i32) -> f32 {
   let nx = P_.nx; let ny = P_.ny; let nz = P_.nz; let nxy = nx * ny;
   let i = c % nx; let j = (c / nx) % ny; let k = c / nxy; let a = A[c];
-  var val = a.x * (*x)[c];
-  if (i + 1 < nx) { val += a.y * (*x)[c + 1]; }
-  if (i > 0) { val += A[c - 1].y * (*x)[c - 1]; }
-  if (j + 1 < ny) { val += a.z * (*x)[c + nx]; }
-  if (j > 0) { val += A[c - nx].z * (*x)[c - nx]; }
-  if (k + 1 < nz) { val += a.w * (*x)[c + nxy]; }
-  if (k > 0) { val += A[c - nxy].w * (*x)[c - nxy]; }
+  var val = a.x * xv(xo, c);
+  if (i + 1 < nx) { val += a.y * xv(xo, c + 1); }
+  if (i > 0) { val += A[c - 1].y * xv(xo, c - 1); }
+  if (j + 1 < ny) { val += a.z * xv(xo, c + nx); }
+  if (j > 0) { val += A[c - nx].z * xv(xo, c - nx); }
+  if (k + 1 < nz) { val += a.w * xv(xo, c + nxy); }
+  if (k > 0) { val += A[c - nxy].w * xv(xo, c - nxy); }
   return val;
 }
 // the whole solve in one workgroup: list the liquid cells, then PCG with the Jacobi preconditioner 1/Ad
@@ -406,9 +413,9 @@ fn pcg(@builtin(local_invocation_id) lid: vec3u) {
   var cnt = 0; for (var c = a0; c < a1; c++) { if (fluid[c] != 0u) { cnt++; } }
   shi[t] = cnt; workgroupBarrier();
   if (t == 0) { var acc = 0; for (var u2 = 0; u2 < ${WG}; u2++) { let vv = shi[u2]; shi[u2] = acc; acc += vv; } flag = acc; }
-  workgroupBarrier();
-  var pos = shi[t]; let nf = flag;
-  for (var c = a0; c < a1; c++) { if (fluid[c] != 0u) { L[pos] = c; pos++; } else { q[c] = 0.0; r[c] = 0.0; z[c] = 0.0; s[c] = 0.0; } }
+  let nf = workgroupUniformLoad(&flag);
+  var pos = shi[t]; let R0 = 0; let Z0 = P_.nc; let S0 = 2 * P_.nc;
+  for (var c = a0; c < a1; c++) { if (fluid[c] != 0u) { L[pos] = c; pos++; } else { q[c] = 0.0; work[R0 + c] = 0.0; work[Z0 + c] = 0.0; work[S0 + c] = 0.0; } }
   workgroupBarrier();
   // |b|max
   var bm = 0.0; for (var n = t; n < nf; n += ${WG}) { bm = max(bm, abs(b[L[n]])); }
@@ -417,33 +424,33 @@ fn pcg(@builtin(local_invocation_id) lid: vec3u) {
   if (bm < 1e-14) { for (var n = t; n < nf; n += ${WG}) { q[L[n]] = 0.0; } if (t == 0) { stat[0] = 0.0; stat[1] = 0.0; } return; }
   // r = b - A q; z = M^-1 r; s = z; sigma = z.r
   var rm = 0.0;
-  for (var n = t; n < nf; n += ${WG}) { let c = L[n]; let rr = b[c] - applyA(c, &q); r[c] = rr; rm = max(rm, abs(rr)); }
+  for (var n = t; n < nf; n += ${WG}) { let c = L[n]; let rr = b[c] - applyA(c, -1); work[R0 + c] = rr; rm = max(rm, abs(rr)); }
   workgroupBarrier();
   rm = reduceMax(t, rm);
   let tol = P_.tol * bm;
   if (rm < tol) { if (t == 0) { stat[0] = 0.0; stat[1] = rm; } return; }
   var sg = 0.0;
-  for (var n = t; n < nf; n += ${WG}) { let c = L[n]; let zz = r[c] / A[c].x; z[c] = zz; s[c] = zz; sg += zz * r[c]; }
+  for (var n = t; n < nf; n += ${WG}) { let c = L[n]; let zz = select(0.0, work[R0 + c] / A[c].x, A[c].x > 0.0); work[Z0 + c] = zz; work[S0 + c] = zz; sg += zz * work[R0 + c]; }
   workgroupBarrier();
   var sigma = reduce(t, sg);
   var it = 0; let maxIt = i32(P_.maxIt);
   for (; it < maxIt; it++) {
     var sz = 0.0;
-    for (var n = t; n < nf; n += ${WG}) { let c = L[n]; let zz = applyA(c, &s); z[c] = zz; sz += s[c] * zz; }
+    for (var n = t; n < nf; n += ${WG}) { let c = L[n]; let zz = applyA(c, S0); work[Z0 + c] = zz; sz += work[S0 + c] * zz; }
     workgroupBarrier();
     sz = reduce(t, sz);
     let alpha = sigma / sz;
     rm = 0.0;
-    for (var n = t; n < nf; n += ${WG}) { let c = L[n]; q[c] += alpha * s[c]; r[c] -= alpha * z[c]; rm = max(rm, abs(r[c])); }
+    for (var n = t; n < nf; n += ${WG}) { let c = L[n]; q[c] += alpha * work[S0 + c]; work[R0 + c] -= alpha * work[Z0 + c]; rm = max(rm, abs(work[R0 + c])); }
     workgroupBarrier();
     rm = reduceMax(t, rm);
     if (rm < tol) { break; }
     var sn = 0.0;
-    for (var n = t; n < nf; n += ${WG}) { let c = L[n]; let zz = r[c] / A[c].x; z[c] = zz; sn += zz * r[c]; }
+    for (var n = t; n < nf; n += ${WG}) { let c = L[n]; let zz = select(0.0, work[R0 + c] / A[c].x, A[c].x > 0.0); work[Z0 + c] = zz; sn += zz * work[R0 + c]; }
     workgroupBarrier();
     sn = reduce(t, sn);
     let beta = sn / sigma; sigma = sn;
-    for (var n = t; n < nf; n += ${WG}) { let c = L[n]; s[c] = z[c] + beta * s[c]; }
+    for (var n = t; n < nf; n += ${WG}) { let c = L[n]; work[S0 + c] = work[Z0 + c] + beta * work[S0 + c]; }
     workgroupBarrier();
   }
   if (t == 0) { stat[0] = f32(it + 1); stat[1] = rm; }
@@ -451,13 +458,13 @@ fn pcg(@builtin(local_invocation_id) lid: vec3u) {
 `;
   // 7. Velocity update from the pressure (ghost fluid at the surface), the valid flags, and extrapolation into the air.
   const PROJECT = COMMON + /* wgsl */`
-@group(0) @binding(2) var<storage, read> open: array<f32>;
+@group(0) @binding(2) var<storage, read> faces: array<f32>;
 @group(0) @binding(3) var<storage, read> phi: array<f32>;
 @group(0) @binding(4) var<storage, read> fluid: array<u32>;
 @group(0) @binding(5) var<storage, read> q: array<f32>;
-@group(0) @binding(6) var<storage, read_write> a: array<f32>;
+@group(0) @binding(6) var<storage, read_write> grid: array<f32>;
 @group(0) @binding(7) var<storage, read_write> valid: array<u32>;
-@group(0) @binding(8) var<storage, read_write> t: array<f32>;
+@group(0) @binding(8) var<storage, read_write> tgrid: array<f32>;
 @group(0) @binding(9) var<storage, read_write> validT: array<u32>;
 @group(0) @binding(10) var<uniform> which: vec4i;    // comp, sx, sy, sz
 fn th(c: i32, n: i32) -> f32 { let tt = phi[c] / (phi[c] - phi[n]); return clamp(tt, P_.thetaMin, 1.0); }
@@ -465,50 +472,51 @@ fn ghost(c: i32, n: i32) -> f32 { return q[c] * (1.0 - 1.0 / th(c, n)); }
 @compute @workgroup_size(${WG})
 fn gradient(@builtin(global_invocation_id) id: vec3u) {
   let n = i32(id.x); let comp = which.x; let sx = which.y; let sy = which.z; let sz = which.w; if (n >= sx * sy * sz) { return; }
+  let o = off(comp);
   let i = n % sx; let j = (n / sx) % sy; let k = n / (sx * sy); let nx = P_.nx; let ny = P_.ny; let nz = P_.nz;
-  valid[n] = 0u;
+  valid[o + n] = 0u;
   // the planes where the velocity is known exactly: the floor and the lid (w = 0)
-  if (comp == 2 && (k == 0 || k == nz)) { a[n] = 0.0; valid[n] = 1u; return; }
+  if (comp == 2 && (k == 0 || k == nz)) { grid[o + n] = 0.0; valid[o + n] = 1u; return; }
   if ((comp == 0 && (i == 0 || i == nx)) || (comp == 1 && (j == 0 || j == ny))) { return; }
-  if (open[n] <= 0.0) { return; }
+  if (faces[o + n] <= 0.0) { return; }
   var cl = 0; var cr = 0;
   if (comp == 0) { cl = (i - 1) + nx * (j + ny * k); cr = cl + 1; } else if (comp == 1) { cl = i + nx * ((j - 1) + ny * k); cr = cl + nx; } else { cl = i + nx * (j + ny * (k - 1)); cr = cl + nx * ny; }
   let fl = fluid[cl] != 0u; let fr = fluid[cr] != 0u;
   if (!fl && !fr) { return; }
   let ql = select(ghost(cr, cl), q[cl], fl); let qr = select(ghost(cl, cr), q[cr], fr);
-  a[n] -= (qr - ql) / P_.dx; valid[n] = 1u;
+  grid[o + n] -= (qr - ql) / P_.dx; valid[o + n] = 1u;
 }
 @compute @workgroup_size(${WG})
-fn copyV(@builtin(global_invocation_id) id: vec3u) { let n = i32(id.x); if (n >= which.y * which.z * which.w) { return; } t[n] = a[n]; validT[n] = valid[n]; }
+fn copyV(@builtin(global_invocation_id) id: vec3u) { let o = off(which.x); let n = i32(id.x); if (n >= which.y * which.z * which.w) { return; } tgrid[o + n] = grid[o + n]; validT[o + n] = valid[o + n]; }
 // one layer of extrapolation: an invalid face takes the mean of its valid neighbours (from the copy)
 @compute @workgroup_size(${WG})
-fn extend(@builtin(global_invocation_id) id: vec3u) {
+fn extend(@builtin(global_invocation_id) id: vec3u) { let o = off(which.x);
   let n = i32(id.x); let sx = which.y; let sy = which.z; let sz = which.w; if (n >= sx * sy * sz) { return; }
-  if (validT[n] != 0u) { return; }
+  if (validT[o + n] != 0u) { return; }
   let i = n % sx; let j = (n / sx) % sy; let k = n / (sx * sy);
   var s = 0.0; var m = 0.0;
-  if (i > 0 && validT[n - 1] != 0u) { s += t[n - 1]; m += 1.0; }
-  if (i < sx - 1 && validT[n + 1] != 0u) { s += t[n + 1]; m += 1.0; }
-  if (j > 0 && validT[n - sx] != 0u) { s += t[n - sx]; m += 1.0; }
-  if (j < sy - 1 && validT[n + sx] != 0u) { s += t[n + sx]; m += 1.0; }
-  if (k > 0 && validT[n - sx * sy] != 0u) { s += t[n - sx * sy]; m += 1.0; }
-  if (k < sz - 1 && validT[n + sx * sy] != 0u) { s += t[n + sx * sy]; m += 1.0; }
-  if (m > 0.0) { a[n] = s / m; valid[n] = 1u; }
+  if (i > 0 && validT[o + n - 1] != 0u) { s += tgrid[o + n - 1]; m += 1.0; }
+  if (i < sx - 1 && validT[o + n + 1] != 0u) { s += tgrid[o + n + 1]; m += 1.0; }
+  if (j > 0 && validT[o + n - sx] != 0u) { s += tgrid[o + n - sx]; m += 1.0; }
+  if (j < sy - 1 && validT[o + n + sx] != 0u) { s += tgrid[o + n + sx]; m += 1.0; }
+  if (k > 0 && validT[o + n - sx * sy] != 0u) { s += tgrid[o + n - sx * sy]; m += 1.0; }
+  if (k < sz - 1 && validT[o + n + sx * sy] != 0u) { s += tgrid[o + n + sx * sy]; m += 1.0; }
+  if (m > 0.0) { grid[o + n] = s / m; valid[o + n] = 1u; }
 }
 @compute @workgroup_size(${WG})
-fn zeroInvalid(@builtin(global_invocation_id) id: vec3u) { let n = i32(id.x); if (n >= which.y * which.z * which.w) { return; } if (valid[n] == 0u) { a[n] = 0.0; } }
+fn zeroInvalid(@builtin(global_invocation_id) id: vec3u) { let o = off(which.x); let n = i32(id.x); if (n >= which.y * which.z * which.w) { return; } if (valid[o + n] == 0u) { grid[o + n] = 0.0; } }
 `;
   // 8. Grid-to-particle (APIC: velocity and its gradient from the trilinear weights), RK2 advection through the grid, the
   //    wall, the floor, the box top, and the spill over the rim.
   const G2P = COMMON + /* wgsl */`
-@group(0) @binding(2) var<storage, read> u: array<f32>;
-@group(0) @binding(3) var<storage, read> v: array<f32>;
-@group(0) @binding(4) var<storage, read> w: array<f32>;
-@group(0) @binding(5) var<storage, read_write> pos: array<vec4f>;
-@group(0) @binding(6) var<storage, read_write> vel: array<vec4f>;
-@group(0) @binding(7) var<storage, read_write> cg: array<vec4f>;
-@group(0) @binding(8) var<storage, read_write> spill: array<vec4f>;      // [count as f32 in .x of slot 0 is kept on the host]; slots: pos, vel of spilled particles
-@group(0) @binding(9) var<storage, read_write> spillN: atomic<i32>;
+@group(0) @binding(2) var<storage, read> cellStart: array<i32>;
+@group(0) @binding(3) var<storage, read> grid: array<f32>;
+@group(0) @binding(4) var<storage, read_write> pos: array<vec4f>;
+@group(0) @binding(5) var<storage, read_write> vel: array<vec4f>;
+@group(0) @binding(6) var<storage, read_write> cg: array<vec4f>;
+@group(0) @binding(7) var<storage, read_write> spill: array<vec4f>;      // pos, vel of each particle that spilled this step
+@group(0) @binding(8) var<storage, read_write> spillN: atomic<i32>;
+fn gv(comp: i32, n: i32) -> f32 { return grid[off(comp) + n]; }
 fn sample(comp: i32, x: f32, y: f32, z: f32) -> f32 {
   let nx = P_.nx; let ny = P_.ny; let nz = P_.nz; let dx = P_.dx;
   var sx = nx; var sy = ny; var sz = nz; var fx = (x - P_.x0) / dx; var fy = (y - P_.y0) / dx; var fz = z / dx;
@@ -517,9 +525,9 @@ fn sample(comp: i32, x: f32, y: f32, z: f32) -> f32 {
   let i0 = clamp(i, 0, sx - 1); let i1 = clamp(i + 1, 0, sx - 1); let j0 = clamp(j, 0, sy - 1); let j1 = clamp(j + 1, 0, sy - 1); let k0 = clamp(k, 0, sz - 1); let k1 = clamp(k + 1, 0, sz - 1);
   let sxy = sx * sy; let b00 = j0 * sx + k0 * sxy; let b10 = j1 * sx + k0 * sxy; let b01 = j0 * sx + k1 * sxy; let b11 = j1 * sx + k1 * sxy;
   var c00 = 0.0; var c10 = 0.0; var c01 = 0.0; var c11 = 0.0;
-  if (comp == 0) { c00 = u[i0 + b00] + tx * (u[i1 + b00] - u[i0 + b00]); c10 = u[i0 + b10] + tx * (u[i1 + b10] - u[i0 + b10]); c01 = u[i0 + b01] + tx * (u[i1 + b01] - u[i0 + b01]); c11 = u[i0 + b11] + tx * (u[i1 + b11] - u[i0 + b11]); }
-  else if (comp == 1) { c00 = v[i0 + b00] + tx * (v[i1 + b00] - v[i0 + b00]); c10 = v[i0 + b10] + tx * (v[i1 + b10] - v[i0 + b10]); c01 = v[i0 + b01] + tx * (v[i1 + b01] - v[i0 + b01]); c11 = v[i0 + b11] + tx * (v[i1 + b11] - v[i0 + b11]); }
-  else { c00 = w[i0 + b00] + tx * (w[i1 + b00] - w[i0 + b00]); c10 = w[i0 + b10] + tx * (w[i1 + b10] - w[i0 + b10]); c01 = w[i0 + b01] + tx * (w[i1 + b01] - w[i0 + b01]); c11 = w[i0 + b11] + tx * (w[i1 + b11] - w[i0 + b11]); }
+  if (comp == 0) { c00 = gv(comp, i0 + b00) + tx * (gv(comp, i1 + b00) - gv(comp, i0 + b00)); c10 = gv(comp, i0 + b10) + tx * (gv(comp, i1 + b10) - gv(comp, i0 + b10)); c01 = gv(comp, i0 + b01) + tx * (gv(comp, i1 + b01) - gv(comp, i0 + b01)); c11 = gv(comp, i0 + b11) + tx * (gv(comp, i1 + b11) - gv(comp, i0 + b11)); }
+  else if (comp == 1) { c00 = gv(comp, i0 + b00) + tx * (gv(comp, i1 + b00) - gv(comp, i0 + b00)); c10 = gv(comp, i0 + b10) + tx * (gv(comp, i1 + b10) - gv(comp, i0 + b10)); c01 = gv(comp, i0 + b01) + tx * (gv(comp, i1 + b01) - gv(comp, i0 + b01)); c11 = gv(comp, i0 + b11) + tx * (gv(comp, i1 + b11) - gv(comp, i0 + b11)); }
+  else { c00 = gv(comp, i0 + b00) + tx * (gv(comp, i1 + b00) - gv(comp, i0 + b00)); c10 = gv(comp, i0 + b10) + tx * (gv(comp, i1 + b10) - gv(comp, i0 + b10)); c01 = gv(comp, i0 + b01) + tx * (gv(comp, i1 + b01) - gv(comp, i0 + b01)); c11 = gv(comp, i0 + b11) + tx * (gv(comp, i1 + b11) - gv(comp, i0 + b11)); }
   let d0 = c00 + ty * (c10 - c00); let d1 = c01 + ty * (c11 - c01);
   return d0 + tz * (d1 - d0);
 }
@@ -534,9 +542,9 @@ fn g2pComp(comp: i32, x: f32, y: f32, z: f32) -> vec4f {
   let n000 = I0 + J0 * sx + K0 * sxy; let n100 = I1 + J0 * sx + K0 * sxy; let n010 = I0 + J1 * sx + K0 * sxy; let n110 = I1 + J1 * sx + K0 * sxy;
   let n001 = I0 + J0 * sx + K1 * sxy; let n101 = I1 + J0 * sx + K1 * sxy; let n011 = I0 + J1 * sx + K1 * sxy; let n111 = I1 + J1 * sx + K1 * sxy;
   var q000 = 0.0; var q100 = 0.0; var q010 = 0.0; var q110 = 0.0; var q001 = 0.0; var q101 = 0.0; var q011 = 0.0; var q111 = 0.0;
-  if (comp == 0) { q000 = u[n000]; q100 = u[n100]; q010 = u[n010]; q110 = u[n110]; q001 = u[n001]; q101 = u[n101]; q011 = u[n011]; q111 = u[n111]; }
-  else if (comp == 1) { q000 = v[n000]; q100 = v[n100]; q010 = v[n010]; q110 = v[n110]; q001 = v[n001]; q101 = v[n101]; q011 = v[n011]; q111 = v[n111]; }
-  else { q000 = w[n000]; q100 = w[n100]; q010 = w[n010]; q110 = w[n110]; q001 = w[n001]; q101 = w[n101]; q011 = w[n011]; q111 = w[n111]; }
+  if (comp == 0) { q000 = gv(comp, n000); q100 = gv(comp, n100); q010 = gv(comp, n010); q110 = gv(comp, n110); q001 = gv(comp, n001); q101 = gv(comp, n101); q011 = gv(comp, n011); q111 = gv(comp, n111); }
+  else if (comp == 1) { q000 = gv(comp, n000); q100 = gv(comp, n100); q010 = gv(comp, n010); q110 = gv(comp, n110); q001 = gv(comp, n001); q101 = gv(comp, n101); q011 = gv(comp, n011); q111 = gv(comp, n111); }
+  else { q000 = gv(comp, n000); q100 = gv(comp, n100); q010 = gv(comp, n010); q110 = gv(comp, n110); q001 = gv(comp, n001); q101 = gv(comp, n101); q011 = gv(comp, n011); q111 = gv(comp, n111); }
   let ux = 1.0 - tx; let uy = 1.0 - ty; let uz = 1.0 - tz;
   let val = ux * uy * uz * q000 + tx * uy * uz * q100 + ux * ty * uz * q010 + tx * ty * uz * q110 + ux * uy * tz * q001 + tx * uy * tz * q101 + ux * ty * tz * q011 + tx * ty * tz * q111;
   let gx = inv * (uy * uz * (q100 - q000) + ty * uz * (q110 - q010) + uy * tz * (q101 - q001) + ty * tz * (q111 - q011));
@@ -546,7 +554,7 @@ fn g2pComp(comp: i32, x: f32, y: f32, z: f32) -> vec4f {
 }
 @compute @workgroup_size(${WG})
 fn g2p(@builtin(global_invocation_id) id: vec3u) {
-  let s = i32(id.x); if (s >= P_.np) { return; }
+  let s = i32(id.x); if (s >= cellStart[P_.nc]) { return; }
   let p = pos[s];
   let a = g2pComp(0, p.x, p.y, p.z); let bq = g2pComp(1, p.x, p.y, p.z); let c = g2pComp(2, p.x, p.y, p.z);
   vel[s] = vec4f(a.x, bq.x, c.x, 0.0);
@@ -556,7 +564,7 @@ fn g2p(@builtin(global_invocation_id) id: vec3u) {
 // along the outward normal; the floor and the box top; above the rim and outside its radius the particle has spilled
 @compute @workgroup_size(${WG})
 fn advect(@builtin(global_invocation_id) id: vec3u) {
-  let s = i32(id.x); if (s >= P_.np) { return; }
+  let s = i32(id.x); if (s >= cellStart[P_.nc]) { return; }
   let p = pos[s]; let dt = P_.dt; let h = 0.5 * dt;
   var x = p.x; var y = p.y; var z = p.z;
   let u1 = sample(0, x, y, z); let v1 = sample(1, x, y, z); let w1 = sample(2, x, y, z);
@@ -587,16 +595,17 @@ fn advect(@builtin(global_invocation_id) id: vec3u) {
   // 9. Reductions the host needs each step: momentum (sum of u, w over the live particles), the fastest particle, and the
   //    particle volume standing on each grid column (integer counts: exact). Per-workgroup partial sums in fixed order.
   const REDUCE = COMMON + /* wgsl */`
-@group(0) @binding(2) var<storage, read> pos: array<vec4f>;
-@group(0) @binding(3) var<storage, read> vel: array<vec4f>;
-@group(0) @binding(4) var<storage, read_write> part: array<vec4f>;      // per workgroup: sum u, sum v, sum w, max |v|^2
-@group(0) @binding(5) var<storage, read_write> col: array<atomic<i32>>;  // particles per column
+@group(0) @binding(2) var<storage, read> cellStart: array<i32>;
+@group(0) @binding(3) var<storage, read> pos: array<vec4f>;
+@group(0) @binding(4) var<storage, read> vel: array<vec4f>;
+@group(0) @binding(5) var<storage, read_write> part: array<vec4f>;      // per workgroup: sum u, sum v, sum w, max |v|^2
+@group(0) @binding(6) var<storage, read_write> col: array<atomic<i32>>;  // particles per column
 var<workgroup> sh: array<vec4f, ${WG}>;
 @compute @workgroup_size(${WG})
 fn momentum(@builtin(global_invocation_id) id: vec3u, @builtin(local_invocation_id) lid: vec3u, @builtin(workgroup_id) wid: vec3u) {
   let s = i32(id.x); let t = i32(lid.x);
   var vv = vec4f(0.0);
-  if (s < P_.np && pos[s].w >= 0.0) { let q = vel[s]; vv = vec4f(q.x, q.y, q.z, q.x * q.x + q.y * q.y + q.z * q.z);
+  if (s < cellStart[P_.nc] && pos[s].w >= 0.0) { let q = vel[s]; vv = vec4f(q.x, q.y, q.z, q.x * q.x + q.y * q.y + q.z * q.z);
     var i = i32(floor((pos[s].x - P_.x0) / P_.dx)); var j = i32(floor((pos[s].y - P_.y0) / P_.dx));
     i = clamp(i, 0, P_.nx - 1); j = clamp(j, 0, P_.ny - 1); atomicAdd(&col[i + P_.nx * j], 1); }
   sh[t] = vv; workgroupBarrier();
@@ -680,102 +689,111 @@ fn momentum(@builtin(global_invocation_id) id: vec3u, @builtin(local_invocation_
   // ---- device, buffers, pipelines
   GpuFluid.prototype.init = async function (device) {
     const d = this.device = device;
-    const mk = (n, usage, label) => d.createBuffer({ label, size: Math.max(16, n), usage: usage || (GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST | GPUBufferUsage.COPY_SRC) });
-    const cap = this.npCap = this.np;
+    const ST = GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST | GPUBufferUsage.COPY_SRC, UN = GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST;
+    const mk = (n, usage, label) => d.createBuffer({ label, size: Math.max(16, Math.ceil(n / 4) * 4), usage: usage || ST });
+    const cap = this.npCap = this.np, nc = this.nc, nf3 = this.nu_ + this.nv_ + this.nw_;
+    this.oV = this.nu_; this.oW = this.nu_ + this.nv_;
+    if (this.profile.R.length > 512) throw new Error('stout-gpu: the glass profile has more than 512 points');
     this.B = {
-      params: mk(128, GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST, 'params'),
-      prof: mk(4 * this.profile.R.length, null, 'profile'),
+      params: mk(128, UN, 'params'), prof: mk(16 * 128, UN, 'profile'),
       posA: mk(16 * cap, null, 'posA'), velA: mk(16 * cap, null, 'velA'), cA: mk(48 * cap, null, 'cA'),
       posB: mk(16 * cap, null, 'posB'), velB: mk(16 * cap, null, 'velB'), cB: mk(48 * cap, null, 'cB'),
-      cnt: mk(4 * (this.nc + 1), null, 'cnt'), pcell: mk(4 * cap, null, 'pcell'), fillp: mk(4 * (this.nc + 1), null, 'fillp'), order: mk(4 * cap, null, 'order'), cellStart: mk(4 * (this.nc + 1), null, 'cellStart'),
-      maskA: mk(4 * this.nc, null, 'maskA'), maskB: mk(4 * this.nc, null, 'maskB'), phi: mk(4 * this.nc, null, 'phi'), fluid: mk(4 * this.nc, null, 'fluid'), imgF: mk(4 * cap, null, 'imgF'),
-      flagCopy: mk(4 * this.nc, null, 'flagCopy'), phiCopy: mk(4 * this.nc, null, 'phiCopy'),
-      au: mk(4 * this.nu_, null, 'au'), av: mk(4 * this.nv_, null, 'av'), aw: mk(4 * this.nw_, null, 'aw'),
-      u: mk(4 * this.nu_, null, 'u'), v: mk(4 * this.nv_, null, 'v'), w: mk(4 * this.nw_, null, 'w'),
-      tu: mk(4 * this.nu_, null, 'tu'), tv: mk(4 * this.nv_, null, 'tv'), tw: mk(4 * this.nw_, null, 'tw'),
-      ku: mk(4 * this.nu_, null, 'ku'), kv: mk(4 * this.nv_, null, 'kv'), kw: mk(4 * this.nw_, null, 'kw'),
-      ktu: mk(4 * this.nu_, null, 'ktu'), ktv: mk(4 * this.nv_, null, 'ktv'), ktw: mk(4 * this.nw_, null, 'ktw'),
-      A: mk(16 * this.nc, null, 'A'), b: mk(4 * this.nc, null, 'b'), q: mk(4 * this.nc, null, 'q'), L: mk(4 * (this.nc + 1), null, 'L'), r: mk(4 * this.nc, null, 'r'), z: mk(4 * this.nc, null, 'z'), s: mk(4 * this.nc, null, 's'),
-      stat: mk(16, null, 'stat'),
-      spill: mk(32 * 4096, null, 'spill'), spillN: mk(16, null, 'spillN'),
+      cnt: mk(4 * (nc + 1), null, 'cnt'), pcell: mk(4 * cap, null, 'pcell'), fillp: mk(4 * (nc + 1), null, 'fillp'), order: mk(4 * cap, null, 'order'), cellStart: mk(4 * (nc + 1), null, 'cellStart'),
+      maskA: mk(4 * nc, null, 'maskA'), maskB: mk(4 * nc, null, 'maskB'), phi: mk(4 * nc, null, 'phi'), fluid: mk(4 * nc, null, 'fluid'), imgF: mk(4 * cap, null, 'imgF'),
+      flagCopy: mk(4 * nc, null, 'flagCopy'), phiCopy: mk(4 * nc, null, 'phiCopy'),
+      faces: mk(4 * nf3, null, 'faces'), grid: mk(4 * nf3, null, 'grid'), tgrid: mk(4 * nf3, null, 'tgrid'), valid: mk(4 * nf3, null, 'valid'), validT: mk(4 * nf3, null, 'validT'),
+      A: mk(16 * nc, null, 'A'), b: mk(4 * nc, null, 'b'), q: mk(4 * nc, null, 'q'), L: mk(4 * (nc + 1), null, 'L'), work: mk(12 * nc, null, 'work'),
+      stat: mk(16, null, 'stat'), spill: mk(32 * 4096, null, 'spill'), spillN: mk(16, null, 'spillN'),
       part: mk(16 * Math.ceil(cap / WG), null, 'part'), col: mk(4 * this.nx * this.ny, null, 'col'),
-      whichU: mk(16, GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST, 'whichU'), whichV: mk(16, GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST, 'whichV'), whichW: mk(16, GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST, 'whichW'),
-      read: d.createBuffer({ label: 'readback', size: 4 * (4 + 4 + 2 + 4 * Math.ceil(cap / WG) + this.nx * this.ny + 8 * 4096 + 1) + 64, usage: GPUBufferUsage.MAP_READ | GPUBufferUsage.COPY_DST }),
+      whichU: mk(16, UN, 'whichU'), whichV: mk(16, UN, 'whichV'), whichW: mk(16, UN, 'whichW'),
+      read: d.createBuffer({ label: 'readback', size: 64 + 16 * Math.ceil(cap / WG) + 4 * this.nx * this.ny + 16 + 32 * 4096, usage: GPUBufferUsage.MAP_READ | GPUBufferUsage.COPY_DST }),
       readPos: d.createBuffer({ label: 'readback positions', size: 16 * cap, usage: GPUBufferUsage.MAP_READ | GPUBufferUsage.COPY_DST })
     };
-    d.queue.writeBuffer(this.B.prof, 0, new Float32Array(this.profile.R));
-    d.queue.writeBuffer(this.B.au, 0, this.au); d.queue.writeBuffer(this.B.av, 0, this.av); d.queue.writeBuffer(this.B.aw, 0, this.aw);
+    const pr = new Float32Array(512); pr.set(this.profile.R); d.queue.writeBuffer(this.B.prof, 0, pr);
+    const fa = new Float32Array(nf3); fa.set(this.au, 0); fa.set(this.av, this.oV); fa.set(this.aw, this.oW); d.queue.writeBuffer(this.B.faces, 0, fa);
     d.queue.writeBuffer(this.B.whichU, 0, new Int32Array([0, this.nx + 1, this.ny, this.nz]));
     d.queue.writeBuffer(this.B.whichV, 0, new Int32Array([1, this.nx, this.ny + 1, this.nz]));
     d.queue.writeBuffer(this.B.whichW, 0, new Int32Array([2, this.nx, this.ny, this.nz + 1]));
     this.uploadParticles();
-    // pipelines
-    const mod = (code, label) => d.createShaderModule({ label, code });
-    const pipe = (m, entry) => d.createComputePipeline({ label: entry, layout: 'auto', compute: { module: m, entryPoint: entry } });
-    const M = { sort: mod(SORT, 'sort'), perm: mod(PERMUTE, 'permute'), ls: mod(LEVELSET, 'levelset'), inh: mod(INHERIT, 'inherit'), p2g: mod(P2G, 'p2g'), forces: mod(FORCES, 'forces'), pr: mod(PRESSURE, 'pressure'), cg: mod(CG, 'cg'), proj: mod(PROJECT, 'project'), g2p: mod(G2P, 'g2p'), red: mod(REDUCE, 'reduce') };
-    const K = this.K = {};
+    // Explicit layouts, one per shader module (u uniform, r read-only storage, s storage): every entry point of a module
+    // shares its bind groups, used bindings or not. At most 8 storage buffers per stage, the limit every device gives.
+    const KINDS = {
+      sort: 'uursssss', perm: 'uurrrrrsss', ls: 'uurrsssss', inh: 'uurssss', p2g: 'uurrrrs', forces: 'uurssu', pr: 'uurrrrss', cg: 'uurrrssss', proj: 'uurrrrssssu', g2p: 'uurrsssss', red: 'uurrrss'
+    };
+    const SRC = { sort: SORT, perm: PERMUTE, ls: LEVELSET, inh: INHERIT, p2g: P2G, forces: FORCES, pr: PRESSURE, cg: CG, proj: PROJECT, g2p: G2P, red: REDUCE };
+    const L = this.layouts = {}, M = {};
+    for (const k in KINDS) {
+      L[k] = d.createBindGroupLayout({ label: k, entries: KINDS[k].split('').map((t, i) => ({ binding: i, visibility: GPUShaderStage.COMPUTE, buffer: { type: t === 'u' ? 'uniform' : t === 'r' ? 'read-only-storage' : 'storage' } })) });
+      M[k] = d.createShaderModule({ label: k, code: SRC[k] });
+    }
+    const K = this.K = {}, PL = {};
+    for (const k in KINDS) PL[k] = d.createPipelineLayout({ bindGroupLayouts: [L[k]] });
     for (const [k, m, e] of [['count', 'sort', 'count'], ['scan', 'sort', 'scan'], ['scatter', 'sort', 'scatter'], ['sortCell', 'sort', 'sortCell'], ['permute', 'perm', 'permute'],
       ['masks', 'ls', 'masks'], ['dilate0', 'ls', 'dilate0'], ['dilateX', 'ls', 'dilateX'], ['dilateY', 'ls', 'dilateY'], ['dilateZ', 'ls', 'dilateZ'], ['phiCells', 'ls', 'phiCells'], ['flags', 'ls', 'flags'],
       ['copyF', 'inh', 'copy'], ['inherit', 'inh', 'inherit'], ['p2gU', 'p2g', 'p2gU'], ['p2gV', 'p2g', 'p2gV'], ['p2gW', 'p2g', 'p2gW'],
       ['force', 'forces', 'force'], ['copyT', 'forces', 'copyT'], ['visc', 'forces', 'visc'], ['assemble', 'pr', 'assemble'], ['pcg', 'cg', 'pcg'],
-      ['gradient', 'proj', 'gradient'], ['copyV', 'proj', 'copyV'], ['extend', 'proj', 'extend'], ['zeroInvalid', 'proj', 'zeroInvalid'], ['g2p', 'g2p', 'g2p'], ['advect', 'g2p', 'advect'], ['momentum', 'red', 'momentum']]) K[k] = pipe(M[m], e);
-    // bind groups (two sets where the particle arrays ping-pong: A -> B and B -> A)
-    const bg = (pl, entries) => d.createBindGroup({ layout: pl.getBindGroupLayout(0), entries: entries.map((bf, i) => ({ binding: i, resource: { buffer: bf } })) });
-    const B = this.B, G = this.G = {};
-    const base = [B.params, B.prof];
-    G.count = [bg(K.count, base.concat([B.posA, B.cnt, B.pcell, B.fillp, B.order, B.cellStart])), bg(K.count, base.concat([B.posB, B.cnt, B.pcell, B.fillp, B.order, B.cellStart]))];
-    G.permute = [bg(K.permute, base.concat([B.order, B.posA, B.velA, B.cA, B.posB, B.velB, B.cB])), bg(K.permute, base.concat([B.order, B.posB, B.velB, B.cB, B.posA, B.velA, B.cA]))];
-    G.ls = [bg(K.masks, base.concat([B.cellStart, B.posB, B.maskA, B.maskB, B.phi, B.fluid, B.imgF])), bg(K.masks, base.concat([B.cellStart, B.posA, B.maskA, B.maskB, B.phi, B.fluid, B.imgF]))];
-    G.inh = bg(K.inherit, base.concat([B.au, B.av, B.aw, B.phi, B.fluid, B.flagCopy, B.phiCopy]));
-    G.p2g = [bg(K.p2gU, base.concat([B.cellStart, B.posB, B.velB, B.cB, B.u, B.v, B.w])), bg(K.p2gU, base.concat([B.cellStart, B.posA, B.velA, B.cA, B.u, B.v, B.w]))];
-    G.forces = [bg(K.force, base.concat([B.au, B.u, B.tu, B.whichU])), bg(K.force, base.concat([B.av, B.v, B.tv, B.whichV])), bg(K.force, base.concat([B.aw, B.w, B.tw, B.whichW]))];
-    G.assemble = bg(K.assemble, base.concat([B.au, B.av, B.aw, B.u, B.v, B.w, B.phi, B.fluid, B.A, B.b]));
-    G.pcg = bg(K.pcg, base.concat([B.fluid, B.A, B.b, B.q, B.L, B.r, B.z, B.s, B.stat]));
-    G.proj = [bg(K.gradient, base.concat([B.au, B.phi, B.fluid, B.q, B.u, B.ku, B.tu, B.ktu, B.whichU])), bg(K.gradient, base.concat([B.av, B.phi, B.fluid, B.q, B.v, B.kv, B.tv, B.ktv, B.whichV])), bg(K.gradient, base.concat([B.aw, B.phi, B.fluid, B.q, B.w, B.kw, B.tw, B.ktw, B.whichW]))];
-    G.g2p = [bg(K.g2p, base.concat([B.u, B.v, B.w, B.posB, B.velB, B.cB, B.spill, B.spillN])), bg(K.g2p, base.concat([B.u, B.v, B.w, B.posA, B.velA, B.cA, B.spill, B.spillN]))];
-    G.red = [bg(K.momentum, base.concat([B.posB, B.velB, B.part, B.col])), bg(K.momentum, base.concat([B.posA, B.velA, B.part, B.col]))];
-    this.side = 0;          // which array set holds the particles now: 0 = A, 1 = B
+      ['gradient', 'proj', 'gradient'], ['copyV', 'proj', 'copyV'], ['extend', 'proj', 'extend'], ['zeroInvalid', 'proj', 'zeroInvalid'], ['g2p', 'g2p', 'g2p'], ['advect', 'g2p', 'advect'], ['momentum', 'red', 'momentum']])
+      K[k] = d.createComputePipeline({ label: e, layout: PL[m], compute: { module: M[m], entryPoint: e } });
+    const bg = (k, bufs) => d.createBindGroup({ label: k, layout: L[k], entries: bufs.map((bf, i) => ({ binding: i, resource: { buffer: bf } })) });
+    const B = this.B, G = this.G = {}, base = [B.params, B.prof];
+    // the particle arrays ping-pong: index 0 sorts A into B and works on B; index 1 sorts B into A and works on A
+    G.count = [bg('sort', base.concat([B.posA, B.cnt, B.pcell, B.fillp, B.order, B.cellStart])), bg('sort', base.concat([B.posB, B.cnt, B.pcell, B.fillp, B.order, B.cellStart]))];
+    G.permute = [bg('perm', base.concat([B.cellStart, B.order, B.posA, B.velA, B.cA, B.posB, B.velB, B.cB])), bg('perm', base.concat([B.cellStart, B.order, B.posB, B.velB, B.cB, B.posA, B.velA, B.cA]))];
+    const work = [[B.posB, B.velB, B.cB], [B.posA, B.velA, B.cA]];
+    G.ls = work.map((w) => bg('ls', base.concat([B.cellStart, w[0], B.maskA, B.maskB, B.phi, B.fluid, B.imgF])));
+    G.inh = bg('inh', base.concat([B.faces, B.phi, B.fluid, B.flagCopy, B.phiCopy]));
+    G.p2g = work.map((w) => bg('p2g', base.concat([B.cellStart, w[0], w[1], w[2], B.grid])));
+    G.forces = [B.whichU, B.whichV, B.whichW].map((wb) => bg('forces', base.concat([B.faces, B.grid, B.tgrid, wb])));
+    G.assemble = bg('pr', base.concat([B.faces, B.grid, B.phi, B.fluid, B.A, B.b]));
+    G.pcg = bg('cg', base.concat([B.fluid, B.A, B.b, B.q, B.L, B.work, B.stat]));
+    G.proj = [B.whichU, B.whichV, B.whichW].map((wb) => bg('proj', base.concat([B.faces, B.phi, B.fluid, B.q, B.grid, B.valid, B.tgrid, B.validT, wb])));
+    G.g2p = work.map((w) => bg('g2p', base.concat([B.cellStart, B.grid, w[0], w[1], w[2], B.spill, B.spillN])));
+    G.red = work.map((w) => bg('red', base.concat([B.cellStart, w[0], w[1], B.part, B.col])));
     this.params = new ArrayBuffer(128); this.pi = new Int32Array(this.params); this.pf = new Float32Array(this.params);
+    this.errors = [];
+    d.addEventListener && d.addEventListener('uncapturederror', (e) => { if (this.errors.length < 20) this.errors.push(e.error.message); });
     this.ready = true;
     // one empty step builds the level set and the column heights, so the surface can be read before the first step
     await this.steps([{ dt: 0, ax: 0, az: 0 }]);
   };
+  // the particles into array set A; the slots the next sort reads (live and dead) are this.slots
   GpuFluid.prototype.uploadParticles = function () {
     const n = this.np, pos = new Float32Array(4 * n), vel = new Float32Array(4 * n), c = new Float32Array(12 * n);
     for (let p = 0; p < n; p++) { pos[4 * p] = this.px[p]; pos[4 * p + 1] = this.py[p]; pos[4 * p + 2] = this.pz[p]; pos[4 * p + 3] = 1; vel[4 * p] = this.pu[p]; vel[4 * p + 1] = this.pv[p]; vel[4 * p + 2] = this.pw[p]; }
     this.device.queue.writeBuffer(this.B.posA, 0, pos); this.device.queue.writeBuffer(this.B.velA, 0, vel); this.device.queue.writeBuffer(this.B.cA, 0, c);
     this.device.queue.writeBuffer(this.B.q, 0, new Float32Array(this.nc));
-    this.side = 0;
+    this.side = 0; this.slots = n;
   };
-  GpuFluid.prototype.writeParams = function (st, np) {
+  GpuFluid.prototype.writeParams = function (st) {
     const pi = this.pi, pf = this.pf;
-    pi[0] = this.nx; pi[1] = this.ny; pi[2] = this.nz; pi[3] = this.nc; pi[4] = np; pi[5] = this.npCap; pi[6] = np; pi[7] = 0;
+    pi[0] = this.nx; pi[1] = this.ny; pi[2] = this.nz; pi[3] = this.nc; pi[4] = this.slots; pi[5] = this.npCap; pi[6] = this.oV; pi[7] = this.oW;
     pf[8] = this.dx; pf[9] = this.x0; pf[10] = this.y0; pf[11] = this.H; pf[12] = st.dt; pf[13] = st.ax; pf[14] = st.az; pf[15] = this.g;
     pf[16] = this.nu; pf[17] = this.rp; pf[18] = this.kernel * this.dx; pf[19] = this.zRim; pf[20] = this.Rrim; pf[21] = this.Rbox; pf[22] = this.Vseed; pf[23] = this.sliver;
     pf[24] = this.thetaMin; pf[25] = this.forcedPhi; pf[26] = this.tol; pf[27] = this.maxIt; pi[28] = this.profile.R.length; pf[29] = this.profile.dz;
     this.device.queue.writeBuffer(this.B.params, 0, this.params);
   };
-  // Several steps in one submission, then one read-back. Each entry: {dt, ax, az}. Returns after the read-back, with
-  // this.P (momentum), this.spill*, this.vmax, this.np, this.colCnt and this.cgIters set for the last step; spill totals
-  // summed over the batch.
+  // Steps, each {dt, ax, az}, each followed by a read-back of what the cart and the probes need: the live count, the
+  // pressure solve's iterations and residual, the particles that spilled (positions and velocities), the momentum relative
+  // to the glass and the fastest particle (per-workgroup partial sums in a fixed order, added here in a fixed order), and
+  // the particles per column. Spill totals are summed over the list; the rest describes the last step.
   GpuFluid.prototype.steps = async function (list) {
     const d = this.device, B = this.B, K = this.K, G = this.G, nc = this.nc;
     const wg = (n) => Math.ceil(Math.max(1, n) / WG);
     const batchSpill = [];
     let spillPx = 0, spillPz = 0, spillCount = 0;
     for (let si = 0; si < list.length; si++) {
-      const st = list[si];
-      this.writeParams(st, this.np);
+      const st = list[si], slots = this.slots;
+      this.writeParams(st);
       const enc = d.createCommandEncoder();
-      enc.clearBuffer(B.cnt); enc.clearBuffer(B.spillN); enc.clearBuffer(B.col);
+      enc.clearBuffer(B.cnt); enc.clearBuffer(B.spillN); enc.clearBuffer(B.col); enc.clearBuffer(B.part);
       const side = this.side, other = 1 - side;
       const pass = enc.beginComputePass();
       const run = (k, g, n) => { pass.setPipeline(K[k]); pass.setBindGroup(0, g); pass.dispatchWorkgroups(wg(n)); };
-      // sort the particles of `side` into `other`
-      run('count', G.count[side], this.np); run('scan', G.count[side], WG); run('scatter', G.count[side], this.np); run('sortCell', G.count[side], nc);
-      run('permute', G.permute[side], this.np);
-      // from here the particles live in `other`
-      const gl = G.ls[other], gp = G.p2g[other], gg = G.g2p[other], gr = G.red[other];
+      // sort the particles of `side` (slots, dead ones included) into the other set; from then on they live there
+      run('count', G.count[side], slots); pass.setPipeline(K.scan); pass.setBindGroup(0, G.count[side]); pass.dispatchWorkgroups(1);
+      run('scatter', G.count[side], slots); run('sortCell', G.count[side], nc);
+      run('permute', G.permute[side], slots);
+      const gl = G.ls[side], gp = G.p2g[side], gg = G.g2p[side], gr = G.red[side];
       run('masks', gl, nc); run('dilate0', gl, nc); run('dilateX', gl, nc); run('dilateY', gl, nc); run('dilateZ', gl, nc);
       run('phiCells', gl, nc); run('flags', gl, nc);
       run('copyF', G.inh, nc); run('inherit', G.inh, nc); run('copyF', G.inh, nc); run('inherit', G.inh, nc);
@@ -791,49 +809,48 @@ fn momentum(@builtin(global_invocation_id) id: vec3u, @builtin(local_invocation_
           for (let l = 0; l < 3; l++) { run('copyV', G.proj[c], sizes[c]); run('extend', G.proj[c], sizes[c]); }
           run('zeroInvalid', G.proj[c], sizes[c]);
         }
-        run('g2p', gg, this.np); run('advect', gg, this.np);
+        run('g2p', gg, slots); run('advect', gg, slots);
       }
-      run('momentum', gr, this.np);
+      run('momentum', gr, slots);
       pass.end();
-      // read-back: cellStart[nc] (live count after the sort), stat, spillN, partials, column counts, spill list
-      const R = B.read; let off = 0;
-      enc.copyBufferToBuffer(B.cellStart, 4 * nc, R, off, 4); off += 16;
-      enc.copyBufferToBuffer(B.stat, 0, R, off, 16); off += 16;
-      enc.copyBufferToBuffer(B.spillN, 0, R, off, 4); off += 16;
-      const nPart = Math.ceil(Math.max(1, this.np) / WG);
-      enc.copyBufferToBuffer(B.part, 0, R, off, 16 * nPart); const offPart = off; off += 16 * nPart;
-      enc.copyBufferToBuffer(B.col, 0, R, off, 4 * this.nx * this.ny); const offCol = off; off += 4 * this.nx * this.ny; off = Math.ceil(off / 16) * 16;
-      enc.copyBufferToBuffer(B.spill, 0, R, off, 32 * 4096); const offSpill = off;
+      const R = B.read, nPart = wg(slots), ncol = this.nx * this.ny;
+      const offPart = 64, offCol = offPart + 16 * nPart, offSpill = Math.ceil((offCol + 4 * ncol) / 16) * 16;
+      enc.copyBufferToBuffer(B.cellStart, 4 * nc, R, 0, 4);
+      enc.copyBufferToBuffer(B.stat, 0, R, 16, 16);
+      enc.copyBufferToBuffer(B.spillN, 0, R, 32, 4);
+      enc.copyBufferToBuffer(B.part, 0, R, offPart, 16 * nPart);
+      enc.copyBufferToBuffer(B.col, 0, R, offCol, 4 * ncol);
+      enc.copyBufferToBuffer(B.spill, 0, R, offSpill, 32 * 4096);
       d.queue.submit([enc.finish()]);
       await R.mapAsync(GPUMapMode.READ);
-      const buf = R.getMappedRange(), I = new Int32Array(buf), F = new Float32Array(buf);
-      const npLive = I[0]; const it = F[4], res = F[5]; const nSp = Math.min(4096, I[8]);
+      const buf = R.getMappedRange().slice(0), I = new Int32Array(buf), F = new Float32Array(buf);
+      R.unmap();
+      const sorted = I[0], it = F[4], res = F[5], nSp = Math.min(4096, I[8]);
       let sx = 0, sy = 0, sz = 0, vm = 0;
       for (let k = 0; k < nPart; k++) { const o = offPart / 4 + 4 * k; sx += F[o]; sy += F[o + 1]; sz += F[o + 2]; vm = Math.max(vm, F[o + 3]); }
-      const col = this.colCnt; for (let k = 0; k < col.length; k++) col[k] = I[offCol / 4 + k];
+      const col = this.colCnt; for (let k = 0; k < ncol; k++) col[k] = I[offCol / 4 + k];
       for (let k = 0; k < nSp; k++) { const o = offSpill / 4 + 8 * k; batchSpill.push([F[o], F[o + 1], F[o + 2], F[o + 4], F[o + 5], F[o + 6]]); spillPx += F[o + 4]; spillPz += F[o + 6]; }
       spillCount += nSp;
-      R.unmap();
-      // the live particles after this step's sort; the spilled ones of this step are marked dead and drop out at the next sort
-      this.np = npLive; this.side = other; this.cgIters = it; this.cgResidual = res;
+      // the sort kept `sorted` particles (in cell order, in the other set); those that spilled in this step are marked dead
+      // there and drop out at the next sort
+      this.slots = sorted; this.np = sorted - nSp; this.side = other; this.cgIters = it; this.cgResidual = res;
       const mp = this.mp; this.P = [mp * sx, mp * sz]; this.Py = mp * sy; this.vmax = Math.sqrt(vm);
       if (st.dt > 0) this.t += st.dt;
     }
-    this.np -= spillCount;      // the dead ones still counted by the last sort
-    if (this.np < 0) this.np = 0;
     this.spillNow = spillCount; this.spilled += spillCount; this.spillPx = this.mp * spillPx; this.spillPz = this.mp * spillPz; this.spillList = batchSpill;
     this.columnHeights();
   };
-  // read the particle positions back (for the store and the drawing): Float32 xyzw per particle, into px, py, pz
+  // read the particle positions back (for the store and the drawing), the live ones only, into px, py, pz
   GpuFluid.prototype.readPositions = async function () {
-    const d = this.device, B = this.B, src = this.side === 0 ? B.posA : B.posB, n = this.np;
-    if (n === 0) return;
+    const d = this.device, B = this.B, src = this.side === 0 ? B.posA : B.posB, n = this.slots;
+    if (n === 0) { this.nRead = 0; return; }
     const enc = d.createCommandEncoder(); enc.copyBufferToBuffer(src, 0, B.readPos, 0, 16 * n); d.queue.submit([enc.finish()]);
     await B.readPos.mapAsync(GPUMapMode.READ, 0, 16 * n);
-    const F = new Float32Array(B.readPos.getMappedRange(0, 16 * n));
+    const F = new Float32Array(B.readPos.getMappedRange(0, 16 * n).slice(0)); B.readPos.unmap();
     if (this.px.length < n) { this.px = new Float64Array(n); this.py = new Float64Array(n); this.pz = new Float64Array(n); }
-    for (let p = 0; p < n; p++) { this.px[p] = F[4 * p]; this.py[p] = F[4 * p + 1]; this.pz[p] = F[4 * p + 2]; }
-    B.readPos.unmap();
+    let m = 0;
+    for (let p = 0; p < n; p++) { if (F[4 * p + 3] < 0) continue; this.px[m] = F[4 * p]; this.py[m] = F[4 * p + 1]; this.pz[m] = F[4 * p + 2]; m++; }
+    this.nRead = m;
   };
   // Column heights from the integer particle counts per column (Fluid.columnHeights: the 3 x 3 binomial filter, the
   // smoothed open volume table inverted), over the whole glass (no fold)
@@ -900,7 +917,7 @@ fn momentum(@builtin(global_invocation_id) id: vec3u, @builtin(local_invocation_
     const a = await navigator.gpu.requestAdapter(); if (!a) return null;
     const dev = await a.requestDevice();
     const info = a.info || {};
-    dev.adapterInfo = { vendor: info.vendor || '', architecture: info.architecture || '', description: info.description || '' };
+    dev.gpuInfo = { vendor: info.vendor || '', architecture: info.architecture || '', description: info.description || '' };
     return dev;
   };
 
