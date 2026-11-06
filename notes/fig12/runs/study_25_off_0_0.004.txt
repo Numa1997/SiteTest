@@ -1,0 +1,1 @@
+bump 25 mm, open loop, suspension passive, dx 4 mm: dw 60.7 mm (t 0.70 s); a_x 3.58 m/s^2; a_z 7.63 m/s^2; spill 11.9 g; |A(3.214 Hz)| 0.4419 m/s; speed 0.699-1.000 m/s; smallest tyre load 6.93 N (10 s)

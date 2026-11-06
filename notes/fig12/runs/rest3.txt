@@ -1,0 +1,2 @@
+rest (tulip, dx 3 mm, dt 1/200 s): 61407 particles, 426.6 g; centre 124.61 -> 124.61 mm; fastest particle 4.3 mm/s; spilled 0
+(9 s)

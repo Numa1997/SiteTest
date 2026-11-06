@@ -1,0 +1,2 @@
+spill (tulip, 25 m/s^2 for 0.12 s): 6093 particles left the glass (25666 -> 19573); liquid 426.6 -> 325.3 g, spilled 101.3 g = 101.3 g counted; momentum carried out -0.0440 kg m/s
+(7 s)

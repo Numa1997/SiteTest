@@ -25,8 +25,15 @@ speed-up of 6 November 2026; see "Speed").
 | `public/scripts/stout-view.js` | the drawing (canvas 2D); reads the solver's state and computes nothing physical |
 | `tools/fig12/glass_profile.py`, `irish-imperial-pint.svg`, `glass_profile.json` | the glass measured from dimensions.com's section and scaled to 160 × 85 mm |
 | `tools/fig12/check.cjs` | offline checks: `node tools/fig12/check.cjs rest|tilt|cyltilt|cylfreq|freq|spill [dx] [steps/s]` |
+| `tools/fig12/theory.cjs` | every closed-form number of the lecture note, from the page's constants: ξ₁₁ (series for J₀, J₁), f₁₁, tilt and centre of mass, sloshing mass, Bond, Reynolds, damping (Abramson eq. 4.10b), quarter car, drive, PI poles, crossover and margin, \|S\| at the swing frequency, skyhook transmissibility |
+| `tools/fig12/study.cjs` | one run of the parameter study through `World.advance` with the page's options: `node tools/fig12/study.cjs <bump mm> <off|speed> <0|1> [dx] [s]`; `SERIES=file.json` also saves a_x, a_z and the lean every step |
+| `tools/fig12/energy.cjs` | the cart's energy book over a bump (`Cart` alone): `node tools/fig12/energy.cjs [bump mm]` |
+| `tools/fig12/figures.cjs` | writes `notes/fig12/fig-glass.svg` and `fig-bump.svg`, the note's two figures (pasted into the page) |
 | `tools/fig12/profile.cjs` | time of one fluid step by phase: `node tools/fig12/profile.cjs [dx] [steps]` |
 | `tools/fig12/same.cjs` | fingerprint of the state after 1 s with a push (SHA-256 of particles, φ, pressure): a speed-up must not change it |
+| `notes/fig12/shots.cjs` | screenshots at 1280 and 390 px, deviceScaleFactor 2 (at rest, swinging after a push, spilling), and the note opened: KaTeX errors, sideways scroll |
+| `notes/fig12/runs/` | the saved output of every check and study run quoted in the note (6 November 2026) |
+| `notes/fig12/check.md`, `referee.md` | the independent derivation check and the blind referee report on the lecture note |
 | `notes/fig12/test.cjs` | browser test (desktop, phone): run, push with and without the speed loop, drag, no errors, no sideways scroll |
 | `notes/fig12/panel-test.cjs`, `panel-test2.cjs`, `spill-test.cjs` | data panel: every check and read-back; on a bump at three widths, Read values, a round, Save, idle; while spilling |
 | `public/scripts/stout-pool.js`, `stout-worker.js` | the solver's loops shared over worker threads (shared memory; same numbers) |
@@ -40,7 +47,7 @@ speed-up of 6 November 2026; see "Speed").
 dimensions.com's "Irish Imperial Pint Glass" (the tulip; a 16 oz glass, 149.2 mm, 3 in) has a dimensioned section. Its inner
 outline was measured from the SVG rendered at 4× (the widest outer diameter measures 76.6 mm against the stated 76.2 mm) and
 scaled to the Guinness imperial glass as retailers list it, 160 mm × 85 mm widest: heights × 1.0724, radii × 1.1096. Result: inner
-radius 28 mm low, 39.3 mm widest (113 mm up), 37.5 mm at the rim (147.5 mm); brim volume 530.7 ml (an imperial pint is 568 ml:
+radius 28 mm low, 39.3 mm widest (116 mm up; within 0.02 mm of that from 114.5 to 118 mm), 37.5 mm at the rim (147.5 mm); brim volume 530.7 ml (an imperial pint is 568 ml:
 the stretched US glass is the uncertainty, stated on the page). Fill 125 mm: 426.6 g of stout.
 
 ## The model
@@ -59,7 +66,9 @@ the stretched US glass is the uncertainty, stated on the page). Fill 125 mm: 426
 - **Suspension**: u_s,cmd = −c_sky ż_b, c_sky = 2·0.7·√(k M_s) = 47.6 N s/m, ±40 N, lag 5 ms.
 - **Hand**: clip(300 (x_hand − x) − 30 ẋ, ±25 N) while dragging.
 - **Coupling**: the stout's reaction is −(ΔP + P_spill)/Δt, P its momentum relative to the glass, P_spill the momentum carried over
-  the rim in the step; m_ℓ falls as it spills.
+  the rim in the step; m_ℓ falls as it spills. It is handed over as an impulse J = −(ΔP + P_spill): the next fluid step, of length h,
+  applies J/h (equal to the old force when the steps are equal). `World.advance` cuts an interval that the CFL limit shortens into
+  equal steps. Both since 6 November 2026, see "Found by measurement".
 - **Drops**: each spilled particle (and its mirror image) falls freely from the glass's position and velocity plus its own until
   it meets the body's top or the road.
 
@@ -73,6 +82,12 @@ with mirror images in y = 0 and in the wall; **particle radius 1.8 spacings**; g
 particles counts as liquid with φ ≥ −0.05 dx. Pressure by PCG with MIC(0), warm-started.
 
 **Found by measurement, 6 November 2026, keep:**
+- The coupling handed the cart the force −(ΔP + P_spill)/h_last and applied it over the next step: after a step cut short by the
+  CFL limit, `World.advance` took the rest as a sliver (0.02 ms measured), and the force measured over the sliver acted over the
+  next 5 ms step, an impulse about 260 times too large (heave 36.2 m/s² in one step over a 25 mm bump in open loop; `study.cjs 25
+  off`). Fixed by handing over the impulse and cutting the interval into equal steps; the 25 mm open-loop run now reads a_x 3.58,
+  heave 7.63 m/s², 11.9 g spilled. Every run without a shortened step is unchanged to the last digit (all 10 mm runs; `same.cjs`
+  tests `Fluid` alone and still prints `7747da757ea9d800`; the 123 panel checks still pass).
 - With a particle radius of 1 spacing the stout could not hold a steady tilt (centre of mass 15 % of exact, also on the version
   then live): on a tilted surface many cells hold particles but read φ ≥ 0, were forced liquid at φ ≈ 0, and the ghost-fluid
   coefficient kicked them every step, driving a circulation down the high wall. 1.8 spacings removes it (`check.cjs cyltilt`).
@@ -132,18 +147,42 @@ What stays serial: the pressure solve (≈ 4.4 ms; the MIC(0) sweeps run cell af
 their order), the bins, the wall pass and the extrapolation (≈ 3 ms). So a step cannot fall much below about 8–10 ms on any
 number of cores (inference from the phase times): about half real time at best on this grid.
 
-## Checks (measured)
+## Checks (measured 6 November 2026, Node, Δt = 5 ms; outputs in `notes/fig12/runs/`)
 
-| Test | Expected | Measured |
-|---|---|---|
-| tulip at rest 1 s | no flow | fastest particle 3.2 mm/s (4 mm), 3.7 mm/s (3 mm) |
-| straight glass R 40 mm, h 100 mm, free swing | 3.382 Hz | 3.235 Hz at 3 mm (−4.3 %), 3.176 Hz at 4 mm (−6.1 %) |
-| steady push 2 m/s², centre of mass, straight | −0.815 mm | +3.6 % at 3 mm, +18.2 % at 4 mm |
-| steady push 2 m/s², the tulip | −0.877 mm | +6.1 % at 3 mm |
-| the tulip's free swing | no closed form | 3.263 Hz at 3 mm, 3.214 Hz at 4 mm |
-| spill book-keeping | equal | 102.1 g left = 102.1 g counted |
-| 1 cm bump at 1 m/s, front − back wall peak | — | 23.8 mm open loop, 3.9 mm speed control |
-| same, heave peak | — | 3.74 m/s² passive, 1.48 m/s² skyhook |
+| Test (`check.cjs …`) | Exact | 5 mm | 4 mm | 3 mm | 2.5 mm |
+|---|---|---|---|---|---|
+| `cylfreq`: R 40 mm, h 100 mm | 3.382 Hz | 3.098 (−8.4 %) | 3.176 (−6.1 %) | 3.235 (−4.3 %) | 3.252 (−3.8 %) |
+| same, damping ratio | 0.0035 (theory) – 0.0053 (experiment) | 0.026 | 0.016 | 0.005 | 0.005 |
+| `freq`: the tulip | ≈ 3.41 Hz inferred | 3.119 | 3.214 | 3.263 | 3.277 |
+| same, damping ratio | | 0.030 | 0.008 | 0.002 | 0.005 |
+| `cyltilt`: centre of mass, 2 m/s² | −0.815 mm | +7.6 % | +18.2 % | +3.6 % | +1.6 % |
+| `tilt`: the tulip | −0.877 mm | +12.0 % | +2.0 % | +6.1 % | −3.4 % |
+| `rest`: fastest particle after 1 s | 0 | | 3.2 mm/s | 4.3 mm/s | |
+| `spill`: 25 m/s² for 0.12 s | left = counted | | 101.3 = 101.3 g | 105.3 = 105.3 g | |
+
+The tulip "≈ 3.41 Hz" divides each grid's tulip frequency by the cylinder's error on that grid (3.42, 3.41, 3.41 Hz at 4, 3, 2.5 mm),
+against 3.421 Hz for a deep cylinder of the surface radius R(h) = 39.1 mm (`theory.cjs`): an inference. Energy book of the cart
+(`energy.cjs`): without losses E = 4.366 J holds to 2·10⁻⁴ J over a 10 mm bump, 1.7·10⁻³ J over 25 mm; with the dampers, E minus their
+work to 5·10⁻⁴ J. Coupling check: after a 10 mm bump in open loop the lean swings with amplitude 18.5 mm at 3.214 Hz; the
+equivalent-mass momentum (ρπR³/ξ²) q̇ predicts a cart ripple of 0.0834 m/s², the fitted ripple is 0.0829 m/s², in phase within 9°.
+
+## Parameter study (`study.cjs`, 2.3 s, set speed 1 m/s, one bump, 4 mm; 3 mm in brackets)
+
+| Bump | Drive | Suspension | Lean (front − back) | \|a_gx\| max | heave \|a_gz\| max | Spilled | \|A(f₁₁)\| |
+|---|---|---|---|---|---|---|---|
+| 0 | open | passive | 1.2 mm (reading noise) | 0 | 0 | 0 | 0.0003 m/s |
+| 0 | speed | passive | 1.2 mm | 0 | 0 | 0 | 0.0001 m/s |
+| 10 mm | open | passive | 25.0 (24.5) mm | 1.24 | 3.66 | 0 | 0.164 m/s |
+| 10 mm | speed | passive | 5.8 (5.6) mm | 0.53 | 3.74 | 0 | 0.045 m/s |
+| 10 mm | open | skyhook | 24.2 (23.1) mm | 1.19 | 1.38 | 0 | 0.167 m/s |
+| 10 mm | speed | skyhook | 6.0 (6.2) mm | 0.59 | 1.48 | 0 | 0.047 m/s |
+| 25 mm | open | passive | 60.7 mm | 3.58 | 7.63 | 11.9 g | 0.442 m/s |
+| 25 mm | speed | passive | 29.9 mm | 1.41 | 9.39 | 0 | 0.116 m/s |
+
+Accelerations in m/s². |A(f₁₁)| is the Fourier amplitude of a_gx at 3.214 Hz (3.263 Hz on 3 mm). The linear estimate of what the
+speed loop lets through at the swing frequency is |S| = 0.39; measured: 0.28 (|A|), 0.23 (lean). The figure 3.9 mm for the
+speed-controlled lean in earlier notes was not reproduced: with fixed 5 ms steps the peak over the run is 5.8 mm (4.0 mm before
+1.5 s), about 1 mm of which is reading noise. The smallest tyre load at a step's end was 4.4 N: the wheel did not leave the road.
 
 ## The store and the data panel
 
@@ -158,6 +197,18 @@ from the live solver. Read-backs: the head's cream at the front and back wall, t
 
 ## Not in the model
 
-The exact imperial glass shape; foam; surface tension (it would raise f₁₁ by 0.78 % with σ = 0.072 N/m); the wall boundary layer
+The exact imperial glass shape; foam; surface tension (it would raise f₁₁ by 0.77 % with σ = 0.072 N/m at R = 40 mm, 0.78 % to first order); the wall boundary layer
 and so the real damping; swirl that breaks the mirror symmetry; air drag on drops; measured motor and sensor data (the drive's
 numbers are a plausible small motor); pitch and roll of the cart.
+
+## The lecture note (rewritten 6 November 2026)
+
+Sixteen sections, equations (1)–(49), two inline SVG figures from `tools/fig12/figures.cjs`, Key-result boxes, worked examples with
+the page's numbers, Problems at the end of §15. §3 the stout in the glass's frame (the fictitious force, boundary conditions, mirror
+symmetry, the quasi-static tilt); §4 ★ linear sloshing of a cylinder (potential flow, Bessel, ξ₁₁ = 1.8412, the dispersion relation,
+the forced mode and the equivalent spring and mass, Abramson eq. 6.27; the tulip); §5 Froude, Bond, Reynolds, the boundary layer and
+the damping (Abramson eq. 4.10b, Stephens et al. 1962); §6 the quarter car (envelope, the road's normal, M_x, energy, frequencies);
+§7 the DC motor; §8 the PI loop and the sensitivity S(s); §9 the skyhook; §10 the coupling derived from Newton's law for the stout
+with spill; §11 ★ the numerical method (Chorin, MAC, APIC, cut cells, Zhu–Bridson level set, ghost fluid, PCG with MIC(0), CFL);
+§12 checks; §13 the parameter study. Every number is printed by `theory.cjs`, `check.cjs`, `study.cjs` or `energy.cjs`. Sources were
+downloaded and read at the sections cited; Karnopp et al. (1974) only in its abstract (the paper could not be obtained).

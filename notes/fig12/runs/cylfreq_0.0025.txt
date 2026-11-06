@@ -1,0 +1,2 @@
+cylinder R 40 mm, h 100 mm, dx 2.5 mm, dt 1/200: f = 3.252 Hz (linear theory 3.382 Hz, -3.8 %); damping ratio 0.0049
+(31 s)

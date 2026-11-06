@@ -1,0 +1,1 @@
+bump 10 mm, open loop, suspension skyhook, dx 3 mm: dw 23.1 mm (t 1.11 s); a_x 1.19 m/s^2; a_z 1.39 m/s^2; spill 0.0 g; |A(3.263 Hz)| 0.1710 m/s; speed 0.907-1.003 m/s; smallest tyre load 18.92 N (20 s)

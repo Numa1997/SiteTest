@@ -1,0 +1,2 @@
+cylinder under a steady push a = 2 m/s^2 (dx 4 mm, volume correction 0): time-mean centre of mass -0.964 mm; exact (first order) -0.815 mm; difference 18.2 %
+(23 s)

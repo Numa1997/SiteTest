@@ -1245,13 +1245,21 @@
     this.t = 0; this.lastAx = 0; this.lastAz = 0;
     this.fluid.levelSet();          // so that the surface can be read before the first step
   }
-  // advance by dt (s), in fluid steps no longer than dtMax and a CFL limit of one cell
+  // advance by dt (s), in equal fluid steps no longer than dtMax and the CFL limit (0.8 cell per step)
   World.prototype.advance = function (dt) {
     let left = dt;
     while (left > 1e-12) {
       const umax = this.fluid.maxSpeed();
-      let h = Math.min(this.dtMax, left, umax > 0 ? 0.8 * this.fluid.dx / umax : this.dtMax);
+      // the longest step allowed (dtMax, and a particle crosses at most 0.8 cell); when it is shorter than what is left, the
+      // rest is cut into equal steps, not into full steps and a sliver (a 0.02 ms remainder step was measured)
+      const hmax = Math.min(this.dtMax, umax > 0 ? 0.8 * this.fluid.dx / umax : this.dtMax);
+      const h = left <= hmax ? left : left / Math.ceil(left / hmax);
       const c = this.cart, vx0 = c.vx, vz0 = c.vzb;
+      // The stout's push is handed over as an impulse: the momentum -(dP + P_spill) it gave up in the last fluid step is
+      // spread over this step, whatever its length. (Handing over the force -(dP + P_spill)/h_last instead multiplied the
+      // impulse by h/h_last: after a step cut short by the CFL limit, e.g. a 0.02 ms remainder before a 5 ms step, the cart
+      // got a kick hundreds of times too large; found 6 November 2026, tools/fig12/study.cjs 25 off.) Equal steps: unchanged.
+      if (this.J && h !== this.hLast) { this.Fx = this.J[0] / h; this.Fz = this.J[1] / h; c.forces(this.Fx, this.Fz); }
       const n = Math.max(1, Math.round(h / this.hCart)), hc = h / n;
       for (let i = 0; i < n; i++) c.step(hc, this.Fx, this.Fz);
       const ax = (c.vx - vx0) / h, az = (c.vzb - vz0) / h;     // the glass's mean acceleration over the step
@@ -1260,7 +1268,8 @@
       // reaction of the liquid on the glass beyond rigid co-motion: -dP_rel/dt, counting the momentum that left over
       // the rim with the spilled stout (it was not pushed by the glass at the moment it left)
       const P0 = this.P, f = this.fluid;
-      this.Fx = -(P[0] + f.spillPx - P0[0]) / h; this.Fz = -(P[1] + f.spillPz - P0[1]) / h;
+      this.J = [-(P[0] + f.spillPx - P0[0]), -(P[1] + f.spillPz - P0[1])]; this.hLast = h;
+      this.Fx = this.J[0] / h; this.Fz = this.J[1] / h;
       if (f.spillNow) { c.ml = f.liquidMass(); this.dropsFrom(f.spillList); }
       f.spillList.length = 0;
       this.moveDrops(h);
