@@ -554,9 +554,10 @@
 
                     <section class="psec" id="p-screen">
                         <h3><span class="psec__n">14</span>What the picture shows</h3>
-                        <p>The surface drawn is the height of the column of stout over each square of the floor: the volume of the particles standing on it, matched to the volume the glass’s shape opens up to that height, both smoothed over one cell (<code>Fluid.columnHeights</code>). That is the surface the computation holds, averaged over depth; a wave curling over cannot be shown this way. Within 2.5 cells of the wall the columns are cut by it and hold too few particles to count, so there the height is extended straight out from the columns inside. The readout “front − back wall” is the drawn height at the front wall minus that at the back, at the radius \(R(h)\), the quantity of Figure 2 and section 13.</p>
+                        <p>The surface drawn is the height of the column of stout over each square of the floor: the volume of the particles standing on it, matched to the volume the glass’s shape opens up to that height, both smoothed over one cell (<code>Fluid.columnHeights</code>). That is the surface the computation holds, averaged over depth; a wave curling over cannot be shown this way. For the picture the column heights are joined by a bicubic Catmull–Rom spline, which passes through every column value and has a continuous slope, so the sheet bends smoothly instead of stepping from cell to cell; within 3.5 cells of the wall, where the columns are cut by the glass and hold too few particles, the height is extended straight out from the columns 3.5 and 7 cells in (a wider baseline than the solver’s own reading, which halves the ripple of the drawn edge at rest). The readout “front − back wall” is the solver’s own reading at the front wall minus that at the back, at the radius \(R(h)\), the quantity of Figure 2 and section 13; it can differ from the drawn edge by a millimetre or two.</p>
+                        <p><b>The camera.</b> The figure is seen through a pinhole camera that rides with the cart: it looks down at 22° and is turned 18° towards the front, from 2.2 m away. A point at depth \(D\) in front of the camera and at \((X_c, Y_c)\) across and up from its line of sight lands on the screen at \((F X_c/D,\ -F Y_c/D)\) from the picture’s centre, with \(F\) the focal length; near things look larger, and the road converges. The head’s sheet is shaded by one light from its normal \(\mathbf n = (-\partial_x\eta, -\partial_y\eta, 1)/\sqrt{1 + |\nabla\eta|^2}\), so it brightens where it tilts towards the light. The stout’s colour across the glass follows the length \(\ell\) of the light’s path through it, a transmission \(e^{-\kappa\ell}\) (Beer–Lambert): ruby at the thin edges, black through the middle; \(\kappa\) is a drawing choice, not a measured property of stout.</p>
                         <p><b>The cart</b> is drawn from the stored state at every frame: the wheel of radius \(R_w\) centred on the axle at \((x, z_w)\), with spokes that turn as it rolls; the spring \(k\) and the damper \(c\) between the axle’s bar and the body; the body, 22 cm by 3 cm, with its bottom at \(z_b\); the glass standing on it. The camera rides with the cart, so the road slides past; its ticks are every 10 cm and the labels give the position \(x\) along the road (the cart starts at \(x = 0.5\) m). The active suspension, the motor and the gearbox are not drawn.</p>
-                        <p><b>The head is drawn, not computed.</b> A cream layer 12 mm thick is laid on the computed surface. Real foam is a different material, lighter and partly elastic, and it damps the swing; it is not in this model. The glass is seen slightly from above, at 14°; spilled drops are drawn where the solver moves them, with their mirror images. The data panel under the figure holds every number the page computes, written where it is computed, and checks each against its formula and against the picture.</p>
+                        <p><b>The head is drawn, not computed.</b> A cream layer 12 mm thick is laid on the computed surface. Real foam is a different material, lighter and partly elastic, and it damps the swing; it is not in this model. Spilled drops are drawn where the solver moves them, with their mirror images, as short streaks along their velocity. The data panel under the figure holds every number the page computes, written where it is computed, and checks each against its formula and against the picture.</p>
                     </section>
 
                     <section class="psec" id="p-limits">
@@ -656,7 +657,7 @@
                 cart: { x0: 0.5, Rw: 0.04, Ls: 0.135, v0: v0.value, ctrl: ctrlMode, susp: susp.checked },
                 dtMax: 1 / 200
             });
-            view = new StoutView(cv, world, { viewHeight: 0.44, groundY: 0.9 });
+            view = new StoutView(cv, world, { viewHeight: 0.40, groundY: 0.86 });
             if (!ds) declare();
             storeConstants();
             world.attach(ds); view.ds = ds;
@@ -696,10 +697,11 @@
         // dragging: press on the cart (body, wheel or glass) and move; the hand pulls the cart toward the pointer along the
         // road (Cart.hand). Nothing happens while Read values is on: then a press pins a point instead.
         var dragging = false;
-        function roadX(ev) { var r = cv.getBoundingClientRect(), sc = view.scale / (cv.width / r.width); return world.cart.x + (ev.clientX - r.left - r.width / 2) / sc; }
+        function pxPerM() { var c = view.cam || view.camera(cv.width, cv.height); return (view.project(c, 0.05, 0, 0)[0] - view.project(c, -0.05, 0, 0)[0]) / 0.1; }   // screen px per metre along the road, at the cart
+        function roadX(ev) { var r = cv.getBoundingClientRect(), sc = pxPerM() / (cv.width / r.width); return world.cart.x + (ev.clientX - r.left - r.width / 2) / sc; }
         cv.addEventListener('pointerdown', function (ev) {
             if (document.querySelector('.dp-reading')) return;
-            var r = cv.getBoundingClientRect(), sc = view.scale / (cv.width / r.width), x = ev.clientX - r.left - r.width / 2;
+            var r = cv.getBoundingClientRect(), sc = pxPerM() / (cv.width / r.width), x = ev.clientX - r.left - r.width / 2;
             if (Math.abs(x) > 0.12 * sc) return;                    // only on the cart
             dragging = true; cv.setPointerCapture(ev.pointerId); world.cart.hand = roadX(ev); ev.preventDefault();
         });
@@ -714,7 +716,7 @@
             $('r-v').textContent = c.vx.toFixed(3) + ' m/s';
             $('r-ax').textContent = world.lastAx.toFixed(2) + ' m/s²';
             $('r-az').textContent = world.lastAz.toFixed(2) + ' m/s²';
-            $('r-dw').textContent = Hs ? ((Hs[nr][0] - Hs[nr][nth / 2]) * 1000).toFixed(1) + ' mm' : '—';
+            $('r-dw').textContent = Hs ? ((f.columnHeightAt(f.Rz(f.h0), 0) - f.columnHeightAt(-f.Rz(f.h0), 0)) * 1000).toFixed(1) + ' mm' : '—';
             $('r-N').textContent = c.N.toFixed(1) + ' N';
             $('r-i').textContent = c.i.toFixed(2) + ' A';
             $('r-sp').textContent = ((world.spilledMass || 0) * 1000).toFixed(1) + ' g';
@@ -803,7 +805,7 @@
             ds.var('py', ['p'], Float64Array, { symbol: 'y<sub>p</sub>', units: 'm', long_name: 'particle position across (y ≥ 0: the half solved)', computed_in: 'Fluid.advect', digits: 5 });
             ds.var('pz', ['p'], Float64Array, { symbol: 'z<sub>p</sub>', units: 'm', long_name: 'particle height above the glass bottom', computed_in: 'Fluid.advect', digits: 5 });
             ds.var('h_col', ['j', 'i'], Float64Array, { symbol: 'h<sub>ji</sub>', units: 'm', long_name: 'height of the stout column over each 4 mm square of the bottom', computed_in: 'Fluid.columnHeights', formula: 'B(Σ particle volume) / B(open area), B the 3 × 3 binomial filter', digits: 5 });
-            ds.var('eta_draw', ['ir', 'ith'], Float64Array, { symbol: 'η<sub>draw</sub>', units: 'm', long_name: 'surface height as drawn, polar grid r = R·ir/9, θ = 2π·ith/48', computed_in: 'StoutView.surface', formula: 'h at (r cos θ, r sin θ), bilinear; within 2.5 Δx of the wall extended along the radius', digits: 5 });
+            ds.var('eta_draw', ['ir', 'ith'], Float64Array, { symbol: 'η<sub>draw</sub>', units: 'm', long_name: 'surface height as drawn, polar grid r = R·ir/16, θ = 2π·ith/64', computed_in: 'StoutView.surface', formula: 'h at (r cos θ, r sin θ), bicubic Catmull–Rom through the column heights; within 3.5 Δx of the wall extended along the radius', digits: 5 });
             S('eta_front', { symbol: 'η<sub>front</sub>', units: 'm', long_name: 'surface at the front wall (direction of travel)', computed_in: 'StoutView.surface', formula: 'η<sub>draw</sub>[9, 0]', digits: 5 });
             S('eta_back', { symbol: 'η<sub>back</sub>', units: 'm', long_name: 'surface at the back wall', computed_in: 'StoutView.surface', formula: 'η<sub>draw</sub>[9, 24]', digits: 5 });
             S('dw', { symbol: 'Δη', units: 'm', long_name: 'front − back wall: how far the stout leans', computed_in: 'StoutView.surface', formula: 'η<sub>front</sub> − η<sub>back</sub>', digits: 5 });
@@ -818,12 +820,16 @@
             ds.var('np0', [], 'int', { symbol: 'N<sub>p,0</sub>', long_name: 'particles poured in (half glass)', computed_in: 'Fluid.seed', digits: 0 });
             ds.var('np', [], 'int', { symbol: 'N<sub>p</sub>', long_name: 'particles in the half glass', computed_in: 'Fluid.seed', digits: 0 });
             // drawing (css px)
-            [['scale', 'σ', 'px/m', 'pixels per metre', 'canvas height / 0.44 m'], ['cam_x', 'x<sub>cam</sub>', 'm', 'road position at the centre of the picture (the camera rides with the cart)', 'x'],
-             ['ground_px', 'z = 0', 'px', 'screen height of road level 0', '0.9 × canvas height'], ['axle_px_x', 'X<sub>axle</sub>', 'px', 'axle on screen, across', 'W/2 + (x − x<sub>cam</sub>) σ'],
-             ['axle_px_y', 'Y<sub>axle</sub>', 'px', 'axle on screen, down', 'ground − z<sub>w</sub> σ'], ['body_px_y', 'Y<sub>body</sub>', 'px', 'bottom of the body on screen', 'ground − z<sub>b</sub> σ'],
-             ['front_px_x', 'X<sub>front</sub>', 'px', 'middle of the head at the front wall, across', 'X<sub>axle</sub> + 0.98 R σ'], ['front_px_y', 'Y<sub>front</sub>', 'px', 'same, down', 'Y<sub>body</sub> − (0.03 + 0.006 + η<sub>front</sub> + h<sub>head</sub>/2) σ cos 14° … see check'],
-             ['back_px_x', 'X<sub>back</sub>', 'px', 'middle of the head at the back wall, across', 'X<sub>axle</sub> − 0.98 R σ'], ['back_px_y', 'Y<sub>back</sub>', 'px', 'same, down', 'as Y<sub>front</sub> with η<sub>back</sub>'],
-             ['elev', 'ε', 'rad', 'the view looks down at 14°', ''], ['canvas_w', 'W', 'px', 'canvas width', ''], ['canvas_h', 'H', 'px', 'canvas height', '']
+            [['scale', 'σ', 'px/m', 'pixels per metre at the camera’s target, so the focal length is σ d', 'canvas height / 0.40 m'], ['cam_x', 'x<sub>cam</sub>', 'm', 'road position of the camera’s target (it rides with the cart)', 'x'],
+             ['elev', 'ε', 'rad', 'the camera looks down at 22°', ''], ['azim', 'α', 'rad', 'the camera’s turn about the vertical, −18°: it looks from the near side and a little from the front', ''],
+             ['cam_dist', 'd', 'm', 'distance from the camera to its target', ''], ['cam_zt', 'z<sub>T</sub>', 'm', 'height of the target above the road under the axle', ''],
+             ['focal', 'F', 'px', 'focal length of the pinhole camera', 'σ d'], ['cam_cx', 'X<sub>0</sub>', 'px', 'screen point of the target, across', 'W/2'], ['cam_cy', 'Y<sub>0</sub>', 'px', 'screen point of the line through the target, down', 'chosen so that the road under the axle sits at 0.86 H'],
+             ['ground_px', 'Y<sub>road</sub>', 'px', 'the road under the axle on screen', 'projection of (0, 0, 0)'], ['axle_px_x', 'X<sub>axle</sub>', 'px', 'the hub on screen, across', 'projection of (0, −0.01, z<sub>w</sub>)'],
+             ['axle_px_y', 'Y<sub>axle</sub>', 'px', 'the hub on screen, down', 'same'], ['body_px_x', 'X<sub>body</sub>', 'px', 'a point of the body’s near bottom edge, across', 'projection of (−0.08, −0.06, z<sub>b</sub>)'], ['body_px_y', 'Y<sub>body</sub>', 'px', 'same, down', 'same'],
+             ['glass_px_x', 'X<sub>glass</sub>', 'px', 'the stout’s surface at rest on the axis, across', 'projection of (0, 0, z<sub>b</sub> + z<sub>floor</sub> + h)'], ['glass_px_y', 'Y<sub>glass</sub>', 'px', 'same, down', 'same'],
+             ['front_px_x', 'X<sub>front</sub>', 'px', 'middle of the head’s band at the front wall, across', 'projection of (0.98 r<sub>s</sub>, 0, glass floor + η<sub>front</sub> + h<sub>head</sub>/2)'], ['front_px_y', 'Y<sub>front</sub>', 'px', 'same, down', 'same'],
+             ['back_px_x', 'X<sub>back</sub>', 'px', 'top of the head at the back wall, across', 'projection of (−0.97 r<sub>s</sub>, 0, glass floor + η<sub>back</sub> + h<sub>head</sub>)'], ['back_px_y', 'Y<sub>back</sub>', 'px', 'same, down', 'same'],
+             ['canvas_w', 'W', 'px', 'canvas width', ''], ['canvas_h', 'H', 'px', 'canvas height', '']
             ].forEach(function (r) { var a = { symbol: r[1], units: r[2], long_name: r[3], computed_in: 'StoutView.draw', digits: 2 }; if (r[4]) a.formula = r[4]; S(r[0], a); });
         }
         function storeConstants() {
@@ -839,6 +845,33 @@
 
         /* ---------- the data panel (scripts/datalog.js): three proofs per value ---------- */
         function g(n) { return ds.get(n); }
+        // the pinhole camera written out again from its stored constants (StoutView.camera and .project): a point
+        // (x, y, z) relative to the cart (x from the axle, y across, z up from the road) to css px
+        function proj(x, y, z) {
+            var e = g('elev'), a = g('azim'), D = g('cam_dist'), zT = g('cam_zt'), F = g('focal');
+            var d = [Math.sin(a) * Math.cos(e), Math.cos(a) * Math.cos(e), -Math.sin(e)], r = [Math.cos(a), -Math.sin(a), 0], u = [Math.sin(a) * Math.sin(e), Math.cos(a) * Math.sin(e), Math.cos(e)];
+            var v = [x + D * d[0], y + D * d[1], z - zT + D * d[2]], dep = v[0] * d[0] + v[1] * d[1] + v[2] * d[2];
+            return [g('cam_cx') + F * (v[0] * r[0] + v[1] * r[1]) / dep, g('cam_cy') - F * (v[0] * u[0] + v[1] * u[1] + v[2] * u[2]) / dep];
+        }
+        var CAMIN = function () { return [inp('elev', 'ε', 'rad', 4), inp('azim', 'α', 'rad', 4), inp('cam_dist', 'd', 'm', 3), inp('cam_zt', 'z<sub>T</sub>', 'm', 3), inp('focal', 'F', 'px', 2), inp('cam_cx', 'X<sub>0</sub>', 'px', 2), inp('cam_cy', 'Y<sub>0</sub>', 'px', 2)]; };
+        function projCheck(lab, pt, k, extra) { return { formula: 'the camera’s projection of ' + lab + ' (pinhole: rotate by α and ε, divide by depth, times F)', inputs: CAMIN().concat(extra || []), value: proj(pt[0], pt[1], pt[2])[k] }; }
+        function glassZ() { return g('zb') + 0.03 + 0.006; }
+        // the drawn surface written out again from the stored column heights h_col: bicubic Catmull–Rom through the column
+        // values (y folded by the mirror plane), extended linearly along the radius beyond R(h) − 3.5 Δx from there and 3.5 Δx in
+        function hDraw(x, y) {
+            var f = world.fluid, nx = f.nx, ny = f.ny, dx = g('dx'), H = g('h_col'), x0 = -nx / 2 * dx;
+            var cub = function (X, Y) {
+                var fx = (X - x0) / dx - 0.5, fy = Y / dx - 0.5, i = Math.floor(fx), j = Math.floor(fy), tx = fx - i, ty = fy - j;
+                var at = function (a, b) { a = a < 0 ? 0 : a >= nx ? nx - 1 : a; b = b < 0 ? -b - 1 : b; b = b >= ny ? ny - 1 : b; return H[a + nx * b]; };
+                var cr = function (p0, p1, p2, p3, t) { return 0.5 * (2 * p1 + (p2 - p0) * t + (2 * p0 - 5 * p1 + 4 * p2 - p3) * t * t + (3 * p1 - p0 - 3 * p2 + p3) * t * t * t); };
+                var r = []; for (var b = -1; b <= 2; b++) r.push(cr(at(i - 1, j + b), at(i, j + b), at(i + 1, j + b), at(i + 2, j + b), tx));
+                return cr(r[0], r[1], r[2], r[3], ty);
+            };
+            y = Math.abs(y);
+            var r = Math.hypot(x, y), r1 = g('r_s') - 3.5 * dx, r2 = r1 - 3.5 * dx;
+            if (r > r1) { var cx = x / r, cy = y / r, h1 = cub(cx * r1, cy * r1), h2 = cub(cx * r2, cy * r2); return h1 + (r - r1) * (h1 - h2) / (r1 - r2); }
+            return cub(x, y);
+        }
         function inp(n, sym, u, d) { return [sym, g(n), u, d]; }
         function zr(x) { var h = g('bump_h'), z = 0; for (var n = 0; n < 60; n++) { var s = (x - (1 + 2 * n)) / 0.25; if (s > -0.5 && s < 0.5) z += 0.5 * h * (1 + Math.cos(2 * Math.PI * s)); } return z; }
         function envNode(i) {   // the axle path at node i of the 0.5 mm table, written out again: max over the rim on the same grid
@@ -878,17 +911,18 @@
         var isHead = function (d) { return d[0] > 170 && d[1] > 150 && d[2] > 110 && d[0] - d[2] < 90; };
         var isInk = function (d) { return d[0] < 90 && d[1] < 90 && d[2] < 90; };
         function headDrawn(side) {
-            return pix(g(side + '_px_x'), g(side + '_px_y'), isHead, 'middle of the head at the ' + side + ' wall', 'the cream of the head, about rgb(236, 225, 201)',
-                'The head is drawn as a 12 mm band on the computed surface; its middle at 0.98 R lies inside the band, so the pixel there is cream only if the surface was drawn at the stored height.');
+            return pix(g(side + '_px_x'), g(side + '_px_y'), isHead, (side === 'front' ? 'middle of the head’s band at the front wall' : 'top of the head at the back wall'), 'the cream of the head, about rgb(236, 225, 201)',
+                side === 'front' ? 'The head is drawn as a 12 mm band on the computed surface; its middle at the front wall lies inside the band, so the pixel there is cream only if the surface was drawn at the stored height.' : 'The top of the head at the back wall: the pixel is cream only if the head’s sheet was drawn at the stored height.');
         }
         function axleDrawn() { return pix(g('axle_px_x'), g('axle_px_y'), isInk, 'the axle', 'the dark hub dot, rgb(28, 21, 24)', 'The hub is a 4 px dot at the axle, drawn over the spokes.'); }
-        function bodyDrawn() { return pix(g('axle_px_x') - 0.08 * g('scale'), g('body_px_y') - 0.5, isInk, 'bottom edge of the body', 'the 2 px ink outline of the body', 'The body is a box from z<sub>b</sub> to z<sub>b</sub> + 3 cm with a 2 px outline; its bottom edge is at the stored height (searched 2 px up and down, the outline is anti-aliased).', 2); }
+        function bodyDrawn() { return pix(g('body_px_x'), g('body_px_y') - 0.5, isInk, 'bottom edge of the body', 'the 2 px ink outline of the body', 'The body is a box from z<sub>b</sub> to z<sub>b</sub> + 3 cm with a 2 px outline; its near bottom edge, seen through the camera, is at the stored height (searched 2 px up and down, the outline is anti-aliased).', 2); }
         function polar(n) { var nth = view.nth, ir = Math.floor(n / nth), it = n % nth, r = g('r_s') * ir / view.nr, th = 2 * Math.PI * it / nth; return { ir: ir, it: it, x: r * Math.cos(th), y: r * Math.sin(th) }; }
         function nearest(x, y) {
-            var s = g('scale'), ax = g('axle_px_x'), ay = g('axle_px_y'), by = g('body_px_y'), R = g('R');
-            if (Math.abs(x - ax) < (R + 0.004) * s && y < by - 0.03 * s && y > by - 0.03 * s - 0.17 * s) return 'stout';
-            if (Math.hypot(x - ax, y - ay) < g('Rw') * s) return 'wheel';
-            if (Math.abs(x - ax) < 0.11 * s && y <= by + 2 && y >= by - 0.03 * s - 2) return 'body';
+            var gx = g('glass_px_x'), gy = g('glass_px_y'), ax = g('axle_px_x'), ay = g('axle_px_y'), bx = g('body_px_x'), by = g('body_px_y');
+            var rG = Math.abs(proj(g('R'), 0, glassZ() + g('h0'))[0] - gx) + 4, rW = Math.abs(proj(g('Rw'), -0.01, g('zw'))[0] - ax);
+            if (Math.abs(x - gx) < rG && y > gy - 0.04 * g('scale') && y < by) return 'stout';
+            if (Math.hypot(x - ax, y - ay) < rW) return 'wheel';
+            if (Math.abs(x - g('cam_cx')) < 0.13 * g('scale') && y <= by + 4 && y >= by - 0.05 * g('scale')) return 'body';
             return null;
         }
         function defineData() { Sim.data = {
@@ -903,7 +937,7 @@
                 { title: 'The last fluid step', note: 'the jolt handed to the stout, and the stout’s push handed back', vars: ['t', 'h_f', 'n_cart', 'vx_0', 'vx_1', 'vzb_0', 'vzb_1', 'a_gx', 'a_gz', 'P0_x', 'P0_z', 'P_x', 'P_z', 'P_spill_x', 'P_spill_z', 'F_lx_next', 'F_lz_next'] },
                 { title: 'The stout', note: 'particles, column heights and the surface as drawn', vars: ['dw', 'eta_front', 'eta_back', 'h_col', 'eta_draw', 'r_s', 'head_h', 'spilled_g', 'px', 'py', 'pz', 'np'] },
                 { title: 'Solver', note: 'APIC on a MAC grid; pressure by MIC(0) conjugate gradients', vars: ['steps', 'cg_iters', 'cg_res', 'rate', 'np0'] },
-                { title: 'Drawing', note: 'css px of the figure', vars: ['scale', 'cam_x', 'ground_px', 'axle_px_x', 'axle_px_y', 'body_px_y', 'front_px_x', 'front_px_y', 'back_px_x', 'back_px_y', 'elev', 'canvas_w', 'canvas_h'] }
+                { title: 'Drawing', note: 'a pinhole camera; css px of the figure', vars: ['scale', 'cam_x', 'elev', 'azim', 'cam_dist', 'cam_zt', 'focal', 'cam_cx', 'cam_cy', 'ground_px', 'axle_px_x', 'axle_px_y', 'body_px_x', 'body_px_y', 'glass_px_x', 'glass_px_y', 'front_px_x', 'front_px_y', 'back_px_x', 'back_px_y', 'canvas_w', 'canvas_h'] }
             ],
             probe: function (x, y) { var n = nearest(x, y); return n ? { what: n } : null; },
             inspect: function (ref) {
@@ -913,7 +947,7 @@
                 return { title: 'the body', at: { x: g('axle_px_x'), y: g('body_px_y') }, rows: [['z<sub>b</sub>', g('zb'), 'm', 'zb'], ['F<sub>s</sub>', g('F_s'), 'N', 'F_s'], ['z̈<sub>b</sub>', g('a_zb'), 'm/s²', 'a_zb'], ['ẋ', g('vx'), 'm/s', 'vx'], ['ẍ', g('a_x'), 'm/s²', 'a_x']] };
             },
             locate: function (name, idx) {
-                if (name === 'eta_draw') { var q = polar(idx), s = g('scale'), cy = g('body_px_y') - 0.03 * s, e = g('elev'); return { x: g('axle_px_x') + q.x * s, y: cy - (0.006 + g('eta_draw')[idx] + g('head_h')) * Math.cos(e) * s - q.y * Math.sin(e) * s }; }
+                if (name === 'eta_draw') { var q = polar(idx), pp = proj(q.x, q.y, glassZ() + g('eta_draw')[idx] + g('head_h')); return { x: pp[0], y: pp[1] }; }
                 return null;
             },
             check: {
@@ -961,21 +995,26 @@
                 P_x: function () { var u = world.fluid.pu, s = 0; for (var p = 0; p < world.fluid.np; p++) s += u[p]; return { formula: '2 m<sub>p</sub> Σ u<sub>p</sub> over the particles (velocities kept by the solver, not in the store)', inputs: [inp('mp', 'm<sub>p</sub>', 'kg', 9), ['Σ u<sub>p</sub>', s, 'm/s', 6]], value: 2 * g('mp') * s }; },
                 P_z: function () { var w = world.fluid.pw, s = 0; for (var p = 0; p < world.fluid.np; p++) s += w[p]; return { formula: '2 m<sub>p</sub> Σ w<sub>p</sub>', inputs: [inp('mp', 'm<sub>p</sub>', 'kg', 9), ['Σ w<sub>p</sub>', s, 'm/s', 6]], value: 2 * g('mp') * s }; },
                 h_col: function (n) { return colCheck(n); },
-                eta_draw: function (n) { var q = polar(n); return { formula: 'h<sub>ji</sub> read at (r cos θ, r sin θ), ir = ' + q.ir + ', ith = ' + q.it + ' (bilinear; near the wall extended along the radius)', inputs: [['x', q.x, 'm', 5], ['y', q.y, 'm', 5]], value: world.fluid.columnHeightAt(q.x, q.y) }; },
-                eta_front: function () { return { formula: 'h read at the front wall (r<sub>s</sub>, 0)', inputs: [inp('r_s', 'r<sub>s</sub>', 'm', 4)], value: world.fluid.columnHeightAt(g('r_s'), 0) }; },
-                eta_back: function () { return { formula: 'h read at the back wall (−r<sub>s</sub>, 0)', inputs: [inp('r_s', 'r<sub>s</sub>', 'm', 4)], value: world.fluid.columnHeightAt(-g('r_s'), 0) }; },
+                eta_draw: function (n) { var q = polar(n); return { formula: 'h<sub>ji</sub> read at (r cos θ, r sin θ), ir = ' + q.ir + ', ith = ' + q.it + ': bicubic Catmull–Rom through the stored column heights; beyond R(h) − 3.5Δx extended along the radius', inputs: [['x', q.x, 'm', 5], ['y', q.y, 'm', 5]], value: hDraw(q.x, q.y) }; },
+                eta_front: function () { return { formula: 'h read at the front wall (r<sub>s</sub>, 0) by the solver’s own reading (bilinear; beyond R(h) − 2.5Δx extended along the radius)', inputs: [inp('r_s', 'r<sub>s</sub>', 'm', 4)], value: world.fluid.columnHeightAt(g('r_s'), 0) }; },
+                eta_back: function () { return { formula: 'h read at the back wall (−r<sub>s</sub>, 0) by the solver’s own reading', inputs: [inp('r_s', 'r<sub>s</sub>', 'm', 4)], value: world.fluid.columnHeightAt(-g('r_s'), 0) }; },
                 dw: function () { return { formula: 'η<sub>front</sub> − η<sub>back</sub>', inputs: [inp('eta_front', 'η<sub>front</sub>', 'm', 5), inp('eta_back', 'η<sub>back</sub>', 'm', 5)], value: g('eta_front') - g('eta_back') }; },
-                scale: function () { return { formula: 'H / 0.44 m', inputs: [inp('canvas_h', 'H', 'px', 1)], value: g('canvas_h') / 0.44 }; },
+                scale: function () { return { formula: 'H / 0.40 m', inputs: [inp('canvas_h', 'H', 'px', 1)], value: g('canvas_h') / 0.40 }; },
+                focal: function () { return { formula: 'σ d', inputs: [inp('scale', 'σ', 'px/m', 2), inp('cam_dist', 'd', 'm', 3)], value: g('scale') * g('cam_dist') }; },
+                cam_cx: function () { return { formula: 'W/2', inputs: [inp('canvas_w', 'W', 'px', 1)], value: g('canvas_w') / 2 }; },
                 r_s: function () { var P = GUINNESS_GLASS, f = g('h0') / P.dz, i = Math.floor(f); return { formula: 'R(h), linear between the 0.5 mm points of the measured profile', inputs: [inp('h0', 'h', 'm', 4)], value: P.R[i] + (f - i) * (P.R[i + 1] - P.R[i]) }; },
                 spilled_g: function () { return { formula: '2 m<sub>p</sub> (N<sub>p,0</sub> − N<sub>p</sub>), in grams', inputs: [inp('mp', 'm<sub>p</sub>', 'kg', 9), inp('np0', 'N<sub>p,0</sub>', '', 0), inp('np', 'N<sub>p</sub>', '', 0)], value: 2 * g('mp') * (g('np0') - g('np')) * 1000 }; },
-                ground_px: function () { return { formula: '0.9 H', inputs: [inp('canvas_h', 'H', 'px', 1)], value: 0.9 * g('canvas_h') }; },
-                axle_px_x: function () { return { formula: 'W/2 + (x − x<sub>cam</sub>) σ', inputs: [inp('canvas_w', 'W', 'px', 1), inp('x', 'x', 'm', 5), inp('cam_x', 'x<sub>cam</sub>', 'm', 5), inp('scale', 'σ', 'px/m', 2)], value: g('canvas_w') / 2 + (g('x') - g('cam_x')) * g('scale') }; },
-                axle_px_y: function () { return { formula: 'ground − z<sub>w</sub> σ', inputs: [inp('ground_px', 'ground', 'px', 2), inp('zw', 'z<sub>w</sub>', 'm', 5), inp('scale', 'σ', 'px/m', 2)], value: g('ground_px') - g('zw') * g('scale') }; },
-                body_px_y: function () { return { formula: 'ground − z<sub>b</sub> σ', inputs: [inp('ground_px', 'ground', 'px', 2), inp('zb', 'z<sub>b</sub>', 'm', 5), inp('scale', 'σ', 'px/m', 2)], value: g('ground_px') - g('zb') * g('scale') }; },
-                front_px_x: function () { return { formula: 'X<sub>axle</sub> + 0.98 r<sub>s</sub> σ', inputs: [inp('axle_px_x', 'X<sub>axle</sub>', 'px', 2), inp('r_s', 'r<sub>s</sub>', 'm', 4), inp('scale', 'σ', 'px/m', 2)], value: g('axle_px_x') + 0.98 * g('r_s') * g('scale') }; },
-                front_px_y: function () { return { formula: 'Y<sub>body</sub> − 0.03 σ − (0.006 + η<sub>front</sub> + h<sub>head</sub>/2) σ cos ε', inputs: [inp('body_px_y', 'Y<sub>body</sub>', 'px', 2), inp('scale', 'σ', 'px/m', 2), inp('eta_front', 'η<sub>front</sub>', 'm', 5), inp('head_h', 'h<sub>head</sub>', 'm', 3), inp('elev', 'ε', 'rad', 4)], value: g('body_px_y') - 0.03 * g('scale') - (0.006 + g('eta_front') + g('head_h') / 2) * Math.cos(g('elev')) * g('scale') }; },
-                back_px_x: function () { return { formula: 'X<sub>axle</sub> − 0.98 r<sub>s</sub> σ', inputs: [inp('axle_px_x', 'X<sub>axle</sub>', 'px', 2), inp('r_s', 'r<sub>s</sub>', 'm', 4), inp('scale', 'σ', 'px/m', 2)], value: g('axle_px_x') - 0.98 * g('r_s') * g('scale') }; },
-                back_px_y: function () { return { formula: 'Y<sub>body</sub> − 0.03 σ − (0.006 + η<sub>back</sub> + h<sub>head</sub>/2) σ cos ε', inputs: [inp('body_px_y', 'Y<sub>body</sub>', 'px', 2), inp('scale', 'σ', 'px/m', 2), inp('eta_back', 'η<sub>back</sub>', 'm', 5), inp('head_h', 'h<sub>head</sub>', 'm', 3), inp('elev', 'ε', 'rad', 4)], value: g('body_px_y') - 0.03 * g('scale') - (0.006 + g('eta_back') + g('head_h') / 2) * Math.cos(g('elev')) * g('scale') }; }
+                ground_px: function () { return projCheck('the road under the axle, (0, 0, 0)', [0, 0, 0], 1); },
+                axle_px_x: function () { return projCheck('the hub, (0, −0.01, z<sub>w</sub>)', [0, -0.01, g('zw')], 0, [inp('zw', 'z<sub>w</sub>', 'm', 5)]); },
+                axle_px_y: function () { return projCheck('the hub, (0, −0.01, z<sub>w</sub>)', [0, -0.01, g('zw')], 1, [inp('zw', 'z<sub>w</sub>', 'm', 5)]); },
+                body_px_x: function () { return projCheck('the body’s near bottom edge, (−0.08, −0.06, z<sub>b</sub>)', [-0.08, -0.06, g('zb')], 0, [inp('zb', 'z<sub>b</sub>', 'm', 5)]); },
+                glass_px_x: function () { return projCheck('the surface at rest on the axis', [0, 0, glassZ() + g('h0')], 0, [inp('zb', 'z<sub>b</sub>', 'm', 5), inp('h0', 'h', 'm', 3)]); },
+                glass_px_y: function () { return projCheck('the surface at rest on the axis', [0, 0, glassZ() + g('h0')], 1, [inp('zb', 'z<sub>b</sub>', 'm', 5), inp('h0', 'h', 'm', 3)]); },
+                body_px_y: function () { return projCheck('the body’s near bottom edge, (−0.08, −0.06, z<sub>b</sub>)', [-0.08, -0.06, g('zb')], 1, [inp('zb', 'z<sub>b</sub>', 'm', 5)]); },
+                front_px_x: function () { return projCheck('the head’s band at the front wall', [0.98 * g('r_s'), 0, glassZ() + g('eta_front') + g('head_h') / 2], 0, [inp('r_s', 'r<sub>s</sub>', 'm', 4), inp('zb', 'z<sub>b</sub>', 'm', 5), inp('eta_front', 'η<sub>front</sub>', 'm', 5), inp('head_h', 'h<sub>head</sub>', 'm', 3)]); },
+                front_px_y: function () { return projCheck('the head’s band at the front wall', [0.98 * g('r_s'), 0, glassZ() + g('eta_front') + g('head_h') / 2], 1, [inp('r_s', 'r<sub>s</sub>', 'm', 4), inp('zb', 'z<sub>b</sub>', 'm', 5), inp('eta_front', 'η<sub>front</sub>', 'm', 5), inp('head_h', 'h<sub>head</sub>', 'm', 3)]); },
+                back_px_x: function () { return projCheck('the head’s top at the back wall', [-0.97 * g('r_s'), 0, glassZ() + g('eta_back') + g('head_h')], 0, [inp('r_s', 'r<sub>s</sub>', 'm', 4), inp('zb', 'z<sub>b</sub>', 'm', 5), inp('eta_back', 'η<sub>back</sub>', 'm', 5), inp('head_h', 'h<sub>head</sub>', 'm', 3)]); },
+                back_px_y: function () { return projCheck('the head’s top at the back wall', [-0.97 * g('r_s'), 0, glassZ() + g('eta_back') + g('head_h')], 1, [inp('r_s', 'r<sub>s</sub>', 'm', 4), inp('zb', 'z<sub>b</sub>', 'm', 5), inp('eta_back', 'η<sub>back</sub>', 'm', 5), inp('head_h', 'h<sub>head</sub>', 'm', 3)]); },
             },
             drawn: {
                 eta_front: function () { return headDrawn('front'); }, front_px_y: function () { return headDrawn('front'); }, dw: function () { return headDrawn('front'); },
@@ -985,7 +1024,7 @@
             },
             round: { time: 't', label: function () { return 'one second of simulated motion'; }, length: function () { return 1; },
                      columns: ['x', 'vx', 'a_gx', 'a_gz', 'dw', 'N', 'F_lx'], point: function () { return { what: 'stout' }; }, blocked: function () { return null; } },
-            about: 'The cart, the body and the wheel are drawn at the stored positions, so picture and store agree to the pixel. The stout is not drawn particle by particle: its surface is the column height h, the volume of the particles over each 4 mm square divided by its area and smoothed over one cell, and within 2.5 cells of the wall it is extended straight out along the radius from the columns inside, because the columns there are cut by the wall and hold too few particles. A wave that curls over, or drops thrown above the surface, cannot show this way. The head is drawn, not computed: a 12 mm cream band laid on the computed surface. Only half the glass is computed; the other half drawn is its mirror image. Spilled drops are drawn where the solver moves them in the room, with their mirror images, and splashes stay where they land. The particles’ velocities stay in the solver (the store keeps their positions); the momentum P is checked from them directly.'
+            about: 'The picture is a pinhole camera (looking down at 22°, turned 18° toward the front, 2.2 m from a point 24 cm above the road under the axle) that rides with the cart; every drawn point the panel checks is recomputed from the camera’s stored constants, so picture and store agree to the pixel. The stout is not drawn particle by particle: its surface is the column height h, the volume of the particles over each 4 mm square divided by its area and smoothed over one cell, interpolated for the picture by a bicubic spline that passes through every column value (so the sheet bends instead of stepping), and within 3 cells of the wall extended straight out along the radius from the columns inside, because the columns there are cut by the wall and hold too few particles. The surface is shaded by one light from its normal; the drink’s colour across the glass follows the light’s path through it (ruby where thin, black where thick; a drawing choice). A wave that curls over, or drops thrown above the surface, cannot show this way. The head is drawn, not computed: a 12 mm cream band laid on the computed surface. Only half the glass is computed; the other half drawn is its mirror image. Spilled drops are drawn where the solver moves them in the room, with their mirror images, as short streaks along their velocity (8 ms of travel), and splashes stay where they land. The particles’ velocities stay in the solver (the store keeps their positions); the momentum P is checked from them directly.'
         };
             var fromSolver = {
                 x: function () { return world.cart.x; }, vx: function () { return world.cart.vx; }, zb: function () { return world.cart.zb; }, vzb: function () { return world.cart.vzb; }, zw: function () { return world.cart.zw; }, vzw: function () { return world.cart.vzw; },
@@ -993,7 +1032,8 @@
                 R: function () { return world.fluid.R; }, h0: function () { return world.fluid.h0; }, rho: function () { return world.fluid.rho; }, nu: function () { return world.fluid.nu; }, g: function () { return world.fluid.g; }, dx: function () { return world.fluid.dx; },
                 dt_max: function () { return world.dtMax; }, h_cart: function () { return world.hCart; }, Mb: function () { return world.cart.Mb; }, mw: function () { return world.cart.mw; }, Rw: function () { return world.cart.Rw; },
                 k: function () { return world.cart.k; }, c: function () { return world.cart.c; }, kt: function () { return world.cart.kt; }, ct: function () { return world.cart.ct; }, cx: function () { return world.cart.cx; }, Ls: function () { return world.cart.Ls; },
-                head_h: function () { return view.headH; }, elev: function () { return view.elev; },
+                head_h: function () { return view.headH; }, elev: function () { return view.elev; }, azim: function () { return view.azim; }, cam_dist: function () { return view.dist; }, cam_zt: function () { return view.targetZ; },
+                cam_cy: function () { var r = cv.getBoundingClientRect(); return view.cam.cy / (cv.width / r.width); },
                 z_rim: function () { return world.fluid.zRim; }, np0: function () { return world.fluid.npStart; }, R_rim: function () { return world.fluid.Rrim; }, ctrl_on: function () { return world.cart.ctrl === 'speed' ? 1 : 0; }, susp_on: function () { return world.cart.susp ? 1 : 0; },
                 i_m: function () { return world.cart.i; }, u_s: function () { return world.cart.us; }, v_s: function () { return ds.get('v_s'); }
             };
