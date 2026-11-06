@@ -41,6 +41,14 @@ The two commands above still work by hand from a computer signed in to Cloudflar
 to the same file in a fresh build. A branch other than `main` gets the same check in red, failing at once: only `main` is set up to
 build. So merging into `main` is deploying, and it happens only on Numa's word.
 
+**When a merge does not build (seen 6 November 2026).** The merge `395fb42` (Fig. 12, PR #96) got no "Workers Builds: phyein-usul"
+check at all, while every push before 09:22 UTC that day had one: Cloudflare never started the build, and phyeinusul.com kept the old page.
+Check it with `curl -sS https://api.github.com/repos/Numa1997/SiteTest/commits/<sha>/check-runs | grep -o '"name": "[^"]*"'`: no
+"Workers Builds" name means no build started. Then, in the Cloudflare dashboard: Workers & Pages → phyein-usul → Deployments, and start a
+build of the latest `main` commit (Retry build / Deploy). If that also does nothing, Settings → Builds shows whether the GitHub connection
+is still there; reconnecting it there (Disconnect, then Connect to Numa1997/SiteTest, branch `main`) restores the doorbell. GitHub's side
+of it is the Cloudflare app under github.com → Settings → Applications → Installed GitHub Apps, which must have access to SiteTest.
+
 **Addresses (since 31 October 2026).** `wrangler.jsonc` sets `"html_handling": "none"`: Cloudflare serves `x.html` and
 `folder/index.html` as they are, the addresses every link of the site uses, with no redirect. Before, it answered each with a 307
 to `x` or `folder/`, one round trip on every click ([performance.md](performance.md), change 6). The short addresses, which readers
