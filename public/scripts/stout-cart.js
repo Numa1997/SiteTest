@@ -1317,6 +1317,23 @@
   Cart.prototype.sample = function () {
     const i0 = this.cx * this.v0 / this.bForce(), e = this.v0 - this.vx;
     if (this.ds) { this.ds.set('v_s', this.vx); this.ds.set('xi_s', this.xi); this.ds.set('vzb_s', this.vzb); }
+    // the sensors and the observer, at every sample whatever the controller: the encoder's speed, the probes' newest
+    // reading if the fluid has stepped since the last sample, the current held over the last sample as the input
+    let s = null;
+    if (this.obs) {
+      const pr = this.probe, nv = this.noiseV ? this.noiseV * this.rng.gauss() : 0, yv = this.vx + nv;
+      const yq = pr && pr.fresh ? pr.y : null;
+      if (pr) pr.fresh = false;
+      s = this.obs.update(this.uPrev, yv, yq);
+      this.uPrev = this.i;                                      // the measured current, held until the next sample
+      const D = this.ds;
+      if (D && D.has('xh')) {                                   // the page declares these; tools run without a store
+        const o = this.obs, put = (k, a) => { const t = D.get(k); for (let n = 0; n < a.length; n++) t[n] = a[n]; D.touch(k); };
+        D.set('n_v', nv); D.set('y_v', yv); D.set('q_fresh', o.fresh); D.set('u_prev', o.uPrev); D.set('y_q_used', yq === null ? NaN : yq);
+        put('xh_prev', o.xPrev); put('xh_pri', o.xPri); put('xh', o.x); put('nu', o.nu);
+        put('P_prev', [].concat.apply([], o.PPrev)); put('P_pri', [].concat.apply([], o.PPri)); put('P_post', [].concat.apply([], o.P)); put('Lk', [].concat.apply([], o.L));
+      }
+    }
     if (this.ctrl === 'speed' || this.ctrl === 'preview') {
       let ic = i0 + this.Kp * e + this.Ki * this.xi;
       if (this.ctrl === 'preview') {                            // the road ahead, one current lag in advance: cancel its push
@@ -1325,11 +1342,11 @@
       }
       if (Math.abs(ic) < this.Imax) this.xi += e * this.Ts;     // anti-windup: integrate only when not saturated
       this.icmd = ic;
-    } else if (this.ctrl === 'slosh' && this.sloshState) {      // state feedback on speed, first mode and integral (LQR)
-      const s = this.sloshState(), K = this.lqrGains();
-      let ic = i0 - (K[0] * (this.vx - this.v0) + K[1] * s[0] + K[2] * s[1] + K[3] * this.xi);
+    } else if (this.ctrl === 'slosh' && s) {                    // state feedback on the estimate, and the integral (LQR)
+      const K = this.lqrGains();
+      let ic = i0 - (K[0] * (s[0] - this.v0) + K[1] * s[1] + K[2] * s[2] + K[3] * this.xi);
       if (Math.abs(ic) < this.Imax) this.xi += e * this.Ts;
-      this.icmd = ic; this.qs = s[0]; this.qds = s[1];
+      this.icmd = ic;
     } else this.icmd = i0;
     this.uscmd = this.susp ? -this.csky * this.vzb : 0;
     if (this.uscmd > this.Umax) this.uscmd = this.Umax; else if (this.uscmd < -this.Umax) this.uscmd = -this.Umax;
@@ -1381,6 +1398,102 @@
     this.forces(Fx, Fz);
   };
 
+  /* ------------------------------------------------------ sensors and observer */
+  // Small dense matrices (arrays of rows) for the observer's design.
+  const mat = {
+    mul: (A, B) => A.map((r) => B[0].map((_, j) => r.reduce((s, v, k) => s + v * B[k][j], 0))),
+    add: (A, B) => A.map((r, i) => r.map((v, j) => v + B[i][j])),
+    scale: (A, s) => A.map((r) => r.map((v) => v * s)),
+    T: (A) => A[0].map((_, j) => A.map((r) => r[j])),
+    eye: (n) => Array.from({ length: n }, (_, i) => Array.from({ length: n }, (_, j) => (i === j ? 1 : 0))),
+    // e^M by scaling and squaring: M / 2^s has norm below 1/2, its Taylor series to 20 terms, then s squarings
+    expm: (M) => {
+      const n = M.length, nrm = Math.max.apply(null, M.map((r) => r.reduce((s, v) => s + Math.abs(v), 0)));
+      const s = Math.max(0, Math.ceil(Math.log2(nrm / 0.5 + 1e-300)));
+      const A = mat.scale(M, Math.pow(2, -s));
+      let E = mat.eye(n), term = mat.eye(n);
+      for (let k = 1; k <= 20; k++) { term = mat.scale(mat.mul(term, A), 1 / k); E = mat.add(E, term); }
+      for (let k = 0; k < s; k++) E = mat.mul(E, E);
+      return E;
+    }
+  };
+  // Gaussian numbers for the optional sensor noise, from a seeded generator (mulberry32, Box–Muller): runs repeat exactly.
+  function Rng(seed) { this.s = seed >>> 0; this.spare = null; }
+  Rng.prototype.u = function () { let t = (this.s = (this.s + 0x6d2b79f5) >>> 0); t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+  Rng.prototype.gauss = function () {
+    if (this.spare !== null) { const v = this.spare; this.spare = null; return v; }
+    const a = Math.max(this.u(), 1e-300), b = this.u(), r = Math.sqrt(-2 * Math.log(a));
+    this.spare = r * Math.sin(2 * Math.PI * b); return r * Math.cos(2 * Math.PI * b);
+  };
+
+  // The observer: a discrete Kalman filter on the cart's speed and the first sloshing mode, z = (v, q, q'), run at every
+  // controller sample (T_s = 1 ms). Its model is the controller's plant (the lecture note, §8.4, and §8.5 for the filter):
+  //     M_x v' = b i − c_x v + F_d,      q'' = −w^2 q − 2 zeta w q' − beta v' + a_q,
+  // the input the measured motor current i, F_d an unknown force on the cart (road, the stout's own push, the reader) and
+  // a_q what the one-mode model gets wrong about the swing, both white noise of intensities W_F (N^2 s) and W_a (m^2 s^-3).
+  // Measured: the speed (a wheel encoder), y_v = v + n_v, every sample; the half difference of the two wall probes,
+  // y_q = (eta_front − eta_back)/2 = q + n_q, once per fluid step (the surface exists only then). Discretised exactly for a
+  // current held over the sample: A_d = e^{A T_s}, B_d = int_0^Ts e^{A s} ds B (one exponential of [[A, B], [0, 0]]), and the
+  // noise's covariance Q_d = int_0^Ts e^{A s} G W G' e^{A' s} ds by Van Loan's method (one exponential of
+  // [[−A, G W G'], [0, A']] T_s: its lower right block is A_d', and Q_d = A_d times its upper right block).
+  function Observer(o) {
+    this.w = o.w; this.zeta = o.zeta; this.beta = o.beta; this.Mx = o.Mx; this.b = o.b; this.cx = o.cx; this.Ts = o.Ts;
+    this.sigV = o.sigV; this.sigQ = o.sigQ; this.WF = o.WF; this.Wa = o.Wa;
+    this.design();
+    this.reset(o.v || 0);
+  }
+  Observer.prototype.design = function () {
+    const w = this.w, z = this.zeta, be = this.beta, Mx = this.Mx, b = this.b, cx = this.cx, Ts = this.Ts;
+    const A = [[-cx / Mx, 0, 0], [0, 0, 1], [be * cx / Mx, -w * w, -2 * z * w]], B = [b / Mx, 0, -be * b / Mx];
+    const G = [[1 / Mx, 0], [0, 0], [-be / Mx, 1]], W = [[this.WF, 0], [0, this.Wa]];
+    const M4 = [0, 1, 2, 3].map((i) => [0, 1, 2, 3].map((j) => (i < 3 && j < 3 ? A[i][j] * Ts : i < 3 && j === 3 ? B[i] * Ts : 0)));
+    const E4 = mat.expm(M4);
+    this.Ad = [0, 1, 2].map((i) => [0, 1, 2].map((j) => E4[i][j])); this.Bd = [0, 1, 2].map((i) => E4[i][3]);
+    const GWG = mat.mul(mat.mul(G, W), mat.T(G));
+    const M6 = [0, 1, 2, 3, 4, 5].map((i) => [0, 1, 2, 3, 4, 5].map((j) => Ts * (i < 3 && j < 3 ? -A[i][j] : i < 3 ? GWG[i][j - 3] : j < 3 ? 0 : A[j - 3][i - 3])));
+    const E6 = mat.expm(M6), F12 = [0, 1, 2].map((i) => [3, 4, 5].map((j) => E6[i][j]));
+    const Qd = mat.mul(this.Ad, F12);
+    this.Qd = Qd.map((r, i) => r.map((v, j) => 0.5 * (v + Qd[j][i])));      // symmetric to the last bit
+    this.A = A; this.B = B; this.G = G;
+  };
+  // at rest on the set speed: the stout still, known to the probes' accuracy
+  Observer.prototype.reset = function (v) {
+    this.x = [v, 0, 0];
+    const s = [this.sigV, this.sigQ, this.sigQ * this.w];
+    this.P = [0, 1, 2].map((i) => [0, 1, 2].map((j) => (i === j ? s[i] * s[i] : 0)));
+    this.xPri = this.x.slice(); this.PPri = this.P.map((r) => r.slice()); this.xPrev = this.x.slice(); this.PPrev = this.P.map((r) => r.slice());
+    this.nu = [0, 0]; this.L = [[0, 0], [0, 0], [0, 0]]; this.S = [0, 0]; this.uPrev = 0; this.fresh = 0;
+  };
+  // one sample: predict with the current u held since the last sample, then correct with the speed y_v and, when the
+  // probes have a new reading, with y_q (null otherwise). Joint update: S = H P H' + R, L = P H' S^-1, x += L nu,
+  // P = (I − L H) P (I − L H)' + L R L' (Joseph's form: stays symmetric and positive).
+  Observer.prototype.update = function (u, yv, yq) {
+    const Ad = this.Ad, Bd = this.Bd;
+    this.xPrev = this.x; this.PPrev = this.P; this.uPrev = u;
+    const xp = [0, 1, 2].map((i) => Ad[i][0] * this.x[0] + Ad[i][1] * this.x[1] + Ad[i][2] * this.x[2] + Bd[i] * u);
+    const PA = mat.mul(mat.mul(Ad, this.P), mat.T(Ad)), Pp = PA.map((r, i) => r.map((v, j) => v + this.Qd[i][j]));
+    this.xPri = xp; this.PPri = Pp;
+    const rows = yq === null || yq === undefined ? [0] : [0, 1], Rv = [this.sigV * this.sigV, this.sigQ * this.sigQ], y = [yv, yq];
+    // S and its inverse (1 x 1 or 2 x 2)
+    const S = rows.map((a) => rows.map((b2) => Pp[a][b2] + (a === b2 ? Rv[a] : 0)));
+    let Si;
+    if (rows.length === 1) Si = [[1 / S[0][0]]];
+    else { const det = S[0][0] * S[1][1] - S[0][1] * S[1][0]; Si = [[S[1][1] / det, -S[0][1] / det], [-S[1][0] / det, S[0][0] / det]]; }
+    const L = [0, 1, 2].map((i) => rows.map((_, c) => rows.reduce((s, a, k) => s + Pp[i][a] * Si[k][c], 0)));
+    const nu = rows.map((a) => y[a] - xp[a]);
+    const x = [0, 1, 2].map((i) => xp[i] + L[i].reduce((s, l, c) => s + l * nu[c], 0));
+    // Joseph: (I − L H) Pp (I − L H)' + L R L'
+    const IKH = [0, 1, 2].map((i) => [0, 1, 2].map((j) => (i === j ? 1 : 0) - rows.reduce((s, a, c) => s + (a === j ? L[i][c] : 0), 0)));
+    const P1 = mat.mul(mat.mul(IKH, Pp), mat.T(IKH));
+    const P = P1.map((r, i) => r.map((v, j) => v + rows.reduce((s, a, c) => s + L[i][c] * Rv[a] * L[j][c], 0)));
+    this.x = x; this.P = P.map((r, i) => r.map((v, j) => 0.5 * (v + P[j][i])));
+    this.fresh = rows.length - 1;
+    this.nu = [nu[0], rows.length > 1 ? nu[1] : 0];
+    this.L = L.map((r) => [r[0], rows.length > 1 ? r[1] : 0]);
+    this.S = [S[0][0], rows.length > 1 ? S[1][1] : 0];
+    return x;
+  };
+
   /* --------------------------------------------------------------- coupling */
   function World(o) {
     o = o || {};
@@ -1389,18 +1502,49 @@
     co.ml = this.fluid.mLiquid;
     if (o.road) co.road = new Road(o.road);
     this.cart = new Cart(co);
-    if (this.fluid.modal) {
-      const f = this.fluid;
-      this.cart.sloshState = () => [f.q[0], f.qd[0]];       // a level probe on the glass would measure these; here ideal
-      this.cart.sloshMode = { w: f.w[0], zeta: f.zeta[0], beta: f.beta[0] };
+    // The controller's plant: the first sloshing mode as each model has it. The live model: its own mode 1. The 3D solver:
+    // the frequency and damping its grid gives the tulip's free swing (check.cjs freq: 3.214 Hz and 0.008 at 4 mm, 3.263 Hz
+    // and 0.002 at 3 mm; the continuum is 3.42 Hz), and beta of the cylinder of the surface's radius (note, eq. 17).
+    // o.plant overrides. The probes and the observer serve both models the same way; nothing reads the modes directly.
+    const f = this.fluid, c = this.cart;
+    let mode;
+    if (f.modal) mode = { w: f.w[0], zeta: f.zeta[0], beta: f.beta[0] };
+    else {
+      const Rs = f.Rz(Math.min(f.h0, f.zRim)), xi = XI[0], th = Math.tanh(xi * f.h0 / Rs), fine = f.dx <= 0.0031;
+      mode = { w: 2 * Math.PI * (fine ? 3.263 : 3.214), zeta: fine ? 0.002 : 0.008, beta: 2 * xi * th / (xi * xi - 1) };
     }
+    if (o.plant) mode = Object.assign(mode, o.plant);
+    c.sloshMode = mode;
+    // sensors: the probes' and the encoder's added noise (standard deviations; 0 by default: the 3D surface has its own
+    // reading noise, about 1 mm on the lean), and what the filter assumes they are (sigQ, sigV)
+    const so = Object.assign({ noiseQ: 0, noiseV: 0, sigQ: 0.0008, sigV: 0.002, WF: 0.5, Wa: 0.002, seed: 12 }, o.sensors || {});
+    c.noiseQ = so.noiseQ; c.noiseV = so.noiseV; c.rng = new Rng(so.seed);
+    c.probe = { y: 0, ef: 0, eb: 0, n: 0, fresh: false, r: 0 };
+    c.obs = new Observer({ w: mode.w, zeta: mode.zeta, beta: mode.beta, Mx: c.massX(), b: c.bForce(), cx: c.cx, Ts: c.Ts, sigQ: so.sigQ, sigV: so.sigV, WF: so.WF, Wa: so.Wa, v: c.vx });
+    c.uPrev = c.i;
     this.dtMax = o.dtMax || 1 / 400;
     this.hCart = o.hCart || 1e-4;
     this.Fx = 0; this.Fz = 0;
     this.P = this.fluid.momentum();
     this.t = 0; this.lastAx = 0; this.lastAz = 0;
     this.fluid.levelSet();          // so that the surface can be read before the first step
+    this.readProbes();
+    this.cart.probe.fresh = false;  // the reading at rest is the filter's starting point, not a measurement to fuse
   }
+  // The two level probes on the glass's wall, at r = R(h), theta = 0 (front, the direction of travel) and pi (back): each
+  // reads the height of the surface there, as the solver has it after the fluid step (Fluid.columnHeightAt on the column
+  // heights; ModalFluid.heightAt). A real probe (a capacitive strip along the wall) does the same: it senses where the liquid
+  // stands at the wall. The controller gets their half difference y_q = (eta_f − eta_b)/2, the swing at the wall, plus the
+  // optional added noise. Nothing here changes the fluid: the 3D solver's column heights are the page's own reading.
+  World.prototype.readProbes = function () {
+    const f = this.fluid, c = this.cart, pr = c.probe;
+    if (!f.modal) f.columnHeights();
+    const r = f.modal ? f.Rs : f.Rz(Math.min(f.h0, f.zRim));
+    const ef = f.columnHeightAt(r, 0), eb = f.columnHeightAt(-r, 0), n = c.noiseQ ? c.noiseQ * c.rng.gauss() : 0;
+    pr.r = r; pr.ef = ef; pr.eb = eb; pr.n = n; pr.y = 0.5 * (ef - eb) + n; pr.fresh = true; pr.t = this.t;
+    const D = this.ds;
+    if (D && D.has('y_q')) { D.set('r_p', r); D.set('eta_pf', ef); D.set('eta_pb', eb); D.set('n_q', n); D.set('y_q', pr.y); }
+  };
   // advance by dt (s), in equal fluid steps no longer than dtMax and the CFL limit (0.8 cell per step)
   World.prototype.advance = function (dt) {
     let left = dt;
@@ -1432,6 +1576,7 @@
       this.P = P; this.lastAx = ax; this.lastAz = az;
       c.forces(this.Fx, this.Fz);                               // the stout's new reaction acts from now
       left -= h; this.t += h; this.steps = (this.steps || 0) + 1;
+      this.readProbes();                                        // the probes see the surface the step has just computed
       const D = this.ds;
       if (D) {
         D.set('t', this.t); D.set('h_f', h); D.set('n_cart', n); D.set('vx_0', vx0); D.set('vzb_0', vz0); D.set('vx_1', c.vx); D.set('vzb_1', c.vzb);
@@ -1481,5 +1626,5 @@
     f.columnHeights(); ds.touch('h_col');
   };
 
-  return { Fluid, ModalFluid, Road, Cart, World };
+  return { Fluid, ModalFluid, Road, Cart, World, Observer, mat, Rng };
 });

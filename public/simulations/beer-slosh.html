@@ -93,7 +93,8 @@
                         <button type="button" class="btn btn--ghost" id="ctrl-slosh" aria-pressed="false">Slosh feedback</button>
                     </div>
                     <label class="switch"><span>Active suspension (skyhook)</span><input type="checkbox" id="susp"></label>
-                    <p class="panel__note">Open loop: the motor gives the fixed torque that balances the drag at the set speed. Speed (PI): a PI loop sampled every 1 ms sets the motor current. Road preview: the PI loop plus the current that cancels the road’s push one current lag ahead. Slosh feedback: state feedback (LQR) on speed and on the stout’s swing, live model only. The suspension adds up to 40 N between body and axle against the body’s vertical speed.</p>
+                    <label class="switch"><span>Sensor noise (probes 1 mm, speed 0.2 mm/s)</span><input type="checkbox" id="noise"></label>
+                    <p class="panel__note">Open loop: the motor gives the fixed torque that balances the drag at the set speed. Speed (PI): a PI loop sampled every 1 ms sets the motor current. Road preview: the PI loop plus the current that cancels the road’s push one current lag ahead. Slosh feedback: state feedback (LQR) on speed and on the stout’s swing as a Kalman filter estimates it from two level probes on the glass’s wall and the wheel’s speed, in both models. The suspension adds up to 40 N between body and axle against the body’s vertical speed.</p>
                 </div>
                 <div class="panel__group">
                     <p class="panel__label">Road and model</p>
@@ -106,7 +107,7 @@
                         <button type="button" class="btn btn--ghost" id="grid-4" aria-pressed="false">3D · 4 mm</button>
                         <button type="button" class="btn btn--ghost" id="grid-3" aria-pressed="false">3D · 3 mm</button>
                     </div>
-                    <p class="panel__note">A cosine bump 25 cm long every 2 m. Live: the stout as its first three sloshing modes, in real time; stout that rises over the rim pours out and is subtracted. 3D: the full Navier–Stokes solution with particles, about a third of real time; spilled stout falls to the road. The 3D grids swing 4–6 % slow.</p>
+                    <p class="panel__note">A cosine bump 25 cm long every 2 m. Live: the stout as its first three sloshing modes, in real time; stout that rises over the rim pours out and is subtracted. 3D: the full Navier–Stokes solution with particles, in slow motion (about ×0.3 on a 4-core computer; the figure shows the rate yours reaches); spilled stout falls to the road. The 3D grids swing 4–6 % slow. With the 3D solver the slosh feedback acts on the computed fluid itself: the probes read its surface.</p>
                 </div>
                 <dl class="readouts">
                     <div><dt>Time</dt><dd id="r-t">—</dd></div>
@@ -117,6 +118,8 @@
                     <div><dt>Tyre load N</dt><dd id="r-N">—</dd></div>
                     <div><dt>Motor current</dt><dd id="r-i">—</dd></div>
                     <div><dt>Spilled</dt><dd id="r-sp">—</dd></div>
+                    <div><dt>Probes, lean</dt><dd id="r-yq">—</dd></div>
+                    <div><dt>Estimate, lean</dt><dd id="r-qh">—</dd></div>
                     <div class="wide"><dt>Solver</dt><dd id="r-solver">—</dd></div>
                 </dl>
             </aside>
