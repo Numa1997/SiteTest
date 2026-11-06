@@ -1,73 +1,53 @@
-"""Guinness tulip pint glass: profile -> Blender solid of revolution -> volumes and meshes.
+"""Guinness Gravity pint glass -> Blender meshes (outer and inner surfaces with the sculpted panels) -> glass.glb,
+and the independent volume check of the cavity. Geometry lives in geom.py; this script only meshes and exports.
 
-Run: python3 tools/fig12/glass.py <outer.csv from profile_from_photo.py> <outdir>
-Geometry decisions (measured in the photo, see notes/fig12/geometry.md):
-  * pixel scale from rim plane to foot plane (ellipse centres, rows 41.5 and 449.0) = 160 mm;
-  * wall thickness T_W = 2.0 mm (uncertain +-0.5 mm), floor of the cavity Z_F = 8.0 mm above the foot.
-Outputs: glass_profile.json (outer and inner radius on a 0.5 mm grid, volumes),
-         glass.glb (outer and inner surfaces as Blender meshes, for the page's renderer).
+Run: python3 tools/fig12/glass.py <outdir>
+Writes glass_profile.json (the body-of-revolution profile on a 0.5 mm grid, the panel parameters, volumes and fill heights)
+and glass.glb (outer and inner surfaces, metres, y up, for the page's renderer).
 """
 import sys, json, math, numpy as np
-from scipy.interpolate import UnivariateSpline
-src, outdir = sys.argv[1], sys.argv[2]
-d = np.loadtxt(src, delimiter=',')
-OLD_S = 160.0 / 419.0                     # scale used in profile_from_photo.py (mm/px)
-PX_RIM, PX_FOOT, PX_BOT = 41.5, 449.0, 458.0
-S = 160.0 / (PX_FOOT - PX_RIM)            # mm per px, rim plane to foot plane
-z_px_from_bottom = d[:, 0] / OLD_S        # back to px above the lowest dark row
-r_px = d[:, 1] / OLD_S
-z = (z_px_from_bottom - (PX_BOT - PX_FOOT)) * S   # mm above the foot plane
-R = r_px * S
-keep = (z > 9.0) & (z < 157.0)            # drop rows distorted by the rim and foot ellipses
-z, R = z[keep][::-1], R[keep][::-1]
-spl = UnivariateSpline(z, R, s=len(z) * 0.20 ** 2, k=4)   # 0.2 mm rms: about half a photo pixel (0.39 mm)
-H, T_W, Z_F = 160.0, 2.0, 8.0
-zz = np.arange(0.0, H + 1e-9, 0.5)
-Ro = spl(np.clip(zz, z.min(), z.max()))
-# below the clean data the foot is near-cylindrical; above it the rim continues its slope
-Ro[zz < z.min()] = spl(z.min()); top = zz > z.max(); Ro[top] = spl(z.max()) + spl.derivative()(z.max()) * (zz[top] - z.max())
-slope = np.gradient(Ro, zz)
-Ri = Ro - T_W * np.sqrt(1 + slope ** 2)   # thickness measured normal to the wall
-Ri[zz < Z_F] = np.nan
-def vol(h):                                # cavity volume below z = h, mm^3 (R interpolated up to h itself, not only to the last grid point)
-    mm = ~np.isnan(Ri); q = np.linspace(Z_F, h, 4001)
-    return np.trapezoid(np.pi * np.interp(q, zz[mm], Ri[mm]) ** 2, q)
-V_brim = vol(H)
-hs = np.arange(Z_F, H, 0.05); Vs = np.array([vol(h) for h in hs])
-h568 = np.interp(568e3, Vs, hs); h500 = np.interp(500e3, Vs, hs)
-print(f'scale {S:.4f} mm/px; outer: foot {2*Ro[0]:.1f}, waist {2*Ro[(zz>15)&(zz<60)].min():.1f} at z={zz[(zz>15)&(zz<60)][np.argmin(Ro[(zz>15)&(zz<60)])]:.1f}, '
-      f'widest {2*Ro.max():.1f} at z={zz[Ro.argmax()]:.1f}, rim {2*Ro[-1]:.1f} mm')
-print(f'cavity: brim volume {V_brim/1e3:.1f} mL; 568 mL reaches z = {h568:.1f} mm ({H-h568:.1f} mm below rim); 500 mL reaches z = {h500:.1f} mm')
-prof = dict(source='MBS Wholesale product photo guiness_2.jpg, scaled to 160 mm height (retailer listings)', H_mm=H, wall_mm=T_W, floor_mm=Z_F,
-            z_mm=zz.tolist(), R_outer_mm=np.round(Ro, 3).tolist(), R_inner_mm=[None if np.isnan(v) else round(float(v), 3) for v in Ri],
+import geom as G
+outdir = sys.argv[1]
+zz = np.arange(0.0, G.H + 1e-9, 0.5)
+Ro = G.R0(zz); Ri0 = G.R_inner(zz, np.pi / 2)             # the round wall (theta = 90 deg has no panel)
+V_brim = G.cavity_volume(G.H)
+hs = np.arange(G.Z_F + 1, G.H, 0.25); Vs = np.array([G.cavity_volume(h, nz=401, nt=64) for h in hs])
+h568 = float(np.interp(568e3, Vs, hs)); h500 = float(np.interp(500e3, Vs, hs))
+print(f'outer: foot {2*Ro[0]:.1f}, waist {2*Ro[(zz>15)&(zz<60)].min():.1f} at z={zz[(zz>15)&(zz<60)][np.argmin(Ro[(zz>15)&(zz<60)])]:.1f}, widest {2*Ro.max():.1f} at z={zz[Ro.argmax()]:.1f}, rim {2*Ro[-1]:.1f} mm')
+print(f'cavity: brim {V_brim/1e3:.1f} mL; 568 mL at z = {h568:.1f} mm ({G.H-h568:.1f} below the rim); 500 mL at z = {h500:.1f} mm')
+prof = dict(source='dimensions.com "Irish Imperial Pint Glass" elevation (profile_drawing.csv), scaled to H = 160 mm and widest diameter 85 mm; '
+                   'sculpted panels from product photographs, depth estimated',
+            H_mm=G.H, wall_mm=G.T_W, floor_mm=G.Z_F, panel=dict(A_mm=G.A_PANEL, W_crease_deg=math.degrees(G.W_CREASE), z_V0=G.Z_V0, z_V1=G.Z_V1, z_V2=G.Z_V2),
+            z_mm=zz.tolist(), R_outer_mm=np.round(Ro, 3).tolist(), R_inner_mm=[None if z < G.Z_F else round(float(v), 3) for z, v in zip(zz, Ri0)],
             V_brim_mL=round(V_brim / 1e3, 1), z_568_mm=round(h568, 2), z_500_mm=round(h500, 2))
 json.dump(prof, open(f'{outdir}/glass_profile.json', 'w'))
 
-# ---- Blender: revolve both surfaces, measure the cavity volume independently, export GLB ----
+# ---- Blender: build both surfaces as rings of R(z, theta), measure the cavity volume independently, export GLB ----
 import bpy, bmesh
 bpy.ops.wm.read_factory_settings(use_empty=True)
-NSEG = 96
-def revolve(name, zs, rs, cap_bottom, flip=False):
+NSEG = 64                                              # 5.6 deg around: resolves the 6 deg crease; with 2 mm rings about 10 000 quads per surface, light enough for a phone
+TH = 2 * np.pi * np.arange(NSEG) / NSEG
+def surface(name, zs, Rfun, cap_bottom, flip=False, scale=1.0):
     bm = bmesh.new(); rings = []
-    for zc, rc in zip(zs, rs):
-        rings.append([bm.verts.new((rc * math.cos(2 * math.pi * k / NSEG), rc * math.sin(2 * math.pi * k / NSEG), zc)) for k in range(NSEG)])
+    for zc in zs:
+        rr = Rfun(zc, TH) * scale
+        rings.append([bm.verts.new((rr[k] * math.cos(TH[k]), rr[k] * math.sin(TH[k]), zc * scale)) for k in range(NSEG)])
     for a, b in zip(rings[:-1], rings[1:]):
         for k in range(NSEG):
             q = (a[k], a[(k + 1) % NSEG], b[(k + 1) % NSEG], b[k])
             bm.faces.new(q[::-1] if flip else q)
-    if cap_bottom:
-        f = bm.faces.new(rings[0][::-1] if not flip else rings[0])
+    if cap_bottom: bm.faces.new(rings[0][::-1] if not flip else rings[0])
     me = bpy.data.meshes.new(name); bm.to_mesh(me); bm.free()
     ob = bpy.data.objects.new(name, me); bpy.context.collection.objects.link(ob); return ob
-m = ~np.isnan(Ri)
-cav = revolve('cavity_check', np.r_[zz[m]], np.r_[Ri[m]], cap_bottom=True)
-bm = bmesh.new(); bm.from_mesh(cav.data); bmesh.ops.contextual_create(bm, geom=[e for e in bm.edges if e.is_boundary]); 
+zc = zz[zz >= G.Z_F]
+cav = surface('cavity_check', zc, G.R_inner, cap_bottom=True)                      # the volume check on the fine 0.5 mm rings
+bm = bmesh.new(); bm.from_mesh(cav.data); bmesh.ops.contextual_create(bm, geom=[e for e in bm.edges if e.is_boundary])
 bmesh.ops.recalc_face_normals(bm, faces=bm.faces); vb = bm.calc_volume(signed=False); bm.free()
-print(f'Blender cavity volume (closed revolved mesh, {NSEG} segments): {vb/1e3:.1f} mL; polygon/circle factor {NSEG/(2*math.pi)*math.sin(2*math.pi/NSEG):.5f}')
+print(f'Blender cavity volume (closed mesh, {NSEG} segments): {vb/1e3:.1f} mL; polygon/circle factor {NSEG/(2*math.pi)*math.sin(2*math.pi/NSEG):.5f}')
 bpy.data.objects.remove(cav)
-# glass shell for rendering, in metres, y up (glTF convention)
-outer = revolve('glass_outer', zz / 1000, Ro / 1000, cap_bottom=True)
-inner = revolve('glass_inner', zz[m] / 1000, Ri[m] / 1000, cap_bottom=True, flip=True)
+zm = np.arange(0.0, G.H + 1e-9, 2.0); zmc = zm[zm >= G.Z_F]                                 # the rendered surfaces on 2 mm rings
+outer = surface('glass_outer', zm, G.R_outer, cap_bottom=True, scale=1e-3)
+inner = surface('glass_inner', zmc, G.R_inner, cap_bottom=True, flip=True, scale=1e-3)
 for ob in (outer, inner):
     for p in ob.data.polygons: p.use_smooth = True
 bpy.ops.export_scene.gltf(filepath=f'{outdir}/glass.glb', export_format='GLB', export_yup=True, export_apply=True)

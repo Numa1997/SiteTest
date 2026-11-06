@@ -258,7 +258,7 @@ the eleven plate figures stay empty (only the grid background shows), and everyt
 ## 2. `public/simulations.html` · the catalog
 
 **Purpose.** The list of every simulation. It opens as a column of twelve closed titles, "01 Wave Interference" to
-"12 A Pint of Stout, Carried" (added 5 November 2026; earlier "11 Balancing Two Rods on a Cart"), in figure order (the old Fig. 11 became a project on 3 November 2026 and a new Fig. 11 took its place), under Expand all / Collapse all. A title opens to a paper abstract: thumbnail, field
+"12 A Pint of Stout on a Suspension" (added 5 November 2026; earlier "11 Balancing Two Rods on a Cart"), in figure order (the old Fig. 11 became a project on 3 November 2026 and a new Fig. 11 took its place), under Expand all / Collapse all. A title opens to a paper abstract: thumbnail, field
 and year, summary, the key equation set by KaTeX, and links to the figure and to its lecture note. Since 3 November 2026 there
 is no search, no field or year chips, no "n shown" counter and no numbers line (removed at Numa's request; the address takes no
 `?q=&field=&stage=` any more). Everything is drawn from the registry [`scripts/catalog.js`](../public/scripts/catalog.js)
