@@ -1,0 +1,2 @@
+tulip under a steady push a = 2 m/s^2 (dx 2.5 mm, volume correction 0): time-mean centre of mass -0.848 mm; exact (first order) -0.877 mm; difference -3.4 %
+(83 s)

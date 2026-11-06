@@ -1,0 +1,1 @@
+bump 10 mm, speed control, suspension skyhook, dx 3 mm: dw 6.2 mm (t 1.03 s); a_x 0.59 m/s^2; a_z 1.48 m/s^2; spill 0.0 g; |A(3.263 Hz)| 0.0466 m/s; speed 0.983-1.021 m/s; smallest tyre load 18.75 N (20 s)

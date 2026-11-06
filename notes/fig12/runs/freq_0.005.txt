@@ -1,0 +1,2 @@
+tulip, h 125 mm, dx 5 mm, dt 1/200: f = 3.119 Hz; damping ratio 0.0300
+(4 s)

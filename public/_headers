@@ -25,3 +25,13 @@
   Cache-Control: public, max-age=600
 /*.svg
   Cache-Control: public, max-age=600
+
+# Fig. 12 (the stout on a cart) splits its fluid solver over worker threads that share memory; a browser allows shared memory only
+# on a cross-origin-isolated page: COOP same-origin (above) and COEP require-corp here. The page loads nothing from other origins.
+/simulations/beer-slosh.html
+  Cross-Origin-Embedder-Policy: require-corp
+/simulations/beer-slosh
+  Cross-Origin-Embedder-Policy: require-corp
+# the worker script too: in an isolated page Chrome starts a dedicated worker only if its script carries the same policy
+/scripts/stout-worker.js
+  Cross-Origin-Embedder-Policy: require-corp
