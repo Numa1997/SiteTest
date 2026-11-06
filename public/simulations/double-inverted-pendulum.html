@@ -1409,7 +1409,8 @@
             if (mode === 'balance' && !lost && superOn && tSim >= nextCheck && cLevel !== null) { nextCheck = tSim + 0.1;
                 if (Wof(s, tSim) > cLevel) {   // outside the certified region: ask the model whether the balancer still wins within 4 s
                     var pr = run({ s: s, t: tSim, tc: tCtl, u: u }, tSim + 4, lqrU);
-                    if (Wof(pr.s, pr.t) > cLevel) { if (rescue) { mode = 'calm'; xc = rolling ? s[0] : xref; ref = { kind: 'fixed', x: xc }; log.push({ t: tSim, ev: 'rescue' }); att0 = attempt; startAttempt(); } else { lost = true; u = 0; } } } }
+                    var wNow = Wof(s, tSim), wPr = Wof(pr.s, pr.t);   /* in a medium the drag slows the balancer down: it may need longer than 4 s to reach the certified region, so there it is left alone while the model shows it lowering W by at least a tenth in those 4 s (honey: about a third) */
+                    if (wPr > cLevel && !(p.fl && wPr < 0.9 * wNow)) { if (rescue) { mode = 'calm'; xc = rolling ? s[0] : xref; ref = { kind: 'fixed', x: xc }; log.push({ t: tSim, ev: 'rescue' }); att0 = attempt; startAttempt(); } else { lost = true; u = 0; } } } }
             if (mode === 'calm' && sPred && tSim >= tPlan - 1e-9) {
                 var ok = tv && Math.abs(s[0] - sPred.s[0]) + Math.abs(s[1] - sPred.s[1]) + Math.abs(s[2] - sPred.s[2]) < 1e-6;
                 if (ok) { mode = 'track'; tCtl = tSim; hp = 3; log.push({ t: tSim, ev: 'track', T: job.T, attempt: attempt, ms: Math.round(job.ms) }); job = null; }
