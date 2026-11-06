@@ -3,6 +3,18 @@
 Written 6 November 2026 by the previous session for a fresh one. Read this whole file, then `CLAUDE.md` and `AGENTS.md`
 at the repository root, before doing anything.
 
+## 0. Outcome (6 November 2026, later the same day): done and live
+
+The hybrid of section 5 was built and published (PR #102): `public/scripts/twoway.js`, the switch *The fluid: given / solved*
+on the project 05 page, lecture-note section 13.6 (eqs. 41–46), data-panel group *The solved fluid*, German and Arabic.
+Docs: `docs/scripts/twoway.md`, `docs/simulations/fig11-double-inverted-pendulum.md` (section "The solved fluid").
+Tests and their numbers: `notes/fig11/fluid-ns-handover/twoway/` (t_*.cjs, panel_addedmass.py). Open, stated on the page:
+rods 3–7 % under-dragged (they read water they slowed themselves); a few per cent of momentum between body and water not
+counted (body-read drag 4.96–5.21 against 5.30–5.34 by momentum balance on Schäfer–Turek 2D-1, band 5.57–5.59); the scheme
+loses 17 % of the motor's energy in glycerol, 80 % in water at 2.5 cm cells; the tank's right end is open (p = 0).
+Numa (6 November): stop there; do not chase the leak or close the tank unless he asks. His idea for later: a top view of the
+x–y ground plane with a second cart (an x–y table), upright rods cut as discs by a horizontal 2D field.
+
 ## 1. What Numa wants, in his words and in physics
 
 Page: `public/simulations/double-inverted-pendulum.html` (project 05; live at phyeinusul.com).
