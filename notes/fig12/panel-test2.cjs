@@ -1,4 +1,5 @@
 // Fig. 12 data panel, part 2: checks on a bump, Read values, a recorded round, Save, idle (node notes/fig12/panel-test2.cjs <out>)
+// CTRL=<controller> and NOISE=1 run the same checks with that controller and the sensor noise (6 November 2026)
 const { chromium } = require('playwright'); const { spawn, execFileSync } = require('child_process'); const path = require('path'), fs = require('fs');
 (async () => {
   const out = process.argv[2] || '/tmp/fig12-panel2'; fs.mkdirSync(out, { recursive: true });
@@ -8,12 +9,15 @@ const { chromium } = require('playwright'); const { spawn, execFileSync } = requ
     const p = await b.newPage({ viewport: { width: W, height: 1000 }, deviceScaleFactor: 1, acceptDownloads: true });
     p.on('pageerror', e => errs.push(W + ': ' + e.message)); p.on('console', m => { if (m.type() === 'error') errs.push(W + ': ' + m.text()); });
     await p.goto(base + '/simulations/beer-slosh.html' + (process.env.QUERY || ''));
+    // CTRL=off|speed|preview|slosh presses that controller; NOISE=1 switches the sensor noise on
+    if (process.env.CTRL) await p.click('#ctrl-' + process.env.CTRL);
+    if (process.env.NOISE) await p.click('#noise');
     // wait until the wheel is on the first bump (x between 0.92 and 1.08 m), then pause
     await p.waitForFunction(() => Fig12.world.cart.x > 0.92, null, { timeout: 60000, polling: 50 });
     await p.click('#play'); await p.waitForTimeout(300);
     const r = await p.evaluate(() => {
       const D = Sim.data, ds = D.ds, bad = []; let n = 0;
-      const agree = (a, b) => typeof a !== 'number' ? String(a) === String(b) : Math.abs(a - b) <= 1e-9 * Math.max(Math.abs(a), Math.abs(b)) + 1e-12;
+      const agree = (a, b) => (Number.isNaN(a) && Number.isNaN(b)) || typeof a !== 'number' ? String(a) === String(b) : Math.abs(a - b) <= 1e-9 * Math.max(Math.abs(a), Math.abs(b)) + 1e-12;
       for (const name in D.check) { const v = ds.vars[name]; if (!v) continue;
         if (v.dims.length) { const a = ds.get(name); for (const i of [0, Math.floor(a.length / 2), a.length - 1]) { n++; if (!agree(a[i], D.check[name](i).value)) bad.push(name + '[' + i + ']'); } }
         else { n++; if (!agree(ds.get(name), D.check[name]().value)) bad.push(name + ' ' + ds.get(name) + ' vs ' + D.check[name]().value); } }

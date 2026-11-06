@@ -1,0 +1,10 @@
+modal 4 mm: plant f 3.421 Hz, zeta 0.005348992643617189, beta 1.5407; M_x 2.5016 kg, b 5 N/A
+LQR K = (75.03, -1939, -38.81, -150.0)
+closed-loop poles (1/s): -243.95, -12.01 − 8.82j, -12.01 + 8.82j, -2.56
+swing pair damping ratio 0.806
+A_d = [0.9992, 0.000, 0.000; 6.157e-7, 0.9998, 0.0009998; 0.001231, -0.4618, 0.9995]
+B_d = (0.001998, -0.000001539, -0.003078)
+Q_d diag = (0.00007983, 6.383e-11, 0.0001914)
+filter: sigma_q 0.0008 m, sigma_v 0.002 m/s, W_F 0.5 N^2 s, W_a 0.002 m^2/s^3
+Kalman gain at a probe sample, rows v, q, q'; columns speed, swing: [0.9544, -0.004332; -0.0006931, 0.1394; -1.468, 2.075]
+estimate sd after it: v 1.954e-3 m/s, q 0.299 mm, q' 9.75 mm/s
