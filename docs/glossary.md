@@ -120,7 +120,13 @@ then into the tables. Machine tables: [i18n/de/strings.json](../i18n/de/strings.
 | current limit | Strombegrenzung | حدّ التيار |
 | linear-quadratic regulator (LQR), Riccati equation | linear-quadratischer Regler (LQR), Riccati-Gleichung | المنظّم الخطّي التربيعي (LQR)، معادلة ريكاتي |
 | gains (of a controller) | Verstärkungen | معاملات الكسب |
-| half-car model, cart (Fig. 12) | Halbfahrzeugmodell, Wagen | نموذج نصف المركبة، العربة |
+| half-car model, cart (Fig. 12, until 6 November 2026) | Halbfahrzeugmodell, Wagen | نموذج نصف المركبة، العربة |
+| quarter-car model (Fig. 12) | Viertelfahrzeugmodell | نموذج ربع المركبة |
+| tyre load (the vertical push of the road on the wheel) | Radlast | حِمل الإطار |
+| the road’s kick (the horizontal part of the road’s push on the wheel) | der Längsstoß der Fahrbahn | الدفعة الأفقية للطريق |
+| envelope (the path of the axle over the road) | Hüllkurve | الغلاف (مسار المحور) |
+| drive, drive motor | Antrieb, Antriebsmotor | الجرّ، محرّك الجرّ |
+| contact point | Aufstandspunkt | نقطة التماس |
 | suspension, active suspension | Fahrwerk, aktives Fahrwerk | نظام التعليق، التعليق الفعّال |
 | strut, spring, damper | Federbein, Feder, Dämpfer | الدعامة، النابض، المخمِّد |
 | wheel, tyre, unsprung mass | Rad, Reifen, ungefederte Masse | العجلة، الإطار، الكتلة غير المعلّقة |

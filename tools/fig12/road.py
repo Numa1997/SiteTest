@@ -38,3 +38,28 @@ def iso_random(x, h=ROUGH_PEAK, Gd0=256e-6, n_lo=0.05, n_hi=10.0, N=120, x0=1.0)
     return np.where(xx > 0, z * (h / ROUGH_PEAK) * u * u * (3 - 2 * u), 0.0)
 
 PROFILES = dict(bump=bump, kerb=kerb, cobbles=cobbles, random=iso_random)
+
+R_WHEEL = 0.08           # m: the cart's wheel (the page's RW)
+DX = 0.002               # m: the road table's step (the page's ROAD_DX)
+L_ROAD = 30.0            # m: the table's length; beyond it the road is as at its end
+
+class Axle:
+    """The axle's height above its rest value as the wheel rolls over a profile: z_a(X) = max_x' [z_r(x') + sqrt(R^2 - (X - x')^2)] - R,
+    the envelope of the road under a circle of radius R. A rigid wheel touches the road where that maximum is taken, and the road's
+    push on it points from the contact point to the axle, so the push's horizontal part over its vertical part is -z_a'(X): the
+    kick is -N z_a'. The same table, step DX, as the page builds (zRoad); z_r is sampled at DX and the envelope searched over
+    |X - x'| <= R. Beyond L_ROAD the table repeats its last value."""
+    def __init__(self, prof, h, R=R_WHEEL, dx=DX, L=L_ROAD):
+        self.dx = dx; n = int(round(L / dx)) + 1; xs = np.arange(n) * dx
+        zr = prof(xs, h=h); m = int(round(R / dx)); off = np.arange(-m, m + 1) * dx; lift = np.sqrt(np.maximum(R * R - off * off, 0.0)) - R
+        zp = np.concatenate([np.full(m, zr[0]), zr, np.full(m, zr[-1])])
+        self.z = np.max(np.stack([zp[k:k + n] + lift[k] for k in range(2 * m + 1)]), axis=0)
+        self.zr = zr; self.n = n
+    def __call__(self, X):
+        i = X / self.dx; i0 = int(np.floor(i)); i0 = min(max(i0, 0), self.n - 2); f = i - i0; f = min(max(f, 0.0), 1.0)
+        return self.z[i0] + f * (self.z[i0 + 1] - self.z[i0])
+    def slope(self, X):
+        i = X / self.dx; i0 = int(np.floor(i)); i0 = min(max(i0, 0), self.n - 2); return (self.z[i0 + 1] - self.z[i0]) / self.dx
+    def road(self, X):
+        i = X / self.dx; i0 = int(np.floor(i)); i0 = min(max(i0, 0), self.n - 2); f = i - i0; f = min(max(f, 0.0), 1.0)
+        return self.zr[i0] + f * (self.zr[i0 + 1] - self.zr[i0])
