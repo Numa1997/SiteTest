@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-1136 files, 60.9 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+1137 files, 60.9 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -40,7 +40,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Agents of the lecture-note review](#agents-of-the-lecture-note-review) | 4 |
 | [Working notes of the Rotor Pendula study](#working-notes-of-the-rotor-pendula-study) | 86 |
 | [Working notes of the Droplet Collection study](#working-notes-of-the-droplet-collection-study) | 121 |
-| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 306 |
+| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 307 |
 
 ## Repository root
 
@@ -1339,6 +1339,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/fig12/nopush.cjs`](../notes/fig12/nopush.cjs) | 2.0 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/panel-test.cjs`](../notes/fig12/panel-test.cjs) | 3.5 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/panel-test2.cjs`](../notes/fig12/panel-test2.cjs) | 5.0 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/realism.md`](../notes/fig12/realism.md) | 11.3 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/referee.md`](../notes/fig12/referee.md) | 27.9 kB | Fig. 12: the blind referee's report on the note. | [notes.md](notes.md) |
 
 <details><summary>52 files: Fig. 12: a measuring script of the review, or its saved output.</summary>
