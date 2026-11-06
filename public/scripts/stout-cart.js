@@ -1322,6 +1322,7 @@
     let s = null;
     if (this.obs) {
       const pr = this.probe, nv = this.noiseV ? this.noiseV * this.rng.gauss() : 0, yv = this.vx + nv;
+      this.nv = nv;
       const yq = pr && pr.fresh ? pr.y : null;
       if (pr) pr.fresh = false;
       s = this.obs.update(this.uPrev, yv, yq);
@@ -1330,7 +1331,7 @@
       if (D && D.has('xh')) {                                   // the page declares these; tools run without a store
         const o = this.obs, put = (k, a) => { const t = D.get(k); for (let n = 0; n < a.length; n++) t[n] = a[n]; D.touch(k); };
         D.set('n_v', nv); D.set('y_v', yv); D.set('q_fresh', o.fresh); D.set('u_prev', o.uPrev); D.set('y_q_used', yq === null ? NaN : yq);
-        put('xh_prev', o.xPrev); put('xh_pri', o.xPri); put('xh', o.x); put('nu', o.nu);
+        put('xh_prev', o.xPrev); put('xh_pri', o.xPri); put('xh', o.x); put('nu_k', o.nu);
         put('P_prev', [].concat.apply([], o.PPrev)); put('P_pri', [].concat.apply([], o.PPri)); put('P_post', [].concat.apply([], o.P)); put('Lk', [].concat.apply([], o.L));
       }
     }
@@ -1339,6 +1340,7 @@
       if (this.ctrl === 'preview') {                            // the road ahead, one current lag in advance: cancel its push
         const ahead = this.road.axle(this.x + this.vx * this.tauI)[1];
         ic += (this.Mb + this.ml + this.mw) * this.g * ahead / this.bForce();
+        if (this.ds && this.ds.has('dza_ahead')) { this.ds.set('dza_ahead', ahead); this.ds.set('ml_s', this.ml); }
       }
       if (Math.abs(ic) < this.Imax) this.xi += e * this.Ts;     // anti-windup: integrate only when not saturated
       this.icmd = ic;

@@ -29,6 +29,10 @@ speed-up of 6 November 2026; see "Speed").
 | `tools/fig12/study.cjs` | one run of the parameter study through `World.advance` with the page's options: `node tools/fig12/study.cjs <bump mm> <off|speed> <0|1> [dx] [s]`; `SERIES=file.json` also saves a_x, a_z and the lean every step |
 | `tools/fig12/linearity.cjs` | where the linear modes fail, from rest: both fluid models given the same half-sine push a_x = A sin(πt/T_p), no cart: `node tools/fig12/linearity.cjs <modal\|3d> A1,A2,… [T_p] [T]`; `OUT=file.json` saves the lean every step |
 | `tools/fig12/linfit.cjs` | fits the free swing after the push in those files (amplitude and frequency): `node tools/fig12/linfit.cjs notes/fig12/runs/linearity-*.json` |
+| `tools/fig12/control.cjs` | the controllers against either model through the probes and the Kalman filter: `node tools/fig12/control.cjs <3d\|modal> <bump mm\|pushN> <off,speed,slosh> [dx] [s]`; `ON=1` starts in open loop and switches the controller on at 1 s; fits the decay (ζ), residual lean, estimate error; `OUT=` saves the series. `notes/fig12/runs/control.sh` runs the 3D set |
+| `tools/fig12/observer.cjs` | the numbers of note §8.5: plant, LQR gains and poles, A_d, B_d, Q_d, the settled Kalman gain, and (3d) the probes' reading at rest: `node tools/fig12/observer.cjs <3d\|modal> [dx]` |
+| `tools/fig12/ident.cjs` | fits one oscillator (f, ζ, β, offset) to the 3D runs of `linearity.cjs`; shows that the 3D swing is not one linear mode at small amplitude (β 0.48–1.26 for A = 0.5–2 m/s²) |
+| `notes/fig12/calm-shots.cjs` | screenshots at 1280 and 390 px: the 3D stout swinging after the 25 mm bump in open loop, then 1.5 s after the slosh feedback is switched on, and the lean the probes read |
 | `tools/fig12/energy.cjs` | the cart's energy book over a bump (`Cart` alone): `node tools/fig12/energy.cjs [bump mm]` |
 | `tools/fig12/figures.cjs` | writes `notes/fig12/fig-glass.svg` and `fig-bump.svg`, the note's two figures (pasted into the page) |
 | `tools/fig12/profile.cjs` | time of one fluid step by phase: `node tools/fig12/profile.cjs [dx] [steps]` |
@@ -254,3 +258,37 @@ the motor current with the rim as the limit; the first mode's phase portrait (q�
 `notes/fig12/phase1.md`: measurements before choosing how to put a real fluid in real time under control: the solver's cost by part,
 a minimal GPU pressure solve, the live modes against the 3D solver from rest (`linearity.cjs`, runs in `notes/fig12/runs/linearity-*.json`),
 the contact model on a rough road, and road roughness from ISO 8608, washboard and Belgian block sources. The page is unchanged.
+
+## Part 1 of the real-time fluid: control through sensors (6 November 2026)
+
+Numa's decision (route 3): the controller acts on the real 3D fluid, in slow motion, said plainly. Since then nothing reads the
+stout's state directly; both models are controlled the same way.
+
+- **Probes** (`World.readProbes`, after every fluid step): η at r_p = R(h), θ = 0 and π, from the solver's own surface (3D:
+  `Fluid.columnHeights` then `columnHeightAt`, 0.5 ms a step, 2 % of it; live: `ModalFluid.heightAt`); y_q = (η_f − η_b)/2 + n_q.
+  At rest on the 4 mm grid the reading has sd 0.08 mm about a 0.39 mm offset (`observer.cjs 3d`). Optional seeded noise (the
+  page's *Sensor noise* switch: 1 mm per probe, 0.2 mm/s on the speed). Drawn as two dark strips on the wall with a white dot at
+  the reading (`StoutView.drawGlass`).
+- **Kalman filter** (`Observer`, every 1 ms sample in `Cart.sample`, whatever the controller): z = (v, q, q̇), input the measured
+  current, unknown force F_d and swing model error a_q as white noise (W_F 0.5 N² s, W_a 0.002 m² s⁻³), R = diag(σ_v², σ_q²) with
+  σ_v 2 mm/s, σ_q 0.8 mm; exact ZOH discretisation and Van Loan Q_d; joint update with the speed every sample and the probes once
+  per fluid step; Joseph form. Plant: live mode 1 (3.421 Hz, ζ 0.0053); 3D the grid's 3.214 Hz, ζ 0.008 (3.263, 0.002 at 3 mm);
+  β 1.541. Settled gain at a probe sample 0.143 (q) and 2.19 s⁻¹ (q̇), estimate sd 0.30 mm.
+- **LQR** on the estimate (`Cart.sample`, ctrl `slosh`), now offered with the 3D solver too. 3D plant: K = (76.7, −1934, −41.3,
+  −150), swing poles −11.3 ± 7.5j s⁻¹ (ζ 0.83).
+- **Results** (`notes/fig12/runs/control-3d-*`): 3D, stout swinging, controller switched on at 1 s: ζ after the switch 0.70 (push
+  10 N) and 0.35 (25 mm bump, past breaking) against 0.000/0.012 open loop and 0.027 (PI); rms lean in the last second 3.2 and 5.8
+  mm. With the slosh feedback from the start the 3D lean over the 25 mm bump stays under 3.2 mm (open loop 61, PI 35). Live model
+  over one bump: 0.5 mm (10 mm) and 1.7 mm (25 mm), against 0.4 and 1.3 with the former ideal sensor. Breaking at a wall amplitude
+  of g/ω² = 21.2 mm (lean 42 mm) is stated in note §8.5: beyond it the filter's linear model is wrong (estimate error 3.9 mm rms
+  against 2.2 mm).
+- **Slow motion**: with the 3D model the figure writes *SLOW MOTION ×0.27* (the measured rate) in its sky and the caption says
+  "slow motion ×r: r s simulated per s, measured on your computer".
+- **Store and panel**: group *Sensors, Kalman filter, slosh feedback*: r_p, η_p (front, back), n_q, y_q, y_q used, new-probe flag,
+  n_v, y_v, i_{k−1}, ẑ_{k−1}, ẑ⁻, ν, L, ẑ, P_{k−1}, P⁻, P, the plant and noise constants, A_d, B_d, Q_d, K. Checks recompute ẑ⁻, P⁻,
+  L, ν, ẑ, P (Joseph) from the stored inputs, A_d, B_d, Q_d by an independent RK4 integration, y_q, y_v, the probes' readings from
+  the stored modes (live) or the solver's reading (3D), and i_cmd in every controller (preview and slosh branches added). Read-back:
+  the front probe's white dot. The head's read-back point moved to ¾ of its band so the probe's dot does not cover it.
+  `panel-test2.cjs` (now with `CTRL=` and `NOISE=1`): live 208 checks, 3D 190, none differ, read-backs true at 1600, 1100, 390 px.
+- **Note**: §8.4 last paragraph and Table 3 updated, new §8.5 (probes, (53a)–(53f), the separation principle, Table 3a, breaking,
+  slow motion); §14 charts paragraph; abstract.
