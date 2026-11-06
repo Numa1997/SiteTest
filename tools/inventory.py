@@ -212,6 +212,8 @@ RULES = [
     (r'notes/fig12/threads-test\.cjs', 'Fig. 12: in Chromium, the threaded solver must print the single-thread fingerprint to the last digit.', 'docs/simulations/fig12-beer-slosh.md'),
     (r'tools/fig12/profile\.cjs', 'Fig. 12: times one fluid step of the stout solver by phase (level set, transfers, pressure, advection).', 'docs/simulations/fig12-beer-slosh.md'),
     (r'tools/fig12/theory\.cjs', 'Fig. 12: the closed-form numbers of the lecture note from the page\u2019s constants: sloshing frequency and equivalent mass, dimensionless groups and damping, quarter car, drive, PI loop, skyhook.', 'docs/simulations/fig12-beer-slosh.md'),
+    (r'tools/fig12/linearity\.cjs', 'Fig. 12: both fluid models from rest under the same half-sine push, no cart: where the linear modes fail (lean, swing, spill).', 'docs/simulations/fig12-beer-slosh.md'),
+    (r'tools/fig12/linfit\.cjs', 'Fig. 12: fits the free swing (amplitude, frequency) in the files linearity.cjs saves.', 'docs/simulations/fig12-beer-slosh.md'),
     (r'tools/fig12/study\.cjs', 'Fig. 12: one run of the parameter study through World.advance (bump height, speed loop, suspension): lean, accelerations, spill.', 'docs/simulations/fig12-beer-slosh.md'),
     (r'tools/fig12/energy\.cjs', 'Fig. 12: the cart\u2019s energy book over a bump: constant without losses, changed by exactly the work of dampers, drag and motor.', 'docs/simulations/fig12-beer-slosh.md'),
     (r'tools/fig12/figures\.cjs', 'Fig. 12: writes the two inline SVG figures of the lecture note (the glass section; one bump, open loop against speed control).', 'docs/simulations/fig12-beer-slosh.md'),

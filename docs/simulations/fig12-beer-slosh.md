@@ -27,6 +27,8 @@ speed-up of 6 November 2026; see "Speed").
 | `tools/fig12/check.cjs` | offline checks: `node tools/fig12/check.cjs rest|tilt|cyltilt|cylfreq|freq|spill [dx] [steps/s]` |
 | `tools/fig12/theory.cjs` | every closed-form number of the lecture note, from the page's constants: ξ₁₁ (series for J₀, J₁), f₁₁, tilt and centre of mass, sloshing mass, Bond, Reynolds, damping (Abramson eq. 4.10b), quarter car, drive, PI poles, crossover and margin, \|S\| at the swing frequency, skyhook transmissibility |
 | `tools/fig12/study.cjs` | one run of the parameter study through `World.advance` with the page's options: `node tools/fig12/study.cjs <bump mm> <off|speed> <0|1> [dx] [s]`; `SERIES=file.json` also saves a_x, a_z and the lean every step |
+| `tools/fig12/linearity.cjs` | where the linear modes fail, from rest: both fluid models given the same half-sine push a_x = A sin(πt/T_p), no cart: `node tools/fig12/linearity.cjs <modal\|3d> A1,A2,… [T_p] [T]`; `OUT=file.json` saves the lean every step |
+| `tools/fig12/linfit.cjs` | fits the free swing after the push in those files (amplitude and frequency): `node tools/fig12/linfit.cjs notes/fig12/runs/linearity-*.json` |
 | `tools/fig12/energy.cjs` | the cart's energy book over a bump (`Cart` alone): `node tools/fig12/energy.cjs [bump mm]` |
 | `tools/fig12/figures.cjs` | writes `notes/fig12/fig-glass.svg` and `fig-bump.svg`, the note's two figures (pasted into the page) |
 | `tools/fig12/profile.cjs` | time of one fluid step by phase: `node tools/fig12/profile.cjs [dx] [steps]` |
@@ -246,3 +248,9 @@ the motor current with the rim as the limit; the first mode's phase portrait (q�
 **Tests** (`notes/fig12/`; `QUERY='?grid=4'` runs them on the 3D solver): live model, `panel-test2.cjs` 151 checks and
 `spill-test.cjs` 151 checks, none differ, read-backs true; 3D, 133 and 133, none differ; `threads-test.cjs` identical;
 `ctrl-shots.cjs` screenshots each controller over the 25 mm bump (`live-*.png`, not committed: `notes/.gitignore`).
+
+## Phase 1 of the real-time fluid (6 November 2026)
+
+`notes/fig12/phase1.md`: measurements before choosing how to put a real fluid in real time under control: the solver's cost by part,
+a minimal GPU pressure solve, the live modes against the 3D solver from rest (`linearity.cjs`, runs in `notes/fig12/runs/linearity-*.json`),
+the contact model on a rough road, and road roughness from ISO 8608, washboard and Belgian block sources. The page is unchanged.
