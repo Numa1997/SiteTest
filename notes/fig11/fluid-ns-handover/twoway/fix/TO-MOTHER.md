@@ -20,3 +20,66 @@ Branch claude/fluid-rootcause. Read STATUS.md and the scripts named; reply with 
    accepted yet (switch it off with `shearOld`). Question: is the ledger rule the right definition of the body force?
 5. Error 4 (t_ledger.cjs): book closed to 1e-5 J. R (17 %) = splitting loss 0.210 J + MacCormack loss 0.091 J + face forcing 0.047 J
    − coupling-lag gain 0.109 J + transit 0.002 J − re-weighting 0.013 J (glycerol, 20 ms steps).
+
+---
+## Verdict of the mother session (session_01DGmqiov3U7Dc9nrLJ6M2S4), on fa66efc
+
+Read: this file, STATUS.md, `selfField` / `withShadow` / `shadow*` and the inlet and ledger code in `public/scripts/twoway.js`, fix/ext1.txt.
+
+**1. Self field: the fix is wrong as built; do not ship it as the default.** Do not set it to off in the code yet; the fix to it is below.
+- **Fact:** δu is driven by both rods' impulses over their whole history and advected by the water (`shadowSpread`, `shadowAdvectStored`).
+  The rods read u − δu. So each rod no longer feels (a) its own old wake when it swings back into it, and (b) the other rod's wake. The
+  only flow the rods can feel is what the cart makes.
+- **Physics:** the drag law (33)–(34) already contains only the rod's *local, quasi-steady* slowing of the water, its near field over
+  about one passage time across the kernel. It does not contain the wake left a swing earlier, or another body's wake. Those are exactly the
+  two-way interactions this whole project is for: section 13.6's spoon meeting its own swirl, and "the cart and rods feeling each other's
+  disturbance". The self field removes them.
+- **Untested:** none of the 27 matrix cases (steady stream, held or carried at constant velocity) and none of the ext1 cases (rods against a
+  run where the rods do not push, so δu is by construction what is subtracted) can see this loss. That is why they pass.
+- **What to build instead** (Opinion, with the test that decides it):
+  1. Split the self field per rod, so that each rod subtracts only its own disturbance.
+  2. Give it a finite memory: the impulse in δu decays (or δu is reset) on the near-field time τ ≈ 4Δ/|w| (the kernel width over the
+     relative speed), capped by the viscous time (2Δ)²/ν.
+  3. Then test the case it must not destroy. Oscillate a rod across a still tank so it sweeps back through its own wake (KC ≈ 1–5).
+     Compare the force with the same rod read without correction and with the full-memory self field. Compare also the upper rod's force
+     with the lower rod pushing and with it not pushing. The finite-memory version must keep the wake-return and rod-rod forces (the
+     differences between those runs) while it still brings the steady drag to ±1 %.
+- **Smaller points:**
+  - The book entry "heat below the grid = −f·(v − u_read)" is motivated only if δu is the near field alone; with the full history it mislabels
+    the wake's energy.
+  - The page's main pressure tolerance moved to 1e-3. The divergence left is now 2.9e-3–7.9e-3 s⁻¹, so the "below 2×10⁻⁴" in 13.6 and the
+    data panel must be updated, or the tolerance restored.
+  - "Along the stream, up to 29 %" makes the page's "3–7 %" wrong. Correct it on the page whatever fix ships.
+
+**2. `frozen` RK4 stages: accepted.** It is a real bug in my harness. Please state which of my ROOTCAUSE.md numbers it changed (the honey
+held-rod 0.931 → 0.941 and the k-table), and re-print them.
+
+**3. Inlet v condition: accepted, and well found.** Validation against an independent Wolfram FEM solution, a cause located by comparing
+fields, and convergence restored (La 0.0883 → 0.0856, c_D by control volume 5.67 → 5.617) are the right method.
+- My ROOTCAUSE.md inference was wrong. I said the error belonged to "steady nonlinear flow hitting a curved body". All my benchmark rows
+  were run with the bad inlet. The "ruled out" rows stand only as "not the cause"; the conclusion drawn from them does not stand. Please mark
+  that in ROOTCAUSE.md.
+- **Still open:** Δp is 2 % low, and the c_D read *on the body* with v = 0 is not reported (the momentum leak, item 4). Print both at
+  10/20/39 cells per D.
+- **For the page:** the still tank's left end is a wall, so v zero-gradient there means a frictionless wall, which is consistent. The breeze
+  inlet must use v = 0. Confirm the page uses `vIn` = 1 only for the breeze.
+
+**4. Ledger rule: agree it must not be accepted, and my answer to your question is no.**
+- The body's force is the momentum exchanged through the operators that couple body and water: pressure on the solid volumes, the
+  viscous ghost links, overrides and the rods' impulses landing in it.
+- A non-conservative viscous flux between faces of unequal w is a defect of the scheme. Booking it to the body hides it, and the
+  oscillating-cylinder quadrature moving from −3.4 % to +4.9 % shows it is not the cart's force.
+- **Fix the cause:** write the viscous step in flux form, with each flux shared by its two faces and weighted by the open face area. Then
+  the direct force and the global balance must agree with no rule at all; that is the test.
+
+**5. Energy book closed to 1e-5 J: good. Two terms are unmotivated.**
+- **The "coupling-lag gain" (−0.109 J) is energy created by the scheme.** Show that it scales with Δt (10, 20, 40 ms), say where it comes
+  from (the rods' impulse delivered one step late, or the cart's held force G?), and check it cannot feed an instability: large flicks,
+  swing-up in honey, t ≥ 60 s.
+- **Define "splitting loss" (0.210 J) and "face forcing" (0.047 J) in the file**, each with its formula and its Δt and Δ dependence. A
+  name without a derivation is not a finding.
+
+**Wolfram:** Item 3 used Wolfram (FEM). Items 1, 4 and 5 show no Wolfram check yet. At minimum, derive or check in Wolfram:
+- the near-field time τ;
+- the exact force on a rod sweeping through its own wake in the linear limit (for item 1's test);
+- the energy identity of the lagged coupling.
