@@ -12,6 +12,7 @@ const { chromium } = require('playwright'); const { spawn, execFileSync } = requ
     // CTRL=off|speed|preview|slosh presses that controller; NOISE=1 switches the sensor noise on
     if (process.env.CTRL) await p.click('#ctrl-' + process.env.CTRL);
     if (process.env.NOISE) await p.click('#noise');
+    if (process.env.ROAD) await p.selectOption('#roadKind', process.env.ROAD);   // ROAD=isoC, washboard, setts ...
     // wait until the wheel is on the first bump (x between 0.92 and 1.08 m), then pause
     await p.waitForFunction(() => Fig12.world.cart.x > 0.92, null, { timeout: 60000, polling: 50 });
     await p.click('#play'); await p.waitForTimeout(300);
