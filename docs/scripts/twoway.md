@@ -32,7 +32,10 @@ Navier–Stokes (lecture-note eq. 41). Per fluid step of `nsub · h` (page: 20 �
 **Books** (`book`): motor work `Wm`, the fluid's work on the machine `Wfl`, the rods' heat below the grid `Drod` (eq. 43), the
 water's kinetic-energy change by operator (`Erod`, `Eadv`, `Ediff`, `Eproj`), the cart's shear work `Wshear`, the energy
 brought in through the ends `Ebnd` (`boundaryPower()`). Diagnostics: `KE()`, `momX()`, `maxDiv()`, `vorticity()`, `velAt()`.
-Test-only hooks: `frozen` (machine held, rods still push), `noRods`, `cartGone`, `geom` + `measureCircle()`, `inflow`, `noslip`.
+Test-only hooks: `frozen` (machine held, rods still push), `noRods`, `cartGone`, `geom` + `measureCircle()` / `measureSdf()`, `inflow`, `noslip`;
+and, for the root-cause study of 6 November 2026 (`notes/fig11/fluid-ns-handover/twoway/research/ROOTCAUSE.md`), all off by default:
+`incremental` (pressure-correction form, the old pressure before the viscous step; its energy book is not valid), `advCentral`
+(second-order central advection in divergence form, SSP-RK3), `advWeighted` (trace with w·u), `noExtrap`.
 
 **Checks** (scripts in `notes/fig11/fluid-ns-handover/twoway/`, results in lecture-note section 13.6): cart added mass against
 potential flow (`t_addedmass.cjs`, `panel_addedmass.py`: −9.0, −3.9, −1.3 % at 4.8, 9.6, 19.2 cells per height); Poiseuille

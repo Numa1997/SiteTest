@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-1073 files, 60.5 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+1082 files, 60.6 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -40,7 +40,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Agents of the lecture-note review](#agents-of-the-lecture-note-review) | 4 |
 | [Working notes of the Rotor Pendula study](#working-notes-of-the-rotor-pendula-study) | 86 |
 | [Working notes of the Droplet Collection study](#working-notes-of-the-droplet-collection-study) | 121 |
-| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 251 |
+| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 260 |
 
 ## Repository root
 
@@ -193,7 +193,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/scripts/sim.js`](../public/scripts/sim.js) | 43.8 kB | Shared helpers of the simulation pages: KaTeX typesetting of the notes, the walkthrough engine. | [sim.md](scripts/sim.md) |
 | [`public/scripts/stout-cart.js`](../public/scripts/stout-cart.js) | 68.2 kB | Fig. 12: the solver: 3D Navier–Stokes for the stout in the glass by APIC on a MAC grid (cut-cell wall, ghost-fluid surface, half glass by symmetry), the road, the one-wheel cart, and their two-way coupling. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`public/scripts/stout-view.js`](../public/scripts/stout-view.js) | 14.7 kB | Fig. 12: draws the cart, the road and the pint on a canvas from the solver’s state; the head of the stout is drawn, not computed. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
-| [`public/scripts/twoway.js`](../public/scripts/twoway.js) | 41.1 kB | The solved, two-way fluid of project 05: a tank as deep as the cart, 2D Navier–Stokes on a MAC grid, the cart coupled through the pressure, the rods as lines of forces; runs the page's 1 ms machine steps inside its 20 ms fluid steps. | [twoway.md](scripts/twoway.md) |
+| [`public/scripts/twoway.js`](../public/scripts/twoway.js) | 44.9 kB | The solved, two-way fluid of project 05: a tank as deep as the cart, 2D Navier–Stokes on a MAC grid, the cart coupled through the pressure, the rods as lines of forces; runs the page's 1 ms machine steps inside its 20 ms fluid steps. | [twoway.md](scripts/twoway.md) |
 
 ## Stylesheets
 
@@ -723,7 +723,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`docs/scripts/dataset.md`](scripts/dataset.md) | 18.1 kB | Documentation: public/scripts/dataset.js. | [dataset.md](scripts/dataset.md) |
 | [`docs/scripts/fold.md`](scripts/fold.md) | 23.0 kB | Documentation: public/scripts/fold.js. | [fold.md](scripts/fold.md) |
 | [`docs/scripts/sim.md`](scripts/sim.md) | 33.4 kB | Documentation: public/scripts/sim.js. | [sim.md](scripts/sim.md) |
-| [`docs/scripts/twoway.md`](scripts/twoway.md) | 3.9 kB | Documentation: public/scripts/twoway.js. | [twoway.md](scripts/twoway.md) |
+| [`docs/scripts/twoway.md`](scripts/twoway.md) | 4.3 kB | Documentation: public/scripts/twoway.js. | [twoway.md](scripts/twoway.md) |
 | [`docs/scripts/walk.md`](scripts/walk.md) | 28.0 kB | Documentation: public/scripts/walk/*.js. | [walk.md](scripts/walk.md) |
 | [`docs/simulations/fig01-wave-sources.md`](simulations/fig01-wave-sources.md) | 56.6 kB | Documentation: Fig. 1 · Wave Interference. | [fig01-wave-sources.md](simulations/fig01-wave-sources.md) |
 | [`docs/simulations/fig02-double-pendulum.md`](simulations/fig02-double-pendulum.md) | 54.7 kB | Documentation: Fig. 2 · Double Pendulum. | [fig02-double-pendulum.md](simulations/fig02-double-pendulum.md) |
@@ -1185,7 +1185,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/fig10/walk.md`](../notes/fig10/walk.md) | 14.7 kB | Fig. 10: the walkthrough check and its proposed fixes. | [notes.md](notes.md) |
 | [`notes/fig11/checked.html`](../notes/fig11/checked.html) | 160.0 kB | Fig. 11: working notes of 4 November 2026, every term of the model and of the rescue with its Wolfram check and the code that was run. | [notes.md](notes.md) |
 
-<details><summary>39 files: Fig. 11: a measuring script of the review, or its saved output.</summary>
+<details><summary>48 files: Fig. 11: a measuring script of the review, or its saved output.</summary>
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
@@ -1206,17 +1206,26 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/fig11/fluid-ns-handover/spectral/t_st.cjs`](../notes/fig11/fluid-ns-handover/spectral/t_st.cjs) | 3.9 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig11/fluid-ns-handover/spectral/t_tg.cjs`](../notes/fig11/fluid-ns-handover/spectral/t_tg.cjs) | 1.0 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig11/fluid-ns-handover/twoway/panel_addedmass.py`](../notes/fig11/fluid-ns-handover/twoway/panel_addedmass.py) | 2.8 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig11/fluid-ns-handover/twoway/research/ROOTCAUSE.md`](../notes/fig11/fluid-ns-handover/twoway/research/ROOTCAUSE.md) | 7.3 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig11/fluid-ns-handover/twoway/research/dossier-energy.md`](../notes/fig11/fluid-ns-handover/twoway/research/dossier-energy.md) | 21.3 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig11/fluid-ns-handover/twoway/research/dossier-projection-force.md`](../notes/fig11/fluid-ns-handover/twoway/research/dossier-projection-force.md) | 28.0 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig11/fluid-ns-handover/twoway/research/dossier-selfinduced.md`](../notes/fig11/fluid-ns-handover/twoway/research/dossier-selfinduced.md) | 18.8 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig11/fluid-ns-handover/twoway/st_160.txt`](../notes/fig11/fluid-ns-handover/twoway/st_160.txt) | 0 B | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig11/fluid-ns-handover/twoway/t_addedmass.cjs`](../notes/fig11/fluid-ns-handover/twoway/t_addedmass.cjs) | 1.1 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
-| [`notes/fig11/fluid-ns-handover/twoway/t_book.cjs`](../notes/fig11/fluid-ns-handover/twoway/t_book.cjs) | 1.7 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig11/fluid-ns-handover/twoway/t_book.cjs`](../notes/fig11/fluid-ns-handover/twoway/t_book.cjs) | 1.8 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig11/fluid-ns-handover/twoway/t_cartdrag.cjs`](../notes/fig11/fluid-ns-handover/twoway/t_cartdrag.cjs) | 1.5 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig11/fluid-ns-handover/twoway/t_cutchannel.cjs`](../notes/fig11/fluid-ns-handover/twoway/t_cutchannel.cjs) | 2.1 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig11/fluid-ns-handover/twoway/t_decomp.cjs`](../notes/fig11/fluid-ns-handover/twoway/t_decomp.cjs) | 1.6 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig11/fluid-ns-handover/twoway/t_disc.cjs`](../notes/fig11/fluid-ns-handover/twoway/t_disc.cjs) | 1.3 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig11/fluid-ns-handover/twoway/t_its.cjs`](../notes/fig11/fluid-ns-handover/twoway/t_its.cjs) | 903 B | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig11/fluid-ns-handover/twoway/t_oscstokes.cjs`](../notes/fig11/fluid-ns-handover/twoway/t_oscstokes.cjs) | 1.7 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig11/fluid-ns-handover/twoway/t_poiseuille.cjs`](../notes/fig11/fluid-ns-handover/twoway/t_poiseuille.cjs) | 1.2 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig11/fluid-ns-handover/twoway/t_prof.cjs`](../notes/fig11/fluid-ns-handover/twoway/t_prof.cjs) | 1.2 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig11/fluid-ns-handover/twoway/t_rodheld.cjs`](../notes/fig11/fluid-ns-handover/twoway/t_rodheld.cjs) | 1.3 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig11/fluid-ns-handover/twoway/t_run.cjs`](../notes/fig11/fluid-ns-handover/twoway/t_run.cjs) | 1.9 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig11/fluid-ns-handover/twoway/t_schaefer.cjs`](../notes/fig11/fluid-ns-handover/twoway/t_schaefer.cjs) | 2.9 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
-| [`notes/fig11/fluid-ns-handover/twoway/twoway.js`](../notes/fig11/fluid-ns-handover/twoway/twoway.js) | 41.1 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig11/fluid-ns-handover/twoway/t_st2.cjs`](../notes/fig11/fluid-ns-handover/twoway/t_st2.cjs) | 3.2 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig11/fluid-ns-handover/twoway/twoway.js`](../notes/fig11/fluid-ns-handover/twoway/twoway.js) | 44.9 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig11/fluid-ns-handover/waterlily/fsi.jl`](../notes/fig11/fluid-ns-handover/waterlily/fsi.jl) | 10.8 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig11/fluid-ns-handover/waterlily/pageparams.json`](../notes/fig11/fluid-ns-handover/waterlily/pageparams.json) | 2.5 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig11/fluid-ns-handover/waterlily/project05_fluid_step1_validation.ipynb`](../notes/fig11/fluid-ns-handover/waterlily/project05_fluid_step1_validation.ipynb) | 18.8 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
