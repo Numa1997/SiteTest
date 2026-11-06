@@ -9,6 +9,7 @@
     <meta name="description" content="A pint of Guinness rides a one-wheel cart over bumps. The stout is a live three-dimensional Navier–Stokes simulation, coupled both ways to the cart.">
     <meta name="theme-color" content="#f5f1ea">
     <link rel="stylesheet" href="../styles/sim.css">
+    <link rel="stylesheet" href="../styles/data.css">
     <link rel="stylesheet" href="../styles/fold.css"><script src="../scripts/flip.js"></script>
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%237a1f2b'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='38' fill='%23f5f1ea'%3EN%3C/text%3E%3C/svg%3E">
     <style>
@@ -187,7 +188,7 @@
                             <tr><td>Free swing, 3 mm, Δt = 2.5 ms</td><td>3.382 Hz (3)</td><td class="n">3.354 Hz; damping ratio 0.005</td></tr>
                             <tr><td>Depth of the stout at rest, read from the particles</td><td>100 mm</td><td class="n">99.5–100.6 mm</td></tr>
                         </table>
-                        <p>The damping ratio is that of the computation, not of real stout: it falls as the grid is refined (0.050 at 4 mm and 0.007 at 2 mm in an earlier version with 6 cm of liquid). Real glasses of this size damp the swing by about one percent per period; on the page the swing dies about twice as fast as in a real pint.</p>
+                        <p>The damping ratio is that of the computation, not of real stout: it falls as the grid is refined (0.050 at 4 mm and 0.007 at 2 mm in an earlier version with 6 cm of liquid). How quickly a real pint stops swinging has not been measured for this page, so the page does not claim that its swing dies at the real rate.</p>
                     </section>
 
                     <section class="psec" id="p-screen">
@@ -201,7 +202,7 @@
                         <h3><span class="psec__n">08</span>What the model leaves out</h3>
                         <ul>
                             <li>The glass is a straight cylinder, not the tulip-shaped Guinness pint.</li>
-                            <li>Density and viscosity are water’s; surface tension is left out (for a 4 cm radius it changes the swing frequency by under 0.1 %).</li>
+                            <li>Density and viscosity are water’s; surface tension is left out. With \(\sigma = 0.072\) N/m (water’s, taken here) it would raise the swing frequency by a factor \(\sqrt{1 + \sigma k^2/(\rho g)}\), \(k = \xi/R\): 0.78 %.</li>
                             <li>The foam head (Section 07).</li>
                             <li>Spilling: the solver box has a lid at the rim, 3 cm above the surface. Higher bumps make the stout hit it.</li>
                             <li>The boundary layer at the wall, and so the real damping (Section 05).</li>
@@ -232,6 +233,7 @@
 
     <script src="../scripts/fold.js"></script>
     <script src="../scripts/sim.js"></script>
+    <script src="../scripts/dataset.js"></script>
     <script src="../scripts/stout-cart.js"></script>
     <script src="../scripts/stout-view.js"></script>
     <script>
@@ -240,9 +242,9 @@
         var cv = document.getElementById('cv'), stage = document.getElementById('stage');
         var pushF = Sim.slider('pushF', { format: function (v) { return v.toFixed(1) + ' N'; } });
         var bumpH = Sim.slider('bumpH', { format: function (v) { return v.toFixed(0) + ' mm'; }, onInput: rebuildRoad });
-        var v0 = Sim.slider('v0', { format: function (v) { return v.toFixed(2) + ' m/s'; }, onInput: function (v) { world.cart.v0 = v; } });
+        var v0 = Sim.slider('v0', { format: function (v) { return v.toFixed(2) + ' m/s'; }, onInput: function (v) { world.cart.v0 = v; ds.set('v0', v); } });
         var BUDGET_MS = 28;          // time per animation frame given to the solver
-        var world, view, push = 0, simPerReal = 0, lastWall = 0, lastSim = 0;
+        var world, view, ds = null, push = 0, simPerReal = 0, lastWall = 0, lastSim = 0;
 
         function bumps(h) {
             var b = [];
@@ -257,6 +259,10 @@
                 dtMax: 1 / 200
             });
             view = new StoutView(cv, world, { viewHeight: 0.40, groundY: 0.9 });
+            if (!ds) declare();
+            storeConstants();
+            world.attach(ds); view.ds = ds;
+            ds.set('bump_h', bumpH.value / 1000); ds.set('v0', v0.value);
             lastWall = 0; lastSim = 0; simPerReal = 0;
             fit();
         }
@@ -264,6 +270,7 @@
             if (!world) return;
             var c = world.cart;
             c.road = new StoutCart.Road({ bumps: bumps(bumpH.value / 1000), Rw: c.Rw, xmin: -1, xmax: 125 });
+            ds.set('bump_h', bumpH.value / 1000);
         }
         function fit() {
             var r = cv.getBoundingClientRect(), dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -299,17 +306,252 @@
             $('cap-rate').textContent = simPerReal > 0 ? (simPerReal.toFixed(2) + ' s simulated per s') : '—';
         }
 
+        /* ---------- the store: every number of the run is written here where it is computed (scripts/dataset.js) ----------
+           stout-cart.js writes the cart's state and forces (Cart.forces), the coupling (World.advance), and keeps the particles
+           and the column heights in the store's arrays (World.attach); stout-view.js writes what it draws (surface, pixels). */
+        function declare() {
+            var f = world.fluid, V = view;
+            ds = Sim.dataset({ title: 'A pint of Guinness on a one-wheel cart', attrs: { figure: 12, page: 'beer-slosh.html', equations: 'Du/Dt = −∇p/ρ + ν∇²u + g − a_g, ∇·u = 0 (half glass); cart by Newton’s laws; F_x = −N z_a′(x)' } });
+            var S = function (n, a) { ds.var(n, [], 'float', a); };
+            // what you set
+            ds.var('push_dir', [], 'int', { symbol: 'push', long_name: 'direction of your push: +1 forward, −1 back, 0 none', computed_in: 'the push buttons and ← → keys', digits: 0 });
+            S('F_push_set', { symbol: 'F<sub>push</sub> set', units: 'N', long_name: 'push force slider', computed_in: 'Push force slider', digits: 1 });
+            S('bump_h', { symbol: 'h<sub>bump</sub>', units: 'm', long_name: 'bump height', computed_in: 'Bump height slider', digits: 3 });
+            S('v0', { symbol: 'v<sub>0</sub>', units: 'm/s', long_name: 'cruising speed the drive is set for', computed_in: 'Cruising speed slider', digits: 2 });
+            // constants of the model
+            [['R', 'R', 'm', 'inner radius of the glass', 3], ['h0', 'h', 'm', 'depth of stout at rest', 3], ['rho', 'ρ', 'kg/m³', 'density (water’s)', 0], ['nu', 'ν', 'm²/s', 'kinematic viscosity (water’s)', 7],
+             ['g', 'g', 'm/s²', 'gravity', 2], ['dx', 'Δx', 'm', 'grid cell', 3], ['dt_max', 'Δt', 's', 'fluid step', 4], ['h_cart', 'h<sub>cart</sub>', 's', 'cart step (at most)', 5],
+             ['Mb', 'M<sub>b</sub>', 'kg', 'body and glass, without the stout', 3], ['ml', 'm<sub>ℓ</sub>', 'kg', 'mass of the stout', 4], ['mw', 'm<sub>w</sub>', 'kg', 'wheel', 3], ['Rw', 'R<sub>w</sub>', 'm', 'wheel radius', 3],
+             ['Iw', 'I<sub>w</sub>', 'kg m²', 'wheel moment of inertia (a disc)', 6], ['k', 'k', 'N/m', 'suspension spring', 0], ['c', 'c', 'N s/m', 'suspension damper', 1], ['kt', 'k<sub>t</sub>', 'N/m', 'tyre stiffness', 0],
+             ['ct', 'c<sub>t</sub>', 'N s/m', 'tyre damping', 1], ['cx', 'c<sub>x</sub>', 'N s/m', 'rolling and air drag', 1], ['Ls', 'L<sub>s</sub>', 'm', 'unloaded spring length, body above axle', 3],
+             ['bump_L', 'L<sub>bump</sub>', 'm', 'bump length', 2], ['bump_gap', 'spacing', 'm', 'distance between bumps', 1], ['mp', 'm<sub>p</sub>', 'kg', 'mass of one particle (half glass holds m<sub>ℓ</sub>/2)', 9]
+            ].forEach(function (r) { S(r[0], { symbol: r[1], units: r[2], long_name: r[3], computed_in: 'build(), constants of the model', digits: r[4] }); });
+            // what follows from them
+            S('Ms', { symbol: 'M<sub>s</sub>', units: 'kg', long_name: 'sprung mass: body, glass and stout', computed_in: 'storeConstants()', formula: 'M<sub>b</sub> + m<sub>ℓ</sub>', digits: 4 });
+            S('Mx', { symbol: 'M<sub>x</sub>', units: 'kg', long_name: 'mass felt along the road (wheel’s rolling inertia included)', computed_in: 'storeConstants()', formula: 'M<sub>s</sub> + m<sub>w</sub> + I<sub>w</sub>/R<sub>w</sub>²', digits: 4 });
+            S('f11', { symbol: 'f<sub>11</sub>', units: 'Hz', long_name: 'linear-theory swing frequency of the stout (a yardstick; the solver does not use it)', computed_in: 'storeConstants()', formula: '(1/2π) √(g ξ/R · tanh(ξ h/R)), ξ = 1.8412', digits: 4 });
+            S('f_body', { symbol: 'f<sub>body</sub>', units: 'Hz', long_name: 'bounce frequency of the body on its spring', computed_in: 'storeConstants()', formula: '√(k/M<sub>s</sub>) / 2π', digits: 4 });
+            // the cart now (Cart.forces)
+            [['x', 'x', 'm', 'position along the road', 4], ['vx', 'ẋ', 'm/s', 'speed', 4], ['zb', 'z<sub>b</sub>', 'm', 'height of the body (bottom)', 5], ['vzb', 'ż<sub>b</sub>', 'm/s', 'vertical speed of the body', 4],
+             ['zw', 'z<sub>w</sub>', 'm', 'height of the axle', 5], ['vzw', 'ż<sub>w</sub>', 'm/s', 'vertical speed of the axle', 4]
+            ].forEach(function (r) { S(r[0], { symbol: r[1], units: r[2], long_name: r[3], computed_in: 'Cart.step (symplectic Euler, h<sub>cart</sub>)', digits: r[4] }); });
+            [['z_a', 'z<sub>a</sub>', 'm', 'axle height of an undeformed wheel on the road here', 'max over s of z<sub>r</sub>(s) + √(R<sub>w</sub>² − (s − x)²)', 5],
+             ['dz_a', 'z<sub>a</sub>′', '', 'slope of that path', 'd z<sub>a</sub>/dx (table at 0.5 mm)', 4],
+             ['N', 'N', 'N', 'tyre load', 'max(0, k<sub>t</sub>(z<sub>a</sub> − z<sub>w</sub>) + c<sub>t</sub>(z<sub>a</sub>′ẋ − ż<sub>w</sub>))', 3],
+             ['F_s', 'F<sub>s</sub>', 'N', 'spring and damper on the body', '−k(z<sub>b</sub> − z<sub>w</sub> − L<sub>s</sub>) − c(ż<sub>b</sub> − ż<sub>w</sub>)', 3],
+             ['F_road', 'F<sub>road</sub>', 'N', 'the road’s push along the road (the jolt)', '−N z<sub>a</sub>′', 4],
+             ['F_drive', 'F<sub>drive</sub>', 'N', 'drive force', 'c<sub>x</sub> v<sub>0</sub>', 3],
+             ['F_push', 'F<sub>push</sub>', 'N', 'your push now', 'push · F<sub>push</sub> set', 2],
+             ['F_lx', 'F<sub>ℓx</sub>', 'N', 'the stout’s push on the glass along the road, acting now', '−ΔP<sub>x</sub>/Δt of the last fluid step', 4],
+             ['F_lz', 'F<sub>ℓz</sub>', 'N', 'the stout’s vertical push beyond its weight, acting now', '−ΔP<sub>z</sub>/Δt of the last fluid step', 4],
+             ['a_x', 'ẍ', 'm/s²', 'acceleration along the road', '(F<sub>road</sub> + F<sub>drive</sub> − c<sub>x</sub>ẋ + F<sub>push</sub> + F<sub>ℓx</sub>) / M<sub>x</sub>', 4],
+             ['a_zb', 'z̈<sub>b</sub>', 'm/s²', 'vertical acceleration of the body', '(F<sub>s</sub> − M<sub>s</sub> g + F<sub>ℓz</sub>) / M<sub>s</sub>', 4],
+             ['a_zw', 'z̈<sub>w</sub>', 'm/s²', 'vertical acceleration of the axle', '(−F<sub>s</sub> − m<sub>w</sub> g + N) / m<sub>w</sub>', 3]
+            ].forEach(function (r) { S(r[0], { symbol: r[1], units: r[2], long_name: r[3], computed_in: 'Cart.forces', formula: r[4], digits: r[5] }); });
+            // the last fluid step (World.advance)
+            [['t', 't', 's', 'simulated time', '', 4], ['h_f', 'Δt', 's', 'length of the last fluid step', '', 5], ['n_cart', 'n', '', 'cart steps inside it', '', 0],
+             ['vx_0', 'ẋ<sub>0</sub>', 'm/s', 'speed at the start of the fluid step', '', 6], ['vx_1', 'ẋ<sub>1</sub>', 'm/s', 'speed at its end', '', 6],
+             ['vzb_0', 'ż<sub>b,0</sub>', 'm/s', 'vertical speed of the body at the start', '', 6], ['vzb_1', 'ż<sub>b,1</sub>', 'm/s', 'at the end', '', 6],
+             ['a_gx', 'a<sub>gx</sub>', 'm/s²', 'the glass’s mean acceleration along the road over the step: the jolt the stout feels', '(ẋ<sub>1</sub> − ẋ<sub>0</sub>)/Δt', 4],
+             ['a_gz', 'a<sub>gz</sub>', 'm/s²', 'the glass’s mean vertical acceleration over the step', '(ż<sub>b,1</sub> − ż<sub>b,0</sub>)/Δt', 4],
+             ['P0_x', 'P<sub>x</sub> before', 'kg m/s', 'momentum of the stout relative to the glass before the step', '', 6], ['P0_z', 'P<sub>z</sub> before', 'kg m/s', 'same, vertical', '', 6],
+             ['P_x', 'P<sub>x</sub>', 'kg m/s', 'momentum of the stout relative to the glass, both halves', '2 m<sub>p</sub> Σ u<sub>p</sub>', 6], ['P_z', 'P<sub>z</sub>', 'kg m/s', 'same, vertical', '2 m<sub>p</sub> Σ w<sub>p</sub>', 6],
+             ['F_lx_next', 'F<sub>ℓx</sub> next', 'N', 'the stout’s push for the next step', '−(P<sub>x</sub> − P<sub>x</sub> before)/Δt', 4], ['F_lz_next', 'F<sub>ℓz</sub> next', 'N', 'vertical, for the next step', '−(P<sub>z</sub> − P<sub>z</sub> before)/Δt', 4]
+            ].forEach(function (r) { var a = { symbol: r[1], units: r[2], long_name: r[3], computed_in: 'World.advance', digits: r[5] }; if (r[4]) a.formula = r[4]; S(r[0], a); });
+            // the stout
+            ds.dim('p', f.np); ds.dim('j', f.ny); ds.dim('i', f.nx); ds.dim('ir', V.nr + 1); ds.dim('ith', V.nth);
+            ds.var('px', ['p'], Float64Array, { symbol: 'x<sub>p</sub>', units: 'm', long_name: 'particle position along the road (glass frame)', computed_in: 'Fluid.advect', digits: 5 });
+            ds.var('py', ['p'], Float64Array, { symbol: 'y<sub>p</sub>', units: 'm', long_name: 'particle position across (y ≥ 0: the half solved)', computed_in: 'Fluid.advect', digits: 5 });
+            ds.var('pz', ['p'], Float64Array, { symbol: 'z<sub>p</sub>', units: 'm', long_name: 'particle height above the glass bottom', computed_in: 'Fluid.advect', digits: 5 });
+            ds.var('h_col', ['j', 'i'], Float64Array, { symbol: 'h<sub>ji</sub>', units: 'm', long_name: 'height of the stout column over each 4 mm square of the bottom', computed_in: 'Fluid.columnHeights', formula: 'B(Σ particle volume) / B(open area), B the 3 × 3 binomial filter', digits: 5 });
+            ds.var('eta_draw', ['ir', 'ith'], Float64Array, { symbol: 'η<sub>draw</sub>', units: 'm', long_name: 'surface height as drawn, polar grid r = R·ir/9, θ = 2π·ith/48', computed_in: 'StoutView.surface', formula: 'h at (r cos θ, r sin θ), bilinear; within 2.5 Δx of the wall extended along the radius', digits: 5 });
+            S('eta_front', { symbol: 'η<sub>front</sub>', units: 'm', long_name: 'surface at the front wall (direction of travel)', computed_in: 'StoutView.surface', formula: 'η<sub>draw</sub>[9, 0]', digits: 5 });
+            S('eta_back', { symbol: 'η<sub>back</sub>', units: 'm', long_name: 'surface at the back wall', computed_in: 'StoutView.surface', formula: 'η<sub>draw</sub>[9, 24]', digits: 5 });
+            S('dw', { symbol: 'Δη', units: 'm', long_name: 'front − back wall: how far the stout leans', computed_in: 'StoutView.surface', formula: 'η<sub>front</sub> − η<sub>back</sub>', digits: 5 });
+            S('head_h', { symbol: 'h<sub>head</sub>', units: 'm', long_name: 'thickness of the drawn head (drawn, not computed)', computed_in: 'StoutView', digits: 3 });
+            // solver
+            ds.var('steps', [], 'int', { symbol: 'steps', long_name: 'fluid steps since the start', computed_in: 'World.advance', digits: 0 });
+            ds.var('cg_iters', [], 'int', { symbol: 'CG it.', long_name: 'conjugate-gradient iterations of the last pressure solve', computed_in: 'Fluid.pcg', digits: 0 });
+            S('cg_res', { symbol: 'r<sub>max</sub>', units: 'm²/s', long_name: 'largest residual left by the pressure solve (scaled, A q = b)', computed_in: 'Fluid.pcg', digits: 3 });
+            S('rate', { symbol: 'rate', units: 's/s', long_name: 'seconds simulated per second of yours (measured, smoothed)', computed_in: 'the clock', digits: 3 });
+            ds.var('np', [], 'int', { symbol: 'N<sub>p</sub>', long_name: 'particles in the half glass', computed_in: 'Fluid.seed', digits: 0 });
+            // drawing (css px)
+            [['scale', 'σ', 'px/m', 'pixels per metre', 'canvas height / 0.40 m'], ['cam_x', 'x<sub>cam</sub>', 'm', 'road position at the centre of the picture (the camera rides with the cart)', 'x'],
+             ['ground_px', 'z = 0', 'px', 'screen height of road level 0', '0.9 × canvas height'], ['axle_px_x', 'X<sub>axle</sub>', 'px', 'axle on screen, across', 'W/2 + (x − x<sub>cam</sub>) σ'],
+             ['axle_px_y', 'Y<sub>axle</sub>', 'px', 'axle on screen, down', 'ground − z<sub>w</sub> σ'], ['body_px_y', 'Y<sub>body</sub>', 'px', 'bottom of the body on screen', 'ground − z<sub>b</sub> σ'],
+             ['front_px_x', 'X<sub>front</sub>', 'px', 'middle of the head at the front wall, across', 'X<sub>axle</sub> + 0.98 R σ'], ['front_px_y', 'Y<sub>front</sub>', 'px', 'same, down', 'Y<sub>body</sub> − (0.03 + 0.006 + η<sub>front</sub> + h<sub>head</sub>/2) σ cos 14° … see check'],
+             ['back_px_x', 'X<sub>back</sub>', 'px', 'middle of the head at the back wall, across', 'X<sub>axle</sub> − 0.98 R σ'], ['back_px_y', 'Y<sub>back</sub>', 'px', 'same, down', 'as Y<sub>front</sub> with η<sub>back</sub>'],
+             ['elev', 'ε', 'rad', 'the view looks down at 14°', ''], ['canvas_w', 'W', 'px', 'canvas width', ''], ['canvas_h', 'H', 'px', 'canvas height', '']
+            ].forEach(function (r) { var a = { symbol: r[1], units: r[2], long_name: r[3], computed_in: 'StoutView.draw', digits: 2 }; if (r[4]) a.formula = r[4]; S(r[0], a); });
+        }
+        function storeConstants() {
+            var f = world.fluid, c = world.cart;
+            ds.set('R', f.R); ds.set('h0', f.h0); ds.set('rho', f.rho); ds.set('nu', f.nu); ds.set('g', f.g); ds.set('dx', f.dx); ds.set('dt_max', world.dtMax); ds.set('h_cart', world.hCart);
+            ds.set('Mb', c.Mb); ds.set('ml', c.ml); ds.set('mw', c.mw); ds.set('Rw', c.Rw); ds.set('Iw', c.Iw); ds.set('k', c.k); ds.set('c', c.c); ds.set('kt', c.kt); ds.set('ct', c.ct);
+            ds.set('cx', c.cx); ds.set('Ls', c.Ls); ds.set('bump_L', 0.25); ds.set('bump_gap', 2); ds.set('mp', f.mp); ds.set('np', f.np);
+            var Ms = c.Mb + c.ml; ds.set('Ms', Ms);
+            ds.set('Mx', Ms + c.mw + c.Iw / (c.Rw * c.Rw));
+            var xi = 1.8412; ds.set('f11', Math.sqrt(f.g * xi / f.R * Math.tanh(xi * f.h0 / f.R)) / (2 * Math.PI));
+            ds.set('f_body', Math.sqrt(c.k / Ms) / (2 * Math.PI));
+        }
+
+        /* ---------- the data panel (scripts/datalog.js): three proofs per value ---------- */
+        function g(n) { return ds.get(n); }
+        function inp(n, sym, u, d) { return [sym, g(n), u, d]; }
+        function zr(x) { var h = g('bump_h'), z = 0; for (var n = 0; n < 60; n++) { var s = (x - (1 + 2 * n)) / 0.25; if (s > -0.5 && s < 0.5) z += 0.5 * h * (1 + Math.cos(2 * Math.PI * s)); } return z; }
+        function envNode(i) {   // the axle path at node i of the 0.5 mm table, written out again: max over the rim on the same grid
+            var Rw = g('Rw'), h = 0.0005, x0 = -1, m = Math.ceil(Rw / h), best = -1e9;
+            for (var d = -m; d <= m; d++) { var s = d * h; if (Math.abs(s) > Rw) continue; var v = zr(x0 + (i + d) * h) + Math.sqrt(Rw * Rw - s * s); if (v > best) best = v; }
+            return best;
+        }
+        function envelope(x) { var f = (x + 1) / 0.0005, i = Math.floor(f), t = f - i, a = envNode(i), b = envNode(i + 1); return { z: a + t * (b - a), slope: (b - a) / 0.0005 }; }
+        function colCheck(n) {   // h_col recomputed from the stored particle positions
+            var f = world.fluid, nx = f.nx, ny = f.ny, dx = g('dx'), i = n % nx, j = Math.floor(n / nx), px = g('px'), py = g('py'), Vp = Math.pow(dx / 2, 3);
+            var fold = function (jj) { return jj < 0 ? -jj - 1 : jj >= ny ? ny - 1 : jj; };
+            var V = 0, A = 0;
+            for (var dj = -1; dj <= 1; dj++) for (var di = -1; di <= 1; di++) {
+                var ii = i + di; if (ii < 0 || ii >= nx) continue;
+                var jj = fold(j + dj), w = (di ? 0.25 : 0.5) * (dj ? 0.25 : 0.5), cnt = 0;
+                for (var p = 0; p < px.length; p++) {
+                    var a = Math.floor((px[p] - f.x0) / dx), b = Math.floor(py[p] / dx);
+                    a = a < 0 ? 0 : a >= nx ? nx - 1 : a; b = b < 0 ? 0 : b >= ny ? ny - 1 : b;
+                    if (a === ii && b === jj) cnt++;
+                }
+                V += w * cnt * Vp; A += w * f.colArea[ii + nx * jj];
+            }
+            return { formula: 'B(Σ V<sub>p</sub>) / B(open area) over the 3 × 3 columns around (j, i) = (' + j + ', ' + i + '), counted from the stored x<sub>p</sub>, y<sub>p</sub>', inputs: [['V<sub>p</sub> = (Δx/2)³', Vp, 'm³', 4], ['B(area)', A, 'm²', 6]], value: A > 0.02 * dx * dx ? V / A : 0 };
+        }
+        function pix(xc, yc, test, what, expected, note, rv) {
+            var dpr = cv.width / cv.getBoundingClientRect().width, d = view.ctx.getImageData(Math.floor(xc * dpr), Math.floor(yc * dpr), 1, 1).data;
+            for (var k = 1; rv && k <= rv && !(d[3] > 0 && test(d)); k++) {        // along a thin outline: the nearest pixel within rv px up or down
+                var up = view.ctx.getImageData(Math.floor(xc * dpr), Math.floor((yc - k) * dpr), 1, 1).data, dn = view.ctx.getImageData(Math.floor(xc * dpr), Math.floor((yc + k) * dpr), 1, 1).data;
+                if (up[3] > 0 && test(up)) d = up; else if (dn[3] > 0 && test(dn)) d = dn;
+            }
+            return { what: what + ', (' + Sim.fmt(xc, 1) + ', ' + Sim.fmt(yc, 1) + ') css px', drawn: d[3] === 0 ? 'nothing (transparent)' : 'rgb(' + d[0] + ', ' + d[1] + ', ' + d[2] + ')', expected: expected, ok: d[3] > 0 && test(d), note: note };
+        }
+        var isHead = function (d) { return d[0] > 170 && d[1] > 150 && d[2] > 110 && d[0] - d[2] < 90; };
+        var isInk = function (d) { return d[0] < 90 && d[1] < 90 && d[2] < 90; };
+        function headDrawn(side) {
+            return pix(g(side + '_px_x'), g(side + '_px_y'), isHead, 'middle of the head at the ' + side + ' wall', 'the cream of the head, about rgb(236, 225, 201)',
+                'The head is drawn as a 12 mm band on the computed surface; its middle at 0.98 R lies inside the band, so the pixel there is cream only if the surface was drawn at the stored height.');
+        }
+        function axleDrawn() { return pix(g('axle_px_x'), g('axle_px_y'), isInk, 'the axle', 'the dark hub dot, rgb(28, 21, 24)', 'The hub is a 4 px dot at the axle, drawn over the spokes.'); }
+        function bodyDrawn() { return pix(g('axle_px_x') - 0.08 * g('scale'), g('body_px_y') - 0.5, isInk, 'bottom edge of the body', 'the 2 px ink outline of the body', 'The body is a box from z<sub>b</sub> to z<sub>b</sub> + 3 cm with a 2 px outline; its bottom edge is at the stored height (searched 2 px up and down, the outline is anti-aliased).', 2); }
+        function polar(n) { var nth = view.nth, ir = Math.floor(n / nth), it = n % nth, r = g('R') * ir / view.nr, th = 2 * Math.PI * it / nth; return { ir: ir, it: it, x: r * Math.cos(th), y: r * Math.sin(th) }; }
+        function nearest(x, y) {
+            var s = g('scale'), ax = g('axle_px_x'), ay = g('axle_px_y'), by = g('body_px_y'), R = g('R');
+            if (Math.abs(x - ax) < (R + 0.004) * s && y < by - 0.03 * s && y > by - 0.03 * s - 0.15 * s) return 'stout';
+            if (Math.hypot(x - ax, y - ay) < g('Rw') * s) return 'wheel';
+            if (Math.abs(x - ax) < 0.11 * s && y <= by + 2 && y >= by - 0.03 * s - 2) return 'body';
+            return null;
+        }
+        function defineData() { Sim.data = {
+            ds: ds, kicker: 'Fig. 12 · data', file: 'fig12-guinness-cart',
+            playing: function () { return clk.playing; }, play: function () { clk.set(true); },
+            groups: [
+                { title: 'What you set', note: 'the push, the road and the speed', vars: ['push_dir', 'F_push_set', 'bump_h', 'v0'] },
+                { title: 'Constants of the model', note: 'stout, glass, cart and road', vars: ['R', 'h0', 'rho', 'nu', 'g', 'Mb', 'ml', 'mw', 'Rw', 'Iw', 'k', 'c', 'kt', 'ct', 'cx', 'Ls', 'bump_L', 'bump_gap', 'dx', 'dt_max', 'h_cart', 'mp'] },
+                { title: 'What follows from them', note: 'masses and two yardstick frequencies', vars: ['Ms', 'Mx', 'f11', 'f_body'] },
+                { title: 'The cart now', note: 'state and forces at the same instant (Cart.forces)', vars: ['x', 'vx', 'zb', 'vzb', 'zw', 'vzw', 'z_a', 'dz_a', 'N', 'F_s', 'F_road', 'F_drive', 'F_push', 'F_lx', 'F_lz', 'a_x', 'a_zb', 'a_zw'] },
+                { title: 'The last fluid step', note: 'the jolt handed to the stout, and the stout’s push handed back', vars: ['t', 'h_f', 'n_cart', 'vx_0', 'vx_1', 'vzb_0', 'vzb_1', 'a_gx', 'a_gz', 'P0_x', 'P0_z', 'P_x', 'P_z', 'F_lx_next', 'F_lz_next'] },
+                { title: 'The stout', note: 'particles, column heights and the surface as drawn', vars: ['dw', 'eta_front', 'eta_back', 'h_col', 'eta_draw', 'head_h', 'px', 'py', 'pz', 'np'] },
+                { title: 'Solver', note: 'APIC on a MAC grid; pressure by MIC(0) conjugate gradients', vars: ['steps', 'cg_iters', 'cg_res', 'rate'] },
+                { title: 'Drawing', note: 'css px of the figure', vars: ['scale', 'cam_x', 'ground_px', 'axle_px_x', 'axle_px_y', 'body_px_y', 'front_px_x', 'front_px_y', 'back_px_x', 'back_px_y', 'elev', 'canvas_w', 'canvas_h'] }
+            ],
+            probe: function (x, y) { var n = nearest(x, y); return n ? { what: n } : null; },
+            inspect: function (ref) {
+                var w = ref.what;
+                if (w === 'stout') return { title: 'the stout', at: { x: g('front_px_x'), y: g('front_px_y') }, rows: [['Δη', g('dw'), 'm', 'dw'], ['η<sub>front</sub>', g('eta_front'), 'm', 'eta_front'], ['η<sub>back</sub>', g('eta_back'), 'm', 'eta_back'], ['a<sub>gx</sub>', g('a_gx'), 'm/s²', 'a_gx'], ['P<sub>x</sub>', g('P_x'), 'kg m/s', 'P_x'], ['F<sub>ℓx</sub>', g('F_lx'), 'N', 'F_lx']] };
+                if (w === 'wheel') return { title: 'the wheel', at: { x: g('axle_px_x'), y: g('axle_px_y') }, rows: [['N', g('N'), 'N', 'N'], ['z<sub>a</sub>', g('z_a'), 'm', 'z_a'], ['z<sub>a</sub>′', g('dz_a'), '', 'dz_a'], ['z<sub>w</sub>', g('zw'), 'm', 'zw'], ['F<sub>road</sub>', g('F_road'), 'N', 'F_road']] };
+                return { title: 'the body', at: { x: g('axle_px_x'), y: g('body_px_y') }, rows: [['z<sub>b</sub>', g('zb'), 'm', 'zb'], ['F<sub>s</sub>', g('F_s'), 'N', 'F_s'], ['z̈<sub>b</sub>', g('a_zb'), 'm/s²', 'a_zb'], ['ẋ', g('vx'), 'm/s', 'vx'], ['ẍ', g('a_x'), 'm/s²', 'a_x']] };
+            },
+            locate: function (name, idx) {
+                if (name === 'eta_draw') { var q = polar(idx), s = g('scale'), cy = g('body_px_y') - 0.03 * s, e = g('elev'); return { x: g('axle_px_x') + q.x * s, y: cy - (0.006 + g('eta_draw')[idx] + g('head_h')) * Math.cos(e) * s - q.y * Math.sin(e) * s }; }
+                return null;
+            },
+            check: {
+                push_dir: function () { return { formula: 'the button or key held now', inputs: [['push', push, '', 0]], value: push }; },
+                F_push_set: function () { return { formula: 'read from the Push force slider now', inputs: [['slider', pushF.el.value, 'N']], value: parseFloat(pushF.el.value) }; },
+                bump_h: function () { return { formula: 'Bump height slider / 1000', inputs: [['slider', bumpH.el.value, 'mm']], value: parseFloat(bumpH.el.value) / 1000 }; },
+                v0: function () { return { formula: 'read from the Cruising speed slider now', inputs: [['slider', v0.el.value, 'm/s']], value: parseFloat(v0.el.value) }; },
+                ml: function () { return { formula: 'ρ π R² h', inputs: [inp('rho', 'ρ', 'kg/m³', 0), inp('R', 'R', 'm', 3), inp('h0', 'h', 'm', 3)], value: g('rho') * Math.PI * g('R') * g('R') * g('h0') }; },
+                Iw: function () { return { formula: '½ m<sub>w</sub> R<sub>w</sub>² (a disc)', inputs: [inp('mw', 'm<sub>w</sub>', 'kg', 3), inp('Rw', 'R<sub>w</sub>', 'm', 3)], value: 0.5 * g('mw') * g('Rw') * g('Rw') }; },
+                mp: function () { return { formula: '(m<sub>ℓ</sub> / 2) / N<sub>p</sub>', inputs: [inp('ml', 'm<sub>ℓ</sub>', 'kg', 4), inp('np', 'N<sub>p</sub>', '', 0)], value: g('ml') / 2 / g('np') }; },
+                Ms: function () { return { formula: 'M<sub>b</sub> + m<sub>ℓ</sub>', inputs: [inp('Mb', 'M<sub>b</sub>', 'kg', 3), inp('ml', 'm<sub>ℓ</sub>', 'kg', 4)], value: g('Mb') + g('ml') }; },
+                Mx: function () { return { formula: 'M<sub>s</sub> + m<sub>w</sub> + I<sub>w</sub>/R<sub>w</sub>²', inputs: [inp('Ms', 'M<sub>s</sub>', 'kg', 4), inp('mw', 'm<sub>w</sub>', 'kg', 3), inp('Iw', 'I<sub>w</sub>', 'kg m²', 6), inp('Rw', 'R<sub>w</sub>', 'm', 3)], value: g('Ms') + g('mw') + g('Iw') / (g('Rw') * g('Rw')) }; },
+                f11: function () { var xi = 1.8412; return { formula: '(1/2π) √(g ξ/R tanh(ξ h/R)), ξ = 1.8412', inputs: [inp('g', 'g', 'm/s²', 2), inp('R', 'R', 'm', 3), inp('h0', 'h', 'm', 3)], value: Math.sqrt(g('g') * xi / g('R') * Math.tanh(xi * g('h0') / g('R'))) / (2 * Math.PI) }; },
+                f_body: function () { return { formula: '√(k/M<sub>s</sub>)/2π', inputs: [inp('k', 'k', 'N/m', 0), inp('Ms', 'M<sub>s</sub>', 'kg', 4)], value: Math.sqrt(g('k') / g('Ms')) / (2 * Math.PI) }; },
+                z_a: function () { return { formula: 'max over the rim of z<sub>r</sub>(s) + √(R<sub>w</sub>² − (s − x)²) at the two 0.5 mm nodes around x (rim sampled on the same grid), linear in between; z<sub>r</sub> written out again from the bump formula', inputs: [inp('x', 'x', 'm', 5), inp('bump_h', 'h<sub>bump</sub>', 'm', 3), inp('Rw', 'R<sub>w</sub>', 'm', 3)], value: envelope(g('x')).z }; },
+                dz_a: function () { return { formula: '(z<sub>a</sub> at the next node − at this node) / 0.5 mm', inputs: [inp('x', 'x', 'm', 5)], value: envelope(g('x')).slope }; },
+                F_lx: function () { return { formula: 'the push handed back at the end of the last fluid step, F<sub>ℓx</sub> next', inputs: [inp('F_lx_next', 'F<sub>ℓx</sub> next', 'N', 4)], value: g('F_lx_next') }; },
+                F_lz: function () { return { formula: 'F<sub>ℓz</sub> next', inputs: [inp('F_lz_next', 'F<sub>ℓz</sub> next', 'N', 4)], value: g('F_lz_next') }; },
+                vx_1: function () { return { formula: 'the speed now, ẋ', inputs: [inp('vx', 'ẋ', 'm/s', 6)], value: g('vx') }; },
+                vzb_1: function () { return { formula: 'ż<sub>b</sub> now', inputs: [inp('vzb', 'ż<sub>b</sub>', 'm/s', 6)], value: g('vzb') }; },
+                N: function () { var n = g('kt') * (g('z_a') - g('zw')) + g('ct') * (g('dz_a') * g('vx') - g('vzw')); return { formula: 'max(0, k<sub>t</sub>(z<sub>a</sub> − z<sub>w</sub>) + c<sub>t</sub>(z<sub>a</sub>′ẋ − ż<sub>w</sub>))', inputs: [inp('kt', 'k<sub>t</sub>', 'N/m', 0), inp('z_a', 'z<sub>a</sub>', 'm', 6), inp('zw', 'z<sub>w</sub>', 'm', 6), inp('ct', 'c<sub>t</sub>', 'N s/m', 1), inp('dz_a', 'z<sub>a</sub>′', '', 5), inp('vx', 'ẋ', 'm/s', 5), inp('vzw', 'ż<sub>w</sub>', 'm/s', 5)], value: Math.max(0, n) }; },
+                F_s: function () { return { formula: '−k(z<sub>b</sub> − z<sub>w</sub> − L<sub>s</sub>) − c(ż<sub>b</sub> − ż<sub>w</sub>)', inputs: [inp('k', 'k', 'N/m', 0), inp('zb', 'z<sub>b</sub>', 'm', 6), inp('zw', 'z<sub>w</sub>', 'm', 6), inp('Ls', 'L<sub>s</sub>', 'm', 3), inp('c', 'c', 'N s/m', 1), inp('vzb', 'ż<sub>b</sub>', 'm/s', 5), inp('vzw', 'ż<sub>w</sub>', 'm/s', 5)], value: -g('k') * (g('zb') - g('zw') - g('Ls')) - g('c') * (g('vzb') - g('vzw')) }; },
+                F_road: function () { return { formula: '−N z<sub>a</sub>′', inputs: [inp('N', 'N', 'N', 4), inp('dz_a', 'z<sub>a</sub>′', '', 5)], value: -g('N') * g('dz_a') }; },
+                F_drive: function () { return { formula: 'c<sub>x</sub> v<sub>0</sub>', inputs: [inp('cx', 'c<sub>x</sub>', 'N s/m', 1), inp('v0', 'v<sub>0</sub>', 'm/s', 2)], value: g('cx') * g('v0') }; },
+                F_push: function () { return { formula: 'push · F<sub>push</sub> set (as at the last cart step)', inputs: [inp('push_dir', 'push', '', 0), inp('F_push_set', 'F<sub>push</sub> set', 'N', 1)], value: g('push_dir') * g('F_push_set') }; },
+                a_x: function () { return { formula: '(F<sub>road</sub> + F<sub>drive</sub> − c<sub>x</sub>ẋ + F<sub>push</sub> + F<sub>ℓx</sub>) / M<sub>x</sub>', inputs: [inp('F_road', 'F<sub>road</sub>', 'N', 4), inp('F_drive', 'F<sub>drive</sub>', 'N', 3), inp('cx', 'c<sub>x</sub>', 'N s/m', 1), inp('vx', 'ẋ', 'm/s', 5), inp('F_push', 'F<sub>push</sub>', 'N', 2), inp('F_lx', 'F<sub>ℓx</sub>', 'N', 4), inp('Mx', 'M<sub>x</sub>', 'kg', 4)], value: (g('F_road') + g('F_drive') - g('cx') * g('vx') + g('F_push') + g('F_lx')) / g('Mx') }; },
+                a_zb: function () { return { formula: '(F<sub>s</sub> − M<sub>s</sub> g + F<sub>ℓz</sub>) / M<sub>s</sub>', inputs: [inp('F_s', 'F<sub>s</sub>', 'N', 4), inp('Ms', 'M<sub>s</sub>', 'kg', 4), inp('g', 'g', 'm/s²', 2), inp('F_lz', 'F<sub>ℓz</sub>', 'N', 4)], value: (g('F_s') - g('Ms') * g('g') + g('F_lz')) / g('Ms') }; },
+                a_zw: function () { return { formula: '(−F<sub>s</sub> − m<sub>w</sub> g + N) / m<sub>w</sub>', inputs: [inp('F_s', 'F<sub>s</sub>', 'N', 4), inp('mw', 'm<sub>w</sub>', 'kg', 3), inp('N', 'N', 'N', 4)], value: (-g('F_s') - g('mw') * g('g') + g('N')) / g('mw') }; },
+                a_gx: function () { return { formula: '(ẋ<sub>1</sub> − ẋ<sub>0</sub>)/Δt', inputs: [inp('vx_1', 'ẋ<sub>1</sub>', 'm/s', 6), inp('vx_0', 'ẋ<sub>0</sub>', 'm/s', 6), inp('h_f', 'Δt', 's', 5)], value: (g('vx_1') - g('vx_0')) / g('h_f') }; },
+                a_gz: function () { return { formula: '(ż<sub>b,1</sub> − ż<sub>b,0</sub>)/Δt', inputs: [inp('vzb_1', 'ż<sub>b,1</sub>', 'm/s', 6), inp('vzb_0', 'ż<sub>b,0</sub>', 'm/s', 6), inp('h_f', 'Δt', 's', 5)], value: (g('vzb_1') - g('vzb_0')) / g('h_f') }; },
+                F_lx_next: function () { return { formula: '−(P<sub>x</sub> − P<sub>x</sub> before)/Δt', inputs: [inp('P_x', 'P<sub>x</sub>', 'kg m/s', 6), inp('P0_x', 'P<sub>x</sub> before', 'kg m/s', 6), inp('h_f', 'Δt', 's', 5)], value: -(g('P_x') - g('P0_x')) / g('h_f') }; },
+                F_lz_next: function () { return { formula: '−(P<sub>z</sub> − P<sub>z</sub> before)/Δt', inputs: [inp('P_z', 'P<sub>z</sub>', 'kg m/s', 6), inp('P0_z', 'P<sub>z</sub> before', 'kg m/s', 6), inp('h_f', 'Δt', 's', 5)], value: -(g('P_z') - g('P0_z')) / g('h_f') }; },
+                P_x: function () { var u = world.fluid.pu, s = 0; for (var p = 0; p < u.length; p++) s += u[p]; return { formula: '2 m<sub>p</sub> Σ u<sub>p</sub> over the particles (velocities kept by the solver, not in the store)', inputs: [inp('mp', 'm<sub>p</sub>', 'kg', 9), ['Σ u<sub>p</sub>', s, 'm/s', 6]], value: 2 * g('mp') * s }; },
+                P_z: function () { var w = world.fluid.pw, s = 0; for (var p = 0; p < w.length; p++) s += w[p]; return { formula: '2 m<sub>p</sub> Σ w<sub>p</sub>', inputs: [inp('mp', 'm<sub>p</sub>', 'kg', 9), ['Σ w<sub>p</sub>', s, 'm/s', 6]], value: 2 * g('mp') * s }; },
+                h_col: function (n) { return colCheck(n); },
+                eta_draw: function (n) { var q = polar(n); return { formula: 'h<sub>ji</sub> read at (r cos θ, r sin θ), ir = ' + q.ir + ', ith = ' + q.it + ' (bilinear; near the wall extended along the radius)', inputs: [['x', q.x, 'm', 5], ['y', q.y, 'm', 5]], value: world.fluid.columnHeightAt(q.x, q.y) }; },
+                eta_front: function () { return { formula: 'h read at the front wall (R, 0)', inputs: [inp('R', 'R', 'm', 3)], value: world.fluid.columnHeightAt(g('R'), 0) }; },
+                eta_back: function () { return { formula: 'h read at the back wall (−R, 0)', inputs: [inp('R', 'R', 'm', 3)], value: world.fluid.columnHeightAt(-g('R'), 0) }; },
+                dw: function () { return { formula: 'η<sub>front</sub> − η<sub>back</sub>', inputs: [inp('eta_front', 'η<sub>front</sub>', 'm', 5), inp('eta_back', 'η<sub>back</sub>', 'm', 5)], value: g('eta_front') - g('eta_back') }; },
+                scale: function () { return { formula: 'H / 0.40 m', inputs: [inp('canvas_h', 'H', 'px', 1)], value: g('canvas_h') / 0.40 }; },
+                ground_px: function () { return { formula: '0.9 H', inputs: [inp('canvas_h', 'H', 'px', 1)], value: 0.9 * g('canvas_h') }; },
+                axle_px_x: function () { return { formula: 'W/2 + (x − x<sub>cam</sub>) σ', inputs: [inp('canvas_w', 'W', 'px', 1), inp('x', 'x', 'm', 5), inp('cam_x', 'x<sub>cam</sub>', 'm', 5), inp('scale', 'σ', 'px/m', 2)], value: g('canvas_w') / 2 + (g('x') - g('cam_x')) * g('scale') }; },
+                axle_px_y: function () { return { formula: 'ground − z<sub>w</sub> σ', inputs: [inp('ground_px', 'ground', 'px', 2), inp('zw', 'z<sub>w</sub>', 'm', 5), inp('scale', 'σ', 'px/m', 2)], value: g('ground_px') - g('zw') * g('scale') }; },
+                body_px_y: function () { return { formula: 'ground − z<sub>b</sub> σ', inputs: [inp('ground_px', 'ground', 'px', 2), inp('zb', 'z<sub>b</sub>', 'm', 5), inp('scale', 'σ', 'px/m', 2)], value: g('ground_px') - g('zb') * g('scale') }; },
+                front_px_x: function () { return { formula: 'X<sub>axle</sub> + 0.98 R σ', inputs: [inp('axle_px_x', 'X<sub>axle</sub>', 'px', 2), inp('R', 'R', 'm', 3), inp('scale', 'σ', 'px/m', 2)], value: g('axle_px_x') + 0.98 * g('R') * g('scale') }; },
+                front_px_y: function () { return { formula: 'Y<sub>body</sub> − 0.03 σ − (0.006 + η<sub>front</sub> + h<sub>head</sub>/2) σ cos ε', inputs: [inp('body_px_y', 'Y<sub>body</sub>', 'px', 2), inp('scale', 'σ', 'px/m', 2), inp('eta_front', 'η<sub>front</sub>', 'm', 5), inp('head_h', 'h<sub>head</sub>', 'm', 3), inp('elev', 'ε', 'rad', 4)], value: g('body_px_y') - 0.03 * g('scale') - (0.006 + g('eta_front') + g('head_h') / 2) * Math.cos(g('elev')) * g('scale') }; },
+                back_px_x: function () { return { formula: 'X<sub>axle</sub> − 0.98 R σ', inputs: [inp('axle_px_x', 'X<sub>axle</sub>', 'px', 2), inp('R', 'R', 'm', 3), inp('scale', 'σ', 'px/m', 2)], value: g('axle_px_x') - 0.98 * g('R') * g('scale') }; },
+                back_px_y: function () { return { formula: 'Y<sub>body</sub> − 0.03 σ − (0.006 + η<sub>back</sub> + h<sub>head</sub>/2) σ cos ε', inputs: [inp('body_px_y', 'Y<sub>body</sub>', 'px', 2), inp('scale', 'σ', 'px/m', 2), inp('eta_back', 'η<sub>back</sub>', 'm', 5), inp('head_h', 'h<sub>head</sub>', 'm', 3), inp('elev', 'ε', 'rad', 4)], value: g('body_px_y') - 0.03 * g('scale') - (0.006 + g('eta_back') + g('head_h') / 2) * Math.cos(g('elev')) * g('scale') }; }
+            },
+            drawn: {
+                eta_front: function () { return headDrawn('front'); }, front_px_y: function () { return headDrawn('front'); }, dw: function () { return headDrawn('front'); },
+                eta_back: function () { return headDrawn('back'); }, back_px_y: function () { return headDrawn('back'); },
+                axle_px_x: axleDrawn, axle_px_y: axleDrawn, zw: axleDrawn, x: axleDrawn,
+                body_px_y: bodyDrawn, zb: bodyDrawn
+            },
+            round: { time: 't', label: function () { return 'one second of simulated motion'; }, length: function () { return 1; },
+                     columns: ['x', 'vx', 'a_gx', 'a_gz', 'dw', 'N', 'F_lx'], point: function () { return { what: 'stout' }; }, blocked: function () { return null; } },
+            about: 'The cart, the body and the wheel are drawn at the stored positions, so picture and store agree to the pixel. The stout is not drawn particle by particle: its surface is the column height h, the volume of the particles over each 4 mm square divided by its area and smoothed over one cell, and within 2.5 cells of the wall it is extended straight out along the radius from the columns inside, because the columns there are cut by the wall and hold too few particles. A wave that curls over, or drops thrown above the surface, cannot show this way. The head is drawn, not computed: a 12 mm cream band laid on the computed surface. Only half the glass is computed; the other half drawn is its mirror image. The particles’ velocities stay in the solver (the store keeps their positions); the momentum P is checked from them directly.'
+        };
+            var C = world.cart, F = world.fluid, fromSolver = {
+                x: function () { return C.x; }, vx: function () { return C.vx; }, zb: function () { return C.zb; }, vzb: function () { return C.vzb; }, zw: function () { return C.zw; }, vzw: function () { return C.vzw; },
+                t: function () { return world.t; }, steps: function () { return world.steps; }, cg_iters: function () { return F.cgIters; }, np: function () { return F.np; },
+                R: function () { return F.R; }, h0: function () { return F.h0; }, rho: function () { return F.rho; }, nu: function () { return F.nu; }, g: function () { return F.g; }, dx: function () { return F.dx; },
+                dt_max: function () { return world.dtMax; }, h_cart: function () { return world.hCart; }, Mb: function () { return C.Mb; }, mw: function () { return C.mw; }, Rw: function () { return C.Rw; },
+                k: function () { return C.k; }, c: function () { return C.c; }, kt: function () { return C.kt; }, ct: function () { return C.ct; }, cx: function () { return C.cx; }, Ls: function () { return C.Ls; },
+                head_h: function () { return view.headH; }, elev: function () { return view.elev; }
+            };
+            Object.keys(fromSolver).forEach(function (n) { if (!Sim.data.check[n]) Sim.data.check[n] = function () { var v = fromSolver[n](); return { formula: 'read from the solver’s own variable (state advanced by the integrator, or a constant of the code)', inputs: [[n, v, '']], value: v }; }; });
+            ['px', 'py', 'pz'].forEach(function (n) { Sim.data.check[n] = function (i) { return { formula: 'the solver’s particle array (the store holds it: the solver writes into it)', inputs: [], value: F[n][i] }; }; });
+        }
+
         build();
+        defineData();
         var frameNo = 0;
         var clk = Sim.clock(function (dt) {
             if (dt <= 0) return;
             world.cart.pushF = push * pushF.value;
+            ds.set('push_dir', push); ds.set('F_push_set', pushF.value);
             var t0 = performance.now();
             do { world.advance(world.dtMax); } while (performance.now() - t0 < BUDGET_MS);
             var now = performance.now();
             if (lastWall) {
                 var rate = (world.t - lastSim) / ((now - lastWall) / 1000);
                 simPerReal = simPerReal ? 0.9 * simPerReal + 0.1 * rate : rate;
+                ds.set('rate', simPerReal);
             }
             lastWall = now; lastSim = world.t;
             view.draw();
@@ -320,5 +562,6 @@
         window.Fig12 = { get world() { return world; }, get view() { return view; } };
     })();
     </script>
+    <script src="../scripts/datalog.js"></script>
 </body>
 </html>

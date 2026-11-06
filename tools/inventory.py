@@ -203,6 +203,8 @@ RULES = [
     (r'notes/fig12/clip\.html', 'Fig. 12: page that renders the clip of the pint on the cart frame by frame, for clip.cjs.', 'docs/simulations/fig12-beer-slosh.md'),
     (r'notes/fig12/clip\.cjs', 'Fig. 12: renders a clip (PNG frames and MP4) of the pint on the cart in headless Chromium.', 'docs/simulations/fig12-beer-slosh.md'),
     (r'notes/fig12/test\.cjs', 'Fig. 12: browser test of the page on desktop and phone: the run advances, the push works, no errors, no sideways scroll.', 'docs/simulations/fig12-beer-slosh.md'),
+    (r'notes/fig12/panel-test\.cjs', 'Fig. 12: every check and read-back of the data panel, run in Chromium; the panel opened.', 'docs/simulations/fig12-beer-slosh.md'),
+    (r'notes/fig12/panel-test2\.cjs', 'Fig. 12: data panel on a bump at three widths, Read values, one round, Save, the panel idle.', 'docs/simulations/fig12-beer-slosh.md'),
     (r'notes/fig12-restart/BRIEF\.md', 'Fig. 12: the hand-over brief of 6 November 2026 from the session whose Fig. 12 was rejected; history only.', 'docs/simulations/fig12-beer-slosh.md'),
     (r'tools/fig11/figs\.py', 'Composes the Blender renders of tools/fig11/ into the four figures with numbered balloons (Pillow).', 'docs/simulations/fig11-pendulum-control.md'),
     (r'public/images/sims/([a-z0-9-]+)\.webp',

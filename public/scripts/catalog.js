@@ -245,7 +245,7 @@
             method: 'APIC particles on a MAC grid of 4 mm, cut-cell walls, ghost-fluid free surface, pressure by conjugate gradients with MIC(0), live in the browser; cart by symplectic Euler at 0.1 ms; checked against the linear sloshing frequency of a cylinder',
             controls: 'push the cart forward or back (buttons or arrow keys) and the push force; bump height; cruising speed; pause and start again',
             concepts: ['Navier–Stokes equations', 'free surface', 'sloshing', 'non-inertial frame', 'particle-in-cell', 'APIC', 'pressure projection', 'quarter-car model', 'contact force', 'momentum'],
-            has: ['derivation'],
+            has: ['derivation', 'data', 'read', 'round', 'check'],
             added: '2026-11-06'
         },
     ];

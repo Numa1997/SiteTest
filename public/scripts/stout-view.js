@@ -36,6 +36,13 @@
       }
       H.push(row);
     }
+    const D = this.ds;
+    if (D) {                                                     // what is drawn, as drawn: heights on the polar grid
+      const e = D.get('eta_draw');
+      for (let ir = 0; ir <= nr; ir++) for (let it = 0; it < nth; it++) e[ir * nth + it] = H[ir][it];
+      D.touch('eta_draw');
+      D.set('eta_front', H[nr][0]); D.set('eta_back', H[nr][nth / 2]); D.set('dw', H[nr][0] - H[nr][nth / 2]);
+    }
     return H;
   };
 
@@ -48,6 +55,12 @@
     if (this.camX == null) this.camX = c.x;
     this.camX = c.x;                                           // the camera rides with the cart
     const X = (x) => W / 2 + (x - this.camX) * s, Z = (z) => Hc * this.groundY - z * s;
+    const D = this.ds;
+    if (D) {                                                     // the drawing's numbers, in css px
+      D.set('scale', s / dpr); D.set('cam_x', this.camX); D.set('ground_px', Z(0) / dpr);
+      D.set('axle_px_x', X(c.x) / dpr); D.set('axle_px_y', Z(c.zw) / dpr); D.set('body_px_y', Z(c.zb) / dpr);
+      D.set('canvas_w', W / dpr); D.set('canvas_h', Hc / dpr);
+    }
     ctx.fillStyle = C.paper; ctx.fillRect(0, 0, W, Hc);
 
     // road and ground
@@ -186,6 +199,11 @@
     ctx.beginPath(); const [rx0, ry0] = P(Ro, 0, Hglass), [rx1, ry1] = P(Ro, 0, -base); ctx.moveTo(rx0, ry0); ctx.lineTo(rx1, ry1); ctx.stroke();
     ctx.beginPath(); ell(-base, Ro, 0, Math.PI); ctx.stroke();
     this.lastSurface = Hs;
+    if (this.ds) {                                               // where the head's middle sits at the front and back wall
+      const D = this.ds, fr = P(R * 0.98, 0, Hs[nr][0] + hh / 2), bk = P(-R * 0.98, 0, Hs[nr][nth / 2] + hh / 2);
+      D.set('front_px_x', fr[0] / dpr); D.set('front_px_y', fr[1] / dpr); D.set('back_px_x', bk[0] / dpr); D.set('back_px_y', bk[1] / dpr);
+      D.set('head_h', hh); D.set('elev', this.elev);
+    }
   };
 
   root.StoutView = View;
