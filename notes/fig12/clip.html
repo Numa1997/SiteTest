@@ -1,0 +1,29 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Fig. 12 clip harness</title>
+<link rel="stylesheet" href="/public/fonts/plex.css">
+<style>html,body{margin:0;background:#f5f1ea}canvas{display:block}</style></head><body>
+<canvas id="cv" width="1280" height="720"></canvas>
+<script src="/public/scripts/coffee-cart.js"></script>
+<script src="/public/scripts/coffee-view.js"></script>
+<script>
+const q = new URLSearchParams(location.search);
+const dx = +(q.get('dx') || 0.003);
+const world = new CoffeeCart.World({ fluid: { dx, R: 0.04, h0: 0.10, H: 0.13 }, road: { bumps: [{ x: 1.0, h: 0.02, L: 0.25 }, { x: 3.0, h: 0.02, L: 0.25 }], Rw: 0.04 },
+  cart: { x0: 0.6, Rw: 0.04, Ls: 0.135 }, dtMax: 1 / 100 });
+const cv = document.getElementById('cv');
+const view = new CoffeeView(cv, world, { scale: 1650, groundY: 0.9 });
+let log = [];
+function info() {
+  const c = world.cart, f = world.fluid, ctx = cv.getContext('2d'), Hs = view.lastSurface;
+  const nth = view.nth, nr = view.nr, front = Hs[nr][0], back = Hs[nr][nth / 2];
+  ctx.fillStyle = '#1c1518'; ctx.font = '15px "IBM Plex Mono", monospace'; ctx.textAlign = 'left';
+  const L = [`t   ${world.t.toFixed(2)} s`, `v   ${c.vx.toFixed(3)} m/s`, `a_x ${world.lastAx.toFixed(2)} m/s²  (glass, along the road)`,
+    `a_z ${world.lastAz.toFixed(2)} m/s²  (glass, vertical)`, `stout at the front wall − back wall  ${((front - back) * 1000).toFixed(1)} mm`];
+  L.forEach((s, i) => ctx.fillText(s, 28, 40 + 22 * i));
+  ctx.fillStyle = '#6b6166'; ctx.font = '12px "IBM Plex Mono", monospace';
+  ctx.fillText(`3D Navier–Stokes (APIC, ${f.np} particles in the half glass, ${(dx * 1000).toFixed(0)} mm cells), coupled both ways to the cart · the head is drawn, 12 mm thick`, 28, 720 - 20);
+  log.push([world.t, c.x, c.vx, world.lastAx, world.lastAz, front - back]);
+}
+window.frame = (dt) => { if (dt > 0) world.advance(dt); view.draw(); info(); return world.t; };
+window.getLog = () => log;
+document.fonts.ready.then(() => { window.frame(0); window.ready = true; });
+</script></body></html>
