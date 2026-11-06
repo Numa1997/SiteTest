@@ -12,8 +12,8 @@ glass's frame, in the measured shape of the glass, open at the top: stout that r
 on the body or the road. The cart follows Newton's laws with a DC gear motor on a current-controlled drive, a PI speed loop
 (or open loop), an optional skyhook active suspension, and the reader's push (buttons, ← →) or hand (drag the cart). The two
 are coupled both ways. Grid 4 mm (default, faster) or 3 mm (`?grid=3`, closer). The caption shows the seconds simulated per
-second (measured in headless Chromium on the build machine, 4 mm: 0.24, up from 0.17 before the speed-up of 6 November 2026;
-see "Speed").
+second (measured in headless Chromium on the 4-core build machine, 4 mm: 0.31 with 4 threads, 0.24 with one, 0.17 before the
+speed-up of 6 November 2026; see "Speed").
 
 ## Files
 
@@ -29,6 +29,9 @@ see "Speed").
 | `tools/fig12/same.cjs` | fingerprint of the state after 1 s with a push (SHA-256 of particles, φ, pressure): a speed-up must not change it |
 | `notes/fig12/test.cjs` | browser test (desktop, phone): run, push with and without the speed loop, drag, no errors, no sideways scroll |
 | `notes/fig12/panel-test.cjs`, `panel-test2.cjs`, `spill-test.cjs` | data panel: every check and read-back; on a bump at three widths, Read values, a round, Save, idle; while spilling |
+| `public/scripts/stout-pool.js`, `stout-worker.js` | the solver's loops shared over worker threads (shared memory; same numbers) |
+| `notes/fig12/serve.cjs` | serves `public/` with the isolation headers Cloudflare sends for this page (tests with threads) |
+| `notes/fig12/threads-test.cjs` | in Chromium: the threaded solver gives the single-thread numbers to the last digit; threads named in the readout |
 | `notes/fig12/clip.html`, `clip.cjs` | renders a clip of the run (PNG frames, MP4) |
 | `public/images/sims/beer-slosh.webp` | catalog thumbnail, 800 × 500 |
 
@@ -102,9 +105,30 @@ The changes compute the same numbers in the same order: `same.cjs` prints `sha25
 - Advection: one sampling closure per velocity component (same formula as `Fluid.sample`, without its dispatch).
 - Tried and dropped: one pass over the particles for all three components in the transfers (slower, 2.7 against 2.2 ms).
 
-What would go further: the page is limited by one processor core. Splitting the particle and cell loops over Web Workers needs
-shared memory, which browsers allow only on a page served with `Cross-Origin-Embedder-Policy` (the site already sends
-`Cross-Origin-Opener-Policy: same-origin`, and the page loads nothing from other origins).
+### Threads (6 November 2026)
+
+`public/scripts/stout-pool.js` and `stout-worker.js` share four loops of each step with `navigator.hardwareConcurrency − 1` worker
+threads (at most 7) plus the page's own thread: the level-set search (every P-th cell of the list), grid-to-particle and advection
+(contiguous particle ranges), particle-to-grid (each thread owns a slab of grid layers with about equal particle counts and adds,
+in particle order, every term that lands in its slab, so each grid value gets the same terms in the same order). The arrays the
+threads touch are made in shared memory (`new Fluid({shared: true})`, `Fluid.mk`); the store holds the same shared particle
+arrays (`World.attach`). The page's thread spins on a shared counter until the workers are done (a page's thread may not block);
+a worker whose share throws still counts itself done and the page goes on alone. Off with `?threads=1`; off where the browser
+gives no shared memory (no `crossOriginIsolated`): the page then runs exactly as before.
+
+Shared memory needs a cross-origin-isolated page: `public/_headers` sends `Cross-Origin-Embedder-Policy: require-corp` for
+`/simulations/beer-slosh.html` and `/simulations/beer-slosh` (the site already sends `Cross-Origin-Opener-Policy: same-origin`
+everywhere; the page loads nothing from other origins). `notes/fig12/serve.cjs` serves `public/` with the same headers for tests.
+
+Measured in headless Chromium on the 4-core build machine (`pagerate`, 10 s of the running page, two runs each): 1 thread
+18.6–19.1 ms a step, 0.235–0.240 s simulated per s; 4 threads 14.3–14.4 ms, 0.306–0.310 s/s. Per parallel task (4 threads, 100
+steps): search 1.0 ms, grid-to-particle 0.6, particle-to-grid 1.2, advection 1.3 ms on the page's thread, then 0.5–0.7 ms
+waiting for the workers. Identity: `notes/fig12/threads-test.cjs` runs the `same.cjs` case in the page with 1 thread and with 4
+and prints the same line as Node (`sha256 7747da757ea9d800` at 4 mm).
+
+What stays serial: the pressure solve (≈ 4.4 ms; the MIC(0) sweeps run cell after cell, and splitting its sums would change
+their order), the bins, the wall pass and the extrapolation (≈ 3 ms). So a step cannot fall much below about 8–10 ms on any
+number of cores (inference from the phase times): about half real time at best on this grid.
 
 ## Checks (measured)
 

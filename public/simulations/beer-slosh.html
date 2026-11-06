@@ -218,7 +218,7 @@
                         <p><b>A defect found and fixed.</b> The first version could not hold a steady tilt: under a steady push its centre of mass reached only 15 % of the value it must reach. On a tilted surface many cells hold a few particles yet sit just above the zero of the smooth function; forced to count as liquid there, they received a needless pressure kick every step, which stirred a circulation down the high wall that ate the tilt. Giving each particle a radius of 1.8 particle spacings in that function makes every cell with particles read as liquid, and the tilt holds (Section 09).</p>
                         <p><b>Half the glass.</b> The road pushes only along \(x\) and up, and the glass is round, so the flow is its own mirror image across the vertical plane of travel; only \(y \ge 0\) is computed: 25 666 particles on 20 × 10 × 45 cells at 4 mm, 61 407 at 3 mm. Swirling waves that break this symmetry are left out.</p>
                         <p><b>Viscosity.</b> \(\nu\nabla^2\mathbf u\) is in, with \(\nu = 10^{-6}\) m²/s (water’s). The layer at the wall where viscosity holds the liquid, \(\sqrt{\nu/\omega}\approx 0.2\) mm thick, is far thinner than a cell, so the stout slides freely along the wall.</p>
-                        <p><b>Time.</b> The cart, motor, controller and suspension are stepped every 0.1 ms inside each fluid step (symplectic Euler for the mechanics; the current and the actuator follow their lags exactly over a step; the controller runs every 1 ms), with the glass’s mean acceleration over the step handed to the stout. Your computer sets the pace: the caption shows the seconds simulated per second. One fluid step (5 ms of the stout’s life) costs about 19 ms of computing at 4 mm on the machine this page was built on, so the run goes about four times slower than life. The solver skips only work whose answer is known beforehand (air with no particle within reach, cells away from the liquid), and gives the same numbers, to the last digit, as the plain loops.</p>
+                        <p><b>Time.</b> The cart, motor, controller and suspension are stepped every 0.1 ms inside each fluid step (symplectic Euler for the mechanics; the current and the actuator follow their lags exactly over a step; the controller runs every 1 ms), with the glass’s mean acceleration over the step handed to the stout. Your computer sets the pace: the caption shows the seconds simulated per second. One fluid step (5 ms of the stout’s life) costs about 19 ms of computing at 4 mm on the machine this page was built on, so the run goes about four times slower than life. The solver skips only work whose answer is known beforehand (air with no particle within reach, cells away from the liquid), and gives the same numbers, to the last digit, as the plain loops. Where the browser allows it, four of the loops (the surface search, the two transfers between particles and grid, the particles’ motion) are shared among your processor’s cores, each core doing the same arithmetic for its share, so the numbers are again the same to the last digit; the readout under the figure says how many threads run (on four cores, 14 ms a step instead of 19). The pressure solve cannot be shared this way: each cell of its sweeps needs the one before. It costs about 4.4 ms of every step, which is why real time is out of reach at this grid.</p>
                     </section>
 
                     <section class="psec" id="p-checks">
@@ -283,6 +283,7 @@
     <script src="../scripts/dataset.js"></script>
     <script src="../scripts/guinness-glass.js"></script>
     <script src="../scripts/stout-cart.js"></script>
+    <script src="../scripts/stout-pool.js"></script>
     <script src="../scripts/stout-view.js"></script>
     <script>
     (function () {
@@ -290,6 +291,10 @@
         var cv = document.getElementById('cv'), stage = document.getElementById('stage');
         var pushF = Sim.slider('pushF', { format: function (v) { return v.toFixed(1) + ' N'; } });
         var GRID = /[?&]grid=3\b/.test(location.search) ? 0.003 : 0.004;
+        // worker threads share the solver's loops when the browser allows shared memory (identical numbers; ?threads=1 turns them off)
+        var NCPU = navigator.hardwareConcurrency || 1, THREADS = /[?&]threads=1\b/.test(location.search) ? 1 : Math.min(8, NCPU);
+        var POOL = null;
+        try { if (window.crossOriginIsolated && typeof SharedArrayBuffer === 'function' && window.StoutPool && THREADS > 1) POOL = new StoutPool(THREADS - 1, '../scripts/stout-worker.js'); } catch (e) { POOL = null; }
         document.getElementById(GRID === 0.003 ? 'grid-3' : 'grid-4').classList.remove('btn--ghost');
         document.getElementById(GRID === 0.003 ? 'grid-3' : 'grid-4').setAttribute('aria-pressed', 'true');
         document.getElementById('grid-3').addEventListener('click', function () { if (GRID !== 0.003) location.search = '?grid=3'; });
@@ -315,7 +320,7 @@
         }
         function build() {
             world = new StoutCart.World({
-                fluid: { dx: GRID, profile: GUINNESS_GLASS, h0: 0.125, H: (GUINNESS_GLASS.R.length - 1) * GUINNESS_GLASS.dz + 0.03 },
+                fluid: { dx: GRID, profile: GUINNESS_GLASS, h0: 0.125, H: (GUINNESS_GLASS.R.length - 1) * GUINNESS_GLASS.dz + 0.03, shared: !!POOL },
                 road: { bumps: bumps(bumpH.value / 1000), Rw: 0.04, xmin: -1, xmax: 125 },
                 cart: { x0: 0.5, Rw: 0.04, Ls: 0.135, v0: v0.value, ctrl: ctrlMode, susp: susp.checked },
                 dtMax: 1 / 200
@@ -324,6 +329,7 @@
             if (!ds) declare();
             storeConstants();
             world.attach(ds); view.ds = ds;
+            if (POOL) POOL.attach(world.fluid);
             ds.set('bump_h', bumpH.value / 1000); ds.set('v0', v0.value); ds.set('ctrl_on', ctrlMode === 'speed' ? 1 : 0); ds.set('susp_on', susp.checked ? 1 : 0);
             ds.set('spilled_g', 0);
             lastWall = 0; lastSim = 0; simPerReal = 0;
@@ -381,7 +387,7 @@
             $('r-N').textContent = c.N.toFixed(1) + ' N';
             $('r-i').textContent = c.i.toFixed(2) + ' A';
             $('r-sp').textContent = ((world.spilledMass || 0) * 1000).toFixed(1) + ' g';
-            $('r-solver').textContent = f.np + ' particles · ' + f.nx + '×' + f.ny + '×' + f.nz + ' cells · CG ' + f.cgIters + ' it.';
+            $('r-solver').textContent = f.np + ' particles · ' + f.nx + '×' + f.ny + '×' + f.nz + ' cells · CG ' + f.cgIters + ' it. · ' + (f.pool ? f.pool.P : 1) + (f.pool && f.pool.P > 1 ? ' threads' : ' thread');
             $('cap-rate').textContent = simPerReal > 0 ? (simPerReal.toFixed(2) + ' s simulated per s') : '—';
         }
 
@@ -687,7 +693,7 @@
         });
         Sim.playButton(document.getElementById('play'), clk);
         view.draw(); readouts();
-        window.Fig12 = { get world() { return world; }, get view() { return view; } };
+        window.Fig12 = { get world() { return world; }, get view() { return view; }, pool: POOL };
     })();
     </script>
     <script src="../scripts/datalog.js"></script>
