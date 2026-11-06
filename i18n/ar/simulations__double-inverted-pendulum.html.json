@@ -91,6 +91,10 @@
   "src": "Switch the motor off, \\(u = 0\\). Row 1 of (10) says the sideways momentum is conserved; starting from rest, \\(d_1\\dot x = -d_2\\dot\\theta_1 - d_3\\dot\\theta_2\\). Using that to remove \\(\\ddot x\\) from rows 2 and 3 leaves two equations for the angles alone,",
   "tr": "أوقف المحرّك، \\(u = 0\\). يقول الصفّ 1 من (10) إن كمية الحركة الجانبية محفوظة؛ وبالانطلاق من السكون \\(d_1\\dot x = -d_2\\dot\\theta_1 - d_3\\dot\\theta_2\\). وباستعمال ذلك لحذف \\(\\ddot x\\) من الصفّين 2 و3 تبقى معادلتان للزاويتين وحدهما،"
  },
+ "0988dbd8e05d": {
+  "src": "whatever you write; the page measures its divergence \\(\\partial u/\\partial x + \\partial v/\\partial y\\) at every arrow and says whether a liquid could flow so",
+  "tr": "أيًّا ما تكتب؛ تقيس الصفحة تباعده \\(\\partial u/\\partial x + \\partial v/\\partial y\\) عند كل سهم وتقول إن كان سائل يمكن أن يجري هكذا"
+ },
  "099f2a29cb12": {
   "src": "two opposed jets",
   "tr": "نفثان متقابلان"
@@ -466,6 +470,10 @@
  "376903f2baa7": {
   "src": "the cart's added mass, \\(-K_x\\Delta t\\), 4.8, 9.6 and 19.2 cells across its height",
   "tr": "الكتلة المضافة للعربة، \\(-K_x\\Delta t\\)، 4.8 و 9.6 و 19.2 خلية على ارتفاعها"
+ },
+ "37dbac1698b5": {
+  "src": "\\((u(x, y, t),\\ v(x, y, t))\\), the two formulas you type under the menu",
+  "tr": "\\((u(x, y, t),\\ v(x, y, t))\\)، المعادلتان اللتان تكتبهما تحت القائمة"
  },
  "38662767d183": {
   "src": "Stir tea with a spoon, stop, and sweep back: the spoon meets the swirl it left, and the swirl pushes it. A swimmer feels the water the person in front has set moving. Nothing of this is in sections 13.1–13.5, where the flow is given and the bodies only feel it. Choose <i>The fluid: solved</i> under the figure and the water becomes a field the page computes: every push of the cart and the rods goes into the water, the water carries it away as wakes and swirls, and those come back to push the bodies. Momentum leaves the machine and enters the water, and the reverse, in equal amounts: Newton's third law, point by point.",
@@ -1131,6 +1139,10 @@
   "src": "Take the simplest machine that falls: one mode, \\(\\dot z = \\sigma z + b u\\), with a rate \\(\\sigma\\) as in section 5. Act on it at every instant with \\(u = -\\kappa z\\) and it decays as \\(e^{(\\sigma - \\gamma)t}\\), where \\(\\gamma = b\\kappa\\) is the strength of the feedback in the units of a rate; the loop works for any \\(\\gamma &gt; \\sigma\\), however large. Now act on it every \\(T_s\\) and hold. Between looks (16a) applies with \\(\\Phi = e^{\\sigma T_s}\\) and \\(\\Gamma = (b/\\sigma)(e^{\\sigma T_s} - 1)\\), and with \\(u_k = -\\kappa z_k\\) each look multiplies \\(z\\) by",
   "tr": "لنأخذ أبسط آلة تسقط: نمط واحد، \\(\\dot z = \\sigma z + b u\\)، بمعدّل \\(\\sigma\\) كما في القسم 5. إذا أثّرنا فيه في كلّ لحظة بـ \\(u = -\\kappa z\\) خمد مثل \\(e^{(\\sigma - \\gamma)t}\\)، حيث \\(\\gamma = b\\kappa\\) قوّة التغذية الراجعة بوحدة معدّل؛ وتعمل الحلقة لأيّ \\(\\gamma &gt; \\sigma\\) مهما كبر. أمّا الآن فنؤثّر فيه كلّ \\(T_s\\) ونمسك. بين النظرات تنطبق (16a) مع \\(\\Phi = e^{\\sigma T_s}\\) و\\(\\Gamma = (b/\\sigma)(e^{\\sigma T_s} - 1)\\)، ومع \\(u_k = -\\kappa z_k\\) تضرب كلّ نظرة \\(z\\) في"
  },
+ "927615a67859": {
+  "src": "your own field",
+  "tr": "حقلك الخاص"
+ },
  "93a461e597df": {
   "src": "Arrive at rest",
   "tr": "الوصول ساكنًا"
@@ -1330,6 +1342,10 @@
  "a975eea30db9": {
   "src": "Parameters",
   "tr": "المعلمات"
+ },
+ "a9a53e6fceb3": {
+  "src": "Your own field: type its velocity u across and v up, in m/s, as formulas in x and y (metres along the rail and up from it), t (seconds) and U (the speed slider). The rods and the cart feel it but do not change it, as with the other flows given here; the arrows are drawn from it, darker where it is slow, red where it is fast.",
+  "tr": "حقلك الخاص: اكتب سرعته u عرضًا و v صعودًا، بوحدة m/s، معادلاتٍ في x و y (أمتار على امتداد السكّة وصعودًا منها)، و t (ثوانٍ)، و U (منزلق السرعة). يشعر به القضيبان والعربة لكنهم لا يغيّرونه، كما في الجريانات المعطاة الأخرى هنا؛ وتُرسم الأسهم منه، أغمق حيث يكون بطيئًا، وحمراء حيث يكون سريعًا."
  },
  "aadd6cd937c2": {
   "src": "is the cost the balancer still has to pay from the state \\(\\mathbf s\\). Its level sets \\(W = c\\) are nested ellipsoids around the upright rest. On the linear model, (15) and (16) give \\(\\dot W = -\\mathbf s^{\\mathsf T}(\\mathbf Q + \\rho\\mathbf K^{\\mathsf T}\\mathbf K)\\mathbf s\\), negative everywhere: the cost always falls. On the real machine, with the real equations (9) and the motor clipped at \\(u_\\text{max}\\), it need not. Suppose we find a level \\(c^\\ast\\) such that \\(\\dot W &lt; 0\\) at every point with \\(0 &lt; W \\le c^\\ast\\), the whole ellipsoid except its centre. Then a motion that starts inside can never leave: to cross the surface \\(W = c^\\ast\\) outward, \\(W\\) would have to rise there, and it cannot. Inside, \\(W\\) falls all the time, and since it is bounded below by zero and falls at a rate that does not die out away from the centre, it can only end at \\(W = 0\\), the upright rest. This is Lyapunov’s argument: a bowl in which the marble can only roll downhill. Negative \\(\\dot W\\) on the surface alone would only keep the motion inside; it is the inside that brings it home, so the inside must be tested too.",
@@ -1646,6 +1662,10 @@
  "d1a525028612": {
   "src": "with \\(\\dot x_\\text{ref} = \\dot e\\) along with it (check: \\(\\dot e(0) = (v + \\omega e_0) - \\omega e_0 = v\\)). The rate \\(\\omega\\) is our choice; the glide from one metre away at rest comes within a centimetre after 13 s. Its largest acceleration is at the start, \\(\\ddot e(0) = -\\omega^2 e_0 - 2\\omega v\\): 0.25 m/s² from one metre at rest, 1.25 m/s² when the cart also moves away at 1 m/s. A cart that accelerates at \\(a\\) can hold its rods only leaning: in the cart’s frame gravity tilts by the angle whose tangent is \\(a/g\\), and both rods must stand along it. The rule gives 1.5° at 0.25 m/s² and 7.3° at 1.25 m/s². The balancer’s reference keeps \\(\\theta = 0\\) all the same, so it meets the lean as a small error and lets it stand. Measured with the page’s equations and the 10 ms gains, the rods lean at most 0.9° in the first glide and 5.3° in the second, less than the rule says, because the cart cannot take up the reference’s acceleration at once and never reaches its peak; the motor needs at most 0.5 and 2.7 N. When the reference is within a centimetre of the target the panel says <i>Balancing</i> again.",
   "tr": "مع \\(\\dot x_\\text{ref} = \\dot e\\) معها (تحقّق: \\(\\dot e(0) = (v + \\omega e_0) - \\omega e_0 = v\\)). والمعدّل \\(\\omega\\) اختيارنا؛ والانزلاق من بُعد متر في سكون يقترب إلى سنتيمتر بعد 13 s. وأكبر تسارع له في البداية، \\(\\ddot e(0) = -\\omega^2 e_0 - 2\\omega v\\): 0.25 m/s² من متر في سكون، و1.25 m/s² حين تبتعد العربة أيضًا بسرعة 1 m/s. والعربة التي تتسارع بـ \\(a\\) لا تستطيع أن تمسك قضيبيها إلّا مائلين: ففي إطار العربة تميل الجاذبية بالزاوية التي ظلّها \\(a/g\\)، ويجب أن يقف القضيبان كلاهما على امتدادها. وتعطي القاعدة 1.5° عند 0.25 m/s² و7.3° عند 1.25 m/s². ومرجع متحكّم الموازنة يُبقي \\(\\theta = 0\\) مع ذلك، فيتلقّى الميل خطأً صغيرًا ويتركه قائمًا. وبالقياس بمعادلات الصفحة وكسوب 10 ms يميل القضيبان على الأكثر 0.9° في الانزلاق الأوّل و5.3° في الثاني، أقلّ ممّا تقوله القاعدة، لأنّ العربة لا تستطيع أن تأخذ تسارع المرجع دفعة واحدة فلا تبلغ ذروته أبدًا؛ ولا يحتاج المحرّك إلى أكثر من 0.5 و2.7 N. وحين يصير المرجع على بعد سنتيمتر من الهدف تعود اللوحة فتقول <i>يوازن</i>."
+ },
+ "d1cdd96d759f": {
+  "src": "your own field, u(x, y, t) and v(x, y, t)",
+  "tr": "حقلك الخاص، u(x, y, t) و v(x, y, t)"
  },
  "d1ed8fd76743": {
   "src": "Stop the cart",
