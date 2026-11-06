@@ -356,3 +356,15 @@ swing check against (17) (−3.335 mm per m/s² both ways), symbols renamed (ψ_
 - **Page**: store `road_kind`, `road_rms`, `mu`, `F_grip`, `F_motor0`, `slip`; checks F_drive = clip(b i, ±μN), the road's rms
   from its table, z_a over rough roads. `panel-test2.cjs` with `ROAD=setts CTRL=slosh` and `ROAD=isoD`: 219 checks, none differ,
   read-backs true at 1600, 1100, 390 px. Note §6.7 ★ ((R1)–(R4), Key result, Table 2a), sources [18]–[23].
+
+### Reviews of notes 11.9 and 6.7 (6 November 2026)
+
+`notes/fig12/check-11-9.md` (derivation check) confirmed (N4)–(N5) against FLT 2.17–2.18 term by term, FLT Table 1, the static tilt
+(−3.335 mm per m/s²), Table 5, and — with FLT's steady-state theory evaluated with the page's coefficients (m1 = −1.884) — the
+swirl regimes: boundaries ≈ 0.925, 0.985, 1.035 f11, so the model's runs at 0.97, 1.00, 1.03, 1.06 f11 agree. Corrected: Table 5's
+lean is the largest in the 2 s run; 4.6 %; which coefficients change by under 2 % from h/R = 1.5; seed s1 = 0.66 µm; the 5–15 %
+statement; §11.8's 1.2 % and 15–31 %; breaking at 21.2 mm called a linear estimate (real crests likely earlier, ~14–15 mm).
+`notes/fig12/check-6-7.md` and `referee-6-7.md`: ISO band start, rms reason, band values (open loop), (R1)/(R3)/(R4) split for
+phones, the averaging step written out with its assumptions and Landau & Lifshitz §27, f = vn and the long-wave picture, the
+suspension transmissibility check (1/(r² − 1) ≈ 0.2 at r = 2.4; 0.2 × 0.72 = 0.14 vs 0.142 measured), the setts' 5.9 Hz, the
+washboard as a direct resonance, b i defined at use.

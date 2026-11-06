@@ -1191,7 +1191,7 @@
   // reproduces their Table 1. The equations are linear in the accelerations: each substep solves a 5 x 5 system for them,
   // then symplectic Euler. Heave scales gravity, sigma^2 -> sigma^2 (1 + a_z/g). Linear damping 2 zeta sigma beta' per mode
   // (zeta of mode 1 from the wall's boundary layer, as in ModalFluid; the others scaled by (sigma_1/sigma)^1/2). A swirl is a
-  // broken left–right symmetry; a real glass always has a little asymmetry, so r1 starts at 1e-5 R (0.4 um), the seed.
+  // broken left–right symmetry; a real glass always has a little asymmetry, so r1 starts at 1e-5 (a sideways swing s1 of 0.66 um at the wall), the seed.
   const NMNAMES = ['p0', 'p1', 'r1', 'p2', 'r2'];
   function Jm(m, x) { let t = Math.pow(x / 2, m); for (let k = 1; k <= m; k++) t /= k; let s = 0; for (let k = 0; k < 80; k++) { s += t; t *= -(x * x / 4) / ((k + 1) * (k + 1 + m)); if (Math.abs(t) < 1e-17) break; } return s; }
   function NMFluid(o) {
