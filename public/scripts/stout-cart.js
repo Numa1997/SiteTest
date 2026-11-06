@@ -151,31 +151,69 @@
     return [this.w, nx, ny, nz + 1, 0.5, 0.5, 0];
   };
 
+  // trilinear value of component c at (x, y, z); flat code, no allocation (the hot path of advection)
   Fluid.prototype.sample = function (c, x, y, z) {
-    const [a, sx, sy, sz, ox, oy, oz] = this.comp(c);
-    const S = stencil(this, x, y, z, sx, sy, sz, ox, oy, oz);
-    let s = 0;
-    for (let m = 0; m < 8; m++) s += a[S.idx[m]] * S.wt[m];
-    return s;
+    const dx = this.dx, nx = this.nx, ny = this.ny, nz = this.nz;
+    let a, sx, sy, sz, fx = (x - this.x0) / dx, fy = y / dx, fz = z / dx;
+    if (c === 0) { a = this.u; sx = nx + 1; sy = ny; sz = nz; fy -= 0.5; fz -= 0.5; }
+    else if (c === 1) { a = this.v; sx = nx; sy = ny + 1; sz = nz; fx -= 0.5; fz -= 0.5; }
+    else { a = this.w; sx = nx; sy = ny; sz = nz + 1; fx -= 0.5; fy -= 0.5; }
+    const i = Math.floor(fx), j = Math.floor(fy), k = Math.floor(fz), tx = fx - i, ty = fy - j, tz = fz - k;
+    const i0 = i < 0 ? 0 : i >= sx ? sx - 1 : i, i1 = i + 1 < 0 ? 0 : i + 1 >= sx ? sx - 1 : i + 1;
+    const j0 = j < 0 ? 0 : j >= sy ? sy - 1 : j, j1 = j + 1 < 0 ? 0 : j + 1 >= sy ? sy - 1 : j + 1;
+    const k0 = k < 0 ? 0 : k >= sz ? sz - 1 : k, k1 = k + 1 < 0 ? 0 : k + 1 >= sz ? sz - 1 : k + 1;
+    const sxy = sx * sy, b00 = j0 * sx + k0 * sxy, b10 = j1 * sx + k0 * sxy, b01 = j0 * sx + k1 * sxy, b11 = j1 * sx + k1 * sxy;
+    const c00 = a[i0 + b00] + tx * (a[i1 + b00] - a[i0 + b00]), c10 = a[i0 + b10] + tx * (a[i1 + b10] - a[i0 + b10]);
+    const c01 = a[i0 + b01] + tx * (a[i1 + b01] - a[i0 + b01]), c11 = a[i0 + b11] + tx * (a[i1 + b11] - a[i0 + b11]);
+    const d0 = c00 + ty * (c10 - c00), d1 = c01 + ty * (c11 - c01);
+    return d0 + tz * (d1 - d0);
   };
 
-  Fluid.prototype.p2g = function () {
-    const comps = [[this.u, this.mu, this.pu], [this.v, this.mv, this.pv], [this.w, this.mw, this.pw]];
-    for (let c = 0; c < 3; c++) {
-      const [a, m, pvel] = comps[c], [cx, cy, cz] = this.pc[c];
-      a.fill(0); m.fill(0);
-      const [, sx, sy, sz, ox, oy, oz] = this.comp(c);
-      for (let p = 0; p < this.np; p++) {
-        const S = stencil(this, this.px[p], this.py[p], this.pz[p], sx, sy, sz, ox, oy, oz);
-        const u0 = pvel[p], gx = cx[p], gy = cy[p], gz = cz[p];
-        for (let n = 0; n < 8; n++) {
-          const wt = S.wt[n];
-          a[S.idx[n]] += wt * (u0 + gx * S.dx[n] + gy * S.dy[n] + gz * S.dz[n]); m[S.idx[n]] += wt;
-        }
+  // APIC transfer kernels for one staggered component, flat code. For each particle: base node (i, j, k), fractions
+  // (tx, ty, tz); node offsets from the particle are ((a - tx) dx, (b - ty) dx, (c - tz) dx), a, b, c in {0, 1}.
+  Fluid.prototype.transfer = function (comp, toGrid) {
+    const dx = this.dx, nx = this.nx, ny = this.ny, nz = this.nz, np = this.np, inv = 1 / dx;
+    let a, m, pvel, sx, sy, sz, ox = 0, oy = 0, oz = 0;
+    if (comp === 0) { a = this.u; m = this.mu; pvel = this.pu; sx = nx + 1; sy = ny; sz = nz; oy = 0.5; oz = 0.5; }
+    else if (comp === 1) { a = this.v; m = this.mv; pvel = this.pv; sx = nx; sy = ny + 1; sz = nz; ox = 0.5; oz = 0.5; }
+    else { a = this.w; m = this.mw; pvel = this.pw; sx = nx; sy = ny; sz = nz + 1; ox = 0.5; oy = 0.5; }
+    const [cx, cy, cz] = this.pc[comp], sxy = sx * sy, px = this.px, py = this.py, pz = this.pz, x0 = this.x0;
+    if (toGrid) { a.fill(0); m.fill(0); }
+    for (let p = 0; p < np; p++) {
+      const fx = (px[p] - x0) * inv - ox, fy = py[p] * inv - oy, fz = pz[p] * inv - oz;
+      const i = Math.floor(fx), j = Math.floor(fy), k = Math.floor(fz), tx = fx - i, ty = fy - j, tz = fz - k;
+      const I0 = i < 0 ? 0 : i >= sx ? sx - 1 : i, I1 = i + 1 < 0 ? 0 : i + 1 >= sx ? sx - 1 : i + 1;
+      const J0 = j < 0 ? 0 : j >= sy ? sy - 1 : j, J1 = j + 1 < 0 ? 0 : j + 1 >= sy ? sy - 1 : j + 1;
+      const K0 = k < 0 ? 0 : k >= sz ? sz - 1 : k, K1 = k + 1 < 0 ? 0 : k + 1 >= sz ? sz - 1 : k + 1;
+      const n000 = I0 + J0 * sx + K0 * sxy, n100 = I1 + J0 * sx + K0 * sxy, n010 = I0 + J1 * sx + K0 * sxy, n110 = I1 + J1 * sx + K0 * sxy;
+      const n001 = I0 + J0 * sx + K1 * sxy, n101 = I1 + J0 * sx + K1 * sxy, n011 = I0 + J1 * sx + K1 * sxy, n111 = I1 + J1 * sx + K1 * sxy;
+      const ux = 1 - tx, uy = 1 - ty, uz = 1 - tz;
+      const w000 = ux * uy * uz, w100 = tx * uy * uz, w010 = ux * ty * uz, w110 = tx * ty * uz;
+      const w001 = ux * uy * tz, w101 = tx * uy * tz, w011 = ux * ty * tz, w111 = tx * ty * tz;
+      if (toGrid) {
+        const u0 = pvel[p], gx = cx[p] * dx, gy = cy[p] * dx, gz = cz[p] * dx;
+        const ax0 = -tx * gx, ax1 = (1 - tx) * gx, ay0 = -ty * gy, ay1 = (1 - ty) * gy, az0 = -tz * gz, az1 = (1 - tz) * gz;
+        a[n000] += w000 * (u0 + ax0 + ay0 + az0); m[n000] += w000;
+        a[n100] += w100 * (u0 + ax1 + ay0 + az0); m[n100] += w100;
+        a[n010] += w010 * (u0 + ax0 + ay1 + az0); m[n010] += w010;
+        a[n110] += w110 * (u0 + ax1 + ay1 + az0); m[n110] += w110;
+        a[n001] += w001 * (u0 + ax0 + ay0 + az1); m[n001] += w001;
+        a[n101] += w101 * (u0 + ax1 + ay0 + az1); m[n101] += w101;
+        a[n011] += w011 * (u0 + ax0 + ay1 + az1); m[n011] += w011;
+        a[n111] += w111 * (u0 + ax1 + ay1 + az1); m[n111] += w111;
+      } else {
+        const q000 = a[n000], q100 = a[n100], q010 = a[n010], q110 = a[n110], q001 = a[n001], q101 = a[n101], q011 = a[n011], q111 = a[n111];
+        pvel[p] = w000 * q000 + w100 * q100 + w010 * q010 + w110 * q110 + w001 * q001 + w101 * q101 + w011 * q011 + w111 * q111;
+        // the velocity gradient at the particle: derivatives of the trilinear weights
+        cx[p] = inv * (uy * uz * (q100 - q000) + ty * uz * (q110 - q010) + uy * tz * (q101 - q001) + ty * tz * (q111 - q011));
+        cy[p] = inv * (ux * uz * (q010 - q000) + tx * uz * (q110 - q100) + ux * tz * (q011 - q001) + tx * tz * (q111 - q101));
+        cz[p] = inv * (ux * uy * (q001 - q000) + tx * uy * (q101 - q100) + ux * ty * (q011 - q010) + tx * ty * (q111 - q110));
       }
-      for (let n = 0; n < a.length; n++) a[n] = m[n] > 1e-9 ? a[n] / m[n] : 0;
     }
+    if (toGrid) for (let n = 0; n < a.length; n++) a[n] = m[n] > 1e-9 ? a[n] / m[n] : 0;
   };
+  Fluid.prototype.p2g = function () { for (let c = 0; c < 3; c++) this.transfer(c, true); };
+  Fluid.prototype.g2p = function () { for (let c = 0; c < 3; c++) this.transfer(c, false); };
 
   // particles sorted by cell (cellStart, sorted) and counted per cell (cnt)
   Fluid.prototype.levelSetBins = function () {
@@ -313,28 +351,17 @@
     for (let k = 0; k < nz; k++) for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) {
       const c = i + nx * (j + ny * k);
       if (!fl[c]) continue;
-      // the six faces: [weight, velocity, sign, neighbour cell or -1]
-      const faces = [
-        [this.au[U(i + 1, j, k)], this.u[U(i + 1, j, k)], 1, i + 1 < nx ? c + 1 : -1, 0],
-        [this.au[U(i, j, k)], this.u[U(i, j, k)], -1, i > 0 ? c - 1 : -1, 0],
-        [this.av[V(i, j + 1, k)], this.v[V(i, j + 1, k)], 1, j + 1 < ny ? c + nx : -1, 1],
-        [this.av[V(i, j, k)], this.v[V(i, j, k)], -1, j > 0 ? c - nx : -1, 1],
-        [this.aw[Wd(i, j, k + 1)], this.w[Wd(i, j, k + 1)], 1, k + 1 < nz ? c + nx * ny : -1, 2],
-        [this.aw[Wd(i, j, k)], this.w[Wd(i, j, k)], -1, k > 0 ? c - nx * ny : -1, 2],
-      ];
+      // the six faces, written out: open fraction, velocity, side (+1 high, -1 low), neighbour cell or -1
       let div = 0;
-      for (let f = 0; f < 6; f++) {
-        const [wt, vel, s, nb, axis] = faces[f];
-        if (wt <= 0) continue;
-        div += s * wt * vel;
-        if (nb < 0) continue;
-        if (fl[nb]) {
-          Ad[c] += wt;
-          if (s > 0) { if (axis === 0) Ax[c] = -wt; else if (axis === 1) Ay[c] = -wt; else Az[c] = -wt; }
-        } else {
-          Ad[c] += wt / th(c, nb);
-        }
-      }
+      const fu1 = U(i + 1, j, k), fu0 = U(i, j, k), fv1 = V(i, j + 1, k), fv0 = V(i, j, k), fw1 = Wd(i, j, k + 1), fw0 = Wd(i, j, k);
+      let wt;
+      wt = this.au[fu1]; if (wt > 0) { div += wt * this.u[fu1]; if (i + 1 < nx) { if (fl[c + 1]) { Ad[c] += wt; Ax[c] = -wt; } else Ad[c] += wt / th(c, c + 1); } }
+      wt = this.au[fu0]; if (wt > 0) { div -= wt * this.u[fu0]; if (i > 0) { if (fl[c - 1]) Ad[c] += wt; else Ad[c] += wt / th(c, c - 1); } }
+      wt = this.av[fv1]; if (wt > 0) { div += wt * this.v[fv1]; if (j + 1 < ny) { if (fl[c + nx]) { Ad[c] += wt; Ay[c] = -wt; } else Ad[c] += wt / th(c, c + nx); } }
+      wt = this.av[fv0]; if (wt > 0) { div -= wt * this.v[fv0]; if (j > 0) { if (fl[c - nx]) Ad[c] += wt; else Ad[c] += wt / th(c, c - nx); } }
+      const nxy = nx * ny;
+      wt = this.aw[fw1]; if (wt > 0) { div += wt * this.w[fw1]; if (k + 1 < nz) { if (fl[c + nxy]) { Ad[c] += wt; Az[c] = -wt; } else Ad[c] += wt / th(c, c + nxy); } }
+      wt = this.aw[fw0]; if (wt > 0) { div -= wt * this.w[fw0]; if (k > 0) { if (fl[c - nxy]) Ad[c] += wt; else Ad[c] += wt / th(c, c - nxy); } }
       b[c] = -dx * div;
     }
     this.pcg();
@@ -391,11 +418,11 @@
       if (e < sigma * Ad[c]) e = Ad[c];
       pc[c] = e > 1e-30 ? 1 / Math.sqrt(e) : 0;
     }
+    // A x and the MIC(0) preconditioner, in nested loops (no division or modulo in the inner loop)
     const applyA = (x, out) => {
-      for (let c = 0; c < nc; c++) {
+      for (let k = 0, c = 0; k < nz; k++) for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++, c++) {
         if (!fl[c]) { out[c] = 0; continue; }
         let v = Ad[c] * x[c];
-        const i = c % nx, j = Math.floor(c / nx) % ny, k = Math.floor(c / nxy);
         if (i + 1 < nx) v += Ax[c] * x[c + 1];
         if (i > 0) v += Ax[c - 1] * x[c - 1];
         if (j + 1 < ny) v += Ay[c] * x[c + nx];
@@ -407,29 +434,30 @@
     };
     const precond = (rr, out) => {
       const t = this.tmpPre || (this.tmpPre = new Float64Array(nc));
-      for (let c = 0; c < nc; c++) {
+      for (let k = 0, c = 0; k < nz; k++) for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++, c++) {
         if (!fl[c]) { t[c] = 0; continue; }
         let v = rr[c];
-        const i = c % nx, j = Math.floor(c / nx) % ny, k = Math.floor(c / nxy);
         if (i > 0) v -= Ax[c - 1] * pc[c - 1] * t[c - 1];
         if (j > 0) v -= Ay[c - nx] * pc[c - nx] * t[c - nx];
         if (k > 0) v -= Az[c - nxy] * pc[c - nxy] * t[c - nxy];
         t[c] = v * pc[c];
       }
-      for (let c = nc - 1; c >= 0; c--) {
+      for (let k = nz - 1, c = nc - 1; k >= 0; k--) for (let j = ny - 1; j >= 0; j--) for (let i = nx - 1; i >= 0; i--, c--) {
         if (!fl[c]) { out[c] = 0; continue; }
         let v = t[c];
-        const i = c % nx, j = Math.floor(c / nx) % ny, k = Math.floor(c / nxy);
         if (i + 1 < nx) v -= Ax[c] * pc[c] * out[c + 1];
         if (j + 1 < ny) v -= Ay[c] * pc[c] * out[c + nx];
         if (k + 1 < nz) v -= Az[c] * pc[c] * out[c + nxy];
         out[c] = v * pc[c];
       }
     };
-    q.fill(0); r.set(b);
-    let rmax = 0; for (let c = 0; c < nc; c++) rmax = Math.max(rmax, Math.abs(r[c]));
-    if (rmax < 1e-14) { this.cgIters = 0; return; }
-    const tol = 1e-7 * rmax;
+    // warm start from the previous step's pressure (it changes little between steps); tolerance relative to |b|
+    let bmax = 0; for (let c = 0; c < nc; c++) { if (!fl[c]) q[c] = 0; if (Math.abs(b[c]) > bmax) bmax = Math.abs(b[c]); }
+    if (bmax < 1e-14) { q.fill(0); this.cgIters = 0; return; }
+    applyA(q, r);
+    let rmax = 0; for (let c = 0; c < nc; c++) { r[c] = fl[c] ? b[c] - r[c] : 0; if (Math.abs(r[c]) > rmax) rmax = Math.abs(r[c]); }
+    const tol = 1e-7 * bmax;
+    if (rmax < tol) { this.cgIters = 0; return; }
     precond(r, z); s.set(z);
     let sigmaR = 0; for (let c = 0; c < nc; c++) sigmaR += z[c] * r[c];
     let it = 0;
@@ -472,20 +500,6 @@
         valid.set(nv);
       }
       for (let n = 0; n < a.length; n++) if (!valid[n]) a[n] = 0;
-    }
-  };
-
-  Fluid.prototype.g2p = function () {
-    const comps = [[this.u, this.pu], [this.v, this.pv], [this.w, this.pw]];
-    for (let c = 0; c < 3; c++) {
-      const [a, pvel] = comps[c], [cx, cy, cz] = this.pc[c];
-      const [, sx, sy, sz, ox, oy, oz] = this.comp(c);
-      for (let p = 0; p < this.np; p++) {
-        const S = stencil(this, this.px[p], this.py[p], this.pz[p], sx, sy, sz, ox, oy, oz);
-        let vn = 0, gx = 0, gy = 0, gz = 0;
-        for (let n = 0; n < 8; n++) { const q = a[S.idx[n]]; vn += q * S.wt[n]; gx += q * S.gx[n]; gy += q * S.gy[n]; gz += q * S.gz[n]; }
-        pvel[p] = vn; cx[p] = gx; cy[p] = gy; cz[p] = gz;
-      }
     }
   };
 

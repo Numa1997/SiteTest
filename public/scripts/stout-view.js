@@ -20,6 +20,7 @@
     this.nr = o.nr || 9; this.nth = o.nth || 48;
     this.bodyW = 0.22; this.bodyH = 0.03; this.headH = o.headH != null ? o.headH : 0.012; this.carrierGap = 0.006; this.glassWall = 0.004; this.glassBase = 0.006;
     this.groundY = o.groundY || 0.80;   // fraction of canvas height where z = 0 sits
+    this.viewHeight = o.viewHeight || 0; // metres of scene shown top to bottom (0: use scale)
     this.camX = null;
   }
 
@@ -39,8 +40,11 @@
   };
 
   View.prototype.draw = function (extra) {
-    const ctx = this.ctx, W = this.cv.width, Hc = this.cv.height, s = this.scale, w = this.world, c = w.cart, f = w.fluid;
+    const ctx = this.ctx, W = this.cv.width, Hc = this.cv.height, w = this.world, c = w.cart, f = w.fluid;
+    ctx.setTransform(1, 0, 0, 1, 0, 0);                       // device pixels throughout
     const dpr = W / (this.cssW || W);
+    if (this.viewHeight) this.scale = Hc / this.viewHeight;    // fit a fixed height of the scene, in metres
+    const s = this.scale;
     if (this.camX == null) this.camX = c.x;
     this.camX = c.x;                                           // the camera rides with the cart
     const X = (x) => W / 2 + (x - this.camX) * s, Z = (z) => Hc * this.groundY - z * s;
