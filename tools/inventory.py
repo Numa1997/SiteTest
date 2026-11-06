@@ -221,6 +221,8 @@ RULES = [
     (r'tools/fig12/observer\.cjs', 'Fig. 12: the numbers of the note\u2019s Kalman-filter section: plant, LQR gains and poles, discrete matrices, settled gain, probe noise at rest.', 'docs/simulations/fig12-beer-slosh.md'),
     (r'tools/fig12/ident\.cjs', 'Fig. 12: fits one oscillator (frequency, damping, coupling) to the 3D solver\u2019s runs from rest.', 'docs/simulations/fig12-beer-slosh.md'),
     (r'notes/fig12/calm-shots\.cjs', 'Fig. 12: screenshots of the 3D stout swinging, then calmed by the slosh feedback switched on, at 1280 and 390 px.', 'docs/simulations/fig12-beer-slosh.md'),
+    (r'tools/fig12/nm_coeffs\.py', 'Fig. 12: derives the Narimanov\u2013Moiseev five-mode sloshing coefficients of a cylinder from the multimodal integrals (Faltinsen, Lukovsky & Timokha 2016) and checks them against their Table 1.', 'docs/simulations/fig12-beer-slosh.md'),
+    (r'notes/fig12/note-shots\.cjs', 'Fig. 12: opens the lecture note at 1280 and 390 px: KaTeX errors, sideways scroll, over-wide equations, screenshots of \u00a78.5.', 'docs/simulations/fig12-beer-slosh.md'),
     (r'notes/fig12/ctrl-shots\.cjs', 'Fig. 12: screenshots of the live model over a 25 mm bump with each controller, and the largest lean the page read.', 'docs/simulations/fig12-beer-slosh.md'),
     (r'tools/fig12/same\.cjs', 'Fig. 12: fingerprint (SHA-256) of the solver state after 1 s with a push; a speed-up must leave it unchanged.', 'docs/simulations/fig12-beer-slosh.md'),
     (r'public/scripts/guinness-glass\.js', 'Fig. 12: inner radius of the Guinness tulip pint every 0.5 mm, written by tools/fig12/glass_profile.py; do not edit.', 'docs/simulations/fig12-beer-slosh.md'),

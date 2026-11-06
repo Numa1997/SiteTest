@@ -290,5 +290,11 @@ stout's state directly; both models are controlled the same way.
   the stored modes (live) or the solver's reading (3D), and i_cmd in every controller (preview and slosh branches added). Read-back:
   the front probe's white dot. The head's read-back point moved to ¾ of its band so the probe's dot does not cover it.
   `panel-test2.cjs` (now with `CTRL=` and `NOISE=1`): live 208 checks, 3D 190, none differ, read-backs true at 1600, 1100, 390 px.
-- **Note**: §8.4 last paragraph and Table 3 updated, new §8.5 (probes, (53a)–(53f), the separation principle, Table 3a, breaking,
-  slow motion); §14 charts paragraph; abstract.
+- **Note**: §8.4 last paragraph and Table 3 updated, new §8.5 ★ (probes, the scalar blend (K2) first, then (K1)–(K7), Key result,
+  worked example, the separation principle, Table 3a, breaking at 21.2 mm (continuum) and 24.1 mm (3D grid), slow motion), sources
+  [13]–[16]; §14 charts paragraph; abstract. Checked by the derivation-checker (`notes/fig12/check-8-5.md`) and the referee
+  (`notes/fig12/referee-8-5.md`); every error they found was corrected in the rewrite. Measured slow-motion rate in headless
+  Chromium with threads: 0.23–0.28 s/s. `notes/fig12/note-shots.cjs`: 0 KaTeX errors, no sideways scroll at 1280 and 390 px.
+- **Part 2 started**: `tools/fig12/nm_coeffs.py` derives Lukovsky's five-mode Narimanov–Moiseev equations (FLT 2016 eq. 2.23)
+  from FLT's integrals (2.12)–(2.14) via the Lagrangian T − V; it reproduces FLT Table 1 at h = 1, Ir = 1 (d1 = 1.758023,
+  d2 = −1.083355); for the glass, h/R = 3.197: d1 = 1.563298, d2 = −1.210550 (`notes/fig12/runs/nm_coeffs.txt`).
