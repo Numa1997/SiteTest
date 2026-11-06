@@ -141,7 +141,7 @@ No stylesheet styles it: size, spacing and the surrounding `inline-flex` span ar
 
 ## three.js and the Blender model (5 to 6 November 2026, removed)
 
-Fig. 12 drew its cart in 3D with three.js r181 (`public/vendor/three/`) and loaded the glass as a glTF binary built in Blender
-(`public/models/fig12/glass.glb`). The one-wheel version of 6 November draws a 2D side view on a canvas, like every other figure, and
-both folders were removed. The Blender script `tools/fig12/glass.py` stays: it builds the glass from `geom.py`, checks the cavity's volume
-independently, and writes `tools/fig12/glass.glb`, which no page loads.
+The previous Fig. 12 drew its cart in 3D with three.js r181 (`public/vendor/three/`) and loaded a glass built in Blender. Both were
+removed, and on 6 November 2026 the whole of that Fig. 12, the Blender script `tools/fig12/glass.py` and its `glass.glb` included, was
+deleted. The new Fig. 12 uses no 3D library and no Blender: it draws on a canvas
+([simulations/fig12-beer-slosh.md](simulations/fig12-beer-slosh.md)).
