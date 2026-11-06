@@ -100,7 +100,7 @@ Two layers, both in the repository:
 | `Referrer-Policy` | `strict-origin-when-cross-origin` | Linked sites learn only that the visit came from phyeinusul.com. |
 | `Permissions-Policy` | `camera=(), microphone=(), geolocation=(), payment=(), usb=()` | No page can ask for these. |
 | `Cross-Origin-Opener-Policy` | `same-origin` | A page opened from elsewhere cannot reach into this one. |
-| `Cross-Origin-Embedder-Policy` on `/simulations/beer-slosh.html` and `/simulations/beer-slosh` only (since 6 November 2026) | `require-corp` | With the opener policy above, the page is cross-origin isolated, so the browser lets Fig. 12 share memory with worker threads ([fig12-beer-slosh.md](simulations/fig12-beer-slosh.md)). The page loads nothing from other origins. |
+| `Cross-Origin-Embedder-Policy` on `/simulations/beer-slosh.html`, `/simulations/beer-slosh` and `/scripts/stout-worker.js` only (since 6 November 2026) | `require-corp` | With the opener policy above, the page is cross-origin isolated, so the browser lets Fig. 12 share memory with worker threads ([fig12-beer-slosh.md](simulations/fig12-beer-slosh.md)). The page loads nothing from other origins. |
 | CSP `object-src`, `base-uri`, `form-action` | `'none'`, `'self'`, `'self'` | No plugins, no hijacked base address, no form posting elsewhere. |
 | `Strict-Transport-Security` | `max-age=31536000` | Browsers use https only, for a year. |
 | `Cache-Control` on `*.woff2` only (since 31 October 2026) | `public, max-age=31536000, immutable` | A font file is kept for a year without asking again; it never changes under its name, so a changed face needs a new file name. Every other file keeps Cloudflare's default, asked again on every visit ([performance.md](performance.md)). |

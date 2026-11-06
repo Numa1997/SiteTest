@@ -117,8 +117,10 @@ a worker whose share throws still counts itself done and the page goes on alone.
 gives no shared memory (no `crossOriginIsolated`): the page then runs exactly as before.
 
 Shared memory needs a cross-origin-isolated page: `public/_headers` sends `Cross-Origin-Embedder-Policy: require-corp` for
-`/simulations/beer-slosh.html` and `/simulations/beer-slosh` (the site already sends `Cross-Origin-Opener-Policy: same-origin`
-everywhere; the page loads nothing from other origins). `notes/fig12/serve.cjs` serves `public/` with the same headers for tests.
+`/simulations/beer-slosh.html`, `/simulations/beer-slosh` and `/scripts/stout-worker.js` (the site already sends
+`Cross-Origin-Opener-Policy: same-origin` everywhere; the page loads nothing from other origins). The worker script needs it too:
+without it Chrome silently starts no worker in the isolated page (found on the live site after the first deploy, which ran on one
+thread). `notes/fig12/serve.cjs` serves `public/` with the headers `public/_headers` gives each path, as Cloudflare does.
 
 Measured in headless Chromium on the 4-core build machine (`pagerate`, 10 s of the running page, two runs each): 1 thread
 18.6–19.1 ms a step, 0.235–0.240 s simulated per s; 4 threads 14.3–14.4 ms, 0.306–0.310 s/s. Per parallel task (4 threads, 100
