@@ -451,6 +451,10 @@
   "src": "Switch the motor off, \\(u = 0\\). Row 1 of (10) then reads \\(d_1\\ddot x + d_2\\ddot\\theta_1 + d_3\\ddot\\theta_2 = 0\\): no outside sideways force, so the centre of mass of the whole machine does not accelerate sideways. Solve it for \\(\\ddot x = -(d_2\\ddot\\theta_1 + d_3\\ddot\\theta_2)/d_1\\) and put that into rows 2 and 3. Row 2 becomes \\((d_4 - d_2^2/d_1)\\ddot\\theta_1 + (d_5 - d_2d_3/d_1)\\ddot\\theta_2 = f_1\\theta_1\\), and row 3 likewise, which leaves two equations for the angles alone,",
   "tr": "أطفئ المحرّك، \\(u = 0\\). فيصبح الصفّ 1 من (10) على الصورة \\(d_1\\ddot x + d_2\\ddot\\theta_1 + d_3\\ddot\\theta_2 = 0\\): لا قوّة جانبية خارجية، فلا يتسارع مركز كتلة الآلة كلّها جانبيًّا. أوجد منه \\(\\ddot x = -(d_2\\ddot\\theta_1 + d_3\\ddot\\theta_2)/d_1\\) وعوِّضه في الصفّين 2 و3. فيصير الصفّ 2 \\((d_4 - d_2^2/d_1)\\ddot\\theta_1 + (d_5 - d_2d_3/d_1)\\ddot\\theta_2 = f_1\\theta_1\\)، وكذلك الصفّ 3، فتبقى معادلتان للزاويتين وحدهما،"
  },
+ "348bf2b234d7": {
+  "src": "which Wolfram checks. The second integral is the law's whole loss, the heat its drag makes in the rod's thin boundary layer and wake; part of that wake, \\(-\\int\\mathbf f\\cdot\\delta\\mathbf u_{k,s}\\,ds\\), the grid resolves itself, so the heat booked below the grid is the rest, \\(-\\int\\mathbf f\\cdot(\\mathbf v_{\\text{body}} - \\mathbf u_s)\\,ds\\). This treatment of slender bodies is the actuator line of wind-turbine studies [30], with Peskin's interaction equations [28] doing the reading and the spreading. The rods' impulses, summed with the weights RK4 gives the state, are spread into the water at the start of the next fluid step: momentum is in transit for 20 ms, never lost.",
+  "tr": "وهو ما يتحقّق منه Wolfram. التكامل الثاني هو كل ما يفقده القانون، الحرارة التي يولّدها كبحه في الطبقة الحدّية الرقيقة للقضيب وفي أثره؛ وجزء من هذا الأثر، \\(-\\int\\mathbf f\\cdot\\delta\\mathbf u_{k,s}\\,ds\\)، تحلّه الشبكة بنفسها، فالحرارة المسجّلة تحت مستوى الشبكة هي الباقي، \\(-\\int\\mathbf f\\cdot(\\mathbf v_{\\text{body}} - \\mathbf u_s)\\,ds\\). هذه المعالجة للأجسام النحيلة هي خطّ المشغّل في دراسات توربينات الرياح [30]، مع معادلات التفاعل لبيسكين [28] تقوم بالقراءة والتوزيع. ودفعات القضيبين، مجموعة بالأوزان التي يعطيها RK4 للحالة، توزَّع في الماء في بداية خطوة المائع التالية: الزخم في الطريق 20 ms، ولا يضيع أبدًا."
+ },
  "35b40a922604": {
   "src": "The first term is never negative and is zero for one choice of \\(u\\); the second does not depend on \\(u\\) at all. So the best force makes the first term vanish, and the least cost from \\(\\mathbf s\\) is the second term. But we assumed that least cost to be \\(\\mathbf s^{\\mathsf T}\\mathbf P\\mathbf s\\): the bracket must be \\(\\mathbf P\\) itself. That is the discrete Riccati equation,",
   "tr": "الحدّ الأوّل لا يكون سالبًا أبدًا، ويساوي الصفر لاختيار واحد من \\(u\\)؛ والثاني لا يتعلّق بـ \\(u\\) إطلاقًا. فأفضل قوّة تجعل الحدّ الأوّل يتلاشى، وأقلّ كلفة من \\(\\mathbf s\\) هي الحدّ الثاني. لكنّنا افترضنا أنّ هذه الكلفة الدنيا هي \\(\\mathbf s^{\\mathsf T}\\mathbf P\\mathbf s\\): فيجب أن يكون ما بين القوسين \\(\\mathbf P\\) نفسه. تلك هي معادلة ريكاتي المتقطّعة،"
@@ -462,6 +466,10 @@
  "36931210f679": {
   "src": "The gains are the controller’s six numbers: how many newtons it pushes per unit of each error (per metre, radian, m/s, rad/s). <i>The loop period</i>: designed knowing that the computer looks only every <i>T</i><sub>s</sub> (7.5). <i>Continuous time</i>: designed as if it looked all the time (7), which fails for slow loops (8).",
   "tr": "الكسوب هي أرقام المتحكّم الستّة: كم نيوتنًا يدفع لكلّ وحدة من كلّ خطأ (لكلّ متر، وراديان، وm/s، وrad/s). <i>دور الحلقة</i>: صُمّمت مع العلم أنّ الحاسوب لا ينظر إلّا كلّ <i>T</i><sub>s</sub> (7.5). <i>الزمن المتّصل</i>: صُمّمت كأنّه ينظر طوال الوقت (7)، وهذا يفشل في الحلقات البطيئة (8)."
+ },
+ "369e8e83d183": {
+  "src": "cylinder in a channel, Schäfer–Turek 2D-1 [29], 10, 20 and 39 cells per diameter: \\(c_D\\) from the momentum through a box round it; the length \\(L_a\\) of the eddy behind it",
+  "tr": "أسطوانة في قناة، شيفر–توريك 2D-1 [29]، 10 و 20 و 39 خلية لكل قطر: \\(c_D\\) من الزخم المارّ عبر صندوق حولها؛ وطول \\(L_a\\) الدوّامة خلفها"
  },
  "36ce6e9e7f21": {
   "src": "<b>The row for \\(\\theta_2\\).</b> From (5), \\(\\partial T/\\partial\\dot\\theta_2 = d_3\\cos\\theta_2\\,\\dot x + d_5\\cos(\\theta_1-\\theta_2)\\dot\\theta_1 + d_6\\dot\\theta_2\\). Its time derivative is",
@@ -707,6 +715,10 @@
   "src": "Projects",
   "tr": "المشاريع"
  },
+ "5416e8f451d9": {
+  "src": "with \\(Q_0\\) holding also the shear of the water on the cart (no slip at the true surface, the wall's distance inside a cell taken into account; the cart's share is what the viscous step changes in the water's momentum, less what the tank's walls and ends take) and the rods' pushes that land inside it. \\(K_x\\) is the water the cart must push aside. The machine moves in 1 ms steps of the page's RK4 within each 20 ms fluid step, so \\(F_c\\) cannot wait for \\(\\dot x'\\); instead the cart carries \\(m_a = -K_x\\Delta t\\) as extra mass while the held force is \\(G = Q_0 + K_x\\dot x_0\\):",
+  "tr": "حيث تضمّ \\(Q_0\\) أيضًا قصّ الماء على العربة (التصاق عند السطح الحقيقي، مع حساب بُعد الجدار داخل الخلية؛ وحصّة العربة هي ما تغيّره خطوة اللزوجة في زخم الماء، مطروحًا منه ما تأخذه جدران الخزّان وطرفاه) ودفعات القضيبين التي تقع داخلها. و\\(K_x\\) هو الماء الذي يجب على العربة أن تزيحه. تتحرّك الآلة بخطوات 1 ms من RK4 الخاص بالصفحة داخل كل خطوة مائع من 20 ms، فلا تستطيع \\(F_c\\) أن تنتظر \\(\\dot x'\\)؛ بل تحمل العربة \\(m_a = -K_x\\Delta t\\) كتلةً إضافية بينما القوّة المثبّتة \\(G = Q_0 + K_x\\dot x_0\\):"
+ },
  "5561b25d09a8": {
   "src": "If the rods fall",
   "tr": "إذا سقط القضيبان"
@@ -915,6 +927,10 @@
   "src": "Two rods stand one on top of the other on a cart, hinged and free to fall. Nothing holds them up but the cart: a motor pushes it left and right along a rail, and a controller decides how hard, a hundred times a second. Flick the top rod, send the cart somewhere, or make the motor weak and the controller slow, and see when balancing stops being possible.",
   "tr": "يقف قضيبان أحدهما فوق الآخر على عربة، موصولان بمفصلين وحرّان في السقوط. لا يمسكهما شيء سوى العربة: محرّك يدفعها يمينًا ويسارًا على سكّة، ومتحكّم يقرّر شدّة الدفع مئة مرّة في الثانية. انقر طرف القضيب العلوي، أو أرسل العربة إلى موضع ما، أو اجعل المحرّك ضعيفًا والمتحكّم بطيئًا، وانظر متى تصبح الموازنة مستحيلة."
  },
+ "72fc4841d082": {
+  "src": "within 0.01–1.8 % (without \\(\\delta\\mathbf u_k\\): 4–21 %)",
+  "tr": "في حدود 0.01–1.8 % (من دون \\(\\delta\\mathbf u_k\\): 4–21 %)"
+ },
  "735934481431": {
   "src": "<span class=\"pbox__t\">Key result · the balancing law</span> \\[ u = -\\mathbf K\\mathbf s, \\qquad \\mathbf K = \\rho^{-1}\\mathbf B^{\\mathsf T}\\mathbf P . \\tag{16} \\]",
   "tr": "<span class=\"pbox__t\">نتيجة أساسية · قانون الموازنة</span> \\[ u = -\\mathbf K\\mathbf s, \\qquad \\mathbf K = \\rho^{-1}\\mathbf B^{\\mathsf T}\\mathbf P . \\tag{16} \\]"
@@ -934,6 +950,10 @@
  "752be5678db3": {
   "src": "wind over grass",
   "tr": "ريح فوق العشب"
+ },
+ "759e12c442b8": {
+  "src": "<b>The rods.</b> Every one of the 24 Gauss points of a rod reads the water's velocity there with the same kernel, \\(\\mathbf u_s(s) = \\sum \\mathbf u\\,\\delta_h(\\mathbf x - \\mathbf r(s))\\,\\Delta^2\\) over the grid of cell size \\(\\Delta\\). That water has already been slowed by the rod's own push. The law (33)–(34) is written for the water as it would be without the rod: its drag coefficient is measured against the stream far upstream, and so it already contains the rod's own slowing of the water. A rod that used \\(\\mathbf u_s\\) as it is would count that slowing twice, and held in a stream it felt 4 to 21 % too little drag. So each rod \\(k\\) carries its own disturbance \\(\\delta\\mathbf u_k\\), a second field that obeys the equations (41) linearised about the flow, is driven only by that rod's push, and has the cart at rest and no stream coming in. The rod uses the water without it; the other rod's wake, the cart's and the stream all stay. The force per metre is then the law of (33), (34) and (39):",
+  "tr": "<b>القضيبان.</b> تقرأ كل نقطة من نقاط غاوس الـ 24 على القضيب سرعة الماء هناك بالنواة نفسها، \\(\\mathbf u_s(s) = \\sum \\mathbf u\\,\\delta_h(\\mathbf x - \\mathbf r(s))\\,\\Delta^2\\) على الشبكة ذات حجم الخلية \\(\\Delta\\). وهذا الماء قد أبطأه دفع القضيب نفسه. أمّا القانون (33)–(34) فمكتوب للماء كما يكون من دون القضيب: معامل كبحه يُقاس نسبةً إلى التيّار البعيد في أعلى المجرى، فهو يتضمّن أصلًا إبطاء القضيب للماء. والقضيب الذي يأخذ \\(\\mathbf u_s\\) كما هي يحسب هذا الإبطاء مرّتين، وحين ثُبّت في تيّار شعر بكبح أقلّ مما ينبغي بـ 4 إلى 21 %. لذلك يحمل كل قضيب \\(k\\) اضطرابه الخاص \\(\\delta\\mathbf u_k\\): حقلًا ثانيًا يخضع للمعادلات (41) مخطَّطةً حول الجريان، ولا يدفعه إلا دفع ذلك القضيب، والعربة فيه ساكنة ولا تيّار يدخله. ويأخذ القضيب الماء من دونه؛ فيبقى أثر القضيب الآخر، وأثر العربة، والتيّار كلّها. والقوّة لكل متر هي عندئذٍ قانون (33) و(34) و(39):"
  },
  "76a1b2738ad8": {
   "src": "Read row 1 as Newton’s law for the whole machine sideways: \\(d_1\\ddot x\\) plus the sideways accelerations of the two centres of mass equals the only outside sideways force, \\(u\\). The \\(\\mathbf C\\) terms are the centripetal parts of those accelerations: a turning rod’s centre of mass accelerates toward its hinge, and when the rod leans that pull has a sideways part. In rows 2 and 3, \\(-f\\sin\\theta\\) is gravity’s torque, which pushes a leaning rod further over.",
@@ -1111,6 +1131,10 @@
   "src": "Arriving moving has a price: the cart keeps going. Until 5 November 2026 the page let it, and in the browser tests of 11.3 the cart got between 6 and 200 m from where it started within the 60 s of a run (with the plan made to arrive at rest, it never left \\(\\pm1.54\\) m). A real rail has an end, so the page now brings the cart to rest after the catch, carefully. How carefully is the subject of the next subsection.",
   "tr": "للوصول متحرّكًا ثمن: العربة تمضي. وحتّى 5 نوفمبر 2026 تركتها الصفحة تمضي، وفي اختبارات المتصفّح في 11.3 ابتعدت العربة بين 6 و200 m عن موضع انطلاقها خلال الـ 60 s من التشغيل (ومع خطّة مصنوعة لتصل ساكنة لم تغادر قطّ \\(\\pm1.54\\) m). والسكّة الحقيقية لها نهاية، لذا تُوقف الصفحة العربة الآن بعد الالتقاط، بحذر. وكم من الحذر هو موضوع القسم الفرعي التالي."
  },
+ "8e1466d0fec4": {
+  "src": "below \\(1.2\\times10^{-2}\\) s⁻¹",
+  "tr": "أقلّ من \\(1.2\\times10^{-2}\\) s⁻¹"
+ },
  "8e166b097267": {
   "src": "Wikipedia, <a href=\"https://en.wikipedia.org/wiki/Glycerol\">“Glycerol”</a>: 1.261 g/cm³, 1.412 Pa s at 20 °C.",
   "tr": "ويكيبيديا، <a href=\"https://en.wikipedia.org/wiki/Glycerol\">«Glycerol»</a>: 1.261 g/cm³، و1.412 Pa s عند 20 °C."
@@ -1130,6 +1154,10 @@
  "8faefae98f2b": {
   "src": "Two things are new. The weights depend on the period: for a short one, \\(\\mathbf Q_d \\approx \\mathbf Q T_s\\) and \\(R_d \\approx \\rho T_s\\), as a rectangle rule would give. And a cross term \\(\\mathbf N_d\\) appears, of second order in the period, \\(\\mathbf N_d \\approx \\tfrac12 T_s^2\\,\\mathbf Q\\mathbf B\\): a force held for a while moves the state during the period, and the cost of that motion is charged to the force. A rectangle rule would miss it. All three integrals are one integral in the augmented variable of 7.2, because \\(\\mathbf z(t) = e^{\\bar{\\mathbf A}t}\\mathbf z_k\\) and the integrand is \\(\\mathbf z^{\\mathsf T}\\bar{\\mathbf Q}\\mathbf z\\) with \\(\\bar{\\mathbf Q} = \\operatorname{diag}(\\mathbf Q, \\rho)\\):",
   "tr": "أمران جديدان. الأوزان تتعلّق بالدور: لدور قصير \\(\\mathbf Q_d \\approx \\mathbf Q T_s\\) و\\(R_d \\approx \\rho T_s\\)، كما تعطي قاعدة المستطيل. ويظهر حدّ متقاطع \\(\\mathbf N_d\\) من الرتبة الثانية في الدور، \\(\\mathbf N_d \\approx \\tfrac12 T_s^2\\,\\mathbf Q\\mathbf B\\): فالقوّة الممسوكة مدّةً تحرّك الحالة خلال الدور، وكلفة تلك الحركة تُحمَّل على القوّة. وقاعدة المستطيل تفوّته. والتكاملات الثلاثة تكامل واحد في المتغيّر الموسَّع من 7.2، لأنّ \\(\\mathbf z(t) = e^{\\bar{\\mathbf A}t}\\mathbf z_k\\) والمكامَل هو \\(\\mathbf z^{\\mathsf T}\\bar{\\mathbf Q}\\mathbf z\\) مع \\(\\bar{\\mathbf Q} = \\operatorname{diag}(\\mathbf Q, \\rho)\\):"
+ },
+ "9024b479526c": {
+  "src": "within 0.26 %",
+  "tr": "في حدود 0.26 %"
  },
  "9074e03a96d9": {
   "src": "K. J. Åström and K. Furuta, <a href=\"https://www.control.utoronto.ca/~broucke/ece1653s/Intro/ast_fur96.pdf\">“Swinging up a pendulum by energy control”</a>, IFAC World Congress, 1996; <em>Automatica</em> 36, 287–295 (2000): the energy law for one rod on an accelerated pivot, equations (1)–(4).",
@@ -1162,6 +1190,10 @@
  "94797063b698": {
   "src": "\\(\\mathbf K_d\\) on \\(x\\) (N/m)",
   "tr": "\\(\\mathbf K_d\\) على \\(x\\) (N/m)"
+ },
+ "947eee4e7edd": {
+  "src": "With each rod's own disturbance computed beside the water, a fluid step of 20 ms costs about 30 ms in Chromium on this computer, so the page runs in slow motion, about 0.7 of real time, and the caption says so; it leaves time to watch the controller work. <b>Left out.</b> The flow through the depth round the rods and any change of the flow across the depth; friction on the tank's front and back walls; the rail; the water's surface; for air and water, the eddies smaller than a cell.",
+  "tr": "مع حساب الاضطراب الخاص بكل قضيب إلى جانب الماء، تكلّف خطوة مائع من 20 ms نحو 30 ms في Chromium على هذا الحاسوب، فتعمل الصفحة بحركة بطيئة، نحو 0.7 من الزمن الحقيقي، ويقول التعليق ذلك؛ وهذا يترك وقتًا لمشاهدة المتحكّم وهو يعمل. <b>ما أُهمل.</b> الجريان عبر العمق حول القضيبين وأي تغيّر للجريان على امتداد العمق؛ والاحتكاك على جداري الخزّان الأمامي والخلفي؛ والسكّة؛ وسطح الماء؛ وفي الهواء والماء، الدوّامات الأصغر من خلية."
  },
  "948cd881248c": {
   "src": "Cart position",
@@ -1495,6 +1527,10 @@
   "src": "Leans from upright, positive to the right.",
   "tr": "الميل عن الوضع القائم، موجبًا نحو اليمين."
  },
+ "b951bb709a38": {
+  "src": "both rods held across, along and at 45° to a stream of glycerol, honey or water, 0.01–0.5 m/s: each rod's force against the same rod held without pushing the water",
+  "tr": "القضيبان مثبّتان عرضيًّا وطوليًّا وبزاوية 45° في تيّار من الغليسرول أو العسل أو الماء، 0.01–0.5 m/s: قوّة كل قضيب مقابل القضيب نفسه مثبّتًا من دون أن يدفع الماء"
+ },
  "ba7ae7e5bbd1": {
   "src": "<span class=\"pfig__n\">Figure 1</span>The model. Each angle is measured from the <em>upward</em> vertical (dashed), positive when the rod leans to the right, the same way as \\(x\\) and \\(u\\). The dots are the centres of mass, half-way along each uniform rod.",
   "tr": "<span class=\"pfig__n\">الشكل 1</span>النموذج. تُقاس كلّ زاوية من الشاقول المتّجه <em>نحو الأعلى</em> (المتقطّع)، وتكون موجبة حين يميل القضيب نحو اليمين، في الاتجاه نفسه الذي يُقاس فيه \\(x\\) و\\(u\\). النقاط هي مراكز الكتلة، في منتصف كلّ قضيب متجانس."
@@ -1530,6 +1566,10 @@
  "bd896fdff234": {
   "src": "to +1 m",
   "tr": "إلى +1 m"
+ },
+ "be70657fd3d2": {
+  "src": "5.71, 5.71, 5.64; 0.113, 0.114, 0.115 Pa",
+  "tr": "5.71، 5.71، 5.64؛ 0.113، 0.114، 0.115 Pa"
  },
  "bec7c512e2f9": {
   "src": "Balancing Two Rods on a Cart<span class=\"dot\">.</span>",
@@ -1686,6 +1726,10 @@
  "d358c2adc046": {
   "src": "divergence left after the pressure step",
   "tr": "التباعد الباقي بعد خطوة الضغط"
+ },
+ "d40433a69157": {
+  "src": "5.57–5.59; 0.1172–0.1176 Pa",
+  "tr": "5.57–5.59؛ 0.1172–0.1176 Pa"
  },
  "d404968ea90b": {
   "src": "Medium",
@@ -1911,6 +1955,14 @@
   "src": "Left out: friction in the hinges and wheels, the motor’s own dynamics (a real motor cannot change its force instantly), sensor noise, and a hard end of the rail (the planner keeps the cart within ±1.5 m; calming and balancing do not). Each is a known extension of this model [1, 3]. Every number on this page that is not derived or taken from a source is a choice of ours, and the text says so where it is made: the weight on \\(x\\), the ranges of the sliders, \\(u_\\text{max} = 60\\) N, the planner’s weights and rail limit, the calming gains, the glide rate of (26), the share \\(\\gamma = 0.5\\) of the certified level in the braking (27a), the spring and the largest acceleration of your hand in (29), the rectangle rule in (23), and the shells, directions and climbs of the certificate (19a).",
   "tr": "ما أُغفل: الاحتكاك في المفاصل والعجلات، وديناميكا المحرّك نفسه (المحرّك الحقيقي لا يغيّر قوّته فورًا)، وضجيج الحسّاسات، ونهاية صلبة للسكّة (يُبقي المخطِّط العربة ضمن ±1.5 m؛ أمّا التهدئة والموازنة فلا). وكلّ منها امتداد معروف لهذا النموذج [1، 3]. وكلّ رقم في هذه الصفحة لم يُشتقّ ولم يُؤخذ من مصدر فهو اختيار منّا، والنصّ يقول ذلك حيث يُتّخذ: الوزن على \\(x\\)، ومدى المنزلقات، و\\(u_\\text{max} = 60\\) N، وأوزان المخطِّط وحدّ سكّته، وكسوب التهدئة، ومعدّل الانزلاق في (26)، والحصّة \\(\\gamma = 0.5\\) من المستوى المضمون في الكبح (27a)، والزنبرك وأقصى تسارع ليدك في (29)، وقاعدة المستطيل في (23)، وقشور الشهادة (19a) واتّجاهاتها وصعودها."
  },
+ "ed96626eb469": {
+  "src": "<b>The books.</b> The data panel's group <i>The solved fluid</i> keeps the water's own book: the motor's work and what the stream brings in through the ends of the tank equal the machine's energy, the water's kinetic energy \\(K_f = \\tfrac12\\rho b\\sum w\\,u^2\\Delta^2\\), the rods' heat (43) and the heat of viscosity in the resolved flow, plus a remainder \\(R\\) that the scheme loses, and \\(R\\) is split into its causes. In glycerol, after a tilt of 4.6° and 2.9° balanced for 3 s, the motor does 1.33 J: 0.012 J stay in the machine, 0.005 J in the water, the rods' drag makes 0.107 J of heat below the grid and viscosity 0.98 J in the flow, and \\(R\\) is 0.23 J, 17 %. The pressure step removes 0.21 J with the part of the flow it projects away, less for shorter fluid steps (0.12 J at 10 ms); the transport step loses 0.09 J at the scale of a cell, the same for any step; forcing the water in the faces the cart cuts to the cart's velocity costs 0.05 J; and the cart's coupling gives 0.11 J back, because the machine feels the pressure at its mean velocity over a step while the water receives its work at the end velocity, \\(J\\,\\Delta\\dot x/2\\) per step for a pressure impulse \\(J\\) (Wolfram). \\(R\\) is 8 % in honey. In water it is 80 %: at 2.5 cm cells water is far too thin for the grid, its eddies end at the cell size, and the scheme's loss stands for the cascade to small eddies that would turn the same energy into heat. The flow drawn in water is right in its large swirls, not in its fine detail. Over 60 s with the rods kicked every 15 s, \\(R\\) stays at the same share in every liquid and the balance holds.",
+  "tr": "<b>الموازنات.</b> تحفظ مجموعة <i>المائع المحلول</i> في لوحة البيانات موازنة الماء الخاصة: شغل المحرّك وما يُدخله التيّار عبر طرفي الخزّان يساويان طاقة الآلة، والطاقة الحركية للماء \\(K_f = \\tfrac12\\rho b\\sum w\\,u^2\\Delta^2\\)، وحرارة القضيبين (43) وحرارة اللزوجة في الجريان المحلول، زائد باقٍ \\(R\\) يفقده المخطّط، ويُقسَم \\(R\\) على أسبابه. في الغليسرول، بعد ميل قدره 4.6° و 2.9° وتوازن مدّته 3 s، يبذل المحرّك 1.33 J: تبقى 0.012 J في الآلة، و 0.005 J في الماء، ويولّد كبح القضيبين 0.107 J حرارةً تحت مستوى الشبكة، واللزوجة 0.98 J في الجريان، و\\(R\\) يساوي 0.23 J، أي 17 %. تزيل خطوة الضغط 0.21 J مع جزء الجريان الذي تُسقطه، وأقلّ مع خطوات مائع أقصر (0.12 J عند 10 ms)؛ وتفقد خطوة النقل 0.09 J على مقياس الخلية، وهي نفسها لأي خطوة؛ وإجبار الماء في الوجوه التي تقطعها العربة على سرعة العربة يكلّف 0.05 J؛ ويعيد اقتران العربة 0.11 J، لأن الآلة تشعر بالضغط عند سرعتها المتوسّطة خلال الخطوة بينما يتلقّى الماء شغله عند السرعة النهائية، \\(J\\,\\Delta\\dot x/2\\) لكل خطوة لدفعة ضغط \\(J\\) (Wolfram). و\\(R\\) يساوي 8 % في العسل. وفي الماء يبلغ 80 %: عند خلايا من 2.5 cm يكون الماء أرقّ كثيرًا من أن تحلّه الشبكة، وتنتهي دوّاماته عند حجم الخلية، ويقوم فقد المخطّط مقام التسلسل إلى الدوّامات الصغيرة الذي كان سيحوّل الطاقة نفسها إلى حرارة. فالجريان المرسوم في الماء صحيح في دوّاماته الكبيرة، لا في تفاصيله الدقيقة. وعلى مدى 60 s، مع دفع القضيبين كل 15 s، يبقى \\(R\\) بالحصّة نفسها في كل سائل، وتصمد الموازنة."
+ },
+ "ee4af0b1509e": {
+  "src": "What is still not right, measured. Each rod removes all of its own disturbance, also the wake it left a swing ago; a real rod swinging back into its old wake would feel it. How much that can matter is bounded by removing a rod's disturbance altogether: for rods carried to and fro through still water it changes their force by 1–3 %. On the benchmark, at 39 cells per diameter, \\(\\Delta p\\) is 2 % below the published band and \\(c_D\\) 0.5–1 % above it; the transport step does not keep momentum exactly, about 1–2 % of the cylinder's drag. A cylinder in a gently oscillating stream stays 2 % low and 5.5 % high in the two parts of its exact unsteady-Stokes force (Wolfram and an independent derivation agree on the exact one) and does not improve on finer cells; that cause is not found. Two earlier faults are mended: water entering the benchmark channel was free to turn as it came in, where the benchmark makes it enter straight, and that alone made the flow 5 % weak at every grid; and the water's viscous push on a body was weighted by the fluid share of each cell face, which missed part of the wall's shear. A body's force is now what the viscous step changes in the water next to it, so body and water exchange exactly equal momentum.",
+  "tr": "ما لا يزال غير صحيح، مقيسًا. يزيل كل قضيب اضطرابه الخاص كلّه، وكذلك الأثر الذي تركه قبل أرجحة؛ والقضيب الحقيقي الذي يعود متأرجحًا إلى أثره القديم كان سيشعر به. ويُحدّ مقدار ما قد يعنيه ذلك بإزالة اضطراب القضيب كلّيًّا: في قضيبين يُحمَلان ذهابًا وإيابًا في ماء ساكن يغيّر ذلك قوّتهما بـ 1–3 %. وفي حالة المقارنة، عند 39 خلية لكل قطر، يقلّ \\(\\Delta p\\) بـ 2 % عن النطاق المنشور ويزيد \\(c_D\\) عليه بـ 0.5–1 %؛ وخطوة النقل لا تحفظ الزخم تمامًا، بنحو 1–2 % من كبح الأسطوانة. وأسطوانة في تيّار يتذبذب بلطف تبقى أدنى بـ 2 % وأعلى بـ 5.5 % في جزأي قوّة ستوكس غير المستقرّة الدقيقة (ويتّفق Wolfram واشتقاق مستقلّ على القيمة الدقيقة) ولا تتحسّن على خلايا أنعم؛ ولم يُعثر على سبب ذلك. وقد أُصلح خطآن سابقان: كان الماء الداخل إلى قناة حالة المقارنة حرًّا في أن ينعطف عند دخوله، حيث تُدخله حالة المقارنة مستقيمًا، وهذا وحده جعل الجريان أضعف بـ 5 % على كل شبكة؛ وكان دفع الماء اللزج على الجسم موزونًا بحصّة المائع من كل وجه خلية، فغاب جزء من قصّ الجدار. وقوّة الجسم الآن هي ما تغيّره خطوة اللزوجة في الماء المجاور له، فيتبادل الجسم والماء زخمًا متساويًا تمامًا."
+ },
  "ee4c322a9d78": {
   "src": "Grab a rod in the figure, pull it over and let go. Or grab the cart and drag it: while you hold it the motor lets go, and you see what the cart’s motion alone does to the rods.",
   "tr": "أمسك قضيبًا في الشكل، واسحبه مائلًا، ثم أفلته. أو أمسك العربة واسحبها: ما دمت ممسكًا بها يتخلّى المحرّك عنها، فترى ما تفعله حركة العربة وحدها بالقضيبين."
@@ -1971,6 +2023,10 @@
   "src": "Can one force at the bottom really bring two angles <em>and</em> the cart back? Kalman’s test answers it: the system (11) can be steered from any state to any other exactly when the six vectors \\(\\mathbf B, \\mathbf A\\mathbf B, \\dots, \\mathbf A^5\\mathbf B\\) are independent, that is when the matrix \\([\\mathbf B\\;\\mathbf A\\mathbf B\\;\\cdots\\;\\mathbf A^5\\mathbf B]\\) has rank 6 [3]. The idea behind it: \\(\\mathbf B\\) is where a push sends the state at once, \\(\\mathbf A\\mathbf B\\) where the motion carries that a moment later, and so on; if these directions fill all six dimensions, a suitable sequence of pushes can reach every state. For the default machine the rank is 6. The cart reaches the upper rod only through the lower one, but because the two rods fall at different rates (5.1) the cart can tell them apart.",
   "tr": "هل تستطيع قوّة واحدة في الأسفل حقًّا أن تعيد زاويتين <em>و</em>العربة؟ يجيب اختبار كالمان: يمكن توجيه النظام (11) من أيّ حالة إلى أيّ حالة أخرى إذا كانت المتّجهات الستّة \\(\\mathbf B, \\mathbf A\\mathbf B, \\dots, \\mathbf A^5\\mathbf B\\) مستقلّة، وفقط عندئذ، أي حين تكون رتبة المصفوفة \\([\\mathbf B\\;\\mathbf A\\mathbf B\\;\\cdots\\;\\mathbf A^5\\mathbf B]\\) هي 6 [3]. والفكرة وراءه: \\(\\mathbf B\\) هو الاتجاه الذي ترسل إليه الدفعةُ الحالةَ فورًا، و\\(\\mathbf A\\mathbf B\\) هو حيث تحملها الحركة بعد لحظة، وهكذا؛ فإذا ملأت هذه الاتجاهات الأبعاد الستّة كلّها، أمكن لسلسلة مناسبة من الدفعات أن تبلغ أيّ حالة. وللآلة الافتراضية الرتبة 6. لا تصل العربة إلى القضيب العلوي إلا عبر السفلي، لكن لأن القضيبين يسقطان بمعدّلين مختلفين (5.1) تستطيع العربة أن تميّز بينهما."
  },
+ "f57b2d312d9e": {
+  "src": "equal",
+  "tr": "متساويتان"
+ },
  "f5cbdf6bfb51": {
   "src": "Contents",
   "tr": "المحتويات"
@@ -1998,6 +2054,10 @@
  "f7454132c230": {
   "src": "<span class=\"psub__n\">13.2</span>From the Stokes equations to a force per metre",
   "tr": "<span class=\"psub__n\">13.2</span>من معادلات ستوكس إلى قوّة لكل متر"
+ },
+ "f74b735b7a20": {
+  "src": "the same: \\(c_D\\) read on the body; the pressure difference \\(\\Delta p\\) across it",
+  "tr": "الشيء نفسه: \\(c_D\\) مقروءًا على الجسم؛ وفرق الضغط \\(\\Delta p\\) عبره"
  },
  "f7a8477c922d": {
   "src": "Figure 1 shows the parts. The <b>cart</b>, of mass \\(m_0\\), rolls on a straight horizontal <b>rail</b>; its position along the rail is \\(x\\). A <b>motor</b> pushes it with a horizontal force \\(u\\), positive to the right, never larger in size than \\(u_\\text{max}\\). Through the middle of the cart runs a <b>slot</b>, open at the top and bottom, and the cart rides on two rails, one on each side of it. Across the top of the slot sits a <b>hinge</b>, a pin through a bearing, which lets the lower rod turn freely in the plane of the picture and in no other way. The <b>lower rod</b> is a uniform bar of mass \\(m_1\\) and length \\(L_1\\). At its top end a second free hinge carries the <b>upper rod</b>, a uniform bar of mass \\(m_2\\) and length \\(L_2\\). No motor sits in either hinge.",

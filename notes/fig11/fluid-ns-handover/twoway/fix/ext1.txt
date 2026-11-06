@@ -1,0 +1,4 @@
+{"med":"honey","A":0.3,"om":3,"U":0,"rms_u_undisturbed":0.0879,"rms_err_corrected":0.00179,"rms_err_uncorrected":0.01306,"rel_force_err":0.0009,"rel_force_err_uncorrected":0.0193}
+{"med":"glycerol","A":0.3,"om":3,"U":0.3,"rms_u_undisturbed":0.2369,"rms_err_corrected":0.0029,"rms_err_uncorrected":0.01446,"rel_force_err":0.002,"rel_force_err_uncorrected":0.0242}
+{"med":"glycerol","A":0.3,"om":3,"U":0,"rms_u_undisturbed":0.0657,"rms_err_corrected":0.00154,"rms_err_uncorrected":0.00728,"rel_force_err":0.0006,"rel_force_err_uncorrected":0.0121}
+{"med":"water","A":0.3,"om":3,"U":0,"rms_u_undisturbed":0.0487,"rms_err_corrected":0.00274,"rms_err_uncorrected":0.00553,"rel_force_err":0.0009,"rel_force_err_uncorrected":0.0098}

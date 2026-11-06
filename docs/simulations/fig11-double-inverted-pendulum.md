@@ -432,7 +432,7 @@ Newton's third law), with the cart moving, on a CPU in the browser. Lecture-note
 - **Controller's model.** `par()` gives the cart the 2D added mass of (46), ρ b · 0.020539 m², when solved.
 - **Drawing.** `drawTank()` paints the stored vorticity `tw_w` (wine anticlockwise, blue clockwise, full strength from 2 1/s)
   under the arrows, and the tank's wall, floor, lid and open end; the arrows read the solved velocity (0.2 m long at 0.2 m/s).
-- **Measured** (headless Chromium, this container): 21.6 ms per 20 ms fluid step for the solver alone; divergence ≤ 2 × 10⁻⁴ 1/s;
+- **Measured** (headless Chromium, this container, 6 November; see 7 November below for the current numbers): 21.6 ms per 20 ms fluid step for the solver alone; divergence ≤ 2 × 10⁻⁴ 1/s;
   the page's energy book closes to 10⁻¹² J. In glycerol, sending the cart to +1 m or a 0.2 m/s stream topples the rods in both
   the given and the solved fluid (the balancer has no integral action); that behaviour predates this work.
 - **Development history** of the fluid work (spectral and MAC attempts, WaterLily): `notes/fig11/fluid-ns-handover/HANDOVER.md`.
@@ -445,5 +445,11 @@ Newton's third law), with the cart moving, on a CPU in the browser. Lecture-note
   errors, no pending translations, no horizontal overflow. `hon.cjs rest flick wind water stillwater`: 5/5 pass (the given
   fluid is unchanged). The solved fluid is not in `hon.cjs` yet: its steps are the tank's RK4 with the water's forces, which the
   replay with the page's `rk4` cannot reproduce.
+- **7 November 2026: every remaining error root-caused** (`notes/fig11/fluid-ns-handover/twoway/fix/STATUS.md`). Section 13.6 now
+  describes the rods' self fields (42)–(43), the corrected check table (benchmark with the right inlet, held rods against their truth runs,
+  divergence below 1.2 × 10⁻² 1/s), what is still not right, and the split of R. Data panel: `tw_Ex` (what flicks and the hand put in since
+  the fluid started; R left it out before), `tw_Lp`, `tw_La`, `tw_Li`, `tw_Ll`, `tw_Lt`, `tw_Eg`, `tw_dEK`, `tw_rr` and a second book
+  *The solved fluid's water* (closes to about 1e-5 J in Chromium in en/de/ar); the `tw_res` hook follows the new formula (hook = stored).
+  The fluid step costs about 30 ms in Chromium, so the page runs in slow motion (about 0.7 of real time).
 - **Translations.** 40 page pieces and 24 strings in German and Arabic, written for this change; maths, numbers and tags
   checked equal to the English; the two edited paragraphs of 13 and 13.5 keep their reviewed text with only the change added.

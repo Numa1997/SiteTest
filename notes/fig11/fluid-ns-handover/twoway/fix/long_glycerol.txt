@@ -1,0 +1,7 @@
+{"med":"glycerol","t":10,"max_th1":0.255,"max_th2":0.127,"max_x":0.207,"W_motor":6.428,"R_pct":24.1,"L_lag":-0.415,"KE_fluid":0.0112}
+{"med":"glycerol","t":20,"max_th1":0.01,"max_th2":0.009,"max_x":0.207,"W_motor":6.452,"R_pct":24,"L_lag":-0.415,"KE_fluid":0.0017}
+{"med":"glycerol","t":30,"max_th1":0.243,"max_th2":0.118,"max_x":0.233,"W_motor":12.454,"R_pct":24.4,"L_lag":-0.8,"KE_fluid":0.0028}
+{"med":"glycerol","t":40,"max_th1":0.242,"max_th2":0.118,"max_x":0.232,"W_motor":18.445,"R_pct":24.5,"L_lag":-1.188,"KE_fluid":0.0057}
+{"med":"glycerol","t":50,"max_th1":0.012,"max_th2":0.011,"max_x":0.228,"W_motor":18.473,"R_pct":24.4,"L_lag":-1.188,"KE_fluid":0.0019}
+{"med":"glycerol","t":60,"max_th1":0.242,"max_th2":0.118,"max_x":0.234,"W_motor":24.483,"R_pct":24.6,"L_lag":-1.577,"KE_fluid":0.0024}
+finite to the end

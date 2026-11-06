@@ -1,0 +1,7 @@
+{"med":"honey","t":10,"max_th1":0.104,"max_th2":0.065,"max_x":0.068,"W_motor":1.625,"R_pct":0.9,"L_lag":-0.128,"KE_fluid":0.0027}
+{"med":"honey","t":20,"max_th1":0.028,"max_th2":0.021,"max_x":0.054,"W_motor":1.63,"R_pct":0.9,"L_lag":-0.128,"KE_fluid":0.0006}
+{"med":"honey","t":30,"max_th1":0.087,"max_th2":0.052,"max_x":0.073,"W_motor":3.07,"R_pct":0.7,"L_lag":-0.241,"KE_fluid":0.0007}
+{"med":"honey","t":40,"max_th1":0.084,"max_th2":0.05,"max_x":0.073,"W_motor":4.507,"R_pct":0.5,"L_lag":-0.36,"KE_fluid":0.001}
+{"med":"honey","t":50,"max_th1":0.014,"max_th2":0.009,"max_x":0.086,"W_motor":4.508,"R_pct":0.5,"L_lag":-0.36,"KE_fluid":0.0002}
+{"med":"honey","t":60,"max_th1":0.086,"max_th2":0.051,"max_x":0.102,"W_motor":5.946,"R_pct":0.4,"L_lag":-0.473,"KE_fluid":0.0004}
+finite to the end
