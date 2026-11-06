@@ -27,8 +27,8 @@
         .pg-c { min-width: 0; display: flex; flex-direction: column; gap: 2px; } .pg-c .ctl { font-size: 13px; gap: 0; }
         .pg .ctl__note { margin: 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; font-size: 11.5px; line-height: 1.35; } .pg .pg-c .ctl__row > span:first-child { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         /* from 901 px the figure takes its height from the window; where the column is 760 px or wider the sliders stand beside the cart figure (a cart needs no full-width rail), narrower (the data panel docked) they sit under it in four columns: all on one screen */ @media (min-width: 901px) { .sim__grid > div:first-child { container-type: inline-size; } #stage { aspect-ratio: auto; width: 100%; max-width: none; height: clamp(150px, 23vh, 380px); } #stage-tr { aspect-ratio: auto; height: clamp(84px, 13vh, 190px); max-width: none; } .pg-g--4 { grid-template-columns: repeat(4, minmax(0, 1fr)); } .pg .ctl__note { -webkit-line-clamp: 1; } .pg .pg-g--4 .pg-c .ctl { font-size: 12px; } .pg .pg-g--4 .pg-c .ctl__row { flex-wrap: wrap; column-gap: 6px; } .pg .pg-g--4 .pg-c .ctl__row > span:first-child { white-space: normal; overflow: visible; } .pg > .pg-n { display: none; } } @container (min-width: 760px) { .dtop { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 10px; align-items: stretch; } .dtop > .pg { margin-top: 0; } .dleft { display: flex; flex-direction: column; gap: 8px; min-width: 0; } .dleft > .stage { flex: 1 1 auto; display: flex; flex-direction: column; } .dleft > .fl-strip { margin-top: 0; } #stage { flex: 1 1 auto; height: auto; min-height: clamp(220px, 46vh, 520px); } #stage-tr { height: clamp(84px, 15vh, 190px); } .pg-g--4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } .pg .ctl__note { -webkit-line-clamp: 2; } .pg .pg-g--4 .pg-c .ctl { font-size: 13px; } .pg .pg-g--4 .pg-c .ctl__row { flex-wrap: nowrap; } .pg .pg-g--4 .pg-c .ctl__row > span:first-child { white-space: nowrap; overflow: hidden; } .pg > .pg-n { display: block; } }
-        .fl-strip { margin-top: 8px; } .pg-g--fl { grid-template-columns: 0.9fr 1.3fr 1fr; gap: 4px 10px; } .fl-strip .pg-c:not(:last-child) .ctl__row { display: none; } .fl-strip .sel { margin-top: 2px; } .fl-strip .pg-n { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .fl-re { font-family: var(--mono); font-size: 11.5px; color: var(--ink-3); white-space: nowrap; } .fl-hide { display: none; }
-        @media (max-width: 900px) { .pg-g--fl { grid-template-columns: 1fr; } .pg-g--4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } .pg .ctl__note { white-space: normal; } }
+        .fl-strip { margin-top: 8px; } .pg-g--fl { grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.15fr) minmax(0, 1.15fr) minmax(0, 0.9fr); gap: 4px 10px; } .fl-strip .pg-c:not(:last-child) .ctl__row { display: none; } .fl-strip .sel { margin-top: 2px; min-width: 0; max-width: 100%; } .fl-strip .pg-n { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .fl-re { font-family: var(--mono); font-size: 11.5px; color: var(--ink-3); white-space: nowrap; } .fl-hide { display: none; }
+        @media (max-width: 900px) { .pg-g--fl { grid-template-columns: minmax(0, 1fr); } .fl-re { white-space: normal; text-align: right; } .pg-g--4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } .pg .ctl__note { white-space: normal; } }
         .defs { margin: 0; font-size: 12px; line-height: 1.45; color: var(--ink-3); }
         .defs dt { font-family: var(--mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-top: 8px; }
         .defs dd { margin: 1px 0 0; }
@@ -38,7 +38,7 @@
 
     <link rel="stylesheet" href="../../fonts/arabic.css" />
     <script src="../../scripts/i18n/strings-ar.js"></script>
-    <meta name="translated-from" content="English public/simulations/double-inverted-pendulum.html, commit e766d52" />
+    <meta name="translated-from" content="English public/simulations/double-inverted-pendulum.html, commit e766d52+" />
   </head>
 <body>
     <header class="sim-top">
@@ -75,7 +75,7 @@
                     </div>
                     <figcaption class="stage__cap">
                         <span><b>الشكل 11</b> · <span class="tx">\(\mathbf D(\boldsymbol\theta)\,\ddot{\boldsymbol\theta} + \mathbf C(\boldsymbol\theta,\dot{\boldsymbol\theta})\,\dot{\boldsymbol\theta} + \mathbf G(\boldsymbol\theta) = \mathbf H u\)</span> · مباشر، RK4</span>
-                        <span id="cap-t"><i>t</i> = —</span>
+                        <span id="cap-tw"></span><span id="cap-t"><i>t</i> = —</span>
                     </figcaption>
                 </figure>
                 <section class="pg fl-strip" aria-label="الهواء والماء">
@@ -87,11 +87,14 @@
                         <span class="ctl__row"><span>الجريان</span></span>
                         <select id="flow" class="sel" disabled><option value="still">ساكن: لا جريان إلا ما تُحدثه الأجسام نفسها</option><optgroup label="Every day"><option value="breeze">نسيم ثابت</option><option value="gusts">ريح متقطّعة الهبّات</option><option value="ground">ريح فوق العشب</option><option value="lorry">شاحنة تمرّ</option><option value="fan">مروحة تنفخ على القضيبين</option><option value="eddy">دوّامة متدحرجة</option><option value="river">تيّار نهر</option><option value="waves">موج بحري متعاقب</option></optgroup><optgroup label="Textbook"><option value="shear">جريان قصّ بسيط</option><option value="jets">نفثان متقابلان</option><option value="cells">خلايا تايلور–غرين</option><option value="street">شارع دوّامات كارمان</option></optgroup></select>
                     </label></div><div class="pg-c"><label class="ctl">
+                        <span class="ctl__row"><span>المائع</span></span>
+                        <select id="cpl" class="sel" disabled><option value="given">معطى: يدفع ولا يُدفع</option><option value="solved">محلول: يدفع ويُدفع (13.6)</option></select>
+                    </label></div><div class="pg-c"><label class="ctl">
                         <span class="ctl__row"><span>سرعة الجريان <i>U</i></span><output id="Uf-out" for="Uf"></output></span>
                         <input type="range" id="Uf" min="0" max="8" step="0.1" value="2">
                     </label></div></div>
                     <p class="ctl__note pg-n" id="flow-note"></p>
-                    <div class="fl-hide" aria-hidden="true"><span id="fn-vacuum">لا وسط: لا يدفع العربة والقضيبين شيء سوى الجاذبية والسكّة والمحرّك. اختر الهواء أو الماء أو الغليسرين أو العسل ليكون لهما ما يتحرّكان خلاله.</span><span id="fn-still">المائع ساكن؛ لا تشعر به العربة والقضيبان إلا حين تتحرّك خلاله: على شكل كبح (33)–(34)، وعلى شكل الماء الذي تحمله معها (38).</span><span id="fn-breeze">الريح نفسها U في كل مكان وفي كل وقت.</span><span id="fn-gusts">الريح نفسها في كل مكان في كل لحظة، لكنها تشتدّ وتضعف: U (1 + ⁦0.5 sin⁩ 2π·⁦0.13t⁩ + ⁦0.3 sin⁩(2π·⁦0.37t⁩ + 1) + ⁦0.2 sin⁩(2π·⁦0.71t⁩ + 2)).</span><span id="fn-ground">ريح فوق العشب: القانون اللوغاريتمي u = (u*/κ) ln(z/z₀) مع z₀ = ⁦3 cm⁩، والأرض على بعد ⁦3.3 m⁩ تحت السكّة؛ U عند السكّة، وأكثر فوقها، وأقل تحتها.</span><span id="fn-lorry">تمرّ شاحنة على طريق بجانبك كل ⁦12 s⁩: هبّة نحو ثانية، ثم سحب أضعف إلى الوراء.</span><span id="fn-fan">مروحة على بعد ⁦6 m⁩ إلى اليسار بارتفاع القضيبين: نفث بيكلي المستوي، عرضه ⁦0.35 m⁩ عند العربة، وسرعته على محوره هناك U؛ ثم يتّسع ويبطؤ أبعد من ذلك.</span><span id="fn-eddy">دوّامة متدحرجة (دوّامة لامب–أوسين، نواتها ⁦0.45 m⁩، وأسرع دوران فيها U) تحملها ريح خفيفة سرعتها ⁦0.4 U⁩؛ دوّامة جديدة كل ⁦20 s⁩.</span><span id="fn-river">نهر: مقطع الأس 1/7 لتيّار مضطرب، U عند السطح على ارتفاع ⁦6.7 m⁩ فوق القاع، والجهاز مغمور تحت الماء.</span><span id="fn-waves">موج متعاقب: أمواج آيري طولها ⁦20 m⁩ فوق ماء عمقه ⁦6.7 m⁩؛ كل جزء من الماء يدور على قطع ناقص، بسرعة U عند السطح وأقل في العمق.</span><span id="fn-shear">قصّ بسيط: u = U y / (⁦1 m⁩)، إلى الأمام فوق السكّة وإلى الخلف تحتها؛ حلّ دقيق لمعادلات نافييه–ستوكس.</span><span id="fn-jets">نفثان يلتقيان وجهًا لوجه عند السكّة (جريان نقطة ركود): u = U x / (⁦1 m⁩)، v = −U y / (⁦1 m⁩).</span><span id="fn-cells">خلايا تايلور–غرين: دوّامات قطرها ⁦1 m⁩ تدور بالتناوب في اتجاهين متعاكسين؛ حلّ دقيق لمعادلات نافييه–ستوكس يخمد كـ e^(−2νπ²t)، سريعًا في العسل، لا في الهواء.</span><span id="fn-street">شارع دوّامات كارمان، أثر عمود في مهبّ الريح: صفّان متخالفان من الدوّامات، تتباعد ⁦1.6 m⁩، يتحرّكان بسرعة ⁦0.8 U⁩ في ريح U.</span></div>
+                    <div class="fl-hide" aria-hidden="true"><span id="fn-vacuum">لا وسط: لا يدفع العربة والقضيبين شيء سوى الجاذبية والسكّة والمحرّك. اختر الهواء أو الماء أو الغليسرين أو العسل ليكون لهما ما يتحرّكان خلاله.</span><span id="fn-still">المائع ساكن؛ لا تشعر به العربة والقضيبان إلا حين تتحرّك خلاله: على شكل كبح (33)–(34)، وعلى شكل الماء الذي تحمله معها (38).</span><span id="fn-breeze">الريح نفسها U في كل مكان وفي كل وقت.</span><span id="fn-gusts">الريح نفسها في كل مكان في كل لحظة، لكنها تشتدّ وتضعف: U (1 + ⁦0.5 sin⁩ 2π·⁦0.13t⁩ + ⁦0.3 sin⁩(2π·⁦0.37t⁩ + 1) + ⁦0.2 sin⁩(2π·⁦0.71t⁩ + 2)).</span><span id="fn-ground">ريح فوق العشب: القانون اللوغاريتمي u = (u*/κ) ln(z/z₀) مع z₀ = ⁦3 cm⁩، والأرض على بعد ⁦3.3 m⁩ تحت السكّة؛ U عند السكّة، وأكثر فوقها، وأقل تحتها.</span><span id="fn-lorry">تمرّ شاحنة على طريق بجانبك كل ⁦12 s⁩: هبّة نحو ثانية، ثم سحب أضعف إلى الوراء.</span><span id="fn-fan">مروحة على بعد ⁦6 m⁩ إلى اليسار بارتفاع القضيبين: نفث بيكلي المستوي، عرضه ⁦0.35 m⁩ عند العربة، وسرعته على محوره هناك U؛ ثم يتّسع ويبطؤ أبعد من ذلك.</span><span id="fn-eddy">دوّامة متدحرجة (دوّامة لامب–أوسين، نواتها ⁦0.45 m⁩، وأسرع دوران فيها U) تحملها ريح خفيفة سرعتها ⁦0.4 U⁩؛ دوّامة جديدة كل ⁦20 s⁩.</span><span id="fn-river">نهر: مقطع الأس 1/7 لتيّار مضطرب، U عند السطح على ارتفاع ⁦6.7 m⁩ فوق القاع، والجهاز مغمور تحت الماء.</span><span id="fn-waves">موج متعاقب: أمواج آيري طولها ⁦20 m⁩ فوق ماء عمقه ⁦6.7 m⁩؛ كل جزء من الماء يدور على قطع ناقص، بسرعة U عند السطح وأقل في العمق.</span><span id="fn-shear">قصّ بسيط: u = U y / (⁦1 m⁩)، إلى الأمام فوق السكّة وإلى الخلف تحتها؛ حلّ دقيق لمعادلات نافييه–ستوكس.</span><span id="fn-jets">نفثان يلتقيان وجهًا لوجه عند السكّة (جريان نقطة ركود): u = U x / (⁦1 m⁩)، v = −U y / (⁦1 m⁩).</span><span id="fn-cells">خلايا تايلور–غرين: دوّامات قطرها ⁦1 m⁩ تدور بالتناوب في اتجاهين متعاكسين؛ حلّ دقيق لمعادلات نافييه–ستوكس يخمد كـ e^(−2νπ²t)، سريعًا في العسل، لا في الهواء.</span><span id="fn-solved">محلول: يملأ الماء خزّانًا طوله ⁦4 m⁩ وارتفاعه ⁦2.8 m⁩ وعمقه عمق العربة (⁦0.2 m⁩)، وتُحلّ فيه معادلات نافييه–ستوكس على خلايا من ⁦2.5 cm⁩. تدفع العربة الماء جانبًا وتسحبه معها؛ ويدفع كل قضيب الماء على طوله كله، ويدفعه الماء بالمقابل؛ وتصل الآثار التي يتركانها إلى الأجسام الأخرى (القسم 13.6). ماء ساكن، أو تيّار U يدخل من اليسار.</span><span id="fn-street">شارع دوّامات كارمان، أثر عمود في مهبّ الريح: صفّان متخالفان من الدوّامات، تتباعد ⁦1.6 m⁩، يتحرّكان بسرعة ⁦0.8 U⁩ في ريح U.</span></div>
                 </section>
                 </div>
                 <section class="pg" aria-label="المعلمات">
@@ -608,12 +611,16 @@
                             <li>ويكيبيديا، <a href="https://en.wikipedia.org/wiki/Airy_wave_theory">«Airy wave theory»</a>: السرعات المدارية و\(\omega^2 = gk\tanh kh\).</li>
                             <li>ويكيبيديا، <a href="https://en.wikipedia.org/wiki/Morison_equation">«Morison equation»</a>: \(F = \rho V\dot u + \rho C_a V(\dot u - \dot v) + \tfrac12\rho C_d A(u - v)|u - v|\)، والحدّ الأول هو قوّة فرود–كريلوف؛ وحدودها.</li>
                             <li>ويكيبيديا، <a href="https://en.wikipedia.org/wiki/Added_mass">«Added mass»</a>: \(\tfrac23\pi r^3\rho\) للكرة.</li>
+                            <li>C. Batty و F. Bertails و R. Bridson، <a href="https://cs.uwaterloo.ca/~c2batty/papers/Batty07.pdf">«A fast variational framework for accurate solid-fluid coupling»</a>، <em>ACM Transactions on Graphics</em> 26(3)، 100 (2007): خطوة الضغط بوصفها أدنى طاقة حركية، وأوزان الحجوم (4)، والقوّة على الجسم (8)–(10).</li>
+                            <li>C. S. Peskin، <a href="https://doi.org/10.1017/S0962492902000077">«The immersed boundary method»</a>، <em>Acta Numerica</em> 11، ⁦479–517⁩ (2002): التوزيع والاستيفاء (4.18)–(4.19)، ومتطابقة القدرة (5.2)، والنواة ذات النقاط الأربع (6.26)–(6.27).</li>
+                            <li>M. Schäfer و S. Turek، <a href="https://karlin.mff.cuni.cz/~hron/NMMO403/dfg_benchmark_results.pdf">«Benchmark computations of laminar flow around a cylinder»</a>، في <em>Flow Simulation with High-Performance Computers II</em>، Vieweg (1996): حالة الاختبار ⁦2D⁩-1، الجدول 3، \(c_D\) بين 5.57 و 5.59.</li>
+                            <li>J. N. Sørensen و W. Z. Shen، <a href="https://doi.org/10.1115/1.1471361">«Numerical modeling of wind turbine wakes»</a>، <em>Journal of Fluids Engineering</em> 124، ⁦393–399⁩ (2002): قوى الشفرات من السرعة المحلّية، موزّعة على خطوط في حلّال لمعادلات نافييه–ستوكس (خطّ المشغّل). لم يتوفّر لنا إلا الملخّص.</li>
                         </ol>
                     </section>
 
                     <section class="psec" id="p-fluid">
                         <h3><span class="psec__n">13</span>الهواء والماء: دفع الجريان</h3>
-                        <p>قف في محطّة حافلات حين تمرّ شاحنة: تدفعك الهبّة، ثم تجذبك. اخُض في نهر: يتّكئ الماء على ساقيك، أشدّ كلما أسرع، وأشدّ على ساق معترضة للتيّار منه على عمود ممسوك بطوله. يعطي هذا القسم الآلة مائعًا كهذا. تتحرّك جسيماته بحقل سرعة \(\mathbf v_f(x, y, t)\) يُختار من القائمة تحت الشكل، وكل جزء من العربة والقضيبين يتحرّك بسرعة مختلفة يُدفع. الجريان معطى: تشعر به الأجسام لكنها لا تغيّره. هذا الاقتران في اتجاه واحد هو الصورة الصحيحة ما دامت الأجسام صغيرة أمام مقياس الجريان؛ ويقول القسم 13.5 ما الذي يُهمله.</p>
+                        <p>قف في محطّة حافلات حين تمرّ شاحنة: تدفعك الهبّة، ثم تجذبك. اخُض في نهر: يتّكئ الماء على ساقيك، أشدّ كلما أسرع، وأشدّ على ساق معترضة للتيّار منه على عمود ممسوك بطوله. يعطي هذا القسم الآلة مائعًا كهذا. تتحرّك جسيماته بحقل سرعة \(\mathbf v_f(x, y, t)\) يُختار من القائمة تحت الشكل، وكل جزء من العربة والقضيبين يتحرّك بسرعة مختلفة يُدفع. الجريان معطى: تشعر به الأجسام لكنها لا تغيّره. هذا الاقتران في اتجاه واحد هو الصورة الصحيحة ما دامت الأجسام صغيرة أمام مقياس الجريان؛ ويقول القسم 13.5 ما الذي يُهمله، أما القسم 13.6 فيحلّ الجريان بدلًا من ذلك، فتدفع الأجسام الماء ويدفعها الماء بالمقابل.</p>
                         <h4><span class="psub__n">13.1</span>الأوساط</h4>
                         <p>يدخل المائع بعددين: كثافته \(\rho\)، التي تحدّد كم من الزخم يحمل، ولزوجته \(\mu\)، التي تحدّد شدّة سحب الطبقات المتجاورة بعضها لبعض. ونسبتهما \(\nu = \mu/\rho\) هي اللزوجة الحركية. وأيّهما يغلب قرب جسم حجمه \(d\) يتحرّك خلال المائع بسرعة \(|\mathbf w|\) يخبر به عدد رينولدز \(\mathrm{Re} = \rho\,|\mathbf w|\,d/\mu\).</p>
                         <table class="ptable">
@@ -672,13 +679,46 @@
                         <p>وعلى العربة \((\rho V_e + m_c)\) مضروبًا في تسارع الجريان على طول السكّة. وبهما معًا تصير معادلات الحركة (9)</p>
                         \[ \bigl(\mathbf D + \mathbf M_a\bigr)\,\ddot{\mathbf q} + \mathbf C\,\dot{\boldsymbol\theta} + \mathbf C_a(\boldsymbol\theta, \dot{\mathbf q}) + \mathbf G = \mathbf H u + \mathbf Q , \tag{40} \]
                         <p>مع (39) داخل \(\mathbf Q\). تأخذ الصفحة \(D\mathbf v_f/Dt\) بفروق مركزية عرضها ⁦0.1 mm⁩ و⁦0.1 ms⁩؛ ويتّفق المشتق الدقيق لكل جريان في Wolfram عند نقطة اختبار معه إلى \(6\times10^{-7}\) منه أو أفضل. ويُعاد تصميم المتحكّم بـ \(\mathbf M_a\)، كما مع الطفو، وكذلك شهادته ومخطِّط الرفع، اللذان يستعملان الآلة نفسها؛ أما الجريان فلا يُخبَران به بعد. وفي الماء يُبطئ الطفو والكتلة المضافة معًا معدّلَي السقوط في (13) بنسبة ⁦17 %⁩: من 10.39 إلى 8.61 ومن 4.10 إلى 3.40 في الثانية.</p>
-                        <p><b>ما أُهمل.</b> أجزاء الكتلة المضافة التي تمزج حركة القضيب نفسه بسرعة الجريان حين يدور القضيب؛ وآثار القضيبين أنفسهما والدوّامات التي يطلقانها؛ وتغيير الأجسام للجريان؛ وسطح الماء؛ وكبح السكّة نفسها. ومعادلة موريسون نفسها تقريب، ضعيف حيث يتقارب الكبح والقصور في الحجم [25]. ولا تستطيع قوّة المحرّك البالغة ⁦60 N⁩ أن تُبقي القضيبين الافتراضيين في نهر يجري بسرعة ⁦2 m/s⁩: فبحسب (34) يدفع الماء نحو ⁦48 N⁩ على كل متر.</p>
+                        <p><b>ما أُهمل</b> (مع الجريان المعطى). أجزاء الكتلة المضافة التي تمزج حركة القضيب نفسه بسرعة الجريان حين يدور القضيب؛ وآثار القضيبين أنفسهما والدوّامات التي يطلقانها؛ وتغيير الأجسام للجريان (يضيف القسم 13.6 هذين الأمرين)؛ وسطح الماء؛ وكبح السكّة نفسها. ومعادلة موريسون نفسها تقريب، ضعيف حيث يتقارب الكبح والقصور في الحجم [25]. ولا تستطيع قوّة المحرّك البالغة ⁦60 N⁩ أن تُبقي القضيبين الافتراضيين في نهر يجري بسرعة ⁦2 m/s⁩: فبحسب (34) يدفع الماء نحو ⁦48 N⁩ على كل متر.</p>
+                        <h4><span class="psub__n">13.6</span>حين يردّ الماء الدفع: المائع المحلول</h4>
+                        <p>حرّك الشاي بملعقة، ثم توقّف وعُد بها: تلقى الملعقة الدوّامة التي تركتها، فتدفعها الدوّامة. ويشعر السبّاح بالماء الذي حرّكه من يسبح أمامه. لا شيء من هذا في الأقسام ⁦13.1–13.5⁩، حيث الجريان معطى والأجسام تشعر به فقط. اختر <i>المائع: محلول</i> تحت الشكل فيصير الماء حقلًا تحسبه الصفحة: كل دفعة من العربة والقضيبين تدخل الماء، ويحملها الماء بعيدًا آثارًا ودوّامات، ثم تعود هذه فتدفع الأجسام. يغادر الزخم الآلة ويدخل الماء، والعكس، بمقادير متساوية: قانون نيوتن الثالث، نقطة نقطة.</p>
+                        <p><b>الخزّان.</b> حقل يتغيّر في الاتجاهات الثلاثة كلها يفوق طاقة المتصفّح بكثير، لذا تقف الآلة في خزّان ضيّق عمقه عمق العربة (\(b = 0.2\) m، إلى داخل الشاشة)، طوله ⁦4 m⁩ وارتفاعه ⁦2.8 m⁩، وجدرانه لا تمسك الماء. فيتحرّك الماء عندئذ في مستوى الشاشة، على حال واحدة في كل شريحة من العمق: حقل سرعة ثنائي البعد \(\mathbf u(x, y, t)\) مع الضغط \(p\). تملأ العربة العمق، فهي في المستوى جسم حقيقي، مستطيل 0.36 × ⁦0.12 m⁩. أما القضيب فلا: سمكه ⁦2 cm⁩ في خزّان عمقه ⁦20 cm⁩، والماء يلتفّ حوله عبر العمق كما يمرّ به في المستوى. ولو رُسم القضيب جسمًا في المستوى لكان مجدافًا بعمق الخزّان؛ وقد فعلت محاولة سابقة ذلك بالضبط، فشعر قضيبها العلوي بنحو ⁦30 N⁩ في تيّار غليسرول سرعته ⁦0.5 m/s⁩، حيث تعطي (33)–(34) نحو ⁦3 N⁩. لذا يصير كل قضيب خطًّا من القوى بدلًا من ذلك: ما يشعر به الماء هو دفع القضيب، موزّعًا على العمق. وفي الخزّان يخضع الماء لمعادلات نافييه–ستوكس</p>
+                        \[ \rho\left(\frac{\partial\mathbf u}{\partial t} + (\mathbf u\cdot\nabla)\mathbf u\right) = -\nabla p + \mu\nabla^2\mathbf u - \frac1b\sum_{\text{rods}}\int \mathbf f(s)\,\delta_h\bigl(\mathbf x - \mathbf r(s)\bigr)\,ds , \qquad \nabla\cdot\mathbf u = 0 , \tag{41} \]
+                        <p>حيث يتحرّك سطح العربة بـ \(\dot x\)، ويلتصق الماء به، والقوّة لكل متر \(\mathbf f\) التي يؤثّر بها الماء في كل قضيب تُستردّ من الماء بإشارة معاكسة: \(\mathbf f\,ds/b\) قوّة لكل وحدة حجم من الشريحة. و\(\delta_h\) نتوء ضيّق مساحته واحد، هو نواة بيسكين ذات النقاط الأربع [28، المعادلة (6.27)]، عرضها 4 خلايا؛ وهي تمثّل دالّة ديراك على الشبكة.</p>
+                        <p><b>القضيبان.</b> تقرأ كل نقطة من نقاط غاوس الـ 24 على القضيب سرعة الماء هناك بالنواة نفسها، \(\mathbf u_s(s) = \sum \mathbf u\,\delta_h(\mathbf x - \mathbf r(s))\,\Delta^2\) على الشبكة ذات حجم الخلية \(\Delta\)، والقوّة لكل متر هي قانون (33) و(34) و(39) مع \(\mathbf u_s\) مكان الجريان المعطى:</p>
+                        \[ \mathbf w = \mathbf v_{\text{body}} - \mathbf u_s , \qquad \mathbf f = \mathbf f_{(33)+(34)}(\mathbf w) + \bigl(\rho\pi r^2 + \mu_a\bigr)\frac{D\mathbf u_s}{Dt}\cdot\mathbf n\;\mathbf n , \qquad Q_{\text{rod},i} = \int \mathbf f\cdot\frac{\partial\mathbf r}{\partial q_i}\,ds . \tag{42} \]
+                        <p>ولأن القراءة والتوزيع يستعملان النواة نفسها، فإن القدرة التي يعطيها الماء للقضيب والقدرة التي يعطيها القضيب للماء مجموعهما بالضبط [28، المعادلة (5.2)]</p>
+                        \[ \int\mathbf f\cdot\mathbf v_{\text{body}}\,ds \;-\; \int \mathbf f\cdot\mathbf u_s\,ds \;=\; \int\mathbf f\cdot\mathbf w\,ds \;=\; -\int\Bigl(\xi_\perp w_n^2 + c_q|w_n|\,w_n^2 + \tfrac12\xi_\perp w_t^2\Bigr)ds \;\le\; 0 , \tag{43} \]
+                        <p>وهو ما يتحقّق منه Wolfram: الفرق هو الحرارة التي يولّدها الكبح في الطبقة الحدّية الرقيقة للقضيب وفي أثره، تحت مستوى الشبكة. هذه المعالجة للأجسام النحيلة هي خطّ المشغّل في دراسات توربينات الرياح [30]، مع معادلات التفاعل لبيسكين [28] تقوم بالقراءة والتوزيع. ودفعات القضيبين، مجموعة بالأوزان التي يعطيها RK4 للحالة، توزَّع في الماء في بداية خطوة المائع التالية: الزخم في الطريق ⁦20 ms⁩، ولا يضيع أبدًا.</p>
+                        <p><b>العربة.</b> تتبع قوّة الضغط على العربة باتي وبيرتاي وبريدسون [27، المعادلات (4)، (8)–(10)]: كل قيمة سرعة على الشبكة تحمل نصيب المائع من الخلية المحيطة بها، ويُحسب للمستطيل بالضبط؛ وسرعة العربة تملأ الباقي؛ والضغط الذي يجعل الحقل خاليًا من التباعد يدفع العربة بـ \(-b\sum(1 - w)\,\Delta^2\,\partial p/\partial x\). هذا الضغط خطّي في سرعة العربة الجديدة \(\dot x'\)، \(p = p_0 + \dot x'\,p_x\)، فيعطي حلّان للضغط في كل خطوة</p>
+                        \[ F_c = Q_0 + K_x\,\dot x' , \qquad K_x = -b\sum(1 - w)\,\Delta^2\,\frac{\partial p_x}{\partial x} < 0 , \tag{44} \]
+                        <p>حيث تضمّ \(Q_0\) أيضًا قصّ الماء على العربة (التصاق عند السطح الحقيقي، مع حساب بُعد الجدار داخل الخلية) ودفعات القضيبين التي تقع داخلها. و\(K_x\) هو الماء الذي يجب على العربة أن تزيحه. تتحرّك الآلة بخطوات ⁦1 ms⁩ من RK4 الخاص بالصفحة داخل كل خطوة مائع من ⁦20 ms⁩، فلا تستطيع \(F_c\) أن تنتظر \(\dot x'\)؛ بل تحمل العربة \(m_a = -K_x\Delta t\) كتلةً إضافية بينما القوّة المثبّتة \(G = Q_0 + K_x\dot x_0\):</p>
+                        \[ \bigl(\mathbf D + \mathbf M_a + m_a\mathbf e_1\mathbf e_1^{\mathsf T}\bigr)\ddot{\mathbf q} + \dots = \mathbf H u + \mathbf Q_{\text{rod}} + G\,\mathbf e_1 , \qquad m_a = -K_x\,\Delta t , \tag{45} \]
+                        <p>ويبيّن Wolfram أن العربة تتلقّى عندئذ خلال الخطوة الدفع \(\Delta t\,(Q_0 + K_x\dot x')\) من (44) بالضبط، أيًّا كانت الخطوة. وهنا لا تحتفظ \(\mathbf M_a\) من (38) إلا بالماء الذي يحمله القضيبان: أما ماء العربة فعلى الشبكة. والعربة الأخفّ من الماء الذي تزيحه (⁦11 kg⁩ من الغليسرول في الخزّان) تبقى مستقرّة بهذه الطريقة، حيث لا تبقى لو دُفعت بقوّة الخطوة السابقة.</p>
+                        <p>يعطي الجريان الكموني الكتلة المضافة نفسها بالضبط. فلمقطع العربة المتحرّك بطوله تعطي طريقة الألواح، لكل وحدة كثافة وعمق،</p>
+                        \[ m_{a,\infty} = \rho\,b\,A_2 , \qquad A_2 = 0.020539\ \text{m}^2 , \tag{46} \]
+                        <p>⁦5.18 kg⁩ في الغليسرول و ⁦4.10 kg⁩ في الماء. ويعطي البرنامج نفسه 1.0017 من \(\rho\pi a^2\) للدائرة و 1.0009 من \(\rho\pi b^2\) لقطع ناقص 0.36 × ⁦0.12 m⁩، وهي القيمة التي يستنتجها Wolfram من الجهد الدقيق للقطع الناقص. ويُعاد تصميم المتحكّم بـ (46)، كما مع الطفو؛ أما الجريان المحلول فلا يُخبَر به بعد.</p>
+                        <p><b>كيف يُتحقّق منه.</b> كل نصّ اختبار موجود في المستودع (<code>notes/fig11/fluid-ns-handover/twoway/</code>)؛ وكل منها يقارن بنتيجة دقيقة أو منشورة.</p>
+                        <table class="ptable">
+                            <tr><th>الاختبار</th><th>دقيق أو منشور</th><th>محلول</th></tr>
+                            <tr><td>الكتلة المضافة للعربة، \(-K_x\Delta t\)، 4.8 و 9.6 و 19.2 خلية على ارتفاعها</td><td>(46): ⁦5.18 kg⁩ في الغليسرول</td><td>−9.0 %, −3.9 %, −1.3 %</td></tr>
+                            <tr><td>قناة بلا أجسام (بوازوي)، \(dp/dx\)</td><td>\(-8\mu U_{\max}/H^2\)</td><td>في حدود ⁦0.34 %⁩</td></tr>
+                            <tr><td>أسطوانة في قناة، شيفر–توريك ⁦2D⁩-1 [29]، \(c_D\) من الزخم المارّ عبر صندوق حولها، 10 و 20 و 40 خلية لكل قطر</td><td>5.57–5.59</td><td>5.34, 5.32, 5.30</td></tr>
+                            <tr><td>الشيء نفسه، \(c_D\) مقروءًا على الجسم</td><td>5.57–5.59</td><td>5.12, 5.21, 4.96</td></tr>
+                            <tr><td>القضيبان ممسوكان في تيّار سرعته ⁦0.5 m/s⁩، الكبح على القانون (33)–(34): الغليسرول، العسل، الماء</td><td>1</td><td>0.959, 0.931, 0.967</td></tr>
+                            <tr><td>التباعد الباقي بعد خطوة الضغط</td><td>0</td><td>دون \(2\times10^{-4}\) s⁻¹</td></tr>
+                            <tr><td>موازنة طاقة الآلة، \(E - E_0 - W_{\text{motor}} - \int P\,dt\)</td><td>0</td><td>\(10^{-12}\) J</td></tr>
+                        </table>
+                        <p>ثلاثة أرقام ليست كما ينبغي، والصفحة تقول ذلك. يقرأ القضيب ماءً أبطأه دفعه هو، فيشعر بكبح أقلّ بـ ⁦3–7 %⁩ مما تَعِد به (33)–(34)؛ والقانون يتضمّن أصلًا إبطاء القضيب للماء، فيُحسب هذا القدر مرّتين، ويكبر النقص قليلًا حين تُنعَّم الشبكة (0.949 عند ⁦1.25 cm⁩ في الغليسرول). والجريان حول أسطوانة المقارنة أضعف بنحو ⁦5 %⁩ ولا يتحسّن على شبكات أنعم، والقوّة المقروءة على الجسم أدنى بـ ⁦2–6 %⁩ أخرى مما تقوله موازنة الزخم: في مكان ما تمرّ بضعة في المئة من الزخم بين الجسم والماء دون أن تُحسب، ولم يُعثر على هذا التسرّب بعد.</p>
+                        <p><b>الموازنات.</b> تحفظ مجموعة <i>المائع المحلول</i> في لوحة البيانات موازنة الماء الخاصة: شغل المحرّك وما يُدخله التيّار عبر طرفي الخزّان يساويان طاقة الآلة، والطاقة الحركية للماء \(K_f = \tfrac12\rho b\sum w\,u^2\Delta^2\)، وحرارة القضيبين (43) وحرارة اللزوجة في الجريان المحلول، زائد باقٍ \(R\) يفقده المخطّط. في الغليسرول، بعد ميل قدره ⁦4.6°⁩ و ⁦2.9°⁩ وتوازن مدّته ⁦3 s⁩، يبذل المحرّك ⁦1.33 J⁩: تبقى ⁦0.012 J⁩ في الآلة، و ⁦0.005 J⁩ في الماء، ويولّد كبح القضيبين ⁦0.107 J⁩ حرارةً تحت مستوى الشبكة، واللزوجة ⁦0.98 J⁩ في الجريان، و\(R\) يساوي ⁦0.23 J⁩، أي ⁦17 %⁩، معظمه في اقتران العربة بالضغط وفي نقل الجريان؛ وهو ⁦14.5 %⁩ على خلايا بنصف الحجم، و ⁦8 %⁩ في العسل. وفي الماء يبلغ ⁦80 %⁩: عند خلايا من ⁦2.5 cm⁩ يكون الماء أرقّ كثيرًا من أن تحلّه الشبكة، وتنتهي دوّاماته عند حجم الخلية، ويقوم فقد المخطّط مقام التسلسل إلى الدوّامات الصغيرة الذي كان سيحوّل الطاقة نفسها إلى حرارة. فالجريان المرسوم في الماء صحيح في دوّاماته الكبيرة، لا في تفاصيله الدقيقة.</p>
+                        <p>على هذا الحاسوب تكلّف خطوة مائع من ⁦20 ms⁩ نحو ⁦22 ms⁩ في Chromium؛ وحين لا يستطيع الحاسوب المجاراة، تُبطَّأ الساعة ويقول التعليق <i>حركة بطيئة</i>. <b>ما أُهمل.</b> الجريان عبر العمق حول القضيبين وأي تغيّر للجريان على امتداد العمق؛ والاحتكاك على جداري الخزّان الأمامي والخلفي؛ والسكّة؛ وسطح الماء؛ وفي الهواء والماء، الدوّامات الأصغر من خلية.</p>
                         <div class="pbox pbox--ex">
                             <span class="pbox__t">التمارين</span>
                             <p><b>13.1</b> قضيبان قائمان ساكنان في نسيم ثابت \(U\)، مع \(\xi_\perp\) واحد للقضيبين و(33) وحدها: بيّن من (35) أن \(\mathbf Q = \xi_\perp U\,\bigl(L_1 + L_2,\ \tfrac12 L_1(L_1 + 2L_2),\ \tfrac12 L_2^2\bigr)\)، وقارنه في الغليسرين بقيم \(Q_i\) في المخزن.</p>
                             <p><b>13.2</b> من (34)، عند أيّ سرعة لنهر يعجز المحرّك ذو ⁦60 N⁩ عن إبقاء القضيبين الافتراضيين قائمين؟ جرّب ذلك بالمزلق.</p>
                             <p><b>13.3</b> بيّن من (33) أن قضيبًا يسقط بزاوية ⁦45°⁩ في مائع لزج ينجرف جانبيًّا أثناء سقوطه، وفي أيّ اتجاه.</p>
                             <p><b>13.4</b> اشتقّ \(\mathbf M_a\) من (38) لقضيب واحد مفصلي على العربة، وبيّن أن عنصره \(xx\)، أي \(\mu_a L\cos^2\theta\)، ينعدم لقضيب ممدّد على طول السكّة. لماذا لا تعتمد الكتلة المضافة لدوران القضيب، \(\mu_a L^3/3\)، على \(\theta\)؟</p>
+                            <p><b>13.5</b> بيّن أنه إذا قرأ القضيبان الماء بنواة ووزّعا دفعهما بنواة أخرى، فإن (43) لا تصحّ: سيتبادل الماء والقضيبان قدرةً ليست حرارة الكبح ولا صفرًا. أين يظهر ذلك في موازنة الماء في لوحة البيانات؟</p>
                         </div>
                     </section>
                 </div>
@@ -693,6 +733,7 @@
     <script src="../../scripts/fold.js"></script>
     <script src="../../scripts/sim.js"></script>
     <script src="../../scripts/dataset.js"></script>
+    <script src="../../scripts/twoway.js"></script>
     <script>
     (function () {
         'use strict';
@@ -704,14 +745,18 @@
         var sR = Sim.slider('rho', { format: function (v) { return Sim.fmt(Math.pow(10, v), v < 0 ? 2 : 1); }, onInput: redesign });
         var medEl = document.getElementById('med'), flowEl = document.getElementById('flow'), flNote = document.getElementById('flow-note');
         var sU = Sim.slider('Uf', { format: function (v) { return v.toFixed(1) + ' m/s'; }, onInput: function () { redesign(); } });
-        function flowNote() { var k = medEl.value === 'vacuum' ? 'vacuum' : flowEl.value; flNote.textContent = flNote.title = document.getElementById('fn-' + k).textContent.replace(/\s+/g, ' ').trim(); }
-        medEl.addEventListener('change', function () { flowEl.disabled = medEl.value === 'vacuum'; flowNote(); redesign(); });
+        var cplEl = document.getElementById('cpl');
+        function solved() { return cplEl.value === 'solved' && medEl.value !== 'vacuum'; }   // the fluid of section 13.6: solved, and pushed back
+        function flowNote() { var k = medEl.value === 'vacuum' ? 'vacuum' : flowEl.value; flNote.textContent = flNote.title = (solved() ? document.getElementById('fn-solved').textContent + ' ' : '') .replace(/\s+/g, ' ') + document.getElementById('fn-' + k).textContent.replace(/\s+/g, ' ').trim(); }
+        function cplOptions() { var sv = cplEl.value === 'solved'; Array.prototype.forEach.call(flowEl.querySelectorAll('option'), function (o) { o.disabled = sv && o.value !== 'still' && o.value !== 'breeze'; }); if (sv && flowEl.value !== 'still' && flowEl.value !== 'breeze') flowEl.value = 'still'; }   // the solved tank has still water or a stream from the left
+        cplEl.addEventListener('change', function () { cplOptions(); flowNote(); redesign(); reset(); });
+        medEl.addEventListener('change', function () { flowEl.disabled = cplEl.disabled = medEl.value === 'vacuum'; flowNote(); redesign(); });
         flowEl.addEventListener('change', function () { var w = flowEl.value === 'river' || flowEl.value === 'waves'; if (w && medEl.value === 'air') medEl.value = 'water'; flowNote(); redesign(); });   // a river and a swell are water
         flowNote();
         var sJ = Sim.slider('J', { format: function (v) { return v.toFixed(2) + ' N·s'; } });
 
         /* ---------- the model (5)–(9) ---------- */
-        function par() { var m0 = sl.m0.value, m1 = sl.m1.value, m2 = sl.m2.value, L1 = sl.L1.value, L2 = sl.L2.value, fl = fluidPar(L1, L2), bA = fl ? fl.rho * Math.PI * ROD_R * ROD_R * G : 0, ma = fl ? { mu: CA_ROD * fl.rho * Math.PI * ROD_R * ROD_R, mc: fl.rho * CART_VE * CART_KX / (2 - CART_KX) } : null;
+        function par() { var m0 = sl.m0.value, m1 = sl.m1.value, m2 = sl.m2.value, L1 = sl.L1.value, L2 = sl.L2.value, fl = fluidPar(L1, L2), bA = fl ? fl.rho * Math.PI * ROD_R * ROD_R * G : 0, ma = fl ? { mu: CA_ROD * fl.rho * Math.PI * ROD_R * ROD_R, mc: solved() ? fl.rho * CART_B * CART_A2 : fl.rho * CART_VE * CART_KX / (2 - CART_KX) } : null;   // solved: the cart fills the tank's depth, so its added mass is the 2D one (13.6)
             return { m0: m0, m1: m1, m2: m2, L1: L1, L2: L2, d: [m0 + m1 + m2, (m1 / 2 + m2) * L1, m2 * L2 / 2, (m1 / 3 + m2) * L1 * L1, m2 * L1 * L2 / 2, m2 * L2 * L2 / 3], f: [(m1 / 2 + m2) * L1 * G - bA * (L1 * L1 / 2 + L1 * L2), m2 * L2 * G / 2 - bA * L2 * L2 / 2], fl: fl, ma: ma }; }   // f with the buoyancy (37) of the medium, ma its added mass (38)
         function Dm(p, a, b) { var d = p.d, c1 = Math.cos(a), c2 = Math.cos(b), c12 = Math.cos(a - b), M = [[d[0], d[1] * c1, d[2] * c2], [d[1] * c1, d[3], d[4] * c12], [d[2] * c2, d[4] * c12, d[5]]]; if (p.ma) addedMass(M, p, c1, c2, c12); return M; }
         function solve3(M, r) { var A = M.map(function (row, i) { return row.concat([r[i]]); }), i, j, k;
@@ -763,6 +808,7 @@
                 case 'street': c = 0.8 * U * t; q = 0.4 * U * ST_L / Math.tanh(Math.PI * ST_H / ST_L); f = row(X, Y, c + ST_L / 2, 0.6 + ST_H / 2, -q); a = row(X, Y, c, 0.6 - ST_H / 2, q); return [U + f[0] + a[0], f[1] + a[1]];
             }
             return [0, 0]; }
+        var CART_A2 = 0.020539;   // added mass of the cart's 0.36 × 0.12 m section moving along its length, per unit density and depth (m²): potential flow, panel method (13.6)
         var CA_ROD = 1, CART_VE = 4 / 3 * Math.PI * 0.18 * 0.06 * 0.10, CART_KX = 0.28761848324573183;   // C_a of a cylinder (13.5, Wolfram); the cart as an ellipsoid of its size, Tuckerman's κ_x [16]
         function addedMass(M, p, c1, c2, c12) { var m = p.ma.mu, L1 = p.L1, L2 = p.L2;   // (38): the matrix of T_a = ½ μ_a ∫ (v·n)² ds over both rods, and the cart's m_c along x
             M[0][0] += m * (L1 * c1 * c1 + L2 * c2 * c2) + p.ma.mc; M[0][1] += m * L1 * (L1 * c1 / 2 + L2 * c2 * c12); M[0][2] += m * L2 * L2 * c2 / 2;
@@ -1097,6 +1143,29 @@
         ds.var('Re_tip', [], 'float', { symbol: 'Re', long_name: 'Reynolds number at the top of the upper rod, from its speed through the fluid (section 13.1)', computed_in: 'diagnostics()', formula: 'ρ |w| d / μ', digits: 3, sci: true });
         ds.var('w_tip', [], 'float', { symbol: '|w|', units: 'm/s', long_name: 'speed of the top of the upper rod through the fluid', computed_in: 'diagnostics()', digits: 4 });
         ds.dim('fg', FG_NX * FG_NY);
+        /* the solved fluid of section 13.6: the tank, the coupling and its books, written by twStep() and diagnostics() */
+        var TW = { dx: 0.025, x0: -2, y0: -1.4, nx: 160, ny: 112, dt: 0.02 };   // the tank: 4.0 × 2.8 m on 2.5 cm cells; one fluid step every 20 ms (20 steps of the machine)
+        ds.dim('twc', (TW.nx + 1) * (TW.ny + 1));
+        ds.var('tw_on', [], 'bool', { symbol: 'solved', long_name: 'the fluid is solved and pushed back (13.6)', computed_in: 'the The fluid menu, in twSync()' });
+        ds.var('tw_dx', [], 'float', { symbol: 'Δ', units: 'm', long_name: 'cell size of the tank’s grid', computed_in: 'the constant TW', digits: 4 });
+        ds.var('tw_n', ['two'], Float64Array, { symbol: 'n<sub>x</sub>, n<sub>y</sub>', long_name: 'cells along and up the tank', computed_in: 'the constant TW', digits: 0 });
+        ds.var('tw_b', [], 'float', { symbol: 'b', units: 'm', long_name: 'depth of the tank, the cart’s depth: every field is per metre of depth times b', computed_in: 'twoway.js', digits: 3 });
+        ds.var('tw_ma', [], 'float', { symbol: 'm<sub>a</sub>', units: 'kg', long_name: 'the water the cart must push aside, from the coupled pressure: m_a = −K<sub>x</sub> Δt (45)', computed_in: 'World.step(), in twStep()', digits: 4 });
+        ds.var('tw_ma2', [], 'float', { symbol: 'm<sub>a,∞</sub>', units: 'kg', long_name: 'the same from potential flow round the cart’s section, panel method (46): what the controller’s model uses', computed_in: 'par()', formula: 'ρ b A<sub>2</sub>, A<sub>2</sub> = 0.020539 m²', digits: 4 });
+        ds.var('tw_Fc', [], 'float', { symbol: 'F<sub>c</sub>', units: 'N', long_name: 'the water’s mean force on the cart over the last fluid step: pressure and shear (44)', computed_in: 'World.step(), in twStep()', digits: 4 });
+        ds.var('tw_Qr', ['a3'], Float64Array, { symbol: 'Q<sub>rod,i</sub>', long_name: 'the water’s mean generalised force on the rods over the last fluid step (42): N, N m, N m', computed_in: 'World.runMachine(), in twStep()', digits: 4 });
+        ds.var('tw_KE', [], 'float', { symbol: 'K<sub>f</sub>', units: 'J', long_name: 'the kinetic energy of the water in the tank', computed_in: 'World.KE(), in diagnostics()', formula: '½ ρ b Σ w u² Δ²', digits: 5 });
+        ds.var('tw_Drod', [], 'float', { symbol: 'D<sub>rod</sub>', units: 'J', long_name: 'heat made by the rods’ drag below the grid since the fluid started (43)', computed_in: 'World.runMachine()', formula: 'Σ h/6 ∫ f·w ds', digits: 5 });
+        ds.var('tw_Dvis', [], 'float', { symbol: 'D<sub>ν</sub>', units: 'J', long_name: 'heat made by viscosity in the resolved flow since the fluid started', computed_in: 'World.diffuse()', formula: 'W<sub>shear</sub> − ΔK<sub>diffusion</sub>', digits: 5 });
+        ds.var('tw_Wm', [], 'float', { symbol: 'W<sub>m</sub>', units: 'J', long_name: 'the motor’s work since the fluid started', computed_in: 'World.runMachine()', formula: 'Σ u Δx', digits: 5 });
+        ds.var('tw_dE', [], 'float', { symbol: 'ΔE', units: 'J', long_name: 'change of the machine’s energy since the fluid started', computed_in: 'diagnostics()', digits: 5 });
+        ds.var('tw_Eb', [], 'float', { symbol: 'E<sub>in</sub>', units: 'J', long_name: 'energy the stream carries into the tank through its ends since the fluid started: kinetic energy and pressure work', computed_in: 'World.boundaryPower()', formula: 'Σ Δt ρ b Δ Σ<sub>j</sub> u (½u² + p/ρ)|<sub>in</sub> − u ½u²|<sub>out</sub>', digits: 5 });
+        ds.var('tw_res', [], 'float', { symbol: 'R', units: 'J', long_name: 'what the scheme loses: W_m + E_in − ΔE − ΔK_f − D_rod − D_ν (section 13.6, the books)', computed_in: 'diagnostics()', digits: 5 });
+        ds.var('tw_div', [], 'float', { symbol: 'max |∇·u|', units: '1/s', long_name: 'largest divergence left in any cell after the pressure step', computed_in: 'World.maxDiv(), in diagnostics()', digits: 3, sci: true });
+        ds.var('tw_its', ['two'], Float64Array, { symbol: 'its', long_name: 'iterations of the pressure solver: p₀ and p<sub>x</sub>', computed_in: 'Poisson.solve(), in twStep()', digits: 0 });
+        ds.var('tw_ms', [], 'float', { symbol: 'cost', units: 'ms', long_name: 'computer time of one fluid step of 20 ms', computed_in: 'twStep()', digits: 1 });
+        ds.var('tw_slow', [], 'float', { symbol: 'speed', long_name: 'simulated time per real time: below 1 when the computer cannot keep up and the clock is held back', computed_in: 'twFrame()', digits: 2 });
+        ds.var('tw_w', ['twc'], Float32Array, { symbol: 'ω', units: '1/s', long_name: 'vorticity at the cell corners of the tank, ∂v/∂x − ∂u/∂y', computed_in: 'World.vorticity(), in diagnostics()', digits: 3 });
         ds.var('fg_x0', [], 'float', { symbol: 'X<sub>0</sub>', units: 'm', long_name: 'left edge of the grid of arrows', computed_in: 'diagnostics()', digits: 3 });
         ds.var('fg_u', ['fg'], Float64Array, { symbol: 'u', units: 'm/s', long_name: 'the flow’s velocity across, on the grid of arrows (0.25 m)', computed_in: 'fieldV(), in diagnostics()', digits: 4 });
         ds.var('fg_v', ['fg'], Float64Array, { symbol: 'v', units: 'm/s', long_name: 'the flow’s velocity up, on the grid of arrows', computed_in: 'fieldV(), in diagnostics()', digits: 4 });
@@ -1233,11 +1302,33 @@
             document.getElementById('r-set').textContent = g('t_settle') === g('t_settle') ? Sim.fmt(g('t_settle'), 2) + ' s' : _t('unstable');
             document.getElementById('r-lam').textContent = Sim.fmt(g('lam'), 4);
             document.getElementById('r-K').textContent = Sim.fmt(gk[1], 0) + ', ' + Sim.fmt(gk[2], 0) + ' N/rad';
-            recatch();
+            recatch(); if (s) twSync(false);
         }
         function recatch() { cLevel = null; catchIt = catchGen(); ds.set('c_star', NaN); ds.set('c_hand', NaN); ds.set('eps_rest', NaN); ds.set('c_busy', true); document.getElementById('r-c').textContent = '…'; document.getElementById('r-eps').textContent = '…'; abandon(); }   // computed between frames by think()
         function abandon() { job = null; tv = null; sPred = null; if (mode !== 'balance' && s) { mode = 'calm'; startAttempt(); } }   // any change of the machine, or a push, spoils the plan: start again from calming
-        function reset() { why = 3; book = false; trN = 0; ds.set('tr_n', 0); ds.set('tr_last', -1); s = [0, 2 * Math.PI / 180, -1 * Math.PI / 180, 0, 0, 0]; xref = 0; lost = false; flat = false; tSim = 0; tCtl = 0; u = 0; mode = 'balance'; job = null; tv = null; sPred = null; nextCheck = 0; attempt = 0; ref = { kind: 'fixed', x: 0 }; }
+        /* ---------- the solved fluid (section 13.6): twoway.js holds the tank; the page's 1 ms steps, controller and logs run inside its 20 ms steps ---------- */
+        var tw = null, twKey = '', twKind = 0, twC0 = 0, twU0 = 0, twE0 = 0, twK0 = 0, twSpeed = 1, twSim = 0, twWall = 0;
+        function twSync(force) {   // a new tank when the machine, the medium or the stream changed (or at a reset); none unless the fluid is solved
+            if (!solved() || !p.fl) { tw = null; twKey = ''; ds.set('tw_on', false); return; }
+            var key = [p.m0, p.m1, p.m2, p.L1, p.L2, p.fl.med, p.fl.field, p.fl.U].join(); if (!force && key === twKey && tw) return;
+            tw = new TwoWay.World({ dx: TW.dx, x0: TW.x0, y0: TW.y0, nx: TW.nx, ny: TW.ny, U: p.fl.field === 'breeze' ? p.fl.U : 0, h: H, nsub: Math.round(TW.dt / H), s: s || [0, 0, 0, 0, 0, 0], machine: { m0: p.m0, m1: p.m1, m2: p.m2, L1: p.L1, L2: p.L2, medium: p.fl.med } });
+            tw.onSub = twSub; twKey = key; twE0 = TwoWay.energy(tw.mp, tw.s); twK0 = tw.KE(); ds.set('tw_on', true); ds.set('tw_dx', TW.dx); ds.get('tw_n').set([TW.nx, TW.ny]); ds.touch('tw_n'); ds.set('tw_b', tw.b); ds.set('tw_ma2', p.ma.mc); }
+        function twV(X, Y) { return X > TW.x0 && X < TW.x0 + TW.nx * TW.dx && Y > TW.y0 && Y < TW.y0 + TW.ny * TW.dx ? tw.velAt(X, Y) : [0, 0]; }   // the solved velocity at a point; nothing outside the tank
+        function twQ() { var Q = ds.get('tw_Qr'), F = ds.get('tw_Fc'); return [F + Q[0], Q[1], Q[2], (F + Q[0]) * s[3] + Q[1] * s[4] + Q[2] * s[5]]; }   // the water's generalised forces on the machine, last fluid step's means (42), (44)
+        function twCtrl(sv, t) {   // called by the tank at the start of every 1 ms step of the machine, with the state then: the page's own loop body
+            s = sv.slice(); tSim = t; twC0 = tCtl; twU0 = u;
+            if (held === 3) { twKind = 2; uh = forceFor(p, s, handA(s, handX, HAND_W, HAND_A), tSim); u = 0; tCtl = tSim; return uh; }   // your hand moves the cart (30)
+            if (held) { twKind = 1; u = 0; tCtl = tSim; return 0; }   // your hand holds the rods still; the tank holds the machine (frozen) and the rods still push on the water
+            twKind = 0; supervise(); if (tSim >= tCtl - 1e-9) { u = control(); tCtl += period(); } return u; }
+        function twSub(sb, sa, t, uu, W) { s = sa.slice(); tSim = t + H; Wfl = W; if (twKind) tCtl = tSim; logStep(sb, t, twKind, twC0, twU0); }   // after every 1 ms step: the page's state, the fluid's work in the step (W, 41), the logs and the energy book
+        function twStep() { var t0 = performance.now(); tw.s = s.slice(); tw.t = tSim; tw.frozen = !!held && held !== 3; if (tw.frozen) tw.s[3] = tw.s[4] = tw.s[5] = 0;
+            tw.step(twCtrl); s = tw.s.slice();
+            ds.set('tw_ma', tw.ma); ds.set('tw_Fc', tw.Fc); ds.get('tw_Qr').set(tw.Qrod); ds.touch('tw_Qr'); ds.get('tw_its').set([tw.its0, tw.itsx]); ds.touch('tw_its'); ds.set('tw_ms', performance.now() - t0); }
+        function twFrame(dt) {   // at most three fluid steps a frame; when the computer cannot keep up, the clock is held back and the speed shown
+            acc += dt; if (held === 3) handX = ds.get('cam_x') + (handPx - ds.get('box_w') / 2) / ds.get('sc');
+            var n = 0; while (acc >= TW.dt - 1e-9 && n < 3) { acc -= TW.dt; n++; if (flat) break; twStep(); }
+            var lag = Math.max(0, acc - TW.dt); acc -= lag; twSim += n * TW.dt; twWall += dt; if (twWall > 1) { twSpeed = twSim / twWall; twSim = twWall = 0; } ds.set('tw_slow', twSpeed); }   // simulated time per real time, over about a second
+        function reset() { why = 3; book = false; trN = 0; ds.set('tr_n', 0); ds.set('tr_last', -1); s = [0, 2 * Math.PI / 180, -1 * Math.PI / 180, 0, 0, 0]; xref = 0; lost = false; flat = false; tSim = 0; tCtl = 0; u = 0; mode = 'balance'; job = null; tv = null; sPred = null; nextCheck = 0; attempt = 0; ref = { kind: 'fixed', x: 0 }; twSync(true); }
 
         /* ---------- the laws: balance (16), calm (21), track (24) ---------- */
         function clampF(v) { var F = sF.value; return Math.max(-F, Math.min(F, v)); }
@@ -1309,6 +1400,7 @@
             ms -= performance.now() - t0; if (!job || job.done || ms <= 0) return; job.work(ms);
             if (job.done) { job.ms = performance.now() - job.t0; if (job.ok) { tv = job.track(Math.pow(10, sR.value)); planStore(); } } }
         function step(dt) {
+            if (tw) { twFrame(dt); return; }   // the solved fluid steps the machine itself, 1 ms at a time, inside its 20 ms steps
             acc += dt; if (held === 3) handX = ds.get('cam_x') + (handPx - ds.get('box_w') / 2) / ds.get('sc');   // where the pointer is on the rail, from the picture the hand sees (the camera stands still while you hold the cart)
             while (acc >= H) { acc -= H;
                 if (flat) break;
@@ -1328,6 +1420,7 @@
         /* ---------- the logs: every physics step and every controller sample is written into the store at the moment it happens ---------- */
         var Wfl = 0, WflB = 0, cDue = 0, ver = 0, nStep = 0, nSamp = 0, stN = 0, csN = 0, trN = 0, why = 0, book = false, E0 = 0, Wm = 0, Eext = 0, sPost = null, plSerial = 0, fps = 0, frames = 0;
         function energy(st) {   // T + V of cart and rods, (5) and (7): ½ θ̇ᵀ D θ̇ + f₁ cos θ₁ + f₂ cos θ₂
+            if (tw) return TwoWay.energy(tw.mp, st);   // solved: the rods' carried water (38) stays with them; the water round the cart is on the grid (13.6)
             var d = p.d, c1 = Math.cos(st[1]), c2 = Math.cos(st[2]), v = st[3], a = st[4], b = st[5];
             return 0.5 * (d[0] * v * v + d[3] * a * a + d[5] * b * b) + d[1] * c1 * v * a + d[2] * c2 * v * b + d[4] * Math.cos(st[1] - st[2]) * a * b + p.f[0] * c1 + p.f[1] * c2 + (p.ma ? addedT(p, st) : 0); }   // with a medium, plus T_a (38)
         function dropHalf(names, N) { names.forEach(function (n) { var a = LG[n], w = a.length / N; a.copyWithin(0, (N / 2) * w); }); }   // a full log keeps its newer half
@@ -1358,14 +1451,16 @@
             plSerial++; ds.dim('p', tv.n); ds.dim('p1', tv.n + 1);
             ds.set('pl_u', tv.un); ds.set('pl_K', tv.Kt); ds.set('pl_nom', tv.nom); ds.set('pl_n', tv.n); ds.set('pl_t0', tPlan); ds.set('pl_xc', xc); ds.set('pl_serial', plSerial); }
         function diagnostics(dt) {   // once per frame, after the steps: the state now and what follows from it
-            var S = ds.get('s_now'), A3 = ds.get('qdd'), q = rhs(p, s, u, tSim), rv = refXV(tSim), E = energy(s), i, fq = p.fl ? fluidQ(p, s, tSim) : [0, 0, 0, 0];
+            var S = ds.get('s_now'), A3 = ds.get('qdd'), q = tw && tw.ma !== undefined ? tw.mrhs(s, u, tw.Q0 + tw.Kx * s[3], null, tw.ma) : rhs(p, s, u, tSim), rv = refXV(tSim), E = energy(s), i, fq = tw ? twQ() : p.fl ? fluidQ(p, s, tSim) : [0, 0, 0, 0];   // solved: the tank's model, with its last coupling (44)
             ds.get('Q_fl').set(fq.slice(0, 3)); ds.touch('Q_fl'); ds.set('P_fl', fq[3]); ds.set('W_fl', book ? WflB : NaN);
-            if (p.fl) { var Xt = s[0] + p.L1 * Math.sin(s[1]) + p.L2 * Math.sin(s[2]), Yt = p.L1 * Math.cos(s[1]) + p.L2 * Math.cos(s[2]), vf = fieldV(p.fl.field, Xt, Yt, tSim, p.fl.U, p.fl.nu);
+            if (p.fl) { var Xt = s[0] + p.L1 * Math.sin(s[1]) + p.L2 * Math.sin(s[2]), Yt = p.L1 * Math.cos(s[1]) + p.L2 * Math.cos(s[2]), vf = tw ? twV(Xt, Yt) : fieldV(p.fl.field, Xt, Yt, tSim, p.fl.U, p.fl.nu);
                 var wxt = s[3] + p.L1 * Math.cos(s[1]) * s[4] + p.L2 * Math.cos(s[2]) * s[5] - vf[0], wyt = -p.L1 * Math.sin(s[1]) * s[4] - p.L2 * Math.sin(s[2]) * s[5] - vf[1], wt = Math.hypot(wxt, wyt);
                 ds.set('w_tip', wt); ds.set('Re_tip', p.fl.rho * wt * 2 * ROD_R / p.fl.mu);
                 var gx0 = Math.round(s[0] * 4) / 4 - FG_D * (FG_NX - 1) / 2, GU = ds.get('fg_u'), GV = ds.get('fg_v'), j; ds.set('fg_x0', gx0);
-                for (j = 0; j < FG_NY; j++) for (i = 0; i < FG_NX; i++) { var g = fieldV(p.fl.field, gx0 + i * FG_D, FG_Y0 + j * FG_D, tSim, p.fl.U, p.fl.nu); GU[j * FG_NX + i] = g[0]; GV[j * FG_NX + i] = g[1]; }
-                ds.touch('fg_u'); ds.touch('fg_v'); } else { ds.set('w_tip', NaN); ds.set('Re_tip', NaN); }
+                for (j = 0; j < FG_NY; j++) for (i = 0; i < FG_NX; i++) { var g = tw ? twV(gx0 + i * FG_D, FG_Y0 + j * FG_D) : fieldV(p.fl.field, gx0 + i * FG_D, FG_Y0 + j * FG_D, tSim, p.fl.U, p.fl.nu); GU[j * FG_NX + i] = g[0]; GV[j * FG_NX + i] = g[1]; }
+                ds.touch('fg_u'); ds.touch('fg_v');
+                if (tw) { tw.vorticity(ds.get('tw_w')); ds.touch('tw_w'); var Kf = tw.KE(), Bk = tw.book, dEm = TwoWay.energy(tw.mp, s) - twE0, Dv = (Bk.Wshear || 0) - Bk.Ediff;   // the books of the water (13.6.4)
+                    ds.set('tw_KE', Kf); ds.set('tw_Wm', Bk.Wm); ds.set('tw_Drod', Bk.Drod); ds.set('tw_Dvis', Dv); ds.set('tw_dE', dEm); ds.set('tw_Eb', Bk.Ebnd || 0); ds.set('tw_res', Bk.Wm + (Bk.Ebnd || 0) - dEm - (Kf - twK0) - Bk.Drod - Dv); ds.set('tw_div', tw.maxDiv()); } } else { ds.set('w_tip', NaN); ds.set('Re_tip', NaN); }
             for (i = 0; i < 6; i++) S[i] = s[i]; for (i = 0; i < 3; i++) A3[i] = q[3 + i]; ds.touch('s_now'); ds.touch('qdd');
             ds.set('t', tSim); ds.set('x', s[0]); ds.set('xd', s[3]); ds.set('th1w', wrapAngle(s[1])); ds.set('th2w', wrapAngle(s[2])); ds.set('u', u);
             ds.set('mode', mode); ds.set('held', held); ds.set('hand_x', held === 3 ? handX : NaN); ds.set('hand_a', held === 3 ? handA(s, handX, HAND_W, HAND_A) : NaN); ds.set('hand_u', held === 3 ? forceFor(p, s, ds.get('hand_a'), tSim) : NaN); ds.set('lost', lost); ds.set('ref_kind', ref.kind); ds.set('braking', !!ref.brake); ds.set('x_r', rv[0]); ds.set('v_r', rv[1]); ds.get('ref_p').set([ref.kind === 'glide' ? ref.target : ref.x, ref.v || 0, ref.t0 || 0, ref.e0 || 0]); ds.touch('ref_p');
@@ -1381,6 +1476,17 @@
 
         /* ---------- drawing ---------- */
         var cv = Sim.canvas2d(document.getElementById('cv')), tr = Sim.canvas2d(document.getElementById('tr')), camX = 0, flTxt = {};
+        var twImg = null, TW_WS = 2;   // vorticity of 2 1/s and more is drawn at full strength
+        function drawTank(c, X, hy0, sc, W, Hh) {   // reads tw_w from the store: wine where the water turns anticlockwise, blue where clockwise
+            var nx = TW.nx + 1, ny = TW.ny + 1, w = ds.get('tw_w'), i, j;
+            if (!twImg) { twImg = document.createElement('canvas'); twImg.width = nx; twImg.height = ny; twImg.ctx = twImg.getContext('2d'); twImg.data = twImg.ctx.createImageData(nx, ny); }
+            var d = twImg.data.data; for (j = 0; j < ny; j++) for (i = 0; i < nx; i++) { var o = 4 * ((ny - 1 - j) * nx + i), om = w[j * nx + i], a = Math.min(1, Math.abs(om) / TW_WS);
+                if (om > 0) { d[o] = 122; d[o + 1] = 31; d[o + 2] = 43; } else { d[o] = 46; d[o + 1] = 94; d[o + 2] = 140; } d[o + 3] = Math.round(150 * a); }
+            twImg.ctx.putImageData(twImg.data, 0, 0); c.save(); c.imageSmoothingEnabled = true;
+            var xl = X(TW.x0 - TW.dx / 2), yt = hy0 - (TW.y0 + (TW.ny + 0.5) * TW.dx) * sc; c.drawImage(twImg, xl, yt, nx * TW.dx * sc, ny * TW.dx * sc);
+            c.strokeStyle = TH.ink3; c.lineWidth = 1.2; var xa = X(TW.x0), xb = X(TW.x0 + TW.nx * TW.dx), ya = hy0 - TW.y0 * sc, yb = hy0 - (TW.y0 + TW.ny * TW.dx) * sc;
+            c.beginPath(); c.moveTo(xa, yb); c.lineTo(xa, ya); c.lineTo(xb, ya); c.moveTo(xa, yb); c.lineTo(xb, yb); c.stroke();   // the wall on the left, the floor and the lid
+            c.setLineDash([4, 4]); c.beginPath(); c.moveTo(xb, yb); c.lineTo(xb, ya); c.stroke(); c.setLineDash([]); c.restore(); }   // the open end on the right
         function draw() {   // reads the store only; what it works out on the way to the pixels it writes back (the drawing section of the store)
             var c = cv.ctx, W = cv.w, Hh = cv.h, g2 = function (n) { return ds.get(n); }, S = g2('s_now'), u = g2('u'), L1 = g2('L1'), L2 = g2('L2'); c.clearRect(0, 0, W, Hh);
             vy += ((g2('lost') || g2('mode') !== 'balance' || Math.cos(S[1]) < 0.3 || Math.cos(S[2]) < 0.3 ? 1 : 0) - vy) * 0.06;   /* when the rods are down or swinging, the view widens and the rail moves up, so rods below it stay in sight */
@@ -1389,7 +1495,8 @@
             c.strokeStyle = TH.ruleSoft; c.lineWidth = 1; c.fillStyle = TH.muted; c.font = TH.mono; c.textAlign = 'center';
             for (var g = Math.floor(camX - 4); g <= camX + 4; g += 0.5) { var gx = X(g); if (gx < -20 || gx > W + 20) continue; c.beginPath(); c.moveTo(gx, y0 + 14); c.lineTo(gx, y0 + (Number.isInteger(g) ? 26 : 20)); c.stroke(); if (Number.isInteger(g)) c.fillText(Sim.fmt(g, 0) + ' m', gx, y0 + 40); }
             c.strokeStyle = TH.ink; c.lineWidth = 2; c.beginPath(); c.moveTo(0, y0 + 14); c.lineTo(W, y0 + 14); c.stroke();
-            if (g2('medium') !== 'vacuum') { var GU = g2('fg_u'), GV = g2('fg_v'), gx0 = g2('fg_x0'), hy0 = y0 - Math.max(20, 0.12 * sc) + 4, Uref = Math.max(0.2, g2('U_f')), ii, jj;   // the flow: an arrow every 0.25 m, 0.2 m long at speed U
+            if (g2('tw_on')) drawTank(c, X, y0 - Math.max(20, 0.12 * sc) + 4, sc, W, Hh);   // the solved fluid: its vorticity and the tank's walls, under the arrows
+            if (g2('medium') !== 'vacuum') { var GU = g2('fg_u'), GV = g2('fg_v'), gx0 = g2('fg_x0'), hy0 = y0 - Math.max(20, 0.12 * sc) + 4, Uref = Math.max(0.2, g2('tw_on') ? 0.2 : g2('U_f')), ii, jj;   // the flow: an arrow every 0.25 m, 0.2 m long at speed U (0.2 m/s for the solved fluid)
                 c.strokeStyle = 'rgba(46, 94, 140, 0.55)'; c.fillStyle = 'rgba(46, 94, 140, 0.55)'; c.lineWidth = 1.2;
                 for (jj = 0; jj < FG_NY; jj++) for (ii = 0; ii < FG_NX; ii++) { var gu = GU[jj * FG_NX + ii], gv = GV[jj * FG_NX + ii], sp = Math.hypot(gu, gv); if (sp < 1e-6) continue;
                     var ax0 = X(gx0 + ii * FG_D), ay0 = hy0 - (FG_Y0 + jj * FG_D) * sc; if (ax0 < -10 || ax0 > W + 10 || ay0 < -10 || ay0 > Hh + 10) continue;
@@ -1455,6 +1562,7 @@
         var clk = Sim.clock(function (dt) { step(dt); think(8); diagnostics(dt); draw();
             if (performance.now() - lastTxt > 250) { lastTxt = performance.now(); var g = function (n) { return ds.get(n); }, held = g('held'), on = g('ctrl_on'), lost = g('lost'), mode = g('mode'), u = g('u');   // the words read the store
                 document.getElementById('cap-t').innerHTML = '<i>t</i> = ' + g('t').toFixed(1) + ' s';
+                document.getElementById('cap-tw').textContent = g('tw_on') ? _t('fluid solved') + (g('tw_slow') < 0.97 ? ' · ' + _t('slow motion ×{s}', { s: Sim.fmt(g('tw_slow'), 2) }) : '') + ' · ' : '';
                 document.getElementById('cap-u').innerHTML = '<i>u</i> = ' + Sim.fmt(u, 1) + ' N';
                 document.getElementById('r-th').textContent = Sim.fmt(g('th1w') * 180 / Math.PI, 1) + '°, ' + Sim.fmt(g('th2w') * 180 / Math.PI, 1) + '°';
                 document.getElementById('r-x').textContent = Sim.fmt(g('x'), 2) + ' m';
@@ -1562,6 +1670,7 @@
             { title: 'The controller', note: 'the gains for the loop period, the machine between two looks, and the certified catch level', how: 'formula', vars: ['K', 'P', 'Phi', 'Gam', 'Rd', 'lam', 't_settle', 'ver', 'c_star', 'c_hand', 'c_busy', 'gamma', 'eps_rest'] },
             { title: 'The state now', note: 'written once per frame, after the frame’s 1 ms steps', how: 'run', vars: ['t', 's_now', 'x', 'xd', 'th1w', 'th2w', 'qdd', 'u', 'mode', 'held', 'hand_x', 'hand_a', 'hand_u', 'lost', 'braking', 'ref_kind', 'ref_p', 'x_r', 'v_r', 'W', 'W_red', 'Ep'] },
             { title: 'Air and water', note: 'the medium, the flow and the force it puts on cart and rods (section 13)', how: 'formula', vars: ['medium', 'flow', 'U_f', 'rho_f', 'mu_f', 'xi_r', 'c_q', 'c_lin', 'c_quad', 'mu_a', 'm_ac', 'Q_fl', 'P_fl', 'w_tip', 'Re_tip'] },
+            { title: 'The solved fluid', note: 'section 13.6: the tank, the coupling between water and machine, and the water’s own book', how: 'run', vars: ['tw_on', 'tw_dx', 'tw_n', 'tw_b', 'tw_ma', 'tw_ma2', 'tw_Fc', 'tw_Qr', 'tw_KE', 'tw_Wm', 'tw_Eb', 'tw_dE', 'tw_Drod', 'tw_Dvis', 'tw_res', 'tw_div', 'tw_its', 'tw_ms', 'tw_slow', 'tw_w'] },
             { title: 'The energy book', note: 'what the motor, the flicks, your hand and the fluid put in, against what the machine holds', how: 'run', vars: ['E', 'E0', 'W_motor', 'E_ext', 'W_fl', 'E_wait', 'bal'] },
             { title: 'The supervisor and the swing-up', note: 'which law runs, the plan and when it starts', how: 'run', vars: ['attempt', 'hp', 'x_c', 't_plan', 'plan_busy', 'plan_ready', 'next_check', 'pl_serial', 'pl_n', 'pl_t0', 'pl_xc', 'pl_u', 'pl_K', 'pl_nom'] },
             { title: 'The controller’s samples', note: 'one row each time the controller looks, every T_s while balancing and every 10 ms while calming or tracking', how: 'run', vars: ['cs_n', 'cs_last', 'cs_i', 'cs_t', 'cs_k', 'cs_due', 'cs_next', 'cs_s', 'cs_u', 'cs_mode', 'cs_rk', 'cs_rx', 'cs_rv', 'cs_rt0', 'cs_re0', 'cs_xc', 'cs_tp', 'cs_pl', 'cs_ver', 'cs_umax', 'cs_bite', 'cs_vb'] },
@@ -1597,7 +1706,7 @@
                 d: function (i) { var m0 = G2('m0'), m1 = G2('m1'), m2 = G2('m2'), L1 = G2('L1'), L2 = G2('L2');
                     return { formula: ds.vars.d.attrs.formula, inputs: [inp('m0', 4), inp('m1', 4), inp('m2', 4), inp('L1', 4), inp('L2', 4)], value: [m0 + m1 + m2, (m1 / 2 + m2) * L1, m2 * L2 / 2, (m1 / 3 + m2) * L1 * L1, m2 * L1 * L2 / 2, m2 * L2 * L2 / 3][i] }; },
                 f: function (i) { var m1 = G2('m1'), m2 = G2('m2'), L1 = G2('L1'), L2 = G2('L2'), g = ds.attrs.g, bA = G2('rho_f') * Math.PI * ROD_R * ROD_R * g; return { formula: ds.vars.f.attrs.formula, inputs: [inp('m1', 4), inp('m2', 4), inp('L1', 4), inp('L2', 4), ['g', g, 'm/s²', 3], inp('rho_f', 5), ['r', ROD_R, 'm', 3]], value: [(m1 / 2 + m2) * L1 * g - bA * (L1 * L1 / 2 + L1 * L2), m2 * L2 * g / 2 - bA * L2 * L2 / 2][i] }; },
-                mu_a: function () { return { formula: ds.vars.mu_a.attrs.formula, inputs: [inp('rho_f', 5), ['r', ROD_R, 'm', 3]], value: G2('medium') === 'vacuum' ? 0 : CA_ROD * G2('rho_f') * Math.PI * ROD_R * ROD_R }; },
+                mu_a: function () { return { formula: ds.vars.mu_a.attrs.formula, inputs: [inp('rho_f', 5), ['r', ROD_R, 'm', 3]], value: G2('medium') === 'vacuum' ? 0 : CA_ROD * G2('rho_f') * Math.PI * ROD_R * ROD_R }; },  tw_ma2: function () { return { formula: ds.vars.tw_ma2.attrs.formula, inputs: [inp('rho_f', 5), inp('tw_b', 3), ['A<sub>2</sub>', CART_A2, 'm²', 6]], value: G2('tw_on') ? G2('rho_f') * G2('tw_b') * CART_A2 : NaN }; }, tw_res: function () { return { formula: 'W<sub>m</sub> + E<sub>in</sub> − ΔE − ΔK<sub>f</sub> − D<sub>rod</sub> − D<sub>ν</sub>', inputs: [inp('tw_Wm', 5), inp('tw_Eb', 5), inp('tw_dE', 5), ['ΔK<sub>f</sub>', G2('tw_KE') - twK0, 'J', 5], inp('tw_Drod', 5), inp('tw_Dvis', 5)], value: G2('tw_Wm') + G2('tw_Eb') - G2('tw_dE') - (G2('tw_KE') - twK0) - G2('tw_Drod') - G2('tw_Dvis') }; },
                 m_ac: function () { return { formula: ds.vars.m_ac.attrs.formula, inputs: [inp('rho_f', 5), ['V<sub>e</sub>', CART_VE, 'm³', 5], ['κ<sub>x</sub>', CART_KX, '', 6]], value: G2('medium') === 'vacuum' ? 0 : G2('rho_f') * CART_VE * CART_KX / (2 - CART_KX) }; },
                 rho_f: function () { var m = MEDIA[G2('medium')]; return { formula: _t('the table of section 13.1'), inputs: [['medium', G2('medium'), '']], value: m ? m.rho : 0 }; },
                 mu_f: function () { var m = MEDIA[G2('medium')]; return { formula: _t('the table of section 13.1'), inputs: [['medium', G2('medium'), '']], value: m ? m.mu : 0 }; },
@@ -1635,7 +1744,7 @@
                 Ep: function () { var S = G2('s_now'), d = G2('d'), f = G2('f'); return { formula: '½(d₄θ̇₁² + 2d₅ cos(θ₁−θ₂) θ̇₁θ̇₂ + d₆θ̇₂²) + f₁ cos θ₁ + f₂ cos θ₂ (20)', inputs: [],
                     value: 0.5 * (d[3] * S[4] * S[4] + 2 * d[4] * Math.cos(S[1] - S[2]) * S[4] * S[5] + d[5] * S[5] * S[5]) + f[0] * Math.cos(S[1]) + f[1] * Math.cos(S[2]) }; },
                 E: function () { var S = G2('s_now'), d = G2('d'), f = G2('f'), v = S[3], a = S[4], b = S[5]; return { formula: ds.vars.E.attrs.formula, inputs: [],
-                    value: 0.5 * (d[0] * v * v + d[3] * a * a + d[5] * b * b) + d[1] * Math.cos(S[1]) * v * a + d[2] * Math.cos(S[2]) * v * b + d[4] * Math.cos(S[1] - S[2]) * a * b + f[0] * Math.cos(S[1]) + f[1] * Math.cos(S[2]) + (G2('medium') === 'vacuum' ? 0 : addedT(machine(), Array.prototype.slice.call(S))) }; },
+                    value: 0.5 * (d[0] * v * v + d[3] * a * a + d[5] * b * b) + d[1] * Math.cos(S[1]) * v * a + d[2] * Math.cos(S[2]) * v * b + d[4] * Math.cos(S[1] - S[2]) * a * b + f[0] * Math.cos(S[1]) + f[1] * Math.cos(S[2]) + (G2('medium') === 'vacuum' ? 0 : addedT(G2('tw_on') ? Object.assign(machine(), { ma: { mu: G2('mu_a'), mc: 0 } }) : machine(), Array.prototype.slice.call(S))) }; },
                 bal: function () { return { formula: ds.vars.bal.attrs.formula, inputs: [inp('E0'), inp('W_motor'), inp('E_ext'), inp('W_fl'), inp('E_wait'), inp('E')], value: G2('E0') + G2('W_motor') + G2('E_ext') + G2('W_fl') + G2('E_wait') - G2('E') }; },
                 cs_u: function (r) { return lawAt(r); },
                 hand_a: function () { var S = Array.prototype.slice.call(G2('s_now')); return { formula: ds.vars.hand_a.attrs.formula, inputs: [inp('hand_x', 5), inp('x', 5), inp('xd', 5), inp('hand_w', 1), inp('hand_amax', 1)], value: G2('held') === 3 ? handA(S, G2('hand_x'), G2('hand_w'), G2('hand_amax')) : NaN }; },
@@ -1704,7 +1813,7 @@
             }
         };
 
-        window.DIPC = { get ds() { return ds; }, rk4: rk4, fluidQ: fluidQ, fieldV: fieldV, fluidPar: fluidPar, accelF: accelF, draw: draw, get geo() { return geo; }, get held() { return held; }, get uh() { return uh; }, get handX() { return handX; }, get s() { return s; }, set s(v) { s = v.slice(); why = 3; nextCheck = tSim; }, get K() { return K; }, get P() { return Pm; }, get p() { return p; }, fallRates: fallRates, rhs: rhs, rhsF: rhsF, flick: flick, get lost() { return lost; }, set xref(v) { xref = v; ref = { kind: 'fixed', x: v }; }, get ref() { return ref; }, set rolling(v) { rolling = v; }, set gmode(v) { gmode = v; redesign(); },
+        window.DIPC = { get ds() { return ds; }, get tw() { return tw; }, rk4: rk4, fluidQ: fluidQ, fieldV: fieldV, fluidPar: fluidPar, accelF: accelF, draw: draw, get geo() { return geo; }, get held() { return held; }, get uh() { return uh; }, get handX() { return handX; }, get s() { return s; }, set s(v) { s = v.slice(); why = 3; nextCheck = tSim; }, get K() { return K; }, get P() { return Pm; }, get p() { return p; }, fallRates: fallRates, rhs: rhs, rhsF: rhsF, flick: flick, get lost() { return lost; }, set xref(v) { xref = v; ref = { kind: 'fixed', x: v }; }, get ref() { return ref; }, set rolling(v) { rolling = v; }, set gmode(v) { gmode = v; redesign(); },
             finishCatch: function () { while (catchIt) think(1000); return cLevel; }, Wred: function () { return Wred(s); }, specRad: specRad, dlqr: dlqr, sampledModel: sampledModel, linear: linear,
             get mode() { return mode; }, get cLevel() { return cLevel; }, get t() { return tSim; }, get u() { return u; }, W: function () { return Wof(s, tSim); }, Ep: function () { return Ep(s); }, get log() { return log; }, swingUp: swingUp, step: step, think: think, get job() { return job; }, PlanJob: PlanJob };
     })();

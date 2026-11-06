@@ -1,0 +1,10 @@
+require('../../../../public/scripts/twoway.js'); const T = globalThis.TwoWay;
+const w = new T.World({ dx: 0.025, machine: { m0: 1.5, m1: 0.5, m2: 0.75, L1: 0.5, L2: 0.75, medium: 'glycerol' } });
+w.measure(); const P = w.P, N = w.nx * w.ny, b = new Float64Array(N), x = new Float64Array(N);
+for (let i = 0; i < N; i++) b[i] = Math.sin(i * 0.37);
+let t = process.hrtime.bigint(); for (let k = 0; k < 50; k++) { P.L[0].b.set(b); P.vcycle(0); } console.log('vcycle ms', Number(process.hrtime.bigint() - t) / 50e6);
+t = process.hrtime.bigint(); for (let k = 0; k < 50; k++) P.apply(P.L[0], b, x); console.log('apply ms', Number(process.hrtime.bigint() - t) / 50e6);
+t = process.hrtime.bigint(); for (let k = 0; k < 50; k++) P.smooth(P.L[0], x, b, 1, 0); console.log('smooth sweep ms', Number(process.hrtime.bigint() - t) / 50e6);
+const L = P.L; console.log(L.map(l => [l.nx, l.ny]));
+t = process.hrtime.bigint(); for (let k = 0; k < 50; k++) P.smooth(L[L.length - 1], L[L.length - 1].x, L[L.length - 1].b, 40, 0); console.log('coarse 40 sweeps ms', Number(process.hrtime.bigint() - t) / 50e6);
+x.fill(0); t = process.hrtime.bigint(); const it = P.solve(b, x); console.log('solve its', it, 'ms', Number(process.hrtime.bigint() - t) / 1e6);
