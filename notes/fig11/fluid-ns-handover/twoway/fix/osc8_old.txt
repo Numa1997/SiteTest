@@ -1,0 +1,2 @@
+{"cells_per_radius":8,"dt":0.005,"A_inphase_over_rhoPiA2_U0_om":2.9022,"B_quadrature_over_rhoPiA2_U0_om":1.2164}
+done

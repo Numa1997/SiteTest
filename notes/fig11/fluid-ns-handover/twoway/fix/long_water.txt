@@ -1,0 +1,7 @@
+{"med":"water","t":10,"max_th1":0.359,"max_th2":0.171,"max_x":0.5,"W_motor":9.525,"R_pct":83.3,"L_lag":-0.883,"KE_fluid":0.1655}
+{"med":"water","t":20,"max_th1":0.009,"max_th2":0.01,"max_x":0.375,"W_motor":9.547,"R_pct":84.1,"L_lag":-0.883,"KE_fluid":0.0729}
+{"med":"water","t":30,"max_th1":0.367,"max_th2":0.174,"max_x":0.468,"W_motor":19.169,"R_pct":84.1,"L_lag":-1.749,"KE_fluid":0.1527}
+{"med":"water","t":40,"max_th1":0.369,"max_th2":0.175,"max_x":0.46,"W_motor":28.853,"R_pct":83.9,"L_lag":-2.621,"KE_fluid":0.3017}
+{"med":"water","t":50,"max_th1":0.009,"max_th2":0.009,"max_x":0.348,"W_motor":28.869,"R_pct":84.2,"L_lag":-2.621,"KE_fluid":0.1911}
+{"med":"water","t":60,"max_th1":0.368,"max_th2":0.173,"max_x":0.449,"W_motor":38.52,"R_pct":84.2,"L_lag":-3.502,"KE_fluid":0.2656}
+finite to the end
