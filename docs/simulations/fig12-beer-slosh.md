@@ -72,5 +72,32 @@ Pressure by PCG with MIC(0), warm-started. Velocity extrapolated three layers in
 
 ## Not in the model
 
-Tulip shape of the real glass; foam; surface tension; spilling (lid at the box top); the wall boundary layer and so real damping (the
-numerical damping is larger: ζ = 0.019 at 4 mm); swirl that breaks the mirror symmetry; pitch and roll of the cart. No data panel yet.
+Tulip shape of the real glass; foam; surface tension (it would raise f₁₁ by 0.78 % with σ = 0.072 N/m); spilling (lid at the box top); the wall boundary layer and so real damping (the
+numerical damping is larger: ζ = 0.019 at 4 mm); swirl that breaks the mirror symmetry; pitch and roll of the cart.
+
+## The store and the data panel (added 6 November 2026)
+
+One store, `Sim.dataset` (`scripts/dataset.js`), 90 variables. The solver writes into it where it computes:
+`Cart.forces` (state and forces at the same instant: `x … vzw`, `z_a`, `dz_a`, `N`, `F_s`, `F_road`, `F_drive`, `F_push`, `F_lx`,
+`F_lz`, `a_x`, `a_zb`, `a_zw`), `World.advance` (the last fluid step: `t`, `h_f`, `vx_0/1`, `vzb_0/1`, `a_gx`, `a_gz`, `P0_*`, `P_*`,
+`F_l*_next`, `steps`, `cg_iters`, `cg_res`). `World.attach(ds)` makes the particle positions (`px`, `py`, `pz`, dimension `p`,
+30 498) and the column heights (`h_col`, dimensions `j` × `i`, 10 × 20) the store's own arrays. `StoutView` writes what it draws:
+`eta_draw` (`ir` × `ith`, 10 × 48), `eta_front`, `eta_back`, `dw`, and the drawing's numbers in css px. The page writes what you
+set (`push_dir`, `F_push_set`, `bump_h`, `v0`), the constants and the derived masses and frequencies (`storeConstants`), and the
+measured rate. The cart's step was reordered for this (forces at the new state computed at the end of each step and used at the
+start of the next: the same symplectic Euler), so every stored force belongs to the stored state.
+
+**Checks** recompute from stored inputs: the masses, `f11`, `f_body`; `N`, `F_s`, `F_road`, `F_drive`, `F_push`, the three
+accelerations; `z_a` and `dz_a` by writing the road and the rim maximum out again on the same 0.5 mm grid; `a_gx`, `a_gz` from the
+step's speeds; the stout's push from the momenta; `h_col[j, i]` by counting the stored particle positions in the 3 × 3 columns;
+`eta_draw`, `eta_front`, `eta_back` by reading `h_col` at the drawn points; `dw`; every pixel position. State and constants are read
+from the solver's own variables. `P_x`, `P_z` are summed from the particle velocities, which stay in the solver (not stored).
+**Read-backs**: the head's cream at its stored middle at the front and back wall (for `eta_front`, `eta_back`, `dw`), the dark hub at
+the stored axle (`x`, `zw`, the axle pixels), the body's outline at the stored `zb` (searched 2 px, the line is anti-aliased).
+**Read values** pins the stout, the wheel or the body. **One round** is one second of simulated motion.
+
+Measured in Chromium (`notes/fig12/panel-test.cjs`, `panel-test2.cjs`): 92 checks with the cart on flat road and 87 with the wheel on
+the first bump (z_a′ down to −0.067) at 1600, 1100 and 390 px, none DIFFER; every read-back true; a pointer sweep with Read values off
+leaves the figure's pixels unchanged; the pinned strip sits under the figure; one round records; Save gives a zip that
+`zipfile.testzip()` accepts, with `h_col` (10, 20), `eta_draw` (10, 48), `px` (30498,) float64 and `dataset.json` with 90 variables and
+their units; with the panel closed (its × button) and the run paused, `__dataPanel.running()` is false.
