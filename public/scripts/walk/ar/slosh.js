@@ -275,7 +275,7 @@ window.WALK["slosh"] = {
      "fz",
      "f<sub>z</sub>",
      "ds.get('f_heave')",
-     "تردد ارتفاع الهيكل، Hz"
+     "تردد الحركة الرأسية للهيكل، Hz"
     ],
     [
      "fhop",
