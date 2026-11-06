@@ -54,7 +54,13 @@
     this.Ad = new F(this.nc); this.Ax = new F(this.nc); this.Ay = new F(this.nc); this.Az = new F(this.nc);
     this.mic = new F(this.nc); this.r_ = new F(this.nc); this.z_ = new F(this.nc); this.s_ = new F(this.nc);
     this.faceFractions();
-    this.seed(o.ppcSide || 2, o.seed || 12345);
+    this.ppcSide = o.ppcSide || 2;
+    this.wallImages = o.wallImages != null ? o.wallImages : true;
+    this.rpFactor = o.rpFactor || 1.0;
+    this.forcedPhi = o.forcedPhi != null ? o.forcedPhi : 0.05;
+    this.thetaMin = o.thetaMin || 0.05;
+    this.relaxStrength = o.relax != null ? o.relax : 0;   // off: not needed at dt = 1/400 s (measured)
+    this.seed(this.ppcSide, o.seed || 12345);
     this.t = 0;
     this.cgIters = 0;
   }
@@ -106,7 +112,7 @@
     this.mp = 0.5 * this.mLiquid / n;
     // radius of the particles for the surface reconstruction: one particle spacing, so that the liquid at rest
     // reads its true depth h0 (measured: 60.0 +- 0.3 mm on 3 and 4 mm grids, tools/fig12/check.cjs rest)
-    this.rp = dx / s * 1.0;
+    this.rp = dx / s * this.rpFactor;
     this.Vseed = (dx / s) ** 3;
   };
 
@@ -171,8 +177,8 @@
     }
   };
 
-  // Level set of the liquid from the particles (Zhu & Bridson 2005), and the fluid cells (phi < 0)
-  Fluid.prototype.levelSet = function () {
+  // particles sorted by cell (cellStart, sorted) and counted per cell (cnt)
+  Fluid.prototype.levelSetBins = function () {
     const nx = this.nx, ny = this.ny, nz = this.nz, dx = this.dx, nc = this.nc;
     const cnt = this.cnt; cnt.fill(0);
     if (!this.cellStart || this.cellStart.length !== nc + 1) { this.cellStart = new Int32Array(nc + 1); }
@@ -189,6 +195,12 @@
     const fillp = this.fillp || (this.fillp = new Int32Array(nc));
     fillp.set(cs.subarray(0, nc));
     for (let p = 0; p < this.np; p++) this.sorted[fillp[pc[p]]++] = p;
+  };
+
+  // Level set of the liquid from the particles (Zhu & Bridson 2005), and the fluid cells (phi < 0)
+  Fluid.prototype.levelSet = function () {
+    const nx = this.nx, ny = this.ny, nz = this.nz, dx = this.dx, nc = this.nc;
+    this.levelSetBins(); const cnt = this.cnt;
     const Rk = 2 * dx, R2 = Rk * Rk, r = this.rp, Rc = this.R - 0.5 * dx;
     // the level set is measured only within two cells of an empty cell inside the cup; deeper cells are liquid
     const empty = this.emptyMask || (this.emptyMask = new Uint8Array(nc));
@@ -207,9 +219,13 @@
       const ph = this.phiAt(xc, yc, zc, Rk, R2, r);
       this.phi[c] = ph;
     }
+    // Liquid cells: inside the level set, or holding particles (so that no particle is left without pressure). A cell
+    // that holds particles but reads phi >= 0 gets phi = -0.05 dx. Measured: -0.5 dx here broke the slosh (4.3 Hz
+    // instead of 3.5 Hz on the 4 mm grid); the spurious flow at rest that first suggested it came from the time
+    // step (clean at dt = 1/400 s), not from this.
     for (let c = 0; c < nc; c++) {
       this.fluid[c] = this.phi[c] < 0 || cnt[c] > 0 ? 1 : 0;
-      if (cnt[c] > 0 && this.phi[c] >= 0) this.phi[c] = -0.05 * dx;   // no particle is left in a cell without pressure
+      if (cnt[c] > 0 && this.phi[c] >= 0) this.phi[c] = -this.forcedPhi * dx;
     }
     // Cells cut by the cup wall hold few or no particles, and the particle level set reads them as air. A wall
     // cell that shares an open side face with liquid at the same height is liquid: otherwise it would be a
@@ -245,7 +261,7 @@
             const ddz = ppz - z, rr = Math.sqrt(ppx * ppx + ppy * ppy);
             // the particle, its image in the mirror plane y = 0, and, near the wall, its images in the wall
             // (r -> 2R - r): the liquid meets the wall at a right angle and the wall cells read as liquid
-            const nImg = rr > this.R - Rk ? 4 : 2, fw = rr > 1e-9 ? (2 * this.R - rr) / rr : 0;
+            const nImg = this.wallImages && rr > this.R - Rk ? 4 : 2, fw = rr > 1e-9 ? (2 * this.R - rr) / rr : 0;
             for (let m = 0; m < nImg; m++) {
               const qx = m < 2 ? ppx : ppx * fw, qy0 = m < 2 ? ppy : ppy * fw, qy = (m & 1) ? -qy0 : qy0;
               const ddx = qx - x, ddy = qy - y, d2 = ddx * ddx + ddy * ddy + ddz * ddz;
@@ -291,7 +307,8 @@
     const fl = this.fluid, phi = this.phi;
     const Ad = this.Ad, Ax = this.Ax, Ay = this.Ay, Az = this.Az, b = this.rhs;
     Ad.fill(0); Ax.fill(0); Ay.fill(0); Az.fill(0); b.fill(0);
-    const th = (c, n) => { let t = phi[c] / (phi[c] - phi[n]); return t < 0.05 ? 0.05 : t > 1 ? 1 : t; };
+    const tmin = this.thetaMin;
+    const th = (c, n) => { let t = phi[c] / (phi[c] - phi[n]); return t < tmin ? tmin : t > 1 ? 1 : t; };
     const U = (i, j, k) => i + (nx + 1) * (j + ny * k), V = (i, j, k) => i + nx * (j + (ny + 1) * k), Wd = (i, j, k) => i + nx * (j + ny * k);
     for (let k = 0; k < nz; k++) for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) {
       const c = i + nx * (j + ny * k);
@@ -480,8 +497,18 @@
       const xm = x + 0.5 * dt * u1, ym = Math.abs(y + 0.5 * dt * v1), zm = z + 0.5 * dt * w1;
       x += dt * this.sample(0, xm, ym, zm); y += dt * this.sample(1, xm, ym, zm); z += dt * this.sample(2, xm, ym, zm);
       if (y < 0) { y = -y; this.pv[p] = -this.pv[p]; }           // mirror plane
+      this.px[p] = x; this.py[p] = y; this.pz[p] = z;
+    }
+    this.collide();
+  };
+
+  // the glass: a particle outside the wall is put back inside and loses its outward speed; likewise bottom and lid
+  Fluid.prototype.collide = function () {
+    const R = this.R, e = 0.02 * this.dx, Rin = R - e;
+    for (let p = 0; p < this.np; p++) {
+      let x = this.px[p], y = this.py[p], z = this.pz[p];
       const r2 = x * x + y * y;
-      if (r2 > Rin * Rin) {                                     // the cup wall: put it back inside, drop the outward speed
+      if (r2 > Rin * Rin) {
         const r = Math.sqrt(r2), nxr = x / r, nyr = y / r;
         x = nxr * Rin; y = nyr * Rin;
         const un = this.pu[p] * nxr + this.pv[p] * nyr;
@@ -491,6 +518,38 @@
       if (z > this.H - e) { z = this.H - e; if (this.pw[p] > 0) this.pw[p] = 0; }
       this.px[p] = x; this.py[p] = y; this.pz[p] = z;
     }
+  };
+
+  // Keep the particles evenly spaced: pairs closer than the seeding spacing d0 are pushed apart, each by a fraction
+  // of the overlap, along the line between them. This moves no mass and adds no momentum (equal and opposite shifts);
+  // without it APIC particles cluster and leave voids that the pressure solve reads as air below the surface.
+  Fluid.prototype.relax = function (strength) {
+    const dx = this.dx, nx = this.nx, ny = this.ny, nz = this.nz, d0 = this.dx / this.ppcSide, d02 = d0 * d0;
+    const n = this.np, sx = this.relX || (this.relX = new Float64Array(n)), sy = this.relY || (this.relY = new Float64Array(n)), sz = this.relZ || (this.relZ = new Float64Array(n));
+    sx.fill(0); sy.fill(0); sz.fill(0);
+    this.levelSetBins();
+    for (let k = 0; k < nz; k++) for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) {
+      const c = i + nx * (j + ny * k);
+      for (let a = this.cellStart[c]; a < this.cellStart[c + 1]; a++) {
+        const p = this.sorted[a];
+        for (let kk = k; kk <= Math.min(nz - 1, k + 1); kk++) for (let jj = Math.max(0, j - 1); jj <= Math.min(ny - 1, j + 1); jj++)
+          for (let ii = Math.max(0, i - 1); ii <= Math.min(nx - 1, i + 1); ii++) {
+            const c2 = ii + nx * (jj + ny * kk);
+            if (c2 < c) continue;                       // each pair once
+            for (let b = this.cellStart[c2]; b < this.cellStart[c2 + 1]; b++) {
+              const q = this.sorted[b];
+              if (c2 === c && q <= p) continue;
+              const ex = this.px[q] - this.px[p], ey = this.py[q] - this.py[p], ez = this.pz[q] - this.pz[p];
+              const d2 = ex * ex + ey * ey + ez * ez;
+              if (d2 >= d02 || d2 < 1e-18) continue;
+              const d = Math.sqrt(d2), m = 0.5 * strength * (d0 - d) / d;
+              sx[p] -= m * ex; sy[p] -= m * ey; sz[p] -= m * ez; sx[q] += m * ex; sy[q] += m * ey; sz[q] += m * ez;
+            }
+          }
+      }
+    }
+    for (let p = 0; p < n; p++) { this.px[p] += sx[p]; this.py[p] = Math.abs(this.py[p] + sy[p]); this.pz[p] += sz[p]; }
+    this.collide();
   };
 
   // momentum of the whole liquid relative to the cup (both halves): x and z components, kg m/s
@@ -515,6 +574,7 @@
     this.extrapolate(3);
     this.g2p();
     this.advect(dt);
+    if (this.relaxStrength > 0) this.relax(this.relaxStrength);
     this.t += dt;
   };
 

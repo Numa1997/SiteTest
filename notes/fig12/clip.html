@@ -7,8 +7,8 @@
 <script>
 const q = new URLSearchParams(location.search);
 const dx = +(q.get('dx') || 0.003);
-const world = new CoffeeCart.World({ fluid: { dx, R: 0.04, h0: 0.10, H: 0.13 }, road: { bumps: [{ x: 1.0, h: 0.02, L: 0.25 }, { x: 3.0, h: 0.02, L: 0.25 }], Rw: 0.04 },
-  cart: { x0: 0.6, Rw: 0.04, Ls: 0.135 }, dtMax: 1 / 100 });
+const world = new CoffeeCart.World({ fluid: { dx, R: 0.04, h0: 0.10, H: 0.13 }, road: { bumps: [{ x: 1.0, h: 0.01, L: 0.25 }, { x: 3.0, h: 0.01, L: 0.25 }], Rw: 0.04 },
+  cart: { x0: 0.6, Rw: 0.04, Ls: 0.135 }, dtMax: 1 / 400 });
 const cv = document.getElementById('cv');
 const view = new CoffeeView(cv, world, { scale: 1650, groundY: 0.9 });
 let log = [];
