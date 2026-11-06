@@ -91,6 +91,10 @@
   "src": "Switch the motor off, \\(u = 0\\). Row 1 of (10) says the sideways momentum is conserved; starting from rest, \\(d_1\\dot x = -d_2\\dot\\theta_1 - d_3\\dot\\theta_2\\). Using that to remove \\(\\ddot x\\) from rows 2 and 3 leaves two equations for the angles alone,",
   "tr": "Schalten Sie den Motor aus, \\(u = 0\\). Zeile 1 von (10) besagt, dass der seitliche Impuls erhalten bleibt; aus der Ruhe heraus gilt \\(d_1\\dot x = -d_2\\dot\\theta_1 - d_3\\dot\\theta_2\\). Damit \\(\\ddot x\\) aus den Zeilen 2 und 3 entfernt, bleiben zwei Gleichungen für die Winkel allein,"
  },
+ "0988dbd8e05d": {
+  "src": "whatever you write; the page measures its divergence \\(\\partial u/\\partial x + \\partial v/\\partial y\\) at every arrow and says whether a liquid could flow so",
+  "tr": "was immer du schreibst; die Seite misst seine Divergenz \\(\\partial u/\\partial x + \\partial v/\\partial y\\) an jedem Pfeil und sagt, ob eine Flüssigkeit so strömen könnte"
+ },
  "099f2a29cb12": {
   "src": "two opposed jets",
   "tr": "zwei gegeneinander gerichtete Strahlen"
@@ -478,6 +482,10 @@
  "376903f2baa7": {
   "src": "the cart's added mass, \\(-K_x\\Delta t\\), 4.8, 9.6 and 19.2 cells across its height",
   "tr": "die hydrodynamische Masse des Wagens, \\(-K_x\\Delta t\\), 4.8, 9.6 und 19.2 Zellen über seine Höhe"
+ },
+ "37dbac1698b5": {
+  "src": "\\((u(x, y, t),\\ v(x, y, t))\\), the two formulas you type under the menu",
+  "tr": "\\((u(x, y, t),\\ v(x, y, t))\\), die beiden Formeln, die du unter dem Menü eingibst"
  },
  "38662767d183": {
   "src": "Stir tea with a spoon, stop, and sweep back: the spoon meets the swirl it left, and the swirl pushes it. A swimmer feels the water the person in front has set moving. Nothing of this is in sections 13.1–13.5, where the flow is given and the bodies only feel it. Choose <i>The fluid: solved</i> under the figure and the water becomes a field the page computes: every push of the cart and the rods goes into the water, the water carries it away as wakes and swirls, and those come back to push the bodies. Momentum leaves the machine and enters the water, and the reverse, in equal amounts: Newton's third law, point by point.",
@@ -1163,6 +1171,10 @@
   "src": "Take the simplest machine that falls: one mode, \\(\\dot z = \\sigma z + b u\\), with a rate \\(\\sigma\\) as in section 5. Act on it at every instant with \\(u = -\\kappa z\\) and it decays as \\(e^{(\\sigma - \\gamma)t}\\), where \\(\\gamma = b\\kappa\\) is the strength of the feedback in the units of a rate; the loop works for any \\(\\gamma &gt; \\sigma\\), however large. Now act on it every \\(T_s\\) and hold. Between looks (16a) applies with \\(\\Phi = e^{\\sigma T_s}\\) and \\(\\Gamma = (b/\\sigma)(e^{\\sigma T_s} - 1)\\), and with \\(u_k = -\\kappa z_k\\) each look multiplies \\(z\\) by",
   "tr": "Nehmen wir die einfachste Maschine, die fällt: eine Mode, \\(\\dot z = \\sigma z + b u\\), mit einer Rate \\(\\sigma\\) wie in Abschnitt 5. Wirkt man in jedem Augenblick mit \\(u = -\\kappa z\\) auf sie ein, klingt sie wie \\(e^{(\\sigma - \\gamma)t}\\) ab, wobei \\(\\gamma = b\\kappa\\) die Stärke der Rückkopplung in der Einheit einer Rate ist; der Regelkreis funktioniert für jedes \\(\\gamma &gt; \\sigma\\), wie groß auch immer. Nun wirkt man nur alle \\(T_s\\) ein und hält. Zwischen den Blicken gilt (16a) mit \\(\\Phi = e^{\\sigma T_s}\\) und \\(\\Gamma = (b/\\sigma)(e^{\\sigma T_s} - 1)\\), und mit \\(u_k = -\\kappa z_k\\) multipliziert jeder Blick \\(z\\) mit"
  },
+ "927615a67859": {
+  "src": "your own field",
+  "tr": "dein eigenes Feld"
+ },
  "93a461e597df": {
   "src": "Arrive at rest",
   "tr": "In Ruhe ankommen"
@@ -1366,6 +1378,10 @@
  "a975eea30db9": {
   "src": "Parameters",
   "tr": "Parameter"
+ },
+ "a9a53e6fceb3": {
+  "src": "Your own field: type its velocity u across and v up, in m/s, as formulas in x and y (metres along the rail and up from it), t (seconds) and U (the speed slider). The rods and the cart feel it but do not change it, as with the other flows given here; the arrows are drawn from it, darker where it is slow, red where it is fast.",
+  "tr": "Dein eigenes Feld: Gib seine Geschwindigkeit u quer und v nach oben in m/s als Formeln in x und y (Meter entlang der Schiene und von ihr nach oben), t (Sekunden) und U (der Geschwindigkeitsregler) ein. Die Stangen und der Wagen spüren es, ändern es aber nicht, wie bei den anderen hier vorgegebenen Strömungen; die Pfeile werden daraus gezeichnet, dunkler, wo es langsam ist, rot, wo es schnell ist."
  },
  "aadd6cd937c2": {
   "src": "is the cost the balancer still has to pay from the state \\(\\mathbf s\\). Its level sets \\(W = c\\) are nested ellipsoids around the upright rest. On the linear model, (15) and (16) give \\(\\dot W = -\\mathbf s^{\\mathsf T}(\\mathbf Q + \\rho\\mathbf K^{\\mathsf T}\\mathbf K)\\mathbf s\\), negative everywhere: the cost always falls. On the real machine, with the real equations (9) and the motor clipped at \\(u_\\text{max}\\), it need not. Suppose we find a level \\(c^\\ast\\) such that \\(\\dot W &lt; 0\\) at every point with \\(0 &lt; W \\le c^\\ast\\), the whole ellipsoid except its centre. Then a motion that starts inside can never leave: to cross the surface \\(W = c^\\ast\\) outward, \\(W\\) would have to rise there, and it cannot. Inside, \\(W\\) falls all the time, and since it is bounded below by zero and falls at a rate that does not die out away from the centre, it can only end at \\(W = 0\\), the upright rest. This is Lyapunov’s argument: a bowl in which the marble can only roll downhill. Negative \\(\\dot W\\) on the surface alone would only keep the motion inside; it is the inside that brings it home, so the inside must be tested too.",
@@ -1690,6 +1706,10 @@
  "d1a525028612": {
   "src": "with \\(\\dot x_\\text{ref} = \\dot e\\) along with it (check: \\(\\dot e(0) = (v + \\omega e_0) - \\omega e_0 = v\\)). The rate \\(\\omega\\) is our choice; the glide from one metre away at rest comes within a centimetre after 13 s. Its largest acceleration is at the start, \\(\\ddot e(0) = -\\omega^2 e_0 - 2\\omega v\\): 0.25 m/s² from one metre at rest, 1.25 m/s² when the cart also moves away at 1 m/s. A cart that accelerates at \\(a\\) can hold its rods only leaning: in the cart’s frame gravity tilts by the angle whose tangent is \\(a/g\\), and both rods must stand along it. The rule gives 1.5° at 0.25 m/s² and 7.3° at 1.25 m/s². The balancer’s reference keeps \\(\\theta = 0\\) all the same, so it meets the lean as a small error and lets it stand. Measured with the page’s equations and the 10 ms gains, the rods lean at most 0.9° in the first glide and 5.3° in the second, less than the rule says, because the cart cannot take up the reference’s acceleration at once and never reaches its peak; the motor needs at most 0.5 and 2.7 N. When the reference is within a centimetre of the target the panel says <i>Balancing</i> again.",
   "tr": "mit \\(\\dot x_\\text{ref} = \\dot e\\) dazu (Probe: \\(\\dot e(0) = (v + \\omega e_0) - \\omega e_0 = v\\)). Die Rate \\(\\omega\\) ist unsere Wahl; das Gleiten aus einem Meter Abstand in Ruhe kommt nach 13 s auf einen Zentimeter heran. Seine größte Beschleunigung hat es am Anfang, \\(\\ddot e(0) = -\\omega^2 e_0 - 2\\omega v\\): 0.25 m/s² aus einem Meter in Ruhe, 1.25 m/s², wenn sich der Wagen außerdem mit 1 m/s entfernt. Ein Wagen, der mit \\(a\\) beschleunigt, kann seine Stangen nur geneigt halten: Im System des Wagens kippt die Schwerkraft um den Winkel, dessen Tangens \\(a/g\\) ist, und beide Stangen müssen entlang dieser Richtung stehen. Die Regel ergibt 1.5° bei 0.25 m/s² und 7.3° bei 1.25 m/s². Die Referenz des Balancierreglers behält dennoch \\(\\theta = 0\\) bei; er nimmt die Neigung also als kleinen Fehler hin und lässt ihn stehen. Mit den Gleichungen der Seite und den Verstärkungen für 10 ms gemessen, neigen sich die Stangen beim ersten Gleiten höchstens um 0.9° und beim zweiten um 5.3°, weniger als die Regel sagt, weil der Wagen die Beschleunigung der Referenz nicht sofort aufnehmen kann und ihre Spitze nie erreicht; der Motor braucht höchstens 0.5 und 2.7 N. Ist die Referenz bis auf einen Zentimeter am Ziel, zeigt das Bedienfeld wieder <i>Balanciert</i>."
+ },
+ "d1cdd96d759f": {
+  "src": "your own field, u(x, y, t) and v(x, y, t)",
+  "tr": "dein eigenes Feld, u(x, y, t) und v(x, y, t)"
  },
  "d1ed8fd76743": {
   "src": "Stop the cart",
