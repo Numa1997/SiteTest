@@ -206,6 +206,8 @@ RULES = [
     (r'notes/fig12/test\.cjs', 'Fig. 12: browser test of the page on desktop and phone: the run advances, the push works, no errors, no sideways scroll.', 'docs/simulations/fig12-beer-slosh.md'),
     (r'notes/fig12/panel-test\.cjs', 'Fig. 12: every check and read-back of the data panel, run in Chromium; the panel opened.', 'docs/simulations/fig12-beer-slosh.md'),
     (r'notes/fig12/panel-test2\.cjs', 'Fig. 12: data panel on a bump at three widths, Read values, one round, Save, the panel idle.', 'docs/simulations/fig12-beer-slosh.md'),
+    (r'tools/fig12/profile\.cjs', 'Fig. 12: times one fluid step of the stout solver by phase (level set, transfers, pressure, advection).', 'docs/simulations/fig12-beer-slosh.md'),
+    (r'tools/fig12/same\.cjs', 'Fig. 12: fingerprint (SHA-256) of the solver state after 1 s with a push; a speed-up must leave it unchanged.', 'docs/simulations/fig12-beer-slosh.md'),
     (r'public/scripts/guinness-glass\.js', 'Fig. 12: inner radius of the Guinness tulip pint every 0.5 mm, written by tools/fig12/glass_profile.py; do not edit.', 'docs/simulations/fig12-beer-slosh.md'),
     (r'tools/fig12/glass_profile\.py', 'Fig. 12: measures the inner outline of the tulip from dimensions.com\u2019s dimensioned section and scales it to 160 x 85 mm; writes glass_profile.json and guinness-glass.js.', 'docs/simulations/fig12-beer-slosh.md'),
     (r'tools/fig12/glass_profile\.json', 'Fig. 12: the measured inner radius every 0.5 mm with its scaling, written by glass_profile.py.', 'docs/simulations/fig12-beer-slosh.md'),
