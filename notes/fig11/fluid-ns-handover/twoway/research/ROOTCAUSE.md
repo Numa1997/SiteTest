@@ -48,6 +48,7 @@ still water (an independent case, not used to build the correction).
 |---|---|---|---|---|
 | 10 cells/D, Δt 10 ms | 5.118 | 5.341 | 0.0801 | 0.1033 |
 | 20 cells/D | 5.212 | 5.324 | 0.0785 | 0.1041 |
+| 39 cells/D, Δt 5 ms | 4.961 | 5.298 | 0.0777 | 0.1046 |
 | 10 cells/D, Δt 5 ms | 5.106 | 5.311 | 0.0790 | 0.1041 |
 | 10 cells/D, Δt 2.5 ms | 5.092 | 5.301 | 0.0785 | 0.1046 |
 | 10 cells/D, run to 30 s instead of 12 s | 5.118 | 5.341 | 0.0801 | 0.1033 |
@@ -75,7 +76,7 @@ in the order they will be tested:
    every substep).
 3. Kim–Moin lagged-φ wall value for the intermediate velocity (dossier-projection-force.md), combined with the
    incremental form, which alone did not help.
-4. A finer run, 40 cells/D, Δt 5 ms (running when this was written).
+4. ~~A finer run~~: 39 cells/D, Δt 5 ms gives La 0.0777, Δp 0.1046: the error does not shrink with the grid (row in the table).
 
 ## 3. A few per cent of momentum between body and water is not counted
 
