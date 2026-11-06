@@ -1,0 +1,1 @@
+{"med":"glycerol","nsub":20,"U":0,"W_motor":1.33579,"machine_check":0,"dE_machine":0.0117,"dK":0.00488,"D_rod":0.1066,"D_visc":0.98423,"L_adv":0.09166,"L_proj":0.20994,"L_imp":0.04738,"L_lag":-0.10891,"L_transit":0.00164,"E_geom":0.01335,"E_in_ends":0,"K_unbucketed":0.033,"R_old":0.22838,"R_old_pct":17.1,"residual":0.00001,"residual_pct":0.001}

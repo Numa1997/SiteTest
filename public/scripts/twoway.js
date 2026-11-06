@@ -169,11 +169,13 @@ W.measure = function () {   // fluid fraction of the control volume (dx × dx) a
   this.finishWeights(); };
 W.finishWeights = function () { var nx = this.nx, ny = this.ny, i, j;
   var wx = this.tmpU, wy = this.tmpV; wx.set(this.wu); wy.set(this.wv);
+  if (this.solidCut) { for (var c = 0; c < wx.length; c++) if (this.phU[c] < 0) wx[c] = 0; for (c = 0; c < wy.length; c++) if (this.phV[c] < 0) wy[c] = 0; }   // test option: faces whose centre is inside the body are solid for the pressure too
   for (j = 0; j < ny; j++) wx[j * (nx + 1)] = 0;   // left edge: given inflow (Neumann for p); right edge: open, p = 0 (Dirichlet, through the diagonal)
   for (i = 0; i < nx; i++) { wy[i] = 0; wy[ny * nx + i] = 0; }   // floor and lid: walls without friction
   this.wx = Float64Array.from(wx); this.wy = Float64Array.from(wy); this.P.setWeights(this.wx, this.wy);
 };
-W.impose = function (xd, strict) { var c, dP = 0; for (c = 0; c < this.u.length; c++) if (this.phU[c] < 0 && (!strict || this.wx[c] <= 0)) { dP += this.wu[c] * (xd - this.u[c]); this.u[c] = xd; } for (c = 0; c < this.v.length; c++) if (this.phV[c] < 0 && (!strict || this.wy[c] <= 0)) this.v[c] = 0;   // faces whose centre lies inside the body move with it
+W.impose = function (xd, strict) { var c, dP = 0, dK = 0; for (c = 0; c < this.u.length; c++) if (this.phU[c] < 0 && (!strict || this.wx[c] <= 0)) { dP += this.wu[c] * (xd - this.u[c]); dK += this.wu[c] * (xd * xd - this.u[c] * this.u[c]); this.u[c] = xd; } for (c = 0; c < this.v.length; c++) if (this.phV[c] < 0 && (!strict || this.wy[c] <= 0)) { dK -= this.wv[c] * this.v[c] * this.v[c]; this.v[c] = 0; }
+  if (!this._shadow) { var m = this.rho * this.b * this.dx * this.dx; this.book.Pimp = (this.book.Pimp || 0) + m * dP; this.book.Wimp = (this.book.Wimp || 0) + m * xd * dP; this.book.Eimp = (this.book.Eimp || 0) + 0.5 * m * dK; }   // books: the energy the body gives at its own velocity, and the water's change of kinetic energy (the difference is the loss of forcing the faces)   // faces whose centre lies inside the body move with it
   this.impX = (this.impX || 0) + this.rho * this.b * this.dx * this.dx * dP; };   // the x-momentum the body gives the partly fluid faces it overrides (N s), credited to the body
 W.boundary = function () { var nx = this.nx, ny = this.ny, Wu = nx + 1, j, i;
   for (j = 0; j < ny; j++) { this.u[j * Wu] = this._shadow ? 0 : this.inflow ? this.inflow(this.yu(j)) : this.U; this.u[j * Wu + nx] = this.u[j * Wu + nx - 1]; }
@@ -200,7 +202,9 @@ W.extrapolate = function (sweeps) {   // fill the faces inside the body with the
     for (j = 0; j <= ny; j++) for (i = 0; i < nx; i++) { c = j * nx + i; if (mv[c]) continue; var s2 = 0, n2 = 0;
       if (i > 0 && mv[c - 1] === 1) { s2 += v[c - 1]; n2++; } if (i < nx - 1 && mv[c + 1] === 1) { s2 += v[c + 1]; n2++; } if (j > 0 && mv[c - nx] === 1) { s2 += v[c - nx]; n2++; } if (j < ny && mv[c + nx] === 1) { s2 += v[c + nx]; n2++; }
       if (n2) tv.push(c, s2 / n2); }
-    for (c = 0; c < tu.length; c += 2) { this.impX = (this.impX || 0) + this.rho * this.b * this.dx * this.dx * this.wu[tu[c]] * (tu[c + 1] - u[tu[c]]); u[tu[c]] = tu[c + 1]; mu[tu[c]] = 1; } for (c = 0; c < tv.length; c += 2) { v[tv[c]] = tv[c + 1]; mv[tv[c]] = 1; } } };
+    var m = this.rho * this.b * this.dx * this.dx, xb = this.s[3], B = this.book, sh = this._shadow;
+    for (c = 0; c < tu.length; c += 2) { var dPe = m * this.wu[tu[c]] * (tu[c + 1] - u[tu[c]]); this.impX = (this.impX || 0) + dPe; if (!sh) { B.Pimp = (B.Pimp || 0) + dPe; B.Wimp = (B.Wimp || 0) + xb * dPe; B.Eimp = (B.Eimp || 0) + 0.5 * m * this.wu[tu[c]] * (tu[c + 1] * tu[c + 1] - u[tu[c]] * u[tu[c]]); } u[tu[c]] = tu[c + 1]; mu[tu[c]] = 1; }
+    for (c = 0; c < tv.length; c += 2) { if (!sh) B.Eimp = (B.Eimp || 0) + 0.5 * m * this.wv[tv[c]] * (tv[c + 1] * tv[c + 1] - v[tv[c]] * v[tv[c]]); v[tv[c]] = tv[c + 1]; mv[tv[c]] = 1; } } };   // books: like impose(), its momentum is the cart's and its energy is booked
 W.advTend = function (u, v, du, dv) {   // −∇·(u u) on the MAC grid, second-order central, divergence form (Harlow & Welch): the tendencies of u and v
   var nx = this.nx, ny = this.ny, Wu = nx + 1, ih = 1 / this.dx, i, j, c; du.fill(0); dv.fill(0);
   for (j = 0; j < ny; j++) for (i = 1; i < nx; i++) { c = j * Wu + i;
@@ -221,10 +225,12 @@ W.advectCentral = function (dt) {   // SSP-RK3 (Shu & Osher) over dt with the ce
 W.advect = function (dt) {   // MacCormack with semi-Lagrangian steps, midpoint backtrace, clamped to the local extrema of the departure cell (Selle et al. 2008, J. Sci. Comput. 35, 350)
   var nx = this.nx, ny = this.ny, Wu = nx + 1, self = this, u0 = this.u0, v0 = this.v0, uF = this.uF, vF = this.vF, i, j, c; u0.set(this.u); v0.set(this.v);
   var h = dt / this.dx, dXu = this._dXu || (this._dXu = new Float64Array(u0.length)), dYu = this._dYu || (this._dYu = new Float64Array(u0.length)), dXv = this._dXv || (this._dXv = new Float64Array(v0.length)), dYv = this._dYv || (this._dYv = new Float64Array(v0.length));
-  var sU = function (A, gx, gy) { if (gx < 0) gx = 0; else if (gx > nx - 1e-9) gx = nx - 1e-9; if (gy < 0) gy = 0; else if (gy > ny - 1 - 1e-9) gy = ny - 1 - 1e-9;
-    var i = gx | 0, j = gy | 0, a = gx - i, b = gy - j, c = j * Wu + i; return (1 - b) * ((1 - a) * A[c] + a * A[c + 1]) + b * ((1 - a) * A[c + Wu] + a * A[c + Wu + 1]); };
-  var sV = function (A, gx, gy) { if (gx < 0) gx = 0; else if (gx > nx - 1 - 1e-9) gx = nx - 1 - 1e-9; if (gy < 0) gy = 0; else if (gy > ny - 1e-9) gy = ny - 1e-9;
-    var i = gx | 0, j = gy | 0, a = gx - i, b = gy - j, c = j * nx + i; return (1 - b) * ((1 - a) * A[c] + a * A[c + 1]) + b * ((1 - a) * A[c + nx] + a * A[c + nx + 1]); };
+  var vIn = (this.inflow || this.U) && !this.inletNeumann ? 1 : 0, uWall = this.noslip ? 1 : 0;   // a stream enters straight (v = 0 at the inlet); no-slip floor and lid (u = 0 there)
+  var sU = function (A, gx, gy) { var f = 1; if (gx < 0) gx = 0; else if (gx > nx - 1e-9) gx = nx - 1e-9; if (gy < 0) { if (uWall) f = Math.max(0, 1 + 2 * gy); gy = 0; } else if (gy > ny - 1 - 1e-9) { if (uWall) f = Math.max(0, 1 - 2 * (gy - ny + 1)); gy = ny - 1 - 1e-9; }
+    var i = gx | 0, j = gy | 0, a = gx - i, b = gy - j, c = j * Wu + i; return f * ((1 - b) * ((1 - a) * A[c] + a * A[c + 1]) + b * ((1 - a) * A[c + Wu] + a * A[c + Wu + 1])); };
+  var sV = function (A, gx, gy) { var f = 1; if (gx < 0) { if (vIn) f = Math.max(0, 1 + 2 * gx); gx = 0; } else if (gx > nx - 1 - 1e-9) gx = nx - 1 - 1e-9; if (gy < 0) gy = 0; else if (gy > ny - 1e-9) gy = ny - 1e-9;
+    var i = gx | 0, j = gy | 0, a = gx - i, b = gy - j, c = j * nx + i; return f * ((1 - b) * ((1 - a) * A[c] + a * A[c + 1]) + b * ((1 - a) * A[c + nx] + a * A[c + nx + 1])); };
+  this._sU = sU; this._sV = sV;   // kept for the self field, which moves with the same velocity and boundaries
   var PX = 0, PY = 0;
   var uT = this._traceU || u0, vT = this._traceV || v0; if (this.advWeighted && !this._traceU) { uT = this._uT || (this._uT = new Float64Array(u0.length)); vT = this._vT || (this._vT = new Float64Array(v0.length)); for (i = 0; i < u0.length; i++) uT[i] = this.wu[i] * u0[i]; for (i = 0; i < v0.length; i++) vT[i] = this.wv[i] * v0[i]; }   // test option: trace with the volume-weighted velocity, the one the projection made divergence-free
   function trace(X, Y, hh) { var ux = sU(uT, X, Y - 0.5), uy = sV(vT, X - 0.5, Y), Xm = X - 0.5 * hh * ux, Ym = Y - 0.5 * hh * uy; PX = X - hh * sU(uT, Xm, Ym - 0.5); PY = Y - hh * sV(vT, Xm - 0.5, Ym); }
@@ -241,21 +247,24 @@ W.advect = function (dt) {   // MacCormack with semi-Lagrangian steps, midpoint 
 W.diffuse = function (dt, xd) {   // explicit viscosity, substepped; no-slip on the body at its true surface by a ghost value (linear through the wall, distance θ dx),
   // the wall link taken implicitly so that small θ stays stable (Gibou et al. 2002, J. Comput. Phys. 176, 205). Returns the x-momentum the body's surface gave the fluid (N s).
   var nx = this.nx, ny = this.ny, dx = this.dx, nu = this.nu, Wu = nx + 1, i, j, c, k; if (!nu || !this.rho) return 0;
-  var n = Math.max(1, Math.ceil(nu * dt / (0.2 * dx * dx))), a = nu * (dt / n) / (dx * dx), u0 = this.u0, v0 = this.v0, shear = 0, pu = this.phU, pv = this.phV, ns = this.noslip;
+  var vIn = (this.inflow || this.U) && !this.inletNeumann ? 1 : 0, n = Math.max(1, Math.ceil(nu * dt / (0.2 * dx * dx))), a = nu * (dt / n) / (dx * dx), u0 = this.u0, v0 = this.v0, shear = 0, pu = this.phU, pv = this.phV, ns = this.noslip, fv = this.viscFV, wu = this.wu, wv = this.wv;
+  var led = !this.shearOld, dPw = 0, dPb = 0;   // ledger: the body's viscous push is what this step changed in the water (Σ w Δu), less what the lid, floor and the tank's ends took
   for (var s = 0; s < n; s++) { u0.set(this.u); v0.set(this.v);
     for (j = 0; j < ny; j++) for (i = 1; i < nx; i++) { c = j * Wu + i; if (pu[c] < 0) continue;
       var nb = [c - 1, c + 1, j < ny - 1 ? c + Wu : -1, j > 0 ? c - Wu : -1], sum = 0, imp = 0, impb = 0;
       for (k = 0; k < 4; k++) { var q = nb[k];
-        if (q < 0) { sum += ns ? -2 * u0[c] : 0; continue; }   // lid and floor: mirror (no friction) or no-slip
+        if (q < 0) { if (ns) { sum -= 2 * u0[c]; dPw -= wu[c] * a * 2 * u0[c]; } continue; }   // lid and floor: mirror (no friction) or no-slip
         if (pu[q] < 0) { var th = Math.max(pu[c] / (pu[c] - pu[q]), 0.05); imp += 1 / th; impb += xd / th; }   // a link through the body's surface
-        else sum += u0[q] - u0[c]; }
-      var un = (u0[c] + a * sum + a * impb) / (1 + a * imp); this.u[c] = un; if (imp) shear += this.wu[c] * a * (impb - imp * un); }
+        else sum += fv ? Math.min(wu[c], wu[q]) / wu[c] * (u0[q] - u0[c]) : u0[q] - u0[c]; }   // finite-volume link: the flux through the fluid part of the face between them, so Σ w u is kept
+      if (i === 1 || i === nx - 1) dPb += wu[c] * a * (u0[i === 1 ? c - 1 : c + 1] - u0[c]);   // the link to the inlet or outlet face
+      var un = (u0[c] + a * sum + a * impb) / (1 + a * imp); this.u[c] = un; if (led) shear += wu[c] * (un - u0[c]); else if (imp) shear += this.wu[c] * a * (impb - imp * un); }
     for (j = 1; j < ny; j++) for (i = 0; i < nx; i++) { c = j * nx + i; if (pv[c] < 0) continue;
       var nb2 = [i > 0 ? c - 1 : -1, i < nx - 1 ? c + 1 : -1, c + nx, c - nx], sum2 = 0, imp2 = 0;
-      for (k = 0; k < 4; k++) { var q2 = nb2[k]; if (q2 < 0) continue;
-        if (pv[q2] < 0) { var th2 = Math.max(pv[c] / (pv[c] - pv[q2]), 0.05); imp2 += 1 / th2; } else sum2 += v0[q2] - v0[c]; }
+      for (k = 0; k < 4; k++) { var q2 = nb2[k]; if (q2 < 0) { if (k === 0 && vIn) sum2 -= 2 * v0[c]; continue; }   // the inlet: v = 0 on x = 0 when a stream enters
+        if (pv[q2] < 0) { var th2 = Math.max(pv[c] / (pv[c] - pv[q2]), 0.05); imp2 += 1 / th2; } else sum2 += fv ? Math.min(wv[c], wv[q2]) / wv[c] * (v0[q2] - v0[c]) : v0[q2] - v0[c]; }
       this.v[c] = (v0[c] + a * sum2) / (1 + a * imp2); }
     this.impose(xd); this.boundary(); }
+  if (led) shear -= dPw + dPb; if (!this._shadow) this.book.Pwall = (this.book.Pwall || 0) + this.rho * this.b * dx * dx * dPw;
   return this.rho * this.b * dx * dx * shear; };
 /* the actuator lines: sample, and spread */
 W.sampleAll = function () {   // the grid velocity at every rod point, with Peskin's kernel (the adjoint of spread)
@@ -317,9 +326,10 @@ W.divFluid = function (out) { var nx = this.nx, ny = this.ny, dx = this.dx, Wu =
 W.divCart = function (out) {   // divergence of (1 - w) · 1 on the u-faces: the cart moving at 1 m/s
   var nx = this.nx, ny = this.ny, dx = this.dx, Wu = nx + 1, i, j;
   for (j = 0; j < ny; j++) for (i = 0; i < nx; i++) out[j * nx + i] = -((1 - this.wu[j * Wu + i + 1]) - (1 - this.wu[j * Wu + i])) / dx; };
-W.project = function (p, dt) { var nx = this.nx, ny = this.ny, dx = this.dx, Wu = nx + 1, s = dt / (this.rho * dx), i, j, c;
-  for (j = 0; j < ny; j++) for (i = 1; i <= nx; i++) { c = j * Wu + i; if (this.wx[c] <= 0) continue; this.u[c] -= s * ((i < nx ? p[j * nx + i] : 0) - p[j * nx + i - 1]); }
-  for (j = 1; j < ny; j++) for (i = 0; i < nx; i++) { c = j * nx + i; if (this.wy[c] <= 0) continue; this.v[c] -= s * (p[j * nx + i] - p[(j - 1) * nx + i]); } };
+W.project = function (p, dt) { var nx = this.nx, ny = this.ny, dx = this.dx, Wu = nx + 1, s = dt / (this.rho * dx), i, j, c, L = 0, d;
+  for (j = 0; j < ny; j++) for (i = 1; i <= nx; i++) { c = j * Wu + i; if (this.wx[c] <= 0) continue; d = s * ((i < nx ? p[j * nx + i] : 0) - p[j * nx + i - 1]); this.u[c] -= d; L += this.wu[c] * d * d; }
+  for (j = 1; j < ny; j++) for (i = 0; i < nx; i++) { c = j * nx + i; if (this.wy[c] <= 0) continue; d = s * (p[j * nx + i] - p[(j - 1) * nx + i]); this.v[c] -= d; L += this.wv[c] * d * d; }
+  if (!this._shadow) this.book.Lproj = (this.book.Lproj || 0) + 0.5 * this.rho * this.b * dx * dx * L; };   // book: the kinetic energy of the part the projection removes (the splitting's loss)
 W.maxDiv = function () { var nx = this.nx, ny = this.ny, dx = this.dx, Wu = nx + 1, xd = this.s[3], mx = 0, i, j;
   for (j = 0; j < ny; j++) for (i = 0; i < nx; i++) { if (!this.P.L[0].d[j * nx + i]) continue;
     var e = j * Wu + i + 1, w = j * Wu + i, n = (j + 1) * nx + i, s = j * nx + i;
@@ -336,7 +346,7 @@ W.shadowRead = function () { this.withShadow(function () { for (var o = 0; o < 4
 W.shadowSpread = function () { if (!this.haveImp || this.noPush) return; this.withShadow(function () { for (var o = 0; o < 4 * NP; o += 2) this.spread(this.impPos[o], this.impPos[o + 1], -this.imp[o], -this.imp[o + 1]); }); };
 W.shadowAdvect = function (dt) { this.withShadow(function (U, V) { this.impose(0); this._traceU = U; this._traceV = V; this.advect(dt); this._traceU = this._traceV = null; this.impose(0); }); };
 W.advectStored = function () {   // the same MacCormack step as advect(), on this.u/this.v, at the points the last advect() traced (the self field moves with the water's velocity)
-  var nx = this.nx, ny = this.ny, Wu = nx + 1, u0 = this.u0, v0 = this.v0, uF = this.uF, vF = this.vF, i, j, c, sU = this.sU.bind(this), sV = this.sV.bind(this);
+  var nx = this.nx, ny = this.ny, Wu = nx + 1, u0 = this.u0, v0 = this.v0, uF = this.uF, vF = this.vF, i, j, c, sU = this._sU, sV = this._sV;
   var dXu = this._dXu, dYu = this._dYu, dXv = this._dXv, dYv = this._dYv, bXu = this._bXu, bYu = this._bYu, bXv = this._bXv, bYv = this._bYv; u0.set(this.u); v0.set(this.v);
   for (j = 0; j < ny; j++) for (i = 1; i < nx; i++) { c = j * Wu + i; uF[c] = sU(u0, dXu[c], dYu[c] - 0.5); }
   for (j = 1; j < ny; j++) for (i = 0; i < nx; i++) { c = j * nx + i; vF[c] = sV(v0, dXv[c] - 0.5, dYv[c]); }
@@ -355,7 +365,7 @@ W.shadowProject = function (dt) { this.withShadow(function () { var f = this.rho
 W.step = function (ctrl) {
   var h = this.h, n = this.nsub, dt = h * n, B = this.book, k, i, o, xd0 = this.s[3];
   if (!this.rho) { this.impNew = new Float64Array(4 * NP); var sV = this.runMachine(this.s, ctrl, this.t, 0, 0, n, h, true); B.Wm += this._Wm; this.s = sV; this.t += dt; return; }
-  var T0 = Date.now(); if (this.geom) this.geom(); else this.measure(); var impPrev = this.impX || 0; this.impX = 0; this.impose(xd0); this.boundary(); var T1 = Date.now();
+  var T0 = Date.now(), Kg0 = this.KE(); if (this.geom) this.geom(); else this.measure(); B.Egeom = (B.Egeom || 0) + this.KE() - Kg0; var impPrev = this.impX || 0; this.impX = 0; this.impose(xd0); this.boundary(); var T1 = Date.now();
   // 1. sample the fluid at the rod points (divergence-free field at the start of the step) and its acceleration there
   this.uS1.set(this.uE); this.sampleAll(); if (this.selfField) this.shadowRead();
   for (o = 0; o < 4 * NP; o++) this.uE[o] = this.selfField ? this.uS[o] - this.uSelf[o] : this.uS[o];   // the water as it would be without the rods: what the law (33)-(34), (39) is written for
@@ -363,14 +373,14 @@ W.step = function (ctrl) {
   var self = this, gEff = function (X, Y) { var g = self.interp(X, Y); if (self.selfField) { var d; self.withShadow(function () { d = this.interp(X, Y); }); g[0] -= d[0]; g[1] -= d[1]; } return g; };
   for (o = 0; o < 4 * NP; o += 2) { var X = this.pos[o], Y = this.pos[o + 1], e = 0.5 * this.dx, gxp = gEff(X + e, Y), gxm = gEff(X - e, Y), gyp = gEff(X, Y + e), gym = gEff(X, Y - e), ux = this.uE[o], uy = this.uE[o + 1];
     this.aS[o] += (ux * (gxp[0] - gxm[0]) + uy * (gyp[0] - gym[0])) / (2 * e); this.aS[o + 1] += (ux * (gxp[1] - gxm[1]) + uy * (gyp[1] - gym[1])) / (2 * e); }   // + (u·∇)u: the acceleration of the fluid's particles (39)
-  var E = this.KE(), Pf = this.momX();
+  var E = this.KE(), Pf = this.momX(); B.PgeomEtc = (B.PgeomEtc || 0) + Pf - (this._Plast !== undefined ? this._Plast : Pf);
   // 2. deliver last step's impulse of the rods to the fluid (Newton's third law: minus what the rods received)
   var toCart = 0; if (this.haveImp && !this.noPush) for (o = 0; o < 4 * NP; o += 2) toCart += this.spread(this.impPos[o], this.impPos[o + 1], -this.imp[o], -this.imp[o + 1]);
-  var E1 = this.KE(); B.Erod += E1 - E; B.Ptransit = 0; if (this.selfField) { this.shadowSpread(); if (this.advCentral) this.shadowAdvect(dt); }
+  var E1 = this.KE(), P1 = this.momX(); B.Prod = (B.Prod || 0) + P1 - Pf; B.toCartP = (B.toCartP || 0) + toCart; B.Erod += E1 - E; B.Ptransit = 0; if (this.selfField) { this.shadowSpread(); if (this.advCentral) this.shadowAdvect(dt); }
   // 3. advect and diffuse
-  var T2 = Date.now(); if (!this.noExtrap) this.extrapolate(3); if (this.advCentral) this.advectCentral(dt); else this.advect(dt); this.impose(xd0); if (this.selfField) { if (!this.advCentral) this.shadowAdvectStored(); this.shadowDiffuse(dt); this.shadowProject(dt); } var T3 = Date.now(); var E2 = this.KE(); B.Eadv += E2 - E1;
-  var Fold = 0; if (this.incremental) { this.project(this.pOld, dt); Fold = this.cartForce(this.pOld); }   // incremental pressure correction: the last pressure enters the prediction before the viscous step, so its no-slip sees it; only the change φ is solved
-  var shear = this.diffuse(dt, xd0); var E3 = this.KE(); B.Ediff += E3 - E2; B.Wshear = (B.Wshear || 0) + shear * xd0;   // the cart's shear does work shear·ẋ on the fluid; the rest of Ediff is viscous dissipation
+  var ei = B.Eimp || 0, wi = B.Wimp || 0, pi = B.Pimp || 0; var T2 = Date.now(); if (!this.noExtrap) this.extrapolate(3); if (this.advCentral) this.advectCentral(dt); else this.advect(dt); this.impose(xd0); if (this.selfField) { if (!this.advCentral) this.shadowAdvectStored(); this.shadowDiffuse(dt); this.shadowProject(dt); } var T3 = Date.now(); var E2 = this.KE(), P2 = this.momX(); B.Padv = (B.Padv || 0) + P2 - P1; B.Eadv += E2 - E1; B.EimpA = (B.EimpA || 0) + B.Eimp - ei; ei = B.Eimp; B.PimpA = (B.PimpA || 0) + (B.Pimp || 0) - pi; pi = B.Pimp || 0;
+  var Fold = 0; if (this.incremental) { this.project(this.pOld, dt); Fold = this.cartForce(this.pOld); var E2b = this.KE(); B.Eproj += E2b - E2; E2 = E2b; B.WcPend = (B.WcPend || 0) + Fold * xd0 * dt; }   // books: the old pressure's step is a projection (its work on the cart at the cart's velocity then)   // incremental pressure correction: the last pressure enters the prediction before the viscous step, so its no-slip sees it; only the change φ is solved
+  var shear = this.diffuse(dt, xd0); var E3 = this.KE(), P3 = this.momX(); B.Pdiff = (B.Pdiff || 0) + P3 - P2; B.Pshear = (B.Pshear || 0) + shear; B.Ediff += E3 - E2; B.EimpD = (B.EimpD || 0) + B.Eimp - ei; ei = B.Eimp; B.PimpD = (B.PimpD || 0) + (B.Pimp || 0) - pi; pi = B.Pimp || 0; B.Wshear = (B.Wshear || 0) + shear * xd0;   // the cart's shear does work shear·ẋ on the fluid; the rest of Ediff is viscous dissipation
   // 4. pressure: p = p0 + ẋ' p_x
   var T4 = Date.now();
   this.divFluid(this.rhs); var f = this.rho / dt; for (i = 0; i < this.rhs.length; i++) this.rhs[i] *= f; this.its0 = this.P.solve(this.rhs, this.p0);
@@ -382,8 +392,9 @@ W.step = function (ctrl) {
   // 6. project with the cart's new velocity
   for (i = 0; i < this.pF.length; i++) this.pF[i] = this.p0[i] + sN[3] * this.px[i];   // the change φ (incremental) or the whole pressure
   this.project(this.pF, dt); if (this.incremental) { for (i = 0; i < this.pF.length; i++) this.pF[i] += this.pOld[i]; this.pOld.set(this.pF); } B.Ebnd = (B.Ebnd || 0) + this.boundaryPower() * dt; this.impX = 0; this.impose(sN[3], true);   // after the pressure step only the wholly solid faces are overridden, so the field stays divergence-free
-  this.boundary(); var E4 = this.KE(); B.Eproj += E4 - E3;
+  this.boundary(); var E4 = this.KE(), P4 = this.momX(); B.Pproj = (B.Pproj || 0) + P4 - P3; this._Plast = P4; B.Eproj += E4 - E3; B.EimpP = (B.EimpP || 0) + B.Eimp - ei; B.PimpP = (B.PimpP || 0) + (B.Pimp || 0) - pi;
   // books: motor work u Δx, the cart's work by the fluid, the rods' dissipation below the grid, impulse in transit
+  var Fnp = Q0 - Fold - this.cartForce(this.p0), dX = sN[0] - s0[0]; B.WcNP = (B.WcNP || 0) + Fnp * dX; B.WcP = (B.WcP || 0) + (G - Fnp) * dX - ma * (sN[3] * sN[3] - s0[3] * s0[3]) / 2; B.WcPend = (B.WcPend || 0) + this.cartForce(this.pF) * sN[3] * dt;   // books: the cart's work by the shear, rods and overrides (held), by the pressure as the machine feels it, and by the pressure at the end velocity (what the projection gives the water)
   B.Wm += this._Wm; B.Ecart += Fc * (sN[0] - s0[0]); B.Drod += this._Dr; B.Wfl = (B.Wfl || 0) + this._Wfl;
   this.imp.set(this.impNew); for (o = 0; o < 4 * NP; o += 2) { this.impPos[o] = this.pos[o]; this.impPos[o + 1] = this.pos[o + 1]; } this.haveImp = true;
   var T6 = Date.now(); this.prof = this.prof || [0, 0, 0, 0, 0, 0]; [T1 - T0, T2 - T1, T3 - T2, T4 - T3, T5 - T4, T6 - T5].forEach(function (v, i) { this.prof[i] += v; }, this);
