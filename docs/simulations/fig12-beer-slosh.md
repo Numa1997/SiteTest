@@ -184,6 +184,11 @@ speed loop lets through at the swing frequency is |S| = 0.39; measured: 0.28 (|A
 speed-controlled lean in earlier notes was not reproduced: with fixed 5 ms steps the peak over the run is 5.8 mm (4.0 mm before
 1.5 s), about 1 mm of which is reading noise. The smallest tyre load at a step's end was 4.4 N: the wheel did not leave the road.
 
+Open (6 November 2026): the one-mode swing equation (17), driven by the measured jolt (t < 0.7 s), predicts a lean of 22.1 mm in
+open loop (solver: 18.5 mm fitted after the bump, followed swing by swing) and 7.8 mm with speed control (solver: 1.3 mm fitted,
+at the reading noise). Why the solver's stout swings so much less under speed control is not established; a swing smaller than a
+4 mm cell may be poorly carried by the particle surface (inference, untested).
+
 ## The store and the data panel
 
 One store (`Sim.dataset`), written where computed: `Cart.forces` and `Cart.sample` (state, forces, motor current, command,
