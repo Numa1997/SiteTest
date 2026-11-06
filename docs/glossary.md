@@ -125,7 +125,9 @@ then into the tables. Machine tables: [i18n/de/strings.json](../i18n/de/strings.
 | strut, spring, damper | Federbein, Feder, Dämpfer | الدعامة، النابض، المخمِّد |
 | wheel, tyre, unsprung mass | Rad, Reifen, ungefederte Masse | العجلة، الإطار، الكتلة غير المعلّقة |
 | heave, pitch (of the body) | Hubbewegung, Nicken | الارتفاع، الانعطاف الطولي |
-| strut deflection, tyre deflection | Federweg, Reifeneinfederung | انضغاط الدعامة، انضغاط الإطار |
+| strut deflection, tyre deflection | Einfederung (des Federbeins), Reifeneinfederung | انضغاط الدعامة، انضغاط الإطار |
+| body (of the cart: the sprung mass) | Aufbau, Aufbaumasse | الهيكل |
+| actuator, moving-coil actuator | Aktor, Tauchspulenaktor | المشغّل، مشغّل بملفّ متحرّك |
 | skyhook damper | Skyhook-Dämpfer (Himmelshaken) | مخمِّد سكاي هوك (المعلَّق بالسماء) |
 | road profile, speed bump, kerb, cobbles | Fahrbahnprofil, Bremsschwelle, Bordstein, Kopfsteinpflaster | مقطع الطريق، المطبّ، الرصيف، الحصى المرصوف |
 | Stokes–Joukowski potential, inertia | Stokes-Joukowski-Potential, -Trägheit | كمون ستوكس–جوكوفسكي، عزم القصور الذاتي |
