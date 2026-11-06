@@ -133,7 +133,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/scripts/walk/ar/bench.js`](../public/scripts/walk/ar/bench.js) | 40.4 kB | Arabic walkthrough bench, generated from the English one; do not edit. | [i18n.md](i18n.md) |
 | [`public/scripts/walk/ar/circles.js`](../public/scripts/walk/ar/circles.js) | 23.4 kB | Arabic walkthrough circles, generated from the English one; do not edit. | [i18n.md](i18n.md) |
 | [`public/scripts/walk/ar/dft.js`](../public/scripts/walk/ar/dft.js) | 30.9 kB | Arabic walkthrough dft, generated from the English one; do not edit. | [i18n.md](i18n.md) |
-| [`public/scripts/walk/ar/dipc.js`](../public/scripts/walk/ar/dipc.js) | 40.0 kB | Arabic walkthrough dipc, generated from the English one; do not edit. | [i18n.md](i18n.md) |
+| [`public/scripts/walk/ar/dipc.js`](../public/scripts/walk/ar/dipc.js) | 40.1 kB | Arabic walkthrough dipc, generated from the English one; do not edit. | [i18n.md](i18n.md) |
 | [`public/scripts/walk/ar/driven.js`](../public/scripts/walk/ar/driven.js) | 48.4 kB | Arabic walkthrough driven, generated from the English one; do not edit. | [i18n.md](i18n.md) |
 | [`public/scripts/walk/ar/pendcontrol.js`](../public/scripts/walk/ar/pendcontrol.js) | 17.8 kB | Arabic walkthrough pendcontrol, generated from the English one; do not edit. | [i18n.md](i18n.md) |
 | [`public/scripts/walk/ar/pendulum.js`](../public/scripts/walk/ar/pendulum.js) | 38.0 kB | Arabic walkthrough pendulum, generated from the English one; do not edit. | [i18n.md](i18n.md) |
@@ -147,7 +147,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/scripts/walk/de/bench.js`](../public/scripts/walk/de/bench.js) | 34.5 kB | German walkthrough bench, generated from the English one; do not edit. | [i18n.md](i18n.md) |
 | [`public/scripts/walk/de/circles.js`](../public/scripts/walk/de/circles.js) | 19.5 kB | German walkthrough circles, generated from the English one; do not edit. | [i18n.md](i18n.md) |
 | [`public/scripts/walk/de/dft.js`](../public/scripts/walk/de/dft.js) | 26.3 kB | German walkthrough dft, generated from the English one; do not edit. | [i18n.md](i18n.md) |
-| [`public/scripts/walk/de/dipc.js`](../public/scripts/walk/de/dipc.js) | 35.6 kB | German walkthrough dipc, generated from the English one; do not edit. | [i18n.md](i18n.md) |
+| [`public/scripts/walk/de/dipc.js`](../public/scripts/walk/de/dipc.js) | 35.8 kB | German walkthrough dipc, generated from the English one; do not edit. | [i18n.md](i18n.md) |
 | [`public/scripts/walk/de/driven.js`](../public/scripts/walk/de/driven.js) | 41.2 kB | German walkthrough driven, generated from the English one; do not edit. | [i18n.md](i18n.md) |
 | [`public/scripts/walk/de/pendcontrol.js`](../public/scripts/walk/de/pendcontrol.js) | 15.7 kB | German walkthrough pendcontrol, generated from the English one; do not edit. | [i18n.md](i18n.md) |
 | [`public/scripts/walk/de/pendulum.js`](../public/scripts/walk/de/pendulum.js) | 32.1 kB | German walkthrough pendulum, generated from the English one; do not edit. | [i18n.md](i18n.md) |
@@ -157,7 +157,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/scripts/walk/de/turbine.js`](../public/scripts/walk/de/turbine.js) | 36.4 kB | German walkthrough turbine, generated from the English one; do not edit. | [i18n.md](i18n.md) |
 | [`public/scripts/walk/de/water.js`](../public/scripts/walk/de/water.js) | 24.5 kB | German walkthrough water, generated from the English one; do not edit. | [i18n.md](i18n.md) |
 | [`public/scripts/walk/dft.js`](../public/scripts/walk/dft.js) | 24.4 kB | "From symbols to code" for Fig. 8 · Draw & Decompose. | [walk.md](scripts/walk.md) |
-| [`public/scripts/walk/dipc.js`](../public/scripts/walk/dipc.js) | 33.7 kB | Walkthrough file that no simulation page names in data-walk. | [walk.md](scripts/walk.md) |
+| [`public/scripts/walk/dipc.js`](../public/scripts/walk/dipc.js) | 33.9 kB | Walkthrough file that no simulation page names in data-walk. | [walk.md](scripts/walk.md) |
 | [`public/scripts/walk/driven.js`](../public/scripts/walk/driven.js) | 39.1 kB | "From symbols to code" for Fig. 9 · Driven Oscillator. | [walk.md](scripts/walk.md) |
 | [`public/scripts/walk/pendcontrol.js`](../public/scripts/walk/pendcontrol.js) | 15.4 kB | "From symbols to code" for Fig. 11 · Double Pendulum under Control. | [walk.md](scripts/walk.md) |
 | [`public/scripts/walk/pendulum.js`](../public/scripts/walk/pendulum.js) | 30.2 kB | "From symbols to code" for Fig. 2 · Double Pendulum. | [walk.md](scripts/walk.md) |
@@ -1190,7 +1190,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | File | Size | What it is | Explained in |
 |---|---|---|---|
 | [`notes/fig11/energy_path.py`](../notes/fig11/energy_path.py) | 2.7 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
-| [`notes/fig11/fluid-ns-handover/HANDOVER.md`](../notes/fig11/fluid-ns-handover/HANDOVER.md) | 8.7 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig11/fluid-ns-handover/HANDOVER.md`](../notes/fig11/fluid-ns-handover/HANDOVER.md) | 9.9 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig11/fluid-ns-handover/mac/mac.cjs`](../notes/fig11/fluid-ns-handover/mac/mac.cjs) | 25.2 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig11/fluid-ns-handover/mac/prof.cjs`](../notes/fig11/fluid-ns-handover/mac/prof.cjs) | 1.3 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig11/fluid-ns-handover/mac/t_light.cjs`](../notes/fig11/fluid-ns-handover/mac/t_light.cjs) | 1.9 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |

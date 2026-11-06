@@ -221,24 +221,24 @@ pixels. Line count still 1477; `hon.cjs rest drag` passes with the pixel read-ba
 
 **Air and water (5 November 2026, night).** Numa asked for air resistance and water as velocity fields: a fluid whose particles move
 with a field \(\mathbf v_f(x, y, t)\) pushes every piece of the 2D bodies that moves at a different velocity. Lecture-note section 13
-([630](../../public/simulations/double-inverted-pendulum.html#L630)) derives it, with equations (31)–(37), the tables of media and flows, how it is checked and what is left out.
+([637](../../public/simulations/double-inverted-pendulum.html#L637)) derives it, with equations (31)–(37), the tables of media and flows, how it is checked and what is left out.
 - **Controls.** A strip under the cart figure ([77](../../public/simulations/double-inverted-pendulum.html#L77)): Medium (vacuum, the default and the page as before; air, water,
   glycerol, honey), Flow (still, eight everyday flows, four textbook flows), Flow speed \(U\) (0–8 m/s), one line describing the
   chosen flow (hidden spans, translated with the page) and, rewritten four times a second, Re at the top of the upper rod and
   which drag rules there. A river or a swell switches air to water.
-- **Physics.** `MEDIA` ([750](../../public/simulations/double-inverted-pendulum.html#L750)) holds ρ and μ (section 13.1, sources [19]–[21]); `fieldV` ([763](../../public/simulations/double-inverted-pendulum.html#L763)) the twelve
-  flows of 13.3; `fluidPar` ([796](../../public/simulations/double-inverted-pendulum.html#L796)) the constants ξ⊥ = 4πμ/ln(L/r) of (33), ½ρC_D d of (34) (rods 2 cm thick, C_D 1.2)
-  and the cart's 6πμr_eq and ½ρC_D h b (box 0.36 × 0.12 × 0.2 m, C_D 1.28); `fluidQ` ([800](../../public/simulations/double-inverted-pendulum.html#L800)) the generalised forces (35)
-  and the power (36), by Gauss–Legendre on 3 panels of 8 points per rod (`GLR`, [757](../../public/simulations/double-inverted-pendulum.html#L757); the 8 nodes come from Newton's
+- **Physics.** `MEDIA` ([795](../../public/simulations/double-inverted-pendulum.html#L795)) holds ρ and μ (section 13.1, sources [19]–[21]); `fieldV` ([808](../../public/simulations/double-inverted-pendulum.html#L808)) the twelve
+  flows of 13.3; `fluidPar` ([842](../../public/simulations/double-inverted-pendulum.html#L842)) the constants ξ⊥ = 4πμ/ln(L/r) of (33), ½ρC_D d of (34) (rods 2 cm thick, C_D 1.2)
+  and the cart's 6πμr_eq and ½ρC_D h b (box 0.36 × 0.12 × 0.2 m, C_D 1.28); `fluidQ` ([846](../../public/simulations/double-inverted-pendulum.html#L846)) the generalised forces (35)
+  and the power (36), by Gauss–Legendre on 3 panels of 8 points per rod (`GLR`, [802](../../public/simulations/double-inverted-pendulum.html#L802); the 8 nodes come from Newton's
   method on P₈). `par()` puts the buoyancy (37) into f, so the controller is designed for the medium; `uFor`
-  ([1265](../../public/simulations/double-inverted-pendulum.html#L1265)) gives the calming law the machine without the flow: the controller is not told the wind.
-- **Equations of motion.** `rhs(p, s, u, t)` ([737](../../public/simulations/double-inverted-pendulum.html#L737)) adds Q to the right side of (9); `rk4(p, s, u, h, t)`
-  ([744](../../public/simulations/double-inverted-pendulum.html#L744)) takes the flow at t, t + h/2, t + h and sums the fluid's work `rk4.W` with RK4's own weights; `forceFor`
-  ([1266](../../public/simulations/double-inverted-pendulum.html#L1266)) adds Q to rows 2–3 and 1 for the hand on the cart. `run()`, `step()` and every check pass the step's time.
+  ([1356](../../public/simulations/double-inverted-pendulum.html#L1356)) gives the calming law the machine without the flow: the controller is not told the wind.
+- **Equations of motion.** `rhs(p, s, u, t)` ([782](../../public/simulations/double-inverted-pendulum.html#L782)) adds Q to the right side of (9); `rk4(p, s, u, h, t)`
+  ([789](../../public/simulations/double-inverted-pendulum.html#L789)) takes the flow at t, t + h/2, t + h and sums the fluid's work `rk4.W` with RK4's own weights; `forceFor`
+  ([1357](../../public/simulations/double-inverted-pendulum.html#L1357)) adds Q to rows 2–3 and 1 for the hand on the cart. `run()`, `step()` and every check pass the step's time.
 - **Store and books.** New variables in a group "Air and water": medium, flow, U_f, rho_f, mu_f, xi_r, c_q, c_lin, c_quad,
   Q_fl, P_fl, w_tip, Re_tip; W_fl is a fifth row of the energy book (E0 + W_motor + E_ext + W_fl + E_wait = E); fg_x0, fg_u, fg_v
-  hold the 25 × 17 arrows (0.25 m apart) that `draw()` reads ([1408](../../public/simulations/double-inverted-pendulum.html#L1408)). Checks: Q_fl by Simpson's rule with 400 slices
-  per rod (`fluidQref`, [1588](../../public/simulations/double-inverted-pendulum.html#L1588)), P_fl from the stored Q and state, the arrows from `fieldV`, f with buoyancy, ρ and μ
+  hold the 25 × 17 arrows (0.25 m apart) that `draw()` reads ([1515](../../public/simulations/double-inverted-pendulum.html#L1515)). Checks: Q_fl by Simpson's rule with 400 slices
+  per rod (`fluidQref`, [1697](../../public/simulations/double-inverted-pendulum.html#L1697)), P_fl from the stored Q and state, the arrows from `fieldV`, f with buoyancy, ρ and μ
   from the table, Re from its formula; st_s1, st_u and hand_u replay with the stored time.
 - **Measured.** Every flow in air and water at 1366 × 625 in headless Chromium: no page errors; the last 300 steps replayed bit for
   bit; Q against Simpson to 10⁻¹⁶–10⁻⁸ N; the book closes to 2 × 10⁻⁹ of the flows with 36 J of fluid work in a river. Wolfram
@@ -270,12 +270,12 @@ section 13.5 derives (38)–(40).
 - **Added mass (38).** Wolfram integrates the kinetic energy of potential flow round a moving cylinder, ½ρπa²U² per metre, so
   C_a = 1 (the same integral gives the textbook ⅔πa³ρ for a sphere). Only motion across a rod carries water: T_a = ½μ_a∫(v·n)²ds
   + ½m_c ẋ², μ_a = ρπr²; the cart is an ellipsoid of its size, m_c = ρV_e κ_x/(2 − κ_x) with Tuckerman's κ_x = 0.2876 (MuJoCo's
-  formula, integrated in Wolfram), 0.76 kg in water. `addedMass` ([783](../../public/simulations/double-inverted-pendulum.html#L783)) adds M_a(θ) to `Dm` ([732](../../public/simulations/double-inverted-pendulum.html#L732)); `addedC`
-  ([786](../../public/simulations/double-inverted-pendulum.html#L786)) holds the velocity terms Wolfram's Lagrange equations give (checked equal to the Christoffel form, and to keep
+  formula, integrated in Wolfram), 0.76 kg in water. `addedMass` ([829](../../public/simulations/double-inverted-pendulum.html#L829)) adds M_a(θ) to `Dm` ([777](../../public/simulations/double-inverted-pendulum.html#L777)); `addedC`
+  ([832](../../public/simulations/double-inverted-pendulum.html#L832)) holds the velocity terms Wolfram's Lagrange equations give (checked equal to the Christoffel form, and to keep
   T_a constant); `addedT` adds T_a to the energy. `rhs`, `forceFor`, `linear` (through `Dm`), `flick` and the planner's fast `rhsF`
-  ([941](../../public/simulations/double-inverted-pendulum.html#L941)) all carry it: the controller, its certificate and the swing-up planner know the medium's buoyancy and added
+  ([987](../../public/simulations/double-inverted-pendulum.html#L987)) all carry it: the controller, its certificate and the swing-up planner know the medium's buoyancy and added
   mass, not the flow.
-- **Flow acceleration (39).** `accelF` ([793](../../public/simulations/double-inverted-pendulum.html#L793)) takes Dv_f/Dt = ∂_t v + (v·∇)v by central differences (0.1 mm,
+- **Flow acceleration (39).** `accelF` ([839](../../public/simulations/double-inverted-pendulum.html#L839)) takes Dv_f/Dt = ∂_t v + (v·∇)v by central differences (0.1 mm,
   0.1 ms); (ρπr² + μ_a)(Dv_f/Dt·n) joins the force per metre in `fluidQ`, (ρV_e + m_c)Dv_f/Dt along x on the cart. Wolfram's exact
   derivative at a test point agrees to 6 × 10⁻⁷ (vortex street) or better (2 × 10⁻⁸ for the others; jets exact).
 - **What a test caught.** With the added mass in the gains but not in `rhsF`, switching to water while balancing left the certified
@@ -301,9 +301,9 @@ phone still scrolls), grab the cart and drag it (since 5 November 2026; see belo
 
 At Numa's request the page carries the site's data panel, like the eleven figures: the store `Sim.dataset()` (`scripts/dataset.js`),
 the bookkeeper `scripts/datalog.js` with `styles/data.css`, and a ledger declared inside the page's own `Sim.data`
-([double-inverted-pendulum.html:1546](../../public/simulations/double-inverted-pendulum.html#L1546), ledger at
-[:1710](../../public/simulations/double-inverted-pendulum.html#L1710)). The store is declared from
-[:1042](../../public/simulations/double-inverted-pendulum.html#L1042); 140 variables in 11 sections.
+([double-inverted-pendulum.html:1546](../../public/simulations/double-inverted-pendulum.html#L1654), ledger at
+[:1710](../../public/simulations/double-inverted-pendulum.html#L1819)). The store is declared from
+[:1042](../../public/simulations/double-inverted-pendulum.html#L1088); 140 variables in 11 sections.
 
 **The picture.** The page integrates live while a controller looks only every loop period, so it runs on three clocks: the 1 ms
 physics step, the controller's sample, and the frame. The store keeps a record of each, the way a lab keeps a fast data logger,
@@ -311,23 +311,23 @@ a log book of every command sent to the motor, and a photograph per frame:
 
 | Rate | What is stored | Written in |
 |---|---|---|
-| every 1 ms step | step number, time, state before and after (`st_s0`, `st_s1`), force held (`st_u`), the sample whose force it holds (`st_j`), kind (0 RK4 with the motor, 1 a rod held by the hand, 2 RK4 with the hand on the cart), where the hand pulled the cart (`st_xh`, NaN otherwise), an outside change before the step (`st_jump`: 1 flick, 2 hand, 3 reset or new state, 4 wrap of the angles at hand-over, 9 unexplained), design number | `logStep()` [:1359](../../public/simulations/double-inverted-pendulum.html#L1359), called on the line after `s = rk4(p, s, u, H); tSim += H;` |
-| every controller sample (every T_s while balancing, every 10 ms while calming or tracking) | sample number, time, step number, due time, next due time, the state seen (`cs_s`), the force chosen (`cs_u`), the law (0 balance, 1 calm, 2 track, 3 off, 4 motor cut by the supervisor outside a sample), the reference's numbers (kind, place or target, speed, start time, glide's starting distance), the governor's bite and the speed before it (`cs_bite`, `cs_vb`, NaN without a bite), centre of calming, plan start, plan number, force limit, design number | `logSample()` [:1350](../../public/simulations/double-inverted-pendulum.html#L1350), from `logStep()` when `tCtl` moved in the step |
-| every frame | state, wrapped angles, accelerations from `rhs()`, force, law, reference now (`x_r`, `v_r`, `ref_p`), W, W_red, E_p, the energy book, the supervisor's state, the settings | `diagnostics()` [:1376](../../public/simulations/double-inverted-pendulum.html#L1376), between `think()` and `draw()` |
-| every frame, by the drawing | scale, axle line, camera, view widening, cart, hinge and tip positions in css px | `draw()` [:1400](../../public/simulations/double-inverted-pendulum.html#L1400) |
-| on change | d, f, fall rates, K, P, Φ, Γ, R_d, \|λ\|, settling time, design number (`redesign()`); c*, 0.9 c*, busy flag, ε = √(γc*/P₄₄) (`recatch()`, `think()`); γ at start; the plan the tracker follows, as the very arrays `trackU()` reads (`planStore()` [:1373](../../public/simulations/double-inverted-pendulum.html#L1373)) | |
+| every 1 ms step | step number, time, state before and after (`st_s0`, `st_s1`), force held (`st_u`), the sample whose force it holds (`st_j`), kind (0 RK4 with the motor, 1 a rod held by the hand, 2 RK4 with the hand on the cart), where the hand pulled the cart (`st_xh`, NaN otherwise), an outside change before the step (`st_jump`: 1 flick, 2 hand, 3 reset or new state, 4 wrap of the angles at hand-over, 9 unexplained), design number | `logStep()` [:1359](../../public/simulations/double-inverted-pendulum.html#L1452), called on the line after `s = rk4(p, s, u, H); tSim += H;` |
+| every controller sample (every T_s while balancing, every 10 ms while calming or tracking) | sample number, time, step number, due time, next due time, the state seen (`cs_s`), the force chosen (`cs_u`), the law (0 balance, 1 calm, 2 track, 3 off, 4 motor cut by the supervisor outside a sample), the reference's numbers (kind, place or target, speed, start time, glide's starting distance), the governor's bite and the speed before it (`cs_bite`, `cs_vb`, NaN without a bite), centre of calming, plan start, plan number, force limit, design number | `logSample()` [:1350](../../public/simulations/double-inverted-pendulum.html#L1443), from `logStep()` when `tCtl` moved in the step |
+| every frame | state, wrapped angles, accelerations from `rhs()`, force, law, reference now (`x_r`, `v_r`, `ref_p`), W, W_red, E_p, the energy book, the supervisor's state, the settings | `diagnostics()` [:1376](../../public/simulations/double-inverted-pendulum.html#L1469), between `think()` and `draw()` |
+| every frame, by the drawing | scale, axle line, camera, view widening, cart, hinge and tip positions in css px | `draw()` [:1400](../../public/simulations/double-inverted-pendulum.html#L1506) |
+| on change | d, f, fall rates, K, P, Φ, Γ, R_d, \|λ\|, settling time, design number (`redesign()`); c*, 0.9 c*, busy flag, ε = √(γc*/P₄₄) (`recatch()`, `think()`); γ at start; the plan the tracker follows, as the very arrays `trackU()` reads (`planStore()` [:1373](../../public/simulations/double-inverted-pendulum.html#L1466)) | |
 | every 20 ms | the trace of the lower figure (`tr_t`, `tr_th1`, `tr_th2`, `tr_u`) | `logStep()` |
 
 The logs hold 8192 rows (800 for the trace); a full log keeps its newer half (`copyWithin`), so it always holds the last 4 to 8 s
 (trace 8 to 16 s). Row counts are written with the rows (they were first written once per frame, and the driven test caught the stale
 count after a log dropped its half). The walkthrough quotes the three lines of the control loop as one block, so nothing was put
 between them: the state, time, due time and force are taken before `supervise()`
-([:1333](../../public/simulations/double-inverted-pendulum.html#L1333)), the due time of a sample is recorded inside `period()`
-(JavaScript reads `tCtl` before it calls `period()` in `tCtl += period()`, [:1298](../../public/simulations/double-inverted-pendulum.html#L1298)),
-and the step and sample are written after the integrator ([:1337](../../public/simulations/double-inverted-pendulum.html#L1337)).
+([:1333](../../public/simulations/double-inverted-pendulum.html#L1425)), the due time of a sample is recorded inside `period()`
+(JavaScript reads `tCtl` before it calls `period()` in `tCtl += period()`, [:1298](../../public/simulations/double-inverted-pendulum.html#L1389)),
+and the step and sample are written after the integrator ([:1337](../../public/simulations/double-inverted-pendulum.html#L1429)).
 
 **The energy book.** The force is constant over a step, so its work in that step is exactly u (x_after − x_before). The book reads
-E₀ + W_motor + E_ext + E_wait = E, with E = ½ θ̇ᵀDθ̇ + f₁ cos θ₁ + f₂ cos θ₂ (`energy()`, [:1346](../../public/simulations/double-inverted-pendulum.html#L1346)); E_ext
+E₀ + W_motor + E_ext + E_wait = E, with E = ½ θ̇ᵀDθ̇ + f₁ cos θ₁ + f₂ cos θ₂ (`energy()`, [:1346](../../public/simulations/double-inverted-pendulum.html#L1438)); E_ext
 adds the energy of every flick, hand step and wrap; E_wait is an outside change made while the clock stands still, booked by the
 next step. The book opens again at a reset and at every change of the machine (until the next step it shows no numbers). Measured:
 it misses by 3.5 × 10⁻¹⁴ of the flows at rest and up to 4 × 10⁻⁹ after a drag and a fall (RK4's own error); the ledger's tolerance is 10⁻⁷.
@@ -338,7 +338,7 @@ and the drawing read the page's own state. Headline: θ₁, θ₂, x, u, W, E. R
 top of the upper rod or the target. One round is ten seconds of simulated motion (`t`), columns x, θ₁, θ₂, u, W, E and the book's
 miss. Checks recompute every derived value from stored inputs (gains, P, Φ, Γ, R_d by designing again; |λ| from the stored Φ, Γ, K;
 W, W_red, E_p, E, x_r, v_r, the accelerations, the drawing's positions; a stored step by one RK4 step from the state before it;
-a stored force by the law of its row, `lawAt()` [:1542](../../public/simulations/double-inverted-pendulum.html#L1542)). Read-backs: the
+a stored force by the law of its row, `lawAt()` [:1542](../../public/simulations/double-inverted-pendulum.html#L1650)). Read-backs: the
 cart's cream body inside both edges and not outside, the white hinge disc, the burgundy top of the upper rod, the force arrow, the
 target. What differs between store and picture is in the `about` paragraph: one state per frame of about 17 steps, the camera that
 follows at 8 % per frame, the view that widens when the rods hang, thicker rods for heavier masses, clipped arrow and trace.
