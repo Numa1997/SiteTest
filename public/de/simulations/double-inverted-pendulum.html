@@ -37,7 +37,7 @@
     </style>
 
     <script src="../../scripts/i18n/strings-de.js"></script>
-    <meta name="translated-from" content="English public/simulations/double-inverted-pendulum.html, commit 4d565dc+" />
+    <meta name="translated-from" content="English public/simulations/double-inverted-pendulum.html, commit 826c5c3+" />
   </head>
 <body>
     <header class="sim-top">
@@ -729,7 +729,7 @@
                         <p><b>Warum: Die äußere Stange ist ein Paddel, kein Pendel.</b> Eine hängende Stange kommt durch Schwingen über den höchsten Punkt: Sie muss den tiefsten Punkt so schnell durchlaufen, dass ihre kinetische Energie den Anstieg bezahlt, \(\tfrac12 I\omega^2 = 2f\), also</p>
                         \[ \omega_{\text{need}} = 2\sqrt{f/I} , \qquad \xi_\perp\frac{L^3}{3}\,\omega_t + c_q\frac{L^4}{4}\,\omega_t^2 = f , \tag{48} \]
                         <p>wobei \(I\) das mitgeführte Wasser (38) enthält. Die Flüssigkeit lässt die Stange aber nicht schneller drehen als mit der Rate \(\omega_t\), bei der ihr Widerstandsmoment, aus (33)–(34) längs der Stange integriert, dem ganzen Zug ihres Gewichts gleicht. Für die voreingestellte äußere Stange (0.75 kg, 0.75 m) ist \(\omega_{\text{need}}\) 6.4, 5.8 und 5.5 rad/s, und \(\omega_t\) ist 1.41, 0.96 und 0.44 rad/s in Wasser, Glycerin und Honig: Die Stange fällt fünf- bis zwölfmal langsamer durch die Flüssigkeit, als sie schwingen müsste. Und der Wagen kann sie auch nicht einfach über den höchsten Punkt ziehen, denn ein seitlicher Stoß hebt keine Stange, die seitlich liegt: Liegt die Stange waagerecht, wirken der Widerstand und der Trägheitsstoß der Wagenbewegung beide längs der Stange und geben kein Moment um ihr Gelenk. Das ist ein grobes Maß, eine einzelne Stange an einem festen Gelenk, kein Beweis; aber es sagt, in welche Richtung die Maschine zu ändern ist. Da \(\omega_t/\omega_{\text{need}}\) wie \(\sqrt{m/(\rho d L^3)}\) wächst, sind kurze schwere Stangen die, die eine Flüssigkeit schwingen lässt. Mit Stangen von 2 kg, 0.20 m und 0.25 m ist das Verhältnis 0.96 in Wasser, 0.79 in Glycerin und 0.57 in Honig; mit einem 200-N-Motor findet der Planer in Wasser einen Aufschwung, die Seite schwingt die Stangen hoch, fängt sie 14 s nach dem Knopfdruck und fährt den Wagen dann nach +1 m. In Glycerin und Honig findet er weiterhin keinen: Mit dem Motor und den Stangen dieser Seite ist ein Aufschwung dort außer Reichweite.</p>
-                        <p><b>Was die Seite in einer Flüssigkeit tut.</b> Scheitert ein Plan, tut der Wagen, was wir oben taten: Er pumpt mit voller Kraft, \(a = -3\,\mathcal P\tanh\bigl(3(V_{\text{top}} - E)/V_{\text{top}}\bigr)\) in m/s² mit \(\mathcal P\) in kg m²/s, was die Stangen bis zur Energie des höchsten Punktes speist und nicht weiter, während der Planer es erneut versucht. Stangen, die schon stehen, bleiben stehen. Die Wache aus Abschnitt 11 fragt das Modell, ob der Balancierregler die Maschine binnen 4 s in das zertifizierte Gebiet \(c^*\) aus Abschnitt 9 bringt. In einer Flüssigkeit ist \(c^*\) klein (0.04 in Wasser, 0.12 in Glycerin, 0.56 in Honig für die voreingestellte Maschine), und der Widerstand macht den Balancierregler langsam, sodass dieser Test Stangen aufgab, die um 0.8° geneigt waren. In einem Medium lässt die Wache den Balancierregler nun auch gewähren, solange das Modell zeigt, dass er \(W\) in diesen 4 s um mindestens ein Zehntel senkt; damit fährt der Wagen die stehenden Stangen in Wasser und Glycerin 16 s nach dem Knopfdruck bis auf 2 cm an +1 m heran; in Honig ist er nach 24 s bei 0.84 m und kriecht weiter. Ein Plan, der mit fahrendem Wagen endet, übergibt an einen Balancierregler, der den Wagen dort hält, wo er gefangen wurde, nicht an die Fahrt aus (25), denn in einer Flüssigkeit braucht eine gleichmäßige Fahrt einen gleichmäßigen Schub gegen den Widerstand, den (25) weglässt.</p>
+                        <p><b>Was die Seite in einer Flüssigkeit tut.</b> Scheitert ein Plan, tut der Wagen, was wir oben taten: Er pumpt mit voller Kraft, \(u = -u_{\max}\tanh\bigl(3(f_1 + f_2 - E_p)/(f_1 + f_2)\bigr)\,\mathrm{sgn}\,\mathcal P\) mit \(E_p\) aus (20), lässt nach, wenn die Energie der Stangen der des höchsten Punktes nahekommt, und wendet den Wagen mit voller Kraft, sobald er 1.2 m von seinem Ausgangspunkt entfernt ist, während der Planer es erneut versucht. Das Datenpanel speichert dies als Gesetz 5 und rechnet jede seiner Kräfte aus dem gespeicherten Zustand nach. Stangen, die schon stehen, bleiben stehen. Die Wache aus Abschnitt 11 fragt das Modell, ob der Balancierregler die Maschine binnen 4 s in das zertifizierte Gebiet \(c^*\) aus Abschnitt 9 bringt. In einer Flüssigkeit ist \(c^*\) klein (0.04 in Wasser, 0.12 in Glycerin, 0.56 in Honig für die voreingestellte Maschine), und der Widerstand macht den Balancierregler langsam, sodass dieser Test Stangen aufgab, die um 0.8° geneigt waren. In einem Medium lässt die Wache den Balancierregler nun auch gewähren, solange das Modell zeigt, dass er \(W\) in diesen 4 s um mindestens ein Zehntel senkt; damit fährt der Wagen die stehenden Stangen in Wasser und Glycerin 16 s nach dem Knopfdruck bis auf 2 cm an +1 m heran; in Honig ist er nach 24 s bei 0.84 m und kriecht weiter. Ein Plan, der mit fahrendem Wagen endet, übergibt an einen Balancierregler, der den Wagen dort hält, wo er gefangen wurde, nicht an die Fahrt aus (25), denn in einer Flüssigkeit braucht eine gleichmäßige Fahrt einen gleichmäßigen Schub gegen den Widerstand, den (25) weglässt.</p>
                         <div class="pbox pbox--ex">
                             <span class="pbox__t">Aufgaben</span>
                             <p><b>13.1</b> Aufrechte, ruhende Stangen in einer gleichmäßigen Brise \(U\), mit einem \(\xi_\perp\) für beide Stangen und nur (33): Zeigen Sie mit (35), dass \(\mathbf Q = \xi_\perp U\,\bigl(L_1 + L_2,\ \tfrac12 L_1(L_1 + 2L_2),\ \tfrac12 L_2^2\bigr)\), und vergleichen Sie es in Glycerin mit den \(Q_i\) des Speichers.</p>
@@ -1242,7 +1242,7 @@
         ds.var('cs_next', ['j'], Float64Array, { symbol: 't<sub>next</sub>', units: 's', long_name: 'time the next sample is due', computed_in: 'step(): tCtl += period()', digits: 4 });
         ds.var('cs_s', ['j', 'q'], Float64Array, { symbol: 's<sub>j</sub>', long_name: 'the state the controller saw', computed_in: 'logSample()', digits: 6, cw: 84 });
         ds.var('cs_u', ['j'], Float64Array, { symbol: 'u<sub>j</sub>', units: 'N', long_name: 'the force it chose, held until the next sample', computed_in: 'control()', digits: 5 });
-        ds.var('cs_mode', ['j'], Int8Array, { symbol: 'law', long_name: 'law used: 0 balance, 1 calm, 2 track, 3 off, 4 motor cut', computed_in: 'control() and supervise()', digits: 0 });
+        ds.var('cs_mode', ['j'], Int8Array, { symbol: 'law', long_name: 'law used: 0 balance, 1 calm, 2 track, 3 off, 4 motor cut, 5 pump (calming reversed, in a liquid after a failed plan)', computed_in: 'control() and supervise()', digits: 0 });
         ds.var('cs_rk', ['j'], Int8Array, { symbol: 'ref', long_name: 'reference: 0 fixed, 1 cruise, 2 glide', computed_in: 'logSample()', digits: 0 });
         ds.var('cs_rx', ['j'], Float64Array, { symbol: 'x<sub>0</sub>', units: 'm', long_name: 'reference place: fixed or start of the cruise, or the glide’s target', computed_in: 'logSample()', digits: 4 });
         ds.var('cs_rv', ['j'], Float64Array, { symbol: 'v<sub>0</sub>', units: 'm/s', long_name: 'reference speed at the start of a cruise or glide', computed_in: 'logSample()', digits: 4 });
@@ -1304,7 +1304,7 @@
 
         var vy = 0, p, K, Pm, Smod, lamNow = NaN, cLevel = null, catchIt = null, gmode = 'sampled', rolling = true, s, u = 0, xref = 0, on = true, rescue = true, lost = false, flat = false, tSim = 0, tCtl = 0, acc = 0, held = 0, geo = null;
         /* the supervisor's state: mode is 'balance' (LQR), 'calm' (drain the rods' energy while a plan is being made) or 'track' (follow a plan) */
-        var mode = 'balance', job = null, tv = null, tPlan = 0, sPred = null, xc = 0, attempt = 0, nextCheck = 0, CALM_K = 2, hp = 3, log = [], pump = false, att0 = 0, PUMP_K = 3;
+        var mode = 'balance', job = null, tv = null, tPlan = 0, sPred = null, xc = 0, attempt = 0, nextCheck = 0, CALM_K = 2, hp = 3, log = [], pump = false, att0 = 0;
         /* the balancer's reference, an equilibrium of the family (25): fixed at a place, cruising at a constant speed, or gliding from one to a resting place (26) */
         var ref = { kind: 'fixed', x: 0 }, GLIDE = 0.5;
         function refXV(t) { if (ref.kind === 'fixed') return [ref.x, 0];
@@ -1370,8 +1370,14 @@
             var det = D[1][1] * D[2][2] - D[1][2] * D[2][1], b1 = (r2 * D[2][2] - D[1][2] * r3) / det, b2 = (D[1][1] * r3 - D[2][1] * r2) / det;
             return D[0][0] * a + D[0][1] * b1 + D[0][2] * b2 - d[1] * s1 * st[4] * st[4] - d[2] * s2 * st[5] * st[5] - Qf[0] + Ca[0]; }
         function calmU(st) {   // a = k𝒫 makes dE_p/dt = −k𝒫² ≤ 0 (21); the two other terms keep the cart near x_c
+            if (pump) return pumpU(st);
             var d = p.d, P = d[1] * Math.cos(st[1]) * st[4] + d[2] * Math.cos(st[2]) * st[5];
-            var a = Math.max(-8, Math.min(8, kCalm(st) * P - 4 * (st[0] - xc) - 4 * st[3])); return clampF(uFor(st, a)); }   /* after a failed plan: pump instead, a = −k𝒫 tanh(3(V_top − E)/V_top), which feeds the rods' energy up to the top's and no further */ function kCalm(st) { if (!pump) return CALM_K; var Et = p.f[0] + p.f[1], E = energy(st) - 0.5 * p.d[0] * st[3] * st[3]; return -PUMP_K * Math.tanh(3 * (Et - E) / Et); }
+            var a = Math.max(-8, Math.min(8, CALM_K * P - 4 * (st[0] - xc) - 4 * st[3])); return clampF(uFor(st, a)); }
+        function pumpU(st) {   /* after a failed plan, in a liquid (13.7): the motor at its limit in the direction that feeds the rods, u = −u_max tanh(3(V_top − E_p)/V_top) sgn 𝒫 with sgn 0 = +1,
+                                  easing off as E_p of (20) nears the top's; within 0.3 m of a 1.2 m excursion from x_c it turns the cart back at full force */
+            var d = p.d, F = sF.value, P = d[1] * Math.cos(st[1]) * st[4] + d[2] * Math.cos(st[2]) * st[5], Vt = p.f[0] + p.f[1], e = st[0] - xc;
+            if (Math.abs(e) > 1.2) return -F * (e + 0.3 * st[3] >= 0 ? 1 : -1);
+            return -F * Math.tanh(3 * (Vt - Ep(st)) / Vt) * (P >= 0 ? 1 : -1); }
         function trackU() {   // u = u_plan − K(t)(s − s_plan) on the 10 ms grid of the plan (24)
             var k = Math.round((tSim - tPlan) / 0.01); if (k >= tv.n) return 'end';
             var v = tv.un[k], dev = 0; for (var j = 0; j < 6; j++) { var e = s[j] - (j === 0 ? xc : 0) - tv.nom[6 * k + j]; dev += e * e; v -= tv.Kt[6 * k + j] * e; }
@@ -1403,7 +1409,7 @@
             while (t < until - 1e-9) { if (t >= tc - 1e-9) { uu = law(q, t); tc += law === lqrU ? sT.value / 1000 : 0.01; } q = rk4(p, q, uu, H, t); t += H; }
             return { s: q, t: t, tc: tc, u: uu }; }
         function startAttempt() {   // plan from where calming will have brought the machine hp seconds from now
-            pump = attempt > att0; var pr = run({ s: s, t: tSim, tc: tCtl, u: u }, tSim + hp, calmU), s0 = pr.s.slice(); s0[0] -= xc;
+            pump = !!p.fl && attempt > att0;   /* in a liquid only: in a vacuum a second plan is found, as before */ var pr = run({ s: s, t: tSim, tc: tCtl, u: u }, tSim + hp, calmU), s0 = pr.s.slice(); s0[0] -= xc;
             sPred = pr; tPlan = pr.t; attempt++; job && !job.done && (hp = Math.min(8, hp * 1.5));
             job = new PlanJob(p, s0, attempt % 2 ? 4 : 6, { x: 1.5, u: sF.value, vw: rolling ? 0 : 0.3 }); job.t0 = performance.now(); }
         function supervise() {
@@ -1456,7 +1462,7 @@
             var r = csN++, i;
             LG.cs_i[r] = nSamp; LG.cs_t[r] = t0; LG.cs_k[r] = nStep; LG.cs_due[r] = cut ? NaN : cDue; LG.cs_next[r] = tCtl; LG.cs_u[r] = u;
             for (i = 0; i < 6; i++) LG.cs_s[6 * r + i] = s0[i];
-            LG.cs_mode[r] = cut ? 4 : !on || lost ? 3 : mode === 'balance' ? 0 : mode === 'calm' ? 1 : 2;
+            LG.cs_mode[r] = cut ? 4 : !on || lost ? 3 : mode === 'balance' ? 0 : mode === 'calm' ? (pump ? 5 : 1) : 2;
             LG.cs_rk[r] = ref.kind === 'fixed' ? 0 : ref.kind === 'cruise' ? 1 : 2; LG.cs_rx[r] = ref.kind === 'glide' ? ref.target : ref.x; LG.cs_rv[r] = ref.v || 0; LG.cs_rt0[r] = ref.t0 || 0; LG.cs_re0[r] = ref.e0 || 0;
             LG.cs_xc[r] = xc; LG.cs_tp[r] = tPlan; LG.cs_pl[r] = plSerial; LG.cs_ver[r] = ver; LG.cs_umax[r] = sF.value; LG.cs_bite[r] = bite; LG.cs_vb[r] = vBefore; nSamp++; ds.set('cs_n', csN); ds.set('cs_last', r); }   // the count is written with the row it counts
         function differs(a, b) { for (var i = 0; i < 6; i++) if (a[i] !== b[i]) return true; return false; }
@@ -1594,7 +1600,7 @@
                 document.getElementById('r-th').textContent = Sim.fmt(g('th1w') * 180 / Math.PI, 1) + '°, ' + Sim.fmt(g('th2w') * 180 / Math.PI, 1) + '°';
                 document.getElementById('r-x').textContent = Sim.fmt(g('x'), 2) + ' m';
                 stEl.innerHTML = held === 3 ? _t('<b>You hold the cart.</b> The motor is off, and the rods answer the cart’s motion alone. Let go and the controller takes over.') : held ? _t('<b>Held.</b> Let go and the controller takes over.') : !on ? _t('<b>Controller off.</b> The rods fall; the cart recoils.') : lost ? _t('<b>Fallen.</b> The balancer can no longer win, and rescue is off. Choose <i>Swing back up</i>, or press Reset.')
-                    : mode === 'track' ? _t('<b>Swinging up.</b> Following the planned force; the tracking controller corrects the drift.') : mode === 'calm' ? (g('plan_ready') ? _t('<b>Plan ready.</b> The swing-up starts the moment the machine reaches the predicted state.') : g('plan_busy') ? _t('<b>Calming and planning.</b> The cart drains the rods’ energy while a swing-up is computed.') : _t('<b>Calming.</b> The cart drains the rods’ energy; the next plan starts soon.'))
+                    : mode === 'track' ? _t('<b>Swinging up.</b> Following the planned force; the tracking controller corrects the drift.') : mode === 'calm' ? (pump && !g('plan_ready') ? _t('<b>Pumping.</b> No swing-up was found in this liquid; the cart drives at full force to feed the rods energy while it plans again (13.7).') : g('plan_ready') ? _t('<b>Plan ready.</b> The swing-up starts the moment the machine reaches the predicted state.') : g('plan_busy') ? _t('<b>Calming and planning.</b> The cart drains the rods’ energy while a swing-up is computed.') : _t('<b>Calming.</b> The cart drains the rods’ energy; the next plan starts soon.'))
                     : Math.abs(u) >= g('u_max') - 1e-9 ? _t('<b>Motor at its limit.</b> Holding on…') : g('braking') ? _t('Braking from {v} m/s to rest, each bite within half the certified level.', { v: Sim.fmt(g('v_r'), 2) }) : g('ref_kind') === 'cruise' ? _t('Balancing while rolling at {v} m/s, a moving equilibrium.', { v: Sim.fmt(g('v_r'), 2) })
                     : g('ref_kind') === 'glide' && Math.abs(g('x_r') - g('x_target')) > 0.01 ? _t('Balancing while gliding to the target.') : _t('Balancing.'); } });
         Sim.playButton(document.getElementById('play'), clk);
@@ -1661,10 +1667,12 @@
         function lawAt(r) {   // the force the controller should have chosen at sample row r, from that row's stored numbers alone
             var m = G2('cs_mode')[r], st = row6('cs_s', r), t = G2('cs_t')[r], F = G2('cs_umax')[r], cl = function (v) { return Math.max(-F, Math.min(F, v)); }, i;
             var ins = [['law', m, ''], ['u<sub>max</sub>', F, 'N', 0], ['t', t, 's', 4]].concat(st.map(function (v, k) { return [QN[k], v, QU[k], 6]; }));
-            if (m >= 3) return { formula: m === 3 ? _t('controller off or fallen: u = 0') : _t('motor cut by the supervisor outside a sample: u = 0'), inputs: ins, value: 0 };
+            if (m === 3 || m === 4) return { formula: m === 3 ? _t('controller off or fallen: u = 0') : _t('motor cut by the supervisor outside a sample: u = 0'), inputs: ins, value: 0 };
             if (G2('cs_ver')[r] !== G2('ver')) return { formula: _t('taken with the gains of an earlier design, which are no longer stored'), inputs: ins, value: undefined };
             if (m === 0) { var rv = refAt(G2('cs_rk')[r], G2('cs_rx')[r], G2('cs_rv')[r], G2('cs_rt0')[r], G2('cs_re0')[r], t), e = wrapState(st), v = 0, Kq = G2('K'); e[0] -= rv[0]; e[3] -= rv[1];
                 for (i = 0; i < 6; i++) v -= Kq[i] * e[i]; return { formula: 'u = sat(−K (s − s<sub>r</sub>)), s<sub>r</sub> = (x<sub>r</sub>, 0, 0, v<sub>r</sub>, 0, 0)', inputs: ins.concat([['x<sub>r</sub>', rv[0], 'm', 5], ['v<sub>r</sub>', rv[1], 'm/s', 5]]), value: cl(v) }; }
+            if (m === 5) { var d5 = G2('d'), f5 = G2('f'), xc5 = G2('cs_xc')[r], P5 = d5[1] * Math.cos(st[1]) * st[4] + d5[2] * Math.cos(st[2]) * st[5], Vt = f5[0] + f5[1], e5 = st[0] - xc5, E5 = 0.5 * (d5[3] * st[4] * st[4] + 2 * d5[4] * Math.cos(st[1] - st[2]) * st[4] * st[5] + d5[5] * st[5] * st[5]) + f5[0] * Math.cos(st[1]) + f5[1] * Math.cos(st[2]);
+                return { formula: 'u = −u<sub>max</sub> tanh(3(f₁ + f₂ − E<sub>p</sub>)/(f₁ + f₂)) sgn 𝒫; if |x − x<sub>c</sub>| > 1.2 m: u = −u<sub>max</sub> sgn(x − x<sub>c</sub> + 0.3 s · ẋ) (13.7)', inputs: ins.concat([['x<sub>c</sub>', xc5, 'm', 4], ['E<sub>p</sub>', E5, 'J', 5], ['𝒫', P5, 'kg m²/s', 5]]), value: Math.abs(e5) > 1.2 ? -F * (e5 + 0.3 * st[3] >= 0 ? 1 : -1) : -F * Math.tanh(3 * (Vt - E5) / Vt) * (P5 >= 0 ? 1 : -1) }; }
             if (m === 1) { var d = G2('d'), xc0 = G2('cs_xc')[r], Pw = d[1] * Math.cos(st[1]) * st[4] + d[2] * Math.cos(st[2]) * st[5], a = Math.max(-8, Math.min(8, G2('calm_k') * Pw - 4 * (st[0] - xc0) - 4 * st[3]));
                 return { formula: 'u = sat(u<sub>for</sub>(s, a)), a = clip(k<sub>c</sub>𝒫 − 4(x − x<sub>c</sub>) − 4ẋ, ±8 m/s²) (21)', inputs: ins.concat([['x<sub>c</sub>', xc0, 'm', 4], ['a', a, 'm/s²', 5]]), value: cl(uFor(st, a)) }; }
             if (G2('cs_pl')[r] !== G2('pl_serial')) return { formula: _t('tracked an earlier plan, which is no longer stored'), inputs: ins, value: undefined };

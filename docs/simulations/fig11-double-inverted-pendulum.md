@@ -476,7 +476,9 @@ Numa: "the cart does not lift the arms … did you shoot? does it take way too m
   In vacuum nothing changed.
 - **Catch in a medium** hands over to `ref = { kind: 'fixed', x: s[0] }` instead of the braking cruise (25), which needs a push
   against drag that (25) leaves out (measured: the cruise kept going at 0.45 m/s with the rods leaning 2°).
-- **After a failed plan** the calming law pumps instead (`kCalm`: −3 𝒫 tanh(3(V_top − E)/V_top)) until the next plan.
+- **After a failed plan, in a liquid only** the cart pumps instead (`pumpU`: u = −u_max tanh(3(V_top − E_p)/V_top) sgn 𝒫, sgn 0 = +1,
+  E_p of (20), V_top = f₁ + f₂; beyond 1.2 m from x_c, u = −u_max sgn(x − x_c + 0.3 s·ẋ)), the law measured by shoot.cjs, until the next plan. It is stored as law 5 in `cs_mode`; the data panel's check and `hon.cjs` recompute it
+  (scenario `pumpwater`, 12/12 scenarios pass; the panel's check `lawAt` recomputes 842 of 842 pump samples exactly). In a vacuum nothing changed: a second plan is found as before.
 - The test switches of the work-in-progress branch are gone; `window.DIPC` exposes `PlanJob`, `dragF`, `sF` for tests.
 
 Measured (Chromium, notes/fig11/project05/): with the default machine and 60 N the upright rods are carried to within 2 cm of +1 m
