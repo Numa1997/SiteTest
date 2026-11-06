@@ -349,7 +349,10 @@ swing check against (17) (−3.335 mm per m/s² both ways), symbols renamed (ψ_
 - **Results** (`roads.cjs nm`, `notes/fig12/runs/roads-nm.txt`, 6 s at 1 m/s), largest lean open / PI / slosh: A 7.6 / 2.2 / 0.1 mm,
   B 15.6 / 4.3 / 0.2, C 28.9 / 8.4 / 0.4, D 39.5 (1.2 g) / 15.6 / 0.7, washboard 66.7 (105.7 g) / 81.4 (60.1 g) / 3.0 mm (0 g),
   setts 18.8 / 16.2 / 5.3 mm (wheel off the road 1–2 %, drive at grip 2–4 %). The washboard's ripples pass at 3.3 Hz at 1 m/s,
-  the stout's own frequency (v = λ f11 = 1.03 m/s).
+  the stout's own frequency (v = λ f11 = 1.03 m/s). Other speeds (`roads-nm-washboard-speeds.txt`), open loop / slosh spilled:
+  0.7 m/s 2.1 / 0 g, 0.85 m/s 42 / 75 g (slosh feedback FAILS: ripples at the body's 2.8 Hz bounce, heave rms 7.6 m/s², a
+  parametric drive the controller's model lacks), 1.2 m/s 174 / 0 g, 1.4 m/s 156 / 0 g. ISO band starts at 2/126 = 0.016
+  cycles/m (rms of the sum 3.60/7.21/14.41/28.83 mm, phase-independent); checked in `notes/fig12/check-6-7.md`.
 - **Page**: store `road_kind`, `road_rms`, `mu`, `F_grip`, `F_motor0`, `slip`; checks F_drive = clip(b i, ±μN), the road's rms
   from its table, z_a over rough roads. `panel-test2.cjs` with `ROAD=setts CTRL=slosh` and `ROAD=isoD`: 219 checks, none differ,
   read-backs true at 1600, 1100, 390 px. Note §6.7 ★ ((R1)–(R4), Key result, Table 2a), sources [18]–[23].
