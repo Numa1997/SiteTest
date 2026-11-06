@@ -28,7 +28,7 @@ function Poisson(nx, ny, h) {
   for (;;) { this.L.push({ nx: n, ny: m, h: hh, wx: new Float64Array((n + 1) * m), wy: new Float64Array(n * (m + 1)), d: new Float64Array(n * m), x: new Float64Array(n * m), b: new Float64Array(n * m), r: new Float64Array(n * m),
       cw: new Float64Array(n * m), ce: new Float64Array(n * m), cs: new Float64Array(n * m), cn: new Float64Array(n * m), id: new Float64Array(n * m) });
     if (n % 2 || m % 2 || n <= 8 || m <= 8) break; n /= 2; m /= 2; hh *= 2; }
-  var N = nx * ny; this.rr = new Float64Array(N); this.z = new Float64Array(N); this.pp = new Float64Array(N); this.Ap = new Float64Array(N); this.tol = 1e-4; this.nPre = 2; this.nPost = 2;
+  var N = nx * ny; this.rr = new Float64Array(N); this.z = new Float64Array(N); this.pp = new Float64Array(N); this.Ap = new Float64Array(N); this.tol = 1e-4; this.nPre = 2; this.nPost = 2; this.extrap = true;
 }
 Poisson.prototype.setWeights = function (wx, wy) {
   var L0 = this.L[0], l, I, J; L0.wx.set(wx); L0.wy.set(wy);
@@ -60,6 +60,9 @@ Poisson.prototype.vcycle = function (l) { var Lv = this.L[l], c;
   this.vcycle(l + 1);
   for (J = 0; J < C.ny; J++) for (I = 0; I < C.nx; I++) { var f2 = 2 * J * Lv.nx + 2 * I, e = C.x[J * C.nx + I]; Lv.x[f2] += e; Lv.x[f2 + 1] += e; Lv.x[f2 + Lv.nx] += e; Lv.x[f2 + Lv.nx + 1] += e; }
   this.smooth(Lv, Lv.x, Lv.b, this.nPost, 1); };
+Poisson.prototype.solveX = function (b, x, maxit) {   // warm start from the linear extrapolation of the last two solutions (x keeps its own history in x._prev)
+  if (this.extrap) { var q = x._prev || (x._prev = Float64Array.from(x)), c, t; for (c = 0; c < x.length; c++) { t = x[c]; x[c] = 2 * t - q[c]; q[c] = t; } }
+  return this.solve(b, x, maxit); };
 Poisson.prototype.solve = function (b, x, maxit) {   // x: warm start; returns iterations; relative residual this.tol
   maxit = maxit || 200; var L0 = this.L[0], N = b.length, rr = this.rr, z = this.z, pp = this.pp, Ap = this.Ap, c;
   this.apply(L0, x, Ap); var bn = 0; for (c = 0; c < N; c++) { rr[c] = L0.d[c] ? b[c] - Ap[c] : 0; bn += b[c] * b[c]; }
@@ -366,7 +369,7 @@ W.advectStored = function () {   // the same MacCormack step as advect(), on thi
   this.boundary(); };
 W.shadowAdvectStored = function () { this.eachShadow(function () { this.impose(0); this.advectStored(); this.impose(0); }); };
 W.shadowDiffuse = function (dt) { this.eachShadow(function () { this.diffuse(dt, 0); }); };
-W.shadowProject = function (dt) { this.eachShadow(function () { var f = this.rho / dt, i; this.divFluid(this.rhs); for (i = 0; i < this.rhs.length; i++) this.rhs[i] *= f; var tol = this.P.tol; if (this.selfTol) this.P.tol = this.selfTol; this.itsS = this.P.solve(this.rhs, this.pS); this.P.tol = tol; this.project(this.pS, dt); this.impose(0, true); this.boundary(); }); };
+W.shadowProject = function (dt) { this.eachShadow(function () { var f = this.rho / dt, i; this.divFluid(this.rhs); for (i = 0; i < this.rhs.length; i++) this.rhs[i] *= f; var tol = this.P.tol; if (this.selfTol) this.P.tol = this.selfTol; this.itsS = this.P.solveX(this.rhs, this.pS); this.P.tol = tol; this.project(this.pS, dt); this.impose(0, true); this.boundary(); }); };
 
 /* one fluid step of dt = nsub · h; ctrl(s, t) gives the motor force, called once at the start (sampled, held) */
 W.step = function (ctrl) {
@@ -390,8 +393,8 @@ W.step = function (ctrl) {
   var shear = this.diffuse(dt, xd0); var E3 = this.KE(), P3 = this.momX(); B.Pdiff = (B.Pdiff || 0) + P3 - P2; B.Pshear = (B.Pshear || 0) + shear; B.Ediff += E3 - E2; B.EimpD = (B.EimpD || 0) + B.Eimp - ei; ei = B.Eimp; B.PimpD = (B.PimpD || 0) + (B.Pimp || 0) - pi; pi = B.Pimp || 0; B.Wshear = (B.Wshear || 0) + shear * xd0;   // the cart's shear does work shear·ẋ on the fluid; the rest of Ediff is viscous dissipation
   // 4. pressure: p = p0 + ẋ' p_x
   var T4 = Date.now();
-  this.divFluid(this.rhs); var f = this.rho / dt; for (i = 0; i < this.rhs.length; i++) this.rhs[i] *= f; this.its0 = this.P.solve(this.rhs, this.p0);
-  this.divCart(this.rhs); for (i = 0; i < this.rhs.length; i++) this.rhs[i] *= f; this.itsx = this.P.solve(this.rhs, this.px);
+  this.divFluid(this.rhs); var f = this.rho / dt; for (i = 0; i < this.rhs.length; i++) this.rhs[i] *= f; this.its0 = this.P.solveX(this.rhs, this.p0);
+  this.divCart(this.rhs); for (i = 0; i < this.rhs.length; i++) this.rhs[i] *= f; this.itsx = this.P.solveX(this.rhs, this.px);
   var Q0 = Fold + this.cartForce(this.p0) - shear / dt + toCart / dt - (this.impX + impPrev) / dt, Kx = this.cartForce(this.px);   // the fluid's force on the cart is Q0 + Kx ẋ' (Kx < 0: the water the cart must push aside)
   // 5. the machine over the step, with the cart force consistent with its velocity at the end of the step (two RK4 runs give the slope; a third checks)
   var T5 = Date.now(), s0 = this.s, ma = -Kx * dt, G = Q0 + Kx * xd0;
