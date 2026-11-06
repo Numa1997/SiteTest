@@ -25,18 +25,28 @@
   /* ------------------------------------------------------------------ fluid */
   function Fluid(o) {
     o = o || {};
-    this.R = o.R || 0.04;           // inner radius of the glass, m
+    // The glass: an inner radius R(z) above the cavity floor. With o.profile ({dz, R: [...]}, metres) it is the measured
+    // tulip (scripts/guinness-glass.js), open above its rim z_rim; without, a straight cylinder of radius o.R closed by a lid
+    // at the box top (the checks against the cylinder's exact sloshing frequency use that).
+    this.profile = o.profile || null;
+    if (this.profile) {
+      const P = this.profile.R;
+      this.zRim = (P.length - 1) * this.profile.dz;
+      this.R = Math.max.apply(null, P);
+      this.Rrim = P[P.length - 1];
+    } else { this.R = o.R || 0.04; this.zRim = Infinity; this.Rrim = this.R; }
     this.h0 = o.h0 || 0.06;         // depth of stout at rest, m
     this.dx = o.dx || 0.004;        // grid cell, m
     this.rho = o.rho || 1000;       // density, kg/m^3
     this.nu = o.nu != null ? o.nu : 1.0e-6;   // kinematic viscosity, m^2/s (taken as water)
     this.g = o.g || 9.81;
-    const R = this.R, dx = this.dx;
-    this.nx = Math.round(2 * R / dx);
-    this.ny = Math.round(R / dx);
+    const dx = this.dx;
+    this.nx = 2 * Math.ceil(this.R / dx);
+    this.ny = Math.ceil(this.R / dx);
     this.nz = Math.ceil((o.H || 0.092) / dx);
-    this.H = this.nz * dx;          // the box top (the rim, closed by a lid the liquid must not reach)
-    this.x0 = -R;
+    this.H = this.nz * dx;          // the box top: for the tulip 3 cm or so above the rim, for the cylinder a lid
+    this.x0 = -(this.nx / 2) * dx;
+    this.Rbox = (this.nx / 2) * dx;
     const nx = this.nx, ny = this.ny, nz = this.nz;
     this.nc = nx * ny * nz;
     this.nu_ = (nx + 1) * ny * nz; this.nv_ = nx * (ny + 1) * nz; this.nw_ = nx * ny * (nz + 1);
@@ -53,62 +63,98 @@
     this.q = new F(this.nc); this.rhs = new F(this.nc);
     this.Ad = new F(this.nc); this.Ax = new F(this.nc); this.Ay = new F(this.nc); this.Az = new F(this.nc);
     this.mic = new F(this.nc); this.r_ = new F(this.nc); this.z_ = new F(this.nc); this.s_ = new F(this.nc);
+    this.sliver = o.sliver != null ? o.sliver : 0.1;
     this.faceFractions();
     this.ppcSide = o.ppcSide || 2;
     this.wallImages = o.wallImages != null ? o.wallImages : true;
-    this.rpFactor = o.rpFactor || 1.0;
+    this.rpFactor = o.rpFactor || 1.8;     // particle radius of the level set, in particle spacings (see Fluid.seed)
     this.forcedPhi = o.forcedPhi != null ? o.forcedPhi : 0.05;
     this.thetaMin = o.thetaMin || 0.05;
+    this.wallPhi = o.wallPhi || 'inherit';
+    this.forceCells = o.forceCells != null ? o.forceCells : true;
+    this.kernel = o.kernel || 2;          // radius of the particle kernel of the level set, in cells
     this.relaxStrength = o.relax != null ? o.relax : 0;   // off: not needed at dt = 1/400 s (measured)
+    this.volumeCorrection = o.volumeCorrection != null ? o.volumeCorrection : 0;   // gamma, a fraction of the excess per step (off: not needed with rp = 1.8 spacings, measured)
+    this.n0 = this.ppcSide * this.ppcSide * this.ppcSide;
     this.seed(this.ppcSide, o.seed || 12345);
     this.t = 0;
     this.cgIters = 0;
   }
 
+  // inner radius of the glass at height z (m); above the rim there is no wall (the box edge stands in, unused)
+  Fluid.prototype.Rz = function (z) {
+    if (!this.profile) return this.R;
+    if (z > this.zRim) return 10;
+    const P = this.profile.R, f = (z < 0 ? 0 : z) / this.profile.dz, i = Math.floor(f);
+    if (i >= P.length - 1) return P[P.length - 1];
+    return P[i] + (f - i) * (P[i + 1] - P[i]);
+  };
+  // slope dR/dz of the wall
+  Fluid.prototype.dRz = function (z) {
+    if (!this.profile || z >= this.zRim) return 0;
+    const P = this.profile.R, f = (z < 0 ? 0 : z) / this.profile.dz, i = Math.min(P.length - 2, Math.floor(f));
+    return (P[i + 1] - P[i]) / this.profile.dz;
+  };
+  // volume of liquid that fills the glass to height h: integral of pi R(z)^2 dz (trapezoid on 0.05 mm)
+  Fluid.prototype.volumeTo = function (h) {
+    const n = Math.max(1, Math.round(h / 5e-5)), d = h / n; let v = 0;
+    for (let k = 0; k <= n; k++) { const r = this.Rz(k * d); v += (k === 0 || k === n ? 0.5 : 1) * Math.PI * r * r * d; }
+    return v;
+  };
+
   Fluid.prototype.faceFractions = function () {
-    const R = this.R, dx = this.dx, nx = this.nx, ny = this.ny, nz = this.nz, x0 = this.x0;
-    // open fraction of each face; slivers under 10 % are closed (moves the wall by < 0.1 dx, keeps the solve well posed)
-    const clamp = (a) => { a = Math.max(0, Math.min(1, a)); return a < 0.1 ? 0 : a; };
-    for (let k = 0; k < nz; k++) for (let j = 0; j < ny; j++) for (let i = 0; i <= nx; i++) {
-      const xf = x0 + i * dx, Y = R * R - xf * xf > 0 ? Math.sqrt(R * R - xf * xf) : 0;
-      this.au[i + (nx + 1) * (j + ny * k)] = clamp((Y - j * dx) / dx);
-    }
-    for (let k = 0; k < nz; k++) for (let j = 0; j <= ny; j++) for (let i = 0; i < nx; i++) {
-      const yf = j * dx, X = R * R - yf * yf > 0 ? Math.sqrt(R * R - yf * yf) : 0;
-      const a = x0 + i * dx, b = a + dx;
-      const len = Math.max(0, Math.min(b, X) - Math.max(a, -X));
-      this.av[i + nx * (j + (ny + 1) * k)] = j === 0 ? 0 : clamp(len / dx);   // y = 0 is the mirror plane: v = 0
+    const dx = this.dx, nx = this.nx, ny = this.ny, nz = this.nz, x0 = this.x0;
+    // open fraction of each face, with the wall radius at the face's height; slivers under 10 % are closed (moves the
+    // wall by < 0.1 dx, keeps the solve well posed)
+    const sl = this.sliver, clamp = (a) => { a = Math.max(0, Math.min(1, a)); return a < sl ? 0 : a; };
+    for (let k = 0; k < nz; k++) {
+      const R = Math.min(this.Rz((k + 0.5) * dx), this.Rbox * 2);
+      for (let j = 0; j < ny; j++) for (let i = 0; i <= nx; i++) {
+        const xf = x0 + i * dx, Y = R * R - xf * xf > 0 ? Math.sqrt(R * R - xf * xf) : 0;
+        this.au[i + (nx + 1) * (j + ny * k)] = (i === 0 || i === nx) ? 0 : clamp((Y - j * dx) / dx);
+      }
+      for (let j = 0; j <= ny; j++) for (let i = 0; i < nx; i++) {
+        const yf = j * dx, X = R * R - yf * yf > 0 ? Math.sqrt(R * R - yf * yf) : 0;
+        const a = x0 + i * dx, b = a + dx;
+        const len = Math.max(0, Math.min(b, X) - Math.max(a, -X));
+        this.av[i + nx * (j + (ny + 1) * k)] = (j === 0 || j === ny) ? 0 : clamp(len / dx);   // y = 0 is the mirror plane: v = 0
+      }
     }
     const S = 10;
-    for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) {
-      let inside = 0;
-      for (let a = 0; a < S; a++) for (let b = 0; b < S; b++) {
-        const x = x0 + (i + (a + 0.5) / S) * dx, y = (j + (b + 0.5) / S) * dx;
-        if (x * x + y * y < R * R) inside++;
+    for (let k = 0; k <= nz; k++) {
+      const R = Math.min(this.Rz(k * dx), this.Rbox * 2);
+      for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) {
+        let inside = 0;
+        for (let a = 0; a < S; a++) for (let b = 0; b < S; b++) {
+          const x = x0 + (i + (a + 0.5) / S) * dx, y = (j + (b + 0.5) / S) * dx;
+          if (x * x + y * y < R * R) inside++;
+        }
+        let f = inside / (S * S); if (f < this.sliver) f = 0;
+        this.aw[i + nx * (j + ny * k)] = (k === 0 || k === nz) ? 0 : f;
       }
-      let f = inside / (S * S); if (f < 0.1) f = 0;
-      for (let k = 0; k <= nz; k++) this.aw[i + nx * (j + ny * k)] = (k === 0 || k === nz) ? 0 : f;
     }
   };
 
   Fluid.prototype.seed = function (s, seed) {
     let st = seed >>> 0;
     const rnd = () => { st = (st * 1664525 + 1013904223) >>> 0; return st / 4294967296; };
-    const R = this.R, dx = this.dx, xs = [], ys = [], zs = [];
+    const dx = this.dx, xs = [], ys = [], zs = [];
     for (let k = 0; k < this.nz; k++) for (let j = 0; j < this.ny; j++) for (let i = 0; i < this.nx; i++)
       for (let a = 0; a < s; a++) for (let b = 0; b < s; b++) for (let c = 0; c < s; c++) {
         const x = this.x0 + (i + (a + 0.5 + 0.6 * (rnd() - 0.5)) / s) * dx;
         const y = (j + (b + 0.5 + 0.6 * (rnd() - 0.5)) / s) * dx;
         const z = (k + (c + 0.5 + 0.6 * (rnd() - 0.5)) / s) * dx;
-        if (x * x + y * y < (R - 0.15 * dx) ** 2 && z < this.h0 && y > 0) { xs.push(x); ys.push(y); zs.push(z); }
+        if (x * x + y * y < (this.Rz(z) - 0.15 * dx) ** 2 && z < this.h0 && y > 0) { xs.push(x); ys.push(y); zs.push(z); }
       }
     const n = this.np = xs.length;
     this.px = Float64Array.from(xs); this.py = Float64Array.from(ys); this.pz = Float64Array.from(zs);
     this.pu = new Float64Array(n); this.pv = new Float64Array(n); this.pw = new Float64Array(n);
     // APIC: each particle also carries the local velocity gradient, one row per component (Jiang et al. 2015)
     this.pc = [0, 1, 2].map(() => [new Float64Array(n), new Float64Array(n), new Float64Array(n)]);
-    // the half glass holds half the liquid: m_l/2 = rho * pi R^2 h0 / 2, shared equally by the particles
-    this.mLiquid = this.rho * Math.PI * R * R * this.h0;
+    // the half glass holds half the liquid: m_l/2 = rho V(h0) / 2, V(h) the integral of pi R(z)^2, shared equally by the
+    // particles; a spilled particle takes its m_p with it
+    this.mLiquid = this.rho * this.volumeTo(this.h0);
+    this.npStart = n; this.spilled = 0;
     this.mp = 0.5 * this.mLiquid / n;
     // radius of the particles for the surface reconstruction: one particle spacing, so that the liquid at rest
     // reads its true depth h0 (measured: 60.0 +- 0.3 mm on 3 and 4 mm grids, tools/fig12/check.cjs rest)
@@ -220,7 +266,7 @@
     const nx = this.nx, ny = this.ny, nz = this.nz, dx = this.dx, nc = this.nc;
     const cnt = this.cnt; cnt.fill(0);
     if (!this.cellStart || this.cellStart.length !== nc + 1) { this.cellStart = new Int32Array(nc + 1); }
-    if (!this.sorted || this.sorted.length !== this.np) this.sorted = new Int32Array(this.np);
+    if (!this.sorted || this.sorted.length < this.np) this.sorted = new Int32Array(this.np);
     const cellOf = (p) => {
       let i = Math.floor((this.px[p] - this.x0) / dx), j = Math.floor(this.py[p] / dx), k = Math.floor(this.pz[p] / dx);
       i = i < 0 ? 0 : i >= nx ? nx - 1 : i; j = j < 0 ? 0 : j >= ny ? ny - 1 : j; k = k < 0 ? 0 : k >= nz ? nz - 1 : k;
@@ -239,12 +285,15 @@
   Fluid.prototype.levelSet = function () {
     const nx = this.nx, ny = this.ny, nz = this.nz, dx = this.dx, nc = this.nc;
     this.levelSetBins(); const cnt = this.cnt;
-    const Rk = 2 * dx, R2 = Rk * Rk, r = this.rp, Rc = this.R - 0.5 * dx;
+    const Rk = this.kernel * dx, R2 = Rk * Rk, r = this.rp;
     // the level set is measured only within two cells of an empty cell inside the glass; deeper cells are liquid
     const empty = this.emptyMask || (this.emptyMask = new Uint8Array(nc));
-    for (let k = 0; k < nz; k++) for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) {
-      const c = i + nx * (j + ny * k), xc = this.x0 + (i + 0.5) * dx, yc = (j + 0.5) * dx;
-      empty[c] = cnt[c] === 0 && xc * xc + yc * yc < Rc * Rc ? 1 : 0;
+    for (let k = 0; k < nz; k++) {
+      const Rc = Math.min(this.Rz((k + 0.5) * dx), this.Rbox) - 0.5 * dx;
+      for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) {
+        const c = i + nx * (j + ny * k), xc = this.x0 + (i + 0.5) * dx, yc = (j + 0.5) * dx;
+        empty[c] = cnt[c] === 0 && xc * xc + yc * yc < Rc * Rc ? 1 : 0;
+      }
     }
     for (let k = 0; k < nz; k++) for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) {
       const c = i + nx * (j + ny * k);
@@ -262,24 +311,92 @@
     // instead of 3.5 Hz on the 4 mm grid); the spurious flow at rest that first suggested it came from the time
     // step (clean at dt = 1/400 s), not from this.
     for (let c = 0; c < nc; c++) {
-      this.fluid[c] = this.phi[c] < 0 || cnt[c] > 0 ? 1 : 0;
-      if (cnt[c] > 0 && this.phi[c] >= 0) this.phi[c] = -this.forcedPhi * dx;
+      if (this.forceCells) {
+        this.fluid[c] = this.phi[c] < 0 || cnt[c] > 0 ? 1 : 0;
+        if (cnt[c] > 0 && this.phi[c] >= 0) this.phi[c] = -this.forcedPhi * dx;
+      } else this.fluid[c] = this.phi[c] < 0 ? 1 : 0;
     }
-    // Cells cut by the glass wall hold few or no particles, and the particle level set reads them as air. A wall
-    // cell that shares an open side face with liquid at the same height is liquid: otherwise it would be a
-    // pocket of zero pressure below the surface and the stout would drain into it.
-    const R = this.R, ph = this.phi, fl = this.fluid;
-    const U = (i, j, k) => i + (nx + 1) * (j + ny * k), V = (i, j, k) => i + nx * (j + (ny + 1) * k);
-    for (let sweep = 0; sweep < 2; sweep++) for (let k = 0; k < nz; k++) for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) {
+    // Cells cut by the glass wall hold few particles (part of them lies in the wall), so the particle level set misreads
+    // them; a column of such cells along the wall, joined to the liquid mostly through its top and bottom faces, whose
+    // top read below the true surface, had too low a pressure and drained: measured, a steady circulation down the high
+    // wall at 20-30 mm/s that ate a steady tilt (centre of mass 15 % of the exact value). So the level set is carried
+    // from inside the glass into the wall cells (as liquid level sets are extended into solids): a cut cell takes the
+    // mean phi of its neighbours at the same height whose centres are inside, and is liquid where that is negative.
+    if (this.wallPhi === 'linear') this.linearWallPhi(); else if (this.wallPhi === 'extend') this.extendWallPhi(); else this.inheritWallPhi();
+  };
+  // Near the wall the particle kernel sees particles on one side only (or, with mirror images, a surface forced flat at
+  // the wall), so the level set there is biased. A free surface is locally a plane, and the level set of a plane is
+  // linear in space; so in the band within 2 cells of the wall phi is extrapolated linearly along the radius from two
+  // points 2.5 and 3.5 cells in from the wall, where the kernel sees particles all round.
+  Fluid.prototype.linearWallPhi = function () {
+    const nx = this.nx, ny = this.ny, nz = this.nz, dx = this.dx, nc = this.nc, ph = this.phi, fl = this.fluid;
+    const src = this.phiSrc || (this.phiSrc = new Float64Array(nc)); src.set(ph);
+    const at = (x, y, z) => {                                 // trilinear phi at a point, from the unmodified field
+      const fx = (x - this.x0) / dx - 0.5, fy = Math.abs(y) / dx - 0.5, fz = z / dx - 0.5;
+      const i = Math.floor(fx), j = Math.floor(fy), k = Math.floor(fz), tx = fx - i, ty = fy - j, tz = fz - k;
+      let v = 0;
+      for (let c = 0; c < 2; c++) for (let b = 0; b < 2; b++) for (let a = 0; a < 2; a++) {
+        let ii = i + a, jj = j + b, kk = k + c;
+        ii = ii < 0 ? 0 : ii >= nx ? nx - 1 : ii; jj = jj < 0 ? -jj - 1 : jj >= ny ? ny - 1 : jj; kk = kk < 0 ? 0 : kk >= nz ? nz - 1 : kk;
+        v += (a ? tx : 1 - tx) * (b ? ty : 1 - ty) * (c ? tz : 1 - tz) * src[ii + nx * (jj + ny * kk)];
+      }
+      return v;
+    };
+    for (let k = 0; k < nz; k++) {
+      const zc = (k + 0.5) * dx, R = this.Rz(zc);
+      if (R > this.Rbox) continue;                           // above the rim: no wall
+      const r1 = R - 2.5 * dx, r2 = R - 3.5 * dx;
+      if (r2 <= 0) continue;
+      for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) {
+        const x = this.x0 + (i + 0.5) * dx, y = (j + 0.5) * dx, r = Math.hypot(x, y);
+        if (r < R - 2 * dx) continue;
+        const cx = x / r, cy = y / r, p1 = at(cx * r1, cy * r1, zc), p2 = at(cx * r2, cy * r2, zc);
+        const c = i + nx * (j + ny * k);
+        ph[c] = p1 + (r - r1) * (p1 - p2) / (r1 - r2);
+        fl[c] = ph[c] < 0 ? 1 : 0;
+      }
+    }
+  };
+  // wall cells: carry the level set from inside the glass into the cut cells
+  Fluid.prototype.extendWallPhi = function () {
+    const nx = this.nx, ny = this.ny, nz = this.nz, dx = this.dx, nc = this.nc;
+    const ph = this.phi, fl = this.fluid;
+    const inside = this.cellInside || (this.cellInside = (() => {
+      const m = new Uint8Array(nc);
+      for (let k = 0; k < nz; k++) { const R = this.Rz((k + 0.5) * dx);
+        for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) { const x = this.x0 + (i + 0.5) * dx, y = (j + 0.5) * dx;
+          m[i + nx * (j + ny * k)] = (R > this.Rbox || x * x + y * y < (R - 0.5 * dx) * (R - 0.5 * dx)) ? 1 : 0; } }
+      return m; })());
+    const done = this.cellDone || (this.cellDone = new Uint8Array(nc)); done.set(inside);
+    for (let sweep = 0; sweep < 3; sweep++) {
+      for (let k = 0; k < nz; k++) for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) {
+        const c = i + nx * (j + ny * k);
+        if (done[c]) continue;
+        let s = 0, m = 0;
+        if (i > 0 && done[c - 1] === 1) { s += ph[c - 1]; m++; }
+        if (i < nx - 1 && done[c + 1] === 1) { s += ph[c + 1]; m++; }
+        if (j > 0 && done[c - nx] === 1) { s += ph[c - nx]; m++; }
+        if (j < ny - 1 && done[c + nx] === 1) { s += ph[c + nx]; m++; }
+        if (m) { ph[c] = s / m; fl[c] = ph[c] < 0 ? 1 : 0; done[c] = 2; }
+      }
+      for (let c = 0; c < nc; c++) if (done[c] === 2) done[c] = 1;
+    }
+  };
+  // wall cells: a cut cell is liquid when it shares an open face with liquid beside it, or above it well below the surface
+  Fluid.prototype.inheritWallPhi = function () {
+    const nx = this.nx, ny = this.ny, nz = this.nz, dx = this.dx, ph = this.phi, fl = this.fluid;
+    const U = (i, j, k) => i + (nx + 1) * (j + ny * k), V = (i, j, k) => i + nx * (j + (ny + 1) * k), Wf = (i, j, k) => i + nx * (j + ny * k);
+    for (let sweep = 0; sweep < 2; sweep++) for (let k = nz - 1; k >= 0; k--) for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) {
       const c = i + nx * (j + ny * k);
       if (fl[c]) continue;
-      const x = this.x0 + (i + 0.5) * dx, y = (j + 0.5) * dx;
-      if (x * x + y * y < (R - 0.5 * dx) ** 2) continue;            // only cells cut by the wall
+      const x = this.x0 + (i + 0.5) * dx, y = (j + 0.5) * dx, R = this.Rz((k + 0.5) * dx);
+      if (R > this.Rbox || x * x + y * y < (R - 0.5 * dx) ** 2) continue;   // only cells cut by the wall
       let best = 1;
       if (i > 0 && this.au[U(i, j, k)] > 0 && fl[c - 1]) best = Math.min(best, ph[c - 1]);
       if (i < nx - 1 && this.au[U(i + 1, j, k)] > 0 && fl[c + 1]) best = Math.min(best, ph[c + 1]);
       if (j > 0 && this.av[V(i, j, k)] > 0 && fl[c - nx]) best = Math.min(best, ph[c - nx]);
       if (j < ny - 1 && this.av[V(i, j + 1, k)] > 0 && fl[c + nx]) best = Math.min(best, ph[c + nx]);
+      if (k < nz - 1 && this.aw[Wf(i, j, k + 1)] > 0 && fl[c + nx * ny] && ph[c + nx * ny] < -0.5 * dx) best = Math.min(best, ph[c + nx * ny]);
       if (best < 1) { fl[c] = 1; ph[c] = Math.min(best, -0.05 * dx); }
     }
   };
@@ -299,7 +416,7 @@
             const ddz = ppz - z, rr = Math.sqrt(ppx * ppx + ppy * ppy);
             // the particle, its image in the mirror plane y = 0, and, near the wall, its images in the wall
             // (r -> 2R - r): the liquid meets the wall at a right angle and the wall cells read as liquid
-            const nImg = this.wallImages && rr > this.R - Rk ? 4 : 2, fw = rr > 1e-9 ? (2 * this.R - rr) / rr : 0;
+            const Rw = this.Rz(ppz), nImg = this.wallImages && ppz < this.zRim && rr > Rw - Rk ? 4 : 2, fw = rr > 1e-9 ? (2 * Rw - rr) / rr : 0;
             for (let m = 0; m < nImg; m++) {
               const qx = m < 2 ? ppx : ppx * fw, qy0 = m < 2 ? ppy : ppy * fw, qy = (m & 1) ? -qy0 : qy0;
               const ddx = qx - x, ddy = qy - y, d2 = ddx * ddx + ddy * ddy + ddz * ddz;
@@ -362,7 +479,13 @@
       const nxy = nx * ny;
       wt = this.aw[fw1]; if (wt > 0) { div += wt * this.w[fw1]; if (k + 1 < nz) { if (fl[c + nxy]) { Ad[c] += wt; Az[c] = -wt; } else Ad[c] += wt / th(c, c + nxy); } }
       wt = this.aw[fw0]; if (wt > 0) { div -= wt * this.w[fw0]; if (k > 0) { if (fl[c - nxy]) Ad[c] += wt; else Ad[c] += wt / th(c, c - nxy); } }
-      b[c] = -dx * div;
+      // volume correction: in a cell deep in the liquid, ask for the divergence (n_c/n0 - 1) * gamma / dt (n_c the particles
+      // splatted to the cell centre with trilinear weights, a smooth count), so that an
+      // overfull cell (particles crowded) expands and an underfull one contracts. Without it the particles drift apart
+      // under a steady load (measured: +2.7 % volume in 4 s under a = 2 m/s^2) and the surface creeps up.
+      let target = 0;
+      if (this.volumeCorrection > 0 && phi[c] < -dx && this.Ad[c] >= 5.999) target = this.volumeCorrection * (this.dens[c] / this.n0 - 1) / dt;
+      b[c] = -dx * (div - target * dx);
     }
     this.pcg();
     // velocity update on faces with at least one liquid side
@@ -504,7 +627,6 @@
   };
 
   Fluid.prototype.advect = function (dt) {
-    const R = this.R, e = 0.02 * this.dx, Rin = R - e;
     for (let p = 0; p < this.np; p++) {
       let x = this.px[p], y = this.py[p], z = this.pz[p];
       const u1 = this.sample(0, x, y, z), v1 = this.sample(1, x, y, z), w1 = this.sample(2, x, y, z);
@@ -516,23 +638,54 @@
     this.collide();
   };
 
-  // the glass wall: a particle outside the wall is put back inside and loses its outward speed; likewise bottom and lid
+  // The glass wall R(z): a particle outside it is put back onto the wall along the wall's normal and loses its speed along the
+  // wall's outward normal n = (cos t, sin t, -R'(z)) / sqrt(1 + R'^2) (free slip); likewise the floor and the box top.
+  // Above the rim there is no wall: a particle that is above the rim and outside the rim's radius has left the glass
+  // (spilled). It is removed, and its mass and its momentum relative to the glass are recorded for the coupling.
   Fluid.prototype.collide = function () {
-    const R = this.R, e = 0.02 * this.dx, Rin = R - e;
+    const e = 0.02 * this.dx, spill = isFinite(this.zRim);
+    this.spillNow = 0; this.spillPx = 0; this.spillPz = 0;
+    if (!this.spillList) this.spillList = [];
     for (let p = 0; p < this.np; p++) {
       let x = this.px[p], y = this.py[p], z = this.pz[p];
       const r2 = x * x + y * y;
+      if (spill && z > this.zRim && r2 > this.Rrim * this.Rrim) {
+        this.spillList.push([x, y, z, this.pu[p], this.pv[p], this.pw[p]]);
+        this.spillNow++; this.spillPx += this.pu[p]; this.spillPz += this.pw[p];
+        this.removeParticle(p); p--; continue;
+      }
+      const Rin = Math.min(this.Rz(z), this.Rbox) - e;
       if (r2 > Rin * Rin) {
-        const r = Math.sqrt(r2), nxr = x / r, nyr = y / r;
-        x = nxr * Rin; y = nyr * Rin;
-        const un = this.pu[p] * nxr + this.pv[p] * nyr;
-        if (un > 0) { this.pu[p] -= un * nxr; this.pv[p] -= un * nyr; }
+        // back to the wall along its normal: the distance to the wall line r = R(z) is (r - R) / l, so the particle
+        // moves by that much along -n (radially in by (r - R)/l^2, and up by s (r - R)/l^2 where the wall leans out)
+        const r = Math.sqrt(r2), cx = x / r, cy = y / r, s = this.dRz(z), l2 = 1 + s * s, l = Math.sqrt(l2);
+        const nx = cx / l, ny = cy / l, nz = -s / l, pen = r - Rin;
+        const rn = r - pen / l2; z += s * pen / l2;
+        x = cx * rn; y = cy * rn;
+        const un = this.pu[p] * nx + this.pv[p] * ny + this.pw[p] * nz;
+        if (un > 0) { this.pu[p] -= un * nx; this.pv[p] -= un * ny; this.pw[p] -= un * nz; }
       }
       if (z < e) { z = e; if (this.pw[p] < 0) this.pw[p] = 0; }
       if (z > this.H - e) { z = this.H - e; if (this.pw[p] > 0) this.pw[p] = 0; }
       this.px[p] = x; this.py[p] = y; this.pz[p] = z;
     }
+    this.spilled += this.spillNow;
+    // both halves: the momentum (relative to the glass) carried out this step, kg m/s
+    this.spillPx *= 2 * this.mp; this.spillPz *= 2 * this.mp;
   };
+  // remove particle p by moving the last particle into its place
+  Fluid.prototype.removeParticle = function (p) {
+    const q = this.np - 1;
+    if (p !== q) {
+      this.px[p] = this.px[q]; this.py[p] = this.py[q]; this.pz[p] = this.pz[q];
+      this.pu[p] = this.pu[q]; this.pv[p] = this.pv[q]; this.pw[p] = this.pw[q];
+      for (let c = 0; c < 3; c++) for (let d = 0; d < 3; d++) this.pc[c][d][p] = this.pc[c][d][q];
+    }
+    this.px[q] = NaN; this.py[q] = NaN; this.pz[q] = NaN;
+    this.np = q;
+  };
+  // mass of the stout still in the glass (both halves)
+  Fluid.prototype.liquidMass = function () { return 2 * this.mp * this.np; };
 
   // Keep the particles evenly spaced: pairs closer than the seeding spacing d0 are pushed apart, each by a fraction
   // of the overlap, along the line between them. This moves no mass and adds no momentum (equal and opposite shifts);
@@ -566,6 +719,19 @@
     this.collide();
   };
 
+  // particles per cell, counted smoothly: each particle shares itself among the 8 nearest cell centres (trilinear)
+  Fluid.prototype.density = function () {
+    const nx = this.nx, ny = this.ny, nz = this.nz, dx = this.dx, inv = 1 / dx;
+    const d = this.dens || (this.dens = new Float64Array(this.nc)); d.fill(0);
+    for (let p = 0; p < this.np; p++) {
+      const fx = (this.px[p] - this.x0) * inv - 0.5, fy = this.py[p] * inv - 0.5, fz = this.pz[p] * inv - 0.5;
+      const i = Math.floor(fx), j = Math.floor(fy), k = Math.floor(fz), tx = fx - i, ty = fy - j, tz = fz - k;
+      for (let c = 0; c < 2; c++) { let kk = k + c; if (kk < 0 || kk >= nz) continue; const wz = c ? tz : 1 - tz;
+        for (let b = 0; b < 2; b++) { let jj = j + b; jj = jj < 0 ? -jj - 1 : jj; if (jj >= ny) continue; const wy = b ? ty : 1 - ty;   // y < 0: the mirror cell
+          for (let a = 0; a < 2; a++) { const ii = i + a; if (ii < 0 || ii >= nx) continue; d[ii + nx * (jj + ny * kk)] += (a ? tx : 1 - tx) * wy * wz; } } }
+    }
+  };
+
   // momentum of the whole liquid relative to the glass (both halves): x and z components, kg m/s
   Fluid.prototype.momentum = function () {
     let mx = 0, mz = 0;
@@ -584,6 +750,7 @@
     this.levelSet();
     this.p2g();
     this.forces(dt, ax, az);
+    if (this.volumeCorrection > 0) this.density();
     this.project(dt);
     this.extrapolate(3);
     this.g2p();
@@ -614,14 +781,15 @@
     return 0.5 * (zLo + zHi);
   };
 
-  // Height of the liquid column over each grid column: the particles' volume standing on the column divided by
-  // the column's open area (the wall cuts the edge columns). This is the depth-averaged free surface: it holds
-  // the liquid's volume exactly and ignores drops thrown above the surface; it cannot show a breaking wave.
-  // A 3 x 3 area-weighted average smooths it over about one cell. Returns a Float64Array nx * ny, metres.
+  // Height of the liquid column over each grid column. The particles' volume standing on the column, smoothed with a
+  // 3 x 3 binomial filter, is matched to the column's open volume up to height h, smoothed the same way: h solves
+  // B(V_col) = B(integral from 0 to h of a_col(z) dz), a_col(z) the part of the column's square inside the wall R(z).
+  // For a flat surface the two sides agree exactly. This is the depth-averaged free surface: it holds the liquid's
+  // volume and ignores drops thrown above the surface; it cannot show a breaking wave. Float64Array nx * ny, metres.
   Fluid.prototype.columnHeights = function () {
-    const nx = this.nx, ny = this.ny, dx = this.dx;
-    const vol = this.colVol || (this.colVol = new Float64Array(nx * ny));
-    const out = this.colH || (this.colH = new Float64Array(nx * ny));
+    const nx = this.nx, ny = this.ny, dx = this.dx, ncol = nx * ny;
+    const vol = this.colVol || (this.colVol = new Float64Array(ncol));
+    const out = this.colH || (this.colH = new Float64Array(ncol));
     vol.fill(0);
     const Vp = this.Vseed;              // the volume each particle fills at its seeding spacing, (dx/s)^3
     const fold = (j) => (j < 0 ? -j - 1 : j >= ny ? ny - 1 : j);
@@ -630,46 +798,61 @@
       i = i < 0 ? 0 : i >= nx ? nx - 1 : i; j = j < 0 ? 0 : j >= ny ? ny - 1 : j;
       vol[i + nx * j] += Vp;
     }
-    const area = (i, j) => this.colArea[i + nx * j];
-    if (!this.colArea) {
-      this.colArea = new Float64Array(nx * ny);
-      const S = 16;
-      for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) {
-        let n = 0;
-        for (let a = 0; a < S; a++) for (let b = 0; b < S; b++) {
-          const x = this.x0 + (i + (a + 0.5) / S) * dx, y = (j + (b + 0.5) / S) * dx;
-          if (x * x + y * y < this.R * this.R) n++;
-        }
-        this.colArea[i + nx * j] = n / (S * S) * dx * dx;
-      }
-    }
-    // volume and open area are smoothed by the same 3 x 3 binomial filter (exact for a flat surface); the mirror
-    // plane folds y < 0 back onto y > 0
-    const blur = (src, dst) => {
+    const blur = (src, dst, off, stride) => {   // 3 x 3 binomial on one level of a column table
       for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) {
         let a = 0;
         for (let dj = -1; dj <= 1; dj++) for (let di = -1; di <= 1; di++) {
           const ii = i + di; if (ii < 0 || ii >= nx) continue;
-          a += (di ? 0.25 : 0.5) * (dj ? 0.25 : 0.5) * src[ii + nx * fold(j + dj)];
+          a += (di ? 0.25 : 0.5) * (dj ? 0.25 : 0.5) * src[(ii + nx * fold(j + dj)) * stride + off];
         }
-        dst[i + nx * j] = a;
+        dst[(i + nx * j) * stride + off] = a;
       }
     };
-    const t1 = this.colT1 || (this.colT1 = new Float64Array(nx * ny));
-    const A1 = this.colA1 || (this.colA1 = (() => { const q = new Float64Array(nx * ny); blur(this.colArea, q); return q; })());
-    blur(vol, t1);
-    for (let n = 0; n < nx * ny; n++) out[n] = A1[n] > 0.02 * dx * dx ? t1[n] / A1[n] : 0;
-    void area;
+    if (!this.colVb) this.buildColumnTables(blur);
+    const t1 = this.colT1 || (this.colT1 = new Float64Array(ncol));
+    blur(vol, t1, 0, 1);
+    const M = this.colM, Vb = this.colVb, dz = this.colDz;
+    for (let n = 0; n < ncol; n++) {
+      const v = t1[n], base = n * (M + 1);
+      if (Vb[base + M] <= 0) { out[n] = 0; continue; }
+      if (v >= Vb[base + M]) { out[n] = M * dz; continue; }
+      let lo = 0, hi = M;                                    // Vb increases with height: bisect
+      while (hi - lo > 1) { const mid = (lo + hi) >> 1; if (Vb[base + mid] <= v) lo = mid; else hi = mid; }
+      const a = Vb[base + lo], b = Vb[base + hi];
+      out[n] = (lo + (b > a ? (v - a) / (b - a) : 0)) * dz;
+    }
     return out;
+  };
+  // the open volume of every column up to each height (every 0.5 mm), and the same smoothed by the column filter
+  Fluid.prototype.buildColumnTables = function (blur) {
+    const nx = this.nx, ny = this.ny, dx = this.dx, ncol = nx * ny, dz = 0.0005, M = Math.round(this.H / dz), S = 12;
+    const Vc = new Float64Array(ncol * (M + 1)), Vb = new Float64Array(ncol * (M + 1));
+    for (let m = 1; m <= M; m++) {
+      const R = Math.min(this.Rz((m - 0.5) * dz), 2 * this.Rbox), R2 = R * R;
+      for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) {
+        let n = 0;
+        for (let a = 0; a < S; a++) for (let b = 0; b < S; b++) {
+          const x = this.x0 + (i + (a + 0.5) / S) * dx, y = (j + (b + 0.5) / S) * dx;
+          if (x * x + y * y < R2) n++;
+        }
+        const c = i + nx * j;
+        Vc[c * (M + 1) + m] = Vc[c * (M + 1) + m - 1] + n / (S * S) * dx * dx * dz;
+      }
+    }
+    for (let m = 0; m <= M; m++) blur(Vc, Vb, m, M + 1);
+    this.colVc = Vc; this.colVb = Vb; this.colM = M; this.colDz = dz;
+    // the open area of each column at the bottom, kept for the checks
+    this.colArea = new Float64Array(ncol);
+    for (let c = 0; c < ncol; c++) this.colArea[c] = Vc[c * (M + 1) + 1] / dz;
   };
 
   // the column height at (x, y), bilinear between column centres (y folded by the mirror plane)
   Fluid.prototype.columnHeightAt = function (x, y) {
     const nx = this.nx, ny = this.ny, dx = this.dx, H = this.colH;
     y = Math.abs(y);
-    // columns near the wall are cut by it and hold too few particles to count: beyond r1 = R - 2.5 dx the height
+    // columns near the wall are cut by it and hold too few particles to count: beyond r1 = R(h0) - 2.5 dx the height
     // is extended linearly along the radius from the values at r1 and r1 - 1.5 dx
-    const r = Math.hypot(x, y), r1 = this.R - 2.5 * dx, r2 = r1 - 1.5 * dx;
+    const r = Math.hypot(x, y), r1 = this.Rz(Math.min(this.h0, this.zRim)) - 2.5 * dx, r2 = r1 - 1.5 * dx;
     if (r > r1) {
       const cx = x / r, cy = y / r, h1 = this.colBilinear(cx * r1, cy * r1), h2 = this.colBilinear(cx * r2, cy * r2);
       return h1 + (r - r1) * (h1 - h2) / (r1 - r2);
@@ -729,6 +912,11 @@
   };
 
   /* ------------------------------------------------------------------- cart */
+  // The cart: x along the road, z_b the body (bottom), z_w the axle. The wheel rolls without slipping, driven through a
+  // gearbox by a DC motor whose current is set by a current loop (a torque drive). A sampled controller sets the current:
+  // 'off' holds the current that balances the drag at the set speed (open loop), 'speed' adds a PI loop on the speed.
+  // An active suspension can add a force between body and axle (skyhook on the body's vertical speed). The reader can
+  // push with buttons or drag the cart with a hand modelled as a spring and damper with a force limit.
   function Cart(o) {
     o = o || {};
     this.Mb = o.Mb || 1.5;       // body and glass, without the stout, kg
@@ -740,21 +928,62 @@
     this.kt = o.kt || 2.0e4;     // radial tyre stiffness, N/m
     this.ct = o.ct || 5;         // tyre damping, N s/m
     this.cx = o.cx || 2;         // rolling and air drag, N s/m
-    this.v0 = o.v0 != null ? o.v0 : 1.0;  // cruising speed the drive force is set for, m/s
-    this.ml = o.ml || 0;         // liquid mass, kg (set by the coupling)
+    this.v0 = o.v0 != null ? o.v0 : 1.0;  // set speed, m/s
+    this.ml = o.ml || 0;         // stout in the glass, kg (set by the coupling; falls as it spills)
     this.Ls = o.Ls || 0.08;      // unloaded spring length (body above axle), m
+    this.bodyW = o.bodyW || 0.22; this.bodyH = o.bodyH || 0.03;   // the body block, m (it catches spilled drops)
+    this.glassFloor = o.glassFloor || 0.036;   // the glass's inner floor above the body's bottom: body 30 mm + glass base 6 mm
     this.g = 9.81;
+    // drive: DC gear motor (a small 12 V motor; the numbers are a modelling choice, stated in the note)
+    this.Ngear = o.Ngear || 10;  // gear ratio, motor turns per wheel turn
+    this.Km = o.Km || 0.02;      // torque constant = back-EMF constant, N m/A = V s/rad
+    this.Ra = o.Ra || 2.0;       // armature resistance, ohm
+    this.Jm = o.Jm || 2e-6;      // rotor inertia, kg m^2
+    this.Vmax = o.Vmax || 12;    // supply voltage, V
+    this.Imax = o.Imax || 3;     // current limit of the drive, A
+    this.tauI = o.tauI || 0.002; // time constant of the current loop, s
+    this.ctrl = o.ctrl || 'speed';
+    this.Ts = o.Ts || 0.001;     // controller sampling period, s
+    const b = this.Ngear * this.Km / this.Rw;                 // force at the road per amp, N/A
+    const M = this.Mb + this.ml + this.mw + this.Iw / (this.Rw * this.Rw) + this.Ngear * this.Ngear * this.Jm / (this.Rw * this.Rw);
+    this.wc = o.wc || 2 * Math.PI * 8;                         // speed-loop crossover, rad/s
+    this.Kp = o.Kp || M * this.wc / b;                         // A per m/s
+    this.Ki = o.Ki || this.Kp * this.wc / 4;                   // A per m
+    // active suspension: skyhook on the body's vertical speed, a force actuator with a lag and a limit
+    this.susp = o.susp || false;
+    this.csky = o.csky || 2 * 0.7 * Math.sqrt(this.k * (this.Mb + this.ml));   // N s/m
+    this.Umax = o.Umax || 40;    // N
+    this.tauU = o.tauU || 0.005; // s
+    // the reader's hand
+    this.kh = o.kh || 300; this.ch = o.ch || 30; this.Fhmax = o.Fhmax || 25;   // N/m, N s/m, N
+    this.hand = null;            // x the hand pulls towards, or null
     this.road = o.road || new Road({ Rw: this.Rw });
     this.pushF = 0;              // the reader's push, N (horizontal)
     this.reset(o.x0 != null ? o.x0 : 0);
   }
+  Cart.prototype.bForce = function () { return this.Ngear * this.Km / this.Rw; };
+  Cart.prototype.massX = function () { return this.Mb + this.ml + this.mw + (this.Iw + this.Ngear * this.Ngear * this.Jm) / (this.Rw * this.Rw); };
   Cart.prototype.reset = function (x) {
     const g = this.g, Ms = this.Mb + this.ml, za = this.road.axle(x)[0];
     this.x = x; this.vx = this.v0;
     this.zw = za - (Ms + this.mw) * g / this.kt;                 // static tyre deflection
     this.zb = this.zw + this.Ls - Ms * g / this.k;               // static spring deflection
     this.vzb = 0; this.vzw = 0; this.t = 0; this.Flx = 0; this.Flz = 0;
+    this.i = this.cx * this.v0 / this.bForce();                  // the current that holds the set speed against the drag
+    this.icmd = this.i; this.xi = 0; this.us = 0; this.uscmd = 0; this.tSample = 0;
     this.forces(0, 0);
+  };
+  // the controller, run every Ts: the motor current command, and the suspension force command
+  Cart.prototype.sample = function () {
+    const i0 = this.cx * this.v0 / this.bForce(), e = this.v0 - this.vx;
+    if (this.ds) { this.ds.set('v_s', this.vx); this.ds.set('xi_s', this.xi); this.ds.set('vzb_s', this.vzb); }
+    if (this.ctrl === 'speed') {
+      let ic = i0 + this.Kp * e + this.Ki * this.xi;
+      if (Math.abs(ic) < this.Imax) this.xi += e * this.Ts;     // anti-windup: integrate only when not saturated
+      this.icmd = ic;
+    } else this.icmd = i0;
+    this.uscmd = this.susp ? -this.csky * this.vzb : 0;
+    if (this.uscmd > this.Umax) this.uscmd = this.Umax; else if (this.uscmd < -this.Umax) this.uscmd = -this.Umax;
   };
   // the forces at the present state, with the liquid's reaction (Fx, Fz) beyond rigid co-motion: kept on the cart
   // (and in the store, when the page gave one) so that every stored force belongs to the stored state
@@ -764,25 +993,41 @@
     const vza = dza * this.vx;
     let N = this.kt * (za - this.zw) + this.ct * (vza - this.vzw);
     if (N < 0) N = 0;                                            // the tyre cannot pull on the road
-    const Fs = -this.k * (this.zb - this.zw - this.Ls) - this.c * (this.vzb - this.vzw);  // on the body
-    const Mx = Ms + this.mw + this.Iw / (this.Rw * this.Rw);
-    const Fdrive = this.cx * this.v0, Froad = -N * dza;
-    const ax = (Froad + Fdrive - this.cx * this.vx + this.pushF + Fx) / Mx;
+    const Fs = -this.k * (this.zb - this.zw - this.Ls) - this.c * (this.vzb - this.vzw) + this.us;  // on the body
+    const Mx = this.massX();
+    const Fmotor = this.bForce() * this.i, Froad = -N * dza;
+    let Fhand = 0;
+    if (this.hand != null) { Fhand = this.kh * (this.hand - this.x) - this.ch * this.vx; if (Fhand > this.Fhmax) Fhand = this.Fhmax; else if (Fhand < -this.Fhmax) Fhand = -this.Fhmax; }
+    const ax = (Froad + Fmotor - this.cx * this.vx + this.pushF + Fhand + Fx) / Mx;
     const azb = (Fs - Ms * g + Fz) / Ms;
     const azw = (-Fs - this.mw * g + N) / this.mw;
-    this.za = za; this.dza = dza; this.N = N; this.Fs = Fs; this.Froad = Froad; this.Fdrive = Fdrive;
-    this.ax = ax; this.azb = azb; this.azw = azw; this.Flx = Fx; this.Flz = Fz;
+    // the current the drive can reach: limited by the drive and by the voltage left over the back-EMF
+    const emf = this.Km * this.Ngear * this.vx / this.Rw;
+    let ilim = this.icmd; if (ilim > this.Imax) ilim = this.Imax; else if (ilim < -this.Imax) ilim = -this.Imax;
+    const iHi = (this.Vmax - emf) / this.Ra, iLo = (-this.Vmax - emf) / this.Ra;
+    if (ilim > iHi) ilim = iHi; else if (ilim < iLo) ilim = iLo;
+    this.za = za; this.dza = dza; this.N = N; this.Fs = Fs; this.Froad = Froad; this.Fdrive = Fmotor; this.Fhand = Fhand;
+    this.ax = ax; this.azb = azb; this.azw = azw; this.Flx = Fx; this.Flz = Fz; this.ireach = ilim; this.emf = emf;
+    this.Vm = this.Ra * this.i + emf;                             // motor voltage
     if (D) {
       D.set('x', this.x); D.set('vx', this.vx); D.set('zb', this.zb); D.set('vzb', this.vzb); D.set('zw', this.zw); D.set('vzw', this.vzw);
-      D.set('z_a', za); D.set('dz_a', dza); D.set('N', N); D.set('F_s', Fs); D.set('F_road', Froad); D.set('F_drive', Fdrive);
-      D.set('F_push', this.pushF); D.set('F_lx', Fx); D.set('F_lz', Fz); D.set('a_x', ax); D.set('a_zb', azb); D.set('a_zw', azw);
+      D.set('z_a', za); D.set('dz_a', dza); D.set('N', N); D.set('F_s', Fs); D.set('F_road', Froad); D.set('F_drive', Fmotor);
+      D.set('F_push', this.pushF); D.set('F_hand', Fhand); D.set('F_lx', Fx); D.set('F_lz', Fz); D.set('a_x', ax); D.set('a_zb', azb); D.set('a_zw', azw);
+      D.set('i_m', this.i); D.set('i_cmd', this.icmd); D.set('i_reach', ilim); D.set('V_m', this.Vm); D.set('emf', emf); D.set('u_s', this.us); D.set('u_s_cmd', this.uscmd);
+      D.set('Mx', Mx); D.set('Ms', Ms); D.set('ml', this.ml);
     }
   };
-  // one step h, symplectic Euler: velocities from the forces at the present state, then positions from the new velocities;
-  // then the forces at the new state, for the next step
+  // one step h: the controller when a sample is due; then symplectic Euler for the mechanics (velocities from the forces
+  // at the present state, positions from the new velocities); the current and the suspension force follow their
+  // first-order lags exactly over h; then the forces at the new state, for the next step
   Cart.prototype.step = function (h, Fx, Fz) {
+    this.tSample += h;
+    if (this.tSample >= this.Ts - 1e-12) { this.tSample -= this.Ts; this.sample(); this.forces(Fx, Fz); }
     this.vx += h * this.ax; this.vzb += h * this.azb; this.vzw += h * this.azw;
     this.x += h * this.vx; this.zb += h * this.vzb; this.zw += h * this.vzw;
+    const ei = Math.exp(-h / this.tauI), eu = Math.exp(-h / this.tauU);
+    this.i = this.ireach + (this.i - this.ireach) * ei;
+    this.us = this.uscmd + (this.us - this.uscmd) * eu;
     this.t += h;
     this.forces(Fx, Fz);
   };
@@ -814,9 +1059,13 @@
       const ax = (c.vx - vx0) / h, az = (c.vzb - vz0) / h;     // the glass's mean acceleration over the step
       this.fluid.step(h, ax, az);
       const P = this.fluid.momentum();
-      // reaction of the liquid on the glass beyond rigid co-motion: -dP_rel/dt
-      const P0 = this.P;
-      this.Fx = -(P[0] - P0[0]) / h; this.Fz = -(P[1] - P0[1]) / h;
+      // reaction of the liquid on the glass beyond rigid co-motion: -dP_rel/dt, counting the momentum that left over
+      // the rim with the spilled stout (it was not pushed by the glass at the moment it left)
+      const P0 = this.P, f = this.fluid;
+      this.Fx = -(P[0] + f.spillPx - P0[0]) / h; this.Fz = -(P[1] + f.spillPz - P0[1]) / h;
+      if (f.spillNow) { c.ml = f.liquidMass(); this.dropsFrom(f.spillList); }
+      f.spillList.length = 0;
+      this.moveDrops(h);
       this.P = P; this.lastAx = ax; this.lastAz = az;
       c.forces(this.Fx, this.Fz);                               // the stout's new reaction acts from now
       left -= h; this.t += h; this.steps = (this.steps || 0) + 1;
@@ -824,9 +1073,36 @@
       if (D) {
         D.set('t', this.t); D.set('h_f', h); D.set('n_cart', n); D.set('vx_0', vx0); D.set('vzb_0', vz0); D.set('vx_1', c.vx); D.set('vzb_1', c.vzb);
         D.set('a_gx', ax); D.set('a_gz', az); D.set('P0_x', P0[0]); D.set('P0_z', P0[1]); D.set('P_x', P[0]); D.set('P_z', P[1]);
-        D.set('F_lx_next', this.Fx); D.set('F_lz_next', this.Fz); D.set('steps', this.steps);
+        D.set('F_lx_next', this.Fx); D.set('F_lz_next', this.Fz); D.set('steps', this.steps); D.set('P_spill_x', f.spillPx); D.set('P_spill_z', f.spillPz);
         D.set('cg_iters', this.fluid.cgIters); D.set('cg_res', this.fluid.cgResidual || 0);
       }
+    }
+  };
+
+  // Spilled stout in the room: each particle that left over the rim becomes a drop (with its mirror image, the other
+  // half of the glass) at the glass's position plus its own, with the glass's velocity plus its own, falling freely
+  // (no air drag) until it meets the body's top or the road, where it stays as a splash. At most 6000 drops are kept.
+  World.prototype.dropsFrom = function (list) {
+    const c = this.cart, D = this.drops || (this.drops = []);
+    for (const q of list) for (const m of [1, -1]) {
+      if (D.length >= 6000) D.shift();
+      D.push({ x: c.x + q[0], y: m * q[1], z: c.zb + c.glassFloor + q[2], vx: c.vx + q[3], vy: m * q[4], vz: c.vzb + q[5], landed: false });
+    }
+    this.spilledMass = (this.spilledMass || 0) + list.length * 2 * this.fluid.mp;
+  };
+  World.prototype.moveDrops = function (h) {
+    const D = this.drops; if (!D) return;
+    const g = this.cart.g, road = this.cart.road;
+    const c = this.cart, top = c.zb + c.bodyH;
+    for (const d of D) {
+      if (d.onBody) { d.x = c.x + d.rel; d.z = c.zb + c.bodyH; continue; }   // a splash on the body rides with it
+      if (d.landed) continue;
+      const zPrev = d.z;
+      d.vz -= g * h; d.x += d.vx * h; d.y += d.vy * h; d.z += d.vz * h;
+      // the body's top face catches a drop that crosses it inside the body's footprint
+      if (zPrev >= top && d.z <= top && Math.abs(d.x - c.x) <= c.bodyW / 2) { d.z = top; d.landed = true; d.onBody = true; d.rel = d.x - c.x; continue; }
+      const zr = road.zr(d.x);
+      if (d.z <= zr) { d.z = zr; d.landed = true; }
     }
   };
 

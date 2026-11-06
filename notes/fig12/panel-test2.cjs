@@ -2,12 +2,12 @@
 const { chromium } = require('playwright'); const { spawn, execFileSync } = require('child_process'); const path = require('path'), fs = require('fs');
 (async () => {
   const out = process.argv[2] || '/tmp/fig12-panel2'; fs.mkdirSync(out, { recursive: true });
-  const srv = spawn('python3', ['-m', 'http.server', '8776', '--directory', path.join(__dirname, '../../public')], { stdio: 'ignore' }); await new Promise(r => setTimeout(r, 800));
+  const base = process.argv[3] || 'http://localhost:8776'; const srv = process.argv[3] ? null : spawn('python3', ['-m', 'http.server', '8776', '--directory', path.join(__dirname, '../../public')], { stdio: 'ignore' }); await new Promise(r => setTimeout(r, 800));
   const b = await chromium.launch(); const errs = [];
   for (const W of [1600, 1100, 390]) {
     const p = await b.newPage({ viewport: { width: W, height: 1000 }, deviceScaleFactor: 1, acceptDownloads: true });
     p.on('pageerror', e => errs.push(W + ': ' + e.message)); p.on('console', m => { if (m.type() === 'error') errs.push(W + ': ' + m.text()); });
-    await p.goto('http://localhost:8776/simulations/beer-slosh.html');
+    await p.goto(base + '/simulations/beer-slosh.html');
     // wait until the wheel is on the first bump (x between 0.92 and 1.08 m), then pause
     await p.waitForFunction(() => Fig12.world.cart.x > 0.92, null, { timeout: 60000, polling: 50 });
     await p.click('#play'); await p.waitForTimeout(300);
@@ -53,5 +53,5 @@ const { chromium } = require('playwright'); const { spawn, execFileSync } = requ
     await p.close();
   }
   console.log('errors:', errs.length ? errs : 'none');
-  await b.close(); srv.kill();
+  await b.close(); if (srv) srv.kill();
 })();

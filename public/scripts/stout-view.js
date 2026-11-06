@@ -18,7 +18,7 @@
     this.scale = o.scale || 2600;        // px per metre
     this.elev = (o.elevDeg != null ? o.elevDeg : 14) * Math.PI / 180;
     this.nr = o.nr || 9; this.nth = o.nth || 48;
-    this.bodyW = 0.22; this.bodyH = 0.03; this.headH = o.headH != null ? o.headH : 0.012; this.carrierGap = 0.006; this.glassWall = 0.004; this.glassBase = 0.006;
+    this.bodyW = 0.22; this.bodyH = 0.03; this.headH = o.headH != null ? o.headH : 0.012; this.carrierGap = 0.006; this.glassWall = 0.0025; this.glassBase = 0.006;
     this.groundY = o.groundY || 0.80;   // fraction of canvas height where z = 0 sits
     this.viewHeight = o.viewHeight || 0; // metres of scene shown top to bottom (0: use scale)
     this.camX = null;
@@ -26,10 +26,10 @@
 
   // free-surface heights on the polar grid: h[ir][ith], ir = 0..nr (r = R ir / nr), ith over the full circle
   View.prototype.surface = function () {
-    const f = this.world.fluid, R = f.R, nr = this.nr, nth = this.nth, H = [];
+    const f = this.world.fluid, R = f.Rz(Math.min(f.h0, f.zRim)), nr = this.nr, nth = this.nth, H = [];
     f.columnHeights();
     for (let ir = 0; ir <= nr; ir++) {
-      const row = [], r = R * ir / nr;
+      const row = [], r = R * ir / nr;                          // a polar grid over the surface, out to the wall at the fill level
       for (let it = 0; it < nth; it++) {
         const th = 2 * Math.PI * it / nth;
         row.push(f.columnHeightAt(r * Math.cos(th), r * Math.sin(th)));
@@ -123,34 +123,59 @@
 
     // the glass and the stout, seen from slightly above
     this.drawGlass(X(c.x), Z(bodyZ + this.bodyH), extra);
+    // spilled stout: drops falling freely in the room, and splashes where they met the road (solver: World.moveDrops)
+    const drops = w.drops;
+    if (drops && drops.length) {
+      ctx.fillStyle = rgb(C.stoutDark);
+      for (const d of drops) {
+        const px = X(d.x), py = Z(d.z) - d.y * Math.sin(this.elev) * s;
+        if (px < -5 || px > W + 5) continue;
+        if (d.landed) ctx.fillRect(px - 2 * dpr, py - 1 * dpr, 4 * dpr, 1.5 * dpr);
+        else { ctx.beginPath(); ctx.arc(px, py, 1.4 * dpr, 0, 2 * Math.PI); ctx.fill(); }
+      }
+    }
   };
 
+  // The glass and the stout, seen from 14 degrees above. The glass is a body of revolution with inner radius R(z) (the
+  // solver's wall) and a wall 2.5 mm thick; the stout fills it to the computed surface; the head is a band laid on it.
   View.prototype.drawGlass = function (cx, cy, extra) {
-    const ctx = this.ctx, s = this.scale, f = this.world.fluid, R = f.R, e = this.elev, se = Math.sin(e), ce = Math.cos(e);
+    const ctx = this.ctx, s = this.scale, f = this.world.fluid, e = this.elev, se = Math.sin(e), ce = Math.cos(e);
     const dpr = this.cv.width / (this.cssW || this.cv.width);
-    const base = this.glassBase, Hglass = f.H, Ro = R + this.glassWall;
-    // projection: x right, y away from the viewer, z up (glass frame, z = 0 at the inner bottom)
+    const base = this.glassBase, wall = this.glassWall, zTop = isFinite(f.zRim) ? f.zRim : f.H;
+    const Rin = (z) => Math.min(f.Rz(Math.min(z, zTop - 1e-6)), f.Rbox), Rout = (z) => Rin(Math.max(0.008, z)) + wall;   // the foot is solid glass: straight below 8 mm
+    // projection: x right, y away from the viewer, z up (glass frame, z = 0 at the inner floor)
     const P = (x, y, z) => [cx + x * s, cy - (base + z) * ce * s - y * se * s];
     const ell = (z, r, from, to, ccw) => { const [px, py] = P(0, 0, z); ctx.ellipse(px, py, r * s, r * se * s, 0, from, to, ccw); };
+    const Z = []; for (let z = 0; z <= zTop + 1e-9; z += 0.002) Z.push(z); if (Z[Z.length - 1] < zTop) Z.push(zTop);
+    const side = (sgn, z0, z1, rf, up) => {                     // the silhouette x = sgn r(z) from z0 to z1 (or back)
+      const zs = Z.filter((z) => z >= z0 && z <= z1); if (!up) zs.reverse();
+      zs.forEach((z) => { const [px, py] = P(sgn * rf(z), 0, z); ctx.lineTo(px, py); });
+    };
+    // the glass seen through: its whole silhouette, tinted
+    ctx.beginPath(); { const [px, py] = P(-Rout(0), 0, -base); ctx.moveTo(px, py); }
+    side(-1, 0, zTop, Rout, true); ell(zTop, Rout(zTop), Math.PI, 2 * Math.PI); side(1, 0, zTop, Rout, false);
+    ell(-base, Rout(0), 0, Math.PI); ctx.closePath();
+    ctx.fillStyle = 'rgba(205,214,218,0.45)'; ctx.fill();
 
-    // back half of the glass: inside wall
-    ctx.beginPath(); ell(Hglass, Ro, Math.PI, 2 * Math.PI); ell(-base, Ro, 2 * Math.PI, Math.PI, true); ctx.closePath();
-    ctx.fillStyle = 'rgba(205,214,218,0.55)'; ctx.fill();
-
-    const Hs = this.surface(), nr = this.nr, nth = this.nth, hh = this.headH;
+    const Hs = this.surface(), nr = this.nr, nth = this.nth, hh = this.headH, rS = f.Rz(Math.min(f.h0, f.zRim));
     const pt = (ir, it) => {
-      const r = R * ir / nr, th = 2 * Math.PI * it / nth;
+      const r = rS * ir / nr, th = 2 * Math.PI * it / nth;
       return [r * Math.cos(th), r * Math.sin(th), Hs[ir][((it % nth) + nth) % nth] + hh];
     };
-    // the drink's body: the front half of the wall from the bottom to the surface
-    ctx.beginPath();
-    for (let it = nth / 2; it <= nth; it++) { const [x, y, z] = pt(nr, it); const [px, py] = P(x, y, z); it === nth / 2 ? ctx.moveTo(px, py) : ctx.lineTo(px, py); }
-    for (let it = nth; it >= nth / 2; it--) { const [x, y] = pt(nr, it); const [px, py] = P(x, y, 0); ctx.lineTo(px, py); }
-    ctx.closePath();
-    // the back half of the liquid's outline too, so the surface quads have liquid beneath
+    const etaL = Hs[nr][nth / 2], etaR = Hs[nr][0];
+    // the front of the drink: surface curve along the near wall, down the right side, the near half of the floor,
+    // up the left side; dz lowers the top (the stout under the head)
+    const front = (dz) => {
+      ctx.beginPath();
+      for (let it = nth / 2; it <= nth; it++) { const [x, y, z] = pt(nr, it); const [px, py] = P(x, y, z - dz); it === nth / 2 ? ctx.moveTo(px, py) : ctx.lineTo(px, py); }
+      side(1, 0, etaR + hh - dz, Rin, false);
+      ell(0, Rin(0), 0, Math.PI);
+      side(-1, 0, etaL + hh - dz, Rin, true);
+      ctx.closePath();
+    };
     const g = ctx.createLinearGradient(0, P(0, 0, f.h0)[1], 0, P(0, 0, 0)[1]);
     g.addColorStop(0, rgb(C.stoutDark)); g.addColorStop(0.85, rgb(C.stoutDark)); g.addColorStop(1, rgb(C.stoutRuby));
-    // surface: quads drawn from the back (large y) to the front, shaded by their normal
+    // surface quads, from the back (large y) to the front, shaded by their normal
     const quads = [];
     for (let ir = 0; ir < nr; ir++) for (let it = 0; it < nth; it++) {
       const a = pt(ir, it), b = pt(ir + 1, it), c2 = pt(ir + 1, it + 1), d = pt(ir, it + 1);
@@ -158,8 +183,7 @@
       let nx = uy * vz - uz * vy, ny = uz * vx - ux * vz, nz = ux * vy - uy * vx;
       if (nz < 0) { nx = -nx; ny = -ny; nz = -nz; }
       const nl = Math.hypot(nx, ny, nz) || 1;
-      const depth = (a[1] + b[1] + c2[1] + d[1]) / 4;
-      quads.push([depth, [a, b, c2, d], nx / nl, ny / nl, nz / nl]);
+      quads.push([(a[1] + b[1] + c2[1] + d[1]) / 4, [a, b, c2, d], nx / nl, ny / nl, nz / nl]);
     }
     quads.sort((p, q) => q[0] - p[0]);
     const L = [-0.45, 0.35, 0.82], Ll = Math.hypot(...L), view = [0, -se, ce];
@@ -173,36 +197,29 @@
       vs.forEach(([x, y, z], k) => { const [px, py] = P(x, y, z); k ? ctx.lineTo(px, py) : ctx.moveTo(px, py); });
       ctx.closePath(); ctx.fillStyle = rgb(col); ctx.fill(); ctx.strokeStyle = rgb(col); ctx.lineWidth = 0.6 * dpr; ctx.stroke();
     }
-    // front of the drink over the near part of the surface: the head band first
-    ctx.beginPath();
-    for (let it = nth / 2; it <= nth; it++) { const [x, y, z] = pt(nr, it); const [px, py] = P(x, y, z); it === nth / 2 ? ctx.moveTo(px, py) : ctx.lineTo(px, py); }
-    for (let it = nth; it >= nth / 2; it--) { const [x, y] = pt(nr, it); const [px, py] = P(x, y, 0); ctx.lineTo(px, py); }
-    ctx.closePath(); ctx.fillStyle = rgb(C.head); ctx.fill();
-    // the stout below the head: the same front wall, up to the simulated surface
-    ctx.beginPath();
-    for (let it = nth / 2; it <= nth; it++) { const [x, y, z] = pt(nr, it); const [px, py] = P(x, y, z - hh); it === nth / 2 ? ctx.moveTo(px, py) : ctx.lineTo(px, py); }
-    for (let it = nth; it >= nth / 2; it--) { const [x, y] = pt(nr, it); const [px, py] = P(x, y, 0); ctx.lineTo(px, py); }
-    ctx.closePath(); ctx.fillStyle = g; ctx.fill();
-    // the line where stout meets head along the front wall
+    front(0); ctx.fillStyle = rgb(C.head); ctx.fill();            // the head band
+    front(hh); ctx.fillStyle = g; ctx.fill();                     // the stout under it
     ctx.beginPath();
     for (let it = nth / 2; it <= nth; it++) { const [x, y, z] = pt(nr, it); const [px, py] = P(x, y, z - hh); it === nth / 2 ? ctx.moveTo(px, py) : ctx.lineTo(px, py); }
     ctx.strokeStyle = 'rgba(150,120,90,0.8)'; ctx.lineWidth = 1 * dpr; ctx.stroke();
 
-    // glass: front wall tint, outlines, rim, base
-    ctx.beginPath(); ell(Hglass, Ro, 0, Math.PI); ell(-base, Ro, Math.PI, 0, true); ctx.closePath();
-    ctx.fillStyle = C.glass; ctx.fill();
-    ctx.strokeStyle = C.line; ctx.lineWidth = 1.6 * dpr;
-    ctx.beginPath(); ell(Hglass, Ro, 0, 2 * Math.PI); ctx.stroke();
-    ctx.beginPath(); ell(Hglass, R, 0, 2 * Math.PI); ctx.strokeStyle = 'rgba(28,21,24,0.35)'; ctx.stroke();
-    ctx.strokeStyle = C.line;
-    ctx.beginPath(); const [lx0, ly0] = P(-Ro, 0, Hglass), [lx1, ly1] = P(-Ro, 0, -base); ctx.moveTo(lx0, ly0); ctx.lineTo(lx1, ly1); ctx.stroke();
-    ctx.beginPath(); const [rx0, ry0] = P(Ro, 0, Hglass), [rx1, ry1] = P(Ro, 0, -base); ctx.moveTo(rx0, ry0); ctx.lineTo(rx1, ry1); ctx.stroke();
-    ctx.beginPath(); ell(-base, Ro, 0, Math.PI); ctx.stroke();
+    // glass: front tint, outer and inner outlines, rim, foot
+    ctx.beginPath(); { const [px, py] = P(-Rout(0), 0, -base); ctx.moveTo(px, py); }
+    side(-1, 0, zTop, Rout, true); ell(zTop, Rout(zTop), Math.PI, 0, true); side(1, 0, zTop, Rout, false); ell(-base, Rout(0), 0, Math.PI);
+    ctx.closePath(); ctx.fillStyle = C.glass; ctx.fill();
+    ctx.lineWidth = 1.6 * dpr; ctx.strokeStyle = C.line;
+    for (const sg of [-1, 1]) { ctx.beginPath(); { const [px, py] = P(sg * Rout(0), 0, -base); ctx.moveTo(px, py); } side(sg, 0, zTop, Rout, true); ctx.stroke(); }
+    ctx.strokeStyle = 'rgba(28,21,24,0.30)'; ctx.lineWidth = 1 * dpr;
+    for (const sg of [-1, 1]) { ctx.beginPath(); { const [px, py] = P(sg * Rin(0), 0, 0); ctx.moveTo(px, py); } side(sg, 0, zTop, Rin, true); ctx.stroke(); }
+    ctx.lineWidth = 1.6 * dpr; ctx.strokeStyle = C.line;
+    ctx.beginPath(); ell(zTop, Rout(zTop), 0, 2 * Math.PI); ctx.stroke();
+    ctx.beginPath(); ell(zTop, Rin(zTop), 0, 2 * Math.PI); ctx.strokeStyle = 'rgba(28,21,24,0.35)'; ctx.stroke();
+    ctx.strokeStyle = C.line; ctx.beginPath(); ell(-base, Rout(0), 0, Math.PI); ctx.stroke();
     this.lastSurface = Hs;
     if (this.ds) {                                               // where the head's middle sits at the front and back wall
-      const D = this.ds, fr = P(R * 0.98, 0, Hs[nr][0] + hh / 2), bk = P(-R * 0.98, 0, Hs[nr][nth / 2] + hh / 2);
+      const D = this.ds, fr = P(rS * 0.98, 0, Hs[nr][0] + hh / 2), bk = P(-rS * 0.98, 0, Hs[nr][nth / 2] + hh / 2);
       D.set('front_px_x', fr[0] / dpr); D.set('front_px_y', fr[1] / dpr); D.set('back_px_x', bk[0] / dpr); D.set('back_px_y', bk[1] / dpr);
-      D.set('head_h', hh); D.set('elev', this.elev);
+      D.set('head_h', hh); D.set('elev', this.elev); D.set('r_s', rS);
     }
   };
 
