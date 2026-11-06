@@ -215,6 +215,7 @@ RULES = [
     (r'tools/fig12/study\.cjs', 'Fig. 12: one run of the parameter study through World.advance (bump height, speed loop, suspension): lean, accelerations, spill.', 'docs/simulations/fig12-beer-slosh.md'),
     (r'tools/fig12/energy\.cjs', 'Fig. 12: the cart\u2019s energy book over a bump: constant without losses, changed by exactly the work of dampers, drag and motor.', 'docs/simulations/fig12-beer-slosh.md'),
     (r'tools/fig12/figures\.cjs', 'Fig. 12: writes the two inline SVG figures of the lecture note (the glass section; one bump, open loop against speed control).', 'docs/simulations/fig12-beer-slosh.md'),
+    (r'notes/fig12/ctrl-shots\.cjs', 'Fig. 12: screenshots of the live model over a 25 mm bump with each controller, and the largest lean the page read.', 'docs/simulations/fig12-beer-slosh.md'),
     (r'tools/fig12/same\.cjs', 'Fig. 12: fingerprint (SHA-256) of the solver state after 1 s with a push; a speed-up must leave it unchanged.', 'docs/simulations/fig12-beer-slosh.md'),
     (r'public/scripts/guinness-glass\.js', 'Fig. 12: inner radius of the Guinness tulip pint every 0.5 mm, written by tools/fig12/glass_profile.py; do not edit.', 'docs/simulations/fig12-beer-slosh.md'),
     (r'tools/fig12/glass_profile\.py', 'Fig. 12: measures the inner outline of the tulip from dimensions.com\u2019s dimensioned section and scales it to 160 x 85 mm; writes glass_profile.json and guinness-glass.js.', 'docs/simulations/fig12-beer-slosh.md'),

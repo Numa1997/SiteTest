@@ -7,7 +7,7 @@ const { chromium } = require('playwright'); const { spawn, execFileSync } = requ
   for (const W of [1600, 1100, 390]) {
     const p = await b.newPage({ viewport: { width: W, height: 1000 }, deviceScaleFactor: 1, acceptDownloads: true });
     p.on('pageerror', e => errs.push(W + ': ' + e.message)); p.on('console', m => { if (m.type() === 'error') errs.push(W + ': ' + m.text()); });
-    await p.goto(base + '/simulations/beer-slosh.html');
+    await p.goto(base + '/simulations/beer-slosh.html' + (process.env.QUERY || ''));
     // wait until the wheel is on the first bump (x between 0.92 and 1.08 m), then pause
     await p.waitForFunction(() => Fig12.world.cart.x > 0.92, null, { timeout: 60000, polling: 50 });
     await p.click('#play'); await p.waitForTimeout(300);
