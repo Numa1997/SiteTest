@@ -451,6 +451,10 @@
   "src": "Switch the motor off, \\(u = 0\\). Row 1 of (10) then reads \\(d_1\\ddot x + d_2\\ddot\\theta_1 + d_3\\ddot\\theta_2 = 0\\): no outside sideways force, so the centre of mass of the whole machine does not accelerate sideways. Solve it for \\(\\ddot x = -(d_2\\ddot\\theta_1 + d_3\\ddot\\theta_2)/d_1\\) and put that into rows 2 and 3. Row 2 becomes \\((d_4 - d_2^2/d_1)\\ddot\\theta_1 + (d_5 - d_2d_3/d_1)\\ddot\\theta_2 = f_1\\theta_1\\), and row 3 likewise, which leaves two equations for the angles alone,",
   "tr": "Schalten Sie den Motor aus, \\(u = 0\\). Zeile 1 von (10) lautet dann \\(d_1\\ddot x + d_2\\ddot\\theta_1 + d_3\\ddot\\theta_2 = 0\\): Es gibt keine äußere seitliche Kraft, also beschleunigt der Schwerpunkt der ganzen Maschine nicht zur Seite. Lösen Sie sie nach \\(\\ddot x = -(d_2\\ddot\\theta_1 + d_3\\ddot\\theta_2)/d_1\\) auf und setzen Sie das in die Zeilen 2 und 3 ein. Zeile 2 wird zu \\((d_4 - d_2^2/d_1)\\ddot\\theta_1 + (d_5 - d_2d_3/d_1)\\ddot\\theta_2 = f_1\\theta_1\\), Zeile 3 entsprechend, und es bleiben zwei Gleichungen für die Winkel allein,"
  },
+ "348bf2b234d7": {
+  "src": "which Wolfram checks. The second integral is the law's whole loss, the heat its drag makes in the rod's thin boundary layer and wake; part of that wake, \\(-\\int\\mathbf f\\cdot\\delta\\mathbf u_{k,s}\\,ds\\), the grid resolves itself, so the heat booked below the grid is the rest, \\(-\\int\\mathbf f\\cdot(\\mathbf v_{\\text{body}} - \\mathbf u_s)\\,ds\\). This treatment of slender bodies is the actuator line of wind-turbine studies [30], with Peskin's interaction equations [28] doing the reading and the spreading. The rods' impulses, summed with the weights RK4 gives the state, are spread into the water at the start of the next fluid step: momentum is in transit for 20 ms, never lost.",
+  "tr": "was Wolfram prüft. Das zweite Integral ist der ganze Verlust des Gesetzes, die Wärme, die sein Widerstand in der dünnen Grenzschicht und im Nachlauf der Stange erzeugt; einen Teil dieses Nachlaufs, \\(-\\int\\mathbf f\\cdot\\delta\\mathbf u_{k,s}\\,ds\\), löst das Gitter selbst auf, also ist die unterhalb des Gitters gebuchte Wärme der Rest, \\(-\\int\\mathbf f\\cdot(\\mathbf v_{\\text{body}} - \\mathbf u_s)\\,ds\\). Diese Behandlung schlanker Körper ist die Aktuatorlinie aus Studien an Windturbinen [30], wobei Peskins Kopplungsgleichungen [28] das Ablesen und das Verteilen besorgen. Die Kraftstöße der Stangen, mit den Gewichten summiert, die RK4 dem Zustand gibt, werden zu Beginn des nächsten Fluidschritts ins Wasser verteilt: Der Impuls ist 20 ms unterwegs, nie verloren."
+ },
  "35b40a922604": {
   "src": "The first term is never negative and is zero for one choice of \\(u\\); the second does not depend on \\(u\\) at all. So the best force makes the first term vanish, and the least cost from \\(\\mathbf s\\) is the second term. But we assumed that least cost to be \\(\\mathbf s^{\\mathsf T}\\mathbf P\\mathbf s\\): the bracket must be \\(\\mathbf P\\) itself. That is the discrete Riccati equation,",
   "tr": "Der erste Term ist nie negativ und ist für genau eine Wahl von \\(u\\) null; der zweite hängt überhaupt nicht von \\(u\\) ab. Also bringt die beste Kraft den ersten Term zum Verschwinden, und die geringsten Kosten von \\(\\mathbf s\\) aus sind der zweite Term. Wir hatten diese geringsten Kosten aber als \\(\\mathbf s^{\\mathsf T}\\mathbf P\\mathbf s\\) angenommen: Die Klammer muss \\(\\mathbf P\\) selbst sein. Das ist die diskrete Riccati-Gleichung,"
@@ -462,6 +466,10 @@
  "36931210f679": {
   "src": "The gains are the controller’s six numbers: how many newtons it pushes per unit of each error (per metre, radian, m/s, rad/s). <i>The loop period</i>: designed knowing that the computer looks only every <i>T</i><sub>s</sub> (7.5). <i>Continuous time</i>: designed as if it looked all the time (7), which fails for slow loops (8).",
   "tr": "Die Verstärkungen sind die sechs Zahlen des Reglers: wie viele Newton er pro Einheit jedes Fehlers drückt (pro Meter, Radiant, m/s, rad/s). <i>Die Taktzeit</i>: entworfen in dem Wissen, dass der Computer nur alle <i>T</i><sub>s</sub> hinschaut (7.5). <i>Kontinuierliche Zeit</i>: entworfen, als schaute er ständig hin (7), was bei langsamen Regelkreisen versagt (8)."
+ },
+ "369e8e83d183": {
+  "src": "cylinder in a channel, Schäfer–Turek 2D-1 [29], 10, 20 and 39 cells per diameter: \\(c_D\\) from the momentum through a box round it; the length \\(L_a\\) of the eddy behind it",
+  "tr": "Zylinder in einem Kanal, Schäfer–Turek 2D-1 [29], 10, 20 und 39 Zellen pro Durchmesser: \\(c_D\\) aus dem Impuls durch einen Kasten um ihn; die Länge \\(L_a\\) des Wirbels hinter ihm"
  },
  "36ce6e9e7f21": {
   "src": "<b>The row for \\(\\theta_2\\).</b> From (5), \\(\\partial T/\\partial\\dot\\theta_2 = d_3\\cos\\theta_2\\,\\dot x + d_5\\cos(\\theta_1-\\theta_2)\\dot\\theta_1 + d_6\\dot\\theta_2\\). Its time derivative is",
@@ -703,6 +711,10 @@
   "src": "Projects",
   "tr": "Projekte"
  },
+ "5416e8f451d9": {
+  "src": "with \\(Q_0\\) holding also the shear of the water on the cart (no slip at the true surface, the wall's distance inside a cell taken into account; the cart's share is what the viscous step changes in the water's momentum, less what the tank's walls and ends take) and the rods' pushes that land inside it. \\(K_x\\) is the water the cart must push aside. The machine moves in 1 ms steps of the page's RK4 within each 20 ms fluid step, so \\(F_c\\) cannot wait for \\(\\dot x'\\); instead the cart carries \\(m_a = -K_x\\Delta t\\) as extra mass while the held force is \\(G = Q_0 + K_x\\dot x_0\\):",
+  "tr": "wobei \\(Q_0\\) auch die Scherung des Wassers am Wagen enthält (Haftung an der wahren Oberfläche, der Wandabstand innerhalb einer Zelle berücksichtigt; der Anteil des Wagens ist, was der Viskositätsschritt am Impuls des Wassers ändert, abzüglich dessen, was die Wände und Enden des Tanks nehmen) und die Stöße der Stangen, die in ihm landen. \\(K_x\\) ist das Wasser, das der Wagen beiseiteschieben muss. Die Maschine bewegt sich in 1-ms-Schritten des RK4 der Seite innerhalb jedes 20-ms-Fluidschritts, also kann \\(F_c\\) nicht auf \\(\\dot x'\\) warten; stattdessen trägt der Wagen \\(m_a = -K_x\\Delta t\\) als zusätzliche Masse, während die gehaltene Kraft \\(G = Q_0 + K_x\\dot x_0\\) ist:"
+ },
  "5561b25d09a8": {
   "src": "If the rods fall",
   "tr": "Wenn die Stangen fallen"
@@ -911,6 +923,10 @@
   "src": "Two rods stand one on top of the other on a cart, hinged and free to fall. Nothing holds them up but the cart: a motor pushes it left and right along a rail, and a controller decides how hard, a hundred times a second. Flick the top rod, send the cart somewhere, or make the motor weak and the controller slow, and see when balancing stops being possible.",
   "tr": "Zwei Stangen stehen übereinander auf einem Wagen, mit Gelenken verbunden und frei, umzufallen. Nichts hält sie oben außer dem Wagen: Ein Motor schiebt ihn auf einer Schiene nach links und rechts, und ein Regler entscheidet hundertmal pro Sekunde, wie stark. Schnippen Sie gegen die obere Stange, schicken Sie den Wagen irgendwohin, oder machen Sie den Motor schwach und den Regler langsam, und sehen Sie, wann das Balancieren unmöglich wird."
  },
+ "72fc4841d082": {
+  "src": "within 0.01–1.8 % (without \\(\\delta\\mathbf u_k\\): 4–21 %)",
+  "tr": "innerhalb von 0.01–1.8 % (ohne \\(\\delta\\mathbf u_k\\): 4–21 %)"
+ },
  "735934481431": {
   "src": "<span class=\"pbox__t\">Key result · the balancing law</span> \\[ u = -\\mathbf K\\mathbf s, \\qquad \\mathbf K = \\rho^{-1}\\mathbf B^{\\mathsf T}\\mathbf P . \\tag{16} \\]",
   "tr": "<span class=\"pbox__t\">Kernergebnis · das Balancier-Gesetz</span> \\[ u = -\\mathbf K\\mathbf s, \\qquad \\mathbf K = \\rho^{-1}\\mathbf B^{\\mathsf T}\\mathbf P . \\tag{16} \\]"
@@ -930,6 +946,10 @@
  "752be5678db3": {
   "src": "wind over grass",
   "tr": "Wind über Gras"
+ },
+ "759e12c442b8": {
+  "src": "<b>The rods.</b> Every one of the 24 Gauss points of a rod reads the water's velocity there with the same kernel, \\(\\mathbf u_s(s) = \\sum \\mathbf u\\,\\delta_h(\\mathbf x - \\mathbf r(s))\\,\\Delta^2\\) over the grid of cell size \\(\\Delta\\). That water has already been slowed by the rod's own push. The law (33)–(34) is written for the water as it would be without the rod: its drag coefficient is measured against the stream far upstream, and so it already contains the rod's own slowing of the water. A rod that used \\(\\mathbf u_s\\) as it is would count that slowing twice, and held in a stream it felt 4 to 21 % too little drag. So each rod \\(k\\) carries its own disturbance \\(\\delta\\mathbf u_k\\), a second field that obeys the equations (41) linearised about the flow, is driven only by that rod's push, and has the cart at rest and no stream coming in. The rod uses the water without it; the other rod's wake, the cart's and the stream all stay. The force per metre is then the law of (33), (34) and (39):",
+  "tr": "<b>Die Stangen.</b> Jeder der 24 Gauß-Punkte einer Stange liest dort die Geschwindigkeit des Wassers mit demselben Kern ab, \\(\\mathbf u_s(s) = \\sum \\mathbf u\\,\\delta_h(\\mathbf x - \\mathbf r(s))\\,\\Delta^2\\) über das Gitter der Zellgröße \\(\\Delta\\). Dieses Wasser hat der eigene Druck der Stange schon verlangsamt. Das Gesetz (33)–(34) ist für das Wasser geschrieben, wie es ohne die Stange wäre: Sein Widerstandsbeiwert wird gegen den Strom weit stromaufwärts gemessen und enthält deshalb die Verlangsamung des Wassers durch die Stange selbst schon. Eine Stange, die \\(\\mathbf u_s\\) so nähme, wie es ist, zählte diese Verlangsamung doppelt, und in einem Strom festgehalten spürte sie 4 bis 21 % zu wenig Widerstand. Deshalb trägt jede Stange \\(k\\) ihre eigene Störung \\(\\delta\\mathbf u_k\\) mit sich: ein zweites Feld, das den um die Strömung linearisierten Gleichungen (41) gehorcht, nur vom Druck dieser Stange angetrieben wird, den Wagen in Ruhe hat und keinen hereinkommenden Strom. Die Stange nimmt das Wasser ohne sie; der Nachlauf der anderen Stange, der des Wagens und der Strom bleiben alle. Die Kraft pro Meter ist dann das Gesetz aus (33), (34) und (39):"
  },
  "76a1b2738ad8": {
   "src": "Read row 1 as Newton’s law for the whole machine sideways: \\(d_1\\ddot x\\) plus the sideways accelerations of the two centres of mass equals the only outside sideways force, \\(u\\). The \\(\\mathbf C\\) terms are the centripetal parts of those accelerations: a turning rod’s centre of mass accelerates toward its hinge, and when the rod leans that pull has a sideways part. In rows 2 and 3, \\(-f\\sin\\theta\\) is gravity’s torque, which pushes a leaning rod further over.",
@@ -1107,6 +1127,10 @@
   "src": "Arriving moving has a price: the cart keeps going. Until 5 November 2026 the page let it, and in the browser tests of 11.3 the cart got between 6 and 200 m from where it started within the 60 s of a run (with the plan made to arrive at rest, it never left \\(\\pm1.54\\) m). A real rail has an end, so the page now brings the cart to rest after the catch, carefully. How carefully is the subject of the next subsection.",
   "tr": "Das Ankommen in Bewegung hat seinen Preis: Der Wagen rollt weiter. Bis zum 5. November 2026 ließ die Seite das zu, und in den Browsertests aus 11.3 entfernte sich der Wagen innerhalb der 60 s eines Laufs 6 bis 200 m von seinem Startpunkt (mit einem Plan, der in Ruhe ankommen musste, verließ er nie \\(\\pm1.54\\) m). Eine wirkliche Schiene hat ein Ende, darum bringt die Seite den Wagen nach dem Fangen jetzt zum Stehen, vorsichtig. Wie vorsichtig, ist Gegenstand des nächsten Unterabschnitts."
  },
+ "8e1466d0fec4": {
+  "src": "below \\(1.2\\times10^{-2}\\) s⁻¹",
+  "tr": "unter \\(1.2\\times10^{-2}\\) s⁻¹"
+ },
  "8e166b097267": {
   "src": "Wikipedia, <a href=\"https://en.wikipedia.org/wiki/Glycerol\">“Glycerol”</a>: 1.261 g/cm³, 1.412 Pa s at 20 °C.",
   "tr": "Wikipedia, <a href=\"https://en.wikipedia.org/wiki/Glycerol\">„Glycerol“</a>: 1.261 g/cm³, 1.412 Pa s bei 20 °C."
@@ -1126,6 +1150,10 @@
  "8faefae98f2b": {
   "src": "Two things are new. The weights depend on the period: for a short one, \\(\\mathbf Q_d \\approx \\mathbf Q T_s\\) and \\(R_d \\approx \\rho T_s\\), as a rectangle rule would give. And a cross term \\(\\mathbf N_d\\) appears, of second order in the period, \\(\\mathbf N_d \\approx \\tfrac12 T_s^2\\,\\mathbf Q\\mathbf B\\): a force held for a while moves the state during the period, and the cost of that motion is charged to the force. A rectangle rule would miss it. All three integrals are one integral in the augmented variable of 7.2, because \\(\\mathbf z(t) = e^{\\bar{\\mathbf A}t}\\mathbf z_k\\) and the integrand is \\(\\mathbf z^{\\mathsf T}\\bar{\\mathbf Q}\\mathbf z\\) with \\(\\bar{\\mathbf Q} = \\operatorname{diag}(\\mathbf Q, \\rho)\\):",
   "tr": "Zweierlei ist neu. Die Gewichte hängen von der Periode ab: Für eine kurze gilt \\(\\mathbf Q_d \\approx \\mathbf Q T_s\\) und \\(R_d \\approx \\rho T_s\\), wie es eine Rechteckregel ergäbe. Und es erscheint ein Kreuzterm \\(\\mathbf N_d\\), von zweiter Ordnung in der Periode, \\(\\mathbf N_d \\approx \\tfrac12 T_s^2\\,\\mathbf Q\\mathbf B\\): Eine Kraft, die eine Weile gehalten wird, bewegt den Zustand während der Periode, und die Kosten dieser Bewegung werden der Kraft angerechnet. Eine Rechteckregel würde ihn übersehen. Alle drei Integrale sind ein einziges Integral in der erweiterten Variablen aus 7.2, denn \\(\\mathbf z(t) = e^{\\bar{\\mathbf A}t}\\mathbf z_k\\), und der Integrand ist \\(\\mathbf z^{\\mathsf T}\\bar{\\mathbf Q}\\mathbf z\\) mit \\(\\bar{\\mathbf Q} = \\operatorname{diag}(\\mathbf Q, \\rho)\\):"
+ },
+ "9024b479526c": {
+  "src": "within 0.26 %",
+  "tr": "innerhalb von 0.26 %"
  },
  "9074e03a96d9": {
   "src": "K. J. Åström and K. Furuta, <a href=\"https://www.control.utoronto.ca/~broucke/ece1653s/Intro/ast_fur96.pdf\">“Swinging up a pendulum by energy control”</a>, IFAC World Congress, 1996; <em>Automatica</em> 36, 287–295 (2000): the energy law for one rod on an accelerated pivot, equations (1)–(4).",
@@ -1154,6 +1182,10 @@
  "94797063b698": {
   "src": "\\(\\mathbf K_d\\) on \\(x\\) (N/m)",
   "tr": "\\(\\mathbf K_d\\) für \\(x\\) (N/m)"
+ },
+ "947eee4e7edd": {
+  "src": "With each rod's own disturbance computed beside the water, a fluid step of 20 ms costs about 30 ms in Chromium on this computer, so the page runs in slow motion, about 0.7 of real time, and the caption says so; it leaves time to watch the controller work. <b>Left out.</b> The flow through the depth round the rods and any change of the flow across the depth; friction on the tank's front and back walls; the rail; the water's surface; for air and water, the eddies smaller than a cell.",
+  "tr": "Wird die eigene Störung jeder Stange neben dem Wasser berechnet, kostet ein Fluidschritt von 20 ms auf diesem Rechner in Chromium etwa 30 ms, also läuft die Seite in Zeitlupe, mit etwa 0.7 der Echtzeit, und die Bildunterschrift sagt es; so bleibt Zeit, dem Regler bei der Arbeit zuzusehen. <b>Weggelassen.</b> Die Strömung durch die Tiefe um die Stangen und jede Änderung der Strömung über die Tiefe; Reibung an der Vorder- und Rückwand des Tanks; die Schiene; die Wasseroberfläche; für Luft und Wasser die Wirbel, die kleiner als eine Zelle sind."
  },
  "948cd881248c": {
   "src": "Cart position",
@@ -1483,6 +1515,10 @@
   "src": "Leans from upright, positive to the right.",
   "tr": "Neigungen gegen die Senkrechte, positiv nach rechts."
  },
+ "b951bb709a38": {
+  "src": "both rods held across, along and at 45° to a stream of glycerol, honey or water, 0.01–0.5 m/s: each rod's force against the same rod held without pushing the water",
+  "tr": "beide Stangen quer, längs und unter 45° in einem Strom aus Glycerin, Honig oder Wasser festgehalten, 0.01–0.5 m/s: die Kraft jeder Stange gegen dieselbe Stange, festgehalten, ohne das Wasser zu schieben"
+ },
  "ba7ae7e5bbd1": {
   "src": "<span class=\"pfig__n\">Figure 1</span>The model. Each angle is measured from the <em>upward</em> vertical (dashed), positive when the rod leans to the right, the same way as \\(x\\) and \\(u\\). The dots are the centres of mass, half-way along each uniform rod.",
   "tr": "<span class=\"pfig__n\">Abbildung 1</span>Das Modell. Jeder Winkel wird von der <em>nach oben</em> zeigenden Senkrechten (gestrichelt) aus gemessen, positiv, wenn sich die Stange nach rechts neigt, in dieselbe Richtung wie \\(x\\) und \\(u\\). Die Punkte sind die Schwerpunkte, in der Mitte jeder homogenen Stange."
@@ -1518,6 +1554,10 @@
  "bd896fdff234": {
   "src": "to +1 m",
   "tr": "nach +1 m"
+ },
+ "be70657fd3d2": {
+  "src": "5.71, 5.71, 5.64; 0.113, 0.114, 0.115 Pa",
+  "tr": "5.71, 5.71, 5.64; 0.113, 0.114, 0.115 Pa"
  },
  "bec7c512e2f9": {
   "src": "Balancing Two Rods on a Cart<span class=\"dot\">.</span>",
@@ -1670,6 +1710,10 @@
  "d358c2adc046": {
   "src": "divergence left after the pressure step",
   "tr": "Divergenz, die nach dem Druckschritt übrig bleibt"
+ },
+ "d40433a69157": {
+  "src": "5.57–5.59; 0.1172–0.1176 Pa",
+  "tr": "5.57–5.59; 0.1172–0.1176 Pa"
  },
  "d404968ea90b": {
   "src": "Medium",
@@ -1895,6 +1939,14 @@
   "src": "Left out: friction in the hinges and wheels, the motor’s own dynamics (a real motor cannot change its force instantly), sensor noise, and a hard end of the rail (the planner keeps the cart within ±1.5 m; calming and balancing do not). Each is a known extension of this model [1, 3]. Every number on this page that is not derived or taken from a source is a choice of ours, and the text says so where it is made: the weight on \\(x\\), the ranges of the sliders, \\(u_\\text{max} = 60\\) N, the planner’s weights and rail limit, the calming gains, the glide rate of (26), the share \\(\\gamma = 0.5\\) of the certified level in the braking (27a), the spring and the largest acceleration of your hand in (29), the rectangle rule in (23), and the shells, directions and climbs of the certificate (19a).",
   "tr": "Weggelassen: Reibung in den Gelenken und Rädern, die eigene Dynamik des Motors (ein wirklicher Motor kann seine Kraft nicht sofort ändern), Rauschen der Sensoren und ein hartes Ende der Schiene (der Planer hält den Wagen innerhalb von ±1.5 m; Beruhigen und Balancieren tun das nicht). Jedes davon ist eine bekannte Erweiterung dieses Modells [1, 3]. Jede Zahl auf dieser Seite, die nicht hergeleitet oder einer Quelle entnommen ist, ist unsere Wahl, und der Text sagt das dort, wo sie getroffen wird: das Gewicht auf \\(x\\), die Bereiche der Schieberegler, \\(u_\\text{max} = 60\\) N, die Gewichte und die Schienengrenze des Planers, die Verstärkungen des Beruhigens, die Gleitrate aus (26), der Anteil \\(\\gamma = 0.5\\) des gesicherten Niveaus beim Bremsen (27a), die Feder und die größte Beschleunigung Ihrer Hand in (29), die Rechteckregel in (23) und die Schalen, Richtungen und Anstiege des Zertifikats (19a)."
  },
+ "ed96626eb469": {
+  "src": "<b>The books.</b> The data panel's group <i>The solved fluid</i> keeps the water's own book: the motor's work and what the stream brings in through the ends of the tank equal the machine's energy, the water's kinetic energy \\(K_f = \\tfrac12\\rho b\\sum w\\,u^2\\Delta^2\\), the rods' heat (43) and the heat of viscosity in the resolved flow, plus a remainder \\(R\\) that the scheme loses, and \\(R\\) is split into its causes. In glycerol, after a tilt of 4.6° and 2.9° balanced for 3 s, the motor does 1.33 J: 0.012 J stay in the machine, 0.005 J in the water, the rods' drag makes 0.107 J of heat below the grid and viscosity 0.98 J in the flow, and \\(R\\) is 0.23 J, 17 %. The pressure step removes 0.21 J with the part of the flow it projects away, less for shorter fluid steps (0.12 J at 10 ms); the transport step loses 0.09 J at the scale of a cell, the same for any step; forcing the water in the faces the cart cuts to the cart's velocity costs 0.05 J; and the cart's coupling gives 0.11 J back, because the machine feels the pressure at its mean velocity over a step while the water receives its work at the end velocity, \\(J\\,\\Delta\\dot x/2\\) per step for a pressure impulse \\(J\\) (Wolfram). \\(R\\) is 8 % in honey. In water it is 80 %: at 2.5 cm cells water is far too thin for the grid, its eddies end at the cell size, and the scheme's loss stands for the cascade to small eddies that would turn the same energy into heat. The flow drawn in water is right in its large swirls, not in its fine detail. Over 60 s with the rods kicked every 15 s, \\(R\\) stays at the same share in every liquid and the balance holds.",
+  "tr": "<b>Die Bilanzen.</b> Die Gruppe <i>Das gelöste Fluid</i> des Datenpanels führt die eigene Bilanz des Wassers: Die Arbeit des Motors und was der Strom durch die Enden des Tanks hereinbringt, sind gleich der Energie der Maschine, der kinetischen Energie des Wassers \\(K_f = \\tfrac12\\rho b\\sum w\\,u^2\\Delta^2\\), der Wärme der Stangen (43) und der Wärme der Viskosität in der aufgelösten Strömung, plus einem Rest \\(R\\), den das Verfahren verliert, und \\(R\\) wird in seine Ursachen zerlegt. In Glycerin, nach einer Neigung von 4.6° und 2.9°, 3 s lang ausbalanciert, verrichtet der Motor 1.33 J: 0.012 J bleiben in der Maschine, 0.005 J im Wasser, der Widerstand der Stangen erzeugt 0.107 J Wärme unterhalb des Gitters und die Viskosität 0.98 J in der Strömung, und \\(R\\) ist 0.23 J, 17 %. Der Druckschritt entfernt 0.21 J mit dem Teil der Strömung, den er wegprojiziert, weniger bei kürzeren Fluidschritten (0.12 J bei 10 ms); der Transportschritt verliert 0.09 J auf der Größe einer Zelle, gleich für jeden Schritt; das Wasser in den Flächen, die der Wagen schneidet, auf die Geschwindigkeit des Wagens zu zwingen, kostet 0.05 J; und die Kopplung des Wagens gibt 0.11 J zurück, weil die Maschine den Druck bei ihrer mittleren Geschwindigkeit über einen Schritt spürt, während das Wasser seine Arbeit bei der Endgeschwindigkeit erhält, \\(J\\,\\Delta\\dot x/2\\) pro Schritt für einen Druckstoß \\(J\\) (Wolfram). In Honig ist \\(R\\) 8 %. In Wasser sind es 80 %: Bei 2.5 cm großen Zellen ist Wasser für das Gitter viel zu dünnflüssig, seine Wirbel enden an der Zellgröße, und der Verlust des Verfahrens steht für die Kaskade zu kleinen Wirbeln, die dieselbe Energie in Wärme verwandeln würde. Die in Wasser gezeichnete Strömung stimmt in ihren großen Wirbeln, nicht im feinen Detail. Über 60 s, mit den Stangen alle 15 s angestoßen, bleibt \\(R\\) in jeder Flüssigkeit beim gleichen Anteil, und die Bilanz geht auf."
+ },
+ "ee4af0b1509e": {
+  "src": "What is still not right, measured. Each rod removes all of its own disturbance, also the wake it left a swing ago; a real rod swinging back into its old wake would feel it. How much that can matter is bounded by removing a rod's disturbance altogether: for rods carried to and fro through still water it changes their force by 1–3 %. On the benchmark, at 39 cells per diameter, \\(\\Delta p\\) is 2 % below the published band and \\(c_D\\) 0.5–1 % above it; the transport step does not keep momentum exactly, about 1–2 % of the cylinder's drag. A cylinder in a gently oscillating stream stays 2 % low and 5.5 % high in the two parts of its exact unsteady-Stokes force (Wolfram and an independent derivation agree on the exact one) and does not improve on finer cells; that cause is not found. Two earlier faults are mended: water entering the benchmark channel was free to turn as it came in, where the benchmark makes it enter straight, and that alone made the flow 5 % weak at every grid; and the water's viscous push on a body was weighted by the fluid share of each cell face, which missed part of the wall's shear. A body's force is now what the viscous step changes in the water next to it, so body and water exchange exactly equal momentum.",
+  "tr": "Was noch nicht stimmt, gemessen. Jede Stange entfernt ihre ganze eigene Störung, auch den Nachlauf, den sie einen Schwung zuvor hinterlassen hat; eine echte Stange, die in ihren alten Nachlauf zurückschwingt, würde ihn spüren. Wie viel das ausmachen kann, begrenzt man, indem man die Störung einer Stange ganz entfernt: Bei Stangen, die durch ruhendes Wasser hin und her getragen werden, ändert das ihre Kraft um 1–3 %. Beim Vergleichsfall liegt bei 39 Zellen pro Durchmesser \\(\\Delta p\\) 2 % unter dem veröffentlichten Band und \\(c_D\\) 0.5–1 % darüber; der Transportschritt erhält den Impuls nicht genau, etwa 1–2 % des Widerstands des Zylinders. Ein Zylinder in einem sanft schwingenden Strom bleibt in den beiden Teilen seiner exakten instationären Stokes-Kraft 2 % zu niedrig und 5.5 % zu hoch (Wolfram und eine unabhängige Herleitung stimmen in der exakten überein) und wird auf feineren Zellen nicht besser; diese Ursache ist nicht gefunden. Zwei frühere Fehler sind behoben: Wasser, das in den Kanal des Vergleichsfalls eintrat, durfte sich beim Eintreten drehen, wo der Vergleichsfall es gerade eintreten lässt, und das allein machte die Strömung auf jedem Gitter 5 % zu schwach; und der zähe Schub des Wassers auf einen Körper war mit dem Fluidanteil jeder Zellfläche gewichtet, wodurch ein Teil der Wandschubspannung fehlte. Die Kraft eines Körpers ist jetzt, was der Viskositätsschritt im Wasser neben ihm ändert, also tauschen Körper und Wasser genau gleich viel Impuls aus."
+ },
  "ee4c322a9d78": {
   "src": "Grab a rod in the figure, pull it over and let go. Or grab the cart and drag it: while you hold it the motor lets go, and you see what the cart’s motion alone does to the rods.",
   "tr": "Fassen Sie eine Stange in der Abbildung, ziehen Sie sie um und lassen Sie los. Oder fassen Sie den Wagen und ziehen Sie ihn: Solange Sie ihn halten, lässt der Motor los, und Sie sehen, was die Bewegung des Wagens allein mit den Stangen macht."
@@ -1955,6 +2007,10 @@
   "src": "Can one force at the bottom really bring two angles <em>and</em> the cart back? Kalman’s test answers it: the system (11) can be steered from any state to any other exactly when the six vectors \\(\\mathbf B, \\mathbf A\\mathbf B, \\dots, \\mathbf A^5\\mathbf B\\) are independent, that is when the matrix \\([\\mathbf B\\;\\mathbf A\\mathbf B\\;\\cdots\\;\\mathbf A^5\\mathbf B]\\) has rank 6 [3]. The idea behind it: \\(\\mathbf B\\) is where a push sends the state at once, \\(\\mathbf A\\mathbf B\\) where the motion carries that a moment later, and so on; if these directions fill all six dimensions, a suitable sequence of pushes can reach every state. For the default machine the rank is 6. The cart reaches the upper rod only through the lower one, but because the two rods fall at different rates (5.1) the cart can tell them apart.",
   "tr": "Kann eine Kraft unten wirklich zwei Winkel <em>und</em> den Wagen zurückbringen? Kalmans Test beantwortet das: Das System (11) lässt sich genau dann von jedem Zustand in jeden anderen steuern, wenn die sechs Vektoren \\(\\mathbf B, \\mathbf A\\mathbf B, \\dots, \\mathbf A^5\\mathbf B\\) linear unabhängig sind, das heißt, wenn die Matrix \\([\\mathbf B\\;\\mathbf A\\mathbf B\\;\\cdots\\;\\mathbf A^5\\mathbf B]\\) den Rang 6 hat [3]. Die Idee dahinter: \\(\\mathbf B\\) ist die Richtung, in die ein Schub den Zustand sofort bringt, \\(\\mathbf A\\mathbf B\\) die, in die die Bewegung das einen Augenblick später trägt, und so weiter; füllen diese Richtungen alle sechs Dimensionen, kann eine geeignete Folge von Schüben jeden Zustand erreichen. Für die voreingestellte Maschine ist der Rang 6. Der Wagen erreicht die obere Stange nur über die untere, aber weil die beiden Stangen mit verschiedenen Raten fallen (5.1), kann der Wagen sie auseinanderhalten."
  },
+ "f57b2d312d9e": {
+  "src": "equal",
+  "tr": "gleich"
+ },
  "f5cbdf6bfb51": {
   "src": "Contents",
   "tr": "Inhalt"
@@ -1982,6 +2038,10 @@
  "f7454132c230": {
   "src": "<span class=\"psub__n\">13.2</span>From the Stokes equations to a force per metre",
   "tr": "<span class=\"psub__n\">13.2</span>Von den Stokes-Gleichungen zu einer Kraft pro Meter"
+ },
+ "f74b735b7a20": {
+  "src": "the same: \\(c_D\\) read on the body; the pressure difference \\(\\Delta p\\) across it",
+  "tr": "dasselbe: \\(c_D\\) am Körper abgelesen; der Druckunterschied \\(\\Delta p\\) über ihn"
  },
  "f7a8477c922d": {
   "src": "Figure 1 shows the parts. The <b>cart</b>, of mass \\(m_0\\), rolls on a straight horizontal <b>rail</b>; its position along the rail is \\(x\\). A <b>motor</b> pushes it with a horizontal force \\(u\\), positive to the right, never larger in size than \\(u_\\text{max}\\). Through the middle of the cart runs a <b>slot</b>, open at the top and bottom, and the cart rides on two rails, one on each side of it. Across the top of the slot sits a <b>hinge</b>, a pin through a bearing, which lets the lower rod turn freely in the plane of the picture and in no other way. The <b>lower rod</b> is a uniform bar of mass \\(m_1\\) and length \\(L_1\\). At its top end a second free hinge carries the <b>upper rod</b>, a uniform bar of mass \\(m_2\\) and length \\(L_2\\). No motor sits in either hinge.",
