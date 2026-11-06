@@ -1,4 +1,4 @@
-/* Fig. 12: drawing the cart and the pint of stout (canvas 2D). Reads the state of a CoffeeCart.World; computes nothing
+/* Fig. 12: drawing the cart and the pint of stout (canvas 2D). Reads the state of a StoutCart.World; computes nothing
  * physical. The surface of the stout is the liquid column height computed by the solver (Fluid.columnHeights), read
  * on a polar grid over the whole glass (the half that is not solved is its mirror image), seen from slightly above.
  * The creamy head is DRAWN, not simulated: a layer of constant thickness headH laid on the simulated surface. */
@@ -18,7 +18,7 @@
     this.scale = o.scale || 2600;        // px per metre
     this.elev = (o.elevDeg != null ? o.elevDeg : 14) * Math.PI / 180;
     this.nr = o.nr || 9; this.nth = o.nth || 48;
-    this.bodyW = 0.22; this.bodyH = 0.03; this.headH = o.headH != null ? o.headH : 0.012; this.carrierGap = 0.006; this.cupWall = 0.004; this.cupBase = 0.006;
+    this.bodyW = 0.22; this.bodyH = 0.03; this.headH = o.headH != null ? o.headH : 0.012; this.carrierGap = 0.006; this.glassWall = 0.004; this.glassBase = 0.006;
     this.groundY = o.groundY || 0.80;   // fraction of canvas height where z = 0 sits
     this.camX = null;
   }
@@ -105,19 +105,19 @@
     ctx.fillText('BODY', X(c.x), Z(bodyZ + this.bodyH / 2) + 4 * dpr);
 
     // the glass and the stout, seen from slightly above
-    this.drawCup(X(c.x), Z(bodyZ + this.bodyH), extra);
+    this.drawGlass(X(c.x), Z(bodyZ + this.bodyH), extra);
   };
 
-  View.prototype.drawCup = function (cx, cy, extra) {
+  View.prototype.drawGlass = function (cx, cy, extra) {
     const ctx = this.ctx, s = this.scale, f = this.world.fluid, R = f.R, e = this.elev, se = Math.sin(e), ce = Math.cos(e);
     const dpr = this.cv.width / (this.cssW || this.cv.width);
-    const base = this.cupBase, Hcup = f.H, Ro = R + this.cupWall;
-    // projection: x right, y away from the viewer, z up (cup frame, z = 0 at the inner bottom)
+    const base = this.glassBase, Hglass = f.H, Ro = R + this.glassWall;
+    // projection: x right, y away from the viewer, z up (glass frame, z = 0 at the inner bottom)
     const P = (x, y, z) => [cx + x * s, cy - (base + z) * ce * s - y * se * s];
     const ell = (z, r, from, to, ccw) => { const [px, py] = P(0, 0, z); ctx.ellipse(px, py, r * s, r * se * s, 0, from, to, ccw); };
 
-    // back half of the cup: inside wall
-    ctx.beginPath(); ell(Hcup, Ro, Math.PI, 2 * Math.PI); ell(-base, Ro, 2 * Math.PI, Math.PI, true); ctx.closePath();
+    // back half of the glass: inside wall
+    ctx.beginPath(); ell(Hglass, Ro, Math.PI, 2 * Math.PI); ell(-base, Ro, 2 * Math.PI, Math.PI, true); ctx.closePath();
     ctx.fillStyle = 'rgba(205,214,218,0.55)'; ctx.fill();
 
     const Hs = this.surface(), nr = this.nr, nth = this.nth, hh = this.headH;
@@ -172,17 +172,17 @@
     ctx.strokeStyle = 'rgba(150,120,90,0.8)'; ctx.lineWidth = 1 * dpr; ctx.stroke();
 
     // glass: front wall tint, outlines, rim, base
-    ctx.beginPath(); ell(Hcup, Ro, 0, Math.PI); ell(-base, Ro, Math.PI, 0, true); ctx.closePath();
+    ctx.beginPath(); ell(Hglass, Ro, 0, Math.PI); ell(-base, Ro, Math.PI, 0, true); ctx.closePath();
     ctx.fillStyle = C.glass; ctx.fill();
     ctx.strokeStyle = C.line; ctx.lineWidth = 1.6 * dpr;
-    ctx.beginPath(); ell(Hcup, Ro, 0, 2 * Math.PI); ctx.stroke();
-    ctx.beginPath(); ell(Hcup, R, 0, 2 * Math.PI); ctx.strokeStyle = 'rgba(28,21,24,0.35)'; ctx.stroke();
+    ctx.beginPath(); ell(Hglass, Ro, 0, 2 * Math.PI); ctx.stroke();
+    ctx.beginPath(); ell(Hglass, R, 0, 2 * Math.PI); ctx.strokeStyle = 'rgba(28,21,24,0.35)'; ctx.stroke();
     ctx.strokeStyle = C.line;
-    ctx.beginPath(); const [lx0, ly0] = P(-Ro, 0, Hcup), [lx1, ly1] = P(-Ro, 0, -base); ctx.moveTo(lx0, ly0); ctx.lineTo(lx1, ly1); ctx.stroke();
-    ctx.beginPath(); const [rx0, ry0] = P(Ro, 0, Hcup), [rx1, ry1] = P(Ro, 0, -base); ctx.moveTo(rx0, ry0); ctx.lineTo(rx1, ry1); ctx.stroke();
+    ctx.beginPath(); const [lx0, ly0] = P(-Ro, 0, Hglass), [lx1, ly1] = P(-Ro, 0, -base); ctx.moveTo(lx0, ly0); ctx.lineTo(lx1, ly1); ctx.stroke();
+    ctx.beginPath(); const [rx0, ry0] = P(Ro, 0, Hglass), [rx1, ry1] = P(Ro, 0, -base); ctx.moveTo(rx0, ry0); ctx.lineTo(rx1, ry1); ctx.stroke();
     ctx.beginPath(); ell(-base, Ro, 0, Math.PI); ctx.stroke();
     this.lastSurface = Hs;
   };
 
-  root.CoffeeView = View;
+  root.StoutView = View;
 })(typeof self !== 'undefined' ? self : this);

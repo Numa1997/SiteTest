@@ -1,5 +1,5 @@
-// Offline checks of the coffee solver (node tools/fig12/check.js). Every number printed is measured.
-const fs = require('fs'), path = require('path'); const mod = { exports: {} }; new Function('module', fs.readFileSync(path.join(__dirname, '../../public/scripts/coffee-cart.js'), 'utf8'))(mod); const { Fluid } = mod.exports;
+// Offline checks of the stout solver (node tools/fig12/check.cjs). Every number printed is measured.
+const fs = require('fs'), path = require('path'); const mod = { exports: {} }; new Function('module', fs.readFileSync(path.join(__dirname, '../../public/scripts/stout-cart.js'), 'utf8'))(mod); const { Fluid } = mod.exports;
 const which = process.argv[2] || 'all';
 const dt = 1 / 400;
 function wallDiff(f) { const xr = 0.8 * f.R; return f.surfaceHeight(xr, 0) - f.surfaceHeight(-xr, 0); }
@@ -38,5 +38,5 @@ if (which === 'all' || which === 'tilt') {
     if (t > 1.5 && n % 4 === 0) { const xr = 0.6 * f.R; sl.push((f.surfaceHeight(xr, 0) - f.surfaceHeight(-xr, 0)) / (2 * xr)); }
   }
   const m = sl.reduce((a, b) => a + b, 0) / sl.length;
-  console.log(`steady push a = ${A} m/s^2: mean surface slope ${m.toFixed(4)} (exact for a fluid at rest in the cup: -a/g = ${(-A/9.81).toFixed(4)})`);
+  console.log(`steady push a = ${A} m/s^2: mean surface slope ${m.toFixed(4)} (exact for a fluid at rest in the glass: -a/g = ${(-A/9.81).toFixed(4)})`);
 }

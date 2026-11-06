@@ -1,35 +1,35 @@
-/* Fig. 12: a cup of coffee on a one-wheel cart.
+/* Fig. 12: a pint of Guinness on a one-wheel cart.
  *
- * Fluid: the incompressible Navier–Stokes equations for the coffee, solved in the cup's frame by APIC
+ * Fluid: the incompressible Navier–Stokes equations for the stout, solved in the glass's frame by APIC
  * (particles carry the velocity and its local gradient, a staggered MAC grid enforces div u = 0):
- *     Du/Dt = -grad(p)/rho + nu lap(u) + g - a_cup(t),   div u = 0,   p = 0 on the free surface.
- * The cup translates with the cart body and never rotates, so its frame is non-inertial only through
- * the uniform fictitious force -a_cup. The cup is an upright circular cylinder (radius R); its wall is
+ *     Du/Dt = -grad(p)/rho + nu lap(u) + g - a_glass(t),   div u = 0,   p = 0 on the free surface.
+ * The glass translates with the cart body and never rotates, so its frame is non-inertial only through
+ * the uniform fictitious force -a_glass. The glass is an upright circular cylinder (radius R); its wall is
  * cut through the Cartesian cells with fractional face areas (Batty, Bertails & Bridson 2007), and the
  * free surface uses ghost-fluid pressure (Enright et al. 2003). The forcing lies in the x-z plane and the
- * cup is mirror-symmetric about y = 0, so the flow is too: only y >= 0 is solved, with v = 0 on y = 0.
+ * glass is mirror-symmetric about y = 0, so the flow is too: only y >= 0 is solved, with v = 0 on y = 0.
  *
  * Cart: one wheel with a radial tyre on a road z_r(x), a body guided vertically on the axle, a spring
  * and a damper between them, the cart free to roll in x. The tyre force acts along the contact normal,
- * so on a slope it has a horizontal part -N z_a'(x): that is what pushes the cup forward and back.
+ * so on a slope it has a horizontal part -N z_a'(x): that is what pushes the glass forward and back.
  * The liquid acts back on the cart through the rate of change of its momentum.
  *
- * SI units throughout. Runs in the browser (window.CoffeeCart) and in Node (require).
+ * SI units throughout. Runs in the browser (window.StoutCart) and in Node (require).
  */
 (function (root, factory) {
   if (typeof module === 'object' && module.exports) module.exports = factory();
-  else root.CoffeeCart = factory();
+  else root.StoutCart = factory();
 })(typeof self !== 'undefined' ? self : this, function () {
   'use strict';
 
   /* ------------------------------------------------------------------ fluid */
   function Fluid(o) {
     o = o || {};
-    this.R = o.R || 0.04;           // inner radius of the cup, m
-    this.h0 = o.h0 || 0.06;         // depth of coffee at rest, m
+    this.R = o.R || 0.04;           // inner radius of the glass, m
+    this.h0 = o.h0 || 0.06;         // depth of stout at rest, m
     this.dx = o.dx || 0.004;        // grid cell, m
     this.rho = o.rho || 1000;       // density, kg/m^3
-    this.nu = o.nu != null ? o.nu : 1.0e-6;   // kinematic viscosity, m^2/s (hot coffee ~ water: 0.3–1e-6)
+    this.nu = o.nu != null ? o.nu : 1.0e-6;   // kinematic viscosity, m^2/s (taken as water)
     this.g = o.g || 9.81;
     const R = this.R, dx = this.dx;
     this.nx = Math.round(2 * R / dx);
@@ -107,7 +107,7 @@
     this.pu = new Float64Array(n); this.pv = new Float64Array(n); this.pw = new Float64Array(n);
     // APIC: each particle also carries the local velocity gradient, one row per component (Jiang et al. 2015)
     this.pc = [0, 1, 2].map(() => [new Float64Array(n), new Float64Array(n), new Float64Array(n)]);
-    // the half cup holds half the liquid: m_l/2 = rho * pi R^2 h0 / 2, shared equally by the particles
+    // the half glass holds half the liquid: m_l/2 = rho * pi R^2 h0 / 2, shared equally by the particles
     this.mLiquid = this.rho * Math.PI * R * R * this.h0;
     this.mp = 0.5 * this.mLiquid / n;
     // radius of the particles for the surface reconstruction: one particle spacing, so that the liquid at rest
@@ -202,7 +202,7 @@
     const nx = this.nx, ny = this.ny, nz = this.nz, dx = this.dx, nc = this.nc;
     this.levelSetBins(); const cnt = this.cnt;
     const Rk = 2 * dx, R2 = Rk * Rk, r = this.rp, Rc = this.R - 0.5 * dx;
-    // the level set is measured only within two cells of an empty cell inside the cup; deeper cells are liquid
+    // the level set is measured only within two cells of an empty cell inside the glass; deeper cells are liquid
     const empty = this.emptyMask || (this.emptyMask = new Uint8Array(nc));
     for (let k = 0; k < nz; k++) for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) {
       const c = i + nx * (j + ny * k), xc = this.x0 + (i + 0.5) * dx, yc = (j + 0.5) * dx;
@@ -227,9 +227,9 @@
       this.fluid[c] = this.phi[c] < 0 || cnt[c] > 0 ? 1 : 0;
       if (cnt[c] > 0 && this.phi[c] >= 0) this.phi[c] = -this.forcedPhi * dx;
     }
-    // Cells cut by the cup wall hold few or no particles, and the particle level set reads them as air. A wall
+    // Cells cut by the glass wall hold few or no particles, and the particle level set reads them as air. A wall
     // cell that shares an open side face with liquid at the same height is liquid: otherwise it would be a
-    // pocket of zero pressure below the surface and the coffee would drain into it.
+    // pocket of zero pressure below the surface and the stout would drain into it.
     const R = this.R, ph = this.phi, fl = this.fluid;
     const U = (i, j, k) => i + (nx + 1) * (j + ny * k), V = (i, j, k) => i + nx * (j + (ny + 1) * k);
     for (let sweep = 0; sweep < 2; sweep++) for (let k = 0; k < nz; k++) for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) {
@@ -363,7 +363,7 @@
       const ql = fl[cl] ? q[cl] : ghost(cr, cl), qr = fl[cr] ? q[cr] : ghost(cl, cr);
       this.w[f] -= (qr - ql) / dx; this.kw[f] = 1;
     }
-    // Faces closed by the cup wall carry no flux, but they must not hold a zero velocity: particles sliding
+    // Faces closed by the glass wall carry no flux, but they must not hold a zero velocity: particles sliding
     // along the wall would read it and be braked as by a no-slip wall one cell thick. They are filled by
     // extrapolation from the liquid (free slip); the particle collision removes the normal part. Two planes
     // are exact: v = 0 on the mirror plane y = 0 (odd in y), w = 0 on the flat bottom and the lid.
@@ -502,7 +502,7 @@
     this.collide();
   };
 
-  // the glass: a particle outside the wall is put back inside and loses its outward speed; likewise bottom and lid
+  // the glass wall: a particle outside the wall is put back inside and loses its outward speed; likewise bottom and lid
   Fluid.prototype.collide = function () {
     const R = this.R, e = 0.02 * this.dx, Rin = R - e;
     for (let p = 0; p < this.np; p++) {
@@ -552,7 +552,7 @@
     this.collide();
   };
 
-  // momentum of the whole liquid relative to the cup (both halves): x and z components, kg m/s
+  // momentum of the whole liquid relative to the glass (both halves): x and z components, kg m/s
   Fluid.prototype.momentum = function () {
     let mx = 0, mz = 0;
     for (let p = 0; p < this.np; p++) { mx += this.pu[p]; mz += this.pw[p]; }
@@ -565,7 +565,7 @@
     return Math.sqrt(m);
   };
 
-  // one time step dt (s) with the cup's acceleration (ax, az) in m/s^2 held over the step
+  // one time step dt (s) with the glass's acceleration (ax, az) in m/s^2 held over the step
   Fluid.prototype.step = function (dt, ax, az) {
     this.levelSet();
     this.p2g();
@@ -578,7 +578,7 @@
     this.t += dt;
   };
 
-  // height of the free surface above the cup bottom at (x, y), found along the vertical from phi
+  // height of the free surface above the glass bottom at (x, y), found along the vertical from phi
   Fluid.prototype.surfaceHeight = function (x, y) {
     y = Math.abs(y);
     const dx = this.dx, Rk = 2 * dx, R2 = Rk * Rk, r = this.rp;
@@ -717,7 +717,7 @@
   /* ------------------------------------------------------------------- cart */
   function Cart(o) {
     o = o || {};
-    this.Mb = o.Mb || 1.5;       // body and cup, without the coffee, kg
+    this.Mb = o.Mb || 1.5;       // body and glass, without the stout, kg
     this.mw = o.mw || 0.3;       // wheel, kg
     this.Rw = o.Rw || 0.05;      // wheel radius, m
     this.Iw = o.Iw || 0.5 * this.mw * this.Rw * this.Rw;   // wheel moment of inertia (a disc), kg m^2
@@ -742,7 +742,7 @@
     this.vzb = 0; this.vzw = 0;
     this.N = (Ms + this.mw) * g; this.ax = 0; this.azb = 0; this.t = 0;
   };
-  // one step h with the liquid's reaction (Fx, Fz) on the cup (the part beyond rigid co-motion)
+  // one step h with the liquid's reaction (Fx, Fz) on the glass (the part beyond rigid co-motion)
   Cart.prototype.step = function (h, Fx, Fz) {
     const g = this.g, Ms = this.Mb + this.ml;
     const [za, dza] = this.road.axle(this.x);
@@ -784,10 +784,10 @@
       const c = this.cart, vx0 = c.vx, vz0 = c.vzb;
       const n = Math.max(1, Math.round(h / this.hCart)), hc = h / n;
       for (let i = 0; i < n; i++) c.step(hc, this.Fx, this.Fz);
-      const ax = (c.vx - vx0) / h, az = (c.vzb - vz0) / h;     // the cup's mean acceleration over the step
+      const ax = (c.vx - vx0) / h, az = (c.vzb - vz0) / h;     // the glass's mean acceleration over the step
       this.fluid.step(h, ax, az);
       const P = this.fluid.momentum();
-      // reaction of the liquid on the cup beyond rigid co-motion: -dP_rel/dt
+      // reaction of the liquid on the glass beyond rigid co-motion: -dP_rel/dt
       this.Fx = -(P[0] - this.P[0]) / h; this.Fz = -(P[1] - this.P[1]) / h;
       this.P = P; this.lastAx = ax; this.lastAz = az;
       left -= h; this.t += h;
