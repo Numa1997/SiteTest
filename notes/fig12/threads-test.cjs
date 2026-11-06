@@ -8,7 +8,7 @@ const { chromium } = require('playwright'), { spawn, execFileSync } = require('c
   const node = execFileSync('node', [path.join(__dirname, '../../tools/fig12/same.cjs'), String(dx)]).toString().trim();
   const b = await chromium.launch(); const pg = await b.newPage(); const errors = [];
   pg.on('pageerror', e => errors.push(String(e))); pg.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
-  await pg.goto(base + '/simulations/beer-slosh.html'); await pg.waitForTimeout(1500);
+  await pg.goto(base + '/simulations/beer-slosh.html' + (process.env.QUERY || '')); await pg.waitForTimeout(1500);
   const info = await pg.evaluate(() => ({ isolated: window.crossOriginIsolated, cpus: navigator.hardwareConcurrency, threads: window.Fig12.pool ? window.Fig12.pool.P : 1, attached: !!window.Fig12.world.fluid.pool, readout: document.getElementById('r-solver').textContent }));
   console.log('page:', JSON.stringify(info));
   const run = (threaded) => pg.evaluate(async ([dx, threaded]) => {

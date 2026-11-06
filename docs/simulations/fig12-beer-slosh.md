@@ -218,3 +218,31 @@ the damping (Abramson eq. 4.10b, Stephens et al. 1962); §6 the quarter car (env
 with spill; §11 ★ the numerical method (Chorin, MAC, APIC, cut cells, Zhu–Bridson level set, ghost fluid, PCG with MIC(0), CFL);
 §12 checks; §13 the parameter study. Every number is printed by `theory.cjs`, `check.cjs`, `study.cjs` or `energy.cjs`. Sources were
 downloaded and read at the sections cited; Karnopp et al. (1974) only in its abstract (the paper could not be obtained).
+
+## The live model and the controllers (6 November 2026)
+
+**Default: the live model** (`ModalFluid` in `stout-cart.js`; the page without a query string, or `?model=live`). The stout as its
+first three sloshing modes m = 1, n = 1–3 of a cylinder of radius R(h) (note, eq. 54): frequencies 3.421, 5.821, 7.365 Hz; damping
+ζ₁ = 0.0053 (Abramson eq. 4.10b, K = 5.23), ζₙ = ζ₁ √(ω₁/ωₙ); forced by the glass's acceleration, with ω² scaled by 1 + a_z/g;
+symplectic Euler, 0.5 ms substeps. Surface and momentum by eq. (55); the stout's push on the cart through the same coupling as the
+3D model. The pour: a sharp-crested weir, C_d (2/3)√(2g) D^{3/2} per unit rim length, C_d = 0.62 (the Francis equation, USBR
+Water Measurement Manual ch. 7 §9, eq. 7-4: 3.33 ft^½/s = 0.623 in SI), integrated round the rim; the volume is subtracted (the fill
+falls, the modes' crest shrinks by that volume), not drawn. The page advances it by the clock's real time: 1.00 s simulated per s.
+The column grid of the 3D solver is filled from the modes (`h_col`), so the store and the drawing read alike; no particles.
+`?grid=4` and `?grid=3` run the 3D solver as before (buttons "3D · 4 mm", "3D · 3 mm").
+
+Against the 3D solver (4 mm), one bump at 1 m/s (`MODAL=1 node tools/fig12/study.cjs …`): lean 24.7 vs 25.0 mm (10 mm, open loop),
+7.6 vs 5.8 (10 mm, PI), 73.9 vs 60.7 and spilled 9.9 vs 11.9 g (25 mm, open loop), 25.4 vs 29.9 mm (25 mm, PI).
+
+**Controllers** (`Cart.sample`, every 1 ms): `off`, `speed` (PI, as before), `preview` (PI plus i_ff = (M_s + m_w) g z_a′(x + ẋ τ_i)/b,
+note eq. 50), `slosh` (LQR on x = (δv, q₁, q̇₁, ξ), note eqs. 51–53; Bryson weights 0.05 m/s, 2 mm, 2 mm·ω, 0.02 m, 3 A; Riccati
+flow integrated in `Cart.lqrGains`: K = (75.0, −1939, −38.8, −150); closed-loop poles −12.0 ± 8.8j, −2.6, −244 s⁻¹, swing damping
+ratio 0.81; live model only, the swing read as an ideal sensor). Lean over one bump, live model: 10 mm 24.7 / 7.6 / 0.8 / 0.4 mm,
+25 mm 73.9 (9.9 g spilled) / 25.4 / 5.9 / 1.3 mm for off / PI / preview / slosh; largest current ≤ 2.32 A.
+
+**Live charts** (`StoutView.drawCharts`, drawing only, from the numbers the page records each frame): the last 4 s of the lean and
+the motor current with the rim as the limit; the first mode's phase portrait (q₁, q̇₁/ω₁) with the rim as vertical lines.
+
+**Tests** (`notes/fig12/`; `QUERY='?grid=4'` runs them on the 3D solver): live model, `panel-test2.cjs` 151 checks and
+`spill-test.cjs` 151 checks, none differ, read-backs true; 3D, 133 and 133, none differ; `threads-test.cjs` identical;
+`ctrl-shots.cjs` screenshots each controller over the 25 mm bump (`live-*.png`, not committed: `notes/.gitignore`).
