@@ -1,0 +1,1 @@
+3d 4 mm, push 10 N, speed: lean peak 10.0 mm during, 14.9 mm after; free decay 3.20 Hz, zeta 0.010 (sigma 0.20 1/s, fit rms 2.33 mm, offset -0.25 mm); within 3 mm never in the run; residual rms 6.23 mm; current rms 0.53 A, max 1.75 A; estimate error rms 1.74 mm vs probes; spilled 0.0 g (12 s)

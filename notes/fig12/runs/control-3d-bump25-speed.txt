@@ -1,0 +1,1 @@
+3d 4 mm, bump 25 mm, speed: lean peak 23.5 mm during, 35.4 mm after; free decay 3.12 Hz, zeta 0.017 (sigma 0.33 1/s, fit rms 4.00 mm, offset -5.09 mm); within 3 mm never in the run; residual rms 19.43 mm; current rms 0.62 A, max 2.32 A; estimate error rms 4.25 mm vs probes; spilled 0.0 g (11 s)

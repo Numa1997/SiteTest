@@ -1,0 +1,1 @@
+3d 4 mm, push 10 N, slosh: lean peak 1.0 mm during, 2.4 mm after; free decay 3.10 Hz, zeta 0.027 (sigma 0.52 1/s, fit rms 0.14 mm, offset 0.80 mm); within 3 mm after 0.00 s; residual rms 1.53 mm; current rms 0.50 A, max 1.56 A; estimate error rms 0.53 mm vs probes; spilled 0.0 g (11 s)
