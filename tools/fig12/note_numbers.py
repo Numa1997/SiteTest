@@ -113,9 +113,8 @@ N['cart']['t_cross'] = 0.5 / 1.5; N['cart']['T_slosh'] = 1 / N['f11']
 D = C.design(Pc, F500, modes, P['rho'], Ts=0.01, s_eta=0.0005, s_w=0.001, s_v=0.05, s_u=20.0, s_m=20.0)
 N['ctl'] = dict(tau_cl=D['tau'], n=D['n'], K_s=D['K_sub'][0].tolist(), K_m=D['K_sub'][1].tolist(), Ts=0.01, s_eta=0.0005, s_w=0.001, s_v=0.05, s_u=20.0, s_m=20.0, runs={})
 def summary(o, Sx=S):
-    n_ = Sx['n']; I_ = Sx['idx']; xdd = np.gradient(o['x'][:, n_ + I_['x']], o['t'])
     return dict(peak_mm=float(np.abs(o['eta']).max() * 1e3), maxUs=float(np.abs(o['u'][:, 0]).max()), maxUm=float(np.abs(o['u'][:, 1]).max()), maxKick=float(np.abs(o['kick']).max()),
-                Nmin=float(o['N'].min()), Nmax=float(o['N'].max()), maxXdd=float(np.abs(xdd).max()), maxAz=float(np.abs(o['azb']).max()),
+                Nmin=float(o['N'].min()), Nmax=float(o['N'].max()), maxXdd=float(o['xdd_max']), maxAz=float(np.abs(o['azb']).max()),
                 over_mm=float((F500['zs'] + np.abs(o['eta']).max() + P['hf'] - 0.160) * 1e3), t_peak=float(o['t'][np.argmax(np.abs(o['eta']))]))
 for sc, hgt in (('bump', 0.03), ('cobbles', 0.006), ('kerb', 0.02), ('random', 0.013)):
     N['ctl']['runs'][sc] = {}
@@ -125,9 +124,17 @@ for sc, hgt in (('bump', 0.03), ('cobbles', 0.006), ('kerb', 0.02), ('random', 0
 N['ctl']['split'] = dict(kick_only=summary(C.simulate(D, Pc, 'bump', v=1.5, T=6.0, law='passive', h_road=0.03, pump_on=False))['peak_mm'],
                          pump_only=summary(C.simulate(D, Pc, 'bump', v=1.5, T=6.0, law='passive', h_road=0.03, kick_on=False))['peak_mm'])
 N['ctl']['drive'] = {}
-for cd in (20.0, 2000.0):
+for cd in (50.0, 2000.0):
     P2 = dict(Pc); P2['c_d'] = cd; D2 = C.design(P2, F500, modes, P['rho'], Ts=0.01, s_eta=0.0005, s_w=0.001, s_v=0.05, s_u=20.0, s_m=20.0)
     N['ctl']['drive'][str(int(cd))] = {law: summary(C.simulate(D2, P2, 'bump', v=1.5, T=6.0, law=law, h_road=0.03), D2['S'])['peak_mm'] for law in ('passive', 'skyhook', 'lqr')}
+# the strut's tolerance on the tyre deflection, tightened: what it does to the kick and the wave; the loop period stretched to 60 ms
+D3 = C.design(Pc, F500, modes, P['rho'], Ts=0.01, s_eta=0.0005, s_w=0.0001, s_v=0.05, s_u=20.0, s_m=20.0)
+N['ctl']['sw_tight'] = summary(C.simulate(D3, Pc, 'bump', v=1.5, T=6.0, law='lqr', h_road=0.03))
+D4 = C.design(Pc, F500, modes, P['rho'], Ts=0.06, s_eta=0.0005, s_w=0.001, s_v=0.05, s_u=20.0, s_m=20.0)
+N['ctl']['Ts60'] = summary(C.simulate(D4, Pc, 'bump', v=1.5, T=6.0, law='lqr', h_road=0.03))
+xs2 = np.arange(1.0, 1.5, 0.002); N['cart']['bump_axle_above_road_mm'] = float(max(ax_b(x) - RD.bump(np.array([x]), h=0.03)[0] for x in xs2) * 1e3)
+N['cart']['dv_exact'] = 1.5 - math.sqrt(1.5 ** 2 - 2 * g * 0.03)
+N['cart']['wheel_spin_kg'] = Pc['m_w'] / 2; N['cart']['head_g'] = 1e3 * M0['Mf'] * math.pi * F500['a'] ** 2
 N['ctl']['speed'] = {str(v): summary(C.simulate(D, Pc, 'bump', v=v, T=6.0, law='passive', h_road=0.03))['peak_mm'] for v in (0.5, 1.5, 3.0)}
 N['ctl']['dome_mm'] = P['hd'] * 1e3; N['ctl']['head_top_rest_mm'] = (F500['zs'] + P['hf'] - 0.160) * 1e3
 os.makedirs('notes/fig12/figs', exist_ok=True)

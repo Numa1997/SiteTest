@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-1078 files, 63.3 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+1079 files, 63.6 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -40,7 +40,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Agents of the lecture-note review](#agents-of-the-lecture-note-review) | 4 |
 | [Working notes of the Rotor Pendula study](#working-notes-of-the-rotor-pendula-study) | 86 |
 | [Working notes of the Droplet Collection study](#working-notes-of-the-droplet-collection-study) | 121 |
-| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 238 |
+| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 239 |
 
 ## Repository root
 
@@ -118,7 +118,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/simulations/Double Pendulum.html`](../public/simulations/Double%20Pendulum.html) | 133.0 kB | Fig. 2 · Double Pendulum: the simulation, its data panel, walkthrough and lecture note. | [fig02-double-pendulum.md](simulations/fig02-double-pendulum.md) |
 | [`public/simulations/Interactive Double-Slit Experiment Visualization.html`](../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html) | 178.4 kB | Fig. 3 · Double-Slit Interference: the simulation, its data panel, walkthrough and lecture note. | [fig03-double-slit.md](simulations/fig03-double-slit.md) |
 | [`public/simulations/Transverse and longitudinal waves.html`](../public/simulations/Transverse%20and%20longitudinal%20waves.html) | 209.2 kB | Fig. 4 · Transverse & Longitudinal: the simulation, its data panel, walkthrough and lecture note. | [fig04-transverse-longitudinal.md](simulations/fig04-transverse-longitudinal.md) |
-| [`public/simulations/beer-slosh.html`](../public/simulations/beer-slosh.html) | 387.6 kB | Fig. 12 · A Pint of Stout on a Suspension: the simulation, its data panel, walkthrough and lecture note. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`public/simulations/beer-slosh.html`](../public/simulations/beer-slosh.html) | 388.9 kB | Fig. 12 · A Pint of Stout on a Suspension: the simulation, its data panel, walkthrough and lecture note. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`public/simulations/double-inverted-pendulum.html`](../public/simulations/double-inverted-pendulum.html) | 314.1 kB | Project 05 · Balancing Two Rods on a Cart (Fig. 11 from 3 to 4 November 2026): the real-time simulation, its walkthrough and lecture note (no data panel); listed on the Projects page, kept at this address so that its German and Arabic pages are generated with the simulations. | [fig11-double-inverted-pendulum.md](simulations/fig11-double-inverted-pendulum.md) |
 | [`public/simulations/draw-decompose.html`](../public/simulations/draw-decompose.html) | 224.0 kB | Fig. 8 · Draw & Decompose: the simulation, its data panel, walkthrough and lecture note. | [fig08-draw-decompose.md](simulations/fig08-draw-decompose.md) |
 | [`public/simulations/driven-oscillator.html`](../public/simulations/driven-oscillator.html) | 342.6 kB | Fig. 9 · Driven Oscillator: the simulation, its data panel, walkthrough and lecture note. | [fig09-driven-oscillator.md](simulations/fig09-driven-oscillator.md) |
@@ -738,7 +738,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`docs/simulations/fig10-wind-turbine.md`](simulations/fig10-wind-turbine.md) | 57.3 kB | Documentation: Fig. 10 · Wind Turbine Control. | [fig10-wind-turbine.md](simulations/fig10-wind-turbine.md) |
 | [`docs/simulations/fig11-double-inverted-pendulum.md`](simulations/fig11-double-inverted-pendulum.md) | 46.7 kB | Documentation: Project 05 · Balancing Two Rods on a Cart (Fig. 11 from 3 to 4 November 2026). | [fig11-double-inverted-pendulum.md](simulations/fig11-double-inverted-pendulum.md) |
 | [`docs/simulations/fig11-pendulum-control.md`](simulations/fig11-pendulum-control.md) | 28.8 kB | Documentation: Fig. 11 · Double Pendulum under Control (Fig. 11 again since 4 November 2026; a project from 3 to 4 November). | [fig11-pendulum-control.md](simulations/fig11-pendulum-control.md) |
-| [`docs/simulations/fig12-beer-slosh.md`](simulations/fig12-beer-slosh.md) | 15.3 kB | Documentation: Fig. 12 · A Pint of Stout on a Suspension (`public/simulations/beer-slosh.html`). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`docs/simulations/fig12-beer-slosh.md`](simulations/fig12-beer-slosh.md) | 15.9 kB | Documentation: Fig. 12 · A Pint of Stout on a Suspension (`public/simulations/beer-slosh.html`). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`docs/styles.md`](styles.md) | 52.1 kB | Documentation: Stylesheets: `public/styles/`. | [styles.md](styles.md) |
 | [`docs/usul.md`](usul.md) | 9.5 kB | Documentation: Phyein Usul · the website at phyeinusul.com. | [usul.md](usul.md) |
 
@@ -752,9 +752,9 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/fig12/build_modes3d.py`](../tools/fig12/build_modes3d.py) | 4.8 kB | Fig. 12: runs modes3d.py for every fill and writes the mode data file (format 3). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/check_cylinder.py`](../tools/fig12/check_cylinder.py) | 1.5 kB | Fig. 12: gate of modes.py against the exact Bessel modes of a cylinder; prints PASS or FAIL. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/check_modes3d.py`](../tools/fig12/check_modes3d.py) | 5.6 kB | Fig. 12: gate of modes3d.py against the exact cylinder and against modes.py on the round glass; prints PASS or FAIL. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
-| [`tools/fig12/check_note_numbers.py`](../tools/fig12/check_note_numbers.py) | 12.1 kB | Fig. 12: finds every quoted number of the note in the page and compares it with the computation; prints PASS or FAIL. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`tools/fig12/check_note_numbers.py`](../tools/fig12/check_note_numbers.py) | 13.5 kB | Fig. 12: finds every quoted number of the note in the page and compares it with the computation; prints PASS or FAIL. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/check_plant.py`](../tools/fig12/check_plant.py) | 6.0 kB | Fig. 12: gate of plant.py against SymPy Hessians of the energies, the modal equation, the kick by energy over a free roll, and the envelope at a step; prints PASS or FAIL. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
-| [`tools/fig12/controller3.py`](../tools/fig12/controller3.py) | 10.5 kB | Fig. 12: the controller reference: the LQR design on the strut and the drive motor with the stout in the model, skyhook, and the scenario runs with RK4 and the kick. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`tools/fig12/controller3.py`](../tools/fig12/controller3.py) | 10.7 kB | Fig. 12: the controller reference: the LQR design on the strut and the drive motor with the stout in the model, skyhook, and the scenario runs with RK4 and the kick. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/gate_ctl3.py`](../tools/fig12/gate_ctl3.py) | 2.4 kB | Fig. 12: compares the page’s gains, time constant and bump runs (dumped by notes/fig12/gate-ctl3.cjs) with controller3.py; prints PASS or FAIL. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/geom.py`](../tools/fig12/geom.py) | 5.0 kB | Fig. 12: the glass as a surface R(z, theta): the tulip profile from the dimensioned drawing scaled to 160 x 85 mm, the two sculpted panels, the cavity volume. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/glass.glb`](../tools/fig12/glass.glb) | 364.8 kB | Fig. 12: the glass as built in Blender (outer and inner surfaces, panels included), written by glass.py with its independent volume check; no page loads it since the one-wheel side view (6 November 2026). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
@@ -762,8 +762,8 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/fig12/glass_profile.json`](../tools/fig12/glass_profile.json) | 7.5 kB | Fig. 12: the glass profile on a 0.5 mm grid with its volumes, written by glass.py. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/modes.py`](../tools/fig12/modes.py) | 8.1 kB | Fig. 12: the two-dimensional P2 finite-element solver for a body of revolution, kept as the independent check of modes3d.py. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/modes3d.py`](../tools/fig12/modes3d.py) | 16.9 kB | Fig. 12: the three-dimensional finite-element solver (27-node hexahedra on the sculpted cavity) of the sloshing eigenproblem, the Stokes–Joukowski potentials, the couplings and damping integrals, and the Fourier helpers for the data file. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
-| [`tools/fig12/note_figs.py`](../tools/fig12/note_figs.py) | 21.8 kB | Fig. 12: the SVG figures of the lecture note, drawn from the same data. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
-| [`tools/fig12/note_numbers.py`](../tools/fig12/note_numbers.py) | 12.7 kB | Fig. 12: every number the lecture note quotes, computed from the page’s data and formulas. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`tools/fig12/note_figs.py`](../tools/fig12/note_figs.py) | 21.9 kB | Fig. 12: the SVG figures of the lecture note, drawn from the same data. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`tools/fig12/note_numbers.py`](../tools/fig12/note_numbers.py) | 13.5 kB | Fig. 12: every number the lecture note quotes, computed from the page’s data and formulas. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/plant.py`](../tools/fig12/plant.py) | 7.9 kB | Fig. 12: the one-wheel cart (quarter-car) with the stout coupled in, assembled as M, C, K from the Lagrangian; the tyre load and the road’s kick; the state-space form. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/profile_drawing.csv`](../tools/fig12/profile_drawing.csv) | 10.7 kB | Fig. 12: the elevation outline of the tulip pint sampled from dimensions.com’s vector drawing, half-width against height in drawing units. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/road.py`](../tools/fig12/road.py) | 4.4 kB | Fig. 12: the road profiles (bump, kerb, cobbles, ISO 8608 random) and the axle’s path over them (the envelope under the wheel), the same numbers as the page. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
@@ -808,7 +808,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`i18n/ar/simulations__Double Pendulum.html.json`](../i18n/ar/simulations__Double%20Pendulum.html.json) | 107.8 kB | Arabic table of simulations__Double Pendulum.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
 | [`i18n/ar/simulations__Interactive Double-Slit Experiment Visualization.html.json`](../i18n/ar/simulations__Interactive%20Double-Slit%20Experiment%20Visualization.html.json) | 83.7 kB | Arabic table of simulations__Interactive Double-Slit Experiment Visualization.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
 | [`i18n/ar/simulations__Transverse and longitudinal waves.html.json`](../i18n/ar/simulations__Transverse%20and%20longitudinal%20waves.html.json) | 84.7 kB | Arabic table of simulations__Transverse and longitudinal waves.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
-| [`i18n/ar/simulations__beer-slosh.html.json`](../i18n/ar/simulations__beer-slosh.html.json) | 440.9 kB | Arabic table of simulations__beer-slosh.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
+| [`i18n/ar/simulations__beer-slosh.html.json`](../i18n/ar/simulations__beer-slosh.html.json) | 529.2 kB | Arabic table of simulations__beer-slosh.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
 | [`i18n/ar/simulations__double-inverted-pendulum.html.json`](../i18n/ar/simulations__double-inverted-pendulum.html.json) | 342.0 kB | Arabic table of simulations__double-inverted-pendulum.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
 | [`i18n/ar/simulations__draw-decompose.html.json`](../i18n/ar/simulations__draw-decompose.html.json) | 84.2 kB | Arabic table of simulations__draw-decompose.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
 | [`i18n/ar/simulations__driven-oscillator.html.json`](../i18n/ar/simulations__driven-oscillator.html.json) | 165.7 kB | Arabic table of simulations__driven-oscillator.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
@@ -817,8 +817,8 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`i18n/ar/simulations__water-wave.html.json`](../i18n/ar/simulations__water-wave.html.json) | 93.9 kB | Arabic table of simulations__water-wave.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
 | [`i18n/ar/simulations__wave-interference.html.json`](../i18n/ar/simulations__wave-interference.html.json) | 88.0 kB | Arabic table of simulations__wave-interference.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
 | [`i18n/ar/simulations__wind-turbine.html.json`](../i18n/ar/simulations__wind-turbine.html.json) | 68.7 kB | Arabic table of simulations__wind-turbine.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
-| [`i18n/ar/strings.json`](../i18n/ar/strings.json) | 436.6 kB | Arabic words of the scripts and of the catalog, with plural forms. | [i18n.md](i18n.md) |
-| [`i18n/ar/walk.json`](../i18n/ar/walk.json) | 533.2 kB | Arabic prose of the ten walkthroughs, keyed by the English. | [i18n.md](i18n.md) |
+| [`i18n/ar/strings.json`](../i18n/ar/strings.json) | 457.3 kB | Arabic words of the scripts and of the catalog, with plural forms. | [i18n.md](i18n.md) |
+| [`i18n/ar/walk.json`](../i18n/ar/walk.json) | 543.5 kB | Arabic prose of the ten walkthroughs, keyed by the English. | [i18n.md](i18n.md) |
 | [`i18n/de/hydraulics__00_map.json`](../i18n/de/hydraulics__00_map.json) | 28.7 kB | German table of hydraulics__00_map: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
 | [`i18n/de/hydraulics__01_ideal.json`](../i18n/de/hydraulics__01_ideal.json) | 41.0 kB | German table of hydraulics__01_ideal: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
 | [`i18n/de/hydraulics__02_servo.json`](../i18n/de/hydraulics__02_servo.json) | 76.0 kB | German table of hydraulics__02_servo: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
@@ -834,7 +834,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`i18n/de/simulations__Double Pendulum.html.json`](../i18n/de/simulations__Double%20Pendulum.html.json) | 97.2 kB | German table of simulations__Double Pendulum.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
 | [`i18n/de/simulations__Interactive Double-Slit Experiment Visualization.html.json`](../i18n/de/simulations__Interactive%20Double-Slit%20Experiment%20Visualization.html.json) | 74.7 kB | German table of simulations__Interactive Double-Slit Experiment Visualization.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
 | [`i18n/de/simulations__Transverse and longitudinal waves.html.json`](../i18n/de/simulations__Transverse%20and%20longitudinal%20waves.html.json) | 76.6 kB | German table of simulations__Transverse and longitudinal waves.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
-| [`i18n/de/simulations__beer-slosh.html.json`](../i18n/de/simulations__beer-slosh.html.json) | 398.6 kB | German table of simulations__beer-slosh.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
+| [`i18n/de/simulations__beer-slosh.html.json`](../i18n/de/simulations__beer-slosh.html.json) | 477.8 kB | German table of simulations__beer-slosh.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
 | [`i18n/de/simulations__double-inverted-pendulum.html.json`](../i18n/de/simulations__double-inverted-pendulum.html.json) | 311.3 kB | German table of simulations__double-inverted-pendulum.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
 | [`i18n/de/simulations__draw-decompose.html.json`](../i18n/de/simulations__draw-decompose.html.json) | 74.9 kB | German table of simulations__draw-decompose.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
 | [`i18n/de/simulations__driven-oscillator.html.json`](../i18n/de/simulations__driven-oscillator.html.json) | 148.3 kB | German table of simulations__driven-oscillator.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
@@ -843,8 +843,8 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`i18n/de/simulations__water-wave.html.json`](../i18n/de/simulations__water-wave.html.json) | 85.2 kB | German table of simulations__water-wave.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
 | [`i18n/de/simulations__wave-interference.html.json`](../i18n/de/simulations__wave-interference.html.json) | 79.2 kB | German table of simulations__wave-interference.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
 | [`i18n/de/simulations__wind-turbine.html.json`](../i18n/de/simulations__wind-turbine.html.json) | 61.3 kB | German table of simulations__wind-turbine.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
-| [`i18n/de/strings.json`](../i18n/de/strings.json) | 378.2 kB | German words of the scripts and of the catalog, with plural forms. | [i18n.md](i18n.md) |
-| [`i18n/de/walk.json`](../i18n/de/walk.json) | 467.1 kB | German prose of the ten walkthroughs, keyed by the English. | [i18n.md](i18n.md) |
+| [`i18n/de/strings.json`](../i18n/de/strings.json) | 395.6 kB | German words of the scripts and of the catalog, with plural forms. | [i18n.md](i18n.md) |
+| [`i18n/de/walk.json`](../i18n/de/walk.json) | 476.4 kB | German prose of the ten walkthroughs, keyed by the English. | [i18n.md](i18n.md) |
 
 ## Agents of the lecture-note review
 
@@ -1297,11 +1297,12 @@ to confirm that every file is described. Sizes are those of the files when the l
 
 </details>
 
-<details><summary>25 files: Fig. 12: a measuring script of the review, or its saved output.</summary>
+<details><summary>26 files: Fig. 12: a measuring script of the review, or its saved output.</summary>
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
 | [`notes/fig12/check-derivations.md`](../notes/fig12/check-derivations.md) | 25.8 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/check-r4.md`](../notes/fig12/check-r4.md) | 30.1 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/code-review-r1.md`](../notes/fig12/code-review-r1.md) | 14.3 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/code-review-r2.md`](../notes/fig12/code-review-r2.md) | 14.1 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/code-review-r3.md`](../notes/fig12/code-review-r3.md) | 19.2 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
@@ -1311,19 +1312,19 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/fig12/figs/f_vs_V.svg`](../notes/fig12/figs/f_vs_V.svg) | 5.0 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/figs/mode11.svg`](../notes/fig12/figs/mode11.svg) | 48.1 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/figs/profile.svg`](../notes/fig12/figs/profile.svg) | 33.0 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
-| [`notes/fig12/figs/runs.svg`](../notes/fig12/figs/runs.svg) | 52.9 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/figs/runs.svg`](../notes/fig12/figs/runs.svg) | 52.4 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/figs/waiter.svg`](../notes/fig12/figs/waiter.svg) | 22.3 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/gate-ctl3.cjs`](../notes/fig12/gate-ctl3.cjs) | 2.3 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/note-sec10.html`](../notes/fig12/note-sec10.html) | 8.6 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
-| [`notes/fig12/note-src.html`](../notes/fig12/note-src.html) | 97.9 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
-| [`notes/fig12/numbers.json`](../notes/fig12/numbers.json) | 14.5 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/note-src.html`](../notes/fig12/note-src.html) | 100.3 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/numbers.json`](../notes/fig12/numbers.json) | 15.3 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/perf.cjs`](../notes/fig12/perf.cjs) | 1.2 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/referee-r1.md`](../notes/fig12/referee-r1.md) | 28.3 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/referee-r2.md`](../notes/fig12/referee-r2.md) | 28.8 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/referee-r3.md`](../notes/fig12/referee-r3.md) | 32.3 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/regress.cjs`](../notes/fig12/regress.cjs) | 5.2 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/shot.cjs`](../notes/fig12/shot.cjs) | 1.3 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
-| [`notes/fig12/status.md`](../notes/fig12/status.md) | 6.0 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/status.md`](../notes/fig12/status.md) | 7.6 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/test.cjs`](../notes/fig12/test.cjs) | 8.3 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/waiter-review.md`](../notes/fig12/waiter-review.md) | 15.4 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 

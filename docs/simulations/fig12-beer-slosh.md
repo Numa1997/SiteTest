@@ -95,20 +95,20 @@ motor along the road. Skyhook: u_s = −c_sky ż_b, c_sky = 300 N s/m, motor idl
 x = (d, w, a_n | ẋ_c, ż_b, ż_w, ȧ_n), d = z_b − z_w, w = z_w − z_a, 9 states for two x-modes; the cart's position is not a state (the motor
 holds a speed, not a timetable; a position no force restores would be a marginal mode). In the linear model the strut cannot reach the
 slosh at all (level tray, ∫ψ_n = 0); it acts only through the kick, by steadying N. Only the motor can answer the kick itself, and the
-design finds that: its force mirrors the kick, and the cart's largest acceleration over the bump falls from 1.37 to 0.43 m/s². Cost
+design finds that: its force mirrors the kick, and the cart's largest acceleration over the bump falls from 1.42 to 0.67 m/s² (at every 1 ms step). Cost
 η_rim²/σ_η² + w²/σ_w² + ż_b²/σ_v² + u_s²/σ_u² + u_m²/σ_m² with σ_η = 0.5 mm, σ_w = 1 mm, σ_v = 50 mm/s, σ_u = σ_m = 20 N; A and B by
 probing the linear map on unit states; ZOH over T_s = 10 ms by one matrix exponential; the discrete Riccati equation by iteration
 (about 900 iterations cold, warm-started from the last solution), redone at the next sample after a slider moves; τ_cl = 1.12 s.
 
 Gate: `node notes/fig12/gate-ctl3.cjs out.json` dumps the page's gains and nine runs (bump, kerb, cobbles × three laws);
 `python3 tools/fig12/gate_ctl3.py out.json` designs the same controller offline and compares: gains to 2 × 10⁻⁹, τ_cl identical, every
-peak rim wave within 0.1 % (the kick's sampled peak on the kerb differs by 5 %, because the two programs sample a 3 ms spike at different
+peak rim wave within 0.11 % (the kick's sampled peak on the kerb differs by 5 %, because the two programs sample a 3 ms spike at different
 instants). PASS.
 
-Scenario numbers (`note_numbers.py`, 6 s runs, 500 mL, 1.5 m/s): bump 30 mm 19.8 / 13.5 / 0.9 mm (passive / skyhook / LQR), LQR 50 N in
+Scenario numbers (`note_numbers.py`, 6 s runs, 500 mL, 1.5 m/s): bump 30 mm 19.8 / 13.5 / 0.9 mm (passive / skyhook / LQR; the passive peak is at the back of the rim, 15.5 mm at the front), LQR 50 N in
 the strut and 24 N in the motor; kerb 20 mm 12.9 / 9.9 / 2.8 mm, motor 121 N; cobbles 6 mm 1.8 / 1.8 / 0.7 mm; rough 13 mm 5.2 / 4.9 /
 0.4 mm. On the bump the kick alone gives 10.6 mm, the pumping alone 0; slower or faster 4.4 mm at 0.5 m/s, 11.0 mm at 3 m/s; a drive of
-2000 N s/m brings the passive cart to 2.5 mm, one of 20 N s/m lets it reach 23.8 mm. Head at rest 2.1 mm above the rim, dome limit 8 mm:
+2000 N s/m brings the passive cart to 2.5 mm, one of 50 N s/m lets it reach 25.1 mm. The slider stops at 50: with no hold at all the speed sits on the unit circle of the LQR's map and the Riccati iteration does not settle (the derivation check of 6 November found the LQR silently off at 0). Head at rest 2.1 mm above the rim, dome limit 8 mm:
 the LQR keeps the pint, the skyhook and the passive cart do not.
 
 ## The store and the data panel
@@ -128,14 +128,14 @@ Bessel-exact; the road is flat before 1 m; a road change restarts; a released pu
 ## The note's numbers
 
 `python3 tools/fig12/note_numbers.py` computes every quoted number (`notes/fig12/numbers.json`), `python3 tools/fig12/note_figs.py` draws
-the six figures, `python3 tools/fig12/check_note_numbers.py` finds each of the 79 quoted numbers in the page and compares it. PASS.
+the six figures, `python3 tools/fig12/check_note_numbers.py` finds each of the 86 quoted numbers in the page and compares it. PASS. The derivation check of sections 10 and 11 (`notes/fig12/check-r4.md`, 6 November) found 15 faults in the text, all fixed: the stout's mass counted twice in the written kinetic energy, the peak placed at the front of the rim (it is at the back), the effect of σ_w stated backwards, an acceleration taken from 10-ms samples, equation numbers colliding with (18), and smaller ones.
 
 ## Values that remain uncertain
 
 The panel depth (2 mm, from photographs); the head's liquid fraction (0.15, no source); the dome the head holds above the rim (8 mm, an
 opinion on a slider); the transfer of Sauret et al.'s foam friction to a round glass (a factor of three either way); the contact-line rate
 (0.05 1/s, from a water tank); Guinness's surface tension (beers 41–48 mN/m); the cart's own numbers, which are a choice, above all how firmly the drive holds the speed,
-which decides how much of the kick the stout feels (a factor of ten between 20 and 2000 N s/m); the rigid wheel's normal for an elastic
+which decides how much of the kick the stout feels (a factor of ten between 50 and 2000 N s/m); the rigid wheel's normal for an elastic
 tyre. The drawing's two scale factors (1.074 in height, 1.12 in width) are stated in the note.
 
 ## Translations

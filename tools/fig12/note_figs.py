@@ -176,7 +176,7 @@ modes = plant.modal_params(F500, rho, 0.045, N['Mf'], gamma_fn)
 for mdx, raw in zip(modes['x'], [m for m in F500['modes'] if m['m'] == 1 and m['o'] == 'c']): mdx['rim_front'] = sum(raw['psi'][k][0][-1] for k in raw['psi'])
 Dd = C.design(P, F500, modes, rho, Ts=0.01, s_eta=0.0005, s_w=0.001, s_v=0.05, s_u=20.0, s_m=20.0)
 runs = {law: C.simulate(Dd, P, 'bump', v=1.5, T=4.0, law=law, h_road=0.03) for law in ('passive', 'skyhook', 'lqr')}
-W, H = 720, 460; L, R = 70, 30; panels = [(30, 150, 'stout at the front of the rim, mm', -10, 20), (190, 290, 'the road’s kick along the road, N', -30, 30), (330, 430, 'drive motor force, N', -30, 30)]
+W, H = 720, 460; L, R = 70, 30; panels = [(30, 150, 'stout at the front of the rim, mm (below zero: the back rises)', -25, 20), (190, 290, 'the road’s kick along the road, N', -30, 30), (330, 430, 'drive motor force, N', -30, 30)]
 b = []
 for (T, B, lab, lo, hi) in panels:
     b.append(f'<rect x="{L}" y="{T}" width="{W-L-R}" height="{B-T}" fill="none" stroke="{RULE}"/>'); b.append(text(L, T - 5, lab, 10, 'start', MUTED))
@@ -188,7 +188,9 @@ def clipped(col, T, B, lo, hi, ts, vs, dash=''):
     yv = lambda v: T + (B - T) * (1 - (min(max(v, lo), hi) - lo) / (hi - lo))
     return path([(xx(t), yv(v)) for t, v in zip(ts, vs)], fill='none', stroke=col, stroke_width=1.4, **({'stroke_dasharray': dash} if dash else {}))
 lim = N['ctl']['dome_mm'] - N['ctl']['head_top_rest_mm']
-T0, B0, _, lo0, hi0 = panels[0]; ylim = T0 + (B0 - T0) * (1 - (lim - lo0) / (hi0 - lo0)); b.append(f'<line x1="{L}" y1="{ylim:.1f}" x2="{W-R}" y2="{ylim:.1f}" stroke="{WINE}" stroke-dasharray="5 4"/>' + text(L + 6, ylim - 7, f'dome limit, {lim:.1f} mm', 9, 'start', WINE))
+T0, B0, _, lo0, hi0 = panels[0]
+for sgn_, lab_ in ((1, f'dome limit, front, {lim:.1f} mm'), (-1, 'dome limit, back of the rim')):
+    ylim = T0 + (B0 - T0) * (1 - (sgn_ * lim - lo0) / (hi0 - lo0)); b.append(f'<line x1="{L}" y1="{ylim:.1f}" x2="{W-R}" y2="{ylim:.1f}" stroke="{WINE}" stroke-dasharray="5 4"/>' + text(L + 6, ylim - 7 if sgn_ > 0 else ylim + 13, lab_, 9, 'start', WINE))
 for law, col in (('passive', INK), ('skyhook', ROSE), ('lqr', WINE)):
     o = runs[law]; b.append(clipped(col, *panels[0][:2], panels[0][3], panels[0][4], o['t'], o['eta'] * 1e3)); b.append(clipped(col, *panels[1][:2], panels[1][3], panels[1][4], o['t'], o['kick'])); b.append(clipped(col, *panels[2][:2], panels[2][3], panels[2][4], o['t'], o['u'][:, 1]))
 b.append(text(L + 6, 330 + 12, 'ink: passive · rose: skyhook · wine: LQR', 9, 'start', MUTED))

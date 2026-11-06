@@ -5,7 +5,7 @@
 window.WALK = window.WALK || {};
 
 window.WALK.slosh = {
-    intro: 'Ten steps from the lecture note to the moving cart, in the order the page uses them: the calm surface for a given volume (section 2), the viscosity at the chosen temperature, the frequency of each mode with its head (11), the five damping terms (14–18), the shape of the surface from the stored modes (section 5), the road and the path of the axle over it (18a), the one system of cart and stout (19), the road’s kick in the right-hand side of the Runge–Kutta step (18b), the two control laws (section 11), and the design of the LQR gains (20). The code is the page’s own; the numbers in the last column are its state now.',
+    intro: 'Ten steps from the lecture note to the moving cart, in the order the page uses them: the calm surface for a given volume (section 2), the viscosity at the chosen temperature, the frequency of each mode with its head (11), the five damping terms (14–18), the shape of the surface from the stored modes (section 5), the road and the path of the axle over it (19a), the one system of cart and stout (20), the road’s kick in the right-hand side of the Runge–Kutta step (19b), the two control laws (section 11), and the design of the LQR gains (21). The code is the page’s own; the numbers in the last column are its state now.',
     steps: [
         {
             title: 'The calm surface',
@@ -70,8 +70,8 @@ function etaWall(th) { var s = 0; for (var k = 0; k < NM; k++) s += aO[k] * psiA
         {
             title: 'The road, and the axle’s path over it',
             where: 'buildRoad(): the road on a 2 mm grid, and the envelope the axle follows',
-            math: '⟦za|z<sub>a</sub>⟧(X) = max<sub>|X − x′| ≤ R<sub>w</sub></sub>[⟦zr|z<sub>r</sub>⟧(x′) + (R<sub>w</sub>² − (X − x′)²)<sup>½</sup>] − R<sub>w</sub><span class="walk__eq">(18a)</span>',
-            note: 'The wheel’s rim rolls on the road, so the axle follows the curve swept by the centre of a circle of radius R<sub>w</sub> rolled along the profile. On a gentle hump that is the profile itself; at a kerb the rim meets the edge before the axle is over it, and the axle climbs on a circle round the edge. The page samples the road every 2 mm (bump, kerb, cobbles and the ISO 8608 rough road, each starting at X = 1 m) and takes the maximum over the 81 grid points under the wheel. The slope of this path is the direction of the road’s push.',
+            math: '⟦za|z<sub>a</sub>⟧(X) = max<sub>|X − x′| ≤ R<sub>w</sub></sub>[⟦zr|z<sub>r</sub>⟧(x′) + (R<sub>w</sub>² − (X − x′)²)<sup>½</sup>] − R<sub>w</sub><span class="walk__eq">(19a)</span>',
+            note: 'The wheel’s rim rolls on the road, so the axle follows the curve swept by the centre of a circle of radius R<sub>w</sub> rolled along the profile. On a gentle hump that is the profile itself; at a kerb the rim meets the edge before the axle is over it, and the axle climbs on a circle round the edge. The page samples the road every 2 mm (bump, kerb, cobbles and the ISO 8608 rough road, each starting at X = 1 m) and takes the maximum over the 81 grid points under the wheel. The slope of this path sets the direction of the road’s push, which is square to the path.',
             code: `for (i = 0; i < NRD; i++) ZR[i] = zProfile(i * ROAD_DX);
 for (k = -m; k <= m; k++) lift.push(Math.sqrt(Math.max(0, P.Rw * P.Rw - k * ROAD_DX * k * ROAD_DX)) - P.Rw);
 for (i = 0; i < NRD; i++) { var best = -1e9; for (k = -m; k <= m; k++) { var j = Math.min(NRD - 1, Math.max(0, i + k)), v = ZR[j] + lift[k + m]; if (v > best) best = v; } ZA[i] = best; }`,
@@ -79,8 +79,8 @@ for (i = 0; i < NRD; i++) { var best = -1e9; for (k = -m; k <= m; k++) { var j =
         },
         {
             title: 'Cart and stout as one system',
-            where: 'assemble(): the matrices of (19), term by term',
-            math: 'M<sub>c</sub> q̈ + C<sub>c</sub> q̇ + K<sub>c</sub> q = F,  q = (x<sub>c</sub>, z<sub>b</sub>, z<sub>w</sub>, a<sub>n</sub>),  M<sub>a<sub>n</sub>a<sub>n</sub></sub> = (ρN<sub>n</sub>/λ<sub>n</sub>)(1 + κ<sub>n</sub>),  M<sub>a<sub>n</sub>x</sub> = ρ⟦Q|Q<sub>n</sub>⟧N<sub>n</sub><span class="walk__eq">(19)</span>',
+            where: 'assemble(): the matrices of (20), term by term',
+            math: 'M<sub>c</sub> q̈ + C<sub>c</sub> q̇ + K<sub>c</sub> q = F,  q = (x<sub>c</sub>, z<sub>b</sub>, z<sub>w</sub>, a<sub>n</sub>),  M<sub>a<sub>n</sub>a<sub>n</sub></sub> = (ρN<sub>n</sub>/λ<sub>n</sub>)(1 + κ<sub>n</sub>),  M<sub>a<sub>n</sub>x</sub> = ρ⟦Q|Q<sub>n</sub>⟧N<sub>n</sub><span class="walk__eq">(20)</span>',
             note: 'The second derivatives of the three energies of section 10, written in by hand. The whole cart, ⟦M|M⟧ = M<sub>s</sub> + m<sub>w</sub>, moves along the road; the body on its spring and damper, the wheel on its tyre. For each mode: its generalised mass with the head, its damping from γ<sub>n</sub>, its stiffness from ω<sub>n</sub>², and the one coupling to the cart, through Q<sub>n</sub> along the road; the same entry appears transposed, so the stout pushes back. The tray stays level, so there is no tilt term, and lifting the glass couples to no wave (∫ψ<sub>n</sub> dS = 0).',
             code: `Mm[IX][IX] = Mtot; Cm[IX][IX] = P.cx + P.cd;                   // everything moves along the road together; rolling resistance and the drive hold the speed
 Mm[IZ][IZ] = Ms; Mm[IW][IW] = P.mw;
@@ -97,7 +97,7 @@ M.forEach(function (md, k) {
         {
             title: 'The kick, in the right-hand side of the step',
             where: 'deriv(t, y, out): what the Runge–Kutta step integrates',
-            math: '⟦N|N⟧ = Mg + k<sub>t</sub>(z<sub>a</sub> − z<sub>w</sub>) + c<sub>t</sub>(ż<sub>a</sub> − ż<sub>w</sub>) ≥ 0,  ⟦kick|F<sub>kick</sub>⟧ = −N z<sub>a</sub>′<span class="walk__eq">(18b)</span>;  q̈ = M<sub>c</sub>⁻¹[F − C<sub>c</sub>q̇ − K<sub>c</sub>q],  pumping −ρN<sub>n</sub>⟦az|z̈<sub>O</sub>⟧a<sub>n</sub>',
+            math: '⟦N|N⟧ = Mg + k<sub>t</sub>(z<sub>a</sub> − z<sub>w</sub>) + c<sub>t</sub>(ż<sub>a</sub> − ż<sub>w</sub>) ≥ 0,  ⟦kick|F<sub>kick</sub>⟧ = −N z<sub>a</sub>′<span class="walk__eq">(19b)</span>;  q̈ = M<sub>c</sub>⁻¹[F − C<sub>c</sub>q̇ − K<sub>c</sub>q],  pumping −ρN<sub>n</sub>⟦az|z̈<sub>O</sub>⟧a<sub>n</sub>',
             note: 'The tyre load is the cart’s weight plus what the tyre’s spring and damper add; a tyre cannot pull, so a negative load means the wheel has left the road: the load is set to zero and the linear tyre’s pull is cancelled on the wheel. The road pushes along the normal of the axle’s path, so its horizontal part is −N times the slope: back on the way up, forward on the way down. That kick, the drive motor and your push act on x<sub>c</sub>; the strut actuator on the body and the wheel. Then the dense solve by the precomputed inverse of M<sub>c</sub>, and the pumping term of (12), taken from the previous substep and held at −0.8 g. The acceleration ⟦ax|ẍ<sub>O</sub>⟧ reaches the stout through the coupling in M<sub>c</sub> alone.',
             code: `var X = P.v * t + y[IX], za = zAxle(X), sl = slopeAxle(X), zad = (P.v + y[n + IX]) * sl;   // the axle rides its path at the cart's speed
 var N = Mtot * g + P.kt * (za - y[IW]) + P.ct * (zad - y[n + IW]), Fw = 0;   // the tyre load: the weight plus the tyre's spring and damper
@@ -126,7 +126,7 @@ else if (P.law === 'lqr' && Ct.ok) { var x = ctlState(); for (var i = 0; i < Ct.
         {
             title: 'Designing the gains',
             where: 'designNow(): the zero-order hold and the discrete Riccati equation',
-            math: 'A<sub>d</sub> = e<sup>AT<sub>s</sub></sup>, B<sub>d</sub> from the same exponential;  P ← W + A<sub>d</sub><sup>T</sup> P (A<sub>d</sub> − B<sub>d</sub>K),  K = (W<sub>u</sub> + B<sub>d</sub><sup>T</sup>PB<sub>d</sub>)⁻¹B<sub>d</sub><sup>T</sup>PA<sub>d</sub>;  ⟦tau|τ<sub>cl</sub>⟧ = −T<sub>s</sub>/ln max|z|<span class="walk__eq">(20)</span>',
+            math: 'A<sub>d</sub> = e<sup>AT<sub>s</sub></sup>, B<sub>d</sub> from the same exponential;  P ← W + A<sub>d</sub><sup>T</sup> P (A<sub>d</sub> − B<sub>d</sub>K),  K = (W<sub>u</sub> + B<sub>d</sub><sup>T</sup>PB<sub>d</sub>)⁻¹B<sub>d</sub><sup>T</sup>PA<sub>d</sub>;  ⟦tau|τ<sub>cl</sub>⟧ = −T<sub>s</sub>/ln max|z|<span class="walk__eq">(21)</span>',
             note: 'The matrices A and B of the design model are built by evaluating the linear map dyn() on each unit state in turn, with the two actuators as the two columns of B. One matrix exponential of [[A, B], [0, 0]]T<sub>s</sub> gives the held-force map. The Riccati iteration (S in the code is P of the note) starts from the weights, or from the last solution, and stops when it changes by less than 10⁻¹¹ of its size; an independent solver in SciPy gives the same gains to 2×10⁻⁹. The slowest closed-loop motion comes from the eigenvalues of A<sub>d</sub> − B<sub>d</sub>K, found as the roots of its characteristic polynomial.',
             code: `var E = expm(Mx), Ad = E.slice(0, n).map(function (r) { return r.slice(0, n); }), Bd = E.slice(0, n).map(function (r) { return [r[n], r[n + 1]]; });
 ...

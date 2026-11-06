@@ -92,7 +92,7 @@ def simulate(D, P, scenario, v=1.5, T=8.0, dt=1e-3, law='lqr', c_sky=300.0, Fmax
     zr, slope = ax_, ax_.slope
     Fmax = Fmax or P['Bl'] * P['I_max']
     x = np.zeros(2 * n); t = 0.0; nT = int(round(T / dt)); hold = int(round(D['Ts'] / dt)); u = np.zeros(2)
-    out = dict(t=[], x=[], u=[], eta=[], zr=[], za=[], azb=[], N=[], kick=[])
+    out = dict(t=[], x=[], u=[], eta=[], zr=[], za=[], azb=[], N=[], kick=[]); xdd_max = 0.0   # the cart's acceleration along the road, its largest at any step (the 10-ms samples would smooth the held forces)
     lag = {'az': 0.0}                                  # z_O'' from the previous evaluation, as the page lags it by one substep
     Mi = np.linalg.inv(S['M']); modes_N = np.zeros(n)
     for k, i in enumerate(I['a']): modes_N[i] = D['rho_N'][0][k]
@@ -116,12 +116,13 @@ def simulate(D, P, scenario, v=1.5, T=8.0, dt=1e-3, law='lqr', c_sky=300.0, Fmax
             u = np.clip(u, -Fmax, Fmax)
         k1 = f(t, x, u); k2 = f(t + dt / 2, x + dt / 2 * k1, u); k3 = f(t + dt / 2, x + dt / 2 * k2, u); k4 = f(t + dt, x + dt * k3, u)
         x = x + dt / 6 * (k1 + 2 * k2 + 2 * k3 + k4); t += dt
-        lag['az'] = k1[n + I['z']]
+        lag['az'] = k1[n + I['z']]; xdd_max = max(xdd_max, abs(k1[n + I['x']]))
         if k % 10 == 0:
             X = v * t + x[I['x']]; z = zr(X); sl = slope(X); Fk, N, Fw = plant.kick(P, S, x[:n], x[n:], z, (v + x[n + I['x']]) * sl, sl)
             out['t'].append(t); out['x'].append(x.copy()); out['u'].append(u.copy()); out['eta'].append(float(D['h'] @ x))
             out['zr'].append(ax_.road(X)); out['za'].append(z); out['azb'].append(float(f(t, x, u)[n + I['z']])); out['N'].append(N); out['kick'].append(Fk)
     for k in out: out[k] = np.array(out[k])
+    out['xdd_max'] = xdd_max
     return out
 
 if __name__ == '__main__':
