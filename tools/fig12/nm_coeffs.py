@@ -146,4 +146,4 @@ if __name__ == '__main__':
         f.write('(function (root) { root.STOUT_NM = ' + json.dumps({'h': R['h'], 'k': R['k'], 'R0': R['R0'], 'R1': R['R1'], 'R2': R['R2'],
                 'sigma2': R['sigma2'], 'Lambda': R['Lambda'], 'forcing': R['forcing'], 'mu': R['mu'], 'd': R['FLT_d'],
                 'eqs': {k: [[round(v, 10), m] for m, v in sorted(e.items())] for k, e in R['equations'].items()}}) +
-                '; if (typeof module !== "undefined") module.exports = root.STOUT_NM; })(typeof self !== "undefined" ? self : this);\n')
+                '; if (typeof module !== "undefined") module.exports = root.STOUT_NM; })(typeof self !== "undefined" ? self : globalThis);\n')

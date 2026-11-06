@@ -21,6 +21,11 @@ speed-up of 6 November 2026; see "Speed").
 |---|---|
 | `public/simulations/beer-slosh.html` | the page: figure, controls, readouts, lecture note, store and data panel; the run loop (`Sim.clock`, 28 ms of solving per frame) |
 | `public/scripts/stout-cart.js` | the solver: `Fluid` (APIC on a MAC grid, wall R(z), spillage), `Road`, `Cart` (motor, controller, suspension, hand), `World` (coupling, drops). Runs in the browser and in Node |
+| `public/scripts/stout-nm.js` | the nonlinear live model's coefficients (Narimanov–Moiseev five-mode equations, h/R = 3.197), written by `tools/fig12/nm_coeffs.py`; do not edit |
+| `tools/fig12/nm_coeffs.py` | derives those coefficients from FLT 2016 eqs. (2.12)–(2.14) through the Lagrangian T − V and the Narimanov–Moiseev ordering; checks FLT Table 1; `python3 tools/fig12/nm_coeffs.py [h ...]` (≈ 1 min per depth) |
+| `tools/fig12/roads.cjs` | the cart on rough roads: `node tools/fig12/roads.cjs <nm\|modal\|3d> <isoA,…,washboard,setts> <ctrl,…> [v0] [s]`; glass a_z rms and in 6.5–7.2 Hz (the Faraday band), lean, spill, wheel airborne, grip limit |
+| `tools/fig12/swirl.cjs` | shakes the nonlinear live model near resonance: does it swirl? `node tools/fig12/swirl.cjs [A] [f/f11,...] [T]` |
+| `notes/fig12/swirl-shots.cjs` | screenshots of the live model swirling (1280, 390 px) |
 | `public/scripts/guinness-glass.js` | the glass's inner radius every 0.5 mm, written by `tools/fig12/glass_profile.py`; do not edit |
 | `public/scripts/stout-view.js` | the drawing (canvas 2D) through a pinhole camera (22° down, turned 18° to the front, 2.2 m away) that rides with the cart; the surface as a bicubic Catmull–Rom spline through the column heights (16 × 64 polar points; beyond R(h) − 3.5 Δx extended over a 3.5 Δx baseline: the drawn edge at rest varies by 2.1 mm instead of 5.3 mm; the lean readout and `eta_front`, `eta_back`, `dw` stay the solver's `columnHeightAt`), lit by one light; the stout's colour by Beer–Lambert across the glass (a drawing constant); drops as 8 ms streaks. Reads the solver's state and computes nothing physical; writes the camera's constants and the drawn points into the store, and the page's checks recompute every point from them (`proj`, `hDraw` in the page) |
 | `tools/fig12/glass_profile.py`, `irish-imperial-pint.svg`, `glass_profile.json` | the glass measured from dimensions.com's section and scaled to 160 × 85 mm |
@@ -298,3 +303,68 @@ stout's state directly; both models are controlled the same way.
 - **Part 2 started**: `tools/fig12/nm_coeffs.py` derives Lukovsky's five-mode Narimanov–Moiseev equations (FLT 2016 eq. 2.23)
   from FLT's integrals (2.12)–(2.14) via the Lagrangian T − V; it reproduces FLT Table 1 at h = 1, Ir = 1 (d1 = 1.758023,
   d2 = −1.083355); for the glass, h/R = 3.197: d1 = 1.563298, d2 = −1.210550 (`notes/fig12/runs/nm_coeffs.txt`).
+
+## Part 2: the nonlinear live model (6 November 2026)
+
+`NMFluid` in `stout-cart.js` (the page's live model since part 2; `ModalFluid` stays for `linearity.cjs modal` and
+`control.cjs modal`): Lukovsky's five-mode Narimanov–Moiseev system (FLT 2016 eqs. 2.17–2.18 with Ir = 1 = eq. 2.23) for
+(p0, p1, r1, p2, r2) of the cylinder of the surface radius, over the whole glass, plus the linear m = 1 modes n = 2, 3. The
+coefficients were derived here (`tools/fig12/nm_coeffs.py`), because FLT's supplementary material with the formulas could not be
+reached; they reproduce FLT Table 1 (h = 1, Ir = 1) to every printed digit: d1 = 1.758023, d2 = −1.083355. For the glass
+(h/R = 3.197): d1 = 1.5633, d2 = −1.2106, σ1² = 1.8412. Each 0.5 ms substep solves a 5 × 5 linear system for the accelerations;
+symplectic Euler; heave as σ² → σ²(1 + a_z/g); damping 2ζσβ̇; swirl seed r1 = 1e−5 R. Surface (N1) over a full-disc column grid
+(`y0`); pour by the weir law at each angle of the wall, the crest's volume shrunk by what poured. Push on the cart: the m = 1
+modes along the road (unchanged formula); the swirl's sideways push and the second-order vertical push are not passed on.
+
+- **Softening against the 3D solver** (`linearity.cjs nm`, `linfit.cjs`): free swing 3.418 → 3.258 Hz (−4.7 %) from 3.8 to
+  34.7 mm; 3D 3.202 → 3.056 Hz (−4.5 %); linear modes constant. Peak leans within 12 % of the 3D at every amplitude. 25 mm bump,
+  open loop: lean 50.8 mm (3D 60.7, linear 73.9), spilled 16.1 g (3D 11.9, linear 9.9).
+- **Swirl** (`swirl.cjs 0.3 0.97,1.0,1.03,1.06 20`, `notes/fig12/runs/swirl-nm.txt`): at 0.97 and 1.00 f11 the sideways swing
+  grows from the seed to 18–20 mm in 12–15 s; at 1.03 and 1.06 it stays planar for 20 s. Whether the ranges match FLT's steady
+  state (stable swirl just above f11) is not established.
+- **Controllers on it** (`control.cjs nm`, `notes/fig12/runs/control-nm.txt`): 25 mm bump, slosh feedback 1.7 mm lean; switched on
+  while swinging, ζ = 0.45.
+- **Page**: store adds s1, ṡ1, c0, c2, s2; `Q_wall` is now the highest rise at the wall over 72 angles; checks recompute every
+  column height, the drawn surface, the probes and the wall maximum from the stored wall heights (`panel-test2.cjs`: 213 checks,
+  none differ, read-backs true at 1600, 1100, 390 px). Note §11.9 ★, equations (N1)–(N5), Table 5, source [17].
+
+### Breaking cap and free fall (part 2, added with part 3)
+
+`NMFluid` clips the swing's wall amplitude sqrt(q1² + s1²) (and each linear mode) at 1.5 R/ξ11 = 31.8 mm, scaling coordinates and
+rates back (`breaks` counts it), and takes gravity as max(0, 1 + a_z/g): on the resonant washboard the five equations otherwise ran
+away to metres. None of the part 2 runs reach the cap (Table 5 and the bump unchanged). Note §11.9 rewritten after the referee
+(`notes/fig12/referee-11-9.md`): (N4) with the glass's numbers, the kinematic condition derived (transport theorem, Green), the small-
+swing check against (17) (−3.335 mm per m/s² both ways), symbols renamed (ψ_M, Θ_k, Π_k, D, 𝖬, K), the swirl forcing in [17]'s terms.
+
+## Part 3: rough roads and the tyre's grip (6 November 2026)
+
+- **Roads** (`Road`, kind `iso` with `cls` A–D, `washboard`, `setts`; the page's *Road* menu): ISO 8608 by (R1), G_d(n0) = 16, 64,
+  256, 1024 e−6 m³, w = 2, 0.011–10 cycles/m over 126 m, seeded phases (seed 8608); washboard λ 0.30 m, 20 mm; setts 150 mm stones,
+  20 mm joints, tops ±4 mm, crown 2 mm, joints −10 mm. The roughness ramps in over 0.5–1 m and the road passes through 0 at 1 m.
+  Measured rms (about the mean): 3.6, 7.3, 14.5, 29.0 mm (expected 3.8, 7.6, 15.3, 30.5); washboard 7.0, setts 4.3 mm.
+- **Grip** (`Cart.forces`): F_m = clip(b i, ±μN), μ = 0.8 (a modelling choice); `slip` flag; no wheel spin state. Unchanged on the
+  bumps (`study.cjs 25 speed 0`: 29.9 mm, `25 off`: 60.7 mm, 11.9 g, as before).
+- **Faraday threshold** (note §6.7, (R3)–(R4)): 4ζg = 0.21 m/s² at 2 f11 = 6.84 Hz. Glass a_z in 6.5–7.2 Hz at 1 m/s (rms):
+  A 0.017, B 0.034, C 0.064, D 0.142, setts 0.034–0.090, washboard 0.13–0.15 m/s².
+- **Results** (`roads.cjs nm`, `notes/fig12/runs/roads-nm.txt`, 6 s at 1 m/s), largest lean open / PI / slosh: A 7.6 / 2.2 / 0.1 mm,
+  B 15.6 / 4.3 / 0.2, C 28.9 / 8.4 / 0.4, D 39.5 (1.2 g) / 15.6 / 0.7, washboard 66.7 (105.7 g) / 81.4 (60.1 g) / 3.0 mm (0 g),
+  setts 18.8 / 16.2 / 5.3 mm (wheel off the road 1–2 %, drive at grip 2–4 %). The washboard's ripples pass at 3.3 Hz at 1 m/s,
+  the stout's own frequency (v = λ f11 = 1.03 m/s). Other speeds (`roads-nm-washboard-speeds.txt`), open loop / slosh spilled:
+  0.7 m/s 2.1 / 0 g, 0.85 m/s 42 / 75 g (slosh feedback FAILS: ripples at the body's 2.8 Hz bounce, heave rms 7.6 m/s², a
+  parametric drive the controller's model lacks), 1.2 m/s 174 / 0 g, 1.4 m/s 156 / 0 g. ISO band starts at 2/126 = 0.016
+  cycles/m (rms of the sum 3.60/7.21/14.41/28.83 mm, phase-independent); checked in `notes/fig12/check-6-7.md`.
+- **Page**: store `road_kind`, `road_rms`, `mu`, `F_grip`, `F_motor0`, `slip`; checks F_drive = clip(b i, ±μN), the road's rms
+  from its table, z_a over rough roads. `panel-test2.cjs` with `ROAD=setts CTRL=slosh` and `ROAD=isoD`: 219 checks, none differ,
+  read-backs true at 1600, 1100, 390 px. Note §6.7 ★ ((R1)–(R4), Key result, Table 2a), sources [18]–[23].
+
+### Reviews of notes 11.9 and 6.7 (6 November 2026)
+
+`notes/fig12/check-11-9.md` (derivation check) confirmed (N4)–(N5) against FLT 2.17–2.18 term by term, FLT Table 1, the static tilt
+(−3.335 mm per m/s²), Table 5, and — with FLT's steady-state theory evaluated with the page's coefficients (m1 = −1.884) — the
+swirl regimes: boundaries ≈ 0.925, 0.985, 1.035 f11, so the model's runs at 0.97, 1.00, 1.03, 1.06 f11 agree. Corrected: Table 5's
+lean is the largest in the 2 s run; 4.6 %; which coefficients change by under 2 % from h/R = 1.5; seed s1 = 0.66 µm; the 5–15 %
+statement; §11.8's 1.2 % and 15–31 %; breaking at 21.2 mm called a linear estimate (real crests likely earlier, ~14–15 mm).
+`notes/fig12/check-6-7.md` and `referee-6-7.md`: ISO band start, rms reason, band values (open loop), (R1)/(R3)/(R4) split for
+phones, the averaging step written out with its assumptions and Landau & Lifshitz §27, f = vn and the long-wave picture, the
+suspension transmissibility check (1/(r² − 1) ≈ 0.2 at r = 2.4; 0.2 × 0.72 = 0.14 vs 0.142 measured), the setts' 5.9 Hz, the
+washboard as a direct resonance, b i defined at use.

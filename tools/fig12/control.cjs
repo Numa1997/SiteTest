@@ -1,5 +1,5 @@
 // The controllers against the stout, through the probes and the Kalman filter, in Node:
-//   node tools/fig12/control.cjs <3d|modal> <bump mm | push N> <off,speed,slosh,...> [dx] [seconds]
+//   node tools/fig12/control.cjs <3d|modal|nm> <bump mm | push N> <off,speed,slosh,...> [dx] [seconds]
 // Scenario "25" (a number): one cosine bump of that height at the set speed 1 m/s, the cart starting at x = 0.5 m (the bump is
 // at 1 m: the disturbance is over by t = 0.65 s). Scenario "push10" (push and a force in N): a flat road, and the reader's push
 // F(t) = F0 sin(pi t / 0.3 s) for t < 0.3 s on the cart at 1 m/s, a hard forward start of the same shape as linearity.cjs.
@@ -12,7 +12,7 @@
 // scanned, a, b, c by least squares; zeta = sigma / sqrt(sigma^2 + w_d^2). OUT=file.json saves the series.
 const fs = require('fs'), path = require('path');
 const load = (f) => { const m = { exports: {} }; new Function('module', fs.readFileSync(path.join(__dirname, '../../public/scripts', f), 'utf8'))(m); return m.exports; };
-const { World } = load('stout-cart.js'), G = load('guinness-glass.js');
+const { World } = load('stout-cart.js'), G = load('guinness-glass.js'), NM = load('stout-nm.js');
 const model = process.argv[2] || 'modal', scen = process.argv[3] || '25', ctrls = (process.argv[4] || 'off,speed,slosh').split(',');
 const dx = +(process.argv[5] || 0.004), T = +(process.argv[6] || 3.0), sense = +(process.env.SENSE || 0);
 const isPush = /^push/.test(scen), F0 = isPush ? +scen.slice(4) : 0, bumpH = isPush ? 0 : +scen / 1000, Tp = 0.3;
@@ -52,7 +52,7 @@ const results = [];
 for (const ctrl of ctrls) {
   const bumps = []; for (let n = 0; n < 60; n++) bumps.push({ x: 1.0 + 2 * n, h: bumpH, L: 0.25 });
   const w = new World({
-    fluid: { dx, profile: G, h0: 0.125, H: (G.R.length - 1) * G.dz + 0.03, modal: model === 'modal' },
+    fluid: { dx, profile: G, h0: 0.125, H: (G.R.length - 1) * G.dz + 0.03, modal: model === 'modal' || model === 'nm', nm: model === 'nm', nmCoeffs: NM },
     road: { bumps, Rw: 0.04, xmin: -1, xmax: 125 },
     cart: { x0: 0.5, Rw: 0.04, Ls: 0.135, v0: 1, ctrl: ON !== null ? 'off' : ctrl },
     sensors: { noiseQ: sense, noiseV: sense / 5 },
