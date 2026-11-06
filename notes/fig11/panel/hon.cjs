@@ -3,7 +3,7 @@
 // c  controller: every stored force recomputed from the stored sample alone; zero-order hold of every 1 ms step; sample times on the loop period's grid
 // d  picture: cart, hinge between the rods and top of the upper rod found in the canvas pixels (alpha first) and compared with the stored state turned into pixels
 // e  scenarios: rest, flick, drag, swing-up, random falls (rolling and STOP), T_s = 10 and 40 ms, a glide, a change of the force limit;
-//    wind (Kármán street in air), water (a swell), windcart (the cart in your hand in a breeze): section 13
+//    wind (Kármán street in air), water (a swell), windcart (the cart in your hand in a breeze): section 13; pumpwater: the pump of 13.7 (law 5)
 // Usage: NODE_PATH=$(npm root -g) node hon.cjs [scenario ...]     ROOT=<repo>  PAGE=<file in public/simulations>  DPR=1|2
 'use strict';
 const { chromium } = require('playwright'); const path = require('path'); const R = require('./ref.cjs');
@@ -95,16 +95,18 @@ function checkLogs(acc) {
     const rates = []; for (let k = 1; k < marks.length; k++) if (marks[k - 1][1] > 1e-15 && marks[k][1] < 1e-3) rates.push((Math.log(marks[k][1] / marks[k - 1][1]) / (marks[k][0] - marks[k - 1][0])).toFixed(1));
     lines.push(`  b chained independent replay from one stored state with the stored forces, ${best[1] - best[0]} steps (${fmt((best[1] - best[0]) * H)} s): max |Δs| ${marks.map((m) => m[0] + ' s: ' + fmt(m[1])).join(', ')}; growth rate of the gap between marks ${rates.join(', ')} 1/s (open loop: the gap grows as fast as nearby motions part, at the fall rate σ₁ = ${fmt(acc.sig || NaN)} 1/s near upright, slower while hanging or caught)`); }
   // c: every stored force from its own row
-  let nc = 0, mc = 0, unc = 0, modes = [0, 0, 0, 0, 0], worstRow = null;
+  let nc = 0, mc = 0, unc = 0, modes = [0, 0, 0, 0, 0, 0], worstRow = null;
   for (const r of cs) { modes[r.mode]++; const c = acc.ctx[r.ver]; let v;
-    if (r.mode >= 3) v = 0;
+    if (r.mode === 3 || r.mode === 4) v = 0;
     else if (!c) { unc++; continue; }
     else if (r.mode === 0) { const rv = R.refAt(r.rk, r.rx, r.rv, r.rt0, r.re0, r.t, c.gw); v = R.lawBalance(c.K, r.s, rv[0], rv[1], r.umax); }
     else if (r.mode === 1) v = R.lawCalm(c.d, c.f, r.s, r.xc, c.kc, r.umax, c.fl ? { ma: c.fl.ma, L1: c.fl.L1, L2: c.fl.L2 } : null);
+    else if (r.mode === 5) { const Vt = c.f[0] + c.f[1], s = r.s, e = s[0] - r.xc, P = c.d[1] * Math.cos(s[1]) * s[4] + c.d[2] * Math.cos(s[2]) * s[5], Ep = 0.5 * (c.d[3] * s[4] * s[4] + 2 * c.d[4] * Math.cos(s[1] - s[2]) * s[4] * s[5] + c.d[5] * s[5] * s[5]) + c.f[0] * Math.cos(s[1]) + c.f[1] * Math.cos(s[2]);   // the pump of 13.7
+      v = Math.abs(e) > 1.2 ? -r.umax * (e + 0.3 * s[3] >= 0 ? 1 : -1) : -r.umax * Math.tanh(3 * (Vt - Ep) / Vt) * (P >= 0 ? 1 : -1); }
     else { const p = acc.plans[r.pl]; if (!p) { unc++; continue; } v = R.lawTrack(p, r.s, r.t, r.tp, r.xc, r.umax); }
     nc++; const d = Math.abs(v - r.u); if (d > mc) { mc = d; worstRow = r; } }
   const okc = mc <= 1e-9 && unc === 0; if (!okc) ok = false;
-  lines.push(`  c force recomputed from each stored sample (state, reference, gains, limit, plan): ${nc} samples (balance ${modes[0]}, calm ${modes[1]}, track ${modes[2]}, off ${modes[3]}, cut ${modes[4]}), max |Δu| = ${fmt(mc)} N${worstRow ? ' (law ' + worstRow.mode + ')' : ''}, ${unc} unchecked ${okc ? 'PASS' : 'FAIL'}`);
+  lines.push(`  c force recomputed from each stored sample (state, reference, gains, limit, plan): ${nc} samples (balance ${modes[0]}, calm ${modes[1]}, track ${modes[2]}, off ${modes[3]}, cut ${modes[4]}, pump ${modes[5]}), max |Δu| = ${fmt(mc)} N${worstRow ? ' (law ' + worstRow.mode + ')' : ''}, ${unc} unchecked ${okc ? 'PASS' : 'FAIL'}`);
   // c: the governor's bites (27), each from its own row: the error from the member of (25) at the cart with the speed before the bite
   let nb = 0, mb = 0, wworst = 0, ub = 0;
   for (const r of cs) { if (!(r.bite === r.bite)) continue; const c = acc.ctx[r.ver]; if (!c || !(c.cs > 0)) { ub++; continue; }
@@ -196,11 +198,14 @@ async function main() {
       return (await pic('braked to rest')) && m.ref === 'fixed' && Math.abs(m.v) < 0.01; },
     wind: async () => { await medium('air', 'street', 2); await pause(true); await pg.click('#reset'); await start(); await drive(8); const a = await pic('in a Kármán street, U = 2 m/s'); await medium('vacuum', 'still', 2); return a; },
     water: async () => { await medium('water', 'waves', 0.4); await pause(true); await pg.click('#reset'); await start(); await drive(8); const a = await pic('in a swell, U = 0.4 m/s'); await medium('vacuum', 'still', 2); return a; },
+    pumpwater: async () => { await medium('water', 'still', 2); await pause(false); await pg.evaluate(() => { DIPC.finishCatch(); DIPC.swingUp(); }); await start(); await drive(16);   // 13.7: no plan in water with the default machine, so after the first failed plan the cart pumps (law 5)
+      const n5 = await pg.evaluate(() => { const g = (k) => DIPC.ds.get(k); let n = 0; for (let r = 0; r < g('cs_n'); r++) if (g('cs_mode')[r] === 5) n++; return n; }); out(`  e pump in still water: ${n5} samples with law 5 in the store`);
+      const a = await pic('in still water, pumping after a failed plan'); await medium('vacuum', 'still', 2); return a && n5 > 0; },
     stillwater: async () => { await medium('water', 'still', 2); await pause(true); await pg.click('#reset'); await start(); await drive(4); await pg.click('#flickR'); await drive(4); const a = await pic('in still water, after a flick'); await medium('vacuum', 'still', 2); return a; },
     windcart: async () => { await medium('air', 'breeze', 3); const a = await scen.cart(); await medium('vacuum', 'still', 2); return a; },
     limit: async () => { await pause(false); await pg.click('#tilt'); await start(); await drive(1); await set({ Fmax: 25 }); await drive(3); await set({ Fmax: 60 }); await pg.evaluate(() => DIPC.finishCatch()); await drive(2); return pic('force limit changed while balancing'); }
   };
-  const order = want.length ? want : ['rest', 'flick', 'drag', 'cart', 'swingup', 'random', 'randomSTOP', 'ts40', 'glide', 'brake', 'limit'];
+  const order = want.length ? want : ['rest', 'flick', 'drag', 'cart', 'swingup', 'random', 'randomSTOP', 'ts40', 'glide', 'brake', 'limit', 'pumpwater'];
   for (const name of order) { out(`== ${name}${dpr !== 1 ? ' (device pixel ratio ' + dpr + ')' : ''}`); const okPic = await (name === 'randomSTOP' ? scen.random(true) : scen[name]());
     await frame(); const bk = await pg.evaluate(() => { const g = (n) => DIPC.ds.get(n), rows = [g('E0'), g('W_motor'), g('E_ext'), g('E_wait')]; return { rows, E: g('E'), bal: g('bal'), rel: Math.abs(g('bal')) / (rows.reduce((a, v) => a + Math.abs(v), 0) + Math.abs(g('E'))) }; });
     out(`  energy book: E0 ${fmt(bk.rows[0])} + W_motor ${fmt(bk.rows[1])} + E_ext ${fmt(bk.rows[2])} + E_wait ${fmt(bk.rows[3])} − E ${fmt(bk.E)} = ${fmt(bk.bal)} J, ${fmt(bk.rel)} of the flows`);
