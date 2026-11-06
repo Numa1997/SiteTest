@@ -20,7 +20,7 @@ const EXTRACT = (a) => {
     if ((row.kind === 0 || row.kind === 2) && row.ver === ver) { const q = DIPC.rk4(DIPC.p, row.s0, row.u, 0.001, row.t); b1n++; if (q.every((v, k) => v === row.s1[k])) b1x++; } else if (row.kind === 0 || row.kind === 2) b1skip++;
     st.push(row); }
   for (let r = 0; r < g('cs_n'); r++) { const i = g('cs_i')[r]; if (i <= a.lastJ) continue;
-    cs.push({ i, t: g('cs_t')[r], k: g('cs_k')[r], due: g('cs_due')[r], next: g('cs_next')[r], s: A('cs_s', r, 6), u: g('cs_u')[r], mode: g('cs_mode')[r], rk: g('cs_rk')[r], rx: g('cs_rx')[r], rv: g('cs_rv')[r], rt0: g('cs_rt0')[r], re0: g('cs_re0')[r], xc: g('cs_xc')[r], tp: g('cs_tp')[r], pl: g('cs_pl')[r], ver: g('cs_ver')[r], umax: g('cs_umax')[r], bite: g('cs_bite')[r], vb: g('cs_vb')[r] }); }
+    cs.push({ i, t: g('cs_t')[r], k: g('cs_k')[r], due: g('cs_due')[r], next: g('cs_next')[r], s: A('cs_s', r, 6), u: g('cs_u')[r], mode: g('cs_mode')[r], rk: g('cs_rk')[r], rx: g('cs_rx')[r], rv: g('cs_rv')[r], rt0: g('cs_rt0')[r], re0: g('cs_re0')[r], xc: g('cs_xc')[r], tp: g('cs_tp')[r], pl: g('cs_pl')[r], ver: g('cs_ver')[r], umax: g('cs_umax')[r], bite: g('cs_bite')[r], vb: g('cs_vb')[r], e1: g('cs_e1')[r], e2: g('cs_e2')[r], us: g('cs_us')[r] }); }
   const ctx = { ver, d: Array.from(g('d')), f: Array.from(g('f')), K: Array.from(g('K')), P: Array.from(g('P')), cs: g('c_star'), gamma: g('gamma'), Ts: g('Ts'), gw: g('glide_w'), kc: g('calm_k'), hw: g('hand_w'), ha: g('hand_amax'), fl: g('medium') === 'vacuum' ? null : { flow: g('flow'), U: g('U_f'), nu: g('mu_f') / g('rho_f'), xi: Array.from(g('xi_r')), cq: g('c_q'), cl: g('c_lin'), cc: g('c_quad'), L1: g('L1'), L2: g('L2'), kr: g('rho_f') * Math.PI * 1e-4 + g('mu_a'), kc: g('rho_f') * 4 / 3 * Math.PI * 0.18 * 0.06 * 0.10 + g('m_ac'), acc: g('flow') !== 'still', ma: { mu: g('mu_a'), mc: g('m_ac') } } };
   const pl = g('pl_serial'), plan = pl && pl !== a.plSerial ? { serial: pl, u: Array.from(g('pl_u')), K: Array.from(g('pl_K')), nom: Array.from(g('pl_nom')) } : null;
   return { st, cs, ctx, plan, sig: g('sig')[0], b1: { n: b1n, exact: b1x, skip: b1skip }, t: DIPC.t, mode: DIPC.mode };
@@ -99,7 +99,9 @@ function checkLogs(acc) {
   for (const r of cs) { modes[r.mode]++; const c = acc.ctx[r.ver]; let v;
     if (r.mode === 3 || r.mode === 4) v = 0;
     else if (!c) { unc++; continue; }
-    else if (r.mode === 0) { const rv = R.refAt(r.rk, r.rx, r.rv, r.rt0, r.re0, r.t, c.gw); v = R.lawBalance(c.K, r.s, rv[0], rv[1], r.umax); }
+    else if (r.mode === 0) { const rv = R.refAt(r.rk, r.rx, r.rv, r.rt0, r.re0, r.t, c.gw);
+      if (r.e1 === 0 && r.e2 === 0 && r.us === 0) v = R.lawBalance(c.K, r.s, rv[0], rv[1], r.umax);
+      else { const e = [r.s[0] - rv[0], R.wrap(r.s[1]) - r.e1, R.wrap(r.s[2]) - r.e2, r.s[3] - rv[1], r.s[4], r.s[5]]; v = r.us; for (let i = 0; i < 6; i++) v -= c.K[i] * e[i]; v = R.sat(v, r.umax); } }   // 13.8: about the flow's rest state
     else if (r.mode === 1) v = R.lawCalm(c.d, c.f, r.s, r.xc, c.kc, r.umax, c.fl ? { ma: c.fl.ma, L1: c.fl.L1, L2: c.fl.L2 } : null);
     else if (r.mode === 5) { const Vt = c.f[0] + c.f[1], s = r.s, e = s[0] - r.xc, P = c.d[1] * Math.cos(s[1]) * s[4] + c.d[2] * Math.cos(s[2]) * s[5], Ep = 0.5 * (c.d[3] * s[4] * s[4] + 2 * c.d[4] * Math.cos(s[1] - s[2]) * s[4] * s[5] + c.d[5] * s[5] * s[5]) + c.f[0] * Math.cos(s[1]) + c.f[1] * Math.cos(s[2]);   // the pump of 13.7
       v = Math.abs(e) > 1.2 ? -r.umax * (e + 0.3 * s[3] >= 0 ? 1 : -1) : -r.umax * Math.tanh(3 * (Vt - Ep) / Vt) * (P >= 0 ? 1 : -1); }

@@ -976,12 +976,13 @@
                     for (k = 0; k < n; k++) { var vkp = V[k][p2], vkq = V[k][q2]; V[k][p2] = c * vkp - sn * vkq; V[k][q2] = sn * vkp + c * vkq; } } }
             return { vals: a.map(function (r, i) { return r[i]; }), vecs: a.map(function (_, j) { return V.map(function (r) { return r[j]; }); }) }; }
         function* catchGen() {   // (19a): the largest c for which W falls over every loop period, W(F(s)) < W(s), at every point with 0 < W(s) ≤ c
+            var eqC = EQ.on ? { u: EQ.u } : { u: 0 }, seqC = [0, EQ.on ? EQ.th1 : 0, EQ.on ? EQ.th2 : 0, 0, 0, 0], pC = EQ.on ? Object.assign({}, p, { fx0: refXV(tSim)[0], ft: tSim }) : p;
             var Pc = Pm, Kc = K.slice(), F = sF.value, Ts = sT.value / 1000, n = Math.max(1, Math.ceil(Ts / 0.01)), h = Ts / n, Lc = chol(Pc), y = new Float64Array(6), seed = 12345, dirs = [], SH = [1, 0.7, 0.4, 0.15], cnt = 0, i, j, k;
             function Wq(x) { var t = 0; for (var a = 0; a < 6; a++) for (var b = 0; b < 6; b++) t += x[a] * Pc[a][b] * x[b]; return t; }
             function dW(dir, c) {   // x = L⁻ᵀ(√c · dir) lies on W = c; F is one loop period of the true equations (9) with u = sat(−Kx) held
-                var x = backsolve(Lc, dir.map(function (a) { return a * Math.sqrt(c); })), uu = 0, a;
+                var x = backsolve(Lc, dir.map(function (a) { return a * Math.sqrt(c); })), uu = eqC.u, a;   // in a flow (13.8): about its rest state, x the deviation from it
                 for (a = 0; a < 6; a++) uu -= Kc[a] * x[a]; uu = Math.max(-F, Math.min(F, uu));
-                for (a = 0; a < 6; a++) y[a] = x[a]; stepF(p, y, uu, h, n, y); return Wq(y) - Wq(x); }
+                for (a = 0; a < 6; a++) y[a] = x[a] + seqC[a]; stepF(pC, y, uu, h, n, y); for (a = 0; a < 6; a++) y[a] -= seqC[a]; return Wq(y) - Wq(x); }
             function nrm(v) { var q = Math.hypot.apply(null, v); return v.map(function (a) { return a / q; }); }
             function rnd() { seed = (seed * 1664525 + 1013904223) % 4294967296; return seed / 4294967296; }
             for (k = 0; k < 1500; k++) { var v = []; for (i = 0; i < 6; i++) v.push(Math.sqrt(-2 * Math.log(rnd() + 1e-12)) * Math.cos(2 * Math.PI * rnd())); dirs.push(nrm(v)); }
@@ -1022,13 +1023,15 @@
             var l00 = Math.sqrt(A00), l10 = A01 / l00, l20 = A02 / l00, l11 = Math.sqrt(A11 - l10 * l10), l21 = (A12 - l20 * l10) / l11, l22 = Math.sqrt(A22 - l20 * l20 - l21 * l21);
             var y0 = r0 / l00, y1 = (r1 - l10 * y0) / l11, y2 = (r2 - l20 * y0 - l21 * y1) / l22, q2 = y2 / l22, q1 = (y1 - l21 * q2) / l11, q0 = (y0 - l10 * q1 - l20 * q2) / l00;
             o[0] = s[3]; o[1] = s[4]; o[2] = s[5]; o[3] = q0; o[4] = q1; o[5] = q2; }
-        function dragF(p, s, o) {   // the drag of a still medium on rods and cart, (33)–(35) with v_f = 0, by 4-point Gauss–Legendre per rod: cheap enough for the planner
-            var F = p.fl, s1 = Math.sin(s[1]), c1 = Math.cos(s[1]), s2 = Math.sin(s[2]), c2 = Math.cos(s[2]), xd = s[3], ad = s[4], bd = s[5], Q0 = 0, Q1 = 0, Q2 = 0, i, k;
+        function dragF(p, s, o) {   // the drag of the medium on rods and cart, (33)–(35), by 4-point Gauss–Legendre per rod: cheap enough for the planner. Still medium: v_f = 0.
+            /* with a flow the controller is told (13.8): v_f at each point from the field, frozen at the time p.ft, with the cart's frame shifted by p.fx0; the push of the flow's own acceleration (39) is left out */
+            var F = p.fl, s1 = Math.sin(s[1]), c1 = Math.cos(s[1]), s2 = Math.sin(s[2]), c2 = Math.cos(s[2]), xd = s[3], ad = s[4], bd = s[5], Q0 = 0, Q1 = 0, Q2 = 0, i, k, fx0 = (p.fx0 || 0) + s[0], fv;
             for (k = 0; k < 2; k++) { var L = k ? p.L2 : p.L1, sn = k ? s2 : s1, cs = k ? c2 : c1, xi = F.xi[k], om = k ? bd : ad;
                 for (i = 0; i < 4; i++) { var sg = GL4.x[i] * L, wq = GL4.w[i] * L, vx = xd + (k ? p.L1 * c1 * ad : 0) + sg * cs * om, vy = -(k ? p.L1 * s1 * ad : 0) - sg * sn * om;
+                    if (F.acc) { fv = fieldV(F.field, fx0 + (k ? p.L1 * s1 : 0) + sg * sn, (k ? p.L1 * c1 : 0) + sg * cs, p.ft || 0, F.U, F.nu); vx -= fv[0]; vy -= fv[1]; }
                     var wt = vx * sn + vy * cs, wn = vx * cs - vy * sn, fn = -xi * wn - F.cq * Math.abs(wn) * wn, ft = -xi / 2 * wt, fx = ft * sn + fn * cs, fy = ft * cs - fn * sn;
                     Q0 += wq * fx; if (k) { Q1 += wq * p.L1 * (fx * c1 - fy * s1); Q2 += wq * sg * fn; } else Q1 += wq * sg * fn; } }
-            o[0] = Q0 - F.cl * xd - F.cc * Math.abs(xd) * xd; o[1] = Q1; o[2] = Q2; }
+            var wc = xd - (F.acc ? fieldV(F.field, fx0, -CART_H / 2, p.ft || 0, F.U, F.nu)[0] : 0); o[0] = Q0 - F.cl * wc - F.cc * Math.abs(wc) * wc; o[1] = Q1; o[2] = Q2; }
         var GL4 = { x: [0.0694318442029737, 0.3300094782075719, 0.6699905217924281, 0.9305681557970263], w: [0.1739274225687269, 0.3260725774312731, 0.3260725774312731, 0.1739274225687269] }, dq3 = new Float64Array(3), CLO = 1e-4;   // the certified-level search may start below W = 1: in a liquid c* can be small
         function stepF(p, s, u, h, n, o) {   // n RK4 steps of length h with u held; the result goes to o (which may be s)
             for (var m = 0; m < n; m++) { var i;
@@ -1047,7 +1050,7 @@
         var WD = 100, WT = 30, WL = 20, WU = 1, WR = 0.02, WS = 0.02;   // weights of the residuals (22), a numerical choice
         function PlanJob(p, s0, T, lim) {
             var M = Math.round(T * 10), dt = T / M, NS = 8, nz = 6 * M, nx = 7 * M, job = this, i, k;
-            var tgt1 = 2 * Math.PI * Math.round(s0[1] / (2 * Math.PI)), tgt2 = 2 * Math.PI * Math.round(s0[2] / (2 * Math.PI));
+            var tgt1 = 2 * Math.PI * Math.round(s0[1] / (2 * Math.PI)) + (lim.e1 || 0), tgt2 = 2 * Math.PI * Math.round(s0[2] / (2 * Math.PI)) + (lim.e2 || 0);   // in a flow, its rest state (13.8)
             var X = new Float64Array(nx), A = new Float64Array(nx * nx), g = new Float64Array(nx), cols = new Int32Array(16), vals = new Float64Array(16);
             var z = new Float64Array(6), zz = new Float64Array(6), base = new Float64Array(6), st = new Float64Array(6), Fm = zeros(6, 6), Gv = new Float64Array(6);
             for (k = 1; k <= M; k++) { var o = 6 * (k - 1), fr = k / M; X[o] = s0[0]; X[o + 1] = s0[1] + (tgt1 - s0[1]) * fr; X[o + 2] = s0[2] + (tgt2 - s0[2]) * fr; X[o + 4] = (tgt1 - s0[1]) / T; X[o + 5] = (tgt2 - s0[2]) / T; }
@@ -1256,7 +1259,7 @@
         ds.var('pl_K', ['p', 'q'], Float64Array, { symbol: 'K(t)', long_name: 'time-varying gains of the tracking controller (23)–(24)', computed_in: 'PlanJob.track()', digits: 4, cw: 80 });
         ds.var('pl_nom', ['p1', 'q'], Float64Array, { symbol: 's<sub>plan</sub>', long_name: 'planned state, cart measured from x_c', computed_in: 'PlanJob.track()', digits: 5, cw: 80 });
         /* the controller's samples: one row each time it looks, written as it looks */
-        var CS = ['cs_i', 'cs_t', 'cs_k', 'cs_due', 'cs_next', 'cs_s', 'cs_u', 'cs_mode', 'cs_rk', 'cs_rx', 'cs_rv', 'cs_rt0', 'cs_re0', 'cs_xc', 'cs_tp', 'cs_pl', 'cs_ver', 'cs_umax', 'cs_bite', 'cs_vb'];
+        var CS = ['cs_i', 'cs_t', 'cs_k', 'cs_due', 'cs_next', 'cs_s', 'cs_u', 'cs_mode', 'cs_rk', 'cs_rx', 'cs_rv', 'cs_rt0', 'cs_re0', 'cs_xc', 'cs_tp', 'cs_pl', 'cs_ver', 'cs_umax', 'cs_bite', 'cs_vb', 'cs_e1', 'cs_e2', 'cs_us'];
         ds.var('cs_n', [], 'int', { symbol: 'rows', long_name: 'samples kept in the log', computed_in: 'logSample()', digits: 0 });
         ds.var('cs_last', [], 'int', { symbol: 'last', long_name: 'row of the newest sample', computed_in: 'logSample()', digits: 0 });
         ds.coord('cs_i', 'j', Int32Array, { symbol: 'j', long_name: 'sample number since the page loaded', computed_in: 'logSample()', digits: 0 });
@@ -1272,6 +1275,9 @@
         ds.var('cs_rv', ['j'], Float64Array, { symbol: 'v<sub>0</sub>', units: 'm/s', long_name: 'reference speed at the start of a cruise or glide', computed_in: 'logSample()', digits: 4 });
         ds.var('cs_rt0', ['j'], Float64Array, { symbol: 't<sub>0</sub>', units: 's', long_name: 'start time of the cruise or glide', computed_in: 'logSample()', digits: 3 });
         ds.var('cs_re0', ['j'], Float64Array, { symbol: 'e<sub>0</sub>', units: 'm', long_name: 'glide’s starting distance from its target', computed_in: 'logSample()', digits: 4 });
+        ds.var('cs_e1', ['j'], Float64Array, { symbol: 'θ<sub>1</sub>*', units: 'rad', long_name: 'the lower rod’s angle at the flow’s rest state the balancer holds (0 without a flow) (13.8)', computed_in: 'eqTrack(), in control()', digits: 5 });
+        ds.var('cs_e2', ['j'], Float64Array, { symbol: 'θ<sub>2</sub>*', units: 'rad', long_name: 'the upper rod’s angle at the flow’s rest state (13.8)', computed_in: 'eqTrack(), in control()', digits: 5 });
+        ds.var('cs_us', ['j'], Float64Array, { symbol: 'u*', units: 'N', long_name: 'the steady force that holds the cart at the flow’s rest state (13.8)', computed_in: 'eqTrack(), in control()', digits: 4 });
         ds.var('cs_xc', ['j'], Float64Array, { symbol: 'x<sub>c</sub>', units: 'm', long_name: 'centre of calming and of the plan', computed_in: 'logSample()', digits: 3 });
         ds.var('cs_tp', ['j'], Float64Array, { symbol: 't<sub>plan</sub>', units: 's', long_name: 'start of the plan', computed_in: 'logSample()', digits: 3 });
         ds.var('cs_pl', ['j'], Int32Array, { symbol: 'plan', long_name: 'number of the stored plan', computed_in: 'logSample()', digits: 0 });
@@ -1326,7 +1332,7 @@
         var LG = {}; CS.concat(ST, TRn).forEach(function (n) { LG[n] = ds.get(n); });   // the log arrays themselves; they are written in place and never reallocated
         ds.get('Qw').set(Q);
 
-        var vy = 0, p, K, Pm, Smod, lamNow = NaN, cLevel = null, catchIt = null, gmode = 'sampled', rolling = true, s, u = 0, xref = 0, on = true, rescue = true, lost = false, flat = false, tSim = 0, tCtl = 0, acc = 0, held = 0, geo = null;
+        var vy = 0, p, K, Pm, Smod, EQ = { on: false, th1: 0, th2: 0, u: 0 }, lamNow = NaN, cLevel = null, catchIt = null, gmode = 'sampled', rolling = true, s, u = 0, xref = 0, on = true, rescue = true, lost = false, flat = false, tSim = 0, tCtl = 0, acc = 0, held = 0, geo = null;
         /* the supervisor's state: mode is 'balance' (LQR), 'calm' (drain the rods' energy while a plan is being made) or 'track' (follow a plan) */
         var mode = 'balance', job = null, tv = null, tPlan = 0, sPred = null, xc = 0, attempt = 0, nextCheck = 0, CALM_K = 2, hp = 3, log = [], pump = false, att0 = 0;
         /* the balancer's reference, an equilibrium of the family (25): fixed at a place, cruising at a constant speed, or gliding from one to a resting place (26) */
@@ -1335,7 +1341,9 @@
             var tau = t - ref.t0; if (ref.kind === 'cruise') return [ref.x + ref.v * tau, ref.v];
             var ex = Math.exp(-GLIDE * tau), b = ref.v + GLIDE * ref.e0; return [ref.target + (ref.e0 + b * tau) * ex, (b - GLIDE * (ref.e0 + b * tau)) * ex]; }
         function redesign() {
-            p = par(); var L = linear(p), Rr = Math.pow(10, sR.value), Ts = sT.value / 1000, Lq = gmode === 'sampled' ? dlqr(L.A, L.B, Rr, Ts) : lqr(L.A, L.B, Rr); K = Lq.K; Pm = Lq.P; Smod = sampledModel(L.A, L.B, Rr, Ts);
+            p = par(); EQ = { on: false, th1: 0, th2: 0, u: 0 }; var L = linear(p);
+            if (flowOn() && s) { var rx = refXV(tSim)[0], e0 = flowEq(rx, tSim, [0, 0, 0]); if (e0.ok) { EQ = { on: true, th1: e0.th1, th2: e0.th2, u: e0.u }; L = linAt(EQ, rx, tSim); } }   // a flow the controller is told: design about its rest state (13.8)
+            var Rr = Math.pow(10, sR.value), Ts = sT.value / 1000, Lq = gmode === 'sampled' ? dlqr(L.A, L.B, Rr, Ts) : lqr(L.A, L.B, Rr); K = Lq.K; Pm = Lq.P; Smod = sampledModel(L.A, L.B, Rr, Ts);
             var Acl = Smod.Phi.map(function (row, i) { return row.map(function (x, j) { return x - Smod.Gam[i][0] * K[j]; }); });   // the sampled loop (16a) with these gains
             var lam = lamNow = specRad(Acl), sg = fallRates(p);
             ver++; book = false;   // a new machine or new gains: a new design number, and the energy book opens again at the next step
@@ -1382,10 +1390,25 @@
 
         /* ---------- the laws: balance (16), calm (21), track (24) ---------- */
         function clampF(v) { var F = sF.value; return Math.max(-F, Math.min(F, v)); }
-        function err(st, t) { var e = wrapState(st), rv = refXV(t); e[0] -= rv[0]; e[3] -= rv[1]; return e; }   // the state measured from the reference equilibrium
+        function err(st, t) { var e = wrapState(st), rv = refXV(t); e[0] -= rv[0]; e[3] -= rv[1]; if (EQ.on) { e[1] -= EQ.th1; e[2] -= EQ.th2; } return e; }   // the state measured from the reference equilibrium
         function Wof(st, t) { return quad(Pm, err(st, t)); }   // the remaining LQR cost (19); below cLevel the balancer is certain to catch
-        function Wred(st) { return quad(Pm, [0, wrapAngle(st[1]), wrapAngle(st[2]), 0, st[4], st[5]]); }   // (19) about the moving equilibrium the cart is on now (25)
-        function lqrU(st, t) { var e = err(st, t), v = 0; for (var i = 0; i < 6; i++) v -= K[i] * e[i]; return clampF(v); }
+        function Wred(st) { return quad(Pm, [0, wrapAngle(st[1]) - (EQ.on ? EQ.th1 : 0), wrapAngle(st[2]) - (EQ.on ? EQ.th2 : 0), 0, st[4], st[5]]); }   // (19) about the moving equilibrium the cart is on now (25)
+        function lqrU(st, t) { var e = err(st, t), v = EQ.on ? EQ.u : 0; for (var i = 0; i < 6; i++) v -= K[i] * e[i]; return clampF(v); }   // in a flow: u = u* − K(s − s*) about the flow's rest state (13.8)
+        /* ---------- a flow the controller is told (13.8): the rods' rest state in it, s* = (x_r, θ₁*, θ₂*, 0, 0, 0) with the steady force u*, from the full equations (9) + (35) ---------- */
+        function flowOn() { return !!(p.fl && p.fl.acc && !solved()); }
+        function flowEq(x, t, z0) {   // Newton on θ̈₁ = θ̈₂ = ẍ = 0 at rest for (θ₁*, θ₂*, u*); the Jacobian by differences of 10⁻⁶
+            var z = z0.slice(), acc3 = function (zz) { return rhs(p, [x, zz[0], zz[1], 0, 0, 0], zz[2], t).slice(3, 6); }, f0, it, i, j;
+            for (it = 0; it < 30; it++) { f0 = acc3(z); if (Math.abs(f0[0]) + Math.abs(f0[1]) + Math.abs(f0[2]) < 1e-11) break;
+                var J = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]; for (j = 0; j < 3; j++) { var zz = z.slice(); zz[j] += 1e-6; var g = acc3(zz); for (i = 0; i < 3; i++) J[i][j] = (g[i] - f0[i]) / 1e-6; }
+                var d = solve3(J, [-f0[0], -f0[1], -f0[2]]); for (i = 0; i < 3; i++) z[i] += d[i]; }
+            var ok = Math.abs(f0[0]) + Math.abs(f0[1]) + Math.abs(f0[2]) < 1e-8 && Math.abs(z[0]) < 1.4 && Math.abs(z[1]) < 1.4 && Math.abs(z[2]) < sF.value;   // a lean of at most 80°, held within the motor's limit
+            return { th1: z[0], th2: z[1], u: z[2], ok: ok }; }
+        function linAt(e, x, t) {   // (10) about the rest state in the flow, by central differences of the full equations
+            var s0 = [x, e.th1, e.th2, 0, 0, 0], A = zeros(6, 6), B = zeros(6, 1), i, j, h = 1e-6;
+            for (j = 0; j < 6; j++) { var a = s0.slice(), b = s0.slice(); a[j] += h; b[j] -= h; var fa = rhs(p, a, e.u, t), fb = rhs(p, b, e.u, t); for (i = 0; i < 6; i++) A[i][j] = (fa[i] - fb[i]) / (2 * h); }
+            var ga = rhs(p, s0, e.u + h, t), gb = rhs(p, s0, e.u - h, t); for (i = 0; i < 6; i++) B[i][0] = (ga[i] - gb[i]) / (2 * h); return { A: A, B: B }; }
+        function eqTrack() {   // each sample of the balancer: the rest state at the reference's place and time, warm-started from the last one (the gains stay those of the design)
+            if (!EQ.on) return; var e = flowEq(refXV(tSim)[0], tSim, [EQ.th1, EQ.th2, EQ.u]); if (e.ok) { EQ.th1 = e.th1; EQ.th2 = e.th2; EQ.u = e.u; } }
         function Ep(st) { var d = p.d, c12 = Math.cos(st[1] - st[2]); return 0.5 * (d[3] * st[4] * st[4] + 2 * d[4] * c12 * st[4] * st[5] + d[5] * st[5] * st[5]) + p.f[0] * Math.cos(st[1]) + p.f[1] * Math.cos(st[2]); }   // (20)
         function uFor(st, a) { return forceFor(p.fl ? { d: p.d, f: p.f, L1: p.L1, L2: p.L2, fl: null, ma: p.ma } : p, st, a); }   // the controller's model: it knows the medium's buoyancy and added mass, not the flow
         function forceFor(p, st, a, t) {   // the force that gives the cart the acceleration a: rows 2–3 of (9) give the angular accelerations (30), row 1 the force
@@ -1425,7 +1448,7 @@
                 if (v === 'end') { mode = 'balance'; tv = null; nextCheck = tSim; if (rolling) ref = { kind: 'cruise', x: s[0], v: s[3], t0: tSim, brake: true }; log.push({ t: tSim, ev: 'plan-end' }); }   // at the end of the plan the balancer gets its chance; the supervisor checks it at once
                 else { mode = 'calm'; tv = null; log.push({ t: tSim, ev: 'left-plan' }); startAttempt(); } }   // the rods left the plan: calm again
             if (mode === 'balance' && ref.brake) govern();   // braking after a rolling catch: one certified bite per look
-            return mode === 'calm' ? calmU(s) : lqrU(s, tSim); }
+            if (mode === 'balance') eqTrack(); return mode === 'calm' ? calmU(s) : lqrU(s, tSim); }
         function period() { cDue = tCtl; return mode === 'balance' ? sT.value / 1000 : 0.01; }   // called inside tCtl += period(), so tCtl is still the time this sample was due
         /* the same loop that moves the machine also predicts it: run(state, until, law) is deterministic, so a plan made for
            the state predicted a few seconds (hp, longer after a plan came too late) ahead starts exactly where the machine will be (checked when it arrives) */
@@ -1435,7 +1458,7 @@
         function startAttempt() {   // plan from where calming will have brought the machine hp seconds from now
             pump = !!p.fl && attempt > att0;   /* in a liquid only: in a vacuum a second plan is found, as before */ var pr = run({ s: s, t: tSim, tc: tCtl, u: u }, tSim + hp, calmU), s0 = pr.s.slice(); s0[0] -= xc;
             sPred = pr; tPlan = pr.t; attempt++; job && !job.done && (hp = Math.min(8, hp * 1.5));
-            job = new PlanJob(p, s0, attempt % 2 ? 4 : 6, { x: 1.5, u: sF.value, vw: rolling ? 0 : 0.3 }); job.t0 = performance.now(); }
+            job = new PlanJob(EQ.on ? Object.assign({}, p, { fx0: xc, ft: tPlan }) : p, s0, attempt % 2 ? 4 : 6, { x: 1.5, u: sF.value, vw: rolling ? 0 : 0.3, e1: EQ.on ? EQ.th1 : 0, e2: EQ.on ? EQ.th2 : 0 }); job.t0 = performance.now(); }
         function supervise() {
             if (!on || held) return;
             if (mode === 'balance' && !lost && tSim >= nextCheck && cLevel !== null) { nextCheck = tSim + 0.1;
@@ -1488,7 +1511,7 @@
             for (i = 0; i < 6; i++) LG.cs_s[6 * r + i] = s0[i];
             LG.cs_mode[r] = cut ? 4 : !on || lost ? 3 : mode === 'balance' ? 0 : mode === 'calm' ? (pump ? 5 : 1) : 2;
             LG.cs_rk[r] = ref.kind === 'fixed' ? 0 : ref.kind === 'cruise' ? 1 : 2; LG.cs_rx[r] = ref.kind === 'glide' ? ref.target : ref.x; LG.cs_rv[r] = ref.v || 0; LG.cs_rt0[r] = ref.t0 || 0; LG.cs_re0[r] = ref.e0 || 0;
-            LG.cs_xc[r] = xc; LG.cs_tp[r] = tPlan; LG.cs_pl[r] = plSerial; LG.cs_ver[r] = ver; LG.cs_umax[r] = sF.value; LG.cs_bite[r] = bite; LG.cs_vb[r] = vBefore; nSamp++; ds.set('cs_n', csN); ds.set('cs_last', r); }   // the count is written with the row it counts
+            LG.cs_e1[r] = EQ.on ? EQ.th1 : 0; LG.cs_e2[r] = EQ.on ? EQ.th2 : 0; LG.cs_us[r] = EQ.on ? EQ.u : 0; LG.cs_xc[r] = xc; LG.cs_tp[r] = tPlan; LG.cs_pl[r] = plSerial; LG.cs_ver[r] = ver; LG.cs_umax[r] = sF.value; LG.cs_bite[r] = bite; LG.cs_vb[r] = vBefore; nSamp++; ds.set('cs_n', csN); ds.set('cs_last', r); }   // the count is written with the row it counts
         function differs(a, b) { for (var i = 0; i < 6; i++) if (a[i] !== b[i]) return true; return false; }
         function logStep(s0, t0, kind, c0, u0) {   // one row of the step log, after the step: s0 before, s after; kind 0 an RK4 step, 1 a step your hand held, 2 an RK4 step with your hand on the cart
             if (kind === 0) { if (tCtl !== c0) logSample(s0, t0, false); else if (u !== u0) logSample(s0, t0, true); }   // the controller looked in this step, or the motor was cut outside a look
@@ -1693,8 +1716,8 @@
             var ins = [['law', m, ''], ['u<sub>max</sub>', F, 'N', 0], ['t', t, 's', 4]].concat(st.map(function (v, k) { return [QN[k], v, QU[k], 6]; }));
             if (m === 3 || m === 4) return { formula: m === 3 ? _t('controller off or fallen: u = 0') : _t('motor cut by the supervisor outside a sample: u = 0'), inputs: ins, value: 0 };
             if (G2('cs_ver')[r] !== G2('ver')) return { formula: _t('taken with the gains of an earlier design, which are no longer stored'), inputs: ins, value: undefined };
-            if (m === 0) { var rv = refAt(G2('cs_rk')[r], G2('cs_rx')[r], G2('cs_rv')[r], G2('cs_rt0')[r], G2('cs_re0')[r], t), e = wrapState(st), v = 0, Kq = G2('K'); e[0] -= rv[0]; e[3] -= rv[1];
-                for (i = 0; i < 6; i++) v -= Kq[i] * e[i]; return { formula: 'u = sat(−K (s − s<sub>r</sub>)), s<sub>r</sub> = (x<sub>r</sub>, 0, 0, v<sub>r</sub>, 0, 0)', inputs: ins.concat([['x<sub>r</sub>', rv[0], 'm', 5], ['v<sub>r</sub>', rv[1], 'm/s', 5]]), value: cl(v) }; }
+            if (m === 0) { var rv = refAt(G2('cs_rk')[r], G2('cs_rx')[r], G2('cs_rv')[r], G2('cs_rt0')[r], G2('cs_re0')[r], t), e = wrapState(st), us = G2('cs_us')[r], v = us, Kq = G2('K'); e[0] -= rv[0]; e[3] -= rv[1]; e[1] -= G2('cs_e1')[r]; e[2] -= G2('cs_e2')[r];
+                for (i = 0; i < 6; i++) v -= Kq[i] * e[i]; return { formula: 'u = sat(u* − K (s − s<sub>r</sub>)), s<sub>r</sub> = (x<sub>r</sub>, θ₁*, θ₂*, v<sub>r</sub>, 0, 0); θ* = u* = 0 without a flow (13.8)', inputs: ins.concat([['x<sub>r</sub>', rv[0], 'm', 5], ['v<sub>r</sub>', rv[1], 'm/s', 5], ['θ₁*', G2('cs_e1')[r], 'rad', 6], ['θ₂*', G2('cs_e2')[r], 'rad', 6], ['u*', us, 'N', 5]]), value: cl(v) }; }
             if (m === 5) { var d5 = G2('d'), f5 = G2('f'), xc5 = G2('cs_xc')[r], P5 = d5[1] * Math.cos(st[1]) * st[4] + d5[2] * Math.cos(st[2]) * st[5], Vt = f5[0] + f5[1], e5 = st[0] - xc5, E5 = 0.5 * (d5[3] * st[4] * st[4] + 2 * d5[4] * Math.cos(st[1] - st[2]) * st[4] * st[5] + d5[5] * st[5] * st[5]) + f5[0] * Math.cos(st[1]) + f5[1] * Math.cos(st[2]);
                 return { formula: 'u = −u<sub>max</sub> tanh(3(f₁ + f₂ − E<sub>p</sub>)/(f₁ + f₂)) sgn 𝒫; if |x − x<sub>c</sub>| > 1.2 m: u = −u<sub>max</sub> sgn(x − x<sub>c</sub> + 0.3 s · ẋ) (13.7)', inputs: ins.concat([['x<sub>c</sub>', xc5, 'm', 4], ['E<sub>p</sub>', E5, 'J', 5], ['𝒫', P5, 'kg m²/s', 5]]), value: Math.abs(e5) > 1.2 ? -F * (e5 + 0.3 * st[3] >= 0 ? 1 : -1) : -F * Math.tanh(3 * (Vt - E5) / Vt) * (P5 >= 0 ? 1 : -1) }; }
             if (m === 1) { var d = G2('d'), xc0 = G2('cs_xc')[r], Pw = d[1] * Math.cos(st[1]) * st[4] + d[2] * Math.cos(st[2]) * st[5], a = Math.max(-8, Math.min(8, G2('calm_k') * Pw - 4 * (st[0] - xc0) - 4 * st[3]));
@@ -1732,7 +1755,7 @@
             { title: 'The solved fluid', note: 'section 13.6: the tank, the coupling between water and machine, and the water’s own book', how: 'run', vars: ['tw_on', 'tw_dx', 'tw_n', 'tw_b', 'tw_ma', 'tw_ma2', 'tw_Fc', 'tw_Qr', 'tw_KE', 'tw_Wm', 'tw_Eb', 'tw_dE', 'tw_Drod', 'tw_Dvis', 'tw_Ex', 'tw_res', 'tw_Lp', 'tw_La', 'tw_Li', 'tw_Ll', 'tw_Lt', 'tw_Eg', 'tw_dEK', 'tw_rr', 'tw_div', 'tw_its', 'tw_ms', 'tw_slow', 'tw_w'] },
             { title: 'The energy book', note: 'what the motor, the flicks, your hand and the fluid put in, against what the machine holds', how: 'run', vars: ['E', 'E0', 'W_motor', 'E_ext', 'W_fl', 'E_wait', 'bal'] },
             { title: 'The supervisor and the swing-up', note: 'which law runs, the plan and when it starts', how: 'run', vars: ['attempt', 'hp', 'x_c', 't_plan', 'plan_busy', 'plan_ready', 'next_check', 'pl_serial', 'pl_n', 'pl_t0', 'pl_xc', 'pl_u', 'pl_K', 'pl_nom'] },
-            { title: 'The controller’s samples', note: 'one row each time the controller looks, every T_s while balancing and every 10 ms while calming or tracking', how: 'run', vars: ['cs_n', 'cs_last', 'cs_i', 'cs_t', 'cs_k', 'cs_due', 'cs_next', 'cs_s', 'cs_u', 'cs_mode', 'cs_rk', 'cs_rx', 'cs_rv', 'cs_rt0', 'cs_re0', 'cs_xc', 'cs_tp', 'cs_pl', 'cs_ver', 'cs_umax', 'cs_bite', 'cs_vb'] },
+            { title: 'The controller’s samples', note: 'one row each time the controller looks, every T_s while balancing and every 10 ms while calming or tracking', how: 'run', vars: ['cs_n', 'cs_last', 'cs_i', 'cs_t', 'cs_k', 'cs_due', 'cs_next', 'cs_s', 'cs_u', 'cs_mode', 'cs_rk', 'cs_rx', 'cs_rv', 'cs_rt0', 'cs_re0', 'cs_xc', 'cs_tp', 'cs_pl', 'cs_ver', 'cs_umax', 'cs_bite', 'cs_vb', 'cs_e1', 'cs_e2', 'cs_us'] },
             { title: 'The physics steps', note: 'one row per 1 ms step of RK4, the last 4 to 8 s', how: 'solver', folded: true, vars: ['st_n', 'st_last', 'st_i', 'st_t', 'st_s0', 'st_s1', 'st_u', 'st_j', 'st_kind', 'st_jump', 'st_ver'] },
             { title: 'The trace', note: 'the lower figure: every 20 ms, the last 8 to 16 s', how: 'run', folded: true, vars: ['tr_n', 'tr_last', 'tr_t', 'tr_th1', 'tr_th2', 'tr_u'] },
             { title: 'Drawing', note: 'how stored values become pixels', how: 'drawing', folded: true, vars: ['box_w', 'box_h', 'vy', 'sc', 'y0', 'cam_x', 'cart_px', 'cart_py', 'cart_w', 'cart_h', 'mid_px', 'mid_py', 'tip_px', 'tip_py', 'target_px', 'hand_px', 'gauge_w', 'gauge_u', 'gauge_x', 'fg_x0', 'fg_u', 'fg_v', 'fps', 'frames'] }
@@ -1874,7 +1897,7 @@
 
         window.DIPC = { get ds() { return ds; }, get tw() { return tw; }, rk4: rk4, fluidQ: fluidQ, fieldV: fieldV, fluidPar: fluidPar, accelF: accelF, draw: draw, get geo() { return geo; }, get held() { return held; }, get uh() { return uh; }, get handX() { return handX; }, get s() { return s; }, set s(v) { s = v.slice(); why = 3; nextCheck = tSim; }, get K() { return K; }, get P() { return Pm; }, get p() { return p; }, fallRates: fallRates, rhs: rhs, rhsF: rhsF, flick: flick, get lost() { return lost; }, set xref(v) { xref = v; ref = { kind: 'fixed', x: v }; }, get ref() { return ref; }, set rolling(v) { rolling = v; }, set gmode(v) { gmode = v; redesign(); },
             finishCatch: function () { while (catchIt) think(1000); return cLevel; }, Wred: function () { return Wred(s); }, specRad: specRad, dlqr: dlqr, sampledModel: sampledModel, linear: linear,
-            get mode() { return mode; }, get cLevel() { return cLevel; }, get t() { return tSim; }, get u() { return u; }, W: function () { return Wof(s, tSim); }, Ep: function () { return Ep(s); }, get log() { return log; }, swingUp: swingUp, step: step, think: think, get job() { return job; }, PlanJob: PlanJob, dragF: dragF, get sF() { return sF; } };
+            get mode() { return mode; }, get cLevel() { return cLevel; }, get t() { return tSim; }, get u() { return u; }, W: function () { return Wof(s, tSim); }, Ep: function () { return Ep(s); }, get log() { return log; }, swingUp: swingUp, step: step, think: think, get job() { return job; }, PlanJob: PlanJob, dragF: dragF, get sF() { return sF; }, get EQ() { return EQ; }, flowEq: function (x, t) { return flowEq(x, t, [0, 0, 0]); } };
     })();
     </script>
     <script src="../scripts/datalog.js"></script>
