@@ -130,7 +130,8 @@ then into the tables. Machine tables: [i18n/de/strings.json](../i18n/de/strings.
 | suspension, active suspension | Fahrwerk, aktives Fahrwerk | نظام التعليق، التعليق الفعّال |
 | strut, spring, damper | Federbein, Feder, Dämpfer | الدعامة، النابض، المخمِّد |
 | wheel, tyre, unsprung mass | Rad, Reifen, ungefederte Masse | العجلة، الإطار، الكتلة غير المعلّقة |
-| heave, pitch (of the body) | Hubbewegung, Nicken | الارتفاع، الانعطاف الطولي |
+| heave, pitch (of the body) | Hubbewegung, Nicken | الحركة الرأسية (as a coordinate: الإزاحة الرأسية)، الميلان الطولي (verb: يميل طوليًّا); not الارتفاع (height) nor الانعطاف (turning), since 6 November 2026 |
+| lift-off (the wheel leaving the road) | Abheben des Rades | انفصال العجلة عن الطريق |
 | strut deflection, tyre deflection | Einfederung (des Federbeins), Reifeneinfederung | انضغاط الدعامة، انضغاط الإطار |
 | body (of the cart: the sprung mass) | Aufbau, Aufbaumasse | الهيكل |
 | actuator, moving-coil actuator | Aktor, Tauchspulenaktor | المشغّل، مشغّل بملفّ متحرّك |
