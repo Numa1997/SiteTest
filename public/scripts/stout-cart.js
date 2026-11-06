@@ -1262,7 +1262,7 @@
   // the accelerations of the five coordinates at the present state, forcing ax, az (m/s^2): solves the 5 x 5 system
   NMFluid.prototype.accel = function (ax, az, out) {
     const st = new Float64Array(15); for (let i = 0; i < 5; i++) { st[i] = this.b[i]; st[5 + i] = this.bd[i]; }
-    const A = [[], [], [], [], []], rhs = [0, 0, 0, 0, 0], gf = 1 + az / this.g, axn = ax / this.g;
+    const A = [[], [], [], [], []], rhs = [0, 0, 0, 0, 0], gf = Math.max(0, 1 + az / this.g), axn = ax / this.g;   // in free fall (a_z < -g) the stout is weightless, no restoring force (the model cannot follow it leaving the floor)
     for (let i = 0; i < 5; i++) {
       for (let j = 0; j < 5; j++) A[i][j] = 0;
       for (const [c, dd, fac, lin, force] of this.eqs[i]) {
@@ -1283,7 +1283,7 @@
     return out;
   };
   NMFluid.prototype.step = function (dt, ax, az) {
-    const n = Math.max(1, Math.ceil(dt / 0.0005)), hs = dt / n, gf = 1 + az / this.g, ts = Math.sqrt(this.g / this.Rs), ht = hs * ts;
+    const n = Math.max(1, Math.ceil(dt / 0.0005)), hs = dt / n, gf = Math.max(0, 1 + az / this.g), ts = Math.sqrt(this.g / this.Rs), ht = hs * ts;
     const acc = new Float64Array(5);
     for (let s = 0; s < n; s++) {
       for (let m = 1; m < this.N; m++) {                                   // the linear modes n = 2, 3 along the road
@@ -1293,6 +1293,14 @@
       }
       this.accel(ax, az, acc);
       for (let i = 0; i < 5; i++) { this.bd[i] += ht * acc[i]; this.b[i] += ht * this.bd[i]; }
+      // Breaking. A crest breaks once its downward acceleration reaches g, at a wall amplitude g / w11^2 = R / xi11 (21.2 mm
+      // here); the theory above assumes it does not. Beyond 1.5 times that, the model clips the swing (the five coordinates and
+      // their rates scaled back so that the swing's wall amplitude sqrt(q1^2 + s1^2) is 1.5 R / xi11): the crest that would
+      // rise higher breaks and its energy is lost; `breaks` counts the substeps where this happened.
+      // A modelling choice standing for breaking, not a theory of it; the 3D solver is the reference there.
+      const A1 = this.Rs * this.Rw[1] * Math.hypot(this.b[1], this.b[2]), Acap = 1.5 * this.Rs / XI[0];
+      if (A1 > Acap) { const f = Acap / A1; for (let i = 0; i < 5; i++) { this.b[i] *= f; this.bd[i] *= f; } this.breaks = (this.breaks || 0) + 1; this.broke = 1; }
+      for (let m = 1; m < this.N; m++) if (Math.abs(this.q[m]) > Acap) { const f = Acap / Math.abs(this.q[m]); this.q[m] *= f; this.qd[m] *= f; this.breaks = (this.breaks || 0) + 1; }
     }
     this.syncQ();
     // the pour over the rim, as in ModalFluid, with the wall height of all modes at each angle
@@ -1326,14 +1334,66 @@
   };
 
   /* ------------------------------------------------------------------- road */
+  // The road: cosine bumps (the default), or a rough surface, made once into a table of heights every 0.5 mm.
+  //   kind 'bumps'                 cosine bumps: centre, height, length
+  //   kind 'iso', cls 'A'..'D'     ISO 8608 random road: z(x) = sum_i sqrt(2 dn G_d(n_i)) cos(2 pi n_i x + phi_i), G_d(n) =
+  //                                G_d(n0) (n/n0)^-2, n0 = 0.1 cycles/m, G_d(n0) = 16, 64, 256, 1024 e-6 m^3 for A–D (the class
+  //                                means; Agostinacchio, Ciampa & Olita 2014, Table 1 and eq. 8), n from 0.011 to 10 cycles/m (ISO's
+  //                                recommended upper limit: the tyre's enveloping filters shorter waves), dn = 1/L, phases from a
+  //                                seeded generator (the same road every time)
+  //   kind 'washboard'             corrugations of a gravel road: z = (H/2)(1 − cos(2 pi x / lambda)), lambda 0.30 m, H 20 mm
+  //                                (Taberlet et al. 2007: lab ripples 50–500 mm; a drone survey of a real road, 20.6 mm peak to peak)
+  //   kind 'setts'                 a street of setts (Belgian block): stones 150 mm long with 20 mm joints (Majer et al. 2024:
+  //                                15 x 15 cm, joints 12–30 mm), each stone's top at a seeded random height, uniform +-4 mm,
+  //                                crowned by 2 mm; the joints 10 mm below the mean top. A modelling choice from those dimensions,
+  //                                not a measured profile
+  // The roughness ramps in over 0.5–1 m (a raised cosine), so the cart starts on a flat road at the set speed.
   function Road(o) {
     o = o || {};
+    this.kind = o.kind || 'bumps'; this.cls = o.cls || 'C'; this.seed = o.seed != null ? o.seed : 8608;
     this.bumps = o.bumps || [{ x: 1.0, h: 0.02, L: 0.25 }];   // cosine bumps: centre, height, length (m)
     this.Rw = o.Rw || 0.05;
     this.xmin = o.xmin != null ? o.xmin : -1; this.xmax = o.xmax != null ? o.xmax : 8; this.h = 0.0005;
+    if (this.kind !== 'bumps') this.profile();
     this.build();
   }
+  Road.GD = { A: 16e-6, B: 64e-6, C: 256e-6, D: 1024e-6 };
+  // the rough surface as a table zt every 0.5 mm from xmin (a ramp in over 0.5 m before x = 1 m)
+  Road.prototype.profile = function () {
+    const n = Math.round((this.xmax - this.xmin) / this.h) + 1, h = this.h, zt = new Float64Array(n), rng = new Rng(this.seed);
+    const ramp = (x) => (x <= 0.5 ? 0 : x >= 1 ? 1 : 0.5 * (1 - Math.cos(Math.PI * (x - 0.5) / 0.5)));
+    if (this.kind === 'iso') {
+      const L = this.xmax - this.xmin, dn = 1 / L, G0 = Road.GD[this.cls], n0 = 0.1;
+      for (let k = Math.ceil(0.011 / dn); dn * k <= 10 + 1e-12; k++) {   // 0.011 to 10 cycles/m
+        const nk = dn * k, amp = Math.sqrt(2 * dn * G0 * Math.pow(nk / n0, -2)), ph = 2 * Math.PI * rng.u();
+        // cos(2 pi nk x + ph) on the grid by rotation: c_{j+1} = c_j cos d - s_j sin d
+        const d = 2 * Math.PI * nk * h, cd = Math.cos(d), sd = Math.sin(d);
+        let c = Math.cos(2 * Math.PI * nk * this.xmin + ph), sn = Math.sin(2 * Math.PI * nk * this.xmin + ph);
+        for (let j = 0; j < n; j++) { zt[j] += amp * c; const c2 = c * cd - sn * sd; sn = sn * cd + c * sd; c = c2; }
+      }
+    } else if (this.kind === 'washboard') {
+      const lam = 0.30, H = 0.020;
+      for (let j = 0; j < n; j++) { const x = this.xmin + j * h; zt[j] = 0.5 * H * (1 - Math.cos(2 * Math.PI * x / lam)); }
+    } else if (this.kind === 'setts') {
+      const P = 0.170, S = 0.150, tops = [];
+      for (let j = 0; j < n; j++) {
+        const x = this.xmin + j * h, k = Math.floor((x - this.xmin) / P), u = (x - this.xmin) - k * P;
+        while (tops.length <= k) tops.push(0.004 * (2 * rng.u() - 1));
+        zt[j] = u < S ? tops[k] + 0.002 * (1 - Math.pow(2 * u / S - 1, 2)) : -0.010;
+      }
+    }
+    // the road is shifted so that it passes through 0 at x = 1 m, where the ramp ends: the cart meets the roughness, not a step
+    // of the long waves (ISO's longest, 126 m, are tens of mm high)
+    const z1 = zt[Math.round((1 - this.xmin) / h)];
+    for (let j = 0; j < n; j++) zt[j] = (zt[j] - z1) * ramp(this.xmin + j * h);
+    { let m = 0, m2 = 0; for (let j = 0; j < n; j++) { m += zt[j]; m2 += zt[j] * zt[j]; } m /= n; this.rms = Math.sqrt(Math.max(0, m2 / n - m * m)); }   // about the mean
+    this.zt = zt;
+  };
   Road.prototype.zr = function (x) {
+    if (this.zt) {
+      const f = (x - this.xmin) / this.h; let i = Math.floor(f); if (i < 0) return 0; if (i > this.zt.length - 2) return 0;
+      return this.zt[i] + (f - i) * (this.zt[i + 1] - this.zt[i]);
+    }
     let z = 0;
     for (const b of this.bumps) {
       const s = (x - b.x) / b.L;
@@ -1414,6 +1474,7 @@
     this.hand = null;            // x the hand pulls towards, or null
     this.road = o.road || new Road({ Rw: this.Rw });
     this.pushF = 0;              // the reader's push, N (horizontal)
+    this.mu = o.mu != null ? o.mu : 0.8;   // tyre–road friction coefficient (rubber on a dry road, a modelling choice)
     this.reset(o.x0 != null ? o.x0 : 0);
   }
   Cart.prototype.bForce = function () { return this.Ngear * this.Km / this.Rw; };
@@ -1508,7 +1569,10 @@
     if (N < 0) N = 0;                                            // the tyre cannot pull on the road
     const Fs = -this.k * (this.zb - this.zw - this.Ls) - this.c * (this.vzb - this.vzw) + this.us;  // on the body
     const Mx = this.massX();
-    const Fmotor = this.bForce() * this.i, Froad = -N * dza;
+    // the drive pushes through the tyre's grip: at most mu N either way (a wheel in the air pushes nothing). The wheel's own
+    // spin while it slips is not modelled: the motor's speed stays tied to the cart's (a stated simplification)
+    const Fm0 = this.bForce() * this.i, Fgrip = this.mu * N, Fmotor = Fm0 > Fgrip ? Fgrip : Fm0 < -Fgrip ? -Fgrip : Fm0, Froad = -N * dza;
+    this.slip = Fmotor !== Fm0 ? 1 : 0; this.Fgrip = Fgrip;
     let Fhand = 0;
     if (this.hand != null) { Fhand = this.kh * (this.hand - this.x) - this.ch * this.vx; if (Fhand > this.Fhmax) Fhand = this.Fhmax; else if (Fhand < -this.Fhmax) Fhand = -this.Fhmax; }
     const ax = (Froad + Fmotor - this.cx * this.vx + this.pushF + Fhand + Fx) / Mx;
@@ -1525,7 +1589,7 @@
     if (D) {
       D.set('x', this.x); D.set('vx', this.vx); D.set('zb', this.zb); D.set('vzb', this.vzb); D.set('zw', this.zw); D.set('vzw', this.vzw);
       D.set('z_a', za); D.set('dz_a', dza); D.set('N', N); D.set('F_s', Fs); D.set('F_road', Froad); D.set('F_drive', Fmotor);
-      D.set('F_push', this.pushF); D.set('F_hand', Fhand); D.set('F_lx', Fx); D.set('F_lz', Fz); D.set('a_x', ax); D.set('a_zb', azb); D.set('a_zw', azw);
+      D.set('F_push', this.pushF); if (D.has('F_grip')) { D.set('F_grip', Fgrip); D.set('F_motor0', Fm0); D.set('slip', this.slip); } D.set('F_hand', Fhand); D.set('F_lx', Fx); D.set('F_lz', Fz); D.set('a_x', ax); D.set('a_zb', azb); D.set('a_zw', azw);
       D.set('i_m', this.i); D.set('i_cmd', this.icmd); D.set('i_reach', ilim); D.set('V_m', this.Vm); D.set('emf', emf); D.set('u_s', this.us); D.set('u_s_cmd', this.uscmd);
       D.set('Mx', Mx); D.set('Ms', Ms); D.set('ml', this.ml);
     }

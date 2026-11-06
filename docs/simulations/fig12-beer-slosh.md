@@ -23,6 +23,7 @@ speed-up of 6 November 2026; see "Speed").
 | `public/scripts/stout-cart.js` | the solver: `Fluid` (APIC on a MAC grid, wall R(z), spillage), `Road`, `Cart` (motor, controller, suspension, hand), `World` (coupling, drops). Runs in the browser and in Node |
 | `public/scripts/stout-nm.js` | the nonlinear live model's coefficients (Narimanov–Moiseev five-mode equations, h/R = 3.197), written by `tools/fig12/nm_coeffs.py`; do not edit |
 | `tools/fig12/nm_coeffs.py` | derives those coefficients from FLT 2016 eqs. (2.12)–(2.14) through the Lagrangian T − V and the Narimanov–Moiseev ordering; checks FLT Table 1; `python3 tools/fig12/nm_coeffs.py [h ...]` (≈ 1 min per depth) |
+| `tools/fig12/roads.cjs` | the cart on rough roads: `node tools/fig12/roads.cjs <nm\|modal\|3d> <isoA,…,washboard,setts> <ctrl,…> [v0] [s]`; glass a_z rms and in 6.5–7.2 Hz (the Faraday band), lean, spill, wheel airborne, grip limit |
 | `tools/fig12/swirl.cjs` | shakes the nonlinear live model near resonance: does it swirl? `node tools/fig12/swirl.cjs [A] [f/f11,...] [T]` |
 | `notes/fig12/swirl-shots.cjs` | screenshots of the live model swirling (1280, 390 px) |
 | `public/scripts/guinness-glass.js` | the glass's inner radius every 0.5 mm, written by `tools/fig12/glass_profile.py`; do not edit |
@@ -303,7 +304,7 @@ stout's state directly; both models are controlled the same way.
   from FLT's integrals (2.12)–(2.14) via the Lagrangian T − V; it reproduces FLT Table 1 at h = 1, Ir = 1 (d1 = 1.758023,
   d2 = −1.083355); for the glass, h/R = 3.197: d1 = 1.563298, d2 = −1.210550 (`notes/fig12/runs/nm_coeffs.txt`).
 
-## Part 2: the nonlinear live model (7 November 2026)
+## Part 2: the nonlinear live model (6 November 2026)
 
 `NMFluid` in `stout-cart.js` (the page's live model since part 2; `ModalFluid` stays for `linearity.cjs modal` and
 `control.cjs modal`): Lukovsky's five-mode Narimanov–Moiseev system (FLT 2016 eqs. 2.17–2.18 with Ir = 1 = eq. 2.23) for
@@ -326,3 +327,29 @@ modes along the road (unchanged formula); the swirl's sideways push and the seco
 - **Page**: store adds s1, ṡ1, c0, c2, s2; `Q_wall` is now the highest rise at the wall over 72 angles; checks recompute every
   column height, the drawn surface, the probes and the wall maximum from the stored wall heights (`panel-test2.cjs`: 213 checks,
   none differ, read-backs true at 1600, 1100, 390 px). Note §11.9 ★, equations (N1)–(N5), Table 5, source [17].
+
+### Breaking cap and free fall (part 2, added with part 3)
+
+`NMFluid` clips the swing's wall amplitude sqrt(q1² + s1²) (and each linear mode) at 1.5 R/ξ11 = 31.8 mm, scaling coordinates and
+rates back (`breaks` counts it), and takes gravity as max(0, 1 + a_z/g): on the resonant washboard the five equations otherwise ran
+away to metres. None of the part 2 runs reach the cap (Table 5 and the bump unchanged). Note §11.9 rewritten after the referee
+(`notes/fig12/referee-11-9.md`): (N4) with the glass's numbers, the kinematic condition derived (transport theorem, Green), the small-
+swing check against (17) (−3.335 mm per m/s² both ways), symbols renamed (ψ_M, Θ_k, Π_k, D, 𝖬, K), the swirl forcing in [17]'s terms.
+
+## Part 3: rough roads and the tyre's grip (6 November 2026)
+
+- **Roads** (`Road`, kind `iso` with `cls` A–D, `washboard`, `setts`; the page's *Road* menu): ISO 8608 by (R1), G_d(n0) = 16, 64,
+  256, 1024 e−6 m³, w = 2, 0.011–10 cycles/m over 126 m, seeded phases (seed 8608); washboard λ 0.30 m, 20 mm; setts 150 mm stones,
+  20 mm joints, tops ±4 mm, crown 2 mm, joints −10 mm. The roughness ramps in over 0.5–1 m and the road passes through 0 at 1 m.
+  Measured rms (about the mean): 3.6, 7.3, 14.5, 29.0 mm (expected 3.8, 7.6, 15.3, 30.5); washboard 7.0, setts 4.3 mm.
+- **Grip** (`Cart.forces`): F_m = clip(b i, ±μN), μ = 0.8 (a modelling choice); `slip` flag; no wheel spin state. Unchanged on the
+  bumps (`study.cjs 25 speed 0`: 29.9 mm, `25 off`: 60.7 mm, 11.9 g, as before).
+- **Faraday threshold** (note §6.7, (R3)–(R4)): 4ζg = 0.21 m/s² at 2 f11 = 6.84 Hz. Glass a_z in 6.5–7.2 Hz at 1 m/s (rms):
+  A 0.017, B 0.034, C 0.064, D 0.142, setts 0.034–0.090, washboard 0.13–0.15 m/s².
+- **Results** (`roads.cjs nm`, `notes/fig12/runs/roads-nm.txt`, 6 s at 1 m/s), largest lean open / PI / slosh: A 7.6 / 2.2 / 0.1 mm,
+  B 15.6 / 4.3 / 0.2, C 28.9 / 8.4 / 0.4, D 39.5 (1.2 g) / 15.6 / 0.7, washboard 66.7 (105.7 g) / 81.4 (60.1 g) / 3.0 mm (0 g),
+  setts 18.8 / 16.2 / 5.3 mm (wheel off the road 1–2 %, drive at grip 2–4 %). The washboard's ripples pass at 3.3 Hz at 1 m/s,
+  the stout's own frequency (v = λ f11 = 1.03 m/s).
+- **Page**: store `road_kind`, `road_rms`, `mu`, `F_grip`, `F_motor0`, `slip`; checks F_drive = clip(b i, ±μN), the road's rms
+  from its table, z_a over rough roads. `panel-test2.cjs` with `ROAD=setts CTRL=slosh` and `ROAD=isoD`: 219 checks, none differ,
+  read-backs true at 1600, 1100, 390 px. Note §6.7 ★ ((R1)–(R4), Key result, Table 2a), sources [18]–[23].

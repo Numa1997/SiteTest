@@ -226,6 +226,7 @@ RULES = [
     (r'public/scripts/stout-nm\.js', 'Fig. 12: the coefficients of the nonlinear (Narimanov\u2013Moiseev) live model, written by tools/fig12/nm_coeffs.py; do not edit.', 'docs/simulations/fig12-beer-slosh.md'),
     (r'tools/fig12/swirl\.cjs', 'Fig. 12: shakes the nonlinear live model along the road at frequencies near resonance and prints whether it swirls.', 'docs/simulations/fig12-beer-slosh.md'),
     (r'notes/fig12/swirl-shots\.cjs', 'Fig. 12: screenshots of the nonlinear live model swirling, at 1280 and 390 px.', 'docs/simulations/fig12-beer-slosh.md'),
+    (r'tools/fig12/roads\.cjs', 'Fig. 12: the cart on the rough roads (ISO 8608 classes, washboard, setts): vertical shaking at twice the swing frequency, lean, spill, wheel off the road, grip limit.', 'docs/simulations/fig12-beer-slosh.md'),
     (r'notes/fig12/ctrl-shots\.cjs', 'Fig. 12: screenshots of the live model over a 25 mm bump with each controller, and the largest lean the page read.', 'docs/simulations/fig12-beer-slosh.md'),
     (r'tools/fig12/same\.cjs', 'Fig. 12: fingerprint (SHA-256) of the solver state after 1 s with a push; a speed-up must leave it unchanged.', 'docs/simulations/fig12-beer-slosh.md'),
     (r'public/scripts/guinness-glass\.js', 'Fig. 12: inner radius of the Guinness tulip pint every 0.5 mm, written by tools/fig12/glass_profile.py; do not edit.', 'docs/simulations/fig12-beer-slosh.md'),

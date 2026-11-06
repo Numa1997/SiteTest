@@ -9,15 +9,16 @@ const { chromium } = require('playwright');
     await p.goto(base + '/simulations/beer-slosh.html'); await p.waitForTimeout(1500);
     await p.evaluate(() => document.querySelectorAll('details, .fold').forEach((d) => { if (d.tagName === 'DETAILS') d.open = true; }));
     await p.evaluate(() => { const b2 = document.querySelector('#paper button, .paper__toggle, [data-fold]'); if (b2) b2.click(); });
+    for (let k = 0; k < 4; k++) { await p.evaluate(() => document.querySelectorAll('#paper [aria-expanded="false"]').forEach((e) => e.click())); await p.waitForTimeout(400); }
     await p.waitForTimeout(1500);
     const r = await p.evaluate(() => {
       const h = [...document.querySelectorAll('h4')].find((e) => /8\.5/.test(e.textContent));
       const sec = h ? h.closest('section') : null;
-      const wide = [...document.querySelectorAll('.katex-display')].filter((e) => e.scrollWidth > e.clientWidth + 1 && sec && sec.contains(e)).length;
+      const wide = [...document.querySelectorAll('.katex-display, .ptab')].filter((e) => e.scrollWidth > e.clientWidth + 1).map((e) => (e.querySelector('.tag') || e.querySelector('caption') || e).textContent.slice(0, 24));
       if (h) h.scrollIntoView();
       return { err: document.querySelectorAll('.katex-error').length, sx: document.documentElement.scrollWidth > innerWidth, found: !!h, visible: h ? h.getBoundingClientRect().height > 0 : false, wide };
     });
-    console.log(`${W} px: KaTeX errors ${r.err}, sideways scroll ${r.sx}, §8.5 found ${r.found} visible ${r.visible}, display equations in §8 wider than their box ${r.wide}`);
+    console.log(`${W} px: KaTeX errors ${r.err}, sideways scroll ${r.sx}, §8.5 found ${r.found} visible ${r.visible}, equations and tables wider than their box ${r.wide.length ? r.wide.join(' | ') : 'none'}`);
     for (let k = 0; k < (W === 390 ? 6 : 3); k++) { await p.screenshot({ path: `${out}/note85-${W}-${k}.png` }); await p.mouse.wheel(0, 850); await p.waitForTimeout(300); }
     await p.close();
   }
