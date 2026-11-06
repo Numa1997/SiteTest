@@ -753,25 +753,38 @@
     this.x = x; this.vx = this.v0;
     this.zw = za - (Ms + this.mw) * g / this.kt;                 // static tyre deflection
     this.zb = this.zw + this.Ls - Ms * g / this.k;               // static spring deflection
-    this.vzb = 0; this.vzw = 0;
-    this.N = (Ms + this.mw) * g; this.ax = 0; this.azb = 0; this.t = 0;
+    this.vzb = 0; this.vzw = 0; this.t = 0; this.Flx = 0; this.Flz = 0;
+    this.forces(0, 0);
   };
-  // one step h with the liquid's reaction (Fx, Fz) on the glass (the part beyond rigid co-motion)
-  Cart.prototype.step = function (h, Fx, Fz) {
-    const g = this.g, Ms = this.Mb + this.ml;
-    const [za, dza] = this.road.axle(this.x);
+  // the forces at the present state, with the liquid's reaction (Fx, Fz) beyond rigid co-motion: kept on the cart
+  // (and in the store, when the page gave one) so that every stored force belongs to the stored state
+  Cart.prototype.forces = function (Fx, Fz) {
+    const g = this.g, Ms = this.Mb + this.ml, D = this.ds;
+    const ad = this.road.axle(this.x), za = ad[0], dza = ad[1];
     const vza = dza * this.vx;
     let N = this.kt * (za - this.zw) + this.ct * (vza - this.vzw);
     if (N < 0) N = 0;                                            // the tyre cannot pull on the road
     const Fs = -this.k * (this.zb - this.zw - this.Ls) - this.c * (this.vzb - this.vzw);  // on the body
     const Mx = Ms + this.mw + this.Iw / (this.Rw * this.Rw);
-    const Fdrive = this.cx * this.v0;
-    const ax = (-N * dza + Fdrive - this.cx * this.vx + this.pushF + Fx) / Mx;
+    const Fdrive = this.cx * this.v0, Froad = -N * dza;
+    const ax = (Froad + Fdrive - this.cx * this.vx + this.pushF + Fx) / Mx;
     const azb = (Fs - Ms * g + Fz) / Ms;
     const azw = (-Fs - this.mw * g + N) / this.mw;
-    this.vx += h * ax; this.vzb += h * azb; this.vzw += h * azw;      // symplectic Euler
+    this.za = za; this.dza = dza; this.N = N; this.Fs = Fs; this.Froad = Froad; this.Fdrive = Fdrive;
+    this.ax = ax; this.azb = azb; this.azw = azw; this.Flx = Fx; this.Flz = Fz;
+    if (D) {
+      D.set('x', this.x); D.set('vx', this.vx); D.set('zb', this.zb); D.set('vzb', this.vzb); D.set('zw', this.zw); D.set('vzw', this.vzw);
+      D.set('z_a', za); D.set('dz_a', dza); D.set('N', N); D.set('F_s', Fs); D.set('F_road', Froad); D.set('F_drive', Fdrive);
+      D.set('F_push', this.pushF); D.set('F_lx', Fx); D.set('F_lz', Fz); D.set('a_x', ax); D.set('a_zb', azb); D.set('a_zw', azw);
+    }
+  };
+  // one step h, symplectic Euler: velocities from the forces at the present state, then positions from the new velocities;
+  // then the forces at the new state, for the next step
+  Cart.prototype.step = function (h, Fx, Fz) {
+    this.vx += h * this.ax; this.vzb += h * this.azb; this.vzw += h * this.azw;
     this.x += h * this.vx; this.zb += h * this.vzb; this.zw += h * this.vzw;
-    this.N = N; this.ax = ax; this.azb = azb; this.t += h;
+    this.t += h;
+    this.forces(Fx, Fz);
   };
 
   /* --------------------------------------------------------------- coupling */
@@ -802,10 +815,30 @@
       this.fluid.step(h, ax, az);
       const P = this.fluid.momentum();
       // reaction of the liquid on the glass beyond rigid co-motion: -dP_rel/dt
-      this.Fx = -(P[0] - this.P[0]) / h; this.Fz = -(P[1] - this.P[1]) / h;
+      const P0 = this.P;
+      this.Fx = -(P[0] - P0[0]) / h; this.Fz = -(P[1] - P0[1]) / h;
       this.P = P; this.lastAx = ax; this.lastAz = az;
-      left -= h; this.t += h;
+      c.forces(this.Fx, this.Fz);                               // the stout's new reaction acts from now
+      left -= h; this.t += h; this.steps = (this.steps || 0) + 1;
+      const D = this.ds;
+      if (D) {
+        D.set('t', this.t); D.set('h_f', h); D.set('n_cart', n); D.set('vx_0', vx0); D.set('vzb_0', vz0); D.set('vx_1', c.vx); D.set('vzb_1', c.vzb);
+        D.set('a_gx', ax); D.set('a_gz', az); D.set('P0_x', P0[0]); D.set('P0_z', P0[1]); D.set('P_x', P[0]); D.set('P_z', P[1]);
+        D.set('F_lx_next', this.Fx); D.set('F_lz_next', this.Fz); D.set('steps', this.steps);
+        D.set('cg_iters', this.fluid.cgIters); D.set('cg_res', this.fluid.cgResidual || 0);
+      }
     }
+  };
+
+  // give the world a store (scripts/dataset.js): the particles' positions and the column heights then live in the
+  // store's arrays, and the scalars above are written into it where they are computed
+  World.prototype.attach = function (ds) {
+    const f = this.fluid;
+    ['px', 'py', 'pz'].forEach((k) => { const a = ds.get(k); a.set(f[k]); f[k] = a; });
+    f.colH = ds.get('h_col');
+    this.ds = ds; this.cart.ds = ds;
+    this.cart.forces(this.Fx, this.Fz);
+    f.columnHeights(); ds.touch('h_col');
   };
 
   return { Fluid, Road, Cart, World };
