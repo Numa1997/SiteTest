@@ -139,12 +139,9 @@ the right. It is a plain SVG of 1 738 paths, `viewBox="104 0 452 250"`, in the t
 No stylesheet styles it: size, spacing and the surrounding `inline-flex` span are inline `style` attributes on each page
 ([styles.md](styles.md#design-rules)).
 
-## `public/vendor/three/` · three.js (since 5 November 2026)
+## three.js and the Blender model (5 to 6 November 2026, removed)
 
-three.js r181 (MIT, `LICENSE.txt`), copied unchanged from the npm package `three@0.181.0`: `three.module.min.js` (355 kB), which imports `three.core.min.js` (380 kB); 186 kB together when gzipped. Only Fig. 12 loads it, as an ES module, so the security policy (`script-src 'self'`) needs no change. The thumbnail `images/sims/beer-slosh.webp` is rendered from that page's 3D view (`node notes/fig12/shot.cjs`).
-
-Since the cart version of Fig. 12 (5 November 2026, later) the folder also holds `GLTFLoader.js` (115 kB, 25 kB gzipped) and `BufferGeometryUtils.js` from the same package's `examples/jsm/`, with their `from 'three'` imports rewritten to `./three.module.min.js` so that no import map is needed; nothing else was changed.
-
-## `public/models/` · 3D models from Blender (since 5 November 2026)
-
-`models/fig12/glass.glb` (365 kB, 158 kB gzipped; 2 mm rings, 64 segments): the Guinness glass as two meshes, the outer and the inner surface with the sculpted panels, built in Blender (bpy 5.2) by `tools/fig12/glass.py` from `tools/fig12/geom.py` and exported as a glTF binary, metres, y up. Fig. 12 loads it with `GLTFLoader` and gives it its own material. The same script keeps a copy next to itself in `tools/fig12/`. Blender's own animation is not used: the page moves the glass and deforms the stout itself from the simulation, every frame.
+Fig. 12 drew its cart in 3D with three.js r181 (`public/vendor/three/`) and loaded the glass as a glTF binary built in Blender
+(`public/models/fig12/glass.glb`). The one-wheel version of 6 November draws a 2D side view on a canvas, like every other figure, and
+both folders were removed. The Blender script `tools/fig12/glass.py` stays: it builds the glass from `geom.py`, checks the cavity's volume
+independently, and writes `tools/fig12/glass.glb`, which no page loads.

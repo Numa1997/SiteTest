@@ -1,4 +1,4 @@
-# Fig. 12 · A Pint of Stout on a Suspension — status (5 November 2026, cart version)
+# Fig. 12 · A Pint of Stout on a Suspension — status (6 November 2026, one-wheel cart)
 
 ## Done, with evidence
 - Glass from the dimensioned drawing (dimensions.com, vector outline) scaled to 160 × 85 mm, with the two sculpted panels of the 2010 glass (photographs): brim 576.2 mL (quadrature) vs 575.3 mL (Blender mesh, 64 sides, polygon factor 0.9984); 568 mL at 158.2 mm, 1.8 mm below the rim, as a brim-measure pint glass should; the photograph profile of the first version was 6 % too big. `tools/fig12/geom.py`, `glass.py`.
@@ -27,5 +27,25 @@
 - Fixed in the note: the drawing's scale factors; the volume check's honesty; the Rayleigh units and the modal-row claim; the controller's level-road tilt error (2.1° on the bump), why x_c is not a state, and why deflection coordinates (the kerb); the frame of reference and Galilean invariance; the vorticity picture of the lag and the closed form Q_r = Q(Z_s − 2/k) = 100.9 mm; the symbol clashes (pitch is now β; tyre deflections w; FEM matrices with h, cart's with c; cost 𝒥, Riccati P, weights W); the wrong Fig. 11 reference; the Problems boxes merged; sources: NASA SP-106 eq. (4.8a) read in place of the secondary quote of SP-8009, the ISO 8608 preview and an open reproduction of the class table.
 - Left as stated in the note: Hrovat, Karnopp, Miles and Keulegan are abstract-level sources, and say so.
 
-## Open at the time of writing
-- German and Arabic translations; merge with main.
+## Published (6 November 2026)
+- German and Arabic translated (all 180 page pieces, 98 strings, 42 walkthrough texts per language); glossary: body = Aufbau / الهيكل, actuator = Aktor / المشغّل, strut deflection = Einfederung.
+- Merged as https://github.com/Numa1997/SiteTest/pull/95; live on phyeinusul.com about 75 s later. `test.cjs` against the live site in en/de/ar: 47/47 checks, read-backs and the 3D pitch read-back pass.
+- The one console error on the live site is Cloudflare's analytics beacon, blocked by the site's own Content-Security-Policy meta; it appears on every page (also pendulum-control.html), not from this figure.
+
+## Open
+- The 3D look: the glass is the only Blender asset, without a material; the cart is three.js boxes and cylinders; no environment map, tone mapping, shadows or see-through glass. Waiting for Numa's choice (Blender assets plus a proper three.js setup, three.js only, or as is).
+- Arabic glossary: heave = الارتفاع and pitch = الانعطاف الطولي read poorly (the translator suggests الحركة الرأسية and الميل الطولي); a site-wide decision.
+
+## The one-wheel cart (6 November 2026)
+Numa's reference (a mae.academy reel, a coffee cup on a one-wheel quarter-car over a bumpy road, made with Manim) and his words: the 3D Blender
+cart took the attention away from the target, the stout. Rebuilt as a 2D side view in the house style, the glass drawn 3.2 times larger.
+- Physics from first principles: the quarter-car; the axle's path as the envelope of the road under the wheel's circle; the road's push
+  along the normal of that path, so its horizontal part, the kick −N z_a′, is what sloshes the stout. A purely vertical cart could not
+  slosh a cup from rest (the reel draws its wave; here it is computed). The drive holds the speed with −c_drive ẋ_c.
+- Checks: plant gate (SymPy Hessians exact; modal row 3e-16; free roll keeps energy to 6e-6 and reaches sqrt(v² − 2gh); the step's envelope
+  is the circle round the edge); controller gate (gains 2e-9, nine peaks within 0.1 %); note 79/79; walkthrough 56/56; browser 53/53 checks,
+  four read-backs, kick sign, kerb envelope; regressions; 27 fps on a slowed phone.
+- Findings: the bump at walking pace is a resonant kick (crossing 0.33 s, slosh period 0.31 s); passive 19.8 mm, skyhook 13.5, LQR 0.9;
+  the kick alone 10.6 mm, the pumping alone 0, together 19.8 (the heave doubles the kicked wave); the strut cannot reach the slosh in the
+  linear model, the drive motor can, and the LQR's motor force mirrors the kick; a stiff drive alone (2000 N s/m) gives 2.5 mm.
+- Removed: public/vendor/three, public/models/fig12 (no page uses them).

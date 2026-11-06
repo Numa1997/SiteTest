@@ -1,11 +1,11 @@
-/* From symbols to code — Fig. 12, A Pint of Stout on a Suspension (beer-slosh.html).
+/* From symbols to code — Fig. 12, A Pint of Stout on a Suspension (beer-slosh.html), the one-wheel cart.
    Each step pairs an equation of the lecture note with the lines of the page's script that compute it, copied character for character.
    ⟦key|text⟧ marks a quantity; the same key in the formula, the code and the table lights up together.
    The "Now" column is filled from Sim.live(), defined in the page next to its state. */
 window.WALK = window.WALK || {};
 
 window.WALK.slosh = {
-    intro: 'Ten steps from the lecture note to the moving cart, in the order the page uses them: the calm surface for a given volume (section 2), the viscosity at the chosen temperature, the frequency of each mode with its head (11), the five damping terms (14–18), the shape of the surface from the stored modes (section 5), the road under the wheels (section 10), the one linear system of cart and stout (19), its right-hand side for the Runge–Kutta step, the two control laws (section 11), and the design of the LQR gains (20). The code is the page’s own; the numbers in the last column are its state now.',
+    intro: 'Ten steps from the lecture note to the moving cart, in the order the page uses them: the calm surface for a given volume (section 2), the viscosity at the chosen temperature, the frequency of each mode with its head (11), the five damping terms (14–18), the shape of the surface from the stored modes (section 5), the road and the path of the axle over it (19a), the one system of cart and stout (20), the road’s kick in the right-hand side of the Runge–Kutta step (19b), the two control laws (section 11), and the design of the LQR gains (21). The code is the page’s own; the numbers in the last column are its state now.',
     steps: [
         {
             title: 'The calm surface',
@@ -68,73 +68,75 @@ function etaWall(th) { var s = 0; for (var k = 0; k < NM; k++) s += aO[k] * psiA
             syms: [['eta', 'η<sub>max</sub>', 'ds.get(\'eta_w\')', 'highest stout at the rim now, mm']]
         },
         {
-            title: 'The road under the wheels',
-            where: 'zRoad(s): the profile at a distance s along the road',
-            math: 'bump: z<sub>r</sub> = ½h<sub>r</sub>[1 − cos(2π s/0.5 m)],  kerb: ½h<sub>r</sub>[1 + tanh(s/0.0125 m)],  cobbles: h<sub>r</sub> sin²(π s/0.1 m),  rough: ISO 8608 class C;  ⟦zrf|z<sub>rf</sub>⟧ = z<sub>r</sub>(vt + x<sub>c</sub> + l<sub>f</sub>)',
-            note: 'Every feature starts 1 m down the road, at s = 1 m, so x = s − 1 m here. The cart’s centre is at s = vt + x<sub>c</sub>; the front wheel reads the road l<sub>f</sub> ahead of it and the rear wheel l<sub>r</sub> behind. The road’s rate of rise under a wheel, which the tyre damping needs, is a centred difference over 0.1 mm.',
-            code: `function zRoad(s) {                              // height of the road at distance s along it (m); the feature starts at s = 1 m
-    var h = P.hr, x = s - 1.0;
-    switch (P.road) {
-        case 'bump': return x > 0 && x < 0.5 ? 0.5 * h * (1 - Math.cos(2 * Math.PI * x / 0.5)) : 0;
-        case 'kerb': return 0.5 * h * (1 + Math.tanh(x / 0.0125));
-        case 'cobbles': var L = 0.10; return x > 0 ? h * Math.pow(Math.sin(Math.PI * x / L), 2) : 0;`,
-            syms: [['zrf', 'z<sub>rf</sub>', 'road.zf', 'road under the front wheel now, mm']]
+            title: 'The road, and the axle’s path over it',
+            where: 'buildRoad(): the road on a 2 mm grid, and the envelope the axle follows',
+            math: '⟦za|z<sub>a</sub>⟧(X) = max<sub>|X − x′| ≤ R<sub>w</sub></sub>[⟦zr|z<sub>r</sub>⟧(x′) + (R<sub>w</sub>² − (X − x′)²)<sup>½</sup>] − R<sub>w</sub><span class="walk__eq">(19a)</span>',
+            note: 'The wheel’s rim rolls on the road, so the axle follows the curve swept by the centre of a circle of radius R<sub>w</sub> rolled along the profile. On a gentle hump that is the profile itself; at a kerb the rim meets the edge before the axle is over it, and the axle climbs on a circle round the edge. The page samples the road every 2 mm (bump, kerb, cobbles and the ISO 8608 rough road, each starting at X = 1 m) and takes the maximum over the 81 grid points under the wheel. The slope of this path sets the direction of the road’s push, which is square to the path.',
+            code: `for (i = 0; i < NRD; i++) ZR[i] = zProfile(i * ROAD_DX);
+for (k = -m; k <= m; k++) lift.push(Math.sqrt(Math.max(0, P.Rw * P.Rw - k * ROAD_DX * k * ROAD_DX)) - P.Rw);
+for (i = 0; i < NRD; i++) { var best = -1e9; for (k = -m; k <= m; k++) { var j = Math.min(NRD - 1, Math.max(0, i + k)), v = ZR[j] + lift[k + m]; if (v > best) best = v; } ZA[i] = best; }`,
+            syms: [['zr', 'z<sub>r</sub>', 'road.zr', 'road surface under the axle now, mm'], ['za', 'z<sub>a</sub>', 'road.za', 'the axle’s path there, mm'], ['slope', 'z<sub>a</sub>′', 'road.slope', 'its slope now']]
         },
         {
             title: 'Cart and stout as one system',
-            where: 'assemble(): the matrices of (19), term by term',
-            math: 'M<sub>c</sub> q̈ + C<sub>c</sub> q̇ + K<sub>c</sub> q = F,  M<sub>a<sub>n</sub>a<sub>n</sub></sub> = (ρN<sub>n</sub>/λ<sub>n</sub>)(1 + κ<sub>n</sub>),  M<sub>a<sub>n</sub>x</sub> = ρ⟦Q|Q<sub>n</sub>⟧N<sub>n</sub>,  M<sub>a<sub>n</sub>β</sub> = ρQ<sub>n</sub>N<sub>n</sub>(h<sub>g</sub> − κ<sub>n</sub>/λ<sub>n</sub>) + ρ⟦Qry|Q<sub>rn</sub>⟧N<sub>n</sub>,  K<sub>a<sub>n</sub>β</sub> = −gρQ<sub>n</sub>N<sub>n</sub><span class="walk__eq">(19)</span>',
-            note: 'The second derivatives of the three energies of section 10, written in by hand. For each mode: its generalised mass mu with the head, its damping from γ<sub>n</sub>, its stiffness from ω<sub>n</sub>²; the coupling to the cart’s motion along x through Q<sub>n</sub>, to the pitch through h<sub>g</sub> (the glass foot swings with the body) and through the Stokes–Joukowski coupling Q<sub>rn</sub>, and the tilt’s sideways gravity in K. The same entries appear transposed: the stout pushes back. An independent SymPy script takes the same second derivatives and agrees to the last digit (check_plant.py).',
-            code: `M.forEach(function (md, k) {
+            where: 'assemble(): the matrices of (20), term by term',
+            math: 'M<sub>c</sub> q̈ + C<sub>c</sub> q̇ + K<sub>c</sub> q = F,  q = (x<sub>c</sub>, z<sub>b</sub>, z<sub>w</sub>, a<sub>n</sub>),  M<sub>a<sub>n</sub>a<sub>n</sub></sub> = (ρN<sub>n</sub>/λ<sub>n</sub>)(1 + κ<sub>n</sub>),  M<sub>a<sub>n</sub>x</sub> = ρ⟦Q|Q<sub>n</sub>⟧N<sub>n</sub><span class="walk__eq">(20)</span>',
+            note: 'The second derivatives of the three energies of section 10, written in by hand. The whole cart, ⟦M|M⟧ = M<sub>s</sub> + m<sub>w</sub>, moves along the road; the body on its spring and damper, the wheel on its tyre. For each mode: its generalised mass with the head, its damping from γ<sub>n</sub>, its stiffness from ω<sub>n</sub>², and the one coupling to the cart, through Q<sub>n</sub> along the road; the same entry appears transposed, so the stout pushes back. The tray stays level, so there is no tilt term, and lifting the glass couples to no wave (∫ψ<sub>n</sub> dS = 0).',
+            code: `Mm[IX][IX] = Mtot; Cm[IX][IX] = P.cx + P.cd;                   // everything moves along the road together; rolling resistance and the drive hold the speed
+Mm[IZ][IZ] = Ms; Mm[IW][IW] = P.mw;
+Km[IZ][IZ] += P.k; Km[IW][IW] += P.k; Km[IZ][IW] -= P.k; Km[IW][IZ] -= P.k;   // the strut: k_s (z_b − z_w)² / 2
+Cm[IZ][IZ] += P.c; Cm[IW][IW] += P.c; Cm[IZ][IW] -= P.c; Cm[IW][IZ] -= P.c;   // and its damper
+Km[IW][IW] += P.kt; Cm[IW][IW] += P.ct;                             // the tyre's linear part; the road's share comes in as a force
+M.forEach(function (md, k) {
     var i = IA + k, mu = P.rho * md.N / md.lam, kap = muA[k];
     Mm[i][i] = mu * (1 + kap); Cm[i][i] = 2 * mu * (1 + kap) * gam[k]; Km[i][i] = mu * omA[k] * omA[k] * (1 + kap);
-    var cx = P.rho * ⟦Q|md.Qx⟧ * md.N, cy = P.rho * md.Qy * md.N;
-    Mm[i][IX] = Mm[IX][i] = cx; Mm[i][IY] = Mm[IY][i] = cy;
-    Mm[i][IP] = Mm[IP][i] = cx * (P.hg - kap / md.lam) + P.rho * ⟦Qry|md.Qry⟧ * md.N;   // x_O carries h_g β; the rotation drives the stout through χ_y and lifts the head at x′ by −βx′ (the −κ/λ)
-    Km[i][IP] = Km[IP][i] = -g * cx;                               // the tilt: the stout's weight along the tilted surface
-});
-Mi = inv(Mm);`,
-            syms: [['Q', 'Q<sub>11</sub>', 'QxA[k]', 'coupling to a sideways acceleration, mm'], ['Qry', 'Q<sub>r,11</sub>', 'QryA[k]', 'coupling to a pitch acceleration, mm²'], ['ml', 'm<sub>l</sub>', 'ds.get(\'m_liq\')', 'mass of the stout, kg']]
+    Mm[i][IX] = Mm[IX][i] = P.rho * ⟦Q|md.Qx⟧ * md.N;                    // the push along the road drives the x-modes, and they push back; the tray never tilts, so no turn and no tilt terms
+});`,
+            syms: [['M', 'M', 'Mtot', 'the whole cart, kg'], ['Q', 'Q<sub>11</sub>', 'QxA[k]', 'coupling to an acceleration along the road, mm'], ['ml', 'm<sub>l</sub>', 'ds.get(\'m_liq\')', 'mass of the stout, kg']]
         },
         {
-            title: 'The right-hand side of the step',
+            title: 'The kick, in the right-hand side of the step',
             where: 'deriv(t, y, out): what the Runge–Kutta step integrates',
-            math: 'q̈ = M⁻¹[F − C q̇ − K q],  F ∋ k<sub>t</sub>z<sub>r</sub> + c<sub>t</sub>ż<sub>r</sub> (wheels),  ±u<sub>f</sub>, ±u<sub>r</sub> (actuators),  F<sub>push</sub>;  the pumping −ρN<sub>n</sub>⟦az|z̈<sub>O</sub>⟧a<sub>n</sub>',
-            note: 'The forces: the road through the tyres, the two actuators pushing up on the body (and down on their wheels, with their lever arms on the pitch), and your push along the chosen axis. Then the dense solve by the precomputed inverse of M. The vertical acceleration of the glass foot stiffens or softens every mode by ρN<sub>n</sub>z̈<sub>O</sub>, the Faraday term of (12); it is taken from the previous substep, one millisecond behind, and held at −0.8g when the stout would leave the floor. The accelerations of the cart ⟦ax|ẍ<sub>O</sub>⟧ and ⟦psi|β⟧ reach the stout only through M and K: nothing is added by hand.',
-            code: `Fv[IF] = P.kt * zf + P.ct * vf; Fv[IR] = P.kt * zr + P.ct * vr;
-Fv[IZ] += Ct.uf + Ct.ur; Fv[IP] += -P.lf * Ct.uf + P.lr * Ct.ur; Fv[IF] -= Ct.uf; Fv[IR] -= Ct.ur;
-var Fp = t < push.until ? push.F : 0; if (push.axis === 'x') Fv[IX] += Fp; else if (push.axis === 'y') Fv[IY] += Fp; else Fv[IZ] -= Fp;
+            math: '⟦N|N⟧ = Mg + k<sub>t</sub>(z<sub>a</sub> − z<sub>w</sub>) + c<sub>t</sub>(ż<sub>a</sub> − ż<sub>w</sub>) ≥ 0,  ⟦kick|F<sub>kick</sub>⟧ = −N z<sub>a</sub>′<span class="walk__eq">(19b)</span>;  q̈ = M<sub>c</sub>⁻¹[F − C<sub>c</sub>q̇ − K<sub>c</sub>q],  pumping −ρN<sub>n</sub>⟦az|z̈<sub>O</sub>⟧a<sub>n</sub>',
+            note: 'The tyre load is the cart’s weight plus what the tyre’s spring and damper add; a tyre cannot pull, so a negative load means the wheel has left the road: the load is set to zero and the linear tyre’s pull is cancelled on the wheel. The road pushes along the normal of the axle’s path, so its horizontal part is −N times the slope: back on the way up, forward on the way down. That kick, the drive motor and your push act on x<sub>c</sub>; the strut actuator on the body and the wheel. Then the dense solve by the precomputed inverse of M<sub>c</sub>, and the pumping term of (12), taken from the previous substep and held at −0.8 g. The acceleration ⟦ax|ẍ<sub>O</sub>⟧ reaches the stout through the coupling in M<sub>c</sub> alone.',
+            code: `var X = P.v * t + y[IX], za = zAxle(X), sl = slopeAxle(X), zad = (P.v + y[n + IX]) * sl;   // the axle rides its path at the cart's speed
+var N = Mtot * g + P.kt * (za - y[IW]) + P.ct * (zad - y[n + IW]), Fw = 0;   // the tyre load: the weight plus the tyre's spring and damper
+if (N < 0) { Fw = -N; N = 0; }                   // a tyre cannot pull: the wheel has left the road, and the linear tyre's pull is cancelled
+var kick = -N * sl;                               // the road's push on the wheel is normal to the surface, from the contact point to the axle: its horizontal part
+...
+Fv[IX] = kick + Ct.um + (t < push.until ? push.Fx : 0);
+Fv[IZ] = Ct.us - (t < push.until ? push.Fz : 0);
+Fv[IW] = -Ct.us + P.kt * za + P.ct * zad + Fw;
 for (i = 0; i < n; i++) { var r = Fv[i]; for (j = 0; j < n; j++) r -= Cm[i][j] * y[n + j] + Km[i][j] * y[j]; rhs[i] = r; }
 var azc = Math.max(-0.8 * g, ⟦az|azO⟧);              // the vertical acceleration of the glass stiffens or softens every mode (Faraday); z̈_O lags one substep. Below −0.8 g the stout would leave the floor and the model has failed: the softening is held there, and the page says so
-for (var k = 0; k < NM; k++) rhs[IA + k] -= P.rho * M[k].N * azc * y[IA + k];
-for (i = 0; i < n; i++) { var a = 0; for (j = 0; j < n; j++) a += Mi[i][j] * rhs[j]; out[n + i] = a; }`,
-            syms: [['ax', 'ẍ<sub>O</sub>', 'ds.get(\'ax\')', 'acceleration of the glass foot along x, m/s²'], ['az', 'z̈<sub>O</sub>', 'azO', 'its vertical acceleration, m/s²'], ['psi', 'β', 'qA[IP]', 'tilt of the glass, °'], ['t', 't', 'tSim', 'simulated time, s'], ['h', 'Δt', 'h', 'step']]
+for (var k = 0; k < NM; k++) rhs[IA + k] -= P.rho * M[k].N * azc * y[IA + k];`,
+            syms: [['N', 'N', 'road.N', 'tyre load now, N'], ['kick', 'F<sub>kick</sub>', 'road.kick', 'the road’s push along the road now, N'], ['ax', 'ẍ<sub>O</sub>', 'ds.get(\'ax\')', 'acceleration of the glass along the road, m/s²'], ['az', 'z̈<sub>O</sub>', 'azO', 'its vertical acceleration, m/s²'], ['t', 't', 'tSim', 'simulated time, s'], ['h', 'Δt', 'h', 'step']]
         },
         {
             title: 'The two control laws',
             where: 'control(): every T<sub>s</sub>, the forces held until the next look',
-            math: 'skyhook: ⟦uf|u<sub>f</sub>⟧ = −c<sub>sky</sub>(ż<sub>b</sub> − l<sub>f</sub>β̇), u<sub>r</sub> = −c<sub>sky</sub>(ż<sub>b</sub> + l<sub>r</sub>β̇);  LQR: u = −K x,  |u| ≤ Bℓ ⟦I|I⟧<sub>max</sub>',
-            note: 'The skyhook damps the absolute velocity of each corner of the body. The LQR reads the state of section 11 from the cart’s coordinates: strut deflections, tyre deflections (wheel height minus the road under it), the x-modes and the rates, in ctlState(), and multiplies by the gains. Both are clipped to what the moving coils can give, Bℓ I<sub>max</sub>.',
-            code: `var Fm = P.Bl * P.Imax, uf = 0, ur = 0;
-if (P.law === 'skyhook') { uf = -P.csky * (qdA[IZ] - P.lf * qdA[IP]); ur = -P.csky * (qdA[IZ] + P.lr * qdA[IP]); }   // each corner of the body damped against the sky
-else if (P.law === 'lqr' && Ct.ok) { var x = ctlState(); for (var i = 0; i < Ct.n; i++) { uf -= Ct.K[0][i] * x[i]; ur -= Ct.K[1][i] * x[i]; } }
-⟦uf|Ct.uf = Math.max(-Fm, Math.min(Fm, uf))⟧; Ct.ur = Math.max(-Fm, Math.min(Fm, ur));`,
-            syms: [['uf', 'u<sub>f</sub>', 'Ct.uf', 'front actuator force now, N'], ['I', 'I', 'ds.get(\'I_now\')', 'actuator current, the larger, A']]
+            math: 'skyhook: ⟦us|u<sub>s</sub>⟧ = −c<sub>sky</sub>ż<sub>b</sub>, u<sub>m</sub> = 0;  LQR: (u<sub>s</sub>, ⟦um|u<sub>m</sub>⟧) = −K x,  |u| ≤ Bℓ ⟦I|I⟧<sub>max</sub>',
+            note: 'The skyhook damps the body’s absolute velocity with the strut actuator and leaves the drive alone. The LQR reads the state of section 11 from the cart’s coordinates in ctlState(): the strut deflection, the tyre deflection (the wheel’s height minus the axle’s road height), the two x-modes and the rates, and multiplies by the two rows of gains, one for the strut and one for the drive motor. Both forces are clipped to what a moving coil can give, Bℓ I<sub>max</sub>.',
+            code: `var Fm = P.Bl * P.Imax, us = 0, um = 0;
+if (P.law === 'skyhook') us = -P.csky * qdA[IZ];                    // the body damped against the sky; the drive stays the plain one
+else if (P.law === 'lqr' && Ct.ok) { var x = ctlState(); for (var i = 0; i < Ct.n; i++) { us -= Ct.K[0][i] * x[i]; um -= Ct.K[1][i] * x[i]; } }
+⟦us|Ct.us = Math.max(-Fm, Math.min(Fm, us))⟧; ⟦um|Ct.um = Math.max(-Fm, Math.min(Fm, um))⟧;`,
+            syms: [['us', 'u<sub>s</sub>', 'Ct.us', 'strut actuator force now, N'], ['um', 'u<sub>m</sub>', 'Ct.um', 'drive motor force now, N'], ['I', 'I', 'ds.get(\'I_now\')', 'actuator current, the larger, A']]
         },
         {
             title: 'Designing the gains',
-            where: 'design(): the zero-order hold and the discrete Riccati equation',
-            math: 'A<sub>d</sub> = e<sup>AT<sub>s</sub></sup>, B<sub>d</sub> from the same exponential;  S ← Q + A<sub>d</sub><sup>T</sup> S (A<sub>d</sub> − B<sub>d</sub>K),  K = (R + B<sub>d</sub><sup>T</sup>SB<sub>d</sub>)⁻¹B<sub>d</sub><sup>T</sup>SA<sub>d</sub>;  ⟦tau|τ<sub>cl</sub>⟧ = −T<sub>s</sub>/ln max|z|<span class="walk__eq">(20)</span>',
-            note: 'The matrices A and B of the design model are built by evaluating the linear map dyn() on each unit state in turn. One matrix exponential of [[A, B], [0, 0]]T<sub>s</sub> gives the held-force map. The Riccati iteration starts from S = Q and stops when S changes by less than 10⁻¹¹ of its size, about a thousand iterations; an independent solver in SciPy gives the same gains to 6×10⁻¹². The slowest closed-loop motion comes from the eigenvalues of A<sub>d</sub> − B<sub>d</sub>K, found as the roots of its characteristic polynomial.',
+            where: 'designNow(): the zero-order hold and the discrete Riccati equation',
+            math: 'A<sub>d</sub> = e<sup>AT<sub>s</sub></sup>, B<sub>d</sub> from the same exponential;  P ← W + A<sub>d</sub><sup>T</sup> P (A<sub>d</sub> − B<sub>d</sub>K),  K = (W<sub>u</sub> + B<sub>d</sub><sup>T</sup>PB<sub>d</sub>)⁻¹B<sub>d</sub><sup>T</sup>PA<sub>d</sub>;  ⟦tau|τ<sub>cl</sub>⟧ = −T<sub>s</sub>/ln max|z|<span class="walk__eq">(21)</span>',
+            note: 'The matrices A and B of the design model are built by evaluating the linear map dyn() on each unit state in turn, with the two actuators as the two columns of B. One matrix exponential of [[A, B], [0, 0]]T<sub>s</sub> gives the held-force map. The Riccati iteration (S in the code is P of the note) starts from the weights, or from the last solution, and stops when it changes by less than 10⁻¹¹ of its size; an independent solver in SciPy gives the same gains to 2×10⁻⁹. The slowest closed-loop motion comes from the eigenvalues of A<sub>d</sub> − B<sub>d</sub>K, found as the roots of its characteristic polynomial.',
             code: `var E = expm(Mx), Ad = E.slice(0, n).map(function (r) { return r.slice(0, n); }), Bd = E.slice(0, n).map(function (r) { return [r[n], r[n + 1]]; });
 ...
 for (it = 0; it < 6000; it++) {
-    var SB = mmul(S, Bd), BSB = mmul(BdT, SB), G2 = [[BSB[0][0] + Rw, BSB[0][1]], [BSB[1][0], BSB[1][1] + Rw]], Gi = inv(G2);
+    var SB = mmul(S, Bd), BSB = mmul(BdT, SB), G2 = [[BSB[0][0] + Rw[0], BSB[0][1]], [BSB[1][0], BSB[1][1] + Rw[1]]], Gi = inv(G2);
     var BSA = mmul([SB.map(function (r) { return r[0]; }), SB.map(function (r) { return r[1]; })], Ad);   // Bdᵀ S Ad, 2×n
     K = mmul(Gi, BSA);
 ...
 ⟦tau|Ct.tau = -P.Ts / Math.log(rad)⟧; ds.set('tau_cl', Ct.tau);`,
-            syms: [['tau', 'τ<sub>cl</sub>', 'Ct.tau', 'slowest time constant of the closed loop, s'], ['fz', 'f<sub>z</sub>', 'ds.get(\'f_heave\')', 'heave frequency of the body, Hz'], ['fp', 'f<sub>β</sub>', 'ds.get(\'f_pitch\')', 'pitch frequency, Hz']]
+            syms: [['tau', 'τ<sub>cl</sub>', 'Ct.tau', 'slowest time constant of the closed loop, s'], ['fz', 'f<sub>z</sub>', 'ds.get(\'f_heave\')', 'heave frequency of the body, Hz'], ['fhop', 'f<sub>hop</sub>', 'ds.get(\'f_hop\')', 'hop frequency of the wheel, Hz']]
         }
     ]
 };

@@ -113,43 +113,71 @@ b.append(text(X(0.05), Y(zs - 1 / md['lam']) + 4, f'1/λ = {1e3/md["lam"]:.0f} m
 b.append(text(X(-0.05), Y(zs) + 4, 'calm level', 10, 'end', INK)); b.append(text(12, H - 8, 'mode (1,1) along x, 500 mL; surface drawn at 8 mm; arrows: velocity, one scale', 10, 'start', MUTED))
 open('notes/fig12/figs/mode11.svg', 'w').write(svg(W, H, ''.join(b), 'The slowest sloshing mode in a vertical cut through the glass: the tilted surface, and the velocity arrows from the three-dimensional finite-element solution, strongest near the surface and fading with depth.'))
 
-# ---- Figure 5: the half-car schematic ----
-W, H = 720, 300; b = []
-gx, gy = 360, 190; Lx = 170; sx_ = 1.0
-b.append(f'<rect x="{gx-Lx-40}" y="{gy-16}" width="{2*Lx+80}" height="24" fill="#f7f3ec" stroke="{INK}" stroke-width="1.2"/>')
-b.append(text(gx - 60, gy + 1, sub('body M_b, J_b'), 11, 'middle'))
-b.append(f'<circle cx="{gx}" cy="{gy-4}" r="3" fill="{WINE}"/>' + text(gx + 8, gy + 1, 'centre of mass', 9, 'start', WINE))
-for sd, lab in ((1, 'front'), (-1, 'rear')):
-    x0 = gx + sd * Lx
-    b.append(f'<line x1="{x0-14}" y1="{gy+8}" x2="{x0-14}" y2="{gy+28}" stroke="{INK}"/>')
-    zig = ''.join(f' L{x0-14+(6 if k%2 else -6)},{gy+28+8*k}' for k in range(1, 6)); b.append(f'<path d="M{x0-14},{gy+28}{zig} L{x0-14},{gy+76}" fill="none" stroke="#d99a3a" stroke-width="1.4"/>')
-    b.append(f'<rect x="{x0+4}" y="{gy+30}" width="16" height="26" fill="none" stroke="{WINE}" stroke-width="1.2"/><line x1="{x0+12}" y1="{gy+8}" x2="{x0+12}" y2="{gy+42}" stroke="{WINE}"/><line x1="{x0+12}" y1="{gy+56}" x2="{x0+12}" y2="{gy+76}" stroke="{WINE}"/>')
-    b.append(f'<circle cx="{x0}" cy="{gy+96}" r="18" fill="none" stroke="{INK}" stroke-width="1.4"/><circle cx="{x0}" cy="{gy+96}" r="3" fill="{INK}"/>')
-    b.append(f'<line x1="{x0}" y1="{gy+114}" x2="{x0}" y2="{gy+122}" stroke="{INK}"/>')
-    b.append(text(x0, gy + 140, sub(f'{lab}: k_s, c, u'), 10, 'middle', MUTED)); b.append(text(x0 + 24, gy + 100, sub('m_w, k_t'), 9, 'start', MUTED))
-b.append(f'<path d="M{gx-Lx-80},{gy+124} Q{gx-80},{gy+104} {gx},{gy+124} T{gx+Lx+80},{gy+124}" fill="none" stroke="{MUTED}" stroke-width="1.2"/>' + text(gx + Lx + 60, gy + 142, sub('road z_road(X)'), 10, 'end', MUTED))
-# the glass on the tray
-tx = gx + 40; b.append(f'<line x1="{tx-60}" y1="{gy-16}" x2="{tx-60}" y2="{gy-96}" stroke="{INK}"/><line x1="{tx+60}" y1="{gy-16}" x2="{tx+60}" y2="{gy-96}" stroke="{INK}"/><rect x="{tx-80}" y="{gy-100}" width="160" height="5" fill="#fff" stroke="{WINE}"/>')
-gz = gy - 100; gp = [(tx - 11, gz), (tx - 13, gz - 20), (tx - 16, gz - 44), (tx - 13, gz - 56), (tx + 13, gz - 56), (tx + 16, gz - 44), (tx + 13, gz - 20), (tx + 11, gz)]
-b.append(path(gp, close=True, fill='#e6eff1', stroke=INK, stroke_width=1)); b.append(f'<rect x="{tx-13}" y="{gz-48}" width="26" height="46" fill="{STOUT}"/><rect x="{tx-15}" y="{gz-54}" width="30" height="7" fill="{HEAD}"/>')
-b.append(f'<circle cx="{tx}" cy="{gz}" r="2.5" fill="{WINE}"/>' + text(tx + 66, gz + 12, sub('O: d_g ahead, h_g above'), 9, 'start', WINE))
-b.append(text(gx - 110, gy - 40, 'β', 12, 'middle', INK) + f'<path d="M{gx-130},{gy-30} A 30 30 0 0 1 {gx-92},{gy-30}" fill="none" stroke="{INK}" stroke-width="0.8"/><path d="M{gx-92},{gy-30} l-5,-4 l1,6Z" fill="{INK}"/>')
-b.append(text(gx - Lx - 40, gy - 24, 'x →', 10, 'start', MUTED)); b.append(text(gx + Lx + 40, gy - 24, 'z ↑', 10, 'end', MUTED))
-b.append(text(gx, 24, sub('x_c along the road, z_b heave, β pitch (front down positive), z_f, z_r wheels'), 10, 'middle', MUTED))
-open('notes/fig12/figs/cart.svg', 'w').write(svg(W, H, ''.join(b), 'The half-car model: a body on two struts, each a spring, a damper and an actuator, on two wheels with tyre springs on the road; the glass on a tray above the body’s centre of mass.'))
+# ---- Figure 5: the one-wheel cart, side view, and the road's push on the wheel at a bump ----
+W, H = 720, 440; b = []
+gx, gr = 250, 366                                   # the wheel's centre x, the rest road line y
+Rw = 34                                             # px: the wheel's radius in the drawing
+# the road: flat, then a bump the wheel is climbing
+road_pts = [(30, gr)] + [(x, gr - 30 * 0.5 * (1 - math.cos(2 * math.pi * (x - 210) / 160)) if 210 < x < 370 else gr) for x in range(200, 381, 4)] + [(700, gr)]
+b.append(path([(30, H)] + road_pts + [(700, H)], close=True, fill='#efe8dc', stroke='none')); b.append(path(road_pts, fill='none', stroke=WINE, stroke_width=1.4))
+# the contact point on the up-slope and the wheel resting on it
+xc_ = 250; zc_ = 30 * 0.5 * (1 - math.cos(2 * math.pi * (xc_ - 210) / 160)); sl = 30 * 0.5 * math.sin(2 * math.pi * (xc_ - 210) / 160) * 2 * math.pi / 160
+nx_, ny_ = -sl / math.hypot(1, sl), 1 / math.hypot(1, sl)            # unit normal, pointing up and back
+cx_, cy_ = xc_ + Rw * nx_, gr - zc_ - Rw * ny_
+b.append(f'<circle cx="{cx_:.1f}" cy="{cy_:.1f}" r="{Rw}" fill="#fff" stroke="{INK}" stroke-width="2"/><circle cx="{cx_:.1f}" cy="{cy_:.1f}" r="3.5" fill="{WINE}"/>')
+for k in range(6):
+    an = k * math.pi / 3 + 0.3; b.append(f'<line x1="{cx_:.1f}" y1="{cy_:.1f}" x2="{cx_ + 0.85 * Rw * math.cos(an):.1f}" y2="{cy_ - 0.85 * Rw * math.sin(an):.1f}" stroke="{INK}" stroke-width="1"/>')
+# the push N_vec from the contact point along the normal, and its two parts
+L = 56; px_, py_ = xc_, gr - zc_
+def arr(x0, y0, x1, y1, col, w=2):
+    an = math.atan2(y1 - y0, x1 - x0); h = 8
+    return (f'<line x1="{x0:.1f}" y1="{y0:.1f}" x2="{x1:.1f}" y2="{y1:.1f}" stroke="{col}" stroke-width="{w}"/>' +
+            f'<path d="M{x1:.1f},{y1:.1f} L{x1 - h * math.cos(an - 0.4):.1f},{y1 - h * math.sin(an - 0.4):.1f} L{x1 - h * math.cos(an + 0.4):.1f},{y1 - h * math.sin(an + 0.4):.1f}Z" fill="{col}"/>')
+# the push acts at the contact point, along the normal towards the axle: drawn with its tail in the road, its head at the contact point
+tx_, ty_ = px_ - L * nx_, py_ + L * ny_
+b.append(arr(tx_, ty_, px_, py_, WINE, 2.4))
+b.append(arr(tx_, ty_, px_, ty_, ROSE, 1.6)); b.append(arr(px_, ty_, px_, py_, ROSE, 1.6))
+b.append(f'<circle cx="{px_:.1f}" cy="{py_:.1f}" r="2.5" fill="{INK}"/>')
+b.append(text(tx_ + (px_ - tx_) / 2, ty_ + 14, sub('kick −N z_a′ (back)'), 10, 'middle', WINE)); b.append(text(px_ + 6, (py_ + ty_) / 2 + 4, 'N', 11, 'start', WINE))
+b.append(text(px_ + 14, py_ - 14, 'contact', 9, 'start', MUTED))
+# the strut: spring and damper from the axle up to the body
+bx, by_, bw, bh = cx_ - 95, cy_ - 140, 190, 22
+b.append(f'<rect x="{bx:.1f}" y="{by_:.1f}" width="{bw}" height="{bh}" rx="4" fill="#3a2f2c" stroke="{INK}"/>' + text(bx + bw / 2, by_ + 15, sub('body M_b'), 10, 'middle', '#fff'))
+yb_ = cy_ - Rw - 8                                  # the axle bar, just above the wheel, held by a fork from the axle
+b.append(f'<line x1="{cx_:.1f}" y1="{cy_:.1f}" x2="{cx_:.1f}" y2="{yb_:.1f}" stroke="{INK}" stroke-width="1.6"/>')
+sx_ = cx_ - 22; zig = ''.join(f' L{sx_ + (7 if k % 2 else -7):.1f},{yb_ - 4 - (yb_ - 4 - by_ - bh) * k / 9:.1f}' for k in range(1, 9))
+b.append(f'<path d="M{sx_:.1f},{yb_:.1f} L{sx_:.1f},{yb_ - 4:.1f}{zig} L{sx_:.1f},{by_ + bh:.1f}" fill="none" stroke="#d99a3a" stroke-width="1.6"/>')
+dx_ = cx_ + 22; ym = (yb_ + by_ + bh) / 2
+b.append(f'<line x1="{dx_:.1f}" y1="{yb_:.1f}" x2="{dx_:.1f}" y2="{ym + 4:.1f}" stroke="{WINE}" stroke-width="1.6"/><rect x="{dx_ - 7:.1f}" y="{ym - 14:.1f}" width="14" height="24" fill="none" stroke="{WINE}" stroke-width="1.4"/><line x1="{dx_:.1f}" y1="{ym - 14:.1f}" x2="{dx_:.1f}" y2="{by_ + bh:.1f}" stroke="{WINE}" stroke-width="1.6"/>')
+b.append(f'<line x1="{sx_:.1f}" y1="{yb_:.1f}" x2="{dx_:.1f}" y2="{yb_:.1f}" stroke="{INK}" stroke-width="1.4"/>')
+b.append(text(sx_ - 12, ym + 4, sub('k_s'), 10, 'end', '#a8741f')); b.append(text(dx_ + 12, ym, sub('c, u_s'), 10, 'start', WINE))
+b.append(text(cx_ + Rw + 8, cy_ - 14, sub('m_w, k_t, R_w'), 10, 'start', MUTED))
+# posts, tray and the glass
+tyy = by_ - 64
+for xx in (cx_ - 50, cx_ + 50): b.append(f'<line x1="{xx:.1f}" y1="{by_:.1f}" x2="{xx:.1f}" y2="{tyy:.1f}" stroke="{INK}" stroke-width="2"/>')
+b.append(f'<rect x="{cx_ - 72:.1f}" y="{tyy - 4:.1f}" width="144" height="4" fill="#fff" stroke="{WINE}"/>')
+gz = tyy - 4; gp = [(cx_ - 11, gz), (cx_ - 13, gz - 20), (cx_ - 16, gz - 44), (cx_ - 13, gz - 56), (cx_ + 13, gz - 56), (cx_ + 16, gz - 44), (cx_ + 13, gz - 20), (cx_ + 11, gz)]
+b.append(path(gp, close=True, fill='#e6eff1', stroke=INK, stroke_width=1)); b.append(f'<rect x="{cx_ - 13:.1f}" y="{gz - 48:.1f}" width="26" height="46" fill="{STOUT}"/><rect x="{cx_ - 15:.1f}" y="{gz - 54:.1f}" width="30" height="7" fill="{HEAD}"/>')
+b.append(f'<circle cx="{cx_:.1f}" cy="{gz:.1f}" r="2.5" fill="{WINE}"/>' + text(cx_ + 80, gz + 2, sub('O, h_g above the body'), 9, 'start', WINE))
+# the drive and its motor
+b.append(arr(cx_ + 100, by_ + bh / 2, cx_ + 160, by_ + bh / 2, INK, 1.6) + text(cx_ + 166, by_ + bh / 2 + 4, 'drive: −c<tspan baseline-shift="sub" font-size="7">drive</tspan> ẋ<tspan baseline-shift="sub" font-size="7">c</tspan> + u<tspan baseline-shift="sub" font-size="7">m</tspan>', 10, 'start', INK))
+b.append(text(cx_ - 120, by_ + 15, sub('z_b ↑'), 10, 'end', MUTED)); b.append(text(cx_ - 120, cy_ + 4, sub('z_w ↑'), 10, 'end', MUTED))
+b.append(text(380, 26, sub('X = v t + x_c along the road →'), 10, 'start', MUTED))
+b.append(text(560, gr + 22, sub('road z_r(X); the axle follows z_a(X)'), 10, 'end', MUTED))
+open('notes/fig12/figs/cart.svg', 'w').write(svg(W, H, ''.join(b), 'The one-wheel cart on a bump: the wheel touches the road on the up-slope, the road pushes along the normal through the axle, and that push has a vertical part, the tyre load N, and a horizontal part, the kick, pointing back. Above the wheel the strut with its spring and damper carries the body, posts carry the tray and the glass, and the drive pulls along the road.'))
 
 # ---- Figure 6: the bump runs ----
-P = dict(plant.DEFAULT); P['I_max'] = 8.0; rho = 1007.0
+P = dict(plant.DEFAULT); rho = 1007.0
 F500 = C.load_modes(MPATH)['fills']; F500 = [f for f in F500 if f['V_mL'] == 500][0]
 def gamma_fn(mdx):
     lam = mdx['lam']; kappa = N['Mf'] * lam / rho; w = math.sqrt((9.81 * lam + 0.045 * lam ** 3 / rho) / (1 + kappa)); sq = 0.5 * math.sqrt(N['nu'] * w / 2)
     return sq * (mdx['Iw'] + mdx['Ib']) + sq * mdx['Is'] + 2 * N['nu'] * lam ** 2 + 0.05 + (0.016 / F500['a']) * (1 - math.exp(-lam * 0.018))
 modes = plant.modal_params(F500, rho, 0.045, N['Mf'], gamma_fn)
 for mdx, raw in zip(modes['x'], [m for m in F500['modes'] if m['m'] == 1 and m['o'] == 'c']): mdx['rim_front'] = sum(raw['psi'][k][0][-1] for k in raw['psi'])
-Dd = C.design(P, F500, modes, rho, Ts=0.01, s_eta=0.0005, s_psi=0.01, s_v=0.05, s_u=20.0)
+Dd = C.design(P, F500, modes, rho, Ts=0.01, s_eta=0.0005, s_w=0.001, s_v=0.05, s_u=20.0, s_m=20.0)
 runs = {law: C.simulate(Dd, P, 'bump', v=1.5, T=4.0, law=law, h_road=0.03) for law in ('passive', 'skyhook', 'lqr')}
-W, H = 720, 460; L, R = 70, 30; panels = [(30, 150, 'stout at the front of the rim, mm', -10, 20), (190, 290, 'tilt of the glass, °', -3, 3), (330, 430, 'front actuator force, N', -120, 120)]
-ip = Dd['S']['idx']['psi']; b = []
+W, H = 720, 460; L, R = 70, 30; panels = [(30, 150, 'stout at the front of the rim, mm (below zero: the back rises)', -25, 20), (190, 290, 'the road’s kick along the road, N', -30, 30), (330, 430, 'drive motor force, N', -30, 30)]
+b = []
 for (T, B, lab, lo, hi) in panels:
     b.append(f'<rect x="{L}" y="{T}" width="{W-L-R}" height="{B-T}" fill="none" stroke="{RULE}"/>'); b.append(text(L, T - 5, lab, 10, 'start', MUTED))
     for v in np.linspace(lo, hi, 7): yv = T + (B - T) * (1 - (v - lo) / (hi - lo)); b.append(f'<line x1="{L}" y1="{yv:.1f}" x2="{W-R}" y2="{yv:.1f}" stroke="{LIGHT}"/>' + text(L - 6, yv + 4, f'{v:g}', 10, 'end', MUTED))
@@ -160,9 +188,11 @@ def clipped(col, T, B, lo, hi, ts, vs, dash=''):
     yv = lambda v: T + (B - T) * (1 - (min(max(v, lo), hi) - lo) / (hi - lo))
     return path([(xx(t), yv(v)) for t, v in zip(ts, vs)], fill='none', stroke=col, stroke_width=1.4, **({'stroke_dasharray': dash} if dash else {}))
 lim = N['ctl']['dome_mm'] - N['ctl']['head_top_rest_mm']
-T0, B0, _, lo0, hi0 = panels[0]; ylim = T0 + (B0 - T0) * (1 - (lim - lo0) / (hi0 - lo0)); b.append(f'<line x1="{L}" y1="{ylim:.1f}" x2="{W-R}" y2="{ylim:.1f}" stroke="{WINE}" stroke-dasharray="5 4"/>' + text(L + 6, ylim - 7, f'dome limit, {lim:.1f} mm', 9, 'start', WINE))
+T0, B0, _, lo0, hi0 = panels[0]
+for sgn_, lab_ in ((1, f'dome limit, front, {lim:.1f} mm'), (-1, 'dome limit, back of the rim')):
+    ylim = T0 + (B0 - T0) * (1 - (sgn_ * lim - lo0) / (hi0 - lo0)); b.append(f'<line x1="{L}" y1="{ylim:.1f}" x2="{W-R}" y2="{ylim:.1f}" stroke="{WINE}" stroke-dasharray="5 4"/>' + text(L + 6, ylim - 7 if sgn_ > 0 else ylim + 13, lab_, 9, 'start', WINE))
 for law, col in (('passive', INK), ('skyhook', ROSE), ('lqr', WINE)):
-    o = runs[law]; b.append(clipped(col, *panels[0][:2], panels[0][3], panels[0][4], o['t'], o['eta'] * 1e3)); b.append(clipped(col, *panels[1][:2], panels[1][3], panels[1][4], o['t'], o['x'][:, ip] * 180 / math.pi)); b.append(clipped(col, *panels[2][:2], panels[2][3], panels[2][4], o['t'], o['u'][:, 0]))
+    o = runs[law]; b.append(clipped(col, *panels[0][:2], panels[0][3], panels[0][4], o['t'], o['eta'] * 1e3)); b.append(clipped(col, *panels[1][:2], panels[1][3], panels[1][4], o['t'], o['kick'])); b.append(clipped(col, *panels[2][:2], panels[2][3], panels[2][4], o['t'], o['u'][:, 1]))
 b.append(text(L + 6, 330 + 12, 'ink: passive · rose: skyhook · wine: LQR', 9, 'start', MUTED))
-open('notes/fig12/figs/runs.svg', 'w').write(svg(W, H, ''.join(b), 'The pint over a 30 mm speed bump at 1.5 m/s: the stout at the front of the rim, the tilt of the glass and the front actuator force, for the passive cart, the skyhook damper and the LQR.'))
+open('notes/fig12/figs/runs.svg', 'w').write(svg(W, H, ''.join(b), 'The pint over a 30 mm speed bump at 1.5 m/s: the stout at the front of the rim, the road’s kick along the road and the drive motor’s force, for the passive cart, the skyhook damper and the LQR.'))
 print('wrote notes/fig12/figs/{profile,f_vs_V,budget,mode11,cart,runs}.svg')

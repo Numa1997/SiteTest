@@ -1,41 +1,49 @@
-"""The cart that carries the pint: a half-car (pitch-plane) model with the sloshing stout coupled in, built from a Lagrangian.
+"""The cart that carries the pint: a quarter-car (one wheel) with the sloshing stout coupled in, built from a Lagrangian.
 
-Coordinates (metres, radians, about the level rest state):
-  x_c  position of the cart along the road (the reader pushes it; the stout pushes back),
-  y_c  sideways position (a sideways push; the stout pushes back),
-  z_b  heave of the body's centre of mass, up,
-  psi  pitch of the body about y through its centre of mass: a point (x, z) of the body moves to (x + psi z, z - psi x),
-       so positive psi puts the front (x > 0) down,
-  z_f, z_r  heave of the front and rear wheels (unsprung masses),
+Coordinates (metres, about the level rest state, the cart travelling at its steady speed v along x):
+  x_c  position of the cart along the road about that steady travel (the road's kick and the reader's push move it; the
+       stout pushes back),
+  z_b  heave of the body (tray, frame, glass and stout), up; the tray is guided and stays level, so the glass never tilts,
+  z_w  heave of the wheel (the unsprung mass),
   a_n  amplitude of sloshing mode n (the wave height at the rim where the mode is largest).
-Struts at x = +l_f (front) and x = -l_r (rear): spring k, damper c, actuator force u (up on the body), tyre stiffness k_t
-to the road heights z_rf(t), z_rr(t). The glass stands on the body at (d_g, h_g) from the centre of mass; its foot centre
-O moves with  x_O = x_c + d_g + h_g psi,  z_O = z_b + h_g - d_g psi,  and turns with the body (tilt psi).
+One strut between body and wheel: spring k, damper c, actuator force u (up on the body, down on the wheel). The tyre is a
+spring k_t with a little damping c_t between the wheel and the road height z_r(X) under it, X = v t + x_c. The glass stands
+on the tray with its foot centre O at height h_g above the body's mass centre: x_O = x_c, z_O = z_b + h_g.
 
-Liquid (from the note, section "The glass turns"): with the velocity potential
-    Phi = xdot_O x + ydot_O y + zdot_O z + psidot chi_y + sum_n (adot_n / lam_n) Phi_n,
-the kinetic energy is T = rho/2 int |grad Phi|^2 dV, which gives the mass matrix below (the Stokes-Joukowski inertia J_ry
-for the rotation, the sloshing masses on the diagonal, the couplings rho Q N); the potential energy of the waves is
-rho g/2 sum a_n^2 N_n (1 + sigma lam_n^2 / (rho g)), the tilt term - rho g psi sum_n a_n Q_xn N_n, and the rigid liquid's
-weight at its centre of mass. The head adds its mass M_f per area to the surface: a_n's inertia is multiplied by (1 + kappa_n).
-Damping: Rayleigh functions 1/2 c (strut rate)^2 for the struts and rho N_n/lam_n gamma_n adot_n^2 per mode.
+Where the slosh comes from (the note, section 10). The road pushes on the wheel along the normal to its surface. With the
+tyre load N (the vertical tyre force, k_t zeta + c_t zeta', zeta = z_r - z_w) and the road slope z_r'(X), the horizontal
+part of that push is -N z_r': uphill it brakes the cart, downhill it shoves it on. That sideways kick is what the stout
+feels (a tilt of the effective gravity, the coupling rho Q_n N_n of the modal equation (12) with xdd_O = xdd_c), and the
+body's vertical acceleration pumps the modes (the parametric term). The kick is a product of two things that change,
+N and z_r', so it is not in the linear matrices: simulate() applies it as a force, and the design works with the linear
+part, in which the slosh is not reachable from the strut at all. The controller holds the body still and the tyre load
+steady; the pint is saved because the fluctuating part of N, (M_body) zdd_b + m_w zdd_w, loses its body share.
 
-The linear equations M qdd + C qd + K q = B u + E w, q = (x_c, y_c, z_b, psi, z_f, z_r, a_1..a_nx, b_1..b_ny),
-u = (u_f, u_r, F_x, F_y, F_z) (two actuators, the reader's pushes), w = (z_rf, z_rr) road heights.
+The drive holds the speed: a force -c_d xdot_c about the steady travel (a cruise control, or a hand), and rolling
+resistance c_x. Liquid: potential Phi = xdot_O x + zdot_O z + sum_n (adot_n / lam_n) Phi_n gives T = rho/2 int |grad Phi|^2,
+hence the couplings rho Q_n N_n between x_c and the x-modes and the modal masses (rho N_n / lam_n)(1 + kappa_n) with the
+head; the waves' potential energy rho g/2 sum a_n^2 N_n (1 + sigma lam_n^2 / rho g). Rayleigh: 1/2 c d'^2 for the strut,
+1/2 c_t zeta'^2 for the tyre, 1/2 (c_x + c_d) xdot_c^2, and (rho N_n / lam_n)(1 + kappa_n) gamma_n adot_n^2 per mode.
+
+The linear equations M qdd + C qd + K q = B u + E w: q = (x_c, z_b, z_w, a_1..a_nx, b_1..b_ny), u = (u_s, F_x, F_z, F_w) (the
+strut actuator, the reader's push along x and down on the body, and the lift-off correction on the wheel: when the linear tyre
+would pull, N < 0, F_w = -N cancels it), w = (z_a, zdot_a) the axle's road height and its rate (road.Axle: the envelope of the
+road under the wheel's circle, so that a sharp kerb is met by the rim, not by a point).
+The y-type modes b_n are carried for the store; nothing in this plane drives them.
 """
 import numpy as np
 
 G_ACC = 9.81
 
 DEFAULT = dict(
-    M_b=25.0, J_b=2.0,            # body (tray, frame, glass) kg, kg m^2 about y through its centre of mass
-    l_f=0.40, l_r=0.40,           # strut positions, m
-    k=3000.0, c=120.0,            # each strut: N/m, N s/m  (heave 2.5 Hz, damping ratio about 0.22 with the stout)
-    m_w=1.5, k_t=5.0e4, c_t=20.0, # each wheel: kg, tyre N/m, N s/m
-    d_g=0.10, h_g=0.25,           # glass foot: ahead of the centre of mass, above it, m
-    M_g=0.42,                     # the empty glass, kg (counted in M_b's rigid part separately)
-    c_x=15.0, c_y=15.0,           # rolling and sideways resistance of the cart, N s/m
-    Bl=20.0, I_max=5.0,           # each actuator: moving coil, N/A and A
+    M_b=10.0,                     # body: tray, frame, posts (the glass and the stout are added), kg
+    k=3000.0, c=60.0,             # the strut: N/m, N s/m  (heave 2.6 Hz with the pint, damping ratio 0.17)
+    m_w=1.5, k_t=5.0e4, c_t=20.0, # the wheel: kg, tyre N/m, N s/m
+    h_g=0.25,                     # glass foot above the body's mass centre, m (the tray's height)
+    M_g=0.42,                     # the empty glass, kg
+    c_x=5.0, c_d=200.0,           # rolling resistance and the drive's speed holding, N s/m
+    Bl=20.0, I_max=8.0,           # each actuator (strut and drive motor): moving coil, N/A and A
+    R_w=0.08,                     # the wheel's radius, m (its rim rolls on the road; the axle follows the envelope)
 )
 
 
@@ -54,71 +62,57 @@ def modal_params(fill, rho, sigma, M_f, gamma_fn, g=G_ACC):
 
 
 def assemble(P, fill, modes, rho, g=G_ACC):
-    """Mass, damping and stiffness matrices and the input matrices, as numpy arrays."""
+    """Mass, damping and stiffness matrices and the input matrices, as numpy arrays (the linear part; the kick is in forces())."""
     mx, my = modes['x'], modes['y']; nx, ny = len(mx), len(my)
-    n = 6 + nx + ny
-    ix, iy, iz, ip, ifw, irw = range(6)
-    ia = 6 + np.arange(nx); ib = 6 + nx + np.arange(ny)
-    V = fill['V_liq']; m_l = rho * V; J_ry = rho * fill['J_ry']; J_rx = rho * fill['J_rx']
-    zs = fill['zs']; zf = 0.008                                       # floor; the liquid's centre of mass above the foot, in the glass:
-    # z_cm from the stored volume: approximate by the fill height's half plus the floor (the cavity widens upward; a few mm off; stated)
-    z_cm_l = zf + 0.5 * (zs - zf) * 1.1
+    n = 3 + nx + ny
+    ix, iz, iw = range(3)
+    ia = 3 + np.arange(nx); ib = 3 + nx + np.arange(ny)
+    V = fill['V_liq']; m_l = rho * V
     M = np.zeros((n, n)); C = np.zeros((n, n)); K = np.zeros((n, n))
     # ---- rigid parts ----
-    M_rig = P['M_b'] + 2 * P['m_w'] + P['M_g'] + m_l                 # everything moves along x and y together
-    M[ix, ix] = M_rig; M[iy, iy] = M_rig
-    C[ix, ix] = P['c_x']; C[iy, iy] = P['c_y']
-    M_sprung = P['M_b'] + P['M_g'] + m_l
-    M[iz, iz] = M_sprung
-    # pitch inertia: body + glass as a point mass at (d_g, h_g + 0.08) + the liquid: Stokes-Joukowski about O plus the parallel axis
-    # for the translation of O (x_O = ... + h_g psi, z_O = ... - d_g psi) handled through the coupling terms below
-    hg_glass = P['h_g'] + 0.08
-    J = P['J_b'] + P['M_g'] * (P['d_g'] ** 2 + hg_glass ** 2)
-    M[ip, ip] = J
-    # the liquid as the rigid translation of O plus the rotation about O: T = 1/2 m_l |v_O|^2 + 1/2 J_ry psidot^2 + m_l (v_O x omega) z_cm terms
-    # v_O = (xdot_c + h_g psidot, zdot_b - d_g psidot); cross term from int grad(x xdot_O).grad(psidot chi) = xdot_O psidot V z_cm
-    M[ix, ip] += m_l * P['h_g'] + m_l * z_cm_l; M[ip, ix] = M[ix, ip]
-    M[iz, ip] += -m_l * P['d_g']; M[ip, iz] = M[iz, ip]
-    M[ip, ip] += m_l * (P['h_g'] ** 2 + P['d_g'] ** 2) + J_ry + 2 * m_l * P['h_g'] * z_cm_l
-    M[ifw, ifw] = P['m_w']; M[irw, irw] = P['m_w']
-    # struts: deflection d_f = z_b - l_f psi - z_f, d_r = z_b + l_r psi - z_r
-    for (l, s, iw) in ((P['l_f'], -1.0, ifw), (P['l_r'], +1.0, irw)):
-        v = np.zeros(n); v[iz] = 1.0; v[ip] = s * l; v[iw] = -1.0
-        K += P['k'] * np.outer(v, v); C += P['c'] * np.outer(v, v)
-        K[iw, iw] += P['k_t']; C[iw, iw] += P['c_t']
-    # gravity on the tilting sprung mass: a mass m at height h above the pitch axis has V = -m g h psi^2/2 (inverted pendulum)
-    K[ip, ip] += -(P['M_g'] * hg_glass + m_l * (P['h_g'] + z_cm_l)) * g
+    M_s = P['M_b'] + P['M_g'] + m_l                                  # the sprung mass: body, glass, stout
+    M_tot = M_s + P['m_w']                                           # everything moves along x together
+    M[ix, ix] = M_tot; C[ix, ix] = P['c_x'] + P['c_d']
+    M[iz, iz] = M_s; M[iw, iw] = P['m_w']
+    # the strut: deflection d = z_b - z_w
+    v = np.zeros(n); v[iz] = 1.0; v[iw] = -1.0
+    K += P['k'] * np.outer(v, v); C += P['c'] * np.outer(v, v)
+    # the tyre's linear part: zeta = z_r - z_w, force k_t zeta + c_t zeta' up on the wheel
+    K[iw, iw] += P['k_t']; C[iw, iw] += P['c_t']
     # ---- the stout ----
-    for q, idx, mlist, dir_ in ((ix, ia, mx, 'x'), (iy, ib, my, 'y')):
+    for q, idx, mlist in ((ix, ia, mx), (None, ib, my)):
         for k, md in enumerate(mlist):
             i = idx[k]; mu = rho * md['N'] / md['lam']                 # generalised mass of a_n (before the head)
             M[i, i] = mu * (1 + md['kappa'])
             C[i, i] = 2 * mu * (1 + md['kappa']) * md['gamma']     # gamma is the decay rate of the mode, head included
             K[i, i] = mu * md['w2'] * (1 + md['kappa'])               # rho g N (1 + sigma lam^2/(rho g))
-            M[i, q] = M[q, i] = rho * md['Q'] * md['N']               # translation coupling
-            if dir_ == 'x':
-                # x_O carries h_g psi; the rotation drives the stout through chi_y (Q_r) and lifts the head at x' by -psi x' (head: -M_f Q N = -rho (kappa/lam) Q N)
-                M[i, ip] = M[ip, i] = rho * md['Q'] * md['N'] * (P['h_g'] - md['kappa'] / md['lam']) + rho * md['Qr'] * md['N']
-                K[i, ip] = K[ip, i] = -rho * g * md['Q'] * md['N']   # tilt: the liquid's weight along the tilted surface
-    # inputs: u = (u_f, u_r, F_x, F_y, F_z), road w = (z_rf, z_rr)
-    B = np.zeros((n, 5)); B[iz, 0] = 1; B[ip, 0] = -P['l_f']; B[ifw, 0] = -1
-    B[iz, 1] = 1; B[ip, 1] = +P['l_r']; B[irw, 1] = -1
-    B[ix, 2] = 1; B[iy, 3] = 1; B[iz, 4] = 1
-    E = np.zeros((n, 2)); E[ifw, 0] = P['k_t']; E[irw, 1] = P['k_t']
-    Ed = np.zeros((n, 2)); Ed[ifw, 0] = P['c_t']; Ed[irw, 1] = P['c_t']
-    return dict(M=M, C=C, K=K, B=B, E=E, Ed=Ed, n=n, idx=dict(x=ix, y=iy, z=iz, psi=ip, zf=ifw, zr=irw, a=ia, b=ib), m_l=m_l, J_ry=J_ry, z_cm_l=z_cm_l)
+            if q is not None: M[i, q] = M[q, i] = rho * md['Q'] * md['N']   # translation coupling, both ways
+    # inputs: u = (actuator, F_x, F_z); road w = (z_r, zdot_r) through the tyre's linear part
+    B = np.zeros((n, 4)); B[iz, 0] = 1; B[iw, 0] = -1; B[ix, 1] = 1; B[iz, 2] = 1; B[iw, 3] = 1   # the fourth input: an extra force on the wheel (the lift-off correction)
+    E = np.zeros((n, 2)); E[iw, 0] = P['k_t']; E[iw, 1] = P['c_t']
+    return dict(M=M, C=C, K=K, B=B, E=E, n=n, idx=dict(x=ix, z=iz, w=iw, a=ia, b=ib), m_l=m_l, M_s=M_s, M_tot=M_tot)
+
+
+def tyre_load(P, S, q, qd, zr, zrd, static=False):
+    """The vertical tyre force N (its fluctuating part about the static load; with static=True the whole load)."""
+    I = S['idx']; N = P['k_t'] * (zr - q[I['w']]) + P['c_t'] * (zrd - qd[I['w']])
+    return N + (S['M_tot'] * G_ACC if static else 0.0)
+
+
+def kick(P, S, q, qd, zr, zrd, slope):
+    """The road's horizontal push on the wheel, -N z_a'(X), with the full tyre load N (static plus fluctuating), and the lift-off
+    correction: a tyre that would pull (N < 0) has left the road and pushes nothing, so F_w = -N is added on the wheel.
+    Returns (kick, N clamped, F_w)."""
+    N = tyre_load(P, S, q, qd, zr, zrd, static=True)
+    Fw = -N if N < 0 else 0.0
+    N = max(N, 0.0)
+    return -N * slope, N, Fw
 
 
 def state_space(S):
-    """xdot = A x + Bu u + Bw w, x = (q, qdot), w = (z_rf, z_rr, zdot_rf, zdot_rr)."""
+    """xdot = A x + Bu u + Bw w for the linear part, x = (q, qdot), w = (z_r, zdot_r)."""
     n = S['n']; Mi = np.linalg.inv(S['M'])
     A = np.zeros((2 * n, 2 * n)); A[:n, n:] = np.eye(n); A[n:, :n] = -Mi @ S['K']; A[n:, n:] = -Mi @ S['C']
     Bu = np.zeros((2 * n, S['B'].shape[1])); Bu[n:] = Mi @ S['B']
-    Bw = np.zeros((2 * n, 4)); Bw[n:, :2] = Mi @ S['E']; Bw[n:, 2:] = Mi @ S['Ed']
+    Bw = np.zeros((2 * n, 2)); Bw[n:] = Mi @ S['E']
     return A, Bu, Bw
-
-
-def glass_kinematics(P, S, x, xdd):
-    """Acceleration of the glass foot and the tilt from a state and its derivative: (xdd_O, ydd_O, zdd_O, psi, psidd)."""
-    n = S['n']; I = S['idx']
-    return (xdd[I['x']] + P['h_g'] * xdd[I['psi']], xdd[I['y']], xdd[I['z']] - P['d_g'] * xdd[I['psi']], x[I['psi']], xdd[I['psi']])
