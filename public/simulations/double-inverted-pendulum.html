@@ -869,7 +869,7 @@
                 for (r = 0; r < n; r++) if (r !== c) { var f = W[r][c]; if (f) for (j = 0; j < 2 * n; j++) W[r][j] -= f * W[c][j]; } }
             return W.map(function (row) { return row.slice(n); }); }
         function linear(p) { var Di = inv(Dm(p, 0, 0)), A = zeros(6, 6), B = zeros(6, 1), i;
-            for (i = 0; i < 3; i++) { A[i][i + 3] = 1; A[i + 3][1] = Di[i][1] * p.f[0]; A[i + 3][2] = Di[i][2] * p.f[1]; B[i + 3][0] = Di[i][0]; } return { A: A, B: B }; }
+            for (i = 0; i < 3; i++) { A[i][i + 3] = 1; A[i + 3][1] = Di[i][1] * p.f[0]; A[i + 3][2] = Di[i][2] * p.f[1]; B[i + 3][0] = Di[i][0]; }   /* in a medium the balancer also knows its drag at upright: Q ≈ −C q̇ (33)–(34), whose linear part is the viscous one; the quadratic part has no slope at rest */ if (p.fl && lqDrag) { var dp = new Float64Array(3), dmn = new Float64Array(3), j, k, e = 1e-6; for (j = 0; j < 3; j++) { var sv = [0, 0, 0, 0, 0, 0]; sv[3 + j] = e; dragF(p, sv, dp); sv[3 + j] = -e; dragF(p, sv, dmn); for (i = 0; i < 3; i++) for (k = 0; k < 3; k++) A[i + 3][j + 3] += Di[i][k] * (dp[k] - dmn[k]) / (2 * e); } } return { A: A, B: B }; }
         function lqr(A, B, R) {   // AᵀP + PA − PBR⁻¹BᵀP + Q = 0 by the sign function of the Hamiltonian matrix
             var n = 6, Hm = zeros(12, 12), i, j;
             for (i = 0; i < n; i++) for (j = 0; j < n; j++) { Hm[i][j] = A[i][j]; Hm[i][n + j] = -B[i][0] * B[j][0] / R; Hm[n + i][j] = -(i === j ? Q[i] : 0); Hm[n + i][n + j] = -A[j][i]; }
@@ -977,7 +977,7 @@
                 for (m = 0; m < weak.length; m++) for (var sg = -1; sg <= 1; sg += 2) for (sh = 0; sh < SH.length; sh++) { var d0 = weak[m].map(function (v) { return sg * v; }); if ((yield* climb(d0, c * SH[sh])) >= 0) return false; }
                 for (m = 0; m < top.length; m++) if ((yield* climb(top[m].d, top[m].cl)) >= 0) return false;
                 return true; }
-            var lo = 1, hi = 1e4;
+            var lo = CLO, hi = 1e4;
             if (!(yield* safe(lo))) return 0;
             for (var bi = 0; bi < 13; bi++) { var mid = Math.sqrt(lo * hi); if (yield* safe(mid)) lo = mid; else hi = mid; }
             return lo; }
@@ -992,10 +992,18 @@
                 A00 += m * (L1 * ca * ca + L2 * cb * cb) + p.ma.mc; A01 += m * L1 * (L1 * ca / 2 + L2 * cb * cab); A02 += m * L2 * L2 * cb / 2; A11 += m * L1 * L1 * (L1 / 3 + L2 * cab * cab); A12 += m * L1 * L2 * L2 * cab / 2; A22 += m * L2 * L2 * L2 / 3;
                 r0 -= (-ad * ad * L1 * (L1 + L2) * m * sa - 2 * ad * L1 * m * xd * Math.sin(2 * a) - L2 * m * (ad * (ad - 2 * bd) * L1 * s2b + bd * (bd * L2 + 4 * xd * cb) * sb)) / 2;
                 r1 -= L1 * m * (xd * xd * Math.sin(2 * a) + L2 * (2 * bd * xd * s2b + (bd * bd * L2 - 2 * ad * (ad - 2 * bd) * L1 * cab) * sab)) / 2;
-                r2 -= -L2 * m * (2 * ad * L1 * xd * s2b + ad * ad * L1 * L2 * sab + ad * ad * L1 * L1 * Math.sin(2 * (a - b)) - xd * xd * Math.sin(2 * b)) / 2; }
+                r2 -= -L2 * m * (2 * ad * L1 * xd * s2b + ad * ad * L1 * L2 * sab + ad * ad * L1 * L1 * Math.sin(2 * (a - b)) - xd * xd * Math.sin(2 * b)) / 2; }   /* the medium's drag in still fluid, (33)–(34) with the flow left out: the plan is made for the honey it will move through */ if (p.fl && planDrag) { dragF(p, s, dq3); r0 += dq3[0]; r1 += dq3[1]; r2 += dq3[2]; }
             var l00 = Math.sqrt(A00), l10 = A01 / l00, l20 = A02 / l00, l11 = Math.sqrt(A11 - l10 * l10), l21 = (A12 - l20 * l10) / l11, l22 = Math.sqrt(A22 - l20 * l20 - l21 * l21);
             var y0 = r0 / l00, y1 = (r1 - l10 * y0) / l11, y2 = (r2 - l20 * y0 - l21 * y1) / l22, q2 = y2 / l22, q1 = (y1 - l21 * q2) / l11, q0 = (y0 - l10 * q1 - l20 * q2) / l00;
             o[0] = s[3]; o[1] = s[4]; o[2] = s[5]; o[3] = q0; o[4] = q1; o[5] = q2; }
+        function dragF(p, s, o) {   // the drag of a still medium on rods and cart, (33)–(35) with v_f = 0, by 4-point Gauss–Legendre per rod: cheap enough for the planner
+            var F = p.fl, s1 = Math.sin(s[1]), c1 = Math.cos(s[1]), s2 = Math.sin(s[2]), c2 = Math.cos(s[2]), xd = s[3], ad = s[4], bd = s[5], Q0 = 0, Q1 = 0, Q2 = 0, i, k;
+            for (k = 0; k < 2; k++) { var L = k ? p.L2 : p.L1, sn = k ? s2 : s1, cs = k ? c2 : c1, xi = F.xi[k], om = k ? bd : ad;
+                for (i = 0; i < 4; i++) { var sg = GL4.x[i] * L, wq = GL4.w[i] * L, vx = xd + (k ? p.L1 * c1 * ad : 0) + sg * cs * om, vy = -(k ? p.L1 * s1 * ad : 0) - sg * sn * om;
+                    var wt = vx * sn + vy * cs, wn = vx * cs - vy * sn, fn = -xi * wn - F.cq * Math.abs(wn) * wn, ft = -xi / 2 * wt, fx = ft * sn + fn * cs, fy = ft * cs - fn * sn;
+                    Q0 += wq * fx; if (k) { Q1 += wq * p.L1 * (fx * c1 - fy * s1); Q2 += wq * sg * fn; } else Q1 += wq * sg * fn; } }
+            o[0] = Q0 - F.cl * xd - F.cc * Math.abs(xd) * xd; o[1] = Q1; o[2] = Q2; }
+        var GL4 = { x: [0.0694318442029737, 0.3300094782075719, 0.6699905217924281, 0.9305681557970263], w: [0.1739274225687269, 0.3260725774312731, 0.3260725774312731, 0.1739274225687269] }, dq3 = new Float64Array(3), planDrag = true, lqDrag = true, CLO = 1e-4, superOn = true;
         function stepF(p, s, u, h, n, o) {   // n RK4 steps of length h with u held; the result goes to o (which may be s)
             for (var m = 0; m < n; m++) { var i;
                 rhsF(p, s, u, kk1); for (i = 0; i < 6; i++) tmp6[i] = s[i] + h / 2 * kk1[i];
@@ -1294,7 +1302,7 @@
 
         var vy = 0, p, K, Pm, Smod, lamNow = NaN, cLevel = null, catchIt = null, gmode = 'sampled', rolling = true, s, u = 0, xref = 0, on = true, rescue = true, lost = false, flat = false, tSim = 0, tCtl = 0, acc = 0, held = 0, geo = null;
         /* the supervisor's state: mode is 'balance' (LQR), 'calm' (drain the rods' energy while a plan is being made) or 'track' (follow a plan) */
-        var mode = 'balance', job = null, tv = null, tPlan = 0, sPred = null, xc = 0, attempt = 0, nextCheck = 0, CALM_K = 2, hp = 3, log = [];
+        var mode = 'balance', job = null, tv = null, tPlan = 0, sPred = null, xc = 0, attempt = 0, nextCheck = 0, CALM_K = 2, hp = 3, log = [], pump = false, att0 = 0, PUMP_K = 3, pumpOn = true;
         /* the balancer's reference, an equilibrium of the family (25): fixed at a place, cruising at a constant speed, or gliding from one to a resting place (26) */
         var ref = { kind: 'fixed', x: 0 }, GLIDE = 0.5;
         function refXV(t) { if (ref.kind === 'fixed') return [ref.x, 0];
@@ -1321,7 +1329,7 @@
             recatch(); if (s) twSync(false);
         }
         function recatch() { cLevel = null; catchIt = catchGen(); ds.set('c_star', NaN); ds.set('c_hand', NaN); ds.set('eps_rest', NaN); ds.set('c_busy', true); document.getElementById('r-c').textContent = '…'; document.getElementById('r-eps').textContent = '…'; abandon(); }   // computed between frames by think()
-        function abandon() { job = null; tv = null; sPred = null; if (mode !== 'balance' && s) { mode = 'calm'; startAttempt(); } }   // any change of the machine, or a push, spoils the plan: start again from calming
+        function abandon() { job = null; tv = null; sPred = null; if (mode !== 'balance' && s) { mode = 'calm'; att0 = attempt; startAttempt(); } }   // any change of the machine, or a push, spoils the plan: start again from calming
         /* ---------- the solved fluid (section 13.6): twoway.js holds the tank; the page's 1 ms steps, controller and logs run inside its 20 ms steps ---------- */
         var tw = null, twKey = '', twKind = 0, twC0 = 0, twU0 = 0, twE0 = 0, twK0 = 0, twX0 = 0, twSpeed = 1, twSim = 0, twWall = 0;
         function twSync(force) {   // a new tank when the machine, the medium or the stream changed (or at a reset); none unless the fluid is solved
@@ -1361,7 +1369,7 @@
             return D[0][0] * a + D[0][1] * b1 + D[0][2] * b2 - d[1] * s1 * st[4] * st[4] - d[2] * s2 * st[5] * st[5] - Qf[0] + Ca[0]; }
         function calmU(st) {   // a = k𝒫 makes dE_p/dt = −k𝒫² ≤ 0 (21); the two other terms keep the cart near x_c
             var d = p.d, P = d[1] * Math.cos(st[1]) * st[4] + d[2] * Math.cos(st[2]) * st[5];
-            var a = Math.max(-8, Math.min(8, CALM_K * P - 4 * (st[0] - xc) - 4 * st[3])); return clampF(uFor(st, a)); }
+            var a = Math.max(-8, Math.min(8, kCalm(st) * P - 4 * (st[0] - xc) - 4 * st[3])); return clampF(uFor(st, a)); }   /* after a failed plan: pump instead, a = −k𝒫 tanh(3(V_top − E)/V_top), which feeds the rods' energy up to the top's and no further */ function kCalm(st) { if (!pump) return CALM_K; var Et = p.f[0] + p.f[1], E = energy(st) - 0.5 * p.d[0] * st[3] * st[3]; return -PUMP_K * Math.tanh(3 * (Et - E) / Et); }
         function trackU() {   // u = u_plan − K(t)(s − s_plan) on the 10 ms grid of the plan (24)
             var k = Math.round((tSim - tPlan) / 0.01); if (k >= tv.n) return 'end';
             var v = tv.un[k], dev = 0; for (var j = 0; j < 6; j++) { var e = s[j] - (j === 0 ? xc : 0) - tv.nom[6 * k + j]; dev += e * e; v -= tv.Kt[6 * k + j] * e; }
@@ -1393,15 +1401,15 @@
             while (t < until - 1e-9) { if (t >= tc - 1e-9) { uu = law(q, t); tc += law === lqrU ? sT.value / 1000 : 0.01; } q = rk4(p, q, uu, H, t); t += H; }
             return { s: q, t: t, tc: tc, u: uu }; }
         function startAttempt() {   // plan from where calming will have brought the machine hp seconds from now
-            var pr = run({ s: s, t: tSim, tc: tCtl, u: u }, tSim + hp, calmU), s0 = pr.s.slice(); s0[0] -= xc;
+            pump = pumpOn && attempt > att0; var pr = run({ s: s, t: tSim, tc: tCtl, u: u }, tSim + hp, calmU), s0 = pr.s.slice(); s0[0] -= xc;
             sPred = pr; tPlan = pr.t; attempt++; job && !job.done && (hp = Math.min(8, hp * 1.5));
             job = new PlanJob(p, s0, attempt % 2 ? 4 : 6, { x: 1.5, u: sF.value, vw: rolling ? 0 : 0.3 }); job.t0 = performance.now(); }
         function supervise() {
             if (!on || held) return;
-            if (mode === 'balance' && !lost && tSim >= nextCheck && cLevel !== null) { nextCheck = tSim + 0.1;
+            if (mode === 'balance' && !lost && superOn && tSim >= nextCheck && cLevel !== null) { nextCheck = tSim + 0.1;
                 if (Wof(s, tSim) > cLevel) {   // outside the certified region: ask the model whether the balancer still wins within 4 s
                     var pr = run({ s: s, t: tSim, tc: tCtl, u: u }, tSim + 4, lqrU);
-                    if (Wof(pr.s, pr.t) > cLevel) { if (rescue) { mode = 'calm'; xc = rolling ? s[0] : xref; ref = { kind: 'fixed', x: xc }; log.push({ t: tSim, ev: 'rescue' }); startAttempt(); } else { lost = true; u = 0; } } } }
+                    if (Wof(pr.s, pr.t) > cLevel) { if (rescue) { mode = 'calm'; xc = rolling ? s[0] : xref; ref = { kind: 'fixed', x: xc }; log.push({ t: tSim, ev: 'rescue' }); att0 = attempt; startAttempt(); } else { lost = true; u = 0; } } } }
             if (mode === 'calm' && sPred && tSim >= tPlan - 1e-9) {
                 var ok = tv && Math.abs(s[0] - sPred.s[0]) + Math.abs(s[1] - sPred.s[1]) + Math.abs(s[2] - sPred.s[2]) < 1e-6;
                 if (ok) { mode = 'track'; tCtl = tSim; hp = 3; log.push({ t: tSim, ev: 'track', T: job.T, attempt: attempt, ms: Math.round(job.ms) }); job = null; }
@@ -1409,7 +1417,7 @@
             if (mode === 'track' && cLevel && tSim - tPlan > 0.05 && (rolling ? Wred(s) : Wof(s, tSim)) < 0.9 * cLevel) {   // inside the certified region, with 10 % to spare for what the search may miss: hand over
                 mode = 'balance'; why = 4; s[1] = wrapAngle(s[1]); s[2] = wrapAngle(s[2]); tv = null; nextCheck = tSim + 0.1; tCtl = tSim;
                 if (rolling) ref = { kind: 'cruise', x: s[0], v: s[3], t0: tSim, brake: true };   // keep the speed it arrived with: a moving equilibrium (25), then brake it away bite by bite (27)
-                log.push({ t: tSim, ev: 'caught', v: s[3] }); } }
+                log.push({ t: tSim, ev: 'caught', v: s[3] }); pump = false; } }
         function think(ms) {   // work between frames: first the certificate, then the plan
             var t0 = performance.now();
             while (catchIt && performance.now() - t0 < ms) { var r = catchIt.next(); if (r.done) { cLevel = r.value; catchIt = null; ds.set('c_star', cLevel); ds.set('c_hand', 0.9 * cLevel); ds.set('eps_rest', Math.sqrt(GAMMA * cLevel / Pm[3][3])); ds.set('c_busy', false); document.getElementById('r-c').textContent = Sim.fmt(ds.get('c_star'), 0); document.getElementById('r-eps').textContent = Sim.fmt(ds.get('eps_rest'), 2) + ' m/s'; } }
@@ -1431,7 +1439,7 @@
         function flick(J) {   // Δθ̇ = D⁻¹ (1, L1 cos θ1, L2 cos θ2)ᵀ J
             if (flat) return; why = 1; var dq = solve3(Dm(p, s[1], s[2]), [J, p.L1 * Math.cos(s[1]) * J, p.L2 * Math.cos(s[2]) * J]);
             s[3] += dq[0]; s[4] += dq[1]; s[5] += dq[2]; nextCheck = tSim; abandon(); }
-        function swingUp() { reset(); s = [0, Math.PI, Math.PI, 0, 0, 0]; mode = 'calm'; xc = 0; ref = { kind: 'fixed', x: 0 }; startAttempt(); }
+        function swingUp() { reset(); s = [0, Math.PI, Math.PI, 0, 0, 0]; mode = 'calm'; xc = 0; ref = { kind: 'fixed', x: 0 }; att0 = attempt; startAttempt(); }
 
         /* ---------- the logs: every physics step and every controller sample is written into the store at the moment it happens ---------- */
         var Wfl = 0, WflB = 0, cDue = 0, ver = 0, nStep = 0, nSamp = 0, stN = 0, csN = 0, trN = 0, why = 0, book = false, E0 = 0, Wm = 0, Eext = 0, sPost = null, plSerial = 0, fps = 0, frames = 0;
@@ -1831,7 +1839,7 @@
 
         window.DIPC = { get ds() { return ds; }, get tw() { return tw; }, rk4: rk4, fluidQ: fluidQ, fieldV: fieldV, fluidPar: fluidPar, accelF: accelF, draw: draw, get geo() { return geo; }, get held() { return held; }, get uh() { return uh; }, get handX() { return handX; }, get s() { return s; }, set s(v) { s = v.slice(); why = 3; nextCheck = tSim; }, get K() { return K; }, get P() { return Pm; }, get p() { return p; }, fallRates: fallRates, rhs: rhs, rhsF: rhsF, flick: flick, get lost() { return lost; }, set xref(v) { xref = v; ref = { kind: 'fixed', x: v }; }, get ref() { return ref; }, set rolling(v) { rolling = v; }, set gmode(v) { gmode = v; redesign(); },
             finishCatch: function () { while (catchIt) think(1000); return cLevel; }, Wred: function () { return Wred(s); }, specRad: specRad, dlqr: dlqr, sampledModel: sampledModel, linear: linear,
-            get mode() { return mode; }, get cLevel() { return cLevel; }, get t() { return tSim; }, get u() { return u; }, W: function () { return Wof(s, tSim); }, Ep: function () { return Ep(s); }, get log() { return log; }, swingUp: swingUp, step: step, think: think, get job() { return job; }, PlanJob: PlanJob };
+            get mode() { return mode; }, get cLevel() { return cLevel; }, get t() { return tSim; }, get u() { return u; }, W: function () { return Wof(s, tSim); }, Ep: function () { return Ep(s); }, get log() { return log; }, swingUp: swingUp, step: step, think: think, get job() { return job; }, set planDrag(v) { planDrag = v; }, set pumpOn(v) { pumpOn = v; }, set lqDrag(v) { lqDrag = v; redesign(); }, set CLO(v) { CLO = v; }, set rescueOn(v) { rescue = v; }, set superOn(v) { superOn = v; }, PlanJob: PlanJob, linear: linear, dragF: dragF, get sF() { return sF; }, PlanJob: PlanJob };
     })();
     </script>
     <script src="../scripts/datalog.js"></script>
