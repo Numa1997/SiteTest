@@ -28,7 +28,7 @@ function Poisson(nx, ny, h) {
   for (;;) { this.L.push({ nx: n, ny: m, h: hh, wx: new Float64Array((n + 1) * m), wy: new Float64Array(n * (m + 1)), d: new Float64Array(n * m), x: new Float64Array(n * m), b: new Float64Array(n * m), r: new Float64Array(n * m),
       cw: new Float64Array(n * m), ce: new Float64Array(n * m), cs: new Float64Array(n * m), cn: new Float64Array(n * m), id: new Float64Array(n * m) });
     if (n % 2 || m % 2 || n <= 8 || m <= 8) break; n /= 2; m /= 2; hh *= 2; }
-  var N = nx * ny; this.rr = new Float64Array(N); this.z = new Float64Array(N); this.pp = new Float64Array(N); this.Ap = new Float64Array(N); this.tol = 1e-4;
+  var N = nx * ny; this.rr = new Float64Array(N); this.z = new Float64Array(N); this.pp = new Float64Array(N); this.Ap = new Float64Array(N); this.tol = 1e-4; this.nPre = 2; this.nPost = 2;
 }
 Poisson.prototype.setWeights = function (wx, wy) {
   var L0 = this.L[0], l, I, J; L0.wx.set(wx); L0.wy.set(wy);
@@ -54,12 +54,12 @@ Poisson.prototype.smooth = function (Lv, x, b, sweeps, order) {   // red-black G
         else x[c] = (b[c] + cw[c] * x[c - 1] + ce[c] * x[c + 1] + cs[c] * x[c - nx] + cn[c] * x[c + nx]) * id[c]; } } } };
 Poisson.prototype.vcycle = function (l) { var Lv = this.L[l], c;
   if (l === this.L.length - 1) { Lv.x.fill(0); this.smooth(Lv, Lv.x, Lv.b, 40, 0); this.smooth(Lv, Lv.x, Lv.b, 40, 1); return; }
-  Lv.x.fill(0); this.smooth(Lv, Lv.x, Lv.b, 2, 0); this.apply(Lv, Lv.x, Lv.r); for (c = 0; c < Lv.r.length; c++) Lv.r[c] = Lv.b[c] - Lv.r[c];
+  Lv.x.fill(0); this.smooth(Lv, Lv.x, Lv.b, this.nPre, 0); this.apply(Lv, Lv.x, Lv.r); for (c = 0; c < Lv.r.length; c++) Lv.r[c] = Lv.b[c] - Lv.r[c];
   var C = this.L[l + 1], I, J;
   for (J = 0; J < C.ny; J++) for (I = 0; I < C.nx; I++) { var f = 2 * J * Lv.nx + 2 * I; C.b[J * C.nx + I] = 0.25 * (Lv.r[f] + Lv.r[f + 1] + Lv.r[f + Lv.nx] + Lv.r[f + Lv.nx + 1]); }
   this.vcycle(l + 1);
   for (J = 0; J < C.ny; J++) for (I = 0; I < C.nx; I++) { var f2 = 2 * J * Lv.nx + 2 * I, e = C.x[J * C.nx + I]; Lv.x[f2] += e; Lv.x[f2 + 1] += e; Lv.x[f2 + Lv.nx] += e; Lv.x[f2 + Lv.nx + 1] += e; }
-  this.smooth(Lv, Lv.x, Lv.b, 2, 1); };
+  this.smooth(Lv, Lv.x, Lv.b, this.nPost, 1); };
 Poisson.prototype.solve = function (b, x, maxit) {   // x: warm start; returns iterations; relative residual this.tol
   maxit = maxit || 200; var L0 = this.L[0], N = b.length, rr = this.rr, z = this.z, pp = this.pp, Ap = this.Ap, c;
   this.apply(L0, x, Ap); var bn = 0; for (c = 0; c < N; c++) { rr[c] = L0.d[c] ? b[c] - Ap[c] : 0; bn += b[c] * b[c]; }
@@ -127,10 +127,12 @@ function World(o) {
   this.nearU = new Uint8Array(NU);   // faces next to the cart whose staggered cell is partly or wholly solid: they carry the cart's velocity in the divergence
   this.phi = new Float64Array(N); this.phU = new Float64Array(NU); this.phV = new Float64Array(NV); /* signed distance to the body at every face centre, negative inside */ this.P = new Poisson(nx, ny, this.dx); this.p0 = new Float64Array(N); this.px = new Float64Array(N); this.rhs = new Float64Array(N); this.pF = new Float64Array(N); this.pOld = new Float64Array(N);
   this.s = (o.s || [0, 0, 0, 0, 0, 0]).slice(); this.t = 0; this.u_m = 0;
-  this.uS = new Float64Array(2 * NP * 2); this.uS1 = new Float64Array(2 * NP * 2); this.aS = new Float64Array(2 * NP * 2); this.pos = new Float64Array(2 * NP * 2);   // sampled velocity now and a step ago, fluid acceleration, where each point stood
+  this.uS = new Float64Array(2 * NP * 2); this.uE = new Float64Array(2 * NP * 2); this.uS1 = new Float64Array(2 * NP * 2); this.aS = new Float64Array(2 * NP * 2); this.pos = new Float64Array(2 * NP * 2);   // sampled velocity now and a step ago, fluid acceleration, where each point stood
   this.imp = new Float64Array(2 * NP * 2); this.impPos = new Float64Array(2 * NP * 2); this.haveImp = false; this.first = true;   // the impulse in transit and where it is delivered
   this.book = { Wm: 0, Drod: 0, Wvisc: 0, Eadv: 0, Ediff: 0, Eproj: 0, Erod: 0, Ecart: 0, Pwall: 0, Pmotor: 0, Ptransit: 0 };
   this.tmpU = new Float64Array(NU); this.tmpV = new Float64Array(NV); this.u0 = new Float64Array(NU); this.v0 = new Float64Array(NV); this.uF = new Float64Array(NU); this.vF = new Float64Array(NV);
+  this.P.tol = 1e-3;   // relative residual of the pressure solves: the cart's added mass to 1e-4 of itself, the divergence left below 1e-2 1/s (fix/t_tol.cjs)
+  this.selfField = o.selfField !== undefined ? o.selfField : true; this.selfTol = 1e-2;   // the rods read the water with their own disturbance removed (the self field, below)
   this.kin = {}; this.measure();
 }
 var W = World.prototype;
@@ -151,15 +153,19 @@ W.measureCircle = function (xc, yc, r) {   // tests only: a fixed circle, fracti
   for (j = 0; j < ny; j++) for (i = 0; i <= nx; i++) { c = j * (nx + 1) + i; var f = frac(this.xu(i), this.yu(j)); this.wu[c] = 1 - f; this.su[c] = f > 0 ? 1 : 0; }
   for (j = 0; j <= ny; j++) for (i = 0; i < nx; i++) { c = j * nx + i; var f2 = frac(this.xv(i), this.yv(j)); this.wv[c] = 1 - f2; this.sv[c] = f2 > 0 ? 1 : 0; }
   this.finishWeights(); };
-W.measure = function () {   // fluid fraction of the control volume (dx × dx) around every face: Batty's kinetic-energy weights; exact for the cart, an axis-aligned rectangle
+W.measure = function () {   // fluid fraction of the control volume (dx × dx) around every face: Batty's kinetic-energy weights; exact for the cart, an axis-aligned rectangle.
+  // Only faces within 3 cells of the cart, now or a step ago, can change: the pass is limited to them (far away w = 1 and the signed distance is only read for its sign).
   var nx = this.nx, ny = this.ny, dx = this.dx, i, j, c, x0 = this.x0, y0 = this.y0, xa = this.s[0] - CART_W / 2, xb = this.s[0] + CART_W / 2, ya = -CART_H, yb = 0, gone = this.cartGone, h = dx / 2, ia = 1 / (dx * dx);
   function ov(a, b, lo, hi) { var l = Math.min(b, hi) - Math.max(a, lo); return l > 0 ? l : 0; }
-  for (j = 0; j < ny; j++) { var yc = y0 + (j + 0.5) * dx, oyu = gone ? 0 : ov(yc - h, yc + h, ya, yb);
-    for (i = 0; i <= nx; i++) { c = j * (nx + 1) + i; var xf = x0 + i * dx, fs = oyu ? ov(xf - h, xf + h, xa, xb) * oyu * ia : 0; if (fs > 1 - 1e-12) fs = 1; this.wu[c] = 1 - fs; this.su[c] = fs > 0 ? 1 : 0; } }
-  for (j = 0; j <= ny; j++) { var yf = y0 + j * dx, oyv = gone ? 0 : ov(yf - h, yf + h, ya, yb);
-    for (i = 0; i < nx; i++) { c = j * nx + i; var xc = x0 + (i + 0.5) * dx, fs2 = oyv ? ov(xc - h, xc + h, xa, xb) * oyv * ia : 0; if (fs2 > 1 - 1e-12) fs2 = 1; this.wv[c] = 1 - fs2; this.sv[c] = fs2 > 0 ? 1 : 0; } }
-  for (j = 0; j < ny; j++) for (i = 0; i <= nx; i++) this.phU[j * (nx + 1) + i] = this.cartSdf(x0 + i * dx, y0 + (j + 0.5) * dx);
-  for (j = 0; j <= ny; j++) for (i = 0; i < nx; i++) this.phV[j * nx + i] = this.cartSdf(x0 + (i + 0.5) * dx, y0 + j * dx);
+  var win = gone ? null : [Math.floor((xa - x0) / dx) - 3, Math.ceil((xb - x0) / dx) + 3, Math.floor((ya - y0) / dx) - 3, Math.ceil((yb - y0) / dx) + 3], old = this._mw, I0, I1, J0, J1;
+  if (old === undefined || this.fullMeasure) { I0 = 0; I1 = nx; J0 = 0; J1 = ny; } else { var u = [win, old].filter(Boolean); if (!u.length) { this._mw = win; return this.finishWeights(); }
+    I0 = Math.max(0, Math.min.apply(null, u.map(function (q) { return q[0]; }))); I1 = Math.min(nx, Math.max.apply(null, u.map(function (q) { return q[1]; })));
+    J0 = Math.max(0, Math.min.apply(null, u.map(function (q) { return q[2]; }))); J1 = Math.min(ny, Math.max.apply(null, u.map(function (q) { return q[3]; }))); }
+  this._mw = win;
+  for (j = J0; j < Math.min(J1 + 1, ny); j++) { var yc = y0 + (j + 0.5) * dx, oyu = gone ? 0 : ov(yc - h, yc + h, ya, yb);
+    for (i = I0; i <= I1; i++) { c = j * (nx + 1) + i; var xf = x0 + i * dx, fs = oyu ? ov(xf - h, xf + h, xa, xb) * oyu * ia : 0; if (fs > 1 - 1e-12) fs = 1; this.wu[c] = 1 - fs; this.su[c] = fs > 0 ? 1 : 0; this.phU[c] = this.cartSdf(xf, yc); } }
+  for (j = J0; j <= J1; j++) { var yf = y0 + j * dx, oyv = gone ? 0 : ov(yf - h, yf + h, ya, yb);
+    for (i = I0; i < Math.min(I1 + 1, nx); i++) { c = j * nx + i; var xc = x0 + (i + 0.5) * dx, fs2 = oyv ? ov(xc - h, xc + h, xa, xb) * oyv * ia : 0; if (fs2 > 1 - 1e-12) fs2 = 1; this.wv[c] = 1 - fs2; this.sv[c] = fs2 > 0 ? 1 : 0; this.phV[c] = this.cartSdf(xc, yf); } }
   this.finishWeights(); };
 W.finishWeights = function () { var nx = this.nx, ny = this.ny, i, j;
   var wx = this.tmpU, wy = this.tmpV; wx.set(this.wu); wy.set(this.wv);
@@ -170,7 +176,7 @@ W.finishWeights = function () { var nx = this.nx, ny = this.ny, i, j;
 W.impose = function (xd, strict) { var c, dP = 0; for (c = 0; c < this.u.length; c++) if (this.phU[c] < 0 && (!strict || this.wx[c] <= 0)) { dP += this.wu[c] * (xd - this.u[c]); this.u[c] = xd; } for (c = 0; c < this.v.length; c++) if (this.phV[c] < 0 && (!strict || this.wy[c] <= 0)) this.v[c] = 0;   // faces whose centre lies inside the body move with it
   this.impX = (this.impX || 0) + this.rho * this.b * this.dx * this.dx * dP; };   // the x-momentum the body gives the partly fluid faces it overrides (N s), credited to the body
 W.boundary = function () { var nx = this.nx, ny = this.ny, Wu = nx + 1, j, i;
-  for (j = 0; j < ny; j++) { this.u[j * Wu] = this.inflow ? this.inflow(this.yu(j)) : this.U; this.u[j * Wu + nx] = this.u[j * Wu + nx - 1]; }
+  for (j = 0; j < ny; j++) { this.u[j * Wu] = this._shadow ? 0 : this.inflow ? this.inflow(this.yu(j)) : this.U; this.u[j * Wu + nx] = this.u[j * Wu + nx - 1]; }
   for (i = 0; i < nx; i++) { this.v[i] = 0; this.v[ny * nx + i] = 0; } };
 W.KE = function () {   // ½ ρ b Σ w u² dx² over the faces: the fluid's kinetic energy (J)
   var s = 0, c; for (c = 0; c < this.u.length; c++) s += this.wu[c] * this.u[c] * this.u[c]; for (c = 0; c < this.v.length; c++) s += this.wv[c] * this.v[c] * this.v[c];
@@ -220,14 +226,15 @@ W.advect = function (dt) {   // MacCormack with semi-Lagrangian steps, midpoint 
   var sV = function (A, gx, gy) { if (gx < 0) gx = 0; else if (gx > nx - 1 - 1e-9) gx = nx - 1 - 1e-9; if (gy < 0) gy = 0; else if (gy > ny - 1e-9) gy = ny - 1e-9;
     var i = gx | 0, j = gy | 0, a = gx - i, b = gy - j, c = j * nx + i; return (1 - b) * ((1 - a) * A[c] + a * A[c + 1]) + b * ((1 - a) * A[c + nx] + a * A[c + nx + 1]); };
   var PX = 0, PY = 0;
-  var uT = u0, vT = v0; if (this.advWeighted) { uT = this._uT || (this._uT = new Float64Array(u0.length)); vT = this._vT || (this._vT = new Float64Array(v0.length)); for (i = 0; i < u0.length; i++) uT[i] = this.wu[i] * u0[i]; for (i = 0; i < v0.length; i++) vT[i] = this.wv[i] * v0[i]; }   // test option: trace with the volume-weighted velocity, the one the projection made divergence-free
+  var uT = this._traceU || u0, vT = this._traceV || v0; if (this.advWeighted && !this._traceU) { uT = this._uT || (this._uT = new Float64Array(u0.length)); vT = this._vT || (this._vT = new Float64Array(v0.length)); for (i = 0; i < u0.length; i++) uT[i] = this.wu[i] * u0[i]; for (i = 0; i < v0.length; i++) vT[i] = this.wv[i] * v0[i]; }   // test option: trace with the volume-weighted velocity, the one the projection made divergence-free
   function trace(X, Y, hh) { var ux = sU(uT, X, Y - 0.5), uy = sV(vT, X - 0.5, Y), Xm = X - 0.5 * hh * ux, Ym = Y - 0.5 * hh * uy; PX = X - hh * sU(uT, Xm, Ym - 0.5); PY = Y - hh * sV(vT, Xm - 0.5, Ym); }
   for (j = 0; j < ny; j++) for (i = 1; i < nx; i++) { c = j * Wu + i; trace(i, j + 0.5, h); dXu[c] = PX; dYu[c] = PY; uF[c] = sU(u0, PX, PY - 0.5); }
   for (j = 1; j < ny; j++) for (i = 0; i < nx; i++) { c = j * nx + i; trace(i + 0.5, j, h); dXv[c] = PX; dYv[c] = PY; vF[c] = sV(v0, PX - 0.5, PY); }
-  for (j = 0; j < ny; j++) for (i = 1; i < nx; i++) { c = j * Wu + i; trace(i, j + 0.5, -h); var val = uF[c] + 0.5 * (u0[c] - sU(uF, PX, PY - 0.5));
+  var bXu = this._bXu || (this._bXu = new Float64Array(u0.length)), bYu = this._bYu || (this._bYu = new Float64Array(u0.length)), bXv = this._bXv || (this._bXv = new Float64Array(v0.length)), bYv = this._bYv || (this._bYv = new Float64Array(v0.length));   // the backward points, kept for the self field
+  for (j = 0; j < ny; j++) for (i = 1; i < nx; i++) { c = j * Wu + i; trace(i, j + 0.5, -h); bXu[c] = PX; bYu[c] = PY; var val = uF[c] + 0.5 * (u0[c] - sU(uF, PX, PY - 0.5));
     var gx = Math.min(Math.max(dXu[c], 0), nx - 1e-9), gy = Math.min(Math.max(dYu[c] - 0.5, 0), ny - 1 - 1e-9), k = (gy | 0) * Wu + (gx | 0);
     var a1 = u0[k], a2 = u0[k + 1], a3 = u0[k + Wu], a4 = u0[k + Wu + 1], lo = Math.min(a1, a2, a3, a4), hi = Math.max(a1, a2, a3, a4); this.u[c] = (val < lo || val > hi) ? uF[c] : val; }
-  for (j = 1; j < ny; j++) for (i = 0; i < nx; i++) { c = j * nx + i; trace(i + 0.5, j, -h); var val2 = vF[c] + 0.5 * (v0[c] - sV(vF, PX - 0.5, PY));
+  for (j = 1; j < ny; j++) for (i = 0; i < nx; i++) { c = j * nx + i; trace(i + 0.5, j, -h); bXv[c] = PX; bYv[c] = PY; var val2 = vF[c] + 0.5 * (v0[c] - sV(vF, PX - 0.5, PY));
     var gx2 = Math.min(Math.max(dXv[c] - 0.5, 0), nx - 1 - 1e-9), gy2 = Math.min(Math.max(dYv[c], 0), ny - 1e-9), k2 = (gy2 | 0) * nx + (gx2 | 0);
     var b1 = v0[k2], b2 = v0[k2 + 1], b3 = v0[k2 + nx], b4 = v0[k2 + nx + 1], lo2 = Math.min(b1, b2, b3, b4), hi2 = Math.max(b1, b2, b3, b4); this.v[c] = (val2 < lo2 || val2 > hi2) ? vF[c] : val2; }
   this.boundary(); };
@@ -276,9 +283,9 @@ W.rodForce = function (k, K, ux, uy, ax, ay, out) { var p = this.mp, xi = p.xi[k
 /* the machine's right-hand side with the cart's fluid force Fc held and the fluid frozen at the sampled velocities */
 W.mrhs = function (s, u, Fc, acc, ma) { var p = this.mp, k, i, K = this.kin, Q = [Fc + u, 0, 0], f = this._f || (this._f = {}), P = 0, Dd = 0;
   if (this.rho && !this.noRods) for (k = 0; k < 2; k++) for (i = 0; i < NP; i++) { pointKin(p, s, k, i, K); var o = 2 * (k * NP + i);
-    this.rodForce(k, K, this.uS[o], this.uS[o + 1], this.aS[o], this.aS[o + 1], f);
+    this.rodForce(k, K, this.uE[o], this.uE[o + 1], this.aS[o], this.aS[o + 1], f);
     Q[0] += K.wq * f.fx; if (k) { Q[1] += K.wq * p.L1 * (f.fx * K.c1 - f.fy * K.s1); Q[2] += K.wq * K.sg * (f.fx * K.cs - f.fy * K.sn); } else Q[1] += K.wq * K.sg * (f.fx * K.cs - f.fy * K.sn);
-    if (acc) { acc[o] = K.wq * f.fx; acc[o + 1] = K.wq * f.fy; } Dd += K.wq * f.diss; P += K.wq * (f.fx * K.vx + f.fy * K.vy); }
+    if (acc) { acc[o] = K.wq * f.fx; acc[o + 1] = K.wq * f.fy; } Dd += K.wq * (this.selfField ? f.diss + f.fx * this.uSelf[o] + f.fy * this.uSelf[o + 1] : f.diss); /* heat below the grid, −f·(v − u_read): with the self field, the law's heat less the part the grid resolves as the rod's own wake */ P += K.wq * (f.fx * K.vx + f.fy * K.vy); }
   var C = Cvec(p, s), Gv = [0, -p.f[0] * Math.sin(s[1]), -p.f[1] * Math.sin(s[2])], Dm = Dmat(p, s[1], s[2]); if (ma) Dm[0][0] += ma;   // the water the cart must push aside, from the coupled pressure
   var q = solve3(Dm, [Q[0] - C[0] - Gv[0], Q[1] - C[1] - Gv[1], Q[2] - C[2] - Gv[2]]);
   var r = [s[3], s[4], s[5], q[0], q[1], q[2]]; r.D = Dd; r.P = P; r.Q = [Q[0] - Fc - u, Q[1], Q[2]]; return r; };   // r.Q: the rods' generalised force alone
@@ -287,9 +294,12 @@ W.runMachine = function (s0, ctrl, t0, G, ma, n, h, record) {   // n RK4 steps o
   // With record: the rods' impulses summed with RK4's weights into this.impNew, the books, and onSub(s_before, s_after, t, u, W_fluid) for every substep.
   var s = s0.slice(), a1 = this._a1 || (this._a1 = new Float64Array(4 * NP)), a2 = this._a2 || (this._a2 = new Float64Array(4 * NP)), a3 = this._a3 || (this._a3 = new Float64Array(4 * NP)), a4 = this._a4 || (this._a4 = new Float64Array(4 * NP)), Dr = 0, Wm = 0, Wfl = 0, Qr = [0, 0, 0], j, m, t = t0;
   for (m = 0; m < n; m++) { var u = ctrl ? ctrl(s, t) : 0;
-    var k1 = this.mrhs(s, u, G, record && a1, ma), s2 = s.map(function (v, i) { return v + h / 2 * k1[i]; });
-    var k2 = this.mrhs(s2, u, G, record && a2, ma), s3 = s.map(function (v, i) { return v + h / 2 * k2[i]; });
-    var k3 = this.mrhs(s3, u, G, record && a3, ma), s4 = s.map(function (v, i) { return v + h * k3[i]; });
+    var fz = this.frozen ? 0 : 1;   // tests: a held machine stays put in every RK4 stage, not only at the end of the step
+    if (this.kinematic) { var K0 = this.kinematic(t), Kh = this.kinematic(t + h / 2), K1 = this.kinematic(t + h); this.mrhs(K0, u, G, record && a1, ma); this.mrhs(Kh, u, G, record && a2, ma); this.mrhs(Kh, u, G, record && a3, ma); this.mrhs(K1, u, G, record && a4, ma);
+      if (record) for (j = 0; j < 4 * NP; j++) this.impNew[j] += h / 6 * (a1[j] + 2 * a2[j] + 2 * a3[j] + a4[j]); s = K1; t += h; continue; }   // tests: the machine moved along a prescribed path
+    var k1 = this.mrhs(s, u, G, record && a1, ma), s2 = s.map(function (v, i) { return v + fz * h / 2 * k1[i]; });
+    var k2 = this.mrhs(s2, u, G, record && a2, ma), s3 = s.map(function (v, i) { return v + fz * h / 2 * k2[i]; });
+    var k3 = this.mrhs(s3, u, G, record && a3, ma), s4 = s.map(function (v, i) { return v + fz * h * k3[i]; });
     var k4 = this.mrhs(s4, u, G, record && a4, ma);
     var sn = this.frozen ? s : s.map(function (v, i) { return v + h / 6 * (k1[i] + 2 * k2[i] + 2 * k3[i] + k4[i]); });
     if (record) { for (j = 0; j < 4 * NP; j++) this.impNew[j] += h / 6 * (a1[j] + 2 * a2[j] + 2 * a3[j] + a4[j]);
@@ -316,22 +326,49 @@ W.maxDiv = function () { var nx = this.nx, ny = this.ny, dx = this.dx, Wu = nx +
     var d = ((this.wu[e] * this.u[e] + (1 - this.wu[e]) * xd) - (this.wu[w] * this.u[w] + (1 - this.wu[w]) * xd) + this.wv[n] * this.v[n] - this.wv[s] * this.v[s]) / dx;
     if (Math.abs(d) > mx) mx = Math.abs(d); } return mx; };
 
+/* the rods' own disturbance (test option selfField): a second field δu that obeys the same equations linearised about the flow, driven only by the
+   rods' impulses, with the cart at rest and no inflow in it. The drag law (33)-(34) is written for the water as it would be without the rod, so the rods
+   read u − δu (their own slowing removed); the water itself still receives every impulse. */
+W.withShadow = function (fn) { var u = this.u, v = this.v, ix = this.impX;
+  if (!this.du) { this.du = new Float64Array(u.length); this.dv = new Float64Array(v.length); this.pS = new Float64Array(this.nx * this.ny); this.uSelf = new Float64Array(4 * NP); }
+  this.u = this.du; this.v = this.dv; this._shadow = true; try { fn.call(this, u, v); } finally { this.u = u; this.v = v; this._shadow = false; this.impX = ix; } };
+W.shadowRead = function () { this.withShadow(function () { for (var o = 0; o < 4 * NP; o += 2) { var r = this.interp(this.pos[o], this.pos[o + 1]); this.uSelf[o] = r[0]; this.uSelf[o + 1] = r[1]; } }); };
+W.shadowSpread = function () { if (!this.haveImp || this.noPush) return; this.withShadow(function () { for (var o = 0; o < 4 * NP; o += 2) this.spread(this.impPos[o], this.impPos[o + 1], -this.imp[o], -this.imp[o + 1]); }); };
+W.shadowAdvect = function (dt) { this.withShadow(function (U, V) { this.impose(0); this._traceU = U; this._traceV = V; this.advect(dt); this._traceU = this._traceV = null; this.impose(0); }); };
+W.advectStored = function () {   // the same MacCormack step as advect(), on this.u/this.v, at the points the last advect() traced (the self field moves with the water's velocity)
+  var nx = this.nx, ny = this.ny, Wu = nx + 1, u0 = this.u0, v0 = this.v0, uF = this.uF, vF = this.vF, i, j, c, sU = this.sU.bind(this), sV = this.sV.bind(this);
+  var dXu = this._dXu, dYu = this._dYu, dXv = this._dXv, dYv = this._dYv, bXu = this._bXu, bYu = this._bYu, bXv = this._bXv, bYv = this._bYv; u0.set(this.u); v0.set(this.v);
+  for (j = 0; j < ny; j++) for (i = 1; i < nx; i++) { c = j * Wu + i; uF[c] = sU(u0, dXu[c], dYu[c] - 0.5); }
+  for (j = 1; j < ny; j++) for (i = 0; i < nx; i++) { c = j * nx + i; vF[c] = sV(v0, dXv[c] - 0.5, dYv[c]); }
+  for (j = 0; j < ny; j++) for (i = 1; i < nx; i++) { c = j * Wu + i; var val = uF[c] + 0.5 * (u0[c] - sU(uF, bXu[c], bYu[c] - 0.5));
+    var gx = Math.min(Math.max(dXu[c], 0), nx - 1e-9), gy = Math.min(Math.max(dYu[c] - 0.5, 0), ny - 1 - 1e-9), k = (gy | 0) * Wu + (gx | 0);
+    var a1 = u0[k], a2 = u0[k + 1], a3 = u0[k + Wu], a4 = u0[k + Wu + 1], lo = Math.min(a1, a2, a3, a4), hi = Math.max(a1, a2, a3, a4); this.u[c] = (val < lo || val > hi) ? uF[c] : val; }
+  for (j = 1; j < ny; j++) for (i = 0; i < nx; i++) { c = j * nx + i; var val2 = vF[c] + 0.5 * (v0[c] - sV(vF, bXv[c] - 0.5, bYv[c]));
+    var gx2 = Math.min(Math.max(dXv[c] - 0.5, 0), nx - 1 - 1e-9), gy2 = Math.min(Math.max(dYv[c], 0), ny - 1e-9), k2 = (gy2 | 0) * nx + (gx2 | 0);
+    var b1 = v0[k2], b2 = v0[k2 + 1], b3 = v0[k2 + nx], b4 = v0[k2 + nx + 1], lo2 = Math.min(b1, b2, b3, b4), hi2 = Math.max(b1, b2, b3, b4); this.v[c] = (val2 < lo2 || val2 > hi2) ? vF[c] : val2; }
+  this.boundary(); };
+W.shadowAdvectStored = function () { this.withShadow(function () { this.impose(0); this.advectStored(); this.impose(0); }); };
+W.shadowDiffuse = function (dt) { this.withShadow(function () { this.diffuse(dt, 0); }); };
+W.shadowProject = function (dt) { this.withShadow(function () { var f = this.rho / dt, i; this.divFluid(this.rhs); for (i = 0; i < this.rhs.length; i++) this.rhs[i] *= f; var tol = this.P.tol; if (this.selfTol) this.P.tol = this.selfTol; this.itsS = this.P.solve(this.rhs, this.pS); this.P.tol = tol; this.project(this.pS, dt); this.impose(0, true); this.boundary(); }); };
+
 /* one fluid step of dt = nsub · h; ctrl(s, t) gives the motor force, called once at the start (sampled, held) */
 W.step = function (ctrl) {
   var h = this.h, n = this.nsub, dt = h * n, B = this.book, k, i, o, xd0 = this.s[3];
   if (!this.rho) { this.impNew = new Float64Array(4 * NP); var sV = this.runMachine(this.s, ctrl, this.t, 0, 0, n, h, true); B.Wm += this._Wm; this.s = sV; this.t += dt; return; }
   var T0 = Date.now(); if (this.geom) this.geom(); else this.measure(); var impPrev = this.impX || 0; this.impX = 0; this.impose(xd0); this.boundary(); var T1 = Date.now();
   // 1. sample the fluid at the rod points (divergence-free field at the start of the step) and its acceleration there
-  this.uS1.set(this.uS); this.sampleAll();
-  if (this.first) { this.aS.fill(0); this.first = false; } else for (o = 0; o < 4 * NP; o++) this.aS[o] = (this.uS[o] - this.uS1[o]) / dt;   // ∂u/∂t at the point
-  for (o = 0; o < 4 * NP; o += 2) { var X = this.pos[o], Y = this.pos[o + 1], e = 0.5 * this.dx, gxp = this.interp(X + e, Y), gxm = this.interp(X - e, Y), gyp = this.interp(X, Y + e), gym = this.interp(X, Y - e), ux = this.uS[o], uy = this.uS[o + 1];
+  this.uS1.set(this.uE); this.sampleAll(); if (this.selfField) this.shadowRead();
+  for (o = 0; o < 4 * NP; o++) this.uE[o] = this.selfField ? this.uS[o] - this.uSelf[o] : this.uS[o];   // the water as it would be without the rods: what the law (33)-(34), (39) is written for
+  if (this.first) { this.aS.fill(0); this.first = false; } else for (o = 0; o < 4 * NP; o++) this.aS[o] = (this.uE[o] - this.uS1[o]) / dt;   // ∂u/∂t at the point
+  var self = this, gEff = function (X, Y) { var g = self.interp(X, Y); if (self.selfField) { var d; self.withShadow(function () { d = this.interp(X, Y); }); g[0] -= d[0]; g[1] -= d[1]; } return g; };
+  for (o = 0; o < 4 * NP; o += 2) { var X = this.pos[o], Y = this.pos[o + 1], e = 0.5 * this.dx, gxp = gEff(X + e, Y), gxm = gEff(X - e, Y), gyp = gEff(X, Y + e), gym = gEff(X, Y - e), ux = this.uE[o], uy = this.uE[o + 1];
     this.aS[o] += (ux * (gxp[0] - gxm[0]) + uy * (gyp[0] - gym[0])) / (2 * e); this.aS[o + 1] += (ux * (gxp[1] - gxm[1]) + uy * (gyp[1] - gym[1])) / (2 * e); }   // + (u·∇)u: the acceleration of the fluid's particles (39)
   var E = this.KE(), Pf = this.momX();
   // 2. deliver last step's impulse of the rods to the fluid (Newton's third law: minus what the rods received)
-  var toCart = 0; if (this.haveImp) for (o = 0; o < 4 * NP; o += 2) toCart += this.spread(this.impPos[o], this.impPos[o + 1], -this.imp[o], -this.imp[o + 1]);
-  var E1 = this.KE(); B.Erod += E1 - E; B.Ptransit = 0;
+  var toCart = 0; if (this.haveImp && !this.noPush) for (o = 0; o < 4 * NP; o += 2) toCart += this.spread(this.impPos[o], this.impPos[o + 1], -this.imp[o], -this.imp[o + 1]);
+  var E1 = this.KE(); B.Erod += E1 - E; B.Ptransit = 0; if (this.selfField) { this.shadowSpread(); if (this.advCentral) this.shadowAdvect(dt); }
   // 3. advect and diffuse
-  var T2 = Date.now(); if (!this.noExtrap) this.extrapolate(3); if (this.advCentral) this.advectCentral(dt); else this.advect(dt); this.impose(xd0); var T3 = Date.now(); var E2 = this.KE(); B.Eadv += E2 - E1;
+  var T2 = Date.now(); if (!this.noExtrap) this.extrapolate(3); if (this.advCentral) this.advectCentral(dt); else this.advect(dt); this.impose(xd0); if (this.selfField) { if (!this.advCentral) this.shadowAdvectStored(); this.shadowDiffuse(dt); this.shadowProject(dt); } var T3 = Date.now(); var E2 = this.KE(); B.Eadv += E2 - E1;
   var Fold = 0; if (this.incremental) { this.project(this.pOld, dt); Fold = this.cartForce(this.pOld); }   // incremental pressure correction: the last pressure enters the prediction before the viscous step, so its no-slip sees it; only the change φ is solved
   var shear = this.diffuse(dt, xd0); var E3 = this.KE(); B.Ediff += E3 - E2; B.Wshear = (B.Wshear || 0) + shear * xd0;   // the cart's shear does work shear·ẋ on the fluid; the rest of Ediff is viscous dissipation
   // 4. pressure: p = p0 + ẋ' p_x

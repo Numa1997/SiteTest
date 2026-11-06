@@ -3,7 +3,7 @@
 require('../../../../public/scripts/twoway.js'); const T = globalThis.TwoWay;
 const med = process.env.MED || 'glycerol', dx = +(process.env.DX || 0.025), U = +(process.env.U || 0.5);
 const w = new T.World({ dx, U, machine: { m0: 1.5, m1: 0.5, m2: 0.75, L1: 0.5, L2: 0.75, medium: med }, s: [0, 0, 0, 0, 0, 0], nsub: 10 });
-w.frozen = true; w.cartGone = true; for (const k of (process.env.OPT || '').split(',').filter(Boolean)) w[k] = true;
+w.frozen = true; w.cartGone = true; w.selfField = false; for (const k of (process.env.OPT || '').split(',').filter(Boolean)) w[k] = true;
 while (w.t < 4 - 1e-9) w.step(null);
 const p = w.mp, NP = T.NP; let us = 0, F = 0;
 for (let o = 0; o < 4 * NP; o += 2) us += w.uS[o]; us /= 2 * NP;
