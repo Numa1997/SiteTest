@@ -1,0 +1,1 @@
+bump 10 mm, speed control, suspension passive, dx 4 mm: dw 5.8 mm (t 2.28 s); a_x 0.53 m/s^2; a_z 3.74 m/s^2; spill 0.0 g; |A(3.214 Hz)| 0.0453 m/s; speed 0.982-1.020 m/s; smallest tyre load 15.00 N (9 s)
