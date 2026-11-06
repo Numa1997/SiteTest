@@ -97,7 +97,8 @@ def assemble(P, fill, modes, rho, g=G_ACC):
             K[i, i] = mu * md['w2'] * (1 + md['kappa'])               # rho g N (1 + sigma lam^2/(rho g))
             M[i, q] = M[q, i] = rho * md['Q'] * md['N']               # translation coupling
             if dir_ == 'x':
-                M[i, ip] = M[ip, i] = rho * md['Q'] * md['N'] * P['h_g'] + rho * md['Qr'] * md['N']   # x_O carries h_g psi; rotation through chi_y
+                # x_O carries h_g psi; the rotation drives the stout through chi_y (Q_r) and lifts the head at x' by -psi x' (head: -M_f Q N = -rho (kappa/lam) Q N)
+                M[i, ip] = M[ip, i] = rho * md['Q'] * md['N'] * (P['h_g'] - md['kappa'] / md['lam']) + rho * md['Qr'] * md['N']
                 K[i, ip] = K[ip, i] = -rho * g * md['Q'] * md['N']   # tilt: the liquid's weight along the tilted surface
     # inputs: u = (u_f, u_r, F_x, F_y, F_z), road w = (z_rf, z_rr)
     B = np.zeros((n, 5)); B[iz, 0] = 1; B[ip, 0] = -P['l_f']; B[ifw, 0] = -1

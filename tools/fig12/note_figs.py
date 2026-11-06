@@ -1,7 +1,7 @@
 """SVG figures of the Fig. 12 lecture note, in the house chart style (white plate, IBM Plex Mono ticks, ink and wine),
 drawn from the mode data, geom.py, notes/fig12/numbers.json and the controller reference. Writes notes/fig12/figs/*.svg.
     python3 tools/fig12/note_figs.py [slosh-modes.js]"""
-import json, math, os, sys, numpy as np
+import re, json, math, os, sys, numpy as np
 sys.path.insert(0, 'tools/fig12')
 import geom as G, plant, controller3 as C
 MPATH = sys.argv[1] if len(sys.argv) > 1 else 'public/scripts/slosh-modes.js'
@@ -9,6 +9,8 @@ D_ = C.load_modes(MPATH); N = json.load(open('notes/fig12/numbers.json')); GL = 
 INK, WINE, ROSE, RULE, MUTED, STOUT, HEAD, LIGHT = '#1c1518', '#7a1f2b', '#e2a2aa', '#cdc1ae', '#8b8079', '#2b1210', '#efe2c6', '#f0ebe3'
 MONO = "font-family=\"IBM Plex Mono, monospace\""
 def svg(w, h, body, label): return f'<svg viewBox="0 0 {w} {h}" role="img" aria-label="{label}"><rect x="0" y="0" width="{w}" height="{h}" fill="#fff"/>{body}</svg>'
+def sub(s):   # a_b -> a<tspan sub>b</tspan> for the labels: one letter or a short group after the underscore
+    return re.sub(r'([A-Za-zψβ])_([A-Za-z0-9]+)', lambda m: f'{m.group(1)}<tspan baseline-shift="sub" font-size="7">{m.group(2)}</tspan>', s)
 def text(x, y, s, size=11, anchor='start', fill=INK, extra=''): return f'<text x="{x:.1f}" y="{y:.1f}" {MONO} font-size="{size}" text-anchor="{anchor}" fill="{fill}" {extra}>{s}</text>'
 def path(pts, **kw): return '<path d="M' + ' L'.join(f'{p[0]:.1f},{p[1]:.1f}' for p in pts) + ('Z' if kw.pop('close', False) else '') + '" ' + ' '.join(f'{k.replace("_", "-")}="{v}"' for k, v in kw.items()) + '/>'
 os.makedirs('notes/fig12/figs', exist_ok=True)
@@ -45,7 +47,7 @@ sx, sy, ssc = 560, 300, 1.55
 th = np.linspace(-np.pi, np.pi, 361)
 for zz, col, lab in ((50, WINE, '50 mm'), (70, INK, '70 mm'), (90, MUTED, '90 mm')):
     r = G.R_inner(zz, th) * ssc; b.append(path([(sx + rr * math.cos(t), sy - rr * math.sin(t)) for rr, t in zip(r, th)], close=True, fill='none', stroke=col, stroke_width=1.1))
-    b.append(text(sx + 72, sy - 36 + 14 * [50, 70, 90].index(zz), f'Z = {lab}', 9, 'start', col))
+    b.append(f'<line x1="{sx+66}" y1="{sy-52+13*[50, 70, 90].index(zz):.1f}" x2="{sx+78}" y2="{sy-52+13*[50, 70, 90].index(zz):.1f}" stroke="{col}" stroke-width="1.1"/>' + text(sx + 82, sy - 49 + 13 * [50, 70, 90].index(zz), f'Z = {lab}', 9, 'start', col))
 b.append(text(sx, sy + 78, 'cavity from above, two panels', 10, 'middle', MUTED)); b.append(text(sx, sy + 92, 'front', 9, 'middle', MUTED)); b.append(f'<line x1="{sx}" y1="{sy+60}" x2="{sx}" y2="{sy+68}" stroke="{MUTED}"/>')
 b.append(text(12, by + 24, f'outline from the dimensioned drawing, scaled to 160 x 85 mm; wall 2.0 mm; panels {G.A_PANEL:.0f} mm deep (estimated)', 10, 'start', MUTED))
 open('notes/fig12/figs/profile.svg', 'w').write(svg(W, H + 10, ''.join(b), 'The profile of the Guinness glass from its drawing: outer and inner wall, the sculpted panel, 500 mL of stout under 18 mm of head, the pint line and the rim; and three cross-sections of the cavity showing the two panels.'))
@@ -62,12 +64,13 @@ b.append(text((L + W - R) / 2, H - 6, 'stout, mL', 10, 'middle', MUTED)); b.appe
 def curve(col, idx, dash=''): return path([(xx(v), yy(f)) for v, f in zip(V, fv[:, idx])], fill='none', stroke=col, stroke_width=1.6, **({'stroke_dasharray': dash} if dash else {}))
 b.append(curve(INK, 3)); b.append(curve(WINE, 1)); b.append(curve(WINE, 4, '1 3')); b.append(curve(WINE, 2, '6 4'))
 Vw = float(np.interp(N['glass']['z_widest'], fv[:, 6], V)); b.append(f'<line x1="{xx(Vw):.1f}" y1="{T}" x2="{xx(Vw):.1f}" y2="{H-B}" stroke="{MUTED}" stroke-dasharray="2 3"/>' + text(xx(Vw) + 4, T + 12, 'surface at the widest point', 9, 'start', MUTED))
-b.append(text(xx(560), yy(fv[-1, 3]) - 6, 'no head', 10, 'end', INK)); b.append(text(xx(560), yy(fv[-1, 1]) + 14, 'with 18 mm of head', 10, 'end', WINE)); b.append(text(xx(560), yy(fv[-1, 2]) + 14, 'straight glass, with head', 10, 'end', WINE))
+for i2, (lab, col, dash) in enumerate((('no head', INK, ''), ('with 18 mm of head', WINE, ''), ('straight glass, with head', WINE, '5 4'))):
+    ly = H - B - 46 + 14 * i2; b.append(f'<line x1="{W-R-150}" y1="{ly-3}" x2="{W-R-126}" y2="{ly-3}" stroke="{col}" stroke-width="1.6" {"stroke-dasharray=\"" + dash + "\"" if dash else ""}/>' + text(W - R - 120, ly, lab, 10, 'start', col))
 open('notes/fig12/figs/f_vs_V.svg', 'w').write(svg(W, H, ''.join(b), 'Frequency of the slowest mode against the volume of stout: the Guinness glass with and without head, its sin copy, and a straight glass of the same surface radius and depth.'))
 
 # ---- Figure 3: the damping budget ----
 W, H = 720, 236; rows = [('wall and floor layers γ<tspan baseline-shift="sub" font-size="8">w</tspan>', N['gw11']), ('surface skin γ<tspan baseline-shift="sub" font-size="8">s</tspan>', N['gs11']), ('interior γ<tspan baseline-shift="sub" font-size="8">v</tspan>', N['gb11']), ('contact line γ<tspan baseline-shift="sub" font-size="8">c</tspan>', N['gc11']), ('head on the wall γ<tspan baseline-shift="sub" font-size="8">f</tspan>', N['gf11'])]
-tot = N['gam11']; b = []; scale = 330 / max(r[1] for r in rows)
+tot = N['gam11']; b = []; scale = 250 / tot
 for i, (lab, v) in enumerate(rows):
     y0 = 22 + 30 * i; b.append(text(180, y0 + 13, lab, 11, 'end')); b.append(f'<rect x="190" y="{y0}" width="{v*scale:.1f}" height="18" fill="{WINE if i == 4 else INK}" opacity="0.75"/>'); b.append(text(196 + v * scale, y0 + 13, f'{v:.3f} s⁻¹  ({100*v/tot:.0f} %)', 10))
 b.append(f'<line x1="190" y1="176" x2="{190+tot*scale:.1f}" y2="176" stroke="{INK}" stroke-width="2"/>' + text(180, 180, 'total γ', 11, 'end') + text(196 + tot * scale, 180, f'{tot:.3f} s⁻¹ → 1/e in {1/tot:.1f} s, 5 % in {math.log(20)/tot:.1f} s', 10))
@@ -114,7 +117,7 @@ open('notes/fig12/figs/mode11.svg', 'w').write(svg(W, H, ''.join(b), 'The slowes
 W, H = 720, 300; b = []
 gx, gy = 360, 190; Lx = 170; sx_ = 1.0
 b.append(f'<rect x="{gx-Lx-40}" y="{gy-16}" width="{2*Lx+80}" height="24" fill="#f7f3ec" stroke="{INK}" stroke-width="1.2"/>')
-b.append(text(gx - 60, gy + 1, 'body M_b, J_b', 11, 'middle'))
+b.append(text(gx - 60, gy + 1, sub('body M_b, J_b'), 11, 'middle'))
 b.append(f'<circle cx="{gx}" cy="{gy-4}" r="3" fill="{WINE}"/>' + text(gx + 8, gy + 1, 'centre of mass', 9, 'start', WINE))
 for sd, lab in ((1, 'front'), (-1, 'rear')):
     x0 = gx + sd * Lx
@@ -123,16 +126,16 @@ for sd, lab in ((1, 'front'), (-1, 'rear')):
     b.append(f'<rect x="{x0+4}" y="{gy+30}" width="16" height="26" fill="none" stroke="{WINE}" stroke-width="1.2"/><line x1="{x0+12}" y1="{gy+8}" x2="{x0+12}" y2="{gy+42}" stroke="{WINE}"/><line x1="{x0+12}" y1="{gy+56}" x2="{x0+12}" y2="{gy+76}" stroke="{WINE}"/>')
     b.append(f'<circle cx="{x0}" cy="{gy+96}" r="18" fill="none" stroke="{INK}" stroke-width="1.4"/><circle cx="{x0}" cy="{gy+96}" r="3" fill="{INK}"/>')
     b.append(f'<line x1="{x0}" y1="{gy+114}" x2="{x0}" y2="{gy+122}" stroke="{INK}"/>')
-    b.append(text(x0, gy + 140, f'{lab}: k, c, u', 10, 'middle', MUTED)); b.append(text(x0 + 24, gy + 100, 'm_w, k_t', 9, 'start', MUTED))
-b.append(f'<path d="M{gx-Lx-80},{gy+124} Q{gx-80},{gy+104} {gx},{gy+124} T{gx+Lx+80},{gy+124}" fill="none" stroke="{MUTED}" stroke-width="1.2"/>' + text(gx + Lx + 60, gy + 142, 'road z_r(s)', 10, 'end', MUTED))
+    b.append(text(x0, gy + 140, sub(f'{lab}: k_s, c, u'), 10, 'middle', MUTED)); b.append(text(x0 + 24, gy + 100, sub('m_w, k_t'), 9, 'start', MUTED))
+b.append(f'<path d="M{gx-Lx-80},{gy+124} Q{gx-80},{gy+104} {gx},{gy+124} T{gx+Lx+80},{gy+124}" fill="none" stroke="{MUTED}" stroke-width="1.2"/>' + text(gx + Lx + 60, gy + 142, sub('road z_road(X)'), 10, 'end', MUTED))
 # the glass on the tray
 tx = gx + 40; b.append(f'<line x1="{tx-60}" y1="{gy-16}" x2="{tx-60}" y2="{gy-96}" stroke="{INK}"/><line x1="{tx+60}" y1="{gy-16}" x2="{tx+60}" y2="{gy-96}" stroke="{INK}"/><rect x="{tx-80}" y="{gy-100}" width="160" height="5" fill="#fff" stroke="{WINE}"/>')
 gz = gy - 100; gp = [(tx - 11, gz), (tx - 13, gz - 20), (tx - 16, gz - 44), (tx - 13, gz - 56), (tx + 13, gz - 56), (tx + 16, gz - 44), (tx + 13, gz - 20), (tx + 11, gz)]
 b.append(path(gp, close=True, fill='#e6eff1', stroke=INK, stroke_width=1)); b.append(f'<rect x="{tx-13}" y="{gz-48}" width="26" height="46" fill="{STOUT}"/><rect x="{tx-15}" y="{gz-54}" width="30" height="7" fill="{HEAD}"/>')
-b.append(f'<circle cx="{tx}" cy="{gz}" r="2.5" fill="{WINE}"/>' + text(tx + 6, gz + 12, 'O: d_g ahead, h_g above', 9, 'start', WINE))
-b.append(text(gx - 20, gy - 40, 'ψ', 12, 'middle', INK) + f'<path d="M{gx-40},{gy-30} A 30 30 0 0 1 {gx-2},{gy-30}" fill="none" stroke="{INK}" stroke-width="0.8"/><path d="M{gx-2},{gy-30} l-5,-4 l1,6Z" fill="{INK}"/>')
+b.append(f'<circle cx="{tx}" cy="{gz}" r="2.5" fill="{WINE}"/>' + text(tx + 66, gz + 12, sub('O: d_g ahead, h_g above'), 9, 'start', WINE))
+b.append(text(gx - 110, gy - 40, 'β', 12, 'middle', INK) + f'<path d="M{gx-130},{gy-30} A 30 30 0 0 1 {gx-92},{gy-30}" fill="none" stroke="{INK}" stroke-width="0.8"/><path d="M{gx-92},{gy-30} l-5,-4 l1,6Z" fill="{INK}"/>')
 b.append(text(gx - Lx - 40, gy - 24, 'x →', 10, 'start', MUTED)); b.append(text(gx + Lx + 40, gy - 24, 'z ↑', 10, 'end', MUTED))
-b.append(text(gx, 24, 'x_c along the road, z_b heave, ψ pitch (front down positive), z_f, z_r wheels', 10, 'middle', MUTED))
+b.append(text(gx, 24, sub('x_c along the road, z_b heave, β pitch (front down positive), z_f, z_r wheels'), 10, 'middle', MUTED))
 open('notes/fig12/figs/cart.svg', 'w').write(svg(W, H, ''.join(b), 'The half-car model: a body on two struts, each a spring, a damper and an actuator, on two wheels with tyre springs on the road; the glass on a tray above the body’s centre of mass.'))
 
 # ---- Figure 6: the bump runs ----
@@ -145,11 +148,11 @@ modes = plant.modal_params(F500, rho, 0.045, N['Mf'], gamma_fn)
 for mdx, raw in zip(modes['x'], [m for m in F500['modes'] if m['m'] == 1 and m['o'] == 'c']): mdx['rim_front'] = sum(raw['psi'][k][0][-1] for k in raw['psi'])
 Dd = C.design(P, F500, modes, rho, Ts=0.01, s_eta=0.0005, s_psi=0.01, s_v=0.05, s_u=20.0)
 runs = {law: C.simulate(Dd, P, 'bump', v=1.5, T=4.0, law=law, h_road=0.03) for law in ('passive', 'skyhook', 'lqr')}
-W, H = 720, 460; L, R = 70, 30; panels = [(16, 150, 'stout at the front of the rim, mm', -8, 20), (176, 290, 'tilt of the glass, °', -3, 3), (316, 430, 'front actuator force, N', -120, 120)]
+W, H = 720, 460; L, R = 70, 30; panels = [(30, 150, 'stout at the front of the rim, mm', -10, 20), (190, 290, 'tilt of the glass, °', -3, 3), (330, 430, 'front actuator force, N', -120, 120)]
 ip = Dd['S']['idx']['psi']; b = []
 for (T, B, lab, lo, hi) in panels:
-    b.append(f'<rect x="{L}" y="{T}" width="{W-L-R}" height="{B-T}" fill="none" stroke="{RULE}"/>'); b.append(text(L + 6, T + 12, lab, 10, 'start', MUTED))
-    for v in np.linspace(lo, hi, 5): yv = T + (B - T) * (1 - (v - lo) / (hi - lo)); b.append(f'<line x1="{L}" y1="{yv:.1f}" x2="{W-R}" y2="{yv:.1f}" stroke="{LIGHT}"/>' + text(L - 6, yv + 4, f'{v:g}', 10, 'end', MUTED))
+    b.append(f'<rect x="{L}" y="{T}" width="{W-L-R}" height="{B-T}" fill="none" stroke="{RULE}"/>'); b.append(text(L, T - 5, lab, 10, 'start', MUTED))
+    for v in np.linspace(lo, hi, 7): yv = T + (B - T) * (1 - (v - lo) / (hi - lo)); b.append(f'<line x1="{L}" y1="{yv:.1f}" x2="{W-R}" y2="{yv:.1f}" stroke="{LIGHT}"/>' + text(L - 6, yv + 4, f'{v:g}', 10, 'end', MUTED))
 xx = lambda t: L + (W - L - R) * t / 4.0
 for t in range(0, 5): b.append(text(xx(t), H - 14, str(t), 10, 'middle', MUTED))
 b.append(text((L + W - R) / 2, H - 2, 'time after the start, s', 10, 'middle', MUTED))
@@ -157,9 +160,9 @@ def clipped(col, T, B, lo, hi, ts, vs, dash=''):
     yv = lambda v: T + (B - T) * (1 - (min(max(v, lo), hi) - lo) / (hi - lo))
     return path([(xx(t), yv(v)) for t, v in zip(ts, vs)], fill='none', stroke=col, stroke_width=1.4, **({'stroke_dasharray': dash} if dash else {}))
 lim = N['ctl']['dome_mm'] - N['ctl']['head_top_rest_mm']
-T0, B0, _, lo0, hi0 = panels[0]; ylim = T0 + (B0 - T0) * (1 - (lim - lo0) / (hi0 - lo0)); b.append(f'<line x1="{L}" y1="{ylim:.1f}" x2="{W-R}" y2="{ylim:.1f}" stroke="{WINE}" stroke-dasharray="5 4"/>' + text(W - R - 4, ylim - 4, f'dome limit, {lim:.1f} mm', 9, 'end', WINE))
+T0, B0, _, lo0, hi0 = panels[0]; ylim = T0 + (B0 - T0) * (1 - (lim - lo0) / (hi0 - lo0)); b.append(f'<line x1="{L}" y1="{ylim:.1f}" x2="{W-R}" y2="{ylim:.1f}" stroke="{WINE}" stroke-dasharray="5 4"/>' + text(L + 6, ylim - 7, f'dome limit, {lim:.1f} mm', 9, 'start', WINE))
 for law, col in (('passive', INK), ('skyhook', ROSE), ('lqr', WINE)):
     o = runs[law]; b.append(clipped(col, *panels[0][:2], panels[0][3], panels[0][4], o['t'], o['eta'] * 1e3)); b.append(clipped(col, *panels[1][:2], panels[1][3], panels[1][4], o['t'], o['x'][:, ip] * 180 / math.pi)); b.append(clipped(col, *panels[2][:2], panels[2][3], panels[2][4], o['t'], o['u'][:, 0]))
-b.append(text(W - R - 4, 150 - 6, 'ink: passive · rose: skyhook · wine: LQR', 9, 'end', MUTED))
+b.append(text(L + 6, 330 + 12, 'ink: passive · rose: skyhook · wine: LQR', 9, 'start', MUTED))
 open('notes/fig12/figs/runs.svg', 'w').write(svg(W, H, ''.join(b), 'The pint over a 30 mm speed bump at 1.5 m/s: the stout at the front of the rim, the tilt of the glass and the front actuator force, for the passive cart, the skyhook damper and the LQR.'))
 print('wrote notes/fig12/figs/{profile,f_vs_V,budget,mode11,cart,runs}.svg')

@@ -23,7 +23,9 @@ def fill(V):
         b = Bm.get(key(a), a)
         md = {k: a[k] for k in ('m', 'o', 'n')}
         for k in ('lam', 'N', 'Qx', 'Qy', 'Qrx', 'Qry', 'Iw', 'Ib', 'Is', 'pur'): md[k] = L(a[k], b[k])
-        md['rim_front'] = sum(L(a['psi'][kk][0][-1], b['psi'][kk][0][-1]) for kk in a['psi'])
+        sb = 1 if sum(x * y for kk in a['psi'] if kk in b['psi'] for x, y in zip(a['psi'][kk][0] + a['psi'][kk][1], b['psi'][kk][0] + b['psi'][kk][1])) >= 0 else -1   # align the sign of fill B's shape with A's (the page does the same)
+        for k in ('Qx', 'Qy', 'Qrx', 'Qry'): md[k] = L(a[k], sb * b[k])
+        md['rim_front'] = sum(L(a['psi'][kk][0][-1], sb * b['psi'][kk][0][-1] if kk in b['psi'] else 0.0) for kk in a['psi'])   # a trimmed component counts as zero
         modes.append(md)
     return dict(V_mL=V, zs=L(A['zs'], B['zs']), a=L(A['a'], B['a']), V_liq=L(A['V_liq'], B['V_liq']), J_ry=L(A['J_ry'], B['J_ry']), J_rx=L(A['J_rx'], B['J_rx']), modes=modes)
 def model(p, shape='glass'):

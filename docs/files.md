@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-1082 files, 69.0 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+1084 files, 63.8 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -42,7 +42,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Agents of the lecture-note review](#agents-of-the-lecture-note-review) | 4 |
 | [Working notes of the Rotor Pendula study](#working-notes-of-the-rotor-pendula-study) | 86 |
 | [Working notes of the Droplet Collection study](#working-notes-of-the-droplet-collection-study) | 121 |
-| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 236 |
+| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 238 |
 
 ## Repository root
 
@@ -120,7 +120,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/simulations/Double Pendulum.html`](../public/simulations/Double%20Pendulum.html) | 133.0 kB | Fig. 2 · Double Pendulum: the simulation, its data panel, walkthrough and lecture note. | [fig02-double-pendulum.md](simulations/fig02-double-pendulum.md) |
 | [`public/simulations/Interactive Double-Slit Experiment Visualization.html`](../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html) | 178.4 kB | Fig. 3 · Double-Slit Interference: the simulation, its data panel, walkthrough and lecture note. | [fig03-double-slit.md](simulations/fig03-double-slit.md) |
 | [`public/simulations/Transverse and longitudinal waves.html`](../public/simulations/Transverse%20and%20longitudinal%20waves.html) | 209.2 kB | Fig. 4 · Transverse & Longitudinal: the simulation, its data panel, walkthrough and lecture note. | [fig04-transverse-longitudinal.md](simulations/fig04-transverse-longitudinal.md) |
-| [`public/simulations/beer-slosh.html`](../public/simulations/beer-slosh.html) | 352.5 kB | Fig. 12 · A Pint of Stout on a Suspension: the simulation, its data panel, walkthrough and lecture note. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`public/simulations/beer-slosh.html`](../public/simulations/beer-slosh.html) | 380.9 kB | Fig. 12 · A Pint of Stout on a Suspension: the simulation, its data panel, walkthrough and lecture note. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`public/simulations/double-inverted-pendulum.html`](../public/simulations/double-inverted-pendulum.html) | 314.1 kB | Project 05 · Balancing Two Rods on a Cart (Fig. 11 from 3 to 4 November 2026): the real-time simulation, its walkthrough and lecture note (no data panel); listed on the Projects page, kept at this address so that its German and Arabic pages are generated with the simulations. | [fig11-double-inverted-pendulum.md](simulations/fig11-double-inverted-pendulum.md) |
 | [`public/simulations/draw-decompose.html`](../public/simulations/draw-decompose.html) | 224.0 kB | Fig. 8 · Draw & Decompose: the simulation, its data panel, walkthrough and lecture note. | [fig08-draw-decompose.md](simulations/fig08-draw-decompose.md) |
 | [`public/simulations/driven-oscillator.html`](../public/simulations/driven-oscillator.html) | 342.6 kB | Fig. 9 · Driven Oscillator: the simulation, its data panel, walkthrough and lecture note. | [fig09-driven-oscillator.md](simulations/fig09-driven-oscillator.md) |
@@ -169,7 +169,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/scripts/walk/pendulum.js`](../public/scripts/walk/pendulum.js) | 30.2 kB | "From symbols to code" for Fig. 2 · Double Pendulum. | [walk.md](scripts/walk.md) |
 | [`public/scripts/walk/phasors.js`](../public/scripts/walk/phasors.js) | 33.0 kB | "From symbols to code" for Fig. 7 · Phasor Sums. | [walk.md](scripts/walk.md) |
 | [`public/scripts/walk/slit.js`](../public/scripts/walk/slit.js) | 23.6 kB | "From symbols to code" for Fig. 3 · Double-Slit Interference. | [walk.md](scripts/walk.md) |
-| [`public/scripts/walk/slosh.js`](../public/scripts/walk/slosh.js) | 16.7 kB | "From symbols to code" for Fig. 12 · A Pint of Stout on a Suspension. | [walk.md](scripts/walk.md) |
+| [`public/scripts/walk/slosh.js`](../public/scripts/walk/slosh.js) | 16.9 kB | "From symbols to code" for Fig. 12 · A Pint of Stout on a Suspension. | [walk.md](scripts/walk.md) |
 | [`public/scripts/walk/tl.js`](../public/scripts/walk/tl.js) | 23.6 kB | "From symbols to code" for Fig. 4 · Transverse & Longitudinal. | [walk.md](scripts/walk.md) |
 | [`public/scripts/walk/turbine.js`](../public/scripts/walk/turbine.js) | 34.4 kB | "From symbols to code" for Fig. 10 · Wind Turbine Control. | [walk.md](scripts/walk.md) |
 | [`public/scripts/walk/water.js`](../public/scripts/walk/water.js) | 22.6 kB | "From symbols to code" for Fig. 5 · Circular Water Waves. | [walk.md](scripts/walk.md) |
@@ -197,7 +197,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/scripts/i18n/strings-ar.js`](../public/scripts/i18n/strings-ar.js) | 419.0 kB | The Arabic string table the scripts read through T(), generated; do not edit. | [i18n.md](i18n.md) |
 | [`public/scripts/i18n/strings-de.js`](../public/scripts/i18n/strings-de.js) | 360.4 kB | The German string table the scripts read through T(), generated; do not edit. | [i18n.md](i18n.md) |
 | [`public/scripts/sim.js`](../public/scripts/sim.js) | 43.8 kB | Shared helpers of the simulation pages: KaTeX typesetting of the notes, the walkthrough engine. | [sim.md](scripts/sim.md) |
-| [`public/scripts/slosh-modes.js`](../public/scripts/slosh-modes.js) | 740.3 kB | Fig. 12: the three-dimensional sloshing modes of the sculpted Guinness glass for 15 fills, generated by tools/fig12/build_modes3d.py and trimmed by trim_modes.py; do not edit. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`public/scripts/slosh-modes.js`](../public/scripts/slosh-modes.js) | 474.7 kB | Fig. 12: the three-dimensional sloshing modes of the sculpted Guinness glass for 15 fills, generated by tools/fig12/build_modes3d.py and trimmed by trim_modes.py; do not edit. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 
 ## Stylesheets
 
@@ -272,7 +272,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
-| [`public/models/fig12/glass.glb`](../public/models/fig12/glass.glb) | 2.88 MB | Fig. 12: the Guinness glass as a glTF binary from Blender (tools/fig12/glass.py), loaded by the page’s 3D view. | [assets.md](assets.md) |
+| [`public/models/fig12/glass.glb`](../public/models/fig12/glass.glb) | 364.8 kB | Fig. 12: the Guinness glass as a glTF binary from Blender (tools/fig12/glass.py), loaded by the page’s 3D view. | [assets.md](assets.md) |
 
 ## Latin Modern
 
@@ -364,7 +364,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
-| [`public/images/sims/beer-slosh.webp`](../public/images/sims/beer-slosh.webp) | 16.9 kB | Thumbnail of Fig. 12 · A Pint of Stout on a Suspension, 800 × 500 px. | [assets.md](assets.md) |
+| [`public/images/sims/beer-slosh.webp`](../public/images/sims/beer-slosh.webp) | 13.2 kB | Thumbnail of Fig. 12 · A Pint of Stout on a Suspension, 800 × 500 px. | [assets.md](assets.md) |
 | [`public/images/sims/double-inverted-pendulum.webp`](../public/images/sims/double-inverted-pendulum.webp) | 10.8 kB | Thumbnail with no simulation of that id. | [assets.md](assets.md) |
 | [`public/images/sims/double-pendulum.webp`](../public/images/sims/double-pendulum.webp) | 12.5 kB | Thumbnail of Fig. 2 · Double Pendulum, 800 × 500 px. | [assets.md](assets.md) |
 | [`public/images/sims/double-slit.webp`](../public/images/sims/double-slit.webp) | 33.4 kB | Thumbnail of Fig. 3 · Double-Slit Interference, 800 × 500 px. | [assets.md](assets.md) |
@@ -729,7 +729,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`docs/assets.md`](assets.md) | 12.4 kB | Documentation: Fonts, maths and pictures: `public/vendor/`, `public/fonts/`, `public/images/`. | [assets.md](assets.md) |
 | [`docs/build-and-deploy.md`](build-and-deploy.md) | 8.9 kB | Documentation: Build files and deployment. | [build-and-deploy.md](build-and-deploy.md) |
 | [`docs/files.md`](files.md) | this file | This list. Written by tools/inventory.py; do not edit by hand. | [files.md](files.md) |
-| [`docs/glossary.md`](glossary.md) | 11.8 kB | Documentation: Glossary: English, German, Arabic. | [glossary.md](glossary.md) |
+| [`docs/glossary.md`](glossary.md) | 13.2 kB | Documentation: Glossary: English, German, Arabic. | [glossary.md](glossary.md) |
 | [`docs/i18n.md`](i18n.md) | 18.1 kB | Documentation: The site in German and Arabic: `tools/i18n/`, `i18n/`, `public/de/`, `public/ar/`. | [i18n.md](i18n.md) |
 | [`docs/minor-issues-report.md`](minor-issues-report.md) | 19.5 kB | Documentation: Minor issues · final verification report. | [minor-issues-report.md](minor-issues-report.md) |
 | [`docs/notes.md`](notes.md) | 5.4 kB | Documentation: The lecture-note review: `notes/` and `.claude/agents/`. | [notes.md](notes.md) |
@@ -756,7 +756,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`docs/simulations/fig10-wind-turbine.md`](simulations/fig10-wind-turbine.md) | 57.3 kB | Documentation: Fig. 10 · Wind Turbine Control. | [fig10-wind-turbine.md](simulations/fig10-wind-turbine.md) |
 | [`docs/simulations/fig11-double-inverted-pendulum.md`](simulations/fig11-double-inverted-pendulum.md) | 46.7 kB | Documentation: Project 05 · Balancing Two Rods on a Cart (Fig. 11 from 3 to 4 November 2026). | [fig11-double-inverted-pendulum.md](simulations/fig11-double-inverted-pendulum.md) |
 | [`docs/simulations/fig11-pendulum-control.md`](simulations/fig11-pendulum-control.md) | 28.8 kB | Documentation: Fig. 11 · Double Pendulum under Control (Fig. 11 again since 4 November 2026; a project from 3 to 4 November). | [fig11-pendulum-control.md](simulations/fig11-pendulum-control.md) |
-| [`docs/simulations/fig12-beer-slosh.md`](simulations/fig12-beer-slosh.md) | 9.0 kB | Documentation: Fig. 12 · A Pint of Stout, Carried (`public/simulations/beer-slosh.html`). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`docs/simulations/fig12-beer-slosh.md`](simulations/fig12-beer-slosh.md) | 14.0 kB | Documentation: Fig. 12 · A Pint of Stout on a Suspension (`public/simulations/beer-slosh.html`). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`docs/styles.md`](styles.md) | 52.1 kB | Documentation: Stylesheets: `public/styles/`. | [styles.md](styles.md) |
 | [`docs/usul.md`](usul.md) | 9.5 kB | Documentation: Phyein Usul · the website at phyeinusul.com. | [usul.md](usul.md) |
 
@@ -771,20 +771,20 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/fig12/check_cylinder.py`](../tools/fig12/check_cylinder.py) | 1.5 kB | Fig. 12: gate of modes.py against the exact Bessel modes of a cylinder; prints PASS or FAIL. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/check_modes3d.py`](../tools/fig12/check_modes3d.py) | 5.6 kB | Fig. 12: gate of modes3d.py against the exact cylinder and against modes.py on the round glass; prints PASS or FAIL. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/check_note_numbers.py`](../tools/fig12/check_note_numbers.py) | 10.1 kB | Fig. 12: finds every quoted number of the note in the page and compares it with the computation; prints PASS or FAIL. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
-| [`tools/fig12/check_plant.py`](../tools/fig12/check_plant.py) | 5.2 kB | Fig. 12: gate of plant.py against SymPy Hessians of the energies and against the modal equation; prints PASS or FAIL. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
-| [`tools/fig12/controller3.py`](../tools/fig12/controller3.py) | 10.5 kB | Fig. 12: the suspension controller reference: the LQR design in suspension coordinates, skyhook, and the scenario runs with RK4. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`tools/fig12/check_plant.py`](../tools/fig12/check_plant.py) | 5.4 kB | Fig. 12: gate of plant.py against SymPy Hessians of the energies and against the modal equation; prints PASS or FAIL. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`tools/fig12/controller3.py`](../tools/fig12/controller3.py) | 10.7 kB | Fig. 12: the suspension controller reference: the LQR design in suspension coordinates, skyhook, and the scenario runs with RK4. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/gate_ctl3.py`](../tools/fig12/gate_ctl3.py) | 2.0 kB | Fig. 12: compares the page’s gains, time constant and bump runs (dumped by notes/fig12/gate-ctl3.cjs) with controller3.py; prints PASS or FAIL. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/geom.py`](../tools/fig12/geom.py) | 5.0 kB | Fig. 12: the glass as a surface R(z, theta): the tulip profile from the dimensioned drawing scaled to 160 x 85 mm, the two sculpted panels, the cavity volume. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
-| [`tools/fig12/glass.glb`](../tools/fig12/glass.glb) | 2.88 MB | Fig. 12: the glass as built in Blender (outer and inner surfaces, panels included), written by glass.py; the copy the page loads is public/models/fig12/glass.glb. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
-| [`tools/fig12/glass.py`](../tools/fig12/glass.py) | 3.8 kB | Fig. 12: geom.py to Blender: outer and inner surfaces with the panels as meshes, the independent volume check, and glass.glb (bpy 5.2). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`tools/fig12/glass.glb`](../tools/fig12/glass.glb) | 364.8 kB | Fig. 12: the glass as built in Blender (outer and inner surfaces, panels included), written by glass.py; the copy the page loads is public/models/fig12/glass.glb. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`tools/fig12/glass.py`](../tools/fig12/glass.py) | 4.1 kB | Fig. 12: geom.py to Blender: outer and inner surfaces with the panels as meshes, the independent volume check, and glass.glb (bpy 5.2). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/glass_profile.json`](../tools/fig12/glass_profile.json) | 7.5 kB | Fig. 12: the glass profile on a 0.5 mm grid with its volumes, written by glass.py. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/modes.py`](../tools/fig12/modes.py) | 8.1 kB | Fig. 12: the two-dimensional P2 finite-element solver for a body of revolution, kept as the independent check of modes3d.py. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/modes3d.py`](../tools/fig12/modes3d.py) | 16.9 kB | Fig. 12: the three-dimensional finite-element solver (27-node hexahedra on the sculpted cavity) of the sloshing eigenproblem, the Stokes–Joukowski potentials, the couplings and damping integrals, and the Fourier helpers for the data file. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
-| [`tools/fig12/note_figs.py`](../tools/fig12/note_figs.py) | 18.5 kB | Fig. 12: the SVG figures of the lecture note, drawn from the same data. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
-| [`tools/fig12/note_numbers.py`](../tools/fig12/note_numbers.py) | 10.7 kB | Fig. 12: every number the lecture note quotes, computed from the page’s data and formulas. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
-| [`tools/fig12/plant.py`](../tools/fig12/plant.py) | 8.3 kB | Fig. 12: the half-car with the stout coupled in, assembled as M, C, K from the Lagrangian; the state-space form. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`tools/fig12/note_figs.py`](../tools/fig12/note_figs.py) | 19.0 kB | Fig. 12: the SVG figures of the lecture note, drawn from the same data. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`tools/fig12/note_numbers.py`](../tools/fig12/note_numbers.py) | 11.1 kB | Fig. 12: every number the lecture note quotes, computed from the page’s data and formulas. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`tools/fig12/plant.py`](../tools/fig12/plant.py) | 8.4 kB | Fig. 12: the half-car with the stout coupled in, assembled as M, C, K from the Lagrangian; the state-space form. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/profile_drawing.csv`](../tools/fig12/profile_drawing.csv) | 10.7 kB | Fig. 12: the elevation outline of the tulip pint sampled from dimensions.com’s vector drawing, half-width against height in drawing units. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
-| [`tools/fig12/road.py`](../tools/fig12/road.py) | 1.4 kB | Fig. 12: the road profiles (bump, kerb, cobbles, ISO 8608 random), the same formulas as the page. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`tools/fig12/road.py`](../tools/fig12/road.py) | 2.5 kB | Fig. 12: the road profiles (bump, kerb, cobbles, ISO 8608 random), the same formulas as the page. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/trim_modes.py`](../tools/fig12/trim_modes.py) | 1.4 kB | Fig. 12: drops the negligible angular components from the mode data file and rounds the fields. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/i18n/apply_review.py`](../tools/i18n/apply_review.py) | 3.4 kB | Applies a reviewer's corrections, only those that keep markup, maths and numbers. | [i18n.md](i18n.md) |
 | [`tools/i18n/build.py`](../tools/i18n/build.py) | 23.4 kB | Writes the German and Arabic pages, the script strings and the mirrored stylesheets from the English pages and the tables; --check fails on anything untranslated. | [i18n.md](i18n.md) |
@@ -1315,32 +1315,34 @@ to confirm that every file is described. Sizes are those of the files when the l
 
 </details>
 
-<details><summary>23 files: Fig. 12: a measuring script of the review, or its saved output.</summary>
+<details><summary>25 files: Fig. 12: a measuring script of the review, or its saved output.</summary>
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
 | [`notes/fig12/check-derivations.md`](../notes/fig12/check-derivations.md) | 25.8 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/code-review-r1.md`](../notes/fig12/code-review-r1.md) | 14.3 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/code-review-r2.md`](../notes/fig12/code-review-r2.md) | 14.1 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
-| [`notes/fig12/dossier-sources.md`](../notes/fig12/dossier-sources.md) | 29.2 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/code-review-r3.md`](../notes/fig12/code-review-r3.md) | 19.2 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/dossier-sources.md`](../notes/fig12/dossier-sources.md) | 31.4 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/figs/budget.svg`](../notes/fig12/figs/budget.svg) | 2.8 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
-| [`notes/fig12/figs/cart.svg`](../notes/fig12/figs/cart.svg) | 4.0 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
-| [`notes/fig12/figs/f_vs_V.svg`](../notes/fig12/figs/f_vs_V.svg) | 4.7 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
-| [`notes/fig12/figs/mode11.svg`](../notes/fig12/figs/mode11.svg) | 36.3 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
-| [`notes/fig12/figs/profile.svg`](../notes/fig12/figs/profile.svg) | 32.7 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
-| [`notes/fig12/figs/runs.svg`](../notes/fig12/figs/runs.svg) | 51.7 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/figs/cart.svg`](../notes/fig12/figs/cart.svg) | 4.8 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/figs/f_vs_V.svg`](../notes/fig12/figs/f_vs_V.svg) | 5.0 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/figs/mode11.svg`](../notes/fig12/figs/mode11.svg) | 48.1 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/figs/profile.svg`](../notes/fig12/figs/profile.svg) | 33.0 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/figs/runs.svg`](../notes/fig12/figs/runs.svg) | 52.8 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/figs/waiter.svg`](../notes/fig12/figs/waiter.svg) | 22.3 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/gate-ctl3.cjs`](../notes/fig12/gate-ctl3.cjs) | 2.0 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/note-sec10.html`](../notes/fig12/note-sec10.html) | 8.6 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
-| [`notes/fig12/note-src.html`](../notes/fig12/note-src.html) | 59.6 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/note-src.html`](../notes/fig12/note-src.html) | 97.9 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/numbers.json`](../notes/fig12/numbers.json) | 12.1 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/perf.cjs`](../notes/fig12/perf.cjs) | 1.4 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/referee-r1.md`](../notes/fig12/referee-r1.md) | 28.3 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/referee-r2.md`](../notes/fig12/referee-r2.md) | 28.8 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/referee-r3.md`](../notes/fig12/referee-r3.md) | 32.3 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/regress.cjs`](../notes/fig12/regress.cjs) | 4.3 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/shot.cjs`](../notes/fig12/shot.cjs) | 1.5 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
-| [`notes/fig12/status.md`](../notes/fig12/status.md) | 3.5 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
-| [`notes/fig12/test.cjs`](../notes/fig12/test.cjs) | 4.6 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/status.md`](../notes/fig12/status.md) | 5.0 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/test.cjs`](../notes/fig12/test.cjs) | 9.2 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/waiter-review.md`](../notes/fig12/waiter-review.md) | 15.4 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 
 </details>

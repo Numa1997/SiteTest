@@ -1,6 +1,6 @@
 """Gate for plant.py: the hand-assembled M, C, K against the Hessians of the Lagrangian written out in SymPy (route 2),
 and the modal row against the modal equation of the note (route 3, the boundary-value derivation):
-   (1 + kappa) a'' + 2 gamma (1 + kappa) a' + omega^2 (1 + kappa) a = -lam [Q (x_O'' - g psi) + Q_r psi'']
+   (1 + kappa) a'' + 2 gamma (1 + kappa) a' + omega^2 (1 + kappa) a = -lam [Q (x_O'' - g psi) + (Q_r - (kappa/lam) Q) psi'']
 Run: python3 tools/fig12/check_plant.py
 """
 import sys, os, numpy as np, sympy as sp
@@ -32,7 +32,7 @@ T = (sp.Rational(1, 2) * (P['M_b'] + 2 * P['m_w'] + P['M_g'] + m_l) * (vx ** 2 +
      + sp.Rational(1, 2) * P['M_g'] * ((P['h_g'] + 0.08) ** 2 + P['d_g'] ** 2) * vp ** 2        # the glass as a point mass on the body
      + sp.Rational(1, 2) * P['m_w'] * (vf ** 2 + vr ** 2)
      + sp.Rational(1, 2) * m_l * (xO_d ** 2 + zO_d ** 2) + sp.Rational(1, 2) * J_ry * vp ** 2 + m_l * zcm * xO_d * vp     # the frozen liquid
-     + sp.Rational(1, 2) * mu_x * (1 + mx['kappa']) * va ** 2 + rho * mx['Q'] * mx['N'] * xO_d * va + rho * mx['Qr'] * mx['N'] * vp * va
+     + sp.Rational(1, 2) * mu_x * (1 + mx['kappa']) * va ** 2 + rho * mx['Q'] * mx['N'] * xO_d * va + rho * mx['Qr'] * mx['N'] * vp * va - rho * (mx['kappa'] / mx['lam']) * mx['Q'] * mx['N'] * vp * va   # the head's vertical speed at x' is -psi' x': cross term -M_f Q N psi' a'
      + sp.Rational(1, 2) * mu_y * (1 + my['kappa']) * vb ** 2 + rho * my['Q'] * my['N'] * yO_d * vb)
 df = zb - P['l_f'] * ps - zf; dr = zb + P['l_r'] * ps - zr
 V = (sp.Rational(1, 2) * P['k'] * (df ** 2 + dr ** 2) + sp.Rational(1, 2) * P['k_t'] * (zf ** 2 + zr ** 2)
@@ -52,12 +52,12 @@ rng = np.random.default_rng(1); qq = rng.normal(size=8); qd_ = rng.normal(size=8
 i = S['idx']['a'][0]; ip = S['idx']['psi']; row = (M @ qdd + C @ qd_ + K @ qq)[i]
 xO_dd = qdd[0] + P['h_g'] * qdd[ip]; psi = qq[ip]; psidd = qdd[ip]
 rhs = mu_x * ((1 + mx['kappa']) * qdd[i] + 2 * mx['gamma'] * (1 + mx['kappa']) * qd_[i] + mx['w2'] * (1 + mx['kappa']) * qq[i]
-              + mx['lam'] * (mx['Q'] * (xO_dd - g * psi) + mx['Qr'] * psidd))
+              + mx['lam'] * (mx['Q'] * (xO_dd - g * psi) + (mx['Qr'] - mx['kappa'] / mx['lam'] * mx['Q']) * psidd))
 print(f'modal row vs the note\'s modal equation: {abs(row - rhs)/abs(rhs):.1e}')
 if abs(row - rhs) / abs(rhs) > 1e-12: ok = False
 # ---- route 4: the stout's push back: the x-row's liquid terms equal -rho sum Q N a'' (the momentum of the waves)
 ix = S['idx']['x']; push = M[ix, i] * qdd[i]; print(f'x-row coupling rho Q N = {M[ix, i]:.5e}, pitch-row coupling {M[ip, i]:.5e} (= rho N (Q h_g + Q_r))')
-if abs(M[ix, i] - rho * mx['Q'] * mx['N']) > 1e-12 or abs(M[ip, i] - rho * mx['N'] * (mx['Q'] * P['h_g'] + mx['Qr'])) > 1e-12: ok = False
+if abs(M[ix, i] - rho * mx['Q'] * mx['N']) > 1e-12 or abs(M[ip, i] - rho * mx['N'] * (mx['Q'] * (P['h_g'] - mx['kappa'] / mx['lam']) + mx['Qr'])) > 1e-12: ok = False
 # ---- eigenfrequencies of the free system, as a sanity print
 A, Bu, Bw = plant.state_space(S); ev = np.linalg.eigvals(A)
 print('free motions (Hz, damping ratio):', sorted([(round(abs(e.imag) / 2 / np.pi, 3), round(-e.real / abs(e), 3)) for e in ev if e.imag > 0]))

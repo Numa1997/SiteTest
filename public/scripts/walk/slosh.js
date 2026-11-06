@@ -56,7 +56,7 @@ gcA[k] = P.gc;
         {
             title: 'The shape of the surface',
             where: 'psiAt(k, s, th), etaWall(th): the stored mode shapes',
-            math: 'ψ<sub>k</sub>(s, θ) = Σ<sub>κ</sub> [c<sub>κ</sub>(s) cos κθ + s<sub>κ</sub>(s) sin κθ],  ⟦eta|η(rim, θ)⟧ = Σ<sub>k</sub> a<sub>k</sub> ψ<sub>k</sub>(1, θ)',
+            math: 'ψ<sub>k</sub>(s, θ) = Σ<sub>j</sub> [c<sub>j</sub>(s) cos jθ + d<sub>j</sub>(s) sin jθ],  ⟦eta|η(rim, θ)⟧ = Σ<sub>k</sub> a<sub>k</sub> ψ<sub>k</sub>(1, θ)',
             note: 'The program stores each mode’s surface shape as a few angular Fourier components at 17 radial nodes, s = r/R from 0 to 1 (section 5): one component for a body of revolution, three for the sculpted glass. The page interpolates the components linearly in s and sums them with the mode’s amplitude a<sub>k</sub>; at s = 1 that is the stout’s height at the rim, which the trace plots and the controller watches.',
             code: `function psiAt(k, s, th) {
     var md = M[k], x = s * (NSN - 1), j = Math.min(NSN - 2, Math.floor(x)), w = x - j, tot = 0;
@@ -83,14 +83,14 @@ function etaWall(th) { var s = 0; for (var k = 0; k < NM; k++) s += aO[k] * psiA
         {
             title: 'Cart and stout as one system',
             where: 'assemble(): the matrices of (19), term by term',
-            math: 'M q̈ + C q̇ + K q = F,  M<sub>a<sub>n</sub>a<sub>n</sub></sub> = (ρN<sub>n</sub>/λ<sub>n</sub>)(1 + κ<sub>n</sub>),  M<sub>a<sub>n</sub>x</sub> = ρ⟦Q|Q<sub>n</sub>⟧N<sub>n</sub>,  M<sub>a<sub>n</sub>ψ</sub> = ρQ<sub>n</sub>N<sub>n</sub>h<sub>g</sub> + ρ⟦Qry|Q<sub>rn</sub>⟧N<sub>n</sub>,  K<sub>a<sub>n</sub>ψ</sub> = −gρQ<sub>n</sub>N<sub>n</sub><span class="walk__eq">(19)</span>',
+            math: 'M<sub>c</sub> q̈ + C<sub>c</sub> q̇ + K<sub>c</sub> q = F,  M<sub>a<sub>n</sub>a<sub>n</sub></sub> = (ρN<sub>n</sub>/λ<sub>n</sub>)(1 + κ<sub>n</sub>),  M<sub>a<sub>n</sub>x</sub> = ρ⟦Q|Q<sub>n</sub>⟧N<sub>n</sub>,  M<sub>a<sub>n</sub>β</sub> = ρQ<sub>n</sub>N<sub>n</sub>(h<sub>g</sub> − κ<sub>n</sub>/λ<sub>n</sub>) + ρ⟦Qry|Q<sub>rn</sub>⟧N<sub>n</sub>,  K<sub>a<sub>n</sub>β</sub> = −gρQ<sub>n</sub>N<sub>n</sub><span class="walk__eq">(19)</span>',
             note: 'The second derivatives of the three energies of section 10, written in by hand. For each mode: its generalised mass mu with the head, its damping from γ<sub>n</sub>, its stiffness from ω<sub>n</sub>²; the coupling to the cart’s motion along x through Q<sub>n</sub>, to the pitch through h<sub>g</sub> (the glass foot swings with the body) and through the Stokes–Joukowski coupling Q<sub>rn</sub>, and the tilt’s sideways gravity in K. The same entries appear transposed: the stout pushes back. An independent SymPy script takes the same second derivatives and agrees to the last digit (check_plant.py).',
             code: `M.forEach(function (md, k) {
     var i = IA + k, mu = P.rho * md.N / md.lam, kap = muA[k];
     Mm[i][i] = mu * (1 + kap); Cm[i][i] = 2 * mu * (1 + kap) * gam[k]; Km[i][i] = mu * omA[k] * omA[k] * (1 + kap);
     var cx = P.rho * ⟦Q|md.Qx⟧ * md.N, cy = P.rho * md.Qy * md.N;
     Mm[i][IX] = Mm[IX][i] = cx; Mm[i][IY] = Mm[IY][i] = cy;
-    Mm[i][IP] = Mm[IP][i] = cx * P.hg + P.rho * ⟦Qry|md.Qry⟧ * md.N;   // x_O carries h_g ψ; the rotation through χ_y
+    Mm[i][IP] = Mm[IP][i] = cx * (P.hg - kap / md.lam) + P.rho * ⟦Qry|md.Qry⟧ * md.N;   // x_O carries h_g β; the rotation drives the stout through χ_y and lifts the head at x′ by −βx′ (the −κ/λ)
     Km[i][IP] = Km[IP][i] = -g * cx;                               // the tilt: the stout's weight along the tilted surface
 });
 Mi = inv(Mm);`,
@@ -100,7 +100,7 @@ Mi = inv(Mm);`,
             title: 'The right-hand side of the step',
             where: 'deriv(t, y, out): what the Runge–Kutta step integrates',
             math: 'q̈ = M⁻¹[F − C q̇ − K q],  F ∋ k<sub>t</sub>z<sub>r</sub> + c<sub>t</sub>ż<sub>r</sub> (wheels),  ±u<sub>f</sub>, ±u<sub>r</sub> (actuators),  F<sub>push</sub>;  the pumping −ρN<sub>n</sub>⟦az|z̈<sub>O</sub>⟧a<sub>n</sub>',
-            note: 'The forces: the road through the tyres, the two actuators pushing up on the body (and down on their wheels, with their lever arms on the pitch), and your push along the chosen axis. Then the dense solve by the precomputed inverse of M. The vertical acceleration of the glass foot stiffens or softens every mode by ρN<sub>n</sub>z̈<sub>O</sub>, the Faraday term of (12); it is taken from the previous substep, one millisecond behind, and held at −0.8g when the stout would leave the floor. The accelerations of the cart ⟦ax|ẍ<sub>O</sub>⟧ and ⟦psi|ψ⟧ reach the stout only through M and K: nothing is added by hand.',
+            note: 'The forces: the road through the tyres, the two actuators pushing up on the body (and down on their wheels, with their lever arms on the pitch), and your push along the chosen axis. Then the dense solve by the precomputed inverse of M. The vertical acceleration of the glass foot stiffens or softens every mode by ρN<sub>n</sub>z̈<sub>O</sub>, the Faraday term of (12); it is taken from the previous substep, one millisecond behind, and held at −0.8g when the stout would leave the floor. The accelerations of the cart ⟦ax|ẍ<sub>O</sub>⟧ and ⟦psi|β⟧ reach the stout only through M and K: nothing is added by hand.',
             code: `Fv[IF] = P.kt * zf + P.ct * vf; Fv[IR] = P.kt * zr + P.ct * vr;
 Fv[IZ] += Ct.uf + Ct.ur; Fv[IP] += -P.lf * Ct.uf + P.lr * Ct.ur; Fv[IF] -= Ct.uf; Fv[IR] -= Ct.ur;
 var Fp = t < push.until ? push.F : 0; if (push.axis === 'x') Fv[IX] += Fp; else if (push.axis === 'y') Fv[IY] += Fp; else Fv[IZ] -= Fp;
@@ -108,12 +108,12 @@ for (i = 0; i < n; i++) { var r = Fv[i]; for (j = 0; j < n; j++) r -= Cm[i][j] *
 var azc = Math.max(-0.8 * g, ⟦az|azO⟧);              // the vertical acceleration of the glass stiffens or softens every mode (Faraday); z̈_O lags one substep. Below −0.8 g the stout would leave the floor and the model has failed: the softening is held there, and the page says so
 for (var k = 0; k < NM; k++) rhs[IA + k] -= P.rho * M[k].N * azc * y[IA + k];
 for (i = 0; i < n; i++) { var a = 0; for (j = 0; j < n; j++) a += Mi[i][j] * rhs[j]; out[n + i] = a; }`,
-            syms: [['ax', 'ẍ<sub>O</sub>', 'ds.get(\'ax\')', 'acceleration of the glass foot along x, m/s²'], ['az', 'z̈<sub>O</sub>', 'azO', 'its vertical acceleration, m/s²'], ['psi', 'ψ', 'qA[IP]', 'tilt of the glass, °'], ['t', 't', 'tSim', 'simulated time, s'], ['h', 'Δt', 'h', 'step']]
+            syms: [['ax', 'ẍ<sub>O</sub>', 'ds.get(\'ax\')', 'acceleration of the glass foot along x, m/s²'], ['az', 'z̈<sub>O</sub>', 'azO', 'its vertical acceleration, m/s²'], ['psi', 'β', 'qA[IP]', 'tilt of the glass, °'], ['t', 't', 'tSim', 'simulated time, s'], ['h', 'Δt', 'h', 'step']]
         },
         {
             title: 'The two control laws',
             where: 'control(): every T<sub>s</sub>, the forces held until the next look',
-            math: 'skyhook: ⟦uf|u<sub>f</sub>⟧ = −c<sub>sky</sub>(ż<sub>b</sub> − l<sub>f</sub>ψ̇), u<sub>r</sub> = −c<sub>sky</sub>(ż<sub>b</sub> + l<sub>r</sub>ψ̇);  LQR: u = −K x,  |u| ≤ Bℓ ⟦I|I⟧<sub>max</sub>',
+            math: 'skyhook: ⟦uf|u<sub>f</sub>⟧ = −c<sub>sky</sub>(ż<sub>b</sub> − l<sub>f</sub>β̇), u<sub>r</sub> = −c<sub>sky</sub>(ż<sub>b</sub> + l<sub>r</sub>β̇);  LQR: u = −K x,  |u| ≤ Bℓ ⟦I|I⟧<sub>max</sub>',
             note: 'The skyhook damps the absolute velocity of each corner of the body. The LQR reads the state of section 11 from the cart’s coordinates: strut deflections, tyre deflections (wheel height minus the road under it), the x-modes and the rates, in ctlState(), and multiplies by the gains. Both are clipped to what the moving coils can give, Bℓ I<sub>max</sub>.',
             code: `var Fm = P.Bl * P.Imax, uf = 0, ur = 0;
 if (P.law === 'skyhook') { uf = -P.csky * (qdA[IZ] - P.lf * qdA[IP]); ur = -P.csky * (qdA[IZ] + P.lr * qdA[IP]); }   // each corner of the body damped against the sky
@@ -134,7 +134,7 @@ for (it = 0; it < 6000; it++) {
     K = mmul(Gi, BSA);
 ...
 ⟦tau|Ct.tau = -P.Ts / Math.log(rad)⟧; ds.set('tau_cl', Ct.tau);`,
-            syms: [['tau', 'τ<sub>cl</sub>', 'Ct.tau', 'slowest time constant of the closed loop, s'], ['fz', 'f<sub>z</sub>', 'ds.get(\'f_heave\')', 'heave frequency of the body, Hz'], ['fp', 'f<sub>ψ</sub>', 'ds.get(\'f_pitch\')', 'pitch frequency, Hz']]
+            syms: [['tau', 'τ<sub>cl</sub>', 'Ct.tau', 'slowest time constant of the closed loop, s'], ['fz', 'f<sub>z</sub>', 'ds.get(\'f_heave\')', 'heave frequency of the body, Hz'], ['fp', 'f<sub>β</sub>', 'ds.get(\'f_pitch\')', 'pitch frequency, Hz']]
         }
     ]
 };

@@ -87,7 +87,7 @@ def simulate(D, P, scenario, v=1.5, T=8.0, dt=1e-3, law='lqr', c_sky=400.0, Fmax
     (x_c is the push coordinate about the uniform motion). Returns time series of the states, u, the rim wave and the road."""
     S, A, Bu, Bw = D['S'], D['A'], D['Bu'], D['Bw']; n = S['n']; I = S['idx']
     prof = road.PROFILES[scenario]
-    zr = lambda x: prof(np.array([x]), h=h_road)[0] if scenario != 'random' else prof(np.array([x]))[0]
+    zr = lambda x: prof(np.array([x]), h=h_road)[0]              # h_road: the feature's height; for 'random' the highest point in the first 3 m (the page's slider default is 13 mm)
     Fmax = Fmax or P['Bl'] * P['I_max']
     x = np.zeros(2 * n); t = 0.0; nT = int(round(T / dt)); hold = int(round(D['Ts'] / dt)); u = np.zeros(2)
     out = dict(t=[], x=[], u=[], eta=[], zrf=[], zrr=[], azb=[])
@@ -97,7 +97,7 @@ def simulate(D, P, scenario, v=1.5, T=8.0, dt=1e-3, law='lqr', c_sky=400.0, Fmax
     for k, i in enumerate(I['b']): modes_N[i] = D['rho_N'][1][k]
     def f(t, x, u):
         xf = v * t + P['l_f'] + x[I['x']]; xr = v * t - P['l_r'] + x[I['x']]
-        w = np.array([zr(xf), zr(xr), v * (zr(xf + 1e-4) - zr(xf - 1e-4)) / 2e-4, v * (zr(xr + 1e-4) - zr(xr - 1e-4)) / 2e-4])
+        vv = v + x[n + I['x']]; w = np.array([zr(xf), zr(xr), vv * (zr(xf + 1e-4) - zr(xf - 1e-4)) / 2e-4, vv * (zr(xr + 1e-4) - zr(xr - 1e-4)) / 2e-4])   # the wheels ride the road at the cart's speed, push included
         uu = np.zeros(5); uu[:2] = u
         if push is not None and push[1] <= t < push[2]: uu[2 + push[0]] = push[3]
         dx = A @ x + Bu @ uu + Bw @ w

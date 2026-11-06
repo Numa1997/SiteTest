@@ -41,7 +41,10 @@ potentials χ_x, χ_y (Laplace with ∂_nχ = (e × r)·n on the whole boundary,
 foot. Per mode: λ, N = ∫ψ², Q_x, Q_y (translation), Q_rx, Q_ry (rotation), the wall, floor and surface integrals of |∇_tΦ|² over E, the
 dominant azimuthal number and orientation (from the rim's Fourier components), and the shapes as Fourier series in θ. Modes are scaled
 to max |ψ| = 1 on the rim, found from the rim's trigonometric interpolant, with the dominant component positive so that the sign is the
-same from fill to fill.
+same from fill to fill. The page does not rely on that: `interpGlass()` aligns the next fill's shape with this one's by the sign of their
+dot product before interpolating, and treats a Fourier component trimmed from one fill as zero there. (The quick-mesh file of the first
+cart version predated the sign rule and flipped (1,1) between neighbouring fills, which cancelled the slosh halfway between them; the code
+review of round 3 found it. The store's `rim_max` shows max|ψ(rim)| = 1 for every mode at every fill, and `test.cjs` checks it at 490 mL.)
 
 Gate (`python3 tools/fig12/check_modes3d.py`, production mesh 8 × 28 × 18, 33 189 nodes, about 3 min per solve): cylinder R = 40 mm,
 D = 100 mm, λ₁₁ within 6 × 10⁻⁶ of the exact k tanh kD, every kept mode (m ≤ 3) within 1.2 × 10⁻⁴; E = λN to 10⁻⁴; Q₁₁ within 1.5 × 10⁻⁶
@@ -51,51 +54,62 @@ inertia changes by 10⁻⁵ between the coarse and the production mesh. On the g
 
 Finding: at the default fill the panels do nothing measurable (the x and y copies of (1,1) differ by 0.003 %, purity 1.0000); at 300 mL the
 split is 0.1 %. The slosh lives in the top two centimetres and the panels end ten centimetres down. `trim_modes.py` therefore drops the
-Fourier components below 2 × 10⁻³ of the dominant one (227 of 576 kept at the quick mesh).
+Fourier components below 2 × 10⁻³ of the dominant one (227 of 576 kept; the installed file is the production mesh, 475 kB).
 
 ## The plant (`plant.py`, `check_plant.py`, `road.py`)
 
 Half-car: body M_b = 25 kg, J_b = 2.0 kg m², struts at ±0.40 m with k = 3000 N/m, c = 120 N s/m, wheels 1.5 kg on tyres 50 kN/m (20 N s/m),
-glass 0.42 kg at d_g = 0.10 m ahead and h_g = 0.25 m above the centre of mass; coordinates (x_c, y_c, z_b, ψ, z_f, z_r, a_n). The stout's
-kinetic energy ½ρ∫|∇Φ|² with Φ = ẋ_O x + ż_O z + ψ̇χ + Σ(ȧ_n/λ_n)Φ_n gives the couplings ρQ_nN_n (translation), ρQ_rnN_n (rotation),
-m_l z_cm (translation–rotation), the Stokes–Joukowski inertia and the modal masses (1 + κ)ρN/λ; the potential holds the springs, tyres,
-waves, the tilt term −ρgψΣQ_nN_na_n and the inverted-pendulum term of the sprung mass; Rayleigh for the dampers and the modal damping.
+glass 0.42 kg at d_g = 0.10 m ahead and h_g = 0.25 m above the centre of mass; coordinates (x_c, y_c, z_b, β (pitch), z_f, z_r, a_n). The stout's
+kinetic energy ½ρ∫|∇Φ|² with Φ = ẋ_O x + ż_O z + β̇χ + Σ(ȧ_n/λ_n)Φ_n gives the couplings ρQ_nN_n (translation), ρQ_rnN_n (rotation),
+less the head's own inertia in the turn (−M_fQ_nN_n, from ½M_f∫(ż_O − β̇x + η̇)²dS, i.e. Q_rn − κ_nQ_n/λ_n, 2.6 % for the slowest mode,
+found by the referee of round 3), m_l z_cm (translation–rotation), the Stokes–Joukowski inertia and the modal masses (1 + κ)ρN/λ; the potential holds the springs, tyres,
+waves, the tilt term −ρgβΣQ_nN_na_n and the inverted-pendulum term of the sprung mass; Rayleigh for the dampers and the modal damping.
 `check_plant.py`: hand-assembled M, C, K equal the SymPy Hessians of the energies exactly; the modal row equals the boundary-value modal
 equation of the note (12) to 10⁻¹⁶; M symmetric positive definite. Free motions of the coupled system at 500 mL: 2.28 Hz heave (ζ 0.28),
-3.09 Hz pitch (0.40), 3.235/3.237 Hz slosh (0.028), 28 Hz wheel hop. Sloshing masses 81 g and 2.3 g.
+3.09 Hz pitch (0.40), 3.235/3.237 Hz slosh (0.028), 28 Hz wheel hop (29.9 Hz undamped, wheel alone). Sloshing masses 81 g and 2.3 g.
 
 The page assembles the same matrices in `assemble()` and integrates `M q̈ + C q̇ + K q = F` with RK4 at 1 ms (dense M⁻¹ precomputed), the
 Faraday term −ρN_n z̈_O a_n with z̈_O lagged one substep and clamped at −0.8 g, the controller held between samples (ZOH), the road under
-each wheel from `zRoad(s)` at s = vt + x_c ± l, and the reader's push as a force along one axis (pointer drag up to 80 N; buttons 40 N for
-0.3 s, 120 N down). Modes past twice the radius are reset and the page says so.
+each wheel from `zRoad(s)` at s = vt + x_c ± l (the tyre rate at the speed v + ẋ_c), and the reader's push as a force along one axis (pointer drag up to 80 N; buttons 40 N for
+0.3 s, 120 N down). Modes past twice the radius are reset and the page says so. The rough road is the class-C sum of 120 sines scaled so that
+its highest point in the first 3 m equals the slider (13 mm by default, the profile as generated) and faded in over 0.2 m, so it starts without
+a step; `road.py` generates the same numbers. `restart()` resets the road under the wheels and the stored forces.
+
+The 3D view: the cart group rotates by −β about three.js's z axis (z_three = −y_physics), so positive β puts the front down;
+`test.cjs` reads the glass group's world position back at β = 0.1 against d_g cos β + h_g sin β, h_g cos β − d_g sin β. Pointer: drag the body to
+push, empty space to orbit; a second finger ends a push and pinches; a plain wheel scrolls the page and Shift + wheel zooms; `touch-action: pan-y`.
 
 ## The control (`controller3.py`, `gate_ctl3.py`, `notes/fig12/gate-ctl3.cjs`)
 
 Actuators Bℓ = 20 N/A, I_max = 8 A (160 N each). Skyhook: u = −c_sky × (absolute velocity of each body corner), c_sky = 400 N s/m. LQR in
-suspension coordinates (Hrovat): x = (d_f, d_r, ζ_f, ζ_r, a_n | ẋ_c, ż_b, ψ̇, ż_f, ż_r, ȧ_n), 13 states for two x-modes; the tilt is
-(d_r − d_f + ζ_r − ζ_f)/(l_f + l_r), not a state (with ψ as a state the system has a marginal mode, the road slope, that the cost sees and
-the Riccati equation has no finite solution; the first design had it and tried to push the wheel back down over the bump). A and B are
-built by probing the linear map on unit states; ZOH over T_s = 10 ms by one matrix exponential; cost η_rim²/σ_η² + ψ²/σ_ψ² + ż_b²/σ_v² +
-|u|²/σ_u² with σ_η = 0.5 mm, σ_ψ = 0.01 rad, σ_v = 50 mm/s, σ_u = 20 N; the discrete Riccati equation by iteration (about 1100 iterations);
+suspension coordinates (Hrovat): x = (d_f, d_r, w_f, w_r, a_n | ẋ_c, ż_b, β̇, ż_f, ż_r, ȧ_n), 13 states for two x-modes; the tilt is
+(d_r − d_f + w_r − w_f)/(l_f + l_r), not a state (with β as a state the system has a marginal mode, the road slope, that the cost sees and
+the Riccati equation has no finite solution; the first design had it and tried to push the wheel back down over the bump). Without a road
+sensor the controller's tilt is the level-road value; while one wheel is on the 30 mm bump it is off by up to 2.1°, which the plant does not
+share, so the runs include that error. A and B are
+built by probing the linear map on unit states; ZOH over T_s = 10 ms by one matrix exponential; cost η_rim²/σ_η² + β²/σ_β² + ż_b²/σ_v² +
+|u|²/σ_u² with σ_η = 0.5 mm, σ_β = 0.01 rad, σ_v = 50 mm/s, σ_u = 20 N; the discrete Riccati equation by iteration (about 1100 iterations cold, warm-started from the last solution); a slider marks the design
+stale and the next control sample under the LQR redoes it, so a drag costs one design per sample at most, and I_max (not in the design) never does;
 the slowest closed-loop time constant from the eigenvalues of A_d − B_dK (Faddeev–LeVerrier and Durand–Kerner), 1.93 s (the cart rolling
 to a stop). The page's `control()` reads the state with `ctlState()` from q, q̇ and the road under the wheels.
 
 Gate: `node notes/fig12/gate-ctl3.cjs out.json` dumps the page's gains and the bump runs; `python3 tools/fig12/gate_ctl3.py out.json`
 designs the same controller offline (iteration = SciPy's solver to 3 × 10⁻¹⁴) and compares: gains to 6 × 10⁻¹², τ_cl identical, and the
-peak rim wave of each run identical to the digits printed (passive 61.13, skyhook 15.01, LQR 3.76 mm on the 30 mm bump at 1.5 m/s) once the
+peak rim wave of each run identical to the digits printed (passive 60.72, skyhook 14.91, LQR 3.77 mm on the 30 mm bump at 1.5 m/s) once the
 offline simulation carries the same parametric term. PASS.
 
-Scenario numbers (`note_numbers.py`, 6 s runs): bump 30 mm: 61 / 15.0 / 3.8 mm, LQR ≤ 60 N, tilts 2.7 / 1.3 / 1.4°; kerb 20 mm: 27 / 7.0 /
+Scenario numbers (`note_numbers.py`, 6 s runs): bump 30 mm: 61 / 14.9 / 3.8 mm, LQR ≤ 60 N, tilts 2.7 / 1.3 / 1.4°; kerb 20 mm: 27 / 6.9 /
 4.3 mm, LQR 102 N; cobbles 6 mm: 4.0 / 1.3 / 0.9 mm. Head at rest 2.1 mm above the rim (500 mL + 18 mm), dome limit 8 mm: the LQR keeps the
 pint on the bump and the kerb, the skyhook does not, the passive cart loses it.
 
 ## The store and the data panel
 
 `Sim.dataset` 'A pint of stout on a suspension', dims `k` (14 modes), `q` (20 coordinates), `j` (17 radial nodes), `kk` (16 gains).
-Groups: what you set; the glass and the pour; the modes; the damping; the cart; the control; the state now; the drawing. 44 checks
+Groups: what you set; the glass and the pour; the modes; the damping; the cart; the control; the state now; the drawing. 47 checks
 (per-mode ones at three indices) recompute from the stored inputs; all agree in English, German and Arabic at 1440 and 390 px
 (`node notes/fig12/test.cjs <out> <width> [de/|ar/]`), which also pushes the cart with a scripted drag and drives the bump under the three
-laws, requiring passive > skyhook > LQR. Read-backs: the trace's last point and the stout under the surface in the cut (3 px probe).
+laws, requiring passive > skyhook > LQR, then the round-3 checks: the 3D pitch read-back, a quiet first sample after a restart, the rough
+road's height and start, the deferred design, a pinch ending a push, the wheel, and max|ψ(rim)| = 1 between two fills. Read-backs: the trace's last point and the stout under the surface in the cut (3 px probe).
 `node notes/fig12/regress.cjs`: the surviving findings of the reviews plus the cart's own (law switch does not kick the cart, the LQR
 converged, the straight glass is straight and Bessel-exact, the road is flat before 1 m, a road change restarts, a released push is zero).
 
