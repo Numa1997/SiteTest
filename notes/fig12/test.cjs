@@ -8,7 +8,7 @@ const { chromium } = require('playwright'); const { spawn } = require('child_pro
   for (const [name, vp] of [['desktop', { width: 1440, height: 1000 }], ['phone', { width: 390, height: 844 }]]) {
     const p = await b.newPage({ viewport: vp, deviceScaleFactor: 1 });
     p.on('pageerror', e => errs.push(name + ': ' + e.message)); p.on('console', m => { if (m.type() === 'error') errs.push(name + ' console: ' + m.text()); });
-    await p.goto(base + '/simulations/beer-slosh.html'); await p.waitForTimeout(1500);
+    await p.goto(base + '/simulations/beer-slosh.html' + (process.env.QUERY || '')); await p.waitForTimeout(1500);
     const s0 = await p.evaluate(() => ({ t: Fig12.world.t, x: Fig12.world.cart.x }));
     await p.waitForTimeout(6000);
     const s1 = await p.evaluate(() => ({ t: Fig12.world.t, x: Fig12.world.cart.x, rate: document.getElementById('cap-rate').textContent, dw: document.getElementById('r-dw').textContent, solver: document.getElementById('r-solver').textContent }));

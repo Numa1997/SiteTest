@@ -55,7 +55,7 @@
                     <canvas id="cv" aria-label="A pint of stout on a one-wheel cart with a spring and a damper, rolling along a road with bumps; the surface of the stout rocks"></canvas>
                 </div>
                 <figcaption class="stage__cap">
-                    <span><b>Fig. 12</b> · 3D Navier–Stokes in the glass · cart by Newton’s laws · coupled both ways</span>
+                    <span id="cap-model"><b>Fig. 12</b> · 3D Navier–Stokes in the glass · cart by Newton’s laws · coupled both ways</span>
                     <span id="cap-rate">—</span>
                 </figcaption>
             </figure>
@@ -86,24 +86,27 @@
                         <span class="ctl__row"><span>Set speed</span><output id="v0-out" for="v0"></output></span>
                         <input type="range" id="v0" min="0" max="2" step="0.05" value="1">
                     </label>
-                    <div class="actions" role="group" aria-label="Speed controller">
+                    <div class="actions" role="group" aria-label="Controller">
                         <button type="button" class="btn btn--ghost" id="ctrl-off" aria-pressed="false">Open loop</button>
-                        <button type="button" class="btn" id="ctrl-speed" aria-pressed="true">Speed control</button>
+                        <button type="button" class="btn" id="ctrl-speed" aria-pressed="true">Speed (PI)</button>
+                        <button type="button" class="btn btn--ghost" id="ctrl-preview" aria-pressed="false">PI + road preview</button>
+                        <button type="button" class="btn btn--ghost" id="ctrl-slosh" aria-pressed="false">Slosh feedback</button>
                     </div>
                     <label class="switch"><span>Active suspension (skyhook)</span><input type="checkbox" id="susp"></label>
-                    <p class="panel__note">Open loop: the motor gives the fixed torque that balances the drag at the set speed. Speed control: a PI loop sampled every 1 ms sets the motor current. The suspension adds up to 40 N between body and axle against the body’s vertical speed.</p>
+                    <p class="panel__note">Open loop: the motor gives the fixed torque that balances the drag at the set speed. Speed (PI): a PI loop sampled every 1 ms sets the motor current. Road preview: the PI loop plus the current that cancels the road’s push one current lag ahead. Slosh feedback: state feedback (LQR) on speed and on the stout’s swing, live model only. The suspension adds up to 40 N between body and axle against the body’s vertical speed.</p>
                 </div>
                 <div class="panel__group">
-                    <p class="panel__label">Road and grid</p>
+                    <p class="panel__label">Road and model</p>
                     <label class="ctl">
                         <span class="ctl__row"><span>Bump height</span><output id="bumpH-out" for="bumpH"></output></span>
                         <input type="range" id="bumpH" min="0" max="25" step="1" value="10">
                     </label>
-                    <div class="actions" role="group" aria-label="Grid">
-                        <button type="button" class="btn btn--ghost" id="grid-4" aria-pressed="false">4 mm grid · faster</button>
-                        <button type="button" class="btn btn--ghost" id="grid-3" aria-pressed="false">3 mm grid · closer</button>
+                    <div class="actions" role="group" aria-label="Model of the stout">
+                        <button type="button" class="btn btn--ghost" id="model-live" aria-pressed="false">Live · 3 modes</button>
+                        <button type="button" class="btn btn--ghost" id="grid-4" aria-pressed="false">3D · 4 mm</button>
+                        <button type="button" class="btn btn--ghost" id="grid-3" aria-pressed="false">3D · 3 mm</button>
                     </div>
-                    <p class="panel__note">A cosine bump 25 cm long every 2 m. The glass is open: stout that rises over the rim spills and falls to the road. Measured accuracy: 3 mm swings 4 % slow and tilts 4–6 % too far under a steady push; 4 mm, 6 % and up to 18 %.</p>
+                    <p class="panel__note">A cosine bump 25 cm long every 2 m. Live: the stout as its first three sloshing modes, in real time; stout that rises over the rim pours out and is subtracted. 3D: the full Navier–Stokes solution with particles, about a third of real time; spilled stout falls to the road. The 3D grids swing 4–6 % slow.</p>
                 </div>
                 <dl class="readouts">
                     <div><dt>Time</dt><dd id="r-t">—</dd></div>
@@ -124,7 +127,7 @@
                 <p class="paper__kicker">Lecture note · Fig. 12 · fluid dynamics · vehicle dynamics · control</p>
                 <h2 class="paper__title" id="paper-title">Why the pint spills, and how a motor can stop it</h2>
                 <p class="paper__by">Numa Koudsie · for physics undergraduates; ★ marks the heavier mathematics, whose results are restated without it</p>
-                <div class="paper__abstract"><b>Abstract.</b> A pint of stout in the Guinness tulip glass rides a cart with one wheel, one spring and one damper over a bump. The road pushes on the wheel along the normal to its surface, which leans backward while the wheel climbs and forward while it descends, so the cart is braked and then shoved. In the frame of the glass that jolt is an extra horizontal force on every parcel of stout, and the stout answers by swinging at its own frequency, about 3.4 times a second, sometimes over the rim. We write the stout’s equations in the glass’s frame, solve the linear problem for an upright cylinder (Bessel functions, the dispersion relation \(\omega^2 = (g\xi/R)\tanh(\xi h/R)\), the equivalent spring and mass), build the cart as a quarter-car with a DC gear motor, a PI speed loop and a skyhook suspension, couple the two through the stout’s momentum, and explain the numerical method the page uses: a particle–grid solution of the incompressible Navier–Stokes equations in three dimensions. Every number in the note was computed or measured from the page’s own code, with the command that reproduces it.</div>
+                <div class="paper__abstract"><b>Abstract.</b> A pint of stout in the Guinness tulip glass rides a cart with one wheel, one spring and one damper over a bump. The road pushes on the wheel along the normal to its surface, which leans backward while the wheel climbs and forward while it descends, so the cart is braked and then shoved. In the frame of the glass that jolt is an extra horizontal force on every parcel of stout, and the stout answers by swinging at its own frequency, about 3.4 times a second, sometimes over the rim. We write the stout’s equations in the glass’s frame, solve the linear problem for an upright cylinder (Bessel functions, the dispersion relation \(\omega^2 = (g\xi/R)\tanh(\xi h/R)\), the equivalent spring and mass), build the cart as a quarter-car with a DC gear motor, a PI speed loop and a skyhook suspension, couple the two through the stout’s momentum, and explain the numerical method the page uses: a particle–grid solution of the incompressible Navier–Stokes equations in three dimensions. The figure runs live, in real time, on a reduced model of the stout (its first three sloshing modes, checked against the 3D solver); the full 3D solution is one switch away. Two further controllers hold the stout still: a feedforward that reads the road ahead, and a state feedback on the stout’s swing designed by the linear–quadratic regulator. Every number in the note was computed or measured from the page’s own code, with the command that reproduces it.</div>
             </header>
             <div class="paper__grid">
                 <nav class="paper__toc" aria-label="Contents">
@@ -433,7 +436,28 @@
                             </div>
                             <figcaption><span class="pfig__n">Figure 2</span>A 10 mm bump at a set speed of 1 m/s, 4 mm grid, passive suspension. Top: the glass’s horizontal acceleration \(a_{g,x}\), the mean over each 5 ms fluid step. Bottom: the stout’s lean, the column height at the front wall minus that at the back, at \(r = R(h)\), as the page reads it. The shaded band is the time the axle path rises over the bump. Computed with <code>tools/fig12/study.cjs</code> through <code>World.advance</code>; drawn by <code>tools/fig12/figures.cjs</code>.</figcaption>
                         </figure>
-                    </section>
+                                            <h4><span class="psub__n">8.4</span>Holding the stout still: road preview and slosh feedback</h4>
+                        <p>A speed loop only reacts: the road must first slow the cart before the loop can push back, and by (38) about 40 % of the jolt at the swing’s frequency gets through. Two better controllers use information the speed loop ignores. The first knows the road. The second knows the stout.</p>
+                        <p><b>Road preview.</b> The road ahead is known, and its push follows from (24): \(F_\text{road} = -N z_a'(x)\). Estimate the tyre load by its static value, \(\hat N = (M_s + m_w)\,g\), and command, besides the PI law (36), the current that cancels the push the cart is about to feel, one current lag ahead:</p>
+                        \[ i_\text{ff}(t) = \frac{\hat N\,z_a'\big(x + \dot x\,\tau_i\big)}{b} . \tag{50} \]
+                        <p>The motor then delivers \(b\,i_\text{ff} \approx -F_\text{road}\) just as the road pushes, and only the error \(-(N - \hat N)\,z_a'\) reaches the cart, the part of the tyre load that the body’s bounce adds, which the PI loop then fights as before. A real cart would read the road from a camera or a map; the page reads it from its own road.</p>
+                        <p><b>Slosh feedback.</b> Put the cart and the first sloshing mode together. With \(\delta v = \dot x - v_0\) the speed error, \(\xi_i = \int(v_0 - \dot x)\,dt\) its integral, \(q = q_1\) and \(u = \delta i\) the current beyond \(i_0\), equations (35) and (17) form one linear system \(\dot{\mathbf x} = A\mathbf x + B u\) with \(\mathbf x = (\delta v, q, \dot q, \xi_i)\):</p>
+                        \[ A = \small\begin{pmatrix} -\gamma & 0 & 0 & 0 \\ 0 & 0 & 1 & 0 \\ \beta\gamma & -\omega^2 & -2\zeta\omega & 0 \\ -1 & 0 & 0 & 0 \end{pmatrix} \tag{51} \]
+                        \[ B = \frac{b}{M_x}\begin{pmatrix} 1 \\ 0 \\ -\beta \\ 0 \end{pmatrix}, \qquad \gamma = \frac{c_x}{M_x} , \tag{51a} \]
+                        <p>Here \(2\zeta\omega\) is written in the matrix as one entry. The third row is (17) with \(a_{g,x} = \delta\dot v\) substituted from the first: the motor’s push reaches the stout through the glass’s acceleration. The linear–quadratic regulator chooses the feedback \(u = -K\mathbf x\) that minimises</p>
+                        \[ J = \int_0^\infty\big(\mathbf x^TQ\mathbf x + r\,u^2\big)\,dt , \tag{52} \]
+                        <p>a sum of the squared errors and the squared effort. The answer is \(K = B^TP/r\), with \(P\) the symmetric positive-definite solution of the algebraic Riccati equation</p>
+                        \[ A^TP + PA - \frac{1}{r}PBB^TP + Q = 0 . \tag{53} \]
+                        <p>The weights follow Bryson’s rule, one over the square of the largest value each quantity may take: 0.05 m/s for the speed error, 2 mm for the swing, \(2\ \mathrm{mm}\times\omega\) for its rate, 2 cm for the integral, and the drive’s 3 A for the current. The page solves (53) by integrating the Riccati flow \(\dot P = A^TP + PA - PBB^TP/r + Q\) from \(P = 0\) until it stops changing (<code>Cart.lqrGains</code>, 0.2 s). The gains are \(K = (75.0\ \mathrm{A/(m/s)},\ -1939\ \mathrm{A/m},\ -38.8\ \mathrm{A/(m/s)},\ -150\ \mathrm{A/m})\). The closed loop’s poles, the eigenvalues of \(A - BK\), are \(-12.0 \pm 8.8j\), \(-2.6\) and \(-244\ \mathrm{s^{-1}}\). The pair \(-12.0 \pm 8.8j\) is the swing: its damping ratio, \(12.0/\sqrt{12.0^2 + 8.8^2} = 0.81\), was 0.005 without control. The controller does not stop the glass from accelerating; it shapes the acceleration so that the swing it starts is taken out again. The price is the slow pole \(-2.6\ \mathrm{s^{-1}}\): the speed recovers in about a second instead of a tenth.</p>
+                        <p>The slosh feedback needs the swing \(q_1\) and its rate. A real cart would measure them, for example with a level probe at each side of the glass, and filter them; the page reads them from its live model, an ideal sensor, so the numbers below are the best this controller can do. It is not offered with the 3D solver, which has no such sensor.</p>
+                        <table class="ptab">
+                            <caption>Table 3 · One bump at 1 m/s, the live model: the largest lean, the stout spilled, the largest motor current</caption>
+                            <tr><th>Bump</th><th>Open loop</th><th>PI speed</th><th>PI + road preview</th><th>Slosh feedback</th></tr>
+                            <tr><td>10 mm</td><td>24.7 mm, 0.40 A</td><td>7.6 mm, 1.06 A</td><td>0.8 mm, 1.01 A</td><td>0.4 mm, 1.04 A</td></tr>
+                            <tr><td>25 mm</td><td>73.9 mm, 9.9 g spilled</td><td>25.4 mm, 2.32 A</td><td>5.9 mm, 2.16 A</td><td>1.3 mm, 2.31 A</td></tr>
+                        </table>
+                        <p>Both new controllers use about the same current as the PI loop; they spend it at the right moments. Preview cuts the lean ninefold against the PI loop on the 10 mm bump, slosh feedback nineteenfold. Command: <code>MODAL=1 node tools/fig12/study.cjs &lt;10|25&gt; &lt;off|speed|preview|slosh&gt; 0</code>.</p>
+</section>
 
                     <section class="psec" id="p-susp">
                         <h3><span class="psec__n">09</span>The skyhook suspension</h3>
@@ -513,7 +537,25 @@
                             <li>the particles moved by the midpoint rule; the wall, floor and spill tests of 11.4 and 10.3.</li>
                         </ol>
                         <p>On a 4-core machine one step at 4 mm takes about 15 to 20 ms of computing, so the page runs at roughly a third of real time; the caption shows the rate your computer reaches. Four of the loops (the surface search, the two transfers, the particles’ motion) are shared among your processor’s cores where the browser allows it, each core doing the same arithmetic in the same order for its share, so that the results are identical to the last digit (<code>node tools/fig12/same.cjs</code> prints the fingerprint <code>sha256 7747da757ea9d800</code>; <code>notes/fig12/threads-test.cjs</code> checks it in the browser). The pressure solve cannot be shared this way, because each cell of its triangular sweeps needs the one before.</p>
-                    </section>
+                                            <h4><span class="psub__n">11.8</span>The live model</h4>
+                        <p>The 3D solution runs at about a third of real time, too slow to watch a controller at work. The figure therefore runs, by default, a reduced model built from section 4: the stout as its first three sloshing modes, \(n = 1, 2, 3\) of the family \(m = 1\) that a push along the road excites. Each mode is an oscillator,</p>
+                        \[ \ddot q_n + 2\zeta_n\omega_n\dot q_n + \omega_n^2\Big(1 + \frac{a_z}{g}\Big)q_n = -\beta_n\,a_x, \qquad \omega_n^2 = g k_n\tanh k_nh,\quad k_n = \frac{\xi_{1n}}{R(h)} , \tag{54} \]
+                        <p>with \(\xi_{1n} = 1.8412,\ 5.3314,\ 8.5363\) the first three zeros of \(J_1'\) and \(\beta_n = 2\xi_{1n}\tanh(\xi_{1n}h/R)/(\xi_{1n}^2 - 1)\), as in (17). The tulip is replaced by the cylinder of its radius at the surface, \(R(h) = 39.1\) mm: section 4.6 showed that this cylinder swings within 0.4 % of the 3D solver’s tulip once the grid’s error is taken out. The frequencies are 3.421, 5.821 and 7.365 Hz. Mode 1 is damped by the wall’s boundary layer at the measured rate of section 5, \(\zeta_1 = 0.0053\), and the others by the boundary-layer scaling \(\zeta_n = \zeta_1\sqrt{\omega_1/\omega_n}\). The surface and the push on the glass follow from section 4:</p>
+                        \[ \eta(r, \theta) = h + \sum_n q_n\,\frac{J_1(k_nr)}{J_1(\xi_{1n})}\cos\theta , \qquad P_x = \sum_n\frac{\rho\pi R^3}{\xi_{1n}^2}\,\dot q_n , \tag{55} \]
+                        <p>so the stout pushes the cart by (44) exactly as in the 3D model, and the surface is smooth by construction. Equations (54) are stepped by the symplectic Euler rule in substeps of 0.5 ms, under a hundredth of the fastest period.</p>
+                        <p><b>The pour.</b> Where the stout at the wall stands above the rim, by \(D(\theta) = h + \sum_nq_n\cos\theta - z_\text{rim} \gt 0\), it pours over the rim like water over a sharp-crested weir. A weir passes, per unit length of crest,</p>
+                        \[ \frac{dV}{dt\,ds} = C_d\,\tfrac23\sqrt{2g}\,D^{3/2} , \qquad C_d = 0.62 . \tag{56} \]
+                        <p>The \(D^{3/2}\) follows from Bernoulli: liquid that falls a height \(z\) below the free surface reaches the speed \(\sqrt{2gz}\), and integrating \(\sqrt{2gz}\,dz\) from 0 to \(D\) gives \(\tfrac23\sqrt{2g}\,D^{3/2}\); \(C_d\) accounts for the contraction of the falling sheet. The value 0.62 is not fitted here: it is the Francis equation of the US Bureau of Reclamation’s Water Measurement Manual [12], \(Q = 3.33\,h^{3/2}L\) in feet and seconds, written in SI (\(3.33/(\tfrac23\sqrt{2\times32.17}) = 0.623\)). The poured volume, integrated round the rim, is subtracted from the glass: the fill \(h\) falls (found from the glass’s volume table), the modes shrink so that their crest loses that volume, and the poured stout’s momentum is counted in \(P_\text{spill}\). It is not drawn as it falls. A weir is a steady flow and a slosh is not, so (56) is an approximation; its test is the comparison below.</p>
+                        <table class="ptab">
+                            <caption>Table 4 · The live model against the 3D solver (4 mm), one bump at 1 m/s</caption>
+                            <tr><th>Run</th><th>Lean, live</th><th>Lean, 3D</th><th>Spilled, live</th><th>Spilled, 3D</th></tr>
+                            <tr><td>10 mm, open loop</td><td>24.7 mm</td><td>25.0 mm</td><td>0</td><td>0</td></tr>
+                            <tr><td>10 mm, PI speed</td><td>7.6 mm</td><td>5.8 mm</td><td>0</td><td>0</td></tr>
+                            <tr><td>25 mm, open loop</td><td>73.9 mm</td><td>60.7 mm</td><td>9.9 g</td><td>11.9 g</td></tr>
+                            <tr><td>25 mm, PI speed</td><td>25.4 mm</td><td>29.9 mm</td><td>0</td><td>0</td></tr>
+                        </table>
+                        <p>The live model agrees with the 3D solver within 1 % where the swing is small and free, and within about 20 % in lean and spilled mass where the swing is large or the speed loop holds the cart (the gap of Example 4.2). It is linear: waves that break, steepen or swirl are beyond it, and for those the 3D solver, one click away (“3D · 4 mm”), is the reference. Command: <code>MODAL=1 node tools/fig12/study.cjs &lt;bump mm&gt; &lt;off|speed&gt; 0</code>.</p>
+</section>
 
                     <section class="psec" id="p-checks">
                         <h3><span class="psec__n">12</span>Checks</h3>
@@ -557,6 +599,7 @@
                         <p>The surface drawn is the height of the column of stout over each square of the floor: the volume of the particles standing on it, matched to the volume the glass’s shape opens up to that height, both smoothed over one cell (<code>Fluid.columnHeights</code>). That is the surface the computation holds, averaged over depth; a wave curling over cannot be shown this way. For the picture the column heights are joined by a bicubic Catmull–Rom spline, which passes through every column value and has a continuous slope, so the sheet bends smoothly instead of stepping from cell to cell; within 3.5 cells of the wall, where the columns are cut by the glass and hold too few particles, the height is extended straight out from the columns 3.5 and 7 cells in (a wider baseline than the solver’s own reading, which halves the ripple of the drawn edge at rest). The readout “front − back wall” is the solver’s own reading at the front wall minus that at the back, at the radius \(R(h)\), the quantity of Figure 2 and section 13; it can differ from the drawn edge by a millimetre or two.</p>
                         <p><b>The camera.</b> The figure is seen through a pinhole camera that rides with the cart: it looks down at 22° and is turned 18° towards the front, from 2.2 m away. A point at depth \(D\) in front of the camera and at \((X_c, Y_c)\) across and up from its line of sight lands on the screen at \((F X_c/D,\ -F Y_c/D)\) from the picture’s centre, with \(F\) the focal length; near things look larger, and the road converges. The head’s sheet is shaded by one light from its normal \(\mathbf n = (-\partial_x\eta, -\partial_y\eta, 1)/\sqrt{1 + |\nabla\eta|^2}\), so it brightens where it tilts towards the light. The stout’s colour across the glass follows the length \(\ell\) of the light’s path through it, a transmission \(e^{-\kappa\ell}\) (Beer–Lambert): ruby at the thin edges, black through the middle; \(\kappa\) is a drawing choice, not a measured property of stout.</p>
                         <p><b>The cart</b> is drawn from the stored state at every frame: the wheel of radius \(R_w\) centred on the axle at \((x, z_w)\), with spokes that turn as it rolls; the spring \(k\) and the damper \(c\) between the axle’s bar and the body; the body, 22 cm by 3 cm, with its bottom at \(z_b\); the glass standing on it. The camera rides with the cart, so the road slides past; its ticks are every 10 cm and the labels give the position \(x\) along the road (the cart starts at \(x = 0.5\) m). The active suspension, the motor and the gearbox are not drawn.</p>
+                        <p><b>The live charts.</b> In the figure’s sky, at the left, the last 4 s of the stout’s lean (front minus back wall) and of the motor current, with the rim drawn as the limit of the lean; at the right, the first mode’s phase portrait, \(q_1\) against \(\dot q_1/\omega_1\), in which a free swing is a circle, damping makes it a spiral, and the rim is the pair of vertical lines a spilling swing crosses. In the 3D model the portrait uses half the measured lean and its rate. In the live model the surface is drawn exactly as (55) gives it, and poured stout is subtracted, not drawn.</p>
                         <p><b>The head is drawn, not computed.</b> A cream layer 12 mm thick is laid on the computed surface. Real foam is a different material, lighter and partly elastic, and it damps the swing; it is not in this model. Spilled drops are drawn where the solver moves them, with their mirror images, as short streaks along their velocity. The data panel under the figure holds every number the page computes, written where it is computed, and checks each against its formula and against the picture.</p>
                     </section>
 
@@ -597,8 +640,9 @@
                             <li>H. Lamb, <i>Hydrodynamics</i>, 6th ed., Cambridge (1932), <a href="https://archive.org/download/dli.ernet.3284/3284-Hydrodynamics%20(1932).pdf">archive.org</a>: Art. 191 (circular basin, \(J_1'(ka) = 0\)), Art. 257 (standing waves, \(\sigma^2 = gk\tanh kh\)), Art. 345 (the viscous layer, \(\sqrt{2\nu/\sigma}\)).</li>
                             <li>R. L. Stephens, H. W. Leonard, T. W. Perry, “Investigation of the damping of liquids in right-circular cylindrical tanks, including the effects of a time-variant liquid depth”, NASA TN D-1367 (1962), <a href="https://ntrs.nasa.gov/api/citations/19620004069/downloads/19620004069.pdf">NTRS</a>: eqs. (2)–(5), pp. 6–7.</li>
                             <li>A. J. Chorin, “Numerical solution of the Navier–Stokes equations”, <i>Math. Comp.</i> 22 (104), 745–762 (1968), <a href="https://www.ams.org/journals/mcom/1968-22-104/S0025-5718-1968-0242392-2/S0025-5718-1968-0242392-2.pdf">AMS</a>: p. 746.</li>
+                            <li>U.S. Bureau of Reclamation, <i>Water Measurement Manual</i>, 3rd ed. (1997, revised 2001), ch. 7, §9, eq. (7-4), the Francis equation for sharp-crested rectangular weirs, <a href="https://www.usbr.gov/tsc/techreferences/mands/wmm/chap07_09.html">usbr.gov</a>.</li>
                         </ol>
-                        <p>Sources 3–6 and 8–11 were opened and read for this note at the places cited; source 7 only in its abstract; sources 1 and 2 were read when the glass was measured. The safety threshold 0.25 of the preconditioner is the code’s choice and is not in source 4.</p>
+                        <p>Source 12 was read for the weir equation. Sources 3–6 and 8–11 were opened and read for this note at the places cited; source 7 only in its abstract; sources 1 and 2 were read when the glass was measured. The safety threshold 0.25 of the preconditioner is the code’s choice and is not in source 4.</p>
                     </section>
                 </div>
             </div>
@@ -622,23 +666,29 @@
         'use strict';
         var cv = document.getElementById('cv'), stage = document.getElementById('stage');
         var pushF = Sim.slider('pushF', { format: function (v) { return v.toFixed(1) + ' N'; } });
+        var MODAL = !/[?&](grid|model)=/.test(location.search) || /[?&]model=live\b/.test(location.search);   // the live modal model unless a 3D grid is asked for
         var GRID = /[?&]grid=3\b/.test(location.search) ? 0.003 : 0.004;
         // worker threads share the solver's loops when the browser allows shared memory (identical numbers; ?threads=1 turns them off)
         var NCPU = navigator.hardwareConcurrency || 1, THREADS = /[?&]threads=1\b/.test(location.search) ? 1 : Math.min(8, NCPU);
         var POOL = null;
-        try { if (window.crossOriginIsolated && typeof SharedArrayBuffer === 'function' && window.StoutPool && THREADS > 1) POOL = new StoutPool(THREADS - 1, '../scripts/stout-worker.js'); } catch (e) { POOL = null; }
-        document.getElementById(GRID === 0.003 ? 'grid-3' : 'grid-4').classList.remove('btn--ghost');
-        document.getElementById(GRID === 0.003 ? 'grid-3' : 'grid-4').setAttribute('aria-pressed', 'true');
-        document.getElementById('grid-3').addEventListener('click', function () { if (GRID !== 0.003) location.search = '?grid=3'; });
-        document.getElementById('grid-4').addEventListener('click', function () { if (GRID !== 0.004) location.search = ''; });
+        try { if (!MODAL && window.crossOriginIsolated && typeof SharedArrayBuffer === 'function' && window.StoutPool && THREADS > 1) POOL = new StoutPool(THREADS - 1, '../scripts/stout-worker.js'); } catch (e) { POOL = null; }
+        if (MODAL) document.getElementById('cap-model').innerHTML = '<b>Fig. 12</b> · the stout as its sloshing modes, live · cart by Newton’s laws · coupled both ways · charts: lean, current, swing';
+        var modelBtn = MODAL ? 'model-live' : GRID === 0.003 ? 'grid-3' : 'grid-4';
+        document.getElementById(modelBtn).classList.remove('btn--ghost'); document.getElementById(modelBtn).setAttribute('aria-pressed', 'true');
+        document.getElementById('grid-3').addEventListener('click', function () { if (MODAL || GRID !== 0.003) location.search = '?grid=3'; });
+        document.getElementById('grid-4').addEventListener('click', function () { if (MODAL || GRID !== 0.004) location.search = '?grid=4'; });
+        document.getElementById('model-live').addEventListener('click', function () { if (!MODAL) location.search = ''; });
+        if (!MODAL) { var sb = document.getElementById('ctrl-slosh'); sb.disabled = true; sb.title = 'needs the live model: the 3D solver has no swing sensor'; }
         var ctrlMode = 'speed', susp = document.getElementById('susp');
         function setCtrl(m) {
             ctrlMode = m; world.cart.ctrl = m; if (m === 'speed') world.cart.xi = 0;
-            [['ctrl-off', 'off'], ['ctrl-speed', 'speed']].forEach(function (b) { var el = document.getElementById(b[0]); el.classList.toggle('btn--ghost', b[1] !== m); el.setAttribute('aria-pressed', String(b[1] === m)); });
-            if (ds) ds.set('ctrl_on', m === 'speed' ? 1 : 0);
+            [['ctrl-off', 'off'], ['ctrl-speed', 'speed'], ['ctrl-preview', 'preview'], ['ctrl-slosh', 'slosh']].forEach(function (b) { var el = document.getElementById(b[0]); el.classList.toggle('btn--ghost', b[1] !== m); el.setAttribute('aria-pressed', String(b[1] === m)); });
+            if (ds) ds.set('ctrl_on', { off: 0, speed: 1, preview: 2, slosh: 3 }[m]);
         }
         document.getElementById('ctrl-off').addEventListener('click', function () { setCtrl('off'); });
         document.getElementById('ctrl-speed').addEventListener('click', function () { setCtrl('speed'); });
+        document.getElementById('ctrl-preview').addEventListener('click', function () { setCtrl('preview'); });
+        document.getElementById('ctrl-slosh').addEventListener('click', function () { if (MODAL) setCtrl('slosh'); });
         susp.addEventListener('change', function () { world.cart.susp = susp.checked; ds.set('susp_on', susp.checked ? 1 : 0); });
         var bumpH = Sim.slider('bumpH', { format: function (v) { return v.toFixed(0) + ' mm'; }, onInput: rebuildRoad });
         var v0 = Sim.slider('v0', { format: function (v) { return v.toFixed(2) + ' m/s'; }, onInput: function (v) { world.cart.v0 = v; ds.set('v0', v); } });
@@ -652,18 +702,19 @@
         }
         function build() {
             world = new StoutCart.World({
-                fluid: { dx: GRID, profile: GUINNESS_GLASS, h0: 0.125, H: (GUINNESS_GLASS.R.length - 1) * GUINNESS_GLASS.dz + 0.03, shared: !!POOL },
+                fluid: { dx: GRID, profile: GUINNESS_GLASS, h0: 0.125, H: (GUINNESS_GLASS.R.length - 1) * GUINNESS_GLASS.dz + 0.03, shared: !!POOL, modal: MODAL },
                 road: { bumps: bumps(bumpH.value / 1000), Rw: 0.04, xmin: -1, xmax: 125 },
                 cart: { x0: 0.5, Rw: 0.04, Ls: 0.135, v0: v0.value, ctrl: ctrlMode, susp: susp.checked },
                 dtMax: 1 / 200
             });
-            view = new StoutView(cv, world, { viewHeight: 0.40, groundY: 0.86 });
+            view = new StoutView(cv, world, { viewHeight: 0.40, groundY: 0.86 }); view.charts = true;
             if (!ds) declare();
             storeConstants();
             world.attach(ds); view.ds = ds;
             if (POOL) POOL.attach(world.fluid);
-            ds.set('bump_h', bumpH.value / 1000); ds.set('v0', v0.value); ds.set('ctrl_on', ctrlMode === 'speed' ? 1 : 0); ds.set('susp_on', susp.checked ? 1 : 0);
+            ds.set('bump_h', bumpH.value / 1000); ds.set('v0', v0.value); ds.set('ctrl_on', { off: 0, speed: 1, preview: 2, slosh: 3 }[ctrlMode]); ds.set('susp_on', susp.checked ? 1 : 0);
             ds.set('spilled_g', 0);
+            if (world.fluid.modal) { var KK = world.cart.lqrGains(); for (var kk = 0; kk < 4; kk++) ds.set('K' + (kk + 1), KK[kk]); world.fluid.step(0, 0, 0); }
             lastWall = 0; lastSim = 0; simPerReal = 0;
             fit();
         }
@@ -720,8 +771,8 @@
             $('r-N').textContent = c.N.toFixed(1) + ' N';
             $('r-i').textContent = c.i.toFixed(2) + ' A';
             $('r-sp').textContent = ((world.spilledMass || 0) * 1000).toFixed(1) + ' g';
-            $('r-solver').textContent = f.np + ' particles · ' + f.nx + '×' + f.ny + '×' + f.nz + ' cells · CG ' + f.cgIters + ' it. · ' + (f.pool ? f.pool.P : 1) + (f.pool && f.pool.P > 1 ? ' threads' : ' thread');
-            $('cap-rate').textContent = simPerReal > 0 ? (simPerReal.toFixed(2) + ' s simulated per s') : '—';
+            $('r-solver').textContent = f.modal ? ('live model · 3 sloshing modes · f₁ = ' + (f.w[0] / 2 / Math.PI).toFixed(2) + ' Hz · fill ' + (f.h * 1000).toFixed(1) + ' mm') : f.np + ' particles · ' + f.nx + '×' + f.ny + '×' + f.nz + ' cells · CG ' + f.cgIters + ' it. · ' + (f.pool ? f.pool.P : 1) + (f.pool && f.pool.P > 1 ? ' threads' : ' thread');
+            $('cap-rate').textContent = simPerReal > 0 ? (MODAL && simPerReal > 0.9 ? 'real time' : simPerReal.toFixed(2) + ' s simulated per s') : '—';
         }
 
         /* ---------- the store: every number of the run is written here where it is computed (scripts/dataset.js) ----------
@@ -736,7 +787,7 @@
             S('F_push_set', { symbol: 'F<sub>push</sub> set', units: 'N', long_name: 'push force slider', computed_in: 'Push force slider', digits: 1 });
             S('bump_h', { symbol: 'h<sub>bump</sub>', units: 'm', long_name: 'bump height', computed_in: 'Bump height slider', digits: 3 });
             S('v0', { symbol: 'v<sub>0</sub>', units: 'm/s', long_name: 'set speed', computed_in: 'Set speed slider', digits: 2 });
-            ds.var('ctrl_on', [], 'int', { symbol: 'speed loop', long_name: '1: speed control on; 0: open loop (fixed current)', computed_in: 'the Open loop / Speed control buttons', digits: 0 });
+            ds.var('ctrl_on', [], 'int', { symbol: 'speed loop', long_name: 'the controller: 0 open loop (fixed current), 1 PI speed loop, 2 PI + road preview, 3 slosh feedback (LQR)', computed_in: 'the Open loop / Speed control buttons', digits: 0 });
             ds.var('susp_on', [], 'int', { symbol: 'skyhook', long_name: '1: active suspension on', computed_in: 'Active suspension switch', digits: 0 });
             S('hand_x', { symbol: 'x<sub>hand</sub>', units: 'm', long_name: 'where your hand pulls the cart to (NaN when not dragging)', computed_in: 'pointer drag on the figure', digits: 4 });
             // constants of the model
@@ -809,7 +860,21 @@
             S('eta_front', { symbol: 'η<sub>front</sub>', units: 'm', long_name: 'surface at the front wall (direction of travel)', computed_in: 'StoutView.surface', formula: 'η<sub>draw</sub>[9, 0]', digits: 5 });
             S('eta_back', { symbol: 'η<sub>back</sub>', units: 'm', long_name: 'surface at the back wall', computed_in: 'StoutView.surface', formula: 'η<sub>draw</sub>[9, 24]', digits: 5 });
             S('dw', { symbol: 'Δη', units: 'm', long_name: 'front − back wall: how far the stout leans', computed_in: 'StoutView.surface', formula: 'η<sub>front</sub> − η<sub>back</sub>', digits: 5 });
+            S('eta_mid', { symbol: 'η<sub>mid</sub>', units: 'm', long_name: 'surface height on the glass’s axis (the solver’s reading)', computed_in: 'StoutView.drawGlass', formula: 'h at (0, 0)', digits: 5 });
             S('spilled_g', { symbol: 'm<sub>spilled</sub>', units: 'g', long_name: 'stout spilled over the rim so far (both halves)', computed_in: 'World.dropsFrom', formula: '2 m<sub>p</sub> × particles that left', digits: 2 });
+            if (f.modal) {   // the live model: the first three sloshing modes (stout-cart.js, ModalFluid)
+                for (var m = 1; m <= 3; m++) {
+                    S('q' + m, { symbol: 'q<sub>' + m + '</sub>', units: 'm', long_name: 'height of sloshing mode ' + m + ' at the front wall', computed_in: 'ModalFluid.step (symplectic Euler, 0.5 ms)', digits: 6 });
+                    S('qd' + m, { symbol: 'q̇<sub>' + m + '</sub>', units: 'm/s', long_name: 'its rate', computed_in: 'ModalFluid.step', digits: 5 });
+                    S('w' + m, { symbol: 'ω<sub>' + m + '</sub>', units: 'rad/s', long_name: 'its frequency at the present fill', computed_in: 'ModalFluid.modes', formula: '√(g k tanh(k h)), k = ξ<sub>1' + m + '</sub>/R(h)', digits: 3 });
+                }
+                S('h_l', { symbol: 'h', units: 'm', long_name: 'fill height now (falls as stout pours out)', computed_in: 'ModalFluid.step', formula: 'V(h) = V<sub>ℓ</sub>', digits: 5 });
+                S('V_l', { symbol: 'V<sub>ℓ</sub>', units: 'm³', long_name: 'stout in the glass', computed_in: 'ModalFluid.step', digits: 9 });
+                S('R_s', { symbol: 'R(h)', units: 'm', long_name: 'radius of the glass at the surface', computed_in: 'ModalFluid.modes', digits: 5 });
+                S('Q_wall', { symbol: 'Σq', units: 'm', long_name: 'rise of the surface at the wall at θ = 0 (all modes)', computed_in: 'ModalFluid.wallLift', formula: 'q<sub>1</sub> + q<sub>2</sub> + q<sub>3</sub>', digits: 6 });
+                S('spill_rate', { symbol: 'Q<sub>spill</sub>', units: 'm³/s', long_name: 'stout pouring over the rim (weir law)', computed_in: 'ModalFluid.step', formula: '∮ C<sub>d</sub> (2/3) √(2g) D<sup>3/2</sup> R<sub>rim</sub> dθ, D = h + Σq cos θ − z<sub>rim</sub> > 0', digits: 8 });
+                for (var kk = 1; kk <= 4; kk++) S('K' + kk, { symbol: 'K<sub>' + kk + '</sub>', units: ['A/(m/s)', 'A/m', 'A/(m/s)', 'A/m'][kk - 1], long_name: 'slosh-feedback gain on ' + ['the speed error', 'the swing q₁', 'its rate q̇₁', 'the speed-error integral'][kk - 1], computed_in: 'Cart.lqrGains (Riccati equation)', digits: 2 });
+            }
             S('r_s', { symbol: 'r<sub>s</sub>', units: 'm', long_name: 'radius of the drawn surface grid: the wall at the fill height', computed_in: 'StoutView.drawGlass', formula: 'R(h)', digits: 4 });
             S('head_h', { symbol: 'h<sub>head</sub>', units: 'm', long_name: 'thickness of the drawn head (drawn, not computed)', computed_in: 'StoutView', digits: 3 });
             // solver
@@ -828,7 +893,7 @@
              ['axle_px_y', 'Y<sub>axle</sub>', 'px', 'the hub on screen, down', 'same'], ['body_px_x', 'X<sub>body</sub>', 'px', 'a point of the body’s near bottom edge, across', 'projection of (−0.08, −0.06, z<sub>b</sub>)'], ['body_px_y', 'Y<sub>body</sub>', 'px', 'same, down', 'same'],
              ['glass_px_x', 'X<sub>glass</sub>', 'px', 'the stout’s surface at rest on the axis, across', 'projection of (0, 0, z<sub>b</sub> + z<sub>floor</sub> + h)'], ['glass_px_y', 'Y<sub>glass</sub>', 'px', 'same, down', 'same'],
              ['front_px_x', 'X<sub>front</sub>', 'px', 'middle of the head’s band at the front wall, across', 'projection of (0.98 r<sub>s</sub>, 0, glass floor + η<sub>front</sub> + h<sub>head</sub>/2)'], ['front_px_y', 'Y<sub>front</sub>', 'px', 'same, down', 'same'],
-             ['back_px_x', 'X<sub>back</sub>', 'px', 'top of the head at the back wall, across', 'projection of (−0.97 r<sub>s</sub>, 0, glass floor + η<sub>back</sub> + h<sub>head</sub>)'], ['back_px_y', 'Y<sub>back</sub>', 'px', 'same, down', 'same'],
+             ['back_px_x', 'X<sub>top</sub>', 'px', 'top of the head on the glass’s axis, across', 'projection of (0, 0, glass floor + η<sub>mid</sub> + h<sub>head</sub>)'], ['back_px_y', 'Y<sub>top</sub>', 'px', 'same, down', 'same'],
              ['canvas_w', 'W', 'px', 'canvas width', ''], ['canvas_h', 'H', 'px', 'canvas height', '']
             ].forEach(function (r) { var a = { symbol: r[1], units: r[2], long_name: r[3], computed_in: 'StoutView.draw', digits: 2 }; if (r[4]) a.formula = r[4]; S(r[0], a); });
         }
@@ -911,8 +976,8 @@
         var isHead = function (d) { return d[0] > 170 && d[1] > 150 && d[2] > 110 && d[0] - d[2] < 90; };
         var isInk = function (d) { return d[0] < 90 && d[1] < 90 && d[2] < 90; };
         function headDrawn(side) {
-            return pix(g(side + '_px_x'), g(side + '_px_y'), isHead, (side === 'front' ? 'middle of the head’s band at the front wall' : 'top of the head at the back wall'), 'the cream of the head, about rgb(236, 225, 201)',
-                side === 'front' ? 'The head is drawn as a 12 mm band on the computed surface; its middle at the front wall lies inside the band, so the pixel there is cream only if the surface was drawn at the stored height.' : 'The top of the head at the back wall: the pixel is cream only if the head’s sheet was drawn at the stored height.');
+            return pix(g(side + '_px_x'), g(side + '_px_y'), isHead, (side === 'front' ? 'middle of the head’s band at the front wall' : 'top of the head on the axis'), 'the cream of the head, about rgb(236, 225, 201)',
+                side === 'front' ? 'The head is drawn as a 12 mm band on the computed surface; its middle at the front wall lies inside the band, so the pixel there is cream only if the surface was drawn at the stored height.' : 'The top of the head on the glass’s axis: the pixel is cream only if the head’s sheet was drawn at the stored height there.');
         }
         function axleDrawn() { return pix(g('axle_px_x'), g('axle_px_y'), isInk, 'the axle', 'the dark hub dot, rgb(28, 21, 24)', 'The hub is a 4 px dot at the axle, drawn over the spokes.'); }
         function bodyDrawn() { return pix(g('body_px_x'), g('body_px_y') - 0.5, isInk, 'bottom edge of the body', 'the 2 px ink outline of the body', 'The body is a box from z<sub>b</sub> to z<sub>b</sub> + 3 cm with a 2 px outline; its near bottom edge, seen through the camera, is at the stored height (searched 2 px up and down, the outline is anti-aliased).', 2); }
@@ -935,7 +1000,8 @@
                 { title: 'What follows from them', note: 'masses and two yardstick frequencies', vars: ['b', 'f11', 'f_body'] },
                 { title: 'The cart now', note: 'state and forces at the same instant (Cart.forces)', vars: ['x', 'vx', 'zb', 'vzb', 'zw', 'vzw', 'v_s', 'xi_s', 'vzb_s', 'ml', 'Ms', 'Mx', 'z_a', 'dz_a', 'N', 'F_s', 'F_road', 'emf', 'i_cmd', 'i_reach', 'i_m', 'V_m', 'F_drive', 'u_s_cmd', 'u_s', 'F_push', 'F_hand', 'F_lx', 'F_lz', 'a_x', 'a_zb', 'a_zw'] },
                 { title: 'The last fluid step', note: 'the jolt handed to the stout, and the stout’s push handed back', vars: ['t', 'h_f', 'n_cart', 'vx_0', 'vx_1', 'vzb_0', 'vzb_1', 'a_gx', 'a_gz', 'P0_x', 'P0_z', 'P_x', 'P_z', 'P_spill_x', 'P_spill_z', 'F_lx_next', 'F_lz_next'] },
-                { title: 'The stout', note: 'particles, column heights and the surface as drawn', vars: ['dw', 'eta_front', 'eta_back', 'h_col', 'eta_draw', 'r_s', 'head_h', 'spilled_g', 'px', 'py', 'pz', 'np'] },
+                { title: 'The stout', note: 'particles, column heights and the surface as drawn', vars: ['dw', 'eta_front', 'eta_back', 'eta_mid', 'h_col', 'eta_draw', 'r_s', 'head_h', 'spilled_g', 'px', 'py', 'pz', 'np'] },
+                { title: 'Live model', note: 'three sloshing modes; the pour over the rim', vars: (world.fluid.modal ? ['q1', 'qd1', 'w1', 'q2', 'qd2', 'w2', 'q3', 'qd3', 'w3', 'Q_wall', 'h_l', 'V_l', 'R_s', 'spill_rate', 'K1', 'K2', 'K3', 'K4'] : []) },
                 { title: 'Solver', note: 'APIC on a MAC grid; pressure by MIC(0) conjugate gradients', vars: ['steps', 'cg_iters', 'cg_res', 'rate', 'np0'] },
                 { title: 'Drawing', note: 'a pinhole camera; css px of the figure', vars: ['scale', 'cam_x', 'elev', 'azim', 'cam_dist', 'cam_zt', 'focal', 'cam_cx', 'cam_cy', 'ground_px', 'axle_px_x', 'axle_px_y', 'body_px_x', 'body_px_y', 'glass_px_x', 'glass_px_y', 'front_px_x', 'front_px_y', 'back_px_x', 'back_px_y', 'canvas_w', 'canvas_h'] }
             ],
@@ -998,6 +1064,7 @@
                 eta_draw: function (n) { var q = polar(n); return { formula: 'h<sub>ji</sub> read at (r cos θ, r sin θ), ir = ' + q.ir + ', ith = ' + q.it + ': bicubic Catmull–Rom through the stored column heights; beyond R(h) − 3.5Δx extended along the radius', inputs: [['x', q.x, 'm', 5], ['y', q.y, 'm', 5]], value: hDraw(q.x, q.y) }; },
                 eta_front: function () { return { formula: 'h read at the front wall (r<sub>s</sub>, 0) by the solver’s own reading (bilinear; beyond R(h) − 2.5Δx extended along the radius)', inputs: [inp('r_s', 'r<sub>s</sub>', 'm', 4)], value: world.fluid.columnHeightAt(g('r_s'), 0) }; },
                 eta_back: function () { return { formula: 'h read at the back wall (−r<sub>s</sub>, 0) by the solver’s own reading', inputs: [inp('r_s', 'r<sub>s</sub>', 'm', 4)], value: world.fluid.columnHeightAt(-g('r_s'), 0) }; },
+                eta_mid: function () { return { formula: 'h read on the axis (0, 0) by the solver’s own reading', inputs: [], value: world.fluid.columnHeightAt(0, 0) }; },
                 dw: function () { return { formula: 'η<sub>front</sub> − η<sub>back</sub>', inputs: [inp('eta_front', 'η<sub>front</sub>', 'm', 5), inp('eta_back', 'η<sub>back</sub>', 'm', 5)], value: g('eta_front') - g('eta_back') }; },
                 scale: function () { return { formula: 'H / 0.40 m', inputs: [inp('canvas_h', 'H', 'px', 1)], value: g('canvas_h') / 0.40 }; },
                 focal: function () { return { formula: 'σ d', inputs: [inp('scale', 'σ', 'px/m', 2), inp('cam_dist', 'd', 'm', 3)], value: g('scale') * g('cam_dist') }; },
@@ -1013,12 +1080,12 @@
                 body_px_y: function () { return projCheck('the body’s near bottom edge, (−0.08, −0.06, z<sub>b</sub>)', [-0.08, -0.06, g('zb')], 1, [inp('zb', 'z<sub>b</sub>', 'm', 5)]); },
                 front_px_x: function () { return projCheck('the head’s band at the front wall', [0.98 * g('r_s'), 0, glassZ() + g('eta_front') + g('head_h') / 2], 0, [inp('r_s', 'r<sub>s</sub>', 'm', 4), inp('zb', 'z<sub>b</sub>', 'm', 5), inp('eta_front', 'η<sub>front</sub>', 'm', 5), inp('head_h', 'h<sub>head</sub>', 'm', 3)]); },
                 front_px_y: function () { return projCheck('the head’s band at the front wall', [0.98 * g('r_s'), 0, glassZ() + g('eta_front') + g('head_h') / 2], 1, [inp('r_s', 'r<sub>s</sub>', 'm', 4), inp('zb', 'z<sub>b</sub>', 'm', 5), inp('eta_front', 'η<sub>front</sub>', 'm', 5), inp('head_h', 'h<sub>head</sub>', 'm', 3)]); },
-                back_px_x: function () { return projCheck('the head’s top at the back wall', [-0.97 * g('r_s'), 0, glassZ() + g('eta_back') + g('head_h')], 0, [inp('r_s', 'r<sub>s</sub>', 'm', 4), inp('zb', 'z<sub>b</sub>', 'm', 5), inp('eta_back', 'η<sub>back</sub>', 'm', 5), inp('head_h', 'h<sub>head</sub>', 'm', 3)]); },
-                back_px_y: function () { return projCheck('the head’s top at the back wall', [-0.97 * g('r_s'), 0, glassZ() + g('eta_back') + g('head_h')], 1, [inp('r_s', 'r<sub>s</sub>', 'm', 4), inp('zb', 'z<sub>b</sub>', 'm', 5), inp('eta_back', 'η<sub>back</sub>', 'm', 5), inp('head_h', 'h<sub>head</sub>', 'm', 3)]); },
+                back_px_x: function () { return projCheck('the head’s top on the axis', [0, 0, glassZ() + g('eta_mid') + g('head_h')], 0, [inp('zb', 'z<sub>b</sub>', 'm', 5), inp('eta_mid', 'η<sub>mid</sub>', 'm', 5), inp('head_h', 'h<sub>head</sub>', 'm', 3)]); },
+                back_px_y: function () { return projCheck('the head’s top on the axis', [0, 0, glassZ() + g('eta_mid') + g('head_h')], 1, [inp('zb', 'z<sub>b</sub>', 'm', 5), inp('eta_mid', 'η<sub>mid</sub>', 'm', 5), inp('head_h', 'h<sub>head</sub>', 'm', 3)]); },
             },
             drawn: {
                 eta_front: function () { return headDrawn('front'); }, front_px_y: function () { return headDrawn('front'); }, dw: function () { return headDrawn('front'); },
-                eta_back: function () { return headDrawn('back'); }, back_px_y: function () { return headDrawn('back'); },
+                eta_mid: function () { return headDrawn('back'); }, back_px_y: function () { return headDrawn('back'); },
                 axle_px_x: axleDrawn, axle_px_y: axleDrawn, zw: axleDrawn, x: axleDrawn,
                 body_px_y: bodyDrawn, zb: bodyDrawn
             },
@@ -1034,12 +1101,36 @@
                 k: function () { return world.cart.k; }, c: function () { return world.cart.c; }, kt: function () { return world.cart.kt; }, ct: function () { return world.cart.ct; }, cx: function () { return world.cart.cx; }, Ls: function () { return world.cart.Ls; },
                 head_h: function () { return view.headH; }, elev: function () { return view.elev; }, azim: function () { return view.azim; }, cam_dist: function () { return view.dist; }, cam_zt: function () { return view.targetZ; },
                 cam_cy: function () { var r = cv.getBoundingClientRect(); return view.cam.cy / (cv.width / r.width); },
-                z_rim: function () { return world.fluid.zRim; }, np0: function () { return world.fluid.npStart; }, R_rim: function () { return world.fluid.Rrim; }, ctrl_on: function () { return world.cart.ctrl === 'speed' ? 1 : 0; }, susp_on: function () { return world.cart.susp ? 1 : 0; },
+                z_rim: function () { return world.fluid.zRim; }, np0: function () { return world.fluid.npStart; }, R_rim: function () { return world.fluid.Rrim; }, ctrl_on: function () { return { off: 0, speed: 1, preview: 2, slosh: 3 }[world.cart.ctrl]; }, susp_on: function () { return world.cart.susp ? 1 : 0; },
                 i_m: function () { return world.cart.i; }, u_s: function () { return world.cart.us; }, v_s: function () { return ds.get('v_s'); }
             };
             ['Ngear', 'Km', 'Ra', 'Jm', 'Vmax', 'Imax', 'tauI', 'Ts', 'Kp', 'Ki', 'wc', 'csky', 'Umax', 'tauU', 'kh', 'ch', 'Fhmax', 'glassFloor'].forEach(function (n) { fromSolver[n] = function () { return world.cart[n]; }; });
             Object.keys(fromSolver).forEach(function (n) { if (!Sim.data.check[n]) Sim.data.check[n] = function () { var v = fromSolver[n](); return { formula: 'read from the solver’s own variable (state advanced by the integrator, or a constant of the code)', inputs: [[n, v, '']], value: v }; }; });
             ['px', 'py', 'pz'].forEach(function (n) { Sim.data.check[n] = function (i) { return { formula: 'the solver’s particle array (the store holds it: the solver writes into it)', inputs: [], value: world.fluid[n][i] }; }; });
+            if (world.fluid.modal) {   // the live model's numbers recomputed from what the store holds
+                var XI = [1.841184, 5.331443, 8.536316];
+                var J1 = function (x) { var t = x / 2, s = 0; for (var k = 0; k < 60; k++) { s += t; t *= -(x * x / 4) / ((k + 1) * (k + 2)); if (Math.abs(t) < 1e-16) break; } return s; };
+                var mH = function (x, y) { var r = Math.hypot(x, y), Rs = g('R_s'), e = 0; if (r < 1e-9) return g('h_l'); for (var m = 0; m < 3; m++) e += g('q' + (m + 1)) * J1(XI[m] * Math.min(r, Rs) / Rs) / J1(XI[m]); return g('h_l') + e * x / r; };
+                var MIN = function () { return [inp('h_l', 'h', 'm', 5), inp('R_s', 'R(h)', 'm', 5), inp('q1', 'q<sub>1</sub>', 'm', 6), inp('q2', 'q<sub>2</sub>', 'm', 6), inp('q3', 'q<sub>3</sub>', 'm', 6)]; };
+                var MF = 'h + Σ q<sub>n</sub> J<sub>1</sub>(ξ<sub>n</sub> r/R)/J<sub>1</sub>(ξ<sub>n</sub>) cos θ';
+                var C = Sim.data.check;
+                C.h_col = function (n) { var fl = world.fluid, i = n % fl.nx, j = Math.floor(n / fl.nx), x = fl.x0 + (i + 0.5) * g('dx'), y = (j + 0.5) * g('dx'); return { formula: MF + ' at the centre of column (' + j + ', ' + i + ')', inputs: MIN(), value: mH(x, y) }; };
+                C.eta_draw = function (n) { var q = polar(n); return { formula: MF + ' at ir = ' + q.ir + ', ith = ' + q.it, inputs: MIN(), value: mH(q.x, q.y) }; };
+                C.eta_front = function () { return { formula: MF + ' at the front wall', inputs: MIN(), value: mH(g('r_s'), 0) }; };
+                C.eta_back = function () { return { formula: MF + ' at the back wall', inputs: MIN(), value: mH(-g('r_s'), 0) }; };
+                C.eta_mid = function () { return { formula: MF + ' on the axis: h', inputs: MIN(), value: mH(0, 0) }; };
+                C.P_x = function () { var Rs = g('R_s'), s = 0; for (var m = 0; m < 3; m++) s += g('rho') * Math.PI * Rs * Rs * Rs / (XI[m] * XI[m]) * g('qd' + (m + 1)); return { formula: 'Σ ρπR³/ξ<sub>n</sub>² q̇<sub>n</sub> (note, eq. 18)', inputs: [inp('rho', 'ρ', 'kg/m³', 0), inp('R_s', 'R(h)', 'm', 5), inp('qd1', 'q̇<sub>1</sub>', 'm/s', 5), inp('qd2', 'q̇<sub>2</sub>', 'm/s', 5), inp('qd3', 'q̇<sub>3</sub>', 'm/s', 5)], value: s }; };
+                C.P_z = function () { return { formula: '0: the linear modes move the stout sideways only', inputs: [], value: 0 }; };
+                C.ml = function () { return { formula: 'ρ V<sub>ℓ</sub>', inputs: [inp('rho', 'ρ', 'kg/m³', 0), inp('V_l', 'V<sub>ℓ</sub>', 'm³', 9)], value: g('rho') * g('V_l') }; };
+                C.spilled_g = function () { return { formula: 'm<sub>ℓ,0</sub> − ρ V<sub>ℓ</sub>, in grams', inputs: [inp('m_l0', 'm<sub>ℓ,0</sub>', 'kg', 4), inp('rho', 'ρ', 'kg/m³', 0), inp('V_l', 'V<sub>ℓ</sub>', 'm³', 9)], value: (g('m_l0') - g('rho') * g('V_l')) * 1000 }; };
+                C.Q_wall = function () { return { formula: 'q<sub>1</sub> + q<sub>2</sub> + q<sub>3</sub>', inputs: [inp('q1', 'q<sub>1</sub>', 'm', 6), inp('q2', 'q<sub>2</sub>', 'm', 6), inp('q3', 'q<sub>3</sub>', 'm', 6)], value: g('q1') + g('q2') + g('q3') }; };
+                C.h_l = function () { var P = GUINNESS_GLASS, V = function (h) { var n = Math.max(1, Math.round(h / 5e-5)), d = h / n, v = 0; for (var k = 0; k <= n; k++) { var f = k * d / P.dz, i = Math.floor(f), r = i >= P.R.length - 1 ? P.R[P.R.length - 1] : P.R[i] + (f - i) * (P.R[i + 1] - P.R[i]); v += (k === 0 || k === n ? 0.5 : 1) * Math.PI * r * r * d; } return v; }, a = 0, b = g('z_rim'); for (var it = 0; it < 40; it++) { var mm = 0.5 * (a + b); if (V(mm) < g('V_l')) a = mm; else b = mm; } return { formula: 'the height that holds V<sub>ℓ</sub> in the measured glass: ∫<sub>0</sub><sup>h</sup> πR(z)² dz = V<sub>ℓ</sub> (bisection)', inputs: [inp('V_l', 'V<sub>ℓ</sub>', 'm³', 9)], value: 0.5 * (a + b) }; };
+                [1, 2, 3].forEach(function (m) { C['w' + m] = function () { var k = XI[m - 1] / g('R_s'); return { formula: '√(g k tanh(k h)), k = ξ<sub>1' + m + '</sub>/R(h)', inputs: [inp('g', 'g', 'm/s²', 2), inp('R_s', 'R(h)', 'm', 5), inp('h_l', 'h', 'm', 5)], value: Math.sqrt(g('g') * k * Math.tanh(k * g('h_l'))) }; }; C['q' + m] = function () { return { formula: 'the solver’s mode amplitude', inputs: [], value: world.fluid.q[m - 1] }; }; C['qd' + m] = function () { return { formula: 'the solver’s mode rate', inputs: [], value: world.fluid.qd[m - 1] }; }; });
+                C.V_l = function () { return { formula: 'the solver’s volume', inputs: [], value: world.fluid.V }; };
+                C.R_s = function () { var P = GUINNESS_GLASS, f = g('h_l') / P.dz, i = Math.floor(f); return { formula: 'R(h), linear between the 0.5 mm points of the measured profile', inputs: [inp('h_l', 'h', 'm', 5)], value: P.R[i] + (f - i) * (P.R[i + 1] - P.R[i]) }; };
+                C.spill_rate = function () { return { formula: 'the solver’s pour rate', inputs: [], value: world.fluid.spillRate }; };
+                [1, 2, 3, 4].forEach(function (k) { C['K' + k] = function () { return { formula: 'from the steady Riccati equation (Cart.lqrGains)', inputs: [], value: world.cart.lqrGains()[k - 1] }; }; });
+            }
         }
 
         build();
@@ -1050,7 +1141,12 @@
             world.cart.pushF = push * pushF.value;
             ds.set('push_dir', push); ds.set('F_push_set', pushF.value); ds.set('hand_x', world.cart.hand == null ? NaN : world.cart.hand);
             var t0 = performance.now();
-            do { world.advance(world.dtMax); } while (performance.now() - t0 < BUDGET_MS);
+            if (MODAL) world.advance(Math.min(dt, 0.05));          // the live model keeps up with the clock: real time
+            else do { world.advance(world.dtMax); } while (performance.now() - t0 < BUDGET_MS);
+            var fl = world.fluid, lean = fl.columnHeightAt(fl.Rz(fl.h0), 0) - fl.columnHeightAt(-fl.Rz(fl.h0), 0), hNow = fl.modal ? fl.h : fl.h0;
+            var q1 = fl.modal ? fl.q[0] : lean / 2, w1 = fl.modal ? fl.w[0] : 2 * Math.PI * 3.214, prev = view.hist && view.hist.length ? view.hist[view.hist.length - 1] : null;
+            var qd1 = fl.modal ? fl.qd[0] : (prev && world.t > prev[0] ? (q1 - prev[3]) / (world.t - prev[0]) : 0);
+            view.record(world.t, lean, world.cart.i, q1, qd1, w1, fl.zRim - hNow);
             var now = performance.now();
             if (lastWall) {
                 var rate = (world.t - lastSim) / ((now - lastWall) / 1000);

@@ -61,6 +61,7 @@
   // the wall varies by 2.1 mm with this baseline, by 5.3 mm with Fluid.columnHeightAt's 2.5 and 1.5 Δx.)
   View.prototype.heightAt = function (x, y) {
     const f = this.world.fluid, dx = f.dx;
+    if (f.modal) return f.heightAt(x, y);                        // the modal model's surface is already smooth: drawn exactly
     y = Math.abs(y);
     const r = Math.hypot(x, y), r1 = f.Rz(Math.min(f.h0, f.zRim)) - 3.5 * dx, r2 = r1 - 3.5 * dx;
     if (r > r1) {
@@ -182,7 +183,7 @@
     // spilled stout: drops in the air drawn as streaks along their velocity (the solver moves them, World.moveDrops),
     // splashes where they landed
     const drops = w.drops;
-    if (drops && drops.length) {
+    if (drops && drops.length && !f.modal) {
       for (const d of drops) {
         const p = P(d.x - c.x, d.y, d.z);
         if (p[0] < -5 || p[0] > W + 5 || p[2] <= 0.05) continue;
@@ -192,6 +193,46 @@
         ctx.beginPath(); ctx.moveTo(q[0], q[1]); ctx.lineTo(p[0], p[1]); ctx.stroke();
       }
     }
+    if (this.charts) this.drawCharts(W, Hc, dpr);
+  };
+
+  // Live charts in the empty sky of the figure, from the store's numbers as they were written (drawing only):
+  // left, the last 4 s of the stout's lean (front − back wall) and the motor current; right, the first mode's phase
+  // portrait (q1, q1'/w1) with the rim as its boundary, |q| = z_rim − h: a path that crosses it spills.
+  View.prototype.record = function (t, lean, cur, q, qd, w, free) {
+    const H = this.hist || (this.hist = []);
+    if (H.length && t < H[H.length - 1][0]) H.length = 0;      // a restart
+    H.push([t, lean, cur, q, qd, w, free]);
+    while (H.length && H[0][0] < t - 4) H.shift();
+  };
+  View.prototype.drawCharts = function (W, Hc, dpr) {
+    const H = this.hist; if (!H || H.length < 2) return;
+    const ctx = this.ctx, mono = (px) => `${px * dpr}px "IBM Plex Mono", monospace`;
+    const narrow = W / dpr < 600, pad = (narrow ? 6 : 10) * dpr, cw = Math.min((narrow ? 0.34 : 0.36) * W, 330 * dpr), ch = Math.min((narrow ? 0.17 : 0.22) * Hc, 120 * dpr);
+    const box = (x, y, w, h) => { ctx.fillStyle = 'rgba(255,255,255,0.82)'; ctx.fillRect(x, y, w, h); ctx.strokeStyle = 'rgba(28,21,24,0.25)'; ctx.lineWidth = 1 * dpr; ctx.strokeRect(x, y, w, h); };
+    // the strip chart
+    const x0 = pad, y0 = pad, t1 = H[H.length - 1][0], t0 = t1 - 4, free = H[H.length - 1][6];
+    box(x0, y0, cw, ch);
+    const lim = Math.max(10, 2 * free * 1000 * 1.1), X = (t) => x0 + (t - t0) / 4 * cw, Yl = (v) => y0 + ch / 2 - v / lim * (ch / 2 - 6 * dpr), Yi = (v) => y0 + ch / 2 - v / 3 * (ch / 2 - 6 * dpr);
+    ctx.strokeStyle = 'rgba(122,31,43,0.35)'; ctx.setLineDash([4 * dpr, 3 * dpr]);
+    for (const sg of [1, -1]) { ctx.beginPath(); ctx.moveTo(x0, Yl(sg * 2 * free * 1000)); ctx.lineTo(x0 + cw, Yl(sg * 2 * free * 1000)); ctx.stroke(); }
+    ctx.setLineDash([]); ctx.strokeStyle = 'rgba(28,21,24,0.15)'; ctx.beginPath(); ctx.moveTo(x0, y0 + ch / 2); ctx.lineTo(x0 + cw, y0 + ch / 2); ctx.stroke();
+    const line = (k, Y, col, lw) => { ctx.beginPath(); H.forEach((r, i) => { const px = X(r[0]), py = Math.max(y0, Math.min(y0 + ch, Y(r[k]))); i ? ctx.lineTo(px, py) : ctx.moveTo(px, py); }); ctx.strokeStyle = col; ctx.lineWidth = lw * dpr; ctx.stroke(); };
+    line(2, Yi, '#8b8079', 1.2); line(1, (v) => Yl(v * 1000), C.accent, 2);
+    ctx.font = mono(narrow ? 9 : 10); ctx.textAlign = 'left'; ctx.fillStyle = C.accent; ctx.fillText((narrow ? 'lean ±' : 'lean, front − back (±') + Math.round(lim) + (narrow ? ' mm' : ' mm)'), x0 + 5 * dpr, y0 + 11 * dpr);
+    ctx.fillStyle = '#6b6166'; ctx.fillText(narrow ? 'current ±3 A' : 'motor current (±3 A)', x0 + 5 * dpr, y0 + ch - 5 * dpr);
+    if (!narrow) { ctx.textAlign = 'right'; ctx.fillStyle = 'rgba(122,31,43,0.7)'; ctx.fillText('rim', x0 + cw - 4 * dpr, Yl(2 * free * 1000) - 3 * dpr); ctx.fillStyle = '#6b6166'; ctx.fillText('last 4 s', x0 + cw - 4 * dpr, y0 + ch - 6 * dpr); }
+    // the phase portrait
+    const s0 = Math.min(ch, 120 * dpr), px0 = W - pad - s0, py0 = pad, R = free * 1.15, Pm = (q) => px0 + s0 / 2 + q / R * (s0 / 2 - 6 * dpr), Pv = (v) => py0 + s0 / 2 - v / R * (s0 / 2 - 6 * dpr);
+    box(px0, py0, s0, s0);
+    ctx.strokeStyle = 'rgba(122,31,43,0.35)'; ctx.setLineDash([4 * dpr, 3 * dpr]);
+    for (const sg of [1, -1]) { ctx.beginPath(); ctx.moveTo(Pm(sg * free), py0); ctx.lineTo(Pm(sg * free), py0 + s0); ctx.stroke(); }
+    ctx.setLineDash([]); ctx.beginPath();
+    H.forEach((r, i) => { const a = Math.max(px0, Math.min(px0 + s0, Pm(r[3]))), b = Math.max(py0, Math.min(py0 + s0, Pv(r[4] / r[5]))); i ? ctx.lineTo(a, b) : ctx.moveTo(a, b); });
+    ctx.strokeStyle = C.accent; ctx.lineWidth = 1.5 * dpr; ctx.stroke();
+    const L = H[H.length - 1]; ctx.beginPath(); ctx.arc(Math.max(px0, Math.min(px0 + s0, Pm(L[3]))), Math.max(py0, Math.min(py0 + s0, Pv(L[4] / L[5]))), 3 * dpr, 0, 2 * Math.PI); ctx.fillStyle = C.accent; ctx.fill();
+    ctx.font = mono(narrow ? 9 : 10); ctx.textAlign = 'left'; ctx.fillStyle = '#6b6166'; ctx.fillText(narrow ? 'swing' : 'swing q₁, q̇₁/ω₁', px0 + 5 * dpr, py0 + 11 * dpr);
+    ctx.textAlign = 'right'; ctx.fillStyle = 'rgba(122,31,43,0.7)'; ctx.fillText('rim', px0 + s0 - 4 * dpr, py0 + s0 - 5 * dpr);
   };
 
   // The glass and the stout. The glass is a body of revolution with inner radius R(z) (the solver's wall) and a wall
@@ -266,8 +307,9 @@
     ctx.beginPath(); { const p = P(Rin(zRim), 0, zRim); ctx.moveTo(p[0], p[1]); } arc(zRim, Rin(zRim), 0, 2 * Math.PI); ctx.stroke();
     ctx.strokeStyle = C.line; ctx.lineWidth = 1.6 * dpr; ctx.beginPath(); { const p = P(Rout(0) * Math.cos(thR), Rout(0) * Math.sin(thR), -base); ctx.moveTo(p[0], p[1]); } arc(-base, Rout(0), thR, thL); ctx.stroke();
     this.lastSurface = Hs;
-    if (this.ds) {                                               // the head's middle at the front wall (near band) and its top at the back wall (far)
-      const D = this.ds, fr = P(0.98 * rS, 0, f.columnHeightAt(rS, 0) + hh / 2), bk = P(-0.97 * rS, 0, f.columnHeightAt(-rS, 0) + hh);
+    if (this.ds) {                                               // the head's middle at the front wall (near band) and its top on the axis
+      const D = this.ds, em = f.columnHeightAt(0, 0), fr = P(0.98 * rS, 0, f.columnHeightAt(rS, 0) + hh / 2), bk = P(0, 0, em + hh);   // the head's band at the front wall; its top on the axis
+      D.set('eta_mid', em);
       D.set('front_px_x', fr[0] / dpr); D.set('front_px_y', fr[1] / dpr); D.set('back_px_x', bk[0] / dpr); D.set('back_px_y', bk[1] / dpr);
       D.set('head_h', hh); D.set('r_s', rS);
     }

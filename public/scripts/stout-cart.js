@@ -1102,6 +1102,10 @@
     this.cV = XI.map((xi, n) => { let a = 0; const M = 400; for (let k = 1; k <= M; k++) { const s0 = (k - 1) / M, s1 = k / M; a += 0.5 * (J1(xi * s0) * s0 + J1(xi * s1) * s1) / M; } return 2 * a / this.J1xi[n]; });
     this.t = 0; this.np = 0; this.npStart = 0; this.mp = 0; this.spilled = 0; this.spillNow = 0; this.spillPx = 0; this.spillPz = 0; this.spillList = [];
     this.spillV = 0; this.spillRate = 0; this.cgIters = 0;
+    // the column grid of the 3D solver (half glass), filled from the modes, so the page's store and drawing read alike
+    const dx = this.dx; this.nx = 2 * Math.ceil(this.R / dx); this.ny = Math.ceil(this.R / dx); this.nz = Math.ceil(this.H / dx); this.x0 = -(this.nx / 2) * dx;
+    this.colH = new Float64Array(this.nx * this.ny);
+    const F = Float64Array; this.px = new F(0); this.py = new F(0); this.pz = new F(0); this.pu = new F(0); this.pv = new F(0); this.pw = new F(0);
     this.modes();
   }
   ModalFluid.prototype.Rz = Fluid.prototype.Rz;
@@ -1129,7 +1133,12 @@
     return this.h + e * c;
   };
   ModalFluid.prototype.columnHeightAt = ModalFluid.prototype.heightAt;
-  ModalFluid.prototype.columnHeights = function () { return null; };
+  // the surface height over each column centre of the 3D solver's grid (the store's h_col)
+  ModalFluid.prototype.columnHeights = function () {
+    const nx = this.nx, ny = this.ny, dx = this.dx, H = this.colH;
+    for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) H[i + nx * j] = this.heightAt(this.x0 + (i + 0.5) * dx, (j + 0.5) * dx);
+    return H;
+  };
   ModalFluid.prototype.levelSet = function () {};
   ModalFluid.prototype.wallLift = function () { let s = 0; for (let n = 0; n < this.N; n++) s += this.q[n]; return s; };   // eta at the wall = wallLift cos(theta)
   ModalFluid.prototype.momentum = function () { let p = 0; for (let n = 0; n < this.N; n++) p += this.Pc[n] * this.qd[n]; return [p, 0]; };
@@ -1163,6 +1172,11 @@
     }
     this.spillNow = dV > 0 ? 1 : 0; this.spillV += dV; this.spillRate = dV / dt; this.spillPx = dPx; this.spillPz = 0;
     this.t += dt;
+    const D = this.ds;
+    if (D) {
+      for (let m = 0; m < this.N; m++) { D.set('q' + (m + 1), this.q[m]); D.set('qd' + (m + 1), this.qd[m]); D.set('w' + (m + 1), this.w[m]); }
+      D.set('h_l', this.h); D.set('V_l', this.V); D.set('R_s', this.Rs); D.set('spill_rate', this.spillRate); D.set('Q_wall', this.wallLift());
+    }
   };
   function h_over(f, Q) { return f.h + Math.abs(Q) - f.zRim; }
 
@@ -1258,6 +1272,36 @@
     this.reset(o.x0 != null ? o.x0 : 0);
   }
   Cart.prototype.bForce = function () { return this.Ngear * this.Km / this.Rw; };
+  // LQR for the cart and the first sloshing mode, x = (dv, q, q', xi), u = di:
+  //   M_x dv' = b di - c_x dv,  q'' = -w^2 q - 2 zeta w q' - beta dv',  xi' = -dv;  minimise int (x' Q x + r u^2) dt.
+  // Weights by Bryson's rule: Q_ii = 1 / (largest acceptable x_i)^2, r = 1 / I_max^2. The Riccati equation is solved by
+  // integrating its flow dP/dt = A'P + PA - P B B' P / r + Q from P = 0 to its steady state. Gains K = B'P / r (A per unit).
+  Cart.prototype.lqrGains = function () {
+    if (this._K && this._Kfor === this.sloshMode) return this._K;
+    const m = this.sloshMode || { w: 2 * Math.PI * 3.42, zeta: 0.005, beta: 1.54 }, Mx = this.massX(), b = this.bForce(), cx = this.cx;
+    const w = m.w, z = m.zeta, be = m.beta;
+    const A = [[-cx / Mx, 0, 0, 0], [0, 0, 1, 0], [be * cx / Mx, -w * w, -2 * z * w, 0], [-1, 0, 0, 0]];
+    const B = [b / Mx, 0, -be * b / Mx, 0];
+    const lim = this.lqrLimits || [0.05, 0.002, 0.002 * w, 0.02];
+    const Q = lim.map((v) => 1 / (v * v)), r = 1 / (this.Imax * this.Imax);
+    let P = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]];
+    const dt = 2e-5;
+    for (let it = 0; it < 400000; it++) {
+      const PB = P.map((row) => row.reduce((a, v, j) => a + v * B[j], 0));
+      let dmax = 0;
+      const Pn = P.map((row, i) => row.map((v, j) => {
+        let d = Q[i] * (i === j ? 1 : 0) - PB[i] * PB[j] / r;
+        for (let k = 0; k < 4; k++) d += A[k][i] * P[k][j] + P[i][k] * A[k][j];
+        dmax = Math.max(dmax, Math.abs(d) / (Math.abs(v) + 1));
+        return v + dt * d;
+      }));
+      P = Pn;
+      if (dmax < 1e-7 && it > 1000) break;
+    }
+    const K = [0, 1, 2, 3].map((j) => B.reduce((a, v, i) => a + v * P[i][j], 0) / r);
+    this._K = K; this._Kfor = this.sloshMode; this.lqrP = P;
+    return K;
+  };
   Cart.prototype.massX = function () { return this.Mb + this.ml + this.mw + (this.Iw + this.Ngear * this.Ngear * this.Jm) / (this.Rw * this.Rw); };
   Cart.prototype.reset = function (x) {
     const g = this.g, Ms = this.Mb + this.ml, za = this.road.axle(x)[0];
@@ -1273,10 +1317,19 @@
   Cart.prototype.sample = function () {
     const i0 = this.cx * this.v0 / this.bForce(), e = this.v0 - this.vx;
     if (this.ds) { this.ds.set('v_s', this.vx); this.ds.set('xi_s', this.xi); this.ds.set('vzb_s', this.vzb); }
-    if (this.ctrl === 'speed') {
+    if (this.ctrl === 'speed' || this.ctrl === 'preview') {
       let ic = i0 + this.Kp * e + this.Ki * this.xi;
+      if (this.ctrl === 'preview') {                            // the road ahead, one current lag in advance: cancel its push
+        const ahead = this.road.axle(this.x + this.vx * this.tauI)[1];
+        ic += (this.Mb + this.ml + this.mw) * this.g * ahead / this.bForce();
+      }
       if (Math.abs(ic) < this.Imax) this.xi += e * this.Ts;     // anti-windup: integrate only when not saturated
       this.icmd = ic;
+    } else if (this.ctrl === 'slosh' && this.sloshState) {      // state feedback on speed, first mode and integral (LQR)
+      const s = this.sloshState(), K = this.lqrGains();
+      let ic = i0 - (K[0] * (this.vx - this.v0) + K[1] * s[0] + K[2] * s[1] + K[3] * this.xi);
+      if (Math.abs(ic) < this.Imax) this.xi += e * this.Ts;
+      this.icmd = ic; this.qs = s[0]; this.qds = s[1];
     } else this.icmd = i0;
     this.uscmd = this.susp ? -this.csky * this.vzb : 0;
     if (this.uscmd > this.Umax) this.uscmd = this.Umax; else if (this.uscmd < -this.Umax) this.uscmd = -this.Umax;
@@ -1336,6 +1389,11 @@
     co.ml = this.fluid.mLiquid;
     if (o.road) co.road = new Road(o.road);
     this.cart = new Cart(co);
+    if (this.fluid.modal) {
+      const f = this.fluid;
+      this.cart.sloshState = () => [f.q[0], f.qd[0]];       // a level probe on the glass would measure these; here ideal
+      this.cart.sloshMode = { w: f.w[0], zeta: f.zeta[0], beta: f.beta[0] };
+    }
     this.dtMax = o.dtMax || 1 / 400;
     this.hCart = o.hCart || 1e-4;
     this.Fx = 0; this.Fz = 0;
@@ -1417,7 +1475,7 @@
     const f = this.fluid;
     // the store holds the solver's particle arrays (with threads, the shared ones; otherwise the store's own, filled)
     ['px', 'py', 'pz'].forEach((k) => { if (f.shared) ds.set(k, f[k]); else { const a = ds.get(k); a.set(f[k]); f[k] = a; } });
-    f.colH = ds.get('h_col');
+    f.colH = ds.get('h_col'); if (f.modal) f.ds = ds;
     this.ds = ds; this.cart.ds = ds;
     this.cart.forces(this.Fx, this.Fz);
     f.columnHeights(); ds.touch('h_col');
