@@ -84,7 +84,7 @@
   // inner radius of the glass at height z (m); above the rim there is no wall (the box edge stands in, unused)
   Fluid.prototype.Rz = function (z) {
     if (!this.profile) return this.R;
-    if (z >= this.zRim) return 10;
+    if (z > this.zRim) return 10;
     const P = this.profile.R, f = (z < 0 ? 0 : z) / this.profile.dz, i = Math.floor(f);
     if (i >= P.length - 1) return P[P.length - 1];
     return P[i] + (f - i) * (P[i + 1] - P[i]);

@@ -6,7 +6,7 @@
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>A Pint of Guinness on a One-Wheel Cart · Numa Koudsie</title>
-    <meta name="description" content="A pint of Guinness rides a one-wheel cart over bumps. The stout is a live three-dimensional Navier–Stokes simulation, coupled both ways to the cart.">
+    <meta name="description" content="A pint of Guinness in its tulip glass rides a one-wheel cart over bumps. The stout is a live three-dimensional Navier–Stokes simulation that can spill; a DC motor with a speed controller and an active suspension keep it calm. Push or drag the cart.">
     <meta name="theme-color" content="#f5f1ea">
     <link rel="stylesheet" href="../styles/sim.css">
     <link rel="stylesheet" href="../styles/data.css">
@@ -46,7 +46,7 @@
         <div class="sim__head">
             <p class="sim__num">Fig. 12 · fluid dynamics · vehicle dynamics</p>
             <h1>A Pint of Guinness on a One-Wheel Cart<span class="dot">.</span></h1>
-            <p class="sim__lede">Carry a full pint over a doorstep and it is not the lift that spills it but the jolt forward and back. Here the stout is computed in three dimensions, particle by particle, while the cart rolls over the bumps.</p>
+            <p class="sim__lede">Carry a full pint over a doorstep and it is not the lift that spills it but the jolt forward and back. Here the stout is computed in three dimensions, particle by particle, in the real shape of the glass, while a motor drives the cart over the bumps. Push it, drag it, and switch its controller off.</p>
         </div>
 
         <div class="sim__grid">
@@ -121,120 +121,152 @@
 
         <article class="paper" id="paper" aria-labelledby="paper-title">
             <header class="paper__head">
-                <p class="paper__kicker">Lecture note · Fig. 12 · fluid dynamics</p>
-                <h2 class="paper__title" id="paper-title">Why the pint spills: a jolt, a wave, and the Navier–Stokes equations</h2>
+                <p class="paper__kicker">Lecture note · Fig. 12 · fluid dynamics · vehicle dynamics · control</p>
+                <h2 class="paper__title" id="paper-title">Why the pint spills, and how a motor can stop it</h2>
                 <p class="paper__by">Numa Koudsie · for school students and first- and second-year undergraduates</p>
-                <div class="paper__abstract"><b>Abstract.</b> A cart with one wheel, one spring and one damper carries a pint of stout over bumps. When the wheel climbs a bump, the road pushes on it along the normal to its surface, which leans backward: the cart is braked, then shoved forward on the way down. In the frame of the glass that jolt acts like gravity tipping for a moment, and the stout starts to rock at its own rhythm, about three and a half times a second. The page computes the stout from the incompressible Navier–Stokes equations in three dimensions, with about thirty thousand particles in half the glass, and the cart from Newton’s laws; the two are coupled both ways. Every number in this note was measured from the page’s own code.</div>
+                <div class="paper__abstract"><b>Abstract.</b> A pint of stout in the Guinness tulip glass rides a cart with one wheel, one spring and one damper over bumps. When the wheel climbs a bump, the road pushes on it along the normal to its surface, which leans backward: the cart is braked, then shoved forward on the way down. In the glass’s frame that jolt acts like gravity tipping for a moment, and the stout rocks at its own rhythm, about 3.2 times a second, and can go over the rim. The page computes the stout from the incompressible Navier–Stokes equations in three dimensions in the measured shape of the glass, the cart from Newton’s laws with a DC drive motor, a speed controller and an active suspension, and couples the two both ways; spilled stout falls to the road. Every number in this note was measured from the page’s own code.</div>
             </header>
             <div class="paper__grid">
                 <nav class="paper__toc" aria-label="Contents">
                     <p>Contents</p>
                     <ol>
                         <li><a href="#p-step"><span>1</span>Over the doorstep</a></li>
-                        <li><a href="#p-frame"><span>2</span>The stout in the glass’s frame</a></li>
-                        <li><a href="#p-cart"><span>3</span>The cart and the road’s push</a></li>
-                        <li><a href="#p-back"><span>4</span>The stout pushes back</a></li>
-                        <li><a href="#p-solve"><span>5</span>Solving it&nbsp;★</a></li>
-                        <li><a href="#p-checks"><span>6</span>Checks</a></li>
-                        <li><a href="#p-screen"><span>7</span>What the picture shows</a></li>
-                        <li><a href="#p-limits"><span>8</span>What the model leaves out</a></li>
-                        <li><a href="#p-refs"><span>9</span>Sources</a></li>
+                        <li><a href="#p-glass"><span>2</span>The glass</a></li>
+                        <li><a href="#p-frame"><span>3</span>The stout in the glass’s frame</a></li>
+                        <li><a href="#p-cart"><span>4</span>The cart and the road’s push</a></li>
+                        <li><a href="#p-motor"><span>5</span>The motor and its speed controller</a></li>
+                        <li><a href="#p-susp"><span>6</span>The active suspension</a></li>
+                        <li><a href="#p-back"><span>7</span>The stout pushes back, and spills</a></li>
+                        <li><a href="#p-solve"><span>8</span>Solving it&nbsp;★</a></li>
+                        <li><a href="#p-checks"><span>9</span>Checks</a></li>
+                        <li><a href="#p-screen"><span>10</span>What the picture shows</a></li>
+                        <li><a href="#p-limits"><span>11</span>What the model leaves out</a></li>
+                        <li><a href="#p-refs"><span>12</span>Sources</a></li>
                     </ol>
                 </nav>
                 <div class="paper__body">
                     <section class="psec" id="p-step">
                         <h3><span class="psec__n">01</span>Over the doorstep</h3>
                         <p class="psec__lead">Walk across a room with a full pint and step over a doorstep. Lifting the glass straight up and setting it down spills almost nothing. What spills it is the moment your hand jerks forward or stops short.</p>
-                        <p>The surface then tilts like the bubble in a spirit level, low on one side and high on the other, and rocks back and forth on its own after your hand is still. For a pint glass the rocking takes about 0.3 s per swing. If your steps, or the bumps under a cart, happen to come at that rhythm, each one adds to the last and the stout climbs the wall.</p>
-                        <p>The figure is that experiment. The glass sits on a body; under the body are a spring and a damper; under them one wheel rolls on a road with bumps. Nothing in the picture is drawn from a formula for waves: the stout is computed from the laws of motion of a liquid, and the cart from Newton’s laws.</p>
+                        <p>The surface then tilts like the bubble in a spirit level, low on one side and high on the other, and rocks back and forth on its own after your hand is still, about three times a second for a pint. If your steps, or the bumps under a cart, come at that rhythm, each one adds to the last and the stout climbs the wall. A careful waiter does two things: keeps the hand moving at a steady speed, and lets the arm give under the up-and-down of each step. The figure does the same with a motor that holds the speed and a suspension that gives.</p>
+                        <p>Nothing in the picture is drawn from a formula for waves: the stout is computed from the laws of motion of a liquid, and the cart from Newton’s laws. Push the cart, drag it, change its speed, switch the controller off and on, and watch what the stout does.</p>
+                    </section>
+
+                    <section class="psec" id="p-glass">
+                        <h3><span class="psec__n">02</span>The glass</h3>
+                        <p>The Guinness pint is the tulip glass: narrow at the foot, swelling to its widest about three quarters of the way up, and closing a little at the rim. Retailers list it as 160 mm tall and 85 mm across at the widest, an imperial pint, 568 ml [1]. No dimensioned drawing of that glass was found; the closest is dimensions.com’s section of the same tulip as a 16 oz glass, 149 mm tall, 3 in across [2]. Its inner outline was measured from that drawing pixel by pixel (the drawing’s widest outer diameter measures 76.6 mm against the 76.2 mm it states) and stretched to the Guinness size: heights by 160/149.2, radii so that the widest outer diameter is 85 mm (<code>tools/fig12/glass_profile.py</code>).</p>
+                        <p>The result is the inner radius \(R(z)\) every 0.5 mm above the floor of the cavity: 28 mm in the lower part, 39.3 mm at the widest (113 mm up), 37.5 mm at the rim, 147.5 mm up; the bottom corner is rounded. Brim-full it holds 530.7 ml, less than an imperial pint: the drawing is the smaller US glass stretched, not the imperial glass itself, and that difference is the uncertainty in the shape. The stout is poured to \(h = 125\) mm: \(\rho\int_0^h\pi R(z)^2\,dz = 426.6\) g.</p>
                     </section>
 
                     <section class="psec" id="p-frame">
-                        <h3><span class="psec__n">02</span>The stout in the glass’s frame</h3>
+                        <h3><span class="psec__n">03</span>The stout in the glass’s frame</h3>
                         <p>On a braking train your coffee leans forward as if gravity had tipped. In the frame of an accelerating container, its acceleration \(\mathbf a_g(t)\) acts on every parcel of liquid as an extra force per unit mass \(-\mathbf a_g\). The glass here moves with the body and never turns (one wheel, a body guided straight up and down), so this is the only change from a glass at rest.</p>
                         <p>Let \(\mathbf u(\mathbf x, t)\) be the velocity of the stout relative to the glass, \(p\) its pressure, \(\rho\) its density and \(\nu\) its kinematic viscosity. The incompressible Navier–Stokes equations in the glass’s frame are</p>
                         \[ \frac{\partial\mathbf u}{\partial t} + (\mathbf u\cdot\nabla)\mathbf u = -\frac{1}{\rho}\nabla p + \nu\nabla^2\mathbf u + \mathbf g - \mathbf a_g(t), \tag{1} \]
                         \[ \nabla\cdot\mathbf u = 0 . \tag{2} \]
-                        <p>Equation (1) is Newton’s second law per unit mass: the left side is the acceleration of a parcel, the right side the forces on it. \(-\nabla p/\rho\) pushes from high to low pressure, \(\nu\nabla^2\mathbf u\) is the friction between layers sliding past each other, \(\mathbf g = (0, 0, -g)\) is the weight, and \(-\mathbf a_g\) is the push the jolt gives. Equation (2) says the stout cannot be squeezed: as much flows into any small box as flows out.</p>
-                        <p>At the walls and the bottom the stout cannot flow through: \(\mathbf u\cdot\mathbf n = 0\). On the free surface the pressure is that of the air, \(p = 0\), and the surface moves with the liquid. The glass is an upright cylinder of inner radius \(R = 4\) cm filled to \(h = 10\) cm, 503 g of stout.</p>
-                        <p><b>What to expect.</b> For a steady push \(a_x\) the liquid comes to rest tilted, at slope \(-a_x/g\) (a spirit level). For a short jolt it swings. Linear theory of small waves in a cylinder (the slowest mode, with \(J_1'(\xi) = 0\), \(\xi = 1.8412\)) gives the swing frequency</p>
-                        \[ f_{11} = \frac{1}{2\pi}\sqrt{\frac{g\,\xi}{R}\tanh\frac{\xi h}{R}} = 3.382\ \text{Hz}, \qquad T = 0.296\ \text{s}. \tag{3} \]
-                        <p>The page does not use (3); it is the yardstick the computation is checked against in Section 06.</p>
+                        <p>Equation (1) is Newton’s second law per unit mass: \(-\nabla p/\rho\) pushes from high to low pressure, \(\nu\nabla^2\mathbf u\) is the friction between layers sliding past each other, \(\mathbf g = (0,0,-g)\) is the weight, and \(-\mathbf a_g\) the push of the jolt. Equation (2) says the stout cannot be squeezed. At the wall \(r = R(z)\) and the floor the stout cannot flow through, \(\mathbf u\cdot\mathbf n = 0\); on the free surface the pressure is that of the air, \(p = 0\). Above the rim there is no wall: stout that rises over it leaves the glass.</p>
+                        <p><b>Two yardsticks.</b> Under a steady push \(a\) the stout comes to rest with a plane surface of slope \(-a/g\); to first order its centre of mass then moves by \(\bar x = -(a/g)\,\pi R(h)^4/(4V)\), for any glass, \(V\) the volume. And a straight glass of radius \(R\) filled to \(h\) swings, by linear theory, at</p>
+                        \[ f_{11} = \frac{1}{2\pi}\sqrt{\frac{g\,\xi}{R}\tanh\frac{\xi h}{R}}, \qquad J_1'(\xi) = 0,\ \xi = 1.8412 . \tag{3} \]
+                        <p>The tulip has no such formula; the page’s solver uses neither, they are checks (Section 09).</p>
                     </section>
 
                     <section class="psec" id="p-cart">
-                        <h3><span class="psec__n">03</span>The cart and the road’s push</h3>
-                        <p>The cart has three coordinates: its position \(x\) along the road, the height \(z_b\) of the body (with the glass), and the height \(z_w\) of the wheel’s axle. A rigid wheel of radius \(R_w = 4\) cm rolling over the road \(z_r(x)\) carries its axle along the path</p>
+                        <h3><span class="psec__n">04</span>The cart and the road’s push</h3>
+                        <p>The cart has three coordinates: its position \(x\) along the road, the height \(z_b\) of the body (with the glass), and the height \(z_w\) of the wheel’s axle. A rigid wheel of radius \(R_w = 4\) cm rolling over the road \(z_r(x)\) carries its axle along</p>
                         \[ z_a(x) = \max_{|s - x| \le R_w}\Big[z_r(s) + \sqrt{R_w^2 - (s - x)^2}\Big], \tag{4} \]
-                        <p>the highest the wheel can sit while touching the road. The tyre is a stiff radial spring and damper: its load is</p>
+                        <p>the highest the wheel can sit while touching the road. The tyre is a stiff radial spring and damper; its load is</p>
                         \[ N = \max\big(0,\; k_t(z_a - z_w) + c_t(\dot z_a - \dot z_w)\big), \tag{5} \]
-                        <p>zero when the wheel leaves the road. The force of the road acts along the line from the contact point to the axle, perpendicular to the path \(z_a(x)\). Its part along the road is</p>
-                        \[ F_x = -N\,z_a'(x) : \tag{6} \]
-                        <p>backward while the wheel climbs (\(z_a' &gt; 0\)), forward on the way down. That is the jolt. Newton’s laws for the three coordinates are</p>
-                        \[ M_x\ddot x = -N z_a'(x) + F_\text{drive} - c_x\dot x + F_\text{push} + F_{\ell,x}, \tag{7} \]
-                        \[ M_s\ddot z_b = -k(z_b - z_w - L_s) - c(\dot z_b - \dot z_w) - M_s g + F_{\ell,z}, \tag{8} \]
-                        \[ m_w\ddot z_w = k(z_b - z_w - L_s) + c(\dot z_b - \dot z_w) - m_w g + N . \tag{9} \]
-                        <p>\(M_s = 2.00\) kg is the body, glass and stout; \(m_w = 0.3\) kg the wheel; \(M_x = M_s + m_w + I_w/R_w^2\) adds the wheel’s rolling inertia (a disc). The spring \(k = 600\) N/m and damper \(c = 8\) N s/m give the body a bounce at 2.75 Hz with damping ratio 0.12; the tyre has \(k_t = 2\times10^4\) N/m, \(c_t = 5\) N s/m. The drive holds a set speed \(v_0\) against the drag \(c_x\dot x\), \(c_x = 2\) N s/m, by a constant force \(F_\text{drive} = c_x v_0\): it does not resist a jolt, so the cart slows on the climb and speeds up after. \(F_\text{push}\) is yours. \(F_\ell\) is the stout’s, next.</p>
+                        <p>zero when the wheel leaves the road. The road pushes along the line from the contact point to the axle, perpendicular to the path \(z_a(x)\); its part along the road is</p>
+                        \[ F_\text{road} = -N\,z_a'(x), \tag{6} \]
+                        <p>backward while the wheel climbs, forward on the way down: the jolt. Newton’s laws are</p>
+                        \[ M_x\ddot x = F_\text{road} + F_m - c_x\dot x + F_\text{push} + F_\text{hand} + F_{\ell,x}, \tag{7} \]
+                        \[ M_s\ddot z_b = -k(z_b - z_w - L_s) - c(\dot z_b - \dot z_w) + u_s - M_s g + F_{\ell,z}, \tag{8} \]
+                        \[ m_w\ddot z_w = k(z_b - z_w - L_s) + c(\dot z_b - \dot z_w) - u_s - m_w g + N . \tag{9} \]
+                        <p>\(M_s = M_b + m_\ell\) is the body and glass (1.5 kg) with the stout still in it; \(m_w = 0.3\) kg the wheel; \(M_x = M_s + m_w + (I_w + N_g^2 J_m)/R_w^2\) adds the rolling inertia of the wheel (a disc) and of the motor’s rotor seen through the gearbox, 2.50 kg with a full glass. The spring \(k = 600\) N/m and damper \(c = 8\) N s/m give the body a bounce at 2.81 Hz; the tyre has \(k_t = 2\times10^4\) N/m, \(c_t = 5\) N s/m; rolling and air drag \(c_x = 2\) N s/m. \(F_m\) is the motor (Section 05), \(u_s\) the suspension actuator (Section 06), \(F_\text{push}\) your buttons or keys, \(F_\text{hand}\) your hand when you drag the cart: a spring of 300 N/m and a damper of 30 N s/m toward the pointer, at most 25 N. \(F_\ell\) is the stout’s (Section 07).</p>
+                    </section>
+
+                    <section class="psec" id="p-motor">
+                        <h3><span class="psec__n">05</span>The motor and its speed controller</h3>
+                        <p>The wheel is driven through a gearbox of ratio \(N_g = 10\) by a small DC motor (torque constant \(K_m = 0.02\) N m/A, which is also its back-EMF constant in V s/rad; armature resistance \(R_a = 2\ \Omega\); rotor inertia \(J_m = 2\times10^{-6}\) kg m²; supply 12 V). The wheel rolls without slipping, so the motor turns at \(\omega_m = N_g\dot x/R_w\) and pushes the cart with</p>
+                        \[ F_m = b\,i, \qquad b = \frac{N_g K_m}{R_w} = 5\ \text{N/A}, \tag{10} \]
+                        <p>\(i\) the motor current. A current-controlled drive sets the current: it follows the command with a lag of \(\tau_i = 2\) ms, but never beyond the drive’s limit \(I_\text{max} = 3\) A (15 N), nor beyond what the voltage left over the back-EMF \(e = K_m\omega_m\) can drive, \(|R_a i + e| \le 12\) V.</p>
+                        <p><b>Open loop.</b> The command is the current that balances the drag at the set speed, \(i_0 = c_x v_0/b\), 0.40 A at 1 m/s. Nothing holds the speed: a bump’s jolt passes straight into the cart’s speed, and so into the glass.</p>
+                        <p><b>Speed control.</b> Every \(T_s = 1\) ms a controller reads the speed and commands</p>
+                        \[ i_\text{cmd} = i_0 + K_p\,(v_0 - \dot x) + K_i\int (v_0 - \dot x)\,dt . \tag{11} \]
+                        <p>For a mass \(M_x\) pushed by \(b\,i\), the loop crosses over at \(\omega_c\) when \(K_p = M_x\omega_c/b\); we take \(\omega_c = 2\pi\times 8\) Hz, well above the stout’s 3.2 Hz, so the jolt is absorbed by the motor before the glass feels it, and \(K_i = K_p\omega_c/4\), which places the integral’s corner a quarter of the way down: \(K_p = 25.1\) A/(m/s), \(K_i = 316\) A/m with a full glass. The integral stops while the current is at its limit (anti-windup). The controller answers your push too: pushing a speed-controlled cart only makes the motor brake.</p>
+                    </section>
+
+                    <section class="psec" id="p-susp">
+                        <h3><span class="psec__n">06</span>The active suspension</h3>
+                        <p>Beside the spring an actuator can push between body and axle with a force \(u_s\). The skyhook law asks for a force against the body’s vertical speed in the room, as if a damper hung it from the sky:</p>
+                        \[ u_\text{s,cmd} = -c_\text{sky}\,\dot z_b, \qquad c_\text{sky} = 2\cdot 0.7\sqrt{k M_s} = 47.6\ \text{N s/m}, \tag{12} \]
+                        <p>sampled every 1 ms, limited to ±40 N, delivered with a lag of 5 ms. It calms the body’s bounce, and with it the up-and-down acceleration that changes the stout’s apparent gravity.</p>
                     </section>
 
                     <section class="psec" id="p-back">
-                        <h3><span class="psec__n">04</span>The stout pushes back</h3>
-                        <p>The stout’s momentum in the room is \(m_\ell\mathbf V_g + \mathbf P\), where \(\mathbf V_g\) is the glass’s velocity and \(\mathbf P = \int\rho\,\mathbf u\,dV\) the momentum of its motion relative to the glass. The glass is the only thing besides gravity that pushes on the stout, so by Newton’s third law the stout pushes on the glass with</p>
-                        \[ \mathbf F_\ell = -m_\ell\,\mathbf a_g - \frac{d\mathbf P}{dt} - m_\ell\,\mathbf g . \tag{10} \]
-                        <p>The first and last terms are the stout as a rigid load (its weight and its mass carried along); they are in \(M_s\) and \(M_x\) above. The middle term is the sloshing: the page measures \(\mathbf P\) from the particles at every step and passes \(-\Delta\mathbf P/\Delta t\) to the cart at the next. A swinging pint shoves the cart back and forth.</p>
+                        <h3><span class="psec__n">07</span>The stout pushes back, and spills</h3>
+                        <p>The stout’s momentum in the room is \(m_\ell\mathbf V_g + \mathbf P\), with \(\mathbf V_g\) the glass’s velocity and \(\mathbf P = \int\rho\,\mathbf u\,dV\) its momentum relative to the glass. Besides gravity only the glass pushes on it, so it pushes on the glass with</p>
+                        \[ \mathbf F_\ell = -m_\ell\,\mathbf a_g - \frac{d\mathbf P}{dt} - m_\ell\,\mathbf g . \tag{13} \]
+                        <p>The first and last terms are the stout as a rigid load; they are in \(M_s\) and \(M_x\). The middle term is the sloshing; the page measures \(\mathbf P\) from the particles at every step and hands \(-\Delta\mathbf P/\Delta t\) to the cart.</p>
+                        <p><b>Spilling.</b> A particle of stout that is above the rim and outside the rim’s radius has left the glass. Its mass leaves \(m_\ell\); its momentum is counted out of \(\Delta\mathbf P\) (the glass did not push it away at that instant). It becomes a drop in the room, at the glass’s position plus its own and with the glass’s velocity plus its own, and falls freely, \(\ddot{\mathbf x} = \mathbf g\), until it lands on the body’s top or on the road.</p>
                     </section>
 
                     <section class="psec" id="p-solve">
-                        <h3><span class="psec__n">05</span>Solving it&nbsp;★</h3>
-                        <p><b>Particles and a grid.</b> The stout is carried by particles; a grid of 4 mm cubes enforces (2). Each step of \(\Delta t = 5\) ms the particles hand their velocities to the grid; the grid adds gravity, the jolt and viscosity; a pressure is found that makes the flow out of every cell zero; the corrected velocities go back to the particles, and the particles move. Handing velocities back and forth loses energy unless each particle also carries how the velocity changes around it; this is the affine particle-in-cell method, APIC [1].</p>
-                        <p><b>The pressure.</b> Requiring \(\nabla\cdot\mathbf u = 0\) after the pressure push gives a Poisson equation \(\nabla^2 p = (\rho/\Delta t)\nabla\cdot\mathbf u^*\) for the pressure, solved by conjugate gradients with an incomplete-Cholesky preconditioner [2]. The round wall cuts through the square cells; each cell face counts by the fraction of it that is open, so the wall is round to the solver, not a staircase [3]. At the free surface the pressure is set to zero at the surface itself, found between cell centres from a smooth function built from the particles [2, 4].</p>
-                        <p><b>Half the glass.</b> The road pushes only along \(x\) and up; the glass is round. The flow is then a mirror image of itself across the vertical plane through the direction of travel, and only the half \(y \ge 0\) is computed: 30 498 particles on 20 × 10 × 33 cells. Turning swirls that break this symmetry (they can appear in real glasses near resonance) are therefore left out.</p>
-                        <p><b>Viscosity.</b> The term \(\nu\nabla^2\mathbf u\) is in, with \(\nu = 10^{-6}\) m²/s (taken as water’s). At the wall the stout slides freely: the layer where viscosity would hold it, \(\sqrt{\nu/\omega}\approx 0.2\) mm thick, is far thinner than a 4 mm cell, so the grid cannot resolve it.</p>
-                        <p><b>Time.</b> The cart is stepped every 0.1 ms inside each 5 ms fluid step, with the glass’s mean acceleration over the step handed to the fluid. Your computer decides how fast this runs: the caption shows how many seconds of simulated time pass per second of yours.</p>
+                        <h3><span class="psec__n">08</span>Solving it&nbsp;★</h3>
+                        <p><b>Particles and a grid.</b> The stout is carried by particles; a grid of 4 mm (or 3 mm) cubes enforces (2). Every \(\Delta t = 5\) ms the particles hand their velocities to the grid; the grid adds gravity, the jolt and viscosity; a pressure is found that makes the flow out of every cell zero; the corrected velocities return to the particles, and the particles move. Each particle also carries how the velocity changes around it, so that little is lost in the handing over: the affine particle-in-cell method, APIC [3].</p>
+                        <p><b>The pressure.</b> Requiring \(\nabla\cdot\mathbf u = 0\) gives a Poisson equation for the pressure, solved by conjugate gradients with an incomplete-Cholesky preconditioner [4]. The glass’s curved wall cuts through the square cells; each cell face counts by the fraction of it inside \(R(z)\) at its height [5]. At the free surface the pressure is zero at the surface itself, found between cell centres from a smooth function built from the particles [4, 6]; a particle that strays outside the wall is put back onto it along the wall’s normal \(\mathbf n \propto (\cos\theta, \sin\theta, -R'(z))\), losing its speed along \(\mathbf n\).</p>
+                        <p><b>A defect found and fixed.</b> The first version could not hold a steady tilt: under a steady push its centre of mass reached only 15 % of the value it must reach. On a tilted surface many cells hold a few particles yet sit just above the zero of the smooth function; forced to count as liquid there, they received a needless pressure kick every step, which stirred a circulation down the high wall that ate the tilt. Giving each particle a radius of 1.8 particle spacings in that function makes every cell with particles read as liquid, and the tilt holds (Section 09).</p>
+                        <p><b>Half the glass.</b> The road pushes only along \(x\) and up, and the glass is round, so the flow is its own mirror image across the vertical plane of travel; only \(y \ge 0\) is computed: 25 666 particles on 20 × 10 × 45 cells at 4 mm, 61 407 at 3 mm. Swirling waves that break this symmetry are left out.</p>
+                        <p><b>Viscosity.</b> \(\nu\nabla^2\mathbf u\) is in, with \(\nu = 10^{-6}\) m²/s (water’s). The layer at the wall where viscosity holds the liquid, \(\sqrt{\nu/\omega}\approx 0.2\) mm thick, is far thinner than a cell, so the stout slides freely along the wall.</p>
+                        <p><b>Time.</b> The cart, motor, controller and suspension are stepped every 0.1 ms inside each fluid step (symplectic Euler for the mechanics; the current and the actuator follow their lags exactly over a step; the controller runs every 1 ms), with the glass’s mean acceleration over the step handed to the stout. Your computer sets the pace: the caption shows the seconds simulated per second.</p>
                     </section>
 
                     <section class="psec" id="p-checks">
-                        <h3><span class="psec__n">06</span>Checks</h3>
-                        <p>The solver was tested offline with the same code (<code>tools/fig12/check.cjs</code> and the scripts named in the documentation). Each number below was measured.</p>
+                        <h3><span class="psec__n">09</span>Checks</h3>
+                        <p>Measured with the page’s own code (<code>tools/fig12/check.cjs</code>, and the browser tests in <code>notes/fig12/</code>), \(\Delta t = 5\) ms:</p>
                         <table class="tbl">
                             <tr><th>Test</th><th>Expected</th><th>Measured</th></tr>
-                            <tr><td>Glass at rest, 1.5 s, 4 mm, Δt = 2.5 ms</td><td>no flow, flat</td><td class="n">fastest particle 11 mm/s; surface 0.46 mm rms</td></tr>
-                            <tr><td>Free swing after a push, 4 mm, Δt = 5 ms</td><td>3.382 Hz (3)</td><td class="n">3.390 Hz; damping ratio 0.019</td></tr>
-                            <tr><td>Free swing, 3 mm, Δt = 2.5 ms</td><td>3.382 Hz (3)</td><td class="n">3.354 Hz; damping ratio 0.005</td></tr>
-                            <tr><td>Depth of the stout at rest, read from the particles</td><td>100 mm</td><td class="n">99.5–100.6 mm</td></tr>
+                            <tr><td>Pint at rest, 1 s</td><td>no flow</td><td class="n">fastest particle 3.2 mm/s (4 mm), 3.7 mm/s (3 mm); surface unchanged</td></tr>
+                            <tr><td>Straight glass R = 40 mm, h = 100 mm, free swing</td><td>3.382 Hz (3)</td><td class="n">3.235 Hz at 3 mm (−4.3 %), 3.176 Hz at 4 mm (−6.1 %)</td></tr>
+                            <tr><td>Steady push 2 m/s², centre of mass, straight glass</td><td>−0.815 mm</td><td class="n">+3.6 % at 3 mm, +18 % at 4 mm</td></tr>
+                            <tr><td>Steady push 2 m/s², the tulip</td><td>−0.877 mm</td><td class="n">+6.1 % at 3 mm</td></tr>
+                            <tr><td>The tulip’s free swing</td><td>no closed form</td><td class="n">3.263 Hz at 3 mm, 3.214 Hz at 4 mm</td></tr>
+                            <tr><td>Spilling: mass leaving = mass counted</td><td>equal</td><td class="n">102.1 g = 102.1 g after a 25 m/s² shove</td></tr>
                         </table>
-                        <p>The damping ratio is that of the computation, not of real stout: it falls as the grid is refined (0.050 at 4 mm and 0.007 at 2 mm in an earlier version with 6 cm of liquid). How quickly a real pint stops swinging has not been measured for this page, so the page does not claim that its swing dies at the real rate.</p>
+                        <p>The errors shrink as the grid is refined, as they must. The 4 mm grid runs about 2.4 times faster and is the default; switch to 3 mm for the closer answer. The numerical damping is small (damping ratio 0.002–0.02); how fast a real pint stops swinging, with its foam, has not been measured for this page.</p>
+                        <p><b>What the controller does</b>, measured over a 1 cm bump at 1 m/s, 4 mm grid: the stout’s lean, front wall minus back wall, peaks at 23.8 mm in open loop and 3.9 mm with speed control; the glass’s largest horizontal acceleration falls from 1.24 to 0.53 m/s². The active suspension cuts the largest vertical acceleration from 3.7 to 1.5 m/s².</p>
                     </section>
 
                     <section class="psec" id="p-screen">
-                        <h3><span class="psec__n">07</span>What the picture shows</h3>
-                        <p>The black surface is the height of the column of stout over each 4 mm square of the bottom: the volume of the particles standing on it divided by its area, smoothed over one cell. That is the surface the computation holds, averaged; drops thrown above it and a wave curling over cannot be shown this way. Within 1 cm of the wall the columns are cut by the wall and hold too few particles to count; there the height is extended straight out from the two columns inside it.</p>
-                        <p><b>The head is drawn, not computed.</b> A cream layer 12 mm thick is laid on the computed surface. Real foam is a different material, much lighter and partly elastic, and it damps the swing; it is not in this model.</p>
-                        <p>The readout “front − back wall” is the drawn surface at the front of the glass (the direction of travel) minus that at the back. The glass is seen slightly from above, 14°.</p>
+                        <h3><span class="psec__n">10</span>What the picture shows</h3>
+                        <p>The surface drawn is the height of the column of stout over each square of the floor: the volume of the particles standing on it, matched to the volume the glass’s shape opens up to that height, both smoothed over one cell. That is the surface the computation holds, averaged; a wave curling over cannot be shown this way. Within 2.5 cells of the wall the columns are cut by it and hold too few particles to count; there the height is extended straight out from the columns inside.</p>
+                        <p><b>The head is drawn, not computed.</b> A cream layer 12 mm thick is laid on the computed surface. Real foam is a different material, lighter and partly elastic, and it damps the swing; it is not in this model. The glass is seen slightly from above, 14°; spilled drops are drawn where the solver moves them, with their mirror images.</p>
                     </section>
 
                     <section class="psec" id="p-limits">
-                        <h3><span class="psec__n">08</span>What the model leaves out</h3>
+                        <h3><span class="psec__n">11</span>What the model leaves out</h3>
                         <ul>
-                            <li>The glass is a straight cylinder, not the tulip-shaped Guinness pint.</li>
-                            <li>Density and viscosity are water’s; surface tension is left out. With \(\sigma = 0.072\) N/m (water’s, taken here) it would raise the swing frequency by a factor \(\sqrt{1 + \sigma k^2/(\rho g)}\), \(k = \xi/R\): 0.78 %.</li>
-                            <li>The foam head (Section 07).</li>
-                            <li>Spilling: the solver box has a lid at the rim, 3 cm above the surface. Higher bumps make the stout hit it.</li>
-                            <li>The boundary layer at the wall, and so the real damping (Section 05).</li>
-                            <li>Swirling waves that break the mirror symmetry (Section 05).</li>
+                            <li>The glass’s exact imperial shape: the profile is the US tulip stretched to the Guinness size (Section 02).</li>
+                            <li>The foam head; density and viscosity are water’s; surface tension (with \(\sigma = 0.072\) N/m it would raise the swing frequency by a factor \(\sqrt{1 + \sigma k^2/(\rho g)}\), \(k = \xi/R\): 0.78 %).</li>
+                            <li>The boundary layer at the wall, and so the real damping (Section 08); swirl that breaks the mirror symmetry.</li>
+                            <li>Air drag on drops; drops that land stay where they land.</li>
+                            <li>The motor’s and controller’s numbers are a plausible small drive, not a measured one; the speed sensor and the body’s vertical-speed sensor are taken as ideal.</li>
                             <li>The cart does not pitch or roll: one wheel, a body guided straight up and down.</li>
                         </ul>
                     </section>
 
                     <section class="psec" id="p-refs">
-                        <h3><span class="psec__n">09</span>Sources</h3>
+                        <h3><span class="psec__n">12</span>Sources</h3>
                         <ol class="prefs">
+                            <li>Retail listings of the Guinness pint tulip glass, 160 mm × 85 mm, 568 ml: e.g. Nisbets, <a href="https://www.nisbets.ie/guinness-pint-tulip-glasses-ce-marked/ja936">nisbets.ie</a>; Carroll’s Irish Gifts, <a href="https://carrollsirishgifts.com/products/guinness-classic-tulip-pint-glass">carrollsirishgifts.com</a>.</li>
+                            <li>dimensions.com, “Irish Imperial Pint Glass”, dimensioned elevation and section, <a href="https://www.dimensions.com/element/irish-imperial-pint-glass">dimensions.com</a> (the SVG is kept as <code>tools/fig12/irish-imperial-pint.svg</code>).</li>
                             <li>C. Jiang, C. Schroeder, A. Selle, J. Teran, A. Stomakhin, “The affine particle-in-cell method”, <i>ACM Trans. Graph.</i> 34 (4), 51 (2015).</li>
-                            <li>R. Bridson, <i>Fluid Simulation for Computer Graphics</i>, 2nd ed., CRC Press (2015): the MAC grid, the pressure solve with MIC(0), the ghost-fluid free surface, particle level sets.</li>
+                            <li>R. Bridson, <i>Fluid Simulation for Computer Graphics</i>, 2nd ed., CRC Press (2015).</li>
                             <li>C. Batty, F. Bertails, R. Bridson, “A fast variational framework for accurate solid–fluid coupling”, <i>ACM Trans. Graph.</i> 26 (3), 100 (2007).</li>
-                            <li>Y. Zhu, R. Bridson, “Animating sand as a fluid”, <i>ACM Trans. Graph.</i> 24 (3), 965 (2005): the surface built from the particles.</li>
+                            <li>Y. Zhu, R. Bridson, “Animating sand as a fluid”, <i>ACM Trans. Graph.</i> 24 (3), 965 (2005).</li>
+                            <li>D. Karnopp, M. J. Crosby, R. A. Harwood, “Vibration control using semi-active force generators”, <i>J. Eng. Ind.</i> 96 (2), 619 (1974): the skyhook idea.</li>
                         </ol>
-                        <p>These are cited for the methods as they are generally known and as the code implements them; the papers were not reopened for this page.</p>
+                        <p>Sources 3–7 are cited for the methods as they are generally known and as the code implements them; they were not reopened for this page. Sources 1 and 2 were read for the numbers quoted.</p>
                     </section>
                 </div>
             </div>
