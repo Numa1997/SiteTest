@@ -186,8 +186,8 @@ speed-controlled lean in earlier notes was not reproduced: with fixed 5 ms steps
 
 Open (6 November 2026): the one-mode swing equation (17), driven by the measured jolt (t < 0.7 s), predicts a lean of 22.1 mm in
 open loop (solver: 18.5 mm fitted after the bump, followed swing by swing) and 7.8 mm with speed control (solver: 1.3 mm fitted,
-at the reading noise). Why the solver's stout swings so much less under speed control is not established; a swing smaller than a
-4 mm cell may be poorly carried by the particle surface (inference, untested).
+at the reading noise). Why the solver's stout swings so much less under speed control is not established. Not the grid: the 3 mm
+runs give the same ratios (21.7 vs 17.5 mm open loop, 7.8 vs 1.2 mm speed control; series in `notes/fig12/runs/`).
 
 ## The store and the data panel
 
