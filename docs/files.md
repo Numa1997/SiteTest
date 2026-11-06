@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-1260 files, 62.2 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+1262 files, 62.2 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -40,7 +40,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Agents of the lecture-note review](#agents-of-the-lecture-note-review) | 4 |
 | [Working notes of the Rotor Pendula study](#working-notes-of-the-rotor-pendula-study) | 86 |
 | [Working notes of the Droplet Collection study](#working-notes-of-the-droplet-collection-study) | 121 |
-| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 424 |
+| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 426 |
 
 ## Repository root
 
@@ -1345,12 +1345,14 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/fig11/panel/view-honesty.txt`](../notes/fig11/panel/view-honesty.txt) | 12.4 kB | Project 05: raw output of an honesty test or behaviour test of the data panel, 5 November 2026. | [README.md](../notes/fig11/panel/README.md) |
 | [`notes/fig11/panel/view-origin.txt`](../notes/fig11/panel/view-origin.txt) | 3.2 kB | Project 05: raw output of an honesty test or behaviour test of the data panel, 5 November 2026. | [README.md](../notes/fig11/panel/README.md) |
 
-<details><summary>15 files: Fig. 11: a measuring script of the review, or its saved output.</summary>
+<details><summary>17 files: Fig. 11: a measuring script of the review, or its saved output.</summary>
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
 | [`notes/fig11/project05/README.md`](../notes/fig11/project05/README.md) | 3.0 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig11/project05/cstar.cjs`](../notes/fig11/project05/cstar.cjs) | 928 B | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig11/project05/flowlift.cjs`](../notes/fig11/project05/flowlift.cjs) | 2.0 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig11/project05/flowlift2.cjs`](../notes/fig11/project05/flowlift2.cjs) | 2.2 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig11/project05/hold.cjs`](../notes/fig11/project05/hold.cjs) | 1.5 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig11/project05/honeyhold.cjs`](../notes/fig11/project05/honeyhold.cjs) | 971 B | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig11/project05/kchk.cjs`](../notes/fig11/project05/kchk.cjs) | 1.1 kB | Fig. 11: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
