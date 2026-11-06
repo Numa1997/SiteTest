@@ -51,15 +51,17 @@
     this.nc = nx * ny * nz;
     this.nu_ = (nx + 1) * ny * nz; this.nv_ = nx * (ny + 1) * nz; this.nw_ = nx * ny * (nz + 1);
     const F = Float64Array;
-    this.u = new F(this.nu_); this.v = new F(this.nv_); this.w = new F(this.nw_);
+    // o.shared: the arrays the worker threads read or write live in shared memory (scripts/stout-pool.js); same numbers
+    this.shared = !!o.shared;
+    this.u = this.mk(F, this.nu_); this.v = this.mk(F, this.nv_); this.w = this.mk(F, this.nw_);
     this.uo = new F(this.nu_); this.vo = new F(this.nv_); this.wo = new F(this.nw_);
-    this.mu = new F(this.nu_); this.mv = new F(this.nv_); this.mw = new F(this.nw_);   // P2G weights
+    this.mu = this.mk(F, this.nu_); this.mv = this.mk(F, this.nv_); this.mw = this.mk(F, this.nw_);   // P2G weights
     this.au = new F(this.nu_); this.av = new F(this.nv_); this.aw = new F(this.nw_);   // open face fractions
     this.ku = new Uint8Array(this.nu_); this.kv = new Uint8Array(this.nv_); this.kw = new Uint8Array(this.nw_); // valid
     this.tmpU = new F(this.nu_); this.tmpV = new F(this.nv_); this.tmpW = new F(this.nw_);
     this.cnt = new Int32Array(this.nc);       // particles per cell
     this.fluid = new Uint8Array(this.nc);
-    this.phi = new F(this.nc);
+    this.phi = this.mk(F, this.nc);
     this.q = new F(this.nc); this.rhs = new F(this.nc);
     this.Ad = new F(this.nc); this.Ax = new F(this.nc); this.Ay = new F(this.nc); this.Az = new F(this.nc);
     this.mic = new F(this.nc); this.r_ = new F(this.nc); this.z_ = new F(this.nc); this.s_ = new F(this.nc);
@@ -135,6 +137,10 @@
     }
   };
 
+  // a typed array, in shared memory when the fluid is shared with worker threads
+  Fluid.prototype.mk = function (T, n) {
+    return this.shared ? new T(new SharedArrayBuffer(Math.max(1, n) * T.BYTES_PER_ELEMENT)) : new T(n);
+  };
   Fluid.prototype.seed = function (s, seed) {
     let st = seed >>> 0;
     const rnd = () => { st = (st * 1664525 + 1013904223) >>> 0; return st / 4294967296; };
@@ -147,10 +153,11 @@
         if (x * x + y * y < (this.Rz(z) - 0.15 * dx) ** 2 && z < this.h0 && y > 0) { xs.push(x); ys.push(y); zs.push(z); }
       }
     const n = this.np = xs.length;
-    this.px = Float64Array.from(xs); this.py = Float64Array.from(ys); this.pz = Float64Array.from(zs);
-    this.pu = new Float64Array(n); this.pv = new Float64Array(n); this.pw = new Float64Array(n);
+    const F = Float64Array;
+    this.px = this.mk(F, n); this.py = this.mk(F, n); this.pz = this.mk(F, n); this.px.set(xs); this.py.set(ys); this.pz.set(zs);
+    this.pu = this.mk(F, n); this.pv = this.mk(F, n); this.pw = this.mk(F, n);
     // APIC: each particle also carries the local velocity gradient, one row per component (Jiang et al. 2015)
-    this.pc = [0, 1, 2].map(() => [new Float64Array(n), new Float64Array(n), new Float64Array(n)]);
+    this.pc = [0, 1, 2].map(() => [this.mk(F, n), this.mk(F, n), this.mk(F, n)]);
     // the half glass holds half the liquid: m_l/2 = rho V(h0) / 2, V(h) the integral of pi R(z)^2, shared equally by the
     // particles; a spilled particle takes its m_p with it
     this.mLiquid = this.rho * this.volumeTo(this.h0);
@@ -217,15 +224,15 @@
 
   // APIC transfer kernels for one staggered component, flat code. For each particle: base node (i, j, k), fractions
   // (tx, ty, tz); node offsets from the particle are ((a - tx) dx, (b - ty) dx, (c - tz) dx), a, b, c in {0, 1}.
-  Fluid.prototype.transfer = function (comp, toGrid) {
-    const dx = this.dx, nx = this.nx, ny = this.ny, nz = this.nz, np = this.np, inv = 1 / dx;
+  Fluid.prototype.transfer = function (comp, toGrid, p0, p1) {
+    const dx = this.dx, nx = this.nx, ny = this.ny, nz = this.nz, inv = 1 / dx, pa = p0 || 0, np = p1 != null ? p1 : this.np;
     let a, m, pvel, sx, sy, sz, ox = 0, oy = 0, oz = 0;
     if (comp === 0) { a = this.u; m = this.mu; pvel = this.pu; sx = nx + 1; sy = ny; sz = nz; oy = 0.5; oz = 0.5; }
     else if (comp === 1) { a = this.v; m = this.mv; pvel = this.pv; sx = nx; sy = ny + 1; sz = nz; ox = 0.5; oz = 0.5; }
     else { a = this.w; m = this.mw; pvel = this.pw; sx = nx; sy = ny; sz = nz + 1; ox = 0.5; oy = 0.5; }
     const [cx, cy, cz] = this.pc[comp], sxy = sx * sy, px = this.px, py = this.py, pz = this.pz, x0 = this.x0;
     if (toGrid) { a.fill(0); m.fill(0); }
-    for (let p = 0; p < np; p++) {
+    for (let p = pa; p < np; p++) {
       const fx = (px[p] - x0) * inv - ox, fy = py[p] * inv - oy, fz = pz[p] * inv - oz;
       const i = Math.floor(fx), j = Math.floor(fy), k = Math.floor(fz), tx = fx - i, ty = fy - j, tz = fz - k;
       const I0 = i < 0 ? 0 : i >= sx ? sx - 1 : i, I1 = i + 1 < 0 ? 0 : i + 1 >= sx ? sx - 1 : i + 1;
@@ -258,15 +265,68 @@
     }
     if (toGrid) for (let n = 0; n < a.length; n++) a[n] = m[n] > 1e-9 ? a[n] / m[n] : 0;
   };
-  Fluid.prototype.p2g = function () { for (let c = 0; c < 3; c++) this.transfer(c, true); };
-  Fluid.prototype.g2p = function () { for (let c = 0; c < 3; c++) this.transfer(c, false); };
+  Fluid.prototype.p2g = function () {
+    if (!this.pool) { for (let c = 0; c < 3; c++) this.transfer(c, true); return; }
+    // threads: each owns a slab of grid layers and adds into it every particle that reaches it, in particle order, so
+    // that every grid value receives the same terms in the same order as above
+    this.u.fill(0); this.mu.fill(0); this.v.fill(0); this.mv.fill(0); this.w.fill(0); this.mw.fill(0);
+    this.pool.slabs(this);
+    this.pool.run(3, this.np, 0, 0);
+    for (const [a, m] of [[this.u, this.mu], [this.v, this.mv], [this.w, this.mw]]) for (let n = 0; n < a.length; n++) a[n] = m[n] > 1e-9 ? a[n] / m[n] : 0;
+  };
+  Fluid.prototype.g2p = function () {
+    if (this.pool) { this.pool.run(2, this.np, 0, 0); return; }
+    for (let c = 0; c < 3; c++) this.transfer(c, false);
+  };
+  // particle-to-grid for the grid layers k0 <= k < k1 of all three components (one thread's slab): Fluid.transfer's terms,
+  // in its order, for the nodes in the slab only
+  Fluid.prototype.p2gSlab = function (k0, k1) {
+    const dx = this.dx, nx = this.nx, ny = this.ny, nz = this.nz, np = this.np, inv = 1 / dx;
+    const px = this.px, py = this.py, pz = this.pz, x0 = this.x0;
+    for (let comp = 0; comp < 3; comp++) {
+      let a, m, pvel, sx, sy, sz, ox = 0, oy = 0, oz = 0;
+      if (comp === 0) { a = this.u; m = this.mu; pvel = this.pu; sx = nx + 1; sy = ny; sz = nz; oy = 0.5; oz = 0.5; }
+      else if (comp === 1) { a = this.v; m = this.mv; pvel = this.pv; sx = nx; sy = ny + 1; sz = nz; ox = 0.5; oz = 0.5; }
+      else { a = this.w; m = this.mw; pvel = this.pw; sx = nx; sy = ny; sz = nz + 1; ox = 0.5; oy = 0.5; }
+      const [cx, cy, cz] = this.pc[comp], sxy = sx * sy;
+      for (let p = 0; p < np; p++) {
+        const fz = pz[p] * inv - oz, k = Math.floor(fz);
+        const K0 = k < 0 ? 0 : k >= sz ? sz - 1 : k, K1 = k + 1 < 0 ? 0 : k + 1 >= sz ? sz - 1 : k + 1;
+        const in0 = K0 >= k0 && K0 < k1, in1 = K1 >= k0 && K1 < k1;
+        if (!in0 && !in1) continue;
+        const fx = (px[p] - x0) * inv - ox, fy = py[p] * inv - oy;
+        const i = Math.floor(fx), j = Math.floor(fy), tx = fx - i, ty = fy - j, tz = fz - k;
+        const I0 = i < 0 ? 0 : i >= sx ? sx - 1 : i, I1 = i + 1 < 0 ? 0 : i + 1 >= sx ? sx - 1 : i + 1;
+        const J0 = j < 0 ? 0 : j >= sy ? sy - 1 : j, J1 = j + 1 < 0 ? 0 : j + 1 >= sy ? sy - 1 : j + 1;
+        const ux = 1 - tx, uy = 1 - ty, uz = 1 - tz;
+        const u0 = pvel[p], gx = cx[p] * dx, gy = cy[p] * dx, gz = cz[p] * dx;
+        const ax0 = -tx * gx, ax1 = (1 - tx) * gx, ay0 = -ty * gy, ay1 = (1 - ty) * gy, az0 = -tz * gz, az1 = (1 - tz) * gz;
+        if (in0) {
+          const n000 = I0 + J0 * sx + K0 * sxy, n100 = I1 + J0 * sx + K0 * sxy, n010 = I0 + J1 * sx + K0 * sxy, n110 = I1 + J1 * sx + K0 * sxy;
+          const w000 = ux * uy * uz, w100 = tx * uy * uz, w010 = ux * ty * uz, w110 = tx * ty * uz;
+          a[n000] += w000 * (u0 + ax0 + ay0 + az0); m[n000] += w000;
+          a[n100] += w100 * (u0 + ax1 + ay0 + az0); m[n100] += w100;
+          a[n010] += w010 * (u0 + ax0 + ay1 + az0); m[n010] += w010;
+          a[n110] += w110 * (u0 + ax1 + ay1 + az0); m[n110] += w110;
+        }
+        if (in1) {
+          const n001 = I0 + J0 * sx + K1 * sxy, n101 = I1 + J0 * sx + K1 * sxy, n011 = I0 + J1 * sx + K1 * sxy, n111 = I1 + J1 * sx + K1 * sxy;
+          const w001 = ux * uy * tz, w101 = tx * uy * tz, w011 = ux * ty * tz, w111 = tx * ty * tz;
+          a[n001] += w001 * (u0 + ax0 + ay0 + az1); m[n001] += w001;
+          a[n101] += w101 * (u0 + ax1 + ay0 + az1); m[n101] += w101;
+          a[n011] += w011 * (u0 + ax0 + ay1 + az1); m[n011] += w011;
+          a[n111] += w111 * (u0 + ax1 + ay1 + az1); m[n111] += w111;
+        }
+      }
+    }
+  };
 
   // particles sorted by cell (cellStart, sorted) and counted per cell (cnt)
   Fluid.prototype.levelSetBins = function () {
     const nx = this.nx, ny = this.ny, nz = this.nz, dx = this.dx, nc = this.nc;
     const cnt = this.cnt; cnt.fill(0);
-    if (!this.cellStart || this.cellStart.length !== nc + 1) { this.cellStart = new Int32Array(nc + 1); }
-    if (!this.sorted || this.sorted.length < this.np) this.sorted = new Int32Array(this.np);
+    if (!this.cellStart || this.cellStart.length !== nc + 1) { this.cellStart = this.mk(Int32Array, nc + 1); }
+    if (!this.sorted || this.sorted.length < this.np) this.sorted = this.mk(Int32Array, this.np);
     const cellOf = (p) => {
       let i = Math.floor((this.px[p] - this.x0) / dx), j = Math.floor(this.py[p] / dx), k = Math.floor(this.pz[p] / dx);
       i = i < 0 ? 0 : i >= nx ? nx - 1 : i; j = j < 0 ? 0 : j >= ny ? ny - 1 : j; k = k < 0 ? 0 : k >= nz ? nz - 1 : k;
@@ -313,14 +373,18 @@
     const occ = this.occA || (this.occA = new Uint8Array(nc)), occB = this.occB || (this.occB = new Uint8Array(nc));
     for (let c = 0; c < nc; c++) occ[c] = cnt[c] > 0 ? 1 : 0;
     dilate(occ, occB, 0); dilate(occB, occ, 1); dilate(occ, occB, 2);
-    const fast = this.kernel === 2;
+    const fast = this.kernel === 2, pool = fast && this.pool;
     if (fast) this.levelSetParticles(Rk);
+    const list = pool ? pool.cells : null; let nl = 0;
     for (let k = 0; k < nz; k++) for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) {
       const c = i + nx * (j + ny * k);
       if (!nearA[c]) { this.phi[c] = cnt[c] > 0 ? -2 * dx : 2 * dx; continue; }
       if (!fast) { this.phi[c] = this.phiAt(this.x0 + (i + 0.5) * dx, (j + 0.5) * dx, (k + 0.5) * dx, Rk, R2, r); continue; }
-      this.phi[c] = occB[c] ? this.phiCell(i, j, k, R2, r) : 3 * dx;
+      if (!occB[c]) this.phi[c] = 3 * dx;
+      else if (pool) list[nl++] = c;               // searched below, by the threads
+      else this.phi[c] = this.phiCell(i, j, k, R2, r);
     }
+    if (pool) pool.run(1, nl, R2, r);
     // Liquid cells: inside the level set, or holding particles (so that no particle is left without pressure). A cell
     // that holds particles but reads phi >= 0 gets phi = -0.05 dx. Measured: -0.5 dx here broke the slosh (4.3 Hz
     // instead of 3.5 Hz on the 4 mm grid); the spurious flow at rest that first suggested it came from the time
@@ -422,7 +486,7 @@
   Fluid.prototype.levelSetParticles = function (Rk) {
     const np = this.np, nc = this.nc, px = this.px, py = this.py, pz = this.pz;
     if (!this.imgF || this.imgF.length < np) { this.imgF = new Float64Array(this.px.length); this.imgN = new Uint8Array(this.px.length); }
-    const cellImg = this.cellImg || (this.cellImg = new Uint8Array(nc)); cellImg.fill(0);
+    const cellImg = this.cellImg || (this.cellImg = this.mk(Uint8Array, nc)); cellImg.fill(0);
     const fwA = this.imgF, nA = this.imgN, pcell = this.pcell;
     for (let p = 0; p < np; p++) {
       const ppx = px[p], ppy = py[p], ppz = pz[p], rr = Math.sqrt(ppx * ppx + ppy * ppy);
@@ -432,7 +496,7 @@
     }
     // the same numbers in cell order (sorted), so that the search below reads memory in sequence
     const L = this.px.length;
-    if (!this.sX || this.sX.length < L) { this.sX = new Float64Array(L); this.sY = new Float64Array(L); this.sZ = new Float64Array(L); this.sF = new Float64Array(L); this.sN = new Uint8Array(L); }
+    if (!this.sX || this.sX.length < L) { const F = Float64Array; this.sX = this.mk(F, L); this.sY = this.mk(F, L); this.sZ = this.mk(F, L); this.sF = this.mk(F, L); this.sN = this.mk(Uint8Array, L); }
     const sorted = this.sorted, sX = this.sX, sY = this.sY, sZ = this.sZ, sF = this.sF, sN = this.sN;
     for (let s = 0; s < np; s++) { const p = sorted[s]; sX[s] = px[p]; sY[s] = py[p]; sZ[s] = pz[p]; sF[s] = fwA[p]; sN[s] = nA[p]; }
     // the cells of the 5 x 5 x 5 block around a cell centre that the kernel sphere (radius 2 dx) can reach: a cell is
@@ -446,6 +510,11 @@
       }
       this.blockOff = Int32Array.from(off);
     }
+  };
+  // phi for the cells list[a], list[a + step], ... below list[b] (one thread's share of the search)
+  Fluid.prototype.phiCells = function (list, a, b, R2, r, step) {
+    const nx = this.nx, nxy = this.nx * this.ny;
+    for (let n = a; n < b; n += step || 1) { const c = list[n]; this.phi[c] = this.phiCell(c % nx, Math.floor(c / nx) % this.ny, Math.floor(c / nxy), R2, r); }
   };
   // phi at the centre of cell (i, j, k): phiAt with the per-particle numbers of levelSetParticles (kernel radius 2 cells)
   Fluid.prototype.phiCell = function (ic, jc, kc, R2, r) {
@@ -746,6 +815,10 @@
     };
   }
   Fluid.prototype.advect = function (dt) {
+    if (this.pool) this.pool.run(4, this.np, dt, 0); else this.advectRange(dt, 0, this.np);
+    this.collide();
+  };
+  Fluid.prototype.advectRange = function (dt, p0, p1) {
     const nx = this.nx, ny = this.ny, nz = this.nz, x0 = this.x0, dx = this.dx;
     if (!this.sU) {
       this.sU = sampler(this.u, nx + 1, ny, nz, 0, 0.5, 0.5, x0, dx);
@@ -753,7 +826,7 @@
       this.sW = sampler(this.w, nx, ny, nz + 1, 0.5, 0.5, 0, x0, dx);
     }
     const sU = this.sU, sV = this.sV, sW = this.sW, px = this.px, py = this.py, pz = this.pz, pv = this.pv, h = 0.5 * dt;
-    for (let p = 0, np = this.np; p < np; p++) {
+    for (let p = p0; p < p1; p++) {
       let x = px[p], y = py[p], z = pz[p];
       const u1 = sU(x, y, z), v1 = sV(x, y, z), w1 = sW(x, y, z);
       const xm = x + h * u1, ym = Math.abs(y + h * v1), zm = z + h * w1;
@@ -761,7 +834,6 @@
       if (y < 0) { y = -y; pv[p] = -pv[p]; }           // mirror plane
       px[p] = x; py[p] = y; pz[p] = z;
     }
-    this.collide();
   };
 
   // The glass wall R(z): a particle outside it is put back onto the wall along the wall's normal and loses its speed along the
@@ -1236,7 +1308,8 @@
   // store's arrays, and the scalars above are written into it where they are computed
   World.prototype.attach = function (ds) {
     const f = this.fluid;
-    ['px', 'py', 'pz'].forEach((k) => { const a = ds.get(k); a.set(f[k]); f[k] = a; });
+    // the store holds the solver's particle arrays (with threads, the shared ones; otherwise the store's own, filled)
+    ['px', 'py', 'pz'].forEach((k) => { if (f.shared) ds.set(k, f[k]); else { const a = ds.get(k); a.set(f[k]); f[k] = a; } });
     f.colH = ds.get('h_col');
     this.ds = ds; this.cart.ds = ds;
     this.cart.forces(this.Fx, this.Fz);
