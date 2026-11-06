@@ -32,3 +32,6 @@
   Cross-Origin-Embedder-Policy: require-corp
 /simulations/beer-slosh
   Cross-Origin-Embedder-Policy: require-corp
+# the worker script too: in an isolated page Chrome starts a dedicated worker only if its script carries the same policy
+/scripts/stout-worker.js
+  Cross-Origin-Embedder-Policy: require-corp

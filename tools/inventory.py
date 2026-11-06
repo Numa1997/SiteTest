@@ -208,7 +208,7 @@ RULES = [
     (r'notes/fig12/panel-test2\.cjs', 'Fig. 12: data panel on a bump at three widths, Read values, one round, Save, the panel idle.', 'docs/simulations/fig12-beer-slosh.md'),
     (r'public/scripts/stout-pool\.js', 'Fig. 12: shares four loops of the stout solver over worker threads with shared memory; identical numbers.', 'docs/simulations/fig12-beer-slosh.md'),
     (r'public/scripts/stout-worker\.js', 'Fig. 12: one worker thread of the stout solver: waits for a task, does its share of a loop.', 'docs/simulations/fig12-beer-slosh.md'),
-    (r'notes/fig12/serve\.cjs', 'Fig. 12: serves public/ with the cross-origin isolation headers, for the browser tests with threads.', 'docs/simulations/fig12-beer-slosh.md'),
+    (r'notes/fig12/serve\.cjs', 'Fig. 12: serves public/ with the headers public/_headers gives each path (as Cloudflare does), for the browser tests with threads.', 'docs/simulations/fig12-beer-slosh.md'),
     (r'notes/fig12/threads-test\.cjs', 'Fig. 12: in Chromium, the threaded solver must print the single-thread fingerprint to the last digit.', 'docs/simulations/fig12-beer-slosh.md'),
     (r'tools/fig12/profile\.cjs', 'Fig. 12: times one fluid step of the stout solver by phase (level set, transfers, pressure, advection).', 'docs/simulations/fig12-beer-slosh.md'),
     (r'tools/fig12/same\.cjs', 'Fig. 12: fingerprint (SHA-256) of the solver state after 1 s with a push; a speed-up must leave it unchanged.', 'docs/simulations/fig12-beer-slosh.md'),
