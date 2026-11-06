@@ -1068,6 +1068,104 @@
     return (1 - tx) * (1 - ty) * at(i, j) + tx * (1 - ty) * at(i + 1, j) + (1 - tx) * ty * at(i, j + 1) + tx * ty * at(i + 1, j + 1);
   };
 
+  /* ------------------------------------------------------------- modal fluid */
+  // The stout as its first sloshing modes, for real time (the lecture note, section 4): the modes m = 1, n = 1..N of a
+  // circular cylinder of the glass's radius at the surface, R(h), forced by the glass's acceleration,
+  //     q_n'' + 2 zeta_n w_n q_n' + w_n^2 (1 + a_z/g) q_n = -beta_n a_x,   w_n^2 = g k_n tanh(k_n h),  k_n = xi_n / R(h),
+  //     beta_n = 2 xi_n tanh(xi_n h / R) / (xi_n^2 - 1),
+  // with q_n the height of mode n at the front wall. The surface is eta = sum q_n J1(k_n r)/J1(xi_n) cos(theta); the stout's
+  // momentum relative to the glass is P_x = sum rho pi R^3 / xi_n^2 q_n' (note, eq. 18). Above the rim the stout pours out over
+  // the rim as over a sharp-crested weir: per unit length of rim C_d (2/3) sqrt(2 g) D^{3/2}, D the height of the stout at the
+  // wall above the rim; the poured volume is subtracted (the fill falls, the crest shrinks) and its relative momentum counted.
+  // The tulip is not a cylinder: near its surface it nearly is (R'(h) = -0.04), and the deep cylinder of radius R(h) swings
+  // within 0.4 % of the 3D solver's frequency once the grid error is taken out (note, section 4.6).
+  const XI = [1.841184, 5.331443, 8.536316];
+  // J1 by its power series (|x| < 12 here; terms until negligible)
+  function J1(x) { let t = x / 2, s = 0; for (let k = 0; k < 60; k++) { s += t; t *= -(x * x / 4) / ((k + 1) * (k + 2)); if (Math.abs(t) < 1e-16) break; } return s; }
+  function ModalFluid(o) {
+    o = o || {};
+    this.modal = true;
+    this.profile = o.profile || null;
+    if (this.profile) { const P = this.profile.R; this.zRim = (P.length - 1) * this.profile.dz; this.R = Math.max.apply(null, P); this.Rrim = P[P.length - 1]; }
+    else { this.R = o.R || 0.04; this.zRim = o.zRim || 0.15; this.Rrim = this.R; }
+    this.h0 = o.h0 || 0.125; this.rho = o.rho || 1000; this.g = o.g || 9.81; this.nu = o.nu != null ? o.nu : 1e-6;
+    this.N = Math.min(3, o.nModes || 3);
+    this.Cd = o.Cd != null ? o.Cd : 0.62;
+    this.Rbox = this.R + 0.01; this.H = this.zRim + 0.03; this.dx = o.dx || 0.004;
+    this.h = this.h0; this.V = this.volumeTo(this.h0); this.mLiquid = this.rho * this.V; this.V0 = this.V;
+    // damping of mode 1 from the wall boundary layer (Abramson SP-106 eq. 4.10b, K = 5.23 measured): zeta_1 = K/(2 pi)
+    // sqrt(nu / (g^1/2 R^3/2)); the higher modes by the Stokes-layer scaling zeta ~ (nu / (w R^2))^1/2, zeta_n = zeta_1 (w_1/w_n)^1/2
+    this.zetaScale = o.zetaScale != null ? o.zetaScale : 1;
+    this.q = new Float64Array(this.N); this.qd = new Float64Array(this.N);
+    this.J1xi = XI.map(J1);
+    // the volume of mode n's crest on the high half of the surface disc per unit q: 2 R^2 int_0^1 J1(xi s)/J1(xi) s ds (trapezoid)
+    this.cV = XI.map((xi, n) => { let a = 0; const M = 400; for (let k = 1; k <= M; k++) { const s0 = (k - 1) / M, s1 = k / M; a += 0.5 * (J1(xi * s0) * s0 + J1(xi * s1) * s1) / M; } return 2 * a / this.J1xi[n]; });
+    this.t = 0; this.np = 0; this.npStart = 0; this.mp = 0; this.spilled = 0; this.spillNow = 0; this.spillPx = 0; this.spillPz = 0; this.spillList = [];
+    this.spillV = 0; this.spillRate = 0; this.cgIters = 0;
+    this.modes();
+  }
+  ModalFluid.prototype.Rz = Fluid.prototype.Rz;
+  ModalFluid.prototype.dRz = Fluid.prototype.dRz;
+  ModalFluid.prototype.volumeTo = Fluid.prototype.volumeTo;
+  // the fill height that holds the volume V (bisection on volumeTo)
+  ModalFluid.prototype.heightOf = function (V) { let a = 0, b = this.zRim; for (let k = 0; k < 40; k++) { const m = 0.5 * (a + b); if (this.volumeTo(m) < V) a = m; else b = m; } return 0.5 * (a + b); };
+  // the modes' constants at the present fill
+  ModalFluid.prototype.modes = function () {
+    const g = this.g, h = this.h, Rs = this.Rz(Math.min(h, this.zRim)); this.Rs = Rs;
+    this.w = []; this.beta = []; this.zeta = []; this.Pc = [];
+    const z1 = this.zetaScale * 5.23 / (2 * Math.PI) * Math.sqrt(this.nu / (Math.sqrt(g) * Math.pow(Rs, 1.5)));
+    for (let n = 0; n < this.N; n++) {
+      const xi = XI[n], k = xi / Rs, th = Math.tanh(k * h);
+      this.w.push(Math.sqrt(g * k * th)); this.beta.push(2 * xi * th / (xi * xi - 1));
+      this.Pc.push(this.rho * Math.PI * Rs * Rs * Rs / (xi * xi));
+    }
+    for (let n = 0; n < this.N; n++) this.zeta.push(z1 * Math.sqrt(this.w[0] / this.w[n]));
+  };
+  // the surface height above the floor at (x, y) in the glass frame
+  ModalFluid.prototype.heightAt = function (x, y) {
+    const r = Math.hypot(x, y), Rs = this.Rs; if (r < 1e-9) return this.h;
+    const c = x / r, rr = Math.min(r, Rs); let e = 0;
+    for (let n = 0; n < this.N; n++) e += this.q[n] * J1(XI[n] * rr / Rs) / this.J1xi[n];
+    return this.h + e * c;
+  };
+  ModalFluid.prototype.columnHeightAt = ModalFluid.prototype.heightAt;
+  ModalFluid.prototype.columnHeights = function () { return null; };
+  ModalFluid.prototype.levelSet = function () {};
+  ModalFluid.prototype.wallLift = function () { let s = 0; for (let n = 0; n < this.N; n++) s += this.q[n]; return s; };   // eta at the wall = wallLift cos(theta)
+  ModalFluid.prototype.momentum = function () { let p = 0; for (let n = 0; n < this.N; n++) p += this.Pc[n] * this.qd[n]; return [p, 0]; };
+  ModalFluid.prototype.liquidMass = function () { return this.rho * this.V; };
+  ModalFluid.prototype.maxSpeed = function () { return 0; };
+  // one step dt with the glass's acceleration (ax, az): the modes by symplectic Euler in substeps of at most 0.5 ms, then the pour
+  ModalFluid.prototype.step = function (dt, ax, az) {
+    const n = Math.max(1, Math.ceil(dt / 0.0005)), hs = dt / n, gf = 1 + az / this.g;
+    for (let s = 0; s < n; s++) for (let m = 0; m < this.N; m++) {
+      const w = this.w[m];
+      this.qd[m] += hs * (-w * w * gf * this.q[m] - 2 * this.zeta[m] * w * this.qd[m] - this.beta[m] * ax);
+      this.q[m] += hs * this.qd[m];
+    }
+    // the pour over the rim: D(theta) = h + Q cos(theta) - z_rim on the arc where it is positive
+    const Q = this.wallLift(), g = this.g;
+    let dV = 0, dPx = 0;
+    if (h_over(this, Q) > 0) {
+      const K = 72;
+      for (let k = 0; k < K; k++) {
+        const th = 2 * Math.PI * (k + 0.5) / K, D = this.h + Q * Math.cos(th) - this.zRim;
+        if (D <= 0) continue;
+        const qw = this.Cd * (2 / 3) * Math.sqrt(2 * g) * Math.pow(D, 1.5), dVk = qw * this.Rrim * (2 * Math.PI / K) * dt;
+        dV += dVk; dPx += this.rho * dVk * Math.sqrt(2 * g * D) * Math.cos(th);   // leaves outward at about the weir's speed
+      }
+      dV = Math.min(dV, 0.5 * this.V);
+      // the crest pours out: shrink the modes so that the crest's volume on the high half falls by dV
+      let Vc = 0; for (let m = 0; m < this.N; m++) Vc += this.cV[m] * this.q[m] * this.Rs * this.Rs;
+      const f = Math.abs(Vc) > 1e-12 ? Math.max(0, 1 - dV / Math.abs(Vc)) : 1;
+      for (let m = 0; m < this.N; m++) { this.q[m] *= f; this.qd[m] *= f; }
+      this.V -= dV; this.h = this.heightOf(this.V); this.modes();
+    }
+    this.spillNow = dV > 0 ? 1 : 0; this.spillV += dV; this.spillRate = dV / dt; this.spillPx = dPx; this.spillPz = 0;
+    this.t += dt;
+  };
+  function h_over(f, Q) { return f.h + Math.abs(Q) - f.zRim; }
+
   /* ------------------------------------------------------------------- road */
   function Road(o) {
     o = o || {};
@@ -1233,7 +1331,7 @@
   /* --------------------------------------------------------------- coupling */
   function World(o) {
     o = o || {};
-    this.fluid = new Fluid(o.fluid);
+    this.fluid = o.fluid && o.fluid.modal ? new ModalFluid(o.fluid) : new Fluid(o.fluid);
     const co = Object.assign({}, o.cart || {});
     co.ml = this.fluid.mLiquid;
     if (o.road) co.road = new Road(o.road);
@@ -1270,7 +1368,7 @@
       const P0 = this.P, f = this.fluid;
       this.J = [-(P[0] + f.spillPx - P0[0]), -(P[1] + f.spillPz - P0[1])]; this.hLast = h;
       this.Fx = this.J[0] / h; this.Fz = this.J[1] / h;
-      if (f.spillNow) { c.ml = f.liquidMass(); this.dropsFrom(f.spillList); }
+      if (f.spillNow) { c.ml = f.liquidMass(); if (f.modal) this.spilledMass = f.rho * f.spillV; else this.dropsFrom(f.spillList); }
       f.spillList.length = 0;
       this.moveDrops(h);
       this.P = P; this.lastAx = ax; this.lastAz = az;
@@ -1325,5 +1423,5 @@
     f.columnHeights(); ds.touch('h_col');
   };
 
-  return { Fluid, Road, Cart, World };
+  return { Fluid, ModalFluid, Road, Cart, World };
 });
