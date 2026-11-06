@@ -132,7 +132,7 @@ function World(o) {
   this.book = { Wm: 0, Drod: 0, Wvisc: 0, Eadv: 0, Ediff: 0, Eproj: 0, Erod: 0, Ecart: 0, Pwall: 0, Pmotor: 0, Ptransit: 0 };
   this.tmpU = new Float64Array(NU); this.tmpV = new Float64Array(NV); this.u0 = new Float64Array(NU); this.v0 = new Float64Array(NV); this.uF = new Float64Array(NU); this.vF = new Float64Array(NV);
   this.P.tol = 1e-3;   // relative residual of the pressure solves: the cart's added mass to 1e-4 of itself, the divergence left below 1e-2 1/s (fix/t_tol.cjs)
-  this.selfField = o.selfField !== undefined ? o.selfField : true; this.selfTol = 1e-2;   // the rods read the water with their own disturbance removed (the self field, below)
+  this.selfField = o.selfField !== undefined ? o.selfField : true; this.selfPerRod = o.selfPerRod !== undefined ? o.selfPerRod : true; this.selfTol = 1e-2;   // the rods read the water with their own disturbance removed (the self field, below)
   this.kin = {}; this.measure();
 }
 var W = World.prototype;
@@ -339,12 +339,19 @@ W.maxDiv = function () { var nx = this.nx, ny = this.ny, dx = this.dx, Wu = nx +
 /* the rods' own disturbance (test option selfField): a second field δu that obeys the same equations linearised about the flow, driven only by the
    rods' impulses, with the cart at rest and no inflow in it. The drag law (33)-(34) is written for the water as it would be without the rod, so the rods
    read u − δu (their own slowing removed); the water itself still receives every impulse. */
-W.withShadow = function (fn) { var u = this.u, v = this.v, ix = this.impX;
-  if (!this.du) { this.du = new Float64Array(u.length); this.dv = new Float64Array(v.length); this.pS = new Float64Array(this.nx * this.ny); this.uSelf = new Float64Array(4 * NP); }
-  this.u = this.du; this.v = this.dv; this._shadow = true; try { fn.call(this, u, v); } finally { this.u = u; this.v = v; this._shadow = false; this.impX = ix; } };
-W.shadowRead = function () { this.withShadow(function () { for (var o = 0; o < 4 * NP; o += 2) { var r = this.interp(this.pos[o], this.pos[o + 1]); this.uSelf[o] = r[0]; this.uSelf[o + 1] = r[1]; } }); };
-W.shadowSpread = function () { if (!this.haveImp || this.noPush) return; this.withShadow(function () { for (var o = 0; o < 4 * NP; o += 2) this.spread(this.impPos[o], this.impPos[o + 1], -this.imp[o], -this.imp[o + 1]); }); };
-W.shadowAdvect = function (dt) { this.withShadow(function (U, V) { this.impose(0); this._traceU = U; this._traceV = V; this.advect(dt); this._traceU = this._traceV = null; this.impose(0); }); };
+W.withShadow = function (fn, k) { var u = this.u, v = this.v, ix = this.impX, K = this.selfPerRod ? 2 : 1, q;   // k: which self field (one per rod with selfPerRod, else one for both)
+  if (!this.sh || this.sh.length !== K) { this.sh = []; for (q = 0; q < K; q++) this.sh.push({ du: new Float64Array(u.length), dv: new Float64Array(v.length), pS: new Float64Array(this.nx * this.ny) }); this.uSelf = new Float64Array(4 * NP); }
+  var S = this.sh[k || 0]; this.du = S.du; this.dv = S.dv; this.pS = S.pS;
+  this.u = S.du; this.v = S.dv; this._shadow = true; try { fn.call(this, u, v); } finally { this.u = u; this.v = v; this._shadow = false; this.impX = ix; } };
+W.eachShadow = function (fn) { var K = this.selfPerRod ? 2 : 1; for (var k = 0; k < K; k++) this.withShadow(fn, k); };
+W.rodOf = function (o) { return o < 2 * NP ? 0 : 1; };
+W.shadowRead = function () { var self = this; this.eachShadow(function () { var k = self.selfPerRod ? self.sh.indexOf(self.sh.filter(function (S) { return S.du === self.u; })[0]) : -1;
+  for (var o = 0; o < 4 * NP; o += 2) { if (k >= 0 && this.rodOf(o) !== k) continue; var r = this.interp(this.pos[o], this.pos[o + 1]); this.uSelf[o] = r[0]; this.uSelf[o + 1] = r[1]; } }); };
+W.shadowSpread = function () { if (!this.haveImp || this.noPush) return; var self = this;
+  if (this.selfTau) { var f = Math.exp(-this.h * this.nsub / this.selfTau); this.eachShadow(function () { for (var c = 0; c < this.u.length; c++) this.u[c] *= f; for (c = 0; c < this.v.length; c++) this.v[c] *= f; }); }   // test option: a finite memory
+  this.eachShadow(function () { var k = self.selfPerRod ? self.sh.indexOf(self.sh.filter(function (S) { return S.du === self.u; })[0]) : -1;
+    for (var o = 0; o < 4 * NP; o += 2) { if (this.noPushRod === this.rodOf(o) || (k >= 0 && this.rodOf(o) !== k)) continue; this.spread(this.impPos[o], this.impPos[o + 1], -this.imp[o], -this.imp[o + 1]); } }); };
+W.shadowAdvect = function (dt) { this.eachShadow(function (U, V) { this.impose(0); this._traceU = U; this._traceV = V; this.advect(dt); this._traceU = this._traceV = null; this.impose(0); }); };
 W.advectStored = function () {   // the same MacCormack step as advect(), on this.u/this.v, at the points the last advect() traced (the self field moves with the water's velocity)
   var nx = this.nx, ny = this.ny, Wu = nx + 1, u0 = this.u0, v0 = this.v0, uF = this.uF, vF = this.vF, i, j, c, sU = this._sU, sV = this._sV;
   var dXu = this._dXu, dYu = this._dYu, dXv = this._dXv, dYv = this._dYv, bXu = this._bXu, bYu = this._bYu, bXv = this._bXv, bYv = this._bYv; u0.set(this.u); v0.set(this.v);
@@ -357,9 +364,9 @@ W.advectStored = function () {   // the same MacCormack step as advect(), on thi
     var gx2 = Math.min(Math.max(dXv[c] - 0.5, 0), nx - 1 - 1e-9), gy2 = Math.min(Math.max(dYv[c], 0), ny - 1e-9), k2 = (gy2 | 0) * nx + (gx2 | 0);
     var b1 = v0[k2], b2 = v0[k2 + 1], b3 = v0[k2 + nx], b4 = v0[k2 + nx + 1], lo2 = Math.min(b1, b2, b3, b4), hi2 = Math.max(b1, b2, b3, b4); this.v[c] = (val2 < lo2 || val2 > hi2) ? vF[c] : val2; }
   this.boundary(); };
-W.shadowAdvectStored = function () { this.withShadow(function () { this.impose(0); this.advectStored(); this.impose(0); }); };
-W.shadowDiffuse = function (dt) { this.withShadow(function () { this.diffuse(dt, 0); }); };
-W.shadowProject = function (dt) { this.withShadow(function () { var f = this.rho / dt, i; this.divFluid(this.rhs); for (i = 0; i < this.rhs.length; i++) this.rhs[i] *= f; var tol = this.P.tol; if (this.selfTol) this.P.tol = this.selfTol; this.itsS = this.P.solve(this.rhs, this.pS); this.P.tol = tol; this.project(this.pS, dt); this.impose(0, true); this.boundary(); }); };
+W.shadowAdvectStored = function () { this.eachShadow(function () { this.impose(0); this.advectStored(); this.impose(0); }); };
+W.shadowDiffuse = function (dt) { this.eachShadow(function () { this.diffuse(dt, 0); }); };
+W.shadowProject = function (dt) { this.eachShadow(function () { var f = this.rho / dt, i; this.divFluid(this.rhs); for (i = 0; i < this.rhs.length; i++) this.rhs[i] *= f; var tol = this.P.tol; if (this.selfTol) this.P.tol = this.selfTol; this.itsS = this.P.solve(this.rhs, this.pS); this.P.tol = tol; this.project(this.pS, dt); this.impose(0, true); this.boundary(); }); };
 
 /* one fluid step of dt = nsub · h; ctrl(s, t) gives the motor force, called once at the start (sampled, held) */
 W.step = function (ctrl) {
@@ -370,12 +377,12 @@ W.step = function (ctrl) {
   this.uS1.set(this.uE); this.sampleAll(); if (this.selfField) this.shadowRead();
   for (o = 0; o < 4 * NP; o++) this.uE[o] = this.selfField ? this.uS[o] - this.uSelf[o] : this.uS[o];   // the water as it would be without the rods: what the law (33)-(34), (39) is written for
   if (this.first) { this.aS.fill(0); this.first = false; } else for (o = 0; o < 4 * NP; o++) this.aS[o] = (this.uE[o] - this.uS1[o]) / dt;   // ∂u/∂t at the point
-  var self = this, gEff = function (X, Y) { var g = self.interp(X, Y); if (self.selfField) { var d; self.withShadow(function () { d = this.interp(X, Y); }); g[0] -= d[0]; g[1] -= d[1]; } return g; };
-  for (o = 0; o < 4 * NP; o += 2) { var X = this.pos[o], Y = this.pos[o + 1], e = 0.5 * this.dx, gxp = gEff(X + e, Y), gxm = gEff(X - e, Y), gyp = gEff(X, Y + e), gym = gEff(X, Y - e), ux = this.uE[o], uy = this.uE[o + 1];
+  var self = this, kOf = 0, gEff = function (X, Y) { var g = self.interp(X, Y); if (self.selfField) { var d; self.withShadow(function () { d = this.interp(X, Y); }, self.selfPerRod ? kOf : 0); g[0] -= d[0]; g[1] -= d[1]; } return g; };
+  for (o = 0; o < 4 * NP; o += 2) { kOf = this.rodOf(o); var X = this.pos[o], Y = this.pos[o + 1], e = 0.5 * this.dx, gxp = gEff(X + e, Y), gxm = gEff(X - e, Y), gyp = gEff(X, Y + e), gym = gEff(X, Y - e), ux = this.uE[o], uy = this.uE[o + 1];
     this.aS[o] += (ux * (gxp[0] - gxm[0]) + uy * (gyp[0] - gym[0])) / (2 * e); this.aS[o + 1] += (ux * (gxp[1] - gxm[1]) + uy * (gyp[1] - gym[1])) / (2 * e); }   // + (u·∇)u: the acceleration of the fluid's particles (39)
   var E = this.KE(), Pf = this.momX(); B.PgeomEtc = (B.PgeomEtc || 0) + Pf - (this._Plast !== undefined ? this._Plast : Pf);
   // 2. deliver last step's impulse of the rods to the fluid (Newton's third law: minus what the rods received)
-  var toCart = 0; if (this.haveImp && !this.noPush) for (o = 0; o < 4 * NP; o += 2) toCart += this.spread(this.impPos[o], this.impPos[o + 1], -this.imp[o], -this.imp[o + 1]);
+  var toCart = 0; if (this.haveImp && !this.noPush) for (o = 0; o < 4 * NP; o += 2) { if (this.noPushRod === (o < 2 * NP ? 0 : 1)) continue; toCart += this.spread(this.impPos[o], this.impPos[o + 1], -this.imp[o], -this.imp[o + 1]); }
   var E1 = this.KE(), P1 = this.momX(); B.Prod = (B.Prod || 0) + P1 - Pf; B.toCartP = (B.toCartP || 0) + toCart; B.Erod += E1 - E; B.Ptransit = 0; if (this.selfField) { this.shadowSpread(); if (this.advCentral) this.shadowAdvect(dt); }
   // 3. advect and diffuse
   var ei = B.Eimp || 0, wi = B.Wimp || 0, pi = B.Pimp || 0; var T2 = Date.now(); if (!this.noExtrap) this.extrapolate(3); if (this.advCentral) this.advectCentral(dt); else this.advect(dt); this.impose(xd0); if (this.selfField) { if (!this.advCentral) this.shadowAdvectStored(); this.shadowDiffuse(dt); this.shadowProject(dt); } var T3 = Date.now(); var E2 = this.KE(), P2 = this.momX(); B.Padv = (B.Padv || 0) + P2 - P1; B.Eadv += E2 - E1; B.EimpA = (B.EimpA || 0) + B.Eimp - ei; ei = B.Eimp; B.PimpA = (B.PimpA || 0) + (B.Pimp || 0) - pi; pi = B.Pimp || 0;

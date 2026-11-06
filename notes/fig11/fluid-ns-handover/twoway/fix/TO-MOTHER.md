@@ -107,3 +107,25 @@ accepted. Gemini G3 independently confirms the oscillating-cylinder reference 3.
    by your test (direct force = global balance with no rule).
 5. Energy: the formulas, the Δt scaling at 10 / 20 / 40 ms, the long-run stability (flicks, swing-up in honey, 60 s) and the Wolfram identity of
    the lagged coupling will be added here.
+
+## Fluid session, round 2 (answers to the verdict, measured)
+**Self field, rebuilt per rod** (`selfPerRod`, default on the branch). t_wake.cjs / t_wake2.cjs, rods carried back and forth through still water:
+deviation of each rod's force from its truth run (that rod not pushing; the other rod's wake present), rms:
+- shared field: 0.27–1.19 %;
+- per rod, τ = ∞: 0.05–0.13 %;
+- per rod, τ = 1 s: 0.4–1.8 %;
+- per rod, τ = 0.2 s: 1.0–2.6 %;
+- no correction: 0.9–3.0 %.
+The other rod's wake is restored. Finite memory: held glycerol at 0.5 m/s, force ÷ isolated law 0.981 / 1.0004 / 1.0135 / 1.0208 for
+τ = 0.2 s / 1 s / 4 s / ∞. The steady self-slowing builds over seconds (far wake, blockage), so τ ≈ 4Δ/|w| removes too little of what the law
+already contains. What the law contains is the rod's own quasi-steady slowing at its current velocity; the exact split (keeping the old
+wake the rod swings back into) would need a steady solve of the tank every step. Chosen: per rod, τ = ∞. The own-wake-return loss is bounded by
+"no correction vs truth" (≤ 1–3 % of the rods' force in these swings) and will be stated on the page.
+Cost: per rod 31.5 ms per 20 ms step in Chromium (shared 20.8). Numa decides between them.
+**Energy**, t_ledger.cjs at fluid steps 10 / 20 / 40 ms (residual ≤ 2e-5 J):
+- L_lag = −0.056 / −0.109 / −0.220 J, ∝ Δt. Derivation: the machine feels the pressure at the mean velocity, the projection gives the water its
+  work at the end velocity, so L_lag = F_p Δt (ẋ′ − ẋ₀)/2 = J Δẋ/2 ≈ −½ m_a Δẋ² per step. Wolfram: symbolic difference 0; numerical 0.0844533 both ways.
+- L_proj = ½ρbΔ² Σ w (Δt ∇p/ρ)², the kinetic energy of the part each projection removes: 0.124 / 0.210 / 0.351 J (≈ Δt^0.76).
+- L_imp = Σ (ẋ ΔP − ΔK) over every override and extrapolation = ½ρbΔ² Σ w (ẋ − u)² (+ ½ w v² on v faces): 0.038 / 0.047 / 0.067 J.
+- L_adv = −(the MacCormack step's change of kinetic energy, less overrides): 0.093 / 0.091 / 0.087 J, not Δt-dependent (grid-scale damping).
+- R = 14.2 / 17.1 / 20.8 %. Net L_proj + L_lag > 0 in every run; long-run stability (flicks, honey swing-up, 60 s) still to test.

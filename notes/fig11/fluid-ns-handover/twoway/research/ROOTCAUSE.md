@@ -106,3 +106,12 @@ would be a regulariser to name in the book, not a physical dissipation.
 
 `incremental` (pressure-correction form; its energy book is not valid, see above), `advCentral` (second-order central
 advection, SSP-RK3), `noExtrap`, `measureSdf(sdf)` (any fixed body by its signed distance, for tests).
+
+## Corrections (7 November 2026, fluid session; see twoway/fix/STATUS.md and TO-MOTHER.md)
+- Every held-rod number above was biased by a harness bug: `frozen` held only the end of each step, so RK4 stages moved the rods. Corrected base
+  (0.5 m/s): glycerol 0.964, honey 0.941, water 0.971 (fix/matrix1.txt).
+- Every benchmark row in section 2 was run with a zero-gradient v at the inlet; the benchmark wants v = 0 (found against a Wolfram FEM solution).
+  The rows stand only as "not the cause"; the conclusion "steady nonlinear flow hitting a curved body" does not stand. With v = 0:
+  control-volume c_D 5.67 / 5.645 / 5.617, La 0.0883 / 0.0862 / 0.0856, Δp 0.1132 / 0.1141 / 0.1149 (10 / 20 / 39 per D).
+- The oscillating-cylinder test does not converge (8 cells per radius: 2.902 / 1.216 old rule, 2.960 / 1.318 ledger; exact 3.020 / 1.249).
+  "Converging, first order" was wrong.
