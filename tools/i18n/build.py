@@ -20,12 +20,15 @@ from html.parser import HTMLParser
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 LANGS = ('de', 'ar')
 NAMES = {'en': 'English', 'de': 'Deutsch', 'ar': 'العربية'}
+# Pages that exist in English only (Numa, 6 November 2026: Fig. 12 has no German or Arabic version). Links to them from the
+# German and Arabic pages point at the English page (rebase below), and they carry no language switch.
+ENGLISH_ONLY = {'beer-slosh.html'}
 # (source file, served path). The served path is the address under the site root; translations go to <lang>/<served path>.
 PAGES = [
     ('index.html', 'index.html'),
     ('public/simulations.html', 'simulations.html'),
     ('public/portfolios.html', 'portfolios.html'),
-] + [('public/simulations/' + f, 'simulations/' + f) for f in sorted(os.listdir(os.path.join(ROOT, 'public', 'simulations'))) if f.endswith('.html')]
+] + [('public/simulations/' + f, 'simulations/' + f) for f in sorted(os.listdir(os.path.join(ROOT, 'public', 'simulations'))) if f.endswith('.html') and f not in ENGLISH_ONLY]
 TEXTUAL = {'p', 'li', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'dt', 'dd', 'td', 'th', 'figcaption', 'caption', 'summary', 'title', 'option', 'button',
            'label', 'div', 'a', 'span', 'b', 'strong', 'em', 'i', 'small', 'sub', 'sup', 'q', 'cite', 'abbr', 'u', 'mark', 'output', 'legend', 'blockquote'}
 SKIP = {'script', 'style', 'svg', 'code', 'pre', 'math', 'textarea', 'noscript-skip'}
@@ -114,7 +117,7 @@ def table(lang, served):
 # Scripts whose words go through T('...'): every literal T('...') and every plural(n, 'one', 'many') in them needs an entry in
 # i18n/<lang>/strings.json, and so does every word of the catalog (scripts/catalog.js).
 SCRIPTS = ['public/scripts/fold.js', 'public/simulations.html', 'public/scripts/sim.js', 'public/scripts/datalog.js', 'public/scripts/curve.js'] + \
-    ['public/simulations/' + f for f in sorted(os.listdir(os.path.join(ROOT, 'public', 'simulations'))) if f.endswith('.html')] + \
+    ['public/simulations/' + f for f in sorted(os.listdir(os.path.join(ROOT, 'public', 'simulations'))) if f.endswith('.html') and f not in ENGLISH_ONLY] + \
     ['public/scripts/ledger/' + f for f in sorted(os.listdir(os.path.join(ROOT, 'public', 'scripts', 'ledger'))) if f.endswith('.js')]
 # The data panel shows what a page declares about its numbers (dataset title, kicker, groups, about, each variable's long_name)
 # through T(), so those literals in the simulation pages are wanted too, and so are the titles and notes of a page's ledger
@@ -239,7 +242,10 @@ def rebase(src, served, lang):
         path = url.split('#')[0].split('?')[0]
         here = os.path.dirname(served)
         target = os.path.normpath(os.path.join(here, path)).replace('\\', '/') if path else served
-        if path and target not in translated: url = up + url
+        if path and target not in translated:
+            # not translated: point at the English file from the site root (one more level up than the English page itself)
+            rest = url[len(url.split('#')[0].split('?')[0]):]
+            url = '../' * (depth(served) + 1) + target + ('/' if path.endswith('/') else '') + rest
         return f'{attr}={q}{url}{q}'
     return re.sub(r'\b(href|src)=(["\'])([^"\']*)\2', fix, src)
 
