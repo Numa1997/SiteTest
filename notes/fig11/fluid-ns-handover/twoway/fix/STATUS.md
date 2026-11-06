@@ -26,3 +26,18 @@ and Du/Dt of (39) is taken from u − δu too.
 ## Next
 2. Benchmark not converging (validate La/Δp measurement on spectral/ns2.cjs first). 3. Momentum identity test. 4. Energy remainder.
 5. Audit list. Then page 13.6, panel, docs, de/ar, Chromium, hon.cjs 5/5, merge.
+
+## Errors 2–4 (later the same day)
+- Error 2, root cause: the inlet's v was zero-gradient (the benchmark and the Wolfram FEM reference use v = 0). Fixed (v = 0 where a stream enters).
+  Control-volume c_D 5.67 / 5.645 / 5.617 and La 0.0883 / 0.0862 / 0.0856 at 10 / 20 / 39 cells per D; Δp 0.1149 (−2 %). t_stprobe.cjs, st_160_*.txt.
+- Error 3, root cause: the body's viscous force was the ghost-link flux weighted by the face fraction w, which misses the (1 − w) share of the
+  wall shear: an error that does not shrink with the grid. Seen from the water's side, it is the viscous step's non-conservation of Σ w u
+  (t_stmom.cjs: −6e-4 N at 10 per D). Fix ACCEPTED: the ledger rule (the body's viscous force = Σ w Δu of the viscous step, less the lid,
+  floor and ends). c_D read on the body 5.709 / 5.705 / 5.638 against the control volume's 5.67 / 5.645 / 5.617 (old rule: 5.444 / 5.535 / 5.264).
+  Independent check, from Gemini's derivation (G1): the unweighted ghost flux and the ledger must agree within O(Δ); measured 5.825 / 5.746 against
+  5.709 / 5.705 (gap 0.116 → 0.041). The rest of the gap to the global balance is semi-Lagrangian non-conservation (about 2e-4 N, also present
+  without a body).
+- Oscillating cylinder (t_oscstokes.cjs): reference 3.020 / 1.249 confirmed independently (Gemini's G3 derivation). The solver does not converge
+  to it with either rule (8 cells per radius: ledger 2.960 / 1.318, old 2.902 / 1.216): an open floor of the test, suspected confinement in the box.
+- Error 4: t_ledger.cjs closes the energy book to 1e-5 J. R in glycerol, 20 ms steps (17.1 %) = splitting loss 0.210 + advection 0.092 +
+  face forcing 0.047 − coupling lag 0.109 + transit 0.002 − re-weighting 0.013 J. Honey: R 7.7 % (splitting loss 0.084 J, advection 0.008 J).

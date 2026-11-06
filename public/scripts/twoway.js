@@ -248,7 +248,7 @@ W.diffuse = function (dt, xd) {   // explicit viscosity, substepped; no-slip on 
   // the wall link taken implicitly so that small θ stays stable (Gibou et al. 2002, J. Comput. Phys. 176, 205). Returns the x-momentum the body's surface gave the fluid (N s).
   var nx = this.nx, ny = this.ny, dx = this.dx, nu = this.nu, Wu = nx + 1, i, j, c, k; if (!nu || !this.rho) return 0;
   var vIn = (this.inflow || this.U) && !this.inletNeumann ? 1 : 0, n = Math.max(1, Math.ceil(nu * dt / (0.2 * dx * dx))), a = nu * (dt / n) / (dx * dx), u0 = this.u0, v0 = this.v0, shear = 0, pu = this.phU, pv = this.phV, ns = this.noslip, fv = this.viscFV, wu = this.wu, wv = this.wv;
-  var led = !this.shearOld, dPw = 0, dPb = 0;   // ledger: the body's viscous push is what this step changed in the water (Σ w Δu), less what the lid, floor and the tank's ends took
+  var led = !this.shearOld && !this.shearUnw, dPw = 0, dPb = 0;   // ledger: the body's viscous push is what this step changed in the water (Σ w Δu), less what the lid, floor and the tank's ends took
   for (var s = 0; s < n; s++) { u0.set(this.u); v0.set(this.v);
     for (j = 0; j < ny; j++) for (i = 1; i < nx; i++) { c = j * Wu + i; if (pu[c] < 0) continue;
       var nb = [c - 1, c + 1, j < ny - 1 ? c + Wu : -1, j > 0 ? c - Wu : -1], sum = 0, imp = 0, impb = 0;
@@ -257,7 +257,7 @@ W.diffuse = function (dt, xd) {   // explicit viscosity, substepped; no-slip on 
         if (pu[q] < 0) { var th = Math.max(pu[c] / (pu[c] - pu[q]), 0.05); imp += 1 / th; impb += xd / th; }   // a link through the body's surface
         else sum += fv ? Math.min(wu[c], wu[q]) / wu[c] * (u0[q] - u0[c]) : u0[q] - u0[c]; }   // finite-volume link: the flux through the fluid part of the face between them, so Σ w u is kept
       if (i === 1 || i === nx - 1) dPb += wu[c] * a * (u0[i === 1 ? c - 1 : c + 1] - u0[c]);   // the link to the inlet or outlet face
-      var un = (u0[c] + a * sum + a * impb) / (1 + a * imp); this.u[c] = un; if (led) shear += wu[c] * (un - u0[c]); else if (imp) shear += this.wu[c] * a * (impb - imp * un); }
+      var un = (u0[c] + a * sum + a * impb) / (1 + a * imp); this.u[c] = un; if (led) shear += wu[c] * (un - u0[c]); else if (imp) shear += (this.shearUnw ? 1 : this.wu[c]) * a * (impb - imp * un); }
     for (j = 1; j < ny; j++) for (i = 0; i < nx; i++) { c = j * nx + i; if (pv[c] < 0) continue;
       var nb2 = [i > 0 ? c - 1 : -1, i < nx - 1 ? c + 1 : -1, c + nx, c - nx], sum2 = 0, imp2 = 0;
       for (k = 0; k < 4; k++) { var q2 = nb2[k]; if (q2 < 0) { if (k === 0 && vIn) sum2 -= 2 * v0[c]; continue; }   // the inlet: v = 0 on x = 0 when a stream enters

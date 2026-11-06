@@ -20,3 +20,8 @@ Branch claude/fluid-rootcause. Read STATUS.md and the scripts named; reply with 
    accepted yet (switch it off with `shearOld`). Question: is the ledger rule the right definition of the body force?
 5. Error 4 (t_ledger.cjs): book closed to 1e-5 J. R (17 %) = splitting loss 0.210 J + MacCormack loss 0.091 J + face forcing 0.047 J
    − coupling-lag gain 0.109 J + transit 0.002 J − re-weighting 0.013 J (glycerol, 20 ms steps).
+
+## Update: error 3 decided
+Gemini (Numa's sidekick, task G1) showed that the old rule (ghost flux × w) has an error that does not shrink with the grid, and that the ledger rule
+and the unweighted ghost flux must agree within O(Δ). Measured: 5.709 / 5.705 against 5.825 / 5.746 (gap 0.116 → 0.041). The ledger rule is
+accepted. Gemini G3 independently confirms the oscillating-cylinder reference 3.020 / 1.249.
