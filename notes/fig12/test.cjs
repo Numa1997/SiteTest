@@ -15,9 +15,18 @@ const { chromium } = require('playwright'); const { spawn } = require('child_pro
     console.log(name, JSON.stringify(s0), '→', JSON.stringify(s1));
     await p.screenshot({ path: path.join(out, name + '.png') });
     if (name === 'desktop') {
-      // push forward for 1.5 s with the key and see the cart speed up
+      // speed control on: a push is answered by the motor (the current drops); open loop: the push speeds the cart up
+      const i0 = await p.evaluate(() => Fig12.world.cart.i); await p.keyboard.down('ArrowRight'); await p.waitForTimeout(2500);
+      const i1 = await p.evaluate(() => Fig12.world.cart.i); await p.keyboard.up('ArrowRight');
+      console.log('push with speed control: motor current', i0.toFixed(2), '→', i1.toFixed(2), 'A');
+      await p.click('#ctrl-off'); await p.waitForTimeout(300);
       const v0 = await p.evaluate(() => Fig12.world.cart.vx); await p.keyboard.down('ArrowRight'); await p.waitForTimeout(2500); const v1 = await p.evaluate(() => Fig12.world.cart.vx); await p.keyboard.up('ArrowRight');
-      console.log('push: speed', v0.toFixed(3), '→', v1.toFixed(3));
+      console.log('push in open loop: speed', v0.toFixed(3), '→', v1.toFixed(3));
+      // drag: press on the cart and pull 10 cm back; the hand force appears and the cart is held back
+      const bb = await p.locator('#cv').boundingBox();
+      await p.mouse.move(bb.x + bb.width / 2, bb.y + bb.height * 0.7); await p.mouse.down(); await p.mouse.move(bb.x + bb.width / 2 - 120, bb.y + bb.height * 0.7, { steps: 5 });
+      await p.waitForTimeout(1500); const dr = await p.evaluate(() => ({ hand: Fig12.world.cart.hand, F: Fig12.world.cart.Fhand, v: Fig12.world.cart.vx })); await p.mouse.up();
+      console.log('drag: hand at', dr.hand && dr.hand.toFixed(3), 'm, hand force', dr.F.toFixed(2), 'N, speed', dr.v.toFixed(3), 'm/s');
       await p.locator('#stage').screenshot({ path: path.join(out, 'stage.png') });
       const ovf = await p.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth); console.log('horizontal overflow px', ovf);
     } else {

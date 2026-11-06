@@ -912,6 +912,11 @@
   };
 
   /* ------------------------------------------------------------------- cart */
+  // The cart: x along the road, z_b the body (bottom), z_w the axle. The wheel rolls without slipping, driven through a
+  // gearbox by a DC motor whose current is set by a current loop (a torque drive). A sampled controller sets the current:
+  // 'off' holds the current that balances the drag at the set speed (open loop), 'speed' adds a PI loop on the speed.
+  // An active suspension can add a force between body and axle (skyhook on the body's vertical speed). The reader can
+  // push with buttons or drag the cart with a hand modelled as a spring and damper with a force limit.
   function Cart(o) {
     o = o || {};
     this.Mb = o.Mb || 1.5;       // body and glass, without the stout, kg
@@ -923,21 +928,62 @@
     this.kt = o.kt || 2.0e4;     // radial tyre stiffness, N/m
     this.ct = o.ct || 5;         // tyre damping, N s/m
     this.cx = o.cx || 2;         // rolling and air drag, N s/m
-    this.v0 = o.v0 != null ? o.v0 : 1.0;  // cruising speed the drive force is set for, m/s
-    this.ml = o.ml || 0;         // liquid mass, kg (set by the coupling)
+    this.v0 = o.v0 != null ? o.v0 : 1.0;  // set speed, m/s
+    this.ml = o.ml || 0;         // stout in the glass, kg (set by the coupling; falls as it spills)
     this.Ls = o.Ls || 0.08;      // unloaded spring length (body above axle), m
+    this.bodyW = o.bodyW || 0.22; this.bodyH = o.bodyH || 0.03;   // the body block, m (it catches spilled drops)
+    this.glassFloor = o.glassFloor || 0.036;   // the glass's inner floor above the body's bottom: body 30 mm + glass base 6 mm
     this.g = 9.81;
+    // drive: DC gear motor (a small 12 V motor; the numbers are a modelling choice, stated in the note)
+    this.Ngear = o.Ngear || 10;  // gear ratio, motor turns per wheel turn
+    this.Km = o.Km || 0.02;      // torque constant = back-EMF constant, N m/A = V s/rad
+    this.Ra = o.Ra || 2.0;       // armature resistance, ohm
+    this.Jm = o.Jm || 2e-6;      // rotor inertia, kg m^2
+    this.Vmax = o.Vmax || 12;    // supply voltage, V
+    this.Imax = o.Imax || 3;     // current limit of the drive, A
+    this.tauI = o.tauI || 0.002; // time constant of the current loop, s
+    this.ctrl = o.ctrl || 'speed';
+    this.Ts = o.Ts || 0.001;     // controller sampling period, s
+    const b = this.Ngear * this.Km / this.Rw;                 // force at the road per amp, N/A
+    const M = this.Mb + this.ml + this.mw + this.Iw / (this.Rw * this.Rw) + this.Ngear * this.Ngear * this.Jm / (this.Rw * this.Rw);
+    this.wc = o.wc || 2 * Math.PI * 8;                         // speed-loop crossover, rad/s
+    this.Kp = o.Kp || M * this.wc / b;                         // A per m/s
+    this.Ki = o.Ki || this.Kp * this.wc / 4;                   // A per m
+    // active suspension: skyhook on the body's vertical speed, a force actuator with a lag and a limit
+    this.susp = o.susp || false;
+    this.csky = o.csky || 2 * 0.7 * Math.sqrt(this.k * (this.Mb + this.ml));   // N s/m
+    this.Umax = o.Umax || 40;    // N
+    this.tauU = o.tauU || 0.005; // s
+    // the reader's hand
+    this.kh = o.kh || 300; this.ch = o.ch || 30; this.Fhmax = o.Fhmax || 25;   // N/m, N s/m, N
+    this.hand = null;            // x the hand pulls towards, or null
     this.road = o.road || new Road({ Rw: this.Rw });
     this.pushF = 0;              // the reader's push, N (horizontal)
     this.reset(o.x0 != null ? o.x0 : 0);
   }
+  Cart.prototype.bForce = function () { return this.Ngear * this.Km / this.Rw; };
+  Cart.prototype.massX = function () { return this.Mb + this.ml + this.mw + (this.Iw + this.Ngear * this.Ngear * this.Jm) / (this.Rw * this.Rw); };
   Cart.prototype.reset = function (x) {
     const g = this.g, Ms = this.Mb + this.ml, za = this.road.axle(x)[0];
     this.x = x; this.vx = this.v0;
     this.zw = za - (Ms + this.mw) * g / this.kt;                 // static tyre deflection
     this.zb = this.zw + this.Ls - Ms * g / this.k;               // static spring deflection
     this.vzb = 0; this.vzw = 0; this.t = 0; this.Flx = 0; this.Flz = 0;
+    this.i = this.cx * this.v0 / this.bForce();                  // the current that holds the set speed against the drag
+    this.icmd = this.i; this.xi = 0; this.us = 0; this.uscmd = 0; this.tSample = 0;
     this.forces(0, 0);
+  };
+  // the controller, run every Ts: the motor current command, and the suspension force command
+  Cart.prototype.sample = function () {
+    const i0 = this.cx * this.v0 / this.bForce(), e = this.v0 - this.vx;
+    if (this.ds) { this.ds.set('v_s', this.vx); this.ds.set('xi_s', this.xi); this.ds.set('vzb_s', this.vzb); }
+    if (this.ctrl === 'speed') {
+      let ic = i0 + this.Kp * e + this.Ki * this.xi;
+      if (Math.abs(ic) < this.Imax) this.xi += e * this.Ts;     // anti-windup: integrate only when not saturated
+      this.icmd = ic;
+    } else this.icmd = i0;
+    this.uscmd = this.susp ? -this.csky * this.vzb : 0;
+    if (this.uscmd > this.Umax) this.uscmd = this.Umax; else if (this.uscmd < -this.Umax) this.uscmd = -this.Umax;
   };
   // the forces at the present state, with the liquid's reaction (Fx, Fz) beyond rigid co-motion: kept on the cart
   // (and in the store, when the page gave one) so that every stored force belongs to the stored state
@@ -947,25 +993,41 @@
     const vza = dza * this.vx;
     let N = this.kt * (za - this.zw) + this.ct * (vza - this.vzw);
     if (N < 0) N = 0;                                            // the tyre cannot pull on the road
-    const Fs = -this.k * (this.zb - this.zw - this.Ls) - this.c * (this.vzb - this.vzw);  // on the body
-    const Mx = Ms + this.mw + this.Iw / (this.Rw * this.Rw);
-    const Fdrive = this.cx * this.v0, Froad = -N * dza;
-    const ax = (Froad + Fdrive - this.cx * this.vx + this.pushF + Fx) / Mx;
+    const Fs = -this.k * (this.zb - this.zw - this.Ls) - this.c * (this.vzb - this.vzw) + this.us;  // on the body
+    const Mx = this.massX();
+    const Fmotor = this.bForce() * this.i, Froad = -N * dza;
+    let Fhand = 0;
+    if (this.hand != null) { Fhand = this.kh * (this.hand - this.x) - this.ch * this.vx; if (Fhand > this.Fhmax) Fhand = this.Fhmax; else if (Fhand < -this.Fhmax) Fhand = -this.Fhmax; }
+    const ax = (Froad + Fmotor - this.cx * this.vx + this.pushF + Fhand + Fx) / Mx;
     const azb = (Fs - Ms * g + Fz) / Ms;
     const azw = (-Fs - this.mw * g + N) / this.mw;
-    this.za = za; this.dza = dza; this.N = N; this.Fs = Fs; this.Froad = Froad; this.Fdrive = Fdrive;
-    this.ax = ax; this.azb = azb; this.azw = azw; this.Flx = Fx; this.Flz = Fz;
+    // the current the drive can reach: limited by the drive and by the voltage left over the back-EMF
+    const emf = this.Km * this.Ngear * this.vx / this.Rw;
+    let ilim = this.icmd; if (ilim > this.Imax) ilim = this.Imax; else if (ilim < -this.Imax) ilim = -this.Imax;
+    const iHi = (this.Vmax - emf) / this.Ra, iLo = (-this.Vmax - emf) / this.Ra;
+    if (ilim > iHi) ilim = iHi; else if (ilim < iLo) ilim = iLo;
+    this.za = za; this.dza = dza; this.N = N; this.Fs = Fs; this.Froad = Froad; this.Fdrive = Fmotor; this.Fhand = Fhand;
+    this.ax = ax; this.azb = azb; this.azw = azw; this.Flx = Fx; this.Flz = Fz; this.ireach = ilim; this.emf = emf;
+    this.Vm = this.Ra * this.i + emf;                             // motor voltage
     if (D) {
       D.set('x', this.x); D.set('vx', this.vx); D.set('zb', this.zb); D.set('vzb', this.vzb); D.set('zw', this.zw); D.set('vzw', this.vzw);
-      D.set('z_a', za); D.set('dz_a', dza); D.set('N', N); D.set('F_s', Fs); D.set('F_road', Froad); D.set('F_drive', Fdrive);
-      D.set('F_push', this.pushF); D.set('F_lx', Fx); D.set('F_lz', Fz); D.set('a_x', ax); D.set('a_zb', azb); D.set('a_zw', azw);
+      D.set('z_a', za); D.set('dz_a', dza); D.set('N', N); D.set('F_s', Fs); D.set('F_road', Froad); D.set('F_drive', Fmotor);
+      D.set('F_push', this.pushF); D.set('F_hand', Fhand); D.set('F_lx', Fx); D.set('F_lz', Fz); D.set('a_x', ax); D.set('a_zb', azb); D.set('a_zw', azw);
+      D.set('i_m', this.i); D.set('i_cmd', this.icmd); D.set('i_reach', ilim); D.set('V_m', this.Vm); D.set('emf', emf); D.set('u_s', this.us); D.set('u_s_cmd', this.uscmd);
+      D.set('Mx', Mx); D.set('Ms', Ms); D.set('ml', this.ml);
     }
   };
-  // one step h, symplectic Euler: velocities from the forces at the present state, then positions from the new velocities;
-  // then the forces at the new state, for the next step
+  // one step h: the controller when a sample is due; then symplectic Euler for the mechanics (velocities from the forces
+  // at the present state, positions from the new velocities); the current and the suspension force follow their
+  // first-order lags exactly over h; then the forces at the new state, for the next step
   Cart.prototype.step = function (h, Fx, Fz) {
+    this.tSample += h;
+    if (this.tSample >= this.Ts - 1e-12) { this.tSample -= this.Ts; this.sample(); this.forces(Fx, Fz); }
     this.vx += h * this.ax; this.vzb += h * this.azb; this.vzw += h * this.azw;
     this.x += h * this.vx; this.zb += h * this.vzb; this.zw += h * this.vzw;
+    const ei = Math.exp(-h / this.tauI), eu = Math.exp(-h / this.tauU);
+    this.i = this.ireach + (this.i - this.ireach) * ei;
+    this.us = this.uscmd + (this.us - this.uscmd) * eu;
     this.t += h;
     this.forces(Fx, Fz);
   };
@@ -997,9 +1059,13 @@
       const ax = (c.vx - vx0) / h, az = (c.vzb - vz0) / h;     // the glass's mean acceleration over the step
       this.fluid.step(h, ax, az);
       const P = this.fluid.momentum();
-      // reaction of the liquid on the glass beyond rigid co-motion: -dP_rel/dt
-      const P0 = this.P;
-      this.Fx = -(P[0] - P0[0]) / h; this.Fz = -(P[1] - P0[1]) / h;
+      // reaction of the liquid on the glass beyond rigid co-motion: -dP_rel/dt, counting the momentum that left over
+      // the rim with the spilled stout (it was not pushed by the glass at the moment it left)
+      const P0 = this.P, f = this.fluid;
+      this.Fx = -(P[0] + f.spillPx - P0[0]) / h; this.Fz = -(P[1] + f.spillPz - P0[1]) / h;
+      if (f.spillNow) { c.ml = f.liquidMass(); this.dropsFrom(f.spillList); }
+      f.spillList.length = 0;
+      this.moveDrops(h);
       this.P = P; this.lastAx = ax; this.lastAz = az;
       c.forces(this.Fx, this.Fz);                               // the stout's new reaction acts from now
       left -= h; this.t += h; this.steps = (this.steps || 0) + 1;
@@ -1007,9 +1073,36 @@
       if (D) {
         D.set('t', this.t); D.set('h_f', h); D.set('n_cart', n); D.set('vx_0', vx0); D.set('vzb_0', vz0); D.set('vx_1', c.vx); D.set('vzb_1', c.vzb);
         D.set('a_gx', ax); D.set('a_gz', az); D.set('P0_x', P0[0]); D.set('P0_z', P0[1]); D.set('P_x', P[0]); D.set('P_z', P[1]);
-        D.set('F_lx_next', this.Fx); D.set('F_lz_next', this.Fz); D.set('steps', this.steps);
+        D.set('F_lx_next', this.Fx); D.set('F_lz_next', this.Fz); D.set('steps', this.steps); D.set('P_spill_x', f.spillPx); D.set('P_spill_z', f.spillPz);
         D.set('cg_iters', this.fluid.cgIters); D.set('cg_res', this.fluid.cgResidual || 0);
       }
+    }
+  };
+
+  // Spilled stout in the room: each particle that left over the rim becomes a drop (with its mirror image, the other
+  // half of the glass) at the glass's position plus its own, with the glass's velocity plus its own, falling freely
+  // (no air drag) until it meets the body's top or the road, where it stays as a splash. At most 6000 drops are kept.
+  World.prototype.dropsFrom = function (list) {
+    const c = this.cart, D = this.drops || (this.drops = []);
+    for (const q of list) for (const m of [1, -1]) {
+      if (D.length >= 6000) D.shift();
+      D.push({ x: c.x + q[0], y: m * q[1], z: c.zb + c.glassFloor + q[2], vx: c.vx + q[3], vy: m * q[4], vz: c.vzb + q[5], landed: false });
+    }
+    this.spilledMass = (this.spilledMass || 0) + list.length * 2 * this.fluid.mp;
+  };
+  World.prototype.moveDrops = function (h) {
+    const D = this.drops; if (!D) return;
+    const g = this.cart.g, road = this.cart.road;
+    const c = this.cart, top = c.zb + c.bodyH;
+    for (const d of D) {
+      if (d.onBody) { d.x = c.x + d.rel; d.z = c.zb + c.bodyH; continue; }   // a splash on the body rides with it
+      if (d.landed) continue;
+      const zPrev = d.z;
+      d.vz -= g * h; d.x += d.vx * h; d.y += d.vy * h; d.z += d.vz * h;
+      // the body's top face catches a drop that crosses it inside the body's footprint
+      if (zPrev >= top && d.z <= top && Math.abs(d.x - c.x) <= c.bodyW / 2) { d.z = top; d.landed = true; d.onBody = true; d.rel = d.x - c.x; continue; }
+      const zr = road.zr(d.x);
+      if (d.z <= zr) { d.z = zr; d.landed = true; }
     }
   };
 
