@@ -1,0 +1,47 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Project 05 in a solved 2D fluid</title>
+<style>body{margin:0;background:#fbfaf7;font:13px IBM Plex Sans,Helvetica,Arial,sans-serif;color:#222}canvas{display:block}#hud{padding:6px 10px;white-space:pre}</style>
+<canvas id="c"></canvas><div id="hud"></div>
+<script>
+function load(src, req) { var x = new XMLHttpRequest(); x.open('GET', src, false); x.send(); var module = { exports: {} }; (new Function('module', 'require', x.responseText))(module, function () { return req; }); return module.exports; }
+var NS1 = load('ns.cjs'), NS2 = load('ns2.cjs', NS1), Q = new URLSearchParams(location.search);
+var N = +(Q.get('N') || 256), M = N / 2, Lx = 3.0, Ly = 1.6, U = +(Q.get('U') || 1.5), nu = +(Q.get('nu') || 1.5e-5);   // air: nu = 1.5e-5 m²/s
+var ns = new NS2.NS({ N: N, M: M, Lx: Lx, Ly: Ly, nu: nu, eta: +(Q.get('eta') || 1e-6), etaSp: 0.01, cfl: +(Q.get('cfl') || 0.6), dtMax: 2e-3, inRhs: !!Q.get('inrhs') });
+ns.Ux = U; ns.setSponge(function (x, y) { var LS = 0.3, LY = 0.08, s = x < LS ? (x < LS / 2 ? Math.pow(Math.sin(Math.PI * x / LS), 2) : 1) : 0;   // inlet strip, and strips top and bottom so the box does not wrap
+  var sy = y < LY ? Math.pow(Math.cos(Math.PI / 2 * y / LY), 2) : y > Ly - LY ? Math.pow(Math.cos(Math.PI / 2 * (Ly - y) / LY), 2) : 0; return [Math.max(s, sy), 0, 0]; });
+var CW = 0.36, CH = 0.12, R = 0.01, L1 = 0.5, L2 = 0.75, YC = +(Q.get('yc') || 0.25), X0 = 1.1;
+function cap(L) { return function (x, y) { var qy = Math.max(Math.min(y, L), 0); return Math.hypot(x, y - qy) - R; }; }   // capsule from (0,0) to (0,L) in local coords
+var cart = new NS2.Body(ns, { ramp: true, sdf: function (x, y) { var qx = Math.abs(x) - CW / 2 + 0.01, qy = Math.abs(y) - CH / 2 + 0.01; return Math.hypot(Math.max(qx, 0), Math.max(qy, 0)) + Math.min(Math.max(qx, qy), 0) - 0.01; }, xc: X0, yc: YC });
+var rod1 = new NS2.Body(ns, { ramp: true, sdf: cap(L1) }), rod2 = new NS2.Body(ns, { ramp: true, sdf: cap(L2) });
+// prescribed motion: cart x(t), angles from the vertical th1, th2 (positive = leaning right); Body.th = -theta (see Body.update)
+function motion(t) {
+  var w0 = 2 * Math.PI * 0.4, w1 = 2 * Math.PI * 0.5, A0 = 0.3, A1 = 0.45, A2 = 0.6, ph = 0.8;
+  var x = X0 + A0 * Math.sin(w0 * t), xd = A0 * w0 * Math.cos(w0 * t);
+  var a = A1 * Math.sin(w1 * t), ad = A1 * w1 * Math.cos(w1 * t), b = -A2 * Math.sin(w1 * t + ph), bd = -A2 * w1 * Math.cos(w1 * t + ph);
+  cart.xc = x; cart.vx = xd;
+  rod1.xc = x; rod1.yc = YC + CH / 2; rod1.th = -a; rod1.vx = xd; rod1.vy = 0; rod1.om = -ad;
+  rod2.xc = x + L1 * Math.sin(a); rod2.yc = YC + CH / 2 + L1 * Math.cos(a); rod2.th = -b; rod2.vx = xd + L1 * Math.cos(a) * ad; rod2.vy = -L1 * Math.sin(a) * ad; rod2.om = -bd;
+}
+rod1.motion = rod2.motion = cart.motion = null; ns.bodies = Q.get('bodies') === 'cart' ? [cart] : [cart, rod1, rod2];
+var STILL = !!Q.get('still'), m0 = motion; motion = function (t) { m0(t); if (STILL) { cart.xc = X0; cart.vx = 0; rod1.xc = X0; rod1.vx = 0; rod2.xc = X0 + L1 * Math.sin(-rod1.th); rod2.vx = L1 * Math.cos(-rod1.th) * (-rod1.om); } }; var KICK = +(Q.get('kick') || 0); ns.setOmega(function (x, y) { return KICK * Math.exp(-((x - (X0 + 0.4)) * (x - (X0 + 0.4)) + (y - YC - 0.1) * (y - YC - 0.1)) / 0.004); });   // a small vortex just behind and above the cart: the seed every real flow has
+var S = 300, cv = document.getElementById('c'); cv.width = Lx * S; cv.height = Ly * S; var ctx = cv.getContext('2d'), img = ctx.createImageData(N, M);
+function draw() {
+  ns.velocity(ns.wr, ns.wi); var WM = +(Q.get('wmax') || 80), d = img.data;
+  for (var j = 0; j < M; j++) for (var i = 0; i < N; i++) { var p = j * N + i, q = ((M - 1 - j) * N + i) * 4, w = Math.max(-1, Math.min(1, ns.w[p] / WM)), c = cart.chi[p] + rod1.chi[p] + rod2.chi[p];
+    var r = 255, g = 255, b = 255; if (w > 0) { g = b = 255 * (1 - w); } else { r = g = 255 * (1 + w); }
+    if (c > 0.5) { r = 60; g = 40; b = 40; } d[q] = r; d[q + 1] = g; d[q + 2] = b; d[q + 3] = 255; }
+  var off = document.createElement('canvas'); off.width = N; off.height = M; off.getContext('2d').putImageData(img, 0, 0);
+  ctx.imageSmoothingEnabled = true; ctx.drawImage(off, 0, 0, cv.width, cv.height);
+  ctx.strokeStyle = '#1d4e89'; ctx.lineWidth = 1; var st = N / 48, sc = 0.05 * S;   // arrows: 0.05 s of travel
+  for (var jj = st / 2; jj < M; jj += st) for (var ii = st / 2; ii < N; ii += st) { var pp = Math.round(jj) * N + Math.round(ii); if (cart.chi[pp] + rod1.chi[pp] + rod2.chi[pp] > 0.5) continue;
+    var x0 = (ii + 0.5) * Lx / N * S, y0 = cv.height - (jj + 0.5) * Ly / M * S, ux = ns.u[pp] * sc, uy = -ns.v[pp] * sc; ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x0 + ux, y0 + uy); ctx.stroke(); ctx.fillStyle = '#1d4e89'; ctx.fillRect(x0 + ux - 1, y0 + uy - 1, 2, 2); }
+  ctx.strokeStyle = '#555'; ctx.beginPath(); ctx.moveTo(0, cv.height - (YC - CH / 2) * S); ctx.lineTo(cv.width, cv.height - (YC - CH / 2) * S); ctx.stroke();
+}
+var rho = +(Q.get('rho') || 1.18), DEP = [0.2, 0.02, 0.02];   // depths out of the screen: cart 0.2 m, rods 0.02 m
+function hud() { var f = ns.bodies.map(function (b, k) { return (b.F ? b.F.map(function (v) { return (v * rho * DEP[k]).toFixed(3); }) : ['-', '-']).join(', '); });
+  document.getElementById('hud').textContent = 't = ' + ns.t.toFixed(3) + ' s   dt = ' + (ns.dtLast || 0).toExponential(1) + '   breeze ' + U + ' m/s, nu ' + nu + '   force on (cart | rod1 | rod2), N, at the bodies\' real depths: ' + f.join(' | ') + '   vorticity scale ±' + (Q.get('wmax') || 80) + ' /s'; }
+window.stepTo = function (T) { while (ns.t < T - 1e-9) { motion(ns.t); var rem = T - ns.t; ns.dtLast = rem > (ns.dtLast || ns.dtMax) ? ns.step() : ns.step(rem); } draw(); hud(); return { t: ns.t, F: ns.bodies.map(function (b) { return b.F; }) }; };
+window.ns = ns; draw(); hud();
+if (Q.get('live')) { (function loop() { stepTo(ns.t + 0.01); requestAnimationFrame(loop); })(); }
+</script>
