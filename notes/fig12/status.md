@@ -27,5 +27,11 @@
 - Fixed in the note: the drawing's scale factors; the volume check's honesty; the Rayleigh units and the modal-row claim; the controller's level-road tilt error (2.1° on the bump), why x_c is not a state, and why deflection coordinates (the kerb); the frame of reference and Galilean invariance; the vorticity picture of the lag and the closed form Q_r = Q(Z_s − 2/k) = 100.9 mm; the symbol clashes (pitch is now β; tyre deflections w; FEM matrices with h, cart's with c; cost 𝒥, Riccati P, weights W); the wrong Fig. 11 reference; the Problems boxes merged; sources: NASA SP-106 eq. (4.8a) read in place of the secondary quote of SP-8009, the ISO 8608 preview and an open reproduction of the class table.
 - Left as stated in the note: Hrovat, Karnopp, Miles and Keulegan are abstract-level sources, and say so.
 
-## Open at the time of writing
-- German and Arabic translations; merge with main.
+## Published (6 November 2026)
+- German and Arabic translated (all 180 page pieces, 98 strings, 42 walkthrough texts per language); glossary: body = Aufbau / الهيكل, actuator = Aktor / المشغّل, strut deflection = Einfederung.
+- Merged as https://github.com/Numa1997/SiteTest/pull/95; live on phyeinusul.com about 75 s later. `test.cjs` against the live site in en/de/ar: 47/47 checks, read-backs and the 3D pitch read-back pass.
+- The one console error on the live site is Cloudflare's analytics beacon, blocked by the site's own Content-Security-Policy meta; it appears on every page (also pendulum-control.html), not from this figure.
+
+## Open
+- The 3D look: the glass is the only Blender asset, without a material; the cart is three.js boxes and cylinders; no environment map, tone mapping, shadows or see-through glass. Waiting for Numa's choice (Blender assets plus a proper three.js setup, three.js only, or as is).
+- Arabic glossary: heave = الارتفاع and pitch = الانعطاف الطولي read poorly (the translator suggests الحركة الرأسية and الميل الطولي); a site-wide decision.
