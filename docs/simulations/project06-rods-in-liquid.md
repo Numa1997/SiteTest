@@ -102,7 +102,10 @@ sets U to this value (`uStart()`).
 
 | Flow | water | glycerol | honey |
 |---|---|---|---|
-@CHALMD@
+| an internal wave | 0.8 | 0.5 | 0.24 |
+| a double gyre | 1.1 | 0.5 | 0.11 |
+| a random sea | 0.6 | 0.3 | 0.14 |
+| tidal beats | 0.7 | 0.4 | 0.16 |
 
 The first version measured the balancing law alone, without the supervisor, and gave 1.0–3.8 m/s in water; on the page those flows
 knocked the rods down (the supervisor rescued them, partly through the certificate bug above). These values are what the page holds.
