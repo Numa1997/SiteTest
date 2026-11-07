@@ -1,0 +1,4 @@
+gpu A 0.5 m/s^2: lean 5.5 mm at 1.325 s; free swing 9.648 Hz; spill 0 g; particles 51332 -> 51332; CG 84.6 it.; fastest particle 53.5 mm/s; 297 ms a step on google/swiftshader; errors none
+gpu A 2 m/s^2: lean -25.4 mm at 0.21 s; free swing 3.835 Hz; spill 0 g; particles 51332 -> 51332; CG 99.1 it.; fastest particle 226.1 mm/s; 386 ms a step on google/swiftshader; errors none
+gpu A 4 m/s^2: lean -46 mm at 0.185 s; free swing 3.081 Hz; spill 1.6 g; particles 51332 -> 51136; CG 99 it.; fastest particle 540 mm/s; 416 ms a step on google/swiftshader; errors none
+gpu A 6 m/s^2: lean -69 mm at 0.205 s; free swing 3.059 Hz; spill 12.3 g; particles 51332 -> 49856; CG 98.3 it.; fastest particle 784.9 mm/s; 450 ms a step on google/swiftshader; errors none

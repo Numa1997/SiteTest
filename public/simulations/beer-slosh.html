@@ -114,11 +114,12 @@
                         <input type="range" id="bumpH" min="0" max="25" step="1" value="10">
                     </label>
                     <div class="actions" role="group" aria-label="Model of the stout">
-                        <button type="button" class="btn btn--ghost" id="model-live" aria-pressed="false">Live · 3 modes</button>
-                        <button type="button" class="btn btn--ghost" id="grid-4" aria-pressed="false">3D · 4 mm</button>
-                        <button type="button" class="btn btn--ghost" id="grid-3" aria-pressed="false">3D · 3 mm</button>
+                        <button type="button" class="btn btn--ghost" id="model-gpu" aria-pressed="false">3D · your graphics chip</button>
+                        <button type="button" class="btn btn--ghost" id="grid-4" aria-pressed="false">3D · processor, 4 mm</button>
+                        <button type="button" class="btn btn--ghost" id="grid-3" aria-pressed="false">3D · processor, 3 mm</button>
+                        <button type="button" class="btn btn--ghost" id="model-live" aria-pressed="false" style="white-space:normal">Reduced model, not a fluid simulation</button>
                     </div>
-                    <p class="panel__note">A cosine bump 25 cm long every 2 m. Live: the stout as its nonlinear sloshing modes (Narimanov–Moiseev), over the whole glass, in real time: its swing slows as it grows and can swirl; stout that rises over the rim pours out and is subtracted. 3D: the full Navier–Stokes solution with particles, in slow motion (about ×0.3 on a 4-core computer; the figure shows the rate yours reaches); spilled stout falls to the road. The 3D grids swing 4–6 % slow. With the 3D solver the slosh feedback acts on the computed fluid itself: the probes read its surface.</p>
+                    <p class="panel__note">A cosine bump 25 cm long every 2 m. The stout is always the same computation: the incompressible Navier–Stokes equations solved with 51 000 particles on a 4 mm grid. <b>Your graphics chip</b> (the default, where the browser offers WebGPU): the whole glass, so it can swirl, computed by thousands of threads of the graphics chip in your own computer or phone, integrated graphics included; no server, nothing to install. The figure shows the rate your chip reaches; real time where it keeps up. <b>Processor</b>: half the glass on your processor, in slow motion (about ×0.3 on 4 cores); the fallback where WebGPU is missing. Spilled stout falls to the road. The 4 mm grid swings 6 % slow (3.20 Hz against 3.42). <b>Reduced model</b>: the stout replaced by its sloshing modes; not a fluid simulation, kept for comparison and because the controller’s own model is of this kind. The slosh feedback always acts on the computed fluid: the probes read its surface.</p>
                 </div>
                 <dl class="readouts">
                     <div><dt>Time</dt><dd id="r-t">—</dd></div>
@@ -785,24 +786,32 @@
     <script src="../scripts/stout-nm.js"></script>
     <script src="../scripts/stout-cart.js"></script>
     <script src="../scripts/stout-pool.js"></script>
+    <script src="../scripts/stout-gpu.js"></script>
+    <script src="../scripts/stout-gpu-view.js"></script>
     <script src="../scripts/stout-view.js"></script>
     <script>
     (function () {
         'use strict';
         var cv = document.getElementById('cv'), stage = document.getElementById('stage');
         var pushF = Sim.slider('pushF', { format: function (v) { return v.toFixed(1) + ' N'; } });
-        var MODAL = !/[?&](grid|model)=/.test(location.search) || /[?&]model=live\b/.test(location.search);   // the live modal model unless a 3D grid is asked for
+        // the stout's model: the 3D solver on the graphics chip by default (?model=gpu), on the processor (?grid=4, ?grid=3), or the
+        // reduced modal model (?model=live). Where the browser has no WebGPU the default falls back to the processor at 4 mm.
+        var MODAL = /[?&]model=live\b/.test(location.search);
+        var WANT_GPU = !MODAL && !/[?&]grid=/.test(location.search) && !!navigator.gpu;
+        var NO_GPU_NOTE = !MODAL && !/[?&]grid=/.test(location.search) && !navigator.gpu;
+        var GPU = false, GPUDEV = null;   // set once the device answers (build)
         var GRID = /[?&]grid=3\b/.test(location.search) ? 0.003 : 0.004;
         // worker threads share the solver's loops when the browser allows shared memory (identical numbers; ?threads=1 turns them off)
         var NCPU = navigator.hardwareConcurrency || 1, THREADS = /[?&]threads=1\b/.test(location.search) ? 1 : Math.min(8, NCPU);
         var POOL = null;
-        try { if (!MODAL && window.crossOriginIsolated && typeof SharedArrayBuffer === 'function' && window.StoutPool && THREADS > 1) POOL = new StoutPool(THREADS - 1, '../scripts/stout-worker.js'); } catch (e) { POOL = null; }
-        if (MODAL) document.getElementById('cap-model').innerHTML = '<b>Fig. 12</b> · the stout as its nonlinear sloshing modes (Narimanov–Moiseev), live, whole glass: it can swirl · cart by Newton’s laws · coupled both ways · probes, Kalman filter';
-        var modelBtn = MODAL ? 'model-live' : GRID === 0.003 ? 'grid-3' : 'grid-4';
-        document.getElementById(modelBtn).classList.remove('btn--ghost'); document.getElementById(modelBtn).setAttribute('aria-pressed', 'true');
-        document.getElementById('grid-3').addEventListener('click', function () { if (MODAL || GRID !== 0.003) location.search = '?grid=3'; });
-        document.getElementById('grid-4').addEventListener('click', function () { if (MODAL || GRID !== 0.004) location.search = '?grid=4'; });
-        document.getElementById('model-live').addEventListener('click', function () { if (!MODAL) location.search = ''; });
+        try { if (!MODAL && !WANT_GPU && window.crossOriginIsolated && typeof SharedArrayBuffer === 'function' && window.StoutPool && THREADS > 1) POOL = new StoutPool(THREADS - 1, '../scripts/stout-worker.js'); } catch (e) { POOL = null; }
+        if (MODAL) document.getElementById('cap-model').innerHTML = '<b>Fig. 12</b> · REDUCED MODEL, not a fluid simulation: the stout as its nonlinear sloshing modes (Narimanov–Moiseev) · cart by Newton’s laws · coupled both ways · probes, Kalman filter';
+        function pressModel(id) { ['model-gpu', 'grid-4', 'grid-3', 'model-live'].forEach(function (b) { var el = document.getElementById(b); el.classList.toggle('btn--ghost', b !== id); el.setAttribute('aria-pressed', String(b === id)); }); }
+        pressModel(MODAL ? 'model-live' : WANT_GPU ? 'model-gpu' : GRID === 0.003 ? 'grid-3' : 'grid-4');
+        document.getElementById('model-gpu').addEventListener('click', function () { if (!GPU) location.search = ''; });
+        document.getElementById('grid-3').addEventListener('click', function () { if (GPU || MODAL || GRID !== 0.003) location.search = '?grid=3'; });
+        document.getElementById('grid-4').addEventListener('click', function () { if (GPU || MODAL || GRID !== 0.004 || !/grid=/.test(location.search)) location.search = '?grid=4'; });
+        document.getElementById('model-live').addEventListener('click', function () { if (!MODAL) location.search = '?model=live'; });
         var ctrlMode = 'speed', susp = document.getElementById('susp');
         function setCtrl(m) {
             ctrlMode = m; world.cart.ctrl = m; if (m === 'speed') world.cart.xi = 0;
@@ -828,14 +837,25 @@
             for (var n = 0; n < 60; n++) b.push({ x: 1.0 + 2 * n, h: h, L: 0.25 });
             return b;
         }
-        function build() {
+        var building = false;
+        // the GPU solver needs its device first (asynchronous); the processor's solvers start at once
+        async function build() {
+            building = true;
+            var fo = { dx: GRID, profile: GUINNESS_GLASS, h0: 0.125, H: (GUINNESS_GLASS.R.length - 1) * GUINNESS_GLASS.dz + 0.03, shared: !!POOL, modal: MODAL, nm: MODAL, nmCoeffs: window.STOUT_NM }, inst = null;
+            if (WANT_GPU) {
+                try { if (!GPUDEV) GPUDEV = await StoutGpu.GpuFluid.device(); } catch (e) { GPUDEV = null; }
+                if (GPUDEV) { inst = new StoutGpu.GpuFluid({ dx: 0.004, profile: GUINNESS_GLASS, h0: 0.125, H: fo.H }); await inst.init(GPUDEV); GPU = true; }
+                else { WANT_GPU = false; NO_GPU_NOTE = true; pressModel('grid-4'); }
+            }
             world = new StoutCart.World({
-                fluid: { dx: GRID, profile: GUINNESS_GLASS, h0: 0.125, H: (GUINNESS_GLASS.R.length - 1) * GUINNESS_GLASS.dz + 0.03, shared: !!POOL, modal: MODAL, nm: MODAL, nmCoeffs: window.STOUT_NM },
+                fluidInstance: inst,
+                fluid: fo,
                 road: roadOpts(0.04),
                 cart: { x0: 0.5, Rw: 0.04, Ls: 0.135, v0: v0.value, ctrl: ctrlMode, susp: susp.checked },
                 dtMax: 1 / 200
             });
             view = new StoutView(cv, world, { viewHeight: 0.40, groundY: 0.86 }); view.charts = true;
+            if (GPU) view.gpuView = new StoutGpuView(world.fluid, cv);
             if (!ds) declare();
             storeConstants();
             world.attach(ds); view.ds = ds;
@@ -845,8 +865,15 @@
             var KK = world.cart.lqrGains(); for (var kk = 0; kk < 4; kk++) ds.set('K' + (kk + 1), KK[kk]);
             if (world.fluid.modal) world.fluid.step(0, 0, 0);
             setNoise(); world.readProbes(); world.cart.probe.fresh = false;
-            lastWall = 0; lastSim = 0; simPerReal = 0;
+            lastWall = 0; lastSim = 0; simPerReal = 0; gpuBusy = false; posStale = true;
+            if (GPU) { ds.set('batch_n', 0); ds.set('owed_x', 0); ds.set('owed_z', 0); ds.set('J_x', 0); ds.set('J_z', 0); }
+            capModel();
+            building = false;
             fit();
+        }
+        function capModel() {
+            if (GPU) document.getElementById('cap-model').innerHTML = '<b>Fig. 12</b> · 3D Navier–Stokes, whole glass, on your graphics chip (' + (GPUDEV.gpuInfo.vendor || 'GPU') + (GPUDEV.gpuInfo.architecture ? ' ' + GPUDEV.gpuInfo.architecture : '') + ') · cart by Newton’s laws · coupled both ways · probes, Kalman filter';
+            else if (NO_GPU_NOTE) document.getElementById('cap-model').innerHTML = '<b>Fig. 12</b> · your browser offers no WebGPU, so the stout runs on the processor (half glass, slow motion) · cart by Newton’s laws · coupled both ways';
         }
         // the road: bumps (the height slider) or a rough surface (the Road menu; a seeded road, the same every time)
         var roadKind = document.getElementById('roadKind');
@@ -878,7 +905,7 @@
             if (e.key === 'ArrowRight') { push = 1; e.preventDefault(); } else if (e.key === 'ArrowLeft') { push = -1; e.preventDefault(); }
         });
         window.addEventListener('keyup', function (e) { if ((e.key === 'ArrowRight' && push === 1) || (e.key === 'ArrowLeft' && push === -1)) push = 0; });
-        document.getElementById('reset').addEventListener('click', function () { build(); });
+        document.getElementById('reset').addEventListener('click', function () { if (!building && !gpuBusy) build(); });
 
         // dragging: press on the cart (body, wheel or glass) and move; the hand pulls the cart toward the pointer along the
         // road (Cart.hand). Nothing happens while Read values is on: then a press pins a point instead.
@@ -908,9 +935,9 @@
             $('r-sp').textContent = ((world.spilledMass || 0) * 1000).toFixed(1) + ' g';
             $('r-yq').textContent = (2 * c.probe.y * 1000).toFixed(1) + ' mm';
             $('r-qh').textContent = (2 * c.obs.x[1] * 1000).toFixed(1) + ' mm';
-            view.slowText = !MODAL && simPerReal > 0 ? 'SLOW MOTION ×' + simPerReal.toFixed(2) : '';
-            $('r-solver').textContent = f.modal ? ('live model · nonlinear, 5 + 2 modes · swirl ' + (f.s1 != null ? (f.s1 * 1000).toFixed(1) + ' mm' : '—') + ' · f₁ = ' + (f.w[0] / 2 / Math.PI).toFixed(2) + ' Hz · fill ' + (f.h * 1000).toFixed(1) + ' mm') : f.np + ' particles · ' + f.nx + '×' + f.ny + '×' + f.nz + ' cells · CG ' + f.cgIters + ' it. · ' + (f.pool ? f.pool.P : 1) + (f.pool && f.pool.P > 1 ? ' threads' : ' thread');
-            $('cap-rate').textContent = simPerReal > 0 ? (MODAL && simPerReal > 0.9 ? 'real time' : 'slow motion ×' + simPerReal.toFixed(2) + ': ' + simPerReal.toFixed(2) + ' s simulated per s, measured on your computer') : '—';
+            view.slowText = !MODAL && simPerReal > 0 && simPerReal < 0.95 ? 'SLOW MOTION ×' + simPerReal.toFixed(simPerReal < 0.1 ? 3 : 2) : '';
+            $('r-solver').textContent = f.gpu ? (f.np + ' particles · ' + f.nx + '×' + f.ny + '×' + f.nz + ' cells, whole glass · CG ' + f.cgIters + ' it. · ' + (world.batch || 0) + ' steps a frame · ' + (gpuMsPerStep ? gpuMsPerStep.toFixed(1) + ' ms a step' : '') + ' · graphics chip: ' + (GPUDEV.gpuInfo.vendor || '?') + ' ' + (GPUDEV.gpuInfo.architecture || '')) : f.modal ? ('live model · nonlinear, 5 + 2 modes · swirl ' + (f.s1 != null ? (f.s1 * 1000).toFixed(1) + ' mm' : '—') + ' · f₁ = ' + (f.w[0] / 2 / Math.PI).toFixed(2) + ' Hz · fill ' + (f.h * 1000).toFixed(1) + ' mm') : f.np + ' particles · ' + f.nx + '×' + f.ny + '×' + f.nz + ' cells · CG ' + f.cgIters + ' it. · ' + (f.pool ? f.pool.P : 1) + (f.pool && f.pool.P > 1 ? ' threads' : ' thread');
+            $('cap-rate').textContent = simPerReal > 0 ? (simPerReal >= 0.95 ? 'real time (' + simPerReal.toFixed(2) + ' s simulated per s, measured on your ' + (GPU ? 'graphics chip' : 'computer') + ')' : 'slow motion ×' + simPerReal.toFixed(simPerReal < 0.1 ? 3 : 2) + ': ' + simPerReal.toFixed(3) + ' s simulated per s, measured on your ' + (GPU ? 'graphics chip' : 'computer')) : '—';
         }
 
         /* ---------- the store: every number of the run is written here where it is computed (scripts/dataset.js) ----------
@@ -1063,6 +1090,16 @@
             ds.var('cg_iters', [], 'int', { symbol: 'CG it.', long_name: 'conjugate-gradient iterations of the last pressure solve', computed_in: 'Fluid.pcg', digits: 0 });
             S('cg_res', { symbol: 'r<sub>max</sub>', units: 'm²/s', long_name: 'largest residual left by the pressure solve (scaled, A q = b)', computed_in: 'Fluid.pcg', digits: 3 });
             S('rate', { symbol: 'rate', units: 's/s', long_name: 'seconds simulated per second of yours (measured, smoothed)', computed_in: 'the clock', digits: 3 });
+            if (f.gpu) {   // the GPU solver: batches of steps, the impulse owed between them, its own timing
+                ds.var('batch_n', [], 'int', { symbol: 'n', long_name: 'fluid steps in the last batch (one submission to the graphics chip, one read-back)', computed_in: 'World.advanceGpu', digits: 0 });
+                S('J_x', { symbol: 'J<sub>x</sub>', units: 'N s', long_name: 'the stout’s impulse on the glass along the road in the last step of the batch', computed_in: 'World.advanceGpu', formula: '−(P<sub>x</sub> + P<sub>spill,x</sub> − P<sub>x</sub> before)', digits: 7 });
+                S('J_z', { symbol: 'J<sub>z</sub>', units: 'N s', long_name: 'same, vertical', computed_in: 'World.advanceGpu', formula: '−(P<sub>z</sub> + P<sub>spill,z</sub> − P<sub>z</sub> before)', digits: 7 });
+                S('owed_x', { symbol: 'D<sub>x</sub>', units: 'N s', long_name: 'impulse owed to the cart: what World.advance would have handed over during the batch minus what was (paid over the next batch)', computed_in: 'World.advanceGpu', formula: 'Σ<sub>i&lt;n</sub> J<sub>i</sub> − n J<sub>0</sub>', digits: 7 });
+                S('owed_z', { symbol: 'D<sub>z</sub>', units: 'N s', long_name: 'same, vertical', computed_in: 'World.advanceGpu', digits: 7 });
+                S('gpu_ms', { symbol: 't<sub>step</sub>', units: 'ms', long_name: 'wall-clock time per fluid step on your graphics chip (smoothed), read-back included', computed_in: 'the clock', digits: 2 });
+                ds.var('np_read', [], 'int', { symbol: 'N<sub>p,read</sub>', long_name: 'live particles whose positions were last read back from the graphics chip (while paused)', computed_in: 'GpuFluid.readPositions', digits: 0 });
+                ds.var('col_cnt', ['j', 'i'], Float64Array, { symbol: 'n<sub>ji</sub>', units: '', long_name: 'particles standing on each 4 mm square of the bottom, counted on the graphics chip', computed_in: 'stout-gpu.js, momentum pass (integer atomics)', digits: 0 });
+            }
             ds.var('np0', [], 'int', { symbol: 'N<sub>p,0</sub>', long_name: 'particles poured in (half glass)', computed_in: 'Fluid.seed', digits: 0 });
             ds.var('np', [], 'int', { symbol: 'N<sub>p</sub>', long_name: 'particles in the half glass', computed_in: 'Fluid.seed', digits: 0 });
             // drawing (css px)
@@ -1192,7 +1229,7 @@
                 { title: 'The stout', note: 'particles, column heights and the surface as drawn', vars: ['dw', 'eta_front', 'eta_back', 'eta_mid', 'h_col', 'eta_draw', 'r_s', 'head_h', 'spilled_g', 'px', 'py', 'pz', 'np'] },
                 { title: 'Live model', note: 'nonlinear: mode 1 along (q₁) and across (s₁), three second-order modes, two linear modes; the pour over the rim', vars: (world.fluid.modal ? ['q1', 'qd1', 'w1', 's1', 's1d', 'c0', 'c2', 's2', 'q2', 'qd2', 'w2', 'q3', 'qd3', 'w3', 'Q_wall', 'h_l', 'V_l', 'R_s', 'spill_rate'] : []) },
                 { title: 'Sensors, Kalman filter, slosh feedback', note: 'two probes on the wall and the encoder; the filter’s estimate is all the LQR sees', vars: ['r_p', 'eta_pf', 'eta_pb', 'n_q', 'y_q', 'y_q_used', 'q_fresh', 'n_v', 'y_v', 'u_prev', 'xh_prev', 'xh_pri', 'nu_k', 'Lk', 'xh', 'P_prev', 'P_pri', 'P_post', 'w_o', 'zeta_o', 'beta_o', 'Mx_o', 'sig_q', 'sig_v', 'W_F', 'W_a', 'noise_q', 'noise_v', 'Ad', 'Bd', 'Qd', 'K1', 'K2', 'K3', 'K4', 'dza_ahead', 'ml_s'] },
-                { title: 'Solver', note: 'APIC on a MAC grid; pressure by MIC(0) conjugate gradients', vars: ['steps', 'cg_iters', 'cg_res', 'rate', 'np0'] },
+                { title: 'Solver', note: world.fluid.gpu ? 'APIC on a MAC grid on your graphics chip, whole glass; pressure by Jacobi-preconditioned conjugate gradients; batches of steps' : 'APIC on a MAC grid; pressure by MIC(0) conjugate gradients', vars: ['steps', 'cg_iters', 'cg_res', 'rate', 'np0'].concat(world.fluid.gpu ? ['batch_n', 'J_x', 'J_z', 'owed_x', 'owed_z', 'gpu_ms', 'np_read', 'col_cnt'] : []) },
                 { title: 'Drawing', note: 'a pinhole camera; css px of the figure', vars: ['scale', 'cam_x', 'elev', 'azim', 'cam_dist', 'cam_zt', 'focal', 'cam_cx', 'cam_cy', 'ground_px', 'axle_px_x', 'axle_px_y', 'body_px_x', 'body_px_y', 'glass_px_x', 'glass_px_y', 'front_px_x', 'front_px_y', 'back_px_x', 'back_px_y', 'probe_px_x', 'probe_px_y', 'canvas_w', 'canvas_h'] }
             ],
             probe: function (x, y) { var n = nearest(x, y); return n ? { what: n } : null; },
@@ -1372,6 +1409,47 @@
                     C[n] = function (i) { var v = src(i); return { formula: 'read from the solver’s own variable (a sensor’s draw, the filter’s memory or a constant of its design)', inputs: [], value: v }; };
                 });
             })();
+            if (world.fluid.gpu) {   // the GPU solver: whole glass, particles of mass m_p each (no mirror half), counts per column from the chip
+                var C2 = Sim.data.check;
+                C2.ml = function () { return { formula: 'm<sub>p</sub> N<sub>p</sub> (the whole glass)', inputs: [inp('mp', 'm<sub>p</sub>', 'kg', 9), inp('np', 'N<sub>p</sub>', '', 0)], value: g('mp') * g('np') }; };
+                C2.mp = function () { return { formula: 'm<sub>ℓ,0</sub> / N<sub>p,0</sub>', inputs: [inp('m_l0', 'm<sub>ℓ,0</sub>', 'kg', 4), inp('np0', 'N<sub>p,0</sub>', '', 0)], value: g('m_l0') / g('np0') }; };
+                C2.spilled_g = function () { return { formula: 'm<sub>p</sub> (N<sub>p,0</sub> − N<sub>p</sub>), in grams', inputs: [inp('mp', 'm<sub>p</sub>', 'kg', 9), inp('np0', 'N<sub>p,0</sub>', '', 0), inp('np', 'N<sub>p</sub>', '', 0)], value: g('mp') * (g('np0') - g('np')) * 1000 }; };
+                C2.P_x = function () { return { formula: 'the momentum read back from the chip, m<sub>p</sub> Σ u<sub>p</sub> (velocities stay on the chip)', inputs: [], value: world.fluid.P[0] }; };
+                C2.P_z = function () { return { formula: 'm<sub>p</sub> Σ w<sub>p</sub>, read back from the chip', inputs: [], value: world.fluid.P[1] }; };
+                C2.J_x = function () { return { formula: '−(P<sub>x</sub> + P<sub>spill,x</sub> − P<sub>x</sub> before)', inputs: [inp('P_x', 'P<sub>x</sub>', 'kg m/s', 7), inp('P_spill_x', 'P<sub>spill,x</sub>', 'kg m/s', 7), inp('P0_x', 'P<sub>x</sub> before', 'kg m/s', 7)], value: -(g('P_x') + g('P_spill_x') - g('P0_x')) }; };
+                C2.J_z = function () { return { formula: '−(P<sub>z</sub> + P<sub>spill,z</sub> − P<sub>z</sub> before)', inputs: [inp('P_z', 'P<sub>z</sub>', 'kg m/s', 7), inp('P_spill_z', 'P<sub>spill,z</sub>', 'kg m/s', 7), inp('P0_z', 'P<sub>z</sub> before', 'kg m/s', 7)], value: -(g('P_z') + g('P_spill_z') - g('P0_z')) }; };
+                C2.F_lx_next = function () { return { formula: 'J<sub>x</sub>/Δt + D<sub>x</sub>/(n Δt): the last step’s impulse, and the owed impulse spread over a batch', inputs: [inp('J_x', 'J<sub>x</sub>', 'N s', 7), inp('owed_x', 'D<sub>x</sub>', 'N s', 7), inp('batch_n', 'n', '', 0), inp('h_f', 'Δt', 's', 5)], value: g('J_x') / g('h_f') + g('owed_x') / (g('batch_n') * g('h_f')) }; };
+                C2.F_lz_next = function () { return { formula: 'J<sub>z</sub>/Δt + D<sub>z</sub>/(n Δt)', inputs: [inp('J_z', 'J<sub>z</sub>', 'N s', 7), inp('owed_z', 'D<sub>z</sub>', 'N s', 7), inp('batch_n', 'n', '', 0), inp('h_f', 'Δt', 's', 5)], value: g('J_z') / g('h_f') + g('owed_z') / (g('batch_n') * g('h_f')) }; };
+                ['batch_n', 'owed_x', 'owed_z', 'gpu_ms', 'np_read'].forEach(function (n) { C2[n] = function () { var v = { batch_n: world.batch, owed_x: world.owed ? world.owed[0] : 0, owed_z: world.owed ? world.owed[1] : 0, gpu_ms: gpuMsPerStep, np_read: world.fluid.nRead }[n]; return { formula: 'read from the solver’s own variable', inputs: [], value: v == null ? 0 : v }; }; });
+                C2.col_cnt = function (n) { return { formula: 'the count the chip returned', inputs: [], value: world.fluid.colCnt[n] }; };
+                // h_col from the stored counts: B(n V<sub>p</sub>) inverted through the column's smoothed open volume, as GpuFluid.columnHeights
+                C2.h_col = function (n) {
+                    var fl = world.fluid, nx = fl.nx, ny = fl.ny, i = n % nx, j = Math.floor(n / nx), Vp = Math.pow(g('dx') / 2, 3), cnt = g('col_cnt'), V = 0;
+                    for (var dj = -1; dj <= 1; dj++) for (var di = -1; di <= 1; di++) { var ii = i + di, jj = j + dj; if (ii < 0 || ii >= nx || jj < 0 || jj >= ny) continue; V += (di ? 0.25 : 0.5) * (dj ? 0.25 : 0.5) * cnt[ii + nx * jj] * Vp; }
+                    var M = fl.colM, T = fl.colVb, base = n * (M + 1), h;
+                    if (T[base + M] <= 0) h = 0; else if (V >= T[base + M]) h = M * fl.colDz;
+                    else { var lo = 0, hi = M; while (hi - lo > 1) { var mid = (lo + hi) >> 1; if (T[base + mid] <= V) lo = mid; else hi = mid; } var A0 = T[base + lo], A1 = T[base + hi]; h = (lo + (A1 > A0 ? (V - A0) / (A1 - A0) : 0)) * fl.colDz; }
+                    return { formula: 'the height where B(∫<sub>0</sub><sup>h</sup> a(z) dz) = B(n<sub>ji</sub> V<sub>p</sub>), column (' + j + ', ' + i + '), n<sub>ji</sub> the stored counts; B the 3 × 3 binomial filter (no mirror: the whole glass)', inputs: [['V<sub>p</sub> = (Δx/2)³', Vp, 'm³', 4], ['B(n V<sub>p</sub>)', V, 'm³', 6]], value: h };
+                };
+                // the drawn surface: bilinear in the stored column heights, extended along the radius beyond R(h) − 2.5Δx (GpuFluid.columnHeightAt)
+                var hG = function (x, y) {
+                    var fl = world.fluid, nx = fl.nx, ny = fl.ny, dx = g('dx'), H = g('h_col'), x0 = -nx / 2 * dx, y0 = -ny / 2 * dx;
+                    var bil = function (X, Y) { var fx = (X - x0) / dx - 0.5, fy = (Y - y0) / dx - 0.5, i = Math.floor(fx), j = Math.floor(fy), tx = fx - i, ty = fy - j; var at = function (a, b) { a = a < 0 ? 0 : a >= nx ? nx - 1 : a; b = b < 0 ? 0 : b >= ny ? ny - 1 : b; return H[a + nx * b]; }; return (1 - tx) * (1 - ty) * at(i, j) + tx * (1 - ty) * at(i + 1, j) + (1 - tx) * ty * at(i, j + 1) + tx * ty * at(i + 1, j + 1); };
+                    var r = Math.hypot(x, y), r1 = g('r_s') - 2.5 * dx, r2 = r1 - 1.5 * dx;
+                    if (r > r1) { var cx = x / r, cy = y / r, h1 = bil(cx * r1, cy * r1), h2 = bil(cx * r2, cy * r2); return h1 + (r - r1) * (h1 - h2) / (r1 - r2); }
+                    return bil(x, y);
+                };
+                C2.eta_draw = function (n) { var q = polar(n); return { formula: 'h<sub>ji</sub> read at (r cos θ, r sin θ), ir = ' + q.ir + ', ith = ' + q.it + ': bilinear in the stored column heights; beyond R(h) − 2.5Δx extended along the radius', inputs: [['x', q.x, 'm', 5], ['y', q.y, 'm', 5]], value: hG(q.x, q.y) }; };
+                C2.eta_front = function () { return { formula: 'h at the front wall (r<sub>s</sub>, 0), from the stored column heights', inputs: [inp('r_s', 'r<sub>s</sub>', 'm', 4)], value: hG(g('r_s'), 0) }; };
+                C2.eta_back = function () { return { formula: 'h at the back wall (−r<sub>s</sub>, 0)', inputs: [inp('r_s', 'r<sub>s</sub>', 'm', 4)], value: hG(-g('r_s'), 0) }; };
+                C2.eta_mid = function () { return { formula: 'h on the axis', inputs: [], value: hG(0, 0) }; };
+                C2.eta_pf = function () { return { formula: 'the front probe: h at (r<sub>p</sub>, 0) from the stored column heights', inputs: [inp('r_p', 'r<sub>p</sub>', 'm', 5)], value: hG(g('r_p'), 0) }; };
+                C2.eta_pb = function () { return { formula: 'the back probe: h at (−r<sub>p</sub>, 0)', inputs: [inp('r_p', 'r<sub>p</sub>', 'm', 5)], value: hG(-g('r_p'), 0) }; };
+                C2.front_px_x = function () { return projCheck('the head’s band at the front wall (half a band below the surface)', [0.98 * g('r_s'), 0, glassZ() + g('eta_front') - 0.5 * g('head_h')], 0, [inp('r_s', 'r<sub>s</sub>', 'm', 4), inp('zb', 'z<sub>b</sub>', 'm', 5), inp('eta_front', 'η<sub>front</sub>', 'm', 5), inp('head_h', 'h<sub>head</sub>', 'm', 3)]); };
+                C2.front_px_y = function () { return projCheck('the head’s band at the front wall (half a band below the surface)', [0.98 * g('r_s'), 0, glassZ() + g('eta_front') - 0.5 * g('head_h')], 1, [inp('r_s', 'r<sub>s</sub>', 'm', 4), inp('zb', 'z<sub>b</sub>', 'm', 5), inp('eta_front', 'η<sub>front</sub>', 'm', 5), inp('head_h', 'h<sub>head</sub>', 'm', 3)]); };
+                C2.back_px_x = function () { return projCheck('the head on the axis, 2 mm under the surface', [0, 0, glassZ() + g('eta_mid') - 0.002], 0, [inp('zb', 'z<sub>b</sub>', 'm', 5), inp('eta_mid', 'η<sub>mid</sub>', 'm', 5)]); };
+                C2.back_px_y = function () { return projCheck('the head on the axis, 2 mm under the surface', [0, 0, glassZ() + g('eta_mid') - 0.002], 1, [inp('zb', 'z<sub>b</sub>', 'm', 5), inp('eta_mid', 'η<sub>mid</sub>', 'm', 5)]); };
+            }
             if (world.fluid.modal) {   // the live model's numbers recomputed from what the store holds
                 var XI = [1.841184, 5.331443, 8.536316];
                 var J1 = function (x) { var t = x / 2, s = 0; for (var k = 0; k < 60; k++) { s += t; t *= -(x * x / 4) / ((k + 1) * (k + 2)); if (Math.abs(t) < 1e-16) break; } return s; };
@@ -1408,17 +1486,10 @@
             }
         }
 
-        build();
-        defineData();
-        var frameNo = 0;
-        var clk = Sim.clock(function (dt) {
-            if (dt <= 0) return;
-            world.cart.pushF = push * pushF.value;
-            ds.set('push_dir', push); ds.set('F_push_set', pushF.value); ds.set('hand_x', world.cart.hand == null ? NaN : world.cart.hand);
-            var t0 = performance.now();
-            if (MODAL) world.advance(Math.min(dt, 0.05));          // the live model keeps up with the clock: real time
-            else do { world.advance(world.dtMax); } while (performance.now() - t0 < BUDGET_MS);
-            var fl = world.fluid, lean = fl.columnHeightAt(fl.Rz(fl.h0), 0) - fl.columnHeightAt(-fl.Rz(fl.h0), 0), hNow = fl.modal ? fl.h : fl.h0;
+        var frameNo = 0, gpuBusy = false, posStale = true, gpuMsPerStep = 0, clk = null;
+        // what follows one advance of the world: charts, the measured rate, the store, the picture, the words (4 times a second)
+        function afterAdvance() {
+            var fl = world.fluid, hNow = fl.modal ? fl.h : fl.h0;
             var ob = world.cart.obs;                       // the charts show what the probes read and what the filter estimates
             view.record(world.t, 2 * world.cart.probe.y, world.cart.i, ob.x[1], ob.x[2], ob.w, fl.zRim - hNow, 2 * ob.x[1]);
             var now = performance.now();
@@ -1431,12 +1502,45 @@
             ds.set('spilled_g', (world.spilledMass || 0) * 1000); ds.set('np', world.fluid.np);
             view.draw();
             if (++frameNo % 15 === 0) readouts();   // words rewritten about four times a second
-        });
-        Sim.playButton(document.getElementById('play'), clk);
-        view.draw(); readouts();
-        window.Fig12 = { get world() { return world; }, get view() { return view; }, pool: POOL };
+        }
+        function tick(dt) {
+            if (dt <= 0 || building || gpuBusy) return;
+            world.cart.pushF = push * pushF.value;
+            ds.set('push_dir', push); ds.set('F_push_set', pushF.value); ds.set('hand_x', world.cart.hand == null ? NaN : world.cart.hand);
+            var t0 = performance.now();
+            if (GPU) {
+                // one batch a frame: as many 5 ms steps as the frame took (at most 16), fewer when the chip needs longer than 60 ms
+                // for them (then the figure runs in slow motion and says so)
+                var nmax = gpuMsPerStep > 0 ? Math.max(1, Math.floor(60 / gpuMsPerStep)) : 1, want = Math.min(dt, 0.08, nmax * world.dtMax);
+                gpuBusy = true;
+                world.advanceGpu(want).then(function (per) {
+                    var ms = (performance.now() - t0) / per.length; gpuMsPerStep = gpuMsPerStep ? 0.8 * gpuMsPerStep + 0.2 * ms : ms;
+                    ds.set('gpu_ms', gpuMsPerStep);
+                    gpuBusy = false; posStale = true; afterAdvance();
+                }, function (e) { gpuBusy = false; console.error('GPU step: ' + e.message); });
+                return;
+            }
+            if (MODAL) world.advance(Math.min(dt, 0.05));          // the reduced model keeps up with the clock: real time
+            else do { world.advance(world.dtMax); } while (performance.now() - t0 < BUDGET_MS);
+            afterAdvance();
+        }
+        // with the GPU solver the particles live on the graphics chip; while the figure is paused their positions are read
+        // back into the store (px, py, pz), so the data panel can count them
+        function posWatch() {
+            if (!GPU || !clk || clk.playing || gpuBusy || building || !posStale) return;
+            posStale = false; gpuBusy = true;
+            world.fluid.readPositions().then(function () { gpuBusy = false; ['px', 'py', 'pz'].forEach(function (k) { ds.touch(k); }); ds.set('np_read', world.fluid.nRead); }, function () { gpuBusy = false; });
+        }
+        window.Fig12 = { get world() { return world; }, get view() { return view; }, pool: POOL, get gpu() { return GPU; }, busy: function () { return gpuBusy || building || (GPU && clk && !clk.playing && posStale); } };
+        build().then(function () {
+            defineData();
+            clk = Sim.clock(tick);
+            Sim.playButton(document.getElementById('play'), clk);
+            setInterval(posWatch, 120);
+            view.draw(); readouts();
+            var dl = document.createElement('script'); dl.src = '../scripts/datalog.js'; document.body.appendChild(dl);   // the data panel, once the store is declared
+        }, function (e) { console.error('Fig. 12 could not start: ' + e.message); });
     })();
     </script>
-    <script src="../scripts/datalog.js"></script>
 </body>
 </html>

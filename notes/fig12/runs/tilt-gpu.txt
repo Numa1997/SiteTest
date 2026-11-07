@@ -1,0 +1,1 @@
+gpu A 0 m/s^2 (steady 2 m/s^2): lean -26.6 mm at 0.46 s; free swing 6.592 Hz; spill 0 g; particles 51332 -> 51332; CG 98 it.; fastest particle 173.4 mm/s; centre of mass x over the last second -0.922 mm; 446 ms a step on google/swiftshader; errors none

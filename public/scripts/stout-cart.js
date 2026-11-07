@@ -1708,7 +1708,8 @@
   /* --------------------------------------------------------------- coupling */
   function World(o) {
     o = o || {};
-    this.fluid = o.fluid && o.fluid.nm ? new NMFluid(Object.assign({ modal: true }, o.fluid)) : o.fluid && o.fluid.modal ? new ModalFluid(o.fluid) : new Fluid(o.fluid);
+    // o.fluidInstance: a fluid made beforehand (the GPU solver, StoutGpu.GpuFluid, which needs an async start)
+    this.fluid = o.fluidInstance ? o.fluidInstance : o.fluid && o.fluid.nm ? new NMFluid(Object.assign({ modal: true }, o.fluid)) : o.fluid && o.fluid.modal ? new ModalFluid(o.fluid) : new Fluid(o.fluid);
     const co = Object.assign({}, o.cart || {});
     co.ml = this.fluid.mLiquid;
     if (o.road) co.road = new Road(o.road);
@@ -1720,7 +1721,12 @@
     const f = this.fluid, c = this.cart;
     let mode;
     if (f.modal) mode = { w: f.w[0], zeta: f.zeta[0], beta: f.beta[0] };
-    else {
+    else if (f.gpu) {
+      // the GPU solver on the 4 mm grid swings at 3.200 Hz (tools/fig12/gpu-linearity.cjs, A = 1 m/s^2); its damping is taken
+      // as the CPU grid's 0.008 (the same method on the same grid)
+      const Rs = f.Rz(Math.min(f.h0, f.zRim)), xi = XI[0], th = Math.tanh(xi * f.h0 / Rs);
+      mode = { w: 2 * Math.PI * 3.200, zeta: 0.008, beta: 2 * xi * th / (xi * xi - 1) };
+    } else {
       const Rs = f.Rz(Math.min(f.h0, f.zRim)), xi = XI[0], th = Math.tanh(xi * f.h0 / Rs), fine = f.dx <= 0.0031;
       mode = { w: 2 * Math.PI * (fine ? 3.263 : 3.214), zeta: fine ? 0.002 : 0.008, beta: 2 * xi * th / (xi * xi - 1) };
     }
@@ -1798,16 +1804,66 @@
     }
   };
 
+  // The same coupling with the GPU solver, a batch of n equal fluid steps of length h (one submission, one read-back: the
+  // only way a real graphics chip keeps up, since every read-back waits for the chip). The cart runs ahead through the
+  // batch with the stout's push held at the force of the last known step; the glass's acceleration of each step goes to the
+  // GPU in the batch. After the read-back the stout's impulse of every step is known. World.advance hands the impulse of step
+  // i to the cart during step i + 1; here, during the batch, the cart got J_0/h in every step instead of J_{i-1}/h, so the
+  // difference D = sum_{i<n} J_i - n J_0 is owed and is paid over the next batch, on top of J_n/h. The cart and the stout
+  // exchange exactly the momentum they exchange in World.advance, later by at most one batch. With n = 1 nothing is owed
+  // and the steps are World.advance's. h: dtMax, or shorter when the fastest particle would cross 0.8 of a cell.
+  World.prototype.advanceGpu = async function (dt) {
+    const f = this.fluid, c = this.cart;
+    const hmax = Math.min(this.dtMax, f.vmax > 0 ? 0.8 * f.dx / f.vmax : this.dtMax);
+    const n = Math.max(1, Math.min(f.constructor.MAXB || 16, Math.round(dt / hmax))), h = hmax;
+    const J0 = this.J || [0, 0], owed = this.owed || [0, 0];
+    this.Fx = J0[0] / h + owed[0] / (n * h); this.Fz = J0[1] / h + owed[1] / (n * h);
+    c.forces(this.Fx, this.Fz);
+    const list = [], hist = [];
+    for (let k = 0; k < n; k++) {
+      const vx0 = c.vx, vz0 = c.vzb, m = Math.max(1, Math.round(h / this.hCart)), hc = h / m;
+      for (let i = 0; i < m; i++) c.step(hc, this.Fx, this.Fz);
+      const ax = (c.vx - vx0) / h, az = (c.vzb - vz0) / h;
+      list.push({ dt: h, ax, az }); hist.push([vx0, vz0, c.vx, c.vzb, m]);
+    }
+    const P0 = this.P, per = await f.steps(list);
+    // the stout's impulse in each step, -(dP + P_spill)
+    let Pp = P0, sumJx = 0, sumJz = 0, Jl = [0, 0];
+    per.forEach((r, k) => { Jl = [-(r.P[0] + r.spillPx - Pp[0]), -(r.P[1] + r.spillPz - Pp[1])]; if (k < n - 1) { sumJx += Jl[0]; sumJz += Jl[1]; } Pp = r.P; });
+    // owed: what World.advance would have handed over during this batch (J_0 .. J_{n-1}) minus what was handed over (n J_0)
+    this.owed = [J0[0] + sumJx - n * J0[0], J0[1] + sumJz - n * J0[1]];
+    this.J = Jl; this.hLast = h; this.batch = n;
+    if (f.spillNow) { c.ml = f.liquidMass(); this.dropsFrom(f.spillList); }
+    f.spillList.length = 0;
+    this.moveDrops(n * h);
+    this.P = Pp; const L = list[n - 1], H = hist[n - 1];
+    this.lastAx = L.ax; this.lastAz = L.az;
+    this.Fx = Jl[0] / h + this.owed[0] / (n * h); this.Fz = Jl[1] / h + this.owed[1] / (n * h);
+    c.forces(this.Fx, this.Fz);
+    this.t += n * h; this.steps = (this.steps || 0) + n;
+    this.readProbes();
+    const D = this.ds;
+    if (D) {
+      const Pb = per.length > 1 ? per[per.length - 2].P : P0;
+      D.set('t', this.t); D.set('h_f', h); D.set('n_cart', H[4]); D.set('vx_0', H[0]); D.set('vzb_0', H[1]); D.set('vx_1', H[2]); D.set('vzb_1', H[3]);
+      D.set('a_gx', L.ax); D.set('a_gz', L.az); D.set('P0_x', Pb[0]); D.set('P0_z', Pb[1]); D.set('P_x', Pp[0]); D.set('P_z', Pp[1]);
+      D.set('F_lx_next', this.Fx); D.set('F_lz_next', this.Fz); D.set('steps', this.steps); D.set('P_spill_x', per[n - 1].spillPx); D.set('P_spill_z', per[n - 1].spillPz);
+      D.set('cg_iters', f.cgIters); D.set('cg_res', f.cgResidual || 0);
+      if (D.has('batch_n')) { D.set('batch_n', n); D.set('owed_x', this.owed[0]); D.set('owed_z', this.owed[1]); D.set('J_x', Jl[0]); D.set('J_z', Jl[1]); }
+    }
+    return per;
+  };
+
   // Spilled stout in the room: each particle that left over the rim becomes a drop (with its mirror image, the other
   // half of the glass) at the glass's position plus its own, with the glass's velocity plus its own, falling freely
   // (no air drag) until it meets the body's top or the road, where it stays as a splash. At most 6000 drops are kept.
   World.prototype.dropsFrom = function (list) {
-    const c = this.cart, D = this.drops || (this.drops = []);
-    for (const q of list) for (const m of [1, -1]) {
+    const c = this.cart, D = this.drops || (this.drops = []), both = this.fluid.whole ? [1] : [1, -1];   // the whole glass has no mirror images
+    for (const q of list) for (const m of both) {
       if (D.length >= 6000) D.shift();
       D.push({ x: c.x + q[0], y: m * q[1], z: c.zb + c.glassFloor + q[2], vx: c.vx + q[3], vy: m * q[4], vz: c.vzb + q[5], landed: false });
     }
-    this.spilledMass = (this.spilledMass || 0) + list.length * 2 * this.fluid.mp;
+    this.spilledMass = (this.spilledMass || 0) + list.length * (this.fluid.whole ? 1 : 2) * this.fluid.mp;
   };
   World.prototype.moveDrops = function (h) {
     const D = this.drops; if (!D) return;
@@ -1832,6 +1888,7 @@
     // the store holds the solver's particle arrays (with threads, the shared ones; otherwise the store's own, filled)
     ['px', 'py', 'pz'].forEach((k) => { if (f.shared) ds.set(k, f[k]); else { const a = ds.get(k); a.set(f[k]); f[k] = a; } });
     f.colH = ds.get('h_col'); if (f.modal) f.ds = ds;
+    if (f.gpu && ds.has('col_cnt')) f.colCnt = ds.get('col_cnt');   // the GPU's particle counts per column, read back each batch
     this.ds = ds; this.cart.ds = ds;
     this.cart.forces(this.Fx, this.Fz);
     f.columnHeights(); ds.touch('h_col');

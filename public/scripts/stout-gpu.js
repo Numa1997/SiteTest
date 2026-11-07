@@ -67,10 +67,11 @@ fn Wf(i: i32, j: i32, k: i32) -> i32 { return i + P_.nx * (j + P_.ny * k); }
 @group(0) @binding(5) var<storage, read_write> fillp: array<atomic<i32>>; // scatter pointers
 @group(0) @binding(6) var<storage, read_write> order: array<i32>;         // sorted slot -> original particle
 @group(0) @binding(7) var<storage, read_write> cellStart: array<i32>;     // nc + 1
+@group(0) @binding(8) var<storage, read> nslot: array<i32>;              // the slots the previous sort filled (live and dead)
 
 @compute @workgroup_size(${WG})
 fn count(@builtin(global_invocation_id) id: vec3u) {
-  let p = i32(id.x); if (p >= P_.np) { return; }
+  let p = i32(id.x); if (p >= nslot[0]) { return; }
   let q = posA[p];
   if (q.w < 0.0) { pcell[p] = -1; return; }
   var i = i32(floor((q.x - P_.x0) / P_.dx)); var j = i32(floor((q.y - P_.y0) / P_.dx)); var k = i32(floor(q.z / P_.dx));
@@ -92,7 +93,7 @@ fn scan(@builtin(local_invocation_id) lid: vec3u) {
 }
 @compute @workgroup_size(${WG})
 fn scatter(@builtin(global_invocation_id) id: vec3u) {
-  let p = i32(id.x); if (p >= P_.np) { return; }
+  let p = i32(id.x); if (p >= nslot[0]) { return; }
   let c = pcell[p]; if (c < 0) { return; }
   let s = atomicAdd(&fillp[c], 1); order[s] = p;
 }
@@ -695,7 +696,7 @@ fn momentum(@builtin(global_invocation_id) id: vec3u, @builtin(local_invocation_
     this.oV = this.nu_; this.oW = this.nu_ + this.nv_;
     if (this.profile.R.length > 512) throw new Error('stout-gpu: the glass profile has more than 512 points');
     this.B = {
-      params: mk(128, UN, 'params'), prof: mk(16 * 128, UN, 'profile'),
+      params: mk(256 * GpuFluid.MAXB, UN, 'params'), nslot: mk(16, null, 'nslot'), prof: mk(16 * 128, UN, 'profile'),
       posA: mk(16 * cap, null, 'posA'), velA: mk(16 * cap, null, 'velA'), cA: mk(48 * cap, null, 'cA'),
       posB: mk(16 * cap, null, 'posB'), velB: mk(16 * cap, null, 'velB'), cB: mk(48 * cap, null, 'cB'),
       cnt: mk(4 * (nc + 1), null, 'cnt'), pcell: mk(4 * cap, null, 'pcell'), fillp: mk(4 * (nc + 1), null, 'fillp'), order: mk(4 * cap, null, 'order'), cellStart: mk(4 * (nc + 1), null, 'cellStart'),
@@ -703,10 +704,10 @@ fn momentum(@builtin(global_invocation_id) id: vec3u, @builtin(local_invocation_
       flagCopy: mk(4 * nc, null, 'flagCopy'), phiCopy: mk(4 * nc, null, 'phiCopy'),
       faces: mk(4 * nf3, null, 'faces'), grid: mk(4 * nf3, null, 'grid'), tgrid: mk(4 * nf3, null, 'tgrid'), valid: mk(4 * nf3, null, 'valid'), validT: mk(4 * nf3, null, 'validT'),
       A: mk(16 * nc, null, 'A'), b: mk(4 * nc, null, 'b'), q: mk(4 * nc, null, 'q'), L: mk(4 * (nc + 1), null, 'L'), work: mk(12 * nc, null, 'work'),
-      stat: mk(16, null, 'stat'), spill: mk(32 * 4096, null, 'spill'), spillN: mk(16, null, 'spillN'),
+      stat: mk(16, null, 'stat'), spill: mk(32 * GpuFluid.SPILLCAP, null, 'spill'), spillN: mk(16, null, 'spillN'),
       part: mk(16 * Math.ceil(cap / WG), null, 'part'), col: mk(4 * this.nx * this.ny, null, 'col'),
       whichU: mk(16, UN, 'whichU'), whichV: mk(16, UN, 'whichV'), whichW: mk(16, UN, 'whichW'),
-      read: d.createBuffer({ label: 'readback', size: 64 + 16 * Math.ceil(cap / WG) + 4 * this.nx * this.ny + 16 + 32 * 4096, usage: GPUBufferUsage.MAP_READ | GPUBufferUsage.COPY_DST }),
+      read: d.createBuffer({ label: 'readback', size: this.readLayout(cap).total, usage: GPUBufferUsage.MAP_READ | GPUBufferUsage.COPY_DST }),
       readPos: d.createBuffer({ label: 'readback positions', size: 16 * cap, usage: GPUBufferUsage.MAP_READ | GPUBufferUsage.COPY_DST })
     };
     const pr = new Float32Array(512); pr.set(this.profile.R); d.queue.writeBuffer(this.B.prof, 0, pr);
@@ -718,12 +719,12 @@ fn momentum(@builtin(global_invocation_id) id: vec3u, @builtin(local_invocation_
     // Explicit layouts, one per shader module (u uniform, r read-only storage, s storage): every entry point of a module
     // shares its bind groups, used bindings or not. At most 8 storage buffers per stage, the limit every device gives.
     const KINDS = {
-      sort: 'uursssss', perm: 'uurrrrrsss', ls: 'uurrsssss', inh: 'uurssss', p2g: 'uurrrrs', forces: 'uurssu', pr: 'uurrrrss', cg: 'uurrrssss', proj: 'uurrrrssssu', g2p: 'uurrsssss', red: 'uurrrss'
+      sort: 'uursssssr', perm: 'uurrrrrsss', ls: 'uurrsssss', inh: 'uurssss', p2g: 'uurrrrs', forces: 'uurssu', pr: 'uurrrrss', cg: 'uurrrssss', proj: 'uurrrrssssu', g2p: 'uurrsssss', red: 'uurrrss'
     };
     const SRC = { sort: SORT, perm: PERMUTE, ls: LEVELSET, inh: INHERIT, p2g: P2G, forces: FORCES, pr: PRESSURE, cg: CG, proj: PROJECT, g2p: G2P, red: REDUCE };
     const L = this.layouts = {}, M = {};
     for (const k in KINDS) {
-      L[k] = d.createBindGroupLayout({ label: k, entries: KINDS[k].split('').map((t, i) => ({ binding: i, visibility: GPUShaderStage.COMPUTE, buffer: { type: t === 'u' ? 'uniform' : t === 'r' ? 'read-only-storage' : 'storage' } })) });
+      L[k] = d.createBindGroupLayout({ label: k, entries: KINDS[k].split('').map((t, i) => ({ binding: i, visibility: GPUShaderStage.COMPUTE, buffer: { type: t === 'u' ? 'uniform' : t === 'r' ? 'read-only-storage' : 'storage', hasDynamicOffset: i === 0 } })) });
       M[k] = d.createShaderModule({ label: k, code: SRC[k] });
     }
     const K = this.K = {}, PL = {};
@@ -734,10 +735,10 @@ fn momentum(@builtin(global_invocation_id) id: vec3u, @builtin(local_invocation_
       ['force', 'forces', 'force'], ['copyT', 'forces', 'copyT'], ['visc', 'forces', 'visc'], ['assemble', 'pr', 'assemble'], ['pcg', 'cg', 'pcg'],
       ['gradient', 'proj', 'gradient'], ['copyV', 'proj', 'copyV'], ['extend', 'proj', 'extend'], ['zeroInvalid', 'proj', 'zeroInvalid'], ['g2p', 'g2p', 'g2p'], ['advect', 'g2p', 'advect'], ['momentum', 'red', 'momentum']])
       K[k] = d.createComputePipeline({ label: e, layout: PL[m], compute: { module: M[m], entryPoint: e } });
-    const bg = (k, bufs) => d.createBindGroup({ label: k, layout: L[k], entries: bufs.map((bf, i) => ({ binding: i, resource: { buffer: bf } })) });
+    const bg = (k, bufs) => d.createBindGroup({ label: k, layout: L[k], entries: bufs.map((bf, i) => ({ binding: i, resource: i === 0 ? { buffer: bf, size: 128 } : { buffer: bf } })) });
     const B = this.B, G = this.G = {}, base = [B.params, B.prof];
     // the particle arrays ping-pong: index 0 sorts A into B and works on B; index 1 sorts B into A and works on A
-    G.count = [bg('sort', base.concat([B.posA, B.cnt, B.pcell, B.fillp, B.order, B.cellStart])), bg('sort', base.concat([B.posB, B.cnt, B.pcell, B.fillp, B.order, B.cellStart]))];
+    G.count = [bg('sort', base.concat([B.posA, B.cnt, B.pcell, B.fillp, B.order, B.cellStart, B.nslot])), bg('sort', base.concat([B.posB, B.cnt, B.pcell, B.fillp, B.order, B.cellStart, B.nslot]))];
     G.permute = [bg('perm', base.concat([B.cellStart, B.order, B.posA, B.velA, B.cA, B.posB, B.velB, B.cB])), bg('perm', base.concat([B.cellStart, B.order, B.posB, B.velB, B.cB, B.posA, B.velA, B.cA]))];
     const work = [[B.posB, B.velB, B.cB], [B.posA, B.velA, B.cA]];
     G.ls = work.map((w) => bg('ls', base.concat([B.cellStart, w[0], B.maskA, B.maskB, B.phi, B.fluid, B.imgF])));
@@ -749,7 +750,7 @@ fn momentum(@builtin(global_invocation_id) id: vec3u, @builtin(local_invocation_
     G.proj = [B.whichU, B.whichV, B.whichW].map((wb) => bg('proj', base.concat([B.faces, B.phi, B.fluid, B.q, B.grid, B.valid, B.tgrid, B.validT, wb])));
     G.g2p = work.map((w) => bg('g2p', base.concat([B.cellStart, B.grid, w[0], w[1], w[2], B.spill, B.spillN])));
     G.red = work.map((w) => bg('red', base.concat([B.cellStart, w[0], w[1], B.part, B.col])));
-    this.params = new ArrayBuffer(128); this.pi = new Int32Array(this.params); this.pf = new Float32Array(this.params);
+    this.params = new ArrayBuffer(256 * GpuFluid.MAXB); this.pi = new Int32Array(this.params); this.pf = new Float32Array(this.params);
     this.errors = [];
     d.addEventListener && d.addEventListener('uncapturederror', (e) => { if (this.errors.length < 20) this.errors.push(e.error.message); });
     this.ready = true;
@@ -762,83 +763,102 @@ fn momentum(@builtin(global_invocation_id) id: vec3u, @builtin(local_invocation_
     for (let p = 0; p < n; p++) { pos[4 * p] = this.px[p]; pos[4 * p + 1] = this.py[p]; pos[4 * p + 2] = this.pz[p]; pos[4 * p + 3] = 1; vel[4 * p] = this.pu[p]; vel[4 * p + 1] = this.pv[p]; vel[4 * p + 2] = this.pw[p]; }
     this.device.queue.writeBuffer(this.B.posA, 0, pos); this.device.queue.writeBuffer(this.B.velA, 0, vel); this.device.queue.writeBuffer(this.B.cA, 0, c);
     this.device.queue.writeBuffer(this.B.q, 0, new Float32Array(this.nc));
+    this.device.queue.writeBuffer(this.B.cellStart, 4 * this.nc, new Int32Array([n]));   // the slots the first sort reads
     this.side = 0; this.slots = n;
   };
-  GpuFluid.prototype.writeParams = function (st) {
-    const pi = this.pi, pf = this.pf;
+  GpuFluid.prototype.writeParams = function (st, si) {
+    const o = 64 * si, pi = this.pi.subarray(o, o + 32), pf = this.pf.subarray(o, o + 32);
     pi[0] = this.nx; pi[1] = this.ny; pi[2] = this.nz; pi[3] = this.nc; pi[4] = this.slots; pi[5] = this.npCap; pi[6] = this.oV; pi[7] = this.oW;
     pf[8] = this.dx; pf[9] = this.x0; pf[10] = this.y0; pf[11] = this.H; pf[12] = st.dt; pf[13] = st.ax; pf[14] = st.az; pf[15] = this.g;
     pf[16] = this.nu; pf[17] = this.rp; pf[18] = this.kernel * this.dx; pf[19] = this.zRim; pf[20] = this.Rrim; pf[21] = this.Rbox; pf[22] = this.Vseed; pf[23] = this.sliver;
     pf[24] = this.thetaMin; pf[25] = this.forcedPhi; pf[26] = this.tol; pf[27] = this.maxIt; pi[28] = this.profile.R.length; pf[29] = this.profile.dz;
-    this.device.queue.writeBuffer(this.B.params, 0, this.params);
+  };
+  GpuFluid.MAXB = 16;          // steps in one submission at most
+  GpuFluid.SPILLCAP = 1024;    // spilled particles recorded per step at most
+  // where each step's numbers land in the read-back buffer
+  GpuFluid.prototype.readLayout = function (cap) {
+    const nPart = Math.ceil(Math.max(1, cap) / WG), per = 64 + 16 * nPart + 32 * GpuFluid.SPILLCAP, ncol = this.nx * this.ny;
+    return { nPart, per, col: per * GpuFluid.MAXB, total: per * GpuFluid.MAXB + 4 * ncol };
   };
   // Steps, each {dt, ax, az}, each followed by a read-back of what the cart and the probes need: the live count, the
   // pressure solve's iterations and residual, the particles that spilled (positions and velocities), the momentum relative
   // to the glass and the fastest particle (per-workgroup partial sums in a fixed order, added here in a fixed order), and
   // the particles per column. Spill totals are summed over the list; the rest describes the last step.
   GpuFluid.prototype.steps = async function (list) {
-    const d = this.device, B = this.B, K = this.K, G = this.G, nc = this.nc;
+    const d = this.device, B = this.B, K = this.K, G = this.G, nc = this.nc, MAXB = GpuFluid.MAXB;
     const wg = (n) => Math.ceil(Math.max(1, n) / WG);
-    const batchSpill = [];
+    const batchSpill = [], perStep = [];
     let spillPx = 0, spillPz = 0, spillCount = 0;
-    for (let si = 0; si < list.length; si++) {
-      const st = list[si], slots = this.slots;
-      this.writeParams(st);
+    for (let b0 = 0; b0 < list.length; b0 += MAXB) {
+      const chunk = list.slice(b0, b0 + MAXB), slots = this.slots, RL = this.readLayout(this.npCap);
+      chunk.forEach((st, si) => this.writeParams(st, si));
+      d.queue.writeBuffer(B.params, 0, this.params, 0, 256 * chunk.length);
       const enc = d.createCommandEncoder();
-      enc.clearBuffer(B.cnt); enc.clearBuffer(B.spillN); enc.clearBuffer(B.col); enc.clearBuffer(B.part);
-      const side = this.side, other = 1 - side;
-      const pass = enc.beginComputePass();
-      const run = (k, g, n) => { pass.setPipeline(K[k]); pass.setBindGroup(0, g); pass.dispatchWorkgroups(wg(n)); };
-      // sort the particles of `side` (slots, dead ones included) into the other set; from then on they live there
-      run('count', G.count[side], slots); pass.setPipeline(K.scan); pass.setBindGroup(0, G.count[side]); pass.dispatchWorkgroups(1);
-      run('scatter', G.count[side], slots); run('sortCell', G.count[side], nc);
-      run('permute', G.permute[side], slots);
-      const gl = G.ls[side], gp = G.p2g[side], gg = G.g2p[side], gr = G.red[side];
-      run('masks', gl, nc); run('dilate0', gl, nc); run('dilateX', gl, nc); run('dilateY', gl, nc); run('dilateZ', gl, nc);
-      run('phiCells', gl, nc); run('flags', gl, nc);
-      run('copyF', G.inh, nc); run('inherit', G.inh, nc); run('copyF', G.inh, nc); run('inherit', G.inh, nc);
-      if (st.dt > 0) {
-        run('p2gU', gp, this.nu_); run('p2gV', gp, this.nv_); run('p2gW', gp, this.nw_);
-        const sizes = [this.nu_, this.nv_, this.nw_];
-        for (let c = 0; c < 3; c++) run('force', G.forces[c], sizes[c]);
-        if (this.nu > 0) for (let c = 0; c < 3; c++) { run('copyT', G.forces[c], sizes[c]); run('visc', G.forces[c], sizes[c]); }
-        run('assemble', G.assemble, nc);
-        pass.setPipeline(K.pcg); pass.setBindGroup(0, G.pcg); pass.dispatchWorkgroups(1);
-        for (let c = 0; c < 3; c++) {
-          run('gradient', G.proj[c], sizes[c]);
-          for (let l = 0; l < 3; l++) { run('copyV', G.proj[c], sizes[c]); run('extend', G.proj[c], sizes[c]); }
-          run('zeroInvalid', G.proj[c], sizes[c]);
+      let side = this.side;
+      chunk.forEach((st, si) => {
+        const dyn = [256 * si], other = 1 - side;
+        // the slots this step's sort reads: what the previous sort kept (cellStart[nc])
+        enc.copyBufferToBuffer(B.cellStart, 4 * nc, B.nslot, 0, 4);
+        enc.clearBuffer(B.cnt); enc.clearBuffer(B.spillN); enc.clearBuffer(B.col); enc.clearBuffer(B.part);
+        const pass = enc.beginComputePass();
+        const run = (k, g, n) => { pass.setPipeline(K[k]); pass.setBindGroup(0, g, dyn); pass.dispatchWorkgroups(wg(n)); };
+        run('count', G.count[side], slots); pass.setPipeline(K.scan); pass.setBindGroup(0, G.count[side], dyn); pass.dispatchWorkgroups(1);
+        run('scatter', G.count[side], slots); run('sortCell', G.count[side], nc);
+        run('permute', G.permute[side], slots);
+        const gl = G.ls[side], gp = G.p2g[side], gg = G.g2p[side], gr = G.red[side];   // index `side` works on the other set
+        run('masks', gl, nc); run('dilate0', gl, nc); run('dilateX', gl, nc); run('dilateY', gl, nc); run('dilateZ', gl, nc);
+        run('phiCells', gl, nc); run('flags', gl, nc);
+        run('copyF', G.inh, nc); run('inherit', G.inh, nc); run('copyF', G.inh, nc); run('inherit', G.inh, nc);
+        if (st.dt > 0) {
+          run('p2gU', gp, this.nu_); run('p2gV', gp, this.nv_); run('p2gW', gp, this.nw_);
+          const sizes = [this.nu_, this.nv_, this.nw_];
+          for (let c = 0; c < 3; c++) run('force', G.forces[c], sizes[c]);
+          if (this.nu > 0) for (let c = 0; c < 3; c++) { run('copyT', G.forces[c], sizes[c]); run('visc', G.forces[c], sizes[c]); }
+          run('assemble', G.assemble, nc);
+          pass.setPipeline(K.pcg); pass.setBindGroup(0, G.pcg, dyn); pass.dispatchWorkgroups(1);
+          for (let c = 0; c < 3; c++) {
+            run('gradient', G.proj[c], sizes[c]);
+            for (let l = 0; l < 3; l++) { run('copyV', G.proj[c], sizes[c]); run('extend', G.proj[c], sizes[c]); }
+            run('zeroInvalid', G.proj[c], sizes[c]);
+          }
+          run('g2p', gg, slots); run('advect', gg, slots);
         }
-        run('g2p', gg, slots); run('advect', gg, slots);
-      }
-      run('momentum', gr, slots);
-      pass.end();
-      const R = B.read, nPart = wg(slots), ncol = this.nx * this.ny;
-      const offPart = 64, offCol = offPart + 16 * nPart, offSpill = Math.ceil((offCol + 4 * ncol) / 16) * 16;
-      enc.copyBufferToBuffer(B.cellStart, 4 * nc, R, 0, 4);
-      enc.copyBufferToBuffer(B.stat, 0, R, 16, 16);
-      enc.copyBufferToBuffer(B.spillN, 0, R, 32, 4);
-      enc.copyBufferToBuffer(B.part, 0, R, offPart, 16 * nPart);
-      enc.copyBufferToBuffer(B.col, 0, R, offCol, 4 * ncol);
-      enc.copyBufferToBuffer(B.spill, 0, R, offSpill, 32 * 4096);
+        run('momentum', gr, slots);
+        pass.end();
+        const o = RL.per * si;
+        enc.copyBufferToBuffer(B.cellStart, 4 * nc, B.read, o, 4);
+        enc.copyBufferToBuffer(B.stat, 0, B.read, o + 16, 16);
+        enc.copyBufferToBuffer(B.spillN, 0, B.read, o + 32, 4);
+        enc.copyBufferToBuffer(B.part, 0, B.read, o + 64, 16 * RL.nPart);
+        enc.copyBufferToBuffer(B.spill, 0, B.read, o + 64 + 16 * RL.nPart, 32 * GpuFluid.SPILLCAP);
+        side = other;
+      });
+      enc.copyBufferToBuffer(B.col, 0, B.read, RL.col, 4 * this.nx * this.ny);
       d.queue.submit([enc.finish()]);
-      await R.mapAsync(GPUMapMode.READ);
-      const buf = R.getMappedRange().slice(0), I = new Int32Array(buf), F = new Float32Array(buf);
-      R.unmap();
-      const sorted = I[0], it = F[4], res = F[5], nSp = Math.min(4096, I[8]);
-      let sx = 0, sy = 0, sz = 0, vm = 0;
-      for (let k = 0; k < nPart; k++) { const o = offPart / 4 + 4 * k; sx += F[o]; sy += F[o + 1]; sz += F[o + 2]; vm = Math.max(vm, F[o + 3]); }
-      const col = this.colCnt; for (let k = 0; k < ncol; k++) col[k] = I[offCol / 4 + k];
-      for (let k = 0; k < nSp; k++) { const o = offSpill / 4 + 8 * k; batchSpill.push([F[o], F[o + 1], F[o + 2], F[o + 4], F[o + 5], F[o + 6]]); spillPx += F[o + 4]; spillPz += F[o + 6]; }
-      spillCount += nSp;
-      // the sort kept `sorted` particles (in cell order, in the other set); those that spilled in this step are marked dead
-      // there and drop out at the next sort
-      this.slots = sorted; this.np = sorted - nSp; this.side = other; this.cgIters = it; this.cgResidual = res;
-      const mp = this.mp; this.P = [mp * sx, mp * sz]; this.Py = mp * sy; this.vmax = Math.sqrt(vm);
-      if (st.dt > 0) this.t += st.dt;
+      await B.read.mapAsync(GPUMapMode.READ);
+      const buf = B.read.getMappedRange().slice(0); B.read.unmap();
+      const I = new Int32Array(buf), F = new Float32Array(buf), mp = this.mp;
+      chunk.forEach((st, si) => {
+        const o = RL.per * si / 4, sorted = I[o], it = F[o + 4], res = F[o + 5], nSp = Math.min(GpuFluid.SPILLCAP, I[o + 8]);
+        let sx = 0, sy = 0, sz = 0, vm = 0;
+        for (let k = 0; k < RL.nPart; k++) { const q = o + 16 + 4 * k; sx += F[q]; sy += F[q + 1]; sz += F[q + 2]; vm = Math.max(vm, F[q + 3]); }
+        let px = 0, pz = 0;
+        for (let k = 0; k < nSp; k++) { const q = o + 16 + 4 * RL.nPart + 8 * k; batchSpill.push([F[q], F[q + 1], F[q + 2], F[q + 4], F[q + 5], F[q + 6]]); px += F[q + 4]; pz += F[q + 6]; }
+        spillPx += px; spillPz += pz; spillCount += nSp;
+        // the sort kept `sorted` particles (in cell order, in the other set); those that spilled in this step are marked
+        // dead there and drop out at the next sort
+        this.slots = sorted; this.np = sorted - nSp; this.cgIters = it; this.cgResidual = res;
+        this.P = [mp * sx, mp * sz]; this.Py = mp * sy; this.vmax = Math.sqrt(vm);
+        if (st.dt > 0) this.t += st.dt;
+        perStep.push({ P: this.P.slice(), spillN: nSp, spillPx: mp * px, spillPz: mp * pz, cg: it, vmax: this.vmax, np: this.np });
+      });
+      this.side = side;
+      const col = this.colCnt; for (let k = 0; k < col.length; k++) col[k] = I[RL.col / 4 + k];
     }
     this.spillNow = spillCount; this.spilled += spillCount; this.spillPx = this.mp * spillPx; this.spillPz = this.mp * spillPz; this.spillList = batchSpill;
+    this.perStep = perStep;
     this.columnHeights();
+    return perStep;
   };
   // read the particle positions back (for the store and the drawing), the live ones only, into px, py, pz
   GpuFluid.prototype.readPositions = async function () {

@@ -1,0 +1,3 @@
+GPU bump 25 mm at 1 m/s, off, batch 1: dw 65.7 mm (t 1.36 s); a_x 3.58 m/s^2; a_z 7.62 m/s^2; spill 13.5 g; |A(3.200 Hz)| 0.4462 m/s; smallest tyre load 6.93 N; rms lean last second 32.4 mm; largest current 0.40 A; 371 ms a step; errors none
+GPU bump 25 mm at 1 m/s, off, batch 4: dw 67.4 mm (t 1.36 s); a_x 3.56 m/s^2; a_z 7.61 m/s^2; spill 13.9 g; |A(3.200 Hz)| 0.4593 m/s; smallest tyre load 7.08 N; rms lean last second 34.3 mm; largest current 0.40 A; 395 ms a step; errors none
+GPU bump 25 mm at 1 m/s, speed, batch 4: dw 27.7 mm (t 0.94 s); a_x 1.42 m/s^2; a_z 9.25 m/s^2; spill 0.0 g; |A(3.200 Hz)| 0.1070 m/s; smallest tyre load 4.43 N; rms lean last second 11.3 mm; largest current 2.29 A; 463 ms a step; errors none
