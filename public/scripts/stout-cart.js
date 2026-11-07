@@ -1513,22 +1513,23 @@
   // force u between body and axle; the road's vertical speed z_a' (unknown) as the disturbance.
   //   M_s v_b' = -k s - c (v_b - v_w) + u,   m_w v_w' = k s + c (v_b - v_w) - u + k_t d - c_t v_w,   s' = v_b - v_w,   d' = -v_w
   // Cost: the body's (the glass's) vertical acceleration a = (-k s - c (v_b - v_w) + u)/M_s, the stroke, the tyre's
-  // compression and the force, each over its largest acceptable value (Bryson): a 0.2 m/s^2 (the Faraday threshold of note
-  // §6.7), s 15 mm, d 1 mm (the static compression is 1.1 mm: more and the wheel leaves the road), u 40 N. Since a contains u
-  // the cost has a cross term N; the Riccati flow is integrated to its steady state as in lqrGains.
+  // compression and the force, each over its largest acceptable value (Bryson): a 0.5 m/s^2, s 10 mm, d 0.2 mm (the static
+  // compression is 1.1 mm: a swing of it as large unloads the tyre and the drive loses its grip), u 40 N. Chosen by measurement
+  // (tools/fig12/springs.cjs): a 0.2 m/s^2 with d 1 mm held the heave lower but let the wheel leave the setts 2.6 % of the time,
+  // and the lean there grew. Since a contains u the cost has a cross term N; the Riccati flow is integrated to its steady state.
   Cart.prototype.suspGains = function () {
     if (this._Ks) return this._Ks;
     const Ms = this.Mb + this.ml, mw = this.mw, k = this.k, c = this.c, kt = this.kt, ct = this.ct;
     const A = [[0, 1, -1, 0], [-k / Ms, -c / Ms, c / Ms, 0], [k / mw, c / mw, -(c + ct) / mw, kt / mw], [0, 0, -1, 0]];
     const B = [0, 1 / Ms, -1 / mw, 0];
-    const lim = this.suspLimits || { a: 0.2, s: 0.015, d: 0.001, u: 40 };
+    const lim = this.suspLimits || { a: 0.5, s: 0.010, d: 0.0002, u: 40 };
     const Ca = [-k / Ms, -c / Ms, c / Ms, 0], Da = 1 / Ms, wa = 1 / (lim.a * lim.a);
     // J = int (wa a^2 + y'Qy y + ru u^2): Q = wa Ca'Ca + diag, N = wa Ca' Da, R = wa Da^2 + ru
     const Q = [0, 1, 2, 3].map((i) => [0, 1, 2, 3].map((j) => wa * Ca[i] * Ca[j] + (i === j ? [1 / (lim.s * lim.s), 0, 0, 1 / (lim.d * lim.d)][i] : 0)));
     const Nc = Ca.map((v) => wa * v * Da), R = wa * Da * Da + 1 / (lim.u * lim.u);
     let P = [0, 1, 2, 3].map(() => [0, 0, 0, 0]);
-    const dt = 2e-6;
-    for (let it = 0; it < 3000000; it++) {
+    const dt = 5e-5;                                         // explicit Euler on the Riccati flow: stable below ~2.6e-4 s here
+    for (let it = 0; it < 400000; it++) {
       const G = [0, 1, 2, 3].map((i) => P[i].reduce((a, v, j) => a + v * B[j], 0) + Nc[i]);   // P B + N
       let dmax = 0;
       const Pn = P.map((row, i) => row.map((v, j) => {
@@ -1538,7 +1539,7 @@
         return v + dt * d;
       }));
       P = Pn;
-      if (dmax < 1e-6 && it > 1000) break;
+      if (dmax < 1e-9 && it > 1000) break;
     }
     const K = [0, 1, 2, 3].map((j) => (B.reduce((a, v, i) => a + v * P[i][j], 0) + Nc[j]) / R);
     this._Ks = K; this.suspP = P; this.suspA = A; this.suspB = B;
@@ -1593,7 +1594,7 @@
       // parametric term -w^2 (a_z/g) q in the swing's equation (exact linearisation: then the swing obeys the linear model the
       // LQR was designed for); a_z from the body accelerometer, q from the filter. Suspension: its own LQR (suspGains).
       const K = this.lqrGains(), m = this.sloshMode, b = this.bForce();
-      const ipar = -this.massX() * m.w * m.w * (this.azMeas / this.g) * s[1] / (m.beta * b);
+      const ipar = this.parCancel === false ? 0 : -this.massX() * m.w * m.w * (this.azMeas / this.g) * s[1] / (m.beta * b);
       let ic = i0 - (K[0] * (s[0] - this.v0) + K[1] * s[1] + K[2] * s[2] + K[3] * this.xi) + ipar;
       if (Math.abs(ic) < this.Imax) this.xi += e * this.Ts;
       this.icmd = ic; this.ipar = ipar;
@@ -1649,6 +1650,7 @@
       D.set('F_push', this.pushF); if (D.has('F_grip')) { D.set('F_grip', Fgrip); D.set('F_motor0', Fm0); D.set('slip', this.slip); } D.set('F_hand', Fhand); D.set('F_lx', Fx); D.set('F_lz', Fz); D.set('a_x', ax); D.set('a_zb', azb); D.set('a_zw', azw);
       D.set('i_m', this.i); D.set('i_cmd', this.icmd); D.set('i_reach', ilim); D.set('V_m', this.Vm); D.set('emf', emf); D.set('u_s', this.us); D.set('u_s_cmd', this.uscmd);
       D.set('Mx', Mx); D.set('Ms', Ms); D.set('ml', this.ml);
+      if (D.has('stroke')) D.set('stroke', this.zb - this.zw - (this.Ls - Ms * g / this.k));   // the spring's compression about its static value
     }
   };
   // one step h: the controller when a sample is due; then symplectic Euler for the mechanics (velocities from the forces

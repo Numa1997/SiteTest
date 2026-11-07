@@ -172,6 +172,23 @@
     line([[dxp, yS, zA], [dxp, yS, mid - 0.004]], C.ink, 2);
     poly([[dxp - 0.011, yS, zA + 0.004], [dxp + 0.011, yS, zA + 0.004], [dxp + 0.011, yS, mid + 0.012], [dxp - 0.011, yS, mid + 0.012]], null, C.ink, 2);
     line([[dxp, yS, zB], [dxp, yS, mid + 0.004]], C.ink, 2); line([[dxp - 0.008, yS, mid + 0.004], [dxp + 0.008, yS, mid + 0.004]], C.ink, 2);
+    // the spring's compression made readable: a gauge beside it, from 20 mm compressed (bottom) to 20 mm extended (top), the
+    // static compression at the middle, the present stroke as a wine bar from it; and the active force as an arrow on the body
+    { const Ms = c.Mb + c.ml, s0 = c.Ls - Ms * c.g / c.k, st = c.zb - c.zw - s0, gx = sx - 0.03, gz = 0.5 * (zA + zB), sc = 1;
+      const top = P(gx, yS, gz + 0.020 * sc), bot = P(gx, yS, gz - 0.020 * sc), mid = P(gx, yS, gz), cur = P(gx, yS, gz + Math.max(-0.02, Math.min(0.02, st)) * sc);
+      ctx.strokeStyle = 'rgba(28,21,24,0.5)'; ctx.lineWidth = 1 * dpr; ctx.beginPath(); ctx.moveTo(top[0], top[1]); ctx.lineTo(bot[0], bot[1]); ctx.stroke();
+      for (const p of [top, mid, bot]) { ctx.beginPath(); ctx.moveTo(p[0] - 4 * dpr, p[1]); ctx.lineTo(p[0] + 4 * dpr, p[1]); ctx.stroke(); }
+      ctx.strokeStyle = C.accent; ctx.lineWidth = 4 * dpr; ctx.lineCap = 'butt'; ctx.beginPath(); ctx.moveTo(mid[0], mid[1]); ctx.lineTo(cur[0], cur[1]); ctx.stroke();
+      ctx.fillStyle = C.muted; ctx.font = `${10 * dpr}px "IBM Plex Mono", monospace`; ctx.textAlign = 'right';
+      ctx.fillText((st >= 0 ? '+' : '') + (st * 1000).toFixed(1) + ' mm', mid[0] - 7 * dpr, mid[1] + 3 * dpr);
+      if (this.ds && this.ds.has('gauge_px_y')) { this.ds.set('gauge_px_x', cur[0] / dpr); this.ds.set('gauge_px_y', 0.5 * (mid[1] + cur[1]) / dpr); this.ds.set('gauge_mid_y', mid[1] / dpr); }
+      if (Math.abs(c.us) > 0.2) {                               // the active force on the body, 1 cm per 4 N
+        const a0 = P(dxp + 0.03, yS, zB), a1 = P(dxp + 0.03, yS, zB + c.us / 4 * 0.01), dir = Math.sign(a1[1] - a0[1]) || 1;
+        ctx.strokeStyle = C.accent; ctx.lineWidth = 2.5 * dpr; ctx.beginPath(); ctx.moveTo(a0[0], a0[1]); ctx.lineTo(a1[0], a1[1]); ctx.stroke();
+        ctx.fillStyle = C.accent; ctx.beginPath(); ctx.moveTo(a1[0], a1[1]); ctx.lineTo(a1[0] - 4 * dpr, a1[1] - 6 * dpr * dir); ctx.lineTo(a1[0] + 4 * dpr, a1[1] - 6 * dpr * dir); ctx.closePath(); ctx.fill();
+        ctx.textAlign = 'left'; ctx.fillText(c.us.toFixed(1) + ' N', a1[0] + 5 * dpr, a1[1] + 3 * dpr);
+      }
+    }
     const bw = this.bodyW / 2, bdp = this.bodyD / 2, bt = bodyZ + this.bodyH;
     poly([[-bw, -bdp, bt], [bw, -bdp, bt], [bw, bdp, bt], [-bw, bdp, bt]], '#f3eee5', C.ink, 2);              // top face
     poly([[bw, -bdp, bodyZ], [bw, bdp, bodyZ], [bw, bdp, bt], [bw, -bdp, bt]], '#ddd5c8', C.ink, 2);          // the end face toward the camera
@@ -205,10 +222,10 @@
   // Live charts in the empty sky of the figure, from the store's numbers as they were written (drawing only):
   // left, the last 4 s of the stout's lean (front − back wall) and the motor current; right, the first mode's phase
   // portrait (q1, q1'/w1) with the rim as its boundary, |q| = z_rim − h: a path that crosses it spills.
-  View.prototype.record = function (t, lean, cur, q, qd, w, free, est) {
+  View.prototype.record = function (t, lean, cur, q, qd, w, free, est, stroke, us) {
     const H = this.hist || (this.hist = []);
     if (H.length && t < H[H.length - 1][0]) H.length = 0;      // a restart
-    H.push([t, lean, cur, q, qd, w, free, est]);
+    H.push([t, lean, cur, q, qd, w, free, est, stroke || 0, us || 0]);
     while (H.length && H[0][0] < t - 4) H.shift();
   };
   View.prototype.drawCharts = function (W, Hc, dpr) {
@@ -230,6 +247,16 @@
     { const wd = ctx.measureText((narrow ? 'lean ±' : 'lean: probes (±') + Math.round(lim) + (narrow ? ' mm' : ' mm)')).width; ctx.fillStyle = C.ink; ctx.fillText(narrow ? ' · est.' : ' · estimate', x0 + 5 * dpr + wd, y0 + 11 * dpr); }
     ctx.fillStyle = '#6b6166'; ctx.fillText(narrow ? 'current ±3 A' : 'motor current (±3 A)', x0 + 5 * dpr, y0 + ch - 5 * dpr);
     if (!narrow) { ctx.textAlign = 'right'; ctx.fillStyle = 'rgba(122,31,43,0.7)'; ctx.fillText('rim', x0 + cw - 4 * dpr, Yl(2 * free * 1000) - 3 * dpr); ctx.fillStyle = '#6b6166'; ctx.fillText('last 4 s', x0 + cw - 4 * dpr, y0 + ch - 6 * dpr); }
+    // the spring: its stroke about the static compression (± 20 mm) and the active force (± 40 N), under the lean chart
+    { const y1 = y0 + ch + (narrow ? 4 : 6) * dpr, ch2 = Math.round(ch * 0.8);
+      box(x0, y1, cw, ch2);
+      const Ys = (v) => y1 + ch2 / 2 - v / 0.02 * (ch2 / 2 - 5 * dpr), Yu = (v) => y1 + ch2 / 2 - v / 40 * (ch2 / 2 - 5 * dpr);
+      ctx.strokeStyle = 'rgba(28,21,24,0.15)'; ctx.beginPath(); ctx.moveTo(x0, y1 + ch2 / 2); ctx.lineTo(x0 + cw, y1 + ch2 / 2); ctx.stroke();
+      const ln = (k, Y, col, lw) => { ctx.beginPath(); H.forEach((r, i) => { const px = X(r[0]), py = Math.max(y1, Math.min(y1 + ch2, Y(r[k]))); i ? ctx.lineTo(px, py) : ctx.moveTo(px, py); }); ctx.strokeStyle = col; ctx.lineWidth = lw * dpr; ctx.stroke(); };
+      ln(9, Yu, '#8b8079', 1.2); ln(8, Ys, C.ink, 1.8);
+      ctx.font = mono(narrow ? 9 : 10); ctx.textAlign = 'left'; ctx.fillStyle = C.ink; ctx.fillText(narrow ? 'spring ±20 mm' : 'spring stroke (±20 mm)', x0 + 5 * dpr, y1 + 11 * dpr);
+      ctx.fillStyle = '#6b6166'; ctx.fillText(narrow ? 'active ±40 N' : 'active force (±40 N)', x0 + 5 * dpr, y1 + ch2 - 5 * dpr);
+      this.chartSpringBox = [x0 / dpr, y1 / dpr, cw / dpr, ch2 / dpr]; }
     // the phase portrait
     const s0 = Math.min(ch, 120 * dpr), px0 = W - pad - s0, py0 = pad, R = free * 1.15, Pm = (q) => px0 + s0 / 2 + q / R * (s0 / 2 - 6 * dpr), Pv = (v) => py0 + s0 / 2 - v / R * (s0 / 2 - 6 * dpr);
     box(px0, py0, s0, s0);

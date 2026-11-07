@@ -1,6 +1,6 @@
 # Fig. 12 · A Pint of Guinness on a One-Wheel Cart (`public/simulations/beer-slosh.html`)
 
-Rebuilt from zero on 6 November 2026 after Numa rejected the previous Fig. 12 (modal sloshing in a Blender-sculpted glass, LQR,
+Rebuilt from zero on 6 November 2026 (since 7 November 2026 the default fluid is the 3D solver on the reader's graphics chip: "Part A" at the end) after Numa rejected the previous Fig. 12 (modal sloshing in a Blender-sculpted glass, LQR,
 three languages). Nothing of it is reused. The page is **English only**: `tools/i18n/build.py` lists it in `ENGLISH_ONLY`, so no
 German or Arabic page is generated, and links to it from the German and Arabic pages point at the English page.
 
@@ -47,6 +47,11 @@ speed-up of 6 November 2026; see "Speed").
 | `notes/fig12/check.md`, `referee.md` | the independent derivation check and the blind referee report on the lecture note |
 | `notes/fig12/test.cjs` | browser test (desktop, phone): run, push with and without the speed loop, drag, no errors, no sideways scroll |
 | `notes/fig12/panel-test.cjs`, `panel-test2.cjs`, `spill-test.cjs` | data panel: every check and read-back; on a bump at three widths, Read values, a round, Save, idle; while spilling |
+| `public/scripts/stout-gpu.js` | the 3D solver on the reader's graphics chip (WebGPU compute shaders, `StoutGpu.GpuFluid`): whole glass, same method as `Fluid`, float32; batches of up to 16 steps in one submission with one read-back; see "Part A" below |
+| `public/scripts/stout-gpu-view.js` | draws the GPU solver's stout on the chip (`StoutGpuView`): screen-space fluid rendering; `StoutView.drawGlass` lays the result in the glass |
+| `tools/fig12/gpu-linearity.cjs`, `gpu-study.cjs` | the GPU solver in headless Chromium (SwiftShader): from rest (`linearity.cjs`'s experiment, `TILT=`, `REST=`), and with the cart over a bump or a road (`study.cjs`/`control.cjs`'s experiments, batches of n steps) |
+| `notes/fig12/gpu-page-test.cjs` | the page on the GPU path: starts, runs, no errors, screenshots |
+| `tools/fig12/springs.cjs` | Part B: the suspension spring's stroke, the active force, the heave, the lean and the spill under each controller |
 | `public/scripts/stout-pool.js`, `stout-worker.js` | the solver's loops shared over worker threads (shared memory; same numbers) |
 | `notes/fig12/serve.cjs` | serves `public/` with the isolation headers Cloudflare sends for this page (tests with threads) |
 | `notes/fig12/threads-test.cjs` | in Chromium: the threaded solver gives the single-thread numbers to the last digit; threads named in the readout |
@@ -368,3 +373,39 @@ statement; §11.8's 1.2 % and 15–31 %; breaking at 21.2 mm called a linear est
 phones, the averaging step written out with its assumptions and Landau & Lifshitz §27, f = vn and the long-wave picture, the
 suspension transmissibility check (1/(r² − 1) ≈ 0.2 at r = 2.4; 0.2 × 0.72 = 0.14 vs 0.142 measured), the setts' 5.9 Hz, the
 washboard as a direct resonance, b i defined at use.
+
+## Part A: the real fluid on the reader's graphics chip (7 November 2026)
+
+Numa rejected any modal model as the thing drawn. Since part A the page's default fluid is the 3D solver itself, run on the
+reader's own graphics chip through WebGPU (`?model=gpu`, or no query). Where the browser has no WebGPU it falls back to the
+processor's solver at 4 mm (half glass, slow motion) and says so in the caption. The modal model stays in the menu as
+"Reduced model, not a fluid simulation" (`?model=live`) and inside the controller (plant model, observer).
+
+- **Solver** (`stout-gpu.js`): the equations and method of `Fluid` (incompressible Navier–Stokes, pressure Poisson solve,
+  APIC, MAC grid, cut-cell wall, Zhu–Bridson level set with wall images, ghost fluid, wall-inherit rule, 3 layers of
+  extrapolation, midpoint advection, spill over the rim), over the whole glass: 51 332 particles, 20 × 20 × 45 cells at 4 mm.
+  Differences: float32; Jacobi-preconditioned CG in one 256-thread workgroup, tolerance 1e-5 of max |b| (70–100 iterations);
+  particle-to-grid as a gather over the particles sorted by cell, each cell's list in particle order, so every sum has a fixed
+  order (no float atomics); the inherit rule as two Jacobi passes. At most 8 storage buffers per stage (face arrays merged,
+  the glass profile a uniform), so it runs on any WebGPU device.
+- **Coupling** (`World.advanceGpu`): a batch of n steps (as many 5 ms steps as the frame lasted, at most 16; fewer if the chip
+  needs over 60 ms for them), one submission, one read-back of every step's momentum, spill and CG statistics and the last
+  step's column counts. The cart runs ahead through the batch with the stout's push held; the impulse owed,
+  D = Σ_{i<n} J_i − n J_0, is paid over the next batch (note eq. G1). n = 1 reproduces `World.advance`.
+- **Drawing** (`stout-gpu-view.js`): spheres of radius 2.2 mm through the page's camera, nearest depth, 4 rounds of a
+  separable bilateral filter, thickness at half size scaled by (spacing³)/(sphere volume), Beer–Lambert with κ = ln 2/6 mm, the
+  head as the top 12 mm below the column-height surface. Composited into the 2D canvas between the glass's back and front.
+- **Store and panel**: the GPU path adds `batch_n`, `J_x`, `J_z`, `owed_x`, `owed_z`, `gpu_ms`, `np_read`, `col_cnt`; checks
+  recompute `h_col` from the stored counts, the drawn surface and probes from the stored column heights (bilinear, wall
+  extension), `F_lx_next` = J/Δt + D/(nΔt), m_p and the spill for the whole glass. Particle positions are read back into the
+  store only while paused. The data panel script is loaded once the store is declared (the GPU starts asynchronously).
+- **Measured** (SwiftShader, the only WebGPU here; `notes/fig12/runs/`): Table 6 of the note: from rest, chip vs processor,
+  largest lean 5.5/5.9, 11.5/11.5, 25.4/25.4, 46/45.3, 69/69.3 mm and free swing 3.194/3.160, 3.200/3.202, 3.190/3.194,
+  3.108/3.109, 3.049/3.056 Hz for A = 0.5–6 m/s²; spill 1.6/1.6 and 12.3/12.2 g at 4 and 6 m/s². Steady tilt at 2 m/s²:
+  −0.922 mm (exact −0.877). 25 mm bump, open loop: 65.7 mm, 13.5 g (processor 60.7, 11.9); batch 4: 67.4 mm, 13.9 g; speed
+  loop 27.7 mm (29.9). At rest the fastest particle reaches 14 mm/s in 2 s (processor 3.2 mm/s after 1 s), cause not
+  established. One step takes about 0.3 s on SwiftShader; the real rate can only be measured on a reader's device, and the
+  page prints it ("real time" or "slow motion ×r", and the chip's name in the solver readout).
+- **Tests**: `GPU=1 node notes/fig12/panel-test2.cjs` (the panel on the GPU path), `node notes/fig12/gpu-page-test.cjs`;
+  without WebGPU the default page is the processor's solver and `panel-test2.cjs` runs as before (196 checks, none differ).
+- **Note**: §11.10 ★ (G1)–(G2), Table 6, source [26]; §14, §15, abstract updated. `same.cjs` still prints `7747da757ea9d800`.

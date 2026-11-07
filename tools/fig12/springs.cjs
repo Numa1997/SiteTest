@@ -3,6 +3,7 @@
 // road: bumps10 bumps25 (one cosine bump of that height in mm), isoA..isoD, washboard, setts. ctrl: off, speed, slosh,
 // slosh+sky (slosh feedback with the skyhook suspension), joint (one LQR for the motor and the suspension, the heave in its
 // model: Cart.sample 'joint'). Several speeds run each case at each. The cart starts at x = 0.5 m.
+// Ablation (section 8.6): UMAX=0 and/or NOCANCEL=1 in the environment, with ctrl joint.
 // Printed per run, over the run after 1.5 s (bumps: over the whole run):
 //   stroke     rms and largest |z_b - z_w - s_0|, the spring's compression about its static value (mm): what the spring does
 //   u_s        rms and largest active force (N)
@@ -23,6 +24,8 @@ for (const rd of roads) for (const v0 of speeds) for (const cs of ctrls) {
   else road = rd.startsWith('iso') ? { kind: 'iso', cls: rd.slice(3) } : { kind: rd };
   const w = new World({ fluid: { dx: 0.004, profile: G, h0: 0.125, H: (G.R.length - 1) * G.dz + 0.03, modal: model !== '3d', nm: model === 'nm', nmCoeffs: NM },
     road: Object.assign({ Rw: 0.04, xmin: -1, xmax: 125 }, road), cart: { x0: 0.5, Rw: 0.04, Ls: 0.135, v0, ctrl, susp: sky }, dtMax: 1 / 200 });
+  if (process.env.UMAX !== undefined) w.cart.Umax = +process.env.UMAX;   // UMAX=0: the suspension gives no force (ablation)
+  if (process.env.NOCANCEL) w.cart.parCancel = false;                    // NOCANCEL=1: drop the parametric cancellation (B3)
   const c = w.cart, f = w.fluid, t0 = Date.now(), s0 = c.Ls - (c.Mb + c.ml) * c.g / c.k, az = [], st = [], us = [];
   const tFrom = rd.startsWith('bumps') ? 0 : 1.5;
   let lean = 0, imax = 0, air = 0, ns = 0, smax = 0, umax = 0;

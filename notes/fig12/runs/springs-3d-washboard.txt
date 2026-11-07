@@ -1,0 +1,4 @@
+3d washboard 0.85 m/s off      : stroke rms 10.96 max 17.4 mm; u_s rms 0.0 max 0.0 N; heave rms 3.53 m/s^2, band 0.125; lean 63.1 mm; spilled 31.3 g; current max 0.34 A; tyre off 0.0 % (17 s)
+3d washboard 0.85 m/s slosh    : stroke rms 28.22 max 43.7 mm; u_s rms 0.0 max 0.0 N; heave rms 9.05 m/s^2, band 0.321; lean 32.1 mm; spilled 0.7 g; current max 3.00 A; tyre off 19.1 % (17 s)
+3d washboard 0.85 m/s slosh+sky: stroke rms 7.21 max 10.4 mm; u_s rms 3.8 max 5.5 N; heave rms 1.41 m/s^2, band 0.014; lean 3.8 mm; spilled 0.0 g; current max 1.49 A; tyre off 0.0 % (14 s)
+3d washboard 0.85 m/s joint    : stroke rms 6.99 max 10.2 mm; u_s rms 3.9 max 5.7 N; heave rms 1.12 m/s^2, band 0.013; lean 5.4 mm; spilled 0.0 g; current max 1.51 A; tyre off 0.0 % (15 s)
