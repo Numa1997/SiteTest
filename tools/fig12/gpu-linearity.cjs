@@ -49,7 +49,7 @@ const TILT = process.env.TILT ? +process.env.TILT : null;
     if (r.error) { console.log(r.error); break; }
     out.push(r);
     console.log(`gpu A ${A} m/s^2${TILT !== null ? ` (steady ${TILT} m/s^2)` : ''}: lean ${r.lean_mm} mm at ${r.t_s} s; free swing ${r.f_Hz} Hz; spill ${r.spill_g} g; particles ${r.np0} -> ${r.np}; CG ${r.cg_mean} it.; fastest particle ${r.vmax_mm_s} mm/s` +
-      (r.com_mm !== null ? `; centre of mass x over the last second ${r.com_mm} mm` : '') + `; ${r.ms_per_step} ms a step on ${r.device.vendor}/${r.device.architecture}; errors ${r.errors.length ? r.errors : 'none'}`);
+      (r.com_mm !== null ? `; centre of mass x over 2.5–5.5 s ${r.com_mm} mm` : '') + `; ${r.ms_per_step} ms a step on ${r.device.vendor}/${r.device.architecture}; errors ${r.errors.length ? r.errors : 'none'}`);
   }
   if (cons.length) console.log(cons.slice(0, 5));
   if (process.env.OUT) fs.writeFileSync(process.env.OUT, JSON.stringify({ model: 'gpu', Tp, T, out }));
