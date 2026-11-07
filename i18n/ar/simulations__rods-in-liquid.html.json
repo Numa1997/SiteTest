@@ -1,4 +1,12 @@
 {
+ "0001bfbd13df": {
+  "src": "The liquid machine",
+  "tr": "آلة السوائل"
+ },
+ "005abdfe6466": {
+  "src": "Balancing Two Rods in a Liquid · Numa Koudsie",
+  "tr": "موازنة قضيبين في سائل · نعمة سائر قدسية"
+ },
  "005b55ffaa7c": {
   "src": "Each step composes the previous step’s map with itself, so \\(\\mathbf H_k\\) is the cost of looking exactly \\(2^k\\) periods ahead; we checked this in Wolfram against the plain period-by-period recursion for \\(k \\le 5\\) (agreement to \\(10^{-15}\\)), and \\(\\mathbf H_k \\to \\mathbf P\\) as the horizon grows. The page stops when \\(\\mathbf H\\) changes by less than \\(10^{-13}\\) of itself, after 12 steps at 10 ms, a horizon of 4096 looks, and takes (16h). For the default machine the result equals Wolfram’s <code>DiscreteLQRegulatorGains</code> [11] to 8 parts in \\(10^{12}\\) at 10 ms and to 1 part in \\(10^{13}\\) at 40 ms.",
   "tr": "كلّ خطوة تركّب تطبيق الخطوة السابقة مع نفسه، فتكون \\(\\mathbf H_k\\) كلفة النظر إلى الأمام \\(2^k\\) دورًا بالضبط؛ وقد قارنّا ذلك في Wolfram بالتكرار البسيط دورًا دورًا لـ \\(k \\le 5\\) (اتّفاق حتّى \\(10^{-15}\\))، و\\(\\mathbf H_k \\to \\mathbf P\\) كلّما اتّسع الأفق. وتتوقّف الصفحة حين تتغيّر \\(\\mathbf H\\) بأقلّ من \\(10^{-13}\\) من نفسها، بعد 12 خطوة عند 10 ms، أي أفق من 4096 نظرة، وتأخذ (16h). وللآلة الافتراضية تساوي النتيجة ما يعطيه <code>DiscreteLQRegulatorGains</code> في Wolfram [11] حتّى 8 أجزاء من \\(10^{12}\\) عند 10 ms، وحتّى 1 جزء من \\(10^{13}\\) عند 40 ms."
@@ -14,6 +22,10 @@
  "02b25ae79282": {
   "src": "The remedy is to design the gains for the loop we actually run. The cost (14) is an integral over continuous time, but the controller decides only at the looks, so we write (14) as a sum over periods and do the integral inside each period exactly. Within one period the state is \\(\\mathbf s(t_k + t) = \\boldsymbol\\Phi(t)\\mathbf s_k + \\boldsymbol\\Gamma(t)u_k\\) with \\(\\boldsymbol\\Phi(t) = e^{\\mathbf A t}\\) and \\(\\boldsymbol\\Gamma(t) = \\int_0^t e^{\\mathbf A\\tau}\\mathrm d\\tau\\,\\mathbf B\\), the running versions of (16a). Insert this into \\(\\int_0^{T_s}(\\mathbf s^{\\mathsf T}\\mathbf Q\\mathbf s + \\rho u_k^2)\\,\\mathrm dt\\) and expand the square:",
   "tr": "العلاج أن تُصمَّم الكسوب للحلقة التي نشغّلها فعلًا. الكلفة (14) تكامل على زمن متّصل، لكنّ المتحكّم لا يقرّر إلّا عند النظرات، فنكتب (14) مجموعًا على الأدوار ونحسب التكامل داخل كلّ دور بدقّة. داخل دور واحد تكون الحالة \\(\\mathbf s(t_k + t) = \\boldsymbol\\Phi(t)\\mathbf s_k + \\boldsymbol\\Gamma(t)u_k\\) مع \\(\\boldsymbol\\Phi(t) = e^{\\mathbf A t}\\) و\\(\\boldsymbol\\Gamma(t) = \\int_0^t e^{\\mathbf A\\tau}\\mathrm d\\tau\\,\\mathbf B\\)، وهما الصيغتان الجاريتان لـ (16a). نعوّض ذلك في \\(\\int_0^{T_s}(\\mathbf s^{\\mathsf T}\\mathbf Q\\mathbf s + \\rho u_k^2)\\,\\mathrm dt\\) ونفكّ المربّع:"
+ },
+ "02b8ae0ac5c7": {
+  "src": "0.93 m after 13 s, still closing at about 3 cm/s",
+  "tr": "0.93 m بعد 13 s، وما زالت تقترب بنحو 3 cm/s"
  },
  "02e17fd4b37a": {
   "src": "<span>2</span>The machine",
@@ -83,6 +95,10 @@
   "src": "The same three steps for \\(x\\) and for \\(\\theta_2\\) give the other two rows. All three together are",
   "tr": "والخطوات الثلاث نفسها لـ\\(x\\) ولـ\\(\\theta_2\\) تعطي الصفّين الآخرين. والثلاثة معًا هي"
  },
+ "084b81485bf3": {
+  "src": "<b>Left out</b> (with the given flow). The parts of the added mass that mix the rod's own motion with the flow's velocity as the rod turns; the rods' own wakes and the vortices they shed; the bodies changing the flow (section 13.6 adds these two); the water's surface; and the rail's own drag. Morison's equation is itself an approximation, poor where drag and inertia are of the same size [25]. By (34) a river running at 2 m/s pushes about 48 N on every metre of rod across it: 22 N on this page's 0.45 m of rods, and 15 N on the carriage's face. The 400 N motor holds that; the rods lean into the stream (13.8).",
+  "tr": "<b>ما أُهمل</b> (مع الجريان المعطى). أجزاء الكتلة المضافة التي تمزج حركة القضيب نفسه بسرعة الجريان حين يدور القضيب؛ وآثار القضيبين أنفسهما والدوّامات التي يطلقانها؛ وتغيير الأجسام للجريان (يضيف القسم 13.6 هذين الأمرين)؛ وسطح الماء؛ وكبح السكّة نفسها. ومعادلة موريسون نفسها تقريب، ضعيف حيث يتقارب الكبح والقصور في الحجم [25]. وبحسب (34) يدفع نهر يجري بسرعة 2 m/s نحو 48 N على كلّ متر من القضيب المعترض له: 22 N على قضيبي هذه الصفحة البالغ طولهما 0.45 m، و15 N على وجه العربة. والمحرّك ذو 400 N يتحمّل ذلك؛ ويميل القضيبان نحو التيّار (13.8)."
+ },
  "085f20750271": {
   "src": "Keep rolling",
   "tr": "تابِع التدحرج"
@@ -106,6 +122,10 @@
  "09f5519d4c6c": {
   "src": "Continuous time",
   "tr": "الزمن المتّصل"
+ },
+ "0b6156c430dd": {
+  "src": "a random sea: six slow waves that never repeat",
+  "tr": "بحر عشوائي: ستّ موجات بطيئة لا تتكرّر أبدًا"
  },
  "0b6bcc80df27": {
   "src": "<b>Left out</b> (with the given flow). The parts of the added mass that mix the rod's own motion with the flow's velocity as the rod turns; the rods' own wakes and the vortices they shed; the bodies changing the flow (section 13.6 adds these two); the water's surface; and the rail's own drag. Morison's equation is itself an approximation, poor where drag and inertia are of the same size [25]. The motor's 60 N cannot hold the default rods in a river running at 2 m/s: by (34) the water pushes about 48 N on every metre.",
@@ -291,9 +311,17 @@
   "src": "Along the way the page watches \\(W\\) of (19). The moment \\(W < 0.9\\,c^\\ast\\) it hands over to the balancer (16), which from there is certain to finish. If the plan runs to its end without reaching \\(c^\\ast\\), the balancer gets its chance anyway, and the check of section 9 decides within 4 s whether to start over; in the tests this happened often and the balancer won every time, which is the conservatism of \\(c^\\ast\\) at work. In headless Chromium, with the same frame-by-frame loop as in your browser, 40 random states, any angles, rates up to \\(\\pm3\\) rad/s and cart speeds up to \\(\\pm0.5\\) m/s, all ended balanced at 60 N within 60 s. A plan took between 0.4 and 12 s of browser time. From hanging rest the whole rescue takes about 7 s: 3 s of calming while the plan is computed, 4 s of swing-up. Seven other machines (a heavier cart, heavier or longer or shorter rods, \\(u_\\text{max}\\) = 30 or 120 N, \\(T_s\\) = 40 ms), six random states each, were caught as well. The same study in Node.js, without the calming stage, found a direct plan for only 16 of the 40 states, which is why calming comes first. Forty cases are evidence, not a proof: a very weak motor, a very heavy cart or a push that throws the cart against the end of the rail can still beat it.",
   "tr": "وفي أثناء الطريق تراقب الصفحة \\(W\\) من (19). ولحظة يصير \\(W < 0.9\\,c^\\ast\\) تسلّم القيادة لمتحكّم الموازنة (16)، الذي يُتمّ المهمّة من هناك يقينًا. وإذا بلغت الخطّة نهايتها دون أن تصل إلى \\(c^\\ast\\)، أخذ متحكّم الموازنة فرصته مع ذلك، وتقرّر الفحوص الموصوفة في القسم 9 خلال 4 s هل يُبدأ من جديد؛ وقد حدث هذا كثيرًا في الاختبارات وفاز متحكّم الموازنة في كلّ مرّة، وهذا هو تحفّظ \\(c^\\ast\\) يعمل. في Chromium بلا واجهة، وبالحلقة نفسها إطارًا بإطار كما في متصفّحك، انتهت 40 حالة عشوائية، بزوايا كيفما اتّفق ومعدّلات دوران حتى \\(\\pm3\\) rad/s وسرعات للعربة حتى \\(\\pm0.5\\) m/s، كلّها متوازنة عند 60 N خلال 60 s. واستغرقت الخطّة بين 0.4 و12 s من زمن المتصفّح. ومن السكون المتدلّي يستغرق الإنقاذ كلّه نحو 7 s: 3 s من التهدئة بينما تُحسب الخطّة، و4 s من الأرجحة إلى الأعلى. وسبع آلات أخرى (عربة أثقل، وقضبان أثقل أو أطول أو أقصر، و\\(u_\\text{max}\\) = 30 أو 120 N، و\\(T_s\\) = 40 ms)، بستّ حالات عشوائية لكلّ منها، التُقطت كذلك. والدراسة نفسها في Node.js، بلا مرحلة التهدئة، وجدت خطّة مباشرة لـ16 حالة فقط من الأربعين، ولهذا تأتي التهدئة أوّلًا. أربعون حالة دليل لا برهان: فمحرّك ضعيف جدًّا، أو عربة ثقيلة جدًّا، أو دفعة ترمي العربة نحو نهاية السكّة، قد تغلبها مع ذلك."
  },
+ "1f9a2f684682": {
+  "src": "\\(\\psi = \\sum_{j=1}^{6}\\frac{U}{\\sqrt6\\,|\\mathbf k_j|}\\sin(\\mathbf k_j\\cdot\\mathbf r - \\omega_j t + \\varphi_j)\\), wavelengths 2.5–8 m from six directions, periods 23–89 s",
+  "tr": "\\(\\psi = \\sum_{j=1}^{6}\\frac{U}{\\sqrt6\\,|\\mathbf k_j|}\\sin(\\mathbf k_j\\cdot\\mathbf r - \\omega_j t + \\varphi_j)\\)، أطوال الموجات 2.5–8 m من ستّة اتجاهات، والأدوار 23–89 s"
+ },
  "1fc152e12266": {
   "src": "J. N. Sørensen and W. Z. Shen, <a href=\"https://doi.org/10.1115/1.1471361\">“Numerical modeling of wind turbine wakes”</a>, <em>Journal of Fluids Engineering</em> 124, 393–399 (2002): blade forces from the local velocity, distributed along lines in a Navier–Stokes solver (the actuator line). Only the abstract was available to us.",
   "tr": "J. N. Sørensen و W. Z. Shen، <a href=\"https://doi.org/10.1115/1.1471361\">«Numerical modeling of wind turbine wakes»</a>، <em>Journal of Fluids Engineering</em> 124، 393–399 (2002): قوى الشفرات من السرعة المحلّية، موزّعة على خطوط في حلّال لمعادلات نافييه–ستوكس (خطّ المشغّل). لم يتوفّر لنا إلا الملخّص."
+ },
+ "20ed48c75552": {
+  "src": "about 11 s after the button",
+  "tr": "بعد نحو 11 s من الضغط على الزرّ"
  },
  "21137c3c1a78": {
   "src": "Below this value of the remaining cost <i>W</i> the balancer is certain to win, motor limit and loop period included (section 9).",
@@ -319,9 +347,17 @@
   "src": "<b>13.1</b> Upright rods at rest in a steady breeze \\(U\\), with one \\(\\xi_\\perp\\) for both rods and (33) alone: show from (35) that \\(\\mathbf Q = \\xi_\\perp U\\,\\bigl(L_1 + L_2,\\ \\tfrac12 L_1(L_1 + 2L_2),\\ \\tfrac12 L_2^2\\bigr)\\), and check it against the store's \\(Q_i\\) in glycerol.",
   "tr": "<b>13.1</b> قضيبان قائمان ساكنان في نسيم ثابت \\(U\\)، مع \\(\\xi_\\perp\\) واحد للقضيبين و(33) وحدها: بيّن من (35) أن \\(\\mathbf Q = \\xi_\\perp U\\,\\bigl(L_1 + L_2,\\ \\tfrac12 L_1(L_1 + 2L_2),\\ \\tfrac12 L_2^2\\bigr)\\)، وقارنه في الغليسرين بقيم \\(Q_i\\) في المخزن."
  },
+ "2404b6d9a2ff": {
+  "src": "−0.13°, −0.14° (after 20 s)",
+  "tr": "−0.13°، −0.14° (بعد 20 s)"
+ },
  "2406c2d888fc": {
   "src": "The same wind U everywhere, all the time.",
   "tr": "الريح نفسها U في كل مكان وفي كل وقت."
+ },
+ "241dd73793db": {
+  "src": "Two tides with periods of 20 s and 22 s, a long wave 30 m from crest to crest: they add up and cancel in turn, once every 220 s. U starts at the hardest strength the balancer still wins.",
+  "tr": "مدّان دوراهما 20 s و22 s، وموجة طويلة طولها 30 m من قمّة إلى قمّة: يتجمّعان ويتلاشيان بالتناوب، مرّة كلّ 220 s. تبدأ U عند أشدّ شدّة ما زال متحكّم الموازنة يفوز عندها."
  },
  "24f94dea2061": {
   "src": "Hang down, swing up",
@@ -343,9 +379,17 @@
   "src": "<span class=\"sw sw--dash\"></span>motor force <i>u</i>",
   "tr": "<span class=\"sw sw--dash\"></span>قوّة المحرّك <i>u</i>"
  },
+ "263d68d8d724": {
+  "src": "<b>Measured: drag the cart and let go.</b> In a river current, the mouse grabbed the carriage, dragged it about 0.3 m in one second, held it a second and let go (<code>notes/fig11/project06/drag.cjs</code>). While you hold the cart the motor is off, and this page's short rods fall within a third of a second, so by the release they have fallen and are turning. The balancer, with 400 N, catches the turning pair where the cart is: in still water, after a grab of 2 s, the rods went over twice more and stood again about a second after the release (<code>notes/fig11/project06/release.cjs</code>).",
+  "tr": "<b>مقيس: اسحب العربة ثم أفلتها.</b> في تيّار نهر أمسكت الفأرة العربة، وسحبتها نحو 0.3 m في ثانية واحدة، وأمسكتها ثانية، ثم أفلتتها (<code>notes/fig11/project06/drag.cjs</code>). وما دمت تُمسك العربة فالمحرّك متوقّف، وقضيبا هذه الصفحة القصيران يسقطان في أقلّ من ثلث ثانية، فعند الإفلات يكونان قد سقطا وهما يدوران. ويلتقط متحكّم الموازنة، بقوّة 400 N، الزوج الدائر حيث تكون العربة: في ماء ساكن، بعد إمساك دام 2 s، انقلب القضيبان مرّتين أخريين ثم وقفا من جديد بعد نحو ثانية من الإفلات (<code>notes/fig11/project06/release.cjs</code>)."
+ },
  "26ad4fc1a372": {
   "src": "The two numbers are our choices. The damping \\(2\\omega_h\\) is the critical one, so the cart never overshoots the pointer: after a jump \\(D\\) of the pointer it follows \\(x = D\\,[1 - (1 + \\omega_h t)\\,e^{-\\omega_h t}]\\), 95 % of the way in 0.32 s, and it trails a pointer moving steadily at speed \\(c\\) by \\(2c/\\omega_h\\), 13 cm at 1 m/s (Wolfram’s <code>DSolve</code> on (29) gives both). With \\(\\ddot x\\) given, the Euler–Lagrange equations of the rods, rows 2 and 3 of (9), no longer contain the force: they are two equations for the rods alone, driven by the cart,",
   "tr": "الرقمان من اختيارنا. والتخامد \\(2\\omega_h\\) هو التخامد الحرج، فلا تتجاوز العربة المؤشّر أبدًا: بعد قفزة \\(D\\) للمؤشّر تتبعه وفق \\(x = D\\,[1 - (1 + \\omega_h t)\\,e^{-\\omega_h t}]\\)، فتقطع 95 % من المسافة في 0.32 s، وتتأخّر عن مؤشّر يتحرّك بثبات بسرعة \\(c\\) بمقدار \\(2c/\\omega_h\\)، أي 13 cm عند 1 m/s (يعطي <code>DSolve</code> من Wolfram على (29) كلتا النتيجتين). ومع \\(\\ddot x\\) معلومًا، لا تعود معادلات أويلر–لاغرانج للقضيبين، أي الصفّان 2 و3 من (9)، تحتوي على القوّة: إنّهما معادلتان للقضيبين وحدهما، تقودهما العربة،"
+ },
+ "2721944a640b": {
+  "src": "Six slow waves of the deep sea, 2.5 to 8 m long, from six directions, with periods of 23 to 89 s: the pattern never repeats. U starts at the hardest strength the balancer still wins.",
+  "tr": "ستّ موجات بطيئة من أعماق البحر، طولها من 2.5 إلى 8 m، تأتي من ستّة اتجاهات، وأدوارها من 23 إلى 89 s: النمط لا يتكرّر أبدًا. تبدأ U عند أشدّ شدّة ما زال متحكّم الموازنة يفوز عندها."
  },
  "275fd4b5f642": {
   "src": "Here is why \\(c^\\ast\\) certifies a catch. Suppose \\(\\dot W < 0\\) at every point with \\(0 < W \\le c^\\ast\\), the whole ellipsoid except its centre. A motion that starts inside can never leave: to cross the surface \\(W = c^\\ast\\) outward, \\(W\\) would have to rise there, and it cannot. Inside, \\(W\\) falls all the time, and since it is bounded below by zero and falls at a rate that does not die out away from the centre, it can only end at \\(W = 0\\), the upright rest. This is Lyapunov’s argument: a bowl in which the marble can only roll downhill. Negative \\(\\dot W\\) on the surface alone would only keep the motion inside; it is the inside that brings it home, which is why the page tests the shells inside too. The page shows \\(c^\\ast\\) in the panel and recomputes it whenever a slider changes. For the default machine it is 31.4 on the page; an independent search in Mathematica, maximising \\(\\dot W\\) on each surface with <code>FindMaximum</code> from several starts, brackets it between 30.56 and 30.69. The page therefore hands over only below \\(0.9\\,c^\\ast\\), a margin of 10 %. The worst point lies close to upright, both rods leaning about 4° the same way and almost at rest, where the balancer asks for a fraction of a newton: there the curvature of (9), the cosines and centripetal terms that (10) threw away, briefly makes \\(W\\) rise.",
@@ -395,6 +439,10 @@
   "src": "The page uses \\(c^\\ast\\) in two places. While balancing, every 0.1 s it checks whether \\(W > c^\\ast\\); if so it runs the equations 4 s ahead with the balancer in charge and, if the motion is still outside \\(c^\\ast\\) then, declares the balancer beaten and starts the rescue of the next two sections. During a swing-up it hands over to the balancer the moment \\(W < 0.9\\,c^\\ast\\).",
   "tr": "تستعمل الصفحة \\(c^\\ast\\) في موضعين. أثناء الموازنة تفحص كلّ 0.1 s هل \\(W > c^\\ast\\)؛ فإن كان كذلك حسبت المعادلات 4 s إلى الأمام ومتحكّم الموازنة يعمل، فإن بقيت الحركة حينها خارج \\(c^\\ast\\) أعلنت أن متحكّم الموازنة قد غُلب وبدأت الإنقاذ الموصوف في القسمين التاليين. وأثناء الأرجحة إلى الأعلى تسلّم القيادة لمتحكّم الموازنة لحظة يصير \\(W < 0.9\\,c^\\ast\\)."
  },
+ "2b26dbcc4c91": {
+  "src": "<b>Flows that challenge, not overwhelm.</b> Each deep and slow flow starts at the strength \\(U\\) at which it works the controller hardest and the controller still wins: the largest \\(U\\), in steps of 0.1 m/s, at which (50) holds the rods for 120 s from the flow's rest state at \\(x = 0\\) without either rod straying more than 0.5 rad from its rest state, the cart leaving 1.5 m of rail, or the force passing three quarters of the motor (<code>notes/fig11/project06/challenge.cjs</code>, the page's own law and integrator). The slider goes further; there the flow wins.",
+  "tr": "<b>جريانات تتحدّى ولا تطغى.</b> يبدأ كلّ جريان عميق بطيء عند الشدّة \\(U\\) التي يُجهد عندها المتحكّم أشدّ إجهاد ويظلّ المتحكّم يفوز: أكبر \\(U\\)، بخطوات قدرها 0.1 m/s، تُمسك عندها (50) القضيبين مدّة 120 s انطلاقًا من وضع السكون في الجريان عند \\(x = 0\\) دون أن يبتعد أيّ من القضيبين أكثر من 0.5 rad عن وضع سكونه، أو تغادر العربة 1.5 m من السكّة، أو تتجاوز القوّة ثلاثة أرباع المحرّك (<code>notes/fig11/project06/challenge.cjs</code>، بقانون الصفحة نفسه ومكامِلها). ويذهب المنزلق أبعد من ذلك؛ وهناك يفوز الجريان."
+ },
  "2baf0fa9e2d6": {
   "src": "<span class=\"psub__n\">3.2</span>Kinetic energy",
   "tr": "<span class=\"psub__n\">3.2</span>الطاقة الحركية"
@@ -414,6 +462,10 @@
  "2d7deb82a432": {
   "src": "<span class=\"psec__n\">05</span>How fast it falls",
   "tr": "<span class=\"psec__n\">05</span>ما سرعة السقوط"
+ },
+ "2d82ab135400": {
+  "src": "3 s: 201 steps, 1.6 s; 4 s: 126 steps, 2.2 s",
+  "tr": "3 s: 201 خطوة، 1.6 s؛ 4 s: 126 خطوة، 2.2 s"
  },
  "2da10ada0709": {
   "src": "Because reading and spreading use the same kernel, the power the water gives a rod and the power the rod gives the water add up to exactly [28, eq. (5.2)]",
@@ -459,9 +511,17 @@
   "src": "motor force on the cart, and its limit",
   "tr": "قوّة المحرّك على العربة، وحدّها"
  },
+ "31b550c132ba": {
+  "src": "an internal wave",
+  "tr": "موجة داخلية"
+ },
  "31e553c9fb1d": {
   "src": "<b>9.3</b> Derive the flick formula of section 8 by integrating (9) over a blow of duration \\(\\varepsilon \\to 0\\) at the top end.",
   "tr": "<b>9.3</b> اشتقّ صيغة النقرة في القسم 8 بمكاملة (9) على ضربة مدّتها \\(\\varepsilon \\to 0\\) عند الطرف العلوي."
+ },
+ "32b008fa53a4": {
+  "src": "<b>The rest state.</b> At rest the velocities and accelerations vanish, and with them \\(\\mathbf C\\) and \\(\\mathbf C_a\\) of (40), which carry velocities. What is left of (40) is a balance of three numbers:",
+  "tr": "<b>وضع السكون.</b> في السكون تنعدم السرعات والتسارعات، ومعها \\(\\mathbf C\\) و\\(\\mathbf C_a\\) في (40)، لأنهما يحملان السرعات. وما يبقى من (40) توازنٌ لثلاثة أعداد:"
  },
  "33f1d1377d18": {
   "src": "Switch the motor off, \\(u = 0\\). Row 1 of (10) then reads \\(d_1\\ddot x + d_2\\ddot\\theta_1 + d_3\\ddot\\theta_2 = 0\\): no outside sideways force, so the centre of mass of the whole machine does not accelerate sideways. Solve it for \\(\\ddot x = -(d_2\\ddot\\theta_1 + d_3\\ddot\\theta_2)/d_1\\) and put that into rows 2 and 3. Row 2 becomes \\((d_4 - d_2^2/d_1)\\ddot\\theta_1 + (d_5 - d_2d_3/d_1)\\ddot\\theta_2 = f_1\\theta_1\\), and row 3 likewise, which leaves two equations for the angles alone,",
@@ -555,6 +615,14 @@
   "src": "R. Tedrake, <a href=\"https://underactuated.mit.edu/acrobot.html\"><em>Underactuated Robotics</em>, chapter 3: Acrobots, Cart-Poles, and Quadrotors</a>, MIT course notes, 2024: manipulator equations, linearisation, controllability and LQR balancing of the cart-pole; and <a href=\"https://underactuated.mit.edu/trajopt.html\">chapter 10: Trajectory Optimization</a>: direct transcription as the limit of multiple shooting, and finite-horizon LQR along a planned trajectory.",
   "tr": "R. Tedrake، <a href=\"https://underactuated.mit.edu/acrobot.html\"><em>Underactuated Robotics</em>، الفصل 3: Acrobots, Cart-Poles, and Quadrotors</a>، مذكّرات مقرّر في MIT، 2024: معادلات المناول، والتخطيط، وقابلية التحكّم، وموازنة العربة والعمود بـLQR؛ و<a href=\"https://underactuated.mit.edu/trajopt.html\">الفصل 10: Trajectory Optimization</a>: النسخ المباشر بوصفه نهاية الإطلاق المتعدّد، وLQR ذو الأفق المنتهي على طول مسار مخطّط."
  },
+ "3b59364c1505": {
+  "src": "swing-up starts",
+  "tr": "تبدأ الأرجحة إلى الأعلى"
+ },
+ "3b84840179fb": {
+  "src": "Vector field <span class=\"panel__label\">Liquids · section 13</span>",
+  "tr": "حقل متّجهي <span class=\"panel__label\">السوائل · القسم 13</span>"
+ },
  "3b87d606cd78": {
   "src": "In water this takes 31 % off the weight of the default rods; a rod lighter than the liquid would stand up by itself. The controller is redesigned with (37), since an engineer knows what the machine stands in. It is not told the flow: to the controller, a wind is a push it can only answer.",
   "tr": "في الماء يُنقص هذا وزن القضيبين الافتراضيين بنسبة 31 %؛ والقضيب الأخفّ من السائل يقف وحده. ويُعاد تصميم المتحكّم بـ (37)، لأن المهندس يعرف فيمَ تقف الآلة. ولا يُخبَر بالجريان: فالريح عند المتحكّم دفعةٌ لا يملك إلا أن يجيبها."
@@ -639,6 +707,14 @@
   "src": "the lower-right block of (5) and the whole of (7). Differentiate it along rows 2 and 3 of (9) with \\(\\ddot x = a\\). The centripetal terms do no work, because \\(\\mathbf C\\) is built so that \\(\\dot{\\mathbf D} - 2\\mathbf C\\) is skew; gravity’s work is already counted in \\(V\\). What remains is the work the cart does on the rods through the hinge:",
   "tr": "وهي الكتلة اليمنى السفلى من (5) و(7) بكاملها. اشتقّها على طول الصفّين 2 و3 من (9) مع \\(\\ddot x = a\\). الحدود المركزية لا تبذل شغلًا، لأن \\(\\mathbf C\\) مبنيّة بحيث تكون \\(\\dot{\\mathbf D} - 2\\mathbf C\\) متخالفة التناظر؛ وشغل الجاذبية محسوب أصلًا في \\(V\\). يبقى الشغل الذي تبذله العربة على القضيبين عبر المفصل:"
  },
+ "466ae7133e63": {
+  "src": "3 s: 124 steps, 1.1 s; 4 s: 167 steps, 2.7 s",
+  "tr": "3 s: 124 خطوة، 1.1 s؛ 4 s: 167 خطوة، 2.7 s"
+ },
+ "4681cc8a03da": {
+  "src": "Project · lecture note · control systems · fluid mechanics",
+  "tr": "مشروع · مذكّرة · أنظمة التحكّم · ميكانيك الموائع"
+ },
  "475f612b81a4": {
   "src": "cart mass",
   "tr": "كتلة العربة"
@@ -646,6 +722,10 @@
  "47752db7530f": {
   "src": "Flow speed <i>U</i>",
   "tr": "سرعة الجريان <i>U</i>"
+ },
+ "479e829a7d74": {
+  "src": "Shadden, Lekien and Marsden's test flow [31]: periodic, yet each particle moves chaotically; kinematic",
+  "tr": "جريان الاختبار لشادن وليكيان ومارسدن [31]: دوري، ومع ذلك يتحرّك كلّ جسيم حركة فوضوية؛ حركي"
  },
  "47bcdbb31985": {
   "src": "Wikipedia, <a href=\"https://en.wikipedia.org/wiki/Drag_coefficient\">“Drag coefficient”</a>: wires and cables 1.0–1.3, a flat plate across the flow 1.28.",
@@ -719,9 +799,21 @@
   "src": "<b>The wrong-way start.</b> Press <i>to +1 m</i>. The cart first creeps 3 mm forward, then backs up by 2.3 cm, half a second after the press, while both rods tip about 2° toward the target. Only then does it drive forward, leaning into the motion, and at the end the rods lean back about 1.2° to brake. It has to: to accelerate to the right with the rods upright on average, the rods must lean right, and the only way to tip them right is to pull their bottom out to the left first. Engineers call this a non-minimum-phase system [3]; you do the same with a broom when you want to walk forward with it.",
   "tr": "<b>البداية في الاتجاه الخاطئ.</b> اضغط <i>إلى +1 m</i>. تزحف العربة أوّلًا 3 mm إلى الأمام، ثم ترجع 2.3 cm بعد نصف ثانية من الضغط، بينما يميل القضيبان كلاهما نحو 2° باتجاه الهدف. وبعد ذلك فقط تنطلق إلى الأمام مائلة مع الحركة، وفي النهاية يميل القضيبان نحو 1.2° إلى الوراء لتكبح. ولا بدّ لها من ذلك: فلكي تتسارع نحو اليمين والقضيبان قائمان في المتوسّط، يجب أن يميل القضيبان نحو اليمين، والطريقة الوحيدة لإمالتهما نحو اليمين هي سحب طرفهما السفلي نحو اليسار أوّلًا. ويسمّي المهندسون هذا نظامًا غير أدنى الطور [3]؛ وأنت تفعل الشيء نفسه بالمكنسة حين تريد أن تمشي بها إلى الأمام."
  },
+ "50534ff6355e": {
+  "src": "honey, 0.3 m/s",
+  "tr": "العسل، 0.3 m/s"
+ },
+ "5089e7d144f2": {
+  "src": "tidal beats: two tides drifting in and out of step",
+  "tr": "ضربات المدّ: مدّان يتوافقان في الطور ثم يفترقان"
+ },
  "50f39deb7d4f": {
   "src": "A cart of mass <i>m</i><sub>0</sub> on a rail. Each rod is a uniform bar of mass <i>m</i> and length <i>L</i>, free to turn about a hinge at its lower end: rod 1 on the cart, rod 2 on top of rod 1 (section 2).",
   "tr": "عربة كتلتها <i>m</i><sub>0</sub> على سكّة. وكلّ قضيب قضيبٌ متجانس كتلته <i>m</i> وطوله <i>L</i>، حرّ الدوران حول مفصل عند طرفه السفلي: القضيب 1 على العربة، والقضيب 2 فوق القضيب 1 (القسم 2)."
+ },
+ "5153a965d6e4": {
+  "src": "water, 1 m/s",
+  "tr": "الماء، 1 m/s"
  },
  "51eb931e069c": {
   "src": "glycerol, 200 N",
@@ -746,6 +838,10 @@
  "5561b25d09a8": {
   "src": "If the rods fall",
   "tr": "إذا سقط القضيبان"
+ },
+ "56a22f5d69d9": {
+  "src": "The double gyre of Shadden, Lekien and Marsden: two counter-rotating cells 3 m across whose boundary sways every 15 s. Each bit of water moves chaotically, though the flow repeats. U starts at the hardest strength the balancer still wins.",
+  "tr": "الدوّامة المزدوجة لشادن وليكيان ومارسدن: خليّتان تدوران في اتجاهين متعاكسين، عرض كلّ منهما 3 m، وتتمايل الحدود بينهما كلّ 15 s. كلّ جزء من الماء يتحرّك حركة فوضوية، مع أنّ الجريان يتكرّر. تبدأ U عند أشدّ شدّة ما زال متحكّم الموازنة يفوز عندها."
  },
  "5731153931c4": {
   "src": "For a cart moving left the signs of \\(\\Delta\\) and \\((\\mathbf P\\mathbf e)_4\\) turn round. The page takes the bite \\(\\min(|v|, \\Delta_\\text{max})\\) at every look; if no bite fits (the square root is imaginary or the root negative), it keeps the reference it has, and the certificate goes on. When the speed reaches zero the reference becomes a fixed place where the cart is. The number \\(\\varepsilon\\) is the answer to the question in its plainest form: how much speed may be taken away in one go from a balanced cart, with certainty. With the default machine, Wolfram’s discrete Riccati solution gives \\(P_{44} = 172.46\\) at \\(T_s = 10\\) ms (the gains it finds equal the page’s to every printed digit), and with \\(c^\\ast = 37.3\\) the certified bite is \\(\\varepsilon = 0.44\\) m/s for \\(\\gamma = 0.9\\) and 0.33 m/s for \\(\\gamma = 0.5\\); at 40 ms, \\(P_{44} = 173.60\\), \\(c^\\ast = 116\\), \\(\\varepsilon = 0.78\\) and 0.58 m/s. The page shows \\(\\varepsilon\\) for \\(\\gamma = 0.5\\) among its readouts. In control engineering this kind of supervisor is a <em>reference governor</em>: at each instant it moves the command towards where we want it by the largest step that keeps a Lyapunov function below a level whose sublevel set is invariant [12]; the bite (27a) is that step, worked out in closed form for our \\(W\\).",
@@ -787,6 +883,10 @@
   "src": "<span>1</span>Balancing from below",
   "tr": "<span>1</span>الموازنة من الأسفل"
  },
+ "5cb0901e717f": {
+  "src": "Balancing Two Rods in a Liquid<span class=\"dot\">.</span>",
+  "tr": "موازنة قضيبين في سائل<span class=\"dot\">.</span>"
+ },
  "5cb1bd930ea1": {
   "src": "With the motor off, a small lean grows like e<sup><i>σt</i></sup>; the two rates <i>σ</i> belong to the two ways the pair can fall (section 5).",
   "tr": "والمحرّك متوقّف، يكبر الميل الصغير مثل e<sup><i>σt</i></sup>؛ والمعدّلان <i>σ</i> يخصّان الطريقتين اللتين يمكن أن يسقط بهما الزوج (القسم 5)."
@@ -795,13 +895,25 @@
   "src": "Play",
   "tr": "اللعب"
  },
+ "5e116c50fce8": {
+  "src": "where at every sample the page solves (49) again, at the reference's place and the present time, starting Newton from the last answer; the gains stay those of the design. A slow flow carries its rest state along, and the controller follows it. The certified level \\(c^*\\) of section 9 and the swing-up planner of section 11 are both taken about \\(\\mathbf s^*\\): the planner aims at \\(\\theta_1^*\\), \\(\\theta_2^*\\) instead of upright, and its drag, four Gauss points per rod, sees the flow frozen at the moment the plan starts. The data panel stores \\(\\theta_1^*\\), \\(\\theta_2^*\\) and \\(u^*\\) with every sample and recomputes the force of (50) from them.",
+  "tr": "حيث تحلّ الصفحة (49) من جديد عند كلّ عيّنة، في مكان المرجع واللحظة الحاضرة، مبتدئةً طريقة نيوتن من الجواب الأخير؛ وتبقى الكسوب كسوب التصميم. فالجريان البطيء يحمل وضع سكونه معه، ويتبعه المتحكّم. والمستوى المضمون \\(c^*\\) من القسم 9 ومخطِّط الأرجحة إلى الأعلى من القسم 11 يؤخذان كلاهما حول \\(\\mathbf s^*\\): يصوّب المخطِّط نحو \\(\\theta_1^*\\) و\\(\\theta_2^*\\) بدلًا من الوضع القائم، وكبحه، بأربع نقاط غاوس لكلّ قضيب، يرى الجريان مجمَّدًا عند لحظة بدء الخطّة. وتخزّن لوحة البيانات \\(\\theta_1^*\\) و\\(\\theta_2^*\\) و\\(u^*\\) مع كلّ عيّنة وتعيد حساب قوّة (50) منها."
+ },
  "5f0591c93e96": {
   "src": "\\(\\mathbf K_d\\) on \\(\\theta_1, \\theta_2\\) (N/rad)",
   "tr": "\\(\\mathbf K_d\\) على \\(\\theta_1, \\theta_2\\) (N/rad)"
  },
+ "5f51a89c0bd8": {
+  "src": "at +1 m (within 1 cm)",
+  "tr": "عند +1 m (في حدود 1 cm)"
+ },
  "5f9d7401ef5f": {
   "src": "<b>How it is checked.</b> The data panel recomputes \\(\\mathbf Q\\) from the stored state by Simpson's rule with 400 slices per rod. In Wolfram, at a fixed test state, an adaptive integral of (35) agrees with the page's 24 points to all 15 digits for the swell and the ground wind and to \\(7\\times10^{-5}\\) of the force or better for the jet, the eddy, the cells and the vortex street; what is left is the kink of \\(|w_n|\\,w_n\\) where the flow across a rod changes sign. With 8 points per rod the vortex street was 1.2 % off, which is why the page uses 24. The honesty tests replay every stored step bit for bit, and an independent reference, written from this note with the published table of Gauss points, agrees to \\(10^{-15}\\) in a vortex street, in a swell and with the cart in your hand in a breeze. For the added mass of 13.5 it takes the other road, the Christoffel symbols of \\(\\mathbf M_a\\), and still agrees to \\(10^{-15}\\), in still water and in a swell.",
   "tr": "<b>كيف يُتحقّق منه.</b> تعيد لوحة البيانات حساب \\(\\mathbf Q\\) من الحالة المخزّنة بقاعدة سمبسون بـ 400 شريحة لكل قضيب. وفي Wolfram، عند حالة اختبار ثابتة، يتّفق تكامل تكيّفي لـ (35) مع نقاط الصفحة الـ 24 في الخانات الـ 15 كلها للموج المتعاقب وريح الأرض، وإلى \\(7\\times10^{-5}\\) من القوّة أو أفضل للنفث والدوّامة والخلايا وشارع الدوّامات؛ وما يبقى هو انكسار \\(|w_n|\\,w_n\\) حيث يغيّر الجريان المعترض للقضيب إشارته. وبـ 8 نقاط لكل قضيب كان شارع الدوّامات منحرفًا بنسبة 1.2 %، ولذلك تستعمل الصفحة 24. وتعيد اختبارات الأمانة كل خطوة مخزّنة بتًّا بتًّا، ويتّفق مرجع مستقل، مكتوب من هذه المذكّرة بالجدول المنشور لنقاط غاوس، إلى \\(10^{-15}\\) في شارع دوّامات، وفي موج متعاقب، والعربة في يدك في نسيم. وللكتلة المضافة في 13.5 يسلك الطريق الآخر، رموز كريستوفل لـ \\(\\mathbf M_a\\)، ويتّفق مع ذلك إلى \\(10^{-15}\\)، في ماء ساكن وفي موج متعاقب."
+ },
+ "6005916a640d": {
+  "src": "six slow waves whose periods have no common multiple, so the pattern never repeats; kinematic",
+  "tr": "ستّ موجات بطيئة ليس لأدوارها مضاعف مشترك، فالنمط لا يتكرّر أبدًا؛ حركي"
  },
  "606291303254": {
   "src": "Stir a spoon through honey and you feel it at once: the honey does not care how much energy you have, only how fast you try to move. The same is true of the cart. To bring both rods from hanging to upright, the motor must raise their weight, less the buoyancy (37), by",
@@ -855,6 +967,10 @@
   "src": "Integrate from 0 to \\(\\infty\\) for a motion that comes to rest: \\(J = \\mathbf s(0)^{\\mathsf T}\\mathbf P\\,\\mathbf s(0) + \\rho\\int(u + \\rho^{-1}\\mathbf B^{\\mathsf T}\\mathbf P\\mathbf s)^2\\,\\mathrm dt\\). The first term does not depend on what we do; the second is never negative and is zero only for",
   "tr": "كامِل من 0 إلى \\(\\infty\\) لحركة تنتهي إلى السكون: \\(J = \\mathbf s(0)^{\\mathsf T}\\mathbf P\\,\\mathbf s(0) + \\rho\\int(u + \\rho^{-1}\\mathbf B^{\\mathsf T}\\mathbf P\\mathbf s)^2\\,\\mathrm dt\\). الحدّ الأوّل لا يتوقّف على ما نفعله؛ والثاني لا يكون سالبًا أبدًا، ولا يكون صفرًا إلا عند"
  },
+ "64e0f24edc1c": {
+  "src": "<span>13</span>Liquids: the push of a flow",
+  "tr": "<span>13</span>السوائل: دفع الجريان"
+ },
  "66b123aaf48c": {
   "src": "30 ms",
   "tr": "30 ms"
@@ -879,6 +995,10 @@
   "src": "a river",
   "tr": "نهر"
  },
+ "6870a232cb97": {
+  "src": "<b>A wrong verdict, and its cause.</b> An earlier version of this note went on: with 2 kg rods and 200 N the planner finds a swing-up in water but none in glycerol or honey, so there a swing-up is out of reach. That was the planner speaking, not the liquid. It priced force at a fixed \\(w_r = 0.02\\) per newton in (22), a weight chosen for a 60 N motor. With heavier rods and a stronger motor the price of pushing outweighed the gaps it had to close: it stopped after 200 steps with gaps of 0.004–0.009 rad while using only half its motor, and the same happened in a vacuum, where nothing resists. Priced in units of the motor's limit, \\(w_r = 0.02 \\times 60\\ \\mathrm N/u_\\text{max}\\), and given 400 steps, the same planner closes the gaps to \\(2\\)–\\(5\\times10^{-4}\\) rad in all three liquids (<code>notes/fig11/project06/plans.cjs</code>). For 60 N nothing changes, so project 05's machine still has no swing-up in a liquid.",
+  "tr": "<b>حكم خاطئ، وسببه.</b> كانت نسخة سابقة من هذه المذكّرة تتابع: مع قضيبين من 2 kg ومحرّك 200 N يجد المخطِّط أرجحة إلى الأعلى في الماء ولا يجد شيئًا في الغليسرين ولا في العسل، فالأرجحة هناك بعيدة المنال. كان ذلك كلام المخطِّط، لا كلام السائل. فقد سعّر القوّة بثمن ثابت \\(w_r = 0.02\\) لكلّ نيوتن في (22)، وهو وزن اختير لمحرّك قوّته 60 N. ومع قضيبين أثقل ومحرّك أقوى رجح ثمنُ الدفع على الفجوات التي كان عليه أن يغلقها: توقّف بعد 200 خطوة وفجواته 0.004–0.009 rad، ولم يستعمل إلا نصف محرّكه، وحدث الشيء نفسه في الفراغ، حيث لا شيء يقاوم. وحين يُسعَّر الدفع بوحدات حدّ المحرّك، \\(w_r = 0.02 \\times 60\\ \\mathrm N/u_\\text{max}\\)، ويُعطى 400 خطوة، يغلق المخطِّط نفسه الفجوات إلى \\(2\\)–\\(5\\times10^{-4}\\) rad في السوائل الثلاثة كلّها (<code>notes/fig11/project06/plans.cjs</code>). ولمحرّك قوّته 60 N لا يتغيّر شيء، فآلة المشروع 05 ما زالت بلا أرجحة إلى الأعلى في سائل."
+ },
  "68856dbfe0c1": {
   "src": "below \\(2\\times10^{-4}\\) s⁻¹",
   "tr": "دون \\(2\\times10^{-4}\\) s⁻¹"
@@ -890,6 +1010,10 @@
  "6927795dc0b3": {
   "src": "Airy waves [24]: \\(u = a\\omega\\,\\frac{\\cosh kz}{\\sinh kh}\\cos(kx - \\omega t)\\), \\(v = a\\omega\\,\\frac{\\sinh kz}{\\sinh kh}\\sin(kx - \\omega t)\\), \\(\\omega^2 = gk\\tanh kh\\), wavelength 20 m, \\(h = 6.7\\) m",
   "tr": "أمواج آيري [24]: \\(u = a\\omega\\,\\frac{\\cosh kz}{\\sinh kh}\\cos(kx - \\omega t)\\)، \\(v = a\\omega\\,\\frac{\\sinh kz}{\\sinh kh}\\sin(kx - \\omega t)\\)، \\(\\omega^2 = gk\\tanh kh\\)، طول الموجة 20 m، \\(h = 6.7\\) m"
+ },
+ "6991db6533e5": {
+  "src": "<b>What the page does in a liquid.</b> When a plan fails, the cart does what we did above: it pumps at full force, \\(u = -u_{\\max}\\tanh\\bigl(3(f_1 + f_2 - E_p)/(f_1 + f_2)\\bigr)\\,\\mathrm{sgn}\\,\\mathcal P\\) with \\(E_p\\) of (20), easing off as the rods' energy nears the top's, and turning the cart back at full force once it is 1.2 m from where it started, while the planner tries again. The data panel stores this as law 5 and recomputes each of its forces from the stored state. Rods that are already upright are kept upright. The guard of section 11 asks the model whether the balancer brings the machine inside the certified region \\(c^*\\) of section 9 within 4 s. In a liquid \\(c^*\\) is small (0.04 in water, 0.12 in glycerol, 0.56 in honey for project 05's machine; 17, 5.4 and 1.7 for this page's) and the drag makes the balancer slow, so that test gave up on rods tilted by 0.8°. In a medium the guard now also leaves the balancer alone while the model shows it lowering \\(W\\) by at least a tenth in those 4 s; with it project 05's cart carried the upright rods to within 2 cm of +1 m 16 s after the button in water and glycerol, and in honey to 0.84 m after 24 s, still creeping; this page's machine does it in the times of the table above. A plan that ends with the cart moving hands over to a balancer holding the cart where it was caught, not to the cruise of (25), because in a liquid a steady cruise needs a steady push against drag that (25) leaves out.",
+  "tr": "<b>ما تفعله الصفحة في سائل.</b> حين تفشل خطّة، تفعل العربة ما فعلناه أعلاه: تضخّ بكامل قوّتها، \\(u = -u_{\\max}\\tanh\\bigl(3(f_1 + f_2 - E_p)/(f_1 + f_2)\\bigr)\\,\\mathrm{sgn}\\,\\mathcal P\\) مع \\(E_p\\) من (20)، وتخفّف كلّما اقتربت طاقة القضيبين من طاقة القمّة، وتعيد العربة بكامل قوّتها حين تبتعد 1.2 m عن نقطة انطلاقها، بينما يحاول المخطِّط من جديد. وتخزّن لوحة البيانات هذا على أنّه القانون 5 وتعيد حساب كلّ قوّة فيه من الحالة المخزّنة. والقضيبان المنتصبان أصلًا يبقيان منتصبين. يسأل الحارس في القسم 11 النموذجَ هل يُدخل متحكّم الموازنة الآلةَ إلى المنطقة المضمونة \\(c^*\\) من القسم 9 خلال 4 s. في السائل تكون \\(c^*\\) صغيرة (0.04 في الماء و0.12 في الغليسرين و0.56 في العسل لآلة المشروع 05؛ و17 و5.4 و1.7 لآلة هذه الصفحة) ويجعل الكبح متحكّم الموازنة بطيئًا، فكان ذلك الاختبار يتخلّى عن قضيبين مائلين بمقدار 0.8°. أمّا الآن ففي الوسط يترك الحارس متحكّم الموازنة يعمل ما دام النموذج يبيّن أنّه يخفض \\(W\\) بعُشر على الأقلّ في تلك الـ 4 s؛ وبهذا حملت عربة المشروع 05 القضيبين المنتصبين إلى ما دون 2 cm من +1 m بعد 16 s من الضغط على الزرّ في الماء والغليسرين، وفي العسل إلى 0.84 m بعد 24 s وما زالت تزحف؛ أمّا آلة هذه الصفحة فتفعل ذلك في أزمنة الجدول أعلاه. والخطّة التي تنتهي والعربة تتحرّك تسلّم إلى متحكّم موازنة يُمسك العربة حيث التُقطت، لا إلى السير المنتظم في (25)، لأنّ السير المنتظم في السائل يحتاج دفعًا منتظمًا ضدّ الكبح لا تحسبه (25)."
  },
  "69dc4cbd529c": {
   "src": "steady breeze",
@@ -926,6 +1050,10 @@
  "6d2d3b90287a": {
   "src": "C. F. Van Loan, <a href=\"https://ecommons.cornell.edu/handle/1813/7095\"><em>Computing Integrals Involving the Matrix Exponential</em></a>, Technical Report TR 77-298, Department of Computer Science, Cornell University, December 1976 (<em>IEEE Transactions on Automatic Control</em> 23, 395–404, 1978): the integrals (1.1)–(1.4), Theorem 1 and its proof by the block differential equations, and the identity \\(\\mathbf Q = \\mathbf F_3^{\\mathsf T}\\mathbf G_2\\) of the algorithm’s step 2, our (16f).",
   "tr": "C. F. Van Loan، <a href=\"https://ecommons.cornell.edu/handle/1813/7095\"><em>Computing Integrals Involving the Matrix Exponential</em></a>، التقرير التقني TR 77-298، قسم علوم الحاسوب، جامعة كورنيل، ديسمبر 1976 (<em>IEEE Transactions on Automatic Control</em> 23، 395–404، 1978): التكاملات (1.1)–(1.4)، والمبرهنة 1 وبرهانها بالمعادلات التفاضلية الكتلية، والمتطابقة \\(\\mathbf Q = \\mathbf F_3^{\\mathsf T}\\mathbf G_2\\) في الخطوة 2 من الخوارزمية، وهي (16f) عندنا."
+ },
+ "6d5a45920a15": {
+  "src": "water",
+  "tr": "الماء"
  },
  "6e02eb27ea22": {
   "src": "From hanging rest, or from any other state, we now want a force history \\(u(t)\\), \\(0 \\le t \\le T\\), that ends with both rods upright and at rest, keeps \\(|u| \\le u_\\text{max}\\), and keeps the cart on the rail. Laboratories solve this with two parts working together: a planned motion computed in advance, and linear feedback that keeps the real machine on it. Graichen, Treuer and Zeitz swung a real double pendulum on a cart up from hanging this way and showed it working in experiments [7]; Al Juboori and colleagues review this family of methods [8]. The page follows the same plan with a different way of computing the planned motion. Figure 2 shows the three stages.",
@@ -998,6 +1126,14 @@
  "77db6ceb59c1": {
   "src": "The first version of this page tested exactly that: \\(\\dot W = 2(\\mathbf s-\\mathbf s_\\text{ref})^{\\mathsf T}\\mathbf P\\,\\mathbf f(\\mathbf s, \\operatorname{sat}(-\\mathbf K\\mathbf s))\\), with \\(\\mathbf f\\) the true right-hand side of section 12, at 8000 random points of the surface \\(W = c\\) and 2000 more on each of five surfaces inside it, a climb uphill in \\(\\dot W\\) from the worst twelve, and a bisection in \\(c\\). It gave \\(c^\\ast = 31.4\\) for the default machine; an independent search in Mathematica, maximising \\(\\dot W\\) on each surface with <code>FindMaximum</code> from several starts, brackets it between 30.56 and 30.69. The climb was needed: random points alone reported about 140, because the states where the guarantee fails form a thin patch that 8000 random points miss. The worst point lies close to upright, both rods leaning about 4° the same way and almost at rest, where the balancer asks for a fraction of a newton: there the curvature of (9), the cosines and centripetal terms that (10) threw away, briefly makes \\(W\\) rise. The level is the same at 30 N, 60 N and 200 N: the motor limit does not set it, the curvature of (9) does.",
   "tr": "اختبرت النسخة الأولى من هذه الصفحة ذلك بالضبط: \\(\\dot W = 2(\\mathbf s-\\mathbf s_\\text{ref})^{\\mathsf T}\\mathbf P\\,\\mathbf f(\\mathbf s, \\operatorname{sat}(-\\mathbf K\\mathbf s))\\)، حيث \\(\\mathbf f\\) الطرف الأيمن الحقيقي من القسم 12، عند 8000 نقطة عشوائية من السطح \\(W = c\\) و2000 أخرى على كلّ من خمسة سطوح داخله، مع صعود في \\(\\dot W\\) من أسوأ اثنتي عشرة نقطة، وتنصيف في \\(c\\). فأعطت \\(c^\\ast = 31.4\\) للآلة الافتراضية؛ وبحث مستقلّ في Mathematica، يرفع \\(\\dot W\\) إلى أقصاها على كلّ سطح بـ <code>FindMaximum</code> من عدّة بدايات، يحصرها بين 30.56 و30.69. وكان الصعود ضروريًّا: فالنقاط العشوائية وحدها أعطت نحو 140، لأنّ الحالات التي يخفق فيها الضمان تشكّل رقعة رقيقة تفوت 8000 نقطة عشوائية. وأسوأ نقطة قريبة من الوضع القائم، والقضيبان مائلان نحو 4° في الاتّجاه نفسه وشبه ساكنين، حيث يطلب متحكّم الموازنة جزءًا من نيوتن: هناك يجعل انحناء (9)، أي حدود جيب التمام والحدود المركزية التي رمتها (10)، \\(W\\) ترتفع برهة. والمستوى نفسه عند 30 N و60 N و200 N: فليس حدّ المحرّك ما يحدّده بل انحناء (9)."
+ },
+ "77e7aa1340c8": {
+  "src": "<b>13.2</b> From (34), at what speed of a river does the 400 N motor stop being able to hold this page's rods? Compare with the slider, where the rods lean into the stream (13.8).",
+  "tr": "<b>13.2</b> من (34)، عند أيّ سرعة لنهر يعجز المحرّك ذو 400 N عن إمساك قضيبي هذه الصفحة؟ قارن بالمنزلق، حيث يميل القضيبان نحو التيّار (13.8)."
+ },
+ "780bb039091a": {
+  "src": "glycerol",
+  "tr": "الغليسرين"
  },
  "781961bc81c2": {
   "src": "Pause",
@@ -1079,9 +1215,17 @@
   "src": "Swing back up",
   "tr": "أرجِحهما إلى الأعلى من جديد"
  },
+ "7fc9a2e2f380": {
+  "src": "<b>13.6</b> For upright rods in a steady stream \\(U\\), with (33) alone and small angles, solve (49) for \\(\\theta_1^*\\), \\(\\theta_2^*\\) and \\(u^*\\). Which way do the rods lean, and why does the upper rod lean further than the lower?",
+  "tr": "<b>13.6</b> لقضيبين قائمين في تيّار ثابت \\(U\\)، مع (33) وحدها وزوايا صغيرة، حلّ (49) لإيجاد \\(\\theta_1^*\\) و\\(\\theta_2^*\\) و\\(u^*\\). في أيّ اتجاه يميل القضيبان، ولماذا يميل القضيب العلوي أكثر من السفلي؟"
+ },
  "7fcc4d28eae0": {
   "src": "<b>Abstract.</b> A rod standing on its end falls; two rods stacked on hinges fall faster and in a tangle. Here the only help they get is from below: a cart that a motor pushes along a rail. We describe the machine, write its energy, derive its equations of motion with Lagrange’s method and check every term against the classic report of Bogdanov (2004). We then linearise around the upright position to find how fast the rods fall, show that one push along the rail is enough to steer both, and build the controller that does it by minimising a cost. The note ends with what each slider teaches: why long rods are easier, why the motor must be strong and the loop fast, and why the cart has to drive the wrong way first. When the rods fall anyway, the note shows where the balancer is certain to win, how the cart can drain the rods’ energy until they hang still, and how a planned swing-up brings them back to the top. A real controller looks only at fixed instants; we derive the exact model of the machine between two looks, the cost it pays, and the gains that fit the loop period, and we let the balancer hold the rods on a cart that keeps rolling.",
   "tr": "<b>الخلاصة.</b> القضيب القائم على طرفه يسقط؛ والقضيبان المركّبان أحدهما فوق الآخر بمفصلين يسقطان أسرع ويتشابكان. ولا عون لهما هنا إلّا من تحت: عربة يدفعها محرّك على سكّة. نصف الآلة، ونكتب طاقتها، ونشتقّ معادلات حركتها بطريقة لاغرانج، ونطابق كلّ حدّ مع التقرير الكلاسيكي لبوغدانوف (2004). ثمّ نخطّط حول الوضع القائم لنعرف سرعة سقوط القضيبين، ونبيّن أنّ دفعًا واحدًا على السكّة يكفي لتوجيههما معًا، ونبني المتحكّم الذي يفعل ذلك بتقليل كلفة. وتنتهي المذكّرة بما يعلّمه كلّ منزلق: لماذا القضبان الطويلة أسهل، ولماذا يجب أن يكون المحرّك قويًّا والحلقة سريعة، ولماذا على العربة أن تسير في الاتّجاه الخاطئ أوّلًا. وإذا سقط القضيبان مع ذلك، تبيّن المذكّرة أين يفوز متحكّم الموازنة يقينًا، وكيف تسحب العربة طاقة القضيبين حتّى يتدلّيا ساكنين، وكيف تعيدهما أرجحة مخطَّطة إلى القمّة. والمتحكّم الحقيقي لا ينظر إلّا في لحظات ثابتة؛ فنشتقّ النموذج الدقيق للآلة بين نظرتين، والكلفة التي تدفعها، والكسوب التي تلائم دور الحلقة، وندع متحكّم الموازنة يمسك القضيبين على عربة تتابع تدحرجها."
+ },
+ "7fd6ad8ac5e2": {
+  "src": "about 12 s after the button",
+  "tr": "بعد نحو 12 s من الضغط على الزرّ"
  },
  "7fe42d2a7fc8": {
   "src": "Square and add, using \\(\\cos^2+\\sin^2 = 1\\) and, for the mixed term of the upper rod, \\(\\cos a\\cos b + \\sin a\\sin b = \\cos(a-b)\\):",
@@ -1107,6 +1251,10 @@
   "src": "<b>Take the cart.</b> Grab the cart in the figure and drag it. While you hold it, your hand moves the cart, not the motor: the controller lets go, and the rods answer the cart’s motion alone. Carry a broom upright on your palm and jerk your hand to the right: the broom does not come along at once, it falls to the left. That is what you see here, with a twist. The page models your hand as a stiff spring with a damper that pulls the cart toward the pointer \\(x_h\\), as hard as a quick hand can:",
   "tr": "<b>خذ العربة.</b> أمسك العربة في الشكل واسحبها. ما دمت ممسكًا بها، فيدك هي التي تحرّك العربة لا المحرّك: يتخلّى المتحكّم عنها، ويستجيب القضيبان لحركة العربة وحدها. احمل مكنسة قائمة على راحة يدك وحرّك يدك بسرعة إلى اليمين: لا تتبعك المكنسة على الفور، بل تسقط إلى اليسار. هذا ما تراه هنا، مع مفاجأة. تمثّل الصفحة يدك بزنبرك صلب مع مُخمِّد يسحب العربة نحو المؤشّر \\(x_h\\)، بأقصى ما تستطيعه يد سريعة:"
  },
+ "836b23438f30": {
+  "src": "The impulse of a flick, <i>J</i> = ∫<i>F</i> d<i>t</i>: how hard the blow pushes times how long it lasts, in newton-seconds (N·s). With this page’s machine in still water, 1 N·s is caught and 1.5 N·s is not: the rods fall and are swung back up (notes/fig11/project06/flick.cjs).",
+  "tr": "دفعة النقرة، <i>J</i> = ∫<i>F</i> d<i>t</i>: شدّة دفع الضربة مضروبةً في مدّة دوامها، بالنيوتن·ثانية (N·s). مع آلة هذه الصفحة في ماء ساكن تُلتقط نقرة قدرها 1 N·s ولا تُلتقط نقرة قدرها 1.5 N·s: يسقط القضيبان ثم يُؤرجَحان إلى الأعلى من جديد (notes/fig11/project06/flick.cjs)."
+ },
  "83a309f183a5": {
   "src": "a Lamb–Oseen vortex, \\(u_\\theta = \\tfrac{\\Gamma}{2\\pi r}\\bigl(1 - e^{-r^2/r_c^2}\\bigr)\\), \\(r_c^2 = 0.45^2\\text{ m}^2 + 4\\nu t\\), carried by a wind \\(0.4\\,U\\); a new one every 20 s",
   "tr": "دوّامة لامب–أوسين، \\(u_\\theta = \\tfrac{\\Gamma}{2\\pi r}\\bigl(1 - e^{-r^2/r_c^2}\\bigr)\\)، \\(r_c^2 = 0.45^2\\text{ m}^2 + 4\\nu t\\)، تحملها ريح \\(0.4\\,U\\)؛ دوّامة جديدة كل 20 s"
@@ -1126,6 +1274,10 @@
  "854fae531441": {
   "src": "Factor per look",
   "tr": "العامل في كلّ نظرة"
+ },
+ "86db33d7a546": {
+  "src": "(46): 5.18 kg in glycerol (the box)",
+  "tr": "(46): 5.18 kg في الغليسرين (الصندوق)"
  },
  "86eff8eb789b": {
   "src": "Flow",
@@ -1159,6 +1311,10 @@
   "src": "<span>4</span>Equations of motion",
   "tr": "<span>4</span>معادلات الحركة"
  },
+ "8b5241c71bbd": {
+  "src": "caught",
+  "tr": "التُقطت"
+ },
  "8b99db20e429": {
   "src": "Section 9 gives the rule that makes a kick safe. After it, the reference is again a member of (25), moving at a constant speed until the next look, so the certificate (19a) applies to it exactly: if \\(W \\le c^\\ast\\) right after the kick, \\(W\\) falls over the next period, and the balancer is certain to win. So we choose a share \\(\\gamma \\le 0.9\\) of the certified level and allow, at each look, the largest kick with \\(W(\\mathbf e + \\Delta\\mathbf e_4) \\le \\gamma c^\\ast\\). Setting (27) equal to \\(\\gamma c^\\ast\\) and taking the larger root (Wolfram’s <code>Solve</code> on the symbolic quadratic gives it in this form):",
   "tr": "يعطي القسم 9 القاعدة التي تجعل الركلة آمنة. فبعدها يكون المرجع مرّة أخرى فردًا من (25)، يتحرّك بسرعة ثابتة حتّى النظرة التالية، فتنطبق عليه الشهادة (19a) تمامًا: إن تحقّق \\(W \\le c^\\ast\\) مباشرة بعد الركلة، تناقصت \\(W\\) خلال الدور التالي، وفاز متحكّم الموازنة يقينًا. لذا نختار حصّة \\(\\gamma \\le 0.9\\) من المستوى المضمون ونسمح، عند كلّ نظرة، بأكبر ركلة تحقّق \\(W(\\mathbf e + \\Delta\\mathbf e_4) \\le \\gamma c^\\ast\\). وبمساواة (27) بـ \\(\\gamma c^\\ast\\) وأخذ الجذر الأكبر (يعطيه <code>Solve</code> في Wolfram على المعادلة التربيعية الرمزية بهذه الصيغة):"
@@ -1171,6 +1327,10 @@
   "src": "Arriving moving has a price: the cart keeps going. Until 5 November 2026 the page let it, and in the browser tests of 11.3 the cart got between 6 and 200 m from where it started within the 60 s of a run (with the plan made to arrive at rest, it never left \\(\\pm1.54\\) m). A real rail has an end, so the page now brings the cart to rest after the catch, carefully. How carefully is the subject of the next subsection.",
   "tr": "للوصول متحرّكًا ثمن: العربة تمضي. وحتّى 5 نوفمبر 2026 تركتها الصفحة تمضي، وفي اختبارات المتصفّح في 11.3 ابتعدت العربة بين 6 و200 m عن موضع انطلاقها خلال الـ 60 s من التشغيل (ومع خطّة مصنوعة لتصل ساكنة لم تغادر قطّ \\(\\pm1.54\\) m). والسكّة الحقيقية لها نهاية، لذا تُوقف الصفحة العربة الآن بعد الالتقاط، بحذر. وكم من الحذر هو موضوع القسم الفرعي التالي."
  },
+ "8d40dd4dabd6": {
+  "src": "tidal beats",
+  "tr": "ضربات المدّ"
+ },
  "8e1466d0fec4": {
   "src": "below \\(1.2\\times10^{-2}\\) s⁻¹",
   "tr": "أقلّ من \\(1.2\\times10^{-2}\\) s⁻¹"
@@ -1178,6 +1338,10 @@
  "8e166b097267": {
   "src": "Wikipedia, <a href=\"https://en.wikipedia.org/wiki/Glycerol\">“Glycerol”</a>: 1.261 g/cm³, 1.412 Pa s at 20 °C.",
   "tr": "ويكيبيديا، <a href=\"https://en.wikipedia.org/wiki/Glycerol\">«Glycerol»</a>: 1.261 g/cm³، و1.412 Pa s عند 20 °C."
+ },
+ "8e30d47b59ec": {
+  "src": "<b>What it leaves out.</b> Freezing the field over a plan is right for flows much slower than the 3–4 s of a swing-up: the gyre's 15 s and the deep flows' 20–89 s are, a sea swell of 3.6 s is not. The gains are designed once, about the rest state at the moment of the design, so a flow that changes the leans a lot is held by gains made for another tilt; (50) still holds the rods, as measured below, but \\(c^*\\) is then only a guide. And the controller knows the flow exactly, which no real machine does; a cart that hears the flow by the echoes of sound it sends out is an idea for later.",
+  "tr": "<b>ما يُهمله.</b> تجميد الحقل على مدى خطّة صحيح للجريانات الأبطأ بكثير من 3–4 s التي تستغرقها الأرجحة إلى الأعلى: الدوّامة المزدوجة بدورها 15 s والجريانات العميقة بأدوارها 20–89 s كذلك، أمّا موج بحري متعاقب دوره 3.6 s فلا. وتُصمَّم الكسوب مرّة واحدة، حول وضع السكون لحظة التصميم، فالجريان الذي يغيّر الميلين كثيرًا يُمسَك بكسوب صُنعت لميل آخر؛ وما زالت (50) تمسك القضيبين، كما هو مقيس أدناه، لكنّ \\(c^*\\) تصير حينئذ دليلًا تقريبيًّا فقط. والمتحكّم يعرف الجريان بالضبط، وهذا ما لا تعرفه آلة حقيقية؛ أمّا عربة تسمع الجريان بأصداء صوت ترسله فهي فكرة لوقت لاحق."
  },
  "8e6b86dce8c4": {
   "src": "Problems",
@@ -1203,6 +1367,10 @@
   "src": "within 0.26 %",
   "tr": "في حدود 0.26 %"
  },
+ "907451483e4f": {
+  "src": "two tides that add up and cancel in turn, once every 220 s; kinematic",
+  "tr": "مدّان يتجمّعان ويتلاشيان بالتناوب، مرّة كلّ 220 s؛ حركي"
+ },
  "9074e03a96d9": {
   "src": "K. J. Åström and K. Furuta, <a href=\"https://www.control.utoronto.ca/~broucke/ece1653s/Intro/ast_fur96.pdf\">“Swinging up a pendulum by energy control”</a>, IFAC World Congress, 1996; <em>Automatica</em> 36, 287–295 (2000): the energy law for one rod on an accelerated pivot, equations (1)–(4).",
   "tr": "K. J. Åström وK. Furuta، <a href=\"https://www.control.utoronto.ca/~broucke/ece1653s/Intro/ast_fur96.pdf\">«Swinging up a pendulum by energy control»</a>، IFAC World Congress، 1996؛ <em>Automatica</em> 36، 287–295 (2000): قانون الطاقة لقضيب واحد على محور مُسرَّع، المعادلات (1)–(4)."
@@ -1210,6 +1378,10 @@
  "9086b5330961": {
   "src": "Take the simplest machine that falls: one mode, \\(\\dot z = \\sigma z + b u\\), with a rate \\(\\sigma\\) as in section 5. Act on it at every instant with \\(u = -\\kappa z\\) and it decays as \\(e^{(\\sigma - \\gamma)t}\\), where \\(\\gamma = b\\kappa\\) is the strength of the feedback in the units of a rate; the loop works for any \\(\\gamma &gt; \\sigma\\), however large. Now act on it every \\(T_s\\) and hold. Between looks (16a) applies with \\(\\Phi = e^{\\sigma T_s}\\) and \\(\\Gamma = (b/\\sigma)(e^{\\sigma T_s} - 1)\\), and with \\(u_k = -\\kappa z_k\\) each look multiplies \\(z\\) by",
   "tr": "لنأخذ أبسط آلة تسقط: نمط واحد، \\(\\dot z = \\sigma z + b u\\)، بمعدّل \\(\\sigma\\) كما في القسم 5. إذا أثّرنا فيه في كلّ لحظة بـ \\(u = -\\kappa z\\) خمد مثل \\(e^{(\\sigma - \\gamma)t}\\)، حيث \\(\\gamma = b\\kappa\\) قوّة التغذية الراجعة بوحدة معدّل؛ وتعمل الحلقة لأيّ \\(\\gamma &gt; \\sigma\\) مهما كبر. أمّا الآن فنؤثّر فيه كلّ \\(T_s\\) ونمسك. بين النظرات تنطبق (16a) مع \\(\\Phi = e^{\\sigma T_s}\\) و\\(\\Gamma = (b/\\sigma)(e^{\\sigma T_s} - 1)\\)، ومع \\(u_k = -\\kappa z_k\\) تضرب كلّ نظرة \\(z\\) في"
+ },
+ "91d9c4ecb6df": {
+  "src": "liquid",
+  "tr": "السائل"
  },
  "927615a67859": {
   "src": "your own field",
@@ -1235,6 +1407,10 @@
   "src": "A swell: Airy waves 20 m long over 6.7 m of water; each bit of water runs round an ellipse, U at the surface, less deeper down.",
   "tr": "موج متعاقب: أمواج آيري طولها 20 m فوق ماء عمقه 6.7 m؛ كل جزء من الماء يدور على قطع ناقص، بسرعة U عند السطح وأقل في العمق."
  },
+ "9436fc138bd3": {
+  "src": "<b>Abstract.</b> This note is the note of project 05 carried under a liquid. Sections 1–12 are the same as there, and their numbers belong to Bogdanov’s machine (a 1.5 kg cart, rods of 0.5 and 0.75 kg, 0.5 and 0.75 m long, a 60 N motor); section 13 puts the machine in water, glycerol and honey, shows why that machine cannot lift its rods there (13.7), builds one that can, and tells the controller the flow (13.8). A rod standing on its end falls; two rods stacked on hinges fall faster and in a tangle. Here the only help they get is from below: a cart that a motor pushes along a rail. We describe the machine, write its energy, derive its equations of motion with Lagrange’s method and check every term against the classic report of Bogdanov (2004). We then linearise around the upright position to find how fast the rods fall, show that one push along the rail is enough to steer both, and build the controller that does it by minimising a cost. The note ends with what each slider teaches: why long rods are easier, why the motor must be strong and the loop fast, and why the cart has to drive the wrong way first. When the rods fall anyway, the note shows where the balancer is certain to win, how the cart can drain the rods’ energy until they hang still, and how a planned swing-up brings them back to the top. A real controller looks only at fixed instants; we derive the exact model of the machine between two looks, the cost it pays, and the gains that fit the loop period, and we let the balancer hold the rods on a cart that keeps rolling, and then work out how much speed may be taken away at each look without knocking them over, so that the cart comes to rest with certainty.",
+  "tr": "<b>الخلاصة.</b> هذه المذكّرة هي مذكّرة المشروع 05 منقولةً إلى ما تحت سائل. الأقسام 1–12 هي نفسها هناك، وأرقامها تخصّ آلة بوغدانوف (عربة 1.5 kg، وقضيبان كتلتاهما 0.5 و0.75 kg وطولاهما 0.5 و0.75 m، ومحرّك 60 N)؛ أمّا القسم 13 فيضع الآلة في الماء والغليسرين والعسل، ويبيّن لماذا لا تستطيع تلك الآلة أن ترفع قضيبيها هناك (13.7)، ويبني آلة تستطيع، ويُخبر المتحكّم بالجريان (13.8). القضيب القائم على طرفه يسقط؛ والقضيبان المركّبان أحدهما فوق الآخر بمفصلين يسقطان أسرع ويتشابكان. ولا عون لهما هنا إلّا من تحت: عربة يدفعها محرّك على سكّة. نصف الآلة، ونكتب طاقتها، ونشتقّ معادلات حركتها بطريقة لاغرانج، ونطابق كلّ حدّ مع التقرير الكلاسيكي لبوغدانوف (2004). ثمّ نخطّط حول الوضع القائم لنعرف سرعة سقوط القضيبين، ونبيّن أنّ دفعًا واحدًا على السكّة يكفي لتوجيههما معًا، ونبني المتحكّم الذي يفعل ذلك بتقليل كلفة. وتنتهي المذكّرة بما يعلّمه كلّ منزلق: لماذا القضبان الطويلة أسهل، ولماذا يجب أن يكون المحرّك قويًّا والحلقة سريعة، ولماذا على العربة أن تسير في الاتّجاه الخاطئ أوّلًا. وإذا سقط القضيبان مع ذلك، تبيّن المذكّرة أين يفوز متحكّم الموازنة يقينًا، وكيف تسحب العربة طاقة القضيبين حتّى يتدلّيا ساكنين، وكيف تعيدهما أرجحة مخطَّطة إلى القمّة. والمتحكّم الحقيقي لا ينظر إلّا في لحظات ثابتة؛ فنشتقّ النموذج الدقيق للآلة بين نظرتين، والكلفة التي تدفعها، والكسوب التي تلائم دور الحلقة، وندع متحكّم الموازنة يمسك القضيبين على عربة تتابع تدحرجها، ثمّ نحسب مقدار السرعة الذي يجوز اقتطاعه عند كلّ نظرة دون أن يسقط القضيبان، بحيث تقف العربة يقينًا."
+ },
  "94797063b698": {
   "src": "\\(\\mathbf K_d\\) on \\(x\\) (N/m)",
   "tr": "\\(\\mathbf K_d\\) على \\(x\\) (N/m)"
@@ -1255,6 +1431,10 @@
   "src": "Wikipedia, <a href=\"https://en.wikipedia.org/wiki/Airy_wave_theory\">“Airy wave theory”</a>: the orbital velocities and \\(\\omega^2 = gk\\tanh kh\\).",
   "tr": "ويكيبيديا، <a href=\"https://en.wikipedia.org/wiki/Airy_wave_theory\">«Airy wave theory»</a>: السرعات المدارية و\\(\\omega^2 = gk\\tanh kh\\)."
  },
+ "94e8e7e617c5": {
+  "src": "<span class=\"psec__n\">13</span>Liquids: the push of a flow",
+  "tr": "<span class=\"psec__n\">13</span>السوائل: دفع الجريان"
+ },
  "95c892cbfb45": {
   "src": "<b>13.5</b> Show that if the rods read the water with one kernel and spread their push with another, (43) fails: the water and the rods would exchange power that is neither the drag's heat nor zero. Where in the water's book of the data panel would it show?",
   "tr": "<b>13.5</b> بيّن أنه إذا قرأ القضيبان الماء بنواة ووزّعا دفعهما بنواة أخرى، فإن (43) لا تصحّ: سيتبادل الماء والقضيبان قدرةً ليست حرارة الكبح ولا صفرًا. أين يظهر ذلك في موازنة الماء في لوحة البيانات؟"
@@ -1262,6 +1442,14 @@
  "9681f0ace4c2": {
   "src": "<b>12.6</b> Show that (25) solves (9) with \\(u = 0\\) for every \\(v\\), and that a cart accelerating steadily at \\(a\\) holds both rods still only if \\(\\tan\\theta_1 = \\tan\\theta_2 = a/g\\). What motor force does that take?",
   "tr": "<b>12.6</b> بيّن أنّ (25) تحلّ (9) مع \\(u = 0\\) لكلّ \\(v\\)، وأنّ عربة تتسارع بانتظام بـ \\(a\\) لا تمسك القضيبين ساكنين إلّا إذا \\(\\tan\\theta_1 = \\tan\\theta_2 = a/g\\). ما قوّة المحرّك التي يتطلّبها ذلك؟"
+ },
+ "96d9939a217e": {
+  "src": "Project · control systems · fluid mechanics",
+  "tr": "مشروع · أنظمة التحكّم · ميكانيك الموائع"
+ },
+ "97795f660830": {
+  "src": "glycerol, 0.5 m/s",
+  "tr": "الغليسرين، 0.5 m/s"
  },
  "97e1ceba053c": {
   "src": "The newtons the motor pushes per radian of lean of each rod.",
@@ -1307,6 +1495,14 @@
   "src": "Write (9) as six first-order equations for \\(\\mathbf s = (\\boldsymbol\\theta, \\dot{\\boldsymbol\\theta})\\): \\(\\dot{\\mathbf s} = \\mathbf f(\\mathbf s, u)\\), whose first three components are \\(\\dot{\\boldsymbol\\theta}\\) and whose last three are \\(\\ddot{\\boldsymbol\\theta} = \\mathbf D^{-1}(\\mathbf Hu - \\mathbf C\\dot{\\boldsymbol\\theta} - \\mathbf G)\\). One step of the classical fourth-order Runge–Kutta method of length \\(h\\) samples the slope four times, at the start, twice at the middle and at the end,",
   "tr": "اكتب (9) على صورة ست معادلات من الرتبة الأولى للمتّجه \\(\\mathbf s = (\\boldsymbol\\theta, \\dot{\\boldsymbol\\theta})\\): \\(\\dot{\\mathbf s} = \\mathbf f(\\mathbf s, u)\\)، مركّباتها الثلاث الأولى هي \\(\\dot{\\boldsymbol\\theta}\\) ومركّباتها الثلاث الأخيرة هي \\(\\ddot{\\boldsymbol\\theta} = \\mathbf D^{-1}(\\mathbf Hu - \\mathbf C\\dot{\\boldsymbol\\theta} - \\mathbf G)\\). وتأخذ الخطوة الواحدة بطول \\(h\\) من طريقة رونغه–كوتا الكلاسيكية من الرتبة الرابعة أربع عيّنات من الميل: عند البداية، ومرّتين عند المنتصف، وعند النهاية،"
  },
+ "9b7b4115dc8a": {
+  "src": "<b>The law.</b> The controller is designed about this state: the linearisation (10) of the full equations at \\(\\mathbf s^*\\), by central differences, gives \\(\\mathbf A\\) and \\(\\mathbf B\\), and (16g)–(16h) give the gains \\(\\mathbf K\\) for the loop period. Then",
+  "tr": "<b>القانون.</b> يُصمَّم المتحكّم حول هذه الحالة: التقريب الخطّي (10) للمعادلات الكاملة عند \\(\\mathbf s^*\\)، بالفروق المركزية، يعطي \\(\\mathbf A\\) و\\(\\mathbf B\\)، وتعطي (16g)–(16h) الكسوب \\(\\mathbf K\\) لدور الحلقة. عندئذ"
+ },
+ "9b898e5fb4e9": {
+  "src": "An internal wave of the deep ocean, where water of different saltiness rides on water below: crests 12 m apart, layers 4 m apart, one swing every 45 s, speed U at its strongest. Chosen, U starts at the strength where the balancer has to work hardest and still wins in this liquid (13.8).",
+  "tr": "موجة داخلية في أعماق المحيط، حيث يركب ماءٌ مختلف الملوحة فوق الماء الذي تحته: قممها متباعدة 12 m، وطبقاتها متباعدة 4 m، وتأرجح واحد كلّ 45 s، والسرعة U في أشدّها. عند اختيارها تبدأ U عند الشدّة التي يعمل فيها متحكّم الموازنة أشدّ ما يعمل ويظلّ يفوز في هذا السائل (13.8)."
+ },
  "9badfb4bf1b5": {
   "src": "Three numbers fix where everything is: \\(x\\), \\(\\theta_1\\) and \\(\\theta_2\\). We collect them as \\(\\boldsymbol\\theta = (x, \\theta_1, \\theta_2)\\). Put the origin of height at the lower hinge, \\(y\\) upward. The lower hinge is at \\((x, 0)\\). A rod leaning by \\(\\theta\\) from the upward vertical has its far end displaced by \\(L\\sin\\theta\\) sideways and \\(L\\cos\\theta\\) up. The centre of mass of a uniform rod is at its middle, so",
   "tr": "ثلاثة أعداد تحدّد موضع كلّ شيء: \\(x\\) و\\(\\theta_1\\) و\\(\\theta_2\\). نجمعها في \\(\\boldsymbol\\theta = (x, \\theta_1, \\theta_2)\\). نضع مبدأ الارتفاع عند المفصل السفلي، و\\(y\\) نحو الأعلى. يقع المفصل السفلي عند \\((x, 0)\\). والقضيب المائل بالزاوية \\(\\theta\\) عن الشاقول المتّجه نحو الأعلى يُزاح طرفه البعيد بمقدار \\(L\\sin\\theta\\) جانبيًّا و\\(L\\cos\\theta\\) نحو الأعلى. ومركز كتلة القضيب المتجانس في منتصفه، ولذلك"
@@ -1327,6 +1523,10 @@
   "src": "<span>10</span>Calming: the cart drains the rods’ energy",
   "tr": "<span>10</span>التهدئة: العربة تسحب طاقة القضيبين"
  },
+ "9d75342c103a": {
+  "src": "honey",
+  "tr": "العسل"
+ },
  "9dfb231129c2": {
   "src": "The fluid stands still; the cart and the rods feel it only by moving through it: as drag (33)–(34), and as the water they carry along (38).",
   "tr": "المائع ساكن؛ لا تشعر به العربة والقضيبان إلا حين تتحرّك خلاله: على شكل كبح (33)–(34)، وعلى شكل الماء الذي تحمله معها (38)."
@@ -1342,6 +1542,10 @@
  "9fa75ff6f9d9": {
   "src": "A fluid enters through two numbers: its density \\(\\rho\\), which sets how much momentum it carries, and its viscosity \\(\\mu\\), which sets how strongly neighbouring layers drag on each other. Their ratio \\(\\nu = \\mu/\\rho\\) is the kinematic viscosity. Which of the two wins near a body of size \\(d\\) moving through the fluid at speed \\(|\\mathbf w|\\) is told by the Reynolds number \\(\\mathrm{Re} = \\rho\\,|\\mathbf w|\\,d/\\mu\\).",
   "tr": "يدخل المائع بعددين: كثافته \\(\\rho\\)، التي تحدّد كم من الزخم يحمل، ولزوجته \\(\\mu\\)، التي تحدّد شدّة سحب الطبقات المتجاورة بعضها لبعض. ونسبتهما \\(\\nu = \\mu/\\rho\\) هي اللزوجة الحركية. وأيّهما يغلب قرب جسم حجمه \\(d\\) يتحرّك خلال المائع بسرعة \\(|\\mathbf w|\\) يخبر به عدد رينولدز \\(\\mathrm{Re} = \\rho\\,|\\mathbf w|\\,d/\\mu\\)."
+ },
+ "9fe850cf049f": {
+  "src": "Stand a walking stick on the bed of a stream and balance it with one finger on its top. You do not hold it vertical: you lean it a little into the current, until the turn its weight gives about the bottom matches the turn the water gives. In a stream, upright is not where rods rest. In project 05 the controller held the rods vertical and fought the flow as a push it could only answer, so a steady stream kept the motor working and pushed the cart off its target. Here the controller is told the flow, as a ship's autopilot is told the current, and asks where the machine could rest in it.",
+  "tr": "أوقف عصا مشي على قاع جدول ماء ووازنها بإصبع واحدة على رأسها. لن تُمسكها عموديّة: بل تُميلها قليلًا نحو التيّار، حتّى يساوي عزمُ وزنها حول أسفلها عزمَ الماء. ففي التيّار ليس الوضع القائم هو حيث يسكن القضيبان. في المشروع 05 كان المتحكّم يُمسك القضيبين عموديّين ويحارب الجريان بوصفه دفعة لا يملك إلا أن يجيبها، فكان التيّار الثابت يُبقي المحرّك عاملًا ويدفع العربة عن هدفها. وهنا يُخبَر المتحكّم بالجريان، كما يُخبَر الطيّار الآلي في السفينة بالتيّار، فيسأل أين يمكن للآلة أن تسكن فيه."
  },
  "9ff229de3cc7": {
   "src": "Two honest limits. The test is a search, not a proof: a bad spot it did not find could exist, which is what the 10 % margin is for. And it is conservative. In simulation the balancer brings back states with \\(W\\) forty times larger, because a motion may let \\(W\\) rise for a moment and still come home. \\(c^\\ast\\) marks where catching is <em>certain</em>, not the whole set that can be caught. It is the same at 30 N, 60 N and 200 N: the motor limit does not set it, the curvature of (9) does. And it assumes a balancer that acts continuously; the page’s sampled balancer comes close to that only while \\(T_s\\) is much shorter than the fall time (section 7.2).",
@@ -1371,6 +1575,10 @@
   "src": "Project · control systems · classical mechanics",
   "tr": "مشروع · أنظمة التحكّم · الميكانيكا الكلاسيكية"
  },
+ "a3873f984d15": {
+  "src": "an internal wave: the deep ocean breathing",
+  "tr": "موجة داخلية: تنفّس المحيط العميق"
+ },
  "a3addf4eefea": {
   "src": "<span class=\"sw\"></span>upper rod <i>θ</i><sub>2</sub>",
   "tr": "<span class=\"sw\"></span>القضيب العلوي <i>θ</i><sub>2</sub>"
@@ -1383,9 +1591,21 @@
   "src": "Section 7.1 gave us the tool. The quantity",
   "tr": "أعطانا القسم 7.1 الأداة. فالمقدار"
  },
+ "a409d16e06fd": {
+  "src": "S. C. Shadden, F. Lekien and J. E. Marsden, <a href=\"https://doi.org/10.1016/j.physd.2005.10.007\">“Definition and properties of Lagrangian coherent structures from finite-time Lyapunov exponents in two-dimensional aperiodic flows”</a>, <em>Physica D</em> 212, 271–304 (2005): the double gyre.",
+  "tr": "S. C. Shadden وF. Lekien وJ. E. Marsden، <a href=\"https://doi.org/10.1016/j.physd.2005.10.007\">«Definition and properties of Lagrangian coherent structures from finite-time Lyapunov exponents in two-dimensional aperiodic flows»</a>، <em>Physica D</em> 212، 271–304 (2005): الدوّامة المزدوجة."
+ },
+ "a428feed2152": {
+  "src": "Back to the machine of this page (section 13.7): a 1.5 kg cart, two rods of 3 kg, 0.20 and 0.25 m long, a 400 N motor, <i>ρ</i> = 1.",
+  "tr": "العودة إلى آلة هذه الصفحة (القسم 13.7): عربة 1.5 kg، وقضيبان كتلة كلّ منهما 3 kg وطولاهما 0.20 و0.25 m، ومحرّك 400 N، و<i>ρ</i> = 1."
+ },
  "a4ce3a9be794": {
   "src": "← All simulations",
   "tr": "→ جميع المحاكاة"
+ },
+ "a4d2f1fafd3d": {
+  "src": "where \\(I\\) includes the water it carries (38). But the liquid will not let the rod turn faster than the rate \\(\\omega_t\\) at which its drag torque, from (33)–(34) integrated along the rod, equals the whole pull of its weight. For the default outer rod (0.75 kg, 0.75 m) \\(\\omega_{\\text{need}}\\) is 6.4, 5.8 and 5.5 rad/s, and \\(\\omega_t\\) is 1.41, 0.96 and 0.44 rad/s in water, glycerol and honey: the rod falls through the liquid five to twelve times slower than it would have to swing. And the cart cannot simply drag it over the top, because a sideways push cannot lift a rod that lies sideways: when the rod is horizontal, both the drag and the inertial push of the cart's motion act along it and give no torque about its hinge. This is a rough measure, a lone rod on a fixed hinge, not a proof; but it says which way to change the machine. Since \\(\\omega_t/\\omega_{\\text{need}}\\) grows like \\(\\sqrt{m/(\\rho d L^3)}\\), short heavy rods are the ones a liquid lets swing. With rods of 2 kg, 0.20 m and 0.25 m, the ratio is 0.96 in water, 0.80 in glycerol and 0.57 in honey (<code>notes/fig11/project06/paddle.cjs</code>).",
+  "tr": "حيث تشمل \\(I\\) الماء الذي يحمله (38). لكنّ السائل لا يدع القضيب يدور أسرع من المعدّل \\(\\omega_t\\) الذي يساوي عنده عزمُ كبحه، من (33)–(34) مكاملًا على طول القضيب، شدَّ وزنه كلّه. للقضيب الخارجي الافتراضي (0.75 kg، 0.75 m) تكون \\(\\omega_{\\text{need}}\\) مساوية 6.4 و5.8 و5.5 rad/s، و\\(\\omega_t\\) مساوية 1.41 و0.96 و0.44 rad/s في الماء والغليسرين والعسل: يسقط القضيب في السائل أبطأ بخمس إلى اثنتي عشرة مرّة ممّا يلزمه ليتأرجح. ولا تستطيع العربة أن تجرّه فوق القمّة ببساطة، لأنّ دفعة جانبية لا ترفع قضيبًا ممدّدًا جانبيًا: حين يكون القضيب أفقيًا يعمل الكبح ودفعة القصور من حركة العربة كلاهما على طوله ولا يعطيان عزمًا حول مفصله. هذا مقياس تقريبي، لقضيب منفرد على مفصل ثابت، لا برهان؛ لكنّه يقول في أيّ اتجاه تُغيَّر الآلة. وبما أنّ \\(\\omega_t/\\omega_{\\text{need}}\\) تنمو مثل \\(\\sqrt{m/(\\rho d L^3)}\\)، فالقضبان القصيرة الثقيلة هي التي يدعها السائل تتأرجح. مع قضيبين من 2 kg، طولهما 0.20 m و0.25 m، تبلغ النسبة 0.96 في الماء و0.80 في الغليسرين و0.57 في العسل (<code>notes/fig11/project06/paddle.cjs</code>)."
  },
  "a4f688a39254": {
   "src": "<b>Left out.</b> The parts of the added mass that mix the rod's own motion with the flow's velocity as the rod turns; the rods' own wakes and the vortices they shed; the bodies changing the flow; the water's surface; and the rail's own drag. Morison's equation is itself an approximation, poor where drag and inertia are of the same size [25]. The motor's 60 N cannot hold the default rods in a river running at 2 m/s: by (34) the water pushes about 48 N on every metre.",
@@ -1402,6 +1622,10 @@
  "a62464254597": {
   "src": "<span class=\"psec__n\">06</span>One push, two rods",
   "tr": "<span class=\"psec__n\">06</span>دفعة واحدة، وقضيبان"
+ },
+ "a627465f6473": {
+  "src": "In water this takes 31 % off the weight of the default rods; a rod lighter than the liquid would stand up by itself. The controller is redesigned with (37), since an engineer knows what the machine stands in. It is also told the flow, and balances the rods where the flow and gravity balance (section 13.8).",
+  "tr": "في الماء يُنقص هذا وزن القضيبين الافتراضيين بنسبة 31 %؛ والقضيب الأخفّ من السائل يقف وحده. ويُعاد تصميم المتحكّم بـ (37)، لأن المهندس يعرف فيمَ تقف الآلة. ويُخبَر أيضًا بالجريان، فيوازن القضيبين حيث يتوازن الجريان والجاذبية (القسم 13.8)."
  },
  "a6da2312b0bf": {
   "src": "medium, \\(u_{\\max}\\)",
@@ -1455,6 +1679,10 @@
   "src": "lower rod mass and length",
   "tr": "كتلة القضيب السفلي وطوله"
  },
+ "ad9dbb46f995": {
+  "src": "Two rods in a liquid: a machine that can lift them",
+  "tr": "قضيبان في سائل: آلة تستطيع رفعهما"
+ },
  "adbc34035063": {
   "src": "<b>We shot.</b> The cart was driven at its limit in the direction that feeds the rods, \\(u = -u_{\\max}\\,\\mathrm{sign}\\,\\mathcal P\\) with \\(\\mathcal P\\) of (21), the reverse of calming, turning back before the end of the rail, for 20 s, with the full drag (33)–(35). The table gives what the motor put in, where it went, and how high the rods got: the largest \\(f_1\\cos\\theta_1 + f_2\\cos\\theta_2\\) reached, as a share of the way from hanging (0) to upright (1).",
   "tr": "<b>لقد جرّبنا الدفع بأقصى قوّة.</b> دُفعت العربة عند حدّها في الاتجاه الذي يغذّي القضيبين، \\(u = -u_{\\max}\\,\\mathrm{sign}\\,\\mathcal P\\) مع \\(\\mathcal P\\) من (21)، أي عكس التهدئة، مع الرجوع قبل نهاية السكّة، مدّة 20 s، مع الكبح الكامل (33)–(35). يبيّن الجدول ما أدخله المحرّك، وأين ذهب، وإلى أيّ ارتفاع وصل القضيبان: أكبر قيمة بلغتها \\(f_1\\cos\\theta_1 + f_2\\cos\\theta_2\\)، كنسبة من الطريق بين التدلّي (0) والانتصاب (1)."
@@ -1479,6 +1707,10 @@
   "src": "The page integrates (9) with the classical fourth-order Runge–Kutta method at a fixed step of 1 ms, several steps per screen frame, in real time. With the controller off, the same integrator tested against a high-accuracy solver keeps the energy \\(T + V\\) constant to \\(2\\times10^{-10}\\) J over 10 s. When a rod passes 60° the run is called lost: the linear controller was designed for small angles, and the page then lets the rods fall freely until one lies flat. Positions are drawn to scale; the view follows the cart.",
   "tr": "تكامل الصفحة (9) بطريقة رونغه–كوتا الكلاسيكية من الرتبة الرابعة بخطوة ثابتة قدرها 1 ms، بعدّة خطوات في كلّ إطار من إطارات الشاشة، في الزمن الحقيقي. ومع إيقاف المتحكّم يُبقي المكامِل نفسه، مختبرًا مقابل حلّال عالي الدقّة، الطاقة \\(T + V\\) ثابتة في حدود \\(2\\times10^{-10}\\) J على مدى 10 s. وحين يتجاوز قضيب 60° تُعدّ الجولة خاسرة: فالمتحكّم الخطّي صُمّم للزوايا الصغيرة، والصفحة تدع القضيبين حينئذ يسقطان بحرّية حتى يستلقي أحدهما. وتُرسم المواضع بمقياس صحيح؛ ويتبع المنظرُ العربة."
  },
+ "afb75a371156": {
+  "src": "liquid, river speed",
+  "tr": "السائل، سرعة النهر"
+ },
  "afc6e01f1a85": {
   "src": "The page solves (15) by the matrix sign function of the Hamiltonian matrix, every time a slider changes [3]. For the default machine and \\(\\rho = 1\\), the gains on \\((x, \\theta_1, \\theta_2, \\dot x, \\dot\\theta_1, \\dot\\theta_2)\\) are \\((7.07,\\ -504.0,\\ 625.9,\\ 15.32,\\ -14.69,\\ 97.94)\\) in N per m, rad, m/s or rad/s; the closed loop’s slowest motion dies away in 1.23 s.",
   "tr": "تحلّ الصفحة (15) بدالّة الإشارة المصفوفية للمصفوفة الهاملتونية، في كلّ مرّة يتغيّر فيها منزلق [3]. وللآلة الافتراضية مع \\(\\rho = 1\\) تكون الكسوب على \\((x, \\theta_1, \\theta_2, \\dot x, \\dot\\theta_1, \\dot\\theta_2)\\) هي \\((7.07,\\ -504.0,\\ 625.9,\\ 15.32,\\ -14.69,\\ 97.94)\\) بوحدات N لكلّ m أو rad أو m/s أو rad/s؛ وأبطأ حركة في الحلقة المغلقة تخمد في 1.23 s."
@@ -1490,6 +1722,10 @@
  "afd94ef4e089": {
   "src": "<span class=\"pbox__t\">Key result · the sampled loop</span> \\[ \\mathbf s_{k+1} = \\boldsymbol\\Phi\\,\\mathbf s_k + \\boldsymbol\\Gamma\\,u_k, \\qquad \\boldsymbol\\Phi = e^{\\mathbf A T_s}, \\quad \\boldsymbol\\Gamma = \\int_0^{T_s} e^{\\mathbf A\\tau}\\,\\mathrm d\\tau\\;\\mathbf B . \\tag{16a} \\]",
   "tr": "<span class=\"pbox__t\">نتيجة أساسية · الحلقة ذات العيّنات</span> \\[ \\mathbf s_{k+1} = \\boldsymbol\\Phi\\,\\mathbf s_k + \\boldsymbol\\Gamma\\,u_k, \\qquad \\boldsymbol\\Phi = e^{\\mathbf A T_s}, \\quad \\boldsymbol\\Gamma = \\int_0^{T_s} e^{\\mathbf A\\tau}\\,\\mathrm d\\tau\\;\\mathbf B . \\tag{16a} \\]"
+ },
+ "afeabca9d312": {
+  "src": "with targets \\(\\theta^\\ast = 2\\pi\\operatorname{round}(\\theta/2\\pi)\\), the nearest upright. The weights \\(w_d = 100\\), \\(w_T = 30\\), \\(w_\\ell = 20\\), \\(w_u = 1\\), \\(w_r = w_s = 0.02 \\times 60\\ \\mathrm N/u_\\text{max}\\) are our choice (the price of force is set in units of the motor's limit, so that a strong motor is not held back by it; for 60 N it is 0.02 per newton); they make a defect of one milliradian cost as much as three milliradians of final error, so the physics wins over the wish. The first guess is a straight line in the angles. Levenberg–Marquardt then improves it, step after step, from the normal equations \\(\\mathbf J^{\\mathsf T}\\mathbf J\\,\\delta = -\\mathbf J^{\\mathsf T}\\mathbf r\\) with the Jacobian \\(\\mathbf J\\) of (22) from finite differences of \\(\\Phi\\). A plan is accepted when every defect is below \\(3\\times10^{-3}\\) and the end is within 0.02 rad and 0.02 rad/s of upright rest.",
+  "tr": "مع الأهداف \\(\\theta^\\ast = 2\\pi\\operatorname{round}(\\theta/2\\pi)\\)، أي أقرب وضع قائم. الأوزان \\(w_d = 100\\) و\\(w_T = 30\\) و\\(w_\\ell = 20\\) و\\(w_u = 1\\) و\\(w_r = w_s = 0.02 \\times 60\\ \\mathrm N/u_\\text{max}\\) من اختيارنا (يُحدَّد ثمن القوّة بوحدات حدّ المحرّك، كي لا يُكبَّل المحرّك القويّ به؛ ولمحرّك قوّته 60 N يساوي 0.02 لكلّ نيوتن)؛ وهي تجعل عيبًا قدره ملّيراديان واحد يكلّف بقدر ثلاثة ملّيراديانات من الخطأ النهائي، فتغلب الفيزياء الرغبة. التخمين الأوّل خطّ مستقيم في الزاويتين. ثم تحسّنه طريقة ليفنبرغ–ماركوارت خطوة بعد خطوة من المعادلات الطبيعية \\(\\mathbf J^{\\mathsf T}\\mathbf J\\,\\delta = -\\mathbf J^{\\mathsf T}\\mathbf r\\)، مع مصفوفة جاكوبي \\(\\mathbf J\\) لـ(22) من فروق منتهية لـ\\(\\Phi\\). وتُقبل الخطّة حين يكون كلّ عيب دون \\(3\\times10^{-3}\\) وتكون النهاية على بُعد 0.02 rad و0.02 rad/s من السكون القائم."
  },
  "b004c299fa45": {
   "src": "an identity Wolfram checks for (33). \\(P\\) is negative while a still fluid brakes the rods; a wind can make it positive and pour energy in. The energy book of the data panel carries \\(\\int P\\,dt\\) as one more row, summed with the weights that RK4 gives the state.",
@@ -1563,6 +1799,10 @@
   "src": "<b>Abstract.</b> A rod standing on its end falls; two rods stacked on hinges fall faster and in a tangle. Here the only help they get is from below: a cart that a motor pushes along a rail. We describe the machine, write its energy, derive its equations of motion with Lagrange’s method and check every term against the classic report of Bogdanov (2004). We then linearise around the upright position to find how fast the rods fall, show that one push along the rail is enough to steer both, and build the controller that does it by minimising a cost. The note ends with what each slider teaches: why long rods are easier, why the motor must be strong and the loop fast, and why the cart has to drive the wrong way first. When the rods fall anyway, the note shows where the balancer is certain to win, how the cart can drain the rods’ energy until they hang still, and how a planned swing-up brings them back to the top. A real controller looks only at fixed instants; we derive the exact model of the machine between two looks, the cost it pays, and the gains that fit the loop period, and we let the balancer hold the rods on a cart that keeps rolling, and then work out how much speed may be taken away at each look without knocking them over, so that the cart comes to rest with certainty.",
   "tr": "<b>الخلاصة.</b> القضيب القائم على طرفه يسقط؛ والقضيبان المركّبان أحدهما فوق الآخر بمفصلين يسقطان أسرع ويتشابكان. ولا عون لهما هنا إلّا من تحت: عربة يدفعها محرّك على سكّة. نصف الآلة، ونكتب طاقتها، ونشتقّ معادلات حركتها بطريقة لاغرانج، ونطابق كلّ حدّ مع التقرير الكلاسيكي لبوغدانوف (2004). ثمّ نخطّط حول الوضع القائم لنعرف سرعة سقوط القضيبين، ونبيّن أنّ دفعًا واحدًا على السكّة يكفي لتوجيههما معًا، ونبني المتحكّم الذي يفعل ذلك بتقليل كلفة. وتنتهي المذكّرة بما يعلّمه كلّ منزلق: لماذا القضبان الطويلة أسهل، ولماذا يجب أن يكون المحرّك قويًّا والحلقة سريعة، ولماذا على العربة أن تسير في الاتّجاه الخاطئ أوّلًا. وإذا سقط القضيبان مع ذلك، تبيّن المذكّرة أين يفوز متحكّم الموازنة يقينًا، وكيف تسحب العربة طاقة القضيبين حتّى يتدلّيا ساكنين، وكيف تعيدهما أرجحة مخطَّطة إلى القمّة. والمتحكّم الحقيقي لا ينظر إلّا في لحظات ثابتة؛ فنشتقّ النموذج الدقيق للآلة بين نظرتين، والكلفة التي تدفعها، والكسوب التي تلائم دور الحلقة، وندع متحكّم الموازنة يمسك القضيبين على عربة تتابع تدحرجها، ثمّ نحسب مقدار السرعة الذي يجوز اقتطاعه عند كلّ نظرة دون أن يسقط القضيبان، بحيث تقف العربة يقينًا."
  },
+ "b697bcee3087": {
+  "src": "15 s after letting go: \\(\\theta_1 - \\theta_1^*\\), \\(\\theta_2 - \\theta_2^*\\)",
+  "tr": "بعد 15 s من الإفلات: \\(\\theta_1 - \\theta_1^*\\)، \\(\\theta_2 - \\theta_2^*\\)"
+ },
  "b6d1c7e900d0": {
   "src": "<span class=\"psec__n\">04</span>Equations of motion",
   "tr": "<span class=\"psec__n\">04</span>معادلات الحركة"
@@ -1575,6 +1815,10 @@
   "src": "<b>13.2</b> From (34), at what speed of a river does the 60 N motor stop being able to hold the default rods upright? Try it with the slider.",
   "tr": "<b>13.2</b> من (34)، عند أيّ سرعة لنهر يعجز المحرّك ذو 60 N عن إبقاء القضيبين الافتراضيين قائمين؟ جرّب ذلك بالمزلق."
  },
+ "b7e082559d87": {
+  "src": "<b>This page's machine.</b> The cart keeps its 1.5 kg. The rods are 3 kg each and 0.20 and 0.25 m long, so that (48) gives \\(\\omega_t/\\omega_{\\text{need}}\\) = 1.17 in water, 0.98 in glycerol and 0.74 in honey. The motor gives up to 400 N. And the cart is no longer a box: of the motor's work in the shots above, 79–93 % heated the liquid round the cart's own face, so the carriage is 0.06 m high and 0.10 m deep, a quarter of the box's face, and 0.40 m long. The table gives what the page then does with <i>Hang down, swing up</i>, and with <i>to +1 m</i> pressed 14 s after it (<code>notes/fig11/project06/swing.cjs</code>, in Chromium on this computer).",
+  "tr": "<b>آلة هذه الصفحة.</b> تحتفظ العربة بكتلتها 1.5 kg. والقضيبان كتلة كلّ منهما 3 kg وطولاهما 0.20 و0.25 m، فتعطي (48) \\(\\omega_t/\\omega_{\\text{need}}\\) = 1.17 في الماء و0.98 في الغليسرين و0.74 في العسل. ويعطي المحرّك حتّى 400 N. ولم تعد العربة صندوقًا: ففي الرميات أعلاه سخّن 79–93 % من شغل المحرّك السائلَ حول وجه العربة نفسها، لذا صار ارتفاع العربة 0.06 m وعمقها 0.10 m، أي ربع وجه الصندوق، وطولها 0.40 m. ويعطي الجدول ما تفعله الصفحة حينئذ بالزرّ <i>أنزِلهما ثم أرجِحهما إلى الأعلى</i>، ثم بالزرّ <i>إلى +1 m</i> مضغوطًا بعده بـ 14 s (<code>notes/fig11/project06/swing.cjs</code>، في Chromium على هذا الحاسوب)."
+ },
  "b84828280deb": {
   "src": "A rolling eddy (a Lamb–Oseen vortex, core 0.45 m, fastest swirl U) carried along by a light wind 0.4 U; a new one every 20 s.",
   "tr": "دوّامة متدحرجة (دوّامة لامب–أوسين، نواتها 0.45 m، وأسرع دوران فيها U) تحملها ريح خفيفة سرعتها 0.4 U؛ دوّامة جديدة كل 20 s."
@@ -1582,6 +1826,10 @@
  "b8eabf434ac0": {
   "src": "air, 25 °C",
   "tr": "هواء، 25 °C"
+ },
+ "b8ec7ab7d055": {
+  "src": "<span class=\"psub__n\">13.8</span>Told the flow: holding the rods where the flow and gravity balance",
+  "tr": "<span class=\"psub__n\">13.8</span>المتحكّم يُخبَر بالجريان: إمساك القضيبين حيث يتوازن الجريان والجاذبية"
  },
  "b94d61621ef1": {
   "src": "Leans from upright, positive to the right.",
@@ -1598,6 +1846,14 @@
  "bac43ece5ce0": {
   "src": "<b>What the page does in a liquid.</b> When a plan fails, the cart does what we did above: it pumps at full force, \\(a = -3\\,\\mathcal P\\tanh\\bigl(3(V_{\\text{top}} - E)/V_{\\text{top}}\\bigr)\\) in m/s² with \\(\\mathcal P\\) in kg m²/s, which feeds the rods up to the energy of the top and no further, while the planner tries again. Rods that are already upright are kept upright. The guard of section 11 asks the model whether the balancer brings the machine inside the certified region \\(c^*\\) of section 9 within 4 s. In a liquid \\(c^*\\) is small (0.04 in water, 0.12 in glycerol, 0.56 in honey for the default machine) and the drag makes the balancer slow, so that test gave up on rods tilted by 0.8°. In a medium the guard now also leaves the balancer alone while the model shows it lowering \\(W\\) by at least a tenth in those 4 s; with it the cart carries the upright rods to within 2 cm of +1 m 16 s after the button in water and glycerol; in honey it is at 0.84 m after 24 s, still creeping. A plan that ends with the cart moving hands over to a balancer holding the cart where it was caught, not to the cruise of (25), because in a liquid a steady cruise needs a steady push against drag that (25) leaves out.",
   "tr": "<b>ما تفعله الصفحة في سائل.</b> حين يفشل خطّ، تفعل العربة ما فعلناه أعلاه: تضخّ بكامل قوّتها، \\(a = -3\\,\\mathcal P\\tanh\\bigl(3(V_{\\text{top}} - E)/V_{\\text{top}}\\bigr)\\) بوحدة m/s² مع \\(\\mathcal P\\) بوحدة kg m²/s، فتغذّي القضيبين حتى طاقة القمّة ولا أكثر، بينما يحاول المخطّط من جديد. والقضيبان المنتصبان أصلًا يبقيان منتصبين. يسأل الحارس في القسم 11 النموذجَ هل يُدخل متحكّم الموازنة الآلةَ إلى المنطقة المضمونة \\(c^*\\) من القسم 9 خلال 4 s. في السائل تكون \\(c^*\\) صغيرة (0.04 في الماء و0.12 في الغليسرين و0.56 في العسل للآلة الافتراضية) ويجعل الكبح متحكّم الموازنة بطيئًا، فكان ذلك الاختبار يتخلّى عن قضيبين مائلين بمقدار 0.8°. أمّا الآن ففي الوسط يترك الحارس متحكّم الموازنة يعمل ما دام النموذج يبيّن أنّه يخفض \\(W\\) بعُشر على الأقلّ في تلك الثواني الأربع؛ وبهذا تحمل العربة القضيبين المنتصبين إلى ما دون 2 cm من +1 m بعد 16 s من الضغط على الزرّ في الماء والغليسرين؛ وفي العسل تكون عند 0.84 m بعد 24 s، وما زالت تزحف. والخطّ الذي ينتهي والعربة تتحرّك يسلّم إلى متحكّم موازنة يُمسك العربة حيث التُقطت، لا إلى السير المنتظم في (25)، لأنّ السير المنتظم في السائل يحتاج دفعًا منتظمًا ضدّ الكبح لا تحسبه (25)."
+ },
+ "bb20f7d72fbf": {
+  "src": "0.741 kg in glycerol and 0.587 kg in water (with 400, 800, 1600 and 3200 panels: 0.005852, 0.005865, 0.005871, 0.005874 m², <code>notes/fig11/project06/</code>; project 05's box has 0.020539). The same code gives 1.0017 of \\(\\rho\\pi a^2\\) for a circle and 1.0009 of \\(\\rho\\pi b^2\\) for an ellipse 0.36 × 0.12 m, the value Wolfram derives from the ellipse's exact potential. The controller is redesigned with (46), as with the buoyancy; the solved flow it is still not told.",
+  "tr": "0.741 kg في الغليسرين و0.587 kg في الماء (مع 400 و800 و1600 و3200 لوح على الحدّ: 0.005852 و0.005865 و0.005871 و0.005874 m²، <code>notes/fig11/project06/</code>؛ ولصندوق المشروع 05 القيمة 0.020539). ويعطي البرنامج نفسه 1.0017 من \\(\\rho\\pi a^2\\) للدائرة و1.0009 من \\(\\rho\\pi b^2\\) لقطع ناقص 0.36 × 0.12 m، وهي القيمة التي يستنتجها Wolfram من الكمون الدقيق للقطع الناقص. ويُعاد تصميم المتحكّم بـ (46)، كما مع الطفو؛ أما الجريان المحلول فلا يُخبَر به بعد."
+ },
+ "bb885629c93c": {
+  "src": "plans found (3 s, 4 s), steps, computing time",
+  "tr": "الخطط الموجودة (3 s، 4 s)، الخطوات، زمن الحساب"
  },
  "bb8c7324b0ce": {
   "src": "Insert (3) and collect by products of velocities. The two rotational pieces combine with the \\(\\tfrac14 L^2\\) pieces of (3): \\(\\tfrac18 + \\tfrac1{24} = \\tfrac16\\), which is the familiar \\(\\tfrac12\\cdot\\tfrac13 mL^2\\) of a rod turning about its end. The result is a quadratic form,",
@@ -1627,9 +1883,21 @@
   "src": "<span class=\"pbox__t\">Key result · the energy law</span> \\[ \\frac{\\mathrm dE_p}{\\mathrm dt} = -a\\,\\mathcal P, \\qquad \\mathcal P = d_2\\cos\\theta_1\\,\\dot\\theta_1 + d_3\\cos\\theta_2\\,\\dot\\theta_2 . \\tag{21} \\]",
   "tr": "<span class=\"pbox__t\">النتيجة الأساسية · قانون الطاقة</span> \\[ \\frac{\\mathrm dE_p}{\\mathrm dt} = -a\\,\\mathcal P, \\qquad \\mathcal P = d_2\\cos\\theta_1\\,\\dot\\theta_1 + d_3\\cos\\theta_2\\,\\dot\\theta_2 . \\tag{21} \\]"
  },
+ "bd814fb54e6c": {
+  "src": "a double gyre: chaos in a periodic flow",
+  "tr": "دوّامة مزدوجة: فوضى في جريان دوري"
+ },
+ "bd834a2804b4": {
+  "src": "3 s: 101 steps, 0.8 s; 4 s: 208 steps, 3.3 s",
+  "tr": "3 s: 101 خطوة، 0.8 s؛ 4 s: 208 خطوات، 3.3 s"
+ },
  "bd896fdff234": {
   "src": "to +1 m",
   "tr": "إلى +1 m"
+ },
+ "bde0c7296288": {
+  "src": "<b>How it is checked.</b> Every test script is in the repository (<code>notes/fig11/fluid-ns-handover/twoway/</code>); each compares with an exact result or a published one. They were run with project 05's box cart, 0.36 × 0.12 m in a tank 0.2 m deep; the solver is the same file, and only the cart's size is set from the page.",
+  "tr": "<b>كيف يُتحقّق منه.</b> كل نصّ اختبار موجود في المستودع (<code>notes/fig11/fluid-ns-handover/twoway/</code>)؛ وكل منها يقارن بنتيجة دقيقة أو منشورة. وقد شُغّلت بعربة المشروع 05 الصندوقية، 0.36 × 0.12 m في خزّان عمقه 0.2 m؛ والحلّال هو الملف نفسه، ولا يُضبط من الصفحة إلا مقاس العربة."
  },
  "be70657fd3d2": {
   "src": "5.71, 5.71, 5.64; 0.113, 0.114, 0.115 Pa",
@@ -1683,6 +1951,10 @@
   "src": "Left out: friction in the hinges and wheels, the motor’s own dynamics (a real motor cannot change its force instantly), sensor noise, and a hard end of the rail (the planner keeps the cart within ±1.5 m; calming and balancing do not). Each is a known extension of this model [1, 3]. Every number on this page that is not derived or taken from a source is a choice of ours, and the text says so where it is made: the weight on \\(x\\), the ranges of the sliders, \\(u_\\text{max} = 60\\) N, the planner’s weights and rail limit, the calming gains, and the sampling of the certificate.",
   "tr": "ما أُغفل: الاحتكاك في المفصلين والعجلات، وديناميكا المحرّك نفسه (المحرّك الحقيقي لا يستطيع تغيير قوّته في الحال)، وضجيج المستشعرات، ونهاية صلبة للسكّة (يُبقي المخطِّط العربة ضمن ±1.5 m؛ أمّا التهدئة والموازنة فلا تفعلان). وكلّ منها امتداد معروف لهذا النموذج [1, 3]. وكلّ رقم في هذه الصفحة لم يُشتقّ ولم يؤخذ من مصدر هو اختيار منّا، ويقول النصّ ذلك حيث يُتّخذ: الوزن على \\(x\\)، ومدى المنزلقات، و\\(u_\\text{max} = 60\\) N، وأوزان المخطِّط وحدّ السكّة عنده، وكسوب التهدئة، وأخذ العيّنات في الشهادة."
  },
+ "c307695f393e": {
+  "src": "The machine of project 05, rebuilt to work under a liquid: shorter, heavier rods and a motor seven times stronger. It stands in water, glycerol or honey, hangs its rods down, swings them up, catches them and carries them to a target. Choose a current, a swell or a slow flow of the deep sea: the controller is told the flow and holds the rods where the flow and gravity balance. Drag the cart away and let go, and it brings them back.",
+  "tr": "آلة المشروع 05، وقد أُعيد بناؤها لتعمل تحت سائل: قضيبان أقصر وأثقل، ومحرّك أقوى بسبع مرّات. تقف في الماء أو الغليسرين أو العسل، فتُدلّي قضيبيها، وتؤرجحهما إلى الأعلى، وتلتقطهما، وتحملهما إلى هدف. اختر تيّارًا أو موجًا متعاقبًا أو جريانًا بطيئًا من أعماق البحر: يُخبَر المتحكّم بالجريان فيُمسك القضيبين حيث يتوازن الجريان والجاذبية. اسحب العربة بعيدًا ثم أفلتها، فتعيد القضيبين إلى مكانهما."
+ },
  "c3eaa08a1450": {
   "src": "Z.-C. Guo, E. K.-W. Chu, X. Liang and W.-W. Lin, <a href=\"https://arxiv.org/abs/2005.08288\">“A decoupled form of the structure-preserving doubling algorithm with low-rank structures”</a>, arXiv:2005.08288 (2020): the discrete Riccati equation in the form \\(-\\mathbf X + \\mathbf A^{\\mathsf T}\\mathbf X(\\mathbf I + \\mathbf G\\mathbf X)^{-1}\\mathbf A + \\mathbf H = \\mathbf 0\\) (their (3)) and the three recursions of the structure-preserving doubling algorithm (their (4)), which the page runs in full (its decoupled low-rank form is for large problems and is not used here).",
   "tr": "Z.-C. Guo وE. K.-W. Chu وX. Liang وW.-W. Lin، <a href=\"https://arxiv.org/abs/2005.08288\">“A decoupled form of the structure-preserving doubling algorithm with low-rank structures”</a>، arXiv:2005.08288 (2020): معادلة ريكاتي المتقطّعة بالصيغة \\(-\\mathbf X + \\mathbf A^{\\mathsf T}\\mathbf X(\\mathbf I + \\mathbf G\\mathbf X)^{-1}\\mathbf A + \\mathbf H = \\mathbf 0\\) (معادلتهم (3)) والتكرارات الثلاثة لخوارزمية المضاعفة الحافظة للبنية (معادلتهم (4))، التي تشغّلها الصفحة كاملة (أمّا صيغتها المفكوكة ذات الرتبة المنخفضة فللمسائل الكبيرة ولا تُستعمل هنا)."
@@ -1723,6 +1995,10 @@
   "src": "<b>What a kick costs.</b> The remaining cost (19) after the kick is a quadratic in \\(\\Delta\\). Expanding \\((\\mathbf e + \\Delta\\mathbf e_4)^{\\mathsf T}\\mathbf P(\\mathbf e + \\Delta\\mathbf e_4)\\) and using \\(\\mathbf P = \\mathbf P^{\\mathsf T}\\):",
   "tr": "<b>كلفة الركلة.</b> الكلفة الباقية (19) بعد الركلة دالّة تربيعية في \\(\\Delta\\). وبفكّ \\((\\mathbf e + \\Delta\\mathbf e_4)^{\\mathsf T}\\mathbf P(\\mathbf e + \\Delta\\mathbf e_4)\\) واستعمال \\(\\mathbf P = \\mathbf P^{\\mathsf T}\\):"
  },
+ "c8bf5b820a75": {
+  "src": "three equations for the two leans \\(\\theta_1^*\\), \\(\\theta_2^*\\) and the steady force \\(u^*\\) that holds the cart at its reference place \\(x_r\\) against the flow's push. \\(\\mathbf Q\\) is the whole fluid force (35) with (39), on the rods at rest in the flow as it is at time \\(t\\). The page solves (49) by Newton's method, with the Jacobian from differences of \\(10^{-6}\\), until the residual is below \\(10^{-11}\\); a rest state counts only if both leans stay below 80° and \\(u^*\\) within the motor. In a still liquid it is upright with \\(u^* = 0\\), as before.",
+  "tr": "ثلاث معادلات للميلين \\(\\theta_1^*\\) و\\(\\theta_2^*\\) وللقوّة الثابتة \\(u^*\\) التي تُمسك العربة عند مكانها المرجعي \\(x_r\\) في مواجهة دفع الجريان. و\\(\\mathbf Q\\) هي القوّة المائعية كلّها (35) مع (39)، على القضيبين الساكنين في الجريان كما هو في اللحظة \\(t\\). وتحلّ الصفحة (49) بطريقة نيوتن، مع مصفوفة جاكوبي من فروق قدرها \\(10^{-6}\\)، حتّى يصير المتبقّي دون \\(10^{-11}\\)؛ ولا يُعتدّ بوضع سكون إلا إذا بقي الميلان كلاهما دون 80° وبقيت \\(u^*\\) ضمن حدود المحرّك. وفي سائل ساكن يكون وضع السكون هو الوضع القائم مع \\(u^* = 0\\)، كما من قبل."
+ },
  "c9f12fb1c88b": {
   "src": "Wikipedia, <a href=\"https://en.wikipedia.org/wiki/Morison_equation\">“Morison equation”</a>: \\(F = \\rho V\\dot u + \\rho C_a V(\\dot u - \\dot v) + \\tfrac12\\rho C_d A(u - v)|u - v|\\), the first term the Froude–Krylov force; its limits.",
   "tr": "ويكيبيديا، <a href=\"https://en.wikipedia.org/wiki/Morison_equation\">«Morison equation»</a>: \\(F = \\rho V\\dot u + \\rho C_a V(\\dot u - \\dot v) + \\tfrac12\\rho C_d A(u - v)|u - v|\\)، والحدّ الأول هو قوّة فرود–كريلوف؛ وحدودها."
@@ -1738,6 +2014,10 @@
  "cc791e6caad5": {
   "src": "<span>8</span>What the sliders teach",
   "tr": "<span>8</span>ما تعلّمه المنزلقات"
+ },
+ "cd567012b1c2": {
+  "src": "The planning runs in the browser between frames, 8 ms at a time, while the machine keeps moving. That raises a question: a plan is made for one starting state, but by the time it is ready the machine has moved on. The page answers it with determinism. Calming (21) is a fixed law, and the integrator (18) is exact arithmetic, so the page can run the next 3 s of calming ahead of time, plan from the state it finds there, and when the clock arrives check that the machine is at that state to \\(10^{-6}\\). It always is, unless you pushed it in between; then the plan is dropped and a new one begun. If a plan is not ready in time, or no plan was found (the search starts from one straight-line guess and can fail), the page plans again from further ahead, with the other of two horizons (here 3 s and 4 s: the short heavy rods of 13.7 swing fast), while calming goes on; the search stops after 400 steps.",
+  "tr": "يجري التخطيط في المتصفّح بين الإطارات، 8 ms في كلّ مرّة، بينما تواصل الآلة حركتها. وهذا يطرح سؤالًا: الخطّة تُصنع لحالة بدء واحدة، لكن الآلة تكون قد تحرّكت حين تجهز. وتجيب الصفحة بالحتمية. فالتهدئة (21) قانون ثابت، والمكامِل (18) حساب دقيق، فتستطيع الصفحة أن تحسب مسبقًا الـ 3 s التالية من التهدئة، وتخطّط من الحالة التي تجدها هناك، وحين يبلغ الزمن تلك اللحظة تتحقّق من أن الآلة في تلك الحالة بدقّة \\(10^{-6}\\). وهي كذلك دائمًا، إلا إذا دفعتها أنت في الأثناء؛ عندئذ تُسقط الخطّة وتبدأ خطّة جديدة. وإذا لم تجهز الخطّة في وقتها، أو لم توجد خطّة (فالبحث يبدأ من تخمين مستقيم واحد وقد يفشل)، خطّطت الصفحة من جديد من مسافة أبعد إلى الأمام، بالأفق الآخر من أفقين (هنا 3 s و4 s: فالقضيبان القصيران الثقيلان في 13.7 يتأرجحان بسرعة)، والتهدئة مستمرّة؛ ويتوقّف البحث بعد 400 خطوة."
  },
  "cd971600cc90": {
   "src": "Fall rates",
@@ -1762,6 +2042,10 @@
  "d031bd51c777": {
   "src": "Fig. 11 · control systems · classical mechanics",
   "tr": "الشكل 11 · أنظمة التحكّم · الميكانيك الكلاسيكي"
+ },
+ "d0751918e80d": {
+  "src": "On this page the cart is a slim carriage, 0.40 m long, 0.06 m high and 0.10 m deep (project 05's is a box 0.36 × 0.12 × 0.2 m; why it changed is in 13.7). It gets the Stokes drag of a sphere of its mean half-size, \\(6\\pi\\mu r_{\\text{eq}}\\,w\\) with \\(r_{\\text{eq}} = 0.0933\\) m, as MuJoCo does [16], and the pressure drag \\(\\tfrac12\\rho C_D h b\\,|w|\\,w\\) of its face (\\(C_D = 1.28\\), a flat plate across the flow [18]; the carriage's rounded ends, as drawn, would lower it, so this is an upper bound), where \\(w\\) is the cart's speed minus the flow averaged over its height. Only the sideways part counts; the rail takes the rest. The physics tutorial of the engine Box2D treats every edge of a body this way, a force on each edge that faces the flow [17].",
+  "tr": "العربة في هذه الصفحة عربة نحيلة، طولها 0.40 m وارتفاعها 0.06 m وعمقها 0.10 m (عربة المشروع 05 صندوق 0.36 × 0.12 × 0.2 m؛ وسبب تغييرها في 13.7). ينالها كبح ستوكس لكرة نصف قطرها متوسّط أنصاف أبعادها، \\(6\\pi\\mu r_{\\text{eq}}\\,w\\) مع \\(r_{\\text{eq}} = 0.0933\\) m، كما في MuJoCo [16]، وكبح الضغط \\(\\tfrac12\\rho C_D h b\\,|w|\\,w\\) على وجهها (\\(C_D = 1.28\\)، صفيحة مستوية معترضة للجريان [18]؛ وطرفا العربة المستديران، كما هما مرسومان، يُخفضانه، فهذا حدّ أعلى)، حيث \\(w\\) سرعة العربة ناقص الجريان المتوسّط على ارتفاعها. لا يُحسب إلا الجزء الجانبي؛ وتتحمّل السكّة الباقي. ويعامل الدليل الفيزيائي لمحرّك Box2D كل حافة من الجسم بهذه الطريقة، قوّة على كل حافة تواجه الجريان [17]."
  },
  "d0f9131cd2b7": {
   "src": "potential flow, divergence-free and irrotational; \\(\\omega = 1.73\\) rad/s, a period of 3.6 s",
@@ -1858,6 +2142,14 @@
  "d8bd930bdb09": {
   "src": "The page integrates (9) with the classical fourth-order Runge–Kutta method at a fixed step of 1 ms, several steps per screen frame, in real time. With the controller off, the same integrator tested against a high-accuracy solver keeps the energy \\(T + V\\) constant to \\(2\\times10^{-10}\\) J over 10 s. When a rod passes 60° the run is called lost: the linear controller was designed for small angles, so the motor stops pushing (\\(u = 0\\)) and the page keeps solving (9) exactly as before. The rods fall all the way, swing down through the slot in the middle of the cart, between its two rails, and go on swinging as a double pendulum hanging from a free cart, without friction, so they never come to rest. The view widens to keep them in sight. Positions are drawn to scale; the view follows the cart.",
   "tr": "تكامل الصفحة (9) بطريقة رونغه–كوتا الكلاسيكية من الرتبة الرابعة بخطوة ثابتة قدرها 1 ms، بعدّة خطوات في كلّ إطار من إطارات الشاشة، في الزمن الحقيقي. ومع إيقاف المتحكّم يُبقي المكامِل نفسه، مختبرًا مقابل حلّال عالي الدقّة، الطاقة \\(T + V\\) ثابتة في حدود \\(2\\times10^{-10}\\) J على مدى 10 s. وحين يتجاوز قضيب 60° تُعدّ الجولة خاسرة: فالمتحكّم الخطّي صُمّم للزوايا الصغيرة، فيكفّ المحرّك عن الدفع (\\(u = 0\\)) وتواصل الصفحة حلّ (9) تمامًا كما من قبل. فيسقط القضيبان حتى النهاية، ويتأرجحان نازلين عبر الشقّ في وسط العربة بين سكّتيها، ثم يواصلان التأرجح كبندول مزدوج معلّق بعربة حرّة، بلا احتكاك، فلا يسكنان أبدًا. ويتّسع المنظر ليبقيا في مجال الرؤية. وتُرسم المواضع بمقياس صحيح؛ ويتبع المنظرُ العربة."
+ },
+ "d8f7e9c783be": {
+  "src": "flow",
+  "tr": "الجريان"
+ },
+ "d916b12eb7e8": {
+  "src": "The cart and its two rods stand in water, glycerol or honey. A heavier, shorter machine with a stronger motor swings the rods up from hanging, catches them and carries them to a target through the liquid, and holds them against currents, waves and slow deep-sea flows that it is told about.",
+  "tr": "تقف العربة وقضيباها في الماء أو الغليسرين أو العسل. آلة أثقل وأقصر بمحرّك أقوى تؤرجح القضيبين إلى الأعلى من التدلّي، وتلتقطهما، وتحملهما إلى هدف عبر السائل، وتُمسكهما في مواجهة التيّارات والأمواج والجريانات البطيئة في أعماق البحر التي تُخبَر بها."
  },
  "d929322e4b16": {
   "src": "Fig.",
@@ -2003,6 +2295,10 @@
   "src": "<b>How it moves with the motor on.</b> The force \\(u\\) accelerates the cart. Through the lower hinge the cart then drags the bottom of the lower rod with it, and a rod whose bottom is pulled to the right turns to the left about its centre, exactly as the broom does when you move your hand. The upper rod feels this only through the hinge between the rods. So one force at the bottom reaches both angles, but indirectly and differently; finding the push that brings both back at once is the controller’s job.",
   "tr": "<b>كيف تتحرّك والمحرّك يعمل.</b> تُسرِّع القوّة \\(u\\) العربة. وعبر المفصل السفلي تجرّ العربة معها الطرف السفلي للقضيب السفلي، والقضيب الذي يُشدّ طرفه السفلي نحو اليمين يدور حول مركزه نحو اليسار، تمامًا كما تفعل المكنسة حين تحرّك يدك. ولا يشعر القضيب العلوي بذلك إلا عبر المفصل الذي بين القضيبين. فالقوّة الواحدة في الأسفل تبلغ الزاويتين كلتيهما، لكن على نحو غير مباشر ومختلف؛ وإيجاد الدفعة التي تعيدهما معًا هو مهمّة المتحكّم."
  },
+ "e627ddf1c55b": {
+  "src": "\\(\\psi = \\tfrac U2\\,y\\,\\bigl(\\cos(kx - \\omega_1 t) + \\cos(kx - \\omega_2 t + 1)\\bigr)\\), \\(k = 2\\pi/30\\) m⁻¹, periods 20 and 22 s",
+  "tr": "\\(\\psi = \\tfrac U2\\,y\\,\\bigl(\\cos(kx - \\omega_1 t) + \\cos(kx - \\omega_2 t + 1)\\bigr)\\)، \\(k = 2\\pi/30\\) m⁻¹، والأدوار 20 و22 s"
+ },
  "e69818ef6942": {
   "src": "<b>12.7</b> Derive (27a) from (27). Then show that with \\(\\mathbf e = \\mathbf 0\\) the certified bite does not depend on the loop period except through \\(P_{44}\\) and \\(c^\\ast\\), and use (28) to estimate how far a cart caught at 3 m/s rolls before it rests at \\(\\gamma = 0.5\\) and 10 ms. Why does braking with the reference kept at its old place come out almost three times slower?",
   "tr": "<b>12.7</b> اشتقّ (27a) من (27). ثمّ بيّن أنّه مع \\(\\mathbf e = \\mathbf 0\\) لا يتوقّف الاقتطاع المضمون على دور الحلقة إلّا عبر \\(P_{44}\\) و\\(c^\\ast\\)، واستعمل (28) لتقدّر كم تتدحرج عربة التُقطت عند 3 m/s قبل أن تسكن عند \\(\\gamma = 0.5\\) و10 ms. ولماذا يأتي الكبح مع إبقاء المرجع في مكانه القديم أبطأ بنحو ثلاث مرّات؟"
@@ -2015,6 +2311,10 @@
   "src": "Back to the projects",
   "tr": "العودة إلى المشاريع"
  },
+ "e8ba5805a8f5": {
+  "src": "the velocity of one mode of a linear internal wave in water whose density grows with depth; the layering that carries it is not in the model, only its motion",
+  "tr": "سرعة نمط واحد من موجة داخلية خطّية في ماء تزداد كثافته مع العمق؛ والتطبّق الذي يحملها ليس في النموذج، بل حركتها فقط"
+ },
  "e8cc80b0d92e": {
   "src": "<span class=\"pbox__t\">Key result · the equations of motion</span> \\[ \\mathbf D(\\boldsymbol\\theta)\\,\\ddot{\\boldsymbol\\theta} + \\mathbf C(\\boldsymbol\\theta,\\dot{\\boldsymbol\\theta})\\,\\dot{\\boldsymbol\\theta} + \\mathbf G(\\boldsymbol\\theta) = \\mathbf H u, \\tag{9} \\] \\[ \\mathbf C = \\begin{pmatrix} 0 & -d_2\\sin\\theta_1\\,\\dot\\theta_1 & -d_3\\sin\\theta_2\\,\\dot\\theta_2 \\\\ 0 & 0 & d_5\\sin(\\theta_1-\\theta_2)\\,\\dot\\theta_2 \\\\ 0 & -d_5\\sin(\\theta_1-\\theta_2)\\,\\dot\\theta_1 & 0 \\end{pmatrix}, \\quad \\mathbf G = \\begin{pmatrix} 0 \\\\ -f_1\\sin\\theta_1 \\\\ -f_2\\sin\\theta_2 \\end{pmatrix}, \\quad \\mathbf H = \\begin{pmatrix} 1 \\\\ 0 \\\\ 0 \\end{pmatrix}. \\] <p>These are equations (2)–(9) of Moysis’s reproduction [2] of Bogdanov’s report [1], letter for letter. We checked them a second way: deriving (4)–(7) symbolically with SymPy and forming Lagrange’s equations reproduces \\(\\mathbf D\\), \\(\\mathbf C\\), \\(\\mathbf G\\) and \\(\\mathbf H\\) with zero difference in every entry.</p>",
   "tr": "<span class=\"pbox__t\">نتيجة أساسية · معادلات الحركة</span> \\[ \\mathbf D(\\boldsymbol\\theta)\\,\\ddot{\\boldsymbol\\theta} + \\mathbf C(\\boldsymbol\\theta,\\dot{\\boldsymbol\\theta})\\,\\dot{\\boldsymbol\\theta} + \\mathbf G(\\boldsymbol\\theta) = \\mathbf H u, \\tag{9} \\] \\[ \\mathbf C = \\begin{pmatrix} 0 & -d_2\\sin\\theta_1\\,\\dot\\theta_1 & -d_3\\sin\\theta_2\\,\\dot\\theta_2 \\\\ 0 & 0 & d_5\\sin(\\theta_1-\\theta_2)\\,\\dot\\theta_2 \\\\ 0 & -d_5\\sin(\\theta_1-\\theta_2)\\,\\dot\\theta_1 & 0 \\end{pmatrix}, \\quad \\mathbf G = \\begin{pmatrix} 0 \\\\ -f_1\\sin\\theta_1 \\\\ -f_2\\sin\\theta_2 \\end{pmatrix}, \\quad \\mathbf H = \\begin{pmatrix} 1 \\\\ 0 \\\\ 0 \\end{pmatrix}. \\] <p>هذه هي المعادلات (2)–(9) في نقل مويسيس [2] لتقرير بوغدانوف [1]، حرفًا بحرف. وقد تحقّقنا منها بطريق ثانٍ: اشتقاق (4)–(7) رمزيًّا باستعمال SymPy وتكوين معادلات لاغرانج منها يعيد \\(\\mathbf D\\) و\\(\\mathbf C\\) و\\(\\mathbf G\\) و\\(\\mathbf H\\) بفرق صفر في كلّ مدخل.</p>"
@@ -2022,6 +2322,10 @@
  "eaa84e17731b": {
   "src": "Both roots \\(\\sigma^2\\) are positive, so each gives a pair \\(\\pm\\sigma\\): one motion that dies away and one that grows as \\(e^{\\sigma t}\\). For the default machine, \\(\\sigma = 10.39\\ \\mathrm{s^{-1}}\\) and \\(4.10\\ \\mathrm{s^{-1}}\\). The fast one dominates: a lean grows by a factor \\(e\\) every \\(1/\\sigma = 96\\) ms. The panel shows both rates live.",
   "tr": "الجذران \\(\\sigma^2\\) كلاهما موجب، فيعطي كلّ منهما زوجًا \\(\\pm\\sigma\\): حركة تخمد وأخرى تنمو مثل \\(e^{\\sigma t}\\). وللآلة الافتراضية \\(\\sigma = 10.39\\ \\mathrm{s^{-1}}\\) و\\(4.10\\ \\mathrm{s^{-1}}\\). والسريع هو الغالب: يكبر الميل بالعامل \\(e\\) كلّ \\(1/\\sigma = 96\\) ms. وتعرض اللوحة المعدّلين مباشرة."
+ },
+ "eaa8674531c8": {
+  "src": "The motor put in nearly two hundred times the lift and the rods still got only a third of the way up. Nine tenths of the work went into the liquid round the cart's own box; the rods lost the rest as fast as they were given it. The swing-up planner of section 11, with the same drag written into its model, finds no path either for this machine, at 60 N or at 200 N, over 4, 6 or 8 s, in any of the three liquids: with the motor at its limit and the cart at the end of the rail, the gaps between its shooting segments stay at 0.02–0.14 rad, where a plan it accepts closes them to below 0.003 (<code>notes/fig11/project05/plan.cjs</code>, rerun 6 November 2026 with the planner of 13.7 below).",
+  "tr": "أدخل المحرّك نحو مئتي ضعف ما يحتاجه الرفع، ومع ذلك لم يبلغ القضيبان إلا ثلث الطريق. ذهبت تسعة أعشار الشغل إلى السائل حول صندوق العربة نفسها؛ وفقد القضيبان الباقي بالسرعة التي أُعطياه بها. ولا يجد مخطِّط الأرجحة إلى الأعلى في القسم 11، وقد كُتب الكبح نفسه في نموذجه، طريقًا هو أيضًا لهذه الآلة، لا عند 60 N ولا عند 200 N، على مدى 4 أو 6 أو 8 s، في أيّ من السوائل الثلاثة: والمحرّك عند حدّه والعربة عند نهاية السكّة، تبقى الفجوات بين مقاطع الرمي عنده بين 0.02 و0.14 rad، بينما تغلقها الخطّة التي يقبلها إلى ما دون 0.003 (<code>notes/fig11/project05/plan.cjs</code>، أُعيد تشغيله في 6 تشرين الثاني 2026 بمخطِّط 13.7 أدناه)."
  },
  "eabb5ba6c680": {
   "src": "MuJoCo documentation, <a href=\"https://mujoco.readthedocs.io/en/stable/computation/fluid.html\">“Fluid forces”</a>: viscous and quadratic drag relative to the wind, added.",
@@ -2035,9 +2339,17 @@
   "src": "Left out: friction in the hinges and wheels, the motor’s own dynamics (a real motor cannot change its force instantly), sensor noise, and a hard end of the rail (the planner keeps the cart within ±1.5 m; calming and balancing do not). Each is a known extension of this model [1, 3]. Every number on this page that is not derived or taken from a source is a choice of ours, and the text says so where it is made: the weight on \\(x\\), the ranges of the sliders, \\(u_\\text{max} = 60\\) N, the planner’s weights and rail limit, the calming gains, the glide rate of (26), the share \\(\\gamma = 0.5\\) of the certified level in the braking (27a), the spring and the largest acceleration of your hand in (29), the rectangle rule in (23), and the shells, directions and climbs of the certificate (19a).",
   "tr": "ما أُغفل: الاحتكاك في المفاصل والعجلات، وديناميكا المحرّك نفسه (المحرّك الحقيقي لا يغيّر قوّته فورًا)، وضجيج الحسّاسات، ونهاية صلبة للسكّة (يُبقي المخطِّط العربة ضمن ±1.5 m؛ أمّا التهدئة والموازنة فلا). وكلّ منها امتداد معروف لهذا النموذج [1، 3]. وكلّ رقم في هذه الصفحة لم يُشتقّ ولم يُؤخذ من مصدر فهو اختيار منّا، والنصّ يقول ذلك حيث يُتّخذ: الوزن على \\(x\\)، ومدى المنزلقات، و\\(u_\\text{max} = 60\\) N، وأوزان المخطِّط وحدّ سكّته، وكسوب التهدئة، ومعدّل الانزلاق في (26)، والحصّة \\(\\gamma = 0.5\\) من المستوى المضمون في الكبح (27a)، والزنبرك وأقصى تسارع ليدك في (29)، وقاعدة المستطيل في (23)، وقشور الشهادة (19a) واتّجاهاتها وصعودها."
  },
+ "ed312b54329e": {
+  "src": "a double gyre",
+  "tr": "دوّامة مزدوجة"
+ },
  "ed96626eb469": {
   "src": "<b>The books.</b> The data panel's group <i>The solved fluid</i> keeps the water's own book: the motor's work and what the stream brings in through the ends of the tank equal the machine's energy, the water's kinetic energy \\(K_f = \\tfrac12\\rho b\\sum w\\,u^2\\Delta^2\\), the rods' heat (43) and the heat of viscosity in the resolved flow, plus a remainder \\(R\\) that the scheme loses, and \\(R\\) is split into its causes. In glycerol, after a tilt of 4.6° and 2.9° balanced for 3 s, the motor does 1.33 J: 0.012 J stay in the machine, 0.005 J in the water, the rods' drag makes 0.107 J of heat below the grid and viscosity 0.98 J in the flow, and \\(R\\) is 0.23 J, 17 %. The pressure step removes 0.21 J with the part of the flow it projects away, less for shorter fluid steps (0.12 J at 10 ms); the transport step loses 0.09 J at the scale of a cell, the same for any step; forcing the water in the faces the cart cuts to the cart's velocity costs 0.05 J; and the cart's coupling gives 0.11 J back, because the machine feels the pressure at its mean velocity over a step while the water receives its work at the end velocity, \\(J\\,\\Delta\\dot x/2\\) per step for a pressure impulse \\(J\\) (Wolfram). \\(R\\) is 8 % in honey. In water it is 80 %: at 2.5 cm cells water is far too thin for the grid, its eddies end at the cell size, and the scheme's loss stands for the cascade to small eddies that would turn the same energy into heat. The flow drawn in water is right in its large swirls, not in its fine detail. Over 60 s with the rods kicked every 15 s, \\(R\\) stays at the same share in every liquid and the balance holds.",
   "tr": "<b>الموازنات.</b> تحفظ مجموعة <i>المائع المحلول</i> في لوحة البيانات موازنة الماء الخاصة: شغل المحرّك وما يُدخله التيّار عبر طرفي الخزّان يساويان طاقة الآلة، والطاقة الحركية للماء \\(K_f = \\tfrac12\\rho b\\sum w\\,u^2\\Delta^2\\)، وحرارة القضيبين (43) وحرارة اللزوجة في الجريان المحلول، زائد باقٍ \\(R\\) يفقده المخطّط، ويُقسَم \\(R\\) على أسبابه. في الغليسرول، بعد ميل قدره 4.6° و 2.9° وتوازن مدّته 3 s، يبذل المحرّك 1.33 J: تبقى 0.012 J في الآلة، و 0.005 J في الماء، ويولّد كبح القضيبين 0.107 J حرارةً تحت مستوى الشبكة، واللزوجة 0.98 J في الجريان، و\\(R\\) يساوي 0.23 J، أي 17 %. تزيل خطوة الضغط 0.21 J مع جزء الجريان الذي تُسقطه، وأقلّ مع خطوات مائع أقصر (0.12 J عند 10 ms)؛ وتفقد خطوة النقل 0.09 J على مقياس الخلية، وهي نفسها لأي خطوة؛ وإجبار الماء في الوجوه التي تقطعها العربة على سرعة العربة يكلّف 0.05 J؛ ويعيد اقتران العربة 0.11 J، لأن الآلة تشعر بالضغط عند سرعتها المتوسّطة خلال الخطوة بينما يتلقّى الماء شغله عند السرعة النهائية، \\(J\\,\\Delta\\dot x/2\\) لكل خطوة لدفعة ضغط \\(J\\) (Wolfram). و\\(R\\) يساوي 8 % في العسل. وفي الماء يبلغ 80 %: عند خلايا من 2.5 cm يكون الماء أرقّ كثيرًا من أن تحلّه الشبكة، وتنتهي دوّاماته عند حجم الخلية، ويقوم فقد المخطّط مقام التسلسل إلى الدوّامات الصغيرة الذي كان سيحوّل الطاقة نفسها إلى حرارة. فالجريان المرسوم في الماء صحيح في دوّاماته الكبيرة، لا في تفاصيله الدقيقة. وعلى مدى 60 s، مع دفع القضيبين كل 15 s، يبقى \\(R\\) بالحصّة نفسها في كل سائل، وتصمد الموازنة."
+ },
+ "ee2135c32a8e": {
+  "src": "rest state \\(\\theta_1^*\\), \\(\\theta_2^*\\), \\(u^*\\)",
+  "tr": "وضع السكون \\(\\theta_1^*\\)، \\(\\theta_2^*\\)، \\(u^*\\)"
  },
  "ee4af0b1509e": {
   "src": "What is still not right, measured. Each rod removes all of its own disturbance, also the wake it left a swing ago; a real rod swinging back into its old wake would feel it. How much that can matter is bounded by removing a rod's disturbance altogether: for rods carried to and fro through still water it changes their force by 1–3 %. On the benchmark, at 39 cells per diameter, \\(\\Delta p\\) is 2 % below the published band and \\(c_D\\) 0.5–1 % above it; the transport step does not keep momentum exactly, about 1–2 % of the cylinder's drag. A cylinder in a gently oscillating stream stays 2 % low and 5.5 % high in the two parts of its exact unsteady-Stokes force (Wolfram and an independent derivation agree on the exact one) and does not improve on finer cells; that cause is not found. Two earlier faults are mended: water entering the benchmark channel was free to turn as it came in, where the benchmark makes it enter straight, and that alone made the flow 5 % weak at every grid; and the water's viscous push on a body was weighted by the fluid share of each cell face, which missed part of the wall's shear. A body's force is now what the viscous step changes in the water next to it, so body and water exchange exactly equal momentum.",
@@ -2050,6 +2362,10 @@
  "ee623274982b": {
   "src": "The last eight seconds of the two rod angles and of the motor force.",
   "tr": "الثواني الثماني الأخيرة لزاويتي القضيبين ولقوّة المحرّك."
+ },
+ "eef001dbe429": {
+  "src": "where \\(m_c = \\rho V_e\\,\\kappa_x/(2 - \\kappa_x)\\) is the added mass of the cart taken as an ellipsoid of its size, semi-axes 0.20, 0.03 and 0.05 m, with Tuckerman's \\(\\kappa_x = 0.1049\\) as MuJoCo computes it [16] (the integral \\(\\kappa_x = abc\\int_0^\\infty d\\lambda/\\bigl((a^2+\\lambda)\\sqrt{(a^2+\\lambda)(b^2+\\lambda)(c^2+\\lambda)}\\bigr)\\), which gives 0.2876 for project 05's box): 0.069 kg in water, a twentieth of the cart's own mass. \\(\\mathbf M_a\\) depends on the angles because \\(\\mathbf v\\cdot\\mathbf n\\) does: when the cart moves, an upright rod moves across itself and carries its full share of water, a rod lying along the rail moves along itself and carries almost none. Lagrange's equations with \\(T + T_a\\) give the velocity terms \\(\\mathbf C_a\\) of (40); Wolfram checks that they keep \\(T_a\\) constant when nothing else acts, and that they equal the terms built from the Christoffel symbols of \\(\\mathbf M_a\\), the road the independent reference takes.",
+  "tr": "حيث \\(m_c = \\rho V_e\\,\\kappa_x/(2 - \\kappa_x)\\) الكتلة المضافة للعربة محسوبةً كقطع ناقص مجسّم بحجمها، أنصاف محاوره 0.20 و0.03 و0.05 m، مع \\(\\kappa_x = 0.1049\\) لتاكرمان كما يحسبه MuJoCo [16] (التكامل \\(\\kappa_x = abc\\int_0^\\infty d\\lambda/\\bigl((a^2+\\lambda)\\sqrt{(a^2+\\lambda)(b^2+\\lambda)(c^2+\\lambda)}\\bigr)\\)، الذي يعطي 0.2876 لصندوق المشروع 05): 0.069 kg في الماء، أي جزء من عشرين من كتلة العربة نفسها. ويعتمد \\(\\mathbf M_a\\) على الزاويتين لأن \\(\\mathbf v\\cdot\\mathbf n\\) يعتمد عليهما: حين تتحرّك العربة يتحرّك القضيب القائم عرضيًّا فيحمل حصّته كاملة من الماء، والقضيب الممدّد على طول السكّة يتحرّك على طوله فلا يكاد يحمل شيئًا. وتعطي معادلات لاغرانج مع \\(T + T_a\\) حدود السرعة \\(\\mathbf C_a\\) في (40)؛ ويتحقّق Wolfram من أنها تُبقي \\(T_a\\) ثابتة حين لا يؤثّر شيء آخر، ومن أنها تساوي الحدود المبنية من رموز كريستوفل لـ \\(\\mathbf M_a\\)، الطريقَ الذي يسلكه المرجع المستقل."
  },
  "ef5184f298f0": {
   "src": "<span class=\"pbox__t\">Key result · the tracking law</span> \\[ u_k = u^\\text{plan}_k - \\mathbf K_k\\,(\\mathbf s_k - \\mathbf s^\\text{plan}_k), \\tag{24} \\]",
@@ -2163,6 +2479,10 @@
   "src": "<span class=\"psub__n\">13.4</span>Into the equations of motion",
   "tr": "<span class=\"psub__n\">13.4</span>في معادلات الحركة"
  },
+ "f8f88a49f0e1": {
+  "src": "<b>Project 06</b> · <span class=\"tx\">\\(\\mathbf D(\\boldsymbol\\theta)\\,\\ddot{\\boldsymbol\\theta} + \\mathbf C(\\boldsymbol\\theta,\\dot{\\boldsymbol\\theta})\\,\\dot{\\boldsymbol\\theta} + \\mathbf G(\\boldsymbol\\theta) = \\mathbf H u\\)</span> · live, RK4",
+  "tr": "<b>المشروع 06</b> · <span class=\"tx\">\\(\\mathbf D(\\boldsymbol\\theta)\\,\\ddot{\\boldsymbol\\theta} + \\mathbf C(\\boldsymbol\\theta,\\dot{\\boldsymbol\\theta})\\,\\dot{\\boldsymbol\\theta} + \\mathbf G(\\boldsymbol\\theta) = \\mathbf H u\\)</span> · مباشر، RK4"
+ },
  "f9030061ee14": {
   "src": "A computer does not watch the rods all the time. It reads the sensors at fixed instants, every \\(T_s\\), computes a force, sets the motor to it and holds it there until the next look. The page does exactly this: \\(u\\) changes only every \\(T_s\\) (the slider; 10 ms by default) and stays constant in between, while the rods keep falling according to (9). Engineers call the held force a <em>zero-order hold</em>: a staircase instead of a curve. Section 7.1 designed \\(\\mathbf K\\) as if the controller acted at every instant. Here we ask what the machine does between two looks, why a loop with those gains breaks when \\(T_s\\) grows, and how to design gains for the loop period itself. A reader who wants the result alone can jump to (16h) and Table 1.",
   "tr": "الحاسوب لا يراقب القضيبين طوال الوقت. إنّه يقرأ الحسّاسات في لحظات ثابتة، كلّ \\(T_s\\)، ويحسب قوّة، ويضبط المحرّك عليها، ويمسكها حتّى النظرة التالية. والصفحة تفعل ذلك بالضبط: لا تتغيّر \\(u\\) إلّا كلّ \\(T_s\\) (المنزلق؛ 10 ms افتراضيًّا) وتبقى ثابتة بين ذلك، بينما يتابع القضيبان سقوطهما وفق (9). ويسمّي المهندسون القوّة الممسوكة <em>ماسكًا من الرتبة الصفرية</em>: درجات سلّم بدل منحنى. لقد صمّم القسم 7.1 \\(\\mathbf K\\) كأنّ المتحكّم يعمل في كلّ لحظة. وهنا نسأل ماذا تفعل الآلة بين نظرتين، ولماذا تنكسر حلقة بهذه الكسوب حين يكبر \\(T_s\\)، وكيف تُصمَّم كسوب لدور الحلقة نفسه. ومن يريد النتيجة وحدها فليقفز إلى (16h) والجدول 1."
@@ -2174,6 +2494,10 @@
  "f9d48e059dd9": {
   "src": "\\(U e^{-2\\nu\\pi^2 t}(\\sin\\pi x\\cos\\pi y,\\ -\\cos\\pi x\\sin\\pi y)\\), lengths in m",
   "tr": "\\(U e^{-2\\nu\\pi^2 t}(\\sin\\pi x\\cos\\pi y,\\ -\\cos\\pi x\\sin\\pi y)\\)، الأطوال بالمتر"
+ },
+ "fb14fc362459": {
+  "src": "<b>The tank.</b> A field that changes in all three directions is far beyond a browser, so the machine stands in a narrow tank, as deep as the cart (\\(b = 0.1\\) m, into the screen), 4 m long and 2.8 m high, with walls that do not grip the water. The water then moves in the plane of the screen, the same in every slice of the depth: a two-dimensional velocity field \\(\\mathbf u(x, y, t)\\) with pressure \\(p\\). The cart fills the depth, so in the plane it is a true body, a 0.40 × 0.06 m rectangle. A rod does not: it is 2 cm thick in a tank 10 cm deep, and the water goes round it through the depth as well as past it in the plane. Drawn as a body in the plane, a rod would be a paddle as deep as the tank; an earlier attempt did exactly that, and its upper rod felt about 30 N in a 0.5 m/s stream of glycerol, where (33)–(34) give about 3 N. So each rod is a line of forces instead: what the water feels is the rod's push, spread over the depth. In the tank the water obeys the Navier–Stokes equations",
+  "tr": "<b>الخزّان.</b> حقل يتغيّر في الاتجاهات الثلاثة كلها يفوق طاقة المتصفّح بكثير، لذا تقف الآلة في خزّان ضيّق عمقه عمق العربة (\\(b = 0.1\\) m، إلى داخل الشاشة)، طوله 4 m وارتفاعه 2.8 m، وجدرانه لا تمسك الماء. فيتحرّك الماء عندئذ في مستوى الشاشة، على حال واحدة في كل شريحة من العمق: حقل سرعة ثنائي البعد \\(\\mathbf u(x, y, t)\\) مع الضغط \\(p\\). تملأ العربة العمق، فهي في المستوى جسم حقيقي، مستطيل 0.40 × 0.06 m. أما القضيب فلا: سمكه 2 cm في خزّان عمقه 10 cm، والماء يلتفّ حوله عبر العمق كما يمرّ به في المستوى. ولو رُسم القضيب جسمًا في المستوى لكان مجدافًا بعمق الخزّان؛ وقد فعلت محاولة سابقة ذلك بالضبط، فشعر قضيبها العلوي بنحو 30 N في تيّار غليسرين سرعته 0.5 m/s، حيث تعطي (33)–(34) نحو 3 N. لذا يصير كل قضيب خطًّا من القوى بدلًا من ذلك: ما يشعر به الماء هو دفع القضيب، موزّعًا على العمق. وفي الخزّان يخضع الماء لمعادلات نافييه–ستوكس"
  },
  "fb57a7ac8366": {
   "src": "This simulation needs JavaScript.",
@@ -2191,6 +2515,10 @@
   "src": "<span class=\"psub__n\">11.2</span>Track",
   "tr": "<span class=\"psub__n\">11.2</span>التتبّع"
  },
+ "fca530b7ce4d": {
+  "src": "The machine is still small next to the motor of a factory robot, but every part of it is now a part a liquid allows: rods heavy enough to fall through it faster than they must swing, a cart that does not spend the motor on its own wake, and a planner that uses the whole motor when it must.",
+  "tr": "ما زالت الآلة صغيرة أمام محرّك روبوت في مصنع، لكنّ كلّ جزء منها صار جزءًا يسمح به السائل: قضيبان ثقيلان بما يكفي ليسقطا فيه أسرع ممّا يلزمهما أن يتأرجحا، وعربة لا تنفق المحرّك على أثرها في الماء، ومخطِّط يستعمل المحرّك كلّه حين يلزم."
+ },
  "fd4f3359f8d7": {
   "src": "the machine's energy book, \\(E - E_0 - W_{\\text{motor}} - \\int P\\,dt\\)",
   "tr": "موازنة طاقة الآلة، \\(E - E_0 - W_{\\text{motor}} - \\int P\\,dt\\)"
@@ -2198,6 +2526,10 @@
  "fddf60529fdb": {
   "src": "<span class=\"psec__n\">07</span>The controller",
   "tr": "<span class=\"psec__n\">07</span>المتحكّم"
+ },
+ "fe835d33d30b": {
+  "src": "a random sea",
+  "tr": "بحر عشوائي"
  },
  "fefa88f3071d": {
   "src": "honey, 200 N",
