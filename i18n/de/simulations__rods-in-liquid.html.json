@@ -11,6 +11,10 @@
   "src": "Each step composes the previous step’s map with itself, so \\(\\mathbf H_k\\) is the cost of looking exactly \\(2^k\\) periods ahead; we checked this in Wolfram against the plain period-by-period recursion for \\(k \\le 5\\) (agreement to \\(10^{-15}\\)), and \\(\\mathbf H_k \\to \\mathbf P\\) as the horizon grows. The page stops when \\(\\mathbf H\\) changes by less than \\(10^{-13}\\) of itself, after 12 steps at 10 ms, a horizon of 4096 looks, and takes (16h). For the default machine the result equals Wolfram’s <code>DiscreteLQRegulatorGains</code> [11] to 8 parts in \\(10^{12}\\) at 10 ms and to 1 part in \\(10^{13}\\) at 40 ms.",
   "tr": "Jeder Schritt setzt die Abbildung des vorigen Schritts mit sich selbst zusammen; also sind \\(\\mathbf H_k\\) die Kosten bei einer Vorausschau von genau \\(2^k\\) Perioden. Wir haben das in Wolfram für \\(k \\le 5\\) mit der schlichten Rekursion Periode für Periode verglichen (Übereinstimmung bis auf \\(10^{-15}\\)), und \\(\\mathbf H_k \\to \\mathbf P\\), wenn der Horizont wächst. Die Seite hört auf, wenn sich \\(\\mathbf H\\) um weniger als \\(10^{-13}\\) seiner selbst ändert, bei 10 ms nach 12 Schritten, einem Horizont von 4096 Blicken, und nimmt (16h). Für die voreingestellte Maschine stimmt das Ergebnis mit Wolframs <code>DiscreteLQRegulatorGains</code> [11] bei 10 ms auf 8 Teile in \\(10^{12}\\) und bei 40 ms auf 1 Teil in \\(10^{13}\\) überein."
  },
+ "00a43c431a93": {
+  "src": "rescued, swung up, caught 6.0 s after the release",
+  "tr": "gerettet, aufgeschwungen, gefangen 6.0 s nach dem Loslassen"
+ },
  "01abb4b1fd82": {
   "src": "and integrated around a rod it becomes a force per metre of rod. The simplest solution of (31) is the flow made by a point force \\(\\mathbf F\\), the Stokeslet, \\(\\mathbf v = (\\mathbf I/r + \\mathbf x\\mathbf x^{\\mathsf T}/r^3)\\,\\mathbf F/(8\\pi\\mu)\\) with \\(p = \\mathbf F\\cdot\\mathbf x/(4\\pi r^3)\\); Wolfram confirms that it satisfies (31) everywhere but at the point itself. Picture a rod as a chain of small beads, each dragging its neighbours along with its Stokeslet [13]. Adding up the chain (the sum over the other beads is \\(2\\ln(L/4a)\\), as Wolfram integrates it) shows that a rod pulled sideways meets twice the resistance of a rod pulled lengthwise. With \\(\\mathbf w = \\mathbf v_{\\text{body}} - \\mathbf v_f\\) the velocity of a rod element through the fluid, \\(\\mathbf t\\) the direction of the rod and \\(\\mathbf n\\) its normal, the force per metre of rod is",
   "tr": "und um einen Stab herum integriert wird daraus eine Kraft pro Meter Stab. Die einfachste Lösung von (31) ist die Strömung einer Punktkraft \\(\\mathbf F\\), das Stokeslet, \\(\\mathbf v = (\\mathbf I/r + \\mathbf x\\mathbf x^{\\mathsf T}/r^3)\\,\\mathbf F/(8\\pi\\mu)\\) mit \\(p = \\mathbf F\\cdot\\mathbf x/(4\\pi r^3)\\); Wolfram bestätigt, dass es (31) überall außer im Punkt selbst erfüllt. Stellen Sie sich einen Stab als Kette kleiner Perlen vor, von denen jede ihre Nachbarn mit ihrem Stokeslet mitzieht [13]. Die Summe über die Kette (die Summe über die anderen Perlen ist \\(2\\ln(L/4a)\\), wie Wolfram sie integriert) zeigt, dass ein quer gezogener Stab doppelt so viel Widerstand erfährt wie ein längs gezogener. Mit \\(\\mathbf w = \\mathbf v_{\\text{body}} - \\mathbf v_f\\), der Geschwindigkeit eines Stabelements durch das Fluid, \\(\\mathbf t\\), der Richtung des Stabes, und \\(\\mathbf n\\), seiner Normalen, ist die Kraft pro Meter Stab"
@@ -311,6 +315,10 @@
   "src": "<span class=\"psub__n\">12.5</span>Sources",
   "tr": "<span class=\"psub__n\">12.5</span>Quellen"
  },
+ "1f19d4709dff": {
+  "src": "<b>A correction found on the way.</b> The certified level \\(c^*\\) of section 9 is the largest \\(W\\) below which one loop period of the model never lets \\(W\\) grow. In a flow, the first version took \\(W\\) about the rest state of the full equations (49), but stepped the planner's faster model, whose drag uses four points per rod. That point is not quite at rest in the faster model, so near it \\(W\\) cannot fall, and the search could give a level of 0: in the internal wave at 0.1 m/s, 8 s after it was chosen, \\(c^* = 0\\) sent the supervisor to rescue rods that stood upright. About the faster model's own rest state the same search gives 17.3 there, as in still water (17.0). The page now solves the rest state of the faster model itself, by the same Newton iteration, and certifies about that.",
+  "tr": "<b>Eine Korrektur, unterwegs gefunden.</b> Das gesicherte Niveau \\(c^*\\) aus Abschnitt 9 ist das größte \\(W\\), unterhalb dessen eine Regelperiode des Modells \\(W\\) nie wachsen lässt. In einer Strömung nahm die erste Fassung \\(W\\) um die Ruhelage der vollen Gleichungen (49), rechnete aber Schritt für Schritt mit dem schnelleren Modell des Planers, dessen Widerstand vier Punkte pro Stab verwendet. Dieser Punkt ist im schnelleren Modell nicht ganz in Ruhe, sodass \\(W\\) nahe bei ihm nicht fallen kann, und die Suche konnte ein Niveau von 0 liefern: In der internen Welle bei 0.1 m/s, 8 s nach ihrer Wahl, schickte \\(c^* = 0\\) den Supervisor los, Stäbe zu retten, die aufrecht standen. Um die eigene Ruhelage des schnelleren Modells liefert dieselbe Suche dort 17.3, wie in ruhendem Wasser (17.0). Die Seite löst jetzt die Ruhelage des schnelleren Modells selbst, mit derselben Newton-Iteration, und sichert um diese herum."
+ },
  "1f1a3455ff88": {
   "src": "Along the way the page watches \\(W\\) of (19). The moment \\(W < 0.9\\,c^\\ast\\) it hands over to the balancer (16), which from there is certain to finish. If the plan runs to its end without reaching \\(c^\\ast\\), the balancer gets its chance anyway, and the check of section 9 decides within 4 s whether to start over; in the tests this happened often and the balancer won every time, which is the conservatism of \\(c^\\ast\\) at work. In headless Chromium, with the same frame-by-frame loop as in your browser, 40 random states, any angles, rates up to \\(\\pm3\\) rad/s and cart speeds up to \\(\\pm0.5\\) m/s, all ended balanced at 60 N within 60 s. A plan took between 0.4 and 12 s of browser time. From hanging rest the whole rescue takes about 7 s: 3 s of calming while the plan is computed, 4 s of swing-up. Seven other machines (a heavier cart, heavier or longer or shorter rods, \\(u_\\text{max}\\) = 30 or 120 N, \\(T_s\\) = 40 ms), six random states each, were caught as well. The same study in Node.js, without the calming stage, found a direct plan for only 16 of the 40 states, which is why calming comes first. Forty cases are evidence, not a proof: a very weak motor, a very heavy cart or a push that throws the cart against the end of the rail can still beat it.",
   "tr": "Unterwegs beobachtet die Seite \\(W\\) aus (19). Sobald \\(W < 0.9\\,c^\\ast\\) ist, übergibt sie an den Balancierregler (16), der von dort aus sicher zu Ende kommt. Läuft der Plan bis zu seinem Ende, ohne \\(c^\\ast\\) zu erreichen, bekommt der Balancierregler trotzdem seine Chance, und die Prüfung aus Abschnitt 9 entscheidet binnen 4 s, ob neu begonnen wird; in den Tests geschah das oft, und der Balancierregler gewann jedes Mal, was die Vorsicht von \\(c^\\ast\\) bei der Arbeit zeigt. In headless Chromium, mit derselben Schleife Bild für Bild wie in Ihrem Browser, endeten 40 zufällige Zustände, beliebige Winkel, Drehraten bis \\(\\pm3\\) rad/s und Wagengeschwindigkeiten bis \\(\\pm0.5\\) m/s, bei 60 N alle binnen 60 s balanciert. Ein Plan brauchte zwischen 0.4 und 12 s Browserzeit. Aus der hängenden Ruhelage dauert die ganze Rettung etwa 7 s: 3 s Beruhigen, während der Plan berechnet wird, 4 s Aufschwingen. Sieben andere Maschinen (ein schwererer Wagen, schwerere, längere oder kürzere Stäbe, \\(u_\\text{max}\\) = 30 oder 120 N, \\(T_s\\) = 40 ms), mit je sechs zufälligen Zuständen, wurden ebenfalls gefangen. Dieselbe Studie in Node.js, ohne die Stufe des Beruhigens, fand nur für 16 der 40 Zustände einen direkten Plan, und deshalb kommt das Beruhigen zuerst. Vierzig Fälle sind ein Beleg, kein Beweis: Ein sehr schwacher Motor, ein sehr schwerer Wagen oder ein Stoß, der den Wagen gegen das Ende der Schiene wirft, kann es noch besiegen."
@@ -566,6 +574,10 @@
  "38662767d183": {
   "src": "Stir tea with a spoon, stop, and sweep back: the spoon meets the swirl it left, and the swirl pushes it. A swimmer feels the water the person in front has set moving. Nothing of this is in sections 13.1–13.5, where the flow is given and the bodies only feel it. Choose <i>The fluid: solved</i> under the figure and the water becomes a field the page computes: every push of the cart and the rods goes into the water, the water carries it away as wakes and swirls, and those come back to push the bodies. Momentum leaves the machine and enters the water, and the reverse, in equal amounts: Newton's third law, point by point.",
   "tr": "Rühren Sie Tee mit einem Löffel um, halten Sie an und fahren Sie zurück: Der Löffel trifft auf den Wirbel, den er hinterlassen hat, und der Wirbel drückt ihn. Wer schwimmt, spürt das Wasser, das der Vordermann in Bewegung gesetzt hat. Nichts davon steht in den Abschnitten 13.1–13.5, wo die Strömung vorgegeben ist und die Körper sie nur spüren. Wählen Sie unter der Abbildung <i>Das Fluid: gelöst</i>, und das Wasser wird zu einem Feld, das die Seite berechnet: Jeder Stoß des Wagens und der Stäbe geht ins Wasser, das Wasser trägt ihn als Nachläufe und Wirbel davon, und diese kommen zurück und drücken die Körper. Impuls verlässt die Maschine und tritt ins Wasser ein, und umgekehrt, in gleichen Mengen: das dritte Newtonsche Gesetz, Punkt für Punkt."
+ },
+ "38849a64923b": {
+  "src": "<b>Flows that challenge, not overwhelm.</b> A deep flow does not switch on: chosen while the rods balance, it comes up over 8 s as \\(U\\,r(\\tau)\\), \\(r = 3\\tau^2 - 2\\tau^3\\), \\(\\tau = (t - t_\\text{on})/8\\ \\mathrm s\\), so that its rest state leaves upright slowly enough for (50) to follow; when it is at full strength the gains are designed once more, about its rest state. Each deep flow then starts at the strength \\(U\\) at which it works the page hardest and the page still wins: the largest \\(U\\), in steps of 0.1 m/s, at which the running page, supervisor and all, keeps the rods up for 120 s after the flow is chosen, with no rescue and the cart within 1.5 m of the middle of the rail (<code>notes/fig11/project06/challenge.cjs</code>, the page's own <code>step()</code>). The slider goes further; there the flow wins, and the page calms the rods and swings them up again where it can.",
+  "tr": "<b>Strömungen, die fordern, nicht überwältigen.</b> Eine tiefe Strömung wird nicht einfach eingeschaltet: Wird sie gewählt, während die Stäbe balancieren, steigt sie über 8 s als \\(U\\,r(\\tau)\\) an, \\(r = 3\\tau^2 - 2\\tau^3\\), \\(\\tau = (t - t_\\text{on})/8\\ \\mathrm s\\), damit sich ihre Ruhelage langsam genug von der aufrechten Lage entfernt, dass (50) folgen kann; hat sie ihre volle Stärke erreicht, werden die Verstärkungen noch einmal entworfen, um ihre Ruhelage. Jede tiefe Strömung beginnt dann mit der Stärke \\(U\\), bei der sie die Seite am härtesten fordert und die Seite noch gewinnt: dem größten \\(U\\), in Schritten von 0.1 m/s, bei dem die laufende Seite, Supervisor und alles, die Stäbe nach der Wahl der Strömung 120 s lang oben hält, ohne Rettung und mit dem Wagen innerhalb von 1.5 m um die Mitte der Schiene (<code>notes/fig11/project06/challenge.cjs</code>, mit dem eigenen <code>step()</code> der Seite). Der Schieberegler reicht weiter; dort gewinnt die Strömung, und die Seite beruhigt die Stäbe und schwingt sie wieder auf, wo sie kann."
  },
  "38ac4011a997": {
   "src": "<span class=\"psub__n\">5.1</span>The fall rates",
@@ -835,6 +847,10 @@
   "src": "Projects",
   "tr": "Projekte"
  },
+ "540fcda1790b": {
+  "src": "−0.19°, −0.21°, 6.8 s after the catch",
+  "tr": "−0.19°, −0.21°, 6.8 s nach dem Fangen"
+ },
  "5416e8f451d9": {
   "src": "with \\(Q_0\\) holding also the shear of the water on the cart (no slip at the true surface, the wall's distance inside a cell taken into account; the cart's share is what the viscous step changes in the water's momentum, less what the tank's walls and ends take) and the rods' pushes that land inside it. \\(K_x\\) is the water the cart must push aside. The machine moves in 1 ms steps of the page's RK4 within each 20 ms fluid step, so \\(F_c\\) cannot wait for \\(\\dot x'\\); instead the cart carries \\(m_a = -K_x\\Delta t\\) as extra mass while the held force is \\(G = Q_0 + K_x\\dot x_0\\):",
   "tr": "wobei \\(Q_0\\) auch die Scherung des Wassers am Wagen enthält (Haftung an der wahren Oberfläche, der Wandabstand innerhalb einer Zelle berücksichtigt; der Anteil des Wagens ist, was der Viskositätsschritt am Impuls des Wassers ändert, abzüglich dessen, was die Wände und Enden des Tanks nehmen) und die Stöße der Stäbe, die in ihm landen. \\(K_x\\) ist das Wasser, das der Wagen beiseiteschieben muss. Die Maschine bewegt sich in 1-ms-Schritten des RK4 der Seite innerhalb jedes 20-ms-Fluidschritts, also kann \\(F_c\\) nicht auf \\(\\dot x'\\) warten; stattdessen trägt der Wagen \\(m_a = -K_x\\Delta t\\) als zusätzliche Masse, während die gehaltene Kraft \\(G = Q_0 + K_x\\dot x_0\\) ist:"
@@ -862,6 +878,10 @@
  "5822f2a10bcd": {
   "src": "M. Schäfer and S. Turek, <a href=\"https://karlin.mff.cuni.cz/~hron/NMMO403/dfg_benchmark_results.pdf\">“Benchmark computations of laminar flow around a cylinder”</a>, in <em>Flow Simulation with High-Performance Computers II</em>, Vieweg (1996): test case 2D-1, table 3, \\(c_D\\) between 5.57 and 5.59.",
   "tr": "M. Schäfer und S. Turek, <a href=\"https://karlin.mff.cuni.cz/~hron/NMMO403/dfg_benchmark_results.pdf\">„Benchmark computations of laminar flow around a cylinder“</a>, in <em>Flow Simulation with High-Performance Computers II</em>, Vieweg (1996): Testfall 2D-1, Tabelle 3, \\(c_D\\) zwischen 5.57 und 5.59."
+ },
+ "585a5666a197": {
+  "src": "−1.14°, −1.24°, 7.0 s after the catch",
+  "tr": "−1.14°, −1.24°, 7.0 s nach dem Fangen"
  },
  "59c800f53691": {
   "src": "The page integrates (9) with (18) at a fixed step of 1 ms, several steps per screen frame, in real time. The walkthrough below sets each equation of this note beside the lines of the page’s script that compute it. With the controller off, the same integrator tested against a high-accuracy solver keeps the energy \\(T + V\\) constant to \\(2\\times10^{-10}\\) J over 10 s. When a rod passes 60° the run is called lost: the linear controller was designed for small angles, so the motor stops pushing (\\(u = 0\\)) and the page keeps solving (9) exactly as before. The rods fall all the way, swing down through the slot in the middle of the cart, between its two rails, and go on swinging as a double pendulum hanging from a free cart, without friction, so they never come to rest. The view widens to keep them in sight. Positions are drawn to scale; the view follows the cart.",
@@ -1163,6 +1183,10 @@
   "src": "iforce2d, <a href=\"https://www.iforce2d.net/b2dtut/buoyancy\">“Box2D tutorial: buoyancy”</a>: drag and lift on every edge of a polygon facing the flow.",
   "tr": "iforce2d, <a href=\"https://www.iforce2d.net/b2dtut/buoyancy\">„Box2D tutorial: buoyancy“</a>: Widerstand und Auftrieb an jeder Kante eines Polygons, die der Strömung zugewandt ist."
  },
+ "7a7c67c22f59": {
+  "src": "the balancer won them back, no rescue",
+  "tr": "der Balancierregler gewann sie zurück, keine Rettung"
+ },
  "7a8355713a37": {
   "src": "highest the rods got",
   "tr": "höchster Stand der Stäbe"
@@ -1311,6 +1335,10 @@
   "src": "<span class=\"psub__n\">3.3</span>Potential energy",
   "tr": "<span class=\"psub__n\">3.3</span>Potentielle Energie"
  },
+ "8a9f8e30bf3d": {
+  "src": "after letting go",
+  "tr": "nach dem Loslassen"
+ },
  "8adf085f4c18": {
   "src": "<span>4</span>Equations of motion",
   "tr": "<span>4</span>Bewegungsgleichungen"
@@ -1350,6 +1378,10 @@
  "8e6b86dce8c4": {
   "src": "Problems",
   "tr": "Aufgaben"
+ },
+ "8e72be996af7": {
+  "src": "0.00°, 0.00°, 23 s after the release",
+  "tr": "0.00°, 0.00°, 23 s nach dem Loslassen"
  },
  "8eb16cb35a26": {
   "src": "<span class=\"psec__n\">13</span>Air and water: the push of a flow",
@@ -1458,6 +1490,10 @@
  "97e1ceba053c": {
   "src": "The newtons the motor pushes per radian of lean of each rod.",
   "tr": "Die Newton, mit denen der Motor pro Radiant Neigung jedes Stabes drückt."
+ },
+ "99012c1ac971": {
+  "src": "<b>Measured: drag the cart and let go.</b> In a river current, the mouse grabbed the carriage, dragged it about 0.3 m in one second, held it a second and let go (<code>notes/fig11/project06/drag.cjs</code>). While you hold the cart the motor is off, and this page's short rods fall within a third of a second, so by the release they have fallen and are turning. At the release, if the balancer can still win the rods back it does; if not, the supervisor calms them and swings them up (sections 10–11); the plan aims at the flow's rest state, and once caught the balancer (50) brings the rods into it while the drag slowly returns the cart.",
+  "tr": "<b>Gemessen: den Wagen ziehen und loslassen.</b> In einer Flussströmung fasste die Maus den Schlitten, zog ihn in einer Sekunde etwa 0.3 m weit, hielt ihn eine Sekunde lang und ließ los (<code>notes/fig11/project06/drag.cjs</code>). Solange Sie den Wagen halten, ist der Motor aus, und die kurzen Stäbe dieser Seite fallen binnen einer Drittelsekunde; beim Loslassen sind sie also schon gefallen und drehen sich. Kann der Balancierregler die Stäbe beim Loslassen noch zurückgewinnen, tut er es; wenn nicht, beruhigt der Supervisor sie und schwingt sie auf (Abschnitte 10–11); der Plan zielt auf die Ruhelage der Strömung, und nach dem Fangen bringt der Balancierregler (50) die Stäbe in sie, während der Widerstand den Wagen langsam zurückführt."
  },
  "99878d25db3b": {
   "src": "How much the worst error is multiplied by from one look of the computer to the next. Below 1 the loop holds, above 1 it breaks (7.3).",
@@ -2146,6 +2182,10 @@
  "d8bd930bdb09": {
   "src": "The page integrates (9) with the classical fourth-order Runge–Kutta method at a fixed step of 1 ms, several steps per screen frame, in real time. With the controller off, the same integrator tested against a high-accuracy solver keeps the energy \\(T + V\\) constant to \\(2\\times10^{-10}\\) J over 10 s. When a rod passes 60° the run is called lost: the linear controller was designed for small angles, so the motor stops pushing (\\(u = 0\\)) and the page keeps solving (9) exactly as before. The rods fall all the way, swing down through the slot in the middle of the cart, between its two rails, and go on swinging as a double pendulum hanging from a free cart, without friction, so they never come to rest. The view widens to keep them in sight. Positions are drawn to scale; the view follows the cart.",
   "tr": "Die Seite integriert (9) mit dem klassischen Runge-Kutta-Verfahren vierter Ordnung mit einer festen Schrittweite von 1 ms, mehrere Schritte je Bildschirmbild, in Echtzeit. Bei ausgeschaltetem Regler hält derselbe Integrator, geprüft gegen einen hochgenauen Löser, die Energie \\(T + V\\) über 10 s auf \\(2\\times10^{-10}\\) J konstant. Wenn ein Stab 60° überschreitet, gilt der Lauf als verloren: Der lineare Regler wurde für kleine Winkel entworfen, also hört der Motor auf zu schieben (\\(u = 0\\)), und die Seite löst (9) genau wie zuvor weiter. Die Stäbe fallen ganz herunter, schwingen durch den Schlitz in der Mitte des Wagens zwischen seinen beiden Schienen hindurch und schwingen weiter als Doppelpendel, das an einem freien Wagen hängt, ohne Reibung, sodass sie nie zur Ruhe kommen. Die Ansicht weitet sich, damit sie sichtbar bleiben. Lagen werden maßstabsgetreu gezeichnet; die Ansicht folgt dem Wagen."
+ },
+ "d8d32f4be20e": {
+  "src": "at the end of the run: \\(\\theta_1 - \\theta_1^*\\), \\(\\theta_2 - \\theta_2^*\\)",
+  "tr": "am Ende des Laufs: \\(\\theta_1 - \\theta_1^*\\), \\(\\theta_2 - \\theta_2^*\\)"
  },
  "d8f7e9c783be": {
   "src": "flow",

@@ -160,7 +160,7 @@ Looked up, not chosen (Numa, 7 November 2026: "Not my call, not yours either. Lo
 ship-motion literature ("irregulärer Seegang", e.g. TU Hamburg reports); gyre: the German and Arabic Wikipedia articles linked from
 [Ocean gyre](https://en.wikipedia.org/wiki/Ocean_gyre) (Ozeanwirbel, دوامة محيطية); tides: [Tide](https://en.wikipedia.org/wiki/Tide) (Gezeiten,
 مد وجزر); glycerol: [Glycerol](https://en.wikipedia.org/wiki/Glycerol) (Glycerin, غليسرول). Swell (Dünung) is confirmed by German
-Wikipedia [Seegang](https://de.wikipedia.org/wiki/Seegang); carriage (Schlitten, العربة) was already in this table.
+Wikipedia [Seegang](https://de.wikipedia.org/wiki/Seegang); carriage (Schlitten, العربة) was already in this table. The Arabic tables of the pendulum pages said الكسوب for gains; they now use this table's معاملات الكسب (89 entries, 7 November 2026).
 
 ## Writing conventions
 

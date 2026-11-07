@@ -221,7 +221,7 @@
  },
  "20b69eea4f98": {
   "src": "clipped to \\(|F| \\le \\kappa I_\\text{max}\\). It chooses the six gains \\(\\mathbf K\\) to make a bill as small as possible:",
-  "tr": "مقصوصًا إلى \\(|F| \\le \\kappa I_\\text{max}\\). ويختار الكسوب الستّة \\(\\mathbf K\\) ليجعل فاتورة أصغر ما يمكن:"
+  "tr": "مقصوصًا إلى \\(|F| \\le \\kappa I_\\text{max}\\). ويختار معاملات الكسب الستّة \\(\\mathbf K\\) ليجعل فاتورة أصغر ما يمكن:"
  },
  "20fb0b3f8d19": {
   "src": "The two mixed terms are equal because \\(\\mathbf P\\) is symmetric and \\(\\tilde F\\) is a number.",
@@ -1093,7 +1093,7 @@
  },
  "9d92d5d95aad": {
   "src": "Set \\(\\rho\\) ten times larger on the page and solve again. How do the gains, the slowest decay and the time at the current limit change? Explain with (24).",
-  "tr": "اجعل \\(\\rho\\) في الصفحة أكبر عشر مرّات واحسب من جديد. كيف تتغيّر الكسوب وأبطأ خمود والزمن عند حدّ التيار؟ اشرح ذلك بـ (24)."
+  "tr": "اجعل \\(\\rho\\) في الصفحة أكبر عشر مرّات واحسب من جديد. كيف تتغيّر معاملات الكسب وأبطأ خمود والزمن عند حدّ التيار؟ اشرح ذلك بـ (24)."
  },
  "9de50c54f62a": {
   "src": "Controller presets",
@@ -1389,7 +1389,7 @@
  },
  "cdd20781c7f2": {
   "src": "One thing was assumed: that a symmetric \\(\\mathbf P\\) solving (25) exists at all. It does, and it is the only positive-definite solution, whenever one push can reach every motion (rank 6 in §11) and every weight in \\(\\mathbf Q\\) is positive; the Toronto notes state this as their Theorem 6.1 and point to Wonham for the proof. The page solves (25) in <code>lqr()</code> each time you press Solve; at the starting values and \\(r = 0.30\\) m the gains are \\(\\mathbf K = (19.22,\\ -201.70,\\ 120.09,\\ 0.04,\\ 0.52,\\ 22.14)\\). The large gain on \\(\\theta_2\\) is the hand that follows the swing: when ball 2 swings right, the coil shoves the cart after it, the cart runs past the ball, and the strut then pulls the ball back against its motion.",
-  "tr": "افترضنا أمرًا واحدًا: أنّ \\(\\mathbf P\\) متناظرة تحلّ (25) موجودة أصلًا. وهي موجودة، وهي الحلّ الوحيد الموجب التعريف، كلّما استطاعت دفعة واحدة أن تبلغ كلّ حركة (الرتبة 6 في §11) وكان كلّ وزن في \\(\\mathbf Q\\) موجبًا؛ وتذكر مذكّرات تورنتو ذلك مبرهنتَها 6.1 وتحيل إلى Wonham للبرهان. وتحلّ الصفحة (25) في <code>lqr()</code> كلّما ضغطت احسب؛ وعند القيم الابتدائية و\\(r = 0.30\\) m تكون الكسوب \\(\\mathbf K = (19.22,\\ -201.70,\\ 120.09,\\ 0.04,\\ 0.52,\\ 22.14)\\). والكسب الكبير على \\(\\theta_2\\) هو اليد التي تتبع التأرجح: حين تتأرجح الكرة 2 إلى اليمين يدفع الملفّ العربة وراءها، فتتجاوز العربة الكرة، ثمّ تشدّ الدعامة الكرة إلى الوراء عكس حركتها."
+  "tr": "افترضنا أمرًا واحدًا: أنّ \\(\\mathbf P\\) متناظرة تحلّ (25) موجودة أصلًا. وهي موجودة، وهي الحلّ الوحيد الموجب التعريف، كلّما استطاعت دفعة واحدة أن تبلغ كلّ حركة (الرتبة 6 في §11) وكان كلّ وزن في \\(\\mathbf Q\\) موجبًا؛ وتذكر مذكّرات تورنتو ذلك مبرهنتَها 6.1 وتحيل إلى Wonham للبرهان. وتحلّ الصفحة (25) في <code>lqr()</code> كلّما ضغطت احسب؛ وعند القيم الابتدائية و\\(r = 0.30\\) m تكون معاملات الكسب \\(\\mathbf K = (19.22,\\ -201.70,\\ 120.09,\\ 0.04,\\ 0.52,\\ 22.14)\\). والكسب الكبير على \\(\\theta_2\\) هو اليد التي تتبع التأرجح: حين تتأرجح الكرة 2 إلى اليمين يدفع الملفّ العربة وراءها، فتتجاوز العربة الكرة، ثمّ تشدّ الدعامة الكرة إلى الوراء عكس حركتها."
  },
  "cdd9b078db1f": {
   "src": "K. J. Åström and R. M. Murray, <em>Feedback Systems: An Introduction for Scientists and Engineers</em>, Princeton University Press, 2008: chapter 6, reachability and state feedback (Section 6.1) and the linear–quadratic regulator (Section 6.3). <a href=\"http://www.cds.caltech.edu/~murray/books/AM08/pdf/am08-complete_22Feb09.pdf\">The authors’ free electronic edition</a>.",
@@ -1637,7 +1637,7 @@
  },
  "f27a2e65839b": {
   "src": "The gains come from the linear model at the target. Far from the rest the nonlinear machine can escape, as the whirl shows. Swinging a chain up from far away needs other ideas, such as pumping energy in or out deliberately before handing over to the regulator.",
-  "tr": "تأتي الكسوب من النموذج الخطّي عند الهدف. وبعيدًا عن السكون قد تفلت الآلة اللاخطّية، كما يُظهر الدوران. وأرجحة سلسلة إلى الأعلى من بعيد تحتاج إلى أفكار أخرى، كضخّ الطاقة إلى الداخل أو الخارج عمدًا قبل التسليم إلى المنظِّم."
+  "tr": "تأتي معاملات الكسب من النموذج الخطّي عند الهدف. وبعيدًا عن السكون قد تفلت الآلة اللاخطّية، كما يُظهر الدوران. وأرجحة سلسلة إلى الأعلى من بعيد تحتاج إلى أفكار أخرى، كضخّ الطاقة إلى الداخل أو الخارج عمدًا قبل التسليم إلى المنظِّم."
  },
  "f33a57b938fb": {
   "src": "Take control",
