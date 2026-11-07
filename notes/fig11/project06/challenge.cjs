@@ -16,10 +16,11 @@ const T = +(process.env.T || 120);
       const n0 = DIPC.log.length; ch('flow', f); inp('Uf', U); DIPC.finishCatch(); let xm = 0, a = 0;
       for (let i = 0; i < T * 60; i++) { DIPC.step(1 / 60); DIPC.think(8); xm = Math.max(xm, Math.abs(DIPC.s[0])); const ev = DIPC.log.slice(n0).map(l => l.ev); if (ev.includes('rescue') || xm > 1.5) return { ok: false, t: i / 60, xm, ev: ev.join(',') }; }
       return { ok: true, xm }; }, [med, fl, U, T]);
-    let lo = 0, hi = 41, best = null;   // tenths of m/s; the slider ends at 8
-    while (hi - lo > 1) { const mid = (lo + hi) >> 1, q = await run(mid / 10); if (q.ok) { lo = mid; best = q; } else hi = mid; }
-    (res[med] = res[med] || {})[fl] = lo / 10;
-    console.log(med.padEnd(9), fl.padEnd(9), 'U*', lo / 10, 'm/s', best ? `| cart within ${best.xm.toFixed(2)} m` : '| even 0.1 m/s is too strong');
+    const D = +(process.env.STEP || 0.1), top = +(process.env.TOP || 4);   // the grid of U (m/s) and the largest U tried
+    let lo = 0, hi = Math.round(top / D) + 1, best = null;
+    while (hi - lo > 1) { const mid = (lo + hi) >> 1, q = await run(+(mid * D).toFixed(2)); if (q.ok) { lo = mid; best = q; } else hi = mid; }
+    (res[med] = res[med] || {})[fl] = +(lo * D).toFixed(2);
+    console.log(med.padEnd(9), fl.padEnd(9), 'U*', +(lo * D).toFixed(2), 'm/s', best ? `| cart within ${best.xm.toFixed(2)} m` : '| even 0.1 m/s is too strong');
   }
   console.log('uStart', JSON.stringify(res)); await b.close();
 })();
