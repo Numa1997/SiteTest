@@ -7,7 +7,7 @@ window.WALK["dipc"] = {
    "title": "Die Konstanten der Maschine",
    "where": "par(): liest die Schieberegler, sobald sich einer bewegt",
    "math": "⟦d1|d<sub>1</sub>⟧ = m<sub>0</sub>+m<sub>1</sub>+m<sub>2</sub>, d<sub>2</sub> = (½m<sub>1</sub>+m<sub>2</sub>)L<sub>1</sub>, d<sub>3</sub> = ½m<sub>2</sub>L<sub>2</sub>,<br>d<sub>4</sub> = (⅓m<sub>1</sub>+m<sub>2</sub>)L<sub>1</sub>², d<sub>5</sub> = ½m<sub>2</sub>L<sub>1</sub>L<sub>2</sub>, d<sub>6</sub> = ⅓m<sub>2</sub>L<sub>2</sub>²<span style=\"font-style:normal;margin-left:1.5em\">(6)</span><br>⟦f1|f<sub>1</sub>⟧ = (½m<sub>1</sub>+m<sub>2</sub>)L<sub>1</sub>g, f<sub>2</sub> = ½m<sub>2</sub>L<sub>2</sub>g<span style=\"font-style:normal;margin-left:1.5em\">(7)</span>",
-   "note": "Die Massen m<sub>0</sub>, m<sub>1</sub>, m<sub>2</sub> in kg und die Längen L<sub>1</sub>, L<sub>2</sub> in m werden von ihren Schiebereglern gelesen, und die acht Konstanten des Skripts werden einmal berechnet, in der Reihenfolge von (6) und (7): Das Feld d enthält d<sub>1</sub> … d<sub>6</sub> (d[0] ist d<sub>1</sub>, weil Felder ab 0 zählen), in kg, kg m und kg m², und das Feld f enthält f<sub>1</sub>, f<sub>2</sub> in N m. G ist g = 9.81 m/s², oben im Skript festgelegt, zusammen mit dem Runge-Kutta-Schritt H = h = 1 ms und den Gewichten Q aus (14). Jede andere Funktion liest nur p.d und p.f, sodass ein Schieberegler die Physik überall zugleich ändert. Mit einem Medium (Abschnitt 13) baut par auch p.fl, Dichte und Viskosität des Mediums und die Widerstandskonstanten aus (33)–(34), und zieht den Auftrieb (37) von f ab: In Wasser wiegen die Stangen weniger.",
+   "note": "Die Massen m<sub>0</sub>, m<sub>1</sub>, m<sub>2</sub> in kg und die Längen L<sub>1</sub>, L<sub>2</sub> in m werden von ihren Schiebereglern gelesen, und die acht Konstanten des Skripts werden einmal berechnet, in der Reihenfolge von (6) und (7): Das Feld d enthält d<sub>1</sub> … d<sub>6</sub> (d[0] ist d<sub>1</sub>, weil Felder ab 0 zählen), in kg, kg m und kg m², und das Feld f enthält f<sub>1</sub>, f<sub>2</sub> in N m. G ist g = 9.81 m/s², oben im Skript festgelegt, zusammen mit dem Runge-Kutta-Schritt H = h = 1 ms und den Gewichten Q aus (14). Jede andere Funktion liest nur p.d und p.f, sodass ein Schieberegler die Physik überall zugleich ändert. Mit einem Medium (Abschnitt 13) baut par auch p.fl, Dichte und Viskosität des Mediums und die Widerstandskonstanten aus (33)–(34), und zieht den Auftrieb (37) von f ab: In Wasser wiegen die Stäbe weniger.",
    "code": "var TH = Sim.theme, G = 9.81, H = 0.001, Q = [50, 50, 50, 20, 700, 700];\n...\nfunction par() { var m0 = sl.m0.value, m1 = sl.m1.value, m2 = sl.m2.value, L1 = sl.L1.value, L2 = sl.L2.value, fl = fluidPar(L1, L2), bA = fl ? fl.rho * Math.PI * ROD_R * ROD_R * G : 0, ma = fl ? { mu: CA_ROD * fl.rho * Math.PI * ROD_R * ROD_R, mc: solved() ? fl.rho * CART_B * CART_A2 : fl.rho * CART_VE * CART_KX / (2 - CART_KX) } : null;   // solved: the cart fills the tank's depth, so its added mass is the 2D one (13.6)\nreturn { m0: m0, m1: m1, m2: m2, L1: L1, L2: L2, ⟦d1|d: [m0 + m1 + m2⟧, (m1 / 2 + m2) * L1, m2 * L2 / 2, (m1 / 3 + m2) * L1 * L1, m2 * L1 * L2 / 2, m2 * L2 * L2 / 3], ⟦f1|f: [(m1 / 2 + m2) * L1 * G⟧ - bA * (L1 * L1 / 2 + L1 * L2), m2 * L2 * G / 2 - bA * L2 * L2 / 2], fl: fl, ma: ma }; }   // f with the buoyancy (37) of the medium, ma its added mass (38)",
    "syms": [
     [
@@ -20,7 +20,7 @@ window.WALK["dipc"] = {
      "f1",
      "f<sub>1</sub>",
      "p.f[0]",
-     "Drehmomentfaktor der Schwerkraft für die untere Stange, N m"
+     "Drehmomentfaktor der Schwerkraft für den unteren Stab, N m"
     ]
    ]
   },
@@ -28,20 +28,20 @@ window.WALK["dipc"] = {
    "title": "Die Matrix der kinetischen Energie",
    "where": "Dm(p, a, b): D bei den Winkeln a = θ<sub>1</sub>, b = θ<sub>2</sub>",
    "math": "T = ½ θ̇<sup>T</sup> D(θ) θ̇,  D = [[d<sub>1</sub>, d<sub>2</sub> cos ⟦t1|θ<sub>1</sub>⟧, d<sub>3</sub> cos ⟦t2|θ<sub>2</sub>⟧], [d<sub>2</sub> cos θ<sub>1</sub>, d<sub>4</sub>, d<sub>5</sub> cos(θ<sub>1</sub> − θ<sub>2</sub>)], [d<sub>3</sub> cos θ<sub>2</sub>, d<sub>5</sub> cos(θ<sub>1</sub> − θ<sub>2</sub>), d<sub>6</sub>]]<span style=\"font-style:normal;margin-left:1.5em\">(5)</span>",
-   "note": "Dm liefert die 3 × 3-Matrix D aus (5) als Array aus drei Zeilen. c1, c2 und c12 sind die drei Kosinus, die darin vorkommen, je einmal berechnet. Die Diagonale enthält die konstanten Trägheiten d<sub>1</sub>, d<sub>4</sub>, d<sub>6</sub>; die Plätze außerhalb der Diagonale enthalten die Kopplungen, die schrumpfen, wenn sich die Stangen neigen, denn eine geneigte Stange dreht sich teils auf und ab statt zur Seite. D ist symmetrisch, wie jede Matrix der kinetischen Energie, und positiv definit, lässt sich also immer invertieren: Darauf stützt sich der nächste Schritt. Mit einem Medium fügt addedMass die Matrix des Wassers hinzu, das jede Stange mitnimmt (38); auch sie hängt von den Winkeln ab, denn nur Bewegung quer zu einer Stange nimmt Wasser mit.",
+   "note": "Dm liefert die 3 × 3-Matrix D aus (5) als Array aus drei Zeilen. c1, c2 und c12 sind die drei Kosinus, die darin vorkommen, je einmal berechnet. Die Diagonale enthält die konstanten Trägheiten d<sub>1</sub>, d<sub>4</sub>, d<sub>6</sub>; die Plätze außerhalb der Diagonale enthalten die Kopplungen, die schrumpfen, wenn sich die Stäbe neigen, denn ein geneigter Stab dreht sich teils auf und ab statt zur Seite. D ist symmetrisch, wie jede Matrix der kinetischen Energie, und positiv definit, lässt sich also immer invertieren: Darauf stützt sich der nächste Schritt. Mit einem Medium fügt addedMass die Matrix des Wassers hinzu, das jeder Stab mitnimmt (38); auch sie hängt von den Winkeln ab, denn nur Bewegung quer zu einem Stab nimmt Wasser mit.",
    "code": "function Dm(p, a, b) { var d = p.d, c1 = Math.cos(a), c2 = Math.cos(b), c12 = Math.cos(a - b), M = [[d[0], d[1] * c1, d[2] * c2], [d[1] * c1, d[3], d[4] * c12], [d[2] * c2, d[4] * c12, d[5]]]; if (p.ma) addedMass(M, p, c1, c2, c12); return M; }",
    "syms": [
     [
      "t1",
      "θ<sub>1</sub>",
      "s[1]",
-     "Winkel der unteren Stange gegen die aufwärts gerichtete Senkrechte, rad"
+     "Winkel des unteren Stabes gegen die aufwärts gerichtete Senkrechte, rad"
     ],
     [
      "t2",
      "θ<sub>2</sub>",
      "s[2]",
-     "Winkel der oberen Stange gegen die aufwärts gerichtete Senkrechte, rad"
+     "Winkel des oberen Stabes gegen die aufwärts gerichtete Senkrechte, rad"
     ]
    ]
   },
@@ -90,10 +90,10 @@ window.WALK["dipc"] = {
    "syms": []
   },
   {
-   "title": "Wie schnell die Stangen fallen",
+   "title": "Wie schnell die Stäbe fallen",
    "where": "fallRates(p), in der Anzeige als „Fallraten, Regler aus“ gezeigt",
    "math": "M = [[d<sub>4</sub> − d<sub>2</sub>²/d<sub>1</sub>, d<sub>5</sub> − d<sub>2</sub>d<sub>3</sub>/d<sub>1</sub>], [·, d<sub>6</sub> − d<sub>3</sub>²/d<sub>1</sub>]]<span style=\"font-style:normal;margin-left:1.5em\">(12)</span><br>det M σ<sup>4</sup> − (M<sub>11</sub>f<sub>2</sub> + M<sub>22</sub>f<sub>1</sub>) σ² + f<sub>1</sub>f<sub>2</sub> = 0  →  ⟦sig|σ⟧<span style=\"font-style:normal;margin-left:1.5em\">(13)</span>",
-   "note": "M11, M12 und M22 sind die Einträge der reduzierten Matrix (12) in kg m², das, was von der Trägheit der Stangen übrig bleibt, wenn der Rückstoß des Wagens herausgenommen ist. a, b und c sind die Koeffizienten der quadratischen Gleichung (13) in σ², und die beiden Wurzeln stammen aus der Schulformel; ihre Quadratwurzeln sind die beiden Fallraten in 1/s, die größere zuerst. Die Anzeige zeigt auch 1/σ, die Zeit, in der eine Neigung um den Faktor e wächst.",
+   "note": "M11, M12 und M22 sind die Einträge der reduzierten Matrix (12) in kg m², das, was von der Trägheit der Stäbe übrig bleibt, wenn der Rückstoß des Wagens herausgenommen ist. a, b und c sind die Koeffizienten der quadratischen Gleichung (13) in σ², und die beiden Wurzeln stammen aus der Schulformel; ihre Quadratwurzeln sind die beiden Fallraten in 1/s, die größere zuerst. Die Anzeige zeigt auch 1/σ, die Zeit, in der eine Neigung um den Faktor e wächst.",
    "code": "function fallRates(p) {   // (12)–(13)\nvar d = p.d, M11 = d[3] - d[1] * d[1] / d[0], M12 = d[4] - d[1] * d[2] / d[0], M22 = d[5] - d[2] * d[2] / d[0];\nvar a = M11 * M22 - M12 * M12, b = -(M11 * p.f[1] + M22 * p.f[0]), c = p.f[0] * p.f[1], disc = Math.sqrt(b * b - 4 * a * c);\nreturn [⟦sig|Math.sqrt((-b + disc) / (2 * a))⟧, Math.sqrt((-b - disc) / (2 * a))]; }",
    "syms": [
     [
@@ -171,7 +171,7 @@ window.WALK["dipc"] = {
    "title": "Der Schub: abgetastet und begrenzt",
    "where": "control() und step()",
    "math": "⟦u|u⟧ = clip(u<sup>∗</sup> − K(s − s<sup>∗</sup>(t)), ±u<sub>max</sub>), held for ⟦Ts|T<sub>s</sub>⟧ (u<sup>∗</sup> = 0 without a flow)",
-   "note": "err() bildet den Fehler e = s − s<sup>∗</sup>(t), gemessen vom Referenzgleichgewicht des Augenblicks: refXV(t) liefert seinen Ort und seine Geschwindigkeit (ein ruhender Ort am Ziel der Knöpfe, eine Fahrt oder ein Gleiten; letzter Schritt), und die Winkel werden zuerst nach −π…π gebracht, sodass eine Stange, die sich einmal überschlagen hat, wieder aufrecht ist. In einer Strömung, die dem Regler mitgeteilt wird (EQ.on, Projekt 06 §13.8, und die Luftströmungen von Projekt 05), werden die Winkel von der Ruhelage der Strömung θ₁<sup>∗</sup>, θ₂<sup>∗</sup> aus gemessen, und die stationäre Kraft u<sup>∗</sup>, die sie hält, wird addiert (50). lqrU() multipliziert den Fehler mit −K und begrenzt das Ergebnis auf ±u<sub>max</sub> vom Schieberegler: Der Motor kann nicht stärker schieben. step() fragt nur dann nach einem neuen u, wenn die simulierte Zeit tSim den nächsten Abtastzeitpunkt tCtl erreicht hat, und schiebt tCtl dann um die Periode weiter: T<sub>s</sub> vom Schieberegler beim Balancieren, 10 ms beim Beruhigen oder Nachführen; zwischen den Abtastungen wird das alte u gehalten, genau das Halteglied nullter Ordnung aus §7.2. Davor entscheidet supervise(), welches Gesetz das Sagen hat (die Schritte unten).",
+   "note": "err() bildet den Fehler e = s − s<sup>∗</sup>(t), gemessen vom Referenzgleichgewicht des Augenblicks: refXV(t) liefert seinen Ort und seine Geschwindigkeit (ein ruhender Ort am Ziel der Knöpfe, eine Fahrt oder ein Gleiten; letzter Schritt), und die Winkel werden zuerst nach −π…π gebracht, sodass ein Stab, der sich einmal überschlagen hat, wieder aufrecht ist. In einer Strömung, die dem Regler mitgeteilt wird (EQ.on, Projekt 06 §13.8, und die Luftströmungen von Projekt 05), werden die Winkel von der Ruhelage der Strömung θ₁<sup>∗</sup>, θ₂<sup>∗</sup> aus gemessen, und die stationäre Kraft u<sup>∗</sup>, die sie hält, wird addiert (50). lqrU() multipliziert den Fehler mit −K und begrenzt das Ergebnis auf ±u<sub>max</sub> vom Schieberegler: Der Motor kann nicht stärker schieben. step() fragt nur dann nach einem neuen u, wenn die simulierte Zeit tSim den nächsten Abtastzeitpunkt tCtl erreicht hat, und schiebt tCtl dann um die Periode weiter: T<sub>s</sub> vom Schieberegler beim Balancieren, 10 ms beim Beruhigen oder Nachführen; zwischen den Abtastungen wird das alte u gehalten, genau das Halteglied nullter Ordnung aus §7.2. Davor entscheidet supervise(), welches Gesetz das Sagen hat (die Schritte unten).",
    "code": "function err(st, t) { var e = wrapState(st), rv = refXV(t); e[0] -= rv[0]; e[3] -= rv[1]; if (EQ.on) { e[1] -= EQ.th1; e[2] -= EQ.th2; } return e; }   // the state measured from the reference equilibrium\n...\nfunction lqrU(st, t) { var e = err(st, t), v = EQ.on ? EQ.u : 0; for (var i = 0; i < 6; i++) v -= K[i] * e[i]; return clampF(v); }\n...\nsupervise();\nif (tSim >= tCtl - 1e-9) { ⟦u|u = control()⟧; tCtl += period(); }\ns = rk4(p, s, u, H, tSim); Wfl += rk4.W; tSim += H;",
    "syms": [
     [
@@ -192,7 +192,7 @@ window.WALK["dipc"] = {
    "title": "Das Schnippen",
    "where": "flick(J), von den beiden Schnipp-Knöpfen",
    "math": "Δθ̇ = D<sup>−1</sup> (1, L<sub>1</sub> cos θ<sub>1</sub>, L<sub>2</sub> cos θ<sub>2</sub>)<sup>T</sup> ⟦J|J⟧<span style=\"font-style:normal;margin-left:1.5em\">(17)</span>",
-   "note": "Die rechte Seite ist der verallgemeinerte Impuls eines waagerechten Schlags J auf das obere Ende, in N s. Löst man mit D bei den aktuellen Winkeln, erhält man den Sprung der drei Änderungsraten, der zu s[3], s[4] und s[5] addiert wird; die Positionen springen nicht. Ein Schlag nach rechts setzt den Wagen nach rechts in Bewegung, die untere Stange nach links und die obere nach rechts in Drehung, dasselbe Muster, das das Skript herleitet.",
+   "note": "Die rechte Seite ist der verallgemeinerte Impuls eines waagerechten Schlags J auf das obere Ende, in N s. Löst man mit D bei den aktuellen Winkeln, erhält man den Sprung der drei Änderungsraten, der zu s[3], s[4] und s[5] addiert wird; die Positionen springen nicht. Ein Schlag nach rechts setzt den Wagen nach rechts in Bewegung, den unteren Stab nach links und den oberen nach rechts in Drehung, dasselbe Muster, das das Skript herleitet.",
    "code": "var dq = solve3(Dm(p, s[1], s[2]), [⟦J|J⟧, p.L1 * Math.cos(s[1]) * J, p.L2 * Math.cos(s[2]) * J]);\ns[3] += dq[0]; s[4] += dq[1]; s[5] += dq[2]; nextCheck = tSim; abandon(); }",
    "syms": [
     [
@@ -225,17 +225,17 @@ window.WALK["dipc"] = {
    ]
   },
   {
-   "title": "Beruhigen: den Stangen Energie entziehen",
+   "title": "Beruhigen: den Stäben Energie entziehen",
    "where": "calmU(st), alle 10 ms, solange der Modus calm ist",
    "math": "d⟦Ep|E<sub>p</sub>⟧/dt = −a 𝒫,  𝒫 = d<sub>2</sub> cos θ<sub>1</sub> θ̇<sub>1</sub> + d<sub>3</sub> cos θ<sub>2</sub> θ̇<sub>2</sub><span style=\"font-style:normal;margin-left:1.5em\">(21)</span><br>a = k𝒫 − 4(x − x<sub>c</sub>) − 4ẋ,  |a| ≤ 8 m/s²",
-   "note": "P ist hier der Drehimpulsanteil 𝒫 der Stangen aus (21), in kg m/s. Mit k = CALM_K = 2 beschleunigt der Wagen mit dem Impuls der Stangen, sodass ihre Energie (20) nur fallen kann; die beiden anderen Terme halten den Wagen nahe seinem Posten x<sub>c</sub>. uFor() macht aus der gewünschten Beschleunigung eine Motorkraft: Die Zeilen 2 und 3 von (9) geben die Winkelbeschleunigungen für dieses a, Zeile 1 gibt dann u.",
+   "note": "P ist hier der Drehimpulsanteil 𝒫 der Stäbe aus (21), in kg m/s. Mit k = CALM_K = 2 beschleunigt der Wagen mit dem Impuls der Stäbe, sodass ihre Energie (20) nur fallen kann; die beiden anderen Terme halten den Wagen nahe seinem Posten x<sub>c</sub>. uFor() macht aus der gewünschten Beschleunigung eine Motorkraft: Die Zeilen 2 und 3 von (9) geben die Winkelbeschleunigungen für dieses a, Zeile 1 gibt dann u.",
    "code": "var d = p.d, P = d[1] * Math.cos(st[1]) * st[4] + d[2] * Math.cos(st[2]) * st[5];\nvar a = Math.max(-8, Math.min(8, CALM_K * P - 4 * (st[0] - xc) - 4 * st[3])); return clampF(uFor(st, a)); }",
    "syms": [
     [
      "Ep",
      "E<sub>p</sub>",
      "Ep",
-     "Energie der Stangen jetzt, J"
+     "Energie der Stäbe jetzt, J"
     ]
    ]
   },

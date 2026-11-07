@@ -98,6 +98,12 @@ then into the tables. Machine tables: [i18n/de/strings.json](../i18n/de/strings.
 | shear flow, stagnation point, plane jet | Scherströmung, Staupunkt, ebener Freistrahl | جريان القصّ، نقطة الركود، النفث المستوي |
 | boundary layer, eddy viscosity | Grenzschicht, Wirbelviskosität | الطبقة الحدّية، لزوجة الاضطراب |
 | swell (sea) | Dünung | موج متعاقب |
+| rod (of a pendulum; projects 05, 06, Fig. 11) | Stab, Pendelstab (not Stange, which is a piston rod: Kolbenstange) | القضيب |
+| internal wave | interne Welle | موجة داخلية |
+| random sea (irregular waves) | irregulärer Seegang | موجات غير منتظمة |
+| (ocean) gyre, double gyre | Ozeanwirbel, Doppelwirbel | دوّامة محيطية، دوّامة مزدوجة |
+| tides | Gezeiten | المدّ والجزر |
+| glycerol | Glycerin | الغليسرول |
 | energy harvesting | Energy Harvesting | حصاد الطاقة |
 | servo valve, spool | Servoventil, Ventilschieber | صمّام مؤازر، المِزلاج |
 | ram (of a press) | Stößel | المِدكّ |
@@ -144,6 +150,17 @@ then into the tables. Machine tables: [i18n/de/strings.json](../i18n/de/strings.
 | centrifugal | Zentrifugal- | الطرد المركزي |
 | matched forcing | gleiche Anregung | قسرٌ متطابق |
 | ECTS credit points (CP) | Leistungspunkte (LP) | نقاط اعتماد ECTS |
+
+### Sources of the entries added on 7 November 2026
+
+Looked up, not chosen (Numa, 7 November 2026: "Not my call, not yours either. Look it up"): rod, cart: German Wikipedia
+[Inverses Pendel](https://de.wikipedia.org/wiki/Inverses_Pendel) ("Pendelstab", "Stab", "Wagen"); internal wave: German Wikipedia
+[Interne Welle](https://de.wikipedia.org/wiki/Interne_Welle), FAO AGROVOC concept c_d19aab3a (Arabic موجات داخلية); random sea: AGROVOC
+[irregular waves](https://agrovoc.fao.org/browse/agrovoc/en/page/c_5617eb5e) (Arabic موجات غير منتظمة, German irreguläre Welle) and German
+ship-motion literature ("irregulärer Seegang", e.g. TU Hamburg reports); gyre: the German and Arabic Wikipedia articles linked from
+[Ocean gyre](https://en.wikipedia.org/wiki/Ocean_gyre) (Ozeanwirbel, دوامة محيطية); tides: [Tide](https://en.wikipedia.org/wiki/Tide) (Gezeiten,
+مد وجزر); glycerol: [Glycerol](https://en.wikipedia.org/wiki/Glycerol) (Glycerin, غليسرول). Swell (Dünung) is confirmed by German
+Wikipedia [Seegang](https://de.wikipedia.org/wiki/Seegang); carriage (Schlitten, العربة) was already in this table. The Arabic tables of the pendulum pages said الكسوب for gains; they now use this table's معاملات الكسب (89 entries, 7 November 2026).
 
 ## Writing conventions
 

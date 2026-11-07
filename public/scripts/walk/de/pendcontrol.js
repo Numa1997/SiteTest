@@ -14,13 +14,13 @@ window.WALK["pendcontrol"] = {
      "th1",
      "θ<sub>1</sub>",
      "q[0]",
-     "Winkel der oberen Stange, rad; Jetzt: der Abtastwert auf dem Bildschirm"
+     "Winkel des oberen Stabes, rad; Jetzt: der Abtastwert auf dem Bildschirm"
     ],
     [
      "th2",
      "θ<sub>2</sub>",
      "q[1]",
-     "Winkel der unteren Stange, rad"
+     "Winkel des unteren Stabes, rad"
     ],
     [
      "X",

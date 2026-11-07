@@ -48,7 +48,7 @@ const PICTURE = () => {
   m.mid = n ? { x: sx / n / dpr, y: sy / n / dpr, n } : null;
   // the top of the upper rod: along the rod, the last fully burgundy sample, from 12 px inside the rod to 12 px beyond its stored end
   const ux = e.tx - e.ex, uy = e.ty - e.ey, ul = Math.hypot(ux, uy); let last = null, clear = null;
-  for (let t = -12; t <= 12; t += 0.05) { const x = e.tx + t * ux / ul, y = e.ty + t * uy / ul, c = px(Math.floor(x * dpr), Math.floor(y * dpr)); if (is(c, ACC, 2)) { last = t; clear = null; } else if (last !== null && clear === null && c[3] === 0) clear = t; }
+  for (let t = -12; t <= 12; t += 0.05) { const x = e.tx + t * ux / ul, y = e.ty + t * uy / ul, c = px(Math.floor(x * dpr), Math.floor(y * dpr)); if (is(c, ACC, 2)) { last = t; clear = null; } else if (last !== null && clear === null && c[3] < 255) clear = t; }   // clear: not fully painted (the rod is opaque; a flow's arrows behind it are drawn at 85 % alpha, so an arrow under the tip no longer hides its end)
   let lo = null, hi = null; const bx = e.tx - 6 * ux / ul, by = e.ty - 6 * uy / ul;   // across the rod, 6 px below its top: the burgundy run must be centred on the axis
   for (let t = -10; t <= 10; t += 0.05) { const x = bx - t * uy / ul, y = by + t * ux / ul; if (is(px(Math.floor(x * dpr), Math.floor(y * dpr)), ACC, 2)) { if (lo === null) lo = t; hi = t; } }
   m.tip = last === null ? null : { end: last, clear, lw: 4 + 6 * Math.min(1, store.m2), across: lo === null ? null : (lo + hi) / 2, width: lo === null ? 0 : hi - lo };
@@ -62,13 +62,22 @@ function checkPicture(P, label) {
   const dst = Math.max(Math.abs(cx - s.cart_px), Math.abs(hy - s.cart_py), Math.abs(ex - s.mid_px), Math.abs(ey - s.mid_py), Math.abs(tx - s.tip_px), Math.abs(ty - s.tip_py));
   const m = P.m, res = [];
   res.push(`stored px vs state→px (Node formulas): max |Δ| = ${fmt(dst)} px`);
-  const okCart = m.cart && Math.abs(m.cart.centre - cx) <= 0.75 && m.cart.alphaAt === 255;
+  // hidden readings: where the stored geometry puts a rod over the place a reading is taken, the pixels cannot show it; such a reading is
+  // reported as hidden and neither passes nor fails (the rods are drawn over the cart, and the white hinge discs over the rods)
+  const lw = 4 + 6 * Math.min(1, s.m2), segD = (px, py, ax, ay, bx, by) => { const vx = bx - ax, vy = by - ay, L2 = vx * vx + vy * vy || 1, u = Math.max(0, Math.min(1, ((px - ax) * vx + (py - ay) * vy) / L2)); return Math.hypot(px - ax - u * vx, py - ay - u * vy); };
+  const nearRod = (px, py, r) => segD(px, py, cx, hy, ex, ey) < r || segD(px, py, ex, ey, tx, ty) < r;
+  const cw2 = Math.max(46, s.CW * s.sc) / 2, rowY = hy + (s.LOOK === 'hull' ? ch / 2 : 4);
+  const cartHidden = nearRod(cx - cw2, rowY, lw / 2 + 13) || nearRod(cx + cw2, rowY, lw / 2 + 13);
+  const tipHidden = (tx > cx - cw2 - 6 && tx < cx + cw2 + 6 && ty > hy - lw && ty < hy + ch + 14) || Math.hypot(tx - ex, ty - ey) < 5 + lw + 2 || Math.hypot(tx - cx, ty - hy) < 5 + lw + 2 || segD(tx, ty, cx, hy, ex, ey) < lw + 2;
+  const okCart = cartHidden || (m.cart && Math.abs(m.cart.centre - cx) <= 0.75 && m.cart.alphaAt === 255);
   res.push(`cart: cream from ${m.cart ? fmt(m.cart.left) : '–'} to ${m.cart ? fmt(m.cart.right) : '–'} px, centre ${m.cart ? fmt(m.cart.centre) : 'NOT FOUND'} vs x→px ${fmt(cx)} (Δ ${m.cart ? fmt(m.cart.centre - cx) : '–'} px, alpha at centre ${m.cart ? m.cart.alphaAt : '–'}) ${okCart ? 'PASS' : 'FAIL'}`);
+  if (cartHidden) res[res.length - 1] = res[res.length - 1].replace(/(PASS|FAIL)$/, 'HIDDEN by a rod at the scan row, not read');
   const okMid = m.mid && Math.hypot(m.mid.x - ex, m.mid.y - ey) <= 0.3;
   res.push(`hinge between the rods: white centroid (${m.mid ? fmt(m.mid.x) + ', ' + fmt(m.mid.y) : 'NOT FOUND'}) of ${m.mid ? m.mid.n : 0} px vs θ₁→px (${fmt(ex)}, ${fmt(ey)}) (Δ ${m.mid ? fmt(Math.hypot(m.mid.x - ex, m.mid.y - ey)) : '–'} px) ${okMid ? 'PASS' : 'FAIL'}`);
   const tipIn = tx > 6 && tx < s.w - 6 && ty > 6 && ty < s.h - 6;
-  const rc = m.tip ? m.tip.lw / 2 : 0, okTip = !tipIn || (m.tip && m.tip.end >= rc - 1.5 && m.tip.end <= rc + 0.5 && m.tip.clear !== null && m.tip.clear <= rc + 1.5 && m.tip.across !== null && Math.abs(m.tip.across) <= 0.75);
-  res.push(`top of the upper rod at θ₂→px (${fmt(tx)}, ${fmt(ty)}): along the rod, fully burgundy to ${m.tip ? fmt(m.tip.end) : 'NOT FOUND'} px beyond it and transparent from ${m.tip && m.tip.clear !== null ? fmt(m.tip.clear) : '–'} px, round cap radius ${m.tip ? fmt(rc) : '–'} px; across the rod 6 px below the top the burgundy (${m.tip ? fmt(m.tip.width) : '–'} px wide) is centred ${m.tip && m.tip.across !== null ? fmt(m.tip.across) : '–'} px off the axis ${tipIn ? (okTip ? 'PASS' : 'FAIL') : 'outside the figure, not tested'}`);
+  const rc = m.tip ? m.tip.lw / 2 : 0, okTip = !tipIn || tipHidden || (m.tip && m.tip.end >= rc - 1.5 && m.tip.end <= rc + 0.5 && m.tip.clear !== null && m.tip.clear <= rc + 1.5 && m.tip.across !== null && Math.abs(m.tip.across) <= 0.75);
+  res.push(`top of the upper rod at θ₂→px (${fmt(tx)}, ${fmt(ty)}): along the rod, fully burgundy to ${m.tip ? fmt(m.tip.end) : 'NOT FOUND'} px beyond it and not fully painted from ${m.tip && m.tip.clear !== null ? fmt(m.tip.clear) : '–'} px, round cap radius ${m.tip ? fmt(rc) : '–'} px; across the rod 6 px below the top the burgundy (${m.tip ? fmt(m.tip.width) : '–'} px wide) is centred ${m.tip && m.tip.across !== null ? fmt(m.tip.across) : '–'} px off the axis ${tipIn ? (okTip ? 'PASS' : 'FAIL') : 'outside the figure, not tested'}`);
+  if (tipIn && tipHidden) res[res.length - 1] = res[res.length - 1].replace(/(PASS|FAIL)$/, 'HIDDEN (over the cart, a hinge disc or the other rod), not read');
   return { ok: dst === 0 && okCart && okMid && okTip, lines: res.map((l) => `  d ${label}: ${l}`) };
 }
 
@@ -212,7 +221,8 @@ async function main() {
   const order = want.length ? want : PAGE === 'double-inverted-pendulum.html' ? ['rest', 'flick', 'drag', 'cart', 'swingup', 'random', 'randomSTOP', 'ts40', 'glide', 'brake', 'limit', 'wind', 'windcart']   // project 05: vacuum and air
     : ['rest', 'flick', 'drag', 'cart', 'swingup', 'random', 'limit', 'water', 'stillwater', 'pumpwater'];   // project 06 (PAGE=rods-in-liquid.html): starts in water; pumpwater with its motor cut to 60 N, where no plan is found; no glide: in a liquid the cart is never left cruising after a catch (13.7), so there is no glide to test
   for (const name of order) { out(`== ${name}${dpr !== 1 ? ' (device pixel ratio ' + dpr + ')' : ''}`); const okPic = await (name === 'randomSTOP' ? scen.random(true) : scen[name]());
-    await frame(); const bk = await pg.evaluate(() => { const g = (n) => DIPC.ds.get(n), rows = [g('E0'), g('W_motor'), g('E_ext'), g('E_wait')]; return { rows, E: g('E'), bal: g('bal'), rel: Math.abs(g('bal')) / (rows.reduce((a, v) => a + Math.abs(v), 0) + Math.abs(g('E'))) }; });
+    await frame(); if (await pg.evaluate(() => { const e0 = DIPC.ds.get('E0'); return e0 !== e0; })) { const was = await pg.evaluate(() => document.getElementById('play').getAttribute('aria-pressed')); await pause(true); await frame(); await frame(); if (was === 'true') await pause(false); }   // a scenario that ends by changing the machine (back to the first medium) closes the book until the next step: play two frames, so it is read open
+    const bk = await pg.evaluate(() => { const g = (n) => DIPC.ds.get(n), rows = [g('E0'), g('W_motor'), g('E_ext'), g('E_wait')]; return { rows, E: g('E'), bal: g('bal'), rel: Math.abs(g('bal')) / (rows.reduce((a, v) => a + Math.abs(v), 0) + Math.abs(g('E'))) }; });
     out(`  energy book: E0 ${fmt(bk.rows[0])} + W_motor ${fmt(bk.rows[1])} + E_ext ${fmt(bk.rows[2])} + E_wait ${fmt(bk.rows[3])} − E ${fmt(bk.E)} = ${fmt(bk.bal)} J, ${fmt(bk.rel)} of the flows`);
     await pull(); const c = checkLogs(acc); c.lines.forEach((l) => out(l)); const span = acc.st.length ? `${fmt(acc.st[0].t)}–${fmt(acc.st[acc.st.length - 1].t + H)} s` : '';
     out(`  ${name}: ${acc.st.length} steps (${span}), ${acc.cs.length} samples → ${c.ok && okPic ? 'ALL PASS' : 'SOMETHING FAILED'}`); results.push([name, c.ok && okPic]); }

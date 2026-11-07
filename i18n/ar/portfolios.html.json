@@ -117,7 +117,7 @@
  },
  "1a6f3bda03d7": {
   "src": "ms: the same with gains designed for the period",
-  "tr": "ms: الشيء نفسه بكسوب مصمَّمة للدور"
+  "tr": "ms: الشيء نفسه بمعاملات كسب مصمَّمة للدور"
  },
  "1b5dbf161208": {
   "src": "The question, the warm cloud in two pictures, and the droplets falling.",
@@ -377,7 +377,7 @@
  },
  "5b911a0572c0": {
   "src": "ms: the longest loop period the continuous gains survive",
-  "tr": "ms: أطول دور للحلقة تصمد فيه الكسوب المتّصلة"
+  "tr": "ms: أطول دور للحلقة تصمد فيه معاملات الكسب المتّصلة"
  },
  "5ba7d18d1c32": {
   "src": "<span class=\"psub__n\">1.1</span>The cloud and the three questions",
@@ -617,7 +617,7 @@
  },
  "9249b9f72537": {
   "src": "Two rods stand one on the other on a cart, hinged and free to fall; the only help is a motor that pushes the cart along its rail. The study derives the equations of motion with Lagrange’s method, finds how fast the rods fall, and builds the balancer by minimising a cost. It then treats the controller as a real computer does: it looks only every T<sub>s</sub>, so the note derives the exact model between two looks and the gains that fit the loop period. When the rods fall anyway, the cart drains their energy, plans a swing-up, tracks it and hands over where a certified test says the balancer is sure to win, even with the cart still rolling.",
-  "tr": "قضيبان يقف أحدهما فوق الآخر على عربة، متّصلان بمفصلين وحرّان في السقوط؛ والعون الوحيد محرّك يدفع العربة على سكّتها. تشتقّ الدراسة معادلات الحركة بطريقة لاغرانج، وتحدّد سرعة سقوط القضيبين، وتبني متحكّم الموازنة بتقليل كلفة. ثمّ تعامل المتحكّم كما يعمل حاسوب حقيقي: فهو لا ينظر إلّا كلّ T<sub>s</sub>، ولذا تشتقّ المذكّرة النموذج الدقيق بين نظرتين والكسوب التي تلائم دور الحلقة. وإذا سقط القضيبان مع ذلك، تسحب العربة طاقتهما، وتخطّط أرجحة إلى الأعلى، وتتتبّعها، وتسلّم حيث يقول اختبار مضمون إنّ متحكّم الموازنة سيفوز يقينًا، حتّى والعربة لا تزال تتدحرج."
+  "tr": "قضيبان يقف أحدهما فوق الآخر على عربة، متّصلان بمفصلين وحرّان في السقوط؛ والعون الوحيد محرّك يدفع العربة على سكّتها. تشتقّ الدراسة معادلات الحركة بطريقة لاغرانج، وتحدّد سرعة سقوط القضيبين، وتبني متحكّم الموازنة بتقليل كلفة. ثمّ تعامل المتحكّم كما يعمل حاسوب حقيقي: فهو لا ينظر إلّا كلّ T<sub>s</sub>، ولذا تشتقّ المذكّرة النموذج الدقيق بين نظرتين ومعاملات الكسب التي تلائم دور الحلقة. وإذا سقط القضيبان مع ذلك، تسحب العربة طاقتهما، وتخطّط أرجحة إلى الأعلى، وتتتبّعها، وتسلّم حيث يقول اختبار مضمون إنّ متحكّم الموازنة سيفوز يقينًا، حتّى والعربة لا تزال تتدحرج."
  },
  "935fb231e528": {
   "src": "<span class=\"psub__n\">2.3</span>Four figures from the study",
@@ -865,7 +865,7 @@
  },
  "d7817b1fb9bc": {
   "src": "The machine of project 05 rebuilt to swing its rods up under water, glycerol and honey",
-  "tr": "آلة المشروع 05 وقد أُعيد بناؤها لتؤرجح قضيبيها إلى الأعلى تحت الماء والغليسرين والعسل"
+  "tr": "آلة المشروع 05 وقد أُعيد بناؤها لتؤرجح قضيبيها إلى الأعلى تحت الماء والغليسرول والعسل"
  },
  "d94f8b3ca4fd": {
   "src": "The solver of the collection equation, in your browser.",

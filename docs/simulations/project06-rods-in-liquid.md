@@ -73,10 +73,21 @@ u = sat(u* − K(s − s*)), (50), with s* re-solved each sample (`eqTrack`); th
 flow (four Gauss points per rod, field frozen at the plan's start). Stored per sample as `cs_e1`, `cs_e2`, `cs_us`. In air (project 05)
 the same code runs for the air flows.
 
-Drag the cart and let go (`drag.cjs`, a river): rest states −4.6°/−5.0° (water, 1 m/s), −2.7°/−2.9° (glycerol, 0.5 m/s),
-−4.2°/−4.4° (honey, 0.3 m/s); 15–20 s after the release both rods within 0.15° of them. While the cart is held the motor is off and
-the short rods fall within a third of a second; the balancer catches the turning pair after the release (`release.cjs`: two more
-turns, upright about 1 s after).
+Drag the cart and let go (`drag.cjs`, a river, rerun 7 November 2026 after the fixes below): while the cart is held the motor is off and
+the short rods fall within a third of a second. At the release the balancer wins them back where it can (glycerol, 0.5 m/s: no rescue,
+0.00° from the rest state −2.7°/−2.9° 23 s later); otherwise the supervisor calms them and swings them up about the flow's rest state
+(water, 1 m/s: caught 6.0 s after the release, −1.14°/−1.24° from the rest state −4.6°/−5.0° 7.0 s after the catch; honey, 0.3 m/s:
+caught 6.0 s after the release, −0.19°/−0.21° from −4.2°/−4.4° 6.8 s after the catch). The cart, released about 0.5 m out, drifts
+during the swing-up and is held where it was caught.
+
+**The certificate in a flow (fixed 7 November 2026).** `catchGen` stepped the planner's model `rhsF` (four Gauss points per rod)
+about the rest state of the full equations (`flowEq`), which is not at rest in that model; near it W cannot fall, and the search could
+return c* = 0 (internal wave, 0.1 m/s, 8 s after it was chosen), which made the supervisor rescue upright rods. `restOf(pC, z0)` now
+solves the rest state of `rhsF` itself (Newton, like `flowEq`) and the certificate is taken about it: 17.3 there, as in still water
+(17.0). In a steady river at 0.1 m/s c* stays 0.64 (unchanged by the fix).
+
+**Deep flows ramp up.** Choosing a deep and slow flow (or changing the liquid, or Reset, while one is chosen) brings it up over 8 s,
+U r(τ), r = 3τ² − 2τ³ (`fieldV`, `DEEP`, `RAMP`, `flowT0`); at the end the gains are redesigned once (`think()`, between frames).
 
 The supervisor's guard (section 11) leaves a slow balancer in a liquid alone while the model shows it lowering W by a tenth in 4 s
 **only if both rods are within 20° of their rest state** (`nearRest`, 7 November 2026): before, a spinning pair, which loses W to drag
@@ -84,19 +95,20 @@ too, was never rescued.
 
 ### Deep and slow flows: starting strength
 
-`challenge.cjs`: the largest U (0.1 m/s steps) at which the page's law (50) holds the rods for 120 s from the flow's rest state
-without a rod straying 0.5 rad from it, the cart leaving 1.5 m of rail, or the force passing ¾ of the motor. Choosing the flow (or
-changing the liquid while it is chosen) sets U to this value (`uStart()`).
+`challenge.cjs` (rewritten 7 November 2026): the largest U at which **the running page**, supervisor included, keeps the rods up for 120 s
+after the flow is chosen while they balance (no rescue, the cart within 1.5 m of the middle), the flow ramping up as above; 0.1 m/s steps,
+honey 0.01 m/s (the flow-speed slider of project 06 moves in hundredths). Choosing the flow (or changing the liquid while it is chosen)
+sets U to this value (`uStart()`).
 
 | Flow | water | glycerol | honey |
 |---|---|---|---|
-| internal wave (ψ = (U/m) cos(kx − ωt) sin my, 12 m × 4 m, 45 s) | 2.5 | 2.2 | 1.9 |
-| double gyre (Shadden, Lekien and Marsden 2005, ε = 0.25, 15 s) | 3.8 | 3.0 | 2.1 |
-| random sea (six waves, 23–89 s) | 1.2 | 0.8 | 0.3 |
-| tidal beats (20 s and 22 s, beat 220 s) | 1.0 | 1.1 | 0.9 |
+| an internal wave | 0.8 | 0.5 | 0.24 |
+| a double gyre | 1.1 | 0.5 | 0.11 |
+| a random sea | 0.6 | 0.3 | 0.14 |
+| tidal beats | 0.7 | 0.4 | 0.16 |
 
-The random sea and the tides are limited by the cart drifting to the end of the rail, the gyre and the internal wave by the rods' lean;
-the motor never passed 19 %.
+The first version measured the balancing law alone, without the supervisor, and gave 1.0–3.8 m/s in water; on the page those flows
+knocked the rods down (the supervisor rescued them, partly through the certificate bug above). These values are what the page holds.
 
 ## Lecture note
 

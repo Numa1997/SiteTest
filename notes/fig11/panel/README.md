@@ -34,3 +34,12 @@ independent `forceFor` of `ref.cjs`), `f-falsification-cart.txt` (each corruptio
 time with the panel closed: median 0.3 ms before and after), `drag-cart.txt` (`drag.cjs` in English, German and Arabic, and `readcart.cjs`).
 In a first run of `hon.cjs cart drag` the rod-drag picture check once found the stored pixels 2.8 × 10⁻¹⁴ px away from the Node formula
 (it demands exactly 0); every rerun since gave 0.
+
+## 7 November 2026: hidden readings, project 06
+
+`hon.cjs` runs on project 06 with `PAGE=rods-in-liquid.html` (scenarios rest, flick, drag, cart, swingup, random, limit, water,
+stillwater, pumpwater) and reads the cart's size and look from the page's `#dipc-page`. A picture reading that the stored geometry
+puts under a rod (the cart's edge at the scan row; the rod's tip over the cart, a hinge disc or the other rod) is reported as
+`HIDDEN … not read` and neither passes nor fails: the short rods of project 06 often lie across the carriage when the motor is off.
+"Not fully painted" (alpha < 255) replaces "transparent" beyond the tip, since a flow's arrows are drawn at 85 % alpha behind it.
+When a scenario ends by changing the machine, the book is closed until the next frame; the test plays two frames before reading it.

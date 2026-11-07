@@ -53,11 +53,11 @@
  },
  "0f7b5d8dd0d3": {
   "src": "The 18 mountings, one rod against two, chaos, and the sensor.",
-  "tr": "Die 18 Befestigungen, eine Stange gegen zwei, Chaos und der Sensor."
+  "tr": "Die 18 Befestigungen, ein Stab gegen zwei, Chaos und der Sensor."
  },
  "108230a47802": {
   "src": "Balancing Two Rods on a Cart",
-  "tr": "Zwei Stangen auf einem Wagen balancieren"
+  "tr": "Zwei Stäbe auf einem Wagen balancieren"
  },
  "10ec1a05a8ed": {
   "src": "<b>Chaos does not help.</b> Every start, at every wind and brake tried, ends on one regular swing: the centrifugal spring is 3 to 9 times stronger than gravity’s push, and resonance is out of reach.",
@@ -137,7 +137,7 @@
  },
  "23ca0d9fd944": {
   "src": "<span class=\"pfig__n\">Figure 1</span>The planar model: the pivot rides a circle round the hub; the generators feel relative joint speeds, not absolute rod speeds.",
-  "tr": "<span class=\"pfig__n\">Abbildung 1</span>Das ebene Modell: Der Drehpunkt läuft auf einem Kreis um die Nabe; die Generatoren spüren relative Gelenkgeschwindigkeiten, nicht absolute Stangengeschwindigkeiten."
+  "tr": "<span class=\"pfig__n\">Abbildung 1</span>Das ebene Modell: Der Drehpunkt läuft auf einem Kreis um die Nabe; die Generatoren spüren relative Gelenkgeschwindigkeiten, nicht absolute Stabgeschwindigkeiten."
  },
  "26f85d2d5c2c": {
   "src": "<b>The fall.</b> Both balls are held 10 m above the head and fall under gravity alone; the first touch comes at 1.428 s, as Newton’s \\(\\sqrt{2h/g}\\) predicts, at 14.0 m/s.",
@@ -165,7 +165,7 @@
  },
  "2d81f325b967": {
   "src": "Hang a 100 g weight on a 20 cm rod from a point on a turning blade. Each time the blade goes round, gravity pulls the weight first one way and then the other, so it swings once per turn, like a child on a swing pushed once per pass; a generator at the pivot brakes that swing and turns it into electricity. The study builds everything from the pendulum’s Lagrangian: the equations of motion, the energy books that say the rotor pays for every milliwatt, the driven-oscillator resonance at \\(r_p = L\\) with the best generator setting \\(\\kappa = |R-1|\\), real turbine sizes from the tip-speed ratio, the double pendulum, chaos, and a sensor budget from two datasheets. An independent audit rebuilt the model from scratch and reproduced every headline number; the solver runs in your browser. Sol’s whole report is included, word for word, with its nine tables rebuilt from the data and all 181 files of the delivery to download.",
-  "tr": "Hängen Sie ein Gewicht von 100 g an einer 20 cm langen Stange an einen Punkt eines sich drehenden Blatts. Bei jeder Umdrehung zieht die Schwerkraft das Gewicht erst in die eine, dann in die andere Richtung, sodass es einmal pro Umdrehung schwingt, wie ein Kind auf der Schaukel, das bei jedem Vorbeischwingen einmal angeschoben wird; ein Generator am Drehpunkt bremst diese Schwingung und macht daraus Strom. Die Studie baut alles aus der Lagrange-Funktion des Pendels auf: die Bewegungsgleichungen, die Energiebilanzen, die zeigen, dass der Rotor jedes Milliwatt bezahlt, die Resonanz des erzwungenen Oszillators bei \\(r_p = L\\) mit der besten Generatoreinstellung \\(\\kappa = |R-1|\\), reale Turbinengrößen aus der Schnelllaufzahl, das Doppelpendel, Chaos und ein Sensorbudget aus zwei Datenblättern. Eine unabhängige Prüfung hat das Modell von Grund auf neu gebaut und jedes Kernergebnis reproduziert; der Löser läuft in Ihrem Browser. Sols vollständiger Bericht ist enthalten, Wort für Wort, mit seinen neun Tabellen aus den Daten neu aufgebaut und allen 181 Dateien der Lieferung zum Herunterladen."
+  "tr": "Hängen Sie ein Gewicht von 100 g an einem 20 cm langen Stab an einen Punkt eines sich drehenden Blatts. Bei jeder Umdrehung zieht die Schwerkraft das Gewicht erst in die eine, dann in die andere Richtung, sodass es einmal pro Umdrehung schwingt, wie ein Kind auf der Schaukel, das bei jedem Vorbeischwingen einmal angeschoben wird; ein Generator am Drehpunkt bremst diese Schwingung und macht daraus Strom. Die Studie baut alles aus der Lagrange-Funktion des Pendels auf: die Bewegungsgleichungen, die Energiebilanzen, die zeigen, dass der Rotor jedes Milliwatt bezahlt, die Resonanz des erzwungenen Oszillators bei \\(r_p = L\\) mit der besten Generatoreinstellung \\(\\kappa = |R-1|\\), reale Turbinengrößen aus der Schnelllaufzahl, das Doppelpendel, Chaos und ein Sensorbudget aus zwei Datenblättern. Eine unabhängige Prüfung hat das Modell von Grund auf neu gebaut und jedes Kernergebnis reproduziert; der Löser läuft in Ihrem Browser. Sols vollständiger Bericht ist enthalten, Wort für Wort, mit seinen neun Tabellen aus den Daten neu aufgebaut und allen 181 Dateien der Lieferung zum Herunterladen."
  },
  "2e561f10b59a": {
   "src": "numbers in the text, each recomputed from the model",
@@ -269,7 +269,7 @@
  },
  "4522622c6ce4": {
   "src": "liquids in which the rods are swung up from hanging and caught, about 6 s after the button",
-  "tr": "Flüssigkeiten, in denen die Stangen aus der hängenden Lage aufgeschwungen und gefangen werden, etwa 6 s nach dem Knopfdruck"
+  "tr": "Flüssigkeiten, in denen die Stäbe aus der hängenden Lage aufgeschwungen und gefangen werden, etwa 6 s nach dem Knopfdruck"
  },
  "45ed4c0fb4e6": {
   "src": "<span class=\"pfig__n\">Figure 1</span>Left: the two fall-speed models against Gunn and Kinzer. Right: the error of the drag balance, at most 2.07 % at the listed sizes from 0.3 mm up and −7.57 % at 0.1 mm.",
@@ -293,7 +293,7 @@
  },
  "4c4622a8a5e8": {
   "src": "<b>One rod beats two.</b> With the same mass and the same reach, a double pendulum gives 0.64–0.74 of the single one’s power at every mounting: half its mass sits at half the reach.",
-  "tr": "<b>Eine Stange schlägt zwei.</b> Bei gleicher Masse und gleicher Reichweite liefert ein Doppelpendel an jeder Befestigung das 0.64- bis 0.74-Fache der Leistung des Einzelpendels: Die Hälfte seiner Masse sitzt auf halber Reichweite."
+  "tr": "<b>Ein Stab schlägt zwei.</b> Bei gleicher Masse und gleicher Reichweite liefert ein Doppelpendel an jeder Befestigung das 0.64- bis 0.74-Fache der Leistung des Einzelpendels: Die Hälfte seiner Masse sitzt auf halber Reichweite."
  },
  "4d7cb4aa6bf4": {
   "src": "Read the derivation",
@@ -397,7 +397,7 @@
  },
  "5fc721e367fe": {
   "src": "The planar model: a pivot on a circle around the hub, an upper rod and a lower rod, and the generators at the two joints.",
-  "tr": "Das ebene Modell: ein Drehpunkt auf einem Kreis um die Nabe, eine obere und eine untere Stange und die Generatoren an den beiden Gelenken."
+  "tr": "Das ebene Modell: ein Drehpunkt auf einem Kreis um die Nabe, ein oberer und ein unterer Stab und die Generatoren an den beiden Gelenken."
  },
  "5fd87e42be54": {
   "src": "Nine chapters from the Lagrangian to a real generator, 31 numbered equations and five figures, theory set against the full solution, every number computed by the models.",
@@ -449,7 +449,7 @@
  },
  "6b4e230aa238": {
   "src": "Projects by Numa Koudsie, each with its derivations, solver and results: Droplet Collection, the remodel of a Bachelor thesis on how cloud droplets become rain; Rotor Pendula, whether a second blade hinged at the tip of a turbine blade can power a sensor; the Hydraulic Press Study, a servo-hydraulic press under digital control, built from first principles; Iron, Cotton and the Head, why an iron ball hurts and a cotton ball of the same mass does not, in English, German and Arabic; and two rods balanced on a cart, in air and in a liquid.",
-  "tr": "Projekte von Numa Koudsie, jedes mit Herleitungen, Löser und Ergebnissen: Droplet Collection, die Neumodellierung einer Bachelorarbeit darüber, wie aus Wolkentröpfchen Regen wird; Rotor Pendula, die Frage, ob ein zweites Blatt, an der Spitze eines Turbinenblatts angelenkt, einen Sensor versorgen kann; die Studie einer hydraulischen Presse, einer servohydraulischen Presse unter digitaler Regelung, aus ersten Prinzipien aufgebaut; Eisen, Baumwolle und der Kopf, warum eine Eisenkugel wehtut und eine Baumwollkugel derselben Masse nicht, auf Englisch, Deutsch und Arabisch; und zwei Stangen, auf einem Wagen balanciert, in Luft und in einer Flüssigkeit."
+  "tr": "Projekte von Numa Koudsie, jedes mit Herleitungen, Löser und Ergebnissen: Droplet Collection, die Neumodellierung einer Bachelorarbeit darüber, wie aus Wolkentröpfchen Regen wird; Rotor Pendula, die Frage, ob ein zweites Blatt, an der Spitze eines Turbinenblatts angelenkt, einen Sensor versorgen kann; die Studie einer hydraulischen Presse, einer servohydraulischen Presse unter digitaler Regelung, aus ersten Prinzipien aufgebaut; Eisen, Baumwolle und der Kopf, warum eine Eisenkugel wehtut und eine Baumwollkugel derselben Masse nicht, auf Englisch, Deutsch und Arabisch; und zwei Stäbe, auf einem Wagen balanciert, in Luft und in einer Flüssigkeit."
  },
  "6d586cabb53f": {
   "src": "<span class=\"psub__n\">2.2</span>What the audit corrected",
@@ -465,7 +465,7 @@
  },
  "6fe138745715": {
   "src": "Holding two stacked rods upright by pushing only the cart below them",
-  "tr": "Zwei übereinander gestapelte Stangen aufrecht halten, indem man nur den Wagen darunter schiebt"
+  "tr": "Zwei übereinander gestapelte Stäbe aufrecht halten, indem man nur den Wagen darunter schiebt"
  },
  "702b201c4b40": {
   "src": "Phyein Usul",
@@ -617,7 +617,7 @@
  },
  "9249b9f72537": {
   "src": "Two rods stand one on the other on a cart, hinged and free to fall; the only help is a motor that pushes the cart along its rail. The study derives the equations of motion with Lagrange’s method, finds how fast the rods fall, and builds the balancer by minimising a cost. It then treats the controller as a real computer does: it looks only every T<sub>s</sub>, so the note derives the exact model between two looks and the gains that fit the loop period. When the rods fall anyway, the cart drains their energy, plans a swing-up, tracks it and hands over where a certified test says the balancer is sure to win, even with the cart still rolling.",
-  "tr": "Zwei Stangen stehen übereinander auf einem Wagen, gelenkig verbunden und frei, umzufallen; die einzige Hilfe ist ein Motor, der den Wagen entlang seiner Schiene schiebt. Die Studie leitet die Bewegungsgleichungen mit der Lagrange-Methode her, ermittelt, wie schnell die Stangen fallen, und baut den Balancierregler durch Minimierung von Kosten. Anschließend behandelt sie den Regler so, wie ein echter Computer arbeitet: Er schaut nur alle T<sub>s</sub> hin, deshalb leitet das Skript das exakte Modell zwischen zwei Blicken her und die Verstärkungen, die zur Taktzeit passen. Fallen die Stangen trotzdem, entzieht der Wagen ihnen Energie, plant ein Aufschwingen, führt es nach und übergibt dort, wo eine gesicherte Prüfung zeigt, dass der Balancierregler sicher gewinnt, auch wenn der Wagen noch rollt."
+  "tr": "Zwei Stäbe stehen übereinander auf einem Wagen, gelenkig verbunden und frei, umzufallen; die einzige Hilfe ist ein Motor, der den Wagen entlang seiner Schiene schiebt. Die Studie leitet die Bewegungsgleichungen mit der Lagrange-Methode her, ermittelt, wie schnell die Stäbe fallen, und baut den Balancierregler durch Minimierung von Kosten. Anschließend behandelt sie den Regler so, wie ein echter Computer arbeitet: Er schaut nur alle T<sub>s</sub> hin, deshalb leitet das Skript das exakte Modell zwischen zwei Blicken her und die Verstärkungen, die zur Taktzeit passen. Fallen die Stäbe trotzdem, entzieht der Wagen ihnen Energie, plant ein Aufschwingen, führt es nach und übergibt dort, wo eine gesicherte Prüfung zeigt, dass der Balancierregler sicher gewinnt, auch wenn der Wagen noch rollt."
  },
  "935fb231e528": {
   "src": "<span class=\"psub__n\">2.3</span>Four figures from the study",
@@ -721,7 +721,7 @@
  },
  "ad1e05a84615": {
   "src": "Under a liquid the cart of project 05 cannot lift its rods: a 0.75 m rod turns through water too slowly to swing over the top, and nine tenths of the motor’s work heat the liquid round the cart. This study measures why, and builds a machine that can: shorter rods of 3 kg, a 400 N motor and a slim carriage. In the page it hangs its rods down, swings them up, catches them and carries them to a target in all three liquids. The controller is told the flow, from a river to a double gyre and the slow waves of the deep sea, and holds the rods where the flow and gravity balance.",
-  "tr": "Unter einer Flüssigkeit kann der Wagen aus Projekt 05 seine Stangen nicht aufrichten: Eine 0.75 m lange Stange dreht sich im Wasser zu langsam, um über den Gipfel zu schwingen, und neun Zehntel der Arbeit des Motors erwärmen die Flüssigkeit um den Wagen. Diese Studie misst, warum, und baut eine Maschine, die es kann: kürzere Stangen von 3 kg, einen Motor mit 400 N und einen schlanken Schlitten. Auf der Seite lässt sie ihre Stangen herabhängen, schwingt sie auf, fängt sie und trägt sie in allen drei Flüssigkeiten zu einem Ziel. Der Regler kennt die Strömung, von einem Fluss über einen Doppelwirbel bis zu den langsamen Wellen der Tiefsee, und hält die Stangen dort, wo sich Strömung und Schwerkraft das Gleichgewicht halten."
+  "tr": "Unter einer Flüssigkeit kann der Wagen aus Projekt 05 seine Stäbe nicht aufrichten: Ein 0.75 m langer Stab dreht sich im Wasser zu langsam, um über den Gipfel zu schwingen, und neun Zehntel der Arbeit des Motors erwärmen die Flüssigkeit um den Wagen. Diese Studie misst, warum, und baut eine Maschine, die es kann: kürzere Stäbe von 3 kg, einen Motor mit 400 N und einen schlanken Schlitten. Auf der Seite lässt sie ihre Stäbe herabhängen, schwingt sie auf, fängt sie und trägt sie in allen drei Flüssigkeiten zu einem Ziel. Der Regler kennt die Strömung, von einem Fluss über einen Doppelwirbel bis zu den langsamen Wellen der Tiefsee, und hält die Stäbe dort, wo sich Strömung und Schwerkraft das Gleichgewicht halten."
  },
  "aef9c7b5f59a": {
   "src": "Skip to the projects",
@@ -741,7 +741,7 @@
  },
  "b2200a3e5748": {
   "src": "the rods’ turning rate allowed by honey over the rate a swing-up needs (0.08 for project 05’s rods)",
-  "tr": "die Drehrate der Stangen, die Honig zulässt, geteilt durch die Rate, die ein Aufschwingen braucht (0.08 für die Stangen aus Projekt 05)"
+  "tr": "die Drehrate der Stäbe, die Honig zulässt, geteilt durch die Rate, die ein Aufschwingen braucht (0.08 für die Stäbe aus Projekt 05)"
  },
  "b6c935d4f3c7": {
   "src": "min",
@@ -865,7 +865,7 @@
  },
  "d7817b1fb9bc": {
   "src": "The machine of project 05 rebuilt to swing its rods up under water, glycerol and honey",
-  "tr": "Die Maschine aus Projekt 05, so umgebaut, dass sie ihre Stangen unter Wasser, in Glycerin und in Honig aufschwingt"
+  "tr": "Die Maschine aus Projekt 05, so umgebaut, dass sie ihre Stäbe unter Wasser, in Glycerin und in Honig aufschwingt"
  },
  "d94f8b3ca4fd": {
   "src": "The solver of the collection equation, in your browser.",
@@ -905,7 +905,7 @@
  },
  "e154c5fb44da": {
   "src": "Balancing Two Rods in a Liquid",
-  "tr": "Zwei Stangen in einer Flüssigkeit balancieren"
+  "tr": "Zwei Stäbe in einer Flüssigkeit balancieren"
  },
  "e1fb99194062": {
   "src": "Nine chapters from the Lagrangian to a real generator, 29 numbered equations, every number computed by the models.",

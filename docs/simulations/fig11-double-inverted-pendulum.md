@@ -25,7 +25,7 @@ pointing to project 06; the figure caption says Project 05. Shared code changes 
 force in units of the motor's limit, w_r = w_s = 0.02 × 60 N/u_max (unchanged at 60 N), and stops after 400 steps (was 200); after a plan
 that was only late no pump is started; the guard's exception for a slow balancer in a liquid needs both rods within 20° of their rest state;
 the controller is told the flow (13.8 of project 06; `flowEq`, `eqTrack`), which in air acts in the air flows; clicking a flow in vacuum
-chooses the second medium of the menu. Tests: `NODE_PATH=$(npm root -g) node notes/fig11/panel/hon.cjs` runs rest, flick, drag, cart,
+chooses the second medium of the menu. Later the same day (follow-up to PR #120): in a flow the certified level c* is taken about the rest state of the certificate's own model (`restOf`), which matters here in the air flows; the four deep flows of project 06 ramp up over 8 s (`DEEP`, `RAMP`; not offered on this page); the flow-speed readout shows hundredths where the slider has them (project 06). Tests: `NODE_PATH=$(npm root -g) node notes/fig11/panel/hon.cjs` runs rest, flick, drag, cart,
 swingup, random, randomSTOP, ts40, glide, brake, limit, wind and windcart here; the liquid scenarios run on project 06 (PAGE=rods-in-liquid.html).
 
 ## What it is
