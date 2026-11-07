@@ -818,7 +818,7 @@
         var sT = Sim.slider('Ts', { format: function (v) { return v.toFixed(0) + ' ms'; }, onInput: function () { redesign(); } });
         var sR = Sim.slider('rho', { format: function (v) { return Sim.fmt(Math.pow(10, v), v < 0 ? 2 : 1); }, onInput: redesign });
         var medEl = document.getElementById('med'), flowEl = document.getElementById('flow'), flNote = document.getElementById('flow-note'); var MEDIA_RHO = { air: '1.2', water: '998', glycerol: '1261', honey: '1420' };   // the densities of section 13.1, on the medium buttons
-        var sU = Sim.slider('Uf', { format: function (v) { return (Math.abs(v * 10 - Math.round(v * 10)) > 1e-6 ? v.toFixed(2) : v.toFixed(1)) + ' m/s'; },   // hundredths where the slider has them (project 06, for honey) onInput: function () { redesign(); } });
+        var sU = Sim.slider('Uf', { format: function (v) { return (Math.abs(v * 10 - Math.round(v * 10)) > 1e-6 ? v.toFixed(2) : v.toFixed(1)) + ' m/s'; },   /* hundredths where the slider has them (project 06, for honey) */ onInput: function () { redesign(); } });
         var cplEl = document.getElementById('cpl');
         function solved() { return cplEl.value === 'solved' && medEl.value !== 'vacuum'; }   // the fluid of section 13.6: solved, and pushed back
         function flowNote() { var k = medEl.value === 'vacuum' ? 'vacuum' : flowEl.value; flNote.textContent = flNote.title = (solved() ? document.getElementById('fn-solved').textContent + ' ' : '') .replace(/\s+/g, ' ') + document.getElementById('fn-' + k).textContent.replace(/\s+/g, ' ').trim(); }

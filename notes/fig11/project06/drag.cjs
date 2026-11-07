@@ -19,13 +19,13 @@ const PAGE = process.env.PAGE || 'rods-in-liquid.html';
     const held = await pg.evaluate(() => DIPC.ds.get('held'));
     await pg.waitForTimeout(1000 * +(process.env.HOLD || 1));
     if (process.env.SHOT) await pg.screenshot({ path: `${process.env.SHOT}-${med}-${fl}-held.png` });
-    const xr = await pg.evaluate(() => DIPC.s[0]); await pg.mouse.up();
+    const xr = await pg.evaluate(() => DIPC.s[0]), trel = await pg.evaluate(() => DIPC.t); await pg.mouse.up(); console.log(`  released at page time ${trel.toFixed(2)} s`);
     const rows = []; for (let i = 0; i < +(process.env.T || 15); i++) { await pg.waitForTimeout(1000); rows.push(await pg.evaluate(() => [DIPC.t.toFixed(0), DIPC.mode, DIPC.s[0].toFixed(2), (DIPC.ds.get('th1w') * 57.3).toFixed(1), (DIPC.ds.get('th2w') * 57.3).toFixed(1), DIPC.u.toFixed(0)].join(' '))); }
-    const end = await pg.evaluate(() => ({ th1: DIPC.ds.get('th1w') * 57.296, th2: DIPC.ds.get('th2w') * 57.296, e1: DIPC.EQ.th1 * 57.296, e2: DIPC.EQ.th2 * 57.296, x: DIPC.s[0] }));
+    const end = await pg.evaluate((tr) => { const c = DIPC.log.filter(l => l.ev === 'caught').pop(); return { th1: DIPC.ds.get('th1w') * 57.296, th2: DIPC.ds.get('th2w') * 57.296, e1: DIPC.EQ.th1 * 57.296, e2: DIPC.EQ.th2 * 57.296, x: DIPC.s[0], t: DIPC.t, tc: c ? c.t : NaN, tr }; }, xr);
     if (process.env.SHOT) await pg.screenshot({ path: `${process.env.SHOT}-${med}-${fl}-end.png` });
     console.log(c, `U ${eq.U} m/s, rest state θ1* ${eq.th1.toFixed(1)}°, θ2* ${eq.th2.toFixed(1)}°, u* ${eq.u.toFixed(1)} N (told: ${eq.on}); grabbed: held=${held}, let go at x = ${xr.toFixed(2)} m`);
     console.log('  ' + rows.filter((r, i) => i % 3 === 2).join('\n  '));
-    console.log(`  end: θ1 − θ1* = ${(end.th1 - end.e1).toFixed(2)}°, θ2 − θ2* = ${(end.th2 - end.e2).toFixed(2)}°, x = ${end.x.toFixed(2)} m; log ${JSON.stringify(await pg.evaluate(() => DIPC.log.map(l => l.ev + '@' + l.t.toFixed(1))))}`);
+    console.log(`  end, page time ${end.t.toFixed(1)} s, ${(end.t - end.tc).toFixed(1)} s after the catch: θ1 − θ1* = ${(end.th1 - end.e1).toFixed(2)}°, θ2 − θ2* = ${(end.th2 - end.e2).toFixed(2)}°, x = ${end.x.toFixed(2)} m; log ${JSON.stringify(await pg.evaluate(() => DIPC.log.map(l => l.ev + '@' + l.t.toFixed(1))))}`);
     await pg.close(); }
   console.log('page errors:', errs.length ? errs : 'none'); await b.close();
 })();
