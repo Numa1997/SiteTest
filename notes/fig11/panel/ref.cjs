@@ -10,9 +10,17 @@ const TAU = 2 * Math.PI;
 const GZ = [0.1834346424956498, 0.5255324099163290, 0.7966664774136267, 0.9602898564975363], GW = [0.3626837833783620, 0.3137066458778873, 0.2223810344533745, 0.1012285362903763];
 const NODES = []; for (let k = 0; k < 4; k++) { NODES.push([(1 - GZ[k]) / 2, GW[k] / 2]); NODES.push([(1 + GZ[k]) / 2, GW[k] / 2]); }
 const RODN = []; for (let p = 0; p < 3; p++) for (const [x, w] of NODES) RODN.push([(p + x) / 3, w / 3]);   // along a rod: 3 panels of 8 points
-const YF = -3.3, YS = 3.4, CH = 0.12, RR = 0.01;
+const YF = -3.3, YS = 3.4, CH = 0.12, RR = 0.01;   // CH: project 05's cart height; a page with another cart passes fl.CH
+// stream functions of the deep and slow flows (13.3), written from the formulas of the note, not from the page's velocities
+const PSI = {
+  internal: (X, Y, t, U) => { const k = 2 * Math.PI / 12, m = 2 * Math.PI / 4, w = 2 * Math.PI / 45; return U / m * Math.cos(k * X - w * t) * Math.sin(m * Y); },
+  gyre: (X, Y, t, U) => { const ep = 0.25 * Math.sin(2 * Math.PI * t / 15), xp = (X + 3) / 3, yp = (Y + 1.5) / 3; return 3 * U / Math.PI * Math.sin(Math.PI * (ep * xp * xp + (1 - 2 * ep) * xp)) * Math.sin(Math.PI * yp); },
+  deepsea: (X, Y, t, U) => [[8, 10, 23, 0.3], [5, 75, 31, 2.1], [3.5, 140, 41, 4.0], [6, 200, 53, 1.2], [2.5, 260, 67, 5.3], [4, 320, 89, 3.7]].reduce((s, [l, d, T, ph]) => { const k = 2 * Math.PI / l, a = d * Math.PI / 180; return s + U / Math.sqrt(6) / k * Math.sin(k * Math.cos(a) * X + k * Math.sin(a) * Y - 2 * Math.PI / T * t + ph); }, 0),
+  tides: (X, Y, t, U) => { const k = 2 * Math.PI / 30; return U / 2 * Y * (Math.cos(k * X - 2 * Math.PI / 20 * t) + Math.cos(k * X - 2 * Math.PI / 22 * t + 1)); },
+};
 function flow(k, X, Y, t, U, nu) {
   const T = 2 * Math.PI;
+  if (PSI[k]) { const e = 1e-5, p = PSI[k]; return [(p(X, Y + e, t, U) - p(X, Y - e, t, U)) / (2 * e), -(p(X + e, Y, t, U) - p(X - e, Y, t, U)) / (2 * e)]; }   // the deep and slow flows: u = ∂ψ/∂y, v = −∂ψ/∂x of their stream functions, numerically
   if (k === 'breeze') return [U, 0];
   if (k === 'gusts') return [U * (1 + 0.5 * Math.sin(T * 0.13 * t) + 0.3 * Math.sin(T * 0.37 * t + 1) + 0.2 * Math.sin(T * 0.71 * t + 2)), 0];
   if (k === 'ground') { const z = Y - YF; return [z > 0.03 ? U * Math.log(z / 0.03) / Math.log(3.3 / 0.03) : 0, 0]; }
@@ -53,8 +61,8 @@ function fluidQ(fl, s, t) {   // rods as lines from the hinge; f = -xi_perp w_n 
       let fn = -fl.xi[k] * wnn - fl.cq * Math.abs(wnn) * wnn; if (fl.acc) { const A = flowAcc(fl, P[0], P[1], t); fn += fl.kr * (A[0] * n1[0] + A[1] * n1[1]); }
       const ft = -0.5 * fl.xi[k] * wt, fv = [ft * t1[0] + fn * n1[0], ft * t1[1] + fn * n1[1]], q = wn * L;
       Q[0] += q * fv[0]; if (k === 0) Q[1] += q * sg * fn; else { Q[1] += q * fl.L1 * (fv[0] * Math.cos(a) - fv[1] * Math.sin(a)); Q[2] += q * sg * fn; } } }
-  let um = 0; for (const [xn, wn] of NODES) um += wn * flow(fl.flow, x, -CH * xn, t, fl.U, fl.nu)[0];
-  const wc = xd - um; Q[0] += -fl.cl * wc - fl.cc * Math.abs(wc) * wc + (fl.acc ? fl.kc * flowAcc(fl, x, -CH / 2, t)[0] : 0); return Q;
+  let um = 0; for (const [xn, wn] of NODES) um += wn * flow(fl.flow, x, -(fl.CH || CH) * xn, t, fl.U, fl.nu)[0];
+  const wc = xd - um; Q[0] += -fl.cl * wc - fl.cc * Math.abs(wc) * wc + (fl.acc ? fl.kc * flowAcc(fl, x, -(fl.CH || CH) / 2, t)[0] : 0); return Q;
 }
 // (8a), (8), (8b):  M q'' = r, with q = (x, th1, th2); with a medium, Q of (35) on the right
 function accel(d, f, s, u, t, fl) {

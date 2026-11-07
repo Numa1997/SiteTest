@@ -259,9 +259,17 @@
   "src": "The equations are derived twice, by Lagrange with the kinetic energy integrated along the blade and by Newton summed over it, and solved with an implicit solver that agrees with an independent one to \\(2\\times10^{-12}\\). A referee checked each derivation, and the notes say where a model was corrected: a smoothing band in the geared generator, set on gravity’s scale, was a thousand times too wide and made the power the rotor pays 16 % low; it now sits on the gear’s own power scale. An independent script, with every constant typed again, re-derives the main formulas in SymPy and re-integrates the runs with SciPy.",
   "tr": "Die Gleichungen werden zweimal hergeleitet, nach Lagrange mit der entlang des Blatts integrierten kinetischen Energie und nach Newton, über das Blatt summiert, und mit einem impliziten Löser gelöst, der mit einem unabhängigen auf \\(2\\times10^{-12}\\) übereinstimmt. Ein Gutachter prüfte jede Herleitung, und das Skript sagt, wo ein Modell korrigiert wurde: Ein Glättungsband im Getriebegenerator, auf die Skala der Schwerkraft gesetzt, war tausendmal zu breit und ließ die Leistung, die der Rotor bezahlt, um 16 % zu niedrig ausfallen; es sitzt jetzt auf der eigenen Leistungsskala des Getriebes. Ein unabhängiges Skript, in dem jede Konstante neu eingetippt ist, leitet die Hauptformeln in SymPy erneut her und integriert die Läufe mit SciPy neu."
  },
+ "447812dddf5b": {
+  "src": "Fluid drag · added mass · swing-up planning · flow-aware control",
+  "tr": "Strömungswiderstand · hydrodynamische Masse · Planung des Aufschwingens · Regelung mit Kenntnis der Strömung"
+ },
  "44cd5b58f613": {
   "src": "<span class=\"pfig__n\">Figure 3</span>The sampled position loop up to the Nyquist frequency of 500 Hz: crossover at 9.7 Hz with 64° of phase margin.",
   "tr": "<span class=\"pfig__n\">Abbildung 3</span>Der abgetastete Lageregelkreis bis zur Nyquist-Frequenz von 500 Hz: Durchtritt bei 9.7 Hz mit 64° Phasenreserve."
+ },
+ "4522622c6ce4": {
+  "src": "liquids in which the rods are swung up from hanging and caught, about 6 s after the button",
+  "tr": "Flüssigkeiten, in denen die Stangen aus der hängenden Lage aufgeschwungen und gefangen werden, etwa 6 s nach dem Knopfdruck"
  },
  "45ed4c0fb4e6": {
   "src": "<span class=\"pfig__n\">Figure 1</span>Left: the two fall-speed models against Gunn and Kinzer. Right: the error of the drag balance, at most 2.07 % at the listed sizes from 0.3 mm up and −7.57 % at 0.1 mm.",
@@ -438,6 +446,10 @@
  "6b37fe2665e2": {
   "src": "the weight both scales settle on: 1.000 kg each",
   "tr": "das Gewicht, auf dem beide Waagen stehen bleiben: je 1.000 kg"
+ },
+ "6b4e230aa238": {
+  "src": "Projects by Numa Koudsie, each with its derivations, solver and results: Droplet Collection, the remodel of a Bachelor thesis on how cloud droplets become rain; Rotor Pendula, whether a second blade hinged at the tip of a turbine blade can power a sensor; the Hydraulic Press Study, a servo-hydraulic press under digital control, built from first principles; Iron, Cotton and the Head, why an iron ball hurts and a cotton ball of the same mass does not, in English, German and Arabic; and two rods balanced on a cart, in air and in a liquid.",
+  "tr": "Projekte von Numa Koudsie, jedes mit Herleitungen, Löser und Ergebnissen: Droplet Collection, die Neumodellierung einer Bachelorarbeit darüber, wie aus Wolkentröpfchen Regen wird; Rotor Pendula, die Frage, ob ein zweites Blatt, an der Spitze eines Turbinenblatts angelenkt, einen Sensor versorgen kann; die Studie einer hydraulischen Presse, einer servohydraulischen Presse unter digitaler Regelung, aus ersten Prinzipien aufgebaut; Eisen, Baumwolle und der Kopf, warum eine Eisenkugel wehtut und eine Baumwollkugel derselben Masse nicht, auf Englisch, Deutsch und Arabisch; und zwei Stangen, auf einem Wagen balanciert, in Luft und in einer Flüssigkeit."
  },
  "6d586cabb53f": {
   "src": "<span class=\"psub__n\">2.2</span>What the audit corrected",
@@ -675,6 +687,10 @@
   "src": "<b>A real generator still delivers.</b> A catalogue motor behind its gearhead’s largest ratio, 492 : 1, brings 57–106 mW to the wires, at least 1 522 times the sensor’s need, and still 811 times if the gearbox is twice as draggy and only 50 % efficient. The air on the second blade, left out of these notes, is the open problem.",
   "tr": "<b>Ein realer Generator liefert trotzdem.</b> Ein Katalogmotor hinter der größten Übersetzung seines Getriebes, 492 : 1, bringt 57–106 mW an die Klemmen, mindestens das 1 522-Fache des Sensorbedarfs, und noch das 811-Fache, wenn das Getriebe doppelt so schwergängig ist und nur 50 % Wirkungsgrad hat. Die Luft am zweiten Blatt, die dieses Skript auslässt, ist die offene Frage."
  },
+ "a5455be5a129": {
+  "src": "of the old cart’s face meets the liquid",
+  "tr": "der Stirnfläche des alten Wagens trifft auf die Flüssigkeit"
+ },
  "a5e164dcc538": {
   "src": "Three winds, an ideal brake or a real geared generator, solved in your browser; six worked solutions.",
   "tr": "Drei Winde, eine ideale Bremse oder ein realer Getriebegenerator, gelöst in Ihrem Browser; sechs durchgerechnete Lösungen."
@@ -703,6 +719,10 @@
   "src": "<span class=\"pfig__n\">Figure 3</span>The energy books at the end: iron heats the head, cotton heats itself.",
   "tr": "<span class=\"pfig__n\">Abbildung 3</span>Die Energiebilanz am Ende: Eisen erwärmt den Kopf, Baumwolle erwärmt sich selbst."
  },
+ "ad1e05a84615": {
+  "src": "Under a liquid the cart of project 05 cannot lift its rods: a 0.75 m rod turns through water too slowly to swing over the top, and nine tenths of the motor’s work heat the liquid round the cart. This study measures why, and builds a machine that can: shorter rods of 3 kg, a 400 N motor and a slim carriage. In the page it hangs its rods down, swings them up, catches them and carries them to a target in all three liquids. The controller is told the flow, from a river to a double gyre and the slow waves of the deep sea, and holds the rods where the flow and gravity balance.",
+  "tr": "Unter einer Flüssigkeit kann der Wagen aus Projekt 05 seine Stangen nicht aufrichten: Eine 0.75 m lange Stange dreht sich im Wasser zu langsam, um über den Gipfel zu schwingen, und neun Zehntel der Arbeit des Motors erwärmen die Flüssigkeit um den Wagen. Diese Studie misst, warum, und baut eine Maschine, die es kann: kürzere Stangen von 3 kg, einen Motor mit 400 N und einen schlanken Schlitten. Auf der Seite lässt sie ihre Stangen herabhängen, schwingt sie auf, fängt sie und trägt sie in allen drei Flüssigkeiten zu einem Ziel. Der Regler kennt die Strömung, von einem Fluss über einen Doppelwirbel bis zu den langsamen Wellen der Tiefsee, und hält die Stangen dort, wo sich Strömung und Schwerkraft das Gleichgewicht halten."
+ },
  "aef9c7b5f59a": {
   "src": "Skip to the projects",
   "tr": "Zu den Projekten springen"
@@ -718,6 +738,10 @@
  "b13b8e96ff0e": {
   "src": "A static copy of the Rotor Pendula app. Its saved-runs list is left out: every run is computed fresh in your browser, and nothing is stored.",
   "tr": "Eine statische Kopie der App Rotor Pendula; die App selbst ist auf Englisch. Ihre Liste gespeicherter Läufe fehlt: Jeder Lauf wird frisch in Ihrem Browser berechnet, und nichts wird gespeichert."
+ },
+ "b2200a3e5748": {
+  "src": "the rods’ turning rate allowed by honey over the rate a swing-up needs (0.08 for project 05’s rods)",
+  "tr": "die Drehrate der Stangen, die Honig zulässt, geteilt durch die Rate, die ein Aufschwingen braucht (0.08 für die Stangen aus Projekt 05)"
  },
  "b6c935d4f3c7": {
   "src": "min",
@@ -839,6 +863,10 @@
   "src": "Largest radial specific force at the pivot for each mounting against the accelerometer range.",
   "tr": "Größte radiale spezifische Kraft am Drehpunkt für jede Befestigung, gegenüber dem Messbereich des Beschleunigungssensors."
  },
+ "d7817b1fb9bc": {
+  "src": "The machine of project 05 rebuilt to swing its rods up under water, glycerol and honey",
+  "tr": "Die Maschine aus Projekt 05, so umgebaut, dass sie ihre Stangen unter Wasser, in Glycerin und in Honig aufschwingt"
+ },
  "d94f8b3ca4fd": {
   "src": "The solver of the collection equation, in your browser.",
   "tr": "Der Löser der Koaleszenzgleichung, in Ihrem Browser."
@@ -874,6 +902,10 @@
  "e09212c7d3ea": {
   "src": "Skills",
   "tr": "Kenntnisse"
+ },
+ "e154c5fb44da": {
+  "src": "Balancing Two Rods in a Liquid",
+  "tr": "Zwei Stangen in einer Flüssigkeit balancieren"
  },
  "e1fb99194062": {
   "src": "Nine chapters from the Lagrangian to a real generator, 29 numbered equations, every number computed by the models.",

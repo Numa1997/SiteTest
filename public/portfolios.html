@@ -8,7 +8,7 @@
     <title>Projects · Numa Koudsie</title>
     <meta
       name="description"
-      content="Projects by Numa Koudsie, each with its derivations, solver and results: Droplet Collection, the remodel of a Bachelor thesis on how cloud droplets become rain; Rotor Pendula, whether a second blade hinged at the tip of a turbine blade can power a sensor; the Hydraulic Press Study, a servo-hydraulic press under digital control, built from first principles; and Iron, Cotton and the Head, why an iron ball hurts and a cotton ball of the same mass does not, in English, German and Arabic."
+      content="Projects by Numa Koudsie, each with its derivations, solver and results: Droplet Collection, the remodel of a Bachelor thesis on how cloud droplets become rain; Rotor Pendula, whether a second blade hinged at the tip of a turbine blade can power a sensor; the Hydraulic Press Study, a servo-hydraulic press under digital control, built from first principles; Iron, Cotton and the Head, why an iron ball hurts and a cotton ball of the same mass does not, in English, German and Arabic; and two rods balanced on a cart, in air and in a liquid."
     />
     <meta name="author" content="Numa Koudsie" />
     <meta name="theme-color" content="#f5f1ea" /><!--I18N-ALTERNATES--><link rel="alternate" hreflang="en" href="https://phyeinusul.com/portfolios.html" /><link rel="alternate" hreflang="de" href="https://phyeinusul.com/de/portfolios.html" /><link rel="alternate" hreflang="ar" href="https://phyeinusul.com/ar/portfolios.html" /><link rel="alternate" hreflang="x-default" href="https://phyeinusul.com/portfolios.html" /><!--/I18N-ALTERNATES-->
@@ -439,6 +439,37 @@
               <div><dt>34</dt><dd>ms: the longest loop period the continuous gains survive</dd></div>
               <div><dt>260</dt><dd>ms: the same with gains designed for the period</dd></div>
               <div><dt>40/40</dt><dd>random falls swung back up and caught in tests</dd></div>
+            </dl>
+          </div>
+        </div>
+      </article>
+      <article class="proj" id="rods-in-liquid" aria-labelledby="ril-title">
+        <div class="proj__band">
+          <span class="proj__num">06</span>
+          <p>An interactive study · from first principles · 2026</p>
+          <span>Fluid drag · added mass · swing-up planning · flow-aware control</span>
+        </div>
+        <div class="proj__body">
+          <div class="proj__head">
+            <div>
+              <h2 id="ril-title">Balancing Two Rods in a Liquid</h2>
+              <p class="proj__sub">The machine of project 05 rebuilt to swing its rods up under water, glycerol and honey</p>
+              <p class="proj__abs">
+                Under a liquid the cart of project 05 cannot lift its rods: a 0.75 m rod turns through water too slowly to swing over
+                the top, and nine tenths of the motor’s work heat the liquid round the cart. This study measures why, and builds a
+                machine that can: shorter rods of 3 kg, a 400 N motor and a slim carriage. In the page it hangs its rods down, swings
+                them up, catches them and carries them to a target in all three liquids. The controller is told the flow, from a
+                river to a double gyre and the slow waves of the deep sea, and holds the rods where the flow and gravity balance.
+              </p>
+              <div class="proj__actions">
+                <a class="proj__btn" href="simulations/rods-in-liquid.html">Run the simulation</a>
+                <a class="proj__btn proj__btn--ghost" href="simulations/rods-in-liquid.html#p-fluid">Read the lecture notes</a>
+              </div>
+            </div>
+            <dl class="proj__tally" aria-label="Key figures">
+              <div><dt>3/3</dt><dd>liquids in which the rods are swung up from hanging and caught, about 6 s after the button</dd></div>
+              <div><dt>0.74</dt><dd>the rods’ turning rate allowed by honey over the rate a swing-up needs (0.08 for project 05’s rods)</dd></div>
+              <div><dt>¼</dt><dd>of the old cart’s face meets the liquid</dd></div>
             </dl>
           </div>
         </div>

@@ -62,3 +62,8 @@ the review with the deploying session in `fix/TO-MOTHER.md`):
   to a window round the cart (bit-identical). With per-rod self fields a 20 ms fluid step costs about 30 ms in Chromium (slow motion, Numa's choice).
 - **Test options**: `frozen` now holds the machine in every RK4 stage; `kinematic(t)` (prescribed path); `noPush`, `noPushRod`; `selfTau`
   (finite memory); `viscFV`, `shearUnw`, `solidCut` (rejected variants, kept for the record).
+
+
+## The cart's size (7 November 2026)
+
+`TwoWay.setCart(w, h, b)` sets the cart's length, height and depth (m), which are also the tank's depth; the page calls it once from its settings (`#dipc-page`, `cart`). Project 05 keeps its box, 0.36 × 0.12 × 0.2 m, the size every check in `notes/fig11/fluid-ns-handover/twoway/` was run with; project 06 ([rods-in-liquid.html](../../public/simulations/rods-in-liquid.html)) sets its carriage, 0.40 × 0.06 × 0.10 m. Since 7 November 2026 the solved fluid is offered on project 06 only; project 05 keeps the file loaded (the script is shared) with its menu hidden.

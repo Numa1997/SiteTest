@@ -259,9 +259,17 @@
   "src": "The equations are derived twice, by Lagrange with the kinetic energy integrated along the blade and by Newton summed over it, and solved with an implicit solver that agrees with an independent one to \\(2\\times10^{-12}\\). A referee checked each derivation, and the notes say where a model was corrected: a smoothing band in the geared generator, set on gravity’s scale, was a thousand times too wide and made the power the rotor pays 16 % low; it now sits on the gear’s own power scale. An independent script, with every constant typed again, re-derives the main formulas in SymPy and re-integrates the runs with SciPy.",
   "tr": "تُشتقّ المعادلات مرّتين، بطريقة لاغرانج مع تكامل الطاقة الحركية على طول الشفرة وبطريقة نيوتن مجموعةً عليها، وتُحلّ بحلّال ضمني يتّفق مع حلّال مستقلّ حتى \\(2\\times10^{-12}\\). فحص مُحكِّم كلّ اشتقاق، وتذكر المذكّرات أين صُحِّح نموذج: كان نطاق تنعيم في المولّد ذي التروس، مضبوطًا على مقياس الجاذبية، أعرضَ بألف مرّة ممّا ينبغي، فجعل القدرة التي يدفعها الدوّار أقلّ بـ16 %؛ وهو الآن مضبوط على مقياس القدرة الخاصّ بالتروس. ونصّ برمجي مستقلّ، أُعيدت فيه كتابة كلّ ثابت، يعيد اشتقاق الصيغ الرئيسة في SymPy ويعيد تكامل التشغيلات بـSciPy."
  },
+ "447812dddf5b": {
+  "src": "Fluid drag · added mass · swing-up planning · flow-aware control",
+  "tr": "كبح المائع · الكتلة المضافة · تخطيط الأرجحة إلى الأعلى · تحكّم يعرف الجريان"
+ },
  "44cd5b58f613": {
   "src": "<span class=\"pfig__n\">Figure 3</span>The sampled position loop up to the Nyquist frequency of 500 Hz: crossover at 9.7 Hz with 64° of phase margin.",
   "tr": "<span class=\"pfig__n\">الشكل 3</span>حلقة الموضع المُعايَنة حتى تردد نايكويست 500 Hz: التقاطع عند 9.7 Hz مع هامش طور قدره 64°."
+ },
+ "4522622c6ce4": {
+  "src": "liquids in which the rods are swung up from hanging and caught, about 6 s after the button",
+  "tr": "سوائل تُؤرجَح فيها القضبان إلى الأعلى من التدلّي وتُلتقط، بعد نحو 6 s من الضغط على الزرّ"
  },
  "45ed4c0fb4e6": {
   "src": "<span class=\"pfig__n\">Figure 1</span>Left: the two fall-speed models against Gunn and Kinzer. Right: the error of the drag balance, at most 2.07 % at the listed sizes from 0.3 mm up and −7.57 % at 0.1 mm.",
@@ -438,6 +446,10 @@
  "6b37fe2665e2": {
   "src": "the weight both scales settle on: 1.000 kg each",
   "tr": "الوزن الذي يستقرّ عليه الميزانان: 1.000 kg لكلٍّ منهما"
+ },
+ "6b4e230aa238": {
+  "src": "Projects by Numa Koudsie, each with its derivations, solver and results: Droplet Collection, the remodel of a Bachelor thesis on how cloud droplets become rain; Rotor Pendula, whether a second blade hinged at the tip of a turbine blade can power a sensor; the Hydraulic Press Study, a servo-hydraulic press under digital control, built from first principles; Iron, Cotton and the Head, why an iron ball hurts and a cotton ball of the same mass does not, in English, German and Arabic; and two rods balanced on a cart, in air and in a liquid.",
+  "tr": "مشاريع لـنعمة سائر قدسية، لكلٍّ منها اشتقاقاته وحلّاله ونتائجه: Droplet Collection، إعادة نمذجة رسالة بكالوريوس عن تحوّل قُطيرات الغيمة إلى مطر؛ وRotor Pendula، عن قدرة شفرة ثانية مثبَّتة بمفصل عند طرف شفرة عنفة على تغذية حسّاس؛ ودراسة المكبس الهيدروليكي، مكبس هيدروليكي مؤازَر بتحكّم رقمي، مبنيّ من المبادئ الأولى؛ والحديد والقطن والرأس، لماذا تؤلم كرة الحديد ولا تؤلم كرة القطن ذات الكتلة نفسها، بالإنجليزية والألمانية والعربية؛ وقضيبان يُوازَنان على عربة، في الهواء وفي سائل."
  },
  "6d586cabb53f": {
   "src": "<span class=\"psub__n\">2.2</span>What the audit corrected",
@@ -675,6 +687,10 @@
   "src": "<b>A real generator still delivers.</b> A catalogue motor behind its gearhead’s largest ratio, 492 : 1, brings 57–106 mW to the wires, at least 1 522 times the sensor’s need, and still 811 times if the gearbox is twice as draggy and only 50 % efficient. The air on the second blade, left out of these notes, is the open problem.",
   "tr": "<b>المولّد الحقيقي يوفي بالغرض.</b> محرّك من كتالوج خلف أكبر نسبة في علبة تروسه، 492 : 1، يوصل 57–106 mW إلى الأسلاك، أي 1 522 ضعف حاجة الحسّاس على الأقل، وما يزال 811 ضعفًا لو كانت علبة التروس أثقل حركةً بمرّتين وكفاءتها 50 % فقط. أمّا الهواء على الشفرة الثانية، الذي تُغفله هذه المذكّرات، فهو المسألة المفتوحة."
  },
+ "a5455be5a129": {
+  "src": "of the old cart’s face meets the liquid",
+  "tr": "من وجه العربة القديمة يلاقي السائل"
+ },
  "a5e164dcc538": {
   "src": "Three winds, an ideal brake or a real geared generator, solved in your browser; six worked solutions.",
   "tr": "ثلاث رياح، وكابح مثالي أو مولّد حقيقي ذو تروس، تُحلّ في متصفّحك؛ وستّة حلول مفصّلة."
@@ -703,6 +719,10 @@
   "src": "<span class=\"pfig__n\">Figure 3</span>The energy books at the end: iron heats the head, cotton heats itself.",
   "tr": "<span class=\"pfig__n\">الشكل 3</span>حساب الطاقة في النهاية: الحديد يسخّن الرأس، والقطن يسخّن نفسه."
  },
+ "ad1e05a84615": {
+  "src": "Under a liquid the cart of project 05 cannot lift its rods: a 0.75 m rod turns through water too slowly to swing over the top, and nine tenths of the motor’s work heat the liquid round the cart. This study measures why, and builds a machine that can: shorter rods of 3 kg, a 400 N motor and a slim carriage. In the page it hangs its rods down, swings them up, catches them and carries them to a target in all three liquids. The controller is told the flow, from a river to a double gyre and the slow waves of the deep sea, and holds the rods where the flow and gravity balance.",
+  "tr": "تحت سائل لا تستطيع عربة المشروع 05 أن ترفع قضيبيها: فالقضيب الذي طوله 0.75 m يدور في الماء أبطأ من أن يتأرجح فوق القمّة، وتسعة أعشار شغل المحرّك تسخّن السائل حول العربة. تقيس هذه الدراسة السبب، وتبني آلة تستطيع ذلك: قضيبان أقصر كتلة كلّ منهما 3 kg، ومحرّك قوّته 400 N، وعربة نحيلة. وفي الصفحة تُدلّي الآلة قضيبيها، وتؤرجحهما إلى الأعلى، وتلتقطهما، وتحملهما إلى هدف في السوائل الثلاثة كلّها. ويُخبَر المتحكّم بالجريان، من نهر إلى الدوّامة المزدوجة إلى الأمواج البطيئة في أعماق البحر، فيُمسك القضيبين حيث يتوازن الجريان والجاذبية."
+ },
  "aef9c7b5f59a": {
   "src": "Skip to the projects",
   "tr": "انتقل إلى المشاريع"
@@ -718,6 +738,10 @@
  "b13b8e96ff0e": {
   "src": "A static copy of the Rotor Pendula app. Its saved-runs list is left out: every run is computed fresh in your browser, and nothing is stored.",
   "tr": "نسخة ثابتة من تطبيق Rotor Pendula، والتطبيق نفسه بالإنجليزية. حُذفت منه قائمة التشغيلات المحفوظة: كلّ تشغيل يُحسَب من جديد في متصفّحك، ولا يُخزَّن شيء."
+ },
+ "b2200a3e5748": {
+  "src": "the rods’ turning rate allowed by honey over the rate a swing-up needs (0.08 for project 05’s rods)",
+  "tr": "معدّل دوران القضيبين الذي يسمح به العسل مقسومًا على المعدّل الذي تحتاجه الأرجحة إلى الأعلى (0.08 لقضيبي المشروع 05)"
  },
  "b6c935d4f3c7": {
   "src": "min",
@@ -839,6 +863,10 @@
   "src": "Largest radial specific force at the pivot for each mounting against the accelerometer range.",
   "tr": "أكبر قوّة نوعية قطرية عند المحور لكلّ موضع تثبيت، مقارنةً بمدى مقياس التسارع."
  },
+ "d7817b1fb9bc": {
+  "src": "The machine of project 05 rebuilt to swing its rods up under water, glycerol and honey",
+  "tr": "آلة المشروع 05 وقد أُعيد بناؤها لتؤرجح قضيبيها إلى الأعلى تحت الماء والغليسرين والعسل"
+ },
  "d94f8b3ca4fd": {
   "src": "The solver of the collection equation, in your browser.",
   "tr": "حلّال معادلة الالتقاط، في متصفّحك."
@@ -874,6 +902,10 @@
  "e09212c7d3ea": {
   "src": "Skills",
   "tr": "المهارات"
+ },
+ "e154c5fb44da": {
+  "src": "Balancing Two Rods in a Liquid",
+  "tr": "موازنة قضيبين في سائل"
  },
  "e1fb99194062": {
   "src": "Nine chapters from the Lagrangian to a real generator, 29 numbered equations, every number computed by the models.",
