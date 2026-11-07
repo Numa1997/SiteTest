@@ -1,4 +1,4 @@
-// Honesty tests of the data panel's store on project 05 (Balancing Two Rods on a Cart).
+// Honesty tests of the data panel's store on project 05 (Balancing Two Rods on a Cart) and, with PAGE=rods-in-liquid.html, project 06 (in a liquid).
 // b  replay: every stored step again, with the page's own rk4 (bit for bit) and with the independent RK4 of ref.cjs; continuity of the step log; a chained replay
 // c  controller: every stored force recomputed from the stored sample alone; zero-order hold of every 1 ms step; sample times on the loop period's grid
 // d  picture: cart, hinge between the rods and top of the upper rod found in the canvas pixels (alpha first) and compared with the stored state turned into pixels
@@ -13,6 +13,7 @@ const fmt = (v) => (v === 0 ? '0' : Math.abs(v) < 1e-3 || Math.abs(v) > 1e5 ? v.
 
 /* ---------- in the page: copy out the logs written since the last copy, and replay each new step with the page's own rk4 ---------- */
 const EXTRACT = (a) => {
+  const CART = JSON.parse(document.getElementById('dipc-page').textContent).cart;   // the page's cart: project 05's box or project 06's carriage
   const ds = DIPC.ds, g = (n) => ds.get(n), ver = g('ver'), A = (n, r, w) => Array.from(g(n).subarray(r * w, (r + 1) * w));
   const st = [], cs = []; let b1n = 0, b1x = 0, b1skip = 0;
   for (let r = 0; r < g('st_n'); r++) { const i = g('st_i')[r]; if (i <= a.lastI) continue;
@@ -21,7 +22,7 @@ const EXTRACT = (a) => {
     st.push(row); }
   for (let r = 0; r < g('cs_n'); r++) { const i = g('cs_i')[r]; if (i <= a.lastJ) continue;
     cs.push({ i, t: g('cs_t')[r], k: g('cs_k')[r], due: g('cs_due')[r], next: g('cs_next')[r], s: A('cs_s', r, 6), u: g('cs_u')[r], mode: g('cs_mode')[r], rk: g('cs_rk')[r], rx: g('cs_rx')[r], rv: g('cs_rv')[r], rt0: g('cs_rt0')[r], re0: g('cs_re0')[r], xc: g('cs_xc')[r], tp: g('cs_tp')[r], pl: g('cs_pl')[r], ver: g('cs_ver')[r], umax: g('cs_umax')[r], bite: g('cs_bite')[r], vb: g('cs_vb')[r], e1: g('cs_e1')[r], e2: g('cs_e2')[r], us: g('cs_us')[r] }); }
-  const ctx = { ver, d: Array.from(g('d')), f: Array.from(g('f')), K: Array.from(g('K')), P: Array.from(g('P')), cs: g('c_star'), gamma: g('gamma'), Ts: g('Ts'), gw: g('glide_w'), kc: g('calm_k'), hw: g('hand_w'), ha: g('hand_amax'), fl: g('medium') === 'vacuum' ? null : { flow: g('flow'), U: g('U_f'), nu: g('mu_f') / g('rho_f'), xi: Array.from(g('xi_r')), cq: g('c_q'), cl: g('c_lin'), cc: g('c_quad'), L1: g('L1'), L2: g('L2'), kr: g('rho_f') * Math.PI * 1e-4 + g('mu_a'), kc: g('rho_f') * 4 / 3 * Math.PI * 0.18 * 0.06 * 0.10 + g('m_ac'), acc: g('flow') !== 'still', ma: { mu: g('mu_a'), mc: g('m_ac') } } };
+  const ctx = { ver, d: Array.from(g('d')), f: Array.from(g('f')), K: Array.from(g('K')), P: Array.from(g('P')), cs: g('c_star'), gamma: g('gamma'), Ts: g('Ts'), gw: g('glide_w'), kc: g('calm_k'), hw: g('hand_w'), ha: g('hand_amax'), fl: g('medium') === 'vacuum' ? null : { CH: CART.h, flow: g('flow'), U: g('U_f'), nu: g('mu_f') / g('rho_f'), xi: Array.from(g('xi_r')), cq: g('c_q'), cl: g('c_lin'), cc: g('c_quad'), L1: g('L1'), L2: g('L2'), kr: g('rho_f') * Math.PI * 1e-4 + g('mu_a'), kc: g('rho_f') * 4 / 3 * Math.PI * (CART.w / 2) * (CART.h / 2) * (CART.b / 2) + g('m_ac'), acc: g('flow') !== 'still', ma: { mu: g('mu_a'), mc: g('m_ac') } } };
   const pl = g('pl_serial'), plan = pl && pl !== a.plSerial ? { serial: pl, u: Array.from(g('pl_u')), K: Array.from(g('pl_K')), nom: Array.from(g('pl_nom')) } : null;
   return { st, cs, ctx, plan, sig: g('sig')[0], b1: { n: b1n, exact: b1x, skip: b1skip }, t: DIPC.t, mode: DIPC.mode };
 };
@@ -32,13 +33,13 @@ const PICTURE = () => {
   const img = cx2.getImageData(0, 0, cv.width, cv.height).data, W = cv.width, Hh = cv.height;
   const px = (i, j) => (i < 0 || j < 0 || i >= W || j >= Hh ? [0, 0, 0, 0] : [img[4 * (j * W + i)], img[4 * (j * W + i) + 1], img[4 * (j * W + i) + 2], img[4 * (j * W + i) + 3]]);
   const is = (c, rgb, tol) => c[3] === 255 && Math.abs(c[0] - rgb[0]) <= tol && Math.abs(c[1] - rgb[1]) <= tol && Math.abs(c[2] - rgb[2]) <= tol;   // alpha first: only a fully painted pixel counts
-  const store = { s: Array.from(g('s_now')), cam: g('cam_x'), sc: g('sc'), w: g('box_w'), h: g('box_h'), y0: g('y0'), L1: g('L1'), L2: g('L2'), m2: g('m2'), cart_px: g('cart_px'), cart_py: g('cart_py'), mid_px: g('mid_px'), mid_py: g('mid_py'), tip_px: g('tip_px'), tip_py: g('tip_py'), cart_w: g('cart_w') };
+  const PGS = JSON.parse(document.getElementById('dipc-page').textContent), CART = PGS.cart, store = { CH: CART.h, CW: CART.w, LOOK: PGS.look, s: Array.from(g('s_now')), cam: g('cam_x'), sc: g('sc'), w: g('box_w'), h: g('box_h'), y0: g('y0'), L1: g('L1'), L2: g('L2'), m2: g('m2'), cart_px: g('cart_px'), cart_py: g('cart_py'), mid_px: g('mid_px'), mid_py: g('mid_py'), tip_px: g('tip_px'), tip_py: g('tip_py'), cart_w: g('cart_w') };
   const CARD = [255, 250, 243], WHITE = [255, 255, 255], ACC = [122, 31, 43], m = {};
   // where the stored state says things are (the test's own formulas): every scan is centred there, not on the drawing's own stored pixels
-  const S = store.s, chh = Math.max(20, 0.12 * store.sc), e = {}; e.cx = store.w / 2 + (S[0] - store.cam) * store.sc; e.hy = store.y0 - chh + 4; e.ex = e.cx + store.L1 * store.sc * Math.sin(S[1]); e.ey = e.hy - store.L1 * store.sc * Math.cos(S[1]);
-  e.tx = e.ex + store.L2 * store.sc * Math.sin(S[2]); e.ty = e.ey - store.L2 * store.sc * Math.cos(S[2]); e.cw2 = Math.max(46, 0.36 * store.sc) / 2;
-  // the cart: on the device row 4 css px under the top, the leftmost and rightmost fully cream pixels within 12 px of the stored edges
-  const jr = Math.round((e.hy + 4) * dpr), cw2 = e.cw2; let L = null, Rr = null;
+  const S = store.s, chh = Math.max(20, store.CH * store.sc), e = {}; e.cx = store.w / 2 + (S[0] - store.cam) * store.sc; e.hy = store.y0 - chh + 4; e.ex = e.cx + store.L1 * store.sc * Math.sin(S[1]); e.ey = e.hy - store.L1 * store.sc * Math.cos(S[1]);
+  e.tx = e.ex + store.L2 * store.sc * Math.sin(S[2]); e.ty = e.ey - store.L2 * store.sc * Math.cos(S[2]); e.cw2 = Math.max(46, store.CW * store.sc) / 2;
+  // the cart: on the device row 4 css px under the top (project 06: half way down), the leftmost and rightmost fully cream pixels within 12 px of the stored edges
+  const jr = Math.round((e.hy + (store.LOOK === 'hull' ? chh / 2 : 4)) * dpr), cw2 = e.cw2; let L = null, Rr = null;   // project 06's carriage: at half its height, below a rod lying flat on its top
   for (let i = Math.floor((e.cx - cw2 - 12) * dpr); i <= Math.ceil((e.cx + cw2 + 12) * dpr); i++) if (is(px(i, jr), CARD, 2)) { if (L === null) L = i; Rr = i; }
   m.cart = L === null ? null : { left: L / dpr, right: (Rr + 1) / dpr, centre: (L + Rr + 1) / (2 * dpr), alphaAt: px(Math.round(e.cx * dpr), jr)[3] };
   // the hinge between the rods: centroid of the pure white pixels within 6 css px of where the store says it is
@@ -56,7 +57,7 @@ const PICTURE = () => {
 
 /* ---------- in Node: the checks ---------- */
 function checkPicture(P, label) {
-  const s = P.store, S = s.s, ch = Math.max(20, 0.12 * s.sc);
+  const s = P.store, S = s.s, ch = Math.max(20, s.CH * s.sc);
   const cx = s.w / 2 + (S[0] - s.cam) * s.sc, hy = s.y0 - ch + 4, ex = cx + s.L1 * s.sc * Math.sin(S[1]), ey = hy - s.L1 * s.sc * Math.cos(S[1]), tx = ex + s.L2 * s.sc * Math.sin(S[2]), ty = ey - s.L2 * s.sc * Math.cos(S[2]);
   const dst = Math.max(Math.abs(cx - s.cart_px), Math.abs(hy - s.cart_py), Math.abs(ex - s.mid_px), Math.abs(ey - s.mid_py), Math.abs(tx - s.tip_px), Math.abs(ty - s.tip_py));
   const m = P.m, res = [];
@@ -164,6 +165,7 @@ async function main() {
   let seed = 7; const rnd = () => { seed = (seed * 1664525 + 1013904223) % 4294967296; return seed / 4294967296; };
   const randomState = () => [(rnd() - 0.5), (rnd() * 2 - 1) * Math.PI, (rnd() * 2 - 1) * Math.PI, (rnd() - 0.5), (rnd() - 0.5) * 6, (rnd() - 0.5) * 6];
   const medium = (m, f, U) => pg.evaluate((a) => { const M = document.getElementById('med'), F = document.getElementById('flow'), S = document.getElementById('Uf'); S.value = a.U; S.dispatchEvent(new Event('input', { bubbles: true })); M.value = a.m; M.dispatchEvent(new Event('change')); F.value = a.f; F.dispatchEvent(new Event('change')); }, { m, f, U });
+  const F0 = await pg.evaluate(() => +document.getElementById('Fmax').value), home = () => pg.evaluate(() => { const M = document.getElementById('med'), F = document.getElementById('flow'); M.value = M.options[0].value; M.dispatchEvent(new Event('change')); F.value = 'still'; F.dispatchEvent(new Event('change')); });   // the page's own motor, and its first medium (05: vacuum, 06: water)
   const results = [];
   const scen = {
     rest: async () => { await pause(true); await pg.click('#reset'); await start(); await live(5000); await pull(); return pic('rest'); },
@@ -198,16 +200,17 @@ async function main() {
       await start(); const v0 = await pg.evaluate(() => DIPC.ref.v); let t = 0; for (; t < 20; t += 2) { await drive(2); if ((await pg.evaluate(() => DIPC.ref.kind)) === 'fixed') break; } await drive(6);   // the reference is at rest; let the balancer settle the last bite
       const m = await pg.evaluate(() => ({ ref: DIPC.ref.kind, v: DIPC.s[3], mode: DIPC.mode })); out(`  e brake: braking from ${fmt(v0)} m/s; reference ${m.ref} after about ${t + 2} s, cart speed 6 s later ${fmt(m.v)} m/s, mode ${m.mode}`);
       return (await pic('braked to rest')) && m.ref === 'fixed' && Math.abs(m.v) < 0.01; },
-    wind: async () => { await medium('air', 'street', 2); await pause(true); await pg.click('#reset'); await start(); await drive(8); const a = await pic('in a Kármán street, U = 2 m/s'); await medium('vacuum', 'still', 2); return a; },
-    water: async () => { await medium('water', 'waves', 0.4); await pause(true); await pg.click('#reset'); await start(); await drive(8); const a = await pic('in a swell, U = 0.4 m/s'); await medium('vacuum', 'still', 2); return a; },
-    pumpwater: async () => { await medium('water', 'still', 2); await pause(false); await pg.evaluate(() => { DIPC.finishCatch(); DIPC.swingUp(); }); await start(); await drive(16);   // 13.7: no plan in water with the default machine, so after the first failed plan the cart pumps (law 5)
+    wind: async () => { await medium('air', 'street', 2); await pause(true); await pg.click('#reset'); await start(); await drive(8); const a = await pic('in a Kármán street, U = 2 m/s'); await home(); return a; },
+    water: async () => { await medium('water', 'waves', 0.4); await pause(true); await pg.click('#reset'); await start(); await drive(8); const a = await pic('in a swell, U = 0.4 m/s'); await home(); return a; },
+    pumpwater: async () => { await medium('water', 'still', 2); if (PAGE !== 'double-inverted-pendulum.html') await set({ Fmax: 60 }); await pause(false); await pg.evaluate(() => { DIPC.finishCatch(); DIPC.swingUp(); }); await start(); await drive(16);   // 13.7: no plan in water with the default machine, so after the first failed plan the cart pumps (law 5)
       const n5 = await pg.evaluate(() => { const g = (k) => DIPC.ds.get(k); let n = 0; for (let r = 0; r < g('cs_n'); r++) if (g('cs_mode')[r] === 5) n++; return n; }); out(`  e pump in still water: ${n5} samples with law 5 in the store`);
-      const a = await pic('in still water, pumping after a failed plan'); await medium('vacuum', 'still', 2); return a && n5 > 0; },
-    stillwater: async () => { await medium('water', 'still', 2); await pause(true); await pg.click('#reset'); await start(); await drive(4); await pg.click('#flickR'); await drive(4); const a = await pic('in still water, after a flick'); await medium('vacuum', 'still', 2); return a; },
-    windcart: async () => { await medium('air', 'breeze', 3); const a = await scen.cart(); await medium('vacuum', 'still', 2); return a; },
-    limit: async () => { await pause(false); await pg.click('#tilt'); await start(); await drive(1); await set({ Fmax: 25 }); await drive(3); await set({ Fmax: 60 }); await pg.evaluate(() => DIPC.finishCatch()); await drive(2); return pic('force limit changed while balancing'); }
+      const a = await pic('in still water, pumping after a failed plan'); await set({ Fmax: F0 }); await home(); return a && n5 > 0; },
+    stillwater: async () => { await medium('water', 'still', 2); await pause(true); await pg.click('#reset'); await start(); await drive(4); await pg.click('#flickR'); await drive(4); const a = await pic('in still water, after a flick'); await home(); return a; },
+    windcart: async () => { await medium('air', 'breeze', 3); const a = await scen.cart(); await home(); return a; },
+    limit: async () => { await pause(false); await pg.click('#tilt'); await start(); await drive(1); await set({ Fmax: Math.round(F0 * 25 / 60) }); await drive(3); await set({ Fmax: F0 }); await pg.evaluate(() => DIPC.finishCatch()); await drive(2); return pic('force limit changed while balancing'); }
   };
-  const order = want.length ? want : ['rest', 'flick', 'drag', 'cart', 'swingup', 'random', 'randomSTOP', 'ts40', 'glide', 'brake', 'limit', 'pumpwater'];
+  const order = want.length ? want : PAGE === 'double-inverted-pendulum.html' ? ['rest', 'flick', 'drag', 'cart', 'swingup', 'random', 'randomSTOP', 'ts40', 'glide', 'brake', 'limit', 'wind', 'windcart']   // project 05: vacuum and air
+    : ['rest', 'flick', 'drag', 'cart', 'swingup', 'random', 'limit', 'water', 'stillwater', 'pumpwater'];   // project 06 (PAGE=rods-in-liquid.html): starts in water; pumpwater with its motor cut to 60 N, where no plan is found; no glide: in a liquid the cart is never left cruising after a catch (13.7), so there is no glide to test
   for (const name of order) { out(`== ${name}${dpr !== 1 ? ' (device pixel ratio ' + dpr + ')' : ''}`); const okPic = await (name === 'randomSTOP' ? scen.random(true) : scen[name]());
     await frame(); const bk = await pg.evaluate(() => { const g = (n) => DIPC.ds.get(n), rows = [g('E0'), g('W_motor'), g('E_ext'), g('E_wait')]; return { rows, E: g('E'), bal: g('bal'), rel: Math.abs(g('bal')) / (rows.reduce((a, v) => a + Math.abs(v), 0) + Math.abs(g('E'))) }; });
     out(`  energy book: E0 ${fmt(bk.rows[0])} + W_motor ${fmt(bk.rows[1])} + E_ext ${fmt(bk.rows[2])} + E_wait ${fmt(bk.rows[3])} − E ${fmt(bk.E)} = ${fmt(bk.bal)} J, ${fmt(bk.rel)} of the flows`);

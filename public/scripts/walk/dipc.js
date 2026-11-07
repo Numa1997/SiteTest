@@ -1,4 +1,5 @@
-/* From symbols to code — Fig. 11, Balancing Two Rods on a Cart (double-inverted-pendulum.html).
+/* From symbols to code — projects 05 and 06, Balancing Two Rods on a Cart (double-inverted-pendulum.html) and in a Liquid (rods-in-liquid.html):
+   the two pages run the same script, so one walkthrough serves both; notes/walkcheck.cjs checks it against each.
    Each step pairs an equation of the lecture note with the lines of the page's script that compute it, copied character for character.
    ⟦key|text⟧ marks a quantity; the same key in the formula, the code and the table lights up together.
    The "Now" column is filled from Sim.live(), defined in the page next to its state. */
@@ -57,7 +58,7 @@ s = rk4(p, s, u, H, tSim); Wfl += rk4.W; tSim += H;`,
             math: 'D<sub>0</sub> θ̈ = F θ + H u,  F = diag(0, f<sub>1</sub>, f<sub>2</sub>)<span style="font-style:normal;margin-left:1.5em">(10)</span><br>A = [[0, I], [D<sub>0</sub><sup>−1</sup>F, 0]],  B = [[0], [D<sub>0</sub><sup>−1</sup>H]]<span style="font-style:normal;margin-left:1.5em">(11)</span>',
             note: 'Di is D<sub>0</sub><sup>−1</sup>, the inverse of D at θ = 0. A is 6 × 6: its upper-right block is the identity (the first three rates of the state are its last three entries), A[i][i + 3] = 1. Its lower-left block is D<sub>0</sub><sup>−1</sup>F; because F has zeros in its first column, only the columns for θ<sub>1</sub> and θ<sub>2</sub> are non-zero, Di[i][1] f<sub>1</sub> and Di[i][2] f<sub>2</sub>. B is the first column of D<sub>0</sub><sup>−1</sup>, placed in the lower half, since D<sub>0</sub><sup>−1</sup>H picks out that column. The note checks this matrix against the one printed by Moysis.',
             code: `function linear(p) { var Di = inv(Dm(p, 0, 0)), A = zeros(6, 6), B = zeros(6, 1), i;
-for (i = 0; i < 3; i++) { A[i][i + 3] = 1; A[i + 3][1] = Di[i][1] * p.f[0]; A[i + 3][2] = Di[i][2] * p.f[1]; B[i + 3][0] = Di[i][0]; } return { A: A, B: B }; }`,
+for (i = 0; i < 3; i++) { A[i][i + 3] = 1; A[i + 3][1] = Di[i][1] * p.f[0]; A[i + 3][2] = Di[i][2] * p.f[1]; B[i + 3][0] = Di[i][0]; } ... return { A: A, B: B }; }`,
             syms: []
         },
         {
@@ -112,7 +113,9 @@ var An = mul(AW, Ak), Gn = madd(Gk, mul(mul(AW, Gk), tp(Ak)), 1), Hn = madd(Hk, 
 var GP = mul(tp(Gam), Hk), den = Rd + mul(GP, Gam)[0][0], num = madd(mul(GP, Phi), tp(Nd), 1)[0];
 return { ⟦K|K: num.map(function (v) { return v / den; })⟧, P: Hk, Phi: Phi, Gam: Gam }; }
 ...
-p = par(); var L = linear(p), Rr = Math.pow(10, sR.value), Ts = sT.value / 1000, Lq = gmode === 'sampled' ? dlqr(L.A, L.B, Rr, Ts) : lqr(L.A, L.B, Rr); K = Lq.K; Pm = Lq.P; Smod = sampledModel(L.A, L.B, Rr, Ts);
+p = par(); EQ = { on: false, th1: 0, th2: 0, u: 0 }; var L = linear(p);
+...
+var Rr = Math.pow(10, sR.value), Ts = sT.value / 1000, Lq = gmode === 'sampled' ? dlqr(L.A, L.B, Rr, Ts) : lqr(L.A, L.B, Rr); K = Lq.K; Pm = Lq.P; Smod = sampledModel(L.A, L.B, Rr, Ts);
 ...
 var lam = ⟦lam|lamNow = specRad(Acl)⟧, sg = fallRates(p);`,
             syms: [['K', 'K<sub>d</sub>', 'K', 'gains in use on (x, θ₁, θ₂, ẋ, θ̇₁, θ̇₂), N/m, N/rad, N s/m, N s/rad'], ['lam', '|λ|', 'lamNow', 'largest factor per look of the sampled loop; below 1 the loop holds']]
@@ -120,11 +123,11 @@ var lam = ⟦lam|lamNow = specRad(Acl)⟧, sg = fallRates(p);`,
         {
             title: 'The push: sampled and limited',
             where: 'control() and step()',
-            math: '⟦u|u⟧ = clip(−K(s − s<sup>∗</sup>(t)), ±u<sub>max</sub>), held for ⟦Ts|T<sub>s</sub>⟧',
-            note: 'err() forms the error e = s − s<sup>∗</sup>(t), measured from the reference equilibrium of the moment: refXV(t) gives its place and speed (a resting place at the target of the buttons, a cruise, or a glide; the last step), and the angles are first brought into −π…π, so a rod that has turned over once is upright again. lqrU() multiplies the error by −K and clips the result to ±u<sub>max</sub> from the slider: the motor cannot push harder. step() asks for a new u only when the simulated time tSim has reached the next sampling instant tCtl, then moves tCtl on by the period: T<sub>s</sub> from the slider while balancing, 10 ms while calming or tracking; between samples the old u is held, exactly the zero-order hold of §7.2. Before that, supervise() decides which law is in charge (the steps below).',
-            code: `function err(st, t) { var e = wrapState(st), rv = refXV(t); e[0] -= rv[0]; e[3] -= rv[1]; return e; }   // the state measured from the reference equilibrium
+            math: '⟦u|u⟧ = clip(u<sup>∗</sup> − K(s − s<sup>∗</sup>(t)), ±u<sub>max</sub>), held for ⟦Ts|T<sub>s</sub>⟧ (u<sup>∗</sup> = 0 without a flow)',
+            note: 'err() forms the error e = s − s<sup>∗</sup>(t), measured from the reference equilibrium of the moment: refXV(t) gives its place and speed (a resting place at the target of the buttons, a cruise, or a glide; the last step), and the angles are first brought into −π…π, so a rod that has turned over once is upright again. In a flow the controller is told (EQ.on, project 06 §13.8, and the air flows of project 05), the angles are measured from the flow’s rest state θ₁<sup>∗</sup>, θ₂<sup>∗</sup> and the steady force u<sup>∗</sup> that holds it is added (50). lqrU() multiplies the error by −K and clips the result to ±u<sub>max</sub> from the slider: the motor cannot push harder. step() asks for a new u only when the simulated time tSim has reached the next sampling instant tCtl, then moves tCtl on by the period: T<sub>s</sub> from the slider while balancing, 10 ms while calming or tracking; between samples the old u is held, exactly the zero-order hold of §7.2. Before that, supervise() decides which law is in charge (the steps below).',
+            code: `function err(st, t) { var e = wrapState(st), rv = refXV(t); e[0] -= rv[0]; e[3] -= rv[1]; if (EQ.on) { e[1] -= EQ.th1; e[2] -= EQ.th2; } return e; }   // the state measured from the reference equilibrium
 ...
-function lqrU(st, t) { var e = err(st, t), v = 0; for (var i = 0; i < 6; i++) v -= K[i] * e[i]; return clampF(v); }
+function lqrU(st, t) { var e = err(st, t), v = EQ.on ? EQ.u : 0; for (var i = 0; i < 6; i++) v -= K[i] * e[i]; return clampF(v); }
 ...
 supervise();
 if (tSim >= tCtl - 1e-9) { ⟦u|u = control()⟧; tCtl += period(); }
@@ -147,9 +150,9 @@ s[3] += dq[0]; s[4] += dq[1]; s[5] += dq[2]; nextCheck = tSim; abandon(); }`,
             note: 'Wof() is the cost (19) still to pay from the state st, measured from the reference of the moment. catchGen() is a generator: think() runs it a few milliseconds between frames, and while it runs the page has no c* and skips the checks that need it. It writes P = LL<sup>T</sup> (Cholesky); a point x = L<sup>−T</sup>(√c · d) with |d| = 1 then lies on the surface W = c. dW() is one loop period of the true equations from that point with the clipped push held, F(s) of (19a), and returns W(F(s)) − W(s). jacobi() finds the eigenvectors of the linear fall per look in the coordinates d; the three weakest are where the search climbs first, both ways and on every shell, then from the worst six of 1500 random directions spread over the shells W = c, 0.7c, 0.4c, 0.15c. The bisection halves the interval from 1 to 10<sup>4</sup> thirteen times on a logarithmic scale. supervise() uses c*: outside it, the equations are run 4 s ahead with the balancer in charge, and if the state is still outside c* then, the rescue starts.',
             code: `function Wof(st, t) { return quad(Pm, err(st, t)); }   // the remaining LQR cost (19); below cLevel the balancer is certain to catch
 ...
-var x = backsolve(Lc, dir.map(function (a) { return a * Math.sqrt(c); })), uu = 0, a;
+var x = backsolve(Lc, dir.map(function (a) { return a * Math.sqrt(c); })), uu = eqC.u, a;   // in a flow (13.8): about its rest state, x the deviation from it
 ...
-for (a = 0; a < 6; a++) y[a] = x[a]; stepF(p, y, uu, h, n, y); return Wq(y) - Wq(x); }
+for (a = 0; a < 6; a++) y[a] = x[a] + seqC[a]; stepF(pC, y, uu, h, n, y); for (a = 0; a < 6; a++) y[a] -= seqC[a]; return Wq(y) - Wq(x); }
 ...
 var eg = jacobi(Mz), order = [0, 1, 2, 3, 4, 5].sort(function (a, b) { return eg.vals[a] - eg.vals[b]; }), weak = order.slice(0, 3).map(function (o) { return eg.vecs[o]; });
 ...
@@ -157,7 +160,7 @@ for (var bi = 0; bi < 13; bi++) { var mid = Math.sqrt(lo * hi); if (yield* safe(
 ...
 if (Wof(s, tSim) > cLevel) {   // outside the certified region: ask the model whether the balancer still wins within 4 s
 var pr = run({ s: s, t: tSim, tc: tCtl, u: u }, tSim + 4, lqrU);
-if (Wof(pr.s, pr.t) > cLevel) { if (rescue) { mode = 'calm'; xc = rolling ? s[0] : xref; ref = { kind: 'fixed', x: xc }; log.push({ t: tSim, ev: 'rescue' }); startAttempt(); } else { lost = true; u = 0; } } } }`,
+if (wPr > cLevel && !(p.fl && wPr < 0.9 * wNow && nearRest(s))) { if (rescue) { mode = 'calm'; xc = rolling ? s[0] : xref; ref = { kind: 'fixed', x: xc }; log.push({ t: tSim, ev: 'rescue' }); att0 = attempt; startAttempt(); } else { lost = true; u = 0; } } } }`,
             syms: [['W', 'W', 'W', 'remaining balancing cost now'], ['c', 'c*', 'c', 'certified catch level']]
         },
         {
@@ -191,11 +194,11 @@ R[ri] = WT * lim.vw * Xv[t0 + 3]; if (wantJ) { cols[0] = t0 + 3; vals[0] = WT * 
 var tau = t - ref.t0; if (ref.kind === 'cruise') return [ref.x + ref.v * tau, ref.v];
 var ex = Math.exp(-GLIDE * tau), b = ref.v + GLIDE * ref.e0; return [ref.target + (ref.e0 + b * tau) * ex, (b - GLIDE * (ref.e0 + b * tau)) * ex]; }
 ...
-function Wred(st) { return quad(Pm, [0, wrapAngle(st[1]), wrapAngle(st[2]), 0, st[4], st[5]]); }   // (19) about the moving equilibrium the cart is on now (25)
+function Wred(st) { return quad(Pm, [0, wrapAngle(st[1]) - (EQ.on ? EQ.th1 : 0), wrapAngle(st[2]) - (EQ.on ? EQ.th2 : 0), 0, st[4], st[5]]); }   // (19) about the moving equilibrium the cart is on now (25)
 ...
 if (mode === 'track' && cLevel && tSim - tPlan > 0.05 && (rolling ? ⟦Wr|Wred(s)⟧ : Wof(s, tSim)) < 0.9 * cLevel) {   // inside the certified region, with 10 % to spare for what the search may miss: hand over
 ...
-if (rolling) ref = { kind: 'cruise', x: s[0], v: s[3], t0: tSim, brake: true };   // keep the speed it arrived with: a moving equilibrium (25), then brake it away bite by bite (27)
+if (rolling) ref = p.fl ? { kind: 'fixed', x: s[0] } : { kind: 'cruise', x: s[0], v: s[3], t0: tSim, brake: true }; ... // keep the speed it arrived with: a moving equilibrium (25), then brake it away bite by bite (27)
 ...
 else { var rv = refXV(tSim); ref = { kind: 'glide', target: tg, e0: rv[0] - tg, v: rv[1], t0: tSim }; }   // moving: glide along the family of equilibria (26)`,
             syms: [['xr', 'x<sub>ref</sub>', 'refXV(tSim)[0]', 'place of the reference equilibrium now, m'], ['Wr', 'W<sub>red</sub>', 'Wred(s)', 'remaining cost about the moving equilibrium the cart is on']]

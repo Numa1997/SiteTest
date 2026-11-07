@@ -10,7 +10,7 @@ const TAU = 2 * Math.PI;
 const GZ = [0.1834346424956498, 0.5255324099163290, 0.7966664774136267, 0.9602898564975363], GW = [0.3626837833783620, 0.3137066458778873, 0.2223810344533745, 0.1012285362903763];
 const NODES = []; for (let k = 0; k < 4; k++) { NODES.push([(1 - GZ[k]) / 2, GW[k] / 2]); NODES.push([(1 + GZ[k]) / 2, GW[k] / 2]); }
 const RODN = []; for (let p = 0; p < 3; p++) for (const [x, w] of NODES) RODN.push([(p + x) / 3, w / 3]);   // along a rod: 3 panels of 8 points
-const YF = -3.3, YS = 3.4, CH = 0.12, RR = 0.01;
+const YF = -3.3, YS = 3.4, CH = 0.12, RR = 0.01;   // CH: project 05's cart height; a page with another cart passes fl.CH
 // stream functions of the deep and slow flows (13.3), written from the formulas of the note, not from the page's velocities
 const PSI = {
   internal: (X, Y, t, U) => { const k = 2 * Math.PI / 12, m = 2 * Math.PI / 4, w = 2 * Math.PI / 45; return U / m * Math.cos(k * X - w * t) * Math.sin(m * Y); },
@@ -61,8 +61,8 @@ function fluidQ(fl, s, t) {   // rods as lines from the hinge; f = -xi_perp w_n 
       let fn = -fl.xi[k] * wnn - fl.cq * Math.abs(wnn) * wnn; if (fl.acc) { const A = flowAcc(fl, P[0], P[1], t); fn += fl.kr * (A[0] * n1[0] + A[1] * n1[1]); }
       const ft = -0.5 * fl.xi[k] * wt, fv = [ft * t1[0] + fn * n1[0], ft * t1[1] + fn * n1[1]], q = wn * L;
       Q[0] += q * fv[0]; if (k === 0) Q[1] += q * sg * fn; else { Q[1] += q * fl.L1 * (fv[0] * Math.cos(a) - fv[1] * Math.sin(a)); Q[2] += q * sg * fn; } } }
-  let um = 0; for (const [xn, wn] of NODES) um += wn * flow(fl.flow, x, -CH * xn, t, fl.U, fl.nu)[0];
-  const wc = xd - um; Q[0] += -fl.cl * wc - fl.cc * Math.abs(wc) * wc + (fl.acc ? fl.kc * flowAcc(fl, x, -CH / 2, t)[0] : 0); return Q;
+  let um = 0; for (const [xn, wn] of NODES) um += wn * flow(fl.flow, x, -(fl.CH || CH) * xn, t, fl.U, fl.nu)[0];
+  const wc = xd - um; Q[0] += -fl.cl * wc - fl.cc * Math.abs(wc) * wc + (fl.acc ? fl.kc * flowAcc(fl, x, -(fl.CH || CH) / 2, t)[0] : 0); return Q;
 }
 // (8a), (8), (8b):  M q'' = r, with q = (x, th1, th2); with a medium, Q of (35) on the right
 function accel(d, f, s, u, t, fl) {

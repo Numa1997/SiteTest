@@ -420,5 +420,5 @@ W.boundaryPower = function () {   // power carried into the tank through its end
   return P * this.b * this.dx; };
 W.transitX = function () { var s = 0; for (var o = 0; o < 4 * NP; o += 2) s -= this.imp[o]; return this.haveImp ? s : 0; };   // the x-impulse the rods have taken and the fluid has not yet received (N s)
 
-return { World: World, machinePar: machinePar, Dmat: Dmat, energy: energy, momX: momX, MEDIA: MEDIA, GLR: GLR, NP: NP, phi4: phi4, pointKin: pointKin, CART_W: CART_W, CART_H: CART_H, CART_B: CART_B, ROD_R: ROD_R };
+return { setCart: function (w, h, b) { CART_W = w; CART_H = h; CART_B = b; }, World: World, machinePar: machinePar, Dmat: Dmat, energy: energy, momX: momX, MEDIA: MEDIA, GLR: GLR, NP: NP, phi4: phi4, pointKin: pointKin, CART_W: CART_W, CART_H: CART_H, CART_B: CART_B, ROD_R: ROD_R };
 });

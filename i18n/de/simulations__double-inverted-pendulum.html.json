@@ -151,6 +151,10 @@
   "src": "Lower rod mass <i>m</i><sub>1</sub>",
   "tr": "Masse der unteren Stange <i>m</i><sub>1</sub>"
  },
+ "10065d317fc9": {
+  "src": "Stand at a bus stop as a lorry goes by: the gust pushes you, then pulls. Wade into a river: the water leans on your legs, harder the faster it runs, and harder on a leg standing across the stream than on a pole held along it. This section gives the machine such a fluid. Its particles move with a velocity field \\(\\mathbf v_f(x, y, t)\\), chosen in the menu under the figure, and every piece of the cart and the rods that moves at a different velocity is pushed. The flow is given: the bodies feel it but do not change it. That one-way coupling is the right picture while the bodies are small next to the scale of the flow; section 13.5 says what it leaves out. Under a liquid, where the flow is also solved so that the bodies push the water and the water pushes back, the machine is <a href=\"rods-in-liquid.html\">project 06</a>, with rods and a motor made for it.",
+  "tr": "Stellen Sie sich an eine Bushaltestelle, während ein Lkw vorbeifährt: Die Böe drückt Sie, dann zieht sie. Waten Sie in einen Fluss: Das Wasser lehnt sich gegen Ihre Beine, umso stärker, je schneller es fließt, und stärker gegen ein Bein, das quer zur Strömung steht, als gegen eine Stange, die längs gehalten wird. Dieser Abschnitt gibt der Maschine ein solches Fluid. Seine Teilchen bewegen sich mit einem Geschwindigkeitsfeld \\(\\mathbf v_f(x, y, t)\\), das im Menü unter der Abbildung gewählt wird, und jedes Stück des Wagens und der Stangen, das sich mit einer anderen Geschwindigkeit bewegt, wird geschoben. Die Strömung ist vorgegeben: Die Körper spüren sie, verändern sie aber nicht. Diese einseitige Kopplung ist das richtige Bild, solange die Körper klein gegenüber der Größenskala der Strömung sind; Abschnitt 13.5 sagt, was sie weglässt. Unter einer Flüssigkeit, wo auch die Strömung gelöst wird, sodass die Körper das Wasser schieben und das Wasser zurückschiebt, ist die Maschine <a href=\"rods-in-liquid.html\">Projekt 06</a>, mit Stangen und einem Motor, die dafür gemacht sind."
+ },
  "10607db85cff": {
   "src": "The machine · the controller is redesigned for every change",
   "tr": "Die Maschine · der Regler wird bei jeder Änderung neu entworfen"
@@ -283,6 +287,10 @@
   "src": "A Kármán vortex street, the wake of a pole upwind: two staggered rows of vortices 1.6 m apart, moving at 0.8 U in a wind U.",
   "tr": "Eine Kármánsche Wirbelstraße, der Nachlauf eines Mastes stromaufwärts: zwei versetzte Wirbelreihen im Abstand von 1.6 m, die sich in einem Wind U mit 0.8 U bewegen."
  },
+ "1d71315e40d7": {
+  "src": "given",
+  "tr": "vorgegeben"
+ },
  "1dbf09307567": {
   "src": "The cart is a box 0.36 m long, 0.12 m high and 0.2 m deep. It gets the Stokes drag of a sphere of its mean half-size, \\(6\\pi\\mu r_{\\text{eq}}\\,w\\) with \\(r_{\\text{eq}} = 0.113\\) m, as MuJoCo does [16], and the pressure drag \\(\\tfrac12\\rho C_D h b\\,|w|\\,w\\) of its face (\\(C_D = 1.28\\), a flat plate across the flow [18]), where \\(w\\) is the cart's speed minus the flow averaged over its height. Only the sideways part counts; the rail takes the rest. The physics tutorial of the engine Box2D treats every edge of a body this way, a force on each edge that faces the flow [17].",
   "tr": "Der Wagen ist ein Kasten, 0.36 m lang, 0.12 m hoch und 0.2 m tief. Er erhält den Stokes-Widerstand einer Kugel seiner mittleren halben Abmessung, \\(6\\pi\\mu r_{\\text{eq}}\\,w\\) mit \\(r_{\\text{eq}} = 0.113\\) m, wie bei MuJoCo [16], und den Druckwiderstand \\(\\tfrac12\\rho C_D h b\\,|w|\\,w\\) seiner Stirnfläche (\\(C_D = 1.28\\), eine ebene Platte quer zur Strömung [18]), wobei \\(w\\) die Geschwindigkeit des Wagens minus die über seine Höhe gemittelte Strömung ist. Nur der seitliche Anteil zählt; den Rest nimmt die Schiene auf. Das Physik-Tutorial der Engine Box2D behandelt jede Kante eines Körpers so: eine Kraft auf jede Kante, die der Strömung zugewandt ist [17]."
@@ -290,6 +298,10 @@
  "1dea94e46e94": {
   "src": "<span class=\"psub__n\">12.5</span>Sources",
   "tr": "<span class=\"psub__n\">12.5</span>Quellen"
+ },
+ "1f13fba3cf3a": {
+  "src": "Vector field <span class=\"panel__label\">Air · section 13</span>",
+  "tr": "Vektorfeld <span class=\"panel__label\">Luft · Abschnitt 13</span>"
  },
  "1f1a3455ff88": {
   "src": "Along the way the page watches \\(W\\) of (19). The moment \\(W < 0.9\\,c^\\ast\\) it hands over to the balancer (16), which from there is certain to finish. If the plan runs to its end without reaching \\(c^\\ast\\), the balancer gets its chance anyway, and the check of section 9 decides within 4 s whether to start over; in the tests this happened often and the balancer won every time, which is the conservatism of \\(c^\\ast\\) at work. In headless Chromium, with the same frame-by-frame loop as in your browser, 40 random states, any angles, rates up to \\(\\pm3\\) rad/s and cart speeds up to \\(\\pm0.5\\) m/s, all ended balanced at 60 N within 60 s. A plan took between 0.4 and 12 s of browser time. From hanging rest the whole rescue takes about 7 s: 3 s of calming while the plan is computed, 4 s of swing-up. Seven other machines (a heavier cart, heavier or longer or shorter rods, \\(u_\\text{max}\\) = 30 or 120 N, \\(T_s\\) = 40 ms), six random states each, were caught as well. The same study in Node.js, without the calming stage, found a direct plan for only 16 of the 40 states, which is why calming comes first. Forty cases are evidence, not a proof: a very weak motor, a very heavy cart or a push that throws the cart against the end of the rail can still beat it.",
@@ -327,6 +339,10 @@
   "src": "The same wind U everywhere, all the time.",
   "tr": "Überall und jederzeit derselbe Wind U."
  },
+ "241dd73793db": {
+  "src": "Two tides with periods of 20 s and 22 s, a long wave 30 m from crest to crest: they add up and cancel in turn, once every 220 s. U starts at the hardest strength the balancer still wins.",
+  "tr": "Zwei Gezeiten mit Perioden von 20 s und 22 s, eine lange Welle mit 30 m von Wellenberg zu Wellenberg: Sie addieren sich und löschen sich abwechselnd aus, einmal alle 220 s. U beginnt mit der größten Stärke, bei der der Balancierregler noch gewinnt."
+ },
  "24f94dea2061": {
   "src": "Hang down, swing up",
   "tr": "Hängen lassen, aufschwingen"
@@ -351,6 +367,10 @@
   "src": "The two numbers are our choices. The damping \\(2\\omega_h\\) is the critical one, so the cart never overshoots the pointer: after a jump \\(D\\) of the pointer it follows \\(x = D\\,[1 - (1 + \\omega_h t)\\,e^{-\\omega_h t}]\\), 95 % of the way in 0.32 s, and it trails a pointer moving steadily at speed \\(c\\) by \\(2c/\\omega_h\\), 13 cm at 1 m/s (Wolfram’s <code>DSolve</code> on (29) gives both). With \\(\\ddot x\\) given, the Euler–Lagrange equations of the rods, rows 2 and 3 of (9), no longer contain the force: they are two equations for the rods alone, driven by the cart,",
   "tr": "Die beiden Zahlen sind unsere Wahl. Die Dämpfung \\(2\\omega_h\\) ist die kritische, sodass der Wagen nie über den Zeiger hinausschießt: Nach einem Sprung \\(D\\) des Zeigers folgt er \\(x = D\\,[1 - (1 + \\omega_h t)\\,e^{-\\omega_h t}]\\), 95 % des Weges in 0.32 s, und einem Zeiger, der sich gleichmäßig mit der Geschwindigkeit \\(c\\) bewegt, hinkt er um \\(2c/\\omega_h\\) hinterher, 13 cm bei 1 m/s (Wolframs <code>DSolve</code> auf (29) liefert beides). Bei gegebenem \\(\\ddot x\\) enthalten die Euler-Lagrange-Gleichungen der Stangen, die Zeilen 2 und 3 von (9), die Kraft nicht mehr: Es sind zwei Gleichungen für die Stangen allein, angetrieben vom Wagen,"
  },
+ "2721944a640b": {
+  "src": "Six slow waves of the deep sea, 2.5 to 8 m long, from six directions, with periods of 23 to 89 s: the pattern never repeats. U starts at the hardest strength the balancer still wins.",
+  "tr": "Sechs langsame Wellen der Tiefsee, 2.5 bis 8 m lang, aus sechs Richtungen, mit Perioden von 23 bis 89 s: Das Muster wiederholt sich nie. U beginnt mit der größten Stärke, bei der der Balancierregler noch gewinnt."
+ },
  "275fd4b5f642": {
   "src": "Here is why \\(c^\\ast\\) certifies a catch. Suppose \\(\\dot W < 0\\) at every point with \\(0 < W \\le c^\\ast\\), the whole ellipsoid except its centre. A motion that starts inside can never leave: to cross the surface \\(W = c^\\ast\\) outward, \\(W\\) would have to rise there, and it cannot. Inside, \\(W\\) falls all the time, and since it is bounded below by zero and falls at a rate that does not die out away from the centre, it can only end at \\(W = 0\\), the upright rest. This is Lyapunov’s argument: a bowl in which the marble can only roll downhill. Negative \\(\\dot W\\) on the surface alone would only keep the motion inside; it is the inside that brings it home, which is why the page tests the shells inside too. The page shows \\(c^\\ast\\) in the panel and recomputes it whenever a slider changes. For the default machine it is 31.4 on the page; an independent search in Mathematica, maximising \\(\\dot W\\) on each surface with <code>FindMaximum</code> from several starts, brackets it between 30.56 and 30.69. The page therefore hands over only below \\(0.9\\,c^\\ast\\), a margin of 10 %. The worst point lies close to upright, both rods leaning about 4° the same way and almost at rest, where the balancer asks for a fraction of a newton: there the curvature of (9), the cosines and centripetal terms that (10) threw away, briefly makes \\(W\\) rise.",
   "tr": "Darum bescheinigt \\(c^\\ast\\) einen Fang. Angenommen, \\(\\dot W < 0\\) gilt an jedem Punkt mit \\(0 < W \\le c^\\ast\\), im ganzen Ellipsoid außer seinem Mittelpunkt. Eine Bewegung, die innen beginnt, kann nie hinaus: Um die Fläche \\(W = c^\\ast\\) nach außen zu kreuzen, müsste \\(W\\) dort steigen, und das kann es nicht. Innen fällt \\(W\\) ständig, und da es nach unten durch null beschränkt ist und abseits des Mittelpunkts mit einer Rate fällt, die nicht erlischt, kann es nur bei \\(W = 0\\) enden, der aufrechten Ruhelage. Das ist Ljapunows Argument: eine Schale, in der die Murmel nur bergab rollen kann. Ein negatives \\(\\dot W\\) allein auf der Fläche hielte die Bewegung nur innen; erst das Innere bringt sie nach Hause, und darum prüft die Seite auch die inneren Schalen. Die Seite zeigt \\(c^\\ast\\) im Bedienfeld und berechnet es bei jeder Änderung eines Schiebereglers neu. Für die voreingestellte Maschine ist es auf der Seite 31.4; eine unabhängige Suche in Mathematica, die \\(\\dot W\\) auf jeder Fläche mit <code>FindMaximum</code> von mehreren Startpunkten aus maximiert, schließt es zwischen 30.56 und 30.69 ein. Die Seite übergibt deshalb erst unterhalb von \\(0.9\\,c^\\ast\\), mit einem Spielraum von 10 %. Der schlechteste Punkt liegt nahe der aufrechten Lage, beide Stangen um etwa 4° in dieselbe Richtung geneigt und fast in Ruhe, wo der Balancierregler nur einen Bruchteil eines Newton verlangt: Dort lässt die Krümmung von (9), die Kosinus- und Zentripetalterme, die (10) weggeworfen hat, \\(W\\) kurz steigen."
@@ -366,6 +386,10 @@
  "28b391091019": {
   "src": "where \\(m_c = \\rho V_e\\,\\kappa_x/(2 - \\kappa_x)\\) is the added mass of the cart taken as an ellipsoid of its size, semi-axes 0.18, 0.06 and 0.10 m, with Tuckerman's \\(\\kappa_x = 0.2876\\) as MuJoCo computes it [16]: 0.76 kg in water, half the cart's own mass. \\(\\mathbf M_a\\) depends on the angles because \\(\\mathbf v\\cdot\\mathbf n\\) does: when the cart moves, an upright rod moves across itself and carries its full share of water, a rod lying along the rail moves along itself and carries almost none. Lagrange's equations with \\(T + T_a\\) give the velocity terms \\(\\mathbf C_a\\) of (40); Wolfram checks that they keep \\(T_a\\) constant when nothing else acts, and that they equal the terms built from the Christoffel symbols of \\(\\mathbf M_a\\), the road the independent reference takes.",
   "tr": "wobei \\(m_c = \\rho V_e\\,\\kappa_x/(2 - \\kappa_x)\\) die hydrodynamische Masse des Wagens ist, gerechnet als Ellipsoid seiner Größe mit den Halbachsen 0.18, 0.06 und 0.10 m und mit Tuckermans \\(\\kappa_x = 0.2876\\), wie MuJoCo es berechnet [16]: 0.76 kg in Wasser, die Hälfte der Masse des Wagens selbst. \\(\\mathbf M_a\\) hängt von den Winkeln ab, weil \\(\\mathbf v\\cdot\\mathbf n\\) es tut: Wenn der Wagen fährt, bewegt sich eine aufrechte Stange quer zu sich selbst und nimmt ihren vollen Anteil Wasser mit, eine längs der Schiene liegende Stange bewegt sich längs und nimmt fast keines mit. Die Lagrange-Gleichungen mit \\(T + T_a\\) geben die Geschwindigkeitsterme \\(\\mathbf C_a\\) von (40); Wolfram prüft, dass sie \\(T_a\\) konstant halten, wenn sonst nichts wirkt, und dass sie gleich den Termen aus den Christoffel-Symbolen von \\(\\mathbf M_a\\) sind, dem Weg, den die unabhängige Referenz nimmt."
+ },
+ "28e0fa7fc788": {
+  "src": "<b>13.2</b> From (34), how strong a steady breeze would the 60 N motor need before it could no longer hold the default rods? Is that wind found on Earth?",
+  "tr": "<b>13.2</b> Wie stark müsste nach (34) eine gleichmäßige Brise sein, damit der 60-N-Motor die voreingestellten Stangen nicht mehr halten kann? Gibt es diesen Wind auf der Erde?"
  },
  "29404de7e4d9": {
   "src": "Near the top every angle and every velocity is small, of some size \\(\\epsilon\\). Keep in (9) only what is of first order in \\(\\epsilon\\): \\(\\sin\\theta = \\theta + O(\\epsilon^3)\\); \\(\\cos\\theta = 1 + O(\\epsilon^2)\\), so \\(\\mathbf D(\\boldsymbol\\theta)\\ddot{\\boldsymbol\\theta} = \\mathbf D(\\mathbf 0)\\ddot{\\boldsymbol\\theta} + O(\\epsilon^3)\\); and every entry of \\(\\mathbf C\\dot{\\boldsymbol\\theta}\\) is a sine times a squared velocity, \\(O(\\epsilon^3)\\), so it drops out. With \\(\\mathbf G \\approx -\\operatorname{diag}(0, f_1, f_2)\\boldsymbol\\theta\\), (9) becomes linear,",
@@ -751,6 +775,10 @@
   "src": "If the rods fall",
   "tr": "Wenn die Stangen fallen"
  },
+ "56a22f5d69d9": {
+  "src": "The double gyre of Shadden, Lekien and Marsden: two counter-rotating cells 3 m across whose boundary sways every 15 s. Each bit of water moves chaotically, though the flow repeats. U starts at the hardest strength the balancer still wins.",
+  "tr": "Der Doppelwirbel von Shadden, Lekien und Marsden: zwei gegensinnig drehende Zellen von 3 m Durchmesser, deren Grenze alle 15 s hin und her schwingt. Jedes Wasserteilchen bewegt sich chaotisch, obwohl sich die Strömung wiederholt. U beginnt mit der größten Stärke, bei der der Balancierregler noch gewinnt."
+ },
  "5731153931c4": {
   "src": "For a cart moving left the signs of \\(\\Delta\\) and \\((\\mathbf P\\mathbf e)_4\\) turn round. The page takes the bite \\(\\min(|v|, \\Delta_\\text{max})\\) at every look; if no bite fits (the square root is imaginary or the root negative), it keeps the reference it has, and the certificate goes on. When the speed reaches zero the reference becomes a fixed place where the cart is. The number \\(\\varepsilon\\) is the answer to the question in its plainest form: how much speed may be taken away in one go from a balanced cart, with certainty. With the default machine, Wolfram’s discrete Riccati solution gives \\(P_{44} = 172.46\\) at \\(T_s = 10\\) ms (the gains it finds equal the page’s to every printed digit), and with \\(c^\\ast = 37.3\\) the certified bite is \\(\\varepsilon = 0.44\\) m/s for \\(\\gamma = 0.9\\) and 0.33 m/s for \\(\\gamma = 0.5\\); at 40 ms, \\(P_{44} = 173.60\\), \\(c^\\ast = 116\\), \\(\\varepsilon = 0.78\\) and 0.58 m/s. The page shows \\(\\varepsilon\\) for \\(\\gamma = 0.5\\) among its readouts. In control engineering this kind of supervisor is a <em>reference governor</em>: at each instant it moves the command towards where we want it by the largest step that keeps a Lyapunov function below a level whose sublevel set is invariant [12]; the bite (27a) is that step, worked out in closed form for our \\(W\\).",
   "tr": "Für einen nach links fahrenden Wagen kehren sich die Vorzeichen von \\(\\Delta\\) und \\((\\mathbf P\\mathbf e)_4\\) um. Die Seite nimmt bei jedem Blick den Abzug \\(\\min(|v|, \\Delta_\\text{max})\\); passt kein Abzug (die Quadratwurzel ist imaginär oder die Wurzel negativ), behält sie ihre Referenz, und das Zertifikat gilt weiter. Erreicht die Geschwindigkeit null, wird die Referenz ein fester Ort, dort, wo der Wagen ist. Die Zahl \\(\\varepsilon\\) ist die Antwort auf die Frage in ihrer schlichtesten Form: wie viel Geschwindigkeit einem balancierten Wagen auf einmal genommen werden darf, mit Sicherheit. Für die voreingestellte Maschine liefert Wolframs diskrete Riccati-Lösung \\(P_{44} = 172.46\\) bei \\(T_s = 10\\) ms (die Verstärkungen, die sie findet, gleichen denen der Seite in jeder gedruckten Ziffer), und mit \\(c^\\ast = 37.3\\) ist der gesicherte Abzug \\(\\varepsilon = 0.44\\) m/s für \\(\\gamma = 0.9\\) und 0.33 m/s für \\(\\gamma = 0.5\\); bei 40 ms \\(P_{44} = 173.60\\), \\(c^\\ast = 116\\), \\(\\varepsilon = 0.78\\) und 0.58 m/s. Die Seite zeigt \\(\\varepsilon\\) für \\(\\gamma = 0.5\\) unter ihren Anzeigen. In der Regelungstechnik heißt diese Art Aufsicht <em>Reference Governor</em>: Sie bewegt den Sollwert in jedem Augenblick um den größten Schritt dorthin, wo wir ihn haben wollen, der eine Ljapunow-Funktion unter einem Niveau hält, dessen Subniveaumenge invariant ist [12]; der Abzug (27a) ist dieser Schritt, für unser \\(W\\) in geschlossener Form ausgerechnet."
@@ -766,6 +794,10 @@
  "5822f2a10bcd": {
   "src": "M. Schäfer and S. Turek, <a href=\"https://karlin.mff.cuni.cz/~hron/NMMO403/dfg_benchmark_results.pdf\">“Benchmark computations of laminar flow around a cylinder”</a>, in <em>Flow Simulation with High-Performance Computers II</em>, Vieweg (1996): test case 2D-1, table 3, \\(c_D\\) between 5.57 and 5.59.",
   "tr": "M. Schäfer und S. Turek, <a href=\"https://karlin.mff.cuni.cz/~hron/NMMO403/dfg_benchmark_results.pdf\">„Benchmark computations of laminar flow around a cylinder“</a>, in <em>Flow Simulation with High-Performance Computers II</em>, Vieweg (1996): Testfall 2D-1, Tabelle 3, \\(c_D\\) zwischen 5.57 und 5.59."
+ },
+ "59bc92e09e1b": {
+  "src": "The planning runs in the browser between frames, 8 ms at a time, while the machine keeps moving. That raises a question: a plan is made for one starting state, but by the time it is ready the machine has moved on. The page answers it with determinism. Calming (21) is a fixed law, and the integrator (18) is exact arithmetic, so the page can run the next 3 s of calming ahead of time, plan from the state it finds there, and when the clock arrives check that the machine is at that state to \\(10^{-6}\\). It always is, unless you pushed it in between; then the plan is dropped and a new one begun. If a plan is not ready in time, or no plan was found (the search starts from one straight-line guess and can fail), the page plans again from further ahead, with the other of two horizons (here 4 s and 6 s), while calming goes on; the search stops after 400 steps.",
+  "tr": "Die Planung läuft im Browser zwischen den Bildern, jeweils 8 ms lang, während sich die Maschine weiterbewegt. Das wirft eine Frage auf: Ein Plan wird für einen Anfangszustand gemacht, aber wenn er fertig ist, hat sich die Maschine weiterbewegt. Die Seite beantwortet sie mit Determinismus. Das Beruhigen (21) ist ein festes Gesetz, und der Integrator (18) ist exakte Arithmetik; also kann die Seite die nächsten 3 s des Beruhigens im Voraus rechnen, aus dem Zustand planen, den sie dort findet, und, wenn die Uhr so weit ist, prüfen, dass die Maschine auf \\(10^{-6}\\) genau in diesem Zustand ist. Das ist sie immer, es sei denn, Sie haben sie zwischendurch angestoßen; dann wird der Plan verworfen und ein neuer begonnen. Ist ein Plan nicht rechtzeitig fertig oder wurde kein Plan gefunden (die Suche beginnt mit einer einzigen geradlinigen Schätzung und kann scheitern), plant die Seite erneut von weiter vorn aus, mit dem anderen von zwei Horizonten (hier 4 s und 6 s), während das Beruhigen weiterläuft; die Suche hört nach 400 Schritten auf."
  },
  "59c800f53691": {
   "src": "The page integrates (9) with (18) at a fixed step of 1 ms, several steps per screen frame, in real time. The walkthrough below sets each equation of this note beside the lines of the page’s script that compute it. With the controller off, the same integrator tested against a high-accuracy solver keeps the energy \\(T + V\\) constant to \\(2\\times10^{-10}\\) J over 10 s. When a rod passes 60° the run is called lost: the linear controller was designed for small angles, so the motor stops pushing (\\(u = 0\\)) and the page keeps solving (9) exactly as before. The rods fall all the way, swing down through the slot in the middle of the cart, between its two rails, and go on swinging as a double pendulum hanging from a free cart, without friction, so they never come to rest. The view widens to keep them in sight. Positions are drawn to scale; the view follows the cart.",
@@ -851,6 +883,10 @@
   "src": "<b>What the page does, and what it costs.</b> With <i>Arrive moving, then brake</i> (the default) the page catches the rods on whatever member of (25) the plan arrives on, then brakes with (27a) at \\(\\gamma = 0.5\\), our choice: half the certified level, about one eighteenth of the deceleration the balancer measurably survives. Measured on the page, 8 random falls caught at 10 ms all came to rest: from 3.5 m/s in 5.4 s over 13 m, with the rods leaning at most 3.8°, the force at most 11 N (at the first bite, while the error left by the hand-over decays) and \\(W\\) never above \\(0.5\\,c^\\ast\\) after a bite, except right after a hand-over, when the governor waits below \\(0.9\\,c^\\ast\\) until a bite fits. The distance follows from (28): a cart caught at speed \\(v\\) rolls about \\(v^2/2a\\) further. Two honest limits. The guarantee is as good as \\(c^\\ast\\), which is a search, not a proof (section 9). And (28) is a linear prediction; on the page and in Node.js the braking time and the lean come within a few per cent of it.",
   "tr": "<b>Was die Seite tut, und was es kostet.</b> Mit <i>In Bewegung ankommen, dann bremsen</i> (der Voreinstellung) fängt die Seite die Stangen auf dem Mitglied von (25), auf dem der Plan ankommt, und bremst dann mit (27a) bei \\(\\gamma = 0.5\\), unsere Wahl: die Hälfte des gesicherten Niveaus, etwa ein Achtzehntel der Verzögerung, die der Balancierregler messbar übersteht. Auf der Seite gemessen kamen 8 zufällige Stürze, gefangen bei 10 ms, alle zur Ruhe: von 3.5 m/s in 5.4 s über 13 m, die Stangen höchstens 3.8° geneigt, die Kraft höchstens 11 N (beim ersten Abzug, während der von der Übergabe hinterlassene Fehler abklingt) und \\(W\\) nach einem Abzug nie über \\(0.5\\,c^\\ast\\), außer gleich nach einer Übergabe, wenn der Reference Governor unter \\(0.9\\,c^\\ast\\) wartet, bis ein Abzug passt. Die Strecke folgt aus (28): Ein bei der Geschwindigkeit \\(v\\) gefangener Wagen rollt etwa \\(v^2/2a\\) weiter. Zwei ehrliche Grenzen. Die Garantie ist so gut wie \\(c^\\ast\\), und das ist eine Suche, kein Beweis (Abschnitt 9). Und (28) ist eine lineare Vorhersage; auf der Seite und in Node.js liegen Bremszeit und Neigung innerhalb weniger Prozent davon."
  },
+ "62f8e2c5a1fd": {
+  "src": "<span class=\"psec__n\">13</span>Air: the push of a flow",
+  "tr": "<span class=\"psec__n\">13</span>Luft: der Schub einer Strömung"
+ },
  "646afff7c5a7": {
   "src": "C. Batty, F. Bertails and R. Bridson, <a href=\"https://cs.uwaterloo.ca/~c2batty/papers/Batty07.pdf\">“A fast variational framework for accurate solid-fluid coupling”</a>, <em>ACM Transactions on Graphics</em> 26(3), 100 (2007): the pressure step as the least kinetic energy, volume weights (4), the force on a body (8)–(10).",
   "tr": "C. Batty, F. Bertails und R. Bridson, <a href=\"https://cs.uwaterloo.ca/~c2batty/papers/Batty07.pdf\">„A fast variational framework for accurate solid-fluid coupling“</a>, <em>ACM Transactions on Graphics</em> 26(3), 100 (2007): der Druckschritt als kleinste kinetische Energie, Volumengewichte (4), die Kraft auf einen Körper (8)–(10)."
@@ -883,6 +919,10 @@
   "src": "a river",
   "tr": "ein Fluss"
  },
+ "68351b1f01c2": {
+  "src": "No medium: nothing pushes on the cart and the rods but gravity, the rail and the motor. Choose air to give them something to move through; water, glycerol and honey are project 06.",
+  "tr": "Kein Medium: Außer der Schwerkraft, der Schiene und dem Motor wirkt nichts auf den Wagen und die Stangen. Wählen Sie Luft, damit sie sich durch etwas bewegen; Wasser, Glycerin und Honig sind Projekt 06."
+ },
  "68856dbfe0c1": {
   "src": "below \\(2\\times10^{-4}\\) s⁻¹",
   "tr": "unter \\(2\\times10^{-4}\\) s⁻¹"
@@ -914,6 +954,10 @@
  "6aeb6be3fa54": {
   "src": "Two honest limits. The test is a search, not a proof: a bad spot it did not find could exist, which is what the 10 % margin is for. And it is conservative. In simulation the balancer brings back states with \\(W\\) forty times larger, because a motion may let \\(W\\) rise for a moment and still come home. \\(c^\\ast\\) marks where catching is <em>certain</em>, not the whole set that can be caught. It is the same at 30 N, 60 N and 200 N: the motor limit does not set it, the curvature of (9) does.",
   "tr": "Zwei ehrliche Grenzen. Der Test ist eine Suche, kein Beweis: Eine schlechte Stelle, die er nicht gefunden hat, könnte es geben, und dafür ist der Spielraum von 10 % da. Und er ist vorsichtig. In der Simulation bringt der Balancierregler Zustände mit vierzigmal größerem \\(W\\) zurück, weil eine Bewegung \\(W\\) für einen Augenblick steigen lassen und trotzdem heimkommen kann. \\(c^\\ast\\) markiert, wo das Fangen <em>sicher</em> ist, nicht die ganze Menge, die gefangen werden kann. Es ist bei 30 N, 60 N und 200 N dasselbe: Nicht die Motorgrenze legt es fest, sondern die Krümmung von (9)."
+ },
+ "6b7a7d573275": {
+  "src": "An internal wave of the deep ocean, where water of different saltiness rides on water below: crests 12 m apart, layers 4 m apart, one swing every 45 s, speed U at its strongest. Chosen, U starts at the strength where the balancer has to work hardest and still wins in this medium (13.7).",
+  "tr": "Eine interne Welle der Tiefsee, in der Wasser anderen Salzgehalts auf dem Wasser darunter reitet: Wellenberge 12 m voneinander entfernt, Schichten 4 m voneinander entfernt, eine Schwingung alle 45 s, Geschwindigkeit U an ihrer stärksten Stelle. Bei der Auswahl beginnt U mit der Stärke, bei der der Balancierregler am härtesten arbeiten muss und in diesem Medium noch gewinnt (13.7)."
  },
  "6b95bc5efffe": {
   "src": "The page repeats this every time a slider changes [3]. For the default machine and \\(\\rho = 1\\), the gains on \\((x, \\theta_1, \\theta_2, \\dot x, \\dot\\theta_1, \\dot\\theta_2)\\) are \\((7.07,\\ -504.0,\\ 625.9,\\ 15.32,\\ -14.69,\\ 97.94)\\) in N per m, rad, m/s or rad/s; the closed loop’s slowest motion dies away in 1.23 s.",
@@ -1079,6 +1123,10 @@
   "src": "<b>12.4</b> Derive (21): differentiate (20) along rows 2 and 3 of (9) with \\(\\ddot x = a\\), and show that the terms with \\(d_5\\sin(\\theta_1-\\theta_2)\\) cancel in pairs.",
   "tr": "<b>12.4</b> Leiten Sie (21) her: Differenzieren Sie (20) entlang der Zeilen 2 und 3 von (9) mit \\(\\ddot x = a\\) und zeigen Sie, dass sich die Terme mit \\(d_5\\sin(\\theta_1-\\theta_2)\\) paarweise aufheben."
  },
+ "7f6cdfdd4459": {
+  "src": "The density of air follows from the ideal gas law at 1 atm, \\(\\rho = p/(R_s T) = 101\\,325/(287.05 \\times 298.15)\\) kg/m³; water (998.2 kg/m³, \\(1.0016\\times10^{-3}\\) Pa s [19]), glycerol and honey are in <a href=\"rods-in-liquid.html#p-fluid\">project 06</a>.",
+  "tr": "Die Dichte der Luft folgt aus dem idealen Gasgesetz bei 1 atm, \\(\\rho = p/(R_s T) = 101\\,325/(287.05 \\times 298.15)\\) kg/m³; Wasser (998.2 kg/m³, \\(1.0016\\times10^{-3}\\) Pa s [19]), Glycerin und Honig stehen in <a href=\"rods-in-liquid.html#p-fluid\">Projekt 06</a>."
+ },
  "7f809ce86895": {
   "src": "Swing back up",
   "tr": "Wieder aufschwingen"
@@ -1118,6 +1166,10 @@
  "83ba44da541c": {
   "src": "Tilt and let go",
   "tr": "Kippen und loslassen"
+ },
+ "83e151a140f9": {
+  "src": "<b>Left out</b> (with the given flow). The parts of the added mass that mix the rod's own motion with the flow's velocity as the rod turns; the rods' own wakes and the vortices they shed; the bodies changing the flow (project 06 adds these two, in its section 13.6); the water's surface; and the rail's own drag. Morison's equation is itself an approximation, poor where drag and inertia are of the same size [25]. In air all of this is small: at 8 m/s, the top of the slider, (34) gives about 0.9 N on every metre of rod across the wind.",
+  "tr": "<b>Weggelassen</b> (bei vorgegebener Strömung). Die Anteile der hydrodynamischen Masse, die die Eigenbewegung der Stange mit der Geschwindigkeit der Strömung mischen, während sich die Stange dreht; die eigenen Nachläufe der Stangen und die Wirbel, die sie ablösen; die Veränderung der Strömung durch die Körper (Projekt 06 fügt diese beiden hinzu, in seinem Abschnitt 13.6); die Wasseroberfläche; und der Widerstand der Schiene selbst. Die Morison-Gleichung ist selbst eine Näherung, schlecht dort, wo Widerstand und Trägheit gleich groß sind [25]. In Luft ist all das klein: Bei 8 m/s, dem oberen Ende des Schiebereglers, liefert (34) etwa 0.9 N auf jeden Meter Stange quer zum Wind."
  },
  "83f9b10b3477": {
   "src": "Rod angles",
@@ -1495,6 +1547,10 @@
   "src": "<span class=\"pbox__t\">Key result · the sampled loop</span> \\[ \\mathbf s_{k+1} = \\boldsymbol\\Phi\\,\\mathbf s_k + \\boldsymbol\\Gamma\\,u_k, \\qquad \\boldsymbol\\Phi = e^{\\mathbf A T_s}, \\quad \\boldsymbol\\Gamma = \\int_0^{T_s} e^{\\mathbf A\\tau}\\,\\mathrm d\\tau\\;\\mathbf B . \\tag{16a} \\]",
   "tr": "<span class=\"pbox__t\">Kernergebnis · der abgetastete Regelkreis</span> \\[ \\mathbf s_{k+1} = \\boldsymbol\\Phi\\,\\mathbf s_k + \\boldsymbol\\Gamma\\,u_k, \\qquad \\boldsymbol\\Phi = e^{\\mathbf A T_s}, \\quad \\boldsymbol\\Gamma = \\int_0^{T_s} e^{\\mathbf A\\tau}\\,\\mathrm d\\tau\\;\\mathbf B . \\tag{16a} \\]"
  },
+ "afeabca9d312": {
+  "src": "with targets \\(\\theta^\\ast = 2\\pi\\operatorname{round}(\\theta/2\\pi)\\), the nearest upright. The weights \\(w_d = 100\\), \\(w_T = 30\\), \\(w_\\ell = 20\\), \\(w_u = 1\\), \\(w_r = w_s = 0.02 \\times 60\\ \\mathrm N/u_\\text{max}\\) are our choice (the price of force is set in units of the motor's limit, so that a strong motor is not held back by it; for 60 N it is 0.02 per newton); they make a defect of one milliradian cost as much as three milliradians of final error, so the physics wins over the wish. The first guess is a straight line in the angles. Levenberg–Marquardt then improves it, step after step, from the normal equations \\(\\mathbf J^{\\mathsf T}\\mathbf J\\,\\delta = -\\mathbf J^{\\mathsf T}\\mathbf r\\) with the Jacobian \\(\\mathbf J\\) of (22) from finite differences of \\(\\Phi\\). A plan is accepted when every defect is below \\(3\\times10^{-3}\\) and the end is within 0.02 rad and 0.02 rad/s of upright rest.",
+  "tr": "mit den Zielen \\(\\theta^\\ast = 2\\pi\\operatorname{round}(\\theta/2\\pi)\\), der nächsten aufrechten Lage. Die Gewichte \\(w_d = 100\\), \\(w_T = 30\\), \\(w_\\ell = 20\\), \\(w_u = 1\\), \\(w_r = w_s = 0.02 \\times 60\\ \\mathrm N/u_\\text{max}\\) sind unsere Wahl (der Preis der Kraft wird in Einheiten der Motorgrenze angesetzt, damit ein starker Motor dadurch nicht gebremst wird; für 60 N sind es 0.02 pro Newton); sie lassen einen Defekt von einem Milliradiant so viel kosten wie drei Milliradiant Endfehler, sodass die Physik über den Wunsch siegt. Die erste Schätzung ist eine Gerade in den Winkeln. Levenberg–Marquardt verbessert sie dann Schritt für Schritt aus den Normalgleichungen \\(\\mathbf J^{\\mathsf T}\\mathbf J\\,\\delta = -\\mathbf J^{\\mathsf T}\\mathbf r\\) mit der Jacobi-Matrix \\(\\mathbf J\\) von (22) aus finiten Differenzen von \\(\\Phi\\). Ein Plan wird angenommen, wenn jeder Defekt unter \\(3\\times10^{-3}\\) liegt und das Ende innerhalb von 0.02 rad und 0.02 rad/s an der aufrechten Ruhelage liegt."
+ },
  "b004c299fa45": {
   "src": "an identity Wolfram checks for (33). \\(P\\) is negative while a still fluid brakes the rods; a wind can make it positive and pour energy in. The energy book of the data panel carries \\(\\int P\\,dt\\) as one more row, summed with the weights that RK4 gives the state.",
   "tr": "eine Identität, die Wolfram für (33) prüft. \\(P\\) ist negativ, solange ein ruhendes Fluid die Stangen bremst; ein Wind kann sie positiv machen und Energie hineinpumpen. Die Energiebilanz des Datenpanels führt \\(\\int P\\,dt\\) als eine weitere Zeile, summiert mit den Gewichten, die RK4 dem Zustand gibt."
@@ -1506,6 +1562,10 @@
  "b0cf5385d4c1": {
   "src": "given: it pushes, is not pushed",
   "tr": "vorgegeben: es drückt, wird nicht gedrückt"
+ },
+ "b10b6c50179e": {
+  "src": "<b>Project 05</b> · <span class=\"tx\">\\(\\mathbf D(\\boldsymbol\\theta)\\,\\ddot{\\boldsymbol\\theta} + \\mathbf C(\\boldsymbol\\theta,\\dot{\\boldsymbol\\theta})\\,\\dot{\\boldsymbol\\theta} + \\mathbf G(\\boldsymbol\\theta) = \\mathbf H u\\)</span> · live, RK4",
+  "tr": "<b>Projekt 05</b> · <span class=\"tx\">\\(\\mathbf D(\\boldsymbol\\theta)\\,\\ddot{\\boldsymbol\\theta} + \\mathbf C(\\boldsymbol\\theta,\\dot{\\boldsymbol\\theta})\\,\\dot{\\boldsymbol\\theta} + \\mathbf G(\\boldsymbol\\theta) = \\mathbf H u\\)</span> · live, RK4"
  },
  "b10bffd89ff4": {
   "src": "solves Bickley's boundary-layer equation exactly (Wolfram); \\(\\alpha\\) makes it 0.35 m wide at the cart, the eddy viscosity \\(\\nu_J\\) makes its axis speed \\(U\\) there",
@@ -1579,6 +1639,10 @@
   "src": "<b>13.2</b> From (34), at what speed of a river does the 60 N motor stop being able to hold the default rods upright? Try it with the slider.",
   "tr": "<b>13.2</b> Bei welcher Fließgeschwindigkeit eines Flusses kann der 60-N-Motor die voreingestellten Stangen nach (34) nicht mehr aufrecht halten? Probieren Sie es mit dem Regler aus."
  },
+ "b78184351e39": {
+  "src": "In water this takes 31 % off the weight of the default rods; a rod lighter than the liquid would stand up by itself. The controller is redesigned with (37), since an engineer knows what the machine stands in. It is also told the flow, and balances the rods where the flow and gravity balance (<a href=\"rods-in-liquid.html#p-fluid\">project 06</a>, 13.8).",
+  "tr": "Im Wasser nimmt das den voreingestellten Stangen 31 % ihres Gewichts; eine Stange, die leichter als die Flüssigkeit ist, würde sich von selbst aufrichten. Der Regler wird mit (37) neu entworfen, denn ein Ingenieur weiß, worin die Maschine steht. Er kennt auch die Strömung und balanciert die Stangen dort, wo sich Strömung und Schwerkraft das Gleichgewicht halten (<a href=\"rods-in-liquid.html#p-fluid\">Projekt 06</a>, 13.8)."
+ },
  "b84828280deb": {
   "src": "A rolling eddy (a Lamb–Oseen vortex, core 0.45 m, fastest swirl U) carried along by a light wind 0.4 U; a new one every 20 s.",
   "tr": "Eine rollende Wirbelwalze (ein Lamb-Oseen-Wirbel, Kern 0.45 m, schnellste Umlaufgeschwindigkeit U), von einem leichten Wind 0.4 U mitgetragen; alle 20 s eine neue."
@@ -1638,6 +1702,10 @@
  "be70657fd3d2": {
   "src": "5.71, 5.71, 5.64; 0.113, 0.114, 0.115 Pa",
   "tr": "5.71, 5.71, 5.64; 0.113, 0.114, 0.115 Pa"
+ },
+ "bea92cce1a0f": {
+  "src": "<span class=\"psub__n\">13.6</span>Under a liquid",
+  "tr": "<span class=\"psub__n\">13.6</span>Unter einer Flüssigkeit"
  },
  "bec7c512e2f9": {
   "src": "Balancing Two Rods on a Cart<span class=\"dot\">.</span>",
@@ -1730,6 +1798,10 @@
  "c9f12fb1c88b": {
   "src": "Wikipedia, <a href=\"https://en.wikipedia.org/wiki/Morison_equation\">“Morison equation”</a>: \\(F = \\rho V\\dot u + \\rho C_a V(\\dot u - \\dot v) + \\tfrac12\\rho C_d A(u - v)|u - v|\\), the first term the Froude–Krylov force; its limits.",
   "tr": "Wikipedia, <a href=\"https://en.wikipedia.org/wiki/Morison_equation\">„Morison equation“</a>: \\(F = \\rho V\\dot u + \\rho C_a V(\\dot u - \\dot v) + \\tfrac12\\rho C_d A(u - v)|u - v|\\), das erste Glied die Froude-Krylow-Kraft; ihre Grenzen."
+ },
+ "ca470b505822": {
+  "src": "<b>13.1</b> Upright rods at rest in a steady breeze \\(U\\), with one \\(\\xi_\\perp\\) for both rods and (33) alone: show from (35) that \\(\\mathbf Q = \\xi_\\perp U\\,\\bigl(L_1 + L_2,\\ \\tfrac12 L_1(L_1 + 2L_2),\\ \\tfrac12 L_2^2\\bigr)\\), and check it against the store's \\(Q_i\\) in a breeze.",
+  "tr": "<b>13.1</b> Aufrechte Stangen in Ruhe in einer gleichmäßigen Brise \\(U\\), mit einem einzigen \\(\\xi_\\perp\\) für beide Stangen und (33) allein: Zeigen Sie mit (35), dass \\(\\mathbf Q = \\xi_\\perp U\\,\\bigl(L_1 + L_2,\\ \\tfrac12 L_1(L_1 + 2L_2),\\ \\tfrac12 L_2^2\\bigr)\\), und prüfen Sie das an den \\(Q_i\\) des Speichers in einer Brise."
  },
  "ca8a78aa7675": {
   "src": "<span class=\"psub__n\">9.1</span>Sources",
@@ -1903,6 +1975,10 @@
   "src": "<b>How it is checked.</b> The data panel recomputes \\(\\mathbf Q\\) from the stored state by Simpson's rule with 400 slices per rod. In Wolfram, at a fixed test state, an adaptive integral of (35) agrees with the page's 24 points to all 15 digits for the swell and the ground wind and to \\(7\\times10^{-5}\\) of the force or better for the jet, the eddy, the cells and the vortex street; what is left is the kink of \\(|w_n|\\,w_n\\) where the flow across a rod changes sign. With 8 points per rod the vortex street was 1.2 % off, which is why the page uses 24. The honesty tests replay every stored step bit for bit, and an independent reference, written from this note with the published table of Gauss points, agrees to \\(10^{-15}\\) in a vortex street, in a swell and with the cart in your hand in a breeze.",
   "tr": "<b>Wie es geprüft wird.</b> Das Datenpanel berechnet \\(\\mathbf Q\\) aus dem gespeicherten Zustand mit der Simpson-Regel und 400 Abschnitten pro Stange neu. In Wolfram stimmt bei einem festen Testzustand ein adaptives Integral von (35) mit den 24 Punkten der Seite für die Dünung und den Bodenwind in allen 15 Stellen überein, für den Strahl, die Wirbelwalze, die Zellen und die Wirbelstraße auf \\(7\\times10^{-5}\\) der Kraft oder besser; was bleibt, ist der Knick von \\(|w_n|\\,w_n\\), wo die Strömung quer zu einer Stange ihr Vorzeichen wechselt. Mit 8 Punkten pro Stange lag die Wirbelstraße 1.2 % daneben; deshalb nimmt die Seite 24. Die Ehrlichkeitstests spielen jeden gespeicherten Schritt Bit für Bit nach, und eine unabhängige Referenz, aus diesem Skript mit der veröffentlichten Tabelle der Gauß-Punkte geschrieben, stimmt auf \\(10^{-15}\\) überein, in einer Wirbelstraße, in einer Dünung und mit dem Wagen in Ihrer Hand in einer Brise."
  },
+ "dc83484123ae": {
+  "src": "<span>13</span>Air: the push of a flow",
+  "tr": "<span>13</span>Luft: der Schub einer Strömung"
+ },
  "dd62d0620203": {
   "src": "Numa Koudsie · for readers who know Newton’s laws and a little calculus",
   "tr": "Numa Koudsie · für Leserinnen und Leser, die Newtons Gesetze und etwas Analysis kennen"
@@ -1962,6 +2038,10 @@
  "e0c90f3d8049": {
   "src": "Once the rods have fallen they swing as a double pendulum hanging from the cart, without friction, for ever. To bring them up again we first bring them to rest, hanging straight down, and that is a problem about energy. Think of a child on a swing. Moving the seat forward while it is going forward feeds the swing; moving it forward while it is coming back takes the energy out. The cart does the same to the rods through the lower hinge.",
   "tr": "Sind die Stangen einmal gefallen, schwingen sie als Doppelpendel am Wagen, ohne Reibung, für immer. Um sie wieder hochzubringen, bringen wir sie zuerst zur Ruhe, senkrecht nach unten hängend, und das ist eine Frage der Energie. Denken Sie an ein Kind auf einer Schaukel. Bewegt man den Sitz nach vorn, während er nach vorn geht, nährt man die Schaukel; bewegt man ihn nach vorn, während er zurückkommt, nimmt man ihr Energie. Der Wagen tut über das untere Gelenk dasselbe mit den Stangen."
+ },
+ "e0e4f3d9359b": {
+  "src": "In water, glycerol and honey this machine cannot lift its rods: a hanging rod must swing over the top faster than a liquid lets a 0.75 m rod turn, and nine tenths of the motor's work heat the liquid round the cart. <a href=\"rods-in-liquid.html\">Project 06</a> measures this, builds a machine that can (shorter, heavier rods, a 400 N motor, a slim cart), solves the water round it, and tells the controller the flow.",
+  "tr": "In Wasser, Glycerin und Honig kann diese Maschine ihre Stangen nicht aufrichten: Eine hängende Stange muss schneller über den Gipfel schwingen, als eine Flüssigkeit eine 0.75 m lange Stange drehen lässt, und neun Zehntel der Arbeit des Motors erwärmen die Flüssigkeit um den Wagen. <a href=\"rods-in-liquid.html\">Projekt 06</a> misst das, baut eine Maschine, die es kann (kürzere, schwerere Stangen, einen Motor mit 400 N, einen schlanken Wagen), löst das Wasser um sie herum und teilt dem Regler die Strömung mit."
  },
  "e120b3447134": {
   "src": "<b>A check.</b> Remove the upper rod, \\(m_2 \\to 0\\). Then (13) leaves \\(\\sigma^2 = f_1/M_{11} = 6g(m_0+m_1)/[L_1(4m_0+m_1)]\\). For a cart much heavier than the rod this tends to \\(3g/(2L_1)\\), the rate at which a rod falls over its fixed bottom end, which is the right limit: a very heavy cart does not recoil.",
