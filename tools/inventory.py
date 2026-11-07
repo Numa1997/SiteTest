@@ -119,6 +119,9 @@ RULES = [
     (r'notes/fig(\d\d)/walk\.md', lambda m: 'Fig. %d: the walkthrough check and its proposed fixes.' % int(m.group(1)), 'docs/notes.md'),
     (r'notes/fig11/checked\.html', lambda m: 'Fig. 11: working notes of 4 November 2026, every term of the model and of the rescue with its Wolfram check and the code that was run.', 'docs/notes.md'),
     (r'notes/fig11/status\.md', lambda m: 'Fig. 11: status of the rescue work (done with evidence, open items, decisions for Numa).', 'docs/notes.md'),
+    (r'notes/fig11/project06/README\.md', 'Project 06: what each measurement script shows and what it gave.', 'docs/simulations/project06-rods-in-liquid.md'),
+    (r'notes/fig11/project06/.+\.cjs', 'Project 06: a measurement in the running page (swing-up, planner, drag-and-release, flick, the deep flows\' starting strengths, the paddle ratio of note 13.7).', 'notes/fig11/project06/README.md'),
+    (r'notes/fig11/project06/(samecode|i18n/validate)\.py', 'Project 06: a check (the two pages\' scripts identical; translations keep tags, maths and numbers).', 'notes/fig11/project06/README.md'),
     (r'notes/fig11/panel/README\.md', 'Project 05: what each honesty test of the data panel checks, and how to run it.', 'docs/simulations/fig11-double-inverted-pendulum.md'),
     (r'notes/fig11/panel/.+\.(cjs|py)', 'Project 05: an honesty test of the data panel (origin, replay, controller, picture, falsification, cost), or the masking and checked translations of its strings.', 'notes/fig11/panel/README.md'),
     (r'notes/fig11/panel/.+\.txt', 'Project 05: raw output of an honesty test or behaviour test of the data panel, 5 November 2026.', 'notes/fig11/panel/README.md'),
@@ -150,7 +153,8 @@ RULES = [
     (r'public/cv/index\.html', 'The CV page (phyeinusul.com/cv/): both pages of the CV as images, with Open and Download PDF.', 'docs/pages.md'),
     (r'public/cv/Numa_Koudsie_CV\.pdf', 'The CV as a two-page PDF (German, then English), linked from the CV page.', 'docs/pages.md'),
     (r'public/cv/cv-(de|en)\.webp', 'One page of the CV rendered at 170 dpi, shown on the CV page.', 'docs/pages.md'),
-    (r'public/simulations/double-inverted-pendulum\.html', 'Project 05 · Balancing Two Rods on a Cart (Fig. 11 from 3 to 4 November 2026): the real-time simulation, its walkthrough and lecture note (no data panel); listed on the Projects page, kept at this address so that its German and Arabic pages are generated with the simulations.', 'docs/simulations/fig11-double-inverted-pendulum.md'),
+    (r'public/simulations/double-inverted-pendulum\.html', 'Project 05 · Balancing Two Rods on a Cart (Fig. 11 from 3 to 4 November 2026), in vacuum and air since 7 November 2026: the real-time simulation, its data panel, walkthrough and lecture note; listed on the Projects page, kept at this address so that its German and Arabic pages are generated with the simulations.', 'docs/simulations/fig11-double-inverted-pendulum.md'),
+    (r'public/simulations/rods-in-liquid\.html', 'Project 06 · Balancing Two Rods in a Liquid (7 November 2026): project 05\'s script with its own settings, a machine that can swing the rods up in water, glycerol and honey, a slim cart, and the controller told the flow; data panel, walkthrough dipc and lecture note.', 'docs/simulations/project06-rods-in-liquid.md'),
     (r'public/simulations/.+\.html',
      lambda m: ('Fig. %d · %s: the simulation, its data panel, walkthrough and lecture note.' if 'double-inverted' not in m.group(0) else 'Fig. %d · %s: the real-time simulation, its walkthrough and lecture note (no data panel).') % SIMS[m.group(0)][::2]
      if m.group(0) in SIMS else 'Simulation page not registered in catalog.js.',
@@ -158,7 +162,7 @@ RULES = [
     # shared scripts and styles
     (r'public/scripts/sim\.js', 'Shared helpers of the simulation pages: KaTeX typesetting of the notes, the walkthrough engine.', 'docs/scripts/sim.md'),
     (r'public/scripts/dataset\.js', 'Sim.dataset(): the one named data store each simulation writes its numbers into.', 'docs/scripts/dataset.md'),
-    (r'public/scripts/twoway\.js', 'The solved, two-way fluid of project 05: a tank as deep as the cart, 2D Navier–Stokes on a MAC grid, the cart coupled through the pressure, the rods as lines of forces; runs the page\'s 1 ms machine steps inside its 20 ms fluid steps.', 'docs/scripts/twoway.md'),
+    (r'public/scripts/twoway\.js', 'The solved, two-way fluid of projects 05 and 06 (offered on 06 since 7 November 2026): a tank as deep as the cart (its size set by the page through setCart), 2D Navier–Stokes on a MAC grid, the cart coupled through the pressure, the rods as lines of forces; runs the page\'s 1 ms machine steps inside its 20 ms fluid steps.', 'docs/scripts/twoway.md'),
     (r'public/scripts/curve\.js', 'Parameter curves: a knob that moves by itself along a chosen or drawn curve while the figure runs; writes every number into the page\'s store.', 'docs/scripts/curve.md'),
     (r'public/scripts/datalog\.js', 'The data panel as a bookkeeper: headline, ledger table, books, Read values, Check, Record one round, Save (.npz + CSV).', 'docs/scripts/datalog.md'),
     (r'public/scripts/ledger/([a-z0-9-]+)\.js', lambda m: 'The data panel\'s ledger of %s: headline, sections in causal order, books, checks of the numbers copied from the run.' % m.group(1), 'docs/scripts/datalog.md'),
