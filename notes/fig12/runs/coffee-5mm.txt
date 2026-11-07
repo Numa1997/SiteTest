@@ -1,0 +1,7 @@
+2. Carried by a walker, A = 5 mm, 10 s from rest: steps before the first drop (largest wall rise, mm; spilled, ml)
+  e2 0, mug                        1 Hz: none (0.9); 1.25 Hz: none (1.5); 1.5 Hz: none (2.4); 1.75 Hz: none (3.7); 2 Hz: none (5.7); 2.25 Hz: 0.7 (8.8; 0); 2.5 Hz: 0.7 (13.0; 3)
+  e2 0, pint, no head              1 Hz: none (1.0); 1.25 Hz: none (1.7); 1.5 Hz: none (2.8); 1.75 Hz: none (4.3); 2 Hz: none (7.0); 2.25 Hz: none (11.3); 2.5 Hz: none (21.0)
+  e2 0, pint, head (zeta x 4.6)    1 Hz: none (1.0); 1.25 Hz: none (1.7); 1.5 Hz: none (2.6); 1.75 Hz: none (3.9); 2 Hz: none (6.7); 2.25 Hz: none (10.1); 2.5 Hz: none (17.6)
+  e2 0.3, mug                        1 Hz: none (2.2); 1.25 Hz: none (4.7); 1.5 Hz: 0.8 (12.3; 2); 1.75 Hz: 0.5 (34.5; 74); 2 Hz: 0.2 (18.0; 19); 2.25 Hz: 0.2 (15.0; 8); 2.5 Hz: 0.2 (13.1; 9)
+  e2 0.3, pint, no head              1 Hz: none (2.6); 1.25 Hz: none (6.2); 1.5 Hz: 2.1 (23.2; 0); 1.75 Hz: 1.2 (34.4; 24); 2 Hz: none (20.9); 2.25 Hz: none (13.6); 2.5 Hz: none (21.4)
+  e2 0.3, pint, head (zeta x 4.6)    1 Hz: none (2.3); 1.25 Hz: none (5.6); 1.5 Hz: none (17.4); 1.75 Hz: 1.5 (29.9; 3); 2 Hz: none (19.2); 2.25 Hz: none (12.1); 2.5 Hz: none (15.2)

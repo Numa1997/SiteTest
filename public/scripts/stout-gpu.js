@@ -576,7 +576,7 @@ fn advect(@builtin(global_invocation_id) id: vec3u) {
   let r2 = x * x + y * y;
   if (z > P_.zRim && r2 > P_.Rrim * P_.Rrim) {
     let n = atomicAdd(&spillN, 1);
-    if (n < 4096) { spill[2 * n] = vec4f(x, y, z, 1.0); spill[2 * n + 1] = vv; }
+    if (n < 1024) { spill[2 * n] = vec4f(x, y, z, 1.0); spill[2 * n + 1] = vv; }   // 1024 = GpuFluid.SPILLCAP, the buffer's size; spillN still counts every one
     pos[s] = vec4f(x, y, z, -1.0); return;
   }
   let Rin = min(Rz(z), P_.Rbox) - e;

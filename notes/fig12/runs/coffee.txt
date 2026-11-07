@@ -1,0 +1,11 @@
+1. The two vessels
+  mug of coffee: R(h) 35.0 mm, depth 100.0 mm, rim 7.5 mm above; f11 3.615 Hz (deep cylinder of R(h), eq. 16: 3.615 Hz, with surface tension 0.072 N/m 3.652 Hz); wall damping zeta 0.0058 (decay time 7.6 s); push to the rim g gap/R 2.10 m/s^2; foam would add zeta 0.020 to 0.039; walking 1-2.5 Hz is 0.28-0.69 f11, its 2nd harmonic 0.55-1.38 f11
+  pint of stout: R(h) 39.1 mm, depth 125.0 mm, rim 22.5 mm above; f11 3.421 Hz (deep cylinder of R(h), eq. 16: 3.421 Hz, with surface tension 0.072 N/m 3.448 Hz); wall damping zeta 0.0053 (decay time 8.7 s); push to the rim g gap/R 5.65 m/s^2; foam would add zeta 0.019 to 0.037; walking 1-2.5 Hz is 0.29-0.73 f11, its 2nd harmonic 0.58-1.46 f11
+  Mayer & Krechetnikov's fill levels alpha 8.1-16.5 deg tilt to the rim at g tan(alpha) = 1.40-2.91 m/s^2
+2. Carried by a walker, A = 10 mm, 10 s from rest: steps before the first drop (largest wall rise, mm; spilled, ml)
+  e2 0, mug                        1 Hz: none (1.7); 1.25 Hz: none (3.0); 1.5 Hz: none (4.8); 1.75 Hz: none (7.4); 2 Hz: 0.3 (11.4; 2); 2.25 Hz: 0.3 (15.7; 7); 2.5 Hz: 0.2 (32.6; 74)
+  e2 0, pint, no head              1 Hz: none (2.0); 1.25 Hz: none (3.5); 1.5 Hz: none (5.7); 1.75 Hz: none (8.9); 2 Hz: none (14.9); 2.25 Hz: 1.1 (27.6; 2); 2.5 Hz: 0.7 (74.3; 138)
+  e2 0, pint, head (zeta x 4.6)    1 Hz: none (2.0); 1.25 Hz: none (3.4); 1.5 Hz: none (5.2); 1.75 Hz: none (8.0); 2 Hz: none (14.0); 2.25 Hz: 1.2 (23.0; 0); 2.5 Hz: 0.8 (34.9; 25)
+  e2 0.3, mug                        1 Hz: none (4.6); 1.25 Hz: 0.8 (9.8; 0); 1.5 Hz: 0.2 (19.0; 24); 1.75 Hz: 0.2 (43.9; 102); 2 Hz: 0.2 (29.9; 64); 2.25 Hz: 0.2 (25.4; 47); 2.5 Hz: 0.1 (40.6; 86)
+  e2 0.3, pint, no head              1 Hz: none (5.4); 1.25 Hz: none (13.5); 1.5 Hz: 0.9 (44.9; 65); 1.75 Hz: 1.0 (51.0; 77); 2 Hz: 1.3 (35.2; 9); 2.25 Hz: 0.3 (37.7; 17); 2.5 Hz: 0.3 (66.1; 117)
+  e2 0.3, pint, head (zeta x 4.6)    1 Hz: none (4.7); 1.25 Hz: none (12.0); 1.5 Hz: 0.9 (37.7; 41); 1.75 Hz: 1.0 (42.3; 56); 2 Hz: 1.3 (33.9; 5); 2.25 Hz: 1.3 (26.8; 3); 2.5 Hz: 0.3 (49.8; 75)

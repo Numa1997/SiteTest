@@ -8,7 +8,8 @@
 //   stroke     rms and largest |z_b - z_w - s_0|, the spring's compression about its static value (mm): what the spring does
 //   u_s        rms and largest active force (N)
 //   heave      rms of the glass's vertical acceleration a_z (m/s^2), and its rms in 6.5–7.2 Hz (the Faraday band)
-//   lean       largest |front - back| at the probes (mm); spilled (g); largest motor current (A); tyre off the road (% of steps)
+//   mean speed of the cart over the same span (m/s)
+//   lean       largest |front - back| at the probes (mm); spilled (g); largest motor current (A) and largest cancellation current (B3) asked; tyre off the road (% of steps)
 // Measured once, before Part B (scratch script of 6 November 2026, now this tool): on bumps the slosh feedback left the stroke
 // unchanged; on the washboard at 0.85 m/s it doubled it.
 const fs = require('fs'), path = require('path');
@@ -28,17 +29,17 @@ for (const rd of roads) for (const v0 of speeds) for (const cs of ctrls) {
   if (process.env.NOCANCEL) w.cart.parCancel = false;                    // NOCANCEL=1: drop the parametric cancellation (B3)
   const c = w.cart, f = w.fluid, t0 = Date.now(), s0 = c.Ls - (c.Mb + c.ml) * c.g / c.k, az = [], st = [], us = [];
   const tFrom = rd.startsWith('bumps') ? 0 : 1.5;
-  let lean = 0, imax = 0, air = 0, ns = 0, smax = 0, umax = 0;
+  let vsum = 0, nv = 0, lean = 0, ipmax = 0, imax = 0, air = 0, ns = 0, smax = 0, umax = 0;
   while (w.t < T - 1e-9) {
     w.advance(1 / 200);
-    lean = Math.max(lean, Math.abs(c.probe.ef - c.probe.eb)); imax = Math.max(imax, Math.abs(c.i));
+    lean = Math.max(lean, Math.abs(c.probe.ef - c.probe.eb)); imax = Math.max(imax, Math.abs(c.i)); ipmax = Math.max(ipmax, Math.abs(c.ipar || 0));
     ns++; if (c.N <= 0) air++;
-    if (w.t > tFrom) { const s = c.zb - c.zw - s0; az.push(w.lastAz); st.push(s); us.push(c.us); smax = Math.max(smax, Math.abs(s)); umax = Math.max(umax, Math.abs(c.us)); }
+    if (w.t > tFrom) { const s = c.zb - c.zw - s0; az.push(w.lastAz); st.push(s); us.push(c.us); smax = Math.max(smax, Math.abs(s)); vsum += c.vx; nv++; umax = Math.max(umax, Math.abs(c.us)); }
   }
   const rms = (a) => Math.sqrt(a.reduce((x, v) => x + v * v, 0) / Math.max(1, a.length)), dt = 1 / 200, Tn = az.length * dt;
   let band = 0; for (let fr = 6.5; fr <= 7.2001; fr += 1 / Tn) { let re = 0, im = 0; az.forEach((v, k) => { re += v * Math.cos(2 * Math.PI * fr * k * dt); im += v * Math.sin(2 * Math.PI * fr * k * dt); }); band += 2 * (re * re + im * im) / (az.length * az.length); }
-  const r = { model, road: rd, v0, ctrl: cs, stroke_rms_mm: rms(st) * 1000, stroke_max_mm: smax * 1000, us_rms: rms(us), us_max: umax, heave_rms: rms(az), heave_band: Math.sqrt(band), lean_mm: lean * 1000, spilled_g: (w.spilledMass || 0) * 1000, i_max: imax, air_pct: 100 * air / ns };
+  const r = { model, road: rd, v0, ctrl: cs, stroke_rms_mm: rms(st) * 1000, stroke_max_mm: smax * 1000, us_rms: rms(us), us_max: umax, heave_rms: rms(az), heave_band: Math.sqrt(band), lean_mm: lean * 1000, spilled_g: (w.spilledMass || 0) * 1000, i_max: imax, ipar_max: ipmax, air_pct: 100 * air / ns, v_mean: vsum / Math.max(1, nv) };
   out.push(r);
-  console.log(`${model} ${rd} ${v0} m/s ${cs.padEnd(9)}: stroke rms ${r.stroke_rms_mm.toFixed(2)} max ${r.stroke_max_mm.toFixed(1)} mm; u_s rms ${r.us_rms.toFixed(1)} max ${r.us_max.toFixed(1)} N; heave rms ${r.heave_rms.toFixed(2)} m/s^2, band ${r.heave_band.toFixed(3)}; lean ${r.lean_mm.toFixed(1)} mm; spilled ${r.spilled_g.toFixed(1)} g; current max ${r.i_max.toFixed(2)} A; tyre off ${r.air_pct.toFixed(1)} % (${((Date.now() - t0) / 1000).toFixed(0)} s)`);
+  console.log(`${model} ${rd} ${v0} m/s ${cs.padEnd(9)}: stroke rms ${r.stroke_rms_mm.toFixed(2)} max ${r.stroke_max_mm.toFixed(1)} mm; u_s rms ${r.us_rms.toFixed(1)} max ${r.us_max.toFixed(1)} N; heave rms ${r.heave_rms.toFixed(2)} m/s^2, band ${r.heave_band.toFixed(3)}; lean ${r.lean_mm.toFixed(1)} mm; spilled ${r.spilled_g.toFixed(1)} g; current max ${r.i_max.toFixed(2)} A (cancellation asked ${r.ipar_max.toFixed(2)} A); tyre off ${r.air_pct.toFixed(1)} %; mean speed ${r.v_mean.toFixed(3)} m/s (${((Date.now() - t0) / 1000).toFixed(0)} s)`);
 }
 if (process.env.OUT) fs.writeFileSync(process.env.OUT, JSON.stringify(out, null, 1));

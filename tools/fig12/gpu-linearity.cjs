@@ -1,11 +1,12 @@
 // The GPU solver (public/scripts/stout-gpu.js) from rest, in headless Chromium, the same experiment as linearity.cjs:
 //   node tools/fig12/gpu-linearity.cjs A1,A2,... [Tp s] [T s]          OUT=file.json saves the lean every step (linfit.cjs reads it)
 //   REST=1 node tools/fig12/gpu-linearity.cjs 0 1 1                      the stout left alone: fastest particle, drift of the surface
-//   TILT=2 node tools/fig12/gpu-linearity.cjs 0 0 2                      a steady push a_x = 2 m/s^2 from t = 0: the static tilt
+//   TILT=2 node tools/fig12/gpu-linearity.cjs 0 0 5.5                    a steady push of 2 m/s^2, ramped in over 2 s as (1 - cos)/2: the static tilt
 // The glass is at rest at t = 0 and gets a_x(t) = A sin(pi t / Tp) for t < Tp, nothing after (no cart). Printed: the largest lean
 // (front − back wall height at r = R(h), as linearity.cjs), the free swing's frequency from zero crossings, the spill, the
 // pressure solve's iterations, the fastest particle, the time per step, and the device. With TILT the centre of mass of the
-// liquid along x over the last second (from the particle positions read back) against the exact −0.877 mm of note §3.5.
+// liquid along x averaged over 2.5–5.5 s, every other step (from the particle positions read back; check.cjs's protocol for the
+// processor, note section 12), against the exact −0.877 mm of note §3.5.
 // In this container Chromium has WebGPU only on SwiftShader (a CPU emulation of a GPU): the numbers are the solver's, the
 // time per step says nothing about a real graphics chip.
 const { chromium } = require('playwright'); const { spawn } = require('child_process'); const fs = require('fs'), path = require('path');
@@ -29,7 +30,7 @@ const TILT = process.env.TILT ? +process.env.TILT : null;
       let lean = 0, tl = 0, prev = null, itSum = 0, vmax = 0;
       const t0 = performance.now();
       for (let n = 0; n * dt < T - 1e-9; n++) {
-        const t = n * dt, ax = TILT !== null ? TILT : t < Tp ? A * Math.sin(Math.PI * t / Tp) : 0;
+        const t = n * dt, ax = TILT !== null ? (t < 2 ? TILT * 0.5 * (1 - Math.cos(Math.PI * t / 2)) : TILT) : t < Tp ? A * Math.sin(Math.PI * t / Tp) : 0;
         await f.steps([{ dt, ax, az: 0 }]);
         itSum += f.cgIters; vmax = Math.max(vmax, f.vmax);
         const d = f.columnHeightAt(Rs, 0) - f.columnHeightAt(-Rs, 0), tt = t + dt;
@@ -37,7 +38,7 @@ const TILT = process.env.TILT ? +process.env.TILT : null;
         if (Math.abs(d) > Math.abs(lean)) { lean = d; tl = tt; }
         if (tt > Tp + 0.1 && prev !== null && Math.sign(d) !== Math.sign(prev) && prev !== 0) cross.push(tt - dt * d / (d - prev));
         prev = d;
-        if (TILT !== null && tt > T - 1 && n % 20 === 0) { await f.readPositions(); let s = 0; for (let p = 0; p < f.nRead; p++) s += f.px[p]; com.push(s / f.nRead); }
+        if (TILT !== null && tt > 2.5 - 1e-9 && n % 2 === 0) { await f.readPositions(); let s = 0; for (let p = 0; p < f.nRead; p++) s += f.px[p]; com.push(s / f.nRead); }
       }
       const ms = (performance.now() - t0) / series.length;
       const fr = cross.length > 2 ? (cross.length - 1) / (2 * (cross[cross.length - 1] - cross[0])) : NaN;

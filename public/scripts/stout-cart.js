@@ -1300,6 +1300,11 @@
       // A modelling choice standing for breaking, not a theory of it; the 3D solver is the reference there.
       const A1 = this.Rs * this.Rw[1] * Math.hypot(this.b[1], this.b[2]), Acap = 1.5 * this.Rs / XI[0];
       if (A1 > Acap) { const f = Acap / A1; for (let i = 0; i < 5; i++) { this.b[i] *= f; this.bd[i] *= f; } this.breaks = (this.breaks || 0) + 1; this.broke = 1; }
+      // The second-order coordinates (p0 and p2, r2) are held to the same crest by the same rule; driven hard for seconds they
+      // can otherwise run away (found by tools/fig12/coffee.cjs: the pint walked at 2.5 Hz, 10 mm, poured 427 ml in 1 s).
+      const A0 = this.Rs * Math.abs(this.Rw[0] * this.b[0]), A2 = this.Rs * Math.abs(this.Rw[2]) * Math.hypot(this.b[3], this.b[4]);
+      if (A0 > Acap) { const f = Acap / A0; this.b[0] *= f; this.bd[0] *= f; this.breaks2 = (this.breaks2 || 0) + 1; this.broke = 1; }
+      if (A2 > Acap) { const f = Acap / A2; this.b[3] *= f; this.bd[3] *= f; this.b[4] *= f; this.bd[4] *= f; this.breaks2 = (this.breaks2 || 0) + 1; this.broke = 1; }
       for (let m = 1; m < this.N; m++) if (Math.abs(this.q[m]) > Acap) { const f = Acap / Math.abs(this.q[m]); this.q[m] *= f; this.qd[m] *= f; this.breaks = (this.breaks || 0) + 1; }
     }
     this.syncQ();
