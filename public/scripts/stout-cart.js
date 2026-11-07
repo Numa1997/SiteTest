@@ -1508,6 +1508,42 @@
     this._K = K; this._Kfor = this.sloshMode; this.lqrP = P;
     return K;
   };
+  // The active suspension's LQR (Part B): the quarter car about its static state, y = (s, v_b, v_w, d) with s the stroke
+  // z_b - z_w - s_0, v_b, v_w the body's and the wheel's vertical speeds, d = z_a - z_w - d_0 the tyre's compression; the
+  // force u between body and axle; the road's vertical speed z_a' (unknown) as the disturbance.
+  //   M_s v_b' = -k s - c (v_b - v_w) + u,   m_w v_w' = k s + c (v_b - v_w) - u + k_t d - c_t v_w,   s' = v_b - v_w,   d' = -v_w
+  // Cost: the body's (the glass's) vertical acceleration a = (-k s - c (v_b - v_w) + u)/M_s, the stroke, the tyre's
+  // compression and the force, each over its largest acceptable value (Bryson): a 0.2 m/s^2 (the Faraday threshold of note
+  // §6.7), s 15 mm, d 1 mm (the static compression is 1.1 mm: more and the wheel leaves the road), u 40 N. Since a contains u
+  // the cost has a cross term N; the Riccati flow is integrated to its steady state as in lqrGains.
+  Cart.prototype.suspGains = function () {
+    if (this._Ks) return this._Ks;
+    const Ms = this.Mb + this.ml, mw = this.mw, k = this.k, c = this.c, kt = this.kt, ct = this.ct;
+    const A = [[0, 1, -1, 0], [-k / Ms, -c / Ms, c / Ms, 0], [k / mw, c / mw, -(c + ct) / mw, kt / mw], [0, 0, -1, 0]];
+    const B = [0, 1 / Ms, -1 / mw, 0];
+    const lim = this.suspLimits || { a: 0.2, s: 0.015, d: 0.001, u: 40 };
+    const Ca = [-k / Ms, -c / Ms, c / Ms, 0], Da = 1 / Ms, wa = 1 / (lim.a * lim.a);
+    // J = int (wa a^2 + y'Qy y + ru u^2): Q = wa Ca'Ca + diag, N = wa Ca' Da, R = wa Da^2 + ru
+    const Q = [0, 1, 2, 3].map((i) => [0, 1, 2, 3].map((j) => wa * Ca[i] * Ca[j] + (i === j ? [1 / (lim.s * lim.s), 0, 0, 1 / (lim.d * lim.d)][i] : 0)));
+    const Nc = Ca.map((v) => wa * v * Da), R = wa * Da * Da + 1 / (lim.u * lim.u);
+    let P = [0, 1, 2, 3].map(() => [0, 0, 0, 0]);
+    const dt = 2e-6;
+    for (let it = 0; it < 3000000; it++) {
+      const G = [0, 1, 2, 3].map((i) => P[i].reduce((a, v, j) => a + v * B[j], 0) + Nc[i]);   // P B + N
+      let dmax = 0;
+      const Pn = P.map((row, i) => row.map((v, j) => {
+        let d = Q[i][j] - G[i] * G[j] / R;
+        for (let m = 0; m < 4; m++) d += A[m][i] * P[m][j] + P[i][m] * A[m][j];
+        dmax = Math.max(dmax, Math.abs(d) / (Math.abs(v) + 1e-3));
+        return v + dt * d;
+      }));
+      P = Pn;
+      if (dmax < 1e-6 && it > 1000) break;
+    }
+    const K = [0, 1, 2, 3].map((j) => (B.reduce((a, v, i) => a + v * P[i][j], 0) + Nc[j]) / R);
+    this._Ks = K; this.suspP = P; this.suspA = A; this.suspB = B;
+    return K;
+  };
   Cart.prototype.massX = function () { return this.Mb + this.ml + this.mw + (this.Iw + this.Ngear * this.Ngear * this.Jm) / (this.Rw * this.Rw); };
   Cart.prototype.reset = function (x) {
     const g = this.g, Ms = this.Mb + this.ml, za = this.road.axle(x)[0];
@@ -1531,7 +1567,9 @@
       this.nv = nv;
       const yq = pr && pr.fresh ? pr.y : null;
       if (pr) pr.fresh = false;
-      s = this.obs.update(this.uPrev, yv, yq);
+      // the joint controller puts the heave into the filter's model: the body accelerometer's reading, taken at the sample
+      this.azMeas = this.azb;
+      s = this.obs.update(this.uPrev, yv, yq, this.ctrl === 'joint' ? this.azMeas : null);
       this.uPrev = this.i;                                      // the measured current, held until the next sample
       const D = this.ds;
       if (D && D.has('xh')) {                                   // the page declares these; tools run without a store
@@ -1550,6 +1588,25 @@
       }
       if (Math.abs(ic) < this.Imax) this.xi += e * this.Ts;     // anti-windup: integrate only when not saturated
       this.icmd = ic;
+    } else if (this.ctrl === 'joint' && s) {
+      // Part B: one design for both actuators. Motor: the slosh LQR on the estimate, plus the current that cancels the heave's
+      // parametric term -w^2 (a_z/g) q in the swing's equation (exact linearisation: then the swing obeys the linear model the
+      // LQR was designed for); a_z from the body accelerometer, q from the filter. Suspension: its own LQR (suspGains).
+      const K = this.lqrGains(), m = this.sloshMode, b = this.bForce();
+      const ipar = -this.massX() * m.w * m.w * (this.azMeas / this.g) * s[1] / (m.beta * b);
+      let ic = i0 - (K[0] * (s[0] - this.v0) + K[1] * s[1] + K[2] * s[2] + K[3] * this.xi) + ipar;
+      if (Math.abs(ic) < this.Imax) this.xi += e * this.Ts;
+      this.icmd = ic; this.ipar = ipar;
+      const Ks = this.suspGains(), Ms = this.Mb + this.ml, s0 = this.Ls - Ms * this.g / this.k, N0 = (Ms + this.mw) * this.g;
+      // measured: the stroke (a potentiometer), the two vertical speeds (accelerometers, integrated), the tyre's compression
+      // from the axle's load cell, d = (N - N_0)/k_t (the tyre damper's share c_t (z_a' - v_w) is left in it: a sensor error)
+      const y = [this.zb - this.zw - s0, this.vzb, this.vzw, (this.N - N0) / this.kt];
+      this.ysusp = y;
+      let u = -(Ks[0] * y[0] + Ks[1] * y[1] + Ks[2] * y[2] + Ks[3] * y[3]);
+      if (u > this.Umax) u = this.Umax; else if (u < -this.Umax) u = -this.Umax;
+      this.uscmd = u;
+      if (this.ds && this.ds.has('i_par')) { this.ds.set('i_par', ipar); this.ds.set('a_z_meas', this.azMeas); for (let n = 0; n < 4; n++) this.ds.set('y_s' + n, y[n]); }
+      return;
     } else if (this.ctrl === 'slosh' && s) {                    // state feedback on the estimate, and the integral (LQR)
       const K = this.lqrGains();
       let ic = i0 - (K[0] * (s[0] - this.v0) + K[1] * s[1] + K[2] * s[2] + K[3] * this.xi);
@@ -1678,8 +1735,20 @@
   // one sample: predict with the current u held since the last sample, then correct with the speed y_v and, when the
   // probes have a new reading, with y_q (null otherwise). Joint update: S = H P H' + R, L = P H' S^-1, x += L nu,
   // P = (I − L H) P (I − L H)' + L R L' (Joseph's form: stays symmetric and positive).
-  Observer.prototype.update = function (u, yv, yq) {
-    const Ad = this.Ad, Bd = this.Bd;
+  // az (optional): the glass's measured vertical acceleration (a body accelerometer). The swing's stiffness is then
+  // w^2 (1 + az/g) (the heave's parametric term, note eq. 54) and A_d, B_d are recomputed for this sample (exact zero-order
+  // hold, e^{A Ts}); Q_d is kept (the noise's covariance changes little with the stiffness over one 1 ms sample).
+  Observer.prototype.discretise = function (az) {
+    const w2 = this.w * this.w * (1 + az / 9.81), z = this.zeta, be = this.beta, Mx = this.Mx, b = this.b, cx = this.cx, Ts = this.Ts, w = this.w;
+    const A = [[-cx / Mx, 0, 0], [0, 0, 1], [be * cx / Mx, -w2, -2 * z * w]], B = [b / Mx, 0, -be * b / Mx];
+    const E4 = mat.expm([0, 1, 2, 3].map((i) => [0, 1, 2, 3].map((j) => (i < 3 && j < 3 ? A[i][j] * Ts : i < 3 && j === 3 ? B[i] * Ts : 0))));
+    return { Ad: [0, 1, 2].map((i) => [0, 1, 2].map((j) => E4[i][j])), Bd: [0, 1, 2].map((i) => E4[i][3]) };
+  };
+  Observer.prototype.update = function (u, yv, yq, az) {
+    let Ad = this.Ad, Bd = this.Bd;
+    this.azUsed = az == null ? 0 : az;
+    if (az != null && az !== 0) { const D = this.discretise(az); Ad = D.Ad; Bd = D.Bd; }
+    this.AdNow = Ad; this.BdNow = Bd;
     this.xPrev = this.x; this.PPrev = this.P; this.uPrev = u;
     const xp = [0, 1, 2].map((i) => Ad[i][0] * this.x[0] + Ad[i][1] * this.x[1] + Ad[i][2] * this.x[2] + Bd[i] * u);
     const PA = mat.mul(mat.mul(Ad, this.P), mat.T(Ad)), Pp = PA.map((r, i) => r.map((v, j) => v + this.Qd[i][j]));
