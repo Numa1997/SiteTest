@@ -48,7 +48,7 @@ const PICTURE = () => {
   m.mid = n ? { x: sx / n / dpr, y: sy / n / dpr, n } : null;
   // the top of the upper rod: along the rod, the last fully burgundy sample, from 12 px inside the rod to 12 px beyond its stored end
   const ux = e.tx - e.ex, uy = e.ty - e.ey, ul = Math.hypot(ux, uy); let last = null, clear = null;
-  for (let t = -12; t <= 12; t += 0.05) { const x = e.tx + t * ux / ul, y = e.ty + t * uy / ul, c = px(Math.floor(x * dpr), Math.floor(y * dpr)); if (is(c, ACC, 2)) { last = t; clear = null; } else if (last !== null && clear === null && c[3] === 0) clear = t; }
+  for (let t = -12; t <= 12; t += 0.05) { const x = e.tx + t * ux / ul, y = e.ty + t * uy / ul, c = px(Math.floor(x * dpr), Math.floor(y * dpr)); if (is(c, ACC, 2)) { last = t; clear = null; } else if (last !== null && clear === null && c[3] < 255) clear = t; }   // clear: not fully painted (the rod is opaque; a flow's arrows behind it are drawn at 85 % alpha, so an arrow under the tip no longer hides its end)
   let lo = null, hi = null; const bx = e.tx - 6 * ux / ul, by = e.ty - 6 * uy / ul;   // across the rod, 6 px below its top: the burgundy run must be centred on the axis
   for (let t = -10; t <= 10; t += 0.05) { const x = bx - t * uy / ul, y = by + t * ux / ul; if (is(px(Math.floor(x * dpr), Math.floor(y * dpr)), ACC, 2)) { if (lo === null) lo = t; hi = t; } }
   m.tip = last === null ? null : { end: last, clear, lw: 4 + 6 * Math.min(1, store.m2), across: lo === null ? null : (lo + hi) / 2, width: lo === null ? 0 : hi - lo };
@@ -68,7 +68,7 @@ function checkPicture(P, label) {
   res.push(`hinge between the rods: white centroid (${m.mid ? fmt(m.mid.x) + ', ' + fmt(m.mid.y) : 'NOT FOUND'}) of ${m.mid ? m.mid.n : 0} px vs θ₁→px (${fmt(ex)}, ${fmt(ey)}) (Δ ${m.mid ? fmt(Math.hypot(m.mid.x - ex, m.mid.y - ey)) : '–'} px) ${okMid ? 'PASS' : 'FAIL'}`);
   const tipIn = tx > 6 && tx < s.w - 6 && ty > 6 && ty < s.h - 6;
   const rc = m.tip ? m.tip.lw / 2 : 0, okTip = !tipIn || (m.tip && m.tip.end >= rc - 1.5 && m.tip.end <= rc + 0.5 && m.tip.clear !== null && m.tip.clear <= rc + 1.5 && m.tip.across !== null && Math.abs(m.tip.across) <= 0.75);
-  res.push(`top of the upper rod at θ₂→px (${fmt(tx)}, ${fmt(ty)}): along the rod, fully burgundy to ${m.tip ? fmt(m.tip.end) : 'NOT FOUND'} px beyond it and transparent from ${m.tip && m.tip.clear !== null ? fmt(m.tip.clear) : '–'} px, round cap radius ${m.tip ? fmt(rc) : '–'} px; across the rod 6 px below the top the burgundy (${m.tip ? fmt(m.tip.width) : '–'} px wide) is centred ${m.tip && m.tip.across !== null ? fmt(m.tip.across) : '–'} px off the axis ${tipIn ? (okTip ? 'PASS' : 'FAIL') : 'outside the figure, not tested'}`);
+  res.push(`top of the upper rod at θ₂→px (${fmt(tx)}, ${fmt(ty)}): along the rod, fully burgundy to ${m.tip ? fmt(m.tip.end) : 'NOT FOUND'} px beyond it and not fully painted from ${m.tip && m.tip.clear !== null ? fmt(m.tip.clear) : '–'} px, round cap radius ${m.tip ? fmt(rc) : '–'} px; across the rod 6 px below the top the burgundy (${m.tip ? fmt(m.tip.width) : '–'} px wide) is centred ${m.tip && m.tip.across !== null ? fmt(m.tip.across) : '–'} px off the axis ${tipIn ? (okTip ? 'PASS' : 'FAIL') : 'outside the figure, not tested'}`);
   return { ok: dst === 0 && okCart && okMid && okTip, lines: res.map((l) => `  d ${label}: ${l}`) };
 }
 

@@ -65,7 +65,7 @@
  },
  "05fdf5940bbf": {
   "src": "No medium: nothing pushes on the cart and the rods but gravity, the rail and the motor. Choose air, water, glycerol or honey to give them something to move through.",
-  "tr": "لا وسط: لا يدفع العربة والقضيبين شيء سوى الجاذبية والسكّة والمحرّك. اختر الهواء أو الماء أو الغليسرين أو العسل ليكون لهما ما يتحرّكان خلاله."
+  "tr": "لا وسط: لا يدفع العربة والقضيبين شيء سوى الجاذبية والسكّة والمحرّك. اختر الهواء أو الماء أو الغليسرول أو العسل ليكون لهما ما يتحرّكان خلاله."
  },
  "063315d310ed": {
   "src": "The density of air follows from the ideal gas law at 1 atm, \\(\\rho = p/(R_s T) = 101\\,325/(287.05 \\times 298.15)\\) kg/m³; the density of honey is the middle of the range 1.38–1.45 kg/L given in [21].",
@@ -93,7 +93,7 @@
  },
  "08bd3899aba1": {
   "src": "<b>What the page does in a liquid.</b> When a plan fails, the cart does what we did above: it pumps at full force, \\(u = -u_{\\max}\\tanh\\bigl(3(f_1 + f_2 - E_p)/(f_1 + f_2)\\bigr)\\,\\mathrm{sgn}\\,\\mathcal P\\) with \\(E_p\\) of (20), easing off as the rods' energy nears the top's, and turning the cart back at full force once it is 1.2 m from where it started, while the planner tries again. The data panel stores this as law 5 and recomputes each of its forces from the stored state. Rods that are already upright are kept upright. The guard of section 11 asks the model whether the balancer brings the machine inside the certified region \\(c^*\\) of section 9 within 4 s. In a liquid \\(c^*\\) is small (0.04 in water, 0.12 in glycerol, 0.56 in honey for the default machine) and the drag makes the balancer slow, so that test gave up on rods tilted by 0.8°. In a medium the guard now also leaves the balancer alone while the model shows it lowering \\(W\\) by at least a tenth in those 4 s; with it the cart carries the upright rods to within 2 cm of +1 m 16 s after the button in water and glycerol; in honey it is at 0.84 m after 24 s, still creeping. A plan that ends with the cart moving hands over to a balancer holding the cart where it was caught, not to the cruise of (25), because in a liquid a steady cruise needs a steady push against drag that (25) leaves out.",
-  "tr": "<b>ما تفعله الصفحة في سائل.</b> حين يفشل خطّ، تفعل العربة ما فعلناه أعلاه: تضخّ بكامل قوّتها، \\(u = -u_{\\max}\\tanh\\bigl(3(f_1 + f_2 - E_p)/(f_1 + f_2)\\bigr)\\,\\mathrm{sgn}\\,\\mathcal P\\) مع \\(E_p\\) من (20)، وتخفّف كلّما اقتربت طاقة القضيبين من طاقة القمّة، وتعيد العربة بكامل قوّتها حين تبتعد 1.2 m عن نقطة انطلاقها، بينما يحاول المخطّط من جديد. وتخزّن لوحة البيانات هذا على أنّه القانون 5 وتعيد حساب كلّ قوّة فيه من الحالة المخزّنة. والقضيبان المنتصبان أصلًا يبقيان منتصبين. يسأل الحارس في القسم 11 النموذجَ هل يُدخل متحكّم الموازنة الآلةَ إلى المنطقة المضمونة \\(c^*\\) من القسم 9 خلال 4 s. في السائل تكون \\(c^*\\) صغيرة (0.04 في الماء و0.12 في الغليسرين و0.56 في العسل للآلة الافتراضية) ويجعل الكبح متحكّم الموازنة بطيئًا، فكان ذلك الاختبار يتخلّى عن قضيبين مائلين بمقدار 0.8°. أمّا الآن ففي الوسط يترك الحارس متحكّم الموازنة يعمل ما دام النموذج يبيّن أنّه يخفض \\(W\\) بعُشر على الأقلّ في تلك الثواني الأربع؛ وبهذا تحمل العربة القضيبين المنتصبين إلى ما دون 2 cm من +1 m بعد 16 s من الضغط على الزرّ في الماء والغليسرين؛ وفي العسل تكون عند 0.84 m بعد 24 s، وما زالت تزحف. والخطّ الذي ينتهي والعربة تتحرّك يسلّم إلى متحكّم موازنة يُمسك العربة حيث التُقطت، لا إلى السير المنتظم في (25)، لأنّ السير المنتظم في السائل يحتاج دفعًا منتظمًا ضدّ الكبح لا تحسبه (25)."
+  "tr": "<b>ما تفعله الصفحة في سائل.</b> حين يفشل خطّ، تفعل العربة ما فعلناه أعلاه: تضخّ بكامل قوّتها، \\(u = -u_{\\max}\\tanh\\bigl(3(f_1 + f_2 - E_p)/(f_1 + f_2)\\bigr)\\,\\mathrm{sgn}\\,\\mathcal P\\) مع \\(E_p\\) من (20)، وتخفّف كلّما اقتربت طاقة القضيبين من طاقة القمّة، وتعيد العربة بكامل قوّتها حين تبتعد 1.2 m عن نقطة انطلاقها، بينما يحاول المخطّط من جديد. وتخزّن لوحة البيانات هذا على أنّه القانون 5 وتعيد حساب كلّ قوّة فيه من الحالة المخزّنة. والقضيبان المنتصبان أصلًا يبقيان منتصبين. يسأل الحارس في القسم 11 النموذجَ هل يُدخل متحكّم الموازنة الآلةَ إلى المنطقة المضمونة \\(c^*\\) من القسم 9 خلال 4 s. في السائل تكون \\(c^*\\) صغيرة (0.04 في الماء و0.12 في الغليسرول و0.56 في العسل للآلة الافتراضية) ويجعل الكبح متحكّم الموازنة بطيئًا، فكان ذلك الاختبار يتخلّى عن قضيبين مائلين بمقدار 0.8°. أمّا الآن ففي الوسط يترك الحارس متحكّم الموازنة يعمل ما دام النموذج يبيّن أنّه يخفض \\(W\\) بعُشر على الأقلّ في تلك الثواني الأربع؛ وبهذا تحمل العربة القضيبين المنتصبين إلى ما دون 2 cm من +1 m بعد 16 s من الضغط على الزرّ في الماء والغليسرول؛ وفي العسل تكون عند 0.84 m بعد 24 s، وما زالت تزحف. والخطّ الذي ينتهي والعربة تتحرّك يسلّم إلى متحكّم موازنة يُمسك العربة حيث التُقطت، لا إلى السير المنتظم في (25)، لأنّ السير المنتظم في السائل يحتاج دفعًا منتظمًا ضدّ الكبح لا تحسبه (25)."
  },
  "0988dbd8e05d": {
   "src": "whatever you write; the page measures its divergence \\(\\partial u/\\partial x + \\partial v/\\partial y\\) at every arrow and says whether a liquid could flow so",
@@ -329,7 +329,7 @@
  },
  "23ed1581c4cd": {
   "src": "<b>13.1</b> Upright rods at rest in a steady breeze \\(U\\), with one \\(\\xi_\\perp\\) for both rods and (33) alone: show from (35) that \\(\\mathbf Q = \\xi_\\perp U\\,\\bigl(L_1 + L_2,\\ \\tfrac12 L_1(L_1 + 2L_2),\\ \\tfrac12 L_2^2\\bigr)\\), and check it against the store's \\(Q_i\\) in glycerol.",
-  "tr": "<b>13.1</b> قضيبان قائمان ساكنان في نسيم ثابت \\(U\\)، مع \\(\\xi_\\perp\\) واحد للقضيبين و(33) وحدها: بيّن من (35) أن \\(\\mathbf Q = \\xi_\\perp U\\,\\bigl(L_1 + L_2,\\ \\tfrac12 L_1(L_1 + 2L_2),\\ \\tfrac12 L_2^2\\bigr)\\)، وقارنه في الغليسرين بقيم \\(Q_i\\) في المخزن."
+  "tr": "<b>13.1</b> قضيبان قائمان ساكنان في نسيم ثابت \\(U\\)، مع \\(\\xi_\\perp\\) واحد للقضيبين و(33) وحدها: بيّن من (35) أن \\(\\mathbf Q = \\xi_\\perp U\\,\\bigl(L_1 + L_2,\\ \\tfrac12 L_1(L_1 + 2L_2),\\ \\tfrac12 L_2^2\\bigr)\\)، وقارنه في الغليسرول بقيم \\(Q_i\\) في المخزن."
  },
  "2406c2d888fc": {
   "src": "The same wind U everywhere, all the time.",
@@ -429,7 +429,7 @@
  },
  "2bb7c0cb8eb2": {
   "src": "glycerol, 20 °C [20]",
-  "tr": "غليسرين، 20 °C [20]"
+  "tr": "غليسرول، 20 °C [20]"
  },
  "2d5c7f213a1a": {
   "src": "Certified catch level",
@@ -749,7 +749,7 @@
  },
  "51eb931e069c": {
   "src": "glycerol, 200 N",
-  "tr": "غليسرين، 200 N"
+  "tr": "غليسرول، 200 N"
  },
  "52b12908b753": {
   "src": "← All projects",
@@ -917,7 +917,7 @@
  },
  "68351b1f01c2": {
   "src": "No medium: nothing pushes on the cart and the rods but gravity, the rail and the motor. Choose air to give them something to move through; water, glycerol and honey are project 06.",
-  "tr": "لا وسط: لا يدفع العربة والقضيبين شيء سوى الجاذبية والسكّة والمحرّك. اختر الهواء ليكون لهما ما يتحرّكان خلاله؛ أمّا الماء والغليسرين والعسل فهي المشروع 06."
+  "tr": "لا وسط: لا يدفع العربة والقضيبين شيء سوى الجاذبية والسكّة والمحرّك. اختر الهواء ليكون لهما ما يتحرّكان خلاله؛ أمّا الماء والغليسرول والعسل فهي المشروع 06."
  },
  "68856dbfe0c1": {
   "src": "below \\(2\\times10^{-4}\\) s⁻¹",
@@ -1121,7 +1121,7 @@
  },
  "7f6cdfdd4459": {
   "src": "The density of air follows from the ideal gas law at 1 atm, \\(\\rho = p/(R_s T) = 101\\,325/(287.05 \\times 298.15)\\) kg/m³; water (998.2 kg/m³, \\(1.0016\\times10^{-3}\\) Pa s [19]), glycerol and honey are in <a href=\"rods-in-liquid.html#p-fluid\">project 06</a>.",
-  "tr": "تنتج كثافة الهواء من قانون الغاز المثالي عند 1 atm، \\(\\rho = p/(R_s T) = 101\\,325/(287.05 \\times 298.15)\\) kg/m³؛ أمّا الماء (998.2 kg/m³، \\(1.0016\\times10^{-3}\\) Pa s [19]) والغليسرين والعسل ففي <a href=\"rods-in-liquid.html#p-fluid\">المشروع 06</a>."
+  "tr": "تنتج كثافة الهواء من قانون الغاز المثالي عند 1 atm، \\(\\rho = p/(R_s T) = 101\\,325/(287.05 \\times 298.15)\\) kg/m³؛ أمّا الماء (998.2 kg/m³، \\(1.0016\\times10^{-3}\\) Pa s [19]) والغليسرول والعسل ففي <a href=\"rods-in-liquid.html#p-fluid\">المشروع 06</a>."
  },
  "7f809ce86895": {
   "src": "Swing back up",
@@ -1517,7 +1517,7 @@
  },
  "ae3f344ac1f3": {
   "src": "glycerol, 60 N",
-  "tr": "غليسرين، 60 N"
+  "tr": "غليسرول، 60 N"
  },
  "ae5178af0233": {
   "src": "<span class=\"psub__n\">13.1</span>The media",
@@ -1661,7 +1661,7 @@
  },
  "bac43ece5ce0": {
   "src": "<b>What the page does in a liquid.</b> When a plan fails, the cart does what we did above: it pumps at full force, \\(a = -3\\,\\mathcal P\\tanh\\bigl(3(V_{\\text{top}} - E)/V_{\\text{top}}\\bigr)\\) in m/s² with \\(\\mathcal P\\) in kg m²/s, which feeds the rods up to the energy of the top and no further, while the planner tries again. Rods that are already upright are kept upright. The guard of section 11 asks the model whether the balancer brings the machine inside the certified region \\(c^*\\) of section 9 within 4 s. In a liquid \\(c^*\\) is small (0.04 in water, 0.12 in glycerol, 0.56 in honey for the default machine) and the drag makes the balancer slow, so that test gave up on rods tilted by 0.8°. In a medium the guard now also leaves the balancer alone while the model shows it lowering \\(W\\) by at least a tenth in those 4 s; with it the cart carries the upright rods to within 2 cm of +1 m 16 s after the button in water and glycerol; in honey it is at 0.84 m after 24 s, still creeping. A plan that ends with the cart moving hands over to a balancer holding the cart where it was caught, not to the cruise of (25), because in a liquid a steady cruise needs a steady push against drag that (25) leaves out.",
-  "tr": "<b>ما تفعله الصفحة في سائل.</b> حين يفشل خطّ، تفعل العربة ما فعلناه أعلاه: تضخّ بكامل قوّتها، \\(a = -3\\,\\mathcal P\\tanh\\bigl(3(V_{\\text{top}} - E)/V_{\\text{top}}\\bigr)\\) بوحدة m/s² مع \\(\\mathcal P\\) بوحدة kg m²/s، فتغذّي القضيبين حتى طاقة القمّة ولا أكثر، بينما يحاول المخطّط من جديد. والقضيبان المنتصبان أصلًا يبقيان منتصبين. يسأل الحارس في القسم 11 النموذجَ هل يُدخل متحكّم الموازنة الآلةَ إلى المنطقة المضمونة \\(c^*\\) من القسم 9 خلال 4 s. في السائل تكون \\(c^*\\) صغيرة (0.04 في الماء و0.12 في الغليسرين و0.56 في العسل للآلة الافتراضية) ويجعل الكبح متحكّم الموازنة بطيئًا، فكان ذلك الاختبار يتخلّى عن قضيبين مائلين بمقدار 0.8°. أمّا الآن ففي الوسط يترك الحارس متحكّم الموازنة يعمل ما دام النموذج يبيّن أنّه يخفض \\(W\\) بعُشر على الأقلّ في تلك الثواني الأربع؛ وبهذا تحمل العربة القضيبين المنتصبين إلى ما دون 2 cm من +1 m بعد 16 s من الضغط على الزرّ في الماء والغليسرين؛ وفي العسل تكون عند 0.84 m بعد 24 s، وما زالت تزحف. والخطّ الذي ينتهي والعربة تتحرّك يسلّم إلى متحكّم موازنة يُمسك العربة حيث التُقطت، لا إلى السير المنتظم في (25)، لأنّ السير المنتظم في السائل يحتاج دفعًا منتظمًا ضدّ الكبح لا تحسبه (25)."
+  "tr": "<b>ما تفعله الصفحة في سائل.</b> حين يفشل خطّ، تفعل العربة ما فعلناه أعلاه: تضخّ بكامل قوّتها، \\(a = -3\\,\\mathcal P\\tanh\\bigl(3(V_{\\text{top}} - E)/V_{\\text{top}}\\bigr)\\) بوحدة m/s² مع \\(\\mathcal P\\) بوحدة kg m²/s، فتغذّي القضيبين حتى طاقة القمّة ولا أكثر، بينما يحاول المخطّط من جديد. والقضيبان المنتصبان أصلًا يبقيان منتصبين. يسأل الحارس في القسم 11 النموذجَ هل يُدخل متحكّم الموازنة الآلةَ إلى المنطقة المضمونة \\(c^*\\) من القسم 9 خلال 4 s. في السائل تكون \\(c^*\\) صغيرة (0.04 في الماء و0.12 في الغليسرول و0.56 في العسل للآلة الافتراضية) ويجعل الكبح متحكّم الموازنة بطيئًا، فكان ذلك الاختبار يتخلّى عن قضيبين مائلين بمقدار 0.8°. أمّا الآن ففي الوسط يترك الحارس متحكّم الموازنة يعمل ما دام النموذج يبيّن أنّه يخفض \\(W\\) بعُشر على الأقلّ في تلك الثواني الأربع؛ وبهذا تحمل العربة القضيبين المنتصبين إلى ما دون 2 cm من +1 m بعد 16 s من الضغط على الزرّ في الماء والغليسرول؛ وفي العسل تكون عند 0.84 m بعد 24 s، وما زالت تزحف. والخطّ الذي ينتهي والعربة تتحرّك يسلّم إلى متحكّم موازنة يُمسك العربة حيث التُقطت، لا إلى السير المنتظم في (25)، لأنّ السير المنتظم في السائل يحتاج دفعًا منتظمًا ضدّ الكبح لا تحسبه (25)."
  },
  "bb8c7324b0ce": {
   "src": "Insert (3) and collect by products of velocities. The two rotational pieces combine with the \\(\\tfrac14 L^2\\) pieces of (3): \\(\\tfrac18 + \\tfrac1{24} = \\tfrac16\\), which is the familiar \\(\\tfrac12\\cdot\\tfrac13 mL^2\\) of a rod turning about its end. The result is a quadratic form,",
@@ -1769,7 +1769,7 @@
  },
  "c5a4f9ed424f": {
   "src": "where \\(I\\) includes the water it carries (38). But the liquid will not let the rod turn faster than the rate \\(\\omega_t\\) at which its drag torque, from (33)–(34) integrated along the rod, equals the whole pull of its weight. For the default outer rod (0.75 kg, 0.75 m) \\(\\omega_{\\text{need}}\\) is 6.4, 5.8 and 5.5 rad/s, and \\(\\omega_t\\) is 1.41, 0.96 and 0.44 rad/s in water, glycerol and honey: the rod falls through the liquid five to twelve times slower than it would have to swing. And the cart cannot simply drag it over the top, because a sideways push cannot lift a rod that lies sideways: when the rod is horizontal, both the drag and the inertial push of the cart's motion act along it and give no torque about its hinge. This is a rough measure, a lone rod on a fixed hinge, not a proof; but it says which way to change the machine. Since \\(\\omega_t/\\omega_{\\text{need}}\\) grows like \\(\\sqrt{m/(\\rho d L^3)}\\), short heavy rods are the ones a liquid lets swing. With rods of 2 kg, 0.20 m and 0.25 m, the ratio is 0.96 in water, 0.79 in glycerol and 0.57 in honey; with a 200 N motor the planner finds a swing-up in water, the page swings the rods up, catches them 14 s after the button and then carries the cart to +1 m. In glycerol and honey it still finds none: with the page's motor and rods, a swing-up there is out of reach.",
-  "tr": "حيث تشمل \\(I\\) الماء الذي يحمله (38). لكنّ السائل لا يدع القضيب يدور أسرع من المعدّل \\(\\omega_t\\) الذي يساوي عنده عزمُ كبحه، من (33)–(34) مكاملًا على طول القضيب، شدَّ وزنه كلّه. للقضيب الخارجي الافتراضي (0.75 kg، 0.75 m) تكون \\(\\omega_{\\text{need}}\\) مساوية 6.4 و5.8 و5.5 rad/s، و\\(\\omega_t\\) مساوية 1.41 و0.96 و0.44 rad/s في الماء والغليسرين والعسل: يسقط القضيب في السائل أبطأ بخمس إلى اثنتي عشرة مرّة ممّا يلزمه ليتأرجح. ولا تستطيع العربة أن تجرّه فوق القمّة ببساطة، لأنّ دفعة جانبية لا ترفع قضيبًا ممدّدًا جانبيًا: حين يكون القضيب أفقيًا يعمل الكبح ودفعة القصور من حركة العربة كلاهما على طوله ولا يعطيان عزمًا حول مفصله. هذا مقياس تقريبي، لقضيب منفرد على مفصل ثابت، لا برهان؛ لكنّه يقول في أيّ اتجاه تُغيَّر الآلة. وبما أنّ \\(\\omega_t/\\omega_{\\text{need}}\\) تنمو مثل \\(\\sqrt{m/(\\rho d L^3)}\\)، فالقضبان القصيرة الثقيلة هي التي يدعها السائل تتأرجح. مع قضيبين من 2 kg، طولهما 0.20 m و0.25 m، تبلغ النسبة 0.96 في الماء و0.79 في الغليسرين و0.57 في العسل؛ ومع محرّك قوّته 200 N يجد المخطّط رفعًا في الماء، فترفع الصفحة القضيبين وتلتقطهما بعد 14 s من الضغط على الزرّ ثم تحمل العربة إلى +1 m. أمّا في الغليسرين والعسل فلا يجد شيئًا بعد: بمحرّك هذه الصفحة وقضيبيها، الرفع هناك بعيد المنال."
+  "tr": "حيث تشمل \\(I\\) الماء الذي يحمله (38). لكنّ السائل لا يدع القضيب يدور أسرع من المعدّل \\(\\omega_t\\) الذي يساوي عنده عزمُ كبحه، من (33)–(34) مكاملًا على طول القضيب، شدَّ وزنه كلّه. للقضيب الخارجي الافتراضي (0.75 kg، 0.75 m) تكون \\(\\omega_{\\text{need}}\\) مساوية 6.4 و5.8 و5.5 rad/s، و\\(\\omega_t\\) مساوية 1.41 و0.96 و0.44 rad/s في الماء والغليسرول والعسل: يسقط القضيب في السائل أبطأ بخمس إلى اثنتي عشرة مرّة ممّا يلزمه ليتأرجح. ولا تستطيع العربة أن تجرّه فوق القمّة ببساطة، لأنّ دفعة جانبية لا ترفع قضيبًا ممدّدًا جانبيًا: حين يكون القضيب أفقيًا يعمل الكبح ودفعة القصور من حركة العربة كلاهما على طوله ولا يعطيان عزمًا حول مفصله. هذا مقياس تقريبي، لقضيب منفرد على مفصل ثابت، لا برهان؛ لكنّه يقول في أيّ اتجاه تُغيَّر الآلة. وبما أنّ \\(\\omega_t/\\omega_{\\text{need}}\\) تنمو مثل \\(\\sqrt{m/(\\rho d L^3)}\\)، فالقضبان القصيرة الثقيلة هي التي يدعها السائل تتأرجح. مع قضيبين من 2 kg، طولهما 0.20 m و0.25 m، تبلغ النسبة 0.96 في الماء و0.79 في الغليسرول و0.57 في العسل؛ ومع محرّك قوّته 200 N يجد المخطّط رفعًا في الماء، فترفع الصفحة القضيبين وتلتقطهما بعد 14 s من الضغط على الزرّ ثم تحمل العربة إلى +1 m. أمّا في الغليسرول والعسل فلا يجد شيئًا بعد: بمحرّك هذه الصفحة وقضيبيها، الرفع هناك بعيد المنال."
  },
  "c5de5652fd14": {
   "src": "Motor force limit <i>u</i><sub>max</sub>",
@@ -2029,7 +2029,7 @@
  },
  "e0b633a1792d": {
   "src": "glycerol, 20 °C",
-  "tr": "غليسرين، 20 °C"
+  "tr": "غليسرول، 20 °C"
  },
  "e0c90f3d8049": {
   "src": "Once the rods have fallen they swing as a double pendulum hanging from the cart, without friction, for ever. To bring them up again we first bring them to rest, hanging straight down, and that is a problem about energy. Think of a child on a swing. Moving the seat forward while it is going forward feeds the swing; moving it forward while it is coming back takes the energy out. The cart does the same to the rods through the lower hinge.",
@@ -2037,7 +2037,7 @@
  },
  "e0e4f3d9359b": {
   "src": "In water, glycerol and honey this machine cannot lift its rods: a hanging rod must swing over the top faster than a liquid lets a 0.75 m rod turn, and nine tenths of the motor's work heat the liquid round the cart. <a href=\"rods-in-liquid.html\">Project 06</a> measures this, builds a machine that can (shorter, heavier rods, a 400 N motor, a slim cart), solves the water round it, and tells the controller the flow.",
-  "tr": "في الماء والغليسرين والعسل لا تستطيع هذه الآلة أن ترفع قضيبيها: فالقضيب المتدلّي يجب أن يتأرجح فوق القمّة أسرع ممّا يسمح السائل لقضيب طوله 0.75 m أن يدور، وتسعة أعشار شغل المحرّك تسخّن السائل حول العربة. ويقيس <a href=\"rods-in-liquid.html\">المشروع 06</a> ذلك، ويبني آلة تستطيع (قضيبان أقصر وأثقل، ومحرّك قوّته 400 N، وعربة نحيلة)، ويحلّ الماء حولها، ويُخبر المتحكّم بالجريان."
+  "tr": "في الماء والغليسرول والعسل لا تستطيع هذه الآلة أن ترفع قضيبيها: فالقضيب المتدلّي يجب أن يتأرجح فوق القمّة أسرع ممّا يسمح السائل لقضيب طوله 0.75 m أن يدور، وتسعة أعشار شغل المحرّك تسخّن السائل حول العربة. ويقيس <a href=\"rods-in-liquid.html\">المشروع 06</a> ذلك، ويبني آلة تستطيع (قضيبان أقصر وأثقل، ومحرّك قوّته 400 N، وعربة نحيلة)، ويحلّ الماء حولها، ويُخبر المتحكّم بالجريان."
  },
  "e120b3447134": {
   "src": "<b>A check.</b> Remove the upper rod, \\(m_2 \\to 0\\). Then (13) leaves \\(\\sigma^2 = f_1/M_{11} = 6g(m_0+m_1)/[L_1(4m_0+m_1)]\\). For a cart much heavier than the rod this tends to \\(3g/(2L_1)\\), the rate at which a rod falls over its fixed bottom end, which is the right limit: a very heavy cart does not recoil.",
@@ -2165,7 +2165,7 @@
  },
  "f2487fd8c2fa": {
   "src": "10.5 J in water, 9.3 J in glycerol and 8.5 J in honey for the default machine. That is very little. A 60 N motor pushing the cart through water reaches the speed at which the cart's own drag takes all its force, \\(c_2 v^2 = u_{\\max}\\), so \\(v = 1.98\\) m/s and the motor delivers 119 W: in a tenth of a second it could pay for the whole lift. Energy is not what is missing.",
-  "tr": "10.5 J في الماء و9.3 J في الغليسرين و8.5 J في العسل للآلة الافتراضية. وهذا قليل جدًا. محرّك قوّته 60 N يدفع العربة في الماء يبلغ السرعة التي يأخذ عندها كبح العربة نفسها قوّته كلّها، \\(c_2 v^2 = u_{\\max}\\)، أي \\(v = 1.98\\) m/s، ويعطي المحرّك 119 W: في عُشر ثانية يستطيع أن يدفع ثمن الرفع كلّه. ليست الطاقة هي الناقصة."
+  "tr": "10.5 J في الماء و9.3 J في الغليسرول و8.5 J في العسل للآلة الافتراضية. وهذا قليل جدًا. محرّك قوّته 60 N يدفع العربة في الماء يبلغ السرعة التي يأخذ عندها كبح العربة نفسها قوّته كلّها، \\(c_2 v^2 = u_{\\max}\\)، أي \\(v = 1.98\\) m/s، ويعطي المحرّك 119 W: في عُشر ثانية يستطيع أن يدفع ثمن الرفع كلّه. ليست الطاقة هي الناقصة."
  },
  "f2c1196fe1d4": {
   "src": "60 ms",
