@@ -1,0 +1,1 @@
+gpu A 0 m/s^2: lean 1.4 mm at 1.985 s; free swing NaN Hz; spill 0 g; particles 51332 -> 51332; CG 36.7 it.; fastest particle 14.3 mm/s; 403 ms a step on google/swiftshader; errors none

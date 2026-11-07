@@ -1,6 +1,6 @@
 # Fig. 12 · A Pint of Guinness on a One-Wheel Cart (`public/simulations/beer-slosh.html`)
 
-Rebuilt from zero on 6 November 2026 after Numa rejected the previous Fig. 12 (modal sloshing in a Blender-sculpted glass, LQR,
+Rebuilt from zero on 6 November 2026 (since 7 November 2026 the default fluid is the 3D solver on the reader's graphics chip: "Part A" at the end) after Numa rejected the previous Fig. 12 (modal sloshing in a Blender-sculpted glass, LQR,
 three languages). Nothing of it is reused. The page is **English only**: `tools/i18n/build.py` lists it in `ENGLISH_ONLY`, so no
 German or Arabic page is generated, and links to it from the German and Arabic pages point at the English page.
 
@@ -47,6 +47,12 @@ speed-up of 6 November 2026; see "Speed").
 | `notes/fig12/check.md`, `referee.md` | the independent derivation check and the blind referee report on the lecture note |
 | `notes/fig12/test.cjs` | browser test (desktop, phone): run, push with and without the speed loop, drag, no errors, no sideways scroll |
 | `notes/fig12/panel-test.cjs`, `panel-test2.cjs`, `spill-test.cjs` | data panel: every check and read-back; on a bump at three widths, Read values, a round, Save, idle; while spilling |
+| `public/scripts/stout-gpu.js` | the 3D solver on the reader's graphics chip (WebGPU compute shaders, `StoutGpu.GpuFluid`): whole glass, same method as `Fluid`, float32; batches of up to 16 steps in one submission with one read-back; see "Part A" below |
+| `public/scripts/stout-gpu-view.js` | draws the GPU solver's stout on the chip (`StoutGpuView`): screen-space fluid rendering; `StoutView.drawGlass` lays the result in the glass |
+| `tools/fig12/gpu-linearity.cjs`, `gpu-study.cjs` | the GPU solver in headless Chromium (SwiftShader): from rest (`linearity.cjs`'s experiment, `TILT=`, `REST=`), and with the cart over a bump or a road (`study.cjs`/`control.cjs`'s experiments, batches of n steps) |
+| `notes/fig12/gpu-page-test.cjs` | the page on the GPU path: starts, runs, no errors, screenshots |
+| `tools/fig12/springs.cjs` | Part B: the suspension spring's stroke, the active force, the heave, the lean, the spill, the cart's mean speed and the cancellation current asked under each controller; `UMAX=0` and `NOCANCEL=1` for the ablation of note §8.6 |
+| `tools/fig12/coffee.cjs` | Part C: a mug of coffee beside the pint (note §14): f11, wall and foam damping, push to the rim, and both walked by a hand through the nonlinear live model |
 | `public/scripts/stout-pool.js`, `stout-worker.js` | the solver's loops shared over worker threads (shared memory; same numbers) |
 | `notes/fig12/serve.cjs` | serves `public/` with the isolation headers Cloudflare sends for this page (tests with threads) |
 | `notes/fig12/threads-test.cjs` | in Chromium: the threaded solver gives the single-thread numbers to the last digit; threads named in the readout |
@@ -368,3 +374,72 @@ statement; §11.8's 1.2 % and 15–31 %; breaking at 21.2 mm called a linear est
 phones, the averaging step written out with its assumptions and Landau & Lifshitz §27, f = vn and the long-wave picture, the
 suspension transmissibility check (1/(r² − 1) ≈ 0.2 at r = 2.4; 0.2 × 0.72 = 0.14 vs 0.142 measured), the setts' 5.9 Hz, the
 washboard as a direct resonance, b i defined at use.
+
+## Part A: the real fluid on the reader's graphics chip (7 November 2026)
+
+Numa rejected any modal model as the thing drawn. Since part A the page's default fluid is the 3D solver itself, run on the
+reader's own graphics chip through WebGPU (`?model=gpu`, or no query). Where the browser has no WebGPU it falls back to the
+processor's solver at 4 mm (half glass, slow motion) and says so in the caption. The modal model stays in the menu as
+"Reduced model, not a fluid simulation" (`?model=live`) and inside the controller (plant model, observer).
+
+- **Solver** (`stout-gpu.js`): the equations and method of `Fluid` (incompressible Navier–Stokes, pressure Poisson solve,
+  APIC, MAC grid, cut-cell wall, Zhu–Bridson level set with wall images, ghost fluid, wall-inherit rule, 3 layers of
+  extrapolation, midpoint advection, spill over the rim), over the whole glass: 51 332 particles, 20 × 20 × 45 cells at 4 mm.
+  Differences: float32; Jacobi-preconditioned CG in one 256-thread workgroup, tolerance 1e-5 of max |b| (70–100 iterations);
+  particle-to-grid as a gather over the particles sorted by cell, each cell's list in particle order, so every sum has a fixed
+  order (no float atomics); the inherit rule as two Jacobi passes. At most 8 storage buffers per stage (face arrays merged,
+  the glass profile a uniform), so it runs on any WebGPU device.
+- **Coupling** (`World.advanceGpu`): a batch of n steps (as many 5 ms steps as the frame lasted, at most 16; fewer if the chip
+  needs over 60 ms for them), one submission, one read-back of every step's momentum, spill and CG statistics and the last
+  step's column counts. The cart runs ahead through the batch with the stout's push held; the impulse owed,
+  D = Σ_{i<n} J_i − n J_0, is paid over the next batch (note eq. G1). n = 1 reproduces `World.advance`.
+- **Drawing** (`stout-gpu-view.js`): spheres of radius 2.2 mm through the page's camera, nearest depth, 4 rounds of a
+  separable bilateral filter, thickness at half size scaled by (spacing³)/(sphere volume), Beer–Lambert with κ = ln 2/6 mm, the
+  head as the top 12 mm below the column-height surface. Composited into the 2D canvas between the glass's back and front.
+- **Store and panel**: the GPU path adds `batch_n`, `J_x`, `J_z`, `owed_x`, `owed_z`, `gpu_ms`, `np_read`, `col_cnt`; checks
+  recompute `h_col` from the stored counts, the drawn surface and probes from the stored column heights (bilinear, wall
+  extension), `F_lx_next` = J/Δt + D/(nΔt), m_p and the spill for the whole glass. Particle positions are read back into the
+  store only while paused. The data panel script is loaded once the store is declared (the GPU starts asynchronously).
+- **Measured** (SwiftShader, the only WebGPU here; `notes/fig12/runs/`): Table 6 of the note: from rest, chip vs processor,
+  largest lean 5.5/5.9, 11.5/11.5, 25.4/25.4, 46/45.3, 69/69.3 mm and free swing 3.194/3.160, 3.200/3.202, 3.190/3.194,
+  3.108/3.109, 3.049/3.056 Hz for A = 0.5–6 m/s²; spill 1.6/1.6 and 12.3/12.2 g at 4 and 6 m/s². Steady tilt at 2 m/s²:
+  −0.913 mm with the push ramped in as in note §12 (exact −0.877). 25 mm bump, open loop: 65.7 mm, 13.5 g (processor 60.7, 11.9); batch 4: 67.4 mm, 13.9 g; speed
+  loop 27.7 mm (29.9). At rest both start alike: the lattice-seeded particles stir to 14.3 mm/s at 0.05 s and 3.2 mm/s at 1 s,
+  the same digits on chip and processor; the chip's lean reaches 1.4 mm in 2 s (processor 1.2 mm on a flat road). One step takes about 0.3 s on SwiftShader; the real rate can only be measured on a reader's device, and the
+  page prints it ("real time" or "slow motion ×r", and the chip's name in the solver readout).
+- **Tests**: `GPU=1 node notes/fig12/panel-test2.cjs` (the panel on the GPU path), `node notes/fig12/gpu-page-test.cjs`;
+  without WebGPU the default page is the processor's solver and `panel-test2.cjs` runs as before (196 checks, none differ).
+- **Note**: §11.10 ★ (G1)–(G2), Table 6, source [26]; §15 (the picture), §16, abstract updated; §3.4, §10 and §15 now say the half glass and its mirror image are the processor's. `same.cjs` still prints `7747da757ea9d800`. The shader's spill record is capped at the buffer's 1024 (it was 4096).
+
+## Part B: motor and active suspension, one design (7 November 2026)
+
+- **Note §8.6 ★** (B1)–(B3), (B2a), Table 3b, Key result. Linearised on a level road the plant splits into (speed, swing)
+  driven by the current and (body, wheel) driven by the active force u_s; the swing is not controllable from u_s
+  (linearly); a_x is additive, a_z parametric. Answer to "how many springs": two (suspension and tyre), one of them with an
+  active force, and one motor; a sideways push would need a third actuator and a third probe.
+- **Code** (`stout-cart.js`): `Cart.suspGains()`, the suspension LQR with the cross term (a_z contains u_s), weights
+  a 0.5 m/s², s 10 mm, δ_t 0.2 mm, u 40 N; K_s = (−502.6, 11.6, −6.1, 612.6); poles −4.94 ± 4.98j, −32.0 ± 259.9j.
+  `Cart.sample` 'joint': slosh LQR + i_par (B3) from the measured a_z (`parCancel === false` turns it off) + u_s = −K_s e_s;
+  the Kalman filter's A_d (and B_d) recomputed with ω²(1 + a_z/g) in this mode only. Button "Motor + suspension (one LQR)".
+- **Drawing** (`stout-view.js`): the spring chart under the lean chart (stroke ±20 mm, active force ±40 N); a gauge beside
+  the spring (wine bar from the static mark, value in mm) and an arrow for the active force (1 cm per 4 N). Store:
+  `stroke`, `a_z_meas`, `i_par`, `y_s0..3`, `Ks1..4`, `gauge_px_x/y`, `gauge_mid_y`; drawn check: the gauge's wine pixel.
+- **Measured** (`node tools/fig12/springs.cjs ...`, runs `notes/fig12/runs/springs-*.txt`): washboard 0.85 m/s, NM model:
+  slosh feedback 102.6 mm lean, 75.4 g, stroke 23.4 mm rms; slosh + skyhook 1.1 mm, 0 g, 7.17 mm; joint 1.0 mm, 0 g, 6.96 mm.
+  3D (4 s): 32.1 / 3.8 / 5.4 mm lean. With no controller the cart slows to 0.68 m/s on the washboard (ripples 2.3 Hz, off the
+  body's 2.8 Hz bounce); speed-holding loops keep it on resonance, so the stroke doubles. Ablation: UMAX=0 126 mm, 186 g,
+  cancellation asks 12.6 A against 3 A; NOCANCEL=1 changes nothing with the suspension working.
+- **Reduced model fix**: the breaking cap (1.5 R/ξ11 at the wall) now also holds p0 and (p2, r2); they could run away under
+  seconds of hard shaking (found by coffee.cjs). Only runs that already spilled heavily changed (washboard open loop at 1.0,
+  1.2, 1.4 m/s: 106, 175, 144 g; PI at 0.85 m/s). `same.cjs` unchanged.
+- **Reviews**: `notes/fig12/check-8-6.md`, `referee-8-6.md`, `check-11-10.md`; findings applied.
+
+## Part C: a mug of coffee beside the pint (7 November 2026)
+
+- **Note §14** (C1)–(C3), Table 7, sources [27]–[29] (Mayer & Krechetnikov 2012, Sauret et al. 2015, Han 2016; what was read
+  and how: `notes/fig12/coffee-sources.md`). Later sections renumbered 15–17.
+- **Numbers** (`node tools/fig12/coffee.cjs 10 5`, `notes/fig12/runs/coffee*.txt`): mug R 35 mm, 100 mm deep, rim 7.5 mm above
+  (α 12.1°): f11 3.615 Hz (3.652 with σ), ζ_wall 0.0058, push to the rim 2.10 m/s²; pint 3.421 Hz (3.448), 0.0053, 5.65 m/s².
+  Foam, Sauret's (w/τ_f) scaled from cell width w to radius R: ζ_f 0.019–0.037 for the pint (inference). Walked at 5 mm with
+  a second harmonic of 0.3: the mug spills from 1.5 steps/s, the pint at 1.5 and 1.75 steps/s, with a head only at 1.75 (3 ml).
+- The mug is run in the live model by the tool, not offered on the page.

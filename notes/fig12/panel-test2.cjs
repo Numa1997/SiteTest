@@ -1,10 +1,13 @@
 // Fig. 12 data panel, part 2: checks on a bump, Read values, a recorded round, Save, idle (node notes/fig12/panel-test2.cjs <out>)
 // CTRL=<controller> and NOISE=1 run the same checks with that controller and the sensor noise (6 November 2026)
+// GPU=1 runs them on the GPU solver: Chromium with WebGPU (SwiftShader in this container), the page served with its headers
+// (serve.cjs); after the pause it waits until the particle positions have been read back from the chip (7 November 2026)
 const { chromium } = require('playwright'); const { spawn, execFileSync } = require('child_process'); const path = require('path'), fs = require('fs');
 (async () => {
   const out = process.argv[2] || '/tmp/fig12-panel2'; fs.mkdirSync(out, { recursive: true });
-  const base = process.argv[3] || 'http://localhost:8776'; const srv = process.argv[3] ? null : spawn('python3', ['-m', 'http.server', '8776', '--directory', path.join(__dirname, '../../public')], { stdio: 'ignore' }); await new Promise(r => setTimeout(r, 800));
-  const b = await chromium.launch(); const errs = [];
+  const GPU = !!process.env.GPU;
+  const base = process.argv[3] || 'http://localhost:8776'; const srv = process.argv[3] ? null : GPU ? spawn('node', [path.join(__dirname, 'serve.cjs'), '8776'], { stdio: 'ignore' }) : spawn('python3', ['-m', 'http.server', '8776', '--directory', path.join(__dirname, '../../public')], { stdio: 'ignore' }); await new Promise(r => setTimeout(r, 800));
+  const b = await chromium.launch(GPU ? { args: ['--enable-unsafe-webgpu', '--enable-features=Vulkan', '--use-vulkan=swiftshader', '--use-angle=swiftshader', '--ignore-gpu-blocklist'] } : {}); const errs = [];
   for (const W of [1600, 1100, 390]) {
     const p = await b.newPage({ viewport: { width: W, height: 1000 }, deviceScaleFactor: 1, acceptDownloads: true });
     p.on('pageerror', e => errs.push(W + ': ' + e.message)); p.on('console', m => { if (m.type() === 'error') errs.push(W + ': ' + m.text()); });
@@ -14,8 +17,10 @@ const { chromium } = require('playwright'); const { spawn, execFileSync } = requ
     if (process.env.NOISE) await p.click('#noise');
     if (process.env.ROAD) await p.selectOption('#roadKind', process.env.ROAD);   // ROAD=isoC, washboard, setts ...
     // wait until the wheel is on the first bump (x between 0.92 and 1.08 m), then pause
-    await p.waitForFunction(() => Fig12.world.cart.x > 0.92, null, { timeout: 60000, polling: 50 });
+    if (GPU && !(await p.evaluate(() => Fig12.gpu))) await p.waitForFunction(() => Fig12.gpu, null, { timeout: 60000, polling: 200 });
+    await p.waitForFunction(() => Fig12.world && Fig12.world.cart.x > 0.92, null, { timeout: GPU ? 1800000 : 60000, polling: 50 });
     await p.click('#play'); await p.waitForTimeout(300);
+    if (GPU) { await p.waitForFunction(() => !Fig12.busy(), null, { timeout: 120000, polling: 100 }); await p.evaluate(() => Fig12.view.draw()); }
     const r = await p.evaluate(() => {
       const D = Sim.data, ds = D.ds, bad = []; let n = 0;
       const agree = (a, b) => (Number.isNaN(a) && Number.isNaN(b)) || typeof a !== 'number' ? String(a) === String(b) : Math.abs(a - b) <= 1e-9 * Math.max(Math.abs(a), Math.abs(b)) + 1e-12;
@@ -49,7 +54,7 @@ const { chromium } = require('playwright'); const { spawn, execFileSync } = requ
     await p.evaluate(() => { const t = document.querySelector('.dp-tab'); if (t.getAttribute('aria-expanded') !== 'true') t.click(); });
     await p.click('#play');
     await p.locator('button:has-text("Record")').first().click();
-    await p.waitForFunction(() => window.__dataPanel.rounds().length > 0, null, { timeout: 120000, polling: 500 });
+    await p.waitForFunction(() => window.__dataPanel.rounds().length > 0, null, { timeout: GPU ? 3600000 : 120000, polling: 500 });
     console.log('rounds recorded:', await p.evaluate(() => window.__dataPanel.rounds().length));
     await p.waitForTimeout(800); await p.screenshot({ path: path.join(out, 'round.png') });
     // save

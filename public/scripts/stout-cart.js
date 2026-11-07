@@ -1300,6 +1300,11 @@
       // A modelling choice standing for breaking, not a theory of it; the 3D solver is the reference there.
       const A1 = this.Rs * this.Rw[1] * Math.hypot(this.b[1], this.b[2]), Acap = 1.5 * this.Rs / XI[0];
       if (A1 > Acap) { const f = Acap / A1; for (let i = 0; i < 5; i++) { this.b[i] *= f; this.bd[i] *= f; } this.breaks = (this.breaks || 0) + 1; this.broke = 1; }
+      // The second-order coordinates (p0 and p2, r2) are held to the same crest by the same rule; driven hard for seconds they
+      // can otherwise run away (found by tools/fig12/coffee.cjs: the pint walked at 2.5 Hz, 10 mm, poured 427 ml in 1 s).
+      const A0 = this.Rs * Math.abs(this.Rw[0] * this.b[0]), A2 = this.Rs * Math.abs(this.Rw[2]) * Math.hypot(this.b[3], this.b[4]);
+      if (A0 > Acap) { const f = Acap / A0; this.b[0] *= f; this.bd[0] *= f; this.breaks2 = (this.breaks2 || 0) + 1; this.broke = 1; }
+      if (A2 > Acap) { const f = Acap / A2; this.b[3] *= f; this.bd[3] *= f; this.b[4] *= f; this.bd[4] *= f; this.breaks2 = (this.breaks2 || 0) + 1; this.broke = 1; }
       for (let m = 1; m < this.N; m++) if (Math.abs(this.q[m]) > Acap) { const f = Acap / Math.abs(this.q[m]); this.q[m] *= f; this.qd[m] *= f; this.breaks = (this.breaks || 0) + 1; }
     }
     this.syncQ();
@@ -1508,6 +1513,43 @@
     this._K = K; this._Kfor = this.sloshMode; this.lqrP = P;
     return K;
   };
+  // The active suspension's LQR (Part B): the quarter car about its static state, y = (s, v_b, v_w, d) with s the stroke
+  // z_b - z_w - s_0, v_b, v_w the body's and the wheel's vertical speeds, d = z_a - z_w - d_0 the tyre's compression; the
+  // force u between body and axle; the road's vertical speed z_a' (unknown) as the disturbance.
+  //   M_s v_b' = -k s - c (v_b - v_w) + u,   m_w v_w' = k s + c (v_b - v_w) - u + k_t d - c_t v_w,   s' = v_b - v_w,   d' = -v_w
+  // Cost: the body's (the glass's) vertical acceleration a = (-k s - c (v_b - v_w) + u)/M_s, the stroke, the tyre's
+  // compression and the force, each over its largest acceptable value (Bryson): a 0.5 m/s^2, s 10 mm, d 0.2 mm (the static
+  // compression is 1.1 mm: a swing of it as large unloads the tyre and the drive loses its grip), u 40 N. Chosen by measurement
+  // (tools/fig12/springs.cjs): a 0.2 m/s^2 with d 1 mm held the heave lower but let the wheel leave the setts 2.6 % of the time,
+  // and the lean there grew. Since a contains u the cost has a cross term N; the Riccati flow is integrated to its steady state.
+  Cart.prototype.suspGains = function () {
+    if (this._Ks) return this._Ks;
+    const Ms = this.Mb + this.ml, mw = this.mw, k = this.k, c = this.c, kt = this.kt, ct = this.ct;
+    const A = [[0, 1, -1, 0], [-k / Ms, -c / Ms, c / Ms, 0], [k / mw, c / mw, -(c + ct) / mw, kt / mw], [0, 0, -1, 0]];
+    const B = [0, 1 / Ms, -1 / mw, 0];
+    const lim = this.suspLimits || { a: 0.5, s: 0.010, d: 0.0002, u: 40 };
+    const Ca = [-k / Ms, -c / Ms, c / Ms, 0], Da = 1 / Ms, wa = 1 / (lim.a * lim.a);
+    // J = int (wa a^2 + y'Qy y + ru u^2): Q = wa Ca'Ca + diag, N = wa Ca' Da, R = wa Da^2 + ru
+    const Q = [0, 1, 2, 3].map((i) => [0, 1, 2, 3].map((j) => wa * Ca[i] * Ca[j] + (i === j ? [1 / (lim.s * lim.s), 0, 0, 1 / (lim.d * lim.d)][i] : 0)));
+    const Nc = Ca.map((v) => wa * v * Da), R = wa * Da * Da + 1 / (lim.u * lim.u);
+    let P = [0, 1, 2, 3].map(() => [0, 0, 0, 0]);
+    const dt = 5e-5;                                         // explicit Euler on the Riccati flow: stable below ~2.6e-4 s here
+    for (let it = 0; it < 400000; it++) {
+      const G = [0, 1, 2, 3].map((i) => P[i].reduce((a, v, j) => a + v * B[j], 0) + Nc[i]);   // P B + N
+      let dmax = 0;
+      const Pn = P.map((row, i) => row.map((v, j) => {
+        let d = Q[i][j] - G[i] * G[j] / R;
+        for (let m = 0; m < 4; m++) d += A[m][i] * P[m][j] + P[i][m] * A[m][j];
+        dmax = Math.max(dmax, Math.abs(d) / (Math.abs(v) + 1e-3));
+        return v + dt * d;
+      }));
+      P = Pn;
+      if (dmax < 1e-9 && it > 1000) break;
+    }
+    const K = [0, 1, 2, 3].map((j) => (B.reduce((a, v, i) => a + v * P[i][j], 0) + Nc[j]) / R);
+    this._Ks = K; this.suspP = P; this.suspA = A; this.suspB = B;
+    return K;
+  };
   Cart.prototype.massX = function () { return this.Mb + this.ml + this.mw + (this.Iw + this.Ngear * this.Ngear * this.Jm) / (this.Rw * this.Rw); };
   Cart.prototype.reset = function (x) {
     const g = this.g, Ms = this.Mb + this.ml, za = this.road.axle(x)[0];
@@ -1531,7 +1573,9 @@
       this.nv = nv;
       const yq = pr && pr.fresh ? pr.y : null;
       if (pr) pr.fresh = false;
-      s = this.obs.update(this.uPrev, yv, yq);
+      // the joint controller puts the heave into the filter's model: the body accelerometer's reading, taken at the sample
+      this.azMeas = this.azb;
+      s = this.obs.update(this.uPrev, yv, yq, this.ctrl === 'joint' ? this.azMeas : null);
       this.uPrev = this.i;                                      // the measured current, held until the next sample
       const D = this.ds;
       if (D && D.has('xh')) {                                   // the page declares these; tools run without a store
@@ -1550,6 +1594,25 @@
       }
       if (Math.abs(ic) < this.Imax) this.xi += e * this.Ts;     // anti-windup: integrate only when not saturated
       this.icmd = ic;
+    } else if (this.ctrl === 'joint' && s) {
+      // Part B: one design for both actuators. Motor: the slosh LQR on the estimate, plus the current that cancels the heave's
+      // parametric term -w^2 (a_z/g) q in the swing's equation (exact linearisation: then the swing obeys the linear model the
+      // LQR was designed for); a_z from the body accelerometer, q from the filter. Suspension: its own LQR (suspGains).
+      const K = this.lqrGains(), m = this.sloshMode, b = this.bForce();
+      const ipar = this.parCancel === false ? 0 : -this.massX() * m.w * m.w * (this.azMeas / this.g) * s[1] / (m.beta * b);
+      let ic = i0 - (K[0] * (s[0] - this.v0) + K[1] * s[1] + K[2] * s[2] + K[3] * this.xi) + ipar;
+      if (Math.abs(ic) < this.Imax) this.xi += e * this.Ts;
+      this.icmd = ic; this.ipar = ipar;
+      const Ks = this.suspGains(), Ms = this.Mb + this.ml, s0 = this.Ls - Ms * this.g / this.k, N0 = (Ms + this.mw) * this.g;
+      // measured: the stroke (a potentiometer), the two vertical speeds (accelerometers, integrated), the tyre's compression
+      // from the axle's load cell, d = (N - N_0)/k_t (the tyre damper's share c_t (z_a' - v_w) is left in it: a sensor error)
+      const y = [this.zb - this.zw - s0, this.vzb, this.vzw, (this.N - N0) / this.kt];
+      this.ysusp = y;
+      let u = -(Ks[0] * y[0] + Ks[1] * y[1] + Ks[2] * y[2] + Ks[3] * y[3]);
+      if (u > this.Umax) u = this.Umax; else if (u < -this.Umax) u = -this.Umax;
+      this.uscmd = u;
+      if (this.ds && this.ds.has('i_par')) { this.ds.set('i_par', ipar); this.ds.set('a_z_meas', this.azMeas); for (let n = 0; n < 4; n++) this.ds.set('y_s' + n, y[n]); }
+      return;
     } else if (this.ctrl === 'slosh' && s) {                    // state feedback on the estimate, and the integral (LQR)
       const K = this.lqrGains();
       let ic = i0 - (K[0] * (s[0] - this.v0) + K[1] * s[1] + K[2] * s[2] + K[3] * this.xi);
@@ -1592,6 +1655,7 @@
       D.set('F_push', this.pushF); if (D.has('F_grip')) { D.set('F_grip', Fgrip); D.set('F_motor0', Fm0); D.set('slip', this.slip); } D.set('F_hand', Fhand); D.set('F_lx', Fx); D.set('F_lz', Fz); D.set('a_x', ax); D.set('a_zb', azb); D.set('a_zw', azw);
       D.set('i_m', this.i); D.set('i_cmd', this.icmd); D.set('i_reach', ilim); D.set('V_m', this.Vm); D.set('emf', emf); D.set('u_s', this.us); D.set('u_s_cmd', this.uscmd);
       D.set('Mx', Mx); D.set('Ms', Ms); D.set('ml', this.ml);
+      if (D.has('stroke')) D.set('stroke', this.zb - this.zw - (this.Ls - Ms * g / this.k));   // the spring's compression about its static value
     }
   };
   // one step h: the controller when a sample is due; then symplectic Euler for the mechanics (velocities from the forces
@@ -1678,8 +1742,20 @@
   // one sample: predict with the current u held since the last sample, then correct with the speed y_v and, when the
   // probes have a new reading, with y_q (null otherwise). Joint update: S = H P H' + R, L = P H' S^-1, x += L nu,
   // P = (I − L H) P (I − L H)' + L R L' (Joseph's form: stays symmetric and positive).
-  Observer.prototype.update = function (u, yv, yq) {
-    const Ad = this.Ad, Bd = this.Bd;
+  // az (optional): the glass's measured vertical acceleration (a body accelerometer). The swing's stiffness is then
+  // w^2 (1 + az/g) (the heave's parametric term, note eq. 54) and A_d, B_d are recomputed for this sample (exact zero-order
+  // hold, e^{A Ts}); Q_d is kept (the noise's covariance changes little with the stiffness over one 1 ms sample).
+  Observer.prototype.discretise = function (az) {
+    const w2 = this.w * this.w * (1 + az / 9.81), z = this.zeta, be = this.beta, Mx = this.Mx, b = this.b, cx = this.cx, Ts = this.Ts, w = this.w;
+    const A = [[-cx / Mx, 0, 0], [0, 0, 1], [be * cx / Mx, -w2, -2 * z * w]], B = [b / Mx, 0, -be * b / Mx];
+    const E4 = mat.expm([0, 1, 2, 3].map((i) => [0, 1, 2, 3].map((j) => (i < 3 && j < 3 ? A[i][j] * Ts : i < 3 && j === 3 ? B[i] * Ts : 0))));
+    return { Ad: [0, 1, 2].map((i) => [0, 1, 2].map((j) => E4[i][j])), Bd: [0, 1, 2].map((i) => E4[i][3]) };
+  };
+  Observer.prototype.update = function (u, yv, yq, az) {
+    let Ad = this.Ad, Bd = this.Bd;
+    this.azUsed = az == null ? 0 : az;
+    if (az != null && az !== 0) { const D = this.discretise(az); Ad = D.Ad; Bd = D.Bd; }
+    this.AdNow = Ad; this.BdNow = Bd;
     this.xPrev = this.x; this.PPrev = this.P; this.uPrev = u;
     const xp = [0, 1, 2].map((i) => Ad[i][0] * this.x[0] + Ad[i][1] * this.x[1] + Ad[i][2] * this.x[2] + Bd[i] * u);
     const PA = mat.mul(mat.mul(Ad, this.P), mat.T(Ad)), Pp = PA.map((r, i) => r.map((v, j) => v + this.Qd[i][j]));
@@ -1708,7 +1784,8 @@
   /* --------------------------------------------------------------- coupling */
   function World(o) {
     o = o || {};
-    this.fluid = o.fluid && o.fluid.nm ? new NMFluid(Object.assign({ modal: true }, o.fluid)) : o.fluid && o.fluid.modal ? new ModalFluid(o.fluid) : new Fluid(o.fluid);
+    // o.fluidInstance: a fluid made beforehand (the GPU solver, StoutGpu.GpuFluid, which needs an async start)
+    this.fluid = o.fluidInstance ? o.fluidInstance : o.fluid && o.fluid.nm ? new NMFluid(Object.assign({ modal: true }, o.fluid)) : o.fluid && o.fluid.modal ? new ModalFluid(o.fluid) : new Fluid(o.fluid);
     const co = Object.assign({}, o.cart || {});
     co.ml = this.fluid.mLiquid;
     if (o.road) co.road = new Road(o.road);
@@ -1720,7 +1797,12 @@
     const f = this.fluid, c = this.cart;
     let mode;
     if (f.modal) mode = { w: f.w[0], zeta: f.zeta[0], beta: f.beta[0] };
-    else {
+    else if (f.gpu) {
+      // the GPU solver on the 4 mm grid swings at 3.200 Hz (tools/fig12/gpu-linearity.cjs, A = 1 m/s^2); its damping is taken
+      // as the CPU grid's 0.008 (the same method on the same grid)
+      const Rs = f.Rz(Math.min(f.h0, f.zRim)), xi = XI[0], th = Math.tanh(xi * f.h0 / Rs);
+      mode = { w: 2 * Math.PI * 3.200, zeta: 0.008, beta: 2 * xi * th / (xi * xi - 1) };
+    } else {
       const Rs = f.Rz(Math.min(f.h0, f.zRim)), xi = XI[0], th = Math.tanh(xi * f.h0 / Rs), fine = f.dx <= 0.0031;
       mode = { w: 2 * Math.PI * (fine ? 3.263 : 3.214), zeta: fine ? 0.002 : 0.008, beta: 2 * xi * th / (xi * xi - 1) };
     }
@@ -1798,16 +1880,66 @@
     }
   };
 
+  // The same coupling with the GPU solver, a batch of n equal fluid steps of length h (one submission, one read-back: the
+  // only way a real graphics chip keeps up, since every read-back waits for the chip). The cart runs ahead through the
+  // batch with the stout's push held at the force of the last known step; the glass's acceleration of each step goes to the
+  // GPU in the batch. After the read-back the stout's impulse of every step is known. World.advance hands the impulse of step
+  // i to the cart during step i + 1; here, during the batch, the cart got J_0/h in every step instead of J_{i-1}/h, so the
+  // difference D = sum_{i<n} J_i - n J_0 is owed and is paid over the next batch, on top of J_n/h. The cart and the stout
+  // exchange exactly the momentum they exchange in World.advance, later by at most one batch. With n = 1 nothing is owed
+  // and the steps are World.advance's. h: dtMax, or shorter when the fastest particle would cross 0.8 of a cell.
+  World.prototype.advanceGpu = async function (dt) {
+    const f = this.fluid, c = this.cart;
+    const hmax = Math.min(this.dtMax, f.vmax > 0 ? 0.8 * f.dx / f.vmax : this.dtMax);
+    const n = Math.max(1, Math.min(f.constructor.MAXB || 16, Math.round(dt / hmax))), h = hmax;
+    const J0 = this.J || [0, 0], owed = this.owed || [0, 0];
+    this.Fx = J0[0] / h + owed[0] / (n * h); this.Fz = J0[1] / h + owed[1] / (n * h);
+    c.forces(this.Fx, this.Fz);
+    const list = [], hist = [];
+    for (let k = 0; k < n; k++) {
+      const vx0 = c.vx, vz0 = c.vzb, m = Math.max(1, Math.round(h / this.hCart)), hc = h / m;
+      for (let i = 0; i < m; i++) c.step(hc, this.Fx, this.Fz);
+      const ax = (c.vx - vx0) / h, az = (c.vzb - vz0) / h;
+      list.push({ dt: h, ax, az }); hist.push([vx0, vz0, c.vx, c.vzb, m]);
+    }
+    const P0 = this.P, per = await f.steps(list);
+    // the stout's impulse in each step, -(dP + P_spill)
+    let Pp = P0, sumJx = 0, sumJz = 0, Jl = [0, 0];
+    per.forEach((r, k) => { Jl = [-(r.P[0] + r.spillPx - Pp[0]), -(r.P[1] + r.spillPz - Pp[1])]; if (k < n - 1) { sumJx += Jl[0]; sumJz += Jl[1]; } Pp = r.P; });
+    // owed: what World.advance would have handed over during this batch (J_0 .. J_{n-1}) minus what was handed over (n J_0)
+    this.owed = [J0[0] + sumJx - n * J0[0], J0[1] + sumJz - n * J0[1]];
+    this.J = Jl; this.hLast = h; this.batch = n;
+    if (f.spillNow) { c.ml = f.liquidMass(); this.dropsFrom(f.spillList); }
+    f.spillList.length = 0;
+    this.moveDrops(n * h);
+    this.P = Pp; const L = list[n - 1], H = hist[n - 1];
+    this.lastAx = L.ax; this.lastAz = L.az;
+    this.Fx = Jl[0] / h + this.owed[0] / (n * h); this.Fz = Jl[1] / h + this.owed[1] / (n * h);
+    c.forces(this.Fx, this.Fz);
+    this.t += n * h; this.steps = (this.steps || 0) + n;
+    this.readProbes();
+    const D = this.ds;
+    if (D) {
+      const Pb = per.length > 1 ? per[per.length - 2].P : P0;
+      D.set('t', this.t); D.set('h_f', h); D.set('n_cart', H[4]); D.set('vx_0', H[0]); D.set('vzb_0', H[1]); D.set('vx_1', H[2]); D.set('vzb_1', H[3]);
+      D.set('a_gx', L.ax); D.set('a_gz', L.az); D.set('P0_x', Pb[0]); D.set('P0_z', Pb[1]); D.set('P_x', Pp[0]); D.set('P_z', Pp[1]);
+      D.set('F_lx_next', this.Fx); D.set('F_lz_next', this.Fz); D.set('steps', this.steps); D.set('P_spill_x', per[n - 1].spillPx); D.set('P_spill_z', per[n - 1].spillPz);
+      D.set('cg_iters', f.cgIters); D.set('cg_res', f.cgResidual || 0);
+      if (D.has('batch_n')) { D.set('batch_n', n); D.set('owed_x', this.owed[0]); D.set('owed_z', this.owed[1]); D.set('J_x', Jl[0]); D.set('J_z', Jl[1]); }
+    }
+    return per;
+  };
+
   // Spilled stout in the room: each particle that left over the rim becomes a drop (with its mirror image, the other
   // half of the glass) at the glass's position plus its own, with the glass's velocity plus its own, falling freely
   // (no air drag) until it meets the body's top or the road, where it stays as a splash. At most 6000 drops are kept.
   World.prototype.dropsFrom = function (list) {
-    const c = this.cart, D = this.drops || (this.drops = []);
-    for (const q of list) for (const m of [1, -1]) {
+    const c = this.cart, D = this.drops || (this.drops = []), both = this.fluid.whole ? [1] : [1, -1];   // the whole glass has no mirror images
+    for (const q of list) for (const m of both) {
       if (D.length >= 6000) D.shift();
       D.push({ x: c.x + q[0], y: m * q[1], z: c.zb + c.glassFloor + q[2], vx: c.vx + q[3], vy: m * q[4], vz: c.vzb + q[5], landed: false });
     }
-    this.spilledMass = (this.spilledMass || 0) + list.length * 2 * this.fluid.mp;
+    this.spilledMass = (this.spilledMass || 0) + list.length * (this.fluid.whole ? 1 : 2) * this.fluid.mp;
   };
   World.prototype.moveDrops = function (h) {
     const D = this.drops; if (!D) return;
@@ -1832,6 +1964,7 @@
     // the store holds the solver's particle arrays (with threads, the shared ones; otherwise the store's own, filled)
     ['px', 'py', 'pz'].forEach((k) => { if (f.shared) ds.set(k, f[k]); else { const a = ds.get(k); a.set(f[k]); f[k] = a; } });
     f.colH = ds.get('h_col'); if (f.modal) f.ds = ds;
+    if (f.gpu && ds.has('col_cnt')) f.colCnt = ds.get('col_cnt');   // the GPU's particle counts per column, read back each batch
     this.ds = ds; this.cart.ds = ds;
     this.cart.forces(this.Fx, this.Fz);
     f.columnHeights(); ds.touch('h_col');

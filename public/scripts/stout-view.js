@@ -62,6 +62,7 @@
   View.prototype.heightAt = function (x, y) {
     const f = this.world.fluid, dx = f.dx;
     if (f.modal) return f.heightAt(x, y);                        // the modal model's surface is already smooth: drawn exactly
+    if (f.gpu) return f.columnHeightAt(x, y);                    // the GPU solver: the whole glass's column heights, as the probes read them
     y = Math.abs(y);
     const r = Math.hypot(x, y), r1 = f.Rz(Math.min(f.h0, f.zRim)) - 3.5 * dx, r2 = r1 - 3.5 * dx;
     if (r > r1) {
@@ -171,6 +172,23 @@
     line([[dxp, yS, zA], [dxp, yS, mid - 0.004]], C.ink, 2);
     poly([[dxp - 0.011, yS, zA + 0.004], [dxp + 0.011, yS, zA + 0.004], [dxp + 0.011, yS, mid + 0.012], [dxp - 0.011, yS, mid + 0.012]], null, C.ink, 2);
     line([[dxp, yS, zB], [dxp, yS, mid + 0.004]], C.ink, 2); line([[dxp - 0.008, yS, mid + 0.004], [dxp + 0.008, yS, mid + 0.004]], C.ink, 2);
+    // the spring's compression made readable: a gauge beside it, from 20 mm compressed (bottom) to 20 mm extended (top), the
+    // static compression at the middle, the present stroke as a wine bar from it; and the active force as an arrow on the body
+    { const Ms = c.Mb + c.ml, s0 = c.Ls - Ms * c.g / c.k, st = c.zb - c.zw - s0, gx = sx - 0.03, gz = 0.5 * (zA + zB), sc = 1;
+      const top = P(gx, yS, gz + 0.020 * sc), bot = P(gx, yS, gz - 0.020 * sc), mid = P(gx, yS, gz), cur = P(gx, yS, gz + Math.max(-0.02, Math.min(0.02, st)) * sc);
+      ctx.strokeStyle = 'rgba(28,21,24,0.5)'; ctx.lineWidth = 1 * dpr; ctx.beginPath(); ctx.moveTo(top[0], top[1]); ctx.lineTo(bot[0], bot[1]); ctx.stroke();
+      for (const p of [top, mid, bot]) { ctx.beginPath(); ctx.moveTo(p[0] - 4 * dpr, p[1]); ctx.lineTo(p[0] + 4 * dpr, p[1]); ctx.stroke(); }
+      ctx.strokeStyle = C.accent; ctx.lineWidth = 4 * dpr; ctx.lineCap = 'butt'; ctx.beginPath(); ctx.moveTo(mid[0], mid[1]); ctx.lineTo(cur[0], cur[1]); ctx.stroke();
+      ctx.fillStyle = C.muted; ctx.font = `${10 * dpr}px "IBM Plex Mono", monospace`; ctx.textAlign = 'right';
+      ctx.fillText((st >= 0 ? '+' : '') + (st * 1000).toFixed(1) + ' mm', mid[0] - 7 * dpr, mid[1] + 3 * dpr);
+      if (this.ds && this.ds.has('gauge_px_y')) { this.ds.set('gauge_px_x', cur[0] / dpr); this.ds.set('gauge_px_y', 0.5 * (mid[1] + cur[1]) / dpr); this.ds.set('gauge_mid_y', mid[1] / dpr); }
+      if (Math.abs(c.us) > 0.2) {                               // the active force on the body, 1 cm per 4 N
+        const a0 = P(dxp + 0.03, yS, zB), a1 = P(dxp + 0.03, yS, zB + c.us / 4 * 0.01), dir = Math.sign(a1[1] - a0[1]) || 1;
+        ctx.strokeStyle = C.accent; ctx.lineWidth = 2.5 * dpr; ctx.beginPath(); ctx.moveTo(a0[0], a0[1]); ctx.lineTo(a1[0], a1[1]); ctx.stroke();
+        ctx.fillStyle = C.accent; ctx.beginPath(); ctx.moveTo(a1[0], a1[1]); ctx.lineTo(a1[0] - 4 * dpr, a1[1] - 6 * dpr * dir); ctx.lineTo(a1[0] + 4 * dpr, a1[1] - 6 * dpr * dir); ctx.closePath(); ctx.fill();
+        ctx.textAlign = 'left'; ctx.fillText(c.us.toFixed(1) + ' N', a1[0] + 5 * dpr, a1[1] + 3 * dpr);
+      }
+    }
     const bw = this.bodyW / 2, bdp = this.bodyD / 2, bt = bodyZ + this.bodyH;
     poly([[-bw, -bdp, bt], [bw, -bdp, bt], [bw, bdp, bt], [-bw, bdp, bt]], '#f3eee5', C.ink, 2);              // top face
     poly([[bw, -bdp, bodyZ], [bw, bdp, bodyZ], [bw, bdp, bt], [bw, -bdp, bt]], '#ddd5c8', C.ink, 2);          // the end face toward the camera
@@ -204,10 +222,10 @@
   // Live charts in the empty sky of the figure, from the store's numbers as they were written (drawing only):
   // left, the last 4 s of the stout's lean (front − back wall) and the motor current; right, the first mode's phase
   // portrait (q1, q1'/w1) with the rim as its boundary, |q| = z_rim − h: a path that crosses it spills.
-  View.prototype.record = function (t, lean, cur, q, qd, w, free, est) {
+  View.prototype.record = function (t, lean, cur, q, qd, w, free, est, stroke, us) {
     const H = this.hist || (this.hist = []);
     if (H.length && t < H[H.length - 1][0]) H.length = 0;      // a restart
-    H.push([t, lean, cur, q, qd, w, free, est]);
+    H.push([t, lean, cur, q, qd, w, free, est, stroke || 0, us || 0]);
     while (H.length && H[0][0] < t - 4) H.shift();
   };
   View.prototype.drawCharts = function (W, Hc, dpr) {
@@ -229,6 +247,16 @@
     { const wd = ctx.measureText((narrow ? 'lean ±' : 'lean: probes (±') + Math.round(lim) + (narrow ? ' mm' : ' mm)')).width; ctx.fillStyle = C.ink; ctx.fillText(narrow ? ' · est.' : ' · estimate', x0 + 5 * dpr + wd, y0 + 11 * dpr); }
     ctx.fillStyle = '#6b6166'; ctx.fillText(narrow ? 'current ±3 A' : 'motor current (±3 A)', x0 + 5 * dpr, y0 + ch - 5 * dpr);
     if (!narrow) { ctx.textAlign = 'right'; ctx.fillStyle = 'rgba(122,31,43,0.7)'; ctx.fillText('rim', x0 + cw - 4 * dpr, Yl(2 * free * 1000) - 3 * dpr); ctx.fillStyle = '#6b6166'; ctx.fillText('last 4 s', x0 + cw - 4 * dpr, y0 + ch - 6 * dpr); }
+    // the spring: its stroke about the static compression (± 20 mm) and the active force (± 40 N), under the lean chart
+    { const y1 = y0 + ch + (narrow ? 4 : 6) * dpr, ch2 = Math.round(ch * 0.8);
+      box(x0, y1, cw, ch2);
+      const Ys = (v) => y1 + ch2 / 2 - v / 0.02 * (ch2 / 2 - 5 * dpr), Yu = (v) => y1 + ch2 / 2 - v / 40 * (ch2 / 2 - 5 * dpr);
+      ctx.strokeStyle = 'rgba(28,21,24,0.15)'; ctx.beginPath(); ctx.moveTo(x0, y1 + ch2 / 2); ctx.lineTo(x0 + cw, y1 + ch2 / 2); ctx.stroke();
+      const ln = (k, Y, col, lw) => { ctx.beginPath(); H.forEach((r, i) => { const px = X(r[0]), py = Math.max(y1, Math.min(y1 + ch2, Y(r[k]))); i ? ctx.lineTo(px, py) : ctx.moveTo(px, py); }); ctx.strokeStyle = col; ctx.lineWidth = lw * dpr; ctx.stroke(); };
+      ln(9, Yu, '#8b8079', 1.2); ln(8, Ys, C.ink, 1.8);
+      ctx.font = mono(narrow ? 9 : 10); ctx.textAlign = 'left'; ctx.fillStyle = C.ink; ctx.fillText(narrow ? 'spring ±20 mm' : 'spring stroke (±20 mm)', x0 + 5 * dpr, y1 + 11 * dpr);
+      ctx.fillStyle = '#6b6166'; ctx.fillText(narrow ? 'active ±40 N' : 'active force (±40 N)', x0 + 5 * dpr, y1 + ch2 - 5 * dpr);
+      this.chartSpringBox = [x0 / dpr, y1 / dpr, cw / dpr, ch2 / dpr]; }
     // the phase portrait
     const s0 = Math.min(ch, 120 * dpr), px0 = W - pad - s0, py0 = pad, R = free * 1.15, Pm = (q) => px0 + s0 / 2 + q / R * (s0 / 2 - 6 * dpr), Pv = (v) => py0 + s0 / 2 - v / R * (s0 / 2 - 6 * dpr);
     box(px0, py0, s0, s0);
@@ -260,6 +288,17 @@
     ctx.fillStyle = 'rgba(205,214,218,0.45)'; ctx.fill();
 
     const Hs = this.surface(), nr = this.nr, nth = this.nth, hh = this.headH, rS = f.Rz(Math.min(f.h0, f.zRim));
+    if (f.gpu && this.gpuView) {
+      // the GPU solver's stout, drawn on the graphics chip from its particles (scripts/stout-gpu-view.js), laid in the glass;
+      // the head there is the top headH of the stout, painted from the surface map hs (the column heights, as the probes read them)
+      const N = this.gpuView.hsN, R0 = rS + 2 * f.dx, hs = this.hsMap || (this.hsMap = new Float32Array(N * N));
+      for (let j = 0; j < N; j++) for (let i = 0; i < N; i++) hs[i + N * j] = f.columnHeightAt(-R0 + 2 * R0 * i / (N - 1), -R0 + 2 * R0 * j / (N - 1));
+      this.gpuView.headH = hh;
+      const img = this.gpuView.render(cam, this.cv.width, this.cv.height, zG, hs, R0, this.light);
+      ctx.drawImage(img, 0, 0);
+      this.drawGlassFront(cam, P, zRim, Rin, Rout, thL, thR, gen, arc, base, f, dpr);
+      return this.afterGlass(P, f, rS, hh, dpr, Hs);
+    }
     const etaAt = (th) => { const it = ((th / (2 * Math.PI) * nth) % nth + nth) % nth, i0 = Math.floor(it), t = it - i0; return Hs[nr][i0] + t * (Hs[nr][(i0 + 1) % nth] - Hs[nr][i0]); };
     const rB = rS - 0.0005;
     // the body of the drink: its near face, from the surface at the near arc down the generatrices to the floor
@@ -300,6 +339,12 @@
     ctx.beginPath(); { const p = P(rB * Math.cos(thR), rB * Math.sin(thR), etaAt(thR)); ctx.moveTo(p[0], p[1]); } nearArc(0, 1);
     ctx.strokeStyle = 'rgba(150,120,90,0.8)'; ctx.lineWidth = 1 * dpr; ctx.stroke();
 
+    this.drawGlassFront(cam, P, zRim, Rin, Rout, thL, thR, gen, arc, base, f, dpr);
+    return this.afterGlass(P, f, rS, hh, dpr, Hs);
+  };
+  // the glass in front of the stout: tint, outlines, rim, foot, and the two probes on the wall
+  View.prototype.drawGlassFront = function (cam, P, zRim, Rin, Rout, thL, thR, gen, arc, base, f, dpr) {
+    const ctx = this.ctx;
     // glass: front tint, outer and inner outlines, rim, foot
     ctx.beginPath(); { const p = P(Rout(0) * Math.cos(thL), Rout(0) * Math.sin(thL), -base); ctx.moveTo(p[0], p[1]); }
     gen(thL, 0, zRim, Rout, true); arc(zRim, Rout(zRim), thL, thR); gen(thR, 0, zRim, Rout, false); arc(-base, Rout(0), thR, thL);
@@ -321,7 +366,8 @@
         // the strip is left open where the head's band lies on the surface, so the head stays visible at the wall
         const rr = pr.r - 0.0006, top = Math.min(zRim, f.h0 + 0.03), bot = f.h0 - 0.03;
         ctx.strokeStyle = 'rgba(28,21,24,0.75)'; ctx.lineWidth = 2.5 * dpr; ctx.lineCap = 'butt';
-        for (const [z0, z1] of [[bot, Math.min(eta, top)], [Math.max(bot, eta + this.headH), top]]) {
+        const g0 = f.gpu ? eta - this.headH : eta, g1 = f.gpu ? eta : eta + this.headH;   // the head: on the surface (CPU drawing) or its top band (GPU drawing)
+        for (const [z0, z1] of [[bot, Math.min(g0, top)], [Math.max(bot, g1), top]]) {
           if (z1 <= z0) continue;
           const a = P(sg * rr, 0, z0), b = P(sg * rr, 0, z1); ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke();
         }
@@ -330,9 +376,14 @@
         if (this.ds && this.ds.has('probe_px_x') && sg > 0) { this.ds.set('probe_px_x', m[0] / dpr); this.ds.set('probe_px_y', m[1] / dpr); }
       }
     }
+  };
+  // what the store keeps of the drawn glass: the read-back points of the head
+  View.prototype.afterGlass = function (P, f, rS, hh, dpr, Hs) {
     this.lastSurface = Hs;
     if (this.ds) {                                               // the head's middle at the front wall (near band) and its top on the axis
-      const D = this.ds, em = f.columnHeightAt(0, 0), fr = P(0.98 * rS, 0, f.columnHeightAt(rS, 0) + 0.75 * hh), bk = P(0, 0, em + hh);   // the head's band at the front wall; its top on the axis
+      // the head's band at the front wall and its top on the axis (CPU drawing: a band laid on the surface; GPU drawing: the top
+      // headH of the stout, so the points sit half a band below the surface and just under it)
+      const D = this.ds, em = f.columnHeightAt(0, 0), fr = P(0.98 * rS, 0, f.columnHeightAt(rS, 0) + (f.gpu ? -0.5 : 0.75) * hh), bk = P(0, 0, em + (f.gpu ? -0.002 : hh));   // the head's band at the front wall; its top on the axis
       D.set('eta_mid', em);
       D.set('front_px_x', fr[0] / dpr); D.set('front_px_y', fr[1] / dpr); D.set('back_px_x', bk[0] / dpr); D.set('back_px_y', bk[1] / dpr);
       D.set('head_h', hh); D.set('r_s', rS);
