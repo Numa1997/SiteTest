@@ -1,14 +1,14 @@
 // Render the butterfly film frame by frame with the preinstalled headless Chromium.
-//   node tools/fig13/gift/render.cjs THEME OUTDIR DSF [frame,frame,... | all] [PAGE] [SCENE]
-//   PAGE: butterfly3d (default), morph or together; SCENE (morph only): wheel or butterfly
+//   node tools/fig13/gift/render.cjs THEME OUTDIR DSF [frames|all] [PAGE] [SCENE] [WxH]
+//   PAGE: butterfly3d (default), morph or together; SCENE: wheel or butterfly (morph), phone (together); WxH: viewport, default 1920x1080
 // Serves nothing itself: start `python3 -m http.server 8766` in the repository root first.
 const { chromium } = require('playwright');
 const fs = require('fs');
 (async () => {
-  const [theme, outdir, dsf, which, page, scene] = [process.argv[2], process.argv[3], Number(process.argv[4] || 1), process.argv[5] || 'all', process.argv[6] || 'butterfly3d', process.argv[7] || 'butterfly'];
+  const [theme, outdir, dsf, which, page, scene] = [process.argv[2], process.argv[3], Number(process.argv[4] || 1), process.argv[5] || 'all', process.argv[6] || 'butterfly3d', process.argv[7] || 'butterfly']; const [VW, VH] = (process.argv[8] || '1920x1080').split('x').map(Number);
   fs.mkdirSync(outdir, { recursive: true });
   const b = await chromium.launch();
-  const ctx = await b.newContext({ viewport: { width: 1920, height: 1080 }, deviceScaleFactor: dsf });
+  const ctx = await b.newContext({ viewport: { width: VW, height: VH }, deviceScaleFactor: dsf });
   const p = await ctx.newPage(); const errs = [];
   p.on('pageerror', e => errs.push(e.message)); p.on('console', m => { if (m.type() === 'error') errs.push(m.text()); });
   await p.goto(`http://localhost:8766/tools/fig13/gift/${page}.html?theme=${theme}&scene=${scene}&film=1`, { waitUntil: 'load' });

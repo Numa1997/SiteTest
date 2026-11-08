@@ -28,6 +28,13 @@ canvas { position:absolute; left:0; top:0; }
 .ttl small { font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin-right:10px; }
 .cap { position:absolute; font-size:15.5px; color:var(--ink2); white-space:nowrap; }
 .off { opacity:.38; }
+:root[data-layout="phone"] #stage { width:1080px; height:1920px; }
+:root[data-layout="phone"] #h1 { left:36px; top:40px; font-size:60px; }
+:root[data-layout="phone"] #h2 { left:38px; top:116px; width:1000px; font-size:20px; line-height:1.45; }
+:root[data-layout="phone"] #clock { left:38px; right:auto; top:198px; font-size:22px; text-align:left; }
+:root[data-layout="phone"] .ttl { font-size:35px; }
+:root[data-layout="phone"] .ttl small { font-size:15px; }
+:root[data-layout="phone"] .cap { font-size:25px; }
 </style>
 </head>
 <body>
@@ -41,7 +48,9 @@ canvas { position:absolute; left:0; top:0; }
 <script>
 'use strict';
 const Q = new URLSearchParams(location.search);
-const THEME = Q.get('theme') === 'light' ? 'light' : 'dark';
+const THEME = Q.get('theme') === 'light' ? 'light' : 'dark', PHONE = Q.get('scene') === 'phone';   // scene=phone: portrait 1080 x 1920
+document.documentElement.dataset.layout = PHONE ? 'phone' : 'wide';
+const SW = PHONE ? 1080 : 1920, SH = PHONE ? 1920 : 1080, LF = PHONE ? 20 : 14;   // stage size, canvas label font (px)
 document.documentElement.dataset.theme = THEME;
 const $ = id => document.getElementById(id);
 const lerp = (a, b, f) => a + (b - a) * f, clamp = (v, a, b) => Math.min(b, Math.max(a, v));
@@ -84,7 +93,7 @@ function angles(t) { const u = clamp(t, 0, O.T) * O.rate, i = Math.min(Math.floo
 function sampleXH(t) { const [a, b] = angles(t); return [Math.sin(a) + Math.sin(b), -(Math.cos(a) + Math.cos(b))]; }
 
 // ------------------------------------------------------------------------------------------------ timeline
-const FPS = 30, SLOW = 4, INTRO = 36, TR = 18;
+const FPS = 30, SLOW = 4, INTRO = 36, TR = 18, HOLDS = 2;   // HOLDS: periods with all six moving together at the end
 let P, TOTAL;                   // P = frames per period (not an integer); picture i joins at INTRO + i P
 const A = i => INTRO + i * P, FINALE = () => INTRO + 6 * P;
 const simT = f => (Math.max(0, f - INTRO) / (FPS * SLOW)) % O.T;
@@ -92,7 +101,7 @@ const drawn = (f, i) => clamp((f - A(i)) / (FPS * SLOW), 0, O.T);   // how much 
 function phase(f, i) { return f < A(i) ? 'off' : f >= FINALE() ? 'all' : (i < 5 && f >= A(i + 1)) ? 'past' : 'present'; }
 
 // ------------------------------------------------------------------------------------------------ layout: a 3 x 2 grid of equal panels
-const PW = 600, PH = 440, GX = [40, 660, 1280], GY = [140, 600];
+const PW = PHONE ? 504 : 600, PH = PHONE ? 520 : 440, COLS = PHONE ? 2 : 3, GX = PHONE ? [28, 548] : [40, 660, 1280], GY = PHONE ? [300, 836, 1372] : [140, 600];
 const PANELS = [
     { title: 'The pendulum', cap: String.raw`\theta_1(t),\ \theta_2(t)\ \text{ from Hamilton's equations}` },
     { title: 'Height of the tip against time', cap: String.raw`h(t)=-l\,(\cos\theta_1+\cos\theta_2)` },
@@ -100,13 +109,21 @@ const PANELS = [
     { title: 'The fold clock', cap: String.raw`\text{hand at }\tfrac{\Delta}{2},\ \Delta=\theta_1-\theta_2;\ \ \text{height}=\cos\tfrac{\Delta}{2}=\tfrac{r}{2l}` },
     { title: 'The bell above the floor', cap: String.raw`r=2l\cos\tfrac{\Delta}{2};\ \ \text{floor: the tip path, bell: height }\tfrac{\Delta}{2}` },
     { title: 'The butterfly', cap: String.raw`\text{tip}=r\,(\sin\psi,\,-\cos\psi),\ \ \psi=\tfrac{\theta_1+\theta_2}{2}` },
-].map((p, i) => Object.assign(p, { x: GX[i % 3], y: GY[Math.floor(i / 3)], w: PW, h: PH }));
-const TOP = 58, BOT = 46;                     // title band and caption band inside each panel
+].map((p, i) => Object.assign(p, { x: GX[i % COLS], y: GY[Math.floor(i / COLS)], w: PW, h: PH }));
+if (PHONE) {   // shorter titles and equations that stay readable on a phone screen
+    const short = [['The pendulum', String.raw`\theta_1(t),\ \theta_2(t)`], ['Height against time', String.raw`h=-l\,(\cos\theta_1+\cos\theta_2)`],
+        ['Turning the paper', String.raw`(\tau\cos\varphi+x\sin\varphi,\ h)`], ['The fold clock', String.raw`\text{height}=\cos\tfrac{\Delta}{2}=\tfrac{r}{2l}`],
+        ['The bell', String.raw`r=2l\cos\tfrac{\Delta}{2}`], ['The butterfly', String.raw`\text{tip}=r\,(\sin\psi,\,-\cos\psi)`]];
+    PANELS.forEach((p, i) => { p.title = short[i][0]; p.cap = short[i][1]; });
+}
+const TOP = PHONE ? 74 : 58, BOT = PHONE ? 62 : 46;                     // title band and caption band inside each panel
 const centreY = PH => TOP + (PH - TOP - BOT) / 2;
+const K = Math.min((PW - 40) / 560, (PH - TOP - BOT) / 336);   // drawing scale relative to the wide layout
+const AW = PW - 40, AH = PH - TOP - BOT;                          // drawing room inside a panel (px); the phone panels are taller, so pictures fill them
 
 // ------------------------------------------------------------------------------------------------ 1: the pendulum
 function drawPendulum(g, w, h, f, t) {
-    const cx = w / 2, cy = centreY(h), S = 82;
+    const cx = w / 2, cy = centreY(h), S = PHONE ? Math.min(AW, AH) / 4.2 : 82;
     g.strokeStyle = TH.rule; g.lineWidth = 1.2; g.setLineDash([3, 6]); g.beginPath(); g.arc(cx, cy, 2 * S, 0, 7); g.stroke(); g.setLineDash([]);
     const [a, b, i] = angles(t), L = Math.round(0.45 * O.rate);
     g.lineCap = 'butt';
@@ -122,7 +139,7 @@ function drawPendulum(g, w, h, f, t) {
 
 // ------------------------------------------------------------------------------------------------ 2 and 3: the space-time sheet, turned by phi
 // Each instant is the point (x, h, tau), tau = k (t - T/2). Turned by phi about the vertical: screen = (tau cos phi + x sin phi, h).
-const SS = 60, KT = () => 6.4 / O.T;
+const SS = PHONE ? Math.min((AW - 64) / 6.4, AH / 5) : 60, KT = () => 6.4 / O.T;
 function drawSheet(g, w, h, t, e, phi, fadeIn, labels) {
     const cx = w / 2, cy = centreY(h), c = Math.cos(phi), s = Math.sin(phi), k = KT(), L = O.T * k / 2;
     const px = j => (TS[j] - O.T / 2) * k * c + XS[j] * s, depth = j => -(TS[j] - O.T / 2) * k * s + XS[j] * c;
@@ -133,11 +150,11 @@ function drawSheet(g, w, h, t, e, phi, fadeIn, labels) {
     poly(g, [[cx - SS * L * c, cy], [cx + SS * L * c, cy]]); g.stroke();
     if (s > 0.02) { g.globalAlpha = s; g.strokeStyle = TH.cardEdge; g.setLineDash([4, 6]); g.beginPath(); g.arc(cx + SS * L * c, cy, 2 * SS * s, 0, 7); g.stroke(); g.setLineDash([]); g.globalAlpha = 1; }
     if (labels) {
-        g.fillStyle = TH.muted; g.font = '14px "IBM Plex Mono"'; g.textAlign = 'center';
+        g.fillStyle = TH.muted; g.font = LF + 'px "IBM Plex Mono"'; g.textAlign = 'center';
         const aT = clamp((c - 0.866) / 0.1, 0, 1), aS = clamp((s - 0.866) / 0.1, 0, 1);
-        if (aT > 0) { g.globalAlpha = aT; g.fillText('time →', cx, cy + SS * 2.3 + 17); }
-        if (aS > 0) { g.globalAlpha = aS; g.fillText('sideways →', cx, cy + SS * 2.3 + 17); }
-        g.globalAlpha = 1; g.save(); g.translate(cx - SS * Math.max(L * c, 2.05 * s) - 18, cy); g.rotate(-Math.PI / 2); g.fillText('height', 0, 0); g.restore();
+        if (aT > 0) { g.globalAlpha = aT; g.fillText('time →', cx, cy + SS * 2.3 + LF + 3); }
+        if (aS > 0) { g.globalAlpha = aS; g.fillText('sideways →', cx, cy + SS * 2.3 + LF + 3); }
+        g.globalAlpha = 1; g.save(); g.translate(cx - SS * Math.max(L * c, 2.05 * s) - LF - 4, cy); g.rotate(-Math.PI / 2); g.fillText('height', 0, 0); g.restore();
     }
     const n = Math.round(e / O.T * NN);
     g.globalCompositeOperation = TH.add; g.lineJoin = 'round'; g.lineCap = 'butt';
@@ -157,11 +174,11 @@ function phiOf(f) { return (Math.PI / 2) * ease((f - A(2) - 0.08 * P) / (0.84 * 
 
 // ------------------------------------------------------------------------------------------------ 4: the fold clock (circle -> cosine)
 function drawClock(g, w, h, f, t) {
-    const cx = 122, cy = centreY(h), R = 86, wx0 = 250, ww = w - wx0 - 26, win = O.T / 4;
+    const R = PHONE ? 96 : 86, cx = PHONE ? 130 : 122, cy = centreY(h), wx0 = PHONE ? 262 : 250, ww = w - wx0 - 26, win = O.T / 4;
     const [a, b, i] = angles(t), q = (a - b) / 2;
     g.strokeStyle = TH.rule; g.lineWidth = 1.2; g.beginPath(); g.arc(cx, cy, R, 0, 7); g.stroke();
     poly(g, [[cx - R - 12, cy], [wx0 + ww, cy]]); g.stroke(); poly(g, [[cx, cy - R - 10], [cx, cy + R + 10]]); g.stroke();
-    g.fillStyle = TH.muted; g.font = '13px "IBM Plex Mono"'; g.textAlign = 'right'; g.fillText('← newest', wx0 + ww, cy + R + 22);
+    g.fillStyle = TH.muted; g.font = (LF - 1) + 'px "IBM Plex Mono"'; g.textAlign = 'right'; g.fillText('← newest', wx0 + ww, cy + R + LF + 8);
     const hx = cx + R * Math.sin(q), hy = cy - R * Math.cos(q);
     g.strokeStyle = TH.muted; g.lineWidth = 1.8; poly(g, [[cx, cy], [hx, hy]]); g.stroke();
     g.strokeStyle = rgba(TH.floor, 0.45); g.lineWidth = 1.2; poly(g, [[hx, hy], [wx0, hy]]); g.stroke();
@@ -183,7 +200,7 @@ function camera(f) {
     return { eye, fw, rt, up };
 }
 function drawBell(g, w, h, f, t, e) {
-    const C = camera(f), F = 740, cy0 = centreY(h) - 26;
+    const C = camera(f), F = PHONE ? 900 : 740, cy0 = centreY(h) - (PHONE ? 44 : 26);
     const pr = (x, y, z) => { const v = [x - C.eye[0], y - C.eye[1], z - C.eye[2]], xc = v[0] * C.rt[0] + v[1] * C.rt[1] + v[2] * C.rt[2], yc = v[0] * C.up[0] + v[1] * C.up[1] + v[2] * C.up[2], zc = v[0] * C.fw[0] + v[1] * C.fw[1] + v[2] * C.fw[2]; return [w / 2 + F * xc / zc, cy0 - F * yc / zc, zc]; };
     const ring = (rr, z, nseg) => Array.from({ length: nseg + 1 }, (_, k) => pr(rr * Math.cos(k / nseg * 6.2832), rr * Math.sin(k / nseg * 6.2832), z));
     g.fillStyle = rgba(TH.floor, TH.floorA); poly(g, ring(2.08, 0, 120), true); g.fill();
@@ -219,7 +236,7 @@ function drawBell(g, w, h, f, t, e) {
 
 // ------------------------------------------------------------------------------------------------ 6: the butterfly, long exposure
 function drawButterfly(g, w, h, f, t, e) {
-    const cx = w / 2, cy = centreY(h), S = 84;
+    const cx = w / 2, cy = centreY(h), S = PHONE ? Math.min(AW / 4.3, AH / 3.9) : 84;
     g.strokeStyle = TH.grid; g.lineWidth = 1; for (const rr of [1, 2]) { g.beginPath(); g.arc(cx, cy, rr * S, 0, 7); g.stroke(); }
     const n = Math.round(e / O.T * NN);
     g.globalCompositeOperation = TH.add; g.lineJoin = 'round'; g.lineCap = 'butt';
@@ -252,7 +269,7 @@ function frameEdge(p, ph, f, i) {
     if (hot > 0.01) { g.globalAlpha = hot; g.strokeStyle = TH.accent; g.lineWidth = 2.2; g.stroke(); g.globalAlpha = 1; }
 }
 function renderFrame(f) {
-    g.setTransform(DPR, 0, 0, DPR, 0, 0); g.fillStyle = TH.bg; g.fillRect(0, 0, 1920, 1080);
+    g.setTransform(DPR, 0, 0, DPR, 0, 0); g.fillStyle = TH.bg; g.fillRect(0, 0, SW, SH);
     const t = simT(f);
     PANELS.forEach((p, i) => {
         const ph = phase(f, i);
@@ -267,7 +284,7 @@ function renderFrame(f) {
             else if (i === 3) drawClock(g, p.w, p.h, f, t);
             else if (i === 4) drawBell(g, p.w, p.h, f, t, e);
             else drawButterfly(g, p.w, p.h, f, t, e);
-            if (i === 2) { g.fillStyle = TH.muted; g.font = '15px "IBM Plex Mono"'; g.textAlign = 'right'; g.fillText(`φ = ${(phiOf(f) * 180 / Math.PI).toFixed(0)}°`, p.w - 24, 36); }
+            if (i === 2) { g.fillStyle = TH.muted; g.font = (LF + 1) + 'px "IBM Plex Mono"'; g.textAlign = 'right'; g.fillText(`φ = ${(phiOf(f) * 180 / Math.PI).toFixed(0)}°`, p.w - 24, 36); }
             // an older picture is shaded while a newer one is drawing; at the end all six are equal
             const shade = ph === 'past' ? 0.3 * ease((f - A(i + 1)) / TR) : ph === 'all' ? 0.3 * (1 - ease((f - FINALE()) / TR)) : 0;
             if (shade > 0.005) { g.globalAlpha = shade; g.fillStyle = TH.panel; g.fillRect(0, 0, p.w, p.h); g.globalAlpha = 1; }
@@ -278,20 +295,21 @@ function renderFrame(f) {
     });
     const k = f < INTRO ? -1 : Math.min(5, Math.floor((f - INTRO) / P));
     const line2 = f < INTRO ? 'six pictures of one motion' : f >= FINALE() ? 'all six pictures, moving together' : `picture <b>${k + 1}</b> of 6 is drawing: ${PANELS[k].title.toLowerCase()}`;
-    setHTML($('clock'), 'clock', `t = <b>${t.toFixed(3)}</b> s of ${O.T.toFixed(3)} s · shown at ¼ speed<br>${line2}`);
+    const sep = ' · ';
+    setHTML($('clock'), 'clock', `t = <b>${t.toFixed(3)}</b> s of ${O.T.toFixed(3)} s${sep}${PHONE ? '¼ speed' : 'shown at ¼ speed'}<br>${line2}`);
 }
 window.renderFrame = renderFrame;
 
 async function boot() {
     DPR = window.devicePixelRatio || 1;
     O = await (await fetch('orbit24.json')).json(); prep();
-    P = O.T * FPS * SLOW; TOTAL = Math.ceil(INTRO + 7 * P) + 12;
+    P = O.T * FPS * SLOW; TOTAL = Math.ceil(INTRO + (6 + HOLDS) * P) + 12;
     $('h2').textContent = `two equal rods, 1 kg and 1 m each, kicked once with p = (${O.p1.toFixed(3)}, ${O.p2.toFixed(3)}) kg·m²/s. Each new picture joins on the next swing; one clock drives all six.`;
-    const c = $('cv'); c.width = 1920 * DPR; c.height = 1080 * DPR; c.style.width = '1920px'; c.style.height = '1080px'; g = c.getContext('2d');
+    const c = $('cv'); c.width = SW * DPR; c.height = SH * DPR; c.style.width = SW + 'px'; c.style.height = SH + 'px'; g = c.getContext('2d');
     PANELS.forEach((p, i) => {
-        p.elT = document.createElement('div'); p.elT.className = 'ttl'; p.elT.style.left = (p.x + 24) + 'px'; p.elT.style.top = (p.y + 20) + 'px';
+        p.elT = document.createElement('div'); p.elT.className = 'ttl'; p.elT.style.left = (p.x + 24) + 'px'; p.elT.style.top = (p.y + (PHONE ? 24 : 20)) + 'px';
         p.elT.innerHTML = `<small>${i + 1}</small>${p.title}`; $('stage').appendChild(p.elT);
-        p.elC = document.createElement('div'); p.elC.className = 'cap'; p.elC.style.left = (p.x + 24) + 'px'; p.elC.style.top = (p.y + p.h - 36) + 'px';
+        p.elC = document.createElement('div'); p.elC.className = 'cap'; p.elC.style.left = (p.x + 24) + 'px'; p.elC.style.top = (p.y + p.h - (PHONE ? 50 : 36)) + 'px';
         katex.render(p.cap, p.elC, { throwOnError: false }); $('stage').appendChild(p.elC);
     });
     await document.fonts.ready;
@@ -300,7 +318,7 @@ async function boot() {
     renderFrame(Number(Q.get('f') || 0)); window.__ready = true;
     if (!Q.get('film')) { let f = 0; const loop = () => { renderFrame(f % TOTAL); f++; requestAnimationFrame(loop); }; loop(); }
 }
-function fit() { const s = Math.min(innerWidth / 1920, innerHeight / 1080, 1); $('stage').style.transform = `scale(${s})`; }
+function fit() { const s = Math.min(innerWidth / SW, innerHeight / SH, 1); $('stage').style.transform = `scale(${s})`; }
 if (!Q.get('film')) { fit(); addEventListener('resize', fit); }
 boot();
 </script>
