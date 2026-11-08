@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A butterfly drawn by a double pendulum</title>
+<!-- Film renderer. Serve the repository root (python3 -m http.server) and open
+     tools/fig13/gift/butterfly3d.html?theme=dark|light ; tools/fig13/gift/render.js writes the frames. Not part of the site. -->
+<link rel="stylesheet" href="../../../public/vendor/katex/katex.min.css">
+<style>
+@font-face { font-family: 'Instrument Serif'; src: url(../../../public/fonts/instrument-serif/instrument-serif-400-latin.woff2) format('woff2'); font-weight: 400; }
+@font-face { font-family: 'Instrument Serif'; src: url(../../../public/fonts/instrument-serif/instrument-serif-400i-latin.woff2) format('woff2'); font-weight: 400; font-style: italic; }
+@font-face { font-family: 'IBM Plex Sans'; src: url(../../../public/fonts/ibm-plex-sans/ibm-plex-sans-400-latin.woff2) format('woff2'); font-weight: 400; }
+@font-face { font-family: 'IBM Plex Mono'; src: url(../../../public/fonts/ibm-plex-mono/ibm-plex-mono-400-latin.woff2) format('woff2'); font-weight: 400; }
+:root { --bg:#140d10; --panel:#1a1114; --rule:#3a2a2e; --ink:#f5f1ea; --ink2:#d9cdc4; --muted:#b9a59b; --accent:#e2a2aa; --wine:#7a1f2b; }
+:root[data-theme="light"] { --bg:#f5f1ea; --panel:#fffaf3; --rule:#d9d0c2; --ink:#1c1518; --ink2:#3a322e; --muted:#6f635d; --accent:#7a1f2b; --wine:#7a1f2b; }
+html, body { margin:0; background:var(--bg); }
+#stage { position:relative; width:1920px; height:1080px; background:var(--bg); color:var(--ink); font-family:'IBM Plex Sans',sans-serif; overflow:hidden; transform-origin:0 0; }
+.panel { position:absolute; background:var(--panel); border:1px solid var(--rule); border-radius:16px; overflow:hidden; }
+.panel canvas { position:absolute; inset:0; width:100%; height:100%; }
+.ttl { position:absolute; left:26px; top:18px; font-family:'Instrument Serif',serif; font-size:31px; line-height:1.1; color:var(--ink); }
+.ttl small { font-family:'IBM Plex Mono',monospace; font-size:12.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin-right:12px; }
+.eq { position:absolute; font-size:19px; color:var(--ink2); line-height:1.35; }
+.eq.m { color:var(--muted); font-size:16.5px; }
+.katex { font-size:1.02em; }
+#h1 { position:absolute; left:56px; top:30px; font-family:'Instrument Serif',serif; font-size:64px; line-height:1; margin:0; font-weight:400; }
+#h2 { position:absolute; left:58px; top:104px; font-family:'IBM Plex Mono',monospace; font-size:15px; color:var(--muted); letter-spacing:.01em; }
+#clock { position:absolute; right:56px; top:46px; font-family:'IBM Plex Mono',monospace; font-size:19px; color:var(--ink2); text-align:right; }
+#clock b { color:var(--accent); font-weight:400; }
+#status { position:absolute; left:26px; bottom:20px; width:400px; font-family:'IBM Plex Mono',monospace; font-size:16px; line-height:1.5; color:var(--muted); }
+</style>
+</head>
+<body>
+<div id="stage">
+  <h1 id="h1">A butterfly drawn by a double pendulum</h1>
+  <div id="h2">two equal rods, 1 kg and 1 m each, hang still and are kicked once. The butterfly is the real path of the lower rod's tip.</div>
+  <div id="clock"></div>
+
+  <div class="panel" id="pP" style="left:56px;top:170px;width:596px;height:520px">
+    <canvas id="cvP"></canvas>
+    <div class="ttl"><small>1</small>The pendulum</div>
+    <div class="eq m" style="left:26px;bottom:18px" id="eqP"></div>
+  </div>
+  <div class="panel" id="pC" style="left:56px;top:710px;width:596px;height:290px">
+    <canvas id="cvC"></canvas>
+    <div class="ttl"><small>2</small>The fold clock</div>
+    <div class="eq m" style="left:26px;bottom:14px" id="eqC"></div>
+  </div>
+  <div class="panel" id="pB" style="left:684px;top:170px;width:1180px;height:830px">
+    <canvas id="cvB"></canvas>
+    <div class="ttl"><small>3</small>The bell above the floor</div>
+    <div class="eq" style="left:26px;top:62px;width:430px" id="eqB1"></div>
+    <div class="eq m" style="right:26px;top:22px;text-align:right;width:380px" id="eqB2"></div>
+    <div id="status"></div>
+  </div>
+</div>
+
+<script src="../../../public/vendor/katex/katex.min.js"></script>
+<script>
+'use strict';
+const Q = new URLSearchParams(location.search);
+const THEME = Q.get('theme') === 'light' ? 'light' : 'dark';
+document.documentElement.dataset.theme = THEME;
+const $ = id => document.getElementById(id);
+const tex = (el, s) => katex.render(s, el, { throwOnError: false });
+const FPS = 30, SLOW = 8, INTRO = 45, CLOSE = 120, HOLD = 100;
+const TH = THEME === 'dark' ? {
+    bg: '#140d10', panel: '#1a1114', rule: '#3a2a2e', ink: '#f5f1ea', muted: '#b9a59b',
+    dome: [226, 162, 170], domeA: 0.15, floor: [226, 162, 170], floorA: 0.09, butterfly: '#e2a2aa', glow: 'rgba(226,162,170,0.22)',
+    lifted: [255, 246, 234], rods: '#f5f1ea', bob: '#7a1f2b', bobRing: '#f5f1ea', plumb: 'rgba(255,246,234,0.85)', head: '#fff6ea', add: 'lighter'
+} : {
+    bg: '#f5f1ea', panel: '#fffaf3', rule: '#d9d0c2', ink: '#1c1518', muted: '#6f635d',
+    dome: [60, 40, 44], domeA: 0.16, floor: [122, 31, 43], floorA: 0.07, butterfly: '#7a1f2b', glow: 'rgba(122,31,43,0.14)',
+    lifted: [77, 15, 24], rods: '#1c1518', bob: '#7a1f2b', bobRing: '#fffaf3', plumb: 'rgba(28,21,24,0.8)', head: '#7a1f2b', add: 'source-over'
+};
+const lerp = (a, b, f) => a + (b - a) * f, clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const ease = u => u < 0 ? 0 : u > 1 ? 1 : u * u * (3 - 2 * u);
+
+let O, X, Y, Z, R, DPR = 1;
+const ctxs = {};
+function setupCanvas(id) {
+    const c = $(id), r = c.getBoundingClientRect(), s = (parseFloat($('stage').dataset.scale) || 1);
+    const w = c.parentElement.offsetWidth, h = c.parentElement.offsetHeight;
+    c.width = Math.round(w * DPR); c.height = Math.round(h * DPR);
+    const g = c.getContext('2d'); ctxs[id] = { g, w, h }; return ctxs[id];
+}
+
+// ------------------------------------------------------------------------------------------------ orbit
+function at(t) { const u = clamp(t, 0, O.T) * O.rate, i = Math.min(Math.floor(u), O.th1.length - 2), f = u - i; return [i, f]; }
+function stateAt(t) { const [i, f] = at(t); return [lerp(O.th1[i], O.th1[i + 1], f), lerp(O.th2[i], O.th2[i + 1], f), i]; }
+function simTime(f) { return f < INTRO ? 0 : Math.min(O.T, (f - INTRO) / (FPS * SLOW)); }
+
+// ------------------------------------------------------------------------------------------------ 3-D camera
+function camera(f) {
+    const runEnd = INTRO + Math.round(O.T * FPS * SLOW);
+    const run = clamp((f - INTRO) / (runEnd - INTRO), 0, 1), cl = ease((f - runEnd) / CLOSE);
+    const az = lerp(lerp(-0.74, 0.12, ease(run)), 0, cl);
+    const el = lerp(lerp(0.62, 0.70, ease(run)), 1.5608, cl);
+    const Rc = 9.2, tz = lerp(0.78, 0, cl);
+    const tgt = [0, 0, tz];
+    const eye = [tgt[0] + Rc * Math.sin(az) * Math.cos(el), tgt[1] - Rc * Math.cos(az) * Math.cos(el), tgt[2] + Rc * Math.sin(el)];
+    let fw = [tgt[0] - eye[0], tgt[1] - eye[1], tgt[2] - eye[2]]; const n = Math.hypot(...fw); fw = fw.map(v => v / n);
+    const up0 = [0, 0, 1];
+    let rt = [fw[1] * up0[2] - fw[2] * up0[1], fw[2] * up0[0] - fw[0] * up0[2], fw[0] * up0[1] - fw[1] * up0[0]];
+    const rn = Math.hypot(...rt); rt = rt.map(v => v / rn);
+    const upv = [rt[1] * fw[2] - rt[2] * fw[1], rt[2] * fw[0] - rt[0] * fw[2], rt[0] * fw[1] - rt[1] * fw[0]];
+    return { eye, fw, rt, upv, cl };
+}
+let CAM = null;
+function P3(x, y, z, W, H) {
+    const v0 = x - CAM.eye[0], v1 = y - CAM.eye[1], v2 = z - CAM.eye[2];
+    const xc = v0 * CAM.rt[0] + v1 * CAM.rt[1] + v2 * CAM.rt[2];
+    const yc = v0 * CAM.upv[0] + v1 * CAM.upv[1] + v2 * CAM.upv[2];
+    const zc = v0 * CAM.fw[0] + v1 * CAM.fw[1] + v2 * CAM.fw[2];
+    const F = 1600 - 190 * CAM.cl, off = -40 + 78 * CAM.cl;
+    return [W / 2 + 4 + F * xc / zc, H / 2 + off - F * yc / zc, zc];
+}
+
+function poly(g, pts, close) { g.beginPath(); pts.forEach((p, i) => i ? g.lineTo(p[0], p[1]) : g.moveTo(p[0], p[1])); if (close) g.closePath(); }
+function rgba(c, a) { return `rgba(${c[0]},${c[1]},${c[2]},${a})`; }
+
+// ------------------------------------------------------------------------------------------------ the three views
+function drawPendulum(t) {
+    const { g, w, h } = ctxs.cvP; g.setTransform(DPR, 0, 0, DPR, 0, 0); g.clearRect(0, 0, w, h);
+    const cx = w / 2, cy = h / 2 + 14, S = 86;
+    const [t1, t2, i] = stateAt(t);
+    g.strokeStyle = TH.rule; g.lineWidth = 1.2; g.setLineDash([3, 6]); g.beginPath(); g.arc(cx, cy, 2 * S, 0, 7); g.stroke();
+    g.setLineDash([2, 5]); g.beginPath(); g.moveTo(cx, cy); g.lineTo(cx, cy + 2 * S + 6); g.stroke(); g.setLineDash([]);
+    g.lineCap = 'butt';
+    // tip trail, last 0.45 s of simulated time
+    const j0 = Math.max(0, i - Math.round(0.45 * O.rate));
+    for (let k = j0; k < i; k += 6) {
+        const a = (k - j0) / (i - j0 + 1);
+        g.strokeStyle = rgba(TH.floor.map((v, q) => q < 3 ? v : v), 0.12 + 0.75 * a); g.lineWidth = 1.2 + 2.2 * a;
+        const k2 = Math.min(i, k + 6);
+        g.beginPath(); g.moveTo(cx + S * (Math.sin(O.th1[k]) + Math.sin(O.th2[k])), cy + S * (Math.cos(O.th1[k]) + Math.cos(O.th2[k])));
+        g.lineTo(cx + S * (Math.sin(O.th1[k2]) + Math.sin(O.th2[k2])), cy + S * (Math.cos(O.th1[k2]) + Math.cos(O.th2[k2]))); g.stroke();
+    }
+    const x1 = cx + S * Math.sin(t1), y1 = cy + S * Math.cos(t1), x2 = x1 + S * Math.sin(t2), y2 = y1 + S * Math.cos(t2);
+    g.lineCap = 'round'; g.strokeStyle = TH.rods; g.lineWidth = 9; g.beginPath(); g.moveTo(cx, cy); g.lineTo(x1, y1); g.lineTo(x2, y2); g.stroke();
+    g.fillStyle = TH.panel; g.beginPath(); g.arc(cx, cy, 8, 0, 7); g.fill(); g.strokeStyle = TH.rods; g.lineWidth = 3; g.stroke();
+    for (const [x, y, r] of [[x1, y1, 13], [x2, y2, 13]]) {
+        g.fillStyle = TH.bob; g.beginPath(); g.arc(x, y, r, 0, 7); g.fill(); g.strokeStyle = TH.bobRing; g.lineWidth = 3; g.stroke();
+    }
+}
+
+function drawClock(t) {
+    const { g, w, h } = ctxs.cvC; g.setTransform(DPR, 0, 0, DPR, 0, 0); g.clearRect(0, 0, w, h);
+    const [t1, t2, i] = stateAt(t), a = (t1 - t2) / 2;
+    const cx = 120, cy = 160, Rr = 78, wx0 = 262, ww = w - wx0 - 28, win = O.T / 4;
+    g.strokeStyle = TH.rule; g.lineWidth = 1.2; g.beginPath(); g.arc(cx, cy, Rr, 0, 7); g.stroke();
+    g.beginPath(); g.moveTo(cx - Rr - 14, cy); g.lineTo(wx0 + ww, cy); g.stroke();
+    g.beginPath(); g.moveTo(cx, cy - Rr - 10); g.lineTo(cx, cy + Rr + 10); g.stroke();
+    const px = cx + Rr * Math.sin(a), py = cy - Rr * Math.cos(a);
+    g.strokeStyle = TH.muted; g.lineWidth = 1.6; g.beginPath(); g.moveTo(cx, cy); g.lineTo(px, py); g.stroke();
+    g.strokeStyle = rgba(TH.floor, 0.5); g.setLineDash([4, 5]); g.beginPath(); g.moveTo(px, py); g.lineTo(wx0, py); g.stroke(); g.setLineDash([]);
+    // the cosine, drawn from the circle's height; newest at the left
+    const k0 = Math.max(0, i - Math.round(win * O.rate)); g.lineWidth = 2.8; g.lineJoin = 'round'; g.strokeStyle = TH.butterfly; g.beginPath();
+    for (let k = i; k >= k0; k -= 2) {
+        const x = wx0 + (t - k / O.rate) / win * ww, y = cy - Rr * Math.cos((O.th1[k] - O.th2[k]) / 2);
+        k === i ? g.moveTo(x, y) : g.lineTo(x, y);
+    }
+    g.stroke();
+    g.fillStyle = TH.head; g.beginPath(); g.arc(px, py, 7, 0, 7); g.fill();
+    g.beginPath(); g.arc(wx0, py, 6, 0, 7); g.fill();
+}
+
+function drawBell(f, t) {
+    const { g, w, h } = ctxs.cvB; g.setTransform(DPR, 0, 0, DPR, 0, 0); g.clearRect(0, 0, w, h);
+    CAM = camera(f);
+    const fade = clamp(1 - CAM.cl * 0.82, 0.18, 1);           // the bell fades as the camera comes overhead
+    const appear = ease(f / 40);
+    const [t1, t2, i] = stateAt(t);
+    const pr = (x, y, z) => P3(x, y, z, w, h);
+    // floor: a disc, polar guide rings and rays
+    g.fillStyle = rgba(TH.floor, TH.floorA * appear); poly(g, Array.from({ length: 121 }, (_, k) => pr(2.08 * Math.cos(k / 120 * 6.2832), 2.08 * Math.sin(k / 120 * 6.2832), 0)), true); g.fill();
+    g.lineWidth = 1; g.strokeStyle = rgba(TH.floor, 0.28 * appear);
+    for (const rr of [0.5, 1, 1.5, 2]) { poly(g, Array.from({ length: 121 }, (_, k) => pr(rr * Math.cos(k / 120 * 6.2832), rr * Math.sin(k / 120 * 6.2832), 0)), true); g.stroke(); }
+    g.strokeStyle = rgba(TH.floor, 0.16 * appear);
+    for (let k = 0; k < 12; k++) { const aa = k / 12 * 6.2832; poly(g, [pr(0, 0, 0), pr(2 * Math.cos(aa), 2 * Math.sin(aa), 0)]); g.stroke(); }
+    // the butterfly on the floor: the real tip path, so far (the whole story stays on the floor)
+    const n = i + 1;
+    g.lineJoin = 'round'; g.lineCap = 'round';
+    const fl = []; for (let k = 0; k < n; k += 1) fl.push(pr(X[k], -Y[k], 0));
+    if (fl.length > 1) {
+        g.globalCompositeOperation = TH.add; g.strokeStyle = TH.glow; g.lineWidth = 9; poly(g, fl); g.stroke();
+        g.strokeStyle = TH.butterfly; g.lineWidth = 2.9; poly(g, fl); g.stroke(); g.globalCompositeOperation = 'source-over';
+    }
+    // the pendulum itself, on the floor
+    const j = pr(Math.sin(t1), -Math.cos(t1), 0), tip = pr(X[i], -Y[i], 0), pv = pr(0, 0, 0);
+    g.strokeStyle = TH.rods; g.lineWidth = 9 * clamp(9.2 / tip[2], 0.7, 1.4); g.globalAlpha = 0.95; poly(g, [pv, j, tip]); g.stroke(); g.globalAlpha = 1;
+    for (const p of [j, tip]) { g.fillStyle = TH.bob; g.beginPath(); g.arc(p[0], p[1], 11, 0, 7); g.fill(); g.strokeStyle = TH.bobRing; g.lineWidth = 3; g.stroke(); }
+    g.fillStyle = TH.panel; g.beginPath(); g.arc(pv[0], pv[1], 7, 0, 7); g.fill(); g.strokeStyle = TH.rods; g.lineWidth = 3; g.stroke();
+    // the bell: r = 2 cos z, z = the fold angle
+    g.lineWidth = 1;
+    for (let m = 0; m < 18; m++) {
+        const aa = m / 18 * 6.2832; g.strokeStyle = rgba(TH.dome, TH.domeA * fade * appear);
+        poly(g, Array.from({ length: 41 }, (_, k) => { const z = k / 40 * Math.PI / 2; return pr(2 * Math.cos(z) * Math.cos(aa), 2 * Math.cos(z) * Math.sin(aa), z); })); g.stroke();
+    }
+    for (const z of [0.25, 0.5, 0.75, 1.0, 1.25, 1.5]) {
+        g.strokeStyle = rgba(TH.dome, TH.domeA * 1.4 * fade * appear);
+        poly(g, Array.from({ length: 97 }, (_, k) => pr(2 * Math.cos(z) * Math.cos(k / 96 * 6.2832), 2 * Math.cos(z) * Math.sin(k / 96 * 6.2832), z)), true); g.stroke();
+    }
+    // the same path lifted onto the bell: height = fold angle. Recent part bright, older part fading.
+    const lifted = (k) => pr(X[k], -Y[k], Z[k]);
+    const agePts = Math.round(1.1 * O.rate), kStart = Math.max(0, i - 6 * O.rate);
+    g.globalCompositeOperation = TH.add;
+    for (let k = kStart; k < i; k += 8) {
+        const a = clamp(1 - (i - k) / agePts, 0.0, 1) ** 1.3 * fade; if (a < 0.02) continue;
+        const k2 = Math.min(i, k + 8), p = lifted(k), q = lifted(k2);
+        g.lineCap = 'butt';
+        g.strokeStyle = rgba(TH.lifted, 0.10 * a); g.lineWidth = 7; poly(g, [p, q]); g.stroke();
+        g.strokeStyle = rgba(TH.lifted, 0.9 * a); g.lineWidth = 2.1; poly(g, [p, q]); g.stroke();
+        g.lineCap = 'round';
+    }
+    g.globalCompositeOperation = 'source-over';
+    // the plumb line from the tip on the floor to its place on the bell, and the point itself
+    const hd = lifted(i);
+    g.strokeStyle = TH.plumb; g.lineWidth = 1.8; g.setLineDash([2, 6]); poly(g, [tip, hd]); g.stroke(); g.setLineDash([]);
+    g.strokeStyle = TH.head; g.lineWidth = 2; g.beginPath(); g.arc(tip[0], tip[1], 17, 0, 7); g.stroke();
+    g.fillStyle = TH.head; g.globalAlpha = 0.18; g.beginPath(); g.arc(hd[0], hd[1], 20, 0, 7); g.fill(); g.globalAlpha = 1;
+    g.beginPath(); g.arc(hd[0], hd[1], 7.5, 0, 7); g.fill();
+    // apex marker (the tip at the pivot, arms folded)
+    const ap = pr(0, 0, Math.PI / 2); g.fillStyle = rgba(TH.dome, 0.9 * fade); g.beginPath(); g.arc(ap[0], ap[1], 3.5, 0, 7); g.fill();
+}
+
+// ------------------------------------------------------------------------------------------------ text that changes
+let lastTxt = {};
+function setTxt(id, html) { if (lastTxt[id] !== html) { lastTxt[id] = html; $(id).innerHTML = html; } }
+function petalsDone(t) { let n = 0; while (n + 1 < O.tp.length && O.tp[n + 1] <= t + 1e-12) n++; return n; }
+function updateText(f, t) {
+    const n = petalsDone(t), runEnd = INTRO + Math.round(O.T * FPS * SLOW);
+    setTxt('clock', f < runEnd ? `t = <b>${t.toFixed(3)}</b> s &nbsp;·&nbsp; 1/${SLOW} of real speed` : `t = <b>${O.T.toFixed(3)}</b> s &nbsp;·&nbsp; the butterfly closes`);
+    setTxt('status', f < runEnd ? `petal ${n} of ${O.N}` : `${O.N} petals · wings ±${O.wing_deg.toFixed(1)}°<br>kick p = (${O.p1.toFixed(3)}, ${O.p2.toFixed(3)}) kg·m²/s`);
+}
+
+// ------------------------------------------------------------------------------------------------ frame
+let sized = false;
+function renderFrame(f) {
+    const t = simTime(f);
+    drawPendulum(t); drawClock(t); drawBell(f, t); updateText(f, t);
+}
+window.renderFrame = renderFrame;
+window.FILM = { FPS, SLOW, INTRO, CLOSE, HOLD, frames: () => INTRO + Math.round(O.T * FPS * SLOW) + CLOSE + HOLD };
+
+async function boot() {
+    DPR = window.devicePixelRatio || 1;
+    O = await (await fetch('orbit24.json')).json();
+    const n = O.th1.length; X = new Float64Array(n); Y = new Float64Array(n); Z = new Float64Array(n); R = new Float64Array(n);
+    for (let k = 0; k < n; k++) {
+        X[k] = Math.sin(O.th1[k]) + Math.sin(O.th2[k]); Y[k] = Math.cos(O.th1[k]) + Math.cos(O.th2[k]);
+        R[k] = Math.hypot(X[k], Y[k]); Z[k] = Math.acos(Math.min(1, R[k] / 2));
+    }
+    ['cvP', 'cvC', 'cvB'].forEach(setupCanvas);
+    tex($('eqP'), String.raw`\theta_1(t),\ \theta_2(t)\ \text{ from Hamilton's equations}`);
+    tex($('eqC'), String.raw`\text{angle }\tfrac{\Delta}{2},\ \Delta=\theta_1-\theta_2;\quad \text{height}=\cos\tfrac{\Delta}{2}=\tfrac{r}{2l}`);
+    tex($('eqB1'), String.raw`\text{tip}=r\,(\cos\psi,\ \sin\psi),\quad r=2l\cos\tfrac{\Delta}{2},\quad \psi=\tfrac{\theta_1+\theta_2}{2}`);
+    $('eqB2').innerHTML = 'floor: the real tip path<br>bell: the same path, lifted to height Δ/2';
+    $('eqB2').innerHTML = ''; tex($('eqB2'), String.raw`\text{floor: the tip path}\quad \text{bell: height}=\tfrac{\Delta}{2}`);
+    await document.fonts.ready;
+    await Promise.all(['IBM Plex Mono', 'IBM Plex Sans', 'Instrument Serif'].map(fn => document.fonts.load(`20px "${fn}"`)));
+    renderFrame(Number(Q.get('f') || 0));
+    window.__ready = true;
+    if (!Q.get('film')) { let f = 0; const loop = () => { renderFrame(f % (FILM.frames())); f++; requestAnimationFrame(loop); }; loop(); }
+}
+function fit() { const s = Math.min(innerWidth / 1920, innerHeight / 1080, 1); $('stage').style.transform = `scale(${s})`; $('stage').dataset.scale = s; }
+if (!Q.get('film')) { fit(); addEventListener('resize', fit); }
+boot();
+</script>
+</body>
+</html>
