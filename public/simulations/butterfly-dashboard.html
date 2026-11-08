@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Wave and the Circle · Numa Koudsie</title>
+    <meta name="description" content="A point going round a circle draws a sine wave in time. One picture shows the plane the motion happens in, its height and sideways position against time joined by straight lines, and the paper turned until each wave becomes the circle again: first a wheel, then a double pendulum that draws a butterfly.">
+    <meta name="theme-color" content="#f5f1ea">
+    <link rel="stylesheet" href="../styles/sim.css">
+    <link rel="stylesheet" href="../styles/fold.css">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%237a1f2b'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='38' fill='%23f5f1ea'%3EN%3C/text%3E%3C/svg%3E">
+    <style>
+        .sim, .sim-top { max-width: 1560px; }
+        .seg { display: inline-flex; border: 1px solid var(--line-strong, #cdc1ae); border-radius: 8px; overflow: hidden; }
+        .seg .btn { border: 0; border-radius: 0; margin: 0; }
+        .seg .btn + .btn { border-left: 1px solid var(--line-strong, #cdc1ae); }
+        .seg .btn.is-on { background: var(--accent); color: var(--card); }
+        #dash canvas { display: block; }
+    </style>
+</head>
+<body>
+    <header class="sim-top">
+        <span style="display:inline-flex;align-items:center;gap:14px"><a href="../index.html" aria-label="Phyein Usul, home page" style="display:inline-block;line-height:0"><img src="../images/phyein-usul-mark.svg" alt="Phyein Usul" width="87" height="48"></a><a href="../simulations.html">← All simulations</a></span>
+        <nav class="sim-nav" aria-label="Simulations">
+            <span>Fig.</span>
+            <a href="Circular Wave Interference Visualization.html">1</a>
+            <a href="Double Pendulum.html">2</a>
+            <a href="Interactive Double-Slit Experiment Visualization.html">3</a>
+            <a href="Transverse and longitudinal waves.html">4</a>
+            <a href="water-wave.html">5</a>
+            <a href="wave-interference.html">6</a>
+            <a href="phasor-sums.html">7</a>
+            <a href="draw-decompose.html">8</a>
+            <a href="driven-oscillator.html">9</a>
+            <a href="wind-turbine.html">10</a>
+            <a href="pendulum-control.html">11</a> <a href="beer-slosh.html">12</a> <a href="momentum-spirographs.html" aria-current="page">13</a>
+        </nav>
+    </header>
+    <noscript><p style="padding:16px">This figure needs JavaScript.</p></noscript>
+
+    <main class="sim">
+        <div class="sim__head">
+            <p class="sim__num">Fig. 13 · dashboard · from a wave to a circle</p>
+            <h1>The Wave and the Circle<span class="dot">.</span></h1>
+            <p class="sim__lede">A point that goes round a circle traces a sine wave in time. Here that happens in one picture: the plane on the left is the wall the motion happens in, the waves are its height and its sideways position against time, joined to it by straight lines. Then the paper with the wave on it is turned a quarter turn, and the wave becomes the circle again. First a wheel, then a double pendulum that draws a butterfly.</p>
+        </div>
+
+        <figure class="stage" style="margin:0">
+            <div id="dash" style="position:relative;background:#140d10;border-radius:10px 10px 0 0;overflow:hidden">
+                <canvas id="cv" aria-label="The complex plane with the moving point, its height against time to the right and its sideways position against time below, joined by straight lines"></canvas>
+            </div>
+            <figcaption class="stage__cap">
+                <span><b>Fig. 13 dashboard</b> · z = x + i h, the point in the plane it moves in · the waves h(t) and x(t) · the paper turned by φ</span>
+                <span id="cap-t">t = 0.00 s</span>
+            </figcaption>
+        </figure>
+
+        <div class="panel" style="margin-top:14px;display:flex;flex-wrap:wrap;gap:18px 28px;align-items:center">
+            <div><p class="panel__label">What moves</p>
+                <div class="seg"><button type="button" class="btn is-on" id="sc-wheel">A wheel</button><button type="button" class="btn" id="sc-bfly">The butterfly pendulum</button></div></div>
+            <div><p class="panel__label">Turning the paper</p>
+                <div class="seg"><button type="button" class="btn is-on" id="ph-auto">By itself</button><button type="button" class="btn" id="ph-hand">By hand</button></div></div>
+            <div style="min-width:240px;flex:1"><p class="panel__label">φ, the turn of the paper <span id="phi-out" style="float:right">0°</span></p>
+                <input type="range" id="phi" min="0" max="90" step="0.5" value="0" style="width:100%" aria-label="Turn of the paper in degrees"></div>
+            <div><p class="panel__label">Run</p>
+                <div class="actions" style="display:flex;gap:8px"><button type="button" class="btn" id="play">Pause</button><button type="button" class="btn btn--ghost" id="restart">Restart</button></div></div>
+            <div><p class="panel__label">Look</p>
+                <div class="seg"><button type="button" class="btn is-on" id="lk-night">Night</button><button type="button" class="btn" id="lk-paper">Paper</button></div></div>
+        </div>
+
+        <p style="margin:18px 0 0;font-size:15px;line-height:1.6;color:var(--ink-2)">More of Fig. 13: <a href="momentum-spirographs.html">Spirographs in Momentum Space</a> · <a href="flower-hunt.html">The Flower Hunt</a> · films that play in the browser: <a href="fig13/dive.html">From a kick to a butterfly</a> (phone first) · <a href="fig13/bell.html">The bell above the floor</a> · <a href="fig13/turning.html?scene=wheel">Turning the paper: a wheel</a> · <a href="fig13/turning.html?scene=butterfly">Turning the paper: the butterfly</a> · <a href="fig13/together.html">Six pictures, one clock</a></p>
+
+        <article class="paper" id="paper" aria-labelledby="paper-title">
+            <header class="paper__head">
+                <p class="paper__kicker">Study note · Fig. 13 · the wave and the circle</p>
+                <h2 class="paper__title" id="paper-title">One motion, three shadows</h2>
+            </header>
+            <section class="psec">
+                <h3>1. The plane the motion lives in</h3>
+                <p>Hold a torch level and let a bicycle wheel turn in front of a wall: the shadow of a spoke tip on the floor slides to and fro, its shadow on the side wall goes up and down. Neither shadow is a circle; both are waves. The circle is only seen from the front.</p>
+                <p>Put the front view in numbers. Call the sideways position \(x\) and the height \(h\), both in metres, and write the point as one complex number,</p>
+                \[ z = x + i\,h . \tag{1} \]
+                <p>The plane of \(z\) is not an abstraction here: it is the wall the motion happens in. For a point on a wheel of radius \(r\) turning at angular speed \(\omega\),</p>
+                \[ z(t) = r\,e^{i\omega t},\qquad x = r\cos\omega t,\qquad h = r\sin\omega t . \tag{2} \]
+                <p>For the double pendulum of two rods of length \(l\), each angle measured from straight down, the lower rod's tip sits at \(x = l(\sin\theta_1+\sin\theta_2)\), \(h = -l(\cos\theta_1+\cos\theta_2)\). Since \(-i\,e^{i\theta} = \sin\theta - i\cos\theta\),</p>
+                \[ z(t) = -i\,l\left(e^{i\theta_1(t)} + e^{i\theta_2(t)}\right). \tag{3} \]
+                <p>The two rods are two rotating arrows added head to tail; the plane on the left of the figure is the real wall the pendulum swings in. Nothing about it is a momentum picture: the kick \((p_1,p_2)\) only chooses which motion happens (<a href="momentum-spirographs.html">Fig. 13</a>).</p>
+            </section>
+            <section class="psec">
+                <h3>2. The waves and the straight lines</h3>
+                <p>The height \(h = \operatorname{Im} z\) is drawn against time to the right of the plane, at the same height scale, the newest instant at the left edge and earlier ones further right. The line joining the moving point to the head of that wave is horizontal at every instant, because both ends are at the same \(h\). The sideways position \(x = \operatorname{Re} z\) is drawn below the plane, time running downward, and joined by a vertical line, because both ends share \(x\). For the wheel these are the sine and the cosine of (2).</p>
+            </section>
+            <section class="psec">
+                <h3>3. Turning the paper</h3>
+                <p>Give every instant a third coordinate, the time axis: \(\tau = k\,a\), where \(a\) is how long ago the instant was and \(k\) is a scale in pixels per second. The motion becomes a curve in space, \((x, h, \tau)\): a helix for the wheel. Each panel is a view of that one curve. Turn the view by \(\varphi\) about the vertical axis through the middle of the panel, \(\tau_c\):</p>
+                \[ \text{screen } x = \tau_c + (\tau-\tau_c)\cos\varphi + x\sin\varphi,\qquad \text{screen } y = h . \tag{4} \]
+                <p>At \(\varphi = 0\) the panel shows \((\tau, h)\), the wave. At \(\varphi = 90^\circ\) the time axis points at the reader, every \(\tau\) lands on the same place, and the panel shows \((x, h)\): the circle, or the butterfly. In between, the wave is seen at a slant and looks like a spring. The height never changes under this turn, so the horizontal line stays horizontal throughout. The panel below turns the same way about a horizontal axis, keeping \(x\), so its line stays vertical.</p>
+                <p>The turn is a rotation, so it is undone by turning back: a circle seen edge-on along time is a wave, and a wave seen end-on along time is a circle. Which picture appears depends only on where one looks from.</p>
+            </section>
+            <section class="psec">
+                <h3>4. What the butterfly needs</h3>
+                <p>The butterfly is the pendulum kicked with \(p = (3.557, 12.211)\) kg·m²/s from hanging still. Its state returns to the start after \(T = 2.659\) s (to about \(10^{-11}\), found by Newton's method on Hamilton's equations; see <a href="flower-hunt.html">The Flower Hunt</a>), so its path closes after 24 petals. It is shown here at a quarter of real speed. In a frictionless model it repeats for ever; a real one loses energy to friction, and this orbit is weakly unstable (a small error grows by about 2 % per lap), so it drifts after a minute or two.</p>
+            </section>
+        </article>
+    </main>
+
+    <script src="../scripts/fold.js"></script>
+    <script src="../scripts/sim.js"></script>
+<script>
+(() => {
+'use strict';
+// Fig. 13 dashboard: the complex plane z = x + i h (the plane the motion happens in), its height h(t) to the right joined by a
+// horizontal line, its sideways position x(t) below joined by a vertical line, and the two wave panels turned by phi about the
+// axis through their middle (study note, eq. 4): screen x = tau_c + (tau - tau_c) cos phi + x sin phi, screen y = h.
+const $ = id => document.getElementById(id);
+const lerp = (a, b, f) => a + (b - a) * f, clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const ease = u => u <= 0 ? 0 : u >= 1 ? 1 : u * u * (3 - 2 * u);
+const NIGHT = { bg: '#140d10', panel: '#1a1114', rule: '#3a2a2e', ink: '#f5f1ea', muted: '#b9a59b', accent: '#e2a2aa', link: 'rgba(255,246,234,0.75)',
+    ramp: [[255, 246, 234], [226, 162, 170], [122, 31, 43]], glow: 0.18, add: 'lighter', rods: '#f5f1ea', bob: '#7a1f2b', ring: '#f5f1ea', head: '#fff6ea', sheet: 'rgba(226,162,170,0.06)', sheetEdge: 'rgba(226,162,170,0.3)' };
+const PAPER = { bg: '#fffaf3', panel: '#fffaf3', rule: '#d9d0c2', ink: '#1c1518', muted: '#6f635d', accent: '#7a1f2b', link: 'rgba(28,21,24,0.6)',
+    ramp: [[28, 21, 24], [122, 31, 43], [226, 162, 170]], glow: 0.08, add: 'source-over', rods: '#1c1518', bob: '#7a1f2b', ring: '#fffaf3', head: '#7a1f2b', sheet: 'rgba(122,31,43,0.04)', sheetEdge: 'rgba(122,31,43,0.3)' };
+let TH = NIGHT;
+const col = (u, a) => { const r = TH.ramp, k = u < 0.5 ? 0 : 1, f = u < 0.5 ? u * 2 : (u - 0.5) * 2, c = r[k].map((v, i) => Math.round(v + (r[k + 1][i] - v) * f)); return `rgba(${c[0]},${c[1]},${c[2]},${a})`; };
+
+// ------------------------------------------------------------------------------------------------ the two motions
+let O = null;                                     // the closed 24-petal orbit (fig13/orbit24.json), samples spaced T/(n-1)
+const SCENES = {
+    wheel: { T: 4, speed: 1, R: 2, name: 'a point on a wheel of radius 2 m, one turn in 4 s',
+             z: t => { const w = 2 * Math.PI / 4; return [2 * Math.cos(w * t), 2 * Math.sin(w * t)]; },
+             arms: t => { const w = 2 * Math.PI / 4; return [[0, 0], [2 * Math.cos(w * t), 2 * Math.sin(w * t)]]; } },
+    bfly:  { T: 2.659405430607505, speed: 0.25, R: 2, name: 'two rods of 1 m, kicked once from hanging still, p = (3.557, 12.211) kg·m²/s',
+             z: t => { const [a, b] = ang(t); return [Math.sin(a) + Math.sin(b), -(Math.cos(a) + Math.cos(b))]; },
+             arms: t => { const [a, b] = ang(t); return [[0, 0], [Math.sin(a), -Math.cos(a)], [Math.sin(a) + Math.sin(b), -(Math.cos(a) + Math.cos(b))]]; } }
+};
+function ang(t) {
+    const n = O.th1.length, u = ((t % O.T) + O.T) % O.T / O.T * (n - 1), i = Math.min(Math.floor(u), n - 2), f = u - i;
+    return [lerp(O.th1[i], O.th1[i + 1], f), lerp(O.th2[i], O.th2[i + 1], f)];
+}
+let SC = SCENES.wheel, NS = 1600, XS, HS;       // one period sampled at NS points (the curve is periodic)
+function sample() {
+    XS = new Float64Array(NS + 1); HS = new Float64Array(NS + 1);
+    for (let j = 0; j <= NS; j++) { const [x, h] = SC.z(SC.T * j / NS); XS[j] = x; HS[j] = h; }
+}
+const atAge = (t, age) => { const u = (((t - age) % SC.T) + SC.T) % SC.T / SC.T * NS, j = Math.floor(u), f = u - j; return [lerp(XS[j], XS[j + 1], f), lerp(HS[j], HS[j + 1], f)]; };
+
+// ------------------------------------------------------------------------------------------------ layout (logical px), wide or tall
+let L, W, H, K = 1, DPR = 1;
+function layout() {
+    const box = $('dash'), cw = box.clientWidth, tall = cw < 760;
+    if (tall) { W = 900; H = 1420; L = { tall, plane: { x: 24, y: 24, s: 426 }, hw: { x: 474, y: 24, w: 402, h: 426 }, xw: { x: 24, y: 474, w: 426, h: 560 }, txt: { x: 474, y: 474, w: 402, h: 560 }, notes: { x: 24, y: 1058, w: 852, h: 338 }, fs: 23 }; }
+    else { W = 1600; H = 1000; L = { tall, plane: { x: 30, y: 30, s: 480 }, hw: { x: 540, y: 30, w: 1030, h: 480 }, xw: { x: 30, y: 540, w: 480, h: 430 }, txt: { x: 540, y: 540, w: 1030, h: 430 }, fs: 19 }; }
+    L.S = L.plane.s / 2 / 2.35; L.cx = L.plane.x + L.plane.s / 2; L.cy = L.plane.y + L.plane.s / 2;
+    K = cw / W; DPR = window.devicePixelRatio || 1;
+    const c = $('cv'); c.style.width = cw + 'px'; c.style.height = Math.round(H * K) + 'px'; c.width = Math.round(cw * DPR); c.height = Math.round(H * K * DPR);
+    box.style.height = Math.round(H * K) + 'px';
+}
+
+// ------------------------------------------------------------------------------------------------ clock and the turn
+let t = 0, running = true, auto = true, phiHand = 0, cyc = 0;      // cyc: seconds of real time since the scene began
+function phiAuto() {                                                // one lap drawn flat, turn 5 s, hold one lap, turn back 5 s, hold one lap
+    const lap = SC.T / SC.speed, c = [lap, 5, lap, 5, lap], tot = c.reduce((a, b) => a + b);
+    let u = cyc < lap ? cyc : (cyc - lap) % (tot - lap) + lap, k = 0;
+    while (k < c.length - 1 && u >= c[k]) { u -= c[k]; k++; }
+    return [0, ease(u / 5), 1, 1 - ease(u / 5), 0][k] * Math.PI / 2;
+}
+const phiNow = () => auto ? phiAuto() : phiHand * Math.PI / 180;
+
+// ------------------------------------------------------------------------------------------------ drawing
+let g;
+function box(b, w, h) { g.fillStyle = TH.panel; g.strokeStyle = TH.rule; g.lineWidth = 1.2; g.beginPath(); g.roundRect(b.x, b.y, w, h, 12); g.fill(); g.stroke(); }
+function text(s, x, y, size, color, align) { g.fillStyle = color; g.font = `${size}px "IBM Plex Mono", monospace`; g.textAlign = align || 'left'; g.fillText(s, x, y); }
+function draw() {
+    if (!g || !O) return;                                           // nothing to draw before the orbit has loaded
+    g.setTransform(DPR * K, 0, 0, DPR * K, 0, 0);
+    g.fillStyle = TH.bg; g.fillRect(0, 0, W, H);
+    const S = L.S, cx = L.cx, cy = L.cy, P = L.plane, phi = phiNow(), c = Math.cos(phi), s = Math.sin(phi), drawn = Math.min(t, SC.T);
+    // --- the complex plane: the wall the motion happens in
+    box(P, P.s, P.s);
+    g.save(); g.beginPath(); g.roundRect(P.x, P.y, P.s, P.s, 12); g.clip();
+    g.strokeStyle = TH.rule; g.lineWidth = 1;
+    g.beginPath(); g.moveTo(P.x, cy); g.lineTo(P.x + P.s, cy); g.moveTo(cx, P.y); g.lineTo(cx, P.y + P.s); g.stroke();
+    g.setLineDash([3, 6]); for (const r of [1, 2]) { g.beginPath(); g.arc(cx, cy, r * S, 0, 7); g.stroke(); } g.setLineDash([]);
+    text('Re z = x  (sideways, m) →', P.x + P.s - 12, P.y + P.s - 12, L.fs - 5, TH.muted, 'right');
+    text('↑ Im z = h  (height, m)', P.x + 12, P.y + 24, L.fs - 5, TH.muted);
+    // the light the point has left: everything since the start, up to one lap
+    curve(age => { const [x, h] = atAge(t, age); return [cx + S * x, cy - S * h, 0]; }, drawn, 2.2, true);
+    // the arrows (the spoke, or the two rods): z is their sum
+    const arms = SC.arms(t); g.lineCap = 'round';
+    g.strokeStyle = TH.rods; g.lineWidth = SC === SCENES.wheel ? 3.5 : 6; g.beginPath();
+    arms.forEach(([x, h], i) => i ? g.lineTo(cx + S * x, cy - S * h) : g.moveTo(cx + S * x, cy - S * h)); g.stroke();
+    for (let i = 1; i < arms.length; i++) { g.fillStyle = TH.bob; g.beginPath(); g.arc(cx + S * arms[i][0], cy - S * arms[i][1], i === arms.length - 1 ? 9 : 8, 0, 7); g.fill(); g.strokeStyle = TH.ring; g.lineWidth = 2.4; g.stroke(); }
+    g.fillStyle = TH.panel; g.beginPath(); g.arc(cx, cy, 5.5, 0, 7); g.fill(); g.strokeStyle = TH.rods; g.lineWidth = 2.4; g.stroke();
+    g.restore();
+    const [zx, zh] = SC.z(t), px = cx + S * zx, py = cy - S * zh;
+    // --- h(t) to the right, turned about the vertical axis through its middle
+    const HW = L.hw, kH = HW.w / SC.T, tcH = HW.w / 2;
+    box(HW, HW.w, HW.h);
+    g.save(); g.beginPath(); g.roundRect(HW.x, HW.y, HW.w, HW.h, 12); g.clip();
+    const sxH = (tau, x) => HW.x + tcH + (tau - tcH) * c + S * x * s;
+    sheet([[sxH(0, 0), cy - S * 2.3], [sxH(HW.w, 0), cy - S * 2.3], [sxH(HW.w, 0), cy + S * 2.3], [sxH(0, 0), cy + S * 2.3]]);
+    g.strokeStyle = TH.rule; g.beginPath(); g.moveTo(sxH(0, 0), cy); g.lineTo(sxH(HW.w, 0), cy); g.stroke();
+    curve(age => { const [x, h] = atAge(t, age); return [sxH(age * kH, x), cy - S * h, -(age * kH - tcH) * s + S * x * c]; }, drawn, 2.2, false);
+    const aT = clamp((c - 0.87) / 0.1, 0, 1), aS = clamp((s - 0.87) / 0.1, 0, 1);
+    if (aT > 0) { g.globalAlpha = aT; text('now', HW.x + 10, HW.y + HW.h - 14, L.fs - 4, TH.muted); text('earlier →', HW.x + HW.w - 12, HW.y + HW.h - 14, L.fs - 4, TH.muted, 'right'); }
+    if (aS > 0) { g.globalAlpha = aS; text('the time axis points at you', HW.x + HW.w / 2, HW.y + HW.h - 14, L.fs - 4, TH.muted, 'center'); }
+    g.globalAlpha = 1;
+    text(`h(t) = Im z · φ = ${(phi * 180 / Math.PI).toFixed(0)}°`, HW.x + 14, HW.y + 28, L.fs - 1, TH.ink);
+    g.restore();
+    const hx = sxH(0, zx);
+    // --- x(t) below, turned about the horizontal axis through its middle
+    const XW = L.xw, kX = XW.h / SC.T, tcX = XW.h / 2;
+    box(XW, XW.w, XW.h);
+    g.save(); g.beginPath(); g.roundRect(XW.x, XW.y, XW.w, XW.h, 12); g.clip();
+    const syX = (tau, h) => XW.y + tcX + (tau - tcX) * c - S * h * s;
+    sheet([[cx - S * 2.3, syX(0, 0)], [cx + S * 2.3, syX(0, 0)], [cx + S * 2.3, syX(XW.h, 0)], [cx - S * 2.3, syX(XW.h, 0)]]);
+    g.strokeStyle = TH.rule; g.beginPath(); g.moveTo(cx, syX(0, 0)); g.lineTo(cx, syX(XW.h, 0)); g.stroke();
+    curve(age => { const [x, h] = atAge(t, age); return [cx + S * x, syX(age * kX, h), -(age * kX - tcX) * s - S * h * c]; }, drawn, 2.2, false);
+    if (aT > 0) { g.globalAlpha = aT; text('now', XW.x + 12, XW.y + 26, L.fs - 4, TH.muted); text('earlier ↓', XW.x + XW.w - 12, XW.y + XW.h - 14, L.fs - 4, TH.muted, 'right'); }
+    g.globalAlpha = 1;
+    text(`x(t) = Re z`, XW.x + 14, XW.y + XW.h - 14 - (aT > 0 ? 0 : 0), L.fs - 1, TH.ink);
+    g.restore();
+    const xy = syX(0, zh);
+    // --- the straight lines: same h to the right, same x below
+    g.strokeStyle = TH.link; g.lineWidth = 1.6;
+    g.beginPath(); g.moveTo(px, py); g.lineTo(hx, py); g.moveTo(px, py); g.lineTo(px, xy); g.stroke();
+    for (const [x, y, r] of [[px, py, 7], [hx, py, 6], [px, xy, 6]]) { g.fillStyle = TH.head; g.globalAlpha = 0.22; g.beginPath(); g.arc(x, y, r * 2.2, 0, 7); g.fill(); g.globalAlpha = 1; g.beginPath(); g.arc(x, y, r, 0, 7); g.fill(); }
+    // --- the words
+    const fs = L.fs, wheel = SC === SCENES.wheel;
+    const head = [[wheel ? 'A wheel' : 'The butterfly', fs + 6, TH.ink], ['', fs * 0.4, TH.ink],
+        [`t = ${(t % SC.T).toFixed(2)} s`, fs, TH.ink], [`of a ${SC.T.toFixed(2)} s lap`, fs - 3, TH.muted],
+        [SC.speed === 1 ? 'real speed' : `at ${SC.speed}× real speed`, fs - 3, TH.muted], ['', fs * 0.4, TH.ink],
+        [`x = ${zx.toFixed(2)} m`, fs, TH.ink], [`h = ${zh.toFixed(2)} m`, fs, TH.ink], ['', fs * 0.4, TH.ink],
+        [`φ = ${(phi * 180 / Math.PI).toFixed(1)}°`, fs + 2, TH.accent], [`0°: the wave · 90°: the ${wheel ? 'circle' : 'butterfly'}`, fs - 4, TH.muted]];
+    const more = [[wheel ? SC.name : 'two rods of 1 m, kicked once from hanging still, p = (3.557, 12.211) kg·m²/s', fs - 4, TH.muted], ['', fs * 0.5, TH.ink],
+        ['screen x = τc + (τ − τc) cos φ + x sin φ', fs - 2, TH.ink], ['screen y = h   (unchanged, so the line stays level)', fs - 2, TH.ink], ['', fs * 0.5, TH.ink],
+        [wheel ? 'z = 2·exp(iωt):  h = 2 sin ωt,  x = 2 cos ωt' : 'z = −i l (exp(iθ₁) + exp(iθ₂))', fs - 2, TH.ink],
+        [wheel ? 'the spoke is the arrow z' : 'the two rods are the two arrows; their sum is the tip', fs - 3, TH.muted]];
+    const write = (bx, list, framed) => { if (framed) box(bx, bx.w, bx.h); let y = bx.y + 38; for (const [s1, size, color] of list) { if (s1) text(s1, bx.x + 18, y, size, color); y += size * 1.5; if (y > bx.y + bx.h - 6) break; } };
+    if (L.notes) { write(L.txt, head, true); write(L.notes, more, true); }
+    else { const T0 = L.txt; box(T0, T0.w, T0.h); write({ x: T0.x, y: T0.y, w: 330, h: T0.h }, head, false); write({ x: T0.x + 340, y: T0.y + 46, w: T0.w - 340, h: T0.h - 46 }, more, false); }
+    $('cap-t').textContent = `t = ${t.toFixed(2)} s · φ = ${(phi * 180 / Math.PI).toFixed(0)}°`;
+    if (auto) { $('phi').value = (phi * 180 / Math.PI).toFixed(1); $('phi-out').textContent = Math.round(phi * 180 / Math.PI) + '°'; }
+}
+function sheet(pts) { g.fillStyle = TH.sheet; g.strokeStyle = TH.sheetEdge; g.lineWidth = 1; g.beginPath(); pts.forEach(([x, y], i) => i ? g.lineTo(x, y) : g.moveTo(x, y)); g.closePath(); g.fill(); g.stroke(); }
+// a curve given by age (s ago) -> [x, y, depth]; coloured by age (new bright), nearer parts brighter
+function curve(P, span, lw, flat) {
+    if (span <= 0) return;
+    const n = Math.max(2, Math.round(span / SC.T * NS)), step = span / n, CH = 16;   // CH points per chunk, one colour per chunk
+    const pts = []; for (let j = 0; j <= n; j++) pts.push(P(j * step));
+    g.globalCompositeOperation = TH.add; g.lineJoin = 'round'; g.lineCap = 'butt';
+    for (const pass of [0, 1]) {
+        for (let j0 = 0; j0 < n; j0 += CH) {
+            const j1 = Math.min(n, j0 + CH), m = pts[(j0 + j1) >> 1], u = ((j0 + j1) / 2) / n;
+            const near = flat ? 1 : clamp(0.65 - 0.35 * m[2] / 260, 0.3, 1);
+            g.strokeStyle = col(u, (pass ? 0.95 : TH.glow) * near); g.lineWidth = pass ? lw : lw * 3;
+            g.beginPath(); g.moveTo(pts[j0][0], pts[j0][1]); for (let j = j0 + 1; j <= j1; j++) g.lineTo(pts[j][0], pts[j][1]); g.stroke();
+        }
+    }
+    g.globalCompositeOperation = 'source-over';
+}
+
+// ------------------------------------------------------------------------------------------------ controls and loop
+function setScene(k) { if (!O) return; SC = SCENES[k]; t = 0; cyc = 0; sample(); $('sc-wheel').classList.toggle('is-on', k === 'wheel'); $('sc-bfly').classList.toggle('is-on', k === 'bfly'); draw(); }
+function setAuto(a) { auto = a; $('ph-auto').classList.toggle('is-on', a); $('ph-hand').classList.toggle('is-on', !a); }
+$('sc-wheel').onclick = () => setScene('wheel'); $('sc-bfly').onclick = () => setScene('bfly');
+$('ph-auto').onclick = () => setAuto(true); $('ph-hand').onclick = () => { phiHand = phiNow() * 180 / Math.PI; setAuto(false); };
+$('phi').oninput = e => { setAuto(false); phiHand = +e.target.value; $('phi-out').textContent = Math.round(phiHand) + '°'; draw(); };
+$('play').onclick = () => { running = !running; $('play').textContent = running ? 'Pause' : 'Play'; };
+$('restart').onclick = () => { t = 0; cyc = 0; draw(); };
+function look(night) { TH = night ? NIGHT : PAPER; $('dash').style.background = TH.bg; $('lk-night').classList.toggle('is-on', night); $('lk-paper').classList.toggle('is-on', !night); draw(); }
+$('lk-night').onclick = () => look(true); $('lk-paper').onclick = () => look(false);
+let last = null;
+function frame(ts) {
+    if (running && last !== null) { const dt = Math.min(0.05, (ts - last) / 1000); t += dt * SC.speed; cyc += dt; }
+    last = ts; draw(); requestAnimationFrame(frame);
+}
+window.addEventListener('resize', () => { if (g) { layout(); draw(); } });
+fetch('fig13/orbit24.json').then(r => r.json()).then(o => {
+    O = o; SCENES.bfly.T = O.T;
+    g = $('cv').getContext('2d'); layout(); sample(); draw();
+    window.__dash = { scene: setScene, set: (tt, cc, ph) => { t = tt; cyc = cc; if (ph !== undefined) { auto = false; phiHand = ph; } draw(); }, pause: () => { running = false; }, state: () => ({ t, cyc, phi: phiNow(), scene: SC === SCENES.wheel ? 'wheel' : 'bfly' }) };
+    requestAnimationFrame(frame);
+});
+})();
+</script>
+</body>
+</html>

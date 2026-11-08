@@ -48,7 +48,7 @@ canvas { position:absolute; left:0; top:0; }
 <script>
 'use strict';
 const Q = new URLSearchParams(location.search);
-const THEME = Q.get('theme') === 'light' ? 'light' : 'dark', PHONE = Q.get('scene') === 'phone';   // scene=phone: portrait 1080 x 1920
+const THEME = Q.get('theme') === 'light' ? 'light' : 'dark', PHONE = Q.get('scene') === 'phone' || (!Q.get('film') && Q.get('scene') !== 'wide' && innerWidth < innerHeight);   // a portrait screen gets the phone layout   // scene=phone: portrait 1080 x 1920
 document.documentElement.dataset.layout = PHONE ? 'phone' : 'wide';
 const SW = PHONE ? 1080 : 1920, SH = PHONE ? 1920 : 1080, LF = PHONE ? 20 : 14;   // stage size, canvas label font (px)
 document.documentElement.dataset.theme = THEME;
