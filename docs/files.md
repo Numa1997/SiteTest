@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-1332 files, 65.2 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+1363 files, 68.6 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -12,17 +12,17 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Pages under public/](#pages-under-public) | 5 |
 | [German pages (generated)](#german-pages-generated) | 16 |
 | [Arabic pages (generated)](#arabic-pages-generated) | 16 |
-| [Simulation pages](#simulation-pages) | 14 |
+| [Simulation pages](#simulation-pages) | 24 |
 | [Walkthroughs](#walkthroughs) | 36 |
 | [Ledgers of the data panel](#ledgers-of-the-data-panel) | 5 |
-| [Shared scripts](#shared-scripts) | 18 |
+| [Shared scripts](#shared-scripts) | 20 |
 | [Stylesheets](#stylesheets) | 15 |
 | [KaTeX](#katex) | 24 |
 | [Latin Modern](#latin-modern) | 5 |
 | [IBM Plex, Instrument Serif, and the Arabic faces](#ibm-plex-instrument-serif-and-the-arabic-faces) | 61 |
 | [Thumbnails](#thumbnails) | 13 |
 | [Figures of Double Pendulum under Control](#figures-of-double-pendulum-under-control) | 4 |
-| [Logo](#logo) | 1 |
+| [Logo](#logo) | 2 |
 | [The CV page](#the-cv-page) | 4 |
 | [Project copy: Droplet Collection](#project-copy-droplet-collection) | 11 |
 | [Project copy: Rotor Pendula](#project-copy-rotor-pendula) | 2 |
@@ -34,8 +34,8 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Source of the Droplet Collection study (not served)](#source-of-the-droplet-collection-study-not-served) | 96 |
 | [Shared by the portfolio sources (not served)](#shared-by-the-portfolio-sources-not-served) | 1 |
 | [Template sources](#template-sources) | 2 |
-| [Documentation](#documentation) | 36 |
-| [Tools](#tools) | 45 |
+| [Documentation](#documentation) | 37 |
+| [Tools](#tools) | 62 |
 | [Translation tables](#translation-tables) | 52 |
 | [Agents of the lecture-note review](#agents-of-the-lecture-note-review) | 4 |
 | [Working notes of the Rotor Pendula study](#working-notes-of-the-rotor-pendula-study) | 86 |
@@ -63,7 +63,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | File | Size | What it is | Explained in |
 |---|---|---|---|
 | [`public/_headers`](../public/_headers) | 2.1 kB | Response headers Cloudflare sets on phyeinusul.com: security headers on every file, a year of caching for font files; read by Cloudflare, never served. | [usul.md](usul.md) |
-| [`public/_redirects`](../public/_redirects) | 9.1 kB | Each page at its short address (x, folder/, /), for Cloudflare with html_handling none; written by tools/redirects.py, read by Cloudflare, never served. | [usul.md](usul.md) |
+| [`public/_redirects`](../public/_redirects) | 10.0 kB | Each page at its short address (x, folder/, /), for Cloudflare with html_handling none; written by tools/redirects.py, read by Cloudflare, never served. | [usul.md](usul.md) |
 | [`public/portfolios.html`](../public/portfolios.html) | 42.8 kB | The Portfolios page: the two research projects. | [pages.md](pages.md) |
 | [`public/robots.txt`](../public/robots.txt) | 58 B | Instructions for search-engine crawlers. | [pages.md](pages.md) |
 | [`public/simulations.html`](../public/simulations.html) | 12.7 kB | The simulations catalog: one titled fold card per simulation, search and chips. | [pages.md](pages.md) |
@@ -119,9 +119,19 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/simulations/Interactive Double-Slit Experiment Visualization.html`](../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html) | 178.4 kB | Fig. 3 · Double-Slit Interference: the simulation, its data panel, walkthrough and lecture note. | [fig03-double-slit.md](simulations/fig03-double-slit.md) |
 | [`public/simulations/Transverse and longitudinal waves.html`](../public/simulations/Transverse%20and%20longitudinal%20waves.html) | 209.2 kB | Fig. 4 · Transverse & Longitudinal: the simulation, its data panel, walkthrough and lecture note. | [fig04-transverse-longitudinal.md](simulations/fig04-transverse-longitudinal.md) |
 | [`public/simulations/beer-slosh.html`](../public/simulations/beer-slosh.html) | 396.7 kB | Fig. 12 · A Pint of Guinness on a One-Wheel Cart: the simulation, its data panel, walkthrough and lecture note. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`public/simulations/butterfly-dashboard.html`](../public/simulations/butterfly-dashboard.html) | 26.7 kB | Fig. 13 dashboard · The Wave and the Circle: the complex plane of the motion, its height and sideways position against time joined by straight lines, and the paper turned until each wave is the circle again (a wheel, the butterfly). | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`public/simulations/double-inverted-pendulum.html`](../public/simulations/double-inverted-pendulum.html) | 369.4 kB | Project 05 · Balancing Two Rods on a Cart (Fig. 11 from 3 to 4 November 2026), in vacuum and air since 7 November 2026: the real-time simulation, its data panel, walkthrough and lecture note; listed on the Projects page, kept at this address so that its German and Arabic pages are generated with the simulations. | [fig11-double-inverted-pendulum.md](simulations/fig11-double-inverted-pendulum.md) |
 | [`public/simulations/draw-decompose.html`](../public/simulations/draw-decompose.html) | 224.0 kB | Fig. 8 · Draw & Decompose: the simulation, its data panel, walkthrough and lecture note. | [fig08-draw-decompose.md](simulations/fig08-draw-decompose.md) |
 | [`public/simulations/driven-oscillator.html`](../public/simulations/driven-oscillator.html) | 342.6 kB | Fig. 9 · Driven Oscillator: the simulation, its data panel, walkthrough and lecture note. | [fig09-driven-oscillator.md](simulations/fig09-driven-oscillator.md) |
+| [`public/simulations/fig13/bell.html`](../public/simulations/fig13/bell.html) | 19.3 kB | Fig. 13 film that plays live in the browser, generated by tools/fig13/gift/publish_films.py from tools/fig13/gift/butterfly3d.html; do not edit. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
+| [`public/simulations/fig13/dive.html`](../public/simulations/fig13/dive.html) | 20.2 kB | Fig. 13 film that plays live in the browser, generated by tools/fig13/gift/publish_films.py from tools/fig13/gift/dive.html; do not edit. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
+| [`public/simulations/fig13/dive/dive.bin`](../public/simulations/fig13/dive/dive.bin) | 2.33 MB | Data of the dive film, copied by publish_films.py: float32 angles of the 81 pendulums, 400 samples per second for 9 s. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
+| [`public/simulations/fig13/dive/dive.json`](../public/simulations/fig13/dive/dive.json) | 36.6 kB | Data of the dive film, copied by publish_films.py: the 9 x 9 grid of kicks and the butterfly's momenta. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
+| [`public/simulations/fig13/orbit24.json`](../public/simulations/fig13/orbit24.json) | 172.8 kB | The closed 24-petal butterfly orbit (theta1, theta2 over one period), copied from tools/fig13/gift/ by publish_films.py. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
+| [`public/simulations/fig13/together.html`](../public/simulations/fig13/together.html) | 27.2 kB | Fig. 13 film that plays live in the browser, generated by tools/fig13/gift/publish_films.py from tools/fig13/gift/together.html; do not edit. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
+| [`public/simulations/fig13/turning.html`](../public/simulations/fig13/turning.html) | 18.5 kB | Fig. 13 film that plays live in the browser, generated by tools/fig13/gift/publish_films.py from tools/fig13/gift/morph.html; do not edit. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
+| [`public/simulations/flower-hunt.html`](../public/simulations/flower-hunt.html) | 38.6 kB | Fig. 13 study · The Flower Hunt: closed flowers and butterflies found as periodic orbits by Newton's method, a test bench and study notes. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
+| [`public/simulations/momentum-spirographs.html`](../public/simulations/momentum-spirographs.html) | 18.7 kB | Fig. 13 · Spirographs in Momentum Space: a live grid of double pendulums, each kicked with the (p1, p2) of its cell, drawn as long exposures over the chaos map. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`public/simulations/pendulum-control.html`](../public/simulations/pendulum-control.html) | 208.0 kB | Fig. 11 · Double Pendulum under Control: the simulation, its data panel, walkthrough and lecture note. | [fig11-pendulum-control.md](simulations/fig11-pendulum-control.md) |
 | [`public/simulations/phasor-sums.html`](../public/simulations/phasor-sums.html) | 273.1 kB | Fig. 7 · Phasor Sums: the simulation, its data panel, walkthrough and lecture note. | [fig07-phasor-sums.md](simulations/fig07-phasor-sums.md) |
 | [`public/simulations/rods-in-liquid.html`](../public/simulations/rods-in-liquid.html) | 403.2 kB | Project 06 · Balancing Two Rods in a Liquid (7 November 2026): project 05's script with its own settings, a machine that can swing the rods up in water, glycerol and honey, a slim cart, and the controller told the flow; data panel, walkthrough dipc and lecture note. | [project06-rods-in-liquid.md](simulations/project06-rods-in-liquid.md) |
@@ -188,6 +198,8 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/scripts/curve.js`](../public/scripts/curve.js) | 46.9 kB | Parameter curves: a knob that moves by itself along a chosen or drawn curve while the figure runs; writes every number into the page's store. | [curve.md](scripts/curve.md) |
 | [`public/scripts/datalog.js`](../public/scripts/datalog.js) | 104.7 kB | The data panel as a bookkeeper: headline, ledger table, books, Read values, Check, Record one round, Save (.npz + CSV). | [datalog.md](scripts/datalog.md) |
 | [`public/scripts/dataset.js`](../public/scripts/dataset.js) | 8.6 kB | Sim.dataset(): the one named data store each simulation writes its numbers into. | [dataset.md](scripts/dataset.md) |
+| [`public/scripts/fig13-engine.js`](../public/scripts/fig13-engine.js) | 6.0 kB | Fig. 13: the general double pendulum (Hamilton's equations, RK4) and the long-exposure plate, shared by the Fig. 13 pages. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
+| [`public/scripts/fig13-hunt-data.js`](../public/scripts/fig13-hunt-data.js) | 17.7 kB | Fig. 13: the flowers and butterflies of the flower hunt, written by tools/fig13/hunt_export.py; do not edit. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`public/scripts/flip.js`](../public/scripts/flip.js) | 3.5 kB | Turns the page over on a change of language (cross-document view transition), and only then. | [i18n.md](i18n.md) |
 | [`public/scripts/fold.js`](../public/scripts/fold.js) | 25.5 kB | Fold-out sections on every page: pinned header bands, remembered state, Expand/Collapse all. | [fold.md](scripts/fold.md) |
 | [`public/scripts/guinness-glass.js`](../public/scripts/guinness-glass.js) | 3.1 kB | Fig. 12: inner radius of the Guinness tulip pint every 0.5 mm, written by tools/fig12/glass_profile.py; do not edit. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
@@ -379,6 +391,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
+| [`public/images/fig13/chaos-map-rods-P20.png`](../public/images/fig13/chaos-map-rods-P20.png) | 318.2 kB | Fig. 13: the chaos map of momentum space (equal rods, P = 20 kg m^2/s), written by tools/fig13/map_png.py from chaos_map.py. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`public/images/phyein-usul-mark.svg`](../public/images/phyein-usul-mark.svg) | 178.4 kB | The Phyein Usul logo: above the name on the home page, linking home in the top bar of the other pages. | [assets.md](assets.md) |
 
 ## The CV page
@@ -746,6 +759,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`docs/simulations/fig11-double-inverted-pendulum.md`](simulations/fig11-double-inverted-pendulum.md) | 61.0 kB | Documentation: Project 05 · Balancing Two Rods on a Cart (Fig. 11 from 3 to 4 November 2026). | [fig11-double-inverted-pendulum.md](simulations/fig11-double-inverted-pendulum.md) |
 | [`docs/simulations/fig11-pendulum-control.md`](simulations/fig11-pendulum-control.md) | 28.8 kB | Documentation: Fig. 11 · Double Pendulum under Control (Fig. 11 again since 4 November 2026; a project from 3 to 4 November). | [fig11-pendulum-control.md](simulations/fig11-pendulum-control.md) |
 | [`docs/simulations/fig12-beer-slosh.md`](simulations/fig12-beer-slosh.md) | 46.9 kB | Documentation: Fig. 12 · A Pint of Guinness on a One-Wheel Cart (`public/simulations/beer-slosh.html`). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`docs/simulations/fig13-momentum-spirographs.md`](simulations/fig13-momentum-spirographs.md) | 4.1 kB | Documentation: Fig. 13 · Spirographs in Momentum Space, the Flower Hunt, the dashboard and the films. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`docs/simulations/project06-rods-in-liquid.md`](simulations/project06-rods-in-liquid.md) | 9.7 kB | Documentation: Project 06 · Balancing Two Rods in a Liquid. | [project06-rods-in-liquid.md](simulations/project06-rods-in-liquid.md) |
 | [`docs/styles.md`](styles.md) | 52.1 kB | Documentation: Stylesheets: `public/styles/`. | [styles.md](styles.md) |
 | [`docs/usul.md`](usul.md) | 10.8 kB | Documentation: Phyein Usul · the website at phyeinusul.com. | [usul.md](usul.md) |
@@ -779,14 +793,31 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/fig12/study.cjs`](../tools/fig12/study.cjs) | 3.7 kB | Fig. 12: one run of the parameter study through World.advance (bump height, speed loop, suspension): lean, accelerations, spill. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/swirl.cjs`](../tools/fig12/swirl.cjs) | 1.6 kB | Fig. 12: shakes the nonlinear live model along the road at frequencies near resonance and prints whether it swirls. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/theory.cjs`](../tools/fig12/theory.cjs) | 12.0 kB | Fig. 12: the closed-form numbers of the lecture note from the page’s constants: sloshing frequency and equivalent mass, dimensionless groups and damping, quarter car, drive, PI loop, skyhook. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`tools/fig13/butterfly.py`](../tools/fig13/butterfly.py) | 5.2 kB | Fig. 13 generator: the butterflies (one-petal resonance) closed by Newton's method, with their stability. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
+| [`tools/fig13/chaos_map.py`](../tools/fig13/chaos_map.py) | 6.9 kB | Fig. 13 generator: the chaos map of momentum space (twin pendulums, numba). | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
+| [`tools/fig13/gift/butterfly3d.html`](../tools/fig13/gift/butterfly3d.html) | 18.6 kB | Fig. 13 film source (the bell above the floor, 3-D); render.cjs writes its frames. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
+| [`tools/fig13/gift/dive.html`](../tools/fig13/gift/dive.html) | 19.5 kB | Fig. 13 film source (from a kick to a butterfly, phone first); render.cjs writes its frames. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
+| [`tools/fig13/gift/dive/.gitignore`](../tools/fig13/gift/dive/.gitignore) | 9 B | Keeps dive.bin (regenerated by dive_data.py) out of the repository. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
+| [`tools/fig13/gift/dive/dive.json`](../tools/fig13/gift/dive/dive.json) | 36.6 kB | The dive film's grid of kicks and the butterfly's momenta, written by dive_data.py. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
+| [`tools/fig13/gift/dive_data.py`](../tools/fig13/gift/dive_data.py) | 3.7 kB | Fig. 13 films: integrates the 9 x 9 grid of kicks of the dive film (dive.bin, regenerated, about 47 s). | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
+| [`tools/fig13/gift/morph.html`](../tools/fig13/gift/morph.html) | 17.8 kB | Fig. 13 film source (turning the paper: a wheel, the butterfly); render.cjs writes its frames. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
+| [`tools/fig13/gift/orbit.py`](../tools/fig13/gift/orbit.py) | 2.2 kB | Fig. 13 films: exports one closed butterfly orbit (orbit24.json) with its checks. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
+| [`tools/fig13/gift/orbit24.json`](../tools/fig13/gift/orbit24.json) | 172.8 kB | The closed 24-petal butterfly orbit, written by orbit.py. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
+| [`tools/fig13/gift/publish_films.py`](../tools/fig13/gift/publish_films.py) | 2.5 kB | Fig. 13 films: copies the films into public/simulations/fig13/ where they play live. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
+| [`tools/fig13/gift/render.cjs`](../tools/fig13/gift/render.cjs) | 2.2 kB | Fig. 13 films: renders a film page frame by frame in headless Chromium (needs a local server on port 8766). | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
+| [`tools/fig13/gift/together.html`](../tools/fig13/gift/together.html) | 26.6 kB | Fig. 13 film source (six pictures on one clock, wide and phone layouts); render.cjs writes its frames. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
+| [`tools/fig13/hunt.py`](../tools/fig13/hunt.py) | 8.1 kB | Fig. 13 generator: the flower hunt: g = 0 theory, scans and Newton's method for closed orbits. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
+| [`tools/fig13/hunt_export.py`](../tools/fig13/hunt_export.py) | 3.2 kB | Fig. 13 generator: writes public/scripts/fig13-hunt-data.js. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
+| [`tools/fig13/hunt_inspect.py`](../tools/fig13/hunt_inspect.py) | 5.0 kB | Fig. 13 generator: Poincare sections and Floquet traces of the hunted orbits. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
+| [`tools/fig13/map_png.py`](../tools/fig13/map_png.py) | 1.2 kB | Fig. 13 generator: the chaos map as a PNG in the house palette. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`tools/i18n/apply_review.py`](../tools/i18n/apply_review.py) | 3.4 kB | Applies a reviewer's corrections, only those that keep markup, maths and numbers. | [i18n.md](i18n.md) |
-| [`tools/i18n/build.py`](../tools/i18n/build.py) | 24.0 kB | Writes the German and Arabic pages, the script strings and the mirrored stylesheets from the English pages and the tables; --check fails on anything untranslated. | [i18n.md](i18n.md) |
+| [`tools/i18n/build.py`](../tools/i18n/build.py) | 24.1 kB | Writes the German and Arabic pages, the script strings and the mirrored stylesheets from the English pages and the tables; --check fails on anything untranslated. | [i18n.md](i18n.md) |
 | [`tools/i18n/fill.py`](../tools/i18n/fill.py) | 1.3 kB | Stores translations into a page table, recording the English each one was made from. | [i18n.md](i18n.md) |
 | [`tools/i18n/hydraulics.py`](../tools/i18n/hydraulics.py) | 13.0 kB | Builds the Hydraulic Press Study in German and Arabic from its unchanged English source, through the study's own tools. | [i18n.md](i18n.md) |
 | [`tools/i18n/ingest.py`](../tools/i18n/ingest.py) | 1.9 kB | Stores checked translations made outside the tables (page pieces, script strings, walkthrough prose). | [i18n.md](i18n.md) |
 | [`tools/i18n/package.json`](../tools/i18n/package.json) | 285 B | The parser wrap.cjs needs (acorn); npm install --prefix tools/i18n. | [i18n.md](i18n.md) |
 | [`tools/i18n/wrap.cjs`](../tools/i18n/wrap.cjs) | 3.7 kB | Wraps the reader-visible strings of a page's scripts in _t(), with a JavaScript parser (acorn). | [i18n.md](i18n.md) |
-| [`tools/inventory.py`](../tools/inventory.py) | 59.3 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
+| [`tools/inventory.py`](../tools/inventory.py) | 64.1 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
 | [`tools/perf/addresses.cjs`](../tools/perf/addresses.cjs) | 6.1 kB | Every page at every address a reader can use (x.html, x, x/, folder/), and every link of every page, on a running site; exits 1 on any wrong answer. | [performance.md](performance.md) |
 | [`tools/perf/clockcheck.cjs`](../tools/perf/clockcheck.cjs) | 3.2 kB | Each figure runs on screen, holds off screen, resumes; the store stays live for an open data panel and the walkthrough. | [performance.md](performance.md) |
 | [`tools/perf/film.cjs`](../tools/perf/film.cjs) | 3.1 kB | A repeat visit as a reader sees it: screenshots at fixed times and every LCP candidate with its element, to tell a metric from the screen. | [performance.md](performance.md) |
@@ -1324,7 +1355,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
-| [`notes/fig11/panel/README.md`](../notes/fig11/panel/README.md) | 3.7 kB | Project 05: what each honesty test of the data panel checks, and how to run it. | [fig11-double-inverted-pendulum.md](simulations/fig11-double-inverted-pendulum.md) |
+| [`notes/fig11/panel/README.md`](../notes/fig11/panel/README.md) | 4.5 kB | Project 05: what each honesty test of the data panel checks, and how to run it. | [fig11-double-inverted-pendulum.md](simulations/fig11-double-inverted-pendulum.md) |
 | [`notes/fig11/panel/a-origin-cart.txt`](../notes/fig11/panel/a-origin-cart.txt) | 3.2 kB | Project 05: raw output of an honesty test or behaviour test of the data panel, 5 November 2026. | [README.md](../notes/fig11/panel/README.md) |
 | [`notes/fig11/panel/a-origin.txt`](../notes/fig11/panel/a-origin.txt) | 3.1 kB | Project 05: raw output of an honesty test or behaviour test of the data panel, 5 November 2026. | [README.md](../notes/fig11/panel/README.md) |
 | [`notes/fig11/panel/bcde-flick-rerun.txt`](../notes/fig11/panel/bcde-flick-rerun.txt) | 2.2 kB | Project 05: raw output of an honesty test or behaviour test of the data panel, 5 November 2026. | [README.md](../notes/fig11/panel/README.md) |

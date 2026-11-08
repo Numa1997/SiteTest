@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Flower Hunt · Numa Koudsie</title>
+    <meta name="description" content="Which kick makes a double pendulum draw a closed flower, or a butterfly? Every answer here is a periodic orbit found by Newton's method, closed to a ten-billionth, and drawn live.">
+    <meta name="theme-color" content="#f5f1ea">
+    <link rel="stylesheet" href="../styles/sim.css">
+    <link rel="stylesheet" href="../styles/fold.css">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%237a1f2b'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='38' fill='%23f5f1ea'%3EN%3C/text%3E%3C/svg%3E">
+    <style>
+        .sim, .sim-top { max-width: 1560px; }
+        .garden { display: grid; grid-template-columns: repeat(auto-fill, minmax(168px, 1fr)); gap: 10px; padding: 12px; background: #140d10; border-radius: 10px 10px 0 0; }
+        .tile { all: unset; cursor: pointer; display: flex; flex-direction: column; border: 1px solid #3a2a2e; border-radius: 8px; overflow: hidden; background: #140d10; }
+        .tile:focus-visible, .tile.is-on { outline: 2px solid var(--accent-rose); outline-offset: 1px; }
+        .tile canvas { display: block; width: 100%; aspect-ratio: 1 / 1; }
+        .tile__cap { padding: 6px 8px 8px; font: 11px/1.45 var(--mono); color: #e9d9cf; border-top: 1px solid #3a2a2e; }
+        .tile__cap b { color: #f3d6da; font-weight: 500; }
+        .tile__cap .st { color: #b9a59b; }
+        .bench { display: grid; gap: 18px; }
+        @media (min-width: 901px) { .bench { grid-template-columns: minmax(0, 1fr) 360px; } }
+        .bench__plate { position: relative; aspect-ratio: 1 / 1; margin: 0 auto; width: min(100%, 78vh); background: #140d10; border-radius: 10px 10px 0 0; }
+        .bench__plate.is-paper { background: var(--card); }
+        .bench__plate canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+        .picker { position: relative; width: 100%; aspect-ratio: 16 / 9; background: #140d10; border: 1px solid var(--line-strong, #cdc1ae); border-radius: 6px; cursor: crosshair; }
+        .picker canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+        .chart { width: 100%; aspect-ratio: 16 / 10; background: #fff; border: 1px solid var(--line-strong, #cdc1ae); border-radius: 6px; display: block; }
+        .read { display: grid; grid-template-columns: auto 1fr; gap: 3px 12px; font: 12px/1.5 var(--mono); color: var(--ink-2); margin: 0; }
+        .read dt { color: var(--muted); }
+        .read dd { margin: 0; text-align: right; font-variant-numeric: tabular-nums; }
+        .verdict { margin: 8px 0 0; font-size: 14px; line-height: 1.5; color: var(--ink); min-height: 3em; }
+        .seg { display: inline-flex; border: 1px solid var(--line-strong, #cdc1ae); border-radius: 8px; overflow: hidden; }
+        .seg .btn { border: 0; border-radius: 0; margin: 0; }
+        .seg .btn + .btn { border-left: 1px solid var(--line-strong, #cdc1ae); }
+        .seg .btn.is-on { background: var(--accent); color: var(--card); }
+        .figtitle { font-family: var(--serif); font-size: 30px; font-weight: 400; margin: 34px 0 10px; color: var(--ink); }
+    </style>
+</head>
+<body>
+    <header class="sim-top">
+        <span style="display:inline-flex;align-items:center;gap:14px"><a href="../index.html" aria-label="Phyein Usul, home page" style="display:inline-block;line-height:0"><img src="../images/phyein-usul-mark.svg" alt="Phyein Usul" width="87" height="48"></a><a href="../simulations.html">← All simulations</a></span>
+        <nav class="sim-nav" aria-label="Simulations">
+            <span>Fig.</span>
+            <a href="Circular Wave Interference Visualization.html">1</a>
+            <a href="Double Pendulum.html">2</a>
+            <a href="Interactive Double-Slit Experiment Visualization.html">3</a>
+            <a href="Transverse and longitudinal waves.html">4</a>
+            <a href="water-wave.html">5</a>
+            <a href="wave-interference.html">6</a>
+            <a href="phasor-sums.html">7</a>
+            <a href="draw-decompose.html">8</a>
+            <a href="driven-oscillator.html">9</a>
+            <a href="wind-turbine.html">10</a>
+            <a href="pendulum-control.html">11</a> <a href="beer-slosh.html">12</a> <a href="momentum-spirographs.html" aria-current="page">13</a>
+        </nav>
+    </header>
+    <noscript><p style="padding:16px">This study needs JavaScript.</p></noscript>
+
+    <main class="sim">
+        <div class="sim__head">
+            <p class="sim__num">Fig. 13 · study · periodic orbits</p>
+            <h1>The Flower Hunt<span class="dot">.</span></h1>
+            <p class="sim__lede">Which kick makes a double pendulum draw a flower that closes on itself, or a butterfly? Every pendulum here hangs straight down and is kicked once. Each kick below was found by computation, closed to a ten-billionth, and is drawn live from Hamilton's equations.</p>
+        </div>
+
+        <h2 class="figtitle">The garden</h2>
+        <figure class="stage">
+            <div class="garden" id="garden" aria-label="Flowers and butterflies found by the hunt; choose one to study it on the bench below"></div>
+            <figcaption class="stage__cap">
+                <span><b>Fig. 13.2</b> · each tile is one pendulum of equal uniform rods (1 kg, 1 m), started at <i>θ</i><sub>1</sub> = <i>θ</i><sub>2</sub> = 0 with the kick (<i>p</i><sub>1</sub>, <i>p</i><sub>2</sub>) shown, in kg·m²/s. Choose a tile to put it on the bench.</span>
+            </figcaption>
+        </figure>
+
+        <h2 class="figtitle">The bench</h2>
+        <div class="bench">
+            <figure class="stage" style="margin:0">
+                <div class="bench__plate" id="plate"><canvas id="bcv" aria-label="The tip path of the pendulum on the bench, drawn as a long exposure"></canvas><canvas id="brods" aria-hidden="true"></canvas></div>
+                <figcaption class="stage__cap">
+                    <span><b>Fig. 13.3</b> · one pendulum, its tip path as a long exposure; the dot is the pivot</span>
+                    <span id="b-t"><i>t</i> = 0.00 s</span>
+                </figcaption>
+            </figure>
+            <aside class="panel" aria-label="Bench controls">
+                <div class="panel__group">
+                    <p class="panel__label">Run</p>
+                    <div class="actions" style="display:flex;gap:8px;flex-wrap:wrap">
+                        <button type="button" class="btn" id="b-play">Pause</button>
+                        <button type="button" class="btn btn--ghost" id="b-restart">Restart</button>
+                    </div>
+                    <label class="switch"><span>Show rods</span><input type="checkbox" id="b-rods"></label>
+                    <div class="seg" role="group" aria-label="Plate"><button type="button" class="btn btn--ghost is-on" id="b-night">Night plate</button><button type="button" class="btn btn--ghost" id="b-paper">Paper plate</button></div>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>Time scale</span><output id="b-speed-out">1.00×</output></span>
+                        <input type="range" id="b-speed" min="0.1" max="1" step="0.05" value="1">
+                    </label>
+                </div>
+                <div class="panel__group">
+                    <p class="panel__label">The kick</p>
+                    <div class="picker" id="picker" title="Click to choose the kick (p1, p2)"><canvas id="pmap" aria-hidden="true"></canvas><canvas id="pmark" aria-label="Momentum space: click to choose the kick"></canvas></div>
+                    <p class="eqnote" style="margin:6px 0 10px">Momentum space, <i>p</i><sub>1</sub> across (±35.6), <i>p</i><sub>2</sub> up (±20). Glow marks chaos (twin pendulums part). Click to choose a kick.</p>
+                    <label class="ctl">
+                        <span class="ctl__row"><span><i>p</i><sub>1</sub></span><output id="b-p1-out"></output></span>
+                        <input type="range" id="b-p1" min="-35.56" max="35.56" step="0.001">
+                    </label>
+                    <label class="ctl">
+                        <span class="ctl__row"><span><i>p</i><sub>2</sub></span><output id="b-p2-out"></output></span>
+                        <input type="range" id="b-p2" min="-20" max="20" step="0.001">
+                    </label>
+                </div>
+                <div class="panel__group">
+                    <p class="panel__label">What the pendulum is doing</p>
+                    <dl class="read">
+                        <dt>energy <i>E</i></dt><dd id="r-E">–</dd>
+                        <dt>petals so far</dt><dd id="r-n">–</dd>
+                        <dt>mean petal step δ</dt><dd id="r-d">–</dd>
+                        <dt>δ / 2π, mod 1</dt><dd id="r-nu">–</dd>
+                        <dt>nearest flower</dt><dd id="r-qk">–</dd>
+                        <dt>petal swing</dt><dd id="r-w">–</dd>
+                    </dl>
+                    <p class="verdict" id="r-verdict"></p>
+                </div>
+                <div class="panel__group">
+                    <p class="panel__label">Without gravity: δ/2π for each kick direction</p>
+                    <canvas class="chart" id="chart" aria-label="Chart: the petal step delta over two pi, mod 1, against the kick direction alpha, computed with gravity off; dots mark closed flowers; the vertical line is the kick on the bench"></canvas>
+                    <p class="eqnote" style="margin:6px 0 0">Line: g = 0, from <code>tools/fig13/hunt.py</code>. Wine dots: closed flowers at g = 0 (k ≤ 8). Rose ring: this kick, measured with gravity.</p>
+                </div>
+            </aside>
+        </div>
+
+        <article class="paper" id="paper" aria-labelledby="paper-title">
+            <header class="paper__head">
+                <p class="paper__kicker">Study notes · Fig. 13 · periodic orbits</p>
+                <h2 class="paper__title" id="paper-title">Hunting the flower pendulum</h2>
+                <p class="paper__by">Numa Koudsie · study notes, 8 November 2026; the full lecture note on Fig. 13 will build on them</p>
+                <div class="paper__abstract"><b>Abstract.</b> A double pendulum that hangs still and is kicked once draws a curve with the tip of its lower rod. For most kicks the curve never closes. We show that the tip draws one petal each time the arms fold through, that without gravity a single number, the kick's direction, decides how far each new petal turns, and that a flower closes when that turn is a rational part of a full circle. With gravity we find the closed flowers exactly, as periodic orbits, by Newton's method, and we measure which of them survive a small push. A butterfly turns out to be a pendulum inside the pendulum: the direction of the petals swings back and forth about straight down.</div>
+            </header>
+            <div class="paper__grid">
+                <nav class="paper__toc" aria-label="Contents">
+                    <p>Contents</p>
+                    <ol>
+                        <li><a href="#h-petal"><span>1</span>Where a petal comes from</a></li>
+                        <li><a href="#h-g0"><span>2</span>Without gravity, one number decides</a></li>
+                        <li><a href="#h-g"><span>3</span>With gravity: closed orbits</a></li>
+                        <li><a href="#h-bfly"><span>4</span>The butterfly</a></li>
+                        <li><a href="#h-check"><span>5</span>How we know</a></li>
+                        <li><a href="#h-src"><span>6</span>Sources and thanks</a></li>
+                    </ol>
+                </nav>
+                <div class="paper__body">
+                    <section class="psec" id="h-petal">
+                        <h3><span class="psec__n">01</span>Where a petal comes from</h3>
+                        <p class="psec__lead">Put your forearm in line with your upper arm and your hand is as far from your shoulder as it can be. Fold the elbow all the way and your hand comes back to the shoulder. A double pendulum does the same with its tip.</p>
+                        <p>Each rod has length \(l\), the upper rod makes the angle \(\theta_1\) with the downward vertical and the lower rod the angle \(\theta_2\). The tip is the sum of two arrows of length \(l\). Written as a complex number, with the real axis pointing down and the imaginary axis pointing right,</p>
+                        \[ z_{\text{tip}} = l\,e^{i\theta_1} + l\,e^{i\theta_2} = 2l\cos\frac{\Delta}{2}\;e^{i\psi}, \qquad \Delta = \theta_1 - \theta_2,\quad \psi = \frac{\theta_1 + \theta_2}{2}. \tag{1} \]
+                        <p>To see the second form, take \(e^{i\psi}\) out of both terms: what is left is \(l(e^{i\Delta/2} + e^{-i\Delta/2}) = 2l\cos(\Delta/2)\). So the tip lies at the distance \(2l\,|\cos(\Delta/2)|\) from the pivot. When the arms line up (\(\Delta = 0\) or a whole number of turns) the tip is on the rim, \(2l\) away. When they fold (\(\Delta = \pi\)) the tip is at the pivot.</p>
+                        <p>If the angle between the arms keeps turning, the tip runs out to the rim, back through the pivot, out to the rim on the other side, and so on. One full turn of \(\Delta\) draws one petal, a loop through the centre. The tip of that petal lies in the direction of the lower rod at the moment the arms are lined up. Call \(\delta\) the angle the lower rod turns between two such moments. Then the next petal tip is \(\delta\) further round, and the flower closes after \(k\) petals exactly when</p>
+                        \[ \frac{\delta}{2\pi} = \frac{q}{k} \pmod 1, \qquad q, k \text{ whole numbers with no common factor}. \tag{2} \]
+                        <p>Every pendulum on this page starts hanging straight down, \(\theta_1 = \theta_2 = 0\). The arms are lined up, so the start is itself a petal tip: every flower here has a petal pointing straight down. The arms fold through only for some kicks. For the others \(\Delta\) rocks back and forth without reaching \(\pi\), the tip never passes the pivot, and the pendulum draws rings instead of petals.</p>
+                    </section>
+
+                    <section class="psec" id="h-g0">
+                        <h3><span class="psec__n">02</span>Without gravity, one number decides</h3>
+                        <p class="psec__lead">A hard kick makes gravity a small correction. So first switch gravity off.</p>
+                        <p>Without gravity the pendulum is a free, jointed stick spinning about the pivot. Nothing outside twists it, so its total angular momentum \(p_1 + p_2\) stays constant. It also has no length scale in time: if a motion \(\theta(t)\) is possible with the kick \(\mathbf p\), then \(\theta(\lambda t)\) is possible with the kick \(\lambda\mathbf p\), because every term of the kinetic energy scales with \(\lambda^2\). Kick twice as hard and the same curve is drawn twice as fast. So \(\delta\) depends only on the direction of the kick, the angle \(\alpha\) in \(\mathbf p = |\mathbf p|(\cos\alpha, \sin\alpha)\).</p>
+                        <p>Whether the arms fold through follows from energy alone. At the start, for two equal uniform rods of mass \(m\), the energy is \(E = \tfrac{6}{7ml^2}(p_1^2 - 3p_1p_2 + 4p_2^2)\). To fold, the stick must spin with its arms folded, where its moment of inertia about the pivot is smallest, \(\tfrac23 ml^2\). Spinning with the angular momentum \(p_1+p_2\) then costs \(\tfrac{3(p_1+p_2)^2}{4ml^2}\), the way a skater pulling in her arms spins faster and must supply energy to do so. The arms fold through when the kick provides more than that:</p>
+                        \[ 3p_1^2 - 114\,p_1p_2 + 75\,p_2^2 > 0 . \tag{3} \]
+                        <p>The edge of this region is two straight lines through the origin, \(p_1 = (19 \mp 4\sqrt{21})\,p_2\), which is \(p_1 = 0.6697\,p_2\) and \(p_1 = 37.33\,p_2\). They are the two arms of the X in Fig. 13's chaos map.</p>
+                        <p>We integrate one turn of \(\Delta\) for 1800 kick directions, 0.1° apart, and read off \(\delta(\alpha)\). It is the curve in the bench's chart. Solving (2) on it gives 80 directions for flowers of 2 to 12 petals.</p>
+                        <div class="pbox"><span class="pbox__t">Key result · without gravity</span><p>A flower's shape is fixed by the direction of the kick alone. Its size in time is set by the strength of the kick. Closed flowers sit at the directions where \(\delta/2\pi\) is a fraction \(q/k\).</p></div>
+                    </section>
+
+                    <section class="psec" id="h-g">
+                        <h3><span class="psec__n">03</span>With gravity: closed orbits</h3>
+                        <p class="psec__lead">Gravity spoils both symmetries: the time scaling and the freedom to turn the flower. A closed flower must now be found as a whole orbit.</p>
+                        <p>A flower of \(k\) petals is closed if, after \(k\) turns of \(\Delta\), the pendulum is back where it started: hanging straight down, \(\theta_2\) a whole number of turns, with the same momenta. Energy is conserved, so once \(p_1\) matches, \(p_2\) matches too. That leaves two conditions for the two unknowns of the kick:</p>
+                        \[ F(p_1, p_2) = \Bigl( \theta_2(t_k) - 2\pi n,\;\; p_1(t_k) - p_1(0) \Bigr) = (0,\,0), \tag{4} \]
+                        <p>where \(t_k\) is the moment of the \(k\)-th alignment. We solve (4) by Newton's method, starting from the gravity-free flower at a kick strength of 18 or 30 kg·m²/s, and integrate with an eighth-order Runge–Kutta method (DOP853) at a relative tolerance of \(10^{-11}\). Every orbit in the garden closes to better than \(10^{-9}\).</p>
+                        <div class="pbox"><span class="pbox__t">Example 3.1 · the seven-petal daisy</span><p>The kick \(\mathbf p = (-28.032,\ 0.476)\) kg·m²/s gives the energy \(E = 689.0\) J, 17.6 times the 39.2 J it takes to lift both rods straight up. The tip draws seven petals and returns in \(T = 0.794\) s; after seven petals the state differs from the start by \(1.8\times10^{-11}\).</p></div>
+                        <p>A closed orbit is useful only if it survives a small push. Watch the moments when the arms line up: the state there is \((\theta_2, p_1)\), and one flower is a map of that plane onto itself. Its Jacobian \(J\) has determinant 1, because Hamiltonian motion keeps phase-space area. If \(|\operatorname{tr} J| < 2\), nearby kicks circle the flower and draw nearly the same picture: the orbit is <em>stable</em>. If \(|\operatorname{tr} J| > 2\), nearby kicks run away from it and the picture smears within a few periods: <em>unstable</em>. Within 0.01 of 2 our finite differences cannot tell, and we say <em>neutral</em>. This is common at high energy, where gravity is weak and almost a whole family of kicks nearly closes. In the garden the 3-petal flower at \(\mathbf p = (24.42,\ 0.00)\) has \(\operatorname{tr} J = 1.96\): stable. The 7-petal flower at \((7.51,\ 12.34)\) has \(\operatorname{tr} J = -14.8\): it is there on purpose, so you can watch an unstable flower fall apart.</p>
+                    </section>
+
+                    <section class="psec" id="h-bfly">
+                        <h3><span class="psec__n">04</span>The butterfly</h3>
+                        <p class="psec__lead">A butterfly is a flower that cannot decide where to point.</p>
+                        <p>Take the kick \(\mathbf p = (3.556,\ 10)\), a cell of the video's grid. Its petal tips point, in order, 57°, 97°, 119°, 126°, 121°, 104°, 74°, 33°, −14°, … from straight down. Each petal lands close to the previous one: the lower rod turns by almost a whole turn between petals, so \(\delta/2\pi\) is close to 0, the one-petal resonance. Without gravity the petals would creep round the circle at a steady rate. Gravity pulls the petal direction towards straight down, so it swings about the bottom like a pendulum, out to \(\pm126°\) and back. A pendulum is slowest at its turning points, so the petals pile up there: two dense fans, left and right. Those are the wings.</p>
+                        <p>Along the line \(p_1 = 3.556\) every kick from \(p_2 = 7.0\) to \(17.9\) is caught in this swing (89 of 161 kicks, 0.1 apart). The wings open between about \(\pm123°\) and \(\pm165°\), widest for the hardest kicks, and one swing takes between 10 and 45 petals. When one swing takes a whole number \(N\) of petals, the butterfly closes. It is then a periodic orbit with \(N\) turns of \(\Delta\), and (4) finds it.</p>
+                        <div class="pbox"><span class="pbox__t">Example 4.1 · the 24-petal butterfly</span><p>\(\mathbf p = (3.557,\ 12.211)\) kg·m²/s, \(E = 390.8\) J. The petal direction swings out to \(\pm135.6°\), the tip draws 24 petals and returns in \(T = 2.659\) s; the state closes to \(9\times10^{-12}\). Its trace is 2.000: neutral.</p></div>
+                        <p>The butterflies with 12, 14 and 16 petals have traces of 2.39, 2.17 and 2.04: unstable. This is expected. Resonant closed orbits come in pairs, one stable and one unstable (the Poincaré–Birkhoff theorem), and Newton's method found the unstable member of each of these three pairs. Their stable partners are not yet computed.</p>
+                    </section>
+
+                    <section class="psec" id="h-check">
+                        <h3><span class="psec__n">05</span>How we know</h3>
+                        <p>The model is the compound double pendulum of two equal uniform rods, \(m = 1\) kg, \(l = 1\) m, \(g = 9.8\) m/s². For two equal rods its equations reduce exactly to 2swap's and to Heyl's (checked with SymPy); the energy, the fold-through lines (3) and the small-swing frequencies were checked again with Wolfram. The search runs in <code>tools/fig13/hunt.py</code>, the stability in <code>hunt_inspect.py</code>, the butterflies in <code>butterfly.py</code>. The fold-through edges found by integration, 0.0262 and 0.9791 rad, agree with (3), 0.0268 and 0.9807 rad, to one scan step. The page itself integrates with its own fourth-order Runge–Kutta at \(h = 1/9000\) s on the bench and \(1/4500\) s in the garden. On the bench it measures \(\delta/2\pi\) for the 7-petal flower at \((-30.04,\ 2.52)\) within \(4\times10^{-5}\) of \(4/7\) over 64 petals: the browser confirms the closure the offline search found.</p>
+                        <p>What is not shown yet: the stable partners of the three unstable butterflies, flowers of 6 and of 9 to 12 petals with gravity (Newton's method did not converge from our starting kicks), and the same hunt for point masses and unequal rods.</p>
+                    </section>
+
+                    <section class="psec" id="h-src">
+                        <h3><span class="psec__n">06</span>Sources and thanks</h3>
+                        <ul class="prefs">
+                            <li>2swap, <a href="https://www.youtube.com/watch?v=dtjb2OhEQcU">“Double Pendulums are Chaoticn’t”</a> (2025), and his open-source renderer swaptube. The picture of spirographs across momentum space is his idea; this page is our own derivation and computation.</li>
+                            <li>J. S. Heyl, <a href="https://www.famaf.unc.edu.ar/~vmarconi/fiscomp/Double.pdf">“The Double Pendulum Fractal”</a> (2008), the rod equations and the energy argument for flips, linked in 2swap’s video description.</li>
+                            <li>Drew’s Campfire, <a href="https://www.youtube.com/watch?v=8jVogdTJESw">“Pushing Simulations to the LIMIT to Turn Chaos into Order”</a>, credited by 2swap as an inspiration.</li>
+                        </ul>
+                    </section>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <script src="../scripts/fold.js"></script>
+    <script src="../scripts/sim.js"></script>
+    <script src="../scripts/fig13-engine.js"></script>
+    <script src="../scripts/fig13-hunt-data.js"></script>
+<script>
+(() => {
+'use strict';
+const $ = id => document.getElementById(id);
+const DATA = window.FIG13_HUNT, TWO_PI = 2 * Math.PI, AR = 16 / 9, PMAX = 20;
+const RODS = { model: 'rods', m1: 1, m2: 1, l1: 1, l2: 1, g: 9.8 };
+const H = 1 / 9000, REC = 10;                       // bench: RK4 step 0.111 ms; tip recorded every 10 steps (900 per second)
+const HT = 1 / 4500, RECT = 5;                      // garden tiles: step 0.222 ms (energy kept to about 1e-6), tip every 5 steps
+const wrap = a => a - TWO_PI * Math.round(a / TWO_PI);
+
+// ---------------------------------------------------------------------------------------------
+// A pendulum that counts its petals. A petal tip is the moment the arms line up again (D = th1 - th2 crosses 2 pi n);
+// we record th2 there, interpolated inside the step. Petal step = change of th2 from one petal tip to the next.
+// ---------------------------------------------------------------------------------------------
+function Runner(model, p1, p2, h = H, rec = REC) {
+    const r = { s: new Float64Array([0, 0, p1, p2]), t: 0, steps: 0, tips: [0], sgn: 0, next: 0, folds: true, tip: [0, 0] };
+    const o = new Float64Array(4); model.deriv(r.s, o); r.sgn = o[0] - o[1] >= 0 ? 1 : -1; r.next = r.sgn * TWO_PI;
+    r.tip = model.tip(r.s); r.E = model.energy(r.s);
+    r.step = function (onTip) {
+        const D0 = r.s[0] - r.s[1], th20 = r.s[1];
+        model.rk4(r.s, h); r.steps++; r.t = r.steps * h;
+        const D1 = r.s[0] - r.s[1];
+        if ((D1 - r.next) * r.sgn >= 0) {
+            const f = (r.next - D0) / (D1 - D0);
+            r.tips.push(th20 + f * (r.s[1] - th20)); r.next += r.sgn * TWO_PI;
+        }
+        if (r.steps % rec === 0 && onTip) { const x = model.tip(r.s); onTip(r.tip, x); r.tip = x; }
+    };
+    return r;
+}
+
+// ---------------------------------------------------------------------------------------------
+// The garden: one tile per verified flower or butterfly
+// ---------------------------------------------------------------------------------------------
+const tiles = [];
+const garden = $('garden');
+DATA.garden.forEach((g, i) => {
+    const b = document.createElement('button'); b.className = 'tile'; b.type = 'button';
+    const cv = document.createElement('canvas');
+    const name = g.kind === 'butterfly' ? `butterfly · ${g.k} petals` : `${g.k}-petal flower`;
+    b.setAttribute('aria-label', `${name}, kick p1 = ${g.p1.toFixed(3)}, p2 = ${g.p2.toFixed(3)}, ${g.stability}`);
+    const cap = document.createElement('span'); cap.className = 'tile__cap';
+    cap.innerHTML = `<b>${name}</b><br>p = (${g.p1.toFixed(2)}, ${g.p2.toFixed(2)})<br>T = ${g.period.toFixed(3)} s · <span class="st">${g.stability}</span>`;
+    b.append(cv, cap); garden.append(b);
+    const model = window.Fig13.Model(RODS);
+    tiles.push({ g, b, cv, model, plate: null, run: null, tau: Math.max(1.5, 1.4 * g.period) });
+    b.addEventListener('click', () => { load(g.p1, g.p2, i); document.getElementById('plate').scrollIntoView({ behavior: 'smooth', block: 'center' }); });
+});
+function startTile(T) { T.plate = window.Fig13.Plate(T.cv, true, 1.5); T.run = Runner(T.model, T.g.p1, T.g.p2, HT, RECT); }
+function tileFrame(T, dt) {
+    const n = Math.round(dt / HT), W = T.plate.W, S = 0.225 * W, c = W / 2;
+    for (let k = 0; k < n; k++) T.run.step((a, x) => T.plate.splat(c + S * a[0], c + S * a[1], c + S * x[0], c + S * x[1]));
+    T.plate.fade(Math.exp(-dt / T.tau)); T.plate.paint();
+    const ctx = T.plate.ctx; ctx.fillStyle = '#7a1f2b'; ctx.beginPath(); ctx.arc(c, c, Math.max(1.5, W / 120), 0, 7); ctx.fill();
+}
+
+// ---------------------------------------------------------------------------------------------
+// The bench
+// ---------------------------------------------------------------------------------------------
+const bModel = window.Fig13.Model(RODS);
+let bPlate = null, bRun = null, running = true, speed = 1, showRods = false, night = true, P1 = 0, P2 = 0, current = -1;
+const plateEl = $('plate'), rodCv = $('brods'), rctx = rodCv.getContext('2d');
+function load(p1, p2, tileIndex) {
+    P1 = p1; P2 = p2; current = tileIndex === undefined ? -1 : tileIndex;
+    tiles.forEach((T, i) => T.b.classList.toggle('is-on', i === current));
+    $('b-p1').value = p1; $('b-p2').value = p2;
+    $('b-p1-out').textContent = p1.toFixed(3) + ' kg·m²/s'; $('b-p2-out').textContent = p2.toFixed(3) + ' kg·m²/s';
+    bRun = Runner(bModel, p1, p2); if (bPlate) bPlate.clear(); lastText = -1; drawMarker(); drawChart();
+}
+function benchFrame(dt) {
+    const sim = dt * speed, n = Math.round(sim / H), W = bPlate.W, Hp = bPlate.H, S = 0.225 * Math.min(W, Hp), c = W / 2, cy = Hp / 2;
+    for (let k = 0; k < n; k++) bRun.step((a, x) => bPlate.splat(c + S * a[0], cy + S * a[1], c + S * x[0], cy + S * x[1]));
+    const tau = current >= 0 ? tiles[current].tau : 2.5;
+    if (sim > 0) bPlate.fade(Math.exp(-sim / tau));
+    bPlate.paint();
+    const ctx = bPlate.ctx; ctx.fillStyle = night ? '#e2a2aa' : '#7a1f2b'; ctx.beginPath(); ctx.arc(c, cy, Math.max(2, W / 160), 0, 7); ctx.fill();
+    rctx.clearRect(0, 0, rodCv.width, rodCv.height);
+    if (showRods) {
+        const s = bRun.s, x1 = c + S * Math.sin(s[0]), y1 = cy + S * Math.cos(s[0]);
+        rctx.strokeStyle = night ? '#fff6ea' : '#7a1f2b'; rctx.globalAlpha = .85; rctx.lineWidth = Math.max(2, W / 200); rctx.lineCap = 'round';
+        rctx.beginPath(); rctx.moveTo(c, cy); rctx.lineTo(x1, y1); rctx.lineTo(x1 + S * Math.sin(s[1]), y1 + S * Math.cos(s[1])); rctx.stroke(); rctx.globalAlpha = 1;
+    }
+}
+
+// ---- what the pendulum is doing: rewritten at most 4 times a second ----
+let lastText = -1, measuredNu = null;
+function nearestFlower(nu) {
+    let best = null;
+    for (let k = 1; k <= 12; k++) for (let q = 0; q < k; q++) {
+        let e = Math.abs(nu - q / k); e = Math.min(e, 1 - e);
+        if (!best || e < best.e - 1e-12) best = { q, k, e };
+    }
+    return best;
+}
+function readouts(now) {
+    if (now - lastText < 250) return; lastText = now;
+    const r = bRun, n = r.tips.length - 1;
+    $('b-t').innerHTML = `<i>t</i> = ${r.t.toFixed(2)} s`;
+    $('r-E').textContent = r.E.toFixed(1) + ' J';
+    $('r-n').textContent = n;
+    if (n < 2) {
+        measuredNu = null;
+        $('r-d').textContent = $('r-nu').textContent = $('r-qk').textContent = $('r-w').textContent = '–';
+        $('r-verdict').textContent = r.t > 3 ? 'The arms do not fold through: the tip never passes the pivot. It draws rings, not petals.' : 'Waiting for petals…';
+        return;
+    }
+    const delta = r.tips[n] / n, nu = ((delta / TWO_PI) % 1 + 1) % 1; measuredNu = nu;
+    $('r-d').textContent = (delta * 180 / Math.PI).toFixed(2) + '°';
+    $('r-nu').textContent = nu.toFixed(4);
+    const nf = nearestFlower(nu);
+    $('r-qk').textContent = nf.q === 0 ? 'one petal (q/k = 0)' : `${nf.k} petals (q/k = ${nf.q}/${nf.k})`;
+    let maxu = 0; for (let i = 1; i <= n; i++) maxu = Math.max(maxu, Math.abs(wrap(r.tips[i])));
+    const caught = maxu < Math.PI * 0.98 && n >= 6 && Math.min(nu, 1 - nu) < 0.2;   // one-petal resonance: each petal lands near the last, and the swing never goes over the top
+    $('r-w').textContent = caught ? '±' + (maxu * 180 / Math.PI).toFixed(1) + '° about straight down' : 'turns all the way round';
+    const v = $('r-verdict');
+    if (caught) v.textContent = 'Caught: each petal lands close to the last, and the petal direction swings about straight down like a pendulum. The petals pile up at the two turning points: wings. A butterfly.';
+    else if (nf.e < 2e-4 && nf.q !== 0) v.textContent = `Closes: δ/2π sits within ${nf.e.toExponential(1)} of ${nf.q}/${nf.k}, so the tip returns after ${nf.k} petals. A ${nf.k}-petal flower.`;
+    else v.textContent = `Not closed: δ/2π is ${nf.e.toFixed(4)} away from ${nf.q}/${nf.k}, so each round of ${nf.k} petals lands a little further on and the petals fill a disc.`;
+    drawChart();
+}
+
+// ---- momentum-space picker over the chaos map ----
+const pmap = $('pmap'), pmark = $('pmark'), mctx = pmap.getContext('2d'), kctx = pmark.getContext('2d');
+const mapImg = new Image(); mapImg.onload = () => drawMap(); mapImg.src = '../images/fig13/chaos-map-rods-P20.png';
+function sizePicker() {
+    const r = pmark.getBoundingClientRect(), dpr = Math.min(window.devicePixelRatio || 1, 2);
+    for (const c of [pmap, pmark]) { c.width = Math.round(r.width * dpr); c.height = Math.round(r.height * dpr); }
+    drawMap(); drawMarker();
+}
+function drawMap() { mctx.clearRect(0, 0, pmap.width, pmap.height); if (mapImg.complete && mapImg.naturalWidth) mctx.drawImage(mapImg, 0, 0, pmap.width, pmap.height); }
+function drawMarker() {
+    const W = pmark.width, Hh = pmark.height; kctx.clearRect(0, 0, W, Hh);
+    kctx.strokeStyle = 'rgba(245,241,234,.25)'; kctx.lineWidth = 1;
+    kctx.beginPath(); kctx.moveTo(W / 2, 0); kctx.lineTo(W / 2, Hh); kctx.moveTo(0, Hh / 2); kctx.lineTo(W, Hh / 2); kctx.stroke();
+    tiles.forEach((T, i) => {
+        const x = (T.g.p1 / (PMAX * AR) + 1) / 2 * W, y = (1 - T.g.p2 / PMAX) / 2 * Hh;
+        kctx.fillStyle = i === current ? '#fff6ea' : 'rgba(226,162,170,.9)'; kctx.beginPath(); kctx.arc(x, y, i === current ? 4 : 2.5, 0, 7); kctx.fill();
+    });
+    const x = (P1 / (PMAX * AR) + 1) / 2 * W, y = (1 - P2 / PMAX) / 2 * Hh;
+    kctx.strokeStyle = '#fff6ea'; kctx.lineWidth = 2; kctx.beginPath(); kctx.arc(x, y, 7, 0, 7); kctx.stroke();
+}
+pmark.addEventListener('click', e => {
+    const r = pmark.getBoundingClientRect();
+    const p1 = ((e.clientX - r.left) / r.width * 2 - 1) * PMAX * AR, p2 = (1 - (e.clientY - r.top) / r.height * 2) * PMAX;
+    load(Math.round(p1 * 1000) / 1000, Math.round(p2 * 1000) / 1000);
+});
+
+// ---- the g = 0 theory chart ----
+const chart = $('chart'), cctx = chart.getContext('2d');
+function sizeChart() { const r = chart.getBoundingClientRect(), dpr = Math.min(window.devicePixelRatio || 1, 2); chart.width = Math.round(r.width * dpr); chart.height = Math.round(r.height * dpr); drawChart(); }
+function drawChart() {
+    const W = chart.width, Hh = chart.height, dpr = W / chart.getBoundingClientRect().width || 1;
+    const L = 40 * dpr, R = 14 * dpr, T = 10 * dpr, B = 40 * dpr, w = W - L - R, h = Hh - T - B;
+    const X = a => L + a / Math.PI * w, Y = v => T + (1 - v) * h;
+    cctx.clearRect(0, 0, W, Hh); cctx.font = `${10 * dpr}px "IBM Plex Mono", monospace`; cctx.fillStyle = '#8b8079'; cctx.strokeStyle = '#e6dfd2'; cctx.lineWidth = 1;
+    [[0, '0'], [1 / 4, '1/4'], [1 / 3, '1/3'], [1 / 2, '1/2'], [2 / 3, '2/3'], [3 / 4, '3/4'], [1, '1']].forEach(([v, s]) => {
+        cctx.beginPath(); cctx.moveTo(L, Y(v)); cctx.lineTo(L + w, Y(v)); cctx.stroke(); cctx.textAlign = 'right'; cctx.fillText(s, L - 5 * dpr, Y(v) + 3.5 * dpr);
+    });
+    cctx.textAlign = 'center';
+    [0, 45, 90, 135, 180].forEach(dg => cctx.fillText(dg + '°', X(dg * Math.PI / 180), T + h + 15 * dpr));
+    cctx.fillText('kick direction α = atan2(p₂, p₁)', L + w / 2, Hh - 4 * dpr);
+    // the curve (mod 1, broken where it wraps or where the arms do not fold through)
+    cctx.strokeStyle = '#3a322e'; cctx.lineWidth = 1.5 * dpr; cctx.beginPath();
+    let pen = false, prev = null;
+    DATA.theory.alpha.forEach((a, i) => {
+        const v0 = DATA.theory.nu[i]; if (v0 === null) { pen = false; return; }
+        const v = ((v0 % 1) + 1) % 1;
+        if (pen && Math.abs(v - prev) < 0.5) cctx.lineTo(X(a), Y(v)); else cctx.moveTo(X(a), Y(v));
+        pen = true; prev = v;
+    });
+    cctx.stroke();
+    cctx.fillStyle = '#7a1f2b';
+    DATA.targets.forEach(t => { cctx.beginPath(); cctx.arc(X(t.alpha), Y(t.q / t.k), 2.5 * dpr, 0, 7); cctx.fill(); });
+    const al = ((Math.atan2(P2, P1) % Math.PI) + Math.PI) % Math.PI;
+    cctx.strokeStyle = '#7a1f2b'; cctx.lineWidth = 1 * dpr; cctx.setLineDash([3 * dpr, 3 * dpr]);
+    cctx.beginPath(); cctx.moveTo(X(al), T); cctx.lineTo(X(al), T + h); cctx.stroke(); cctx.setLineDash([]);
+    if (measuredNu !== null) { cctx.strokeStyle = '#e2a2aa'; cctx.lineWidth = 2.5 * dpr; cctx.beginPath(); cctx.arc(X(al), Y(measuredNu), 5 * dpr, 0, 7); cctx.stroke(); }
+}
+
+// ---- controls ----
+$('b-play').onclick = () => { running = !running; $('b-play').textContent = running ? 'Pause' : 'Play'; };
+$('b-restart').onclick = () => load(P1, P2, current >= 0 ? current : undefined);
+$('b-rods').onchange = e => { showRods = e.target.checked; };
+function setNight(n) { night = n; plateEl.classList.toggle('is-paper', !n); $('b-night').classList.toggle('is-on', n); $('b-paper').classList.toggle('is-on', !n); bPlate.setNight(n); }
+$('b-night').onclick = () => setNight(true); $('b-paper').onclick = () => setNight(false);
+$('b-speed').oninput = e => { speed = +e.target.value; $('b-speed-out').textContent = speed.toFixed(2) + '×'; };
+$('b-p1').oninput = e => load(+e.target.value, P2);
+$('b-p2').oninput = e => load(P1, +e.target.value);
+
+function sizeAll() {
+    tiles.forEach(T => { if (!T.plate) startTile(T); else { T.plate.resize(); } });
+    if (!bPlate) bPlate = window.Fig13.Plate($('bcv'), true); else bPlate.resize();
+    const r = rodCv.getBoundingClientRect(), dpr = Math.min(window.devicePixelRatio || 1, 2); rodCv.width = Math.round(r.width * dpr); rodCv.height = Math.round(r.height * dpr);
+    sizePicker(); sizeChart();
+}
+let last = null;
+function frame(ts) {
+    const dt = last === null ? 0 : Math.min(0.05, (ts - last) / 1000); last = ts;
+    if (running && dt > 0) { tiles.forEach(T => tileFrame(T, dt)); benchFrame(dt); }
+    readouts(ts); requestAnimationFrame(frame);
+}
+window.addEventListener('resize', sizeAll);
+sizeAll();
+const start = DATA.garden.findIndex(g => g.kind === 'flower' && g.k === 7);
+load(DATA.garden[start].p1, DATA.garden[start].p2, start);
+window.__hunt = {
+    advance(sec) { const n = Math.round(sec / 0.02); for (let i = 0; i < n; i++) { tiles.forEach(T => tileFrame(T, 0.02)); benchFrame(0.02); } lastText = -1; readouts(1e12); },
+    pause() { running = false; }, load, bench: () => bRun, data: DATA
+};
+requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

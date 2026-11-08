@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spirographs in Momentum Space · Numa Koudsie</title>
+    <meta name="description" content="A grid of double pendulums, all hanging still and each given a different kick. The tip of each one draws its own curve, a regular rosette or a chaotic tangle, drawn live as a long exposure.">
+    <meta name="theme-color" content="#f5f1ea">
+    <link rel="stylesheet" href="../styles/sim.css">
+    <link rel="stylesheet" href="../styles/fold.css">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%237a1f2b'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='38' fill='%23f5f1ea'%3EN%3C/text%3E%3C/svg%3E">
+    <style>
+        .sim, .sim-top { max-width: 1560px; }
+        @media (min-width: 901px) { .sim__grid { grid-template-columns: minmax(0, 1fr) 300px; } }
+        /* the figure: a plate the exposure is drawn on; night or paper */
+        #stage { position: relative; background: var(--card); }
+        #stage.is-night, .stage__canvas#stage.is-night { background: #140d10; background-image: none; }
+        #stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+        .seg { display: inline-flex; border: 1px solid var(--line-strong, #cdc1ae); border-radius: 8px; overflow: hidden; }
+        .seg .btn { border: 0; border-radius: 0; margin: 0; }
+        .seg .btn + .btn { border-left: 1px solid var(--line-strong, #cdc1ae); }
+        .seg .btn.is-on { background: var(--accent); color: var(--card); }
+        .panel .seg { margin-top: 2px; }
+    </style>
+</head>
+<body>
+    <header class="sim-top">
+        <span style="display:inline-flex;align-items:center;gap:14px"><a href="../index.html" aria-label="Phyein Usul, home page" style="display:inline-block;line-height:0"><img src="../images/phyein-usul-mark.svg" alt="Phyein Usul" width="87" height="48"></a><a href="../simulations.html">← All simulations</a></span>
+        <nav class="sim-nav" aria-label="Simulations">
+            <span>Fig.</span>
+            <a href="Circular Wave Interference Visualization.html">1</a>
+            <a href="Double Pendulum.html">2</a>
+            <a href="Interactive Double-Slit Experiment Visualization.html">3</a>
+            <a href="Transverse and longitudinal waves.html">4</a>
+            <a href="water-wave.html">5</a>
+            <a href="wave-interference.html">6</a>
+            <a href="phasor-sums.html">7</a>
+            <a href="draw-decompose.html">8</a>
+            <a href="driven-oscillator.html">9</a>
+            <a href="wind-turbine.html">10</a>
+            <a href="pendulum-control.html">11</a> <a href="beer-slosh.html">12</a> <a href="momentum-spirographs.html" aria-current="page">13</a>
+        </nav>
+    </header>
+    <noscript><p style="padding:16px">This figure needs JavaScript.</p></noscript>
+
+    <main class="sim">
+        <div class="sim__head">
+            <p class="sim__num">Fig. 13 · classical mechanics · chaos</p>
+            <h1>Spirographs in Momentum Space<span class="dot">.</span></h1>
+            <p class="sim__lede">A hundred double pendulums hang still, and each is given a different kick. The tip of each one draws its own curve: a tidy rosette where the motion is regular, a tangle where it is chaotic. Every curve is computed live from Hamilton's equations.</p>
+        </div>
+
+        <div class="sim__grid">
+            <div class="stack">
+                <figure class="stage">
+                    <div class="stage__canvas is-night" id="stage" style="--ar: 16 / 9;">
+                        <canvas id="map" aria-hidden="true"></canvas>
+                        <canvas id="cv" aria-label="Tip paths of a grid of double pendulums, all started hanging straight down with different momenta"></canvas>
+                        <canvas id="rodcv" aria-hidden="true"></canvas>
+                    </div>
+                    <figcaption class="stage__cap">
+                        <span><b>Fig. 13</b> · tip paths from <i>θ</i><sub>1</sub> = <i>θ</i><sub>2</sub> = 0, one pendulum per cell, momenta (<i>p</i><sub>1</sub>, <i>p</i><sub>2</sub>) across the grid</span>
+                        <span id="cap-t"><i>t</i> = 0.00 s</span>
+                    </figcaption>
+                </figure>
+                <p style="margin:12px 2px 0;font-size:15px;line-height:1.6;color:var(--ink-2)">The tip paths are real positions; the grid only places each pendulum at its kick. Follow one of them: <a href="butterfly-dashboard.html"><b>the dashboard</b></a> (a wave becomes a circle, then the butterfly) · <a href="flower-hunt.html">the flower hunt</a> · films: <a href="fig13/dive.html">from a kick to a butterfly</a>, <a href="fig13/bell.html">the bell</a>, <a href="fig13/turning.html?scene=butterfly">turning the paper</a>, <a href="fig13/together.html">six pictures</a>.</p>
+            </div>
+
+            <aside class="panel" aria-label="Controls">
+                <div class="panel__group">
+                    <p class="panel__label">Run</p>
+                    <div class="actions" style="display:flex;gap:8px">
+                        <button type="button" class="btn" id="play">Pause</button>
+                        <button type="button" class="btn btn--ghost" id="restart">Restart</button>
+                    </div>
+                    <label class="switch"><span>Show rods</span><input type="checkbox" id="rods"></label>
+                    <label class="switch"><span>Show chaos map</span><input type="checkbox" id="showmap" checked></label>
+                </div>
+                <div class="panel__group">
+                    <p class="panel__label">Picture</p>
+                    <div class="seg" role="group" aria-label="Plate"><button type="button" class="btn btn--ghost is-on" id="look-night">Night plate</button><button type="button" class="btn btn--ghost" id="look-paper">Paper plate</button></div>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>Trail memory τ</span><output id="tau-out">1.5 s</output></span>
+                        <input type="range" id="tau" min="0.3" max="6" step="0.1" value="1.5">
+                    </label>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>Pendulums per row N</span><output id="n-out">10</output></span>
+                        <input type="range" id="n" min="4" max="14" step="1" value="10">
+                    </label>
+                </div>
+                <div class="panel__group">
+                    <p class="panel__label">Pendulum</p>
+                    <div class="seg" role="group" aria-label="Model"><button type="button" class="btn btn--ghost is-on" id="m-rods">Uniform rods</button><button type="button" class="btn btn--ghost" id="m-pts">Point masses</button></div>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>Mass ratio <i>m</i><sub>2</sub>/<i>m</i><sub>1</sub></span><output id="mr-out">1.00</output></span>
+                        <input type="range" id="mr" min="-1.6" max="1.6" step="0.05" value="0">
+                    </label>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>Length ratio <i>l</i><sub>2</sub>/<i>l</i><sub>1</sub></span><output id="lr-out">1.00</output></span>
+                        <input type="range" id="lr" min="-1" max="1" step="0.05" value="0">
+                    </label>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>Momentum range <i>P</i></span><output id="p-out">20 kg·m²/s</output></span>
+                        <input type="range" id="p" min="2" max="30" step="1" value="20">
+                    </label>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>Gravity <i>g</i></span><output id="g-out">9.8 m/s²</output></span>
+                        <input type="range" id="g" min="0" max="25" step="0.1" value="9.8">
+                    </label>
+                </div>
+            </aside>
+        </div>
+    </main>
+
+<script>
+(() => {
+'use strict';
+const $ = id => document.getElementById(id);
+
+// ---------------------------------------------------------------------------------------------
+// Physics: the general double pendulum, Hamilton's equations.
+// Link i has mass m_i, length l_i, centre of mass a_i below its upper joint, moment of inertia I_i about it.
+//   A = m1 a1^2 + I1 + m2 l1^2,  B = m2 a2^2 + I2,  C = m2 l1 a2,  U1 = g (m1 a1 + m2 l1),  U2 = g m2 a2
+//   T = (1/2) A w1^2 + (1/2) B w2^2 + C w1 w2 cos(th1 - th2),   V = -U1 cos th1 - U2 cos th2
+//   w1 = (B p1 - C cos(D) p2) / det,  w2 = (A p2 - C cos(D) p1) / det,  det = A B - C^2 cos^2(D)
+//   p1' = -C w1 w2 sin(D) - U1 sin th1,   p2' = +C w1 w2 sin(D) - U2 sin th2
+// Equal uniform rods give the equations of the 2swap video; point masses give those of Fig. 2.
+// ---------------------------------------------------------------------------------------------
+const par = { model: 'rods', m1: 1, m2: 1, l1: 1, l2: 1, g: 9.8, A: 0, B: 0, C: 0, U1: 0, U2: 0 };
+function setPar() {
+    const a1 = par.model === 'rods' ? par.l1 / 2 : par.l1, a2 = par.model === 'rods' ? par.l2 / 2 : par.l2;
+    const I1 = par.model === 'rods' ? par.m1 * par.l1 * par.l1 / 12 : 0, I2 = par.model === 'rods' ? par.m2 * par.l2 * par.l2 / 12 : 0;
+    par.A = par.m1 * a1 * a1 + I1 + par.m2 * par.l1 * par.l1; par.B = par.m2 * a2 * a2 + I2; par.C = par.m2 * par.l1 * a2;
+    par.U1 = par.g * (par.m1 * a1 + par.m2 * par.l1); par.U2 = par.g * par.m2 * a2;
+}
+function deriv(s, o) {
+    const { A, B, C, U1, U2 } = par;
+    const d = s[0] - s[1], c = Math.cos(d), sn = Math.sin(d), det = A * B - C * C * c * c;
+    const w1 = (B * s[2] - C * c * s[3]) / det, w2 = (A * s[3] - C * c * s[2]) / det, e = C * w1 * w2 * sn;
+    o[0] = w1; o[1] = w2; o[2] = -e - U1 * Math.sin(s[0]); o[3] = e - U2 * Math.sin(s[1]);
+}
+const k1 = new Float64Array(4), k2 = new Float64Array(4), k3 = new Float64Array(4), k4 = new Float64Array(4), tmp = new Float64Array(4);
+function rk4(s, h) {
+    deriv(s, k1); for (let i = 0; i < 4; i++) tmp[i] = s[i] + 0.5 * h * k1[i];
+    deriv(tmp, k2); for (let i = 0; i < 4; i++) tmp[i] = s[i] + 0.5 * h * k2[i];
+    deriv(tmp, k3); for (let i = 0; i < 4; i++) tmp[i] = s[i] + h * k3[i];
+    deriv(tmp, k4); for (let i = 0; i < 4; i++) s[i] += h / 6 * (k1[i] + 2 * k2[i] + 2 * k3[i] + k4[i]);
+}
+const H = 1 / 4500, REC = 5;           // RK4 step; the tip is recorded every 5 steps, 900 points per second
+
+// ---------------------------------------------------------------------------------------------
+// The grid of pendulums, and the exposure they leave on the plate.
+// ---------------------------------------------------------------------------------------------
+const AR = 16 / 9;
+let N = 10, P = 20, tau = 1.5, pend = [], steps = 0, t = 0, acc = 0;
+let showRods = false, showMap = true, night = true;
+const stage = $('stage'), cv = $('cv'), mapCv = $('map'), rodCv = $('rodcv');
+const ctx = cv.getContext('2d'), mctx = mapCv.getContext('2d'), rctx = rodCv.getContext('2d');
+let W = 0, Hh = 0, cw = 0, ch = 0, S = 1;
+let D = new Float32Array(1), img = null, px32 = null;
+
+function tip(s) { return [par.l1 * Math.sin(s[0]) + par.l2 * Math.sin(s[1]), par.l1 * Math.cos(s[0]) + par.l2 * Math.cos(s[1])]; }
+function build() {
+    pend = []; steps = 0; t = 0; acc = 0; D.fill(0);
+    for (let j = 0; j < N; j++) for (let i = 0; i < N; i++) {
+        const p1 = ((i + .5) / N - .5) * 2 * P * AR, p2 = -((j + .5) / N - .5) * 2 * P;
+        const q = { i, j, s: new Float64Array([0, 0, p1, p2]), x: 0, y: 0 };
+        [q.x, q.y] = tip(q.s); pend.push(q);
+    }
+}
+// deposit light along a straight piece of path, the same amount per unit length: the exposure counts passes
+function splat(x0, y0, x1, y1) {
+    const len = Math.hypot(x1 - x0, y1 - y0), m = Math.max(1, Math.ceil(len / 0.4)), w = len / m;
+    for (let k = 0; k < m; k++) {
+        const f = (k + .5) / m, x = x0 + (x1 - x0) * f, y = y0 + (y1 - y0) * f;
+        const ix = Math.floor(x), iy = Math.floor(y); if (ix < 0 || iy < 0 || ix >= W - 1 || iy >= Hh - 1) continue;
+        const fx = x - ix, fy = y - iy, o = iy * W + ix;
+        D[o] += w * (1 - fx) * (1 - fy); D[o + 1] += w * fx * (1 - fy); D[o + W] += w * (1 - fx) * fy; D[o + W + 1] += w * fx * fy;
+    }
+}
+function advance(sec) {
+    acc += sec; const n = Math.floor(acc / H); acc -= n * H;
+    const R = Math.max(par.l1 + par.l2, 1e-9);
+    for (const q of pend) {
+        const cx = (q.i + .5) * cw, cy = (q.j + .5) * ch;
+        for (let k = 1; k <= n; k++) {
+            rk4(q.s, H);
+            if ((steps + k) % REC === 0) {
+                const [x, y] = tip(q.s);
+                splat(cx + S * q.x, cy + S * q.y, cx + S * x, cy + S * y); q.x = x; q.y = y;
+            }
+        }
+    }
+    steps += n; t = steps * H;
+    if (sec > 0) { const dec = Math.exp(-sec / tau); for (let i = 0; i < D.length; i++) D[i] *= dec; }
+}
+
+// ---- tone map: density -> colour, with the plate's palette ----
+const LUTN = 4096, DMAX = 9, D0 = 0.22;
+let pal = new Uint32Array(LUTN);
+function lerp(a, b, f) { return a + (b - a) * f; }
+function ramp(stops, f) { for (let i = 1; i < stops.length; i++) if (f <= stops[i][0]) { const [p0, c0] = stops[i - 1], [p1, c1] = stops[i], u = (f - p0) / (p1 - p0); return [lerp(c0[0], c1[0], u), lerp(c0[1], c1[1], u), lerp(c0[2], c1[2], u)]; } return stops[stops.length - 1][1]; }
+const NIGHT = [[0, [122, 31, 43]], [0.6, [226, 162, 170]], [1, [255, 246, 234]]];
+const PAPER = [[0, [226, 162, 170]], [0.55, [122, 31, 43]], [1, [28, 21, 24]]];
+function makePalette() {
+    const st = night ? NIGHT : PAPER, norm = Math.log1p(DMAX / D0);
+    for (let i = 0; i < LUTN; i++) {
+        const d = i / (LUTN - 1) * DMAX, f = Math.min(1, Math.log1p(d / D0) / norm), [r, g, b] = ramp(st, f);
+        const a = Math.round(255 * Math.pow(Math.min(1, f * (night ? 1.7 : 1.5)), 0.8));
+        pal[i] = (a << 24) | (Math.round(b) << 16) | (Math.round(g) << 8) | Math.round(r);   // little-endian RGBA
+    }
+}
+function paint() {
+    const sc = (LUTN - 1) / DMAX, n = D.length, last = LUTN - 1;
+    for (let i = 0; i < n; i++) { const d = D[i]; px32[i] = d < 0.004 ? 0 : pal[Math.min(last, (d * sc) | 0)]; }
+    ctx.putImageData(img, 0, 0);
+}
+
+// ---- layout, map, rods ----
+let mapImg = null;
+function size() {
+    const r = stage.getBoundingClientRect(), dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = Math.max(2, Math.round(r.width * dpr)); Hh = Math.max(2, Math.round(r.height * dpr));
+    for (const c of [cv, mapCv, rodCv]) { c.width = W; c.height = Hh; }
+    cw = W / N; ch = Hh / N; S = 0.2 * ch / ((par.l1 + par.l2) / 2);     // reach l1 + l2 = 0.4 of the cell height for equal rods
+    D = new Float32Array(W * Hh); img = ctx.createImageData(W, Hh); px32 = new Uint32Array(img.data.buffer);
+    build(); drawMap();
+}
+function drawMap() {
+    mctx.clearRect(0, 0, W, Hh);
+    if (!showMap || !mapImg || P !== 20 || par.model !== 'rods' || par.m2 !== par.m1 || par.l2 !== par.l1 || par.g !== 9.8) return;
+    mctx.globalAlpha = night ? 0.5 : 0.8; mctx.drawImage(mapImg, 0, 0, W, Hh); mctx.globalAlpha = 1;
+}
+function drawRods() {
+    rctx.clearRect(0, 0, W, Hh); if (!showRods) return;
+    rctx.strokeStyle = night ? '#fff6ea' : '#7a1f2b'; rctx.lineWidth = Math.max(1.5, ch / 70); rctx.lineCap = 'round'; rctx.globalAlpha = .8;
+    for (const q of pend) {
+        const cx = (q.i + .5) * cw, cy = (q.j + .5) * ch, x1 = cx + S * par.l1 * Math.sin(q.s[0]), y1 = cy + S * par.l1 * Math.cos(q.s[0]);
+        rctx.beginPath(); rctx.moveTo(cx, cy); rctx.lineTo(x1, y1); rctx.lineTo(x1 + S * par.l2 * Math.sin(q.s[1]), y1 + S * par.l2 * Math.cos(q.s[1])); rctx.stroke();
+    }
+    rctx.globalAlpha = 1;
+}
+function draw() { paint(); drawRods(); $('cap-t').innerHTML = `<i>t</i> = ${t.toFixed(2)} s`; }
+
+// ---- controls ----
+let running = true;
+function rebuild() { setPar(); size(); makePalette(); draw(); }
+$('play').onclick = () => { running = !running; $('play').textContent = running ? 'Pause' : 'Play'; };
+$('restart').onclick = () => { build(); draw(); };
+$('rods').onchange = e => { showRods = e.target.checked; draw(); };
+$('showmap').onchange = e => { showMap = e.target.checked; drawMap(); };
+function setLook(n) { night = n; stage.classList.toggle('is-night', n); $('look-night').classList.toggle('is-on', n); $('look-paper').classList.toggle('is-on', !n); makePalette(); drawMap(); draw(); }
+$('look-night').onclick = () => setLook(true); $('look-paper').onclick = () => setLook(false);
+function setModel(r) { par.model = r ? 'rods' : 'points'; $('m-rods').classList.toggle('is-on', r); $('m-pts').classList.toggle('is-on', !r); rebuild(); }
+$('m-rods').onclick = () => setModel(true); $('m-pts').onclick = () => setModel(false);
+$('tau').oninput = e => { tau = +e.target.value; $('tau-out').textContent = tau.toFixed(1) + ' s'; };
+$('n').oninput = e => { N = +e.target.value; $('n-out').textContent = N; rebuild(); };
+$('p').oninput = e => { P = +e.target.value; $('p-out').textContent = P + ' kg·m²/s'; build(); drawMap(); draw(); };
+$('g').oninput = e => { par.g = +e.target.value; $('g-out').textContent = par.g.toFixed(1) + ' m/s²'; rebuild(); };
+$('mr').oninput = e => { par.m2 = par.m1 * Math.exp(+e.target.value); $('mr-out').textContent = (par.m2 / par.m1).toFixed(2); rebuild(); };
+$('lr').oninput = e => { par.l2 = par.l1 * Math.exp(+e.target.value); $('lr-out').textContent = (par.l2 / par.l1).toFixed(2); rebuild(); };
+
+let last = null;
+function frame(ts) {
+    if (running && last !== null) advance(Math.min(0.05, (ts - last) / 1000));
+    last = ts; draw(); requestAnimationFrame(frame);
+}
+const im = new Image(); im.onload = () => { mapImg = im; drawMap(); }; im.src = '../images/fig13/chaos-map-rods-P20.png';
+window.addEventListener('resize', () => { size(); draw(); });
+setPar(); size(); makePalette(); draw();
+window.__fig13 = { advance: s => { advance(s); draw(); }, pause: () => { running = false; }, state: () => ({ t, N, P, par, pend }), D: () => D };
+requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
