@@ -1,6 +1,6 @@
 // Render the butterfly film frame by frame with the preinstalled headless Chromium.
 //   node tools/fig13/gift/render.cjs THEME OUTDIR DSF [frame,frame,... | all] [PAGE] [SCENE]
-//   PAGE: butterfly3d (default) or morph; SCENE (morph only): wheel or butterfly
+//   PAGE: butterfly3d (default), morph or together; SCENE (morph only): wheel or butterfly
 // Serves nothing itself: start `python3 -m http.server 8766` in the repository root first.
 const { chromium } = require('playwright');
 const fs = require('fs');

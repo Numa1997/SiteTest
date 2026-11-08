@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>One motion, six pictures</title>
+<!-- Film renderer: all six pictures of the 24-petal butterfly orbit in one frame, joining one by one and then moving together.
+     Serve the repository root and open tools/fig13/gift/together.html?theme=dark|light ; tools/fig13/gift/render.cjs writes
+     the frames (page=together). Not part of the site.
+     Timing: one butterfly period T is P = T*FPS*SLOW frames. Picture i (0..5) joins at frame INTRO + i*P, which is simulated
+     time i*T, so every picture starts drawing at t = 0 (mod T) and finishes exactly one period later; all share the one clock
+     t = ((f - INTRO) / (FPS*SLOW)) mod T. After the sixth has drawn, one more period runs with all six live. -->
+<link rel="stylesheet" href="../../../public/vendor/katex/katex.min.css">
+<style>
+@font-face { font-family: 'Instrument Serif'; src: url(../../../public/fonts/instrument-serif/instrument-serif-400-latin.woff2) format('woff2'); }
+@font-face { font-family: 'IBM Plex Sans'; src: url(../../../public/fonts/ibm-plex-sans/ibm-plex-sans-400-latin.woff2) format('woff2'); }
+@font-face { font-family: 'IBM Plex Mono'; src: url(../../../public/fonts/ibm-plex-mono/ibm-plex-mono-400-latin.woff2) format('woff2'); }
+:root { --bg:#140d10; --ink:#f5f1ea; --ink2:#d9cdc4; --muted:#b9a59b; --accent:#e2a2aa; }
+:root[data-theme="light"] { --bg:#f5f1ea; --ink:#1c1518; --ink2:#3a322e; --muted:#6f635d; --accent:#7a1f2b; }
+html, body { margin:0; background:var(--bg); }
+#stage { position:relative; width:1920px; height:1080px; background:var(--bg); color:var(--ink); font-family:'IBM Plex Sans',sans-serif; overflow:hidden; transform-origin:0 0; }
+canvas { position:absolute; left:0; top:0; }
+#h1 { position:absolute; left:40px; top:26px; font-family:'Instrument Serif',serif; font-size:54px; line-height:1; margin:0; font-weight:400; }
+#h2 { position:absolute; left:42px; top:92px; font-family:'IBM Plex Mono',monospace; font-size:14.5px; color:var(--muted); }
+#clock { position:absolute; right:40px; top:34px; font-family:'IBM Plex Mono',monospace; font-size:18px; line-height:1.55; color:var(--ink2); text-align:right; }
+#clock b { color:var(--accent); font-weight:400; }
+.ttl { position:absolute; font-family:'Instrument Serif',serif; font-size:27px; line-height:1; color:var(--ink); transition:none; }
+.ttl small { font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin-right:10px; }
+.cap { position:absolute; font-size:15.5px; color:var(--ink2); white-space:nowrap; }
+.off { opacity:.38; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <canvas id="cv"></canvas>
+  <h1 id="h1">A butterfly drawn by a double pendulum</h1>
+  <div id="h2"></div>
+  <div id="clock"></div>
+</div>
+<script src="../../../public/vendor/katex/katex.min.js"></script>
+<script>
+'use strict';
+const Q = new URLSearchParams(location.search);
+const THEME = Q.get('theme') === 'light' ? 'light' : 'dark';
+document.documentElement.dataset.theme = THEME;
+const $ = id => document.getElementById(id);
+const lerp = (a, b, f) => a + (b - a) * f, clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const ease = u => u <= 0 ? 0 : u >= 1 ? 1 : u * u * (3 - 2 * u);
+const TH = THEME === 'dark' ? {
+    bg: '#140d10', panel: '#1a1114', rule: '#3a2a2e', ink: '#f5f1ea', muted: '#b9a59b', accent: '#e2a2aa',
+    rods: '#f5f1ea', bob: '#7a1f2b', ring: '#f5f1ea', head: '#fff6ea', add: 'lighter',
+    ramp: [[122, 31, 43], [226, 162, 170], [255, 246, 234]], glowA: 0.18, grid: 'rgba(226,162,170,0.13)', card: 'rgba(226,162,170,0.06)', cardEdge: 'rgba(226,162,170,0.35)',
+    dome: [226, 162, 170], domeA: 0.17, floor: [226, 162, 170], floorA: 0.09, butterfly: '#e2a2aa', glow: 'rgba(226,162,170,0.22)', lifted: [255, 246, 234], plumb: 'rgba(255,246,234,0.85)'
+} : {
+    bg: '#f5f1ea', panel: '#fffaf3', rule: '#d9d0c2', ink: '#1c1518', muted: '#6f635d', accent: '#7a1f2b',
+    rods: '#1c1518', bob: '#7a1f2b', ring: '#fffaf3', head: '#7a1f2b', add: 'source-over',
+    ramp: [[226, 162, 170], [122, 31, 43], [28, 21, 24]], glowA: 0.10, grid: 'rgba(28,21,24,0.10)', card: 'rgba(122,31,43,0.05)', cardEdge: 'rgba(122,31,43,0.35)',
+    dome: [60, 40, 44], domeA: 0.17, floor: [122, 31, 43], floorA: 0.07, butterfly: '#7a1f2b', glow: 'rgba(122,31,43,0.14)', lifted: [77, 15, 24], plumb: 'rgba(28,21,24,0.8)'
+};
+const rgba = (c, a) => `rgba(${c[0]},${c[1]},${c[2]},${a})`;
+function rampCol(u, a) { const r = TH.ramp, k = u < 0.5 ? 0 : 1, f = u < 0.5 ? u * 2 : (u - 0.5) * 2; return rgba(r[k].map((v, i) => Math.round(v + (r[k + 1][i] - v) * f)), a); }
+function poly(g, pts, close) { g.beginPath(); pts.forEach((p, i) => i ? g.lineTo(p[0], p[1]) : g.moveTo(p[0], p[1])); if (close) g.closePath(); }
+function bob(g, x, y, r) { g.fillStyle = TH.bob; g.beginPath(); g.arc(x, y, r, 0, 7); g.fill(); g.strokeStyle = TH.ring; g.lineWidth = 2.6; g.stroke(); }
+function pivot(g, x, y) { g.fillStyle = TH.panel; g.beginPath(); g.arc(x, y, 6, 0, 7); g.fill(); g.strokeStyle = TH.rods; g.lineWidth = 2.6; g.stroke(); }
+function dot(g, x, y, r) { g.fillStyle = TH.head; g.globalAlpha = 0.2; g.beginPath(); g.arc(x, y, r * 2.4, 0, 7); g.fill(); g.globalAlpha = 1; g.beginPath(); g.arc(x, y, r, 0, 7); g.fill(); }
+
+// ------------------------------------------------------------------------------------------------ the orbit
+// O.th1, O.th2 sampled at O.rate per second over one period [0, T]; the last sample equals the first (closed orbit).
+let O, M, X, H, Z, D2;        // M = samples per period; X sideways, H height (up), Z = height on the bell, D2 = fold angle / 2
+const NN = 4000; let XS, HS, TS;
+function prep() {
+    const n = O.th1.length; M = n - 1;
+    X = new Float64Array(n); H = new Float64Array(n); Z = new Float64Array(n); D2 = new Float64Array(n);
+    for (let k = 0; k < n; k++) {
+        const a = O.th1[k], b = O.th2[k];
+        X[k] = Math.sin(a) + Math.sin(b); H[k] = -(Math.cos(a) + Math.cos(b));
+        Z[k] = Math.acos(Math.min(1, Math.hypot(X[k], H[k]) / 2)); D2[k] = (a - b) / 2;
+    }
+    XS = new Float64Array(NN + 1); HS = new Float64Array(NN + 1); TS = new Float64Array(NN + 1);
+    for (let j = 0; j <= NN; j++) { const t = O.T * j / NN, [x, h] = sampleXH(t); XS[j] = x; HS[j] = h; TS[j] = t; }
+}
+const wrap = k => ((k % M) + M) % M;
+function angles(t) { const u = clamp(t, 0, O.T) * O.rate, i = Math.min(Math.floor(u), M - 1), f = u - i; return [lerp(O.th1[i], O.th1[i + 1], f), lerp(O.th2[i], O.th2[i + 1], f), i]; }
+function sampleXH(t) { const [a, b] = angles(t); return [Math.sin(a) + Math.sin(b), -(Math.cos(a) + Math.cos(b))]; }
+
+// ------------------------------------------------------------------------------------------------ timeline
+const FPS = 30, SLOW = 4, INTRO = 36, TR = 18;
+let P, TOTAL;                   // P = frames per period (not an integer); picture i joins at INTRO + i P
+const A = i => INTRO + i * P, FINALE = () => INTRO + 6 * P;
+const simT = f => (Math.max(0, f - INTRO) / (FPS * SLOW)) % O.T;
+const drawn = (f, i) => clamp((f - A(i)) / (FPS * SLOW), 0, O.T);   // how much of picture i has been drawn, in seconds of motion
+function phase(f, i) { return f < A(i) ? 'off' : f >= FINALE() ? 'all' : (i < 5 && f >= A(i + 1)) ? 'past' : 'present'; }
+
+// ------------------------------------------------------------------------------------------------ layout: a 3 x 2 grid of equal panels
+const PW = 600, PH = 440, GX = [40, 660, 1280], GY = [140, 600];
+const PANELS = [
+    { title: 'The pendulum', cap: String.raw`\theta_1(t),\ \theta_2(t)\ \text{ from Hamilton's equations}` },
+    { title: 'Height of the tip against time', cap: String.raw`h(t)=-l\,(\cos\theta_1+\cos\theta_2)` },
+    { title: 'Turning the paper', cap: String.raw`\text{screen}=\bigl(\tau\cos\varphi+x\sin\varphi,\ h\bigr),\ \ \tau=k\,(t-\tfrac T2)` },
+    { title: 'The fold clock', cap: String.raw`\text{hand at }\tfrac{\Delta}{2},\ \Delta=\theta_1-\theta_2;\ \ \text{height}=\cos\tfrac{\Delta}{2}=\tfrac{r}{2l}` },
+    { title: 'The bell above the floor', cap: String.raw`r=2l\cos\tfrac{\Delta}{2};\ \ \text{floor: the tip path, bell: height }\tfrac{\Delta}{2}` },
+    { title: 'The butterfly', cap: String.raw`\text{tip}=r\,(\sin\psi,\,-\cos\psi),\ \ \psi=\tfrac{\theta_1+\theta_2}{2}` },
+].map((p, i) => Object.assign(p, { x: GX[i % 3], y: GY[Math.floor(i / 3)], w: PW, h: PH }));
+const TOP = 58, BOT = 46;                     // title band and caption band inside each panel
+const centreY = PH => TOP + (PH - TOP - BOT) / 2;
+
+// ------------------------------------------------------------------------------------------------ 1: the pendulum
+function drawPendulum(g, w, h, f, t) {
+    const cx = w / 2, cy = centreY(h), S = 82;
+    g.strokeStyle = TH.rule; g.lineWidth = 1.2; g.setLineDash([3, 6]); g.beginPath(); g.arc(cx, cy, 2 * S, 0, 7); g.stroke(); g.setLineDash([]);
+    const [a, b, i] = angles(t), L = Math.round(0.45 * O.rate);
+    g.lineCap = 'butt';
+    for (let m = 0; m < L; m += 6) {
+        const u = m / L, k0 = wrap(i - L + m), k1 = wrap(i - L + m + 6);
+        g.strokeStyle = rgba(TH.floor, 0.1 + 0.75 * u); g.lineWidth = 1 + 2 * u;
+        g.beginPath(); g.moveTo(cx + S * X[k0], cy - S * H[k0]); g.lineTo(cx + S * X[k1], cy - S * H[k1]); g.stroke();
+    }
+    const x1 = cx + S * Math.sin(a), y1 = cy + S * Math.cos(a), x2 = x1 + S * Math.sin(b), y2 = y1 + S * Math.cos(b);
+    g.lineCap = 'round'; g.strokeStyle = TH.rods; g.lineWidth = 8; g.beginPath(); g.moveTo(cx, cy); g.lineTo(x1, y1); g.lineTo(x2, y2); g.stroke();
+    pivot(g, cx, cy); bob(g, x1, y1, 11); bob(g, x2, y2, 11);
+}
+
+// ------------------------------------------------------------------------------------------------ 2 and 3: the space-time sheet, turned by phi
+// Each instant is the point (x, h, tau), tau = k (t - T/2). Turned by phi about the vertical: screen = (tau cos phi + x sin phi, h).
+const SS = 60, KT = () => 6.4 / O.T;
+function drawSheet(g, w, h, t, e, phi, fadeIn, labels) {
+    const cx = w / 2, cy = centreY(h), c = Math.cos(phi), s = Math.sin(phi), k = KT(), L = O.T * k / 2;
+    const px = j => (TS[j] - O.T / 2) * k * c + XS[j] * s, depth = j => -(TS[j] - O.T / 2) * k * s + XS[j] * c;
+    g.fillStyle = TH.card; g.strokeStyle = TH.cardEdge; g.lineWidth = 1.1;
+    poly(g, [[-L, 2.3], [L, 2.3], [L, -2.3], [-L, -2.3]].map(([tau, hh]) => [cx + SS * tau * c, cy - SS * hh]), true); g.fill(); g.stroke();
+    g.strokeStyle = TH.grid; g.lineWidth = 1;
+    for (let sec = 0; sec <= O.T + 1e-9; sec += 0.5) { const xx = cx + SS * (sec - O.T / 2) * k * c; poly(g, [[xx, cy - SS * 2.3], [xx, cy + SS * 2.3]]); g.stroke(); }
+    poly(g, [[cx - SS * L * c, cy], [cx + SS * L * c, cy]]); g.stroke();
+    if (s > 0.02) { g.globalAlpha = s; g.strokeStyle = TH.cardEdge; g.setLineDash([4, 6]); g.beginPath(); g.arc(cx + SS * L * c, cy, 2 * SS * s, 0, 7); g.stroke(); g.setLineDash([]); g.globalAlpha = 1; }
+    if (labels) {
+        g.fillStyle = TH.muted; g.font = '14px "IBM Plex Mono"'; g.textAlign = 'center';
+        const aT = clamp((c - 0.866) / 0.1, 0, 1), aS = clamp((s - 0.866) / 0.1, 0, 1);
+        if (aT > 0) { g.globalAlpha = aT; g.fillText('time →', cx, cy + SS * 2.3 + 17); }
+        if (aS > 0) { g.globalAlpha = aS; g.fillText('sideways →', cx, cy + SS * 2.3 + 17); }
+        g.globalAlpha = 1; g.save(); g.translate(cx - SS * Math.max(L * c, 2.05 * s) - 18, cy); g.rotate(-Math.PI / 2); g.fillText('height', 0, 0); g.restore();
+    }
+    const n = Math.round(e / O.T * NN);
+    g.globalCompositeOperation = TH.add; g.lineJoin = 'round'; g.lineCap = 'butt';
+    for (let j = 0; j + 2 <= n; j += 2) {
+        const u = j / NN, d = depth(j) / (L + 2.05), near = clamp(0.62 + 0.38 * (s > 0.05 ? -d : 0), 0.25, 1) * fadeIn;
+        const x0 = cx + SS * px(j), y0 = cy - SS * HS[j], x1 = cx + SS * px(j + 2), y1 = cy - SS * HS[j + 2];
+        g.strokeStyle = rampCol(u, TH.glowA * near); g.lineWidth = 6.5; poly(g, [[x0, y0], [x1, y1]]); g.stroke();
+        g.strokeStyle = rampCol(u, 0.95 * near); g.lineWidth = 2.1; poly(g, [[x0, y0], [x1, y1]]); g.stroke();
+    }
+    g.globalCompositeOperation = 'source-over';
+    // the present instant
+    const [x, hh] = sampleXH(t), tau = (t - O.T / 2) * k, mx = cx + SS * (tau * c + x * s), my = cy - SS * hh;
+    if (phi < 0.05) { g.strokeStyle = TH.cardEdge; g.lineWidth = 1; poly(g, [[mx, cy - SS * 2.3], [mx, cy + SS * 2.3]]); g.stroke(); }
+    dot(g, mx, my, 5.5);
+}
+function phiOf(f) { return (Math.PI / 2) * ease((f - A(2) - 0.08 * P) / (0.84 * P)); }
+
+// ------------------------------------------------------------------------------------------------ 4: the fold clock (circle -> cosine)
+function drawClock(g, w, h, f, t) {
+    const cx = 122, cy = centreY(h), R = 86, wx0 = 250, ww = w - wx0 - 26, win = O.T / 4;
+    const [a, b, i] = angles(t), q = (a - b) / 2;
+    g.strokeStyle = TH.rule; g.lineWidth = 1.2; g.beginPath(); g.arc(cx, cy, R, 0, 7); g.stroke();
+    poly(g, [[cx - R - 12, cy], [wx0 + ww, cy]]); g.stroke(); poly(g, [[cx, cy - R - 10], [cx, cy + R + 10]]); g.stroke();
+    g.fillStyle = TH.muted; g.font = '13px "IBM Plex Mono"'; g.textAlign = 'right'; g.fillText('← newest', wx0 + ww, cy + R + 22);
+    const hx = cx + R * Math.sin(q), hy = cy - R * Math.cos(q);
+    g.strokeStyle = TH.muted; g.lineWidth = 1.8; poly(g, [[cx, cy], [hx, hy]]); g.stroke();
+    g.strokeStyle = rgba(TH.floor, 0.45); g.lineWidth = 1.2; poly(g, [[hx, hy], [wx0, hy]]); g.stroke();
+    // the cosine of the hand, newest at the left, as far back as this picture has been running
+    const back = Math.min(Math.round(win * O.rate), Math.round((f - A(3)) / (FPS * SLOW) * O.rate));
+    g.lineWidth = 2.4; g.lineJoin = 'round'; g.strokeStyle = TH.butterfly; g.beginPath();
+    for (let m = 0; m <= back; m += 2) { const k = wrap(i - m); const xx = wx0 + m / O.rate / win * ww, yy = cy - R * Math.cos(D2[k]); m ? g.lineTo(xx, yy) : g.moveTo(xx, yy); }
+    g.stroke();
+    dot(g, hx, hy, 5.5); dot(g, wx0, hy, 4.5);
+}
+
+// ------------------------------------------------------------------------------------------------ 5: the bell above the floor (3-D)
+function camera(f) {
+    const az = -0.72 + 0.42 * ease((f - A(4)) / (2 * P)), el = 0.6, Rc = 9.2, tgt = [0, 0, 0.7];
+    const eye = [Rc * Math.sin(az) * Math.cos(el), -Rc * Math.cos(az) * Math.cos(el), tgt[2] + Rc * Math.sin(el)];
+    let fw = [tgt[0] - eye[0], tgt[1] - eye[1], tgt[2] - eye[2]]; const n = Math.hypot(...fw); fw = fw.map(v => v / n);
+    let rt = [fw[1], -fw[0], 0]; const rn = Math.hypot(...rt); rt = rt.map(v => v / rn);
+    const up = [rt[1] * fw[2] - rt[2] * fw[1], rt[2] * fw[0] - rt[0] * fw[2], rt[0] * fw[1] - rt[1] * fw[0]];
+    return { eye, fw, rt, up };
+}
+function drawBell(g, w, h, f, t, e) {
+    const C = camera(f), F = 740, cy0 = centreY(h) - 26;
+    const pr = (x, y, z) => { const v = [x - C.eye[0], y - C.eye[1], z - C.eye[2]], xc = v[0] * C.rt[0] + v[1] * C.rt[1] + v[2] * C.rt[2], yc = v[0] * C.up[0] + v[1] * C.up[1] + v[2] * C.up[2], zc = v[0] * C.fw[0] + v[1] * C.fw[1] + v[2] * C.fw[2]; return [w / 2 + F * xc / zc, cy0 - F * yc / zc, zc]; };
+    const ring = (rr, z, nseg) => Array.from({ length: nseg + 1 }, (_, k) => pr(rr * Math.cos(k / nseg * 6.2832), rr * Math.sin(k / nseg * 6.2832), z));
+    g.fillStyle = rgba(TH.floor, TH.floorA); poly(g, ring(2.08, 0, 120), true); g.fill();
+    g.lineWidth = 1; g.strokeStyle = rgba(TH.floor, 0.26); for (const rr of [1, 2]) { poly(g, ring(rr, 0, 120), true); g.stroke(); }
+    g.strokeStyle = rgba(TH.floor, 0.14); for (let k = 0; k < 12; k++) { const aa = k / 12 * 6.2832; poly(g, [pr(0, 0, 0), pr(2 * Math.cos(aa), 2 * Math.sin(aa), 0)]); g.stroke(); }
+    // the tip path on the floor, as far as this picture has drawn it
+    const [a, b, i] = angles(t), ne = Math.round(e * O.rate);
+    const fl = []; for (let k = 0; k <= ne; k += 2) fl.push(pr(X[k], H[k], 0));
+    if (fl.length > 1) { g.lineJoin = 'round'; g.lineCap = 'round'; g.globalCompositeOperation = TH.add; g.strokeStyle = TH.glow; g.lineWidth = 4; poly(g, fl); g.stroke(); g.strokeStyle = TH.butterfly; g.lineWidth = 1.3; poly(g, fl); g.stroke(); g.globalCompositeOperation = 'source-over'; }
+    // the pendulum lying on the floor
+    const pv = pr(0, 0, 0), j = pr(Math.sin(a), -Math.cos(a), 0), tip = pr(X[i], H[i], 0);
+    g.strokeStyle = TH.rods; g.lineWidth = 6; g.globalAlpha = 0.95; poly(g, [pv, j, tip]); g.stroke(); g.globalAlpha = 1;
+    bob(g, j[0], j[1], 8); bob(g, tip[0], tip[1], 8); pivot(g, pv[0], pv[1]);
+    // the bell r = 2 cos z
+    g.lineWidth = 1;
+    for (let m = 0; m < 18; m++) { const aa = m / 18 * 6.2832; g.strokeStyle = rgba(TH.dome, TH.domeA); poly(g, Array.from({ length: 41 }, (_, k) => { const z = k / 40 * Math.PI / 2; return pr(2 * Math.cos(z) * Math.cos(aa), 2 * Math.cos(z) * Math.sin(aa), z); })); g.stroke(); }
+    for (const z of [0.25, 0.5, 0.75, 1.0, 1.25, 1.5]) { g.strokeStyle = rgba(TH.dome, TH.domeA * 1.4); poly(g, ring(2 * Math.cos(z), z, 96), true); g.stroke(); }
+    // the path lifted onto the bell: recent part bright, older part fading
+    const age = Math.round(1.1 * O.rate), back = Math.min(age, Math.round(e * O.rate));
+    g.globalCompositeOperation = TH.add; g.lineCap = 'butt';
+    for (let m = back; m > 0; m -= 8) {
+        const k0 = wrap(i - m), k1 = wrap(i - Math.max(0, m - 8)), al = (1 - m / age) ** 1.3;
+        const p0 = pr(X[k0], H[k0], Z[k0]), p1 = pr(X[k1], H[k1], Z[k1]);
+        g.strokeStyle = rgba(TH.lifted, 0.1 * al); g.lineWidth = 5.5; poly(g, [p0, p1]); g.stroke();
+        g.strokeStyle = rgba(TH.lifted, 0.9 * al); g.lineWidth = 1.7; poly(g, [p0, p1]); g.stroke();
+    }
+    g.globalCompositeOperation = 'source-over'; g.lineCap = 'round';
+    const hd = pr(X[i], H[i], Z[i]);
+    g.strokeStyle = TH.plumb; g.lineWidth = 1.5; g.setLineDash([2, 5]); poly(g, [tip, hd]); g.stroke(); g.setLineDash([]);
+    g.strokeStyle = TH.head; g.lineWidth = 1.6; g.beginPath(); g.arc(tip[0], tip[1], 12, 0, 7); g.stroke();
+    dot(g, hd[0], hd[1], 5.5);
+}
+
+// ------------------------------------------------------------------------------------------------ 6: the butterfly, long exposure
+function drawButterfly(g, w, h, f, t, e) {
+    const cx = w / 2, cy = centreY(h), S = 84;
+    g.strokeStyle = TH.grid; g.lineWidth = 1; for (const rr of [1, 2]) { g.beginPath(); g.arc(cx, cy, rr * S, 0, 7); g.stroke(); }
+    const n = Math.round(e / O.T * NN);
+    g.globalCompositeOperation = TH.add; g.lineJoin = 'round'; g.lineCap = 'butt';
+    for (let j = 0; j + 2 <= n; j += 2) {
+        const u = j / NN, x0 = cx + S * XS[j], y0 = cy - S * HS[j], x1 = cx + S * XS[j + 2], y1 = cy - S * HS[j + 2];
+        g.strokeStyle = rampCol(u, TH.glowA * 1.4); g.lineWidth = 8; poly(g, [[x0, y0], [x1, y1]]); g.stroke();
+        g.strokeStyle = rampCol(u, 0.97); g.lineWidth = 2.3; poly(g, [[x0, y0], [x1, y1]]); g.stroke();
+    }
+    g.globalCompositeOperation = 'source-over';
+    const [a, b] = angles(t), x1 = cx + S * Math.sin(a), y1 = cy + S * Math.cos(a), x2 = x1 + S * Math.sin(b), y2 = y1 + S * Math.cos(b);
+    g.globalAlpha = 0.5; g.lineCap = 'round'; g.strokeStyle = TH.rods; g.lineWidth = 4; poly(g, [[cx, cy], [x1, y1], [x2, y2]]); g.stroke(); g.globalAlpha = 1;
+    pivot(g, cx, cy); dot(g, x2, y2, 6);
+}
+
+// ------------------------------------------------------------------------------------------------ frame
+let g, DPR = 1;
+const memo = {};
+function setHTML(el, key, html) { if (memo[key] !== html) { memo[key] = html; el.innerHTML = html; } }
+function setClass(el, key, cls) { if (memo[key] !== cls) { memo[key] = cls; el.className = cls; } }
+function frameRect(p, ph, f, i) {
+    const rr = (dx) => { g.beginPath(); g.roundRect(p.x + dx, p.y + dx, p.w - 2 * dx, p.h - 2 * dx, 16 - dx); };
+    if (ph === 'off') { g.globalAlpha = 0.5; g.fillStyle = TH.panel; rr(0.5); g.fill(); g.setLineDash([5, 6]); g.strokeStyle = TH.rule; g.lineWidth = 1; g.stroke(); g.setLineDash([]); g.globalAlpha = 1; return; }
+    g.fillStyle = TH.panel; rr(0.5); g.fill();
+}
+function frameEdge(p, ph, f, i) {
+    const on = ease((f - A(i)) / TR), leave = i < 5 ? ease((f - A(i + 1)) / TR) : ease((f - FINALE()) / TR);
+    const hot = ph === 'off' ? 0 : on * (1 - leave);
+    g.beginPath(); g.roundRect(p.x + 0.5, p.y + 0.5, p.w - 1, p.h - 1, 16);
+    g.strokeStyle = TH.rule; g.lineWidth = 1; g.stroke();
+    if (hot > 0.01) { g.globalAlpha = hot; g.strokeStyle = TH.accent; g.lineWidth = 2.2; g.stroke(); g.globalAlpha = 1; }
+}
+function renderFrame(f) {
+    g.setTransform(DPR, 0, 0, DPR, 0, 0); g.fillStyle = TH.bg; g.fillRect(0, 0, 1920, 1080);
+    const t = simT(f);
+    PANELS.forEach((p, i) => {
+        const ph = phase(f, i);
+        frameRect(p, ph, f, i);
+        if (ph !== 'off') {
+            g.save(); g.beginPath(); g.roundRect(p.x + 1, p.y + 1, p.w - 2, p.h - 2, 15); g.clip(); g.translate(p.x, p.y);
+            const e = drawn(f, i), fade = ease((f - A(i)) / TR);
+            g.globalAlpha = 1;
+            if (i === 0) drawPendulum(g, p.w, p.h, f, t);
+            else if (i === 1) drawSheet(g, p.w, p.h, t, e, 0, 1, true);
+            else if (i === 2) drawSheet(g, p.w, p.h, t, O.T, phiOf(f), fade, true);
+            else if (i === 3) drawClock(g, p.w, p.h, f, t);
+            else if (i === 4) drawBell(g, p.w, p.h, f, t, e);
+            else drawButterfly(g, p.w, p.h, f, t, e);
+            if (i === 2) { g.fillStyle = TH.muted; g.font = '15px "IBM Plex Mono"'; g.textAlign = 'right'; g.fillText(`φ = ${(phiOf(f) * 180 / Math.PI).toFixed(0)}°`, p.w - 24, 36); }
+            // an older picture is shaded while a newer one is drawing; at the end all six are equal
+            const shade = ph === 'past' ? 0.3 * ease((f - A(i + 1)) / TR) : ph === 'all' ? 0.3 * (1 - ease((f - FINALE()) / TR)) : 0;
+            if (shade > 0.005) { g.globalAlpha = shade; g.fillStyle = TH.panel; g.fillRect(0, 0, p.w, p.h); g.globalAlpha = 1; }
+            g.restore();
+        }
+        frameEdge(p, ph, f, i);
+        setClass(p.elT, 'tc' + i, 'ttl' + (ph === 'off' ? ' off' : '')); setClass(p.elC, 'cc' + i, 'cap' + (ph === 'off' ? ' off' : ''));
+    });
+    const k = f < INTRO ? -1 : Math.min(5, Math.floor((f - INTRO) / P));
+    const line2 = f < INTRO ? 'six pictures of one motion' : f >= FINALE() ? 'all six pictures, moving together' : `picture <b>${k + 1}</b> of 6 is drawing: ${PANELS[k].title.toLowerCase()}`;
+    setHTML($('clock'), 'clock', `t = <b>${t.toFixed(3)}</b> s of ${O.T.toFixed(3)} s · shown at ¼ speed<br>${line2}`);
+}
+window.renderFrame = renderFrame;
+
+async function boot() {
+    DPR = window.devicePixelRatio || 1;
+    O = await (await fetch('orbit24.json')).json(); prep();
+    P = O.T * FPS * SLOW; TOTAL = Math.ceil(INTRO + 7 * P) + 12;
+    $('h2').textContent = `two equal rods, 1 kg and 1 m each, kicked once with p = (${O.p1.toFixed(3)}, ${O.p2.toFixed(3)}) kg·m²/s. Each new picture joins on the next swing; one clock drives all six.`;
+    const c = $('cv'); c.width = 1920 * DPR; c.height = 1080 * DPR; c.style.width = '1920px'; c.style.height = '1080px'; g = c.getContext('2d');
+    PANELS.forEach((p, i) => {
+        p.elT = document.createElement('div'); p.elT.className = 'ttl'; p.elT.style.left = (p.x + 24) + 'px'; p.elT.style.top = (p.y + 20) + 'px';
+        p.elT.innerHTML = `<small>${i + 1}</small>${p.title}`; $('stage').appendChild(p.elT);
+        p.elC = document.createElement('div'); p.elC.className = 'cap'; p.elC.style.left = (p.x + 24) + 'px'; p.elC.style.top = (p.y + p.h - 36) + 'px';
+        katex.render(p.cap, p.elC, { throwOnError: false }); $('stage').appendChild(p.elC);
+    });
+    await document.fonts.ready;
+    await Promise.all(['IBM Plex Mono', 'IBM Plex Sans', 'Instrument Serif'].map(fn => document.fonts.load(`20px "${fn}"`)));
+    window.FILM = { FPS, SLOW, INTRO, P, frames: () => TOTAL };
+    renderFrame(Number(Q.get('f') || 0)); window.__ready = true;
+    if (!Q.get('film')) { let f = 0; const loop = () => { renderFrame(f % TOTAL); f++; requestAnimationFrame(loop); }; loop(); }
+}
+function fit() { const s = Math.min(innerWidth / 1920, innerHeight / 1080, 1); $('stage').style.transform = `scale(${s})`; }
+if (!Q.get('film')) { fit(); addEventListener('resize', fit); }
+boot();
+</script>
+</body>
+</html>
