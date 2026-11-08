@@ -1,16 +1,17 @@
 // Render the butterfly film frame by frame with the preinstalled headless Chromium.
-//   node tools/fig13/gift/render.cjs THEME OUTDIR DSF [frame,frame,... | all]
+//   node tools/fig13/gift/render.cjs THEME OUTDIR DSF [frame,frame,... | all] [PAGE] [SCENE]
+//   PAGE: butterfly3d (default) or morph; SCENE (morph only): wheel or butterfly
 // Serves nothing itself: start `python3 -m http.server 8766` in the repository root first.
 const { chromium } = require('playwright');
 const fs = require('fs');
 (async () => {
-  const [theme, outdir, dsf, which] = [process.argv[2], process.argv[3], Number(process.argv[4] || 1), process.argv[5] || 'all'];
+  const [theme, outdir, dsf, which, page, scene] = [process.argv[2], process.argv[3], Number(process.argv[4] || 1), process.argv[5] || 'all', process.argv[6] || 'butterfly3d', process.argv[7] || 'butterfly'];
   fs.mkdirSync(outdir, { recursive: true });
   const b = await chromium.launch();
   const ctx = await b.newContext({ viewport: { width: 1920, height: 1080 }, deviceScaleFactor: dsf });
   const p = await ctx.newPage(); const errs = [];
   p.on('pageerror', e => errs.push(e.message)); p.on('console', m => { if (m.type() === 'error') errs.push(m.text()); });
-  await p.goto(`http://localhost:8766/tools/fig13/gift/butterfly3d.html?theme=${theme}&film=1`, { waitUntil: 'load' });
+  await p.goto(`http://localhost:8766/tools/fig13/gift/${page}.html?theme=${theme}&scene=${scene}&film=1`, { waitUntil: 'load' });
   await p.waitForFunction(() => window.__ready === true, null, { timeout: 60000 });
   const total = await p.evaluate(() => window.FILM.frames());
   const list = which === 'all' ? Array.from({ length: total }, (_, i) => i) : which.split(',').map(Number);
