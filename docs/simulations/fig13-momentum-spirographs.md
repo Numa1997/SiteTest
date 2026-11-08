@@ -31,6 +31,7 @@ momenta p₁, p₂. Hamilton's equations for the general family (masses, lengths
 | `simulations/fig13/turning.html?scene=wheel\|butterfly` | Film: turning the paper, with the deck of earlier pictures. |
 | `simulations/fig13/together.html` | Film: six pictures on one clock; the phone layout on a portrait screen. |
 | `simulations/fig13/dive.html` | Film, phone first: from momentum space into one cell, then the exposure grows from an eye's 0.1 s to one lap. |
+| `simulations/fig13/reem.html` | Gift film, not linked from the site: "For ريم" and "فراشتك" written by 420 turning arrows each (a Fourier series of the outline in Noto Nastaliq Urdu, SIL OFL; `tools/fig13/gift/reem_data.py`, `calligraphy.py`), then the butterfly by two arrows (the rods), then its dashboard with the paper turning. |
 
 The four films are generated: edit `tools/fig13/gift/*.html` and run `python3 tools/fig13/gift/publish_films.py`, which rewrites the
 asset paths, adds the two security meta tags and a link back to the dashboard. Opened without `?film=1` they loop live.
@@ -42,3 +43,14 @@ asset paths, adds the two security meta tags and a link back to the dashboard. O
 - `gift/orbit.py` → `gift/orbit24.json` (samples spaced T/(n−1), not exactly 1/3000 s; index by t/T·(n−1)).
 - `gift/dive_data.py` → `gift/dive/dive.json` and `dive.bin` (not committed in tools/, about 47 s to regenerate; checks the butterfly cell against orbit24 to 3.6e-5 rad and every cell's energy to 1e-6).
 - `gift/render.cjs THEME OUTDIR DSF [frames|all] [PAGE] [SCENE] [WxH]` renders a film to frames (local server on port 8766 in the repository root); ffmpeg makes the MP4. Videos are not committed.
+
+## What makes the butterfly (checked on orbit24.json, 8 November 2026)
+
+- At every petal the arm is straight (Δ = 2πn), and then tip = 2l·e^{iθ₁}: the petal points exactly along the upper rod.
+- Over one lap the upper rod makes 0 net turns and swings between −156.7° and +156.7°, never over the top; the lower rod makes 24 turns
+  (about 9 turns of the elbow per second). The butterfly is a slow pendulum (the upper rod, held by gravity) carrying a fast spinner
+  (the lower rod); the wings are the turning points of the slow swing, where the petals pile up (±135.6° at the petals).
+- Conditions: a hard kick mostly to the lower rod, so that the arm folds through (eq. 3 of the hunt note: 3p₁² − 114p₁p₂ + 75p₂² > 0)
+  and the petals nearly do not creep without gravity (the one-petal resonance, δ/2π ≈ 0); gravity then holds the petal direction to a
+  swing about straight down. If the upper rod went over the top, the petals would go all the way round: a flower, not a butterfly.
+  It closes exactly when one swing takes a whole number N of petals (N = 24 at E = 390.8 J; the hunt found N = 12 to 32 on p₁ ≈ 3.556).

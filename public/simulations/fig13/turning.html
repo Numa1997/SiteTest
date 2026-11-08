@@ -20,7 +20,8 @@
 @font-face { font-family: 'IBM Plex Mono'; src: url(../../fonts/ibm-plex-mono/ibm-plex-mono-400-latin.woff2) format('woff2'); }
 :root { --bg:#140d10; --panel:#1a1114; --rule:#3a2a2e; --ink:#f5f1ea; --ink2:#d9cdc4; --muted:#b9a59b; --accent:#e2a2aa; }
 :root[data-theme="light"] { --bg:#f5f1ea; --panel:#fffaf3; --rule:#d9d0c2; --ink:#1c1518; --ink2:#3a322e; --muted:#6f635d; --accent:#7a1f2b; }
-html, body { margin:0; background:var(--bg); }
+html, body { margin:0; background:var(--bg); height:100%; overflow:hidden; }   /* the stage never widens the page, so a phone does not zoom out */
+#stage { position:absolute; left:0; top:0; }
 #stage { position:relative; width:1920px; height:1080px; background:var(--bg); color:var(--ink); font-family:'IBM Plex Sans',sans-serif; overflow:hidden; transform-origin:0 0; }
 .card { position:absolute; background:var(--panel); border:1px solid var(--rule); border-radius:16px; }
 .slot { position:absolute; border:1px dashed var(--rule); border-radius:14px; }
@@ -239,7 +240,10 @@ async function boot() {
     renderFrame(Number(Q.get('f') || 0)); window.__ready = true;
     if (!Q.get('film')) { let f = 0; const loop = () => { renderFrame(f % TL.total); f++; requestAnimationFrame(loop); }; loop(); }
 }
-function fit() { const s = Math.min(innerWidth / 1920, innerHeight / 1080, 1); $('stage').style.transform = `scale(${s})`; }
+function fit() {   // scale the stage to the screen (the layout viewport, not innerWidth, which a phone may enlarge) and centre it
+    const cw = document.documentElement.clientWidth, ch = document.documentElement.clientHeight, s = Math.min(cw / 1920, ch / 1080, 1);
+    $('stage').style.transform = `translate(${Math.max(0, (cw - 1920 * s) / 2)}px, 0) scale(${s})`;
+}
 if (!Q.get('film')) { fit(); addEventListener('resize', fit); }
 boot();
 </script>
