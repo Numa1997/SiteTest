@@ -266,7 +266,7 @@ function frame(ts) {
     if (running && last !== null) advance(Math.min(0.05, (ts - last) / 1000));
     last = ts; draw(); requestAnimationFrame(frame);
 }
-const im = new Image(); im.onload = () => { mapImg = im; drawMap(); }; im.src = '../images/fig13/fig13-map.png';
+const im = new Image(); im.onload = () => { mapImg = im; drawMap(); }; im.src = '../images/fig13/chaos-map-rods-P20.png';
 window.addEventListener('resize', () => { size(); draw(); });
 setPar(); size(); makePalette(); draw();
 window.__fig13 = { advance: s => { advance(s); draw(); }, pause: () => { running = false; }, state: () => ({ t, N, P, par, pend }), D: () => D };
