@@ -1,0 +1,428 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Electron Beam, from Tip to Measurement · Numa Koudsie</title>
+    <meta name="description" content="Lecture notes and simulations that follow an electron from a field-emission tip to a measured line width on a wafer: field emission, acceleration, a magnetic lens, the spot, scattering in the wafer, noise and tolerance." />
+    <meta name="author" content="Numa Koudsie" />
+    <meta name="theme-color" content="#f5f1ea" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%237a1f2b'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='34' font-weight='700' fill='%23fff'%3ENK%3C/text%3E%3C/svg%3E" />
+    <link rel="preload" href="../../fonts/instrument-serif/instrument-serif-400-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="../../fonts/instrument-plex.css" />
+    <link rel="stylesheet" href="../../vendor/katex/katex.min.css" />
+    <link rel="stylesheet" href="../../styles/paper.css" />
+<style>
+/* The Electron Beam, from Tip to Measurement · house design as docs/styles.md records it: Instrument Serif titles at weight 400,
+   IBM Plex Sans text, IBM Plex Mono labels, Latin Modern notes (paper.css), wine #7a1f2b, every box outlined, no card shadows. */
+:root{--paper:#f5f1ea;--card:#fffaf3;--card-soft:#fbf6ee;--ink:#1c1518;--ink-2:#3a322e;--ink-3:#5a504b;--muted:#8b8079;--rule:#d9d0c2;--rule-soft:#e6dfd2;
+  --accent:#7a1f2b;--accent-dark:#4d0f18;--accent-rose:#e2a2aa;--tan:#efe4c8;--tan-ink:#7a4b12;
+  --serif:'Instrument Serif',Georgia,'Times New Roman',serif;--sans:'IBM Plex Sans',system-ui,-apple-system,'Segoe UI',sans-serif;--mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
+  --grid:linear-gradient(rgba(122,31,43,.075) 1px,transparent 1px),linear-gradient(90deg,rgba(122,31,43,.075) 1px,transparent 1px)}
+*,*::before,*::after{box-sizing:border-box}
+html{background:var(--paper);-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:var(--serif);font-weight:400;color:var(--ink);margin:0}
+p{margin:0 0 1em}
+a{color:var(--accent);text-decoration:none;text-underline-offset:3px}a:hover{color:var(--accent-dark);text-decoration:underline}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+::selection{background:var(--accent-rose);color:var(--ink)}
+.nobr{white-space:nowrap}
+
+/* top bar: the logo and the way back to the Projects page */
+.eb-top{max-width:1240px;margin:0 auto;padding:22px 32px 0;display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;font:11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.eb-top a{color:var(--ink-3)}.eb-top a:hover{color:var(--accent);text-decoration:none}
+.eb-top img{display:block}.eb-top .back{margin-left:0}
+
+.eb{max-width:1240px;margin:0 auto;padding:30px 32px 64px}
+.eb.paper{margin-top:0}
+.paper__head{max-width:980px}
+.paper__title{max-width:20ch}
+.paper__abstract p:last-child{margin-bottom:0}
+
+/* the reading guide */
+.guide{margin:0 0 44px;padding:18px 22px 20px;background:var(--card);border:1px solid var(--line-strong);border-left:4px solid var(--accent);border-radius:6px;max-width:980px}
+.guide__t{margin:0 0 12px;font:500 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.guide__grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 28px;margin:0}
+.guide dt{font:500 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
+.guide dd{margin:0;font:17px/1.55 var(--tex);color:var(--ink-2)}
+.guide__status{margin:16px 0 0;padding-top:12px;border-top:1px solid var(--rule-soft);font:12px/1.6 var(--mono);color:var(--ink-3)}
+
+/* chapters */
+.chapter{padding-top:8px;margin-top:64px;border-top:1px solid var(--line-strong)}
+.chapter:first-child{margin-top:0;border-top:0}
+.chapter__t{display:flex;flex-direction:column;gap:6px;margin:30px 0 18px;font:400 clamp(34px,4.2vw,52px)/1.04 var(--serif);letter-spacing:-.012em}
+.chapter__n{font:500 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.chapter__lead{font-size:20px;color:var(--ink-2)}
+.chapter--todo .todo{padding:14px 18px;border:1px dashed var(--line-strong);border-radius:6px;color:var(--muted);font:15px var(--tex)}
+.paper__body .psec{margin-top:30px;padding-top:26px}
+.paper__body .psec:first-of-type{margin-top:18px}
+.paper__toc .toc-sub{display:none}
+.paper__toc li.is-open .toc-sub{display:block}
+.paper__toc .toc-sub a{padding-left:34px;font-size:14.5px}
+.paper__toc a.is-here{color:var(--accent)}
+
+/* numbered display equations: the equation on its quote ground, its number beside it */
+.eqn{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:0 12px;margin:1.1em 0 1.3em}
+.eqn__m{min-width:0}
+.eqn .katex-display{margin:0}
+.eqn__no{font:14px var(--tex);color:var(--muted);white-space:nowrap}
+.eqn:target .katex-display{border-left-color:var(--accent-dark);background:var(--tan)}
+.eqref,.figref,.secref{white-space:nowrap}
+.ki,.kd{display:inline}.kd{display:block}
+.num{font-variant-numeric:tabular-nums}
+
+/* the running simulation of a chapter */
+.eb-sim{margin:2em 0 .5em;padding:14px 16px 16px;background:var(--card);border:1px solid var(--line-strong);border-radius:8px}
+.eb-sim__t{margin:0 0 12px;font:500 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.eb-sim__grid{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:18px;align-items:start}
+.eb-sim__stage{min-width:0;border:1px solid var(--rule);border-radius:8px;background:var(--card);overflow:hidden}
+.eb-sim__stage canvas{display:block;width:100%;aspect-ratio:var(--ar,16/9);background-color:var(--card);background-image:var(--grid);background-size:24px 24px}
+.eb-sim__cap{margin:0;padding:9px 12px;border-top:1px solid var(--rule-soft);font:15px/1.5 var(--tex);color:var(--ink-3)}
+.eb-sim__panel{min-width:0;display:flex;flex-direction:column;gap:14px}
+.eb-sim__ctls{display:flex;flex-direction:column;gap:12px}
+.eb-sim__err{margin:12px 0 0;padding:10px 14px;background:var(--tan);color:var(--tan-ink);border:1px solid #e0cf9f;border-left:3px solid var(--accent);border-radius:8px;font-size:14px}
+.ctl{display:flex;flex-direction:column;gap:4px;font-size:13.5px;line-height:1.35;color:var(--ink-2)}
+.ctl__row{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.ctl__sym{font-family:var(--tex)}
+.ctl output{font:500 12px var(--mono);color:var(--accent);white-space:nowrap}
+.sel{font:12px var(--mono);padding:5px 8px;border:1px solid var(--rule);border-radius:6px;background:var(--card);color:var(--ink)}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:22px;margin:0;background:transparent;cursor:pointer;--p:50%;--c:var(--accent)}
+input[type=range]::-webkit-slider-runnable-track{height:4px;border-radius:2px;background:linear-gradient(to right,var(--c) 0,var(--c) var(--p),var(--rule) var(--p),var(--rule) 100%)}
+input[type=range]::-moz-range-track{height:4px;border-radius:2px;background:var(--rule)}
+input[type=range]::-moz-range-progress{height:4px;border-radius:2px;background:var(--c)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:16px;height:16px;margin-top:-6px;border-radius:50%;background:var(--c);border:2px solid var(--card);box-shadow:0 0 0 1px var(--c)}
+input[type=range]::-moz-range-thumb{width:12px;height:12px;border-radius:50%;background:var(--c);border:2px solid var(--card);box-shadow:0 0 0 1px var(--c)}
+.readouts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:0}
+.readouts div{min-width:0;background:var(--card-soft);border:1px solid var(--rule-soft);border-radius:8px;padding:7px 10px}
+.readouts dt{font:10px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.readouts dd{margin:2px 0 0;font:13px var(--mono);color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+.eb-foot{max-width:1240px;margin:0 auto;padding:0 32px 48px;font:11.5px/1.7 var(--mono);color:var(--muted)}
+.eb-foot p{max-width:78ch;margin:0 0 6px}
+
+@media (max-width:960px){.eb-sim__grid{grid-template-columns:minmax(0,1fr)}.eb-sim__stage canvas{aspect-ratio:var(--ar-m,16/9)}}
+@media (max-width:640px){.eb-top,.eb,.eb-foot{padding-left:16px;padding-right:16px}.guide__grid{grid-template-columns:minmax(0,1fr)}.guide{padding:14px 16px}.eb-sim{padding:10px}}
+@media print{.eb-top,.eb-sim__panel{display:none}.eb-sim__grid{display:block}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<header class="eb-top"><a href="../../index.html" aria-label="Phyein Usul, home page"><img src="../../images/phyein-usul-mark.svg" alt="Phyein Usul" width="87" height="48" /></a><a class="back" href="../../portfolios.html">← Numa Koudsie · Projects</a></header>
+<main class="eb paper is-typeset" id="paper">
+  <div class="paper__head">
+    <p class="paper__kicker">Project 07 · Electron optics</p>
+    <h1 class="paper__title">The Electron Beam, from Tip to Measurement</h1>
+    <p class="paper__by">Numa Koudsie · lecture notes and simulations · every number computed</p>
+    <div class="paper__abstract"><p><b>Question.</b> Why does anyone build an electron beam, and what must the machine deliver? Chips have features a few nanometres wide and one defect can kill a chip, so every step is inspected and measured. Light cannot resolve such features; the electron wavelength at kilovolt energies is picometres. The beam is a probe scanned over the wafer, and what comes back gives edge position, height and material. The machine must give a spot thinner than the feature, enough current for a clean picture, a beam gentle enough for fragile resist, and speed, and these demands trade against each other. The chapters expose those trade-offs one by one.</p></div>
+  </div>
+  <aside class="guide" id="guide" aria-label="Reading guide for the reviewer">
+    <p class="guide__t">Reading guide for the reviewer</p>
+    <dl class="guide__grid">
+      <div><dt>What this page shows</dt><dd>A chain of short chapters that follows an electron from a metal tip to a measured line width on a wafer. Each chapter starts from a physical picture, derives its formulas step by step, and ends with a simulation whose sliders are the symbols of the formulas. The last chapters connect all stages into one machine and ask which parameter matters most.</dd></div>
+      <div><dt>What it models</dt><dd>The motion of a charged particle in electric and magnetic fields, field emission from a tip, acceleration, a magnetic lens with an analytic field, the aberrations that set the spot size, the scattering of electrons in a solid, and the statistics of a noisy line profile.</dd></div>
+      <div><dt>What it leaves out</dt><dd>No field solver: lens fields are an analytic model, not a finite-element or boundary-element computation. No aberration-corrected optics. No space-charge interaction between beam electrons unless a chapter says so. No proprietary detail and no model of any commercial tool.</dd></div>
+      <div><dt>Where each number comes from</dt><dd>Constants are CODATA 2018. Every number in the text is computed by the page&rsquo;s own code and checked against an independent Python version. Published data are shown beside the model with their source, and the gap between model and data is stated.</dd></div>
+    </dl>
+    <p class="guide__status">0 of 10 chapters written · 0 numbered equations · 0 figures · 0 computed numbers · 1 simulations running in the page. Chapters that are not written yet show as “in preparation”.</p>
+  </aside>
+  <div class="paper__grid">
+    <nav class="paper__toc" aria-label="Chapters"><p>Chapters</p><ol><li><a href="#ch00" data-ch="ch00"><span>0</span>The goal</a></li><li><a href="#ch01" data-ch="ch01"><span>1</span>A free electron in fields</a></li><li><a href="#ch02" data-ch="ch02"><span>2</span>The source</a></li><li><a href="#ch03" data-ch="ch03"><span>3</span>Acceleration, brightness, energy spread</a></li><li><a href="#ch04" data-ch="ch04"><span>4</span>The lens</a></li><li><a href="#ch05" data-ch="ch05"><span>5</span>The spot</a></li><li><a href="#ch06" data-ch="ch06"><span>6</span>Scan and hit</a></li><li><a href="#ch07" data-ch="ch07"><span>7</span>Detect and measure</a></li><li><a href="#ch08" data-ch="ch08"><span>8</span>The whole machine</a></li><li><a href="#ch09" data-ch="ch09"><span>9</span>What an interviewer for this role will probe</a></li></ol></nav>
+    <div class="paper__body">
+<section class="chapter chapter--todo" id="ch00"><h2 class="chapter__t"><span class="chapter__n">Chapter 0</span>The goal</h2><p class="todo">In preparation. This chapter has not been written yet.</p><div class="eb-sim" data-module="ch00" id="sim-ch00" style="--ar:16 / 6;--ar-m:16 / 6"><p class="eb-sim__t">Simulation · The goal: why electrons</p><div class="eb-sim__grid"><div class="eb-sim__stage"><canvas role="img" aria-label="The goal: why electrons"></canvas><p class="eb-sim__cap">Four lengths on one logarithmic ruler: the electron wavelength, the feature, the smallest half-pitch light can resolve, and the light’s wavelength.</p></div><div class="eb-sim__panel"><div class="eb-sim__ctls"><label class="ctl"><span class="ctl__row"><span><span class="ctl__sym"><span class="ki" role="img" aria-label="V"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.22222em;">V</span></span></span></span></span></span> acceleration voltage of the gun</span><output data-for="V_acc"></output></span><input type="range" min="0" max="1000" step="1" value="500" data-symbol="V_acc" data-min="100" data-max="300000" data-scale="log" data-int="0" aria-label="acceleration voltage of the gun"></label><label class="ctl"><span class="ctl__row"><span><span class="ctl__sym"><span class="ki" role="img" aria-label="\lambda_\mathrm{opt}"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9805em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal">λ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2806em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathrm mtight">opt</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span></span></span> wavelength of the light in an optical inspection tool</span><output data-for="lambda_opt"></output></span><input type="range" min="0" max="1000" step="1" value="500" data-symbol="lambda_opt" data-min="1.3e-08" data-max="7e-07" data-scale="log" data-int="0" aria-label="wavelength of the light in an optical inspection tool"></label><label class="ctl"><span class="ctl__row"><span><span class="ctl__sym"><span class="ki" role="img" aria-label="\mathrm{NA}"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord"><span class="mord mathrm">NA</span></span></span></span></span></span></span> numerical aperture of the optical objective</span><output data-for="NA"></output></span><input type="range" min="0" max="1000" step="1" value="500" data-symbol="NA" data-min="0.1" data-max="1.35" data-scale="lin" data-int="0" aria-label="numerical aperture of the optical objective"></label><label class="ctl"><span class="ctl__row"><span><span class="ctl__sym"><span class="ki" role="img" aria-label="w"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.02691em;">w</span></span></span></span></span></span> width of the smallest feature on the wafer that must be seen</span><output data-for="w_feat"></output></span><input type="range" min="0" max="1000" step="1" value="500" data-symbol="w_feat" data-min="1e-09" data-max="1e-06" data-scale="log" data-int="0" aria-label="width of the smallest feature on the wafer that must be seen"></label></div><dl class="readouts"><div><dt><span class="ki" role="img" aria-label="\lambda"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">λ</span></span></span></span></span></dt><dd data-out="lambda_e">38.8 pm</dd></div><div><dt><span class="ki" role="img" aria-label="d_\mathrm{opt}"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9805em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal">d</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2806em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathrm mtight">opt</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span></span></dt><dd data-out="d_opt">102 nm</dd></div><div><dt><span class="ki" role="img" aria-label="d_\mathrm{opt}/w"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0361em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal">d</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2806em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathrm mtight">opt</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mord">/</span><span class="mord mathnormal" style="margin-right:0.02691em;">w</span></span></span></span></span></dt><dd data-out="ratio_opt">10.2</dd></div><div><dt><span class="ki" role="img" aria-label="\lambda/w"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">λ</span><span class="mord">/</span><span class="mord mathnormal" style="margin-right:0.02691em;">w</span></span></span></span></span></dt><dd data-out="ratio_e">0.00388</dd></div></dl></div></div><p class="eb-sim__err" hidden></p></div></section>
+<section class="chapter chapter--todo" id="ch01"><h2 class="chapter__t"><span class="chapter__n">Chapter 1</span>A free electron in fields</h2><p class="todo">In preparation. This chapter has not been written yet.</p></section>
+<section class="chapter chapter--todo" id="ch02"><h2 class="chapter__t"><span class="chapter__n">Chapter 2</span>The source</h2><p class="todo">In preparation. This chapter has not been written yet.</p></section>
+<section class="chapter chapter--todo" id="ch03"><h2 class="chapter__t"><span class="chapter__n">Chapter 3</span>Acceleration, brightness, energy spread</h2><p class="todo">In preparation. This chapter has not been written yet.</p></section>
+<section class="chapter chapter--todo" id="ch04"><h2 class="chapter__t"><span class="chapter__n">Chapter 4</span>The lens</h2><p class="todo">In preparation. This chapter has not been written yet.</p></section>
+<section class="chapter chapter--todo" id="ch05"><h2 class="chapter__t"><span class="chapter__n">Chapter 5</span>The spot</h2><p class="todo">In preparation. This chapter has not been written yet.</p></section>
+<section class="chapter chapter--todo" id="ch06"><h2 class="chapter__t"><span class="chapter__n">Chapter 6</span>Scan and hit</h2><p class="todo">In preparation. This chapter has not been written yet.</p></section>
+<section class="chapter chapter--todo" id="ch07"><h2 class="chapter__t"><span class="chapter__n">Chapter 7</span>Detect and measure</h2><p class="todo">In preparation. This chapter has not been written yet.</p></section>
+<section class="chapter chapter--todo" id="ch08"><h2 class="chapter__t"><span class="chapter__n">Chapter 8</span>The whole machine</h2><p class="todo">In preparation. This chapter has not been written yet.</p></section>
+<section class="chapter chapter--todo" id="ch09"><h2 class="chapter__t"><span class="chapter__n">Chapter 9</span>What an interviewer for this role will probe</h2><p class="todo">In preparation. This chapter has not been written yet.</p></section>
+    </div>
+  </div>
+</main>
+<footer class="eb-foot">
+  <p>An independent portfolio project by Numa Koudsie. It is not affiliated with, endorsed by or sponsored by Applied Materials, and it does not model any of its products. Statements by manufacturers are quoted as public claims, with their source.</p>
+  <p>Mathematics typeset at build time with KaTeX 0.16.11; physics in <code>physics/*.js</code>, Python reference in <code>ref/</code>; source in the repository under <code>portfolios-src/electron-beam/</code>.</p>
+</footer>
+<script type="application/json" id="eb-contract">{"title":"The Electron Beam, from Tip to Measurement: the hand-over contract","version":1,"written":"2026-11-09, scaffold session S1, from PLAN.md section 6","rules":["Every stored value is in coherent SI units: m, s, kg, A, K, mol, and derived units (V, T, J, Pa, sr). No eV, nm, mbar or degrees Celsius inside a value.","A symbol may carry a display unit (display_unit) and the factor that turns the SI value into it (display_scale): shown = value * display_scale. Energies are stored in J and shown in eV; the eV is accepted for use with the SI, it is never stored.","Each symbol has one meaning on the whole page. Its key is the name used in physics/chNN.js, ref/chNN.py and text/chNN.py.","A stage reads only the symbols listed under its 'in' and the 'out' of earlier stages, and writes only its 'out'.","A chapter that needs a new symbol or a change here writes the request in notes/electron-beam/requests.md; the scaffold or the coordinator edits this file."],"types":{"number":"a finite IEEE 754 double in the SI unit given","integer":"a whole number stored as a double","enum":"one of the strings listed in 'values'","material":"an object {Z, A, rho, J, name}: atomic number, molar mass in kg/mol, density in kg/m^3, mean ionisation energy in J","profile":"an object {kind, pitch, cd, height, sidewall}: kind 'line-space' or 'fin'; lengths in m; sidewall angle in rad","array":"a list of numbers (a curve or a trajectory); its unit is the symbol's unit"},"symbols":{"lambda_opt":{"meaning":"wavelength of the light in an optical inspection tool","tex":"\\lambda_\\mathrm{opt}","type":"number","unit":"m","default":1.93e-07,"min":1.3e-08,"max":7e-07,"scale":"log","display_unit":"nm","display_scale":1000000000.0,"stage":"ch0"},"NA":{"meaning":"numerical aperture of the optical objective","tex":"\\mathrm{NA}","type":"number","unit":"1","default":0.95,"min":0.1,"max":1.35,"scale":"lin","stage":"ch0"},"w_feat":{"meaning":"width of the smallest feature on the wafer that must be seen","tex":"w","type":"number","unit":"m","default":1e-08,"min":1e-09,"max":1e-06,"scale":"log","display_unit":"nm","display_scale":1000000000.0,"stage":"ch0"},"d_opt":{"meaning":"smallest half-pitch light can resolve, Abbe limit lambda_opt/(2 NA)","tex":"d_\\mathrm{opt}","type":"number","unit":"m","display_unit":"nm","display_scale":1000000000.0,"stage":"ch0"},"ratio_opt":{"meaning":"Abbe limit over feature width (above 1: light cannot resolve the feature)","tex":"d_\\mathrm{opt}/w","type":"number","unit":"1","stage":"ch0"},"ratio_e":{"meaning":"electron wavelength over feature width","tex":"\\lambda/w","type":"number","unit":"1","stage":"ch0"},"E_field":{"meaning":"uniform electric field strength (along +y in chapter 1)","tex":"E","type":"number","unit":"V/m","default":10000.0,"min":0,"max":1000000.0,"scale":"lin","display_unit":"kV/m","display_scale":0.001,"stage":"ch1"},"B_field":{"meaning":"uniform magnetic flux density (along +z in chapter 1)","tex":"B","type":"number","unit":"T","default":0.001,"min":0,"max":0.1,"scale":"lin","display_unit":"mT","display_scale":1000.0,"stage":"ch1"},"v_0":{"meaning":"initial electron speed","tex":"v_0","type":"number","unit":"m/s","default":10000000.0,"min":100000.0,"max":290000000.0,"scale":"log","display_unit":"Mm/s","display_scale":1e-06,"stage":"ch1"},"theta_0":{"meaning":"angle of the initial velocity to the magnetic field","tex":"\\theta_0","type":"number","unit":"rad","default":1.0471975511965976,"min":0,"max":3.141592653589793,"scale":"lin","display_unit":"deg","display_scale":57.29577951308232,"stage":"ch1"},"dt":{"meaning":"integrator time step","tex":"\\Delta t","type":"number","unit":"s","default":1e-12,"min":1e-15,"max":1e-09,"scale":"log","display_unit":"ps","display_scale":1000000000000.0,"stage":"ch1"},"integrator":{"meaning":"time integrator","tex":"","type":"enum","values":["boris","rk4"],"default":"boris","unit":"","stage":"ch1"},"r_g":{"meaning":"gyroradius of the helix","tex":"r_g","type":"number","unit":"m","display_unit":"mm","display_scale":1000.0,"stage":"ch1"},"omega_c":{"meaning":"cyclotron angular frequency eB/(gamma m)","tex":"\\omega_c","type":"number","unit":"rad/s","stage":"ch1"},"energy_drift":{"meaning":"relative change of kinetic energy over the run, (E_end - E_start)/E_start","tex":"\\delta E/E","type":"number","unit":"1","stage":"ch1"},"trajectory":{"meaning":"positions x, y, z of the electron at each stored step","tex":"\\mathbf r(t)","type":"array","unit":"m","stage":"ch1"},"r_t":{"meaning":"radius of the emitter tip apex","tex":"r_t","type":"number","unit":"m","default":1e-07,"min":1e-08,"max":1e-06,"scale":"log","display_unit":"nm","display_scale":1000000000.0,"stage":"ch2"},"V_ex":{"meaning":"extraction voltage between tip and extractor","tex":"V_\\mathrm{ex}","type":"number","unit":"V","default":4000,"min":500,"max":8000,"scale":"lin","display_unit":"kV","display_scale":0.001,"stage":"ch2"},"phi":{"meaning":"work function of the emitter surface","tex":"\\phi","type":"number","unit":"J","default":7.2899036847e-19,"min":3.2e-19,"max":9.6e-19,"scale":"lin","display_unit":"eV","display_scale":6.241509074460763e+18,"stage":"ch2","note":"default 4.55 eV, clean tungsten (310); the chapter states its source"},"T":{"meaning":"emitter temperature","tex":"T","type":"number","unit":"K","default":300,"min":250,"max":3000,"scale":"lin","display_unit":"K","display_scale":1,"stage":"ch2"},"p":{"meaning":"residual gas pressure at the tip","tex":"p","type":"number","unit":"Pa","default":1e-09,"min":1e-11,"max":0.0001,"scale":"log","display_unit":"Pa","display_scale":1,"stage":"ch2"},"t_clean":{"meaning":"time since the last cleaning flash of the tip","tex":"t","type":"number","unit":"s","default":3600,"min":0,"max":86400,"scale":"lin","display_unit":"h","display_scale":0.0002777777777777778,"stage":"ch2"},"k_f":{"meaning":"field factor in F = V_ex/(k_f r_t)","tex":"k","type":"number","unit":"1","default":5,"min":2,"max":10,"scale":"lin","stage":"ch2"},"I_e":{"meaning":"total emission current from the tip","tex":"I_e","type":"number","unit":"A","display_unit":"µA","display_scale":1000000.0,"stage":"ch2"},"B_r":{"meaning":"reduced brightness of the source","tex":"B_r","type":"number","unit":"A m^-2 sr^-1 V^-1","stage":"ch2"},"dE":{"meaning":"full width at half maximum of the energy distribution of emitted electrons","tex":"\\Delta E","type":"number","unit":"J","display_unit":"eV","display_scale":6.241509074460763e+18,"stage":"ch2"},"d_v":{"meaning":"virtual source diameter","tex":"d_v","type":"number","unit":"m","display_unit":"nm","display_scale":1000000000.0,"stage":"ch2"},"theta_cov":{"meaning":"fraction of the tip surface covered by adsorbed gas","tex":"\\theta","type":"number","unit":"1","stage":"ch2"},"V_acc":{"meaning":"acceleration voltage of the gun","tex":"V","type":"number","unit":"V","default":1000,"min":100,"max":300000,"scale":"log","display_unit":"kV","display_scale":0.001,"stage":"ch3"},"V_land":{"meaning":"landing voltage: the energy per charge with which electrons hit the wafer (after any retarding field)","tex":"V_\\mathrm{land}","type":"number","unit":"V","default":800,"min":100,"max":30000,"scale":"log","display_unit":"kV","display_scale":0.001,"stage":"ch3"},"E_0":{"meaning":"kinetic energy of the beam electrons, e V_acc","tex":"E_0","type":"number","unit":"J","display_unit":"eV","display_scale":6.241509074460763e+18,"stage":"ch3"},"lambda_e":{"meaning":"relativistic de Broglie wavelength of the beam electrons","tex":"\\lambda","type":"number","unit":"m","display_unit":"pm","display_scale":1000000000000.0,"stage":"ch3"},"gamma":{"meaning":"Lorentz factor 1 + eV/(m c^2)","tex":"\\gamma","type":"number","unit":"1","stage":"ch3"},"V_star":{"meaning":"relativistically corrected voltage V (1 + eV/(2 m c^2))","tex":"V^*","type":"number","unit":"V","display_unit":"kV","display_scale":0.001,"stage":"ch3"},"NI":{"meaning":"lens excitation: coil turns times current","tex":"NI","type":"number","unit":"A","default":500,"min":0,"max":5000,"scale":"lin","display_unit":"A","display_scale":1,"stage":"ch4","note":"ampere-turns; the turn count is dimensionless"},"a_lens":{"meaning":"half-width at half maximum of the Glaser bell field B(z) = B_0/(1 + (z/a)^2)","tex":"a","type":"number","unit":"m","default":0.002,"min":0.0002,"max":0.02,"scale":"log","display_unit":"mm","display_scale":1000.0,"stage":"ch4"},"u_obj":{"meaning":"object distance: from the object plane (source or intermediate image) to the lens centre","tex":"u","type":"number","unit":"m","default":0.2,"min":0.01,"max":0.5,"scale":"lin","display_unit":"mm","display_scale":1000.0,"stage":"ch4"},"WD":{"meaning":"working distance: from the objective lens centre to the wafer","tex":"\\mathrm{WD}","type":"number","unit":"m","default":0.003,"min":0.0005,"max":0.02,"scale":"log","display_unit":"mm","display_scale":1000.0,"stage":"ch4"},"B_0":{"meaning":"peak axial flux density of the lens, from NI and a: B_0 = mu_0 NI/(2a) for the Glaser field","tex":"B_0","type":"number","unit":"T","display_unit":"mT","display_scale":1000.0,"stage":"ch4"},"M":{"meaning":"lateral magnification of the column (image size over object size)","tex":"M","type":"number","unit":"1","stage":"ch4"},"f":{"meaning":"focal length of the lens","tex":"f","type":"number","unit":"m","display_unit":"mm","display_scale":1000.0,"stage":"ch4"},"C_s":{"meaning":"spherical aberration coefficient referred to the image side","tex":"C_s","type":"number","unit":"m","display_unit":"mm","display_scale":1000.0,"stage":"ch4"},"C_c":{"meaning":"chromatic aberration coefficient referred to the image side","tex":"C_c","type":"number","unit":"m","display_unit":"mm","display_scale":1000.0,"stage":"ch4"},"theta_rot":{"meaning":"image rotation by the magnetic lens (Larmor angle)","tex":"\\theta_\\mathrm{rot}","type":"number","unit":"rad","display_unit":"deg","display_scale":57.29577951308232,"stage":"ch4"},"alpha":{"meaning":"beam half-angle at the wafer, set by the aperture","tex":"\\alpha","type":"number","unit":"rad","default":0.005,"min":0.0001,"max":0.03,"scale":"log","display_unit":"mrad","display_scale":1000.0,"stage":"ch5"},"d_p":{"meaning":"probe diameter at the wafer, in the convention named by 'probe_convention'","tex":"d_p","type":"number","unit":"m","display_unit":"nm","display_scale":1000000000.0,"stage":"ch5"},"I_p":{"meaning":"probe current reaching the wafer","tex":"I_p","type":"number","unit":"A","display_unit":"pA","display_scale":1000000000000.0,"stage":"ch5"},"probe_convention":{"meaning":"how d_p is defined: 'rss' quadrature sum of the four diameters below (default), or 'fw50' after Barth and Kruit (1996); chapter 5 states the diameter convention of each term (spherical 0.5 C_s alpha^3 is the disc of least confusion)","tex":"","type":"enum","values":["rss","fw50"],"default":"rss","unit":"","stage":"ch5"},"alpha_opt":{"meaning":"aperture half-angle that minimises d_p","tex":"\\alpha_\\mathrm{opt}","type":"number","unit":"rad","display_unit":"mrad","display_scale":1000.0,"stage":"ch5"},"E_land":{"meaning":"landing energy of the beam electrons on the wafer, e V_land","tex":"E","type":"number","unit":"J","display_unit":"eV","display_scale":6.241509074460763e+18,"stage":"ch6"},"material":{"meaning":"target material","tex":"","type":"material","unit":"","default":{"name":"Si","Z":14,"A":0.0280855,"rho":2329,"J":2.73972204414e-17},"stage":"ch6","note":"J default 171 eV (ICRU 37 value for silicon); chapter 6 states its source"},"delta_SE":{"meaning":"secondary electron yield (secondary electrons out per primary in)","tex":"\\delta","type":"number","unit":"1","stage":"ch6"},"eta_BSE":{"meaning":"backscattered electron coefficient","tex":"\\eta","type":"number","unit":"1","stage":"ch6"},"R":{"meaning":"electron range in the target (Kanaya-Okayama unless stated)","tex":"R","type":"number","unit":"m","display_unit":"nm","display_scale":1000000000.0,"stage":"ch6"},"V_int":{"meaning":"volume of the interaction region","tex":"V_\\mathrm{int}","type":"number","unit":"m^3","stage":"ch6"},"sigma_sig":{"meaning":"lateral spread (standard deviation) of the escaping signal around the beam axis","tex":"\\sigma_s","type":"number","unit":"m","display_unit":"nm","display_scale":1000000000.0,"stage":"ch6"},"t_d":{"meaning":"dwell time per pixel","tex":"t_d","type":"number","unit":"s","default":1e-07,"min":1e-09,"max":0.0001,"scale":"log","display_unit":"ns","display_scale":1000000000.0,"stage":"ch7"},"N_px":{"meaning":"pixels along the measured line profile","tex":"N","type":"integer","unit":"1","default":512,"min":32,"max":4096,"scale":"log","stage":"ch7"},"eta_c":{"meaning":"fraction of the emitted signal electrons that the detector collects","tex":"\\eta_c","type":"number","unit":"1","default":0.5,"min":0.05,"max":1,"scale":"lin","stage":"ch7","note":"Applied Materials' public product page quotes 95 % for its back-scatter detector; that is quoted as a public claim only, never as a model input"},"profile":{"meaning":"the structure on the wafer","tex":"","type":"profile","unit":"","default":{"kind":"line-space","pitch":4e-08,"cd":2e-08,"height":3e-08,"sidewall":0.03490658503988659},"stage":"ch7"},"SNR":{"meaning":"signal-to-noise ratio of the edge contrast","tex":"\\mathrm{SNR}","type":"number","unit":"1","stage":"ch7"},"sigma_CD":{"meaning":"standard deviation of the measured critical dimension","tex":"\\sigma_\\mathrm{CD}","type":"number","unit":"m","display_unit":"nm","display_scale":1000000000.0,"stage":"ch7"},"MPH":{"meaning":"measurement rate","tex":"\\dot N_m","type":"number","unit":"1/s","display_unit":"per hour","display_scale":3600,"stage":"ch7"}},"stages":{"ch00":{"title":"The goal: why electrons","in":["lambda_opt","NA","w_feat","V_acc"],"out":["d_opt","ratio_opt","lambda_e","ratio_e","gamma"],"note":"worked example of the module pattern, physics/ch00.js, written by the scaffold"},"ch01":{"title":"A free electron in fields","in":["E_field","B_field","v_0","theta_0","dt","integrator"],"out":["r_g","omega_c","energy_drift","trajectory"],"note":"not in PLAN.md section 6; proposed by the scaffold, the chapter 1 session may ask to change it"},"ch02":{"title":"The source","in":["r_t","V_ex","phi","T","p","t_clean","k_f"],"out":["I_e","B_r","dE","d_v","theta_cov"]},"ch03":{"title":"Acceleration","in":["V_acc","V_land"],"out":["E_0","lambda_e","gamma","V_star"]},"ch04":{"title":"The lens","in":["NI","a_lens","u_obj","WD","V_star"],"out":["B_0","M","f","C_s","C_c","theta_rot"]},"ch05":{"title":"The spot","in":["C_s","C_c","M","d_v","B_r","dE","V_star","lambda_e","alpha","probe_convention"],"out":["d_p","I_p","alpha_opt"]},"ch06":{"title":"Scan and hit","in":["V_land","material"],"out":["E_land","delta_SE","eta_BSE","R","V_int","sigma_sig"]},"ch07":{"title":"Detect and measure","in":["d_p","I_p","t_d","N_px","eta_c","profile","delta_SE","eta_BSE","sigma_sig"],"out":["SNR","sigma_CD","MPH"]},"ch08":{"title":"The whole machine","in":["every input above"],"out":["sensitivity table (normalised derivatives of d_p, I_p, sigma_CD, MPH)","tolerance Monte Carlo","process window"],"note":"chains ch2 to ch7 through this contract; defines no new physics symbols"}}}</script>
+<script>
+/* The Electron Beam, from Tip to Measurement · physics/core.js
+   Shared physics core, owned by the scaffold (PLAN.md section 7). Constants, unit helpers and number formatting.
+
+   The module pattern every physics/chNN.js follows (see physics/ch00.js for a worked example):
+   - one file, wrapped so that it runs unchanged in the page (a plain <script>, registers itself as EB.<name>) and in Node
+     (require('./core.js') returns the same object);
+   - pure: compute(p) reads a plain object of SI inputs (keys from contract.json) and returns a plain object of SI outputs;
+     no DOM, no global state, no randomness unless a seed is passed in p;
+   - optional draw(ctx, w, h, p, out) paints one canvas in the browser from p and out only; it computes nothing new.
+   The Python reference ref/core.py mirrors every constant here; checks/check_parity.py compares the two.
+
+   Constants: CODATA 2018 recommended values (E. Tiesinga et al., Rev. Mod. Phys. 93, 025010 (2021);
+   https://physics.nist.gov/cuu/Constants/). c, h, e, k_B and N_A are exact since the SI redefinition of 20 May 2019. */
+(function (root, factory) {
+  if (typeof module === 'object' && module.exports) module.exports = factory();
+  else { root.EB = root.EB || {}; root.EB.core = factory(); }
+})(typeof self !== 'undefined' ? self : this, function () {
+  'use strict';
+
+  const C = Object.freeze({
+    c: 299792458,                 // m/s, speed of light in vacuum (exact)
+    h: 6.62607015e-34,            // J s, Planck constant (exact)
+    e: 1.602176634e-19,           // C, elementary charge (exact)
+    k_B: 1.380649e-23,            // J/K, Boltzmann constant (exact)
+    N_A: 6.02214076e23,           // 1/mol, Avogadro constant (exact)
+    m_e: 9.1093837015e-31,        // kg, electron mass (CODATA 2018)
+    eps0: 8.8541878128e-12,       // F/m, vacuum electric permittivity (CODATA 2018)
+    mu0: 1.25663706212e-6,        // N/A^2, vacuum magnetic permeability (CODATA 2018)
+    u: 1.66053906660e-27,         // kg, atomic mass constant (CODATA 2018)
+    a0: 5.29177210903e-11,        // m, Bohr radius (CODATA 2018)
+    alpha_fs: 7.2973525693e-3,    // 1, fine-structure constant (CODATA 2018)
+  });
+  // derived, computed here once so that every chapter uses the same double
+  const D = Object.freeze({
+    hbar: C.h / (2 * Math.PI),                     // J s
+    e_over_m: C.e / C.m_e,                         // C/kg, specific charge of the electron (CODATA 2018 lists 1.75882001076e11)
+    mc2: C.m_e * C.c * C.c,                        // J, electron rest energy
+    mc2_eV: C.m_e * C.c * C.c / C.e,               // eV-equivalent of the rest energy, as a plain number (CODATA 2018: 510998.95000)
+    A_R: 4 * Math.PI * C.m_e * C.e * C.k_B * C.k_B / Math.pow(C.h, 3),   // A m^-2 K^-2, Richardson constant
+  });
+
+  // ------------------------------------------------------------------ units: every stored value is SI; these convert at the edges
+  const U = Object.freeze({
+    eV: C.e,                 // J per eV
+    keV: 1e3 * C.e,
+    nm: 1e-9, pm: 1e-12, um: 1e-6, mm: 1e-3,
+    mbar: 100,               // Pa per mbar
+    Torr: 101325 / 760,      // Pa per Torr
+    hour: 3600,              // s per hour
+    deg: Math.PI / 180,      // rad per degree
+    zeroC: 273.15,           // K at 0 degrees Celsius
+  });
+  const toSI = (x, unit) => { if (!(unit in U)) throw new Error('unknown unit ' + unit); return x * U[unit]; };
+  const fromSI = (x, unit) => { if (!(unit in U)) throw new Error('unknown unit ' + unit); return x / U[unit]; };
+
+  // ------------------------------------------------------------------ number formatting (mirrored by ref/core.py fmt; the build uses the Python one)
+  const SUP = { '-': '⁻', 0: '⁰', 1: '¹', 2: '²', 3: '³', 4: '⁴', 5: '⁵', 6: '⁶', 7: '⁷', 8: '⁸', 9: '⁹' };
+  // x to `sig` significant figures; plain decimals between 1e-3 and 1e5, otherwise m × 10ⁿ
+  function fmt(x, sig) {
+    sig = sig || 3;
+    if (!isFinite(x)) return String(x);
+    if (x === 0) return '0';
+    const neg = x < 0; x = Math.abs(x);
+    let e = Math.floor(Math.log10(x));
+    let m = x / Math.pow(10, e);
+    let ms = m.toFixed(sig - 1);
+    if (+ms >= 10) { e += 1; m /= 10; ms = m.toFixed(sig - 1); }
+    let s;
+    if (e >= -3 && e < 5) {
+      const dec = Math.max(0, sig - 1 - e);
+      s = (+ms * Math.pow(10, e)).toFixed(dec);
+    } else {
+      s = ms + ' × 10' + String(e).split('').map(ch => SUP[ch]).join('');
+    }
+    return (neg ? '−' : '') + s;
+  }
+
+  // ------------------------------------------------------------------ small numerical helpers shared by the chapters
+  const clamp = (x, lo, hi) => Math.min(hi, Math.max(lo, x));
+  // deterministic random numbers for Monte Carlo chapters: mulberry32, a 32-bit generator; same seed, same sequence in page and Node
+  function rng(seed) {
+    let a = seed >>> 0;
+    return function () {
+      a = (a + 0x6D2B79F5) >>> 0;
+      let t = a;
+      t = Math.imul(t ^ (t >>> 15), t | 1);
+      t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  // ------------------------------------------------------------------ the contract: fill a module's inputs with their defaults
+  function withDefaults(contract, names, p) {
+    const out = {};
+    for (const k of names) {
+      const s = contract.symbols[k];
+      if (!s) throw new Error('symbol not in contract.json: ' + k);
+      out[k] = (p && k in p) ? p[k] : s.default;
+      if (out[k] === undefined) throw new Error('no value and no default for ' + k);
+    }
+    return out;
+  }
+
+  return { C, D, U, toSI, fromSI, fmt, clamp, rng, withDefaults, version: 1 };
+});
+
+/* The Electron Beam, from Tip to Measurement · physics/ch00.js
+   Chapter 0, the goal: why a beam of electrons and not light. Worked example of the module pattern (physics/core.js).
+
+   Model. Light of wavelength lambda_opt through an objective of numerical aperture NA resolves at best a half-pitch
+     d_opt = lambda_opt / (2 NA)                                  (Abbe; Born & Wolf, Principles of Optics, 7th ed., section 8.6)
+   An electron accelerated from rest through a voltage V has kinetic energy eV, Lorentz factor gamma = 1 + eV/(m c^2) and
+   momentum p = sqrt(2 m e V (1 + eV/(2 m c^2))) (from E^2 = (pc)^2 + (mc^2)^2 with E = mc^2 + eV), so its de Broglie wavelength is
+     lambda_e = h / sqrt(2 m e V (1 + eV/(2 m c^2)))
+   Chapter 3 derives the second formula in full; here it only sets the scale. The ratios to the feature width w say which probe can
+   resolve the feature at all (a ratio above 1 cannot). */
+(function (root, factory) {
+  if (typeof module === 'object' && module.exports) module.exports = factory(require('./core.js'));
+  else { root.EB = root.EB || {}; root.EB.ch00 = factory(root.EB.core); }
+})(typeof self !== 'undefined' ? self : this, function (core) {
+  'use strict';
+  const { C } = core;
+
+  function compute(p) {
+    const V = p.V_acc;
+    const eV = C.e * V;                                    // J, kinetic energy
+    const mc2 = C.m_e * C.c * C.c;                         // J, rest energy
+    const gamma = 1 + eV / mc2;
+    const pmom = Math.sqrt(2 * C.m_e * eV * (1 + eV / (2 * mc2)));   // kg m/s
+    const lambda_e = C.h / pmom;                           // m
+    const d_opt = p.lambda_opt / (2 * p.NA);               // m
+    return { lambda_e, gamma, d_opt, ratio_opt: d_opt / p.w_feat, ratio_e: lambda_e / p.w_feat };
+  }
+
+  // the canvas: four lengths on one logarithmic ruler from 1 pm to 1 µm
+  function draw(ctx, w, h, p, out) {
+    const lo = -12, hi = -6, padL = 18, padR = 18;
+    const X = x => padL + (Math.log10(x) - lo) / (hi - lo) * (w - padL - padR);
+    const y0 = Math.round(h * 0.62);
+    ctx.clearRect(0, 0, w, h);
+    ctx.strokeStyle = '#3a322e'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(padL, y0); ctx.lineTo(w - padR, y0); ctx.stroke();
+    ctx.font = "11px 'IBM Plex Mono', monospace"; ctx.fillStyle = '#6f655f'; ctx.textAlign = 'center';
+    const names = { '-12': '1 pm', '-11': '10 pm', '-10': '100 pm', '-9': '1 nm', '-8': '10 nm', '-7': '100 nm', '-6': '1 µm' };
+    for (let k = lo; k <= hi; k++) {
+      const x = X(Math.pow(10, k));
+      ctx.beginPath(); ctx.moveTo(x, y0 - 4); ctx.lineTo(x, y0 + 4); ctx.stroke();
+      if (w > 420 || k % 2 === 0) ctx.fillText(names[String(k)], x, y0 + 18);
+    }
+    const marks = [
+      { v: out.lambda_e, t: 'electron λ', c: '#7a1f2b', up: 1 },
+      { v: p.w_feat, t: 'feature w', c: '#1c1518', up: 2 },
+      { v: out.d_opt, t: 'light: λ/2NA', c: '#7a4b12', up: 3 },
+      { v: p.lambda_opt, t: 'light λ', c: '#8b8079', up: 1 },
+    ];
+    ctx.font = "12.5px 'IBM Plex Sans', sans-serif";
+    for (const m of marks) {
+      const x = core.clamp(X(m.v), padL, w - padR), y = y0 - 14 - 22 * m.up;
+      ctx.strokeStyle = m.c; ctx.fillStyle = m.c; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(x, y0); ctx.lineTo(x, y + 4); ctx.stroke();
+      ctx.beginPath(); ctx.arc(x, y0, 3.5, 0, 2 * Math.PI); ctx.fill();
+      ctx.textAlign = x < w / 2 ? 'left' : 'right';
+      ctx.fillText(m.t, x + (x < w / 2 ? 5 : -5), y);
+    }
+  }
+
+  return {
+    id: 'ch00',
+    inputs: ['V_acc', 'lambda_opt', 'NA', 'w_feat'],
+    outputs: ['lambda_e', 'gamma', 'd_opt', 'ratio_opt', 'ratio_e'],
+    // parity with ref/ch00.py: the same formula in float64 on both sides, so agreement to a few ulp is expected
+    tolerance: { rel: 1e-13, abs: 0 },
+    // the inputs check_parity.py runs on both sides (missing keys take the contract's defaults)
+    cases: [{}, { V_acc: 100 }, { V_acc: 3e4 }, { V_acc: 3e5, lambda_opt: 1.93e-7, NA: 1.35 }, { lambda_opt: 1.35e-8, NA: 0.33, w_feat: 3e-9 }],
+    ui: {
+      controls: ['V_acc', 'lambda_opt', 'NA', 'w_feat'],
+      readouts: ['lambda_e', 'd_opt', 'ratio_opt', 'ratio_e'],
+      aspect: '16 / 6', aspectPhone: '4 / 3',
+      caption: 'Four lengths on one logarithmic ruler: the electron wavelength, the feature, the smallest half-pitch light can resolve, and the light’s wavelength.',
+    },
+    compute,
+    draw,
+  };
+});
+
+</script>
+<script>
+/* The Electron Beam, from Tip to Measurement · app.js
+   The page's own script. It binds each simulation slot (.eb-sim[data-module]) to its physics module (EB.chNN, physics/chNN.js):
+   a slider or menu per contract symbol (data-symbol), readouts (data-out), a canvas the module draws on. It computes nothing itself:
+   module.compute(p) gives the numbers, module.draw(ctx, w, h, p, out) paints them. Also the contents list's "you are here" mark.
+   window.EB.sims[id] = { p, out, set(symbol, value) } is how the browser checks drive a slider. */
+(function () {
+  'use strict';
+  var EB = window.EB, core = EB.core;
+  var CONTRACT = JSON.parse(document.getElementById('eb-contract').textContent);
+  EB.contract = CONTRACT; EB.sims = {};
+
+  function unitText(s, v) {
+    var u = s.display_unit || s.unit, x = v * (s.display_scale || 1);
+    return core.fmt(x, 3) + (u === '1' || u === '' ? '' : ' ' + u);
+  }
+  function fromSlider(s, t) {
+    var lo = s.min, hi = s.max, v = s.scale === 'log' ? lo * Math.pow(hi / lo, t) : lo + t * (hi - lo);
+    return s.type === 'integer' ? Math.round(v) : v;
+  }
+  function toSlider(s, v) {
+    var lo = s.min, hi = s.max;
+    return core.clamp(s.scale === 'log' ? Math.log(v / lo) / Math.log(hi / lo) : (v - lo) / (hi - lo), 0, 1);
+  }
+
+  function mount(el) {
+    var id = el.getAttribute('data-module'), mod = EB[id];
+    if (!mod) return;
+    var p = {}, out = null, pending = false, err = el.querySelector('.eb-sim__err');
+    mod.inputs.forEach(function (k) { p[k] = CONTRACT.symbols[k].default; });
+    var cv = el.querySelector('canvas'), ctx = cv.getContext('2d');
+
+    function show() {
+      pending = false;
+      try {
+        out = mod.compute(p); err.hidden = true;
+        EB.sims[id].out = out;
+        el.querySelectorAll('[data-out]').forEach(function (d) {
+          var k = d.getAttribute('data-out'), v = k in out ? out[k] : p[k];
+          d.textContent = unitText(CONTRACT.symbols[k], v);
+        });
+        el.querySelectorAll('[data-for]').forEach(function (o) { var k = o.getAttribute('data-for'); o.textContent = unitText(CONTRACT.symbols[k], p[k]); });
+        if (mod.draw) {
+          var dpr = window.devicePixelRatio || 1, w = cv.clientWidth, h = cv.clientHeight;
+          if (cv.width !== Math.round(w * dpr) || cv.height !== Math.round(h * dpr)) { cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr); }
+          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+          mod.draw(ctx, w, h, p, out);
+        }
+      } catch (e) { err.textContent = 'This simulation stopped: ' + (e && e.message || e); err.hidden = false; }
+    }
+    function later() { if (!pending) { pending = true; requestAnimationFrame(show); } }
+
+    EB.sims[id] = { p: p, out: null, set: function (k, v) { p[k] = v; sync(k); later(); }, redraw: show };
+    function sync(k) {
+      var inp = el.querySelector('[data-symbol="' + k + '"]'); if (!inp) return;
+      if (inp.tagName === 'SELECT') { inp.value = p[k]; return; }
+      var t = toSlider(CONTRACT.symbols[k], p[k]); inp.value = Math.round(t * 1000); inp.style.setProperty('--p', (t * 100) + '%');
+    }
+    el.querySelectorAll('[data-symbol]').forEach(function (inp) {
+      var k = inp.getAttribute('data-symbol'), s = CONTRACT.symbols[k];
+      sync(k);
+      inp.addEventListener('input', function () {
+        if (inp.tagName === 'SELECT') p[k] = inp.value;
+        else { var t = inp.value / 1000; p[k] = fromSlider(s, t); inp.style.setProperty('--p', (t * 100) + '%'); }
+        later();
+      });
+    });
+    if (window.ResizeObserver) new ResizeObserver(later).observe(cv);
+    show();
+  }
+
+  function toc() {
+    var links = Array.prototype.slice.call(document.querySelectorAll('.paper__toc a[data-ch]'));
+    if (!window.IntersectionObserver || !links.length) return;
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        links.forEach(function (a) { var on = a.getAttribute('data-ch') === e.target.id; a.classList.toggle('is-here', on); a.parentNode.classList.toggle('is-open', on); });
+      });
+    }, { rootMargin: '-20% 0px -70% 0px' });
+    document.querySelectorAll('.chapter').forEach(function (c) { io.observe(c); });
+  }
+
+  document.querySelectorAll('.eb-sim[data-module]').forEach(mount);
+  toc();
+})();
+
+</script>
+</body>
+</html>
