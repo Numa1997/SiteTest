@@ -35,6 +35,10 @@
   "src": "<b>Fall speed.</b> Stokes’ law gives \\(\\mathrm{Re}\\approx 150\\) for a \\(200\\ \\mathrm{\\mu m}\\) drop, outside its own validity. A force balance with Beard’s drag coefficient \\(C_D(\\mathrm{Re})\\), solved through the Davies number, reproduces the measurements of Gunn and Kinzer within 2.1 % from 0.3 mm up.",
   "tr": "<b>Fallgeschwindigkeit.</b> Für einen Tropfen von \\(200\\ \\mathrm{\\mu m}\\) liefert das Stokessche Gesetz \\(\\mathrm{Re}\\approx 150\\), außerhalb seines eigenen Gültigkeitsbereichs. Ein Kräftegleichgewicht mit Beards Widerstandsbeiwert \\(C_D(\\mathrm{Re})\\), gelöst über die Davies-Zahl, gibt die Messungen von Gunn und Kinzer ab 0.3 mm auf 2.1 % genau wieder."
  },
+ "0bedae86b665": {
+  "src": "The source: field emission",
+  "tr": "Die Quelle: Feldemission"
+ },
  "0bf9d1ad9c28": {
   "src": "A turbulent wind built from the standard’s spectra and coherences, the rotor turning in it and the second blade swinging at its tip, computed in your browser.",
   "tr": "Ein turbulenter Wind, aufgebaut aus den Spektren und Kohärenzen der Norm, der Rotor dreht sich darin, und an seiner Spitze schwingt das zweite Blatt, berechnet in Ihrem Browser."
@@ -46,6 +50,10 @@
  "0c82a5d9b019": {
   "src": "peak force of the iron ball on the model head",
   "tr": "Spitzenkraft der Eisenkugel auf den Modellkopf"
+ },
+ "0dbd560743d2": {
+  "src": "<span class=\"pfig__n\">Figure 2</span>A magnetic field brings electrons back to the axis after one turn: the first hint of a lens.",
+  "tr": "<span class=\"pfig__n\">Abbildung 2</span>Ein Magnetfeld bringt Elektronen nach einer Umdrehung zur Achse zurück: der erste Hinweis auf eine Linse."
  },
  "0efc2e6be4c2": {
   "src": "Overview",
@@ -62,6 +70,10 @@
  "10ec1a05a8ed": {
   "src": "<b>Chaos does not help.</b> Every start, at every wind and brake tried, ends on one regular swing: the centrifugal spring is 3 to 9 times stronger than gravity’s push, and resonance is out of reach.",
   "tr": "<b>Chaos hilft nicht.</b> Jeder Start, bei jedem untersuchten Wind und jeder Bremse, endet in einer einzigen regelmäßigen Schwingung: Die Zentrifugalfeder ist 3- bis 9-mal stärker als der Stoß der Schwerkraft, und die Resonanz ist außer Reichweite."
+ },
+ "110d1d4181fe": {
+  "src": "<span class=\"pfig__n\">Figure 1</span>Light, the structures and the electron on one ruler.",
+  "tr": "<span class=\"pfig__n\">Abbildung 1</span>Licht, die Strukturen und das Elektron auf einem Maßstab."
  },
  "117d71b35d3d": {
   "src": "The collection equation, the droplet trajectories and an exact random cloud, running in your browser.",
@@ -223,6 +235,18 @@
   "src": "Ten chapters from the energy of moving air to a real generator and the air on the swinging blade, written for readers new to wind turbines, with warm-ups and problems: 39 numbered equations and eight figures, theory set against the full solution, every number computed by the models.",
   "tr": "Zehn Kapitel von der Energie bewegter Luft bis zu einem realen Generator und zur Luft am schwingenden Blatt, geschrieben für Leser, die Windturbinen noch nicht kennen, mit Aufwärmaufgaben und Übungsaufgaben: 39 nummerierte Gleichungen und acht Abbildungen, die Theorie gegen die vollständige Lösung gestellt, jede Zahl von den Modellen berechnet."
  },
+ "394b69de2038": {
+  "src": "<span class=\"psub__n\">7.2</span>What the model keeps and leaves out",
+  "tr": "<span class=\"psub__n\">7.2</span>Was das Modell enthält und was es weglässt"
+ },
+ "3b8077f62f54": {
+  "src": "Lengths on a logarithmic axis from one picometre to one micrometre: the smallest period light resolves (71.5, 20.5 and 12.3 nanometres), the 20 nanometre metal pitch and the 543 picometre silicon cell, and the electron wavelength, 38.8 picometres at 1 kilovolt and 6.98 at 30.",
+  "tr": "Längen auf einer logarithmischen Achse von einem Pikometer bis zu einem Mikrometer: die kleinste Periode, die Licht auflöst (71.5, 20.5 und 12.3 Nanometer), der Metallabstand von 20 Nanometern und die Siliziumzelle von 543 Pikometern, und die Elektronenwellenlänge, 38.8 Pikometer bei 1 Kilovolt und 6.98 bei 30."
+ },
+ "3beda7233d6c": {
+  "src": "rms gap between the field-emission model and a measured tungsten tip, over a factor 752 in current",
+  "tr": "Effektivwert der Abweichung zwischen dem Feldemissionsmodell und einer gemessenen Wolframspitze, über einen Faktor 752 im Strom"
+ },
  "3c39e3e8ecb6": {
   "src": "Run a pendulum",
   "tr": "Ein Pendel rechnen lassen"
@@ -230,6 +254,14 @@
  "3d1f9d4a0fa5": {
   "src": "<span class=\"pfig__n\">Figure 4</span>The first drizzle: exact runs against the Poisson prediction from the collection equation (chapter 6).",
   "tr": "<span class=\"pfig__n\">Abbildung 4</span>Der erste Niesel: exakte Läufe gegen die Poisson-Vorhersage aus der Koaleszenzgleichung (Kapitel 6)."
+ },
+ "3d98905ff40e": {
+  "src": "Thomson’s 1897 charge-to-mass ratio (tubes 1 and 2) over today’s value",
+  "tr": "Thomsons Verhältnis von Ladung zu Masse von 1897 (Röhren 1 und 2) geteilt durch den heutigen Wert"
+ },
+ "3ee468764fac": {
+  "src": "The Electron Beam, from Tip to Measurement",
+  "tr": "Der Elektronenstrahl, von der Spitze bis zur Messung"
  },
  "40acd8393970": {
   "src": "Fall speed, collision efficiency, critical Stokes numbers and the Golovin test.",
@@ -278,6 +310,10 @@
  "47267962edfb": {
   "src": "<span class=\"psub__n\">2.1</span>The answer in five lines",
   "tr": "<span class=\"psub__n\">2.1</span>Die Antwort in fünf Zeilen"
+ },
+ "47fba69a9ed9": {
+  "src": "<span class=\"psub__n\">7.4</span>The page",
+  "tr": "<span class=\"psub__n\">7.4</span>Die Seite"
  },
  "4ac862ee8e67": {
   "src": "Force on the head against time around the impact: a tall narrow spike for iron reaching 639 N, a low wide hump for cotton reaching 188 N, and the dashed weight line at 9.81 N.",
@@ -343,6 +379,10 @@
   "src": "<span class=\"psub__n\">4.2</span>What the model keeps",
   "tr": "<span class=\"psub__n\">4.2</span>Was das Modell enthält"
  },
+ "5608960d7153": {
+  "src": "<b>A free electron in fields.</b> The relativistic Lagrangian, the Lorentz force, the helix in a magnetic field, and two integrators (Boris and fourth-order Runge–Kutta) tested against the exact helix.",
+  "tr": "<b>Ein freies Elektron in Feldern.</b> Die relativistische Lagrange-Funktion, die Lorentzkraft, die Schraubenbahn im Magnetfeld und zwei Integratoren (Boris und das klassische Runge–Kutta-Verfahren vierter Ordnung), geprüft an der exakten Schraubenbahn."
+ },
  "56bf80e8f244": {
   "src": "Six time plots of one press cycle: position, force, the three pressures, valve command and spool position, the energy books, and the tracking error.",
   "tr": "Sechs Zeitdiagramme eines Pressenzyklus: Lage, Kraft, die drei Drücke, Ventilbefehl und Schieberstellung, die Energiebilanz und die Regelabweichung."
@@ -358,6 +398,10 @@
  "589a176dc4c8": {
   "src": "The question, the answer in three numbers, and the best mounting in motion.",
   "tr": "Die Frage, die Antwort in drei Zahlen und die beste Befestigung in Bewegung."
+ },
+ "58c623bc1573": {
+  "src": "<span class=\"pfig__n\">Figure 3</span>The cold field-emission tip of the live figure in chapter 2.",
+  "tr": "<span class=\"pfig__n\">Abbildung 3</span>Die Spitze des kalten Feldemitters aus der lebenden Abbildung in Kapitel 2."
  },
  "59a4019dbdc3": {
   "src": "<span class=\"pfig__n\">Figure 4</span>At rest: both scales read 9.81 N, 1.000 kg, and keep their very different peaks.",
@@ -539,6 +583,10 @@
   "src": "to the first drizzle drop in a cubic metre, ten times sooner than half the water: luck",
   "tr": "bis zum ersten Nieseltropfen in einem Kubikmeter, zehnmal früher als die Hälfte des Wassers: Glück"
  },
+ "8263f3e07507": {
+  "src": "energy spread of the model cold field emitter at 4 V/nm",
+  "tr": "Energiebreite des kalten Feldemitters im Modell bei 4 V/nm"
+ },
  "82868e56791b": {
   "src": "Pascal’s press from one Lagrangian, drawn to scale, with a probe that reads the pressure anywhere in the oil.",
   "tr": "Pascals Presse aus einer Lagrange-Funktion, maßstabsgetreu gezeichnet, mit einer Sonde, die den Druck an jeder Stelle im Öl abliest."
@@ -546,6 +594,10 @@
  "8373958aa734": {
   "src": "<b>Fall speed.</b> Stokes’ law breaks its own assumption at \\(41\\ \\mathrm{\\mu m}\\), where its Reynolds number reaches 1. A drag balance through the Davies number matches the measurements of Gunn and Kinzer within 2.1 % from 0.3 mm up, and in the full population it slows growth by a factor 1.76, far more than for a single drop.",
   "tr": "<b>Fallgeschwindigkeit.</b> Das Stokes-Gesetz verletzt seine eigene Annahme bei \\(41\\ \\mathrm{\\mu m}\\), wo seine Reynolds-Zahl 1 erreicht. Eine Widerstandsbilanz über die Davies-Zahl trifft die Messungen von Gunn und Kinzer ab 0.3 mm auf 2.1 % genau, und in der ganzen Population bremst sie das Wachstum um den Faktor 1.76, weit mehr als bei einem einzelnen Tropfen."
+ },
+ "85adfa391891": {
+  "src": "<span class=\"pfig__n\">Figure 4</span>The model against a measured tungsten tip (Ayari et al. 2023, CC BY 4.0).",
+  "tr": "<span class=\"pfig__n\">Abbildung 4</span>Das Modell gegen eine gemessene Wolframspitze (Ayari et al. 2023, CC BY 4.0)."
  },
  "869bd4b37aeb": {
   "src": "Holding a double pendulum still by pushing only a cart",
@@ -623,6 +675,10 @@
   "src": "<span class=\"psub__n\">2.3</span>Four figures from the study",
   "tr": "<span class=\"psub__n\">2.3</span>Vier Abbildungen aus der Studie"
  },
+ "944f7d8ee4d5": {
+  "src": "<span class=\"psub__n\">7.3</span>Four figures from the notes",
+  "tr": "<span class=\"psub__n\">7.3</span>Vier Abbildungen aus den Notizen"
+ },
  "9521dba25709": {
   "src": "Home page",
   "tr": "Startseite"
@@ -654,6 +710,10 @@
  "9dd35bd1eabb": {
   "src": "Droplet Collection",
   "tr": "Droplet Collection"
+ },
+ "9e33a41066cb": {
+  "src": "<b>The source.</b> The image-charge barrier, tunnelling, the Fowler–Nordheim law, the energy spread and brightness of cold and Schottky emitters, and the vacuum physics that makes a cold tip bright and fragile.",
+  "tr": "<b>Die Quelle.</b> Die Bildladungsbarriere, das Tunneln, das Fowler–Nordheim-Gesetz, Energiebreite und Richtstrahlwert kalter und Schottky-Emitter, und die Vakuumphysik, die eine kalte Spitze zugleich hell und empfindlich macht."
  },
  "9f9b3ec46526": {
   "src": "<span class=\"pfig__n\">Figure 3</span>The same blow twice: iron as a tall spike, cotton as a low, wide hump.",
@@ -743,6 +803,10 @@
   "src": "the rods’ turning rate allowed by honey over the rate a swing-up needs (0.08 for project 05’s rods)",
   "tr": "die Drehrate der Stäbe, die Honig zulässt, geteilt durch die Rate, die ein Aufschwingen braucht (0.08 für die Stäbe aus Projekt 05)"
  },
+ "b2a31a97af2f": {
+  "src": "Chips carry lines a few nanometres wide, and light cannot resolve them: its wavelength is tens of nanometres, an electron’s at a kilovolt is picometres. This project follows one electron from a sharp tungsten tip to a measured line width, in chapters that each start from a physical picture, derive every formula step by step, check it with symbolic algebra and an independent Python program, and end in a simulation whose sliders are the symbols of the formulas. Measured data are laid over the model with the source named and the gap stated: Thomson’s 1897 cathode-ray tubes, and the current of a real tungsten tip against its voltage. The chapters on the gun, the magnetic lens, the spot, scattering in the wafer, the measurement and the whole machine are being added in order; the page says which are written.",
+  "tr": "Chips tragen Linien von wenigen Nanometern Breite, und Licht kann sie nicht auflösen: Seine Wellenlänge beträgt Dutzende Nanometer, die eines Elektrons bei einem Kilovolt Pikometer. Dieses Projekt verfolgt ein Elektron von einer scharfen Wolframspitze bis zu einer gemessenen Linienbreite, in Kapiteln, die jeweils mit einem physikalischen Bild beginnen, jede Formel Schritt für Schritt herleiten, sie mit symbolischer Algebra und einem unabhängigen Python-Programm prüfen und mit einer Simulation enden, deren Schieberegler die Symbole der Formeln sind. Messdaten werden über das Modell gelegt, mit genannter Quelle und benannter Abweichung: Thomsons Kathodenstrahlröhren von 1897 und der Strom einer echten Wolframspitze in Abhängigkeit von ihrer Spannung. Die Kapitel über die Kanone, die magnetische Linse, den Fleck, die Streuung im Wafer, die Messung und die ganze Maschine kommen der Reihe nach hinzu; die Seite sagt, welche geschrieben sind."
+ },
  "b6c935d4f3c7": {
   "src": "min",
   "tr": "min"
@@ -751,9 +815,17 @@
   "src": "The test case is the thesis’s warm cloud: \\(300\\ \\mathrm{cm^{-3}}\\) droplets around \\(8\\ \\mathrm{\\mu m}\\) and \\(1\\ \\mathrm{cm^{-3}}\\) collectors around \\(40\\ \\mathrm{\\mu m}\\), at \\(10\\,{}^{\\circ}\\mathrm{C}\\) and \\(850\\ \\mathrm{hPa}\\), in a closed, well-mixed box. The notes ask how long until most of the water sits in large drops, how long until the very first drizzle drop appears in a given volume, and whether collisions in a cold cloud make new ice. A ladder of models answers them, each rung adding one effect with a computed number that shows it matters.",
   "tr": "Der Testfall ist die warme Wolke der Arbeit: \\(300\\ \\mathrm{cm^{-3}}\\) Tröpfchen um \\(8\\ \\mathrm{\\mu m}\\) und \\(1\\ \\mathrm{cm^{-3}}\\) Sammeltropfen um \\(40\\ \\mathrm{\\mu m}\\), bei \\(10\\,{}^{\\circ}\\mathrm{C}\\) und \\(850\\ \\mathrm{hPa}\\), in einem geschlossenen, gut durchmischten Kasten. Das Skript fragt, wie lange es dauert, bis der größte Teil des Wassers in großen Tropfen steckt, wie lange, bis in einem gegebenen Volumen der allererste Nieseltropfen erscheint, und ob Stöße in einer kalten Wolke neues Eis erzeugen. Eine Leiter von Modellen beantwortet diese Fragen; jede Sprosse fügt einen Effekt hinzu, mit einer berechneten Zahl, die zeigt, dass er zählt."
  },
+ "b873bb5e8804": {
+  "src": "Charged-particle optics · field emission · vacuum · measurement",
+  "tr": "Optik geladener Teilchen · Feldemission · Vakuum · Messung"
+ },
  "b8a15ac3e90f": {
   "src": "<span class=\"pfig__n\">Figure 3</span>Left: the matched group, power against damping. Right: all 54 scanned cases; the vertical line alone is not the chaos test.",
   "tr": "<span class=\"pfig__n\">Abbildung 3</span>Links: die abgeglichene Gruppe, Leistung gegen Dämpfung. Rechts: alle 54 untersuchten Fälle; die senkrechte Linie allein ist nicht der Chaostest."
+ },
+ "b9f0213762d8": {
+  "src": "Drawing of the emitter tip: a tapered shank ending in a round apex of 50 nanometres, dashed field lines to the anode, emitted electrons and a few adsorbed atoms on the apex.",
+  "tr": "Zeichnung der Emitterspitze: ein sich verjüngender Schaft mit runder Kuppe von 50 Nanometern, gestrichelte Feldlinien zur Anode, emittierte Elektronen und einige adsorbierte Atome auf der Kuppe."
  },
  "ba3efd9a831f": {
   "src": "<span class=\"psub__n\">1.3</span>Four figures from the notes",
@@ -795,6 +867,10 @@
   "src": "The drop, the gauges, the force curves, the energy books, and seven sections of derivations with every parameter.",
   "tr": "Der Fall, die Anzeigen, die Kraftkurven, die Energiebilanzen und sieben Abschnitte Herleitungen mit allen Parametern."
  },
+ "c0530f552ec3": {
+  "src": "Fields are analytic: there is no finite-element field solver, no aberration-corrected optics, and no interaction between the electrons of the beam. Constants are CODATA 2018. Every number in the text is computed by the page’s own code and checked against an independent Python version. The project is independent: it does not model any company’s instrument, and statements by manufacturers are quoted as public claims with their source.",
+  "tr": "Die Felder sind analytisch: Es gibt keinen Finite-Elemente-Feldlöser, keine aberrationskorrigierte Optik und keine Wechselwirkung zwischen den Elektronen des Strahls. Die Konstanten sind CODATA 2018. Jede Zahl im Text wird vom eigenen Code der Seite berechnet und gegen eine unabhängige Python-Fassung geprüft. Das Projekt ist unabhängig: Es modelliert kein Gerät irgendeines Unternehmens, und Aussagen von Herstellern werden als öffentliche Angaben mit ihrer Quelle zitiert."
+ },
  "c343e40ca599": {
   "src": "Map of the collision efficiency against the radii of the collector and the collected droplet.",
   "tr": "Karte der Kollisionseffizienz über den Radien des Sammlers und des gesammelten Tröpfchens."
@@ -810,6 +886,14 @@
  "c70a2d65879a": {
   "src": "Double Pendulum under Control",
   "tr": "Geregeltes Doppelpendel"
+ },
+ "cabbed71cbd6": {
+  "src": "Lecture notes with simulations · from first principles · 2026",
+  "tr": "Vorlesungsnotizen mit Simulationen · aus ersten Prinzipien · 2026"
+ },
+ "cad8f3fef89a": {
+  "src": "<b>Why electrons.</b> Abbe’s limit for light against the electron wavelength, and what a measuring machine must deliver at once: a thin spot, enough current, a gentle beam and speed.",
+  "tr": "<b>Warum Elektronen.</b> Abbes Grenze für Licht gegen die Elektronenwellenlänge, und was eine Messmaschine zugleich liefern muss: einen dünnen Fleck, genug Strom, einen schonenden Strahl und Tempo."
  },
  "cbb8cae7abce": {
   "src": "<span class=\"psub__n\">4.3</span>Four figures from the study",
@@ -870,6 +954,10 @@
  "d94f8b3ca4fd": {
   "src": "The solver of the collection equation, in your browser.",
   "tr": "Der Löser der Koaleszenzgleichung, in Ihrem Browser."
+ },
+ "da8dc253f89e": {
+  "src": "One page in English, generated from its source in this site’s repository, <a href=\"https://github.com/Numa1997/SiteTest/tree/main/portfolios-src/electron-beam\">portfolios-src/electron-beam</a>: the lecture notes, the physics in JavaScript that runs in your browser, the Python reference and the symbolic checks. Nothing is stored.",
+  "tr": "Eine Seite auf Englisch, erzeugt aus ihrer Quelle im Repository dieser Website, <a href=\"https://github.com/Numa1997/SiteTest/tree/main/portfolios-src/electron-beam\">portfolios-src/electron-beam</a>: die Vorlesungsnotizen, die Physik in JavaScript, die in Ihrem Browser läuft, die Python-Referenz und die symbolischen Prüfungen. Nichts wird gespeichert."
  },
  "daae8799b745": {
   "src": "what a blade sensor node needs",
@@ -935,6 +1023,14 @@
   "src": "Key figures",
   "tr": "Kennzahlen"
  },
+ "e4f0a4747f43": {
+  "src": "Left: Fowler–Nordheim plot of a measured tungsten tip with the model line through the points. Right: the residuals, within a few per cent, one point near 6 per cent.",
+  "tr": "Links: Fowler–Nordheim-Auftragung einer gemessenen Wolframspitze mit der Modelllinie durch die Punkte. Rechts: die Residuen, innerhalb weniger Prozent, ein Punkt nahe 6 Prozent."
+ },
+ "eab7bc0a7a18": {
+  "src": "eV",
+  "tr": "eV"
+ },
  "eb368b420396": {
   "src": "Projects · Numa Koudsie",
   "tr": "Projekte · Numa Koudsie"
@@ -942,6 +1038,10 @@
  "ebdb648bf16b": {
   "src": "<span class=\"pfig__n\">Figure 1</span>The press at 1.45 s, under the force law: set-point 32.6 kN on its way to 60, spool 6.4 % open, oil coloured by pressure.",
   "tr": "<span class=\"pfig__n\">Abbildung 1</span>Die Presse bei 1.45 s unter dem Kraftgesetz: Sollwert 32.6 kN auf dem Weg zu 60, Ventilschieber zu 6.4 % offen, das Öl nach Druck gefärbt."
+ },
+ "ed93b515ad0e": {
+  "src": "Open the lecture notes",
+  "tr": "Die Vorlesungsnotizen öffnen"
  },
  "ee24eb283cf0": {
   "src": "Iron is 91 atoms on a triangular lattice, each bonded to its neighbours by a Morse valley with the shape Girifalco and Weizer fitted to iron in 1959. Cotton is 18 fibres of 34 beads: stretch springs along each fibre, bending springs on the angle between segments, breakable junctions where fibres cross, and soft contact with friction where they touch, which gives the stiffening of van Wyk’s law. The head is a plate on a spring and a damper and is also the scale. The model is two-dimensional, leaves out air and is tuned for clarity, so its force ratio is about 3.4, where real iron against real cotton gives about 120; the text says so and gives the real-world numbers beside the model’s.",
@@ -958,6 +1058,10 @@
  "f0150d19f839": {
   "src": "kN",
   "tr": "kN"
+ },
+ "f0cb83ce9a75": {
+  "src": "Six electron helices in a uniform magnetic field, leaving one point at different angles and meeting again on the axis one turn later; the end view shows six circles through the axis.",
+  "tr": "Sechs Elektronenschraubenbahnen in einem homogenen Magnetfeld, die einen Punkt unter verschiedenen Winkeln verlassen und sich eine Umdrehung später wieder auf der Achse treffen; die Ansicht von vorn zeigt sechs Kreise durch die Achse."
  },
  "f1bda49c041b": {
   "src": "Sol’s 14-page report in full: 20 equations, 9 tables rebuilt from the data and checked cell by cell, the PDF and all 181 files.",
@@ -978,6 +1082,10 @@
  "f48570ff70f7": {
   "src": "of the pump’s work turned into heat in the valve",
   "tr": "der Pumpenarbeit werden im Ventil zu Wärme"
+ },
+ "f520f50da10a": {
+  "src": "<span class=\"psub__n\">7.1</span>What the notes follow",
+  "tr": "<span class=\"psub__n\">7.1</span>Was die Notizen verfolgen"
  },
  "f625abc444ea": {
   "src": "Projects of months rather than afternoons: a question from research, a model rebuilt and checked step by step, a solver you can run, and results you can reproduce. Each project keeps its own pages; this page introduces them.",
@@ -1030,5 +1138,9 @@
  "fde7a78a09c4": {
   "src": "Hydraulic Press Study",
   "tr": "Studie einer hydraulischen Presse"
+ },
+ "fdf9b9e26654": {
+  "src": "How a beam of electrons is made, focused and used to measure the width of a line a few nanometres wide",
+  "tr": "Wie ein Elektronenstrahl erzeugt und fokussiert wird und wie er die Breite einer wenige Nanometer breiten Linie misst"
  }
 }

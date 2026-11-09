@@ -56,7 +56,10 @@ A chapter session owns `text/chNN.py`, `physics/chNN.js`, `ref/chNN.py`, `derive
 6. **Build and check** (commands above). The build fails on an unknown or doubled label, a figure declared but not placed (or placed twice), an
    SVG with a script or an outside address, an unknown key, a KaTeX error, a contract that disagrees with a module, a `$` left over.
 
-A custom panel that the generic slider-and-canvas slot cannot give (a second canvas, a table) is a request for the scaffold, not a change to the template.
+A custom panel that the generic slider-and-canvas slot cannot give (a second canvas, a table): `CH['sim_html']` replaces the generic slot with the
+chapter's own markup (same `{{...}}` and `$...$` rules), `CH['ui_js']` names a file in `physics/` whose script is appended to the page script, and
+`CH['css']` adds the chapter's style. A chapter whose `text/chNN.py` has no `CH` but a `build()` (chapter 2, written before this scaffold) is taken as
+it is: its numbered HTML with `\( \)` and `\[ \]` is typeset here, its `css` and `ui_js` are added (finisher, 9 November 2026).
 
 ## Rules this source keeps
 
