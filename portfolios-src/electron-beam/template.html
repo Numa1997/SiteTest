@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+{{HEAD}}
+<style>
+/* The Electron Beam, from Tip to Measurement · house design as docs/styles.md records it: Instrument Serif titles at weight 400,
+   IBM Plex Sans text, IBM Plex Mono labels, Latin Modern notes (paper.css), wine #7a1f2b, every box outlined, no card shadows. */
+:root{--paper:#f5f1ea;--card:#fffaf3;--card-soft:#fbf6ee;--ink:#1c1518;--ink-2:#3a322e;--ink-3:#5a504b;--muted:#8b8079;--rule:#d9d0c2;--rule-soft:#e6dfd2;
+  --accent:#7a1f2b;--accent-dark:#4d0f18;--accent-rose:#e2a2aa;--tan:#efe4c8;--tan-ink:#7a4b12;
+  --serif:'Instrument Serif',Georgia,'Times New Roman',serif;--sans:'IBM Plex Sans',system-ui,-apple-system,'Segoe UI',sans-serif;--mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
+  --grid:linear-gradient(rgba(122,31,43,.075) 1px,transparent 1px),linear-gradient(90deg,rgba(122,31,43,.075) 1px,transparent 1px)}
+*,*::before,*::after{box-sizing:border-box}
+html{background:var(--paper);-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:var(--serif);font-weight:400;color:var(--ink);margin:0}
+p{margin:0 0 1em}
+a{color:var(--accent);text-decoration:none;text-underline-offset:3px}a:hover{color:var(--accent-dark);text-decoration:underline}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+::selection{background:var(--accent-rose);color:var(--ink)}
+.nobr{white-space:nowrap}
+
+/* top bar: the logo and the way back to the Projects page */
+.eb-top{max-width:1240px;margin:0 auto;padding:22px 32px 0;display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;font:11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.eb-top a{color:var(--ink-3)}.eb-top a:hover{color:var(--accent);text-decoration:none}
+.eb-top img{display:block}.eb-top .back{margin-left:0}
+
+.eb{max-width:1240px;margin:0 auto;padding:30px 32px 64px}
+.eb.paper{margin-top:0}
+.paper__head{max-width:980px}
+.paper__title{max-width:20ch}
+.paper__abstract p:last-child{margin-bottom:0}
+
+/* the reading guide */
+.guide{margin:0 0 44px;padding:18px 22px 20px;background:var(--card);border:1px solid var(--line-strong);border-left:4px solid var(--accent);border-radius:6px;max-width:980px}
+.guide__t{margin:0 0 12px;font:500 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.guide__grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 28px;margin:0}
+.guide dt{font:500 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
+.guide dd{margin:0;font:17px/1.55 var(--tex);color:var(--ink-2)}
+.guide__status{margin:16px 0 0;padding-top:12px;border-top:1px solid var(--rule-soft);font:12px/1.6 var(--mono);color:var(--ink-3)}
+
+/* chapters */
+.chapter{padding-top:8px;margin-top:64px;border-top:1px solid var(--line-strong)}
+.chapter:first-child{margin-top:0;border-top:0}
+.chapter__t{display:flex;flex-direction:column;gap:6px;margin:30px 0 18px;font:400 clamp(34px,4.2vw,52px)/1.04 var(--serif);letter-spacing:-.012em}
+.chapter__n{font:500 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.chapter__lead{font-size:20px;color:var(--ink-2)}
+.chapter--todo .todo{padding:14px 18px;border:1px dashed var(--line-strong);border-radius:6px;color:var(--muted);font:15px var(--tex)}
+.paper__body .psec{margin-top:30px;padding-top:26px}
+.paper__body .psec:first-of-type{margin-top:18px}
+.paper__toc .toc-sub{display:none}
+.paper__toc li.is-open .toc-sub{display:block}
+.paper__toc .toc-sub a{padding-left:34px;font-size:14.5px}
+.paper__toc a.is-here{color:var(--accent)}
+
+/* numbered display equations: the equation on its quote ground, its number beside it */
+.eqn{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:0 12px;margin:1.1em 0 1.3em}
+.eqn__m{min-width:0}
+.eqn .katex-display{margin:0}
+.eqn__no{font:14px var(--tex);color:var(--muted);white-space:nowrap}
+.eqn:target .katex-display{border-left-color:var(--accent-dark);background:var(--tan)}
+.eqref,.figref,.secref{white-space:nowrap}
+.ki,.kd{display:inline}.kd{display:block}
+.num{font-variant-numeric:tabular-nums}
+
+/* the running simulation of a chapter */
+.eb-sim{margin:2em 0 .5em;padding:14px 16px 16px;background:var(--card);border:1px solid var(--line-strong);border-radius:8px}
+.eb-sim__t{margin:0 0 12px;font:500 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.eb-sim__grid{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:18px;align-items:start}
+.eb-sim__stage{min-width:0;border:1px solid var(--rule);border-radius:8px;background:var(--card);overflow:hidden}
+.eb-sim__stage canvas{display:block;width:100%;aspect-ratio:var(--ar,16/9);background-color:var(--card);background-image:var(--grid);background-size:24px 24px}
+.eb-sim__cap{margin:0;padding:9px 12px;border-top:1px solid var(--rule-soft);font:15px/1.5 var(--tex);color:var(--ink-3)}
+.eb-sim__panel{min-width:0;display:flex;flex-direction:column;gap:14px}
+.eb-sim__ctls{display:flex;flex-direction:column;gap:12px}
+.eb-sim__err{margin:12px 0 0;padding:10px 14px;background:var(--tan);color:var(--tan-ink);border:1px solid #e0cf9f;border-left:3px solid var(--accent);border-radius:8px;font-size:14px}
+.ctl{display:flex;flex-direction:column;gap:4px;font-size:13.5px;line-height:1.35;color:var(--ink-2)}
+.ctl__row{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.ctl__sym{font-family:var(--tex)}
+.ctl output{font:500 12px var(--mono);color:var(--accent);white-space:nowrap}
+.sel{font:12px var(--mono);padding:5px 8px;border:1px solid var(--rule);border-radius:6px;background:var(--card);color:var(--ink)}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:22px;margin:0;background:transparent;cursor:pointer;--p:50%;--c:var(--accent)}
+input[type=range]::-webkit-slider-runnable-track{height:4px;border-radius:2px;background:linear-gradient(to right,var(--c) 0,var(--c) var(--p),var(--rule) var(--p),var(--rule) 100%)}
+input[type=range]::-moz-range-track{height:4px;border-radius:2px;background:var(--rule)}
+input[type=range]::-moz-range-progress{height:4px;border-radius:2px;background:var(--c)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:16px;height:16px;margin-top:-6px;border-radius:50%;background:var(--c);border:2px solid var(--card);box-shadow:0 0 0 1px var(--c)}
+input[type=range]::-moz-range-thumb{width:12px;height:12px;border-radius:50%;background:var(--c);border:2px solid var(--card);box-shadow:0 0 0 1px var(--c)}
+.readouts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:0}
+.readouts div{min-width:0;background:var(--card-soft);border:1px solid var(--rule-soft);border-radius:8px;padding:7px 10px}
+.readouts dt{font:10px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.readouts dd{margin:2px 0 0;font:13px var(--mono);color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+.eb-foot{max-width:1240px;margin:0 auto;padding:0 32px 48px;font:11.5px/1.7 var(--mono);color:var(--muted)}
+.eb-foot p{max-width:78ch;margin:0 0 6px}
+
+@media (max-width:960px){.eb-sim__grid{grid-template-columns:minmax(0,1fr)}.eb-sim__stage canvas{aspect-ratio:var(--ar-m,16/9)}}
+@media (max-width:640px){.eb-top,.eb,.eb-foot{padding-left:16px;padding-right:16px}.guide__grid{grid-template-columns:minmax(0,1fr)}.guide{padding:14px 16px}.eb-sim{padding:10px}}
+@media print{.eb-top,.eb-sim__panel{display:none}.eb-sim__grid{display:block}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+/* finisher: symbols keep their case inside upper-case labels; a readout wraps instead of being cut; a long display equation shows its scrollbar */
+.readouts dt .katex,.guide dt .katex,.eb-sim__t .katex{text-transform:none;letter-spacing:0;font-size:1.25em}
+.readouts dd{white-space:normal;overflow:visible;text-overflow:clip}
+.paper code{overflow-wrap:anywhere}
+.paper .katex-display{scrollbar-width:thin;scrollbar-color:var(--accent-rose) transparent}
+.paper .katex-display::-webkit-scrollbar{height:6px}.paper .katex-display::-webkit-scrollbar-thumb{background:var(--accent-rose);border-radius:3px}
+/* chapter styles (CH['css'] and chapter 2's own) */
+{{CHAPTER_CSS}}
+</style>
+</head>
+<body>
+<header class="eb-top">{{LOGO}}<a class="back" href="{{BASE}}portfolios.html">← Numa Koudsie · Projects</a></header>
+<main class="eb paper is-typeset" id="paper">
+  <div class="paper__head">
+    <p class="paper__kicker">Project 07 · Electron optics</p>
+    <h1 class="paper__title">The Electron Beam, from Tip to Measurement</h1>
+    <p class="paper__by">Numa Koudsie · lecture notes and simulations · every number computed</p>
+    <div class="paper__abstract"><p><b>Question.</b> {{ABSTRACT}}</p></div>
+  </div>
+  <aside class="guide" id="guide" aria-label="Reading guide for the reviewer">
+    <p class="guide__t">Reading guide for the reviewer</p>
+    <dl class="guide__grid">
+      <div><dt>What this page shows</dt><dd>{{G_SHOWS}}</dd></div>
+      <div><dt>What it models</dt><dd>{{G_MODELS}}</dd></div>
+      <div><dt>What it leaves out</dt><dd>{{G_LEAVES}}</dd></div>
+      <div><dt>Where each number comes from</dt><dd>{{G_NUMBERS}}</dd></div>
+    </dl>
+    <p class="guide__status">{{STATUS}}</p>
+  </aside>
+  <div class="paper__grid">
+    <nav class="paper__toc" aria-label="Chapters"><p>Chapters</p><ol>{{TOC}}</ol></nav>
+    <div class="paper__body">
+{{CHAPTERS}}
+    </div>
+  </div>
+</main>
+<footer class="eb-foot">
+  <p>An independent portfolio project by Numa Koudsie. It is not affiliated with, endorsed by or sponsored by Applied Materials, and it does not model any of its products. Statements by manufacturers are quoted as public claims, with their source.</p>
+  <p>Mathematics typeset at build time with KaTeX {{KATEX}}; physics in <code>physics/*.js</code>, Python reference in <code>ref/</code>; source in the repository under <code>portfolios-src/electron-beam/</code>.</p>
+</footer>
+<script type="application/json" id="eb-contract">{{CONTRACT_JSON}}</script>
+<script>
+{{CORE_JS}}
+{{MODULES_JS}}
+</script>
+<script>
+{{APP_JS}}
+</script>
+</body>
+</html>

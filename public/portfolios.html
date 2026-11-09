@@ -474,6 +474,85 @@
           </div>
         </div>
       </article>
+      <article class="proj" id="electron-beam" aria-labelledby="eb-title">
+        <div class="proj__band">
+          <span class="proj__num">07</span>
+          <p>Lecture notes with simulations · from first principles · 2026</p>
+          <span>Charged-particle optics · field emission · vacuum · measurement</span>
+        </div>
+        <div class="proj__body">
+          <div class="proj__head">
+            <div>
+              <h2 id="eb-title">The Electron Beam, from Tip to Measurement</h2>
+              <p class="proj__sub">How a beam of electrons is made, focused and used to measure the width of a line a few nanometres wide</p>
+              <p class="proj__abs">
+                Chips carry lines a few nanometres wide, and light cannot resolve them: its wavelength is tens of nanometres, an electron’s
+                at a kilovolt is picometres. This project follows one electron from a sharp tungsten tip to a measured line width, in
+                chapters that each start from a physical picture, derive every formula step by step, check it with symbolic algebra and an
+                independent Python program, and end in a simulation whose sliders are the symbols of the formulas. Measured data are laid
+                over the model with the source named and the gap stated: Thomson’s 1897 cathode-ray tubes, and the current of a real
+                tungsten tip against its voltage. The chapters on the gun, the magnetic lens, the spot, scattering in the wafer, the
+                measurement and the whole machine are being added in order; the page says which are written.
+              </p>
+              <div class="proj__actions">
+                <a class="proj__btn" href="portfolios/electron-beam/index.html">Open the lecture notes</a>
+                <a class="proj__btn proj__btn--ghost" href="portfolios/electron-beam/index.html#ch02">The source: field emission</a>
+              </div>
+            </div>
+            <dl class="proj__tally" aria-label="Key figures">
+              <div><dt class="is-new">1.8<small> %</small></dt><dd>rms gap between the field-emission model and a measured tungsten tip, over a factor 752 in current</dd></div>
+              <div><dt>0.215<small> eV</small></dt><dd>energy spread of the model cold field emitter at 4 V/nm</dd></div>
+              <div><dt>1.26</dt><dd>Thomson’s 1897 charge-to-mass ratio (tubes 1 and 2) over today’s value</dd></div>
+            </dl>
+          </div>
+
+          <section class="proj__part" aria-labelledby="eb-follow">
+            <h3 id="eb-follow"><span class="psub__n">7.1</span>What the notes follow</h3>
+            <ol class="proj__changes">
+              <li><b>Why electrons.</b> Abbe’s limit for light against the electron wavelength, and what a measuring machine must deliver at once: a thin spot, enough current, a gentle beam and speed.</li>
+              <li><b>A free electron in fields.</b> The relativistic Lagrangian, the Lorentz force, the helix in a magnetic field, and two integrators (Boris and fourth-order Runge–Kutta) tested against the exact helix.</li>
+              <li><b>The source.</b> The image-charge barrier, tunnelling, the Fowler–Nordheim law, the energy spread and brightness of cold and Schottky emitters, and the vacuum physics that makes a cold tip bright and fragile.</li>
+            </ol>
+          </section>
+
+          <section class="proj__part" aria-labelledby="eb-limits">
+            <h3 id="eb-limits"><span class="psub__n">7.2</span>What the model keeps and leaves out</h3>
+            <p>
+              Fields are analytic: there is no finite-element field solver, no aberration-corrected optics, and no interaction between
+              the electrons of the beam. Constants are CODATA 2018. Every number in the text is computed by the page’s own code and
+              checked against an independent Python version. The project is independent: it does not model any company’s instrument,
+              and statements by manufacturers are quoted as public claims with their source.
+            </p>
+          </section>
+
+          <section class="proj__part" aria-labelledby="eb-figs">
+            <h3 id="eb-figs"><span class="psub__n">7.3</span>Four figures from the notes</h3>
+            <div class="proj__figs">
+              <figure>
+                <a class="pfig__plate" href="portfolios/electron-beam/index.html#fig-scales"><img src="portfolios/electron-beam/fig/01_scales.webp" width="552" height="300" loading="lazy" alt="Lengths on a logarithmic axis from one picometre to one micrometre: the smallest period light resolves (71.5, 20.5 and 12.3 nanometres), the 20 nanometre metal pitch and the 543 picometre silicon cell, and the electron wavelength, 38.8 picometres at 1 kilovolt and 6.98 at 30."></a>
+                <figcaption><span class="pfig__n">Figure 1</span>Light, the structures and the electron on one ruler.</figcaption>
+              </figure>
+              <figure>
+                <a class="pfig__plate" href="portfolios/electron-beam/index.html#fig-helix"><img src="portfolios/electron-beam/fig/02_helix.webp" width="915" height="300" loading="lazy" alt="Six electron helices in a uniform magnetic field, leaving one point at different angles and meeting again on the axis one turn later; the end view shows six circles through the axis."></a>
+                <figcaption><span class="pfig__n">Figure 2</span>A magnetic field brings electrons back to the axis after one turn: the first hint of a lens.</figcaption>
+              </figure>
+              <figure>
+                <a class="pfig__plate" href="portfolios/electron-beam/index.html#ch02"><img src="portfolios/electron-beam/fig/03_tip.webp" width="531" height="300" loading="lazy" alt="Drawing of the emitter tip: a tapered shank ending in a round apex of 50 nanometres, dashed field lines to the anode, emitted electrons and a few adsorbed atoms on the apex."></a>
+                <figcaption><span class="pfig__n">Figure 3</span>The cold field-emission tip of the live figure in chapter 2.</figcaption>
+              </figure>
+              <figure>
+                <a class="pfig__plate" href="portfolios/electron-beam/index.html#fig-data"><img src="portfolios/electron-beam/fig/04_fn.webp" width="714" height="300" loading="lazy" alt="Left: Fowler–Nordheim plot of a measured tungsten tip with the model line through the points. Right: the residuals, within a few per cent, one point near 6 per cent."></a>
+                <figcaption><span class="pfig__n">Figure 4</span>The model against a measured tungsten tip (Ayari et al. 2023, CC BY 4.0).</figcaption>
+              </figure>
+            </div>
+          </section>
+
+          <section class="proj__part" aria-labelledby="eb-pages">
+            <h3 id="eb-pages"><span class="psub__n">7.4</span>The page</h3>
+            <p class="proj__note">One page in English, generated from its source in this site’s repository, <a href="https://github.com/Numa1997/SiteTest/tree/main/portfolios-src/electron-beam">portfolios-src/electron-beam</a>: the lecture notes, the physics in JavaScript that runs in your browser, the Python reference and the symbolic checks. Nothing is stored.</p>
+          </section>
+        </div>
+      </article>
     </main>
 
     <footer>

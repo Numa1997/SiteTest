@@ -28,7 +28,7 @@
     </script>
   
     <script src="../scripts/i18n/strings-de.js"></script>
-    <meta name="translated-from" content="English public/portfolios.html, commit 39565cb" />
+    <meta name="translated-from" content="English public/portfolios.html, commit d161c84" />
   </head>
 
   <body>
@@ -379,6 +379,72 @@
               <div><dt>¼</dt><dd>der Stirnfläche des alten Wagens trifft auf die Flüssigkeit</dd></div>
             </dl>
           </div>
+        </div>
+      </article>
+      <article class="proj" id="electron-beam" aria-labelledby="eb-title">
+        <div class="proj__band">
+          <span class="proj__num">07</span>
+          <p>Vorlesungsnotizen mit Simulationen · aus ersten Prinzipien · 2026</p>
+          <span>Optik geladener Teilchen · Feldemission · Vakuum · Messung</span>
+        </div>
+        <div class="proj__body">
+          <div class="proj__head">
+            <div>
+              <h2 id="eb-title">Der Elektronenstrahl, von der Spitze bis zur Messung</h2>
+              <p class="proj__sub">Wie ein Elektronenstrahl erzeugt und fokussiert wird und wie er die Breite einer wenige Nanometer breiten Linie misst</p>
+              <p class="proj__abs">Chips tragen Linien von wenigen Nanometern Breite, und Licht kann sie nicht auflösen: Seine Wellenlänge beträgt Dutzende Nanometer, die eines Elektrons bei einem Kilovolt Pikometer. Dieses Projekt verfolgt ein Elektron von einer scharfen Wolframspitze bis zu einer gemessenen Linienbreite, in Kapiteln, die jeweils mit einem physikalischen Bild beginnen, jede Formel Schritt für Schritt herleiten, sie mit symbolischer Algebra und einem unabhängigen Python-Programm prüfen und mit einer Simulation enden, deren Schieberegler die Symbole der Formeln sind. Messdaten werden über das Modell gelegt, mit genannter Quelle und benannter Abweichung: Thomsons Kathodenstrahlröhren von 1897 und der Strom einer echten Wolframspitze in Abhängigkeit von ihrer Spannung. Die Kapitel über die Kanone, die magnetische Linse, den Fleck, die Streuung im Wafer, die Messung und die ganze Maschine kommen der Reihe nach hinzu; die Seite sagt, welche geschrieben sind.</p>
+              <div class="proj__actions">
+                <a class="proj__btn" href="../portfolios/electron-beam/index.html">Die Vorlesungsnotizen öffnen</a>
+                <a class="proj__btn proj__btn--ghost" href="../portfolios/electron-beam/index.html#ch02">Die Quelle: Feldemission</a>
+              </div>
+            </div>
+            <dl class="proj__tally" aria-label="Kennzahlen">
+              <div><dt class="is-new">1.8<small> %</small></dt><dd>Effektivwert der Abweichung zwischen dem Feldemissionsmodell und einer gemessenen Wolframspitze, über einen Faktor 752 im Strom</dd></div>
+              <div><dt>0.215<small>eV</small></dt><dd>Energiebreite des kalten Feldemitters im Modell bei 4 V/nm</dd></div>
+              <div><dt>1.26</dt><dd>Thomsons Verhältnis von Ladung zu Masse von 1897 (Röhren 1 und 2) geteilt durch den heutigen Wert</dd></div>
+            </dl>
+          </div>
+
+          <section class="proj__part" aria-labelledby="eb-follow">
+            <h3 id="eb-follow"><span class="psub__n">7.1</span>Was die Notizen verfolgen</h3>
+            <ol class="proj__changes">
+              <li><b>Warum Elektronen.</b> Abbes Grenze für Licht gegen die Elektronenwellenlänge, und was eine Messmaschine zugleich liefern muss: einen dünnen Fleck, genug Strom, einen schonenden Strahl und Tempo.</li>
+              <li><b>Ein freies Elektron in Feldern.</b> Die relativistische Lagrange-Funktion, die Lorentzkraft, die Schraubenbahn im Magnetfeld und zwei Integratoren (Boris und das klassische Runge–Kutta-Verfahren vierter Ordnung), geprüft an der exakten Schraubenbahn.</li>
+              <li><b>Die Quelle.</b> Die Bildladungsbarriere, das Tunneln, das Fowler–Nordheim-Gesetz, Energiebreite und Richtstrahlwert kalter und Schottky-Emitter, und die Vakuumphysik, die eine kalte Spitze zugleich hell und empfindlich macht.</li>
+            </ol>
+          </section>
+
+          <section class="proj__part" aria-labelledby="eb-limits">
+            <h3 id="eb-limits"><span class="psub__n">7.2</span>Was das Modell enthält und was es weglässt</h3>
+            <p>Die Felder sind analytisch: Es gibt keinen Finite-Elemente-Feldlöser, keine aberrationskorrigierte Optik und keine Wechselwirkung zwischen den Elektronen des Strahls. Die Konstanten sind CODATA 2018. Jede Zahl im Text wird vom eigenen Code der Seite berechnet und gegen eine unabhängige Python-Fassung geprüft. Das Projekt ist unabhängig: Es modelliert kein Gerät irgendeines Unternehmens, und Aussagen von Herstellern werden als öffentliche Angaben mit ihrer Quelle zitiert.</p>
+          </section>
+
+          <section class="proj__part" aria-labelledby="eb-figs">
+            <h3 id="eb-figs"><span class="psub__n">7.3</span>Vier Abbildungen aus den Notizen</h3>
+            <div class="proj__figs">
+              <figure>
+                <a class="pfig__plate" href="../portfolios/electron-beam/index.html#fig-scales"><img src="../portfolios/electron-beam/fig/01_scales.webp" width="552" height="300" loading="lazy" alt="Längen auf einer logarithmischen Achse von einem Pikometer bis zu einem Mikrometer: die kleinste Periode, die Licht auflöst (71.5, 20.5 und 12.3 Nanometer), der Metallabstand von 20 Nanometern und die Siliziumzelle von 543 Pikometern, und die Elektronenwellenlänge, 38.8 Pikometer bei 1 Kilovolt und 6.98 bei 30."></a>
+                <figcaption><span class="pfig__n">Abbildung 1</span>Licht, die Strukturen und das Elektron auf einem Maßstab.</figcaption>
+              </figure>
+              <figure>
+                <a class="pfig__plate" href="../portfolios/electron-beam/index.html#fig-helix"><img src="../portfolios/electron-beam/fig/02_helix.webp" width="915" height="300" loading="lazy" alt="Sechs Elektronenschraubenbahnen in einem homogenen Magnetfeld, die einen Punkt unter verschiedenen Winkeln verlassen und sich eine Umdrehung später wieder auf der Achse treffen; die Ansicht von vorn zeigt sechs Kreise durch die Achse."></a>
+                <figcaption><span class="pfig__n">Abbildung 2</span>Ein Magnetfeld bringt Elektronen nach einer Umdrehung zur Achse zurück: der erste Hinweis auf eine Linse.</figcaption>
+              </figure>
+              <figure>
+                <a class="pfig__plate" href="../portfolios/electron-beam/index.html#ch02"><img src="../portfolios/electron-beam/fig/03_tip.webp" width="531" height="300" loading="lazy" alt="Zeichnung der Emitterspitze: ein sich verjüngender Schaft mit runder Kuppe von 50 Nanometern, gestrichelte Feldlinien zur Anode, emittierte Elektronen und einige adsorbierte Atome auf der Kuppe."></a>
+                <figcaption><span class="pfig__n">Abbildung 3</span>Die Spitze des kalten Feldemitters aus der lebenden Abbildung in Kapitel 2.</figcaption>
+              </figure>
+              <figure>
+                <a class="pfig__plate" href="../portfolios/electron-beam/index.html#fig-data"><img src="../portfolios/electron-beam/fig/04_fn.webp" width="714" height="300" loading="lazy" alt="Links: Fowler–Nordheim-Auftragung einer gemessenen Wolframspitze mit der Modelllinie durch die Punkte. Rechts: die Residuen, innerhalb weniger Prozent, ein Punkt nahe 6 Prozent."></a>
+                <figcaption><span class="pfig__n">Abbildung 4</span>Das Modell gegen eine gemessene Wolframspitze (Ayari et al. 2023, CC BY 4.0).</figcaption>
+              </figure>
+            </div>
+          </section>
+
+          <section class="proj__part" aria-labelledby="eb-pages">
+            <h3 id="eb-pages"><span class="psub__n">7.4</span>Die Seite</h3>
+            <p class="proj__note">Eine Seite auf Englisch, erzeugt aus ihrer Quelle im Repository dieser Website, <a href="https://github.com/Numa1997/SiteTest/tree/main/portfolios-src/electron-beam">portfolios-src/electron-beam</a>: die Vorlesungsnotizen, die Physik in JavaScript, die in Ihrem Browser läuft, die Python-Referenz und die symbolischen Prüfungen. Nichts wird gespeichert.</p>
+          </section>
         </div>
       </article>
     </main>

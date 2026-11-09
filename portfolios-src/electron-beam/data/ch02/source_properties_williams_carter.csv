@@ -1,0 +1,5 @@
+source,work_function_eV,richardson_A_as_printed_A_per_m2_K2,T_K,current_density_as_printed_A_per_m2,crossover_nm_as_printed,brightness_at_100kV_A_per_m2_sr,reduced_brightness_computed_A_per_m2_sr_V,energy_spread_eV,emission_stability_pct_per_h,vacuum_Pa,lifetime_h
+Tungsten (thermionic),4.5,6e9,2700,5, >1e5,1.0e+10,1.0e+05,3,<1,1e-02,100
+LaB6 (thermionic),2.4,4e9,1700,1e2,1e4,5.0e+11,5.0e+06,1.5,<1,1e-04,1000
+Schottky FEG,3.0,,1700,1e5,15,5.0e+12,5.0e+07,0.7,<1,1e-06,>5000
+Cold FEG,4.5,,300,1e6,3,1.0e+13,1.0e+08,0.3,5,1e-09,>5000

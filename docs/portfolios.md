@@ -13,6 +13,7 @@ Study, is generated from its source in this repository too, `portfolios-src/hydr
 | [`public/portfolios/hydraulics/`](../public/portfolios/hydraulics/) | its source in [`portfolios-src/hydraulics/`](../portfolios-src/hydraulics/) (not an app) | A servo-hydraulic press under digital control, from first principles: the animated press with its PID controller, loop analysis (Bode, Nyquist, z-plane), Pascal's ideal press, and a 23-chapter text deriving every equation. One page, with the site's font files beside it. |
 | [`public/simulations/double-inverted-pendulum.html`](../public/simulations/double-inverted-pendulum.html) (project 05 since 4 November 2026) | written by hand, a simulation page | Balancing Two Rods on a Cart: a double inverted pendulum on a cart, balanced by a sampled LQR, with calming, a planned swing-up and moving equilibria. Listed on the Projects page as `#double-inverted-pendulum`; the file stays in `simulations/`, because `tools/i18n/build.py` generates German and Arabic pages only for that folder. Its figure bar is replaced by a link to Projects (the bar's lines are kept empty). Since 5 November 2026 it carries the site's data panel, with logs of every 1 ms step and every controller sample and an energy book, proved honest by the tests in `notes/fig11/panel/`. Described in [simulations/fig11-double-inverted-pendulum.md](simulations/fig11-double-inverted-pendulum.md). Double Pendulum under Control, project 05 from 3 to 4 November 2026, is Fig. 11 again: [simulations/fig11-pendulum-control.md](simulations/fig11-pendulum-control.md). |
 | [`public/simulations/rods-in-liquid.html`](../public/simulations/rods-in-liquid.html) (project 06 since 7 November 2026) | written by hand, the same script as project 05 with its own settings | Balancing Two Rods in a Liquid: the liquid work of project 05 moved to its own page, with a machine that can swing the rods up in water, glycerol and honey (rods 3 kg, 0.20 and 0.25 m; 400 N; a slim cart), and the controller told the flow. See [project06-rods-in-liquid.md](simulations/project06-rods-in-liquid.md). |
+| [`public/portfolios/electron-beam/`](../public/portfolios/electron-beam/) (project 07 since 9 November 2026) | its source in [`portfolios-src/electron-beam/`](../portfolios-src/electron-beam/) | The Electron Beam, from Tip to Measurement: lecture notes in chapters 0 to 9 that follow an electron from a field-emission tip to a measured line width, each with its derivations, SymPy checks, a NumPy reference and a simulation running in the page. Chapters are published in rounds; a chapter not yet written shows "in preparation". One page, English only ([below](#the-electron-beam-electron-beam-since-9-november-2026)). |
 
 Every project here is generated from its source in this repository.
 
@@ -552,3 +553,26 @@ dependencies of the derived constants; and which menu sets which input. Drop cou
   site tokens the panel's stylesheet reads onto the study's palette, and `.plot > svg` keeps the charts' full-width rule off the
   panel's icons. The served page loads `sim.js` and `dataset.js` before its inline script and `datalog.js` after it, with
   `paper.css` and `data.css`; the standalone build has none of them and keeps its readouts through a bare stand-in store.
+
+## The Electron Beam: `electron-beam/` (since 9 November 2026)
+
+Project 07, the portfolio Numa attaches to his applications for electron-optics and particle-beam roles. It is independent work: it models
+no company's instrument, and manufacturers' statements are quoted as public claims with their source (`portfolios-src/electron-beam/sources/applied-public.md`).
+Scope, chapters and file ownership are in [`portfolios-src/electron-beam/PLAN.md`](../portfolios-src/electron-beam/PLAN.md); how a chapter plugs in, the
+commands and the checks are in [`portfolios-src/electron-beam/README.md`](../portfolios-src/electron-beam/README.md).
+
+- **Build.** `python3 portfolios-src/electron-beam/build.py --site` writes `public/portfolios/electron-beam/index.html` from `template.html`,
+  `contract.json` (every symbol with its SI unit and default, the inputs and outputs of each stage), `text/chNN.py` (a dict `CH` per chapter) and
+  `physics/chNN.js` (pure modules, inlined). Mathematics is typeset at build time with the site's KaTeX 0.16.11; the page links `styles/sim.css`
+  and the site's fonts and loads nothing from outside. Chapter 2 was written before the build existed: its `text/ch02.py` has a `build()` that returns
+  numbered HTML, CSS and its own figure script (`physics/ch02_ui.js`), which the build accepts as a "legacy" chapter. Chapter 1 needs SymPy at build time
+  (its text shows the output of `derive/ch01.py`).
+- **Checks.** `checks/check_parity.py` (each `physics/chNN.js` against `ref/chNN.py` within the tolerance the module states), `checks/check_numbers.py`
+  (every quoted number computed, browser string equal to the Python string; chapter 2 is skipped there and its typed numerals are listed by
+  `checks/list_legacy_numerals.py`), `checks/selftest.py`, `checks/check_page.cjs` (Chromium at 360, 390, 1024 and 1440 px: KaTeX, page errors,
+  sideways scroll, outside requests, fonts, every simulation drawn and moving), and `derive/chNN.py` per chapter.
+- **Projects page.** `#electron-beam` in `public/portfolios.html`: band, abstract, tally, parts 7.1 to 7.4 and four plates in
+  `public/portfolios/electron-beam/fig/`, captured from the built page's own figures by `notes/electron-beam/tools/plates.cjs` and converted to WebP.
+  The entry has German and Arabic tables in `i18n/<lang>/portfolios.html.json`; the project page itself is English only.
+- **Published data.** Thomson 1897 (`data/ch01/`), a tungsten ⟨111⟩ tip I–V set (Ayari et al. 2023, CC BY 4.0) and Cho 2014 (`data/ch02/`), with
+  provenance in each folder's README. The working notes, reports of every session and the audit are in `notes/electron-beam/`.

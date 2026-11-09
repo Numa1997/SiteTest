@@ -1,0 +1,94 @@
+{
+ "checks": [
+  {
+   "id": "L1",
+   "title": "∫B dz over the axis = πaB₀, so Ampère (∮B·dl = μ₀NI, the return path far away) gives B₀ = μ₀NI/(πa)",
+   "ok": true,
+   "detail": "∫ B₀/(1+z²/a²) dz = πaB₀"
+  },
+  {
+   "id": "L2",
+   "title": "B_z = B − r²B″/4 + r⁴B⁗/64, B_r = −rB′/2 + r³B‴/16 satisfy div B = 0 and curl B = 0 up to the next order",
+   "ok": true,
+   "detail": "in div B and curl B the coefficients of r⁰, r¹, r² and r³ are all 0; what remains starts at order r⁴"
+  },
+  {
+   "id": "L3",
+   "title": "B′, B″, B‴ of the bell field as coded in physics/ch04.js",
+   "ok": true,
+   "detail": "differences simplify to 0"
+  },
+  {
+   "id": "L4",
+   "title": "Busch: an electron that starts on the axis (p_θ = 0) turns at θ̇ = eB/(2γm), the Larmor rate",
+   "ok": true,
+   "detail": "solving p_θ = 0 for θ̇ gives eB(z)/(2γm)"
+  },
+  {
+   "id": "L5",
+   "title": "e²B²/(4p²) with p² = 2meV* equals eB²/(8mV*)",
+   "ok": true,
+   "detail": "the coefficient η B² of the paraxial equation"
+  },
+  {
+   "id": "L6",
+   "title": "r = sin(ω(π−ψ))/sin ψ with z = a cot ψ (any constant factor) solves r″ + k²a²r/(a²+z²)² = 0 when ω² = 1 + k²",
+   "ok": true,
+   "detail": "residual simplifies to 0"
+  },
+  {
+   "id": "L7",
+   "title": "f = −ωa/sin(ωπ); for a weak lens 1/f → πk²/(2a) = η∫B²dz (the thin-lens formula)",
+   "ok": true,
+   "detail": "k²f → 2a/π as k → 0; η∫B²dz = ηB₀²aπ/2 = πk²/(2a)"
+  },
+  {
+   "id": "L8",
+   "title": "all paraxial rays, skew ones too: with w = x + iy the transverse Lorentz force is (v×B)ₓ + i(v×B)ᵧ = −i[B ẇ + (vB′/2)w]; in the frame turned by θ′ = (e/2p)B, w = u e^{iθ} gives u″ = −(e/2p)²B²u",
+   "ok": true,
+   "detail": "force identity and the rotating-frame equation both simplify to 0"
+  },
+  {
+   "id": "N1",
+   "title": "focal length traced by the solver equals Glaser’s exact −ωa/sin(ωπ) (the solver starts its parallel ray at z = −2000a, which costs about 1/2000² relative)",
+   "ok": true,
+   "detail": "traced 3.6690797 mm, formula 3.6690802 mm"
+  },
+  {
+   "id": "N2",
+   "title": "C_c from the solver (paraxial ray at V*(1 ± 10⁻⁴)) equals the perturbation integral η∫B²h²dz (h: unit slope at the image)",
+   "ok": true,
+   "detail": "solver 2.847594 mm, integral 2.847594 mm"
+  },
+  {
+   "id": "N3",
+   "title": "C_s from tracing rays through the third-order field equals the aberration integral (e/128mV*)∫[3(e/mV*)B⁴h⁴ + 8B′²h⁴ − 8B²h²h′²]dz",
+   "ok": true,
+   "detail": "traced 4.18897 mm, integral 4.18897 mm, ratio 1.000000"
+  },
+  {
+   "id": "N4",
+   "title": "image rotation √(e/8mV*)∫B dz from object to wafer: closed form in the solver against quadrature",
+   "ok": true,
+   "detail": "solver 1.843842 rad, quadrature 1.843842 rad"
+  },
+  {
+   "id": "N5",
+   "title": "the traced miss grows as α³ (miss/α³ constant to 0.02 % from 1 to 8 mrad)",
+   "ok": true,
+   "detail": "miss/α³ = 4.18898 mm, 4.18900 mm, 4.18911 mm, 4.18952 mm"
+  }
+ ],
+ "summary": "13 of 13 checks pass",
+ "numbers": {
+  "Cs_integral": 0.004188967845704914,
+  "Cc_integral": 0.002847594037887062,
+  "f_formula": 0.0036690801754760707,
+  "cs_over_a3": [
+   0.004188976808791642,
+   0.004189002780358973,
+   0.004189106581959195,
+   0.004189521846212022
+  ]
+ }
+}

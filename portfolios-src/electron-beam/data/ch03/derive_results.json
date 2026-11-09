@@ -1,0 +1,60 @@
+{
+ "checks": [
+  {
+   "id": "D1",
+   "title": "(eV + mc²)² = (pc)² + (mc²)² gives p² = 2meV(1 + eV/2mc²) = 2meV*",
+   "ok": true,
+   "detail": "p² − 2meV* simplifies to 0"
+  },
+  {
+   "id": "D2",
+   "title": "λ → h/√(2meV) for eV ≪ mc², and λ → hc/(eV) for eV ≫ mc²",
+   "ok": true,
+   "detail": "λ√x → h/(√2 mc) and λx → h/(mc), with x = eV/mc²; these are h/√(2meV) and hc/eV"
+  },
+  {
+   "id": "D3",
+   "title": "λ_NR/λ = √(1 + eV/2mc²) = 1 + eV/(4mc²) − (eV)²/(32(mc²)²) + …",
+   "ok": true,
+   "detail": "series in x = eV/mc²: 1 + x/4 − x²/32 + …"
+  },
+  {
+   "id": "D4",
+   "title": "p⊥ conserved, p_z reduced: α_land/α → p_acc/p_land = √(V*_acc/V*_land) for small angles",
+   "ok": true,
+   "detail": "limit of arctan(p⊥/p_l)/arctan(p⊥/p_a) for p⊥ → 0 is p_a/p_l"
+  },
+  {
+   "id": "D5",
+   "title": "Hamilton’s equations with z as time: ∂(dx/dz)/∂x + ∂(dp_x/dz)/∂p_x = 0, so phase-space area is conserved (Liouville)",
+   "ok": true,
+   "detail": "divergence of the flow simplifies to 0 for arbitrary P(x, z) and A(x, z)"
+  },
+  {
+   "id": "D6",
+   "title": "B ∝ p², so B/V* is the same at every plane of the column (exactly, relativistically)",
+   "ok": true,
+   "detail": "B/p² = dI/K at both planes; p² = 2meV* by D1"
+  },
+  {
+   "id": "D7",
+   "title": "Gaussian virtual source: the total current over the area of the half-current disk is 1/ln 2 times the axial value",
+   "ok": true,
+   "detail": "R₅₀² = σ² ln 2; ratio = 1/ln 2 = 1.44270"
+  },
+  {
+   "id": "D8",
+   "title": "the solid angle of a cone of half-angle α is πα² for small α, as used in I_p = B V* (π d²/4)(π α²)",
+   "ok": true,
+   "detail": "solid angle 2π(1 − cos α) = πα² − πα⁴/12 + …; I_p ∝ d² α² at fixed brightness"
+  },
+  {
+   "id": "D9",
+   "title": "two electrons gaining eV each keep their energy difference",
+   "ok": true,
+   "detail": "ΔE after = ΔE before"
+  }
+ ],
+ "summary": "9 of 9 checks pass",
+ "ln2_ratio": 1.4426950408889634
+}

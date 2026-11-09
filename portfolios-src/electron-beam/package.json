@@ -1,0 +1,6 @@
+{
+  "name": "electron-beam-source",
+  "private": true,
+  "description": "Marks the .js files of this folder as CommonJS, so physics/*.js load in Node with require(); the repository root is an ES module package.",
+  "type": "commonjs"
+}

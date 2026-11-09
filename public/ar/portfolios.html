@@ -29,7 +29,7 @@
   
     <link rel="stylesheet" href="../fonts/arabic.css" />
     <script src="../scripts/i18n/strings-ar.js"></script>
-    <meta name="translated-from" content="English public/portfolios.html, commit 39565cb" />
+    <meta name="translated-from" content="English public/portfolios.html, commit d161c84" />
   </head>
 
   <body>
@@ -380,6 +380,72 @@
               <div><dt>¼</dt><dd>من وجه العربة القديمة يلاقي السائل</dd></div>
             </dl>
           </div>
+        </div>
+      </article>
+      <article class="proj" id="electron-beam" aria-labelledby="eb-title">
+        <div class="proj__band">
+          <span class="proj__num">07</span>
+          <p>محاضرات مع محاكيات · من المبادئ الأولى · 2026</p>
+          <span>بصريات الجسيمات المشحونة · الانبعاث المجالي · الفراغ · القياس</span>
+        </div>
+        <div class="proj__body">
+          <div class="proj__head">
+            <div>
+              <h2 id="eb-title">الحزمة الإلكترونية، من الرأس إلى القياس</h2>
+              <p class="proj__sub">كيف تُصنع حزمة من الإلكترونات وتُركَّز، وكيف تُستعمل لقياس عرض خطٍّ لا يتجاوز بضعة نانومترات</p>
+              <p class="proj__abs">تحمل الرقائق خطوطًا عرضها بضعة نانومترات، ولا يستطيع الضوء تمييزها: طول موجته عشرات النانومترات، أما طول موجة الإلكترون عند كيلوفولت واحد فبضعة بيكومترات. يتتبّع هذا المشروع إلكترونًا واحدًا من رأسٍ حادٍّ من التنغستن إلى عرض خطٍّ مقيس، في فصولٍ يبدأ كلٌّ منها بصورة فيزيائية، ويشتقّ كل صيغة خطوةً خطوة، ويتحقّق منها بالجبر الرمزي وببرنامج Python مستقل، وينتهي بمحاكاة تكون منزلقاتها رموزَ الصيغ نفسها. تُوضع البيانات المقيسة فوق النموذج مع ذكر المصدر وبيان الفرق: أنابيب الأشعة المهبطية التي استعملها طومسون عام 1897، وتيار رأسٍ حقيقي من التنغستن بدلالة جهده. تُضاف بالترتيب فصول المدفع والعدسة المغناطيسية والبقعة والتشتّت في الرقاقة والقياس والآلة كاملةً؛ وتبيّن الصفحة ما كُتب منها.</p>
+              <div class="proj__actions">
+                <a class="proj__btn" href="../portfolios/electron-beam/index.html">افتح المحاضرات</a>
+                <a class="proj__btn proj__btn--ghost" href="../portfolios/electron-beam/index.html#ch02">المصدر: الانبعاث المجالي</a>
+              </div>
+            </div>
+            <dl class="proj__tally" aria-label="أرقام رئيسية">
+              <div><dt class="is-new">1.8<small> %</small></dt><dd>جذر متوسط مربع الفرق بين نموذج الانبعاث المجالي ورأسٍ مقيس من التنغستن، على مدى يتغيّر فيه التيار بعامل 752</dd></div>
+              <div><dt>0.215<small>eV</small></dt><dd>اتساع الطاقة لباعث المجال البارد في النموذج عند ⁦4 V/nm⁩</dd></div>
+              <div><dt>1.26</dt><dd>نسبة الشحنة إلى الكتلة عند طومسون عام 1897 (الأنبوبان 1 و2) مقسومةً على قيمتها اليوم</dd></div>
+            </dl>
+          </div>
+
+          <section class="proj__part" aria-labelledby="eb-follow">
+            <h3 id="eb-follow"><span class="psub__n">7.1</span>ما تتتبّعه المحاضرات</h3>
+            <ol class="proj__changes">
+              <li><b>لماذا الإلكترونات.</b> حدّ آبه للضوء مقابل طول موجة الإلكترون، وما يجب أن تقدّمه آلة القياس في آنٍ واحد: بقعة دقيقة، وتيار كافٍ، وحزمة لطيفة، وسرعة.</li>
+              <li><b>إلكترون حرّ في المجالات.</b> دالة لاغرانج النسبية، وقوة لورنتز، والمسار اللولبي في مجال مغناطيسي، ومُكامِلان (بوريس ورونغه–كوتا من الرتبة الرابعة) يُختبران أمام المسار اللولبي الدقيق.</li>
+              <li><b>المصدر.</b> حاجز الشحنة الصورية، والنفق الكمومي، وقانون فاولر–نوردهايم، واتساع الطاقة والسطوع للباعثات الباردة وباعثات شوتكي، وفيزياء الفراغ التي تجعل الرأس البارد ساطعًا وهشًّا في آنٍ واحد.</li>
+            </ol>
+          </section>
+
+          <section class="proj__part" aria-labelledby="eb-limits">
+            <h3 id="eb-limits"><span class="psub__n">7.2</span>ما يُبقيه النموذج وما يتركه</h3>
+            <p>المجالات تحليلية: لا يوجد حلّال مجالات بالعناصر المنتهية، ولا بصريات مصحَّحة الزيوغ، ولا تفاعل بين إلكترونات الحزمة. الثوابت من CODATA 2018. كل عدد في النص يحسبه كود الصفحة نفسه ويُتحقَّق منه أمام نسخة Python مستقلة. المشروع مستقل: لا ينمذج جهازَ أيّ شركة، وتُقتبس تصريحات المصنّعين بوصفها ادعاءات علنية مع مصدرها.</p>
+          </section>
+
+          <section class="proj__part" aria-labelledby="eb-figs">
+            <h3 id="eb-figs"><span class="psub__n">7.3</span>أربعة أشكال من المحاضرات</h3>
+            <div class="proj__figs">
+              <figure>
+                <a class="pfig__plate" href="../portfolios/electron-beam/index.html#fig-scales"><img src="../portfolios/electron-beam/fig/01_scales.webp" width="552" height="300" loading="lazy" alt="أطوال على محور لوغاريتمي من بيكومتر واحد إلى ميكرومتر واحد: أصغر دورٍ يميّزه الضوء (71.5 و20.5 و12.3 نانومتر)، وخطوة المعدن البالغة 20 نانومترًا وخلية السيليكون البالغة 543 بيكومترًا، وطول موجة الإلكترون، 38.8 بيكومتر عند 1 كيلوفولت و6.98 عند 30."></a>
+                <figcaption><span class="pfig__n">الشكل 1</span>الضوء والبنى والإلكترون على مسطرة واحدة.</figcaption>
+              </figure>
+              <figure>
+                <a class="pfig__plate" href="../portfolios/electron-beam/index.html#fig-helix"><img src="../portfolios/electron-beam/fig/02_helix.webp" width="915" height="300" loading="lazy" alt="ستة مسارات لولبية لإلكترونات في مجال مغناطيسي منتظم، تغادر نقطة واحدة بزوايا مختلفة وتلتقي ثانيةً على المحور بعد دورة واحدة؛ ويُظهر المنظر من الطرف ست دوائر تمرّ بالمحور."></a>
+                <figcaption><span class="pfig__n">الشكل 2</span>يعيد المجال المغناطيسي الإلكترونات إلى المحور بعد دورة واحدة: أول تلميح إلى العدسة.</figcaption>
+              </figure>
+              <figure>
+                <a class="pfig__plate" href="../portfolios/electron-beam/index.html#ch02"><img src="../portfolios/electron-beam/fig/03_tip.webp" width="531" height="300" loading="lazy" alt="رسم لرأس الباعث: ساق مستدقّة تنتهي بقمة مستديرة نصف قطرها 50 نانومترًا، وخطوط مجال متقطّعة إلى المصعد، وإلكترونات منبعثة، وبضع ذرات ممتزّة على القمة."></a>
+                <figcaption><span class="pfig__n">الشكل 3</span>رأس باعث المجال البارد في الشكل الحيّ من الفصل 2.</figcaption>
+              </figure>
+              <figure>
+                <a class="pfig__plate" href="../portfolios/electron-beam/index.html#fig-data"><img src="../portfolios/electron-beam/fig/04_fn.webp" width="714" height="300" loading="lazy" alt="يسارًا: مخطط فاولر–نوردهايم لرأسٍ مقيس من التنغستن مع خط النموذج عبر النقاط. يمينًا: البواقي، ضمن بضعة في المئة، ونقطة واحدة قرب 6 في المئة."></a>
+                <figcaption><span class="pfig__n">الشكل 4</span>النموذج أمام رأسٍ مقيس من التنغستن (Ayari et al. 2023, CC BY 4.0).</figcaption>
+              </figure>
+            </div>
+          </section>
+
+          <section class="proj__part" aria-labelledby="eb-pages">
+            <h3 id="eb-pages"><span class="psub__n">7.4</span>الصفحة</h3>
+            <p class="proj__note">صفحة واحدة بالإنجليزية، مولَّدة من مصدرها في مستودع هذا الموقع، <a href="https://github.com/Numa1997/SiteTest/tree/main/portfolios-src/electron-beam">portfolios-src/electron-beam</a>: المحاضرات، والفيزياء بلغة JavaScript التي تعمل في متصفحك، ومرجع Python، والتحقّقات الرمزية. لا يُخزَّن شيء.</p>
+          </section>
         </div>
       </article>
     </main>
