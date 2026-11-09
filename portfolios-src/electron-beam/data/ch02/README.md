@@ -25,3 +25,42 @@
   0.5 to 0.6 eV, at an unstated voltage: the same order as here once the voltage is allowed for.
 - **Still missing for data item c**: a measured value with an uncertainty for each source, from a primary paper (Bronsgeest et al. 2008 is
   located, not read). This table is a textbook summary, not a measurement.
+
+## fn_tungsten_nanotip_li2025.csv  (data item b: a measured Fowler–Nordheim I–V set for a tungsten tip)
+- **Source**: Y. Li, L. Xia, N. Li, S. Tang, Y. Ge, J. Wang, B. Xiao, Y. Cheng, L. K. Ang, G. Meng, "Uncovering a widely applicable empirical
+  formula for field emission characteristics of metallic nanotips in nanogaps", *Nature Communications* **16**, 5583 (2025),
+  doi 10.1038/s41467-025-60607-6. Figure 2a,b: measured I_m–V_m curves of one tungsten nanotip of apex radius 4 nm (from TEM images) against a gold plate,
+  at gaps d = 5, 10, 15, 20, 25, 30, 50, 80 nm. In-situ TEM holder; the paper states a current resolution of 0.1 nA, gap adjustment to 0.04 nm
+  and voltages up to 150 V (excerpt of its Methods).
+- **How obtained (not digitised from a picture)**: the authors' own Source Data, `Source Data/Figure 2 a-b.xlsx` in
+  <https://static-content.springer.com/esm/art%3A10.1038%2Fs41467-025-60607-6/MediaObjects/41467_2025_60607_MOESM3_ESM.rar>. I took only the
+  measured columns `Vm` and `Im(d=…nm)` of each block (771 points). The authors' theoretical Murphy–Good columns in the same sheet are **not** copied.
+- **Units**: V in volts. The sheet has no unit for I. I take **nA**: the maximum is 101.7 in every block, and the paper's text speaks of currents of "2 nA",
+  "10, 50 and 100 nA". `I_measured_A` is I × 10⁻⁹. `ln_I_over_V2…` and `one_over_V` are computed here, only where I > 0 and V > 0.
+- **Uncertainty**: current resolution 0.1 nA (paper); the noise floor shows in the data (negative currents down to −0.28 nA at low voltage, 9 points).
+  No uncertainty on V is stated.
+- **Check done here (reproduce with `numpy.polyfit` on rows with I ≥ 2 nA)**: for each gap the plot of ln(I/V²) against 1/V is straight (rms residual 0.10 to 0.24).
+  With φ = 4.5 eV, b = 6.83089×10⁹ V m⁻¹ eV⁻³ᐟ² (Forbes Eq. 18, recomputed), c_S² = 1.43996×10⁻⁹ eV² m V⁻¹ and v(f) ≈ 1 − f + (f ln f)/6 (Forbes Eq. 40), solving
+  slope = −b φ³ᐟ² v(f)/β self-consistently gives, at the mid-range voltage of the fit:
+
+  | gap d (nm) | fit range (V) | slope (V) | β = F/V (10⁷ m⁻¹) | apex field F (V/nm) | f | k = 1/(βR), R = 4 nm |
+  |---|---|---|---|---|---|---|
+  | 5 | 25.6–33.1 | −359 | 12.4 | 3.64 | 0.26 | 2.0 |
+  | 10 | 30.4–39.2 | −391 | 11.1 | 3.86 | 0.27 | 2.3 |
+  | 20 | 37.2–48.0 | −511 | 8.66 | 3.69 | 0.26 | 2.9 |
+  | 30 | 42.0–53.8 | −659 | 6.98 | 3.34 | 0.24 | 3.6 |
+  | 50 | 46.2–58.8 | −725 | 6.35 | 3.34 | 0.24 | 3.9 |
+  | 80 | 51.5–66.0 | −729 | 6.13 | 3.60 | 0.26 | 4.1 |
+
+  So the data are consistent with the Schottky–Nordheim theory of ch. 2 for polycrystalline tungsten (4.5 eV): the apex field at emission is 3.3 to 3.9 V/nm and
+  f ≈ 0.25, and the tip-field relation F = V/(kR) holds with k between 2 and 4, rising as the anode moves away. The sharp 4 nm tip is the weak point: assumptions are
+  φ = 4.5 eV, a constant emitting area, and the pre-exponential factor left free (only the slope is used).
+- **What this is not**: it is not Dyke and Dolan (1956), which I could not open, and not an SEM-gun tip (radius about 100 nm, kilovolts). It is a modern
+  measured tungsten I–V set that tests the same exponent.
+- **Licence warning (decide before publishing)**: the paper is open access under **CC BY-NC-ND 4.0**, and I could not see a separate licence on the Source Data file.
+  NC-ND does not allow adapted material. Numbers are facts and a plotted overlay with a citation is normal scientific use, but the coordinator should not
+  copy the sheet itself onto the site without checking, and may prefer to keep the CSV in the repository only (not served).
+- **Other open tungsten-tip papers found, with I–V only as figures** (not digitised: needs the page image, which this session could not fetch): M. A. Madanat,
+  M. S. Mousa, A. N. Al-Rabadi, A. Fischer, *Jordan J. Phys.* **8**(2), 79–85 (2015), Table 1 gives apex radii (SEM 93 to 220 nm; extracted from the FN slope 108 to 288 nm; the
+  paper's relation r_FEM = 1.35 r_SEM − 20 nm) — a ready model-versus-data check of the radius extraction; E. C. Reeves, Hamline University honors thesis (2014),
+  <https://digitalcommons.hamline.edu/dhp/15>, Figure 22 (I–V of 11 etched tips, radii about 20 to 100 nm).
