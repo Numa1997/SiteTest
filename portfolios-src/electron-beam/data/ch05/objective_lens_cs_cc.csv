@@ -1,0 +1,12 @@
+system,beam_or_landing_energy_keV,Cs_mm,Cc_mm,Cs_m,Cc_m,kind,source,how_read
+"Typical low-voltage SEM objective, working distance 4 mm",1,5,5,0.005,0.005,"assumed typical (Joy states ""typical lens parameters"")","D. C. Joy, J. Surf. Sci. Nanotechnol. 4 (2006) 369, doi 10.1380/ejssnt.2006.369, Fig. 1 text",EXCERPT
+"Uncorrected CD-SEM column (HOLON Z-System, as named by CEOS)",1,2.0,2.0,0.002,0.002,stated for an uncorrected system,"CEOS SEMCOR white paper, https://www.ceos-gmbh.de/en/produkte/semcor/CEOS_SEMCOR_whitepaper_012_FINAL.pdf",EXCERPT
+"Magnetic immersion lens, minimum values",1,1.0,1.0,0.001,0.001,calculated minimum,"K. Tsuno, N. Handa, S. Matsumoto, SPIE (1995), doi 10.1117/12.221578 (abstract)",ABSTRACT
+"Combined electrostatic+magnetic lens, specimen field-free, at most",1,1.0,0.7,0.001,0.0007,calculated upper bound,same (abstract),ABSTRACT
+Combined lens with specimen immersed in the electrostatic field,1,0.2,0.1,0.0002,0.0001,calculated,same (abstract),ABSTRACT
+"Magnetic immersion objective, aperture-lens model, f = 257 um, probe 0.87 nm",1,0.168,0.187,0.000168,0.000187,calculated,"Aberration characteristics of immersion lenses for LVSEM, Ultramicroscopy (2002), pii S0304-3991(02)00288-7 (authors not seen)",EXCERPT
+Requirement for a probe under 1 nm at 1 keV landing (Zach); not a lens value,1,0.1,0.084,0.0001,8.4e-05,"requirement, upper limits","same paper, quoting Zach",EXCERPT
+"LVEM 5 (low-voltage TEM/STEM, Delong), manufacturer, calculated",5,0.64,0.89,0.00064,0.00089,calculated by manufacturer,"J. Bacovsky, PMC6138797 (2018), Table 1",EXCERPT
+LVEM 25 TEM,25,1.03,1.05,0.00103,0.00105,calculated by manufacturer,"same, Table 1",EXCERPT
+LVEM 25 STEM,15,0.8,0.85,0.0008,0.00085,calculated by manufacturer,"same, Table 1",EXCERPT
+LVEM 25 STEM,10,0.64,0.72,0.00064,0.00072,calculated by manufacturer,"same, Table 1",EXCERPT
