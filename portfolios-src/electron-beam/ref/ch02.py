@@ -294,3 +294,22 @@ if __name__ == '__main__':
     for Fnm in (3, 4, 5):
         m = emission_model(Fnm * 1e9, 4.5 * eV, 300)
         print(Fnm, 'V/nm', f"J={m['J']:.4e} FWHM={m['fwhm'] / eV:.4f} eV <Et>={m['mean_et'] / eV:.4f} eV B_r={m['B_r']:.4e}", m['regime'])
+
+
+# ------------------------------------------------------------------------------------------------ the contract interface (stage ch02)
+INPUTS = ['r_t', 'V_ex', 'phi', 'T', 'p', 't_clean', 'k_f']
+OUTPUTS = ['I_e', 'B_r', 'dE', 'd_v', 'theta_cov']
+ASSUME = dict(mu=2.016, Tg=300.0, ks=0.535, Ns=1e19, Ed=1.9, dads=1.0)
+
+
+def compute(p):
+    """Mirror of compute() in physics/ch02.js: hand-over of the clean tip, coverage after t_clean, patch-model mix."""
+    r, k, phi, T, V = p['r_t'], p['k_f'], p['phi'], p['T'], p['V_ex']
+    h = handover(V, r, k, phi, T)
+    h['I_e'] = tip_current(V, r, k, phi, T, nodes=16)
+    a = ASSUME['ks'] * hk_flux(p['p'], ASSUME['Tg'], ASSUME['mu']) / ASSUME['Ns']
+    th = coverage_step(0.0, p['t_clean'], a, k_des(ASSUME['Ed'], T))
+    phiV = phi + ASSUME['dads'] * eV
+    Iv = tip_current(V, r, k, phiV, T, nodes=16)
+    mv = emission_model(tip_field(V, r, k), phiV, T)
+    return dict(I_e=(1 - th) * h['I_e'] + th * Iv, B_r=(1 - th) * h['B_r'] + th * mv['B_r'], dE=h['dE'], d_v=h['d_v'], theta_cov=th)

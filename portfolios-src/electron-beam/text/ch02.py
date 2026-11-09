@@ -891,9 +891,10 @@ def sim_html(n):
 
 
 SIM_CSS = '''
-.ebsim { display: grid; grid-template-columns: minmax(0, 1fr) 330px; gap: 20px; align-items: start; margin: 1.6em 0 1.8em; font-family: var(--sans); color: var(--ink); }
-.ebsim__plots { display: grid; gap: 14px; min-width: 0; }\n@media (min-width: 1101px) { .ebsim__plots { position: sticky; top: 12px; } }
-.ebsim__three { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.ebsim { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; align-items: start; margin: 1.6em 0 1.8em; font-family: var(--sans); color: var(--ink); }
+.ebsim__plots { display: grid; gap: 14px; min-width: 0; }
+.ebsim__three { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; }
+.ebsim__three .ebsim__c { --ar: 16/7 !important; }
 .ebsim .stage { margin: 0; }
 .ebsim .stage__cap { font-size: 13.5px; line-height: 1.4; padding: 8px 10px; }
 .ebsim .stage__cap b { margin-right: 8px; }
@@ -901,14 +902,13 @@ SIM_CSS = '''
 .ebsim .ctl { font-size: 13.5px; }
 .ebsim select { font: 13.5px var(--sans); color: var(--ink); background: var(--card); border: 1px solid var(--rule); border-radius: 6px; padding: 5px 8px; }
 .ebsim .panel { box-shadow: none; }
+@media (min-width: 700px) { .ebsim .panel { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 24px; align-items: start; } .ebsim .panel > .panel__group:last-child, .ebsim__assume { grid-column: 1 / -1; } }
 .ebsim__assume { border: 1px solid var(--rule-soft); border-radius: 8px; padding: 8px 12px 12px; display: grid; gap: 10px; }
 .ebsim__assume summary { cursor: pointer; font: 500 10.5px var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
 .ebsim__assume[open] summary { margin-bottom: 8px; }
 .ebsim__status { margin: 0; min-height: 1.2em; font: 11px var(--mono); color: var(--muted); }
 .ebsim .readouts dd { white-space: normal; font-size: 12.5px; }
 .ebsim .readouts dt i { font-family: var(--tex); text-transform: none; letter-spacing: 0; font-size: 13px; }
-@media (max-width: 1100px) { .ebsim { grid-template-columns: minmax(0, 1fr); } .ebsim__three { grid-template-columns: minmax(0, 1fr); } }
-@media (min-width: 700px) and (max-width: 1100px) { .ebsim__three { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 .ptab-wrap { overflow-x: auto; max-width: 100%; margin: 1.2em 0 1.4em; }
 .ptab-wrap .ptab { display: table; width: 100%; margin: 0; }
 .pfig__row svg { min-width: 0; }

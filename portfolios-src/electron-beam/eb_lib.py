@@ -36,7 +36,7 @@ from ref import core as rcore  # noqa: E402
 N_CHAPTERS = 10
 TITLES = ['The goal', 'A free electron in fields', 'The source', 'Acceleration, brightness, energy spread', 'The lens', 'The spot',
           'Scan and hit', 'Detect and measure', 'The whole machine', 'What an interviewer for this role will probe']
-CH_KEYS = {'title', 'lead', 'sections', 'figures', 'numbers', 'literals', 'sim'}
+CH_KEYS = {'title', 'lead', 'sections', 'figures', 'numbers', 'literals', 'sim', 'css', 'ui_js', 'sim_html'}
 SEC_KEYS = {'id', 'title', 'html', 'star'}
 NUM_KEYS = {'module', 'inputs', 'out', 'expr', 'of', 'scale', 'sig'}
 SIM_KEYS = {'module', 'title', 'caption', 'controls', 'readouts', 'aspect', 'aspect_phone'}
@@ -112,6 +112,8 @@ def load_chapter(n, text_dir):
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
     ch = getattr(mod, 'CH', None)
+    if ch is None and callable(getattr(mod, 'build', None)):
+        return {'legacy': mod.build()}   # a chapter written before the scaffold (chapter 2): pre-numbered html with \( \) and \[ \]
     errs = []
     if not isinstance(ch, dict):
         fail(['%s defines no dict CH' % f.name])
@@ -294,6 +296,8 @@ def build_book(text_dir=None):
         fail(errs)
     chs = {n: load_chapter(n, text_dir) for n in range(N_CHAPTERS)}
     chs = {n: c for n, c in chs.items() if c is not None}
+    legacy = {n: c['legacy'] for n, c in chs.items() if 'legacy' in c}
+    chs = {n: c for n, c in chs.items() if 'legacy' not in c}
     defaults = dict(zip([m['id'] for m in modules], node('compute', [{'module': m['id']} for m in modules]))) if modules else {}
     nums = Numbers(chs)
 
@@ -402,8 +406,33 @@ def build_book(text_dir=None):
     guide = {k: prose(v, 0, gst, 'guide:' + k, allow_display=False) for k, v in gsrc.items()}
 
     toc = []
+    extra_css, extra_js = [], []
     for n in range(N_CHAPTERS):
         ch = chs.get(n)
+        if n in legacy:
+            L = legacy[n]
+            cid = 'ch%02d' % n
+            body = re.search(r'<div class="paper__body">(.*)</div></article>\s*$', L['html'], re.S).group(1)
+            lead = re.search(r'<div class="paper__abstract">(.*?)</div></header>', L['html'], re.S).group(1)
+            body = re.sub(r'id="sec-([a-z0-9-]+)"', lambda m: 'id="%s-%s"' % (cid, m.group(1)), body)
+
+            def tex(src):
+                def one(m):
+                    inline = m.group(1) is not None
+                    return job(html.unescape((m.group(1) if inline else m.group(2)).strip()), not inline)
+                return re.sub(r'\\\((.*?)\\\)|\\\[(.*?)\\\]', one, src, flags=re.S)
+            subs = []
+            for m in re.finditer(r'<section class="psec" id="(%s-[a-z0-9-]+)"><h3><span class="psec__n">([\d.]+)</span>(.*?)</h3>' % cid, body):
+                sec[m.group(1)] = ('§' + m.group(2), cid)
+                subs.append({'id': m.group(1), 'n': m.group(2), 'title': html.unescape(re.sub(r'<[^>]+>', '', m.group(3)))})
+            lead = re.sub(r'^<b>Abstract\.</b>\s*', '', lead)
+            chapters.append({'n': n, 'id': cid, 'title': L['title'], 'present': True,
+                             'html': '<section class="chapter chapter--legacy" id="%s"><h2 class="chapter__t"><span class="chapter__n">Chapter %d</span>%s</h2><p class="chapter__lead">%s</p>%s</section>'
+                             % (cid, n, html.escape(L['title']), tex(lead), tex(body))})
+            toc.append({'id': cid, 'n': str(n), 'title': L['title'], 'subs': subs})
+            extra_css.append(L.get('css', ''))
+            extra_js.append(L.get('ui_js', ''))
+            continue
         st = {'eq': 0, 'fig': 0, 'figs': (ch or {}).get('figures') or {}, 'placed': []}
         cid = 'ch%02d' % n
         slot_job = lambda tex, d: job(tex, d)  # noqa: E731
@@ -426,7 +455,11 @@ def build_book(text_dir=None):
             subs.append({'id': sid, 'n': '%d.%d' % (n, i), 'title': s['title']})
         for name in set(st['figs']) - set(st['placed']):
             errors.append('%s: figure %r is declared but never placed with {{figure:%s}}' % (cid, name, name))
-        slot = sim_slot(n, ch, modmap, defaults, contract, slot_job)
+        if ch.get('css'):
+            extra_css.append(ch['css'])
+        if ch.get('ui_js'):
+            extra_js.append((HERE / 'physics' / ch['ui_js']).read_text(encoding='utf-8'))
+        slot = prose(ch['sim_html'], n, st, cid + ' sim') if ch.get('sim_html') else sim_slot(n, ch, modmap, defaults, contract, slot_job)
         if ch.get('sim') and not slot:
             errors.append('%s: CH["sim"] names a module without physics/ui' % cid)
         parts.append(slot)
@@ -484,7 +517,8 @@ def build_book(text_dir=None):
     for c in chapters:
         c['html'] = place(c['html'])
     guide = {k: place(v) for k, v in guide.items()}
-    stats = {'chapters_present': sum(1 for c in chapters if c['present']), 'equations': len(eq), 'figures': len(fig),
+    n_legacy_eq = sum(len(re.findall(r'\\tag\{', jobs[i][0])) for i in range(len(jobs)) if jobs[i][1])
+    stats = {'chapters_present': sum(1 for c in chapters if c['present']), 'equations': len(eq) + n_legacy_eq, 'figures': len(fig),
              'numbers': len(nums.specs), 'formulas': len(jobs)}
-    return {'chapters': chapters, 'guide': guide, 'toc': toc, 'stats': stats, 'contract': contract, 'modules': modules,
+    return {'chapters': chapters, 'guide': guide, 'toc': toc, 'stats': stats, 'css': '\n'.join(extra_css), 'ui_js': '\n'.join(extra_js), 'contract': contract, 'modules': modules,
             'numbers': nums, 'labels': {'eq': eq, 'fig': fig, 'sec': sec}}

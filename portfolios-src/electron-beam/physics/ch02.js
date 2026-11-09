@@ -13,7 +13,7 @@
    The analytic Fowler-Nordheim form (Forbes' v(f), t(f)) is the T -> 0 limit of the same integrals.          [2.6]  */
 (function (root, factory) {
   if (typeof module === 'object' && module.exports) module.exports = factory();   // CommonJS
-  else root.EB_CH02 = factory();                                                   // page, or Node ESM (import, then globalThis.EB_CH02)
+  else { root.EB_CH02 = factory(); root.EB = root.EB || {}; root.EB.ch02 = root.EB_CH02; }   // page: also EB.ch02, the scaffold's name
 })(typeof globalThis !== 'undefined' ? globalThis : self, function () {
   'use strict';
 
@@ -213,7 +213,30 @@
     return pts;
   }
 
-  return { K, gauleg, schottkyLowering, scaledField, referenceField, barrierG, vExact, vForbes, tForbes, dTunnel, jFN, jRichardson, jSchottky,
+  /* ---------------------------------------------------------------- the contract interface (contract.json, stage ch02)
+     Added by the finisher so the build, the parity check and chapter 8 can call chapter 2 like every other stage.
+     theta_cov: coverage after t_clean seconds at pressure p, from a clean tip, by the exact solution of the rate equation [2.10]
+     with the chapter's stated model assumptions (residual gas H2 at 300 K, kappa*s = 0.535, N_s = 1e19 m^-2, E_d = 1.9 eV,
+     Delta phi_ads = 1.0 eV); I_e and B_r mix the clean and the covered surface by area (patch model, the chapter's boxed
+     assumption); dE and d_v are those of the clean surface. */
+  const ASSUME = { mu: 2.016, Tg: 300, ks: 0.535, Ns: 1e19, Ed: 1.9, dads: 1.0 };
+  function compute(p) {
+    const q = { r: p.r_t, k: p.k_f, phi: p.phi, T: p.T, nodes: 16 };
+    const h = handover({ ...q, V: p.V_ex });
+    const a = ASSUME.ks * hkFlux(p.p, ASSUME.Tg, ASSUME.mu) / ASSUME.Ns, kd = kDes(ASSUME.Ed, p.T);
+    const theta_cov = coverageStep(0, p.t_clean, a, kd);
+    const phiV = p.phi + ASSUME.dads * eV;
+    const Iv = tipCurrent(p.V_ex, { ...q, phi: phiV });
+    const mv = emissionModel(tipField(p.V_ex, p.r_t, p.k_f), phiV, p.T);
+    return { I_e: (1 - theta_cov) * h.I_e + theta_cov * Iv, B_r: (1 - theta_cov) * h.B_r + theta_cov * mv.B_r,
+             dE: h.dE, d_v: h.d_v, theta_cov };
+  }
+
+  return { id: 'ch02', inputs: ['r_t', 'V_ex', 'phi', 'T', 'p', 't_clean', 'k_f'], outputs: ['I_e', 'B_r', 'dE', 'd_v', 'theta_cov'],
+           tolerance: { rel: 2e-6, abs: 0, note: 'same quadrature in float64 on both sides; the FWHM is read off a grid' },
+           cases: [{}, { V_ex: 1000, r_t: 5e-8 }, { T: 1800, phi: 2.9 * 1.602176634e-19, V_ex: 2000, r_t: 5e-7, k_f: 8 }, { p: 1e-7, t_clean: 7200 }],
+           ASSUME, compute,
+           K, gauleg, schottkyLowering, scaledField, referenceField, barrierG, vExact, vForbes, tForbes, dTunnel, jFN, jRichardson, jSchottky,
            negLi2, emissionModel, tipField, tipCurrent, handover, hkFlux, kDes, coverageStep, timeToCoverage, currentRatio, coveredRatio,
            cycle, fnPlot };
 });

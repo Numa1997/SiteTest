@@ -52,7 +52,7 @@ function serve(extraFile) {
     res.katex_errors = await pg.locator('.katex-error').count();
     res.katex_ok = await pg.locator('.katex').count();
     res.overflow = await pg.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
-    res.wide_elements = await pg.evaluate(() => { const W = document.documentElement.clientWidth; return Array.from(document.querySelectorAll('main *')).filter(e => { const r = e.getBoundingClientRect(); return r.width > 0 && r.right > W + 1 && !e.closest('.katex-display') && !e.closest('.ptab') && !e.closest('.pfig__plate'); }).slice(0, 3).map(e => e.tagName + '.' + e.className); });
+    res.wide_elements = await pg.evaluate(() => { const W = document.documentElement.clientWidth; return Array.from(document.querySelectorAll('main *')).filter(e => { const r = e.getBoundingClientRect(); return r.width > 0 && r.right > W + 1 && !e.closest('.katex-display') && !e.closest('svg') && !e.closest('.ptab') && !e.closest('.pfig__plate'); }).slice(0, 3).map(e => e.tagName + '.' + e.className); });
     res.h1_font = await pg.evaluate(() => { const c = getComputedStyle(document.querySelector('h1')); return c.fontFamily.split(',')[0].replace(/["']/g, '') + ' ' + c.fontWeight; });
     res.fonts = await pg.evaluate(() => ['Instrument Serif', 'IBM Plex Sans', 'IBM Plex Mono', 'Latin Modern Roman'].filter(f => document.fonts.check('16px "' + f + '"')));
     res.chapters = await pg.locator('.chapter').count();

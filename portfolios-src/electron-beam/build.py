@@ -55,9 +55,7 @@ def main():
             '    <meta name="description" content="%s" />\n    <meta name="author" content="Numa Koudsie" />\n    <meta name="theme-color" content="#f5f1ea" />\n'
             '    %s\n'
             '    <link rel="preload" href="%sfonts/instrument-serif/instrument-serif-400-latin.woff2" as="font" type="font/woff2" crossorigin />\n'
-            '    <link rel="stylesheet" href="%sfonts/instrument-plex.css" />\n'
-            '    <link rel="stylesheet" href="%svendor/katex/katex.min.css" />\n'
-            '    <link rel="stylesheet" href="%sstyles/paper.css" />') % (html.escape(desc, quote=True), icon, base, base, base, base)
+            '    <link rel="stylesheet" href="%sstyles/sim.css" />') % (html.escape(desc, quote=True), icon, base, base)
 
     toc = []
     for t in book['toc']:
@@ -78,7 +76,7 @@ def main():
            'G_LEAVES': book['guide']['leaves_out'], 'G_NUMBERS': book['guide']['numbers'], 'STATUS': html.escape(status),
            'TOC': ''.join(toc), 'CHAPTERS': chapters, 'KATEX': '0.16.11',
            'CONTRACT_JSON': json.dumps(book['contract'], ensure_ascii=False, separators=(',', ':')).replace('</', '<\\/'),
-           'CORE_JS': read(HERE / 'physics' / 'core.js'), 'MODULES_JS': modjs, 'APP_JS': read(HERE / 'app.js')}
+           'CORE_JS': read(HERE / 'physics' / 'core.js'), 'MODULES_JS': modjs, 'APP_JS': read(HERE / 'app.js') + '\n' + book['ui_js'], 'CHAPTER_CSS': book['css']}
     # one pass, so a placeholder inside inserted text (KaTeX output, code) is never replaced again
     out = re.sub(r'\{\{([A-Z_]+)\}\}', lambda m: rep[m.group(1)] if m.group(1) in rep else m.group(0), out)
     left = re.findall(r'\{\{[A-Z_]+\}\}', re.sub(r'<script>.*?</script>', '', out, flags=re.S))
