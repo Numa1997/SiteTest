@@ -31,7 +31,7 @@ momenta p₁, p₂. Hamilton's equations for the general family (masses, lengths
 | `simulations/fig13/turning.html?scene=wheel\|butterfly` | Film: turning the paper, with the deck of earlier pictures. |
 | `simulations/fig13/together.html` | Film: six pictures on one clock; the phone layout on a portrait screen. |
 | `simulations/fig13/dive.html` | Film, phone first: from momentum space into one cell, then the exposure grows from an eye's 0.1 s to one lap. |
-| `simulations/fig13/reem.html` | The gift For رِيمْ as a precomputed video (`video/gift-{dark,light}.mp4`), then the construction video, looping; follows the reader's light or dark setting. The film itself (`tools/fig13/gift/reem.html`, the first version Numa liked, in the house colours) writes رِيمْ (traced from the reference plate Numa chose) and فَرَاشَتُكِ (Amiri) with 640 arrows each, then the butterfly by two arrows, then its dashboard with the paper turning. |
+| `simulations/fig13/reem.html` | The gift For رِيمْ as a precomputed video (`video/gift-{dark,light}.mp4`), then the construction video, looping; follows the reader's light or dark setting. The film itself (`tools/fig13/gift/reem.html`, the first version Numa liked, in the house colours) writes رِيمْ (traced from the reference plate Numa chose) and فَرَاشَتُكِ (written in the same hand: `farashatuki.py`) with 640 arrows each, then the butterfly by two arrows, then its dashboard with the paper turning. |
 | `simulations/fig13/construction.html` | The construction as a precomputed video (`video/construction-{dark,light}.mp4`), looping. The film (`tools/fig13/gift/construction.html`): h(t) beside the plane, x(t) below, the two time axes joined by a 45-degree mitre; for each instant a level and an upright line cross at the tip of the pendulum; a wheel first, then the butterfly. Videos and pages: `video_pages.py` (drawn live on a phone the films stuttered). |
 
 The four films are generated: edit `tools/fig13/gift/*.html` and run `python3 tools/fig13/gift/publish_films.py`, which rewrites the
@@ -63,3 +63,8 @@ Amiri composed as a mirror butterfly (`qalam2.py`); automatic re-inking of whole
 Accepted: the reference plate Numa chose (a screenshot of an image made by Gemini), traced to vector outlines (`ref_trace.py`, `reem_ref.json`)
 and set as gold on navy (`plate.py`). Its Arabic was checked by eye only: the third dot under the ya was wrong and removed; the vowel marks are
 kept as drawn and have not been checked by a calligrapher.
+
+**فَرَاشَتُكِ in the hand of رِيمْ (9 November 2026).** Measured on the traced name (stroke width against direction over 5282 skeleton samples): a flat
+nib about 60 px wide held at 70 degrees (horizontal strokes 57-60 px, strokes at 60-75 degrees about 16 px); uprights about 40 px, as with the reed
+turned to 45 degrees. `farashatuki.py` takes the plate's own ra, fathas, damma, kasra and the small hooked mark, and writes fa, alif, shin, ta, the
+kaf and the dots with that nib, on the plate's habit of letters climbing from the upper right and the ra sweeping under what follows.
