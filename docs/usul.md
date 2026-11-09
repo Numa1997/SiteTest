@@ -41,7 +41,7 @@ The two commands above still work by hand from a computer signed in to Cloudflar
 to the same file in a fresh build. A branch other than `main` gets the same check in red, failing at once: only `main` is set up to
 build. So merging into `main` is deploying, and it happens only on Numa's word.
 
-**When a merge does not build (seen 6 November 2026).** The merge `395fb42` (Fig. 12, PR #96) got no "Workers Builds: phyein-usul"
+**When a merge does not build (seen 6 November 2026, again 9 November 2026: merge `ba082de`, the new gift video of Fig. 13, had no "Workers Builds" check while `7b49ec5` before it had one; the next merge started a build).** The merge `395fb42` (Fig. 12, PR #96) got no "Workers Builds: phyein-usul"
 check at all, while every push before 09:22 UTC that day had one: Cloudflare never started the build, and phyeinusul.com kept the old page.
 Check it with `curl -sS https://api.github.com/repos/Numa1997/SiteTest/commits/<sha>/check-runs | grep -o '"name": "[^"]*"'`: no
 "Workers Builds" name means no build started. Then, in the Cloudflare dashboard: Workers & Pages → phyein-usul → Deployments, and start a
