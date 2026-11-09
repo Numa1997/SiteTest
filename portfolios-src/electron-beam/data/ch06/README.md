@@ -35,6 +35,21 @@
   named in the paper) was not reached.
 - **Uncertainty**: none printed. The paper discusses a wide spread between authors in the compiled data for the same element.
 
+## estar_electron_stopping_power.csv  (calculated reference for the Bethe stopping power, not a measurement)
+- **Source**: NIST ESTAR, *Stopping-Power and Range Tables for Electrons*, <https://physics.nist.gov/PhysRefData/Star/Text/ESTAR.html>
+  (text-version table, queried 9 November 2026 at 1, 1.5, 2, 3, 5, 7, 10, 15, 20, 30, 50, 100 keV for silicon, aluminium, copper, gold and
+  PMMA "Lucite"). ESTAR's lowest energy is 1 keV.
+- **What it is**: calculated collision and total stopping powers with a density-effect parameter δ. Nothing here was measured; ESTAR is the usual reference
+  the Bethe-formula part of the Monte Carlo is compared with. The methodology document of ESTAR was not opened.
+- **Units**: ESTAR gives MeV cm² g⁻¹. The CSV also has J m⁻¹ (S × ρ × 1.602176634×10⁻¹¹ with ρ in g cm⁻³) and keV nm⁻¹ (S × ρ × 10⁻⁴). The mean excitation energies and
+  densities ESTAR used: Si 173 eV, 2.33 g cm⁻³; Al 166 eV, 2.6989; Cu 322 eV, 8.96; Au 790 eV, 19.32; PMMA 74 eV, 1.19.
+- **Check done here**: I recomputed the collision stopping power with the standard Bethe formula for electrons including the density effect δ from the table
+  (S = 0.153537 (Z/A) β⁻² [ln(τ²(τ+2)/(2(I/mc²)²)) + F⁻(τ) − δ] MeV cm² g⁻¹, with F⁻ = (1−β²)[1 + τ²/8 − (2τ+1) ln 2]; τ = T/mc²).
+  It reproduces ESTAR to 0.02 % for silicon at 2, 10, 30 and 100 keV and for gold at 10 keV (ratios 0.9999 to 1.0002). I wrote that formula from memory; its book source
+  (ICRU Report 37 and Bethe) was **not opened**, so the check shows ESTAR and the formula agree, not that either is verified against a book.
+- **Not delivered**: the CSDA range columns. The text interface I could reach returns only stopping power. A range can be had by integrating
+  1/S from 1 keV upward, but the part below 1 keV is not in ESTAR, so I did not do it.
+
 ## Still to do for ch06 (data item d, ranges)
 Measured electron ranges (Everhart and Hoff 1971, Kanaya and Okayama 1972) are paywalled and not yet found in an open copy. See
-`sources/bibliography.md` section 3.
+`sources/bibliography.md` section 3. What is read: the Kanaya–Okayama formula itself and its units (Goldstein et al., ch. 11 abstract), and that it gives a larger range than Everhart–Hoff (Luke 1994 abstract).

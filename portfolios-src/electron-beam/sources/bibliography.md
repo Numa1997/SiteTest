@@ -104,7 +104,8 @@ Hohmann §5.4, pp. 33–35 (READ). Local error O(τ⁵), global O(τ⁴): the fi
 | Kanaya–Okayama range R_KO(nm) = (27.6 A/(Z^0.89 ρ)) E₀^1.67, A in g/mol, ρ in g/cm³, E₀ in keV | J. I. Goldstein et al., *Scanning Electron Microscopy and X-Ray Microanalysis*, 4th ed., Springer 2017, ch. 11 "Low Beam Energy SEM", doi 10.1007/978-1-4939-6676-9_11 | READ (abstract only; the chapter is not open); the original K. Kanaya, S. Okayama, *J. Phys. D* **5** (1972) 43 was not opened |
 | Everhart–Hoff range (smaller than Kanaya–Okayama) | T. E. Everhart, P. H. Hoff, *J. Appl. Phys.* **42**, 5837 (1971); the comparison is stated in K. L. Luke, *J. Appl. Phys.* **76**, 1081 (1994) | LOCATED (abstracts) |
 | CSDA range and stopping power below 5 keV (Bethe–Bloch not adequate; dielectric function used); IMFP of Ag, Al, Na, PMMA, Si, SiO₂ up to 2 keV | P. Pianetta, X-Ray Data Booklet §3.2, <https://xdb.lbl.gov/Section3/Sec_3-2.html> | LOCATED (excerpt) |
-| Bethe stopping power | no source opened | NOT OPENED |
+| Stopping power table (calculated) for Si, Al, Cu, Au, PMMA, 1–100 keV | NIST ESTAR, <https://physics.nist.gov/PhysRefData/Star/Text/ESTAR.html> | READ (table queried); in `data/ch06/estar_electron_stopping_power.csv`; reproduced by a collision-stopping-power formula written from memory |
+| Bethe stopping power, ICRU Report 37 | no book opened | NOT OPENED |
 
 ### 2.8 Detection and statistics
 Shot noise (Poisson, SNR ∝ √N), CD uncertainty, throughput: no source opened yet. Reimer, *Scanning Electron Microscopy*
