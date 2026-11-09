@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-1390 files, 114.2 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+1392 files, 114.1 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -35,7 +35,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Shared by the portfolio sources (not served)](#shared-by-the-portfolio-sources-not-served) | 1 |
 | [Template sources](#template-sources) | 2 |
 | [Documentation](#documentation) | 37 |
-| [Tools](#tools) | 79 |
+| [Tools](#tools) | 81 |
 | [Translation tables](#translation-tables) | 52 |
 | [Agents of the lecture-note review](#agents-of-the-lecture-note-review) | 4 |
 | [Working notes of the Rotor Pendula study](#working-notes-of-the-rotor-pendula-study) | 86 |
@@ -137,9 +137,9 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/simulations/fig13/video/construction-light.jpg`](../public/simulations/fig13/video/construction-light.jpg) | 83.8 kB | Precomputed poster frame of the construction film, light (H.264, 1080 x 1920, 30 fps; video_pages.py). | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`public/simulations/fig13/video/construction-light.mp4`](../public/simulations/fig13/video/construction-light.mp4) | 8.53 MB | Precomputed video of the construction film, light (H.264, 1080 x 1920, 30 fps; video_pages.py). | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`public/simulations/fig13/video/gift-dark.jpg`](../public/simulations/fig13/video/gift-dark.jpg) | 37.5 kB | Precomputed poster frame of the gift film For رِيمْ, dark (H.264, 1080 x 1920, 30 fps; video_pages.py). | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
-| [`public/simulations/fig13/video/gift-dark.mp4`](../public/simulations/fig13/video/gift-dark.mp4) | 13.98 MB | Precomputed video of the gift film For رِيمْ, dark (H.264, 1080 x 1920, 30 fps; video_pages.py). | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
+| [`public/simulations/fig13/video/gift-dark.mp4`](../public/simulations/fig13/video/gift-dark.mp4) | 13.87 MB | Precomputed video of the gift film For رِيمْ, dark (H.264, 1080 x 1920, 30 fps; video_pages.py). | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`public/simulations/fig13/video/gift-light.jpg`](../public/simulations/fig13/video/gift-light.jpg) | 37.6 kB | Precomputed poster frame of the gift film For رِيمْ, light (H.264, 1080 x 1920, 30 fps; video_pages.py). | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
-| [`public/simulations/fig13/video/gift-light.mp4`](../public/simulations/fig13/video/gift-light.mp4) | 13.19 MB | Precomputed video of the gift film For رِيمْ, light (H.264, 1080 x 1920, 30 fps; video_pages.py). | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
+| [`public/simulations/fig13/video/gift-light.mp4`](../public/simulations/fig13/video/gift-light.mp4) | 13.14 MB | Precomputed video of the gift film For رِيمْ, light (H.264, 1080 x 1920, 30 fps; video_pages.py). | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`public/simulations/flower-hunt.html`](../public/simulations/flower-hunt.html) | 38.6 kB | Fig. 13 study · The Flower Hunt: closed flowers and butterflies found as periodic orbits by Newton's method, a test bench and study notes. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`public/simulations/momentum-spirographs.html`](../public/simulations/momentum-spirographs.html) | 18.8 kB | Fig. 13 · Spirographs in Momentum Space: a live grid of double pendulums, each kicked with the (p1, p2) of its cell, drawn as long exposures over the chaos map. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`public/simulations/pendulum-control.html`](../public/simulations/pendulum-control.html) | 208.0 kB | Fig. 11 · Double Pendulum under Control: the simulation, its data panel, walkthrough and lecture note. | [fig11-pendulum-control.md](simulations/fig11-pendulum-control.md) |
@@ -769,7 +769,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`docs/simulations/fig11-double-inverted-pendulum.md`](simulations/fig11-double-inverted-pendulum.md) | 61.0 kB | Documentation: Project 05 · Balancing Two Rods on a Cart (Fig. 11 from 3 to 4 November 2026). | [fig11-double-inverted-pendulum.md](simulations/fig11-double-inverted-pendulum.md) |
 | [`docs/simulations/fig11-pendulum-control.md`](simulations/fig11-pendulum-control.md) | 28.8 kB | Documentation: Fig. 11 · Double Pendulum under Control (Fig. 11 again since 4 November 2026; a project from 3 to 4 November). | [fig11-pendulum-control.md](simulations/fig11-pendulum-control.md) |
 | [`docs/simulations/fig12-beer-slosh.md`](simulations/fig12-beer-slosh.md) | 46.9 kB | Documentation: Fig. 12 · A Pint of Guinness on a One-Wheel Cart (`public/simulations/beer-slosh.html`). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
-| [`docs/simulations/fig13-momentum-spirographs.md`](simulations/fig13-momentum-spirographs.md) | 6.9 kB | Documentation: Fig. 13 · Spirographs in Momentum Space, the Flower Hunt, the dashboard and the films. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
+| [`docs/simulations/fig13-momentum-spirographs.md`](simulations/fig13-momentum-spirographs.md) | 7.6 kB | Documentation: Fig. 13 · Spirographs in Momentum Space, the Flower Hunt, the dashboard and the films. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`docs/simulations/project06-rods-in-liquid.md`](simulations/project06-rods-in-liquid.md) | 9.7 kB | Documentation: Project 06 · Balancing Two Rods in a Liquid. | [project06-rods-in-liquid.md](simulations/project06-rods-in-liquid.md) |
 | [`docs/styles.md`](styles.md) | 52.1 kB | Documentation: Stylesheets: `public/styles/`. | [styles.md](styles.md) |
 | [`docs/usul.md`](usul.md) | 10.8 kB | Documentation: Phyein Usul · the website at phyeinusul.com. | [usul.md](usul.md) |
@@ -812,6 +812,8 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/fig13/gift/dive/.gitignore`](../tools/fig13/gift/dive/.gitignore) | 9 B | Keeps dive.bin (regenerated by dive_data.py) out of the repository. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`tools/fig13/gift/dive/dive.json`](../tools/fig13/gift/dive/dive.json) | 36.6 kB | The dive film's grid of kicks and the butterfly's momenta, written by dive_data.py. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`tools/fig13/gift/dive_data.py`](../tools/fig13/gift/dive_data.py) | 3.7 kB | Fig. 13 films: integrates the 9 x 9 grid of kicks of the dive film (dive.bin, regenerated, about 47 s). | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
+| [`tools/fig13/gift/farashatuki.json`](../tools/fig13/gift/farashatuki.json) | 22.7 kB | Fig. 13 gift: فَرَاشَتُكِ written in the hand of the traced رِيمْ (its measured nib, 60 px at 70 degrees; its ra, fathas, damma and kasra) - its outlines. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
+| [`tools/fig13/gift/farashatuki.py`](../tools/fig13/gift/farashatuki.py) | 7.4 kB | Fig. 13 gift: فَرَاشَتُكِ written in the hand of the traced رِيمْ (its measured nib, 60 px at 70 degrees; its ra, fathas, damma and kasra) - the script. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`tools/fig13/gift/fonts/Amiri-Regular.ttf`](../tools/fig13/gift/fonts/Amiri-Regular.ttf) | 431.1 kB | Amiri (Khaled Hosny; SIL Open Font License 1.1), the Naskh of فَرَاشَتُكِ in the gift film and the master model of qalam2/3.py: the font. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`tools/fig13/gift/fonts/NotoNastaliqUrdu-wght.ttf`](../tools/fig13/gift/fonts/NotoNastaliqUrdu-wght.ttf) | 690.3 kB | Noto Nastaliq Urdu, the calligraphy font of the gift film (Google Fonts, SIL Open Font License 1.1): the font. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`tools/fig13/gift/fonts/OFL-Amiri.txt`](../tools/fig13/gift/fonts/OFL-Amiri.txt) | 4.4 kB | Amiri (Khaled Hosny; SIL Open Font License 1.1), the Naskh of فَرَاشَتُكِ in the gift film and the master model of qalam2/3.py: its licence. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
@@ -825,7 +827,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/fig13/gift/qalam2.py`](../tools/fig13/gift/qalam2.py) | 5.6 kB | Fig. 13 gift calligraphy: reed strokes over a master model, a mirror composition (rejected by Numa). | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`tools/fig13/gift/qalam3.py`](../tools/fig13/gift/qalam3.py) | 3.3 kB | Fig. 13 gift calligraphy: reed re-inking of a whole word (falls short of the model; kept as a record). | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`tools/fig13/gift/reem.html`](../tools/fig13/gift/reem.html) | 21.1 kB | Fig. 13 gift film source (For رِيمْ, phone first): the name (traced from the reference plate) and فَرَاشَتُكِ (Amiri) written by 640 turning arrows each, gold on navy or ink on paper. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
-| [`tools/fig13/gift/reem.json`](../tools/fig13/gift/reem.json) | 86.3 kB | Arrows (Fourier terms) and outlines of the words of the gift film, written by tools/fig13/gift/reem_data.py. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
+| [`tools/fig13/gift/reem.json`](../tools/fig13/gift/reem.json) | 65.8 kB | Arrows (Fourier terms) and outlines of the words of the gift film, written by tools/fig13/gift/reem_data.py. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`tools/fig13/gift/reem_data.py`](../tools/fig13/gift/reem_data.py) | 4.9 kB | Fig. 13 gift: the Fourier terms of each word's outline (640 arrows), checked against the outline. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`tools/fig13/gift/reem_ref.json`](../tools/fig13/gift/reem_ref.json) | 9.4 kB | The outlines of رِيمْ traced from the reference plate Numa chose (ref_trace.py); the source of the name in the gift film. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`tools/fig13/gift/ref_trace.py`](../tools/fig13/gift/ref_trace.py) | 3.3 kB | Fig. 13 gift calligraphy: vector outlines of the ink in the reference plate Numa chose. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
@@ -844,7 +846,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/i18n/ingest.py`](../tools/i18n/ingest.py) | 1.9 kB | Stores checked translations made outside the tables (page pieces, script strings, walkthrough prose). | [i18n.md](i18n.md) |
 | [`tools/i18n/package.json`](../tools/i18n/package.json) | 285 B | The parser wrap.cjs needs (acorn); npm install --prefix tools/i18n. | [i18n.md](i18n.md) |
 | [`tools/i18n/wrap.cjs`](../tools/i18n/wrap.cjs) | 3.7 kB | Wraps the reader-visible strings of a page's scripts in _t(), with a JavaScript parser (acorn). | [i18n.md](i18n.md) |
-| [`tools/inventory.py`](../tools/inventory.py) | 67.7 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
+| [`tools/inventory.py`](../tools/inventory.py) | 68.0 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
 | [`tools/perf/addresses.cjs`](../tools/perf/addresses.cjs) | 6.1 kB | Every page at every address a reader can use (x.html, x, x/, folder/), and every link of every page, on a running site; exits 1 on any wrong answer. | [performance.md](performance.md) |
 | [`tools/perf/clockcheck.cjs`](../tools/perf/clockcheck.cjs) | 3.2 kB | Each figure runs on screen, holds off screen, resumes; the store stays live for an open data panel and the walkthrough. | [performance.md](performance.md) |
 | [`tools/perf/film.cjs`](../tools/perf/film.cjs) | 3.1 kB | A repeat visit as a reader sees it: screenshots at fixed times and every LCP candidate with its element, to tell a metric from the screen. | [performance.md](performance.md) |

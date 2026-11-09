@@ -25,7 +25,7 @@ AMIRI = HERE + '/fonts/Amiri-Regular.ttf'
 def traced(path):   # outlines traced from the reference plate (ref_trace.py): pixels, y down -> y up
     return [np.array(c) * [1, -1] for c in _json.load(open(path))['contours']]
 WORDS = {'reem': ('رِيمْ', lambda: traced(HERE + '/reem_ref.json'), 'evenodd'),
-         'butterfly': ('فَرَاشَتُكِ', lambda: word_contours(AMIRI, 'فَرَاشَتُكِ'), 'nonzero')}
+         'butterfly': ('فَرَاشَتُكِ', lambda: traced(HERE + '/farashatuki.json'), 'nonzero')}   # written in the plate's hand: farashatuki.py
 N, K, MAXERR = 8192, 640, 0.004
 
 
@@ -75,5 +75,5 @@ def build(text, source, rule):
 
 
 out = {k: build(*v) for k, v in WORDS.items()}
-out['sources'] = 'رِيمْ: traced from the reference plate Numa supplied (ref_trace.py); فَرَاشَتُكِ: Amiri (SIL OFL 1.1), Google Fonts'
+out['sources'] = 'رِيمْ: traced from the reference plate Numa supplied (ref_trace.py); فَرَاشَتُكِ: written in the same hand (farashatuki.py)'
 json.dump(out, open(sys.argv[1], 'w'), separators=(',', ':'), ensure_ascii=False)
