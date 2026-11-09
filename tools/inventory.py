@@ -303,6 +303,15 @@ RULES = [
     (r'notes/droplets/gate3-answers-r(\d)\.md', lambda m: 'Answers to the Gate 3 skeptic, round ' + m.group(1) + '.', 'notes/droplets/status.md'),
     (r'notes/droplets/gate2/(.+)', lambda m: 'Gate 2 checker script or output: ' + m.group(1) + '.', 'notes/droplets/status.md'),
     (r'portfolios-src/electron-beam/PLAN\.md', 'Plan and brief of project 07, the electron beam from tip to measurement: aim, chapters, contract, sessions and file ownership.', 'docs/portfolios.md'),
+    # --- electron-beam librarian (session S2, branch eb/librarian): sources and digitised data of project 07 ---
+    (r'portfolios-src/electron-beam/sources/bibliography\.md', 'Project 07 bibliography: for each formula family the book or paper, section and page, marked READ or LOCATED, with what is still unopened.', 'portfolios-src/electron-beam/sources/bibliography.md'),
+    (r'portfolios-src/electron-beam/sources/drive-inventory\.md', "Project 07: every file listed in Numa's Drive folders (EP4, Oldenburg), what the read-only connector could and could not read.", 'portfolios-src/electron-beam/sources/bibliography.md'),
+    (r'portfolios-src/electron-beam/sources/applied-public\.md', "Project 07: Applied Materials' public statements (PROVision, SEMVision pages, press release) quoted as public claims only.", 'portfolios-src/electron-beam/sources/bibliography.md'),
+    (r'portfolios-src/electron-beam/data/(ch\d\d)/README\.md', lambda m: 'Provenance of the published data digitised for chapter ' + str(int(m.group(1)[2:])) + ' of project 07: source, figure or table, how digitised, SI conversion, uncertainty.', 'portfolios-src/electron-beam/sources/bibliography.md'),
+    (r'portfolios-src/electron-beam/data/(ch\d\d)/(.+)\.csv', lambda m: 'Published measurement digitised for chapter ' + str(int(m.group(1)[2:])) + ' of project 07: ' + m.group(2) + ' (provenance in the README beside it).', 'portfolios-src/electron-beam/sources/bibliography.md'),
+    (r'notes/electron-beam/librarian-status\.md', 'Project 07 librarian status: what sources and data are ready for the chapter sessions, what is missing.', 'portfolios-src/electron-beam/sources/bibliography.md'),
+    (r'notes/electron-beam/S2-report\.md', 'Project 07 librarian final report: sources, data, gaps, handles for every claim.', 'portfolios-src/electron-beam/sources/bibliography.md'),
+    # --- end electron-beam librarian ---
     (r'portfolios-src/droplets/README\.md', "The study's source: every folder, how the served page is built, the three checks.", 'portfolios-src/droplets/README.md'),
     (r'portfolios-src/droplets/\.gitignore', 'Keeps the stand-alone build (out/) out of git.', 'portfolios-src/droplets/README.md'),
     (r'portfolios-src/droplets/physics\.cjs', 'The model, L0 to L10: fall speeds, trajectories, kernel, collection equation, exact stochastic process, turbulence, energy ledger, maximum entropy, a cloud with a shape (super-droplets with a stochastic element); runs in the page and in Node.', 'portfolios-src/droplets/README.md'),
