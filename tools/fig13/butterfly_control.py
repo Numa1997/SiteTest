@@ -361,4 +361,4 @@ def film_data(p, t_free, seconds, out, log_every=4, hold_laps=2.0, free_laps=3.0
 # kE, kA, kI, kB, Pmin_lim, wait_max (s), steer_max (s), window (s), e_tol (J), a_tol (kg m^2/s), catch_at: the working settings
 # (30 random strikes p in [-8, 8]^2, accurate integration: 28 caught and held within 900 s, 22 within 300 s; 9 November 2026)
 KT = 2.5   # N m per A: torque constant assumed for the film's motor (a direct-drive torque motor; 60 N m at 24 A)
-SETTINGS = (0.01, 0.05, 0.005, 0.0, 1e9, 12.0, 12.0, 3.0, 1.0, 1.0, 0.2, -1.0)
+SETTINGS = (0.01, 0.05, 0.005, 0.0, 1e9, 12.0, 12.0, 3.0, 5.0, 3.0, 0.6, -1.0)   # 9 Nov 2026, as pendulum.js: 100 of 100 random starts caught (median 16 s)

@@ -23,18 +23,25 @@ html, body { margin:0; background:var(--bg); height:100%; overflow:hidden; }
 #stage { position:absolute; left:0; top:0; width:1080px; height:1920px; background:var(--bg); color:var(--ink); font-family:'Instrument Sans',sans-serif; overflow:hidden; transform-origin:0 0; }
 canvas { position:absolute; left:0; top:0; }
 #h1 { position:absolute; left:40px; top:40px; font-family:'Instrument Serif',serif; font-size:64px; line-height:1; margin:0; font-weight:400; }
-#h2 { position:absolute; left:42px; top:116px; width:1000px; font-size:22px; line-height:1.45; color:var(--muted); }
+#h2 { position:absolute; left:42px; top:116px; width:560px; font-size:22px; line-height:1.45; color:var(--muted); }
 .capt { position:absolute; left:40px; top:1690px; width:1000px; font-size:30px; line-height:1.42; color:var(--ink); }
 .capt b { font-weight:400; color:var(--accent); }
+.ctl { position:absolute; right:40px; width:400px; height:66px; font:500 28px 'Instrument Sans',sans-serif; color:var(--ink); background:transparent;
+       border:2px solid var(--accent); border-radius:14px; cursor:pointer; z-index:3; }
+#bRand { top:30px; } #bPick { top:108px; }
+#pick { position:absolute; left:40px; top:190px; width:1000px; height:1000px; display:none; z-index:4; cursor:crosshair; touch-action:none; }
 </style>
 </head>
 <body>
 <div id="stage">
   <canvas id="cv"></canvas>
   <h1 id="h1">Catching the butterfly</h1>
-  <div id="h2">a motor at the top pin takes a double pendulum out of chaos, sets it on the butterfly, and lets go</div>
+  <div id="h2">a motor catches a chaotic double pendulum, sets it on the butterfly, and lets go. Start it anywhere.</div>
   <div class="capt" id="capA"></div>
   <div class="capt" id="capB"></div>
+  <button type="button" class="ctl" id="bRand">Random chaos</button>
+  <button type="button" class="ctl" id="bPick">Choose a strike</button>
+  <canvas id="pick" width="1000" height="1000"></canvas>
 </div>
 <script src="pendulum.js"></script>
 <script>
@@ -57,7 +64,9 @@ const rgba = (c, a) => `rgba(${c[0]},${c[1]},${c[2]},${a})`;
 // ------------------------------------------------------------------------------------------------ the motion, computed live
 // pendulum.js integrates the pendulum and runs the motor's controller as the film plays: struck with p = (2, 4) kg m^2/s (18 J),
 // free for 8 s, then pump and steer, wait, catch, hold four laps, let go, four laps free. Nothing is recorded in advance.
-const STRIKE = [2, 4], T_FREE = 8, HOLD_LAPS = 4, FREE_LAPS = 4, LOG_EVERY = 4;
+let START = [0, 0, 2, 4], START_NAME = 'struck from hanging still with p = (2, 4) kg·m²/s';
+const T_FREE = 8, HOLD_LAPS = 4, FREE_LAPS = 4, LOG_EVERY = 4;
+let RESTARTS = 0, OWN_F = 0;
 let DES, RUN, D, N = 0;
 function stateAt(t) {     // linear interpolation of the run so far (samples every D.h seconds)
     const L0 = RUN.log, u = clamp(t / D.h, 0, N - 1.000001), i = Math.floor(u), f = u - i, L = k => lerp(L0[k][i], L0[k][Math.min(i + 1, N - 1)], f);
@@ -69,7 +78,13 @@ const tip = (a, b) => [Math.sin(a) + Math.sin(b), -(Math.cos(a) + Math.cos(b))];
 const FPS = 30;
 let FT = [0], TL = { on: null, catch: null, release: null, total: null };
 const endT = () => RUN.ev.release !== null ? RUN.ev.release + FREE_LAPS * D.T : Infinity;
-const speedOf = t => t < T_FREE ? 0.5 : (RUN.ev.catch !== null && t > RUN.ev.catch + 1) ? 0.5 : 0.25;
+function speedOf(t) {      // the film's clock: chaos at half speed; the motor's first try at a quarter, its waiting at full speed; a search after
+    if (t < T_FREE) return 0.5;                                  // a miss fast-forwarded four times; from a second after the catch, half speed
+    if (RUN.ev.catch !== null && t > RUN.ev.catch + 1) return 0.5;
+    if (RUN.ev.catch === null && RUN.hops > 0) return 4;
+    const L = RUN.log, i = Math.min(L.mode.length - 1, Math.max(0, Math.round(t / D.h)));
+    return L.mode[i] === 1 ? 1 : 0.25;
+}
 function simT(f) {
     while (FT.length <= f) {
         const k = FT.length, t = FT[k - 1];
@@ -85,7 +100,7 @@ function simT(f) {
     }
     return FT[f];
 }
-const speedAt = f => speedOf(simT(f)) === 0.5 ? '½' : '¼';
+const speedAt = f => ({ 0.5: '½', 0.25: '¼', 1: 'full', 4: '4×' })[speedOf(simT(f))];
 const tEndNow = t => RUN.ev.release !== null ? endT() : Math.max(34, t + 6);
 
 // ------------------------------------------------------------------------------------------------ layout
@@ -161,7 +176,7 @@ function drawScene(g, f) {
     g.restore();
     g.fillStyle = rgba(TH.curve, 1); g.beginPath(); g.arc(j2[0] + 26 * ux, j2[1] + 26 * uy, 3.5, 0, 7); g.fill();
     text(g, s.mode === 3 || s.mode < 0 || (s.mode === 1) ? 'motor off' : `motor: ${Math.abs(tq).toFixed(1)} N·m, coil current ${Math.abs(I).toFixed(1)} A`, PL.x + PL.s - 20, PL.y + 38, 22, rgba(TH.motor, 1), 'right', 500);
-    text(g, `shown at ${speedAt(f)} of real speed`, PL.x + PL.s - 20, PL.y + PL.s - 22, 18, TH.muted, 'right');
+    text(g, speedAt(f) === '4×' ? `missed, searching again (try ${RUN.hops + 1}): fast-forward ×4` : speedAt(f) === 'full' ? 'waiting: shown at real speed' : `shown at ${speedAt(f)} of real speed`, PL.x + PL.s - 20, PL.y + PL.s - 22, 18, TH.muted, 'right');
     g.restore();
     // the phases
     card(g, ST.x, ST.y, ST.w, ST.h);
@@ -201,12 +216,12 @@ function captions() {
     const F = v => v === null ? Infinity : v;
     TL.on = TL.on; const ON = F(TL.on), CA = F(TL.catch), RE = F(TL.release);
     CAPS = [
-        [0, 'A double pendulum, struck gently (18 J), swings in chaos: two such pendulums one part in a million apart disagree by 1 cm within 6 s. A pen at its tip, a motor at its pin, switched off.'],
+        [0, `A double pendulum, ${START_NAME}, energy ${PEND.energy(START).toFixed(0)} J. A pen at its tip, a motor at its pin, switched off. Choose another start above: a strike on the chaos map, or a random chaotic state.`],
         [ON, 'The motor switches on. Current in its coils pushes on the magnets of the rotor: torque = 2.5 N·m per ampere. It pumps the energy to the butterfly\'s 390.8 J and steers the upper rod\'s swing to the butterfly\'s size.<br><span style="font-size:22px;color:var(--muted)">energy E, torque τ:  dE/dt = τ · dθ₁/dt</span>'],
         [CA, 'Close enough: the motor makes small corrections along the butterfly\'s own lap, a feedback designed on the orbit (as in our control lessons).'],
         [CA + 200, 'Caught. The motor holds it for four laps; the corrections shrink below 0.1 N·m.'],
         [RE, 'Let go: the motor switches off. The butterfly is unstable by itself, but only barely (an error grows 2 % a lap), so the pen keeps drawing it: within 0.1 of the exact path for about 12 minutes, its wings unchanged for at least an hour.'],
-        [RE + 330, 'From 30 random strikes, the motor caught 28 within 15 minutes, 22 of them within 5. Two escaped it in that time.'],
+        [RE + 330, 'From 100 random starts the motor caught every one: half within 16 s of switching on, the slowest after 188 s. The theory and the method: butterfly-catch.html.'],
     ];
 }
 const memo = {};
@@ -224,7 +239,7 @@ window.renderFrame = renderFrame;
 async function boot() {
     DPR = window.devicePixelRatio || 1;
     DES = PEND.design();                                     // the orbit, its linearisation and the motor's gains: computed here, ~0.1 s
-    RUN = new PEND.Run(DES, STRIKE, T_FREE, HOLD_LAPS);
+    RUN = new PEND.Run(DES, START, T_FREE, HOLD_LAPS);
     const C = PEND.consts, OB = DES.S.filter((x, i) => i % 4 === 0);
     D = { h: LOG_EVERY * C.H, T: C.T, t_free: T_FREE, E_star: DES.Estar, tau_max: C.TAU_MAX, kt: C.KT, orbit_th1: OB.map(x => x[0]), orbit_th2: OB.map(x => x[1]),
           get catch_t() { return RUN.ev.catch === null ? Infinity : RUN.ev.catch; }, get release_t() { return RUN.ev.release === null ? Infinity : RUN.ev.release; } };
@@ -234,9 +249,54 @@ async function boot() {
     await document.fonts.ready;
     await Promise.all(['Instrument Sans', 'Instrument Serif'].map(fn => document.fonts.load(`20px "${fn}"`)));
     await document.fonts.load('20px "Instrument Sans"', 'φθτ'); await document.fonts.load('500 20px "Instrument Sans"');
-    window.FILM = { frames: () => TL.total === null ? FT.length + 900 : TL.total };
+    window.FILM = { frames: () => TL.total === null ? FT.length + 900 : TL.total, get restarts() { return RESTARTS; } };
+    setupControls();
     renderFrame(Number(Q.get('f') || 0)); window.__ready = true;
-    if (!Q.get('film')) { let f = 0, last = null; const loop = ts => { if (last === null || ts - last >= 1000 / FPS - 2) { renderFrame(TL.total === null ? f : f % TL.total); f++; if (TL.total !== null && f >= TL.total) f = 0; last = ts; } requestAnimationFrame(loop); }; requestAnimationFrame(loop); }
+    if (!Q.get('film')) { let f = 0, last = null, lastR = 0; const loop = ts => { if (last === null || ts - last >= 1000 / FPS - 2) { if (RESTARTS !== lastR) { lastR = RESTARTS; f = 0; } renderFrame(TL.total === null ? f : f % TL.total); f++; if (TL.total !== null && f >= TL.total) f = 0; last = ts; } requestAnimationFrame(loop); }; requestAnimationFrame(loop); }
+}
+// ------------------------------------------------------------------------------------------------ choosing a start
+function restart(s0, name) {
+    START = s0; START_NAME = name; RESTARTS++;
+    RUN = new PEND.Run(DES, START, T_FREE, HOLD_LAPS); N = RUN.log.t.length;
+    FT = [0]; TL = { on: null, catch: null, release: null, total: null }; for (const k in memo) delete memo[k];
+}
+const MAP = { p1: [-12, 12], p2: [-8, 16] };             // the part of the Fig. 13 chaos map shown (p1 +-35.6, p2 +-20 in the full map)
+let mapImg = null;
+function drawPick() {
+    const c = $('pick'), q = c.getContext('2d'), W = 1000;
+    q.fillStyle = TH.paper; q.fillRect(0, 0, W, W);
+    if (mapImg && mapImg.complete && mapImg.naturalWidth) {
+        const cx = p => (p + 35.5556) / 71.1111 * 1280, ry = p => (20 - p) / 40 * 720;
+        q.globalAlpha = 0.9; q.drawImage(mapImg, cx(MAP.p1[0]), ry(MAP.p2[1]), cx(MAP.p1[1]) - cx(MAP.p1[0]), ry(MAP.p2[0]) - ry(MAP.p2[1]), 0, 0, W, W); q.globalAlpha = 1;
+    }
+    const X = p => (p - MAP.p1[0]) / 24 * W, Y = p => (MAP.p2[1] - p) / 24 * W;
+    q.strokeStyle = TH.rule; q.lineWidth = 1; q.beginPath(); q.moveTo(X(0), 0); q.lineTo(X(0), W); q.moveTo(0, Y(0)); q.lineTo(W, Y(0)); q.stroke();
+    q.fillStyle = TH.paper; q.globalAlpha = 0.88; q.fillRect(0, 0, W, 104); q.fillRect(0, W - 64, W, 64); q.globalAlpha = 1;
+    q.fillStyle = TH.ink; q.font = '500 30px "Instrument Sans"'; q.textAlign = 'left'; q.fillText('Tap a strike: both rods hang still, then are struck with (p₁, p₂)', 24, 48);
+    q.font = '24px "Instrument Sans"'; q.fillStyle = TH.muted;
+    q.fillText('the Fig. 13 chaos map: rose where the motion is chaotic, clear where it is regular', 24, 84);
+    q.fillText('p₁ (upper rod), kg·m²/s →', W - 330, Y(0) + 64); q.fillText('↑ p₂ (lower rod)', X(0) + 10, 140);
+    for (const v of [-10, -5, 5, 10]) { q.fillText(v, X(v) - 10, Y(0) + 30); }
+    for (const v of [-5, 5, 10]) { q.fillText(v, X(0) + 8, Y(v) + 8); }
+    const bx = X(PEND.consts.P1), by = Y(PEND.consts.P2);
+    q.strokeStyle = TH.accent; q.lineWidth = 3; q.beginPath(); q.arc(bx, by, 14, 0, 7); q.stroke();
+    q.fillStyle = TH.accent; q.font = '500 24px "Instrument Sans"'; q.fillText('the butterfly\'s own strike', bx + 22, by + 52);
+    q.fillStyle = TH.ink; q.font = '24px "Instrument Sans"'; q.fillText('tap outside the square or here to close', 24, W - 24);
+}
+function setupControls() {
+    mapImg = new Image(); mapImg.src = '../../images/fig13/chaos-map-rods-P20.png'; mapImg.onload = drawPick;
+    $('bRand').onclick = () => {
+        const r = () => Math.random(), s0 = [(2 * r() - 1) * Math.PI, (2 * r() - 1) * Math.PI, (2 * r() - 1) * 4, (2 * r() - 1) * 4];
+        restart(s0, `started from a random state (θ₁ ${(s0[0] * 180 / Math.PI).toFixed(0)}°, θ₂ ${(s0[1] * 180 / Math.PI).toFixed(0)}°, p = (${s0[2].toFixed(1)}, ${s0[3].toFixed(1)}) kg·m²/s)`);
+    };
+    $('bPick').onclick = () => { const c = $('pick'); c.style.display = c.style.display === 'block' ? 'none' : 'block'; drawPick(); };
+    $('pick').onpointerdown = e => {
+        const c = $('pick'), b = c.getBoundingClientRect(), u = (e.clientX - b.left) / b.width, v = (e.clientY - b.top) / b.height;
+        c.style.display = 'none';
+        if (v > 0.94) return;
+        const p1 = MAP.p1[0] + 24 * u, p2 = MAP.p2[1] - 24 * v;
+        restart([0, 0, p1, p2], `struck from hanging still with p = (${p1.toFixed(2)}, ${p2.toFixed(2)}) kg·m²/s`);
+    };
 }
 function fit() {
     const cw = document.documentElement.clientWidth, ch = document.documentElement.clientHeight, s = Math.min(cw / 1080, ch / 1920, 1);

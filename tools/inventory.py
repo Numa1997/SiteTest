@@ -180,6 +180,8 @@ RULES = [
     (r'public/simulations/fig13/reem\.json', 'Fig. 13: the Fourier terms of the two words, copied by publish_films.py.', 'docs/simulations/fig13-momentum-spirographs.md'),
     (r'(public/simulations/fig13|tools/fig13/gift)/pendulum\.js', 'Fig. 13: the double pendulum and the motor controller computed live in the browser (the films reem, construction, catch); copied to the site by publish_films.py.', 'docs/simulations/fig13-momentum-spirographs.md'),
     (r'public/simulations/fig13/fonts/(.+)', lambda m: 'Instrument Sans for the live films (copied by publish_films.py): ' + m.group(1) + '.', 'docs/simulations/fig13-momentum-spirographs.md'),
+    (r'public/simulations/butterfly-catch\.html', 'Fig. 13: catching the butterfly, the live interactive catch and its lecture note (theory and method); body from tools/fig13/catch_note_body.html.', 'docs/simulations/fig13-momentum-spirographs.md'),
+    (r'tools/fig13/catch_note_body\.html', 'Fig. 13: the body of butterfly-catch.html (the catch lecture note); assembled with the house head and header.', 'docs/simulations/fig13-momentum-spirographs.md'),
     (r'tools/fig13/gift/film_page\.py', 'Fig. 13: writes public/simulations/fig13/film.html, the whole gift drawn live.', 'docs/simulations/fig13-momentum-spirographs.md'),
     (r'tools/fig13/gift/video_pages\.py', 'Fig. 13: encodes the gift and construction films for the web and writes their two video pages.', 'docs/simulations/fig13-momentum-spirographs.md'),
     (r'tools/fig13/gift/construction\.html', 'Fig. 13 film source (phone first): the construction by ruler of a wheel and of the butterfly from h(t) and x(t), the two time axes joined by a mitre.', 'docs/simulations/fig13-momentum-spirographs.md'),

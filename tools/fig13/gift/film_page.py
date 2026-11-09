@@ -60,13 +60,14 @@ iframe { width:1080px; height:1920px; border:0; display:block; background:var(--
 const PARTS = [['live-gift.html', 'For رِيمْ'], ['live-construction.html', 'built by hand'], ['live-catch.html', 'caught and let go']];
 const FPS = 30, fr = document.getElementById('fr'), Q = new URLSearchParams(location.search);
 let theme = Q.get('theme') || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
-let part = 0, f = 0, total = null, playing = true, last = null, lengths = [0, 0, 0];
+let part = 0, f = 0, total = null, playing = true, last = null, lengths = [0, 0, 0], seenRestarts = 0;
 function fit() {
     const cw = document.documentElement.clientWidth, ch = document.documentElement.clientHeight - document.querySelector('.bar').offsetHeight - 20, s = Math.min(cw / 1080, ch / 1920, 1);
     document.getElementById('box').style.transform = `translate(${Math.max(0, (cw - 1080 * s) / 2)}px, 0) scale(${s})`;
 }
 function load(k, frame) {
-    part = (k + PARTS.length) % PARTS.length; f = frame || 0; total = null;
+    part = (k + PARTS.length) % PARTS.length; f = frame || 0; total = null; seenRestarts = 0;
+    document.getElementById('tap').style.pointerEvents = part === 2 ? 'none' : 'auto';   // the catch has its own buttons: let taps through
     fr.src = PARTS[part][0] + '?film=1&theme=' + theme;
 }
 fr.addEventListener('load', () => {
@@ -85,7 +86,9 @@ function draw() {
 function tick(ts) {
     if (playing && total && (last === null || ts - last >= 1000 / FPS - 2)) {
         last = ts; f++;
-        const w = fr.contentWindow; if (w && w.FILM) { total = w.FILM.frames(); lengths[part] = total; }   // a live film learns its length as it runs
+        const w = fr.contentWindow; if (w && w.FILM) {
+            if (w.FILM.restarts !== undefined && w.FILM.restarts !== seenRestarts) { seenRestarts = w.FILM.restarts; f = 0; }   // the reader chose a new start
+            total = w.FILM.frames(); lengths[part] = total; }   // a live film learns its length as it runs
         if (f >= total) load(part + 1); else draw();
     }
     requestAnimationFrame(tick);
