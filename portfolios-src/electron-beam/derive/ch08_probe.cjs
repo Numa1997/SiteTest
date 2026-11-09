@@ -27,21 +27,26 @@ out.defocus = [1e-5, 1e-4].map(eps => {
 });
 // 4. the source grid: interpolated against direct chapter 2 runs at the same random draws
 const rnd = core.rng(8082026), g = () => Math.sqrt(-2 * Math.log(1 - rnd())) * Math.cos(2 * Math.PI * rnd());
-let worst = 0;
-for (let n = 0; n < 40; n++) {
+let worst = 0, inside = 0, outside = 0;
+const G = [];
+for (let i = 0; i < 5; i++) for (let j = 0; j < 5; j++) G.push(m2.compute({ r_t: p.r_t * Math.exp((i - 2) * 1.5 * Math.log(1 + p.tol_rt)), V_ex: p.V_ex, phi: F.phi, T: F.T, p: p.p * Math.exp((j - 2) * 1.5 * p.tol_p), t_clean: p.t_clean, k_f: F.k_f }));
+for (let n = 0; n < 300; n++) {
   const zr = g(), zp = g(); g(); g();
   const r = p.r_t * Math.exp(zr * Math.log(1 + p.tol_rt)), pr = p.p * Math.exp(zp * p.tol_p);
+  if (Math.abs(zr) > 3 || Math.abs(zp) > 3) { outside++; continue; }
+  if (inside >= 40) continue;
+  inside++;
   const d = m2.compute({ r_t: r, V_ex: p.V_ex, phi: F.phi, T: F.T, p: pr, t_clean: p.t_clean, k_f: F.k_f });
-  // interpolate the module's way through a fresh 5 x 5 grid
-  const G = [];
-  for (let i = 0; i < 5; i++) for (let j = 0; j < 5; j++) G.push(m2.compute({ r_t: p.r_t * Math.exp((i - 2) * 1.5 * Math.log(1 + p.tol_rt)), V_ex: p.V_ex, phi: F.phi, T: F.T, p: p.p * Math.exp((j - 2) * 1.5 * p.tol_p), t_clean: p.t_clean, k_f: F.k_f }));
   const u = zr / 1.5 + 2, v = zp / 1.5 + 2, x = Math.min(4, Math.max(0, u)), yv = Math.min(4, Math.max(0, v)), i = Math.min(3, Math.floor(x)), j = Math.min(3, Math.floor(yv)), fx = x - i, fy = yv - j;
-  const at = (a, b) => Math.log(G[5 * a + b].B_r);
-  const Bi = Math.exp((1 - fx) * (1 - fy) * at(i, j) + fx * (1 - fy) * at(i + 1, j) + (1 - fx) * fy * at(i, j + 1) + fx * fy * at(i + 1, j + 1));
-  if (Math.abs(zr) < 3 && Math.abs(zp) < 3) worst = Math.max(worst, Math.abs(Bi / d.B_r - 1));
-  if (n === 4) break;                                                    // five samples are enough for the grid (each needs 26 runs)
+  for (const k of ['B_r', 'dE50', 'd_v']) {
+    const at = (a, b) => Math.log(G[5 * a + b][k]);
+    const Bi = Math.exp((1 - fx) * (1 - fy) * at(i, j) + fx * (1 - fy) * at(i + 1, j) + (1 - fx) * fy * at(i, j + 1) + fx * fy * at(i + 1, j + 1));
+    worst = Math.max(worst, Math.abs(Bi / d[k] - 1));
+  }
 }
-out.grid_worst = worst;
+out.grid_worst = worst; out.grid_inside = inside; out.grid_outside = outside;
+// 6. the probe's sensitivity to the landing voltage against the -3/4 of a diffraction-chromatic optimum, d ~ sqrt(A K), A ~ V^-1/2, K ~ V^-1
+out.dp_V = o.sens[3];
 // 5. the tolerance Monte Carlo with one source of error at a time
 const none = { tol_rt: 0, tol_NI: 0, tol_p: 0, tol_z: 0 };
 out.tol_each = {};

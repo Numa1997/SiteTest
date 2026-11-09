@@ -178,7 +178,7 @@ def run(p, N=None):
             break
         acc += hist[b]
     return dict(E_land=p['V_land'] * C['e'], delta_SE=delta, eta_BSE=eta, R=R * 1e-9, V_int=2 / 3 * math.pi * (r90 * 1e-9) ** 3,
-                sigma_sig=math.sqrt(wx2 / wTot) * 1e-9, sig_core=sCore * 1e-9, f_core=fCore, sig_halo=max(sHalo, sCore) * 1e-9, u_eta=math.sqrt(eta * (1 - eta) / N), u_delta=uDelta, r90=r90 * 1e-9, mc_paths=paths)
+                sigma_sig=math.sqrt(wx2 / wTot) * 1e-9, sig_core=math.sqrt(sCore * sCore + m['ls'] * m['ls']) * 1e-9, f_core=fCore, sig_halo=max(sHalo, math.sqrt(sCore * sCore + m['ls'] * m['ls'])) * 1e-9, u_eta=math.sqrt(eta * (1 - eta) / N), u_delta=uDelta, r90=r90 * 1e-9, mc_paths=paths)
 
 
 def compute(p):

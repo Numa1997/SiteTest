@@ -151,6 +151,10 @@
   "src": "<span class=\"pfig__n\">Figure 1</span>The planar model: the pivot rides a circle round the hub; the generators feel relative joint speeds, not absolute rod speeds.",
   "tr": "<span class=\"pfig__n\">الشكل 1</span>النموذج المستوي: يسير المحور على دائرة حول الصُّرّة؛ والمولّدات تحسّ بسرعات المفاصل النسبية، لا بسرعات القضبان المطلقة."
  },
+ "26725e799c58": {
+  "src": "Fields are analytic: there is no finite-element field solver, no aberration-corrected optics, and no interaction between the electrons of the beam. The scattering model is simple and is shown where it fails: it overstates the backscattering of heavy elements at low voltage. Constants are CODATA 2018. Every number in the text is computed by the project’s code and checked against an independent Python version, and every chapter was read by two independent reviewers. The project is independent: it does not model any company’s instrument, and statements by manufacturers are quoted as public claims with their source.",
+  "tr": "المجالات تحليلية: لا يوجد حلّال مجالات بالعناصر المنتهية، ولا بصريات مصحَّحة الزيوغ، ولا تفاعل بين إلكترونات الحزمة. نموذج التشتّت بسيط ويُعرض حيث يخفق: فهو يبالغ في التشتّت الخلفي للعناصر الثقيلة عند الجهد المنخفض. الثوابت من CODATA 2018. كل عدد في النص يحسبه كود المشروع ويُتحقَّق منه أمام نسخة Python مستقلة، وقد قرأ كلَّ فصل مراجعان مستقلان. المشروع مستقل: لا ينمذج جهازَ أيّ شركة، وتُقتبس تصريحات المصنّعين بوصفها ادعاءات علنية مع مصدرها."
+ },
  "26f85d2d5c2c": {
   "src": "<b>The fall.</b> Both balls are held 10 m above the head and fall under gravity alone; the first touch comes at 1.428 s, as Newton’s \\(\\sqrt{2h/g}\\) predicts, at 14.0 m/s.",
   "tr": "<b>السقوط.</b> تُمسَك الكرتان على ارتفاع 10 m فوق الرأس وتسقطان تحت الجاذبية وحدها؛ ويأتي أوّل تلامس عند 1.428 s، كما تتنبّأ صيغة نيوتن \\(\\sqrt{2h/g}\\)، بسرعة 14.0 m/s."
@@ -162,6 +166,10 @@
  "278c9e2fa1f7": {
   "src": "Mean harvested power at the 18 mountings against rotor speed, single and double pendulum, small and large rotors.",
   "tr": "متوسط القدرة المحصودة عند مواضع التثبيت الـ18 مقابل سرعة الدوّار، للنوّاس المفرد والمزدوج، ولدوّارات صغيرة وكبيرة."
+ },
+ "29527acd1776": {
+  "src": "Chips carry lines a few nanometres wide, and light cannot resolve them: its wavelength is tens of nanometres, an electron’s at a kilovolt is picometres. This project follows one electron from a sharp tungsten tip to a measured line width, in chapters that each start from a physical picture, derive every formula step by step, check it with symbolic algebra and an independent Python program, and end in a simulation whose sliders are the symbols of the formulas. Measured data are laid over the model with the source named and the gap stated: Thomson’s 1897 cathode-ray tubes, the current of a real tungsten tip against its voltage, measured backscattering from silicon to gold, and published stopping powers and secondary-electron yields. The last chapters join every stage into one machine and ask which input matters most.",
+  "tr": "تحمل الرقائق خطوطًا عرضها بضعة نانومترات، ولا يستطيع الضوء تمييزها: طول موجته عشرات النانومترات، أما طول موجة الإلكترون عند كيلوفولت واحد فبضعة بيكومترات. يتتبّع هذا المشروع إلكترونًا واحدًا من رأسٍ حادٍّ من التنغستن إلى عرض خطٍّ مقيس، في فصولٍ يبدأ كلٌّ منها بصورة فيزيائية، ويشتقّ كل صيغة خطوةً خطوة، ويتحقّق منها بالجبر الرمزي وببرنامج Python مستقل، وينتهي بمحاكاة تكون منزلقاتها رموزَ الصيغ نفسها. تُوضع البيانات المقيسة فوق النموذج مع ذكر المصدر وبيان الفرق: أنابيب الأشعة المهبطية التي استعملها طومسون عام 1897، وتيار رأسٍ حقيقي من التنغستن بدلالة جهده، والتشتّت الخلفي المقيس من السيليكون إلى الذهب، وقدرات الإيقاف ومردودات الإلكترونات الثانوية المنشورة. وتربط الفصول الأخيرة كل المراحل في آلة واحدة وتسأل أيّ مُدخل هو الأهم."
  },
  "2ab2baaec6d7": {
   "src": "Projects<span class=\"dot\">.</span>",
@@ -331,6 +339,10 @@
   "src": "<b>One rod beats two.</b> With the same mass and the same reach, a double pendulum gives 0.64–0.74 of the single one’s power at every mounting: half its mass sits at half the reach.",
   "tr": "<b>قضيبٌ واحد خيرٌ من اثنين.</b> بالكتلة نفسها والامتداد نفسه يعطي النوّاس المزدوج 0.64–0.74 من قدرة النوّاس المفرد عند كلّ موضع تثبيت: نصف كتلته يقع على نصف الامتداد."
  },
+ "4c86fa9e781c": {
+  "src": "<b>The whole machine.</b> All stages in one chain: a table of sensitivities, a tolerance study and a measurement window.",
+  "tr": "<b>الآلة كاملةً.</b> كل المراحل في سلسلة واحدة: جدول للحساسيات، ودراسة للتفاوتات، ونافذة للقياس."
+ },
  "4d7cb4aa6bf4": {
   "src": "Read the derivation",
   "tr": "اقرأ الاشتقاق"
@@ -498,6 +510,10 @@
  "6d586cabb53f": {
   "src": "<span class=\"psub__n\">2.2</span>What the audit corrected",
   "tr": "<span class=\"psub__n\">2.2</span>ما الذي صحّحته المراجعة"
+ },
+ "6dc4a41b61fd": {
+  "src": "<b>The lens.</b> Busch’s twist and the paraxial ray equation, Glaser’s exact lens, and its spherical and chromatic aberration found by tracing rays and checked against the aberration integrals.",
+  "tr": "<b>العدسة.</b> دوران بوش ومعادلة الشعاع المحوري، وعدسة غلاسر الدقيقة، وزيغاها الكروي واللوني المحسوبان بتتبّع الأشعة والمتحقَّق منهما بتكاملات الزيغ."
  },
  "6e9e2545bb51": {
   "src": "The test case is a warm cloud of \\(300\\ \\mathrm{cm^{-3}}\\) droplets of radius \\(8\\ \\mathrm{\\mu m}\\) with \\(1\\ \\mathrm{cm^{-3}}\\) collectors of \\(40\\ \\mathrm{\\mu m}\\), at \\(10\\,{}^{\\circ}\\mathrm{C}\\) and \\(850\\ \\mathrm{hPa}\\). Growth is measured by the mass fraction in drops of radius \\(r \\ge 40\\ \\mathrm{\\mu m}\\): a diagnostic of growth, not a rainfall prediction. With the thesis kernel the mass piles up near \\(500\\ \\mathrm{\\mu m}\\) and stops, because the Weber number computed with Stokes speeds switches coalescence off; with the extended kernel the drops keep growing to millimetres. The kernel matters more than the bookkeeping.",
@@ -714,6 +730,10 @@
  "9e33a41066cb": {
   "src": "<b>The source.</b> The image-charge barrier, tunnelling, the Fowler–Nordheim law, the energy spread and brightness of cold and Schottky emitters, and the vacuum physics that makes a cold tip bright and fragile.",
   "tr": "<b>المصدر.</b> حاجز الشحنة الصورية، والنفق الكمومي، وقانون فاولر–نوردهايم، واتساع الطاقة والسطوع للباعثات الباردة وباعثات شوتكي، وفيزياء الفراغ التي تجعل الرأس البارد ساطعًا وهشًّا في آنٍ واحد."
+ },
+ "9f1c64eac35d": {
+  "src": "<b>Detect and measure.</b> The line profile, its shot noise, and how precisely a width can be read, by error propagation and by Monte Carlo.",
+  "tr": "<b>الكشف والقياس.</b> مقطع الخط، وضجيج الطلقات فيه، ومدى الدقة التي يُقرأ بها العرض، بانتشار الأخطاء وبمونت كارلو."
  },
  "9f9b3ec46526": {
   "src": "<span class=\"pfig__n\">Figure 3</span>The same blow twice: iron as a tall spike, cotton as a low, wide hump.",
@@ -951,6 +971,10 @@
   "src": "The machine of project 05 rebuilt to swing its rods up under water, glycerol and honey",
   "tr": "آلة المشروع 05 وقد أُعيد بناؤها لتؤرجح قضيبيها إلى الأعلى تحت الماء والغليسرول والعسل"
  },
+ "d8529716b42a": {
+  "src": "<b>Acceleration and brightness.</b> The relativistic wavelength, a retarding field before the wafer, and the brightness that Liouville’s theorem conserves.",
+  "tr": "<b>التسريع والسطوع.</b> الطول الموجي النسبي، ومجال كابح قبل الرقاقة، والسطوع الذي تحفظه مبرهنة ليوفيل."
+ },
  "d94f8b3ca4fd": {
   "src": "The solver of the collection equation, in your browser.",
   "tr": "حلّال معادلة الالتقاط، في متصفّحك."
@@ -1095,6 +1119,10 @@
   "src": "Simulations",
   "tr": "المحاكاة"
  },
+ "f734ae221c7c": {
+  "src": "<b>Scan and hit.</b> A Monte Carlo simulation of electrons scattering in the wafer, compared with measured backscattering and secondary-electron yields.",
+  "tr": "<b>المسح والاصطدام.</b> محاكاة مونت كارلو لتشتّت الإلكترونات في الرقاقة، مقارنةً بالتشتّت الخلفي ومردودات الإلكترونات الثانوية المقيسة."
+ },
  "f7e315e89890": {
   "src": "<b>Approach.</b> From 0.1 s the position law moves the ram up along a smooth path, the spool opening to 94 % on the way; at 1.1 s it slows to a 10 mm/s creep for the last 2 mm.",
   "tr": "<b>الاقتراب.</b> من 0.1 s يحرّك قانونُ الموضع المِدكَّ إلى الأعلى على مسار ناعم، ويُفتح المِزلاج في الطريق حتى 94 %؛ وعند 1.1 s يبطئ إلى زحفٍ بسرعة 10 mm/s في آخر 2 mm."
@@ -1142,5 +1170,9 @@
  "fdf9b9e26654": {
   "src": "How a beam of electrons is made, focused and used to measure the width of a line a few nanometres wide",
   "tr": "كيف تُصنع حزمة من الإلكترونات وتُركَّز، وكيف تُستعمل لقياس عرض خطٍّ لا يتجاوز بضعة نانومترات"
+ },
+ "ff63f557f703": {
+  "src": "<b>The spot.</b> Four blurs and the beam angle that makes the probe smallest for a given current.",
+  "tr": "<b>البقعة.</b> أربعة أسباب للتمويه، وزاوية الحزمة التي تجعل المسبار أصغر ما يمكن عند تيار معلوم."
  }
 }

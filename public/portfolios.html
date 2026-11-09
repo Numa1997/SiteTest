@@ -490,9 +490,9 @@
                 at a kilovolt is picometres. This project follows one electron from a sharp tungsten tip to a measured line width, in
                 chapters that each start from a physical picture, derive every formula step by step, check it with symbolic algebra and an
                 independent Python program, and end in a simulation whose sliders are the symbols of the formulas. Measured data are laid
-                over the model with the source named and the gap stated: Thomson’s 1897 cathode-ray tubes, and the current of a real
-                tungsten tip against its voltage. The chapters on the gun, the magnetic lens, the spot, scattering in the wafer, the
-                measurement and the whole machine are being added in order; the page says which are written.
+                over the model with the source named and the gap stated: Thomson’s 1897 cathode-ray tubes, the current of a real
+                tungsten tip against its voltage, measured backscattering from silicon to gold, and published stopping powers and
+                secondary-electron yields. The last chapters join every stage into one machine and ask which input matters most.
               </p>
               <div class="proj__actions">
                 <a class="proj__btn" href="portfolios/electron-beam/index.html">Open the lecture notes</a>
@@ -512,6 +512,12 @@
               <li><b>Why electrons.</b> Abbe’s limit for light against the electron wavelength, and what a measuring machine must deliver at once: a thin spot, enough current, a gentle beam and speed.</li>
               <li><b>A free electron in fields.</b> The relativistic Lagrangian, the Lorentz force, the helix in a magnetic field, and two integrators (Boris and fourth-order Runge–Kutta) tested against the exact helix.</li>
               <li><b>The source.</b> The image-charge barrier, tunnelling, the Fowler–Nordheim law, the energy spread and brightness of cold and Schottky emitters, and the vacuum physics that makes a cold tip bright and fragile.</li>
+              <li><b>Acceleration and brightness.</b> The relativistic wavelength, a retarding field before the wafer, and the brightness that Liouville’s theorem conserves.</li>
+              <li><b>The lens.</b> Busch’s twist and the paraxial ray equation, Glaser’s exact lens, and its spherical and chromatic aberration found by tracing rays and checked against the aberration integrals.</li>
+              <li><b>The spot.</b> Four blurs and the beam angle that makes the probe smallest for a given current.</li>
+              <li><b>Scan and hit.</b> A Monte Carlo simulation of electrons scattering in the wafer, compared with measured backscattering and secondary-electron yields.</li>
+              <li><b>Detect and measure.</b> The line profile, its shot noise, and how precisely a width can be read, by error propagation and by Monte Carlo.</li>
+              <li><b>The whole machine.</b> All stages in one chain: a table of sensitivities, a tolerance study and a measurement window.</li>
             </ol>
           </section>
 
@@ -519,8 +525,9 @@
             <h3 id="eb-limits"><span class="psub__n">7.2</span>What the model keeps and leaves out</h3>
             <p>
               Fields are analytic: there is no finite-element field solver, no aberration-corrected optics, and no interaction between
-              the electrons of the beam. Constants are CODATA 2018. Every number in the text is computed by the page’s own code and
-              checked against an independent Python version. The project is independent: it does not model any company’s instrument,
+              the electrons of the beam. The scattering model is simple and is shown where it fails: it overstates the backscattering of
+              heavy elements at low voltage. Constants are CODATA 2018. Every number in the text is computed by the project’s code and
+              checked against an independent Python version, and every chapter was read by two independent reviewers. The project is independent: it does not model any company’s instrument,
               and statements by manufacturers are quoted as public claims with their source.
             </p>
           </section>

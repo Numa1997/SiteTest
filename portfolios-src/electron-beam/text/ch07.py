@@ -61,8 +61,8 @@ ex('fin_bias', '(a-1.5e-8)*1e9', {'a': 'fin_cdm'}, sig=2)
 ex('fin_bias_pct', '100*(a-1.5e-8)/1.5e-8', {'a': 'fin_cdm'}, sig=2)
 ex('bl_bias', '(a-2e-8)*1e9', {'a': 'bl_cdm'}, sig=2)
 mod('bl_sigmc', {'d_p': 1.5e-8}, 'sigma_CD_mc', scale=1e9, sig=2)
-ex('sig_b', 'sqrt((5.3e-9/2.3548)**2+(1.95e-9)**2)*1e9', {}, sig=2)
-ex('blur_space', 'sqrt((5.3e-9/2.3548)**2+(1.95e-9)**2)/2e-8', {}, sig=2)
+ex('sig_b', 'sqrt((5.3e-9/2.3548)**2+(3.33e-9)**2)*1e9', {}, sig=2)
+ex('blur_space', 'sqrt((5.3e-9/2.3548)**2+(3.33e-9)**2)/2e-8', {}, sig=2)
 # checks
 DN = DER['numbers']
 const('cd_sharp', DN['cd_sharp'] * 1e9, sig=4)
@@ -74,7 +74,7 @@ ex('amat_per_image', '1e8/3600*512**2*1e-7', {}, sig=2)
 
 LITERALS = {
     '30 kV': 'a landing voltage of chapter 6, a given', '0.76': 'chapter 6\'s δ, rounded, the default input', '0.24': 'chapter 6\'s η, rounded, the default input',
-    '20 %': 'the agreement level of check C6', '1.95 nm': 'chapter 6\'s core width, the default input', '86 %': 'chapter 6\'s core fraction, the default input', '8.7 nm': 'chapter 6\'s halo width, the default input', '2.7 nm': 'Lin and Joy\'s escape depth for silicon, quoted', '1.5': 'aspect ratio h/CD = 30/20, givens',
+    '20 %': 'the agreement level of check C6', '3.3 nm': 'chapter 6\'s core width, rounded, the default input', '86 %': 'chapter 6\'s core fraction, the default input', '8.7 nm': 'chapter 6\'s halo width, the default input', '2.7 nm': 'Lin and Joy\'s escape depth for silicon, quoted', '1.5': 'aspect ratio h/CD = 30/20, givens',
     '5 %': 'the contrast below which the module stops', '4000': 'the number of Monte Carlo repeats', '1 %': 'the statistical error of the Monte Carlo, rounded',
     'two neighbouring periods': 'what the code adds at small blur', 'Example 7.4': 'the number of a worked example', 'four times': 'a factor of a problem',
     '7.1.26': 'formula number in Abramowitz and Stegun', '1964': 'year of Abramowitz and Stegun', '1.3 %': 'the effect of counting backscattered electrons as Poisson, from the derivation review', '0.1 nm': 'a target of a problem, a given', '10^{-10}': 'the measured parity agreement',
@@ -125,7 +125,7 @@ $$ \delta\left(\frac{1}{\sin\beta}-1\right)h\tan\beta=\delta\,h\left(\frac{1}{\c
 <p>The detector never sees this sharp map. The probe has a size, and the signal spreads in the solid before it escapes. We treat both as Gaussian blurs. A round Gaussian probe of FW50 diameter $d_p$ has the standard deviation $\sigma_p=d_p/2.355$ along any line (check C2). Chapter 6 splits the escaping secondaries into a core, a fraction $f_\mathrm{core}$ of width $\sigma_\mathrm{core}$ made by the incoming beam, and a halo of width $\sigma_\mathrm{halo}$ made by backscattered electrons. Each part is blurred by its own Gaussian, $\sigma_1^2=\sigma_p^2+\sigma_\mathrm{core}^2$ and $\sigma_2^2=\sigma_p^2+\sigma_\mathrm{halo}^2$. The expected yield at the beam position $x$ is then the flat value plus each wall's excess spread over its width and blurred,</p>
 $$ Y(x)=\delta+\eta+\sum_\text{walls}\frac{\delta h(1/\cos\beta-\tan\beta)}{w}\sum_{k=1,2}f_k\left[\Phi\!\left(\frac{x-x_1}{\sigma_k}\right)-\Phi\!\left(\frac{x-x_2}{\sigma_k}\right)\right], \label{profile7} $$
 <p>with $f_1=f_\mathrm{core}$, $f_2=1-f_\mathrm{core}$, $x_1$ and $x_2$ the ends of a wall in projection and $\Phi$ the cumulative normal distribution (the error function, approximated to $1.5\times10^{-7}$ by formula 7.1.26 of M. Abramowitz and I. A. Stegun, <em>Handbook of Mathematical Functions</em>, 1964, check C4). The pattern is periodic, so the walls of the neighbouring lines are added too (two neighbouring periods on each side when the blur is small, more when it is wide; a halo wider than twice the pitch is simply a uniform background): at a pitch of 40 nm and a blur of a few nanometres they overlap.</p>
-<p>The default numbers are chapter 6's silicon at 800 V, rounded: $\delta=0.76$, $\eta=0.24$, a core of 1.95 nm holding 86 % of the signal and a halo of 8.7 nm (secondaries escape from about the escape depth $\lambda_s=2.7$ nm), and chapter 5's probe of {{num:c5_dp}} nm, so $\sigma_1=$ {{num:sig_b}} nm. The line is 20 nm wide and 30 nm high (aspect ratio 1.5), the space 20 nm, and the core blur is {{num:blur_space}} of the space: the edges are sharp enough to find, but the neighbours' edges already lift the floor.</p>
+<p>The default numbers are chapter 6's silicon at 800 V, rounded: $\delta=0.76$, $\eta=0.24$, a core of 3.3 nm holding 86 % of the signal and a halo of 8.7 nm (the core includes the escape depth $\lambda_s=2.7$ nm), and chapter 5's probe of {{num:c5_dp}} nm, so $\sigma_1=$ {{num:sig_b}} nm. The line is 20 nm wide and 30 nm high (aspect ratio 1.5), the space 20 nm, and the core blur is {{num:blur_space}} of the space: the edges are sharp enough to find, but the neighbours' edges already lift the floor.</p>
 <p>A Gaussian is a fair stand-in for the probe. For each part of the signal it is rougher, and the split into two parts is itself a summary of chapter 6's histogram, not its full shape.</p>
 '''})
 

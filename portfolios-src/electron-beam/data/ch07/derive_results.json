@@ -34,13 +34,13 @@
    "id": "C6",
    "title": "σ_CD by first-order error propagation against the standard deviation of 4000 noisy repeats of the same measurement: within 20 % where the edges stand well out of the floor (the Monte Carlo carries about 1 %)",
    "ok": true,
-   "detail": "default: 0.171 vs 0.160 nm; {\"t_d\": 1e-06}: 0.054 vs 0.054 nm; {\"t_d\": 1e-08}: 0.542 vs 0.483 nm; {\"N_px\": 128}: 0.343 vs 0.305 nm; {\"sidewall\": 0.0, \"height\": 5e-08, \"cd\": 1.5e-08}: 0.103 vs 0.122 nm. Not within 20 %: the 15 nm probe of Example 7.4 (edge contrast 14 %), 1.242 vs 1.012 nm"
+   "detail": "default: 0.227 vs 0.263 nm; {\"t_d\": 1e-06}: 0.072 vs 0.074 nm; {\"t_d\": 1e-08}: 0.718 vs 0.816 nm; {\"N_px\": 128}: 0.454 vs 0.528 nm; {\"sidewall\": 0.0, \"height\": 5e-08, \"cd\": 1.5e-08}: 0.161 vs 0.185 nm. Not within 20 %: the 15 nm probe of Example 7.4 (edge contrast 14 %), 1.776 vs 1.552 nm"
   },
   {
    "id": "C7",
    "title": "with a sharp probe and no spread of the signal the outer-flank threshold finds the bottom corners of the line (width CD + h tan β), within a pixel",
    "ok": true,
-   "detail": "sharp: 21.040 nm against the bottom width 21.048 nm; default blur: 26.95 nm for a true CD of 20.0 nm"
+   "detail": "sharp: 21.040 nm against the bottom width 21.048 nm; default blur: 28.24 nm for a true CD of 20.0 nm"
   },
   {
    "id": "C8",
@@ -51,40 +51,40 @@
  ],
  "numbers": {
   "slopes": {
-   "t_d": -0.5000000000604939,
-   "I_p": -0.5000000000604939,
+   "t_d": -0.5000000001654346,
+   "I_p": -0.5000000001654346,
    "N_px": -0.5
   },
   "ep_vs_mc": [
    [
     "{}",
-    1.7126663934541093e-10,
-    1.6025850962412244e-10
+    2.2719358028666424e-10,
+    2.63377729670885e-10
    ],
    [
     "{\"t_d\": 1e-06}",
-    5.4159266749907726e-11,
-    5.4037477042825776e-11
+    7.184491836200019e-11,
+    7.36684728914201e-11
    ],
    [
     "{\"t_d\": 1e-08}",
-    5.415926674816136e-10,
-    4.826689070785302e-10
+    7.184491835632061e-10,
+    8.160114829763248e-10
    ],
    [
     "{\"N_px\": 128}",
-    3.4253327869082185e-10,
-    3.049863782097148e-10
+    4.543871605733285e-10,
+    5.278278091040054e-10
    ],
    [
     "{\"sidewall\": 0.0, \"height\": 5e-08, \"cd\": 1.5e-08}",
-    1.0275201402398813e-10,
-    1.2183575214046656e-10
+    1.6112267974504836e-10,
+    1.848364135398894e-10
    ]
   ],
   "cd_sharp": 2.104026346335472e-08,
   "bottom": 2.1047623084752432e-08,
-  "cd_default": 2.6947867695728228e-08
+  "cd_default": 2.8237196313070716e-08
  },
  "summary": "8 of 8 checks pass"
 }

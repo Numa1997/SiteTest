@@ -20,7 +20,8 @@
    Interaction volume: hemisphere about the point of impact whose radius r90 holds 90 % of the energy left in the wafer (step energy put at the
    step's midpoint; histogram of 4000 bins up to 3 R).  sigma_sig: rms of one lateral coordinate (x) of the escaping SE, weight = escape weight.
    The escaping signal is a sharp core and a broad halo; from a weighted histogram of |x| (400 log bins, 1e-3 to 1e5 nm): sig_core = median |x| /
-   0.67449, f_core = weight within 3 sig_core, sig_halo = rms of the rest. Chapter 7 blurs with the two parts.
+   0.67449, f_core = weight within 3 of those widths, sig_halo = rms of the rest. The secondaries' own sideways travel before they escape, of the
+   order of the escape depth, is added to the core width in quadrature (sig_core^2 = width^2 + lambda_s^2). Chapter 7 blurs with the two parts.
    Random numbers: core.rng (mulberry32), one generator per electron seeded with SEED + 7919 i, so a last-bit difference in a library function
    can change at most that one electron's path (parity tolerance in `tolerance`). */
 (function (root, factory) {
@@ -139,7 +140,7 @@
     }
     return {
       E_land: p.V_land * C.e, delta_SE: delta, eta_BSE: eta, R: R * 1e-9, V_int: 2 / 3 * Math.PI * Math.pow(r90 * 1e-9, 3),
-      sigma_sig: Math.sqrt(wx2 / wTot) * 1e-9, sig_core: sCore * 1e-9, f_core: fCore, sig_halo: Math.max(sHalo, sCore) * 1e-9, u_eta: Math.sqrt(eta * (1 - eta) / N), u_delta: uDelta, r90: r90 * 1e-9, mc_paths: paths,
+      sigma_sig: Math.sqrt(wx2 / wTot) * 1e-9, sig_core: Math.sqrt(sCore * sCore + m.ls * m.ls) * 1e-9, f_core: fCore, sig_halo: Math.max(sHalo, Math.sqrt(sCore * sCore + m.ls * m.ls)) * 1e-9, u_eta: Math.sqrt(eta * (1 - eta) / N), u_delta: uDelta, r90: r90 * 1e-9, mc_paths: paths,
     };
   }
   const compute = p => run(p);
