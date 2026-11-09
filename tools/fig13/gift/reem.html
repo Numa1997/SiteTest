@@ -6,7 +6,7 @@
 <title>For رِيمْ</title>
 <!-- Film renderer (phone first, 1080 x 1920), a gift: "For ريم" and "فراشتك" written by chains of turning arrows (a Fourier series
      of each word's outline, reem.json from reem_data.py, رِيمْ and فَرَاشَتُكِ traced from the two plates Numa chose), then the butterfly drawn by
-     only two arrows (the rods of the double pendulum, orbit24.json), then its dashboard: the plane of the motion, its height and
+     only two arrows (the rods of the double pendulum, integrated live: pendulum.js), then its dashboard: the plane of the motion, its height and
      sideways position against time joined by straight lines, the paper turned until each wave is the butterfly again, and the
      exact strike with the reason it is not chaos (numbers from tools/fig13/butterfly_physics.py).
      Serve the repository root; tools/fig13/gift/render.cjs THEME OUT 1 all reem x 1080x1920 writes the frames. -->
@@ -32,6 +32,7 @@ canvas { position:absolute; left:0; top:0; }
   <div class="capt" id="capA"></div>
   <div class="capt" id="capB"></div>
 </div>
+<script src="pendulum.js"></script>
 <script>
 'use strict';
 const Q = new URLSearchParams(location.search);
@@ -247,7 +248,7 @@ function renderFrame(f) { g.setTransform(DPR, 0, 0, DPR, 0, 0); drawScene(g, f);
 window.renderFrame = renderFrame;
 async function boot() {
     DPR = window.devicePixelRatio || 1;
-    WD = await (await fetch('reem.json')).json(); O = await (await fetch('orbit24.json')).json();
+    WD = await (await fetch('reem.json')).json(); O = PEND.butterfly(7979);   // the motion computed live from its strike (pendulum.js)
     prepWord(WD.reem); prepWord(WD.butterfly); prepOrbit(); timeline(); captions();
     const c = $('cv'); c.width = 1080 * DPR; c.height = 1920 * DPR; c.style.width = '1080px'; c.style.height = '1920px'; g = c.getContext('2d');
     await document.fonts.ready;

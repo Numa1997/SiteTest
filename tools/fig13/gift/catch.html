@@ -5,7 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Catching the butterfly</title>
 <!-- Film renderer (phone first, 1080 x 1920): a double pendulum swinging in chaos is caught by a motor at its top pin and held on
-     the butterfly. The motion is computed, not drawn: catch.json from tools/fig13/butterfly_control.py (film_data): 8 s free from
+     the butterfly. The motion is computed live as the film plays (pendulum.js: the pendulum's equations and the controller of
+     tools/fig13/butterfly_control.py, its gains designed in the browser at start): 8 s free from
      the strike p = (2, 4) kg m^2/s (18 J), then pump and steer, wait, catch with the periodic LQR along the orbit, hold.
      Serve the repository root; tools/fig13/gift/render.cjs THEME OUT 1 all catch x 1080x1920 writes the frames. -->
 <style>
@@ -32,6 +33,7 @@ canvas { position:absolute; left:0; top:0; }
   <div class="capt" id="capA"></div>
   <div class="capt" id="capB"></div>
 </div>
+<script src="pendulum.js"></script>
 <script>
 'use strict';
 const Q = new URLSearchParams(location.search);
@@ -49,31 +51,39 @@ const TH = THEME === 'dark' ? {
 };
 const rgba = (c, a) => `rgba(${c[0]},${c[1]},${c[2]},${a})`;
 
-// ------------------------------------------------------------------------------------------------ data and its clock
-let D, N;
-function stateAt(t) {     // linear interpolation of the stored run (samples every D.h seconds)
-    const u = clamp(t / D.h, 0, N - 1.000001), i = Math.floor(u), f = u - i, L = k => lerp(D[k][i], D[k][i + 1], f);
-    return { th1: L('th1'), th2: L('th2'), tau: L('tau'), E: L('E'), dist: L('dist'), mode: D.mode[i] };
+// ------------------------------------------------------------------------------------------------ the motion, computed live
+// pendulum.js integrates the pendulum and runs the motor's controller as the film plays: struck with p = (2, 4) kg m^2/s (18 J),
+// free for 8 s, then pump and steer, wait, catch, hold four laps, let go, four laps free. Nothing is recorded in advance.
+const STRIKE = [2, 4], T_FREE = 8, HOLD_LAPS = 4, FREE_LAPS = 4, LOG_EVERY = 4;
+let DES, RUN, D, N = 0;
+function stateAt(t) {     // linear interpolation of the run so far (samples every D.h seconds)
+    const L0 = RUN.log, u = clamp(t / D.h, 0, N - 1.000001), i = Math.floor(u), f = u - i, L = k => lerp(L0[k][i], L0[k][Math.min(i + 1, N - 1)], f);
+    return { th1: L('th1'), th2: L('th2'), tau: L('tau'), E: L('E'), dist: L('dist'), mode: L0.mode[i] };
 }
 const tip = (a, b) => [Math.sin(a) + Math.sin(b), -(Math.cos(a) + Math.cos(b))];
 
-// frames to seconds of motion: the free chaos at half speed, the motor at a quarter, the held butterfly at a quarter
+// the film's clock follows the pendulum: chaos at half speed, the motor at work at a quarter, from a second after the catch at half
 const FPS = 30;
-let SEG, TL;
-function timeline() {
-    const tOn = D.t_free, tSlow = D.catch_t + 1.0, tEnd = D.t[N - 1];
-    const fOn = 30 + Math.round(tOn / 0.5 * FPS), fSlow = fOn + Math.round((tSlow - tOn) / 0.25 * FPS), fEnd = fSlow + Math.round((tEnd - tSlow) / 0.5 * FPS);
-    SEG = { tOn, tSlow, fOn, fSlow };
-    const fOf = tt => tt < tOn ? 30 + tt / 0.5 * FPS : tt < tSlow ? fOn + (tt - tOn) / 0.25 * FPS : fSlow + (tt - tSlow) / 0.5 * FPS;
-    TL = { on: fOn, slow: fSlow, catch: Math.round(fOf(D.catch_t)), release: Math.round(fOf(D.release_t)), end: fEnd, total: fEnd + 90, tEnd };
-}
+let FT = [0], TL = { on: null, catch: null, release: null, total: null };
+const endT = () => RUN.ev.release !== null ? RUN.ev.release + FREE_LAPS * D.T : Infinity;
+const speedOf = t => t < T_FREE ? 0.5 : (RUN.ev.catch !== null && t > RUN.ev.catch + 1) ? 0.5 : 0.25;
 function simT(f) {
-    if (f < 30) return 0;
-    if (f < SEG.fOn) return (f - 30) / FPS * 0.5;
-    if (f < SEG.fSlow) return SEG.tOn + (f - SEG.fOn) / FPS * 0.25;
-    return Math.min(TL.tEnd, SEG.tSlow + (f - SEG.fSlow) / FPS * 0.5);
+    while (FT.length <= f) {
+        const k = FT.length, t = FT[k - 1];
+        if (k <= 30) { FT.push(0); continue; }
+        RUN.advance(Math.min(t + 0.6, endT() + 0.1), LOG_EVERY); N = RUN.log.t.length;      // integrate a little ahead of the picture
+        const tn = Math.min(t + speedOf(t) / FPS, endT());
+        if (TL.catch !== null && RUN.ev.catch === null) TL.catch = null;                       // a catch that slipped
+        if (TL.on === null && tn >= T_FREE) TL.on = k;
+        if (TL.catch === null && RUN.ev.catch !== null && tn >= RUN.ev.catch) TL.catch = k;
+        if (TL.release === null && RUN.ev.release !== null && tn >= RUN.ev.release) TL.release = k;
+        if (TL.total === null && tn >= endT()) TL.total = k + 90;
+        FT.push(tn);
+    }
+    return FT[f];
 }
-const speedAt = f => f < SEG.fOn || f >= SEG.fSlow ? '½' : '¼';
+const speedAt = f => speedOf(simT(f)) === 0.5 ? '½' : '¼';
+const tEndNow = t => RUN.ev.release !== null ? endT() : Math.max(34, t + 6);
 
 // ------------------------------------------------------------------------------------------------ layout
 const PL = { x: 40, y: 190, s: 1000 }, SC = PL.s / 2 / 2.25, CX = PL.x + PL.s / 2, CY = PL.y + PL.s / 2 - 40;
@@ -86,7 +96,7 @@ function card(g, x, y, w, h) { g.fillStyle = TH.paper; g.strokeStyle = TH.rule; 
 
 function drawScene(g, f) {
     g.fillStyle = TH.bg; g.fillRect(0, 0, 1080, 1920);
-    const t = simT(f), s = stateAt(t), ph = phaseOf(s.mode), held = t > D.catch_t + 0.4, I = s.tau / D.kt, Imax = D.tau_max / D.kt;
+    const t = simT(f); TL.tEnd = tEndNow(t); const s = stateAt(t), ph = phaseOf(s.mode), held = t > D.catch_t + 0.4, I = s.tau / D.kt, Imax = D.tau_max / D.kt;
     card(g, PL.x, PL.y, PL.s, PL.s);
     g.save(); g.beginPath(); g.roundRect(PL.x, PL.y, PL.s, PL.s, 14); g.clip();
     g.strokeStyle = TH.rule; g.lineWidth = 1; g.setLineDash([3, 7]); for (const r of [1, 2]) { g.beginPath(); g.arc(CX, CY, r * SC, 0, 7); g.stroke(); } g.setLineDash([]);
@@ -174,8 +184,8 @@ function drawScene(g, f) {
     g.strokeStyle = TH.rule; g.lineWidth = 1; g.beginPath(); g.moveTo(tx(D.t_free), CH.y + 10); g.lineTo(tx(D.t_free), CH.y + CH.h - 10); g.moveTo(tx(D.catch_t), CH.y + 10); g.lineTo(tx(D.catch_t), CH.y + CH.h - 10); g.stroke();
     for (const [key, y, col] of [['tau', qy, TH.motor], ['E', ey, TH.energy]]) {
         g.strokeStyle = rgba(col, 0.9); g.lineWidth = 1.6; g.beginPath();
-        const m = Math.min(N - 1, Math.floor(t / D.h));
-        for (let i = 0; i <= m; i += 2) { const X = tx(D.t[i]), Y = y(D[key][i]); i ? g.lineTo(X, Y) : g.moveTo(X, Y); }
+        const m = Math.min(N - 1, Math.floor(t / D.h)), Lg = RUN.log;
+        for (let i = 0; i <= m; i += 2) { const X = tx(Lg.t[i]), Y = y(Lg[key][i]); i ? g.lineTo(X, Y) : g.moveTo(X, Y); }
         g.stroke();
     }
     text(g, 'energy', CH.x + 26, CH.y + 28, 16, rgba(TH.energy, 1)); text(g, 'torque', CH.x + 100, CH.y + 28, 16, rgba(TH.motor, 1));
@@ -185,13 +195,15 @@ function drawScene(g, f) {
 // ------------------------------------------------------------------------------------------------ words under the picture
 let CAPS;
 function captions() {
+    const F = v => v === null ? Infinity : v;
+    TL.on = TL.on; const ON = F(TL.on), CA = F(TL.catch), RE = F(TL.release);
     CAPS = [
         [0, 'A double pendulum, struck gently (18 J), swings in chaos: two such pendulums one part in a million apart disagree by 1 cm within 6 s. A pen at its tip, a motor at its pin, switched off.'],
-        [TL.on, 'The motor switches on. Current in its coils pushes on the magnets of the rotor: torque = 2.5 N·m per ampere. It pumps the energy to the butterfly\'s 390.8 J and steers the upper rod\'s swing to the butterfly\'s size.<br><span style="font-size:22px;color:var(--muted)">energy E, torque τ:  dE/dt = τ · dθ₁/dt</span>'],
-        [TL.catch - 40, 'Close enough: the motor makes small corrections along the butterfly\'s own lap, a feedback designed on the orbit (as in our control lessons).'],
-        [TL.catch + 200, 'Caught. The motor holds it for four laps; the corrections shrink below 0.1 N·m.'],
-        [TL.release, 'Let go: the motor switches off. The butterfly is unstable by itself, but only barely (an error grows 2 % a lap), so the pen keeps drawing it: within 0.1 of the exact path for about 12 minutes, its wings unchanged for at least an hour.'],
-        [TL.release + 330, 'From 30 random strikes, the motor caught 28 within 15 minutes, 22 of them within 5. Two escaped it in that time.'],
+        [ON, 'The motor switches on. Current in its coils pushes on the magnets of the rotor: torque = 2.5 N·m per ampere. It pumps the energy to the butterfly\'s 390.8 J and steers the upper rod\'s swing to the butterfly\'s size.<br><span style="font-size:22px;color:var(--muted)">energy E, torque τ:  dE/dt = τ · dθ₁/dt</span>'],
+        [CA, 'Close enough: the motor makes small corrections along the butterfly\'s own lap, a feedback designed on the orbit (as in our control lessons).'],
+        [CA + 200, 'Caught. The motor holds it for four laps; the corrections shrink below 0.1 N·m.'],
+        [RE, 'Let go: the motor switches off. The butterfly is unstable by itself, but only barely (an error grows 2 % a lap), so the pen keeps drawing it: within 0.1 of the exact path for about 12 minutes, its wings unchanged for at least an hour.'],
+        [RE + 330, 'From 30 random strikes, the motor caught 28 within 15 minutes, 22 of them within 5. Two escaped it in that time.'],
     ];
 }
 const memo = {};
@@ -204,19 +216,24 @@ function showCaption(f) {
 }
 
 let g, DPR = 1;
-function renderFrame(f) { g.setTransform(DPR, 0, 0, DPR, 0, 0); drawScene(g, f); showCaption(f); }
+function renderFrame(f) { g.setTransform(DPR, 0, 0, DPR, 0, 0); drawScene(g, f); captions(); showCaption(f); }
 window.renderFrame = renderFrame;
 async function boot() {
     DPR = window.devicePixelRatio || 1;
-    D = await (await fetch('catch.json')).json(); N = D.t.length;
-    timeline(); captions();
+    DES = PEND.design();                                     // the orbit, its linearisation and the motor's gains: computed here, ~0.1 s
+    RUN = new PEND.Run(DES, STRIKE, T_FREE, HOLD_LAPS);
+    const C = PEND.consts, OB = DES.S.filter((x, i) => i % 4 === 0);
+    D = { h: LOG_EVERY * C.H, T: C.T, t_free: T_FREE, E_star: DES.Estar, tau_max: C.TAU_MAX, kt: C.KT, orbit_th1: OB.map(x => x[0]), orbit_th2: OB.map(x => x[1]),
+          get catch_t() { return RUN.ev.catch === null ? Infinity : RUN.ev.catch; }, get release_t() { return RUN.ev.release === null ? Infinity : RUN.ev.release; } };
+    N = RUN.log.t.length; captions();
+    window.LIVE = { get run() { return RUN; }, get frameTimes() { return FT; } };   // read-only view for checks
     const c = $('cv'); c.width = 1080 * DPR; c.height = 1920 * DPR; c.style.width = '1080px'; c.style.height = '1920px'; g = c.getContext('2d');
     await document.fonts.ready;
     await Promise.all(['Instrument Sans', 'Instrument Serif'].map(fn => document.fonts.load(`20px "${fn}"`)));
     await document.fonts.load('20px "Instrument Sans"', 'φθτ'); await document.fonts.load('500 20px "Instrument Sans"');
-    window.FILM = { frames: () => TL.total };
+    window.FILM = { frames: () => TL.total === null ? FT.length + 900 : TL.total };
     renderFrame(Number(Q.get('f') || 0)); window.__ready = true;
-    if (!Q.get('film')) { let f = 0, last = null; const loop = ts => { if (last === null || ts - last >= 1000 / FPS - 2) { renderFrame(f % TL.total); f++; last = ts; } requestAnimationFrame(loop); }; requestAnimationFrame(loop); }
+    if (!Q.get('film')) { let f = 0, last = null; const loop = ts => { if (last === null || ts - last >= 1000 / FPS - 2) { renderFrame(TL.total === null ? f : f % TL.total); f++; if (TL.total !== null && f >= TL.total) f = 0; last = ts; } requestAnimationFrame(loop); }; requestAnimationFrame(loop); }
 }
 function fit() {
     const cw = document.documentElement.clientWidth, ch = document.documentElement.clientHeight, s = Math.min(cw / 1080, ch / 1920, 1);

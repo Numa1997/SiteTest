@@ -11,7 +11,7 @@
      the height h(t) is plotted beside the plane of the motion, at the plane's height scale, time to the right; the sideways
      position x(t) is plotted below it, at the plane's sideways scale, time downward. For an instant t: a level line from the
      point (t, h(t)) and an upright line from the point (x(t), t) cross in the plane at (x, h), the tip of the pendulum.
-     First a wheel (12 instants by hand, then a continuous sweep), then the 24-petal butterfly (orbit24.json).
+     First a wheel (12 instants by hand, then a continuous sweep), then the 24-petal butterfly (integrated live from its strike: pendulum.js).
      Serve the repository root; tools/fig13/gift/render.cjs THEME OUT 1 all construction x 1080x1920 writes the frames. -->
 <style>
 @font-face { font-family: 'Instrument Serif'; src: url(../../fonts/instrument-serif/instrument-serif-400-latin.woff2) format('woff2'); }
@@ -37,6 +37,7 @@ canvas { position:absolute; left:0; top:0; }
   <div class="capt" id="capA"></div>
   <div class="capt" id="capB"></div>
 </div>
+<script src="pendulum.js"></script>
 <script>
 'use strict';
 const Q = new URLSearchParams(location.search);
@@ -238,7 +239,7 @@ function renderFrame(f) { g.setTransform(DPR, 0, 0, DPR, 0, 0); drawScene(g, f);
 window.renderFrame = renderFrame;
 async function boot() {
     DPR = window.devicePixelRatio || 1;
-    O = await (await fetch('orbit24.json')).json(); BFLY.T = O.T;
+    O = PEND.butterfly(7979); BFLY.T = O.T;   // the motion computed live from its strike (pendulum.js)
     sample(WHEEL, 1200); sample(BFLY, 6000); timeline(); captions();
     const c = $('cv'); c.width = 1080 * DPR; c.height = 1920 * DPR; c.style.width = '1080px'; c.style.height = '1920px'; g = c.getContext('2d');
     await document.fonts.ready;

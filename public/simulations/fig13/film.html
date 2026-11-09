@@ -66,6 +66,7 @@ function draw() {
 function tick(ts) {
     if (playing && total && (last === null || ts - last >= 1000 / FPS - 2)) {
         last = ts; f++;
+        const w = fr.contentWindow; if (w && w.FILM) { total = w.FILM.frames(); lengths[part] = total; }   // a live film learns its length as it runs
         if (f >= total) load(part + 1); else draw();
     }
     requestAnimationFrame(tick);

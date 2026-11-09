@@ -4,7 +4,7 @@ Plays, one after the other, the three live films that publish_films.py copies in
     live-gift.html          For رِيمْ and فَرَاشَتُكِ written by turning arrows, the butterfly by two arrows, its dashboard, the exact strike
     live-construction.html  the butterfly built by hand from its two perpendicular waveforms, the time axes joined by a mitre
     live-catch.html         a motor at the top pin takes the pendulum out of chaos, sets it on the butterfly, and lets go
-Each film is opened with ?film=1 in a frame of 1080 x 1920 scaled to the screen; this page keeps the clock (30 frames a second) and
+Each film computes its motion live (pendulum.js); each is opened with ?film=1 in a frame of 1080 x 1920 scaled to the screen; this page keeps the clock (30 frames a second) and
 asks the film to draw frame f (window.renderFrame), so nothing is precomputed and no video file is needed (Cloudflare serves no
 file above 25 MiB; the four-minute film as one MP4 is about 60 MB). Controls: play/pause (or tap the picture), previous, next,
 from the start, Night/Paper, and a bar showing where you are in the whole film; it loops.
@@ -85,6 +85,7 @@ function draw() {
 function tick(ts) {
     if (playing && total && (last === null || ts - last >= 1000 / FPS - 2)) {
         last = ts; f++;
+        const w = fr.contentWindow; if (w && w.FILM) { total = w.FILM.frames(); lengths[part] = total; }   // a live film learns its length as it runs
         if (f >= total) load(part + 1); else draw();
     }
     requestAnimationFrame(tick);
