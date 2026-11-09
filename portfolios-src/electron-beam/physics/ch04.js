@@ -65,8 +65,10 @@
     return [s[0], s[1]];
   }
 
+  const NOFOCUS = 'no focus on the wafer. Even the strongest excitation of a lens with one crossing (ω = 2) does not bring the ray back to the axis this close to the lens centre. Move the wafer further from the centre or the object further away.';
   function focusB0(a, eta, u, wd) {
     let lo = 0, hi = Math.sqrt(3 / eta) / a;
+    if (paraxial(hi, a, eta, -u, wd, 0, 1)[0] > 0) throw new Error(NOFOCUS);
     for (let i = 0; i < 60; i++) {
       const mid = (lo + hi) / 2, r = paraxial(mid, a, eta, -u, wd, 0, 1)[0];
       if (r > 0) lo = mid; else hi = mid;
@@ -137,7 +139,7 @@
       controls: ['V_land', 'a_lens', 'WD', 'u_obj'],
       readouts: ['NI', 'f', 'C_s', 'C_c', 'M', 'theta_rot'],
       aspect: '4 / 3', aspectPhone: '4 / 3',
-      caption: 'The objective lens in section: coil (drawn, not to scale), the bell-shaped field on the axis (dashed) and the axial ray from the object to the wafer. The excitation NI is solved so that the ray meets the axis at the wafer.',
+      caption: 'The objective lens in section: coil (drawn, not to scale), the bell-shaped field on the axis (dashed) and the axial ray from the object to the wafer. The excitation NI is solved so that the ray meets the axis at the wafer; where no excitation with a single crossing can do that, the simulation says so instead of drawing. The lens is computed at the landing voltage: this lens model has no retarding field.',
     },
     compute, draw, paraxial, ray3d, glaser, focusB0,
     setSteps: n => { NSTEP = n; },

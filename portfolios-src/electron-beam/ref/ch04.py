@@ -92,6 +92,8 @@ def ray3d(B0, a, qp, z0, z1, xp0):
 def focus_B0(a, eta, u, wd):
     """The peak field that brings the axial ray from z = -u back to the axis at z = +wd (first crossing), by bisection."""
     lo, hi = 0.0, math.sqrt(3 / eta) / a          # omega^2 = 1 + eta B0^2 a^2 = 4 at hi: beyond the first-crossing regime
+    if paraxial(hi, a, eta, -u, wd, 0.0, 1.0)[0] > 0:
+        raise ValueError('no focus on the wafer: even omega = 2 does not bring the ray back to the axis')
     for _ in range(60):
         mid = (lo + hi) / 2
         r, _ = paraxial(mid, a, eta, -u, wd, 0.0, 1.0)

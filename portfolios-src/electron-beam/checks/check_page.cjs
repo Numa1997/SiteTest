@@ -81,7 +81,9 @@ function serve(extraFile) {
     res.errors = errs; res.outside = outside; res.bad_responses = bad;
     await pg.evaluate(() => window.scrollTo(0, 0));
     await pg.screenshot({ path: path.join(shots, `top-${w}.png`) });
-    await pg.screenshot({ path: path.join(shots, `page-${w}.png`), fullPage: true });
+    // a full-page picture of a very tall page can exceed what Chromium captures in one piece; then take the first 15 000 px
+    try { await pg.screenshot({ path: path.join(shots, `page-${w}.png`), fullPage: true }); }
+    catch (e) { await pg.screenshot({ path: path.join(shots, `page-${w}.png`), fullPage: true, clip: { x: 0, y: 0, width: w, height: 15000 } }); res.page_shot = 'first 15000 px only'; }
     const fail = res.katex_errors || errs.length || outside.length || bad.length || res.overflow > 0 || res.wide_elements.length ||
       !/^Instrument Serif 400$/.test(res.h1_font) || res.fonts.length < 4 ||
       res.sims.some(s => s.drawn_pixels === 0 || s.readouts_move === false || s.error_shown);

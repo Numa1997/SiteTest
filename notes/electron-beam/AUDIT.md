@@ -107,3 +107,62 @@ Every claim below was checked by me before it was acted on; the fix commit is 85
 ### Layout
 - Upper-case readout labels turned KaTeX symbols into capitals (λ → Λ): fixed in the template. Readouts were cut with an ellipsis: they wrap now.
 - Long display equations scroll inside their box; the scrollbar is now visible. At 360 and 390 px no element runs past the screen (checked in Chromium).
+
+## 4. Chapters 3 to 5: built by the finisher, and how each is checked
+- **Chapter 3** (acceleration, brightness, energy spread): `physics/ch03.js` closed formulas; no Python twin needed (PLAN.md §4) but one exists and agrees to 3×10⁻¹⁶.
+  `derive/ch03.py` D1–D9 (momentum, limits of λ, deceleration, Liouville with z as time, B/V* invariance, 1/ln 2 for a Gaussian source, solid angle, ΔE unchanged).
+- **Chapter 4** (the lens): RK4 paraxial ray in τ with z = a tan τ, bisection for the excitation that focuses on the wafer, C_s from rays traced through the third-order
+  field, C_c by a central difference. `derive/ch04.py` L1–L8 (SymPy) and N1–N5 (numerics): Glaser's focal length to 1.4×10⁻⁷ (the finite start of the ray),
+  C_c and C_s each against its perturbation integral (C_s 4.18897 mm both ways), rotation, α³ scaling.
+- **Chapter 5** (the spot): closed formulas and a golden-section search. `derive/ch05.py` P1–P10, including first-principles checks of the FW50 coefficients
+  (Airy 0.535 λ/α, spherical 0.177 C_sα³) and Joy's worked example.
+- Run: `python3 derive/ch0N.py`, `python3 checks/check_parity.py`, `python3 checks/check_numbers.py`, `node checks/check_page.cjs` (all pass, 9 November 2026).
+
+## 5. Blind reviews of chapters 4 and 5, and what was done
+Reports: `review/referee-ch04.md`, `review/derivations-ch04.md`, `review/referee-ch05.md`, `review/derivations-ch05.md`. Every number on both pages matched
+the reviewers' independent recomputation; the problems were in physics, wording and one coefficient.
+
+### The worst finding: a coefficient I misread (chapter 5)
+**Fact.** Bronsgeest et al. (2008) print Eq. 19 as d_A = 0.66×10⁻⁹/(α√V_p), metres and volts. I had read it as 0.66 λ/α. With λ√V = 1.226 nm·V^½ it is
+0.538 λ/α; the Airy disc holds half its current inside 0.535 λ/α (computed, check P7); 0.66 λ/α holds 64 %. Re-read in full on 9 November 2026 (TU Delft copy, via Exa).
+**Consequences fixed.** Every FW50 size and optimum angle in chapter 5 moved by about 10–20 % (default spot 6.48 → 5.32 nm at 5 mrad; optimum 5.27 nm at 8.13 mrad →
+4.11 nm at 8.67 mrad). The "disagreement inside Bronsgeest et al." that the page reported (their I_AI against their Eqs. 6 and 19, "a factor close to 1/ln 2") was my
+misreading, not theirs: with 0.54 their Eqs. reproduce 1.07×10⁻¹⁸ B against the quoted 1.08×10⁻¹⁸ B (check P6). The paragraph is gone.
+
+### Chapter 5, other findings confirmed and fixed
+- The chromatic term used the FWHM where the paper uses the FW50 of the energy distribution. Chapter 2 now exports `dE50` (both twins, interpolated as the
+  derivation checker asked: 0.157 eV for the cold source, 0.267 eV for the Schottky preset); chapter 5 uses it in the FW50 convention and the FWHM in the classic one.
+- Check P1's printed coefficients were typed by hand and wrong (1.0 and 0.93); now computed: 1.09 (λ/C_s)^¼ and 1.29 λ^¾ C_s^¼.
+- Check P7 (energy FW50) took the next grid point up; now the module's interpolated value, checked against a 16× resampling.
+- "Condensers demagnify the source more": wrong for this source. 10 pA at 5 mrad needs a total magnification of 0.63 from the 1.30 nm virtual source; the objective
+  alone (0.018) would give 8.3 fA. Stated on the page.
+- "A thousand times the current costs a factor of a few": it is 1.5; the source image becomes the largest part only above 1.8 nA. "At low voltage the lens, not the
+  source, sets the spot" rewritten. The default optimum is named as the diffraction–chromatic balance (the P2 case).
+- Problem 3's premise (similar chromatic weight) was false; the Schottky preset's values are now printed. Problem 2 no longer contradicts itself.
+- §5.4: our lens is larger in C_s than all but one published value (not "inside the range"); Joy's 0.61 λ/α is a radius used beside a diameter; his formulas are
+  smallest at 2.60 mrad (12.9 nm), and the page no longer guesses why he took 5 mrad. A manufacturer's resolution claim (Hitachi SU9600, 0.4 nm at 30 kV) is quoted as such.
+- λ, V*, B_r defined in the chapter; a physical reason for λ/α and for the chromatic miss; the derivative step to α⁸ = A²/(3B²); radius and diameter of the
+  spherical blur kept apart; the root-power sum explained as far as the paper allows ("the powers are simply those that give a good approximation"), split into two
+  displays so it no longer overflows.
+- Simulation: the plot now spans 0.1–100 mrad (the slider is inside it), the legend sits below the plot, tick labels no longer collide, readouts for d_A, d_S, d_C,
+  d_I, the menu label is plain words, ΔE₅₀ and ΔE are separate sliders, the caption warns about Coulomb interactions above about 1 nA.
+- Limits added: gun and condenser aberrations at large current, fifth-order aberration, retarding-field overlap, Coulomb interactions. A sources paragraph with links.
+- Parity: at 100 V the two optimum searches part at 2×10⁻⁹; the stated tolerance is now 10⁻⁸ and the case is in the test set.
+- Not verified: the chromatic coefficient 0.6 is taken from the paper (the derivation checker reproduced 0.601; I did not rerun that); Joy 2006 could not be re-opened
+  (J-STAGE 502), so his quotes rest on the earlier excerpt.
+
+### Chapter 4, findings confirmed and fixed
+- **The simulation failed silently**: at settings where no single-crossing excitation focuses on the wafer (6.8 % of slider settings, per the referee) it showed a
+  nonsense lens. The solver now stops with a plain message (both twins); checked at a = 20 mm, WD = 0.5 mm, u = 10 mm.
+- **f is not the focal length that sets the image here**: the wafer at 1.5a sits in 31 % of the peak field (21 mT). The page now says f describes the asymptotes
+  and that the solver focuses the real ray for that reason.
+- **Ampère**: "real lenses lose some of NI in the iron" mixed B and H. A loop closed in vacuum gives ∫B dz = μ₀NI exactly; the iron shapes B(z), saturation near 2 T
+  limits the peak. Rewritten.
+- **Skew rays**: the derivation covered only rays from the axis while the Key result claimed all rays. Added the complex-coordinate derivation w = u e^{iθ} for every
+  paraxial ray, verified in SymPy (check L8); the reversed "linearity" sentence replaced by the g, h argument for point-to-point imaging.
+- Glaser's substitution now includes y = r sin ψ; k² and ω restated where Example 4.1 uses them; the angle is ψ (φ is the potential), the integration variable τ.
+- The C_c proof now shows the second ray, the constant Wronskian and the integration limits; the B⁴ term is attributed to the motion, not only the field.
+- Example 4.3: diffraction (0.61λ/α = 5.3 nm) is larger than the chromatic miss at 5 mrad; said so. Example 4.2: iron saturates near 2 T, not 1 T; this lens needs 0.43 T at 30 kV.
+- The V_land slider: the lens is computed at the landing voltage (no retarding field); the caption and the hand-over say so. The hand-over no longer claims M is passed on.
+- Busch cited (record found, text not read); Hawkes and Kasper cited as not opened, with our numerical agreement as the check. Lead backslashes, the raw heading
+  "C_s and C_c" and raw SymPy output in the checks table fixed. Figure 4.1 redrawn: gap in the bore wall, field lines, electron path, labels readable at 360 px.

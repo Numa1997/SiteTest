@@ -4,7 +4,7 @@
    "id": "P1",
    "title": "quadrature of A/α and Bα³ is smallest at α⁸ = A²/(3B²), where d² = (4/3)·3^(1/4)·A^(3/2)B^(1/2)",
    "ok": true,
-   "detail": "α_opt = (A²/3B²)^(1/8); with A = 1.22λ, B = C_s/2: α_opt ≈ 1.0(λ/C_s)^(1/4), d_min ≈ 0.93 λ^(3/4) C_s^(1/4)"
+   "detail": "α_opt = (A²/3B²)^(1/8); with A = 1.22λ and B = C_s/2 (computed here): α_opt = 1.0894 (λ/C_s)^(1/4), d_min = 1.2931 λ^(3/4) C_s^(1/4)"
   },
   {
    "id": "P2",
@@ -32,31 +32,51 @@
   },
   {
    "id": "P6",
-   "title": "recorded, not a test: Bronsgeest et al. quote I_AI = 1.08×10⁻¹⁸ B (source image as large as the diffraction disc); their Eqs. 6 and 19 give (π²/4)(0.66)²λ²V B",
+   "title": "Bronsgeest et al. quote I_AI = 1.08×10⁻¹⁸ B (source image as large as the diffraction disc); their Eqs. 6 and 19 reproduce it, and their Eq. 19 is d_A = 0.54 λ/α",
    "ok": true,
-   "detail": "Eqs. 6 and 19 give 1.617e-18 B (exact λ) or 1.548e-18 B (their 1.2 nm·V½); the quoted value is 0.698 of the latter, close to ln 2 = 0.693, as if it counted only the current inside the FW50 disc"
+   "detail": "Eqs. 6 and 19 give I_AI = 1.0748e-18 B; 0.66 nm·V½ / (λ√V) = 0.5381, so Eq. 19 is d_A = 0.538 λ/α"
   },
   {
    "id": "P7",
-   "title": "FW50 (narrowest interval holding half the electrons) of chapter 2’s cold energy distribution against its FWHM",
+   "title": "the diameter of the Airy disc that holds half the current is 0.535 λ/α (Eq. 19’s 0.54); a diameter of 0.66 λ/α would hold 64 %",
    "ok": true,
-   "detail": "FW50 0.1596 eV, FWHM 0.2147 eV, ratio 0.743"
+   "detail": "encircled current 1 − J₀² − J₁² = ½ at v = 1.6802; d₅₀ = v/π · λ/α = 0.5348 λ/α"
   },
   {
    "id": "P8",
+   "title": "the half-current diameter of spherical aberration, at the plane where it is smallest, is 0.18 C_sα³ (Eq. 21)",
+   "ok": true,
+   "detail": "smallest d₅₀ = 0.1768 C_sα³ at Δz = -0.375 C_sα² (2001 planes, 200 000 rays uniform over the aperture)"
+  },
+  {
+   "id": "P9",
+   "title": "FW50 (narrowest interval holding half the electrons) of chapter 2’s cold energy distribution: the module’s value against a 16 times finer resampling",
+   "ok": true,
+   "detail": "module FW50 0.1570 eV, resampled 0.1570 eV; FWHM 0.2147 eV; FW50/FWHM 0.731"
+  },
+  {
+   "id": "P10",
    "title": "Joy (2006) worked example: C_s = C_c = 5 mm, 1 keV, ΔE = 0.7 eV, α = 5 mrad, his three terms in quadrature give “about 18 nm”",
    "ok": true,
-   "detail": "recomputed 18.11 nm"
+   "detail": "recomputed 18.11 nm at 5 mrad; his formulas are smallest at 2.60 mrad, 12.86 nm"
   }
  ],
  "numbers": {
+  "P1_alpha_coef": 1.0894499912894269,
+  "P1_d_coef": 1.2930695929928535,
   "aopt_sph_cf_mrad": 10.987158807739693,
   "aopt_chr_cf_mrad": 8.31785953682132,
-  "I_AI_coef": 1.6166287537072e-18,
-  "fw50_eV": 0.1596072134867522,
-  "fwhm_eV": 0.21472585822868043,
-  "fw50_over_fwhm": 0.7433069067851737,
+  "I_AI_coef": 1.0747999192786312e-18,
+  "dA_coef_eq19": 0.538149075616434,
+  "airy_fw50_coef": 0.5348321477241863,
+  "airy_frac_066": 0.6410295447206267,
+  "sph_fw50_coef": 0.17677868402534402,
+  "fw50_eV": 0.15704977757710312,
+  "fwhm_eV": 0.2147258582286803,
+  "fw50_over_fwhm": 0.7313966695610881,
+  "joy_aopt_mrad": 2.6003306116325744,
+  "joy_dopt_nm": 12.859337392989152,
   "joy_nm": 18.11393568900091
  },
- "summary": "8 of 8 checks pass"
+ "summary": "10 of 10 checks pass"
 }

@@ -37,7 +37,7 @@ div = sp.expand(sp.diff(r * Br, r) / r + sp.diff(Bz, z))
 curl = sp.expand(sp.diff(Br, z) - sp.diff(Bz, r))
 check('L2', 'B_z = B − r²B″/4 + r⁴B⁗/64, B_r = −rB′/2 + r³B‴/16 satisfy div B = 0 and curl B = 0 up to the next order',
       sp.Poly(div, r).degree() >= 4 and all(sp.simplify(div.coeff(r, n)) == 0 for n in range(4)) and all(sp.simplify(curl.coeff(r, n)) == 0 for n in range(4)),
-      'div B = %s;  curl B = %s (only terms of order r⁴ and above remain)' % (sp.sstr(sp.factor(div)), sp.sstr(sp.factor(curl))))
+      'in div B and curl B the coefficients of r⁰, r¹, r² and r³ are all 0; what remains starts at order r⁴')
 
 # L3: derivatives of the bell field used by the code
 u = z / a
@@ -51,7 +51,7 @@ q = -e
 ptheta = g * m * r ** 2 * thd + q * r * (r * Bf / 2)
 sol = sp.solve(sp.Eq(ptheta, 0), thd)[0]
 check('L4', 'Busch: an electron that starts on the axis (p_θ = 0) turns at θ̇ = eB/(2γm), the Larmor rate', sp.simplify(sol - e * Bf / (2 * g * m)) == 0,
-      'θ̇ = %s' % sp.sstr(sol))
+      'solving p_θ = 0 for θ̇ gives eB(z)/(2γm)')
 
 # L5: in the frame turning at the Larmor rate the radial force is -e^2 B^2 r / (4 gamma m), so r'' = -(e^2 B^2 / 4 p^2) r = -(e/8mV*) B^2 r
 p, Vs = sp.symbols('p V^*', positive=True)
@@ -67,13 +67,29 @@ dzdph = sp.diff(zz, ph)
 r1 = sp.diff(rr, ph) / dzdph
 r2 = sp.diff(r1, ph) / dzdph
 resid = sp.simplify(r2 + k ** 2 * a ** 2 / (a ** 2 + zz ** 2) ** 2 * rr)
-check('L6', 'r = sin(ω(π−φ))/sin φ with z = a cot φ solves r″ + k²a²r/(a²+z²)² = 0 when ω² = 1 + k²', resid == 0, 'residual simplifies to 0')
+check('L6', 'r = sin(ω(π−ψ))/sin ψ with z = a cot ψ (any constant factor) solves r″ + k²a²r/(a²+z²)² = 0 when ω² = 1 + k²', resid == 0, 'residual simplifies to 0')
 
 # L7: focal length from it: far behind the lens r -> sin(omega pi) z/(omega a) + ..., so f = -omega a / sin(omega pi); thin-lens limit
 f_ex = -w * a / sp.sin(w * sp.pi)
 lim = sp.limit(f_ex * k ** 2, k, 0)
 check('L7', 'f = −ωa/sin(ωπ); for a weak lens 1/f → πk²/(2a) = η∫B²dz (the thin-lens formula)', sp.simplify(lim - 2 * a / sp.pi) == 0,
       'k²f → 2a/π as k → 0; η∫B²dz = ηB₀²aπ/2 = πk²/(2a)')
+
+# L8: any paraxial ray, also a skew one. w = x + i y obeys w'' = i kappa (2 B w' + B' w) with kappa = e/(2p) (q = -e, d/dt = v d/dz);
+# in the frame turned by theta(z), theta' = kappa B, the substitution w = u exp(i theta) gives u'' = -kappa^2 B^2 u, and kappa^2 = e/(8 m V*)
+kap = sp.symbols('kappa', positive=True)
+uf = sp.Function('u')(z)
+th = sp.Function('theta')(z)
+wf = uf * sp.exp(sp.I * th)
+lhs = sp.diff(wf, z, 2) - sp.I * kap * (2 * Bf * sp.diff(wf, z) + sp.diff(Bf, z) * wf)
+res8 = sp.simplify((lhs * sp.exp(-sp.I * th)).subs(sp.Derivative(th, (z, 2)), kap * sp.diff(Bf, z)).subs(sp.Derivative(th, z), kap * Bf) - (sp.diff(uf, z, 2) + kap ** 2 * Bf ** 2 * uf))
+xx, yy, vx, vy, vv = sp.symbols('x y v_x v_y v', real=True)
+Bvec = sp.Matrix([-xx * sp.diff(Bf, z) / 2, -yy * sp.diff(Bf, z) / 2, Bf])
+F = sp.Matrix([vx, vy, vv]).cross(Bvec)
+Fw = sp.expand(F[0] + sp.I * F[1])
+target = sp.expand(-sp.I * (Bf * (vx + sp.I * vy) + vv * sp.diff(Bf, z) / 2 * (xx + sp.I * yy)))
+check('L8', 'all paraxial rays, skew ones too: with w = x + iy the transverse Lorentz force is (v×B)ₓ + i(v×B)ᵧ = −i[B ẇ + (vB′/2)w]; in the frame turned by θ′ = (e/2p)B, w = u e^{iθ} gives u″ = −(e/2p)²B²u',
+      sp.simplify(Fw - target) == 0 and res8 == 0, 'force identity and the rotating-frame equation both simplify to 0')
 
 # ---- numerical cross-checks at the contract defaults
 p0 = with_defaults(R.INPUTS)

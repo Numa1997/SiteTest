@@ -165,7 +165,24 @@ def emission_model(F, phi, T, max_points=2400):
     xl = w[l] + (half - P[l]) / (P[l + 1] - P[l]) * dw if l < ip else w[l]
     xr = w[r - 1] + (P[r - 1] - half) / (P[r - 1] - P[r]) * dw if r > ip else w[r]
     J_check = e * pref * np.sum(wt * P) * dw
-    return dict(J=J, J_check=J_check, jt0=jt0, B_r=eV * jt0 / math.pi, mean_et=mean_et, fwhm=xr - xl, peak=w[ip],
+    # FW50 of the energy distribution, as in physics/ch02.js (same loop, same interpolation)
+    cdf = [0.0] * n
+    for i in range(1, n):
+        cdf[i] = cdf[i - 1] + 0.5 * (P[i] + P[i - 1]) * dw
+    tot = cdf[n - 1]
+    fw50, jj = math.inf, 0
+    for i in range(n):
+        target = cdf[i] + 0.5 * tot
+        if target > tot:
+            break
+        while jj < n - 1 and cdf[jj + 1] < target:
+            jj += 1
+        if jj + 1 > n - 1:
+            break
+        x = w[jj] + (target - cdf[jj]) / (cdf[jj + 1] - cdf[jj]) * dw
+        if x - w[i] < fw50:
+            fw50 = x - w[i]
+    return dict(J=J, J_check=J_check, jt0=jt0, B_r=eV * jt0 / math.pi, mean_et=mean_et, fwhm=xr - xl, fw50=fw50, peak=w[ip],
                 top=top, d=d, f=f0, kT=kT, dphi=dphi, w=w, D=Dv, P=P, regime=_regime(f0, kT, w[ip], top))
 
 
@@ -201,7 +218,7 @@ def handover(V, r, k, phi, T):
     m = emission_model(F0, phi, T)
     I_e = tip_current(V, r, k, phi, T)
     d_v = 2 * r * math.sqrt(m['mean_et'] / (e * V))
-    return dict(I_e=I_e, B_r=m['B_r'], dE=m['fwhm'], dE_eV=m['fwhm'] / eV, d_v=d_v, F0=F0, f=m['f'], J0=m['J'],
+    return dict(I_e=I_e, B_r=m['B_r'], dE=m['fwhm'], dE50=m['fw50'], dE_eV=m['fwhm'] / eV, d_v=d_v, F0=F0, f=m['f'], J0=m['J'],
                 meanEt_eV=m['mean_et'] / eV, regime=m['regime'])
 
 
@@ -298,7 +315,7 @@ if __name__ == '__main__':
 
 # ------------------------------------------------------------------------------------------------ the contract interface (stage ch02)
 INPUTS = ['r_t', 'V_ex', 'phi', 'T', 'p', 't_clean', 'k_f']
-OUTPUTS = ['I_e', 'B_r', 'dE', 'd_v', 'theta_cov']
+OUTPUTS = ['I_e', 'B_r', 'dE', 'dE50', 'd_v', 'theta_cov']
 ASSUME = dict(mu=2.016, Tg=300.0, ks=0.535, Ns=1e19, Ed=1.9, dads=1.0)
 
 
@@ -312,4 +329,4 @@ def compute(p):
     phiV = phi + ASSUME['dads'] * eV
     Iv = tip_current(V, r, k, phiV, T, nodes=16)
     mv = emission_model(tip_field(V, r, k), phiV, T)
-    return dict(I_e=(1 - th) * h['I_e'] + th * Iv, B_r=(1 - th) * h['B_r'] + th * mv['B_r'], dE=h['dE'], d_v=h['d_v'], theta_cov=th)
+    return dict(I_e=(1 - th) * h['I_e'] + th * Iv, B_r=(1 - th) * h['B_r'] + th * mv['B_r'], dE=h['dE'], dE50=h['dE50'], d_v=h['d_v'], theta_cov=th)

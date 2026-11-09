@@ -10,7 +10,7 @@
    "id": "L2",
    "title": "B_z = B − r²B″/4 + r⁴B⁗/64, B_r = −rB′/2 + r³B‴/16 satisfy div B = 0 and curl B = 0 up to the next order",
    "ok": true,
-   "detail": "div B = r**4*Derivative(B(z), (z, 5))/64;  curl B = 0 (only terms of order r⁴ and above remain)"
+   "detail": "in div B and curl B the coefficients of r⁰, r¹, r² and r³ are all 0; what remains starts at order r⁴"
   },
   {
    "id": "L3",
@@ -22,7 +22,7 @@
    "id": "L4",
    "title": "Busch: an electron that starts on the axis (p_θ = 0) turns at θ̇ = eB/(2γm), the Larmor rate",
    "ok": true,
-   "detail": "θ̇ = e*B(z)/(2*gamma*m)"
+   "detail": "solving p_θ = 0 for θ̇ gives eB(z)/(2γm)"
   },
   {
    "id": "L5",
@@ -32,7 +32,7 @@
   },
   {
    "id": "L6",
-   "title": "r = sin(ω(π−φ))/sin φ with z = a cot φ solves r″ + k²a²r/(a²+z²)² = 0 when ω² = 1 + k²",
+   "title": "r = sin(ω(π−ψ))/sin ψ with z = a cot ψ (any constant factor) solves r″ + k²a²r/(a²+z²)² = 0 when ω² = 1 + k²",
    "ok": true,
    "detail": "residual simplifies to 0"
   },
@@ -41,6 +41,12 @@
    "title": "f = −ωa/sin(ωπ); for a weak lens 1/f → πk²/(2a) = η∫B²dz (the thin-lens formula)",
    "ok": true,
    "detail": "k²f → 2a/π as k → 0; η∫B²dz = ηB₀²aπ/2 = πk²/(2a)"
+  },
+  {
+   "id": "L8",
+   "title": "all paraxial rays, skew ones too: with w = x + iy the transverse Lorentz force is (v×B)ₓ + i(v×B)ᵧ = −i[B ẇ + (vB′/2)w]; in the frame turned by θ′ = (e/2p)B, w = u e^{iθ} gives u″ = −(e/2p)²B²u",
+   "ok": true,
+   "detail": "force identity and the rotating-frame equation both simplify to 0"
   },
   {
    "id": "N1",
@@ -73,7 +79,7 @@
    "detail": "miss/α³ = 4.18898 mm, 4.18900 mm, 4.18911 mm, 4.18952 mm"
   }
  ],
- "summary": "12 of 12 checks pass",
+ "summary": "13 of 13 checks pass",
  "numbers": {
   "Cs_integral": 0.004188967845704914,
   "Cc_integral": 0.002847594037887062,

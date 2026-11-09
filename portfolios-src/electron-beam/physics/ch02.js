@@ -138,7 +138,19 @@
     const xr = r > ip ? w[r - 1] + (P[r - 1] - half) / (P[r - 1] - P[r]) * dw : w[r];
     let sP = 0; for (let i = 0; i < n; i++) sP += ((i === 0 || i === n - 1) ? 0.5 : 1) * P[i];
     const Jcheck = K.e * pref * sP * dw;                                           // must equal J (integration by parts)
-    return { J, Jcheck, jt0, B_r: eV * jt0 / Math.PI, meanEt, fwhm: xr - xl, peak: w[ip], top, d, f: f0, kT, dphi,
+    // FW50 of the energy distribution: the narrowest interval holding half the electrons (cumulative by the trapezoid rule, ends interpolated)
+    const cdf = new Float64Array(n);
+    for (let i = 1; i < n; i++) cdf[i] = cdf[i - 1] + 0.5 * (P[i] + P[i - 1]) * dw;
+    const tot = cdf[n - 1]; let fw50 = Infinity, jj = 0;
+    for (let i = 0; i < n; i++) {
+      const target = cdf[i] + 0.5 * tot;
+      if (target > tot) break;
+      while (jj < n - 1 && cdf[jj + 1] < target) jj++;
+      if (jj + 1 > n - 1) break;
+      const x = w[jj] + (target - cdf[jj]) / (cdf[jj + 1] - cdf[jj]) * dw;
+      if (x - w[i] < fw50) fw50 = x - w[i];
+    }
+    return { J, Jcheck, jt0, B_r: eV * jt0 / Math.PI, meanEt, fwhm: xr - xl, fw50, peak: w[ip], top, d, f: f0, kT, dphi,
              w, D, P, Ppeak: P[ip], regime: regimeOf(f0, kT, w[ip], top) };
   }
   // Gomer's three regimes by where the emitted-energy peak sits: below the Fermi level, between it and the barrier top, at the top
@@ -169,7 +181,7 @@
     const F0 = tipField(p.V, p.r, p.k), m = emissionModel(F0, p.phi, p.T);
     const I_e = tipCurrent(p.V, p);
     const dE = m.fwhm, d_v = 2 * p.r * Math.sqrt(m.meanEt / (K.e * p.V));
-    return { I_e, B_r: m.B_r, dE, dE_eV: dE / eV, d_v, F0, f: m.f, J0: m.J, meanEt_eV: m.meanEt / eV, regime: m.regime };
+    return { I_e, B_r: m.B_r, dE, dE50: m.fw50, dE_eV: dE / eV, d_v, F0, f: m.f, J0: m.J, meanEt_eV: m.meanEt / eV, regime: m.regime };
   }
 
   /* ---------------------------------------------------------------- vacuum and contamination [2.9-2.12] */
@@ -229,10 +241,10 @@
     const Iv = tipCurrent(p.V_ex, { ...q, phi: phiV });
     const mv = emissionModel(tipField(p.V_ex, p.r_t, p.k_f), phiV, p.T);
     return { I_e: (1 - theta_cov) * h.I_e + theta_cov * Iv, B_r: (1 - theta_cov) * h.B_r + theta_cov * mv.B_r,
-             dE: h.dE, d_v: h.d_v, theta_cov };
+             dE: h.dE, dE50: h.dE50, d_v: h.d_v, theta_cov };
   }
 
-  return { id: 'ch02', inputs: ['r_t', 'V_ex', 'phi', 'T', 'p', 't_clean', 'k_f'], outputs: ['I_e', 'B_r', 'dE', 'd_v', 'theta_cov'],
+  return { id: 'ch02', inputs: ['r_t', 'V_ex', 'phi', 'T', 'p', 't_clean', 'k_f'], outputs: ['I_e', 'B_r', 'dE', 'dE50', 'd_v', 'theta_cov'],
            tolerance: { rel: 2e-6, abs: 0, note: 'same quadrature in float64 on both sides; the FWHM is read off a grid' },
            cases: [{}, { V_ex: 1000, r_t: 5e-8 }, { T: 1800, phi: 2.9 * 1.602176634e-19, V_ex: 2000, r_t: 5e-7, k_f: 8 }, { p: 1e-7, t_clean: 7200 }],
            ASSUME, compute,
