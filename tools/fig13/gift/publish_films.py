@@ -4,7 +4,8 @@
     tools/fig13/gift/morph.html       -> public/simulations/fig13/turning.html   (?scene=wheel | butterfly)
     tools/fig13/gift/together.html    -> public/simulations/fig13/together.html  (the phone layout on a portrait screen)
     tools/fig13/gift/dive.html        -> public/simulations/fig13/dive.html      (phone first)
-    tools/fig13/gift/reem.html        -> public/simulations/fig13/reem.html      (a gift: For ريم; not linked from the site)
+    tools/fig13/gift/reem.html        -> public/simulations/fig13/reem.html      (a gift: For رِيمْ; then opens construction.html)
+    tools/fig13/gift/construction.html -> public/simulations/fig13/construction.html (the butterfly built by hand from its two plots)
     plus orbit24.json, reem.json and dive/dive.json, dive/dive.bin (run dive_data.py first if dive.bin is missing).
 
 The copies are generated: edit the files in tools/fig13/gift/ and run this again. It rewrites the asset paths
@@ -16,7 +17,7 @@ import pathlib, re, shutil
 
 ROOT = pathlib.Path(__file__).resolve().parents[3]
 SRC, DST = ROOT / 'tools/fig13/gift', ROOT / 'public/simulations/fig13'
-FILMS = {'butterfly3d.html': 'bell.html', 'morph.html': 'turning.html', 'together.html': 'together.html', 'dive.html': 'dive.html', 'reem.html': 'reem.html'}
+FILMS = {'butterfly3d.html': 'bell.html', 'morph.html': 'turning.html', 'together.html': 'together.html', 'dive.html': 'dive.html', 'reem.html': 'reem.html', 'construction.html': 'construction.html'}
 ref = (ROOT / 'public/simulations/flower-hunt.html').read_text().split('\n')
 CSP = next(l for l in ref if 'Content-Security-Policy' in l).strip()
 REF = next(l for l in ref if 'name="referrer"' in l).strip()

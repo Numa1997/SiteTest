@@ -31,7 +31,8 @@ momenta p₁, p₂. Hamilton's equations for the general family (masses, lengths
 | `simulations/fig13/turning.html?scene=wheel\|butterfly` | Film: turning the paper, with the deck of earlier pictures. |
 | `simulations/fig13/together.html` | Film: six pictures on one clock; the phone layout on a portrait screen. |
 | `simulations/fig13/dive.html` | Film, phone first: from momentum space into one cell, then the exposure grows from an eye's 0.1 s to one lap. |
-| `simulations/fig13/reem.html` | Gift film, not linked from the site: "For ريم" and "فراشتك" written by 420 turning arrows each (a Fourier series of the outline in Noto Nastaliq Urdu, SIL OFL; `tools/fig13/gift/reem_data.py`, `calligraphy.py`), then the butterfly by two arrows (the rods), then its dashboard with the paper turning. |
+| `simulations/fig13/reem.html` | Gift film, not linked from the site: "For رِيمْ" and "فَرَاشَتُكِ" written by 640 turning arrows each (a Fourier series of the outline; `tools/fig13/gift/reem_data.py`), gold on navy or ink on paper. رِيمْ is traced from the reference plate Numa chose (`ref_trace.py`; the plate's extra third dot under the ya was removed), فَرَاشَتُكِ is set in Amiri (SIL OFL). Live, it then opens `construction.html`. |
+| `simulations/fig13/construction.html` | The butterfly built by hand: h(t) beside the plane at its height scale, x(t) below it at its sideways scale, the two time axes joined by a 45-degree mitre; for each instant a level line and an upright line cross at the tip of the pendulum. A wheel first (12 instants, then continuously), then the butterfly (96 instants at 1/6 speed, then two laps at 1/4). |
 
 The four films are generated: edit `tools/fig13/gift/*.html` and run `python3 tools/fig13/gift/publish_films.py`, which rewrites the
 asset paths, adds the two security meta tags and a link back to the dashboard. Opened without `?film=1` they loop live.
@@ -54,3 +55,11 @@ asset paths, adds the two security meta tags and a link back to the dashboard. O
   and the petals nearly do not creep without gravity (the one-petal resonance, δ/2π ≈ 0); gravity then holds the petal direction to a
   swing about straight down. If the upper rod went over the top, the petals would go all the way round: a flower, not a butterfly.
   It closes exactly when one swing takes a whole number N of petals (N = 24 at E = 390.8 J; the hunt found N = 12 to 32 on p₁ ≈ 3.556).
+
+## The calligraphy of the gift (8-9 November 2026)
+
+Tried and rejected by Numa, in order: a font drawn at random (Noto Nastaliq Urdu); my own reed-pen sketch (`qalam.py`); reed strokes over
+Amiri composed as a mirror butterfly (`qalam2.py`); automatic re-inking of whole words (`qalam3.py`, worse than its model); ten more fonts.
+Accepted: the reference plate Numa chose (a screenshot of an image made by Gemini), traced to vector outlines (`ref_trace.py`, `reem_ref.json`)
+and set as gold on navy (`plate.py`). Its Arabic was checked by eye only: the third dot under the ya was wrong and removed; the vowel marks are
+kept as drawn and have not been checked by a calligrapher.

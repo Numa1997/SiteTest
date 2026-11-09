@@ -19,8 +19,14 @@ sys.path.insert(0, __file__.rsplit('/', 1)[0])
 from calligraphy import word_contours
 
 FONT = __file__.rsplit('/', 1)[0] + '/fonts/NotoNastaliqUrdu-wght.ttf'
-WORDS = {'reem': 'ريم', 'butterfly': 'فراشتك'}
-N, K, MAXERR = 8192, 420, 0.004
+import json as _json
+HERE = __file__.rsplit('/', 1)[0]
+AMIRI = HERE + '/fonts/Amiri-Regular.ttf'
+def traced(path):   # outlines traced from the reference plate (ref_trace.py): pixels, y down -> y up
+    return [np.array(c) * [1, -1] for c in _json.load(open(path))['contours']]
+WORDS = {'reem': ('رِيمْ', lambda: traced(HERE + '/reem_ref.json'), 'evenodd'),
+         'butterfly': ('فَرَاشَتُكِ', lambda: word_contours(AMIRI, 'فَرَاشَتُكِ'), 'nonzero')}
+N, K, MAXERR = 8192, 640, 0.004
 
 
 def resample(poly, ds):
@@ -30,8 +36,8 @@ def resample(poly, ds):
     return np.stack([np.interp(t, s, poly[:, 0]), np.interp(t, s, poly[:, 1])], axis=1), s[-1]
 
 
-def build(text):
-    cs = word_contours(FONT, text)
+def build(text, source, rule):
+    cs = source()
     allp = np.concatenate(cs); x0, x1, y0, y1 = allp[:, 0].min(), allp[:, 0].max(), allp[:, 1].min(), allp[:, 1].max()
     sc = 2 / (x1 - x0); cx, cy = (x0 + x1) / 2, (y0 + y1) / 2
     cs = [(c - [cx, cy]) * sc for c in cs]
@@ -64,10 +70,10 @@ def build(text):
     fill = [[[round(float(v), 4) for v in p] for p in cc[::max(1, len(cc) // 400)]] for cc in cs]
     print('%-9s %s  contours %d  samples %d  arrows %d  median error %.4f, 99%% %.4f (word width 2)  pen-up %.1f%%'
           % (text, '', len(cs), n, K, np.median(err), np.percentile(err, 99), 100 * flags.mean()))
-    return dict(text=text, n=int(n), terms=[[int(f[i]), round(float(c[i].real), 6), round(float(c[i].imag), 6)] for i in keep],
+    return dict(text=text, rule=rule, n=int(n), terms=[[int(f[i]), round(float(c[i].real), 6), round(float(c[i].imag), 6)] for i in keep],
                 hidden=hidden, fill=fill, height=float((y1 - y0) * sc), median_err=float(np.median(err)))
 
 
-out = {k: build(v) for k, v in WORDS.items()}
-out['font'] = 'Noto Nastaliq Urdu (SIL OFL 1.1), Google Fonts'
+out = {k: build(*v) for k, v in WORDS.items()}
+out['sources'] = 'رِيمْ: traced from the reference plate Numa supplied (ref_trace.py); فَرَاشَتُكِ: Amiri (SIL OFL 1.1), Google Fonts'
 json.dump(out, open(sys.argv[1], 'w'), separators=(',', ':'), ensure_ascii=False)
