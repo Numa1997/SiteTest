@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-1537 files, 172.4 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+1539 files, 172.5 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -40,7 +40,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Tools](#tools) | 93 |
 | [Translation tables](#translation-tables) | 52 |
 | [Agents of the lecture-note review](#agents-of-the-lecture-note-review) | 4 |
-| [Working notes of project 07, the electron beam](#working-notes-of-project-07-the-electron-beam) | 34 |
+| [Working notes of project 07, the electron beam](#working-notes-of-project-07-the-electron-beam) | 36 |
 | [Working notes of the Rotor Pendula study](#working-notes-of-the-rotor-pendula-study) | 86 |
 | [Working notes of the Droplet Collection study](#working-notes-of-the-droplet-collection-study) | 121 |
 | [Record of the lecture-note review](#record-of-the-lecture-note-review) | 481 |
@@ -487,7 +487,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/portfolios/electron-beam/fig/02_helix.webp`](../public/portfolios/electron-beam/fig/02_helix.webp) | 44.7 kB | Plate of the Portfolios page entry of project 07. | [portfolios.md](portfolios.md) |
 | [`public/portfolios/electron-beam/fig/03_tip.webp`](../public/portfolios/electron-beam/fig/03_tip.webp) | 17.2 kB | Plate of the Portfolios page entry of project 07. | [portfolios.md](portfolios.md) |
 | [`public/portfolios/electron-beam/fig/04_fn.webp`](../public/portfolios/electron-beam/fig/04_fn.webp) | 25.0 kB | Plate of the Portfolios page entry of project 07. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/electron-beam/index.html`](../public/portfolios/electron-beam/index.html) | 2.83 MB | Generated page of project 07: lecture notes in chapters with running simulations (portfolios-src/electron-beam/build.py --site). | [portfolios.md](portfolios.md) |
+| [`public/portfolios/electron-beam/index.html`](../public/portfolios/electron-beam/index.html) | 2.89 MB | Generated page of project 07: lecture notes in chapters with running simulations (portfolios-src/electron-beam/build.py --site). | [portfolios.md](portfolios.md) |
 
 ## Source of the Hydraulic Press Study (not served)
 
@@ -783,7 +783,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`portfolios-src/electron-beam/data/ch05/objective_lens_cs_cc.csv`](../portfolios-src/electron-beam/data/ch05/objective_lens_cs_cc.csv) | 1.9 kB | Published measurement digitised for chapter 5 of project 07: objective_lens_cs_cc (provenance in the README beside it). | [bibliography.md](../portfolios-src/electron-beam/sources/bibliography.md) |
 | [`portfolios-src/electron-beam/data/ch06/README.md`](../portfolios-src/electron-beam/data/ch06/README.md) | 5.9 kB | Provenance of the published data digitised for chapter 6 of project 07: source, figure or table, how digitised, SI conversion, uncertainty. | [bibliography.md](../portfolios-src/electron-beam/sources/bibliography.md) |
 | [`portfolios-src/electron-beam/data/ch06/bse_coefficient_vs_energy.csv`](../portfolios-src/electron-beam/data/ch06/bse_coefficient_vs_energy.csv) | 20.7 kB | Published measurement digitised for chapter 6 of project 07: bse_coefficient_vs_energy (provenance in the README beside it). | [bibliography.md](../portfolios-src/electron-beam/sources/bibliography.md) |
-| [`portfolios-src/electron-beam/data/ch06/derive_results.json`](../portfolios-src/electron-beam/data/ch06/derive_results.json) | 8.2 kB | Published data digitised for an overlay, with its provenance. | [README.md](../portfolios-src/electron-beam/README.md) |
+| [`portfolios-src/electron-beam/data/ch06/derive_results.json`](../portfolios-src/electron-beam/data/ch06/derive_results.json) | 9.3 kB | Published data digitised for an overlay, with its provenance. | [README.md](../portfolios-src/electron-beam/README.md) |
 | [`portfolios-src/electron-beam/data/ch06/estar_electron_stopping_power.csv`](../portfolios-src/electron-beam/data/ch06/estar_electron_stopping_power.csv) | 5.4 kB | Published measurement digitised for chapter 6 of project 07: estar_electron_stopping_power (provenance in the README beside it). | [bibliography.md](../portfolios-src/electron-beam/sources/bibliography.md) |
 | [`portfolios-src/electron-beam/data/ch06/mc_runs.json`](../portfolios-src/electron-beam/data/ch06/mc_runs.json) | 31.1 kB | Published data digitised for an overlay, with its provenance. | [README.md](../portfolios-src/electron-beam/README.md) |
 | [`portfolios-src/electron-beam/data/ch06/se_yield_lin_joy2005.csv`](../portfolios-src/electron-beam/data/ch06/se_yield_lin_joy2005.csv) | 528 B | Published measurement digitised for chapter 6 of project 07: se_yield_lin_joy2005 (provenance in the README beside it). | [bibliography.md](../portfolios-src/electron-beam/sources/bibliography.md) |
@@ -793,7 +793,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`portfolios-src/electron-beam/derive/ch03.py`](../portfolios-src/electron-beam/derive/ch03.py) | 5.5 kB | SymPy derivation script of a chapter; its output is shown on the page. | [README.md](../portfolios-src/electron-beam/README.md) |
 | [`portfolios-src/electron-beam/derive/ch04.py`](../portfolios-src/electron-beam/derive/ch04.py) | 9.1 kB | SymPy derivation script of a chapter; its output is shown on the page. | [README.md](../portfolios-src/electron-beam/README.md) |
 | [`portfolios-src/electron-beam/derive/ch05.py`](../portfolios-src/electron-beam/derive/ch05.py) | 9.2 kB | SymPy derivation script of a chapter; its output is shown on the page. | [README.md](../portfolios-src/electron-beam/README.md) |
-| [`portfolios-src/electron-beam/derive/ch06.py`](../portfolios-src/electron-beam/derive/ch06.py) | 12.7 kB | SymPy derivation script of a chapter; its output is shown on the page. | [README.md](../portfolios-src/electron-beam/README.md) |
+| [`portfolios-src/electron-beam/derive/ch06.py`](../portfolios-src/electron-beam/derive/ch06.py) | 15.3 kB | SymPy derivation script of a chapter; its output is shown on the page. | [README.md](../portfolios-src/electron-beam/README.md) |
 | [`portfolios-src/electron-beam/derive/ch07.py`](../portfolios-src/electron-beam/derive/ch07.py) | 5.8 kB | SymPy derivation script of a chapter; its output is shown on the page. | [README.md](../portfolios-src/electron-beam/README.md) |
 | [`portfolios-src/electron-beam/eb_lib.py`](../portfolios-src/electron-beam/eb_lib.py) | 27.2 kB | Loads the chapters, numbers equations and figures, resolves references, computes every quoted number, typesets with KaTeX, validates the contract. | [README.md](../portfolios-src/electron-beam/README.md) |
 | [`portfolios-src/electron-beam/guide_default.py`](../portfolios-src/electron-beam/guide_default.py) | 1.7 kB | The reading guide shown until text/guide.py exists. | [README.md](../portfolios-src/electron-beam/README.md) |
@@ -805,7 +805,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`portfolios-src/electron-beam/physics/ch03.js`](../portfolios-src/electron-beam/physics/ch03.js) | 7.0 kB | Chapter 3 solver: a pure module that runs in the page and in Node. | [README.md](../portfolios-src/electron-beam/README.md) |
 | [`portfolios-src/electron-beam/physics/ch04.js`](../portfolios-src/electron-beam/physics/ch04.js) | 9.7 kB | Chapter 4 solver: a pure module that runs in the page and in Node. | [README.md](../portfolios-src/electron-beam/README.md) |
 | [`portfolios-src/electron-beam/physics/ch05.js`](../portfolios-src/electron-beam/physics/ch05.js) | 7.9 kB | Chapter 5 solver: a pure module that runs in the page and in Node. | [README.md](../portfolios-src/electron-beam/README.md) |
-| [`portfolios-src/electron-beam/physics/ch06.js`](../portfolios-src/electron-beam/physics/ch06.js) | 11.9 kB | Chapter 6 solver: a pure module that runs in the page and in Node. | [README.md](../portfolios-src/electron-beam/README.md) |
+| [`portfolios-src/electron-beam/physics/ch06.js`](../portfolios-src/electron-beam/physics/ch06.js) | 12.4 kB | Chapter 6 solver: a pure module that runs in the page and in Node. | [README.md](../portfolios-src/electron-beam/README.md) |
 | [`portfolios-src/electron-beam/physics/ch07.js`](../portfolios-src/electron-beam/physics/ch07.js) | 12.0 kB | Chapter 7 solver: a pure module that runs in the page and in Node. | [README.md](../portfolios-src/electron-beam/README.md) |
 | [`portfolios-src/electron-beam/physics/core.js`](../portfolios-src/electron-beam/physics/core.js) | 5.7 kB | Shared physics core: CODATA 2018 constants, unit helpers, number format, seeded random numbers; the pattern every chapter module follows. | [README.md](../portfolios-src/electron-beam/README.md) |
 | [`portfolios-src/electron-beam/ref/__init__.py`](../portfolios-src/electron-beam/ref/__init__.py) | 596 B | Python reference package: constants, units and number format mirroring physics/core.js. | [README.md](../portfolios-src/electron-beam/README.md) |
@@ -815,7 +815,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`portfolios-src/electron-beam/ref/ch03.py`](../portfolios-src/electron-beam/ref/ch03.py) | 1.0 kB | Chapter 3 NumPy reference solver, mirrors physics/ch03.js. | [README.md](../portfolios-src/electron-beam/README.md) |
 | [`portfolios-src/electron-beam/ref/ch04.py`](../portfolios-src/electron-beam/ref/ch04.py) | 6.4 kB | Chapter 4 NumPy reference solver, mirrors physics/ch04.js. | [README.md](../portfolios-src/electron-beam/README.md) |
 | [`portfolios-src/electron-beam/ref/ch05.py`](../portfolios-src/electron-beam/ref/ch05.py) | 2.4 kB | Chapter 5 NumPy reference solver, mirrors physics/ch05.js. | [README.md](../portfolios-src/electron-beam/README.md) |
-| [`portfolios-src/electron-beam/ref/ch06.py`](../portfolios-src/electron-beam/ref/ch06.py) | 5.3 kB | Chapter 6 NumPy reference solver, mirrors physics/ch06.js. | [README.md](../portfolios-src/electron-beam/README.md) |
+| [`portfolios-src/electron-beam/ref/ch06.py`](../portfolios-src/electron-beam/ref/ch06.py) | 5.4 kB | Chapter 6 NumPy reference solver, mirrors physics/ch06.js. | [README.md](../portfolios-src/electron-beam/README.md) |
 | [`portfolios-src/electron-beam/ref/ch07.py`](../portfolios-src/electron-beam/ref/ch07.py) | 4.9 kB | Chapter 7 NumPy reference solver, mirrors physics/ch07.js. | [README.md](../portfolios-src/electron-beam/README.md) |
 | [`portfolios-src/electron-beam/ref/core.py`](../portfolios-src/electron-beam/ref/core.py) | 3.0 kB | Python reference package: constants, units and number format mirroring physics/core.js. | [README.md](../portfolios-src/electron-beam/README.md) |
 | [`portfolios-src/electron-beam/sources/applied-public.md`](../portfolios-src/electron-beam/sources/applied-public.md) | 6.4 kB | Project 07: Applied Materials' public statements (PROVision, SEMVision pages, press release) quoted as public claims only. | [bibliography.md](../portfolios-src/electron-beam/sources/bibliography.md) |
@@ -828,7 +828,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`portfolios-src/electron-beam/text/ch03.py`](../portfolios-src/electron-beam/text/ch03.py) | 33.5 kB | Words, figures and numbers of chapter 3 (a dict CH). | [README.md](../portfolios-src/electron-beam/README.md) |
 | [`portfolios-src/electron-beam/text/ch04.py`](../portfolios-src/electron-beam/text/ch04.py) | 33.1 kB | Words, figures and numbers of chapter 4 (a dict CH). | [README.md](../portfolios-src/electron-beam/README.md) |
 | [`portfolios-src/electron-beam/text/ch05.py`](../portfolios-src/electron-beam/text/ch05.py) | 29.3 kB | Words, figures and numbers of chapter 5 (a dict CH). | [README.md](../portfolios-src/electron-beam/README.md) |
-| [`portfolios-src/electron-beam/text/ch06.py`](../portfolios-src/electron-beam/text/ch06.py) | 35.6 kB | Words, figures and numbers of chapter 6 (a dict CH). | [README.md](../portfolios-src/electron-beam/README.md) |
+| [`portfolios-src/electron-beam/text/ch06.py`](../portfolios-src/electron-beam/text/ch06.py) | 43.8 kB | Words, figures and numbers of chapter 6 (a dict CH). | [README.md](../portfolios-src/electron-beam/README.md) |
 | [`portfolios-src/electron-beam/text/ch07.py`](../portfolios-src/electron-beam/text/ch07.py) | 21.2 kB | Words, figures and numbers of chapter 7 (a dict CH). | [README.md](../portfolios-src/electron-beam/README.md) |
 
 ## Shared by the portfolio sources (not served)
@@ -1069,18 +1069,30 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/electron-beam/ch02/serve.py`](../notes/electron-beam/ch02/serve.py) | 723 B | Chapter 2 session's preview harness, written before the scaffold existed: serve.py (superseded by build.py and checks/). | [README.md](../portfolios-src/electron-beam/README.md) |
 | [`notes/electron-beam/librarian-status.md`](../notes/electron-beam/librarian-status.md) | 3.6 kB | Project 07 librarian status: what sources and data are ready for the chapter sessions, what is missing. | [bibliography.md](../portfolios-src/electron-beam/sources/bibliography.md) |
 | [`notes/electron-beam/requests.md`](../notes/electron-beam/requests.md) | 4.7 kB | Requests from chapter sessions for a change in a shared file (template, core, contract). | [README.md](../portfolios-src/electron-beam/README.md) |
+
+<details><summary>14 files: Working note of project 07.</summary>
+
+| File | Size | What it is | Explained in |
+|---|---|---|---|
 | [`notes/electron-beam/review/derivations-ch00-ch01.md`](../notes/electron-beam/review/derivations-ch00-ch01.md) | 41.3 kB | Working note of project 07. | [README.md](../portfolios-src/electron-beam/README.md) |
 | [`notes/electron-beam/review/derivations-ch02.md`](../notes/electron-beam/review/derivations-ch02.md) | 27.4 kB | Working note of project 07. | [README.md](../portfolios-src/electron-beam/README.md) |
 | [`notes/electron-beam/review/derivations-ch03.md`](../notes/electron-beam/review/derivations-ch03.md) | 20.6 kB | Working note of project 07. | [README.md](../portfolios-src/electron-beam/README.md) |
 | [`notes/electron-beam/review/derivations-ch04.md`](../notes/electron-beam/review/derivations-ch04.md) | 15.9 kB | Working note of project 07. | [README.md](../portfolios-src/electron-beam/README.md) |
 | [`notes/electron-beam/review/derivations-ch05.md`](../notes/electron-beam/review/derivations-ch05.md) | 19.2 kB | Working note of project 07. | [README.md](../portfolios-src/electron-beam/README.md) |
 | [`notes/electron-beam/review/derivations-ch06.md`](../notes/electron-beam/review/derivations-ch06.md) | 21.2 kB | Working note of project 07. | [README.md](../portfolios-src/electron-beam/README.md) |
+| [`notes/electron-beam/review/derivations-ch07.md`](../notes/electron-beam/review/derivations-ch07.md) | 22.2 kB | Working note of project 07. | [README.md](../portfolios-src/electron-beam/README.md) |
 | [`notes/electron-beam/review/referee-ch00-ch01.md`](../notes/electron-beam/review/referee-ch00-ch01.md) | 32.8 kB | Working note of project 07. | [README.md](../portfolios-src/electron-beam/README.md) |
 | [`notes/electron-beam/review/referee-ch02.md`](../notes/electron-beam/review/referee-ch02.md) | 31.7 kB | Working note of project 07. | [README.md](../portfolios-src/electron-beam/README.md) |
 | [`notes/electron-beam/review/referee-ch03.md`](../notes/electron-beam/review/referee-ch03.md) | 25.0 kB | Working note of project 07. | [README.md](../portfolios-src/electron-beam/README.md) |
 | [`notes/electron-beam/review/referee-ch04.md`](../notes/electron-beam/review/referee-ch04.md) | 28.5 kB | Working note of project 07. | [README.md](../portfolios-src/electron-beam/README.md) |
 | [`notes/electron-beam/review/referee-ch05.md`](../notes/electron-beam/review/referee-ch05.md) | 23.8 kB | Working note of project 07. | [README.md](../portfolios-src/electron-beam/README.md) |
 | [`notes/electron-beam/review/referee-ch06.md`](../notes/electron-beam/review/referee-ch06.md) | 27.0 kB | Working note of project 07. | [README.md](../portfolios-src/electron-beam/README.md) |
+| [`notes/electron-beam/review/referee-ch07.md`](../notes/electron-beam/review/referee-ch07.md) | 143 B | Working note of project 07. | [README.md](../portfolios-src/electron-beam/README.md) |
+
+</details>
+
+| File | Size | What it is | Explained in |
+|---|---|---|---|
 | [`notes/electron-beam/shots/ch02-sim-1440.png`](../notes/electron-beam/shots/ch02-sim-1440.png) | 194.1 kB | Screenshot of project 07 in Chromium: ch02-sim-1440. | [README.md](../portfolios-src/electron-beam/README.md) |
 | [`notes/electron-beam/shots/ch02-sim-360.png`](../notes/electron-beam/shots/ch02-sim-360.png) | 171.3 kB | Screenshot of project 07 in Chromium: ch02-sim-360. | [README.md](../portfolios-src/electron-beam/README.md) |
 | [`notes/electron-beam/shots/ch02-top-1440.png`](../notes/electron-beam/shots/ch02-top-1440.png) | 163.5 kB | Screenshot of project 07 in Chromium: ch02-top-1440. | [README.md](../portfolios-src/electron-beam/README.md) |

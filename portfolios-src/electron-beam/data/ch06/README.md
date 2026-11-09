@@ -27,7 +27,7 @@
 - **What the numbers are**: Table 1 is titled "Data for elements from Monte Carlo simulation". These are not raw measurements: the
   paper fits the SE yield compilation of its Ref. 1 with a universal curve and with Monte Carlo, and tabulates δ_max, E_max and δ at 2 and
   20 keV. I copied Al, Si (crystal), Cu and Au.
-- **The universal law** (the paper's Eq. 5): δ/δ_max = 1.28 (E/E_max)^(−0.67) [1 − exp(−1.614 (E/E_max)^1.67)].
+- **The universal law** (the paper's Eq. 12): δ/δ_max = 1.28 (E/E_max)^(−0.67) [1 − exp(−1.614 (E/E_max)^1.67)].
   The CSV carries δ at 2 and 20 keV from that law, **computed here**, beside the printed Monte Carlo values. They agree for Al and Si
   (ratio 0.96 to 1.05 at 2 keV) and not for Cu (1.25 and 1.69) and Au (1.45 and 2.67): the law is a template, not the same as the
   Monte Carlo output. Say so if the page overlays one of them.

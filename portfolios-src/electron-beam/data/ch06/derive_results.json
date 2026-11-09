@@ -4,61 +4,85 @@
    "id": "M1",
    "title": "screened Rutherford: ∫ K/(1 − cos φ + 2a)² dΩ = πK/(a(1+a)), and setting its cumulative fraction equal to a random number R gives cos φ = 1 − 2aR/(1 + a − R) (Joy’s Eq. 6)",
    "ok": true,
-   "detail": "total pi*K/(a*(a + 1)); solution for cos φ: [(-2*R*a - R + a + 1)/(-R + a + 1)]"
+   "detail": "the integral simplifies to πK/(a(1+a)); solving F(φ) = R for cos φ gives 1 − 2aR/(1+a−R)",
+   "record": false
   },
   {
    "id": "M2",
-   "title": "Joy’s Eq. 1 is Rutherford’s cross-section with pv in place of 2E: pv = E(E+2mc²)/(E+mc²), and (e²/4πε₀)²/4 = 5.18×10⁻²¹ keV² cm² against Joy’s 5.21×10⁻²¹",
+   "title": "Rutherford’s cross-section from the orbit: with b = (k/pv) cot(φ/2), dσ/dΩ = b|db/dφ|/sin φ = (k/pv)²/(1 − cos φ)²",
    "ok": true,
-   "detail": "e²/4πε₀ = 1.43996e-10 keV cm; squared over 4: 5.1837e-21 keV² cm² (Joy 5.21e-21, 0.51 % higher)"
+   "detail": "checked symbolically at two angles after simplification",
+   "record": false
   },
   {
    "id": "M3",
-   "title": "free paths: p(s) = e^(−s/λ)/λ has mean λ, and the path with P(longer than s) = R is s = −λ ln R (Joy’s Eq. 4)",
+   "title": "Joy’s Eq. 1 is Rutherford’s cross-section with pv in place of 2E: pv = E(E+2mc²)/(E+mc²), and (e²/4πε₀)²/4 = 5.18×10⁻²¹ keV² cm² against Joy’s 5.21×10⁻²¹",
    "ok": true,
-   "detail": "mean lambda; inverse [-lambda*log(R)]"
+   "detail": "e²/4πε₀ = 1.43996e-10 keV cm; squared over 4: 5.1837e-21 keV² cm² (Joy 5.21e-21, 0.51 % higher)",
+   "record": false
   },
   {
    "id": "M4",
-   "title": "the rotation of the direction (physics/ch06.js turn) keeps unit length and makes angle φ with the old direction, for 20 000 random cases including travel parallel to the surface",
+   "title": "free paths: p(s) = e^(−s/λ)/λ has mean λ, and the path with P(longer than s) = R is s = −λ ln R (Joy’s Eq. 4)",
    "ok": true,
-   "detail": "largest error of length 2.2e-16, of cos(angle) 4.6e-14"
+   "detail": "mean = λ; solving e^(−s/λ) = R gives s = −λ ln R",
+   "record": false
   },
   {
    "id": "M5",
-   "title": "the exact integral of the escape weight e^(−z/λ_s) along a straight step against a 200 000-point midpoint sum, four cases",
+   "title": "the rotation of the direction (physics/ch06.js turn) keeps unit length and makes angle φ with the old direction, for 20 000 cases: random directions, travel parallel to the surface, and directions along and near each axis",
    "ok": true,
-   "detail": "largest relative difference 2.6e-09"
+   "detail": "largest error of length 2.2e-16, of cos(angle) 3.3e-16",
+   "record": false
   },
   {
    "id": "M6",
-   "title": "Joy–Luo tends to Bethe as E → ∞ (ratio of the logarithms → 1); against ESTAR’s collision stopping power it agrees within 8 % from 5 to 30 keV for Si, Al, Cu, Au",
+   "title": "the exact integral of the escape weight e^(−z/λ_s) along a straight step against a 200 000-point midpoint sum, four cases",
    "ok": true,
-   "detail": "5–30 keV: ratio 0.928 to 1.048; 1–3 keV: 1.011 to 2.310 (higher, most for gold); at 100 keV 0.781 to 0.786, which is the non-relativistic 1/E against the relativistic 1/β²: β²/(2E/mc²) = 0.768"
+   "detail": "largest relative difference 2.6e-09",
+   "record": false
   },
   {
    "id": "M7",
-   "title": "mean ionisation energy J from Joy’s Eq. 12 against the values ESTAR uses (Si 173, Al 166, Cu 322, Au 790 eV): within 3 %",
+   "title": "Joy–Luo tends to Bethe as E → ∞ (ratio of the logarithms → 1); against ESTAR’s collision stopping power it agrees within 8 % from 5 to 30 keV for Si, Al, Cu, Au",
    "ok": true,
-   "detail": "Si 172 eV (0.995), Al 163 eV (0.981), Cu 314 eV (0.975), Au 797 eV (1.008)"
+   "detail": "5–30 keV: ratio 0.928 to 1.048; 1–3 keV: 1.011 to 2.310 (higher, most for gold); at 100 keV 0.781 to 0.786, which is the non-relativistic 1/E against the relativistic 1/β²: β²/(2E/mc²) = 0.768",
+   "record": false
   },
   {
    "id": "M8",
-   "title": "Joy calls the elastic mean free path at 100 keV “typically of the order of a few hundred ångström”; his Eqs. 1–3 give values on either side of that for silicon and gold",
+   "title": "the constants of Joy’s stopping power: 78 500 ≈ 2π(e²/4πε₀)²N_A in keV² cm² mol⁻¹, and 1.166 ≈ √(e/2) with e = 2.718…",
    "ok": true,
-   "detail": "λ_el(100 keV): Si 105 nm, Au 8.9 nm"
+   "detail": "2π(e²/4πε₀)²N_A = 78457; √(e/2) = 1.16582",
+   "record": false
   },
   {
    "id": "M9",
-   "title": "recorded comparison: the simulated η against the database of measured backscattering coefficients (Akbari et al.); above 8 keV within 25 % of the mean of the measurements for each element",
+   "title": "mean ionisation energy J from Joy’s Eq. 12 against the values ESTAR uses (Si 173, Al 166, Cu 322, Au 790 eV): within 3 %",
    "ok": true,
-   "detail": "Si: 0.4–2 keV MC 0.243 vs measured 0.238 (5 points, 0.228–0.255), 2–8 keV MC 0.194 vs measured 0.196 (10 points, 0.182–0.212), 8–31 keV MC 0.181 vs measured 0.175 (19 points, 0.145–0.200); Cu: 0.4–2 keV MC 0.421 vs measured 0.314 (37 points, 0.255–0.437), 2–8 keV MC 0.362 vs measured 0.332 (52 points, 0.298–0.419), 8–31 keV MC 0.344 vs measured 0.318 (42 points, 0.290–0.368); Au: 0.4–2 keV MC 0.645 vs measured 0.344 (20 points, 0.245–0.419), 2–8 keV MC 0.588 vs measured 0.444 (36 points, 0.373–0.489), 8–31 keV MC 0.564 vs measured 0.494 (32 points, 0.470–0.521); Al: 0.4–2 keV MC 0.226 vs measured 0.221 (20 points, 0.134–0.443), 2–8 keV MC 0.179 vs measured 0.179 (47 points, 0.131–0.332), 8–31 keV MC 0.166 vs measured 0.154 (40 points, 0.130–0.187)"
+   "detail": "Si 172 eV (0.995), Al 163 eV (0.981), Cu 314 eV (0.975), Au 797 eV (1.008)",
+   "record": false
   },
   {
    "id": "M10",
+   "title": "Joy calls the elastic mean free path at 100 keV “typically of the order of a few hundred ångström”; his Eqs. 1–3 give values on either side of that for silicon and gold",
+   "ok": true,
+   "detail": "λ_el(100 keV): Si 105 nm, Au 8.9 nm",
+   "record": true
+  },
+  {
+   "id": "M11",
+   "title": "recorded comparison: the simulated η against the database of measured backscattering coefficients (Akbari et al.); above 8 keV within 25 % of the mean of the measurements for each element",
+   "ok": true,
+   "detail": "Si: 0.4–2 keV MC 0.243 vs measured 0.238 (5 points, 0.228–0.255), 2–8 keV MC 0.199 vs measured 0.196 (10 points, 0.182–0.212), 8–31 keV MC 0.176 vs measured 0.175 (19 points, 0.145–0.200); Cu: 0.4–2 keV MC 0.411 vs measured 0.314 (37 points, 0.255–0.437), 2–8 keV MC 0.372 vs measured 0.332 (52 points, 0.298–0.419), 8–31 keV MC 0.329 vs measured 0.318 (42 points, 0.290–0.368); Au: 0.4–2 keV MC 0.656 vs measured 0.344 (20 points, 0.245–0.419), 2–8 keV MC 0.585 vs measured 0.444 (36 points, 0.373–0.489), 8–31 keV MC 0.553 vs measured 0.494 (32 points, 0.470–0.521); Al: 0.4–2 keV MC 0.226 vs measured 0.221 (20 points, 0.134–0.443), 2–8 keV MC 0.181 vs measured 0.179 (47 points, 0.131–0.332), 8–31 keV MC 0.166 vs measured 0.154 (40 points, 0.130–0.187)",
+   "record": true
+  },
+  {
+   "id": "M12",
    "title": "recorded comparison: δ at 2 and 20 keV against the Monte Carlo values Lin and Joy print with the same ε and λ_s (their simulation also has elastic scattering details we do not know)",
    "ok": true,
-   "detail": "Si 2 keV 0.367 vs 0.44, 20 keV 0.054 vs 0.08; Al 2 keV 0.682 vs 0.84, 20 keV 0.099 vs 0.19; Cu 2 keV 0.736 vs 0.83, 20 keV 0.113 vs 0.24; Au 2 keV 1.049 vs 0.94, 20 keV 0.175 vs 0.37"
+   "detail": "Si 2 keV 0.378 vs 0.44, 20 keV 0.048 vs 0.08; Al 2 keV 0.709 vs 0.84, 20 keV 0.100 vs 0.19; Cu 2 keV 0.753 vs 0.83, 20 keV 0.107 vs 0.24; Au 2 keV 1.056 vs 0.94, 20 keV 0.173 vs 0.37",
+   "record": true
   }
  ],
  "numbers": {
@@ -76,6 +100,17 @@
    0.7860817763622339,
    0.7678937420737552
   ],
+  "c78500": 78457.48282159251,
+  "loss_per_mfp_eV": 21.63608045589931,
+  "plasmon_eV": 16.599676548787734,
+  "zab_Si": 1.8279017493264584,
+  "zab_Au": 10.314588442627873,
+  "mfp_Au_08": 0.0911110894025243,
+  "spacing_Au": 0.2567705128921047,
+  "mass_ratio": {
+   "Si": 51196.73459734883,
+   "Au": 359048.87658884504
+  },
   "J_eV": {
    "Si": 172.07166322008675,
    "Al": 162.81408817530732,
@@ -100,7 +135,7 @@
      "eta_meas_mean": 0.238,
      "eta_meas_min": 0.228,
      "eta_meas_max": 0.255,
-     "eta_mc_mean": 0.242625
+     "eta_mc_mean": 0.243
     },
     {
      "band_keV": [
@@ -111,7 +146,7 @@
      "eta_meas_mean": 0.1958,
      "eta_meas_min": 0.182,
      "eta_meas_max": 0.212,
-     "eta_mc_mean": 0.194375
+     "eta_mc_mean": 0.198875
     },
     {
      "band_keV": [
@@ -122,7 +157,7 @@
      "eta_meas_mean": 0.1754736842105263,
      "eta_meas_min": 0.145,
      "eta_meas_max": 0.2,
-     "eta_mc_mean": 0.18075
+     "eta_mc_mean": 0.175625
     }
    ],
    "Cu": [
@@ -135,7 +170,7 @@
      "eta_meas_mean": 0.3144054054054054,
      "eta_meas_min": 0.255,
      "eta_meas_max": 0.437,
-     "eta_mc_mean": 0.42125
+     "eta_mc_mean": 0.41100000000000003
     },
     {
      "band_keV": [
@@ -146,7 +181,7 @@
      "eta_meas_mean": 0.3320769230769231,
      "eta_meas_min": 0.298,
      "eta_meas_max": 0.419,
-     "eta_mc_mean": 0.3625
+     "eta_mc_mean": 0.372125
     },
     {
      "band_keV": [
@@ -157,7 +192,7 @@
      "eta_meas_mean": 0.3180238095238095,
      "eta_meas_min": 0.29,
      "eta_meas_max": 0.368,
-     "eta_mc_mean": 0.3435
+     "eta_mc_mean": 0.32925
     }
    ],
    "Au": [
@@ -170,7 +205,7 @@
      "eta_meas_mean": 0.3443,
      "eta_meas_min": 0.245,
      "eta_meas_max": 0.419,
-     "eta_mc_mean": 0.64475
+     "eta_mc_mean": 0.6565
     },
     {
      "band_keV": [
@@ -181,7 +216,7 @@
      "eta_meas_mean": 0.4436388888888889,
      "eta_meas_min": 0.373,
      "eta_meas_max": 0.489,
-     "eta_mc_mean": 0.588125
+     "eta_mc_mean": 0.5845
     },
     {
      "band_keV": [
@@ -192,7 +227,7 @@
      "eta_meas_mean": 0.4938125,
      "eta_meas_min": 0.47,
      "eta_meas_max": 0.521,
-     "eta_mc_mean": 0.56375
+     "eta_mc_mean": 0.553375
     }
    ],
    "Al": [
@@ -205,7 +240,7 @@
      "eta_meas_mean": 0.22149999999999997,
      "eta_meas_min": 0.134,
      "eta_meas_max": 0.443,
-     "eta_mc_mean": 0.226125
+     "eta_mc_mean": 0.225625
     },
     {
      "band_keV": [
@@ -216,7 +251,7 @@
      "eta_meas_mean": 0.17861702127659573,
      "eta_meas_min": 0.131,
      "eta_meas_max": 0.332,
-     "eta_mc_mean": 0.179375
+     "eta_mc_mean": 0.1815
     },
     {
      "band_keV": [
@@ -227,40 +262,40 @@
      "eta_meas_mean": 0.1537,
      "eta_meas_min": 0.13,
      "eta_meas_max": 0.187,
-     "eta_mc_mean": 0.16625
+     "eta_mc_mean": 0.165875
     }
    ]
   },
   "delta_cmp": {
    "Si": {
-    "mc2": 0.3672069348928788,
-    "u2": 0.007471922960277547,
-    "mc20": 0.05404779482988875,
-    "u20": 0.0017823054728550339,
+    "mc2": 0.3782519269068307,
+    "u2": 0.00794805430010694,
+    "mc20": 0.0482688194869875,
+    "u20": 0.0009221395009278516,
     "lj2": 0.44,
     "lj20": 0.08
    },
    "Al": {
-    "mc2": 0.6817008946501784,
-    "u2": 0.014707619333634063,
-    "mc20": 0.09880410048836871,
-    "u20": 0.002241795222047335,
+    "mc2": 0.7088944331743539,
+    "u2": 0.016151322882840935,
+    "mc20": 0.10049237080658785,
+    "u20": 0.002411499868694354,
     "lj2": 0.84,
     "lj20": 0.19
    },
    "Cu": {
-    "mc2": 0.7363155021502377,
-    "u2": 0.013907673540921732,
-    "mc20": 0.11281227861343877,
-    "u20": 0.002670961371116009,
+    "mc2": 0.7534362206775117,
+    "u2": 0.01494047975303952,
+    "mc20": 0.10748421353449035,
+    "u20": 0.002828866909750515,
     "lj2": 0.83,
     "lj20": 0.24
    },
    "Au": {
-    "mc2": 1.0494474651086692,
-    "u2": 0.017765985480272427,
-    "mc20": 0.17528732914650647,
-    "u20": 0.0036188593716567317,
+    "mc2": 1.0559088780987076,
+    "u2": 0.018505215913641543,
+    "mc20": 0.17314030432314773,
+    "u20": 0.003433500764745093,
     "lj2": 0.94,
     "lj20": 0.37
    }
@@ -292,5 +327,5 @@
    }
   }
  },
- "summary": "10 of 10 checks pass"
+ "summary": "12 of 12 checks pass"
 }

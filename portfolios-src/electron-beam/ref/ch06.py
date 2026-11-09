@@ -65,11 +65,11 @@ def escInt(zA, zB, s, ls):
 def turn(c, phi, psi):
     cp, sp, cs, ss = math.cos(phi), math.sin(phi), math.cos(psi), math.sin(psi)
     cx, cy, cz = c
-    if abs(cz) > 0.99999:
-        n = [sp * cs, sp * ss, (1 if cz > 0 else -1) * cp]
-    else:
-        t = math.sqrt(1 - cz * cz)
-        n = [sp * (cx * cz * cs - cy * ss) / t + cx * cp, sp * (cy * cz * cs + cx * ss) / t + cy * cp, -sp * cs * t + cz * cp]
+    e1 = [0.0, cz, -cy] if abs(cx) < 0.6 else [-cz, 0.0, cx]
+    l1 = math.sqrt(e1[0] * e1[0] + e1[1] * e1[1] + e1[2] * e1[2])
+    e1 = [e1[0] / l1, e1[1] / l1, e1[2] / l1]
+    e2 = [cy * e1[2] - cz * e1[1], cz * e1[0] - cx * e1[2], cx * e1[1] - cy * e1[0]]
+    n = [c[k] * cp + sp * (e1[k] * cs + e2[k] * ss) for k in range(3)]
     l = math.sqrt(n[0] * n[0] + n[1] * n[1] + n[2] * n[2])
     return [n[0] / l, n[1] / l, n[2] / l]
 

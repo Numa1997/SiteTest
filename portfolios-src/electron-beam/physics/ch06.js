@@ -8,8 +8,9 @@
        sigma_E = 5.21e-21 (Z^2/E^2) 4 pi / (a (1 + a)) ((E + 511) / (E + 1024))^2  cm^2,   a = 3.4e-3 Z^0.67 / E   (Bishop 1976)
        lambda_el = A / (N_A rho sigma_E)
    Step and angles (Joy Eqs. 4, 6, 7): s = -lambda_el ln R1,  cos phi = 1 - 2 a R2 / (1 + a - R2),  psi = 2 pi R3.
-   Direction: rotation of the unit vector by (phi, psi) about its own axis; the form used avoids Joy's AN = -cx/cz, which diverges for
-   cz = 0 (derive/ch06.py checks that it keeps unit length and turns by exactly phi).
+   Direction: rotation of the unit vector by (phi, psi) about its own axis, n = c cos phi + sin phi (e1 cos psi + e2 sin psi) with e1, e2 unit
+   vectors perpendicular to c; this avoids Joy's AN = -cx/cz, which diverges for cz = 0 (derive/ch06.py checks that it keeps unit length and
+   turns by exactly phi for random directions and for directions along and near every axis).
    Energy loss, continuous (Joy-Luo modified Bethe, k = 0.85 as Lin and Joy Eq. 13):
        dE/ds = -78500 (rho Z / (A E)) ln(1.166 (E + 0.85 J) / J)  keV/cm,   J = (9.76 Z + 58.5 Z^-0.19) eV   (Joy Eq. 12, Berger-Seltzer)
    Secondary electrons (Lin and Joy Eqs. 1-3): generated at (1/eps) |dE/ds| per path length, each escapes with probability 0.5 exp(-z/lambda_s);
@@ -52,17 +53,18 @@
     return s * ls / dz * (Math.exp(-zA / ls) - Math.exp(-zB / ls));
   }
   function turn(c, phi, psi) {                                            // rotate unit vector c by polar angle phi, azimuth psi
+    // two unit vectors perpendicular to c: e1 = c x ax / |c x ax| with ax the coordinate axis x or y, whichever is far from c; e2 = c x e1
     const cp = Math.cos(phi), sp = Math.sin(phi), cs = Math.cos(psi), ss = Math.sin(psi);
     const [cx, cy, cz] = c;
-    let n;
-    if (Math.abs(cz) > 0.99999) n = [sp * cs, sp * ss, (cz > 0 ? 1 : -1) * cp];
-    else {
-      const t = Math.sqrt(1 - cz * cz);
-      n = [sp * (cx * cz * cs - cy * ss) / t + cx * cp, sp * (cy * cz * cs + cx * ss) / t + cy * cp, -sp * cs * t + cz * cp];
-    }
+    let e1 = Math.abs(cx) < 0.6 ? [0, cz, -cy] : [-cz, 0, cx];           // c x (1,0,0) or c x (0,1,0)
+    const l1 = Math.sqrt(e1[0] * e1[0] + e1[1] * e1[1] + e1[2] * e1[2]);
+    e1 = [e1[0] / l1, e1[1] / l1, e1[2] / l1];
+    const e2 = [cy * e1[2] - cz * e1[1], cz * e1[0] - cx * e1[2], cx * e1[1] - cy * e1[0]];
+    const n = [0, 1, 2].map(k => c[k] * cp + sp * (e1[k] * cs + e2[k] * ss));
     const l = Math.sqrt(n[0] * n[0] + n[1] * n[1] + n[2] * n[2]);
     return [n[0] / l, n[1] / l, n[2] / l];
   }
+
 
   function run(p, opts) {
     opts = opts || {};
@@ -165,13 +167,13 @@
     id: 'ch06',
     inputs: ['V_land', 'material'],
     outputs: ['E_land', 'delta_SE', 'eta_BSE', 'R', 'V_int', 'sigma_sig', 'u_eta', 'u_delta', 'r90', 'mc_paths'],
-    tolerance: { rel: 1e-7, abs: 1e-12, note: 'same random numbers and the same arithmetic on both sides; library functions (log, exp, acos, pow) may differ in the last bit, which moves paths by about 1e-15 and, through the energy histogram, r90 and V_int by about 1e-9 (measured); each electron has its own generator, so a flipped branch would change one electron only' },
+    tolerance: { rel: 1e-7, abs: 1e-12, note: 'same random numbers and the same arithmetic on both sides; library functions (log, exp, acos, pow) may differ in the last bit; the readouts agree to about 1e-13 and the coordinates of the drawn paths to about 1e-9 relative (measured); each electron has its own generator, so a flipped branch would change one electron only' },
     cases: [{}, { V_land: 3000 }, { V_land: 30000, material: 'Au' }, { V_land: 1000, material: 'Cu' }, { V_land: 5000, material: 'Al' }],
     ui: {
       controls: ['material', 'V_land'],
-      readouts: ['eta_BSE', 'delta_SE', 'R', 'r90', 'sigma_sig'],
+      readouts: ['eta_BSE', 'u_eta', 'delta_SE', 'u_delta', 'R', 'r90', 'sigma_sig'],
       aspect: '16 / 10', aspectPhone: '1 / 1',
-      caption: 'Forty electron paths in the wafer, seen from the side (wine: the electron came back out, a backscattered electron; grey: it stopped inside). The dashed arc is the Kanaya–Okayama range; the shaded band at the surface is three escape depths deep, the layer from which secondary electrons get out. The readouts come from 2000 electrons with fixed random numbers, so the same settings always give the same numbers; their statistical uncertainty is stated in the text.',
+      caption: 'Forty electron paths in the wafer, seen from the side (wine: the electron came back out, a backscattered electron; grey: it stopped inside). The dashed arc is the Kanaya–Okayama range; the shaded band at the surface is three escape depths deep, the layer from which secondary electrons get out. The readouts come from 2000 electrons with fixed random numbers, so the same settings always give the same numbers; u_η and u_δ are their statistical standard errors. Below about 1 kV, and for heavy elements at low voltage, the model is used outside the range its author recommends (see the text).',
     },
     compute, draw, run, MAT, mfp, stop, Jkev, rangeKO, turn, escInt,
   };
