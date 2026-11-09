@@ -31,7 +31,7 @@
   // left: the gun drawn (tip, extractor, anode at V_acc, retarding plate at the wafer); right: lambda(V) on log axes
   function draw(ctx, w, h, p, out) {
     ctx.clearRect(0, 0, w, h);
-    const narrow = w < 560, gw = narrow ? w : w * 0.42, gh = narrow ? h * 0.42 : h;
+    const narrow = w < 560, gw = narrow ? w : w * 0.42, gh = narrow ? h * 0.55 : h;
     ctx.font = "11px 'IBM Plex Mono', monospace"; ctx.textAlign = 'left';
     // gun: vertical column, electrons go down
     const cx = gw / 2, y0 = 18, y1 = gh - 16;
@@ -75,7 +75,7 @@
     ui: {
       controls: ['V_acc', 'V_land'],
       readouts: ['V_star', 'lambda_e', 'lambda_land', 'ang_mag'],
-      aspect: '16 / 7', aspectPhone: '3 / 4',
+      aspect: '1 / 1', aspectPhone: '3 / 4',
       caption: 'First panel: the gun drawn (not to scale), the beam spreading from the tip at one angle down the column and, below the dashed line where the retarding field acts, at an angle larger by the factor of (3.4) when it is slowed. Second panel: the electron wavelength against voltage, exact (wine) and without relativity (grey, dashed), with the column and landing values marked. A landing voltage above the column voltage means the beam is accelerated again before the wafer.',
     },
     compute, draw,

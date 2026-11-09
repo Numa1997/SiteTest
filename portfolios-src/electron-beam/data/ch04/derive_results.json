@@ -58,7 +58,7 @@
    "id": "N3",
    "title": "C_s from tracing rays through the third-order field equals the aberration integral (e/128mV*)∫[3(e/mV*)B⁴h⁴ + 8B′²h⁴ − 8B²h²h′²]dz",
    "ok": true,
-   "detail": "traced 4.18893 mm, integral 4.18897 mm, ratio 0.999990"
+   "detail": "traced 4.18897 mm, integral 4.18897 mm, ratio 1.000000"
   },
   {
    "id": "N4",
@@ -70,7 +70,7 @@
    "id": "N5",
    "title": "the traced miss grows as α³ (miss/α³ constant to 0.02 % from 1 to 8 mrad)",
    "ok": true,
-   "detail": "miss/α³ = 4.18885 mm, 4.18897 mm, 4.18910 mm, 4.18952 mm"
+   "detail": "miss/α³ = 4.18898 mm, 4.18900 mm, 4.18911 mm, 4.18952 mm"
   }
  ],
  "summary": "12 of 12 checks pass",
@@ -79,10 +79,10 @@
   "Cc_integral": 0.002847594037887062,
   "f_formula": 0.0036690801754760707,
   "cs_over_a3": [
-   0.004188847914646429,
-   0.004188970556822667,
-   0.004189098526075116,
-   0.004189519832241002
+   0.004188976808791642,
+   0.004189002780358973,
+   0.004189106581959195,
+   0.004189521846212022
   ]
  }
 }

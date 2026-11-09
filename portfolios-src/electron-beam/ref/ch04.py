@@ -121,7 +121,7 @@ def compute(p):
     theta = math.sqrt(E / (8 * ME * Vs)) * B0 * a * (math.atan(wd / a) + math.atan(u / a))
     # spherical aberration: miss at the paraxial image plane, linear (defocus) part removed with a tiny ray, two angles to remove alpha^5
     qp = -E / pmom
-    eps = 1e-7
+    eps = 1e-9                                 # small enough that its own cubic miss, C_s (eps/M)^3, does not bias the fit
     xe, ye = ray3d(B0, a, qp, -u, wd, eps)
     miss = []
     for ai in (2e-3, 4e-3):

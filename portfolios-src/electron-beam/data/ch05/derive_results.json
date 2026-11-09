@@ -1,0 +1,62 @@
+{
+ "checks": [
+  {
+   "id": "P1",
+   "title": "quadrature of A/α and Bα³ is smallest at α⁸ = A²/(3B²), where d² = (4/3)·3^(1/4)·A^(3/2)B^(1/2)",
+   "ok": true,
+   "detail": "α_opt = (A²/3B²)^(1/8); with A = 1.22λ, B = C_s/2: α_opt ≈ 1.0(λ/C_s)^(1/4), d_min ≈ 0.93 λ^(3/4) C_s^(1/4)"
+  },
+  {
+   "id": "P2",
+   "title": "quadrature of A/α and Kα is smallest at α = √(A/K), where d = √(2AK)",
+   "ok": true,
+   "detail": "K = C_c ΔE/(eV*): at low voltage the optimum is set by chromatic aberration and diffraction"
+  },
+  {
+   "id": "P3",
+   "title": "brute force: the narrowest beam cross-section of rays r = α′Δz + C_sα′³ (|α′| ≤ α) is C_sα³/2 wide, at Δz = −¾C_sα²",
+   "ok": true,
+   "detail": "width 0.5000 C_sα³ at Δz = -0.7500 C_sα² (scanned 4001 planes, 20001 rays)"
+  },
+  {
+   "id": "P4",
+   "title": "the solver’s golden-section optimum equals the closed form of P1 (rss, no chromatic term, no source image)",
+   "ok": true,
+   "detail": "numeric 10.987159 mrad, closed form 10.987159 mrad"
+  },
+  {
+   "id": "P5",
+   "title": "and the closed form of P2 when only diffraction and chromatic remain",
+   "ok": true,
+   "detail": "numeric 8.317860 mrad, closed form 8.317860 mrad"
+  },
+  {
+   "id": "P6",
+   "title": "recorded, not a test: Bronsgeest et al. quote I_AI = 1.08×10⁻¹⁸ B (source image as large as the diffraction disc); their Eqs. 6 and 19 give (π²/4)(0.66)²λ²V B",
+   "ok": true,
+   "detail": "Eqs. 6 and 19 give 1.617e-18 B (exact λ) or 1.548e-18 B (their 1.2 nm·V½); the quoted value is 0.698 of the latter, close to ln 2 = 0.693, as if it counted only the current inside the FW50 disc"
+  },
+  {
+   "id": "P7",
+   "title": "FW50 (narrowest interval holding half the electrons) of chapter 2’s cold energy distribution against its FWHM",
+   "ok": true,
+   "detail": "FW50 0.1596 eV, FWHM 0.2147 eV, ratio 0.743"
+  },
+  {
+   "id": "P8",
+   "title": "Joy (2006) worked example: C_s = C_c = 5 mm, 1 keV, ΔE = 0.7 eV, α = 5 mrad, his three terms in quadrature give “about 18 nm”",
+   "ok": true,
+   "detail": "recomputed 18.11 nm"
+  }
+ ],
+ "numbers": {
+  "aopt_sph_cf_mrad": 10.987158807739693,
+  "aopt_chr_cf_mrad": 8.31785953682132,
+  "I_AI_coef": 1.6166287537072e-18,
+  "fw50_eV": 0.1596072134867522,
+  "fwhm_eV": 0.21472585822868043,
+  "fw50_over_fwhm": 0.7433069067851737,
+  "joy_nm": 18.11393568900091
+ },
+ "summary": "8 of 8 checks pass"
+}

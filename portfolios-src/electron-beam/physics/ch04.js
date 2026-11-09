@@ -82,7 +82,7 @@
     const zfar = 2000 * a, f = -1 / paraxial(B0, a, eta, -zfar, zfar, 1, 0)[1];
     const omega = Math.sqrt(1 + eta * B0 * B0 * a * a);
     const theta = Math.sqrt(E / (8 * ME * Vs)) * B0 * a * (Math.atan(wd / a) + Math.atan(u / a));
-    const qp = -E / pmom, eps = 1e-7, [xe, ye] = ray3d(B0, a, qp, -u, wd, eps);
+    const qp = -E / pmom, eps = 1e-9, [xe, ye] = ray3d(B0, a, qp, -u, wd, eps);
     const miss = [2e-3, 4e-3].map(ai => { const ao = ai * M, [x, y] = ray3d(B0, a, qp, -u, wd, ao), k = ao / eps; return Math.hypot(x - k * xe, y - k * ye); });
     const a1 = 2e-3, a2 = 4e-3;
     const Cs = (miss[0] * Math.pow(a2, 5) - miss[1] * Math.pow(a1, 5)) / (Math.pow(a1, 3) * Math.pow(a2, 5) - Math.pow(a2, 3) * Math.pow(a1, 5));
@@ -116,7 +116,7 @@
     // axis and wafer
     ctx.strokeStyle = '#d9d0c2'; ctx.beginPath(); ctx.moveTo(L, yAx); ctx.lineTo(R, yAx); ctx.stroke();
     ctx.fillStyle = '#3a322e'; ctx.fillRect(X(p.WD) - 2, yAx - sc * 0.6, 4, sc * 1.2);
-    ctx.fillStyle = '#5a504b'; ctx.textAlign = 'center'; ctx.fillText('wafer', X(p.WD), yAx + sc * 0.6 + 13);
+    ctx.fillStyle = '#5a504b'; ctx.textAlign = 'left'; ctx.fillText('wafer', X(p.WD) + 6, yAx + 4);
     // the ray (and its mirror image), scaled to the largest excursion in view
     ctx.strokeStyle = '#7a1f2b'; ctx.lineWidth = 1.8;
     for (const sgn of [1, -1]) {
@@ -124,7 +124,7 @@
       for (let i = 0; i < rec.length; i += 2) { if (rec[i] < zl) continue; const xx = X(rec[i]), yy = yAx - sgn * sc * rec[i + 1] / rmax; first ? ctx.moveTo(xx, yy) : ctx.lineTo(xx, yy); first = false; }
       ctx.stroke();
     }
-    ctx.fillStyle = '#5a504b'; ctx.textAlign = 'left'; ctx.fillText('← from the object, ' + core.fmt(p.u_obj * 1e3, 3) + ' mm before the lens', L, h - 10);
+    ctx.fillStyle = '#5a504b'; ctx.textAlign = 'left'; ctx.fillText('← from the object, ' + core.fmt(p.u_obj * 1e3, 3) + ' mm', L, yAx - sc * 0.55);
   }
 
   return {
@@ -136,7 +136,7 @@
     ui: {
       controls: ['V_land', 'a_lens', 'WD', 'u_obj'],
       readouts: ['NI', 'f', 'C_s', 'C_c', 'M', 'theta_rot'],
-      aspect: '16 / 8', aspectPhone: '4 / 3',
+      aspect: '4 / 3', aspectPhone: '4 / 3',
       caption: 'The objective lens in section: coil (drawn, not to scale), the bell-shaped field on the axis (dashed) and the axial ray from the object to the wafer. The excitation NI is solved so that the ray meets the axis at the wafer.',
     },
     compute, draw, paraxial, ray3d, glaser, focusB0,

@@ -118,18 +118,18 @@ Cs_int = em / (128 * Vs_) * np.trapezoid(3 * em / Vs_ * Bv ** 4 * hh ** 4 + 8 * 
 check('N2', 'C_c from the solver (paraxial ray at V*(1 ± 10⁻⁴)) equals the perturbation integral η∫B²h²dz (h: unit slope at the image)',
       abs(out['C_c'] / Cc_int - 1) < 1e-4, 'solver %.6f mm, integral %.6f mm' % (out['C_c'] * 1e3, Cc_int * 1e3))
 check('N3', 'C_s from tracing rays through the third-order field equals the aberration integral (e/128mV*)∫[3(e/mV*)B⁴h⁴ + 8B′²h⁴ − 8B²h²h′²]dz',
-      abs(out['C_s'] / Cs_int - 1) < 2e-3, 'traced %.5f mm, integral %.5f mm, ratio %.6f' % (out['C_s'] * 1e3, Cs_int * 1e3, out['C_s'] / Cs_int))
+      abs(out['C_s'] / Cs_int - 1) < 1e-5, 'traced %.5f mm, integral %.5f mm, ratio %.6f' % (out['C_s'] * 1e3, Cs_int * 1e3, out['C_s'] / Cs_int))
 # image rotation from the Larmor rate integrated
 th_int = math.sqrt(R.E / (8 * R.ME * Vs_)) * np.trapezoid(Bv, zg)
 check('N4', 'image rotation √(e/8mV*)∫B dz from object to wafer: closed form in the solver against quadrature', abs(out['theta_rot'] / th_int - 1) < 1e-6,
       'solver %.6f rad, quadrature %.6f rad' % (out['theta_rot'], th_int))
 # scaling of the traced miss with the angle
 pm = math.sqrt(2 * R.ME * R.E * Vs_)
-xe, ye = R.ray3d(B0_, a_, -R.E / pm, -u_, wd_, 1e-7)
+xe, ye = R.ray3d(B0_, a_, -R.E / pm, -u_, wd_, 1e-9)
 rat = []
 for ai in (1e-3, 2e-3, 4e-3, 8e-3):
     x, y = R.ray3d(B0_, a_, -R.E / pm, -u_, wd_, ai * M)
-    rat.append(math.hypot(x - ai * M / 1e-7 * xe, y - ai * M / 1e-7 * ye) / ai ** 3)
+    rat.append(math.hypot(x - ai * M / 1e-9 * xe, y - ai * M / 1e-9 * ye) / ai ** 3)
 check('N5', 'the traced miss grows as α³ (miss/α³ constant to 0.02 % from 1 to 8 mrad)', max(rat) / min(rat) - 1 < 2e-4,
       'miss/α³ = ' + ', '.join('%.5f mm' % (x * 1e3) for x in rat))
 
