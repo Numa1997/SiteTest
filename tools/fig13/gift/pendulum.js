@@ -42,7 +42,9 @@
     // ---------------------------------------------------------------- the motor's controller (butterfly_control.py, sections 1-4)
     const M = 2400, H = T / M, SUB = 4, Qd = [1, 1, 0.05, 0.05], R = 1e-3, TAU_MAX = 60, KT = 2.5;
     // kE, kA, kI, wait_max, steer_max, window, e_tol, a_tol, catch_at (SETTINGS in butterfly_control.py)
-    const SET = { kE: 0.01, kA: 0.05, kI: 0.005, waitMax: 12, steerMax: 12, win: 3, eTol: 1, aTol: 1, catchAt: 0.2, eLow: 60 };
+    // catchAt 0.6, eTol 5 J, aTol 3: measured 9 Nov 2026 on 100 random starts (pendulum.js in Node): all caught and held, median 16 s after the
+// motor switches on (catchAt 0.2, eTol 1, aTol 1: 29 of 40 within 400 s). The catch's basin: from 0.3 away 16 of 16, from 0.6 12 of 16.
+const SET = { kE: 0.01, kA: 0.05, kI: 0.005, waitMax: 12, steerMax: 12, win: 3, eTol: 5, aTol: 3, catchAt: 0.6, eLow: 60, releaseAt: 0.005 };
     function step(s, tau) { for (let j = 0; j < SUB; j++) rk4(s, H / SUB, tau); }     // one control step of H, four sub-steps
 
     function design() {
@@ -97,15 +99,16 @@
         return d1 <= d2 ? [k1, d1, 1] : [k2, d2, -1];
     }
 
-    // The run: struck with p, free for tFree seconds (chaos), then the controller; held holdLaps laps after the catch, then let go.
+    // The run: from the state s0 = [th1, th2, p1, p2] (or a strike p = [p1, p2] from hanging still), free for tFree seconds,
+    // then the controller; held holdLaps laps after the catch, then let go.
     // modes: -1 free, 0 pump and steer (or drain after a miss), 1 wait, 2 catch and hold, 3 let go.
     function Run(D, p, tFree, holdLaps) {
-        this.D = D; this.p = p; this.tFree = tFree; this.holdLaps = holdLaps; this.reset();
+        this.D = D; this.s0 = p.length === 2 ? [0, 0, p[0], p[1]] : p.slice(); this.tFree = tFree; this.holdLaps = holdLaps; this.reset();
     }
     Run.prototype.reset = function () {
-        this.s = [0, 0, this.p[0], this.p[1]]; this.i = 0; this.t = 0;
+        this.s = this.s0.slice(); this.i = 0; this.t = 0;
         this.mode = -1; this.k = 0; this.dist = 9; this.sg = 1; this.zA = 0; this.zE = 0;
-        const nb = Math.round(SET.win / H); this.hist = new Float64Array(nb).fill(Math.abs(this.p[0] + this.p[1])); this.hi = 0; this.reach = 0;
+        const nb = Math.round(SET.win / H); this.hist = new Float64Array(nb).fill(Math.abs(this.s0[2] + this.s0[3])); this.hi = 0; this.reach = 0;
         this.hops = 0; this.tHop = -1; this.tSteer = 0; this.drain = false; this.tWait = 0;
         this.ev = { on: this.tFree, wait: null, catch: null, release: null };
         this.log = { t: [], th1: [], th2: [], tau: [], E: [], dist: [], mode: [] };
@@ -146,7 +149,7 @@
             tau = 0;
             for (let j = 0; j < 4; j++) { let d = s[j] - this.sg * Sk[j]; if (j < 2) d -= 2 * Math.PI * Math.round(d / (2 * Math.PI)); tau -= Kk[j] * d; }
             if (this.dist > 1) { this.mode = 0; this.hops++; this.tHop = t; this.tSteer = t; this.zA = 0; this.zE = 0; this.drain = true; tau = 0; this.ev.catch = null; }
-            else if (t - this.ev.catch >= this.holdLaps * T) { this.mode = 3; this.ev.release = t; tau = 0; }
+            else if (t - this.ev.catch >= this.holdLaps * T && this.dist < SET.releaseAt) { this.mode = 3; this.ev.release = t; tau = 0; }   // let go only once settled
         }
         return Math.max(-TAU_MAX, Math.min(TAU_MAX, tau));
     };
