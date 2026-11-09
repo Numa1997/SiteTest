@@ -29,7 +29,7 @@ video { position:fixed; inset:0; width:100%; height:100%; object-fit:contain; ba
 </div>
 <script>
 'use strict';
-const PLAYLIST = ['gift', 'construction'], LOOP_ALL = true;
+const PLAYLIST = ['gift', 'construction', 'catch'], LOOP_ALL = true;
 const v = document.getElementById('v'), Q = new URLSearchParams(location.search);
 let theme = Q.get('theme') || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'), k = 0;
 function load(i, keepTime) {

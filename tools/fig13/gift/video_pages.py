@@ -1,12 +1,13 @@
 """The gift and the construction as precomputed videos on the site: smooth on a phone, where drawing the films live stutters.
 
-    python3 tools/fig13/gift/video_pages.py GIFT_DARK.mp4 GIFT_LIGHT.mp4 CONS_DARK.mp4 CONS_LIGHT.mp4
+    python3 tools/fig13/gift/video_pages.py GIFT_DARK.mp4 GIFT_LIGHT.mp4 CONS_DARK.mp4 CONS_LIGHT.mp4 CATCH_DARK.mp4 CATCH_LIGHT.mp4
 
 Encodes each master (rendered by render.cjs + ffmpeg at CRF 16) for the web: H.264 High, CRF 23, 30 frames per second, a key frame
 every 2 s, moov atom first (plays while it loads), into public/simulations/fig13/video/{gift,construction}-{dark,light}.mp4, with a
 poster frame each; then writes the two player pages:
-    public/simulations/fig13/reem.html          the gift, then the construction, then again from the start
+    public/simulations/fig13/reem.html          the gift, then the construction, then the catch, then again from the start
     public/simulations/fig13/construction.html  the construction alone, looping
+    public/simulations/fig13/catch.html         the catch alone (a motor takes the pendulum out of chaos onto the butterfly), looping
 Each page follows the reader's light or dark setting (or ?theme=dark|light, or its Night / Paper buttons), plays muted and inline
 so a phone starts it by itself, and shows its controls. The canvas renderers stay in tools/fig13/gift/ (reem.html, construction.html).
 """
@@ -14,8 +15,8 @@ import sys, subprocess, pathlib
 
 ROOT = pathlib.Path(__file__).resolve().parents[3]
 DST = ROOT / 'public/simulations/fig13'; VID = DST / 'video'; VID.mkdir(parents=True, exist_ok=True)
-masters = dict(zip(['gift-dark', 'gift-light', 'construction-dark', 'construction-light'], sys.argv[1:5]))
-assert len(masters) == 4, __doc__
+masters = dict(zip(['gift-dark', 'gift-light', 'construction-dark', 'construction-light', 'catch-dark', 'catch-light'], sys.argv[1:7]))
+assert len(masters) == 6, __doc__
 for name, src in masters.items():
     out = VID / (name + '.mp4')
     subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-i', src, '-c:v', 'libx264', '-profile:v', 'high', '-level', '4.1', '-preset', 'slow',
@@ -86,6 +87,7 @@ setTheme(theme); load(0);
 '''
 
 
-(DST / 'reem.html').write_text(page('For رِيمْ', ['gift', 'construction'], True))
+(DST / 'reem.html').write_text(page('For رِيمْ', ['gift', 'construction', 'catch'], True))
 (DST / 'construction.html').write_text(page('Constructing the butterfly by hand', ['construction'], True))
-print('wrote', DST / 'reem.html', 'and', DST / 'construction.html')
+(DST / 'catch.html').write_text(page('Catching the butterfly', ['catch'], True))
+print('wrote', DST / 'reem.html', DST / 'construction.html', 'and', DST / 'catch.html')

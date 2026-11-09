@@ -139,6 +139,13 @@ def main(outdir):
         res['pump-wait-catch from p = %s' % (p,)] = dict(E0=energy(COEF, [0, 0, *p]), times=tm, caught=bool(len(c)),
             dist_end=float(c[-1, 2]) if len(c) else None, catch_tau_max=float(np.abs(c[:, 3]).max()) if len(c) else None)
         print(p, res['pump-wait-catch from p = %s' % (p,)])
+    Qd = np.diag(Q).copy(); Astar = swing_reach_of_orbit(S); rng = np.random.default_rng(1); held = []
+    for n in range(30):                                                  # catch from anywhere: 30 random strikes, 900 s each at most
+        p = rng.uniform(-8, 8, 2)
+        log, _, tm, hops = catch_anywhere(np.array([0, 0, *p]), S, K, Qd, H, 900.0, E_STAR, Astar, *SETTINGS, TAU_MAX, np.array(COEF), 10)
+        ok = bool(log[-1, 5] == 2 and log[-1, 3] < 0.01); held.append((float(p[0]), float(p[1]), ok, float(tm[2]) if ok else None, int(hops)))
+        print('strike (%.2f, %.2f): %s' % (p[0], p[1], ('caught at %.0f s after %d misses' % (tm[2], hops)) if ok else 'not caught in 900 s'))
+    res['catch from anywhere'] = held
     json.dump(dict(M=M, Q=np.diag(Q).tolist(), R=R_TAU, tau_max=TAU_MAX, multipliers=[str(m) for m in mult], gramian=gram.tolist(), runs=res),
               open(out / 'control.json', 'w'), indent=1)
 
@@ -200,3 +207,131 @@ def pump_wait_catch(S, K, s0, seconds, kE=0.02, e_tol=0.5, catch_at=0.12, log_ev
 
 if __name__ == '__main__':
     main(sys.argv[1])
+
+
+# ---- 4. Catch from anywhere: pump the energy AND steer the slow swing, then wait, then catch (compiled, 9 Nov 2026) --------
+# Picture (P = p1 + p2, the total angular momentum, is the slow pendulum's momentum): the butterfly is a slow pendulum (the upper rod, swinging +-156.7 deg) carrying a fast spinner (the lower rod).
+# One motor at the top pin reaches both: a torque along P feeds or brakes the swing (dP/dt = tau - gravity's torque); a torque that follows the full dtheta1/dt changes the total energy. Holding the energy at E* while the swing is
+# steered to its target moves energy between swing and spin. With both right, the pendulum is on a motion next to the
+# butterfly; the motor waits until the free motion passes close, then the orbit-following LQR catches it.
+from numba import njit
+from chaos_map import rk4 as rk4n
+
+
+@njit
+def _energy(s, A, B, C, U1, U2):
+    c = np.cos(s[0] - s[1]); det = A * B - C * C * c * c
+    return 0.5 * (B * s[2] ** 2 - 2 * C * c * s[2] * s[3] + A * s[3] ** 2) / det - U1 * np.cos(s[0]) - U2 * np.cos(s[1])
+
+
+@njit
+def _w1(s, A, B, C):
+    c = np.cos(s[0] - s[1]); return (B * s[2] - C * c * s[3]) / (A * B - C * C * c * c)
+
+
+@njit
+def _nearest(S, Qd, s, kg, window, M, sg):
+    """Nearest point of the butterfly (sg = +1) or of its mirror image (sg = -1: every angle and momentum negated, the same
+    drawing flipped left to right, held by the same gains with the torque reversed)."""
+    best = 1e18; kb = kg
+    for j in range(-window, window + 1):
+        k = (kg + j) % M
+        v = 0.0
+        for i in range(4):
+            d = s[i] - sg * S[k, i]
+            if i < 2: d -= 2 * np.pi * np.round(d / (2 * np.pi))
+            v += Qd[i] * d * d
+        if v < best: best = v; kb = k
+    return kb, np.sqrt(best)
+
+
+@njit
+def _nearest2(S, Qd, s, kg, window, M, sg):
+    """Search both the butterfly and its mirror when window is wide; keep the current one otherwise."""
+    if window < M // 2: k, d = _nearest(S, Qd, s, kg, window, M, sg); return k, d, sg
+    k1, d1 = _nearest(S, Qd, s, kg, window, M, 1.0); k2, d2 = _nearest(S, Qd, s, kg, window, M, -1.0)
+    return (k1, d1, 1.0) if d1 <= d2 else (k2, d2, -1.0)
+
+
+@njit
+def catch_anywhere(s0, S, K, Qd, h, seconds, Estar, Astar, kE, kA, kI, kB, Pmin_lim, wait_max, steer_max, win, e_tol, a_tol, catch_at, tau_max, coef, log_every):
+    A_, B_, C_, U1, U2 = coef
+    M = S.shape[0] - 1
+    n = int(seconds / h); nl = n // log_every + 1
+    log = np.zeros((nl, 10))     # t, E, A_est, dist, tau, mode, th1, th2, p1 ; then p2 stored separately
+    p2log = np.zeros(nl)
+    s = s0.copy(); mode = 0; k = 0; dist = 9.0; sg = 1.0; zA = 0.0; zE = 0.0
+    nb = int(win / h); hist = np.zeros(nb) + abs(s0[2] + s0[3]); hi = 0; Aest = 0.0; t_mode = np.zeros(3); hops = 0; t_hop = -1.0; Pmin = 0.0; t_steer = 0.0; drain = False; E_low = 60.0
+    for i in range(n):
+        E = _energy(s, A_, B_, C_, U1, U2); w1 = _w1(s, A_, B_, C_)
+        Ptot = s[2] + s[3]                                        # the slow pendulum's momentum: dP/dt = tau - gravity's torque
+        hist[hi] = abs(Ptot); hi = (hi + 1) % nb
+        if i % 50 == 0: Aest = hist.max(); Pmin = hist.min()      # the swing's reach and its lowest |P| over the last win seconds
+        tau = 0.0
+        if mode == 0 and i * h - t_steer > steer_max:             # steering has not settled: shove
+            hops += 1; t_hop = i * h; t_steer = i * h; zA = 0.0; zE = 0.0; drain = True
+        if mode == 0 and t_hop >= 0 and drain:                    # a miss: drain back down into chaos (to E_low), then try again
+            tau = kE * (E_low - E) * w1
+            if E < E_low + 5.0 or i * h - t_hop > 6.0: drain = False; t_steer = i * h
+        elif mode == 0:                                           # pump and steer
+            if i * h > win and Pmin < Pmin_lim: zA += h * (Astar - Aest); zE += h * (Estar - E)       # memories: no steady error (PI, as Fig. 9)
+            tau = (kE * (Estar - E) + kI * 0.05 * zE) * w1 + ((kA * (Astar - Aest) + kI * zA) if Pmin < Pmin_lim else -kB * (Pmin - Pmin_lim)) * Ptot   # energy in; reach fed or braked along P;
+            # going round (|P| never dips, the butterfly's dips to 1.23 each swing) is braked until the upper rod swings
+            if i * h > win and not drain and i * h - t_steer > win and Pmin < Pmin_lim and abs(E - Estar) < e_tol and abs(Aest - Astar) < a_tol:
+                mode = 1; t_mode[1] = i * h; k, dist, sg = _nearest2(S, Qd, s, 0, M // 2, M, sg)
+        elif mode == 1:                                           # wait, motor off
+            if i % 4 == 0:
+                k, dist, sg = _nearest2(S, Qd, s, (k + 4) % M, 40, M, sg)
+                if i % 400 == 0: k, dist, sg = _nearest2(S, Qd, s, k, M // 2, M, sg)
+            if dist < catch_at: mode = 2; t_mode[2] = i * h
+            elif i * h - t_mode[1] > wait_max:                    # waited in vain: shove it onto another motion, steer again
+                mode = 0; hops += 1; t_hop = i * h; t_steer = i * h; zA = 0.0; zE = 0.0; drain = True
+        if mode == 2:                                             # catch and hold
+            k, dist, sg = _nearest2(S, Qd, s, (k + 1) % M, 30, M, sg)
+            ds = s - sg * S[k]
+            for j in range(2): ds[j] -= 2 * np.pi * np.round(ds[j] / (2 * np.pi))
+            tau = 0.0
+            for j in range(4): tau -= K[k, j] * ds[j]
+            if dist > 1.0:                                        # the catch slipped: a miss; drain into chaos and try again
+                mode = 0; hops += 1; t_hop = i * h; t_steer = i * h; zA = 0.0; zE = 0.0; drain = True; tau = 0.0
+        tau = min(tau_max, max(-tau_max, tau))
+        if i % log_every == 0:
+            r = i // log_every
+            log[r, 0] = i * h; log[r, 1] = E; log[r, 2] = Aest; log[r, 3] = dist; log[r, 4] = tau; log[r, 5] = mode
+            log[r, 6] = s[0]; log[r, 7] = s[1]; log[r, 8] = s[2]; log[r, 9] = sg; p2log[r] = s[3]
+        q1, q2, p1, p2 = rk4n(s[0], s[1], s[2] + 0.5 * h * tau, s[3], h, A_, B_, C_, U1, U2)   # torque as a kick split
+        s[0] = q1; s[1] = q2; s[2] = p1 + 0.5 * h * tau; s[3] = p2                         # around the step (2nd order)
+    return log[:n // log_every], p2log[:n // log_every], t_mode, hops
+
+
+def swing_reach_of_orbit(S):
+    """The steering target: the largest |P| = |p1 + p2| on the butterfly."""
+    return float(np.abs(S[:, 2] + S[:, 3]).max())
+
+
+def film_data(p, t_free, seconds, out, log_every=4):
+    """The run shown in the catch film (gift/catch.html): both rods hanging still, struck with p, swinging freely (chaos) for
+    t_free seconds, then the controller of section 4 (catch_anywhere, settings below) for the given seconds; every log_every
+    steps: t, th1, th2, tau, E, distance, mode (-1 free, 0 pump/steer, 1 wait, 2 catch). Also the butterfly (one lap)."""
+    S, PHI, B = orbit_and_linearisation()
+    K, _, _ = periodic_lqr(PHI, B)
+    Qd = np.diag(Q).copy(); Astar = swing_reach_of_orbit(S)
+    s = np.array([0, 0, *p], float); free = []
+    for i in range(int(round(t_free / H))):
+        if i % log_every == 0: free.append((i * H, energy(COEF, s), 9.0, 0.0, -1, s[0], s[1]))
+        s = rk4(s, 0.0)
+    t0 = int(round(t_free / H)) * H
+    log, p2, tm, hops = catch_anywhere(s, S, K, Qd, H, seconds, E_STAR, Astar, *SETTINGS, TAU_MAX, np.array(COEF), log_every)
+    free = np.array(free); log = log.copy(); log[:, 0] += t0; tm = tm + t0
+    log = np.vstack([np.column_stack([free[:, 0], free[:, 1], np.zeros(len(free)), free[:, 2], free[:, 3], free[:, 4], free[:, 5], free[:, 6],
+                                      np.zeros(len(free)), np.ones(len(free))]), log])
+    r = lambda a, d: [round(float(v), d) for v in a]
+    json.dump(dict(p=list(p), t_free=t0, h=H * log_every, E_star=E_STAR, T=T, tau_max=TAU_MAX, catch_t=float(tm[2]), wait_t=float(tm[1]), hops=int(hops),
+                   t=r(log[:, 0], 4), th1=r(log[:, 6], 5), th2=r(log[:, 7], 5), tau=r(log[:, 4], 3), E=r(log[:, 1], 2), dist=r(log[:, 3], 4),
+                   mode=[int(m) for m in log[:, 5]], orbit_th1=r(S[::4, 0], 5), orbit_th2=r(S[::4, 1], 5)), open(out, 'w'), separators=(',', ':'))
+    return tm, hops
+
+
+# kE, kA, kI, kB, Pmin_lim, wait_max (s), steer_max (s), window (s), e_tol (J), a_tol (kg m^2/s), catch_at: the working settings
+# (30 random strikes p in [-8, 8]^2: all caught and held; 25 within 300 s, the rest within 677 s; 9 November 2026)
+SETTINGS = (0.01, 0.05, 0.005, 0.0, 1e9, 12.0, 12.0, 3.0, 1.0, 1.0, 0.3)

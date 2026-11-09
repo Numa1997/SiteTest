@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Catching the butterfly</title>
+<!-- Film renderer (phone first, 1080 x 1920): a double pendulum swinging in chaos is caught by a motor at its top pin and held on
+     the butterfly. The motion is computed, not drawn: catch.json from tools/fig13/butterfly_control.py (film_data): 8 s free from
+     the strike p = (2, 4) kg m^2/s (18 J), then pump and steer, wait, catch with the periodic LQR along the orbit, hold.
+     Serve the repository root; tools/fig13/gift/render.cjs THEME OUT 1 all catch x 1080x1920 writes the frames. -->
+<style>
+@font-face { font-family: 'Instrument Serif'; src: url(../../../public/fonts/instrument-serif/instrument-serif-400-latin.woff2) format('woff2'); }
+@font-face { font-family: 'Instrument Sans'; src: url(fonts/instrument-sans-400.woff2) format('woff2'); font-weight: 400; }
+@font-face { font-family: 'Instrument Sans'; src: url(fonts/instrument-sans-500.woff2) format('woff2'); font-weight: 500; }
+@font-face { font-family: 'Instrument Sans'; src: url(../../../public/fonts/ibm-plex-sans/ibm-plex-sans-400-greek.woff2) format('woff2'); unicode-range: U+0370-03FF; }
+:root { --bg:#140d10; --ink:#f5f1ea; --muted:#b9a59b; --accent:#e2a2aa; }
+:root[data-theme="light"] { --bg:#f5f1ea; --ink:#1c1518; --muted:#6f635d; --accent:#7a1f2b; }
+html, body { margin:0; background:var(--bg); height:100%; overflow:hidden; }
+#stage { position:absolute; left:0; top:0; width:1080px; height:1920px; background:var(--bg); color:var(--ink); font-family:'Instrument Sans',sans-serif; overflow:hidden; transform-origin:0 0; }
+canvas { position:absolute; left:0; top:0; }
+#h1 { position:absolute; left:40px; top:40px; font-family:'Instrument Serif',serif; font-size:64px; line-height:1; margin:0; font-weight:400; }
+#h2 { position:absolute; left:42px; top:116px; width:1000px; font-size:22px; line-height:1.45; color:var(--muted); }
+.capt { position:absolute; left:40px; top:1690px; width:1000px; font-size:30px; line-height:1.42; color:var(--ink); }
+.capt b { font-weight:400; color:var(--accent); }
+</style>
+</head>
+<body>
+<div id="stage">
+  <canvas id="cv"></canvas>
+  <h1 id="h1">Catching the butterfly</h1>
+  <div id="h2">a motor at the top pin takes a double pendulum out of chaos and holds it on the butterfly</div>
+  <div class="capt" id="capA"></div>
+  <div class="capt" id="capB"></div>
+</div>
+<script>
+'use strict';
+const Q = new URLSearchParams(location.search);
+const THEME = Q.get('theme') === 'light' ? 'light' : 'dark';
+document.documentElement.dataset.theme = THEME;
+const $ = id => document.getElementById(id);
+const lerp = (a, b, f) => a + (b - a) * f, clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const ease = u => u <= 0 ? 0 : u >= 1 ? 1 : u * u * (3 - 2 * u);
+const TH = THEME === 'dark' ? {
+    bg: '#140d10', paper: '#1a1114', rule: '#3a2a2e', ink: '#f5f1ea', muted: '#b9a59b', accent: '#e2a2aa', curve: [226, 162, 170], ghost: [226, 162, 170],
+    rods: '#f5f1ea', bob: '#7a1f2b', ring: '#f5f1ea', motor: [240, 190, 120], energy: [150, 200, 235], add: 'lighter'
+} : {
+    bg: '#f5f1ea', paper: '#fffaf3', rule: '#d9d0c2', ink: '#1c1518', muted: '#6f635d', accent: '#7a1f2b', curve: [122, 31, 43], ghost: [122, 31, 43],
+    rods: '#1c1518', bob: '#7a1f2b', ring: '#fffaf3', motor: [176, 98, 18], energy: [28, 92, 140], add: 'source-over'
+};
+const rgba = (c, a) => `rgba(${c[0]},${c[1]},${c[2]},${a})`;
+
+// ------------------------------------------------------------------------------------------------ data and its clock
+let D, N;
+function stateAt(t) {     // linear interpolation of the stored run (samples every D.h seconds)
+    const u = clamp(t / D.h, 0, N - 1.000001), i = Math.floor(u), f = u - i, L = k => lerp(D[k][i], D[k][i + 1], f);
+    return { th1: L('th1'), th2: L('th2'), tau: L('tau'), E: L('E'), dist: L('dist'), mode: D.mode[i] };
+}
+const tip = (a, b) => [Math.sin(a) + Math.sin(b), -(Math.cos(a) + Math.cos(b))];
+
+// frames to seconds of motion: the free chaos at half speed, the motor at a quarter, the held butterfly at a quarter
+const FPS = 30;
+let SEG, TL;
+function timeline() {
+    const tOn = D.t_free, tC = D.catch_t, tEnd = Math.min(D.t[N - 1], tC + 3 * D.T);
+    SEG = [[0, 0, 0.5], [0, tOn, 0.25], [0, tEnd, 0.25]];      // [first frame, sim time at it, speed]
+    const fOn = 30 + Math.round(tOn / 0.5 * FPS); SEG[0][0] = 30; SEG[1][0] = fOn;
+    const fEnd = fOn + Math.round((tEnd - tOn) / 0.25 * FPS);
+    TL = { on: fOn, catch: fOn + Math.round((tC - tOn) / 0.25 * FPS), end: fEnd, total: fEnd + 90, tEnd };
+}
+function simT(f) {
+    if (f < 30) return 0;
+    if (f < TL.on) return (f - 30) / FPS * 0.5;
+    return Math.min(TL.tEnd, D.t_free + (f - TL.on) / FPS * 0.25);
+}
+
+// ------------------------------------------------------------------------------------------------ layout
+const PL = { x: 40, y: 190, s: 1000 }, SC = PL.s / 2 / 2.25, CX = PL.x + PL.s / 2, CY = PL.y + PL.s / 2 - 40;
+const ST = { x: 40, y: 1210, w: 1000, h: 300 }, CH = { x: 40, y: 1530, w: 1000, h: 140 };
+const PHASES = [['chaos', 'motor off'], ['pump & steer', 'energy and swing'], ['wait', 'motor off, watching'], ['catch & hold', 'tiny corrections']];
+const phaseOf = m => m < 0 ? 0 : m === 0 ? 1 : m === 1 ? 2 : 3;
+
+function text(g, s, x, y, size, color, align, wt) { g.fillStyle = color; g.font = `${wt || 400} ${size}px "Instrument Sans"`; g.textAlign = align || 'left'; g.fillText(s, x, y); }
+function card(g, x, y, w, h) { g.fillStyle = TH.paper; g.strokeStyle = TH.rule; g.lineWidth = 1; g.beginPath(); g.roundRect(x, y, w, h, 14); g.fill(); g.stroke(); }
+
+function drawScene(g, f) {
+    g.fillStyle = TH.bg; g.fillRect(0, 0, 1080, 1920);
+    const t = simT(f), s = stateAt(t), ph = phaseOf(s.mode), held = t > D.catch_t + 0.4;
+    card(g, PL.x, PL.y, PL.s, PL.s);
+    g.save(); g.beginPath(); g.roundRect(PL.x, PL.y, PL.s, PL.s, 14); g.clip();
+    g.strokeStyle = TH.rule; g.lineWidth = 1; g.setLineDash([3, 7]); for (const r of [1, 2]) { g.beginPath(); g.arc(CX, CY, r * SC, 0, 7); g.stroke(); } g.setLineDash([]);
+    // the target: the butterfly, faint, until it is caught
+    const gA = held ? Math.max(0, 0.22 - 0.22 * (t - D.catch_t - 0.4) / 3) : 0.22;
+    if (gA > 0.005) {
+        g.strokeStyle = rgba(TH.ghost, gA); g.lineWidth = 1.4; g.beginPath();
+        for (let i = 0; i < D.orbit_th1.length; i++) { const [x, h] = tip(D.orbit_th1[i], D.orbit_th2[i]); i ? g.lineTo(CX + SC * x, CY - SC * h) : g.moveTo(CX + SC * x, CY - SC * h); }
+        g.stroke();
+        text(g, 'the butterfly (target)', PL.x + 20, PL.y + 36, 20, rgba(TH.ghost, Math.min(1, 3 * gA)));
+    }
+    // the trail of the tip: the last 0.8 s while it searches; since the catch once it is held
+    const t0 = held ? D.catch_t : Math.max(0, t - 0.8), n = Math.max(2, Math.round((t - t0) / D.h));
+    g.globalCompositeOperation = TH.add; g.lineCap = 'round';
+    let prev = null;
+    for (let j = 0; j <= n; j++) {
+        const tt = t0 + (t - t0) * j / n, st = stateAt(tt), [x, h] = tip(st.th1, st.th2), P = [CX + SC * x, CY - SC * h];
+        if (prev) { const age = (t - tt), a = held ? 0.25 + 0.65 * Math.exp(-age / 2.5) : Math.exp(-age / 0.35);
+            g.strokeStyle = rgba(TH.curve, a); g.lineWidth = held ? 2.0 : 2.6; g.beginPath(); g.moveTo(prev[0], prev[1]); g.lineTo(P[0], P[1]); g.stroke(); }
+        prev = P;
+    }
+    g.globalCompositeOperation = 'source-over';
+    // the motor: an arc at the pin, as long as the torque, in the direction it turns the upper rod
+    const tq = s.tau, frac = Math.min(1, Math.abs(tq) / D.tau_max);
+    if (frac > 0.01) {
+        const a0 = -Math.PI / 2, a1 = a0 - Math.sign(tq) * frac * 1.6 * Math.PI;
+        g.strokeStyle = rgba(TH.motor, 0.9); g.lineWidth = 9; g.beginPath(); g.arc(CX, CY, 46, Math.min(a0, a1), Math.max(a0, a1)); g.stroke();
+        const ae = a1, hx = CX + 46 * Math.cos(ae), hy = CY + 46 * Math.sin(ae), dir = -Math.sign(tq);
+        g.fillStyle = rgba(TH.motor, 0.9); g.beginPath(); g.moveTo(hx + 14 * Math.cos(ae + dir * Math.PI / 2), hy + 14 * Math.sin(ae + dir * Math.PI / 2));
+        g.lineTo(hx + 10 * Math.cos(ae), hy + 10 * Math.sin(ae)); g.lineTo(hx - 10 * Math.cos(ae), hy - 10 * Math.sin(ae)); g.fill();
+    }
+    // the rods
+    const j1 = [CX + SC * Math.sin(s.th1), CY + SC * Math.cos(s.th1)], [x2, h2] = tip(s.th1, s.th2), j2 = [CX + SC * x2, CY - SC * h2];
+    g.strokeStyle = TH.rods; g.lineWidth = 10; g.beginPath(); g.moveTo(CX, CY); g.lineTo(j1[0], j1[1]); g.lineTo(j2[0], j2[1]); g.stroke();
+    for (const [x, y] of [j1, j2]) { g.fillStyle = TH.bob; g.beginPath(); g.arc(x, y, 14, 0, 7); g.fill(); g.strokeStyle = TH.ring; g.lineWidth = 3; g.stroke(); }
+    g.fillStyle = TH.paper; g.beginPath(); g.arc(CX, CY, 9, 0, 7); g.fill(); g.strokeStyle = TH.rods; g.lineWidth = 3; g.stroke();
+    text(g, `motor at the pin: ${Math.abs(tq).toFixed(1)} N·m`, PL.x + PL.s - 20, PL.y + 38, 22, rgba(TH.motor, 1), 'right', 500);
+    text(g, `shown at ${f < TL.on ? '½' : '¼'} of real speed`, PL.x + PL.s - 20, PL.y + PL.s - 22, 18, TH.muted, 'right');
+    g.restore();
+    // the phases
+    card(g, ST.x, ST.y, ST.w, ST.h);
+    const pw = (ST.w - 40) / 4;
+    PHASES.forEach(([a, b], i) => {
+        const x = ST.x + 20 + i * pw, on = i === ph, done = i < ph;
+        g.fillStyle = on ? rgba(TH.curve, 0.18) : 'rgba(0,0,0,0)'; g.beginPath(); g.roundRect(x + 4, ST.y + 18, pw - 8, 86, 10); g.fill();
+        g.strokeStyle = on ? TH.accent : TH.rule; g.lineWidth = on ? 2 : 1; g.stroke();
+        text(g, `${i + 1}  ${a}`, x + 18, ST.y + 54, 24, on ? TH.accent : done ? TH.ink : TH.muted, 'left', on ? 500 : 400);
+        text(g, b, x + 18, ST.y + 86, 17, TH.muted);
+    });
+    const rows = [[`t = ${t.toFixed(2)} s`, TH.ink], [`energy ${s.E.toFixed(1)} J  (butterfly: ${D.E_star.toFixed(1)} J)`, rgba(TH.energy, 1)],
+        [`motor torque ${Math.abs(tq).toFixed(1)} N·m  (limit ${D.tau_max.toFixed(0)})`, rgba(TH.motor, 1)],
+        [s.mode >= 1 ? `distance from the butterfly ${s.dist.toFixed(s.dist < 0.01 ? 4 : 3)}` : 'distance from the butterfly: not yet near', TH.ink]];
+    rows.forEach(([r, c], i) => text(g, r, ST.x + 24 + (i % 2) * 490, ST.y + 156 + Math.floor(i / 2) * 50, 23, c));
+    text(g, `energy bar`, ST.x + 24, ST.y + 268, 17, TH.muted);
+    const bx = ST.x + 130, bw = ST.w - 160, ef = clamp(s.E / 420, 0, 1), ex = bx + bw * D.E_star / 420;
+    g.fillStyle = rgba(TH.energy, 0.2); g.fillRect(bx, ST.y + 254, bw, 16); g.fillStyle = rgba(TH.energy, 0.85); g.fillRect(bx, ST.y + 254, bw * ef, 16);
+    g.strokeStyle = TH.ink; g.lineWidth = 2; g.beginPath(); g.moveTo(ex, ST.y + 246); g.lineTo(ex, ST.y + 278); g.stroke();
+    // the record: energy and torque against time
+    card(g, CH.x, CH.y, CH.w, CH.h);
+    const tx = tt => CH.x + 20 + (CH.w - 40) * tt / TL.tEnd, ey = E => CH.y + CH.h - 16 - (CH.h - 32) * clamp(E / 420, 0, 1), qy = q => CH.y + CH.h / 2 - (CH.h / 2 - 16) * q / D.tau_max;
+    g.strokeStyle = TH.rule; g.lineWidth = 1; g.beginPath(); g.moveTo(tx(D.t_free), CH.y + 10); g.lineTo(tx(D.t_free), CH.y + CH.h - 10); g.moveTo(tx(D.catch_t), CH.y + 10); g.lineTo(tx(D.catch_t), CH.y + CH.h - 10); g.stroke();
+    for (const [key, y, col] of [['tau', qy, TH.motor], ['E', ey, TH.energy]]) {
+        g.strokeStyle = rgba(col, 0.9); g.lineWidth = 1.6; g.beginPath();
+        const m = Math.min(N - 1, Math.floor(t / D.h));
+        for (let i = 0; i <= m; i += 2) { const X = tx(D.t[i]), Y = y(D[key][i]); i ? g.lineTo(X, Y) : g.moveTo(X, Y); }
+        g.stroke();
+    }
+    text(g, 'energy', CH.x + 26, CH.y + 28, 16, rgba(TH.energy, 1)); text(g, 'torque', CH.x + 100, CH.y + 28, 16, rgba(TH.motor, 1));
+    text(g, 'motor on', tx(D.t_free) + 6, CH.y + CH.h - 14, 15, TH.muted); text(g, 'caught', tx(D.catch_t) + 6, CH.y + CH.h - 14, 15, TH.muted);
+}
+
+// ------------------------------------------------------------------------------------------------ words under the picture
+let CAPS;
+function captions() {
+    CAPS = [
+        [0, 'A double pendulum, struck gently (18 J), swings in chaos: two such pendulums one part in a million apart disagree by 1 cm within 6 s.'],
+        [TL.on, 'The motor switches on. It pumps the energy up to the butterfly\'s 390.8 J, and steers the upper rod\'s swing to the butterfly\'s size.<br><span style="font-size:22px;color:var(--muted)">torque τ, energy E:  dE/dt = τ · dθ₁/dt</span>'],
+        [TL.catch - 40, 'Close enough: the motor makes small corrections along the butterfly\'s own lap (a feedback designed on the orbit, as in our control lessons).'],
+        [TL.catch + 150, 'Caught. The butterfly is unstable by itself (an error grows 2 % a lap); held, the motor\'s torque falls to almost nothing.'],
+        [TL.catch + 420, 'The butterfly draws itself. From 30 random strikes, the motor caught every one: most within 5 minutes, the slowest after 11.'],
+    ];
+}
+const memo = {};
+function setHTML(el, key, html) { if (memo[key] !== html) { memo[key] = html; el.innerHTML = html; } }
+function showCaption(f) {
+    let k = 0; while (k + 1 < CAPS.length && f >= CAPS[k + 1][0]) k++;
+    const u = k === 0 ? ease(f / 30) : ease((f - CAPS[k][0]) / 14), prev = k > 0 ? CAPS[k - 1][1] : '';
+    const [cur, old] = (k % 2 === 0) ? [$('capA'), $('capB')] : [$('capB'), $('capA')];
+    setHTML(cur, 'c' + cur.id, CAPS[k][1]); setHTML(old, 'c' + old.id, prev); cur.style.opacity = u; old.style.opacity = 1 - u;
+}
+
+let g, DPR = 1;
+function renderFrame(f) { g.setTransform(DPR, 0, 0, DPR, 0, 0); drawScene(g, f); showCaption(f); }
+window.renderFrame = renderFrame;
+async function boot() {
+    DPR = window.devicePixelRatio || 1;
+    D = await (await fetch('catch.json')).json(); N = D.t.length;
+    timeline(); captions();
+    const c = $('cv'); c.width = 1080 * DPR; c.height = 1920 * DPR; c.style.width = '1080px'; c.style.height = '1920px'; g = c.getContext('2d');
+    await document.fonts.ready;
+    await Promise.all(['Instrument Sans', 'Instrument Serif'].map(fn => document.fonts.load(`20px "${fn}"`)));
+    await document.fonts.load('20px "Instrument Sans"', 'φθτ'); await document.fonts.load('500 20px "Instrument Sans"');
+    window.FILM = { frames: () => TL.total };
+    renderFrame(Number(Q.get('f') || 0)); window.__ready = true;
+    if (!Q.get('film')) { let f = 0, last = null; const loop = ts => { if (last === null || ts - last >= 1000 / FPS - 2) { renderFrame(f % TL.total); f++; last = ts; } requestAnimationFrame(loop); }; requestAnimationFrame(loop); }
+}
+function fit() {
+    const cw = document.documentElement.clientWidth, ch = document.documentElement.clientHeight, s = Math.min(cw / 1080, ch / 1920, 1);
+    $('stage').style.transform = `translate(${Math.max(0, (cw - 1080 * s) / 2)}px, 0) scale(${s})`;
+}
+if (!Q.get('film')) { fit(); addEventListener('resize', fit); }
+boot();
+</script>
+</body>
+</html>
