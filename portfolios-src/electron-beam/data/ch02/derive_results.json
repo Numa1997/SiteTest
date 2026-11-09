@@ -64,7 +64,7 @@
    "id": "C10",
    "title": "thermionic limit (D=1 above the top): J = A_R T^2 exp(-\u03c6/kT), A_R = 4\u03c0 m e k_B^2/h^3",
    "ok": true,
-   "detail": "A_R = 1.20173e+06 A m^-2 K^-2 (textbook 1.2017e6)"
+   "detail": "A_R = 1.20173\u00d710\u2076 A m\u207b\u00b2 K\u207b\u00b2 (textbook 1.2017\u00d710\u2076)"
   },
   {
    "id": "C11",

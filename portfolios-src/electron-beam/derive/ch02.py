@@ -135,7 +135,7 @@ Tn, ph_ = sp.symbols('T phi_w', positive=True)
 kBs = sp.symbols('k_B', positive=True)
 thermionic = sp.integrate(4 * sp.pi * m * kBs * Tn / h ** 3 * sp.exp(-w / (kBs * Tn)), (w, ph_, sp.oo))   # ln(1+z) ≈ z for w >> kT
 ok = sp.simplify(thermionic - 4 * sp.pi * m * (kBs * Tn) ** 2 / h ** 3 * sp.exp(-ph_ / (kBs * Tn))) == 0 and abs(AR / 1.2017e6 - 1) < 1e-3
-check('C10', 'thermionic limit (D=1 above the top): J = A_R T^2 exp(-φ/kT), A_R = 4π m e k_B^2/h^3', ok, f'A_R = {AR:.5e} A m^-2 K^-2 (textbook 1.2017e6)')
+check('C10', 'thermionic limit (D=1 above the top): J = A_R T^2 exp(-φ/kT), A_R = 4π m e k_B^2/h^3', ok, f'A_R = {AR / 1e6:.5f}×10⁶ A m⁻² K⁻² (textbook 1.2017×10⁶)')
 OUT['numbers']['A_R'] = AR
 
 # ------------------------------------------------------------------ C11: unified model against analytic limits (cold FN and Richardson-Schottky)

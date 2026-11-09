@@ -222,7 +222,7 @@
     const ne = Math.round(level * 34), bez = (p, s) => { const u = 1 - s; return [u * u * u * p[0] + 3 * u * u * s * p[2] + 3 * u * s * s * p[4] + s * s * s * p[6], u * u * u * p[1] + 3 * u * u * s * p[3] + 3 * u * s * s * p[5] + s * s * s * p[7]]; };
     g.fillStyle = C.wine;
     for (let i = 0; i < ne; i++) { const L_ = lines[i % nl], s = (dots[i].s + ts * 0.00045 * (0.7 + dots[i].a)) % 1, [px, py] = bez(L_, s); g.beginPath(); g.arc(px, py, 2.3, 0, 7); g.fill(); }
-    g.fillStyle = C.ink2; g.textAlign = 'left'; g.fillText('r = ' + M.I.r.toFixed(0) + ' nm (drawn to scale against the shank, not against the gap)', 10, h - 8);
+    g.fillStyle = C.ink2; g.textAlign = 'left'; g.fillText('r = ' + M.I.r.toFixed(0) + ' nm (apex on a logarithmic scale; shank and gap not to scale)', 10, h - 8);
     if (glow) { g.fillStyle = C.wine; g.font = "600 12px 'IBM Plex Mono', monospace"; g.fillText('FLASH: tip heated to ' + M.I.Tfl.toFixed(0) + ' K', 10, 18); }
   }
 
@@ -250,7 +250,7 @@
     if (!M || !st) return;
     const R = {
       'eb-o-F': (M.F0 * 1e-9).toFixed(2) + ' V/nm (f = ' + M.mC.f.toFixed(3) + ')', 'eb-o-reg': M.mC.regime.replace('emission', ''),
-      'eb-o-I': sci(mx.Ie, 2) + ' A', 'eb-o-B': sci(mx.Br, 2), 'eb-o-dE': (mx.fwhm / eV).toFixed(3) + ' eV', 'eb-o-dv': (mx.dv * 1e9).toFixed(2) + ' nm',
+      'eb-o-I': sci(mx.Ie, 2) + ' A', 'eb-o-B': sci(mx.Br, 2) + ' A m⁻² sr⁻¹ V⁻¹', 'eb-o-dE': (mx.fwhm / eV).toFixed(3) + ' eV', 'eb-o-dv': (mx.dv * 1e9).toFixed(2) + ' nm',
       'eb-o-th': (st.th * 100).toFixed(2) + ' %', 'eb-o-r': Number.isFinite(st.ratio) ? st.ratio.toFixed(3) : 'flashing', 'eb-o-t': fmtS(st.since), 'eb-o-n': String(st.nflash),
       'eb-o-fl': sci(E.hkFlux(M.I.p, 300, MASS[M.I.gas]), 2) + ' m⁻² s⁻¹', 'eb-o-ml': fmtS(1e19 / E.hkFlux(M.I.p, 300, MASS[M.I.gas])),
     };
