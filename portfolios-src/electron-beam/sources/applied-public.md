@@ -68,6 +68,9 @@ Applied's original text before using it.
 
 ## 3. Verified earlier by the planning session (PLAN.md section 3), not re-read by me
 
+**Re-read by the finisher on 9 November 2026** (through the Exa fetch tool; plain curl gets 403): the PROVision 10 page still says "up to 100 million accurate,
+actionable measurements per hour" and "Applied’s unique Elluminator™ technology captures 95% of back-scattered electrons". Chapter 7 quotes both as claims.
+
 - PROVision 10 page <https://www.appliedmaterials.com/us/en/product-library/provision-10-ebeam-metrology.html>: cold field emission
   column, "up to 100 million accurate, actionable measurements per hour", Elluminator "captures 95% of back-scattered electrons",
   high-energy modes "hundreds of nanometers deep", low-energy modes for EUV resist.

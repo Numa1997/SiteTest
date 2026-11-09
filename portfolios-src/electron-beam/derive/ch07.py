@@ -28,7 +28,7 @@ EN, VN = n, n
 mean = EN * EK
 var = EN * VK + VN * EK ** 2
 check('C1', 'counts per pixel: beam electrons Poisson with mean n̄, each giving a Poisson number of collected secondaries with mean m; the total has mean n̄m and variance n̄(m + m²)',
-      sp.simplify(var - n * (m + m ** 2)) == 0 and sp.simplify(mean - n * m) == 0, 'law of total variance: E[N]Var[K] + Var[N]E[K]² = %s' % sp.sstr(sp.factor(var)))
+      sp.simplify(var - n * (m + m ** 2)) == 0 and sp.simplify(mean - n * m) == 0, 'law of total variance: E[N]Var[K] + Var[N]E[K]² = n̄m(1 + m)')
 
 # C2: a 2-D Gaussian probe holds half its current inside the diameter 2 sqrt(2 ln 2) sigma, which is also its FWHM
 s, r = sp.symbols('sigma r', positive=True)
@@ -36,7 +36,7 @@ frac = sp.integrate(sp.exp(-r ** 2 / (2 * s ** 2)) * r, (r, 0, sp.Symbol('R'))) 
 R50 = sp.solve(sp.Eq(frac, sp.Rational(1, 2)), sp.Symbol('R'))
 fwhm = 2 * sp.sqrt(2 * sp.log(2)) * s
 check('C2', 'a round Gaussian probe of standard deviation σ per axis holds half its current inside the diameter 2√(2 ln 2) σ = 2.355σ, equal to its FWHM, so σ_p = d_p/2.355',
-      any(sp.simplify(2 * x - fwhm) == 0 for x in R50), 'R₅₀ = %s' % sp.sstr(R50))
+      any(sp.simplify(2 * x - fwhm) == 0 for x in R50), 'half the current lies inside the radius R₅₀ = σ√(2 ln 2)')
 
 # C3: the sidewall excess delta h (1/cos b - tan b) -> delta h as b -> 0, and equals delta (1/sin b - 1) w with w = h tan b
 b_, h_, d_ = sp.symbols('beta h delta', positive=True)
@@ -65,8 +65,10 @@ for kw in ({}, {'t_d': 1e-6}, {'t_d': 1e-8}, {'N_px': 128}, {'sidewall': 0.0, 'h
     o = R.compute(dict(p0, **kw))
     cmp.append((kw, o['sigma_CD'], o['sigma_CD_mc']))
 ratios = [b / a for _, a, b in cmp]
-check('C6', 'σ_CD by first-order error propagation against the standard deviation of 1000 noisy repeats of the same measurement: within 10 % (the Monte Carlo itself carries about 2 %)',
-      all(abs(x - 1) < 0.10 for x in ratios), '; '.join('%s: %.3f vs %.3f nm' % (json.dumps(kw) if kw else 'default', a * 1e9, b * 1e9) for kw, a, b in cmp))
+ob = R.compute(dict(p0, d_p=1.5e-8))
+check('C6', 'σ_CD by first-order error propagation against the standard deviation of 4000 noisy repeats of the same measurement: within 10 % where the edges stand well out of the floor (the Monte Carlo carries about 1 %)',
+      all(abs(x - 1) < 0.10 for x in ratios), '; '.join('%s: %.3f vs %.3f nm' % (json.dumps(kw) if kw else 'default', a * 1e9, b * 1e9) for kw, a, b in cmp)
+      + '. Not within 10 %%: the 15 nm probe of Example 7.4 (edge contrast 14 %%), %.3f vs %.3f nm' % (ob['sigma_CD'] * 1e9, ob['sigma_CD_mc'] * 1e9))
 nums['ep_vs_mc'] = [[json.dumps(kw), a, b] for kw, a, b in cmp]
 
 # C7: the bias of the threshold method grows with the blur; with a sharp probe and no signal spread it tends to the bottom width

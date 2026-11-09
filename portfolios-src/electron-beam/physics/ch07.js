@@ -10,12 +10,13 @@
    Blur: Gaussian, sigma_b^2 = sigma_p^2 + sigma_sig^2, sigma_p = d_p / (2 sqrt(2 ln 2)) (a Gaussian probe of FW50 d_p), sigma_sig from chapter 6.
    Counts: nbar = I_p t_d / e beam electrons per pixel; each collected with the yield Y(x) and the collection fraction eta_c. Taking the beam
    electrons and the secondaries each Poisson, the counts per pixel of one line have mean nbar m and variance nbar (m + m^2), m = eta_c Y(x).
-   N_px lines along the feature are averaged into one profile, so its variance is that over N_px.
+   N_px lines along the feature are averaged into one profile, so its variance is that over N_px. The walls of the neighbouring periods are
+   added, 2 + ceil(5 sigma_b / pitch) periods on each side.
    Edge algorithm (threshold on the outer flank of each edge peak): baseline b = mean of the pixels in the middle half of the space; peak level
    = mean of the three pixels around the maximum of each half; threshold T = (b + peak) / 2; the edge is where the profile, walked outwards
    from the peak, first falls below T (linear interpolation between pixels). CD_meas = x_R - x_L.
    sigma_CD: first-order error propagation, sigma^2 = sum_i (dCD/dS_i)^2 var_i, with dCD/dS_i by finite differences of the algorithm itself;
-   sigma_CD_mc: the same algorithm on 1000 noisy averaged profiles (Gaussian noise of the stated variance, Box-Muller from core.rng, seed fixed).
+   sigma_CD_mc: the same algorithm on 4000 noisy averaged profiles (Gaussian noise of the stated variance, Box-Muller from core.rng, seed fixed).
    SNR: (peak - baseline) / sqrt(variance at the baseline) for one line, the contrast an operator sees in the raw image.
    Time per site: N_px^2 t_d (one square image) + t_ov.  erf: Abramowitz and Stegun 7.1.26 (|error| < 1.5e-7). */
 (function (root, factory) {
@@ -24,7 +25,7 @@
 })(typeof self !== 'undefined' ? self : this, function (core) {
   'use strict';
   const { C } = core;
-  const SEED = 7072026, NMC = 1000;
+  const SEED = 7072026, NMC = 4000;
   function erf(x) {
     const s = x < 0 ? -1 : 1, a = Math.abs(x), t = 1 / (1 + 0.3275911 * a);
     const y = 1 - (((((1.061405429 * t - 1.453152027) * t) + 1.421413741) * t - 0.284496736) * t + 0.254829592) * t * Math.exp(-a * a);
@@ -36,7 +37,8 @@
   function yieldAt(x, p, sb) {
     const w = p.height * Math.tan(p.sidewall), dens = p.delta_SE * p.height * (1 / Math.cos(p.sidewall) - Math.tan(p.sidewall));
     let Y = p.delta_SE + p.eta_BSE;
-    for (let k = -2; k <= 2; k++) {
+    const K = Math.min(50, 2 + Math.ceil(5 * sb / p.pitch));               // enough neighbouring periods for the blur
+    for (let k = -K; k <= K; k++) {
       const c = k * p.pitch;
       for (const [a, b] of [[c - (p.cd + w) / 2, c - (p.cd - w) / 2], [c + (p.cd - w) / 2, c + (p.cd + w) / 2]]) {
         if (b - a < 1e-6 * sb) Y += dens * Math.exp(-0.5 * ((x - 0.5 * (a + b)) / sb) ** 2) / (sb * Math.sqrt(2 * Math.PI));
@@ -76,11 +78,12 @@
     return xL === null || xR === null ? null : [xL, xR];
   }
   function compute(p) {
+    if (!(p.height > 0)) throw new Error('a line of zero height has no walls, and in this model no edge signal: give it a height');
     const st = setup(p), N = p.N_px;
     const e0 = edges(st.mean, st.x, p);
     if (!e0) throw new Error('the edge algorithm finds no edges: the space is narrower than a few pixels or the edges are blurred into each other');
     let mx = -Infinity, mn = Infinity; for (const v of st.mean) { mx = Math.max(mx, v); mn = Math.min(mn, v); }
-    if (mx - mn < 1e-3 * mn) throw new Error('the edges are blurred away: the profile varies by less than 0.1 % across the period, so there is nothing to measure (the blur of the signal is much wider than the pitch)');
+    if (mx - mn < 0.05 * mn) throw new Error('the edges are blurred away: the profile varies by less than 5 % across the period, and the threshold rule no longer finds stable edges (the blur of the signal is too wide for the pitch)');
     const cd0 = e0[1] - e0[0];
     // error propagation: dCD/dS_i by finite differences of the algorithm
     let v = 0;
@@ -155,7 +158,7 @@
       controls: ['t_d', 'N_px', 'I_p', 'd_p', 'eta_c', 'cd', 'pitch', 'height', 'sidewall', 'px'],
       readouts: ['n_pe', 'SNR', 'CD_meas', 'sigma_CD', 'sigma_CD_mc', 'dose', 'MPH'],
       aspect: '16 / 10', aspectPhone: '4 / 5',
-      caption: 'One period of a line-and-space pattern, seen by the secondary-electron detector: the line in section below, the expected counts above (wine), one noisy scan line (dots) and the mean of all scan lines (dark). The dashed lines are the edges the threshold algorithm finds. The two edges are bright because a beam on a steep sidewall frees more secondaries near a surface. The yields and the blur of the signal are chapter 6’s silicon at 800 V and can be changed in chapter 8.',
+      caption: 'One period of a line-and-space pattern, seen by the secondary-electron detector: the line in section below (widths to scale, height not), the expected counts above (wine), one noisy scan line (dots; those beyond the frame sit on its edge) and the mean of all scan lines (dark). The dashed lines are the edges the threshold rule finds on the noise-free profile. Here the probe size and the current are independent sliders; chapter 8 couples them through chapter 5. The two edges are bright because a beam on a steep sidewall frees more secondaries near a surface. The yields and the blur of the signal are chapter 6’s silicon at 800 V and can be changed in chapter 8.',
     },
     compute, draw, edges, setup, yieldAt, erf,
   };

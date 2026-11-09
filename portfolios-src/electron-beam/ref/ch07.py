@@ -7,7 +7,7 @@ from .ch06 import rng
 
 INPUTS = ['d_p', 'I_p', 't_d', 'N_px', 'eta_c', 'cd', 'pitch', 'height', 'sidewall', 'px', 't_ov', 'delta_SE', 'eta_BSE', 'sigma_sig']
 OUTPUTS = ['SNR', 'sigma_CD', 'MPH', 'CD_meas', 'sigma_CD_mc', 'dose', 'n_pe', 'prof_curve']
-SEED, NMC = 7072026, 1000
+SEED, NMC = 7072026, 4000
 
 
 def erf(x):
@@ -26,7 +26,8 @@ def yieldAt(x, p, sb):
     w = p['height'] * math.tan(p['sidewall'])
     dens = p['delta_SE'] * p['height'] * (1 / math.cos(p['sidewall']) - math.tan(p['sidewall']))
     Y = p['delta_SE'] + p['eta_BSE']
-    for k in range(-2, 3):
+    K = min(50, 2 + math.ceil(5 * sb / p['pitch']))
+    for k in range(-K, K + 1):
         c = k * p['pitch']
         for a, b in ((c - (p['cd'] + w) / 2, c - (p['cd'] - w) / 2), (c + (p['cd'] - w) / 2, c + (p['cd'] + w) / 2)):
             if b - a < 1e-6 * sb:
@@ -85,12 +86,14 @@ def edges(S, x, p):
 
 
 def compute(p):
+    if not p['height'] > 0:
+        raise ValueError('a line of zero height has no walls')
     st = setup(p)
     N = p['N_px']
     e0 = edges(st['mean'], st['x'], p)
     if not e0:
         raise ValueError('the edge algorithm finds no edges')
-    if max(st['mean']) - min(st['mean']) < 1e-3 * min(st['mean']):
+    if max(st['mean']) - min(st['mean']) < 0.05 * min(st['mean']):
         raise ValueError('the edges are blurred away')
     cd0 = e0[1] - e0[0]
     v = 0.0

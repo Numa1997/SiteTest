@@ -166,3 +166,32 @@ misreading, not theirs: with 0.54 their Eqs. reproduce 1.07×10⁻¹⁸ B agains
 - The V_land slider: the lens is computed at the landing voltage (no retarding field); the caption and the hand-over say so. The hand-over no longer claims M is passed on.
 - Busch cited (record found, text not read); Hawkes and Kasper cited as not opened, with our numerical agreement as the check. Lead backslashes, the raw heading
   "C_s and C_c" and raw SymPy output in the checks table fixed. Figure 4.1 redrawn: gap in the bore wall, field lines, electron path, labels readable at 360 px.
+
+## 6. Chapters 6 and 7: built by the finisher, blind reviews, and what was done
+**Chapter 6** (Monte Carlo after Joy 1991, Lin and Joy 2005; both read in full; Joy et al. 1996 Table 2 read). Checks M1–M12; stored runs through Node.
+Every number reproduced in the derivation check. Fixed after the reviews:
+- **Code**: the near-axis branch of the direction rotation turned about z instead of about the direction, off by up to 4.5 mrad (fired 49 times per run at
+  30 kV). Replaced by one exact construction; the check now covers directions along and near each axis (error 3×10⁻¹⁶). All Monte Carlo numbers moved slightly.
+- Example 6.2 (silicon at 800 V) read as if gold's δ + η were 1; now: silicon's δ + η = 1.00, so 800 V is the model's crossover for silicon; gold's 2.2.
+- The "many losses per free path" premise fails at the default (21.6 eV per elastic path, about one free-electron plasmon, 16.6 eV): stated.
+- Built-in agreement named (screening fitted to backscattering, ε and λ_s fitted to yields); Sommerfeld parameter Zα/β (1.8 Si, 10.3 Au); gold's mean free path
+  (0.09 nm) below the atomic spacing (0.26 nm); gold's trend wrong (measured η rises, ours falls), with Joy's own sentence on the Mott cross-section.
+- δ compared both ways with the universal law (now written out, Eq. 6.x) and with Lin and Joy's Monte Carlo; "must lie" removed.
+- Derivations added: Rutherford from the orbit (check M2), the integral and the inversion behind Eq. 6, 78 500 = 2π(e²/4πε₀)²N_A and 1.166 = √(e/2)
+  (check M8), 1024 against 2mc² = 1022 keV stated. Random numbers renamed ξ (R is the range). Problem 1 uses the exact median 2a/(1+2a).
+- A section on scanning (deflection angle eB ℓ/p, field of view, a field below the Earth's) — the chapter title promised it.
+- Checks that only compare are marked "recorded", not "pass". u_η and u_δ are readouts. Figures' labels larger.
+- Not verified by the derivation checker (its access was refused): Joy 1991's quotations. I read that paper in full myself earlier this session (Exa fetch).
+
+**Chapter 7** (line profile, shot noise, threshold rule, error propagation and Monte Carlo, throughput). Checks C1–C8. Every number reproduced. Fixed:
+- Problem 2 asked to explain a dependence on t_ov that does not exist; rewritten (at fixed σ_CD, t_d N is fixed; time N·t_dN + t_ov).
+- Problem 1's premise ("more than √2") false at the default (interpolation averages two pixels); rewritten to ask for both effects.
+- The Key result claimed four times the dose when the lines are quadrupled; dose does not depend on the number of lines. And the law holds at fixed pixel size. Fixed.
+- Monte Carlo agreement claimed too broadly: at the blunt probe (Example 7.4) the Monte Carlo is 11 % below; now stated, the repeats raised from 1000 to 4000,
+  the cause of the usual few-per-cent excess named (the noisy peak jumps between flat top pixels), and the module stops below 5 % edge contrast.
+- Neighbouring periods: the code added two per side; now 2 + ceil(5σ_b/p), and a zero-height line stops with its own message.
+- Symbols: counts are k (N is lines), floor level S_floor, wall ends x₁, x₂. The model's values (δ, η, σ_s, σ_b, λ_s, aspect ratio, blur/space) are stated.
+- "Collects 3200 electrons" was beam electrons landing; corrected. Biases explained (sidewall projection and blur), the fin's 64 % stated.
+- Labels: the I_p slider no longer claims chapter 5 sets the probe from it; the caption says probe size and current are independent here and coupled in chapter 8.
+- Limits: grazing incidence, the edge effect, shadowing, materials, detector noise. Sources paragraph. Applied's page: re-read 9 November 2026, recorded in
+  `sources/applied-public.md` (the reviewers could not reach it: 403 to curl).
