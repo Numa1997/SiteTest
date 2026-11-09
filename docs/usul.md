@@ -41,6 +41,10 @@ The two commands above still work by hand from a computer signed in to Cloudflar
 to the same file in a fresh build. A branch other than `main` gets the same check in red, failing at once: only `main` is set up to
 build. So merging into `main` is deploying, and it happens only on Numa's word.
 
+**A file over 25 MiB fails the whole deploy (9 November 2026).** Merge `bf4edf8` carried `public/simulations/fig13/video/catch-dark.mp4` at 29.0 MB;
+Cloudflare serves no asset above 25 MiB, so the deploy did not go out and the live site kept the previous version. `tools/fig13/gift/video_pages.py`
+now raises the compression until each video is under 24 MB. Before merging large media: `find public -size +24M` must print nothing.
+
 **When a merge does not build (seen 6 November 2026, again 9 November 2026: merge `ba082de`, the new gift video of Fig. 13, had no "Workers Builds" check while `7b49ec5` before it had one; the next merge started a build).** The merge `395fb42` (Fig. 12, PR #96) got no "Workers Builds: phyein-usul"
 check at all, while every push before 09:22 UTC that day had one: Cloudflare never started the build, and phyeinusul.com kept the old page.
 Check it with `curl -sS https://api.github.com/repos/Numa1997/SiteTest/commits/<sha>/check-runs | grep -o '"name": "[^"]*"'`: no

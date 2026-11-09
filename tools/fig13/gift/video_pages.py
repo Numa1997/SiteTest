@@ -2,7 +2,8 @@
 
     python3 tools/fig13/gift/video_pages.py GIFT_DARK.mp4 GIFT_LIGHT.mp4 CONS_DARK.mp4 CONS_LIGHT.mp4 CATCH_DARK.mp4 CATCH_LIGHT.mp4
 
-Encodes each master (rendered by render.cjs + ffmpeg at CRF 16) for the web: H.264 High, CRF 23, 30 frames per second, a key frame
+Encodes each master (rendered by render.cjs + ffmpeg at CRF 16) for the web: H.264 High, CRF 23 (raised until the file is under 24 MB,
+below Cloudflare's 25 MiB limit per file), 30 frames per second, a key frame
 every 2 s, moov atom first (plays while it loads), into public/simulations/fig13/video/{gift,construction}-{dark,light}.mp4, with a
 poster frame each; then writes the two player pages:
     public/simulations/fig13/reem.html          the gift, then the construction, then the catch, then again from the start
@@ -19,10 +20,13 @@ masters = dict(zip(['gift-dark', 'gift-light', 'construction-dark', 'constructio
 assert len(masters) == 6, __doc__
 for name, src in masters.items():
     out = VID / (name + '.mp4')
-    subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-i', src, '-c:v', 'libx264', '-profile:v', 'high', '-level', '4.1', '-preset', 'slow',
-                    '-crf', '23', '-r', '30', '-g', '60', '-pix_fmt', 'yuv420p', '-movflags', '+faststart', '-an', str(out)], check=True)
+    for crf in range(23, 36):     # Cloudflare serves no single file above 25 MiB (a larger one fails the whole deploy): stay under 24 MB
+        subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-i', src, '-c:v', 'libx264', '-profile:v', 'high', '-level', '4.1', '-preset', 'slow',
+                        '-crf', str(crf), '-r', '30', '-g', '60', '-pix_fmt', 'yuv420p', '-movflags', '+faststart', '-an', str(out)], check=True)
+        if out.stat().st_size < 24e6: break
+    assert out.stat().st_size < 24e6, out
     subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-ss', '0.5', '-i', str(out), '-frames:v', '1', '-q:v', '4', str(VID / (name + '.jpg'))], check=True)
-    print('%-20s %5.1f MB' % (name, out.stat().st_size / 1e6))
+    print('%-20s %5.1f MB (CRF %d)' % (name, out.stat().st_size / 1e6, crf))
 
 ref = (ROOT / 'public/simulations/flower-hunt.html').read_text().split('\n')
 CSP = next(l for l in ref if 'Content-Security-Policy' in l).strip()
