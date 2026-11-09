@@ -33,7 +33,7 @@ momenta p₁, p₂. Hamilton's equations for the general family (masses, lengths
 | `simulations/fig13/dive.html` | Film, phone first: from momentum space into one cell, then the exposure grows from an eye's 0.1 s to one lap. |
 | `simulations/fig13/reem.html` | The gift For رِيمْ as a precomputed video (`video/gift-{dark,light}.mp4`), then the construction video, looping; follows the reader's light or dark setting. The film itself (`tools/fig13/gift/reem.html`, the first version Numa liked, in the house colours) writes رِيمْ and فَرَاشَتُكِ (each traced from a plate Numa chose) with 640 arrows each, then the butterfly by two arrows, then its dashboard with the paper turning, then the exact strike and why it is not chaos (numbers from `butterfly_physics.py`). Labels and captions in Instrument Sans. |
 | `simulations/fig13/construction.html` | The construction as a precomputed video (`video/construction-{dark,light}.mp4`), looping; labels in Instrument Sans. The film (`tools/fig13/gift/construction.html`): h(t) beside the plane, x(t) below, the two time axes joined by a 45-degree mitre; for each instant a level and an upright line cross at the tip of the pendulum; a wheel first, then the butterfly. Videos and pages: `video_pages.py` (drawn live on a phone the films stuttered). |
-| `simulations/fig13/catch.html` | Catching the butterfly, as a precomputed video (`video/catch-{dark,light}.mp4`), looping; also the third part of `reem.html`. The film (`tools/fig13/gift/catch.html`, data `catch.json` from `butterfly_control.film_data`): the pendulum struck with p = (2, 4) (18 J) swings in chaos for 8 s, then a motor at the top pin pumps and steers, waits, catches at 13.04 s and holds; the butterfly draws itself. |
+| `simulations/fig13/catch.html` | Catching the butterfly, as a precomputed video (`video/catch-{dark,light}.mp4`), looping; also the third part of `reem.html`. The film (`tools/fig13/gift/catch.html`, data `catch.json` from `butterfly_control.film_data`): struck with p = (2, 4) (18 J), the pendulum swings in chaos for 8 s; a motor at the top pin (drawn as a direct-drive torque motor: six stator coils that glow with the current, a rotor of four magnets turning with the upper rod; torque constant 2.5 N·m/A, assumed) pumps and steers, catches at 13.34 s, holds four laps (corrections below 0.1 N·m), and lets go at 23.97 s within 0.0000 of the butterfly; a pen at the tip inks it, still within 0.0002 four free laps later. |
 
 The four films are generated: edit `tools/fig13/gift/*.html` and run `python3 tools/fig13/gift/publish_films.py`, which rewrites the
 asset paths, adds the two security meta tags and a link back to the dashboard. Opened without `?film=1` they loop live.
@@ -122,5 +122,9 @@ torque), so one motor reaches both the energy and the swing:
 3. catch and hold with the periodic LQR;
 4. a miss (steering not settled in 12 s, nothing near in 12 s, or a catch that slips past 1) drains the pendulum back to 60 J, into chaos, and tries again:
    each try is a fresh draw.
-Result, |τ| ≤ 60 N·m: 30 random strikes p ∈ [−8, 8]² kg·m²/s all caught and held (error below 0.01); 25 within 300 s (mean 53 s), the other 5 after 107 to
-677 s (6 to 37 tries). The film's run: p = (2, 4), free for 8 s, motor on, caught at 13.04 s on the first try, then held with the torque near zero.
+Integration: RK4 at four sub-steps per control step (2 400 steps a lap; at one sub-step the free orbit drifts about 1e-2 a lap and the motor
+locked onto that drift: an earlier count of "30 of 30", made at one sub-step, was wrong and was withdrawn the same day); free motion by DOP853.
+Result, |τ| ≤ 60 N·m, catch within 0.2: of 30 random strikes p ∈ [−8, 8]² kg·m²/s, 28 caught and held within 900 s (22 within 300 s; mean 163 s, slowest
+794 s); 2 not caught in 900 s. Close in, the catch converges from 0.05 to 0.2 away to the exact orbit (error below 1e-4, energy 390.78 J).
+Let go: released within 0.0003 of the orbit, the free pendulum stays within 0.1 of it for 275 laps (731 s), then wanders but stays within 0.13 for 1 500
+laps (66 min), its wings 135.55° to 135.83° throughout, never over the top (DOP853).

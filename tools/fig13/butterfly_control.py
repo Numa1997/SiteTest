@@ -254,14 +254,14 @@ def _nearest2(S, Qd, s, kg, window, M, sg):
 
 
 @njit
-def catch_anywhere(s0, S, K, Qd, h, seconds, Estar, Astar, kE, kA, kI, kB, Pmin_lim, wait_max, steer_max, win, e_tol, a_tol, catch_at, tau_max, coef, log_every):
+def catch_anywhere(s0, S, K, Qd, h, seconds, Estar, Astar, kE, kA, kI, kB, Pmin_lim, wait_max, steer_max, win, e_tol, a_tol, catch_at, lock_at, tau_max, coef, log_every):
     A_, B_, C_, U1, U2 = coef
     M = S.shape[0] - 1
     n = int(seconds / h); nl = n // log_every + 1
     log = np.zeros((nl, 10))     # t, E, A_est, dist, tau, mode, th1, th2, p1 ; then p2 stored separately
     p2log = np.zeros(nl)
     s = s0.copy(); mode = 0; k = 0; dist = 9.0; sg = 1.0; zA = 0.0; zE = 0.0
-    nb = int(win / h); hist = np.zeros(nb) + abs(s0[2] + s0[3]); hi = 0; Aest = 0.0; t_mode = np.zeros(3); hops = 0; t_hop = -1.0; Pmin = 0.0; t_steer = 0.0; drain = False; E_low = 60.0
+    nb = int(win / h); hist = np.zeros(nb) + abs(s0[2] + s0[3]); hi = 0; Aest = 0.0; t_mode = np.zeros(3); hops = 0; t_hop = -1.0; Pmin = 0.0; t_steer = 0.0; drain = False; E_low = 60.0; locked = False
     for i in range(n):
         E = _energy(s, A_, B_, C_, U1, U2); w1 = _w1(s, A_, B_, C_)
         Ptot = s[2] + s[3]                                        # the slow pendulum's momentum: dP/dt = tau - gravity's torque
@@ -287,20 +287,33 @@ def catch_anywhere(s0, S, K, Qd, h, seconds, Estar, Astar, kE, kA, kI, kB, Pmin_
             elif i * h - t_mode[1] > wait_max:                    # waited in vain: shove it onto another motion, steer again
                 mode = 0; hops += 1; t_hop = i * h; t_steer = i * h; zA = 0.0; zE = 0.0; drain = True
         if mode == 2:                                             # catch and hold
-            k, dist, sg = _nearest2(S, Qd, s, (k + 1) % M, 30, M, sg)
+            if locked:                                            # near: follow the orbit's own clock (the gains were designed for it)
+                k = (k + 1) % M
+                ds = s - sg * S[k]
+                for j in range(2): ds[j] -= 2 * np.pi * np.round(ds[j] / (2 * np.pi))
+                dist = 0.0
+                for j in range(4): dist += Qd[j] * ds[j] * ds[j]
+                dist = np.sqrt(dist)
+            else:                                                 # still coming in: re-index to the nearest point each step
+                k, dist, sg = _nearest2(S, Qd, s, (k + 1) % M, 30, M, sg)
+                if dist < lock_at: locked = True
             ds = s - sg * S[k]
             for j in range(2): ds[j] -= 2 * np.pi * np.round(ds[j] / (2 * np.pi))
             tau = 0.0
             for j in range(4): tau -= K[k, j] * ds[j]
             if dist > 1.0:                                        # the catch slipped: a miss; drain into chaos and try again
-                mode = 0; hops += 1; t_hop = i * h; t_steer = i * h; zA = 0.0; zE = 0.0; drain = True; tau = 0.0
+                mode = 0; hops += 1; t_hop = i * h; t_steer = i * h; zA = 0.0; zE = 0.0; drain = True; tau = 0.0; locked = False
         tau = min(tau_max, max(-tau_max, tau))
         if i % log_every == 0:
             r = i // log_every
             log[r, 0] = i * h; log[r, 1] = E; log[r, 2] = Aest; log[r, 3] = dist; log[r, 4] = tau; log[r, 5] = mode
             log[r, 6] = s[0]; log[r, 7] = s[1]; log[r, 8] = s[2]; log[r, 9] = sg; p2log[r] = s[3]
-        q1, q2, p1, p2 = rk4n(s[0], s[1], s[2] + 0.5 * h * tau, s[3], h, A_, B_, C_, U1, U2)   # torque as a kick split
-        s[0] = q1; s[1] = q2; s[2] = p1 + 0.5 * h * tau; s[3] = p2                         # around the step (2nd order)
+        q1, q2, p1, p2 = s[0], s[1], s[2], s[3]                   # four RK4 sub-steps of h/4 (one control step, torque held):
+        for sub in range(4):                                      # at h the free orbit drifts ~1e-2 a lap, at h/4 ~1e-5
+            p1 += 0.125 * h * tau                                 # torque as a kick split around each sub-step (2nd order)
+            q1, q2, p1, p2 = rk4n(q1, q2, p1, p2, 0.25 * h, A_, B_, C_, U1, U2)
+            p1 += 0.125 * h * tau
+        s[0] = q1; s[1] = q2; s[2] = p1; s[3] = p2
     return log[:n // log_every], p2log[:n // log_every], t_mode, hops
 
 
@@ -309,7 +322,7 @@ def swing_reach_of_orbit(S):
     return float(np.abs(S[:, 2] + S[:, 3]).max())
 
 
-def film_data(p, t_free, seconds, out, log_every=4):
+def film_data(p, t_free, seconds, out, log_every=4, hold_laps=2.0, free_laps=3.0):
     """The run shown in the catch film (gift/catch.html): both rods hanging still, struck with p, swinging freely (chaos) for
     t_free seconds, then the controller of section 4 (catch_anywhere, settings below) for the given seconds; every log_every
     steps: t, th1, th2, tau, E, distance, mode (-1 free, 0 pump/steer, 1 wait, 2 catch). Also the butterfly (one lap)."""
@@ -317,21 +330,35 @@ def film_data(p, t_free, seconds, out, log_every=4):
     K, _, _ = periodic_lqr(PHI, B)
     Qd = np.diag(Q).copy(); Astar = swing_reach_of_orbit(S)
     s = np.array([0, 0, *p], float); free = []
-    for i in range(int(round(t_free / H))):
-        if i % log_every == 0: free.append((i * H, energy(COEF, s), 9.0, 0.0, -1, s[0], s[1]))
-        s = rk4(s, 0.0)
+    tt0 = np.arange(0, int(round(t_free / H)), log_every) * H
+    sol0 = solve_ivp(F, (0, int(round(t_free / H)) * H), s, method='DOP853', rtol=RTOL, atol=ATOL, t_eval=np.append(tt0, int(round(t_free / H)) * H))
+    for j, tj in enumerate(tt0): free.append((tj, energy(COEF, sol0.y[:, j]), 9.0, 0.0, -1, sol0.y[0, j], sol0.y[1, j]))
+    s = sol0.y[:, -1].copy()
     t0 = int(round(t_free / H)) * H
     log, p2, tm, hops = catch_anywhere(s, S, K, Qd, H, seconds, E_STAR, Astar, *SETTINGS, TAU_MAX, np.array(COEF), log_every)
     free = np.array(free); log = log.copy(); log[:, 0] += t0; tm = tm + t0
-    log = np.vstack([np.column_stack([free[:, 0], free[:, 1], np.zeros(len(free)), free[:, 2], free[:, 3], free[:, 4], free[:, 5], free[:, 6],
-                                      np.zeros(len(free)), np.ones(len(free))]), log])
+    # let go: after hold_laps laps of holding, the motor switches off; free_laps laps of free motion (mode 3)
+    keep = log[:, 0] <= tm[2] + hold_laps * T; log, p2 = log[keep], p2[keep]
+    s = np.array([log[-1, 6], log[-1, 7], log[-1, 8], p2[-1]]); tr = log[-1, 0]; rel = []
+    tt = np.arange(1, int(round(free_laps * T / (H * log_every))) + 1) * H * log_every       # free motion: DOP853 (RK4 at step H drifts ~1e-2 a lap)
+    sol = solve_ivp(F, (0, tt[-1]), s, method='DOP853', rtol=RTOL, atol=ATOL, t_eval=tt)
+    Qd1 = Qd.copy()
+    for j, tj in enumerate(tt):
+        y = sol.y[:, j]
+        if j % 25 == 0: k, dd, sg = _nearest2(S, Qd1, y, 0, M // 2, M, 1.0)
+        rel.append((tr + tj, energy(COEF, y), 0.0, dd, 0.0, 3, y[0], y[1]))
+    rel = np.array(rel)
+    log = np.vstack([log[:, :8], rel])
+    log = np.vstack([np.column_stack([free[:, 0], free[:, 1], np.zeros(len(free)), free[:, 2], free[:, 3], free[:, 4], free[:, 5], free[:, 6]]),
+                     log])
     r = lambda a, d: [round(float(v), d) for v in a]
-    json.dump(dict(p=list(p), t_free=t0, h=H * log_every, E_star=E_STAR, T=T, tau_max=TAU_MAX, catch_t=float(tm[2]), wait_t=float(tm[1]), hops=int(hops),
+    json.dump(dict(p=list(p), t_free=t0, release_t=float(tr), kt=KT, h=H * log_every, E_star=E_STAR, T=T, tau_max=TAU_MAX, catch_t=float(tm[2]), wait_t=float(tm[1]), hops=int(hops),
                    t=r(log[:, 0], 4), th1=r(log[:, 6], 5), th2=r(log[:, 7], 5), tau=r(log[:, 4], 3), E=r(log[:, 1], 2), dist=r(log[:, 3], 4),
                    mode=[int(m) for m in log[:, 5]], orbit_th1=r(S[::4, 0], 5), orbit_th2=r(S[::4, 1], 5)), open(out, 'w'), separators=(',', ':'))
     return tm, hops
 
 
 # kE, kA, kI, kB, Pmin_lim, wait_max (s), steer_max (s), window (s), e_tol (J), a_tol (kg m^2/s), catch_at: the working settings
-# (30 random strikes p in [-8, 8]^2: all caught and held; 25 within 300 s, the rest within 677 s; 9 November 2026)
-SETTINGS = (0.01, 0.05, 0.005, 0.0, 1e9, 12.0, 12.0, 3.0, 1.0, 1.0, 0.3)
+# (30 random strikes p in [-8, 8]^2, accurate integration: 28 caught and held within 900 s, 22 within 300 s; 9 November 2026)
+KT = 2.5   # N m per A: torque constant assumed for the film's motor (a direct-drive torque motor; 60 N m at 24 A)
+SETTINGS = (0.01, 0.05, 0.005, 0.0, 1e9, 12.0, 12.0, 3.0, 1.0, 1.0, 0.2, -1.0)

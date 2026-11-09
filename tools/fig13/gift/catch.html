@@ -28,7 +28,7 @@ canvas { position:absolute; left:0; top:0; }
 <div id="stage">
   <canvas id="cv"></canvas>
   <h1 id="h1">Catching the butterfly</h1>
-  <div id="h2">a motor at the top pin takes a double pendulum out of chaos and holds it on the butterfly</div>
+  <div id="h2">a motor at the top pin takes a double pendulum out of chaos, sets it on the butterfly, and lets go</div>
   <div class="capt" id="capA"></div>
   <div class="capt" id="capB"></div>
 </div>
@@ -42,10 +42,10 @@ const lerp = (a, b, f) => a + (b - a) * f, clamp = (v, a, b) => Math.min(b, Math
 const ease = u => u <= 0 ? 0 : u >= 1 ? 1 : u * u * (3 - 2 * u);
 const TH = THEME === 'dark' ? {
     bg: '#140d10', paper: '#1a1114', rule: '#3a2a2e', ink: '#f5f1ea', muted: '#b9a59b', accent: '#e2a2aa', curve: [226, 162, 170], ghost: [226, 162, 170],
-    rods: '#f5f1ea', bob: '#7a1f2b', ring: '#f5f1ea', motor: [240, 190, 120], energy: [150, 200, 235], add: 'lighter'
+    rods: '#f5f1ea', bob: '#7a1f2b', ring: '#f5f1ea', motor: [240, 190, 120], energy: [150, 200, 235], add: 'lighter', body: '#2a1d21', steel: '#8a7d78', copper: [196, 120, 70], north: [226, 120, 130], south: [130, 170, 220], nib: '#d9c8a8'
 } : {
     bg: '#f5f1ea', paper: '#fffaf3', rule: '#d9d0c2', ink: '#1c1518', muted: '#6f635d', accent: '#7a1f2b', curve: [122, 31, 43], ghost: [122, 31, 43],
-    rods: '#1c1518', bob: '#7a1f2b', ring: '#fffaf3', motor: [176, 98, 18], energy: [28, 92, 140], add: 'source-over'
+    rods: '#1c1518', bob: '#7a1f2b', ring: '#fffaf3', motor: [176, 98, 18], energy: [28, 92, 140], add: 'source-over', body: '#e9e1d6', steel: '#8a7d78', copper: [170, 96, 50], north: [190, 70, 80], south: [60, 110, 170], nib: '#3a322e'
 };
 const rgba = (c, a) => `rgba(${c[0]},${c[1]},${c[2]},${a})`;
 
@@ -61,30 +61,32 @@ const tip = (a, b) => [Math.sin(a) + Math.sin(b), -(Math.cos(a) + Math.cos(b))];
 const FPS = 30;
 let SEG, TL;
 function timeline() {
-    const tOn = D.t_free, tC = D.catch_t, tEnd = Math.min(D.t[N - 1], tC + 3 * D.T);
-    SEG = [[0, 0, 0.5], [0, tOn, 0.25], [0, tEnd, 0.25]];      // [first frame, sim time at it, speed]
-    const fOn = 30 + Math.round(tOn / 0.5 * FPS); SEG[0][0] = 30; SEG[1][0] = fOn;
-    const fEnd = fOn + Math.round((tEnd - tOn) / 0.25 * FPS);
-    TL = { on: fOn, catch: fOn + Math.round((tC - tOn) / 0.25 * FPS), end: fEnd, total: fEnd + 90, tEnd };
+    const tOn = D.t_free, tSlow = D.catch_t + 1.0, tEnd = D.t[N - 1];
+    const fOn = 30 + Math.round(tOn / 0.5 * FPS), fSlow = fOn + Math.round((tSlow - tOn) / 0.25 * FPS), fEnd = fSlow + Math.round((tEnd - tSlow) / 0.5 * FPS);
+    SEG = { tOn, tSlow, fOn, fSlow };
+    const fOf = tt => tt < tOn ? 30 + tt / 0.5 * FPS : tt < tSlow ? fOn + (tt - tOn) / 0.25 * FPS : fSlow + (tt - tSlow) / 0.5 * FPS;
+    TL = { on: fOn, slow: fSlow, catch: Math.round(fOf(D.catch_t)), release: Math.round(fOf(D.release_t)), end: fEnd, total: fEnd + 90, tEnd };
 }
 function simT(f) {
     if (f < 30) return 0;
-    if (f < TL.on) return (f - 30) / FPS * 0.5;
-    return Math.min(TL.tEnd, D.t_free + (f - TL.on) / FPS * 0.25);
+    if (f < SEG.fOn) return (f - 30) / FPS * 0.5;
+    if (f < SEG.fSlow) return SEG.tOn + (f - SEG.fOn) / FPS * 0.25;
+    return Math.min(TL.tEnd, SEG.tSlow + (f - SEG.fSlow) / FPS * 0.5);
 }
+const speedAt = f => f < SEG.fOn || f >= SEG.fSlow ? '½' : '¼';
 
 // ------------------------------------------------------------------------------------------------ layout
 const PL = { x: 40, y: 190, s: 1000 }, SC = PL.s / 2 / 2.25, CX = PL.x + PL.s / 2, CY = PL.y + PL.s / 2 - 40;
 const ST = { x: 40, y: 1210, w: 1000, h: 300 }, CH = { x: 40, y: 1530, w: 1000, h: 140 };
-const PHASES = [['chaos', 'motor off'], ['pump & steer', 'energy and swing'], ['wait', 'motor off, watching'], ['catch & hold', 'tiny corrections']];
-const phaseOf = m => m < 0 ? 0 : m === 0 ? 1 : m === 1 ? 2 : 3;
+const PHASES = [['chaos', 'motor off'], ['pump, steer', 'energy, swing'], ['wait', 'motor off'], ['catch, hold', 'tiny corrections'], ['let go', 'motor off']];
+const phaseOf = m => m < 0 ? 0 : m === 0 ? 1 : m === 1 ? 2 : m === 2 ? 3 : 4;
 
 function text(g, s, x, y, size, color, align, wt) { g.fillStyle = color; g.font = `${wt || 400} ${size}px "Instrument Sans"`; g.textAlign = align || 'left'; g.fillText(s, x, y); }
 function card(g, x, y, w, h) { g.fillStyle = TH.paper; g.strokeStyle = TH.rule; g.lineWidth = 1; g.beginPath(); g.roundRect(x, y, w, h, 14); g.fill(); g.stroke(); }
 
 function drawScene(g, f) {
     g.fillStyle = TH.bg; g.fillRect(0, 0, 1080, 1920);
-    const t = simT(f), s = stateAt(t), ph = phaseOf(s.mode), held = t > D.catch_t + 0.4;
+    const t = simT(f), s = stateAt(t), ph = phaseOf(s.mode), held = t > D.catch_t + 0.4, I = s.tau / D.kt, Imax = D.tau_max / D.kt;
     card(g, PL.x, PL.y, PL.s, PL.s);
     g.save(); g.beginPath(); g.roundRect(PL.x, PL.y, PL.s, PL.s, 14); g.clip();
     g.strokeStyle = TH.rule; g.lineWidth = 1; g.setLineDash([3, 7]); for (const r of [1, 2]) { g.beginPath(); g.arc(CX, CY, r * SC, 0, 7); g.stroke(); } g.setLineDash([]);
@@ -107,32 +109,56 @@ function drawScene(g, f) {
         prev = P;
     }
     g.globalCompositeOperation = 'source-over';
-    // the motor: an arc at the pin, as long as the torque, in the direction it turns the upper rod
+    // the machine: a bracket from the frame, the motor (stator with six coils, rotor with four magnets turning with the upper rod)
+    const MR = 64;
+    g.fillStyle = TH.steel; g.fillRect(CX - 10, PL.y, 20, CY - PL.y - MR + 6); g.fillRect(CX - 70, PL.y, 140, 12);
+    g.strokeStyle = rgba(TH.motor, 0.55 + 0.45 * Math.min(1, Math.abs(I) / Imax)); g.lineWidth = 2;
+    for (const dx of [-5, 5]) { g.beginPath(); g.moveTo(CX + dx, PL.y + 12); g.lineTo(CX + dx, CY - MR); g.stroke(); }
+    g.fillStyle = TH.body; g.strokeStyle = TH.steel; g.lineWidth = 3; g.beginPath(); g.arc(CX, CY, MR, 0, 7); g.fill(); g.stroke();
+    const glow = Math.min(1, Math.abs(I) / Imax);
+    for (let c = 0; c < 6; c++) {
+        const a0 = c * Math.PI / 3 + Math.PI / 6, cx = CX + (MR - 14) * Math.cos(a0), cy = CY + (MR - 14) * Math.sin(a0);
+        g.save(); g.translate(cx, cy); g.rotate(a0);
+        if (glow > 0.01) { g.fillStyle = rgba(TH.motor, 0.55 * glow); g.beginPath(); g.arc(0, 0, 18 + 10 * glow, 0, 7); g.fill(); }
+        g.fillStyle = rgba(TH.copper, 0.95); g.beginPath(); g.roundRect(-8, -13, 16, 26, 4); g.fill();
+        g.strokeStyle = 'rgba(0,0,0,0.35)'; g.lineWidth = 1; for (let w = -10; w <= 10; w += 4) { g.beginPath(); g.moveTo(-8, w); g.lineTo(8, w); g.stroke(); }
+        g.restore();
+    }
+    const rot = -s.th1;                                    // the rotor turns with the upper rod
+    for (let q = 0; q < 4; q++) {
+        g.fillStyle = rgba(q % 2 ? TH.south : TH.north, 0.95); g.beginPath(); g.moveTo(CX, CY);
+        g.arc(CX, CY, 34, rot + q * Math.PI / 2 + 0.08, rot + (q + 1) * Math.PI / 2 - 0.08); g.closePath(); g.fill();
+    }
+    g.fillStyle = TH.body; g.beginPath(); g.arc(CX, CY, 14, 0, 7); g.fill();
+    // the torque, as an arc outside the motor
     const tq = s.tau, frac = Math.min(1, Math.abs(tq) / D.tau_max);
     if (frac > 0.01) {
         const a0 = -Math.PI / 2, a1 = a0 - Math.sign(tq) * frac * 1.6 * Math.PI;
-        g.strokeStyle = rgba(TH.motor, 0.9); g.lineWidth = 9; g.beginPath(); g.arc(CX, CY, 46, Math.min(a0, a1), Math.max(a0, a1)); g.stroke();
-        const ae = a1, hx = CX + 46 * Math.cos(ae), hy = CY + 46 * Math.sin(ae), dir = -Math.sign(tq);
-        g.fillStyle = rgba(TH.motor, 0.9); g.beginPath(); g.moveTo(hx + 14 * Math.cos(ae + dir * Math.PI / 2), hy + 14 * Math.sin(ae + dir * Math.PI / 2));
-        g.lineTo(hx + 10 * Math.cos(ae), hy + 10 * Math.sin(ae)); g.lineTo(hx - 10 * Math.cos(ae), hy - 10 * Math.sin(ae)); g.fill();
+        g.strokeStyle = rgba(TH.motor, 0.9); g.lineWidth = 6; g.beginPath(); g.arc(CX, CY, MR + 16, Math.min(a0, a1), Math.max(a0, a1)); g.stroke();
     }
-    // the rods
+    // the rods, and a pen at the tip
     const j1 = [CX + SC * Math.sin(s.th1), CY + SC * Math.cos(s.th1)], [x2, h2] = tip(s.th1, s.th2), j2 = [CX + SC * x2, CY - SC * h2];
-    g.strokeStyle = TH.rods; g.lineWidth = 10; g.beginPath(); g.moveTo(CX, CY); g.lineTo(j1[0], j1[1]); g.lineTo(j2[0], j2[1]); g.stroke();
-    for (const [x, y] of [j1, j2]) { g.fillStyle = TH.bob; g.beginPath(); g.arc(x, y, 14, 0, 7); g.fill(); g.strokeStyle = TH.ring; g.lineWidth = 3; g.stroke(); }
-    g.fillStyle = TH.paper; g.beginPath(); g.arc(CX, CY, 9, 0, 7); g.fill(); g.strokeStyle = TH.rods; g.lineWidth = 3; g.stroke();
-    text(g, `motor at the pin: ${Math.abs(tq).toFixed(1)} N·m`, PL.x + PL.s - 20, PL.y + 38, 22, rgba(TH.motor, 1), 'right', 500);
-    text(g, `shown at ${f < TL.on ? '½' : '¼'} of real speed`, PL.x + PL.s - 20, PL.y + PL.s - 22, 18, TH.muted, 'right');
+    g.strokeStyle = TH.rods; g.lineWidth = 10; g.lineCap = 'round'; g.beginPath(); g.moveTo(CX, CY); g.lineTo(j1[0], j1[1]); g.lineTo(j2[0], j2[1]); g.stroke();
+    g.fillStyle = TH.bob; g.beginPath(); g.arc(j1[0], j1[1], 14, 0, 7); g.fill(); g.strokeStyle = TH.ring; g.lineWidth = 3; g.stroke();
+    const ux = Math.sin(s.th2), uy = Math.cos(s.th2);          // along the lower rod, outwards
+    g.save(); g.translate(j2[0], j2[1]); g.rotate(Math.atan2(uy, ux));
+    g.fillStyle = TH.nib; g.beginPath(); g.moveTo(-16, -9); g.lineTo(16, -3); g.lineTo(26, 0); g.lineTo(16, 3); g.lineTo(-16, 9); g.closePath(); g.fill();
+    g.strokeStyle = TH.bob; g.lineWidth = 1.5; g.beginPath(); g.moveTo(-6, 0); g.lineTo(20, 0); g.stroke();
+    g.fillStyle = TH.bob; g.beginPath(); g.arc(-2, 0, 3, 0, 7); g.fill();
+    g.restore();
+    g.fillStyle = rgba(TH.curve, 1); g.beginPath(); g.arc(j2[0] + 26 * ux, j2[1] + 26 * uy, 3.5, 0, 7); g.fill();
+    text(g, s.mode === 3 || s.mode < 0 || (s.mode === 1) ? 'motor off' : `motor: ${Math.abs(tq).toFixed(1)} N·m, coil current ${Math.abs(I).toFixed(1)} A`, PL.x + PL.s - 20, PL.y + 38, 22, rgba(TH.motor, 1), 'right', 500);
+    text(g, `shown at ${speedAt(f)} of real speed`, PL.x + PL.s - 20, PL.y + PL.s - 22, 18, TH.muted, 'right');
     g.restore();
     // the phases
     card(g, ST.x, ST.y, ST.w, ST.h);
-    const pw = (ST.w - 40) / 4;
+    const pw = (ST.w - 40) / 5;
     PHASES.forEach(([a, b], i) => {
         const x = ST.x + 20 + i * pw, on = i === ph, done = i < ph;
         g.fillStyle = on ? rgba(TH.curve, 0.18) : 'rgba(0,0,0,0)'; g.beginPath(); g.roundRect(x + 4, ST.y + 18, pw - 8, 86, 10); g.fill();
         g.strokeStyle = on ? TH.accent : TH.rule; g.lineWidth = on ? 2 : 1; g.stroke();
-        text(g, `${i + 1}  ${a}`, x + 18, ST.y + 54, 24, on ? TH.accent : done ? TH.ink : TH.muted, 'left', on ? 500 : 400);
-        text(g, b, x + 18, ST.y + 86, 17, TH.muted);
+        text(g, `${i + 1}  ${a}`, x + 16, ST.y + 54, 22, on ? TH.accent : done ? TH.ink : TH.muted, 'left', on ? 500 : 400);
+        text(g, b, x + 16, ST.y + 86, 16, TH.muted);
     });
     const rows = [[`t = ${t.toFixed(2)} s`, TH.ink], [`energy ${s.E.toFixed(1)} J  (butterfly: ${D.E_star.toFixed(1)} J)`, rgba(TH.energy, 1)],
         [`motor torque ${Math.abs(tq).toFixed(1)} N·m  (limit ${D.tau_max.toFixed(0)})`, rgba(TH.motor, 1)],
@@ -160,11 +186,12 @@ function drawScene(g, f) {
 let CAPS;
 function captions() {
     CAPS = [
-        [0, 'A double pendulum, struck gently (18 J), swings in chaos: two such pendulums one part in a million apart disagree by 1 cm within 6 s.'],
-        [TL.on, 'The motor switches on. It pumps the energy up to the butterfly\'s 390.8 J, and steers the upper rod\'s swing to the butterfly\'s size.<br><span style="font-size:22px;color:var(--muted)">torque τ, energy E:  dE/dt = τ · dθ₁/dt</span>'],
-        [TL.catch - 40, 'Close enough: the motor makes small corrections along the butterfly\'s own lap (a feedback designed on the orbit, as in our control lessons).'],
-        [TL.catch + 150, 'Caught. The butterfly is unstable by itself (an error grows 2 % a lap); held, the motor\'s torque falls to almost nothing.'],
-        [TL.catch + 420, 'The butterfly draws itself. From 30 random strikes, the motor caught every one: most within 5 minutes, the slowest after 11.'],
+        [0, 'A double pendulum, struck gently (18 J), swings in chaos: two such pendulums one part in a million apart disagree by 1 cm within 6 s. A pen at its tip, a motor at its pin, switched off.'],
+        [TL.on, 'The motor switches on. Current in its coils pushes on the magnets of the rotor: torque = 2.5 N·m per ampere. It pumps the energy to the butterfly\'s 390.8 J and steers the upper rod\'s swing to the butterfly\'s size.<br><span style="font-size:22px;color:var(--muted)">energy E, torque τ:  dE/dt = τ · dθ₁/dt</span>'],
+        [TL.catch - 40, 'Close enough: the motor makes small corrections along the butterfly\'s own lap, a feedback designed on the orbit (as in our control lessons).'],
+        [TL.catch + 200, 'Caught. The motor holds it for four laps; the corrections shrink below 0.1 N·m.'],
+        [TL.release, 'Let go: the motor switches off. The butterfly is unstable by itself, but only barely (an error grows 2 % a lap), so the pen keeps drawing it: within 0.1 of the exact path for about 12 minutes, its wings unchanged for at least an hour.'],
+        [TL.release + 330, 'From 30 random strikes, the motor caught 28 within 15 minutes, 22 of them within 5. Two escaped it in that time.'],
     ];
 }
 const memo = {};
