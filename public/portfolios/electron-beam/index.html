@@ -1366,7 +1366,7 @@ M1001 80h400000v40h-400000z"/></svg></span></span></span><span class="vlist-s">â
   function draw(ctx, w, h, p, out) {
     const tr = out.trajectory, np = tr.length / 3;
     ctx.clearRect(0, 0, w, h);
-    const views = [['x', 'y', 'top view (x, y): E up, B out of the page'], ['x', 'z', 'side view (x, z): B up']];
+    const views = [['x', 'y', 'top (x, y): E up, B out'], ['x', 'z', 'side (x, z): B up']];
     const idx = { x: 0, y: 1, z: 2 };
     const pad = 12, gap = 14, top = 22, vw = (w - 2 * pad - gap) / 2, vh = h - top - pad - 4;
     const lo = [Infinity, Infinity, Infinity], hi = [-Infinity, -Infinity, -Infinity];
@@ -1378,7 +1378,7 @@ M1001 80h400000v40h-400000z"/></svg></span></span></span><span class="vlist-s">â
       const x0 = pad + j * (vw + gap), a = idx[vd[0]], b = idx[vd[1]];
       ctx.fillStyle = '#fff'; ctx.strokeStyle = '#cdc1ae'; ctx.lineWidth = 1;
       ctx.fillRect(x0, top, vw, vh); ctx.strokeRect(x0 + 0.5, top + 0.5, vw - 1, vh - 1);
-      ctx.fillStyle = '#6f655f'; ctx.textAlign = 'left'; ctx.fillText(vd[2], x0, 14);
+      ctx.fillStyle = '#6f655f'; ctx.textAlign = 'left'; ctx.save(); ctx.beginPath(); ctx.rect(x0, 0, vw, top); ctx.clip(); ctx.fillText(vd[2], x0, 14); ctx.restore();   // finisher: clipped to its own view, so the two titles never overprint
       const cx = x0 + vw / 2 - sc * (lo[a] + hi[a]) / 2, cy = top + vh / 2 + sc * (lo[b] + hi[b]) / 2;
       const X = t => cx + sc * t, Y = t => cy - sc * t;
       ctx.strokeStyle = '#e6dfd2';
