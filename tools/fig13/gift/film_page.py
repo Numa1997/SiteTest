@@ -34,7 +34,7 @@ PAGE_T = '''<!DOCTYPE html>
 :root[data-theme="light"] { --bg:#f5f1ea; --ink:#1c1518; --muted:#6f635d; --chip:rgba(255,250,243,.9); --line:#d9d0c2; --accent:#7a1f2b; }
 html, body { margin:0; height:100%; background:var(--bg); overflow:hidden; }
 #box { position:fixed; left:0; top:0; width:1080px; height:1920px; transform-origin:0 0; }
-iframe { width:1080px; height:1920px; border:0; display:block; background:var(--bg); }
+iframe { width:100%; height:100%; border:0; display:block; background:var(--bg); }
 #tap { position:fixed; inset:0 0 64px 0; z-index:1; }
 .bar { position:fixed; left:10px; right:10px; bottom:10px; display:flex; gap:8px; align-items:center; flex-wrap:wrap; z-index:2;
        font:14px 'Instrument Sans', sans-serif; }
@@ -63,14 +63,16 @@ const PARTS = @PARTS@;
 const FPS = 30, fr = document.getElementById('fr'), Q = new URLSearchParams(location.search);
 let theme = Q.get('theme') || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
 let part = 0, f = 0, total = null, playing = true, last = null, lengths = PARTS.map(() => 0), seenRestarts = 0;
-function fit() {
-    const cw = document.documentElement.clientWidth, ch = document.documentElement.clientHeight - document.querySelector('.bar').offsetHeight - 20, s = Math.min(cw / 1080, ch / 1920, 1);
-    document.getElementById('box').style.transform = `translate(${Math.max(0, (cw - 1080 * s) / 2)}px, 0) scale(${s})`;
+function fit() {   // each part has its own stage size: portrait films 1080 x 1920, wide ones 1920 x 1080
+    const W = PARTS[part][2] || 1080, H = PARTS[part][3] || 1920, box = document.getElementById('box');
+    box.style.width = W + 'px'; box.style.height = H + 'px';
+    const cw = document.documentElement.clientWidth, ch = document.documentElement.clientHeight - document.querySelector('.bar').offsetHeight - 20, s = Math.min(cw / W, ch / H, 1);
+    box.style.transform = `translate(${Math.max(0, (cw - W * s) / 2)}px, ${Math.max(0, (ch - H * s) / 2)}px) scale(${s})`;
 }
 function load(k, frame) {
     part = (k + PARTS.length) % PARTS.length; f = frame || 0; total = null; seenRestarts = 0;
-    document.getElementById('tap').style.pointerEvents = PARTS[part][0] === 'live-catch.html' ? 'none' : 'auto';   // the catch has its own buttons: let taps through
-    fr.src = PARTS[part][0] + '?film=1&theme=' + theme;
+    document.getElementById('tap').style.pointerEvents = PARTS[part][0].startsWith('live-catch') ? 'none' : 'auto';   // the catch has its own buttons: let taps through
+    fit(); fr.src = PARTS[part][0] + (PARTS[part][0].includes('?') ? '&' : '?') + 'film=1&theme=' + theme;
 }
 fr.addEventListener('load', () => {
     const w = fr.contentWindow;
@@ -110,10 +112,13 @@ setTheme(theme); fit(); addEventListener('resize', fit); load(0); requestAnimati
 </body>
 </html>
 '''
-ALL = [['live-gift.html', 'For رِيمْ'], ['live-construction.html', 'built by hand'], ['live-catch.html', 'caught and let go']]
+ALL = [['live-gift.html', 'For رِيمْ', 1080, 1920], ['live-construction.html', 'built by hand', 1080, 1920], ['live-catch.html', 'caught and let go', 1080, 1920]]
+MORE = [['dive.html', 'from a kick to a butterfly', 1080, 1920], ['together.html?scene=phone', 'one motion, six pictures', 1080, 1920],
+        ['turning.html?scene=wheel', 'turning the paper: a wheel', 1920, 1080], ['turning.html?scene=butterfly', 'turning the paper: the butterfly', 1920, 1080],
+        ['bell.html', 'the bell above the floor', 1920, 1080]]   # the other Fig. 13 films (publish_films.py), all drawn live
 PAGES = {   # file: (title, parts)
-    'film.html': ('For رِيمْ: the whole film, live', ALL),
-    'reem.html': ('For رِيمْ', ALL),
+    'film.html': ('For رِيمْ: the whole film, live', ALL + MORE),
+    'reem.html': ('For رِيمْ', ALL + MORE),
     'construction.html': ('Constructing the butterfly by hand', [ALL[1]]),
     'catch.html': ('Catching the butterfly', [ALL[2]]),
 }

@@ -1,7 +1,9 @@
 # Fig. 13 · Spirographs in Momentum Space, the Flower Hunt, the dashboard and the films
 
-Published 8 November 2026 at Numa's word. English only (`ENGLISH_ONLY` in `tools/i18n/build.py`). Not yet in the catalog
-(`public/scripts/catalog.js`) or in the hand-written Fig. links of the other pages: the Fig. 13 pages link to each other.
+Published 8 November 2026 at Numa's word. English only (`ENGLISH_ONLY` in `tools/i18n/build.py`). In the catalog
+(`public/scripts/catalog.js`, entry `momentum-spirographs`, fig 13; its German and Arabic catalog strings are not translated, as Fig. 12's)
+and in the Fig. links of every simulation page since 10 November 2026 (the two project pages, double-inverted-pendulum and rods-in-liquid,
+carry no Fig. list).
 
 ## The physics, in one place
 
@@ -138,3 +140,8 @@ median 16 s after the motor switches on, 82 within 60 s, 90 % within 87 s, slowe
 laps later. The earlier settings (catch 0.2, settled at 1 J and 1) caught 29 of 40 within 400 s. A one-lap Gauss-Newton torque plan
 (a "bridge", 12 segments) was tried and dropped: from 0.2 to 1.0 away it landed within 0.05 in 1 or 2 of 12 cases. `butterfly_control.py`
 `SETTINGS` follow (its release is not distance-gated). The film's clock: a search after a miss runs at 4×, waiting at full speed.
+
+**10 November 2026.** The gift player (`reem.html`, `film.html`) plays eight live parts: the gift, the construction, the catch, then the
+dive, six pictures (phone layout), turning the paper (wheel, butterfly) and the bell; each part has its own stage size (portrait
+1080 × 1920 or wide 1920 × 1080). Captions and subtitles of the gift, construction and catch films sit in fixed boxes and shrink their
+type to fit (`fitBox`), so a browser's translation, longer than the English, never spills over the drawing.

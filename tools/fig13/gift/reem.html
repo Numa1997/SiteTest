@@ -21,7 +21,7 @@
 html, body { margin:0; background:var(--bg); height:100%; overflow:hidden; }   /* the stage never widens the page, so a phone does not zoom out */
 #stage { position:absolute; width:1080px; height:1920px; background:var(--bg); color:var(--ink); font-family:'Instrument Sans',sans-serif; overflow:hidden; transform-origin:0 0; }
 canvas { position:absolute; left:0; top:0; }
-.capt { position:absolute; left:48px; top:1556px; width:984px; font-size:31px; line-height:1.45; color:var(--ink); }
+.capt { overflow:hidden;  position:absolute; left:48px; top:1556px; width:984px; font-size:31px; line-height:1.45; color:var(--ink); }
 .capt b { font-weight:400; color:var(--accent); }
 .capt .m { font-family:'Instrument Sans',sans-serif; font-size:23px; color:var(--ink2); }
 </style>
@@ -236,11 +236,15 @@ function captions() {
 }
 const memo = {};
 function setHTML(el, key, html) { if (memo[key] !== html) { memo[key] = html; el.innerHTML = html; } }
+
+// keep words inside their boxes: a browser's translation can make them longer; shrink the type until they fit, never spill over the drawing
+function fitBox(el, maxH, base, min) { if (!el) return; let fs = base; el.style.fontSize = fs + 'px'; while (el.scrollHeight > maxH && fs > min) { fs -= 1; el.style.fontSize = fs + 'px'; } }
 function showCaption(f) {
     let k = 0; while (k + 1 < CAPS.length && f >= CAPS[k + 1][0]) k++;
     const u = k === 0 ? ease(f / 30) : ease((f - CAPS[k][0]) / 14), prev = k > 0 ? CAPS[k - 1][1] : '';
     const [cur, old] = (k % 2 === 0) ? [$('capA'), $('capB')] : [$('capB'), $('capA')];
     setHTML(cur, 'c' + cur.id, CAPS[k][1]); setHTML(old, 'c' + old.id, prev); cur.style.opacity = u; old.style.opacity = 1 - u;
+    if (f % 6 === 0) for (const id of ['capA','capB']) fitBox($(id), 344, 31, 14);
 }
 
 let g, DPR = 1;
