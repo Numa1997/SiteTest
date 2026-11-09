@@ -21,8 +21,8 @@
     "lambda_opt": {"meaning": "wavelength of the light in an optical inspection tool", "tex": "\\lambda_\\mathrm{opt}", "type": "number", "unit": "m", "default": 1.93e-7, "min": 1.3e-8, "max": 7.0e-7, "scale": "log", "display_unit": "nm", "display_scale": 1e9, "stage": "ch0"},
     "NA": {"meaning": "numerical aperture of the optical objective", "tex": "\\mathrm{NA}", "type": "number", "unit": "1", "default": 0.95, "min": 0.1, "max": 1.35, "scale": "lin", "stage": "ch0"},
     "w_feat": {"meaning": "width of the smallest feature on the wafer that must be seen", "tex": "w", "type": "number", "unit": "m", "default": 1.0e-8, "min": 1.0e-9, "max": 1.0e-6, "scale": "log", "display_unit": "nm", "display_scale": 1e9, "stage": "ch0"},
-    "d_opt": {"meaning": "smallest half-pitch light can resolve, Abbe limit lambda_opt/(2 NA)", "tex": "d_\\mathrm{opt}", "type": "number", "unit": "m", "display_unit": "nm", "display_scale": 1e9, "stage": "ch0"},
-    "ratio_opt": {"meaning": "Abbe limit over feature width (above 1: light cannot resolve the feature)", "tex": "d_\\mathrm{opt}/w", "type": "number", "unit": "1", "stage": "ch0"},
+    "d_opt": {"meaning": "smallest period (pitch) light can resolve, Abbe limit lambda_opt/(2 NA); the half-pitch is half of it", "tex": "d_\\mathrm{opt}", "type": "number", "unit": "m", "display_unit": "nm", "display_scale": 1e9, "stage": "ch0"},
+    "ratio_opt": {"meaning": "Abbe period over feature width; for equal lines and spaces (pitch 2w) light cannot resolve the pattern when this exceeds 2", "tex": "d_\\mathrm{opt}/w", "type": "number", "unit": "1", "stage": "ch0"},
     "ratio_e": {"meaning": "electron wavelength over feature width", "tex": "\\lambda/w", "type": "number", "unit": "1", "stage": "ch0"},
 
     "E_field": {"meaning": "uniform electric field strength (along +y in chapter 1)", "tex": "E", "type": "number", "unit": "V/m", "default": 1.0e4, "min": 0, "max": 1.0e6, "scale": "lin", "display_unit": "kV/m", "display_scale": 1e-3, "stage": "ch1"},
@@ -35,6 +35,11 @@
     "omega_c": {"meaning": "cyclotron angular frequency eB/(gamma m)", "tex": "\\omega_c", "type": "number", "unit": "rad/s", "stage": "ch1"},
     "energy_drift": {"meaning": "relative change of kinetic energy over the run, (E_end - E_start)/E_start", "tex": "\\delta E/E", "type": "number", "unit": "1", "stage": "ch1"},
     "trajectory": {"meaning": "positions x, y, z of the electron at each stored step", "tex": "\\mathbf r(t)", "type": "array", "unit": "m", "stage": "ch1"},
+    "t_run": {"meaning": "duration of the run: the time over which the electron is followed in the uniform fields (the plate transit time in Thomson's tube)", "tex": "t_\\mathrm{run}", "type": "number", "unit": "s", "default": 3.6e-8, "min": 1.0e-10, "max": 2.0e-6, "scale": "log", "display_unit": "ns", "display_scale": 1e9, "stage": "ch1", "note": "the module enlarges dt, if it must, so that a run has at most 400 000 steps"},
+    "x_end": {"meaning": "x position of the electron at the end of the run", "tex": "x_\\mathrm{end}", "type": "number", "unit": "m", "display_unit": "mm", "display_scale": 1e3, "stage": "ch1"},
+    "y_end": {"meaning": "y position of the electron at the end of the run", "tex": "y_\\mathrm{end}", "type": "number", "unit": "m", "display_unit": "mm", "display_scale": 1e3, "stage": "ch1"},
+    "z_end": {"meaning": "z position of the electron at the end of the run (along B)", "tex": "z_\\mathrm{end}", "type": "number", "unit": "m", "display_unit": "mm", "display_scale": 1e3, "stage": "ch1"},
+    "theta_end": {"meaning": "angle of the velocity at the end of the run to the +x axis, measured in the x-y plane: the deflection angle when the field region ends", "tex": "\\theta_\\mathrm{end}", "type": "number", "unit": "rad", "display_unit": "mrad", "display_scale": 1e3, "stage": "ch1"},
 
     "r_t": {"meaning": "radius of the emitter tip apex", "tex": "r_t", "type": "number", "unit": "m", "default": 5.0e-8, "min": 1.0e-8, "max": 1.0e-6, "scale": "log", "display_unit": "nm", "display_scale": 1e9, "stage": "ch2"},
     "V_ex": {"meaning": "extraction voltage between tip and extractor", "tex": "V_\\mathrm{ex}", "type": "number", "unit": "V", "default": 1000, "min": 300, "max": 8000, "scale": "lin", "display_unit": "kV", "display_scale": 1e-3, "stage": "ch2"},
@@ -91,7 +96,7 @@
   },
   "stages": {
     "ch00": {"title": "The goal: why electrons", "in": ["lambda_opt", "NA", "w_feat", "V_acc"], "out": ["d_opt", "ratio_opt", "lambda_e", "ratio_e", "gamma"], "note": "worked example of the module pattern, physics/ch00.js, written by the scaffold"},
-    "ch01": {"title": "A free electron in fields", "in": ["E_field", "B_field", "v_0", "theta_0", "dt", "integrator"], "out": ["r_g", "omega_c", "energy_drift", "trajectory"], "note": "not in PLAN.md section 6; proposed by the scaffold, the chapter 1 session may ask to change it"},
+    "ch01": {"title": "A free electron in fields", "in": ["E_field", "B_field", "v_0", "theta_0", "dt", "integrator", "t_run"], "out": ["r_g", "omega_c", "energy_drift", "trajectory", "x_end", "y_end", "z_end", "theta_end"], "note": "uniform E (+y) and B (+z), an electron entering at the origin with speed v_0 at the angle theta_0 to B in the x-z plane, followed for t_run; extended by the chapter 1 session (notes/electron-beam/requests.md)"},
     "ch02": {"title": "The source", "in": ["r_t", "V_ex", "phi", "T", "p", "t_clean", "k_f"], "out": ["I_e", "B_r", "dE", "d_v", "theta_cov"]},
     "ch03": {"title": "Acceleration", "in": ["V_acc", "V_land"], "out": ["E_0", "lambda_e", "gamma", "V_star"]},
     "ch04": {"title": "The lens", "in": ["NI", "a_lens", "u_obj", "WD", "V_star"], "out": ["B_0", "M", "f", "C_s", "C_c", "theta_rot"]},

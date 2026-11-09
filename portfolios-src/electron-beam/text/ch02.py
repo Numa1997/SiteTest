@@ -51,6 +51,8 @@ def load_numbers():
     N['J_FN300_ex'] = R.j_fn(F0, phi, 300.0)
     mdl = R.emission_model(F0, phi, 300.0)
     N['J_model_ex'] = mdl['J']; N['d_ex_eV'] = mdl['d'] / eV; N['Tcorr_ex'] = N['J_FN300_ex'] / N['J_FN0_ex']
+    N['Tcorr_pct'] = (N['Tcorr_ex'] - 1) * 100                          # finisher: the size of the correction, computed
+    N['t_des_700'] = 1 / R.k_des(1.9, 700.0)                              # finisher: residence time at 700 K with the assumed E_d, nu0
     N['x_ex'] = math.pi * R.kB * 300 / mdl['d']
     N['kT300_eV'] = R.kB * 300 / eV
     N['I_ex'] = R.tip_current(V, r, k, phi, 300.0)
@@ -628,7 +630,7 @@ SECTIONS = [
 <h4><span class="psub__n">2.5.3</span>Finite temperature <span class="star">★</span></h4>
 <p>With the linearised \(D\) and the full \(N\), the integral is \(J=e\,(4\pi m kT/h^{3})\,e^{-G_F}\int\ln(1+e^{-w/kT})\,e^{w/d}\,dw\). Integrating by parts (the boundary terms vanish for \(d>kT\)) turns it into \(\tfrac{d}{kT}\int e^{w/d}/(1+e^{w/kT})\,dw\), and \(\int_{-\infty}^{\infty}e^{au}/(1+e^{u})\,du = \pi/\sin\pi a\) for \(0<a<1\), with \(u=w/kT\) and \(a=kT/d\). Hence</p>
 [[EQ Tfactor]]J(T) = J_0\,\frac{\pi kT/d}{\sin(\pi kT/d)}[[/EQ]]
-<p>(check C9 evaluates both sides numerically at 30 digits). At the working point, 300 K, \(\pi kT/d=@x_ex|.3f@\) and the factor is @Tcorr_ex|.3f@, a 4 % correction. The factor diverges when \(\pi kT/d\to\pi\), that is when \(kT\to d\), and is a poor description well before that: electrons far above the Fermi level, where the barrier is thinner, then dominate and the linearisation of \(G\) fails. That is the transition to thermal-field emission; there we integrate numerically.</p>
+<p>(check C9 evaluates both sides numerically at 30 digits). At the working point, 300 K, \(\pi kT/d=@x_ex|.3f@\) and the factor is @Tcorr_ex|.3f@, a @Tcorr_pct|.1f@ % correction. The factor diverges when \(\pi kT/d\to\pi\), that is when \(kT\to d\), and is a poor description well before that: electrons far above the Fermi level, where the barrier is thinner, then dominate and the linearisation of \(G\) fails. That is the transition to thermal-field emission; there we integrate numerically.</p>
 
 <h4><span class="psub__n">2.5.4</span>The Fowler–Nordheim plot</h4>
 <p>Experimenters measure current \(I\) at voltage \(V\), not \(J\) at \(F\). If the emitting area \(A\) is constant and \(F=V/\zeta\) (so \(\zeta=kr\) is the <em>voltage conversion length</em>), \(I=AJ_0\) gives</p>
@@ -739,7 +741,7 @@ SECTIONS = [
 
 <h4><span class="psub__n">2.10.5</span>The flash-cleaning cycle</h4>
 <p>At room temperature \(k_d\) is negligible: for \(E_d=@model/Ed|.1f@\) eV, \(k_d=@kd_RT|sci1@\ \mathrm{s^{-1}}\), so adsorbed atoms stay as long as the experiment lasts. This is why a cold tip cannot clean itself. Heating the tip for a few seconds changes the rate by many orders of magnitude: at 700 K, \(k_d=@kd_700|.2f@\ \mathrm{s^{-1}}\); at @model/Tflash|.0f@ K, \(@kd_flash|.0f@\ \mathrm{s^{-1}}\); at 2000 K, \(@kd_2000|sci1@\ \mathrm{s^{-1}}\). A flash of @model/tflash|.0f@ s at @model/Tflash|.0f@ K therefore removes everything (\(e^{-k_dt}\approx0\)). The values \(E_d=@model/Ed|.1f@\) eV and \(
-u_0=10^{13}\ \mathrm{s^{-1}}\) are assumptions, chosen so that hydrogen-like adsorbates leave a hot tip in about a second near 700 K and stay at room temperature; they are not measured for this tip. The cycle is then: run until \(I/I_0\) falls below a threshold, flash, run again. With the threshold \(@model/thr|.1f@\) the model flashes after @fl_gap_min|.0f@ min at \(10^{-8}\) Pa and hydrogen, and for the other pressures (same assumptions) after:</p>
+u_0=10^{13}\ \mathrm{s^{-1}}\) are assumptions, chosen so that hydrogen-like adsorbates leave a hot tip within seconds near 700 K (a residence time \(1/k_d=@t_des_700|.1f@\) s there) and stay at room temperature; they are not measured for this tip. The cycle is then: run until \(I/I_0\) falls below a threshold, flash, run again. With the threshold \(@model/thr|.1f@\) the model flashes after @fl_gap_min|.0f@ min at \(10^{-8}\) Pa and hydrogen, and for the other pressures (same assumptions) after:</p>
 <div class="ptab-wrap"><table class="ptab"><thead><tr><th>pressure (Pa)</th><th>time between flashes</th></tr></thead><tbody>
 @FLROWS@
 </tbody></table></div>

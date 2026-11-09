@@ -72,6 +72,11 @@ def check(text_dir=None):
     out, ok = [], True
     chs = {n: L.load_chapter(n, text_dir) for n in range(L.N_CHAPTERS)}
     chs = {n: c for n, c in chs.items() if c}
+    legacy = [n for n, c in chs.items() if 'legacy' in c]
+    chs = {n: c for n, c in chs.items() if 'legacy' not in c}
+    for n in legacy:
+        out.append('SKIP  ch%02d: written before the scaffold; its numbers are @key@ placeholders filled from ref/ch%02d.py and derive/ch%02d.py '
+                   '(an unresolved key raises), so part A does not apply; its typed numerals are listed by checks/list_legacy_numerals.py' % (n, n, n))
     if not chs:
         return True, ['no chapter written yet: nothing to check (PASS, vacuous)']
     js = L.Numbers(chs, 'js')

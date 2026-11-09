@@ -1,7 +1,7 @@
 /* The Electron Beam, from Tip to Measurement · physics/ch00.js
    Chapter 0, the goal: why a beam of electrons and not light. Worked example of the module pattern (physics/core.js).
 
-   Model. Light of wavelength lambda_opt through an objective of numerical aperture NA resolves at best a half-pitch
+   Model. Light of wavelength lambda_opt through an objective of numerical aperture NA resolves at best a period (pitch)
      d_opt = lambda_opt / (2 NA)                                  (Abbe; Born & Wolf, Principles of Optics, 7th ed., section 8.6)
    An electron accelerated from rest through a voltage V has kinetic energy eV, Lorentz factor gamma = 1 + eV/(m c^2) and
    momentum p = sqrt(2 m e V (1 + eV/(2 m c^2))) (from E^2 = (pc)^2 + (mc^2)^2 with E = mc^2 + eV), so its de Broglie wavelength is
