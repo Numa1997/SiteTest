@@ -25,7 +25,7 @@ AMIRI = HERE + '/fonts/Amiri-Regular.ttf'
 def traced(path):   # outlines traced from the reference plate (ref_trace.py): pixels, y down -> y up
     return [np.array(c) * [1, -1] for c in _json.load(open(path))['contours']]
 WORDS = {'reem': ('رِيمْ', lambda: traced(HERE + '/reem_ref.json'), 'evenodd'),
-         'butterfly': ('فَرَاشَتُكِ', lambda: traced(HERE + '/farashatuki.json'), 'evenodd')}   # the Diwani plate Numa chose: farashatuki_trace.py
+         'butterfly': ('فَرَاشَتُكِ', lambda: traced(HERE + '/farashatuki.json'), 'evenodd')}   # the Diwani plate Numa chose: farashatuki_trace.py panel
 N, K, MAXERR = 8192, 640, 0.004
 
 

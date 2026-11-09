@@ -6,7 +6,9 @@ upscale 4x (Lanczos), subtract the board (a heavily blurred copy), hysteresis th
 word's box (the panel's frame, its two labels "03. Diwani" and "ديواني" and the faint guide lines are not part of the word),
 drop specks, smooth, trace the ink's boundary at sub-pixel accuracy, simplify. Output in the crop's pixels, y down.
 
-    python3 tools/fig13/gift/farashatuki_trace.py IMAGE.jpg OUT.json [PREVIEW.png]
+    python3 tools/fig13/gift/farashatuki_trace.py sheet|panel IMAGE.jpg OUT.json [PREVIEW.png]
+  sheet: the nine-style sheet (panel 03 is about 300 px wide in it); panel: the same panel Numa sent again, full screen width
+  (1080 px), about 3.5 times sharper (9 November 2026, 13:18). The film uses the panel.
 """
 import sys, json
 import numpy as np
@@ -15,10 +17,12 @@ from scipy.ndimage import gaussian_filter, label, binary_closing, binary_opening
 from skimage.filters import apply_hysteresis_threshold
 from skimage.measure import find_contours, approximate_polygon
 
-UP = 4
-BOX = (605, 775, 862, 918)          # panel 03 in the 923-px-wide view of the screenshot
-WORD = (180, 100, 1012, 578)        # the word inside the 4x crop: x0, y0, x1, y1
-LABELS = ((0, 0, 495, 150), (880, 0, 1204, 152))   # "03. Diwani" (left) and "ديواني" (right), 4x crop pixels
+SOURCES = {   # box in the 923-px-wide view of the screenshot; word box and label boxes in pixels of the upscaled crop
+    'sheet': dict(SMOOTH=1.5, UP=4, BOX=(605, 775, 862, 918), WORD=(180, 100, 1012, 578), LABELS=((0, 0, 495, 150), (880, 0, 1204, 152))),
+    'panel': dict(SMOOTH=4.0, UP=2, BOX=(0, 740, 923, 1260), WORD=(330, 190, 1800, 1010), LABELS=((0, 0, 900, 290), (1560, 0, 2160, 310))),
+}
+src = SOURCES[sys.argv[1]]; UP, BOX, WORD, LABELS = src['UP'], src['BOX'], src['WORD'], src['LABELS']
+sys.argv = sys.argv[1:]
 
 img = Image.open(sys.argv[1]).convert('RGB'); s = img.size[0] / 923
 crop = img.crop(tuple(int(v * s) for v in BOX))
@@ -33,7 +37,7 @@ for a, b, c, d in LABELS: keep[b:d, a:c] = False
 mask &= keep
 lab, n = label(mask); sizes = np.bincount(lab.ravel())
 mask = np.isin(lab, [i for i in range(1, n + 1) if sizes[i] > 250])
-sm = gaussian_filter(mask.astype(float), 1.5)
+sm = gaussian_filter(mask.astype(float), src['SMOOTH'])   # the panel is a phone's zoom of a JPEG: smooth away its 8-px blocks
 cs = []
 for c in find_contours(sm, 0.5):
     c = approximate_polygon(c, 0.6)[:, ::-1]

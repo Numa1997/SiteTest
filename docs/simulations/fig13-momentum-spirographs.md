@@ -73,6 +73,8 @@ kaf and the dots with that nib, on the plate's habit of letters climbing from th
 of `farashatuki_v2.py` were shown, not used) and chose the Diwani panel (03, top right) of a nine-style sheet of the word he sent, an image made by an
 image generator. `farashatuki_trace.py` traces it like the name: gold ink brighter than the dark board, panel frame, labels and guide lines removed,
 14 contours (letters, dots and the small Diwani marks), filled with the even-odd rule. As with the name, its vowel marks were not checked by a calligrapher.
+Numa then sent the same panel full-screen (about 3.5 times sharper); the film uses that trace (`farashatuki_trace.py panel`, smoothed over the
+phone zoom's JPEG blocks; the fa's head is solid there, as on the plate).
 
 **Labels (9 November 2026).** At Numa's request ("old and scientific") the films' labels, readouts and captions are set in Instrument Sans
 (SIL OFL; `tools/fig13/gift/fonts/`), with its tabular digits frozen into the font so that changing numbers do not jitter, and IBM Plex Sans
