@@ -165,7 +165,7 @@
     ui: {
       controls: ['V_land', 'I_p', 't_d', 'N_px', 'material', 'r_t', 'V_ex', 'p', 't_clean', 'WD', 'a_lens', 'eta_c', 'cd', 'tol_rt', 'tol_NI', 'tol_p', 'tol_z', 'spec_cd', 'dose_max'],
       readouts: ['d_p', 'alpha_opt', 'I_beam', 'delta_SE', 'sigma_CD', 'CD_meas', 'dose', 'MPH', 'tol_dp_sd', 'tol_cd_p95', 'tol_yield'],
-      aspect: '16 / 9', aspectPhone: '3 / 4',
+      aspect: '16 / 10', aspectPhone: '2 / 3',
       caption: 'The whole column at once. Left: the precision of a width over landing voltage and probe current, with the aperture set to its best angle at every point; wine squares meet the precision spec, darker grey ones miss it more, the dashed line is the dose limit for the dwell time chosen, and the dot is the present setting. Right: how strongly each output answers a one per cent change of each input (wine: rises with it, grey: falls). The readouts below include the tolerance Monte Carlo over tip radius, pressure, lens drift and wafer height.',
     },
     compute, draw, chain, yields, SENS_IN, SENS_OUT, FIX,

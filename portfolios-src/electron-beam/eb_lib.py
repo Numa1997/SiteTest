@@ -281,7 +281,7 @@ def sim_slot(n, ch, modmap, defaults, contract, add_job):
     return ('<div class="eb-sim" data-module="%s" id="sim-%s" style="--ar:%s;--ar-m:%s"><p class="eb-sim__t">Simulation · %s</p>'
             '<div class="eb-sim__grid"><div class="eb-sim__stage"><canvas role="img" aria-label="%s"></canvas>'
             '<p class="eb-sim__cap">%s</p></div><div class="eb-sim__panel"><div class="eb-sim__ctls">%s</div><dl class="readouts">%s</dl></div></div>'
-            '<p class="eb-sim__err" hidden></p></div>') % (mid, mid, ui.get('aspect', '16 / 9'), ui.get('aspect_phone', ui.get('aspect', '16 / 9')),
+            '<p class="eb-sim__err" hidden></p></div>') % (mid, mid, ui.get('aspect', '16 / 9'), ui.get('aspect_phone', ui.get('aspectPhone', ui.get('aspect', '16 / 9'))),
                                                            html.escape(title), html.escape(title), cap, ''.join(ctl), ''.join(rd))
 
 
