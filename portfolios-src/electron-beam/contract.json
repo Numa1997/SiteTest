@@ -92,12 +92,16 @@
     "spot_curve": {"meaning": "for the figure: (alpha, d_A, d_S, d_C, d_I, d_p) on 61 log-spaced angles from 0.1 to 100 mrad, flattened", "tex": "d_p(\\alpha)", "type": "array", "unit": "rad, m", "stage": "ch5"},
 
     "E_land": {"meaning": "landing energy of the beam electrons on the wafer, e V_land", "tex": "E", "type": "number", "unit": "J", "display_unit": "eV", "display_scale": 6.241509074460763e18, "stage": "ch6"},
-    "material": {"meaning": "target material", "tex": "", "type": "material", "unit": "", "default": {"name": "Si", "Z": 14, "A": 0.0280855, "rho": 2329, "J": 2.73972204414e-17}, "stage": "ch6", "note": "J default 171 eV (ICRU 37 value for silicon); chapter 6 states its source"},
+    "material": {"meaning": "target material: Si, Al, Cu or Au (the elements for which chapter 6 has both backscattering data and secondary-electron constants)", "tex": "", "type": "enum", "values": ["Si", "Al", "Cu", "Au"], "default": "Si", "unit": "", "stage": "ch6", "note": "finisher: an enum with the material table inside physics/ch06.js (Z, molar mass, ESTAR density, Lin and Joy eps and lambda_s); J from Joy 1991 Eq. 12"},
     "delta_SE": {"meaning": "secondary electron yield (secondary electrons out per primary in)", "tex": "\\delta", "type": "number", "unit": "1", "stage": "ch6"},
     "eta_BSE": {"meaning": "backscattered electron coefficient", "tex": "\\eta", "type": "number", "unit": "1", "stage": "ch6"},
     "R": {"meaning": "electron range in the target (Kanaya-Okayama unless stated)", "tex": "R", "type": "number", "unit": "m", "display_unit": "nm", "display_scale": 1e9, "stage": "ch6"},
-    "V_int": {"meaning": "volume of the interaction region", "tex": "V_\\mathrm{int}", "type": "number", "unit": "m^3", "stage": "ch6"},
+    "V_int": {"meaning": "volume of the interaction region, taken as the hemisphere of radius r90 about the point of impact", "tex": "V_\\mathrm{int}", "type": "number", "unit": "m^3", "stage": "ch6"},
     "sigma_sig": {"meaning": "lateral spread (standard deviation) of the escaping signal around the beam axis", "tex": "\\sigma_s", "type": "number", "unit": "m", "display_unit": "nm", "display_scale": 1e9, "stage": "ch6"},
+    "u_eta": {"meaning": "statistical standard error of eta_BSE from the finite number of simulated electrons", "tex": "u_\\eta", "type": "number", "unit": "1", "stage": "ch6"},
+    "u_delta": {"meaning": "statistical standard error of delta_SE from the finite number of simulated electrons", "tex": "u_\\delta", "type": "number", "unit": "1", "stage": "ch6"},
+    "r90": {"meaning": "radius about the point of impact of the hemisphere that holds 90 % of the energy left in the wafer", "tex": "r_{90}", "type": "number", "unit": "m", "display_unit": "nm", "display_scale": 1e9, "stage": "ch6"},
+    "mc_paths": {"meaning": "for the figure: the first 40 trajectories, each as (number of points n, 1 if backscattered else 0, x1, z1, ..., xn, zn) in nm, concatenated", "tex": "", "type": "array", "unit": "nm", "stage": "ch6"},
 
     "t_d": {"meaning": "dwell time per pixel", "tex": "t_d", "type": "number", "unit": "s", "default": 1.0e-7, "min": 1.0e-9, "max": 1.0e-4, "scale": "log", "display_unit": "ns", "display_scale": 1e9, "stage": "ch7"},
     "N_px": {"meaning": "pixels along the measured line profile", "tex": "N", "type": "integer", "unit": "1", "default": 512, "min": 32, "max": 4096, "scale": "log", "stage": "ch7"},
@@ -114,7 +118,7 @@
     "ch03": {"title": "Acceleration", "in": ["V_acc", "V_land"], "out": ["E_0", "lambda_e", "gamma", "V_star", "V_star_land", "lambda_land", "ang_mag", "lambda_curve"], "note": "landing quantities and the wavelength curve added by the finisher"},
     "ch04": {"title": "The lens", "in": ["a_lens", "u_obj", "WD", "V_land"], "out": ["NI", "B_0", "M", "f", "C_s", "C_c", "theta_rot", "omega_G", "lens_ray"], "note": "finisher: the excitation NI is solved so that the lens focuses on the wafer, so it is an output; the beam voltage through the lens is the landing voltage (no retarding field in the lens model)"},
     "ch05": {"title": "The spot", "in": ["C_s", "C_c", "B_r", "dE", "dE50", "V_land", "alpha", "I_p", "probe_convention"], "out": ["d_p", "d_I", "d_A", "d_S", "d_C", "alpha_opt", "d_p_opt", "spot_curve"], "note": "finisher: the probe current is asked for and the source-image size follows from the brightness (the condenser sets it), so I_p is an input; B_r is converted to the practical brightness B_r/ln 2 (chapter 3)"},
-    "ch06": {"title": "Scan and hit", "in": ["V_land", "material"], "out": ["E_land", "delta_SE", "eta_BSE", "R", "V_int", "sigma_sig"]},
+    "ch06": {"title": "Scan and hit", "in": ["V_land", "material"], "out": ["E_land", "delta_SE", "eta_BSE", "R", "V_int", "sigma_sig", "u_eta", "u_delta", "r90", "mc_paths"], "note": "finisher: statistical errors, r90 and the drawn paths added; material is an enum"},
     "ch07": {"title": "Detect and measure", "in": ["d_p", "I_p", "t_d", "N_px", "eta_c", "profile", "delta_SE", "eta_BSE", "sigma_sig"], "out": ["SNR", "sigma_CD", "MPH"]},
     "ch08": {"title": "The whole machine", "in": ["every input above"], "out": ["sensitivity table (normalised derivatives of d_p, I_p, sigma_CD, MPH)", "tolerance Monte Carlo", "process window"], "note": "chains ch2 to ch7 through this contract; defines no new physics symbols"}
   }
