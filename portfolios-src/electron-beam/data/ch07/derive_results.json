@@ -1,0 +1,90 @@
+{
+ "checks": [
+  {
+   "id": "C1",
+   "title": "counts per pixel: beam electrons Poisson with mean n̄, each giving a Poisson number of collected secondaries with mean m; the total has mean n̄m and variance n̄(m + m²)",
+   "ok": true,
+   "detail": "law of total variance: E[N]Var[K] + Var[N]E[K]² = m*n*(m + 1)"
+  },
+  {
+   "id": "C2",
+   "title": "a round Gaussian probe of standard deviation σ per axis holds half its current inside the diameter 2√(2 ln 2) σ = 2.355σ, equal to its FWHM, so σ_p = d_p/2.355",
+   "ok": true,
+   "detail": "R₅₀ = [-sqrt(2)*sigma*sqrt(log(2)), sqrt(2)*sigma*sqrt(log(2))]"
+  },
+  {
+   "id": "C3",
+   "title": "secant law on the sidewall: the excess δ(1/sin β − 1)·h tan β equals δh(1/cos β − tan β) and tends to δh for a vertical wall",
+   "ok": true,
+   "detail": "limit β → 0: delta*h"
+  },
+  {
+   "id": "C4",
+   "title": "the error function used for the blurred profile (Abramowitz and Stegun 7.1.26) against the library erf on −6 ≤ x ≤ 6",
+   "ok": true,
+   "detail": "largest difference 1.4e-07"
+  },
+  {
+   "id": "C5",
+   "title": "σ_CD falls as the inverse square root of the dwell time, the current and the number of lines averaged (log-log slopes, at high counts per pixel)",
+   "ok": true,
+   "detail": "t_d -0.500, I_p -0.500, N_px -0.500"
+  },
+  {
+   "id": "C6",
+   "title": "σ_CD by first-order error propagation against the standard deviation of 1000 noisy repeats of the same measurement: within 10 % (the Monte Carlo itself carries about 2 %)",
+   "ok": true,
+   "detail": "default: 0.271 vs 0.285 nm; {\"t_d\": 1e-06}: 0.086 vs 0.091 nm; {\"t_d\": 1e-08}: 0.858 vs 0.873 nm; {\"N_px\": 128}: 0.543 vs 0.549 nm; {\"sidewall\": 0.0, \"height\": 5e-08, \"cd\": 1.5e-08}: 0.194 vs 0.208 nm"
+  },
+  {
+   "id": "C7",
+   "title": "with a sharp probe and no spread of the signal the outer-flank threshold finds the bottom corners of the line (width CD + h tan β), within a pixel",
+   "ok": true,
+   "detail": "sharp: 21.040 nm against the bottom width 21.048 nm; default blur: 28.56 nm for a true CD of 20.0 nm"
+  },
+  {
+   "id": "C8",
+   "title": "dose: n̄ = I_p t_d / e electrons per pixel and D = I_p t_d / Δx² (1 C m⁻² = 100 µC cm⁻²)",
+   "ok": true,
+   "detail": "n̄ = 6.242, D = 100.0 µC cm⁻²"
+  }
+ ],
+ "numbers": {
+  "slopes": {
+   "t_d": -0.49999999994576033,
+   "I_p": -0.49999999994576033,
+   "N_px": -0.5
+  },
+  "ep_vs_mc": [
+   [
+    "{}",
+    2.713528869867261e-10,
+    2.8501555204056874e-10
+   ],
+   [
+    "{\"t_d\": 1e-06}",
+    8.580931725124387e-11,
+    9.109838491564572e-11
+   ],
+   [
+    "{\"t_d\": 1e-08}",
+    8.580931723980263e-10,
+    8.730523280838721e-10
+   ],
+   [
+    "{\"N_px\": 128}",
+    5.427057739734522e-10,
+    5.494871237761642e-10
+   ],
+   [
+    "{\"sidewall\": 0.0, \"height\": 5e-08, \"cd\": 1.5e-08}",
+    1.9359381268329705e-10,
+    2.076196022060305e-10
+   ]
+  ],
+  "cd_sharp": 2.104026346335472e-08,
+  "bottom": 2.1047623084752432e-08,
+  "cd_default": 2.8562562684368596e-08
+ },
+ "summary": "8 of 8 checks pass"
+}
