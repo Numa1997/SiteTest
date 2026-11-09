@@ -86,7 +86,7 @@ Hohmann §5.4, pp. 33–35 (READ). Local error O(τ⁵), global O(τ⁴): the fi
 | The original theory | R. H. Fowler, L. Nordheim, *Proc. R. Soc. A* **119** (1928) 173–181; L. W. Nordheim, *Proc. R. Soc. A* **121** (1928) 626–639; E. L. Murphy, R. H. Good, *Phys. Rev.* **102** (1956) 1464–1473; R. E. Burgess, H. Kroemer, J. M. Houston, *Phys. Rev.* **90** (1953) 515 | NOT OPENED (listed as printed in the reference list of arXiv:1905.07585) |
 | Tunnelling through a barrier, T ∝ exp(−2κa) | Biehs §2.5 pp. 51–58 | READ |
 | Practical brightness B = 1.44 e j/(kT) (thermionic, Schottky) and a field-emission form (Eqs. 15 and 16 there); reduced brightness = brightness per volt in A m⁻² sr⁻¹ V⁻¹, conserved along the column (Liouville) | M. S. Bronsgeest, J. E. Barth, L. W. Swanson, P. Kruit, "Probe current, probe size, and the practical brightness for probe forming systems", *J. Vac. Sci. Technol. B* (2008), doi 10.1116/1.2907780 | LOCATED (excerpt; the symbol in the field-emission denominator was lost in the excerpt) |
-| Table of source properties (work function, temperature, current density, brightness, energy spread, vacuum, life) for W, LaB₆, Schottky and cold FEG | D. B. Williams, C. B. Carter, *Transmission Electron Microscopy*, ch. 5, Table 5.1, copy at <https://iubemcenter.indiana.edu/doc/williams-and-carter/transmission-electron-microscopy-chapter-05.pdf> | LOCATED (the excerpt dropped the exponents; the PDF must be opened before any number is digitised) |
+| Table of source properties (work function, temperature, current density, brightness, energy spread, vacuum, life) for W, LaB₆, Schottky and cold FEG | D. B. Williams, C. B. Carter, *Transmission Electron Microscopy*, ch. 5, Table 5.1 (book p. 74), copy at <https://iubemcenter.indiana.edu/doc/williams-and-carter/transmission-electron-microscopy-chapter-05.pdf> | READ from a page image; digitised in `data/ch02/source_properties_williams_carter.csv`; **the printed Richardson constants are wrong** (see `data/ch02/README.md`) |
 | Field-emission brightness and its space-charge limit | S. Tsujino, *J. Vac. Sci. Technol. B* **40**, 030801 (2022) | LOCATED (excerpt) |
 | Hertz–Knudsen flux, Langmuir coverage and sticking | no source opened | NOT OPENED |
 | Applied's statements on cold field emission | `applied-public.md` | in progress |
@@ -98,7 +98,8 @@ Hohmann §5.4, pp. 33–35 (READ). Local error O(τ⁵), global O(τ⁴): the fi
 | Born approximation, scattering | Griffiths §11.3, p. 363 | LOCATED (contents) |
 | Mott cross section deviates strongly from Rutherford at low energy; BSE yield of light elements rises and of heavy falls at low landing energy | Y. Hashimoto, A. Muto, E. Woods, T. Walters, D. C. Joy, *Microscopy Today* (2016), doi 10.1017/S1551929516000390 | LOCATED (excerpt) |
 | Database of measured SE and BSE yields and stopping powers | D. C. Joy, "A database on electron–solid interactions", *Scanning* **17** (1995), doi 10.1002/sca.4950170501 (the Wiley record lists the author as "Ashley JC"; the 1995 database is Joy's per the MC-SET note) | LOCATED (abstract) |
-| Open database of electron backscattering coefficients, 0.1 keV to 15 MeV, 50 elements and 19 compounds incl. Si, Cu, Au, e-beam PMMA resist and PETEOS: J. I. Goldstein et al., *Med. Phys.* (2023), doi 10.1002/mp.16604, data at doi 10.5281/zenodo.7810951 | | LOCATED (to be downloaded for `data/ch06/`) |
+| Open database of electron backscattering coefficients, 0.1 keV to 15 MeV, 50 elements and 19 compounds incl. Si, Cu, Au, e-beam PMMA resist and PETEOS: F. Akbari et al. (author list unverified; a search listing gave J. I. Goldstein), *Med. Phys.* (2023), doi 10.1002/mp.16604, data at doi 10.5281/zenodo.7810951, CC BY 4.0 | | data READ (five files merged in `data/ch06/bse_coefficient_vs_energy.csv`); the paper itself LOCATED (excerpt) |
+| SE yield: universal law δ/δ_max = 1.28 (E/E_max)^−0.67 [1 − exp(−1.614 (E/E_max)^1.67)] and Table 1 (δ_max, E_max for 44 elements) | Y. Lin, D. C. Joy, *Surf. Interface Anal.* **37** (2005) 895–900, doi 10.1002/sia.2107, <https://psec.uchicago.edu/Papers/A_new_examination_of_secondary_electron_yield_data.pdf> | READ (abstract, law, Table 1); in `data/ch06/se_yield_lin_joy2005.csv` |
 | Bethe stopping power, Kanaya–Okayama range (1972), Everhart–Hoff (1971) | no source opened | NOT OPENED |
 
 ### 2.8 Detection and statistics
@@ -108,8 +109,8 @@ Shot noise (Poisson, SNR ∝ √N), CD uncertainty, throughput: no source opened
 
 ## 3. Still to do (S2 backlog, in this order)
 
-1. Open Williams & Carter Table 5.1 and digitise (data c).
-2. Download the Zenodo BSE database and extract Si, Cu, Au, PMMA (data e); find an open SE-yield source for the same (data e).
+1. (done) Williams & Carter Table 5.1 (data c, textbook level); still missing: a primary measurement of B_r and ΔE per source.
+2. (done) BSE database and Lin & Joy SE table (data e); still missing: SE yield of a resist.
 3. A measured tungsten FN I–V set (data b): Dyke & Dolan 1956 is not open; look for open reproductions or a thesis table.
 4. Reimer or Goldstein for Cs, Cc of SEM objective lenses (data f); Kanaya–Okayama and Everhart–Hoff (data d).
 5. Books for L, Boris, Busch, Scherzer, Airy, Hertz–Knudsen, Bethe, shot noise.
