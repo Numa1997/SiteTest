@@ -1,0 +1,58 @@
+{
+  "source": "J. J. Thomson, 'Cathode Rays', Philosophical Magazine (5th series) 44, 293-316 (1897), doi:10.1080/14786449708621070",
+  "transcription": "Classic Chemistry transcription by Carmen J. Giunta, Le Moyne College: https://web.lemoyne.edu/~giunta/thomson1897.html (read 9 November 2026). Values typed exactly as printed there; the transcriber's mark [sic-CJG] on the last Tube 3 row is kept in 'note'.",
+  "units_as_printed": "CGS electromagnetic (emu): m/e in g per abcoulomb, v in cm/s, W/Q in erg per abcoulomb, I = H*rho in gauss*cm, H in gauss (oersted), F in abvolt/cm, l in cm, theta in rad.",
+  "si_conversion": "1 abC = 10 C, 1 g = 1e-3 kg, so (m/e)_SI [kg/C] = 1e-4 * (m/e)_emu; v_SI = 1e-2 v_cgs; H 1 G -> B = 1e-4 T; F 1 abV/cm = 1e-8 V/cm = 1e-6 V/m; l 1 cm = 1e-2 m. Done in ref/ch01.py, never by hand.",
+  "method1_heat": {
+    "what": "Thermal method: cathode rays caught in an insulated cylinder (charge Q) and on a thermojunction (energy W); bent by a uniform field H with radius rho. m/e = I^2 Q / (2 W), v = 2 W / (Q I), I = H rho.",
+    "columns": ["tube", "gas", "W_over_Q_emu", "I_emu", "m_over_e_emu", "v_cgs"],
+    "rows": [
+      [1, "Air", 4.6e11, 230, 0.57e-7, 4e9],
+      [1, "Air", 1.8e12, 350, 0.34e-7, 1e10],
+      [1, "Air", 6.1e11, 230, 0.43e-7, 5.4e9],
+      [1, "Air", 2.5e12, 400, 0.32e-7, 1.2e10],
+      [1, "Air", 5.5e11, 230, 0.48e-7, 4.8e9],
+      [1, "Air", 1e12, 285, 0.4e-7, 7e9],
+      [1, "Air", 1e12, 285, 0.4e-7, 7e9],
+      [1, "Hydrogen", 6e12, 205, 0.35e-7, 6e9],
+      [1, "Hydrogen", 2.1e12, 460, 0.5e-7, 9.2e9],
+      [1, "Carbonic acid", 8.4e11, 260, 0.4e-7, 7.5e9],
+      [1, "Carbonic acid", 1.47e12, 340, 0.4e-7, 8.5e9],
+      [1, "Carbonic acid", 3.0e12, 480, 0.39e-7, 1.3e10],
+      [2, "Air", 2.8e11, 175, 0.53e-7, 3.3e9],
+      [2, "Air", 4.4e11, 195, 0.47e-7, 4.1e9],
+      [2, "Air", 3.5e11, 181, 0.47e-7, 3.8e9],
+      [2, "Hydrogen", 2.8e11, 175, 0.53e-7, 3.3e9],
+      [2, "Air", 2.5e11, 160, 0.51e-7, 3.1e9],
+      [2, "Carbonic acid", 2e11, 148, 0.54e-7, 2.5e9],
+      [2, "Air", 1.8e11, 151, 0.63e-7, 2.3e9],
+      [2, "Hydrogen", 2.8e11, 175, 0.53e-7, 3.3e9],
+      [2, "Hydrogen", 4.4e11, 201, 0.46e-7, 4.4e9],
+      [2, "Air", 2.5e11, 176, 0.61e-7, 2.8e9],
+      [2, "Air", 4.2e11, 200, 0.48e-7, 4.1e9],
+      [3, "Air", 2.5e11, 220, 0.9e-7, 2.4e9],
+      [3, "Air", 3.5e11, 225, 0.7e-7, 3.2e9],
+      [3, "Hydrogen", 3e11, 250, 1.0e-7, 2.5e9, "transcriber marks the printed value 1.0 with [sic-CJG]"]
+    ],
+    "thomson_comment": "Thomson judged the Tube 1 and 2 values too small because charge leaked from the inner cylinder through the ionised gas."
+  },
+  "method2_crossed": {
+    "what": "Crossed-field method: plates of length l give deflection theta under electric intensity F; coils give the same deflection under H; theta = F (e/m) l / v^2, phi = H (e/m) l / v; with phi = theta: v = F/H, m/e = H^2 l / (F theta). Mean H over l was 60 x coil current.",
+    "columns": ["gas", "theta_num", "theta_den", "H_emu", "F_emu", "l_cm", "m_over_e_emu", "v_cgs"],
+    "rows": [
+      ["Air", 8, 110, 5.5, 1.5e10, 5, 1.3e-7, 2.8e9],
+      ["Air", 9.5, 110, 5.4, 1.5e10, 5, 1.1e-7, 2.8e9],
+      ["Air", 13, 110, 6.6, 1.5e10, 5, 1.2e-7, 2.3e9],
+      ["Hydrogen", 9, 110, 6.3, 1.5e10, 5, 1.5e-7, 2.5e9],
+      ["Carbonic acid", 11, 110, 6.9, 1.5e10, 5, 1.5e-7, 2.2e9],
+      ["Air", 6, 110, 5, 1.8e10, 5, 1.3e-7, 3.6e9],
+      ["Air", 7, 110, 3.6, 1.0e10, 5, 1.1e-7, 2.8e9, "F printed as 1.x10^10 in the transcription"]
+    ],
+    "apparatus": "Plates (as printed) about 5 cm long, 2 cm broad, 1.5 cm apart."
+  },
+  "codata": {
+    "source": "CODATA 2018 (Tiesinga et al., Rev. Mod. Phys. 93, 025010 (2021)); NIST https://physics.nist.gov/cgi-bin/cuu/Value?esme",
+    "e_over_me_C_per_kg": 1.75882001076e11,
+    "rel_uncertainty": 3.0e-10
+  }
+}
