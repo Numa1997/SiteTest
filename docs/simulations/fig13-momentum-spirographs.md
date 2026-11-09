@@ -31,8 +31,8 @@ momenta p₁, p₂. Hamilton's equations for the general family (masses, lengths
 | `simulations/fig13/turning.html?scene=wheel\|butterfly` | Film: turning the paper, with the deck of earlier pictures. |
 | `simulations/fig13/together.html` | Film: six pictures on one clock; the phone layout on a portrait screen. |
 | `simulations/fig13/dive.html` | Film, phone first: from momentum space into one cell, then the exposure grows from an eye's 0.1 s to one lap. |
-| `simulations/fig13/reem.html` | The gift For رِيمْ as a precomputed video (`video/gift-{dark,light}.mp4`), then the construction video, looping; follows the reader's light or dark setting. The film itself (`tools/fig13/gift/reem.html`, the first version Numa liked, in the house colours) writes رِيمْ (traced from the reference plate Numa chose) and فَرَاشَتُكِ (written in the same hand: `farashatuki.py`) with 640 arrows each, then the butterfly by two arrows, then its dashboard with the paper turning. |
-| `simulations/fig13/construction.html` | The construction as a precomputed video (`video/construction-{dark,light}.mp4`), looping. The film (`tools/fig13/gift/construction.html`): h(t) beside the plane, x(t) below, the two time axes joined by a 45-degree mitre; for each instant a level and an upright line cross at the tip of the pendulum; a wheel first, then the butterfly. Videos and pages: `video_pages.py` (drawn live on a phone the films stuttered). |
+| `simulations/fig13/reem.html` | The gift For رِيمْ as a precomputed video (`video/gift-{dark,light}.mp4`), then the construction video, looping; follows the reader's light or dark setting. The film itself (`tools/fig13/gift/reem.html`, the first version Numa liked, in the house colours) writes رِيمْ and فَرَاشَتُكِ (each traced from a plate Numa chose) with 640 arrows each, then the butterfly by two arrows, then its dashboard with the paper turning, then the exact strike and why it is not chaos (numbers from `butterfly_physics.py`). Labels and captions in Instrument Sans. |
+| `simulations/fig13/construction.html` | The construction as a precomputed video (`video/construction-{dark,light}.mp4`), looping; labels in Instrument Sans. The film (`tools/fig13/gift/construction.html`): h(t) beside the plane, x(t) below, the two time axes joined by a 45-degree mitre; for each instant a level and an upright line cross at the tip of the pendulum; a wheel first, then the butterfly. Videos and pages: `video_pages.py` (drawn live on a phone the films stuttered). |
 
 The four films are generated: edit `tools/fig13/gift/*.html` and run `python3 tools/fig13/gift/publish_films.py`, which rewrites the
 asset paths, adds the two security meta tags and a link back to the dashboard. Opened without `?film=1` they loop live.
@@ -68,3 +68,45 @@ kept as drawn and have not been checked by a calligrapher.
 nib about 60 px wide held at 70 degrees (horizontal strokes 57-60 px, strokes at 60-75 degrees about 16 px); uprights about 40 px, as with the reed
 turned to 45 degrees. `farashatuki.py` takes the plate's own ra, fathas, damma, kasra and the small hooked mark, and writes fa, alif, shin, ta, the
 kaf and the dots with that nib, on the plate's habit of letters climbing from the upper right and the ra sweeping under what follows.
+
+**فَرَاشَتُكِ, final (9 November 2026).** Numa rejected the composed versions (`farashatuki.py`: "just disconnected letters"; the three compositions
+of `farashatuki_v2.py` were shown, not used) and chose the Diwani panel (03, top right) of a nine-style sheet of the word he sent, an image made by an
+image generator. `farashatuki_trace.py` traces it like the name: gold ink brighter than the dark board, panel frame, labels and guide lines removed,
+14 contours (letters, dots and the small Diwani marks), filled with the even-odd rule. As with the name, its vowel marks were not checked by a calligrapher.
+
+**Labels (9 November 2026).** At Numa's request ("old and scientific") the films' labels, readouts and captions are set in Instrument Sans
+(SIL OFL; `tools/fig13/gift/fonts/`), with its tabular digits frozen into the font so that changing numbers do not jitter, and IBM Plex Sans
+supplying Greek (φ, θ), which Instrument Sans lacks. This is the only place on the site with a font outside the house set; titles stay in
+Instrument Serif. The player pages' buttons keep IBM Plex Mono.
+
+## The butterfly physically (`tools/fig13/butterfly_physics.py`, 9 November 2026)
+
+- The strike: both rods hanging still, the upper rod is set turning at −25.30 rad/s (4.0 turns a second, backwards), the lower at +74.59 rad/s
+  (11.9 forwards); p = (3.557313, 12.211005) kg·m²/s, E = 390.78 J.
+- Over a lap: the upper rod's speed swings between −32.7 and +33.1 rad/s, the lower rod never stops (44.7 to 74.6 rad/s, always forwards); the tip moves
+  at 38 to 52 m/s; the top pin pulls with 905 N on average and up to 4.31 kN (220 times the pendulum's weight, 19.6 N; from the centre of mass's
+  acceleration, sampled at 20 001 points).
+- Stability from the exact variational equations (SymPy Jacobian, DOP853, rtol 1e-12; det of the lap map 1 to 2e-12): multipliers 1.01977 and 0.98062
+  (plus the pair at 1 every periodic orbit has): unstable, an error grows ×1.0198 a lap. The finite-difference trace of `butterfly.py` (2.0004) could not
+  tell this ('neutral'); this settles it.
+- Twins struck 1e-6 apart in p₂: the butterfly pair stays within 0.32 mm (tip) after 40 laps (106 s); at 18 J (p = (2, 4)) a pair disagrees by 1 cm after
+  6 s, at 65 J (p = (3, 6)) after 37 s.
+- 1 500 laps (66 min) of butterflies struck 0, 1e-6 and 1e-3 off in p₂: the wing angle (largest petal direction) stays between 135.56° and 135.9°, the upper
+  rod never goes over the top. The exact closed drawing is unstable; the butterfly shape is robust.
+- Why it is not chaos, in one line: the motion carries 20 times the energy gravity can give or take (390.8 J against ±19.6 J), so gravity only steers.
+
+## Catching the butterfly with a motor (`tools/fig13/butterfly_control.py`, 9 November 2026)
+
+Method of the skill `phyein-usul-first-principles-control` (§8), applied to a periodic orbit instead of a resting point: a motor torque τ at the top pin
+enters as a generalised force on θ₁ (dp₁/dt gains τ); the orbit is sampled at 2 400 points a lap and linearised step by step (variational equations);
+controllability over one lap: all four Gramian eigenvalues positive (3.5e-8 to 4.0e-5, the smallest along the timing of the lap); periodic LQR
+(Q = diag(1, 1, 0.05, 0.05), R = 1e-3 per (N·m)², |τ| ≤ 60 N·m): the closed-loop lap multipliers fall to 0.07 to 0.08. Verified on the nonlinear equations
+(RK4 at the same step, torque held over a step), with the reference re-indexed to the nearest orbit point each step:
+- nudged 0.1 rad off: back on the orbit within about 5 s, at most 8.3 N·m, then the torque falls to zero (holding the orbit costs nothing);
+- pump, wait, catch: the motor pumps the energy to 390.8 J (τ = sat(0.02 (E* − E) θ̇₁)), switches off, and waits until the free motion passes within
+  0.12 of the orbit, then catches. From p = (2, 4) (18 J, chaotic): pump 1.9 s, caught at 6.4 s, at most 2.2 N·m in the catch, then within 6e-4 of the orbit
+  with zero holding torque. From p = (3, 6) (65 J): caught at 5.7 s. Not caught within 300 s from p = (5, −3), (−2, 5), (1, 8), (0, 0.5), (−4, 3): after the
+  pump these sit on regular motions at the right energy that never come near the butterfly.
+- Did not work: time-locked tracking (fights the lap's timing, the costliest direction); a transverse-only cost with saturated torque (drained the energy).
+- Open: a second pump for the slow swing (a torque that varies slowly moves the upper rod's swing; one that varies with the fast whirl moves the spin), so
+  that every start reaches the butterfly's neighbourhood.

@@ -5,23 +5,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>For رِيمْ</title>
 <!-- Film renderer (phone first, 1080 x 1920), a gift: "For ريم" and "فراشتك" written by chains of turning arrows (a Fourier series
-     of each word's outline, reem.json from reem_data.py, رِيمْ traced from the reference plate Numa chose, فَرَاشَتُكِ in Amiri, SIL OFL), then the butterfly drawn by
+     of each word's outline, reem.json from reem_data.py, رِيمْ and فَرَاشَتُكِ traced from the two plates Numa chose), then the butterfly drawn by
      only two arrows (the rods of the double pendulum, orbit24.json), then its dashboard: the plane of the motion, its height and
-     sideways position against time joined by straight lines, and the paper turned until each wave is the butterfly again.
+     sideways position against time joined by straight lines, the paper turned until each wave is the butterfly again, and the
+     exact strike with the reason it is not chaos (numbers from tools/fig13/butterfly_physics.py).
      Serve the repository root; tools/fig13/gift/render.cjs THEME OUT 1 all reem x 1080x1920 writes the frames. -->
 <style>
 @font-face { font-family: 'Instrument Serif'; src: url(../../../public/fonts/instrument-serif/instrument-serif-400-latin.woff2) format('woff2'); font-style: normal; }
 @font-face { font-family: 'Instrument Serif'; src: url(../../../public/fonts/instrument-serif/instrument-serif-400i-latin.woff2) format('woff2'); font-style: italic; }
-@font-face { font-family: 'IBM Plex Sans'; src: url(../../../public/fonts/ibm-plex-sans/ibm-plex-sans-400-latin.woff2) format('woff2'); }
-@font-face { font-family: 'IBM Plex Mono'; src: url(../../../public/fonts/ibm-plex-mono/ibm-plex-mono-400-latin.woff2) format('woff2'); }
+@font-face { font-family: 'Instrument Sans'; src: url(fonts/instrument-sans-400.woff2) format('woff2'); font-weight: 400; }   /* Numa, 9 Nov 2026: labels and numbers in a modern sans (SIL OFL, fonts/OFL-InstrumentSans.txt); digits tabular */
+@font-face { font-family: 'Instrument Sans'; src: url(fonts/instrument-sans-500.woff2) format('woff2'); font-weight: 500; }
+@font-face { font-family: 'Instrument Sans'; src: url(../../../public/fonts/ibm-plex-sans/ibm-plex-sans-400-greek.woff2) format('woff2'); unicode-range: U+0370-03FF; }   /* Greek (φ, θ): Instrument Sans has none */
 :root { --bg:#140d10; --ink:#f5f1ea; --ink2:#d9cdc4; --muted:#b9a59b; --accent:#e2a2aa; }
 :root[data-theme="light"] { --bg:#f5f1ea; --ink:#1c1518; --ink2:#3a322e; --muted:#6f635d; --accent:#7a1f2b; }
 html, body { margin:0; background:var(--bg); height:100%; overflow:hidden; }   /* the stage never widens the page, so a phone does not zoom out */
-#stage { position:absolute; width:1080px; height:1920px; background:var(--bg); color:var(--ink); font-family:'IBM Plex Sans',sans-serif; overflow:hidden; transform-origin:0 0; }
+#stage { position:absolute; width:1080px; height:1920px; background:var(--bg); color:var(--ink); font-family:'Instrument Sans',sans-serif; overflow:hidden; transform-origin:0 0; }
 canvas { position:absolute; left:0; top:0; }
 .capt { position:absolute; left:48px; top:1556px; width:984px; font-size:31px; line-height:1.45; color:var(--ink); }
 .capt b { font-weight:400; color:var(--accent); }
-.capt .m { font-family:'IBM Plex Mono',monospace; font-size:23px; color:var(--ink2); }
+.capt .m { font-family:'Instrument Sans',sans-serif; font-size:23px; color:var(--ink2); }
 </style>
 </head>
 <body>
@@ -113,7 +115,7 @@ function curve(g, P, span, lw, flat, alpha) {
     g.globalCompositeOperation = 'source-over';
 }
 function card(g, x, y, w, h, a) { g.globalAlpha = a; g.fillStyle = TH.panel; g.strokeStyle = TH.rule; g.lineWidth = 1.2; g.beginPath(); g.roundRect(x, y, w, h, 14); g.fill(); g.stroke(); g.globalAlpha = 1; }
-function label(g, s, x, y, size, color, align, a) { g.globalAlpha = a === undefined ? 1 : a; g.fillStyle = color; g.font = `${size}px "IBM Plex Mono"`; g.textAlign = align || 'left'; g.fillText(s, x, y); g.globalAlpha = 1; }
+function label(g, s, x, y, size, color, align, a) { g.globalAlpha = a === undefined ? 1 : a; g.fillStyle = color; g.font = `${size}px "Instrument Sans"`; g.textAlign = align || 'left'; g.fillText(s, x, y); g.globalAlpha = 1; }
 
 // ------------------------------------------------------------------------------------------------ timeline (frames at 30 per second)
 const FPS = 30, LAP = () => Math.round(O.T / SPEED * FPS);
@@ -125,7 +127,8 @@ function timeline() {
     TL.d0 = TL.p1; TL.d1 = TL.d0 + 40;                          // the plane shrinks into the dashboard
     TL.wv = TL.d1; TL.wv1 = TL.wv + L;                          // the waves develop, one lap
     TL.r0 = TL.wv1; TL.r1 = TL.r0 + 150; TL.h1 = TL.r1 + L; TL.b1 = TL.h1 + 150;   // turn, hold a lap, turn back
-    TL.total = TL.b1 + 120;
+    TL.c0 = TL.b1 + 30; TL.c1 = TL.c0 + 420;                  // the exact conditions, then the reason it is not chaos
+    TL.total = TL.c1 + 30;
 }
 const simT = f => Math.max(0, f - TL.p0) / FPS * SPEED;       // seconds of motion since the kick
 function phiAt(f) { return (Math.PI / 2) * (f < TL.r0 ? 0 : f < TL.r1 ? ease((f - TL.r0) / (TL.r1 - TL.r0)) : f < TL.h1 ? 1 : 1 - ease((f - TL.h1) / (TL.b1 - TL.h1))); }
@@ -202,7 +205,17 @@ function drawScene(g, f) {
         [`x = ${zx.toFixed(2)} m`, 21, TH.ink], [`h = ${zh.toFixed(2)} m`, 21, TH.ink], ['', 10], [`φ = ${(phi * 180 / Math.PI).toFixed(1)}°`, 24, TH.accent], ['0°: the wave', 17, TH.muted], ['90°: the butterfly', 17, TH.muted], ['', 14],
         ['screen x = τc + (τ − τc) cos φ', 17, TH.ink], ['           + x sin φ', 17, TH.ink], ['screen y = h', 17, TH.ink], ['h never changes: the line', 16, TH.muted], ['stays level as the paper turns', 16, TH.muted], ['', 12],
         ['z = −i l (exp iθ₁ + exp iθ₂)', 17, TH.ink], ['the two rods are the two arrows', 16, TH.muted]];
-    let y = TX.y + 40; for (const [s1, size, color] of lines) { if (s1) label(g, s1, TX.x + 20, y, size, color, 'left', pa); y += size * 1.55; }
+    // after the turn the box shows the exact conditions (tools/fig13/butterfly_physics.py, physics.json, 9 Nov 2026)
+    const cA = ease((f - TL.c0) / 20), rA = 1 - cA;
+    let y = TX.y + 40; for (const [s1, size, color] of lines) { if (s1) label(g, s1, TX.x + 20, y, size, color, 'left', pa * rA); y += size * 1.55; }
+    if (cA > 0) {
+        const C = [['the exact strike', 24, TH.ink, 500], ['', 6], ['two rods, 1 kg and 1 m each', 18, TH.muted], ['g = 9.8 m/s² · no friction', 18, TH.muted], ['', 12],
+            ['both hang still, then are struck:', 18, TH.ink], ['upper rod −25.3 rad/s', 22, TH.accent], ['    4.0 turns a second, backwards', 16, TH.muted],
+            ['lower rod +74.6 rad/s', 22, TH.accent], ['    11.9 turns a second, forwards', 16, TH.muted], ['p₁ = 3.557,  p₂ = 12.211 kg·m²/s', 16, TH.muted], ['', 12],
+            ['back where it started after 2.659 s', 18, TH.ink], ['upper rod: one swing, ±156.7°', 18, TH.ink], ['lower rod: 24 whole turns', 18, TH.ink], ['', 12],
+            ['energy 390.8 J', 20, TH.ink], ['gravity can give or take 19.6 J', 18, TH.muted], ['tip speed 38 to 52 m/s', 18, TH.muted], ['pull on the top pin up to 4.3 kN', 18, TH.muted]];
+        let yy = TX.y + 40; for (const [s1, size, color, wt] of C) { if (s1) { g.font = `${wt || 400} ${size}px "Instrument Sans"`; g.globalAlpha = pa * cA; g.fillStyle = color; g.textAlign = 'left'; g.fillText(s1, TX.x + 20, yy); g.globalAlpha = 1; } yy += size * 1.55; }
+    }
 }
 function sheet(g, pts) { g.fillStyle = TH.sheet; g.strokeStyle = TH.sheetEdge; g.lineWidth = 1; g.beginPath(); pts.forEach(([x, y], i) => i ? g.lineTo(x, y) : g.moveTo(x, y)); g.closePath(); g.fill(); g.stroke(); }
 
@@ -216,6 +229,8 @@ function captions() {
         [TL.d1, 'Its height against time, to the right; its sideways position, below. The straight lines join the same instant.'],
         [TL.r0, 'Turn the paper a quarter turn and the wave becomes the butterfly. The height never changes under the turn, so the line stays level.'],
         [TL.h1 + 20, 'The upper rod swings like a pendulum, out to ±157°, never over the top, while the lower rod whirls round 24 times. Each time the arm is straight, a petal points along the upper rod.'],
+        [TL.c0, 'It closes because exactly 24 whirls of the lower rod fit into one swing of the upper. Strike it a hair differently and it keeps its wings, but the drawing no longer closes.'],
+        [TL.c0 + 210, 'Why it is not chaos: struck this hard, the motion carries 20 times what gravity can give or take, so gravity only steers it. Struck gently (18 J), two pendulums one part in a million apart disagree by 1 cm within 6 s; these two stay within 0.3 mm for 100 s.'],
     ];
 }
 const memo = {};
@@ -236,7 +251,8 @@ async function boot() {
     prepWord(WD.reem); prepWord(WD.butterfly); prepOrbit(); timeline(); captions();
     const c = $('cv'); c.width = 1080 * DPR; c.height = 1920 * DPR; c.style.width = '1080px'; c.style.height = '1920px'; g = c.getContext('2d');
     await document.fonts.ready;
-    await Promise.all(['IBM Plex Mono', 'IBM Plex Sans', 'Instrument Serif'].map(fn => document.fonts.load(`20px "${fn}"`)));
+    await Promise.all(['Instrument Sans', 'Instrument Serif'].map(fn => document.fonts.load(`20px "${fn}"`)));
+    await document.fonts.load('20px "Instrument Sans"', 'φθτ'); await document.fonts.load('500 20px "Instrument Sans"');
     await document.fonts.load('italic 40px "Instrument Serif"');
     window.FILM = { frames: () => TL.total };
     renderFrame(Number(Q.get('f') || 0)); window.__ready = true;
