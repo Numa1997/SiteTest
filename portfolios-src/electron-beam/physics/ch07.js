@@ -7,7 +7,8 @@
    Yield (secant law of the escape depth): on a surface tilted by theta the SE yield is delta / cos(theta); the sidewall (theta = 90 deg - beta)
    gives delta / sin(beta) over its projected width w. The excess over the flat value, delta (1/sin(beta) - 1) w = delta h (1/cos(beta) - tan(beta)),
    stays finite as beta -> 0 (then delta h).  Backscattered electrons add a flat eta_BSE (no topographic contrast assumed for them).
-   Blur: Gaussian, sigma_b^2 = sigma_p^2 + sigma_sig^2, sigma_p = d_p / (2 sqrt(2 ln 2)) (a Gaussian probe of FW50 d_p), sigma_sig from chapter 6.
+   Blur: two Gaussians, the signal's core (weight f_core, sigma_b^2 = sigma_p^2 + sig_core^2) and halo (weight 1 - f_core, sigma_p^2 + sig_halo^2),
+   sigma_p = d_p / (2 sqrt(2 ln 2)) (a Gaussian probe of FW50 d_p); sig_core, f_core, sig_halo from chapter 6.
    Counts: nbar = I_p t_d / e beam electrons per pixel; each collected with the yield Y(x) and the collection fraction eta_c. Taking the beam
    electrons and the secondaries each Poisson, the counts per pixel of one line have mean nbar m and variance nbar (m + m^2), m = eta_c Y(x).
    N_px lines along the feature are averaged into one profile, so its variance is that over N_px. The walls of the neighbouring periods are
@@ -34,9 +35,12 @@
   const Phi = u => 0.5 * (1 + erf(u / Math.SQRT2));
   // blurred yield at x: flat delta + eta, plus the two sidewall excesses spread over their projected widths and blurred by sigma_b;
   // the pattern is periodic, so the neighbouring periods' edges are added too
-  function yieldAt(x, p, sb) {
-    const w = p.height * Math.tan(p.sidewall), dens = p.delta_SE * p.height * (1 / Math.cos(p.sidewall) - Math.tan(p.sidewall));
-    let Y = p.delta_SE + p.eta_BSE;
+  // the wall excess blurred by one Gaussian of width sb, weight wt; a blur wider than twice the pitch is a uniform background (the periodic
+  // modulation it leaves is below exp(-8 pi^2), Poisson summation)
+  function excessAt(x, p, sb, wt) {
+    const w = p.height * Math.tan(p.sidewall), dens = wt * p.delta_SE * p.height * (1 / Math.cos(p.sidewall) - Math.tan(p.sidewall));
+    if (sb > 2 * p.pitch) return 2 * dens / p.pitch;
+    let Y = 0;
     const K = Math.min(50, 2 + Math.ceil(5 * sb / p.pitch));               // enough neighbouring periods for the blur
     for (let k = -K; k <= K; k++) {
       const c = k * p.pitch;
@@ -47,13 +51,14 @@
     }
     return Y;
   }
+  function yieldAt(x, p, s1, s2) { return p.delta_SE + p.eta_BSE + excessAt(x, p, s1, p.f_core) + excessAt(x, p, s2, 1 - p.f_core); }
   function setup(p) {
     const n = Math.max(8, Math.round(p.pitch / p.px)), dx = p.pitch / n;
-    const sp = p.d_p / (2 * Math.sqrt(2 * Math.LN2)), sb = Math.sqrt(sp * sp + p.sigma_sig * p.sigma_sig);
+    const sp = p.d_p / (2 * Math.sqrt(2 * Math.LN2)), sb = Math.sqrt(sp * sp + p.sig_core * p.sig_core), s2 = Math.sqrt(sp * sp + p.sig_halo * p.sig_halo);
     const nbar = p.I_p * p.t_d / C.e;
     const x = [], mean = [], varLine = [];
     for (let i = 0; i < n; i++) {
-      const xi = -p.pitch / 2 + (i + 0.5) * dx, m = p.eta_c * yieldAt(xi, p, sb);
+      const xi = -p.pitch / 2 + (i + 0.5) * dx, m = p.eta_c * yieldAt(xi, p, sb, s2);
       x.push(xi); mean.push(nbar * m); varLine.push(nbar * (m + m * m));
     }
     return { n, dx, sb, nbar, x, mean, varLine };
@@ -77,7 +82,8 @@
     const xL = side(0, half, -1), xR = side(half, n, 1);
     return xL === null || xR === null ? null : [xL, xR];
   }
-  function compute(p) {
+  function compute(p, opts) {
+    const doMC = !(opts && opts.mc === false);                            // chapter 8 skips the Monte Carlo
     if (!(p.height > 0)) throw new Error('a line of zero height has no walls, and in this model no edge signal: give it a height');
     const st = setup(p), N = p.N_px;
     const e0 = edges(st.mean, st.x, p);
@@ -98,7 +104,7 @@
     const rnd = core.rng(SEED), sd = st.varLine.map(z => Math.sqrt(z / N));
     let s1 = 0, s2 = 0, ok = 0;
     const noisy = new Array(st.n), avgShown = [], lineShown = [];
-    for (let r = 0; r < NMC; r++) {
+    for (let r = 0; r < (doMC ? NMC : 1); r++) {
       for (let i = 0; i < st.n; i++) {
         const u1 = 1 - rnd(), u2 = rnd();
         noisy[i] = st.mean[i] + sd[i] * Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
@@ -150,16 +156,16 @@
 
   return {
     id: 'ch07',
-    inputs: ['d_p', 'I_p', 't_d', 'N_px', 'eta_c', 'cd', 'pitch', 'height', 'sidewall', 'px', 't_ov', 'delta_SE', 'eta_BSE', 'sigma_sig'],
+    inputs: ['d_p', 'I_p', 't_d', 'N_px', 'eta_c', 'cd', 'pitch', 'height', 'sidewall', 'px', 't_ov', 'delta_SE', 'eta_BSE', 'sig_core', 'f_core', 'sig_halo'],
     outputs: ['SNR', 'sigma_CD', 'MPH', 'CD_meas', 'sigma_CD_mc', 'dose', 'n_pe', 'prof_curve'],
     tolerance: { rel: 1e-9, abs: 1e-15, note: 'closed formulas and the same algorithm on both sides; the Monte Carlo uses the same random numbers, and log and cos may differ in the last bit' },
-    cases: [{}, { t_d: 1e-6 }, { N_px: 64, I_p: 1e-12 }, { sidewall: 0, height: 5e-8, cd: 1.5e-8 }, { d_p: 2e-8, sigma_sig: 1e-8, pitch: 1e-7 }],
+    cases: [{}, { t_d: 1e-6 }, { N_px: 64, I_p: 1e-12 }, { sidewall: 0, height: 5e-8, cd: 1.5e-8 }, { d_p: 2e-8, sig_halo: 3e-8, f_core: 0.6, pitch: 1e-7 }, { sig_core: 1e-11, f_core: 0.6, sig_halo: 2e-6 }],
     ui: {
       controls: ['t_d', 'N_px', 'I_p', 'd_p', 'eta_c', 'cd', 'pitch', 'height', 'sidewall', 'px'],
       readouts: ['n_pe', 'SNR', 'CD_meas', 'sigma_CD', 'sigma_CD_mc', 'dose', 'MPH'],
       aspect: '16 / 10', aspectPhone: '4 / 5',
       caption: 'One period of a line-and-space pattern, seen by the secondary-electron detector: the line in section below (widths to scale, height not), the expected counts above (wine), one noisy scan line (dots; those beyond the frame sit on its edge) and the mean of all scan lines (dark). The dashed lines are the edges the threshold rule finds on the noise-free profile. Here the probe size and the current are independent sliders; chapter 8 couples them through chapter 5. The two edges are bright because a beam on a steep sidewall frees more secondaries near a surface. The yields and the blur of the signal are chapter 6’s silicon at 800 V and can be changed in chapter 8.',
     },
-    compute, draw, edges, setup, yieldAt, erf,
+    compute, draw, edges, setup, yieldAt, excessAt, erf,
   };
 });
