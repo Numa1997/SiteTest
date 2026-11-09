@@ -89,7 +89,10 @@ ex('vy_exit', 'a*t', {'a': 'a_y', 't': 't_plates'}, sig=4)
 ex('y_exit', 'a*t**2/2', {'a': 'a_y', 't': 't_plates'}, sig=4)
 ex('theta_nr', 'em*E*l/v**2', {'em': 'e_over_m', 'E': 'E_tube', 'l': 'l_pl', 'v': 'v_2000'}, sig=4)
 ex('y_screen_nr', 't*(l/2+L)', {'t': 'theta_nr', 'l': 'l_pl', 'L': 'L_drift'}, sig=4)
-TH_IN = dict(E_field=E_TUBE, B_field=0.0, v_0=V0, theta_0=math.pi / 2, dt=2e-12, integrator='boris', t_run=T_PL)
+# finisher, 9 November 2026: the solver's E_field is the y component of E and B_field the z component of B. The text's tube has
+# E = (0, -E, 0) and B = (0, 0, -B_p) (section 1.3), so the solver gets -E and -B_p; before, it got +E and the spot came out on the
+# wrong side (the page printed gaps of -200 %).
+TH_IN = dict(E_field=-E_TUBE, B_field=0.0, v_0=V0, theta_0=math.pi / 2, dt=2e-12, integrator='boris', t_run=T_PL)
 mod('th_y_end', TH_IN, 'y_end')
 mod('theta_sim', TH_IN, 'theta_end', sig=4)
 ex('y_screen_sim', 'y+tan(t)*L', {'y': 'th_y_end', 't': 'theta_sim', 'L': 'L_drift'}, sig=4)
@@ -98,7 +101,7 @@ ex('tan_theta_rel', 'x/g', {'x': 'theta_nr', 'g': 'gamma_2000'}, sig=4)
 ex('y_screen_rel', 't*(l/2+L)', {'t': 'tan_theta_rel', 'l': 'l_pl', 'L': 'L_drift'}, sig=4)
 ex('ys_rel_gap', '100*fabs(a/b-1)', {'a': 'y_screen_rel', 'b': 'y_screen_sim'}, sig=2)
 ex('B_balance', 'E/v', {'E': 'E_tube', 'v': 'v_2000'}, sig=4)
-BAL_IN = dict(TH_IN, B_field=E_TUBE / V0)
+BAL_IN = dict(TH_IN, B_field=-E_TUBE / V0)
 mod('yboth_um', BAL_IN, 'y_end', scale=1e6)
 mod('rL_balance', dict(TH_IN, E_field=0.0, B_field=E_TUBE / V0), 'r_g')
 ex('rL_over_l', 'r/l', {'r': 'rL_balance', 'l': 'l_pl'})
@@ -262,7 +265,7 @@ def svg_tube():
     s.append('<ellipse cx="%.1f" cy="%.1f" rx="%.1f" ry="7" fill="none" stroke="#7a1f2b" stroke-width="3"/><ellipse cx="%.1f" cy="%.1f" rx="%.1f" ry="7" fill="none" stroke="#7a1f2b" stroke-width="3"/>' % (cx, Y(0.047), rx, cx, Y(-0.047), rx))
     s.append('<line x1="%.1f" y1="%.1f" x2="%.1f" y2="%.1f" stroke="#3a8a5a" stroke-width="3"/>' % (X(XS), Y(0.045), X(XS), Y(-0.045)))
     s.append('<line x1="%.1f" y1="%.1f" x2="%.1f" y2="%.1f" stroke="#cdc1ae" stroke-dasharray="4 4"/>' % (X(0), Y(0), X(XS), Y(0)))
-    s.append('<polyline points="%s" fill="none" stroke="#7a1f2b" stroke-width="2"/>' % ' '.join('%.1f,%.1f' % (X(x), Y(y)) for x, y in plate_path(E_TUBE, 0.0)))
+    s.append('<polyline points="%s" fill="none" stroke="#7a1f2b" stroke-width="2"/>' % ' '.join('%.1f,%.1f' % (X(x), Y(y)) for x, y in plate_path(-E_TUBE, 0.0)))
     lab = lambda x, y, t, a='middle': s.append(_tx(x, y, t, 'lbl', a))
     lab(X(0), Y(-0.012) + 18, 'cathode C')
     lab(X(0.02), Y(0.016) - 7, 'anode A')
@@ -304,9 +307,9 @@ def svg_motions():
     Bb = E_TUBE / V0
     s = ['<svg viewBox="0 0 780 230" role="img" aria-label="Three computed electron paths: a parabola in an electric field, a circular arc in a magnetic field, a straight line when the two forces balance.">',
          '<rect width="780" height="230" fill="#fff"/>',
-         _panel(plate_path(E_TUBE, 0.0), 'E only: parabola', 20, w, h),
-         _panel(plate_path(0.0, Bb), 'B only: circle', 275, w, h),
-         _panel(plate_path(E_TUBE, Bb), 'E and B balanced: line', 530, w, h),
+         _panel(plate_path(-E_TUBE, 0.0), 'E only: parabola', 20, w, h),
+         _panel(plate_path(0.0, -Bb), 'B only: circle', 275, w, h),
+         _panel(plate_path(-E_TUBE, -Bb), 'E and B balanced: line', 530, w, h),
          _tx(20, 222, 'x from 50 mm to 300 mm (plates 60 mm to 110 mm, grey lines); vertical axis stretched', 'tick'), '</svg>']
     return ''.join(s)
 

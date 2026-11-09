@@ -70,7 +70,7 @@
       controls: ['V_acc', 'lambda_opt', 'NA', 'w_feat'],
       readouts: ['lambda_e', 'd_opt', 'ratio_opt', 'ratio_e'],
       aspect: '16 / 6', aspectPhone: '4 / 3',
-      caption: 'Four lengths on one logarithmic ruler: the electron wavelength, the feature, the smallest half-pitch light can resolve, and the light’s wavelength.',
+      caption: 'Four lengths on one logarithmic ruler: the electron wavelength, the feature, the smallest period (pitch) light can resolve, λ/2NA, and the light’s wavelength. The default NA of 0.95 is a dry objective; chapter 0’s ArF example uses the immersion value 1.35.',
     },
     compute,
     draw,
