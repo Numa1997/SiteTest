@@ -75,6 +75,8 @@
     "C_s": {"meaning": "spherical aberration coefficient referred to the image side", "tex": "C_s", "type": "number", "unit": "m", "display_unit": "mm", "display_scale": 1e3, "stage": "ch4"},
     "C_c": {"meaning": "chromatic aberration coefficient referred to the image side", "tex": "C_c", "type": "number", "unit": "m", "display_unit": "mm", "display_scale": 1e3, "stage": "ch4"},
     "theta_rot": {"meaning": "image rotation by the magnetic lens (Larmor angle)", "tex": "\\theta_\\mathrm{rot}", "type": "number", "unit": "rad", "display_unit": "deg", "display_scale": 57.29577951308232, "stage": "ch4"},
+    "omega_G": {"meaning": "Glaser's lens parameter omega = sqrt(1 + k^2), k^2 = e B_0^2 a^2 / (8 m V*): how strong the lens is (1 = no lens, 2 = the ray crosses the axis twice inside the field)", "tex": "\\omega", "type": "number", "unit": "1", "stage": "ch4"},
+    "lens_ray": {"meaning": "the axial paraxial ray from the object to the wafer for the figure: pairs (z, r) for unit slope at the object, flattened", "tex": "r(z)", "type": "array", "unit": "m, m", "stage": "ch4"},
 
     "alpha": {"meaning": "beam half-angle at the wafer, set by the aperture", "tex": "\\alpha", "type": "number", "unit": "rad", "default": 5.0e-3, "min": 1.0e-4, "max": 3.0e-2, "scale": "log", "display_unit": "mrad", "display_scale": 1e3, "stage": "ch5"},
     "d_p": {"meaning": "probe diameter at the wafer, in the convention named by 'probe_convention'", "tex": "d_p", "type": "number", "unit": "m", "display_unit": "nm", "display_scale": 1e9, "stage": "ch5"},
@@ -103,7 +105,7 @@
     "ch01": {"title": "A free electron in fields", "in": ["E_field", "B_field", "v_0", "theta_0", "dt", "integrator", "t_run"], "out": ["r_g", "omega_c", "energy_drift", "trajectory", "x_end", "y_end", "z_end", "theta_end"], "note": "uniform E (+y) and B (+z), an electron entering at the origin with speed v_0 at the angle theta_0 to B in the x-z plane, followed for t_run; extended by the chapter 1 session (notes/electron-beam/requests.md)"},
     "ch02": {"title": "The source", "in": ["r_t", "V_ex", "phi", "T", "p", "t_clean", "k_f"], "out": ["I_e", "B_r", "dE", "d_v", "theta_cov"]},
     "ch03": {"title": "Acceleration", "in": ["V_acc", "V_land"], "out": ["E_0", "lambda_e", "gamma", "V_star", "V_star_land", "lambda_land", "ang_mag", "lambda_curve"], "note": "landing quantities and the wavelength curve added by the finisher"},
-    "ch04": {"title": "The lens", "in": ["NI", "a_lens", "u_obj", "WD", "V_star"], "out": ["B_0", "M", "f", "C_s", "C_c", "theta_rot"]},
+    "ch04": {"title": "The lens", "in": ["a_lens", "u_obj", "WD", "V_land"], "out": ["NI", "B_0", "M", "f", "C_s", "C_c", "theta_rot", "omega_G", "lens_ray"], "note": "finisher: the excitation NI is solved so that the lens focuses on the wafer, so it is an output; the beam voltage through the lens is the landing voltage (no retarding field in the lens model)"},
     "ch05": {"title": "The spot", "in": ["C_s", "C_c", "M", "d_v", "B_r", "dE", "V_star", "lambda_e", "alpha", "probe_convention"], "out": ["d_p", "I_p", "alpha_opt"]},
     "ch06": {"title": "Scan and hit", "in": ["V_land", "material"], "out": ["E_land", "delta_SE", "eta_BSE", "R", "V_int", "sigma_sig"]},
     "ch07": {"title": "Detect and measure", "in": ["d_p", "I_p", "t_d", "N_px", "eta_c", "profile", "delta_SE", "eta_BSE", "sigma_sig"], "out": ["SNR", "sigma_CD", "MPH"]},

@@ -41,7 +41,7 @@ check('D2', 'λ → h/√(2meV) for eV ≪ mc², and λ → hc/(eV) for eV ≫ m
 ratio = sp.sqrt(Vstar / V)
 ser = sp.series(ratio.subs(V, x * mc2 / e), x, 0, 3).removeO()
 check('D3', 'λ_NR/λ = √(1 + eV/2mc²) = 1 + eV/(4mc²) − (eV)²/(32(mc²)²) + …',
-      sp.simplify(ser - (1 + x / 4 - x ** 2 / 32)) == 0, sp.sstr(ser))
+      sp.simplify(ser - (1 + x / 4 - x ** 2 / 32)) == 0, 'series in x = eV/mc²: 1 + x/4 − x²/32 + …')
 
 # D4: deceleration with conserved transverse momentum: angle grows by p_acc/p_land (paraxial)
 pperp, pa, pl = sp.symbols('p_perp p_a p_l', positive=True)
@@ -75,13 +75,13 @@ Itot = sp.integrate(J0 * sp.exp(-r ** 2 / sig ** 2) * 2 * sp.pi * r, (r, 0, sp.o
 Ir = sp.integrate(J0 * sp.exp(-r ** 2 / sig ** 2) * 2 * sp.pi * r, (r, 0, R))
 R50 = sp.solve(sp.Eq(Ir, Itot / 2), R)[0]
 ratio_b = sp.simplify((Itot / (sp.pi * R50 ** 2)) / J0)
-check('D7', 'Gaussian virtual source: total current over the area of the half-current disk = (1/ln 2) × axial value = 1.4427 ×',
-      sp.simplify(ratio_b - 1 / sp.log(2)) == 0, 'R₅₀² = σ² ln 2; ratio = %s = %.5f' % (sp.sstr(ratio_b), float(ratio_b)))
+check('D7', 'Gaussian virtual source: the total current over the area of the half-current disk is 1/ln 2 times the axial value',
+      sp.simplify(ratio_b - 1 / sp.log(2)) == 0, 'R₅₀² = σ² ln 2; ratio = 1/ln 2 = %.5f' % float(ratio_b))
 
 # D8: probe current from the practical brightness (Bronsgeest et al. 2008, Eq. 6): units and form
 Bp, Vp, d, al = sp.symbols('B V_p d alpha', positive=True)
 Ip = Bp * Vp * (sp.pi * d ** 2 / 4) * (sp.pi * al ** 2)
-check('D8', 'I_p = B V* (π d²/4)(π α²): small-angle solid angle of a cone is πα²', sp.simplify(sp.series(2 * sp.pi * (1 - sp.cos(al)), al, 0, 4).removeO() - sp.pi * al ** 2) == 0,
+check('D8', 'the solid angle of a cone of half-angle α is πα² for small α, as used in I_p = B V* (π d²/4)(π α²)', sp.simplify(sp.series(2 * sp.pi * (1 - sp.cos(al)), al, 0, 4).removeO() - sp.pi * al ** 2) == 0,
       'solid angle 2π(1 − cos α) = πα² − πα⁴/12 + …; I_p ∝ d² α² at fixed brightness')
 
 # D9: energy spread is unchanged by a static potential step

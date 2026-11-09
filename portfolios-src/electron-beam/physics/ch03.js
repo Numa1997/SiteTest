@@ -37,15 +37,19 @@
     const cx = gw / 2, y0 = 18, y1 = gh - 16;
     ctx.fillStyle = '#efe4c8'; ctx.strokeStyle = '#3a322e'; ctx.lineWidth = 1;
     ctx.beginPath(); ctx.moveTo(cx - 9, y0); ctx.lineTo(cx + 9, y0); ctx.lineTo(cx + 2, y0 + 36); ctx.arc(cx, y0 + 36, 2, 0, Math.PI); ctx.closePath(); ctx.fill(); ctx.stroke();
-    const plate = (y, label) => { ctx.fillStyle = '#d9d0c2'; ctx.fillRect(cx - gw * 0.38, y, gw * 0.38 - 7, 6); ctx.fillRect(cx + 7, y, gw * 0.38 - 7, 6); ctx.strokeRect(cx - gw * 0.38, y, gw * 0.38 - 7, 6); ctx.strokeRect(cx + 7, y, gw * 0.38 - 7, 6); ctx.fillStyle = '#5a504b'; ctx.fillText(label, cx + gw * 0.38 - 2 > gw - 4 ? 4 : cx + 10, y - 4); };
+    const plate = (y, label) => { ctx.fillStyle = '#d9d0c2'; ctx.fillRect(cx - gw * 0.38, y, gw * 0.38 - 7, 6); ctx.fillRect(cx + 7, y, gw * 0.38 - 7, 6); ctx.strokeRect(cx - gw * 0.38, y, gw * 0.38 - 7, 6); ctx.strokeRect(cx + 7, y, gw * 0.38 - 7, 6); ctx.fillStyle = '#5a504b'; ctx.textAlign = 'left'; ctx.fillText(label, cx + 12, y + 18); };   // label below the right plate, clear of the tip
     const yE = y0 + 0.24 * (y1 - y0), yA = y0 + 0.46 * (y1 - y0), yW = y1 - 8;
     plate(yE, 'extractor'); plate(yA, 'anode: +' + core.fmt(p.V_acc, 3) + ' V');
     ctx.fillStyle = '#d9d0c2'; ctx.fillRect(cx - gw * 0.38, yW, gw * 0.76, 8); ctx.strokeRect(cx - gw * 0.38, yW, gw * 0.76, 8);
     ctx.fillStyle = '#5a504b'; ctx.fillText('wafer: lands at ' + core.fmt(p.V_land, 3) + ' V', cx - gw * 0.38, yW - 5);
     // the beam: a cone that narrows to the anode, then opens by ang_mag on the way down if decelerated
     ctx.strokeStyle = '#7a1f2b'; ctx.lineWidth = 1.5;
-    const a1 = 0.06 * gw, a2 = Math.min(gw * 0.36, a1 * out.ang_mag);
-    ctx.beginPath(); ctx.moveTo(cx, y0 + 38); ctx.lineTo(cx - a1 * 0.6, yA); ctx.lineTo(cx - a2 * 0.6, yW); ctx.moveTo(cx, y0 + 38); ctx.lineTo(cx + a1 * 0.6, yA); ctx.lineTo(cx + a2 * 0.6, yW); ctx.stroke();
+    // the beam spreads from the tip at a half-angle that stays the same down the column (slope s1 per pixel); in the last stretch, the
+    // retarding field near the wafer, the half-angle is multiplied by ang_mag (chapter 3, the angle factor). Drawn with an exaggerated angle.
+    const yR = yW - 0.16 * (y1 - y0), s1 = 0.10, s2 = Math.min(1.2, s1 * out.ang_mag);
+    const wR = s1 * (yR - (y0 + 38)), wW = wR + s2 * (yW - yR);
+    ctx.beginPath(); ctx.moveTo(cx, y0 + 38); ctx.lineTo(cx - wR, yR); ctx.lineTo(cx - wW, yW); ctx.moveTo(cx, y0 + 38); ctx.lineTo(cx + wR, yR); ctx.lineTo(cx + wW, yW); ctx.stroke();
+    ctx.strokeStyle = '#8b8079'; ctx.setLineDash([3, 3]); ctx.beginPath(); ctx.moveTo(cx - gw * 0.38, yR); ctx.lineTo(cx + gw * 0.38, yR); ctx.stroke(); ctx.setLineDash([]);
     // plot
     const px = narrow ? 44 : gw + 52, py = narrow ? gh + 10 : 14, pw = (narrow ? w : w - gw) - 66, ph = (narrow ? h - gh : h) - 44;
     const lx = v => px + (Math.log10(v) - 1) / 5 * pw, ly = l => py + (Math.log10(l) - Math.log10(4e-10)) / (Math.log10(8e-13) - Math.log10(4e-10)) * ph;
@@ -57,8 +61,8 @@
     const cv = out.lambda_curve, n = cv.length / 3;
     const line = (k, col, dash) => { ctx.strokeStyle = col; ctx.setLineDash(dash); ctx.lineWidth = 2; ctx.beginPath(); for (let i = 0; i < n; i++) { const X = lx(cv[3 * i]), Y = ly(cv[3 * i + k]); if (i) ctx.lineTo(X, Y); else ctx.moveTo(X, Y); } ctx.stroke(); ctx.setLineDash([]); };
     line(2, '#8b8079', [5, 4]); line(1, '#7a1f2b', []);
-    const dot = (V, l, t) => { ctx.fillStyle = '#1c1518'; ctx.beginPath(); ctx.arc(lx(V), ly(l), 4, 0, 2 * Math.PI); ctx.fill(); ctx.textAlign = 'left'; ctx.fillText(t, lx(V) + 7, ly(l) - 6); };
-    dot(p.V_acc, out.lambda_e, 'column'); dot(p.V_land, out.lambda_land, 'landing');
+    const dot = (V, l, t, dy) => { ctx.fillStyle = '#1c1518'; ctx.beginPath(); ctx.arc(lx(V), ly(l), 4, 0, 2 * Math.PI); ctx.fill(); ctx.textAlign = 'left'; ctx.fillText(t, lx(V) + 7, ly(l) + dy); };
+    dot(p.V_acc, out.lambda_e, 'column', -8); dot(p.V_land, out.lambda_land, 'landing', 14);   // one label above, one below, so they never merge
     ctx.textAlign = 'left'; ctx.fillStyle = '#7a1f2b'; ctx.fillText('λ exact', px + 8, py + 14); ctx.fillStyle = '#8b8079'; ctx.fillText('λ without relativity (dashed)', px + 8, py + 28);
   }
 
@@ -72,7 +76,7 @@
       controls: ['V_acc', 'V_land'],
       readouts: ['V_star', 'lambda_e', 'lambda_land', 'ang_mag'],
       aspect: '16 / 7', aspectPhone: '3 / 4',
-      caption: 'Left: the gun drawn, the beam narrowing to the anode and opening again if it is slowed before the wafer. Right: the electron wavelength against voltage, exact (wine) and without relativity (grey, dashed), with the column and landing values marked.',
+      caption: 'First panel: the gun drawn (not to scale), the beam spreading from the tip at one angle down the column and, below the dashed line where the retarding field acts, at an angle larger by the factor of (3.4) when it is slowed. Second panel: the electron wavelength against voltage, exact (wine) and without relativity (grey, dashed), with the column and landing values marked. A landing voltage above the column voltage means the beam is accelerated again before the wafer.',
     },
     compute, draw,
   };

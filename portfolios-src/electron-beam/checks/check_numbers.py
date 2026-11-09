@@ -36,6 +36,7 @@ def strip_prose(s):
     s = re.sub(r'\$([^$]+?)\$', ' ', s, flags=re.S)
     s = re.sub(r'\{\{[^}]*\}\}', ' ', s)
     s = re.sub(r'<svg.*?</svg>', ' ', s, flags=re.S)
+    s = re.sub(r'<table class="ptab ptab--checks">.*?</table>', ' ', s, flags=re.S)   # tables printed by derive/chNN.py: program output, recorded in data/chNN/derive_results.json
     s = re.sub(r'<[^>]+>', ' ', s)
     return html.unescape(s), [a or b for a, b in maths]
 
