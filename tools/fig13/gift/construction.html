@@ -42,9 +42,11 @@ const $ = id => document.getElementById(id);
 const lerp = (a, b, f) => a + (b - a) * f, clamp = (v, a, b) => Math.min(b, Math.max(a, v));
 const ease = u => u <= 0 ? 0 : u >= 1 ? 1 : u * u * (3 - 2 * u);
 const TH = THEME === 'dark' ? {
+    tLine: [226, 162, 170],
     bg: '#140d10', paper: '#1a1114', grid: 'rgba(226,162,170,0.08)', grid2: 'rgba(226,162,170,0.16)', rule: '#3a2a2e', ink: '#f5f1ea', muted: '#b9a59b', accent: '#e2a2aa',
     curve: [226, 162, 170], hot: [255, 246, 234], pencil: [217, 205, 196], hLine: [240, 190, 120], xLine: [150, 200, 235], rods: '#f5f1ea', bob: '#7a1f2b', ring: '#f5f1ea', add: 'lighter'
 } : {
+    tLine: [122, 31, 43],
     bg: '#f5f1ea', paper: '#fffaf3', grid: 'rgba(122,31,43,0.07)', grid2: 'rgba(122,31,43,0.15)', rule: '#d9d0c2', ink: '#1c1518', muted: '#6f635d', accent: '#7a1f2b',
     curve: [122, 31, 43], hot: [77, 15, 24], pencil: [90, 80, 76], hLine: [176, 98, 18], xLine: [28, 92, 140], rods: '#1c1518', bob: '#7a1f2b', ring: '#fffaf3', add: 'source-over'
 };
@@ -63,8 +65,10 @@ function sample(M, n) { M.n = n; M.X = new Float64Array(n + 1); M.H = new Float6
 // ------------------------------------------------------------------------------------------------ layout: the plane, h(t) beside it, x(t) below it, at shared scales
 const PL = { x: 556, y: 258, s: 500 }, S = PL.s / 2 / 2.3, CX = PL.x + PL.s / 2, CY = PL.y + PL.s / 2;
 const HP = { x: 24, y: 230, w: 512, h: 556, t0: 92, t1: 512 - 24 };       // h(t): time from x+t0 (t = 0) to x+t1 (t = T)
-const XP = { x: 556, y: 806, w: 500, h: 830, t0: 70, t1: 830 - 34 };       // x(t): time from y+t0 (t = 0) down to y+t1 (t = T)
-const TXT = { x: 24, y: 806, w: 512, h: 830 };
+const XP = { x: 556, y: 806, w: 500, h: 506, t0: 70, t1: 70 + 396 };       // x(t): time from y+t0 (t = 0) down to y+t1 (t = T), as long as the h plot's
+const MB = { x: 24, y: 806, w: 512, h: 506 };                                // the mitre: a 45-degree line carrying t from one time axis to the other
+const TXT = { x: 24, y: 1332, w: 1032, h: 306 };
+const MA = [HP.x + HP.t0, XP.y + XP.t0], ML = HP.t1 - HP.t0;                  // mitre from (t = 0, t = 0) to (t = T, t = T)
 const yOfH = h => CY - S * h, xOfX = x => CX + S * x;
 const hpX = (M, t) => HP.x + HP.t0 + (HP.t1 - HP.t0) * t / M.T, xpY = (M, t) => XP.y + XP.t0 + (XP.t1 - XP.t0) * t / M.T;
 
@@ -74,7 +78,10 @@ function line(g, x0, y0, x1, y1, c, w) { g.strokeStyle = c; g.lineWidth = w; g.b
 
 // graph paper with axes, for the plane and both plots (all in metres and seconds)
 function paper(g, M, a) {
-    frameBox(g, PL, PL.s, PL.s, a); frameBox(g, HP, HP.w, HP.h, a); frameBox(g, XP, XP.w, XP.h, a);
+    frameBox(g, PL, PL.s, PL.s, a); frameBox(g, HP, HP.w, HP.h, a); frameBox(g, XP, XP.w, XP.h, a); frameBox(g, MB, MB.w, MB.h, a);
+    g.globalAlpha = a; for (let t = 0; t <= M.T + 1e-9; t += (M.T > 3 ? 0.5 : 0.25)) { const u = ML * t / M.T; line(g, MA[0] + u, MB.y + 8, MA[0] + u, MA[1] + u, TH.grid, 1); line(g, MA[0] + u, MA[1] + u, MB.x + MB.w - 8, MA[1] + u, TH.grid, 1); }
+    line(g, MA[0], MA[1], MA[0] + ML, MA[1] + ML, TH.rule, 2); g.globalAlpha = 1;
+    text(g, 'the mitre: t carried', MB.x + 14, MB.y + MB.h - 40, 17, TH.ink, 'left', a); text(g, 'from one time axis to the other', MB.x + 14, MB.y + MB.h - 16, 17, TH.ink, 'left', a);
     g.globalAlpha = a;
     for (let v = -2; v <= 2.001; v += 0.5) {                // metre lines: level lines (h) through the plane and the h plot, upright (x) through the plane and the x plot
         const major = Math.abs(v % 1) < 1e-9, c = major ? TH.grid2 : TH.grid;
@@ -115,6 +122,9 @@ function rulers(g, M, t, a, reach, strong) {
     g.save(); g.globalAlpha = a; g.lineCap = 'round';
     // the instant marked on both time axes
     line(g, ph[0], yOfH(2.2), ph[0], yOfH(-2.2), rgba(TH.hLine, 0.35), 1.2); line(g, xOfX(-2.2), px[1], xOfX(2.2), px[1], rgba(TH.xLine, 0.35), 1.2);
+    const mt = [ph[0], MA[1] + (ph[0] - MA[0])];                       // the instant on the mitre
+    line(g, ph[0], yOfH(-2.25), mt[0], mt[1], rgba(TH.tLine, 0.9), 1.8); line(g, mt[0], mt[1], px[0], px[1], rgba(TH.tLine, 0.9), 1.8);
+    g.fillStyle = rgba(TH.tLine, 1); g.beginPath(); g.arc(mt[0], mt[1], 5, 0, 7); g.fill();
     line(g, ph[0], ph[1], eh[0], eh[1], rgba(TH.hLine, 0.95), strong ? 2.6 : 2); line(g, px[0], px[1], ex[0], ex[1], rgba(TH.xLine, 0.95), strong ? 2.6 : 2);
     for (const [p, c] of [[ph, TH.hLine], [px, TH.xLine]]) { g.fillStyle = rgba(c, 1); g.beginPath(); g.arc(p[0], p[1], 6.5, 0, 7); g.fill(); }
     if (r >= 0.999) { g.fillStyle = rgba(TH.hot, 0.25); g.beginPath(); g.arc(tip[0], tip[1], 17, 0, 7); g.fill(); g.fillStyle = rgba(TH.hot, 1); g.beginPath(); g.arc(tip[0], tip[1], 7, 0, 7); g.fill(); }
@@ -126,7 +136,11 @@ function pencil(g, M, t, a, label) {
     const [x, h] = M.xh(t), tip = [xOfX(x), yOfH(h)];
     g.save(); g.globalAlpha = a; line(g, hpX(M, t), tip[1], tip[0], tip[1], rgba(TH.pencil, 0.28), 1); line(g, tip[0], xpY(M, t), tip[0], tip[1], rgba(TH.pencil, 0.28), 1);
     g.fillStyle = rgba(TH.hot, 0.9); g.beginPath(); g.arc(tip[0], tip[1], 4.5, 0, 7); g.fill();
-    if (label !== undefined) text(g, String(label), tip[0] + 9, tip[1] - 9, 15, TH.muted, 'left', a);
+    if (label !== undefined) {
+        const hx = hpX(M, t), mt = [hx, MA[1] + (hx - MA[0])];
+        line(g, hx, yOfH(-2.25), mt[0], mt[1], rgba(TH.tLine, 0.3), 1); line(g, mt[0], mt[1], tip[0], xpY(M, t), rgba(TH.tLine, 0.3), 1);
+        text(g, String(label), tip[0] + 9, tip[1] - 9, 15, TH.muted, 'left', a);
+    }
     g.restore();
 }
 function arms(g, M, t, a) {
@@ -154,12 +168,11 @@ function timeline() {
 }
 function steps(g, M, f, a) {
     frameBox(g, TXT, TXT.w, TXT.h, a);
-    const L = [['By hand, for one instant t:', 22, TH.ink], ['', 8],
-        ['1  find t on both time axes', 18, TH.ink], ['2  on the h plot, read the height;', 18, TH.ink], ['   draw a level line', 18, rgba(TH.hLine, 1)],
-        ['3  on the x plot, read the sideways', 18, TH.ink], ['   position; draw an upright line', 18, rgba(TH.xLine, 1)], ['4  where they cross is the tip', 18, TH.ink], ['   at that instant', 18, TH.ink], ['', 8],
-        ['Repeat for many instants and', 18, TH.muted], ['join the points in time order.', 18, TH.muted], ['', 14]];
-    let y = TXT.y + 42; for (const [s1, sz, c] of L) { if (s1) text(g, s1, TXT.x + 22, y, sz, c, 'left', a); y += sz * 1.6; }
-    return y;
+    const L = [['By hand, for one instant t:', 21, TH.ink], ['', 6],
+        ['1  mark t on the height plot', 17, TH.ink], ['2  carry it down to the mitre and across:', 17, rgba(TH.tLine, 1)], ['   the same t on the sideways plot', 17, rgba(TH.tLine, 1)],
+        ['3  a level line from the height', 17, rgba(TH.hLine, 1)], ['4  an upright line from the sideways position', 17, rgba(TH.xLine, 1)], ['5  where they cross is the tip at t', 17, TH.ink]];
+    let y = TXT.y + 38; for (const [s1, sz, c] of L) { if (s1) text(g, s1, TXT.x + 22, y, sz, c, 'left', a); y += sz * 1.62; }
+    return TXT.y + 38;
 }
 
 function drawScene(g, f) {
@@ -192,7 +205,7 @@ function drawScene(g, f) {
         const [x, h] = M.xh(readT);
         const R = [['', 6], [`t = ${readT.toFixed(2)} s`, 22, TH.ink], [`h = ${h >= 0 ? ' ' : ''}${h.toFixed(2)} m`, 22, rgba(TH.hLine, 1)], [`x = ${x >= 0 ? ' ' : ''}${x.toFixed(2)} m`, 22, rgba(TH.xLine, 1)],
             ['', 8], [M === WHEEL ? 'a wheel, radius 2 m, one turn in 4 s' : 'the double pendulum, p = (3.557, 12.211)', 16, TH.muted], [M === WHEEL ? 'real speed' : (f < TL.bs1 ? 'shown at 1/6 of real speed' : 'shown at 1/4 of real speed'), 16, TH.muted]];
-        for (const [s1, sz, c] of R) { if (s1) text(g, s1, TXT.x + 22, y, sz, c, 'left', a); y += sz * 1.6; }
+        for (const [s1, sz, c] of R) { if (s1) text(g, s1, TXT.x + 600, y, sz, c, 'left', a); y += sz * 1.6; }
     }
 }
 
@@ -200,7 +213,7 @@ function drawScene(g, f) {
 let CAPS;
 function captions() {
     CAPS = [[0, 'First a wheel. Its height against time, beside the plane; its sideways position against time, below it. Same scales as the plane.'],
-        [TL.wt0, 'Pick an instant. A <b>level line</b> from the height plot, an <b>upright line</b> from the sideways plot: they cross at the point of the wheel at that instant.'],
+        [TL.wt0, 'Pick an instant. The mitre carries it from one time axis to the other. A <b>level line</b> from the height plot, an <b>upright line</b> from the sideways plot: they cross at the point of the wheel.'],
         [TL.wt1, 'Twelve instants, twelve crossings. Joined in time order, they make a circle: the sine and the cosine were a circle all along.'],
         [TL.wc1, 'Now continuously: the crossing of the two lines is the point on the wheel.'],
         [TL.x1, 'Now the double pendulum. Its two plots: height and sideways position of the lower rod’s tip, over one lap of 2.66 s.'],
