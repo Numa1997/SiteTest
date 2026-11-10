@@ -3,12 +3,15 @@
 Numa, 5 November 2026: the opening passage (lines 146–158, the terror of the mind dispelled not by daylight but by nature's law;
 nothing comes from nothing by divine power; things happen without the gods) stands on the home page; the rest of the passage is to
 be scattered over other pages later. A standalone page that carried all of it was published and removed again the same day at
-Numa's word.
+Numa's word. On 10 November 2026 Numa asked for one again: `public/lucretius.html` (lines 146–224 in Latin, English, German and Arabic),
+linked from the home band.
 
 | File | What it is |
 |---|---|
 | `poem-146-224.json` | The passage in 20 Latin sentences: line numbers, Latin, Leonard's English, Diels' German, per sentence. |
 | `extract.py` | Cuts the passage out of the downloaded sources by first and last words, so nothing is retyped (paths point at the scratch folder where the sources were downloaded; download them again to rerun). |
+| `poem-ar-146-158.json`, `poem-ar-159-224.json` | The Arabic, per sentence, made from the Latin for this site (not published, not reviewed by a second reader). |
+| `make_page.py` | Writes `public/lucretius.html`, the whole passage in four languages (10 November 2026). |
 | `make_home.py` | Writes the home page band (between `<!--LUCRETIUS-->` markers in `index.html`) from the first four sentences of the JSON. |
 
 **Sources.** Latin: [The Latin Library](https://www.thelatinlibrary.com/lucretius/lucretius1.shtml), Book I, in the manuscripts'

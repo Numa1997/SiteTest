@@ -24,6 +24,7 @@ block = """<!--LUCRETIUS-->
             .lq-l { display: block; font-family: 'Instrument Serif', Georgia, serif; font-size: clamp(15px, min(1.45vw, 2.15svh), 19.5px); line-height: 1.3; color: var(--ink); transition: color .25s ease; }
             .lq-s.is-on { background: rgba(122, 31, 43, .06); } .lq-s.is-on .lq-l { color: var(--accent-dark); } .lq-s:focus-visible { box-shadow: 0 0 0 2px var(--accent); }
             .lq-k { margin: 6px 0 0; font-family: var(--mono); font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+            .lq-all { margin: 9px 0 0; font-family: var(--mono); font-size: 11px; letter-spacing: .06em; } .lq-all a { color: var(--accent); text-decoration: none; border-bottom: 1px solid transparent; } .lq-all a:hover, .lq-all a:focus-visible { border-bottom-color: var(--accent); }
             .lq-card { position: absolute; z-index: 20; left: 0; width: min(460px, 92vw); padding: 12px 16px; background: var(--card); border: 1px solid var(--rule); border-left: 3px solid var(--accent); border-radius: 10px; box-shadow: 0 10px 30px rgba(60, 40, 20, .14); opacity: 0; transform: translateY(8px); pointer-events: none; transition: opacity .18s ease, transform .26s cubic-bezier(.2, .7, .2, 1), top .26s cubic-bezier(.2, .7, .2, 1), left .26s cubic-bezier(.2, .7, .2, 1); }
             .lq-card.is-shown { opacity: 1; transform: none; } .lq-card.is-pinned { pointer-events: auto; }
             .lq-card__h { display: block; margin-bottom: 6px; font-family: var(--mono); font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
@@ -34,6 +35,7 @@ block = """<!--LUCRETIUS-->
           </style>
           """ + rows + """
           <p class="lq-k" id="lq-h" dir="auto">Lucretius, On the Nature of Things I 146–158 · rest the pointer on a sentence for a translation</p>
+          <p class="lq-all"><a href="lucretius.html">Read lines 146–224 in Latin, English, German and Arabic →</a></p>
           <div class="lq-card" id="lq-card" role="status" aria-live="polite" hidden><span class="lq-card__h"></span><span class="lq-card__b"></span><span class="lq-card__note"></span><span class="lq-card__pin"></span></div>
           <div class="lq-hide" aria-hidden="true"><span id="lq-w-lines">Lines</span><span id="lq-cr-en">William Ellery Leonard, 1916</span><span id="lq-cr-de">Hermann Diels, 1924</span><span id="lq-w-pin">Kept open · click again or press Esc to close</span><span id="lq-cr-ar">Arabic: translated from the Latin for this site, 2026</span><span id="lq-w-ar">The Arabic is not a published translation: it was made from the Latin for this site and read against Leonard and Diels.</span><span id="lq-w-src">Latin: The Latin Library, checked against Hermann Diels’ edition (Berlin, 1923). The manuscripts give line 155 after 158.</span></div>
           <script>
