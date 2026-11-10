@@ -23,8 +23,8 @@ html, body { margin:0; background:var(--bg); height:100%; overflow:hidden; }
 #stage { position:absolute; left:0; top:0; width:1080px; height:1920px; background:var(--bg); color:var(--ink); font-family:'Instrument Sans',sans-serif; overflow:hidden; transform-origin:0 0; }
 canvas { position:absolute; left:0; top:0; }
 #h1 { position:absolute; left:40px; top:40px; font-family:'Instrument Serif',serif; font-size:64px; line-height:1; margin:0; font-weight:400; }
-#h2 { position:absolute; left:42px; top:116px; width:560px; font-size:22px; line-height:1.45; color:var(--muted); }
-.capt { position:absolute; left:40px; top:1690px; width:1000px; font-size:30px; line-height:1.42; color:var(--ink); }
+#h2 { overflow:hidden;  position:absolute; left:42px; top:116px; width:560px; font-size:22px; line-height:1.45; color:var(--muted); }
+.capt { overflow:hidden;  position:absolute; left:40px; top:1690px; width:1000px; font-size:30px; line-height:1.42; color:var(--ink); }
 .capt b { font-weight:400; color:var(--accent); }
 .ctl { position:absolute; right:40px; width:400px; height:66px; font:500 28px 'Instrument Sans',sans-serif; color:var(--ink); background:transparent;
        border:2px solid var(--accent); border-radius:14px; cursor:pointer; z-index:3; }
@@ -226,11 +226,16 @@ function captions() {
 }
 const memo = {};
 function setHTML(el, key, html) { if (memo[key] !== html) { memo[key] = html; el.innerHTML = html; } }
+
+// keep words inside their boxes: a browser's translation can make them longer; shrink the type until they fit, never spill over the drawing
+function fitBox(el, maxH, base, min) { if (!el) return; let fs = base; el.style.fontSize = fs + 'px'; while (el.scrollHeight > maxH && fs > min) { fs -= 1; el.style.fontSize = fs + 'px'; } }
 function showCaption(f) {
     let k = 0; while (k + 1 < CAPS.length && f >= CAPS[k + 1][0]) k++;
     const u = k === 0 ? ease(f / 30) : ease((f - CAPS[k][0]) / 14), prev = k > 0 ? CAPS[k - 1][1] : '';
     const [cur, old] = (k % 2 === 0) ? [$('capA'), $('capB')] : [$('capB'), $('capA')];
     setHTML(cur, 'c' + cur.id, CAPS[k][1]); setHTML(old, 'c' + old.id, prev); cur.style.opacity = u; old.style.opacity = 1 - u;
+    if (f % 6 === 0) for (const id of ['capA','capB']) fitBox($(id), 210, 30, 14);
+    if (f % 6 === 0) for (const id of ['h2']) fitBox($(id), 68, 22, 12);
 }
 
 let g, DPR = 1;
