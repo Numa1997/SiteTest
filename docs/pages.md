@@ -517,8 +517,10 @@ at 52–124 px); the tag, contacts and buttons as before. The right column (`div
 Lucretius I 146–158 as an inscription (Instrument Serif, a wine rule on its left, a one-line caption) above the live pendulum, whose
 stage is 4 : 3 there. Each of the four sentences (`p.lq-s`, `translate="no"`, `lang="la"`) shows, on a resting mouse (150 ms; 70 ms
 from one sentence to the next; hidden 240 ms after leaving), a tap or keyboard focus, one card with its published translation: Leonard
-(1916) on the English and Arabic pages (with a note that no free Arabic translation exists), Diels (1924) on the German page, with the
-source of the Latin under it; on desktop the card rises over the left column beside the verse, otherwise just below the sentence; a
-click pins it, Esc or a second click closes it. Written by `notes/lucretius/make_home.py` from `notes/lucretius/poem-146-224.json`.
+(1916) on the English page, Diels (1924) on the German page, and on the Arabic page (since 10 November 2026) an Arabic translation
+made from the Latin for this site (`notes/lucretius/poem-ar-146-158.json`; the card says it is not a published translation, the only
+published one, Cairo 2018, being under copyright), with the source of the Latin under it; on desktop the card rises beside the verse
+(left of it where the text is; right of it on the mirrored Arabic page), otherwise just below the sentence; a click pins it, Esc or a
+second click closes it. Written by `notes/lucretius/make_home.py` from `notes/lucretius/poem-146-224.json` and the Arabic file.
 Measured on the built site: at 1366 × 768, 1440 × 900 and 1920 × 1080, in English, German and Arabic, the quote and the buttons are in
 the first screen, no errors, no sideways scroll; on a phone the quote follows the buttons.
