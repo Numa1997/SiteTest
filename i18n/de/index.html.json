@@ -299,6 +299,10 @@
   "src": "Bode plot",
   "tr": "Bode-Diagramm"
  },
+ "630c03914dc0": {
+  "src": "Arabic: translated from the Latin for this site, 2026",
+  "tr": "Arabisch: für diese Seite aus dem Lateinischen übersetzt, 2026"
+ },
  "64472dd0fbfb": {
   "src": "Visualizations of wave mechanics, classical mechanics, and interference, written in vanilla JavaScript, React, and HTML5 Canvas. Each plate opens the live simulation in a new tab. The <a href=\"simulations.html\">simulations page</a> lists them all by field, with the question each one answers and a search.",
   "tr": "Visualisierungen zu Wellenmechanik, klassischer Mechanik und Interferenz, geschrieben in reinem JavaScript, React und HTML5 Canvas. Jede Tafel öffnet die laufende Simulation in einem neuen Tab. Die <a href=\"simulations.html\">Simulationsseite</a> führt sie alle nach Gebieten auf, mit der Frage, die jede beantwortet, und einer Suche."
@@ -490,6 +494,10 @@
  "9dd35bd1eabb": {
   "src": "Droplet Collection",
   "tr": "Droplet Collection"
+ },
+ "9eb626f8b680": {
+  "src": "The Arabic is not a published translation: it was made from the Latin for this site and read against Leonard and Diels.",
+  "tr": "Das Arabische ist keine veröffentlichte Übersetzung: Es wurde für diese Seite aus dem Lateinischen angefertigt und mit Leonard und Diels verglichen."
  },
  "a024c68075c4": {
   "src": "Discrete Fourier transform",

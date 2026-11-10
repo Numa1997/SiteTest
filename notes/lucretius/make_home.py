@@ -9,14 +9,16 @@ if g0[1].endswith('leuchtende') and g0[2].startswith('Helle Scheuchen'):   # Die
     G[0]['de'] = [g0[0], g0[1] + ' Helle', 'S' + g0[2][len('Helle S'):]]
 E = html.escape
 rows = ''.join(f'<p class="lq-s" data-g="{k}" tabindex="0" translate="no" lang="la">' + ''.join(f'<span class="lq-l">{E(t)}</span>' for t in g['la']) + '</p>' for k, g in enumerate(G))
-data = json.dumps([{'n': [min(g['lines']), max(g['lines'])], 'en': g['en'], 'de': g['de']} for g in G], ensure_ascii=False)
+A = json.load(io.open('notes/lucretius/poem-ar-146-158.json', encoding='utf-8'))['groups']   # my Arabic, made from the Latin (not published)
+assert [a['lines'] for a in A] == [[min(g['lines']), max(g['lines'])] for g in G]
+data = json.dumps([{'n': [min(g['lines']), max(g['lines'])], 'en': g['en'], 'de': g['de'], 'ar': a['ar']} for g, a in zip(G, A)], ensure_ascii=False)
 block = """<!--LUCRETIUS-->
         <div class="lq" id="lq-wall" dir="ltr">
           <style>
             /* Lucretius beside the name: the Latin as an inscription; a published translation of each sentence rises over the page */
             .hero__side { display: flex; flex-direction: column; gap: clamp(12px, 2.4svh, 22px); min-width: 0; }
             .hero__side .figure__stage { aspect-ratio: 4 / 3; }
-            .lq { position: relative; padding: 2px 0 2px 16px; border-left: 2px solid var(--accent); animation: fade 1.2s 0.2s ease both; }
+            .lq { position: relative; z-index: 30; padding: 2px 0 2px 16px; border-left: 2px solid var(--accent); animation: fade 1.2s 0.2s ease both; }
             .lq, .lq * { box-sizing: border-box; }
             .lq-s { width: fit-content; max-width: 100%; margin: 0 0 .35em; padding: 1px 10px 1px 4px; margin-left: -4px; border-radius: 6px; cursor: default; outline: none; transition: background-color .25s ease; }
             .lq-l { display: block; font-family: 'Instrument Serif', Georgia, serif; font-size: clamp(15px, min(1.45vw, 2.15svh), 19.5px); line-height: 1.3; color: var(--ink); transition: color .25s ease; }
@@ -33,29 +35,30 @@ block = """<!--LUCRETIUS-->
           """ + rows + """
           <p class="lq-k" id="lq-h" dir="auto">Lucretius, On the Nature of Things I 146–158 · rest the pointer on a sentence for a translation</p>
           <div class="lq-card" id="lq-card" role="status" aria-live="polite" hidden><span class="lq-card__h"></span><span class="lq-card__b"></span><span class="lq-card__note"></span><span class="lq-card__pin"></span></div>
-          <div class="lq-hide" aria-hidden="true"><span id="lq-w-lines">Lines</span><span id="lq-cr-en">William Ellery Leonard, 1916</span><span id="lq-cr-de">Hermann Diels, 1924</span><span id="lq-w-pin">Kept open · click again or press Esc to close</span><span id="lq-w-ar">No free Arabic translation of these lines exists; the card shows the English of Leonard.</span><span id="lq-w-src">Latin: The Latin Library, checked against Hermann Diels’ edition (Berlin, 1923). The manuscripts give line 155 after 158.</span></div>
+          <div class="lq-hide" aria-hidden="true"><span id="lq-w-lines">Lines</span><span id="lq-cr-en">William Ellery Leonard, 1916</span><span id="lq-cr-de">Hermann Diels, 1924</span><span id="lq-w-pin">Kept open · click again or press Esc to close</span><span id="lq-cr-ar">Arabic: translated from the Latin for this site, 2026</span><span id="lq-w-ar">The Arabic is not a published translation: it was made from the Latin for this site and read against Leonard and Diels.</span><span id="lq-w-src">Latin: The Latin Library, checked against Hermann Diels’ edition (Berlin, 1923). The manuscripts give line 155 after 158.</span></div>
           <script>
           (function () {
             'use strict';
             var P = """ + data + """;
-            var lang = (document.documentElement.lang || 'en').slice(0, 2), useDe = lang === 'de';
+            var lang = (document.documentElement.lang || 'en').slice(0, 2), useDe = lang === 'de', useAr = lang === 'ar';
             var wall = document.getElementById('lq-wall'), card = document.getElementById('lq-card'), hero = document.getElementById('top');
             var hEl = card.querySelector('.lq-card__h'), bEl = card.querySelector('.lq-card__b'), nEl = card.querySelector('.lq-card__note'), pEl = card.querySelector('.lq-card__pin');
             var word = function (id) { return document.getElementById(id).textContent.replace(/\\s+/g, ' ').trim(); };
-            var credit = word(useDe ? 'lq-cr-de' : 'lq-cr-en'), linesW = word('lq-w-lines'), pinW = word('lq-w-pin'), arW = word('lq-w-ar'), srcW = word('lq-w-src');
+            var credit = word(useAr ? 'lq-cr-ar' : useDe ? 'lq-cr-de' : 'lq-cr-en'), linesW = word('lq-w-lines'), pinW = word('lq-w-pin'), arW = word('lq-w-ar'), srcW = word('lq-w-src');
             var blocks = Array.prototype.slice.call(wall.querySelectorAll('.lq-s')), cur = -1, pinned = false, tShow = 0, tHide = 0;
             function mark(k) { blocks.forEach(function (b) { b.classList.toggle('is-on', +b.getAttribute('data-g') === k); }); }
             function fill(k) {
-              var g = P[k], tr = useDe ? g.de : g.en, rtl = lang === 'ar' ? 'rtl' : 'ltr';
+              var g = P[k], tr = useAr ? g.ar : useDe ? g.de : g.en, rtl = lang === 'ar' ? 'rtl' : 'ltr';
               hEl.textContent = linesW + ' \\u2066' + g.n[0] + '–' + g.n[1] + '\\u2069 · ' + credit; hEl.dir = rtl;
-              bEl.textContent = ''; tr.forEach(function (l) { var s = document.createElement('span'); s.className = 'lq-card__l'; s.textContent = l; bEl.appendChild(s); }); bEl.lang = useDe ? 'de' : 'en'; bEl.dir = 'ltr';
-              nEl.textContent = (lang === 'ar' ? arW + ' ' : '') + srcW; nEl.dir = rtl;
+              bEl.textContent = ''; tr.forEach(function (l) { var s = document.createElement('span'); s.className = 'lq-card__l'; s.textContent = l; bEl.appendChild(s); }); bEl.lang = useAr ? 'ar' : useDe ? 'de' : 'en'; bEl.dir = useAr ? 'rtl' : 'ltr';
+              nEl.textContent = (useAr ? arW + ' ' : '') + srcW; nEl.dir = rtl;
               pEl.textContent = pinned ? pinW : ''; pEl.hidden = !pinned; pEl.dir = rtl;
             }
             function place(b) {   // over the page beside the verse where the hero has room (left of it, over the text), else just below the sentence
               var wr = wall.getBoundingClientRect(), r = b.getBoundingClientRect(), hr = hero.getBoundingClientRect(), cw = card.offsetWidth, h = card.offsetHeight, left;
-              if (wr.left - hr.left - 24 >= cw) left = -cw - 24; else left = Math.max(-wr.left + 8, Math.min(0, window.innerWidth - 8 - cw - wr.left));
-              var top = r.top - wr.top; if (left >= 0 || wr.left - hr.left - 24 < cw) top = r.bottom - wr.top + 8;
+              var side = true;   // beside the verse: on the left where the text is (English, German); on the right in the mirrored Arabic page
+              if (wr.left - hr.left - 24 >= cw) left = -cw - 24; else if (hr.right - wr.right - 24 >= cw) left = wr.width + 24; else { side = false; left = Math.max(-wr.left + 8, Math.min(0, window.innerWidth - 8 - cw - wr.left)); }
+              var top = side ? r.top - wr.top : r.bottom - wr.top + 8;
               top = Math.min(top, window.innerHeight - 12 - h - wr.top); card.style.left = left + 'px'; card.style.top = Math.max(-wr.top + 8, top) + 'px';
             }
             function show(k) {

@@ -20,7 +20,8 @@ Einstein), line for line, from [textlog.de](https://www.textlog.de/lukrez-natur-
 [Falter](https://www.falter.at/heureka/20131015/gedicht); corrected there: "wild" → "wird" (line 156), and the break of line 147
 ("leuchtende Helle / Scheuchen", the online copy has "leuchtende / Helle Scheuchen"; `make_home.py` applies it); line 173 ("…tut jedes
 gesondert die Kraft ruht") is as printed online and unchecked against the print. Arabic: the only published translation found
-(المركز القومي للترجمة, Cairo 2018) is under copyright; no free one exists, so the Arabic pages show Leonard's English.
+(المركز القومي للترجمة, Cairo 2018) is under copyright and was not used; the Arabic on the site (`poem-ar-146-158.json`, 10 November
+2026) is a translation made from the Latin for this site, read against Leonard and Diels, not reviewed by a second reader, and labelled so on the cards.
 
 **What Numa first had** (from Gemini): lines 149 and 218 misquoted, an English text attributed to Leonard that is not his, lines
 192–214 missing.
