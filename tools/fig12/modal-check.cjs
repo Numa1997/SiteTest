@@ -27,7 +27,7 @@ const mk = (o) => new TulipModes(Object.assign({ data, profile: G, h0: 0.125 }, 
   const fw = f.w[0] / (2 * Math.PI) * Math.sqrt(1 - f.zeta[0] ** 2);
   ok(Math.abs(fb - fw) < 0.002, `free swing ${fb.toFixed(4)} Hz, data (damped) ${fw.toFixed(4)} Hz`);
   const i1 = 1000, i2 = ys.length - 1, rate = Math.log(Es[i1] / Es[i2]) / ((i2 - i1) * dt);
-  ok(Math.abs(rate / (2 * f.zeta[0] * f.w[0]) - 1) < 0.01, `energy decay ${rate.toFixed(5)} 1/s, 2 zeta w ${(2 * f.zeta[0] * f.w[0]).toFixed(5)} 1/s (zeta ${f.zeta[0].toFixed(5)}, water)`);
+  ok(Math.abs(rate / (2 * f.zeta[0] * f.w[0]) - 1) < 0.01, `energy decay ${rate.toFixed(5)} 1/s, 2 zeta w ${(2 * f.zeta[0] * f.w[0]).toFixed(5)} 1/s (zeta ${f.zeta[0].toFixed(5)}: wall and bulk, stout nu 2.05e-6)`);
 }
 { // 3
   const f = mk(); for (let k = 0; k < 5000; k++) f.step(0.001, 0, 5 * Math.sin(2 * Math.PI * 7 * k * 0.001));
@@ -38,6 +38,29 @@ const mk = (o) => new TulipModes(Object.assign({ data, profile: G, h0: 0.125 }, 
   const A = []; for (let k = 0; k * dt < 30; k++) { f.step(dt, 0, eps * f.g * Math.cos(2 * w * k * dt)); A.push(Math.hypot(f.q[0], f.qd[0] / w)); }
   const rate = Math.log(A[A.length - 1] / A[Math.round(5 / dt)]) / (A.length * dt - 5);
   ok(Math.abs(rate / (eps * w / 4) - 1) < 0.03, `Mathieu pumping: growth ${rate.toFixed(4)} 1/s, theory eps w/4 = ${(eps * w / 4).toFixed(4)} 1/s`);
+}
+{ // 7 friction off: the swing keeps its energy. Symplectic Euler keeps a modified energy exactly, so the plain energy wobbles
+  //   within each swing by about w h (0.5 %) but must not drift: its mean over the first and the last second must agree
+  const f = mk({ friction: false }); f.q[0] = 0.005; let a = 0, b = 0;
+  for (let k = 0; k < 20000; k++) { f.step(0.001, 0, 0); if (k < 1000) a += f.energy(); if (k >= 19000) b += f.energy(); }
+  ok(Math.abs(b / a - 1) < 1e-4, `friction off, 20 s free swing: mean energy of the last second / first second = ${(b / a).toFixed(7)}`);
+}
+{ // 8 the books: energy lost = the friction power integrated (stout's skin and a 5 mm head)
+  const f = mk({ skin: 1, foam: { h: 0.005 } }); f.q[0] = 0.01; const E0 = f.energy(); let W = 0;
+  for (let k = 0; k < 5000; k++) { f.step(0.001, 0, 0); W += (f.Pvisc + f.Pfoam) * 0.001; }
+  const lost = E0 - f.energy();
+  ok(Math.abs(W / lost - 1) < 0.01, `energy lost in 5 s ${(lost * 1e3).toFixed(4)} mJ, friction work ${(W * 1e3).toFixed(4)} mJ`);
+}
+{ // 9 foam alone on one mode: the swing stops in finite time, Viola et al. eq. 7.6: t* = 3/(s w) ln[1 + s/(c alpha) (X0/R)^(1/3)],
+  //   c = 2 Gamma(1/3) / (5 Gamma(5/6) sqrt(pi)) = 0.5356, s the linear damping ratio (multiple scales, small s and alpha)
+  const al = 0.02, f = mk({ nModes: 1, foam: { alpha: al } }), X0 = 0.005; f.q[0] = X0;
+  // their envelope dA/dt~ = -s A - c alpha A^(2/3) with u = A^(1/3): u = (u0 + c alpha/s) e^(-s t~/3) - c alpha/s, so A falls to
+  // 1e-3 A0 (u to 0.1 u0) at t1 = 3/(s w) ln[(u0 + c alpha/s)/(0.1 u0 + c alpha/s)] and to 0 at t*
+  const s0 = f.zeta[0], w = f.w[0], c = 0.5356, u0 = Math.cbrt(X0 / f.Rs), r = c * al / s0;
+  const tStar = 3 / (s0 * w) * Math.log(1 + u0 / r), t1 = 3 / (s0 * w) * Math.log((u0 + r) / (0.1 * u0 + r));
+  let t = 0; const A = () => Math.hypot(f.q[0], f.qd[0] / w);
+  while (A() > 1e-3 * X0 && t < 60) { f.step(0.0005, 0, 0); t += 0.0005; }
+  ok(Math.abs(t / t1 - 1) < 0.02, `foam alpha ${al}: swing of ${X0 * 1000} mm falls to 0.1 % after ${t.toFixed(2)} s, Viola et al.'s envelope ${t1.toFixed(2)} s (and stops at ${tStar.toFixed(2)} s)`);
 }
 const bumps = []; for (let n = 0; n < 60; n++) bumps.push({ x: 1.0 + 2 * n, h: 0.010, L: 0.25 });
 const mkWorld = (fluid, ctrl) => new World({ fluidInstance: fluid, road: { bumps, Rw: 0.04, xmin: -1, xmax: 125 }, cart: { x0: 0.5, Rw: 0.04, Ls: 0.135, v0: 1, ctrl: ctrl || 'off', susp: false }, dtMax: 0.001 });

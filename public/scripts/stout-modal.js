@@ -11,8 +11,17 @@
  * (sum_n c_n e_n = r). Heave (a_z) changes gravity, so it scales every stiffness: on a still surface it does nothing, on a
  * swinging one it pumps (Mathieu). The stout's momentum relative to the glass is rho sum_n Ix_n q_n' (only the surface moves
  * the centre of mass), so its push on the cart is minus the rate of change of that (World in stout-cart.js).
- * Damping of each mode: the laminar boundary layer on the wall and floor, zeta_wall = (1/2) sqrt(nu/(2 w)) Lam_n
- * (Landau & Lifshitz sec. 24 over the finite-element mode), times surfaceFactor (1 for a clean surface), plus zetaExtra.
+ * Friction, each term from its source and computed over the finite-element mode (all off with o.friction = false):
+ *   wall and floor  zeta_wall = (1/2) sqrt(nu/(2 w)) Lam    laminar Stokes layer (Landau & Lifshitz, Fluid Mechanics, sec. 24)
+ *   surface skin    zeta_skin = skin (1/2) sqrt(nu/(2 w)) LamS   an inextensible (protein-covered) surface (Lamb 1932, Art. 351);
+ *                   skin = the covered fraction, 0 (clean) to 1
+ *   bulk            zeta_bulk = nu Bk / w    viscous strain of the potential flow (Lamb's dissipation integral)
+ *   contact line    zetaCL (an added ratio, from measurements)
+ *   foam head       a friction force at the wall, Viola, Brun, Dollet & Gallaire (Phys. Fluids 28, 091701, 2016) eq. 7.3:
+ *                   q'' = ... - alpha w^(4/3) R^(1/3) V |V|^(n-1),  V = the wall's vertical speed = sum_n q_n'
+ *                   (every mode has e_n(R) = 1, so each feels the same generalised force, divided by its own modal mass);
+ *                   alpha from o.foam (see foamAlpha). nu: the stout's, 2.05e-6 m^2/s at 6 C (Benilov et al., Am. J. Phys.
+ *                   81, 88, 2013, eq. 1: 2.06 mPa s, 1007 kg/m^3, measured).
  *
  * The class has the interface of ModalFluid in stout-cart.js, so World (cart, motor, controller, probes, observer) drives it
  * unchanged: new StoutCart.World({ fluidInstance: new StoutModal.TulipModes({ data, profile, h0 }), ... }).
@@ -44,9 +53,12 @@
     this.profile = o.profile;
     const P = this.profile.R; this.zRim = (P.length - 1) * this.profile.dz; this.R = Math.max.apply(null, P); this.Rrim = P[P.length - 1];
     this.h0 = o.h0 || 0.125; this.rho = o.rho || 1000; this.g = o.g || o.data.g || 9.81;
-    this.nu = o.nu != null ? o.nu : 1e-6;                         // kinematic viscosity, m^2/s (water's until the stout's is set)
-    this.surfaceFactor = o.surfaceFactor != null ? o.surfaceFactor : 1;
-    this.zetaExtra = o.zetaExtra || 0;
+    this.friction = o.friction !== false;
+    this.nu = o.nu != null ? o.nu : 2.05e-6;                      // the stout's kinematic viscosity, m^2/s (Benilov et al. 2013)
+    this.skin = o.skin != null ? o.skin : 0;                       // covered fraction of the surface (0 clean, 1 inextensible)
+    this.zetaCL = o.zetaCL || 0;
+    this.zetaExtra = o.zetaExtra || 0;                             // for checks only
+    this.foam = Object.assign({ h: 0, n: 2 / 3, alpha: null }, o.foam || {});
     this.N = Math.min(o.nModes || 4, o.data.levels[0].m1.f.length);
     this.NR = o.data.NR;
     this.Cd = o.Cd != null ? o.Cd : 0.62;                          // weir discharge coefficient (Francis; see ModalFluid)
@@ -80,18 +92,35 @@
   TulipModes.prototype.modes = function () {
     const [i, t] = bracket(this.hsData, this.h), A = this.data.levels[i].m1, B = this.data.levels[i + 1 > this.data.levels.length - 1 ? i : i + 1].m1;
     this.Rs = lerp(this.data.R_surface[i], this.data.R_surface[Math.min(i + 1, this.data.R_surface.length - 1)], t);
-    this.w = []; this.beta = []; this.zeta = []; this.Pc = []; this.c = []; this.Vc = []; this.zetaWall = [];
+    this.w = []; this.beta = []; this.zeta = []; this.Pc = []; this.c = []; this.Vc = []; this.zetaWall = []; this.zetaSkin = []; this.zetaBulk = []; this.M = [];
     for (let n = 0; n < this.N; n++) {
       const w = 2 * Math.PI * lerp(A.f[n], B.f[n], t), c = lerp(A.c[n], B.c[n], t), Lam = lerp(A.Lam[n], B.Lam[n], t);
       this.w.push(w); this.c.push(c);
       this.beta.push(w * w / this.g * c);                          // the push per unit a_x (the plant's beta, as in ModalFluid)
       this.Pc.push(this.rho * lerp(A.Ix[n], B.Ix[n], t));         // momentum per unit q_n'
       this.Vc.push(lerp(A.Vc[n], B.Vc[n], t));                     // crest volume on the high half per unit q_n
+      this.M.push(this.rho * lerp(A.Ix[n], B.Ix[n], t) / c);        // modal mass: momentum per unit q' over the push coefficient
       const zw = 0.5 * Math.sqrt(this.nu / (2 * w)) * Lam;
-      this.zetaWall.push(zw); this.zeta.push(this.surfaceFactor * zw + this.zetaExtra);
+      const zs = A.LamS ? 0.5 * Math.sqrt(this.nu / (2 * w)) * lerp(A.LamS[n], B.LamS[n], t) : 0;
+      const zb = A.Bk ? this.nu * lerp(A.Bk[n], B.Bk[n], t) / w : 0;
+      this.zetaWall.push(zw); this.zetaSkin.push(zs); this.zetaBulk.push(zb);
+      this.zeta.push(this.friction ? zw + this.skin * zs + zb + this.zetaCL + this.zetaExtra : this.zetaExtra);
       const e = this.e[n];
       for (let j = 0; j < this.NR; j++) e[j] = lerp(A.e[n][j], B.e[n][j], t);
     }
+    this.alpha = this.friction ? this.foamAlpha() : 0;
+  };
+  // The foam's coefficient alpha (dimensionless) in Viola et al.'s law. o.foam.alpha sets it directly; otherwise from the head's
+  // thickness h with Viola et al.'s measured slope (soap foam, d = 0.25 mm, gamma 31.5 mN/m, water, R = 37.05 mm: alpha = 0.010,
+  // 0.013, 0.016, 0.023, 0.030 at h = 2.5, 3.3, 4, 5, 6.5 mm; least squares through zero 0.00440 per mm), their scaling
+  // alpha ~ (h/d) gamma^(1/3) mu^(2/3) / (rho R^(5/3) g^(2/3)) for the stout's bubbles, surface tension, viscosity and the glass,
+  // and Sauret et al.'s saturation with depth (Phys. Fluids 27, 022103, 2015: bubble motion fades over about 1/k below the
+  // surface), h -> h_c (1 - exp(-h/h_c)), h_c = R/xi_11.
+  TulipModes.prototype.foamAlpha = function () {
+    const F = this.foam; if (F.alpha != null) return F.alpha; if (!(F.h > 0)) return 0;
+    const d = F.d || 0.25e-3, gam = F.gamma || 0.0315, mu = this.nu * this.rho, R = this.Rs;
+    const hc = R / 1.8412, heff = hc * (1 - Math.exp(-F.h / hc));
+    return 4.40 * heff * (0.25e-3 / d) * Math.pow(gam / 0.0315, 1 / 3) * Math.pow(mu / 1.0e-3, 2 / 3) * (1000 / this.rho) * Math.pow(R / 0.03705, -5 / 3);
   };
   // e_n at radius r (linear between the NR points r_j = R(h) j/(NR - 1); beyond R(h) the wall value)
   TulipModes.prototype.shapeAt = function (n, r) {
@@ -129,11 +158,21 @@
     // effective gravity g + a_z, never below zero: a glass falling faster than g (a_z < -g) would leave the stout floating
     // free of its floor, which no linear model describes; the same limit as NMFluid in stout-cart.js
     const ns = Math.max(1, Math.ceil(dt / 0.0005 - 1e-9)), hs = dt / ns, gf = Math.max(0, 1 + az / this.g), N = this.N;
-    for (let s = 0; s < ns; s++) for (let m = 0; m < N; m++) {
-      const w = this.w[m];
-      this.qd[m] += hs * (-w * w * gf * this.q[m] - 2 * this.zeta[m] * w * this.qd[m] - this.beta[m] * ax);
-      this.q[m] += hs * this.qd[m];
+    // the foam's friction is a force at the wall: Q = -M_1 alpha w_1^(4/3) R^(1/3) V|V|^(n-1) on every mode (its wall value is 1)
+    const Kf = this.alpha > 0 ? this.M[0] * this.alpha * Math.pow(this.w[0], 4 / 3) * Math.cbrt(this.Rs) : 0, nf = this.foam.n;
+    let Pv = 0, Pf = 0;
+    for (let s = 0; s < ns; s++) {
+      let V = 0; for (let m = 0; m < N; m++) V += this.qd[m];
+      const Q = Kf > 0 && V !== 0 ? -Kf * V * Math.pow(Math.abs(V), nf - 1) : 0;
+      Pf -= Q * V * hs;
+      for (let m = 0; m < N; m++) {
+        const w = this.w[m], fv = 2 * this.zeta[m] * w * this.qd[m];
+        Pv += this.M[m] * fv * this.qd[m] * hs;
+        this.qd[m] += hs * (-w * w * gf * this.q[m] - fv - this.beta[m] * ax + Q / this.M[m]);
+        this.q[m] += hs * this.qd[m];
+      }
     }
+    this.Pvisc = Pv / dt; this.Pfoam = Pf / dt;                   // mean power taken by viscosity and by the foam over the step, W
     const Q = this.wallLift(), g = this.g;
     let dV = 0, dPx = 0;
     if (this.h + Math.abs(Q) > this.zRim) {

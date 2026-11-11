@@ -1447,7 +1447,12 @@
     this.c = o.c || 8;           // suspension damper, N s/m
     this.kt = o.kt || 2.0e4;     // radial tyre stiffness, N/m
     this.ct = o.ct || 5;         // tyre damping, N s/m
-    this.cx = o.cx || 2;         // rolling and air drag, N s/m
+    this.cx = o.cx != null ? o.cx : 2;   // rolling and air drag lumped as one linear drag, N s/m (the default; see resist())
+    // the resistances one by one (all 0 by default, so the lumped cx above is the cart unless a page asks for these):
+    // rolling resistance Crr N, dry and viscous friction of the gearbox output Tf + bf w at the wheel's axle, air drag
+    // (1/2) rho_air CdA v|v|. Dry friction changes sign with the speed, smoothed over vSmooth (a stated regularisation).
+    this.Crr = o.Crr || 0; this.Tf = o.Tf || 0; this.bf = o.bf || 0; this.CdA = o.CdA || 0; this.rhoAir = o.rhoAir || 1.2;
+    this.vSmooth = o.vSmooth || 0.001;
     this.v0 = o.v0 != null ? o.v0 : 1.0;  // set speed, m/s
     this.ml = o.ml || 0;         // stout in the glass, kg (set by the coupling; falls as it spills)
     this.Ls = o.Ls || 0.08;      // unloaded spring length (body above axle), m
@@ -1483,6 +1488,13 @@
     this.reset(o.x0 != null ? o.x0 : 0);
   }
   Cart.prototype.bForce = function () { return this.Ngear * this.Km / this.Rw; };
+  // the force resisting the cart's motion at speed v with tyre load N (positive against the motion), N
+  Cart.prototype.resist = function (v, N) {
+    const sg = v / Math.sqrt(v * v + this.vSmooth * this.vSmooth), Rw = this.Rw;
+    return this.cx * v + this.Crr * N * sg + this.Tf / Rw * sg + this.bf * v / (Rw * Rw) + 0.5 * this.rhoAir * this.CdA * v * Math.abs(v);
+  };
+  // the same at the set speed on level road, with the static tyre load: what the open-loop current must balance
+  Cart.prototype.resistAtSetSpeed = function () { return this.resist(this.v0, (this.Mb + this.ml + this.mw) * this.g); };
   // LQR for the cart and the first sloshing mode, x = (dv, q, q', xi), u = di:
   //   M_x dv' = b di - c_x dv,  q'' = -w^2 q - 2 zeta w q' - beta dv',  xi' = -dv;  minimise int (x' Q x + r u^2) dt.
   // Weights by Bryson's rule: Q_ii = 1 / (largest acceptable x_i)^2, r = 1 / I_max^2. The Riccati equation is solved by
@@ -1557,13 +1569,13 @@
     this.zw = za - (Ms + this.mw) * g / this.kt;                 // static tyre deflection
     this.zb = this.zw + this.Ls - Ms * g / this.k;               // static spring deflection
     this.vzb = 0; this.vzw = 0; this.t = 0; this.Flx = 0; this.Flz = 0;
-    this.i = this.cx * this.v0 / this.bForce();                  // the current that holds the set speed against the drag
+    this.i = this.resistAtSetSpeed() / this.bForce();            // the current that holds the set speed against the drag
     this.icmd = this.i; this.xi = 0; this.us = 0; this.uscmd = 0; this.tSample = 0;
     this.forces(0, 0);
   };
   // the controller, run every Ts: the motor current command, and the suspension force command
   Cart.prototype.sample = function () {
-    const i0 = this.cx * this.v0 / this.bForce(), e = this.v0 - this.vx;
+    const i0 = this.resistAtSetSpeed() / this.bForce(), e = this.v0 - this.vx;
     if (this.ds) { this.ds.set('v_s', this.vx); this.ds.set('xi_s', this.xi); this.ds.set('vzb_s', this.vzb); }
     // the sensors and the observer, at every sample whatever the controller: the encoder's speed, the probes' newest
     // reading if the fluid has stepped since the last sample, the current held over the last sample as the input
@@ -1638,7 +1650,8 @@
     this.slip = Fmotor !== Fm0 ? 1 : 0; this.Fgrip = Fgrip;
     let Fhand = 0;
     if (this.hand != null) { Fhand = this.kh * (this.hand - this.x) - this.ch * this.vx; if (Fhand > this.Fhmax) Fhand = this.Fhmax; else if (Fhand < -this.Fhmax) Fhand = -this.Fhmax; }
-    const ax = (Froad + Fmotor - this.cx * this.vx + this.pushF + Fhand + Fx) / Mx;
+    const Fres = this.resist(this.vx, N); this.Fres = Fres;
+    const ax = (Froad + Fmotor - Fres + this.pushF + Fhand + Fx) / Mx;
     const azb = (Fs - Ms * g + Fz) / Ms;
     const azw = (-Fs - this.mw * g + N) / this.mw;
     // the current the drive can reach: limited by the drive and by the voltage left over the back-EMF

@@ -98,7 +98,38 @@ def solve(Rf, h, m, nr=24, nz=48, order=2, grade=2.0, nmodes=6):
         u = w['u']; tr, tz = -w.n[1], w.n[0]; r = w.x[0]
         gt = u.grad[0] * tr + u.grad[1] * tz
         return (gt ** 2 + m * m * u.value ** 2 / r ** 2) * r
-    shapes, c, lam, ix, vc = [], [], [], [], []
+    # The surface skin (Lamb 1932, Art. 351): a protein- or film-covered surface is inextensible, so the tangential velocity there
+    # is brought to rest across a Stokes layer of its own: Lam_s = int_surface |grad_h phi|^2 dS / int |grad phi|^2 dV, same factor.
+    @Functional
+    def sform(w):
+        u = w['u']; r = w.x[0]
+        return (u.grad[0] ** 2 + m * m * u.value ** 2 / r ** 2) * r
+    # Bulk viscous loss of the potential flow: the strain rate is the Hessian H of phi, mean heat mu int |H|^2 dV, so
+    # zeta_bulk = nu Bk / omega with Bk = int |H|^2 dV / int |grad phi|^2 dV. For phi = Phi(r, z) cos(m theta), |H|^2 averaged
+    # over theta (the same angular factor as the energy) is
+    #   Phi_rr^2 + Phi_zz^2 + 2 Phi_rz^2 + (Phi_r/r - m^2 Phi/r^2)^2 + 2 m^2 (Phi_r/r - Phi/r^2)^2 + 2 m^2 Phi_z^2 / r^2.
+    # Lagrange elements carry no second derivatives: the gradient is projected onto the same P2 space (L2 projection) and
+    # differentiated again; the mixed derivative is the mean of d(Phi_r)/dz and d(Phi_z)/dr
+    @Functional
+    def hform(w):
+        u, gr, gz = w['u'], w['gr'], w['gz']; r = w.x[0]; P, Pr, Pz = u.value, u.grad[0], u.grad[1]
+        Hrr, Hzz, Hrz = gr.grad[0], gz.grad[1], 0.5 * (gr.grad[1] + gz.grad[0])
+        return (Hrr ** 2 + Hzz ** 2 + 2 * Hrz ** 2 + (Pr / r - m * m * P / r ** 2) ** 2
+                + 2 * m * m * (Pr / r - P / r ** 2) ** 2 + 2 * m * m * Pz ** 2 / r ** 2) * r
+    fbs = FacetBasis(mesh, E, facets=top)
+
+    @BilinearForm
+    def mass(u, v, w):
+        return u * v
+    from skfem import LinearForm
+    @LinearForm
+    def proj_r(v, w):
+        return w['u'].grad[0] * v
+    @LinearForm
+    def proj_z(v, w):
+        return w['u'].grad[1] * v
+    Mlu = spla.splu(mass.assemble(ib).tocsc())
+    shapes, c, lam, ix, vc, lams, bk = [], [], [], [], [], [], []
     for j in range(V.shape[1]):
         v = V[:, j] / V[o[-1], j]                              # the surface shape e_n, 1 at the wall
         shapes.append(v[o])
@@ -110,14 +141,42 @@ def solve(Rf, h, m, nr=24, nz=48, order=2, grade=2.0, nmodes=6):
         # volume of the crest above the rest level per unit wall height (for the pour over the rim)
         ix.append(float(np.pi * v @ Mss @ r_s) if m == 1 else 0.0); vc.append(float(2 * v @ Mss @ np.ones_like(r_s)))
         x = np.zeros(n); x[sdofs] = v; x[inner] = -X @ v
-        lam.append(float(wform.assemble(fbw, u=fbw.interpolate(x)) / (x @ K @ x)))
+        en = x @ K @ x
+        lam.append(float(wform.assemble(fbw, u=fbw.interpolate(x)) / en))
+        lams.append(float(sform.assemble(fbs, u=fbs.interpolate(x)) / en))
+        ux = ib.interpolate(x)
+        gr = Mlu.solve(proj_r.assemble(ib, u=ux)); gz = Mlu.solve(proj_z.assemble(ib, u=ux))
+        bk.append(float(hform.assemble(ib, u=ux, gr=ib.interpolate(gr), gz=ib.interpolate(gz)) / en))
     f = np.sqrt(G * kap) / (2 * np.pi)
-    return dict(f=f, kappa=kap, r=r_s[o], shapes=shapes, c=np.array(c), Lam=np.array(lam), Ix=np.array(ix), Vc=np.array(vc), ndof=n, nsurf=len(sdofs))
+    return dict(f=f, kappa=kap, r=r_s[o], shapes=shapes, c=np.array(c), Lam=np.array(lam), LamS=np.array(lams), Bk=np.array(bk), Ix=np.array(ix), Vc=np.array(vc), ndof=n, nsurf=len(sdofs))
 
 
-def zeta(out, nu):
+def zeta(out, nu, part='wall'):
     w = 2 * np.pi * out['f']
-    return 0.5 * np.sqrt(nu / (2 * w)) * out['Lam']
+    if part == 'wall': return 0.5 * np.sqrt(nu / (2 * w)) * out['Lam']
+    if part == 'skin': return 0.5 * np.sqrt(nu / (2 * w)) * out['LamS']
+    if part == 'bulk': return nu * out['Bk'] / w
+    raise ValueError(part)
+
+
+def bessel_ratios(R, h, m, n=1, N=400):
+    """Independent check: the surface-skin and bulk ratios of the cylinder's exact mode J_m(kr) cosh(kz) cos(m th) (floor
+    z = 0, surface z = h), by Gauss quadrature of its analytic derivatives."""
+    from scipy.special import jv, jvp
+    k = jnp_zeros(m, n)[-1] / R
+    xr, wr = np.polynomial.legendre.leggauss(N); r = 0.5 * R * (xr + 1); wr = 0.5 * R * wr
+    xz, wz = np.polynomial.legendre.leggauss(N); z = 0.5 * h * (xz + 1); wz = 0.5 * h * wz
+    rr, zz = np.meshgrid(r, z, indexing='ij'); W = np.outer(wr, wz) * rr
+    J, Jp = jv(m, k * rr), jvp(m, k * rr); x = k * rr
+    Jpp = -Jp / x - (1 - m * m / x ** 2) * J
+    C, S = np.cosh(k * zz), np.sinh(k * zz)
+    P, Pr, Pz = J * C, k * Jp * C, k * J * S
+    Prr, Pzz, Prz = k * k * Jpp * C, k * k * J * C, k * k * Jp * S
+    en = np.sum(W * (Pr ** 2 + Pz ** 2 + m * m * P ** 2 / rr ** 2))
+    H2 = (Prr ** 2 + Pzz ** 2 + 2 * Prz ** 2 + (Pr / rr - m * m * P / rr ** 2) ** 2 + 2 * m * m * (Pr / rr - P / rr ** 2) ** 2 + 2 * m * m * Pz ** 2 / rr ** 2)
+    rs = r; Js, Jps = jv(m, k * rs) * np.cosh(k * h), k * jvp(m, k * rs) * np.cosh(k * h)
+    skin = np.sum(wr * rs * (Jps ** 2 + m * m * Js ** 2 / rs ** 2))
+    return skin / en, np.sum(W * H2) / en
 
 
 def exact_cyl(R, h, m, n):
@@ -177,6 +236,15 @@ def check():
         print(f'  P2 {nr} x {nz}: Lambda R = ' + ', '.join(f'{a * R:.5f}' for a in d['Lam']) + ' (exact '
               + ', '.join(f'{(x * x + 1) / (x * x - 1):.5f}' for x in jnp_zeros(1, 3)) + f'); K = {K:.4f}')
     if abs(d['Lam'][0] * R / ((xi[0] ** 2 + 1) / (xi[0] ** 2 - 1)) - 1) > 1e-3: fails.append('wall friction')
+    print('Surface skin and bulk loss on the cylinder (h = 100 mm), finite elements against the exact Bessel mode:')
+    for m in (1, 0, 2):
+        ex_s, ex_b = bessel_ratios(R, h, m)
+        for nr, nz in ((24, 48), (48, 96), (96, 192)):
+            d = solve(Rf, h, m, nr, nz, 2, nmodes=1)
+            print(f'  m = {m}, P2 {nr} x {nz}: skin {d["LamS"][0]:.5f} (exact {ex_s:.5f}) 1/m, bulk {d["Bk"][0]:.3f} (exact {ex_b:.3f}) 1/m^2')
+        if abs(d['LamS'][0] / ex_s - 1) > 1e-4 or abs(d['Bk'][0] / ex_b - 1) > 2e-3: fails.append(f'skin or bulk m={m}')
+    k1 = jnp_zeros(1, 1)[0] / R
+    print(f'  deep-water bulk 2 k^2 = {2 * k1 * k1:.3f} 1/m^2 (m = 1; the cylinder differs by its wall and depth)')
     d = solve(Rf, h, 1, 48, 96, 2, nmodes=1)
     print(f'  the page note\'s cylinder (h = 100 mm), water nu = 1e-6: zeta = {zeta(d, 1e-6)[0]:.5f} (floor included)')
     return fails
@@ -223,7 +291,7 @@ def sweep(path):
     out = {'about': 'Fig. 12 linear sloshing modes of the Guinness tulip, by tools/fig12/modes_fem.py sweep (finite elements, P2, '
                     'mesh 48 x 96 on the meridian section). Elevation of mode (m, n): beta(t) e(r) cos(m theta). '
                     'm = 1 obeys beta\'\' + 2 zeta omega beta\' + omega^2 (1 + a_z/g) beta = -(omega^2/g) c a_x. '
-                    'Momentum relative to the glass rho sum Ix q\'; crest volume on the high half per unit wall height Vc. Wall-friction damping zeta = (1/2) sqrt(nu/(2 omega)) Lam (laminar Stokes layer). '
+                    'Surface-skin factor LamS (1/m; zeta_skin = sqrt(nu/(2 omega)) LamS / 2, an inextensible surface, Lamb 1932 Art. 351); bulk factor Bk (1/m^2; zeta_bulk = nu Bk / omega). Momentum relative to the glass rho sum Ix q\'; crest volume on the high half per unit wall height Vc. Wall-friction damping zeta = (1/2) sqrt(nu/(2 omega)) Lam (laminar Stokes layer). '
                     'Lengths in m, frequencies in Hz.',
            'g': G, 'glass_profile': 'public/scripts/guinness-glass.js', 'NR': NR, 'h': hs, 'R_surface': [], 'levels': []}
     worst = 0.0
@@ -237,6 +305,7 @@ def sweep(path):
             rr = np.linspace(0, b['r'][-1], NR)
             lev[f'm{m}'] = {'f': [round(float(x), 6) for x in b['f'][:nm]], 'kappa': [round(float(x), 5) for x in b['kappa'][:nm]],
                             'Lam': [round(float(x), 4) for x in b['Lam'][:nm]],
+                            'LamS': [round(float(x), 4) for x in b['LamS'][:nm]], 'Bk': [round(float(x), 2) for x in b['Bk'][:nm]],
                             'e': [[round(float(x), 5) for x in np.interp(rr, b['r'], e)] for e in b['shapes'][:nm]]}
             if m == 1:
                 lev['m1']['c'] = [round(float(x), 8) for x in b['c'][:nm]]
