@@ -94,7 +94,25 @@ function instrument() {
   wrap('arcTo', function (x1, y1) { add(this, x1, y1); });
   wrap('rect', function (x, y, w, h) { const p = path(this); p.cur = null; add(this, x, y); add(this, x + w, y); add(this, x + w, y + h); add(this, x, y + h); add(this, x, y); p.cur = null; });
   const full = (g, x, y, w, h) => { const a = T(g, x, y), b = T(g, x + w, y + h), cv = g.canvas; return Math.min(a[0], b[0]) <= 1 && Math.min(a[1], b[1]) <= 1 && Math.max(a[0], b[0]) >= cv.width - 1 && Math.max(a[1], b[1]) >= cv.height - 1; };
-  const commit = (g, subs, kind, hw) => {
+  // clip regions: the bounding box of the path at clip(), intersected with the one before, saved and restored with the state;
+  // a stroke is tested only where it is drawn, so a curve clipped to the plot does not 'cross' the labels outside it
+  wrap('save', function () { (this.__clipStack || (this.__clipStack = [])).push(this.__clip || null); });
+  wrapAfter('restore', function () { this.__clip = this.__clipStack && this.__clipStack.length ? this.__clipStack.pop() : null; });
+  wrapAfter('clip', function (p2) {
+    if (p2 && typeof p2 !== 'string') return;
+    const pts = path(this).subs.flat(); if (!pts.length) return;
+    let b = [Math.min(...pts.map(q => q[0])), Math.min(...pts.map(q => q[1])), Math.max(...pts.map(q => q[0])), Math.max(...pts.map(q => q[1]))];
+    const c = this.__clip; if (c) b = [Math.max(b[0], c[0]), Math.max(b[1], c[1]), Math.min(b[2], c[2]), Math.min(b[3], c[3])];
+    this.__clip = b;
+  });
+  const clipSubs = (g, subs) => {
+    const c = g.__clip; if (!c) return subs;
+    const inn = q => q[0] >= c[0] - 0.5 && q[0] <= c[2] + 0.5 && q[1] >= c[1] - 0.5 && q[1] <= c[3] + 0.5, out = [];
+    for (const s of subs) { let run = []; for (const q of s) { if (inn(q)) run.push(q); else { if (run.length > 1) out.push(run); run = []; } } if (run.length > 1) out.push(run); }
+    return out;
+  };
+  const commit = (g, subs0, kind, hw) => {
+    const subs = clipSubs(g, subs0);
     if (!subs.length) return; const r = rec(g.canvas);
     r.strokes.push({ subs: subs.map(s => s.map(q => q.slice())), kind, hw, nocollide: !!g.__nocollide, desc: kind + ' ' + (kind === 'fill' ? (typeof g.fillStyle === 'string' ? g.fillStyle : 'pattern') : desc(g)) + (kind === 'fill' ? '' : ' lw ' + g.lineWidth) });
   };
