@@ -716,11 +716,11 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`portfolios-src/droplets/text/book-06.src.html`](../portfolios-src/droplets/text/book-06.src.html) | 19.2 kB | Lecture notes, chapter 6. | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/text/book-07.src.html`](../portfolios-src/droplets/text/book-07.src.html) | 7.2 kB | Lecture notes, chapter 7. | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/text/book-08.src.html`](../portfolios-src/droplets/text/book-08.src.html) | 8.1 kB | Lecture notes, chapter 8. | [README.md](../portfolios-src/droplets/README.md) |
-| [`portfolios-src/droplets/text/book-09.src.html`](../portfolios-src/droplets/text/book-09.src.html) | 7.5 kB | Lecture notes, chapter 9. | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/text/book-09.src.html`](../portfolios-src/droplets/text/book-09.src.html) | 7.6 kB | Lecture notes, chapter 9. | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/text/book-10.src.html`](../portfolios-src/droplets/text/book-10.src.html) | 33.6 kB | Lecture notes, chapter 10. | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/text/book-11.src.html`](../portfolios-src/droplets/text/book-11.src.html) | 12.9 kB | Lecture notes, chapter 11. | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/text/book-12.src.html`](../portfolios-src/droplets/text/book-12.src.html) | 23.2 kB | Lecture notes, chapter 12. | [README.md](../portfolios-src/droplets/README.md) |
-| [`portfolios-src/droplets/text/book-99.src.html`](../portfolios-src/droplets/text/book-99.src.html) | 6.3 kB | Symbols and sources (appendix A). | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/text/book-99.src.html`](../portfolios-src/droplets/text/book-99.src.html) | 6.7 kB | Symbols and sources (appendix A). | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/text/checks.src.html`](../portfolios-src/droplets/text/checks.src.html) | 7.4 kB | Words of the checks tab. | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/text/problems.src.html`](../portfolios-src/droplets/text/problems.src.html) | 10.2 kB | Words of the problems tab. | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/text/sim.src.html`](../portfolios-src/droplets/text/sim.src.html) | 7.8 kB | Words of the sim tab. | [README.md](../portfolios-src/droplets/README.md) |
