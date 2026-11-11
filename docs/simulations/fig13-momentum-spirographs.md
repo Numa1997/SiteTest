@@ -161,3 +161,8 @@ Measured for the note on `chaos-map-rods-P20.png` (1280 × 720, chaotic = v > 0.
 fold line 65.9 %, 0.02 to 0.05 rad 13.6 %, 0.05 to 0.10 rad 2.2 %, beyond 0.10 rad 0.0 %. Of the 100 default cells: 2 in the pupil,
 60 fold through, 38 do not; 5 chaotic by the map. Energy drift of the page over 10 s (RK4, h = 1/4500 s): median 2e-5 J, worst 0.14 J of
 3450 J at (−32, 18). Test hook `window.__fig13` gained `strikeKE`, `foldsThrough`, `mapValue`, `energy`.
+
+**11 November 2026, later: everything inside the Fig. 13 page.** A section "Inside Fig. 13" (`#inside`) under the figure: the catch
+(`fig13/live-catch.html`) and the eight-part film player (`fig13/reem.html`) play in place in a frame on **Play here** (one at a time; the
+sheet pauses while one plays and resumes on **Stop**), with links to the dashboard and the flower hunt. On plates narrower than 600 px the
+axes are two range labels instead of a number per cell.

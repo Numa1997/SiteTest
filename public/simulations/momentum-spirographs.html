@@ -29,6 +29,15 @@
         #probe { display: block; width: 100%; aspect-ratio: 1 / 1; background: #140d10; border-radius: 8px; }
         #probe.is-paper { background: var(--card); }
         #stage { cursor: pointer; }
+            .inside { margin: 44px 0 0; }
+        .inside h2 { font-family: var(--serif); font-size: 30px; font-weight: 400; margin: 0 0 6px; color: var(--ink); }
+        .inside > p { margin: 0 0 16px; font-size: 16px; line-height: 1.6; color: var(--ink-2); max-width: 760px; }
+        .inside__grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); align-items: start; }
+        .icard { background: var(--card); border: 1px solid var(--line-strong, #cdc1ae); border-radius: 10px; padding: 16px; }
+        .icard h3 { font-family: var(--serif); font-size: 23px; font-weight: 400; margin: 0 0 6px; color: var(--ink); }
+        .icard p { margin: 0 0 12px; font-size: 15px; line-height: 1.55; color: var(--ink-2); }
+        .icard .actions { display: flex; gap: 8px; flex-wrap: wrap; }
+        .icard iframe { display: block; width: 100%; aspect-ratio: 9 / 16; border: 0; border-radius: 8px; background: #140d10; margin: 0 0 12px; }
     </style>
 </head>
 <body>
@@ -71,7 +80,7 @@
                         <span id="cap-t"><i>t</i> = 0.00 s</span>
                     </figcaption>
                 </figure>
-                <p style="margin:12px 2px 0;font-size:15px;line-height:1.6;color:var(--ink-2)">Tap a cell to pin its pendulum and read its strike. The cells do not touch each other: they are a hundred separate experiments, sorted by how they were struck. More of Fig. 13: <a href="butterfly-dashboard.html"><b>the butterfly dashboard</b></a> · <a href="butterfly-catch.html"><b>catching the butterfly with a motor</b></a> · <a href="flower-hunt.html"><b>the flower hunt</b></a> · <a href="fig13/reem.html">the films</a> · <a href="#paper">the lecture note below</a>.</p>
+                <p style="margin:12px 2px 0;font-size:15px;line-height:1.6;color:var(--ink-2)">Tap a cell to pin its pendulum and read its strike. The cells do not touch each other: they are a hundred separate experiments, sorted by how they were struck. More of Fig. 13: <a href="butterfly-dashboard.html"><b>the butterfly dashboard</b></a> · <a href="butterfly-catch.html"><b>catching the butterfly with a motor</b></a> · <a href="flower-hunt.html"><b>the flower hunt</b></a> · <a href="#inside"><b>the catch and the films, playing below</b></a> · <a href="#paper">the lecture note</a>.</p>
             </div>
 
             <aside class="panel" aria-label="Controls">
@@ -129,6 +138,33 @@
                 </div>
             </aside>
         </div>
+
+        <section class="inside" id="inside" aria-labelledby="inside-title">
+            <h2 id="inside-title">Inside Fig. 13</h2>
+            <p>One cell of the sheet, the strike (3.557, 12.211), draws a butterfly. Everything built around it plays here, computed live in your browser. Press <b>Play here</b>; one runs at a time.</p>
+            <div class="inside__grid">
+                <div class="icard" data-src="fig13/live-catch.html">
+                    <h3>Catching the butterfly</h3>
+                    <p>A motor at the top pin takes a chaotic pendulum, sets it on the butterfly and lets go. Start it from a random chaotic state or from a strike you choose on the eye.</p>
+                    <div class="actions"><button type="button" class="btn" data-play>Play here</button><a class="btn btn--ghost" href="butterfly-catch.html">With its theory</a></div>
+                </div>
+                <div class="icard" data-src="fig13/reem.html">
+                    <h3>For رِيمْ: the films</h3>
+                    <p>Eight parts in order: the two words written by turning arrows, the butterfly built by hand from its two waveforms, the catch, the dive from the sheet into one cell, six pictures of one motion, turning the paper, the bell.</p>
+                    <div class="actions"><button type="button" class="btn" data-play>Play here</button><a class="btn btn--ghost" href="fig13/reem.html">Full screen</a></div>
+                </div>
+                <div class="icard">
+                    <h3>The butterfly dashboard</h3>
+                    <p>The butterfly in the complex plane, with its height and sideways position against time joined to it by straight lines; turn the paper and each wave becomes the butterfly.</p>
+                    <div class="actions"><a class="btn" href="butterfly-dashboard.html">Open the dashboard</a></div>
+                </div>
+                <div class="icard">
+                    <h3>The flower hunt</h3>
+                    <p>Which strike makes the tip draw a flower that closes, or a butterfly? A garden of closed orbits found by Newton's method, and a bench to test any strike.</p>
+                    <div class="actions"><a class="btn" href="flower-hunt.html">Open the hunt</a></div>
+                </div>
+            </div>
+        </section>
 
         <article class="paper" id="paper" aria-labelledby="paper-title">
             <header class="paper__head">
@@ -439,6 +475,12 @@ function ellipse(c, ke) {       // the strikes of kinetic energy ke: an ellipse 
 function drawAxes() {
     const f = Math.max(9, Math.min(13, cw / 5.2)) * (W / stage.getBoundingClientRect().width || 1);
     rctx.font = `${f}px "IBM Plex Mono", monospace`; rctx.fillStyle = night ? 'rgba(245,241,234,.62)' : 'rgba(28,21,24,.62)';
+    if (stage.getBoundingClientRect().width < 600) {      // a phone: no room between the drawings for a number per cell; give the two ranges
+        const d = P >= 10 ? 0 : 1, a = ((N - 1) / N * P * AR).toFixed(d), b = ((N - 1) / N * P).toFixed(d), ink = rctx.fillStyle;
+        const chip = (txt, x, y, al, bl) => { rctx.textAlign = al; rctx.textBaseline = bl; const w = rctx.measureText(txt).width + 8, x0 = al === 'right' ? x - w + 4 : x - 4, y0 = bl === 'bottom' ? y - 1.25 * f : y - .15 * f; rctx.fillStyle = night ? 'rgba(20,13,16,.8)' : 'rgba(255,250,243,.86)'; rctx.fillRect(x0, y0, w, 1.4 * f); rctx.fillStyle = ink; rctx.fillText(txt, x, y); };
+        chip(`↑ p₂ from −${b} to ${b}`, 6, 5, 'left', 'top'); chip(`p₁ from −${a} to ${a} →`, W - 6, Hh - 4, 'right', 'bottom');
+        return;
+    }
     const every = cw < 5.4 * f ? 2 : 1;
     rctx.textAlign = 'left'; rctx.textBaseline = 'bottom';         // in the lower left corner of each column, clear of the drawings
     for (let i = 0; i < N; i += every) rctx.fillText((((i + .5) / N - .5) * 2 * P * AR).toFixed(P >= 10 ? 0 : 1), i * cw + 3, Hh - 2);
@@ -544,6 +586,15 @@ $('p').oninput = e => { P = +e.target.value; $('p-out').textContent = P + ' kg·
 $('g').oninput = e => { par.g = +e.target.value; $('g-out').textContent = par.g.toFixed(1) + ' m/s²'; rebuild(); };
 $('mr').oninput = e => { par.m2 = par.m1 * Math.exp(+e.target.value); $('mr-out').textContent = (par.m2 / par.m1).toFixed(2); rebuild(); };
 $('lr').oninput = e => { par.l2 = par.l1 * Math.exp(+e.target.value); $('lr-out').textContent = (par.l2 / par.l1).toFixed(2); rebuild(); };
+
+// ---- Inside Fig. 13: a film plays in its card; starting one stops the other and pauses the sheet (a phone computes one thing at a time)
+document.querySelectorAll('.icard [data-play]').forEach(btn => btn.onclick = () => {
+    const card = btn.closest('.icard'), open = card.querySelector('iframe');
+    document.querySelectorAll('.icard iframe').forEach(f => { const b = f.closest('.icard').querySelector('[data-play]'); f.remove(); b.textContent = 'Play here'; });
+    if (open) { if (!running) $('play').click(); return; }
+    const f = document.createElement('iframe'); f.src = card.dataset.src; f.title = card.querySelector('h3').textContent; card.insertBefore(f, card.querySelector('.actions'));
+    btn.textContent = 'Stop'; if (running) $('play').click();
+});
 
 let last = null;
 function frame(ts) {
