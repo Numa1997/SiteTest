@@ -1,7 +1,7 @@
 T = {}
 T['title_tag'] = "Eisen, Baumwolle und der Kopf"
 T['eyebrow'] = "Newton · Morse · Hooke · eine interaktive Studie"
-T['title'] = "Warum eine Eisenkugel weh tut und eine Baumwollkugel nicht"; T['dedication'] = "Für meinen Vater."
+T['title'] = "Warum eine Eisenkugel weh tut und eine Baumwollkugel nicht"; T['dedication'] = "Für Saer"
 T['lede'] = "Zwei Kugeln gleicher Masse fallen aus gleicher Höhe auf einen Kopf, der als Platte auf einer Feder und einem Dämpfer gezeichnet ist. Die Eisenkugel ist ein Gitter aus Atomen, die durch steife Bindungen verbunden sind. Die Baumwollkugel ist ein Knäuel dünner Fasern, die sich biegen, an ihren Kreuzungsstellen haften und aneinander reiben. Das Modell läuft einmal beim Öffnen der Seite, und jede Kurve und jede Zahl auf dieser Seite stammt daraus; der Text unten leitet her, was das Modell tut, und vergleicht es mit echtem Eisen, echter Baumwolle und einem echten Schädel."
 T['replay'] = "Noch einmal fallen lassen"
 T['drop'] = "Fallen lassen"
