@@ -1,0 +1,12 @@
+FoamFile { format ascii; class dictionary; object fvModels; }
+// the glass's frame: its velocity along the road V(t) (a table written by make_case.py); OpenFOAM adds -rho alpha dV/dt
+glassFrame
+{
+    type            acceleration;
+    cellZone        all;
+    U               U;
+    velocity        table
+    (
+        #include "glassVelocity"
+    );
+}

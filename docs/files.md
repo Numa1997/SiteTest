@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-1632 files, 77.7 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+1650 files, 77.7 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -39,7 +39,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Shared by the portfolio sources (not served)](#shared-by-the-portfolio-sources-not-served) | 1 |
 | [Template sources](#template-sources) | 2 |
 | [Documentation](#documentation) | 37 |
-| [Tools](#tools) | 97 |
+| [Tools](#tools) | 115 |
 | [Translation tables](#translation-tables) | 54 |
 | [Agents of the lecture-note review](#agents-of-the-lecture-note-review) | 4 |
 | [Working notes of project 07, the electron beam](#working-notes-of-project-07-the-electron-beam) | 52 |
@@ -908,7 +908,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/fig11/rig.py`](../tools/fig11/rig.py) | 18.7 kB | Blender scenes for Double Pendulum under Control: the whole machine, the strut cut open, the motor (bpy 5.2). | [fig11-pendulum-control.md](simulations/fig11-pendulum-control.md) |
 | [`tools/fig12/backbone-3d.cjs`](../tools/fig12/backbone-3d.cjs) | 3.4 kB | Fig. 12: the 3D solver’s free swing at any fill (pulse or tilt-release): frequency against amplitude. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/check.cjs`](../tools/fig12/check.cjs) | 5.5 kB | Fig. 12: offline checks of the stout solver (rest, free sloshing frequency, tilt under a steady push); prints measured numbers. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
-| [`tools/fig12/decay-3d.cjs`](../tools/fig12/decay-3d.cjs) | 5.9 kB | Fig. 12: the 3D solver’s free swing dying out, wall friction on or off, with an energy budget (kinetic, surface, wall power). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`tools/fig12/decay-3d.cjs`](../tools/fig12/decay-3d.cjs) | 6.0 kB | Fig. 12: the 3D solver’s free swing dying out, wall friction on or off, with an energy budget (kinetic, surface, wall power). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/energy-audit.cjs`](../tools/fig12/energy-audit.cjs) | 5.7 kB | Fig. 12: where the 3D solver’s energy goes: Fluid.step replayed stage by stage, the stout’s mechanical energy booked per mechanism (transfers, gravity and pressure, particle motion, wall, spill). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/energy.cjs`](../tools/fig12/energy.cjs) | 2.3 kB | Fig. 12: the cart’s energy book over a bump: constant without losses, changed by exactly the work of dampers, drag and motor. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/figures.cjs`](../tools/fig12/figures.cjs) | 9.0 kB | Fig. 12: writes the two inline SVG figures of the lecture note (the glass section; one bump, open loop against speed control). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
@@ -919,9 +919,37 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/fig12/gpu-study.cjs`](../tools/fig12/gpu-study.cjs) | 5.2 kB | Fig. 12: the cart over a bump or a rough road with the GPU solver (World.advanceGpu) in headless Chromium, in batches; lean, accelerations, spill, controllers. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/irish-imperial-pint.svg`](../tools/fig12/irish-imperial-pint.svg) | 54.0 kB | Fig. 12: dimensions.com’s dimensioned elevation and section of the tulip pint glass (source of the profile). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/linfit.cjs`](../tools/fig12/linfit.cjs) | 2.0 kB | Fig. 12: fits the free swing (amplitude, frequency) in the files linearity.cjs saves. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+
+<details><summary>15 files: Fig. 12, OpenFOAM case template: incompressible two-phase Navier–Stokes (volume of fluid), stout and air, no-slip glass, the glass’s frame as an acceleration source, the stout monitor (mass, energy, momentum, spill, surface heights).</summary>
+
+| File | Size | What it is | Explained in |
+|---|---|---|---|
+| [`tools/fig12/of/case/0/U`](../tools/fig12/of/case/0/U) | 331 B | Fig. 12, OpenFOAM case template: incompressible two-phase Navier–Stokes (volume of fluid), stout and air, no-slip glass, the glass’s frame as an acceleration source, the stout monitor (mass, energy, momentum, spill, surface heights). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`tools/fig12/of/case/0/alpha.stout.orig`](../tools/fig12/of/case/0/alpha.stout.orig) | 327 B | Fig. 12, OpenFOAM case template: incompressible two-phase Navier–Stokes (volume of fluid), stout and air, no-slip glass, the glass’s frame as an acceleration source, the stout monitor (mass, energy, momentum, spill, surface heights). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`tools/fig12/of/case/0/p`](../tools/fig12/of/case/0/p) | 301 B | Fig. 12, OpenFOAM case template: incompressible two-phase Navier–Stokes (volume of fluid), stout and air, no-slip glass, the glass’s frame as an acceleration source, the stout monitor (mass, energy, momentum, spill, surface heights). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`tools/fig12/of/case/0/p_rgh`](../tools/fig12/of/case/0/p_rgh) | 303 B | Fig. 12, OpenFOAM case template: incompressible two-phase Navier–Stokes (volume of fluid), stout and air, no-slip glass, the glass’s frame as an acceleration source, the stout monitor (mass, energy, momentum, spill, surface heights). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`tools/fig12/of/case/constant/fvModels`](../tools/fig12/of/case/constant/fvModels) | 352 B | Fig. 12, OpenFOAM case template: incompressible two-phase Navier–Stokes (volume of fluid), stout and air, no-slip glass, the glass’s frame as an acceleration source, the stout monitor (mass, energy, momentum, spill, surface heights). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`tools/fig12/of/case/constant/g`](../tools/fig12/of/case/constant/g) | 137 B | Fig. 12, OpenFOAM case template: incompressible two-phase Navier–Stokes (volume of fluid), stout and air, no-slip glass, the glass’s frame as an acceleration source, the stout monitor (mass, energy, momentum, spill, surface heights). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`tools/fig12/of/case/constant/momentumTransport`](../tools/fig12/of/case/constant/momentumTransport) | 96 B | Fig. 12, OpenFOAM case template: incompressible two-phase Navier–Stokes (volume of fluid), stout and air, no-slip glass, the glass’s frame as an acceleration source, the stout monitor (mass, energy, momentum, spill, surface heights). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`tools/fig12/of/case/constant/phaseProperties`](../tools/fig12/of/case/constant/phaseProperties) | 121 B | Fig. 12, OpenFOAM case template: incompressible two-phase Navier–Stokes (volume of fluid), stout and air, no-slip glass, the glass’s frame as an acceleration source, the stout monitor (mass, energy, momentum, spill, surface heights). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`tools/fig12/of/case/constant/physicalProperties.air`](../tools/fig12/of/case/constant/physicalProperties.air) | 149 B | Fig. 12, OpenFOAM case template: incompressible two-phase Navier–Stokes (volume of fluid), stout and air, no-slip glass, the glass’s frame as an acceleration source, the stout monitor (mass, energy, momentum, spill, surface heights). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`tools/fig12/of/case/constant/physicalProperties.stout`](../tools/fig12/of/case/constant/physicalProperties.stout) | 145 B | Fig. 12, OpenFOAM case template: incompressible two-phase Navier–Stokes (volume of fluid), stout and air, no-slip glass, the glass’s frame as an acceleration source, the stout monitor (mass, energy, momentum, spill, surface heights). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`tools/fig12/of/case/system/controlDict`](../tools/fig12/of/case/system/controlDict) | 809 B | Fig. 12, OpenFOAM case template: incompressible two-phase Navier–Stokes (volume of fluid), stout and air, no-slip glass, the glass’s frame as an acceleration source, the stout monitor (mass, energy, momentum, spill, surface heights). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`tools/fig12/of/case/system/fvSchemes`](../tools/fig12/of/case/system/fvSchemes) | 485 B | Fig. 12, OpenFOAM case template: incompressible two-phase Navier–Stokes (volume of fluid), stout and air, no-slip glass, the glass’s frame as an acceleration source, the stout monitor (mass, energy, momentum, spill, surface heights). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`tools/fig12/of/case/system/fvSolution`](../tools/fig12/of/case/system/fvSolution) | 747 B | Fig. 12, OpenFOAM case template: incompressible two-phase Navier–Stokes (volume of fluid), stout and air, no-slip glass, the glass’s frame as an acceleration source, the stout monitor (mass, energy, momentum, spill, surface heights). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`tools/fig12/of/case/system/setFieldsDict`](../tools/fig12/of/case/system/setFieldsDict) | 230 B | Fig. 12, OpenFOAM case template: incompressible two-phase Navier–Stokes (volume of fluid), stout and air, no-slip glass, the glass’s frame as an acceleration source, the stout monitor (mass, energy, momentum, spill, surface heights). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`tools/fig12/of/case/system/stoutMonitor`](../tools/fig12/of/case/system/stoutMonitor) | 3.3 kB | Fig. 12, OpenFOAM case template: incompressible two-phase Navier–Stokes (volume of fluid), stout and air, no-slip glass, the glass’s frame as an acceleration source, the stout monitor (mass, energy, momentum, spill, surface heights). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+
+</details>
+
+| File | Size | What it is | Explained in |
+|---|---|---|---|
+| [`tools/fig12/of/make_case.py`](../tools/fig12/of/make_case.py) | 3.3 kB | Fig. 12, OpenFOAM: builds a case of the stout in the tulip (mesh, fill, forcing, physical parameters) from the template. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`tools/fig12/of/run.sh`](../tools/fig12/of/run.sh) | 857 B | Fig. 12, OpenFOAM: runs one case (serial or split over processes) and records its wall time. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`tools/fig12/of/tulip_mesh.py`](../tools/fig12/of/tulip_mesh.py) | 8.3 kB | Fig. 12, OpenFOAM: the wall-fitted O-grid mesh of the Guinness tulip (boundary layers at the glass and the floor resolved; air and a spill ring above the rim), three levels for the convergence proof. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/profile.cjs`](../tools/fig12/profile.cjs) | 1.5 kB | Fig. 12: times one fluid step of the stout solver by phase (level set, transfers, pressure, advection). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/requirements.txt`](../tools/fig12/requirements.txt) | 178 B | Fig. 12: the pinned Python packages of the fitting tools, for GitHub’s runners. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
-| [`tools/fig12/rest-gate.cjs`](../tools/fig12/rest-gate.cjs) | 3.6 kB | Fig. 12, gate 1.1: the stout left at rest for 30 s must stay still (centre of mass, kinetic energy, fastest particle, growth), limits fixed before the run. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`tools/fig12/rest-gate.cjs`](../tools/fig12/rest-gate.cjs) | 3.7 kB | Fig. 12, gate 1.1: the stout left at rest for 30 s must stay still (centre of mass, kinetic energy, fastest particle, growth), limits fixed before the run. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/roads.cjs`](../tools/fig12/roads.cjs) | 3.2 kB | Fig. 12: the cart on the rough roads (ISO 8608 classes, washboard, setts): vertical shaking at twice the swing frequency, lean, spill, wheel off the road, grip limit. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/same.cjs`](../tools/fig12/same.cjs) | 1.1 kB | Fig. 12: fingerprint (SHA-256) of the solver state after 1 s with a push; a speed-up must leave it unchanged. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/spill-3d.cjs`](../tools/fig12/spill-3d.cjs) | 2.1 kB | Fig. 12: the 3D solver pushed hard enough to spill: lean, highest wall point and spilled mass over time. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
@@ -987,7 +1015,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/i18n/ingest.py`](../tools/i18n/ingest.py) | 1.9 kB | Stores checked translations made outside the tables (page pieces, script strings, walkthrough prose). | [i18n.md](i18n.md) |
 | [`tools/i18n/package.json`](../tools/i18n/package.json) | 285 B | The parser wrap.cjs needs (acorn); npm install --prefix tools/i18n. | [i18n.md](i18n.md) |
 | [`tools/i18n/wrap.cjs`](../tools/i18n/wrap.cjs) | 3.7 kB | Wraps the reader-visible strings of a page's scripts in _t(), with a JavaScript parser (acorn). | [i18n.md](i18n.md) |
-| [`tools/inventory.py`](../tools/inventory.py) | 82.7 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
+| [`tools/inventory.py`](../tools/inventory.py) | 83.6 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
 | [`tools/perf/addresses.cjs`](../tools/perf/addresses.cjs) | 6.1 kB | Every page at every address a reader can use (x.html, x, x/, folder/), and every link of every page, on a running site; exits 1 on any wrong answer. | [performance.md](performance.md) |
 | [`tools/perf/clockcheck.cjs`](../tools/perf/clockcheck.cjs) | 3.2 kB | Each figure runs on screen, holds off screen, resumes; the store stays live for an open data panel and the walkthrough. | [performance.md](performance.md) |
 | [`tools/perf/film.cjs`](../tools/perf/film.cjs) | 3.1 kB | A repeat visit as a reader sees it: screenshots at fixed times and every LCP candidate with its element, to tell a metric from the screen. | [performance.md](performance.md) |

@@ -1,0 +1,9 @@
+FoamFile { format ascii; class volScalarField; object alpha.stout; }
+dimensions      [];
+internalField   uniform 0;
+boundaryField
+{
+    glass       { type zeroGradient; }
+    spill       { type inletOutlet; inletValue uniform 0; value uniform 0; }
+    atmosphere  { type inletOutlet; inletValue uniform 0; value uniform 0; }
+}

@@ -1,0 +1,70 @@
+// every time step: the stout's mass, kinetic and potential energy, momentum (all in the glass's frame), the volume that
+// has left through 'spill' and 'atmosphere', and the surface height at four points near the wall (see below)
+stoutMonitor
+{
+    type            coded;
+    libs            ("libutilityFunctionObjects.so");
+    name            stoutMonitor;
+    codeInclude
+    #{
+        #include "volFields.H"
+        #include "surfaceFields.H"
+        #include "OFstream.H"
+        #include "meshSearch.H"
+    #};
+    codeData
+    #{
+        autoPtr<OFstream> os_;
+        scalar outV_ = 0;
+        scalar wallR_ = 0;
+    #};
+    codeRead
+    #{
+        wallR_ = PROBER;
+    #};
+    codeExecute
+    #{
+        const volScalarField& a = mesh().lookupObject<volScalarField>("alpha.stout");
+        const volVectorField& U = mesh().lookupObject<volVectorField>("U");
+        const surfaceScalarField& phi = mesh().lookupObject<surfaceScalarField>("phi");
+        const scalar rho = RHO, g = 9.81, dt = mesh().time().deltaTValue();
+        const scalarField& V = mesh().V();
+        const vectorField& C = mesh().C();
+        scalar m = 0, ke = 0, pe = 0; vector P = Zero;
+        forAll(a, i) { const scalar dm = rho*a[i]*V[i]; m += dm; ke += 0.5*dm*magSqr(U[i]); pe += dm*g*C[i].z(); P += dm*U[i]; }
+        // outflow of stout through the open patches during this step
+        forAll(mesh().boundary(), pi)
+        {
+            const word& n = mesh().boundary()[pi].name();
+            if (n != "spill" && n != "atmosphere") continue;
+            const fvsPatchScalarField& pf = phi.boundaryField()[pi];
+            const fvPatchScalarField& ap = a.boundaryField()[pi];
+            forAll(pf, f) if (pf[f] > 0) outV_ += pf[f]*ap[f]*dt;
+        }
+        // surface height at four points 1 mm inside the wall at the fill height (front x+, back x-, left y+, right y-):
+        // the stout fraction summed along a vertical line in steps of 0.5 mm (cells found by the mesh's own search)
+        const meshSearch& search = meshSearch::New(mesh());
+        const scalar Rp = wallR_, dz = 0.0005, zTop = ZTOP;
+        const vector pts[4] = { vector(Rp, 0, 0), vector(-Rp, 0, 0), vector(0, Rp, 0), vector(0, -Rp, 0) };
+        scalar h[4] = {0, 0, 0, 0};
+        // below the point where the line enters the glass (the base is narrower) the line is in the wall: the height is that
+        // entry height plus the stout column above it
+        for (label k = 0; k < 4; k++)
+        {
+            scalar zIn = -1;
+            for (scalar z = 0.5*dz; z < zTop; z += dz)
+            {
+                const label c = search.findCell(point(pts[k].x(), pts[k].y(), z));
+                if (c >= 0) { if (zIn < 0) zIn = z - 0.5*dz; h[k] += a[c]*dz; }
+            }
+            h[k] += max(zIn, scalar(0));
+        }
+        if (!os_.valid())
+        {
+            os_.reset(new OFstream(mesh().time().path()/"stoutMonitor.dat"));
+            os_() << "# t[s] mass[kg] KE[J] PE[J] Px Py Pz[kg m/s] outVolume[m^3] h_front h_back h_left h_right[m]" << endl;
+        }
+        os_() << mesh().time().value() << ' ' << m << ' ' << ke << ' ' << pe << ' ' << P.x() << ' ' << P.y() << ' ' << P.z() << ' ' << outV_
+              << ' ' << h[0] << ' ' << h[1] << ' ' << h[2] << ' ' << h[3] << endl;
+    #};
+}

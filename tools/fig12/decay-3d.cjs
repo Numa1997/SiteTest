@@ -12,7 +12,7 @@ const K = JSON.parse(fs.readFileSync(path.join(__dirname, '../../public/data/fig
 const h0 = +process.argv[2] / 1000, on = process.argv[3] === 'on', T = +(process.argv[4] || 8), dx = +(process.argv[5] || 0.003), dt = +(process.env.DT || 0.005), A = 1.5;
 if (!(h0 > 0) || !['on', 'off'].includes(process.argv[3])) throw new Error('usage: decay-3d.cjs <fill mm> <on|off> [T] [dx]');
 const force = (t) => (t < 0.6 ? A * 0.5 * (1 - Math.cos(Math.PI * t / 0.6)) : t < 1.0 ? A : 0);
-const f = new Fluid({ dx, profile: G, h0, H: (G.R.length - 1) * G.dz + 0.03, nu: 2.05e-6, wallFriction: on ? K : null, flip: +(process.env.FLIP || 0), densityProjection: +(process.env.DP || 0), quadratic: process.env.Q === '1', whole: process.env.WHOLE === '1' });   // FLIP: FLIP share; WHOLE=1: whole glass
+const f = new Fluid({ dx, profile: G, h0, H: (G.R.length - 1) * G.dz + 0.03, nu: 2.05e-6, wallFriction: on ? K : null, flip: +(process.env.FLIP || 0), densityProjection: +(process.env.DP || 0), quadratic: process.env.Q === '1', thetaMin: +(process.env.TMIN || 0.05), whole: process.env.WHOLE === '1' });   // FLIP: FLIP share; WHOLE=1: whole glass
 const Rs = f.Rz(Math.min(h0, f.zRim)), ys = [], t0 = Date.now();
 // the stout's energy relative to rest, whole glass (2 x the half glass): kinetic sum m v^2/2 + potential sum m g z, from the particles
 // kinetic from the particles; potential of the swing from the surface: rho g (eta - mean)^2 / 2 over the columns whose centre

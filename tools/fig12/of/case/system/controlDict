@@ -1,0 +1,27 @@
+FoamFile { format ascii; class dictionary; object controlDict; }
+// Fig. 12 OpenFOAM case template (tools/fig12/of/make_case.py fills END, WRITE and the forcing)
+solver          incompressibleVoF;
+startFrom       startTime;
+startTime       0;
+stopAt          endTime;
+endTime         END;
+deltaT          1e-4;
+writeControl    adjustableRunTime;
+writeInterval   WRITE;
+purgeWrite      0;
+writeFormat     binary;
+writePrecision  8;
+writeCompression off;
+timeFormat      general;
+timePrecision   8;
+runTimeModifiable no;
+adjustTimeStep  yes;
+maxCo           MAXCO;
+maxAlphaCo      MAXCO;
+maxDeltaT       1e-3;
+// the coded monitor (and later the cart) are compiled at the start of a run: OpenFOAM requires this switch for that
+InfoSwitches { allowSystemOperations 1; }
+functions
+{
+    #include "stoutMonitor"
+}

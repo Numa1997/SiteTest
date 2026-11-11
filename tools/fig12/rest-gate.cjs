@@ -9,7 +9,7 @@ const { Fluid } = load('stout-cart.js'), G = load('guinness-glass.js');
 const K = JSON.parse(fs.readFileSync(path.join(__dirname, '../../public/data/fig12/wall-kernel.json'), 'utf8'));
 const dx = +process.argv[2], T = +(process.argv[3] || 30), dt = +(process.argv[4] || 0.005);
 if (!(dx > 0)) throw new Error('usage: rest-gate.cjs <dx> [T] [dt]');
-const f = new Fluid({ dx, profile: G, h0: 0.125, H: (G.R.length - 1) * G.dz + 0.03, nu: 2.05e-6, wallFriction: process.env.FRICTION === '0' ? null : K, volumeCorrection: +(process.env.VC || 0), relax: +(process.env.RELAX || 0), flip: +(process.env.FLIP || 0), densityProjection: +(process.env.DP || 0), quadratic: process.env.Q === '1', whole: process.env.WHOLE === '1' });   // FRICTION=0: off; VC: volume correction (diagnosis)
+const f = new Fluid({ dx, profile: G, h0: 0.125, H: (G.R.length - 1) * G.dz + 0.03, nu: 2.05e-6, wallFriction: process.env.FRICTION === '0' ? null : K, volumeCorrection: +(process.env.VC || 0), relax: +(process.env.RELAX || 0), flip: +(process.env.FLIP || 0), densityProjection: +(process.env.DP || 0), quadratic: process.env.Q === '1', thetaMin: +(process.env.TMIN || 0.05), whole: process.env.WHOLE === '1' });   // FRICTION=0: off; VC: volume correction (diagnosis)
 const W = 2 * f.mp, I = dx * dx / 4, zc = () => { let s = 0; for (let p = 0; p < f.np; p++) s += f.pz[p]; return s / f.np; };
 const ke = () => { let k = 0; for (let p = 0; p < f.np; p++) { let a = 0; for (let c = 0; c < 3; c++) a += f.pc[c][0][p] ** 2 + f.pc[c][1][p] ** 2 + f.pc[c][2][p] ** 2; k += f.pu[p] ** 2 + f.pv[p] ** 2 + f.pw[p] ** 2 + I * a; } return 0.5 * W * k; };
 const z0 = zc(), t0 = Date.now(); let vmax = 0, zmax = 0; const K1 = [], K2 = [];
