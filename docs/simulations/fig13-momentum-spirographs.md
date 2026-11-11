@@ -145,3 +145,19 @@ laps later. The earlier settings (catch 0.2, settled at 1 J and 1) caught 29 of 
 dive, six pictures (phone layout), turning the paper (wheel, butterfly) and the bell; each part has its own stage size (portrait
 1080 × 1920 or wide 1920 × 1080). Captions and subtitles of the gift, construction and catch films sit in fixed boxes and shrink their
 type to fit (`fitBox`), so a browser's translation, longer than the English, never spills over the drawing.
+
+**11 November 2026: the Fig. 13 page itself.** Until now `momentum-spirographs.html` was the bare figure: no axes, no legend for the
+glow, no lecture note (the catalog's "Read the lecture note" led nowhere). Added:
+- axes: the p₂ of each row along the left edge, the p₁ of each column along the bottom (`drawAxes`);
+- **Explain the eye** (`drawAnatomy`): the ellipses K = 2U₂ (pupil) and K = 2(U₁ + U₂) from the strike's kinetic energy
+  K = (B p₁² − 2C p₁p₂ + A p₂²)/(2(AB − C²)), and the two fold-through lines from K = (p₁ + p₂)²/(2(A + B − 2C)), all for the sliders' values;
+- **Pinned pendulum**: a tap on a cell pins it (`setPin`): enlarged live view with the last 3 s of path, its strike, K, the map's value at
+  the strike (`mapValue`, read from the PNG's alpha, v = (α/255)^(1/0.8)) and a sentence saying which part of the eye it is in;
+- a square plate on screens up to 640 px wide (same sheet, drawings 1.8 times larger); S = 0.4·min(cell width, height)/(l₁ + l₂);
+- the lecture note (11 sections, 9 numbered equations; source kept in `tools/fig13/fig13_note.html`): why a hundred pendulums share one
+  sheet (position = strike, drawing = tip path), what a strike is (hammer impulses), what the glow measures, the eye, the two streaks.
+Measured for the note on `chaos-map-rods-P20.png` (1280 × 720, chaotic = v > 0.5, 5.52 % of the sheet): K < 9.8 J 0.0 % chaotic;
+9.8 to 29.4 J 42.4 %; 29.4 to 39.2 J 63.8 %; 39.2 to 78.4 J 32.2 %; 78.4 to 196 J 8.6 %; above 196 J 2.3 %, of which within 0.02 rad of a
+fold line 65.9 %, 0.02 to 0.05 rad 13.6 %, 0.05 to 0.10 rad 2.2 %, beyond 0.10 rad 0.0 %. Of the 100 default cells: 2 in the pupil,
+60 fold through, 38 do not; 5 chaotic by the map. Energy drift of the page over 10 s (RK4, h = 1/4500 s): median 2e-5 J, worst 0.14 J of
+3450 J at (−32, 18). Test hook `window.__fig13` gained `strikeKE`, `foldsThrough`, `mapValue`, `energy`.

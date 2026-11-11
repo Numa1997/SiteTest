@@ -1,0 +1,165 @@
+        <article class="paper" id="paper" aria-labelledby="paper-title">
+            <header class="paper__head">
+                <p class="paper__kicker">Lecture note · Fig. 13 · chaos and order in one picture</p>
+                <h2 class="paper__title" id="paper-title">A hundred pendulums on one sheet, and the eye behind them</h2>
+                <p class="paper__by">Numa Koudsie · 11 November 2026 · the picture is 2swap's idea; the derivations and measurements here are our own (<code>tools/fig13/chaos_map.py</code>, <code>hunt.py</code>, this page's script)</p>
+                <div class="paper__abstract"><b>Abstract.</b> Fig. 13 shows a hundred double pendulums at once. They are separate experiments: each hangs still and is struck once, and the place of its cell on the sheet is the strike it received, \((p_1, p_2)\). What is drawn inside the cell is the real path of that pendulum's tip. Behind them glows a map of 921 600 further strikes, bright where two almost equal strikes soon disagree. The glow has the shape of an eye, and each part of it has a reason. The dark pupil holds the strikes too gentle to throw a rod over the top: less than 9.8 J, none of them chaotic. The bright iris holds the strikes that can flip a rod while gravity still decides which way: between 29.4 and 39.2 J, 64 % of them are chaotic. The two long streaks lie on the two strike directions for which the elbow just fails to fold through: within 0.02 rad of them 66 % of the hard strikes are chaotic, beyond 0.1 rad none. Everywhere else a hard strike makes gravity a small correction, and the tip draws a ring or a rosette.</div>
+            </header>
+            <div class="paper__grid">
+                <nav class="paper__toc" aria-label="Contents">
+                    <p>Contents</p>
+                    <ol>
+                        <li><a href="#n-picture"><span>1</span>The picture</a></li>
+                        <li><a href="#n-model"><span>2</span>The machine and the strike</a></li>
+                        <li><a href="#n-sheet"><span>3</span>Why they sit on one sheet</a></li>
+                        <li><a href="#n-map"><span>4</span>What the glow measures</a></li>
+                        <li><a href="#n-eye"><span>5</span>The eye: pupil and iris</a></li>
+                        <li><a href="#n-x"><span>6</span>The two streaks</a></li>
+                        <li><a href="#n-cells"><span>7</span>Reading the cells</a></li>
+                        <li><a href="#n-method"><span>8</span>How the page computes it</a></li>
+                        <li><a href="#n-screen"><span>9</span>Equation to screen</a></li>
+                        <li><a href="#n-limits"><span>10</span>Limits and what comes next</a></li>
+                        <li><a href="#n-src"><span>11</span>Sources and thanks</a></li>
+                    </ol>
+                </nav>
+                <div class="paper__body">
+
+                    <section class="psec" id="n-picture">
+                        <h3><span class="psec__n">01</span>The picture</h3>
+                        <p class="psec__lead">Hang a hundred identical wind chimes in a hall, in ten rows of ten. Give each one a different tap: harder to the right, harder on the lower piece towards the back. Then open a camera's shutter and let a small lamp on each chime's tip write on the film.</p>
+                        <p>That photograph is Fig. 13. The chimes are double pendulums: a rod hanging from a pin, a second rod hanging from the end of the first. Where a chime hangs in the hall tells you how it was tapped. What its lamp writes tells you what it then did. Some lamps write a clean ring. Some write a flower with a fixed number of petals, again and again. A few write a scribble that never repeats. Neighbours in the hall were tapped almost alike, so walking through the hall you see how the motion changes as the tap changes, and where a small change of the tap changes everything.</p>
+                        <p>Behind the hundred lamps the page lays a second picture, made the same way with many more pendulums and a different question: not "what does it draw" but "would its twin draw the same". That second picture glows in the shape of an eye. Sections 4 to 6 say what it measures and why it has a pupil, an iris and two long streaks.</p>
+                    </section>
+
+                    <section class="psec" id="n-model">
+                        <h3><span class="psec__n">02</span>The machine and the strike</h3>
+                        <p class="psec__lead">Two rods, two pins, gravity; no friction, no motor.</p>
+                        <p>Rod \(i\) has mass \(m_i\), length \(l_i\), its centre of mass at \(a_i\) below its upper pin, and the moment of inertia \(I_i\) about that centre. For the page's default, two equal uniform rods, \(m = 1\ \mathrm{kg}\), \(l = 1\ \mathrm{m}\), \(a = l/2\), \(I = ml^2/12\), and \(g = 9.8\ \mathrm{m/s^2}\). The angles \(\theta_1, \theta_2\) are measured from straight down. With</p>
+                        \[ A = m_1a_1^2 + I_1 + m_2l_1^2,\quad B = m_2a_2^2 + I_2,\quad C = m_2l_1a_2,\quad U_1 = g(m_1a_1 + m_2l_1),\quad U_2 = g\,m_2a_2, \tag{1} \]
+                        <p>(for the equal rods \(A = \tfrac43\), \(B = \tfrac13\), \(C = \tfrac12\ \mathrm{kg\,m^2}\), \(U_1 = 14.7\), \(U_2 = 4.9\ \mathrm{J}\)) the kinetic and potential energies are</p>
+                        \[ T = \tfrac12A\dot\theta_1^2 + \tfrac12B\dot\theta_2^2 + C\cos(\theta_1-\theta_2)\,\dot\theta_1\dot\theta_2,\qquad V = -U_1\cos\theta_1 - U_2\cos\theta_2 . \tag{2} \]
+                        <p>The momenta conjugate to the angles are \(p_1 = \partial T/\partial\dot\theta_1 = A\dot\theta_1 + C\cos(\theta_1-\theta_2)\dot\theta_2\) and \(p_2 = B\dot\theta_2 + C\cos(\theta_1-\theta_2)\dot\theta_1\). Solving for the angular speeds and writing \(H = T + V\) in terms of the momenta gives Hamilton's equations, the four first-order equations the page integrates:</p>
+                        \[ \dot\theta_1 = \frac{Bp_1 - C\cos\Delta\,p_2}{AB - C^2\cos^2\Delta},\quad \dot\theta_2 = \frac{Ap_2 - C\cos\Delta\,p_1}{AB - C^2\cos^2\Delta},\quad \dot p_1 = -C\dot\theta_1\dot\theta_2\sin\Delta - U_1\sin\theta_1,\quad \dot p_2 = +C\dot\theta_1\dot\theta_2\sin\Delta - U_2\sin\theta_2, \tag{3} \]
+                        <p>with \(\Delta = \theta_1 - \theta_2\), the angle of the elbow.</p>
+                        <p><b>What a strike is.</b> A hammer blow lasts so short a time that the rods do not move during it; it only changes the momenta. A sideways blow of impulse \(\hat J\) (in N·s) on a point that moves by \(\delta x = r_1\,\delta\theta_1 + r_2\,\delta\theta_2\) adds \(\hat J r_1\) to \(p_1\) and \(\hat J r_2\) to \(p_2\). A blow on the upper rod at the distance \(r\) below the top pin gives \((p_1, p_2) = (\hat J r,\ 0)\). A blow on the lower rod at the distance \(r\) below the elbow gives \((\hat J l_1,\ \hat J r)\), because moving that point also swings the upper rod. Two blows reach any \((p_1, p_2)\). The unit is \(\mathrm{N\,s\cdot m = kg\,m^2/s}\). So \(p_1\) and \(p_2\) are not mysterious: they are how hard, and where, the hanging pendulum was hit.</p>
+                        <p><b>The energy of a strike.</b> At the strike both rods hang down, \(V = -(U_1+U_2) = -19.6\ \mathrm{J}\), and the strike supplies the kinetic energy</p>
+                        \[ K(p_1, p_2) = \frac{Bp_1^2 - 2Cp_1p_2 + Ap_2^2}{2(AB - C^2)} = \tfrac67p_1^2 - \tfrac{18}{7}p_1p_2 + \tfrac{24}{7}p_2^2\quad\text{(equal rods, J for } p \text{ in kg m}^2\text{/s)}. \tag{4} \]
+                        <p>Strikes of equal energy lie on an ellipse in the \((p_1, p_2)\) plane. For the equal rods its long axis points 22.5° above the \(p_1\) axis and is 3.49 times its short axis (the eigenvalues of the quadratic form are 0.3246 and 3.961). Hold on to that ellipse: it is the outline of the eye.</p>
+                    </section>
+
+                    <section class="psec" id="n-sheet">
+                        <h3><span class="psec__n">03</span>Why they sit on one sheet</h3>
+                        <p class="psec__lead">Two different spaces are drawn on the same paper, at two different scales. Keeping them apart is the whole trick of reading the figure.</p>
+                        <p><b>The sheet is momentum space.</b> Across the whole figure, left to right is \(p_1\) from \(-35.6\) to \(+35.6\ \mathrm{kg\,m^2/s}\), and bottom to top is \(p_2\) from \(-20\) to \(+20\). A point of the sheet is a strike. Every pendulum starts from the same position, hanging straight down, so the strike is all that distinguishes one from another: the sheet lists every possible experiment of this kind. A full state of the pendulum needs four numbers \((\theta_1, \theta_2, p_1, p_2)\); the sheet is the two-dimensional slice \(\theta_1 = \theta_2 = 0\) of that four-dimensional space.</p>
+                        <p><b>Each cell is a small window into real space.</b> The sheet is cut into \(N \times N\) cells (10 × 10 by default). At the centre of each cell stands one pendulum, struck with the \((p_1, p_2)\) of that centre: \(p_1 = \pm3.56, \pm10.67, \pm17.78, \pm24.89, \pm32\) and \(p_2 = \pm2, \pm6, \pm10, \pm14, \pm18\). Inside the cell, the drawing is the path of the tip of its lower rod in ordinary space, in metres, with the pin at the cell's centre and down pointing down the page:</p>
+                        \[ x = l_1\sin\theta_1 + l_2\sin\theta_2,\qquad y = l_1\cos\theta_1 + l_2\cos\theta_2 . \tag{5} \]
+                        <p>The tip can reach \(l_1 + l_2 = 2\ \mathrm{m}\) from the pin; that reach is drawn as 0.4 of the cell's shorter side. So one cell's height stands for 4 kg·m²/s of strike when you read the sheet, and (on a wide screen) for 5 m when you read the drawing inside it. On a phone the sheet is drawn square, the same strikes with larger drawings.</p>
+                        <p><b>They do not touch.</b> No pendulum feels its neighbour. A drawing never crosses into the next cell because the tip cannot leave its 2 m circle. If two drawings look alike, it is because two nearly equal strikes led to nearly equal motions, not because one influenced the other.</p>
+                        <p><b>Why draw them together at all.</b> A single pendulum answers "what happens after this strike". The question of the figure is the next one: "how does what happens depend on the strike". That is a question about a whole family, and a family is best seen laid out by its parameter, the way a weather map shows a small wind arrow at each town or the periodic table puts each element where its numbers put it. The eye reads three things at once from the layout. Where neighbours agree, the motion depends smoothly on the strike. Where a picture is mirrored through the centre of the sheet, a symmetry is at work: striking with \((-p_1, -p_2)\) gives the mirror-image motion, because equations (3) are unchanged when all four variables change sign. And where neighbours disagree wildly, the outcome is sensitive to the strike. The glow behind marks exactly those places.</p>
+                        <div class="pbox"><span class="pbox__t">Key result</span><p>Position on the sheet = the cause (the strike, in kg·m²/s). Drawing in the cell = the effect (the tip's path, in metres). The pendulums share a sheet as entries share a table, not as bodies share a room.</p></div>
+                    </section>
+
+                    <section class="psec" id="n-map">
+                        <h3><span class="psec__n">04</span>What the glow measures</h3>
+                        <p class="psec__lead">The glow is a second experiment with twins.</p>
+                        <p>For each of \(1280 \times 720 = 921\,600\) strikes covering the sheet, take the pendulum and a twin that differs by one ten-thousandth of a radian in the upper rod's angle, \(\delta\theta_1 = 10^{-4}\), about 0.1 mm at the end of the rod. Run both for 6.67 s. After every step measure how far apart the twins are in their four numbers, never counting more than 1:</p>
+                        \[ d = \Big\langle \min\!\Big(1,\ \sqrt{\delta\theta_1^2 + \delta\theta_2^2 + \delta p_1^2 + \delta p_2^2}\,\Big)\Big\rangle_{6.67\ \mathrm{s}},\qquad v = \operatorname{clip}\!\Big(\frac{\ln(1000\,d)}{\ln 1000},\ 0,\ 1\Big). \tag{6} \]
+                        <p>The brightness is \(v\): dark where the twins stay within a thousandth (\(d \le 10^{-3}\)), full where they end up as far apart as two unrelated pendulums (\(d \to 1\)). This is the measure of 2swap's program, computed here with a step four times finer (16 000 Runge–Kutta steps of 0.417 ms).</p>
+                        <p>Two regular pendulums that start 0.1 mm apart drift apart slowly, in proportion to time, like two runners at slightly different speeds. Two chaotic ones part like compound interest: the gap multiplies by a fixed factor every fraction of a second, so a ten-thousandth becomes one within seconds. The map separates these two behaviours. We call a strike <em>chaotic</em> below when \(v > 0.5\), which is \(d > 0.032\): the twins have parted more than 300 times their starting distance on average. By this count 5.5 % of the sheet is chaotic.</p>
+                        <p>The map exists for the default pendulum only (equal uniform rods, \(g = 9.8\), the range \(P = 20\)); move a slider under <em>Pendulum</em> and the page hides it, because it would no longer be true.</p>
+                    </section>
+
+                    <section class="psec" id="n-eye">
+                        <h3><span class="psec__n">05</span>The eye: pupil and iris</h3>
+                        <p class="psec__lead">The eye is drawn by energy. Switch on <em>Explain the eye</em> above to see the curves of this section on the figure.</p>
+                        <p>Chaos in a double pendulum needs a rod to go over the top: as long as both rods only rock about the bottom, the motion is close to two coupled swings, which is regular. Going over the top costs energy, and the strike must pay it. From (2), with the pendulum hanging at \(V = -(U_1 + U_2)\):</p>
+                        \[ \text{lower rod up, upper rod down: } K \ge 2U_2 = 9.8\ \mathrm{J};\qquad \text{upper rod up, lower hanging from it: } K \ge 2U_1 = 29.4\ \mathrm{J};\qquad \text{both straight up: } K \ge 2(U_1+U_2) = 39.2\ \mathrm{J}. \tag{7} \]
+                        <p>(Heyl's energy argument for the flips.) Each threshold is one of the ellipses of (4).</p>
+                        <p><b>The pupil</b> is the inside of the smallest ellipse, \(K < 9.8\ \mathrm{J}\): semi-axes 5.49 and 1.57 kg·m²/s, tilted by 22.5°. No strike in it can lift even the lower rod over the top. The pendulum rocks, the twins stay together, the map is dark. Measured on the map: of the 0.96 % of the sheet inside it, 0.0 % is chaotic.</p>
+                        <p><b>The iris</b> is the ring around it. Here a rod can go over, but the strike's energy is of the same size as what gravity gives and takes during the motion, so at every near-miss at the top gravity decides between falling back and going over, and a hair's difference decides differently. That is where twins part.</p>
+                        <table class="ptab">
+                            <thead><tr><th>Energy of the strike \(K\)</th><th>What it allows</th><th>Share of the sheet</th><th>Chaotic (\(v > 0.5\))</th></tr></thead>
+                            <tbody>
+                                <tr><td>below 9.8 J</td><td>no rod over the top (pupil)</td><td>0.96 %</td><td>0.0 %</td></tr>
+                                <tr><td>9.8 to 29.4 J</td><td>the lower rod can go over</td><td>1.91 %</td><td>42.4 %</td></tr>
+                                <tr><td>29.4 to 39.2 J</td><td>either rod can go over</td><td>0.95 %</td><td>63.8 %</td></tr>
+                                <tr><td>39.2 to 78.4 J</td><td>both can stand straight up</td><td>3.82 %</td><td>32.2 %</td></tr>
+                                <tr><td>78.4 to 196 J</td><td>2 to 5 times the 39.2 J</td><td>11.45 %</td><td>8.6 %</td></tr>
+                                <tr><td>above 196 J</td><td>gravity is a small correction</td><td>80.91 %</td><td>2.3 %</td></tr>
+                            </tbody>
+                        </table>
+                        <p>The iris does not stop at the 39.2 J ellipse: chaos fades over the next factor of five in energy, as the table shows. The eye is long and tilted because the ellipses of (4) are: along the 22.5° direction a strike carries the least energy for its size, so a pendulum can be struck hardest there and still stay in the pupil.</p>
+                        <div class="pbox pbox--ex"><span class="pbox__t">Example 5.1 · two cells in the pupil</span><p>Of the hundred cells, two lie in the pupil: the strikes \((3.56,\ 2)\) and \((-3.56,\ -2)\), each with \(K = \tfrac67(3.56)^2 - \tfrac{18}{7}(3.56)(2) + \tfrac{24}{7}(2)^2 = 6.26\ \mathrm{J}\). Pin one: its tip only rocks below the pin. Their mirror partners across the \(p_1\) axis, \((3.56,\ -2)\) and \((-3.56,\ 2)\), have the same size of strike but \(K = 42.8\ \mathrm{J}\): they sit in the iris and the map calls both chaotic.</p></div>
+                    </section>
+
+                    <section class="psec" id="n-x">
+                        <h3><span class="psec__n">06</span>The two streaks<span class="star">★</span></h3>
+                        <p class="psec__lead">Far outside the eye a strike carries ten or a hundred times what gravity can give. Chaos should be gone. Yet two bright streaks run out to the edge of the sheet, like lashes.</p>
+                        <p>Switch gravity off (the <em>Gravity</em> slider at 0). The pendulum is then a free jointed stick spinning about the pin. Nothing twists it from outside, so its total angular momentum \(p_1 + p_2\) is conserved, as well as its energy \(K\): two conserved quantities for two angles, and the motion is regular for every strike. What remains to decide is what the elbow does. It behaves like a pendulum of its own: either the angle \(\Delta\) keeps turning, the arms folding through each other once per turn and the tip passing through the pin (a petal), or \(\Delta\) swings back and forth and the tip stays out on a ring.</p>
+                        <p>To fold through, the stick must pass the folded position, where its moment of inertia about the pin is smallest, \(I_{\text{fold}} = A + B - 2C\) (set \(\theta_2 = \theta_1 + \pi\) in (2); \(\tfrac23\ \mathrm{kg\,m^2}\) for the equal rods). Spinning there with the angular momentum \(p_1 + p_2\) costs \((p_1+p_2)^2 / 2I_{\text{fold}}\), the way a skater who pulls her arms in spins faster and must supply energy to do so. The elbow folds through when the strike provides more:</p>
+                        \[ K(p_1, p_2) > \frac{(p_1+p_2)^2}{2(A + B - 2C)}\quad\Longleftrightarrow\quad 3p_1^2 - 114\,p_1p_2 + 75\,p_2^2 > 0\quad\text{(equal rods)}. \tag{8} \]
+                        <p>Both sides are quadratic in the strike, so the border does not depend on how hard the strike is, only on its direction: it is two straight lines through the centre of the sheet,</p>
+                        \[ p_1 = (19 \mp 4\sqrt{21})\,p_2:\qquad p_1 = 0.6697\,p_2\ \ (56.2^\circ \text{ above the } p_1 \text{ axis}),\qquad p_1 = 37.33\,p_2\ \ (1.5^\circ). \tag{9} \]
+                        <p>On these lines the elbow has exactly enough to reach the folded position and none to pass it: it creeps up to it and takes for ever, like a pendulum given exactly enough to stand on its head. Such a borderline motion is called a <em>separatrix</em>. Now switch gravity back on, however weak compared with the strike. Near the separatrix the elbow arrives at the folded position almost stopped, and there the small push of gravity is enough to decide whether it folds through or turns back, differently each time. Two twins disagree at the first such decision. This is the general rule for a regular system that is slightly disturbed: chaos appears first in a thin layer around its separatrices.</p>
+                        <p>Measured on the map, for the strikes above 196 J:</p>
+                        <table class="ptab">
+                            <thead><tr><th>Direction of the strike, angle from the nearer line of (9)</th><th>Share of the sheet</th><th>Chaotic</th></tr></thead>
+                            <tbody>
+                                <tr><td>within 0.02 rad (1.1°)</td><td>2.06 %</td><td>65.9 %</td></tr>
+                                <tr><td>0.02 to 0.05 rad</td><td>3.08 %</td><td>13.6 %</td></tr>
+                                <tr><td>0.05 to 0.10 rad</td><td>5.14 %</td><td>2.2 %</td></tr>
+                                <tr><td>more than 0.10 rad (5.7°)</td><td>70.63 %</td><td>0.0 %</td></tr>
+                            </tbody>
+                        </table>
+                        <p>The streaks are the lines (9), and away from them the hard strikes are regular without exception. The lines also sort the cells: on the side where (8) holds the tip draws petals through the pin (60 of the hundred cells), on the other side rings that never reach the pin (38 cells); the remaining two are the pupil's.</p>
+                    </section>
+
+                    <section class="psec" id="n-cells">
+                        <h3><span class="psec__n">07</span>Reading the cells</h3>
+                        <p class="psec__lead">Four kinds of drawing, and where on the sheet each lives.</p>
+                        <ul>
+                            <li><b>Rings.</b> Upper right and lower left of the steep streak, towards the corners where \(p_1\) and \(p_2\) have the same sign. The elbow does not fold through; the arm stays nearly straight and the whole pendulum whirls round the pin like a single long rod. The tip stays near the 2 m circle.</li>
+                            <li><b>Rosettes.</b> Where (8) holds. Each turn of the elbow draws one petal through the pin; the next petal lies turned by a fixed angle \(\delta\). When \(\delta/2\pi\) is a fraction \(q/k\) the flower closes with \(k\) petals. <a href="flower-hunt.html">The flower hunt</a> finds these strikes.</li>
+                            <li><b>Butterflies.</b> The column \(p_1 = 3.56\), upper half: pin the cell \((3.56,\ 10)\). Here each petal lands almost on the last one, so the petal direction drifts slowly, and gravity makes it swing about straight down like a pendulum; the petals pile up at the two turning points, the wings. Tuned to \((3.557,\ 12.211)\) it closes after 24 petals: the butterfly of <a href="butterfly-dashboard.html">the dashboard</a> and of <a href="butterfly-catch.html">the catch</a>.</li>
+                            <li><b>Tangles.</b> The cells on the glow. Five of the hundred strikes are chaotic by the map: \((3.56,\ 6)\), \((-3.56,\ 2)\), \((3.56,\ -2)\), \((-3.56,\ -6)\) and \((-17.78,\ -2)\). Their drawings never settle into a figure; restart and they draw the same tangle again, because the page repeats the same arithmetic, but strike a hair differently (change \(N\) or \(P\) slightly) and the tangle is another one.</li>
+                        </ul>
+                        <p>Every drawing has a twin on the opposite side of the centre, mirrored left to right: the symmetry \((\theta, p) \to (-\theta, -p)\) of section 3.</p>
+                    </section>
+
+                    <section class="psec" id="n-method">
+                        <h3><span class="psec__n">08</span>How the page computes it</h3>
+                        <p class="psec__lead">A hundred pendulums integrated live, and a photographic plate that forgets.</p>
+                        <p><b>Integration.</b> Each pendulum's four numbers are advanced by the classical fourth-order Runge–Kutta method with the step \(h = 1/4500\ \mathrm{s} = 0.222\ \mathrm{ms}\); the error of one step falls as \(h^5\). The step is fixed, so the hardest strikes, which move fastest, are the least accurate. Measured by running this page for 10 s of motion: the energy of the median pendulum has changed by \(2\times10^{-5}\ \mathrm{J}\); the worst is the corner strike \((-32,\ 18)\) with 0.14 J out of 3450 J, a relative error of \(4\times10^{-5}\). For a regular pendulum such an error only shifts the timing slightly. For a chaotic one any error grows like the twins' distance, so after a few seconds the drawn tangle is one possible tangle, not the one an exact computation would draw; what stays true is its kind.</p>
+                        <p><b>The plate.</b> The tip is recorded every fifth step, 900 points a second. Each short piece of path deposits light on the pixels it crosses, the same amount per unit length, so a place the tip visits ten times is ten times as exposed: the brightness counts passes, as on a long-exposure photograph. Every frame the whole plate fades by \(e^{-\Delta t/\tau}\); the <em>trail memory</em> \(\tau\) (1.5 s by default) is how long the plate remembers. The exposure \(D\) is turned into colour through \(\ln(1 + D/D_0)\), which keeps both faint single passes and bright crossings visible.</p>
+                        <p><b>The map</b> was computed once, offline (<code>tools/fig13/chaos_map.py</code>, 921 600 twin pairs, 16 000 steps each), and is shown as an image under the plate.</p>
+                    </section>
+
+                    <section class="psec" id="n-screen">
+                        <h3><span class="psec__n">09</span>Equation to screen</h3>
+                        <ul>
+                            <li><b>A cell's place</b>: the strike. The small numbers along the left edge are \(p_2\) of each row, those along the bottom \(p_1\) of each column, in kg·m²/s.</li>
+                            <li><b>A cell's drawing</b>: equation (5), the tip in metres; the pin is the cell's centre; 2 m is 0.4 of the cell's shorter side. <em>Show rods</em> draws the two rods themselves.</li>
+                            <li><b>The glow</b>: \(v\) of (6) for the strike at that point of the sheet; wine to rose, transparent where \(v = 0\).</li>
+                            <li><b>Explain the eye</b>: the green ellipse is \(K = 2U_2\) (the pupil's edge), the yellow one \(K = 2(U_1 + U_2)\), both from (4) and (7) with the sliders' values; the dashed lines are (9), from (8) in its general form.</li>
+                            <li><b>The pinned pendulum</b>: tap a cell. The panel shows that pendulum enlarged with its last 3 s of path, its strike, \(K\) from (4), the map's \(v\) at its strike, and which part of the eye it is in. A tap on it again lets it go.</li>
+                            <li><b>Where drawing and model differ</b>: the plate forgets (the model does not); the colour is a logarithm of the exposure; the map is 6.67 s of twins, so a strike whose twins part only later counts as regular.</li>
+                        </ul>
+                    </section>
+
+                    <section class="psec" id="n-limits">
+                        <h3><span class="psec__n">10</span>Limits and what comes next</h3>
+                        <p>The pendulum has no friction and the strike is instantaneous. The sheet shows one slice of the four-dimensional state space, the pendulums that start hanging still; a pendulum released from a raised position is not on it. The map's verdict depends on its 6.67 s and on the threshold \(v > 0.5\); it is a finite-time measure, not a Lyapunov exponent. The argument for the streaks is the standard picture of chaos near a separatrix, supported here by measurement, not proved for this system. Next: the same map for point masses and unequal rods, a Poincaré section for a pinned pendulum, and the stable partners of the butterflies.</p>
+                    </section>
+
+                    <section class="psec" id="n-src">
+                        <h3><span class="psec__n">11</span>Sources and thanks</h3>
+                        <ul class="prefs">
+                            <li>2swap, <a href="https://www.youtube.com/watch?v=dtjb2OhEQcU">“Double Pendulums are Chaoticn’t”</a> (2025), 7:08 to 7:20, and his open-source renderer swaptube. The picture of spirographs across momentum space and the twin-distance map are his; this page reproduces them from the equations and adds the explanation of the map's parts.</li>
+                            <li>J. S. Heyl, <a href="https://www.famaf.unc.edu.ar/~vmarconi/fiscomp/Double.pdf">“The Double Pendulum Fractal”</a> (2008): the rod equations and the energy argument for which rod can flip, equation (7).</li>
+                            <li>Drew’s Campfire, <a href="https://www.youtube.com/watch?v=8jVogdTJESw">“Pushing Simulations to the LIMIT to Turn Chaos into Order”</a>, credited by 2swap as an inspiration.</li>
+                            <li>On this site: <a href="flower-hunt.html">the flower hunt</a> (closed flowers and butterflies by Newton's method), <a href="butterfly-dashboard.html">the butterfly dashboard</a>, <a href="butterfly-catch.html">catching the butterfly</a> (a motor sets a chaotic pendulum on the butterfly), and <a href="Double%20Pendulum.html">Fig. 2</a>, the point-mass double pendulum.</li>
+                        </ul>
+                    </section>
+                </div>
+            </div>
+        </article>
