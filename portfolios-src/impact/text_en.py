@@ -1,7 +1,7 @@
 T = {}
 T['title_tag'] = 'Iron, Cotton and the Head'
 T['eyebrow'] = 'Newton · Morse · Hooke · an interactive study'
-T['title'] = 'Why an iron ball hurts and a cotton ball does not'
+T['title'] = 'Why an iron ball hurts and a cotton ball does not'; T['dedication'] = 'For my father.'
 T['lede'] = ('Two balls of the same mass fall from the same height onto a head, drawn as a plate on a spring and a damper. '
  'The iron ball is a lattice of atoms joined by stiff bonds. The cotton ball is a tangle of thin fibres that bend, cling where they cross and rub on each other. '
  'The model runs once when the page opens and every curve and number on this page comes from it; the text below derives what the model does and compares it with real iron, real cotton and a real skull.')

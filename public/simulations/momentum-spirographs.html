@@ -10,6 +10,7 @@
     <meta name="theme-color" content="#f5f1ea">
     <link rel="stylesheet" href="../styles/sim.css">
     <link rel="stylesheet" href="../styles/fold.css">
+    <link rel="stylesheet" href="../fonts/arabic.css">
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%237a1f2b'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='38' fill='%23f5f1ea'%3EN%3C/text%3E%3C/svg%3E">
     <style>
         .sim, .sim-top { max-width: 1560px; }
@@ -29,6 +30,8 @@
         #probe { display: block; width: 100%; aspect-ratio: 1 / 1; background: #140d10; border-radius: 8px; }
         #probe.is-paper { background: var(--card); }
         #stage { cursor: pointer; }
+        .dedication { margin: 12px 0 0; font-family: var(--serif); font-style: italic; font-size: 19px; line-height: 1.5; color: var(--ink-2); }
+        .dedication span { margin-left: 14px; } .dedication [lang='ar'] { font-family: 'Amiri', 'Noto Naskh Arabic', serif; font-style: normal; font-size: 20px; }
         #zin, #zout, #zall, #v-tip, #v-ang, #v-sec { min-height: 44px; }
         .onpage { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 0; padding: 0; list-style: none; }
         .onpage a { display: inline-block; padding: 9px 13px; min-height: 22px; border: 1px solid var(--line-strong, #cdc1ae); border-radius: 999px; background: var(--card); color: var(--accent, #7a1f2b); font: 13px/1.3 var(--mono); text-decoration: none; }
@@ -79,6 +82,7 @@
             <p class="sim__num">Fig. 13 · classical mechanics · chaos</p>
             <h1>Spirographs in Momentum Space<span class="dot">.</span></h1>
             <p class="sim__lede">A hundred double pendulums hang still, and each is given a different kick. The tip of each one draws its own curve: a tidy rosette where the motion is regular, a tangle where it is chaotic. Every curve is computed live from Hamilton's equations.</p>
+            <p class="dedication">For my mother. <span lang="de">Für meine Mutter.</span> <span lang="ar" dir="rtl">إلى أمّي.</span></p>
             <ul class="onpage" aria-label="On this page">
                 <li><a href="#sheet">The sheet</a></li><li><a href="#butterfly">The butterfly</a></li><li><a href="#hunt">The flower hunt</a></li><li><a href="#catch">The catch</a></li><li><a href="#films">The eight films</a></li><li><a href="#paper">All the theory</a></li>
             </ul>

@@ -216,3 +216,5 @@ axes are two range labels instead of a number per cell.
   - `butterfly_control.py`: a comment says its 30-strike loop is a test of the Python controller, not the source of the page's counts.
   - Left as they are, on purpose: the film captions are 30 px on a 1080 px stage (11 px on a 390 px phone), because each film's layout
     gives its caption a fixed box; the flower hunt is long on a phone because it holds 14 tiles, a bench and a chart.
+- Dedication (11 November 2026): one line under the lede of the Fig. 13 page, "For my mother." with its German and Arabic
+  (`.dedication`; the page now also loads `fonts/arabic.css` for the Arabic words, set in Amiri). The page itself exists in English only.
