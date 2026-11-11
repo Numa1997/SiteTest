@@ -43,7 +43,7 @@ resolve the eddies as a field.</p>
 <h3>12.2 Leaving the cloud</h3>
 <p>Inside the outline the air is saturated and drops neither grow nor shrink by vapour, as in the box. Outside it the air holds 80 % of the
 vapour it could, and a drop evaporates as</p>
-$$\frac{dr^2}{dt} = 2GSf_v(r),\qquad S = -0.2, \tag{12.4}$$
+$$\frac{dr^2}{dt} = 2Gsf_v(r),\qquad s = -0.2, \tag{12.4}$$
 <p>where $G = 9.73\times10^{-11}$ m²/s collects heat conduction and vapour diffusion (Rogers and Yau 1989, chapter 7) and $f_v$ is the ventilation
 factor: a falling drop keeps meeting fresh dry air, which speeds its evaporation (Pruppacher and Klett 1997, 13-60 and 13-61). $f_v$ is 1.00 at
 10 µm, 1.55 at 100 µm and 2.44 at 200 µm. A 10 µm droplet that leaves the cloud is gone in 2.6 s. A 100 µm drizzle drop lasts 205 s, much less
@@ -62,6 +62,32 @@ probability $K\Delta t/\Delta V$, so $\xi_j\xi_kK\Delta t/\Delta V$ real mergers
 happen with probability $\xi_jK\Delta t/\Delta V$. In a merger each of the $\xi_k$ drops of the second kind swallows $\gamma$ of the first, so the water is kept exactly.
 The kernel $K$ is that of chapters 1 to 4: the stochastic element moves drops between cells, but how fast two drops in one cell approach
 each other is still set by gravity.</p>
+<div class="callout"><div class="ctag">Method · one time step of the shaped cloud, as the model takes it</div>
+<p>Before the run: the mean motion is found once, by solving (12.2) on the 25 m grid by successive over-relaxation. The target for each grid value is the average of its four neighbours plus a quarter of $h^2\omega$ ($h$ = 25 m), which is (12.2) written with differences. Each value in turn is moved 1.9 times the way to its target; the overshoot makes the sweeps converge much faster. The sweeps stop when no value changes by more than $10^{-10}h^2$, or after 4000. $\psi$ is held at zero at every grid point that has a neighbour outside the outline. The result is scaled to a fastest updraft of 1 m/s. Then every 50 m cell inside the outline receives its super-droplets, in this chapter's runs 96 for the droplet mode and 32 for the collector mode (panel 4 of the Simulation tab uses 24 and 8 to stay quick), at random places in the cell, with radii drawn from the modes cut at three standard deviations and eddy velocities drawn with the spread $\sigma$.</p>
+<p>The step is $\Delta t$ = 1 s. First every super-droplet is moved, one after the other:</p>
+<ol>
+<li><strong>The eddy velocity.</strong> Look up $\varepsilon$ where the super-droplet is, form $\sigma^2 = (\varepsilon L_e)^{2/3}$ and $T_L$, and renew its two eddy components by (12.3).</li>
+<li><strong>The air's motion.</strong> Move it by $(\mathbf U + \mathbf u')\,\Delta t$, with $\mathbf U$ read from the grid of (12.2). At a side wall, the top or the ground the air turns back: the position is mirrored and the eddy component reversed.</li>
+<li><strong>The fall.</strong> Lower it by $v_T(r)\,\Delta t$.</li>
+<li><strong>The ground.</strong> If it is now below the ground, its water is added to the rain and it leaves the list.</li>
+<li><strong>The dry air.</strong> If it is outside the outline, shrink it by (12.4): $r^2 \to r^2 + 2Gsf_v\Delta t$. The water lost is added to the evaporated water; a drop that falls below 1 µm is removed.</li>
+</ol>
+<p>Then the collisions, cell by cell:</p>
+<ol start="6">
+<li><strong>Sort.</strong> Assign each super-droplet to its 50 m cell.</li>
+<li><strong>Pair.</strong> In each cell holding $n \ge 2$ super-droplets, shuffle them and pair them off: $\lfloor n/2\rfloor$ pairs.</li>
+<li><strong>Draw.</strong> For each pair, call the one with the larger multiplicity $j$, compute $p$ from (12.5), and draw $\gamma$: the whole part of $p$, plus one with a probability equal to its fractional part. $\gamma$ may not exceed $\xi_j/\xi_k$, so that no drop is used twice.</li>
+<li><strong>Merge.</strong> If $\gamma \ge 1$: every drop of super-droplet $k$ swallows $\gamma$ drops of $j$ and takes the radius $(\gamma r_j^3 + r_k^3)^{1/3}$, and $\xi_j$ falls by $\gamma\xi_k$. If that empties $j$, the merged drops are shared equally between the two super-droplets, so that their number stays the same.</li>
+</ol>
+<p>Then the clock advances by one second. A run of 45 minutes is 2700 such steps.</p></div>
+<div class="press"><div class="ctag">Example 12.1 · one second in one cell</div>
+<ol>
+<li><strong>What the cell holds.</strong> A cell is a cube of 50 m: $\Delta V = 1.25\times10^{5}$ m³. With 128 super-droplets per cell, 96 stand for the droplets, each for $\xi = 3.906\times10^{11}$ of them, and 32 for the collectors, each for $3.906\times10^{9}$.</li>
+<li><strong>The eddy step.</strong> With $\varepsilon = 10^{-2}$ m²/s³ and $L_e$ = 100 m: $\sigma$ = 1.000 m/s and $T_L$ = 33.33 s. Over one second a super-droplet keeps the share $e^{-\Delta t/T_L}$ = 0.9704 of its eddy velocity and receives a random kick of spread $\sigma\sqrt{1 - e^{-2\Delta t/T_L}}$ = 0.2413 m/s.</li>
+<li><strong>The collision draw.</strong> Suppose the shuffle pairs an 8 µm droplet super-droplet with a 40 µm collector super-droplet. Their kernel is $K = 4.205\times10^{-10}$ m³/s, so $\xi_jK\Delta t/\Delta V = 1.314\times10^{-3}$. The cell has $128\times127/2$ = 8128 possible pairs and tests 64 of them, so the last factor of (12.5) is 127, and $p$ = 0.167.</li>
+<li><strong>The merger.</strong> About one second in six, then, $\gamma = 1$: each of the $3.906\times10^{9}$ collectors swallows one droplet and grows from 40 to 40.106 µm, and the droplet super-droplet now stands for one hundredth fewer drops.</li>
+<li><strong>Outside the cloud.</strong> A 100 µm drop in the dry air loses $6.04\times10^{-11}$ m² of $r^2$ in the second, which is 0.30 µm of radius.</li>
+</ol></div>
 <div class="check"><div class="ctag">Check: super-droplets against the collection equation</div>Switch the motion off and put all super-droplets
 in one cell: the method must reproduce the collection equation (5.873 and 13.716 min to half and nine tenths of the water above 40 µm, with
 the same modes cut at three standard deviations). With 32 super-droplets per cell the box is $12 \pm 4$ % slow in reaching nine tenths

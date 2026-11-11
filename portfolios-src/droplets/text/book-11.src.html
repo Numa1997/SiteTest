@@ -20,6 +20,14 @@ exactly: energy accepts whatever gravity proposes.</p>
 <p>A second way to let energy decide is steepest descent: always take the merger that lowers the free energy most. The drop,
 $\sigma\cdot4\pi\,[r_1^2 + r_2^2 - (r_1^3 + r_2^3)^{2/3}]$, grows with both radii, so steepest descent always merges the two largest drops; the
 product is then the largest, and it eats every other drop in order of decreasing size.</p>
+<div class="callout"><div class="ctag">Method · the three rules, as the model runs them</div>
+<p>All three start from the same kind of volume: 100 cm³ holding 30 100 drops drawn from the two modes of the thesis cloud, cut at three standard deviations. After every merger the surface destroyed, $4\pi(r_1^2 + r_2^2 - r_{\rm new}^2)$, is subtracted from the running total, and the total is written down each time the number of drops passes one of 41 marks.</p>
+<ol>
+<li><strong>The collision kernel.</strong> The exact simulation of chapter 6, unchanged: pairs are proposed and accepted in proportion to $K$.</li>
+<li><strong>Every pair alike.</strong> The same simulation with the kernel replaced by one number, the same for every pair. Then every pair is equally likely to be the next, and every proposal is accepted, as (11.1) demands. The value of the number changes only the clock, never the order of the mergers.</li>
+<li><strong>Largest pair first.</strong> Sort the drops by size. Merge the two largest. The product is now the largest; merge it with the next in the list, and so on to the end of the list. Nothing is random after the drops are drawn.</li>
+</ol>
+<p>Rules 2 and 3 have no clock, and that is not an oversight. A free-energy difference is measured in joules, a rate in events per second, and nothing in the energy turns one into the other. Something must supply a mobility. For the vapour it was the diffusion of water through air, the mobility of (10.7); for collisions it is the kernel, in m³/s, and the kernel comes from mechanics. That is why figure 11.1 can only count mergers along its horizontal axis.</p></div>
 <figure class="fig" id="fig-11-1">{{FIG:rules}}<figcaption>Figure 11.1. The same 100 cm³ of the thesis cloud (30 100 drops) merged under three rules: the collision
 kernel (the exact Monte Carlo of chapter 6, mean of 20 runs), the uninformed lottery (every pair alike, 20 runs), and steepest descent.
 The free-energy landscape is the same for all three; the paths differ.</figcaption></figure>
@@ -64,10 +72,16 @@ energy, the one an energy rule would merge first, is the one gravity merges last
 
 <h3>11.3 The distribution of greatest entropy</h3>
 <p>There is a second, different entropy: the entropy of our knowledge of the size distribution (Jaynes 1957). If all we know is the number of
-drops $N$ and their water $M$, the least biased distribution is the one that maximises $H = -\int n\ln n\,dm$ at fixed $N$ and $M$. Setting
-the variation of $H - \alpha N - \beta M$ to zero gives $-\ln n - 1 - \alpha - \beta m = 0$, an exponential:</p>
+drops $N$ and their water $M$, the least biased distribution is the one that maximises $H = -\int n\ln n\,dm$ at fixed $N$ and $M$. The maximum is found in three steps.</p>
+<p><strong>Step 1: vary the distribution.</strong> Change $n(m)$ by a small amount $\delta n(m)$. The three quantities change by</p>
+$$\delta H = -\int(\ln n + 1)\,\delta n\,dm,\qquad \delta N = \int\delta n\,dm,\qquad \delta M = \int m\,\delta n\,dm.$$
+<p><strong>Step 2: the condition for a maximum.</strong> At the maximum $H$ must not change for any $\delta n$ that leaves $N$ and $M$ alone. Lagrange's way of saying that is to ask $H - \alpha N - \beta M$ to be stationary for every $\delta n$ whatever, with two numbers $\alpha$ and $\beta$ to be found later:</p>
+$$\int\big(-\ln n - 1 - \alpha - \beta m\big)\,\delta n\,dm = 0\ \text{ for every }\delta n\quad\Rightarrow\quad n(m) = e^{-1-\alpha}\,e^{-\beta m} \equiv C\,e^{-\beta m}.$$
+<p>It is a maximum and not a minimum because $-n\ln n$ curves downward: to second order $H$ changes by $-\tfrac12\int(\delta n)^2/n\,dm$, which is negative for every $\delta n$.</p>
+<p><strong>Step 3: the two numbers from the two things we know.</strong> $N = \int_0^\infty Ce^{-\beta m}\,dm = C/\beta$ and $M = \int_0^\infty m\,Ce^{-\beta m}\,dm = C/\beta^2$. Dividing, $\beta = N/M$, and then $C = N^2/M$:</p>
 $$n(m) = \frac{N^2}{M}\,e^{-Nm/M}. \tag{11.2}$$
-<p>For the constant kernel of section 11.1 this same exponential solves the collection equation (5.1) exactly when the number falls as</p>
+<div class="press"><div class="ctag">In our cloud</div>At the start $N = 3.010\times10^{8}$ drops per m³ hold $M = 1.116\times10^{-3}$ kg/m³. The mean mass $M/N = 3.709\times10^{-12}$ kg is that of a 9.60 µm sphere, and (11.2) lets the number of drops fall by a factor $e$ for each further $3.709\times10^{-12}$ kg of mass. It has one hump; the cloud has two.</div>
+<p>For the constant kernel of section 11.1 this same exponential solves the collection equation (5.1) exactly (problem 7). The number of drops then follows from the moment identity (5.2) with $\phi = 1$: the bracket is $-1$ and $K$ comes out of the integral, so $dN/dt = -\tfrac12KN^2$. Divide by $-N^2$: $d(1/N)/dt = K/2$, a straight line in time,</p>
 $$N(t) = \frac{N_0}{1 + KN_0t/2}, \tag{11.3}$$
 <p>and in the collection equation every start with finite water approaches it, in the sense that the distribution of $m/\bar m$ tends to the
 exponential's shape as $t \to \infty$ (Menon and Pego 2004, Theorem 5.1, for this kernel). So for the uninformed lottery the shape of greatest

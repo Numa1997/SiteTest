@@ -77,5 +77,8 @@ for (const [name, bfun] of [['pure', null], ['salt', () => bSalt(0.05e-6)]]) {
 // late-time growth of the cube of the mean radius against Lifshitz-Slyozov-Wagner's (4/9) G a (pure water)
 const pr = out.cases.pure[0], i12 = pr.findIndex(q => q.t === 12 * 3600), i24 = pr.findIndex(q => q.t === 86400);
 out.lsw = { measured: (pr[i24].rmean3 ** 3 - pr[i12].rmean3 ** 3) / (12 * 3600), theory: 4 / 9 * out.G * out.a };
-console.log(`r^3 growth 12-24 h: ${out.lsw.measured.toExponential(3)} m^3/s against LSW (4/9) G a = ${out.lsw.theory.toExponential(3)} (ratio ${(out.lsw.measured / out.lsw.theory).toFixed(2)}); collection lowers F to ${(EN.warm.recs.find(q => Math.abs(q.t - 810) < 6).Es / EN.warm.Es0).toFixed(3)} by t90`);
+// `measured` uses the cube root of the mean cube of the radii of one draw. The law is stated for the critical radius, so the text quotes
+// the class run's r_c instead: rcRatio, the growth of r_c^3 between 12 and 24 h over (4/9) G a.
+{ const c12 = out.classes.rec.find(q => q.t === 12 * 3600), c24 = out.classes.rec.find(q => q.t === 86400); out.lsw.rcRatio = (c24.rc ** 3 - c12.rc ** 3) / (12 * 3600) / out.lsw.theory; }
+console.log(`r^3 growth 12-24 h: ${out.lsw.measured.toExponential(3)} m^3/s against LSW (4/9) G a = ${out.lsw.theory.toExponential(3)} (ratio ${(out.lsw.measured / out.lsw.theory).toFixed(2)}; with the class run's r_c: ${out.lsw.rcRatio.toFixed(2)}); collection lowers F to ${(EN.warm.recs.find(q => Math.abs(q.t - 810) < 6).Es / EN.warm.Es0).toFixed(3)} by t90`);
 if (process.argv.includes('--json')) fs.writeFileSync(path.join(__dirname, '..', 'data', 'ripening.json'), JSON.stringify(out));

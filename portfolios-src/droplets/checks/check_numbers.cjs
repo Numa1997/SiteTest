@@ -440,6 +440,74 @@ expect('checks', 'against 5.767,', `${f(t90ext, 3)}`, 'the model at 5 s records'
     expect('problems', 'At the end each pair has become one drop of', `$1216^{1/3}$ = ${f(Math.cbrt(1216), 2)} µm, and the surface free energy has fallen to ${f(100 * Math.cbrt(1216) ** 2 / 136, 1)} %`); }
 }
 
+// ---------------------------------------------------------------- the worked examples and method boxes (derive/examples.cjs prints the same numbers)
+{
+  const ex = (file, anchor, win, list) => list.forEach(s2 => expect(file, anchor, s2, null, win));
+  const g = 9.81, rw = 1000, sig = P.sigmaWater(A.T), tabW = D('etab_warm.json'), extK = { speed: 'beard', eff: 'table', coal: 'law', tab: tabW };
+  const thin = x => String(x).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');   // 4528545 -> 4 528 545
+  // Example 1.1
+  { const k = P.stokesK(A), m8 = P.massOf(8e-6), W = 300e6 * m8, c = k * W / (4 * rw), ts = 1 / (c * 40e-6), F1 = P.L0F(100e-6, 8e-6), F0 = P.L0F(40e-6, 8e-6);
+    ex('book-01', 'Example 1.1', 1900, [`${f(A.rho, 4)} kg/m³`, `${texSci(A.mu, 3)}`, `${texSci(k, 4)}`, `${texSci(m8, 3)} kg`, `W = ${texSci(W, 3)} kg/m³`, `= ${f(c, 2)} m⁻¹ s⁻¹`,
+      `${f(ts, 0)} s = ${f(ts / 60, 2)} min`, `= ${f(ts * 0.6 / 60, 2)} min`, `= ${f(F1, 1).replace('-', '-')}`, `-21\\,092.3`, `11 814.0`, `= ${f(4 * rw / (k * W), 5)} m s`, `= ${f(P.L0time(40e-6, 100e-6, 8e-6, W, A) / 60, 2)} min`]);
+    expect('book-01', 'Example 1.1', f(F0, 1) === '-21092.3' && f(F1 - F0, 1) === '11814.0' ? '-21\\,092.3' : 'F VALUES CHANGED', 'F(40) ' + f(F0, 1) + ', difference ' + f(F1 - F0, 1), 1900); }
+  // Example 2.1 and the remark on the long reach of creeping flow
+  { const B2 = [-3.18657, 0.992696, -1.53193e-3, -9.87059e-4, -5.78878e-4, 8.55176e-5, -3.27815e-6], lam = 6.62e-8 * (A.mu / 1.818e-5) * (101325 / A.p) * Math.sqrt(A.T / 293.15);
+    const run = a => { const d = 2 * a, N = 4 * A.rho * (rw - A.rho) * g / (3 * A.mu * A.mu) * d ** 3, X = Math.log(N); let Y = 0; for (let q = 6; q >= 0; q--) Y = Y * X + B2[q]; const csc = 1 + 2.51 * lam / d, Re = csc * Math.exp(Y); return { N, X, Y, csc, Re, v: A.mu * Re / (A.rho * d) }; };
+    const a40 = run(40e-6), a100 = run(100e-6), c8 = 1 + 2.51 * lam / 16e-6;
+    ex('book-02', 'Example 2.1', 1700, [`\\lambda = ${texSci(lam, 2)} m`, `C_{sc} = ${f(a40.csc, 4)}`, `= ${f(a40.N, 2)}, and X = \\ln ${f(a40.N, 2)} = ${f(a40.X, 3)}`, `Y = −${f(-a40.Y, 4)}`, `= ${f(a40.Re, 3)}`,
+      `= ${f(a40.v, 4)} m/s`, `= ${f(a40.N / 24, 3)} and v = ${f(vS(40e-6), 4)} m/s: ${f(100 * (vS(40e-6) / a40.v - 1), 0)} % too fast`, `N_{Da} = ${f(a100.N, 1)}, \\mathrm{Re} = ${f(a100.Re, 2)} and v = ${f(a100.v, 4)} m/s`, `would be ${f(a100.N / 24, 1)}`,
+      `${texSci(vS(8e-6), 2)} m/s times its slip factor ${f(c8, 4)} is ${texSci(vB(8e-6), 3)} m/s`]);
+    expect('book-02', 'ten radii from the centre', `still ${f(100 * (1.5 / 10 - 0.5 / 1000), 0)} % slower`); }
+  // Example 3.1
+  { const R = 40e-6, r = 8e-6, U = vB(R), vr = vB(r), gs = g * (1 - A.rho / rw), tau = vr / gs, St = tau * U / R, S = vr / U, p = r / R, Re = 2 * R * A.rho * U / A.mu;
+    const es = P.flowEfficiency('stokes', St, S, p, 200), ep = P.flowEfficiency('potential', St, S, p, 30), E = (es.E + ep.E * Re / 60) / (1 + Re / 60);
+    ex('book-03', 'Example 3.1', 1900, [`U = ${f(U, 4)} m/s and v(r) = ${texSci(vr, 3)} m/s`, `= ${f(gs, 4)} m/s²`, `= ${f(tau * 1e3, 4)} ms`, `= ${f(tau * U * 1e6, 1)} µm`, `\\mathrm{St} = ${f(St, 2)}`, `S = ${f(S, 3)}`, `\\mathrm{Re} = ${f(Re, 3)}`,
+      `b_c = ${f(es.bc, 4)} collector radii in creeping flow and ${f(ep.bc, 4)} in potential flow`, `starting ${f(es.bc * 40, 0)} µm from the axis`, `may start ${f(ep.bc * 40, 0)} µm out`, `E_S = ${f(es.E, 4)} and E_P = ${f(ep.E, 4)}`,
+      `would give ${f(es.bc ** 2 / (1 + p) ** 2, 4)}`, `= ${f(Re / 60, 4)}`, `= ${f(E, 4)}`]);
+    expect('book-03', 'The grazing path.', `${Math.ceil(Math.log2(1.5 / 1e-7))} halvings`); }
+  // Example 4.1
+  { const row = (a1, a2) => { const m1 = P.massOf(a1), m2 = P.massOf(a2), mr = m1 * m2 / (m1 + m2), dv = vB(a1) - vB(a2), cke = 0.5 * mr * dv * dv, dc = 2 * Math.cbrt(a1 ** 3 + a2 ** 3), Es = Math.PI * sig * dc * dc; return { m1, m2, mr, dv, cke, dc, Es, We: cke / Es }; };
+    const s1 = row(40e-6, 8e-6), s2 = row(500e-6, 250e-6);
+    ex('book-04', 'Example 4.1', 1700, [`${texSci(s1.m1, 3)} ${texSci(s2.m1, 3)}`, `${texSci(s1.m2, 3)} ${texSci(s2.m2, 3)}`, `${texSci(s1.mr, 3)} ${texSci(s2.mr, 3)}`, `${f(s1.dv, 4)} ${f(s2.dv, 4)}`, `${texSci(s1.cke, 3)} ${texSci(s2.cke, 3)}`,
+      `${f(s1.dc * 1e6, 2)} ${f(s2.dc * 1e6, 2)}`, `${texSci(s1.Es, 3)} ${texSci(s2.Es, 3)}`, `${texSci(s1.We, 3)} ${f(s2.We, 3)}`, `${f(Math.exp(-1.15 * s1.We), 5)} ${f(Math.exp(-1.15 * s2.We), 3)}`, `\\sigma = ${f(sig, 5)} N/m`,
+      `collector is ${f(s1.m1 / s1.m2, 0)} times heavier`, `surface energy by ${r10(s2.Es / s1.Es)}`]);
+    expect('book-04', 'the collision energy grows by a factor of', 'four million', 'ratio ' + (s2.cke / s1.cke).toExponential(3)); }
+  // Example 5.1
+  { const gr = P.makeGrid(8, 4e-3), N = P.lognormalBins(gr, modes), i = 72, j = gr.r.findIndex(r => r >= 40e-6), K = P.kernel(gr.r[i], gr.r[j], A, extK), C = K * N[i] * N[j], xs = gr.x[i] + gr.x[j];
+    let kk = j; while (gr.x[kk + 1] <= xs) kk++; const fr = (xs - gr.x[kk]) / (gr.x[kk + 1] - gr.x[kk]);
+    ex('book-05', 'Example 5.1', 2300, [`2^{1/24} = ${f(Math.pow(2, 1 / 24), 4)}`, `Bin ${i} is r = ${f(gr.r[i] * 1e6, 3)} µm and holds N_i = ${texSci(N[i], 3)}`, `Bin ${j} is r = ${f(gr.r[j] * 1e6, 3)} µm and holds N_j = ${texSci(N[j], 3)}`, `= ${texSci(K, 3)} m³/s`,
+      `\\Delta v = ${f(vB(gr.r[j]) - vB(gr.r[i]), 4)} m/s and E = ${f(P.tableE(tabW, gr.r[j], gr.r[i] / gr.r[j]), 4)}`, `= ${f(C, 1)} per m³`, `catches ${f(K * N[i], 4)} droplets`, `${f(100 * C / N[j], 3)} % of them`, `is a ${f(P.radiusOf(xs) * 1e6, 3)} µm drop`,
+      `bin ${kk} (${f(gr.r[kk] * 1e6, 3)} µm) and bin ${kk + 1} (${f(gr.r[kk + 1] * 1e6, 3)} µm)`, `= ${f(fr, 4)}`, `= ${f(100 * gr.x[i] / gr.x[j], 2)} %`, `${f(100 * (Math.pow(2, 1 / 8) - 1), 2)} % heavier`, `a net loss of ${f(fr * C, 1)}`, `1/f = ${f(1 / fr, 1)}`]);
+    expect('book-05', 'computed once', `(${gr.n} × ${gr.n} at 8 bins per doubling)`); }
+  // Example 6.1
+  { const u1 = P.rng(1), rad = P.drawModes(modes, 10, u1, 3), n = rad.length, V = 10e-6; let a0 = 0, cc = 0, dd = 0, nc = 0;
+    for (let i = 0; i < n; i++) for (let j = i + 1; j < n; j++) { const K = P.kernel(rad[i], rad[j], A, extK) / V; a0 += K; if (Math.min(rad[i], rad[j]) >= 20e-6) cc += K; else if (Math.max(rad[i], rad[j]) < 20e-6) dd += K; }
+    rad.forEach(r => { if (r >= 20e-6) nc++; });
+    ex('book-06', 'Example 6.1', 1000, [`${n} drops, ${nc} of them collectors`, `${thin(n * (n - 1) / 2)} pairs`, `gives ${f(a0, 3)} per second`, `every ${f(1 / a0, 2)} s`, `The ${nc * (nc - 1) / 2} pairs of two collectors carry ${f(100 * cc / a0, 2)} %`, `every ${f(1 / cc, 0)} s`, `carry ${f(100 * dd / a0, 3)} %`]); }
+  // Example 7.1
+  { const a1 = 40e-6, a2 = 8e-6, eps = 1e-2, t1 = vB(a1) / g, t2 = vB(a2) / g, v1 = vB(a1), v2 = vB(a2), R = a1 + a2, nu = A.nu, a0 = (11 + 7 * 2e4) / (205 + 2e4), tk = Math.sqrt(nu / eps), vk = Math.pow(nu * eps, 0.25), d = t1 - t2;
+    const sh = R * R * eps / (15 * nu), ac = d * d * a0 * (vk / tk) ** 2, se = (v1 * t1 - v2 * t2) ** 2 * 2 * eps / (15 * nu), grv = Math.PI / 8 * d * d * g * g, w = Math.sqrt(2 / Math.PI) * Math.sqrt(sh + ac + se + grv), wg = 0.5 * Math.abs(d) * g;
+    ex('book-07', 'Example 7.1', 2100, [`= ${f(t1 * 1e3, 2)} ms`, `= ${f(t2 * 1e3, 3)} ms`, `= ${f(tk * 1e3, 1)} ms`, `\\nu = ${texSci(nu, 3)} m²/s`, `= ${texSci(sh, 2)} m²/s²`, `= ${f(Math.pow(eps, 0.75) * Math.pow(nu, -0.25), 2)} m/s²`, `= ${texSci(ac, 2)} m²/s²`, `= ${texSci(se, 2)} m²/s²`,
+      `\\sigma_w^2 = ${texSci(sh + ac + se, 2)} m²/s²`, `\\sigma_w = ${f(Math.sqrt(sh + ac + se) * 100, 2)} cm/s`, `= ${texSci(grv, 2)} m²/s²`, `= ${f(w * 100, 2)} cm/s, against ${f(wg * 100, 2)} cm/s in still air: a factor ${f(w / wg, 3)}`, `a third of gravity's ${f(Math.sqrt(grv) * 100, 1)} cm/s`]);
+    expect('book-07', 'Gravity\'s part.', `${f(grv / (sh + ac + se), 0)} times larger`.replace(/^9 /, 'nine '), 'ratio ' + f(grv / (sh + ac + se), 2)); }
+  // Example 8.1: the intermediate numbers (the others are checked with chapter 8 above)
+  { const m1 = mi(40e-6), m2 = mi(8e-6), a0 = 3.78e4 * (1 + 0.0079 / Math.pow(5e-4, 1.5)), al = Math.PI * 16e-6 ** 2, xr = 6.3e6 * K0 / aA;
+    ex('book-08', 'Example 8.1', 1700, [`they close at ${f(vi(40e-6) - vi(8e-6), 4)} m/s`, `${texSci(m1, 3)} and ${texSci(m2, 3)} kg, the reduced mass ${texSci(m1 * m2 / (m1 + m2), 3)} kg`, `= ${f(fT, 3)}`, `a_0 = ${texSci(a0, 3)} m⁻² and A = ${texSci(a0 * fT, 3)} m⁻²`,
+      `\\pi D^2 = ${texSci(al, 2)} m²`, `CK_0/\\alpha A = ${texSci(xr, 2)}`, `it is ${f(Math.pow(xr, 0.3), 4)}`, `e^{-${f(Math.pow(xr, 0.3), 4)}}`, `breaks ${f(100 * (1 - Math.exp(-Math.pow(xr, 0.3))), 1)} % of them`]);
+    expect('book-08', 'Step 4 shows the weak power at work', '56 000 times', 'ratio ' + f(1 / xr, 0)); }
+  // chapter 11: the maximum-entropy numbers at the start, and the method box
+  { const gr = P.makeGrid(8, 4e-3), N = P.lognormalBins(gr, modes); let Nt = 0, M = 0; N.forEach((n, q) => { Nt += n; M += n * gr.x[q]; });
+    ex('book-11', 'drops per m³ hold', 400, [`N = ${texSci(Nt, 3)} drops per m³ hold M = ${texSci(M, 3)} kg/m³`, `M/N = ${texSci(M / Nt, 3)} kg is that of a ${f(P.radiusOf(M / Nt) * 1e6, 2)} µm sphere`]);
+    const EN = D('energy.json'); expect('book-11', 'All three start from the same kind of volume', `${thin(EN.mc.steepest.Nini)} drops`); expect('book-11', 'passes one of', `${EN.mc.marks.length} marks`); }
+  // Example 12.1
+  { const dV = 50 ** 3, xid = 300e6 * dV / 96, xic = 1e6 * dV / 32, n = 128, K = P.kernel(40e-6, 8e-6, A, extK), sc = n * (n - 1) / 2 / Math.floor(n / 2), pp = xid * K / dV * sc, s2 = Math.pow(1e-2 * 100, 2 / 3), TL = 2 * s2 / (6 * 1e-2), aa = Math.exp(-1 / TL);
+    const dr2 = 2 * P.growthG(A) * -0.2 * P.ventilation(100e-6, A);
+    ex('book-12', 'Example 12.1', 2300, [`\\Delta V = ${texSci(dV, 2)} m³`, `\\xi = ${texSci(xid, 3)}`, `${texSci(xic, 3)}`, `\\sigma = ${f(Math.sqrt(s2), 3)} m/s and T_L = ${f(TL, 2)} s`, `= ${f(aa, 4)}`, `= ${f(Math.sqrt(s2 * (1 - aa * aa)), 4)} m/s`, `K = ${texSci(K, 3)} m³/s`,
+      `= ${texSci(xid * K / dV, 3)}`, `= ${n * (n - 1) / 2} possible pairs and tests ${Math.floor(n / 2)} of them`, `is ${sc}, and p = ${f(pp, 3)}`, `from 40 to ${f(Math.cbrt(40 ** 3 + 8 ** 3), 3)} µm`, `one hundredth fewer`, `loses ${texSci(-dr2, 2)} m²`,
+      `which is ${f((1e-4 - Math.sqrt(1e-8 + dr2)) * 1e6, 2)} µm of radius`]);
+    expect('book-12', 'Then the clock advances by one second', `${45 * 60} such steps`); }
+}
+
 // ---------------------------------------------------------------- chapter 11: who eats whom (data/energy.json)
 {
   const EN = D('energy.json'), wr = EN.warm, mc = EN.mc;

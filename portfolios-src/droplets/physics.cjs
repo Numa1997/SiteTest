@@ -522,8 +522,8 @@ var PHYS = (function () {
 
   // ---------------------------------------------------------------- L5: the stochastic process, sampled exactly
   // Gillespie (1975), method B (proposals accepted with probability K_ij / K*), with the particles grouped in size classes
-  // and one majorant K*_ab per class pair: proposals form a Poisson process of rate A* = sum_ab K*_ab n_a n_b / V (half
-  // n_a (n_a - 1) for a = b); a proposed pair is accepted with probability K_ij / K*_ab. Thinning makes the accepted events
+  // and one majorant K*_ab per class pair: proposals form a Poisson process of rate A* = sum_ab K*_ab n_a n_b / V (K*_aa n_a^2 / (2V)
+  // for a = b: ordered proposals, the same drop twice rejected, see pairRate); a proposed pair is accepted with probability K_ij / K*_ab. Thinning makes the accepted events
   // exactly the coalescence process of the master equation. The bound K_ij <= K*_ab is checked at every proposal.
   function rng(seed) {      // mulberry32: a small, seeded, reproducible generator of uniforms in (0, 1)
     var a = seed >>> 0;
