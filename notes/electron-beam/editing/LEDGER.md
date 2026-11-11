@@ -52,6 +52,10 @@ when V hands that chapter over. V reads this file before editing every chapter. 
 - **Promises.** ch05: chromatic blur ∝ ΔE/eV; ch07: a few thousand electrons per pixel; ch04: the retarding field and the objective
   overlap (outside the project).
 - **Hand-over.** "What chapter 4 and chapter 5 receive": $V^*$, the angle factor, $I_p$ with $B_\mathrm{pr}=B_r/\ln2$.
+- **Voice pass.** Opening now ties the marble to "the electrons that chapter 2 drew from the tip"; brightness and reduced
+  brightness are pointers to chapter 2 (reduced brightness "now exact, with the beam voltage in place of $V$"); "beam voltage"
+  named at the definition of $V^*$; FW50 and probe current marked at their definition (§3.5); the two rhetorical questions
+  removed; a duplicated sentence in §3.7 removed.
 
 ## ch04 · The lens
 - **Opening picture.** The helix of chapter 1 shortened to a coil in an iron shell; the convex glass lens.
