@@ -62,6 +62,11 @@ const mk = (o) => new TulipModes(Object.assign({ data, profile: G, h0: 0.125 }, 
   while (A() > 1e-3 * X0 && t < 60) { f.step(0.0005, 0, 0); t += 0.0005; }
   ok(Math.abs(t / t1 - 1) < 0.02, `foam alpha ${al}: swing of ${X0 * 1000} mm falls to 0.1 % after ${t.toFixed(2)} s, Viola et al.'s envelope ${t1.toFixed(2)} s (and stops at ${tStar.toFixed(2)} s)`);
 }
+{ // 10 the modal mass from the linear data equals the nonlinear data's rho R^3 mu / Rw1^2 (two independent routes)
+  const N = JSON.parse(fs.readFileSync(path.join(__dirname, '../../public/data/fig12/nm.json'), 'utf8')), j = N.h.indexOf(125), L = N.levels[j];
+  const f = mk(), Mn = 1000 * L.Rs ** 3 * L.mu.p1 / L.Rw[1] ** 2;
+  ok(Math.abs(f.M[0] / Mn - 1) < 1e-3, `modal mass of mode 1 at 125 mm: ${f.M[0].toFixed(5)} kg (linear data), ${Mn.toFixed(5)} kg (nonlinear data)`);
+}
 const bumps = []; for (let n = 0; n < 60; n++) bumps.push({ x: 1.0 + 2 * n, h: 0.010, L: 0.25 });
 const mkWorld = (fluid, ctrl) => new World({ fluidInstance: fluid, road: { bumps, Rw: 0.04, xmin: -1, xmax: 125 }, cart: { x0: 0.5, Rw: 0.04, Ls: 0.135, v0: 1, ctrl: ctrl || 'off', susp: false }, dtMax: 0.001 });
 { // 5

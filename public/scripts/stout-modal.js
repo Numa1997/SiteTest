@@ -99,7 +99,9 @@
       this.beta.push(w * w / this.g * c);                          // the push per unit a_x (the plant's beta, as in ModalFluid)
       this.Pc.push(this.rho * lerp(A.Ix[n], B.Ix[n], t));         // momentum per unit q_n'
       this.Vc.push(lerp(A.Vc[n], B.Vc[n], t));                     // crest volume on the high half per unit q_n
-      this.M.push(this.rho * lerp(A.Ix[n], B.Ix[n], t) / c);        // modal mass: momentum per unit q' over the push coefficient
+      // modal mass of the wall-height coordinate q_n: the push enters as M q'' + K q = -rho a_x Ix, which with
+      // q'' + w^2 q = -(w^2/g) c a_x gives M = rho Ix / (kappa c), kappa = w^2/g (kg); K = M w^2 = rho g Ix / c = rho g int e^2 dS
+      this.M.push(this.rho * lerp(A.Ix[n], B.Ix[n], t) / (w * w / this.g * c));
       const zw = 0.5 * Math.sqrt(this.nu / (2 * w)) * Lam;
       const zs = A.LamS ? 0.5 * Math.sqrt(this.nu / (2 * w)) * lerp(A.LamS[n], B.LamS[n], t) : 0;
       const zb = A.Bk ? this.nu * lerp(A.Bk[n], B.Bk[n], t) / w : 0;
@@ -152,9 +154,9 @@
   TulipModes.prototype.liquidMass = function () { return this.rho * this.V; };
   TulipModes.prototype.maxSpeed = function () { return 0; };
   // the mechanical energy of the swing (kinetic + potential, relative to rest), J: for the books and the damping checks.
-  // Mode n: (1/2) M_n (q_n'^2 + w_n^2 q_n^2) with the modal mass M_n = rho Ix_n / c_n (the momentum per unit q' over the push)
+  // Mode n: (1/2) M_n (q_n'^2 + w_n^2 q_n^2) with the modal mass M_n = rho Ix_n / (kappa_n c_n) (see modes())
   TulipModes.prototype.energy = function () {
-    let E = 0; for (let n = 0; n < this.N; n++) { const M = this.Pc[n] / this.c[n]; E += 0.5 * M * (this.qd[n] * this.qd[n] + this.w[n] * this.w[n] * this.q[n] * this.q[n]); }
+    let E = 0; for (let n = 0; n < this.N; n++) { const M = this.M[n]; E += 0.5 * M * (this.qd[n] * this.qd[n] + this.w[n] * this.w[n] * this.q[n] * this.q[n]); }
     return E;
   };
 
