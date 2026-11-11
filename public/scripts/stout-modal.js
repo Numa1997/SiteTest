@@ -61,7 +61,10 @@
     this.foam = Object.assign({ h: 0, n: 2 / 3, alpha: null }, o.foam || {});
     this.N = Math.min(o.nModes || 4, o.data.levels[0].m1.f.length);
     this.NR = o.data.NR;
-    this.Cd = o.Cd != null ? o.Cd : 0.62;                          // weir discharge coefficient (Francis; see ModalFluid)
+    // the pour over the rim as a weir, C_d (2/3) sqrt(2g) D^(3/2) per unit length of rim. C_d = 1.0, fitted to the 3D solver's 24 spill
+    // runs (fills 125-140 mm, pushes 4-10 m/s^2, 3 and 4 mm grids; tools/fig12/spill-fit.cjs): spilled mass 5-23 % low, typical 15 %.
+    // A steady sharp-crested weir has 0.62 (Francis); a sloshing crest arrives with upward momentum and pours more (an inference).
+    this.Cd = o.Cd != null ? o.Cd : 1.0;
     this.dx = o.dx || 0.004; this.H = this.zRim + 0.03; this.Rbox = this.R + 0.01;   // the 3D solver's box, as ModalFluid (the view clamps radii by it)
     this.h = this.h0; this.V = this.volumeTo(this.h0); this.V0 = this.V; this.mLiquid = this.rho * this.V;
     this.q = new Float64Array(this.N); this.qd = new Float64Array(this.N);
@@ -235,6 +238,7 @@
     this.b = new Float64Array(5); this.bd = new Float64Array(5);
     this.b[2] = o.swirlSeed != null ? o.swirlSeed : 1e-5;           // a real glass is never perfectly round: the swirl's seed
     this.breaks = 0; this.s1 = 0; this.s1d = 0;
+    this.capFactor = o.capFactor != null ? o.capFactor : 2.0;      // breaking: the swing's wall amplitude held at capFactor R/xi11 (fitted with C_d; above 2 it no longer matters)
     TulipModes.call(this, o);
     // the whole glass: columns over -R..R in y
     this.ny = 2 * Math.ceil(this.R / this.dx); this.y0 = -(this.ny / 2) * this.dx; this.colH = new Float64Array(this.nx * this.ny);
@@ -378,7 +382,7 @@
         b[i] += ht / 6 * (v[i] + 2 * v2[i] + 2 * v3[i] + v4[i]);
         v[i] += ht / 6 * (k1[i] + 2 * k2[i] + 2 * k3[i] + k4[i]);
       }
-      const amp = Math.hypot(b[1], b[2]) * R * W[1], cap = 1.5 * R / 1.8412;
+      const amp = Math.hypot(b[1], b[2]) * R * W[1], cap = this.capFactor * R / 1.8412;
       if (amp > cap) { const fc = cap / amp; for (let i = 0; i < 5; i++) { b[i] *= fc; v[i] *= fc; } this.breaks++; }
     }
     this.syncQ();
