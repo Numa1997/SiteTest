@@ -7,7 +7,7 @@ Five files make the frame around the twelve simulation pages:
 | [`index.html`](../index.html) | `/` | 1547 | The home page: the Phyein Usul logo and note, CV, projects, ten figure plates (one per simulation), a live double pendulum. |
 | [`public/simulations.html`](../public/simulations.html) | `/simulations.html` | 212 | The catalog: one fold card per simulation, no search and no chips since 3 November 2026. |
 | [`public/portfolios.html`](../public/portfolios.html) | `/portfolios.html` | 472 | The Projects page (address `portfolios.html`, kept so old links work): the Bachelor thesis and four studies, and the links into their pages. |
-| [`public/lucretius.html`](../public/lucretius.html) | `/lucretius.html` | 177 | The poem page (10 November 2026): Lucretius I 146–224 as 20 sentences in Latin, English, German and Arabic; see the last section. |
+| [`public/lucretius.html`](../public/lucretius.html) | `/lucretius.html` | 177 | The poem page (10 November 2026): Lucretius I 146–224 as 20 verses in English, German and Arabic; see the last section. |
 | [`public/robots.txt`](../public/robots.txt) | `/robots.txt` | 4 | Rules for search-engine crawlers. |
 
 The build copies everything under `public/` to the site root, so a page under `public/` links to `styles/…` and
@@ -526,21 +526,24 @@ second click closes it. Written by `notes/lucretius/make_home.py` from `notes/lu
 Measured on the built site: at 1366 × 768, 1440 × 900 and 1920 × 1080, in English, German and Arabic, the quote and the buttons are in
 the first screen, no errors, no sideways scroll; on a phone the quote follows the buttons.
 
-## The poem page, `lucretius.html` (10 November 2026)
+## The poem page, `lucretius.html` (10 November 2026, rebuilt 11 November 2026)
 
-Numa: a button on the home page to the whole poem, on a page of its own, in all three languages. The home band has, under its caption,
-a link "Read lines 146–224 in Latin, English, German and Arabic →" (`p.lq-all`). The page (`public/lucretius.html`, with `/de/` and
+Numa: a button on the home page to the whole poem, on a page of its own, in all three languages; on 11 November 2026: no Latin on that
+page (it stands on the home page), the verses well separated and decorated, the Arabic more majestic. The home band has, under its
+caption, a link "Read lines 146–224 in English, German and Arabic →" (`p.lq-all`). The page (`public/lucretius.html`, with `/de/` and
 `/ar/` versions made by `tools/i18n/build.py`, which lists it in `PAGES`, and short addresses in `public/_redirects`) holds the
-same passage as `notes/lucretius/poem-146-224.json`, the 20 Latin sentences of lines 146–224. Each sentence is a section
-(`section.lp`, address `#l146` and so on, the line numbers at its left) with four columns: the Latin (Instrument Serif), Leonard
-(1916), Diels (1924) and the Arabic (Amiri). The row is `direction: ltr` in every language of the page, so the columns keep their order
-on the Arabic page; each column carries its own `lang` and `dir`. Since 11 November 2026 ornaments in the accent colour, drawn as inline
-SVG, separate the languages and the sentences: between two columns a vertical rule with a small lozenge at each end and in the middle an
-eight-pointed star (khatam), a quatrefoil, a star (Latin | English | Deutsch | Arabic); between two sentences a horizontal rule with lozenge,
-larger star, lozenge. Under 1000 px the four languages stack in one column and the column rules turn horizontal and shorter, so the
-sentence break (wider, larger star) stays distinct from the language break. The four columns are
-`translate="no"`: the generator translates only the words around them (title, introduction, the four source notes, footer); the poem
-itself is never translated by the table. Written by `notes/lucretius/make_page.py` from the three JSON files, never retyped; do not edit
-`public/lucretius.html` by hand. The Arabic is `poem-ar-146-158.json` and `poem-ar-159-224.json`: made from the Latin for this site,
-read against Leonard and Diels, not a published translation, not reviewed by a second reader, and the page says so in its source notes.
-Measured on the built site: English, German and Arabic at 1280 and 390 px: 20 sections, 80 cells, no errors, no sideways scroll.
+passage of `notes/lucretius/poem-146-224.json`, 20 sentences of lines 146–224, as 20 verses. Each verse is a section (`section.lp`,
+address `#l146` and so on) with a heading and three columns: Leonard (1916), Diels (1924) and the Arabic of this site (Noto Naskh
+Arabic, 20 px on a 2.05 line). The heading (`h2.lp__n`) is a rule with a lozenge, a pierced star, the line numbers of the Latin in the
+accent colour, a pierced star, a lozenge and a rule; the page opens and closes with a larger star between rules. The row is
+`direction: ltr` in every language of the page, so the columns keep their order on the Arabic page; each column carries its own `lang`
+and `dir`. Between two columns a vertical rule with a lozenge at each end and in the middle a quatrefoil, then an eight-pointed star
+(khatam), all inline SVG in the accent colour. A row of column titles (`.lp-head`, `position: sticky`) stays at the top of the screen
+above 1000 px; under 1000 px it is hidden and the three languages stack in one column, each cell carrying its own title, with
+horizontal rules between them. The cells and the title row are `translate="no"`: the generator translates only the words around them
+(title, introduction, the three source notes, footer); the poem itself is never translated by the table. Written by
+`notes/lucretius/make_page.py` from the three JSON files, never retyped; do not edit `public/lucretius.html` by hand. The Arabic is
+`poem-ar-146-158.json` and `poem-ar-159-224.json`, fifth version (11 November 2026, README), made from the Latin for this site, read
+against Leonard and Diels, not a published translation, not reviewed by a second reader, and the page says so in its source notes.
+Measured on the built site: English, German and Arabic at 1280 and 390 px: 20 sections, 60 cells, no errors, no sideways scroll; the
+four home cards fit in all three languages.

@@ -1,5 +1,5 @@
 {
-  "about": "Arabic translation of the four sentences on the home page, Lucretius I 146-158. First version, made from the Latin (poem-146-224.json, field 'la') on 10 November 2026 and restored on 11 November 2026 at Numa's word, after he judged the three later versions worse. Read against Leonard (1916) and Diels (1924) for the sense. It keeps the misreadings that the review of 10 November found and that commit 868d8f6 had corrected. It is not a published translation and has no second reader. The only published Arabic translation (Cairo 2018) is under copyright and was not used.",
+  "about": "Arabic translation of Lucretius I 146-158 (the four sentences of the home page), made from the Latin (poem-146-224.json, field 'la') for this site. Fifth version, 11 November 2026, written at Numa's word as majestic modern literary Arabic: strong and smooth, understandable, not Quranic (no archaic particles, case vowels left unmarked, vowel marks only where a word could be misread). nihilum is «العدم», darkness «ظلام» (Numa). The three misreadings of the first version (lines 162, 173, 181) are corrected. Read against Leonard (1916) and Diels (1924) for the sense. It is not a published translation and has no second reader. The only published Arabic translation (Cairo 2018) is under copyright and was not used. Earlier versions are in git (README).",
   "groups": [
     {
       "lines": [
@@ -7,7 +7,7 @@
         148
       ],
       "ar": [
-        "وهذا الرعبُ في النفس، وهذا الظلامُ، لا بدّ أن يُبدِّدَهما لا شعاعُ الشمس ولا سهامُ النهار اللامعة، بل مظهرُ الطبيعة وقانونُها العقلي."
+        "إنّ هذا الرعب الذي يثقل النفس، وهذا الظلام الذي يطبق عليها، لا بدّ أن يزولا؛ ولن تزيلهما أشعّة الشمس، ولا سهام النهار المتلألئة، بل وجه الطبيعة حين نتأمّله، وقانونها حين نفقهه."
       ]
     },
     {
@@ -16,7 +16,7 @@
         150
       ],
       "ar": [
-        "ومبدؤها، الذي منه نأخذ فاتحةَ القول، هو أنّ شيئًا لا يُولَد من العدم بقوّةٍ إلهيّةٍ أبدًا."
+        "وأوّل ما نفتتح به القول، وأصل ما نقيم عليه الحجّة: أن لا شيء يولد من العدم، ولو بقدرة الآلهة."
       ]
     },
     {
@@ -25,7 +25,7 @@
         154
       ],
       "ar": [
-        "ذلك أنّ الخوفَ يقبض على البشر جميعًا لأنّهم يرَون في الأرض وفي السماء أشياءَ كثيرةً تحدث، ولا يستطيعون بأيّ تعليلٍ أن يروا أسبابَها، فيظنّونها تحدث بمشيئةٍ إلهيّة."
+        "إنّ الخوف لا يقبض على قلوب البشر جميعًا إلا لأنّهم يرون في الأرض وفي السماء أمورًا شتّى تجري، ثمّ لا يهتدون إلى أسبابها، فيحسبونها صادرة عن مشيئة الآلهة."
       ]
     },
     {
@@ -34,7 +34,7 @@
         158
       ],
       "ar": [
-        "فإذا رأينا لهذا السبب أنّ شيئًا لا يمكن أن يُخلَق من العدم، أبصرنا عندئذٍ بوضوحٍ أكبر ما نطلبه: من أين يمكن أن يُخلَق كلُّ شيء، وبأيّ كيفيّةٍ يجري كلُّ شيء بغير عمل الآلهة."
+        "فإذا أيقنّا أنّ شيئًا لا يُخلق من العدم، استبان لنا ما نطلب على وجه أصحّ وأجلى: من أين يتكوّن كلّ شيء، وكيف يتمّ كلّ أمر من غير أن تمتدّ إليه يد الآلهة."
       ]
     }
   ]

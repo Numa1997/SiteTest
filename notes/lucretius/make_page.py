@@ -1,7 +1,8 @@
-# Writes public/lucretius.html: Lucretius I 146-224 as a page of its own, each of the 20 sentences in Latin, English, German and Arabic.
-# The texts come from poem-146-224.json (Latin, Leonard, Diels: cut from the sources by extract.py) and from poem-ar-146-158.json and
-# poem-ar-159-224.json (the Arabic, made for this site); nothing is retyped. The poem blocks are translate="no": the German and Arabic
-# versions of the page (made by tools/i18n/build.py) translate only the words around them. Run from the repository root.
+# Writes public/lucretius.html: Lucretius I 146-224 as a page of its own, each of the 20 sentences in English, German and Arabic
+# (no Latin: it stands on the home page; the numbers are the lines of the Latin). The texts come from poem-146-224.json (Leonard,
+# Diels: cut from the sources by extract.py) and from poem-ar-146-158.json and poem-ar-159-224.json (the Arabic, made for this site);
+# nothing is retyped. The poem blocks are translate="no": the German and Arabic versions of the page (made by tools/i18n/build.py)
+# translate only the words around them. Run from the repository root.
 import json, io, html, re
 E = html.escape
 G = json.load(io.open('notes/lucretius/poem-146-224.json', encoding='utf-8'))
@@ -22,12 +23,18 @@ QUAT = '<svg width="16" height="16" viewBox="0 0 20 20"><circle cx="10" cy="4.6"
 DOT = '<svg width="7" height="7" viewBox="0 0 10 10"><rect x="2" y="2" width="6" height="6" transform="rotate(45 5 5)"/></svg>'
 sep = lambda mid: f'<i class="lp__sep" aria-hidden="true">{DOT}<span></span>{mid}<span></span>{DOT}</i>'
 DIV = f'      <div class="lp-div" aria-hidden="true"><span></span>{DOT}<span></span>{STAR}<span></span>{DOT}<span></span></div>'
+# The heading of every verse (a sentence of the Latin): line, lozenge, line, star, the line numbers, star, line, lozenge, line.
+BAR = lambda lo, hi: (f'<h2 class="lp__n"><span></span>{DOT}<span></span>{STAR}<a href="#l{lo}" dir="ltr">{lo} – {hi}</a>{STAR}<span></span>{DOT}<span></span></h2>')
+# The column titles, once, above the first verse (on narrow screens every cell carries its own title instead).
+HEAD = ('      <div class="lp-head" translate="no" aria-hidden="true"><div class="lp__row">'
+        '<span lang="en">English · Leonard, 1916</span><i></i><span lang="de">Deutsch · Diels, 1924</span><i></i>'
+        '<span lang="ar" dir="rtl">العربية · لهذا الموقع</span></div></div>')
 secs = []
 for k, (g, a) in enumerate(zip(G, AR)):
     lo, hi = min(g['lines']), max(g['lines'])
     secs.append(f'''      <section class="lp" id="l{lo}" translate="no">
-        <h2 class="lp__n"><a href="#l{lo}" dir="ltr">{lo}–{hi}</a></h2>
-        <div class="lp__row">{cell('la', 'Latin', g['la'])}{sep(STAR)}{cell('en', 'English', g['en'])}{sep(QUAT)}{cell('de', 'Deutsch', g['de'])}{sep(STAR)}{cell('ar', 'العربية', a['ar'], 'rtl')}</div>
+        {BAR(lo, hi)}
+        <div class="lp__row">{cell('en', 'English', g['en'])}{sep(QUAT)}{cell('de', 'Deutsch', g['de'])}{sep(STAR)}{cell('ar', 'العربية', a['ar'], 'rtl')}</div>
       </section>''')
 P = io.open('public/portfolios.html', encoding='utf-8').read()
 csp = re.search(r'    <meta http-equiv="Content-Security-Policy"[^\n]*\n', P).group(0)
@@ -36,33 +43,40 @@ fav = re.search(r'    <link\n      rel="icon"\n.*?/>\n', P, flags=re.S).group(0)
 sw = re.search(r'<span class="lang-switch".*?</span>', P, flags=re.S).group(0).replace('portfolios.html', 'lucretius.html')
 alt = re.search(r'<!--I18N-ALTERNATES-->.*?<!--/I18N-ALTERNATES-->', P, flags=re.S).group(0).replace('portfolios.html', 'lucretius.html')
 logo = re.search(r'<span style="display:inline-flex;align-items:center;gap:14px">.*?</span>\n', P, flags=re.S).group(0)
-CSS = """      /* Lucretius I 146-224, four columns: the Latin, then Leonard, Diels and the Arabic of this site. The row stays left to right in every
-         language of the page (direction: ltr); each column carries its own dir. */
+CSS = """      /* Lucretius I 146-224, three columns: Leonard, Diels and the Arabic of this site. Each verse has a heading of ornaments and its line
+         numbers; the three columns are parted by pierced stars and a quatrefoil. The row stays left to right in every language of the page
+         (direction: ltr); each column carries its own dir. */
       .lp-lede { max-width: 62ch; }
-      .lp { display: grid; grid-template-columns: 72px minmax(0, 1fr); gap: 0 18px; padding: 20px 0; }
-      .lp__n { margin: 0; font: 500 11px/1.6 var(--mono); letter-spacing: .06em; padding-top: 5px; }
-      .lp__n a { color: var(--muted, var(--ink-3)); text-decoration: none; }
-      .lp__n a:hover, .lp:target .lp__n a { color: var(--accent); }
+      .lp-head { position: sticky; top: 0; z-index: 5; background: var(--paper); border-bottom: 1px solid rgba(122, 31, 43, .18); margin-top: 6px; }
+      .lp-head .lp__row { padding: 9px 0 8px; }
+      .lp-head span { font: 500 10.5px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted, var(--ink-3)); }
+      .lp-head span[lang='ar'] { font: 500 13px 'Noto Naskh Arabic', serif; letter-spacing: 0; text-transform: none; }
+      .lp { padding: 30px 0 14px; }
+      .lp__n { display: flex; align-items: center; gap: 12px; max-width: 640px; margin: 0 auto 20px; font: 500 14px var(--mono); letter-spacing: .14em; color: var(--accent); }
+      .lp__n a { color: var(--accent); text-decoration: none; white-space: nowrap; padding: 0 2px; }
+      .lp__n a:hover { color: var(--accent-dark, var(--accent)); }
+      .lp__n span { flex: 1; height: 1px; background: linear-gradient(to right, rgba(122, 31, 43, .04), rgba(122, 31, 43, .3), rgba(122, 31, 43, .04)); }
+      .lp__n > svg, .lp-div svg, .lp__sep svg { flex: none; display: block; fill: currentColor; }
+      .lp__n svg { width: 15px; height: 15px; } .lp__n svg .h, .lp-div svg .h, .lp__sep svg .h { fill: var(--paper); }
+      .lp__n > svg:first-of-type, .lp__n > svg:last-of-type { opacity: .9; } .lp__n > svg:nth-of-type(odd) { opacity: .9; }
       .lp:target { background: rgba(122, 31, 43, .04); }
-      .lp__row { direction: ltr; display: grid; grid-template-columns: minmax(0, 1fr) 18px minmax(0, 1fr) 18px minmax(0, 1fr) 18px minmax(0, 1fr); gap: 0 16px; }
+      .lp__row { direction: ltr; display: grid; grid-template-columns: minmax(0, 1fr) 18px minmax(0, 1fr) 18px minmax(0, 1fr); gap: 0 24px; }
       .lp__sep { display: flex; flex-direction: column; align-items: center; gap: 7px; padding: 2px 0; color: var(--accent); font-style: normal; }
       .lp__sep span { flex: 1; width: 1px; min-height: 14px; background: linear-gradient(to bottom, rgba(122, 31, 43, .05), rgba(122, 31, 43, .32), rgba(122, 31, 43, .05)); }
-      .lp__sep svg, .lp-div svg { flex: none; display: block; fill: currentColor; } .lp__sep svg .h, .lp-div svg .h { fill: var(--paper); }
       .lp__sep svg:not(:first-child):not(:last-child) { opacity: .85; } .lp__sep > svg:first-child, .lp__sep > svg:last-child { opacity: .55; }
-      .lp-div { display: flex; align-items: center; gap: 10px; max-width: 460px; margin: 10px auto; color: var(--accent); }
+      .lp-div { display: flex; align-items: center; gap: 10px; max-width: 460px; margin: 26px auto 8px; color: var(--accent); }
       .lp-div span { flex: 1; height: 1px; background: linear-gradient(to right, rgba(122, 31, 43, .04), rgba(122, 31, 43, .3), rgba(122, 31, 43, .04)); }
-      .lp-div > svg:nth-of-type(odd) { opacity: .55; } .lp-div > svg:nth-of-type(2) { width: 24px; height: 24px; }   /* the sentence break: a larger star than the column breaks */
+      .lp-div > svg:nth-of-type(odd) { opacity: .55; } .lp-div > svg:nth-of-type(2) { width: 24px; height: 24px; }
       .lp__c { min-width: 0; }
-      .lp__c::before { content: attr(data-l); display: block; margin-bottom: 6px; font: 500 10.5px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted, var(--ink-3)); }
+      .lp__c::before { content: attr(data-l); display: none; margin-bottom: 6px; font: 500 10.5px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted, var(--ink-3)); }
       .lp__c[lang='ar']::before { font-family: 'Noto Naskh Arabic', var(--mono); letter-spacing: 0; text-transform: none; font-size: 12px; }
       .lp__l { display: block; font: 400 15px/1.6 var(--sans, 'IBM Plex Sans', sans-serif); color: var(--ink-2, var(--ink)); }
-      .lp__c[lang='la'] .lp__l { font: 400 19px/1.35 'Instrument Serif', Georgia, serif; color: var(--ink); margin-bottom: .15em; }
-      .lp__c[lang='en'] .lp__l, .lp__c[lang='de'] .lp__l { font-style: italic; font-family: var(--serif); font-size: 16.5px; line-height: 1.5; }
-      .lp__c[lang='ar'] .lp__l { font: 400 17.5px/2 'Noto Naskh Arabic', 'Amiri', serif; color: var(--ink); }
+      .lp__c[lang='en'] .lp__l, .lp__c[lang='de'] .lp__l { font-style: italic; font-family: var(--serif); font-size: 17.5px; line-height: 1.55; }
+      .lp__c[lang='ar'] .lp__l { font: 400 20px/2.05 'Noto Naskh Arabic', 'Amiri', serif; color: var(--ink); }
       .lp-src { margin: 34px 0 0; padding: 0; list-style: none; max-width: 78ch; }
       .lp-src li { margin: 0 0 12px; font-size: 14.5px; line-height: 1.65; color: var(--ink-2, var(--ink)); }
-      @media (max-width: 1000px) { .lp__row { grid-template-columns: minmax(0, 1fr); gap: 14px 0; } .lp__sep { flex-direction: row; width: min(130px, 40%); opacity: .8; margin: 0 auto; padding: 0; } .lp__sep span { width: auto; min-height: 0; height: 1px; background: linear-gradient(to right, rgba(122, 31, 43, .05), rgba(122, 31, 43, .32), rgba(122, 31, 43, .05)); } }
-      @media (max-width: 620px) { .lp { grid-template-columns: minmax(0, 1fr); } .lp__row { grid-template-columns: minmax(0, 1fr); } .lp__n { padding-top: 0; margin-bottom: 8px; } }
+      @media (max-width: 1000px) { .lp-head { display: none; } .lp__c::before { display: block; } .lp__row { grid-template-columns: minmax(0, 1fr); gap: 14px 0; } .lp__sep { flex-direction: row; width: min(130px, 40%); opacity: .8; margin: 0 auto; padding: 0; } .lp__sep span { width: auto; min-height: 0; height: 1px; background: linear-gradient(to right, rgba(122, 31, 43, .05), rgba(122, 31, 43, .32), rgba(122, 31, 43, .05)); } }
+      @media (max-width: 620px) { .lp__n { gap: 8px; letter-spacing: .08em; } }
 """
 page = f'''<!doctype html>
 <html lang="en" class="no-js">
@@ -70,7 +84,7 @@ page = f'''<!doctype html>
     <meta charset="UTF-8" />
 {csp}{ref}    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Lucretius, On the Nature of Things · Numa Koudsie</title>
-    <meta name="description" content="Lucretius, On the Nature of Things, Book I, lines 146–224 (nothing comes from nothing): the Latin, William Ellery Leonard’s English, Hermann Diels’ German and an Arabic translation made for this site, sentence by sentence." />
+    <meta name="description" content="Lucretius, On the Nature of Things, Book I, lines 146–224 (nothing comes from nothing): William Ellery Leonard’s English, Hermann Diels’ German and an Arabic translation made for this site, sentence by sentence." />
     <meta name="author" content="Numa Koudsie" />
     <meta name="theme-color" content="#f5f1ea" />{alt}
     <link rel="stylesheet" href="styles/site.css" />
@@ -106,19 +120,22 @@ page = f'''<!doctype html>
             The opening of the argument of Lucretius, lines 146 to 224 of Book I: the terror of the mind is
             dispelled not by daylight but by looking at nature, and the first thing nature shows is that
             nothing is ever born from nothing, and nothing is destroyed into nothing. Each sentence stands in
-            the Latin and in three languages. The numbers on the left are the lines of the Latin.
+            three languages. The numbers are the lines of the Latin; its opening stands on the home page.
           </p>
         </div>
       </div>
 
-{(chr(10) + DIV + chr(10)).join(secs)}
+{DIV}
+{HEAD}
+{chr(10).join(secs)}
+{DIV}
 
       <h2 class="lp-h">Sources and how the translations were made</h2>
       <ul class="lp-src">
-        <li><b>Latin.</b> <a href="https://www.thelatinlibrary.com/lucretius/lucretius1.shtml">The Latin Library</a>, Book I, in the order of the manuscripts, which give line 155 after line 158; checked at lines 149, 155 to 158 and 218 against the edition of Hermann Diels (Berlin, 1923).</li>
+        <li><b>Line numbers.</b> They are those of the Latin of Book I as <a href="https://www.thelatinlibrary.com/lucretius/lucretius1.shtml">The Latin Library</a> prints it, in the order of the manuscripts, which give line 155 after line 158; checked at lines 149, 155 to 158 and 218 against the edition of Hermann Diels (Berlin, 1923).</li>
         <li><b>English.</b> William Ellery Leonard, <i>Of the Nature of Things: A Metrical Translation</i> (1916), <a href="https://www.gutenberg.org/ebooks/785">Project Gutenberg 785</a>, public domain. His verse takes more lines than the Latin, so his lines do not match the Latin line for line; the sentences do.</li>
         <li><b>German.</b> Hermann Diels, <i>Lukrez: Von der Natur</i> (Berlin, 1924), line for line, from <a href="https://www.textlog.de/lukrez-natur-dinge.html">textlog.de</a>. Two places are corrected: “wild” to “wird” (line 156, as the excerpt in the Falter has it) and the break of line 147. Line 173 is as printed online and has not been compared with the book.</li>
-        <li><b>Arabic.</b> Made from the Latin for this site on 10 November 2026 and read against Leonard and Diels for the sense. It is not a published translation and has not been checked by a second reader. The only published Arabic translation, from the Egyptian National Centre for Translation (Cairo, 2018), is under copyright and was not used.</li>
+        <li><b>Arabic.</b> Made from the Latin for this site on 11 November 2026, in modern literary Arabic, and read against Leonard and Diels for the sense. It is not a published translation and has not been checked by a second reader. The only published Arabic translation, from the Egyptian National Centre for Translation (Cairo, 2018), is under copyright and was not used.</li>
       </ul>
     </main>
 
