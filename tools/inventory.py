@@ -303,6 +303,7 @@ RULES = [
     (r'notes/droplets/status\.md', 'Status of the Droplet Collection study: Fermi estimate, queue, done list with evidence, decisions for Numa. Read first.', None),
     (r'notes/droplets/done\.md', 'Definition of done of the Droplet Collection study, as a checklist; only Numa may change it.', None),
     (r'notes/droplets/contract-L(\d+)\.md', lambda m: 'Gate 1 contract of model level L' + m.group(1) + ': question, picture, model, assumptions with their numbers, predictions, answers to the skeptic.', 'notes/droplets/status.md'),
+    (r'notes/droplets/check-steps-r3\.md', 'Independent check of the step-by-step passages of sections 6.3, 6.4, 9 and 10.1 to 10.3 (11 November 2026): equations re-derived, numbers recomputed, method boxes compared with the code.', 'notes/droplets/status.md'),
     (r'notes/droplets/check-steps\.md', 'Independent check of the step-by-step derivations, method boxes and examples of 11 November 2026: each equation re-derived, each method box compared with its function in physics.cjs.', 'notes/droplets/status.md'),
     (r'notes/droplets/check-L(\d+)\.md', lambda m: 'Gate 2 check of level L' + m.group(1) + ': each equation re-derived by two routes.', 'notes/droplets/status.md'),
     (r'notes/droplets/dossier-([a-z-]+)\.md', lambda m: 'Scout dossier on ' + m.group(1) + ': primary sources read for the study.', 'notes/droplets/status.md'),
