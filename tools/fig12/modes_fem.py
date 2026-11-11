@@ -98,17 +98,21 @@ def solve(Rf, h, m, nr=24, nz=48, order=2, grade=2.0, nmodes=6):
         u = w['u']; tr, tz = -w.n[1], w.n[0]; r = w.x[0]
         gt = u.grad[0] * tr + u.grad[1] * tz
         return (gt ** 2 + m * m * u.value ** 2 / r ** 2) * r
-    shapes, c, lam = [], [], []
+    shapes, c, lam, ix, vc = [], [], [], [], []
     for j in range(V.shape[1]):
         v = V[:, j] / V[o[-1], j]                              # the surface shape e_n, 1 at the wall
         shapes.append(v[o])
         # c_n = int x e_n dS / int e_n^2 dS (m = 1; the angular integrals give pi on both sides): with this, a push a_x drives
         # beta_n'' + omega_n^2 (1 + a_z/g) beta_n = -kappa_n c_n a_x, and a steady push tilts the surface by sum c_n e_n = x
         c.append(float(v @ Mss @ r_s / (v @ Mss @ v)) if m == 1 else 0.0)
+        # Ix = int x e cos(theta) dS = pi int r^2 e dr: the stout's momentum relative to the glass is rho sum Ix_n q_n' (mass
+        # conservation: only the surface moves the centre of mass); Vc = int_{high half} e cos(theta) dS = 2 int e r dr: the
+        # volume of the crest above the rest level per unit wall height (for the pour over the rim)
+        ix.append(float(np.pi * v @ Mss @ r_s) if m == 1 else 0.0); vc.append(float(2 * v @ Mss @ np.ones_like(r_s)))
         x = np.zeros(n); x[sdofs] = v; x[inner] = -X @ v
         lam.append(float(wform.assemble(fbw, u=fbw.interpolate(x)) / (x @ K @ x)))
     f = np.sqrt(G * kap) / (2 * np.pi)
-    return dict(f=f, kappa=kap, r=r_s[o], shapes=shapes, c=np.array(c), Lam=np.array(lam), ndof=n, nsurf=len(sdofs))
+    return dict(f=f, kappa=kap, r=r_s[o], shapes=shapes, c=np.array(c), Lam=np.array(lam), Ix=np.array(ix), Vc=np.array(vc), ndof=n, nsurf=len(sdofs))
 
 
 def zeta(out, nu):
@@ -155,6 +159,13 @@ def check():
     xi = jnp_zeros(1, 6); r6 = solve(Rf, h, 1, 48, 96, 2, nmodes=6)
     print('  c_n / R (exact 2/(xi^2 - 1)): ' + ', '.join(f'{a / R:.6f} ({b:.6f})' for a, b in zip(r6['c'], 2 / (xi ** 2 - 1))))
     if np.abs(r6['c'][:3] / R / (2 / (xi[:3] ** 2 - 1)) - 1).max() > 1e-4: fails.append('push coefficients')
+    from scipy.integrate import quad
+    from scipy.special import j1
+    ix_ex = np.pi * R ** 3 / xi[:3] ** 2
+    vc_ex = np.array([2 * R * R * quad(lambda u: j1(x * u) * u, 0, 1)[0] / j1(x) for x in xi[:3]])
+    print('  Ix (exact pi R^3/xi^2): ' + ', '.join(f'{a:.4e} ({b:.4e})' for a, b in zip(r6['Ix'], ix_ex))
+          + ';  Vc (exact 2 R^2 int J1(xi s) s ds / J1(xi)): ' + ', '.join(f'{a:.4e} ({b:.4e})' for a, b in zip(r6['Vc'], vc_ex)))
+    if np.abs(r6['Ix'][:3] / ix_ex - 1).max() > 1e-4 or np.abs(r6['Vc'][:3] / vc_ex - 1).max() > 1e-4: fails.append('Ix or Vc')
     r40 = solve(Rf, h, 1, 48, 96, 2, nmodes=40)
     if not 0.990 < r40['c'].sum() / R <= 1.0: fails.append('static tilt')
     print(f'  static tilt: sum of c_n e_n(R) over {len(r40["c"])} modes = {r40["c"].sum() / R:.5f} R (exact 1)')
@@ -212,7 +223,7 @@ def sweep(path):
     out = {'about': 'Fig. 12 linear sloshing modes of the Guinness tulip, by tools/fig12/modes_fem.py sweep (finite elements, P2, '
                     'mesh 48 x 96 on the meridian section). Elevation of mode (m, n): beta(t) e(r) cos(m theta). '
                     'm = 1 obeys beta\'\' + 2 zeta omega beta\' + omega^2 (1 + a_z/g) beta = -(omega^2/g) c a_x. '
-                    'Wall-friction damping zeta = (1/2) sqrt(nu/(2 omega)) Lam (laminar Stokes layer). '
+                    'Momentum relative to the glass rho sum Ix q\'; crest volume on the high half per unit wall height Vc. Wall-friction damping zeta = (1/2) sqrt(nu/(2 omega)) Lam (laminar Stokes layer). '
                     'Lengths in m, frequencies in Hz.',
            'g': G, 'glass_profile': 'public/scripts/guinness-glass.js', 'NR': NR, 'h': hs, 'R_surface': [], 'levels': []}
     worst = 0.0
@@ -230,6 +241,8 @@ def sweep(path):
             if m == 1:
                 lev['m1']['c'] = [round(float(x), 8) for x in b['c'][:nm]]
                 lev['m1']['c_sum_40_over_R'] = round(float(b['c'].sum() / b['r'][-1]), 5)
+            lev[f'm{m}']['Ix'] = [float(f'{x:.6e}') for x in b['Ix'][:nm]]
+            lev[f'm{m}']['Vc'] = [float(f'{x:.6e}') for x in b['Vc'][:nm]]
         out['levels'].append(lev)
         print(f'h {h_mm:5.1f} mm  R {out["R_surface"][-1] * 1000:5.2f} mm  f11 {lev["m1"]["f"][0]:.4f} Hz  f01 {lev["m0"]["f"][0]:.4f}  '
               f'f21 {lev["m2"]["f"][0]:.4f}  c1 {lev["m1"]["c"][0] * 1000:.3f} mm  zeta11 (water) '

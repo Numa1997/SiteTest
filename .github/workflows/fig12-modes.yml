@@ -11,6 +11,9 @@ on:
       - tools/fig12/requirements.txt
       - tools/fig12/same_data.py
       - public/scripts/guinness-glass.js
+      - public/scripts/stout-modal.js
+      - public/scripts/stout-cart.js
+      - tools/fig12/modal-check.cjs
       - .github/workflows/fig12-modes.yml
 permissions:
   contents: write
@@ -22,8 +25,8 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
         with:
           python-version: '3.13'
       - name: Install the pinned tools
@@ -32,20 +35,26 @@ jobs:
         run: python tools/fig12/modes_fem.py check
       - name: Every fill height
         run: python tools/fig12/modes_fem.py sweep "$RUNNER_TEMP/modes.json" | tee "$RUNNER_TEMP/sweep.log"
-      - name: Commit the data if its numbers changed
+      - name: Take the new data if its numbers changed
+        id: data
         run: |
           if python tools/fig12/same_data.py "$RUNNER_TEMP/modes.json" public/data/fig12/modes.json; then
-            echo "Numbers unchanged: nothing to commit."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
           else
-            mkdir -p public/data/fig12
-            cp "$RUNNER_TEMP/modes.json" public/data/fig12/modes.json
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add public/data/fig12/modes.json
-            git commit -m "Fig. 12 data: modes.json recomputed by workflow run ${{ github.run_id }}"
-            git push
+            mkdir -p public/data/fig12 && cp "$RUNNER_TEMP/modes.json" public/data/fig12/modes.json
+            echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
-      - uses: actions/upload-artifact@v4
+      - name: The page's live model against the data (fails the job before anything is committed)
+        run: node tools/fig12/modal-check.cjs
+      - name: Commit the data
+        if: steps.data.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/data/fig12/modes.json
+          git commit -m "Fig. 12 data: modes.json recomputed by workflow run ${{ github.run_id }}"
+          git push
+      - uses: actions/upload-artifact@v6
         with:
           name: fig12-modes-log
           path: ${{ runner.temp }}/sweep.log
