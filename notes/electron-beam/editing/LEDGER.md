@@ -74,6 +74,9 @@ when V hands that chapter over. V reads this file before editing every chapter. 
   optimum angle, CD-SEM (with CD named forward to ch07).
 - **Promises.** ch06 measures the deeper, harder hit at 30 kV; chapter 7 defines CD.
 - **Hand-over.** "What chapters 7 and 8 receive": $d_p$, $I_p$, the angle.
+- **Voice pass.** Brightness, reduced brightness, beam voltage and FW50 are now reminders with pointers to chapters 2 and 3,
+  not second definitions; the diffraction wavelength sentence untangled ({{num:lam800}} pm belongs to λ, not to $V^*$);
+  long sentences on chromatic blur, the checked coefficients, published lenses and image resolution split.
 
 ## ch06 · Scan and hit
 - **Opening picture.** Marbles thrown into a box of heavier balls.
