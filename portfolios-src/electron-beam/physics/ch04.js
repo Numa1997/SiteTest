@@ -94,39 +94,70 @@
   }
   const compute = p => solve(p, []);
 
-  // the drawing: the lens (coil and pole pieces) in section, the field B(z) on a strip, and the axial ray from the object to the wafer
+  // Labels that keep clear of the drawing: every line a label must not touch is registered as points (CSS px), every placed label and
+  // every solid part as a box; a label goes to the first of its candidate places ([x, y, align, ...]) whose box, grown by a margin,
+  // holds no point, meets no box and stays inside the bounds (the canvas unless given). put returns the box and the place used.
+  function labels(ctx, w, h) {
+    const P = [], Bx = [];
+    const seg = (x0, y0, x1, y1) => { const n = Math.max(1, Math.ceil(Math.hypot(x1 - x0, y1 - y0) / 2)); for (let i = 0; i <= n; i++) P.push(x0 + (x1 - x0) * i / n, y0 + (y1 - y0) * i / n); };
+    const box = (t, c) => { ctx.textAlign = c[2] || 'left'; const m = ctx.measureText(t); return [c[0] - m.actualBoundingBoxLeft, c[1] - m.actualBoundingBoxAscent, c[0] + m.actualBoundingBoxRight, c[1] + m.actualBoundingBoxDescent]; };
+    const free = (b, m, r) => {
+      if (b[0] < r[0] + 1 || b[1] < r[1] + 1 || b[2] > r[2] - 1 || b[3] > r[3] - 1) return false;
+      for (let i = 0; i < P.length; i += 2) if (P[i] > b[0] - m && P[i] < b[2] + m && P[i + 1] > b[1] - m && P[i + 1] < b[3] + m) return false;
+      return Bx.every(c => b[2] + m <= c[0] || c[2] + m <= b[0] || b[3] + m <= c[1] || c[3] + m <= b[1]);
+    };
+    return {
+      line(xy) { for (let i = 2; i < xy.length; i += 2) seg(xy[i - 2], xy[i - 1], xy[i], xy[i + 1]); if (xy.length === 2) P.push(xy[0], xy[1]); },
+      block(b) { Bx.push(b); },
+      free: (b, m = 3, r = [0, 0, w, h]) => free(b, m, r),
+      put(t, cands, m = 3, r = [0, 0, w, h]) {
+        const c = cands.find(c => free(box(t, c), m, r)) || cands[0], b = box(t, c);
+        ctx.fillText(t, c[0], c[1]); Bx.push(b); return [b, c];
+      },
+    };
+  }
+
+  // the drawing: the lens (coil and pole pieces) in section, the field B(z) on the axis, and the axial ray from the object to the wafer;
+  // a key along the bottom edge names the ray and the field, so that no label sits on a line
   function draw(ctx, w, h, p, out) {
     ctx.clearRect(0, 0, w, h);
-    const rec = out.lens_ray, a = p.a_lens;
-    // horizontal axis: z from -6a to WD + a on a linear scale (the object is far to the left; its ray enters from the edge)
-    const zl = -Math.max(6 * a, 1.2 * p.WD), zr = p.WD * 1.15 + a, L = 30, R = w - 20;
-    const X = z => L + (z - zl) / (zr - zl) * (R - L);
-    const yAx = h * 0.58, sc = (h * 0.30);
-    let rmax = 0; for (let i = 0; i < rec.length; i += 2) if (rec[i] >= zl) rmax = Math.max(rmax, Math.abs(rec[i + 1]));
+    const rec = out.lens_ray, a = p.a_lens, lab = labels(ctx, w, h);
     ctx.font = "11px 'IBM Plex Mono', monospace";
-    // coil and pole pieces (drawn, not to scale)
+    const H = h - 40;                                                    // the drawing above, the key in the last 40 px
+    // horizontal axis: z from -6a to WD + a on a linear scale (the object is far to the left; its ray enters from the edge)
+    const zl = -Math.max(6 * a, 1.2 * p.WD), zr = p.WD * 1.15 + a, L = 16, R = w - 16;
+    const X = z => L + (z - zl) / (zr - zl) * (R - L);
+    // coil and pole pieces (drawn, not to scale) at the top and the bottom; the ray's height A keeps it clear of the coil's label
+    const ch = Math.max(14, H * 0.13), cw = Math.max(16, X(1.6 * a) - X(-1.6 * a)), yAx = H / 2, A = yAx - (8 + ch + 24);
     ctx.fillStyle = '#efe4c8'; ctx.strokeStyle = '#3a322e'; ctx.lineWidth = 1;
-    const cw = Math.max(16, X(1.6 * a) - X(-1.6 * a));
-    ctx.fillRect(X(0) - cw / 2, 8, cw, h * 0.16); ctx.strokeRect(X(0) - cw / 2, 8, cw, h * 0.16);
-    ctx.fillRect(X(0) - cw / 2, h - 8 - h * 0.16, cw, h * 0.16); ctx.strokeRect(X(0) - cw / 2, h - 8 - h * 0.16, cw, h * 0.16);
-    ctx.fillStyle = '#5a504b'; ctx.textAlign = 'center'; ctx.fillText('coil, NI = ' + core.fmt(out.NI, 3) + ' A', X(0), 8 + h * 0.16 + 13);
-    // field strip
-    ctx.strokeStyle = '#8b8079'; ctx.setLineDash([4, 3]); ctx.beginPath();
-    for (let i = 0; i <= 200; i++) { const z = zl + (zr - zl) * i / 200, y = yAx - sc * 0.9 * glaser(z, 1, a)[0]; i ? ctx.lineTo(X(z), y) : ctx.moveTo(X(z), y); }
-    ctx.stroke(); ctx.setLineDash([]);
-    ctx.fillStyle = '#8b8079'; ctx.textAlign = 'left'; ctx.fillText('B(z), dashed', X(a) + 6, yAx - sc * 0.9);
+    for (const y of [8, H - 8 - ch]) { ctx.fillRect(X(0) - cw / 2, y, cw, ch); ctx.strokeRect(X(0) - cw / 2, y, cw, ch); lab.block([X(0) - cw / 2, y, X(0) + cw / 2, y + ch]); }
+    // the field on the axis, dashed, its peak at 0.9 of the ray's height
+    const fz = []; for (let i = 0; i <= 200; i++) { const z = zl + (zr - zl) * i / 200; fz.push(X(z), yAx - 0.9 * A * glaser(z, 1, a)[0]); }
+    ctx.strokeStyle = '#8b8079'; ctx.setLineDash([4, 3]); ctx.beginPath(); for (let i = 0; i < fz.length; i += 2) i ? ctx.lineTo(fz[i], fz[i + 1]) : ctx.moveTo(fz[i], fz[i + 1]); ctx.stroke(); ctx.setLineDash([]);
+    lab.line(fz);
     // axis and wafer
-    ctx.strokeStyle = '#d9d0c2'; ctx.beginPath(); ctx.moveTo(L, yAx); ctx.lineTo(R, yAx); ctx.stroke();
-    ctx.fillStyle = '#3a322e'; ctx.fillRect(X(p.WD) - 2, yAx - sc * 0.6, 4, sc * 1.2);
-    ctx.fillStyle = '#5a504b'; ctx.textAlign = 'left'; ctx.fillText('wafer', X(p.WD) + 6, yAx + 4);
+    ctx.strokeStyle = '#d9d0c2'; ctx.beginPath(); ctx.moveTo(L, yAx); ctx.lineTo(R, yAx); ctx.stroke(); lab.line([L, yAx, R, yAx]);
+    const xw = X(p.WD), hw = 0.6 * A;
+    ctx.fillStyle = '#3a322e'; ctx.fillRect(xw - 2, yAx - hw, 4, 2 * hw); lab.block([xw - 2, yAx - hw, xw + 2, yAx + hw]);
     // the ray (and its mirror image), scaled to the largest excursion in view
+    let rmax = 0; for (let i = 0; i < rec.length; i += 2) if (rec[i] >= zl) rmax = Math.max(rmax, Math.abs(rec[i + 1]));
     ctx.strokeStyle = '#7a1f2b'; ctx.lineWidth = 1.8;
     for (const sgn of [1, -1]) {
-      ctx.beginPath(); let first = true;
-      for (let i = 0; i < rec.length; i += 2) { if (rec[i] < zl) continue; const xx = X(rec[i]), yy = yAx - sgn * sc * rec[i + 1] / rmax; first ? ctx.moveTo(xx, yy) : ctx.lineTo(xx, yy); first = false; }
-      ctx.stroke();
+      const xy = []; for (let i = 0; i < rec.length; i += 2) if (rec[i] >= zl) xy.push(X(rec[i]), yAx - sgn * A * rec[i + 1] / rmax);
+      ctx.beginPath(); for (let i = 0; i < xy.length; i += 2) i ? ctx.lineTo(xy[i], xy[i + 1]) : ctx.moveTo(xy[i], xy[i + 1]); ctx.stroke();
+      lab.line(xy);
     }
-    ctx.fillStyle = '#5a504b'; ctx.textAlign = 'left'; ctx.fillText('← from the object, ' + core.fmt(p.u_obj * 1e3, 3) + ' mm', L, yAx - sc * 0.55);
+    ctx.lineWidth = 1;
+    // the two labels in the drawing, each at the first free place of a few
+    ctx.fillStyle = '#5a504b';
+    lab.put('coil, NI = ' + core.fmt(out.NI, 3) + ' A', [[X(0), 8 + ch + 14, 'center'], [X(0), H - 8 - ch - 6, 'center'], [X(0) + cw / 2 + 6, 8 + ch - 2, 'left'], [X(0) - cw / 2 - 6, 8 + ch - 2, 'right']]);
+    lab.put('wafer', [[xw, yAx - hw - 6, 'center'], [xw + 2, yAx - hw - 6, 'right'], [xw, yAx + hw + 14, 'center'], [xw + 2, yAx + hw + 14, 'right'], [xw - 6, yAx - hw + 8, 'right'], [xw - 6, yAx + hw - 2, 'right']]);
+    // the key: what the wine line and the dashed line are
+    const k1 = H + 16, k2 = H + 32;
+    ctx.strokeStyle = '#7a1f2b'; ctx.lineWidth = 1.8; ctx.beginPath(); ctx.moveTo(L, k1 - 4); ctx.lineTo(L + 22, k1 - 4); ctx.stroke();
+    ctx.strokeStyle = '#8b8079'; ctx.lineWidth = 1; ctx.setLineDash([4, 3]); ctx.beginPath(); ctx.moveTo(L, k2 - 4); ctx.lineTo(L + 22, k2 - 4); ctx.stroke(); ctx.setLineDash([]);
+    ctx.textAlign = 'left'; ctx.fillStyle = '#5a504b'; ctx.fillText('ray ← from the object, ' + core.fmt(p.u_obj * 1e3, 3) + ' mm', L + 30, k1);
+    ctx.fillStyle = '#8b8079'; ctx.fillText('B(z) on the axis', L + 30, k2);
   }
 
   return {
@@ -138,7 +169,7 @@
     ui: {
       controls: ['V_land', 'a_lens', 'WD', 'u_obj'],
       readouts: ['NI', 'f', 'C_s', 'C_c', 'M', 'theta_rot'],
-      aspect: '4 / 3', aspectPhone: '4 / 3',
+      aspect: '4 / 3', aspectPhone: '1 / 1',
       caption: 'The objective lens in section: coil (drawn, not to scale), the bell-shaped field on the axis (dashed) and the axial ray from the object to the wafer. The excitation NI is solved so that the ray meets the axis at the wafer; where no excitation with a single crossing can do that, the simulation says so instead of drawing. The lens is computed at the landing voltage: this lens model has no retarding field.',
     },
     compute, draw, paraxial, ray3d, glaser, focusB0,

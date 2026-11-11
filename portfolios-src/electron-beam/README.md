@@ -67,5 +67,13 @@ it is: its numbered HTML with `\( \)` and `\[ \]` is typeset here, its `css` and
 - The page loads nothing from outside the site: the build writes the site's security policy and referrer tag after the charset line, fonts and KaTeX
   styles are the site's own files, and `check_page.cjs` fails on any other request.
 - A simulation writes nothing the display recomputes: `compute` gives the numbers, the slot only reads them.
+- A figure's words sit where nothing is drawn (chapters 3 to 8, 11 November 2026). A canvas `draw` registers its curves and solid parts with a
+  small `labels(ctx, w, h)` helper (a copy in each of `physics/ch03.js`, `ch04.js`, `ch05.js` and `ch08.js`) and puts each word at the first of a
+  few candidate places that is free; chapter 6 sets its beam label on whichever side of the beam has room, chapter 7 widens its left margin to its
+  longest count; keys stand below the plot or the drawing; the frame, the grid, the squares of a colour map and leaders are drawn with
+  `ctx.__nocollide = true`. Each SVG figure of these chapters has `class="ebf"` and a `<style>` that sets its labels in IBM Plex Mono at 23 units
+  of the 640-unit width on a phone (11 px on a 360 px screen), 17 from 480 px and 15 from 760 px, and is laid out for the largest size; its frame
+  and grid carry `data-nocollide`. Measured in Chromium at 360, 390, 480, 600, 760, 900, 1024 and 1440 px, at the default and at both ends of every
+  slider and every menu entry: no word meets a line, a solid part, another word or the edge.
 - The page never claims affiliation with Applied Materials. Its public statements are quoted as public claims, with their source.
 - Screenshots are reproducible and stay out of git (`notes/.gitignore`).

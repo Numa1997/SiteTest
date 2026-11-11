@@ -151,23 +151,27 @@ def fig_curve():
             a = R5.optimum(q)
             pts.append((I, R5.terms(q, a)['dp']))
         series.append((name, col, pts))
-    W, H, L, Rr, T, B = 640, 330, 70, 620, 20, 280
+    # label size: 23 units of the 640-unit width on a phone (11 px on a 360 px screen), 17 on a small tablet, 15 on a wide screen; the
+    # labels are placed for the largest size. The key sits in the top left corner, where neither curve comes.
+    css = ('<style>.pfig svg.ebf text{font-family:\'IBM Plex Mono\',monospace;font-size:23px}'
+           '@media (min-width:480px){.pfig svg.ebf text{font-size:17px}}@media (min-width:760px){.pfig svg.ebf text{font-size:15px}}</style>')
+    W, H, L, Rr, T, B = 640, 380, 96, 596, 16, 288
     X = lambda I: L + (math.log10(I) + 13) / 5 * (Rr - L)
     ylo, yhi = -9.0, -7.3
     Y = lambda d: B - (math.log10(d) - ylo) / (yhi - ylo) * (B - T)
-    out = ['<svg viewBox="0 0 %d %d" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Smallest probe diameter against probe current for two sources">' % (W, H),
-           '<rect width="%d" height="%d" fill="#fff"/><rect x="%d" y="%d" width="%d" height="%d" fill="none" stroke="#d9d0c2"/>' % (W, H, L, T, Rr - L, B - T)]
-    st = 'font-family:IBM Plex Mono,monospace;font-size:11px;fill:#5a504b'
+    out = ['<svg class="ebf" viewBox="0 0 %d %d" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Smallest probe diameter against probe current for two sources">' % (W, H), css,
+           '<rect width="%d" height="%d" fill="#fff"/><rect x="%d" y="%d" width="%d" height="%d" fill="none" stroke="#d9d0c2" data-nocollide=""/>' % (W, H, L, T, Rr - L, B - T)]
+    st = 'fill:#5a504b'
     for k, lab in zip(range(-13, -7), ('0.1 pA', '1 pA', '10 pA', '100 pA', '1 nA', '10 nA')):
         x = X(10 ** k)
-        out.append('<line x1="%.1f" y1="%d" x2="%.1f" y2="%d" stroke="#e6dfd2"/><text x="%.1f" y="%d" text-anchor="middle" style="%s">%s</text>' % (x, T, x, B, x, B + 16, st, lab))
+        out.append('<line x1="%.1f" y1="%d" x2="%.1f" y2="%d" stroke="#e6dfd2" data-nocollide=""/><text x="%.1f" y="%d" text-anchor="middle" style="%s">%s</text>' % (x, T, x, B, x, B + 34, st, lab))
     for d, lab in ((1e-9, '1 nm'), (2e-9, '2 nm'), (5e-9, '5 nm'), (1e-8, '10 nm'), (2e-8, '20 nm'), (4e-8, '40 nm')):
         y = Y(d)
-        out.append('<line x1="%d" y1="%.1f" x2="%d" y2="%.1f" stroke="#e6dfd2"/><text x="%d" y="%.1f" text-anchor="end" style="%s">%s</text>' % (L, y, Rr, y, L - 6, y + 4, st, lab))
-    out.append('<text x="%d" y="%d" text-anchor="middle" style="%s">probe current I_p</text>' % ((L + Rr) // 2, H - 8, st))
+        out.append('<line x1="%d" y1="%.1f" x2="%d" y2="%.1f" stroke="#e6dfd2" data-nocollide=""/><text x="%d" y="%.1f" text-anchor="end" style="%s">%s</text>' % (L, y, Rr, y, L - 8, y + 7, st, lab))
+    out.append('<text x="%d" y="%d" text-anchor="middle" style="%s">probe current I_p</text>' % ((L + Rr) // 2, H - 12, st))
     for j, (name, col, pts) in enumerate(series):
         out.append('<polyline fill="none" stroke="%s" stroke-width="2.2" points="%s"/>' % (col, ' '.join('%.1f,%.1f' % (X(I), Y(d)) for I, d in pts)))
-        out.append('<line x1="%d" y1="%d" x2="%d" y2="%d" stroke="%s" stroke-width="2.2"/><text x="%d" y="%d" style="%s">%s</text>' % (L + 12, T + 16 + 16 * j, L + 36, T + 16 + 16 * j, col, L + 42, T + 20 + 16 * j, st, name))
+        out.append('<line x1="%d" y1="%d" x2="%d" y2="%d" stroke="%s" stroke-width="2.2"/><text x="%d" y="%d" style="%s">%s</text>' % (L + 12, T + 22 + 28 * j, L + 40, T + 22 + 28 * j, col, L + 48, T + 30 + 28 * j, st, name))
     out.append('</svg>')
     return ''.join(out)
 

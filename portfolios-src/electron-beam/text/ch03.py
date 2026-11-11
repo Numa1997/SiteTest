@@ -107,34 +107,42 @@ ex('nrc_pct_100k', '100*(s/v-1)', {'s': 'vs_100k', 'v': 'v_100k'}, sig=2)
 const('coulomb_limit', 3e8)          # Bronsgeest et al. 2008, section III, citing van Veen et al. 2001: Schottky interactions matter above this
 ex('sch_vs_limit', 'b/l', {'b': 'sch_Bp', 'l': 'coulomb_limit'}, sig=2)
 
-STYLE = 'font-family:IBM Plex Mono,monospace;font-size:11px;fill:#5a504b'
-SVG_GUN = ('<svg viewBox="0 0 640 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Potential energy of an electron along the column">'
-           '<rect x="0" y="0" width="640" height="250" fill="#fff"/>'
-           '<rect x="150" y="30" width="8" height="190" fill="#d9d0c2"/><rect x="230" y="30" width="8" height="190" fill="#d9d0c2"/><rect x="520" y="30" width="8" height="190" fill="#d9d0c2"/>'
-           '<line x1="60" y1="30" x2="60" y2="220" stroke="#3a322e"/><line x1="60" y1="220" x2="610" y2="220" stroke="#3a322e"/>'
-           '<text x="16" y="40" style="%s">U(z)</text><text x="590" y="240" style="%s">z</text>'
-           '<path d="M70 50 L120 50 C140 50 150 70 170 110 C200 170 230 200 280 205 L420 205 C470 205 500 180 530 160 L600 160" fill="none" stroke="#7a1f2b" stroke-width="2.2"/>'
-           '<line x1="70" y1="50" x2="600" y2="50" stroke="#8b8079" stroke-dasharray="4 4"/>'
-           '<text x="72" y="44" style="%s">tip: U = 0 (Fermi level)</text>'
-           '<text x="300" y="198" style="%s">column: U = −eV_acc</text>'
-           '<text x="500" y="150" style="%s">wafer: U = −eV_land</text>'
-           '<line x1="290" y1="54" x2="290" y2="202" stroke="#1c1518" marker-end="url(#a3)" marker-start="url(#a3)"/>'
-           '<text x="296" y="130" style="%s">kinetic energy eV_acc</text>'
-           '<line x1="560" y1="54" x2="560" y2="157" stroke="#1c1518" marker-end="url(#a3)" marker-start="url(#a3)"/>'
-           '<text x="470" y="100" style="%s">eV_land</text>'
-           '<text x="130" y="240" style="%s">extractor</text><text x="216" y="240" style="%s">anode</text><text x="500" y="240" style="%s">retarding plate</text>'
+# Label size of the figures: 23 units of the 640-unit width on a phone (11 px on a 360 px screen), 17 on a small tablet, 15 on a wide
+# screen (16 to 17 px). Every label is placed for the largest size, so it stays clear of the drawing at all three.
+SVGCSS = ('<style>.pfig svg.ebf text{font-family:\'IBM Plex Mono\',monospace;font-size:23px}'
+          '@media (min-width:480px){.pfig svg.ebf text{font-size:17px}}@media (min-width:760px){.pfig svg.ebf text{font-size:15px}}</style>')
+STYLE = 'fill:#5a504b'
+SVG_GUN = ('<svg class="ebf" viewBox="0 0 640 500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Potential energy of an electron along the column">'
+           + SVGCSS +
+           '<rect x="0" y="0" width="640" height="500" fill="#fff"/>'
+           # the three plates, marked where they stand on the z axis
+           '<rect x="150" y="420" width="8" height="30" fill="#d9d0c2"/><rect x="266" y="420" width="8" height="30" fill="#d9d0c2"/><rect x="460" y="420" width="8" height="30" fill="#d9d0c2"/>'
+           '<line x1="56" y1="60" x2="56" y2="450" stroke="#3a322e"/><line x1="56" y1="450" x2="610" y2="450" stroke="#3a322e"/>'
+           '<text x="6" y="44" style="%s">U(z)</text><text x="606" y="438" style="%s">z</text>'
+           '<path d="M66 110 L110 110 C150 110 170 160 190 250 C210 340 230 380 270 380 L390 380 C420 380 440 290 460 250 L610 250" fill="none" stroke="#7a1f2b" stroke-width="2.2"/>'
+           '<line x1="66" y1="110" x2="610" y2="110" stroke="#8b8079" stroke-dasharray="4 4"/>'
+           '<text x="66" y="96" style="%s">tip: U = 0 (Fermi level)</text>'
+           '<text x="276" y="408" style="%s">column: U = −eV_acc</text>'
+           '<text x="636" y="280" text-anchor="end" style="%s">wafer:<tspan x="636" dy="1.25em">U = −eV_land</tspan></text>'
+           '<line x1="300" y1="114" x2="300" y2="376" stroke="#1c1518" marker-end="url(#a3)" marker-start="url(#a3)"/>'
+           '<text x="310" y="200" style="%s">kinetic energy<tspan x="310" dy="1.25em">eV_acc</tspan></text>'
+           '<line x1="560" y1="114" x2="560" y2="246" stroke="#1c1518" marker-end="url(#a3)" marker-start="url(#a3)"/>'
+           '<text x="552" y="160" text-anchor="end" style="%s">eV_land</text>'
+           '<text x="154" y="478" text-anchor="middle" style="%s">extractor</text><text x="270" y="478" text-anchor="middle" style="%s">anode</text><text x="464" y="478" text-anchor="middle" style="%s">retarding plate</text>'
            '<defs><marker id="a3" viewBox="0 0 8 8" refX="4" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L8 4 L0 8 z" fill="#1c1518"/></marker></defs>'
            '</svg>') % ((STYLE,) * 10)
 
-SVG_PHASE = ('<svg viewBox="0 0 640 230" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The same beam in phase space at two planes">'
-             '<rect x="0" y="0" width="640" height="230" fill="#fff"/>'
-             '<line x1="40" y1="115" x2="290" y2="115" stroke="#d9d0c2"/><line x1="165" y1="20" x2="165" y2="210" stroke="#d9d0c2"/>'
-             '<line x1="350" y1="115" x2="610" y2="115" stroke="#d9d0c2"/><line x1="480" y1="20" x2="480" y2="210" stroke="#d9d0c2"/>'
-             '<ellipse cx="165" cy="115" rx="90" ry="22" fill="#e2a2aa" fill-opacity=".55" stroke="#7a1f2b"/>'
-             '<ellipse cx="480" cy="115" rx="22" ry="90" fill="#e2a2aa" fill-opacity=".55" stroke="#7a1f2b"/>'
-             '<text x="272" y="108" style="%s">x</text><text x="172" y="30" style="%s">p_x</text>'
-             '<text x="592" y="108" style="%s">x</text><text x="487" y="30" style="%s">p_x</text>'
-             '<text x="60" y="205" style="%s">plane 1: wide, nearly parallel</text><text x="370" y="205" style="%s">plane 2: a focus (narrow, steep), same area</text>'
+SVG_PHASE = ('<svg class="ebf" viewBox="0 0 640 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The same beam in phase space at two planes">'
+             + SVGCSS +
+             '<rect x="0" y="0" width="640" height="340" fill="#fff"/>'
+             '<line x1="30" y1="115" x2="300" y2="115" stroke="#d9d0c2"/><line x1="165" y1="12" x2="165" y2="218" stroke="#d9d0c2"/>'
+             '<line x1="340" y1="115" x2="620" y2="115" stroke="#d9d0c2"/><line x1="480" y1="12" x2="480" y2="218" stroke="#d9d0c2"/>'
+             '<ellipse cx="165" cy="115" rx="95" ry="22" fill="#e2a2aa" fill-opacity=".55" stroke="#7a1f2b"/>'
+             '<ellipse cx="480" cy="115" rx="22" ry="78" fill="#e2a2aa" fill-opacity=".55" stroke="#7a1f2b"/>'
+             '<text x="284" y="102" style="%s">x</text><text x="173" y="28" style="%s">p_x</text>'
+             '<text x="604" y="102" style="%s">x</text><text x="488" y="28" style="%s">p_x</text>'
+             '<text x="30" y="258" style="%s">plane 1: wide,<tspan x="30" dy="1.25em">nearly parallel</tspan></text>'
+             '<text x="340" y="258" style="%s">plane 2: a focus<tspan x="340" dy="1.25em">(narrow, steep),</tspan><tspan x="340" dy="1.25em">same area</tspan></text>'
              '</svg>') % ((STYLE,) * 6)
 
 LITERALS = {

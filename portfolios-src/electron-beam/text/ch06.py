@@ -158,27 +158,46 @@ def checks_table():
 
 
 COL = {'Si': '#7a1f2b', 'Al': '#8b8079', 'Cu': '#7a4b12', 'Au': '#3a322e'}
-ST = 'font-family:IBM Plex Mono,monospace;font-size:19px;fill:#3a322e'
+# Label size of the figures: 23 units of the 640-unit width on a phone (11 px on a 360 px screen), 17 on a small tablet, 15 on a wide
+# screen (16 to 17 px). Every label is placed for the largest size, so it stays clear of the drawing at all three: the element names
+# sit beyond the right end of their curves, the keys below the axis title.
+SVGCSS = ('<style>.pfig svg.ebf text{font-family:\'IBM Plex Mono\',monospace;font-size:23px}'
+          '@media (min-width:480px){.pfig svg.ebf text{font-size:17px}}@media (min-width:760px){.pfig svg.ebf text{font-size:15px}}</style>')
+ST = 'fill:#3a322e'
 
 
 def _frame(W, H, L, Rr, T, Bt, ylab, yticks, Y):
-    out = ['<svg viewBox="0 0 %d %d" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="%s">' % (W, H, html.escape(ylab)),
-           '<rect width="%d" height="%d" fill="#fff"/><rect x="%d" y="%d" width="%d" height="%d" fill="none" stroke="#d9d0c2"/>' % (W, H, L, T, Rr - L, Bt - T)]
+    out = ['<svg class="ebf" viewBox="0 0 %d %d" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="%s">' % (W, H, html.escape(ylab)), SVGCSS,
+           '<rect width="%d" height="%d" fill="#fff"/><rect x="%d" y="%d" width="%d" height="%d" fill="none" stroke="#d9d0c2" data-nocollide=""/>' % (W, H, L, T, Rr - L, Bt - T)]
     X = lambda E: L + (math.log10(E) - math.log10(0.5)) / (math.log10(30) - math.log10(0.5)) * (Rr - L)
     for E, lab in ((0.5, '0.5'), (1, '1'), (2, '2'), (5, '5'), (10, '10'), (20, '20'), (30, '30')):
-        out.append('<line x1="%.1f" y1="%d" x2="%.1f" y2="%d" stroke="#eee7da"/><text x="%.1f" y="%d" text-anchor="middle" style="%s">%s</text>' % (X(E), T, X(E), Bt, X(E), Bt + 17, ST, lab))
+        out.append('<line x1="%.1f" y1="%d" x2="%.1f" y2="%d" stroke="#eee7da" data-nocollide=""/><text x="%.1f" y="%d" text-anchor="middle" style="%s">%s</text>' % (X(E), T, X(E), Bt, X(E), Bt + 34, ST, lab))
     for v, lab in yticks:
         y = Y(v)
-        out.append('<line x1="%d" y1="%.1f" x2="%d" y2="%.1f" stroke="#eee7da"/><text x="%d" y="%.1f" text-anchor="end" style="%s">%s</text>' % (L, y, Rr, y, L - 6, y + 4, ST, lab))
-    out.append('<text x="%d" y="%d" text-anchor="middle" style="%s">landing energy (keV), logarithmic</text>' % ((L + Rr) // 2, Bt + 36, ST))
-    out.append('<text x="%d" y="%d" style="%s">%s</text>' % (L, T - 8, ST, html.escape(ylab)))
+        out.append('<line x1="%d" y1="%.1f" x2="%d" y2="%.1f" stroke="#eee7da" data-nocollide=""/><text x="%d" y="%.1f" text-anchor="end" style="%s">%s</text>' % (L, y, Rr, y, L - 8, y + 7, ST, lab))
+    out.append('<text x="%d" y="%d" text-anchor="middle" style="%s">landing energy (keV), logarithmic</text>' % ((L + Rr) // 2, Bt + 68, ST))
+    out.append('<text x="%d" y="%d" style="%s">%s</text>' % (16, T - 20, ST, html.escape(ylab)))
     return out, X
 
 
+def _names(out, ends, Rr, lo, hi):
+    """Element names beyond the right end of their curves, pushed apart to 26 units where two ends are close, each with a short leader."""
+    ends = sorted(ends, key=lambda e: e[1])
+    ys = []
+    for _, y, _ in ends:
+        ys.append(max(y + 8, ys[-1] + 26) if ys else max(y + 8, lo + 21))
+    over = ys[-1] - hi if ys else 0
+    if over > 0:
+        ys = [v - over for v in ys]
+    for (mt, y, col), yl in zip(ends, ys):
+        out.append('<line x1="%d" y1="%.1f" x2="%d" y2="%.1f" stroke="%s"/><text x="%d" y="%.1f" style="%s;fill:%s">%s</text>' % (Rr + 3, y, Rr + 11, yl - 8, col, Rr + 14, yl, ST, col, mt))
+
+
 def fig_eta():
-    W, H, L, Rr, T, Bt = 640, 400, 62, 620, 36, 330
+    W, H, L, Rr, T, Bt = 640, 458, 72, 590, 52, 338
     Y = lambda v: Bt - v / 0.7 * (Bt - T)
     out, X = _frame(W, H, L, Rr, T, Bt, 'backscattering coefficient η', [(v, '%.1f' % v) for v in (0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7)], Y)
+    ends = []
     for mt in ('Si', 'Al', 'Cu', 'Au'):
         col = COL[mt]
         for E, e in RUNS['database'].get(mt, []):
@@ -186,18 +205,19 @@ def fig_eta():
                 out.append('<circle cx="%.1f" cy="%.1f" r="2.6" fill="none" stroke="%s" stroke-width="1"/>' % (X(E), Y(e), col))
         pts = [(r['E_keV'], r['eta']) for r in RUNS['runs'][mt]]
         out.append('<polyline fill="none" stroke="%s" stroke-width="2.2" points="%s"/>' % (col, ' '.join('%.1f,%.1f' % (X(E), Y(e)) for E, e in pts)))
-        E_, e_ = pts[-1]
-        out.append('<text x="%.1f" y="%.1f" style="%s;fill:%s">%s</text>' % (X(E_) - 30, Y(e_) + {'Si': -8, 'Al': 20, 'Cu': -8, 'Au': -8}[mt], ST, col, mt))
-    out.append('<text x="%d" y="%d" style="%s">lines: Monte Carlo · circles: measured</text>' % (L + 8, Bt - 10, ST))
+        ends.append((mt, Y(pts[-1][1]), col))
+    _names(out, ends, Rr, T, Bt)
+    out.append('<text x="%d" y="%d" style="%s">lines: Monte Carlo · circles: measured</text>' % (16, Bt + 108, ST))
     out.append('</svg>')
     return ''.join(out)
 
 
 def fig_delta():
-    W, H, L, Rr, T, Bt = 640, 400, 62, 620, 36, 330
+    W, H, L, Rr, T, Bt = 640, 486, 72, 590, 52, 338
     lo, hi = math.log10(0.02), math.log10(2.0)
     Y = lambda v: Bt - (math.log10(max(v, 1e-3)) - lo) / (hi - lo) * (Bt - T)
     out, X = _frame(W, H, L, Rr, T, Bt, 'secondary-electron yield δ, logarithmic', [(v, str(v)) for v in (0.02, 0.05, 0.1, 0.2, 0.5, 1, 2)], Y)
+    ends = []
     for mt in ('Si', 'Au'):
         col = COL[mt]
         Es = [0.5 * 60 ** (i / 80) for i in range(81)]
@@ -207,10 +227,10 @@ def fig_delta():
         for E, key in ((2.0, 'd2'), (20.0, 'd20')):
             v = LJ[mt][key]
             out.append('<rect x="%.1f" y="%.1f" width="7" height="7" fill="none" stroke="%s" stroke-width="1.3"/>' % (X(E) - 3.5, Y(v) - 3.5, col))
-        E_, d_ = pts[0]
-        out.append('<text x="%.1f" y="%.1f" style="%s;fill:%s">%s</text>' % (X(E_) + 6, Y(d_) - 8, ST, col, mt))
-    out.append('<text x="%d" y="%d" style="%s">solid: ours · dashed: universal law</text>' % (L + 8, Bt - 30, ST))
-    out.append('<text x="%d" y="%d" style="%s">squares: Lin and Joy’s Monte Carlo</text>' % (L + 8, Bt - 8, ST))
+        ends.append((mt, Y(pts[-1][1]), col))
+    _names(out, ends, Rr, T, Bt)
+    out.append('<text x="%d" y="%d" style="%s">solid: ours · dashed: universal law</text>' % (16, Bt + 108, ST))
+    out.append('<text x="%d" y="%d" style="%s">squares: Lin and Joy’s Monte Carlo</text>' % (16, Bt + 136, ST))
     out.append('</svg>')
     return ''.join(out)
 
