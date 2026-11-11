@@ -28,7 +28,7 @@
     </script>
   
     <script src="../scripts/i18n/strings-de.js"></script>
-    <meta name="translated-from" content="English public/portfolios.html, commit d161c84" />
+    <meta name="translated-from" content="English public/portfolios.html, commit d161c84+" />
   </head>
 
   <body>
@@ -392,7 +392,7 @@
             <div>
               <h2 id="eb-title">Der Elektronenstrahl, von der Spitze bis zur Messung</h2>
               <p class="proj__sub">Wie ein Elektronenstrahl erzeugt und fokussiert wird und wie er die Breite einer wenige Nanometer breiten Linie misst</p>
-              <p class="proj__abs">Chips tragen Linien von wenigen Nanometern Breite, und Licht kann sie nicht auflösen: Seine Wellenlänge beträgt Dutzende Nanometer, die eines Elektrons bei einem Kilovolt Pikometer. Dieses Projekt verfolgt ein Elektron von einer scharfen Wolframspitze bis zu einer gemessenen Linienbreite, in Kapiteln, die jeweils mit einem physikalischen Bild beginnen, jede Formel Schritt für Schritt herleiten, sie mit symbolischer Algebra und einem unabhängigen Python-Programm prüfen und mit einer Simulation enden, deren Schieberegler die Symbole der Formeln sind. Messdaten werden über das Modell gelegt, mit genannter Quelle und benannter Abweichung: Thomsons Kathodenstrahlröhren von 1897 und der Strom einer echten Wolframspitze in Abhängigkeit von ihrer Spannung. Die Kapitel über die Kanone, die magnetische Linse, den Fleck, die Streuung im Wafer, die Messung und die ganze Maschine kommen der Reihe nach hinzu; die Seite sagt, welche geschrieben sind.</p>
+              <p class="proj__abs">Chips tragen Linien von wenigen Nanometern Breite, und Licht kann sie nicht auflösen: Seine Wellenlänge beträgt Dutzende Nanometer, die eines Elektrons bei einem Kilovolt Pikometer. Dieses Projekt verfolgt ein Elektron von einer scharfen Wolframspitze bis zu einer gemessenen Linienbreite, in Kapiteln, die jeweils mit einem physikalischen Bild beginnen, jede Formel Schritt für Schritt herleiten, sie mit symbolischer Algebra und einem unabhängigen Python-Programm prüfen und mit einer Simulation enden, deren Schieberegler die Symbole der Formeln sind. Messdaten werden über das Modell gelegt, mit genannter Quelle und benannter Abweichung: Thomsons Kathodenstrahlröhren von 1897, der Strom einer echten Wolframspitze in Abhängigkeit von ihrer Spannung, gemessene Rückstreuung von Silizium bis Gold sowie veröffentlichte Bremsvermögen und Sekundärelektronenausbeuten. Die letzten Kapitel verbinden alle Stufen zu einer Maschine und fragen, welche Eingangsgröße am meisten zählt.</p>
               <div class="proj__actions">
                 <a class="proj__btn" href="../portfolios/electron-beam/index.html">Die Vorlesungsnotizen öffnen</a>
                 <a class="proj__btn proj__btn--ghost" href="../portfolios/electron-beam/index.html#ch02">Die Quelle: Feldemission</a>
@@ -411,12 +411,18 @@
               <li><b>Warum Elektronen.</b> Abbes Grenze für Licht gegen die Elektronenwellenlänge, und was eine Messmaschine zugleich liefern muss: einen dünnen Fleck, genug Strom, einen schonenden Strahl und Tempo.</li>
               <li><b>Ein freies Elektron in Feldern.</b> Die relativistische Lagrange-Funktion, die Lorentzkraft, die Schraubenbahn im Magnetfeld und zwei Integratoren (Boris und das klassische Runge–Kutta-Verfahren vierter Ordnung), geprüft an der exakten Schraubenbahn.</li>
               <li><b>Die Quelle.</b> Die Bildladungsbarriere, das Tunneln, das Fowler–Nordheim-Gesetz, Energiebreite und Richtstrahlwert kalter und Schottky-Emitter, und die Vakuumphysik, die eine kalte Spitze zugleich hell und empfindlich macht.</li>
+              <li><b>Beschleunigung und Richtstrahlwert.</b> Die relativistische Wellenlänge, ein Bremsfeld vor dem Wafer und der Richtstrahlwert, den der Satz von Liouville erhält.</li>
+              <li><b>Die Linse.</b> Buschs Drehung und die paraxiale Bahngleichung, Glasers exakte Linse und ihre sphärische und chromatische Aberration, durch Strahlverfolgung bestimmt und an den Aberrationsintegralen geprüft.</li>
+              <li><b>Der Fleck.</b> Vier Unschärfen und der Strahlwinkel, der die Sonde bei gegebenem Strom am kleinsten macht.</li>
+              <li><b>Abtasten und Auftreffen.</b> Eine Monte-Carlo-Simulation der Elektronenstreuung im Wafer, verglichen mit gemessener Rückstreuung und gemessenen Sekundärelektronenausbeuten.</li>
+              <li><b>Detektieren und messen.</b> Das Linienprofil, sein Schrotrauschen und wie genau sich eine Breite ablesen lässt, durch Fehlerfortpflanzung und durch Monte Carlo.</li>
+              <li><b>Die ganze Maschine.</b> Alle Stufen in einer Kette: eine Tabelle der Empfindlichkeiten, eine Toleranzstudie und ein Messfenster.</li>
             </ol>
           </section>
 
           <section class="proj__part" aria-labelledby="eb-limits">
             <h3 id="eb-limits"><span class="psub__n">7.2</span>Was das Modell enthält und was es weglässt</h3>
-            <p>Die Felder sind analytisch: Es gibt keinen Finite-Elemente-Feldlöser, keine aberrationskorrigierte Optik und keine Wechselwirkung zwischen den Elektronen des Strahls. Die Konstanten sind CODATA 2018. Jede Zahl im Text wird vom eigenen Code der Seite berechnet und gegen eine unabhängige Python-Fassung geprüft. Das Projekt ist unabhängig: Es modelliert kein Gerät irgendeines Unternehmens, und Aussagen von Herstellern werden als öffentliche Angaben mit ihrer Quelle zitiert.</p>
+            <p>Die Felder sind analytisch: Es gibt keinen Finite-Elemente-Feldlöser, keine aberrationskorrigierte Optik und keine Wechselwirkung zwischen den Elektronen des Strahls. Das Streumodell ist einfach und wird dort gezeigt, wo es versagt: Es überschätzt die Rückstreuung schwerer Elemente bei niedriger Spannung. Die Konstanten sind CODATA 2018. Jede Zahl im Text wird vom Code des Projekts berechnet und gegen eine unabhängige Python-Fassung geprüft, und jedes Kapitel wurde von zwei unabhängigen Gutachtern gelesen. Das Projekt ist unabhängig: Es modelliert kein Gerät irgendeines Unternehmens, und Aussagen von Herstellern werden als öffentliche Angaben mit ihrer Quelle zitiert.</p>
           </section>
 
           <section class="proj__part" aria-labelledby="eb-figs">

@@ -28,6 +28,7 @@ PAGES = [
     ('index.html', 'index.html'),
     ('public/simulations.html', 'simulations.html'),
     ('public/portfolios.html', 'portfolios.html'),
+    ('public/lucretius.html', 'lucretius.html'),
 ] + [('public/simulations/' + f, 'simulations/' + f) for f in sorted(os.listdir(os.path.join(ROOT, 'public', 'simulations'))) if f.endswith('.html') and f not in ENGLISH_ONLY]
 TEXTUAL = {'p', 'li', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'dt', 'dd', 'td', 'th', 'figcaption', 'caption', 'summary', 'title', 'option', 'button',
            'label', 'div', 'a', 'span', 'b', 'strong', 'em', 'i', 'small', 'sub', 'sup', 'q', 'cite', 'abbr', 'u', 'mark', 'output', 'legend', 'blockquote'}

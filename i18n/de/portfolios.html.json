@@ -151,6 +151,10 @@
   "src": "<span class=\"pfig__n\">Figure 1</span>The planar model: the pivot rides a circle round the hub; the generators feel relative joint speeds, not absolute rod speeds.",
   "tr": "<span class=\"pfig__n\">Abbildung 1</span>Das ebene Modell: Der Drehpunkt läuft auf einem Kreis um die Nabe; die Generatoren spüren relative Gelenkgeschwindigkeiten, nicht absolute Stabgeschwindigkeiten."
  },
+ "26725e799c58": {
+  "src": "Fields are analytic: there is no finite-element field solver, no aberration-corrected optics, and no interaction between the electrons of the beam. The scattering model is simple and is shown where it fails: it overstates the backscattering of heavy elements at low voltage. Constants are CODATA 2018. Every number in the text is computed by the project’s code and checked against an independent Python version, and every chapter was read by two independent reviewers. The project is independent: it does not model any company’s instrument, and statements by manufacturers are quoted as public claims with their source.",
+  "tr": "Die Felder sind analytisch: Es gibt keinen Finite-Elemente-Feldlöser, keine aberrationskorrigierte Optik und keine Wechselwirkung zwischen den Elektronen des Strahls. Das Streumodell ist einfach und wird dort gezeigt, wo es versagt: Es überschätzt die Rückstreuung schwerer Elemente bei niedriger Spannung. Die Konstanten sind CODATA 2018. Jede Zahl im Text wird vom Code des Projekts berechnet und gegen eine unabhängige Python-Fassung geprüft, und jedes Kapitel wurde von zwei unabhängigen Gutachtern gelesen. Das Projekt ist unabhängig: Es modelliert kein Gerät irgendeines Unternehmens, und Aussagen von Herstellern werden als öffentliche Angaben mit ihrer Quelle zitiert."
+ },
  "26f85d2d5c2c": {
   "src": "<b>The fall.</b> Both balls are held 10 m above the head and fall under gravity alone; the first touch comes at 1.428 s, as Newton’s \\(\\sqrt{2h/g}\\) predicts, at 14.0 m/s.",
   "tr": "<b>Der Fall.</b> Beide Kugeln werden 10 m über dem Kopf gehalten und fallen allein unter der Schwerkraft; die erste Berührung kommt bei 1.428 s, wie Newtons \\(\\sqrt{2h/g}\\) vorhersagt, mit 14.0 m/s."
@@ -162,6 +166,10 @@
  "278c9e2fa1f7": {
   "src": "Mean harvested power at the 18 mountings against rotor speed, single and double pendulum, small and large rotors.",
   "tr": "Mittlere geerntete Leistung an den 18 Befestigungen gegen die Rotordrehzahl, Einzel- und Doppelpendel, kleine und große Rotoren."
+ },
+ "29527acd1776": {
+  "src": "Chips carry lines a few nanometres wide, and light cannot resolve them: its wavelength is tens of nanometres, an electron’s at a kilovolt is picometres. This project follows one electron from a sharp tungsten tip to a measured line width, in chapters that each start from a physical picture, derive every formula step by step, check it with symbolic algebra and an independent Python program, and end in a simulation whose sliders are the symbols of the formulas. Measured data are laid over the model with the source named and the gap stated: Thomson’s 1897 cathode-ray tubes, the current of a real tungsten tip against its voltage, measured backscattering from silicon to gold, and published stopping powers and secondary-electron yields. The last chapters join every stage into one machine and ask which input matters most.",
+  "tr": "Chips tragen Linien von wenigen Nanometern Breite, und Licht kann sie nicht auflösen: Seine Wellenlänge beträgt Dutzende Nanometer, die eines Elektrons bei einem Kilovolt Pikometer. Dieses Projekt verfolgt ein Elektron von einer scharfen Wolframspitze bis zu einer gemessenen Linienbreite, in Kapiteln, die jeweils mit einem physikalischen Bild beginnen, jede Formel Schritt für Schritt herleiten, sie mit symbolischer Algebra und einem unabhängigen Python-Programm prüfen und mit einer Simulation enden, deren Schieberegler die Symbole der Formeln sind. Messdaten werden über das Modell gelegt, mit genannter Quelle und benannter Abweichung: Thomsons Kathodenstrahlröhren von 1897, der Strom einer echten Wolframspitze in Abhängigkeit von ihrer Spannung, gemessene Rückstreuung von Silizium bis Gold sowie veröffentlichte Bremsvermögen und Sekundärelektronenausbeuten. Die letzten Kapitel verbinden alle Stufen zu einer Maschine und fragen, welche Eingangsgröße am meisten zählt."
  },
  "2ab2baaec6d7": {
   "src": "Projects<span class=\"dot\">.</span>",
@@ -331,6 +339,10 @@
   "src": "<b>One rod beats two.</b> With the same mass and the same reach, a double pendulum gives 0.64–0.74 of the single one’s power at every mounting: half its mass sits at half the reach.",
   "tr": "<b>Ein Stab schlägt zwei.</b> Bei gleicher Masse und gleicher Reichweite liefert ein Doppelpendel an jeder Befestigung das 0.64- bis 0.74-Fache der Leistung des Einzelpendels: Die Hälfte seiner Masse sitzt auf halber Reichweite."
  },
+ "4c86fa9e781c": {
+  "src": "<b>The whole machine.</b> All stages in one chain: a table of sensitivities, a tolerance study and a measurement window.",
+  "tr": "<b>Die ganze Maschine.</b> Alle Stufen in einer Kette: eine Tabelle der Empfindlichkeiten, eine Toleranzstudie und ein Messfenster."
+ },
  "4d7cb4aa6bf4": {
   "src": "Read the derivation",
   "tr": "Die Herleitung lesen"
@@ -498,6 +510,10 @@
  "6d586cabb53f": {
   "src": "<span class=\"psub__n\">2.2</span>What the audit corrected",
   "tr": "<span class=\"psub__n\">2.2</span>Was die Prüfung korrigiert hat"
+ },
+ "6dc4a41b61fd": {
+  "src": "<b>The lens.</b> Busch’s twist and the paraxial ray equation, Glaser’s exact lens, and its spherical and chromatic aberration found by tracing rays and checked against the aberration integrals.",
+  "tr": "<b>Die Linse.</b> Buschs Drehung und die paraxiale Bahngleichung, Glasers exakte Linse und ihre sphärische und chromatische Aberration, durch Strahlverfolgung bestimmt und an den Aberrationsintegralen geprüft."
  },
  "6e9e2545bb51": {
   "src": "The test case is a warm cloud of \\(300\\ \\mathrm{cm^{-3}}\\) droplets of radius \\(8\\ \\mathrm{\\mu m}\\) with \\(1\\ \\mathrm{cm^{-3}}\\) collectors of \\(40\\ \\mathrm{\\mu m}\\), at \\(10\\,{}^{\\circ}\\mathrm{C}\\) and \\(850\\ \\mathrm{hPa}\\). Growth is measured by the mass fraction in drops of radius \\(r \\ge 40\\ \\mathrm{\\mu m}\\): a diagnostic of growth, not a rainfall prediction. With the thesis kernel the mass piles up near \\(500\\ \\mathrm{\\mu m}\\) and stops, because the Weber number computed with Stokes speeds switches coalescence off; with the extended kernel the drops keep growing to millimetres. The kernel matters more than the bookkeeping.",
@@ -714,6 +730,10 @@
  "9e33a41066cb": {
   "src": "<b>The source.</b> The image-charge barrier, tunnelling, the Fowler–Nordheim law, the energy spread and brightness of cold and Schottky emitters, and the vacuum physics that makes a cold tip bright and fragile.",
   "tr": "<b>Die Quelle.</b> Die Bildladungsbarriere, das Tunneln, das Fowler–Nordheim-Gesetz, Energiebreite und Richtstrahlwert kalter und Schottky-Emitter, und die Vakuumphysik, die eine kalte Spitze zugleich hell und empfindlich macht."
+ },
+ "9f1c64eac35d": {
+  "src": "<b>Detect and measure.</b> The line profile, its shot noise, and how precisely a width can be read, by error propagation and by Monte Carlo.",
+  "tr": "<b>Detektieren und messen.</b> Das Linienprofil, sein Schrotrauschen und wie genau sich eine Breite ablesen lässt, durch Fehlerfortpflanzung und durch Monte Carlo."
  },
  "9f9b3ec46526": {
   "src": "<span class=\"pfig__n\">Figure 3</span>The same blow twice: iron as a tall spike, cotton as a low, wide hump.",
@@ -951,6 +971,10 @@
   "src": "The machine of project 05 rebuilt to swing its rods up under water, glycerol and honey",
   "tr": "Die Maschine aus Projekt 05, so umgebaut, dass sie ihre Stäbe unter Wasser, in Glycerin und in Honig aufschwingt"
  },
+ "d8529716b42a": {
+  "src": "<b>Acceleration and brightness.</b> The relativistic wavelength, a retarding field before the wafer, and the brightness that Liouville’s theorem conserves.",
+  "tr": "<b>Beschleunigung und Richtstrahlwert.</b> Die relativistische Wellenlänge, ein Bremsfeld vor dem Wafer und der Richtstrahlwert, den der Satz von Liouville erhält."
+ },
  "d94f8b3ca4fd": {
   "src": "The solver of the collection equation, in your browser.",
   "tr": "Der Löser der Koaleszenzgleichung, in Ihrem Browser."
@@ -1095,6 +1119,10 @@
   "src": "Simulations",
   "tr": "Simulationen"
  },
+ "f734ae221c7c": {
+  "src": "<b>Scan and hit.</b> A Monte Carlo simulation of electrons scattering in the wafer, compared with measured backscattering and secondary-electron yields.",
+  "tr": "<b>Abtasten und Auftreffen.</b> Eine Monte-Carlo-Simulation der Elektronenstreuung im Wafer, verglichen mit gemessener Rückstreuung und gemessenen Sekundärelektronenausbeuten."
+ },
  "f7e315e89890": {
   "src": "<b>Approach.</b> From 0.1 s the position law moves the ram up along a smooth path, the spool opening to 94 % on the way; at 1.1 s it slows to a 10 mm/s creep for the last 2 mm.",
   "tr": "<b>Anfahren.</b> Ab 0.1 s bewegt das Lagegesetz den Stößel auf einer glatten Bahn nach oben, wobei sich der Ventilschieber unterwegs auf 94 % öffnet; bei 1.1 s bremst es den Stößel für die letzten 2 mm auf ein Schleichtempo von 10 mm/s ab."
@@ -1142,5 +1170,9 @@
  "fdf9b9e26654": {
   "src": "How a beam of electrons is made, focused and used to measure the width of a line a few nanometres wide",
   "tr": "Wie ein Elektronenstrahl erzeugt und fokussiert wird und wie er die Breite einer wenige Nanometer breiten Linie misst"
+ },
+ "ff63f557f703": {
+  "src": "<b>The spot.</b> Four blurs and the beam angle that makes the probe smallest for a given current.",
+  "tr": "<b>Der Fleck.</b> Vier Unschärfen und der Strahlwinkel, der die Sonde bei gegebenem Strom am kleinsten macht."
  }
 }

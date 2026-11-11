@@ -1,12 +1,13 @@
 # The site's own pages: home, simulations catalog, Portfolios, robots.txt
 
-Four files make the frame around the twelve simulation pages:
+Five files make the frame around the twelve simulation pages:
 
 | File | Served at | Lines | What it is |
 |---|---|---|---|
 | [`index.html`](../index.html) | `/` | 1547 | The home page: the Phyein Usul logo and note, CV, projects, ten figure plates (one per simulation), a live double pendulum. |
 | [`public/simulations.html`](../public/simulations.html) | `/simulations.html` | 212 | The catalog: one fold card per simulation, no search and no chips since 3 November 2026. |
 | [`public/portfolios.html`](../public/portfolios.html) | `/portfolios.html` | 472 | The Projects page (address `portfolios.html`, kept so old links work): the Bachelor thesis and four studies, and the links into their pages. |
+| [`public/lucretius.html`](../public/lucretius.html) | `/lucretius.html` | 177 | The poem page (10 November 2026): Lucretius I 146–224 as 20 sentences in Latin, English, German and Arabic; see the last section. |
 | [`public/robots.txt`](../public/robots.txt) | `/robots.txt` | 4 | Rules for search-engine crawlers. |
 
 The build copies everything under `public/` to the site root, so a page under `public/` links to `styles/…` and
@@ -517,8 +518,25 @@ at 52–124 px); the tag, contacts and buttons as before. The right column (`div
 Lucretius I 146–158 as an inscription (Instrument Serif, a wine rule on its left, a one-line caption) above the live pendulum, whose
 stage is 4 : 3 there. Each of the four sentences (`p.lq-s`, `translate="no"`, `lang="la"`) shows, on a resting mouse (150 ms; 70 ms
 from one sentence to the next; hidden 240 ms after leaving), a tap or keyboard focus, one card with its published translation: Leonard
-(1916) on the English and Arabic pages (with a note that no free Arabic translation exists), Diels (1924) on the German page, with the
-source of the Latin under it; on desktop the card rises over the left column beside the verse, otherwise just below the sentence; a
-click pins it, Esc or a second click closes it. Written by `notes/lucretius/make_home.py` from `notes/lucretius/poem-146-224.json`.
+(1916) on the English page, Diels (1924) on the German page, and on the Arabic page (since 10 November 2026) an Arabic translation
+made from the Latin for this site (`notes/lucretius/poem-ar-146-158.json`; the card says it is not a published translation, the only
+published one, Cairo 2018, being under copyright), with the source of the Latin under it; on desktop the card rises beside the verse
+(left of it where the text is; right of it on the mirrored Arabic page), otherwise just below the sentence; a click pins it, Esc or a
+second click closes it. Written by `notes/lucretius/make_home.py` from `notes/lucretius/poem-146-224.json` and the Arabic file.
 Measured on the built site: at 1366 × 768, 1440 × 900 and 1920 × 1080, in English, German and Arabic, the quote and the buttons are in
 the first screen, no errors, no sideways scroll; on a phone the quote follows the buttons.
+
+## The poem page, `lucretius.html` (10 November 2026)
+
+Numa: a button on the home page to the whole poem, on a page of its own, in all three languages. The home band has, under its caption,
+a link "Read lines 146–224 in Latin, English, German and Arabic →" (`p.lq-all`). The page (`public/lucretius.html`, with `/de/` and
+`/ar/` versions made by `tools/i18n/build.py`, which lists it in `PAGES`, and short addresses in `public/_redirects`) holds the
+same passage as `notes/lucretius/poem-146-224.json`, the 20 Latin sentences of lines 146–224. Each sentence is a section
+(`section.lp`, address `#l146` and so on, the line numbers at its left) with four columns: the Latin (Instrument Serif), Leonard
+(1916), Diels (1924) and the Arabic (Amiri). The row is `direction: ltr` in every language of the page, so the columns keep their order
+on the Arabic page; each column carries its own `lang` and `dir`. Under 1000 px two columns, under 620 px one. The four columns are
+`translate="no"`: the generator translates only the words around them (title, introduction, the four source notes, footer); the poem
+itself is never translated by the table. Written by `notes/lucretius/make_page.py` from the three JSON files, never retyped; do not edit
+`public/lucretius.html` by hand. The Arabic is `poem-ar-146-158.json` and `poem-ar-159-224.json`: made from the Latin for this site,
+read against Leonard and Diels, not a published translation, not reviewed by a second reader, and the page says so in its source notes.
+Measured on the built site: English, German and Arabic at 1280 and 390 px: 20 sections, 80 cells, no errors, no sideways scroll.

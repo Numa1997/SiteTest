@@ -5,9 +5,9 @@ import math
 from .core import C
 
 INPUTS = ['V_land', 'material']
-OUTPUTS = ['E_land', 'delta_SE', 'eta_BSE', 'R', 'V_int', 'sigma_sig', 'u_eta', 'u_delta', 'r90', 'mc_paths']
+OUTPUTS = ['E_land', 'delta_SE', 'eta_BSE', 'R', 'V_int', 'sigma_sig', 'sig_core', 'f_core', 'sig_halo', 'u_eta', 'u_delta', 'r90', 'mc_paths']
 NA = C['N_A']
-SEED, NEL, EMIN, NPATH, NBIN = 20261109, 2000, 0.05, 40, 4000
+SEED, NEL, EMIN, NPATH, NBIN, NH = 20261109, 2000, 0.05, 40, 4000, 400
 MAT = {
     'Si': dict(Z=14, A=28.0855, rho=2.33, eps=90, ls=2.7),
     'Al': dict(Z=13, A=26.9815, rho=2.6989, eps=32, ls=1.7),
@@ -84,6 +84,10 @@ def run(p, N=None):
     hist = [0.0] * NBIN
     nBS, seSum, seSq, wx2, wTot, depTot = 0, 0.0, 0.0, 0.0, 0.0, 0.0
     paths = []
+    hW, hQ = [0.0] * NH, [0.0] * NH
+
+    def hbin(ax):
+        return 0 if ax <= 1e-3 else min(NH - 1, math.floor((math.log10(ax) + 3) / 8 * NH))
     for i in range(N):
         rnd = rng(SEED + 7919 * i)
         x = y = z = 0.0
@@ -117,6 +121,9 @@ def run(p, N=None):
                     se += wk
                     wx2 += wk * xm * xm
                     wTot += wk
+                    hb = hbin(abs(xm))
+                    hW[hb] += wk
+                    hQ[hb] += wk * xm * xm
             dE = S * s
             mx, my, mz = 0.5 * (x + xn), 0.5 * (y + yn), 0.5 * (z + zn)
             rm = math.sqrt(mx * mx + my * my + mz * mz)
@@ -145,6 +152,25 @@ def run(p, N=None):
             paths += rec
     eta, delta = nBS / N, seSum / N
     uDelta = math.sqrt(max(0.0, seSq / N - delta * delta) / N)
+    def edge(b):
+        return 10 ** (b * 8 / NH - 3)
+    cw, x50 = 0.0, 0.0
+    for b in range(NH):
+        if cw + hW[b] >= 0.5 * wTot:
+            f = (0.5 * wTot - cw) / hW[b]
+            x50 = edge(b) * (edge(b + 1) / edge(b)) ** f
+            break
+        cw += hW[b]
+    sCore = x50 / 0.67449
+    cut = 3 * sCore
+    wIn = qIn = 0.0
+    for b in range(NH):
+        lo, hi = edge(b), edge(b + 1)
+        fr = 1.0 if hi <= cut else (0.0 if lo >= cut else math.log(cut / lo) / math.log(hi / lo))
+        wIn += fr * hW[b]
+        qIn += fr * hQ[b]
+    fCore = wIn / wTot
+    sHalo = math.sqrt((wx2 - qIn) / (wTot - wIn)) if wTot - wIn > 0 else sCore
     acc, r90 = 0.0, 3 * R
     for b in range(NBIN):
         if acc + hist[b] >= 0.9 * depTot:
@@ -152,7 +178,7 @@ def run(p, N=None):
             break
         acc += hist[b]
     return dict(E_land=p['V_land'] * C['e'], delta_SE=delta, eta_BSE=eta, R=R * 1e-9, V_int=2 / 3 * math.pi * (r90 * 1e-9) ** 3,
-                sigma_sig=math.sqrt(wx2 / wTot) * 1e-9, u_eta=math.sqrt(eta * (1 - eta) / N), u_delta=uDelta, r90=r90 * 1e-9, mc_paths=paths)
+                sigma_sig=math.sqrt(wx2 / wTot) * 1e-9, sig_core=math.sqrt(sCore * sCore + m['ls'] * m['ls']) * 1e-9, f_core=fCore, sig_halo=max(sHalo, math.sqrt(sCore * sCore + m['ls'] * m['ls'])) * 1e-9, u_eta=math.sqrt(eta * (1 - eta) / N), u_delta=uDelta, r90=r90 * 1e-9, mc_paths=paths)
 
 
 def compute(p):

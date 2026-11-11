@@ -169,7 +169,8 @@ res = [r_['outputs'] for r_ in L.node('compute', jobs)]
 runs = {mt: [] for mt in R.MAT}
 for j, o in zip(jobs, res):
     runs[j['inputs']['material']].append({'E_keV': j['inputs']['V_land'] / 1e3, 'eta': o['eta_BSE'], 'u_eta': o['u_eta'], 'delta': o['delta_SE'], 'u_delta': o['u_delta'],
-                                         'R_nm': o['R'] * 1e9, 'r90_nm': o['r90'] * 1e9, 'sigma_nm': o['sigma_sig'] * 1e9})
+                                         'R_nm': o['R'] * 1e9, 'r90_nm': o['r90'] * 1e9, 'sigma_nm': o['sigma_sig'] * 1e9,
+                                         'core_nm': o['sig_core'] * 1e9, 'f_core': o['f_core'], 'halo_nm': o['sig_halo'] * 1e9})
 
 # M8: eta against the database: mean of the measured points per element, by energy band; recorded with the gap
 band = {}
@@ -206,6 +207,20 @@ check('M12', 'recorded comparison: δ at 2 and 20 keV against the Monte Carlo va
 nums['delta_cmp'] = {mt: {'mc2': dcmp[mt]['d2'][0], 'u2': dcmp[mt]['d2'][1], 'mc20': dcmp[mt]['d20'][0], 'u20': dcmp[mt]['d20'][1], 'lj2': lj[mt]['d2'], 'lj20': lj[mt]['d20']} for mt in R.MAT}
 nums['lin_joy'] = lj
 
+def write_ch08_table(HERE, runs):
+    """Writes chapter 6's stored yields into physics/ch08.js between the TABLE markers (chapter 8 reads them instead of rerunning the Monte Carlo)."""
+    import json as _j
+    t = {m: {'E': [r['E_keV'] for r in v], 'delta': [r['delta'] for r in v], 'eta': [r['eta'] for r in v], 'core': [r['core_nm'] for r in v],
+             'fcore': [r['f_core'] for r in v], 'halo': [r['halo_nm'] for r in v]} for m, v in runs.items()}
+    f = HERE / 'physics' / 'ch08.js'
+    s = f.read_text(encoding='utf-8')
+    a = s.index('/* TABLE-START (written by derive/ch06.py) */')
+    b = s.index('/* TABLE-END */')
+    s = s[:a] + '/* TABLE-START (written by derive/ch06.py) */\n  const YT = ' + _j.dumps(t, separators=(',', ':')) + ';\n  ' + s[b:]
+    f.write_text(s, encoding='utf-8')
+
+
+write_ch08_table(HERE, runs)
 out = {'checks': checks, 'numbers': nums, 'summary': '%d of %d checks pass' % (sum(c_['ok'] for c_ in checks), len(checks))}
 (HERE / 'data' / 'ch06').mkdir(parents=True, exist_ok=True)
 (HERE / 'data' / 'ch06' / 'derive_results.json').write_text(json.dumps(out, indent=1, ensure_ascii=False), encoding='utf-8')

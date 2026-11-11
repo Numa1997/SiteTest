@@ -5,7 +5,7 @@ import math
 from .core import C
 from .ch06 import rng
 
-INPUTS = ['d_p', 'I_p', 't_d', 'N_px', 'eta_c', 'cd', 'pitch', 'height', 'sidewall', 'px', 't_ov', 'delta_SE', 'eta_BSE', 'sigma_sig']
+INPUTS = ['d_p', 'I_p', 't_d', 'N_px', 'eta_c', 'cd', 'pitch', 'height', 'sidewall', 'px', 't_ov', 'delta_SE', 'eta_BSE', 'sig_core', 'f_core', 'sig_halo']
 OUTPUTS = ['SNR', 'sigma_CD', 'MPH', 'CD_meas', 'sigma_CD_mc', 'dose', 'n_pe', 'prof_curve']
 SEED, NMC = 7072026, 4000
 
@@ -22,10 +22,12 @@ def Phi(u):
     return 0.5 * (1 + erf(u / math.sqrt(2)))
 
 
-def yieldAt(x, p, sb):
+def excessAt(x, p, sb, wt):
     w = p['height'] * math.tan(p['sidewall'])
-    dens = p['delta_SE'] * p['height'] * (1 / math.cos(p['sidewall']) - math.tan(p['sidewall']))
-    Y = p['delta_SE'] + p['eta_BSE']
+    dens = wt * p['delta_SE'] * p['height'] * (1 / math.cos(p['sidewall']) - math.tan(p['sidewall']))
+    if sb > 2 * p['pitch']:
+        return 2 * dens / p['pitch']
+    Y = 0.0
     K = min(50, 2 + math.ceil(5 * sb / p['pitch']))
     for k in range(-K, K + 1):
         c = k * p['pitch']
@@ -37,16 +39,21 @@ def yieldAt(x, p, sb):
     return Y
 
 
+def yieldAt(x, p, s1, s2):
+    return p['delta_SE'] + p['eta_BSE'] + excessAt(x, p, s1, p['f_core']) + excessAt(x, p, s2, 1 - p['f_core'])
+
+
 def setup(p):
     n = max(8, math.floor(p['pitch'] / p['px'] + 0.5))           # Math.round: halves go up
     dx = p['pitch'] / n
     sp = p['d_p'] / (2 * math.sqrt(2 * math.log(2)))
-    sb = math.sqrt(sp * sp + p['sigma_sig'] * p['sigma_sig'])
+    sb = math.sqrt(sp * sp + p['sig_core'] * p['sig_core'])
+    s2 = math.sqrt(sp * sp + p['sig_halo'] * p['sig_halo'])
     nbar = p['I_p'] * p['t_d'] / C['e']
     x, mean, var = [], [], []
     for i in range(n):
         xi = -p['pitch'] / 2 + (i + 0.5) * dx
-        m = p['eta_c'] * yieldAt(xi, p, sb)
+        m = p['eta_c'] * yieldAt(xi, p, sb, s2)
         x.append(xi)
         mean.append(nbar * m)
         var.append(nbar * (m + m * m))

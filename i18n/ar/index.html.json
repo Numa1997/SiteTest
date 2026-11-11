@@ -251,6 +251,10 @@
   "src": "React",
   "tr": "React"
  },
+ "4d5f0263f934": {
+  "src": "Read lines 146–224 in Latin, English, German and Arabic →",
+  "tr": "اقرأ الأبيات 146–224 باللاتينية والإنجليزية والألمانية والعربية ←"
+ },
  "4f4c9b155e91": {
   "src": "Saxony International School Reinsdorf",
   "tr": "Saxony International School، راينسدورف"
@@ -298,6 +302,10 @@
  "6176dabae73b": {
   "src": "Bode plot",
   "tr": "مخطّط بودي"
+ },
+ "630c03914dc0": {
+  "src": "Arabic: translated from the Latin for this site, 2026",
+  "tr": "العربية: ترجمة عن اللاتينية أُعدّت لهذا الموقع، 2026"
  },
  "64472dd0fbfb": {
   "src": "Visualizations of wave mechanics, classical mechanics, and interference, written in vanilla JavaScript, React, and HTML5 Canvas. Each plate opens the live simulation in a new tab. The <a href=\"simulations.html\">simulations page</a> lists them all by field, with the question each one answers and a search.",
@@ -490,6 +498,10 @@
  "9dd35bd1eabb": {
   "src": "Droplet Collection",
   "tr": "Droplet Collection"
+ },
+ "9eb626f8b680": {
+  "src": "The Arabic is not a published translation: it was made from the Latin for this site and read against Leonard and Diels.",
+  "tr": "هذه العربية ليست ترجمةً منشورة: أُعدّت عن اللاتينية لهذا الموقع وقورنت بترجمتَي ليونارد وديلز."
  },
  "a024c68075c4": {
   "src": "Discrete Fourier transform",

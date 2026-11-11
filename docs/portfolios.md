@@ -574,5 +574,13 @@ commands and the checks are in [`portfolios-src/electron-beam/README.md`](../por
 - **Projects page.** `#electron-beam` in `public/portfolios.html`: band, abstract, tally, parts 7.1 to 7.4 and four plates in
   `public/portfolios/electron-beam/fig/`, captured from the built page's own figures by `notes/electron-beam/tools/plates.cjs` and converted to WebP.
   The entry has German and Arabic tables in `i18n/<lang>/portfolios.html.json`; the project page itself is English only.
-- **Published data.** Thomson 1897 (`data/ch01/`), a tungsten ⟨111⟩ tip I–V set (Ayari et al. 2023, CC BY 4.0) and Cho 2014 (`data/ch02/`), with
-  provenance in each folder's README. The working notes, reports of every session and the audit are in `notes/electron-beam/`.
+- **Chapters 3 to 9 and the guide** (finisher, 9 November 2026). Chapters 3 to 7 each have a module, a Python twin and `derive/chNN.py`.
+  Chapter 6 is a Monte Carlo (2000 electrons per setting, one random stream per electron); `derive/ch06.py` stores runs on an energy grid in
+  `data/ch06/mc_runs.json` and writes the yields, core and halo widths into a table inside `physics/ch08.js` (between `TABLE-START` and `TABLE-END`),
+  so rerun it after changing chapter 6. Chapter 8 chains the modules of chapters 2, 4, 5 and 7 and reads that table; it has no Python twin, and
+  `derive/ch08.py` (through `derive/ch08_probe.cjs`) checks the chain against the separate chapters instead. Chapter 9 is prose that refers to numbers
+  of earlier chapters (`{{num:chNN.name}}`). The reading guide is `text/guide.py`. Modules give a phone shape as `ui.aspectPhone`.
+- **Published data.** Thomson 1897 (`data/ch01/`), a tungsten ⟨111⟩ tip I–V set (Ayari et al. 2023, CC BY 4.0) and Cho 2014 (`data/ch02/`), measured
+  backscattering coefficients (Akbari et al., CC BY 4.0), NIST ESTAR stopping powers and Lin and Joy's secondary-electron table (`data/ch06/`), and
+  published lens coefficients (`data/ch05/`), with provenance in each folder's README. The working notes, reports of every session, the blind reviews
+  of every chapter and the audit are in `notes/electron-beam/`.

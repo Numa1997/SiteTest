@@ -19,6 +19,9 @@
    to about 50 eV). Range R: Kanaya-Okayama, R = 27.6 A E^1.67 / (Z^0.89 rho) nm (A g/mol, rho g/cm^3, E keV).
    Interaction volume: hemisphere about the point of impact whose radius r90 holds 90 % of the energy left in the wafer (step energy put at the
    step's midpoint; histogram of 4000 bins up to 3 R).  sigma_sig: rms of one lateral coordinate (x) of the escaping SE, weight = escape weight.
+   The escaping signal is a sharp core and a broad halo; from a weighted histogram of |x| (400 log bins, 1e-3 to 1e5 nm): sig_core = median |x| /
+   0.67449, f_core = weight within 3 of those widths, sig_halo = rms of the rest. The secondaries' own sideways travel before they escape, of the
+   order of the escape depth, is added to the core width in quadrature (sig_core^2 = width^2 + lambda_s^2). Chapter 7 blurs with the two parts.
    Random numbers: core.rng (mulberry32), one generator per electron seeded with SEED + 7919 i, so a last-bit difference in a library function
    can change at most that one electron's path (parity tolerance in `tolerance`). */
 (function (root, factory) {
@@ -27,7 +30,7 @@
 })(typeof self !== 'undefined' ? self : this, function (core) {
   'use strict';
   const { C } = core;
-  const NA = C.N_A, SEED = 20261109, NEL = 2000, EMIN = 0.05, NPATH = 40, NBIN = 4000;
+  const NA = C.N_A, SEED = 20261109, NEL = 2000, EMIN = 0.05, NPATH = 40, NBIN = 4000, NH = 400;
   // Z, A (g/mol, IUPAC standard atomic weights), rho (g/cm^3, the densities NIST ESTAR uses), eps (eV) and lambda_s (nm) from Lin and Joy Table 1
   const MAT = {
     Si: { Z: 14, A: 28.0855, rho: 2.33, eps: 90, ls: 2.7 },
@@ -73,6 +76,8 @@
     const E0 = p.V_land * 1e-3, J = Jkev(m.Z), R = rangeKO(m, E0), N = opts.N || NEL;
     const binW = 3 * R / NBIN, hist = new Float64Array(NBIN);
     let nBS = 0, seSum = 0, seSq = 0, wx2 = 0, wTot = 0, depTot = 0;
+    const hW = new Float64Array(NH), hQ = new Float64Array(NH);            // escape weight and weight * x^2 by |x|, log bins 1e-3 to 1e5 nm
+    const hbin = ax => ax <= 1e-3 ? 0 : Math.min(NH - 1, Math.floor((Math.log10(ax) + 3) / 8 * NH));
     const paths = [];
     for (let i = 0; i < N; i++) {
       const rnd = core.rng(SEED + 7919 * i);
@@ -95,6 +100,7 @@
             const wk = 0.5 * S / (m.eps * 1e-3) * escInt(z + c[2] * u0, z + c[2] * u1, u1 - u0, m.ls);
             const xm = x + c[0] * um;
             se += wk; wx2 += wk * xm * xm; wTot += wk;
+            const hb = hbin(Math.abs(xm)); hW[hb] += wk; hQ[hb] += wk * xm * xm;
           }
         }
         // energy left in the wafer on this piece, at its midpoint
@@ -114,6 +120,19 @@
     }
     const eta = nBS / N, delta = seSum / N;
     const uDelta = Math.sqrt(Math.max(0, seSq / N - delta * delta) / N);
+    // core and halo of the escaping signal: the core width from the median of |x| (a Gaussian has median |x| = 0.67449 sigma), the core fraction
+    // the weight within 3 core widths, the halo the root mean square of the rest (bins split at the cut in proportion to their log width)
+    const edge = b => Math.pow(10, b * 8 / NH - 3);
+    let cw = 0, x50 = 0;
+    for (let b = 0; b < NH; b++) { if (cw + hW[b] >= 0.5 * wTot) { const f = (0.5 * wTot - cw) / hW[b]; x50 = edge(b) * Math.pow(edge(b + 1) / edge(b), f); break; } cw += hW[b]; }
+    const sCore = x50 / 0.67449, cut = 3 * sCore;
+    let wIn = 0, qIn = 0;
+    for (let b = 0; b < NH; b++) {
+      const lo = edge(b), hi = edge(b + 1);
+      const fr = hi <= cut ? 1 : (lo >= cut ? 0 : Math.log(cut / lo) / Math.log(hi / lo));
+      wIn += fr * hW[b]; qIn += fr * hQ[b];
+    }
+    const fCore = wIn / wTot, sHalo = wTot - wIn > 0 ? Math.sqrt((wx2 - qIn) / (wTot - wIn)) : sCore;
     let acc = 0, r90 = 3 * R;
     for (let b = 0; b < NBIN; b++) {
       if (acc + hist[b] >= 0.9 * depTot) { r90 = (b + (0.9 * depTot - acc) / hist[b]) * binW; break; }
@@ -121,7 +140,7 @@
     }
     return {
       E_land: p.V_land * C.e, delta_SE: delta, eta_BSE: eta, R: R * 1e-9, V_int: 2 / 3 * Math.PI * Math.pow(r90 * 1e-9, 3),
-      sigma_sig: Math.sqrt(wx2 / wTot) * 1e-9, u_eta: Math.sqrt(eta * (1 - eta) / N), u_delta: uDelta, r90: r90 * 1e-9, mc_paths: paths,
+      sigma_sig: Math.sqrt(wx2 / wTot) * 1e-9, sig_core: Math.sqrt(sCore * sCore + m.ls * m.ls) * 1e-9, f_core: fCore, sig_halo: Math.max(sHalo, Math.sqrt(sCore * sCore + m.ls * m.ls)) * 1e-9, u_eta: Math.sqrt(eta * (1 - eta) / N), u_delta: uDelta, r90: r90 * 1e-9, mc_paths: paths,
     };
   }
   const compute = p => run(p);
@@ -166,12 +185,12 @@
   return {
     id: 'ch06',
     inputs: ['V_land', 'material'],
-    outputs: ['E_land', 'delta_SE', 'eta_BSE', 'R', 'V_int', 'sigma_sig', 'u_eta', 'u_delta', 'r90', 'mc_paths'],
+    outputs: ['E_land', 'delta_SE', 'eta_BSE', 'R', 'V_int', 'sigma_sig', 'sig_core', 'f_core', 'sig_halo', 'u_eta', 'u_delta', 'r90', 'mc_paths'],
     tolerance: { rel: 1e-7, abs: 1e-12, note: 'same random numbers and the same arithmetic on both sides; library functions (log, exp, acos, pow) may differ in the last bit; the readouts agree to about 1e-13 and the coordinates of the drawn paths to about 1e-9 relative (measured); each electron has its own generator, so a flipped branch would change one electron only' },
     cases: [{}, { V_land: 3000 }, { V_land: 30000, material: 'Au' }, { V_land: 1000, material: 'Cu' }, { V_land: 5000, material: 'Al' }],
     ui: {
       controls: ['material', 'V_land'],
-      readouts: ['eta_BSE', 'u_eta', 'delta_SE', 'u_delta', 'R', 'r90', 'sigma_sig'],
+      readouts: ['eta_BSE', 'u_eta', 'delta_SE', 'u_delta', 'R', 'r90', 'sig_core', 'f_core', 'sig_halo'],
       aspect: '16 / 10', aspectPhone: '1 / 1',
       caption: 'Forty electron paths in the wafer, seen from the side (wine: the electron came back out, a backscattered electron; grey: it stopped inside). The dashed arc is the Kanaya–Okayama range; the shaded band at the surface is three escape depths deep, the layer from which secondary electrons get out. The readouts come from 2000 electrons with fixed random numbers, so the same settings always give the same numbers; u_η and u_δ are their statistical standard errors. Below about 1 kV, and for heavy elements at low voltage, the model is used outside the range its author recommends (see the text).',
     },
