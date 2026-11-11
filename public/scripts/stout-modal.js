@@ -203,6 +203,192 @@
   // change the fill (the reader's slider): the volume to height h, the modes there, the swing kept
   TulipModes.prototype.setFill = function (h) { this.h = h; this.V = this.volumeTo(h); this.mLiquid = this.rho * this.V; this.modes(); };
 
+
+  /* ------------------------------------------------------------ large swings */
+  // The tulip's five-mode Narimanov–Moiseev system (Faltinsen, Lukovsky & Timokha, J. Fluid Mech. 804, 2016, eqs. 2.17–2.18 with
+  // Ir = 1; Lukovsky's eq. 2.23), with coefficients derived from the glass's own finite-element modes, wall slope included
+  // (tools/fig12/nm_tulip.py, public/data/fig12/nm.json), over the whole glass so it can swirl. Coordinates b = (p0, p1, r1, p2, r2)
+  // in units of R(h), time in sqrt(R/g); the surface is
+  //   eta = h + R [Rw0 e0(rho) p0 + Rw1 e1(rho) (p1 cos th + r1 sin th) + Rw2 e2(rho) (p2 cos 2th + r2 sin 2th)] + sum_{n>=2} q_n e_n(r) cos th,
+  // e_M the finite-element shapes (1 at the wall), the higher m = 1 modes n >= 2 linear as in TulipModes. Each equation is solved
+  // for the accelerations (a 5 x 5 system, nonlinear in b through the kinetic matrix). Heave scales the restoring terms by
+  // (1 + a_z/g). Friction per coordinate from its own mode (m = 0, 1, 2 rows of modes.json). The foam acts at the wall at each
+  // angle by the local vertical speed V(th): a force per unit length k V|V|^(-1/3) whose total on a planar swing is Viola et al.'s
+  // law (calibrated so), projected on every coordinate; this is what keeps it right when the swing turns into a swirl.
+  // Breaking (a modelling choice, as NMFluid): beyond 1.5 R/xi11 of wall amplitude the coordinates are scaled back (`breaks`).
+  const NMN = ['p0', 'p1', 'r1', 'p2', 'r2'], NMM = [0, 1, 1, 2, 2], KF = 24, I53 = 3.3653;   // I53 = int |cos|^(5/3) dth
+  function TulipNM(o) {
+    o = o || {};
+    if (!o.nmData) throw new Error('TulipNM needs public/data/fig12/nm.json as o.nmData');
+    this.nmData = o.nmData; this.nmH = o.nmData.h.map((x) => x / 1000);
+    // the monomials of each equation, compiled once: [index of the acceleration or -1, factors [[state index, power]], linear?, force?]
+    const vars = {}; NMN.forEach((n, i) => { vars[n] = i; vars[n + 'd'] = 5 + i; vars[n + 'dd'] = 10 + i; });
+    this.mon = NMN.map((n) => o.nmData.mon[n].map((mon) => {
+      let dd = -1, force = false; const fac = [];
+      for (const tok of mon.replace(/\*\*/g, '^').split('*')) {
+        const [v, pw] = tok.split('^'); if (v === 'a_x') { force = true; continue; }
+        const id = vars[v]; if (id >= 10) dd = id - 10; else fac.push([id, pw ? +pw : 1]);
+      }
+      return [dd, fac, mon === n, force];
+    }));
+    this.coef = NMN.map((n) => new Float64Array(o.nmData.mon[n].length));
+    this.b = new Float64Array(5); this.bd = new Float64Array(5);
+    this.b[2] = o.swirlSeed != null ? o.swirlSeed : 1e-5;           // a real glass is never perfectly round: the swirl's seed
+    this.breaks = 0; this.s1 = 0; this.s1d = 0;
+    TulipModes.call(this, o);
+    // the whole glass: columns over -R..R in y
+    this.ny = 2 * Math.ceil(this.R / this.dx); this.y0 = -(this.ny / 2) * this.dx; this.colH = new Float64Array(this.nx * this.ny);
+    this.st = new Float64Array(15); this.acc = new Float64Array(5);
+    this.syncQ();
+  }
+  TulipNM.prototype = Object.create(TulipModes.prototype);
+  TulipNM.prototype.constructor = TulipNM;
+  TulipNM.prototype.modes = function () {
+    TulipModes.prototype.modes.call(this);
+    if (!this.nmData) return;                                      // during TulipModes' constructor
+    const [i, t] = bracket(this.nmH, this.h), j = Math.min(i + 1, this.nmH.length - 1), A = this.nmData.levels[i], B = this.nmData.levels[j];
+    NMN.forEach((n, k) => { const ca = A.eqs[n], cb = B.eqs[n], c = this.coef[k]; for (let m = 0; m < c.length; m++) c[m] = lerp(ca[m], cb[m], t); });
+    this.mu = NMN.map((n) => lerp(A.mu[n], B.mu[n], t)); this.sig = NMN.map((n) => Math.sqrt(lerp(A.sigma2[n], B.sigma2[n], t)));
+    this.Rw = [0, 1, 2].map((m) => lerp(A.Rw[m], B.Rw[m], t));
+    // friction of each coordinate from the first mode of its harmonic m (modes.json rows m0, m1, m2), the shapes e0, e2
+    const [ii, tt] = bracket(this.hsData, this.h), jj = Math.min(ii + 1, this.hsData.length - 1), LA = this.data.levels[ii], LB = this.data.levels[jj];
+    this.zNM = NMM.map((m) => {
+      const a = LA['m' + m], bb = LB['m' + m], w = 2 * Math.PI * lerp(a.f[0], bb.f[0], tt), sq = 0.5 * Math.sqrt(this.nu / (2 * w));
+      const z = sq * lerp(a.Lam[0], bb.Lam[0], tt) + this.skin * sq * lerp(a.LamS[0], bb.LamS[0], tt) + this.nu * lerp(a.Bk[0], bb.Bk[0], tt) / w;
+      return this.friction ? z + this.zetaCL + this.zetaExtra : this.zetaExtra;
+    });
+    this.eM = [0, 2].map((m) => { const e = new Float64Array(this.NR), a = LA['m' + m].e[0], bb = LB['m' + m].e[0]; for (let k = 0; k < this.NR; k++) e[k] = lerp(a[k], bb[k], tt); return e; });
+    // the foam's force per unit wall length k V|V|^(-1/3): total on a planar mode-1 swing = M1 alpha w1^(4/3) R^(1/3) V|V|^(-1/3)
+    this.kfR = this.alpha > 0 ? this.M[0] * this.alpha * Math.pow(this.w[0], 4 / 3) * Math.cbrt(this.Rs) / I53 : 0;
+  };
+  TulipNM.prototype.shapeM = function (M, rho) {        // e_M(rho), rho = r/R(h); M = 1 uses the linear data's mode 1
+    if (M === 1) return this.shapeAt(0, rho * this.Rs);
+    const e = this.eM[M === 0 ? 0 : 1], s = Math.min(1, rho) * (this.NR - 1), j = Math.min(this.NR - 2, Math.floor(s)), u = s - j;
+    return e[j] + u * (e[j + 1] - e[j]);
+  };
+  // wall heights in metres, as NMFluid: q[0] the swing at th = 0 (p1), s1 at th = pi/2 (r1: the swirl's part)
+  TulipNM.prototype.syncQ = function () {
+    const R = this.Rs, ts = Math.sqrt(this.g / R), W = this.Rw;
+    this.q[0] = R * W[1] * this.b[1]; this.qd[0] = R * W[1] * this.bd[1] * ts;
+    this.s1 = R * W[1] * this.b[2]; this.s1d = R * W[1] * this.bd[2] * ts;
+    this.c0 = R * W[0] * this.b[0]; this.c2 = R * W[2] * this.b[3]; this.s2 = R * W[2] * this.b[4];
+  };
+  TulipNM.prototype.heightAt = function (x, y) {
+    const r = Math.hypot(x, y), R = this.Rs, rho = Math.min(r, R) / R, th = Math.atan2(y, x), b = this.b, W = this.Rw;
+    let e = R * (W[0] * this.shapeM(0, rho) * b[0] + W[1] * this.shapeM(1, rho) * (b[1] * Math.cos(th) + b[2] * Math.sin(th))
+      + W[2] * this.shapeM(2, rho) * (b[3] * Math.cos(2 * th) + b[4] * Math.sin(2 * th)));
+    for (let n = 1; n < this.N; n++) e += this.q[n] * this.shapeAt(n, r) * Math.cos(th);
+    return this.h + e;
+  };
+  TulipNM.prototype.columnHeightAt = TulipNM.prototype.heightAt;
+  TulipNM.prototype.columnHeights = function () {
+    const nx = this.nx, ny = this.ny, dx = this.dx, H = this.colH;
+    for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) H[i + nx * j] = this.heightAt(this.x0 + (i + 0.5) * dx, this.y0 + (j + 0.5) * dx);
+    return H;
+  };
+  TulipNM.prototype.wallAt = function (th) {
+    const b = this.b, W = this.Rw; let e = this.Rs * (W[0] * b[0] + W[1] * (b[1] * Math.cos(th) + b[2] * Math.sin(th)) + W[2] * (b[3] * Math.cos(2 * th) + b[4] * Math.sin(2 * th)));
+    for (let n = 1; n < this.N; n++) e += this.q[n] * Math.cos(th);
+    return this.h + e;
+  };
+  TulipNM.prototype.wallLift = function () { let m = 0; for (let k = 0; k < 72; k++) m = Math.max(m, this.wallAt(2 * Math.PI * k / 72) - this.h); return m; };
+  TulipNM.prototype.momentum = function () { this.Py = this.Pc[0] * this.s1d; return TulipModes.prototype.momentum.call(this); };
+  TulipNM.prototype.energy = function () {           // kinetic energy to second order is the nonlinear part's; the books use powers
+    return TulipModes.prototype.energy.call(this);
+  };
+  TulipNM.prototype.accel = function (gf, axn, Qhat, bv, bdv, out) {
+    bv = bv || this.b; bdv = bdv || this.bd; out = out || this.acc;
+    const st = this.st, A = this.Amat || (this.Amat = [new Float64Array(5), new Float64Array(5), new Float64Array(5), new Float64Array(5), new Float64Array(5)]), rhs = this.rhs || (this.rhs = new Float64Array(5));
+    for (let i = 0; i < 5; i++) { st[i] = bv[i]; st[5 + i] = bdv[i]; }
+    for (let i = 0; i < 5; i++) {
+      A[i].fill(0); let r = 0; const mon = this.mon[i], c = this.coef[i];
+      for (let k = 0; k < mon.length; k++) {
+        const [dd, fac, lin, force] = mon[k]; let v = c[k]; if (v === 0) continue;
+        for (let f = 0; f < fac.length; f++) { const x = st[fac[f][0]]; v *= fac[f][1] === 1 ? x : Math.pow(x, fac[f][1]); }
+        if (force) r -= v * axn; else if (dd >= 0) A[i][dd] += v; else r -= lin ? v * gf : v;
+      }
+      r -= 2 * this.zNM[i] * this.sig[i] * bdv[i];
+      rhs[i] = r + Qhat[i] / this.mu[i];
+    }
+    for (let c = 0; c < 5; c++) {                       // Gaussian elimination, partial pivoting
+      let p = c; for (let r = c + 1; r < 5; r++) if (Math.abs(A[r][c]) > Math.abs(A[p][c])) p = r;
+      if (p !== c) { const t = A[c]; A[c] = A[p]; A[p] = t; const u = rhs[c]; rhs[c] = rhs[p]; rhs[p] = u; }
+      for (let r = c + 1; r < 5; r++) { const f = A[r][c] / A[c][c]; for (let k = c; k < 5; k++) A[r][k] -= f * A[c][k]; rhs[r] -= f * rhs[c]; }
+    }
+    for (let c = 4; c >= 0; c--) { let s = rhs[c]; for (let k = c + 1; k < 5; k++) s -= A[c][k] * out[k]; out[c] = s / A[c][c]; }
+    return out;
+  };
+  // the foam's generalised forces for the rates bdv (large-swing coordinates, nondimensional) and qd (linear modes, m/s):
+  // fills Qhat (nondimensional, per coordinate) and Qlin (N, per linear mode); returns the power the foam takes (W)
+  TulipNM.prototype.foamForces = function (bdv, Qhat, Qlin) {
+    Qhat.fill(0); Qlin.fill(0); if (!(this.kfR > 0)) return 0;
+    const R = this.Rs, ts = Math.sqrt(this.g / R), W = this.Rw, E0 = this.rho * this.g * R * R * R * R, dth = 2 * Math.PI / KF, N = this.N;
+    const g0 = R * W[0], g1 = R * W[1], g2 = R * W[2]; let P = 0;
+    for (let k = 0; k < KF; k++) {
+      const th = (k + 0.5) * dth, c1 = Math.cos(th), s1 = Math.sin(th), c2 = Math.cos(2 * th), s2 = Math.sin(2 * th);
+      let V = R * ts * (W[0] * bdv[0] + W[1] * (bdv[1] * c1 + bdv[2] * s1) + W[2] * (bdv[3] * c2 + bdv[4] * s2));
+      for (let n = 1; n < N; n++) V += this.qd[n] * c1;
+      if (V === 0) continue;
+      const F = -this.kfR * V * Math.pow(Math.abs(V), -1 / 3) * dth;
+      P -= F * V;
+      Qhat[0] += F * g0 / E0; Qhat[1] += F * g1 * c1 / E0; Qhat[2] += F * g1 * s1 / E0; Qhat[3] += F * g2 * c2 / E0; Qhat[4] += F * g2 * s2 / E0;
+      for (let n = 1; n < N; n++) Qlin[n] += F * c1;
+    }
+    return P;
+  };
+  TulipNM.prototype.step = function (dt, ax, az) {
+    const ns = Math.max(1, Math.ceil(dt / 0.0005 - 1e-9)), hs = dt / ns, gf = Math.max(0, 1 + az / this.g), R = this.Rs, ts = Math.sqrt(this.g / R), ht = hs * ts;
+    const W = this.Rw, E0 = this.rho * this.g * R * R * R * R, Qhat = new Float64Array(5), N = this.N, Qlin = new Float64Array(N);
+    let Pv = 0, Pf = 0;
+    // each substep: the large-swing coordinates by classical Runge-Kutta (their kinetic matrix depends on the coordinates, so the
+    // semi-implicit Euler of the linear modes would drift: measured +3 % of amplitude per 10 s at 0.5 ms, halving with the step);
+    // the linear modes by semi-implicit Euler (exact energy behaviour for a constant mass), the foam's force held over the substep
+    const k1 = new Float64Array(5), k2 = new Float64Array(5), k3 = new Float64Array(5), k4 = new Float64Array(5), bt = new Float64Array(5), vt = new Float64Array(5), Qt = new Float64Array(5), Qd = new Float64Array(N);
+    const axn = ax / this.g, f = (bv, bdv, out) => { this.foamForces(bdv, Qt, Qd); return this.accel(gf, axn, Qt, bv, bdv, out); };
+    for (let s = 0; s < ns; s++) {
+      Pf += this.foamForces(this.bd, Qhat, Qlin) * hs;
+      for (let m = 1; m < N; m++) {                       // the higher m = 1 modes, linear
+        const w = this.w[m], fv = 2 * this.zeta[m] * w * this.qd[m];
+        Pv += this.M[m] * fv * this.qd[m] * hs;
+        this.qd[m] += hs * (-w * w * gf * this.q[m] - fv - this.beta[m] * ax + Qlin[m] / this.M[m]);
+        this.q[m] += hs * this.qd[m];
+      }
+      const b = this.b, v = this.bd;
+      f(b, v, k1);
+      for (let i = 0; i < 5; i++) { bt[i] = b[i] + 0.5 * ht * v[i]; vt[i] = v[i] + 0.5 * ht * k1[i]; } const v2 = Float64Array.from(vt); f(bt, vt, k2);
+      for (let i = 0; i < 5; i++) { bt[i] = b[i] + 0.5 * ht * v2[i]; vt[i] = v[i] + 0.5 * ht * k2[i]; } const v3 = Float64Array.from(vt); f(bt, vt, k3);
+      for (let i = 0; i < 5; i++) { bt[i] = b[i] + ht * v3[i]; vt[i] = v[i] + ht * k3[i]; } const v4 = Float64Array.from(vt); f(bt, vt, k4);
+      for (let i = 0; i < 5; i++) {
+        Pv += E0 * this.mu[i] * 2 * this.zNM[i] * this.sig[i] * v[i] * v[i] * ht;
+        b[i] += ht / 6 * (v[i] + 2 * v2[i] + 2 * v3[i] + v4[i]);
+        v[i] += ht / 6 * (k1[i] + 2 * k2[i] + 2 * k3[i] + k4[i]);
+      }
+      const amp = Math.hypot(b[1], b[2]) * R * W[1], cap = 1.5 * R / 1.8412;
+      if (amp > cap) { const fc = cap / amp; for (let i = 0; i < 5; i++) { b[i] *= fc; v[i] *= fc; } this.breaks++; }
+    }
+    this.syncQ();
+    // the pour over the rim: the weir law at each angle of the wall (as ModalFluid); the crest's volume above rest shrinks by
+    // what poured (all coordinates scaled alike)
+    let dV = 0, dPx = 0; const g = this.g;
+    if (this.h + this.wallLift() > this.zRim) {
+      const K = 72;
+      for (let k = 0; k < K; k++) {
+        const th = 2 * Math.PI * (k + 0.5) / K, D = this.wallAt(th) - this.zRim;
+        if (D <= 0) continue;
+        const dVk = this.Cd * (2 / 3) * Math.sqrt(2 * g) * Math.pow(D, 1.5) * this.Rrim * (2 * Math.PI / K) * dt;
+        dV += dVk; dPx += this.rho * dVk * Math.sqrt(2 * g * D) * Math.cos(th);
+      }
+      dV = Math.min(dV, 0.5 * this.V);
+      let Vc = 0; const nr = 12;                           // volume above the rest level: int max(eta - h, 0) dA, polar grid
+      for (let i = 0; i < nr; i++) { const r = this.Rs * (i + 0.5) / nr; for (let k = 0; k < 36; k++) { const th = 2 * Math.PI * (k + 0.5) / 36; Vc += Math.max(0, this.heightAt(r * Math.cos(th), r * Math.sin(th)) - this.h) * r * (this.Rs / nr) * (2 * Math.PI / 36); } }
+      const f = Vc > 1e-12 ? Math.max(0, 1 - dV / Vc) : 1;
+      for (let i = 0; i < 5; i++) { this.b[i] *= f; this.bd[i] *= f; } for (let m = 1; m < N; m++) { this.q[m] *= f; this.qd[m] *= f; }
+      this.V -= dV; this.h = this.heightOf(this.V); this.modes(); this.syncQ();
+    }
+    this.spillNow = dV > 0 ? 1 : 0; this.spillV += dV; this.spillRate = dV / dt; this.spillPx = dPx; this.spillPz = 0;
+    this.Pvisc = Pv / dt; this.Pfoam = Pf / dt; this.t += dt;
+  };
+
   // A fixed-step driver: the page hands it the real time of each frame; it advances the world in exact steps of `step`
   // seconds (1 ms), so the simulated history never depends on the frame rate: every device computes the same steps. At most
   // maxSteps a frame (a stalled tab does not try to catch up); the time it gives up is counted in `dropped`.
@@ -220,5 +406,5 @@
     return n;
   };
 
-  return { TulipModes, FixedStepper, bracket };
+  return { TulipModes, TulipNM, FixedStepper, bracket };
 });
