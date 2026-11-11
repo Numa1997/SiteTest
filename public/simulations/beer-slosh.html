@@ -21,6 +21,10 @@
         .tbl th, .tbl td { border-bottom: 1px solid var(--rule-soft); padding: 4px 10px; text-align: left; }
         .tbl td.n { font-variant-numeric: tabular-nums; text-align: right; }
     </style>
+    <style>
+        .road-ed { margin-top: 10px; }
+        .road-ed canvas { display: block; width: 100%; height: 120px; background: #fff; border: 1px solid var(--line, #d9d2c7); touch-action: none; cursor: crosshair; }
+    </style>
 </head>
 <body>
     <header class="sim-top">
@@ -121,8 +125,20 @@
                             <option value="isoD">ISO 8608 class D (poor)</option>
                             <option value="washboard">washboard: gravel ripples 30 cm, 20 mm</option>
                             <option value="setts">setts (Belgian block): 15 cm stones</option>
+                            <option value="drawn">your own road: draw it below</option>
                         </select>
                     </label>
+                    <div id="road-ed-wrap" class="road-ed" hidden>
+                        <canvas id="road-ed" aria-label="Your road from 0 to 12 m: draw its height with the mouse or a finger"></canvas>
+                        <div class="actions" role="group" aria-label="Start from">
+                            <button type="button" class="btn btn--ghost" data-road="kerb">Kerb 12 mm</button>
+                            <button type="button" class="btn btn--ghost" data-road="hill">Hill 10 cm</button>
+                            <button type="button" class="btn btn--ghost" data-road="dip">Dip 10 cm</button>
+                            <button type="button" class="btn btn--ghost" data-road="ripples">Ripples</button>
+                            <button type="button" class="btn btn--ghost" data-road="flat">Level</button>
+                        </div>
+                        <p class="panel__note">Draw the road’s height from 0 to 12 m (heights exaggerated, ±150 mm). The wheel rolls over whatever you draw: a step shorter than the wheel is rounded off as a real wheel rounds it, a sharp crest can throw it off the road. Past 12 m the road stays at its last height. Slopes push the cart back uphill and on downhill through the tyre; the cart itself stays level (no pitch in the model).</p>
+                    </div>
                     <label class="ctl">
                         <span class="ctl__row"><span>Bump height</span><output id="bumpH-out" for="bumpH"></output></span>
                         <input type="range" id="bumpH" min="0" max="25" step="1" value="10">
@@ -1010,9 +1026,45 @@
         }
         // the road: bumps (the height slider) or a rough surface (the Road menu; a seeded road, the same every time)
         var roadKind = document.getElementById('roadKind');
-        function roadOpts(Rw) { var k = roadKind.value, o = { bumps: bumps(bumpH.value / 1000), Rw: Rw, xmin: -1, xmax: 125 }; if (k.indexOf('iso') === 0) { o.kind = 'iso'; o.cls = k.slice(3); } else if (k !== 'bumps') o.kind = k; return o; }
-        function storeRoad() { if (!ds) return; var r = world.cart.road; ds.set('road_kind', ['bumps', 'isoA', 'isoB', 'isoC', 'isoD', 'washboard', 'setts'].indexOf(roadKind.value)); ds.set('road_rms', r.rms || 0); ds.set('mu', world.cart.mu); }
-        roadKind.addEventListener('change', function () { document.getElementById('bumpH').disabled = roadKind.value !== 'bumps'; rebuildRoad(); });
+        // the reader's own road: heights every 12.5 cm from 0 to 12 m, drawn in the editor (Road kind 'drawn' in stout-cart.js)
+        var RD = { n: 97, L: 12, z: new Float64Array(97) };
+        function roadPreset(k) {
+            for (var i = 0; i < RD.n; i++) {
+                var x = RD.L * i / (RD.n - 1), z = 0;
+                if (k === 'kerb') z = x >= 2 && x < 6 ? 0.012 : 0;
+                else if (k === 'hill') z = x > 2 && x < 8 ? 0.05 * (1 - Math.cos(2 * Math.PI * (x - 2) / 6)) : 0;
+                else if (k === 'dip') z = x > 2 && x < 8 ? -0.05 * (1 - Math.cos(2 * Math.PI * (x - 2) / 6)) : 0;
+                else if (k === 'ripples') z = x > 2 && x < 10 ? 0.01 * (1 - Math.cos(2 * Math.PI * (x - 2) / 0.5)) : 0;
+                RD.z[i] = z;
+            }
+        }
+        roadPreset('kerb');
+        function roadPoints() { var P = []; for (var i = 0; i < RD.n; i++) P.push([RD.L * i / (RD.n - 1), RD.z[i]]); return P; }
+        function roadOpts(Rw) { var k = roadKind.value, o = { bumps: bumps(bumpH.value / 1000), Rw: Rw, xmin: -1, xmax: k === 'drawn' ? 14 : 125 }; if (k.indexOf('iso') === 0) { o.kind = 'iso'; o.cls = k.slice(3); } else if (k === 'drawn') { o.kind = 'drawn'; o.points = roadPoints(); } else if (k !== 'bumps') o.kind = k; return o; }
+        var red = document.getElementById('road-ed'), redWrap = document.getElementById('road-ed-wrap'), redDown = false, redLast = null;
+        function redFit() { var r = red.getBoundingClientRect(), dpr = Math.min(window.devicePixelRatio || 1, 2); red.width = Math.max(1, Math.round(r.width * dpr)); red.height = Math.max(1, Math.round(r.height * dpr)); redDraw(); }
+        function redXY(e) { var r = red.getBoundingClientRect(); return [Math.max(0, Math.min(RD.L, (e.clientX - r.left) / r.width * RD.L)), Math.max(-0.15, Math.min(0.15, (0.5 - (e.clientY - r.top) / r.height) * 0.3))]; }
+        function redSet(a, b) {   // heights along the stroke from a to b, linear between the two pointer positions
+            var i0 = Math.round(Math.min(a[0], b[0]) / RD.L * (RD.n - 1)), i1 = Math.round(Math.max(a[0], b[0]) / RD.L * (RD.n - 1));
+            for (var i = i0; i <= i1; i++) { var x = RD.L * i / (RD.n - 1), t = b[0] === a[0] ? 1 : (x - a[0]) / (b[0] - a[0]); RD.z[i] = a[1] + Math.max(0, Math.min(1, t)) * (b[1] - a[1]); }
+        }
+        function redDraw() {
+            if (redWrap.hidden) return;
+            var c = red.getContext('2d'), W = red.width, H = red.height, dpr = W / (red.getBoundingClientRect().width || W), X = function (x) { return x / RD.L * W; }, Y = function (z) { return H * (0.5 - z / 0.3); };
+            c.clearRect(0, 0, W, H); c.font = (10 * dpr) + 'px "IBM Plex Mono", monospace'; c.fillStyle = '#6b6166'; c.strokeStyle = 'rgba(28,21,24,0.12)'; c.lineWidth = 1;
+            for (var m = 0; m <= 12; m += 2) { c.beginPath(); c.moveTo(X(m), 0); c.lineTo(X(m), H); c.stroke(); c.fillText(m + ' m', X(m) + 3 * dpr, H - 4 * dpr); }
+            c.beginPath(); c.moveTo(0, Y(0)); c.lineTo(W, Y(0)); c.stroke(); c.fillText('+150 mm', 3 * dpr, 11 * dpr);
+            c.beginPath(); for (var i = 0; i < RD.n; i++) { var x = X(RD.L * i / (RD.n - 1)), y = Y(RD.z[i]); i ? c.lineTo(x, y) : c.moveTo(x, y); }
+            c.strokeStyle = '#1c1518'; c.lineWidth = 2 * dpr; c.stroke();
+            if (world) { var cx = world.cart.x; if (cx >= 0 && cx <= RD.L) { c.fillStyle = '#7a1f2b'; c.beginPath(); c.arc(X(cx), Y(world.cart.road.zr(cx)), 4 * dpr, 0, 2 * Math.PI); c.fill(); } }
+        }
+        red.addEventListener('pointerdown', function (e) { redDown = true; red.setPointerCapture(e.pointerId); redLast = redXY(e); redSet(redLast, redLast); redDraw(); });
+        red.addEventListener('pointermove', function (e) { if (!redDown) return; var p = redXY(e); redSet(redLast, p); redLast = p; redDraw(); });
+        red.addEventListener('pointerup', function () { if (!redDown) return; redDown = false; rebuildRoad(); });
+        [].forEach.call(document.querySelectorAll('[data-road]'), function (b) { b.addEventListener('click', function () { roadPreset(b.getAttribute('data-road')); redDraw(); rebuildRoad(); }); });
+        Sim.onResize(red, redFit);
+        function storeRoad() { if (!ds) return; var r = world.cart.road; ds.set('road_kind', ['bumps', 'isoA', 'isoB', 'isoC', 'isoD', 'washboard', 'setts', 'drawn'].indexOf(roadKind.value)); ds.set('road_rms', r.rms || 0); ds.set('mu', world.cart.mu); }
+        roadKind.addEventListener('change', function () { document.getElementById('bumpH').disabled = roadKind.value !== 'bumps'; redWrap.hidden = roadKind.value !== 'drawn'; if (!redWrap.hidden) redFit(); rebuildRoad(); });
         function rebuildRoad() {
             if (!world) return;
             var c = world.cart;
@@ -1086,7 +1138,7 @@
             S('bump_h', { symbol: 'h<sub>bump</sub>', units: 'm', long_name: 'bump height', computed_in: 'Bump height slider', digits: 3 });
             S('v0', { symbol: 'v<sub>0</sub>', units: 'm/s', long_name: 'set speed', computed_in: 'Set speed slider', digits: 2 });
             ds.var('ctrl_on', [], 'int', { symbol: 'speed loop', long_name: 'the controller: 0 open loop (fixed current), 1 PI speed loop, 2 PI + road preview, 3 slosh feedback (LQR), 4 motor + suspension (joint LQR, heave in the model)', computed_in: 'the Open loop / Speed control buttons', digits: 0 });
-            ds.var('road_kind', [], 'int', { symbol: 'road', long_name: 'the road: 0 bumps, 1–4 ISO 8608 classes A–D, 5 washboard, 6 setts', computed_in: 'the Road menu', digits: 0 });
+            ds.var('road_kind', [], 'int', { symbol: 'road', long_name: 'the road: 0 bumps, 1–4 ISO 8608 classes A–D, 5 washboard, 6 setts, 7 your own (drawn)', computed_in: 'the Road menu', digits: 0 });
             S('road_rms', { symbol: 'z<sub>r,rms</sub>', units: 'm', long_name: 'rms height of the rough road about its mean, over its 126 m (0 for bumps)', computed_in: 'Road.profile', digits: 4 });
             S('mu', { symbol: 'μ', units: '', long_name: 'tyre–road friction coefficient: the drive pushes at most μN', computed_in: 'Cart (a modelling choice)', digits: 2 });
             S('F_grip', { symbol: 'μN', units: 'N', long_name: 'the most the tyre can pass along the road now', computed_in: 'Cart.forces', formula: 'μ N', digits: 3 });
@@ -1424,7 +1476,7 @@
                 F_drive: function () { var f = g('F_motor0'), m = g('F_grip'); return { formula: 'b i, clipped to ±μN (the grip)', inputs: [inp('F_motor0', 'b i', 'N', 3), inp('F_grip', 'μN', 'N', 3)], value: f > m ? m : f < -m ? -m : f }; },
                 slip: function () { var f = g('F_motor0'), m = g('F_grip'); return { formula: '1 if |b i| > μN', inputs: [inp('F_motor0', 'b i', 'N', 3), inp('F_grip', 'μN', 'N', 3)], value: (f > m || f < -m) ? 1 : 0 }; },
                 mu: function () { return { formula: 'the cart’s constant', inputs: [], value: world.cart.mu }; },
-                road_kind: function () { return { formula: 'read from the Road menu now', inputs: [], value: ['bumps', 'isoA', 'isoB', 'isoC', 'isoD', 'washboard', 'setts'].indexOf(roadKind.value) }; },
+                road_kind: function () { return { formula: 'read from the Road menu now', inputs: [], value: ['bumps', 'isoA', 'isoB', 'isoC', 'isoD', 'washboard', 'setts', 'drawn'].indexOf(roadKind.value) }; },
                 road_rms: function () { var r = world.cart.road; if (!r.zt) return { formula: '0 for bumps', inputs: [], value: 0 }; var a = r.zt, m = 0, m2 = 0; for (var k = 0; k < a.length; k++) { m += a[k]; m2 += a[k] * a[k]; } m /= a.length; return { formula: 'standard deviation of z<sub>r</sub> over the 126 m table', inputs: [], value: Math.sqrt(Math.max(0, m2 / a.length - m * m)) }; },
                 z_a: function () { if (world.cart.road.zt) return { formula: 'the axle path over the rough road (Road.build on its table)', inputs: [inp('x', 'x', 'm', 5)], value: world.cart.road.axle(g('x'))[0] }; return { formula: 'max over the rim of z<sub>r</sub>(s) + √(R<sub>w</sub>² − (s − x)²) at the two 0.5 mm nodes around x (rim sampled on the same grid), linear in between; z<sub>r</sub> written out again from the bump formula', inputs: [inp('x', 'x', 'm', 5), inp('bump_h', 'h<sub>bump</sub>', 'm', 3), inp('Rw', 'R<sub>w</sub>', 'm', 3)], value: envelope(g('x')).z }; },
                 dz_a: function () { if (world.cart.road.zt) return { formula: 'slope of the axle path over the rough road', inputs: [inp('x', 'x', 'm', 5)], value: world.cart.road.axle(g('x'))[1] }; return { formula: '(z<sub>a</sub> at the next node − at this node) / 0.5 mm', inputs: [inp('x', 'x', 'm', 5)], value: envelope(g('x')).slope }; },
@@ -1659,6 +1711,7 @@
             lastWall = now; lastSim = world.t;
             ds.set('spilled_g', (world.spilledMass || 0) * 1000); ds.set('np', world.fluid.np);
             view.draw();
+            if (!redWrap.hidden && frameNo % 2 === 0) redDraw();   // the cart's place on your road
             if (++frameNo % 15 === 0) readouts();   // words rewritten about four times a second
         }
         function tick(dt) {
