@@ -91,8 +91,8 @@ $\mu = R_vT\,(a/r - b/r^3)$, with $b$ proportional to the mass of salt in the dr
 
 <p><strong>Step 2: the path. Water passes through the vapour.</strong> Drops do not touch here, so the only path between them is the air: water
 evaporates from one drop, crosses as vapour and condenses on another. The vapour has a chemical potential too. If the air holds a share $s$
-more vapour than air in balance with flat water ($s$ is the <em>supersaturation</em>; $s$ = 0.01 means 1 % more), then for small $s$ the
-vapour's potential on the same scale is $\bar\mu = R_vT\,s$. A drop is in balance with the air when the two potentials are equal, $s = a/r$:
+more vapour than air in balance with flat water ($s$ is the <em>supersaturation</em>; $s$ = 0.01 means 1 % more), then the
+vapour's potential on the same scale is $R_vT\ln(1 + s)$, and for the $s$ of order $10^{-4}$ met here that is $\bar\mu = R_vT\,s$ to better than a part in ten thousand. A drop is in balance with the air when the two potentials are equal, $s = a/r$:
 the smaller the drop, the more vapour the air must hold to keep it alive. That is Kelvin's law.</p>
 <p>When they are not equal, vapour diffuses toward the drop or away from it. Around a sphere a steady diffusion has the vapour density approaching
 its far value as $1/\text{distance}$, like the potential of a charge, and the total flow through any shell round the drop is $4\pi rD_v$ times the
@@ -126,7 +126,7 @@ $$\frac{dF_s}{dt} = \sum_i \frac{\partial F_s}{\partial m_i}\,\frac{dm_i}{dt} = 
 <p>Since the gains and losses add to zero, we may subtract
 $\bar\mu\sum_i dm_i/dt = 0$ without changing anything, and then (10.7) gives</p>
 $$\boxed{\;\frac{dF_s}{dt} = \sum_i (\mu_i - \bar\mu)\,\frac{dm_i}{dt} = -\sum_i M_i\,(\mu_i - \bar\mu)^2 \;\le\; 0.\;} \tag{10.9}$$
-<p>Every drop contributes a square, so every drop lowers the free energy, the one that shrinks and the one that grows alike. The descent stops
+<p>Every drop contributes a square, so every term of the sum is a loss. Measure the potentials from the vapour's level $\bar\mu$: a drop that shrinks gives up water it held above that level, a drop that grows takes water in below it, and both lower the total. The descent stops
 only when all $\mu_i$ are equal, which cannot happen while pure-water drops of two different sizes are left: it ends with one size and, given time, one drop. And because the box
 is at one temperature, (10.4) turns this into the entropy made each second, $dS/dt = -\dot F_s/T = \sum_i M_i(\mu_i - \bar\mu)^2/T$: a flow
 times the force that drives it, summed over the drops. This is the second law doing work: it does not only forbid the way back, it gives
