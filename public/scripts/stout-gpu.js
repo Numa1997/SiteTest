@@ -32,7 +32,7 @@ struct P {
   nu: f32, rp: f32, Rk: f32, zRim: f32,
   Rrim: f32, Rbox: f32, Vp: f32, sliver: f32,
   thetaMin: f32, forcedPhi: f32, tol: f32, maxIt: f32,
-  nProf: i32, dzProf: f32, pad1: f32, pad2: f32,
+  nProf: i32, dzProf: f32, ay: f32, pad2: f32,
 };
 @group(0) @binding(0) var<uniform> P_: P;
 @group(0) @binding(1) var<uniform> profV: array<vec4f, 128>;      // the glass's inner radius every dzProf (the measured tulip), 4 to a vec4
@@ -323,7 +323,7 @@ fn force(@builtin(global_invocation_id) id: vec3u) {
   let n = i32(id.x); if (n >= which.y * which.z * which.w) { return; }
   if (open(n) <= 0.0) { return; }
   let o = off(which.x);
-  if (which.x == 0) { grid[o + n] += P_.dt * (-P_.ax); } else if (which.x == 2) { grid[o + n] += P_.dt * (-P_.g - P_.az); }
+  if (which.x == 0) { grid[o + n] += P_.dt * (-P_.ax); } else if (which.x == 2) { grid[o + n] += P_.dt * (-P_.g - P_.az); } else if (P_.ay != 0.0) { grid[o + n] += P_.dt * (-P_.ay); }
 }
 @compute @workgroup_size(${WG})
 fn copyT(@builtin(global_invocation_id) id: vec3u) { let n = i32(id.x); if (n >= which.y * which.z * which.w) { return; } let o = off(which.x); tgrid[o + n] = grid[o + n]; }
@@ -771,7 +771,7 @@ fn momentum(@builtin(global_invocation_id) id: vec3u, @builtin(local_invocation_
     pi[0] = this.nx; pi[1] = this.ny; pi[2] = this.nz; pi[3] = this.nc; pi[4] = this.slots; pi[5] = this.npCap; pi[6] = this.oV; pi[7] = this.oW;
     pf[8] = this.dx; pf[9] = this.x0; pf[10] = this.y0; pf[11] = this.H; pf[12] = st.dt; pf[13] = st.ax; pf[14] = st.az; pf[15] = this.g;
     pf[16] = this.nu; pf[17] = this.rp; pf[18] = this.kernel * this.dx; pf[19] = this.zRim; pf[20] = this.Rrim; pf[21] = this.Rbox; pf[22] = this.Vseed; pf[23] = this.sliver;
-    pf[24] = this.thetaMin; pf[25] = this.forcedPhi; pf[26] = this.tol; pf[27] = this.maxIt; pi[28] = this.profile.R.length; pf[29] = this.profile.dz;
+    pf[24] = this.thetaMin; pf[25] = this.forcedPhi; pf[26] = this.tol; pf[27] = this.maxIt; pi[28] = this.profile.R.length; pf[29] = this.profile.dz; pf[30] = st.ay || 0;   // sideways acceleration (tools only; the page never sets it)
   };
   GpuFluid.MAXB = 16;          // steps in one submission at most
   GpuFluid.SPILLCAP = 1024;    // spilled particles recorded per step at most
