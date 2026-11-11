@@ -49,10 +49,12 @@ figs.growth = C.line({ id: 'f2', w: 600, h: 320, xmin: 0, xmax: 20, ymin: 40, ym
 })();
 
 // 4. collision efficiency against size ratio, this study against Hall (1980)
-const tab = D('etab_warm'), hall = D('hall1980'), ps = range(0.02, 0.6, 60);
+const tab = D('etab_warm'), hall = D('hall1980'), ps = range(0.005, 0.6, 240), A0 = P.air(283.15, 85000);
 const effSeries = [];
 [[30, '#c9783f'], [40, '#7d1d2f'], [60, '#33627f'], [100, '#3c6a46']].forEach(([Rum, col]) => {
-  effSeries.push({ x: ps, y: ps.map(p => P.tableE(tab, Rum * 1e-6, p)), label: `R = ${Rum} µm, this study`, color: col });
+  // the curve is the trajectory solver itself at every point drawn; the runs read the same solver's 64 x 40 table, whose straight pieces
+  // between nodes would show as corners here
+  effSeries.push({ x: ps, y: ps.map(p => P.pairEfficiency(Rum * 1e-6, p * Rum * 1e-6, A0).E), label: `R = ${Rum} µm, this study`, color: col });
   const row = hall.E[hall.R.indexOf(Rum)];
   effSeries.push({ x: hall.p.slice(0, 12), y: row.slice(0, 12), color: col, dots: true, r: 2.5 });
 });
@@ -255,12 +257,24 @@ figs.first = C.line({ id: 'f9', w: 600, h: 310, xmin: 0, xmax: 20, ymin: 0, ymax
     { x: wr.map(q => q.t / 60), y: wr.map(q => q.Es / E.warm.Es0), label: 'collection (chapter 5)', color: '#7d1d2f' },
     { x: ra.slice(1).map(t => t / 60), y: ra.slice(1).map((_, k) => mean('pure', k + 1)), label: 'ripening, pure water', color: '#33627f' },
     { x: ra.slice(1).map(t => t / 60), y: ra.slice(1).map((_, k) => mean('salt', k + 1)), label: 'ripening, with salt', color: '#3c6a46', dash: '5 4' }] });
-  const run = R.cases.pure[0], bins = 32, lo = Math.log(1), hi = Math.log(200), dl = (hi - lo) / bins, xs = Array.from({ length: bins }, (_, i) => Math.exp(lo + (i + 0.5) * dl));
-  const hist = rr => { const h = new Array(bins).fill(0); rr.forEach(r => { if (r <= 0) return; const b = Math.floor((Math.log(r) - lo) / dl); if (b >= 0 && b < bins) h[b] += r ** 3; }); const tot = h.reduce((a, v) => a + v, 0); return h.map(v => v / tot / dl); };
-  const idx = t => ra.indexOf(t);
-  figs.ripenSpec = C.line({ id: 'f10c', w: 600, h: 300, xlog: true, xmin: 1, xmax: 200, ymin: 0, xlabel: 'radius r (µm)', ylabel: 'share of the water per unit ln r', series: [
-    { x: xs, y: hist(run[idx(0)].r), label: 'start', color: '#6f665e', dash: '4 3' },
-    { x: xs, y: hist(run[idx(3600)].r), label: 'after 1 hour', color: '#33627f' },
-    { x: xs, y: hist(run[idx(86400)].r), label: 'after 1 day', color: '#7d1d2f' }] });
+  // the spectrum from the class run: each class's water over the distance of its edges (run_ripening.cjs), a curve without binning
+  const C2 = R.classes, sp = t => C2.spec.find(q => q.t === t);
+  figs.ripenSpec = C.line({ id: 'f10c', w: 600, h: 300, xlog: true, xmin: 2, xmax: 100, ymin: 0, xlabel: 'radius r (µm)', ylabel: 'share of the water per unit ln r', series: [
+    { x: sp(0).x, y: sp(0).y, label: 'start', color: '#6f665e', dash: '4 3' },
+    { x: sp(3600).x, y: sp(3600).y, label: 'after 1 hour', color: '#33627f' },
+    { x: sp(21600).x, y: sp(21600).y, label: 'after 6 hours', color: '#c9783f' },
+    { x: sp(86400).x, y: sp(86400).y, label: 'after 1 day', color: '#7d1d2f' }] });
+  // one step of the descent: the rate of change of the radius against the radius, at the start and after an hour
+  const rt = C2.rate;
+  figs.ripenRate = C.line({ id: 'f10d', w: 600, h: 310, xlog: true, xmin: 2, xmax: 100, ymin: -6, ymax: 2, xlabel: 'radius r (µm)', ylabel: 'dr/dt (µm per hour)', series: [
+    { x: rt[0].x, y: rt[0].y, label: 'at the start (critical radius ' + (rt[0].rc * 1e6).toFixed(2) + ' µm)', color: '#7d1d2f' },
+    { x: rt[1].x, y: rt[1].y, label: 'after 1 hour (critical radius ' + (rt[1].rc * 1e6).toFixed(2) + ' µm)', color: '#33627f', dash: '5 4' }],
+    hlines: [{ y: 0 }] });
+  // the books of the vapour channel: who holds the water, and the critical radius
+  const cr = C2.rec.filter(q => q.t >= 60), tm2 = cr.map(q => q.t / 60);
+  figs.ripenWho = C.line({ id: 'f10e', w: 600, h: 310, xlog: true, xmin: 1, xmax: 1440, ymin: 0, ymax: 1, xlabel: 'time (min)', ylabel: 'share of the water', series: [
+    { x: tm2, y: cr.map(q => q.Wd / C2.M0), label: 'held by the droplet mode', color: '#33627f' },
+    { x: tm2, y: cr.map(q => q.Wc / C2.M0), label: 'held by the collector mode', color: '#c9783f' },
+    { x: tm2, y: cr.map(q => q.moved / C2.M0), label: 'passed through the vapour so far', color: '#7d1d2f', dash: '5 4' }] });
 })();
 process.stdout.write(JSON.stringify(figs));

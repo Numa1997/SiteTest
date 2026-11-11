@@ -510,11 +510,11 @@ how each model level was argued, attacked by an independent reviewer and checked
   an exact random cloud, a cloud with a shape, one energy landscape under three rules) change only on a click, a slider release or a
   button; nothing reacts to the pointer crossing a figure. Panel 4 animates on Start; its probe is pinned by a click and its words
   change about four times a second.
-- **Every quoted number is checked.** `checks/check_numbers.cjs` recomputes 235 numbers from the model and finds each in the text
+- **Every quoted number is checked.** `checks/check_numbers.cjs` recomputes 277 numbers from the model and finds each in the text
   near its anchor; `checks/check_physics.py` recomputes the physics independently in Python (14 checks); `checks/check_browser.py`
   opens every tab at 360, 390, 1024 and 1440 px and counts KaTeX errors, page errors and horizontal overflow.
 - **The ladder.** L0 one collector (chapter 1); L1 fall speed (2); L2 collision efficiency (3); L3 coalescence (4); L4 the
-  collection equation (5); L5 the exact random process and the first drizzle (6); L6 turbulence, decided by a number (7); L7 ice (8); L8 energy, entropy, ripening and who eats whom (10, 11);
+  collection equation (5); L5 the exact random process and the first drizzle (6); L6 turbulence, decided by a number (7); L7 ice (8); L8 energy, entropy, ripening and who eats whom (10, 11; since 11 November 2026 section 10.4 derives ripening through the vapour step by step as a gradient descent of the surface free energy, with the critical radius as the rule of who eats whom, Onsager's minimum principle, a ledger of each step and a check of the stored free energy against the summed formula; `physics.cjs` `ripen` takes weights and writes the ledger, `tools/run_ripening.cjs` stores it, `derive/L8b_ledger.cjs` prints its numbers);
   L10 a cloud with a shape: fall, mean motion and a stochastic element (12). L9 (turbulence at contact scale) and L11 (a mean motion
   measured from cloud pictures) are open; Part IV had one round of two independent reviews (`notes/droplets/review-*.md`).
 

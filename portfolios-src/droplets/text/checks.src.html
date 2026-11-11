@@ -20,6 +20,10 @@ SymPy), and a script that recomputes every number quoted in the notes and finds 
 <tr><td class="wrap">Collection equation solved again by independent NumPy code (all pairs at once, half the time step)</td><td class="wrap">$t_{50}$, $t_{90}$ = 5.774, 13.483 min against 5.767, 13.470</td></tr>
 <tr><td class="wrap">Exact stochastic engine against a problem solved exactly: one collector, 20 identical droplets (a pure capture chain), 4000 runs</td><td class="wrap">mean captures 8.246 ± 0.036 against 8.221; χ² test p = 0.15</td></tr>
 <tr><td class="wrap">Poisson prediction (6.1) against the exact first-drop times (Kolmogorov–Smirnov)</td><td class="wrap">p = 0.42 (1000 cm³), 0.40 (100 cm³)</td></tr>
+<tr><td class="wrap">Ripening as a gradient descent: the stored fall of the surface free energy against the summed formula (10.9), from 1 min to 1 day</td><td class="wrap">the stored fall is 0.3 to 1.1 % larger (time step; last surface of vanishing drops)</td></tr>
+<tr><td class="wrap">Ripening followed as 1100 classes against three random draws of 3010 drops: free energy left after 1 hour</td><td class="wrap">86.9 % against 86.8 %</td></tr>
+<tr><td class="wrap">The ripening routine with its ledger switched on and off, and against the run stored before the ledger was added</td><td class="wrap">identical in every stored digit</td></tr>
+<tr><td class="wrap">Problem 9, two droplet sizes ripening: a separate integration of (10.11) against the model's routine</td><td class="wrap">29.4 min against 29.3 to 29.5 min</td></tr>
 </table></div>
 <p>One of these tests taught something worth passing on. The second, independent solver of the collection equation first gave
 $t_{90}$ = 18.3 min instead of 13.5. The physics was the same; the difference was one line of bookkeeping. A step may not take more

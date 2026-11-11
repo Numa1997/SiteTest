@@ -637,24 +637,46 @@ var PHYS = (function () {
     return X < 1.4 ? 1 + 0.108 * X * X : 0.78 + 0.308 * X;
   }
   function kelvinA(A) { return 2 * sigmaWater(A.T) / (RHO_W * 461.5 * A.T); }
+  // Options: o.w, a weight per entry (how many real drops per m^3 of air, or per volume, one entry stands for; absent: one each), so that a
+  // size distribution can be followed as classes of identical drops; an entry of weight 0 is a tracer that moves but carries no water.
+  // o.ledger: every record also carries the books of the descent (they only read the state; the run is the same with and without them):
+  //   s      supersaturation the closed volume sets;  rc = a/s  critical radius (pure water): drops above it grow, drops below shrink
+  //   nUp, nDown   drops growing and shrinking;  flux  water passing through the vapour, kg/s (the sum of the gains)
+  //   P      -dF/dt from the gradient-flow formula, sum M_i (mu_i - mu_bar)^2, W;  moved  water moved so far, kg
+  //   diss   the time integral of P over the steps taken, J: to be compared with the fall of F (pure water)
+  //   Wd, Wc, nd, nc   water held by, and number of, the drops that started below and above o.split (the two starting modes)
   function ripen(radii, A, o) {
     o = o || {};
     var n = radii.length, r = Float64Array.from(radii), b = new Float64Array(n), a = kelvinA(A), G = growthG(A), i, t = 0, out = [];
     var bOf = o.b || function () { return 0; }, fv = o.vent === false ? function () { return 1; } : function (rr) { return ventilation(rr, A); };
-    for (i = 0; i < n; i++) b[i] = bOf(i, r[i]);
+    var w = o.w ? Float64Array.from(o.w) : null, split = o.split || 20e-6, isC = new Uint8Array(n), moved = 0, diss = 0, RvT = 461.5 * A.T;
+    for (i = 0; i < n; i++) { b[i] = bOf(i, r[i]); isC[i] = r[i] >= split ? 1 : 0; }
     var rmin = o.rmin || 0.05e-6, tEnd = o.tEnd || 86400, recAt = (o.recAt || [0, 600, 3600, 6 * 3600, 21600, 86400]).slice(), M0 = 0, steps = 0;
-    for (i = 0; i < n; i++) M0 += massOf(r[i]);
+    for (i = 0; i < n; i++) M0 += (w ? w[i] : 1) * massOf(r[i]);
     var fvc = new Float64Array(n); for (i = 0; i < n; i++) fvc[i] = fv(r[i]);
-    function F() { var f = 0; for (var k = 0; k < n; k++) if (r[k] > 0) f += sigmaWater(A.T) * 4 * Math.PI * r[k] * r[k]; return f; }
-    function rec() { var alive = 0, m = 0, r3 = 0; for (var k = 0; k < n; k++) if (r[k] > 0) { alive++; m += massOf(r[k]); r3 += r[k] * r[k] * r[k]; }
-      out.push({ t: t, alive: alive, F: F(), M: m / M0, rmean3: Math.cbrt(r3 / Math.max(1, alive)), r: Array.from(r) }); }
+    function F() { var f = 0; for (var k = 0; k < n; k++) if (r[k] > 0) f += (w ? w[k] : 1) * sigmaWater(A.T) * 4 * Math.PI * r[k] * r[k]; return f; }
+    function sat() {   // s from conservation: sum w 4 pi rho r G f (s - a/r + b/r^3) = 0
+      var num = 0, den = 0;
+      for (var k = 0; k < n; k++) if (r[k] > 0) { var q = (w ? w[k] : 1) * r[k] * fvc[k]; num += q * (a / r[k] - b[k] / (r[k] * r[k] * r[k])); den += q; }
+      return num / den;
+    }
+    function rec() { var alive = 0, m = 0, r3 = 0, k, wk; for (k = 0; k < n; k++) if (r[k] > 0) { wk = w ? w[k] : 1; alive += wk; m += wk * massOf(r[k]); r3 += wk * r[k] * r[k] * r[k]; }
+      var q = { t: t, alive: alive, F: F(), M: m / M0, rmean3: Math.cbrt(r3 / Math.max(1e-300, alive)), r: Array.from(r) };
+      if (o.ledger) {
+        var s0 = sat(), nUp = 0, nDown = 0, flux = 0, P = 0, Wd = 0, Wc = 0, nd = 0, nc = 0;
+        for (k = 0; k < n; k++) if (r[k] > 0) {
+          wk = w ? w[k] : 1; var drive = s0 - a / r[k] + b[k] / (r[k] * r[k] * r[k]), rate = 4 * Math.PI * RHO_W * r[k] * G * fvc[k] * drive;
+          if (rate > 0) { nUp += wk; flux += wk * rate; } else nDown += wk;
+          P += wk * rate * RvT * drive;
+          if (isC[k]) { Wc += wk * massOf(r[k]); nc += wk; } else { Wd += wk * massOf(r[k]); nd += wk; }
+        }
+        q.s = s0; q.rc = a / s0; q.nUp = nUp; q.nDown = nDown; q.flux = flux; q.P = P; q.moved = moved; q.diss = diss; q.Wd = Wd; q.Wc = Wc; q.nd = nd; q.nc = nc;
+      }
+      out.push(q); }
     while (recAt.length && recAt[0] <= 0) { rec(); recAt.shift(); }
     var dm = new Float64Array(n);
     while (t < tEnd) {
-      // s from conservation: sum 4 pi rho r G f (s - a/r + b/r^3) = 0
-      var num = 0, den = 0;
-      for (i = 0; i < n; i++) if (r[i] > 0) { var w = r[i] * fvc[i]; num += w * (a / r[i] - b[i] / (r[i] * r[i] * r[i])); den += w; }
-      var sv = num / den, dt = Math.min(o.dtMax || 120, recAt.length ? recAt[0] - t : tEnd - t);
+      var sv = sat(), dt = Math.min(o.dtMax || 120, recAt.length ? recAt[0] - t : tEnd - t);
       for (i = 0; i < n; i++) if (r[i] > 0) {
         dm[i] = 4 * Math.PI * RHO_W * r[i] * G * fvc[i] * (sv - a / r[i] + b[i] / (r[i] * r[i] * r[i]));
         if (dm[i] < 0) dt = Math.min(dt, 0.2 * massOf(r[i]) / -dm[i]);
@@ -663,10 +685,11 @@ var PHYS = (function () {
       var lost = 0;
       for (i = 0; i < n; i++) if (r[i] > 0) {
         var mi = massOf(r[i]) + dm[i] * dt;
-        if (mi <= massOf(rmin) && b[i] === 0) { lost += mi; r[i] = 0; } else r[i] = radiusOf(Math.max(mi, 1e-30));
+        if (o.ledger) { if (dm[i] > 0) moved += (w ? w[i] : 1) * dm[i] * dt; diss += (w ? w[i] : 1) * dm[i] * dm[i] * RvT / (4 * Math.PI * RHO_W * r[i] * G * fvc[i]) * dt; }
+        if (mi <= massOf(rmin) && b[i] === 0) { lost += (w ? w[i] : 1) * mi; r[i] = 0; } else r[i] = radiusOf(Math.max(mi, 1e-30));
       }
       if (lost !== 0) {   // a vanishing drop's last water goes to the vapour and back to the others, in proportion to their uptake
-        var up = 0; for (i = 0; i < n; i++) if (r[i] > 0 && dm[i] > 0) up += dm[i];
+        var up = 0; for (i = 0; i < n; i++) if (r[i] > 0 && dm[i] > 0) up += (w ? w[i] : 1) * dm[i];
         if (up > 0) for (i = 0; i < n; i++) if (r[i] > 0 && dm[i] > 0) r[i] = radiusOf(massOf(r[i]) + lost * dm[i] / up);
       }
       if (++steps % 50 === 0) for (i = 0; i < n; i++) if (r[i] > 0) fvc[i] = fv(r[i]);
