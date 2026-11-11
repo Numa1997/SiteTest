@@ -773,7 +773,10 @@
       // overfull cell (particles crowded) expands and an underfull one contracts. Without it the particles drift apart
       // under a steady load (measured: +2.7 % volume in 4 s under a = 2 m/s^2) and the surface creeps up.
       let target = 0;
-      if (this.volumeCorrection > 0 && phi[c] < -dx && this.Ad[c] >= 5.999) target = this.volumeCorrection * (this.dens[c] / this.n0 - 1) / dt;
+      // The reference is the stout's own density at the start (densRef, the mean count of the full cells deep in the liquid at
+      // the first step), not the ideal n0: seeded with jitter, the cells hold 0.96 n0 on average (4 mm), and against n0 every
+      // cell read underfull, contracted, and pulled the stout down (measured: centre of mass 0.67-0.71 mm lower after 4.8 s).
+      if (this.volumeCorrection > 0 && phi[c] < -dx && this.Ad[c] >= 5.999) target = this.volumeCorrection * (this.dens[c] / this.densRef - 1) / dt;
       b[c] = -dx * (div - target * dx);
     }
     this.pcg();
@@ -1053,12 +1056,22 @@
   Fluid.prototype.density = function () {
     const nx = this.nx, ny = this.ny, nz = this.nz, dx = this.dx, inv = 1 / dx;
     const d = this.dens || (this.dens = new Float64Array(this.nc)); d.fill(0);
+    const first = !this.densRef;
     for (let p = 0; p < this.np; p++) {
       const fx = (this.px[p] - this.x0) * inv - 0.5, fy = this.py[p] * inv - 0.5, fz = this.pz[p] * inv - 0.5;
       const i = Math.floor(fx), j = Math.floor(fy), k = Math.floor(fz), tx = fx - i, ty = fy - j, tz = fz - k;
       for (let c = 0; c < 2; c++) { let kk = k + c; if (kk < 0 || kk >= nz) continue; const wz = c ? tz : 1 - tz;
         for (let b = 0; b < 2; b++) { let jj = j + b; jj = jj < 0 ? -jj - 1 : jj; if (jj >= ny) continue; const wy = b ? ty : 1 - ty;   // y < 0: the mirror cell
           for (let a = 0; a < 2; a++) { const ii = i + a; if (ii < 0 || ii >= nx) continue; d[ii + nx * (jj + ny * kk)] += (a ? tx : 1 - tx) * wy * wz; } } }
+    }
+    if (first) {   // the reference: the mean count of cells wholly inside the glass and at least 2 dx below the surface at rest
+      let s = 0, n = 0;
+      for (let k = 1; (k + 2.5) * dx < this.h0; k++) for (let j = 1; j < ny - 1; j++) for (let i = 1; i < nx - 1; i++) {
+        const x = this.x0 + (i + 0.5) * dx, y = (j + 0.5) * dx, R = this.Rz((k + 0.5) * dx) - 1.5 * dx;
+        if (x * x + y * y < R * R) { s += d[i + nx * (j + ny * k)]; n++; }
+      }
+      if (n === 0) throw new Error('volume correction: no full cell to take the reference density from');
+      this.densRef = s / n;
     }
   };
 
