@@ -86,6 +86,10 @@ when V hands that chapter over. V reads this file before editing every chapter. 
   lateral spread, core width, core fraction, halo width.
 - **Promises.** ch07 counts the electrons of a pixel; ch07 blurs edges with core and halo.
 - **Hand-over.** "What chapter 7 receives": δ, η, core width, core fraction, halo width, with errors.
+- **Voice pass.** Elastic collision, secondary yield, pixel, dwell time, mean ionisation energy and escape depth marked at
+  their definitions; the two rhetorical questions ("How good is this cross-section?", "How sure is a count of 2000?") made
+  statements; a doubled sentence in Ex. 6.3 removed; "backscatter" (noun) → backscattering. Approved content fix (doubt 1):
+  §6.7 now says the range "grows faster than the energy, roughly as its five-thirds power (Kanaya–Okayama)".
 
 ## ch07 · Detect and measure
 - **Opening picture.** A metrology tool reading a width over and over; lines look like their own outlines.
@@ -93,20 +97,26 @@ when V hands that chapter over. V reads this file before editing every chapter. 
   threshold rule, floor level, bias, $\sigma_\mathrm{CD}$, error propagation and Monte Carlo check, $N$ lines, overhead, measurements per hour.
 - **Promises.** ch08 joins everything.
 - **Hand-over.** "What chapter 8 receives": $\sigma_\mathrm{CD}$, bias, dose, rate as functions of all inputs.
+- **Voice pass.** Critical dimension marked at its definition; shot noise a pointer to chapter 0; the threshold rule told one
+  step per sentence; the neighbouring-period, default-number, Poisson and bias sentences split.
 
 ## ch08 · The whole machine
 - **Opening picture.** A long train of gears; a slip at the first gear passed on to the last.
 - **Terms introduced.** normalised sensitivity, tolerance Monte Carlo, measurement window (process window of lithography as picture).
 - **Hand-over.** Checks and limits; no explicit bridge to ch09.
+- **Voice pass.** The chain of the opening told one link per sentence; the landing-voltage, current-scaling, sensitivity-method
+  and window-legend sentences split. Terms of earlier chapters used with pointers, none redefined.
 
 ## ch09 · The column in one view
 - Prose summary with pointers; no new terms. Last paragraph: the misread Airy coefficient and "checking against the physics".
+- **Voice pass.** Long summary sentences split at their semicolons; its range sentence (five-thirds power) now agrees with ch06.
 
 ## guide · Reading guide (four boxes above chapter 0)
 - shows, models, leaves out, numbers.
+- **Voice pass.** The 'shows', 'models' and 'numbers' boxes rewritten as one stage or claim per sentence; 'leaves out' kept (a scannable list).
 
 ## Doubts (physics or claims; listed, not fixed)
-1. ch06 §6.7: "The range grows almost as the square of the energy." The Kanaya–Okayama law quoted just above has the exponent 1.67,
+1. (FIXED in ch06 voice pass, coordinator's approval) ch06 §6.7: "The range grows almost as the square of the energy." The Kanaya–Okayama law quoted just above has the exponent 1.67,
    and ch09 says "roughly as its five-thirds power". AUDIT §8 records this as fixed, but the sentence is still in ch06. Coordinator to decide.
 2. ch04 §4.1–4.2 uses $B_r$ for the radial field component, the same symbol as the reduced brightness of ch02, ch03, ch05 and ch08.
    Inside maths; not changed. Since the ch04 voice pass the prose says so at first use.
