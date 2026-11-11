@@ -159,6 +159,10 @@
   "src": "LQR",
   "tr": "LQR"
  },
+ "2e4ba9efa0e3": {
+  "src": "The Arabic is not a published translation: it was made for this site from Leonard’s English and compared with the Latin.",
+  "tr": "هذه العربية ليست ترجمة منشورة: أُعدّت لهذا الموقع عن إنجليزية ليونارد وقورنت باللاتينية."
+ },
  "3006b416f6fa": {
   "src": "Faiveley Transport",
   "tr": "Faiveley Transport"
@@ -746,6 +750,10 @@
  "e580725cfdee": {
   "src": "inverted pendulum",
   "tr": "النوّاس المقلوب"
+ },
+ "e699596106db": {
+  "src": "Arabic: translated from Leonard’s English for this site, 2026",
+  "tr": "العربية: تُرجمت عن إنجليزية ليونارد لهذا الموقع، 2026"
  },
  "e7137ce08df4": {
   "src": "Focus: computational physics",
