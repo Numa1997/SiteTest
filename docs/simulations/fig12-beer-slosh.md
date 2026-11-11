@@ -44,6 +44,24 @@ by 3.3 mm on 3 mm (4.8 mm on 4 mm) at rest, while the top particles lie flat wit
 `colGap`, 0.15 dx) the reader matches the top particles within 0.03–0.40 mm in every ring on 4, 3 and 2 mm; the lean
 reading is unchanged (it already extended the surface inward from r = R(h) − 2.5 dx).
 
+**Phase 1, solver correctness (11 November 2026, in progress).**
+- *The circulation at rest was the viscosity's order.* The explicit Laplacian ran after gravity's g Δt had been added to
+  every open face; beside the closed faces of the wall and the floor it pushed the liquid up by ν Δt/Δx² × g Δt each step,
+  and the projection kept part of it as a circulation (up the wall at 1.0–1.1 mm/s, down the middle at 0.5 mm/s, in the
+  tulip and in a straight cylinder, halved with the step). Viscosity now runs first (`Fluid.forces`); at rest the
+  circulation is 0–3 µm/s and kinetic energy 0.03 µJ (was 0.38). `tools/fig12/same.cjs` now prints `sha256 4db045f0e864ac66`.
+- *A slower instability remains at rest at 5 ms:* after about 10 s the surface roughens at the scale of a cell (on 4 mm at
+  25 s the top particle of each column ranges 121–133 mm) and the centre of mass rises 0.14–0.2 mm in 30 s. At 1.25 ms the
+  rest gate passes (`tools/fig12/rest-gate.cjs`, 4 mm, 30 s: centre of mass within 4.9 µm, kinetic energy 0.0002 µJ, fastest
+  particle 1.7 mm/s). At 2.5 ms it fails. The shortest surface waves the grid carries have a period of about 70 ms on 4 mm.
+- *The free swing's own loss* comes from the grid stage of every step, not from the transfers' smoothing (FLIP does not
+  help) and grows with the number of steps. Quadratic B-spline transfers (option `quadratic`) cut it to a damping ratio of
+  about 0.0023 at 5 ms on 4 mm (trilinear: about 0.008); the real wall friction is about 0.005 and the surface skin as much.
+- New options, all off by default: `whole` (the whole glass; the half glass stays the default and gives identical numbers),
+  `flip` (FLIP share in the transfer back to the particles), `densityProjection` (Kugelstadt et al. 2019, positions moved
+  to undo crowding), `quadratic` (quadratic B-spline APIC, Jiang et al. 2015). The volume correction's reference is now the
+  stout's own starting density (`densRef`).
+
 **What the page will offer (agreed 11 November 2026).** Every result is precomputed on GitHub and only played back. Roads
 come from a menu of about ten: single bumps of 5, 10, 15, 20 and 25 mm, a kerb, a pothole, and three periodic rows (for
 Poincaré sections). Each road is computed for 11 speeds (0.5–1.5 m/s), 13 fills (80–140 mm), the three controllers,

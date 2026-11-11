@@ -7,7 +7,8 @@
  * the uniform fictitious force -a_glass. The glass is an upright circular cylinder (radius R); its wall is
  * cut through the Cartesian cells with fractional face areas (Batty, Bertails & Bridson 2007), and the
  * free surface uses ghost-fluid pressure (Enright et al. 2003). The forcing lies in the x-z plane and the
- * glass is mirror-symmetric about y = 0, so the flow is too: only y >= 0 is solved, with v = 0 on y = 0.
+ * glass is mirror-symmetric about y = 0. With o.whole the whole glass is solved (a swirl can break the symmetry); without,
+ * only y >= 0, with v = 0 on y = 0 (the half glass, kept as a test option: identical numbers to before the option existed).
  *
  * Cart: one wheel with a radial tyre on a road z_r(x), a body guided vertically on the axle, a spring
  * and a damper between them, the cart free to roll in x. The tyre force acts along the contact normal,
@@ -42,7 +43,11 @@
     this.g = o.g || 9.81;
     const dx = this.dx;
     this.nx = 2 * Math.ceil(this.R / dx);
-    this.ny = Math.ceil(this.R / dx);
+    // o.whole: the whole glass, cells from y0 = -ny/2 dx to +ny/2 dx; otherwise the half glass y >= 0 (y0 = 0). sym: how many
+    // copies of the solved part make the glass (2 for the half glass: masses, momenta and the wall area are doubled)
+    this.whole = !!o.whole; this.sym = this.whole ? 1 : 2;
+    this.ny = this.whole ? 2 * Math.ceil(this.R / dx) : Math.ceil(this.R / dx);
+    this.y0 = this.whole ? -(this.ny / 2) * dx : 0;
     this.nz = Math.ceil((o.H || 0.092) / dx);
     this.H = this.nz * dx;          // the box top: for the tulip 3 cm or so above the rim, for the cylinder a lid
     this.x0 = -(this.nx / 2) * dx;
@@ -54,7 +59,7 @@
     // o.shared: the arrays the worker threads read or write live in shared memory (scripts/stout-pool.js); same numbers
     this.shared = !!o.shared;
     this.u = this.mk(F, this.nu_); this.v = this.mk(F, this.nv_); this.w = this.mk(F, this.nw_);
-    this.uo = new F(this.nu_); this.vo = new F(this.nv_); this.wo = new F(this.nw_);
+    this.uo = this.mk(F, this.nu_); this.vo = this.mk(F, this.nv_); this.wo = this.mk(F, this.nw_);   // the grid after P2G (FLIP)
     this.mu = this.mk(F, this.nu_); this.mv = this.mk(F, this.nv_); this.mw = this.mk(F, this.nw_);   // P2G weights
     this.au = new F(this.nu_); this.av = new F(this.nv_); this.aw = new F(this.nw_);   // open face fractions
     this.ku = new Uint8Array(this.nu_); this.kv = new Uint8Array(this.nv_); this.kw = new Uint8Array(this.nw_); // valid
@@ -67,6 +72,14 @@
     this.mic = new F(this.nc); this.r_ = new F(this.nc); this.z_ = new F(this.nc); this.s_ = new F(this.nc);
     this.sliver = o.sliver != null ? o.sliver : 0.1;
     this.colGap = o.colGap != null ? o.colGap : 0.15;   // see buildColumnTables
+    // o.flip: the share alpha of FLIP in the grid-to-particle transfer (0: APIC, the default). FLIP adds the grid's change over
+    // the step to each particle's own velocity instead of replacing it, so a swing is not smeared away step by step
+    // (measured with APIC on 4 mm: the free swing's kinetic energy 78 -> 28 uJ in 2.6 s at 5 ms, 43 -> 5 uJ at 1.25 ms)
+    this.flip = o.flip || 0;
+    // o.densityProjection: the share gamma of the particles' density excess corrected each step by moving them (0: off)
+    this.densityProjection = o.densityProjection || 0;
+    // o.kernel2: quadratic B-spline transfers (3 x 3 x 3 grid points per particle and component) instead of trilinear (2 x 2 x 2)
+    this.quadratic = !!o.quadratic;
     this.faceFractions();
     // Friction on the glass (off unless o.wallFriction is given): the stress of the laminar Stokes layer between the wall
     // and the core of the flow, tau = rho sqrt(nu) Integral K(t-t') dU_t/dt' dt', K = 1/sqrt(pi t) (derived in Wolfram,
@@ -113,7 +126,7 @@
   };
 
   Fluid.prototype.faceFractions = function () {
-    const dx = this.dx, nx = this.nx, ny = this.ny, nz = this.nz, x0 = this.x0;
+    const dx = this.dx, nx = this.nx, ny = this.ny, nz = this.nz, x0 = this.x0, y0 = this.y0;
     // open fraction of each face, with the wall radius at the face's height; slivers under 10 % are closed (moves the
     // wall by < 0.1 dx, keeps the solve well posed)
     const sl = this.sliver, clamp = (a) => { a = Math.max(0, Math.min(1, a)); return a < sl ? 0 : a; };
@@ -121,13 +134,14 @@
       const R = Math.min(this.Rz((k + 0.5) * dx), this.Rbox * 2);
       for (let j = 0; j < ny; j++) for (let i = 0; i <= nx; i++) {
         const xf = x0 + i * dx, Y = R * R - xf * xf > 0 ? Math.sqrt(R * R - xf * xf) : 0;
-        this.au[i + (nx + 1) * (j + ny * k)] = (i === 0 || i === nx) ? 0 : clamp((Y - j * dx) / dx);
+        const ya = y0 + j * dx, yb = ya + dx;
+        this.au[i + (nx + 1) * (j + ny * k)] = (i === 0 || i === nx) ? 0 : clamp(Math.max(0, Math.min(yb, Y) - Math.max(ya, -Y)) / dx);
       }
       for (let j = 0; j <= ny; j++) for (let i = 0; i < nx; i++) {
-        const yf = j * dx, X = R * R - yf * yf > 0 ? Math.sqrt(R * R - yf * yf) : 0;
+        const yf = y0 + j * dx, X = R * R - yf * yf > 0 ? Math.sqrt(R * R - yf * yf) : 0;
         const a = x0 + i * dx, b = a + dx;
         const len = Math.max(0, Math.min(b, X) - Math.max(a, -X));
-        this.av[i + nx * (j + (ny + 1) * k)] = (j === 0 || j === ny) ? 0 : clamp(len / dx);   // y = 0 is the mirror plane: v = 0
+        this.av[i + nx * (j + (ny + 1) * k)] = (j === 0 || j === ny) ? 0 : clamp(len / dx);   // half glass: y = 0 is the mirror plane, v = 0
       }
     }
     const S = 10;
@@ -136,7 +150,7 @@
       for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) {
         let inside = 0;
         for (let a = 0; a < S; a++) for (let b = 0; b < S; b++) {
-          const x = x0 + (i + (a + 0.5) / S) * dx, y = (j + (b + 0.5) / S) * dx;
+          const x = x0 + (i + (a + 0.5) / S) * dx, y = y0 + (j + (b + 0.5) / S) * dx;
           if (x * x + y * y < R * R) inside++;
         }
         let f = inside / (S * S); if (f < this.sliver) f = 0;
@@ -156,9 +170,9 @@
     for (let k = 0; k < this.nz; k++) for (let j = 0; j < this.ny; j++) for (let i = 0; i < this.nx; i++)
       for (let a = 0; a < s; a++) for (let b = 0; b < s; b++) for (let c = 0; c < s; c++) {
         const x = this.x0 + (i + (a + 0.5 + 0.6 * (rnd() - 0.5)) / s) * dx;
-        const y = (j + (b + 0.5 + 0.6 * (rnd() - 0.5)) / s) * dx;
+        const y = this.y0 + (j + (b + 0.5 + 0.6 * (rnd() - 0.5)) / s) * dx;
         const z = (k + (c + 0.5 + 0.6 * (rnd() - 0.5)) / s) * dx;
-        if (x * x + y * y < (this.Rz(z) - 0.15 * dx) ** 2 && z < this.h0 && y > 0) { xs.push(x); ys.push(y); zs.push(z); }
+        if (x * x + y * y < (this.Rz(z) - 0.15 * dx) ** 2 && z < this.h0 && (this.whole || y > 0)) { xs.push(x); ys.push(y); zs.push(z); }
       }
     const n = this.np = xs.length;
     const F = Float64Array;
@@ -170,7 +184,7 @@
     // particles; a spilled particle takes its m_p with it
     this.mLiquid = this.rho * this.volumeTo(this.h0);
     this.npStart = n; this.spilled = 0;
-    this.mp = 0.5 * this.mLiquid / n;
+    this.mp = this.mLiquid / (this.sym * n);
     // radius of the particles for the surface reconstruction: one particle spacing, so that the liquid at rest
     // reads its true depth h0 (measured: 60.0 +- 0.3 mm on 3 and 4 mm grids, tools/fig12/check.cjs rest)
     this.rp = dx / s * this.rpFactor;
@@ -181,7 +195,7 @@
   // the 8 node indices (clamped: a node beyond y = 0 is its own mirror image), weights, weight gradients
   // with respect to the particle position, and the node-minus-particle offsets (unclamped, geometric)
   function stencil(f, x, y, z, sx, sy, sz, ox, oy, oz) {
-    const dx = f.dx, fx = (x - f.x0) / dx - ox, fy = y / dx - oy, fz = z / dx - oz;
+    const dx = f.dx, fx = (x - f.x0) / dx - ox, fy = (y - f.y0) / dx - oy, fz = z / dx - oz;
     const i = Math.floor(fx), j = Math.floor(fy), k = Math.floor(fz);
     const tx = fx - i, ty = fy - j, tz = fz - k;
     const S = stencil.out;
@@ -215,7 +229,7 @@
   // trilinear value of component c at (x, y, z); flat code, no allocation (the hot path of advection)
   Fluid.prototype.sample = function (c, x, y, z) {
     const dx = this.dx, nx = this.nx, ny = this.ny, nz = this.nz;
-    let a, sx, sy, sz, fx = (x - this.x0) / dx, fy = y / dx, fz = z / dx;
+    let a, sx, sy, sz, fx = (x - this.x0) / dx, fy = (y - this.y0) / dx, fz = z / dx;
     if (c === 0) { a = this.u; sx = nx + 1; sy = ny; sz = nz; fy -= 0.5; fz -= 0.5; }
     else if (c === 1) { a = this.v; sx = nx; sy = ny + 1; sz = nz; fx -= 0.5; fz -= 0.5; }
     else { a = this.w; sx = nx; sy = ny; sz = nz + 1; fx -= 0.5; fy -= 0.5; }
@@ -233,15 +247,17 @@
   // APIC transfer kernels for one staggered component, flat code. For each particle: base node (i, j, k), fractions
   // (tx, ty, tz); node offsets from the particle are ((a - tx) dx, (b - ty) dx, (c - tz) dx), a, b, c in {0, 1}.
   Fluid.prototype.transfer = function (comp, toGrid, p0, p1) {
+    if (this.quadratic) return this.transferQ(comp, toGrid, p0, p1);
     const dx = this.dx, nx = this.nx, ny = this.ny, nz = this.nz, inv = 1 / dx, pa = p0 || 0, np = p1 != null ? p1 : this.np;
     let a, m, pvel, sx, sy, sz, ox = 0, oy = 0, oz = 0;
     if (comp === 0) { a = this.u; m = this.mu; pvel = this.pu; sx = nx + 1; sy = ny; sz = nz; oy = 0.5; oz = 0.5; }
     else if (comp === 1) { a = this.v; m = this.mv; pvel = this.pv; sx = nx; sy = ny + 1; sz = nz; ox = 0.5; oz = 0.5; }
     else { a = this.w; m = this.mw; pvel = this.pw; sx = nx; sy = ny; sz = nz + 1; ox = 0.5; oy = 0.5; }
     const [cx, cy, cz] = this.pc[comp], sxy = sx * sy, px = this.px, py = this.py, pz = this.pz, x0 = this.x0;
+    const alpha = toGrid ? 0 : this.flip, ao = alpha > 0 ? [this.uo, this.vo, this.wo][comp] : null;
     if (toGrid) { a.fill(0); m.fill(0); }
     for (let p = pa; p < np; p++) {
-      const fx = (px[p] - x0) * inv - ox, fy = py[p] * inv - oy, fz = pz[p] * inv - oz;
+      const fx = (px[p] - x0) * inv - ox, fy = (py[p] - this.y0) * inv - oy, fz = pz[p] * inv - oz;
       const i = Math.floor(fx), j = Math.floor(fy), k = Math.floor(fz), tx = fx - i, ty = fy - j, tz = fz - k;
       const I0 = i < 0 ? 0 : i >= sx ? sx - 1 : i, I1 = i + 1 < 0 ? 0 : i + 1 >= sx ? sx - 1 : i + 1;
       const J0 = j < 0 ? 0 : j >= sy ? sy - 1 : j, J1 = j + 1 < 0 ? 0 : j + 1 >= sy ? sy - 1 : j + 1;
@@ -264,7 +280,14 @@
         a[n111] += w111 * (u0 + ax1 + ay1 + az1); m[n111] += w111;
       } else {
         const q000 = a[n000], q100 = a[n100], q010 = a[n010], q110 = a[n110], q001 = a[n001], q101 = a[n101], q011 = a[n011], q111 = a[n111];
-        pvel[p] = w000 * q000 + w100 * q100 + w010 * q010 + w110 * q110 + w001 * q001 + w101 * q101 + w011 * q011 + w111 * q111;
+        const vNew = w000 * q000 + w100 * q100 + w010 * q010 + w110 * q110 + w001 * q001 + w101 * q101 + w011 * q011 + w111 * q111;
+        if (alpha > 0) {   // FLIP share: the particle keeps its velocity plus the grid's change at its place; PIC share: the grid's
+          const vOld = w000 * ao[n000] + w100 * ao[n100] + w010 * ao[n010] + w110 * ao[n110] + w001 * ao[n001] + w101 * ao[n101] + w011 * ao[n011] + w111 * ao[n111];
+          pvel[p] = alpha * (pvel[p] + vNew - vOld) + (1 - alpha) * vNew;
+          cx[p] = 0; cy[p] = 0; cz[p] = 0;
+          continue;
+        }
+        pvel[p] = vNew;
         // the velocity gradient at the particle: derivatives of the trilinear weights
         cx[p] = inv * (uy * uz * (q100 - q000) + ty * uz * (q110 - q010) + uy * tz * (q101 - q001) + ty * tz * (q111 - q011));
         cy[p] = inv * (ux * uz * (q010 - q000) + tx * uz * (q110 - q100) + ux * tz * (q011 - q001) + tx * tz * (q111 - q101));
@@ -273,14 +296,81 @@
     }
     if (toGrid) for (let n = 0; n < a.length; n++) a[n] = m[n] > 1e-9 ? a[n] / m[n] : 0;
   };
+  // APIC with quadratic B-splines (Jiang, Schroeder, Selle, Teran & Stomakhin 2015, SIGGRAPH; weights as in their eq. 123 of
+  // the MPM course notes, Jiang et al. 2016): per axis, with f = position / dx - offset and base b = floor(f - 0.5), r = f - b:
+  // w0 = (1.5 - r)^2 / 2, w1 = 0.75 - (r - 1)^2, w2 = (r - 0.5)^2 / 2 at nodes b, b + 1, b + 2. The affine matrix's inertia is
+  // D = dx^2 / 4 for this kernel, so C_p = (4 / dx^2) sum_i w_ip v_i (x_i - x_p) and P2G adds w_ip (v_p + C_p (x_i - x_p)).
+  // Nodes beyond the grid are clamped to its edge (as the trilinear transfer does).
+  Fluid.prototype.transferQ = function (comp, toGrid, p0, p1) {
+    if (this.pool) throw new Error('quadratic transfers: single-threaded only');
+    const dx = this.dx, nx = this.nx, ny = this.ny, nz = this.nz, inv = 1 / dx, pa = p0 || 0, np = p1 != null ? p1 : this.np, D4 = 4 * inv * inv;
+    let a, m, pvel, sx, sy, sz, ox = 0, oy = 0, oz = 0;
+    if (comp === 0) { a = this.u; m = this.mu; pvel = this.pu; sx = nx + 1; sy = ny; sz = nz; oy = 0.5; oz = 0.5; }
+    else if (comp === 1) { a = this.v; m = this.mv; pvel = this.pv; sx = nx; sy = ny + 1; sz = nz; ox = 0.5; oz = 0.5; }
+    else { a = this.w; m = this.mw; pvel = this.pw; sx = nx; sy = ny; sz = nz + 1; ox = 0.5; oy = 0.5; }
+    const [cx, cy, cz] = this.pc[comp], sxy = sx * sy, px = this.px, py = this.py, pz = this.pz, x0 = this.x0, y0 = this.y0;
+    const alpha = toGrid ? 0 : this.flip, ao = alpha > 0 ? [this.uo, this.vo, this.wo][comp] : null;
+    if (toGrid) { a.fill(0); m.fill(0); }
+    const W = (r, o) => { o[0] = 0.5 * (1.5 - r) * (1.5 - r); o[1] = 0.75 - (r - 1) * (r - 1); o[2] = 0.5 * (r - 0.5) * (r - 0.5); };
+    const wx = new Float64Array(3), wy = new Float64Array(3), wz = new Float64Array(3), I = new Int32Array(3), J = new Int32Array(3), Kk = new Int32Array(3), Dx = new Float64Array(3), Dy = new Float64Array(3), Dz = new Float64Array(3);
+    for (let p = pa; p < np; p++) {
+      const fx = (px[p] - x0) * inv - ox, fy = (py[p] - y0) * inv - oy, fz = pz[p] * inv - oz;
+      const bx = Math.floor(fx - 0.5), by = Math.floor(fy - 0.5), bz = Math.floor(fz - 0.5);
+      W(fx - bx, wx); W(fy - by, wy); W(fz - bz, wz);
+      for (let d = 0; d < 3; d++) {
+        const ii = bx + d, jj = by + d, kk = bz + d;
+        I[d] = ii < 0 ? 0 : ii >= sx ? sx - 1 : ii; J[d] = jj < 0 ? 0 : jj >= sy ? sy - 1 : jj; Kk[d] = kk < 0 ? 0 : kk >= sz ? sz - 1 : kk;
+        Dx[d] = (ii - fx) * dx; Dy[d] = (jj - fy) * dx; Dz[d] = (kk - fz) * dx;   // node minus particle (geometric, unclamped)
+      }
+      if (toGrid) {
+        const u0 = pvel[p], gx = cx[p], gy = cy[p], gz = cz[p];
+        for (let c = 0; c < 3; c++) for (let b = 0; b < 3; b++) { const wbc = wy[b] * wz[c], base = J[b] * sx + Kk[c] * sxy, ay = gy * Dy[b] + gz * Dz[c];
+          for (let e = 0; e < 3; e++) { const w = wx[e] * wbc, n = I[e] + base; a[n] += w * (u0 + gx * Dx[e] + ay); m[n] += w; } }
+      } else {
+        let v = 0, vo = 0, c0 = 0, c1 = 0, c2 = 0;
+        for (let c = 0; c < 3; c++) for (let b = 0; b < 3; b++) { const wbc = wy[b] * wz[c], base = J[b] * sx + Kk[c] * sxy;
+          for (let e = 0; e < 3; e++) { const w = wx[e] * wbc, n = I[e] + base, q = a[n]; v += w * q; if (ao) vo += w * ao[n]; c0 += w * q * Dx[e]; c1 += w * q * Dy[b]; c2 += w * q * Dz[c]; } }
+        if (alpha > 0) { pvel[p] = alpha * (pvel[p] + v - vo) + (1 - alpha) * v; cx[p] = 0; cy[p] = 0; cz[p] = 0; }
+        else { pvel[p] = v; cx[p] = D4 * c0; cy[p] = D4 * c1; cz[p] = D4 * c2; }
+      }
+    }
+    if (toGrid) for (let n = 0; n < a.length; n++) a[n] = m[n] > 1e-9 ? a[n] / m[n] : 0;
+  };
   Fluid.prototype.p2g = function () {
-    if (!this.pool) { for (let c = 0; c < 3; c++) this.transfer(c, true); return; }
+    if (!this.pool) { for (let c = 0; c < 3; c++) this.transfer(c, true); if (this.flip > 0) this.saveOld(); return; }
     // threads: each owns a slab of grid layers and adds into it every particle that reaches it, in particle order, so
     // that every grid value receives the same terms in the same order as above
     this.u.fill(0); this.mu.fill(0); this.v.fill(0); this.mv.fill(0); this.w.fill(0); this.mw.fill(0);
     this.pool.slabs(this);
     this.pool.run(3, this.np, 0, 0);
     for (const [a, m] of [[this.u, this.mu], [this.v, this.mv], [this.w, this.mw]]) for (let n = 0; n < a.length; n++) a[n] = m[n] > 1e-9 ? a[n] / m[n] : 0;
+    if (this.flip > 0) this.saveOld();
+  };
+  // FLIP: the grid's velocity right after P2G, extended from the faces that received particles into their neighbours (three
+  // layers, as Fluid.extrapolate extends the new velocity), so that old and new are read at a particle on the same footing
+  Fluid.prototype.saveOld = function () {
+    const arr = [[this.u, this.mu, this.uo], [this.v, this.mv, this.vo], [this.w, this.mw, this.wo]];
+    for (let comp = 0; comp < 3; comp++) {
+      const [a, m, o] = arr[comp], [, sx, sy, sz] = this.comp(comp);
+      o.set(a);
+      let valid = new Uint8Array(o.length); for (let n = 0; n < o.length; n++) valid[n] = m[n] > 1e-9 ? 1 : 0;
+      const t = new Float64Array(o.length);
+      for (let L = 0; L < 3; L++) {
+        const nv = Uint8Array.from(valid); t.set(o);
+        for (let k = 0; k < sz; k++) for (let j = 0; j < sy; j++) for (let i = 0; i < sx; i++) {
+          const n = i + sx * (j + sy * k); if (valid[n]) continue;
+          let su = 0, c = 0;
+          if (i > 0 && valid[n - 1]) { su += t[n - 1]; c++; }
+          if (i < sx - 1 && valid[n + 1]) { su += t[n + 1]; c++; }
+          if (j > 0 && valid[n - sx]) { su += t[n - sx]; c++; }
+          if (j < sy - 1 && valid[n + sx]) { su += t[n + sx]; c++; }
+          if (k > 0 && valid[n - sx * sy]) { su += t[n - sx * sy]; c++; }
+          if (k < sz - 1 && valid[n + sx * sy]) { su += t[n + sx * sy]; c++; }
+          if (c) { o[n] = su / c; nv[n] = 1; }
+        }
+        valid = nv;
+      }
+    }
   };
   Fluid.prototype.g2p = function () {
     if (this.pool) { this.pool.run(2, this.np, 0, 0); return; }
@@ -302,7 +392,7 @@
         const K0 = k < 0 ? 0 : k >= sz ? sz - 1 : k, K1 = k + 1 < 0 ? 0 : k + 1 >= sz ? sz - 1 : k + 1;
         const in0 = K0 >= k0 && K0 < k1, in1 = K1 >= k0 && K1 < k1;
         if (!in0 && !in1) continue;
-        const fx = (px[p] - x0) * inv - ox, fy = py[p] * inv - oy;
+        const fx = (px[p] - x0) * inv - ox, fy = (py[p] - this.y0) * inv - oy;
         const i = Math.floor(fx), j = Math.floor(fy), tx = fx - i, ty = fy - j, tz = fz - k;
         const I0 = i < 0 ? 0 : i >= sx ? sx - 1 : i, I1 = i + 1 < 0 ? 0 : i + 1 >= sx ? sx - 1 : i + 1;
         const J0 = j < 0 ? 0 : j >= sy ? sy - 1 : j, J1 = j + 1 < 0 ? 0 : j + 1 >= sy ? sy - 1 : j + 1;
@@ -336,7 +426,7 @@
     if (!this.cellStart || this.cellStart.length !== nc + 1) { this.cellStart = this.mk(Int32Array, nc + 1); }
     if (!this.sorted || this.sorted.length < this.np) this.sorted = this.mk(Int32Array, this.np);
     const cellOf = (p) => {
-      let i = Math.floor((this.px[p] - this.x0) / dx), j = Math.floor(this.py[p] / dx), k = Math.floor(this.pz[p] / dx);
+      let i = Math.floor((this.px[p] - this.x0) / dx), j = Math.floor((this.py[p] - this.y0) / dx), k = Math.floor(this.pz[p] / dx);
       i = i < 0 ? 0 : i >= nx ? nx - 1 : i; j = j < 0 ? 0 : j >= ny ? ny - 1 : j; k = k < 0 ? 0 : k >= nz ? nz - 1 : k;
       return i + nx * (j + ny * k);
     };
@@ -359,7 +449,7 @@
     for (let k = 0; k < nz; k++) {
       const Rc = Math.min(this.Rz((k + 0.5) * dx), this.Rbox) - 0.5 * dx;
       for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) {
-        const c = i + nx * (j + ny * k), xc = this.x0 + (i + 0.5) * dx, yc = (j + 0.5) * dx;
+        const c = i + nx * (j + ny * k), xc = this.x0 + (i + 0.5) * dx, yc = this.y0 + (j + 0.5) * dx;
         empty[c] = cnt[c] === 0 && xc * xc + yc * yc < Rc * Rc ? 1 : 0;
       }
     }
@@ -387,7 +477,7 @@
     for (let k = 0; k < nz; k++) for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) {
       const c = i + nx * (j + ny * k);
       if (!nearA[c]) { this.phi[c] = cnt[c] > 0 ? -2 * dx : 2 * dx; continue; }
-      if (!fast) { this.phi[c] = this.phiAt(this.x0 + (i + 0.5) * dx, (j + 0.5) * dx, (k + 0.5) * dx, Rk, R2, r); continue; }
+      if (!fast) { this.phi[c] = this.phiAt(this.x0 + (i + 0.5) * dx, this.y0 + (j + 0.5) * dx, (k + 0.5) * dx, Rk, R2, r); continue; }
       if (!occB[c]) this.phi[c] = 3 * dx;
       else if (pool) list[nl++] = c;               // searched below, by the threads
       else this.phi[c] = this.phiCell(i, j, k, R2, r);
@@ -419,12 +509,12 @@
     const nx = this.nx, ny = this.ny, nz = this.nz, dx = this.dx, nc = this.nc, ph = this.phi, fl = this.fluid;
     const src = this.phiSrc || (this.phiSrc = new Float64Array(nc)); src.set(ph);
     const at = (x, y, z) => {                                 // trilinear phi at a point, from the unmodified field
-      const fx = (x - this.x0) / dx - 0.5, fy = Math.abs(y) / dx - 0.5, fz = z / dx - 0.5;
+      const fx = (x - this.x0) / dx - 0.5, fy = ((this.whole ? y : Math.abs(y)) - this.y0) / dx - 0.5, fz = z / dx - 0.5;
       const i = Math.floor(fx), j = Math.floor(fy), k = Math.floor(fz), tx = fx - i, ty = fy - j, tz = fz - k;
       let v = 0;
       for (let c = 0; c < 2; c++) for (let b = 0; b < 2; b++) for (let a = 0; a < 2; a++) {
         let ii = i + a, jj = j + b, kk = k + c;
-        ii = ii < 0 ? 0 : ii >= nx ? nx - 1 : ii; jj = jj < 0 ? -jj - 1 : jj >= ny ? ny - 1 : jj; kk = kk < 0 ? 0 : kk >= nz ? nz - 1 : kk;
+        ii = ii < 0 ? 0 : ii >= nx ? nx - 1 : ii; jj = jj < 0 ? (this.whole ? 0 : -jj - 1) : jj >= ny ? ny - 1 : jj; kk = kk < 0 ? 0 : kk >= nz ? nz - 1 : kk;
         v += (a ? tx : 1 - tx) * (b ? ty : 1 - ty) * (c ? tz : 1 - tz) * src[ii + nx * (jj + ny * kk)];
       }
       return v;
@@ -435,7 +525,7 @@
       const r1 = R - 2.5 * dx, r2 = R - 3.5 * dx;
       if (r2 <= 0) continue;
       for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) {
-        const x = this.x0 + (i + 0.5) * dx, y = (j + 0.5) * dx, r = Math.hypot(x, y);
+        const x = this.x0 + (i + 0.5) * dx, y = this.y0 + (j + 0.5) * dx, r = Math.hypot(x, y);
         if (r < R - 2 * dx) continue;
         const cx = x / r, cy = y / r, p1 = at(cx * r1, cy * r1, zc), p2 = at(cx * r2, cy * r2, zc);
         const c = i + nx * (j + ny * k);
@@ -451,7 +541,7 @@
     const inside = this.cellInside || (this.cellInside = (() => {
       const m = new Uint8Array(nc);
       for (let k = 0; k < nz; k++) { const R = this.Rz((k + 0.5) * dx);
-        for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) { const x = this.x0 + (i + 0.5) * dx, y = (j + 0.5) * dx;
+        for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) { const x = this.x0 + (i + 0.5) * dx, y = this.y0 + (j + 0.5) * dx;
           m[i + nx * (j + ny * k)] = (R > this.Rbox || x * x + y * y < (R - 0.5 * dx) * (R - 0.5 * dx)) ? 1 : 0; } }
       return m; })());
     const done = this.cellDone || (this.cellDone = new Uint8Array(nc)); done.set(inside);
@@ -476,7 +566,7 @@
     for (let sweep = 0; sweep < 2; sweep++) for (let k = nz - 1; k >= 0; k--) for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) {
       const c = i + nx * (j + ny * k);
       if (fl[c]) continue;
-      const x = this.x0 + (i + 0.5) * dx, y = (j + 0.5) * dx, R = this.Rz((k + 0.5) * dx);
+      const x = this.x0 + (i + 0.5) * dx, y = this.y0 + (j + 0.5) * dx, R = this.Rz((k + 0.5) * dx);
       if (R > this.Rbox || x * x + y * y < (R - 0.5 * dx) ** 2) continue;   // only cells cut by the wall
       let best = 1;
       if (i > 0 && this.au[U(i, j, k)] > 0 && fl[c - 1]) best = Math.min(best, ph[c - 1]);
@@ -527,11 +617,11 @@
   // phi at the centre of cell (i, j, k): phiAt with the per-particle numbers of levelSetParticles (kernel radius 2 cells)
   Fluid.prototype.phiCell = function (ic, jc, kc, R2, r) {
     const nx = this.nx, ny = this.ny, nz = this.nz, dx = this.dx;
-    const x = this.x0 + (ic + 0.5) * dx, y = (jc + 0.5) * dx, z = (kc + 0.5) * dx;
+    const x = this.x0 + (ic + 0.5) * dx, y = this.y0 + (jc + 0.5) * dx, z = (kc + 0.5) * dx;
     const off = this.blockOff, cs = this.cellStart, sX = this.sX, sY = this.sY, sZ = this.sZ, sF = this.sF, sN = this.sN;
     const cellImg = this.cellImg;
     // mirror images lie at y <= 0, at least y = (j + 1/2) dx from this centre: out of reach (2 dx) from the third row on
-    const mirror = jc < 2;
+    const mirror = !this.whole && jc < 2;   // the whole glass has no mirror images
     let W = 0, sx = 0, sy = 0, sz = 0;
     for (let o = 0; o < off.length; o += 4) {
       const i = ic + off[o], j = jc + off[o + 1], k = kc + off[o + 2];
@@ -570,7 +660,7 @@
   Fluid.prototype.phiAt = function (x, y, z, Rk, R2, r) {
     const nx = this.nx, ny = this.ny, nz = this.nz, dx = this.dx;
     const span = Math.ceil(Rk / dx);
-    const ic = Math.floor((x - this.x0) / dx), jc = Math.floor(y / dx), kc = Math.floor(z / dx);
+    const ic = Math.floor((x - this.x0) / dx), jc = Math.floor((y - this.y0) / dx), kc = Math.floor(z / dx);
     let W = 0, sx = 0, sy = 0, sz = 0;
     for (let k = Math.max(0, kc - span); k <= Math.min(nz - 1, kc + span); k++)
       for (let j = Math.max(0, jc - span); j <= Math.min(ny - 1, Math.abs(jc) + span); j++)
@@ -583,6 +673,7 @@
             // (r -> 2R - r): the liquid meets the wall at a right angle and the wall cells read as liquid
             const Rw = this.Rz(ppz), nImg = this.wallImages && ppz < this.zRim && rr > Rw - Rk ? 4 : 2, fw = rr > 1e-9 ? (2 * Rw - rr) / rr : 0;
             for (let m = 0; m < nImg; m++) {
+              if (this.whole && (m & 1)) continue;   // mirror images: half glass only
               const qx = m < 2 ? ppx : ppx * fw, qy0 = m < 2 ? ppy : ppy * fw, qy = (m & 1) ? -qy0 : qy0;
               const ddx = qx - x, ddy = qy - y, d2 = ddx * ddx + ddy * ddy + ddz * ddz;
               if (d2 < R2) {
@@ -597,11 +688,16 @@
     return Math.sqrt(mx * mx + my * my + mz * mz) - r;
   };
 
+  // Viscosity first, then the body forces. The other way round, the explicit Laplacian compared faces that had just received
+  // the uniform g dt with the closed faces of the wall and the floor, which receive nothing, and pushed the faces next to
+  // the wall up by nu dt / dx^2 x g dt each step; the projection kept part of it as a steady circulation, up the wall and
+  // down the middle (measured at rest, 4 mm, 5 ms: +1.0-1.1 and -0.5 mm/s, halved with dt; tools/fig12/energy-audit.cjs).
+  // A uniform body force has no Laplacian, so the order is exact for it: Laplacian(u + g dt) = Laplacian(u) in the bulk.
   Fluid.prototype.forces = function (dt, ax, az) {
+    if (this.nu > 0) this.viscosity(dt);
     const gz = -this.g - az, gx = -ax;
     for (let n = 0; n < this.nu_; n++) if (this.au[n] > 0) this.u[n] += dt * gx;
     for (let n = 0; n < this.nw_; n++) if (this.aw[n] > 0) this.w[n] += dt * gz;
-    if (this.nu > 0) this.viscosity(dt);
   };
 
   // The wetted glass, face by face: for every velocity face next to the wall, the wall area it carries (half of each
@@ -617,16 +713,17 @@
     for (let k = 0; k < nz; k++) {
       const z = (k + 0.5) * dx; if (z > this.zRim) break;
       const R = this.Rz(z), sl = Math.sqrt(1 + this.dRz(z) ** 2);
-      for (let q = 0; q < M; q++) {
+      // the half glass: half a turn (y >= 0) in M pieces; the whole glass: a full turn in 2M
+      for (let q = 0; q < (this.whole ? 2 * M : M); q++) {
         const th = Math.PI * (q + 0.5) / M, x = R * Math.cos(th), y = R * Math.sin(th);
-        const i = Math.floor((x - x0) / dx), j = Math.floor(y / dx);
+        const i = Math.floor((x - x0) / dx), j = Math.floor((y - this.y0) / dx);
         if (i < 0 || i >= nx || j < 0 || j >= ny) continue;
         const A = R * Math.PI / M * dx * sl; side[i + nx * (j + ny * k)] += A; sideTotal += A;
       }
       for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) {
         let inside = 0;
         for (let a = 0; a < S; a++) for (let b = 0; b < S; b++) {
-          const x = x0 + (i + (a + 0.5) / S) * dx, y = (j + (b + 0.5) / S) * dx;
+          const x = x0 + (i + (a + 0.5) / S) * dx, y = this.y0 + (j + (b + 0.5) / S) * dx;
           if (x * x + y * y < R * R) inside++;
         }
         const c = i + nx * (j + ny * k); vol[c] = inside / (S * S) * dx * dx * dx;
@@ -636,7 +733,7 @@
         for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) {
           let inside = 0;
           for (let a = 0; a < S; a++) for (let b = 0; b < S; b++) {
-            const x = x0 + (i + (a + 0.5) / S) * dx, y = (j + (b + 0.5) / S) * dx;
+            const x = x0 + (i + (a + 0.5) / S) * dx, y = this.y0 + (j + (b + 0.5) / S) * dx;
             if (x * x + y * y < R0 * R0) inside++;
           }
           const c = i + nx * (j + ny * k); floor[c] = inside / (S * S) * dx * dx; floorTotal += floor[c];
@@ -651,13 +748,13 @@
       const c = i + nx * (j + ny * k);
       for (const [A, part] of [[side[c], 0], [floor[c], 1]]) {
         if (A <= 0) continue;
-        const xc = x0 + (i + 0.5) * dx, yc = (j + 0.5) * dx, zc = (k + 0.5) * dx;
+        const xc = x0 + (i + 0.5) * dx, yc = this.y0 + (j + 0.5) * dx, zc = (k + 0.5) * dx;
         let nxw = 0, nyw = 0, nzw = 1;
         if (part === 0) { const r = Math.hypot(xc, yc), d = -this.dRz(zc), L = Math.sqrt(1 + d * d); nxw = xc / r / L; nyw = yc / r / L; nzw = d / L; }
         // the two faces of each component that bound the cell
         const faces = [
           [0, i + (nx + 1) * (j + ny * k), i + 1 + (nx + 1) * (j + ny * k), this.au, [x0 + i * dx, yc, zc], [x0 + (i + 1) * dx, yc, zc]],
-          [1, i + nx * (j + (ny + 1) * k), i + nx * (j + 1 + (ny + 1) * k), this.av, [xc, j * dx, zc], [xc, (j + 1) * dx, zc]],
+          [1, i + nx * (j + (ny + 1) * k), i + nx * (j + 1 + (ny + 1) * k), this.av, [xc, this.y0 + j * dx, zc], [xc, this.y0 + (j + 1) * dx, zc]],
           [2, i + nx * (j + ny * k), i + nx * (j + ny * (k + 1)), this.aw, [xc, yc, k * dx], [xc, yc, (k + 1) * dx]]];
         for (const [comp, fa, fb, open, pa, pb] of faces) {
           const oa = open[fa] > 0, ob = open[fb] > 0;
@@ -685,7 +782,7 @@
       this.wPos[3 * e] = px; this.wPos[3 * e + 1] = py; this.wPos[3 * e + 2] = pz; this.wCellA[e] = ca; this.wCellB[e] = cb;
     }
     // per-step factors of each exponential: decay e^{-dt/T} and the weight of a linear rise over the step, (T/dt)(1 - e^{-dt/T})
-    this.wallInfo = { entries: n, sideArea: 2 * sideTotal, floorArea: 2 * floorTotal, droppedArea: 2 * dropped };   // whole glass (x2)
+    const sy = this.sym; this.wallInfo = { entries: n, sideArea: sy * sideTotal, floorArea: sy * floorTotal, droppedArea: sy * dropped };   // whole glass
     this.wDt = 0;
   };
 
@@ -725,7 +822,7 @@
       arr[comp][f] = u1;
       work += sq * s * this.wArea[e] * Ut;   // tau A U_t / rho: power drawn from the core per unit density (half glass)
     }
-    this.wallPower = 2 * this.rho * work;   // W, whole glass
+    this.wallPower = this.sym * this.rho * work;   // W, whole glass
   };
 
   // explicit nu * lap(u) on each component (stable: nu dt / dx^2 ~ 1e-4)
@@ -934,10 +1031,10 @@
 
   // Second-order Runge–Kutta (midpoint) through the grid velocity. The three components are sampled by one closure each,
   // made once per step with the grid's numbers bound (the same arithmetic as Fluid.sample, without its dispatch).
-  function sampler(a, sx, sy, sz, ox, oy, oz, x0, dx) {
+  function sampler(a, sx, sy, sz, ox, oy, oz, x0, dx, y0) {
     const sxy = sx * sy, inv = 1 / dx;
     return function (x, y, z) {
-      const fx = (x - x0) / dx - ox, fy = y / dx - oy, fz = z / dx - oz;
+      const fx = (x - x0) / dx - ox, fy = (y - y0) / dx - oy, fz = z / dx - oz;
       const i = Math.floor(fx), j = Math.floor(fy), k = Math.floor(fz), tx = fx - i, ty = fy - j, tz = fz - k;
       const i0 = i < 0 ? 0 : i >= sx ? sx - 1 : i, i1 = i + 1 < 0 ? 0 : i + 1 >= sx ? sx - 1 : i + 1;
       const j0 = j < 0 ? 0 : j >= sy ? sy - 1 : j, j1 = j + 1 < 0 ? 0 : j + 1 >= sy ? sy - 1 : j + 1;
@@ -956,17 +1053,17 @@
   Fluid.prototype.advectRange = function (dt, p0, p1) {
     const nx = this.nx, ny = this.ny, nz = this.nz, x0 = this.x0, dx = this.dx;
     if (!this.sU) {
-      this.sU = sampler(this.u, nx + 1, ny, nz, 0, 0.5, 0.5, x0, dx);
-      this.sV = sampler(this.v, nx, ny + 1, nz, 0.5, 0, 0.5, x0, dx);
-      this.sW = sampler(this.w, nx, ny, nz + 1, 0.5, 0.5, 0, x0, dx);
+      this.sU = sampler(this.u, nx + 1, ny, nz, 0, 0.5, 0.5, x0, dx, this.y0);
+      this.sV = sampler(this.v, nx, ny + 1, nz, 0.5, 0, 0.5, x0, dx, this.y0);
+      this.sW = sampler(this.w, nx, ny, nz + 1, 0.5, 0.5, 0, x0, dx, this.y0);
     }
-    const sU = this.sU, sV = this.sV, sW = this.sW, px = this.px, py = this.py, pz = this.pz, pv = this.pv, h = 0.5 * dt;
+    const sU = this.sU, sV = this.sV, sW = this.sW, px = this.px, py = this.py, pz = this.pz, pv = this.pv, h = 0.5 * dt, whole = this.whole;
     for (let p = p0; p < p1; p++) {
       let x = px[p], y = py[p], z = pz[p];
       const u1 = sU(x, y, z), v1 = sV(x, y, z), w1 = sW(x, y, z);
-      const xm = x + h * u1, ym = Math.abs(y + h * v1), zm = z + h * w1;
+      const xm = x + h * u1, ym = whole ? y + h * v1 : Math.abs(y + h * v1), zm = z + h * w1;
       x += dt * sU(xm, ym, zm); y += dt * sV(xm, ym, zm); z += dt * sW(xm, ym, zm);
-      if (y < 0) { y = -y; pv[p] = -pv[p]; }           // mirror plane
+      if (!whole && y < 0) { y = -y; pv[p] = -pv[p]; }           // mirror plane (half glass)
       px[p] = x; py[p] = y; pz[p] = z;
     }
   };
@@ -1004,7 +1101,7 @@
     }
     this.spilled += this.spillNow;
     // both halves: the momentum (relative to the glass) carried out this step, kg m/s
-    this.spillPx *= 2 * this.mp; this.spillPz *= 2 * this.mp;
+    this.spillPx *= this.sym * this.mp; this.spillPz *= this.sym * this.mp;
   };
   // remove particle p by moving the last particle into its place
   Fluid.prototype.removeParticle = function (p) {
@@ -1018,7 +1115,7 @@
     this.np = q;
   };
   // mass of the stout still in the glass (both halves)
-  Fluid.prototype.liquidMass = function () { return 2 * this.mp * this.np; };
+  Fluid.prototype.liquidMass = function () { return this.sym * this.mp * this.np; };
 
   // Keep the particles evenly spaced: pairs closer than the seeding spacing d0 are pushed apart, each by a fraction
   // of the overlap, along the line between them. This moves no mass and adds no momentum (equal and opposite shifts);
@@ -1048,26 +1145,70 @@
           }
       }
     }
-    for (let p = 0; p < n; p++) { this.px[p] += sx[p]; this.py[p] = Math.abs(this.py[p] + sy[p]); this.pz[p] += sz[p]; }
+    for (let p = 0; p < n; p++) { this.px[p] += sx[p]; this.py[p] = this.whole ? this.py[p] + sy[p] : Math.abs(this.py[p] + sy[p]); this.pz[p] += sz[p]; }
     this.collide();
   };
 
   // particles per cell, counted smoothly: each particle shares itself among the 8 nearest cell centres (trilinear)
+  // Implicit density projection (Kugelstadt, Longva, Thuerey & Bender 2019, IEEE TVCG 26(10)): the particles ride a trilinear
+  // reading of the grid's flow, which is divergence-free on the faces but not between them, so they slowly crowd or spread
+  // (measured at rest on 4 mm: the centre of mass rose 0.14-0.2 mm in 30 s at 5 ms; in a free swing the cloud expands and
+  // takes the swing's energy as height). Each step: the density ratio rho_c / rho_0 - 1 of every full cell deep in the
+  // liquid (the same cells as the volume correction, Fluid.density, reference densRef) is the target divergence of a
+  // displacement d = -grad(q) / dx, found with the step's own pressure matrix (A q = gamma (rho_c / rho_0 - 1) dx^2, q = 0
+  // at the free surface, no flux through the wall), and every particle moves by d at its place. Positions only: the
+  // velocities are untouched, so momentum is unchanged; the displacement is what crowding would undo by itself if the
+  // particles followed the continuous flow exactly. Signs: an overfull cell gets q > 0 and its particles move out.
+  Fluid.prototype.densityProject = function () {
+    const nx = this.nx, ny = this.ny, nz = this.nz, dx = this.dx, fl = this.fluid, phi = this.phi, b = this.rhs, gam = this.densityProjection;
+    this.density();
+    const qSave = Float64Array.from(this.q);
+    for (let c = 0; c < this.nc; c++) b[c] = fl[c] && phi[c] < -dx && this.Ad[c] >= 5.999 ? gam * (this.dens[c] / this.densRef - 1) * dx * dx : 0;
+    this.q.fill(0); this.pcg();
+    const q = this.q, tmin = this.thetaMin, th = (c, n) => { let t = phi[c] / (phi[c] - phi[n]); return t < tmin ? tmin : t > 1 ? 1 : t; };
+    const ghost = (c, n) => q[c] * (1 - 1 / th(c, n));
+    const du = this.tmpU, dv = this.tmpV, dw = this.tmpW; du.fill(0); dv.fill(0); dw.fill(0);
+    const U = (i, j, k) => i + (nx + 1) * (j + ny * k), V = (i, j, k) => i + nx * (j + (ny + 1) * k), Wd = (i, j, k) => i + nx * (j + ny * k);
+    for (let k = 0; k < nz; k++) for (let j = 0; j < ny; j++) for (let i = 1; i < nx; i++) {
+      const f = U(i, j, k); if (this.au[f] <= 0) continue; const cl = (i - 1) + nx * (j + ny * k), cr = cl + 1;
+      if (!fl[cl] && !fl[cr]) continue; du[f] = -((fl[cr] ? q[cr] : ghost(cl, cr)) - (fl[cl] ? q[cl] : ghost(cr, cl))) / dx;
+    }
+    for (let k = 0; k < nz; k++) for (let j = 1; j < ny; j++) for (let i = 0; i < nx; i++) {
+      const f = V(i, j, k); if (this.av[f] <= 0) continue; const cl = i + nx * ((j - 1) + ny * k), cr = cl + nx;
+      if (!fl[cl] && !fl[cr]) continue; dv[f] = -((fl[cr] ? q[cr] : ghost(cl, cr)) - (fl[cl] ? q[cl] : ghost(cr, cl))) / dx;
+    }
+    for (let k = 1; k < nz; k++) for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) {
+      const f = Wd(i, j, k); if (this.aw[f] <= 0) continue; const cl = i + nx * (j + ny * (k - 1)), cr = cl + nx * ny;
+      if (!fl[cl] && !fl[cr]) continue; dw[f] = -((fl[cr] ? q[cr] : ghost(cl, cr)) - (fl[cl] ? q[cl] : ghost(cr, cl))) / dx;
+    }
+    const sU = sampler(du, nx + 1, ny, nz, 0, 0.5, 0.5, this.x0, dx, this.y0), sV = sampler(dv, nx, ny + 1, nz, 0.5, 0, 0.5, this.x0, dx, this.y0), sW = sampler(dw, nx, ny, nz + 1, 0.5, 0.5, 0, this.x0, dx, this.y0);
+    let moved = 0;
+    for (let p = 0; p < this.np; p++) {
+      const x = this.px[p], y = this.py[p], z = this.pz[p], ex = sU(x, y, z), ey = sV(x, y, z), ez = sW(x, y, z);
+      this.px[p] = x + ex; this.py[p] = this.whole ? y + ey : Math.abs(y + ey); this.pz[p] = z + ez; moved += ex * ex + ey * ey + ez * ez;
+    }
+    this.densityMoved = Math.sqrt(moved / Math.max(1, this.np));   // rms displacement this step, m
+    this.q.set(qSave);
+    // back inside the glass; collide() starts its spill count afresh, so the spill of this step's advection is carried over
+    const sN = this.spillNow, sPx = this.spillPx, sPz = this.spillPz;
+    this.collide();
+    this.spillNow += sN; this.spillPx += sPx; this.spillPz += sPz;
+  };
   Fluid.prototype.density = function () {
     const nx = this.nx, ny = this.ny, nz = this.nz, dx = this.dx, inv = 1 / dx;
     const d = this.dens || (this.dens = new Float64Array(this.nc)); d.fill(0);
     const first = !this.densRef;
     for (let p = 0; p < this.np; p++) {
-      const fx = (this.px[p] - this.x0) * inv - 0.5, fy = this.py[p] * inv - 0.5, fz = this.pz[p] * inv - 0.5;
+      const fx = (this.px[p] - this.x0) * inv - 0.5, fy = (this.py[p] - this.y0) * inv - 0.5, fz = this.pz[p] * inv - 0.5;
       const i = Math.floor(fx), j = Math.floor(fy), k = Math.floor(fz), tx = fx - i, ty = fy - j, tz = fz - k;
       for (let c = 0; c < 2; c++) { let kk = k + c; if (kk < 0 || kk >= nz) continue; const wz = c ? tz : 1 - tz;
-        for (let b = 0; b < 2; b++) { let jj = j + b; jj = jj < 0 ? -jj - 1 : jj; if (jj >= ny) continue; const wy = b ? ty : 1 - ty;   // y < 0: the mirror cell
+        for (let b = 0; b < 2; b++) { let jj = j + b; jj = jj < 0 ? (this.whole ? -1 : -jj - 1) : jj; if (jj < 0 || jj >= ny) continue; const wy = b ? ty : 1 - ty;   // y < 0: the mirror cell
           for (let a = 0; a < 2; a++) { const ii = i + a; if (ii < 0 || ii >= nx) continue; d[ii + nx * (jj + ny * kk)] += (a ? tx : 1 - tx) * wy * wz; } } }
     }
     if (first) {   // the reference: the mean count of cells wholly inside the glass and at least 2 dx below the surface at rest
       let s = 0, n = 0;
       for (let k = 1; (k + 2.5) * dx < this.h0; k++) for (let j = 1; j < ny - 1; j++) for (let i = 1; i < nx - 1; i++) {
-        const x = this.x0 + (i + 0.5) * dx, y = (j + 0.5) * dx, R = this.Rz((k + 0.5) * dx) - 1.5 * dx;
+        const x = this.x0 + (i + 0.5) * dx, y = this.y0 + (j + 0.5) * dx, R = this.Rz((k + 0.5) * dx) - 1.5 * dx;
         if (x * x + y * y < R * R) { s += d[i + nx * (j + ny * k)]; n++; }
       }
       if (n === 0) throw new Error('volume correction: no full cell to take the reference density from');
@@ -1079,7 +1220,7 @@
   Fluid.prototype.momentum = function () {
     let mx = 0, mz = 0;
     for (let p = 0; p < this.np; p++) { mx += this.pu[p]; mz += this.pw[p]; }
-    return [2 * this.mp * mx, 2 * this.mp * mz];
+    return [this.sym * this.mp * mx, this.sym * this.mp * mz];
   };
 
   Fluid.prototype.maxSpeed = function () {
@@ -1102,13 +1243,14 @@
     this.extrapolate(3);
     this.g2p();
     this.advect(dt);
+    if (this.densityProjection > 0) this.densityProject();
     if (this.relaxStrength > 0) this.relax(this.relaxStrength);
     this.t += dt;
   };
 
   // height of the free surface above the glass bottom at (x, y), found along the vertical from phi
   Fluid.prototype.surfaceHeight = function (x, y) {
-    y = Math.abs(y);
+    if (!this.whole) y = Math.abs(y);
     const dx = this.dx, Rk = 2 * dx, R2 = Rk * Rk, r = this.rp;
     let zHi = this.H - 0.5 * dx, zLo = 0.5 * dx;
     let pHi = this.phiAt(x, y, zHi, Rk, R2, r);
@@ -1139,9 +1281,9 @@
     const out = this.colH || (this.colH = new Float64Array(ncol));
     vol.fill(0);
     const Vp = this.Vseed;              // the volume each particle fills at its seeding spacing, (dx/s)^3
-    const fold = (j) => (j < 0 ? -j - 1 : j >= ny ? ny - 1 : j);
+    const fold = this.whole ? (j) => (j < 0 ? 0 : j >= ny ? ny - 1 : j) : (j) => (j < 0 ? -j - 1 : j >= ny ? ny - 1 : j);   // half glass: y < 0 is the mirror column
     for (let p = 0; p < this.np; p++) {
-      let i = Math.floor((this.px[p] - this.x0) / dx), j = Math.floor(this.py[p] / dx);
+      let i = Math.floor((this.px[p] - this.x0) / dx), j = Math.floor((this.py[p] - this.y0) / dx);
       i = i < 0 ? 0 : i >= nx ? nx - 1 : i; j = j < 0 ? 0 : j >= ny ? ny - 1 : j;
       vol[i + nx * j] += Vp;
     }
@@ -1183,7 +1325,7 @@
       for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) {
         let n = 0;
         for (let a = 0; a < S; a++) for (let b = 0; b < S; b++) {
-          const x = this.x0 + (i + (a + 0.5) / S) * dx, y = (j + (b + 0.5) / S) * dx;
+          const x = this.x0 + (i + (a + 0.5) / S) * dx, y = this.y0 + (j + (b + 0.5) / S) * dx;
           if (x * x + y * y < R2) n++;
         }
         const c = i + nx * j;
@@ -1200,7 +1342,7 @@
   // the column height at (x, y), bilinear between column centres (y folded by the mirror plane)
   Fluid.prototype.columnHeightAt = function (x, y) {
     const nx = this.nx, ny = this.ny, dx = this.dx, H = this.colH;
-    y = Math.abs(y);
+    if (!this.whole) y = Math.abs(y);
     // columns near the wall are cut by it and hold too few particles to count: beyond r1 = R(h0) - 2.5 dx the height
     // is extended linearly along the radius from the values at r1 and r1 - 1.5 dx
     const r = Math.hypot(x, y), r1 = this.Rz(Math.min(this.h0, this.zRim)) - 2.5 * dx, r2 = r1 - 1.5 * dx;
@@ -1212,10 +1354,10 @@
   };
   Fluid.prototype.colBilinear = function (x, y) {
     const nx = this.nx, ny = this.ny, dx = this.dx, H = this.colH;
-    const fx = (x - this.x0) / dx - 0.5, fy = y / dx - 0.5;
+    const fx = (x - this.x0) / dx - 0.5, fy = (y - this.y0) / dx - 0.5;
     let i = Math.floor(fx), j = Math.floor(fy); const tx = fx - i, ty = fy - j;
     const at = (a, b) => {
-      a = a < 0 ? 0 : a >= nx ? nx - 1 : a; b = b < 0 ? -b - 1 : b; b = b >= ny ? ny - 1 : b;
+      a = a < 0 ? 0 : a >= nx ? nx - 1 : a; b = b < 0 ? (this.whole ? 0 : -b - 1) : b; b = b >= ny ? ny - 1 : b;
       return H[a + nx * b];
     };
     return (1 - tx) * (1 - ty) * at(i, j) + tx * (1 - ty) * at(i + 1, j) + (1 - tx) * ty * at(i, j + 1) + tx * ty * at(i + 1, j + 1);

@@ -20,7 +20,7 @@ const h0 = +process.argv[2] / 1000, T = +(process.argv[3] || 6), dx = +(process.
 if (!(h0 > 0)) throw new Error('usage: energy-audit.cjs <fill mm> [T] [dx]');
 const force = (t) => (t < 0.6 ? A * 0.5 * (1 - Math.cos(Math.PI * t / 0.6)) : t < 1.0 ? A : 0);
 // VC: the solver's volume correction strength (Fluid option volumeCorrection, off by default); RELAX: particle relaxation
-const f = new Fluid({ dx, profile: G, h0, H: (G.R.length - 1) * G.dz + 0.03, nu: 2.05e-6, volumeCorrection: +(process.env.VC || 0), relax: +(process.env.RELAX || 0) });
+const f = new Fluid({ dx, profile: G, h0, H: (G.R.length - 1) * G.dz + 0.03, nu: 2.05e-6, volumeCorrection: +(process.env.VC || 0), relax: +(process.env.RELAX || 0), flip: +(process.env.FLIP || 0), densityProjection: +(process.env.DP || 0), quadratic: process.env.Q === '1' });
 const W = 2 * f.mp, I = dx * dx / 4;
 const keP = () => { let k = 0; const C = f.pc; for (let p = 0; p < f.np; p++) { let a = 0; for (let c = 0; c < 3; c++) a += C[c][0][p] ** 2 + C[c][1][p] ** 2 + C[c][2][p] ** 2; k += f.pu[p] ** 2 + f.pv[p] ** 2 + f.pw[p] ** 2 + I * a; } return 0.5 * W * k; };
 const keLin = () => { let k = 0; for (let p = 0; p < f.np; p++) k += f.pu[p] ** 2 + f.pv[p] ** 2 + f.pw[p] ** 2; return 0.5 * W * k; };
