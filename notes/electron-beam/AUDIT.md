@@ -221,3 +221,14 @@ documents in the Groningen folder were not opened.
 **Last readability pass.** No question-and-answer format anywhere (0 headings or paragraphs ending in "?"). Every abbreviation is spelled out at
 first use in reading order; the one exception found (CD-SEM in chapter 5, before chapter 7 defines CD) is fixed. Long sentences (over 40 words) remain:
 about one in seven in chapters 1–4, fewer later; left for Numa's own edit, since shortening them is a matter of his voice.
+
+## 8. Editing for voice and rhythm (from 11 November 2026)
+First attempt: five editors in parallel, one per chapter group. Stopped after two had finished. The method failed for a
+chronological text: chapter 8's draft re-defined terms from chapters 2–6 (reduced brightness, FW50, critical dimension,
+secondary yield), long sentences were chopped into runs of short ones, and the shared term list did not exist.
+The drafts stay on their worktree branches as reference only. The editors' reports found eight faults in the base text,
+fixed before the new start: the guide's "every module has a Python twin" (not chapter 8); ch09's "constant current" stated
+as fact (now an inference); range "almost as the square of the energy" (Kanaya–Okayama: about the five-thirds power);
+the Mott cross-section described as spin only (also the failure of the first Born approximation); ch08's unclear
+"cooler tip"; ch06's Kepler orbit "with the sign of the force reversed" (the force attracts); ch07's undefined σ_b (σ₁);
+ch07's N (lines averaged = rows of a square image, now said). New method: the session tree in `editing/PLAN-TREE.md`.
