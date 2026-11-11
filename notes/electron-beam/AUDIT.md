@@ -195,3 +195,29 @@ Every number reproduced in the derivation check. Fixed after the reviews:
 - Labels: the I_p slider no longer claims chapter 5 sets the probe from it; the caption says probe size and current are independent here and coupled in chapter 8.
 - Limits: grazing incidence, the edge effect, shadowing, materials, detector noise. Sources paragraph. Applied's page: re-read 9 November 2026, recorded in
   `sources/applied-public.md` (the reviewers could not reach it: 403 to curl).
+
+## 7. Chapter 8, the core-width change, chapter 9, the reading guide, the Drive, the last pass
+**Chapter 8** (the whole chain; sensitivities, tolerance Monte Carlo, process window). Checks W1–W6. Both blind reviews
+(`review/referee-ch08.md`, `review/derivations-ch08.md`) found the same serious fault:
+- Example 8.3 said higher landing voltage helps; its own numbers (0.37 nm at 0.5 kV against 0.45 nm at 1.4 kV, 1 pA) said the reverse, and the map
+  jumped by factors 2 to 3 between grid points above 2 kV. The cause was in chapter 6: the fitted core width of the secondary signal fell to 1.6 pm above
+  10 kV, smaller than an atom. **Fix in chapter 6**: the secondaries' own sideways travel (escape depth λ_s) is added in quadrature to the core width, so the
+  core cannot fall below about λ_s. The map is now smooth, and the example now says what the map shows: at a given current, low voltage is better.
+- Tip changes now move the current (nominal = the default tip); the aperture is held fixed in the tolerance Monte Carlo (it was re-optimised per draw);
+  checks W2 and W4 widened to the core and halo widths and to B_r, ΔE₅₀, d_v; W6 added (the V^−3/4 law). 2 of 300 tolerance draws fall outside the grid;
+  stated on the page.
+- No Python twin for chapter 8 (it only chains the other modules, each of which has one); stated as a limit.
+
+**Chapter 9** (what the project shows, its limits, what was checked) and the **reading guide** (what each chapter shows, models, leaves out, its numbers):
+prose only, no new numbers; every number they quote is pulled from the chapter stores by `{{num:chNN.name}}`.
+
+**Drive (Numa's Leipzig, Oldenburg and Groningen folders), 11 November 2026.** Searched by full text (electron microscope, electron optics,
+Elektronenoptik, Rutherford, Bethe, field emission, Busch) and by title (Reimer, Hawkes, Goldstein, Kruit, Optik/optics, Scanning, Monte Carlo).
+No electron-optics or SEM book is there. What is there and could back textbook steps: Landau and Lifshitz vol. 2 and Demtröder's *Atoms, Molecules
+and Photons* (Rutherford scattering), Nolting's electrodynamics, Sólyom vol. 2 (electrons in solids). None was opened; the second-hand citations
+(Hawkes and Kasper's C_s integral, Kanaya–Okayama via Goldstein, Barth and Kruit, Reimer, Busch) stay marked as such on the pages. The personal
+documents in the Groningen folder were not opened.
+
+**Last readability pass.** No question-and-answer format anywhere (0 headings or paragraphs ending in "?"). Every abbreviation is spelled out at
+first use in reading order; the one exception found (CD-SEM in chapter 5, before chapter 7 defines CD) is fixed. Long sentences (over 40 words) remain:
+about one in seven in chapters 1–4, fewer later; left for Numa's own edit, since shortening them is a matter of his voice.
