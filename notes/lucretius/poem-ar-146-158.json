@@ -1,5 +1,5 @@
 {
-  "about": "Arabic translation of the four sentences on the home page, Lucretius I 146-158. Made from the Latin (poem-146-224.json, field 'la') for this site; fourth version, 11 November 2026, in modern Levantine literary Arabic (README, 'How the Arabic is written'), checked against the Latin, Leonard (1916) and Diels (1924) for the sense. It is not a published translation and has not been reviewed by a second reader. The only published Arabic translation (Cairo 2018) is under copyright and was not used.",
+  "about": "Arabic translation of the four sentences on the home page, Lucretius I 146-158. First version, made from the Latin (poem-146-224.json, field 'la') on 10 November 2026 and restored on 11 November 2026 at Numa's word, after he judged the three later versions worse. Read against Leonard (1916) and Diels (1924) for the sense. It keeps the misreadings that the review of 10 November found and that commit 868d8f6 had corrected. It is not a published translation and has no second reader. The only published Arabic translation (Cairo 2018) is under copyright and was not used.",
   "groups": [
     {
       "lines": [
@@ -7,7 +7,7 @@
         148
       ],
       "ar": [
-        "هذا الرعب الذي يسكن النفس، وهذا الظلام الذي يخيّم عليها، لن تبدّدهما أشعّة الشمس ولا سهام النهار الساطعة، بل وجه الطبيعة وقانونها."
+        "وهذا الرعبُ في النفس، وهذا الظلامُ، لا بدّ أن يُبدِّدَهما لا شعاعُ الشمس ولا سهامُ النهار اللامعة، بل مظهرُ الطبيعة وقانونُها العقلي."
       ]
     },
     {
@@ -16,7 +16,7 @@
         150
       ],
       "ar": [
-        "ومن هنا نبدأ، وهذا أوّل المبادئ: لا شيء يولد من العدم أبدًا، ولو بقدرة الآلهة."
+        "ومبدؤها، الذي منه نأخذ فاتحةَ القول، هو أنّ شيئًا لا يُولَد من العدم بقوّةٍ إلهيّةٍ أبدًا."
       ]
     },
     {
@@ -25,7 +25,7 @@
         154
       ],
       "ar": [
-        "إن الخوف لا يقبض على قلوب البشر جميعًا إلا لأنهم يرون في الأرض وفي السماء أمورًا كثيرة تجري، ولا يرون لها سببًا، فيحسبون أن مشيئة الآلهة وراءها."
+        "ذلك أنّ الخوفَ يقبض على البشر جميعًا لأنّهم يرَون في الأرض وفي السماء أشياءَ كثيرةً تحدث، ولا يستطيعون بأيّ تعليلٍ أن يروا أسبابَها، فيظنّونها تحدث بمشيئةٍ إلهيّة."
       ]
     },
     {
@@ -34,7 +34,7 @@
         158
       ],
       "ar": [
-        "لذلك، متى أدركنا أن لا شيء يُخلق من العدم، تجلّى لنا بوضوح أكبر ما نبحث عنه: من أين يأتي كل شيء، وكيف يجري كل ما يجري دون أن تمتدّ إليه يد الآلهة."
+        "فإذا رأينا لهذا السبب أنّ شيئًا لا يمكن أن يُخلَق من العدم، أبصرنا عندئذٍ بوضوحٍ أكبر ما نطلبه: من أين يمكن أن يُخلَق كلُّ شيء، وبأيّ كيفيّةٍ يجري كلُّ شيء بغير عمل الآلهة."
       ]
     }
   ]

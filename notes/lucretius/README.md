@@ -29,17 +29,31 @@ gesondert die Kraft ruht") is as printed online and unchecked against the print.
 **What Numa first had** (from Gemini): lines 149 and 218 misquoted, an English text attributed to Leonard that is not his, lines
 192–214 missing.
 
-**How the Arabic is written** (fourth version, 11 November 2026). Numa rejected three versions, and the reasons are the rule for any
-later change. (1) Word for word («لا يُولَد شيءٌ من العدم بفعل الآلهة أبدًا»): "no one says that in standard Arabic". (2) Classical
-ornament («تجلوها», «نواميسها», «أنّى», «لا مناص», «الجبال الشُّمّ», case vowels on every noun): "Quran Arabic, too old, a Gulf or
-Bedouin voice". (3) Plain modern («العتمة», short flat sentences): "fragile and weak"; darkness is «ظلام». What he wants is the voice
-of Levantine literary prose, strong and with a melody, between (2) and (3). The model is the prose of the Levantine Nahda and Mahjar and
-its translations of philosophical poetry: sentences that open on «إن», «لكنّ», «ومن هنا», clauses chained with و and ف, balanced pairs
-and repetition («هذا الرعب… وهذا الظلام…», «يرون… ولا يرون…», «كل ما يجري»), strong plain verbs («يسكن», «يخيّم», «يقبض», «تنبثق»,
-«تروّض», «تُسلم»), questions answered by «أليس لأن…», living images kept («شواطئ النور», «سهام النهار», «يد الآلهة»). Vowel marks only
-where a word could be misread (the passive: «يُخلق», «حُرمت»), plus shadda and tanwin, as modern Levantine books print. *nihilum* is
-«العدم» (Numa). Set in Noto Naskh Arabic, the site's Arabic text face, not Amiri. Read for the voice on 11 November 2026: Felix Fares'
-translation of Nietzsche's Zarathustra as serialised in الرسالة, 1937
-([Wikisource](https://ar.wikisource.org/wiki/مجلة_الرسالة/العدد_211/هكذا_قال_زرادشت)), Gibran's prose
+**Which Arabic is on the site, and why** (decision of Numa, 11 November 2026). The Arabic on the site is the **first version** (10 November
+2026, commits bea5607 and 9120b8d): sentence by sentence, with full case vowels (حركات). Numa tried three more and judged all three worse.
+He had called the first "Gulf and Peninsula Arabic", and still found it "the least bad" of the four. Nothing else is to be put in its
+place unless he asks. The four versions, so that no later session repeats a rejected one:
+
+1. First (10 Nov, bea5607 and 9120b8d): close to the Latin, classical case vowels everywhere. **On the site now.**
+2. Second (10 Nov, 868d8f6): corrected after the review; used «لا شيء» for *nihilum*. Rejected: «العدم» is the word (Numa).
+3. Third (11 Nov, 8ebf821): sentence by sentence, with archaic ornament («تجلوها», «نواميسها», «أنّى»). Rejected as Quranic Arabic.
+4. Fourth (11 Nov, c1e93c5): modern Levantine literary prose, almost no vowels. Rejected as thin, "fragile and weak", "a second grader
+   from Damascus". Its wording is in git (c1e93c5) and was not thrown away.
+
+Rules that came out of the rejections, and still hold: *nihilum* is «العدم»; darkness is «ظلام» (never «عتمة»); no calques («لا يُولَد
+شيءٌ من العدم بفعل الآلهة أبدًا» was rejected as word for word); no archaic particles. What Numa wants, and has not yet been given, is a
+hybrid: the weight and sound of the first version with the strength of Levantine prose and the argumentative cadence of Mahdi Amel
+(«لا بدّ أن», «إنّ… هو…», «ليس… إلا…»). A proposal for the four home sentences in that voice was put to him on 11 November and not
+adopted.
+
+**What the first version still gets wrong.** The review of 10 November (Opus) found misreadings that commit 868d8f6 corrected and that
+this version therefore contains again: among them *erumpere* (line 162) rendered «تنفلق», *secreta facultas* (line 173) rendered «قدرةً
+خاصّةً مستترة», and *alienis partibus anni* (line 181) rendered «من أجزاءِ السنة التي لا تناسبها». It has no second reader. The page
+note (`i18n/ar/lucretius.html.json`, key 471218cdfee7) says so in the reader's words.
+
+**Sources read for the Arabic voice** (11 November 2026): Felix Fares' translation of Nietzsche's Zarathustra as serialised in الرسالة,
+1937 ([Wikisource](https://ar.wikisource.org/wiki/مجلة_الرسالة/العدد_211/هكذا_قال_زرادشت)), Gibran's prose
 ([Hindawi](https://www.hindawi.org/books/59729251/24/)), and the Arabic quotations of the atomists in
-[نشأة العالم في المذهب الذري](https://altanweeri.net/8838/). The sentences are this site's own.
+[نشأة العالم في المذهب الذري](https://altanweeri.net/8838/). The Arabic column is set in Noto Naskh Arabic, the site's Arabic text face.
+The Cairo 2018 translation (المركز القومي للترجمة) was not read and is not to be copied onto the site; a short credited quotation would
+fall under the right of quotation (§ 51 UrhG), a whole column would need the publisher's licence.
