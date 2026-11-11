@@ -113,6 +113,7 @@ when V hands that chapter over. V reads this file before editing every chapter. 
 
 ## guide · Reading guide (four boxes above chapter 0)
 - shows, models, leaves out, numbers.
+- **Voice pass.** The 'shows', 'models' and 'numbers' boxes rewritten as one stage or claim per sentence; 'leaves out' kept (a scannable list).
 
 ## Doubts (physics or claims; listed, not fixed)
 1. (FIXED in ch06 voice pass, coordinator's approval) ch06 §6.7: "The range grows almost as the square of the energy." The Kanaya–Okayama law quoted just above has the exponent 1.67,
