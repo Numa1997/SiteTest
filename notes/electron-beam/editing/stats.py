@@ -4,6 +4,10 @@ import re, sys
 
 def prose(src):
     s = re.sub(r'<svg.*?</svg>', ' ', src, flags=re.S)
+    s = re.sub(r'‹E[^›]*›.*?‹/E›', ' ', s, flags=re.S)
+    s = re.sub(r'‹[^›]*›', ' N ', s)
+    s = re.sub(r"S\.append\(\(.*?r'''", '. ', s, flags=re.S)
+    s = re.sub(r'\n\s*\d+(\.\d+)*\s+[A-Z][^\n.]{0,80}\n', '. ', s)
     s = re.sub(r'\$\$.*?\$\$|\\\[.*?\\\]', ' ', s, flags=re.S)
     s = re.sub(r'\$[^$]*\$|\\\(.*?\\\)', ' X ', s, flags=re.S)
     s = re.sub(r'\{\{[^}]*\}\}', ' N ', s)
