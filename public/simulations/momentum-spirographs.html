@@ -398,6 +398,15 @@
                     <section class="psec" id="n-limits">
                         <h3><span class="psec__n">10</span>Limits and what comes next</h3>
                         <p>The pendulum has no friction and the strike is instantaneous. The sheet shows one slice of the four-dimensional state space, the pendulums that start hanging still; a pendulum released from a raised position is not on it. The map's verdict depends on its 6.67 s and on the threshold \(v > 0.5\); it is a finite-time measure, not a Lyapunov exponent. The argument for the streaks is the standard picture of chaos near a separatrix, supported here by measurement, not proved for this system. The section of the pinned pendulum is one cut, at \(\theta_1 = 0\); a motion whose upper rod seldom passes straight down fills it slowly. Next: the same map for point masses and unequal rods, and the stable partners of the butterflies.</p>
+                        <div class="pbox pbox--ex">
+                            <span class="pbox__t">Problems</span>
+                            <ol>
+                                <li>The butterfly's strike is \(p_1 = 3.557\), \(p_2 = 12.211\) kg·m²/s. Put it into (4) and find its kinetic energy. How many times the eye's outer edge, 39.2 J, is it? Check your number against the panel: choose the butterfly of 24 turns in the atlas.</li>
+                                <li>Where does the pupil's edge, \(K = 9.8\) J, cross the two axes of the sheet? Set \(p_2 = 0\) in (4), then \(p_1 = 0\). Switch on <em>Explain the eye</em> and compare. Why is the pupil wider than it is tall?</li>
+                                <li>The dashed lines are the strikes for which the fold-through condition (8) holds with an equals sign. Divide \(3p_1^2 - 114\,p_1p_2 + 75\,p_2^2 = 0\) by \(p_2^2\), solve the quadratic for \(p_1/p_2\), and recover the two slopes of (9).</li>
+                                <li>Go to a closed curve in the atlas and open <em>Section</em>. Count the separate dots after a minute. Then tap a neighbouring cell. Its dots do not repeat; they fill in a ring. Say in one sentence what the ring is a cut through.</li>
+                            </ol>
+                        </div>
                     </section>
 
                     <section class="psec" id="n-src">
@@ -698,12 +707,21 @@
                         <h3><span class="psec__n">34</span>Limits and the next model</h3>
                         <p class="psec__lead">An ideal pendulum and an ideal motor.</p>
                         <p>The pins have no friction; the motor makes exactly the torque asked, at once, held over each 1.1 ms; the controller knows the state exactly. A real machine needs: friction, which at 9 whirls a second would drain the butterfly within seconds and make the motor work all the time, not only to catch; the motor's electrical dynamics (inductance, back-emf, \(V = R_mI + \Lambda\dot I + k_t\dot\theta_1\), as in Fig. 9) between the command and the torque; measurement, and an observer that estimates \(p_1, p_2\) from encoder angles; and limits on speed. The method has no proof of global success: the measured catch rate is a statistic over 100 starts, not a theorem. Natural next steps are a transverse (orbital) linearisation that removes the timing direction from the design itself (Shiriaev and co-workers), and model-predictive control that plans the approach over a lap instead of waiting for it.</p>
+                        <div class="pbox pbox--ex">
+                            <span class="pbox__t">Problems</span>
+                            <ol>
+                                <li>A pendulum hanging still is struck with \(p_1 = 2\), \(p_2 = 4\) kg·m²/s. Its kinetic energy is \(K = \tfrac{6}{7}p_1^2 - \tfrac{18}{7}p_1p_2 + \tfrac{24}{7}p_2^2\), and hanging straight down its potential energy is −19.6 J. Show that its energy is 18.1 J. The butterfly has 390.8 J. How much must the motor add?</li>
+                                <li>The motor can give at most 60 N·m. Suppose the upper rod turned steadily at 10 rad/s and the motor pushed with it all the time. Use \(\dot H = \tau\,\dot\theta_1\) to find how long the pumping would take. The live catch needs far longer. Give two reasons from the text.</li>
+                                <li>Start from Hamilton's equations with the torque \(\tau\) added to \(\dot p_1\), and derive \(\dot H = \tau\,\dot\theta_1\) in three lines. Which terms cancel, and why does the torque on the upper rod alone still change the energy of both rods?</li>
+                                <li>Press <em>Random chaos</em> five times and write down each time to the catch. Compare your five with the counts of 300 starts quoted above: half within 18 s, slowest 229 s.</li>
+                            </ol>
+                        </div>
                     </section>
 
                     <section class="psec" id="c-src">
                         <h3><span class="psec__n">35</span>Further reading</h3>
                         <ul class="prefs">
-                            <li>K. J. Åström and K. Furuta, <a href="https://web.ece.ucsb.edu/~hespanha/ece229/references/AstromFurutaAUTOM00.pdf">“Swinging up a pendulum by energy control”</a>, <i>Automatica</i> 36 (2000) 287–295. The energy law, its Lyapunov function \(V = (E-E_0)^2/2\), and the advice to combine energy control with a catching controller near the target (read).</li>
+                            <li>K. J. Åström and K. Furuta, <a href="https://doi.org/10.1016/S0005-1098(99)00140-5">“Swinging up a pendulum by energy control”</a>, <i>Automatica</i> 36 (2000) 287–295. The energy law, its Lyapunov function \(V = (E-E_0)^2/2\), and the advice to combine energy control with a catching controller near the target (read).</li>
                             <li>E. Ott, C. Grebogi and J. A. Yorke, <a href="https://doi.org/10.1103/PhysRevLett.64.1196">“Controlling chaos”</a>, <i>Phys. Rev. Lett.</i> 64 (1990) 1196. Waiting for a chaotic motion to come near an unstable periodic orbit and holding it with small corrections (citation checked; the full text could not be opened from this session).</li>
                             <li>Fig. 9 of this site, <a href="driven-oscillator.html">the driven oscillator</a>: proportional, integral and derivative control as physical parts; why an integral removes a steady error.</li>
                             <li>The flower hunt, <a href="#hunt">Fig. 13 study</a>: how the butterfly orbit was found by Newton's method, and why it is a butterfly.</li>

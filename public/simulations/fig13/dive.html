@@ -231,7 +231,7 @@ function captions(f) {
     const since = f - CAPS[k][0], u = k === 0 ? 1 : ease(since / 14), prev = k > 0 ? CAPS[k - 1][1] : '';
     const [cur, old] = (k % 2 === 0) ? [$('capA'), $('capB')] : [$('capB'), $('capA')];
     setHTML(cur, 'c' + cur.id, CAPS[k][1]); setHTML(old, 'c' + old.id, prev);
-    cur.style.opacity = u; old.style.opacity = 1 - u;
+    cur.style.opacity = Math.max(0, 2 * u - 1); old.style.opacity = Math.max(0, 1 - 2 * u);   // the old words leave before the new ones come: never two captions on top of each other
 }
 function readout(f, t) {
     const sp = speed(f), ta = tau(f), e = zoomU(f);

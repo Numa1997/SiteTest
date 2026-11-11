@@ -212,12 +212,21 @@
                         <h3><span class="psec__n">12</span>Limits and the next model</h3>
                         <p class="psec__lead">An ideal pendulum and an ideal motor.</p>
                         <p>The pins have no friction; the motor makes exactly the torque asked, at once, held over each 1.1 ms; the controller knows the state exactly. A real machine needs: friction, which at 9 whirls a second would drain the butterfly within seconds and make the motor work all the time, not only to catch; the motor's electrical dynamics (inductance, back-emf, \(V = R_mI + \Lambda\dot I + k_t\dot\theta_1\), as in Fig. 9) between the command and the torque; measurement, and an observer that estimates \(p_1, p_2\) from encoder angles; and limits on speed. The method has no proof of global success: the measured catch rate is a statistic over 100 starts, not a theorem. Natural next steps are a transverse (orbital) linearisation that removes the timing direction from the design itself (Shiriaev and co-workers), and model-predictive control that plans the approach over a lap instead of waiting for it.</p>
+                        <div class="pbox pbox--ex">
+                            <span class="pbox__t">Problems</span>
+                            <ol>
+                                <li>A pendulum hanging still is struck with \(p_1 = 2\), \(p_2 = 4\) kg·m²/s. Its kinetic energy is \(K = \tfrac{6}{7}p_1^2 - \tfrac{18}{7}p_1p_2 + \tfrac{24}{7}p_2^2\), and hanging straight down its potential energy is −19.6 J. Show that its energy is 18.1 J. The butterfly has 390.8 J. How much must the motor add?</li>
+                                <li>The motor can give at most 60 N·m. Suppose the upper rod turned steadily at 10 rad/s and the motor pushed with it all the time. Use \(\dot H = \tau\,\dot\theta_1\) to find how long the pumping would take. The live catch needs far longer. Give two reasons from the text.</li>
+                                <li>Start from Hamilton's equations with the torque \(\tau\) added to \(\dot p_1\), and derive \(\dot H = \tau\,\dot\theta_1\) in three lines. Which terms cancel, and why does the torque on the upper rod alone still change the energy of both rods?</li>
+                                <li>Press <em>Random chaos</em> five times and write down each time to the catch. Compare your five with the counts of 300 starts quoted above: half within 18 s, slowest 229 s.</li>
+                            </ol>
+                        </div>
                     </section>
 
                     <section class="psec" id="c-src">
                         <h3><span class="psec__n">13</span>Further reading</h3>
                         <ul class="prefs">
-                            <li>K. J. Åström and K. Furuta, <a href="https://web.ece.ucsb.edu/~hespanha/ece229/references/AstromFurutaAUTOM00.pdf">“Swinging up a pendulum by energy control”</a>, <i>Automatica</i> 36 (2000) 287–295. The energy law, its Lyapunov function \(V = (E-E_0)^2/2\), and the advice to combine energy control with a catching controller near the target (read).</li>
+                            <li>K. J. Åström and K. Furuta, <a href="https://doi.org/10.1016/S0005-1098(99)00140-5">“Swinging up a pendulum by energy control”</a>, <i>Automatica</i> 36 (2000) 287–295. The energy law, its Lyapunov function \(V = (E-E_0)^2/2\), and the advice to combine energy control with a catching controller near the target (read).</li>
                             <li>E. Ott, C. Grebogi and J. A. Yorke, <a href="https://doi.org/10.1103/PhysRevLett.64.1196">“Controlling chaos”</a>, <i>Phys. Rev. Lett.</i> 64 (1990) 1196. Waiting for a chaotic motion to come near an unstable periodic orbit and holding it with small corrections (citation checked; the full text could not be opened from this session).</li>
                             <li>Fig. 9 of this site, <a href="driven-oscillator.html">the driven oscillator</a>: proportional, integral and derivative control as physical parts; why an integral removes a steady error.</li>
                             <li>The flower hunt, <a href="flower-hunt.html">Fig. 13 study</a>: how the butterfly orbit was found by Newton's method, and why it is a butterfly.</li>

@@ -44,6 +44,13 @@ then into the tables. Machine tables: [i18n/de/strings.json](../i18n/de/strings.
 | Lagrangian | Lagrange-Funktion | اللاغرانجيان |
 | Euler–Lagrange equations | Euler-Lagrange-Gleichungen | معادلات أويلر–لاغرانج |
 | chaos, sensitive dependence | Chaos, sensitive Abhängigkeit | الفوضى، الحساسية للشروط الابتدائية |
+| momentum space; strike, kick (Fig. 13: the blow that starts a pendulum) | Impulsraum; Stoß | فضاء الزخم؛ الضربة |
+| periodic orbit, closed orbit; Floquet multipliers, Floquet theory | periodische Bahn, geschlossene Bahn; Floquet-Multiplikatoren, Floquet-Theorie | مدار دوري، مدار مغلق؛ مضاعِفات فلوكيه، نظرية فلوكيه |
+| Poincaré map | Poincaré-Abbildung | تطبيق بوانكاريه |
+| energy shaping | Energieformung | تشكيل الطاقة |
+| the butterfly, the flower hunt, the catch (Fig. 13) | der Schmetterling, die Blumenjagd, das Einfangen | الفراشة، صيد الأزهار، الالتقاط |
+| chaos map | Chaoskarte | خريطة الفوضى |
+| non-inertial frame; pressure projection; particle-in-cell (Fig. 12 catalog) | Nichtinertialsystem; Druckprojektion; Particle-in-Cell | إطار غير عطالي؛ إسقاط الضغط؛ جسيمات في خلايا |
 | normal modes | Eigenschwingungen | الأنماط الطبيعية |
 | normal (to a surface) | Normale | الناظم |
 | scalar | skalar, Skalar | سلّمي، كمّية سلّمية |

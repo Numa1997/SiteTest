@@ -140,6 +140,8 @@ def main(outdir):
             dist_end=float(c[-1, 2]) if len(c) else None, catch_tau_max=float(np.abs(c[:, 3]).max()) if len(c) else None)
         print(p, res['pump-wait-catch from p = %s' % (p,)])
     Qd = np.diag(Q).copy(); Astar = swing_reach_of_orbit(S); rng = np.random.default_rng(1); held = []
+    # A quick test of this Python controller only. The counts the page quotes (300 random starts) come from the page's own
+    # controller, run by tools/fig13/catch_stats.cjs; this loop is not their source.
     for n in range(30):                                                  # catch from anywhere: 30 random strikes, 900 s each at most
         p = rng.uniform(-8, 8, 2)
         log, _, tm, hops = catch_anywhere(np.array([0, 0, *p]), S, K, Qd, H, 900.0, E_STAR, Astar, *SETTINGS, TAU_MAX, np.array(COEF), 10)

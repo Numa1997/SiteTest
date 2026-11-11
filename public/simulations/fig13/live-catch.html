@@ -241,7 +241,7 @@ function showCaption(f) {
     let k = 0; while (k + 1 < CAPS.length && f >= CAPS[k + 1][0]) k++;
     const u = k === 0 ? ease(f / 30) : ease((f - CAPS[k][0]) / 14), prev = k > 0 ? CAPS[k - 1][1] : '';
     const [cur, old] = (k % 2 === 0) ? [$('capA'), $('capB')] : [$('capB'), $('capA')];
-    setHTML(cur, 'c' + cur.id, CAPS[k][1]); setHTML(old, 'c' + old.id, prev); cur.style.opacity = u; old.style.opacity = 1 - u;
+    setHTML(cur, 'c' + cur.id, CAPS[k][1]); setHTML(old, 'c' + old.id, prev); cur.style.opacity = Math.max(0, 2 * u - 1); old.style.opacity = Math.max(0, 1 - 2 * u);   // the old words leave before the new ones come: never two captions on top of each other
     if (f % 6 === 0) for (const id of ['capA','capB']) fitBox($(id), 210, 30, 14);
     if (f % 6 === 0) for (const id of ['h2']) fitBox($(id), 68, 22, 12);
 }

@@ -203,3 +203,16 @@ axes are two range labels instead of a number per cell.
   curve gives 1 to 7 separate dots after five periods, a chaotic strike (3.56, −2.00, map value 0.83) scatters 44 dots in 60 s; zooming
   keeps the pinned strike exactly; the map canvas agrees with `mapValue` at 762 of 763 random points of a zoomed window. A change of
   the window's height alone (a phone's address bar) no longer rebuilds the sheet.
+- Loose ends closed (11 November 2026, last pass):
+  - **Two captions on top of each other.** In the gift, construction, catch and dive films the old caption faded out while the new
+    one faded in at the same place, so for 14 frames two texts lay over each other (in the gift: "فَرَاشَتُكِ: your butterfly" under the
+    sentence about the pendulum). Now the old caption leaves first and the new one comes after. Measured over every frame of the
+    gift (2647), the construction (1944) and the catch (901): 0 frames with both captions visible.
+  - **Catalog.** The Fig. 13 entry no longer claims the badge `check` (stored value, formula, pixel read back): the page has no such
+    panel. German and Arabic texts of the Fig. 12 and Fig. 13 catalog entries are stored (28 each); `tools/i18n/build.py --check`
+    reports 0 missing. New terms are in `docs/glossary.md`.
+  - **Problems.** Part I and Part IV of the note (and `butterfly-catch.html`) end with a "Problems" box, as `notes/STANDARD.md` asks.
+  - **Åström and Furuta.** The link to the paper now goes to its DOI (the university copy stopped answering).
+  - `butterfly_control.py`: a comment says its 30-strike loop is a test of the Python controller, not the source of the page's counts.
+  - Left as they are, on purpose: the film captions are 30 px on a 1080 px stage (11 px on a 390 px phone), because each film's layout
+    gives its caption a fixed box; the flower hunt is long on a phone because it holds 14 tiles, a bench and a chart.

@@ -262,7 +262,7 @@
             method: 'RK4 live in the browser; Newton\u2019s method and DOP853 for the closed orbits; periodic LQR along the orbit for the catch, its gains computed in the browser',
             controls: 'kick grid with exposure, model and ratios; the flower hunt bench; the dashboard; the catch: random chaotic state or a strike chosen on the chaos map',
             concepts: ['Hamiltonian mechanics', 'chaos', 'periodic orbit', 'Floquet theory', 'Poincar\u00e9 map', 'energy shaping', 'LQR', 'Riccati equation', 'controllability', 'Fourier series'],
-            has: ['derivation', 'read', 'check'],
+            has: ['derivation', 'read'],
             added: '2026-11-08'
         },
     ];
