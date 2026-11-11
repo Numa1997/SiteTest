@@ -29,12 +29,12 @@ gesondert die Kraft ruht") is as printed online and unchecked against the print.
 **What Numa first had** (from Gemini): lines 149 and 218 misquoted, an English text attributed to Leonard that is not his, lines
 192–214 missing.
 
-**Arabic word choices** (11 November 2026). The Arabic keeps one word for each of Lucretius' recurring terms, so that the argument can be
-followed across sentences as in the Latin. *nihilum*: «العدم» ("from nothing" «من العدم», "into nothing" «إلى العدم»), the established Arabic word for nothingness, at Numa's word
-(11 November 2026); a draft that day used «لا شيء» and was reverted. *divinitus*, *divino numine*, *sine divom*: «بفعل الآلهة», «بمشيئة الآلهة», «بغير فعل الآلهة», plural gods as in the Latin, so that line
-150 and line 155 answer each other. *mortales*: «الفانين» (echoed by «فانيًا» at 217). *naturae species ratioque*: «مرأى الطبيعة وناموسها»
-(*species* from *specio*, to look; *ratio* as the law of nature). *semina*: «بذور»; *certus*: «معلوم» throughout; *genitalia corpora*:
-«الأجسام الوالدة»; *corpora prima*: «الأجسام الأولى»; *primordia*, *principia*: «أوائل»; *luminis orae*: «شُطآن النور»; *inane*:
-«الخلاء», the word of classical Arabic natural philosophy; *causae*: «علل». Corrections of 11 November against the first draft: *igitur*
-(146), *quas ob res* (156), *erumpere* (162, not «تنفلق»), *secreta facultas* (173, a power of its own, not a hidden one), *alienis partibus
-anni* (181), *manibus* (209, to our hands), and the universal negation «لا يُخلَق شيءٌ من العدم» instead of «أنّ شيئًا لا…».
+**How the Arabic is written** (11 November 2026, at Numa's word, replacing two earlier word-for-word drafts). The Arabic is literary prose
+in the register of Arabic translations of Greek philosophy, recast sentence by sentence so that it reads as Arabic and not as Latin in
+Arabic words: universal negation as «ما من شيءٍ…» or «العدمُ لا يُخرج شيئًا», not «أنّ شيئًا لا…»; Lucretius' *ita … quod* as «وما … إلّا
+لأنّ…»; *quas ob res* as «فإذا استقرّ عندنا…»; *sine divom* as «من غير أن يكون للآلهة فيه يد»; *huc accedit* as «أضف إلى ذلك», the
+phrase Arabic quotations of Lucretius use. *nihilum* is «العدم» throughout (Numa). The gods stay plural (*divom*: «الآلهة»), as in the
+Latin. Fixed images are kept: *luminis orae* «شواطئ النور», *semina* «بذور», *inane* «الخلاء». Arabic idiom is used where Latin has its own:
+«في طرفة عين» for *repente*, «الجبال الشُّمّ», «نسيم الهواء العليل», «ما بالُنا نرى…». The phrasing of the principle follows how Arabic
+writing on the atomists states it, e.g. «لا شيء يولد من العدم، ولا شيء يفنى ويعود إلى العدم» and «لا شيء أبدا قد وجد بأمر إلهي من عدم»
+quoted in [نشأة العالم في المذهب الذري](https://altanweeri.net/8838/), read on 11 November 2026; the sentences themselves are this site's own.
