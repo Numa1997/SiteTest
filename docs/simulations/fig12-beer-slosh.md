@@ -4,71 +4,38 @@ Rebuilt from zero on 6 November 2026 (since 7 November 2026 the default fluid is
 three languages). Nothing of it is reused. The page is **English only**: `tools/i18n/build.py` lists it in `ENGLISH_ONLY`, so no
 German or Arabic page is generated, and links to it from the German and Arabic pages point at the English page.
 
-## Part D: the real glass, computed (11 November 2026) — the page's default since then
+## The rebuild (11 November 2026): the full equations, solved on GitHub
 
-The task: the same result on every device, in real time, with the heavy computation done beforehand on GitHub's free runners.
-The page no longer solves the 3D equations on the reader's device by default; it steps a model of the stout whose every number
-was computed from the measured glass, and keeps the 3D solvers as "3D reference" buttons (`?model=gpu`, `?grid=4`, `?grid=3`).
+The stout is computed only by solving the incompressible Navier–Stokes equations with a free surface (`Fluid` in
+`public/scripts/stout-cart.js`). Every reduced model is gone from the code: the sloshing-mode models (`ModalFluid`,
+`NMFluid`, `public/scripts/stout-modal.js`, `public/scripts/stout-nm.js`), the finite-element mode data
+(`public/data/fig12/modes.json`, `nm.json`) and the tools that built and checked them, the validation of a mode model
+against the 3D solver, and the two controllers that carried a one-mode oscillator inside them (slosh feedback and the
+motor-plus-suspension LQR, with their Kalman filter `Observer`). The cart keeps three controllers: open loop, speed (PI),
+and speed with road preview. The sections further down that describe the removed parts are kept as history only.
 
-**The model** (`public/scripts/stout-modal.js`, `TulipNM`; `TulipModes` is its linear part):
-- Linear modes of the real tulip by finite elements (`tools/fig12/modes_fem.py`): Laplace's equation in the stout, no flow through
-  the glass, the free-surface condition, per harmonic m on the meridian section (P2 elements, the surface's Schur complement).
-  Checks: the cylinder's Bessel frequencies to 3e-9, its shapes, push coefficients 2R/(ξ²−1), momentum πR³/ξ², the static tilt,
-  truncated cones against Gavrilyuk et al. (Eng. Comput. 25, 2008, Table II(A)) to 2e-5, the full 45° cone's exact κ11 = 1.
-  Tulip at 125 mm: 3.4114 Hz (the page had inferred ≈ 3.41 from the 3D grids), steady wall rise −3.312 mm per m/s².
-- Each m = 1 mode: q̈ + 2ζωq̇ + ω²(1 + a_z/g) q = −(ω²/g) c a_x; momentum ρ Σ Ix q̇ (only the surface moves the centre of mass);
-  modal mass ρ Ix/(κc). Large swings: the tulip's own Narimanov–Moiseev five-mode equations (`tools/fig12/nm_tulip.py`), FLT 2016's
-  integrals with the finite-element shapes; on a cylinder every coefficient equals the Bessel route (`nm_coeffs.py`) to 1.6e-6 and
-  FLT Table 1 (d1 1.758024, d2 −1.083354). First-order wall-slope terms derived here (the wedge of liquid at a sloping wall).
-  Classical Runge–Kutta for the five coordinates (semi-implicit Euler drifted +3 % per 10 s: the kinetic matrix depends on them).
-- Friction (all off with the page's switch): the wall's Stokes layer (Landau & Lifshitz §24 over the finite-element mode; deep
-  cylinder K = 3.503 against Miles's 3.52), the protein skin of the surface as an inextensible film (Lamb 1932, Art. 351), bulk
-  strain; the stout's ν = 2.05e-6 m²/s (Benilov et al. 2013, measured). At 125 mm: ζ = 0.00496 (wall) + 0.00518 (skin) + 0.00039
-  (bulk). The head: Viola, Brun, Dollet & Gallaire (Phys. Fluids 28, 2016) wall friction ∝ V|V|^(−1/3) (mobile bubble surfaces:
-  beer's surface modulus 5–25 mN/m, Wierenga 2023, below Denkov's 30–100 mN/m), their measured α refitted on an effective depth
-  h_eff = ℓ/(n+1)(1 − e^(−(n+1)h/ℓ)), ℓ = R/ξ11 (5.36 per m, ±20 %), scaled to stout (bubbles 0.2 mm, Ronteltap 1989; γ 45 mN/m).
-  It acts at the wall at 24 angles, so it stays right for a swirl. Uncertain by a factor of a few; against the only beer measurement
-  (Rubio-Iñiguez et al., Lat. Am. J. Phys. Educ. 18(2), 2024: decay times 0.95–1.5 s, head thickness not reported) it may be 3–5×
-  too strong if their heads were about 10 mm.
-- The pour: a weir at each angle of the rim, C_d = 1.0 and the breaking cap 2.0 R/ξ11, fitted to the 3D solver's 24 spill runs
-  (`tools/fig12/spill-fit.cjs`): spilled mass 5–23 % low, typical 15 %; the largest lean of violent swings 20–30 % low.
-- The cart (`stout-cart.js`): new options, all 0 by default (the page and every saved run unchanged): rolling resistance, gearbox
-  dry and viscous friction, air drag (`Cart.resist`); the road kind `drawn` (a monotone cubic through the reader's points).
+**Friction on the glass.** The glass holds the stout still at its surface (no slip). The layer in which the stout's speed
+goes from zero to the speed of the core is the Stokes layer: 0.44 mm thick at the swing's 3.4 Hz with the stout's
+viscosity 2.05×10⁻⁶ m²/s, far thinner than a grid cell. Its stress on the core was derived in Wolfram 15.0.1 from the
+diffusion of momentum into the wall: τ(t) = ρ√ν ∫ K(t − t′) U̇(t′) dt′ with K(t) = 1/√(πt), U the core's slip along the wall.
+Four checks came out exact: the diffusion equation, the wall started suddenly (Stokes's first problem, ρU√(ν/πt)), the
+steadily shaken wall (μ(1 − i)U/δ), and the energy balance (the work of the wall stress equals the dissipation in the
+layer). `tools/fig12/wall_kernel.py` writes K as 12 exponentials (`public/data/fig12/wall-kernel.json`; worst error
+0.06 % in strength and 0.03° in timing over 0.05–200 Hz), so each wall face carries 12 numbers of memory, each updated
+exactly over a step. `Fluid` applies the stress, with the option `wallFriction` (off by default; `tools/fig12/same.cjs`
+still prints `sha256 7747da757ea9d800`), on every velocity face next to the side wall or the floor, with the area it
+carries: the floor sums to 0.000834 m² against πR(0)² = 0.000836 m² on the 3 mm grid; 2 % of the side area lies on cells
+with no open face of a component and is dropped.
 
-**Stepping** (`FixedStepper`): exact 1 ms steps, as many as the real time asks, at most 100 a frame; the store is attached for the
-frame's last step only. 2000 steps bit-identical for frames of 16.7 ms and of mixed 4–31 ms (`modal-check.cjs`). This also removes
-the glitch traced on 11 November 2026: the processor path advanced 5, 10 or 15 ms a frame in an irregular mix (734 frames of 10 ms,
-625 of 15 ms over 60 s at a steady 44 ms a frame), and the graphics-chip path froze while a batch was on the chip and jumped after.
+**What the first test showed** (`tools/fig12/decay-3d.cjs`, 125 mm fill, free swing after a tilt). The wall draws
+28–31 µW from a swing of about 170 µJ, the right size. But the solver's own errors on the 3 and 4 mm grids are as large as
+this friction: with friction off, the swing's kinetic energy falls from about 180 µJ to about 20 µJ in 8 s and reappears
+as surface roughness (a floor of 60–80 µJ in the surface's potential energy, from the particle count per column) and a
+slow, wandering tilt. A finer grid is being measured. Until the solver passes grid convergence and the energy budget,
+nothing of this is shown on the page.
 
-**Measured on the page** (headless Chromium, 390 px, DPR 3, the site's protocol): 1× CPU 60.0 fps, frames 16.7 ms, real time 1.000;
-4× CPU 24.8 fps, real time 0.93 (before: 12 fps and 0.05 of real time). At 4× the scripts take about 11 ms a frame (drawing 8.4);
-the rest is the headless browser's software painting, which a phone does on its graphics chip. `notes/fig12/panel-test2.cjs`: 231
-checks, none differ, at 1600, 1100, 390 px; `notes/fig12/test.cjs`: real time, push, drag, no errors.
-
-**Checked against the 3D solver** (runs in `notes/fig12/runs/`): small swings (the 10 mm bump: 23.7 against 25.0 mm); vertical
-jolts on a swinging stout (`heave-3d.cjs`: the reversal reproduced, odd part 7.6/7.5 against 7.7/8.4 mm); softening at 75–140 mm on
-3 and 4 mm grids (`backbone-3d.cjs`, stage C): with slope terms 0.57, vertical wall 0.59 percentage points rms from the 3D, whose own
-grid spread is as large; spill (above); random roads by regime (stage E, `notes/fig12/validation.md`).
-
-**The 3D reference itself** (`tools/fig12/tilt-exact.cjs`): a push held steady tilts the surface into the plane 2 R(h) a/g in any
-glass. The 4 mm grid misses it by up to 46 % on the flared wall (75 mm fill, 2.5 m/s²) and by 23 % at 100 and 125 mm; the 3 mm grid by
-5–6 % at 75–125 mm and 13–23 % at 140 mm. Since 11 November 2026 the validation's reference is the 3 mm grid.
-
-**Validation (stage E)**: the first run (4 mm grid, every case judged) failed in fills, gentle and vertical, nearly all on swings
-the 3D solver does not resolve. With the site owner's agreement only resolvable swings are judged (envelope windows over 3 mm,
-cases whose 3D lean exceeds 5 mm), the rest counted and reported; the history stays in `notes/fig12/validation.md`. The pour is
-reported, not judged: on single hard pushes the model spills 5–23 % less than the 3D solver, but on roads that just lift the crest
-over the rim it pours more, up to about twice at 125 mm fill, where an overflow thinner than one cell can hardly leave the 3D grid.
-
-**Drawing the pour**: the model emits a drop for each 0.05 g it pours at each angle of the rim (outward at the weir's speed); the
-World lets them fall (`dropsFrom(list, visualOnly)`: the spilled mass stays the model's computed volume).
-
-**The pipeline on GitHub** (standard runners only, free): `fig12-modes.yml` (stages B, D: checks, every fill height, data committed
-only if its numbers changed: `tools/fig12/same_data.py`), `fig12-3d.yml` (stage C: 3D runs into `notes/fig12/runs/3d/`), and
-`fig12-validate.yml` (stage E: 250 roads, report, then the verdict). A push made with GITHUB_TOKEN starts no workflow run, so the
-pipeline cannot loop. Data: `public/data/fig12/modes.json` (239 kB), `nm.json` (65 kB).
-
-**The page**: new controls "The pint" (fill, head 0–20 mm, friction switch) and "your own road" (an editor, 0–12 m, presets).
+**The page on this branch** does not run at present: its script and data panel were built around the removed parts. It
+is being replaced by a page that only plays back solutions computed on GitHub. The page on `main` is unchanged.
 
 ## What the page does
 
@@ -304,6 +271,8 @@ downloaded and read at the sections cited; Karnopp et al. (1974) only in its abs
 
 ## The live model and the controllers (6 November 2026)
 
+*Removed from the code on 11 November 2026 with the mode model; kept here as history.*
+
 **Default: the live model** (`ModalFluid` in `stout-cart.js`; the page without a query string, or `?model=live`). The stout as its
 first three sloshing modes m = 1, n = 1–3 of a cylinder of radius R(h) (note, eq. 54): frequencies 3.421, 5.821, 7.365 Hz; damping
 ζ₁ = 0.0053 (Abramson eq. 4.10b, K = 5.23), ζₙ = ζ₁ √(ω₁/ωₙ); forced by the glass's acceleration, with ω² scaled by 1 + a_z/g;
@@ -332,11 +301,15 @@ the motor current with the rim as the limit; the first mode's phase portrait (q�
 
 ## Phase 1 of the real-time fluid (6 November 2026)
 
+*Removed from the code on 11 November 2026 with the mode model; kept here as history.*
+
 `notes/fig12/phase1.md`: measurements before choosing how to put a real fluid in real time under control: the solver's cost by part,
 a minimal GPU pressure solve, the live modes against the 3D solver from rest (`linearity.cjs`, runs in `notes/fig12/runs/linearity-*.json`),
 the contact model on a rough road, and road roughness from ISO 8608, washboard and Belgian block sources. The page is unchanged.
 
 ## Part 1 of the real-time fluid: control through sensors (6 November 2026)
+
+*Removed from the code on 11 November 2026 with the mode model; kept here as history.*
 
 Numa's decision (route 3): the controller acts on the real 3D fluid, in slow motion, said plainly. Since then nothing reads the
 stout's state directly; both models are controlled the same way.
@@ -377,6 +350,8 @@ stout's state directly; both models are controlled the same way.
   d2 = −1.083355); for the glass, h/R = 3.197: d1 = 1.563298, d2 = −1.210550 (`notes/fig12/runs/nm_coeffs.txt`).
 
 ## Part 2: the nonlinear live model (6 November 2026)
+
+*Removed from the code on 11 November 2026 with the mode model; kept here as history.*
 
 `NMFluid` in `stout-cart.js` (the page's live model since part 2; `ModalFluid` stays for `linearity.cjs modal` and
 `control.cjs modal`): Lukovsky's five-mode Narimanov–Moiseev system (FLT 2016 eqs. 2.17–2.18 with Ir = 1 = eq. 2.23) for
@@ -479,6 +454,8 @@ processor's solver at 4 mm (half glass, slow motion) and says so in the caption.
 
 ## Part B: motor and active suspension, one design (7 November 2026)
 
+*Removed from the code on 11 November 2026 with the mode model; kept here as history.*
+
 - **Note §8.6 ★** (B1)–(B3), (B2a), Table 3b, Key result. Linearised on a level road the plant splits into (speed, swing)
   driven by the current and (body, wheel) driven by the active force u_s; the swing is not controllable from u_s
   (linearly); a_x is additive, a_z parametric. Answer to "how many springs": two (suspension and tyre), one of them with an
@@ -501,6 +478,8 @@ processor's solver at 4 mm (half glass, slow motion) and says so in the caption.
 - **Reviews**: `notes/fig12/check-8-6.md`, `referee-8-6.md`, `check-11-10.md`; findings applied.
 
 ## Part C: a mug of coffee beside the pint (7 November 2026)
+
+*Removed from the code on 11 November 2026 with the mode model; kept here as history.*
 
 - **Note §14** (C1)–(C3), Table 7, sources [27]–[29] (Mayer & Krechetnikov 2012, Sauret et al. 2015, Han 2016; what was read
   and how: `notes/fig12/coffee-sources.md`). Later sections renumbered 15–17.

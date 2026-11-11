@@ -16,7 +16,7 @@ const ON = process.env.ON ? +process.env.ON : null, ROAD = process.env.ROAD || n
   const page = await b.newPage(); const cons = [];
   page.on('pageerror', (e) => cons.push('page error: ' + e.message)); page.on('console', (m) => { if (m.type() === 'error') cons.push(m.text().slice(0, 300)); });
   await page.goto(`http://localhost:${port}/none`);
-  for (const s of ['guinness-glass.js', 'stout-nm.js', 'stout-cart.js', 'stout-gpu.js']) await page.addScriptTag({ url: '/scripts/' + s });
+  for (const s of ['guinness-glass.js', 'stout-cart.js', 'stout-gpu.js']) await page.addScriptTag({ url: '/scripts/' + s });
   const r = await page.evaluate(async ({ bump, ctrl, nB, T, ON, ROAD, V0 }) => {
     const dev = await StoutGpu.GpuFluid.device(); if (!dev) return { error: 'no WebGPU device' };
     const G = GUINNESS_GLASS, f = new StoutGpu.GpuFluid({ dx: 0.004, profile: G, h0: 0.125, H: (G.R.length - 1) * G.dz + 0.03 });

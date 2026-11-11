@@ -708,13 +708,21 @@
       const comp = this.wComp[e], f = this.wFace[e], x = P[3 * e], y = P[3 * e + 1], z = P[3 * e + 2];
       const uc = [0, 0, 0];
       for (let c = 0; c < 3; c++) uc[c] = c === comp ? arr[c][f] : this.sample(c, x, y, z);
-      const un = uc[0] * N[3 * e] + uc[1] * N[3 * e + 1] + uc[2] * N[3 * e + 2];
-      const Ut = uc[comp] - un * N[3 * e + comp], dU = Ut - Up[e];
+      // the slip is linear in this face's own velocity: U_t = p u + o, p = 1 - n_c^2, o from the other components (held)
+      const nc = N[3 * e + comp], un = uc[0] * N[3 * e] + uc[1] * N[3 * e + 1] + uc[2] * N[3 * e + 2];
+      const p = 1 - nc * nc, o = uc[comp] - un * nc - p * uc[comp];
+      // the stress at the end of the step, tau/rho = sqrt(nu) (S0 + R (U_t' - U_prev)), with S0 the decayed memory and R the
+      // weight of this step's rise; solved for the new velocity u' = u - G tau/rho, G = dt A / V (implicit in the rise: a
+      // face with little liquid behind much wall is slowed, never thrown back; the explicit form ran away on 2 mm, measured)
+      let S0 = 0, R = 0;
+      for (let q = 0; q < NK; q++) { S0 += a[q] * dec[q] * H[e * NK + q]; R += a[q] * rise[q]; }
+      const G = dt * sq * this.wArea[e] / this.wVol[e], u0 = uc[comp];
+      const u1 = (u0 - G * (S0 + R * (o - Up[e]))) / (1 + G * R * p);
+      const Ut = p * u1 + o, dU = Ut - Up[e];
       let s = 0;
       for (let q = 0; q < NK; q++) { const h = dec[q] * H[e * NK + q] + dU * rise[q]; H[e * NK + q] = h; s += a[q] * h; }
       Up[e] = Ut;
-      const dv = -dt * sq * s * this.wArea[e] / this.wVol[e];
-      arr[comp][f] += dv;
+      arr[comp][f] = u1;
       work += sq * s * this.wArea[e] * Ut;   // tau A U_t / rho: power drawn from the core per unit density (half glass)
     }
     this.wallPower = 2 * this.rho * work;   // W, whole glass
@@ -1192,276 +1200,6 @@
     return (1 - tx) * (1 - ty) * at(i, j) + tx * (1 - ty) * at(i + 1, j) + (1 - tx) * ty * at(i, j + 1) + tx * ty * at(i + 1, j + 1);
   };
 
-  /* ------------------------------------------------------------- modal fluid */
-  // The stout as its first sloshing modes, for real time (the lecture note, section 4): the modes m = 1, n = 1..N of a
-  // circular cylinder of the glass's radius at the surface, R(h), forced by the glass's acceleration,
-  //     q_n'' + 2 zeta_n w_n q_n' + w_n^2 (1 + a_z/g) q_n = -beta_n a_x,   w_n^2 = g k_n tanh(k_n h),  k_n = xi_n / R(h),
-  //     beta_n = 2 xi_n tanh(xi_n h / R) / (xi_n^2 - 1),
-  // with q_n the height of mode n at the front wall. The surface is eta = sum q_n J1(k_n r)/J1(xi_n) cos(theta); the stout's
-  // momentum relative to the glass is P_x = sum rho pi R^3 / xi_n^2 q_n' (note, eq. 18). Above the rim the stout pours out over
-  // the rim as over a sharp-crested weir: per unit length of rim C_d (2/3) sqrt(2 g) D^{3/2}, D the height of the stout at the
-  // wall above the rim; the poured volume is subtracted (the fill falls, the crest shrinks) and its relative momentum counted.
-  // The tulip is not a cylinder: near its surface it nearly is (R'(h) = -0.04), and the deep cylinder of radius R(h) swings
-  // within 0.4 % of the 3D solver's frequency once the grid error is taken out (note, section 4.6).
-  const XI = [1.841184, 5.331443, 8.536316];
-  // J1 by its power series (|x| < 12 here; terms until negligible)
-  function J1(x) { let t = x / 2, s = 0; for (let k = 0; k < 60; k++) { s += t; t *= -(x * x / 4) / ((k + 1) * (k + 2)); if (Math.abs(t) < 1e-16) break; } return s; }
-  function ModalFluid(o) {
-    o = o || {};
-    this.modal = true;
-    this.profile = o.profile || null;
-    if (this.profile) { const P = this.profile.R; this.zRim = (P.length - 1) * this.profile.dz; this.R = Math.max.apply(null, P); this.Rrim = P[P.length - 1]; }
-    else { this.R = o.R || 0.04; this.zRim = o.zRim || 0.15; this.Rrim = this.R; }
-    this.h0 = o.h0 || 0.125; this.rho = o.rho || 1000; this.g = o.g || 9.81; this.nu = o.nu != null ? o.nu : 1e-6;
-    this.N = Math.min(3, o.nModes || 3);
-    this.Cd = o.Cd != null ? o.Cd : 0.62;
-    this.Rbox = this.R + 0.01; this.H = this.zRim + 0.03; this.dx = o.dx || 0.004;
-    this.h = this.h0; this.V = this.volumeTo(this.h0); this.mLiquid = this.rho * this.V; this.V0 = this.V;
-    // damping of mode 1 from the wall boundary layer (Abramson SP-106 eq. 4.10b, K = 5.23 measured): zeta_1 = K/(2 pi)
-    // sqrt(nu / (g^1/2 R^3/2)); the higher modes by the Stokes-layer scaling zeta ~ (nu / (w R^2))^1/2, zeta_n = zeta_1 (w_1/w_n)^1/2
-    this.zetaScale = o.zetaScale != null ? o.zetaScale : 1;
-    this.q = new Float64Array(this.N); this.qd = new Float64Array(this.N);
-    this.J1xi = XI.map(J1);
-    // the volume of mode n's crest on the high half of the surface disc per unit q: 2 R^2 int_0^1 J1(xi s)/J1(xi) s ds (trapezoid)
-    this.cV = XI.map((xi, n) => { let a = 0; const M = 400; for (let k = 1; k <= M; k++) { const s0 = (k - 1) / M, s1 = k / M; a += 0.5 * (J1(xi * s0) * s0 + J1(xi * s1) * s1) / M; } return 2 * a / this.J1xi[n]; });
-    this.t = 0; this.np = 0; this.npStart = 0; this.mp = 0; this.spilled = 0; this.spillNow = 0; this.spillPx = 0; this.spillPz = 0; this.spillList = [];
-    this.spillV = 0; this.spillRate = 0; this.cgIters = 0;
-    // the column grid of the 3D solver (half glass), filled from the modes, so the page's store and drawing read alike
-    const dx = this.dx; this.nx = 2 * Math.ceil(this.R / dx); this.ny = Math.ceil(this.R / dx); this.nz = Math.ceil(this.H / dx); this.x0 = -(this.nx / 2) * dx;
-    this.colH = new Float64Array(this.nx * this.ny);
-    const F = Float64Array; this.px = new F(0); this.py = new F(0); this.pz = new F(0); this.pu = new F(0); this.pv = new F(0); this.pw = new F(0);
-    this.modes();
-  }
-  ModalFluid.prototype.Rz = Fluid.prototype.Rz;
-  ModalFluid.prototype.dRz = Fluid.prototype.dRz;
-  ModalFluid.prototype.volumeTo = Fluid.prototype.volumeTo;
-  // the fill height that holds the volume V (bisection on volumeTo)
-  ModalFluid.prototype.heightOf = function (V) { let a = 0, b = this.zRim; for (let k = 0; k < 40; k++) { const m = 0.5 * (a + b); if (this.volumeTo(m) < V) a = m; else b = m; } return 0.5 * (a + b); };
-  // the modes' constants at the present fill
-  ModalFluid.prototype.modes = function () {
-    const g = this.g, h = this.h, Rs = this.Rz(Math.min(h, this.zRim)); this.Rs = Rs;
-    this.w = []; this.beta = []; this.zeta = []; this.Pc = [];
-    const z1 = this.zetaScale * 5.23 / (2 * Math.PI) * Math.sqrt(this.nu / (Math.sqrt(g) * Math.pow(Rs, 1.5)));
-    for (let n = 0; n < this.N; n++) {
-      const xi = XI[n], k = xi / Rs, th = Math.tanh(k * h);
-      this.w.push(Math.sqrt(g * k * th)); this.beta.push(2 * xi * th / (xi * xi - 1));
-      this.Pc.push(this.rho * Math.PI * Rs * Rs * Rs / (xi * xi));
-    }
-    for (let n = 0; n < this.N; n++) this.zeta.push(z1 * Math.sqrt(this.w[0] / this.w[n]));
-  };
-  // the surface height above the floor at (x, y) in the glass frame
-  ModalFluid.prototype.heightAt = function (x, y) {
-    const r = Math.hypot(x, y), Rs = this.Rs; if (r < 1e-9) return this.h;
-    const c = x / r, rr = Math.min(r, Rs); let e = 0;
-    for (let n = 0; n < this.N; n++) e += this.q[n] * J1(XI[n] * rr / Rs) / this.J1xi[n];
-    return this.h + e * c;
-  };
-  ModalFluid.prototype.columnHeightAt = ModalFluid.prototype.heightAt;
-  // the surface height over each column centre of the 3D solver's grid (the store's h_col)
-  ModalFluid.prototype.columnHeights = function () {
-    const nx = this.nx, ny = this.ny, dx = this.dx, H = this.colH;
-    for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) H[i + nx * j] = this.heightAt(this.x0 + (i + 0.5) * dx, (j + 0.5) * dx);
-    return H;
-  };
-  ModalFluid.prototype.levelSet = function () {};
-  ModalFluid.prototype.wallLift = function () { let s = 0; for (let n = 0; n < this.N; n++) s += this.q[n]; return s; };   // eta at the wall = wallLift cos(theta)
-  ModalFluid.prototype.momentum = function () { let p = 0; for (let n = 0; n < this.N; n++) p += this.Pc[n] * this.qd[n]; return [p, 0]; };
-  ModalFluid.prototype.liquidMass = function () { return this.rho * this.V; };
-  ModalFluid.prototype.maxSpeed = function () { return 0; };
-  // one step dt with the glass's acceleration (ax, az): the modes by symplectic Euler in substeps of at most 0.5 ms, then the pour
-  ModalFluid.prototype.step = function (dt, ax, az) {
-    const n = Math.max(1, Math.ceil(dt / 0.0005)), hs = dt / n, gf = 1 + az / this.g;
-    for (let s = 0; s < n; s++) for (let m = 0; m < this.N; m++) {
-      const w = this.w[m];
-      this.qd[m] += hs * (-w * w * gf * this.q[m] - 2 * this.zeta[m] * w * this.qd[m] - this.beta[m] * ax);
-      this.q[m] += hs * this.qd[m];
-    }
-    // the pour over the rim: D(theta) = h + Q cos(theta) - z_rim on the arc where it is positive
-    const Q = this.wallLift(), g = this.g;
-    let dV = 0, dPx = 0;
-    if (h_over(this, Q) > 0) {
-      const K = 72;
-      for (let k = 0; k < K; k++) {
-        const th = 2 * Math.PI * (k + 0.5) / K, D = this.h + Q * Math.cos(th) - this.zRim;
-        if (D <= 0) continue;
-        const qw = this.Cd * (2 / 3) * Math.sqrt(2 * g) * Math.pow(D, 1.5), dVk = qw * this.Rrim * (2 * Math.PI / K) * dt;
-        dV += dVk; dPx += this.rho * dVk * Math.sqrt(2 * g * D) * Math.cos(th);   // leaves outward at about the weir's speed
-      }
-      dV = Math.min(dV, 0.5 * this.V);
-      // the crest pours out: shrink the modes so that the crest's volume on the high half falls by dV
-      let Vc = 0; for (let m = 0; m < this.N; m++) Vc += this.cV[m] * this.q[m] * this.Rs * this.Rs;
-      const f = Math.abs(Vc) > 1e-12 ? Math.max(0, 1 - dV / Math.abs(Vc)) : 1;
-      for (let m = 0; m < this.N; m++) { this.q[m] *= f; this.qd[m] *= f; }
-      this.V -= dV; this.h = this.heightOf(this.V); this.modes();
-    }
-    this.spillNow = dV > 0 ? 1 : 0; this.spillV += dV; this.spillRate = dV / dt; this.spillPx = dPx; this.spillPz = 0;
-    this.t += dt;
-    const D = this.ds;
-    if (D) {
-      for (let m = 0; m < this.N; m++) { D.set('q' + (m + 1), this.q[m]); D.set('qd' + (m + 1), this.qd[m]); D.set('w' + (m + 1), this.w[m]); }
-      D.set('h_l', this.h); D.set('V_l', this.V); D.set('R_s', this.Rs); D.set('spill_rate', this.spillRate); D.set('Q_wall', this.wallLift());
-    }
-  };
-  function h_over(f, Q) { return f.h + Math.abs(Q) - f.zRim; }
-
-  /* ---------------------------------------------------- nonlinear modal fluid */
-  // The stout as the Narimanov–Moiseev five-mode system of an upright circular cylinder of the surface's radius R(h)
-  // (Faltinsen, Lukovsky & Timokha, JFM 804 (2016), eqs. 2.17–2.18 with Ir = 1, which is Lukovsky's eq. 2.23; lecture note
-  // §14.4), over the whole glass, so it can swirl. Coordinates beta = (p0, p1, r1, p2, r2), lengths in units of R, time in
-  // sqrt(R/g): the surface is
-  //     eta = h + R [ R01 p0 + R11 (p1 cos th + r1 sin th) + R21 (p2 cos 2th + r2 sin 2th) ],   R_Mi(rho) = alpha_M J_M(k_M rho),
-  // plus the m = 1 modes n = 2, 3 of the linear live model (q[1], q[2]), which carry the wall's finer shape. The equations'
-  // coefficients come from tools/fig12/nm_coeffs.py (scripts/stout-nm.js), which derives them from FLT's integrals and
-  // reproduces their Table 1. The equations are linear in the accelerations: each substep solves a 5 x 5 system for them,
-  // then symplectic Euler. Heave scales gravity, sigma^2 -> sigma^2 (1 + a_z/g). Linear damping 2 zeta sigma beta' per mode
-  // (zeta of mode 1 from the wall's boundary layer, as in ModalFluid; the others scaled by (sigma_1/sigma)^1/2). A swirl is a
-  // broken left–right symmetry; a real glass always has a little asymmetry, so r1 starts at 1e-5 (a sideways swing s1 of 0.66 um at the wall), the seed.
-  const NMNAMES = ['p0', 'p1', 'r1', 'p2', 'r2'];
-  function Jm(m, x) { let t = Math.pow(x / 2, m); for (let k = 1; k <= m; k++) t /= k; let s = 0; for (let k = 0; k < 80; k++) { s += t; t *= -(x * x / 4) / ((k + 1) * (k + 1 + m)); if (Math.abs(t) < 1e-17) break; } return s; }
-  function NMFluid(o) {
-    o = o || {};
-    ModalFluid.call(this, o);
-    const C = o.nmCoeffs || (typeof STOUT_NM !== 'undefined' ? STOUT_NM : (typeof require === 'function' ? require('./stout-nm.js') : null));
-    if (!C) throw new Error('NMFluid needs scripts/stout-nm.js');
-    this.nm = true; this.C = C;
-    this.k = [C.k['0'], C.k['1'], C.k['2']]; this.Rw = [C.R0, C.R1, C.R2];            // R_M1(1): the mode's height at the wall
-    this.alpha = [0, 1, 2].map((m) => this.Rw[m] / Jm(m, this.k[m]));
-    this.sig2 = NMNAMES.map((n) => C.sigma2[n]);
-    const z1 = this.zeta[0];
-    this.zetaNM = this.sig2.map((s2) => z1 * Math.sqrt(Math.sqrt(this.sig2[1] / s2)));
-    // the equations: [coef, index of the acceleration it multiplies or -1, factors [[var, power]...], isLinear, isForce]
-    const vars = {}; NMNAMES.forEach((n, i) => { vars[n] = i; vars[n + 'd'] = 5 + i; vars[n + 'dd'] = 10 + i; });
-    this.eqs = NMNAMES.map((n) => C.eqs[n].map(([c, mon]) => {
-      let dd = -1, force = false; const fac = [];
-      for (const tok of mon.replace(/\*\*/g, '^').split('*')) {
-        const [v, pw] = tok.split('^'); if (v === 'a_x') { force = true; continue; }
-        const id = vars[v]; if (id >= 10) dd = id - 10; else fac.push([id, pw ? +pw : 1]);
-      }
-      return [c, dd, fac, mon === n, force];
-    }));
-    this.b = new Float64Array(5); this.bd = new Float64Array(5);
-    this.b[2] = o.swirlSeed != null ? o.swirlSeed : 1e-5;
-    // the whole glass: columns over -R..R in y (the half-glass grid of the 3D solver cannot hold a swirl)
-    this.ny = 2 * Math.ceil(this.R / this.dx); this.y0 = -(this.ny / 2) * this.dx;
-    this.colH = new Float64Array(this.nx * this.ny);
-    this.ax2 = 0; this.tauScale = Math.sqrt(this.g / this.Rs);
-    this.syncQ();
-  }
-  NMFluid.prototype = Object.create(ModalFluid.prototype);
-  NMFluid.prototype.constructor = NMFluid;
-  // wall heights in metres: q[0] = R R11(1) p1 (the swing at theta = 0, as in ModalFluid), s1 = R R11(1) r1 (the swing at
-  // theta = pi/2: the swirl's part), c0 = R R01(1) p0, c2 = R R21(1) p2, s2 = R R21(1) r2
-  NMFluid.prototype.syncQ = function () {
-    const R = this.Rs, ts = Math.sqrt(this.g / R), W = this.Rw;
-    this.q[0] = R * W[1] * this.b[1]; this.qd[0] = R * W[1] * this.bd[1] * ts;
-    this.s1 = R * W[1] * this.b[2]; this.s1d = R * W[1] * this.bd[2] * ts;
-    this.c0 = R * W[0] * this.b[0]; this.c2 = R * W[2] * this.b[3]; this.s2 = R * W[2] * this.b[4];
-  };
-  NMFluid.prototype.shape = function (m, rho) { return this.alpha[m] * Jm(m, this.k[m] * rho); };
-  NMFluid.prototype.heightAt = function (x, y) {
-    const r = Math.hypot(x, y), Rs = this.Rs, rho = Math.min(r, Rs) / Rs, th = Math.atan2(y, x), b = this.b;
-    let e = this.shape(0, rho) * b[0] + this.shape(1, rho) * (b[1] * Math.cos(th) + b[2] * Math.sin(th)) + this.shape(2, rho) * (b[3] * Math.cos(2 * th) + b[4] * Math.sin(2 * th));
-    e *= Rs;
-    for (let n = 1; n < this.N; n++) e += this.q[n] * J1(XI[n] * rho) / this.J1xi[n] * Math.cos(th);
-    return this.h + e;
-  };
-  NMFluid.prototype.columnHeightAt = NMFluid.prototype.heightAt;
-  NMFluid.prototype.columnHeights = function () {
-    const nx = this.nx, ny = this.ny, dx = this.dx, H = this.colH;
-    for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) H[i + nx * j] = this.heightAt(this.x0 + (i + 0.5) * dx, this.y0 + (j + 0.5) * dx);
-    return H;
-  };
-  // the height of the stout at the wall at angle th, above the floor
-  NMFluid.prototype.wallAt = function (th) {
-    const b = this.b, W = this.Rw; let e = this.Rs * (W[0] * b[0] + W[1] * (b[1] * Math.cos(th) + b[2] * Math.sin(th)) + W[2] * (b[3] * Math.cos(2 * th) + b[4] * Math.sin(2 * th)));
-    for (let n = 1; n < this.N; n++) e += this.q[n] * Math.cos(th);
-    return this.h + e;
-  };
-  NMFluid.prototype.wallLift = function () { let m = 0; for (let k = 0; k < 72; k++) m = Math.max(m, this.wallAt(2 * Math.PI * k / 72) - this.h); return m; };
-  // relative momentum along the road: rho d/dt int int x zeta dA, exact for a single-valued surface; only the m = 1 modes
-  // contribute, rho pi R^3 / xi_n^2 times the rate of each wall height (note, eq. 18), as in ModalFluid. Across (P_y, from s1)
-  // it is kept for the store; the cart has no sideways motion. The vertical part, rho d/dt int int zeta^2/2 dA, is of second
-  // order in the swing and is not handed to the cart (as in the linear model).
-  NMFluid.prototype.momentum = function () { this.Py = this.Pc[0] * this.s1d; return ModalFluid.prototype.momentum.call(this); };
-  // the accelerations of the five coordinates at the present state, forcing ax, az (m/s^2): solves the 5 x 5 system
-  NMFluid.prototype.accel = function (ax, az, out) {
-    const st = new Float64Array(15); for (let i = 0; i < 5; i++) { st[i] = this.b[i]; st[5 + i] = this.bd[i]; }
-    const A = [[], [], [], [], []], rhs = [0, 0, 0, 0, 0], gf = Math.max(0, 1 + az / this.g), axn = ax / this.g;   // in free fall (a_z < -g) the stout is weightless, no restoring force (the model cannot follow it leaving the floor)
-    for (let i = 0; i < 5; i++) {
-      for (let j = 0; j < 5; j++) A[i][j] = 0;
-      for (const [c, dd, fac, lin, force] of this.eqs[i]) {
-        let v = c; for (const [id, pw] of fac) v *= pw === 1 ? st[id] : Math.pow(st[id], pw);
-        if (force) { rhs[i] -= v * axn; continue; }
-        if (dd >= 0) A[i][dd] += v; else rhs[i] -= lin ? v * gf : v;
-      }
-      rhs[i] -= 2 * this.zetaNM[i] * Math.sqrt(this.sig2[i]) * this.bd[i];
-    }
-    if (this.ay) rhs[2] -= this.C.eqs.p1.find((t) => t[1] === 'a_x')[0] * this.ay / this.g;
-    // Gaussian elimination with partial pivoting
-    for (let c = 0; c < 5; c++) {
-      let p = c; for (let r = c + 1; r < 5; r++) if (Math.abs(A[r][c]) > Math.abs(A[p][c])) p = r;
-      [A[c], A[p]] = [A[p], A[c]]; [rhs[c], rhs[p]] = [rhs[p], rhs[c]];
-      for (let r = c + 1; r < 5; r++) { const f = A[r][c] / A[c][c]; for (let k = c; k < 5; k++) A[r][k] -= f * A[c][k]; rhs[r] -= f * rhs[c]; }
-    }
-    for (let c = 4; c >= 0; c--) { let s = rhs[c]; for (let k = c + 1; k < 5; k++) s -= A[c][k] * out[k]; out[c] = s / A[c][c]; }
-    return out;
-  };
-  NMFluid.prototype.step = function (dt, ax, az) {
-    const n = Math.max(1, Math.ceil(dt / 0.0005)), hs = dt / n, gf = Math.max(0, 1 + az / this.g), ts = Math.sqrt(this.g / this.Rs), ht = hs * ts;
-    const acc = new Float64Array(5);
-    for (let s = 0; s < n; s++) {
-      for (let m = 1; m < this.N; m++) {                                   // the linear modes n = 2, 3 along the road
-        const w = this.w[m];
-        this.qd[m] += hs * (-w * w * gf * this.q[m] - 2 * this.zeta[m] * w * this.qd[m] - this.beta[m] * ax);
-        this.q[m] += hs * this.qd[m];
-      }
-      this.accel(ax, az, acc);
-      for (let i = 0; i < 5; i++) { this.bd[i] += ht * acc[i]; this.b[i] += ht * this.bd[i]; }
-      // Breaking. A crest breaks once its downward acceleration reaches g, at a wall amplitude g / w11^2 = R / xi11 (21.2 mm
-      // here); the theory above assumes it does not. Beyond 1.5 times that, the model clips the swing (the five coordinates and
-      // their rates scaled back so that the swing's wall amplitude sqrt(q1^2 + s1^2) is 1.5 R / xi11): the crest that would
-      // rise higher breaks and its energy is lost; `breaks` counts the substeps where this happened.
-      // A modelling choice standing for breaking, not a theory of it; the 3D solver is the reference there.
-      const A1 = this.Rs * this.Rw[1] * Math.hypot(this.b[1], this.b[2]), Acap = 1.5 * this.Rs / XI[0];
-      if (A1 > Acap) { const f = Acap / A1; for (let i = 0; i < 5; i++) { this.b[i] *= f; this.bd[i] *= f; } this.breaks = (this.breaks || 0) + 1; this.broke = 1; }
-      // The second-order coordinates (p0 and p2, r2) are held to the same crest by the same rule; driven hard for seconds they
-      // can otherwise run away (found by tools/fig12/coffee.cjs: the pint walked at 2.5 Hz, 10 mm, poured 427 ml in 1 s).
-      const A0 = this.Rs * Math.abs(this.Rw[0] * this.b[0]), A2 = this.Rs * Math.abs(this.Rw[2]) * Math.hypot(this.b[3], this.b[4]);
-      if (A0 > Acap) { const f = Acap / A0; this.b[0] *= f; this.bd[0] *= f; this.breaks2 = (this.breaks2 || 0) + 1; this.broke = 1; }
-      if (A2 > Acap) { const f = Acap / A2; this.b[3] *= f; this.bd[3] *= f; this.b[4] *= f; this.bd[4] *= f; this.breaks2 = (this.breaks2 || 0) + 1; this.broke = 1; }
-      for (let m = 1; m < this.N; m++) if (Math.abs(this.q[m]) > Acap) { const f = Acap / Math.abs(this.q[m]); this.q[m] *= f; this.qd[m] *= f; this.breaks = (this.breaks || 0) + 1; }
-    }
-    this.syncQ();
-    // the pour over the rim, as in ModalFluid, with the wall height of all modes at each angle
-    const g = this.g; let dV = 0, dPx = 0;
-    if (this.h + this.wallLift() > this.zRim) {
-      const K = 72;
-      for (let k = 0; k < K; k++) {
-        const th = 2 * Math.PI * (k + 0.5) / K, D = this.wallAt(th) - this.zRim;
-        if (D <= 0) continue;
-        const qw = this.Cd * (2 / 3) * Math.sqrt(2 * g) * Math.pow(D, 1.5), dVk = qw * this.Rrim * (2 * Math.PI / K) * dt;
-        dV += dVk; dPx += this.rho * dVk * Math.sqrt(2 * g * D) * Math.cos(th);
-      }
-      dV = Math.min(dV, 0.5 * this.V);
-      // the crest's volume above the mean, over the whole surface: shrink every mode by the share that poured out
-      let Vc = 0; const NR = 12, NT = 48;                               // int int max(0, eta - h) dA, midpoint rule
-      for (let i = 0; i < NR; i++) for (let k = 0; k < NT; k++) { const rr = this.Rs * (i + 0.5) / NR, th = 2 * Math.PI * (k + 0.5) / NT; Vc += Math.max(0, this.heightAt(rr * Math.cos(th), rr * Math.sin(th)) - this.h) * rr; }
-      Vc *= (this.Rs / NR) * (2 * Math.PI / NT);
-      const f = Vc > 1e-12 ? Math.max(0, 1 - dV / Vc) : 1;
-      for (let i = 0; i < 5; i++) { this.b[i] *= f; this.bd[i] *= f; }
-      for (let m = 1; m < this.N; m++) { this.q[m] *= f; this.qd[m] *= f; }
-      this.V -= dV; this.h = this.heightOf(this.V); this.modes(); this.syncQ();
-    }
-    this.spillNow = dV > 0 ? 1 : 0; this.spillV += dV; this.spillRate = dV / dt; this.spillPx = dPx; this.spillPz = 0;
-    this.t += dt;
-    const D = this.ds;
-    if (D) {
-      for (let m = 0; m < this.N; m++) { D.set('q' + (m + 1), this.q[m]); D.set('qd' + (m + 1), this.qd[m]); D.set('w' + (m + 1), this.w[m]); }
-      D.set('h_l', this.h); D.set('V_l', this.V); D.set('R_s', this.Rs); D.set('spill_rate', this.spillRate); D.set('Q_wall', this.wallLift());
-      if (D.has('s1')) { D.set('s1', this.s1); D.set('c0', this.c0); D.set('c2', this.c2); D.set('s2', this.s2); D.set('s1d', this.s1d); }
-    }
-  };
-
   /* ------------------------------------------------------------------- road */
   // The road: cosine bumps (the default), or a rough surface, made once into a table of heights every 0.5 mm.
   //   kind 'bumps'                 cosine bumps: centre, height, length
@@ -1615,6 +1353,7 @@
     this.Imax = o.Imax || 3;     // current limit of the drive, A
     this.tauI = o.tauI || 0.002; // time constant of the current loop, s
     this.ctrl = o.ctrl || 'speed';
+    if (!['off', 'speed', 'preview'].includes(this.ctrl)) throw new Error('controller ' + this.ctrl + ': the cart has open loop (off), speed (PI) and preview (PI + road preview); the slosh-model controllers were removed with the mode model');
     this.Ts = o.Ts || 0.001;     // controller sampling period, s
     const b = this.Ngear * this.Km / this.Rw;                 // force at the road per amp, N/A
     const M = this.Mb + this.ml + this.mw + this.Iw / (this.Rw * this.Rw) + this.Ngear * this.Ngear * this.Jm / (this.Rw * this.Rw);
@@ -1642,36 +1381,6 @@
   };
   // the same at the set speed on level road, with the static tyre load: what the open-loop current must balance
   Cart.prototype.resistAtSetSpeed = function () { return this.resist(this.v0, (this.Mb + this.ml + this.mw) * this.g); };
-  // LQR for the cart and the first sloshing mode, x = (dv, q, q', xi), u = di:
-  //   M_x dv' = b di - c_x dv,  q'' = -w^2 q - 2 zeta w q' - beta dv',  xi' = -dv;  minimise int (x' Q x + r u^2) dt.
-  // Weights by Bryson's rule: Q_ii = 1 / (largest acceptable x_i)^2, r = 1 / I_max^2. The Riccati equation is solved by
-  // integrating its flow dP/dt = A'P + PA - P B B' P / r + Q from P = 0 to its steady state. Gains K = B'P / r (A per unit).
-  Cart.prototype.lqrGains = function () {
-    if (this._K && this._Kfor === this.sloshMode) return this._K;
-    const m = this.sloshMode || { w: 2 * Math.PI * 3.42, zeta: 0.005, beta: 1.54 }, Mx = this.massX(), b = this.bForce(), cx = this.cx;
-    const w = m.w, z = m.zeta, be = m.beta;
-    const A = [[-cx / Mx, 0, 0, 0], [0, 0, 1, 0], [be * cx / Mx, -w * w, -2 * z * w, 0], [-1, 0, 0, 0]];
-    const B = [b / Mx, 0, -be * b / Mx, 0];
-    const lim = this.lqrLimits || [0.05, 0.002, 0.002 * w, 0.02];
-    const Q = lim.map((v) => 1 / (v * v)), r = 1 / (this.Imax * this.Imax);
-    let P = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]];
-    const dt = 2e-5;
-    for (let it = 0; it < 400000; it++) {
-      const PB = P.map((row) => row.reduce((a, v, j) => a + v * B[j], 0));
-      let dmax = 0;
-      const Pn = P.map((row, i) => row.map((v, j) => {
-        let d = Q[i] * (i === j ? 1 : 0) - PB[i] * PB[j] / r;
-        for (let k = 0; k < 4; k++) d += A[k][i] * P[k][j] + P[i][k] * A[k][j];
-        dmax = Math.max(dmax, Math.abs(d) / (Math.abs(v) + 1));
-        return v + dt * d;
-      }));
-      P = Pn;
-      if (dmax < 1e-7 && it > 1000) break;
-    }
-    const K = [0, 1, 2, 3].map((j) => B.reduce((a, v, i) => a + v * P[i][j], 0) / r);
-    this._K = K; this._Kfor = this.sloshMode; this.lqrP = P;
-    return K;
-  };
   // The active suspension's LQR (Part B): the quarter car about its static state, y = (s, v_b, v_w, d) with s the stroke
   // z_b - z_w - s_0, v_b, v_w the body's and the wheel's vertical speeds, d = z_a - z_w - d_0 the tyre's compression; the
   // force u between body and axle; the road's vertical speed z_a' (unknown) as the disturbance.
@@ -1724,26 +1433,6 @@
   Cart.prototype.sample = function () {
     const i0 = this.resistAtSetSpeed() / this.bForce(), e = this.v0 - this.vx;
     if (this.ds) { this.ds.set('v_s', this.vx); this.ds.set('xi_s', this.xi); this.ds.set('vzb_s', this.vzb); }
-    // the sensors and the observer, at every sample whatever the controller: the encoder's speed, the probes' newest
-    // reading if the fluid has stepped since the last sample, the current held over the last sample as the input
-    let s = null;
-    if (this.obs) {
-      const pr = this.probe, nv = this.noiseV ? this.noiseV * this.rng.gauss() : 0, yv = this.vx + nv;
-      this.nv = nv;
-      const yq = pr && pr.fresh ? pr.y : null;
-      if (pr) pr.fresh = false;
-      // the joint controller puts the heave into the filter's model: the body accelerometer's reading, taken at the sample
-      this.azMeas = this.azb;
-      s = this.obs.update(this.uPrev, yv, yq, this.ctrl === 'joint' ? this.azMeas : null);
-      this.uPrev = this.i;                                      // the measured current, held until the next sample
-      const D = this.ds;
-      if (D && D.has('xh')) {                                   // the page declares these; tools run without a store
-        const o = this.obs, put = (k, a) => { const t = D.get(k); for (let n = 0; n < a.length; n++) t[n] = a[n]; D.touch(k); };
-        D.set('n_v', nv); D.set('y_v', yv); D.set('q_fresh', o.fresh); D.set('u_prev', o.uPrev); D.set('y_q_used', yq === null ? NaN : yq);
-        put('xh_prev', o.xPrev); put('xh_pri', o.xPri); put('xh', o.x); put('nu_k', o.nu);
-        put('P_prev', [].concat.apply([], o.PPrev)); put('P_pri', [].concat.apply([], o.PPri)); put('P_post', [].concat.apply([], o.P)); put('Lk', [].concat.apply([], o.L));
-      }
-    }
     if (this.ctrl === 'speed' || this.ctrl === 'preview') {
       let ic = i0 + this.Kp * e + this.Ki * this.xi;
       if (this.ctrl === 'preview') {                            // the road ahead, one current lag in advance: cancel its push
@@ -1752,30 +1441,6 @@
         if (this.ds && this.ds.has('dza_ahead')) { this.ds.set('dza_ahead', ahead); this.ds.set('ml_s', this.ml); }
       }
       if (Math.abs(ic) < this.Imax) this.xi += e * this.Ts;     // anti-windup: integrate only when not saturated
-      this.icmd = ic;
-    } else if (this.ctrl === 'joint' && s) {
-      // Part B: one design for both actuators. Motor: the slosh LQR on the estimate, plus the current that cancels the heave's
-      // parametric term -w^2 (a_z/g) q in the swing's equation (exact linearisation: then the swing obeys the linear model the
-      // LQR was designed for); a_z from the body accelerometer, q from the filter. Suspension: its own LQR (suspGains).
-      const K = this.lqrGains(), m = this.sloshMode, b = this.bForce();
-      const ipar = this.parCancel === false ? 0 : -this.massX() * m.w * m.w * (this.azMeas / this.g) * s[1] / (m.beta * b);
-      let ic = i0 - (K[0] * (s[0] - this.v0) + K[1] * s[1] + K[2] * s[2] + K[3] * this.xi) + ipar;
-      if (Math.abs(ic) < this.Imax) this.xi += e * this.Ts;
-      this.icmd = ic; this.ipar = ipar;
-      const Ks = this.suspGains(), Ms = this.Mb + this.ml, s0 = this.Ls - Ms * this.g / this.k, N0 = (Ms + this.mw) * this.g;
-      // measured: the stroke (a potentiometer), the two vertical speeds (accelerometers, integrated), the tyre's compression
-      // from the axle's load cell, d = (N - N_0)/k_t (the tyre damper's share c_t (z_a' - v_w) is left in it: a sensor error)
-      const y = [this.zb - this.zw - s0, this.vzb, this.vzw, (this.N - N0) / this.kt];
-      this.ysusp = y;
-      let u = -(Ks[0] * y[0] + Ks[1] * y[1] + Ks[2] * y[2] + Ks[3] * y[3]);
-      if (u > this.Umax) u = this.Umax; else if (u < -this.Umax) u = -this.Umax;
-      this.uscmd = u;
-      if (this.ds && this.ds.has('i_par')) { this.ds.set('i_par', ipar); this.ds.set('a_z_meas', this.azMeas); for (let n = 0; n < 4; n++) this.ds.set('y_s' + n, y[n]); }
-      return;
-    } else if (this.ctrl === 'slosh' && s) {                    // state feedback on the estimate, and the integral (LQR)
-      const K = this.lqrGains();
-      let ic = i0 - (K[0] * (s[0] - this.v0) + K[1] * s[1] + K[2] * s[2] + K[3] * this.xi);
-      if (Math.abs(ic) < this.Imax) this.xi += e * this.Ts;
       this.icmd = ic;
     } else this.icmd = i0;
     this.uscmd = this.susp ? -this.csky * this.vzb : 0;
@@ -1833,26 +1498,7 @@
     this.forces(Fx, Fz);
   };
 
-  /* ------------------------------------------------------ sensors and observer */
-  // Small dense matrices (arrays of rows) for the observer's design.
-  const mat = {
-    mul: (A, B) => A.map((r) => B[0].map((_, j) => r.reduce((s, v, k) => s + v * B[k][j], 0))),
-    add: (A, B) => A.map((r, i) => r.map((v, j) => v + B[i][j])),
-    scale: (A, s) => A.map((r) => r.map((v) => v * s)),
-    T: (A) => A[0].map((_, j) => A.map((r) => r[j])),
-    eye: (n) => Array.from({ length: n }, (_, i) => Array.from({ length: n }, (_, j) => (i === j ? 1 : 0))),
-    // e^M by scaling and squaring: M / 2^s has norm below 1/2, its Taylor series to 20 terms, then s squarings
-    expm: (M) => {
-      const n = M.length, nrm = Math.max.apply(null, M.map((r) => r.reduce((s, v) => s + Math.abs(v), 0)));
-      const s = Math.max(0, Math.ceil(Math.log2(nrm / 0.5 + 1e-300)));
-      const A = mat.scale(M, Math.pow(2, -s));
-      let E = mat.eye(n), term = mat.eye(n);
-      for (let k = 1; k <= 20; k++) { term = mat.scale(mat.mul(term, A), 1 / k); E = mat.add(E, term); }
-      for (let k = 0; k < s; k++) E = mat.mul(E, E);
-      return E;
-    }
-  };
-  // Gaussian numbers for the optional sensor noise, from a seeded generator (mulberry32, Box–Muller): runs repeat exactly.
+  /* ------------------------------------------------------------- random numbers */
   function Rng(seed) { this.s = seed >>> 0; this.spare = null; }
   Rng.prototype.u = function () { let t = (this.s = (this.s + 0x6d2b79f5) >>> 0); t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
   Rng.prototype.gauss = function () {
@@ -1871,109 +1517,20 @@
   // current held over the sample: A_d = e^{A T_s}, B_d = int_0^Ts e^{A s} ds B (one exponential of [[A, B], [0, 0]]), and the
   // noise's covariance Q_d = int_0^Ts e^{A s} G W G' e^{A' s} ds by Van Loan's method (one exponential of
   // [[−A, G W G'], [0, A']] T_s: its lower right block is A_d', and Q_d = A_d times its upper right block).
-  function Observer(o) {
-    this.w = o.w; this.zeta = o.zeta; this.beta = o.beta; this.Mx = o.Mx; this.b = o.b; this.cx = o.cx; this.Ts = o.Ts;
-    this.sigV = o.sigV; this.sigQ = o.sigQ; this.WF = o.WF; this.Wa = o.Wa;
-    this.design();
-    this.reset(o.v || 0);
-  }
-  Observer.prototype.design = function () {
-    const w = this.w, z = this.zeta, be = this.beta, Mx = this.Mx, b = this.b, cx = this.cx, Ts = this.Ts;
-    const A = [[-cx / Mx, 0, 0], [0, 0, 1], [be * cx / Mx, -w * w, -2 * z * w]], B = [b / Mx, 0, -be * b / Mx];
-    const G = [[1 / Mx, 0], [0, 0], [-be / Mx, 1]], W = [[this.WF, 0], [0, this.Wa]];
-    const M4 = [0, 1, 2, 3].map((i) => [0, 1, 2, 3].map((j) => (i < 3 && j < 3 ? A[i][j] * Ts : i < 3 && j === 3 ? B[i] * Ts : 0)));
-    const E4 = mat.expm(M4);
-    this.Ad = [0, 1, 2].map((i) => [0, 1, 2].map((j) => E4[i][j])); this.Bd = [0, 1, 2].map((i) => E4[i][3]);
-    const GWG = mat.mul(mat.mul(G, W), mat.T(G));
-    const M6 = [0, 1, 2, 3, 4, 5].map((i) => [0, 1, 2, 3, 4, 5].map((j) => Ts * (i < 3 && j < 3 ? -A[i][j] : i < 3 ? GWG[i][j - 3] : j < 3 ? 0 : A[j - 3][i - 3])));
-    const E6 = mat.expm(M6), F12 = [0, 1, 2].map((i) => [3, 4, 5].map((j) => E6[i][j]));
-    const Qd = mat.mul(this.Ad, F12);
-    this.Qd = Qd.map((r, i) => r.map((v, j) => 0.5 * (v + Qd[j][i])));      // symmetric to the last bit
-    this.A = A; this.B = B; this.G = G;
-  };
-  // at rest on the set speed: the stout still, known to the probes' accuracy
-  Observer.prototype.reset = function (v) {
-    this.x = [v, 0, 0];
-    const s = [this.sigV, this.sigQ, this.sigQ * this.w];
-    this.P = [0, 1, 2].map((i) => [0, 1, 2].map((j) => (i === j ? s[i] * s[i] : 0)));
-    this.xPri = this.x.slice(); this.PPri = this.P.map((r) => r.slice()); this.xPrev = this.x.slice(); this.PPrev = this.P.map((r) => r.slice());
-    this.nu = [0, 0]; this.L = [[0, 0], [0, 0], [0, 0]]; this.S = [0, 0]; this.uPrev = 0; this.fresh = 0;
-  };
-  // one sample: predict with the current u held since the last sample, then correct with the speed y_v and, when the
-  // probes have a new reading, with y_q (null otherwise). Joint update: S = H P H' + R, L = P H' S^-1, x += L nu,
-  // P = (I − L H) P (I − L H)' + L R L' (Joseph's form: stays symmetric and positive).
-  // az (optional): the glass's measured vertical acceleration (a body accelerometer). The swing's stiffness is then
-  // w^2 (1 + az/g) (the heave's parametric term, note eq. 54) and A_d, B_d are recomputed for this sample (exact zero-order
-  // hold, e^{A Ts}); Q_d is kept (the noise's covariance changes little with the stiffness over one 1 ms sample).
-  Observer.prototype.discretise = function (az) {
-    const w2 = this.w * this.w * (1 + az / 9.81), z = this.zeta, be = this.beta, Mx = this.Mx, b = this.b, cx = this.cx, Ts = this.Ts, w = this.w;
-    const A = [[-cx / Mx, 0, 0], [0, 0, 1], [be * cx / Mx, -w2, -2 * z * w]], B = [b / Mx, 0, -be * b / Mx];
-    const E4 = mat.expm([0, 1, 2, 3].map((i) => [0, 1, 2, 3].map((j) => (i < 3 && j < 3 ? A[i][j] * Ts : i < 3 && j === 3 ? B[i] * Ts : 0))));
-    return { Ad: [0, 1, 2].map((i) => [0, 1, 2].map((j) => E4[i][j])), Bd: [0, 1, 2].map((i) => E4[i][3]) };
-  };
-  Observer.prototype.update = function (u, yv, yq, az) {
-    let Ad = this.Ad, Bd = this.Bd;
-    this.azUsed = az == null ? 0 : az;
-    if (az != null && az !== 0) { const D = this.discretise(az); Ad = D.Ad; Bd = D.Bd; }
-    this.AdNow = Ad; this.BdNow = Bd;
-    this.xPrev = this.x; this.PPrev = this.P; this.uPrev = u;
-    const xp = [0, 1, 2].map((i) => Ad[i][0] * this.x[0] + Ad[i][1] * this.x[1] + Ad[i][2] * this.x[2] + Bd[i] * u);
-    const PA = mat.mul(mat.mul(Ad, this.P), mat.T(Ad)), Pp = PA.map((r, i) => r.map((v, j) => v + this.Qd[i][j]));
-    this.xPri = xp; this.PPri = Pp;
-    const rows = yq === null || yq === undefined ? [0] : [0, 1], Rv = [this.sigV * this.sigV, this.sigQ * this.sigQ], y = [yv, yq];
-    // S and its inverse (1 x 1 or 2 x 2)
-    const S = rows.map((a) => rows.map((b2) => Pp[a][b2] + (a === b2 ? Rv[a] : 0)));
-    let Si;
-    if (rows.length === 1) Si = [[1 / S[0][0]]];
-    else { const det = S[0][0] * S[1][1] - S[0][1] * S[1][0]; Si = [[S[1][1] / det, -S[0][1] / det], [-S[1][0] / det, S[0][0] / det]]; }
-    const L = [0, 1, 2].map((i) => rows.map((_, c) => rows.reduce((s, a, k) => s + Pp[i][a] * Si[k][c], 0)));
-    const nu = rows.map((a) => y[a] - xp[a]);
-    const x = [0, 1, 2].map((i) => xp[i] + L[i].reduce((s, l, c) => s + l * nu[c], 0));
-    // Joseph: (I − L H) Pp (I − L H)' + L R L'
-    const IKH = [0, 1, 2].map((i) => [0, 1, 2].map((j) => (i === j ? 1 : 0) - rows.reduce((s, a, c) => s + (a === j ? L[i][c] : 0), 0)));
-    const P1 = mat.mul(mat.mul(IKH, Pp), mat.T(IKH));
-    const P = P1.map((r, i) => r.map((v, j) => v + rows.reduce((s, a, c) => s + L[i][c] * Rv[a] * L[j][c], 0)));
-    this.x = x; this.P = P.map((r, i) => r.map((v, j) => 0.5 * (v + P[j][i])));
-    this.fresh = rows.length - 1;
-    this.nu = [nu[0], rows.length > 1 ? nu[1] : 0];
-    this.L = L.map((r) => [r[0], rows.length > 1 ? r[1] : 0]);
-    this.S = [S[0][0], rows.length > 1 ? S[1][1] : 0];
-    return x;
-  };
-
   /* --------------------------------------------------------------- coupling */
   function World(o) {
     o = o || {};
     // o.fluidInstance: a fluid made beforehand (the GPU solver, StoutGpu.GpuFluid, which needs an async start)
-    this.fluid = o.fluidInstance ? o.fluidInstance : o.fluid && o.fluid.nm ? new NMFluid(Object.assign({ modal: true }, o.fluid)) : o.fluid && o.fluid.modal ? new ModalFluid(o.fluid) : new Fluid(o.fluid);
+    this.fluid = o.fluidInstance ? o.fluidInstance : new Fluid(o.fluid);
     const co = Object.assign({}, o.cart || {});
     co.ml = this.fluid.mLiquid;
     if (o.road) co.road = new Road(o.road);
     this.cart = new Cart(co);
-    // The controller's plant: the first sloshing mode as each model has it. The live model: its own mode 1. The 3D solver:
-    // the frequency and damping its grid gives the tulip's free swing (check.cjs freq: 3.214 Hz and 0.008 at 4 mm, 3.263 Hz
-    // and 0.002 at 3 mm; the continuum is 3.42 Hz), and beta of the cylinder of the surface's radius (note, eq. 17).
-    // o.plant overrides. The probes and the observer serve both models the same way; nothing reads the modes directly.
-    const f = this.fluid, c = this.cart;
-    let mode;
-    if (f.modal) mode = { w: f.w[0], zeta: f.zeta[0], beta: f.beta[0] };
-    else if (f.gpu) {
-      // the GPU solver on the 4 mm grid swings at 3.200 Hz (tools/fig12/gpu-linearity.cjs, A = 1 m/s^2); its damping is taken
-      // as the CPU grid's 0.008 (the same method on the same grid)
-      const Rs = f.Rz(Math.min(f.h0, f.zRim)), xi = XI[0], th = Math.tanh(xi * f.h0 / Rs);
-      mode = { w: 2 * Math.PI * 3.200, zeta: 0.008, beta: 2 * xi * th / (xi * xi - 1) };
-    } else {
-      const Rs = f.Rz(Math.min(f.h0, f.zRim)), xi = XI[0], th = Math.tanh(xi * f.h0 / Rs), fine = f.dx <= 0.0031;
-      mode = { w: 2 * Math.PI * (fine ? 3.263 : 3.214), zeta: fine ? 0.002 : 0.008, beta: 2 * xi * th / (xi * xi - 1) };
-    }
-    if (o.plant) mode = Object.assign(mode, o.plant);
-    c.sloshMode = mode;
     // sensors: the probes' and the encoder's added noise (standard deviations; 0 by default: the 3D surface has its own
-    // reading noise, about 1 mm on the lean), and what the filter assumes they are (sigQ, sigV)
-    const so = Object.assign({ noiseQ: 0, noiseV: 0, sigQ: 0.0008, sigV: 0.002, WF: 0.5, Wa: 0.002, seed: 12 }, o.sensors || {});
+    // reading noise, about 1 mm on the lean)
+    const c = this.cart, so = Object.assign({ noiseQ: 0, noiseV: 0, seed: 12 }, o.sensors || {});
     c.noiseQ = so.noiseQ; c.noiseV = so.noiseV; c.rng = new Rng(so.seed);
     c.probe = { y: 0, ef: 0, eb: 0, n: 0, fresh: false, r: 0 };
-    c.obs = new Observer({ w: mode.w, zeta: mode.zeta, beta: mode.beta, Mx: c.massX(), b: c.bForce(), cx: c.cx, Ts: c.Ts, sigQ: so.sigQ, sigV: so.sigV, WF: so.WF, Wa: so.Wa, v: c.vx });
     c.uPrev = c.i;
     this.dtMax = o.dtMax || 1 / 400;
     this.hCart = o.hCart || 1e-4;
@@ -1982,17 +1539,17 @@
     this.t = 0; this.lastAx = 0; this.lastAz = 0;
     this.fluid.levelSet();          // so that the surface can be read before the first step
     this.readProbes();
-    this.cart.probe.fresh = false;  // the reading at rest is the filter's starting point, not a measurement to fuse
+    this.cart.probe.fresh = false;  // the reading at rest is not a new measurement
   }
   // The two level probes on the glass's wall, at r = R(h), theta = 0 (front, the direction of travel) and pi (back): each
   // reads the height of the surface there, as the solver has it after the fluid step (Fluid.columnHeightAt on the column
-  // heights; ModalFluid.heightAt). A real probe (a capacitive strip along the wall) does the same: it senses where the liquid
+  // heights). A real probe (a capacitive strip along the wall) does the same: it senses where the liquid
   // stands at the wall. The controller gets their half difference y_q = (eta_f − eta_b)/2, the swing at the wall, plus the
   // optional added noise. Nothing here changes the fluid: the 3D solver's column heights are the page's own reading.
   World.prototype.readProbes = function () {
     const f = this.fluid, c = this.cart, pr = c.probe;
-    if (!f.modal) f.columnHeights();
-    const r = f.modal ? f.Rs : f.Rz(Math.min(f.h0, f.zRim));
+    f.columnHeights();
+    const r = f.Rz(Math.min(f.h0, f.zRim));
     const ef = f.columnHeightAt(r, 0), eb = f.columnHeightAt(-r, 0), n = c.noiseQ ? c.noiseQ * c.rng.gauss() : 0;
     pr.r = r; pr.ef = ef; pr.eb = eb; pr.n = n; pr.y = 0.5 * (ef - eb) + n; pr.fresh = true; pr.t = this.t;
     const D = this.ds;
@@ -2023,7 +1580,7 @@
       const P0 = this.P, f = this.fluid;
       this.J = [-(P[0] + f.spillPx - P0[0]), -(P[1] + f.spillPz - P0[1])]; this.hLast = h;
       this.Fx = this.J[0] / h; this.Fz = this.J[1] / h;
-      if (f.spillNow) { c.ml = f.liquidMass(); if (f.modal) { this.spilledMass = f.rho * f.spillV; if (f.spillList.length) this.dropsFrom(f.spillList, true); } else this.dropsFrom(f.spillList); }
+      if (f.spillNow) { c.ml = f.liquidMass(); this.dropsFrom(f.spillList); }
       f.spillList.length = 0;
       this.moveDrops(h);
       this.P = P; this.lastAx = ax; this.lastAz = az;
@@ -2093,14 +1650,13 @@
   // Spilled stout in the room: each particle that left over the rim becomes a drop (with its mirror image, the other
   // half of the glass) at the glass's position plus its own, with the glass's velocity plus its own, falling freely
   // (no air drag) until it meets the body's top or the road, where it stays as a splash. At most 6000 drops are kept.
-  // visualOnly: drops a mode model emits to show its pour (stout-modal.js); its spilled mass is its own computed volume, not counted here
-  World.prototype.dropsFrom = function (list, visualOnly) {
+  World.prototype.dropsFrom = function (list) {
     const c = this.cart, D = this.drops || (this.drops = []), both = this.fluid.whole ? [1] : [1, -1];   // the whole glass has no mirror images
     for (const q of list) for (const m of both) {
       if (D.length >= 6000) D.shift();
       D.push({ x: c.x + q[0], y: m * q[1], z: c.zb + c.glassFloor + q[2], vx: c.vx + q[3], vy: m * q[4], vz: c.vzb + q[5], landed: false });
     }
-    if (!visualOnly) this.spilledMass = (this.spilledMass || 0) + list.length * (this.fluid.whole ? 1 : 2) * this.fluid.mp;
+    this.spilledMass = (this.spilledMass || 0) + list.length * (this.fluid.whole ? 1 : 2) * this.fluid.mp;
   };
   World.prototype.moveDrops = function (h) {
     const D = this.drops; if (!D) return;
@@ -2124,12 +1680,12 @@
     const f = this.fluid;
     // the store holds the solver's particle arrays (with threads, the shared ones; otherwise the store's own, filled)
     ['px', 'py', 'pz'].forEach((k) => { if (f.shared) ds.set(k, f[k]); else { const a = ds.get(k); a.set(f[k]); f[k] = a; } });
-    f.colH = ds.get('h_col'); if (f.modal) f.ds = ds;
+    f.colH = ds.get('h_col');
     if (f.gpu && ds.has('col_cnt')) f.colCnt = ds.get('col_cnt');   // the GPU's particle counts per column, read back each batch
     this.ds = ds; this.cart.ds = ds;
     this.cart.forces(this.Fx, this.Fz);
     f.columnHeights(); ds.touch('h_col');
   };
 
-  return { Fluid, ModalFluid, NMFluid, Road, Cart, World, Observer, mat, Rng };
+  return { Fluid, Road, Cart, World, Rng };
 });

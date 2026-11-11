@@ -1,4 +1,4 @@
-// The cart on rough roads (part 3): node tools/fig12/roads.cjs <nm|modal|3d> <road,...> <ctrl,...> [v0 m/s] [seconds] [dx]
+// The cart on rough roads (part 3): node tools/fig12/roads.cjs 3d <road,...> <ctrl,...> [v0 m/s] [seconds] [dx]
 // road: isoA isoB isoC isoD washboard setts. The cart starts at x = 0.5 m on the set speed; the roughness ramps in over
 // 0.5–1 m. Printed per run: the road's rms height, the glass's vertical acceleration (rms over the run after 1.5 s, and the rms
 // in the band 6.5–7.2 Hz around twice the swing frequency, f = 2 f11 = 6.84 Hz, by a discrete Fourier sum), the largest
@@ -7,12 +7,13 @@
 // amplitude 4 zeta g = 0.21 m/s^2 at 6.84 Hz (note §6.6); a band rms r stands for an amplitude of about r sqrt 2.
 const fs = require('fs'), path = require('path');
 const load = (f) => { const m = { exports: {} }; new Function('module', fs.readFileSync(path.join(__dirname, '../../public/scripts', f), 'utf8'))(m); return m.exports; };
-const { World } = load('stout-cart.js'), G = load('guinness-glass.js'), NM = load('stout-nm.js');
-const model = process.argv[2] || 'nm', roads = (process.argv[3] || 'isoA,isoB,isoC,isoD,washboard,setts').split(','), ctrls = (process.argv[4] || 'off,speed,slosh').split(',');
+const { World } = load('stout-cart.js'), G = load('guinness-glass.js');
+const model = process.argv[2] || '3d', roads = (process.argv[3] || 'isoA,isoB,isoC,isoD,washboard,setts').split(','), ctrls = (process.argv[4] || 'off,speed').split(',');
+if (model !== '3d') throw new Error('only the 3D solver: the mode models were removed');
 const v0 = +(process.argv[5] || 1), T = +(process.argv[6] || 6), dx = +(process.argv[7] || 0.004);
 for (const rd of roads) for (const ctrl of ctrls) {
   const road = rd.startsWith('iso') ? { kind: 'iso', cls: rd.slice(3) } : { kind: rd };
-  const w = new World({ fluid: { dx, profile: G, h0: 0.125, H: (G.R.length - 1) * G.dz + 0.03, modal: model !== '3d', nm: model === 'nm', nmCoeffs: NM },
+  const w = new World({ fluid: { dx, profile: G, h0: 0.125, H: (G.R.length - 1) * G.dz + 0.03 },
     road: Object.assign({ Rw: 0.04, xmin: -1, xmax: 125 }, road), cart: { x0: 0.5, Rw: 0.04, Ls: 0.135, v0, ctrl }, dtMax: 1 / 200 });
   const c = w.cart, f = w.fluid, t0 = Date.now(), az = [];
   let lean = 0, air = 0, grip = 0, ns = 0, Nmin = 1e9, swirl = 0;
