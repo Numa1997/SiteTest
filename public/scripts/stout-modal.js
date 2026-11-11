@@ -110,18 +110,24 @@
     }
     this.alpha = this.friction ? this.foamAlpha() : 0;
   };
-  // The foam's coefficient alpha (dimensionless) in Viola et al.'s law. o.foam.alpha sets it directly; otherwise from the head's
-  // thickness h with Viola et al.'s measured slope (soap foam, d = 0.25 mm, gamma 31.5 mN/m, water, R = 37.05 mm: alpha = 0.010,
-  // 0.013, 0.016, 0.023, 0.030 at h = 2.5, 3.3, 4, 5, 6.5 mm; least squares through zero 0.00440 per mm), their scaling
-  // alpha ~ (h/d) gamma^(1/3) mu^(2/3) / (rho R^(5/3) g^(2/3)) for the stout's bubbles, surface tension, viscosity and the glass,
-  // and Sauret et al.'s saturation with depth (Phys. Fluids 27, 022103, 2015: bubble motion fades over about 1/k below the
-  // surface), h -> h_c (1 - exp(-h/h_c)), h_c = R/xi_11.
+  // The foam's coefficient alpha (dimensionless) in Viola et al.'s law, for mobile bubble surfaces (friction of the wall
+  // Plateau borders ~ gamma Ca^(2/3), Cantat 2013). Beer's surfaces count as mobile: their dilatational modulus is 5-25 mN/m
+  // (Wierenga et al. 2023, 24 lagers), below the 30-100 mN/m where foams turn rigid (Denkov et al. 2009). o.foam.alpha sets alpha
+  // directly; otherwise:
+  //   - Viola et al.'s measurements (soap foam, d = 0.25 mm, gamma = 31.5 mN/m, water, R = 37.05 mm; alpha = 0.010, 0.013, 0.016,
+  //     0.023, 0.030 for h = 2.5, 3.3, 4, 5, 6.5 mm), fitted through zero against the effective thickness below: 5.36 per metre
+  //     of h_eff (scatter +-20 %);
+  //   - depth: the bubbles' speed falls as exp(-z/l) below the surface, l = R/xi_11 (Sauret et al. 2015; Viola's alpha still grew
+  //     at 26 bubble layers), and the friction power of a layer as speed^(n+1), so h_eff = l/(n+1) (1 - exp(-(n+1) h/l)), n = 2/3;
+  //   - Viola et al.'s scaling alpha ~ (h/d) gamma^(1/3) mu^(2/3) / (rho R^(5/3) g^(2/3)) to the stout's head: bubbles d = 0.2 mm
+  //     (fresh nitrogen beer foam, mean radius about 0.1 mm, Ronteltap 1989), gamma = 45 mN/m (beers 38-48 mN/m), the stout's mu, rho.
   TulipModes.prototype.foamAlpha = function () {
     const F = this.foam; if (F.alpha != null) return F.alpha; if (!(F.h > 0)) return 0;
-    const d = F.d || 0.25e-3, gam = F.gamma || 0.0315, mu = this.nu * this.rho, R = this.Rs;
-    const hc = R / 1.8412, heff = hc * (1 - Math.exp(-F.h / hc));
-    return 4.40 * heff * (0.25e-3 / d) * Math.pow(gam / 0.0315, 1 / 3) * Math.pow(mu / 1.0e-3, 2 / 3) * (1000 / this.rho) * Math.pow(R / 0.03705, -5 / 3);
+    const n = 2 / 3, d = F.d || 0.2e-3, gam = F.gamma || 0.045, mu = this.nu * this.rho, R = this.Rs;
+    const l = R / 1.8412, heff = l / (n + 1) * (1 - Math.exp(-(n + 1) * F.h / l));
+    return 5.36 * heff * (0.25e-3 / d) * Math.pow(gam / 0.0315, 1 / 3) * Math.pow(mu / 1.0e-3, 2 / 3) * (1000 / this.rho) * Math.pow(R / 0.03705, -5 / 3);
   };
+
   // e_n at radius r (linear between the NR points r_j = R(h) j/(NR - 1); beyond R(h) the wall value)
   TulipModes.prototype.shapeAt = function (n, r) {
     const s = Math.min(1, r / this.Rs) * (this.NR - 1), j = Math.min(this.NR - 2, Math.floor(s)), u = s - j, e = this.e[n];

@@ -48,10 +48,11 @@ def surface_mode(Rf, h, m, deg=16):
     R = lambda r: norm * r ** m * P(r * r)
     dR = lambda r: norm * (m * r ** (m - 1) * P(r * r) + 2 * r ** (m + 1) * dP(r * r)) if m > 0 else norm * 2 * r * dP(r * r)
     nlap = lambda r: -norm * r ** m * (4 * r * r * ddP(r * r) + 4 * (m + 1) * dP(r * r))      # -Lap_h of R e^{i m th}, radial part
-    return dict(kappa=out['kappa'][0] * Rs, f=out['f'][0], R=R, dR=dR, nlap=nlap, fit_res=res, Rs=Rs)
+    slope = float((Rf(np.array([h + 2e-4]))[0] - Rf(np.array([h - 2e-4]))[0]) / 4e-4)
+    return dict(kappa=out['kappa'][0] * Rs, f=out['f'][0], R=R, dR=dR, nlap=nlap, fit_res=res, Rs=Rs, slope=slope)
 
 
-def lagrange_numeric(J0, J1, J2, A0, A1, A2, Lam, fx, prov):
+def lagrange_numeric(J0, J1, J2, A0, A1, A2, Lam, fx, prov, V3=None):
     """The same equations without symbolic algebra. M(b) = M0 + M1_i b_i + M2_ij b_i b_j (second order, as derive builds it),
     T = 1/2 b'^T M b', V = 1/2 sum Lam b^2, L_a = -a_x sum f b. Lagrange's equation of coordinate c:
         sum_b M_cb b''_b + sum_{b,i} d_i M_cb b'_i b'_b - 1/2 sum_{a,b} d_c M_ab b'_a b'_b + Lam_c b_c + f_c a_x = 0,
@@ -93,6 +94,9 @@ def lagrange_numeric(J0, J1, J2, A0, A1, A2, Lam, fx, prov):
                 add(-0.5 * M1[a, b, c], [(a, 1), (b, 1)])
                 for j in range(n): add(-0.5 * (M2[a, b, c, j] + M2[a, b, j, c]), [(a, 1), (b, 1), (j, 0)])
         add(Lam[c], [(c, 0)])
+        if V3 is not None:                           # d/db_c of s oint zeta_w^3/3 = s oint zeta_w^2 w_c: sum_ij V3[c,i,j] b_i b_j
+            for i in range(n):
+                for j in range(n): add(V3[c, i, j], [(i, 0), (j, 0)])
         terms = {k: v for k, v in terms.items() if abs(v) > 1e-10}
         if abs(fx[c]) > 1e-10: terms['a_x'] = fx[c]
         lead = terms[NAMES[c] + 'dd']; out.append({k: v / lead for k, v in terms.items()})
@@ -129,8 +133,34 @@ def derive(prov, nr=200, nth=64, numeric=False):
                       for j in range(n)] for i in range(n)] for b in range(n)] for a in range(n)])
     Lam = [integ(F[i] * F[i]) for i in range(n)]
     fx = [integ(np.outer(r, np.cos(th)) * F[i]) for i in range(n)]
+    # The wall's slope s = dR/dz at the surface (the tulip: -0.04 at 125 mm, +0.25 at 75 mm). Liquid that rises by zeta_w at the
+    # wall fills, besides the column over the rest disc, the wedge between R(h) and R(h + z) for 0 < z < zeta_w, of width s z per
+    # unit height (R = 1). To first order in s, with phi_k at the wall equal to its surface trace F_k(1, th) =: w_k(th):
+    #   kinematic function  A^p_k += s oint int_0^zeta_w z (phi_k + kappa_k z phi_k) dz dth = s oint (w_k zeta_w^2/2 + kappa_k w_k zeta_w^3/3)
+    #   kinetic matrix      A^pp_ab += s oint (grad phi_a . grad phi_b)_w zeta_w^2/2 dth
+    #   potential energy    V += s oint zeta_w^3/3 dth        (g = 1, rho = 1)
+    # (the volume of the wedge, s oint zeta_w^2/2, lowers the mean level by a second-order constant whose energy is of fourth order).
+    # Derived here from the same variational principle (FLT 2016 eqs. 2.2-2.14 over the true domain); s = 0 gives the above.
+    s_ = prov[1].get('slope', 0.0) if numeric else 0.0
+    V3 = np.zeros((n, n, n))
+    if s_ != 0.0:
+        Fw = [prov[M]['R'](np.array([1.0]))[0] * Tf[i] for i, (_, M, _) in enumerate(MODES)]                  # w_k(th)
+        dFw = [prov[M]['dR'](np.array([1.0]))[0] * Tf[i] for i, (_, M, _) in enumerate(MODES)]
+        Rw1 = [prov[M]['R'](np.array([1.0]))[0] for _, M, _ in MODES]
+        Gw = [[dFw[a] * dFw[b] + Rw1[a] * Rw1[b] * dTf[a] * dTf[b] + kap[a] * kap[b] * Fw[a] * Fw[b] for b in range(n)] for a in range(n)]   # grad phi_a . grad phi_b at the wall (r = 1)
+        oint = lambda f: float(np.sum(f) * wth)
+        for k in range(n):
+            for i in range(n):
+                for j in range(n):
+                    J1[k, i, j] += s_ * oint(Fw[k] * Fw[i] * Fw[j])
+                    V3[k, i, j] = s_ * oint(Fw[k] * Fw[i] * Fw[j])
+                    for l in range(n): J2[k, i, j, l] += s_ * kap[k] * oint(Fw[k] * Fw[i] * Fw[j] * Fw[l])
+        for a in range(n):
+            for b in range(n):
+                for i in range(n):
+                    for j in range(n): A2[a, b, i, j] += 0.5 * s_ * oint(Gw[a][b] * Fw[i] * Fw[j])
     if numeric:
-        return lagrange_numeric(J0, J1, J2, A0, A1, A2, Lam, fx, prov)
+        return lagrange_numeric(J0, J1, J2, A0, A1, A2, Lam, fx, prov, V3)
     B = sp.symbols('p0 p1 r1 p2 r2'); Bd = sp.symbols('p0d p1d r1d p2d r2d'); Bdd = sp.symbols('p0dd p1dd r1dd p2dd r2dd'); ax = sp.Symbol('a_x')
     lin = lambda T3: sp.Matrix(n, n, lambda a, b: sum(sp.Float(T3[a, b, i], 15) * B[i] for i in range(n)))
     quad = lambda T4: sp.Matrix(n, n, lambda a, b: sum(sp.Float(T4[a, b, i, j], 15) * B[i] * B[j] for i in range(n) for j in range(n)))
@@ -209,9 +239,35 @@ def tulip(hs):
     return res
 
 
+def sweep(path):
+    """The page's data for the nonlinear model: for each fill height of modes.json, the five equations (numeric route), the
+    mass coefficients mu, sigma^2, the forcing f and the wall values R_M(1) of the normalised shapes (int r R_M^2 dr = 1). The
+    shapes themselves are modes.json's e(r) times R_M(1). Monomials missing at one height are written with coefficient 0."""
+    dz, Rarr = FE.glass(); Rf = FE.profile_fn(dz, Rarr)
+    hs = [round(30 + 2.5 * k, 1) for k in range(47)]
+    levels = []
+    for hmm in hs:
+        prov = {m: surface_mode(Rf, hmm / 1000, m) for m in (0, 1, 2)}
+        a = derive(prov, numeric=True)
+        levels.append(dict(h_mm=hmm, Rs=prov[1]['Rs'], mu=a['mu'], sigma2=a['sigma2'], forcing=a['forcing'], Rw=[a['R0'], a['R1'], a['R2']],
+                           d=a['d'], fit=max(prov[m]['fit_res'] for m in (0, 1, 2)), eqs=a['equations']))
+        print(f'h {hmm:5.1f} mm  d1 {a["d"]["d1"]:.5f}  d2 {a["d"]["d2"]:+.5f}  sigma1^2 {a["sigma2"]["p1"]:.5f}  fit {levels[-1]["fit"]:.1e}', flush=True)
+    keys = {n: sorted(set().union(*[set(L['eqs'][n]) for L in levels])) for n in NAMES}
+    out = {'about': 'Fig. 12 Narimanov-Moiseev five-mode equations of the tulip (FLT 2016 eqs. 2.17-2.18 with Ir = 1) from its '
+                    'finite-element modes, by tools/fig12/nm_tulip.py sweep. Lengths in units of R(h), time in sqrt(R/g); the '
+                    'surface is R [R0 p0 + R1 (p1 cos + r1 sin) + R2 (p2 cos 2th + r2 sin 2th)], R_M(rho) = Rw[M] e_M(rho) with '
+                    'e_M from modes.json. eqs[name]: one coefficient per monomial in mon[name], per height; each equation sums to 0.',
+           'h': hs, 'mon': keys, 'levels': [{'Rs': L['Rs'], 'mu': L['mu'], 'sigma2': L['sigma2'], 'forcing': L['forcing'], 'Rw': L['Rw'],
+                                            'd': L['d'], 'eqs': {n: [round(L['eqs'][n].get(k, 0.0), 10) for k in keys[n]] for n in NAMES}} for L in levels]}
+    json.dump(out, open(path, 'w'), separators=(',', ':'))
+    print(f'wrote {path}: {os.path.getsize(path)} bytes; worst shape fit {max(L["fit"] for L in levels):.1e}')
+
+
 if __name__ == '__main__':
     what = sys.argv[1] if len(sys.argv) > 1 else 'check'
     if what == 'check':
         f = check(); print('CHECK ' + ('PASSED' if not f else 'FAILED: ' + '; '.join(f))); sys.exit(1 if f else 0)
+    if what == 'sweep':
+        sweep(sys.argv[2] if len(sys.argv) > 2 else os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'public', 'data', 'fig12', 'nm.json')); sys.exit(0)
     out = tulip([float(x) for x in sys.argv[2:]] or [125.0])
     if os.environ.get('OUT'): json.dump(out, open(os.environ['OUT'], 'w'), indent=1)
