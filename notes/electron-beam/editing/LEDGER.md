@@ -97,6 +97,8 @@ when V hands that chapter over. V reads this file before editing every chapter. 
   threshold rule, floor level, bias, $\sigma_\mathrm{CD}$, error propagation and Monte Carlo check, $N$ lines, overhead, measurements per hour.
 - **Promises.** ch08 joins everything.
 - **Hand-over.** "What chapter 8 receives": $\sigma_\mathrm{CD}$, bias, dose, rate as functions of all inputs.
+- **Voice pass.** Critical dimension marked at its definition; shot noise a pointer to chapter 0; the threshold rule told one
+  step per sentence; the neighbouring-period, default-number, Poisson and bias sentences split.
 
 ## ch08 · The whole machine
 - **Opening picture.** A long train of gears; a slip at the first gear passed on to the last.
