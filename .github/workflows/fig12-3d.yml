@@ -1,0 +1,86 @@
+# Fig. 12, stage C of the pipeline: the full 3D Navier-Stokes runs that test and calibrate the page's model
+# (docs/simulations/fig12-beer-slosh.md). Each matrix job runs one tool and uploads its series; the last job gathers them into
+# notes/fig12/runs/3d/ and commits them. A push made with GITHUB_TOKEN starts no new workflow run, so this cannot loop.
+#   cpu:  the half-glass processor solver (public/scripts/stout-cart.js): spill and breaking (tools/fig12/spill-3d.cjs), and the
+#         free swing's softening at several fills on the 3 mm grid (tools/fig12/backbone-3d.cjs MODE=tilt)
+#   gpu:  the whole-glass solver (public/scripts/stout-gpu.js) on SwiftShader in headless Chromium, shaken near resonance: does the
+#         swing turn into a swirl (tools/fig12/gpu-shake.cjs); about 0.33 s a step, 20 s of shaking in about 25 min
+name: Fig. 12 3D runs
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - tools/fig12/spill-3d.cjs
+      - tools/fig12/backbone-3d.cjs
+      - tools/fig12/gpu-shake.cjs
+      - .github/workflows/fig12-3d.yml
+permissions:
+  contents: write
+concurrency:
+  group: fig12-3d-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  cpu:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        case:
+          - { name: spill-4mm, cmd: 'for h in 125 135 140; do for A in 4 6 8 10; do OUT=out/spill-$h-$A-4mm.json node tools/fig12/spill-3d.cjs $h $A 0.3 1.5 0.004; done; done' }
+          - { name: spill-3mm, cmd: 'for h in 125 135 140; do for A in 4 6 8 10; do OUT=out/spill-$h-$A-3mm.json node tools/fig12/spill-3d.cjs $h $A 0.3 1.5 0.003; done; done' }
+          - { name: backbone-3mm-a, cmd: 'for h in 75 100; do for A in 1.5 2.5 5; do MODE=tilt OUT=out/backbone-tilt-$h-$A-3mm.json node tools/fig12/backbone-3d.cjs $h $A 2.7 0.003; done; done' }
+          - { name: backbone-3mm-b, cmd: 'for h in 125 140; do for A in 1.5 2.5 5; do MODE=tilt OUT=out/backbone-tilt-$h-$A-3mm.json node tools/fig12/backbone-3d.cjs $h $A 2.7 0.003; done; done' }
+          - { name: backbone-4mm, cmd: 'for h in 75 100 125 140; do for A in 1.5 2.5 5; do MODE=tilt OUT=out/backbone-tilt-$h-$A-4mm.json node tools/fig12/backbone-3d.cjs $h $A 2.7 0.004; done; done' }
+    steps:
+      - uses: actions/checkout@v6
+      - name: Run
+        run: |
+          mkdir -p out
+          ${{ matrix.case.cmd }} | tee out/${{ matrix.case.name }}.log
+      - uses: actions/upload-artifact@v6
+        with:
+          name: fig12-3d-${{ matrix.case.name }}
+          path: out/
+  gpu:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        ratio: ['0.93', '0.97', '1.00', '1.03', '1.06']
+    steps:
+      - uses: actions/checkout@v6
+      - name: Headless Chromium (Playwright 1.63.0, pinned)
+        run: |
+          npm install --prefix "$RUNNER_TEMP/pw" playwright@1.63.0
+          "$RUNNER_TEMP/pw/node_modules/.bin/playwright" install --with-deps chromium
+      - name: Shake the whole glass at ${{ matrix.ratio }} f11 for 20 s
+        run: |
+          mkdir -p out
+          NODE_PATH="$RUNNER_TEMP/pw/node_modules" OUT=out/shake-0.3-${{ matrix.ratio }}.json node tools/fig12/gpu-shake.cjs 0.3 ${{ matrix.ratio }} 20 | tee out/shake-${{ matrix.ratio }}.log
+      - uses: actions/upload-artifact@v6
+        with:
+          name: fig12-3d-shake-${{ matrix.ratio }}
+          path: out/
+  gather:
+    needs: [cpu, gpu]
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/download-artifact@v6
+        with:
+          pattern: fig12-3d-*
+          path: notes/fig12/runs/3d
+          merge-multiple: true
+      - name: Commit the runs
+        run: |
+          ls -la notes/fig12/runs/3d
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add notes/fig12/runs/3d
+          git diff --cached --quiet && echo "nothing new" && exit 0
+          git commit -m "Fig. 12 3D runs from workflow run ${{ github.run_id }}"
+          git pull --rebase origin "${GITHUB_REF_NAME}" && git push
