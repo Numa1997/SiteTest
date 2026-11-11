@@ -29,12 +29,17 @@ gesondert die Kraft ruht") is as printed online and unchecked against the print.
 **What Numa first had** (from Gemini): lines 149 and 218 misquoted, an English text attributed to Leonard that is not his, lines
 192–214 missing.
 
-**How the Arabic is written** (11 November 2026, at Numa's word, replacing two earlier word-for-word drafts). The Arabic is literary prose
-in the register of Arabic translations of Greek philosophy, recast sentence by sentence so that it reads as Arabic and not as Latin in
-Arabic words: universal negation as «ما من شيءٍ…» or «العدمُ لا يُخرج شيئًا», not «أنّ شيئًا لا…»; Lucretius' *ita … quod* as «وما … إلّا
-لأنّ…»; *quas ob res* as «فإذا استقرّ عندنا…»; *sine divom* as «من غير أن يكون للآلهة فيه يد»; *huc accedit* as «أضف إلى ذلك», the
-phrase Arabic quotations of Lucretius use. *nihilum* is «العدم» throughout (Numa). The gods stay plural (*divom*: «الآلهة»), as in the
-Latin. Fixed images are kept: *luminis orae* «شواطئ النور», *semina* «بذور», *inane* «الخلاء». Arabic idiom is used where Latin has its own:
-«في طرفة عين» for *repente*, «الجبال الشُّمّ», «نسيم الهواء العليل», «ما بالُنا نرى…». The phrasing of the principle follows how Arabic
-writing on the atomists states it, e.g. «لا شيء يولد من العدم، ولا شيء يفنى ويعود إلى العدم» and «لا شيء أبدا قد وجد بأمر إلهي من عدم»
-quoted in [نشأة العالم في المذهب الذري](https://altanweeri.net/8838/), read on 11 November 2026; the sentences themselves are this site's own.
+**How the Arabic is written** (fourth version, 11 November 2026). Numa rejected three versions, and the reasons are the rule for any
+later change. (1) Word for word («لا يُولَد شيءٌ من العدم بفعل الآلهة أبدًا»): "no one says that in standard Arabic". (2) Classical
+ornament («تجلوها», «نواميسها», «أنّى», «لا مناص», «الجبال الشُّمّ», case vowels on every noun): "Quran Arabic, too old, a Gulf or
+Bedouin voice". (3) Plain modern («العتمة», short flat sentences): "fragile and weak"; darkness is «ظلام». What he wants is the voice
+of Levantine literary prose, strong and with a melody, between (2) and (3). The model is the prose of the Levantine Nahda and Mahjar and
+its translations of philosophical poetry: sentences that open on «إن», «لكنّ», «ومن هنا», clauses chained with و and ف, balanced pairs
+and repetition («هذا الرعب… وهذا الظلام…», «يرون… ولا يرون…», «كل ما يجري»), strong plain verbs («يسكن», «يخيّم», «يقبض», «تنبثق»,
+«تروّض», «تُسلم»), questions answered by «أليس لأن…», living images kept («شواطئ النور», «سهام النهار», «يد الآلهة»). Vowel marks only
+where a word could be misread (the passive: «يُخلق», «حُرمت»), plus shadda and tanwin, as modern Levantine books print. *nihilum* is
+«العدم» (Numa). Set in Noto Naskh Arabic, the site's Arabic text face, not Amiri. Read for the voice on 11 November 2026: Felix Fares'
+translation of Nietzsche's Zarathustra as serialised in الرسالة, 1937
+([Wikisource](https://ar.wikisource.org/wiki/مجلة_الرسالة/العدد_211/هكذا_قال_زرادشت)), Gibran's prose
+([Hindawi](https://www.hindawi.org/books/59729251/24/)), and the Arabic quotations of the atomists in
+[نشأة العالم في المذهب الذري](https://altanweeri.net/8838/). The sentences are this site's own.
