@@ -16,16 +16,16 @@ $\sigma$ is the surface's <em>free energy</em> per square metre (the part of its
 $r = (3m/4\pi\rho_w)^{1/3}$, so its surface $4\pi r^2 = 4\pi\,(3m/4\pi\rho_w)^{2/3}$. Collect the numbers, $4\pi\,(3/4\pi)^{2/3} = (36\pi)^{1/3}$, and the surface free energy is a power of the mass,</p>
 $$\sigma\,4\pi r^2 = \sigma\,(36\pi)^{1/3}\rho_w^{-2/3}\,m^{2/3},\qquad F_s = \sigma\,(36\pi)^{1/3}\rho_w^{-2/3}\sum_{\text{drops}} m_i^{2/3}. \tag{10.1}$$
 <p>$F_s$ is the surface free energy of the drops in one m³ of air.</p>
-<p><strong>Step 2: one merger.</strong> A merger replaces $m^{2/3} + m'^{2/3}$ by $(m + m')^{2/3}$. Write $x = m/(m + m')$
+<p><strong>Step 2: one merger.</strong> A merger replaces $m^{2/3} + m'^{2/3}$ by $(m + m')^{2/3}$. Write $\eta = m/(m + m')$
 for the share of the product's water brought by the first partner, and take $(m + m')^{2/3}$ out as a common factor:</p>
-$$(m + m')^{2/3} - m^{2/3} - m'^{2/3} = (m + m')^{2/3}\,\big[1 - x^{2/3} - (1 - x)^{2/3}\big]. \tag{10.2}$$
-<p>For $0 < x < 1$ we have $x^{2/3} > x$ (a number below one grows when raised to a power below one), so $x^{2/3} + (1-x)^{2/3} > 1$ and the
+$$(m + m')^{2/3} - m^{2/3} - m'^{2/3} = (m + m')^{2/3}\,\big[1 - \eta^{2/3} - (1 - \eta)^{2/3}\big]. \tag{10.2}$$
+<p>For $0 < \eta < 1$ we have $\eta^{2/3} > \eta$ (a number below one grows when raised to a power below one), so $\eta^{2/3} + (1-\eta)^{2/3} > 1$ and the
 bracket is negative. Every merger lowers $F_s$, whatever the two sizes.</p>
 <p><strong>Step 3: the whole cloud.</strong> The moment identity (5.2) gives the rate of change of $\int\phi\,n\,dm$ for any $\phi$. Take $\phi(m) = \sigma(36\pi)^{1/3}\rho_w^{-2/3}m^{2/3}$, the surface free energy of one drop: then $\int\phi\,n\,dm = F_s$, and the bracket of (5.2), $\phi(m + m') - \phi(m) - \phi(m')$, is the change in one merger, step 2. So</p>
 $$\boxed{\;\frac{dF_s}{dt} = \frac{\sigma(36\pi)^{1/3}}{2\rho_w^{2/3}}\iint K\,n(m)\,n(m')\,\big[(m+m')^{2/3} - m^{2/3} - m'^{2/3}\big]\,dm\,dm' \;\le\; 0.\;} \tag{10.3}$$
 <p>A quantity that can only fall is called a Lyapunov function. $F_s$ is one, for the collection equation and also along every single
 history of the exact Monte Carlo of chapter 6, because the statement holds merger by merger.</p>
-<div class="check"><div class="ctag">Check: the limits of one merger</div>The bracket of (10.2) is deepest at $x = \tfrac12$: two equal drops
+<div class="check"><div class="ctag">Check: the limits of one merger</div>The bracket of (10.2) is deepest at $\eta = \tfrac12$: two equal drops
 lose $1 - 2^{-1/3}$ = 20.6 % of their joint surface. A large drop of radius $R$ eating a small one of radius $r$, with $p = r/R$: the product has radius $R(1 + p^3)^{1/3}$, and its surface exceeds the large drop's by</p> $$4\pi R^2\big[(1 + p^3)^{2/3} - 1\big] = 4\pi R^2\big[\tfrac23p^3 - \tfrac19p^6 + \dots\big].$$ <p> Subtract that from the small drop's surface $4\pi R^2p^2$ and divide by it: the merger destroys the share
 $1 - \tfrac23p + \tfrac19p^4 - \dots$ of the small one's surface, almost all of it. So the free energy sits mostly in the smallest drops,
 and it is destroyed most efficiently by feeding small drops to large ones.</div>
