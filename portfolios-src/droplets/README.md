@@ -28,7 +28,7 @@ cd portfolios-src/droplets
 (cd tools && npm ci)                     # KaTeX for build-time typesetting, once
 python3 tools/build.py --site            # writes public/portfolios/droplet-collection/index.html and its four plates in fig/
 python3 tools/build.py                   # a standalone copy in out/ (not committed)
-node checks/check_numbers.cjs            # 468 numbers, about four minutes: NUMBER CHECK PASS
+node checks/check_numbers.cjs            # 472 numbers, about four minutes: NUMBER CHECK PASS
 python3 checks/check_physics.py          # 14 checks, about three minutes: PHYSICS CHECK PASS
 python3 -m http.server 8771 --directory ../../public &
 python3 checks/check_browser.py http://localhost:8771/portfolios/droplet-collection/index.html <screenshot folder>

@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-1567 files, 78.4 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+1568 files, 78.5 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -42,7 +42,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Agents of the lecture-note review](#agents-of-the-lecture-note-review) | 4 |
 | [Working notes of project 07, the electron beam](#working-notes-of-project-07-the-electron-beam) | 52 |
 | [Working notes of the Rotor Pendula study](#working-notes-of-the-rotor-pendula-study) | 86 |
-| [Working notes of the Droplet Collection study](#working-notes-of-the-droplet-collection-study) | 122 |
+| [Working notes of the Droplet Collection study](#working-notes-of-the-droplet-collection-study) | 123 |
 | [Record of the lecture-note review](#record-of-the-lecture-note-review) | 484 |
 
 ## Repository root
@@ -436,7 +436,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/portfolios/droplet-collection/fig/plate-warm.svg`](../public/portfolios/droplet-collection/fig/plate-warm.svg) | 24.3 kB | Plate of the Portfolios page article (warm), written by the Droplet Collection build. | [portfolios.md](portfolios.md) |
 | [`public/portfolios/droplet-collection/fig/w2_rain.svg`](../public/portfolios/droplet-collection/fig/w2_rain.svg) | 45.0 kB | A vector figure of the project. | [portfolios.md](portfolios.md) |
 | [`public/portfolios/droplet-collection/fig/w2_spectra.svg`](../public/portfolios/droplet-collection/fig/w2_spectra.svg) | 74.0 kB | A vector figure of the project. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/droplet-collection/index.html`](../public/portfolios/droplet-collection/index.html) | 2.89 MB | Entry page of the project copy: module script and stylesheet loader. | [portfolios.md](portfolios.md) |
+| [`public/portfolios/droplet-collection/index.html`](../public/portfolios/droplet-collection/index.html) | 2.91 MB | Entry page of the project copy: module script and stylesheet loader. | [portfolios.md](portfolios.md) |
 
 ## Project copy: Rotor Pendula
 
@@ -646,7 +646,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`portfolios-src/droplets/app.js`](../portfolios-src/droplets/app.js) | 52.4 kB | The page's script: tabs, hash routes, the five simulation panels, and the store (dataset) that panels 3 and 4 write. | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/chart.cjs`](../portfolios-src/droplets/chart.cjs) | 7.8 kB | House-style SVG line charts for the figures and the page. | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/checks/check_browser.py`](../portfolios-src/droplets/checks/check_browser.py) | 2.8 kB | Check: check_browser.py (see the README). | [README.md](../portfolios-src/droplets/README.md) |
-| [`portfolios-src/droplets/checks/check_numbers.cjs`](../portfolios-src/droplets/checks/check_numbers.cjs) | 74.8 kB | Check: check_numbers.cjs (see the README). | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/checks/check_numbers.cjs`](../portfolios-src/droplets/checks/check_numbers.cjs) | 75.8 kB | Check: check_numbers.cjs (see the README). | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/checks/check_physics.py`](../portfolios-src/droplets/checks/check_physics.py) | 18.9 kB | Check: check_physics.py (see the README). | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/checks/model_dump.cjs`](../portfolios-src/droplets/checks/model_dump.cjs) | 2.8 kB | Check: model_dump.cjs (see the README). | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/data/bridge.json`](../portfolios-src/droplets/data/bridge.json) | 56.1 kB | Data written by the model's run tools: bridge.json. | [README.md](../portfolios-src/droplets/README.md) |
@@ -713,11 +713,11 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`portfolios-src/droplets/text/book-03.src.html`](../portfolios-src/droplets/text/book-03.src.html) | 14.6 kB | Lecture notes, chapter 3. | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/text/book-04.src.html`](../portfolios-src/droplets/text/book-04.src.html) | 5.9 kB | Lecture notes, chapter 4. | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/text/book-05.src.html`](../portfolios-src/droplets/text/book-05.src.html) | 12.7 kB | Lecture notes, chapter 5. | [README.md](../portfolios-src/droplets/README.md) |
-| [`portfolios-src/droplets/text/book-06.src.html`](../portfolios-src/droplets/text/book-06.src.html) | 18.4 kB | Lecture notes, chapter 6. | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/text/book-06.src.html`](../portfolios-src/droplets/text/book-06.src.html) | 19.2 kB | Lecture notes, chapter 6. | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/text/book-07.src.html`](../portfolios-src/droplets/text/book-07.src.html) | 7.2 kB | Lecture notes, chapter 7. | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/text/book-08.src.html`](../portfolios-src/droplets/text/book-08.src.html) | 8.1 kB | Lecture notes, chapter 8. | [README.md](../portfolios-src/droplets/README.md) |
-| [`portfolios-src/droplets/text/book-09.src.html`](../portfolios-src/droplets/text/book-09.src.html) | 7.1 kB | Lecture notes, chapter 9. | [README.md](../portfolios-src/droplets/README.md) |
-| [`portfolios-src/droplets/text/book-10.src.html`](../portfolios-src/droplets/text/book-10.src.html) | 33.4 kB | Lecture notes, chapter 10. | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/text/book-09.src.html`](../portfolios-src/droplets/text/book-09.src.html) | 7.5 kB | Lecture notes, chapter 9. | [README.md](../portfolios-src/droplets/README.md) |
+| [`portfolios-src/droplets/text/book-10.src.html`](../portfolios-src/droplets/text/book-10.src.html) | 33.6 kB | Lecture notes, chapter 10. | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/text/book-11.src.html`](../portfolios-src/droplets/text/book-11.src.html) | 12.9 kB | Lecture notes, chapter 11. | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/text/book-12.src.html`](../portfolios-src/droplets/text/book-12.src.html) | 23.2 kB | Lecture notes, chapter 12. | [README.md](../portfolios-src/droplets/README.md) |
 | [`portfolios-src/droplets/text/book-99.src.html`](../portfolios-src/droplets/text/book-99.src.html) | 6.3 kB | Symbols and sources (appendix A). | [README.md](../portfolios-src/droplets/README.md) |
@@ -976,7 +976,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/i18n/ingest.py`](../tools/i18n/ingest.py) | 1.9 kB | Stores checked translations made outside the tables (page pieces, script strings, walkthrough prose). | [i18n.md](i18n.md) |
 | [`tools/i18n/package.json`](../tools/i18n/package.json) | 285 B | The parser wrap.cjs needs (acorn); npm install --prefix tools/i18n. | [i18n.md](i18n.md) |
 | [`tools/i18n/wrap.cjs`](../tools/i18n/wrap.cjs) | 3.7 kB | Wraps the reader-visible strings of a page's scripts in _t(), with a JavaScript parser (acorn). | [i18n.md](i18n.md) |
-| [`tools/inventory.py`](../tools/inventory.py) | 83.0 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
+| [`tools/inventory.py`](../tools/inventory.py) | 83.3 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
 | [`tools/perf/addresses.cjs`](../tools/perf/addresses.cjs) | 6.1 kB | Every page at every address a reader can use (x.html, x, x/, folder/), and every link of every page, on a running site; exits 1 on any wrong answer. | [performance.md](performance.md) |
 | [`tools/perf/clockcheck.cjs`](../tools/perf/clockcheck.cjs) | 3.2 kB | Each figure runs on screen, holds off screen, resumes; the store stays live for an open data panel and the walkthrough. | [performance.md](performance.md) |
 | [`tools/perf/film.cjs`](../tools/perf/film.cjs) | 3.1 kB | A repeat visit as a reader sees it: screenshots at fixed times and every LCP candidate with its element, to tell a metric from the screen. | [performance.md](performance.md) |
@@ -1244,6 +1244,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/droplets/check-L5.md`](../notes/droplets/check-L5.md) | 6.5 kB | Gate 2 check of level L5: each equation re-derived by two routes. | [status.md](../notes/droplets/status.md) |
 | [`notes/droplets/check-L6.md`](../notes/droplets/check-L6.md) | 5.8 kB | Gate 2 check of level L6: each equation re-derived by two routes. | [status.md](../notes/droplets/status.md) |
 | [`notes/droplets/check-L7.md`](../notes/droplets/check-L7.md) | 6.6 kB | Gate 2 check of level L7: each equation re-derived by two routes. | [status.md](../notes/droplets/status.md) |
+| [`notes/droplets/check-steps-r3.md`](../notes/droplets/check-steps-r3.md) | 16.9 kB | Independent check of the step-by-step passages of sections 6.3, 6.4, 9 and 10.1 to 10.3 (11 November 2026): equations re-derived, numbers recomputed, method boxes compared with the code. | [status.md](../notes/droplets/status.md) |
 | [`notes/droplets/check-steps.md`](../notes/droplets/check-steps.md) | 17.4 kB | Independent check of the step-by-step derivations, method boxes and examples of 11 November 2026: each equation re-derived, each method box compared with its function in physics.cjs. | [status.md](../notes/droplets/status.md) |
 | [`notes/droplets/contract-L0.md`](../notes/droplets/contract-L0.md) | 25.2 kB | Gate 1 contract of model level L0: question, picture, model, assumptions with their numbers, predictions, answers to the skeptic. | [status.md](../notes/droplets/status.md) |
 | [`notes/droplets/contract-L1.md`](../notes/droplets/contract-L1.md) | 18.6 kB | Gate 1 contract of model level L1: question, picture, model, assumptions with their numbers, predictions, answers to the skeptic. | [status.md](../notes/droplets/status.md) |

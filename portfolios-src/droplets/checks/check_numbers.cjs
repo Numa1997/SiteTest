@@ -288,7 +288,7 @@ const Kfit = 0.5 * mi(0.5e-3) * mi(0.25e-3) / (mi(0.5e-3) + mi(0.25e-3)) * (vi(0
 expect('book-08', 'the smallest particles (8.2) was fitted to, fall at', `${f(vi(0.25e-3), 2)} and ${f(vi(0.5e-3), 2)} m/s and collide with K_0 = ${texSci(Kfit, 1)} J`);
 expect('book-08', 'our collisions carry', `${f(Math.log10(Kfit / C.K0q[2]), 1)} to ${f(Math.log10(Kfit / C.K0q[0]), 1)} orders of magnitude`);
 expect('book-08', 'with $a_0 = 3.78', `${f(fT, 3)} $a_0$ at −10`);
-expect('book-06', 'The 1 cm³ curve starts lower', `(${f(S.V['1'].reduce((a, q) => a + q.F40[0], 0) / S.V['1'].length, 2)})`);
+expect('book-06', 'The 1 cm³ curve starts lower', `(${f(S.V['1'].reduce((a, q) => a + q.F40[0], 0) / S.V['1'].length, 2)} against ${f(D('bridge.json').s16.F40[0], 2)})`);
 expect('book-01', 'with the droplets\' own size, (1.2), already at', `${f(P.L0blowup(40e-6, 8e-6, W8, A) / 60, 1)} min`);
 expect('book-08', '0 to 1.7 fragments per freezing drop,', `${f(pm(C.rime25), 2)} drops of 25 µm`);
 expect('book-08', 'or more freezing per cm³ and minute', `0 to ${f(pm(C.shatter[1]), 1)}`);
@@ -518,7 +518,9 @@ expect('checks', 'against 5.767,', `${f(t90ext, 3)}`, 'the model at 5 s records'
     const rate = RR => P.tableE(tabW, RR, 8e-6 / RR, 'clamp') * Math.PI * (RR + 8e-6) ** 2 * (vB(RR) - vB(8e-6)) * Wd / (4 * Math.PI * RR * RR * RW);
     let R = 69e-6, t = 0; while (R < 100e-6) { R += 0.05 * rate(R); t += 0.05; }
     ex('book-06', 'Example 6.2', 2000, [`= ${f(40 * 1.2 ** 3, 2)} µm`, `W = ${texSci(Wd, 3)} kg/m³`, `E = ${f(P.tableE(tabW, 69e-6, 8 / 69, 'clamp'), 3)}`, `differ by ${f(vB(69e-6) - vB(8e-6), 4)} m/s`, `that is ${f(rate(69e-6) * 6e7, 3)} µm per minute`,
-      `it is ${f(rate(100e-6) * 6e7, 3)} µm per minute`, `takes ${f(t, 0)} s`, `= ${f(n, 0)} captures`, `= ${f(100 / Math.sqrt(n), 1)} %`, `needs ${f(t / 60, 1)} minutes`]); }
+      `it is ${f(rate(100e-6) * 6e7, 3)} µm per minute`, `takes ${f(t, 0)} s`, `= ${f(n, 0)} captures`, `needs ${f(t / 60, 1)} minutes`]);
+    { const nd = Wd / P.massOf(8e-6); let R3 = 69e-6 ** 3, mu = 0, va = 0; while (Math.cbrt(R3) < 100e-6) { const RR = Math.cbrt(R3), lam = P.tableE(tabW, RR, 8e-6 / RR, 'clamp') * Math.PI * (RR + 8e-6) ** 2 * (vB(RR) - vB(8e-6)) * nd; mu += 1 / lam; va += 1 / lam ** 2; R3 += 512e-18; }
+      ex('book-06', 'The luck in capture.', 600, [`relative spread of ${f(100 * Math.sqrt(va) / mu, 2)} %`, `about ${f(300 * Math.sqrt(va) / mu, 0)} % sooner`]); } }
   // Example 6.3
   { const at = V => { let mx = 0; for (let i = 0; i < Bx.t.length; i++) { mx = Math.max(mx, Bx.N100[i]); if (V * mx >= Math.LN2) return [Bx.t[i], mx]; } return null; };
     ex('book-06', 'Example 6.3', 800, [`= ${f(Math.LN2 / 1e-3, 0)} drops per m³`, `The record at ${at(1e-3)[0]} s is the first above that: ${f(at(1e-3)[1], 1)} per m³`, `is ${at(1e-3)[0]} s`, `threshold is ${f(Math.LN2 / 1e-4, 0)} per m³, reached at ${at(1e-4)[0]} s`, `${f(Math.LN2, 3)} per m³, reached at ${at(1)[0]} s`]); }
@@ -527,7 +529,8 @@ expect('checks', 'against 5.767,', `${f(t90ext, 3)}`, 'the model at 5 s records'
     ex('book-06', 'In our cloud: the pair count', 900, rows);
     const Fa = (V, k) => Sx.V[V].reduce((a, q) => a + q.F40[k], 0) / Sx.V[V].length, i600 = Bx.t.indexOf(600);
     ex('book-06', 'average F_{40} 1 cm³', 300, [`at the start ${['1', '10', '100', '1000'].map(V => f(Fa(V, 0), 3)).join(' ')} ${f(Bx.F40[0], 3)}`, `after 10 min ${['1', '10', '100', '1000'].map(V => f(Fa(V, 10), 3)).join(' ')} ${f(Bx.F40[i600], 3)}`]);
-    ex('book-06', 'Read the two rows together', 300, [`already ${f(Bx.F40[0] - Fa('10', 0), 3)} behind`, `the gap is ${f(Bx.F40[i600] - Fa('10', 10), 3)}`]);
+    ex('book-06', 'Read the two rows together', 500, [`already ${f(Bx.F40[0] - Fa('10', 0), 3)} behind`, `the gap is ${f(Bx.F40[i600] - Fa('10', 10), 3)}`, `after 10 minutes is ${f(Bx.F40[i600] - Fa('100', 10), 3)}, at 1000 cm³ ${f(Bx.F40[i600] - Fa('1000', 10), 3)}`]);
+    { const xs = Sx.V['100'].map(q => q.F40[10]), mu = xs.reduce((a, v) => a + v, 0) / xs.length, se = Math.sqrt(xs.reduce((a, v) => a + (v - mu) ** 2, 0) / (xs.length - 1) / xs.length); expect('book-06', 'leave it uncertain by about', f(se, 3), 'standard error of the 100 cm³ mean'); }
     expect('book-06', 'Method · the average growth of small volumes', `${Sx.V['1'].length} runs of 1 cm³, ${Sx.V['10'].length} of 10 and of 100 cm³, ${Sx.V['1000'].length} of 1000 cm³`, null, 600); }
   // Example 9.1
   { const Rd = 287.05, Rv = 461.5, cp = 1005, L = 2.477e6, eps = Rd / Rv, es = 611.2 * Math.exp(17.67 * (T - 273.15) / (T - 29.65)), qs = eps * es / (A.p - es);
@@ -535,8 +538,9 @@ expect('checks', 'against 5.767,', `${f(t90ext, 3)}`, 'the model at 5 s records'
     const wr = EN.warm.recs, r60 = wr.find(q => q.t === 60), moved = (r60.wat[1] + r60.wat[2] - wr[0].wat[1] - wr[0].wat[2]) * 1e3;
     ex('book-09', 'Example 9.1', 2600, [`e_s = ${f(es, 1)} Pa`, `= ${f(qs * 1e3, 3)} g/kg`, `= ${f(eps, 3)}`, `g/c_p = ${f(g / cp * 1e3, 2)} K per km`, `= ${f(Gm * 1e3, 2)} K per km`, `= −${f(-dq * 1e6, 3)} g/kg per km`, `${f(A.rho, 4)} kg/m³: ${f(c * 1e6, 3)} g of liquid`,
       `30 m in a minute: ${f(c * 30 * 1e3, 3)} g/m³`, `At 2 m/s, ${f(c * 120 * 1e3, 3)} g/m³`, `moves ${f(moved, 3)} g/m³`]);
-    expect('book-09', 'No condensation: a rising cloud condenses', `${f(c * 30 * 1e3, 2)} to ${f(Math.ceil(c * 120 * 1e5) / 100, 2)} g/m³`, 'rounded up: ' + f(c * 120 * 1e3, 3));
-    expect('book-09', 'two to seven times what collection moves', `two to seven`, `ratios ${f(c * 30 * 1e3 / moved, 1)} and ${f(c * 120 * 1e3 / moved, 1)}`); }
+    expect('book-09', 'No condensation: a rising cloud condenses', `${f(c * 30 * 1e3, 2)} to ${f(c * 120 * 1e3, 2)} g/m³`);
+    expect('book-09', 'two to seven times what collection moves', `two to seven`, `ratios ${f(c * 30 * 1e3 / moved, 1)} and ${f(c * 120 * 1e3 / moved, 1)}`);
+    { const all = Object.values(Sx.V).flat(); expect('book-09', 'exact simulation by thinning,', `${all.length} runs, ${all.filter(q => q.t100 !== null).length} of which made a drizzle drop`); } }
   // Examples 10.1 and 10.2, the method of figure 10.1
   { const A4 = r => 4 * Math.PI * r * r, R = 40e-6, r = 8e-6, Rn = Math.cbrt(R ** 3 + r ** 3), dA = A4(R) + A4(r) - A4(Rn), m1 = P.massOf(R), m2 = P.massOf(r), cke = 0.5 * m1 * m2 / (m1 + m2) * (vB(R) - vB(r)) ** 2;
     ex('book-10', 'Example 10.1', 1300, [`= ${f(Rn * 1e6, 4)} µm`, `${texSci(A4(R), 3)} m² and 4\\pi r^2 = ${texSci(A4(r), 3)} m²`, `after.</strong> ${texSci(A4(Rn), 3)} m²`.replace('after.</strong> ', 'after. '), `Destroyed. ${texSci(dA, 3)} m², ${f(100 * dA / A4(r), 1)} %`, `gives ${f(100 * (1 - 2 / 3 * 0.2 + 0.2 ** 4 / 9), 2)} %`,
