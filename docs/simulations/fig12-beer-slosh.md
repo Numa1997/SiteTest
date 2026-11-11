@@ -50,6 +50,19 @@ jolts on a swinging stout (`heave-3d.cjs`: the reversal reproduced, odd part 7.6
 3 and 4 mm grids (`backbone-3d.cjs`, stage C): with slope terms 0.57, vertical wall 0.59 percentage points rms from the 3D, whose own
 grid spread is as large; spill (above); random roads by regime (stage E, `notes/fig12/validation.md`).
 
+**The 3D reference itself** (`tools/fig12/tilt-exact.cjs`): a push held steady tilts the surface into the plane 2 R(h) a/g in any
+glass. The 4 mm grid misses it by up to 46 % on the flared wall (75 mm fill, 2.5 m/s²) and by 23 % at 100 and 125 mm; the 3 mm grid by
+5–6 % at 75–125 mm and 13–23 % at 140 mm. Since 11 November 2026 the validation's reference is the 3 mm grid.
+
+**Validation (stage E)**: the first run (4 mm grid, every case judged) failed in fills, gentle and vertical, nearly all on swings
+the 3D solver does not resolve. With the site owner's agreement only resolvable swings are judged (envelope windows over 3 mm,
+cases whose 3D lean exceeds 5 mm), the rest counted and reported; the history stays in `notes/fig12/validation.md`. The pour is
+reported, not judged: on single hard pushes the model spills 5–23 % less than the 3D solver, but on roads that just lift the crest
+over the rim it pours more, up to about twice at 125 mm fill, where an overflow thinner than one cell can hardly leave the 3D grid.
+
+**Drawing the pour**: the model emits a drop for each 0.05 g it pours at each angle of the rim (outward at the weir's speed); the
+World lets them fall (`dropsFrom(list, visualOnly)`: the spilled mass stays the model's computed volume).
+
 **The pipeline on GitHub** (standard runners only, free): `fig12-modes.yml` (stages B, D: checks, every fill height, data committed
 only if its numbers changed: `tools/fig12/same_data.py`), `fig12-3d.yml` (stage C: 3D runs into `notes/fig12/runs/3d/`), and
 `fig12-validate.yml` (stage E: 250 roads, report, then the verdict). A push made with GITHUB_TOKEN starts no workflow run, so the
