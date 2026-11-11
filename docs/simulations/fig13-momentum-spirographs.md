@@ -26,18 +26,18 @@ momenta p₁, p₂. Hamilton's equations for the general family (masses, lengths
 
 | File | What it is |
 |---|---|
-| `simulations/momentum-spirographs.html` | Fig. 13: live grid of the general family over the chaos map; controls for τ, N, P, model, ratios, g. |
+| `simulations/momentum-spirographs.html` | Fig. 13, the one page that holds everything (11 November 2026): the live grid over the chaos map with its controls and the pinned pendulum; a guide of six jumps at the top; the stations of section `#inside`, each opening in place in a frame (`#butterfly` the dashboard, `#hunt` the flower hunt, `#catch` the live catch, `#films` the eight films, each started by its own button); and one lecture note of four parts, 35 sections and 33 equations, written into the page by `tools/fig13/build_page.py`. |
 | `simulations/flower-hunt.html` | The flower hunt: a garden of closed flowers and butterflies, a bench to test any kick, study notes. |
 | `simulations/butterfly-dashboard.html` | The dashboard: complex plane, h(t) to the right joined by a horizontal line, x(t) below joined by a vertical line, both wave panels turned by φ (by itself or by hand). A wheel and the butterfly. Wide and tall (phone) layouts are chosen by the width of the figure. Test hook `window.__dash`. |
 | `simulations/fig13/bell.html` | Film: the bell above the floor (3-D), r = 2l cos(Δ/2). |
 | `simulations/fig13/turning.html?scene=wheel\|butterfly` | Film: turning the paper, with the deck of earlier pictures. |
 | `simulations/fig13/together.html` | Film: six pictures on one clock; the phone layout on a portrait screen. |
 | `simulations/fig13/dive.html` | Film, phone first: from momentum space into one cell, then the exposure grows from an eye's 0.1 s to one lap. |
-| `simulations/fig13/reem.html` | (9 November 2026, evening: reem.html, construction.html and catch.html are now the live player, written by `film_page.py`; the precomputed videos were removed from the site and `video_pages.py` is superseded; the masters were made by `render.cjs` and ffmpeg and are not kept.) The gift For رِيمْ as a precomputed video (`video/gift-{dark,light}.mp4`), then the construction video, looping; follows the reader's light or dark setting. The film itself (`tools/fig13/gift/reem.html`, the first version Numa liked, in the house colours) writes رِيمْ and فَرَاشَتُكِ (each traced from a plate Numa chose) with 640 arrows each, then the butterfly by two arrows, then its dashboard with the paper turning, then the exact strike and why it is not chaos (numbers from `butterfly_physics.py`). Labels and captions in Instrument Sans. |
-| `simulations/fig13/construction.html` | The construction as a precomputed video (`video/construction-{dark,light}.mp4`), looping; labels in Instrument Sans. The film (`tools/fig13/gift/construction.html`): h(t) beside the plane, x(t) below, the two time axes joined by a 45-degree mitre; for each instant a level and an upright line cross at the tip of the pendulum; a wheel first, then the butterfly. Videos and pages: `video_pages.py` (drawn live on a phone the films stuttered). |
-| `simulations/fig13/catch.html` | Catching the butterfly, as a precomputed video (`video/catch-{dark,light}.mp4`), looping; also the third part of `reem.html`. The film (`tools/fig13/gift/catch.html`, data `catch.json` from `butterfly_control.film_data`): struck with p = (2, 4) (18 J), the pendulum swings in chaos for 8 s; a motor at the top pin (drawn as a direct-drive torque motor: six stator coils that glow with the current, a rotor of four magnets turning with the upper rod; torque constant 2.5 N·m/A, assumed) pumps and steers, catches at 13.34 s, holds four laps (corrections below 0.1 N·m), and lets go at 23.97 s within 0.0000 of the butterfly; a pen at the tip inks it, still within 0.0002 four free laps later. |
+| `simulations/fig13/reem.html` | The film player, written by `film_page.py`: the eight live parts in order (the gift For رِيمْ, the construction, the catch, the dive, six pictures, turning the paper twice, the bell). `?part=k` starts at part k; `?embed=1` (inside the Fig. 13 page) hides the back link and tells the page each part's shape. The gift film itself (`tools/fig13/gift/reem.html`) writes رِيمْ and فَرَاشَتُكِ (each traced from a plate Numa chose) with 640 arrows each, then the butterfly by two arrows, then its dashboard with the paper turning, then the exact strike and why it is not chaos. Labels and captions in Instrument Sans. No recorded video is on the site. |
+| `simulations/fig13/construction.html` | The player with the construction film alone (`tools/fig13/gift/construction.html`): h(t) beside the plane, x(t) below, the two time axes joined by a 45-degree mitre; for each instant a level and an upright line cross at the tip of the pendulum; a wheel first, then the butterfly. |
+| `simulations/fig13/catch.html` | The player with the catch film alone (`tools/fig13/gift/catch.html`, drawn live from `pendulum.js`): struck with p = (2, 4) (18 J), the pendulum swings in chaos for 8 s; a motor at the top pin (drawn as a direct-drive torque motor; torque constant 2.5 N·m/A, assumed) pumps and steers, waits, catches, holds four laps and lets go. When the catch happens is not a fixed number: 8 s of chaos amplify the last digit of the arithmetic (73 s in Chromium 153, 118 s in Node 22, 43 s in Python, measured 11 November 2026). |
 | `simulations/butterfly-catch.html` | Catching the butterfly: the live catch (`fig13/live-catch.html` in a frame) with **Random chaos** (random angles and momenta) and **Choose a strike** (a tap on the Fig. 13 chaos map, p₁ ∈ [−12, 12], p₂ ∈ [−8, 16], strikes both rods from rest), each restarting the run computed live; then the lecture note on the theory and the method (13 sections, 15 numbered equations, the phase diagram, the checks). Body in `tools/fig13/catch_note_body.html`. English only. |
-| `simulations/fig13/film.html` | The whole gift as one film, computed and drawn live in the browser, nothing recorded: `live-gift.html`, `live-construction.html`, `live-catch.html` (copies of the three film renderers, by `publish_films.py`) played in order; the page keeps the clock and asks each film for frame f. The motion comes from `pendulum.js`: the pendulum's Hamilton equations integrated by RK4 (the butterfly from its strike, matching `orbit24.json` to 4e-7 rad); for the catch, the orbit, its step maps and the motor's periodic-LQR gains are computed at start (about 0.1 s, gains equal to the Python ones to three decimals) and the controller of `butterfly_control.py` runs as the film plays (caught at 13.30 s, Python 13.34 s); the catch film's clock follows the phases (chaos at half speed, the motor at a quarter, from a second after the catch at half). Play/pause, previous, next, from the start, Night/Paper, progress; loops. Written by `tools/fig13/gift/film_page.py`. The same film as one MP4 (about 60 MB) is too large for Cloudflare's 25 MiB per file; it is made from the three masters with ffmpeg and not committed. |
+| `simulations/fig13/film.html` | The whole gift as one film, computed and drawn live in the browser, nothing recorded: the eight parts of `reem.html` (the same list), played in order; the page keeps the clock and asks each film for frame f. The motion comes from `pendulum.js`: the pendulum's Hamilton equations integrated by RK4 (the butterfly from its strike, matching `orbit24.json` to 4e-7 rad); for the catch, the orbit, its step maps and the motor's periodic-LQR gains are computed at start (about 0.1 s, gains equal to the Python ones to three decimals) and the controller of `butterfly_control.py` runs as the film plays (when it is caught depends on the device's arithmetic, see `catch.html` above); the catch film's clock follows the phases (chaos at half speed, the motor at a quarter, from a second after the catch at half). Play/pause, previous, next, from the start, Night/Paper, progress; loops. Written by `tools/fig13/gift/film_page.py`. The same film as one MP4 (about 60 MB) is too large for Cloudflare's 25 MiB per file; it is made from the three masters with ffmpeg and not committed. |
 
 The four films are generated: edit `tools/fig13/gift/*.html` and run `python3 tools/fig13/gift/publish_films.py`, which rewrites the
 asset paths, adds the two security meta tags and a link back to the dashboard. Opened without `?film=1` they loop live.
@@ -145,3 +145,61 @@ laps later. The earlier settings (catch 0.2, settled at 1 J and 1) caught 29 of 
 dive, six pictures (phone layout), turning the paper (wheel, butterfly) and the bell; each part has its own stage size (portrait
 1080 × 1920 or wide 1920 × 1080). Captions and subtitles of the gift, construction and catch films sit in fixed boxes and shrink their
 type to fit (`fitBox`), so a browser's translation, longer than the English, never spills over the drawing.
+
+**11 November 2026: the Fig. 13 page itself.** Until now `momentum-spirographs.html` was the bare figure: no axes, no legend for the
+glow, no lecture note (the catalog's "Read the lecture note" led nowhere). Added:
+- axes: the p₂ of each row along the left edge, the p₁ of each column along the bottom (`drawAxes`);
+- **Explain the eye** (`drawAnatomy`): the ellipses K = 2U₂ (pupil) and K = 2(U₁ + U₂) from the strike's kinetic energy
+  K = (B p₁² − 2C p₁p₂ + A p₂²)/(2(AB − C²)), and the two fold-through lines from K = (p₁ + p₂)²/(2(A + B − 2C)), all for the sliders' values;
+- **Pinned pendulum**: a tap on a cell pins it (`setPin`): enlarged live view with the last 3 s of path, its strike, K, the map's value at
+  the strike (`mapValue`, read from the PNG's alpha, v = (α/255)^(1/0.8)) and a sentence saying which part of the eye it is in;
+- a square plate on screens up to 640 px wide (same sheet, drawings 1.8 times larger); S = 0.4·min(cell width, height)/(l₁ + l₂);
+- the lecture note (11 sections, 9 numbered equations; source kept in `tools/fig13/fig13_note.html`): why a hundred pendulums share one
+  sheet (position = strike, drawing = tip path), what a strike is (hammer impulses), what the glow measures, the eye, the two streaks.
+Measured for the note on `chaos-map-rods-P20.png` (1280 × 720, chaotic = v > 0.5, 5.52 % of the sheet): K < 9.8 J 0.0 % chaotic;
+9.8 to 29.4 J 42.4 %; 29.4 to 39.2 J 63.8 %; 39.2 to 78.4 J 32.2 %; 78.4 to 196 J 8.6 %; above 196 J 2.3 %, of which within 0.02 rad of a
+fold line 65.9 %, 0.02 to 0.05 rad 13.6 %, 0.05 to 0.10 rad 2.2 %, beyond 0.10 rad 0.0 %. Of the 100 default cells: 2 in the pupil,
+60 fold through, 38 do not; 6 chaotic by the map (corrected 11 November 2026, see the end of this page). Energy drift of the page over 10 s (RK4, h = 1/4500 s): median 2e-5 J, worst 0.14 J of
+3450 J at (−32, 18). Test hook `window.__fig13` gained `strikeKE`, `foldsThrough`, `mapValue`, `energy`.
+
+**11 November 2026, later: everything inside the Fig. 13 page.** A section "Inside Fig. 13" (`#inside`) under the figure: the catch
+(`fig13/live-catch.html`) and the eight-part film player (`fig13/reem.html`) play in place in a frame on **Play here** (one at a time; the
+sheet pauses while one plays and resumes on **Stop**), with links to the dashboard and the flower hunt. On plates narrower than 600 px the
+axes are two range labels instead of a number per cell.
+
+**11 November 2026, audit and continuation (a second session).** Checked independently (scripts kept: `tools/fig13/catch_stats.cjs`,
+`tools/fig13/release_check.py`); what was wrong was corrected on the pages and here:
+- The map's statistics, the model, the fold lines and the butterfly's numbers were recomputed and hold. Six cells, not five, are chaotic
+  by the map: (17.78, 2) was missed because a cell's centre lies on a pixel corner and `mapValue` read one pixel; it now reads between
+  the four nearest pixels, so mirror strikes read alike.
+- The catch: 100 of 100 random starts are caught at 1, 4, 8 and 16 sub-steps and for the seeds 1, 2 and 2026 (median 17.5 to 18.9 s,
+  slowest 229 s). Not reproducible and replaced by measurements: the film's "13.30 s" (see `catch.html` above); the basin (now 200
+  random states per distance: 0.3: 140, 0.4: 112, 0.6: 62, 0.8: 26 held); "at most 0.0034 four laps after release" (median 0.0017, worst
+  0.058 over 300 runs); "within 0.1 for 12 minutes" (median 403 s, shortest 41 s over 40 runs by DOP853); the free orbit's drift
+  (2e-3 a lap at one sub-step, 4e-6 at four). The smallest Gramian direction is a change of energy, not of timing.
+- Everything on the one page: `butterfly-dashboard.html` and `flower-hunt.html` take `?embed=1` (no header, no note; they report their
+  height to the page that frames them); the player takes `?part=k`; the page's note is built by `tools/fig13/build_page.py` from
+  `fig13_note.html` (Part I), the dashboard's note and `butterfly_note.html` (Part II), the hunt's notes (Part III) and
+  `catch_note_body.html` (Part IV). After editing any of these run `python3 tools/fig13/build_page.py`; `--check` fails if the page is stale.
+- Translation: `publish_films.py` adds a guard to every film (table `GUARD`): titles and captions shrink to stay inside their boxes when a
+  browser's translation makes them longer. Measured with text made 35 % and 100 % longer: no title or caption overlaps another in
+  parts 2 to 8 (before: the title over the subtitle in part 5, the catch's title under its buttons). Not tested with a real translator.
+- Phone speed: a film's canvas was stage size times the device's pixel ratio (3240 x 5760 px on a phone of ratio 3, shown at a third
+  of that). The published films now cap the ratio to what is displayed (`DPR_JS` in `publish_films.py`; the player passes `?dpr=`).
+  Measured in headless Chromium at 390 x 844, ratio 3, processor slowed four times: the gift film 27 frames a second (12 before, at
+  ratio 2), the catch 23 (7.5 before). While a station is open the paused sheet is not redrawn. Not measured on a real phone.
+- Removed: `tools/fig13/gift/video_pages.py` and `tools/fig13/gift/catch.json` (nothing used them since the videos left the site).
+
+- Zoom, atlas and two more views of the pinned pendulum (11 November 2026, later; `simulations/momentum-spirographs.html`, hand-written
+  part): the sheet is a window on the plane of strikes with a centre `c1, c2` and a half-height `P`. **Zoom in / Zoom out** halve or
+  double `P` around the pinned strike (`goTo` puts that strike exactly on a cell's centre and keeps it pinned); **Whole sheet** goes back
+  to ±35.6 by ±20. The chaos map is drawn as the matching part of the one stored picture, at any zoom (before, it was hidden unless
+  `P` was 20). The **Atlas** is a list of the 14 closed curves in `scripts/fig13-hunt-data.js` (the page now loads that file); choosing
+  one resets the pendulum to equal rods under g = 9.8, goes to the strike and shows ±1 kg·m²/s of p₂ around it. The small picture of
+  the pinned pendulum has three views: **Tip path** (as before), **Angles** (θ₂ against θ₁, both wrapped, kept since pinning, on its own
+  canvas so only new path is drawn) and **Section** (one dot at (θ₂, p₂) each time θ₁ passes a multiple of 2π; a backward pass is drawn
+  mirrored; up to 8 000 dots). The note's section 9 explains all three. Measured in headless Chromium at 1400 x 900 and 390 x 844: all
+  14 atlas strikes land on their value to 1e-15 and their state returns after one period to within 0.03 (the step is 1/4500 s); a closed
+  curve gives 1 to 7 separate dots after five periods, a chaotic strike (3.56, −2.00, map value 0.83) scatters 44 dots in 60 s; zooming
+  keeps the pinned strike exactly; the map canvas agrees with `mapValue` at 762 of 763 random points of a zoomed window. A change of
+  the window's height alone (a phone's address bar) no longer rebuilds the sheet.

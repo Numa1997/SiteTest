@@ -19,6 +19,13 @@
         .seg .btn.is-on { background: var(--accent); color: var(--card); }
         #dash canvas { display: block; }
     </style>
+    <script>if (new URLSearchParams(location.search).get('embed') === '1') document.documentElement.classList.add('embed');</script>
+    <style>
+        /* ?embed=1: inside a frame of the Fig. 13 page, only the figure and its controls; the frame is given this page's height */
+        .embed body { background: transparent; }
+        .embed .sim-top, .embed .sim__head, .embed .paper, .embed .more13 { display: none; }
+        .embed .sim { padding: 0; margin: 0; max-width: none; }
+    </style>
 </head>
 <body>
     <header class="sim-top">
@@ -70,7 +77,7 @@
                 <div class="seg"><button type="button" class="btn is-on" id="lk-night">Night</button><button type="button" class="btn" id="lk-paper">Paper</button></div></div>
         </div>
 
-        <p style="margin:18px 0 0;font-size:15px;line-height:1.6;color:var(--ink-2)">More of Fig. 13: <a href="momentum-spirographs.html">Spirographs in Momentum Space</a> · <a href="flower-hunt.html">The Flower Hunt</a> · films that play in the browser: <a href="fig13/film.html"><b>the whole gift as one film, drawn live</b></a> · <a href="butterfly-catch.html"><b>catching the butterfly: start it anywhere, with the theory</b></a> · <a href="fig13/construction.html"><b>the butterfly built by hand</b></a> · <a href="fig13/catch.html"><b>catching the butterfly with a motor</b></a> · <a href="fig13/dive.html">From a kick to a butterfly</a> (phone first) · <a href="fig13/bell.html">The bell above the floor</a> · <a href="fig13/turning.html?scene=wheel">Turning the paper: a wheel</a> · <a href="fig13/turning.html?scene=butterfly">Turning the paper: the butterfly</a> · <a href="fig13/together.html">Six pictures, one clock</a></p>
+        <p class="more13" style="margin:18px 0 0;font-size:15px;line-height:1.6;color:var(--ink-2)">More of Fig. 13: <a href="momentum-spirographs.html">Spirographs in Momentum Space</a> · <a href="flower-hunt.html">The Flower Hunt</a> · films that play in the browser: <a href="fig13/film.html"><b>the whole gift as one film, drawn live</b></a> · <a href="butterfly-catch.html"><b>catching the butterfly: start it anywhere, with the theory</b></a> · <a href="fig13/construction.html"><b>the butterfly built by hand</b></a> · <a href="fig13/catch.html"><b>catching the butterfly with a motor</b></a> · <a href="fig13/dive.html">From a kick to a butterfly</a> (phone first) · <a href="fig13/bell.html">The bell above the floor</a> · <a href="fig13/turning.html?scene=wheel">Turning the paper: a wheel</a> · <a href="fig13/turning.html?scene=butterfly">Turning the paper: the butterfly</a> · <a href="fig13/together.html">Six pictures, one clock</a></p>
 
         <article class="paper" id="paper" aria-labelledby="paper-title">
             <header class="paper__head">
@@ -104,6 +111,13 @@
                 <p>The butterfly is the pendulum kicked with \(p = (3.557, 12.211)\) kg·m²/s from hanging still. Its state returns to the start after \(T = 2.659\) s (to about \(10^{-11}\), found by Newton's method on Hamilton's equations; see <a href="flower-hunt.html">The Flower Hunt</a>), so its path closes after 24 petals. It is shown here at a quarter of real speed. In a frictionless model it repeats for ever; a real one loses energy to friction, and this orbit is weakly unstable (a small error grows by about 2 % per lap), so it drifts after a minute or two.</p>
             </section>
         </article>
+    <script>
+    if (document.documentElement.classList.contains('embed') && parent !== window) {
+        const p = document.getElementById('paper'); if (p) p.remove();                 // its note is in the Fig. 13 page's own note
+        const tell = () => parent.postMessage({ fig13: 'height', h: Math.ceil(document.querySelector('.sim').getBoundingClientRect().bottom + scrollY) + 34 }, location.origin);
+        new ResizeObserver(tell).observe(document.querySelector('.sim')); addEventListener('load', tell); tell();
+    }
+    </script>
     </main>
 
     <script src="../scripts/fold.js"></script>

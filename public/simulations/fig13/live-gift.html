@@ -30,6 +30,14 @@ canvas { position:absolute; left:0; top:0; }
 </style>
 </head>
 <body>
+<script>
+(function () {
+    const real = window.devicePixelRatio || 1, q = +new URLSearchParams(location.search).get('dpr'), W = 1080, H = 1920;
+    const cap = q > 0 ? q : Math.max(1, real * Math.min(1, innerWidth / W, innerHeight / H));
+    if (cap < real) try { Object.defineProperty(window, 'devicePixelRatio', { get: () => cap, configurable: true }); } catch (e) {}
+})();
+</script>
+
 <div id="stage">
   <canvas id="cv"></canvas>
   <div class="capt" id="capA"></div>

@@ -42,8 +42,9 @@
     // ---------------------------------------------------------------- the motor's controller (butterfly_control.py, sections 1-4)
     const M = 2400, H = T / M, SUB = 4, Qd = [1, 1, 0.05, 0.05], R = 1e-3, TAU_MAX = 60, KT = 2.5;
     // kE, kA, kI, wait_max, steer_max, window, e_tol, a_tol, catch_at (SETTINGS in butterfly_control.py)
-    // catchAt 0.6, eTol 5 J, aTol 3: measured 9 Nov 2026 on 100 random starts (pendulum.js in Node): all caught and held, median 16 s after the
-// motor switches on (catchAt 0.2, eTol 1, aTol 1: 29 of 40 within 400 s). The catch's basin: from 0.3 away 16 of 16, from 0.6 12 of 16.
+    // catchAt 0.6, eTol 5 J, aTol 3: measured 11 Nov 2026 with tools/fig13/catch_stats.cjs on three sets of 100 random starts (seeds 1, 2, 2026):
+    // all caught and held, median 17.5 to 18.9 s after the motor switches on, slowest 229 s; the same count at 8 and 16 sub-steps.
+    // (catchAt 0.2, eTol 1, aTol 1: 29 of 40 within 400 s.) The catch's basin, 200 random states per distance: 0.3: 140, 0.6: 62 held.
 const SET = { kE: 0.01, kA: 0.05, kI: 0.005, waitMax: 12, steerMax: 12, win: 3, eTol: 5, aTol: 3, catchAt: 0.6, eLow: 60, releaseAt: 0.005 };
     function step(s, tau) { for (let j = 0; j < SUB; j++) rk4(s, H / SUB, tau); }     // one control step of H, four sub-steps
 

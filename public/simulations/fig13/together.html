@@ -42,7 +42,15 @@ canvas { position:absolute; left:0; top:0; }
 </style>
 </head>
 <body>
-<a href="../butterfly-dashboard.html" style="position:fixed;left:10px;bottom:10px;z-index:9;font:13px 'IBM Plex Mono',monospace;color:#b9a59b;background:rgba(20,13,16,.75);padding:6px 10px;border-radius:6px;text-decoration:none">← Fig. 13 dashboard</a>
+<script>
+(function () {
+    const real = window.devicePixelRatio || 1, q = +new URLSearchParams(location.search).get('dpr'), W = 1080, H = 1920;
+    const cap = q > 0 ? q : Math.max(1, real * Math.min(1, innerWidth / W, innerHeight / H));
+    if (cap < real) try { Object.defineProperty(window, 'devicePixelRatio', { get: () => cap, configurable: true }); } catch (e) {}
+})();
+</script>
+
+<a id="back13" href="../momentum-spirographs.html#films" style="position:fixed;left:10px;bottom:10px;z-index:9;font:13px 'IBM Plex Mono',monospace;color:#b9a59b;background:rgba(20,13,16,.75);padding:6px 10px;border-radius:6px;text-decoration:none">← Fig. 13</a><script>if (new URLSearchParams(location.search).get("film")) document.getElementById("back13").style.display = "none";</script>
 <div id="stage">
   <canvas id="cv"></canvas>
   <h1 id="h1">A butterfly drawn by a double pendulum</h1>
@@ -329,6 +337,21 @@ function fit() {   // scale the stage to the screen (the layout viewport, not in
 }
 if (!Q.get('film')) { fit(); addEventListener('resize', fit); }
 boot();
+</script>
+<script>
+// Added by publish_films.py: keep titles and captions inside their boxes when the page is translated (longer words).
+(function () {
+    const SPEC = [["#h1", 1008, 0, 1], ["#h2", 1000, 60, 0], ["#clock", 1000, 72, 0]], base = new Map(), seen = new Map();
+    function fit() {
+        for (const [sel, maxW, maxH, line] of SPEC) document.querySelectorAll(sel).forEach(el => {
+            const n = el.textContent.length; if (!n || seen.get(el) === n) return; seen.set(el, n);
+            if (!base.has(el)) base.set(el, parseFloat(getComputedStyle(el).fontSize));
+            const b = base.get(el); let fs = b; el.style.fontSize = b + 'px'; el.style.maxWidth = maxW + 'px'; el.style.overflow = 'hidden'; if (line) el.style.whiteSpace = 'nowrap';
+            while (((line && el.scrollWidth > maxW + 1) || (maxH && el.scrollHeight > maxH + 1)) && fs > b * 0.5) { fs -= 1; el.style.fontSize = fs + 'px'; }
+        });
+    }
+    setInterval(fit, 250);
+})();
 </script>
 </body>
 </html>

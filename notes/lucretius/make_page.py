@@ -14,12 +14,20 @@ if g0[1].endswith('leuchtende') and g0[2].startswith('Helle Scheuchen'):   # Die
 def cell(lang, label, lines, dir_='ltr'):
     body = ''.join(f'<span class="lp__l">{E(t)}</span>' for t in lines)
     return f'<div class="lp__c" lang="{lang}" dir="{dir_}" data-l="{label}">{body}</div>'
+# Ornaments, drawn as inline SVG in the accent colour (no font needed): an eight-pointed star (khatam, two squares turned 45 degrees,
+# pierced in the middle), a quatrefoil of four discs, and a small lozenge. Between two columns: lozenge, line, star or quatrefoil, line,
+# lozenge; between two sentences: line, lozenge, line, star, line, lozenge, line.
+STAR = '<svg width="18" height="18" viewBox="0 0 20 20"><rect x="4.2" y="4.2" width="11.6" height="11.6"/><rect x="4.2" y="4.2" width="11.6" height="11.6" transform="rotate(45 10 10)"/><circle class="h" cx="10" cy="10" r="2.6"/></svg>'
+QUAT = '<svg width="16" height="16" viewBox="0 0 20 20"><circle cx="10" cy="4.6" r="3.9"/><circle cx="15.4" cy="10" r="3.9"/><circle cx="10" cy="15.4" r="3.9"/><circle cx="4.6" cy="10" r="3.9"/><circle class="h" cx="10" cy="10" r="2.2"/></svg>'
+DOT = '<svg width="7" height="7" viewBox="0 0 10 10"><rect x="2" y="2" width="6" height="6" transform="rotate(45 5 5)"/></svg>'
+sep = lambda mid: f'<i class="lp__sep" aria-hidden="true">{DOT}<span></span>{mid}<span></span>{DOT}</i>'
+DIV = f'      <div class="lp-div" aria-hidden="true"><span></span>{DOT}<span></span>{STAR}<span></span>{DOT}<span></span></div>'
 secs = []
 for k, (g, a) in enumerate(zip(G, AR)):
     lo, hi = min(g['lines']), max(g['lines'])
     secs.append(f'''      <section class="lp" id="l{lo}" translate="no">
         <h2 class="lp__n"><a href="#l{lo}" dir="ltr">{lo}–{hi}</a></h2>
-        <div class="lp__row">{cell('la', 'Latin', g['la'])}{cell('en', 'English', g['en'])}{cell('de', 'Deutsch', g['de'])}{cell('ar', 'العربية', a['ar'], 'rtl')}</div>
+        <div class="lp__row">{cell('la', 'Latin', g['la'])}{sep(STAR)}{cell('en', 'English', g['en'])}{sep(QUAT)}{cell('de', 'Deutsch', g['de'])}{sep(STAR)}{cell('ar', 'العربية', a['ar'], 'rtl')}</div>
       </section>''')
 P = io.open('public/portfolios.html', encoding='utf-8').read()
 csp = re.search(r'    <meta http-equiv="Content-Security-Policy"[^\n]*\n', P).group(0)
@@ -31,12 +39,19 @@ logo = re.search(r'<span style="display:inline-flex;align-items:center;gap:14px"
 CSS = """      /* Lucretius I 146-224, four columns: the Latin, then Leonard, Diels and the Arabic of this site. The row stays left to right in every
          language of the page (direction: ltr); each column carries its own dir. */
       .lp-lede { max-width: 62ch; }
-      .lp { display: grid; grid-template-columns: 72px minmax(0, 1fr); gap: 0 18px; padding: 22px 0; border-bottom: 1px solid var(--rule, rgba(60, 40, 20, .16)); }
+      .lp { display: grid; grid-template-columns: 72px minmax(0, 1fr); gap: 0 18px; padding: 20px 0; }
       .lp__n { margin: 0; font: 500 11px/1.6 var(--mono); letter-spacing: .06em; padding-top: 5px; }
       .lp__n a { color: var(--muted, var(--ink-3)); text-decoration: none; }
       .lp__n a:hover, .lp:target .lp__n a { color: var(--accent); }
       .lp:target { background: rgba(122, 31, 43, .04); }
-      .lp__row { direction: ltr; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0 28px; }
+      .lp__row { direction: ltr; display: grid; grid-template-columns: minmax(0, 1fr) 18px minmax(0, 1fr) 18px minmax(0, 1fr) 18px minmax(0, 1fr); gap: 0 16px; }
+      .lp__sep { display: flex; flex-direction: column; align-items: center; gap: 7px; padding: 2px 0; color: var(--accent); font-style: normal; }
+      .lp__sep span { flex: 1; width: 1px; min-height: 14px; background: linear-gradient(to bottom, rgba(122, 31, 43, .05), rgba(122, 31, 43, .32), rgba(122, 31, 43, .05)); }
+      .lp__sep svg, .lp-div svg { flex: none; display: block; fill: currentColor; } .lp__sep svg .h, .lp-div svg .h { fill: var(--paper); }
+      .lp__sep svg:not(:first-child):not(:last-child) { opacity: .85; } .lp__sep > svg:first-child, .lp__sep > svg:last-child { opacity: .55; }
+      .lp-div { display: flex; align-items: center; gap: 10px; max-width: 460px; margin: 10px auto; color: var(--accent); }
+      .lp-div span { flex: 1; height: 1px; background: linear-gradient(to right, rgba(122, 31, 43, .04), rgba(122, 31, 43, .3), rgba(122, 31, 43, .04)); }
+      .lp-div > svg:nth-of-type(odd) { opacity: .55; } .lp-div > svg:nth-of-type(2) { width: 24px; height: 24px; }   /* the sentence break: a larger star than the column breaks */
       .lp__c { min-width: 0; }
       .lp__c::before { content: attr(data-l); display: block; margin-bottom: 6px; font: 500 10.5px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted, var(--ink-3)); }
       .lp__c[lang='ar']::before { font-family: 'Noto Naskh Arabic', var(--mono); letter-spacing: 0; text-transform: none; font-size: 12px; }
@@ -46,7 +61,7 @@ CSS = """      /* Lucretius I 146-224, four columns: the Latin, then Leonard, Di
       .lp__c[lang='ar'] .lp__l { font: 400 19px/1.95 'Amiri', 'Noto Naskh Arabic', serif; color: var(--ink); }
       .lp-src { margin: 34px 0 0; padding: 0; list-style: none; max-width: 78ch; }
       .lp-src li { margin: 0 0 12px; font-size: 14.5px; line-height: 1.65; color: var(--ink-2, var(--ink)); }
-      @media (max-width: 1000px) { .lp__row { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 24px; } }
+      @media (max-width: 1000px) { .lp__row { grid-template-columns: minmax(0, 1fr); gap: 14px 0; } .lp__sep { flex-direction: row; width: min(130px, 40%); opacity: .8; margin: 0 auto; padding: 0; } .lp__sep span { width: auto; min-height: 0; height: 1px; background: linear-gradient(to right, rgba(122, 31, 43, .05), rgba(122, 31, 43, .32), rgba(122, 31, 43, .05)); } }
       @media (max-width: 620px) { .lp { grid-template-columns: minmax(0, 1fr); } .lp__row { grid-template-columns: minmax(0, 1fr); } .lp__n { padding-top: 0; margin-bottom: 8px; } }
 """
 page = f'''<!doctype html>
@@ -96,7 +111,7 @@ page = f'''<!doctype html>
         </div>
       </div>
 
-{chr(10).join(secs)}
+{(chr(10) + DIV + chr(10)).join(secs)}
 
       <h2 class="lp-h">Sources and how the translations were made</h2>
       <ul class="lp-src">
