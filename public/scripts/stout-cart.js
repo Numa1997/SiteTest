@@ -67,6 +67,13 @@
     this.mic = new F(this.nc); this.r_ = new F(this.nc); this.z_ = new F(this.nc); this.s_ = new F(this.nc);
     this.sliver = o.sliver != null ? o.sliver : 0.1;
     this.faceFractions();
+    // Friction on the glass (off unless o.wallFriction is given): the stress of the laminar Stokes layer between the wall
+    // and the core of the flow, tau = rho sqrt(nu) Integral K(t-t') dU_t/dt' dt', K = 1/sqrt(pi t) (derived in Wolfram,
+    // docs/simulations/fig12-beer-slosh.md), with K as the sum of exponentials sum a_k exp(-t/T_k) of
+    // public/data/fig12/wall-kernel.json (tools/fig12/wall_kernel.py). The layer (0.44 mm at 3.4 Hz) is far thinner than a
+    // cell, so it is not resolved: its stress acts on the faces next to the wall, on the slip U_t that the grid carries there.
+    this.wallKernel = o.wallFriction || null;
+    if (this.wallKernel) this.wallGeometry();
     this.ppcSide = o.ppcSide || 2;
     this.wallImages = o.wallImages != null ? o.wallImages : true;
     this.rpFactor = o.rpFactor || 1.8;     // particle radius of the level set, in particle spacings (see Fluid.seed)
@@ -594,6 +601,123 @@
     for (let n = 0; n < this.nu_; n++) if (this.au[n] > 0) this.u[n] += dt * gx;
     for (let n = 0; n < this.nw_; n++) if (this.aw[n] > 0) this.w[n] += dt * gz;
     if (this.nu > 0) this.viscosity(dt);
+    if (this.wallKernel) this.wallStress(dt);
+  };
+
+  // The wetted glass, face by face: for every velocity face next to the wall, the wall area it carries (half of each
+  // neighbouring cell's area, all of it if the other face is shut), the wall's normal there, and the liquid volume of the
+  // face's control volume. Side wall: the arc of R(z) at the layer's middle height, cut into 1/4000 of a half turn, each
+  // piece given to the cell that holds its midpoint, times dx sqrt(1 + R'^2) for the slant. Floor (z = 0): the area of
+  // the k = 0 cells inside R(0).
+  Fluid.prototype.wallGeometry = function () {
+    const dx = this.dx, nx = this.nx, ny = this.ny, nz = this.nz, x0 = this.x0, nc = this.nc;
+    const side = new Float64Array(nc), floor = new Float64Array(nc), vol = new Float64Array(nc);
+    const M = 4000, S = 10;
+    let sideTotal = 0, floorTotal = 0;
+    for (let k = 0; k < nz; k++) {
+      const z = (k + 0.5) * dx; if (z > this.zRim) break;
+      const R = this.Rz(z), sl = Math.sqrt(1 + this.dRz(z) ** 2);
+      for (let q = 0; q < M; q++) {
+        const th = Math.PI * (q + 0.5) / M, x = R * Math.cos(th), y = R * Math.sin(th);
+        const i = Math.floor((x - x0) / dx), j = Math.floor(y / dx);
+        if (i < 0 || i >= nx || j < 0 || j >= ny) continue;
+        const A = R * Math.PI / M * dx * sl; side[i + nx * (j + ny * k)] += A; sideTotal += A;
+      }
+      for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) {
+        let inside = 0;
+        for (let a = 0; a < S; a++) for (let b = 0; b < S; b++) {
+          const x = x0 + (i + (a + 0.5) / S) * dx, y = (j + (b + 0.5) / S) * dx;
+          if (x * x + y * y < R * R) inside++;
+        }
+        const c = i + nx * (j + ny * k); vol[c] = inside / (S * S) * dx * dx * dx;
+      }
+      if (k === 0) {   // the floor at z = 0, radius R(0)
+        const R0 = this.Rz(0);
+        for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) {
+          let inside = 0;
+          for (let a = 0; a < S; a++) for (let b = 0; b < S; b++) {
+            const x = x0 + (i + (a + 0.5) / S) * dx, y = (j + (b + 0.5) / S) * dx;
+            if (x * x + y * y < R0 * R0) inside++;
+          }
+          const c = i + nx * (j + ny * k); floor[c] = inside / (S * S) * dx * dx; floorTotal += floor[c];
+        }
+      }
+    }
+    // entries: one per (face, wall part); each keeps its own history
+    const ent = [];
+    const add = (comp, f, A, nxw, nyw, nzw, V, px, py, pz) => { if (A > 0) ent.push([comp, f, A, nxw, nyw, nzw, V, px, py, pz]); };
+    let dropped = 0;
+    for (let k = 0; k < nz; k++) for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) {
+      const c = i + nx * (j + ny * k);
+      for (const [A, part] of [[side[c], 0], [floor[c], 1]]) {
+        if (A <= 0) continue;
+        const xc = x0 + (i + 0.5) * dx, yc = (j + 0.5) * dx, zc = (k + 0.5) * dx;
+        let nxw = 0, nyw = 0, nzw = 1;
+        if (part === 0) { const r = Math.hypot(xc, yc), d = -this.dRz(zc), L = Math.sqrt(1 + d * d); nxw = xc / r / L; nyw = yc / r / L; nzw = d / L; }
+        // the two faces of each component that bound the cell
+        const faces = [
+          [0, i + (nx + 1) * (j + ny * k), i + 1 + (nx + 1) * (j + ny * k), this.au, [x0 + i * dx, yc, zc], [x0 + (i + 1) * dx, yc, zc]],
+          [1, i + nx * (j + (ny + 1) * k), i + nx * (j + 1 + (ny + 1) * k), this.av, [xc, j * dx, zc], [xc, (j + 1) * dx, zc]],
+          [2, i + nx * (j + ny * k), i + nx * (j + ny * (k + 1)), this.aw, [xc, yc, k * dx], [xc, yc, (k + 1) * dx]]];
+        for (const [comp, fa, fb, open, pa, pb] of faces) {
+          const oa = open[fa] > 0, ob = open[fb] > 0;
+          if (!oa && !ob) { if (comp === 0) dropped += A; continue; }
+          const sa = oa && ob ? 0.5 : oa ? 1 : 0;
+          if (sa > 0) add(comp, fa, sa * A, nxw, nyw, nzw, null, pa[0], pa[1], pa[2]);
+          if (1 - sa > 0) add(comp, fb, (1 - sa) * A, nxw, nyw, nzw, null, pb[0], pb[1], pb[2]);
+        }
+      }
+    }
+    // the liquid volume of each face's control volume: half of each neighbouring cell's
+    const cellsOf = (comp, f) => {
+      if (comp === 0) { const i = f % (nx + 1), r = (f - i) / (nx + 1), j = r % ny, k = (r - j) / ny; return [i > 0 ? (i - 1) + nx * (j + ny * k) : -1, i < nx ? i + nx * (j + ny * k) : -1]; }
+      if (comp === 1) { const i = f % nx, r = (f - i) / nx, j = r % (ny + 1), k = (r - j) / (ny + 1); return [j > 0 ? i + nx * (j - 1 + ny * k) : -1, j < ny ? i + nx * (j + ny * k) : -1]; }
+      const i = f % nx, r = (f - i) / nx, j = r % ny, k = (r - j) / ny; return [k > 0 ? i + nx * (j + ny * (k - 1)) : -1, k < nz ? i + nx * (j + ny * k) : -1];
+    };
+    const n = ent.length, NK = this.wallKernel.T.length;
+    this.wComp = new Uint8Array(n); this.wFace = new Int32Array(n); this.wArea = new Float64Array(n); this.wN = new Float64Array(3 * n);
+    this.wVol = new Float64Array(n); this.wPos = new Float64Array(3 * n); this.wCellA = new Int32Array(n); this.wCellB = new Int32Array(n);
+    this.wH = new Float64Array(n * NK); this.wU = new Float64Array(n);
+    for (let e = 0; e < n; e++) {
+      const [comp, f, A, a, b, c, , px, py, pz] = ent[e], [ca, cb] = cellsOf(comp, f);
+      this.wComp[e] = comp; this.wFace[e] = f; this.wArea[e] = A; this.wN[3 * e] = a; this.wN[3 * e + 1] = b; this.wN[3 * e + 2] = c;
+      this.wVol[e] = 0.5 * ((ca >= 0 ? vol[ca] : 0) + (cb >= 0 ? vol[cb] : 0));
+      this.wPos[3 * e] = px; this.wPos[3 * e + 1] = py; this.wPos[3 * e + 2] = pz; this.wCellA[e] = ca; this.wCellB[e] = cb;
+    }
+    // per-step factors of each exponential: decay e^{-dt/T} and the weight of a linear rise over the step, (T/dt)(1 - e^{-dt/T})
+    this.wallInfo = { entries: n, sideArea: 2 * sideTotal, floorArea: 2 * floorTotal, droppedArea: 2 * dropped };   // whole glass (x2)
+    this.wDt = 0;
+  };
+
+  // the wall stress over one step dt: for each entry, the slip U_t (the face's component of the velocity's part along the
+  // wall), its memory H_k <- e^{-dt/T_k} H_k + dU (T_k/dt)(1 - e^{-dt/T_k}) (exact for U linear over the step), the stress
+  // tau = rho sqrt(nu) sum a_k H_k, and the face's velocity change -dt tau A / (rho V). A face with no liquid on either side
+  // forgets its layer (a wall wetted again starts a new layer, as a wall started from rest).
+  Fluid.prototype.wallStress = function (dt) {
+    const K = this.wallKernel, NK = K.T.length, n = this.wComp.length, sq = Math.sqrt(this.nu);
+    if (this.wDt !== dt) {
+      this.wDt = dt; this.wDec = new Float64Array(NK); this.wRise = new Float64Array(NK);
+      for (let q = 0; q < NK; q++) { const r = dt / K.T[q]; this.wDec[q] = Math.exp(-r); this.wRise[q] = (1 - Math.exp(-r)) / r; }
+    }
+    const dec = this.wDec, rise = this.wRise, a = K.a, fl = this.fluid, H = this.wH, Up = this.wU, N = this.wN, P = this.wPos;
+    const arr = [this.u, this.v, this.w];
+    let work = 0;
+    for (let e = 0; e < n; e++) {
+      const ca = this.wCellA[e], cb = this.wCellB[e];
+      if (!((ca >= 0 && fl[ca]) || (cb >= 0 && fl[cb]))) { Up[e] = 0; for (let q = 0; q < NK; q++) H[e * NK + q] = 0; continue; }
+      const comp = this.wComp[e], f = this.wFace[e], x = P[3 * e], y = P[3 * e + 1], z = P[3 * e + 2];
+      const uc = [0, 0, 0];
+      for (let c = 0; c < 3; c++) uc[c] = c === comp ? arr[c][f] : this.sample(c, x, y, z);
+      const un = uc[0] * N[3 * e] + uc[1] * N[3 * e + 1] + uc[2] * N[3 * e + 2];
+      const Ut = uc[comp] - un * N[3 * e + comp], dU = Ut - Up[e];
+      let s = 0;
+      for (let q = 0; q < NK; q++) { const h = dec[q] * H[e * NK + q] + dU * rise[q]; H[e * NK + q] = h; s += a[q] * h; }
+      Up[e] = Ut;
+      const dv = -dt * sq * s * this.wArea[e] / this.wVol[e];
+      arr[comp][f] += dv;
+      work += sq * s * this.wArea[e] * Ut;   // tau A U_t / rho: power drawn from the core per unit density (half glass)
+    }
+    this.wallPower = 2 * this.rho * work;   // W, whole glass
   };
 
   // explicit nu * lap(u) on each component (stable: nu dt / dx^2 ~ 1e-4)
