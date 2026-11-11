@@ -29,6 +29,7 @@
         #probe { display: block; width: 100%; aspect-ratio: 1 / 1; background: #140d10; border-radius: 8px; }
         #probe.is-paper { background: var(--card); }
         #stage { cursor: pointer; }
+        #zin, #zout, #zall, #v-tip, #v-ang, #v-sec { min-height: 44px; }
         .onpage { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 0; padding: 0; list-style: none; }
         .onpage a { display: inline-block; padding: 9px 13px; min-height: 22px; border: 1px solid var(--line-strong, #cdc1ae); border-radius: 999px; background: var(--card); color: var(--accent, #7a1f2b); font: 13px/1.3 var(--mono); text-decoration: none; }
         .inside { margin: 44px 0 0; }
@@ -112,13 +113,28 @@
                 </div>
                 <div class="panel__group">
                     <p class="panel__label">Pinned pendulum</p>
-                    <canvas id="probe" aria-label="The pinned pendulum, enlarged: its rods and the recent path of its tip"></canvas>
+                    <div class="seg" role="group" aria-label="What the small picture shows" style="display:flex;margin-bottom:8px"><button type="button" class="btn btn--ghost is-on" id="v-tip" style="flex:1">Tip path</button><button type="button" class="btn btn--ghost" id="v-ang" style="flex:1">Angles</button><button type="button" class="btn btn--ghost" id="v-sec" style="flex:1">Section</button></div>
+                    <canvas id="probe" aria-label="The pinned pendulum: its rods and recent tip path, or its two angles against each other, or its section, as chosen above"></canvas>
+                    <p id="v-say" style="margin:6px 0 0;font-size:13px;line-height:1.5;color:var(--ink-2);min-height:5.6em">The two rods and the last 3 s of the tip's path.</p>
                     <dl class="read">
                         <dt>strike <i>p</i><sub>1</sub>, <i>p</i><sub>2</sub></dt><dd id="pr-p">–</dd>
                         <dt>kinetic energy of the strike</dt><dd id="pr-e">–</dd>
                         <dt>chaos map value</dt><dd id="pr-v">–</dd>
                     </dl>
                     <p class="verdict" id="pr-say" style="margin:8px 0 0;font-size:14px;line-height:1.5;min-height:4.5em">Tap a cell of the figure.</p>
+                </div>
+                <div class="panel__group">
+                    <p class="panel__label">Zoom</p>
+                    <div class="actions" style="display:flex;gap:8px;flex-wrap:wrap">
+                        <button type="button" class="btn" id="zin">Zoom in</button>
+                        <button type="button" class="btn btn--ghost" id="zout">Zoom out</button>
+                        <button type="button" class="btn btn--ghost" id="zall">Whole sheet</button>
+                    </div>
+                    <p id="z-say" style="margin:8px 0 0;font:12px/1.5 var(--mono);color:var(--ink-2);min-height:3em">–</p>
+                    <label class="ctl" style="margin-top:8px">
+                        <span class="ctl__row"><span>Atlas: the closed curves found so far</span></span>
+                        <select id="atlas" style="width:100%;min-height:44px;padding:8px;border:1px solid var(--line-strong, #cdc1ae);border-radius:8px;background:var(--card);color:var(--ink);font:13px/1.3 var(--mono)"><option value="">Choose a curve to go to</option></select>
+                    </label>
                 </div>
                 <div class="panel__group">
                     <p class="panel__label">Picture</p>
@@ -369,14 +385,19 @@
                             <li><b>A cell's drawing</b>: equation (5), the tip in metres; the pin is the cell's centre; 2 m is 0.4 of the cell's shorter side. <em>Show rods</em> draws the two rods themselves.</li>
                             <li><b>The glow</b>: \(v\) of (6) for the strike at that point of the sheet; wine to rose, transparent where \(v = 0\).</li>
                             <li><b>Explain the eye</b>: the green ellipse is \(K = 2U_2\) (the pupil's edge), the yellow one \(K = 2(U_1 + U_2)\), both from (4) and (7) with the sliders' values; the dashed lines are (9), from (8) in its general form.</li>
-                            <li><b>The pinned pendulum</b>: tap a cell. The panel shows that pendulum enlarged with its last 3 s of path, its strike, \(K\) from (4), the map's \(v\) at its strike, and which part of the eye it is in. A tap on it again lets it go.</li>
+                            <li><b>The pinned pendulum</b>: tap a cell. The panel shows its strike, \(K\) from (4), the map's \(v\) at its strike, and which part of the eye it is in. A tap on it again lets it go. The small picture has three views.</li>
+                            <li><b>Tip path</b>: that pendulum enlarged, with the last 3 s of its tip's path.</li>
+                            <li><b>Angles</b>: \(\theta_2\) against \(\theta_1\), each taken between −180° and +180°, hanging straight down in the middle. The left edge is the same line as the right one and the bottom the same as the top, so the square is a torus cut open and laid flat. The path is kept from the moment of pinning. A rod that goes over the top leaves through one edge and comes back through the opposite one.</li>
+                            <li><b>Section</b>: a Poincaré section. Each time the upper rod passes straight down, \(\theta_1 = 0\) (mod \(2\pi\)), one dot is placed at \((\theta_2, p_2)\). The energy is fixed, so the motion lives on a three-dimensional surface, and the section cuts that surface down to a plane. A regular motion winds round a torus, and its dots fall on the closed curve where the plane cuts that torus. A chaotic motion scatters its dots over an area. A closed orbit returns to the same few dots. A pass with the upper rod turning backwards is drawn at \((-\theta_2, -p_2)\): the mirror image of a motion is again a motion, so all dots belong to one section, the one with \(\dot\theta_1 > 0\). The moment of passing is found inside one integration step of 1/4500 s by a straight line.</li>
+                            <li><b>Zoom</b>: the sheet is a window on the plane of strikes. <em>Zoom in</em> halves its width and height around the pinned strike, which stays pinned; with nothing pinned it narrows around the middle. The pendulums in the cells are computed afresh for the new strikes. The map behind is one stored picture, a value every 0.056 kg·m²/s; zoomed in further than that it shows its own grain and nothing new.</li>
+                            <li><b>Atlas</b>: the list holds the fourteen closed curves of the flower hunt of Part III, ten flowers and four butterflies, read from the same file as the hunt's garden. Choosing one sets the pendulum to equal rods under \(g = 9.8\) m/s², puts that strike on the centre of a cell, pins it, and shows 1 kg·m²/s of \(p_2\) either side of it. The neighbours then show how the curve opens when the strike is slightly off.</li>
                             <li><b>Where drawing and model differ</b>: the plate forgets (the model does not); the colour is a logarithm of the exposure; the map is 6.67 s of twins, so a strike whose twins part only later counts as regular.</li>
                         </ul>
                     </section>
 
                     <section class="psec" id="n-limits">
                         <h3><span class="psec__n">10</span>Limits and what comes next</h3>
-                        <p>The pendulum has no friction and the strike is instantaneous. The sheet shows one slice of the four-dimensional state space, the pendulums that start hanging still; a pendulum released from a raised position is not on it. The map's verdict depends on its 6.67 s and on the threshold \(v > 0.5\); it is a finite-time measure, not a Lyapunov exponent. The argument for the streaks is the standard picture of chaos near a separatrix, supported here by measurement, not proved for this system. Next: the same map for point masses and unequal rods, a Poincaré section for a pinned pendulum, and the stable partners of the butterflies.</p>
+                        <p>The pendulum has no friction and the strike is instantaneous. The sheet shows one slice of the four-dimensional state space, the pendulums that start hanging still; a pendulum released from a raised position is not on it. The map's verdict depends on its 6.67 s and on the threshold \(v > 0.5\); it is a finite-time measure, not a Lyapunov exponent. The argument for the streaks is the standard picture of chaos near a separatrix, supported here by measurement, not proved for this system. The section of the pinned pendulum is one cut, at \(\theta_1 = 0\); a motion whose upper rod seldom passes straight down fills it slowly. Next: the same map for point masses and unequal rods, and the stable partners of the butterflies.</p>
                     </section>
 
                     <section class="psec" id="n-src">
@@ -695,6 +716,7 @@
 
     <script src="../scripts/fold.js"></script>
     <script src="../scripts/sim.js"></script>
+    <script src="../scripts/fig13-hunt-data.js"></script>
 <script>
 (() => {
 'use strict';
@@ -735,20 +757,25 @@ const H = 1 / 4500, REC = 5;           // RK4 step; the tip is recorded every 5 
 // The grid of pendulums, and the exposure they leave on the plate.
 // ---------------------------------------------------------------------------------------------
 const AR = 16 / 9;
-let N = 10, P = 20, tau = 1.5, pend = [], steps = 0, t = 0, acc = 0;
+let N = 10, P = 20, c1 = 0, c2 = 0, tau = 1.5, pend = [], steps = 0, t = 0, acc = 0;      // the sheet shows the strikes c1 ± P·AR by c2 ± P
 let showRods = false, showMap = true, night = true;
 const stage = $('stage'), cv = $('cv'), mapCv = $('map'), rodCv = $('rodcv');
 const ctx = cv.getContext('2d'), mctx = mapCv.getContext('2d'), rctx = rodCv.getContext('2d');
 let W = 0, Hh = 0, cw = 0, ch = 0, S = 1;
 let D = new Float32Array(1), img = null, px32 = null;
 let pin = null, anat = false; const trail = [], TRAILN = 2700;      // the pinned pendulum's last 3 s of tip positions (900 a second)
+// Two more views of the pinned pendulum. Angles: (theta1, theta2), both taken round the circle, so the square is a torus rolled flat.
+// Section: one dot each time the upper rod passes straight down (theta1 a multiple of 2 pi): (theta2, p2) there. A pass going backwards
+// is shown mirrored, (-theta2, -p2): the mirror image of a motion is a motion, so all dots belong to one section, theta1 = 0 with w1 > 0.
+const TAU = 2 * Math.PI, wrap = x => x - TAU * Math.round(x / TAU), sect = [], SECTN = 8000, angNew = [];
+let view = 'tip', smax = 1, torLast = null; const tor = document.createElement('canvas'), tctx = tor.getContext('2d');
 
 function tip(s) { return [par.l1 * Math.sin(s[0]) + par.l2 * Math.sin(s[1]), par.l1 * Math.cos(s[0]) + par.l2 * Math.cos(s[1])]; }
 function build() {
     const keep = pin ? [pin.i, pin.j] : null; pin = null; trail.length = 0;
     pend = []; steps = 0; t = 0; acc = 0; D.fill(0);
     for (let j = 0; j < N; j++) for (let i = 0; i < N; i++) {
-        const p1 = ((i + .5) / N - .5) * 2 * P * AR, p2 = -((j + .5) / N - .5) * 2 * P;
+        const p1 = c1 + ((i + .5) / N - .5) * 2 * P * AR, p2 = c2 - ((j + .5) / N - .5) * 2 * P;
         const q = { i, j, s: new Float64Array([0, 0, p1, p2]), x: 0, y: 0, p0: [p1, p2] };   // p0: the strike, kept for the readout
         [q.x, q.y] = tip(q.s); pend.push(q);
     }
@@ -769,12 +796,22 @@ function advance(sec) {
     const R = Math.max(par.l1 + par.l2, 1e-9);
     for (const q of pend) {
         const cx = (q.i + .5) * cw, cy = (q.j + .5) * ch;
+        const isPin = q === pin;
         for (let k = 1; k <= n; k++) {
+            const a0 = q.s[0], b0 = q.s[1], m0 = q.s[3];
             rk4(q.s, H);
+            if (isPin) {
+                const k0 = Math.floor(a0 / TAU), k1 = Math.floor(q.s[0] / TAU);
+                if (k0 !== k1) {                                        // the upper rod passed straight down during this step
+                    const f = (Math.max(k0, k1) * TAU - a0) / (q.s[0] - a0), dir = q.s[0] > a0 ? 1 : -1, pp = dir * (m0 + f * (q.s[3] - m0));
+                    sect.push(wrap(dir * (b0 + f * (q.s[1] - b0))), pp); smax = Math.max(smax, Math.abs(pp));
+                    if (sect.length > 2 * SECTN) sect.splice(0, sect.length - 2 * SECTN);
+                }
+            }
             if ((steps + k) % REC === 0) {
                 const [x, y] = tip(q.s);
                 splat(cx + S * q.x, cy + S * q.y, cx + S * x, cy + S * y); q.x = x; q.y = y;
-                if (q === pin) { trail.push(x, y); if (trail.length > 2 * TRAILN) trail.splice(0, trail.length - 2 * TRAILN); }
+                if (isPin) { trail.push(x, y); if (trail.length > 2 * TRAILN) trail.splice(0, trail.length - 2 * TRAILN); angNew.push(q.s[0], q.s[1]); }
             }
         }
     }
@@ -816,8 +853,12 @@ function size() {
 }
 function drawMap() {
     mctx.clearRect(0, 0, W, Hh);
-    if (!showMap || !mapImg || P !== 20 || par.model !== 'rods' || par.m2 !== par.m1 || par.l2 !== par.l1 || par.g !== 9.8) return;
-    mctx.globalAlpha = night ? 0.5 : 0.8; mctx.drawImage(mapImg, 0, 0, W, Hh); mctx.globalAlpha = 1;
+    if (!showMap || !mapImg || par.model !== 'rods' || par.m2 !== par.m1 || par.l2 !== par.l1 || par.g !== 9.8) return;
+    // the picture covers p1 = ±20·AR, p2 = ±20 in 1280 x 720; draw the part of it this window shows (clipped by hand to the picture)
+    const sx = ((c1 - P * AR) / (40 * AR) + .5) * 1280, sy = (.5 - (c2 + P) / 40) * 720, sw = P / 20 * 1280, sh = P / 20 * 720;
+    const x0 = Math.max(0, sx), y0 = Math.max(0, sy), x1 = Math.min(1280, sx + sw), y1 = Math.min(720, sy + sh); if (x1 <= x0 || y1 <= y0) return;
+    mctx.imageSmoothingEnabled = true; mctx.globalAlpha = night ? 0.5 : 0.8;
+    mctx.drawImage(mapImg, x0, y0, x1 - x0, y1 - y0, (x0 - sx) / sw * W, (y0 - sy) / sh * Hh, (x1 - x0) / sw * W, (y1 - y0) / sh * Hh); mctx.globalAlpha = 1;
 }
 // ---- the strike: its energy, and what that energy allows -------------------------------------------------------------
 // At the strike both rods hang down, so the potential energy is -(U1 + U2) and all the rest is kinetic:
@@ -826,7 +867,8 @@ function drawMap() {
 // Without gravity the elbow folds through when KE exceeds the spin energy of the folded stick, (p1 + p2)^2 / (2 (A + B - 2 C)).
 function strikeKE(p1, p2) { const { A, B, C } = par; return (B * p1 * p1 - 2 * C * p1 * p2 + A * p2 * p2) / (2 * (A * B - C * C)); }
 function foldsThrough(p1, p2) { const { A, B, C } = par; return strikeKE(p1, p2) > (p1 + p2) * (p1 + p2) / (2 * (A + B - 2 * C)); }
-const X = p1 => (p1 / (2 * P * AR) + .5) * W, Y = p2 => (.5 - p2 / (2 * P)) * Hh;
+const X = p1 => ((p1 - c1) / (2 * P * AR) + .5) * W, Y = p2 => (.5 - (p2 - c2) / (2 * P)) * Hh;
+const digits = () => { const st = 2 * P / N; return st >= 2 ? 0 : st >= .2 ? 1 : st >= .02 ? 2 : st >= .002 ? 3 : 4; };   // decimals that tell neighbouring cells apart
 function ellipse(c, ke) {       // the strikes of kinetic energy ke: an ellipse in the (p1, p2) plane
     c.beginPath();
     for (let k = 0; k <= 180; k++) { const a = k / 180 * 2 * Math.PI, r = Math.sqrt(ke / strikeKE(Math.cos(a), Math.sin(a))); const x = X(r * Math.cos(a)), y = Y(r * Math.sin(a)); k ? c.lineTo(x, y) : c.moveTo(x, y); }
@@ -836,16 +878,16 @@ function drawAxes() {
     const f = Math.max(9, Math.min(13, cw / 5.2)) * (W / stage.getBoundingClientRect().width || 1);
     rctx.font = `${f}px "IBM Plex Mono", monospace`; rctx.fillStyle = night ? 'rgba(245,241,234,.62)' : 'rgba(28,21,24,.62)';
     if (stage.getBoundingClientRect().width < 600) {      // a phone: no room between the drawings for a number per cell; give the two ranges
-        const d = P >= 10 ? 0 : 1, a = ((N - 1) / N * P * AR).toFixed(d), b = ((N - 1) / N * P).toFixed(d), ink = rctx.fillStyle;
+        const d = digits(), ha = (N - 1) / N * P * AR, hb = (N - 1) / N * P, mn = v => v.toFixed(d).replace('-', '−'), ink = rctx.fillStyle;
         const chip = (txt, x, y, al, bl) => { rctx.textAlign = al; rctx.textBaseline = bl; const w = rctx.measureText(txt).width + 8, x0 = al === 'right' ? x - w + 4 : x - 4, y0 = bl === 'bottom' ? y - 1.25 * f : y - .15 * f; rctx.fillStyle = night ? 'rgba(20,13,16,.8)' : 'rgba(255,250,243,.86)'; rctx.fillRect(x0, y0, w, 1.4 * f); rctx.fillStyle = ink; rctx.fillText(txt, x, y); };
-        chip(`↑ p₂ from −${b} to ${b}`, 6, 5, 'left', 'top'); chip(`p₁ from −${a} to ${a} →`, W - 6, Hh - 4, 'right', 'bottom');
+        chip(`↑ p₂ from ${mn(c2 - hb)} to ${mn(c2 + hb)}`, 6, 5, 'left', 'top'); chip(`p₁ from ${mn(c1 - ha)} to ${mn(c1 + ha)} →`, W - 6, Hh - 4, 'right', 'bottom');
         return;
     }
-    const every = cw < 5.4 * f ? 2 : 1;
+    const dg = digits(), every = cw < (5.4 + 1.2 * dg) * f ? 2 : 1;
     rctx.textAlign = 'left'; rctx.textBaseline = 'bottom';         // in the lower left corner of each column, clear of the drawings
-    for (let i = 0; i < N; i += every) rctx.fillText((((i + .5) / N - .5) * 2 * P * AR).toFixed(P >= 10 ? 0 : 1), i * cw + 3, Hh - 2);
+    for (let i = 0; i < N; i += every) rctx.fillText((c1 + ((i + .5) / N - .5) * 2 * P * AR).toFixed(dg), i * cw + 3, Hh - 2);
     rctx.textAlign = 'left'; rctx.textBaseline = 'middle';
-    for (let j = 0; j < N; j++) rctx.fillText((-((j + .5) / N - .5) * 2 * P).toFixed(P >= 10 ? 0 : 1), 3, (j + .5) * ch);
+    for (let j = 0; j < N; j++) rctx.fillText((c2 - ((j + .5) / N - .5) * 2 * P).toFixed(dg), 3, (j + .5) * ch);
     rctx.textAlign = 'right'; rctx.textBaseline = 'bottom'; rctx.fillText('p₁ →', W - 4, Hh - 2);
     rctx.textAlign = 'left'; rctx.textBaseline = 'top'; rctx.fillText('↑ p₂', 3, 3);
 }
@@ -861,11 +903,12 @@ function drawAnatomy() {
     const { A, B, C } = par, det = A * B - C * C, If = A + B - 2 * C, a = B / det - 1 / If, b = -2 * C / det - 2 / If, c2 = A / det - 1 / If, disc = b * b - 4 * a * c2;
     rctx.strokeStyle = ink; rctx.setLineDash([6 * lw, 5 * lw]);
     if (disc > 0) for (const sg of [1, -1]) {                                      // a p1^2 + b p1 p2 + c p2^2 = 0: p1 = k p2
-        const k = (-b + sg * Math.sqrt(disc)) / (2 * a), big = 4 * P * AR, n = Math.hypot(k, 1);
+        const k = (-b + sg * Math.sqrt(disc)) / (2 * a), big = 4 * (P * AR + Math.abs(c1) + Math.abs(c2)), n = Math.hypot(k, 1);
         rctx.beginPath(); rctx.moveTo(X(-big * k / n), Y(-big / n)); rctx.lineTo(X(big * k / n), Y(big / n)); rctx.stroke();
     }
     rctx.setLineDash([]);
     const small = stage.getBoundingClientRect().width < 600;
+    if (c1 || c2 || P < 10) return;                 // zoomed in: the curves stay, their labels belong to the whole sheet
     if (par.g > 0) {
         label(small ? 'pupil' : 'pupil: too gentle to flip a rod', X(0) + 6, Y(0));
         label(small ? 'iris' : 'iris: enough to flip, not enough to forget gravity', small ? X(0) - 2.4 * cw : X(0) - 3.2 * cw, Y(0) + (small ? 1.2 : 1.75) * ch);
@@ -873,9 +916,9 @@ function drawAnatomy() {
     label(small ? 'fold lines' : 'the elbow just fails to fold through', X(P * AR * .42), Y(P * .78));
 }
 function setPin(q) {
-    pin = q; trail.length = 0; if (!q) return;
-    const [a, b] = q.p0, ke = strikeKE(a, b), { U1, U2 } = par;
-    $('pr-p').textContent = `${a.toFixed(2)}, ${b.toFixed(2)} kg·m²/s`;
+    pin = q; trail.length = 0; sect.length = 0; angNew.length = 0; smax = 1; torLast = null; tctx.clearRect(0, 0, tor.width, tor.height); if (!q) return;
+    const [a, b] = q.p0, ke = strikeKE(a, b), { U1, U2 } = par, dp = Math.max(2, digits() + 1);
+    $('pr-p').textContent = `${a.toFixed(dp)}, ${b.toFixed(dp)} kg·m²/s`;
     $('pr-e').textContent = `${ke.toFixed(1)} J`;
     const v = mapValue(a, b); $('pr-v').textContent = v === null ? 'no map for these settings' : v.toFixed(2) + (v > 0.5 ? ' (chaotic)' : v > 0.15 ? ' (edge)' : ' (regular)');
     let say;
@@ -887,7 +930,7 @@ function setPin(q) {
 }
 let mapPx = null;
 function mapValue(p1, p2) {     // the chaos map's value at a strike: only for the settings the map was computed for
-    if (!mapPx || P !== 20 || par.model !== 'rods' || par.m2 !== par.m1 || par.l2 !== par.l1 || par.g !== 9.8) return null;
+    if (!mapPx || par.model !== 'rods' || par.m2 !== par.m1 || par.l2 !== par.l1 || par.g !== 9.8) return null;
     // Between the four nearest pixel centres (bilinear): a cell's centre lies exactly on a pixel corner, and one pixel alone would
     // give mirror strikes different values (17.78, 2 read 0.25 and its mirror 0.56 until 11 Nov 2026; both are 0.8 computed directly).
     const fx = (p1 / (2 * 20 * AR) + .5) * 1280 - .5, fy = (.5 - p2 / 40) * 720 - .5;
@@ -900,9 +943,35 @@ const pcv = $('probe'), pctx = pcv.getContext('2d');
 function drawProbe() {
     const r = pcv.getBoundingClientRect(), dpr = Math.min(window.devicePixelRatio || 1, 2), w = Math.max(2, Math.round(r.width * dpr));
     if (pcv.width !== w) { pcv.width = w; pcv.height = w; }
+    if (tor.width !== w) { tor.width = w; tor.height = w; torLast = null; }
     pctx.clearRect(0, 0, w, w); pcv.classList.toggle('is-paper', !night);
-    if (!pin) return;
-    const sc = 0.44 * w / (par.l1 + par.l2), c = w / 2, n = trail.length / 2, col = night ? [226, 162, 170] : [122, 31, 43];
+    if (!pin) { angNew.length = 0; return; }
+    const col = night ? [226, 162, 170] : [122, 31, 43], ink = night ? '#fff6ea' : '#1c1518', soft = night ? 'rgba(245,241,234,.6)' : 'rgba(28,21,24,.6)';
+    // the angle picture is kept on its own canvas and only the new piece of path is added to it, whichever view is showing
+    if (angNew.length) {
+        tctx.strokeStyle = `rgba(${col[0]},${col[1]},${col[2]},.5)`; tctx.lineWidth = Math.max(1, w / 420); tctx.beginPath();
+        for (let k = 0; k < angNew.length; k += 2) {
+            const x = (wrap(angNew[k]) / TAU + .5) * w, y = (.5 - wrap(angNew[k + 1]) / TAU) * w;
+            if (torLast && Math.abs(x - torLast[0]) < w / 2 && Math.abs(y - torLast[1]) < w / 2) { tctx.moveTo(torLast[0], torLast[1]); tctx.lineTo(x, y); }
+            torLast = [x, y];
+        }
+        tctx.stroke(); angNew.length = 0;
+    }
+    const lab = (txt, x, y, al, bl) => { pctx.font = `${Math.round(w / 24)}px "IBM Plex Mono", monospace`; pctx.textAlign = al; pctx.textBaseline = bl; pctx.fillStyle = soft; pctx.fillText(txt, x, y); };
+    const cross = () => { pctx.strokeStyle = night ? 'rgba(245,241,234,.22)' : 'rgba(28,21,24,.2)'; pctx.lineWidth = 1; pctx.beginPath(); pctx.moveTo(w / 2, 0); pctx.lineTo(w / 2, w); pctx.moveTo(0, w / 2); pctx.lineTo(w, w / 2); pctx.stroke(); };
+    if (view === 'ang') {
+        cross(); pctx.drawImage(tor, 0, 0);
+        pctx.fillStyle = ink; pctx.beginPath(); pctx.arc((wrap(pin.s[0]) / TAU + .5) * w, (.5 - wrap(pin.s[1]) / TAU) * w, Math.max(3, w / 70), 0, 7); pctx.fill();
+        lab('upper rod θ₁ →', w - 5, w - 4, 'right', 'bottom'); lab('↑ lower rod θ₂', 5, 4, 'left', 'top'); lab('−180°', 5, w - 4, 'left', 'bottom'); lab('+180°', w - 5, 4, 'right', 'top');
+        return;
+    }
+    if (view === 'sec') {
+        cross(); const m = 1.12 * smax, r = Math.max(2.5, w / 110); pctx.fillStyle = `rgb(${col[0]},${col[1]},${col[2]})`;
+        for (let k = 0; k < sect.length; k += 2) pctx.fillRect((sect[k] / TAU + .5) * w - r / 2, (.5 - sect[k + 1] / (2 * m)) * w - r / 2, r, r);
+        lab('lower rod θ₂ →', w - 5, w - 4, 'right', 'bottom'); lab(`↑ p₂, to ±${m.toFixed(m < 10 ? 1 : 0)}`, 5, 4, 'left', 'top'); lab(`${sect.length / 2} passes`, w - 5, 4, 'right', 'top');
+        return;
+    }
+    const sc = 0.44 * w / (par.l1 + par.l2), c = w / 2, n = trail.length / 2;
     pctx.lineCap = 'round'; pctx.lineWidth = Math.max(1.2, w / 260);
     for (let k = 1; k < n; k++) {
         pctx.strokeStyle = `rgba(${col[0]},${col[1]},${col[2]},${(0.08 + 0.85 * k / n).toFixed(3)})`;
@@ -936,17 +1005,51 @@ $('showmap').onchange = e => { showMap = e.target.checked; drawMap(); };
 $('anat').onchange = e => { anat = e.target.checked; draw(); };
 stage.addEventListener('click', e => {         // tap a cell: pin its pendulum (a tap on the pinned one lets it go)
     const r = stage.getBoundingClientRect(), i = Math.min(N - 1, Math.floor((e.clientX - r.left) / r.width * N)), j = Math.min(N - 1, Math.floor((e.clientY - r.top) / r.height * N));
-    const q = pend[j * N + i]; setPin(q === pin ? null : q);
-    if (!pin) { $('pr-p').textContent = $('pr-e').textContent = $('pr-v').textContent = '–'; $('pr-say').textContent = 'Tap a cell of the figure.'; }
+    const q = pend[j * N + i]; if (q === pin) unpin(); else setPin(q);
     draw();
 });
-function setLook(n) { night = n; stage.classList.toggle('is-night', n); $('look-night').classList.toggle('is-on', n); $('look-paper').classList.toggle('is-on', !n); makePalette(); drawMap(); draw(); }
+function unpin() { setPin(null); $('pr-p').textContent = $('pr-e').textContent = $('pr-v').textContent = '–'; $('pr-say').textContent = 'Tap a cell of the figure.'; }
+
+// ---- zoom: the sheet is a window on the plane of strikes; it can be moved and narrowed -----------------------------------------
+// goTo puts the strike (s1, s2) exactly on the centre of the cell just right of and below the middle, pins it, and shows ± Pn around.
+function showRange() {
+    const d = Math.max(1, digits()), mn = v => v.toFixed(d).replace('-', '−');
+    $('z-say').textContent = `p₁ from ${mn(c1 - P * AR)} to ${mn(c1 + P * AR)}, p₂ from ${mn(c2 - P)} to ${mn(c2 + P)} kg·m²/s` + (c1 || c2 || P !== 20 ? `; magnified ${(20 / P).toFixed(P > 2 ? 1 : 0).replace(/\.0$/, '')} times` : ' (the whole sheet)');
+    $('p-out').textContent = (P >= 2 && P === Math.round(P) ? P : P.toPrecision(3)) + ' kg·m²/s'; $('p').value = Math.max(2, Math.min(30, Math.round(P)));
+}
+function goTo(s1, s2, Pn) {
+    P = Math.max(0.005, Math.min(30, Pn)); const i0 = N >> 1, j0 = N >> 1;
+    c1 = s1 - ((i0 + .5) / N - .5) * 2 * P * AR; c2 = s2 + ((j0 + .5) / N - .5) * 2 * P;
+    pin = null; build(); setPin(pend[j0 * N + i0]); showRange(); drawMap(); draw();
+}
+function zoom(f) { if (pin) goTo(pin.p0[0], pin.p0[1], P * f); else { P = Math.max(0.005, Math.min(30, P * f)); build(); showRange(); drawMap(); draw(); } }
+$('zin').onclick = () => zoom(.5); $('zout').onclick = () => zoom(2);
+$('zall').onclick = () => { c1 = c2 = 0; P = 20; pin = null; build(); unpin(); showRange(); drawMap(); draw(); $('atlas').value = ''; };
+// ---- atlas: the closed curves the flower hunt found (scripts/fig13-hunt-data.js, written by tools/fig13/hunt_export.py) ----------
+const GARDEN = (window.FIG13_HUNT && window.FIG13_HUNT.garden) || [];
+GARDEN.forEach((g, n) => { const o = document.createElement('option'); o.value = n; o.textContent = (g.kind === 'butterfly' ? `Butterfly, ${g.k} turns` : `Flower, ${g.k} petals`) + ` · (${g.p1.toFixed(2)}, ${g.p2.toFixed(2)}) · ${g.stability}`; $('atlas').appendChild(o); });
+$('atlas').onchange = e => {
+    const g = GARDEN[+e.target.value]; if (e.target.value === '' || !g) return;
+    // these curves were found for two equal uniform rods under g = 9.8: set the pendulum back to that
+    par.model = 'rods'; par.m2 = par.m1; par.l2 = par.l1; par.g = 9.8; $('m-rods').classList.add('is-on'); $('m-pts').classList.remove('is-on');
+    $('mr').value = 0; $('lr').value = 0; $('g').value = 9.8; $('mr-out').textContent = $('lr-out').textContent = '1.00'; $('g-out').textContent = '9.8 m/s²';
+    setPar(); size(); makePalette(); goTo(g.p1, g.p2, 1);
+};
+// ---- the small picture: tip path, angles, or section ----
+const VSAY = {
+    tip: 'The two rods and the last 3 s of the tip\'s path.',
+    ang: 'The two angles against each other: upper rod across, lower rod up, hanging straight down in the middle. Left edge joins right, bottom joins top. A regular motion weaves a tidy pattern; a chaotic one smears over all it can reach.',
+    sec: 'One dot each time the upper rod passes straight down: where the lower rod is then (across) and how hard it turns (up). Dots along a smooth curve: regular. Dots scattered over an area: chaotic. A few dots, hit again and again: a closed curve.'
+};
+function setView(v) { view = v; for (const k of ['tip', 'ang', 'sec']) $('v-' + k).classList.toggle('is-on', k === v); $('v-say').textContent = VSAY[v]; draw(); }
+$('v-tip').onclick = () => setView('tip'); $('v-ang').onclick = () => setView('ang'); $('v-sec').onclick = () => setView('sec');
+function setLook(n) { night = n; tctx.clearRect(0, 0, tor.width, tor.height); torLast = null; stage.classList.toggle('is-night', n); $('look-night').classList.toggle('is-on', n); $('look-paper').classList.toggle('is-on', !n); makePalette(); drawMap(); draw(); }
 $('look-night').onclick = () => setLook(true); $('look-paper').onclick = () => setLook(false);
 function setModel(r) { par.model = r ? 'rods' : 'points'; $('m-rods').classList.toggle('is-on', r); $('m-pts').classList.toggle('is-on', !r); rebuild(); }
 $('m-rods').onclick = () => setModel(true); $('m-pts').onclick = () => setModel(false);
 $('tau').oninput = e => { tau = +e.target.value; $('tau-out').textContent = tau.toFixed(1) + ' s'; };
 $('n').oninput = e => { N = +e.target.value; $('n-out').textContent = N; rebuild(); };
-$('p').oninput = e => { P = +e.target.value; $('p-out').textContent = P + ' kg·m²/s'; build(); drawMap(); draw(); };
+$('p').oninput = e => { P = +e.target.value; build(); showRange(); drawMap(); draw(); };
 $('g').oninput = e => { par.g = +e.target.value; $('g-out').textContent = par.g.toFixed(1) + ' m/s²'; rebuild(); };
 $('mr').oninput = e => { par.m2 = par.m1 * Math.exp(+e.target.value); $('mr-out').textContent = (par.m2 / par.m1).toFixed(2); rebuild(); };
 $('lr').oninput = e => { par.l2 = par.l1 * Math.exp(+e.target.value); $('lr-out').textContent = (par.l2 / par.l1).toFixed(2); rebuild(); };
@@ -998,9 +1101,10 @@ function frame(ts) {
     requestAnimationFrame(frame);
 }
 const im = new Image(); im.onload = () => { mapImg = im; drawMap(); const o = document.createElement('canvas'); o.width = 1280; o.height = 720; const oc = o.getContext('2d'); oc.drawImage(im, 0, 0, 1280, 720); mapPx = oc.getImageData(0, 0, 1280, 720).data; if (pin) setPin(pin); }; im.src = '../images/fig13/chaos-map-rods-P20.png';
-window.addEventListener('resize', () => { size(); draw(); });
-setPar(); size(); makePalette(); draw();
-window.__fig13 = { advance: s => { advance(s); draw(); }, pause: () => { running = false; }, state: () => ({ t, N, P, par, pend, pin }), D: () => D, strikeKE, foldsThrough, mapValue, energy: s => { const c = Math.cos(s[0] - s[1]), det = par.A * par.B - par.C * par.C * c * c; return 0.5 * (par.B * s[2] * s[2] - 2 * par.C * c * s[2] * s[3] + par.A * s[3] * s[3]) / det - par.U1 * Math.cos(s[0]) - par.U2 * Math.cos(s[1]); } };
+let stageW = 0;      // rebuild only when the plate's width changed: a phone fires 'resize' each time its address bar slides away
+window.addEventListener('resize', () => { const w = stage.getBoundingClientRect().width; if (Math.abs(w - stageW) < 1) return; stageW = w; size(); draw(); });
+setPar(); size(); stageW = stage.getBoundingClientRect().width; makePalette(); showRange(); draw();
+window.__fig13 = { advance: s => { advance(s); draw(); }, pause: () => { running = false; }, state: () => ({ t, N, P, c1, c2, par, pend, pin, view }), goTo, sect: () => sect, D: () => D, strikeKE, foldsThrough, mapValue, energy: s => { const c = Math.cos(s[0] - s[1]), det = par.A * par.B - par.C * par.C * c * c; return 0.5 * (par.B * s[2] * s[2] - 2 * par.C * c * s[2] * s[3] + par.A * s[3] * s[3]) / det - par.U1 * Math.cos(s[0]) - par.U2 * Math.cos(s[1]); } };
 requestAnimationFrame(frame);
 })();
 </script>

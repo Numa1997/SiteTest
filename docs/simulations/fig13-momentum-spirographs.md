@@ -190,3 +190,16 @@ axes are two range labels instead of a number per cell.
   ratio 2), the catch 23 (7.5 before). While a station is open the paused sheet is not redrawn. Not measured on a real phone.
 - Removed: `tools/fig13/gift/video_pages.py` and `tools/fig13/gift/catch.json` (nothing used them since the videos left the site).
 
+- Zoom, atlas and two more views of the pinned pendulum (11 November 2026, later; `simulations/momentum-spirographs.html`, hand-written
+  part): the sheet is a window on the plane of strikes with a centre `c1, c2` and a half-height `P`. **Zoom in / Zoom out** halve or
+  double `P` around the pinned strike (`goTo` puts that strike exactly on a cell's centre and keeps it pinned); **Whole sheet** goes back
+  to ±35.6 by ±20. The chaos map is drawn as the matching part of the one stored picture, at any zoom (before, it was hidden unless
+  `P` was 20). The **Atlas** is a list of the 14 closed curves in `scripts/fig13-hunt-data.js` (the page now loads that file); choosing
+  one resets the pendulum to equal rods under g = 9.8, goes to the strike and shows ±1 kg·m²/s of p₂ around it. The small picture of
+  the pinned pendulum has three views: **Tip path** (as before), **Angles** (θ₂ against θ₁, both wrapped, kept since pinning, on its own
+  canvas so only new path is drawn) and **Section** (one dot at (θ₂, p₂) each time θ₁ passes a multiple of 2π; a backward pass is drawn
+  mirrored; up to 8 000 dots). The note's section 9 explains all three. Measured in headless Chromium at 1400 x 900 and 390 x 844: all
+  14 atlas strikes land on their value to 1e-15 and their state returns after one period to within 0.03 (the step is 1/4500 s); a closed
+  curve gives 1 to 7 separate dots after five periods, a chaotic strike (3.56, −2.00, map value 0.83) scatters 44 dots in 60 s; zooming
+  keeps the pinned strike exactly; the map canvas agrees with `mapValue` at 762 of 763 random points of a zoomed window. A change of
+  the window's height alone (a phone's address bar) no longer rebuilds the sheet.
