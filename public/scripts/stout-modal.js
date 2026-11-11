@@ -58,6 +58,9 @@
     this.skin = o.skin != null ? o.skin : 0;                       // covered fraction of the surface (0 clean, 1 inextensible)
     this.zetaCL = o.zetaCL || 0;
     this.zetaExtra = o.zetaExtra || 0;                             // for checks only
+    // the 3D solver's twin, for validating the model's form against it (tools/fig12/validate.cjs): every natural frequency times
+    // freqScale (the 4 mm grid swings 6 % slow); 1 on the page
+    this.freqScale = o.freqScale || 1;
     this.foam = Object.assign({ h: 0, n: 2 / 3, alpha: null }, o.foam || {});
     this.N = Math.min(o.nModes || 4, o.data.levels[0].m1.f.length);
     this.NR = o.data.NR;
@@ -97,7 +100,7 @@
     this.Rs = lerp(this.data.R_surface[i], this.data.R_surface[Math.min(i + 1, this.data.R_surface.length - 1)], t);
     this.w = []; this.beta = []; this.zeta = []; this.Pc = []; this.c = []; this.Vc = []; this.zetaWall = []; this.zetaSkin = []; this.zetaBulk = []; this.M = [];
     for (let n = 0; n < this.N; n++) {
-      const w = 2 * Math.PI * lerp(A.f[n], B.f[n], t), c = lerp(A.c[n], B.c[n], t), Lam = lerp(A.Lam[n], B.Lam[n], t);
+      const w = 2 * Math.PI * lerp(A.f[n], B.f[n], t) * this.freqScale, c = lerp(A.c[n], B.c[n], t), Lam = lerp(A.Lam[n], B.Lam[n], t);
       this.w.push(w); this.c.push(c);
       this.beta.push(w * w / this.g * c);                          // the push per unit a_x (the plant's beta, as in ModalFluid)
       this.Pc.push(this.rho * lerp(A.Ix[n], B.Ix[n], t));         // momentum per unit q_n'
@@ -258,7 +261,8 @@
     if (!this.nmData) return;                                      // during TulipModes' constructor
     const [i, t] = bracket(this.nmH, this.h), j = Math.min(i + 1, this.nmH.length - 1), A = this.nmData.levels[i], B = this.nmData.levels[j];
     NMN.forEach((n, k) => { const ca = A.eqs[n], cb = B.eqs[n], c = this.coef[k]; for (let m = 0; m < c.length; m++) c[m] = lerp(ca[m], cb[m], t); });
-    this.mu = NMN.map((n) => lerp(A.mu[n], B.mu[n], t)); this.sig = NMN.map((n) => Math.sqrt(lerp(A.sigma2[n], B.sigma2[n], t)));
+    this.fs2 = this.freqScale * this.freqScale;                   // the twin's stiffness scale (1 on the page)
+    this.mu = NMN.map((n) => lerp(A.mu[n], B.mu[n], t)); this.sig = NMN.map((n) => this.freqScale * Math.sqrt(lerp(A.sigma2[n], B.sigma2[n], t)));
     this.Rw = [0, 1, 2].map((m) => lerp(A.Rw[m], B.Rw[m], t));
     // friction of each coordinate from the first mode of its harmonic m (modes.json rows m0, m1, m2), the shapes e0, e2
     const [ii, tt] = bracket(this.hsData, this.h), jj = Math.min(ii + 1, this.hsData.length - 1), LA = this.data.levels[ii], LB = this.data.levels[jj];
@@ -322,7 +326,7 @@
       for (let k = 0; k < mon.length; k++) {
         const [dd, fac, lin, force] = mon[k]; let v = c[k]; if (v === 0) continue;
         for (let f = 0; f < fac.length; f++) { const x = st[fac[f][0]]; v *= fac[f][1] === 1 ? x : Math.pow(x, fac[f][1]); }
-        if (force) r -= v * axn; else if (dd >= 0) A[i][dd] += v; else r -= lin ? v * gf : v;
+        if (force) r -= v * axn; else if (dd >= 0) A[i][dd] += v; else r -= lin ? v * gf * this.fs2 : v;
       }
       r -= 2 * this.zNM[i] * this.sig[i] * bdv[i];
       rhs[i] = r + Qhat[i] / this.mu[i];
