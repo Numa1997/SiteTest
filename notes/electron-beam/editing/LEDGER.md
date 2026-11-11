@@ -12,7 +12,9 @@ when V hands that chapter over. V reads this file before editing every chapter. 
   against aberrations; ch06: ions damage, electrons mostly do not; SE carry shape, BSE material; ch02–08 follow the trade-offs of
   spot, current, gentleness and speed quantitatively; the physics must explain why a cold tip is bright but fragile, why 10⁻⁹ Pa
   matters, why a high-energy mode sees deeper.
-- **Hand-over.** The road table; last sentence "We start with the electron itself."
+- **Hand-over.** The road table (now subjects, not questions); last sentence "We start with the electron itself."
+- **Voice pass (6ffc3a8).** Beam half-angle α defined in §0.3 ("the half-angle of the cone in which the beam converges on the
+  wafer"); shot noise and brightness named in §0.4; the four demands now one paragraph, their link through the source a second.
 
 ## ch01 · The electron in given fields
 - **Opening picture.** A bar magnet bent the picture of an old cathode-ray television; Thomson's tube.
@@ -23,6 +25,9 @@ when V hands that chapter over. V reads this file before editing every chapter. 
   gun; ch04 traces rays with the integrator; ch05 returns to space charge; ch02 describes the real cathode's spread.
 - **Hand-over.** Box "Hand-over to chapter 2": force law, energy relation, steppers, helix; chapter 2 supplies the other end of the
   column, "a stream with a current and a brightness".
+- **Voice pass.** The guiding problem stated, not asked ("where a single electron goes when the fields are known"); gyroradius
+  given its meaning at first use in §1.2; "electronvolt" (one word) as in ch02; Thomson's own causes in a paragraph of their own;
+  problems phrased as tasks. Last paragraph unchanged in content: the hand-over box to chapter 2.
 
 ## ch02 · The source
 - **Opening picture.** Every beam starts at a piece of metal; the spark from a fingertip on a dry winter day, the lightning rod; the
