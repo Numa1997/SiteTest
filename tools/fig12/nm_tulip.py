@@ -51,7 +51,59 @@ def surface_mode(Rf, h, m, deg=16):
     return dict(kappa=out['kappa'][0] * Rs, f=out['f'][0], R=R, dR=dR, nlap=nlap, fit_res=res, Rs=Rs)
 
 
-def derive(prov, nr=200, nth=64):
+def lagrange_numeric(J0, J1, J2, A0, A1, A2, Lam, fx, prov):
+    """The same equations without symbolic algebra. M(b) = M0 + M1_i b_i + M2_ij b_i b_j (second order, as derive builds it),
+    T = 1/2 b'^T M b', V = 1/2 sum Lam b^2, L_a = -a_x sum f b. Lagrange's equation of coordinate c:
+        sum_b M_cb b''_b + sum_{b,i} d_i M_cb b'_i b'_b - 1/2 sum_{a,b} d_c M_ab b'_a b'_b + Lam_c b_c + f_c a_x = 0,
+    every monomial kept or dropped by the Narimanov-Moiseev order, as in derive."""
+    n = len(MODES); Ai = np.linalg.inv(A0)
+    M0 = J0.T @ Ai @ J0
+    # first order: M1[a,b,i]
+    J1i = np.transpose(J1, (2, 0, 1)); A1i = np.transpose(A1, (2, 0, 1))        # [i][k][l]
+    M1 = np.zeros((n, n, n)); M2 = np.zeros((n, n, n, n))
+    for i in range(n):
+        M1[:, :, i] = J1i[i].T @ Ai @ J0 + J0.T @ Ai @ J1i[i] - J0.T @ Ai @ A1i[i] @ Ai @ J0
+    for i in range(n):
+        for j in range(n):
+            J2ij, A2ij = J2[:, :, i, j], A2[:, :, i, j]
+            M2[:, :, i, j] = (J2ij.T @ Ai @ J0 + J0.T @ Ai @ J2ij + J1i[i].T @ Ai @ J1i[j] - J1i[i].T @ Ai @ A1i[j] @ Ai @ J0
+                              - J0.T @ Ai @ A1i[i] @ Ai @ J1i[j] - J0.T @ Ai @ A2ij @ Ai @ J0 + J0.T @ Ai @ A1i[i] @ Ai @ A1i[j] @ Ai @ J0)
+    order = [2, 1, 1, 2, 2]
+    def name(fs):          # factors (var index, kind 0 b, 1 b', 2 b'') -> sympy's printed monomial
+        cnt = {}
+        for v, k in fs:
+            nm = NAMES[v] + ['', 'd', 'dd'][k]; cnt[nm] = cnt.get(nm, 0) + 1
+        return '*'.join(f'{k}**{c}' if c > 1 else k for k, c in sorted(cnt.items()))
+    out = []
+    for c in range(n):
+        keep = 3 if c in (1, 2) else 2; terms = {}
+        def add(coef, fs):
+            if sum(order[v] for v, _ in fs) <= keep and abs(coef) > 0: terms[name(fs)] = terms.get(name(fs), 0) + coef
+        for b in range(n):                           # M_cb b''_b, M to second order
+            add(M0[c, b], [(b, 2)])
+            for i in range(n):
+                add(M1[c, b, i], [(b, 2), (i, 0)])
+                for j in range(n): add(M2[c, b, i, j], [(b, 2), (i, 0), (j, 0)])
+        for b in range(n):                           # d_i M_cb b'_i b'_b ;  d_i M = M1[..i] + (M2[..i,j] + M2[..j,i]) b_j
+            for i in range(n):
+                add(M1[c, b, i], [(i, 1), (b, 1)])
+                for j in range(n): add(M2[c, b, i, j] + M2[c, b, j, i], [(i, 1), (b, 1), (j, 0)])
+        for a in range(n):                           # -1/2 d_c M_ab b'_a b'_b
+            for b in range(n):
+                add(-0.5 * M1[a, b, c], [(a, 1), (b, 1)])
+                for j in range(n): add(-0.5 * (M2[a, b, c, j] + M2[a, b, j, c]), [(a, 1), (b, 1), (j, 0)])
+        add(Lam[c], [(c, 0)])
+        terms = {k: v for k, v in terms.items() if abs(v) > 1e-10}
+        if abs(fx[c]) > 1e-10: terms['a_x'] = fx[c]
+        lead = terms[NAMES[c] + 'dd']; out.append({k: v / lead for k, v in terms.items()})
+    mu = [float(M0[i, i]) for i in range(n)]
+    return {'sigma2': dict(zip(NAMES, [Lam[i] / mu[i] for i in range(n)])), 'mu': dict(zip(NAMES, mu)), 'Lambda': dict(zip(NAMES, Lam)),
+            'forcing': dict(zip(NAMES, fx)), 'R0': float(prov[0]['R'](np.array([1.0]))[0]), 'R1': float(prov[1]['R'](np.array([1.0]))[0]),
+            'R2': float(prov[2]['R'](np.array([1.0]))[0]), 'd': {'d1': out[1].get('p1**2*p1dd', 0), 'd2': out[1].get('p1dd*r1**2', 0)},
+            'equations': dict(zip(NAMES, out))}
+
+
+def derive(prov, nr=200, nth=64, numeric=False):
     """prov[M] = surface_mode(...) for M = 0, 1, 2. The FLT construction of nm_coeffs.derive with surface integrals."""
     n = len(MODES)
     xg, wg = np.polynomial.legendre.leggauss(nr); r = 0.5 * (xg + 1); wr = 0.5 * wg
@@ -75,6 +127,10 @@ def derive(prov, nr=200, nth=64):
     # d/dz of (grad_h phi_a . grad_h phi_b + phi_az phi_bz) = (kap_a + kap_b) G1 + kap_b phi_b d2phi_a + kap_a phi_a d2phi_b
     A2 = np.array([[[[0.5 * integ(((kap[a] + kap[b]) * G1[a][b] + kap[b] * F[b] * NL[a] + kap[a] * F[a] * NL[b]) * F[i] * F[j])
                       for j in range(n)] for i in range(n)] for b in range(n)] for a in range(n)])
+    Lam = [integ(F[i] * F[i]) for i in range(n)]
+    fx = [integ(np.outer(r, np.cos(th)) * F[i]) for i in range(n)]
+    if numeric:
+        return lagrange_numeric(J0, J1, J2, A0, A1, A2, Lam, fx, prov)
     B = sp.symbols('p0 p1 r1 p2 r2'); Bd = sp.symbols('p0d p1d r1d p2d r2d'); Bdd = sp.symbols('p0dd p1dd r1dd p2dd r2dd'); ax = sp.Symbol('a_x')
     lin = lambda T3: sp.Matrix(n, n, lambda a, b: sum(sp.Float(T3[a, b, i], 15) * B[i] for i in range(n)))
     quad = lambda T4: sp.Matrix(n, n, lambda a, b: sum(sp.Float(T4[a, b, i, j], 15) * B[i] * B[j] for i in range(n) for j in range(n)))
@@ -84,8 +140,6 @@ def derive(prov, nr=200, nth=64):
          + J1m.T * A0i * J0m + J0m.T * A0i * J1m - J0m.T * A0i * A1m * A0i * J0m
          + J2m.T * A0i * J0m + J0m.T * A0i * J2m + J1m.T * A0i * J1m - J1m.T * A0i * A1m * A0i * J0m - J0m.T * A0i * A1m * A0i * J1m
          - J0m.T * A0i * A2m * A0i * J0m + J0m.T * A0i * A1m * A0i * A1m * A0i * J0m)
-    Lam = [integ(F[i] * F[i]) for i in range(n)]
-    fx = [integ(np.outer(r, np.cos(th)) * F[i]) for i in range(n)]
     bd = sp.Matrix(Bd); T = (bd.T * M * bd)[0] / 2; V = sum(Lam[i] * B[i] ** 2 for i in range(n)) / 2
     order = {B[0]: 2, B[1]: 1, B[2]: 1, B[3]: 2, B[4]: 2, Bd[0]: 2, Bd[1]: 1, Bd[2]: 1, Bd[3]: 2, Bd[4]: 2,
              Bdd[0]: 2, Bdd[1]: 1, Bdd[2]: 1, Bdd[3]: 2, Bdd[4]: 2, ax: 3}
