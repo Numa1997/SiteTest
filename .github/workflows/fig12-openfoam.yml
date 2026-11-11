@@ -1,5 +1,7 @@
 # Fig. 12: OpenFOAM runs of the stout in the Guinness tulip on GitHub's free runners (public repository: 4 cores, 16 GB,
-# 6 h per job). Started by hand only (workflow_dispatch), never by a push. Input: cases, a JSON list of
+# 6 h per job). Started by hand only: by committing a request, notes/fig12/of-request.json (a push that does not touch
+# that file starts nothing), or with workflow_dispatch once this file is on the default branch (GitHub dispatches only
+# workflows found there). The request (or the input 'cases') is a JSON list of
 #   {"name": "...", "level": "coarse|medium|fine", "forcing": "rest|tilt", "fill": 0.125, "end": 8, "write": 1,
 #    "wall": "noslip|slip", "sigma": 0, "nu": 2.05e-6, "rho": 1000, "maxco": 0.5}
 # Each case runs as one job on 4 cores (tools/fig12/of/make_case.py, tools/fig12/of/run.sh). The last job commits the
@@ -7,6 +9,9 @@
 # with GITHUB_TOKEN starts no workflow, so nothing loops. A case already stored there is skipped (rerun = only the missing).
 name: Fig. 12 OpenFOAM runs
 on:
+  push:
+    paths:
+      - notes/fig12/of-request.json
   workflow_dispatch:
     inputs:
       cases:
@@ -18,14 +23,27 @@ concurrency:
   group: fig12-openfoam-${{ github.ref }}
   cancel-in-progress: false
 jobs:
+  plan:
+    runs-on: ubuntu-24.04
+    outputs:
+      cases: ${{ steps.c.outputs.cases }}
+    steps:
+      - uses: actions/checkout@v6
+      - id: c
+        env:
+          INPUT_CASES: ${{ github.event.inputs.cases }}
+        run: |
+          if [ -n "$INPUT_CASES" ]; then j="$INPUT_CASES"; else j="$(cat notes/fig12/of-request.json)"; fi
+          echo "cases=$(echo "$j" | python3 -c 'import json,sys; print(json.dumps(json.load(sys.stdin)))')" >> "$GITHUB_OUTPUT"
   run:
+    needs: plan
     runs-on: ubuntu-24.04
     timeout-minutes: 355
     strategy:
       fail-fast: false
       max-parallel: 20
       matrix:
-        case: ${{ fromJSON(github.event.inputs.cases) }}
+        case: ${{ fromJSON(needs.plan.outputs.cases) }}
     steps:
       - uses: actions/checkout@v6
       - name: Skip if stored
