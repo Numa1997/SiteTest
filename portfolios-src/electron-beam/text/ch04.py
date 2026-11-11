@@ -73,29 +73,34 @@ ex('wafer_pct', '100/(1+(0.003/0.002)**2)', {}, sig=2)               # field at 
 ex('B_wafer', 'b/(1+(0.003/0.002)**2)*1e3', {'b': 'd_B_0'}, sig=2)  # in mT
 mod('k30_B0', {'V_land': 30000.0}, 'B_0', sig=2)
 
-STY = 'font-family:IBM Plex Mono,monospace;font-size:17px;fill:#3a322e'
-SVG_LENS = ('<svg viewBox="0 0 640 410" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A magnetic lens in section: coil inside an iron yoke whose bore wall has a gap; field lines leave the gap and cross the axis; an electron path is bent back to the axis; below, the axial field B(z)">'
-            '<rect width="640" height="410" fill="#fff"/>'
+# Label size of the figure: 23 units of the 640-unit width on a phone (11 px on a 360 px screen), 17 on a small tablet, 15 on a wide
+# screen (16 to 17 px). Every label is placed for the largest size, so it stays clear of the drawing at all three.
+SVGCSS = ('<style>.pfig svg.ebf text{font-family:\'IBM Plex Mono\',monospace;font-size:23px}'
+          '@media (min-width:480px){.pfig svg.ebf text{font-size:17px}}@media (min-width:760px){.pfig svg.ebf text{font-size:15px}}</style>')
+STY = 'fill:#3a322e'
+SVG_LENS = ('<svg class="ebf" viewBox="0 0 640 460" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A magnetic lens in section: coil inside an iron yoke whose bore wall has a gap; field lines leave the gap and cross the axis; an electron path is bent back to the axis; below, the axial field B(z)">'
+            + SVGCSS +
+            '<rect width="640" height="460" fill="#fff"/>'
             # iron yoke, upper and lower section (the yoke is a ring around the axis); the bore wall facing the axis is open at the gap
-            '<path d="M190 18 H450 V128 H342 V106 H428 V40 H212 V106 H298 V128 H190 Z" fill="#d9d0c2" stroke="#1c1518" stroke-width="1.5"/>'
-            '<path d="M190 302 H450 V192 H342 V214 H428 V280 H212 V214 H298 V192 H190 Z" fill="#d9d0c2" stroke="#1c1518" stroke-width="1.5"/>'
-            '<rect x="226" y="50" width="188" height="44" fill="#efe4c8" stroke="#3a322e"/><rect x="226" y="226" width="188" height="44" fill="#efe4c8" stroke="#3a322e"/>'
-            '<text x="236" y="78" style="%s">coil: N turns, I</text><text x="236" y="254" style="%s">coil</text>'
-            '<text x="458" y="40" style="%s">iron</text><text x="458" y="60" style="%s">yoke</text>'
-            '<line x1="466" y1="116" x2="344" y2="120" stroke="#3a322e"/><text x="470" y="122" style="%s">gap</text>'
+            '<path d="M160 18 H480 V128 H342 V106 H458 V40 H182 V106 H298 V128 H160 Z" fill="#d9d0c2" stroke="#1c1518" stroke-width="1.5"/>'
+            '<path d="M160 302 H480 V192 H342 V214 H458 V280 H182 V214 H298 V192 H160 Z" fill="#d9d0c2" stroke="#1c1518" stroke-width="1.5"/>'
+            '<rect x="196" y="50" width="248" height="44" fill="#efe4c8" stroke="#3a322e"/><rect x="196" y="226" width="248" height="44" fill="#efe4c8" stroke="#3a322e"/>'
+            '<text x="210" y="80" style="%s">coil: N turns, I</text><text x="210" y="256" style="%s">coil</text>'
+            '<text x="492" y="40" style="%s">iron</text><text x="492" y="68" style="%s">yoke</text>'
+            '<line x1="486" y1="117" x2="344" y2="120" stroke="#3a322e" data-nocollide=""/><text x="492" y="125" style="%s">gap</text>'
             # field lines leaking out of the gap onto the axis region
             '<path d="M298 128 C300 152 340 152 342 128" fill="none" stroke="#3a322e" stroke-width="1.2"/>'
             '<path d="M290 128 C284 176 356 176 350 128" fill="none" stroke="#3a322e" stroke-width="1.2"/>'
             '<path d="M298 192 C300 168 340 168 342 192" fill="none" stroke="#3a322e" stroke-width="1.2"/>'
             '<path d="M290 192 C284 144 356 144 350 192" fill="none" stroke="#3a322e" stroke-width="1.2"/>'
             # axis and an electron path from an axial object point, bent back to the axis
-            '<line x1="16" y1="160" x2="624" y2="160" stroke="#8b8079" stroke-dasharray="6 4"/><text x="606" y="184" style="%s">z</text>'
+            '<line x1="16" y1="160" x2="624" y2="160" stroke="#8b8079" stroke-dasharray="6 4"/><text x="608" y="192" style="%s">z</text>'
             '<path d="M16 160 L296 141 Q320 139.5 344 142.5 L570 160 L624 164.2" fill="none" stroke="#7a1f2b" stroke-width="2.2"/>'
-            '<text x="24" y="138" style="%s">electron</text><line x1="570" y1="146" x2="570" y2="174" stroke="#1c1518" stroke-width="2"/><text x="530" y="198" style="%s">image</text>'
+            '<text x="24" y="136" style="%s">electron</text><line x1="570" y1="146" x2="570" y2="174" stroke="#1c1518" stroke-width="2"/><text x="526" y="198" style="%s">image</text>'
             # the axial field below
-            '<line x1="16" y1="392" x2="624" y2="392" stroke="#8b8079"/>'
-            '<path d="M16 390.3 C200 388 260 340 320 336 C380 340 440 388 624 390.3" fill="none" stroke="#7a1f2b" stroke-width="2"/>'
-            '<text x="20" y="346" style="%s">B(z) on the axis</text><text x="404" y="346" style="%s">peak at the gap</text>'
+            '<line x1="16" y1="440" x2="624" y2="440" stroke="#8b8079"/>'
+            '<path d="M16 438.3 C200 436 260 388 320 384 C380 388 440 436 624 438.3" fill="none" stroke="#7a1f2b" stroke-width="2"/>'
+            '<text x="16" y="368" style="%s">B(z) on the axis</text><text x="624" y="368" text-anchor="end" style="%s">peak at the gap</text>'
             '</svg>') % ((STY,) * 10)
 
 LITERALS = {

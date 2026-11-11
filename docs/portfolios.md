@@ -571,6 +571,14 @@ commands and the checks are in [`portfolios-src/electron-beam/README.md`](../por
   (every quoted number computed, browser string equal to the Python string; chapter 2 is skipped there and its typed numerals are listed by
   `checks/list_legacy_numerals.py`), `checks/selftest.py`, `checks/check_page.cjs` (Chromium at 360, 390, 1024 and 1440 px: KaTeX, page errors,
   sideways scroll, outside requests, fonts, every simulation drawn and moving), and `derive/chNN.py` per chapter.
+- **Figures without collisions** (11 November 2026). `checks/check_figures.cjs` tests every SVG figure and simulation canvas in Chromium at 360,
+  390, 1024 and 1440 px, each simulation at its default and at the ends of every slider, menu, switch and preset: text on text, a curve or line
+  through a label, a label outside the drawing, text below 10.5 CSS px on a phone (9.5 px wider). Grid lines, frames and leaders may touch
+  labels when marked: `data-nocollide` in SVG, `ctx.__nocollide = true` while drawing on a canvas (the top of the file says how).
+  `figkit.py` is the layout kit of the SVG figures: label widths from the house fonts, a label placer that avoids what is drawn, and `dual()`,
+  which gives each figure a wide drawing and a narrow one (300 units wide, shown below 700 px of window width, so labels read at 11 px on a
+  phone). Chapters 0 to 2 use it; their canvases (`physics/ch00.js`, `ch01.js`, `ch02_ui.js`) put the y label and keys above the plot and
+  test each note's spot against what they drew.
 - **Projects page.** `#electron-beam` in `public/portfolios.html`: band, abstract, tally, parts 7.1 to 7.4 and four plates in
   `public/portfolios/electron-beam/fig/`, captured from the built page's own figures by `notes/electron-beam/tools/plates.cjs` and converted to WebP.
   The entry has German and Arabic tables in `i18n/<lang>/portfolios.html.json`; the project page itself is English only.
@@ -579,7 +587,8 @@ commands and the checks are in [`portfolios-src/electron-beam/README.md`](../por
   `data/ch06/mc_runs.json` and writes the yields, core and halo widths into a table inside `physics/ch08.js` (between `TABLE-START` and `TABLE-END`),
   so rerun it after changing chapter 6. Chapter 8 chains the modules of chapters 2, 4, 5 and 7 and reads that table; it has no Python twin, and
   `derive/ch08.py` (through `derive/ch08_probe.cjs`) checks the chain against the separate chapters instead. Chapter 9 is prose that refers to numbers
-  of earlier chapters (`{{num:chNN.name}}`). The reading guide is `text/guide.py`. Modules give a phone shape as `ui.aspectPhone`.
+  of earlier chapters (`{{num:chNN.name}}`). The reading guide is `text/guide.py`. Modules give a phone shape as `ui.aspectPhone`. The figures
+  and simulations of chapters 3 to 8 place every word clear of every line (11 November 2026; how, in the source README under "Rules this source keeps").
 - **Published data.** Thomson 1897 (`data/ch01/`), a tungsten ⟨111⟩ tip I–V set (Ayari et al. 2023, CC BY 4.0) and Cho 2014 (`data/ch02/`), measured
   backscattering coefficients (Akbari et al., CC BY 4.0), NIST ESTAR stopping powers and Lin and Joy's secondary-electron table (`data/ch06/`), and
   published lens coefficients (`data/ch05/`), with provenance in each folder's README. The working notes, reports of every session, the blind reviews

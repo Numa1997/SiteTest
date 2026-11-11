@@ -14,7 +14,8 @@ and the definition of done are in [PLAN.md](PLAN.md). The scaffold (this README,
 | `ref/core.py`, `ref/chNN.py` | The Python reference; `core.py` mirrors `core.js` value for value and holds the number formatter the build uses. |
 | `text/chNN.py`, `text/guide.py` | The words: a dict `CH` per chapter, a dict `GUIDE` for the reading guide. Missing files render "in preparation". |
 | `build.py`, `eb_lib.py`, `template.html`, `app.js`, `bridge.cjs`, `guide_default.py` | The build and the page. `bridge.cjs` runs the page's JavaScript in Node and typesets with the site's KaTeX. |
-| `checks/` | `check_parity.py`, `check_numbers.py`, `check_page.cjs`, `selftest.py`, `fixtures/`. |
+| `figkit.py` | Layout kit of the SVG figures: label widths in the house fonts, `Layout.place()` (a label at the nearest spot nothing drawn touches, with a leader if it moved), `dual()` (a wide and a narrow drawing of one figure, switched at 700 px). |
+| `checks/` | `check_parity.py`, `check_numbers.py`, `check_page.cjs`, `check_figures.cjs` (labels in every figure and simulation against lines, labels and edges; allow-list `data-nocollide` / `ctx.__nocollide`), `selftest.py`, `fixtures/`. |
 | `derive/`, `sources/`, `data/` | Chapter sessions' SymPy derivations, the librarian's bibliography, digitised published data. |
 | `out/` | Stand-alone build (git-ignored). |
 
@@ -27,6 +28,7 @@ python3 portfolios-src/electron-beam/checks/selftest.py  # the build accepts a g
 python3 portfolios-src/electron-beam/checks/check_parity.py   # physics/chNN.js against ref/chNN.py, constants, number format
 python3 portfolios-src/electron-beam/checks/check_numbers.py  # every quoted number computed; no typed measurement in the prose
 node    portfolios-src/electron-beam/checks/check_page.cjs    # Chromium at 360, 390, 1024, 1440 px; shots in notes/electron-beam/shots/
+node    portfolios-src/electron-beam/checks/check_figures.cjs --chapters ch00,ch01,ch02   # labels against lines, labels, edges; --quick, --shots DIR
 python3 tools/inventory.py --check                            # every file described
 ```
 
@@ -67,5 +69,13 @@ it is: its numbered HTML with `\( \)` and `\[ \]` is typeset here, its `css` and
 - The page loads nothing from outside the site: the build writes the site's security policy and referrer tag after the charset line, fonts and KaTeX
   styles are the site's own files, and `check_page.cjs` fails on any other request.
 - A simulation writes nothing the display recomputes: `compute` gives the numbers, the slot only reads them.
+- A figure's words sit where nothing is drawn (chapters 3 to 8, 11 November 2026). A canvas `draw` registers its curves and solid parts with a
+  small `labels(ctx, w, h)` helper (a copy in each of `physics/ch03.js`, `ch04.js`, `ch05.js` and `ch08.js`) and puts each word at the first of a
+  few candidate places that is free; chapter 6 sets its beam label on whichever side of the beam has room, chapter 7 widens its left margin to its
+  longest count; keys stand below the plot or the drawing; the frame, the grid, the squares of a colour map and leaders are drawn with
+  `ctx.__nocollide = true`. Each SVG figure of these chapters has `class="ebf"` and a `<style>` that sets its labels in IBM Plex Mono at 23 units
+  of the 640-unit width on a phone (11 px on a 360 px screen), 17 from 480 px and 15 from 760 px, and is laid out for the largest size; its frame
+  and grid carry `data-nocollide`. Measured in Chromium at 360, 390, 480, 600, 760, 900, 1024 and 1440 px, at the default and at both ends of every
+  slider and every menu entry: no word meets a line, a solid part, another word or the edge.
 - The page never claims affiliation with Applied Materials. Its public statements are quoted as public claims, with their source.
 - Screenshots are reproducible and stay out of git (`notes/.gitignore`).
