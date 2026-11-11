@@ -3,15 +3,15 @@
 Numa, 5 November 2026: the opening passage (lines 146–158, the terror of the mind dispelled not by daylight but by nature's law;
 nothing comes from nothing by divine power; things happen without the gods) stands on the home page; the rest of the passage is to
 be scattered over other pages later. A standalone page that carried all of it was published and removed again the same day at
-Numa's word. On 10 November 2026 Numa asked for one again: `public/lucretius.html` (lines 146–224 in Latin, English, German and Arabic),
-linked from the home band.
+Numa's word. On 10 November 2026 Numa asked for one again: `public/lucretius.html` (lines 146–224 in English, German and Arabic; no Latin column since
+11 November 2026, the Latin stands on the home page), linked from the home band.
 
 | File | What it is |
 |---|---|
 | `poem-146-224.json` | The passage in 20 Latin sentences: line numbers, Latin, Leonard's English, Diels' German, per sentence. |
 | `extract.py` | Cuts the passage out of the downloaded sources by first and last words, so nothing is retyped (paths point at the scratch folder where the sources were downloaded; download them again to rerun). |
 | `poem-ar-146-158.json`, `poem-ar-159-224.json` | The Arabic, per sentence, made from the Latin for this site (not published, not reviewed by a second reader). |
-| `make_page.py` | Writes `public/lucretius.html`, the whole passage in four languages (10 November 2026). |
+| `make_page.py` | Writes `public/lucretius.html`, the whole passage as 20 verses in English, German and Arabic (10 November 2026, rebuilt 11 November 2026). |
 | `make_home.py` | Writes the home page band (between `<!--LUCRETIUS-->` markers in `index.html`) from the first four sentences of the JSON. |
 
 **Sources.** Latin: [The Latin Library](https://www.thelatinlibrary.com/lucretius/lucretius1.shtml), Book I, in the manuscripts'
@@ -29,27 +29,28 @@ gesondert die Kraft ruht") is as printed online and unchecked against the print.
 **What Numa first had** (from Gemini): lines 149 and 218 misquoted, an English text attributed to Leonard that is not his, lines
 192–214 missing.
 
-**Which Arabic is on the site, and why** (decision of Numa, 11 November 2026). The Arabic on the site is the **first version** (10 November
-2026, commits bea5607 and 9120b8d): sentence by sentence, with full case vowels (حركات). Numa tried three more and judged all three worse.
-He had called the first "Gulf and Peninsula Arabic", and still found it "the least bad" of the four. Nothing else is to be put in its
-place unless he asks. The four versions, so that no later session repeats a rejected one:
+**Which Arabic is on the site, and why.** The Arabic on the site is the **fifth version** (11 November 2026), written at Numa's word as
+majestic modern literary Arabic. Four versions came before it, and the reasons they were rejected are the rules for any later change:
 
-1. First (10 Nov, bea5607 and 9120b8d): close to the Latin, classical case vowels everywhere. **On the site now.**
+1. First (10 Nov, bea5607 and 9120b8d): close to the Latin, case vowels everywhere. Numa called it "Gulf and Peninsula Arabic" and,
+   after the three that followed, "the least bad". It was restored for a few hours on 11 November (78c4e89) and is in git.
 2. Second (10 Nov, 868d8f6): corrected after the review; used «لا شيء» for *nihilum*. Rejected: «العدم» is the word (Numa).
 3. Third (11 Nov, 8ebf821): sentence by sentence, with archaic ornament («تجلوها», «نواميسها», «أنّى»). Rejected as Quranic Arabic.
 4. Fourth (11 Nov, c1e93c5): modern Levantine literary prose, almost no vowels. Rejected as thin, "fragile and weak", "a second grader
-   from Damascus". Its wording is in git (c1e93c5) and was not thrown away.
+   from Damascus".
+5. Fifth (11 Nov, the page now): his request, after restoring the first: "more Arabic and more majestically Arabic", not Quranic, "that
+   beautiful Arabic that you read and you just feel so smooth while reading it, strong as well". It keeps the first version's weight and
+   fidelity, the Levantine strong plain verbs and the chaining with و and ف, and a measured, balanced cadence (paired clauses: «حين
+   نتأمّله، وقانونها حين نفقهه», «أصل ما نقيم عليه الحجّة»), with the argumentative stress Numa named in Mahdi Amel («لا بدّ أن», «إنّ…»,
+   «ليس… إلا…»); no archaic particles, case vowels unmarked, marks only where a word could be misread. It corrects the three misreadings
+   of the first version (lines 162, 173, 181). Its verdict is not yet known.
 
-Rules that came out of the rejections, and still hold: *nihilum* is «العدم»; darkness is «ظلام» (never «عتمة»); no calques («لا يُولَد
-شيءٌ من العدم بفعل الآلهة أبدًا» was rejected as word for word); no archaic particles. What Numa wants, and has not yet been given, is a
-hybrid: the weight and sound of the first version with the strength of Levantine prose and the argumentative cadence of Mahdi Amel
-(«لا بدّ أن», «إنّ… هو…», «ليس… إلا…»). A proposal for the four home sentences in that voice was put to him on 11 November and not
-adopted.
+Rules that hold for every version: *nihilum* is «العدم»; darkness is «ظلام» (never «عتمة»); no calques («لا يُولَد شيءٌ من العدم بفعل
+الآلهة أبدًا» was rejected as word for word); no archaic particles; no Quranic ornament.
 
-**What the first version still gets wrong.** The review of 10 November (Opus) found misreadings that commit 868d8f6 corrected and that
-this version therefore contains again: among them *erumpere* (line 162) rendered «تنفلق», *secreta facultas* (line 173) rendered «قدرةً
-خاصّةً مستترة», and *alienis partibus anni* (line 181) rendered «من أجزاءِ السنة التي لا تناسبها». It has no second reader. The page
-note (`i18n/ar/lucretius.html.json`, key 471218cdfee7) says so in the reader's words.
+**What the first version got wrong** (corrected in 868d8f6 and again in the fifth version). The review of 10 November (Opus) found, among others, *erumpere* (line 162) rendered «تنفلق», *secreta facultas* (line 173) rendered «قدرةً
+خاصّةً مستترة», and *alienis partibus anni* (line 181) rendered «من أجزاءِ السنة التي لا تناسبها». The fifth version has no second reader. The page
+note (`i18n/ar/lucretius.html.json`, key 4f631a71eff5) says so in the reader's words.
 
 **Sources read for the Arabic voice** (11 November 2026): Felix Fares' translation of Nietzsche's Zarathustra as serialised in الرسالة,
 1937 ([Wikisource](https://ar.wikisource.org/wiki/مجلة_الرسالة/العدد_211/هكذا_قال_زرادشت)), Gibran's prose
