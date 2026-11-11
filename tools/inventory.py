@@ -265,6 +265,8 @@ RULES = [
     (r'tools/fig12/spill-3d\.cjs', 'Fig. 12: the 3D solver pushed hard enough to spill: lean, highest wall point and spilled mass over time.', 'docs/simulations/fig12-beer-slosh.md'),
     (r'tools/fig12/spill-fit\.cjs', 'Fig. 12: the page\u2019s pour model against the 3D spill runs; the calibration of the weir coefficient and the breaking cap.', 'docs/simulations/fig12-beer-slosh.md'),
     (r'tools/fig12/gpu-shake\.cjs', 'Fig. 12: the whole glass (GPU solver, headless Chromium) shaken near resonance: does the swing turn into a swirl?', 'docs/simulations/fig12-beer-slosh.md'),
+    (r'tools/fig12/tilt-exact\.cjs', 'Fig. 12: how well the 3D solver holds a steady tilt, against the exact plane 2 R(h) a/g (any glass).', 'docs/simulations/fig12-beer-slosh.md'),
+    (r'tools/fig12/figures-d\.cjs', 'Fig. 12: draws the lecture note\u2019s figures of Part D (the real glass computed) from the data files, as inline SVG.', 'docs/simulations/fig12-beer-slosh.md'),
     (r'tools/fig12/validate\.cjs', 'Fig. 12: stage E: the page\u2019s model against the 3D solver on seeded random roads, by regime.', 'docs/simulations/fig12-beer-slosh.md'),
     (r'tools/fig12/validate-report\.cjs', 'Fig. 12: gathers the validation runs, writes notes/fig12/validation.md in plain words, fails on stated tolerances.', 'docs/simulations/fig12-beer-slosh.md'),
     (r'\.github/workflows/fig12-modes\.yml', 'Fig. 12 pipeline, stages B and D: on GitHub\u2019s runners, the finite-element and nonlinear checks, every fill height, the page\u2019s model checked, the data committed only if its numbers changed.', 'docs/simulations/fig12-beer-slosh.md'),

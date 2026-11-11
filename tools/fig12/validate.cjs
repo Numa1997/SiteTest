@@ -3,9 +3,11 @@
 //   regimes: gentle (bumps 2-8 mm), violent (bumps 15-25 mm, open loop), vertical (ripples under the wheel), spilling (fill
 //   135-140 mm, bumps 15-25 mm, open loop), fills (fill 80-140 mm, bumps 5-15 mm)
 // Each case: a seeded random road (Road kind 'drawn'), set speed 0.8-1.2 m/s, the cart from x = 0.5 m, 3 s. The 3D solver (half
-// glass, 4 mm grid, World.advance at 5 ms) against the page's model (TulipNM) as the 3D solver's twin: natural frequencies times
-// 0.943 (the 4 mm grid's measured ratio to the finite elements, 0.940-0.947 at 75-140 mm, notes/fig12/runs/3d/backbone-*),
-// friction off and the grid's own damping ratio 0.004 instead (the 3D solver has no wall layer, skin or foam): this tests the
+// glass, 3 mm grid by default, DX=0.004 for 4 mm; World.advance at 5 ms) against the page's model (TulipNM) as the 3D solver's twin:
+// natural frequencies times the grid's measured ratio to the finite elements (3 mm 0.958: 0.957-0.961 at 75-140 mm; 4 mm 0.943:
+// 0.940-0.947; notes/fig12/runs/3d/backbone-*), friction off and the grid's own damping ratio (3 mm 0.002, 4 mm 0.004) instead (the
+// 3D solver has no wall layer, skin or foam). The 3 mm grid because the 4 mm grid fails the exact steady tilt by up to 46 % on the
+// flared wall (tools/fig12/tilt-exact.cjs; 3 mm within 5-6 % at 75-125 mm, 13-23 % at 140 mm): this tests the
 // model's form (modes, nonlinearity, heave, coupling, pour), not its physical frequency and friction, which are tested against
 // the finite elements and the literature (modal-check.cjs, modes_fem.py check).
 // Per case: the lean (front minus back wall height at r = R(h)) every 5 ms from both, its rms difference over the rms of the 3D
@@ -17,7 +19,7 @@ const rd = (f) => JSON.parse(fs.readFileSync(path.join(__dirname, '../../public/
 const data = rd('modes.json'), nmData = rd('nm.json');
 const [regime, s0, cnt, outFile] = [process.argv[2] || 'gentle', +(process.argv[3] || 1), +(process.argv[4] || 1), process.argv[5]];
 //   e_env: the envelope's rms difference over the 3D envelope's rms (see below); peak_ratio: model's largest lean over the 3D's
-const T = 3.0, H = (G.R.length - 1) * G.dz + 0.03;
+const T = 3.0, H = (G.R.length - 1) * G.dz + 0.03, DX = +(process.env.DX || 0.003), FS = DX <= 0.0031 ? 0.958 : 0.943, ZG = DX <= 0.0031 ? 0.002 : 0.004;
 function makeCase(seed) {
   const r = new Rng(1000 * seed + { gentle: 1, violent: 2, vertical: 3, spilling: 4, fills: 5 }[regime]), u = () => r.u(), P = [[0, 0]];
   let fill = 0.125, ctrl = u() < 0.5 ? 'off' : 'speed', v0 = 0.8 + 0.4 * u();
@@ -36,8 +38,8 @@ function makeCase(seed) {
 }
 function run(c, twin) {
   const road = { kind: 'drawn', points: c.points, Rw: 0.04, xmin: -1, xmax: 14 }, cart = { x0: 0.5, Rw: 0.04, Ls: 0.135, v0: c.v0, ctrl: c.ctrl, susp: false };
-  const w = twin ? new World({ fluidInstance: new TulipNM({ data, nmData, profile: G, h0: c.fill, nModes: 3, friction: false, zetaExtra: 0.004, freqScale: 0.943 }), road, cart, dtMax: 0.001 })
-    : new World({ fluid: { dx: 0.004, profile: G, h0: c.fill, H }, road, cart, dtMax: 1 / 200 });
+  const w = twin ? new World({ fluidInstance: new TulipNM({ data, nmData, profile: G, h0: c.fill, nModes: 3, friction: false, zetaExtra: ZG, freqScale: FS }), road, cart, dtMax: 0.001 })
+    : new World({ fluid: { dx: DX, profile: G, h0: c.fill, H }, road, cart, dtMax: 1 / 200 });
   const f = w.fluid, Rs = f.Rz(Math.min(c.fill, f.zRim)), lean = [], vx = [];
   while (w.t < T - 1e-9) {
     w.advance(0.005); if (f.columnHeights && !twin) f.columnHeights();
@@ -54,7 +56,7 @@ for (let s = s0; s < s0 + cnt; s++) {
   // window (insensitive to a phase that drifts as a small frequency difference accumulates)
   const env = (L) => { const o = []; for (let k = 0; k + 60 <= n; k += 60) { let m = 0; for (let j = k; j < k + 60; j++) m = Math.max(m, Math.abs(L[j])); o.push(m); } return o; };
   const ea = env(a.lean), eb = env(b.lean); let de = 0, ae = 0; for (let k = 0; k < ea.length; k++) { de += (eb[k] - ea[k]) ** 2; ae += ea[k] ** 2; }
-  const r = { ...c, points: undefined, e_env: +Math.sqrt(de / Math.max(ae, 1e-12)).toFixed(3), peak_ratio: +(lb / Math.max(la, 1e-9)).toFixed(3), e_lean: +(Math.sqrt(d2 / Math.max(a2, 1e-12))).toFixed(3), rms_lean_3d: +Math.sqrt(a2 / n).toFixed(2), lean_3d: +la.toFixed(1), lean_model: +lb.toFixed(1),
+  const r = { ...c, points: undefined, dx: DX, e_env: +Math.sqrt(de / Math.max(ae, 1e-12)).toFixed(3), peak_ratio: +(lb / Math.max(la, 1e-9)).toFixed(3), e_lean: +(Math.sqrt(d2 / Math.max(a2, 1e-12))).toFixed(3), rms_lean_3d: +Math.sqrt(a2 / n).toFixed(2), lean_3d: +la.toFixed(1), lean_model: +lb.toFixed(1),
     dv_rms_mm_s: +(1000 * Math.sqrt(v2 / n)).toFixed(2), spill_3d: +a.spill.toFixed(1), spill_model: +b.spill.toFixed(1), seconds: (Date.now() - t0) / 1000, series: { lean_3d: a.lean.map((v) => +v.toFixed(2)), lean_model: b.lean.map((v) => +v.toFixed(2)) } };
   out.push(r);
   console.log(`${regime} #${s}: fill ${(c.fill * 1000).toFixed(1)} mm, ${c.ctrl}, ${c.v0} m/s: lean 3D ${r.lean_3d} / model ${r.lean_model} mm, envelope ${(r.e_env * 100).toFixed(0)} % apart, point by point ${(r.e_lean * 100).toFixed(0)} % of the 3D's rms ${r.rms_lean_3d} mm; speed ${r.dv_rms_mm_s} mm/s rms apart; spilled ${r.spill_3d} / ${r.spill_model} g (${r.seconds.toFixed(0)} s)`);
