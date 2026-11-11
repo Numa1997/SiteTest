@@ -1899,7 +1899,7 @@
       const P0 = this.P, f = this.fluid;
       this.J = [-(P[0] + f.spillPx - P0[0]), -(P[1] + f.spillPz - P0[1])]; this.hLast = h;
       this.Fx = this.J[0] / h; this.Fz = this.J[1] / h;
-      if (f.spillNow) { c.ml = f.liquidMass(); if (f.modal) this.spilledMass = f.rho * f.spillV; else this.dropsFrom(f.spillList); }
+      if (f.spillNow) { c.ml = f.liquidMass(); if (f.modal) { this.spilledMass = f.rho * f.spillV; if (f.spillList.length) this.dropsFrom(f.spillList, true); } else this.dropsFrom(f.spillList); }
       f.spillList.length = 0;
       this.moveDrops(h);
       this.P = P; this.lastAx = ax; this.lastAz = az;
@@ -1969,13 +1969,14 @@
   // Spilled stout in the room: each particle that left over the rim becomes a drop (with its mirror image, the other
   // half of the glass) at the glass's position plus its own, with the glass's velocity plus its own, falling freely
   // (no air drag) until it meets the body's top or the road, where it stays as a splash. At most 6000 drops are kept.
-  World.prototype.dropsFrom = function (list) {
+  // visualOnly: drops a mode model emits to show its pour (stout-modal.js); its spilled mass is its own computed volume, not counted here
+  World.prototype.dropsFrom = function (list, visualOnly) {
     const c = this.cart, D = this.drops || (this.drops = []), both = this.fluid.whole ? [1] : [1, -1];   // the whole glass has no mirror images
     for (const q of list) for (const m of both) {
       if (D.length >= 6000) D.shift();
       D.push({ x: c.x + q[0], y: m * q[1], z: c.zb + c.glassFloor + q[2], vx: c.vx + q[3], vy: m * q[4], vz: c.vzb + q[5], landed: false });
     }
-    this.spilledMass = (this.spilledMass || 0) + list.length * (this.fluid.whole ? 1 : 2) * this.fluid.mp;
+    if (!visualOnly) this.spilledMass = (this.spilledMass || 0) + list.length * (this.fluid.whole ? 1 : 2) * this.fluid.mp;
   };
   World.prototype.moveDrops = function (h) {
     const D = this.drops; if (!D) return;

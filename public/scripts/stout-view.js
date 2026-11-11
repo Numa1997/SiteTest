@@ -201,7 +201,7 @@
     // spilled stout: drops in the air drawn as streaks along their velocity (the solver moves them, World.moveDrops),
     // splashes where they landed
     const drops = w.drops;
-    if (drops && drops.length && !f.modal) {
+    if (drops && drops.length) {   // the 3D solvers' spilled particles, or the drops a mode model emits where it pours
       for (const d of drops) {
         const p = P(d.x - c.x, d.y, d.z);
         if (p[0] < -5 || p[0] > W + 5 || p[2] <= 0.05) continue;

@@ -48,7 +48,7 @@
   function TulipModes(o) {
     o = o || {};
     if (!o.data) throw new Error('TulipModes needs the computed modes (public/data/fig12/modes.json) as o.data');
-    this.data = o.data; this.modal = true;
+    this.data = o.data; this.modal = true; this.whole = true;   // the whole glass: its drops have no mirror images
     this.hsData = o.data.h.map((x) => x / 1000);
     this.profile = o.profile;
     const P = this.profile.R; this.zRim = (P.length - 1) * this.profile.dz; this.R = Math.max.apply(null, P); this.Rrim = P[P.length - 1];
@@ -400,6 +400,13 @@
         if (D <= 0) continue;
         const dVk = this.Cd * (2 / 3) * Math.sqrt(2 * g) * Math.pow(D, 1.5) * this.Rrim * (2 * Math.PI / K) * dt;
         dV += dVk; dPx += this.rho * dVk * Math.sqrt(2 * g * D) * Math.cos(th);
+        // drops to draw the pour: one for each 0.05 g poured here, leaving the rim outward at the weir's speed sqrt(2 g D) (the World
+        // lets them fall with the glass's velocity added; the spilled mass stays this model's computed volume)
+        this.dropAcc = (this.dropAcc || 0) + this.rho * dVk / 5e-5;
+        while (this.dropAcc >= 1 && this.spillList.length < 400) {
+          this.dropAcc -= 1; const u = Math.sqrt(2 * g * D), jit = 0.6 + 0.8 * ((this.spillList.length * 0.618034) % 1);
+          this.spillList.push([this.Rrim * Math.cos(th), this.Rrim * Math.sin(th), this.zRim, u * jit * Math.cos(th), u * jit * Math.sin(th), 0.3 * u * jit]);
+        }
       }
       dV = Math.min(dV, 0.5 * this.V);
       let Vc = 0; const nr = 12;                           // volume above the rest level: int max(eta - h, 0) dA, polar grid
