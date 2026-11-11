@@ -17,6 +17,7 @@ EB = os.path.abspath(os.path.join(HERE, '..'))
 if EB not in sys.path:
     sys.path.insert(0, EB)
 from ref import ch00 as R0, core as RC  # noqa: E402
+import figkit as FK  # noqa: E402  (figure layout helpers, figkit.py)
 
 NUMS = {}
 
@@ -82,26 +83,38 @@ def fig_scales():
              ('light', 'EUV 0.55 NA, λ/2NA', g['euv2'], '#8b8079'),
              ('feature', 'tightest metal pitch, 2025', 20e-9, '#7a1f2b'), ('feature', 'silicon crystal cell', 5.431020511e-10, '#7a1f2b'),
              ('electron', 'electron, 1 kV: λ', e1, '#1c1518'), ('electron', 'electron, 30 kV: λ', e30, '#1c1518')]
-    x0, w, lo, hi = 40, 680, -12.0, -6.0
+    return FK.dual(_scales(items, False), _scales(items, True))
+
+
+def _scales(items, narrow):
+    """One drawing of Figure 0.1: wide (760 units) or narrow (figkit.NARROW_W); each mark has its own row, so only grid lines cross labels."""
+    W, x0, w, lo, hi = (FK.NARROW_W, 14, 272, -12.0, -6.0) if narrow else (760, 40, 680, -12.0, -6.0)
     X = lambda v: x0 + (math.log10(v) - lo) / (hi - lo) * w
-    s = ['<svg viewBox="0 0 760 400" role="img" aria-label="A logarithmic length axis from one picometre to one micrometre. The feature pitch, the optical limit and the electron wavelength are marked.">',
-         '<rect width="760" height="400" fill="#fff"/>']
+    rows = {'light': [92, 120, 148], 'feature': [220, 248], 'electron': [320, 348]}
+    groups = [('light', 'light: smallest period resolved, λ/2NA', 62), ('feature', 'the structures to be measured', 190), ('electron', 'electrons: wavelength λ', 290)]
+    if narrow:                                   # rows a little closer, the same order
+        rows = {'light': [60, 86, 112], 'feature': [166, 192], 'electron': [246, 272]}
+        groups = [('light', 'light: smallest period resolved, λ/2NA', 34), ('feature', 'the structures to be measured', 140), ('electron', 'electrons: wavelength λ', 220)]
+    ya = rows['electron'][-1] + 24
+    H = ya + 22
+    s = ['<svg viewBox="0 0 %d %d" role="img" aria-label="A logarithmic length axis from one picometre to one micrometre. The feature pitch, the optical limit and the electron wavelength are marked.">' % (W, H),
+         '<rect width="%d" height="%d" fill="#fff"/>' % (W, H)]
+    names = {-12: '1 pm', -11: '10 pm', -10: '100 pm', -9: '1 nm', -8: '10 nm', -7: '100 nm', -6: '1 µm'}
     for e in range(-12, -5):
         x = X(10.0 ** e)
-        s.append('<line x1="%.1f" y1="30" x2="%.1f" y2="372" stroke="#f0ebe3"/>' % (x, x))
-        s.append('<text class="tick" x="%.1f" y="392" text-anchor="middle">%s</text>' % (x, {-12: '1 pm', -11: '10 pm', -10: '100 pm', -9: '1 nm', -8: '10 nm', -7: '100 nm', -6: '1 µm'}[e]))
-    s.append('<line x1="%d" y1="372" x2="%d" y2="372" stroke="#6f655f"/>' % (x0, x0 + w))
-    groups = [('light', 'light: smallest period resolved, λ/2NA', 62), ('feature', 'the structures to be measured', 190), ('electron', 'electrons: wavelength λ', 290)]
-    ys = {'light': [92, 120, 148], 'feature': [220, 248], 'electron': [320, 348]}
+        s.append('<line x1="%.1f" y1="%d" x2="%.1f" y2="%d" stroke="#f0ebe3" data-nocollide=""/>' % (x, groups[0][2] - 18, x, ya))
+        if not narrow or e % 2 == 0:
+            s.append('<text class="tick" x="%.1f" y="%d" text-anchor="%s">%s</text>' % (x, ya + 20, 'start' if x - 20 < 0 else 'end' if x + 20 > W else 'middle', names[e]))
+    s.append('<line x1="%d" y1="%d" x2="%d" y2="%d" stroke="#6f655f"/>' % (x0, ya, x0 + w, ya))
     for k, lab, y in groups:
-        s.append('<text class="lbl" x="%d" y="%d" font-weight="600">%s</text>' % (x0, y, lab))
-    cnt = {k: 0 for k in ys}
+        s.append('<text class="lbl" x="%d" y="%d" font-weight="600">%s</text>' % (4 if narrow else x0, y, lab))
+    cnt = {k: 0 for k in rows}
     for kind, lab, v, col in items:
-        y = ys[kind][cnt[kind]]
+        y = rows[kind][cnt[kind]]
         cnt[kind] += 1
-        s.append('<circle cx="%.1f" cy="%d" r="6" fill="%s"/>' % (X(v), y, col))
+        s.append('<circle cx="%.1f" cy="%d" r="%d" fill="%s"/>' % (X(v), y, 5 if narrow else 6, col))
         txt = '%s  %s' % (lab, ('%.3g nm' % (v * 1e9)) if v >= 1e-9 else ('%.3g pm' % (v * 1e12)))
-        anchor, tx = ('start', X(v) + 12) if X(v) < 500 else ('end', X(v) - 12)
+        anchor, tx = ('start', X(v) + 11) if X(v) < 0.62 * W and X(v) + 11 + FK.width(txt) < W - 2 else ('end', X(v) - 11)
         s.append('<text class="lbl" x="%.1f" y="%d" text-anchor="%s">%s</text>' % (tx, y + 4, anchor, txt))
     s.append('</svg>')
     return ''.join(s)

@@ -96,20 +96,27 @@ def checks_table():
     return '<div class="ptab-wrap"><table class="ptab ptab--checks"><thead><tr><th>check</th><th>what is verified</th><th>result</th><th>detail</th></tr></thead><tbody>%s</tbody></table></div>' % rows
 
 
-STY = 'font-family:IBM Plex Mono,monospace;font-size:19px;fill:#3a322e'
-SVG_EDGE = ('<svg viewBox="0 0 640 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Why an edge is bright: the beam crosses the thin escape layer at a slant on a steep wall">'
-            '<rect width="640" height="300" fill="#fff"/>'
+# Label size of the figure: 23 units of the 640-unit width on a phone (11 px on a 360 px screen), 17 on a small tablet, 15 on a wide
+# screen (16 to 17 px). Every label is placed for the largest size, so it stays clear of the drawing at all three; the words for the
+# tilted wall stand below it.
+SVGCSS = ('<style>.pfig svg.ebf text{font-family:\'IBM Plex Mono\',monospace;font-size:23px}'
+          '@media (min-width:480px){.pfig svg.ebf text{font-size:17px}}@media (min-width:760px){.pfig svg.ebf text{font-size:15px}}</style>')
+STY = 'fill:#3a322e'
+SVG_EDGE = ('<svg class="ebf" viewBox="0 0 640 440" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Why an edge is bright: the beam crosses the thin escape layer at a slant on a steep wall">'
+            + SVGCSS +
+            '<rect width="640" height="440" fill="#fff"/>'
             # flat surface with escape layer
-            '<rect x="20" y="170" width="250" height="110" fill="#efe4c8" stroke="#3a322e"/><rect x="20" y="170" width="250" height="16" fill="#e2a2aa" opacity="0.6"/>'
-            '<line x1="145" y1="40" x2="145" y2="240" stroke="#7a1f2b" stroke-width="2.5"/><text x="152" y="60" style="%s">beam</text>'
-            '<line x1="128" y1="170" x2="128" y2="186" stroke="#1c1518" stroke-width="2"/><text x="156" y="216" style="%s">escape layer</text><text x="156" y="240" style="%s">path λ_s</text>'
+            '<rect x="20" y="200" width="280" height="130" fill="#efe4c8" stroke="#3a322e"/><rect x="20" y="200" width="280" height="16" fill="#e2a2aa" opacity="0.6"/>'
+            '<line x1="200" y1="60" x2="200" y2="300" stroke="#7a1f2b" stroke-width="2.5"/><text x="210" y="84" style="%s">beam</text>'
+            '<line x1="186" y1="200" x2="186" y2="216" stroke="#1c1518" stroke-width="2"/><text x="24" y="186" style="%s">escape layer</text><text x="186" y="252" text-anchor="end" style="%s">path λ_s</text>'
             # tilted wall
-            '<path d="M360 280 L360 170 L470 60 L620 60 L620 280 Z" fill="#efe4c8" stroke="#3a322e"/>'
-            '<path d="M360 170 L470 60 L481 71 L371 181 Z" fill="#e2a2aa" opacity="0.6"/>'
-            '<line x1="420" y1="20" x2="420" y2="240" stroke="#7a1f2b" stroke-width="2.5"/><text x="428" y="34" style="%s">beam</text>'
-            '<line x1="414" y1="116" x2="414" y2="138" stroke="#1c1518" stroke-width="2"/>'
-            '<text x="436" y="196" style="%s">wall tilted by θ:</text><text x="436" y="220" style="%s">path λ_s / cos θ,</text><text x="436" y="244" style="%s">more SE</text>'
-            '</svg>') % ((STY,) * 7)
+            '<path d="M340 330 L340 200 L450 90 L620 90 L620 330 Z" fill="#efe4c8" stroke="#3a322e"/>'
+            '<path d="M340 200 L450 90 L461 101 L351 211 Z" fill="#e2a2aa" opacity="0.6"/>'
+            '<line x1="400" y1="20" x2="400" y2="300" stroke="#7a1f2b" stroke-width="2.5"/><text x="410" y="44" style="%s">beam</text>'
+            '<line x1="394" y1="146" x2="394" y2="168" stroke="#1c1518" stroke-width="2"/>'
+            '<text x="340" y="364" style="%s">wall tilted by θ:<tspan x="340" dy="1.25em">path λ_s / cos θ,</tspan><tspan x="340" dy="1.25em">more SE</tspan></text>'
+            '</svg>') % ((STY,) * 5)
+
 
 S = []
 S.append({'id': 'picture', 'title': 'Reading a width from an image', 'html': r'''
@@ -141,7 +148,7 @@ $$ \langle k\rangle=\bar n\,m,\qquad \operatorname{Var}k=\bar n\,(m+m^2) \label{
 
 S.append({'id': 'edges', 'title': 'Finding the edges', 'html': r'''
 <p>The averaged profile is still noisy, and the width must be read from it by a rule. We use a simple and common one, a threshold on the outer flank of each edge peak. The floor level $S_\text{floor}$ is the mean of the pixels in the middle half of the space; the level of each edge peak is the mean of the three pixels around its maximum; the threshold is half-way between them; and the edge is the point where the profile, followed outwards from the peak, first falls below the threshold, interpolated linearly between pixels. The measured width is the distance between the two edges found.</p>
-<p>A rule reads a width, but not necessarily the true one. With a vanishingly small probe and no spread of the signal, the outer flanks are the bottom corners of the line, and the rule finds {{num:cd_sharp}} nm against the bottom width {{num:cd_bottom}} nm (check C7). With the default blur the flanks move outwards and the rule reads {{num:d_cdm}} nm for a line whose true CD is 20 nm: a bias of {{num:d_bias}} nm, made of the sidewall's projection (the bottom is wider than the middle) and above all of the blur, which moves the half-height point of each outer flank outwards by about one $\sigma_b$. The fin-like line of Example 7.3 reads {{num:fin_bias}} nm too wide, {{num:fin_bias_pct}} % of its width. Such a bias is not an error of the tool but a property of the method; real tools calibrate it away against a reference measurement (cross-section electron microscopy or atomic force microscopy) for each kind of pattern. What cannot be calibrated away is the scatter from one measurement to the next.</p>
+<p>A rule reads a width, but not necessarily the true one. With a vanishingly small probe and no spread of the signal, the outer flanks are the bottom corners of the line, and the rule finds {{num:cd_sharp}} nm against the bottom width {{num:cd_bottom}} nm (check C7). With the default blur the flanks move outwards and the rule reads {{num:d_cdm}} nm for a line whose true CD is 20 nm: a bias of {{num:d_bias}} nm, made of the sidewall's projection (the bottom is wider than the middle) and above all of the blur, which moves the half-height point of each outer flank outwards by about one $\sigma_1$. The fin-like line of Example 7.3 reads {{num:fin_bias}} nm too wide, {{num:fin_bias_pct}} % of its width. Such a bias is not an error of the tool but a property of the method; real tools calibrate it away against a reference measurement (cross-section electron microscopy or atomic force microscopy) for each kind of pattern. What cannot be calibrated away is the scatter from one measurement to the next.</p>
 '''})
 
 S.append({'id': 'precision', 'title': 'The precision of a width', 'html': r'''
@@ -162,7 +169,7 @@ $$ \sigma_\mathrm{CD}\propto\frac{1}{\sqrt{I_p\,t_d\,N}} , \label{law7} $$
 '''})
 
 S.append({'id': 'throughput', 'title': 'Measurements per hour', 'html': r'''
-<p>One image of 512 by 512 pixels at 100 ns per pixel takes {{num:d_tframe}} ms. A measurement site also needs a stage move, focusing and pattern recognition, which we lump into an overhead $t_\mathrm{ov}$; we assume 1 s, not a vendor's number. The rate is then</p>
+<p>One image of 512 by 512 pixels at 100 ns per pixel takes {{num:d_tframe}} ms. A measurement site also needs a stage move, focusing and pattern recognition, which we lump into an overhead $t_\mathrm{ov}$; we assume 1 s, not a vendor's number. For a square image of $N$ lines of $N$ pixels each (the lines averaged are the rows of the image), the rate is then</p>
 $$ \dot N_m=\frac{1}{N^2t_d+t_\mathrm{ov}} , \label{mph7} $$
 <p>{{num:d_mph}} per hour at the default, of which the scan itself would allow {{num:d_mph_noov}}. The overhead dominates, so a faster scan alone gains little; what pays is measuring many features in one image.</p>
 <p>Applied Materials states that its PROVision 10 makes "up to 100 million accurate, actionable measurements per hour" with a cold-field-emission column (product page, as above). We cannot check that claim and do not model that tool. As arithmetic only: 100 million per hour is one measurement every {{num:amat_us}} µs. In the time of one default image, {{num:d_tframe}} ms, that is {{num:amat_per_image}} measurements, which is possible only if each image yields hundreds of widths at once, many lines in a large field, read by software in parallel. Our single-line model counts one width per image, so its rate and the claim measure different things.</p>

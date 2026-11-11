@@ -121,7 +121,11 @@
   }
 
   /* ------------------------------------------------------------------ drawing */
+  // Layout (Numa, 11 November 2026: "lines intersect with legends"): the y label and any key stand in the margin above the plot, never
+  // inside it; a note inside a plot goes to the first spot of a list that no drawn curve, line or other note touches (placer below).
+  // Grid lines and frames are drawn with ctx.__nocollide set, the allow-list of checks/check_figures.cjs.
   const C = { ink: '#1c1518', ink2: '#3a322e', wine: '#7a1f2b', rose: '#e2a2aa', tan: '#7a4b12', muted: '#8b8079', rule: '#d9d0c2', card: '#fffaf3', soft: '#ece5d8' };
+  const MONO = "11px 'IBM Plex Mono', monospace", SANS = "11px 'IBM Plex Sans', sans-serif";
   function ctxOf(id) {
     const cv = $(id), box = cv.parentElement, dpr = Math.min(2, window.devicePixelRatio || 1);
     const w = box.clientWidth, h = box.clientHeight;
@@ -129,19 +133,53 @@
     const g = cv.getContext('2d'); g.setTransform(dpr, 0, 0, dpr, 0, 0); g.clearRect(0, 0, w, h);
     return { g, w, h };
   }
+  // placer: obstacles are sampled points of what is drawn; put() takes a list of [x, y, align] and uses the first free one
+  // (or the first of the list, if none is free). region: [x0, y0, x1, y1] the label must stay in.
+  function placer(g, region) {
+    const pts = [], boxes = [];
+    return {
+      line(P) { for (let i = 0; i + 1 < P.length; i++) { const [ax, ay] = P[i], [bx, by] = P[i + 1], n = Math.max(1, Math.ceil(Math.hypot(bx - ax, by - ay) / 2)); for (let k = 0; k <= n; k++) pts.push([ax + (bx - ax) * k / n, ay + (by - ay) * k / n]); } },
+      box(b) { boxes.push(b); },
+      put(text, cands, font) {
+        g.font = font;
+        const m = g.measureText(text), wd = m.width, a = m.actualBoundingBoxAscent, d = m.actualBoundingBoxDescent;
+        for (const [x, y, al] of cands) {
+          const x0 = al === 'right' ? x - wd : al === 'center' ? x - wd / 2 : x, b = [x0 - 2, y - a - 2, x0 + wd + 2, y + d + 2];
+          if (b[0] < region[0] || b[2] > region[2] || b[1] < region[1] || b[3] > region[3]) continue;
+          if (boxes.some(o => b[0] < o[2] && o[0] < b[2] && b[1] < o[3] && o[1] < b[3])) continue;
+          if (pts.some(([px, py]) => px > b[0] - 1.5 && px < b[2] + 1.5 && py > b[1] - 1.5 && py < b[3] + 1.5)) continue;
+          boxes.push(b); return { x, y, al };
+        }
+        return cands.length ? { x: cands[0][0], y: cands[0][1], al: cands[0][2] } : null;
+      },
+    };
+  }
+  // candidate spots around (x, y), nearest first, both alignments
+  const around = (x, y, r) => { const c = []; for (let dy = -r; dy <= r; dy += 4) for (let dx = -r; dx <= r; dx += 6) c.push([x + dx, y + dy, Math.hypot(dx, dy)]); c.sort((a, b) => a[2] - b[2]); return c.flatMap(([cx, cy]) => [[cx, cy, 'left'], [cx, cy, 'right']]); };
+  // the margins: the y label above the plot at the left, the key (if any) above the plot at the right
+  const MG = { l: 50, r: 12, t: 24, b: 36 };
   function axes(g, w, h, m, xlab, ylab, xt, yt) {
-    g.save(); g.font = "10.5px 'IBM Plex Mono', monospace"; g.fillStyle = C.muted; g.strokeStyle = C.soft; g.lineWidth = 1;
-    xt.forEach(([x, s]) => { g.beginPath(); g.moveTo(x, m.t); g.lineTo(x, h - m.b); g.stroke(); g.textAlign = 'center'; g.fillText(s, x, h - m.b + 14); });
-    yt.forEach(([y, s]) => { g.beginPath(); g.moveTo(m.l, y); g.lineTo(w - m.r, y); g.stroke(); g.textAlign = 'right'; g.fillText(s, m.l - 5, y + 3); });
+    g.save(); g.font = MONO; g.fillStyle = C.muted; g.strokeStyle = C.soft; g.lineWidth = 1;
+    g.__nocollide = true;
+    xt.forEach(([x]) => { g.beginPath(); g.moveTo(x, m.t); g.lineTo(x, h - m.b); g.stroke(); });
+    yt.forEach(([y]) => { g.beginPath(); g.moveTo(m.l, y); g.lineTo(w - m.r, y); g.stroke(); });
     g.strokeStyle = '#cdc1ae'; g.strokeRect(m.l, m.t, w - m.l - m.r, h - m.t - m.b);
-    g.fillStyle = C.ink2; g.font = "11px 'IBM Plex Sans', sans-serif"; g.textAlign = 'center'; g.fillText(xlab, (m.l + w - m.r) / 2, h - 4);
-    g.save(); g.translate(11, (m.t + h - m.b) / 2); g.rotate(-Math.PI / 2); g.fillText(ylab, 0, 0); g.restore(); g.restore();
+    g.__nocollide = false;
+    // tick labels, thinned until neighbours stand 8 px apart
+    let xs = xt;
+    const wd = s => g.measureText(s).width;
+    while (xs.length > 2 && xs.some((p, i) => i && (p[0] - wd(p[1]) / 2) - (xs[i - 1][0] + wd(xs[i - 1][1]) / 2) < 8)) xs = xs.filter((_, i) => i % 2 === 0);
+    xs.forEach(([x, s]) => { g.textAlign = 'center'; g.fillText(s, x, h - m.b + 14); });
+    yt.forEach(([y, s]) => { g.textAlign = 'right'; g.fillText(s, m.l - 5, y + 4); });
+    g.fillStyle = C.ink2; g.font = SANS; g.textAlign = 'center'; g.fillText(xlab, (m.l + w - m.r) / 2, h - 4);
+    g.textAlign = 'left'; g.fillText(ylab, 4, m.t - 8);
+    g.restore();
   }
   const nice = (lo, hi, n) => { const span = hi - lo, raw = span / n, mag = Math.pow(10, Math.floor(Math.log10(raw))); let st = mag; for (const q of [1, 2, 2.5, 5, 10]) { if (raw <= q * mag) { st = q * mag; break; } } const o = []; for (let t = Math.ceil(lo / st - 1e-9) * st; t <= hi + 1e-9 * span; t += st) o.push(t); return o; };
 
   // ---- Fowler–Nordheim plot ---------------------------------------------------------------------------------
   function drawFN(th) {
-    const { g, w, h } = ctxOf('eb-fn'), m = { l: 58, r: 12, t: 10, b: 36 };
+    const { g, w, h } = ctxOf('eb-fn'), m = { ...MG };
     const pts = M.sweep.map(s => ({ x: 1000 / s.V, c: Math.log(s.Ic / (s.V * s.V)), v: Math.log(s.Iv / (s.V * s.V)), y: Math.log(((1 - th) * s.Ic + th * s.Iv) / (s.V * s.V)) }));
     const ys = pts.flatMap(p => [p.c, isFinite(p.v) ? p.v : p.c, isFinite(p.y) ? p.y : p.c]).filter(isFinite);
     let y0 = Math.min(...ys), y1 = Math.max(...ys); const pad = (y1 - y0) * 0.08 + 0.2; y0 -= pad; y1 += pad;
@@ -151,11 +189,13 @@
     // clean-tip line through the sweep (least squares) and its slope
     const n = pts.length, sx = pts.reduce((a, p) => a + p.x, 0), sy = pts.reduce((a, p) => a + p.c, 0), sxx = pts.reduce((a, p) => a + p.x * p.x, 0), sxy = pts.reduce((a, p) => a + p.x * p.c, 0);
     const slope = (n * sxy - sx * sy) / (n * sxx - sx * sx), icpt = (sy - slope * sx) / n;
+    g.save(); g.beginPath(); g.rect(m.l, m.t, w - m.l - m.r, h - m.t - m.b); g.clip();          // lines stay inside the frame
     g.strokeStyle = C.muted; g.setLineDash([5, 4]); g.lineWidth = 1.4; g.beginPath(); g.moveTo(X(x0 - dx), Y(icpt + slope * (x0 - dx))); g.lineTo(X(x1 + dx), Y(icpt + slope * (x1 + dx))); g.stroke(); g.setLineDash([]);
     if (th > 0.002) { g.strokeStyle = C.rose; g.lineWidth = 1.6; g.beginPath(); pts.forEach((p, i) => { const px = X(p.x), py = Y(isFinite(p.v) ? p.v : y0); i ? g.lineTo(px, py) : g.moveTo(px, py); }); g.stroke(); }
     g.strokeStyle = C.wine; g.lineWidth = 2.2; g.beginPath(); pts.forEach((p, i) => { const px = X(p.x), py = Y(isFinite(p.y) ? p.y : y0); i ? g.lineTo(px, py) : g.moveTo(px, py); }); g.stroke();
     const op = pts.reduce((a, p) => Math.abs(p.x - 1000 / M.V) < Math.abs(a.x - 1000 / M.V) ? p : a, pts[0]);
     g.fillStyle = C.wine; g.beginPath(); g.arc(X(op.x), Y(isFinite(op.y) ? op.y : y0), 4.6, 0, 7); g.fill();
+    g.restore();
     const bphi = 6.83089 * Math.pow(M.I.phi, 1.5);        // b φ^{3/2}, V/nm
     put('apex', 'FN_slope', slope * 1000, 'V', 'least-squares slope of ln(I/V²) against 1/V, clean tip');
     put('apex', 'zeta_from_slope', Math.abs(slope * 1000) / (bphi * (1 - M.mC.f / 6)), 'nm', 'ζ = |S| / (b φ^{3/2} (1 − f/6)), @eq:FNslope@');
@@ -163,25 +203,44 @@
 
   // ---- energy distribution ----------------------------------------------------------------------------------
   function drawEnergy(mx) {
-    const { g, w, h } = ctxOf('eb-en'), m = { l: 50, r: 12, t: 10, b: 36 }, gr = M.grid, e0 = gr[0] / eV, e1 = gr[gr.length - 1] / eV;
+    const { g, w, h } = ctxOf('eb-en'), m = { ...MG }, gr = M.grid, e0 = gr[0] / eV, e1 = gr[gr.length - 1] / eV;
     const pmax = Math.max(...M.Pc) || 1;
     const X = x => m.l + (x - e0) / (e1 - e0) * (w - m.l - m.r), Y = y => h - m.b - y / (pmax * 1.08) * (h - m.t - m.b);
     axes(g, w, h, m, 'energy relative to the Fermi level  ε  (eV)', 'P(ε) / peak (clean)', nice(e0, e1, 5).map(x => [X(x), x.toFixed(1)]), [0, 0.5, 1].map(y => [Y(y * pmax), y.toFixed(1)]));
+    const L = placer(g, [m.l + 1, m.t + 1, w - m.r - 1, h - m.b - 1]);
+    const curve = P => P.map((v, i) => [X(gr[i] / eV), Y(v)]);
     const draw = (P, col, lw, fill) => { g.beginPath(); P.forEach((v, i) => { const px = X(gr[i] / eV), py = Y(v); i ? g.lineTo(px, py) : g.moveTo(px, py); }); if (fill) { g.lineTo(X(e1), Y(0)); g.lineTo(X(e0), Y(0)); g.closePath(); g.fillStyle = fill; g.fill(); } g.strokeStyle = col; g.lineWidth = lw; g.stroke(); };
-    draw(M.Pc, C.muted, 1.3);
-    draw(mx.P, C.wine, 2.2, 'rgba(122,31,43,.14)');
-    g.strokeStyle = C.ink; g.setLineDash([5, 4]); g.lineWidth = 1.2; g.beginPath(); g.moveTo(X(0), m.t); g.lineTo(X(0), h - m.b); g.stroke(); g.setLineDash([]);
-    g.fillStyle = C.ink2; g.font = "10.5px 'IBM Plex Mono', monospace"; g.textAlign = 'left'; g.fillText('Fermi level', X(0) + 4, m.t + 11);
-    const top = M.mC.top / eV; if (top > e0 && top < e1) { g.strokeStyle = C.tan; g.beginPath(); g.moveTo(X(top), m.t); g.lineTo(X(top), h - m.b); g.stroke(); g.fillStyle = C.tan; g.fillText('barrier top', X(top) + 4, m.t + 24); }
+    draw(M.Pc, C.muted, 1.3); L.line(curve(M.Pc));
+    draw(mx.P, C.wine, 2.2, 'rgba(122,31,43,.14)'); L.line(curve(mx.P));
+    const vcands = (x, al) => { const c = []; for (let y = m.t + 13; y < h - m.b - 4; y += 4) c.push([x + 4, y, 'left'], [x - 4, y, 'right']); return c; };
+    const notes = [], anywhere = around((m.l + w - m.r) / 2, (m.t + h - m.b) / 2, 220);
+    if (0 > e0 && 0 < e1) {
+      g.strokeStyle = C.ink; g.setLineDash([5, 4]); g.lineWidth = 1.2; g.beginPath(); g.moveTo(X(0), m.t); g.lineTo(X(0), h - m.b); g.stroke(); g.setLineDash([]);
+      L.line([[X(0), m.t], [X(0), h - m.b]]);
+      notes.push(['Fermi level', C.ink2, vcands(X(0)).concat(anywhere)]);
+    } else {                                           // the Fermi level is off the energy axis: say on which side
+      const left = 0 <= e0, t = left ? '← Fermi level' : 'Fermi level →', cs = [];
+      for (let y = m.t + 13; y < h - m.b - 4; y += 4) cs.push(left ? [m.l + 5, y, 'left'] : [w - m.r - 5, y, 'right']);
+      notes.push([t, C.ink2, cs.concat(anywhere)]);
+    }
+    const top = M.mC.top / eV;
+    if (top > e0 && top < e1) { g.strokeStyle = C.tan; g.lineWidth = 1.2; g.beginPath(); g.moveTo(X(top), m.t); g.lineTo(X(top), h - m.b); g.stroke(); L.line([[X(top), m.t], [X(top), h - m.b]]); notes.push(['barrier top', C.tan, vcands(X(top)).concat(anywhere)]); }
     // FWHM bar of the mixture
     const P = mx.P; let ip = 0; for (let i = 1; i < P.length; i++) if (P[i] > P[ip]) ip = i;
-    if (P[ip] > 0) { const hm = P[ip] / 2; let l = ip, r = ip; while (l > 0 && P[l] > hm) l--; while (r < P.length - 1 && P[r] > hm) r++; const dwv = gr[1] - gr[0], xl = gr[0] + (l < ip ? l + (hm - P[l]) / (P[l + 1] - P[l]) : l) * dwv, xr = gr[0] + (r > ip ? r - 1 + (P[r - 1] - hm) / (P[r - 1] - P[r]) : r) * dwv; g.strokeStyle = C.ink; g.lineWidth = 1.6; g.beginPath(); g.moveTo(X(xl / eV), Y(hm)); g.lineTo(X(xr / eV), Y(hm)); g.stroke(); g.fillStyle = C.ink; g.textAlign = 'left'; g.fillText('ΔE = ' + (mx.fwhm / eV).toFixed(3) + ' eV', Math.min(X(xr / eV) + 6, w - 105), Y(hm) - 6); }
+    if (P[ip] > 0) {
+      const hm = P[ip] / 2; let l = ip, r = ip; while (l > 0 && P[l] > hm) l--; while (r < P.length - 1 && P[r] > hm) r++;
+      const dwv = gr[1] - gr[0], xl = gr[0] + (l < ip ? l + (hm - P[l]) / (P[l + 1] - P[l]) : l) * dwv, xr = gr[0] + (r > ip ? r - 1 + (P[r - 1] - hm) / (P[r - 1] - P[r]) : r) * dwv;
+      g.strokeStyle = C.ink; g.lineWidth = 1.6; g.beginPath(); g.moveTo(X(xl / eV), Y(hm)); g.lineTo(X(xr / eV), Y(hm)); g.stroke();
+      L.line([[X(xl / eV), Y(hm)], [X(xr / eV), Y(hm)]]);
+      notes.unshift(['ΔE = ' + (mx.fwhm / eV).toFixed(3) + ' eV', C.ink, around(X(xr / eV) + 6, Y(hm) - 6, 60).concat(anywhere)]);
+    }
+    notes.forEach(([t, col, cands]) => { const s = L.put(t, cands, MONO); if (!s) return; g.font = MONO; g.fillStyle = col; g.textAlign = s.al; g.fillText(t, s.x, s.y); });
   }
 
   // ---- coverage and current against time ---------------------------------------------------------------------
   function timeUnit(tmax) { return tmax < 7200 ? [1 / 60, 'min'] : tmax < 3 * 86400 ? [1 / 3600, 'h'] : [1 / 86400, 'days']; }
   function drawTime(t) {
-    const { g, w, h } = ctxOf('eb-tm'), m = { l: 50, r: 12, t: 10, b: 36 }, [u, un] = timeUnit(M.tmax), c = M.cyc;
+    const { g, w, h } = ctxOf('eb-tm'), m = { ...MG }, [u, un] = timeUnit(M.tmax), c = M.cyc;
     const X = x => m.l + x / M.tmax * (w - m.l - m.r), Y = y => h - m.b - y / 1.2 * (h - m.t - m.b);
     axes(g, w, h, m, 'time (' + un + ')', 'θ, I / I₀', nice(0, M.tmax * u, 5).map(x => [X(x / u), String(+x.toFixed(2))]), [0, 0.25, 0.5, 0.75, 1].map(y => [Y(y), String(y)]));
     if (M.I.auto) { g.strokeStyle = C.muted; g.setLineDash([3, 4]); g.beginPath(); g.moveTo(m.l, Y(M.I.thr)); g.lineTo(w - m.r, Y(M.I.thr)); g.stroke(); g.setLineDash([]); }
@@ -189,28 +248,42 @@
     const line = (arr, col, lw) => { g.strokeStyle = col; g.lineWidth = lw; g.beginPath(); let pen = false; c.t.forEach((tt, i) => { const v = arr[i]; if (!Number.isFinite(v)) { pen = false; return; } const px = X(tt), py = Y(v); pen ? g.lineTo(px, py) : g.moveTo(px, py); pen = true; }); g.stroke(); };
     line(c.theta, C.ink2, 1.8); line(c.ratio, C.wine, 2.4);
     g.strokeStyle = C.ink; g.lineWidth = 1.2; g.beginPath(); g.moveTo(X(t), m.t); g.lineTo(X(t), h - m.b); g.stroke();
-    g.font = "10.5px 'IBM Plex Mono', monospace"; g.textAlign = 'left'; g.fillStyle = C.ink2; g.fillText('θ coverage', m.l + 8, m.t + 12); g.fillStyle = C.wine; g.fillText('I / I₀', m.l + 90, m.t + 12);
+    // the key, in the margin above the plot at the right: a short stroke of each colour and its name
+    g.font = MONO; g.textAlign = 'left';
+    const keys = [['θ coverage', C.ink2, 1.8], ['I / I₀', C.wine, 2.4]];
+    let kx = w - m.r - keys.reduce((a, [s]) => a + 20 + g.measureText(s).width + 12, -12), ky = m.t - 8;
+    keys.forEach(([s, col, lw]) => { g.strokeStyle = col; g.lineWidth = lw; g.beginPath(); g.moveTo(kx, ky - 4); g.lineTo(kx + 14, ky - 4); g.stroke(); g.fillStyle = col; g.fillText(s, kx + 20, ky); kx += 20 + g.measureText(s).width + 12; });
   }
 
   // ---- the tip --------------------------------------------------------------------------------------------------
+  // The drawing keeps to a band between a top line (anode label, flash notice) and the note at the bottom.
   const dots = []; for (let i = 0; i < 60; i++) dots.push({ s: (i * 0.6180339887) % 1, a: ((i * 0.7548776662) % 1) });
   function drawTip(st, mx, ts) {
     const { g, w, h } = ctxOf('eb-tip');
-    const apexX = w * 0.60, apexY = h * 0.5, rpx = 12 + 44 * (Math.log(M.I.r / 10) / Math.log(60));        // drawn radius: 12 to 56 px for 10 to 600 nm
+    g.font = MONO;
+    const note = 'r = ' + M.I.r.toFixed(0) + ' nm (apex on a logarithmic scale; shank and gap not to scale)';
+    const noteLines = [];                               // the note, broken into lines that fit the canvas
+    note.split(' ').forEach(wd => { const l = noteLines.length - 1; if (l >= 0 && g.measureText(noteLines[l] + ' ' + wd).width <= w - 20) noteLines[l] += ' ' + wd; else noteLines.push(wd); });
+    const bandTop = 24, bandBot = h - 10 - 14 * noteLines.length, bh = Math.max(40, bandBot - bandTop);
+    const apexX = w * 0.60, apexY = bandTop + bh / 2, rpx = Math.max(4, Math.min(12 + 44 * (Math.log(M.I.r / 10) / Math.log(60)), bh * 0.3));   // drawn radius: 12 to 56 px for 10 to 600 nm, at most 0.3 of the band
     const anodeX = w * 0.90, ang = 0.16;
     // anode with hole
-    g.fillStyle = '#d9d0c2'; g.strokeStyle = C.ink; g.lineWidth = 1.2; g.fillRect(anodeX, 0, 10, h * 0.40); g.strokeRect(anodeX, 0, 10, h * 0.40); g.fillRect(anodeX, h * 0.60, 10, h * 0.40); g.strokeRect(anodeX, h * 0.60, 10, h * 0.40);
-    g.fillStyle = C.ink2; g.font = "10.5px 'IBM Plex Mono', monospace"; g.textAlign = 'center'; g.fillText('anode 0 V', anodeX + 5, 14);
-    // shank: cone with half angle ang ending in a sphere of radius rpx
-    const cx = apexX - rpx, tx = cx - rpx * Math.sin(ang), ty = rpx * Math.cos(ang), L = apexX;
+    g.fillStyle = '#d9d0c2'; g.strokeStyle = C.ink; g.lineWidth = 1.2;
+    const hole = bh * 0.1;
+    g.fillRect(anodeX, bandTop, 10, apexY - hole - bandTop); g.strokeRect(anodeX, bandTop, 10, apexY - hole - bandTop);
+    g.fillRect(anodeX, apexY + hole, 10, bandTop + bh - apexY - hole); g.strokeRect(anodeX, apexY + hole, 10, bandTop + bh - apexY - hole);
+    g.fillStyle = C.ink2; g.textAlign = 'right'; g.fillText('anode 0 V', Math.min(w - 4, anodeX + 10), 15);
+    // shank: cone with half angle ang ending in a sphere of radius rpx, cut where it would leave the band
+    const cx = apexX - rpx, tx = cx - rpx * Math.sin(ang), ty = rpx * Math.cos(ang);
+    const xs = Math.max(10, tx - (bh / 2 - ty) / Math.tan(ang));
     const glow = st.flashing;
     g.fillStyle = glow ? '#f2b8bf' : '#efe4c8'; g.strokeStyle = glow ? C.wine : C.ink; g.lineWidth = 1.6;
-    g.beginPath(); g.moveTo(10, apexY - ty - (tx - 10) * Math.tan(ang)); g.lineTo(tx, apexY - ty); g.arc(cx, apexY, rpx, -(Math.PI / 2 - ang), Math.PI / 2 - ang); g.lineTo(10, apexY + ty + (tx - 10) * Math.tan(ang)); g.closePath(); g.fill(); g.stroke();
+    g.beginPath(); g.moveTo(xs, apexY - ty - (tx - xs) * Math.tan(ang)); g.lineTo(tx, apexY - ty); g.arc(cx, apexY, rpx, -(Math.PI / 2 - ang), Math.PI / 2 - ang); g.lineTo(xs, apexY + ty + (tx - xs) * Math.tan(ang)); g.closePath(); g.fill(); g.stroke();
     // field lines: more of them for a higher field
-    const nl = Math.max(3, Math.min(13, Math.round(2 + 1.6 * M.F0 * 1e-9))), lines = [];
+    const nl = Math.max(3, Math.min(13, Math.round(2 + 1.6 * M.F0 * 1e-9))), lines = [], reach = Math.min(60, bh * 0.3);
     for (let i = 0; i < nl; i++) {
-      const a = (i / (nl - 1) - 0.5) * 1.7, x0 = cx + rpx * Math.cos(a), y0 = apexY + rpx * Math.sin(a), x1 = anodeX, y1 = apexY + a * h * 0.34;
-      lines.push([x0, y0, x0 + 60 * Math.cos(a) + 30, y0 + 60 * Math.sin(a), x1 - 70, y1, x1, y1]);
+      const a = (i / (nl - 1) - 0.5) * 1.7, x0 = cx + rpx * Math.cos(a), y0 = apexY + rpx * Math.sin(a), x1 = anodeX, y1 = apexY + a * bh * 0.45;
+      lines.push([x0, y0, x0 + reach * Math.cos(a) + 30, y0 + reach * Math.sin(a), x1 - 70, y1, x1, y1]);
       g.strokeStyle = 'rgba(122,31,43,.30)'; g.setLineDash([5, 4]); g.lineWidth = 1; g.beginPath(); g.moveTo(x0, y0); g.bezierCurveTo(lines[i][2], lines[i][3], lines[i][4], lines[i][5], x1, y1); g.stroke(); g.setLineDash([]);
     }
     // adsorbed atoms on the cap
@@ -222,8 +295,9 @@
     const ne = Math.round(level * 34), bez = (p, s) => { const u = 1 - s; return [u * u * u * p[0] + 3 * u * u * s * p[2] + 3 * u * s * s * p[4] + s * s * s * p[6], u * u * u * p[1] + 3 * u * u * s * p[3] + 3 * u * s * s * p[5] + s * s * s * p[7]]; };
     g.fillStyle = C.wine;
     for (let i = 0; i < ne; i++) { const L_ = lines[i % nl], s = (dots[i].s + ts * 0.00045 * (0.7 + dots[i].a)) % 1, [px, py] = bez(L_, s); g.beginPath(); g.arc(px, py, 2.3, 0, 7); g.fill(); }
-    g.fillStyle = C.ink2; g.textAlign = 'left'; g.fillText('r = ' + M.I.r.toFixed(0) + ' nm (apex on a logarithmic scale; shank and gap not to scale)', 10, h - 8);
-    if (glow) { g.fillStyle = C.wine; g.font = "600 12px 'IBM Plex Mono', monospace"; g.fillText('FLASH: tip heated to ' + M.I.Tfl.toFixed(0) + ' K', 10, 18); }
+    g.font = MONO; g.fillStyle = C.ink2; g.textAlign = 'left';
+    noteLines.forEach((t, i) => g.fillText(t, 10, h - 8 - 14 * (noteLines.length - 1 - i)));
+    if (glow) { g.fillStyle = C.wine; g.font = "600 12px 'IBM Plex Mono', monospace"; g.fillText('FLASH: tip heated to ' + M.I.Tfl.toFixed(0) + ' K', 10, 16); }
   }
 
   /* ------------------------------------------------------------------ frame loop and readouts */
@@ -238,8 +312,9 @@
   function drawStatic() { /* nothing is static: all canvases redraw each frame; kept for clarity */ }
   function frame(ts) {
     if (!M) return;
-    if (playing && lastTs) { const speed = parseFloat($('eb-speed').value); tCursor += (ts - lastTs) / 1000 * speed; if (tCursor > M.tmax) tCursor = 0; }
-    lastTs = ts; $('eb-scrub').value = tCursor;
+    // compute() calls frame(0): a frame time earlier than the last one moves nothing (it used to push the cursor below zero)
+    if (playing && lastTs && ts > lastTs) { const speed = parseFloat($('eb-speed').value); tCursor += (ts - lastTs) / 1000 * speed; if (tCursor > M.tmax) tCursor = 0; }
+    if (ts) lastTs = ts; $('eb-scrub').value = tCursor;
     state(); drawTip(st, mx, ts); drawFN(st.th); drawEnergy(mx); drawTime(tCursor);
   }
   function loop(ts) { try { if (dirty && !busy) { busy = true; setTimeout(() => { $('eb-status').textContent = 'computing…'; setTimeout(() => { compute(); $('eb-status').textContent = ''; busy = false; }, 10); }, 0); } else frame(ts); } catch (e) { $('eb-status').textContent = 'error: ' + e.message; console.error(e); return; } requestAnimationFrame(loop); }

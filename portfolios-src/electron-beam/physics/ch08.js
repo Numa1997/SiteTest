@@ -115,48 +115,86 @@
     };
   }
 
-  // left: the measurement window (sigma_CD over landing voltage and current, the spec contour, the dose limit); right: the sensitivity table
+  // Labels that keep clear of the drawing: every line a label must not touch is registered as points (CSS px), every placed label and
+  // every solid part as a box; a label goes to the first of its candidate places ([x, y, align, ...]) whose box, grown by a margin,
+  // holds no point, meets no box and stays inside the bounds (the canvas unless given). put returns the box and the place used.
+  function labels(ctx, w, h) {
+    const P = [], Bx = [];
+    const seg = (x0, y0, x1, y1) => { const n = Math.max(1, Math.ceil(Math.hypot(x1 - x0, y1 - y0) / 2)); for (let i = 0; i <= n; i++) P.push(x0 + (x1 - x0) * i / n, y0 + (y1 - y0) * i / n); };
+    const box = (t, c) => { ctx.textAlign = c[2] || 'left'; const m = ctx.measureText(t); return [c[0] - m.actualBoundingBoxLeft, c[1] - m.actualBoundingBoxAscent, c[0] + m.actualBoundingBoxRight, c[1] + m.actualBoundingBoxDescent]; };
+    const free = (b, m, r) => {
+      if (b[0] < r[0] + 1 || b[1] < r[1] + 1 || b[2] > r[2] - 1 || b[3] > r[3] - 1) return false;
+      for (let i = 0; i < P.length; i += 2) if (P[i] > b[0] - m && P[i] < b[2] + m && P[i + 1] > b[1] - m && P[i + 1] < b[3] + m) return false;
+      return Bx.every(c => b[2] + m <= c[0] || c[2] + m <= b[0] || b[3] + m <= c[1] || c[3] + m <= b[1]);
+    };
+    return {
+      line(xy) { for (let i = 2; i < xy.length; i += 2) seg(xy[i - 2], xy[i - 1], xy[i], xy[i + 1]); if (xy.length === 2) P.push(xy[0], xy[1]); },
+      block(b) { Bx.push(b); },
+      free: (b, m = 3, r = [0, 0, w, h]) => free(b, m, r),
+      put(t, cands, m = 3, r = [0, 0, w, h]) {
+        const c = cands.find(c => free(box(t, c), m, r)) || cands[0], b = box(t, c);
+        ctx.fillText(t, c[0], c[1]); Bx.push(b); return [b, c];
+      },
+    };
+  }
+
+  // left: the measurement window (sigma_CD over landing voltage and current, the spec contour, the dose limit); right: the sensitivity table.
+  // The map is a ground (its squares are not lines a word must avoid); the dose limit's word goes to the first free place along its
+  // line, clear of the dot; the table's columns are as wide as their widest entry, so no name or head runs into a neighbour.
   function draw(ctx, w, h, p, out) {
     ctx.clearRect(0, 0, w, h);
     const wide = w >= 620, pw = wide ? Math.floor(w * 0.52) : w, ph = wide ? h : Math.floor(h * 0.55);
-    const L = 54, R = pw - 10, T = 22, B = ph - 36;
+    const L = 54, R = pw - 10, T = 36, B = ph - 36, lab = labels(ctx, w, h);
     ctx.font = "11px 'IBM Plex Mono', monospace";
     const cw = (R - L) / NPW, chh = (B - T) / NPW, lv = Math.log10(p.spec_cd);
+    ctx.__nocollide = true;                                              // the map's squares are its ground
     for (let i = 0; i < NPW; i++) for (let j = 0; j < NPW; j++) {
       const v = out.pwin[NPW * i + j], x = L + i * cw, y = B - (j + 1) * chh;
       let col = '#d9d0c2';
       if (isFinite(v)) { const t = Math.max(0, Math.min(1, (Math.log10(v) - lv + 1) / 2)); const a = v <= p.spec_cd ? 0.15 + 0.5 * (1 - t) : 0.06; col = v <= p.spec_cd ? 'rgba(122,31,43,' + a.toFixed(3) + ')' : 'rgba(58,50,46,' + (0.08 + 0.3 * t).toFixed(3) + ')'; }
       ctx.fillStyle = col; ctx.fillRect(x, y, cw + 0.5, chh + 0.5);
     }
+    ctx.__nocollide = false;
+    // the present setting
+    const xi = Math.log10(p.V_land / 500), yj = Math.log10(p.I_p / 1e-12) / 3, onMap = xi >= 0 && xi <= 1 && yj >= 0 && yj <= 1;
+    const xd = L + xi * (R - L), yd = B - yj * (B - T);
+    if (onMap) lab.block([xd - 4, yd - 4, xd + 4, yd + 4]);
     // dose limit: I_p t_d / px^2 = dose_max
     const Imax = p.dose_max * 1e-18 / p.t_d, jy = Math.log10(Imax / 1e-12) / 3;
-    if (jy > 0 && jy < 1) { const y = B - jy * (B - T); ctx.strokeStyle = '#1c1518'; ctx.setLineDash([5, 3]); ctx.beginPath(); ctx.moveTo(L, y); ctx.lineTo(R, y); ctx.stroke(); ctx.setLineDash([]); ctx.fillStyle = '#1c1518'; ctx.textAlign = 'right'; ctx.fillText('dose limit', R - 2, y - 4); }
-    // the present setting
-    const xi = Math.log10(p.V_land / 500), yj = Math.log10(p.I_p / 1e-12) / 3;
-    if (xi >= 0 && xi <= 1 && yj >= 0 && yj <= 1) { ctx.fillStyle = '#1c1518'; ctx.beginPath(); ctx.arc(L + xi * (R - L), B - yj * (B - T), 4, 0, 2 * Math.PI); ctx.fill(); }
-    ctx.strokeStyle = '#d9d0c2'; ctx.strokeRect(L, T, R - L, B - T);
-    ctx.fillStyle = '#6f655f'; ctx.textAlign = 'center';
-    [[500, '0.5'], [1000, '1'], [2000, '2'], [5000, '5']].forEach(([V, t]) => ctx.fillText(t, L + Math.log10(V / 500) * (R - L), B + 14));
-    ctx.fillText('landing voltage (kV)', (L + R) / 2, B + 28);
+    if (jy > 0 && jy < 1) {
+      const y = B - jy * (B - T); ctx.strokeStyle = '#1c1518'; ctx.setLineDash([5, 3]); ctx.beginPath(); ctx.moveTo(L, y); ctx.lineTo(R, y); ctx.stroke(); ctx.setLineDash([]);
+      lab.line([L, y, R, y]); ctx.fillStyle = '#1c1518';
+      lab.put('dose limit', [[R - 2, y - 4, 'right'], [R - 2, y + 12, 'right'], [L + 2, y - 4, 'left'], [L + 2, y + 12, 'left'], [(L + R) / 2, y - 4, 'center'], [(L + R) / 2, y + 12, 'center']], 2, [L, T, R, B]);
+    }
+    if (onMap) { ctx.fillStyle = '#1c1518'; ctx.beginPath(); ctx.arc(xd, yd, 4, 0, 2 * Math.PI); ctx.fill(); }
+    ctx.__nocollide = true; ctx.strokeStyle = '#d9d0c2'; ctx.strokeRect(L, T, R - L, B - T); ctx.__nocollide = false;   // the frame
+    ctx.fillStyle = '#6f655f';
+    [[500, '0.5'], [1000, '1'], [2000, '2'], [5000, '5']].forEach(([V, t], i) => { ctx.textAlign = i ? 'center' : 'left'; ctx.fillText(t, L + Math.log10(V / 500) * (R - L) - (i ? 0 : 2), B + 14); });
+    ctx.textAlign = 'center'; ctx.fillText('landing voltage (kV)', (L + R) / 2, B + 28);
     ctx.textAlign = 'right';
     [[1e-12, '1 pA'], [1e-11, '10 pA'], [1e-10, '100 pA'], [1e-9, '1 nA']].forEach(([I, t]) => ctx.fillText(t, L - 4, B - Math.log10(I / 1e-12) / 3 * (B - T) + 4));
     ctx.textAlign = 'left'; ctx.fillStyle = '#3a322e';
     ctx.fillText('wine: precision within spec', L, 13);
-    if (!(xi >= 0 && xi <= 1 && yj >= 0 && yj <= 1)) { ctx.fillStyle = '#7a1f2b'; ctx.textAlign = 'right'; ctx.fillText('present setting off the map', R, 13); }
-    // sensitivity table
-    const x0 = wide ? pw + 12 : 8, y0 = wide ? 24 : ph + 18, colw = wide ? (w - x0 - 8) / 5 : (w - 16) / 5, rowh = wide ? (h - 40) / 11.5 : (h - ph - 24) / 11.5;
+    if (!onMap) { ctx.fillStyle = '#7a1f2b'; ctx.textAlign = 'right'; ctx.fillText('present setting off the map', R, 28); }
+    // sensitivity table: each column as wide as its widest entry (head or value), the names take what is left
+    const x0 = wide ? pw + 12 : 8, y0 = wide ? 24 : ph + 18, tw = wide ? w - x0 - 8 : w - 16, rowh = wide ? (h - 40) / 11.5 : (h - ph - 24) / 11.5;
     const heads = ['probe', 'current', 'precision', 'rate'], names = ['tip radius', 'extraction', 'pressure', 'landing', 'current', 'work. dist.', 'lens width', 'dwell', 'lines', 'collection'];
+    const cell = v => isFinite(v) ? (Math.abs(v) < 0.005 ? '0' : (v > 0 ? '+' : '−') + Math.abs(v).toFixed(2)) : '–';
+    const wd = t => ctx.measureText(t).width;
+    const need = heads.map((t, c) => Math.max(wd(t), ...names.map((_, r) => wd(cell(out.sens[c * SENS_IN.length + r])))) + 10);
+    const nameW = Math.max(...names.map(wd)) + 8, spare = Math.max(0, tw - nameW - need.reduce((s, v) => s + v, 0));
+    const shrink = Math.min(1, (tw - nameW) / need.reduce((s, v) => s + v, 0)), colw = need.map(v => v * shrink + spare / 4), cx = [x0 + nameW]; colw.forEach((v, c) => cx.push(cx[c] + v));
     ctx.fillStyle = '#3a322e'; ctx.textAlign = 'left'; ctx.fillText('(x/y) ∂y/∂x', x0, y0 - 8);
-    heads.forEach((t, i) => { ctx.textAlign = 'right'; ctx.fillText(t, x0 + colw * (i + 2) - 4, y0 + rowh * 0.7); });
+    heads.forEach((t, i) => { ctx.textAlign = 'right'; ctx.fillText(t, cx[i + 1] - 5, y0 + rowh * 0.7); });
     names.forEach((t, r) => {
       const y = y0 + rowh * (r + 1.7);
       ctx.textAlign = 'left'; ctx.fillStyle = '#3a322e'; ctx.fillText(t, x0, y);
       for (let c = 0; c < 4; c++) {
         const v = out.sens[c * SENS_IN.length + r], a = Math.min(1, Math.abs(v));
         ctx.fillStyle = isFinite(v) ? (v > 0 ? 'rgba(122,31,43,' : 'rgba(58,50,46,') + (0.08 + 0.5 * a).toFixed(3) + ')' : '#eee';
-        ctx.fillRect(x0 + colw * (c + 1) + 2, y - rowh * 0.72, colw - 4, rowh * 0.9);
+        ctx.fillRect(cx[c] + 2, y - rowh * 0.72, colw[c] - 4, rowh * 0.9);
         ctx.fillStyle = '#1c1518'; ctx.textAlign = 'right';
-        ctx.fillText(isFinite(v) ? (Math.abs(v) < 0.005 ? '0' : (v > 0 ? '+' : '−') + Math.abs(v).toFixed(2)) : '–', x0 + colw * (c + 2) - 4, y);
+        ctx.fillText(cell(v), cx[c + 1] - 5, y);
       }
     });
   }

@@ -17,7 +17,7 @@ GUIDE = {
                    'its range (low voltage on heavy elements, for example), the chapter says so and shows the gap to measurements. '
                    'Spreads and specifications in chapter 8 are stated assumptions.'),
     'numbers': ('SI units throughout; constants from CODATA 2018. Every number in the text is computed by the project’s code, not typed: '
-                'each browser module has an independent Python twin that must agree with it, the derivations are checked symbolically, '
+                'every browser module, except the one of chapter eight, which only chains the others, has an independent Python twin that must agree with it, the derivations are checked symbolically, '
                 'and published data (stopping powers, backscattering measurements, secondary-electron yields, lens coefficients) are shown '
                 'beside the model with their source. Each chapter ends with its table of checks. Every chapter was also read by two '
                 'independent reviewers, and what they found is recorded in the project’s audit notes.'),

@@ -58,7 +58,7 @@ CSS = """      /* Lucretius I 146-224, four columns: the Latin, then Leonard, Di
       .lp__l { display: block; font: 400 15px/1.6 var(--sans, 'IBM Plex Sans', sans-serif); color: var(--ink-2, var(--ink)); }
       .lp__c[lang='la'] .lp__l { font: 400 19px/1.35 'Instrument Serif', Georgia, serif; color: var(--ink); margin-bottom: .15em; }
       .lp__c[lang='en'] .lp__l, .lp__c[lang='de'] .lp__l { font-style: italic; font-family: var(--serif); font-size: 16.5px; line-height: 1.5; }
-      .lp__c[lang='ar'] .lp__l { font: 400 19px/1.95 'Amiri', 'Noto Naskh Arabic', serif; color: var(--ink); }
+      .lp__c[lang='ar'] .lp__l { font: 400 17.5px/2 'Noto Naskh Arabic', 'Amiri', serif; color: var(--ink); }
       .lp-src { margin: 34px 0 0; padding: 0; list-style: none; max-width: 78ch; }
       .lp-src li { margin: 0 0 12px; font-size: 14.5px; line-height: 1.65; color: var(--ink-2, var(--ink)); }
       @media (max-width: 1000px) { .lp__row { grid-template-columns: minmax(0, 1fr); gap: 14px 0; } .lp__sep { flex-direction: row; width: min(130px, 40%); opacity: .8; margin: 0 auto; padding: 0; } .lp__sep span { width: auto; min-height: 0; height: 1px; background: linear-gradient(to right, rgba(122, 31, 43, .05), rgba(122, 31, 43, .32), rgba(122, 31, 43, .05)); } }
