@@ -33,6 +33,14 @@ canvas { position:absolute; left:0; top:0; }
 </style>
 </head>
 <body>
+<script>
+(function () {
+    const real = window.devicePixelRatio || 1, q = +new URLSearchParams(location.search).get('dpr'), W = 1080, H = 1920;
+    const cap = q > 0 ? q : Math.max(1, real * Math.min(1, innerWidth / W, innerHeight / H));
+    if (cap < real) try { Object.defineProperty(window, 'devicePixelRatio', { get: () => cap, configurable: true }); } catch (e) {}
+})();
+</script>
+
 <div id="stage">
   <canvas id="cv"></canvas>
   <h1 id="h1">Catching the butterfly</h1>
@@ -220,8 +228,8 @@ function captions() {
         [ON, 'The motor switches on. Current in its coils pushes on the magnets of the rotor: torque = 2.5 N·m per ampere. It pumps the energy to the butterfly\'s 390.8 J and steers the upper rod\'s swing to the butterfly\'s size.<br><span style="font-size:22px;color:var(--muted)">energy E, torque τ:  dE/dt = τ · dθ₁/dt</span>'],
         [CA, 'Close enough: the motor makes small corrections along the butterfly\'s own lap, a feedback designed on the orbit (as in our control lessons).'],
         [CA + 200, 'Caught. The motor holds it for four laps; the corrections shrink below 0.1 N·m.'],
-        [RE, 'Let go: the motor switches off. The butterfly is unstable by itself, but only barely (an error grows 2 % a lap), so the pen keeps drawing it: within 0.1 of the exact path for about 12 minutes, its wings unchanged for at least an hour.'],
-        [RE + 330, 'From 100 random starts the motor caught every one: half within 16 s of switching on, the slowest after 188 s. The theory and the method: butterfly-catch.html.'],
+        [RE, 'Let go: the motor switches off. The butterfly is unstable by itself, but only barely (an error grows 2 % a lap), so the pen keeps drawing it: within 0.1 of the exact path for minutes (about 7 in the median of 40 released runs, 41 s in the worst), its wings unchanged for an hour in a run followed that long.'],
+        [RE + 330, 'From 300 random starts the motor caught every one: half within 18 s of switching on, the slowest after 229 s. How long this run took depends on the last digit of your device\'s arithmetic. The theory and the method: the catch note on the Fig. 13 page.'],
     ];
 }
 const memo = {};
@@ -309,6 +317,21 @@ function fit() {
 }
 if (!Q.get('film')) { fit(); addEventListener('resize', fit); }
 boot();
+</script>
+<script>
+// Added by publish_films.py: keep titles and captions inside their boxes when the page is translated (longer words).
+(function () {
+    const SPEC = [["#h1", 585, 0, 1]], base = new Map(), seen = new Map();
+    function fit() {
+        for (const [sel, maxW, maxH, line] of SPEC) document.querySelectorAll(sel).forEach(el => {
+            const n = el.textContent.length; if (!n || seen.get(el) === n) return; seen.set(el, n);
+            if (!base.has(el)) base.set(el, parseFloat(getComputedStyle(el).fontSize));
+            const b = base.get(el); let fs = b; el.style.fontSize = b + 'px'; el.style.maxWidth = maxW + 'px'; el.style.overflow = 'hidden'; if (line) el.style.whiteSpace = 'nowrap';
+            while (((line && el.scrollWidth > maxW + 1) || (maxH && el.scrollHeight > maxH + 1)) && fs > b * 0.5) { fs -= 1; el.style.fontSize = fs + 'px'; }
+        });
+    }
+    setInterval(fit, 250);
+})();
 </script>
 </body>
 </html>

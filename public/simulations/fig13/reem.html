@@ -30,7 +30,7 @@ iframe { width:100%; height:100%; border:0; display:block; background:var(--bg);
 <div id="box"><iframe id="fr" title="film"></iframe></div>
 <div id="tap"></div>
 <div class="bar">
-  <a href="../butterfly-dashboard.html">← Fig. 13</a>
+  <a id="back" href="../momentum-spirographs.html#films">← Fig. 13</a>
   <button type="button" id="play">Pause</button><button type="button" id="prev">◀</button><button type="button" id="next">▶</button>
   <button type="button" id="again">From the start</button>
   <button type="button" id="night">Night</button><button type="button" id="paper">Paper</button>
@@ -48,10 +48,13 @@ function fit() {   // each part has its own stage size: portrait films 1080 x 19
     const cw = document.documentElement.clientWidth, ch = document.documentElement.clientHeight - document.querySelector('.bar').offsetHeight - 20, s = Math.min(cw / W, ch / H, 1);
     box.style.transform = `translate(${Math.max(0, (cw - W * s) / 2)}px, ${Math.max(0, (ch - H * s) / 2)}px) scale(${s})`;
 }
+// the film's canvas needs only the pixels the screen shows: the device's ratio times the scale of the box (never below 1)
+function dprShown() { const b = document.getElementById('box'), s = b.offsetWidth ? b.getBoundingClientRect().width / b.offsetWidth : 1; return Math.max(1, Math.ceil((window.devicePixelRatio || 1) * s * 4) / 4); }
 function load(k, frame) {
     part = (k + PARTS.length) % PARTS.length; f = frame || 0; total = null; seenRestarts = 0;
     document.getElementById('tap').style.pointerEvents = PARTS[part][0].startsWith('live-catch') ? 'none' : 'auto';   // the catch has its own buttons: let taps through
-    fit(); fr.src = PARTS[part][0] + (PARTS[part][0].includes('?') ? '&' : '?') + 'film=1&theme=' + theme;
+    fit(); fr.src = PARTS[part][0] + (PARTS[part][0].includes('?') ? '&' : '?') + 'film=1&theme=' + theme + '&dpr=' + dprShown();
+    if (Q.get('embed') === '1' && parent !== window) parent.postMessage({ fig13: 'part', part: part + 1, W: PARTS[part][2] || 1080, H: PARTS[part][3] || 1920, bar: document.querySelector('.bar').offsetHeight + 20 }, location.origin);
 }
 fr.addEventListener('load', () => {
     const w = fr.contentWindow;
@@ -86,7 +89,10 @@ document.getElementById('prev').onclick = () => load(part - 1); document.getElem
 document.getElementById('again').onclick = () => load(0);
 document.getElementById('night').onclick = () => { setTheme('dark'); load(part, f); };
 document.getElementById('paper').onclick = () => { setTheme('light'); load(part, f); };
-setTheme(theme); fit(); addEventListener('resize', fit); load(0); requestAnimationFrame(tick);
+// ?part=k starts at part k (1 to PARTS.length); ?embed=1: the page sits in a frame of the Fig. 13 page, which is told the part and its shape
+const EMBED = Q.get('embed') === '1' && parent !== window;
+if (EMBED) document.getElementById('back').style.display = 'none';
+setTheme(theme); fit(); addEventListener('resize', fit); load(Math.max(1, Math.min(PARTS.length, +(Q.get('part') || 1))) - 1); requestAnimationFrame(tick);
 </script>
 </body>
 </html>

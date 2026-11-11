@@ -309,7 +309,7 @@ def catch_anywhere(s0, S, K, Qd, h, seconds, Estar, Astar, kE, kA, kI, kB, Pmin_
             log[r, 0] = i * h; log[r, 1] = E; log[r, 2] = Aest; log[r, 3] = dist; log[r, 4] = tau; log[r, 5] = mode
             log[r, 6] = s[0]; log[r, 7] = s[1]; log[r, 8] = s[2]; log[r, 9] = sg; p2log[r] = s[3]
         q1, q2, p1, p2 = s[0], s[1], s[2], s[3]                   # four RK4 sub-steps of h/4 (one control step, torque held):
-        for sub in range(4):                                      # at h the free orbit drifts ~1e-2 a lap, at h/4 ~1e-5
+        for sub in range(4):                                      # at h the free orbit drifts 2e-3 a lap, at h/4 4e-6 (measured 11 Nov 2026)
             p1 += 0.125 * h * tau                                 # torque as a kick split around each sub-step (2nd order)
             q1, q2, p1, p2 = rk4n(q1, q2, p1, p2, 0.25 * h, A_, B_, C_, U1, U2)
             p1 += 0.125 * h * tau
@@ -340,7 +340,7 @@ def film_data(p, t_free, seconds, out, log_every=4, hold_laps=2.0, free_laps=3.0
     # let go: after hold_laps laps of holding, the motor switches off; free_laps laps of free motion (mode 3)
     keep = log[:, 0] <= tm[2] + hold_laps * T; log, p2 = log[keep], p2[keep]
     s = np.array([log[-1, 6], log[-1, 7], log[-1, 8], p2[-1]]); tr = log[-1, 0]; rel = []
-    tt = np.arange(1, int(round(free_laps * T / (H * log_every))) + 1) * H * log_every       # free motion: DOP853 (RK4 at step H drifts ~1e-2 a lap)
+    tt = np.arange(1, int(round(free_laps * T / (H * log_every))) + 1) * H * log_every       # free motion: DOP853 (RK4 at step H drifts 2e-3 a lap)
     sol = solve_ivp(F, (0, tt[-1]), s, method='DOP853', rtol=RTOL, atol=ATOL, t_eval=tt)
     Qd1 = Qd.copy()
     for j, tj in enumerate(tt):
@@ -361,4 +361,4 @@ def film_data(p, t_free, seconds, out, log_every=4, hold_laps=2.0, free_laps=3.0
 # kE, kA, kI, kB, Pmin_lim, wait_max (s), steer_max (s), window (s), e_tol (J), a_tol (kg m^2/s), catch_at: the working settings
 # (30 random strikes p in [-8, 8]^2, accurate integration: 28 caught and held within 900 s, 22 within 300 s; 9 November 2026)
 KT = 2.5   # N m per A: torque constant assumed for the film's motor (a direct-drive torque motor; 60 N m at 24 A)
-SETTINGS = (0.01, 0.05, 0.005, 0.0, 1e9, 12.0, 12.0, 3.0, 5.0, 3.0, 0.6, -1.0)   # 9 Nov 2026, as pendulum.js: 100 of 100 random starts caught (median 16 s)
+SETTINGS = (0.01, 0.05, 0.005, 0.0, 1e9, 12.0, 12.0, 3.0, 5.0, 3.0, 0.6, -1.0)   # as pendulum.js; its statistics: tools/fig13/catch_stats.cjs (this file's own 30-strike test in main() predates these settings)

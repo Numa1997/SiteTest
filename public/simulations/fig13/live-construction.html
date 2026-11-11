@@ -30,6 +30,14 @@ canvas { position:absolute; left:0; top:0; }
 </style>
 </head>
 <body>
+<script>
+(function () {
+    const real = window.devicePixelRatio || 1, q = +new URLSearchParams(location.search).get('dpr'), W = 1080, H = 1920;
+    const cap = q > 0 ? q : Math.max(1, real * Math.min(1, innerWidth / W, innerHeight / H));
+    if (cap < real) try { Object.defineProperty(window, 'devicePixelRatio', { get: () => cap, configurable: true }); } catch (e) {}
+})();
+</script>
+
 <div id="stage">
   <canvas id="cv"></canvas>
   <h1 id="h1">Constructing the butterfly by hand</h1>
@@ -260,6 +268,21 @@ function fit() {   // scale the stage to the screen (the layout viewport) and ce
 }
 if (!Q.get('film')) { fit(); addEventListener('resize', fit); }
 boot();
+</script>
+<script>
+// Added by publish_films.py: keep titles and captions inside their boxes when the page is translated (longer words).
+(function () {
+    const SPEC = [["#h1", 1020, 0, 1]], base = new Map(), seen = new Map();
+    function fit() {
+        for (const [sel, maxW, maxH, line] of SPEC) document.querySelectorAll(sel).forEach(el => {
+            const n = el.textContent.length; if (!n || seen.get(el) === n) return; seen.set(el, n);
+            if (!base.has(el)) base.set(el, parseFloat(getComputedStyle(el).fontSize));
+            const b = base.get(el); let fs = b; el.style.fontSize = b + 'px'; el.style.maxWidth = maxW + 'px'; el.style.overflow = 'hidden'; if (line) el.style.whiteSpace = 'nowrap';
+            while (((line && el.scrollWidth > maxW + 1) || (maxH && el.scrollHeight > maxH + 1)) && fs > b * 0.5) { fs -= 1; el.style.fontSize = fs + 'px'; }
+        });
+    }
+    setInterval(fit, 250);
+})();
 </script>
 </body>
 </html>

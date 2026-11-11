@@ -38,6 +38,13 @@
         .seg .btn.is-on { background: var(--accent); color: var(--card); }
         .figtitle { font-family: var(--serif); font-size: 30px; font-weight: 400; margin: 34px 0 10px; color: var(--ink); }
     </style>
+    <script>if (new URLSearchParams(location.search).get('embed') === '1') document.documentElement.classList.add('embed');</script>
+    <style>
+        /* ?embed=1: inside a frame of the Fig. 13 page, only the figure and its controls; the frame is given this page's height */
+        .embed body { background: transparent; }
+        .embed .sim-top, .embed .sim__head, .embed .paper, .embed .more13 { display: none; }
+        .embed .sim { padding: 0; margin: 0; max-width: none; }
+    </style>
 </head>
 <body>
     <header class="sim-top">
@@ -208,6 +215,13 @@
                 </div>
             </div>
         </article>
+    <script>
+    if (document.documentElement.classList.contains('embed') && parent !== window) {
+        const p = document.getElementById('paper'); if (p) p.remove();                 // its note is in the Fig. 13 page's own note
+        const tell = () => parent.postMessage({ fig13: 'height', h: Math.ceil(document.querySelector('.sim').getBoundingClientRect().bottom + scrollY) + 34 }, location.origin);
+        new ResizeObserver(tell).observe(document.querySelector('.sim')); addEventListener('load', tell); tell();
+    }
+    </script>
     </main>
 
     <script src="../scripts/fold.js"></script>
