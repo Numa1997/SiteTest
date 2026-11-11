@@ -43,7 +43,8 @@ chapter 8 are assumed, not measured.
 - The project fits card 225 (electron optics, multiphysics simulation) well and card 267 (particle-beam technology, control) reasonably: chapter 8's
   sensitivities and tolerance analysis are the part closest to control work.
 - What would raise it most: one comparison with measured data (published SEM line profiles or backscatter yields), and Mott cross-sections for gold.
-- Long sentences remain in chapters 1–4; shortening them is best done in Numa's own voice.
+- Chapters 0–9 and the guide were edited in one voice (V), for sentence length (R) and checked for unchanged physics (G), one chapter after
+  the other; every chapter passed G (`notes/electron-beam/editing/guard/` on branch `eb/guard`). No blind reader read the edited text.
 
 ## Three sentences for the application
 I built this project together with the AI assistant Claude, which wrote much of the code and the text under my direction.
