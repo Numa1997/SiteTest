@@ -239,6 +239,12 @@
     // the whole glass: columns over -R..R in y
     this.ny = 2 * Math.ceil(this.R / this.dx); this.y0 = -(this.ny / 2) * this.dx; this.colH = new Float64Array(this.nx * this.ny);
     this.st = new Float64Array(15); this.acc = new Float64Array(5);
+    // scratch arrays for the Runge-Kutta substeps (allocated once: a phone's garbage collector otherwise runs every few frames)
+    this.sc = { k1: new Float64Array(5), k2: new Float64Array(5), k3: new Float64Array(5), k4: new Float64Array(5), bt: new Float64Array(5), vt: new Float64Array(5),
+      v2: new Float64Array(5), v3: new Float64Array(5), v4: new Float64Array(5), Qt: new Float64Array(5), Qhat: new Float64Array(5), Qd: new Float64Array(this.N), Qlin: new Float64Array(this.N) };
+    // the foam's angles: cos th, sin th, cos 2th, sin 2th at the KF points
+    this.trig = new Float64Array(4 * KF);
+    for (let k = 0; k < KF; k++) { const th = (k + 0.5) * 2 * Math.PI / KF; this.trig.set([Math.cos(th), Math.sin(th), Math.cos(2 * th), Math.sin(2 * th)], 4 * k); }
     this.syncQ();
   }
   TulipNM.prototype = Object.create(TulipModes.prototype);
@@ -291,6 +297,13 @@
     for (let n = 1; n < this.N; n++) e += this.q[n] * Math.cos(th);
     return this.h + e;
   };
+  // an upper bound of the wall's rise at any angle (the triangle inequality on the terms of wallAt): when even this stays
+  // under the rim, nothing can pour and the 72-angle scan is skipped
+  TulipNM.prototype.wallBound = function () {
+    const b = this.b, W = this.Rw; let e = this.Rs * (Math.abs(W[0] * b[0]) + Math.abs(W[1]) * Math.hypot(b[1], b[2]) + Math.abs(W[2]) * Math.hypot(b[3], b[4]));
+    for (let n = 1; n < this.N; n++) e += Math.abs(this.q[n]);
+    return e;
+  };
   TulipNM.prototype.wallLift = function () { let m = 0; for (let k = 0; k < 72; k++) m = Math.max(m, this.wallAt(2 * Math.PI * k / 72) - this.h); return m; };
   TulipNM.prototype.momentum = function () { this.Py = this.Pc[0] * this.s1d; return TulipModes.prototype.momentum.call(this); };
   TulipNM.prototype.energy = function () {           // kinetic energy to second order is the nonlinear part's; the books use powers
@@ -324,12 +337,13 @@
     Qhat.fill(0); Qlin.fill(0); if (!(this.kfR > 0)) return 0;
     const R = this.Rs, ts = Math.sqrt(this.g / R), W = this.Rw, E0 = this.rho * this.g * R * R * R * R, dth = 2 * Math.PI / KF, N = this.N;
     const g0 = R * W[0], g1 = R * W[1], g2 = R * W[2]; let P = 0;
+    const T = this.trig;
     for (let k = 0; k < KF; k++) {
-      const th = (k + 0.5) * dth, c1 = Math.cos(th), s1 = Math.sin(th), c2 = Math.cos(2 * th), s2 = Math.sin(2 * th);
+      const c1 = T[4 * k], s1 = T[4 * k + 1], c2 = T[4 * k + 2], s2 = T[4 * k + 3];
       let V = R * ts * (W[0] * bdv[0] + W[1] * (bdv[1] * c1 + bdv[2] * s1) + W[2] * (bdv[3] * c2 + bdv[4] * s2));
       for (let n = 1; n < N; n++) V += this.qd[n] * c1;
       if (V === 0) continue;
-      const F = -this.kfR * V * Math.pow(Math.abs(V), -1 / 3) * dth;
+      const F = -this.kfR * V / Math.cbrt(Math.abs(V)) * dth;                     // V |V|^(-1/3)
       P -= F * V;
       Qhat[0] += F * g0 / E0; Qhat[1] += F * g1 * c1 / E0; Qhat[2] += F * g1 * s1 / E0; Qhat[3] += F * g2 * c2 / E0; Qhat[4] += F * g2 * s2 / E0;
       for (let n = 1; n < N; n++) Qlin[n] += F * c1;
@@ -337,13 +351,14 @@
     return P;
   };
   TulipNM.prototype.step = function (dt, ax, az) {
-    const ns = Math.max(1, Math.ceil(dt / 0.0005 - 1e-9)), hs = dt / ns, gf = Math.max(0, 1 + az / this.g), R = this.Rs, ts = Math.sqrt(this.g / R), ht = hs * ts;
-    const W = this.Rw, E0 = this.rho * this.g * R * R * R * R, Qhat = new Float64Array(5), N = this.N, Qlin = new Float64Array(N);
+    // substeps of at most 1 ms (Runge-Kutta: the largest lean over 60 s was the same at 1 and 0.5 ms, nm-check.cjs)
+    const ns = Math.max(1, Math.ceil(dt / 0.001 - 1e-9)), hs = dt / ns, gf = Math.max(0, 1 + az / this.g), R = this.Rs, ts = Math.sqrt(this.g / R), ht = hs * ts;
+    const W = this.Rw, E0 = this.rho * this.g * R * R * R * R, N = this.N, SC = this.sc, Qhat = SC.Qhat, Qlin = SC.Qlin;
     let Pv = 0, Pf = 0;
     // each substep: the large-swing coordinates by classical Runge-Kutta (their kinetic matrix depends on the coordinates, so the
     // semi-implicit Euler of the linear modes would drift: measured +3 % of amplitude per 10 s at 0.5 ms, halving with the step);
     // the linear modes by semi-implicit Euler (exact energy behaviour for a constant mass), the foam's force held over the substep
-    const k1 = new Float64Array(5), k2 = new Float64Array(5), k3 = new Float64Array(5), k4 = new Float64Array(5), bt = new Float64Array(5), vt = new Float64Array(5), Qt = new Float64Array(5), Qd = new Float64Array(N);
+    const k1 = SC.k1, k2 = SC.k2, k3 = SC.k3, k4 = SC.k4, bt = SC.bt, vt = SC.vt, Qt = SC.Qt, Qd = SC.Qd, v2 = SC.v2, v3 = SC.v3, v4 = SC.v4;
     const axn = ax / this.g, f = (bv, bdv, out) => { this.foamForces(bdv, Qt, Qd); return this.accel(gf, axn, Qt, bv, bdv, out); };
     for (let s = 0; s < ns; s++) {
       Pf += this.foamForces(this.bd, Qhat, Qlin) * hs;
@@ -355,9 +370,9 @@
       }
       const b = this.b, v = this.bd;
       f(b, v, k1);
-      for (let i = 0; i < 5; i++) { bt[i] = b[i] + 0.5 * ht * v[i]; vt[i] = v[i] + 0.5 * ht * k1[i]; } const v2 = Float64Array.from(vt); f(bt, vt, k2);
-      for (let i = 0; i < 5; i++) { bt[i] = b[i] + 0.5 * ht * v2[i]; vt[i] = v[i] + 0.5 * ht * k2[i]; } const v3 = Float64Array.from(vt); f(bt, vt, k3);
-      for (let i = 0; i < 5; i++) { bt[i] = b[i] + ht * v3[i]; vt[i] = v[i] + ht * k3[i]; } const v4 = Float64Array.from(vt); f(bt, vt, k4);
+      for (let i = 0; i < 5; i++) { bt[i] = b[i] + 0.5 * ht * v[i]; vt[i] = v[i] + 0.5 * ht * k1[i]; } v2.set(vt); f(bt, vt, k2);
+      for (let i = 0; i < 5; i++) { bt[i] = b[i] + 0.5 * ht * v2[i]; vt[i] = v[i] + 0.5 * ht * k2[i]; } v3.set(vt); f(bt, vt, k3);
+      for (let i = 0; i < 5; i++) { bt[i] = b[i] + ht * v3[i]; vt[i] = v[i] + ht * k3[i]; } v4.set(vt); f(bt, vt, k4);
       for (let i = 0; i < 5; i++) {
         Pv += E0 * this.mu[i] * 2 * this.zNM[i] * this.sig[i] * v[i] * v[i] * ht;
         b[i] += ht / 6 * (v[i] + 2 * v2[i] + 2 * v3[i] + v4[i]);
@@ -370,7 +385,7 @@
     // the pour over the rim: the weir law at each angle of the wall (as ModalFluid); the crest's volume above rest shrinks by
     // what poured (all coordinates scaled alike)
     let dV = 0, dPx = 0; const g = this.g;
-    if (this.h + this.wallLift() > this.zRim) {
+    if (this.h + this.wallBound() > this.zRim && this.h + this.wallLift() > this.zRim) {
       const K = 72;
       for (let k = 0; k < K; k++) {
         const th = 2 * Math.PI * (k + 0.5) / K, D = this.wallAt(th) - this.zRim;
@@ -411,7 +426,15 @@
     this.acc += dtReal;
     let n = Math.floor(this.acc / this.step + 1e-9);
     if (n > this.maxSteps) { this.dropped += (n - this.maxSteps) * this.step; this.acc -= (n - this.maxSteps) * this.step; n = this.maxSteps; }
-    for (let k = 0; k < n; k++) this.world.advance(this.step);
+    // the store (scripts/dataset.js) is attached for the frame's last step only: it then holds that step's numbers, all from one
+    // instant, as before; the steps in between, whose values the next one overwrites unread, skip the writing (about 40 values
+    // per cart substep, the main cost of a frame on a phone)
+    const w = this.world, D = w.ds;
+    for (let k = 0; k < n; k++) {
+      if (D) { const on = k === n - 1 ? D : null; w.ds = on; w.cart.ds = on; w.fluid.ds = on; }
+      w.advance(this.step);
+    }
+    if (D) { w.ds = D; w.cart.ds = D; w.fluid.ds = D; }
     this.acc -= n * this.step; this.steps += n;
     return n;
   };

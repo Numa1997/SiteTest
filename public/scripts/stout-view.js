@@ -316,8 +316,11 @@
     // the head's top: the sheet, quads from far to near, lit by one light (Phong)
     const pt = (ir, it) => { const r = rS * ir / nr, th = 2 * Math.PI * it / nth; return [r * Math.cos(th), r * Math.sin(th), Hs[ir][((it % nth) + nth) % nth] + hh]; };
     const quads = [], L = this.light, E = [-cam.d[0], -cam.d[1], -cam.d[2]], Hv = [L[0] + E[0], L[1] + E[1], L[2] + E[2]], Hl = Math.hypot(...Hv);
-    for (let ir = 0; ir < nr; ir++) for (let it = 0; it < nth; it++) {
-      const a = pt(ir, it), b = pt(ir + 1, it), c2 = pt(ir + 1, it + 1), d = pt(ir, it + 1);
+    // on a narrow figure (a phone: the glass is about 70 px wide) the sheet is drawn over every other angle of the same stored
+    // surface: half the quads, the stored and checked points unchanged
+    const stp = this.cssW && this.cssW < 600 ? 2 : 1;
+    for (let ir = 0; ir < nr; ir++) for (let it = 0; it < nth; it += stp) {
+      const a = pt(ir, it), b = pt(ir + 1, it), c2 = pt(ir + 1, it + stp), d = pt(ir, it + stp);
       const ux = c2[0] - a[0], uy = c2[1] - a[1], uz = c2[2] - a[2], vx = d[0] - b[0], vy = d[1] - b[1], vz = d[2] - b[2];
       let nx = uy * vz - uz * vy, ny = uz * vx - ux * vz, nz = ux * vy - uy * vx;
       if (nz < 0) { nx = -nx; ny = -ny; nz = -nz; }
