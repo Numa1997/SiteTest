@@ -1,0 +1,51 @@
+# Fig. 12, stage B of the pipeline: the tulip's linear sloshing modes by finite elements (docs/simulations/fig12-beer-slosh.md).
+# Runs the solver's exact cylinder checks (fails the job if any is off), recomputes public/data/fig12/modes.json for every fill
+# height, and commits it only if its numbers changed (tools/fig12/same_data.py). A push made with GITHUB_TOKEN starts no new
+# workflow run, so this cannot loop; on main, Cloudflare's own build deploys the commit.
+name: Fig. 12 modes (finite elements)
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - tools/fig12/modes_fem.py
+      - tools/fig12/requirements.txt
+      - tools/fig12/same_data.py
+      - public/scripts/guinness-glass.js
+      - .github/workflows/fig12-modes.yml
+permissions:
+  contents: write
+concurrency:
+  group: fig12-modes-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  modes:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install the pinned tools
+        run: pip install -r tools/fig12/requirements.txt
+      - name: Exact checks on the cylinder
+        run: python tools/fig12/modes_fem.py check
+      - name: Every fill height
+        run: python tools/fig12/modes_fem.py sweep "$RUNNER_TEMP/modes.json" | tee "$RUNNER_TEMP/sweep.log"
+      - name: Commit the data if its numbers changed
+        run: |
+          if python tools/fig12/same_data.py "$RUNNER_TEMP/modes.json" public/data/fig12/modes.json; then
+            echo "Numbers unchanged: nothing to commit."
+          else
+            mkdir -p public/data/fig12
+            cp "$RUNNER_TEMP/modes.json" public/data/fig12/modes.json
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add public/data/fig12/modes.json
+            git commit -m "Fig. 12 data: modes.json recomputed by workflow run ${{ github.run_id }}"
+            git push
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: fig12-modes-log
+          path: ${{ runner.temp }}/sweep.log

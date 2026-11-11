@@ -3,6 +3,8 @@
 
     python3 tools/fig12/modes_fem.py check            # the cylinder against its exact answer, and a convergence table
     python3 tools/fig12/modes_fem.py tulip [h_mm ...] # the tulip at the given fill heights (default 125)
+    python3 tools/fig12/modes_fem.py sweep [out.json] # every fill height 30-145 mm in 2.5 mm steps: the page's data file
+                                                      # (default public/data/fig12/modes.json)
 
 The problem (Faltinsen & Timokha, "Sloshing", 2009, ch. 4-5; Ibrahim, "Liquid Sloshing Dynamics", 2005, ch. 2):
 the liquid at rest fills r <= R(z), 0 <= z <= h. Small motions without vorticity have a velocity potential phi with
@@ -120,6 +122,9 @@ def exact_cyl(R, h, m, n):
 
 
 def check():
+    """Prints the checks and returns the list of failures (empty: pass). Tolerances: frequencies 1e-6, push coefficients 1e-4,
+    the deep-tank wall friction 1e-3 relative, the static tilt sum within the 40-mode tail (0.5 %)."""
+    fails = []
     R, h = 0.040, 0.100
     print('Cylinder R = 40 mm, h = 100 mm (the page note checks the 3D solver on the same case: 3.382 Hz).')
     print('Exact f_mn = sqrt(g k tanh kh)/2pi, k = jp_mn/R:')
@@ -136,17 +141,22 @@ def check():
             rate = '' if prev is None else '  order ' + ', '.join(f'{np.log2(abs(a / b)):.2f}' for a, b in zip(prev, err))
             print(f'  P{order} {nr:2d} x {nz:3d} ({out["ndof"]:6d} unknowns): ' + ', '.join(f'{e:+.2e}' for e in err) + rate)
             prev = err
+    if abs(err[0]) > 1e-6: fails.append(f'f11 error {err[0]:.1e}')
     for m in (0, 2):
         out = solve(Rf, h, m, 48, 96, 2); ex2 = exact_cyl(R, h, m, 3)
+        if abs(out['f'][0] / ex2[0] - 1) > 1e-6: fails.append(f'm={m} f error')
         print(f'  P2 48 x 96, m = {m}: ' + ', '.join(f'{a:.5f} ({a / b - 1:+.1e})' for a, b in zip(out['f'][:3], ex2)))
     r = solve(Rf, h, 1, 48, 96, 2)
     from scipy.special import jv
     k = jnp_zeros(1, 1)[0] / R
     ex_shape = jv(1, k * r['r']) / jv(1, k * R)
     print(f'  surface shape of mode (1,1) against J1(kr)/J1(kR): largest difference {np.abs(r["shapes"][0] - ex_shape).max():.1e}')
+    if np.abs(r['shapes'][0] - ex_shape).max() > 1e-5: fails.append('shape')
     xi = jnp_zeros(1, 6); r6 = solve(Rf, h, 1, 48, 96, 2, nmodes=6)
     print('  c_n / R (exact 2/(xi^2 - 1)): ' + ', '.join(f'{a / R:.6f} ({b:.6f})' for a, b in zip(r6['c'], 2 / (xi ** 2 - 1))))
+    if np.abs(r6['c'][:3] / R / (2 / (xi[:3] ** 2 - 1)) - 1).max() > 1e-4: fails.append('push coefficients')
     r40 = solve(Rf, h, 1, 48, 96, 2, nmodes=40)
+    if not 0.990 < r40['c'].sum() / R <= 1.0: fails.append('static tilt')
     print(f'  static tilt: sum of c_n e_n(R) over {len(r40["c"])} modes = {r40["c"].sum() / R:.5f} R (exact 1)')
     print('Wall friction (laminar Stokes layer). Deep cylinder, h = 10 R: Lambda R must be (xi^2 + 1)/(xi^2 - 1) (derived by hand),')
     print('and the log decrement 2 pi zeta / (nu^1/2 R^-3/4 g^-1/4) must be Miles K = 3.52 (Stephens et al. 1962, eq. 3):')
@@ -155,8 +165,10 @@ def check():
         K = 2 * np.pi * zeta(d, 1e-6)[0] / (1e-6 ** 0.5 * R ** -0.75 * G ** -0.25)
         print(f'  P2 {nr} x {nz}: Lambda R = ' + ', '.join(f'{a * R:.5f}' for a in d['Lam']) + ' (exact '
               + ', '.join(f'{(x * x + 1) / (x * x - 1):.5f}' for x in jnp_zeros(1, 3)) + f'); K = {K:.4f}')
+    if abs(d['Lam'][0] * R / ((xi[0] ** 2 + 1) / (xi[0] ** 2 - 1)) - 1) > 1e-3: fails.append('wall friction')
     d = solve(Rf, h, 1, 48, 96, 2, nmodes=1)
     print(f'  the page note\'s cylinder (h = 100 mm), water nu = 1e-6: zeta = {zeta(d, 1e-6)[0]:.5f} (floor included)')
+    return fails
 
 
 def tulip(hs):
@@ -190,10 +202,53 @@ def tulip(hs):
     return res
 
 
+def sweep(path):
+    """The page's data: for each fill height, harmonics m = 0, 1, 2, the first modes' frequency f (Hz), surface curvature
+    kappa = omega^2/g (1/m), push coefficient c (m, m = 1 only), wall-friction factor Lam (1/m; zeta = sqrt(nu/(2 omega)) Lam / 2)
+    and surface shape e(r) on NR points r = R(h) j/(NR-1), 1 at the wall. Mesh 48 x 96 P2; the 24 x 48 change is recorded."""
+    dz, Rarr = glass(); Rf = profile_fn(dz, Rarr)
+    NR, NM = 33, {0: 4, 1: 6, 2: 4}
+    hs = [round(30 + 2.5 * k, 1) for k in range(47)]
+    out = {'about': 'Fig. 12 linear sloshing modes of the Guinness tulip, by tools/fig12/modes_fem.py sweep (finite elements, P2, '
+                    'mesh 48 x 96 on the meridian section). Elevation of mode (m, n): beta(t) e(r) cos(m theta). '
+                    'm = 1 obeys beta\'\' + 2 zeta omega beta\' + omega^2 (1 + a_z/g) beta = -(omega^2/g) c a_x. '
+                    'Wall-friction damping zeta = (1/2) sqrt(nu/(2 omega)) Lam (laminar Stokes layer). '
+                    'Lengths in m, frequencies in Hz.',
+           'g': G, 'glass_profile': 'public/scripts/guinness-glass.js', 'NR': NR, 'h': hs, 'R_surface': [], 'levels': []}
+    worst = 0.0
+    for h_mm in hs:
+        h = h_mm / 1000; lev = {}
+        out['R_surface'].append(round(float(Rf(np.array([h]))[0]), 7))
+        for m, nm in NM.items():
+            b = solve(Rf, h, m, 48, 96, 2, nmodes=max(nm, 40 if m == 1 else nm))
+            a = solve(Rf, h, m, 24, 48, 2, nmodes=nm)
+            worst = max(worst, float(np.abs(b['f'][:nm] / a['f'][:nm] - 1).max()))
+            rr = np.linspace(0, b['r'][-1], NR)
+            lev[f'm{m}'] = {'f': [round(float(x), 6) for x in b['f'][:nm]], 'kappa': [round(float(x), 5) for x in b['kappa'][:nm]],
+                            'Lam': [round(float(x), 4) for x in b['Lam'][:nm]],
+                            'e': [[round(float(x), 5) for x in np.interp(rr, b['r'], e)] for e in b['shapes'][:nm]]}
+            if m == 1:
+                lev['m1']['c'] = [round(float(x), 8) for x in b['c'][:nm]]
+                lev['m1']['c_sum_40_over_R'] = round(float(b['c'].sum() / b['r'][-1]), 5)
+        out['levels'].append(lev)
+        print(f'h {h_mm:5.1f} mm  R {out["R_surface"][-1] * 1000:5.2f} mm  f11 {lev["m1"]["f"][0]:.4f} Hz  f01 {lev["m0"]["f"][0]:.4f}  '
+              f'f21 {lev["m2"]["f"][0]:.4f}  c1 {lev["m1"]["c"][0] * 1000:.3f} mm  zeta11 (water) '
+              f'{0.5 * np.sqrt(1e-6 / (2 * 2 * np.pi * lev["m1"]["f"][0])) * lev["m1"]["Lam"][0]:.5f}', flush=True)
+    out['mesh_change_worst'] = worst
+    print(f'largest change of any listed frequency from mesh 24 x 48 to 48 x 96: {worst:.1e}')
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    json.dump(out, open(path, 'w'), separators=(',', ':'))
+    print(f'wrote {path}: {os.path.getsize(path)} bytes')
+
+
 if __name__ == '__main__':
     what = sys.argv[1] if len(sys.argv) > 1 else 'check'
     if what == 'check':
-        check()
+        f = check()
+        print('CHECK ' + ('PASSED' if not f else 'FAILED: ' + '; '.join(f)))
+        sys.exit(1 if f else 0)
+    elif what == 'sweep':
+        sweep(sys.argv[2] if len(sys.argv) > 2 else os.path.join(ROOT, 'public', 'data', 'fig12', 'modes.json'))
     else:
         out = tulip([float(x) for x in sys.argv[2:]] or [125.0])
         if os.environ.get('OUT'):
