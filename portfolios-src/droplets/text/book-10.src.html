@@ -11,28 +11,55 @@ interesting part is how much each one decides, and how fast it can act on its ow
 
 <h3>10.1 Every merger lowers the surface free energy</h3>
 <p>Water's surface costs work to make: stretching it by a square metre at fixed temperature takes $\sigma$ = 0.07422 J at 10&nbsp;°C. So
-$\sigma$ is the surface's <em>free energy</em> per square metre (the part of its energy available as work). A drop of mass $m$ has radius
-$r = (3m/4\pi\rho_w)^{1/3}$, and its surface free energy is a power of its mass,</p>
+$\sigma$ is the surface's <em>free energy</em> per square metre (the part of its energy available as work). The argument that every merger lowers it has three steps.</p>
+<p><strong>Step 1: the surface of a drop as a function of its water.</strong> A drop of mass $m$ has radius
+$r = (3m/4\pi\rho_w)^{1/3}$, so its surface $4\pi r^2 = 4\pi\,(3m/4\pi\rho_w)^{2/3}$. Collect the numbers, $4\pi\,(3/4\pi)^{2/3} = (36\pi)^{1/3}$, and the surface free energy is a power of the mass,</p>
 $$\sigma\,4\pi r^2 = \sigma\,(36\pi)^{1/3}\rho_w^{-2/3}\,m^{2/3},\qquad F_s = \sigma\,(36\pi)^{1/3}\rho_w^{-2/3}\sum_{\text{drops}} m_i^{2/3}. \tag{10.1}$$
-<p>$F_s$ is the surface free energy of the drops in one m³ of air. A merger replaces $m^{2/3} + m'^{2/3}$ by $(m + m')^{2/3}$. Write $x = m/(m + m')$
-for the share of the product's water brought by the first partner:</p>
+<p>$F_s$ is the surface free energy of the drops in one m³ of air.</p>
+<p><strong>Step 2: one merger.</strong> A merger replaces $m^{2/3} + m'^{2/3}$ by $(m + m')^{2/3}$. Write $x = m/(m + m')$
+for the share of the product's water brought by the first partner, and take $(m + m')^{2/3}$ out as a common factor:</p>
 $$(m + m')^{2/3} - m^{2/3} - m'^{2/3} = (m + m')^{2/3}\,\big[1 - x^{2/3} - (1 - x)^{2/3}\big]. \tag{10.2}$$
 <p>For $0 < x < 1$ we have $x^{2/3} > x$ (a number below one grows when raised to a power below one), so $x^{2/3} + (1-x)^{2/3} > 1$ and the
-bracket is negative. Every merger lowers $F_s$, whatever the two sizes. Putting (10.2) into the moment identity (5.2) gives</p>
+bracket is negative. Every merger lowers $F_s$, whatever the two sizes.</p>
+<p><strong>Step 3: the whole cloud.</strong> The moment identity (5.2) gives the rate of change of $\int\phi\,n\,dm$ for any $\phi$. Take $\phi(m) = \sigma(36\pi)^{1/3}\rho_w^{-2/3}m^{2/3}$, the surface free energy of one drop: then $\int\phi\,n\,dm = F_s$, and the bracket of (5.2), $\phi(m + m') - \phi(m) - \phi(m')$, is the change in one merger, step 2. So</p>
 $$\boxed{\;\frac{dF_s}{dt} = \frac{\sigma(36\pi)^{1/3}}{2\rho_w^{2/3}}\iint K\,n(m)\,n(m')\,\big[(m+m')^{2/3} - m^{2/3} - m'^{2/3}\big]\,dm\,dm' \;\le\; 0.\;} \tag{10.3}$$
 <p>A quantity that can only fall is called a Lyapunov function. $F_s$ is one, for the collection equation and also along every single
 history of the exact Monte Carlo of chapter 6, because the statement holds merger by merger.</p>
 <div class="check"><div class="ctag">Check: the limits of one merger</div>The bracket of (10.2) is deepest at $x = \tfrac12$: two equal drops
-lose $1 - 2^{-1/3}$ = 20.6 % of their joint surface. A large drop of radius $R$ eating a small one of radius $r$ destroys the share
-$1 - \tfrac23(r/R) + \tfrac19(r/R)^4 - \dots$ of the small one's surface, almost all of it. So the free energy sits mostly in the smallest drops,
+lose $1 - 2^{-1/3}$ = 20.6 % of their joint surface. A large drop of radius $R$ eating a small one of radius $r$, with $p = r/R$: the product has radius $R(1 + p^3)^{1/3}$, and its surface exceeds the large drop's by</p> $$4\pi R^2\big[(1 + p^3)^{2/3} - 1\big] = 4\pi R^2\big[\tfrac23p^3 - \tfrac19p^6 + \dots\big].$$ <p> Subtract that from the small drop's surface $4\pi R^2p^2$ and divide by it: the merger destroys the share
+$1 - \tfrac23p + \tfrac19p^4 - \dots$ of the small one's surface, almost all of it. So the free energy sits mostly in the smallest drops,
 and it is destroyed most efficiently by feeding small drops to large ones.</div>
+<div class="press"><div class="ctag">Example 10.1 · one capture, step by step</div>
+A 40 µm collector eats an 8 µm droplet.
+<ol>
+<li><strong>The product.</strong> $(40^3 + 8^3)^{1/3}$ = 40.1064 µm.</li>
+<li><strong>Surfaces before.</strong> $4\pi R^2 = 2.011\times10^{-8}$ m² and $4\pi r^2 = 8.042\times10^{-10}$ m².</li>
+<li><strong>Surface after.</strong> $2.021\times10^{-8}$ m².</li>
+<li><strong>Destroyed.</strong> $6.972\times10^{-10}$ m², 86.7 % of the droplet's own surface; the series of the check box with $p$ = 0.2 gives 86.68 %.</li>
+<li><strong>Free energy released.</strong> $\sigma\,|\Delta A| = 5.174\times10^{-11}$ J.</li>
+<li><strong>Against the collision.</strong> The kinetic energy of the hit is $3.043\times10^{-14}$ J (example 4.1): the surface releases 1700 times more than the hit brought.</li>
+</ol></div>
+<div class="press"><div class="ctag">Example 10.2 · the surface free energy of the whole cloud at the start</div>
+<ol>
+<li><strong>One mode.</strong> $F_s$ of a mode is $\sigma\,4\pi N\langle r^2\rangle$, with $\langle r^2\rangle$ the mean square radius. For a lognormal, $\langle r^2\rangle = r_g^2\,e^{2\ln^2\sigma_g}$ (the mean of $e^{2z\ln\sigma_g}$ over a normal $z$).</li>
+<li><strong>The droplets.</strong> $e^{2\ln^2 1.25}$ = 1.1047, so their root-mean-square radius is 8.408 µm, and 300 per cm³ hold $1.978\times10^{-2}$ J per m³.</li>
+<li><strong>The collectors.</strong> One per cm³ of about 40 µm: $1.595\times10^{-3}$ J per m³.</li>
+<li><strong>Together.</strong> 0.0214 J per m³, 92.5 % of it in the droplets: the collectors hold 28 % of the water but only 7.5 % of the surface.</li>
+</ol></div>
+<div class="callout"><div class="ctag">Method · the free energy in the collection-equation run</div>
+<ol>
+<li>Before and after every one-second step of section 5.3, add $N_k\,x_k^{2/3}$ over all bins, plus the stored $m^{2/3}$ of every drop that went into the overflow store, and multiply by $\sigma(36\pi)^{1/3}\rho_w^{-2/3}$.</li>
+<li>Count the steps in which the sum rose.</li>
+<li>Inside the step, for every merger, add the surface released by the exact product $x_i + x_j$ to the ledger of its channel (section 11.2).</li>
+</ol>
+The binned sum is not the exact sum of the drops, because the lever rule (5.3) puts a product into two neighbouring bins. Step 2 is therefore a real test: the smearing could have made the sum rise.</div>
 <div class="press"><div class="ctag">In our cloud</div>At the start the drops in a cubic metre hold $F_s$ = 0.021 J, 93 % of it in the droplets.
 A 40 µm collector eating an 8 µm droplet lowers $F_s$ by $5.2\times10^{-11}$ J, 1700 times the kinetic energy of their collision. In the
 collection equation of chapter 5, $F_s$ fell at every one of the 3600 one-second steps of the hour.</div>
 
 <h3>10.2 Heat, entropy and the direction of time</h3>
 <p>The free energy released first shakes the merged drop, which wobbles like a struck jelly; water's viscosity stills the wobble in a
-quarter of a millisecond at 40 µm (Lamb's damping time $r^2/5\nu_w$). The heat that appears is more than the free energy lost, because a
+quarter of a millisecond at 40 µm (Lamb's damping time $r^2/5\nu_w$, with $\nu_w = 1.307\times10^{-6}$ m²/s the kinematic viscosity of water at 10 °C). The heat that appears is more than the free energy lost, because a
 surface also carries entropy: a square metre of surface has entropy $-d\sigma/dT$, and destroying it releases that entropy too. Each
 square metre of surface destroyed gives the heat $u_s = \sigma - T\,d\sigma/dT$ = 0.115 J, 1.56 times $\sigma$. For the capture above that is
 $8.0\times10^{-11}$ J, which warms the merged drop by $7.1\times10^{-5}$ K before the air takes it away. Now add up the entropy of
@@ -40,6 +67,15 @@ the world. The air receives the heat $u_s|\Delta A|$ at temperature $T$, so its 
 disappeared takes its own entropy, $-(d\sigma/dT)\,|\Delta A|$, with it. The water of the drops is unchanged. The sum is
 $\big[u_s + T\,d\sigma/dT\big]|\Delta A|/T$, and the bracket is $\sigma$:</p>
 $$\Delta S = -\frac{\Delta F_s}{T} = \frac{\sigma\,|\Delta A|}{T}, \tag{10.4}$$
+<div class="press"><div class="ctag">Example 10.3 · the heat and entropy of one capture, step by step</div>
+The capture of example 10.1, which destroyed $|\Delta A| = 6.972\times10^{-10}$ m².
+<ol>
+<li><strong>How the surface tension changes with temperature.</strong> From the IAPWS formula the model uses, $d\sigma/dT = -1.456\times10^{-4}$ N/(m K): warmer water has a weaker skin.</li>
+<li><strong>The surface's entropy and heat.</strong> Its entropy per m² is $-d\sigma/dT$; times $T$ = 283.15 K that is 0.0412 J per m², and the heat per m² is $u_s = \sigma + 0.0412$ = 0.1154 J, 1.555 times $\sigma$.</li>
+<li><strong>The heat.</strong> $u_s|\Delta A| = 8.048\times10^{-11}$ J, into a drop of $2.702\times10^{-10}$ kg with a heat capacity of 4192 J/(kg K): it warms by $7.105\times10^{-5}$ K.</li>
+<li><strong>The books of entropy.</strong> The air gains $u_s|\Delta A|/T = 2.842\times10^{-13}$ J/K. The vanished surface takes $1.015\times10^{-13}$ J/K with it. The world gains the difference, $1.827\times10^{-13}$ J/K, which is $\sigma|\Delta A|/T$, as (10.4) says.</li>
+<li><strong>In units of Boltzmann's constant.</strong> Divide by $k_B = 1.381\times10^{-23}$ J/K: $1.324\times10^{10}$.</li>
+</ol></div>
 <p>$1.32\times10^{10}\,k_B$ for that one capture ($k_B$ is Boltzmann's constant, $|\Delta A|$ the surface destroyed). For the merged drop to split
 again by a thermal fluctuation, that entropy would have to come back out of the air, and statistical mechanics gives such a fluctuation the
 weight $e^{-\Delta S/k_B} = e^{-1.32\times10^{10}}$. No thermal fluctuation ever splits a cloud drop. Drops do break, but only when mechanical
@@ -48,6 +84,12 @@ outside this closed box of small drops, so within it the second law fixes the di
 <figure class="fig" id="fig-10-1">{{FIG:energyflow}}<figcaption>Figure 10.1. Two heat sources in the warm cloud of chapter 5: the heat released by merging,
 $u_s|\Delta A|$ per second, and the work gravity does on the falling drops, which drag turns into heat. The dashed line is the turbulent
 dissipation at ε = 10⁻² m²/s³. In the closed box the drops never leave, so gravity's work keeps growing as they grow.</figcaption></figure>
+<div class="callout"><div class="ctag">Method · the three powers of figure 10.1</div>
+<ol>
+<li><strong>Heat of merging.</strong> The fall of $F_s$ between two records 10 s apart, divided by 10 s and multiplied by $u_s/\sigma$ = 1.555, because each joule of surface free energy released comes with 0.555 J taken from the surface's entropy.</li>
+<li><strong>Gravity's work.</strong> A drop at its terminal speed is not accelerating, so all the work gravity does on it, weight less buoyancy times speed, goes into the air as heat through drag: $\sum_k N_k\,x_k\,g^*\,v(r_k)$ over the bins, plus the overflow store at its mean drop size. At the start it is $7.620\times10^{-4}$ W/m³, 87.8 % of it from the collectors.</li>
+<li><strong>Turbulence, for scale.</strong> $\rho_a\varepsilon$ with $\varepsilon = 10^{-2}$ m²/s³: $1.046\times10^{-2}$ W/m³.</li>
+</ol></div>
 <div class="press"><div class="ctag">In our cloud</div>Over the hour merging releases 0.033 J of heat per m³ and raises the entropy by
 $7.5\times10^{-5}$ J/K per m³, about $1.8\times10^{10}\,k_B$ per merger. At its largest the heat of merging is 2.3 % of the heat gravity's
 drag makes. Gravity turns as much energy into heat as all the drops' surfaces hold every 28 s.</div>
@@ -56,7 +98,18 @@ drag makes. Gravity turns as much energy into heat as all the drops' surfaces ho
 <p>Free energy is $F = E - TS$, and the entropy $S$ includes the drops' own: many drops scattered through the air can be arranged in more
 ways than a few. How much is that worth? A drop of 8 µm is a particle of mass $2.1\times10^{-12}$ kg, and the entropy of $N$ such particles
 in a volume $V$ is the ideal-gas value, about $k_B[\ln(V/N\lambda^3) + 5/2]$ per particle, with $\lambda = h/\sqrt{2\pi mk_BT}$ the thermal
-wavelength. For our droplets $\lambda = 2.9\times10^{-18}$ m and this is 104 $k_B$ per drop. A merger destroys one drop's worth of it, 104 $k_B$,
+wavelength. For our droplets $\lambda = 2.9\times10^{-18}$ m and this is 104 $k_B$ per drop.</p>
+<p>Where the formula comes from, in three steps. <strong>Count places:</strong> one particle in a volume $v$ can sit in about $v/\lambda^3$ distinguishable places, because quantum mechanics blurs a particle with the momenta of temperature $T$ over a length $\lambda$. <strong>Share the volume:</strong> $N$ identical particles in $V$ each have $V/N$ to themselves, and the number of their arrangements is about $(eV/N\lambda^3)^N$; the $e$ is what is left of $1/N!$, the swaps of identical particles, after Stirling's formula $N! \approx (N/e)^N$. <strong>Take the logarithm:</strong> $S = k_B\ln(\text{arrangements})$ gives $k_B[\ln(V/N\lambda^3) + 1]$ per particle, and the motion adds $\tfrac32k_B$ more, which makes the $\tfrac52$ (Sackur and Tetrode).</p>
+<div class="press"><div class="ctag">Example 10.4 · the entropy of placement of one droplet, step by step</div>
+<ol>
+<li><strong>The mass.</strong> An 8 µm droplet: $2.145\times10^{-12}$ kg.</li>
+<li><strong>The thermal wavelength.</strong> $2\pi mk_BT = 5.268\times10^{-32}$ kg² m² s⁻², so $\lambda = h/\sqrt{5.268\times10^{-32}}$ = $2.887\times10^{-18}$ m, some three hundred times smaller than a proton: the droplet is a classical particle.</li>
+<li><strong>Room per drop.</strong> 301 drops per cm³ leave each one $1/n = 3.322\times10^{-9}$ m³, a cube of 1492 µm on a side.</li>
+<li><strong>Places per drop.</strong> $\lambda^3 = 2.406\times10^{-53}$ m³, so $(V/N)/\lambda^3 = 1.381\times10^{44}$.</li>
+<li><strong>The entropy.</strong> $\ln(1.381\times10^{44})$ = 101.64, plus 5/2: 104.14 $k_B$ per drop.</li>
+<li><strong>Against the surface.</strong> The capture of example 10.3 released $1.324\times10^{10}\,k_B$, $1.27\times10^{8}$ times more than the one drop's worth of placement entropy it destroyed.</li>
+</ol></div>
+<p> A merger destroys one drop's worth of it, 104 $k_B$,
 while releasing $10^{10}\,k_B$ of surface entropy. Minimising $F$ therefore means merging, by a margin of a hundred million to one: the
 free energy of the whole cloud is lowest when all its water sits in as few drops as possible.</p>
 <p>So energy and entropy, written together as the free energy, say exactly where a closed cloud of small drops is heading. They do not

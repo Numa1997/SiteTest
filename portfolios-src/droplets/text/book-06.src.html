@@ -19,13 +19,47 @@ million collectors, a few are lucky in this way, early and more than once, and t
 </ol>
 <p>No time step appears anywhere, so there is no time-step error: the only approximations are the kernel itself and the rounding of the computer's numbers. The random numbers come from a seeded generator, so every run can be repeated exactly.</p></div>
 <div class="press"><div class="ctag">Example 6.1 · the clock of 10 cm³ at the start</div>
-One drawn volume of 10 cm³ (seed 1) holds 3010 drops, 10 of them collectors, and so 4 528 545 pairs. Adding the true rates $K/V$ of all pairs gives 1.223 per second: a merger about every 0.82 s. Nearly all of these are a collector catching a droplet. The 45 pairs of two collectors carry 0.22 % of the total rate, one such merger every 373 s on average; the 4.5 million pairs of two droplets carry 0.036 %. Keep the 373 s in mind for section 6.3: the first drizzle drop in such a volume appears after about ten minutes, and it is made by exactly these rare mergers.</div> <div class="check"><div class="ctag">Check</div>The bound is checked at every proposal (zero violations in 430 runs); 50 to 59 % of proposals are accepted, depending on the volume. Each run conserves water exactly. Section 6.4 compares the averages with the collection equation.</div> <p>The drops are drawn from the two lognormal modes, but cut at three standard deviations ($\sigma_g^3$): no collector starts above 69 µm. Without the cut, the lognormal tail itself would put 0.25 drops of 100 µm in every m³ at the start, and in a large volume the first drizzle would be decided by the initial spectrum, which comes from aerosol and condensation physics outside these notes.</p> <h3>6.3 The first 100 µm drop</h3> <p>Run the process many times in volumes of 1, 10, 100 and 1000 cm³ (200, 100, 100 and 30 runs) and note when the first drop reaches 100 µm.</p> <div class="press"><div class="ctag">In our cloud</div>In 1 cm³ (one collector and 300 droplets) no drop ever reaches 100 µm: there is not enough water (a 100 µm drop holds the water of 3.75 cm³ of
+One drawn volume of 10 cm³ (seed 1) holds 3010 drops, 10 of them collectors, and so 4 528 545 pairs. Adding the true rates $K/V$ of all pairs gives 1.223 per second: a merger about every 0.82 s. Nearly all of these are a collector catching a droplet. The 45 pairs of two collectors carry 0.22 % of the total rate, one such merger every 373 s on average; the 4.5 million pairs of two droplets carry 0.036 %. Keep the 373 s in mind for section 6.3: the first drizzle drop in such a volume appears after about ten minutes, and it is made by exactly these rare mergers.</div> <div class="check"><div class="ctag">Check</div>The bound is checked at every proposal (zero violations in 430 runs); 50 to 59 % of proposals are accepted, depending on the volume. Each run conserves water exactly. Section 6.4 compares the averages with the collection equation.</div> <p>The drops are drawn from the two lognormal modes, but cut at three standard deviations ($\sigma_g^3$): no collector starts above 69 µm. Without the cut, the lognormal tail itself would put 0.25 drops of 100 µm in every m³ at the start, and in a large volume the first drizzle would be decided by the initial spectrum, which comes from aerosol and condensation physics outside these notes.</p> <h3>6.3 The first 100 µm drop</h3> <p>Run the process many times in volumes of 1, 10, 100 and 1000 cm³ (200, 100, 100 and 30 runs) and note when the first drop reaches 100 µm.</p>
+<div class="callout"><div class="ctag">Method · the time of the first drizzle drop, as the runs measure it</div>
+<ol>
+<li><strong>One volume.</strong> Draw its drops from the two modes, cut at three standard deviations. The number of each kind is fixed, not drawn: $N V$ rounded, so 1 cm³ holds exactly 300 droplets and 1 collector, 10 cm³ exactly 3000 and 10. Each run has its own seed, $1000\,V + k$ for run $k$ in a volume of $V$ cm³, so every run can be repeated.</li>
+<li><strong>Run it.</strong> Carry out the exact simulation of section 6.2 for one hour.</li>
+<li><strong>Watch every merger.</strong> After each merger look at the new drop. The first time any drop reaches 100 µm, write down the clock. A drop never shrinks, so that moment is the first passage and cannot be undone.</li>
+<li><strong>Many volumes.</strong> Repeat for all runs of that size. The <em>median</em> is the time by which half the runs have had their first drop; the curves of figure 6.1 show the share of runs that have had one, against time.</li>
+</ol></div>
+<div class="press"><div class="ctag">Example 6.2 · why capture alone is too slow</div>
+Could the first drizzle come from one collector that is simply big to begin with, sweeping droplets? Take the most favourable case the cloud allows.
+<ol>
+<li><strong>The largest start.</strong> The collector mode is cut at three standard deviations: $40\ \mu\text m\times1.2^3$ = 69.12 µm.</li>
+<li><strong>The most food.</strong> Give it all the droplet water of the cloud, $W = 8.050\times10^{-4}$ kg/m³, as 8 µm droplets, and let none be used up.</li>
+<li><strong>The growth rate.</strong> The radius grows by (1.1) divided by $4\pi\rho_wR^2$, with the drag-balance speeds and the efficiency of chapter 3. At 69 µm, where $E$ = 0.477 and the speeds differ by 0.4231 m/s, that is 3.035 µm per minute; at 100 µm it is 5.556 µm per minute.</li>
+<li><strong>Integrate.</strong> Stepping the radius forward in steps of 0.05 s from 69 to 100 µm takes 448 s.</li>
+<li><strong>Count the meals.</strong> Each capture adds $(8\ \mu\text m)^3$ of volume, so the collector needs $(100^3 - 69^3)/8^3$ = 1312 captures.</li>
+<li><strong>The luck in capture.</strong> Captures arrive at random, independently, so their number in a given time is Poisson-distributed, and its relative spread is $1/\sqrt{1312}$ = 2.8 %. Even a collector lucky by three times that spread arrives only about a tenth sooner.</li>
+</ol>
+So capture alone, at its very best, needs 7.5 minutes. The exact runs in 1000 cm³ make the first drizzle in three. The extra speed must come from somewhere else, and the runs say where.</div> <div class="press"><div class="ctag">In our cloud</div>In 1 cm³ (one collector and 300 droplets) no drop ever reaches 100 µm: there is not enough water (a 100 µm drop holds the water of 3.75 cm³ of
 this cloud). The median time to the first 100 µm drop is 605 s in 10 cm³, 286 s in 100 cm³ and 175 s in 1000 cm³. In every one of the 230 runs that made one, the drop got there by merging with another drop of 30 µm or more: collectors meeting collectors, not droplet capture alone, make the first drizzle here. Capture alone would be far too
 slow: the largest collector the cloud starts with (69 µm), sweeping 8 µm droplets with all of the cloud's droplet water and none
 used up, would need 1312 captures and 448 s to reach 100 µm, and the number of
 captures in a given time varies by only a few percent, so no amount of capture luck brings that down to three minutes.</div> <p>The larger the volume, the sooner its luckiest drop arrives. To reach a cubic metre, which we cannot simulate drop by drop, use the collection equation's tail. A drop above 100 µm stays above 100 µm, so the first one has arrived by time $t$ if the volume holds at least one. If such drops are rare and independent, their number in $V$ is Poisson-distributed with mean $V n_{100}(t)$, where $n_{100}$ is
-the concentration of drops above 100 µm in the mean field:</p>
+the concentration of drops above 100 µm in the mean field. The formula follows in three steps.</p>
+<p><strong>Step 1: cut the volume into small pieces.</strong> Divide $V$ into $J$ equal pieces, so small that none holds more than one large drop. A piece holds one with the probability $n_{100}V/J$, and if large drops are independent of each other, the pieces are independent too.</p>
+<p><strong>Step 2: no piece holds one.</strong> The probability that all $J$ pieces are empty is the product, $(1 - n_{100}V/J)^J$.</p>
+<p><strong>Step 3: let the pieces shrink.</strong> As $J \to \infty$ this becomes $e^{-n_{100}V}$, the limit that defines the exponential. The median is the moment when this probability has fallen to one half:</p>
 $$P(\text{no 100 µm drop in } V \text{ by } t) = e^{-V n_{100}(t)},\qquad \text{median: } V n_{100} = \ln 2. \tag{6.1}$$
+<p>Two assumptions went in, and both will be tested: the large drops must be rare (step 1), and their presence in one place must not depend on their presence in another (step 2).</p>
+<div class="callout"><div class="ctag">Method · the prediction (6.1), as the model evaluates it</div>
+<ol>
+<li>Solve the collection equation for the same cut modes, at 16 bins per doubling with 1 s steps, and write down every 5 s the number of drops per m³ in all bins at or above 100 µm, plus those in the overflow store.</li>
+<li>Keep the largest value reached so far. (Later, large drops merge with each other and their number falls; a volume that once held one has still had its first.)</li>
+<li>The predicted median for a volume $V$ is the first record at which $V$ times that largest value reaches $\ln 2$ = 0.693.</li>
+</ol></div>
+<div class="press"><div class="ctag">Example 6.3 · the prediction for a litre</div>
+<ol>
+<li>$V$ = 1000 cm³ = $10^{-3}$ m³, so the mean field must reach $n_{100} = 0.693/10^{-3}$ = 693 drops per m³ above 100 µm.</li>
+<li>The record at 175 s is the first above that: 744.5 per m³.</li>
+<li>So the predicted median is 175 s. For 100 cm³ the threshold is 6931 per m³, reached at 280 s; for a whole cubic metre only 0.693 per m³, reached at 60 s at this grid and record spacing.</li>
+</ol></div>
 <figure class="fig" id="fig-6-1">{{FIG:first}}<figcaption>Figure 6.1. Share of volumes that have held a drop of 100 µm or more: exact runs (solid) against (6.1) with the
 collection equation's tail (dashed). The dashed curves use the largest $n_{100}$ reached so far: later the large drops merge with
 each other and their number falls, but a volume that once held one has had its first drop.</figcaption></figure>
@@ -49,9 +83,33 @@ it lies in meeting another collector early. Note what carried the luck: the coll
 time. What does not contain it is the smooth-growth bookkeeping of the thesis (5.2), in which identical collectors grow identically.</p>
 
 <h3>6.4 Small volumes</h3>
+<p>The collection equation multiplies concentrations: the rate of collector–collector mergers per m³ is $\tfrac12Kc^2$, with $c$ the collectors per m³. Count instead the pairs that really exist, in four steps.</p>
+<p><strong>Step 1: the equation's count.</strong> In a volume $V$ that holds $n = cV$ collectors, the equation's rate becomes $\tfrac12Kc^2V = (K/V)\cdot\tfrac12n^2$: as if there were $\tfrac12n^2$ pairs, each merging at the rate $K/V$ of section 6.1.</p>
+<p><strong>Step 2: the true count.</strong> The first collector of a pair can be any of the $n$, the second any of the other $n - 1$, and each pair has been counted twice: $\tfrac12n(n - 1)$ pairs.</p>
+<p><strong>Step 3: the ratio.</strong> The true rate is the fraction $(n - 1)/n$ of the equation's. A collector cannot meet itself; the equation, written for a cloud too large to count, does not know that.</p>
+<p><strong>Step 4: what a random count would change.</strong> Had the number of collectors in a volume been drawn at random (Poisson, mean $\bar n$), the average of $n(n - 1)$ would have been $\bar n^2$ exactly, and the deficit would vanish on average. Our volumes hold exactly $V$ collectors each (section 6.3), so the deficit is there in every run. Either way, every merger then uses up partners in its own volume, which a mean field spread over an infinite cloud never notices.</p>
+<div class="press"><div class="ctag">In our cloud: the pair count</div>
+<div class="tblw"><table class="mt">
+<tr><th>volume</th><th>collectors $n$</th><th>pairs, collection equation $\tfrac12n^2$</th><th>pairs, true $\tfrac12n(n - 1)$</th><th>ratio</th></tr>
+<tr><td>1 cm³</td><td>1</td><td>0.5</td><td>0</td><td>0</td></tr>
+<tr><td>10 cm³</td><td>10</td><td>50</td><td>45</td><td>0.900</td></tr>
+<tr><td>100 cm³</td><td>100</td><td>5 000</td><td>4 950</td><td>0.990</td></tr>
+<tr><td>1000 cm³</td><td>1000</td><td>500 000</td><td>499 500</td><td>0.999</td></tr></table></div></div>
+<div class="callout"><div class="ctag">Method · the average growth of small volumes</div>
+<ol>
+<li>In every run of section 6.3 the share of the volume's water in drops of 40 µm or more, $F_{40}$, is written down once a minute.</li>
+<li>For each volume size the shares of all its runs are averaged, minute by minute: 200 runs of 1 cm³, 100 of 10 and of 100 cm³, 30 of 1000 cm³.</li>
+<li>The collection equation for the same cut modes gives the mean-field curve.</li>
+</ol>
+The average is taken over the runs' shares. A volume whose single collector is small and one whose collector is large count equally, which is why the 1 cm³ curve starts below the others (figure 6.2).</div>
 <figure class="fig" id="fig-6-2">{{FIG:luckF40}}<figcaption>Figure 6.2. Average share of water in drops above 40 µm in volumes of 1 to 1000 cm³, against the collection equation. The 1 cm³ curve starts lower (0.15) because its single collector, drawn at random, is smaller than 40 µm about half the time.</figcaption></figure>
 <div class="press"><div class="ctag">In our cloud</div>After 10 min the average share above 40 µm is 0.52 in 1 cm³, 0.70 in 10 cm³, 0.73 in
 100 cm³ and 0.74 in 1000 cm³. Small volumes grow more slowly than the mean field, as Dziekan and Pawlowska (2017) found. In 1 cm³ the reason is plain: the volume
 holds one collector, and one collector can never meet another. The exact count of collector pairs is $n(n-1)/2 = 0$, where the
-collection equation, written for a cloud too large to count, uses $n^2/2$.</div>
+collection equation, written for a cloud too large to count, uses $n^2/2$.
+<div class="tblw"><table class="mt">
+<tr><th>average $F_{40}$</th><th>1 cm³</th><th>10 cm³</th><th>100 cm³</th><th>1000 cm³</th><th>collection equation</th></tr>
+<tr><td>at the start</td><td>0.152</td><td>0.188</td><td>0.195</td><td>0.196</td><td>0.197</td></tr>
+<tr><td>after 10 min</td><td>0.520</td><td>0.696</td><td>0.730</td><td>0.740</td><td>0.742</td></tr></table></div>
+Read the two rows together. In 10 cm³ the start is already 0.009 behind, and after 10 minutes the gap is 0.046: the volume falls further behind as it grows, consistent with step 3: its collector pairs are a tenth fewer. From 100 cm³ upward the gap is a few thousandths, the size of the pair deficit.</div>
 </section>

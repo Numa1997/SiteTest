@@ -18,7 +18,7 @@ self-contained HTML file. The record of how each model level was argued, attacke
 | `text/` | The words: `sim.src.html`, `book-00` … `book-12` (chapters 0–12), `book-99` (appendix A), `problems.src.html`, `checks.src.html`. HTML with TeX maths (`$…$`, `$$…\tag{n}$$`). |
 | `data/` | Numbers the model's run tools wrote: `etab_warm.json` (efficiency table, 64 × 40), `etab_split.json` (the same with the two flow limits apart), `hall1980.json` (Hall's table, OCR reading), `warm.json`, `stochastic.json`, `bridge.json`, `cold.json`, `energy.json` (L8, `run_energy.cjs`), `ripening.json` (L8b, `run_ripening.cjs`: three random draws of 3010 drops with pure water and with salt, recorded at 82 times with the ledger of the descent, and the same cloud as 1100 classes of identical drops, which gives the smooth spectra, the rate curves and the ledger of section 10.4), `cloud.json` (L10, `run_cloud.cjs CASE …` then `--merge`, about 1.5 h on 4 cores). |
 | `tools/` | `build.py` (the build), `figs.cjs` (the 27 figures), `katex_render.cjs` and `package.json` (KaTeX 0.16.11 at build time), and the run tools that write `data/`: `gen_tables.cjs`, `run_warm.cjs`, `run_golovin.cjs`, `run_stochastic.cjs`, `run_bridge.cjs`, `run_cold.cjs`, `run_energy.cjs`, `run_ripening.cjs`, `run_cloud.cjs`, `test_gillespie.cjs`, `tail_resolution.cjs`. |
-| `derive/` | Derivations and the numbers behind the Gate 1 contracts (SymPy, Wolfram, Node), level by level; `L8b_ledger.cjs` prints every number of section 10.4, `examples.cjs` every number of the worked examples and method boxes. |
+| `derive/` | Derivations and the numbers behind the Gate 1 contracts (SymPy, Wolfram, Node), level by level; `L8b_ledger.cjs` prints every number of section 10.4, `examples.cjs` and `examples2.cjs` every number of the worked examples and method boxes. |
 | `checks/` | `check_physics.py` (independent Python: constants retyped, SciPy, SymPy), `check_numbers.cjs` (every number quoted in the text, recomputed and found near its anchor), `check_browser.py` (Playwright at 360, 390, 1024, 1440 px), `model_dump.cjs` (helper of `check_physics.py`). |
 
 ## Build and check
@@ -28,7 +28,7 @@ cd portfolios-src/droplets
 (cd tools && npm ci)                     # KaTeX for build-time typesetting, once
 python3 tools/build.py --site            # writes public/portfolios/droplet-collection/index.html and its four plates in fig/
 python3 tools/build.py                   # a standalone copy in out/ (not committed)
-node checks/check_numbers.cjs            # 396 numbers, about four minutes: NUMBER CHECK PASS
+node checks/check_numbers.cjs            # 468 numbers, about four minutes: NUMBER CHECK PASS
 python3 checks/check_physics.py          # 14 checks, about three minutes: PHYSICS CHECK PASS
 python3 -m http.server 8771 --directory ../../public &
 python3 checks/check_browser.py http://localhost:8771/portfolios/droplet-collection/index.html <screenshot folder>
