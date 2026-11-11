@@ -9,13 +9,13 @@ the glass's frame: OpenFOAM adds rho alpha dW/dt for a table W(t) (fvModel accel
 Then: blockMesh, setFields. Run with foamRun in the case directory. Every number is a parameter of this script; the
 physical ones carry no default here that the gate scripts do not set explicitly.
 """
-import argparse, math, os, shutil, subprocess, sys
+import argparse, json, math, os, shutil, subprocess, sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import tulip_mesh
 
 def velocity_table(kind, end, A=1.5):
-    if kind == 'rest': return [(0.0, 0.0), (end + 1.0, 0.0)]
+    if kind in ('rest', 'cart'): return [(0.0, 0.0), (end + 1.0, 0.0)]   # cart: the frame comes from the cart (fvModels.cart)
     # a(t) = A (1 - cos(pi t / 0.6)) / 2 for t < 0.6, A for 0.6 <= t < 1, 0 after; V = its integral (closed form)
     def V(t):
         if t < 0.6: return A * 0.5 * (t - 0.6 / math.pi * math.sin(math.pi * t / 0.6))
@@ -27,7 +27,8 @@ def velocity_table(kind, end, A=1.5):
 
 def main():
     ap = argparse.ArgumentParser(); ap.add_argument('case'); ap.add_argument('--level', required=True); ap.add_argument('--fill', type=float, required=True)
-    ap.add_argument('--end', type=float, required=True); ap.add_argument('--forcing', required=True, choices=['rest', 'tilt'])
+    ap.add_argument('--end', type=float, required=True); ap.add_argument('--forcing', required=True, choices=['rest', 'tilt', 'cart'])
+    ap.add_argument('--ride', help='forcing cart: the ride as JSON for tools/fig12/of/cart/write_cart.cjs (road, v0, ctrl, susp)')
     ap.add_argument('--write', type=float, default=0.05); ap.add_argument('--maxco', type=float, default=0.5)
     ap.add_argument('--wall', required=True, choices=['noslip', 'slip'])
     ap.add_argument('--sigma', type=float, required=True); ap.add_argument('--nu', type=float, required=True); ap.add_argument('--rho', type=float, required=True)
@@ -43,6 +44,15 @@ def main():
             p = os.path.join(root, f); s = open(p).read(); t = s
             for k, v in subs.items(): t = t.replace(k, v)
             if t != s: open(p, 'w').write(t)
+    if a.forcing == 'cart':   # the glass moves with the cart, coupled both ways (constant/fvModels.cart)
+        if not a.ride: sys.exit('--forcing cart needs --ride')
+        ride = json.loads(a.ride); ride['fill'] = a.fill; ride['rho'] = a.rho
+        cd = os.path.join(a.case, 'constant', 'cart'); os.makedirs(cd, exist_ok=True)
+        subprocess.run(['node', os.path.join(HERE, 'cart', 'write_cart.cjs'), json.dumps(ride), cd], check=True)
+        shutil.copy(os.path.join(HERE, 'cart', 'cart.H'), cd)
+        shutil.move(os.path.join(a.case, 'constant', 'fvModels.cart'), os.path.join(a.case, 'constant', 'fvModels'))
+    else:
+        os.remove(os.path.join(a.case, 'constant', 'fvModels.cart'))
     with open(os.path.join(a.case, 'constant', 'glassVelocity'), 'w') as fh:
         # OpenFOAM's fvModel 'acceleration' adds +rho alpha dV/dt (measured: V rising along +x drove the stout to +x, the
         # front surface up 3.4 mm in 0.1 s at 1.5 m/s^2). In the glass's frame the stout feels -rho alpha a_glass, so the

@@ -1,0 +1,93 @@
+FoamFile { format ascii; class dictionary; object fvModels; }
+// The glass's frame, coupled both ways to the cart (tools/fig12/of/cart/cart.H, a port of Cart in stout-cart.js). Once per
+// fluid step: the stout's momentum P (in the glass's frame) and what left through the open patches give the liquid's force
+// on the cart, F = -(P - P_prev + P_out) / dt_prev (World.advance's coupling); the cart advances over the step in 0.1 ms
+// steps; the glass's acceleration a = (v_new - v_old) / dt then acts on every cell as -rho a (OpenFOAM's source sign: a
+// term added to eqn.source() enters the momentum equation with a minus, measured with fvModel acceleration).
+cartCoupling
+{
+    type            coded;
+    name            cartCoupling;
+    cellZone        all;
+    field           U;
+    codeOptions
+    #{
+        -I$(FOAM_CASE)/constant/cart
+    #};
+    codeInclude
+    #{
+        #include "cart.H"
+        #include "OFstream.H"
+        namespace
+        {
+            struct CartState
+            {
+                fig12::Cart cart; bool ready = false; Foam::label lastTi = -1; Foam::scalar dtPrev = 0;
+                Foam::vector P = Foam::Zero, Pout = Foam::Zero, a = Foam::Zero; Foam::scalar Fx = 0, Fz = 0;
+                Foam::autoPtr<Foam::OFstream> os;
+            };
+            CartState& cartState() { static CartState s; return s; }
+        }
+    #};
+    codeAddRhoSup
+    #{
+        const fvMesh& m = mesh();
+        CartState& s = cartState();
+        const scalar rhoS = RHO;
+        if (!s.ready)
+        {
+            const fileName d = m.time().globalPath()/"constant"/"cart";
+            s.cart.load(d/"cart.params", d/"road.table");
+            s.ready = true;
+        }
+        const label ti = m.time().timeIndex();
+        if (ti != s.lastTi)
+        {
+            const scalar dt = m.time().deltaTValue();
+            const volScalarField& al = m.lookupObject<volScalarField>("alpha.stout");
+            const volVectorField& Uc = m.lookupObject<volVectorField>("U");
+            const surfaceScalarField& phi = m.lookupObject<surfaceScalarField>("phi");
+            const scalarField& V = m.V();
+            scalar ms = 0; vector P = Zero, Pout = Zero;
+            forAll(al, c) { const scalar dm = rhoS*al[c]*V[c]; ms += dm; P += dm*Uc[c]; }
+            forAll(m.boundary(), pi)
+            {
+                const word& n = m.boundary()[pi].name();
+                if (n != "spill" && n != "atmosphere") continue;
+                const fvsPatchScalarField& pf = phi.boundaryField()[pi];
+                const fvPatchScalarField& ap = al.boundaryField()[pi];
+                const fvPatchVectorField& up = Uc.boundaryField()[pi];
+                forAll(pf, f) if (pf[f] > 0) Pout += rhoS*pf[f]*ap[f]*up[f]*dt;
+            }
+            reduce(ms, sumOp<scalar>()); reduce(P, sumOp<vector>()); reduce(Pout, sumOp<vector>());
+            if (s.lastTi >= 0 && s.dtPrev > 0)
+            {
+                s.Fx = -(P.x() - s.P.x() + s.Pout.x())/s.dtPrev;
+                s.Fz = -(P.z() - s.P.z() + s.Pout.z())/s.dtPrev;
+            }
+            s.cart.ml = ms;
+            const double vx0 = s.cart.vx, vz0 = s.cart.vzb;
+            const label nsub = max(label(1), label(std::round(dt/1e-4)));
+            const double hc = dt/nsub;
+            for (label k = 0; k < nsub; k++) s.cart.step(hc, s.Fx, s.Fz);
+            s.a = vector((s.cart.vx - vx0)/dt, 0, (s.cart.vzb - vz0)/dt);
+            s.P = P; s.Pout = Pout; s.dtPrev = dt; s.lastTi = ti;
+            if (Pstream::master())
+            {
+                if (!s.os.valid())
+                {
+                    s.os.reset(new OFstream(m.time().globalPath()/"cartMonitor.dat"));
+                    s.os() << "# t x vx zb vzb zw vzw i icmd xi Fx Fz ax az ml N slip za" << endl;
+                }
+                const fig12::Cart& c = s.cart;
+                s.os() << c.t << ' ' << c.x << ' ' << c.vx << ' ' << c.zb << ' ' << c.vzb << ' ' << c.zw << ' ' << c.vzw << ' ' << c.i
+                       << ' ' << c.icmd << ' ' << c.xi << ' ' << s.Fx << ' ' << s.Fz << ' ' << s.a.x() << ' ' << s.a.z() << ' ' << c.ml
+                       << ' ' << c.N << ' ' << c.slip << ' ' << c.zaNow << endl;
+            }
+        }
+        // the fictitious force -rho a of the glass's acceleration, on every cell (air included: it is in the glass's frame too)
+        const scalarField& V = m.V();
+        vectorField& src = eqn.source();
+        forAll(src, c) src[c] += V[c]*rho[c]*s.a;
+    #};
+}
