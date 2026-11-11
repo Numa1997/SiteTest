@@ -1,5 +1,5 @@
 {
-  "about": "Arabic translation of the four sentences on the home page, Lucretius I 146-158. Made from the Latin (poem-146-224.json, field 'la') for this site; rewritten on 11 November 2026 as literary Arabic prose, recast sentence by sentence rather than word by word (README, 'How the Arabic is written'), and checked against the Latin, Leonard (1916) and Diels (1924) for the sense. It is not a published translation and has not been reviewed by a second reader. The only published Arabic translation (Cairo 2018) is under copyright and was not used.",
+  "about": "Arabic translation of the four sentences on the home page, Lucretius I 146-158. Made from the Latin (poem-146-224.json, field 'la') for this site; fourth version, 11 November 2026, in modern Levantine literary Arabic (README, 'How the Arabic is written'), checked against the Latin, Leonard (1916) and Diels (1924) for the sense. It is not a published translation and has not been reviewed by a second reader. The only published Arabic translation (Cairo 2018) is under copyright and was not used.",
   "groups": [
     {
       "lines": [
@@ -7,7 +7,7 @@
         148
       ],
       "ar": [
-        "فهذا الهلعُ الذي يسكن النفوس، وهذه الظلمةُ التي تغشى العقول، لا تجلوها أشعّةُ الشمس ولا سهامُ النهار البرّاقة، وإنّما يجلوها تأمّلُ الطبيعة والوقوفُ على نواميسها."
+        "هذا الرعب الذي يسكن النفس، وهذا الظلام الذي يخيّم عليها، لن تبدّدهما أشعّة الشمس ولا سهام النهار الساطعة، بل وجه الطبيعة وقانونها."
       ]
     },
     {
@@ -16,7 +16,7 @@
         150
       ],
       "ar": [
-        "وأوّلُ أصلٍ نبني عليه أنّه ما من شيءٍ وُلِد من العدم قطّ بأمر الآلهة."
+        "ومن هنا نبدأ، وهذا أوّل المبادئ: لا شيء يولد من العدم أبدًا، ولو بقدرة الآلهة."
       ]
     },
     {
@@ -25,7 +25,7 @@
         154
       ],
       "ar": [
-        "وما استبدّ الخوفُ بالبشر أجمعين إلّا لأنّهم يشهدون في الأرض والسماء أحداثًا كثيرة لا يهتدون إلى أسبابها سبيلًا، فينسبونها إلى قدرة الآلهة."
+        "إن الخوف لا يقبض على قلوب البشر جميعًا إلا لأنهم يرون في الأرض وفي السماء أمورًا كثيرة تجري، ولا يرون لها سببًا، فيحسبون أن مشيئة الآلهة وراءها."
       ]
     },
     {
@@ -34,7 +34,7 @@
         158
       ],
       "ar": [
-        "فإذا استقرّ عندنا أنّ العدمَ لا يُخرج شيئًا، انكشف لنا ما نطلبه على وجهٍ أصوب: من أيّ أصلٍ تنشأ الأشياء، وكيف يجري كلُّ ما يجري من غير أن يكون للآلهة فيه يد."
+        "لذلك، متى أدركنا أن لا شيء يُخلق من العدم، تجلّى لنا بوضوح أكبر ما نبحث عنه: من أين يأتي كل شيء، وكيف يجري كل ما يجري دون أن تمتدّ إليه يد الآلهة."
       ]
     }
   ]
