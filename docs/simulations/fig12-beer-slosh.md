@@ -34,6 +34,25 @@ as surface roughness (a floor of 60–80 µJ in the surface's potential energy, 
 slow, wandering tilt. A finer grid is being measured. Until the solver passes grid convergence and the energy budget,
 nothing of this is shown on the page.
 
+**Two solver bugs found and fixed (11 November 2026).** (1) The wall stress first acted before the pressure solve, on
+faces that still carried gravity's g Δt (49 mm/s at Δt = 5 ms), which the pressure cancels in a stout at rest; the stress
+on that phantom slip drove a circulation up the wall (3 mm, at rest, 2 s: kinetic energy 7.2 µJ with friction against
+1.1 µJ without, wall power 15–60 µW). The stress now acts after the projection (`Fluid.step`): at rest 0.70 µJ and
+0.3–0.5 µW. (2) The surface reader (`Fluid.buildColumnTables`) counted the open volume of each column up to the wall,
+while the particles fill it only to 0.15 dx inside (their seeding gap): columns cut to a sliver read low, the outer rings
+by 3.3 mm on 3 mm (4.8 mm on 4 mm) at rest, while the top particles lie flat within 0.04 mm. With the gap (option
+`colGap`, 0.15 dx) the reader matches the top particles within 0.03–0.40 mm in every ring on 4, 3 and 2 mm; the lean
+reading is unchanged (it already extended the surface inward from r = R(h) − 2.5 dx).
+
+**What the page will offer (agreed 11 November 2026).** Every result is precomputed on GitHub and only played back. Roads
+come from a menu of about ten: single bumps of 5, 10, 15, 20 and 25 mm, a kerb, a pothole, and three periodic rows (for
+Poincaré sections). Each road is computed for 11 speeds (0.5–1.5 m/s), 13 fills (80–140 mm), the three controllers,
+suspension on and off, and wall friction on and off: 1716 rides per road, about 17 000 in all. A 12 s ride of the whole
+glass on the 3 mm grid takes about 3.7 min on one core (half glass measured at 46 ms a step; the whole glass taken as
+twice that until it is built), so about 13 h with 80 rides at once on GitHub's free runners, and about 1.7 GB of
+compressed surfaces (7 kB per second of ride, measured). A freehand road cannot be offered: no solution exists for it
+until it is computed.
+
 **The page on this branch** does not run at present: its script and data panel were built around the removed parts. It
 is being replaced by a page that only plays back solutions computed on GitHub. The page on `main` is unchanged.
 

@@ -66,6 +66,7 @@
     this.Ad = new F(this.nc); this.Ax = new F(this.nc); this.Ay = new F(this.nc); this.Az = new F(this.nc);
     this.mic = new F(this.nc); this.r_ = new F(this.nc); this.z_ = new F(this.nc); this.s_ = new F(this.nc);
     this.sliver = o.sliver != null ? o.sliver : 0.1;
+    this.colGap = o.colGap != null ? o.colGap : 0.15;   // see buildColumnTables
     this.faceFractions();
     // Friction on the glass (off unless o.wallFriction is given): the stress of the laminar Stokes layer between the wall
     // and the core of the flow, tau = rho sqrt(nu) Integral K(t-t') dU_t/dt' dt', K = 1/sqrt(pi t) (derived in Wolfram,
@@ -601,7 +602,6 @@
     for (let n = 0; n < this.nu_; n++) if (this.au[n] > 0) this.u[n] += dt * gx;
     for (let n = 0; n < this.nw_; n++) if (this.aw[n] > 0) this.w[n] += dt * gz;
     if (this.nu > 0) this.viscosity(dt);
-    if (this.wallKernel) this.wallStress(dt);
   };
 
   // The wetted glass, face by face: for every velocity face next to the wall, the wall area it carries (half of each
@@ -1082,6 +1082,10 @@
     this.forces(dt, ax, az);
     if (this.volumeCorrection > 0) this.density();
     this.project(dt);
+    // the wall's friction acts on the velocity the pressure has made divergence-free: before the projection the faces carry
+    // g dt (49 mm/s at 5 ms) that the pressure cancels in a stout at rest, and a stress on that phantom slip drove a
+    // circulation up the wall (measured: kinetic energy at rest 6.4 times that without friction after 2 s, 3 mm grid)
+    if (this.wallKernel) this.wallStress(dt);
     this.extrapolate(3);
     this.g2p();
     this.advect(dt);
@@ -1158,7 +1162,11 @@
     const nx = this.nx, ny = this.ny, dx = this.dx, ncol = nx * ny, dz = 0.0005, M = Math.round(this.H / dz), S = 12;
     const Vc = new Float64Array(ncol * (M + 1)), Vb = new Float64Array(ncol * (M + 1));
     for (let m = 1; m <= M; m++) {
-      const R = Math.min(this.Rz((m - 0.5) * dz), 2 * this.Rbox), R2 = R * R;
+      // the open radius as the particles fill it: they are seeded 0.15 dx inside the wall (Fluid.seed), each standing for a
+      // cube of the seeding spacing, so the liquid they count ends 0.15 dx short of R. Without this gap the columns the wall
+      // cuts to a sliver read far too low (measured at rest, 3 mm: the outer rings 3.3 mm under the top particles, which lie
+      // flat within 0.04 mm)
+      const R = Math.min(this.Rz((m - 0.5) * dz), 2 * this.Rbox) - this.colGap * dx, R2 = R > 0 ? R * R : 0;
       for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) {
         let n = 0;
         for (let a = 0; a < S; a++) for (let b = 0; b < S; b++) {
