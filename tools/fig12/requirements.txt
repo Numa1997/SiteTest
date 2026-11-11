@@ -1,0 +1,4 @@
+# Fig. 12 finite-element and fitting tools (tools/fig12/*.py); pinned for reproducible results on GitHub runners
+numpy==2.5.3
+scipy==1.16.3
+scikit-fem==10.0.2
