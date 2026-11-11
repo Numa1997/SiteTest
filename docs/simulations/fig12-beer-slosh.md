@@ -62,6 +62,20 @@ reading is unchanged (it already extended the surface inward from r = R(h) − 2
   to undo crowding), `quadratic` (quadratic B-spline APIC, Jiang et al. 2015). The volume correction's reference is now the
   stout's own starting density (`densRef`).
 
+**OpenFOAM gates: the swing's books (11 November 2026).** `tools/fig12/of/analyse_swing.py` reads a run's
+`stoutMonitor.dat`. Mass: what is in the glass, what left through the open top (`outVolume`), and what the numerics
+destroyed (`leak = m(t) − m(0) + ρ·outVolume`). Swing energy: kinetic plus potential energy above the rest state of the
+stout actually present, `E = KE + PE − PE(0) − g h0 (m − m0)`, because the rest state's potential energy grows by g h per
+kilogram added at the surface height h. Before this, a coarse no-slip swing lost about 2×10⁻⁵ kg (24.5 µJ at the fill
+height) and its swing energy went negative. The script also prints the time step and the damping ratio that backward
+Euler alone would give a pure oscillator, ωΔt/2 (derived with sympy). First local check (coarse mesh, slip walls,
+viscosity 10⁻⁹ m²/s, 4 s, 4 cores, 318 s): 3.3996 Hz; largest lean 9.62 mm; swing energy 291.4 → 185.3 µJ; solver's own
+damping ratio 0.00527 at Δt = 1.0 ms. The pure-oscillator Euler figure for that step is 0.0107, twice the measured value,
+so the time stepping alone does not explain the loss. The real wall friction is about 0.005, so the coarse mesh fails
+gate 1.2. Mass: 1.31×10⁻⁵ kg gone in 4 s, half of it out through the top (rising steadily during the swing, though the
+surface stays 20 mm below the rim: stout fraction smeared into the air and carried out), half destroyed. The stout
+fraction peaks at 1.0005 (the advection scheme overshoots).
+
 **What the page will offer (agreed 11 November 2026).** Every result is precomputed on GitHub and only played back. Roads
 come from a menu of about ten: single bumps of 5, 10, 15, 20 and 25 mm, a kerb, a pothole, and three periodic rows (for
 Poincaré sections). Each road is computed for 11 speeds (0.5–1.5 m/s), 13 fills (80–140 mm), the three controllers,
