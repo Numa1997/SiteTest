@@ -54,7 +54,9 @@ jobs:
       - name: Headless Chromium (Playwright 1.63.0, pinned)
         run: |
           npm install --prefix "$RUNNER_TEMP/pw" playwright@1.63.0
-          "$RUNNER_TEMP/pw/node_modules/.bin/playwright" install --with-deps chromium
+          # the browser only: the runner image has its libraries; --with-deps also fetched fonts from Ubuntu's mirror, and a failed
+          # name lookup there stopped the first run (11 November 2026)
+          "$RUNNER_TEMP/pw/node_modules/.bin/playwright" install chromium
       - name: Shake the whole glass at ${{ matrix.ratio }} f11 for 20 s
         run: |
           mkdir -p out
