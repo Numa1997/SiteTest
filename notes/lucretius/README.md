@@ -30,13 +30,11 @@ gesondert die Kraft ruht") is as printed online and unchecked against the print.
 192–214 missing.
 
 **Arabic word choices** (11 November 2026). The Arabic keeps one word for each of Lucretius' recurring terms, so that the argument can be
-followed across sentences as in the Latin. *nihilum*: «لا شيء» ("from nothing" «من لا شيء», "into nothing" «إلى لا شيء»), the form used in Arabic
-writing on Epicurus (an Arabic study of Epicurean ethics drawing on Yusuf Karam's history of Greek philosophy has «شيء من لا شيء، ولا يمكن
-أن ينحل العالم إلى لا شيء»), not «العدم», which in Arabic carries the theology of creation.
-*divinitus*, *divino numine*, *sine divom*: «بفعل الآلهة», «بمشيئة الآلهة», «بغير فعل الآلهة», plural gods as in the Latin, so that line
+followed across sentences as in the Latin. *nihilum*: «العدم» ("from nothing" «من العدم», "into nothing" «إلى العدم»), the established Arabic word for nothingness, at Numa's word
+(11 November 2026); a draft that day used «لا شيء» and was reverted. *divinitus*, *divino numine*, *sine divom*: «بفعل الآلهة», «بمشيئة الآلهة», «بغير فعل الآلهة», plural gods as in the Latin, so that line
 150 and line 155 answer each other. *mortales*: «الفانين» (echoed by «فانيًا» at 217). *naturae species ratioque*: «مرأى الطبيعة وناموسها»
 (*species* from *specio*, to look; *ratio* as the law of nature). *semina*: «بذور»; *certus*: «معلوم» throughout; *genitalia corpora*:
 «الأجسام الوالدة»; *corpora prima*: «الأجسام الأولى»; *primordia*, *principia*: «أوائل»; *luminis orae*: «شُطآن النور»; *inane*:
 «الخلاء», the word of classical Arabic natural philosophy; *causae*: «علل». Corrections of 11 November against the first draft: *igitur*
 (146), *quas ob res* (156), *erumpere* (162, not «تنفلق»), *secreta facultas* (173, a power of its own, not a hidden one), *alienis partibus
-anni* (181), *manibus* (209, to our hands), and the universal negation «لا يُخلَق شيءٌ من لا شيء» instead of «أنّ شيئًا لا…».
+anni* (181), *manibus* (209, to our hands), and the universal negation «لا يُخلَق شيءٌ من العدم» instead of «أنّ شيئًا لا…».

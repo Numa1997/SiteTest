@@ -1,9 +1,9 @@
 {
-  "about": "Arabic translation of the four sentences on the home page, Lucretius I 146-158. Made from the Latin (poem-146-224.json, field 'la') for this site, first on 10 November 2026, revised on 11 November 2026 with one fixed vocabulary (README, 'Arabic word choices'); read against Leonard (1916) and Diels (1924) for the sense. It is not a published translation and has not been reviewed by a second reader. The only published Arabic translation (Cairo 2018) is under copyright and was not used.",
+  "about": "Arabic translation of the four sentences on the home page, Lucretius I 146-158. Made from the Latin (poem-146-224.json, field 'la') for this site, first on 10 November 2026, revised on 11 November 2026 with one fixed vocabulary (nihilum: العدم) (README, 'Arabic word choices'); read against Leonard (1916) and Diels (1924) for the sense. It is not a published translation and has not been reviewed by a second reader. The only published Arabic translation (Cairo 2018) is under copyright and was not used.",
   "groups": [
     {"lines": [146, 148], "ar": ["فهذا الرعبُ في النفس، وهذه الظلماتُ، ليس يبدّدها شعاعُ الشمس ولا سهامُ النهار الساطعة، وإنّما يبدّدها لا محالةَ مرأى الطبيعة وناموسُها."]},
-    {"lines": [149, 150], "ar": ["ومبدأُ النظر فيها يأخذ فاتحتَه عندنا من هذا الأصل: أنّه لا يُولَد شيءٌ من لا شيء بفعل الآلهة أبدًا."]},
+    {"lines": [149, 150], "ar": ["ومبدأُ النظر فيها يأخذ فاتحتَه عندنا من هذا الأصل: أنّه لا يُولَد شيءٌ من العدم بفعل الآلهة أبدًا."]},
     {"lines": [151, 154], "ar": ["ذلك أنّ الخوف ليقبضُ على الفانين جميعًا، لأنّهم يرون في الأرض وفي السماء أمورًا كثيرةً تجري، ولا يقدرون بحالٍ أن يتبيّنوا عللَها، فيحسبون أنّها تجري بمشيئة الآلهة."]},
-    {"lines": [155, 158], "ar": ["ولذلك، متى تبيّنّا أنّه لا يُخلَق شيءٌ من لا شيء، أبصرنا عندئذٍ ما نطلبه على وجهٍ أصحّ: من أين يُخلَق كلُّ شيء، وكيف تجري الأمورُ كلُّها بغير فعل الآلهة."]}
+    {"lines": [155, 158], "ar": ["ولذلك، متى تبيّنّا أنّه لا يُخلَق شيءٌ من العدم، أبصرنا عندئذٍ ما نطلبه على وجهٍ أصحّ: من أين يُخلَق كلُّ شيء، وكيف تجري الأمورُ كلُّها بغير فعل الآلهة."]}
   ]
 }
