@@ -245,6 +245,14 @@ def check():
         if abs(d['LamS'][0] / ex_s - 1) > 1e-4 or abs(d['Bk'][0] / ex_b - 1) > 2e-3: fails.append(f'skin or bulk m={m}')
     k1 = jnp_zeros(1, 1)[0] / R
     print(f'  deep-water bulk 2 k^2 = {2 * k1 * k1:.3f} 1/m^2 (m = 1; the cylinder differs by its wall and depth)')
+    print('Sloping walls: truncated cones widening upward, surface radius 1 (Gavrilyuk et al., Eng. Comput. 25, 2008, Table II(A),')
+    print('q = 12; the full 45 degree cone has kappa11 = 1 exactly: phi = x z satisfies the wall and the surface condition):')
+    for th, r1, ref in ((30, 0.2, {1: 1.304377, 0: 3.385600, 2: 2.263150}), (30, 0.6, {1: 1.253978, 0: 3.381826, 2: 2.254976}), (45, 0.02, {1: 1.0})):
+        tt = np.tan(np.radians(th)); hc = (1 - r1) / tt; Rc = lambda z, r1=r1, tt=tt: r1 + np.clip(z, 0, None) * tt
+        for m, kref in ref.items():
+            kk = solve(Rc, hc, m, 48, 96, 2, nmodes=1)['kappa'][0]
+            print(f'  {th} deg, r1 {r1}, m = {m}: kappa {kk:.6f} (published {kref}, {(kk / kref - 1) * 100:+.4f} %)')
+            if abs(kk / kref - 1) > 2e-5: fails.append(f'cone {th} {r1} m={m}')
     d = solve(Rf, h, 1, 48, 96, 2, nmodes=1)
     print(f'  the page note\'s cylinder (h = 100 mm), water nu = 1e-6: zeta = {zeta(d, 1e-6)[0]:.5f} (floor included)')
     return fails
