@@ -1356,6 +1356,7 @@
   function Road(o) {
     o = o || {};
     this.kind = o.kind || 'bumps'; this.cls = o.cls || 'C'; this.seed = o.seed != null ? o.seed : 8608;
+    this.points = o.points || null;                          // kind 'drawn': [[x, z], ...] in metres, x increasing
     this.bumps = o.bumps || [{ x: 1.0, h: 0.02, L: 0.25 }];   // cosine bumps: centre, height, length (m)
     this.Rw = o.Rw || 0.05;
     this.xmin = o.xmin != null ? o.xmin : -1; this.xmax = o.xmax != null ? o.xmax : 8; this.h = 0.0005;
@@ -1379,6 +1380,28 @@
     } else if (this.kind === 'washboard') {
       const lam = 0.30, H = 0.020;
       for (let j = 0; j < n; j++) { const x = this.xmin + j * h; zt[j] = 0.5 * H * (1 - Math.cos(2 * Math.PI * x / lam)); }
+    } else if (this.kind === 'drawn') {
+      // the reader's road: a monotone cubic through the drawn points (Fritsch & Carlson 1980: smooth, no overshoot between
+      // points, so a drawn kerb gets no phantom dip), held level beyond the first and last point; no ramp, no shift
+      const P = this.points, m = P.length, d = new Float64Array(m), sl = new Float64Array(Math.max(1, m - 1));
+      for (let k = 0; k < m - 1; k++) sl[k] = (P[k + 1][1] - P[k][1]) / (P[k + 1][0] - P[k][0]);
+      for (let k = 0; k < m; k++) {
+        if (k === 0 || k === m - 1) { d[k] = 0; continue; }
+        const a = sl[k - 1], b = sl[k];
+        if (a * b <= 0) d[k] = 0;
+        else { const h0 = P[k][0] - P[k - 1][0], h1 = P[k + 1][0] - P[k][0], w1 = 2 * h1 + h0, w2 = h1 + 2 * h0; d[k] = (w1 + w2) / (w1 / a + w2 / b); }
+      }
+      let k = 0;
+      for (let j = 0; j < n; j++) {
+        const x = this.xmin + j * h;
+        if (x <= P[0][0]) { zt[j] = P[0][1]; continue; }
+        if (x >= P[m - 1][0]) { zt[j] = P[m - 1][1]; continue; }
+        while (k < m - 2 && x > P[k + 1][0]) k++;
+        const hk = P[k + 1][0] - P[k][0], t = (x - P[k][0]) / hk, t2 = t * t, t3 = t2 * t;
+        zt[j] = (2 * t3 - 3 * t2 + 1) * P[k][1] + (t3 - 2 * t2 + t) * hk * d[k] + (-2 * t3 + 3 * t2) * P[k + 1][1] + (t3 - t2) * hk * d[k + 1];
+      }
+      { let mm = 0, m2 = 0; for (let j = 0; j < n; j++) { mm += zt[j]; m2 += zt[j] * zt[j]; } mm /= n; this.rms = Math.sqrt(Math.max(0, m2 / n - mm * mm)); }
+      this.zt = zt; return;
     } else if (this.kind === 'setts') {
       const P = 0.170, S = 0.150, tops = [];
       for (let j = 0; j < n; j++) {

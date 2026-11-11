@@ -62,7 +62,7 @@
     this.N = Math.min(o.nModes || 4, o.data.levels[0].m1.f.length);
     this.NR = o.data.NR;
     this.Cd = o.Cd != null ? o.Cd : 0.62;                          // weir discharge coefficient (Francis; see ModalFluid)
-    this.dx = o.dx || 0.004; this.H = this.zRim + 0.03;
+    this.dx = o.dx || 0.004; this.H = this.zRim + 0.03; this.Rbox = this.R + 0.01;   // the 3D solver's box, as ModalFluid (the view clamps radii by it)
     this.h = this.h0; this.V = this.volumeTo(this.h0); this.V0 = this.V; this.mLiquid = this.rho * this.V;
     this.q = new Float64Array(this.N); this.qd = new Float64Array(this.N);
     this.e = []; for (let n = 0; n < this.N; n++) this.e.push(new Float64Array(this.NR));
@@ -387,6 +387,16 @@
     }
     this.spillNow = dV > 0 ? 1 : 0; this.spillV += dV; this.spillRate = dV / dt; this.spillPx = dPx; this.spillPz = 0;
     this.Pvisc = Pv / dt; this.Pfoam = Pf / dt; this.t += dt;
+    this.store();
+  };
+  // the page's store (scripts/dataset.js), written where computed: the same names as NMFluid's, and the friction's where declared
+  TulipNM.prototype.store = function () {
+    const D = this.ds; if (!D) return;
+    for (let m = 0; m < this.N; m++) if (D.has('q' + (m + 1))) { D.set('q' + (m + 1), this.q[m]); D.set('qd' + (m + 1), this.qd[m]); D.set('w' + (m + 1), this.w[m]); }
+    D.set('h_l', this.h); D.set('V_l', this.V); D.set('R_s', this.Rs); D.set('spill_rate', this.spillRate); D.set('Q_wall', this.wallLift());
+    if (D.has('s1')) { D.set('s1', this.s1); D.set('c0', this.c0); D.set('c2', this.c2); D.set('s2', this.s2); D.set('s1d', this.s1d); }
+    if (D.has('zeta1')) { D.set('zeta1', this.zeta[0]); D.set('zeta_wall1', this.zetaWall[0]); D.set('zeta_skin1', this.zetaSkin[0]); D.set('zeta_bulk1', this.zetaBulk[0]); }
+    if (D.has('alpha_f')) { D.set('alpha_f', this.alpha); D.set('P_visc', this.Pvisc); D.set('P_foam', this.Pfoam); D.set('breaks', this.breaks); }
   };
 
   // A fixed-step driver: the page hands it the real time of each frame; it advances the world in exact steps of `step`

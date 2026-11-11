@@ -46,7 +46,7 @@
         <div class="sim__head">
             <p class="sim__num">Fig. 12 · fluid dynamics · vehicle dynamics</p>
             <h1>A Pint of Guinness on a One-Wheel Cart<span class="dot">.</span></h1>
-            <p class="sim__lede">Carry a full pint over a doorstep and it is not the lift that spills it but the jolt forward and back. Here the stout is computed in three dimensions, particle by particle, in the real shape of the glass, while a motor drives the cart over the bumps. Push it, drag it, and switch its controller off.</p>
+            <p class="sim__lede">Carry a full pint over a doorstep and it is not the lift that spills it but the jolt forward and back. Here the stout sloshes as the real glass makes it: its shapes, frequencies and large swings worked out beforehand from the measured tulip and checked against full three-dimensional flow, so it runs in real time and alike on every device, while a motor drives the cart over the bumps. Push it, drag it, change the head and the fill, and switch its controller off.</p>
         </div>
 
         <div class="sim__grid">
@@ -97,6 +97,19 @@
                     <label class="switch"><span>Sensor noise (probes 1 mm, speed 0.2 mm/s)</span><input type="checkbox" id="noise"></label>
                     <p class="panel__note">Open loop: the motor gives the fixed torque that balances the drag at the set speed. Speed (PI): a PI loop sampled every 1 ms sets the motor current. Road preview: the PI loop plus the current that cancels the road’s push one current lag ahead. Slosh feedback: state feedback (LQR) on speed and on the stout’s swing as a Kalman filter estimates it from two level probes on the glass’s wall and the wheel’s speed. Motor + suspension: one design for both actuators (note §8.6): the slosh feedback with the heave in its model (a body accelerometer), and an active force up to 40 N in the suspension from the same kind of optimum, which softens the spring for the glass while holding the tyre on the road. The skyhook switch adds up to 40 N against the body’s vertical speed (with the first four controllers). Watch the spring’s gauge and its chart: with the motor alone the spring works as before; with the joint design it does a different job.</p>
                 </div>
+                <div class="panel__group" id="pint-group">
+                    <p class="panel__label">The pint</p>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>Stout in the glass</span><output id="fillH-out" for="fillH"></output></span>
+                        <input type="range" id="fillH" min="60" max="140" step="2.5" value="125">
+                    </label>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>Head of foam</span><output id="headH-out" for="headH"></output></span>
+                        <input type="range" id="headH" min="0" max="20" step="1" value="15">
+                    </label>
+                    <label class="switch"><span>Friction (wall, surface, foam)</span><input type="checkbox" id="fric" checked></label>
+                    <p class="panel__note">The stout is computed from the real glass: its sloshing shapes, frequencies and large-swing equations come from finite elements of the measured tulip, worked out on GitHub’s machines, for every fill. Friction: the thin layer the swing drags along the glass, the protein skin on the surface, the stout’s own viscosity (2.06 mPa s, measured), and the head, whose foam rubs on the glass (Viola et al. 2016, scaled to stout). Switch friction off to see the stout swing on undamped. A new fill height starts the run again.</p>
+                </div>
                 <div class="panel__group">
                     <p class="panel__label">Road and model</p>
                     <label class="ctl"><span class="ctl__row"><span>Road</span></span>
@@ -115,12 +128,12 @@
                         <input type="range" id="bumpH" min="0" max="25" step="1" value="10">
                     </label>
                     <div class="actions" role="group" aria-label="Model of the stout">
-                        <button type="button" class="btn btn--ghost" id="model-gpu" aria-pressed="false">3D · your graphics chip</button>
-                        <button type="button" class="btn btn--ghost" id="grid-4" aria-pressed="false">3D · processor, 4 mm</button>
-                        <button type="button" class="btn btn--ghost" id="grid-3" aria-pressed="false">3D · processor, 3 mm</button>
-                        <button type="button" class="btn btn--ghost" id="model-live" aria-pressed="false" style="white-space:normal">Reduced model, not a fluid simulation</button>
+                        <button type="button" class="btn btn--ghost" id="model-live" aria-pressed="false" style="white-space:normal">The real glass, computed (real time)</button>
+                        <button type="button" class="btn btn--ghost" id="model-gpu" aria-pressed="false">3D reference · your graphics chip</button>
+                        <button type="button" class="btn btn--ghost" id="grid-4" aria-pressed="false">3D reference · processor, 4 mm</button>
+                        <button type="button" class="btn btn--ghost" id="grid-3" aria-pressed="false">3D reference · processor, 3 mm</button>
                     </div>
-                    <p class="panel__note">A cosine bump 25 cm long every 2 m. The stout is always the same computation: the incompressible Navier–Stokes equations solved with 51 000 particles on a 4 mm grid. <b>Your graphics chip</b> (the default, where the browser offers WebGPU): the whole glass, so it can swirl, computed by thousands of threads of the graphics chip in your own computer or phone, integrated graphics included; no server, nothing to install. The figure shows the rate your chip reaches; real time where it keeps up. <b>Processor</b>: half the glass on your processor, in slow motion (about ×0.3 on 4 cores); the fallback where WebGPU is missing. Spilled stout falls to the road. The 4 mm grid swings 6 % slow (3.20 Hz against 3.42). <b>Reduced model</b>: the stout replaced by its sloshing modes; not a fluid simulation, kept for comparison and because the controller’s own model is of this kind. The slosh feedback always acts on the computed fluid: the probes read its surface.</p>
+                    <p class="panel__note">A cosine bump 25 cm long every 2 m. <b>The real glass, computed</b> (the default): the stout as the computed sloshing of the measured glass, in real time and with the same numbers on every device; nothing heavy runs on yours. <b>3D reference</b>: the full computation itself, for strong computers: the incompressible Navier–Stokes equations solved with 51 000 particles on a 4 mm grid. <b>Your graphics chip</b> (the default, where the browser offers WebGPU): the whole glass, so it can swirl, computed by thousands of threads of the graphics chip in your own computer or phone, integrated graphics included; no server, nothing to install. The figure shows the rate your chip reaches; real time where it keeps up. <b>Processor</b>: half the glass on your processor, in slow motion (about ×0.3 on 4 cores). Spilled stout falls to the road. The 4 mm grid swings 6 % slow (3.20 Hz against 3.41) and loses its swing about ten times too slowly (no wall layer, no foam). The slosh feedback always acts on the computed stout: the probes read its surface.</p>
                 </div>
                 <dl class="readouts">
                     <div><dt>Time</dt><dd id="r-t">—</dd></div>
@@ -885,6 +898,7 @@
     <script src="../scripts/guinness-glass.js"></script>
     <script src="../scripts/stout-nm.js"></script>
     <script src="../scripts/stout-cart.js"></script>
+    <script src="../scripts/stout-modal.js"></script>
     <script src="../scripts/stout-pool.js"></script>
     <script src="../scripts/stout-gpu.js"></script>
     <script src="../scripts/stout-gpu-view.js"></script>
@@ -896,22 +910,32 @@
         var pushF = Sim.slider('pushF', { format: function (v) { return v.toFixed(1) + ' N'; } });
         // the stout's model: the 3D solver on the graphics chip by default (?model=gpu), on the processor (?grid=4, ?grid=3), or the
         // reduced modal model (?model=live). Where the browser has no WebGPU the default falls back to the processor at 4 mm.
-        var MODAL = /[?&]model=live\b/.test(location.search);
-        var WANT_GPU = !MODAL && !/[?&]grid=/.test(location.search) && !!navigator.gpu;
-        var NO_GPU_NOTE = !MODAL && !/[?&]grid=/.test(location.search) && !navigator.gpu;
+        // the default: the real glass, computed (TulipNM in scripts/stout-modal.js, data from public/data/fig12/); the 3D solvers as
+        // references: on the graphics chip (?model=gpu), on the processor (?grid=4, ?grid=3)
+        var MODAL = !/[?&](model=gpu|grid=)/.test(location.search);
+        var WANT_GPU = /[?&]model=gpu\b/.test(location.search) && !!navigator.gpu;
+        var NO_GPU_NOTE = /[?&]model=gpu\b/.test(location.search) && !navigator.gpu;
+        var DATA = null, STEPPER = null;
         var GPU = false, GPUDEV = null;   // set once the device answers (build)
         var GRID = /[?&]grid=3\b/.test(location.search) ? 0.003 : 0.004;
         // worker threads share the solver's loops when the browser allows shared memory (identical numbers; ?threads=1 turns them off)
         var NCPU = navigator.hardwareConcurrency || 1, THREADS = /[?&]threads=1\b/.test(location.search) ? 1 : Math.min(8, NCPU);
         var POOL = null;
         try { if (!MODAL && !WANT_GPU && window.crossOriginIsolated && typeof SharedArrayBuffer === 'function' && window.StoutPool && THREADS > 1) POOL = new StoutPool(THREADS - 1, '../scripts/stout-worker.js'); } catch (e) { POOL = null; }
-        if (MODAL) document.getElementById('cap-model').innerHTML = '<b>Fig. 12</b> · REDUCED MODEL, not a fluid simulation: the stout as its nonlinear sloshing modes (Narimanov–Moiseev) · cart by Newton’s laws · coupled both ways · probes, Kalman filter';
+        if (MODAL) document.getElementById('cap-model').innerHTML = '<b>Fig. 12</b> · the real glass, computed: its sloshing from finite elements of the measured tulip, large swings and swirl (Narimanov–Moiseev), friction of wall, skin and head · cart by Newton’s laws · coupled both ways · probes, Kalman filter';
         function pressModel(id) { ['model-gpu', 'grid-4', 'grid-3', 'model-live'].forEach(function (b) { var el = document.getElementById(b); el.classList.toggle('btn--ghost', b !== id); el.setAttribute('aria-pressed', String(b === id)); }); }
         pressModel(MODAL ? 'model-live' : WANT_GPU ? 'model-gpu' : GRID === 0.003 ? 'grid-3' : 'grid-4');
-        document.getElementById('model-gpu').addEventListener('click', function () { if (!GPU) location.search = ''; });
+        document.getElementById('model-gpu').addEventListener('click', function () { if (!GPU) location.search = '?model=gpu'; });
         document.getElementById('grid-3').addEventListener('click', function () { if (GPU || MODAL || GRID !== 0.003) location.search = '?grid=3'; });
         document.getElementById('grid-4').addEventListener('click', function () { if (GPU || MODAL || GRID !== 0.004 || !/grid=/.test(location.search)) location.search = '?grid=4'; });
-        document.getElementById('model-live').addEventListener('click', function () { if (!MODAL) location.search = '?model=live'; });
+        document.getElementById('model-live').addEventListener('click', function () { if (!MODAL) location.search = ''; });
+        // the pint: fill (a new run), head and friction (at once)
+        var fillH = Sim.slider('fillH', { format: function (v) { return v.toFixed(1) + ' mm'; } });
+        var headH = Sim.slider('headH', { format: function (v) { return v.toFixed(0) + ' mm'; }, onInput: function (v) { if (view) view.headH = v / 1000; if (world && world.fluid.foam) { world.fluid.foam.h = v / 1000; world.fluid.modes(); if (ds && ds.has('head_f')) ds.set('head_f', v / 1000); } } });
+        var fric = document.getElementById('fric');
+        fric.addEventListener('change', function () { if (world && world.fluid.foam) { world.fluid.friction = fric.checked; world.fluid.modes(); if (ds && ds.has('fric_on')) ds.set('fric_on', fric.checked ? 1 : 0); } });
+        document.getElementById('fillH').addEventListener('change', function () { if (!building && !gpuBusy) build(); });
+        if (!MODAL) ['fillH', 'headH', 'fric'].forEach(function (id) { document.getElementById(id).disabled = true; });
         var ctrlMode = 'speed', susp = document.getElementById('susp');
         function setCtrl(m) {
             ctrlMode = m; world.cart.ctrl = m; if (m === 'speed') world.cart.xi = 0;
@@ -943,6 +967,10 @@
         async function build() {
             building = true;
             var fo = { dx: GRID, profile: GUINNESS_GLASS, h0: 0.125, H: (GUINNESS_GLASS.R.length - 1) * GUINNESS_GLASS.dz + 0.03, shared: !!POOL, modal: MODAL, nm: MODAL, nmCoeffs: window.STOUT_NM }, inst = null;
+            if (MODAL) {
+                if (!DATA) DATA = await Promise.all(['modes', 'nm'].map(function (n) { return fetch('../data/fig12/' + n + '.json').then(function (r) { if (!r.ok) throw new Error(n + '.json: ' + r.status); return r.json(); }); }));
+                inst = new StoutModal.TulipNM({ data: DATA[0], nmData: DATA[1], profile: GUINNESS_GLASS, h0: fillH.value / 1000, nModes: 3, skin: 1, foam: { h: headH.value / 1000 }, friction: fric.checked, dx: 0.004 });
+            }
             if (WANT_GPU) {
                 try { if (!GPUDEV) GPUDEV = await StoutGpu.GpuFluid.device(); } catch (e) { GPUDEV = null; }
                 if (GPUDEV) { inst = new StoutGpu.GpuFluid({ dx: 0.004, profile: GUINNESS_GLASS, h0: 0.125, H: fo.H }); await inst.init(GPUDEV); GPU = true; }
@@ -953,9 +981,11 @@
                 fluid: fo,
                 road: roadOpts(0.04),
                 cart: { x0: 0.5, Rw: 0.04, Ls: 0.135, v0: v0.value, ctrl: ctrlMode, susp: susp.checked },
-                dtMax: 1 / 200
+                dtMax: MODAL ? 0.001 : 1 / 200
             });
+            if (MODAL) STEPPER = new StoutModal.FixedStepper(world, { step: 0.001, maxSteps: 100 });
             view = new StoutView(cv, world, { viewHeight: 0.40, groundY: 0.86 }); view.charts = true;
+            if (MODAL) view.headH = headH.value / 1000;   // the head drawn as thick as the one computed
             if (GPU) view.gpuView = new StoutGpuView(world.fluid, cv);
             if (!ds) declare();
             storeConstants();
@@ -1039,7 +1069,7 @@
             $('r-yq').textContent = (2 * c.probe.y * 1000).toFixed(1) + ' mm';
             $('r-qh').textContent = (2 * c.obs.x[1] * 1000).toFixed(1) + ' mm';
             view.slowText = !MODAL && simPerReal > 0 && simPerReal < 0.95 ? 'SLOW MOTION ×' + simPerReal.toFixed(simPerReal < 0.1 ? 3 : 2) : '';
-            $('r-solver').textContent = f.gpu ? (f.np + ' particles · ' + f.nx + '×' + f.ny + '×' + f.nz + ' cells, whole glass · CG ' + f.cgIters + ' it. · ' + (world.batch || 0) + ' steps a frame · ' + (gpuMsPerStep ? gpuMsPerStep.toFixed(1) + ' ms a step' : '') + ' · graphics chip: ' + (GPUDEV.gpuInfo.vendor || '?') + ' ' + (GPUDEV.gpuInfo.architecture || '')) : f.modal ? ('live model · nonlinear, 5 + 2 modes · swirl ' + (f.s1 != null ? (f.s1 * 1000).toFixed(1) + ' mm' : '—') + ' · f₁ = ' + (f.w[0] / 2 / Math.PI).toFixed(2) + ' Hz · fill ' + (f.h * 1000).toFixed(1) + ' mm') : f.np + ' particles · ' + f.nx + '×' + f.ny + '×' + f.nz + ' cells · CG ' + f.cgIters + ' it. · ' + (f.pool ? f.pool.P : 1) + (f.pool && f.pool.P > 1 ? ' threads' : ' thread');
+            $('r-solver').textContent = f.gpu ? (f.np + ' particles · ' + f.nx + '×' + f.ny + '×' + f.nz + ' cells, whole glass · CG ' + f.cgIters + ' it. · ' + (world.batch || 0) + ' steps a frame · ' + (gpuMsPerStep ? gpuMsPerStep.toFixed(1) + ' ms a step' : '') + ' · graphics chip: ' + (GPUDEV.gpuInfo.vendor || '?') + ' ' + (GPUDEV.gpuInfo.architecture || '')) : f.modal ? ('the real glass · 5 + 2 modes · swirl ' + (f.s1 != null ? (f.s1 * 1000).toFixed(1) + ' mm' : '—') + ' · f₁ = ' + (f.w[0] / 2 / Math.PI).toFixed(3) + ' Hz · fill ' + (f.h * 1000).toFixed(1) + ' mm · damping ' + (f.zeta ? f.zeta[0].toFixed(4) : '—') + (f.alpha > 0 ? ' + foam α ' + f.alpha.toFixed(3) : '') + (f.friction === false ? ' (friction off)' : '') + (STEPPER && STEPPER.dropped > 0 ? ' · ' + STEPPER.dropped.toFixed(1) + ' s skipped while the tab was busy' : '')) : f.np + ' particles · ' + f.nx + '×' + f.ny + '×' + f.nz + ' cells · CG ' + f.cgIters + ' it. · ' + (f.pool ? f.pool.P : 1) + (f.pool && f.pool.P > 1 ? ' threads' : ' thread');
             $('cap-rate').textContent = simPerReal > 0 ? (simPerReal >= 0.95 ? 'real time (' + simPerReal.toFixed(2) + ' s simulated per s, measured on your ' + (GPU ? 'graphics chip' : 'computer') + ')' : 'slow motion ×' + simPerReal.toFixed(simPerReal < 0.1 ? 3 : 2) + ': ' + simPerReal.toFixed(3) + ' s simulated per s, measured on your ' + (GPU ? 'graphics chip' : 'computer')) : '—';
         }
 
@@ -1644,7 +1674,7 @@
                 }, function (e) { gpuBusy = false; console.error('GPU step: ' + e.message); });
                 return;
             }
-            if (MODAL) world.advance(Math.min(dt, 0.05));          // the reduced model keeps up with the clock: real time
+            if (MODAL) STEPPER.advance(dt);                        // exact 1 ms steps, as many as the real time asks: the same history on every device
             else do { world.advance(world.dtMax); } while (performance.now() - t0 < BUDGET_MS);
             afterAdvance();
         }
