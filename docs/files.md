@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-1657 files, 77.8 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+1673 files, 77.8 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -45,7 +45,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Working notes of project 07, the electron beam](#working-notes-of-project-07-the-electron-beam) | 52 |
 | [Working notes of the Rotor Pendula study](#working-notes-of-the-rotor-pendula-study) | 86 |
 | [Working notes of the Droplet Collection study](#working-notes-of-the-droplet-collection-study) | 121 |
-| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 553 |
+| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 569 |
 
 ## Repository root
 
@@ -950,7 +950,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | File | Size | What it is | Explained in |
 |---|---|---|---|
 | [`tools/fig12/of/make_case.py`](../tools/fig12/of/make_case.py) | 4.8 kB | Fig. 12, OpenFOAM: builds a case of the stout in the tulip (mesh, fill, forcing, physical parameters) from the template. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
-| [`tools/fig12/of/run.sh`](../tools/fig12/of/run.sh) | 857 B | Fig. 12, OpenFOAM: runs one case (serial or split over processes) and records its wall time. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`tools/fig12/of/run.sh`](../tools/fig12/of/run.sh) | 877 B | Fig. 12, OpenFOAM: runs one case (serial or split over processes) and records its wall time. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/of/tulip_mesh.py`](../tools/fig12/of/tulip_mesh.py) | 8.3 kB | Fig. 12, OpenFOAM: the wall-fitted O-grid mesh of the Guinness tulip (boundary layers at the glass and the floor resolved; air and a spill ring above the rim), three levels for the convergence proof. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/profile.cjs`](../tools/fig12/profile.cjs) | 1.5 kB | Fig. 12: times one fluid step of the stout solver by phase (level set, transfers, pressure, advection). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/requirements.txt`](../tools/fig12/requirements.txt) | 178 B | Fig. 12: the pinned Python packages of the fitting tools, for GitHub’s runners. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
@@ -1767,7 +1767,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/fig12/check-8-6.md`](../notes/fig12/check-8-6.md) | 12.8 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/check.md`](../notes/fig12/check.md) | 24.2 kB | Fig. 12: the derivation checker's table of equations and numbers. | [notes.md](notes.md) |
 
-<details><summary>21 files: Fig. 12: a measuring script of the review, or its saved output.</summary>
+<details><summary>37 files: Fig. 12: a measuring script of the review, or its saved output.</summary>
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
@@ -1782,6 +1782,22 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/fig12/nopush.cjs`](../notes/fig12/nopush.cjs) | 2.0 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/note-shots.cjs`](../notes/fig12/note-shots.cjs) | 2.2 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/of-request.json`](../notes/fig12/of-request.json) | 1.6 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/of-runs/rest-coarse/case.json`](../notes/fig12/of-runs/rest-coarse/case.json) | 198 B | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/of-runs/rest-coarse/log.foamRun.tail.gz`](../notes/fig12/of-runs/rest-coarse/log.foamRun.tail.gz) | 583 B | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/of-runs/rest-medium/case.json`](../notes/fig12/of-runs/rest-medium/case.json) | 198 B | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/of-runs/rest-medium/log.foamRun.tail.gz`](../notes/fig12/of-runs/rest-medium/log.foamRun.tail.gz) | 583 B | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/of-runs/swing-noslip-coarse/case.json`](../notes/fig12/of-runs/swing-noslip-coarse/case.json) | 204 B | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/of-runs/swing-noslip-coarse/log.foamRun.tail.gz`](../notes/fig12/of-runs/swing-noslip-coarse/log.foamRun.tail.gz) | 583 B | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/of-runs/swing-noslip-fine/case.json`](../notes/fig12/of-runs/swing-noslip-fine/case.json) | 200 B | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/of-runs/swing-noslip-fine/log.foamRun.tail.gz`](../notes/fig12/of-runs/swing-noslip-fine/log.foamRun.tail.gz) | 583 B | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/of-runs/swing-noslip-medium/case.json`](../notes/fig12/of-runs/swing-noslip-medium/case.json) | 204 B | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/of-runs/swing-noslip-medium/log.foamRun.tail.gz`](../notes/fig12/of-runs/swing-noslip-medium/log.foamRun.tail.gz) | 583 B | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/of-runs/swing-slip-coarse/case.json`](../notes/fig12/of-runs/swing-slip-coarse/case.json) | 197 B | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/of-runs/swing-slip-coarse/log.foamRun.tail.gz`](../notes/fig12/of-runs/swing-slip-coarse/log.foamRun.tail.gz) | 583 B | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/of-runs/swing-slip-fine/case.json`](../notes/fig12/of-runs/swing-slip-fine/case.json) | 193 B | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/of-runs/swing-slip-fine/log.foamRun.tail.gz`](../notes/fig12/of-runs/swing-slip-fine/log.foamRun.tail.gz) | 583 B | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/of-runs/swing-slip-medium/case.json`](../notes/fig12/of-runs/swing-slip-medium/case.json) | 197 B | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/of-runs/swing-slip-medium/log.foamRun.tail.gz`](../notes/fig12/of-runs/swing-slip-medium/log.foamRun.tail.gz) | 583 B | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/panel-test.cjs`](../notes/fig12/panel-test.cjs) | 3.5 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/panel-test2.cjs`](../notes/fig12/panel-test2.cjs) | 6.4 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/phase1.md`](../notes/fig12/phase1.md) | 11.9 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |

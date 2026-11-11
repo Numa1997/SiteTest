@@ -10,7 +10,7 @@ start=$(date +%s.%N)
 if [ "$np" -gt 1 ]; then
   printf 'FoamFile { format ascii; class dictionary; object decomposeParDict; }\nnumberOfSubdomains %s;\nmethod scotch;\n' "$np" > system/decomposeParDict
   decomposePar -force > log.decomposePar 2>&1
-  mpirun -np "$np" foamRun -parallel > log.foamRun 2>&1
+  mpirun --use-hwthread-cpus -np "$np" foamRun -parallel > log.foamRun 2>&1
   reconstructPar > log.reconstructPar 2>&1 || true
 else
   foamRun > log.foamRun 2>&1
