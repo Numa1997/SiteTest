@@ -63,6 +63,10 @@ when V hands that chapter over. V reads this file before editing every chapter. 
   lens strength $k^2$ and ω, focal length, objective, working distance, magnification, $C_s$, $C_c$, Scherzer's theorem, Airy disc.
 - **Promises.** ch05 chooses the beam angle to balance diffraction against the aberrations.
 - **Hand-over.** "What chapter 5 receives": $C_s$, $C_c$ at the wafer; $M$ reported but not handed on.
+- **Voice pass.** Opens with "The beam that leaves the gun of chapter 3 must now be focused into a spot"; the radial field
+  $B_r$ is told apart from the reduced brightness at first use (doubt 2 answered in prose, maths unchanged); the solver's
+  integrator is "the RK4 method of chapter 1"; the comma splice in Example 4.1 fixed; the aberration measurement told step by
+  step. Ex. 4.3 still ends "chapter 5 shows how the beam angle is then chosen to balance diffraction against these blurs".
 
 ## ch05 · The spot
 - **Opening picture.** Sunlight focused by a magnifying glass makes a dot, never a point.
@@ -102,7 +106,7 @@ when V hands that chapter over. V reads this file before editing every chapter. 
 1. ch06 §6.7: "The range grows almost as the square of the energy." The Kanaya–Okayama law quoted just above has the exponent 1.67,
    and ch09 says "roughly as its five-thirds power". AUDIT §8 records this as fixed, but the sentence is still in ch06. Coordinator to decide.
 2. ch04 §4.1–4.2 uses $B_r$ for the radial field component, the same symbol as the reduced brightness of ch02, ch03, ch05 and ch08.
-   Inside maths; not changed.
+   Inside maths; not changed. Since the ch04 voice pass the prose says so at first use.
 3. ch02 §2.8 defines $B_r=B/V$ ("non-relativistically"), ch03 §3.4 $B_r=B/V^*$. Consistent (ch02 says chapter 3 shows it), noted for
    the guard.
 4. ch07 calls the contrast-to-noise ratio "SNR". Name inside text and maths; left.
