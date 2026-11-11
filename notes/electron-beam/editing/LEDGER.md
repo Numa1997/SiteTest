@@ -104,6 +104,8 @@ when V hands that chapter over. V reads this file before editing every chapter. 
 - **Opening picture.** A long train of gears; a slip at the first gear passed on to the last.
 - **Terms introduced.** normalised sensitivity, tolerance Monte Carlo, measurement window (process window of lithography as picture).
 - **Hand-over.** Checks and limits; no explicit bridge to ch09.
+- **Voice pass.** The chain of the opening told one link per sentence; the landing-voltage, current-scaling, sensitivity-method
+  and window-legend sentences split. Terms of earlier chapters used with pointers, none redefined.
 
 ## ch09 · The column in one view
 - Prose summary with pointers; no new terms. Last paragraph: the misread Airy coefficient and "checking against the physics".
