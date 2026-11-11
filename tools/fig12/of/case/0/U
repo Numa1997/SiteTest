@@ -3,7 +3,7 @@ dimensions      [0 1 -1 0 0 0 0];
 internalField   uniform (0 0 0);
 boundaryField
 {
-    glass       { type noSlip; }
+    glass       { type GLASSU; }
     spill       { type pressureInletOutletVelocity; value uniform (0 0 0); }
     atmosphere  { type pressureInletOutletVelocity; value uniform (0 0 0); }
 }

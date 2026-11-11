@@ -1,5 +1,6 @@
 FoamFile { format ascii; class dictionary; object fvModels; }
-// the glass's frame: its velocity along the road V(t) (a table written by make_case.py); OpenFOAM adds -rho alpha dV/dt
+// the glass's frame: the table holds minus the glass's velocity along the road, -V(t) (make_case.py); OpenFOAM adds
+// rho alpha dW/dt for a table W, so the stout feels -rho alpha a_glass, the fictitious force of the glass's acceleration
 glassFrame
 {
     type            acceleration;

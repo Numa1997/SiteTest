@@ -4,6 +4,9 @@ internalField   uniform 0;
 boundaryField
 {
     glass       { type fixedFluxPressure; }
-    spill       { type prghTotalPressure; p0 uniform 0; }
-    atmosphere  { type prghTotalPressure; p0 uniform 0; }
+    // open air: the pressure above its hydrostatic part (p_rgh) is held at 0, so still air stays still. Fixing the static
+    // pressure instead made the spill ring (at the rim) and the top (25 mm higher) disagree by rho_air g dz = 0.29 Pa,
+    // which drove a draft of about 0.7 m/s past the rim (measured) and set the time step
+    spill       { type totalPressure; p0 uniform 0; }
+    atmosphere  { type totalPressure; p0 uniform 0; }
 }

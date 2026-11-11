@@ -32,15 +32,19 @@ stoutMonitor
         const vectorField& C = mesh().C();
         scalar m = 0, ke = 0, pe = 0; vector P = Zero;
         forAll(a, i) { const scalar dm = rho*a[i]*V[i]; m += dm; ke += 0.5*dm*magSqr(U[i]); pe += dm*g*C[i].z(); P += dm*U[i]; }
+        // in parallel each processor holds a piece of the mesh: sum the pieces
+        reduce(m, sumOp<scalar>()); reduce(ke, sumOp<scalar>()); reduce(pe, sumOp<scalar>()); reduce(P, sumOp<vector>());
         // outflow of stout through the open patches during this step
+        scalar outStep = 0;
         forAll(mesh().boundary(), pi)
         {
             const word& n = mesh().boundary()[pi].name();
             if (n != "spill" && n != "atmosphere") continue;
             const fvsPatchScalarField& pf = phi.boundaryField()[pi];
             const fvPatchScalarField& ap = a.boundaryField()[pi];
-            forAll(pf, f) if (pf[f] > 0) outV_ += pf[f]*ap[f]*dt;
+            forAll(pf, f) if (pf[f] > 0) outStep += pf[f]*ap[f]*dt;
         }
+        reduce(outStep, sumOp<scalar>()); outV_ += outStep;
         // surface height at four points 1 mm inside the wall at the fill height (front x+, back x-, left y+, right y-):
         // the stout fraction summed along a vertical line in steps of 0.5 mm (cells found by the mesh's own search)
         const meshSearch& search = meshSearch::New(mesh());
@@ -49,19 +53,22 @@ stoutMonitor
         scalar h[4] = {0, 0, 0, 0};
         // below the point where the line enters the glass (the base is narrower) the line is in the wall: the height is that
         // entry height plus the stout column above it
+        // in parallel a point lies on exactly one processor: the column sums add, the entry height is the lowest found
         for (label k = 0; k < 4; k++)
         {
-            scalar zIn = -1;
+            scalar zIn = great;
             for (scalar z = 0.5*dz; z < zTop; z += dz)
             {
                 const label c = search.findCell(point(pts[k].x(), pts[k].y(), z));
-                if (c >= 0) { if (zIn < 0) zIn = z - 0.5*dz; h[k] += a[c]*dz; }
+                if (c >= 0) { if (zIn == great) zIn = z - 0.5*dz; h[k] += a[c]*dz; }
             }
-            h[k] += max(zIn, scalar(0));
+            reduce(h[k], sumOp<scalar>()); reduce(zIn, minOp<scalar>());
+            h[k] += (zIn < great ? zIn : 0);
         }
+        if (!Pstream::master()) return true;
         if (!os_.valid())
         {
-            os_.reset(new OFstream(mesh().time().path()/"stoutMonitor.dat"));
+            os_.reset(new OFstream(mesh().time().globalPath()/"stoutMonitor.dat"));
             os_() << "# t[s] mass[kg] KE[J] PE[J] Px Py Pz[kg m/s] outVolume[m^3] h_front h_back h_left h_right[m]" << endl;
         }
         os_() << mesh().time().value() << ' ' << m << ' ' << ke << ' ' << pe << ' ' << P.x() << ' ' << P.y() << ' ' << P.z() << ' ' << outV_

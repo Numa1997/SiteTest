@@ -1,0 +1,87 @@
+# Fig. 12: OpenFOAM runs of the stout in the Guinness tulip on GitHub's free runners (public repository: 4 cores, 16 GB,
+# 6 h per job). Started by hand only (workflow_dispatch), never by a push. Input: cases, a JSON list of
+#   {"name": "...", "level": "coarse|medium|fine", "forcing": "rest|tilt", "fill": 0.125, "end": 8, "write": 1,
+#    "wall": "noslip|slip", "sigma": 0, "nu": 2.05e-6, "rho": 1000, "maxco": 0.5}
+# Each case runs as one job on 4 cores (tools/fig12/of/make_case.py, tools/fig12/of/run.sh). The last job commits the
+# monitors and logs (not the flow fields) to notes/fig12/of-runs/<name>/ on the branch the workflow ran from. A push made
+# with GITHUB_TOKEN starts no workflow, so nothing loops. A case already stored there is skipped (rerun = only the missing).
+name: Fig. 12 OpenFOAM runs
+on:
+  workflow_dispatch:
+    inputs:
+      cases:
+        description: 'JSON list of cases (see the file header)'
+        required: true
+permissions:
+  contents: write
+concurrency:
+  group: fig12-openfoam-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  run:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 355
+    strategy:
+      fail-fast: false
+      max-parallel: 20
+      matrix:
+        case: ${{ fromJSON(github.event.inputs.cases) }}
+    steps:
+      - uses: actions/checkout@v6
+      - name: Skip if stored
+        id: stored
+        run: |
+          if [ -f "notes/fig12/of-runs/${{ matrix.case.name }}/stoutMonitor.dat.gz" ]; then echo "skip=true" >> "$GITHUB_OUTPUT"; else echo "skip=false" >> "$GITHUB_OUTPUT"; fi
+      - name: OpenFOAM 13 (dl.openfoam.org)
+        if: steps.stored.outputs.skip == 'false'
+        run: |
+          sudo sh -c "wget -q -O - https://dl.openfoam.org/gpg.key > /etc/apt/trusted.gpg.d/openfoam.asc"
+          echo "deb [arch=amd64] http://dl.openfoam.org/ubuntu noble main" | sudo tee /etc/apt/sources.list.d/openfoam.list
+          sudo apt-get update -qq
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq openfoam13 bc > /dev/null
+      - name: Build and run the case
+        if: steps.stored.outputs.skip == 'false'
+        env:
+          CASE_JSON: ${{ toJSON(matrix.case) }}
+        run: |
+          arg() { python3 -c "import json,os; v=json.loads(os.environ['CASE_JSON']).get('$1'); print('' if v is None else v)"; }
+          mkdir -p "$RUNNER_TEMP/case"
+          python3 tools/fig12/of/make_case.py "$RUNNER_TEMP/case/run" --level "$(arg level)" --forcing "$(arg forcing)" \
+            --fill "$(arg fill)" --end "$(arg end)" --write "$(arg write)" --wall "$(arg wall)" --sigma "$(arg sigma)" --nu "$(arg nu)" \
+            --rho "$(arg rho)" --maxco "$(arg maxco)"
+          echo "cores: $(nproc)"
+          bash tools/fig12/of/run.sh "$RUNNER_TEMP/case/run" 4 || echo "run ended with an error"
+          out="out/${{ matrix.case.name }}"; mkdir -p "$out"
+          for f in "$RUNNER_TEMP/case/run/stoutMonitor.dat" "$RUNNER_TEMP"/case/run/processor0/stoutMonitor.dat; do
+            if [ -f "$f" ]; then cp "$f" "$out/stoutMonitor.dat"; break; fi
+          done
+          if [ -f "$out/stoutMonitor.dat" ]; then gzip -9 "$out/stoutMonitor.dat"; fi
+          cp "$RUNNER_TEMP/case/run/walltime" "$out/" 2>/dev/null || true
+          tail -c 200000 "$RUNNER_TEMP/case/run/log.foamRun" | gzip -9 > "$out/log.foamRun.tail.gz" || true
+          echo "$CASE_JSON" > "$out/case.json"
+          ls -la "$out"
+      - uses: actions/upload-artifact@v6
+        if: steps.stored.outputs.skip == 'false'
+        with:
+          name: fig12-of-${{ matrix.case.name }}
+          path: out/
+  store:
+    needs: run
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/download-artifact@v6
+        with:
+          pattern: fig12-of-*
+          path: notes/fig12/of-runs
+          merge-multiple: true
+      - name: Commit the monitors
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add notes/fig12/of-runs
+          git diff --cached --quiet && echo "nothing new" && exit 0
+          git commit -m "Fig. 12 OpenFOAM runs from workflow run ${{ github.run_id }}"
+          git pull --rebase origin "${GITHUB_REF_NAME}" && git push

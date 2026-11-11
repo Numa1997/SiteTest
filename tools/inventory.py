@@ -266,7 +266,7 @@ RULES = [
     (r'tools/fig12/spill-3d\.cjs', 'Fig. 12: the 3D solver pushed hard enough to spill: lean, highest wall point and spilled mass over time.', 'docs/simulations/fig12-beer-slosh.md'),
     (r'tools/fig12/gpu-shake\.cjs', 'Fig. 12: the whole glass (GPU solver, headless Chromium) shaken near resonance: does the swing turn into a swirl?', 'docs/simulations/fig12-beer-slosh.md'),
     (r'tools/fig12/tilt-exact\.cjs', 'Fig. 12: how well the 3D solver holds a steady tilt, against the exact plane 2 R(h) a/g (any glass).', 'docs/simulations/fig12-beer-slosh.md'),
-    (r'\.github/workflows/fig12-3d\.yml', 'Fig. 12 pipeline, stage C: the full 3D runs on GitHub\u2019s runners (spill, softening, the whole glass shaken), gathered into notes/fig12/runs/3d/.', 'docs/simulations/fig12-beer-slosh.md'),
+    (r'\.github/workflows/fig12-openfoam\.yml', 'Fig. 12: OpenFOAM runs on GitHub\u2019s free runners, started by hand only: one case per 4-core job, the monitors committed to notes/fig12/of-runs/.', 'docs/simulations/fig12-beer-slosh.md'),
     (r'public/scripts/stout-view\.js', 'Fig. 12: draws the cart, the road and the pint on a canvas from the solver\u2019s state; the head of the stout is drawn, not computed.', 'docs/simulations/fig12-beer-slosh.md'),
     (r'tools/fig12/check\.cjs', 'Fig. 12: offline checks of the stout solver (rest, free sloshing frequency, tilt under a steady push); prints measured numbers.', 'docs/simulations/fig12-beer-slosh.md'),
     (r'notes/fig12/clip\.html', 'Fig. 12: page that renders the clip of the pint on the cart frame by frame, for clip.cjs.', 'docs/simulations/fig12-beer-slosh.md'),
