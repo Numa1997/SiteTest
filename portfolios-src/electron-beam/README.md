@@ -14,7 +14,8 @@ and the definition of done are in [PLAN.md](PLAN.md). The scaffold (this README,
 | `ref/core.py`, `ref/chNN.py` | The Python reference; `core.py` mirrors `core.js` value for value and holds the number formatter the build uses. |
 | `text/chNN.py`, `text/guide.py` | The words: a dict `CH` per chapter, a dict `GUIDE` for the reading guide. Missing files render "in preparation". |
 | `build.py`, `eb_lib.py`, `template.html`, `app.js`, `bridge.cjs`, `guide_default.py` | The build and the page. `bridge.cjs` runs the page's JavaScript in Node and typesets with the site's KaTeX. |
-| `checks/` | `check_parity.py`, `check_numbers.py`, `check_page.cjs`, `selftest.py`, `fixtures/`. |
+| `figkit.py` | Layout kit of the SVG figures: label widths in the house fonts, `Layout.place()` (a label at the nearest spot nothing drawn touches, with a leader if it moved), `dual()` (a wide and a narrow drawing of one figure, switched at 700 px). |
+| `checks/` | `check_parity.py`, `check_numbers.py`, `check_page.cjs`, `check_figures.cjs` (labels in every figure and simulation against lines, labels and edges; allow-list `data-nocollide` / `ctx.__nocollide`), `selftest.py`, `fixtures/`. |
 | `derive/`, `sources/`, `data/` | Chapter sessions' SymPy derivations, the librarian's bibliography, digitised published data. |
 | `out/` | Stand-alone build (git-ignored). |
 
@@ -27,6 +28,7 @@ python3 portfolios-src/electron-beam/checks/selftest.py  # the build accepts a g
 python3 portfolios-src/electron-beam/checks/check_parity.py   # physics/chNN.js against ref/chNN.py, constants, number format
 python3 portfolios-src/electron-beam/checks/check_numbers.py  # every quoted number computed; no typed measurement in the prose
 node    portfolios-src/electron-beam/checks/check_page.cjs    # Chromium at 360, 390, 1024, 1440 px; shots in notes/electron-beam/shots/
+node    portfolios-src/electron-beam/checks/check_figures.cjs --chapters ch00,ch01,ch02   # labels against lines, labels, edges; --quick, --shots DIR
 python3 tools/inventory.py --check                            # every file described
 ```
 

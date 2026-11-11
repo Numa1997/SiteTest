@@ -571,6 +571,14 @@ commands and the checks are in [`portfolios-src/electron-beam/README.md`](../por
   (every quoted number computed, browser string equal to the Python string; chapter 2 is skipped there and its typed numerals are listed by
   `checks/list_legacy_numerals.py`), `checks/selftest.py`, `checks/check_page.cjs` (Chromium at 360, 390, 1024 and 1440 px: KaTeX, page errors,
   sideways scroll, outside requests, fonts, every simulation drawn and moving), and `derive/chNN.py` per chapter.
+- **Figures without collisions** (11 November 2026). `checks/check_figures.cjs` tests every SVG figure and simulation canvas in Chromium at 360,
+  390, 1024 and 1440 px, each simulation at its default and at the ends of every slider, menu, switch and preset: text on text, a curve or line
+  through a label, a label outside the drawing, text below 10.5 CSS px on a phone (9.5 px wider). Grid lines, frames and leaders may touch
+  labels when marked: `data-nocollide` in SVG, `ctx.__nocollide = true` while drawing on a canvas (the top of the file says how).
+  `figkit.py` is the layout kit of the SVG figures: label widths from the house fonts, a label placer that avoids what is drawn, and `dual()`,
+  which gives each figure a wide drawing and a narrow one (300 units wide, shown below 700 px of window width, so labels read at 11 px on a
+  phone). Chapters 0 to 2 use it; their canvases (`physics/ch00.js`, `ch01.js`, `ch02_ui.js`) put the y label and keys above the plot and
+  test each note's spot against what they drew.
 - **Projects page.** `#electron-beam` in `public/portfolios.html`: band, abstract, tally, parts 7.1 to 7.4 and four plates in
   `public/portfolios/electron-beam/fig/`, captured from the built page's own figures by `notes/electron-beam/tools/plates.cjs` and converted to WebP.
   The entry has German and Arabic tables in `i18n/<lang>/portfolios.html.json`; the project page itself is English only.

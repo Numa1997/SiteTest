@@ -88,27 +88,35 @@
     };
   }
 
-  // the canvas: the path seen from two sides, one common scale, start and end marked
+  // the canvas: the path seen from two sides, one common scale, start and end marked. A view's title stands above its frame and
+  // breaks after the colon when it is wider than the view; the key below breaks into two lines when it is wider than the canvas.
   function draw(ctx, w, h, p, out) {
     const tr = out.trajectory, np = tr.length / 3;
     ctx.clearRect(0, 0, w, h);
+    ctx.font = "11px 'IBM Plex Mono', monospace";
     const views = [['x', 'y', 'top (x, y): E up, B out'], ['x', 'z', 'side (x, z): B up']];
     const idx = { x: 0, y: 1, z: 2 };
-    const pad = 12, gap = 14, top = 22, vw = (w - 2 * pad - gap) / 2, vh = h - top - pad - 4;
+    const pad = 12, gap = 14, vw = (w - 2 * pad - gap) / 2, lh = 14;
+    const titles = views.map(v => ctx.measureText(v[2]).width <= vw ? [v[2]] : [v[2].slice(0, v[2].indexOf(':') + 1), v[2].slice(v[2].indexOf(':') + 2)]);
     const lo = [Infinity, Infinity, Infinity], hi = [-Infinity, -Infinity, -Infinity];
     for (let i = 0; i < np; i++) for (let k = 0; k < 3; k++) { lo[k] = Math.min(lo[k], tr[3 * i + k]); hi[k] = Math.max(hi[k], tr[3 * i + k]); }
     const span = Math.max(hi[0] - lo[0], hi[1] - lo[1], hi[2] - lo[2], 1e-9);
+    const key = ['black: start   green: end', 'field of view ' + core.fmt(span / 0.86 * 1e3, 2) + ' mm'];
+    const keyLines = ctx.measureText(key.join('   ')).width <= w - 2 * pad ? [key.join('   ')] : key;
+    const top = 8 + lh * Math.max(...titles.map(t => t.length)), bottom = 8 + lh * keyLines.length, vh = h - top - bottom;
     const sc = Math.min(vw, vh) * 0.86 / span;
-    ctx.font = "11px 'IBM Plex Mono', monospace";
     views.forEach((vd, j) => {
       const x0 = pad + j * (vw + gap), a = idx[vd[0]], b = idx[vd[1]];
       ctx.fillStyle = '#fff'; ctx.strokeStyle = '#cdc1ae'; ctx.lineWidth = 1;
+      ctx.__nocollide = true;                                   // the frame and the axes are ground (checks/check_figures.cjs)
       ctx.fillRect(x0, top, vw, vh); ctx.strokeRect(x0 + 0.5, top + 0.5, vw - 1, vh - 1);
-      ctx.fillStyle = '#6f655f'; ctx.textAlign = 'left'; ctx.save(); ctx.beginPath(); ctx.rect(x0, 0, vw, top); ctx.clip(); ctx.fillText(vd[2], x0, 14); ctx.restore();   // finisher: clipped to its own view, so the two titles never overprint
       const cx = x0 + vw / 2 - sc * (lo[a] + hi[a]) / 2, cy = top + vh / 2 + sc * (lo[b] + hi[b]) / 2;
       const X = t => cx + sc * t, Y = t => cy - sc * t;
       ctx.strokeStyle = '#e6dfd2';
       ctx.beginPath(); ctx.moveTo(x0, Y(0)); ctx.lineTo(x0 + vw, Y(0)); ctx.moveTo(X(0), top); ctx.lineTo(X(0), top + vh); ctx.stroke();
+      ctx.__nocollide = false;
+      ctx.fillStyle = '#6f655f'; ctx.textAlign = 'left';
+      titles[j].forEach((t, i) => ctx.fillText(t, x0, top - 6 - lh * (titles[j].length - 1 - i)));
       ctx.strokeStyle = '#7a1f2b'; ctx.lineWidth = 2; ctx.beginPath();
       for (let i = 0; i < np; i++) { const px = X(tr[3 * i + a]), py = Y(tr[3 * i + b]); if (i) ctx.lineTo(px, py); else ctx.moveTo(px, py); }
       ctx.stroke();
@@ -116,7 +124,7 @@
       ctx.fillStyle = '#3a8a5a'; ctx.beginPath(); ctx.arc(X(tr[3 * (np - 1) + a]), Y(tr[3 * (np - 1) + b]), 3.5, 0, 2 * Math.PI); ctx.fill();
     });
     ctx.fillStyle = '#6f655f'; ctx.textAlign = 'right';
-    ctx.fillText('black: start   green: end   field of view ' + core.fmt(span / 0.86 * 1e3, 2) + ' mm', w - pad, h - 3);
+    keyLines.forEach((t, i) => ctx.fillText(t, w - pad, h - 5 - lh * (keyLines.length - 1 - i)));
   }
 
   return {

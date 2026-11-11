@@ -15,6 +15,8 @@ EB = os.path.abspath(os.path.join(HERE, '..'))
 import importlib.util
 _spec = importlib.util.spec_from_file_location('eb_ref_ch02', os.path.join(EB, 'ref', 'ch02.py'))   # same stem as this file: load by path
 R = importlib.util.module_from_spec(_spec); _spec.loader.exec_module(R)
+_fks = importlib.util.spec_from_file_location('eb_figkit', os.path.join(EB, 'figkit.py'))                # figure layout helpers
+FK = importlib.util.module_from_spec(_fks); _fks.loader.exec_module(FK)
 
 eV = R.eV
 INK, WINE, TAN, MUTED, ROSE = '#1c1518', '#7a1f2b', '#7a4b12', '#8b8079', '#e2a2aa'
@@ -156,6 +158,9 @@ def fmt_tick(v):
 
 
 class Plot:
+    """The house chart, drawn twice (figkit.dual): wide at W user units, narrow at figkit.NARROW_W. Curves, dots and reference lines are
+    kept as data and drawn for each width; the legend sits below the plot, the y label is turned when it fits beside the plot and is
+    written above it otherwise; notes go to the free spot nearest to where they are asked (figkit.Layout), with a leader if they move."""
     _n = 0
 
     def __init__(s, xlim, ylim, xlabel, ylabel, W=640, H=360, xlog=False, ylog=False, ml=64, mr=16, mt=14, mb=48, xticks=None, yticks=None, legend_xy=None):
@@ -164,71 +169,138 @@ class Plot:
         s.W, s.H, s.xlim, s.ylim, s.xlog, s.ylog = W, H, xlim, ylim, xlog, ylog
         s.ml, s.mr, s.mt, s.mb = ml, mr, mt, mb
         s.xlabel, s.ylabel = xlabel, ylabel
-        s.xt = xticks; s.yt = yticks; s.legend_xy = legend_xy
-        s.body = []; s.legend = []
+        s.xt = xticks; s.yt = yticks
+        s.items = []; s.notes = []; s.legend = []
 
-    def X(s, x):
+    def _fx(s, x, x0, pw):
         a, b = s.xlim
         if s.xlog: x, a, b = math.log10(x), math.log10(a), math.log10(b)
-        return s.ml + (x - a) / (b - a) * (s.W - s.ml - s.mr)
+        return x0 + (x - a) / (b - a) * pw
 
-    def Y(s, y):
+    def _fy(s, y, y0, ph):
         a, b = s.ylim
         if s.ylog: y, a, b = math.log10(y), math.log10(a), math.log10(b)
-        return s.H - s.mb - (y - a) / (b - a) * (s.H - s.mt - s.mb)
+        return y0 + ph - (y - a) / (b - a) * ph
 
     def line(s, xs, ys, color=INK, w=2, dash=None, label=None, opacity=1):
         pts = [(x, y) for x, y in zip(xs, ys) if x is not None and y is not None and np.isfinite(x) and np.isfinite(y)
                and (not s.ylog or y > 0) and (not s.xlog or x > 0)]
         if not pts: return
-        d = ' '.join(f'{"M" if i == 0 else "L"}{s.X(x):.1f} {s.Y(y):.1f}' for i, (x, y) in enumerate(pts))
-        s.body.append(f'<path d="{d}" fill="none" stroke="{color}" stroke-width="{w}" stroke-linejoin="round"' + (f' stroke-dasharray="{dash}"' if dash else '') + (f' opacity="{opacity}"' if opacity != 1 else '') + ' clip-path="url(#' + s.id + 'c)"/>')
+        s.items.append(('line', pts, color, w, dash, opacity))
         if label: s.legend.append((label, color, dash, 'line'))
 
     def dots(s, xs, ys, color=WINE, r=3.2, label=None, hollow=False):
-        for x, y in zip(xs, ys):
-            if (s.ylog and y <= 0): continue
-            s.body.append(f'<circle cx="{s.X(x):.1f}" cy="{s.Y(y):.1f}" r="{r}" fill="{"#fff" if hollow else color}" stroke="{color}" stroke-width="1.4" clip-path="url(#{s.id}c)"/>')
+        s.items.append(('dots', [(x, y) for x, y in zip(xs, ys) if not (s.ylog and y <= 0)], color, r, hollow))
         if label: s.legend.append((label, color, None, 'dot'))
 
     def vline(s, x, color=MUTED, dash='4 4', label=None, textpos=None):
-        s.body.append(f'<line x1="{s.X(x):.1f}" x2="{s.X(x):.1f}" y1="{s.mt}" y2="{s.H - s.mb}" stroke="{color}" stroke-width="1.2" stroke-dasharray="{dash}"/>')
-        if label: s.text(s.X(x) + 4, s.mt + 12, label, 'lbl', raw=True)
+        s.items.append(('vline', x, color, dash))
+        if label: s.notes.append((x, None, label, 'lbl', 'start'))
 
     def hline(s, y, color=MUTED, dash='4 4'):
-        s.body.append(f'<line x1="{s.ml}" x2="{s.W - s.mr}" y1="{s.Y(y):.1f}" y2="{s.Y(y):.1f}" stroke="{color}" stroke-width="1.2" stroke-dasharray="{dash}"/>')
+        s.items.append(('hline', y, color, dash))
 
     def text(s, x, y, txt, cls='lbl', raw=False, anchor='start'):
-        px, py = (x, y) if raw else (s.X(x), s.Y(y))
-        s.body.append(f'<text x="{px:.1f}" y="{py:.1f}" class="{cls}" text-anchor="{anchor}">{txt}</text>')
+        s.notes.append((x, y, txt, cls, anchor))
 
-    def svg(s, title):
-        out = [f'<svg viewBox="0 0 {s.W} {s.H}" role="img" aria-label="{title}" xmlns="http://www.w3.org/2000/svg">',
-               f'<defs><clipPath id="{s.id}c"><rect x="{s.ml}" y="{s.mt}" width="{s.W - s.ml - s.mr}" height="{s.H - s.mt - s.mb}"/></clipPath></defs>']
-        xt = s.xt if s.xt is not None else (([10 ** e for e in range(math.ceil(math.log10(s.xlim[0])), math.floor(math.log10(s.xlim[1])) + 1)]) if s.xlog else nice_ticks(*s.xlim))
-        yt = s.yt if s.yt is not None else (([10 ** e for e in range(math.ceil(math.log10(s.ylim[0])), math.floor(math.log10(s.ylim[1])) + 1)]) if s.ylog else nice_ticks(*s.ylim))
-        for v in xt:
-            x = s.X(v)
-            out.append(f'<line x1="{x:.1f}" x2="{x:.1f}" y1="{s.mt}" y2="{s.H - s.mb}" stroke="#ece5d8" stroke-width="1"/>')
-            out.append(f'<text x="{x:.1f}" y="{s.H - s.mb + 16}" class="tick" text-anchor="middle">{fmt_tick(v)}</text>')
+    def _ticks(s, given, lim, log):
+        if given is not None: return given
+        if log: return [10 ** e for e in range(math.ceil(math.log10(lim[0])), math.floor(math.log10(lim[1])) + 1)]
+        return nice_ticks(*lim)
+
+    def _draw(s, title, narrow):
+        W = FK.NARROW_W if narrow else s.W
+        xt, yt = s._ticks(s.xt, s.xlim, s.xlog), s._ticks(s.yt, s.ylim, s.ylog)
+        tw = max(FK.width(fmt_tick(v), 'tick') for v in yt)
+        ph = 190 if narrow else s.H - s.mt - s.mb
+        rot = not narrow and FK.width(s.ylabel) <= ph - 8
+        ytop = [] if rot else FK.wrap(s.ylabel, W - 8)
+        ml = max(s.ml, tw + 30) if rot else tw + 12
+        mt = s.mt if rot else 16 * len(ytop) + 10
+        mr = 10 if narrow else s.mr
+        pw = W - ml - mr
+        X = lambda x: s._fx(x, ml, pw)
+        Y = lambda y: s._fy(y, mt, ph)
+        bot = mt + ph
+        cid = s.id + ('n' if narrow else 'w') + 'c'
+        L = FK.Layout(W, bot + 400)
+        out = [f'<defs><clipPath id="{cid}"><rect x="{ml}" y="{mt}" width="{pw}" height="{ph}"/></clipPath></defs>']
+        # y ticks, thinned until they are 15 units apart
+        ys = [v for v in yt]
+        while len(ys) > 2 and min(abs(Y(a) - Y(b)) for a, b in zip(ys, ys[1:])) < 15: ys = ys[::2]
         for v in yt:
-            y = s.Y(v)
-            out.append(f'<line x1="{s.ml}" x2="{s.W - s.mr}" y1="{y:.1f}" y2="{y:.1f}" stroke="#ece5d8" stroke-width="1"/>')
-            out.append(f'<text x="{s.ml - 7}" y="{y + 4:.1f}" class="tick" text-anchor="end">{fmt_tick(v)}</text>')
-        out.append(f'<rect x="{s.ml}" y="{s.mt}" width="{s.W - s.ml - s.mr}" height="{s.H - s.mt - s.mb}" fill="none" stroke="#cdc1ae"/>')
-        out += s.body
-        out.append(f'<text x="{(s.ml + s.W - s.mr) / 2:.0f}" y="{s.H - 8}" class="lbl" text-anchor="middle">{s.xlabel}</text>')
-        out.append(f'<text transform="translate(14 {(s.mt + s.H - s.mb) / 2:.0f}) rotate(-90)" class="lbl" text-anchor="middle">{s.ylabel}</text>')
-        lx, ly = s.legend_xy if s.legend_xy else (s.ml + 10, s.mt + 16)
+            y = Y(v)
+            out.append(f'<line x1="{ml}" x2="{ml + pw}" y1="{y:.1f}" y2="{y:.1f}" stroke="#ece5d8" stroke-width="1" data-nocollide=""/>')
+            if v in ys: out.append(f'<text x="{ml - 7}" y="{y + 4:.1f}" class="tick" text-anchor="end">{fmt_tick(v)}</text>')
+        # x ticks, thinned until their labels stand 8 units apart
+        xs = list(xt)
+        gap = lambda a, b: (X(b) - FK.width(fmt_tick(b), 'tick') / 2) - (X(a) + FK.width(fmt_tick(a), 'tick') / 2)
+        while len(xs) > 2 and min(gap(a, b) for a, b in zip(xs, xs[1:])) < 8: xs = xs[::2]
+        for v in xt:
+            x = X(v)
+            out.append(f'<line x1="{x:.1f}" x2="{x:.1f}" y1="{mt}" y2="{bot}" stroke="#ece5d8" stroke-width="1" data-nocollide=""/>')
+            if v in xs:
+                w2 = FK.width(fmt_tick(v), 'tick') / 2
+                an, tx = ('end', W - 2) if x + w2 > W - 2 else ('start', 2) if x - w2 < 2 else ('middle', x)
+                out.append(f'<text x="{tx:.1f}" y="{bot + 16}" class="tick" text-anchor="{an}">{fmt_tick(v)}</text>')
+        out.append(f'<rect x="{ml}" y="{mt}" width="{pw}" height="{ph}" fill="none" stroke="#cdc1ae" data-nocollide=""/>')
+        # the data
+        for it in s.items:
+            if it[0] == 'line':
+                _, pts, color, w, dash, op = it
+                P = [(X(x), Y(y)) for x, y in pts]
+                L.line([(min(max(px, ml - 5), ml + pw + 5), min(max(py, mt - 5), bot + 5)) for px, py in P], w / 2 + 0.5)
+                d = ' '.join(f'{"M" if i == 0 else "L"}{px:.1f} {py:.1f}' for i, (px, py) in enumerate(P))
+                out.append(f'<path d="{d}" fill="none" stroke="{color}" stroke-width="{w}" stroke-linejoin="round"' + (f' stroke-dasharray="{dash}"' if dash else '') + (f' opacity="{op}"' if op != 1 else '') + f' clip-path="url(#{cid})"/>')
+            elif it[0] == 'dots':
+                _, pts, color, r, hollow = it
+                for x, y in pts:
+                    L.circle(X(x), Y(y), r + 0.7)
+                    out.append(f'<circle cx="{X(x):.1f}" cy="{Y(y):.1f}" r="{r}" fill="{"#fff" if hollow else color}" stroke="{color}" stroke-width="1.4" clip-path="url(#{cid})"/>')
+            elif it[0] == 'vline':
+                _, x, color, dash = it
+                L.line([(X(x), mt), (X(x), bot)], 0.8)
+                out.append(f'<line x1="{X(x):.1f}" x2="{X(x):.1f}" y1="{mt}" y2="{bot}" stroke="{color}" stroke-width="1.2" stroke-dasharray="{dash}"/>')
+            elif it[0] == 'hline':
+                _, y, color, dash = it
+                L.line([(ml, Y(y)), (ml + pw, Y(y))], 0.8)
+                out.append(f'<line x1="{ml}" x2="{ml + pw}" y1="{Y(y):.1f}" y2="{Y(y):.1f}" stroke="{color}" stroke-width="1.2" stroke-dasharray="{dash}"/>')
+        # notes inside the plot, where no curve passes
+        region = (ml + 3, mt + 3, ml + pw - 3, bot - 3)
+        for x, y, txt, cls, anchor in s.notes:
+            px, py = (X(x) + 4, mt + 15) if y is None else (X(x), Y(y))
+            kw = dict(region=region, radius=70 if narrow else 90, anchors=[anchor, 'end' if anchor != 'end' else 'start'])
+            got = L.place(txt, px, py, cls, anchor, force=False, **kw)
+            if got is None and '<' not in txt:          # no room on one line: two lines
+                got = L.place(FK.wrap(txt, max(FK.width(txt) * 0.55, 60)), px, py, cls, anchor, **kw)
+            out.append(got or L.place(txt, px, py, cls, anchor, **kw))
+        # axis labels and legend below the plot
+        yb = bot + 16 + 20
+        for ln in FK.wrap(s.xlabel, W - 8):
+            out.append(f'<text x="{(ml + W - mr) / 2 if FK.width(ln) < pw else W / 2:.0f}" y="{yb}" class="lbl" text-anchor="middle">{ln}</text>')
+            yb += 16
+        if rot:
+            out.append(f'<text transform="translate(14 {mt + ph / 2:.0f}) rotate(-90)" class="lbl" text-anchor="middle">{s.ylabel}</text>')
+        else:
+            for i, ln in enumerate(ytop):
+                out.append(f'<text x="4" y="{14 + 16 * i}" class="lbl">{ln}</text>')
+        lx, ly = (4 if narrow else ml), yb + 6
         for lab, col, dash, kind in s.legend:
+            wl = 30 + FK.width(lab)
+            if lx + wl > W - 2 and lx > (4 if narrow else ml):
+                lx, ly = (4 if narrow else ml), ly + 18
             if kind == 'line':
                 out.append(f'<line x1="{lx}" x2="{lx + 22}" y1="{ly - 4}" y2="{ly - 4}" stroke="{col}" stroke-width="2.2"' + (f' stroke-dasharray="{dash}"' if dash else '') + '/>')
             else:
                 out.append(f'<circle cx="{lx + 11}" cy="{ly - 4}" r="3.4" fill="{col}"/>')
             out.append(f'<text x="{lx + 28}" y="{ly}" class="lbl">{lab}</text>')
-            ly += 17
-        out.append('</svg>')
-        return ''.join(out)
+            lx += wl + 16
+        H = (ly + 10) if s.legend else (yb - 6)
+        return (f'<svg viewBox="0 0 {W} {H:.0f}" role="img" aria-label="{title}" xmlns="http://www.w3.org/2000/svg"><rect width="{W}" height="{H:.0f}" fill="#fff"/>'
+                + ''.join(out) + '</svg>')
+
+    def svg(s, title):
+        return FK.dual(s._draw(title, False), s._draw(title, True))
 
 
 # ================================================================================================ numbering, formatting
@@ -305,42 +377,73 @@ def fill(s, N, SPECIAL=None):
 
 
 # ================================================================================================ figures
-def fig_tip(N):
-    W, H = 640, 330
-    s = [f'<svg viewBox="0 0 {W} {H}" role="img" aria-label="A sharp tungsten tip facing an extraction anode with a hole" xmlns="http://www.w3.org/2000/svg">']
+def _tip_svg(N, narrow):
+    """Figure 2.1 in drawing units of the wide figure (640 x 330), mapped by P(); labels placed by figkit where nothing is drawn."""
+    k, ox, oy, W = (0.44, 6, 46, FK.NARROW_W) if narrow else (1.0, 0, 26, 640)
+    P = lambda x, y: (ox + k * x, oy + k * y)
+    L = FK.Layout(W, 600)
+    s = []
     # anode plate with a hole
-    s.append(f'<rect x="500" y="20" width="14" height="118" fill="#d9d0c2" stroke="{INK}" stroke-width="1.2"/>')
-    s.append(f'<rect x="500" y="192" width="14" height="118" fill="#d9d0c2" stroke="{INK}" stroke-width="1.2"/>')
-    s.append(f'<text x="507" y="14" class="lbl" text-anchor="middle">anode, 0 V</text>')
+    for y0 in (20, 192):
+        x, y = P(500, y0)
+        s.append(f'<rect x="{x:.1f}" y="{y:.1f}" width="{14 * k:.1f}" height="{118 * k:.1f}" fill="#d9d0c2" stroke="{INK}" stroke-width="1.2"/>')
+        L.rect(x, y, 14 * k, 118 * k)
     # shank and apex
     apex = (330, 165); rad = 22
-    s.append(f'<path d="M 30 133 L {apex[0] - rad * 0.92:.1f} {apex[1] - rad * 0.4:.1f} A {rad} {rad} 0 0 1 {apex[0] - rad * 0.92:.1f} {apex[1] + rad * 0.4:.1f} L 30 197 Z" fill="#efe4c8" stroke="{INK}" stroke-width="1.6"/>')
-    # sphere circle (dashed) and radius
     cx = apex[0] - rad
-    s.append(f'<circle cx="{cx}" cy="{apex[1]}" r="{rad}" fill="none" stroke="{WINE}" stroke-width="1.2" stroke-dasharray="3 3"/>')
-    s.append(f'<line x1="{cx}" y1="{apex[1]}" x2="{cx - rad * 0.7:.1f}" y2="{apex[1] - rad * 0.7:.1f}" stroke="{WINE}" stroke-width="1.6"/>')
-    s.append(f'<circle cx="{cx}" cy="{apex[1]}" r="2.5" fill="{WINE}"/>')
-    s.append(f'<text x="{cx - rad * 0.7 - 6:.0f}" y="{apex[1] - rad * 0.7 - 6:.0f}" class="m" text-anchor="end">r</text>')
+    a1, a2, a3 = P(30, 133), P(apex[0] - rad * 0.92, apex[1] - rad * 0.4), P(apex[0] - rad * 0.92, apex[1] + rad * 0.4)
+    a4 = P(30, 197)
+    s.append(f'<path d="M {a1[0]:.1f} {a1[1]:.1f} L {a2[0]:.1f} {a2[1]:.1f} A {rad * k:.1f} {rad * k:.1f} 0 0 1 {a3[0]:.1f} {a3[1]:.1f} L {a4[0]:.1f} {a4[1]:.1f} Z" fill="#efe4c8" stroke="{INK}" stroke-width="1.6"/>')
+    L.line([a1, a2, P(apex[0], apex[1]), a3, a4, a1], 1)
+    c = P(cx, apex[1])
+    s.append(f'<circle cx="{c[0]:.1f}" cy="{c[1]:.1f}" r="{rad * k:.1f}" fill="none" stroke="{WINE}" stroke-width="1.2" stroke-dasharray="3 3"/>')
+    L.circle(c[0], c[1], rad * k)
+    e = P(cx - rad * 0.7, apex[1] - rad * 0.7)
+    s.append(f'<line x1="{c[0]:.1f}" y1="{c[1]:.1f}" x2="{e[0]:.1f}" y2="{e[1]:.1f}" stroke="{WINE}" stroke-width="1.6"/>')
+    s.append(f'<circle cx="{c[0]:.1f}" cy="{c[1]:.1f}" r="2.5" fill="{WINE}"/>')
+    L.line([c, e], 1)
     # field lines: from cap to the anode
     for a in (-1.0, -0.6, -0.25, 0.0, 0.25, 0.6, 1.0):
         th = a * 0.9
         x0 = cx + rad * math.cos(th); y0 = apex[1] + rad * math.sin(th)
         x1, y1 = 500, apex[1] + a * 95
-        c1 = (x0 + 70 * math.cos(th) + 40, y0 + 70 * math.sin(th))
-        s.append(f'<path d="M {x0:.1f} {y0:.1f} C {c1[0]:.1f} {c1[1]:.1f}, {x1 - 90:.1f} {y1:.1f}, {x1:.1f} {y1:.1f}" fill="none" stroke="#b79aa0" stroke-width="1" stroke-dasharray="5 3"/>')
+        c1 = (x0 + 70 * math.cos(th) + 40, y0 + 70 * math.sin(th)); c2 = (x1 - 90, y1)
+        q = [P(*p) for p in ((x0, y0), c1, c2, (x1, y1))]
+        s.append(f'<path d="M {q[0][0]:.1f} {q[0][1]:.1f} C {q[1][0]:.1f} {q[1][1]:.1f}, {q[2][0]:.1f} {q[2][1]:.1f}, {q[3][0]:.1f} {q[3][1]:.1f}" fill="none" stroke="#b79aa0" stroke-width="1" stroke-dasharray="5 3"/>')
+        L.line([tuple((1 - t) ** 3 * q[0][i] + 3 * (1 - t) ** 2 * t * q[1][i] + 3 * (1 - t) * t * t * q[2][i] + t ** 3 * q[3][i] for i in (0, 1)) for t in [j / 40 for j in range(41)]], 0.8)
     # emitted electrons
     for a, xx in ((-0.1, 372), (0.1, 372), (-0.08, 430), (0.08, 430), (0.0, 470)):
-        s.append(f'<circle cx="{xx}" cy="{apex[1] + a * 100:.1f}" r="3.2" fill="{WINE}"/>')
-    s.append(f'<path d="M 360 165 L 492 165" stroke="{WINE}" stroke-width="1.4" fill="none" marker-end="url(#ar)"/>')
-    s.append(f'<defs><marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="{WINE}"/></marker></defs>')
-    s.append(f'<text x="420" y="128" class="lbl" text-anchor="middle">electrons leave the apex</text>')
-    s.append(f'<text x="205" y="252" class="lbl" text-anchor="middle">shank</text>')
-    s.append(f'<text x="250" y="105" class="lbl">field lines end on the anode</text>')
-    s.append(f'<text x="30" y="226" class="lbl">tip at −V</text>')
-    s.append(f'<text x="{cx - 4}" y="{apex[1] + rad + 20}" class="lbl" text-anchor="middle">apex: sphere of radius <tspan class="m">r</tspan></text>')
-    s.append(f'<text x="30" y="312" class="lbl">not to scale: with <tspan class="m">r</tspan> = {N["ex_r_nm"]:.0f} nm the apex is far smaller than the gap</text>')
-    s.append('</svg>')
-    return ''.join(s)
+        d = P(xx, apex[1] + a * 100)
+        s.append(f'<circle cx="{d[0]:.1f}" cy="{d[1]:.1f}" r="{3.2 if not narrow else 2.6}" fill="{WINE}"/>')
+        L.circle(d[0], d[1], 3.5)
+    m0, m1 = P(360, 165), P(492, 165)
+    mid = 'arn' if narrow else 'arw'
+    s.append(f'<path d="M {m0[0]:.1f} {m0[1]:.1f} L {m1[0]:.1f} {m1[1]:.1f}" stroke="{WINE}" stroke-width="1.4" fill="none" marker-end="url(#{mid})"/>')
+    s.append(f'<defs><marker id="{mid}" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="{WINE}"/></marker></defs>')
+    L.line([m0, m1], 1.5)
+    # labels: wanted spot, the feature a leader points to
+    lab = lambda txt, at, anchor='middle', to=None, **kw: s.append(L.place(txt, *P(*at), 'lbl', anchor, lead_to=P(*to) if to else None, **kw))
+    lab('anode, 0 V', (507, -6), 'middle', prefer=(0, -1))
+    lab(['electrons', 'leave the', 'apex'] if narrow else ['electrons leave', 'the apex'], (522, 150), 'start', prefer=(1, 0))
+    lab('field lines end on the anode', (270, 50), 'middle', (430, 82), prefer=(0, -1))
+    lab('shank', (205, 230), 'middle', (205, 176), prefer=(0, 1))
+    lab('tip at −V', (30, 230), 'start', (40, 190), prefer=(0, 1))
+    lab('apex: sphere of radius <tspan class="m">r</tspan>', (cx, apex[1] + rad + 26), 'middle', (cx, apex[1] + rad), prefer=(0, 1))
+    s.append(L.place('<tspan class="m">r</tspan>', e[0] - 4, e[1] - 4, 'lbl', 'end', radius=20, leader=False))
+    bottom = max([b[3] for b in L.boxes] + [P(0, 310)[1]]) + 8
+    note = f'not to scale: with <tspan class="m">r</tspan> = {N["ex_r_nm"]:.0f} nm the apex is far smaller than the gap'
+    if narrow:
+        s.append(FK.text(4, bottom + 14, [f'not to scale: with <tspan class="m">r</tspan> = {N["ex_r_nm"]:.0f} nm the apex', 'is far smaller than the gap']))
+        H = bottom + 14 + 16 + 10
+    else:
+        s.append(FK.text(30, bottom + 16, note))
+        H = bottom + 26
+    return (f'<svg viewBox="0 0 {W} {H:.0f}" role="img" aria-label="A sharp tungsten tip facing an extraction anode with a hole" xmlns="http://www.w3.org/2000/svg">'
+            f'<rect width="{W}" height="{H:.0f}" fill="#fff"/>' + ''.join(s) + '</svg>')
+
+
+def fig_tip(N):
+    return FK.dual(_tip_svg(N, False), _tip_svg(N, True))
 
 
 def fig_barrier(N):
@@ -420,14 +523,14 @@ def fig_data(N):
     f45 = ay['fits']['4.5']; z = f45['zeta_nm'] * 1e-9; A = f45['A_nm2'] * 1e-18
     x = 1000 / V
     y = np.log(I / V ** 2)
-    P1 = Plot((0.58, 0.80), (-27, -20), '1000 / V   (1/kV)', 'ln( I / V² )   (I in nA, V in V)', W=420, H=340, ml=56, xticks=[0.6, 0.65, 0.7, 0.75, 0.8], yticks=[-27, -25, -23, -21], legend_xy=(70, 262))
+    P1 = Plot((0.58, 0.80), (-27, -20), '1000 / V   (1/kV)', 'ln( I / V² )   (I in nA, V in V)', W=340, H=300, ml=56, xticks=[0.6, 0.65, 0.7, 0.75, 0.8], yticks=[-27, -25, -23, -21], legend_xy=(70, 262))
     xs = np.linspace(0.6, 0.78, 60)
     ym = [math.log(A * R.j_fn(1000 / xx / z, 4.5 * eV, 300) * 1e9 / (1000 / xx) ** 2) for xx in xs]
     P1.line(xs, ym, WINE, 2.2, None, 'model, φ = 4.5 eV, 300 K')
     P1.line(xs, [ay['fn_slope_V'] * xx / 1000 + ay['fn_intercept'] for xx in xs], INK, 1.6, '5 4', 'straight line (authors)')
     P1.dots(x, y, INK, 2.9, 'measured, run 4, down')
     res = np.array([r for _, r in ay['resid_vs_V']]) * 100
-    P2 = Plot((1280, 1650), (-8, 8), 'voltage V (V)', 'ln I measured − ln I model  (%)', W=420, H=340, ml=56, xticks=[1300, 1400, 1500, 1600], yticks=[-6, -3, 0, 3, 6])
+    P2 = Plot((1280, 1650), (-8, 8), 'voltage V (V)', 'ln I measured − ln I model  (%)', W=340, H=300, ml=56, xticks=[1300, 1400, 1500, 1600], yticks=[-6, -3, 0, 3, 6])
     P2.hline(0, INK, '4 4')
     P2.dots(V, res, WINE, 3)
     return '<div class="pfig__row">' + P1.svg('Fowler-Nordheim plot of the tungsten tip data') + P2.svg('Residuals of the model fit') + '</div>'
@@ -704,7 +807,7 @@ SECTIONS = [
 
 <p><strong>What we did.</strong> (i) A straight line through \(\ln(I/V^{2})\) against \(1/V\) gives slope \(@ayari/fn_slope_V|.0f@\) V and intercept @ayari/fn_intercept|.3f@, which reproduces the authors' own fit (41 339 ± 73 V, 4.57 ± 0.05; check C19) and so confirms that we read the units of the file correctly (current in nanoampere). (ii) With \(\varphi=4.5\) eV, which the authors also assume, @eq:FNslope@ with \(s(f)=@ay_s_mid|.3f@\) at the middle of the range gives \(\zeta=@ay_zeta_slope_nm|.0f@\) nm. (iii) The full fit of \(I=A\,J(V/\zeta)\) to all 33 points, with the temperature factor and 300 K, gives \(\zeta=@ayari/fits/4.5/zeta_nm|.1f@\) nm, an emitting area \(A=@ayari/fits/4.5/A_nm2|.0f@\ \mathrm{nm^2}\), and a root-mean-square deviation of \(\ln I\) of @ay_resid_rms_pct|.1f@ %, largest deviation @ay_resid_max_pct|.1f@ %. With \(k=5\) the radius is \(r=\zeta/k=@ayari/fits/4.5/r_nm|.0f@\) nm. The authors' own analysis with the Murphy–Good model has 653 nm and 131 nm for the same sweep (their file <code>paramIV4d.txt</code>), so the two calculations agree.</p>
 
-[[FIG data|DATAFIG]]Left: the Fowler–Nordheim plot of run 4 (down) of Ayari et al. (2023): measured points, our model fit (wine, <i>φ</i> = 4.5 eV, 300 K) and the straight line of the authors. Right: the difference of ln <i>I</i> between measurement and model, in per cent.[[/FIG]]
+[[FIG data|DATAFIG]]First panel: the Fowler–Nordheim plot of run 4 (down) of Ayari et al. (2023): measured points, our model fit (wine, <i>φ</i> = 4.5 eV, 300 K) and the straight line of the authors. Second panel: the difference of ln <i>I</i> between measurement and model, in per cent.[[/FIG]]
 
 <h4><span class="psub__n">2.9.1</span>Where model and data differ</h4>
 <p><strong>The data do not fix the work function.</strong> The fit quality is the same, rms \(@ayari/fits/4.5/rms|.4f@\) in \(\ln I\), for any \(\varphi\) between 4.0 and 5.5 eV; only \(\zeta\) changes, because the slope fixes the product \(\varphi^{3/2}\zeta\). For \(\varphi=\)4.0, 4.5, 5.0 and 5.5 eV the fit gives \(\zeta=\)@ayari/fits/4.0/zeta_nm|.0f@, @ayari/fits/4.5/zeta_nm|.0f@, @ayari/fits/5.0/zeta_nm|.0f@ and @ayari/fits/5.5/zeta_nm|.0f@ nm, so the apex radius deduced from a slope inherits the full uncertainty of \(\varphi\) and of \(k\). The authors of the data make this point more strongly in their title and abstract. The model is not wrong here; the measurement is not sensitive enough to test it for \(\varphi\).</p>

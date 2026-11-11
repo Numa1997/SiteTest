@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-1544 files, 76.3 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+1547 files, 76.6 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -33,14 +33,14 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Source of Rotor Pendula (not served)](#source-of-rotor-pendula-not-served) | 76 |
 | [Source of Iron, Cotton and the Head (not served)](#source-of-iron-cotton-and-the-head-not-served) | 19 |
 | [Source of the Droplet Collection study (not served)](#source-of-the-droplet-collection-study-not-served) | 96 |
-| [Source of project 07, the electron beam (not served)](#source-of-project-07-the-electron-beam-not-served) | 86 |
+| [Source of project 07, the electron beam (not served)](#source-of-project-07-the-electron-beam-not-served) | 88 |
 | [Shared by the portfolio sources (not served)](#shared-by-the-portfolio-sources-not-served) | 1 |
 | [Template sources](#template-sources) | 2 |
 | [Documentation](#documentation) | 37 |
 | [Tools](#tools) | 93 |
 | [Translation tables](#translation-tables) | 54 |
 | [Agents of the lecture-note review](#agents-of-the-lecture-note-review) | 4 |
-| [Working notes of project 07, the electron beam](#working-notes-of-project-07-the-electron-beam) | 38 |
+| [Working notes of project 07, the electron beam](#working-notes-of-project-07-the-electron-beam) | 39 |
 | [Working notes of the Rotor Pendula study](#working-notes-of-the-rotor-pendula-study) | 86 |
 | [Working notes of the Droplet Collection study](#working-notes-of-the-droplet-collection-study) | 121 |
 | [Record of the lecture-note review](#record-of-the-lecture-note-review) | 484 |
@@ -478,7 +478,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/portfolios/electron-beam/fig/02_helix.webp`](../public/portfolios/electron-beam/fig/02_helix.webp) | 44.7 kB | Plate of the Portfolios page entry of project 07. | [portfolios.md](portfolios.md) |
 | [`public/portfolios/electron-beam/fig/03_tip.webp`](../public/portfolios/electron-beam/fig/03_tip.webp) | 17.2 kB | Plate of the Portfolios page entry of project 07. | [portfolios.md](portfolios.md) |
 | [`public/portfolios/electron-beam/fig/04_fn.webp`](../public/portfolios/electron-beam/fig/04_fn.webp) | 25.0 kB | Plate of the Portfolios page entry of project 07. | [portfolios.md](portfolios.md) |
-| [`public/portfolios/electron-beam/index.html`](../public/portfolios/electron-beam/index.html) | 3.07 MB | Generated page of project 07: lecture notes in chapters with running simulations (portfolios-src/electron-beam/build.py --site). | [portfolios.md](portfolios.md) |
+| [`public/portfolios/electron-beam/index.html`](../public/portfolios/electron-beam/index.html) | 3.27 MB | Generated page of project 07: lecture notes in chapters with running simulations (portfolios-src/electron-beam/build.py --site). | [portfolios.md](portfolios.md) |
 
 ## Source of the Hydraulic Press Study (not served)
 
@@ -744,10 +744,11 @@ to confirm that every file is described. Sizes are those of the files when the l
 |---|---|---|---|
 | [`portfolios-src/electron-beam/.gitignore`](../portfolios-src/electron-beam/.gitignore) | 24 B | Keeps out/ and caches out of git; marks the .js files of this folder as CommonJS so Node can load them. | [README.md](../portfolios-src/electron-beam/README.md) |
 | [`portfolios-src/electron-beam/PLAN.md`](../portfolios-src/electron-beam/PLAN.md) | 18.8 kB | Plan and brief of project 07, the electron beam from tip to measurement: aim, chapters, contract, sessions and file ownership. | [portfolios.md](portfolios.md) |
-| [`portfolios-src/electron-beam/README.md`](../portfolios-src/electron-beam/README.md) | 6.7 kB | Project 07's source: every file, the chapter format, how a chapter plugs in, the commands and the checks. | [README.md](../portfolios-src/electron-beam/README.md) |
+| [`portfolios-src/electron-beam/README.md`](../portfolios-src/electron-beam/README.md) | 7.3 kB | Project 07's source: every file, the chapter format, how a chapter plugs in, the commands and the checks. | [README.md](../portfolios-src/electron-beam/README.md) |
 | [`portfolios-src/electron-beam/app.js`](../portfolios-src/electron-beam/app.js) | 4.3 kB | The page's script: binds each simulation slot's sliders (contract symbols) to its physics module and draws it. | [README.md](../portfolios-src/electron-beam/README.md) |
 | [`portfolios-src/electron-beam/bridge.cjs`](../portfolios-src/electron-beam/bridge.cjs) | 3.2 kB | Runs the page JavaScript in Node for the build and the checks: module list, compute, constants, number format, KaTeX (the site vendor copy). | [README.md](../portfolios-src/electron-beam/README.md) |
 | [`portfolios-src/electron-beam/build.py`](../portfolios-src/electron-beam/build.py) | 6.5 kB | Generates public/portfolios/electron-beam/index.html (--site) or a stand-alone page in out/. | [README.md](../portfolios-src/electron-beam/README.md) |
+| [`portfolios-src/electron-beam/checks/check_figures.cjs`](../portfolios-src/electron-beam/checks/check_figures.cjs) | 26.3 kB | Check: every SVG figure and simulation canvas of the built page at four widths and every slider end, for labels on labels, lines through labels, labels off the edge and text too small. | [portfolios.md](portfolios.md) |
 | [`portfolios-src/electron-beam/checks/check_numbers.py`](../portfolios-src/electron-beam/checks/check_numbers.py) | 6.7 kB | Check: every number quoted in the text is computed, and no typed measurement is left in the prose. | [README.md](../portfolios-src/electron-beam/README.md) |
 | [`portfolios-src/electron-beam/checks/check_page.cjs`](../portfolios-src/electron-beam/checks/check_page.cjs) | 7.3 kB | Check: the built page in Chromium at 360, 390, 1024 and 1440 px (KaTeX, errors, scroll, requests, fonts, simulations), with screenshots. | [README.md](../portfolios-src/electron-beam/README.md) |
 | [`portfolios-src/electron-beam/checks/check_parity.py`](../portfolios-src/electron-beam/checks/check_parity.py) | 4.8 kB | Check: each physics/chNN.js against ref/chNN.py on the same inputs, and the constants and number format. | [README.md](../portfolios-src/electron-beam/README.md) |
@@ -790,12 +791,13 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`portfolios-src/electron-beam/derive/ch08.py`](../portfolios-src/electron-beam/derive/ch08.py) | 4.1 kB | SymPy derivation script of a chapter; its output is shown on the page. | [README.md](../portfolios-src/electron-beam/README.md) |
 | [`portfolios-src/electron-beam/derive/ch08_probe.cjs`](../portfolios-src/electron-beam/derive/ch08_probe.cjs) | 4.7 kB | SymPy derivation script of a chapter; its output is shown on the page. | [README.md](../portfolios-src/electron-beam/README.md) |
 | [`portfolios-src/electron-beam/eb_lib.py`](../portfolios-src/electron-beam/eb_lib.py) | 27.2 kB | Loads the chapters, numbers equations and figures, resolves references, computes every quoted number, typesets with KaTeX, validates the contract. | [README.md](../portfolios-src/electron-beam/README.md) |
+| [`portfolios-src/electron-beam/figkit.py`](../portfolios-src/electron-beam/figkit.py) | 13.9 kB | Layout kit of the inline SVG figures: label widths in the house fonts, a label placer that avoids what is drawn, a wide and a narrow drawing per figure. | [portfolios.md](portfolios.md) |
 | [`portfolios-src/electron-beam/guide_default.py`](../portfolios-src/electron-beam/guide_default.py) | 1.7 kB | The reading guide shown until text/guide.py exists. | [README.md](../portfolios-src/electron-beam/README.md) |
 | [`portfolios-src/electron-beam/package.json`](../portfolios-src/electron-beam/package.json) | 236 B | Keeps out/ and caches out of git; marks the .js files of this folder as CommonJS so Node can load them. | [README.md](../portfolios-src/electron-beam/README.md) |
-| [`portfolios-src/electron-beam/physics/ch00.js`](../portfolios-src/electron-beam/physics/ch00.js) | 4.5 kB | Chapter 0 solver: a pure module that runs in the page and in Node. | [README.md](../portfolios-src/electron-beam/README.md) |
-| [`portfolios-src/electron-beam/physics/ch01.js`](../portfolios-src/electron-beam/physics/ch01.js) | 9.4 kB | Chapter 1 solver: a pure module that runs in the page and in Node. | [README.md](../portfolios-src/electron-beam/README.md) |
+| [`portfolios-src/electron-beam/physics/ch00.js`](../portfolios-src/electron-beam/physics/ch00.js) | 6.4 kB | Chapter 0 solver: a pure module that runs in the page and in Node. | [README.md](../portfolios-src/electron-beam/README.md) |
+| [`portfolios-src/electron-beam/physics/ch01.js`](../portfolios-src/electron-beam/physics/ch01.js) | 10.1 kB | Chapter 1 solver: a pure module that runs in the page and in Node. | [README.md](../portfolios-src/electron-beam/README.md) |
 | [`portfolios-src/electron-beam/physics/ch02.js`](../portfolios-src/electron-beam/physics/ch02.js) | 15.8 kB | Chapter 2 solver: a pure module that runs in the page and in Node. | [README.md](../portfolios-src/electron-beam/README.md) |
-| [`portfolios-src/electron-beam/physics/ch02_ui.js`](../portfolios-src/electron-beam/physics/ch02_ui.js) | 24.9 kB | Chapter 2's live figure in the browser: four canvases and the controls; reads physics/ch02.js and writes every number into its store. | [README.md](../portfolios-src/electron-beam/README.md) |
+| [`portfolios-src/electron-beam/physics/ch02_ui.js`](../portfolios-src/electron-beam/physics/ch02_ui.js) | 30.2 kB | Chapter 2's live figure in the browser: four canvases and the controls; reads physics/ch02.js and writes every number into its store. | [README.md](../portfolios-src/electron-beam/README.md) |
 | [`portfolios-src/electron-beam/physics/ch03.js`](../portfolios-src/electron-beam/physics/ch03.js) | 7.0 kB | Chapter 3 solver: a pure module that runs in the page and in Node. | [README.md](../portfolios-src/electron-beam/README.md) |
 | [`portfolios-src/electron-beam/physics/ch04.js`](../portfolios-src/electron-beam/physics/ch04.js) | 9.7 kB | Chapter 4 solver: a pure module that runs in the page and in Node. | [README.md](../portfolios-src/electron-beam/README.md) |
 | [`portfolios-src/electron-beam/physics/ch05.js`](../portfolios-src/electron-beam/physics/ch05.js) | 7.9 kB | Chapter 5 solver: a pure module that runs in the page and in Node. | [README.md](../portfolios-src/electron-beam/README.md) |
@@ -817,12 +819,12 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`portfolios-src/electron-beam/sources/bibliography.md`](../portfolios-src/electron-beam/sources/bibliography.md) | 17.1 kB | Project 07 bibliography: for each formula family the book or paper, section and page, marked READ or LOCATED, with what is still unopened. | [bibliography.md](../portfolios-src/electron-beam/sources/bibliography.md) |
 | [`portfolios-src/electron-beam/sources/drive-inventory.md`](../portfolios-src/electron-beam/sources/drive-inventory.md) | 4.7 kB | Project 07: every file listed in Numa's Drive folders (EP4, Oldenburg), what the read-only connector could and could not read. | [bibliography.md](../portfolios-src/electron-beam/sources/bibliography.md) |
 | [`portfolios-src/electron-beam/template.html`](../portfolios-src/electron-beam/template.html) | 10.4 kB | The page template: house design, reading guide, contents list, chapter slots, simulation slots. | [README.md](../portfolios-src/electron-beam/README.md) |
-| [`portfolios-src/electron-beam/text/ch00.py`](../portfolios-src/electron-beam/text/ch00.py) | 20.9 kB | Words, figures and numbers of chapter 0 (a dict CH). | [README.md](../portfolios-src/electron-beam/README.md) |
-| [`portfolios-src/electron-beam/text/ch01.py`](../portfolios-src/electron-beam/text/ch01.py) | 87.8 kB | Words, figures and numbers of chapter 1 (a dict CH). | [README.md](../portfolios-src/electron-beam/README.md) |
-| [`portfolios-src/electron-beam/text/ch02.py`](../portfolios-src/electron-beam/text/ch02.py) | 101.5 kB | Words, figures and numbers of chapter 2 (a dict CH). | [README.md](../portfolios-src/electron-beam/README.md) |
+| [`portfolios-src/electron-beam/text/ch00.py`](../portfolios-src/electron-beam/text/ch00.py) | 22.0 kB | Words, figures and numbers of chapter 0 (a dict CH). | [README.md](../portfolios-src/electron-beam/README.md) |
+| [`portfolios-src/electron-beam/text/ch01.py`](../portfolios-src/electron-beam/text/ch01.py) | 93.4 kB | Words, figures and numbers of chapter 1 (a dict CH). | [README.md](../portfolios-src/electron-beam/README.md) |
+| [`portfolios-src/electron-beam/text/ch02.py`](../portfolios-src/electron-beam/text/ch02.py) | 107.0 kB | Words, figures and numbers of chapter 2 (a dict CH). | [README.md](../portfolios-src/electron-beam/README.md) |
 | [`portfolios-src/electron-beam/text/ch03.py`](../portfolios-src/electron-beam/text/ch03.py) | 33.5 kB | Words, figures and numbers of chapter 3 (a dict CH). | [README.md](../portfolios-src/electron-beam/README.md) |
 | [`portfolios-src/electron-beam/text/ch04.py`](../portfolios-src/electron-beam/text/ch04.py) | 33.1 kB | Words, figures and numbers of chapter 4 (a dict CH). | [README.md](../portfolios-src/electron-beam/README.md) |
-| [`portfolios-src/electron-beam/text/ch05.py`](../portfolios-src/electron-beam/text/ch05.py) | 29.3 kB | Words, figures and numbers of chapter 5 (a dict CH). | [README.md](../portfolios-src/electron-beam/README.md) |
+| [`portfolios-src/electron-beam/text/ch05.py`](../portfolios-src/electron-beam/text/ch05.py) | 29.4 kB | Words, figures and numbers of chapter 5 (a dict CH). | [README.md](../portfolios-src/electron-beam/README.md) |
 | [`portfolios-src/electron-beam/text/ch06.py`](../portfolios-src/electron-beam/text/ch06.py) | 45.4 kB | Words, figures and numbers of chapter 6 (a dict CH). | [README.md](../portfolios-src/electron-beam/README.md) |
 | [`portfolios-src/electron-beam/text/ch07.py`](../portfolios-src/electron-beam/text/ch07.py) | 25.9 kB | Words, figures and numbers of chapter 7 (a dict CH). | [README.md](../portfolios-src/electron-beam/README.md) |
 | [`portfolios-src/electron-beam/text/ch08.py`](../portfolios-src/electron-beam/text/ch08.py) | 20.4 kB | Words, figures and numbers of chapter 8 (a dict CH). | [README.md](../portfolios-src/electron-beam/README.md) |
@@ -856,7 +858,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`docs/notes.md`](notes.md) | 5.4 kB | Documentation: The lecture-note review: `notes/` and `.claude/agents/`. | [notes.md](notes.md) |
 | [`docs/pages.md`](pages.md) | 52.7 kB | Documentation: The site's own pages: home, simulations catalog, Portfolios, robots.txt. | [pages.md](pages.md) |
 | [`docs/performance.md`](performance.md) | 53.8 kB | Documentation: Performance: what was measured, what was slow, what changed. | [performance.md](performance.md) |
-| [`docs/portfolios.md`](portfolios.md) | 65.9 kB | Documentation: The four research projects: `public/portfolios/`. | [portfolios.md](portfolios.md) |
+| [`docs/portfolios.md`](portfolios.md) | 66.9 kB | Documentation: The four research projects: `public/portfolios/`. | [portfolios.md](portfolios.md) |
 | [`docs/research-theory-audit.md`](research-theory-audit.md) | 30.0 kB | Documentation: Readability audit: Droplet Collection and Rotor Pendula. | [research-theory-audit.md](research-theory-audit.md) |
 | [`docs/scripts/catalog.md`](scripts/catalog.md) | 15.4 kB | Documentation: public/scripts/catalog.js. | [catalog.md](scripts/catalog.md) |
 | [`docs/scripts/curve.md`](scripts/curve.md) | 19.3 kB | Documentation: public/scripts/curve.js. | [curve.md](scripts/curve.md) |
@@ -968,7 +970,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/i18n/ingest.py`](../tools/i18n/ingest.py) | 1.9 kB | Stores checked translations made outside the tables (page pieces, script strings, walkthrough prose). | [i18n.md](i18n.md) |
 | [`tools/i18n/package.json`](../tools/i18n/package.json) | 285 B | The parser wrap.cjs needs (acorn); npm install --prefix tools/i18n. | [i18n.md](i18n.md) |
 | [`tools/i18n/wrap.cjs`](../tools/i18n/wrap.cjs) | 3.7 kB | Wraps the reader-visible strings of a page's scripts in _t(), with a JavaScript parser (acorn). | [i18n.md](i18n.md) |
-| [`tools/inventory.py`](../tools/inventory.py) | 81.6 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
+| [`tools/inventory.py`](../tools/inventory.py) | 82.1 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
 | [`tools/perf/addresses.cjs`](../tools/perf/addresses.cjs) | 6.1 kB | Every page at every address a reader can use (x.html, x, x/, folder/), and every link of every page, on a running site; exits 1 on any wrong answer. | [performance.md](performance.md) |
 | [`tools/perf/clockcheck.cjs`](../tools/perf/clockcheck.cjs) | 3.2 kB | Each figure runs on screen, holds off screen, resumes; the store stays live for an open data panel and the walkthrough. | [performance.md](performance.md) |
 | [`tools/perf/film.cjs`](../tools/perf/film.cjs) | 3.1 kB | A repeat visit as a reader sees it: screenshots at fixed times and every LCP candidate with its element, to tell a metric from the screen. | [performance.md](performance.md) |
@@ -1054,7 +1056,8 @@ to confirm that every file is described. Sizes are those of the files when the l
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
-| [`notes/electron-beam/AUDIT.md`](../notes/electron-beam/AUDIT.md) | 22.9 kB | Working note of project 07. | [README.md](../portfolios-src/electron-beam/README.md) |
+| [`notes/electron-beam/AUDIT.md`](../notes/electron-beam/AUDIT.md) | 25.7 kB | Working note of project 07. | [README.md](../portfolios-src/electron-beam/README.md) |
+| [`notes/electron-beam/FINISH-report.md`](../notes/electron-beam/FINISH-report.md) | 4.6 kB | Working note of project 07. | [README.md](../portfolios-src/electron-beam/README.md) |
 | [`notes/electron-beam/S1-report.md`](../notes/electron-beam/S1-report.md) | 5.0 kB | Report of the scaffold session S1: what exists, how chapters plug in, commands, what was verified. | [README.md](../portfolios-src/electron-beam/README.md) |
 | [`notes/electron-beam/S2-report.md`](../notes/electron-beam/S2-report.md) | 5.9 kB | Project 07 librarian final report: sources, data, gaps, handles for every claim. | [bibliography.md](../portfolios-src/electron-beam/sources/bibliography.md) |
 | [`notes/electron-beam/S3-report.md`](../notes/electron-beam/S3-report.md) | 3.4 kB | Working note of project 07. | [README.md](../portfolios-src/electron-beam/README.md) |
@@ -1858,7 +1861,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/home/longlines.cjs`](../notes/home/longlines.cjs) | 1.2 kB | Browser measurements of the home page: index size, column widths, characters per line, section screenshots. | [styles.md](styles.md) |
 | [`notes/home/measure.cjs`](../notes/home/measure.cjs) | 2.6 kB | Browser measurements of the home page: index size, column widths, characters per line, section screenshots. | [styles.md](styles.md) |
 | [`notes/home/sections.cjs`](../notes/home/sections.cjs) | 891 B | Browser measurements of the home page: index size, column widths, characters per line, section screenshots. | [styles.md](styles.md) |
-| [`notes/lucretius/README.md`](../notes/lucretius/README.md) | 4.7 kB | Lucretius I 146-224 kept for the site: sources, corrections, what is where. | [README.md](../notes/lucretius/README.md) |
+| [`notes/lucretius/README.md`](../notes/lucretius/README.md) | 4.8 kB | Lucretius I 146-224 kept for the site: sources, corrections, what is where. | [README.md](../notes/lucretius/README.md) |
 | [`notes/lucretius/extract.py`](../notes/lucretius/extract.py) | 5.1 kB | Cuts Lucretius I 146-224 out of the downloaded sources without retyping. | [README.md](../notes/lucretius/README.md) |
 | [`notes/lucretius/make_home.py`](../notes/lucretius/make_home.py) | 11.6 kB | Writes the Lucretius band of the home page from the first four sentences. | [README.md](../notes/lucretius/README.md) |
 | [`notes/lucretius/make_page.py`](../notes/lucretius/make_page.py) | 8.9 kB | Writes public/lucretius.html, Lucretius I 146-224 in Latin, English, German and Arabic. | [README.md](../notes/lucretius/README.md) |
