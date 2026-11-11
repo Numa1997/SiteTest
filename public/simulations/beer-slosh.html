@@ -1605,18 +1605,22 @@
                 C2.back_px_y = function () { return projCheck('the head on the axis, 2 mm under the surface', [0, 0, glassZ() + g('eta_mid') - 0.002], 1, [inp('zb', 'z<sub>b</sub>', 'm', 5), inp('eta_mid', 'η<sub>mid</sub>', 'm', 5)]); };
             }
             if (world.fluid.modal) {   // the live model's numbers recomputed from what the store holds
-                var XI = [1.841184, 5.331443, 8.536316];
-                var J1 = function (x) { var t = x / 2, s = 0; for (var k = 0; k < 60; k++) { s += t; t *= -(x * x / 4) / ((k + 1) * (k + 2)); if (Math.abs(t) < 1e-16) break; } return s; };
-                // the nonlinear live model's surface from the stored wall heights (NMFluid.heightAt written out again): k_M from
-                // the model's constants (scripts/stout-nm.js), J_M by its power series
-                var KN = [STOUT_NM.k['0'], STOUT_NM.k['1'], STOUT_NM.k['2']];
-                var Jm = function (m, x) { var t = Math.pow(x / 2, m); for (var k = 1; k <= m; k++) t /= k; var s2 = 0; for (var k2 = 0; k2 < 80; k2++) { s2 += t; t *= -(x * x / 4) / ((k2 + 1) * (k2 + 1 + m)); if (Math.abs(t) < 1e-17) break; } return s2; };
-                var mH = function (x, y) { var r = Math.hypot(x, y), Rs = g('R_s'), rho = Math.min(r, Rs) / Rs, th = Math.atan2(y, x), S = function (m) { return Jm(m, KN[m] * rho) / Jm(m, KN[m]); };
-                    var e = g('c0') * S(0) + (g('q1') * Math.cos(th) + g('s1') * Math.sin(th)) * S(1) + (g('c2') * Math.cos(2 * th) + g('s2') * Math.sin(2 * th)) * S(2);
-                    for (var m = 1; m < 3; m++) e += g('q' + (m + 1)) * J1(XI[m] * rho) / J1(XI[m]) * Math.cos(th);
+                // the real glass's numbers at the stored fill h, read from the computed data (public/data/fig12/modes.json) with this
+                // page's own interpolation (linear between the computed fills and between the 33 radial points; written again here,
+                // not the engine's code): shapes e of the first m = 0, 2 modes and the first three m = 1 modes, frequencies, Ix
+                var TD = function (h) {
+                    var M = DATA[0], hs = M.h, x = h * 1000, i = 0; while (i < hs.length - 2 && hs[i + 1] < x) i++;
+                    var t = Math.max(0, Math.min(1, (x - hs[i]) / (hs[i + 1] - hs[i]))), A = M.levels[i], B = M.levels[i + 1];
+                    var L = function (a, b) { return a + (b - a) * t; };
+                    var sh = function (m, n, rho) { var NR = M.NR, u = Math.min(1, rho) * (NR - 1), j = Math.min(NR - 2, Math.floor(u)), v = u - j, a = A['m' + m].e[n], b = B['m' + m].e[n]; return L(a[j] + v * (a[j + 1] - a[j]), b[j] + v * (b[j + 1] - b[j])); };
+                    return { R: L(M.R_surface[i], M.R_surface[i + 1]), f: function (n) { return L(A.m1.f[n], B.m1.f[n]); }, Ix: function (n) { return L(A.m1.Ix[n], B.m1.Ix[n]); }, sh: sh };
+                };
+                var mH = function (x, y) { var T = TD(g('h_l')), r = Math.hypot(x, y), Rs = g('R_s'), rho = Math.min(r, Rs) / Rs, th = Math.atan2(y, x);
+                    var e = g('c0') * T.sh(0, 0, rho) + (g('q1') * Math.cos(th) + g('s1') * Math.sin(th)) * T.sh(1, 0, rho) + (g('c2') * Math.cos(2 * th) + g('s2') * Math.sin(2 * th)) * T.sh(2, 0, rho);
+                    for (var m = 1; m < 3; m++) e += g('q' + (m + 1)) * T.sh(1, m, rho) * Math.cos(th);
                     return g('h_l') + e; };
                 var MIN = function () { return [inp('h_l', 'h', 'm', 5), inp('R_s', 'R(h)', 'm', 5), inp('q1', 'q<sub>1</sub>', 'm', 6), inp('s1', 's<sub>1</sub>', 'm', 6), inp('c0', 'c<sub>0</sub>', 'm', 6), inp('c2', 'c<sub>2</sub>', 'm', 6), inp('s2', 's<sub>2</sub>', 'm', 6), inp('q2', 'q<sub>2</sub>', 'm', 6), inp('q3', 'q<sub>3</sub>', 'm', 6)]; };
-                var MF = 'h + c<sub>0</sub>S<sub>0</sub> + (q<sub>1</sub>cos θ + s<sub>1</sub>sin θ)S<sub>1</sub> + (c<sub>2</sub>cos 2θ + s<sub>2</sub>sin 2θ)S<sub>2</sub> + Σ<sub>n=2,3</sub> q<sub>n</sub>J<sub>1</sub>(ξ<sub>1n</sub>r/R)/J<sub>1</sub>(ξ<sub>1n</sub>) cos θ, S<sub>M</sub> = J<sub>M</sub>(k<sub>M</sub>r/R)/J<sub>M</sub>(k<sub>M</sub>)';
+                var MF = 'h + c<sub>0</sub>e<sub>0</sub> + (q<sub>1</sub>cos θ + s<sub>1</sub>sin θ)e<sub>1</sub> + (c<sub>2</sub>cos 2θ + s<sub>2</sub>sin 2θ)e<sub>2</sub> + Σ<sub>n=2,3</sub> q<sub>n</sub>e<sub>1n</sub> cos θ, e the computed shapes of the real glass at fill h (data/fig12/modes.json, 1 at the wall)';
                 var C = Sim.data.check;
                 C.h_col = function (n) { var fl = world.fluid, i = n % fl.nx, j = Math.floor(n / fl.nx), x = fl.x0 + (i + 0.5) * g('dx'), y = fl.y0 + (j + 0.5) * g('dx'); return { formula: MF + ' at the centre of column (' + j + ', ' + i + ')', inputs: MIN(), value: mH(x, y) }; };
                 C.eta_draw = function (n) { var q = polar(n); return { formula: MF + ' at ir = ' + q.ir + ', ith = ' + q.it, inputs: MIN(), value: mH(q.x, q.y) }; };
@@ -1625,14 +1629,14 @@
                 C.eta_pf = function () { return { formula: MF + ' at the front probe (r<sub>p</sub>, 0)', inputs: MIN().concat([inp('r_p', 'r<sub>p</sub>', 'm', 5)]), value: mH(g('r_p'), 0) }; };
                 C.eta_pb = function () { return { formula: MF + ' at the back probe (−r<sub>p</sub>, 0)', inputs: MIN().concat([inp('r_p', 'r<sub>p</sub>', 'm', 5)]), value: mH(-g('r_p'), 0) }; };
                 C.eta_mid = function () { return { formula: MF + ' on the axis: h', inputs: MIN(), value: mH(0, 0) }; };
-                C.P_x = function () { var Rs = g('R_s'), s = 0; for (var m = 0; m < 3; m++) s += g('rho') * Math.PI * Rs * Rs * Rs / (XI[m] * XI[m]) * g('qd' + (m + 1)); return { formula: 'Σ ρπR³/ξ<sub>n</sub>² q̇<sub>n</sub> (note, eq. 18)', inputs: [inp('rho', 'ρ', 'kg/m³', 0), inp('R_s', 'R(h)', 'm', 5), inp('qd1', 'q̇<sub>1</sub>', 'm/s', 5), inp('qd2', 'q̇<sub>2</sub>', 'm/s', 5), inp('qd3', 'q̇<sub>3</sub>', 'm/s', 5)], value: s }; };
+                C.P_x = function () { var T = TD(g('h_l')), s = 0; for (var m = 0; m < 3; m++) s += g('rho') * T.Ix(m) * g('qd' + (m + 1)); return { formula: 'ρ Σ<sub>n</sub> I<sub>x,n</sub> q̇<sub>n</sub>, I<sub>x,n</sub> = ∫ x e<sub>1n</sub> cos θ dA of the computed shapes at fill h (only the surface moves the centre of mass)', inputs: [inp('rho', 'ρ', 'kg/m³', 0), inp('h_l', 'h', 'm', 5), inp('qd1', 'q̇<sub>1</sub>', 'm/s', 5), inp('qd2', 'q̇<sub>2</sub>', 'm/s', 5), inp('qd3', 'q̇<sub>3</sub>', 'm/s', 5)], value: s }; };
                 C.P_z = function () { return { formula: '0: the linear modes move the stout sideways only', inputs: [], value: 0 }; };
                 C.ml = function () { return { formula: 'ρ V<sub>ℓ</sub>', inputs: [inp('rho', 'ρ', 'kg/m³', 0), inp('V_l', 'V<sub>ℓ</sub>', 'm³', 9)], value: g('rho') * g('V_l') }; };
                 C.spilled_g = function () { return { formula: 'm<sub>ℓ,0</sub> − ρ V<sub>ℓ</sub>, in grams', inputs: [inp('m_l0', 'm<sub>ℓ,0</sub>', 'kg', 4), inp('rho', 'ρ', 'kg/m³', 0), inp('V_l', 'V<sub>ℓ</sub>', 'm³', 9)], value: (g('m_l0') - g('rho') * g('V_l')) * 1000 }; };
                 C.Q_wall = function () { var m = 0; for (var k = 0; k < 72; k++) { var th = 2 * Math.PI * k / 72; m = Math.max(m, mH(g('R_s') * Math.cos(th), g('R_s') * Math.sin(th)) - g('h_l')); } return { formula: 'max over θ = 2πk/72 of η(R, θ) − h', inputs: MIN(), value: m }; };
                 ['s1', 's1d', 'c0', 'c2', 's2'].forEach(function (n) { C[n] = function () { return { formula: 'the solver’s mode amplitude (Narimanov–Moiseev equations)', inputs: [], value: world.fluid[n] }; }; });
                 C.h_l = function () { var P = GUINNESS_GLASS, V = function (h) { var n = Math.max(1, Math.round(h / 5e-5)), d = h / n, v = 0; for (var k = 0; k <= n; k++) { var f = k * d / P.dz, i = Math.floor(f), r = i >= P.R.length - 1 ? P.R[P.R.length - 1] : P.R[i] + (f - i) * (P.R[i + 1] - P.R[i]); v += (k === 0 || k === n ? 0.5 : 1) * Math.PI * r * r * d; } return v; }, a = 0, b = g('z_rim'); for (var it = 0; it < 40; it++) { var mm = 0.5 * (a + b); if (V(mm) < g('V_l')) a = mm; else b = mm; } return { formula: 'the height that holds V<sub>ℓ</sub> in the measured glass: ∫<sub>0</sub><sup>h</sup> πR(z)² dz = V<sub>ℓ</sub> (bisection)', inputs: [inp('V_l', 'V<sub>ℓ</sub>', 'm³', 9)], value: 0.5 * (a + b) }; };
-                [1, 2, 3].forEach(function (m) { C['w' + m] = function () { var k = XI[m - 1] / g('R_s'); return { formula: '√(g k tanh(k h)), k = ξ<sub>1' + m + '</sub>/R(h)', inputs: [inp('g', 'g', 'm/s²', 2), inp('R_s', 'R(h)', 'm', 5), inp('h_l', 'h', 'm', 5)], value: Math.sqrt(g('g') * k * Math.tanh(k * g('h_l'))) }; }; C['q' + m] = function () { return { formula: 'the solver’s mode amplitude', inputs: [], value: world.fluid.q[m - 1] }; }; C['qd' + m] = function () { return { formula: 'the solver’s mode rate', inputs: [], value: world.fluid.qd[m - 1] }; }; });
+                [1, 2, 3].forEach(function (m) { C['w' + m] = function () { return { formula: '2π f<sub>1' + m + '</sub>(h), computed by finite elements for the measured glass (data/fig12/modes.json), linear between the computed fills', inputs: [inp('h_l', 'h', 'm', 5)], value: 2 * Math.PI * TD(g('h_l')).f(m - 1) }; }; C['q' + m] = function () { return { formula: 'the solver’s mode amplitude', inputs: [], value: world.fluid.q[m - 1] }; }; C['qd' + m] = function () { return { formula: 'the solver’s mode rate', inputs: [], value: world.fluid.qd[m - 1] }; }; });
                 C.V_l = function () { return { formula: 'the solver’s volume', inputs: [], value: world.fluid.V }; };
                 C.R_s = function () { var P = GUINNESS_GLASS, f = g('h_l') / P.dz, i = Math.floor(f); return { formula: 'R(h), linear between the 0.5 mm points of the measured profile', inputs: [inp('h_l', 'h', 'm', 5)], value: P.R[i] + (f - i) * (P.R[i + 1] - P.R[i]) }; };
                 C.spill_rate = function () { return { formula: 'the solver’s pour rate', inputs: [], value: world.fluid.spillRate }; };
