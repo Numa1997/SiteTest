@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-1655 files, 77.8 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+1656 files, 77.8 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -39,7 +39,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Shared by the portfolio sources (not served)](#shared-by-the-portfolio-sources-not-served) | 1 |
 | [Template sources](#template-sources) | 2 |
 | [Documentation](#documentation) | 37 |
-| [Tools](#tools) | 119 |
+| [Tools](#tools) | 120 |
 | [Translation tables](#translation-tables) | 54 |
 | [Agents of the lecture-note review](#agents-of-the-lecture-note-review) | 4 |
 | [Working notes of project 07, the electron beam](#working-notes-of-project-07-the-electron-beam) | 52 |
@@ -919,6 +919,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/fig12/gpu-study.cjs`](../tools/fig12/gpu-study.cjs) | 5.2 kB | Fig. 12: the cart over a bump or a rough road with the GPU solver (World.advanceGpu) in headless Chromium, in batches; lean, accelerations, spill, controllers. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/irish-imperial-pint.svg`](../tools/fig12/irish-imperial-pint.svg) | 54.0 kB | Fig. 12: dimensions.com’s dimensioned elevation and section of the tulip pint glass (source of the profile). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/linfit.cjs`](../tools/fig12/linfit.cjs) | 2.0 kB | Fig. 12: fits the free swing (amplitude, frequency) in the files linearity.cjs saves. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`tools/fig12/of/analyse_swing.py`](../tools/fig12/of/analyse_swing.py) | 2.9 kB | Fig. 12, OpenFOAM, gate 1.2: the free swing’s frequency and damping from a run’s monitor; a slip/no-slip pair gives the solver’s own damping against the real friction’s. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/of/cart/cart.H`](../tools/fig12/of/cart/cart.H) | 7.0 kB | Fig. 12, OpenFOAM: the cart’s equations of motion in C++, a line-by-line port of Cart in stout-cart.js (bit-identical rides, test_cart.cpp). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/of/cart/test_cart.cpp`](../tools/fig12/of/cart/test_cart.cpp) | 719 B | Fig. 12, OpenFOAM: the C++ cart against the JavaScript cart on the same ride, the stout rigid. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/of/cart/write_cart.cjs`](../tools/fig12/of/cart/write_cart.cjs) | 3.1 kB | Fig. 12, OpenFOAM: writes the cart’s parameters and road table for cart.H from the JavaScript Cart and Road (one source of truth). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
@@ -1019,7 +1020,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/i18n/ingest.py`](../tools/i18n/ingest.py) | 1.9 kB | Stores checked translations made outside the tables (page pieces, script strings, walkthrough prose). | [i18n.md](i18n.md) |
 | [`tools/i18n/package.json`](../tools/i18n/package.json) | 285 B | The parser wrap.cjs needs (acorn); npm install --prefix tools/i18n. | [i18n.md](i18n.md) |
 | [`tools/i18n/wrap.cjs`](../tools/i18n/wrap.cjs) | 3.7 kB | Wraps the reader-visible strings of a page's scripts in _t(), with a JavaScript parser (acorn). | [i18n.md](i18n.md) |
-| [`tools/inventory.py`](../tools/inventory.py) | 84.7 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
+| [`tools/inventory.py`](../tools/inventory.py) | 85.0 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
 | [`tools/perf/addresses.cjs`](../tools/perf/addresses.cjs) | 6.1 kB | Every page at every address a reader can use (x.html, x, x/, folder/), and every link of every page, on a running site; exits 1 on any wrong answer. | [performance.md](performance.md) |
 | [`tools/perf/clockcheck.cjs`](../tools/perf/clockcheck.cjs) | 3.2 kB | Each figure runs on screen, holds off screen, resumes; the store stays live for an open data panel and the walkthrough. | [performance.md](performance.md) |
 | [`tools/perf/film.cjs`](../tools/perf/film.cjs) | 3.1 kB | A repeat visit as a reader sees it: screenshots at fixed times and every LCP candidate with its element, to tell a metric from the screen. | [performance.md](performance.md) |
