@@ -109,6 +109,7 @@ when V hands that chapter over. V reads this file before editing every chapter. 
 
 ## ch09 · The column in one view
 - Prose summary with pointers; no new terms. Last paragraph: the misread Airy coefficient and "checking against the physics".
+- **Voice pass.** Long summary sentences split at their semicolons; its range sentence (five-thirds power) now agrees with ch06.
 
 ## guide · Reading guide (four boxes above chapter 0)
 - shows, models, leaves out, numbers.
