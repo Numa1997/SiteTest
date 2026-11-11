@@ -1,0 +1,13 @@
+{
+  "name": "swing-slip-coarse",
+  "level": "coarse",
+  "forcing": "tilt",
+  "fill": 0.125,
+  "end": 8,
+  "write": 8,
+  "wall": "slip",
+  "sigma": 0,
+  "nu": 1E-09,
+  "rho": 1000,
+  "maxco": 0.5
+}

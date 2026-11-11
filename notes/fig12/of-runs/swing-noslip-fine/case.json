@@ -1,0 +1,13 @@
+{
+  "name": "swing-noslip-fine",
+  "level": "fine",
+  "forcing": "tilt",
+  "fill": 0.125,
+  "end": 8,
+  "write": 8,
+  "wall": "noslip",
+  "sigma": 0,
+  "nu": 2.05E-06,
+  "rho": 1000,
+  "maxco": 0.5
+}

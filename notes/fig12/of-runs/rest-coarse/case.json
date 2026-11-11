@@ -1,0 +1,13 @@
+{
+  "name": "rest-coarse",
+  "level": "coarse",
+  "forcing": "rest",
+  "fill": 0.125,
+  "end": 30,
+  "write": 30,
+  "wall": "noslip",
+  "sigma": 0,
+  "nu": 2.05E-06,
+  "rho": 1000,
+  "maxco": 0.5
+}
