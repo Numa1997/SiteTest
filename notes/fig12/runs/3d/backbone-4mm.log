@@ -1,0 +1,12 @@
+tilt-release 3D fill 75 mm (R 34.50 mm), A 1.5 m/s^2, dx 4 mm: free swing lean 4.9 mm at 3.2140 Hz (rms misfit 1.54 mm); spill 0.0 g
+tilt-release 3D fill 75 mm (R 34.50 mm), A 2.5 m/s^2, dx 4 mm: free swing lean 9.9 mm at 3.1800 Hz (rms misfit 1.64 mm); spill 0.0 g
+tilt-release 3D fill 75 mm (R 34.50 mm), A 5 m/s^2, dx 4 mm: free swing lean 24.1 mm at 3.0995 Hz (rms misfit 2.45 mm); spill 0.0 g
+tilt-release 3D fill 100 mm (R 38.67 mm), A 1.5 m/s^2, dx 4 mm: free swing lean 7.0 mm at 3.1345 Hz (rms misfit 1.27 mm); spill 0.0 g
+tilt-release 3D fill 100 mm (R 38.67 mm), A 2.5 m/s^2, dx 4 mm: free swing lean 11.3 mm at 3.1130 Hz (rms misfit 2.36 mm); spill 0.0 g
+tilt-release 3D fill 100 mm (R 38.67 mm), A 5 m/s^2, dx 4 mm: free swing lean 25.5 mm at 3.0470 Hz (rms misfit 3.18 mm); spill 0.0 g
+tilt-release 3D fill 125 mm (R 39.10 mm), A 1.5 m/s^2, dx 4 mm: free swing lean 6.5 mm at 3.2135 Hz (rms misfit 2.06 mm); spill 0.0 g
+tilt-release 3D fill 125 mm (R 39.10 mm), A 2.5 m/s^2, dx 4 mm: free swing lean 13.2 mm at 3.2120 Hz (rms misfit 2.40 mm); spill 0.0 g
+tilt-release 3D fill 125 mm (R 39.10 mm), A 5 m/s^2, dx 4 mm: free swing lean 27.8 mm at 3.1510 Hz (rms misfit 3.65 mm); spill 0.0 g
+tilt-release 3D fill 140 mm (R 38.10 mm), A 1.5 m/s^2, dx 4 mm: free swing lean 2.8 mm at 3.2970 Hz (rms misfit 1.31 mm); spill 0.0 g
+tilt-release 3D fill 140 mm (R 38.10 mm), A 2.5 m/s^2, dx 4 mm: free swing lean 7.8 mm at 3.2445 Hz (rms misfit 1.79 mm); spill 4.0 g
+tilt-release 3D fill 140 mm (R 38.10 mm), A 5 m/s^2, dx 4 mm: free swing lean 24.9 mm at 3.1775 Hz (rms misfit 3.53 mm); spill 35.5 g
