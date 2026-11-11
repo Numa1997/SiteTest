@@ -534,7 +534,11 @@ a link "Read lines 146–224 in Latin, English, German and Arabic →" (`p.lq-al
 same passage as `notes/lucretius/poem-146-224.json`, the 20 Latin sentences of lines 146–224. Each sentence is a section
 (`section.lp`, address `#l146` and so on, the line numbers at its left) with four columns: the Latin (Instrument Serif), Leonard
 (1916), Diels (1924) and the Arabic (Amiri). The row is `direction: ltr` in every language of the page, so the columns keep their order
-on the Arabic page; each column carries its own `lang` and `dir`. Under 1000 px two columns, under 620 px one. The four columns are
+on the Arabic page; each column carries its own `lang` and `dir`. Since 11 November 2026 ornaments in the accent colour, drawn as inline
+SVG, separate the languages and the sentences: between two columns a vertical rule with a small lozenge at each end and in the middle an
+eight-pointed star (khatam), a quatrefoil, a star (Latin | English | Deutsch | Arabic); between two sentences a horizontal rule with lozenge,
+larger star, lozenge. Under 1000 px the four languages stack in one column and the column rules turn horizontal and shorter, so the
+sentence break (wider, larger star) stays distinct from the language break. The four columns are
 `translate="no"`: the generator translates only the words around them (title, introduction, the four source notes, footer); the poem
 itself is never translated by the table. Written by `notes/lucretius/make_page.py` from the three JSON files, never retyped; do not edit
 `public/lucretius.html` by hand. The Arabic is `poem-ar-146-158.json` and `poem-ar-159-224.json`: made from the Latin for this site,
