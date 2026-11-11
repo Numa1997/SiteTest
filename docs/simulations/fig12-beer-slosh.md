@@ -4,6 +4,59 @@ Rebuilt from zero on 6 November 2026 (since 7 November 2026 the default fluid is
 three languages). Nothing of it is reused. The page is **English only**: `tools/i18n/build.py` lists it in `ENGLISH_ONLY`, so no
 German or Arabic page is generated, and links to it from the German and Arabic pages point at the English page.
 
+## Part D: the real glass, computed (11 November 2026) — the page's default since then
+
+The task: the same result on every device, in real time, with the heavy computation done beforehand on GitHub's free runners.
+The page no longer solves the 3D equations on the reader's device by default; it steps a model of the stout whose every number
+was computed from the measured glass, and keeps the 3D solvers as "3D reference" buttons (`?model=gpu`, `?grid=4`, `?grid=3`).
+
+**The model** (`public/scripts/stout-modal.js`, `TulipNM`; `TulipModes` is its linear part):
+- Linear modes of the real tulip by finite elements (`tools/fig12/modes_fem.py`): Laplace's equation in the stout, no flow through
+  the glass, the free-surface condition, per harmonic m on the meridian section (P2 elements, the surface's Schur complement).
+  Checks: the cylinder's Bessel frequencies to 3e-9, its shapes, push coefficients 2R/(ξ²−1), momentum πR³/ξ², the static tilt,
+  truncated cones against Gavrilyuk et al. (Eng. Comput. 25, 2008, Table II(A)) to 2e-5, the full 45° cone's exact κ11 = 1.
+  Tulip at 125 mm: 3.4114 Hz (the page had inferred ≈ 3.41 from the 3D grids), steady wall rise −3.312 mm per m/s².
+- Each m = 1 mode: q̈ + 2ζωq̇ + ω²(1 + a_z/g) q = −(ω²/g) c a_x; momentum ρ Σ Ix q̇ (only the surface moves the centre of mass);
+  modal mass ρ Ix/(κc). Large swings: the tulip's own Narimanov–Moiseev five-mode equations (`tools/fig12/nm_tulip.py`), FLT 2016's
+  integrals with the finite-element shapes; on a cylinder every coefficient equals the Bessel route (`nm_coeffs.py`) to 1.6e-6 and
+  FLT Table 1 (d1 1.758024, d2 −1.083354). First-order wall-slope terms derived here (the wedge of liquid at a sloping wall).
+  Classical Runge–Kutta for the five coordinates (semi-implicit Euler drifted +3 % per 10 s: the kinetic matrix depends on them).
+- Friction (all off with the page's switch): the wall's Stokes layer (Landau & Lifshitz §24 over the finite-element mode; deep
+  cylinder K = 3.503 against Miles's 3.52), the protein skin of the surface as an inextensible film (Lamb 1932, Art. 351), bulk
+  strain; the stout's ν = 2.05e-6 m²/s (Benilov et al. 2013, measured). At 125 mm: ζ = 0.00496 (wall) + 0.00518 (skin) + 0.00039
+  (bulk). The head: Viola, Brun, Dollet & Gallaire (Phys. Fluids 28, 2016) wall friction ∝ V|V|^(−1/3) (mobile bubble surfaces:
+  beer's surface modulus 5–25 mN/m, Wierenga 2023, below Denkov's 30–100 mN/m), their measured α refitted on an effective depth
+  h_eff = ℓ/(n+1)(1 − e^(−(n+1)h/ℓ)), ℓ = R/ξ11 (5.36 per m, ±20 %), scaled to stout (bubbles 0.2 mm, Ronteltap 1989; γ 45 mN/m).
+  It acts at the wall at 24 angles, so it stays right for a swirl. Uncertain by a factor of a few; against the only beer measurement
+  (Rubio-Iñiguez et al., Lat. Am. J. Phys. Educ. 18(2), 2024: decay times 0.95–1.5 s, head thickness not reported) it may be 3–5×
+  too strong if their heads were about 10 mm.
+- The pour: a weir at each angle of the rim, C_d = 1.0 and the breaking cap 2.0 R/ξ11, fitted to the 3D solver's 24 spill runs
+  (`tools/fig12/spill-fit.cjs`): spilled mass 5–23 % low, typical 15 %; the largest lean of violent swings 20–30 % low.
+- The cart (`stout-cart.js`): new options, all 0 by default (the page and every saved run unchanged): rolling resistance, gearbox
+  dry and viscous friction, air drag (`Cart.resist`); the road kind `drawn` (a monotone cubic through the reader's points).
+
+**Stepping** (`FixedStepper`): exact 1 ms steps, as many as the real time asks, at most 100 a frame; the store is attached for the
+frame's last step only. 2000 steps bit-identical for frames of 16.7 ms and of mixed 4–31 ms (`modal-check.cjs`). This also removes
+the glitch traced on 11 November 2026: the processor path advanced 5, 10 or 15 ms a frame in an irregular mix (734 frames of 10 ms,
+625 of 15 ms over 60 s at a steady 44 ms a frame), and the graphics-chip path froze while a batch was on the chip and jumped after.
+
+**Measured on the page** (headless Chromium, 390 px, DPR 3, the site's protocol): 1× CPU 60.0 fps, frames 16.7 ms, real time 1.000;
+4× CPU 24.8 fps, real time 0.93 (before: 12 fps and 0.05 of real time). At 4× the scripts take about 11 ms a frame (drawing 8.4);
+the rest is the headless browser's software painting, which a phone does on its graphics chip. `notes/fig12/panel-test2.cjs`: 231
+checks, none differ, at 1600, 1100, 390 px; `notes/fig12/test.cjs`: real time, push, drag, no errors.
+
+**Checked against the 3D solver** (runs in `notes/fig12/runs/`): small swings (the 10 mm bump: 23.7 against 25.0 mm); vertical
+jolts on a swinging stout (`heave-3d.cjs`: the reversal reproduced, odd part 7.6/7.5 against 7.7/8.4 mm); softening at 75–140 mm on
+3 and 4 mm grids (`backbone-3d.cjs`, stage C): with slope terms 0.57, vertical wall 0.59 percentage points rms from the 3D, whose own
+grid spread is as large; spill (above); random roads by regime (stage E, `notes/fig12/validation.md`).
+
+**The pipeline on GitHub** (standard runners only, free): `fig12-modes.yml` (stages B, D: checks, every fill height, data committed
+only if its numbers changed: `tools/fig12/same_data.py`), `fig12-3d.yml` (stage C: 3D runs into `notes/fig12/runs/3d/`), and
+`fig12-validate.yml` (stage E: 250 roads, report, then the verdict). A push made with GITHUB_TOKEN starts no workflow run, so the
+pipeline cannot loop. Data: `public/data/fig12/modes.json` (239 kB), `nm.json` (65 kB).
+
+**The page**: new controls "The pint" (fill, head 0–20 mm, friction switch) and "your own road" (an editor, 0–12 m, presets).
+
 ## What the page does
 
 A pint of stout in the Guinness tulip glass rides a cart with one wheel, one spring and one damper over cosine bumps (25 cm

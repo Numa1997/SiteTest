@@ -4,19 +4,21 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-1563 files, 77.0 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+1646 files, 78.2 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
 | [Repository root](#repository-root) | 11 |
+| [GitHub workflows (the Fig. 12 pipeline)](#github-workflows-the-fig-12-pipeline) | 3 |
 | [Pages under public/](#pages-under-public) | 6 |
 | [German pages (generated)](#german-pages-generated) | 17 |
 | [Arabic pages (generated)](#arabic-pages-generated) | 17 |
 | [Simulation pages](#simulation-pages) | 37 |
 | [Walkthroughs](#walkthroughs) | 36 |
 | [Ledgers of the data panel](#ledgers-of-the-data-panel) | 5 |
-| [Shared scripts](#shared-scripts) | 20 |
+| [Shared scripts](#shared-scripts) | 21 |
 | [Stylesheets](#stylesheets) | 15 |
+| [Data of Fig. 12, computed on GitHub’s runners](#data-of-fig-12-computed-on-githubs-runners) | 2 |
 | [KaTeX](#katex) | 24 |
 | [Latin Modern](#latin-modern) | 5 |
 | [IBM Plex, Instrument Serif, and the Arabic faces](#ibm-plex-instrument-serif-and-the-arabic-faces) | 61 |
@@ -37,13 +39,13 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Shared by the portfolio sources (not served)](#shared-by-the-portfolio-sources-not-served) | 1 |
 | [Template sources](#template-sources) | 2 |
 | [Documentation](#documentation) | 37 |
-| [Tools](#tools) | 96 |
+| [Tools](#tools) | 109 |
 | [Translation tables](#translation-tables) | 54 |
 | [Agents of the lecture-note review](#agents-of-the-lecture-note-review) | 4 |
 | [Working notes of project 07, the electron beam](#working-notes-of-project-07-the-electron-beam) | 52 |
 | [Working notes of the Rotor Pendula study](#working-notes-of-the-rotor-pendula-study) | 86 |
 | [Working notes of the Droplet Collection study](#working-notes-of-the-droplet-collection-study) | 121 |
-| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 484 |
+| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 548 |
 
 ## Repository root
 
@@ -60,6 +62,14 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tsconfig.json`](../tsconfig.json) | 485 B | TypeScript settings for src/ (template; unused by the site). | [build-and-deploy.md](build-and-deploy.md) |
 | [`vite.config.ts`](../vite.config.ts) | 226 B | Vite settings: relative base, output folder from the platform. | [build-and-deploy.md](build-and-deploy.md) |
 | [`wrangler.jsonc`](../wrangler.jsonc) | 898 B | Cloudflare settings: the Worker phyein-usul, the dist/ folder, the custom domains phyeinusul.com and www. | [usul.md](usul.md) |
+
+## GitHub workflows (the Fig. 12 pipeline)
+
+| File | Size | What it is | Explained in |
+|---|---|---|---|
+| [`.github/workflows/fig12-3d.yml`](../.github/workflows/fig12-3d.yml) | 4.4 kB | Fig. 12 pipeline, stage C: the full 3D runs on GitHub’s runners (spill, softening, the whole glass shaken), gathered into notes/fig12/runs/3d/. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`.github/workflows/fig12-modes.yml`](../.github/workflows/fig12-modes.yml) | 3.0 kB | Fig. 12 pipeline, stages B and D: on GitHub’s runners, the finite-element and nonlinear checks, every fill height, the page’s model checked, the data committed only if its numbers changed. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`.github/workflows/fig12-validate.yml`](../.github/workflows/fig12-validate.yml) | 2.4 kB | Fig. 12 pipeline, stage E: the page’s model against the 3D solver on 250 random roads; the report committed, then judged against stated tolerances. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 
 ## Pages under public/
 
@@ -124,7 +134,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/simulations/Double Pendulum.html`](../public/simulations/Double%20Pendulum.html) | 133.1 kB | Fig. 2 · Double Pendulum: the simulation, its data panel, walkthrough and lecture note. | [fig02-double-pendulum.md](simulations/fig02-double-pendulum.md) |
 | [`public/simulations/Interactive Double-Slit Experiment Visualization.html`](../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html) | 178.5 kB | Fig. 3 · Double-Slit Interference: the simulation, its data panel, walkthrough and lecture note. | [fig03-double-slit.md](simulations/fig03-double-slit.md) |
 | [`public/simulations/Transverse and longitudinal waves.html`](../public/simulations/Transverse%20and%20longitudinal%20waves.html) | 209.2 kB | Fig. 4 · Transverse & Longitudinal: the simulation, its data panel, walkthrough and lecture note. | [fig04-transverse-longitudinal.md](simulations/fig04-transverse-longitudinal.md) |
-| [`public/simulations/beer-slosh.html`](../public/simulations/beer-slosh.html) | 396.8 kB | Fig. 12 · A Pint of Guinness on a One-Wheel Cart: the simulation, its data panel, walkthrough and lecture note. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`public/simulations/beer-slosh.html`](../public/simulations/beer-slosh.html) | 407.1 kB | Fig. 12 · A Pint of Guinness on a One-Wheel Cart: the simulation, its data panel, walkthrough and lecture note. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`public/simulations/butterfly-catch.html`](../public/simulations/butterfly-catch.html) | 40.5 kB | Fig. 13: catching the butterfly, the live interactive catch and its lecture note (theory and method); body from tools/fig13/catch_note_body.html. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`public/simulations/butterfly-dashboard.html`](../public/simulations/butterfly-dashboard.html) | 28.1 kB | Fig. 13 dashboard · The Wave and the Circle: the complex plane of the motion, its height and sideways position against time joined by straight lines, and the paper turned until each wave is the circle again (a wheel, the butterfly). | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`public/simulations/double-inverted-pendulum.html`](../public/simulations/double-inverted-pendulum.html) | 369.4 kB | Project 05 · Balancing Two Rods on a Cart (Fig. 11 from 3 to 4 November 2026), in vacuum and air since 7 November 2026: the real-time simulation, its data panel, walkthrough and lecture note; listed on the Projects page, kept at this address so that its German and Arabic pages are generated with the simulations. | [fig11-double-inverted-pendulum.md](simulations/fig11-double-inverted-pendulum.md) |
@@ -225,12 +235,13 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/scripts/i18n/strings-ar.js`](../public/scripts/i18n/strings-ar.js) | 482.3 kB | The Arabic string table the scripts read through T(), generated; do not edit. | [i18n.md](i18n.md) |
 | [`public/scripts/i18n/strings-de.js`](../public/scripts/i18n/strings-de.js) | 414.2 kB | The German string table the scripts read through T(), generated; do not edit. | [i18n.md](i18n.md) |
 | [`public/scripts/sim.js`](../public/scripts/sim.js) | 43.8 kB | Shared helpers of the simulation pages: KaTeX typesetting of the notes, the walkthrough engine. | [sim.md](scripts/sim.md) |
-| [`public/scripts/stout-cart.js`](../public/scripts/stout-cart.js) | 132.7 kB | Fig. 12: the solver: 3D Navier–Stokes for the stout in the glass by APIC on a MAC grid (cut-cell wall, ghost-fluid surface, half glass by symmetry), the road, the one-wheel cart, and their two-way coupling. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`public/scripts/stout-cart.js`](../public/scripts/stout-cart.js) | 135.6 kB | Fig. 12: the solver: 3D Navier–Stokes for the stout in the glass by APIC on a MAC grid (cut-cell wall, ghost-fluid surface, half glass by symmetry), the road, the one-wheel cart, and their two-way coupling. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`public/scripts/stout-gpu-view.js`](../public/scripts/stout-gpu-view.js) | 15.5 kB | Fig. 12: draws the GPU solver’s stout on the graphics chip (screen-space fluid rendering: sphere depth, bilateral smoothing, thickness for Beer–Lambert, the head as the top 12 mm). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
-| [`public/scripts/stout-gpu.js`](../public/scripts/stout-gpu.js) | 66.7 kB | Fig. 12: the 3D stout solver on the graphics chip (WebGPU compute shaders): the whole glass, APIC on a MAC grid, level set, Jacobi-preconditioned CG; batches of steps with one read-back. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`public/scripts/stout-gpu.js`](../public/scripts/stout-gpu.js) | 66.8 kB | Fig. 12: the 3D stout solver on the graphics chip (WebGPU compute shaders): the whole glass, APIC on a MAC grid, level set, Jacobi-preconditioned CG; batches of steps with one read-back. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`public/scripts/stout-modal.js`](../public/scripts/stout-modal.js) | 34.0 kB | Fig. 12: the page’s default model, the real glass computed: its sloshing modes, large-swing (Narimanov–Moiseev) equations and friction from public/data/fig12/, stepped in exact 1 ms steps (TulipModes, TulipNM, FixedStepper). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`public/scripts/stout-nm.js`](../public/scripts/stout-nm.js) | 3.0 kB | Fig. 12: the coefficients of the nonlinear (Narimanov–Moiseev) live model, written by tools/fig12/nm_coeffs.py; do not edit. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`public/scripts/stout-pool.js`](../public/scripts/stout-pool.js) | 4.9 kB | Fig. 12: shares four loops of the stout solver over worker threads with shared memory; identical numbers. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
-| [`public/scripts/stout-view.js`](../public/scripts/stout-view.js) | 35.5 kB | Fig. 12: draws the cart, the road and the pint on a canvas from the solver’s state; the head of the stout is drawn, not computed. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`public/scripts/stout-view.js`](../public/scripts/stout-view.js) | 35.8 kB | Fig. 12: draws the cart, the road and the pint on a canvas from the solver’s state; the head of the stout is drawn, not computed. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`public/scripts/stout-worker.js`](../public/scripts/stout-worker.js) | 1.1 kB | Fig. 12: one worker thread of the stout solver: waits for a task, does its share of a loop. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`public/scripts/twoway.js`](../public/scripts/twoway.js) | 57.7 kB | The solved, two-way fluid of projects 05 and 06 (offered on 06 since 7 November 2026): a tank as deep as the cart (its size set by the page through setCart), 2D Navier–Stokes on a MAC grid, the cart coupled through the pressure, the rods as lines of forces; runs the page's 1 ms machine steps inside its 20 ms fluid steps. | [twoway.md](scripts/twoway.md) |
 
@@ -253,6 +264,13 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/styles/sim.rtl.css`](../public/styles/sim.rtl.css) | 21.5 kB | sim.css with left and right exchanged, for the Arabic pages; generated with rtlcss, do not edit. | [styles.md](styles.md) |
 | [`public/styles/site.css`](../public/styles/site.css) | 27.4 kB | Design of the home, catalog and Portfolios pages: tokens, top bar, sections, cards. | [styles.md](styles.md) |
 | [`public/styles/site.rtl.css`](../public/styles/site.rtl.css) | 27.6 kB | site.css with left and right exchanged, for the Arabic pages; generated with rtlcss, do not edit. | [styles.md](styles.md) |
+
+## Data of Fig. 12, computed on GitHub’s runners
+
+| File | Size | What it is | Explained in |
+|---|---|---|---|
+| [`public/data/fig12/modes.json`](../public/data/fig12/modes.json) | 239.1 kB | Fig. 12 data: the tulip’s linear sloshing modes for 47 fill heights (frequencies, shapes, push and momentum coefficients, friction factors), by tools/fig12/modes_fem.py on GitHub’s runners; do not edit. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`public/data/fig12/nm.json`](../public/data/fig12/nm.json) | 65.5 kB | Fig. 12 data: the tulip’s five-mode Narimanov–Moiseev equations for 47 fill heights, by tools/fig12/nm_tulip.py on GitHub’s runners; do not edit. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 
 ## KaTeX
 
@@ -893,6 +911,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/fig11/figs.py`](../tools/fig11/figs.py) | 5.8 kB | Composes the Blender renders of tools/fig11/ into the four figures with numbered balloons (Pillow). | [fig11-pendulum-control.md](simulations/fig11-pendulum-control.md) |
 | [`tools/fig11/joints.py`](../tools/fig11/joints.py) | 8.7 kB | Blender scenes for Double Pendulum under Control: the strut’s two joints, exploded (bpy 5.2). | [fig11-pendulum-control.md](simulations/fig11-pendulum-control.md) |
 | [`tools/fig11/rig.py`](../tools/fig11/rig.py) | 18.7 kB | Blender scenes for Double Pendulum under Control: the whole machine, the strut cut open, the motor (bpy 5.2). | [fig11-pendulum-control.md](simulations/fig11-pendulum-control.md) |
+| [`tools/fig12/backbone-3d.cjs`](../tools/fig12/backbone-3d.cjs) | 3.4 kB | Fig. 12: the 3D solver’s free swing at any fill (pulse or tilt-release): frequency against amplitude. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/check.cjs`](../tools/fig12/check.cjs) | 5.5 kB | Fig. 12: offline checks of the stout solver (rest, free sloshing frequency, tilt under a steady push); prints measured numbers. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/coffee.cjs`](../tools/fig12/coffee.cjs) | 4.9 kB | Fig. 12: a mug of coffee beside the pint (note §14): f11, wall and foam damping, the push to the rim, and both carried by a walking hand through the nonlinear live model. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/control.cjs`](../tools/fig12/control.cjs) | 7.6 kB | Fig. 12: the controllers against either fluid model through the wall probes and the Kalman filter (bump or push, controller switched on while swinging); fits the decay. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
@@ -901,20 +920,32 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/fig12/glass_profile.json`](../tools/fig12/glass_profile.json) | 3.2 kB | Fig. 12: the measured inner radius every 0.5 mm with its scaling, written by glass_profile.py. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/glass_profile.py`](../tools/fig12/glass_profile.py) | 6.1 kB | Fig. 12: measures the inner outline of the tulip from dimensions.com’s dimensioned section and scales it to 160 x 85 mm; writes glass_profile.json and guinness-glass.js. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/gpu-linearity.cjs`](../tools/fig12/gpu-linearity.cjs) | 5.2 kB | Fig. 12: the GPU solver from rest in headless Chromium (pushes, steady tilt, rest), the experiment of linearity.cjs; saves series for linfit.cjs. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`tools/fig12/gpu-shake.cjs`](../tools/fig12/gpu-shake.cjs) | 4.1 kB | Fig. 12: the whole glass (GPU solver, headless Chromium) shaken near resonance: does the swing turn into a swirl? | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/gpu-study.cjs`](../tools/fig12/gpu-study.cjs) | 5.3 kB | Fig. 12: the cart over a bump or a rough road with the GPU solver (World.advanceGpu) in headless Chromium, in batches; lean, accelerations, spill, controllers. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`tools/fig12/heave-3d.cjs`](../tools/fig12/heave-3d.cjs) | 2.9 kB | Fig. 12: vertical jolts on a swinging stout, the 3D solver against the model’s heave law. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/ident.cjs`](../tools/fig12/ident.cjs) | 3.2 kB | Fig. 12: fits one oscillator (frequency, damping, coupling) to the 3D solver’s runs from rest. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/irish-imperial-pint.svg`](../tools/fig12/irish-imperial-pint.svg) | 54.0 kB | Fig. 12: dimensions.com’s dimensioned elevation and section of the tulip pint glass (source of the profile). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/linearity.cjs`](../tools/fig12/linearity.cjs) | 2.9 kB | Fig. 12: both fluid models from rest under the same half-sine push, no cart: where the linear modes fail (lean, swing, spill). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/linfit.cjs`](../tools/fig12/linfit.cjs) | 2.0 kB | Fig. 12: fits the free swing (amplitude, frequency) in the files linearity.cjs saves. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`tools/fig12/modal-check.cjs`](../tools/fig12/modal-check.cjs) | 7.8 kB | Fig. 12: checks of the page’s linear model: steady tilt, frequency, decay, heave, Mathieu growth, frame-independent histories, friction, foam, masses. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`tools/fig12/modes_fem.py`](../tools/fig12/modes_fem.py) | 22.2 kB | Fig. 12: finite elements of the measured glass: sloshing modes, push and momentum coefficients, wall, skin and bulk friction, checked on cylinders and cones; writes public/data/fig12/modes.json. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`tools/fig12/nm-check.cjs`](../tools/fig12/nm-check.cjs) | 4.5 kB | Fig. 12: checks of the page’s large-swing model: small-swing limit, softening against the 3D solver, no drift, swirl and planar regimes. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/nm_coeffs.py`](../tools/fig12/nm_coeffs.py) | 11.7 kB | Fig. 12: derives the Narimanov–Moiseev five-mode sloshing coefficients of a cylinder from the multimodal integrals (Faltinsen, Lukovsky & Timokha 2016) and checks them against their Table 1. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`tools/fig12/nm_tulip.py`](../tools/fig12/nm_tulip.py) | 19.6 kB | Fig. 12: the tulip’s Narimanov–Moiseev equations from its finite-element modes, wall slope included; checked against the Bessel route; writes public/data/fig12/nm.json. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/observer.cjs`](../tools/fig12/observer.cjs) | 4.9 kB | Fig. 12: the numbers of the note’s Kalman-filter section: plant, LQR gains and poles, discrete matrices, settled gain, probe noise at rest. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/profile.cjs`](../tools/fig12/profile.cjs) | 1.5 kB | Fig. 12: times one fluid step of the stout solver by phase (level set, transfers, pressure, advection). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`tools/fig12/requirements.txt`](../tools/fig12/requirements.txt) | 187 B | Fig. 12: the pinned Python packages of the finite-element and fitting tools, for GitHub’s runners. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/roads.cjs`](../tools/fig12/roads.cjs) | 3.2 kB | Fig. 12: the cart on the rough roads (ISO 8608 classes, washboard, setts): vertical shaking at twice the swing frequency, lean, spill, wheel off the road, grip limit. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/same.cjs`](../tools/fig12/same.cjs) | 1.1 kB | Fig. 12: fingerprint (SHA-256) of the solver state after 1 s with a push; a speed-up must leave it unchanged. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`tools/fig12/same_data.py`](../tools/fig12/same_data.py) | 1.4 kB | Fig. 12: do two data files hold the same numbers (to their printed digits)? The pipeline commits new data only if not. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`tools/fig12/spill-3d.cjs`](../tools/fig12/spill-3d.cjs) | 2.1 kB | Fig. 12: the 3D solver pushed hard enough to spill: lean, highest wall point and spilled mass over time. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`tools/fig12/spill-fit.cjs`](../tools/fig12/spill-fit.cjs) | 2.6 kB | Fig. 12: the page’s pour model against the 3D spill runs; the calibration of the weir coefficient and the breaking cap. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/springs.cjs`](../tools/fig12/springs.cjs) | 5.1 kB | Fig. 12: what each controller does to the suspension spring (stroke, active force, heave, lean, spill) on bumps and rough roads; the joint motor and suspension design. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/study.cjs`](../tools/fig12/study.cjs) | 3.7 kB | Fig. 12: one run of the parameter study through World.advance (bump height, speed loop, suspension): lean, accelerations, spill. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/swirl.cjs`](../tools/fig12/swirl.cjs) | 1.6 kB | Fig. 12: shakes the nonlinear live model along the road at frequencies near resonance and prints whether it swirls. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/theory.cjs`](../tools/fig12/theory.cjs) | 12.0 kB | Fig. 12: the closed-form numbers of the lecture note from the page’s constants: sloshing frequency and equivalent mass, dimensionless groups and damping, quarter car, drive, PI loop, skyhook. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`tools/fig12/validate-report.cjs`](../tools/fig12/validate-report.cjs) | 4.7 kB | Fig. 12: gathers the validation runs, writes notes/fig12/validation.md in plain words, fails on stated tolerances. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`tools/fig12/validate.cjs`](../tools/fig12/validate.cjs) | 6.3 kB | Fig. 12: stage E: the page’s model against the 3D solver on seeded random roads, by regime. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig13/build_page.py`](../tools/fig13/build_page.py) | 8.1 kB | Fig. 13: joins the four notes (sheet and eye, butterfly, flower hunt, catch) into the one article of momentum-spirographs.html, with one numbering; --check fails if the page is stale. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`tools/fig13/butterfly.py`](../tools/fig13/butterfly.py) | 5.2 kB | Fig. 13 generator: the butterflies (one-petal resonance) closed by Newton's method, with their stability. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`tools/fig13/butterfly_control.py`](../tools/fig13/butterfly_control.py) | 21.8 kB | Fig. 13: a motor at the top pin catches the pendulum and holds it on the butterfly (periodic LQR along the orbit; pump, wait, catch). | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
@@ -973,7 +1004,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/i18n/ingest.py`](../tools/i18n/ingest.py) | 1.9 kB | Stores checked translations made outside the tables (page pieces, script strings, walkthrough prose). | [i18n.md](i18n.md) |
 | [`tools/i18n/package.json`](../tools/i18n/package.json) | 285 B | The parser wrap.cjs needs (acorn); npm install --prefix tools/i18n. | [i18n.md](i18n.md) |
 | [`tools/i18n/wrap.cjs`](../tools/i18n/wrap.cjs) | 3.7 kB | Wraps the reader-visible strings of a page's scripts in _t(), with a JavaScript parser (acorn). | [i18n.md](i18n.md) |
-| [`tools/inventory.py`](../tools/inventory.py) | 82.8 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
+| [`tools/inventory.py`](../tools/inventory.py) | 87.3 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
 | [`tools/perf/addresses.cjs`](../tools/perf/addresses.cjs) | 6.1 kB | Every page at every address a reader can use (x.html, x, x/, folder/), and every link of every page, on a running site; exits 1 on any wrong answer. | [performance.md](performance.md) |
 | [`tools/perf/clockcheck.cjs`](../tools/perf/clockcheck.cjs) | 3.2 kB | Each figure runs on screen, holds off screen, resumes; the store stays live for an open data panel and the walkthrough. | [performance.md](performance.md) |
 | [`tools/perf/film.cjs`](../tools/perf/film.cjs) | 3.1 kB | A repeat visit as a reader sees it: screenshots at fixed times and every LCP candidate with its element, to tell a metric from the screen. | [performance.md](performance.md) |
@@ -1751,12 +1782,71 @@ to confirm that every file is described. Sizes are those of the files when the l
 |---|---|---|---|
 | [`notes/fig12/referee.md`](../notes/fig12/referee.md) | 27.9 kB | Fig. 12: the blind referee's report on the note. | [notes.md](notes.md) |
 
-<details><summary>114 files: Fig. 12: a measuring script of the review, or its saved output.</summary>
+<details><summary>178 files: Fig. 12: a measuring script of the review, or its saved output.</summary>
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
 | [`notes/fig12/research.md`](../notes/fig12/research.md) | 5.6 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/road-shots.cjs`](../notes/fig12/road-shots.cjs) | 1.9 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/runs/3d/backbone-3mm-a.log`](../notes/fig12/runs/3d/backbone-3mm-a.log) | 801 B | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/runs/3d/backbone-3mm-b.log`](../notes/fig12/runs/3d/backbone-3mm-b.log) | 803 B | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/runs/3d/backbone-4mm.log`](../notes/fig12/runs/3d/backbone-4mm.log) | 1.6 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/runs/3d/backbone-tilt-100-1.5-3mm.json`](../notes/fig12/runs/3d/backbone-tilt-100-1.5-3mm.json) | 14.5 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/runs/3d/backbone-tilt-100-1.5-4mm.json`](../notes/fig12/runs/3d/backbone-tilt-100-1.5-4mm.json) | 14.4 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/runs/3d/backbone-tilt-100-2.5-3mm.json`](../notes/fig12/runs/3d/backbone-tilt-100-2.5-3mm.json) | 14.6 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/runs/3d/backbone-tilt-100-2.5-4mm.json`](../notes/fig12/runs/3d/backbone-tilt-100-2.5-4mm.json) | 14.5 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/runs/3d/backbone-tilt-100-5-3mm.json`](../notes/fig12/runs/3d/backbone-tilt-100-5-3mm.json) | 14.5 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/runs/3d/backbone-tilt-100-5-4mm.json`](../notes/fig12/runs/3d/backbone-tilt-100-5-4mm.json) | 14.5 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/runs/3d/backbone-tilt-125-1.5-3mm.json`](../notes/fig12/runs/3d/backbone-tilt-125-1.5-3mm.json) | 14.5 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/runs/3d/backbone-tilt-125-1.5-4mm.json`](../notes/fig12/runs/3d/backbone-tilt-125-1.5-4mm.json) | 14.4 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/runs/3d/backbone-tilt-125-2.5-3mm.json`](../notes/fig12/runs/3d/backbone-tilt-125-2.5-3mm.json) | 14.6 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/runs/3d/backbone-tilt-125-2.5-4mm.json`](../notes/fig12/runs/3d/backbone-tilt-125-2.5-4mm.json) | 14.5 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/runs/3d/backbone-tilt-125-5-3mm.json`](../notes/fig12/runs/3d/backbone-tilt-125-5-3mm.json) | 14.6 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/runs/3d/backbone-tilt-125-5-4mm.json`](../notes/fig12/runs/3d/backbone-tilt-125-5-4mm.json) | 14.5 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/runs/3d/backbone-tilt-140-1.5-3mm.json`](../notes/fig12/runs/3d/backbone-tilt-140-1.5-3mm.json) | 14.3 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/runs/3d/backbone-tilt-140-1.5-4mm.json`](../notes/fig12/runs/3d/backbone-tilt-140-1.5-4mm.json) | 14.5 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/runs/3d/backbone-tilt-140-2.5-3mm.json`](../notes/fig12/runs/3d/backbone-tilt-140-2.5-3mm.json) | 14.5 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/runs/3d/backbone-tilt-140-2.5-4mm.json`](../notes/fig12/runs/3d/backbone-tilt-140-2.5-4mm.json) | 14.4 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/runs/3d/backbone-tilt-140-5-3mm.json`](../notes/fig12/runs/3d/backbone-tilt-140-5-3mm.json) | 14.5 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/runs/3d/backbone-tilt-140-5-4mm.json`](../notes/fig12/runs/3d/backbone-tilt-140-5-4mm.json) | 14.5 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/runs/3d/backbone-tilt-75-1.5-3mm.json`](../notes/fig12/runs/3d/backbone-tilt-75-1.5-3mm.json) | 14.4 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/runs/3d/backbone-tilt-75-1.5-4mm.json`](../notes/fig12/runs/3d/backbone-tilt-75-1.5-4mm.json) | 14.4 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/runs/3d/backbone-tilt-75-2.5-3mm.json`](../notes/fig12/runs/3d/backbone-tilt-75-2.5-3mm.json) | 14.5 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/runs/3d/backbone-tilt-75-2.5-4mm.json`](../notes/fig12/runs/3d/backbone-tilt-75-2.5-4mm.json) | 14.4 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/runs/3d/backbone-tilt-75-5-3mm.json`](../notes/fig12/runs/3d/backbone-tilt-75-5-3mm.json) | 14.5 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/runs/3d/backbone-tilt-75-5-4mm.json`](../notes/fig12/runs/3d/backbone-tilt-75-5-4mm.json) | 14.5 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/runs/3d/spill-125-10-3mm.json`](../notes/fig12/runs/3d/spill-125-10-3mm.json) | 7.6 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/runs/3d/spill-125-10-4mm.json`](../notes/fig12/runs/3d/spill-125-10-4mm.json) | 7.6 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/runs/3d/spill-125-4-3mm.json`](../notes/fig12/runs/3d/spill-125-4-3mm.json) | 7.3 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/runs/3d/spill-125-4-4mm.json`](../notes/fig12/runs/3d/spill-125-4-4mm.json) | 7.3 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/runs/3d/spill-125-6-3mm.json`](../notes/fig12/runs/3d/spill-125-6-3mm.json) | 7.5 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/runs/3d/spill-125-6-4mm.json`](../notes/fig12/runs/3d/spill-125-6-4mm.json) | 7.5 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/runs/3d/spill-125-8-3mm.json`](../notes/fig12/runs/3d/spill-125-8-3mm.json) | 7.6 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/runs/3d/spill-125-8-4mm.json`](../notes/fig12/runs/3d/spill-125-8-4mm.json) | 7.6 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/runs/3d/spill-135-10-3mm.json`](../notes/fig12/runs/3d/spill-135-10-3mm.json) | 7.6 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/runs/3d/spill-135-10-4mm.json`](../notes/fig12/runs/3d/spill-135-10-4mm.json) | 7.7 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/runs/3d/spill-135-4-3mm.json`](../notes/fig12/runs/3d/spill-135-4-3mm.json) | 7.1 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/runs/3d/spill-135-4-4mm.json`](../notes/fig12/runs/3d/spill-135-4-4mm.json) | 7.3 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/runs/3d/spill-135-6-3mm.json`](../notes/fig12/runs/3d/spill-135-6-3mm.json) | 7.5 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/runs/3d/spill-135-6-4mm.json`](../notes/fig12/runs/3d/spill-135-6-4mm.json) | 7.5 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/runs/3d/spill-135-8-3mm.json`](../notes/fig12/runs/3d/spill-135-8-3mm.json) | 7.6 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/runs/3d/spill-135-8-4mm.json`](../notes/fig12/runs/3d/spill-135-8-4mm.json) | 7.7 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/runs/3d/spill-140-10-3mm.json`](../notes/fig12/runs/3d/spill-140-10-3mm.json) | 7.6 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/runs/3d/spill-140-10-4mm.json`](../notes/fig12/runs/3d/spill-140-10-4mm.json) | 7.8 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/runs/3d/spill-140-4-3mm.json`](../notes/fig12/runs/3d/spill-140-4-3mm.json) | 7.4 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/runs/3d/spill-140-4-4mm.json`](../notes/fig12/runs/3d/spill-140-4-4mm.json) | 7.5 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/runs/3d/spill-140-6-3mm.json`](../notes/fig12/runs/3d/spill-140-6-3mm.json) | 7.6 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/runs/3d/spill-140-6-4mm.json`](../notes/fig12/runs/3d/spill-140-6-4mm.json) | 7.6 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/runs/3d/spill-140-8-3mm.json`](../notes/fig12/runs/3d/spill-140-8-3mm.json) | 7.6 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/runs/3d/spill-140-8-4mm.json`](../notes/fig12/runs/3d/spill-140-8-4mm.json) | 7.6 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/runs/3d/spill-3mm.log`](../notes/fig12/runs/3d/spill-3mm.log) | 1.1 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/runs/3d/spill-4mm.log`](../notes/fig12/runs/3d/spill-4mm.log) | 1.1 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/runs/backbone-3d-75-0.7.json`](../notes/fig12/runs/backbone-3d-75-0.7.json) | 11.8 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/runs/backbone-3d-75-1.5.json`](../notes/fig12/runs/backbone-3d-75-1.5.json) | 11.7 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/runs/backbone-3d-75-3.json`](../notes/fig12/runs/backbone-3d-75-3.json) | 11.8 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/runs/backbone-3d-tilt-75-1.json`](../notes/fig12/runs/backbone-3d-tilt-75-1.json) | 14.5 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/runs/backbone-3d-tilt-75-2.5.json`](../notes/fig12/runs/backbone-3d-tilt-75-2.5.json) | 14.4 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/runs/backbone-3d-tilt-75-5.json`](../notes/fig12/runs/backbone-3d-tilt-75-5.json) | 14.5 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/runs/coffee-5mm.txt`](../notes/fig12/runs/coffee-5mm.txt) | 1.2 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/runs/coffee.txt`](../notes/fig12/runs/coffee.txt) | 2.1 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/runs/control-3d-bump25-off.json`](../notes/fig12/runs/control-3d-bump25-off.json) | 35.1 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
@@ -1799,6 +1889,8 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/fig12/runs/freq_0.0025.txt`](../notes/fig12/runs/freq_0.0025.txt) | 80 B | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/runs/freq_0.004.txt`](../notes/fig12/runs/freq_0.004.txt) | 77 B | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/runs/freq_0.005.txt`](../notes/fig12/runs/freq_0.005.txt) | 77 B | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/runs/heave-3d.json`](../notes/fig12/runs/heave-3d.json) | 17.3 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/runs/heave-modes.json`](../notes/fig12/runs/heave-modes.json) | 17.6 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/runs/linearity-3d-a.json`](../notes/fig12/runs/linearity-3d-a.json) | 10.6 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/runs/linearity-3d-b.json`](../notes/fig12/runs/linearity-3d-b.json) | 10.8 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/runs/linearity-3d-c.json`](../notes/fig12/runs/linearity-3d-c.json) | 5.6 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
@@ -1807,6 +1899,8 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/fig12/runs/linearity-gpu-b.txt`](../notes/fig12/runs/linearity-gpu-b.txt) | 755 B | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/runs/linearity-modal.json`](../notes/fig12/runs/linearity-modal.json) | 27.1 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/runs/linearity-nm.json`](../notes/fig12/runs/linearity-nm.json) | 27.1 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/runs/modes-fem-125.json`](../notes/fig12/runs/modes-fem-125.json) | 18.2 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/runs/nm-tulip-125.json`](../notes/fig12/runs/nm-tulip-125.json) | 2.8 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/runs/nm_coeffs.json`](../notes/fig12/runs/nm_coeffs.json) | 8.9 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/runs/nm_coeffs.txt`](../notes/fig12/runs/nm_coeffs.txt) | 1.9 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/runs/observer-3d.txt`](../notes/fig12/runs/observer-3d.txt) | 761 B | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
@@ -1830,6 +1924,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/fig12/runs/series_10_speed_1_0.004.json`](../notes/fig12/runs/series_10_speed_1_0.004.json) | 12.5 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/runs/series_25_off_0_0.004.json`](../notes/fig12/runs/series_25_off_0_0.004.json) | 13.1 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/runs/series_25_speed_0_0.004.json`](../notes/fig12/runs/series_25_speed_0_0.004.json) | 12.9 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/runs/spill-fit.json`](../notes/fig12/runs/spill-fit.json) | 4.4 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/runs/spill_0.003.txt`](../notes/fig12/runs/spill_0.003.txt) | 188 B | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/runs/spill_0.004.txt`](../notes/fig12/runs/spill_0.004.txt) | 186 B | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/runs/springs-3d-washboard.json`](../notes/fig12/runs/springs-3d-washboard.json) | 1.5 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
