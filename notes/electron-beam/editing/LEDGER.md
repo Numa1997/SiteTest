@@ -86,6 +86,10 @@ when V hands that chapter over. V reads this file before editing every chapter. 
   lateral spread, core width, core fraction, halo width.
 - **Promises.** ch07 counts the electrons of a pixel; ch07 blurs edges with core and halo.
 - **Hand-over.** "What chapter 7 receives": δ, η, core width, core fraction, halo width, with errors.
+- **Voice pass.** Elastic collision, secondary yield, pixel, dwell time, mean ionisation energy and escape depth marked at
+  their definitions; the two rhetorical questions ("How good is this cross-section?", "How sure is a count of 2000?") made
+  statements; a doubled sentence in Ex. 6.3 removed; "backscatter" (noun) → backscattering. Approved content fix (doubt 1):
+  §6.7 now says the range "grows faster than the energy, roughly as its five-thirds power (Kanaya–Okayama)".
 
 ## ch07 · Detect and measure
 - **Opening picture.** A metrology tool reading a width over and over; lines look like their own outlines.
@@ -106,7 +110,7 @@ when V hands that chapter over. V reads this file before editing every chapter. 
 - shows, models, leaves out, numbers.
 
 ## Doubts (physics or claims; listed, not fixed)
-1. ch06 §6.7: "The range grows almost as the square of the energy." The Kanaya–Okayama law quoted just above has the exponent 1.67,
+1. (FIXED in ch06 voice pass, coordinator's approval) ch06 §6.7: "The range grows almost as the square of the energy." The Kanaya–Okayama law quoted just above has the exponent 1.67,
    and ch09 says "roughly as its five-thirds power". AUDIT §8 records this as fixed, but the sentence is still in ch06. Coordinator to decide.
 2. ch04 §4.1–4.2 uses $B_r$ for the radial field component, the same symbol as the reduced brightness of ch02, ch03, ch05 and ch08.
    Inside maths; not changed. Since the ch04 voice pass the prose says so at first use.
