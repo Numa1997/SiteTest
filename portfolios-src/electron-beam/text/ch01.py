@@ -21,6 +21,7 @@ EB = os.path.abspath(os.path.join(HERE, '..'))
 if EB not in sys.path:
     sys.path.insert(0, EB)
 from ref import ch00 as R0, ch01 as R, core as RC  # noqa: E402
+import figkit as FK  # noqa: E402  (figure layout helpers, figkit.py)
 
 C = RC.C
 
@@ -250,70 +251,122 @@ def plate_path(E, B):
     return _thin(pts)
 
 
-def svg_tube():
-    X = lambda x: 40 + (x + 0.005) * 2000
-    Y = lambda y: 150 - y * 2600
-    s = ['<svg viewBox="0 0 760 300" role="img" aria-label="Cross-section of the cathode-ray tube: cathode, anode with a slit, deflection plates, coils, screen, and the path of one electron.">',
-         '<rect width="760" height="300" fill="#fff"/>']
-    s.append('<path d="M%.0f %.0f L%.0f %.0f L%.0f %.0f L%.0f %.0f Q%.0f %.0f %.0f %.0f L%.0f %.0f L%.0f %.0f L%.0f %.0f Z" fill="#fbf8f3" stroke="#8b8079" stroke-width="1.4"/>' % (
-        X(-0.004), Y(0.016), X(0.035), Y(0.016), X(0.05), Y(0.045), X(0.30), Y(0.045), X(0.305), Y(0), X(0.30), Y(-0.045), X(0.05), Y(-0.045), X(0.035), Y(-0.016), X(-0.004), Y(-0.016)))
-    s.append('<rect x="%.1f" y="%.1f" width="5" height="%.1f" fill="#1c1518"/>' % (X(-0.003), Y(0.008), Y(-0.008) - Y(0.008)))
-    s.append('<path d="M%.1f %.1f l-14 6 M%.1f %.1f l-14 -6" stroke="#7a1f2b" stroke-width="1.4" fill="none"/>' % (X(-0.003), Y(0.004), X(-0.003), Y(-0.004)))
-    s.append('<rect x="%.1f" y="%.1f" width="6" height="%.1f" fill="#5a504b"/><rect x="%.1f" y="%.1f" width="6" height="%.1f" fill="#5a504b"/>' % (
-        X(0.02) - 3, Y(0.014), Y(0.0012) - Y(0.014), X(0.02) - 3, Y(-0.0012), Y(-0.014) - Y(-0.0012)))
-    s.append('<rect x="%.1f" y="%.1f" width="%.1f" height="4" fill="#1c1518"/><rect x="%.1f" y="%.1f" width="%.1f" height="4" fill="#1c1518"/>' % (
-        X(XP), Y(D_GAP / 2) - 4, X(XP + L_PL) - X(XP), X(XP), Y(-D_GAP / 2), X(XP + L_PL) - X(XP)))
+def _svg(W, H, label, body):
+    return ('<svg viewBox="0 0 %d %d" role="img" aria-label="%s"><rect width="%d" height="%d" fill="#fff"/>' % (W, math.ceil(H), label, W, math.ceil(H))
+            + ''.join(body) + '</svg>')
+
+
+def _bez(p0, c, p1, n=24):
+    return [((1 - t) ** 2 * p0[0] + 2 * (1 - t) * t * c[0] + t * t * p1[0], (1 - t) ** 2 * p0[1] + 2 * (1 - t) * t * c[1] + t * t * p1[1]) for t in [i / n for i in range(n + 1)]]
+
+
+def _ell(cx, cy, rx, ry, n=64):
+    return [(cx + rx * math.cos(2 * math.pi * i / n), cy + ry * math.sin(2 * math.pi * i / n)) for i in range(n + 1)]
+
+
+def _tube(narrow):
+    k, ox, oy, W = (0.45, -14, 34, FK.NARROW_W) if narrow else (1.0, 0, 20, 760)
+    X = lambda x: ox + k * (40 + (x + 0.005) * 2000)
+    Y = lambda y: oy + k * (150 - y * 2600)
+    L = FK.Layout(W, 600)
+    s = []
+    o = [(X(-0.004), Y(0.016)), (X(0.035), Y(0.016)), (X(0.05), Y(0.045)), (X(0.30), Y(0.045))]
+    q = _bez((X(0.30), Y(0.045)), (X(0.305), Y(0)), (X(0.30), Y(-0.045)))
+    o2 = [(X(0.05), Y(-0.045)), (X(0.035), Y(-0.016)), (X(-0.004), Y(-0.016)), (X(-0.004), Y(0.016))]
+    s.append('<path d="M%.1f %.1f L%.1f %.1f L%.1f %.1f L%.1f %.1f Q%.1f %.1f %.1f %.1f L%.1f %.1f L%.1f %.1f L%.1f %.1f Z" fill="#fbf8f3" stroke="#8b8079" stroke-width="1.4"/>' % (
+        o[0] + o[1] + o[2] + o[3] + (X(0.305), Y(0), X(0.30), Y(-0.045)) + o2[0] + o2[1] + o2[2]))
+    L.line(o + q + o2, 1)
+    s.append('<rect x="%.1f" y="%.1f" width="%.1f" height="%.1f" fill="#1c1518"/>' % (X(-0.003), Y(0.008), max(2, 5 * k), Y(-0.008) - Y(0.008)))
+    L.rect(X(-0.003), Y(0.008), max(2, 5 * k), Y(-0.008) - Y(0.008))
+    s.append('<path d="M%.1f %.1f l%.1f %.1f M%.1f %.1f l%.1f %.1f" stroke="#7a1f2b" stroke-width="1.4" fill="none"/>' % (X(-0.003), Y(0.004), -14 * k, 6 * k, X(-0.003), Y(-0.004), -14 * k, -6 * k))
+    for y0, y1 in ((0.014, 0.0012), (-0.0012, -0.014)):
+        s.append('<rect x="%.1f" y="%.1f" width="%.1f" height="%.1f" fill="#5a504b"/>' % (X(0.02) - 3 * k, Y(y0), 6 * k, Y(y1) - Y(y0)))
+        L.rect(X(0.02) - 3 * k, Y(y0), 6 * k, Y(y1) - Y(y0))
+    ph = max(2, 4 * k)
+    for yy in (Y(D_GAP / 2) - ph, Y(-D_GAP / 2)):
+        s.append('<rect x="%.1f" y="%.1f" width="%.1f" height="%.1f" fill="#1c1518"/>' % (X(XP), yy, X(XP + L_PL) - X(XP), ph))
+        L.rect(X(XP), yy, X(XP + L_PL) - X(XP), ph)
     cx, rx = X(XP + L_PL / 2), (X(XP + L_PL) - X(XP)) / 2
-    s.append('<ellipse cx="%.1f" cy="%.1f" rx="%.1f" ry="7" fill="none" stroke="#7a1f2b" stroke-width="3"/><ellipse cx="%.1f" cy="%.1f" rx="%.1f" ry="7" fill="none" stroke="#7a1f2b" stroke-width="3"/>' % (cx, Y(0.047), rx, cx, Y(-0.047), rx))
+    for yc in (Y(0.047), Y(-0.047)):
+        s.append('<ellipse cx="%.1f" cy="%.1f" rx="%.1f" ry="%.1f" fill="none" stroke="#7a1f2b" stroke-width="%.1f"/>' % (cx, yc, rx, 7 * k, 3 if not narrow else 2))
+        L.line(_ell(cx, yc, rx, 7 * k), 1.5)
     s.append('<line x1="%.1f" y1="%.1f" x2="%.1f" y2="%.1f" stroke="#3a8a5a" stroke-width="3"/>' % (X(XS), Y(0.045), X(XS), Y(-0.045)))
+    L.line([(X(XS), Y(0.045)), (X(XS), Y(-0.045))], 1.5)
     s.append('<line x1="%.1f" y1="%.1f" x2="%.1f" y2="%.1f" stroke="#cdc1ae" stroke-dasharray="4 4"/>' % (X(0), Y(0), X(XS), Y(0)))
-    s.append('<polyline points="%s" fill="none" stroke="#7a1f2b" stroke-width="2"/>' % ' '.join('%.1f,%.1f' % (X(x), Y(y)) for x, y in plate_path(-E_TUBE, 0.0)))
-    lab = lambda x, y, t, a='middle': s.append(_tx(x, y, t, 'lbl', a))
-    lab(X(0), Y(-0.012) + 18, 'cathode C')
-    lab(X(0.02), Y(0.016) - 7, 'anode A')
-    lab(X(0.085), Y(-0.0075) + 24, 'plates')
-    lab(cx, Y(-0.047) + 24, 'coils (Helmholtz pair)')
-    lab(X(XS), Y(0.045) - 8, 'phosphor screen', 'end')
-    ya = 104
-    s.append('<g stroke="#8b8079" stroke-width="1"><line x1="%.1f" y1="%d" x2="%.1f" y2="%d"/><line x1="%.1f" y1="%d" x2="%.1f" y2="%d"/><line x1="%.1f" y1="%d" x2="%.1f" y2="%d"/></g>' % (
-        X(XP), ya, X(XP + L_PL), ya, X(XP), ya - 4, X(XP), ya + 4, X(XP + L_PL), ya - 4, X(XP + L_PL), ya + 4))
-    s.append(_tx(cx, ya - 8, '<tspan class="m">l</tspan>', 'lbl', 'middle'))
+    L.line([(X(0), Y(0)), (X(XS), Y(0))], 0.5)
+    path = [(X(x), Y(y)) for x, y in plate_path(-E_TUBE, 0.0)]
+    s.append('<polyline points="%s" fill="none" stroke="#7a1f2b" stroke-width="2"/>' % ' '.join('%.1f,%.1f' % p for p in path))
+    L.line(path, 1)
+    # dimension lines: l above the plates, d beside them
+    ya = Y(D_GAP / 2) - (20 if not narrow else 10)
+    x1, x2 = X(XP), X(XP + L_PL)
+    s.append('<g stroke="#8b8079" stroke-width="1"><line x1="%.1f" y1="%.1f" x2="%.1f" y2="%.1f"/><line x1="%.1f" y1="%.1f" x2="%.1f" y2="%.1f"/><line x1="%.1f" y1="%.1f" x2="%.1f" y2="%.1f"/></g>' % (
+        x1, ya, x2, ya, x1, ya - 4, x1, ya + 4, x2, ya - 4, x2, ya + 4))
+    L.line([(x1, ya), (x2, ya)], 0.5)
+    xd = x2 + (12 if not narrow else 6)
     s.append('<g stroke="#8b8079"><line x1="%.1f" y1="%.1f" x2="%.1f" y2="%.1f"/><line x1="%.1f" y1="%.1f" x2="%.1f" y2="%.1f"/><line x1="%.1f" y1="%.1f" x2="%.1f" y2="%.1f"/></g>' % (
-        X(XP + L_PL) + 12, Y(D_GAP / 2), X(XP + L_PL) + 12, Y(-D_GAP / 2), X(XP + L_PL) + 8, Y(D_GAP / 2), X(XP + L_PL) + 16, Y(D_GAP / 2), X(XP + L_PL) + 8, Y(-D_GAP / 2), X(XP + L_PL) + 16, Y(-D_GAP / 2)))
-    s.append(_tx(X(XP + L_PL) + 20, Y(0) + 4, '<tspan class="m">d</tspan>', 'lbl'))
-    s.append(_tx(X(XS) - 6, Y(0) + 18, '<tspan class="m">x</tspan><tspan class="mu" font-size="12" dy="4">s</tspan>', 'lbl', 'end'))
-    s.append('</svg>')
-    return ''.join(s)
+        xd, Y(D_GAP / 2), xd, Y(-D_GAP / 2), xd - 4, Y(D_GAP / 2), xd + 4, Y(D_GAP / 2), xd - 4, Y(-D_GAP / 2), xd + 4, Y(-D_GAP / 2)))
+    L.line([(xd, Y(D_GAP / 2)), (xd, Y(-D_GAP / 2))], 0.5)
+    lab = lambda t, x, y, a='middle', to=None, **kw: s.append(L.place(t, x, y, 'lbl', a, lead_to=to, anchors=[a, 'start', 'end'], **kw))
+    lab('<tspan class="m">l</tspan>', (x1 + x2) / 2, ya - 6, 'middle', None, prefer=(0, -1), radius=30)
+    lab('<tspan class="m">d</tspan>', xd + 6, Y(0) + 5, 'start', None, prefer=(1, 0), radius=30)
+    lab('<tspan class="m">x</tspan><tspan class="mu" font-size="12" dy="4">s</tspan>', X(XS) - 6, Y(0) + 18, 'end', None, radius=30)
+    lab('plates', X(XP + L_PL / 2), Y(-D_GAP / 2) + 22, 'middle', (X(XP + L_PL / 2), Y(-D_GAP / 2) + ph), prefer=(0, 1))
+    lab('cathode C', X(0), Y(-0.016) + 18, 'middle', (X(0), Y(-0.008)), prefer=(0, 1))
+    lab('coils (Helmholtz pair)', cx, Y(-0.047) + 7 * k + 18, 'middle', (cx, Y(-0.047) + 7 * k), prefer=(1, 0.5))
+    lab('anode A', X(0.02), Y(0.016) - 8, 'middle', (X(0.02), Y(0.014)), prefer=(0, -1))
+    lab('phosphor screen', X(XS), Y(0.045) - 8, 'end', (X(XS), Y(0.045)), prefer=(0, -1))
+    H = max(b[3] for b in L.boxes) + 8
+    return _svg(W, H, 'Cross-section of the cathode-ray tube: cathode, anode with a slit, deflection plates, coils, screen, and the path of one electron.', s)
 
 
-def _panel(pts, title, x0, w, h, ymax=0.022):
+def svg_tube():
+    return FK.dual(_tube(False), _tube(True))
+
+
+def _panel(pts, title, x0, y0, w, h, ymax=0.022):
+    """One view of the plates: frame, axis, plates, path, title above the frame, a 5 mm bar in the corner the path leaves free."""
     X = lambda x: x0 + (x - 0.05) / 0.25 * w
-    Y = lambda y: 10 + h / 2 - y / ymax * h / 2
-    g = ['<rect x="%.1f" y="10" width="%.1f" height="%.1f" fill="#fff" stroke="#cdc1ae"/>' % (x0, w, h),
+    Y = lambda y: y0 + h / 2 - y / ymax * h / 2
+    path = [(X(x), min(max(Y(y), y0), y0 + h)) for x, y in pts if x >= 0.05]
+    g = ['<rect x="%.1f" y="%.1f" width="%.1f" height="%.1f" fill="#fff" stroke="#cdc1ae" data-nocollide=""/>' % (x0, y0, w, h),
          '<line x1="%.1f" y1="%.1f" x2="%.1f" y2="%.1f" stroke="#cdc1ae" stroke-dasharray="4 4"/>' % (x0, Y(0), x0 + w, Y(0)),
          '<rect x="%.1f" y="%.1f" width="%.1f" height="3" fill="#1c1518"/><rect x="%.1f" y="%.1f" width="%.1f" height="3" fill="#1c1518"/>' % (
              X(XP), Y(D_GAP / 2) - 3, X(XP + L_PL) - X(XP), X(XP), Y(-D_GAP / 2), X(XP + L_PL) - X(XP)),
-         '<line x1="%.1f" y1="10" x2="%.1f" y2="%.1f" stroke="#e6dfd2"/><line x1="%.1f" y1="10" x2="%.1f" y2="%.1f" stroke="#e6dfd2"/>' % (X(XP), X(XP), 10 + h, X(XP + L_PL), X(XP + L_PL), 10 + h),
-         '<polyline points="%s" fill="none" stroke="#7a1f2b" stroke-width="2"/>' % ' '.join('%.1f,%.1f' % (X(x), min(max(Y(y), 10), 10 + h)) for x, y in pts if x >= 0.05),
-         _tx(x0 + 6, 26, title, 'lbl')]
+         '<line x1="%.1f" y1="%.1f" x2="%.1f" y2="%.1f" stroke="#e6dfd2"/><line x1="%.1f" y1="%.1f" x2="%.1f" y2="%.1f" stroke="#e6dfd2"/>' % (X(XP), y0, X(XP), y0 + h, X(XP + L_PL), y0, X(XP + L_PL), y0 + h),
+         '<polyline points="%s" fill="none" stroke="#7a1f2b" stroke-width="2"/>' % ' '.join('%.1f,%.1f' % p for p in path),
+         _tx(x0, y0 - 7, title, 'lbl')]
+    Lp = FK.Layout(x0 + w, y0 + h)
+    Lp.line(path, 1.2)
+    for yy in (Y(D_GAP / 2) - 3, Y(-D_GAP / 2)):
+        Lp.rect(X(XP), yy, X(XP + L_PL) - X(XP), 3)
     ys = 5e-3 / ymax * h / 2
-    yb = 10 + h - 14
+    tw = FK.width('5 mm', 'tick')
+    for right, top in ((True, False), (False, False), (True, True), (False, True)):
+        xb = x0 + w - 12 if right else x0 + tw + 22
+        yb = y0 + h - 8 if not top else y0 + 8 + ys
+        box = (xb - 6 - tw - 4, yb - ys - 2, xb + 4, yb + 2)
+        if not Lp.hits(box, 2, (x0, y0, x0 + w, y0 + h)):
+            break
     g.append('<g stroke="#7a1f2b"><line x1="%.1f" y1="%.1f" x2="%.1f" y2="%.1f"/><line x1="%.1f" y1="%.1f" x2="%.1f" y2="%.1f"/><line x1="%.1f" y1="%.1f" x2="%.1f" y2="%.1f"/></g>' % (
-        x0 + w - 12, yb, x0 + w - 12, yb - ys, x0 + w - 16, yb, x0 + w - 8, yb, x0 + w - 16, yb - ys, x0 + w - 8, yb - ys))
-    g.append(_tx(x0 + w - 18, yb - ys / 2 + 4, '5 mm', 'tick', 'end'))
+        xb, yb, xb, yb - ys, xb - 4, yb, xb + 4, yb, xb - 4, yb - ys, xb + 4, yb - ys))
+    g.append(_tx(xb - 6, yb - ys / 2 + 4, '5 mm', 'tick', 'end'))
     return ''.join(g)
 
 
 def svg_motions():
-    w, h = 230, 190
     Bb = E_TUBE / V0
-    s = ['<svg viewBox="0 0 780 230" role="img" aria-label="Three computed electron paths: a parabola in an electric field, a circular arc in a magnetic field, a straight line when the two forces balance.">',
-         '<rect width="780" height="230" fill="#fff"/>',
-         _panel(plate_path(-E_TUBE, 0.0), 'E only: parabola', 20, w, h),
-         _panel(plate_path(0.0, -Bb), 'B only: circle', 275, w, h),
-         _panel(plate_path(-E_TUBE, -Bb), 'E and B balanced: line', 530, w, h),
-         _tx(20, 222, 'x from 50 mm to 300 mm (plates 60 mm to 110 mm, grey lines); vertical axis stretched', 'tick'), '</svg>']
-    return ''.join(s)
+    paths = [(plate_path(-E_TUBE, 0.0), 'E only: parabola'), (plate_path(0.0, -Bb), 'B only: circle'), (plate_path(-E_TUBE, -Bb), 'E and B balanced: line')]
+    label = 'Three computed electron paths: a parabola in an electric field, a circular arc in a magnetic field, a straight line when the two forces balance.'
+    note = 'x from 50 mm to 300 mm (plates 60 mm to 110 mm, grey lines); vertical axis stretched'
+    wide = [_panel(p, t, 14 + i * 250, 26, 232, 190) for i, (p, t) in enumerate(paths)] + [_tx(14, 238, note, 'tick')]
+    narrow, y = [], 22
+    for p, t in paths:
+        narrow.append(_panel(p, t, 4, y, 292, 120))
+        y += 120 + 30
+    for i, ln in enumerate(FK.wrap(note, 292, 'tick')):
+        narrow.append(_tx(4, y - 10 + 15 * i, ln, 'tick'))
+    return FK.dual(_svg(760, 248, label, wide), _svg(FK.NARROW_W, y - 10 + 15 * len(FK.wrap(note, 292, 'tick')), label, narrow))
 
 
 def svg_helix():
@@ -322,28 +375,35 @@ def svg_helix():
     tr = out['trajectory']
     pts = [(tr[i], tr[i + 1], tr[i + 2]) for i in range(0, len(tr), 3)]
     Lf = 2 * math.pi * V0 * math.cos(0.06) / R.compute(HEL_IN)['omega_c']
-    Zx = lambda z: 40 + z / 0.26 * 460
-    Yx = lambda t: 110 - t / 0.0045 * 80
-    s = ['<svg viewBox="0 0 760 230" role="img" aria-label="Electrons leaving one point at a small angle to a uniform magnetic field spiral round the field and meet it again after one turn.">',
-         '<rect width="760" height="230" fill="#fff"/>', '<rect x="40" y="10" width="460" height="200" fill="#fff" stroke="#cdc1ae"/>',
-         '<line x1="40" y1="110" x2="500" y2="110" stroke="#cdc1ae" stroke-dasharray="4 4"/>']
-    for k in range(6):
-        a = k * math.pi / 3
-        side = [(z, x * math.cos(a) - y * math.sin(a)) for x, y, z in pts]
-        s.append('<polyline points="%s" fill="none" stroke="#7a1f2b" stroke-width="1.5" opacity="0.8"/>' % ' '.join('%.1f,%.1f' % (Zx(z), Yx(t)) for z, t in _thin(side)))
-    s.append('<line x1="%.1f" y1="12" x2="%.1f" y2="208" stroke="#3a8a5a" stroke-dasharray="3 3"/>' % (Zx(Lf), Zx(Lf)))
-    s.append(_tx(Zx(Lf), 226, '<tspan class="m">L</tspan> = 2π<tspan class="m">v</tspan><tspan class="mu" font-size="12" dy="4">∥</tspan><tspan dy="-4">/Ω</tspan>', 'lbl', 'middle'))
-    s.append(_tx(40, 226, 'start', 'lbl', 'start'))
-    cx, cy, es = 640, 110, 80 / 0.0045
-    s.append('<circle cx="%.1f" cy="%.1f" r="%.1f" fill="#fff" stroke="#cdc1ae"/>' % (cx, cy, 0.0045 * es))
-    s.append('<line x1="%.1f" y1="%.1f" x2="%.1f" y2="%.1f" stroke="#cdc1ae" stroke-dasharray="3 3"/><line x1="%.1f" y1="%.1f" x2="%.1f" y2="%.1f" stroke="#cdc1ae" stroke-dasharray="3 3"/>' % (cx - 90, cy, cx + 90, cy, cx, cy - 90, cx, cy + 90))
-    for k in range(6):
-        a = k * math.pi / 3
-        ring = [(x * math.cos(a) - y * math.sin(a), x * math.sin(a) + y * math.cos(a)) for x, y, z in pts]
-        s.append('<polyline points="%s" fill="none" stroke="#7a1f2b" stroke-width="1.2" opacity="0.8"/>' % ' '.join('%.1f,%.1f' % (cx + u * es, cy - v * es) for u, v in _thin(ring)))
-    s.append(_tx(cx, 226, 'end view: six circles through the axis', 'lbl', 'middle'))
-    s.append('</svg>')
-    return ''.join(s)
+    label = 'Electrons leaving one point at a small angle to a uniform magnetic field spiral round the field and meet it again after one turn.'
+    Ltxt = '<tspan class="m">L</tspan> = 2π<tspan class="m">v</tspan><tspan class="mu" font-size="12" dy="4">∥</tspan><tspan dy="-4">/Ω</tspan>'
+
+    def draw(x0, y0, w, h, cx, cy, rr, endlab_y):
+        Zx = lambda z: x0 + z / 0.26 * w
+        Yx = lambda t: y0 + h / 2 - t / 0.0045 * (h / 2 - 20)
+        s = ['<rect x="%.1f" y="%.1f" width="%.1f" height="%.1f" fill="#fff" stroke="#cdc1ae"/>' % (x0, y0, w, h),
+             '<line x1="%.1f" y1="%.1f" x2="%.1f" y2="%.1f" stroke="#cdc1ae" stroke-dasharray="4 4"/>' % (x0, y0 + h / 2, x0 + w, y0 + h / 2)]
+        for k in range(6):
+            a = k * math.pi / 3
+            side = [(z, x * math.cos(a) - y * math.sin(a)) for x, y, z in pts]
+            s.append('<polyline points="%s" fill="none" stroke="#7a1f2b" stroke-width="1.5" opacity="0.8"/>' % ' '.join('%.1f,%.1f' % (Zx(z), Yx(t)) for z, t in _thin(side)))
+        s.append('<line x1="%.1f" y1="%.1f" x2="%.1f" y2="%.1f" stroke="#3a8a5a" stroke-dasharray="3 3"/>' % (Zx(Lf), y0 + 2, Zx(Lf), y0 + h - 2))
+        lw = FK.width(Ltxt)
+        s.append(_tx(Zx(Lf), y0 + h + 18, Ltxt, 'lbl', 'middle') if Zx(Lf) + lw / 2 < x0 + w else _tx(x0 + w, y0 + h + 18, Ltxt, 'lbl', 'end'))
+        s.append(_tx(x0, y0 + h + 18, 'start', 'lbl', 'start'))
+        es = rr / 0.0045
+        s.append('<circle cx="%.1f" cy="%.1f" r="%.1f" fill="#fff" stroke="#cdc1ae"/>' % (cx, cy, rr))
+        s.append('<line x1="%.1f" y1="%.1f" x2="%.1f" y2="%.1f" stroke="#cdc1ae" stroke-dasharray="3 3"/><line x1="%.1f" y1="%.1f" x2="%.1f" y2="%.1f" stroke="#cdc1ae" stroke-dasharray="3 3"/>' % (
+            cx - rr - 10, cy, cx + rr + 10, cy, cx, cy - rr - 10, cx, cy + rr + 10))
+        for k in range(6):
+            a = k * math.pi / 3
+            ring = [(x * math.cos(a) - y * math.sin(a), x * math.sin(a) + y * math.cos(a)) for x, y, z in pts]
+            s.append('<polyline points="%s" fill="none" stroke="#7a1f2b" stroke-width="1.2" opacity="0.8"/>' % ' '.join('%.1f,%.1f' % (cx + u * es, cy - v * es) for u, v in _thin(ring)))
+        s.append(_tx(cx, endlab_y, 'end view: six circles through the axis', 'lbl', 'middle'))
+        return s
+    wide = _svg(760, 248, label, draw(40, 10, 460, 200, 640, 110, 80, 232))
+    narrow = _svg(FK.NARROW_W, 420, label, draw(4, 6, 292, 150, 150, 296, 80, 410))
+    return FK.dual(wide, narrow)
 
 
 def svg_integrators():
@@ -356,35 +416,43 @@ def svg_integrators():
             o = R.compute(_test_in(N, m))
             err = math.sqrt(o['x_end'] ** 2 + o['y_end'] ** 2 + (o['z_end'] - _vpar * TURNS * T_PY) ** 2) / rg
             res[(m, N)] = (err, abs(o['energy_drift']))
-    W, H = 900, 330
-    s = ['<svg viewBox="0 0 %d %d" role="img" aria-label="Position error and energy error of the Boris pusher and of Runge-Kutta 4 against steps per turn, on logarithmic axes.">' % (W, H),
-         '<rect width="%d" height="%d" fill="#fff"/>' % (W, H)]
+    label = 'Position error and energy error of the Boris pusher and of Runge-Kutta 4 against steps per turn, on logarithmic axes.'
 
-    def panel(x0, title, idx, lo, hi, floor_note=None):
-        w, h, y0 = 370, 240, 40
+    def panel(x0, y0, w, h, title, idx, lo, hi, floor_note=None, step=2):
         lx = lambda n: x0 + math.log10(n / 6.0) / math.log10(700 / 6.0) * w
         ly = lambda e: y0 + h - (math.log10(max(e, 10 ** lo)) - lo) / (hi - lo) * h
-        g = ['<rect x="%d" y="%d" width="%d" height="%d" fill="#fff" stroke="#cdc1ae"/>' % (x0, y0, w, h), _tx(x0, y0 - 12, title, 'lbl')]
+        L = FK.Layout(x0 + w + 40, y0 + h + 60)
+        g = ['<rect x="%d" y="%d" width="%d" height="%d" fill="#fff" stroke="#cdc1ae" data-nocollide=""/>' % (x0, y0, w, h)]
+        for t in FK.wrap(title, w + x0 - 4) if False else [title]:
+            g.append(_tx(x0, y0 - 9, t, 'lbl'))
         for e in range(lo, hi + 1, 2):
-            g.append('<line x1="%d" x2="%d" y1="%.1f" y2="%.1f" stroke="#f0ebe3"/>' % (x0, x0 + w, ly(10 ** e), ly(10 ** e)))
-            g.append(_tx(x0 - 6, ly(10 ** e) + 4, '1e%d' % e if e else '1', 'tick', 'end'))
-        for n in (8, 16, 32, 64, 128, 256, 512):
+            g.append('<line x1="%d" x2="%d" y1="%.1f" y2="%.1f" stroke="#f0ebe3" data-nocollide=""/>' % (x0, x0 + w, ly(10 ** e), ly(10 ** e)))
+            if (e - lo) % (2 * step) == 0:
+                g.append(_tx(x0 - 6, ly(10 ** e) + 4, '1e%d' % e if e else '1', 'tick', 'end'))
+        shown = (8, 16, 32, 64, 128, 256, 512) if w > 280 else (8, 32, 128, 512)
+        for n in shown:
             g.append(_tx(lx(n), y0 + h + 15, str(n), 'tick', 'middle'))
-        g.append(_tx(x0 + w / 2, y0 + h + 32, 'steps per turn  N', 'lbl', 'middle'))
+        g.append(_tx(x0 + w / 2, y0 + h + 33, 'steps per turn  N', 'lbl', 'middle'))
         for m, col, dash in (('boris', '#7a1f2b', ''), ('rk4', '#1c1518', '6 3')):
-            pts = ' '.join('%.1f,%.1f' % (lx(N), ly(res[(m, N)][idx])) for N in Ns)
-            g.append('<polyline points="%s" fill="none" stroke="%s" stroke-width="2" stroke-dasharray="%s"/>' % (pts, col, dash))
-            for N in Ns:
-                g.append('<circle cx="%.1f" cy="%.1f" r="3" fill="%s"/>' % (lx(N), ly(res[(m, N)][idx]), col))
-        g.append(_tx(x0 + w - 6, y0 + 16, '● Boris', 'lbl', 'end', 'fill="#7a1f2b"'))
-        g.append(_tx(x0 + w - 6, y0 + 31, '● RK4', 'lbl', 'end', 'fill="#1c1518"'))
+            P = [(lx(N), ly(res[(m, N)][idx])) for N in Ns]
+            L.line(P, 1.5)
+            g.append('<polyline points="%s" fill="none" stroke="%s" stroke-width="2" stroke-dasharray="%s"/>' % (' '.join('%.1f,%.1f' % p for p in P), col, dash))
+            for px, py in P:
+                g.append('<circle cx="%.1f" cy="%.1f" r="3" fill="%s"/>' % (px, py, col))
+                L.circle(px, py, 3.5)
         if floor_note:
-            g.append(_tx(x0 + 8, y0 + h - 8, floor_note, 'tick'))
+            g.append(L.place(floor_note, x0 + 8, y0 + h - 8, 'tick', 'start', region=(x0 + 2, y0 + 2, x0 + w - 2, y0 + h - 2), leader=False))
         return ''.join(g)
-    s.append(panel(70, 'position error / gyroradius after 20 turns', 0, -10, 2))
-    s.append(panel(500, 'energy error |ΔK/K| over the run', 1, -18, 0, 'Boris: rounding noise, about 1e-15'))
-    s.append('</svg>')
-    return ''.join(s)
+
+    def legend(x, y):
+        return ('<line x1="%.1f" x2="%.1f" y1="%.1f" y2="%.1f" stroke="#7a1f2b" stroke-width="2"/><circle cx="%.1f" cy="%.1f" r="3" fill="#7a1f2b"/>' % (x, x + 24, y - 4, y - 4, x + 12, y - 4)
+                + _tx(x + 30, y, 'Boris', 'lbl')
+                + '<line x1="%.1f" x2="%.1f" y1="%.1f" y2="%.1f" stroke="#1c1518" stroke-width="2" stroke-dasharray="6 3"/><circle cx="%.1f" cy="%.1f" r="3" fill="#1c1518"/>' % (x + 90, x + 114, y - 4, y - 4, x + 102, y - 4)
+                + _tx(x + 120, y, 'RK4 (Runge–Kutta 4)', 'lbl'))
+    t1, t2 = 'position error / gyroradius after 20 turns', 'energy error |ΔK/K| over the run'
+    wide = _svg(760, 330, label, [panel(58, 34, 300, 220, t1, 0, -10, 2, None, 1), panel(448, 34, 300, 220, t2, 1, -18, 0, 'Boris: rounding noise, about 1e-15', 1), legend(58, 320)])
+    narrow = _svg(FK.NARROW_W, 584, label, [panel(48, 30, 244, 190, t1, 0, -10, 2), panel(48, 304, 244, 190, t2, 1, -18, 0, 'Boris: rounding noise, about 1e-15'), legend(4, 572)])
+    return FK.dual(wide, narrow)
 
 
 def svg_thomson1897():
@@ -394,28 +462,59 @@ def svg_thomson1897():
     rows = [('method 1, tubes 1 and 2', [em(r[4]) for r in _m1 if r[0] in (1, 2)], '#1c1518'),
             ('method 1, tube 3', [em(r[4]) for r in _m1 if r[0] == 3], '#8b8079'),
             ('method 2, crossed fields', [em(r[6]) for r in _m2], '#7a1f2b')]
-    s = ['<svg viewBox="0 0 760 330" role="img" aria-label="Thomson 1897 values of e/m from two methods, plotted against the CODATA value.">', '<rect width="760" height="330" fill="#fff"/>']
-    x0, w, xmax = 215, 520, 4.2e11
-    X = lambda v: x0 + v / xmax * w
-    for i, (lab, vals, col) in enumerate(rows):
-        y = 70 + i * 70
-        s.append('<line x1="%.1f" y1="%d" x2="%.1f" y2="%d" stroke="#e6dfd2"/>' % (x0, y, x0 + w, y))
-        s.append(_tx(x0 - 10, y + 4, lab, 'lbl', 'end'))
-        seen = {}
-        for v in vals:
-            k = round(v / 1e9)
-            seen[k] = seen.get(k, 0) + 1
-            s.append('<circle cx="%.1f" cy="%.1f" r="5" fill="%s" fill-opacity="0.75" stroke="#fff"/>' % (X(v), y - (seen[k] - 1) * 9, col))
-        s.append('<path d="M%.1f %d l-5 12 h10 z" fill="%s"/>' % (X(sum(vals) / len(vals)), y + 8, col))
-    s.append('<line x1="%.1f" y1="20" x2="%.1f" y2="270" stroke="#3a8a5a" stroke-width="2"/>' % (X(emc), X(emc)))
-    s.append(_tx(X(emc) + 6, 30, 'CODATA 2018: %.3f × 10¹¹ C/kg' % (emc / 1e11), 'lbl'))
-    for t in (0, 1, 2, 3, 4):
-        s.append('<line x1="%.1f" y1="270" x2="%.1f" y2="276" stroke="#6f655f"/>' % (X(t * 1e11), X(t * 1e11)))
-        s.append(_tx(X(t * 1e11), 292, '%d' % t, 'tick', 'middle'))
-    s.append('<line x1="%.1f" y1="270" x2="%.1f" y2="270" stroke="#6f655f"/>' % (x0, x0 + w))
-    s.append(_tx(x0 + w / 2, 316, 'e/m  in units of 10¹¹ C/kg    (triangles: mean of each group)', 'lbl', 'middle'))
-    s.append('</svg>')
-    return ''.join(s)
+    label = 'Thomson 1897 values of e/m from two methods, plotted against the CODATA value.'
+    codata = 'CODATA 2018: %.3f × 10¹¹ C/kg' % (emc / 1e11)
+    axis = 'e/m  in units of 10¹¹ C/kg    (triangles: mean of each group)'
+
+    def draw(x0, w, y_first, dy, labels_above, W):
+        xmax = 4.2e11
+        X = lambda v: x0 + v / xmax * w
+        s = []
+        stack = []
+        for lab, vals, col in rows:
+            seen = {}
+            for v in vals:
+                seen[round(v / 1e9)] = seen.get(round(v / 1e9), 0) + 1
+            stack.append(max(seen.values()))
+        ys = [y_first if not labels_above else 58 + 9 * (stack[0] - 1) + 14]
+        for i in (1, 2):             # a row label above its row clears the highest stacked dot
+            ys.append(ys[-1] + (dy if not labels_above else 30 + 9 * (stack[i] - 1) + 34))
+        ybot = ys[-1] + 50
+        for i, (lab, vals, col) in enumerate(rows):
+            y = ys[i]
+            s.append('<line x1="%.1f" y1="%d" x2="%.1f" y2="%d" stroke="#e6dfd2"/>' % (x0, y, x0 + w, y))
+            if labels_above:
+                s.append(_tx(4, y - 9 * (stack[i] - 1) - 14, lab, 'lbl', 'start'))
+            else:
+                s.append(_tx(x0 - 10, y + 4, lab, 'lbl', 'end'))
+            seen = {}
+            for v in vals:
+                k = round(v / 1e9)
+                seen[k] = seen.get(k, 0) + 1
+                s.append('<circle cx="%.1f" cy="%.1f" r="5" fill="%s" fill-opacity="0.75" stroke="#fff"/>' % (X(v), y - (seen[k] - 1) * 9, col))
+            s.append('<path d="M%.1f %d l-5 12 h10 z" fill="%s"/>' % (X(sum(vals) / len(vals)), y + 8, col))
+        if labels_above:             # the reference line stops where a row label is written across it
+            cuts = [20] + [v for i in range(3) for v in (ys[i] - 9 * (stack[i] - 1) - 29, ys[i] - 9 * (stack[i] - 1) - 8)] + [ybot]
+            for a, b in zip(cuts[::2], cuts[1::2]):
+                s.append('<line x1="%.1f" y1="%d" x2="%.1f" y2="%d" stroke="#3a8a5a" stroke-width="2"/>' % (X(emc), a, X(emc), b))
+        else:
+            s.append('<line x1="%.1f" y1="20" x2="%.1f" y2="%d" stroke="#3a8a5a" stroke-width="2"/>' % (X(emc), X(emc), ybot))
+        if X(emc) + 6 + FK.width(codata) < W - 2:
+            s.append(_tx(X(emc) + 6, 30, codata, 'lbl'))
+        else:
+            s.append(FK.text(X(emc) + 6, 18, codata.split(': '), 'lbl'))
+        for t in (0, 1, 2, 3, 4):
+            s.append('<line x1="%.1f" y1="%d" x2="%.1f" y2="%d" stroke="#6f655f"/>' % (X(t * 1e11), ybot, X(t * 1e11), ybot + 6))
+            s.append(_tx(X(t * 1e11), ybot + 22, '%d' % t, 'tick', 'middle'))
+        s.append('<line x1="%.1f" y1="%d" x2="%.1f" y2="%d" stroke="#6f655f"/>' % (x0, ybot, x0 + w, ybot))
+        yy = ybot + 46
+        for ln in FK.wrap(axis, W - 8):
+            s.append(_tx(W / 2 if labels_above else x0 + w / 2, yy, ln, 'lbl', 'middle'))
+            yy += 16
+        return s, yy - 6
+    ws, wh = draw(215, 520, 70, 70, False, 760)
+    ns, nh = draw(10, 280, 64 + 9 * 4, 64, True, FK.NARROW_W)
+    return FK.dual(_svg(760, wh, label, ws), _svg(FK.NARROW_W, nh, label, ns))
 
 
 FIG_SVG = {'tube1': svg_tube, 'motions': svg_motions, 'helix': svg_helix, 'integrators': svg_integrators, 'th1897': svg_thomson1897}
@@ -470,7 +569,7 @@ def sections():
 <p>The balancing field is \(B=E/v_0=\)‹n:B_balance|4›&nbsp;T. The computed spot with that field on is at \(y_s=\)‹n:yboth_um|3›&nbsp;µm, zero to the resolution of the integration.</p></div>
 <figure class="pfig">
   <div class="pfig__plate">‹SVG:motions›</div>
-  <figcaption>‹F motions›The three motions, computed by the solver of ‹s:numerics› with the default tube. Left: electric field only, a parabola between the grey lines and a straight line after them. Middle: magnetic field only, with the strength \(B_p=E/v_0=\)‹n:B_balance|4›&nbsp;T of the right-hand panel, a circular arc bending the other way. Right: both fields, a straight line. The vertical axis is stretched; the red bar is 5 mm.</figcaption>
+  <figcaption>‹F motions›The three motions, computed by the solver of ‹s:numerics› with the default tube. First panel: electric field only, a parabola between the grey lines and a straight line after them. Second: magnetic field only, with the strength \(B_p=E/v_0=\)‹n:B_balance|4›&nbsp;T of the third panel, a circular arc bending the other way. Third: both fields, a straight line. The vertical axis is stretched; the red bar is 5 mm.</figcaption>
 </figure>
 '''))
     return S
@@ -553,7 +652,7 @@ def sections_b():
 <p>This is a lens. Electrons spread out from a point and reunite at another point, because they all need the same time to complete a turn. With \(V_a=\)‹n:Va|4›&nbsp;V and \(B_\parallel=4\ \mathrm{mT}\), ‹eq:focus› gives \(L=\)‹n:focus_L_2000_4mT|4›&nbsp;m; an electron leaving at \(\alpha=60\ \mathrm{mrad}\) circles with \(r_L=\)‹n:rL_4mT_alpha06|3›&nbsp;m. ‹fig:helix› shows six of them. A real magnetic lens, chapter 4, is a short coil whose field rises and falls along the axis, and it twists the beam by the angle it gains while crossing: this helix is its seed.</p>
 <figure class="pfig">
   <div class="pfig__plate">‹SVG:helix›</div>
-  <figcaption>‹F helix›One electron of \(V_a=2\) kV in \(B_\parallel=4\) mT at \(\alpha=60\) mrad to the field, computed by the solver of the chapter, and the same path turned about \(\mathbf B\) in steps of \(60^\circ\), which the symmetry of the field allows: six electrons leaving one point in six directions. Left: side view, the vertical axis stretched. Right: end view, six circles that all pass through the axis. The dashed line marks the focus at \(L=2\pi v_\parallel/\Omega\).</figcaption>
+  <figcaption>‹F helix›One electron of \(V_a=2\) kV in \(B_\parallel=4\) mT at \(\alpha=60\) mrad to the field, computed by the solver of the chapter, and the same path turned about \(\mathbf B\) in steps of \(60^\circ\), which the symmetry of the field allows: six electrons leaving one point in six directions. Side view: the vertical axis stretched. End view: six circles that all pass through the axis. The dashed line marks the focus at \(L=2\pi v_\parallel/\Omega\).</figcaption>
 </figure>
 '''))
     return S
@@ -591,7 +690,7 @@ def sections_c():
 <p>The position error of Boris falls with slope ‹n:slope_boris_pos|3› in \(\log N\) (between \(N=64\) and \(256\)), as \(h^2\) predicts; the RK4 error falls with slope ‹n:slope_rk4_pos|3›, as \(h^4\) predicts; the RK4 energy error falls with slope ‹n:slope_rk4_energy|3›, one power faster than the position error, as ‹eq:rk4amp› predicts. The energy of Boris stays at the noise of 64-bit arithmetic in every case, the last column. At \(N=64\) the predicted position error of Boris is within ‹n:pred_gap_boris_64_pct|2›&nbsp;% of the measured one, and the prediction improves with \(N\); for RK4 the prediction is within about ten per cent at the smallest \(N\) and closer at larger \(N\), because its total error is not only phase error.</p>
 <figure class="pfig">
   <div class="pfig__plate">‹SVG:integrators›</div>
-  <figcaption>‹F integrators›The test of the table as a picture, computed with the reference solver <code>ref/ch01.py</code>: the distance from the exact helix after 20 turns, in gyroradii (left), and the change of the kinetic energy over the run (right), against the number of steps per turn. Both axes are logarithmic. The error of Boris falls with slope −2, that of RK4 with slope −4 (position) and −5 (energy); the energy of Boris stays at the noise of 64-bit arithmetic.</figcaption>
+  <figcaption>‹F integrators›The test of the table as a picture, computed with the reference solver <code>ref/ch01.py</code>: the distance from the exact helix after 20 turns, in gyroradii (first panel), and the change of the kinetic energy over the run (second panel), against the number of steps per turn. Both axes are logarithmic. The error of Boris falls with slope −2, that of RK4 with slope −4 (position) and −5 (energy); the energy of Boris stays at the noise of 64-bit arithmetic.</figcaption>
 </figure>
 <div class="pbox"><span class="pbox__t">Key result · which to use</span>
 <p><strong>RK4</strong> is much more accurate per step: at \(N=64\) its error is ‹n:tst_rk4_64_err|3› of \(r_L\), against ‹n:tst_boris_64_err|3› for Boris. But RK4 loses energy steadily, at a rate set by \(\Omega h\). <strong>Boris</strong> uses one field evaluation per step instead of four, keeps the energy and the radius bounded however long it runs, and its error is a phase error that does not distort the shape of the orbit. We use RK4 for short paths where accuracy counts and Boris for the many-turn paths of later chapters, and we check each result against the other.</p></div>
