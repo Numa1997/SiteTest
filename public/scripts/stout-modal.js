@@ -126,7 +126,9 @@
   // one step dt with the glass's acceleration (ax, az): the modes by symplectic Euler in substeps of at most 0.5 ms, then the
   // pour over the rim (the weir law of ModalFluid with the tulip's crest volume)
   TulipModes.prototype.step = function (dt, ax, az) {
-    const ns = Math.max(1, Math.ceil(dt / 0.0005 - 1e-9)), hs = dt / ns, gf = 1 + az / this.g, N = this.N;
+    // effective gravity g + a_z, never below zero: a glass falling faster than g (a_z < -g) would leave the stout floating
+    // free of its floor, which no linear model describes; the same limit as NMFluid in stout-cart.js
+    const ns = Math.max(1, Math.ceil(dt / 0.0005 - 1e-9)), hs = dt / ns, gf = Math.max(0, 1 + az / this.g), N = this.N;
     for (let s = 0; s < ns; s++) for (let m = 0; m < N; m++) {
       const w = this.w[m];
       this.qd[m] += hs * (-w * w * gf * this.q[m] - 2 * this.zeta[m] * w * this.qd[m] - this.beta[m] * ax);
