@@ -363,6 +363,83 @@ expect('checks', 'against 5.767,', `${f(t90ext, 3)}`, 'the model at 5 s records'
   expect('book-10', 'the heat of merging is at most', `${f(100 * wr.maxRatio * us / sig, 1)} %`);
 }
 
+// ---------------------------------------------------------------- section 10.4: ripening as a gradient descent, its ledger (data/ripening.json)
+{
+  const RP = D('ripening.json'), EN = D('energy.json'), C = RP.classes, sig = P.sigmaWater(A.T), a = P.kelvinA(A), G = P.growthG(A), T = A.T, Rv = 461.5;
+  const at = t => C.rec.find(q => q.t === t), q0 = at(0), mu = r => 2 * sig / (1000 * r);
+  const strip = h => h.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();   // a table row as the reader sees it (the text is read with tags removed)
+  expect('book-10', 'An 8 µm droplet holds its water at', `$\\mu$ = ${f(mu(8e-6), 1)} J/kg, a 40 µm collector at ${f(mu(40e-6), 1)} J/kg`);
+  expect('book-10', 'sits as high above a lake', `lifted ${f(mu(8e-6) / 9.81, 2)} m`);
+  expect('book-10', 'sits as high above a lake', `as if lifted ${f(mu(40e-6) / 9.81, 2)} m`);
+  const L = 2.477e6, Kt = 2.48e-2, es = 611.2 * Math.exp(17.67 * (T - 273.15) / (T - 29.65)), Dv = 2.11e-5 * Math.pow(T / 273.15, 1.94) * (101325 / A.p);
+  const Fk = (L / (Rv * T) - 1) * L * 1000 / (Kt * T), Fd = 1000 * Rv * T / (Dv * es);
+  expect('book-10', 'Heat conduction is', `$G = ${texSci(G, 2)}$ m²/s. Heat conduction is ${f(100 * Fk / (Fk + Fd), 0)} % of the resistance and diffusion ${f(100 * Fd / (Fk + Fd), 0)} %`, null, 100);
+  expect('book-10', 'with diffusion alone', `$${texSci(1 / Fd, 2)}$ m²/s, ${f((Fk + Fd) / Fd, 1)} times larger`);
+  expect('book-10', 'it is 1.00 for droplets and', `${f(P.ventilation(40e-6, A), 2)} at 40 µm`);
+  expect('book-10', 'the air holds', `${f(es / (Rv * T) * 1e3, 1)} g/m³ of vapour`);
+  expect('book-10', 'while the drops hold', `${f(C.M0 * 1e3, 1)} g/m³`);
+  // the first step: the classes rebuilt (quantiles of the normal cut at 3, as in run_ripening.cjs), and (10.8) recomputed from them
+  const rate = r => 4 * Math.PI * 1000 * r * G * P.ventilation(r, A) * (q0.s - a / r), drdt = r => rate(r) / (4 * Math.PI * 1000 * r * r) * 3.6e9;
+  const md = [[800, { N: 300e6, rg: 8e-6, sg: 1.25 }], [300, { N: 1e6, rg: 40e-6, sg: 1.2 }]];
+  const nz = 60001, zs = Float64Array.from({ length: nz }, (_, i) => -3 + 6 * i / (nz - 1)), cdf = new Float64Array(nz);
+  for (let i = 1; i < nz; i++) cdf[i] = cdf[i - 1] + 0.5 * (Math.exp(-zs[i] * zs[i] / 2) + Math.exp(-zs[i - 1] * zs[i - 1] / 2));
+  const zOf = q => { const c = q * cdf[nz - 1]; let lo = 0, hi = nz - 1; while (hi - lo > 1) { const m = (lo + hi) >> 1; if (cdf[m] <= c) lo = m; else hi = m; } return zs[lo] + (zs[hi] - zs[lo]) * (c - cdf[lo]) / (cdf[hi] - cdf[lo]); };
+  let upD = 0, upC = 0, nUpD = 0, sr = 0, sn = 0, sf = 0, srf = 0;
+  for (const [nC, m] of md) for (let k = 0; k < nC; k++) { const r = m.rg * Math.exp(Math.log(m.sg) * zOf((k + 0.5) / nC)), w = m.N / nC, fv = P.ventilation(r, A);
+    sr += w * r; sn += w; sf += w * fv; srf += w * r * fv; }
+  const sRe = a / (srf / sf);
+  for (const [nC, m] of md) for (let k = 0; k < nC; k++) { const r = m.rg * Math.exp(Math.log(m.sg) * zOf((k + 0.5) / nC)), w = m.N / nC, g = 4 * Math.PI * 1000 * r * G * P.ventilation(r, A) * (sRe - a / r);
+    if (g > 0) { if (r < 20e-6) { upD += w * g; nUpD += w; } else upC += w * g; } }
+  expect('book-10', 'At the start the drops set', `$s$ = ${f(100 * sRe, 4)} % and $r_c$ = ${f(srf / sf * 1e6, 2)} µm (their mean radius is ${f(sr / sn * 1e6, 2)} µm). ${f(100 * q0.nUp / (q0.nUp + q0.nDown), 0)} % of the drops lie above it and grow; ${f(100 * q0.nDown / (q0.nUp + q0.nDown), 0)} % shrink`, 'stored s ' + (100 * q0.s).toFixed(4) + ' %, stored r_c ' + (q0.rc * 1e6).toFixed(2));
+  const sgn = (x, d) => (x < 0 ? '−' : '+') + f(Math.abs(x), d), sci = (x, d) => `$${x < 0 ? '-' : '+'}${texSci(Math.abs(x), d)}$`;
+  expect('book-10', '5 µm droplet', strip(`<td>${sgn(drdt(5e-6), 2)}</td><td>${sci(rate(5e-6), 1)}</td>`));
+  expect('book-10', '8 µm droplet', strip(`<td>${sgn(drdt(8e-6), 2)}</td><td>${sci(rate(8e-6), 1)}</td><td>${sgn(100 * rate(8e-6) * 3600 / P.massOf(8e-6), 1)} %`));
+  expect('book-10', '12 µm droplet', strip(`<td>${sgn(drdt(12e-6), 2)}</td><td>${sci(rate(12e-6), 1)}</td><td>${sgn(100 * rate(12e-6) * 3600 / P.massOf(12e-6), 1)} %`));
+  expect('book-10', '40 µm collector', strip(`<td>${sgn(drdt(40e-6), 2)}</td><td>${sci(rate(40e-6), 1)}</td><td>${sgn(100 * rate(40e-6) * 3600 / P.massOf(40e-6), 1)} %`));
+  expect('book-10', 'A 40 µm collector takes in', `${f(rate(40e-6) / rate(12e-6), 1)} times as much water as a 12 µm droplet`);
+  expect('book-10', 'there is one collector per cm³ and there are', `${f(nUpD / 1e6, 0)} droplets above`);
+  expect('book-10', 'so at the start', `${f(100 * upD / (upD + upC), 0)} % of the water in transit goes to the larger droplets and only ${f(100 * upC / (upD + upC), 0)} % to the collectors`, 'flux recomputed ' + (upD + upC).toExponential(4) + ', stored ' + q0.flux.toExponential(4));
+  expect('book-10', 'The clock (10.12) is', `$\\tau$ = ${f(q0.rc ** 3 / (G * a) / 3600, 2)} hours`);
+  // the ledger table
+  const row = (name, t) => { const q = at(t); return `<tr><td>${name}</td><td>${f(q.rc * 1e6, 1)} µm</td><td>${f(q.alive / 1e6, 0)}</td><td>${t ? f(100 * q.moved / C.M0, 1) + ' %' : '0'}</td><td>${f(100 * q.Wd / C.M0, 1)} / ${f(100 * q.Wc / C.M0, 1)} %</td><td>${t ? f(100 * q.F, 1) : '100'} %</td></tr>`; };
+  expect('book-10', 'critical radius r_c drops left per cm³', strip(row('start', 0)), null, 900);
+  expect('book-10', 'critical radius r_c drops left per cm³', strip(row('1 hour', 3600)), null, 900);
+  expect('book-10', 'critical radius r_c drops left per cm³', strip(row('6 hours', 21600)), null, 900);
+  expect('book-10', 'critical radius r_c drops left per cm³', strip(row('1 day', 86400)), null, 900);
+  expect('book-10', 'The collector mode never loses a drop', `All ${f((q0.alive - at(86400).alive) / 1e6, 0)} drops per cm³ that vanish in a day are droplets`, 'collector-mode drops per cm³ at the end ' + (at(86400).nc / 1e6).toFixed(3));
+  expect('book-10', 'in the first hour,', `${f(100 * at(3600).moved / C.M0, 1)} % of the water changes drops but the collectors gain only ${f(100 * (at(3600).Wc - q0.Wc) / C.M0, 1)} points`);
+  expect('book-10', 'Even after a day the', `collectors have gained ${f(100 * (at(86400).Wc - q0.Wc) / C.M0, 0)} points of the water while ${f(100 * at(86400).moved / C.M0, 0)} % has passed`);
+  const gaps = C.rec.filter(q => q.t >= 60).map(q => 100 * ((C.F0 * (1 - q.F)) / q.diss - 1));
+  expect('book-10', 'From 1 minute to 1 day the stored fall', `is ${f(Math.min(...gaps), 1)} to ${f(Math.max(...gaps), 1)} % larger`);
+  expect('book-10', 'The water is kept to', `$${texSci(Math.abs(at(86400).M - 1), 0)}$ of itself`);
+  const d1 = RP.cases.pure.reduce((s2, r) => s2 + r.find(q => q.t === 3600).F, 0) / RP.cases.pure.length;
+  expect('book-10', 'after one hour the classes have', `${f(100 * at(3600).F, 1)} % of the free energy left, the three draws of 3010 drops ${f(100 * d1, 1)} %`);
+  expect('book-10', 'predicts that after a long time', `ours grows ${f((at(86400).rc ** 3 - at(43200).rc ** 3) / 43200 / (4 / 9 * G * a), 1)} times faster`);
+  const q90 = EN.warm.recs.find(q => Math.abs(q.t - 810) < 6), Pcol = (EN.warm.Es0 - q90.Es) / q90.t;
+  expect('book-10', 'At the start ripening lowers the free energy at', `$${texSci(q0.P, 1)}$ W per m³ of cloud`);
+  expect('book-10', 'averaged up to 13.5 min, at', `$${texSci(Pcol, 1)}$ W per m³, ${f(Pcol / q0.P, 0)} times faster`);
+  expect('checks', 'against the summed formula (10.9)', `the stored fall is ${f(Math.min(...gaps), 1)} to ${f(Math.max(...gaps), 1)} % larger`);
+  expect('checks', 'Ripening followed as 1100 classes', `${f(100 * at(3600).F, 1)} % against ${f(100 * d1, 1)} %`);
+  expect('book-10', 'some twenty times the', `${f(100 * q0.s, 3)} %`);
+  // figure 3.2's ripple and chapter 7's a0
+  let rip = 0; for (const Rum of [60, 100]) { const E2 = []; for (let i = 0; i < 240; i++) { const p = 0.005 + 0.595 * i / 239; E2.push(p < 0.19 ? NaN : P.pairEfficiency(Rum * 1e-6, p * Rum * 1e-6, A).E); }
+    for (let i = 4; i < 236; i++) { const fit = (-E2[i - 4] + 4 * E2[i - 2] + 4 * E2[i + 2] - E2[i + 4]) / 6; if (isFinite(fit) && isFinite(E2[i])) rip = Math.max(rip, Math.abs(E2[i] - fit)); } }
+  expect('book-03', 'The fine ripple on the two upper curves, up to', f(rip, 3), null, 40);
+  expect('book-07', 'answer them differently', `$a_0$ = ${f((11 + 7 * 2e4) / (205 + 2e4), 1)}`);
+  // problem 9
+  { let r1 = 6e-6, r2 = 10e-6, t = 0; const c = r1 ** 3 + r2 ** 3, rc0 = 8e-6;
+    expect('problems', 'Who eats whom through the vapour', `$s = a/r_c$ = ${f(100 * a / rc0, 4)} % with $a$ = ${f(a * 1e9, 3)} nm`, null, 900);
+    expect('problems', 'Who eats whom through the vapour', `is −${f(-G * a / r1 * (1 / rc0 - 1 / r1) * 3.6e9, 2)} µm per hour for the small droplets and +${f(G * a / r2 * (1 / rc0 - 1 / r2) * 3.6e9, 2)} µm per hour`, null, 1400);
+    expect('problems', 'would last $r^3/(3Ga)$', `= ${f(r1 ** 3 / (3 * G * a) / 60, 1)} min`);
+    while (r1 > 0.05e-6) { const rc = (r1 + r2) / 2, d = G * a / r1 * (1 / rc - 1 / r1), dt = Math.min(0.5, 0.001 * r1 / Math.abs(d)); r1 += d * dt; r2 = Math.cbrt(c - r1 ** 3); t += dt; }
+    expect('problems', 'Integrated numerically, the 6 µm droplets are gone after', `${f(t / 60, 1)} min`);
+    const rad = []; for (let i = 0; i < 200; i++) rad.push(i < 100 ? 6e-6 : 10e-6);
+    const Rr = P.ripen(rad, A, { tEnd: 3600, recAt: Array.from({ length: 361 }, (_, k) => k * 10) }), g1 = Rr.rec.findIndex(q => q.alive < 200);
+    expect('checks', 'Problem 9, two droplet sizes ripening', `${f(t / 60, 1)} min against ${f(Rr.rec[g1 - 1].t / 60, 1)} to ${f(Rr.rec[g1].t / 60, 1)} min`);
+    expect('problems', "the model's own ripening routine, with ventilation,", `gives ${f(Rr.rec[g1 - 1].t / 60, 1)} to ${f(Rr.rec[g1].t / 60, 1)} min`);
+    expect('problems', 'At the end each pair has become one drop of', `$1216^{1/3}$ = ${f(Math.cbrt(1216), 2)} µm, and the surface free energy has fallen to ${f(100 * Math.cbrt(1216) ** 2 / 136, 1)} %`); }
+}
+
 // ---------------------------------------------------------------- chapter 11: who eats whom (data/energy.json)
 {
   const EN = D('energy.json'), wr = EN.warm, mc = EN.mc;

@@ -35,8 +35,10 @@ collection equation of chapter 5, $F_s$ fell at every one of the 3600 one-second
 quarter of a millisecond at 40 µm (Lamb's damping time $r^2/5\nu_w$). The heat that appears is more than the free energy lost, because a
 surface also carries entropy: a square metre of surface has entropy $-d\sigma/dT$, and destroying it releases that entropy too. Each
 square metre of surface destroyed gives the heat $u_s = \sigma - T\,d\sigma/dT$ = 0.115 J, 1.56 times $\sigma$. For the capture above that is
-$8.0\times10^{-11}$ J, which warms the merged drop by $7.1\times10^{-5}$ K before the air takes it away. The entropy of the world (drop, surface
-and air) rises by</p>
+$8.0\times10^{-11}$ J, which warms the merged drop by $7.1\times10^{-5}$ K before the air takes it away. Now add up the entropy of
+the world. The air receives the heat $u_s|\Delta A|$ at temperature $T$, so its entropy rises by $u_s|\Delta A|/T$. The surface that
+disappeared takes its own entropy, $-(d\sigma/dT)\,|\Delta A|$, with it. The water of the drops is unchanged. The sum is
+$\big[u_s + T\,d\sigma/dT\big]|\Delta A|/T$, and the bracket is $\sigma$:</p>
 $$\Delta S = -\frac{\Delta F_s}{T} = \frac{\sigma\,|\Delta A|}{T}, \tag{10.4}$$
 <p>$1.32\times10^{10}\,k_B$ for that one capture ($k_B$ is Boltzmann's constant, $|\Delta A|$ the surface destroyed). For the merged drop to split
 again by a thermal fluctuation, that entropy would have to come back out of the air, and statistical mechanics gives such a fluctuation the
@@ -66,36 +68,153 @@ vapour, where the free energy itself drives the water. That channel is the hones
 <div class="picture">Leave a glass of beer to stand. The foam coarsens: small bubbles vanish and big ones grow, without any bubble touching
 another, because gas passes through the liquid from the small bubbles, where the curved skin squeezes it harder, to the large ones.
 Ice cream left in a freezer grows coarse crystals the same way.</div>
-<p>A small drop holds its water less tightly than a large one. Its curved surface pushes on the water inside, so the water's tendency to
-escape, its chemical potential, is raised by the curvature (Kelvin's effect). Dissolved salt lowers it (Raoult's effect). Per kilogram of
-water, relative to flat pure water,</p>
-$$\mu = R_vT\Big(\frac{a}{r} - \frac{b}{r^3}\Big),\qquad a = \frac{2\sigma}{\rho_wR_vT} = 1.14\ \text{nm}, \tag{10.5}$$
-<p>with $R_v$ the gas constant of water vapour and $b$ proportional to the salt in the drop. Water diffuses through the vapour from drops of
-high $\mu$ to drops of low $\mu$. With the growth constant $G$ and ventilation factor $f_v$ of chapter 12, (12.4), each drop's mass changes as</p>
-$$\frac{dm_i}{dt} = -M_i\,(\mu_i - \bar\mu),\qquad M_i = \frac{4\pi\rho_wr_iGf_v}{R_vT}, \tag{10.6}$$
-<p>where $\bar\mu$ is set by the vapour so that the total water stays fixed, and $M_i$ is a mobility. Since $\mu_i = \partial F/\partial m_i$, this is
-precisely a gradient descent of the free energy at fixed water, and it lowers $F$ at the rate</p>
-$$\frac{dF}{dt} = \sum_i \mu_i\,\frac{dm_i}{dt} = -\sum_i M_i\,(\mu_i - \bar\mu)^2 \;\le\; 0. \tag{10.7}$$
-<p>We ran it on 10 cm³ of the thesis cloud (3010 drops, three random draws), sealed and saturated, once with pure water and once with every
-drop holding the salt of a 0.05 µm grain of ammonium sulfate.</p>
-<figure class="fig" id="fig-10-2">{{FIG:ripenF}}<figcaption>Figure 10.2. Surface free energy left, against time on a logarithmic axis: ripening through the vapour
+<p>This section does what the chapter's title promises and the sections above could not: it takes the free energy, turns it into a force on
+the water of every drop, lets the water move down that force, and keeps the books of who gains and who loses at each step. Five steps lead
+there: the force, the path the water can take, the rule that keeps the water fixed, the proof that the free energy falls, and the reading
+of one step.</p>
+
+<p><strong>Step 1: the force. How tightly a drop holds its water.</strong> Move a little water $dm$ into a drop of radius $r$. The drop swells:
+its mass is $m = \tfrac43\pi\rho_wr^3$, so $dm = 4\pi\rho_wr^2\,dr$, and its surface $A = 4\pi r^2$ grows by $dA = 8\pi r\,dr$. Dividing,
+$dA/dm = 2/(\rho_wr)$: a kilogram of water costs a small drop more new surface than a large one. The surface free energy of that drop
+changes by $\sigma\,dA$, and the price per kilogram is the drop's <em>chemical potential</em>,</p>
+$$\mu_i \equiv \frac{\partial F_s}{\partial m_i} = \frac{2\sigma}{\rho_wr_i} = R_vT\,\frac{a}{r_i},\qquad a = \frac{2\sigma}{\rho_wR_vT} = 1.14\ \text{nm}. \tag{10.5}$$
+<p>$R_v$ = 461.5 J kg⁻¹ K⁻¹ is the gas constant of water vapour; it enters only to give the length $a$, which is the natural unit of the
+problem. There is a mechanical way to see (10.5). The curved skin squeezes the water inside by the pressure $2\sigma/r$ (Laplace), and
+pushing a kilogram of water, a volume $1/\rho_w$, in against that pressure takes the work $2\sigma/(\rho_wr)$. Flat water, $r \to \infty$,
+has $\mu = 0$: it is the zero of the scale. (In this section $\mu$ always carries a drop's index or a bar and is a chemical potential; the air's
+viscosity, which had the same letter in chapters 2 and 3, does not appear here.)</p>
+<div class="press"><div class="ctag">In our cloud</div>An 8 µm droplet holds its water at $\mu$ = 18.6 J/kg, a 40 µm collector at 3.7 J/kg. In
+everyday terms: the water in 8 µm droplets sits as high above a lake, in energy, as if it had been lifted 1.89 m, and the water in 40 µm
+drops as if lifted 0.38 m. Water runs downhill, from the small drop to the large one, if a path lets it.</div>
+<p>Dissolved salt changes the price. A drop that holds salt keeps its water more tightly (Raoult's effect), and (10.5) gains a second term,
+$\mu = R_vT\,(a/r - b/r^3)$, with $b$ proportional to the mass of salt in the drop. We come back to it at the end of the section.</p>
+
+<p><strong>Step 2: the path. Water passes through the vapour.</strong> Drops do not touch here, so the only path between them is the air: water
+evaporates from one drop, crosses as vapour and condenses on another. The vapour has a chemical potential too. If the air holds a share $s$
+more vapour than air in balance with flat water ($s$ is the <em>supersaturation</em>; $s$ = 0.01 means 1 % more), then for small $s$ the
+vapour's potential on the same scale is $\bar\mu = R_vT\,s$. A drop is in balance with the air when the two potentials are equal, $s = a/r$:
+the smaller the drop, the more vapour the air must hold to keep it alive. That is Kelvin's law.</p>
+<p>When they are not equal, vapour diffuses toward the drop or away from it. Around a sphere a steady diffusion has the vapour density approaching
+its far value as $1/\text{distance}$, like the potential of a charge, and the total flow through any shell round the drop is $4\pi rD_v$ times the
+density difference between the far air and the drop's surface ($D_v$ is the diffusivity of vapour in air): the flow grows with the radius,
+not with the surface. Condensing vapour also releases latent heat, which warms the drop and raises its own vapour pressure until the heat
+has leaked into the air; that slows the flow. Rogers and Yau (1989, chapter 7) put both resistances, diffusion and heat conduction, into one
+growth constant $G$, and a falling drop gains a little from the fresh air it meets, the ventilation factor $f_v$ (it is 1.00 for droplets and
+1.07 at 40 µm):</p>
+$$\frac{dm_i}{dt} = 4\pi\rho_w\,r_i\,G\,f_v\Big(s - \frac{a}{r_i}\Big). \tag{10.6}$$
+<div class="press"><div class="ctag">In our cloud</div>$G = 9.73\times10^{-11}$ m²/s. Heat conduction is 62 % of the resistance and diffusion 38 %:
+with diffusion alone $G$ would be $2.53\times10^{-10}$ m²/s, 2.6 times larger. (Chapter 12 uses the same $G$ for drops that leave the cloud,
+(12.4), where $s = -0.2$.)</div>
+<p>Write (10.6) with the potentials of step 1 and it takes the form that every law of slow, damped transport has, a flow proportional to
+a difference of potential:</p>
+$$\frac{dm_i}{dt} = -M_i\,(\mu_i - \bar\mu),\qquad M_i = \frac{4\pi\rho_w\,r_i\,G\,f_v}{R_vT}. \tag{10.7}$$
+<p>$M_i$ is the drop's <em>mobility</em>: how many kilograms per second flow for each J/kg of difference. Compare Ohm's law, current equal to
+conductance times voltage difference, or heat flowing between two bodies in proportion to their temperature difference.</p>
+
+<p><strong>Step 3: the rule. The water is fixed, and that sets the vapour.</strong> The box is sealed, and the vapour cannot act as a store: the air holds 9.4 g/m³ of vapour, but $s$ moves only in its fourth decimal place, so
+the vapour's content changes by about a thousandth of a g/m³ while the drops hold 1.1 g/m³. So what one drop loses another must gain: $\sum_i dm_i/dt = 0$. Put (10.7) in and solve for the one unknown, $\bar\mu$:</p>
+$$\bar\mu = \frac{\sum_i M_i\,\mu_i}{\sum_i M_i},\qquad\text{so that}\qquad r_c \equiv \frac{a}{s} = \frac{\sum_i r_i f_{v,i}}{\sum_i f_{v,i}}. \tag{10.8}$$
+<p>The vapour settles at the mobility-weighted mean of the drops' potentials. Nobody sets $s$ from outside; the drops set it themselves.
+The second form says the same thing as a radius. $r_c$ is the <em>critical radius</em>, the size of a drop that is exactly in balance with the
+air, and with $f_v \approx 1$ it is simply the mean radius of all the drops. This is the whole rule of who eats whom through the vapour:</p>
+<div class="callout"><div class="ctag">Key result · who eats whom through the vapour</div>At every instant, every drop larger than the mean radius
+$r_c$ grows and every drop smaller than it shrinks. The line between eaters and eaten is not fixed: as small drops vanish the mean radius
+rises, and a drop that was growing yesterday finds itself below the line today and starts to give its water back.</div>
+
+<p><strong>Step 4: the proof. The free energy falls, as a sum of squares.</strong> The free energy changes because the masses change:</p>
+$$\frac{dF_s}{dt} = \sum_i \frac{\partial F_s}{\partial m_i}\,\frac{dm_i}{dt} = \sum_i \mu_i\,\frac{dm_i}{dt}.$$
+<p>Since the gains and losses add to zero, we may subtract
+$\bar\mu\sum_i dm_i/dt = 0$ without changing anything, and then (10.7) gives</p>
+$$\boxed{\;\frac{dF_s}{dt} = \sum_i (\mu_i - \bar\mu)\,\frac{dm_i}{dt} = -\sum_i M_i\,(\mu_i - \bar\mu)^2 \;\le\; 0.\;} \tag{10.9}$$
+<p>Every drop contributes a square, so every drop lowers the free energy, the one that shrinks and the one that grows alike. The descent stops
+only when all $\mu_i$ are equal, which cannot happen while pure-water drops of two different sizes are left: it ends with one size and, given time, one drop. And because the box
+is at one temperature, (10.4) turns this into the entropy made each second, $dS/dt = -\dot F_s/T = \sum_i M_i(\mu_i - \bar\mu)^2/T$: a flow
+times the force that drives it, summed over the drops. This is the second law doing work: it does not only forbid the way back, it gives
+the rate of the way forward.</p>
+<p><strong>★ Why this deserves the name gradient descent.</strong> A ball in honey does not accelerate down a slope; it moves at the speed at which
+the friction balances the slope. Rayleigh wrote that balance as a minimum principle, and Onsager showed it holds for slow transport in
+general: among all the flows $\dot m_i$ that keep the water fixed, nature takes the ones that minimise</p>
+$$\mathcal R = \underbrace{\sum_i \frac{\dot m_i^{\,2}}{2M_i}}_{\text{half the dissipation}} \;+\; \underbrace{\sum_i \mu_i\,\dot m_i}_{dF_s/dt} \;-\; \bar\mu\sum_i \dot m_i. \tag{10.10}$$
+<p>The last term is the constraint, with $\bar\mu$ as its Lagrange multiplier. Setting $\partial\mathcal R/\partial\dot m_i = 0$ gives
+$\dot m_i/M_i + \mu_i - \bar\mu = 0$, which is (10.7): the vapour's potential is the multiplier that keeps the water fixed. So ripening is the
+steepest descent of $F_s$ at fixed water, with steepness measured by the cost $\dot m^2/2M$ of pushing water through the vapour. This is
+the overdamped cousin of a Lagrangian: no inertia, only a force and a friction. Collisions have no such function. Their rate $K$
+contains fall speeds and collision efficiencies and does not ask how much free energy a merger would release; that is the exact sense in
+which they are not a gradient descent.</p>
+
+<p><strong>Step 5: one step, read off.</strong> Divide (10.6) by $4\pi\rho_wr^2$ to get the rate of the radius, and use $s = a/r_c$:</p>
+$$\frac{dr}{dt} = \frac{G f_v\,a}{r}\Big(\frac{1}{r_c} - \frac{1}{r}\Big). \tag{10.11}$$
+<figure class="fig" id="fig-10-2">{{FIG:ripenRate}}<figcaption>Figure 10.2. One step of the descent: how fast a drop's radius changes, against its radius, by (10.11), at the start and
+after one hour. The curve crosses zero at the critical radius $r_c$. Below it drops shrink, the faster the smaller they are; above it they
+grow, fastest near $2r_c$.</figcaption></figure>
+<p>Three things can be read from (10.11) without a computer. Below $r_c$ the rate is negative and grows without limit as $r \to 0$: a
+shrinking drop shrinks faster and faster, and vanishes in a finite time. Above $r_c$ the rate is positive, has its largest value
+$Ga/(4r_c^2)$ at $r = 2r_c$ (differentiate and set to zero, with $f_v = 1$), and falls off as $1/r$ beyond. And the clock: a drop whose radius
+differs from $r_c$ by about $r_c$ moves at about $Ga/r_c^2$, so it needs about</p>
+$$\tau \approx \frac{r_c^3}{G\,a} \tag{10.12}$$
+<p>to change its radius by $r_c$. The cube is the important part: each doubling of the mean radius takes eight times longer than the
+last, so ripening always slows down.</p>
+<div class="press"><div class="ctag">In our cloud: the first step, drop by drop</div>At the start the drops set $s$ = 0.0137 % and
+$r_c$ = 8.31 µm (their mean radius is 8.30 µm). 43 % of the drops lie above it and grow; 57 % shrink.
+<div class="tblw"><table class="mt">
+<tr><th>drop</th><th>$dr/dt$ (µm per hour)</th><th>$dm/dt$ (kg/s)</th><th>share of its own water per hour</th></tr>
+<tr><td>5 µm droplet</td><td>−6.34</td><td>$-5.5\times10^{-16}$</td><td>gone within the hour</td></tr>
+<tr><td>8 µm droplet</td><td>−0.23</td><td>$-5.2\times10^{-17}$</td><td>−8.8 %</td></tr>
+<tr><td>12 µm droplet</td><td>+1.23</td><td>$+6.2\times10^{-16}$</td><td>+30.7 %</td></tr>
+<tr><td>40 µm collector</td><td>+1.01</td><td>$+5.6\times10^{-15}$</td><td>+7.6 %</td></tr></table></div>
+A 40 µm collector takes in 9.1 times as much water as a 12 µm droplet. But there is one collector per cm³ and there are 129 droplets above
+$r_c$, so at the start 85 % of the water in transit goes to the larger droplets and only 15 % to the collectors. The clock (10.12) is
+$\tau$ = 1.44 hours.</div>
+
+<p><strong>The run.</strong> We followed the thesis cloud, sealed and saturated, in two ways. First as 1100 classes of identical drops per m³ of
+air (800 for the droplet mode, 300 for the collector mode, each mode cut at three standard deviations as in chapter 6): drops of one size
+ripen identically, so the classes follow the size distribution itself, and they give smooth curves. Second, as a check on chance, as 10 cm³
+holding 3010 drops drawn at random, three draws, once with pure water and once with every drop holding the salt of a 0.05 µm grain of
+ammonium sulfate.</p>
+<figure class="fig" id="fig-10-3">{{FIG:ripenF}}<figcaption>Figure 10.3. Surface free energy left, against time on a logarithmic axis: ripening through the vapour
 (pure water, and with salt) against collection (chapter 5). Mean of three draws; the two ripening curves lie on top of each other.</figcaption></figure>
-<figure class="fig" id="fig-10-3">{{FIG:ripenSpec}}<figcaption>Figure 10.3. The pure-water cloud ripening: the water's size distribution at the start, after 1 hour and after a
-day. The droplet hump shrinks and the collectors grow; no drop touches another.</figcaption></figure>
+<figure class="fig" id="fig-10-4">{{FIG:ripenSpec}}<figcaption>Figure 10.4. The pure-water cloud ripening: the water's size distribution at the start and after 1 hour,
+6 hours and a day (the class run). The droplet hump loses its small side and moves up; the collector hump barely moves. No drop touches another. The steep right side of each hump is the cut at three standard deviations, which ripening sharpens: beyond $2r_c$ larger drops grow more slowly, so the top of the hump closes up.</figcaption></figure>
+<figure class="fig" id="fig-10-5">{{FIG:ripenWho}}<figcaption>Figure 10.5. The books of the vapour channel (the class run): the water held by the drops that started in the
+droplet mode and in the collector mode, and the water that has passed through the vapour so far. Water can pass more than once, when a drop
+that grew falls below the rising $r_c$ and gives it back.</figcaption></figure>
+<div class="press"><div class="ctag">In our cloud: the ledger of the descent</div>
+<div class="tblw"><table class="mt">
+<tr><th>time</th><th>critical radius $r_c$</th><th>drops left per cm³</th><th>water passed through the vapour</th><th>water held by droplet mode / collector mode</th><th>free energy left</th></tr>
+<tr><td>start</td><td>8.3 µm</td><td>301</td><td>0</td><td>72.1 / 27.9 %</td><td>100 %</td></tr>
+<tr><td>1 hour</td><td>9.0 µm</td><td>212</td><td>13.7 %</td><td>70.2 / 29.8 %</td><td>86.9 %</td></tr>
+<tr><td>6 hours</td><td>13.1 µm</td><td>70</td><td>45.5 %</td><td>63.1 / 36.9 %</td><td>60.3 %</td></tr>
+<tr><td>1 day</td><td>19.9 µm</td><td>19</td><td>82.0 %</td><td>45.7 / 54.3 %</td><td>38.5 %</td></tr></table></div>
+The collector mode never loses a drop: one per cm³ from start to end. All 282 drops per cm³ that vanish in a day are droplets.</div>
+<p>Read the ledger against the gravity ledger of the next chapter (section 11.2) and the two channels turn out to be opposites. Through the
+vapour, in the first hour, 13.7 % of the water changes drops but the collectors gain only 1.9 points of it: the rest went from small
+droplets to larger droplets, because the dividing line $r_c$ runs through the middle of the droplet hump. Droplets eat droplets. Under
+gravity that is the one channel that is closed: two droplets fall at almost the same speed and hardly ever meet. Even after a day the
+collectors have gained 26 points of the water while 82 % has passed through the vapour.</p>
+<div class="check"><div class="ctag">Check: the descent against its own formula</div>The run stores the surface free energy itself, and
+separately adds up the right side of (10.9), $\sum_i M_i(\mu_i - \bar\mu)^2$, over its time steps. From 1 minute to 1 day the stored fall
+of $F_s$ is 0.3 to 1.1 % larger than the summed formula; the gap is the time step (the sum takes each step's rate at its beginning) and the
+last surface of drops that vanish within a step. The water is kept to $5\times10^{-12}$ of itself. The two ways of putting the cloud into
+the computer agree: after one hour the classes have 86.9 % of the free energy left, the three draws of 3010 drops 86.8 %. The theory of
+this process (Lifshitz and Slyozov 1961, Wagner 1961) predicts that after a long time $r_c^3$ grows steadily at the rate $\tfrac49Ga$; between
+12 and 24 hours ours grows 1.8 times faster, so with its two humps this cloud has not yet reached that final state.</div>
 <div class="press"><div class="ctag">In our cloud</div>By the time collection has put nine tenths of the water above 40 µm (13.5 min), it has
 destroyed 82 % of the surface free energy; ripening has destroyed 2.5 %. Ripening needs an hour to remove 13 % and a day to remove 61 %. In
-pure water a third of the drops vanish within the hour; with salt none do: each shrinks only to a haze particle of 0.27 µm, where the
-salt holds it, and the water moved is the same.</div>
-<p>So the competition one might picture, large drops starving small ones by energy alone, is real. Large drops do grow at the expense of small ones, driven by nothing but the free
-energy, exactly as a gradient descent. It is simply slow: it works on a time of hours to days, while gravity's collisions finish the same
-job in minutes. In a real cloud ripening is buried under the much larger vapour changes that rising and sinking air bring, which is why the
-collection equation, which leaves it out, is the right first model of rain.</p>
+pure water a third of the drops vanish within the hour; with salt none do: each shrinks only to a haze particle of 0.28 µm, where the
+salt holds it, and the water moved is the same. At the start ripening lowers the free energy at $4.6\times10^{-7}$ W per m³ of cloud;
+collection, averaged up to 13.5 min, at $2.2\times10^{-5}$ W per m³, 47 times faster.</div>
+<p>So the competition one might picture, large drops starving small ones by energy alone, is real, and it is a gradient descent in the
+exact sense of (10.10). Its books can be kept step by step, and they say that the mean radius is the dividing line. It is simply slow: its
+clock is $r_c^3/(Ga)$, an hour and a half at the start and eight times longer with each doubling of the drops, while gravity's collisions
+finish the same job in minutes. In a real cloud ripening is buried under the much larger vapour changes that rising and sinking air bring
+(in rising cloud air $s$ is typically a few tenths of a percent, Rogers and Yau 1989, some twenty times the 0.014 % the drops set here), which is why the collection equation,
+which leaves it out, is the right first model of rain.</p>
 
 <h3>10.5 What energy and entropy decide</h3>
 <div class="callout"><div class="ctag">The balance sheet</div><ul>
 <li><strong>Exact:</strong> the surface free energy (10.3) only falls, and each merger raises the entropy by about $10^{10}\,k_B$, so no thermal
 fluctuation undoes it. The free energy of the whole cloud is lowest with all the water in a few drops.</li>
 <li><strong>Exact, and small:</strong> the heat of merging is at most 2.3 % of the heat gravity's drag makes; it drives nothing.</li>
-<li><strong>A real gradient descent:</strong> ripening through the vapour (10.6) lowers the free energy by itself, but over hours to days.</li>
+<li><strong>A real gradient descent:</strong> ripening through the vapour (10.7) lowers the free energy by itself, as a sum of squares (10.9). Every drop above the mean radius grows and every drop below it shrinks, so through the vapour droplets eat droplets; the clock is $r_c^3/(Ga)$, hours to days.</li>
 <li><strong>Not decided by free energy:</strong> which drops collide, and when. That is the subject of the next chapter.</li></ul></div>
 </section>

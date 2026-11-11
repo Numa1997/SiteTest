@@ -13,25 +13,29 @@ about a minute: the first drizzle in a large volume comes from one-in-a-million 
 </details>
 
 <details class="prob" id="p6"><summary><span class="pn">6</span>A temperature for splitting. Two droplets of 10 µm merge. How much
-surface energy is released, and at what temperature would the Metropolis rule (10.5) accept the reverse split with probability $1/e$?</summary>
+surface energy is released, and at what temperature would the Metropolis rule (11.1) accept the reverse split with probability $1/e$?</summary>
 <div class="head">$3.85\times10^{-11}$ J, and a temperature of $2.79\times10^{12}$ K</div>
 <p>The product has radius $10\cdot2^{1/3}$ = 12.60 µm. The surface lost is $2\cdot4\pi(10\ \mu\mathrm m)^2 - 4\pi(12.60\ \mu\mathrm m)^2$, and with
 $\sigma$ = 0.07422 N/m the energy released is $\Delta E = 3.85\times10^{-11}$ J, which is $9.84\times10^{9}\,k_BT$ at 283 K. The split is accepted
 with probability $e^{-\Delta E/k_BT_{\rm eff}}$, which is $1/e$ when $k_BT_{\rm eff} = \Delta E$, at $T_{\rm eff} = 2.79\times10^{12}$ K.</p>
 <p>No air is that hot. Drops do break up in real clouds, but large ones, when a collision's kinetic energy beats the surface tension (Weber
 number near 1, chapter 4); that is mechanics, not heat. A Metropolis rule with an invented temperature high enough to split drops would be
-a free parameter with nothing physical behind it, which is why chapter 10 uses the rule only at the true temperature.</p>
+a free parameter with nothing physical behind it, which is why chapter 11 uses the rule only at the true temperature.</p>
 </details>
 
 <details class="prob" id="p7"><summary><span class="pn">7</span>The cloud that maximises entropy. Show that $n = (N^2/M)\,e^{-Nm/M}$
 with $N = N_0/(1 + KN_0t/2)$ solves the collection equation (5.1) when the kernel $K$ is the same for every pair, and that $M$ stays fixed.</summary>
 <div class="head">The gain is $\tfrac12K(N^4/M^2)\,m\,e^{-Nm/M}$; the rest is bookkeeping</div>
-<p>Gain: the convolution $\int_0^m n(m')\,n(m - m')\,dm' = (N^2/M)^2\,e^{-Nm/M}\int_0^m dm' = (N^4/M^2)\,m\,e^{-Nm/M}$, because the two exponents add to
-$-Nm/M$ for every $m'$. Loss: $K\,n(m)\int_0^\infty n\,dm' = K N\,(N^2/M)\,e^{-Nm/M}$. Left side: $\partial n/\partial t = \big[2N\dot N/M - (N^2/M)(\dot N m/M)\big]e^{-Nm/M}$,
+<p>Gain: the convolution</p>
+$$\int_0^m n(m')\,n(m - m')\,dm' = \Big(\frac{N^2}{M}\Big)^2 e^{-Nm/M}\int_0^m dm' = \frac{N^4}{M^2}\,m\,e^{-Nm/M},$$
+<p>because the two exponents add to
+$-Nm/M$ for every $m'$. Loss: $K\,n(m)\int_0^\infty n\,dm' = K N\,(N^2/M)\,e^{-Nm/M}$. Left side:</p>
+$$\frac{\partial n}{\partial t} = \Big[\frac{2N\dot N}{M} - \frac{N^2}{M}\,\frac{\dot N m}{M}\Big]e^{-Nm/M},$$
+<p>
 and $\dot N = -KN^2/2$ from integrating (5.1) over $m$. Substituting, the left side is $\big[-KN^3/M + \tfrac12K(N^4/M^2)\,m\big]e^{-Nm/M}$, which is gain minus loss.
 The water $\int m\,n\,dm = (N^2/M)(M/N)^2 = M$ for every $t$.</p>
-<p>The exponential is also what maximum entropy gives from $N$ and $M$ alone (10.6). So the cloud in which every pair is equally likely, which is
-the Metropolis cloud of section 10.3, keeps the maximum-entropy shape once it has it, and approaches it from any start (figure 10.6).
+<p>The exponential is also what maximum entropy gives from $N$ and $M$ alone (11.2). So the cloud in which every pair is equally likely, which is
+the uninformed lottery of section 11.1, keeps the maximum-entropy shape once it has it, and approaches it from any start (figure 11.5).
 Gravity's kernel prefers pairs with different fall speeds, and that preference is what keeps the real cloud far from this shape.</p>
 </details>
 
@@ -45,4 +49,20 @@ and after a time $t \gg T_L$ the spread is $\sqrt{2Kt}$ = 136 m.</p>
 <p>The drop: (12.4) with $S = -0.2$, $G = 9.73\times10^{-11}$ m²/s and the ventilation factor, which is 2.00 at 150 µm because the drop falls at
 1.21 m/s and refreshes the air around it. Integrating $dr^2/dt = 2GSf_v(r)$ while the drop falls at its own speed, the drop is gone after
 385 s, about 44 m above the ground. A 200 µm drop arrives, with 41 % of its water. Rain needs drops well above the size where drizzle begins.</p>
+</details>
+<details class="prob" id="p9"><summary><span class="pn">9</span>Who eats whom through the vapour. A sealed, saturated box at 10 °C holds two kinds
+of pure-water droplets in equal numbers: 6 µm and 10 µm. Which grow? What supersaturation do they set, how fast does each radius change at the
+start, and how long do the losers last?</summary>
+<div class="head">The 10 µm droplets eat the 6 µm ones in about half an hour</div>
+<p>By (10.8) the dividing line is the mean radius, $r_c$ = 8 µm, and the drops hold the air at $s = a/r_c$ = 0.0142 % with $a$ = 1.136 nm. The
+6 µm droplets are below the line and shrink; the 10 µm droplets are above it and grow. From (10.11) with $G = 9.73\times10^{-11}$ m²/s and
+$f_v = 1$: $dr/dt = (Ga/r)(1/r_c - 1/r)$ is −2.76 µm per hour for the small droplets and +0.99 µm per hour for the large ones. The small ones
+lose radius nearly three times faster than the large ones gain it, because the same water is a thicker shell on a small drop.</p>
+<p>How long? The water is fixed, $r_1^3 + r_2^3$ = 1216 µm³ per pair, so $r_2$ follows from $r_1$ and (10.11) is a single equation with
+$r_c = (r_1 + r_2)/2$. Integrated numerically, the 6 µm droplets are gone after 29.4 min (the model's own ripening routine, with ventilation,
+gives 29.3 to 29.5 min). A quick bound: if the air were exactly saturated, $s = 0$, (10.11) would be $r^2\,dr = -Ga\,dt$ and the droplet
+would last $r^3/(3Ga)$ = 10.9 min. The real time is nearly three times longer, because the droplets themselves hold the air slightly
+supersaturated and so prop each other up.</p>
+<p>At the end each pair has become one drop of $1216^{1/3}$ = 10.67 µm, and the surface free energy has fallen to 83.8 % of its start.
+Nothing touched anything: the free energy alone moved the water, down its own gradient, as (10.9) says it must.</p>
 </details>

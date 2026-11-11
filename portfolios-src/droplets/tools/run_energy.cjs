@@ -124,7 +124,10 @@ out.warm.epsByN = recs.map(q => [r6(q.Ntot / N0w), r6(q.epsExp), r6(q.epsGamma)]
 const V = 100, trunc = 3, nSeeds = +(process.env.SEEDS || 20);
 const clsOf = r => r < CUTS[0] ? 0 : r < CUTS[1] ? 1 : 2;
 const area23 = r => Math.pow(P.massOf(r), 2 / 3);
-const marks = [0.99, 0.95, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1, 0.05, 0.02, 0.01];
+// marks: the share of drops left at which a row is written. Dense enough to draw figure 11.1 as a curve (41 marks; the 14 of the first
+// version are among them, so every number quoted from them is unchanged).
+const marks = [0.99, 0.975, 0.95, 0.925, 0.9, 0.875, 0.85, 0.825, 0.8, 0.775, 0.75, 0.725, 0.7, 0.65, 0.6, 0.55, 0.5, 0.45, 0.4, 0.35, 0.3, 0.25, 0.2, 0.16, 0.13, 0.1, 0.08, 0.065,
+  0.05, 0.04, 0.03, 0.025, 0.02, 0.016, 0.013, 0.01, 0.008, 0.006, 0.004, 0.003, 0.002];
 function mcRun(kind, seed) {
   const u = P.rng(seed), radii = P.drawModes(modes, V, u, trunc), Nini = radii.length;
   let S = radii.reduce((a, r) => a + area23(r), 0); const S0 = S;

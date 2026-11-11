@@ -18,9 +18,11 @@ neither made nor lost), and we ask $\psi$ to vanish on the cloud's outline, so t
 $$\nabla^2\psi = -\omega \ \text{inside the cloud},\qquad \psi = 0 \ \text{on and outside the outline}. \tag{12.2}$$
 <p>The vorticity $\omega$ is that of two counter-rotating cells, rising in the middle and sinking at the sides; we solve (12.2) on a 25 m grid and
 scale $\psi$ so the fastest updraft is 1 m/s. The middle term of (12.1) is the stochastic element. We cannot follow each eddy, but Kolmogorov's
-theory gives two things about eddies up to a size $L_e$: how strong they are and how long they remember. Each component of $\mathbf u'$ has
-variance $\sigma^2 = (\varepsilon L_e)^{2/3}$, and a drop carried by them forgets its velocity after the Lagrangian time $T_L = 2\sigma^2/(C_0\varepsilon)$,
-with $C_0 \approx 6$ the measured Lagrangian constant (Sawford 1991). The simplest process with exactly that spread and that memory is the
+theory gives two things about eddies up to a size $L_e$: how strong they are and how long they remember. An eddy of size $\ell$ and speed $u_\ell$ turns over in a time $\ell/u_\ell$ and hands its kinetic energy, about $u_\ell^2$ per kg, to smaller eddies in that time; in steady
+turbulence every size passes on the same power $\varepsilon$, so $u_\ell^3/\ell \approx \varepsilon$ and $u_\ell \approx (\varepsilon\ell)^{1/3}$. The largest eddies carry most of the speed, so each component of $\mathbf u'$ has
+variance $\sigma^2 = (\varepsilon L_e)^{2/3}$. For the memory, Kolmogorov's theory says the velocity of a parcel of air changes over a short time $t$ by an amount of mean square
+$C_0\varepsilon t$, with $C_0 \approx 6$ the measured Lagrangian constant (Sawford 1991). A velocity that forgets itself over a time $T_L$ changes by $2\sigma^2t/T_L$ over a short time.
+Setting the two equal gives the Lagrangian time $T_L = 2\sigma^2/(C_0\varepsilon)$. The simplest process with exactly that spread and that memory is the
 Ornstein–Uhlenbeck process, which we advance over a step $\Delta t$ as</p>
 $$u_i'(t + \Delta t) = u_i'\,e^{-\Delta t/T_L} + \sigma\sqrt{1 - e^{-2\Delta t/T_L}}\;\zeta_i + a_i\,\Delta t,\qquad a_i = \tfrac12\,\partial_i\sigma^2 + u_i'\,\frac{(\mathbf u' + \mathbf U)\cdot\nabla\sigma^2}{2\sigma^2}, \tag{12.3}$$
 <p>with $\zeta_i$ fresh standard normal numbers. The first two terms are exact for any step. The drift $a_i$, advanced with the simple Euler rule,
@@ -55,7 +57,9 @@ super-droplets are shuffled into random pairs, and a pair of multiplicities $\xi
 its mean is</p>
 $$p = \xi_j\,K(r_j, r_k)\,\frac{\Delta t}{\Delta V}\,\frac{n(n - 1)/2}{\lfloor n/2\rfloor}. \tag{12.5}$$
 <p>Here $n$ is the number of super-droplets in the cell of volume $\Delta V$, and the last factor makes up for testing only $\lfloor n/2\rfloor$ of the
-$n(n - 1)/2$ possible pairs. In a merger each of the $\xi_k$ drops of the second kind swallows $\gamma$ of the first, so the water is kept exactly.
+$n(n - 1)/2$ possible pairs. The first factors follow from counting real drops: the two super-droplets stand for $\xi_j\xi_k$ pairs of real drops, each of which merges with
+probability $K\Delta t/\Delta V$, so $\xi_j\xi_kK\Delta t/\Delta V$ real mergers are due; one merger of the super-droplets carries out $\xi_k$ of them at once, so it must
+happen with probability $\xi_jK\Delta t/\Delta V$. In a merger each of the $\xi_k$ drops of the second kind swallows $\gamma$ of the first, so the water is kept exactly.
 The kernel $K$ is that of chapters 1 to 4: the stochastic element moves drops between cells, but how fast two drops in one cell approach
 each other is still set by gravity.</p>
 <div class="check"><div class="ctag">Check: super-droplets against the collection equation</div>Switch the motion off and put all super-droplets
