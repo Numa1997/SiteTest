@@ -40,6 +40,10 @@ when V hands that chapter over. V reads this file before editing every chapter. 
 - **Promises.** ch03 proves the conservation of $B_r$ (Liouville) and compares published brightness; ch05 turns ΔE into the chromatic
   blur; the one-atom claim of Applied Materials is a stated limit.
 - **Hand-over.** Table of four numbers to chapter 3 (I_e, B_r, ΔE, d_v) for the two presets; limits; checks; problems; sources.
+- **Voice pass.** The electronvolt now a pointer to chapter 1; brightness and reduced brightness set in italics at their
+  definition (§2.8); the decay width $d$ named and given its meaning (the transmission falls by e per $d$ below the Fermi
+  level); "your screen", "you move" and the one "I" removed; the long vacuum, Schottky-preset, residence-time and patch-model
+  sentences split. No typed numeral added (checks/list_legacy_numerals.py before and after).
 
 ## ch03 · Acceleration, brightness, energy spread
 - **Opening picture.** A marble let go at the top of a smooth slide.
