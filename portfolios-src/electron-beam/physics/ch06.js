@@ -174,7 +174,8 @@
     ctx.restore();
     ctx.strokeStyle = '#1c1518'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(cx, 4); ctx.lineTo(cx, top); ctx.stroke();
     ctx.font = "11px 'IBM Plex Mono', monospace"; ctx.fillStyle = '#3a322e'; ctx.textAlign = 'left';
-    ctx.fillText('beam, ' + core.fmt(p.V_land * 1e-3, 3) + ' kV into ' + p.material, 6, 14);
+    const bt = 'beam, ' + core.fmt(p.V_land * 1e-3, 3) + ' kV into ' + p.material, bw = ctx.measureText(bt).width;   // left of the beam's line, or right of it when there is no room
+    if (bw + 7 <= cx - 5) ctx.fillText(bt, 6, 14); else if (bw + 2 <= cx - 6) { ctx.textAlign = 'right'; ctx.fillText(bt, cx - 6, 14); ctx.textAlign = 'left'; } else ctx.fillText(bt, cx + 6, 14);
     // scale bar: a round length near R/2
     const raw = R / 2, pw = Math.pow(10, Math.floor(Math.log10(raw))), bar = [1, 2, 5].map(f => f * pw).filter(v => v <= raw).pop() || pw;
     const yb = h - 10; ctx.strokeStyle = '#1c1518'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(10, yb); ctx.lineTo(10 + bar * sc, yb); ctx.stroke();

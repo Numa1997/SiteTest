@@ -129,14 +129,18 @@
   // one period: the line in section below, the counts of one noisy line (dots), the mean of N_px lines (dark), the expectation (wine), the edges
   function draw(ctx, w, h, p, out) {
     ctx.clearRect(0, 0, w, h);
-    const cv = out.prof_curve, n = cv.length / 4, L = 46, R = w - 10, T = 12, B = h - 92;
+    const cv = out.prof_curve, n = cv.length / 4;
     let ymax = 0; for (let i = 0; i < n; i++) ymax = Math.max(ymax, cv[4 * i + 1], cv[4 * i + 3]);
     ymax *= 1.15;
+    // the left margin is as wide as the longest count label plus the turned axis title, so the two never meet
+    ctx.font = "11px 'IBM Plex Mono', monospace";
+    const ticks = [0, 0.5, 1].map(f => f * ymax / 1.15), tw = Math.max(...ticks.map(v => ctx.measureText(core.fmt(v, 2)).width));
+    const L = Math.max(46, Math.ceil(tw) + 24), R = w - 10, T = 12, B = h - 92;
     const X = x => L + (x / p.pitch + 0.5) * (R - L), Y = v => B - Math.max(0, Math.min(1.3, v / ymax)) * (B - T);
-    ctx.strokeStyle = '#d9d0c2'; ctx.lineWidth = 1; ctx.strokeRect(L, T, R - L, B - T);
-    ctx.font = "11px 'IBM Plex Mono', monospace"; ctx.fillStyle = '#6f655f'; ctx.textAlign = 'right';
-    for (const f of [0, 0.5, 1]) { const v = f * ymax / 1.15; ctx.fillText(core.fmt(v, 2), L - 4, Y(v) + 4); }
-    ctx.save(); ctx.translate(12, (T + B) / 2); ctx.rotate(-Math.PI / 2); ctx.textAlign = 'center'; ctx.fillText('counts per pixel', 0, 0); ctx.restore();
+    ctx.strokeStyle = '#d9d0c2'; ctx.lineWidth = 1; ctx.__nocollide = true; ctx.strokeRect(L, T, R - L, B - T); ctx.__nocollide = false;   // the frame
+    ctx.fillStyle = '#6f655f'; ctx.textAlign = 'right';
+    for (const v of ticks) ctx.fillText(core.fmt(v, 2), L - 4, Y(v) + 4);
+    ctx.save(); ctx.translate(L - 4 - tw - 7, (T + B) / 2); ctx.rotate(-Math.PI / 2); ctx.textAlign = 'center'; ctx.fillText('counts per pixel', 0, 0); ctx.restore();
     ctx.fillStyle = 'rgba(58,50,46,0.45)';
     for (let i = 0; i < n; i++) { ctx.beginPath(); ctx.arc(X(cv[4 * i]), Y(cv[4 * i + 2]), 1.8, 0, 2 * Math.PI); ctx.fill(); }
     const line = (k, col, lw) => { ctx.strokeStyle = col; ctx.lineWidth = lw; ctx.beginPath(); for (let i = 0; i < n; i++) { const xx = X(cv[4 * i]), yy = Y(cv[4 * i + k]); i ? ctx.lineTo(xx, yy) : ctx.moveTo(xx, yy); } ctx.stroke(); };

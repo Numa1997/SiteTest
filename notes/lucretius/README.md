@@ -3,12 +3,15 @@
 Numa, 5 November 2026: the opening passage (lines 146–158, the terror of the mind dispelled not by daylight but by nature's law;
 nothing comes from nothing by divine power; things happen without the gods) stands on the home page; the rest of the passage is to
 be scattered over other pages later. A standalone page that carried all of it was published and removed again the same day at
-Numa's word.
+Numa's word. On 10 November 2026 Numa asked for one again: `public/lucretius.html` (lines 146–224 in Latin, English, German and Arabic),
+linked from the home band.
 
 | File | What it is |
 |---|---|
 | `poem-146-224.json` | The passage in 20 Latin sentences: line numbers, Latin, Leonard's English, Diels' German, per sentence. |
 | `extract.py` | Cuts the passage out of the downloaded sources by first and last words, so nothing is retyped (paths point at the scratch folder where the sources were downloaded; download them again to rerun). |
+| `poem-ar-146-158.json`, `poem-ar-159-224.json` | The Arabic, per sentence, made from the Latin for this site (not published, not reviewed by a second reader). |
+| `make_page.py` | Writes `public/lucretius.html`, the whole passage in four languages (10 November 2026). |
 | `make_home.py` | Writes the home page band (between `<!--LUCRETIUS-->` markers in `index.html`) from the first four sentences of the JSON. |
 
 **Sources.** Latin: [The Latin Library](https://www.thelatinlibrary.com/lucretius/lucretius1.shtml), Book I, in the manuscripts'
@@ -20,7 +23,20 @@ Einstein), line for line, from [textlog.de](https://www.textlog.de/lukrez-natur-
 [Falter](https://www.falter.at/heureka/20131015/gedicht); corrected there: "wild" → "wird" (line 156), and the break of line 147
 ("leuchtende Helle / Scheuchen", the online copy has "leuchtende / Helle Scheuchen"; `make_home.py` applies it); line 173 ("…tut jedes
 gesondert die Kraft ruht") is as printed online and unchecked against the print. Arabic: the only published translation found
-(المركز القومي للترجمة, Cairo 2018) is under copyright; no free one exists, so the Arabic pages show Leonard's English.
+(المركز القومي للترجمة, Cairo 2018) is under copyright and was not used; the Arabic on the site (`poem-ar-146-158.json`, 10 November
+2026) is a translation made from the Latin for this site, read against Leonard and Diels, not reviewed by a second reader, and labelled so on the cards.
 
 **What Numa first had** (from Gemini): lines 149 and 218 misquoted, an English text attributed to Leonard that is not his, lines
 192–214 missing.
+
+**Arabic word choices** (11 November 2026). The Arabic keeps one word for each of Lucretius' recurring terms, so that the argument can be
+followed across sentences as in the Latin. *nihilum*: «لا شيء» ("from nothing" «من لا شيء», "into nothing" «إلى لا شيء»), the form used in Arabic
+writing on Epicurus (an Arabic study of Epicurean ethics drawing on Yusuf Karam's history of Greek philosophy has «شيء من لا شيء، ولا يمكن
+أن ينحل العالم إلى لا شيء»), not «العدم», which in Arabic carries the theology of creation.
+*divinitus*, *divino numine*, *sine divom*: «بفعل الآلهة», «بمشيئة الآلهة», «بغير فعل الآلهة», plural gods as in the Latin, so that line
+150 and line 155 answer each other. *mortales*: «الفانين» (echoed by «فانيًا» at 217). *naturae species ratioque*: «مرأى الطبيعة وناموسها»
+(*species* from *specio*, to look; *ratio* as the law of nature). *semina*: «بذور»; *certus*: «معلوم» throughout; *genitalia corpora*:
+«الأجسام الوالدة»; *corpora prima*: «الأجسام الأولى»; *primordia*, *principia*: «أوائل»; *luminis orae*: «شُطآن النور»; *inane*:
+«الخلاء», the word of classical Arabic natural philosophy; *causae*: «علل». Corrections of 11 November against the first draft: *igitur*
+(146), *quas ob res* (156), *erumpere* (162, not «تنفلق»), *secreta facultas* (173, a power of its own, not a hidden one), *alienis partibus
+anni* (181), *manibus* (209, to our hands), and the universal negation «لا يُخلَق شيءٌ من لا شيء» instead of «أنّ شيئًا لا…».
