@@ -3,7 +3,8 @@
  * spilled mass and the stout's surface on the polar grid of StoutView (17 rings x 64 angles, uint8 in 0.2 mm steps about
  * the fill, zlib-packed). The frame is handed to the website's own drawing code (stout-view.js) as a "fluid" whose
  * heightAt() reads the stored grid. Near the end of the computed time the playback slows smoothly to zero speed; only
- * there the pop-up about the pipeline fades in. Changing the ride cross-fades.
+ * there the pop-up about the pipeline fades in (kaggle-flow.js). Changing the ride cross-fades. Speeds not computed on Kaggle play a
+ * labelled live preview computed in the browser (guinness-preview-worker.js), in the same format.
  *
  * The store (scripts/dataset.js): every number the page shows is written into one dataset where it is set. The file's
  * arrays go in when a ride is chosen (pick), the playback numbers every frame (tick), and StoutView writes what it draws
@@ -16,10 +17,16 @@
   const DATA_URL = DIR + 'rides.json', INDEX_URL = DIR + 'index.json';
   const F11 = 3.421;         // Hz, first sloshing mode of a deep cylinder of radius R(h) = 39.1 mm (note, eq. 16)
   const SLOW = 3.0;          // s of ride before the computed end over which the playback slows to zero
+  const STOPS = [0.5, 1.0, 1.5, 2.0, 2.5];   // m/s, the speed control's stops; those not in the file are computed as a live preview
+  // the computed road (the notebook's ROADS, version 3): cosine bumps, centre x, height h, length L (m); the preview uses the same
+  const BUMPS = [{ x: 1.5, h: 0.01, L: 0.6 }, { x: 3.5, h: -0.008, L: 0.6 }, { x: 5.75, h: 0.005, L: 0.5 }, { x: 6.25, h: 0.005, L: 0.5 },
+    { x: 6.75, h: 0.005, L: 0.5 }, { x: 7.25, h: 0.005, L: 0.5 }, { x: 9.0, h: 0.01, L: 0.25 }];
+  const BRIDGE_URL = null, PROJECT = 'guinness-cart';   // kaggle-bridge is not connected yet (docs/kaggle-pipeline.md)
+  const TAU = 0.45;          // s, time constant of every eased change of playback speed (KaggleFlow.governor)
   const ROUND = 4.0;         // s of ride in one recorded round of the data panel
   const GROUND_Y = 0.95, GLASS_BASE = 0.014, BODY_H = 0.03, GLASS_FLOOR = 0.012;   // drawing constants handed to StoutView
   const $ = (id) => document.getElementById(id);
-  const cv = $('cv'), pop = $('pop'), play = $('play'), tbar = $('tbar'), vbar = $('vbar');
+  const cv = $('cv'), old = $('cv-old'), play = $('play'), tbar = $('tbar'), badge = $('src-badge');
 
   Promise.all([fetch(DATA_URL).then((r) => r.arrayBuffer()), fetch(INDEX_URL).then((r) => r.json())])
     .then(([buf, idx]) => start(buf, idx))
@@ -72,7 +79,9 @@
       generated: IDX.generated, kaggle_notebook: IDX.kaggle.url, kaggle_version: IDX.kaggle.version } });
     const S = (n, t, a) => ds.var(n, [], t, a);
     // what the reader chooses
-    S('ride_i', 'int', { symbol: 'i<sub>ride</sub>', long_name: 'the ride chosen: position of the speed control', computed_in: 'Set speed control (pick)', digits: 0 });
+    S('ride_i', 'int', { symbol: 'i<sub>ride</sub>', long_name: 'the stop of the speed control chosen', computed_in: 'Set speed control (choose)', digits: 0 });
+    S('source', 'str', { symbol: 'source', long_name: 'where the frames on screen come from: stored on Kaggle, or the live preview computed in this browser', computed_in: 'choose()' });
+    S('n_ready', 'int', { symbol: 'N<sub>ready</sub>', long_name: 'frames of this ride available now (all of a stored ride; of a preview, those computed so far)', computed_in: 'choose(), preview worker', digits: 0 });
     S('v0', 'float', { symbol: 'v<sub>0</sub>', units: 'm/s', long_name: 'set speed of the chosen ride, as computed on Kaggle', computed_in: 'pick(), from the file', digits: 2 });
     S('road', 'str', { symbol: 'road', long_name: 'the road of the chosen ride', computed_in: 'pick(), from the file' });
     S('n_rides', 'int', { symbol: 'N<sub>rides</sub>', long_name: 'rides stored in the file', computed_in: 'start(), from the file', digits: 0 });
@@ -111,7 +120,14 @@
     // playback now
     S('playing', 'bool', { symbol: 'playing', long_name: 'the playback is running', computed_in: 'Play / Pause button' });
     S('t_play', 'float', { symbol: 't', units: 's', long_name: 'ride time being shown', computed_in: 'tick()', formula: 't += r Δt<sub>wall</sub>', digits: 3, updates: 'every frame' });
-    S('rate', 'float', { symbol: 'r', long_name: 'playback rate: 1 is real time; it eases to 0 over the last 3 s of computed data', computed_in: 'tick()', formula: 'r = min(1, √((T<sub>ride</sub> − t) / 3 s))', digits: 4, updates: 'every frame' });
+    S('closeness', 'float', { symbol: 'c', long_name: 'how near the speed control is to the edge of the computed speeds: 0 inside, 1 at or beyond it', computed_in: 'KaggleFlow.slider', digits: 3, updates: 'every frame' });
+    S('t_prev', 'float', { symbol: 't<sub>prev</sub>', units: 's', long_name: 'ride time at the start of this frame', computed_in: 'tick()', digits: 3, updates: 'every frame' });
+    S('dt_wall', 'float', { symbol: 'Δt<sub>wall</sub>', units: 's', long_name: 'wall-clock time since the last frame (at most 0.1 s)', computed_in: 'tick()', digits: 4, updates: 'every frame' });
+    S('goal', 'float', { symbol: 'r<sub>goal</sub>', long_name: 'the speed the governor eases towards: 1 − 0.8 c, 0 when paused, and with a preview slower as its last computed frame comes near', computed_in: 'tick()', formula: '(playing ? 1 − 0.8 c : 0), and no more than smooth((t<sub>ready</sub> − t)/0.6 s) while a preview computes; 0 once the end is reached', digits: 4, updates: 'every frame' });
+    S('gov_prev', 'float', { symbol: 'g<sub>prev</sub>', long_name: 'the governor’s speed before this frame', computed_in: 'tick()', digits: 4, updates: 'every frame' });
+    S('gov', 'float', { symbol: 'g', long_name: 'the governor’s speed after this frame: a first-order lag towards the goal', computed_in: 'KaggleFlow.governor', formula: 'g<sub>prev</sub> + (r<sub>goal</sub> − g<sub>prev</sub>)(1 − e<sup>−Δt/τ</sup>), τ = 0.45 s', digits: 4, updates: 'every frame' });
+    S('edge', 'float', { symbol: 'r<sub>edge</sub>', long_name: 'the speed allowed by the end of the computed time: it reaches 0 exactly at the end', computed_in: 'tick()', formula: 'min(1, √((T<sub>ride</sub> − t<sub>prev</sub>) / 3 s))', digits: 4, updates: 'every frame' });
+    S('rate', 'float', { symbol: 'r', long_name: 'playback rate: 1 is real time', computed_in: 'tick()', formula: 'min(g, r<sub>edge</sub>)', digits: 4, updates: 'every frame' });
     S('i_now', 'int', { symbol: 'n', long_name: 'stored frame on screen (no interpolation between frames)', computed_in: 'tick()', formula: 'n = round(t f<sub>s</sub>)', digits: 0, updates: 'every frame' });
     S('x_now', 'float', { symbol: 'x', units: 'm', long_name: 'cart position now', computed_in: 'tick()', formula: 'x<sub>n</sub>', digits: 4, updates: 'every frame' });
     S('v_now', 'float', { symbol: 'v', units: 'm/s', long_name: 'cart speed now', computed_in: 'tick()', formula: 'v<sub>n</sub>', digits: 4, updates: 'every frame' });
@@ -169,56 +185,135 @@
     ds.set('R_fill', Rh); ds.set('z_rim', zRim); ds.set('f11', F11); ds.set('w11', 2 * Math.PI * F11); ds.set('glass_base', view.glassBase); ds.set('body_h', view.bodyH);
     const fileIdx = (IDX.files || []).find((f) => f.path === 'rides.json') || {};
 
-    vbar.max = rides.length - 1; vbar.value = Math.floor((rides.length - 1) / 2);
-    $('road-name').textContent = 'Road: ' + rides[0].road + ' (the same road at every speed).';
-    let ride = null, T = 0, rate = 1, playing = true, last = null, lastTxt = 0, ended = false;
-    const dur = () => (ride.n - 1) / D.fps;
+    await Promise.all(rides.map(unpack));        // all stored rides at once (0.7 MB); the preview borrows their road table
+    const N0 = rides[0].n, road0 = rides[0];
+    $('road-name').textContent = 'Road: ' + road0.road + ' (the same road at every speed).';
+    rides.forEach((r) => { r.ready = r.n; });
+    const byV = new Map(rides.map((r) => [r.v0.toFixed(2), r]));
+    const stored = (i) => byV.has(STOPS[i].toFixed(2));
+    let ride = null, T = 0, playing = true, last = null, lastTxt = 0, ended = false, askNote = '';
+    const gov = KaggleFlow.governor(TAU, 1), popup = KaggleFlow.popup($('stage')), bridge = KaggleFlow.bridge({ url: BRIDGE_URL, project: PROJECT });
+    const dur = () => (ride.n - 1) / D.fps, tReady = () => Math.max(0, ride.ready - 1) / D.fps;
 
+    // the derived numbers of a ride, over the frames available (all of a stored ride, those computed so far of a preview)
+    function derive(r) {
+      const n = r.ready; ds.set('n_ready', n);
+      let lm = 0, vmn = Infinity, vmx = -Infinity; for (let k = 0; k < n; k++) { lm = Math.max(lm, Math.abs(r._lean[k])); vmn = Math.min(vmn, r._v[k]); vmx = Math.max(vmx, r._v[k]); }
+      ds.set('lean_max', lm); ds.set('v_min', n ? vmn : NaN); ds.set('v_max', n ? vmx : NaN); ds.set('spill_end', n ? r._spill[n - 1] : NaN);
+      // the first sloshing mode from the stored surface: the cos θ part of the outer ring (at the wall η = q cos θ), and
+      // its rate over ω11 from the frames on either side, divided by 2 sin(ω11 h) so that a pure swing at f11 is a circle
+      const q = ds.get('q1'), pr = ds.get('p1'), ring = NR * NTH, w = 2 * Math.PI * F11, h = 1 / D.fps;
+      for (let k = 0; k < n; k++) { let a = 0; for (let j = 0; j < NTH; j++) a += (D.fill + (r.bytes[k * M + ring + j] - 128) * D.q) * Math.cos(2 * Math.PI * j / NTH); q[k] = 2 / NTH * a * 1000; }
+      let pm = 0;
+      for (let k = 0; k < n; k++) { const k0 = Math.max(0, k - 1), k1 = Math.min(n - 1, k + 1); pr[k] = k1 > k0 ? (q[k1] - q[k0]) / ((k1 - k0) * Math.sin(w * h)) : 0; pm = Math.max(pm, Math.abs(q[k]), Math.abs(pr[k])); }
+      ds.touch('q1'); ds.touch('p1'); ds.set('ph_range', 1.1 * Math.max(pm, 0.5));
+    }
     function store(r, i) {                        // the chosen ride into the store: the very arrays the playback reads
       ds.dim('n', r.n); ds.dim('m', r._road_zr.length);
       ds.set('ride_i', i); ds.set('v0', r.v0); ds.set('road', r.road); ds.set('n_frames', r.n); ds.set('dur', (r.n - 1) / D.fps);
+      ds.set('source', r.preview ? 'live preview (browser)' : 'stored on Kaggle');
       ds.set('x', r._x); ds.set('v', r._v); ds.set('zb', r._zb); ds.set('zw', r._zw); ds.set('lean', r._lean); ds.set('spill', r._spill);
       ds.set('eta_q', r.bytes); ds.set('road_zr', r._road_zr);
       const tn = ds.alloc('t_n'); for (let k = 0; k < r.n; k++) tn[k] = k / D.fps;
       const rx = ds.alloc('road_x'); for (let k = 0; k < rx.length; k++) rx[k] = r.road_x0 + k * r.road_dx;
-      let lm = 0, vmn = Infinity, vmx = -Infinity; for (let k = 0; k < r.n; k++) { lm = Math.max(lm, Math.abs(r._lean[k])); vmn = Math.min(vmn, r._v[k]); vmx = Math.max(vmx, r._v[k]); }
-      // the first sloshing mode from the stored surface: the cos θ part of the outer ring (at the wall η = q cos θ), and
-      // its rate over ω11 from the frames on either side, divided by 2 sin(ω11 h) so that a pure swing at f11 is a circle
-      const q = ds.alloc('q1'), pr = ds.alloc('p1'), ring = NR * NTH, w = 2 * Math.PI * F11, h = 1 / D.fps;
-      for (let k = 0; k < r.n; k++) { let a = 0; for (let j = 0; j < NTH; j++) a += (D.fill + (r.bytes[k * M + ring + j] - 128) * D.q) * Math.cos(2 * Math.PI * j / NTH); q[k] = 2 / NTH * a * 1000; }
-      let pm = 0;
-      for (let k = 0; k < r.n; k++) { const k0 = Math.max(0, k - 1), k1 = Math.min(r.n - 1, k + 1); pr[k] = (q[k1] - q[k0]) / ((k1 - k0) * Math.sin(w * h)); pm = Math.max(pm, Math.abs(q[k]), Math.abs(pr[k])); }
-      ds.touch('q1'); ds.touch('p1'); ds.set('ph_range', 1.1 * pm);
-      ds.set('lean_max', lm); ds.set('v_min', vmn); ds.set('v_max', vmx); ds.set('spill_end', r._spill[r.n - 1]);
+      ds.alloc('q1'); ds.alloc('p1'); derive(r);
     }
-    async function pick(fade) {
-      const i = +vbar.value, r = rides[i]; await unpack(r);
-      const swap = () => { ride = r; cart.ride = r; T = 0; ended = false; hidePop(); store(r, i); $('v-out').textContent = r.v0.toFixed(2) + ' m/s (computed)'; };
-      if (fade && ride) { cv.style.opacity = '0'; setTimeout(() => { swap(); cv.style.opacity = '1'; }, 350); } else swap();
-    }
-    function showPop() { pop.hidden = false; requestAnimationFrame(() => pop.classList.add('is-on')); }
-    function hidePop() { pop.classList.remove('is-on'); setTimeout(() => { if (!pop.classList.contains('is-on')) pop.hidden = true; }, 600); }
-    function setPlaying(p) { playing = p; play.textContent = playing ? 'Pause' : 'Play'; ds.set('playing', playing); }
 
-    vbar.addEventListener('input', () => pick(true));
-    tbar.addEventListener('input', () => { if (ride) { T = tbar.value / 1000 * dur(); ended = false; hidePop(); } });
+    // the live preview: the site's coarse solver in a Worker, one frame per 1/30 s of ride, in the stored format
+    const previews = {}; let worker = null, workerV = null;
+    function stopWorker() { if (worker) { worker.terminate(); if (previews[workerV] && previews[workerV].ready < previews[workerV].n) delete previews[workerV]; worker = null; workerV = null; } }
+    function previewFor(v0) {
+      const key = v0.toFixed(2);
+      if (previews[key]) return previews[key];
+      const n = N0, p = { preview: true, v0: v0, road: road0.road, n: n, ready: 0, bytes: new Uint8Array(n * M), road_x0: road0.road_x0, road_dx: road0.road_dx, _road_zr: road0._road_zr, road_zr: road0.road_zr, wall: 0 };
+      for (const k of ['x', 'v', 'zb', 'zw', 'lean', 'spill']) p['_' + k] = new Float64Array(n);
+      previews[key] = p; stopWorker();
+      worker = new Worker('../scripts/guinness-preview-worker.js'); workerV = key;
+      worker.onmessage = (e) => {
+        const m = e.data;
+        if (m.done) { p.wall = m.wall; if (worker && workerV === key) { worker.terminate(); worker = null; workerV = null; } return; }
+        p.bytes.set(m.bytes, m.k * M); p._x[m.k] = m.x; p._v[m.k] = m.v; p._zb[m.k] = m.zb; p._zw[m.k] = m.zw; p._lean[m.k] = m.lean; p._spill[m.k] = m.spill;
+        p.ready = m.k + 1; p.wall = m.wall;
+        if (ride === p) { ds.touch('eta_q'); derive(p); }
+      };
+      worker.postMessage({ v0: v0, bumps: BUMPS, fill: D.fill, q: D.q, nr: NR, nth: NTH, fps: D.fps, n: n });
+      return p;
+    }
+
+    // a change of ride cross-fades over TAU: the last picture is copied onto a canvas above and faded out
+    function crossfade() {
+      if (!cv.width) return;
+      old.width = cv.width; old.height = cv.height; old.getContext('2d').drawImage(cv, 0, 0);
+      old.style.transition = 'none'; old.style.opacity = '1'; void old.offsetWidth;
+      old.style.transition = 'opacity ' + TAU + 's ease'; old.style.opacity = '0';
+    }
+    function switchTo(r, i, t) {
+      crossfade(); ride = r; cart.ride = r; T = Math.min(t, Math.max(0, r.ready - 1) / D.fps); ended = false; popup.hide(); store(r, i);
+      badge.hidden = !r.preview;
+    }
+    // asking kaggle-bridge for a block (road, speed, time span): once per block; the answer is said under the control
+    const asked = {};
+    function ask(b) {
+      const key = b.v0.toFixed(2) + '/' + b.t0;
+      if (asked[key]) return; asked[key] = true;
+      bridge.request(Object.assign({ road: road0.road }, b)).then((a) => {
+        const what = b.v0.toFixed(2) + ' m/s, ' + b.t0 + ' to ' + b.t1 + ' s';
+        askNote = a.state === 'offline' ? 'Asked Kaggle for ' + what + '. ' + a.reason : 'Asked Kaggle for ' + what + ': ' + a.state + '.';
+        $('ask-note').textContent = askNote;
+        if (a.state === 'stored' && a.url) fetch(a.url).then((x) => x.json()).then(arrive);
+      });
+    }
+    // a ride that Kaggle delivers: added to the stored rides; if it is the speed on screen, cross-faded in at the same time
+    async function arrive(r) {
+      await unpack(r); r.ready = r.n; byV.set(r.v0.toFixed(2), r); rides.push(r); slider.refresh();
+      if (ride && ride.preview && ride.v0.toFixed(2) === r.v0.toFixed(2)) switchTo(r, slider.index, T);
+    }
+    async function choose(i) {
+      const v0 = STOPS[i];
+      if (stored(i)) { const r = byV.get(v0.toFixed(2)); await unpack(r); stopWorker(); switchTo(r, i, 0); }
+      else { ask({ v0: v0, t0: 0, t1: (N0 - 1) / D.fps }); switchTo(previewFor(v0), i, 0); }
+    }
+    const slider = KaggleFlow.slider({ host: $('speed-host'), label: 'Set speed', aria: 'Set speed of the cart', stops: STOPS, index: STOPS.indexOf(1.0), stored: stored,
+      format: (v) => v.toFixed(2) + ' m/s', onChange: (i) => choose(i) });
+
+    function showEnd() {
+      popup.set({ stage: 1, broken: 1, title: 'The computed ride ends at ' + dur().toFixed(0) + ' s',
+        text: (ride.preview ? 'This was the live preview from your browser. ' : '') + (askNote || bridge.connected ? askNote : 'The next part would be computed on Kaggle on request; the link to Kaggle (kaggle-bridge) is not switched on yet.') + ' <b>Ride again</b> starts from the beginning.', progress: 0 });
+      const kick = $('stage').querySelector('.kf-pop__kicker'); if (kick) kick.textContent = bridge.connected ? 'Computing the next part' : 'Not computed yet';
+      popup.show();
+    }
+    function setPlaying(p) { playing = p; play.textContent = playing ? 'Pause' : 'Play'; ds.set('playing', playing); }
+    function rideAgain() { crossfade(); T = 0; ended = false; popup.hide(); }
+
+    tbar.addEventListener('input', () => { if (ride) { T = Math.min(tbar.value / 1000 * dur(), tReady()); ended = false; popup.hide(); } });
     play.addEventListener('click', () => setPlaying(!playing));
-    $('again').addEventListener('click', () => { cv.style.opacity = '0'; setTimeout(() => { T = 0; ended = false; hidePop(); cv.style.opacity = '1'; }, 350); });
-    await pick(false); setPlaying(true);
+    $('again').addEventListener('click', rideAgain);
+    await choose(slider.index); setPlaying(true);
 
     function tick(now) {
       requestAnimationFrame(tick);                // first, so the data panel's frame reads a frame this page has written
-      if (!(ride && ride.bytes)) return;
-      if (last != null && playing && !ended) {
-        // the playback rate eases to zero over the last SLOW seconds: rate = sqrt(left / SLOW), which reaches the end
-        const left = dur() - T;
-        rate = left >= SLOW ? 1 : Math.sqrt(Math.max(0, left) / SLOW);
-        T = Math.min(dur(), T + rate * (now - last) / 1000);
-        if (dur() - T < 0.01) { T = dur(); ended = true; showPop(); }
-      }
-      last = now;
-      const k = Math.min(ride.n - 1, Math.max(0, Math.round(T * D.fps)));
-      ds.set('t_play', T); ds.set('rate', rate); ds.set('i_now', k);
+      if (!ride) return;
+      const dt = last == null ? 0 : Math.min(0.1, (now - last) / 1000); last = now;
+      // the speed: eased by the governor towards 1, slower the nearer the speed control is to the edge of the computed
+      // speeds, slower as a preview's last computed frame comes near; and never faster than the end of the computed time
+      // allows, a law that reaches zero exactly at the end (sqrt of the time left)
+      const c = slider.closeness(), tAv = tReady(), computing = ride.ready < ride.n;
+      let goal = playing ? 1 - 0.8 * c : 0;
+      if (computing) goal = Math.min(goal, KaggleFlow.smooth((tAv - T) / 0.6));
+      if (ended) goal = 0;
+      const gp = gov.value, g = gov.step(goal, dt), left = dur() - T, edge = left >= SLOW ? 1 : Math.sqrt(Math.max(0, left) / SLOW);
+      const rate = ended ? 0 : Math.min(g, edge);
+      ds.set('closeness', c); ds.set('t_prev', T); ds.set('dt_wall', dt); ds.set('goal', goal); ds.set('gov_prev', gp); ds.set('gov', g); ds.set('edge', edge); ds.set('rate', rate);
+      if (!ended) T = Math.min(T + rate * dt, computing ? tAv : dur());
+      if (!ended && !computing && dur() - T < 0.0012) { T = dur(); ended = true; ask({ v0: ride.v0, t0: Math.round(dur()), t1: Math.round(2 * dur()) }); }
+      if (ended && g < 0.02 && !popup.shown) showEnd();
+      // heading out of the computed speeds: ask for the next speed at once
+      const hd = slider.heading(), bd = slider.band();
+      if (hd && bd) { const j = hd > 0 ? bd[1] + 1 : bd[0] - 1; if (j >= 0 && j < STOPS.length) ask({ v0: STOPS[j], t0: 0, t1: (N0 - 1) / D.fps }); }
+      cv.classList.toggle('is-held', ride.ready === 0);
+      if (ride.ready === 0) return;                // a preview without its first frame yet: the last picture stays, dimmed
+      const k = Math.min(ride.ready - 1, Math.max(0, Math.round(T * D.fps)));
+      ds.set('t_play', T); ds.set('i_now', k);
       fluid.frame = ride.bytes.subarray(k * M, (k + 1) * M);
       cart.x = ride._x[k]; cart.vx = ride._v[k]; cart.zw = ride._zw[k]; cart.zb = ride._zb[k];
       ds.set('x_now', cart.x); ds.set('v_now', cart.vx); ds.set('zb_now', cart.zb); ds.set('zw_now', cart.zw);
@@ -234,7 +329,8 @@
       if (now - lastTxt > 250) {        // the words change four times a second
         lastTxt = now;
         $('t-out').textContent = (k / D.fps).toFixed(1) + ' of ' + dur().toFixed(0) + ' s';
-        $('cap-t').textContent = rate < 0.999 && !ended ? 'slowing: computed data ends at ' + dur().toFixed(0) + ' s' : (ended ? 'end of computed data' : 'stored ride, real time');
+        $('cap-t').textContent = ride.preview ? 'live preview in your browser' + (computing ? ', ready to ' + tAv.toFixed(1) + ' s, computing at ' + (p => p.wall > 0 ? (tAv / p.wall).toFixed(2) : '…')(ride) + ' × real time' : '')
+          : ended ? 'end of computed data' : rate < 0.98 ? 'slowing: ' + (edge < g ? 'computed data ends at ' + dur().toFixed(0) + ' s' : 'near the edge of the computed speeds') : 'stored Kaggle ride, real time';
         $('r-v').textContent = ride._v[k].toFixed(3) + ' m/s'; $('r-l').textContent = ride._lean[k].toFixed(1) + ' mm'; $('r-s').textContent = ride._spill[k].toFixed(1) + ' g';
         ds.set('i_text', k);
         $('cap-ph').textContent = 'amplitude now ' + ds.get('amp_now').toFixed(2) + ' mm';
@@ -247,7 +343,7 @@
     function drawPhase(k) {
       const rc = phc.getBoundingClientRect();
       if (Math.round(rc.width) !== pbox.w || Math.round(rc.height) !== pbox.h) pbox.fit();
-      const c = pbox.ctx, W = pbox.w, H = pbox.h, q = ds.get('q1'), p = ds.get('p1'), R = ds.get('ph_range') || 1, n = ride.n;
+      const c = pbox.ctx, W = pbox.w, H = pbox.h, q = ds.get('q1'), p = ds.get('p1'), R = ds.get('ph_range') || 1, n = ride.ready;
       const side = Math.min(W - 70, H - 56), cx = Math.round(W / 2 + 10), cy = Math.round(24 + side / 2), sc = side / (2 * R);
       ds.set('ph_cx', cx); ds.set('ph_cy', cy); ds.set('ph_s', sc);
       const X = (v) => cx + sc * v, Y = (v) => cy - sc * v, L = cx - side / 2, Rr = cx + side / 2, T0 = cy - side / 2, B = cy + side / 2;
@@ -339,24 +435,24 @@
         ds: ds, kicker: 'Fig. 12 on Kaggle · data', file: 'fig12-guinness-kaggle',
         playing: () => playing, play: () => setPlaying(true),
         groups: [
-          { title: 'What you chose', note: 'the ride, by the position of the speed control', vars: ['ride_i', 'v0', 'road', 'n_rides'] },
+          { title: 'What you chose', note: 'the ride, by the position of the speed control', vars: ['ride_i', 'v0', 'road', 'n_rides', 'source', 'n_ready'] },
           { title: 'The file', note: 'where the numbers come from, and its fingerprint', vars: ['generated', 'nb_version', 'file_bytes', 'sha_file', 'fill', 'q', 'fps', 'nr', 'nth', 'ml', 'R_fill', 'z_rim'] },
           { title: 'The stored ride', note: 'computed on Kaggle, as stored; this page computes none of it', vars: ['t_n', 'x', 'v', 'zb', 'zw', 'lean', 'spill', 'eta_q', 'road_x', 'road_zr', 'n_frames', 'dur', 'lean_max', 'v_min', 'v_max', 'spill_end'] },
-          { title: 'Playback now', note: 'which stored frame is on screen, and its numbers', vars: ['playing', 't_play', 'rate', 'i_now', 'x_now', 'v_now', 'zb_now', 'zw_now', 'lean_now', 'spill_now', 'i_text', 'eta_draw', 'eta_front', 'eta_back', 'dw', 'eta_mid', 'lean_gap'] },
+          { title: 'Playback now', note: 'which stored frame is on screen, and its numbers', vars: ['playing', 'closeness', 't_prev', 'dt_wall', 'goal', 'gov_prev', 'gov', 'edge', 'rate', 't_play', 'i_now', 'x_now', 'v_now', 'zb_now', 'zw_now', 'lean_now', 'spill_now', 'i_text', 'eta_draw', 'eta_front', 'eta_back', 'dw', 'eta_mid', 'lean_gap'] },
           { title: 'Phase space', note: 'the first sloshing mode and its rate, from the stored surface', vars: ['f11', 'w11', 'q1', 'p1', 'ph_range', 'q_now', 'p_now', 'amp_now', 'ph_cx', 'ph_cy', 'ph_s', 'ph_x_px', 'ph_y_px'] },
           { title: 'Drawing', note: 'how stored numbers become pixels: the camera and the points it places', vars: ['scale', 'cam_x', 'elev', 'azim', 'cam_dist', 'cam_zt', 'focal', 'cam_cx', 'cam_cy', 'ground_px', 'axle_px_x', 'axle_px_y', 'body_px_x', 'body_px_y', 'glass_px_x', 'glass_px_y', 'front_px_x', 'front_px_y', 'back_px_x', 'back_px_y', 'canvas_w', 'canvas_h', 'head_h', 'r_s', 'glass_base', 'body_h'] },
         ],
         ledger: {
           headline: [{ v: 'lean_now', title: 'surface lean' }, { v: 'v_now', title: 'cart speed' }, { v: 'x_now', title: 'along the road' }, { v: 'spill_now', title: 'stout spilled' }, { v: 'amp_now', title: 'first-mode swing' }, { v: 'rate', title: 'playback rate' }],
           sections: [
-            { title: 'What you chose', note: 'the ride, by the position of the speed control', vars: ['ride_i', 'v0', 'road', 'n_rides'], how: 'set' },
+            { title: 'What you chose', note: 'the ride, by the position of the speed control', vars: ['ride_i', 'v0', 'road', 'n_rides', 'source', 'n_ready'], how: 'set' },
             { title: 'The file', note: 'where the numbers come from, and its fingerprint', vars: ['generated', 'nb_version', 'file_bytes', 'sha_file', 'fill', 'q', 'fps', 'nr', 'nth', 'ml', 'R_fill', 'z_rim'], how: 'constant' },
-            { title: 'Playback now', note: 'which stored frame is on screen, and its numbers', vars: ['playing', 't_play', 'rate', 'i_now', 'x_now', 'v_now', 'zb_now', 'zw_now', 'lean_now', 'spill_now', 'i_text', 'eta_front', 'eta_back', 'dw', 'eta_mid', 'lean_gap', 'eta_draw'], how: 'formula' },
+            { title: 'Playback now', note: 'which stored frame is on screen, and its numbers', vars: ['playing', 'closeness', 't_prev', 'dt_wall', 'goal', 'gov_prev', 'gov', 'edge', 'rate', 't_play', 'i_now', 'x_now', 'v_now', 'zb_now', 'zw_now', 'lean_now', 'spill_now', 'i_text', 'eta_front', 'eta_back', 'dw', 'eta_mid', 'lean_gap', 'eta_draw'], how: 'formula' },
             { title: 'The stored ride', note: 'computed on Kaggle, as stored; this page computes none of it', vars: ['t_n', 'x', 'v', 'zb', 'zw', 'lean', 'spill', 'eta_q', 'road_x', 'road_zr', 'n_frames', 'dur', 'lean_max', 'v_min', 'v_max', 'spill_end'], how: 'run' },
             { title: 'Phase space', note: 'the first sloshing mode and its rate, from the stored surface', vars: ['f11', 'w11', 'q1', 'p1', 'ph_range', 'q_now', 'p_now', 'amp_now', 'ph_cx', 'ph_cy', 'ph_s', 'ph_x_px', 'ph_y_px'], how: 'formula' },
             { title: 'Drawing', note: 'how stored numbers become pixels', vars: ['scale', 'cam_x', 'elev', 'azim', 'cam_dist', 'cam_zt', 'focal', 'cam_cx', 'cam_cy', 'ground_px', 'axle_px_x', 'axle_px_y', 'body_px_x', 'body_px_y', 'glass_px_x', 'glass_px_y', 'front_px_x', 'front_px_y', 'back_px_x', 'back_px_y', 'canvas_w', 'canvas_h', 'head_h', 'r_s', 'glass_base', 'body_h'], how: 'drawing', folded: true },
           ],
-          controls: { vbar: 'ride_i', play: 'playing', tbar: 't_play' },
+          controls: { play: 'playing', tbar: 't_play' },
           current: { n: 'i_now' },
         },
         probe: probe,
@@ -375,9 +471,10 @@
           return null;
         },
         check: {
-          ride_i: () => ({ formula: 'read from the Set speed control now', inputs: [['control', vbar.value, '', 0]], value: +vbar.value }),
-          v0: () => ({ formula: 'v<sub>0</sub> of ride i<sub>ride</sub> in the file (rides sorted by speed)', inputs: [inp('ride_i', 'i<sub>ride</sub>', '', 0)], value: rides[g('ride_i')].v0 }),
-          road: () => ({ formula: 'road of ride i<sub>ride</sub> in the file', inputs: [inp('ride_i', 'i<sub>ride</sub>', '', 0)], value: rides[g('ride_i')].road }),
+          ride_i: () => ({ formula: 'the stop the Set speed control stands on now', inputs: [['control', slider.index, '', 0]], value: slider.index }),
+          source: () => ({ formula: 'stop i<sub>ride</sub> is in the file of stored rides (filled dot under the control): stored on Kaggle; otherwise the live preview', inputs: [inp('ride_i', 'i<sub>ride</sub>', '', 0)], value: stored(g('ride_i')) ? 'stored on Kaggle' : 'live preview (browser)' }),
+          v0: () => ({ formula: 'the speed of stop i<sub>ride</sub> of the control: 0.5, 1.0, 1.5, 2.0, 2.5 m/s', inputs: [inp('ride_i', 'i<sub>ride</sub>', '', 0)], value: STOPS[g('ride_i')] }),
+          road: () => ({ formula: 'the road of the stored rides (the preview uses the same road)', inputs: [], value: road0.road }),
           n_rides: () => ({ formula: 'rides listed in index.json', inputs: [], value: IDX.rides.length }),
           file_bytes: () => ({ formula: 'size written in index.json when the data was committed', inputs: [], value: fileIdx.bytes }),
           sha_file: () => ({ formula: 'SHA-256 written in index.json when the data was committed; equal only if not one byte changed on the way', inputs: [], value: fileIdx.sha256 }),
@@ -387,16 +484,19 @@
           r_s: () => ({ formula: 'R(h<sub>0</sub>): the drawing’s outer ring is the glass’s radius at the fill', inputs: [inp('R_fill', 'R(h<sub>0</sub>)', 'm', 5)], value: g('R_fill') }),
           z_rim: () => ({ formula: '(number of table rows − 1) Δz', inputs: [['rows', G.R.length, '', 0], ['Δz', G.dz, 'm', 4]], value: (G.R.length - 1) * G.dz }),
           t_n: (n) => ({ formula: 'n / f<sub>s</sub>, n = ' + n, inputs: [inp('fps', 'f<sub>s</sub>', '1/s', 0)], value: n / g('fps') }),
-          road_x: (m) => ({ formula: 'x<sub>0</sub> + m Δx<sub>road</sub>, m = ' + m, inputs: [['x<sub>0</sub>', rides[g('ride_i')].road_x0, 'm', 3], ['Δx<sub>road</sub>', rides[g('ride_i')].road_dx, 'm', 4]], value: rides[g('ride_i')].road_x0 + m * rides[g('ride_i')].road_dx }),
-          n_frames: () => ({ formula: 'frames listed for this ride in index.json', inputs: [inp('ride_i', 'i<sub>ride</sub>', '', 0)], value: (IDX.rides.slice().sort((a, b) => a.v0 - b.v0)[g('ride_i')] || {}).frames }),
+          road_x: (m) => ({ formula: 'x<sub>0</sub> + m Δx<sub>road</sub>, m = ' + m, inputs: [['x<sub>0</sub>', ride.road_x0, 'm', 3], ['Δx<sub>road</sub>', ride.road_dx, 'm', 4]], value: ride.road_x0 + m * ride.road_dx }),
+          n_frames: () => ({ formula: ride.preview ? 'the preview is computed over as many frames as the stored rides have' : 'frames listed for this ride in index.json', inputs: [inp('ride_i', 'i<sub>ride</sub>', '', 0)], value: ride.preview ? N0 : (IDX.rides.find((x) => x.v0.toFixed(2) === STOPS[g('ride_i')].toFixed(2)) || {}).frames }),
           dur: () => ({ formula: '(N − 1) / f<sub>s</sub>', inputs: [inp('n_frames', 'N', '', 0), inp('fps', 'f<sub>s</sub>', '1/s', 0)], value: (g('n_frames') - 1) / g('fps') }),
-          lean_max: () => { const a = g('lean'); let m = 0; for (let k = 0; k < g('n_frames'); k++) m = Math.max(m, Math.abs(a[k])); return { formula: 'max over all N stored frames of |Δη<sub>n</sub>|', inputs: [inp('n_frames', 'N', '', 0)], value: m }; },
-          v_min: () => { const a = g('v'); let m = Infinity; for (let k = 0; k < g('n_frames'); k++) m = Math.min(m, a[k]); return { formula: 'min over all N stored frames of v<sub>n</sub>', inputs: [inp('n_frames', 'N', '', 0)], value: m }; },
-          v_max: () => { const a = g('v'); let m = -Infinity; for (let k = 0; k < g('n_frames'); k++) m = Math.max(m, a[k]); return { formula: 'max over all N stored frames of v<sub>n</sub>', inputs: [inp('n_frames', 'N', '', 0)], value: m }; },
-          spill_end: () => ({ formula: 'm<sub>s</sub> at the last frame, n = N − 1', inputs: [inp('n_frames', 'N', '', 0)], value: g('spill')[g('n_frames') - 1] }),
+          lean_max: () => { const a = g('lean'); let m = 0; for (let k = 0; k < g('n_ready'); k++) m = Math.max(m, Math.abs(a[k])); return { formula: 'max over the N<sub>ready</sub> frames available of |Δη<sub>n</sub>|', inputs: [inp('n_ready', 'N<sub>ready</sub>', '', 0)], value: m }; },
+          v_min: () => { const a = g('v'); let m = Infinity; for (let k = 0; k < g('n_ready'); k++) m = Math.min(m, a[k]); return { formula: 'min over the N<sub>ready</sub> frames available of v<sub>n</sub>', inputs: [inp('n_ready', 'N<sub>ready</sub>', '', 0)], value: g('n_ready') ? m : NaN }; },
+          v_max: () => { const a = g('v'); let m = -Infinity; for (let k = 0; k < g('n_ready'); k++) m = Math.max(m, a[k]); return { formula: 'max over the N<sub>ready</sub> frames available of v<sub>n</sub>', inputs: [inp('n_ready', 'N<sub>ready</sub>', '', 0)], value: g('n_ready') ? m : NaN }; },
+          spill_end: () => ({ formula: 'm<sub>s</sub> at the last frame available, n = N<sub>ready</sub> − 1', inputs: [inp('n_ready', 'N<sub>ready</sub>', '', 0)], value: g('n_ready') ? g('spill')[g('n_ready') - 1] : NaN }),
           playing: () => ({ formula: 'the Play / Pause button now says', inputs: [['button', play.textContent, '']], value: play.textContent === 'Pause' }),
-          rate: () => { const left = g('dur') - g('t_play'); return { formula: 'r = 1 while T<sub>ride</sub> − t ≥ 3 s, else √((T<sub>ride</sub> − t) / 3 s)' + (playing ? '' : ' (paused: the last rate is kept)'), inputs: [inp('dur', 'T<sub>ride</sub>', 's', 2), inp('t_play', 't', 's', 3)], value: playing && !ended ? (left >= SLOW ? 1 : Math.sqrt(Math.max(0, left) / SLOW)) : g('rate') }; },
-          i_now: () => ({ formula: 'round(t f<sub>s</sub>), kept within 0 … N − 1', inputs: [inp('t_play', 't', 's', 3), inp('fps', 'f<sub>s</sub>', '1/s', 0), inp('n_frames', 'N', '', 0)], value: Math.min(g('n_frames') - 1, Math.max(0, Math.round(g('t_play') * g('fps')))) }),
+          rate: () => ({ formula: ended ? '0: the end of the computed data is reached' : 'min(g, r<sub>edge</sub>)', inputs: [inp('gov', 'g', '', 4), inp('edge', 'r<sub>edge</sub>', '', 4)], value: ended ? 0 : Math.min(g('gov'), g('edge')) }),
+          gov: () => ({ formula: 'g<sub>prev</sub> + (r<sub>goal</sub> − g<sub>prev</sub>)(1 − e<sup>−Δt/τ</sup>), τ = ' + TAU + ' s (snapped to the goal within 10<sup>−4</sup>)', inputs: [inp('gov_prev', 'g<sub>prev</sub>', '', 4), inp('goal', 'r<sub>goal</sub>', '', 4), inp('dt_wall', 'Δt', 's', 4)], value: (() => { const a = g('gov_prev'), b = g('goal'); let v = a + (b - a) * (1 - Math.exp(-g('dt_wall') / TAU)); if (Math.abs(b - v) < 1e-4) v = b; return v; })() }),
+          edge: () => { const left = g('dur') - g('t_prev'); return { formula: 'min(1, √((T<sub>ride</sub> − t<sub>prev</sub>) / 3 s))', inputs: [inp('dur', 'T<sub>ride</sub>', 's', 2), inp('t_prev', 't<sub>prev</sub>', 's', 3)], value: left >= SLOW ? 1 : Math.sqrt(Math.max(0, left) / SLOW) }; },
+          closeness: () => ({ formula: 'the speed control’s own measure (kaggle-flow.js): smoothstep across the last 28 % of the computed band, 1 beyond it', inputs: [['thumb', slider.position, '', 3]], value: slider.closeness() }),
+          i_now: () => ({ formula: 'round(t f<sub>s</sub>), kept within 0 … N<sub>ready</sub> − 1', inputs: [inp('t_play', 't', 's', 3), inp('fps', 'f<sub>s</sub>', '1/s', 0), inp('n_ready', 'N<sub>ready</sub>', '', 0)], value: Math.min(g('n_ready') - 1, Math.max(0, Math.round(g('t_play') * g('fps')))) }),
           x_now: atNow('x', 'x<sub>n</sub>'), v_now: atNow('v', 'v<sub>n</sub>'), zb_now: atNow('zb', 'z<sub>b,n</sub>'), zw_now: atNow('zw', 'z<sub>w,n</sub>'),
           lean_now: atNow('lean', 'Δη<sub>n</sub>'), spill_now: atNow('spill', 'm<sub>s,n</sub>'),
           eta_draw: (i) => ({ formula: 'h<sub>0</sub> + (b − 128) δ at ring ' + Math.floor(i / NTH) + ', angle ' + (i % NTH) + ' of frame n', inputs: BYTE(i), value: etaFromBytes(i) }),
@@ -427,9 +527,9 @@
           w11: () => ({ formula: '2π f<sub>11</sub>', inputs: [inp('f11', 'f<sub>11</sub>', 'Hz', 3)], value: 2 * Math.PI * g('f11') }),
           q1: (n) => { const b = g('eta_q'); let a = 0; for (let j = 0; j < NTH; j++) a += (g('fill') + (b[n * M + NR * NTH + j] - 128) * g('q')) * Math.cos(2 * Math.PI * j / NTH);
             return { formula: '1000 (2/N<sub>θ</sub>) Σ<sub>j</sub> [h<sub>0</sub> + (b<sub>n,N<sub>r</sub>,j</sub> − 128) δ] cos(2π j/N<sub>θ</sub>), the 64 stored bytes of the outer ring at frame n = ' + n, inputs: [inp('fill', 'h<sub>0</sub>', 'm', 4), inp('q', 'δ', 'm', 4), inp('nth', 'N<sub>θ</sub>', '', 0)], value: 2 / NTH * a * 1000 }; },
-          p1: (n) => { const q = g('q1'), N = g('n_frames'), k0 = Math.max(0, n - 1), k1 = Math.min(N - 1, n + 1);
-            return { formula: '(q<sub>' + k1 + '</sub> − q<sub>' + k0 + '</sub>) / (' + (k1 - k0) + ' sin ω<sub>11</sub>h)' + (k1 - k0 === 1 ? ', one-sided at the end of the ride' : ''), inputs: [['q<sub>' + k1 + '</sub>', q[k1], 'mm', 3], ['q<sub>' + k0 + '</sub>', q[k0], 'mm', 3], inp('w11', 'ω<sub>11</sub>', 'rad/s', 3), inp('fps', 'f<sub>s</sub>', '1/s', 0)], value: (q[k1] - q[k0]) / ((k1 - k0) * Math.sin(g('w11') / g('fps'))) }; },
-          ph_range: () => { const q = g('q1'), p = g('p1'); let m = 0; for (let k = 0; k < g('n_frames'); k++) m = Math.max(m, Math.abs(q[k]), Math.abs(p[k])); return { formula: '1.1 max over all N frames of max(|q<sub>n</sub>|, |p<sub>n</sub>|)', inputs: [inp('n_frames', 'N', '', 0)], value: 1.1 * m }; },
+          p1: (n) => { const q = g('q1'), N = g('n_ready'), k0 = Math.max(0, n - 1), k1 = Math.min(N - 1, n + 1);
+            return { formula: '(q<sub>' + k1 + '</sub> − q<sub>' + k0 + '</sub>) / (' + (k1 - k0) + ' sin ω<sub>11</sub>h)' + (k1 - k0 === 1 ? ', one-sided at the end of the ride' : ''), inputs: [['q<sub>' + k1 + '</sub>', q[k1], 'mm', 3], ['q<sub>' + k0 + '</sub>', q[k0], 'mm', 3], inp('w11', 'ω<sub>11</sub>', 'rad/s', 3), inp('fps', 'f<sub>s</sub>', '1/s', 0)], value: k1 > k0 ? (q[k1] - q[k0]) / ((k1 - k0) * Math.sin(g('w11') / g('fps'))) : 0 }; },
+          ph_range: () => { const q = g('q1'), p = g('p1'); let m = 0; for (let k = 0; k < g('n_ready'); k++) m = Math.max(m, Math.abs(q[k]), Math.abs(p[k])); return { formula: '1.1 max(0.5 mm, max over the N<sub>ready</sub> frames of max(|q<sub>n</sub>|, |p<sub>n</sub>|))', inputs: [inp('n_ready', 'N<sub>ready</sub>', '', 0)], value: 1.1 * Math.max(m, 0.5) }; },
           q_now: atNow('q1', 'q<sub>n</sub>'), p_now: atNow('p1', 'p<sub>n</sub>'),
           amp_now: () => ({ formula: '√(q² + p²)', inputs: [inp('q_now', 'q', 'mm', 3), inp('p_now', 'p', 'mm', 3)], value: Math.hypot(g('q_now'), g('p_now')) }),
           ph_x_px: () => ({ formula: 'X<sub>ph</sub> + s<sub>ph</sub> q', inputs: [inp('ph_cx', 'X<sub>ph</sub>', 'px', 2), inp('ph_s', 's<sub>ph</sub>', 'px/mm', 3), inp('q_now', 'q', 'mm', 3)], value: g('ph_cx') + g('ph_s') * g('q_now') }),
@@ -453,8 +553,8 @@
         round: { time: 't_play', label: () => ROUND + ' s of the stored ride, as it plays', length: () => ROUND,
           columns: ['x_now', 'v_now', 'lean_now', 'dw', 'zb_now', 'zw_now', 'spill_now', 'i_now'],
           point: () => ({ what: 'node', i: NR * NTH }),
-          blocked: () => (g('dur') - g('t_play') < ROUND + SLOW ? 'Less than ' + (ROUND + SLOW) + ' s of computed data is left, and the playback slows down over the last ' + SLOW + ' s. Move the time back or ride again.' : null) },
-        about: 'This page computes no physics: every number of the ride was computed on Kaggle and is read from the file, whose SHA-256 fingerprint is checked against index.json. The picture is the website’s own drawing code (stout-view.js) through a pinhole camera (looking down at 16°, turned 24° toward the front) that rides with the cart; every point the panel checks is recomputed from the camera’s stored constants. Four things differ between the data and the picture. (1) The surface is stored rounded to 0.2 mm steps; Kaggle’s lean Δη was taken before rounding, so it can differ from the lean of the stored grid by up to 0.2 mm (lean_gap; measured over all 1,803 stored frames: at most 0.19 mm). (2) Between the 17 × 64 grid nodes the surface is drawn by straight-line (bilinear) interpolation; the nodes themselves are drawn exactly. (3) The head is drawn, not computed: a 12 mm cream band laid on the stored surface; the glass’s highlights and tint are drawing only. (4) Only stored frames are shown, 30 per second of ride, never a blend of two; near the end of the data the playback slows down, so one stored frame can stay on screen longer. (5) The phase space is worked out here from the stored surface, not computed on Kaggle: q is the cos θ part of the outer ring, and its rate comes from the frames on either side, 1/30 s apart, divided by 2 sin(ω<sub>11</sub>h) instead of 2ω<sub>11</sub>h, so that a pure swing at f<sub>11</sub> = 3.421 Hz traces an exact circle (the plain central difference would read it 8 % low).',
+          blocked: () => (ride.ready < ride.n ? 'The live preview is still being computed (ready to ' + Sim.fmt(tReady(), 1) + ' s); record a stored ride, or wait until the preview is done.' : g('dur') - g('t_play') < ROUND + SLOW ? 'Less than ' + (ROUND + SLOW) + ' s of computed data is left, and the playback slows down over the last ' + SLOW + ' s. Move the time back or ride again.' : null) },
+        about: 'On a filled stop of the speed control this page computes no physics: every number of the ride was computed on Kaggle and is read from the file, whose SHA-256 fingerprint is checked against index.json. On a hollow stop (2.0 and 2.5 m/s, not computed on Kaggle) the frames are a live preview computed in your browser by the site’s coarse solver (scripts/guinness-preview-worker.js: 4 mm grid, about 25,700 particles, half the glass mirrored; its free swing is 3.21 Hz, 6 % slow), in the same format and drawn by the same code; the store then holds the preview’s numbers, and source says so. The playback speed never steps: it eases (τ = 0.45 s) towards 1 − 0.8 c, c the closeness of the speed control to the edge of the computed speeds, slows as a preview’s last computed frame comes near, and is capped by √(time left / 3 s), which reaches zero exactly at the end of the computed time. The picture is the website’s own drawing code (stout-view.js) through a pinhole camera (looking down at 16°, turned 24° toward the front) that rides with the cart; every point the panel checks is recomputed from the camera’s stored constants. Four things differ between the data and the picture. (1) The surface is stored rounded to 0.2 mm steps; Kaggle’s lean Δη was taken before rounding, so it can differ from the lean of the stored grid by up to 0.2 mm (lean_gap; measured over all 1,803 stored frames: at most 0.19 mm). (2) Between the 17 × 64 grid nodes the surface is drawn by straight-line (bilinear) interpolation; the nodes themselves are drawn exactly. (3) The head is drawn, not computed: a 12 mm cream band laid on the stored surface; the glass’s highlights and tint are drawing only. (4) Only stored frames are shown, 30 per second of ride, never a blend of two; near the end of the data the playback slows down, so one stored frame can stay on screen longer. (5) The phase space is worked out here from the stored surface, not computed on Kaggle: q is the cos θ part of the outer ring, and its rate comes from the frames on either side, 1/30 s apart, divided by 2 sin(ω<sub>11</sub>h) instead of 2ω<sub>11</sub>h, so that a pure swing at f<sub>11</sub> = 3.421 Hz traces an exact circle (the plain central difference would read it 8 % low).',
       };
     }
   }

@@ -471,7 +471,7 @@ suspension. Measured on Kaggle: 10,000 steps per ride, 21.8 / 20.2 / 20.3 min, 1
 it cross-fades the picture over 0.35 s). In the last 3 s of a ride the playback rate falls as sqrt(time left / 3 s), so
 the picture slows smoothly and stops exactly at the end of the data; only then a pop-up fades in that shows the pipeline
 (page -> kaggle-bridge -> Kaggle GPU -> stored -> back) and says that computing on request is not yet connected; "Ride
-again" cross-fades to the start. Not yet built: the live browser preview and fetching new rides through kaggle-bridge.
+again" cross-fades to the start. (Replaced on 12 November 2026 by the shared pipeline, next section.)
 
 **Tested** in headless Chromium at 360, 390, 1024 and 1440 px: no errors, no sideways scroll, playback advances, the
 slow-down ends at 20.0 s and the pop-up shows.
@@ -543,3 +543,36 @@ read back (wine). Tested at 390 and 1440 px: 84 checks agree, none differ, the d
   stored outer ring also sits about 7 mm above the axis (133 mm against 126 mm at t = 0, 0.5 m/s ride): the wall
   columns' linear extension in the notebook's `polar_surface`. Both point at the wall reconstruction, not the stout
   (an inference; confirming it needs the solver's particles, which are not stored).
+
+
+**Edge of the computed data, on the shared pipeline (12 November 2026).** The page now uses `kaggle-flow.js` and
+`kaggle-flow.css` of [the Kaggle pipeline](../kaggle-pipeline.md) and changes nothing in them.
+
+- Speed control: `KaggleFlow.slider` over 0.5, 1.0, 1.5, 2.0, 2.5 m/s. Filled dots and a solid band: the three speeds
+  in `rides.json`. Hollow dots and hatching: 2.0 and 2.5 m/s, not computed on Kaggle. Over the last 28 % of the band the
+  control grows heavy (the thumb follows the hand down to 22 % of its pace).
+- Playback speed: `rate = min(g, r_edge)`. The governor g (`KaggleFlow.governor`, tau 0.45 s) eases towards
+  goal = 1 - 0.8 c (c = the control's closeness to the edge; 0 when paused; 0 once the end is reached), and while a preview
+  computes no more than smooth((t_ready - t) / 0.6 s). r_edge = min(1, sqrt((T_ride - t) / 3 s)) reaches zero exactly at
+  the end of the computed time; the ride stops when 1.2 ms are left (rate there about 0.02). Every term is in the store
+  (`closeness`, `t_prev`, `dt_wall`, `goal`, `gov_prev`, `gov`, `edge`, `rate`) and checked.
+- Live preview on a hollow stop: `scripts/guinness-preview-worker.js` runs `stout-cart.js` (4 mm grid, 25,666 particles,
+  half glass mirrored, same cart, same road `BUMPS`) in a Worker and sends one frame per 1/30 s in the stored format
+  (surface by `StoutView.surface`, rounded to 0.2 mm; lean before rounding; spilled mass from the lost liquid). Measured
+  0.23 x real time in Node 22 on one thread, 0.21 in headless Chromium here; the playback waits for its frames. A label in
+  the figure says it is a preview from the browser's coarse solver, not Kaggle's result; `source` in the store says the same.
+  A finished preview is kept for the visit; an unfinished one is dropped when the speed changes.
+- Asking Kaggle: on a hollow stop, when the control heads out of the band, and at the end of the computed time, the page calls
+  `KaggleFlow.bridge({ url: null })` once per block (road, speed, time span) and writes the answer under the control. With the
+  bridge not connected the answer is "not switched on yet". A block the bridge delivers (`state: 'stored'`) is added to the
+  rides and, if it is the speed on screen, cross-faded in at the same ride time (`arrive`); not exercised until the bridge exists.
+- Cross-fade: the last picture is copied onto `#cv-old` above the figure and faded out over 0.45 s while the new ride draws.
+- The notice: `KaggleFlow.popup` with the pipeline, kaggle-bridge drawn dashed (not connected), kicker "Not computed yet",
+  shown only when the end is reached and the governor's speed is under 0.02. Ride again (in Run) hides it and cross-fades
+  to t = 0; the speed builds up through the governor.
+
+Tested in headless Chromium at 360, 390, 1024 and 1440 px: no errors, no sideways scroll; 3 filled and 2 hollow dots; at
+1.5 m/s closeness 1 and rate 0.20; at 2.0 m/s the label shows, frames arrive (36 to 39 in 6 s), the largest frame-to-frame
+change of rate 0.009 to 0.015; slowing to the end of a stored ride, the largest change 0.020 to 0.023 (the last step to 0);
+the notice appears only after that and disappears on Ride again. Data panel with the preview on screen: 81 checks agree,
+none differ, no read-back fails; with a stored ride: 88 agree, none differ.

@@ -172,3 +172,12 @@ A project brings five things; nothing in `kaggle-flow.js` or the bridge changes.
 | GPU quota used by both notebooks | 3 275 s (from 2 495 s to 5 770 s) | `get_accelerator_quota` before and after |
 | Stored data on the website | 405 files, 46.4 MB (amplitude only; 120.0 MB with the phase) | `to_site.py` |
 | Live preview, whole run | 11 to 34 s on one core | Node 22, this workspace |
+
+## Projects plugged in
+
+- Fig. 14, the wave packet and the sphere: the first, described above.
+- Fig. 12 computed on Kaggle, the Guinness cart (`simulations/guinness-kaggle.html`, 12 November 2026): one speed control
+  (`KaggleFlow.slider`, 0.5 to 2.5 m/s, 0.5/1.0/1.5 stored), `governor`, `popup` and `bridge` with `url: null`; blocks asked
+  for are (road, speed, 0 to 20 s) and (road, speed, 20 to 40 s). Its live preview is `guinness-preview-worker.js`, the site's
+  coarse solver, labelled as such; it is not checked against Kaggle, and the stored Kaggle rides themselves are measured to be
+  damped 12 to 40 times too strongly (`tools/fig12/kaggle_decay.py`). Details: [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md).
