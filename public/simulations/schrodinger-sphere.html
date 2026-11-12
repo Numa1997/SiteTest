@@ -61,10 +61,11 @@
             <div class="figs">
                 <figure class="stage">
                     <div class="stage__canvas sq" id="stage">
-                        <canvas id="field" aria-label="The wave packet in the plane through the sphere's centre"></canvas>
+                        <canvas id="vol" aria-label="The wave packet in three dimensions meeting the sphere; drag to turn the view"></canvas>
+                        <canvas id="ov" aria-hidden="true" style="pointer-events:none"></canvas>
                     </div>
                     <figcaption class="stage__cap">
-                        <span><b>Fig. 14</b> · <span class="tx">\(|\psi(x,y,0,t)|\)</span> in the plane through the sphere’s centre</span>
+                        <span><b>Fig. 14</b> · the probability density <span class="tx">\(|\psi(\mathbf r,t)|^2\)</span> in three dimensions · drag to turn</span>
                         <span id="cap-t">t = —</span>
                     </figcaption>
                 </figure>
@@ -564,6 +565,7 @@
     <script src="../scripts/sim.js"></script>
     <script src="../scripts/dataset.js"></script>
     <script src="../scripts/kaggle-flow.js"></script>
+    <script src="../scripts/volume-view.js"></script>
     <script>
     (function () {
         'use strict';
@@ -576,14 +578,16 @@
         var PLAY_SECONDS = 9;    /* a whole run plays in about this many seconds at full speed */
         var LIVE_MS = { note: 'measured in Node 22 on one core of a 4-core workspace: 11 to 34 s for a whole run' };
 
-        var stage = document.getElementById('stage'), fieldBox = Sim.canvas2d(document.getElementById('field')), fctx = fieldBox.ctx;
+        var stage = document.getElementById('stage'), volCanvas = document.getElementById('vol'), ovBox = Sim.canvas2d(document.getElementById('ov')), octx = ovBox.ctx;
+        var reading = false;   /* Read values on: dragging pins a point instead of turning the view */
+        var view = VolumeView(volCanvas, { offset: 0.25 / 64, canTurn: function () { return !reading; }, onTurn: function () { dirty = true; } }), dirty = true, shownId = null;
+        if (!view.ok) document.getElementById('src-t').textContent = 'This browser has no WebGL2, which the 3D view needs.';
         var plotBox = Sim.canvas2d(document.getElementById('plot')), pctx = plotBox.ctx;
         var timeIn = document.getElementById('time'), timeOut = document.getElementById('time-out');
-        var IDX = null, byKey = {}, cache = {}, live = null, liveKey = null, worker = null, job = 0;
+        var IDX = null, byKey = {}, by2d = {}, cache = {}, live = null, liveKey = null, worker = null, job = 0;
         var tPhys = 0, playing = true, endHeld = false, fade = { from: null, a: 1 }, lastKey = null, lastSrc = null, shownReal = false;
         var gov = KaggleFlow.governor(0.45, 0), pop = KaggleFlow.popup(stage), bridge = KaggleFlow.bridge({ url: BRIDGE_URL, project: PROJECT });
         var requested = {}, sliders = {};
-        var off = document.createElement('canvas'), og = off.getContext('2d');
         var prev = document.createElement('canvas'), pg = prev.getContext('2d');
 
         /* ---------- the store (scripts/dataset.js): every number shown is written here where it is read or computed ---------- */
@@ -612,16 +616,16 @@
         ds.var('speed', [], 'float', { symbol: 'speed', long_name: 'playback speed relative to normal (eased)', computed_in: 'tick()', digits: 3 });
         ds.var('edge', [], 'float', { symbol: 'edge', long_name: 'how close a control is to the edge of the computed range: 0 inside, 1 at the edge', computed_in: 'tick()', digits: 3 });
         ds.var('live_done', [], 'float', { symbol: 'live', long_name: 'fraction of the live preview computed', computed_in: 'worker messages', digits: 3 });
-        ds.dim('x', 128); ds.dim('y', 128);
-        ds.coord('xc', 'x', Float32Array, { symbol: 'x', units: 'a', long_name: 'x of each stored point', computed_in: 'grid' });
-        ds.var('level', ['x', 'y'], Uint8Array, { symbol: 'q', long_name: 'stored amplitude level of |ψ| in the plane z = 0, 0 to 255 of the first frame’s peak', computed_in: 'frame(), copied from the run file', digits: 0 });
-        var LEVEL = ds.alloc('level'), XC = ds.alloc('xc');
+        ds.dim('cx', 64); ds.dim('cy', 64); ds.dim('cz', 64);
+        ds.coord('xc', 'cx', Float32Array, { symbol: 'x', units: 'a', long_name: 'centre of each stored cell along x (the same along y and z)', computed_in: 'grid: cells of 2 × 2 × 2 Kaggle points' });
+        ds.var('cloud', ['cx', 'cy', 'cz'], Uint8Array, { symbol: 'q', long_name: 'stored level of the cell: root-mean-square |ψ| over its 8 Kaggle points, 0 to 255 of the first frame’s peak cell; q² is the cell’s mean probability density in that unit', computed_in: 'frame(), copied from the run file', digits: 0 });
+        var CLOUD = ds.alloc('cloud'), XC = ds.alloc('xc');
 
         /* ---------- the grid ---------- */
         function stopsOf(grid, extra) { return grid.concat(extra).sort(function (a, b) { return a - b; }).filter(function (v, i, a) { return i === 0 || v !== a[i - 1]; }); }
         function key(E, V, R) { return E.toFixed(2) + '_' + V.toFixed(2) + '_' + R.toFixed(2); }
         function current() { return { E: sliders.E.value, V0: sliders.V0.value, R: sliders.R.value }; }
-        function isStored(E, V, R) { return !!byKey[key(E, V, R)]; }
+        function isStored(E, V, R) { return !!byKey[key(E, V, R)]; }   /* stored in 3D (the 2D generation of 2026-11-12 is kept for its numbers) */
 
         /* ---------- load one stored run: fetch, check its SHA-256, inflate ---------- */
         function hex(buf) { return Array.prototype.map.call(new Uint8Array(buf), function (b) { return ('0' + b.toString(16)).slice(-2); }).join(''); }
@@ -634,8 +638,8 @@
                 var dv = new DataView(buf), H = dv.getUint32(4, true), head = JSON.parse(new TextDecoder().decode(new Uint8Array(buf, 8, H)));
                 var body = new Blob([new Uint8Array(buf, 8 + H)]).stream().pipeThrough(new DecompressionStream('deflate'));
                 return Promise.all([check, new Response(body).arrayBuffer()]).then(function (res) {
-                    var all = new Uint8Array(res[1]), n = head.n, o = head.out;
-                    c.head = head; c.n = n; c.out = o; c.ready_n = n; c.amp = all.subarray(0, n * o * o); c.curves = head.curves; c.sha = res[0];   /* the website stores the amplitude only (docs/kaggle-pipeline.md) */
+                    var all = new Uint8Array(res[1]), n = head.n, v = head.vol;
+                    c.head = head; c.n = n; c.vn = v; c.L = head.L; c.ready_n = n; c.vol = all; c.curves = head.curves; c.sha = res[0];   /* n frames of v^3 cells */
                     return c;
                 });
             });
@@ -649,12 +653,12 @@
             if (liveKey === k && live) return;
             if (worker) worker.terminate();
             liveKey = k; job++;
-            live = { source: 'live', meta: p, n: 48, out: 64, ready_n: 0, amp: new Uint8Array(48 * 64 * 64), curves: [], t0: performance.now() };
+            live = { source: 'live', meta: p, n: 48, vn: 64, L: 64, ready_n: 0, vol: new Uint8Array(48 * 262144), curves: [], t0: performance.now() };
             var mine = live, id = job;
             worker = new Worker('../scripts/schrodinger-live-worker.js');
             worker.onmessage = function (e) {
                 var m = e.data; if (m.id !== id || mine !== live) return;
-                if (m.type === 'frame') { mine.amp.set(m.amp, m.f * 4096); mine.curves[m.f] = m.curve; mine.ready_n = m.f + 1; }
+                if (m.type === 'frame') { mine.vol.set(m.vol, m.f * 262144); mine.L = m.L; mine.curves[m.f] = m.curve; mine.ready_n = m.f + 1; }
                 else if (m.type === 'done') { mine.ms = m.ms; mine.done = true; }
                 else if (m.type === 'error') { mine.error = m.message; }
             };
@@ -664,44 +668,33 @@
         /* ---------- what to show: the stored run, else the live preview ---------- */
         function entry() {
             var p = current(), r = byKey[key(p.E, p.V0, p.R)];
-            if (r) { var c = cache[key(p.E, p.V0, p.R)]; if (!c) load(r); return c && c.amp ? c : null; }
+            if (r) { var c = cache[key(p.E, p.V0, p.R)]; if (!c) load(r); return c && c.vol ? c : null; }
             startLive(p);
             return live && liveKey === key(p.E, p.V0, p.R) ? live : null;
         }
         function frameDt(c) { return c.curves.length > 1 && c.curves[1] ? c.curves[1][0] - c.curves[0][0] : 0.3; }
         function tEnd(c) { return frameDt(c) * (c.n - 1); }
 
-        /* ---------- drawing ---------- */
-        var ramp = []; for (var v = 0; v < 256; v++) { var s = v / 255; ramp.push([Math.round(245 + s * (122 - 245)), Math.round(241 + s * (31 - 241)), Math.round(234 + s * (43 - 234))]); }
-        function paintImage(c, f) {
-            var o = c.out; if (off.width !== o) { off.width = off.height = o; }
-            var img = og.createImageData(o, o), base = f * o * o, A = c.amp;
-            for (var x = 0; x < o; x++) for (var y = 0; y < o; y++) {
-                var s = base + x * o + y, q = 4 * ((o - 1 - y) * o + x), col = ramp[A[s]];
-                img.data[q] = col[0]; img.data[q + 1] = col[1]; img.data[q + 2] = col[2]; img.data[q + 3] = 255;
-            }
-            og.putImageData(img, 0, 0);
-        }
+        /* ---------- drawing: the stored cloud through VolumeView, labels on a 2D canvas above it ---------- */
         function L() { return (IDX && IDX.L) || 64; }
-        function drawField(c, f, hold) {
-            var W = fieldBox.w, Hh = fieldBox.h; fctx.clearRect(0, 0, W, Hh);
-            fctx.fillStyle = '#f5f1ea'; fctx.fillRect(0, 0, W, Hh);
-            if (hold && fade.from) { fctx.globalAlpha = 0.55; fctx.drawImage(prev, 0, 0, W, Hh); fctx.globalAlpha = 1; fade.a = 0; }   /* the last picture, held and dimmed, until frames reach the visitor's time */
-            if (c) {
-                paintImage(c, f);
-                /* the live grid covers a box of side Lc (64 a, smaller for fast packets): draw it at its true size, centred */
-                var Lc = c.source === 'live' ? 64 * Math.min(1, Math.PI / (Math.sqrt(2 * c.meta.E) + 0.67)) : L(), side = W * Lc / L(), x0 = (W - side) / 2;
-                fctx.imageSmoothingEnabled = true; fctx.globalAlpha = 1; fctx.drawImage(off, x0, (Hh - side) / 2, side, side);
+        function drawView(c, f, hold) {
+            var W = ovBox.w, Hh = ovBox.h, dpr = window.devicePixelRatio || 1;
+            if (volCanvas.width !== Math.round(W * dpr) || volCanvas.height !== Math.round(Hh * dpr)) { volCanvas.width = Math.round(W * dpr); volCanvas.height = Math.round(Hh * dpr); dirty = true; }
+            var id = c && !hold ? (c.source + (c.meta.E + '_' + c.meta.V0 + '_' + c.meta.R) + ':' + f) : 'none';
+            if (id !== shownId) {
+                if (c && !hold) { view.setVolume(c.vol.subarray(f * c.vn * c.vn * c.vn, (f + 1) * c.vn * c.vn * c.vn), c.vn); view.extent = (c.L || 64) / L(); } else view.clear();
+                shownId = id; dirty = true;
             }
-            if (fade.a < 1 && fade.from) { fctx.globalAlpha = 1 - fade.a; fctx.drawImage(prev, 0, 0, W, Hh); fctx.globalAlpha = 1; }
-            var p = current(), sc = W / L();
-            fctx.strokeStyle = '#1c1518'; fctx.lineWidth = 1.3; fctx.setLineDash([6, 5]); fctx.beginPath(); fctx.arc(W / 2, Hh / 2, p.R * sc, 0, 2 * Math.PI); fctx.stroke(); fctx.setLineDash([]);
-            fctx.fillStyle = '#5a504b'; fctx.font = '12px "IBM Plex Mono", monospace';
-            fctx.fillText('x →', W - 38, Hh - 10); fctx.fillText('y ↑', 8, 18);
-            fctx.beginPath(); fctx.moveTo(12, Hh - 14); fctx.lineTo(12 + 10 * sc, Hh - 14); fctx.stroke(); fctx.fillText('10 a', 12, Hh - 20);
-            if (c && c.source === 'live') { fctx.fillStyle = '#7a1f2b'; fctx.fillText('live preview in your browser · coarser grid · being computed', 10, 36); }
+            var p = current(); if (view.sphere !== p.R / (L() / 2)) { view.sphere = p.R / (L() / 2); dirty = true; }
+            if (dirty && view.ok) { view.render(); dirty = false; }
+            octx.clearRect(0, 0, W, Hh);
+            if (hold && fade.from) { octx.globalAlpha = 0.55; octx.drawImage(prev, 0, 0, W, Hh); octx.globalAlpha = 1; fade.a = 0; }   /* the last picture, held and dimmed, until frames reach the visitor's time */
+            else if (fade.a < 1 && fade.from) { octx.globalAlpha = 1 - fade.a; octx.drawImage(prev, 0, 0, W, Hh); octx.globalAlpha = 1; }
+            octx.fillStyle = '#5a504b'; octx.font = '12px "IBM Plex Mono", monospace';
+            octx.fillText('flight along x · glass sphere R = ' + p.R + ' a', 10, Hh - 12);
+            if (c && c.source === 'live' && !hold) { octx.fillStyle = '#7a1f2b'; octx.fillText('live preview in your browser · 64³ points · being computed', 10, 20); }
         }
-        function snapshot() { prev.width = fieldBox.canvas.width; prev.height = fieldBox.canvas.height; pg.setTransform(1, 0, 0, 1, 0, 0); pg.drawImage(fieldBox.canvas, 0, 0); fade.from = true; fade.a = 0; }
+        function snapshot() { prev.width = volCanvas.width; prev.height = volCanvas.height; pg.setTransform(1, 0, 0, 1, 0, 0); pg.drawImage(volCanvas, 0, 0); fade.from = true; fade.a = 0; }
         function drawPlot(c, f) {
             var W = plotBox.w, Hh = plotBox.h, m = { l: 42, r: 10, t: 34, b: 30 }; pctx.clearRect(0, 0, W, Hh);
             pctx.fillStyle = '#fffaf3'; pctx.fillRect(0, 0, W, Hh);
@@ -738,8 +731,7 @@
                 ds.set('inside', q[1] - q[2] - q[3]); ds.set('lost', 1 - q[1]); ds.set('sigma_free', s0 * Math.sqrt(1 + Math.pow(q[0] / (2 * s0 * s0), 2)));
                 ds.set('ready', c.ready_n);
                 if (c.source === 'kaggle') { ds.set('sha_ok', c.sha === true); ds.set('steps', c.head.steps); ds.set('wall', c.head.wall); }
-                var o = c.out, base = f * o * o;
-                if (o === 128) { LEVEL.set(c.amp.subarray(base, base + o * o)); ds.touch('level'); }
+                if (c.vn === 64) { CLOUD.set(c.vol.subarray(f * 262144, (f + 1) * 262144)); ds.touch('cloud'); }
             }
             var fx = function (v, d) { return v == null || !isFinite(v) ? '—' : v.toFixed(d); };
             document.getElementById('r-b').textContent = fx(ds.get('behind'), 3); document.getElementById('r-a').textContent = fx(ds.get('ahead'), 3);
@@ -748,8 +740,8 @@
             document.getElementById('cap-t').textContent = 't = ' + fx(ds.get('t'), 2) + (c ? ' · frame ' + (f + 1) + ' of ' + c.n : '');
             document.getElementById('cap-p').textContent = c ? (c.source === 'kaggle' ? 'stored, from Kaggle' : 'live preview, ' + c.ready_n + ' of 48 frames') : any ? 'live preview, ' + any.ready_n + ' of 48 frames: the picture waits' : 'not computed yet';
             var src = document.getElementById('src-t'); if (!c && any) c = any;
-            if (c && c.source === 'kaggle') src.innerHTML = 'Computed on Kaggle on ' + c.meta.generated + ', Tesla T4, 128³ points, ' + c.head.steps + ' steps of Δt = 0.01 in ' + c.head.wall.toFixed(1) + ' s. File <code>' + c.meta.generated + '/' + c.meta.file + '</code>, SHA-256 ' + (c.sha === true ? 'checked ✓' : c.sha === false ? '<b>does not match</b>' : 'not checked (no crypto in this browser)') + '.';
-            else if (c) src.innerHTML = 'Not computed on Kaggle yet. This is a <b style="display:inline">live preview</b> computed in your browser on a coarser grid (64³), ' + c.ready_n + ' of 48 frames so far. Checked against Kaggle on stored runs: the probabilities agree to within 0.08 at every frame. ' + (bridge.connected ? '' : 'The link that would have Kaggle compute it precisely (kaggle-bridge) is not switched on yet.');
+            if (c && c.source === 'kaggle') src.innerHTML = 'Computed on Kaggle on ' + c.meta.generated + ', Tesla T4, 128³ points, stored as 64³ cells, ' + c.head.steps + ' steps of Δt = 0.01 in ' + c.head.wall.toFixed(1) + ' s. File <code>' + c.meta.generated + '/' + c.meta.file + '</code>, SHA-256 ' + (c.sha === true ? 'checked ✓' : c.sha === false ? '<b>does not match</b>' : 'not checked (no crypto in this browser)') + '.';
+            else if (c) src.innerHTML = 'Not computed on Kaggle yet. This is a <b style="display:inline">live preview</b> computed in your browser on a coarser grid (64³), ' + c.ready_n + ' of 48 frames so far. Checked against Kaggle on stored runs: the probabilities agree to within 0.08 at every frame. ' + (by2d[key(p.E, p.V0, p.R)] ? 'Kaggle’s 2D generation of this run gives at the end: behind ' + by2d[key(p.E, p.V0, p.R)].behind.toFixed(3) + ', ahead ' + by2d[key(p.E, p.V0, p.R)].ahead.toFixed(3) + '. ' : '') + (bridge.connected ? '' : 'The link that would have Kaggle compute it in 3D (kaggle-bridge) is not switched on yet.');
             else src.textContent = 'Not computed yet.';
         }
 
@@ -791,7 +783,7 @@
             } else if (pop.shown) pop.hide();
             var f = frameOf(c);
             timeIn.max = c ? c.n - 1 : 47; timeIn.value = f; timeIn.style.setProperty('--p', (c ? 100 * f / (c.n - 1) : 0) + '%'); timeOut.textContent = (behind ? tPhys : c && c.curves[f] ? c.curves[f][0] : 0).toFixed(2);
-            if (behind) { drawField(null, 0, true); shownReal = false; } else { drawField(c, f); shownReal = true; }
+            if (behind) { drawView(c, 0, true); shownReal = false; } else { drawView(c, f); shownReal = true; }
             drawPlot(c, f); readouts(behind ? null : c, f, c);
         });
         function setPlay(p) { playing = p; document.getElementById('play').textContent = p ? 'Pause' : 'Play'; }
@@ -805,9 +797,9 @@
             return Promise.all(gens.map(function (g) { return fetch(DATA_BASE + g.index).then(function (r) { return r.json(); }).then(function (ix) { ix.base = DATA_BASE + g.date + '/'; return ix; }); }));
         }).then(function (ixs) {
             var grid = { Es: [], Vs: [], Rs: [] };
-            ixs.forEach(function (ix) { ix.runs.forEach(function (r) { r.base = ix.base; r.generated = ix.generated; byKey[key(r.E, r.V0, r.R)] = r; }); ['Es', 'Vs', 'Rs'].forEach(function (n) { grid[n] = grid[n].concat(ix[n]); }); });
-            var idx = IDX = Object.assign({}, ixs[ixs.length - 1], grid);
-            for (var i = 0; i < 128; i++) XC[i] = (i - 64) * idx.L / 128; ds.touch('xc');
+            ixs.forEach(function (ix) { ix.runs.forEach(function (r) { r.base = ix.base; r.generated = ix.generated; (ix.kind === '3d' ? byKey : by2d)[key(r.E, r.V0, r.R)] = r; }); ['Es', 'Vs', 'Rs'].forEach(function (n) { grid[n] = grid[n].concat(ix[n]); }); });
+            var idx = IDX = Object.assign({}, ixs.filter(function (ix) { return ix.kind === '3d'; }).pop() || ixs[ixs.length - 1], grid);
+            for (var i = 0; i < 64; i++) XC[i] = (i - 32) * idx.L / 64 + 0.25; ds.touch('xc');
             var host = document.getElementById('params'), defs = [
                 ['E', 'Packet energy <i>E</i>', stopsOf(idx.Es, EXTRA.E), 2.5],
                 ['V0', 'Barrier height <i>V</i><sub>0</sub>', stopsOf(idx.Vs, EXTRA.V0), 3.0],
@@ -821,19 +813,22 @@
             ['E', 'V0', 'R'].forEach(function (o) { sliders[o].refresh(); });
             load(byKey[key(2.5, 3.0, 4.0)]);
         }).catch(function (e) { document.getElementById('src-t').textContent = 'The stored runs could not be read: ' + e.message; });
-        Sim.onResize(stage, function () { fieldBox.fit(); plotBox.fit(); });
+        Sim.onResize(stage, function () { ovBox.fit(); plotBox.fit(); dirty = true; });
         window.__fig14 = { ds: ds, entry: entry, sliders: function () { return sliders; }, setT: function (t) { tPhys = t; }, play: setPlay };
 
         /* ---------- the data panel (scripts/datalog.js) reads the store; these hooks only say where things are drawn ---------- */
-        function screenOf(gx, gy) { var W = fieldBox.w, Hh = fieldBox.h; return { x: (gx + 0.5) / 128 * W, y: Hh - (gy + 0.5) / 128 * Hh }; }
+        /* a stored cell -> where it lands on the screen; a screen point -> the brightest stored cell along its ray */
+        function cellPoint(q) { var n = 64, ix = Math.floor(q / 4096), iy = Math.floor(q / 64) % 64, iz = q % 64, e = view.extent; return [ix, iy, iz].map(function (i) { return ((i + 0.5) / n - 0.5 + view.offset) * 2 * e; }); }
+        function screenOf(q) { return view.project(cellPoint(q), ovBox.w, ovBox.h); }
         function pixelCheck(q) {
-            var gx = Math.floor(q / 128), gy = q % 128, at = screenOf(gx, gy), c = entry();
-            if (!c || c.source !== 'kaggle') return { what: 'the picture', drawn: 'not compared', expected: '—', ok: true, note: 'Only a stored Kaggle run is compared pixel by pixel.' };
-            var px = fctx.getImageData(Math.round(at.x * fieldBox.dpr), Math.round(at.y * fieldBox.dpr), 1, 1).data, lv = LEVEL[q], want = ramp[lv];
-            if (px[3] === 0) return { what: 'screen pixel at grid point (' + gx + ', ' + gy + ')', drawn: 'nothing (transparent)', expected: 'a filled pixel', ok: false };
-            var d = want ? Math.max(Math.abs(px[0] - want[0]), Math.abs(px[1] - want[1]), Math.abs(px[2] - want[2])) : 0;
-            return { what: 'screen pixel at grid point (' + gx + ', ' + gy + ')', drawn: 'rgb(' + px[0] + ', ' + px[1] + ', ' + px[2] + ')', expected: want ? 'rgb(' + want.join(', ') + ') for level ' + lv : 'a phase colour', ok: !want || d <= 24,
-                note: 'The 128 × 128 stored points are stretched over the canvas with smoothing, so a pixel between points mixes its neighbours: up to 24 colour units apart is accepted.' };
+            var at = screenOf(q), c = entry(), dpr = volCanvas.width / ovBox.w;
+            if (!c || !view.data) return { what: 'the picture', drawn: 'nothing drawn yet', expected: '—', ok: true };
+            var gl = volCanvas.getContext('webgl2'), px = new Uint8Array(4), X = Math.floor(at.x * dpr), Y = Math.floor(at.y * dpr);
+            gl.readPixels(X, volCanvas.height - 1 - Y, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, px);
+            if (px[3] === 0) return { what: 'screen pixel at cell ' + q, drawn: 'nothing (transparent)', expected: 'a filled pixel', ok: false };
+            var want = view.expected((X + 0.5) / dpr, (Y + 0.5) / dpr, ovBox.w, ovBox.h), d = Math.max(Math.abs(px[0] - want[0]), Math.abs(px[1] - want[1]), Math.abs(px[2] - want[2]));
+            return { what: 'screen pixel where cell ' + q + ' lands, (' + at.x.toFixed(1) + ', ' + at.y.toFixed(1) + ') css px', drawn: 'rgb(' + px[0] + ', ' + px[1] + ', ' + px[2] + ')', expected: 'rgb(' + want.join(', ') + '): the shader’s sum along that ray, recomputed here from the stored cells', ok: d <= 3,
+                note: 'Each pixel sums ' + 192 + ' samples of the stored cloud along its ray (trilinear between cell centres, opacity 1 − exp(−30 q² Δs)), plus the glass shell of the sphere; the page repeats that sum on the CPU from the same stored levels. Up to 3 colour units apart is accepted for rounding on the graphics card.' };
         }
         Sim.data = {
             ds: ds, kicker: 'Fig. 14 · data', file: 'fig14-wave-packet-sphere',
@@ -842,16 +837,16 @@
                 { title: 'What you set', note: 'the three stops of the controls', vars: ['E', 'V0', 'R', 'k0'] },
                 { title: 'The stored run', note: 'read from the run file Kaggle wrote', vars: ['stored', 'source', 'file', 'sha_ok', 'steps', 'wall', 'ready', 'live_done'] },
                 { title: 'This frame', note: 'stored values; inside and lost added up from them', vars: ['t', 'frame', 'norm', 'behind', 'ahead', 'inside', 'lost', 'sigma_y', 'sigma_free', 'T1D'] },
-                { title: 'The picture', note: 'the stored levels of |ψ| in the plane z = 0', vars: ['xc', 'level'] },
+                { title: 'The picture', note: 'the stored cloud of this frame, 64 × 64 × 64 cells', vars: ['xc', 'cloud'] },
                 { title: 'Playback', note: 'how the page plays', vars: ['speed', 'edge'] }
             ],
-            probe: function (x, y) { var W = fieldBox.w, Hh = fieldBox.h, gx = Math.floor(x / W * 128), gy = Math.floor((Hh - y) / Hh * 128); return gx < 0 || gy < 0 || gx > 127 || gy > 127 ? null : { q: gx * 128 + gy }; },
+            probe: function (x, y) { var b = view.pick(x, y, ovBox.w, ovBox.h); return b ? { q: (b.ix * 64 + b.iy) * 64 + b.iz } : null; },
             inspect: function (ref) {
-                var gx = Math.floor(ref.q / 128), gy = ref.q % 128, lv = LEVEL[ref.q];
-                return { title: 'point x = ' + XC[gx].toFixed(2) + ' a, y = ' + XC[gy].toFixed(2) + ' a', at: screenOf(gx, gy),
-                    rows: [['x', XC[gx], 'a', 'xc', gx], ['y', XC[gy], 'a', 'xc', gy], ['q', lv, '', 'level', ref.q], ['|ψ| / |ψ|<sub>peak,0</sub>', lv / 255, ''], ['|ψ|² / |ψ|²<sub>peak,0</sub>', (lv / 255) * (lv / 255), '']] };
+                var q = ref.q, ix = Math.floor(q / 4096), iy = Math.floor(q / 64) % 64, iz = q % 64, lv = CLOUD[q];
+                return { title: 'cell at x = ' + XC[ix].toFixed(2) + ' a, y = ' + XC[iy].toFixed(2) + ' a, z = ' + XC[iz].toFixed(2) + ' a (the brightest along the ray you pointed at)', at: screenOf(q),
+                    rows: [['x', XC[ix], 'a', 'xc', ix], ['y', XC[iy], 'a', 'xc', iy], ['z', XC[iz], 'a', 'xc', iz], ['q', lv, '', 'cloud', q], ['q / 255', lv / 255, ''], ['density (q / 255)²', (lv / 255) * (lv / 255), '']] };
             },
-            locate: function (name, idx) { if (name === 'level') return screenOf(Math.floor(idx / 128), idx % 128); return null; },
+            locate: function (name, idx) { if (name === 'cloud') return screenOf(idx); return null; },
             check: {
                 k0: function () { return { formula: '√(2E)', inputs: [['E', ds.get('E'), '', 2]], value: Math.sqrt(2 * ds.get('E')) }; },
                 inside: function () { return { formula: '∫|ψ|² − P<sub>behind</sub> − P<sub>ahead</sub>', inputs: [['∫|ψ|²', ds.get('norm'), '', 6], ['P<sub>behind</sub>', ds.get('behind'), '', 5], ['P<sub>ahead</sub>', ds.get('ahead'), '', 5]], value: ds.get('norm') - ds.get('behind') - ds.get('ahead') }; },
@@ -860,10 +855,10 @@
                 T1D: function () { return { formula: 'rectangular barrier, thickness 2R', inputs: [['E', ds.get('E'), '', 2], ['V<sub>0</sub>', ds.get('V0'), '', 2], ['2R', 2 * ds.get('R'), 'a', 1]], value: T1D(ds.get('E'), ds.get('V0'), 2 * ds.get('R')) }; },
                 t: function () { var c = entry(); return c ? { formula: 'frame · Δt<sub>frame</sub>', inputs: [['frame', ds.get('frame'), '', 0], ['Δt<sub>frame</sub>', frameDt(c), '', 3]], value: ds.get('frame') * frameDt(c) } : null; }
             },
-            drawn: { level: pixelCheck },
+            drawn: { cloud: pixelCheck },
             round: { time: 't', label: function () { return 'one stored run, ' + (ds.get('ready') || 48) + ' frames'; }, length: function () { var c = entry(); return c ? tEnd(c) : 10; }, columns: ['behind', 'ahead', 'inside', 'lost', 'sigma_y'] },
             play: function () { setPlay(true); },
-            about: 'The picture is the stored 128 × 128 grid of amplitude levels of the plane z = 0, stretched over the canvas with smoothing; the stored levels are 0 to 255 of the first frame’s peak, so |ψ|² is the level squared, in the same unit. The probabilities come from the whole three-dimensional ψ on Kaggle, not from the picture. Between stored frames nothing is interpolated: the page shows the stored frame at or before the playback time. In a region not computed on Kaggle the picture is the live preview from your browser (64³ points), marked as such on the figure.'
+            about: 'The picture is the stored cloud of 64 × 64 × 64 cells (each the root-mean-square |ψ| over 2 × 2 × 2 of Kaggle’s 128³ points, in 256 levels of the first frame’s peak cell), drawn as fog: along each pixel’s ray 192 samples, trilinear between cell centres, each adding opacity 1 − exp(−30 q² Δs), so the fog is as dense as the probability; the sphere is a glass shell. That smoothing between cell centres is the only thing the picture adds to the stored numbers, and any pixel can be checked against the same sum recomputed from the store. The probabilities come from the whole ψ on Kaggle’s 128³ grid. Between stored frames nothing is interpolated. Where a run is not stored in 3D the picture is the live preview from your browser (64³ points), marked on the figure.'
         };
     })();
     </script>

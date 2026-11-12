@@ -5,7 +5,8 @@
    a faster packet needs a finer step, so the box shrinks to keep the step below pi / (k0 + 0.67): its fastest Fourier
    components (k0 plus four momentum widths 1/(2 sigma0)) must stay below the grid's highest wave number pi / dx.
    Message in:  { id, E, V0, R, N (default 64), L (default 64, smaller for fast packets, see above), dt (default 0.04, rounded so frames fall on the Kaggle frame times), nframes (48), sigma0 (3), x0 (-14), travel (30) }
-   Messages out: { id, type: 'frame', f, n, out, amp (Uint8Array out*out), ph (Uint8Array), curve: [t, norm, behind, ahead, sigma_y] }
+   Messages out: { id, type: 'frame', f, n, out, L, amp (Uint8Array out*out), ph (Uint8Array), vol (Uint8Array N^3, |psi| at each point in
+                 levels of the first frame's peak point, index (x*N + y)*N + z), curve: [t, norm, behind, ahead, sigma_y] }
                  { id, type: 'done', ms, steps } ; { id, type: 'error', message }
    The levels are coded exactly as the Kaggle runs: |psi| in 256 levels of the first frame's peak in the plane z = 0,
    arg psi in 256 levels (0 where the amplitude is below 3 levels). */
@@ -75,7 +76,7 @@ function run(m) {
         kr[q] = Math.cos(pk) / N3; ki[q] = Math.sin(pk) / N3;     /* the 1/N^3 of the inverse transform folded in */
         mask[q] = m1[a] * m1[b] * m1[c];
     }
-    var plan = fftPlan(N), tr = new Float64Array(N), ti = new Float64Array(N), amp0 = 0, dV = dx * dx * dx;
+    var plan = fftPlan(N), tr = new Float64Array(N), ti = new Float64Array(N), amp0 = 0, vol0 = 1, dV = dx * dx * dx;
     function mul(ar, ai) { for (var i = 0; i < N3; i++) { var r0 = re[i], i0 = im[i]; re[i] = r0 * ar[i] - i0 * ai[i]; im[i] = r0 * ai[i] + i0 * ar[i]; } }
     function measure(f) {
         var rx = new Float64Array(N), ry = new Float64Array(N), A = new Float32Array(N2), P = new Float32Array(N2), zc = N / 2;
@@ -88,12 +89,14 @@ function run(m) {
         for (a = 0; a < N; a++) { rx[a] *= dV; ry[a] *= dV; nrm += rx[a]; if (x[a] < -R) beh += rx[a]; if (x[a] > R) ah += rx[a]; my += ry[a] * x[a]; }
         my /= nrm; for (a = 0; a < N; a++) sy += ry[a] * (x[a] - my) * (x[a] - my); sy = Math.sqrt(sy / nrm);
         if (f === 0) { amp0 = 0; for (q = 0; q < N2; q++) if (A[q] > amp0) amp0 = A[q]; }
-        var qa = new Uint8Array(N2), qp = new Uint8Array(N2);
+        var qa = new Uint8Array(N2), qp = new Uint8Array(N2), qv = new Uint8Array(N3);
+        if (f === 0) { vol0 = 0; for (q = 0; q < N3; q++) { var m0 = re[q] * re[q] + im[q] * im[q]; if (m0 > vol0) vol0 = m0; } vol0 = Math.sqrt(vol0); }
+        for (q = 0; q < N3; q++) qv[q] = Math.min(255, Math.round(255 * Math.sqrt(re[q] * re[q] + im[q] * im[q]) / vol0));
         for (q = 0; q < N2; q++) {
             var lv = Math.min(255, Math.max(0, Math.round(255 * A[q] / amp0))); qa[q] = lv;
             qp[q] = lv < 3 ? 0 : (Math.round((P[q] + Math.PI) / (2 * Math.PI) * 255) % 256);
         }
-        postMessage({ id: id, type: 'frame', f: f, n: nf, out: N, amp: qa, ph: qp, curve: [f * per * dt, nrm, beh, ah, sy] }, [qa.buffer, qp.buffer]);
+        postMessage({ id: id, type: 'frame', f: f, n: nf, out: N, L: L, amp: qa, ph: qp, vol: qv, curve: [f * per * dt, nrm, beh, ah, sy] }, [qa.buffer, qp.buffer, qv.buffer]);
     }
     measure(0);
     for (var f = 1; f < nf; f++) {
