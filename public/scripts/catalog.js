@@ -250,6 +250,23 @@
             added: '2026-11-06'
         },
         {
+            id: 'guinness-kaggle',
+            fig: 12,
+            title: 'A Pint of Guinness on a One-Wheel Cart',
+            file: 'simulations/guinness-kaggle.html',
+            field: 'fluids',
+            stage: 2,
+            subject: 'fluid dynamics · computed on Kaggle',
+            summary: 'The pint of stout on the one-wheel cart of Fig. 12, computed ahead of time on Kaggle’s graphics card: a million particles in the measured glass, twenty seconds of ride over a gentle road at three speeds. The page only plays the stored rides back and checks every number against the file. At speeds not computed it plays a clearly labelled live preview from the browser, and it says plainly what the stored rides get wrong: their swing dies far too fast.',
+            equation: '\\frac{\\partial\\mathbf u}{\\partial t} + (\\mathbf u\\cdot\\nabla)\\mathbf u = -\\frac{\\nabla p}{\\rho} + \\mathbf g - \\mathbf a_g, \\qquad \\nabla\\cdot\\mathbf u = 0',
+            model: 'incompressible flow with a free surface in the frame of the measured tulip glass, without viscosity or wall friction; the one-wheel cart of Fig. 12 with its motor holding the set speed, the two pushing on each other',
+            method: 'APIC particles on a 1.5 mm grid (370,386 cells, 1,002,808 particles) in Taichi on Kaggle’s Tesla T4 GPU, stored 30 times a second and played back; beyond the computed speeds a live preview on a 4 mm grid in a Web Worker',
+            controls: 'speed on the computed stops and beyond them; time; pause and ride again',
+            concepts: ['sloshing', 'free surface', 'phase space', 'particle-in-cell', 'APIC', 'non-inertial frame', 'damping', 'GPU', 'Kaggle'],
+            has: ['derivation', 'data', 'read', 'round', 'check'],
+            added: '2026-11-12'
+        },
+        {
             id: 'momentum-spirographs',
             fig: 13,
             title: 'Spirographs in Momentum Space',

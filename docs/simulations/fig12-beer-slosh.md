@@ -471,7 +471,7 @@ suspension. Measured on Kaggle: 10,000 steps per ride, 21.8 / 20.2 / 20.3 min, 1
 it cross-fades the picture over 0.35 s). In the last 3 s of a ride the playback rate falls as sqrt(time left / 3 s), so
 the picture slows smoothly and stops exactly at the end of the data; only then a pop-up fades in that shows the pipeline
 (page -> kaggle-bridge -> Kaggle GPU -> stored -> back) and says that computing on request is not yet connected; "Ride
-again" cross-fades to the start. Not yet built: the live browser preview and fetching new rides through kaggle-bridge.
+again" cross-fades to the start. (Replaced on 12 November 2026 by the shared pipeline, next section.)
 
 **Tested** in headless Chromium at 360, 390, 1024 and 1440 px: no errors, no sideways scroll, playback advances, the
 slow-down ends at 20.0 s and the pop-up shows.
@@ -518,3 +518,100 @@ figure paints 0 overlay pixels with Read values off and on. A click pins, the st
 and its words change 4.00 times a second. One round records; Save gives a zip that `zipfile.testzip()` accepts and
 `numpy.load` reads (`x` (601,), `eta_q` (601, 17, 64) uint8, `eta_draw` (17, 64)), with `round-1.csv` and units in
 `dataset.json`. The panel's loop is idle before opening and after closing.
+
+
+**Phase space and what the stored rides get wrong (12 November 2026).** A second figure under the cart (`#stage-phase`,
+canvas `#ph`, `drawPhase` in `guinness-playback.js`) draws the first sloshing mode: q, the cos θ part of the outer ring
+of the stored surface, (2/64) Σ_j η(R, θ_j) cos θ_j in mm (at the wall the first mode is η = q cos θ, note section 4.5),
+against p = (q_{n+1} − q_{n−1}) / (2 sin ω11 h), h = 1/30 s, ω11 = 2π · 3.421 Hz. The sine instead of ω11 h makes a pure
+swing at f11 an exact circle; the plain central difference reads it 8 % low (sin 0.716 / 0.716 = 0.917). Both axes share
+one scale (`ph_s`, px per mm); the plot half-width is 1.1 times the ride's largest |q| or |p|. Pale: the whole ride;
+dark: the last 30 frames; dashed rose: the circle of the present amplitude; wine dot: the frame on screen. Store:
+`f11`, `w11`, `q1`, `p1`, `ph_range`, `q_now`, `p_now`, `amp_now`, `ph_cx`, `ph_cy`, `ph_s`, `ph_x_px`, `ph_y_px`; each
+checked (q1 from the 64 stored bytes of the outer ring, p1 from its neighbours, the dot from centre and scale) and the dot
+read back (wine). Tested at 390 and 1440 px: 84 checks agree, none differ, the dot reads back wine.
+
+`tools/fig12/kaggle_decay.py` measures from `rides.json` (output of 12 November 2026):
+
+- strongest swing between 2.5 and 4.5 Hz: 3.043 / 3.433 / 3.393 Hz at 0.5 / 1.0 / 1.5 m/s (3.421 Hz theory; the 0.5 m/s
+  ride swings too little, 0.4 mm, for a clean peak);
+- decay after the last bump (band-pass 2.5–4.5 Hz, envelope, log fit over 1.5 s): e-folding time 0.76 / 0.41 / 0.32 s,
+  damping ratio 0.061 / 0.115 / 0.147, against 0.0036 (theory) to 0.0053 (experiment) for real stout. The
+  solver's own losses are 12 to 40 times too large: the stored rides are far too calm after each bump;
+- drift: over the last 5 s, at steady speed on flat road, the stored wall lean averages 1.90 / 0.56 / 6.36 mm while q
+  averages 0.28 / 0.30 / 0.89 mm. The lean at single wall nodes drifts; the surface as a whole hardly tilts. At rest the
+  stored outer ring also sits about 7 mm above the axis (133 mm against 126 mm at t = 0, 0.5 m/s ride): the wall
+  columns' linear extension in the notebook's `polar_surface`. Both point at the wall reconstruction, not the stout
+  (an inference; confirming it needs the solver's particles, which are not stored).
+
+
+**Edge of the computed data, on the shared pipeline (12 November 2026).** The page now uses `kaggle-flow.js` and
+`kaggle-flow.css` of [the Kaggle pipeline](../kaggle-pipeline.md) and changes nothing in them.
+
+- Speed control: `KaggleFlow.slider` over 0.5, 1.0, 1.5, 2.0, 2.5 m/s. Filled dots and a solid band: the three speeds
+  in `rides.json`. Hollow dots and hatching: 2.0 and 2.5 m/s, not computed on Kaggle. Over the last 28 % of the band the
+  control grows heavy (the thumb follows the hand down to 22 % of its pace).
+- Playback speed: `rate = min(g, r_edge)`. The governor g (`KaggleFlow.governor`, tau 0.45 s) eases towards
+  goal = 1 - 0.8 c (c = the control's closeness to the edge; 0 when paused; 0 once the end is reached), and while a preview
+  computes no more than smooth((t_ready - t) / 0.6 s). r_edge = min(1, sqrt((T_ride - t) / 3 s)) reaches zero exactly at
+  the end of the computed time; the ride stops when 1.2 ms are left (rate there about 0.02). Every term is in the store
+  (`closeness`, `t_prev`, `dt_wall`, `goal`, `gov_prev`, `gov`, `edge`, `rate`) and checked.
+- Live preview on a hollow stop: `scripts/guinness-preview-worker.js` runs `stout-cart.js` (4 mm grid, 25,666 particles,
+  half glass mirrored, same cart, same road `BUMPS`) in a Worker and sends one frame per 1/30 s in the stored format
+  (surface by `StoutView.surface`, rounded to 0.2 mm; lean before rounding; spilled mass from the lost liquid). Measured
+  0.23 x real time in Node 22 on one thread, 0.21 in headless Chromium here; the playback waits for its frames. A label in
+  the figure says it is a preview from the browser's coarse solver, not Kaggle's result; `source` in the store says the same.
+  A finished preview is kept for the visit; an unfinished one is dropped when the speed changes.
+- Asking Kaggle: on a hollow stop, when the control heads out of the band, and at the end of the computed time, the page calls
+  `KaggleFlow.bridge({ url: null })` once per block (road, speed, time span) and writes the answer under the control. With the
+  bridge not connected the answer is "not switched on yet". A block the bridge delivers (`state: 'stored'`) is added to the
+  rides and, if it is the speed on screen, cross-faded in at the same ride time (`arrive`); not exercised until the bridge exists.
+- Cross-fade: the last picture is copied onto `#cv-old` above the figure and faded out over 0.45 s while the new ride draws.
+- The notice: `KaggleFlow.popup` with the pipeline, kaggle-bridge drawn dashed (not connected), kicker "Not computed yet",
+  shown only when the end is reached and the governor's speed is under 0.02. Ride again (in Run) hides it and cross-fades
+  to t = 0; the speed builds up through the governor.
+
+Tested in headless Chromium at 360, 390, 1024 and 1440 px: no errors, no sideways scroll; 3 filled and 2 hollow dots; at
+1.5 m/s closeness 1 and rate 0.20; at 2.0 m/s the label shows, frames arrive (36 to 39 in 6 s), the largest frame-to-frame
+change of rate 0.009 to 0.015; slowing to the end of a stored ride, the largest change 0.020 to 0.023 (the last step to 0);
+the notice appears only after that and disappears on Ride again. Data panel with the preview on screen: 81 checks agree,
+none differ, no read-back fails; with a stored ride: 88 agree, none differ.
+
+
+**Catalogue (12 November 2026).** `public/scripts/catalog.js` has an entry `guinness-kaggle` (fig 12, field fluids, stage
+2, subject "fluid dynamics · computed on Kaggle"), so the catalogue shows two Fig. 12 cards, the live solver and the Kaggle
+playback, side by side. Thumbnail `public/images/sims/guinness-kaggle.webp`, 800 x 500, a still of the 1.5 m/s ride at
+6.6 s (the swing after the last bump). The card's German and Arabic texts are in `i18n/de|ar/strings.json` (five strings each,
+stored with `tools/i18n/ingest.py strings`). The page itself is English only, like Fig. 12: `guinness-kaggle.html` is in
+`ENGLISH_ONLY` of `tools/i18n/build.py` (it was missing there, so `build.py --check` failed on `main` until this change).
+Tested: the catalogue in English at 1100 and 390 px and in German and Arabic at 390 px, no errors, no sideways scroll, two
+Fig. 12 cards among 15.
+
+
+**Lecture note (12 November 2026).** The page's short section "What was computed, and how" is replaced by a lecture note,
+`<article class="paper" id="paper">`, written to `notes/STANDARD.md` (Taylor's way: every step, Key results, worked examples
+with the page's numbers, Problems; ★ on section 3 and on the rate estimate). Sections: 1 the pint that keeps rocking;
+2 what Kaggle computed, eq. (1); 3 the first sloshing mode, (2)-(5), f11 = 3.421 Hz; 4 boundary-layer damping, (6), zeta =
+0.0036 (theory) and 0.0053 (experiment), tau = 12.9 and 8.7 s, Stokes layer 0.31 mm; 5 phase space of the damped swing,
+(7)-(8); 6 reading q from the stored ring, (9), rounding errors, the scaled rate (10)-(11), and how it misreads modes 2 and 3
+(16 % and 29 % short); 7 the measurements of `tools/fig12/kaggle_decay.py`, with the push a 6 mm lean would need (0.95
+m/s^2); 8 playback laws (12)-(13): under the square-root cap the picture slows at a constant rate from real time to rest in
+6 s; 9 equation to screen; 10 limits, the free-swing test and a wall-drag model as the next steps, three Problems; 11
+sources (NASA TN D-1367, NASA SP-106, the APIC paper, the Fig. 12 note, the notebook), each opened for this note. `fold.js`
+is now loaded, so the sections fold like every other note. Rendered at 390 and 1440 px: 13 numbered equations, no KaTeX
+errors, no sideways scroll. The catalogue entry now lists `derivation`.
+
+
+**Review of the note and corrected measurement (12 November 2026).** An independent derivation check and a blind referee
+read the note. Their findings that changed it: (1) the band-pass and envelope fit first used in `kaggle_decay.py` was
+biased (a made-up tau of 0.32 s read 0.42 s); the script now fits q = A exp(-t/tau) cos(wt + phi) + c + st directly
+(linear least squares inside a grid search over tau and w, numpy only), and `--selftest` recovers made-up tau from 0.32 to
+12.9 s within 1.5 %. (2) The cart damps the swing too: `tools/fig12/cart_damping.cjs` runs the reduced model on the same
+cart and road; with the stout's own damping off the swing dies with zeta 0.0067-0.0074 (with the wall's, 0.012-0.013), so
+`--modal` compares. (3) q is now read from ring 13, the outermost ring the notebook built from particles, scaled to the
+wall by J1(xi)/J1(xi 13/16) = 1.044 (page: `q_ring`, `q_scale`, `q1`). (4) The stored surface at rest is level at
+126.2 mm on rings 0-10 but 118.1 and 117.6 mm on rings 11-12 and 125.0, 125.5, 129.4, 133.3 mm on rings 13-16, in every
+ride: a reconstruction fault near the tulip's waist radius, visible as a faint trench in the head. Corrected results:
+1.0 m/s tau 0.481 s, 3.32 Hz, zeta 0.100; 1.5 m/s tau 0.344 s, 3.41 Hz, zeta 0.136 (0.5 m/s swings 0.3 mm, not fitted);
+on rings 8 and 10 zeta 0.14-0.21. Against the cart alone (0.007) 14-19 times too much; against cart and wall (0.012) 8-11
+times. Example 7.2 now uses the tilt of the whole surface, lean = 2Ra/g, so a 6.36 mm lean needs 0.80 m/s^2.

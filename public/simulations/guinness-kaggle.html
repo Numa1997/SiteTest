@@ -10,21 +10,20 @@
     <meta name="theme-color" content="#f5f1ea">
     <link rel="stylesheet" href="../styles/sim.css">
     <link rel="stylesheet" href="../styles/data.css">
+    <link rel="stylesheet" href="../styles/kaggle-flow.css">
     <link rel="stylesheet" href="../styles/fold.css"><script src="../scripts/flip.js"></script>
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%237a1f2b'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='38' fill='%23f5f1ea'%3EN%3C/text%3E%3C/svg%3E">
     <style>
         .stage__canvas canvas { display: block; width: 100%; height: 100%; }
-        .kpop { position: absolute; inset: auto 4% 6% 4%; background: rgba(252,248,240,0.96); border: 1.5px solid #3f2c23; border-radius: 12px; padding: 14px 16px; opacity: 0; transition: opacity 0.6s ease; box-shadow: 0 4px 18px rgba(0,0,0,0.12); }
-        .kpop.is-on { opacity: 1; }
-        .kpop__t { font: 400 22px/1.2 'Instrument Serif', serif; margin: 0 0 6px; color: #5a0f21; }
-        .kpop__d { width: 100%; height: auto; display: block; margin: 4px 0; }
-        .kpop__x { font-size: 13.5px; line-height: 1.5; color: #6f5b4c; margin: 4px 0 10px; }
-        .k-box { fill: #f8f2e6; stroke: #8b8079; stroke-width: 1.2; } .k-on { fill: #f1e2c4; stroke: #7d1d2f; }
-        .k-arrow { stroke: #8b8079; stroke-width: 1.4; fill: none; stroke-dasharray: 4 4; animation: kflow 1.2s linear infinite; }
-        @keyframes kflow { to { stroke-dashoffset: -16; } }
         .kread { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin: 0; font-family: 'IBM Plex Mono', monospace; }
         .kread dt { font-size: 11px; color: var(--ink-3); } .kread dd { margin: 0; font-size: 16px; }
-        #cv { transition: opacity 0.35s ease; }
+        #cv { transition: opacity 0.45s ease; }
+        #cv.is-held { opacity: 0.55; }
+        #cv-old { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; pointer-events: none; }
+        .g-badge { position: absolute; left: 12px; top: 12px; right: 12px; max-width: 520px; margin: 0; padding: 8px 12px; background: var(--card); border: 1px solid var(--ink); border-left: 3px solid var(--accent); border-radius: 8px; font-size: 13px; line-height: 1.45; color: var(--ink-2); z-index: 4; }
+        .g-badge b { font: 500 11px var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--accent); }
+        .ask-note { font-family: var(--mono); font-size: 11px; line-height: 1.5; color: var(--ink-3); min-height: 1.2em; }
+        #ph { display: block; width: 100%; height: 100%; }
     </style>
 </head>
 <body>
@@ -55,35 +54,33 @@
         </div>
 
         <div class="sim__grid">
+            <div>
             <figure class="stage">
                 <div class="stage__canvas" id="stage" style="--ar: 14 / 13; --ar-m: 1 / 1.05; position: relative;">
                     <canvas id="cv" aria-label="A pint of stout on a one-wheel cart rolling over a gentle road; the surface of the stout rocks, played back from stored Kaggle data"></canvas>
-                    <div id="pop" class="kpop" hidden>
-                        <p class="kpop__t">The computed ride ends here</p>
-                        <svg viewBox="0 0 520 90" class="kpop__d" aria-hidden="true">
-                            <g font-family="IBM Plex Mono, monospace" font-size="11" text-anchor="middle">
-                                <rect x="4" y="28" width="84" height="34" rx="6" class="k-box k-on"/><text x="46" y="49">this page</text>
-                                <rect x="112" y="28" width="96" height="34" rx="6" class="k-box"/><text x="160" y="49">kaggle-bridge</text>
-                                <rect x="232" y="28" width="96" height="34" rx="6" class="k-box"/><text x="280" y="49">Kaggle GPU</text>
-                                <rect x="352" y="28" width="72" height="34" rx="6" class="k-box"/><text x="388" y="49">stored</text>
-                                <rect x="446" y="28" width="70" height="34" rx="6" class="k-box k-on"/><text x="481" y="49">back here</text>
-                                <path d="M88 45h24M208 45h24M328 45h24M424 45h22" class="k-arrow"/>
-                            </g>
-                        </svg>
-                        <p class="kpop__x">Every picture so far was computed on Kaggle and stored on this site. Asking Kaggle for more on the spot (the bridge in the middle) is being built; until then the ride starts again.</p>
-                        <button type="button" class="btn" id="again">Ride again</button>
-                    </div>
+                    <canvas id="cv-old" aria-hidden="true"></canvas>
+                    <p id="src-badge" class="g-badge" hidden><b>Live preview</b>, computed in your browser by the site&#8217;s coarse solver (4 mm grid, half the glass mirrored; it swings 6 % slow). Not Kaggle&#8217;s result: Kaggle has not computed this speed, and computing it there on request is not connected yet.</p>
                 </div>
                 <figcaption class="stage__cap">
                     <span><b>Fig. 12</b> · stored Kaggle data, played back · nothing computed here</span>
                     <span id="cap-t">—</span>
                 </figcaption>
             </figure>
+            <figure class="stage" style="margin-top: 16px;">
+                <div class="stage__canvas" id="stage-phase" style="--ar: 16 / 9; --ar-m: 1 / 1;">
+                    <canvas id="ph" aria-label="Phase space of the first sloshing mode: its height at the wall q across, its scaled rate up; the whole ride as a pale path, the last second dark, the frame on screen as a dot, and a dashed circle of the present amplitude"></canvas>
+                </div>
+                <figcaption class="stage__cap">
+                    <span><b>Phase space</b> · first sloshing mode, height at the wall <i>q</i> against its rate <i>q&#775;</i>/<i>&omega;</i><sub>11</sub>, from the stored surface</span>
+                    <span id="cap-ph">—</span>
+                </figcaption>
+            </figure>
+            </div>
 
             <aside class="panel" aria-label="Controls">
                 <div class="panel__group">
                     <p class="panel__label">Run</p>
-                    <div class="actions"><button type="button" class="btn" id="play">Pause</button></div>
+                    <div class="actions"><button type="button" class="btn" id="play">Pause</button><button type="button" class="btn btn--ghost" id="again">Ride again</button></div>
                     <label class="ctl">
                         <span class="ctl__row"><span>Time</span><output id="t-out" for="tbar"></output></span>
                         <input type="range" id="tbar" min="0" max="1000" step="1" value="0">
@@ -91,12 +88,10 @@
                 </div>
                 <div class="panel__group">
                     <p class="panel__label">Ride</p>
-                    <label class="ctl">
-                        <span class="ctl__row"><span>Set speed</span><output id="v-out" for="vbar"></output></span>
-                        <input type="range" id="vbar" min="0" max="2" step="1" value="1" list="vmarks">
-                    </label>
+                    <div id="speed-host"></div>
+                    <p class="ask-note" id="ask-note" aria-live="polite"></p>
                     <p class="panel__note" id="road-name"></p>
-                    <p class="panel__note">Only computed rides can be chosen: every position of the speed control is its own ride, computed on Kaggle. Near the end of a ride the playback slows down smoothly and stops where the computed data ends.</p>
+                    <p class="panel__note">Filled dots: speeds computed on Kaggle and stored on this site. Hollow dots: not computed yet; there your browser computes a live preview with the site&#8217;s coarse solver, clearly labelled. Near the edge of the computed speeds the control grows heavier and the ride slows; near the end of the computed time the ride slows smoothly to a stop.</p>
                 </div>
                 <div class="panel__group">
                     <p class="panel__label">Readings</p>
@@ -110,14 +105,187 @@
             </aside>
         </div>
 
-        <section class="sim__notes" style="max-width:760px;margin:28px auto 0;font-size:15px;line-height:1.6">
-            <h2 style="font:400 26px/1.2 'Instrument Serif',serif">What was computed, and how</h2>
-            <p>On Kaggle&#8217;s Tesla T4 graphics card the stout is a million particles (1,002,808) moving through a grid of 370,386 cells of 1.5 mm in the measured Guinness glass: incompressible flow with a free surface and gravity, in the glass&#8217;s moving frame, with the stout and the cart pushing on each other. Each 20 s ride took 20 to 22 minutes (123 ms per step, 10,000 steps). The cart is the same model as Fig. 12: one wheel, a spring of 600 N/m, a damper of 8 N s/m, and a motor that holds the set speed.</p>
-            <p>The road: a long hump 10 mm high, a dip 8 mm deep, four ripples 5 mm high and a short bump 10 mm high, then flat road so the stout settles in view.</p>
-            <p><b>What is not in it yet.</b> The glass wall&#8217;s friction and the stout&#8217;s viscosity are left out, so the sloshing dies away only through the method&#8217;s own losses, which are not yet measured. The creamy head is drawn, not computed. The surface is stored 30 times a second on a grid of 17 rings by 64 angles in 0.2 mm steps, and drawn by the same code as Fig. 12.</p>
-            <p><b>The data panel.</b> The Data tab at the side of the page lists every number on this page: the stored ride, the frame on screen and what the picture draws. Each number is shown three ways: as stored, worked out again from the stored numbers, and read back from the pixels of the picture. The file&#8217;s fingerprint is checked against the one written when it was committed. Read values under the figure pins a point of the stout, the wheel or the body. Save downloads it all for NumPy.</p>
-            <p>Data: <a href="../data/fig12/2026-11-12/index.json">generated on Kaggle on 12 November 2026</a> (notebook version, checksums, measured times).</p>
-        </section>
+        <article class="paper" id="paper" aria-labelledby="paper-title">
+            <header class="paper__head">
+                <p class="paper__kicker">Lecture note · Fig. 12 computed on Kaggle · fluid dynamics · data</p>
+                <h2 class="paper__title" id="paper-title">A swing that should ring, and stored data that says it does not</h2>
+                <p class="paper__by">Numa Koudsie · for physics undergraduates; ★ marks the heavier mathematics, whose results are restated without it</p>
+                <div class="paper__abstract"><b>Abstract.</b> A pint of stout rides a one-wheel cart over a gentle road. Each bump sets the stout rocking front to back, and a real stout in a smooth glass keeps rocking for many seconds. The rides on this page were computed ahead of time on Kaggle&#8217;s graphics card and are only played back here. We first work out what the stout should do: the frequency of its first sloshing mode, 3.421 Hz, from the linear theory of a liquid in an upright cylinder, and its damping, a damping ratio of 0.0036 to 0.0053, from the boundary layer at the wall, and about 0.007 more from the cart it rides on. We then draw the swing in phase space, show how to read the mode and its rate from stored surfaces without bias, and measure the stored rides. Their swing has the right pace but dies about fifteen times faster than the cart alone would make it die, and in the fastest ride the lean read at two wall points drifts to 6.4 mm while the first-mode tilt of the surface stays near 1 mm. Last, we explain how the page plays stored data: no blending between frames, speeds that ease rather than jump, and a live preview, clearly labelled, where Kaggle has not computed.</div>
+            </header>
+            <div class="paper__grid">
+                <nav class="paper__toc" aria-label="Contents">
+                    <p>Contents</p>
+                    <ol>
+                        <li><a href="#p-ring"><span>1</span>A pint that keeps rocking</a></li>
+                        <li><a href="#p-computed"><span>2</span>What Kaggle computed</a></li>
+                        <li><a href="#p-mode"><span>3</span>The first sloshing mode&nbsp;★</a></li>
+                        <li><a href="#p-damp"><span>4</span>How fast a real swing dies</a></li>
+                        <li><a href="#p-phase"><span>5</span>One swing in phase space</a></li>
+                        <li><a href="#p-read"><span>6</span>Reading the mode from stored surfaces</a></li>
+                        <li><a href="#p-measured"><span>7</span>What the stored rides show</a></li>
+                        <li><a href="#p-play"><span>8</span>Playing stored data back</a></li>
+                        <li><a href="#p-screen"><span>9</span>What the picture shows</a></li>
+                        <li><a href="#p-limits"><span>10</span>Limits, and the next model</a></li>
+                        <li><a href="#p-refs"><span>11</span>Sources</a></li>
+                    </ol>
+                </nav>
+                <div class="paper__body">
+                    <section class="psec" id="p-ring">
+                        <h3><span class="psec__n">01</span>A pint that keeps rocking</h3>
+                        <p class="psec__lead">Set a full pint down on a table a little too hard and watch the surface. It tips toward you, back, toward you again, a few times a second, and it goes on doing so long after your hand has left the glass.</p>
+                        <p>That slow fading is the subject of this note. The stout&#8217;s rocking is a swing in the same sense as a playground swing: a restoring force, here gravity pulling the raised side of the surface down, and an inertia, the stout that has to be set moving. What stops a swing is friction. For a liquid in a smooth glass the friction is weak: it acts only in a thin layer of stout next to the wall, and the rest of the liquid slides past almost freely. So a real pint, once disturbed, rings for many seconds.</p>
+                        <p>The figure above does not compute the stout. It plays rides that were computed ahead of time on a graphics card rented through Kaggle, a million particles of stout in the measured Guinness glass, and stored on this site. A page that only plays stored data can still be checked. We can work out from first principles what the stout should do, then read the stored data and see whether it does. It turns out that the stored stout swings at the right pace but stops far too soon, and the rest of this note explains how we know.</p>
+                    </section>
+
+                    <section class="psec" id="p-computed">
+                        <h3><span class="psec__n">02</span>What Kaggle computed</h3>
+                        <p class="psec__lead">The stout is computed in the frame of the glass, as a passenger on the cart would see it, because the walls are then at rest.</p>
+                        <p>Let \(\mathbf u\) be the velocity of the stout relative to the glass, \(p\) its pressure, \(\rho\) its density and \(\mathbf a_g(t)\) the acceleration of the glass. A frame that accelerates with \(\mathbf a_g\) adds the force \(-\rho\,\mathbf a_g\) per unit volume, so the stout feels an effective gravity \(\mathbf g - \mathbf a_g\). Without viscosity the equations Kaggle solved are Euler&#8217;s equations for an incompressible liquid,</p>
+                        \[ \frac{\partial\mathbf u}{\partial t} + (\mathbf u\cdot\nabla)\mathbf u = -\frac{\nabla p}{\rho} + \mathbf g - \mathbf a_g , \qquad \nabla\cdot\mathbf u = 0 , \tag{1} \]
+                        <p>with the stout unable to cross the glass, \(\mathbf u\cdot\mathbf n = 0\) on the wall, and the air&#8217;s pressure on the free surface. Leaving out viscosity also leaves out the friction of the wall, because friction is viscosity acting next to the wall; section 4 shows that it acts in a layer 0.31 mm thick, five times thinner than the cells of Kaggle&#8217;s grid, so the grid could not have resolved it anyway.</p>
+                        <p>The cart is the one-wheel cart of Fig. 12: a body of 1.5 kg on a spring of 600 N/m and a damper of 8 N s/m over one wheel, driven by a motor whose speed loop holds the set speed. The stout&#8217;s mass, 0.430 kg, is counted in the cart&#8217;s mass, and beyond that the stout and the cart push on each other: the glass&#8217;s acceleration enters (1), and the stout pushes back on the glass with the force \(-\mathrm d\mathbf P/\mathrm dt\), where \(\mathbf P\) is the stout&#8217;s momentum relative to the glass. The front of the glass is the side facing the direction of travel.</p>
+                        <p><b>The numerical method.</b> The stout is 1,002,808 particles, eight in each of the about 125,000 cells of 1.5 mm that it fills; the box around the glass has 370,386 cells in all. In each step the particles hand their velocities to the grid, the grid makes the velocity free of divergence by solving for the pressure (conjugate gradients with a diagonal preconditioner, with fractions of cell faces where the glass cuts them), and the particles take their new velocities back and move. APIC, the affine particle-in-cell method [3], gives each particle not one velocity but a small linear velocity field, so that the hand-over loses as little motion as possible. The step is 2 ms, shorter when a particle would cross 0.8 of a cell; the cart moves in sub-steps of 0.1 ms. On Kaggle&#8217;s Tesla T4 each step took 123 ms, so a ride of 20 s, 10,000 steps, took 20 to 22 minutes. The error to expect from all this is not known in advance; section 7 measures it on the stored rides.</p>
+                        <p>The road is a long hump 10 mm high at 1.5 m, a dip 8 mm deep at 3.5 m, four ripples 5 mm high from 5.5 to 7.5 m and a short bump 10 mm high at 9 m, then flat road; it was ridden at 0.5, 1.0 and 1.5 m/s. Thirty times a second the notebook stored the cart&#8217;s position, speed and heights, the spilled mass, the <em>lean</em> (the height of the surface at the front wall minus its height at the back wall), and the surface itself on a polar grid of 17 rings, at radii \(r = R\,i/16\), \(i = 0, \dots, 16\), and 64 angles, each height rounded to steps of 0.2 mm. These files, generated on 12 November 2026, are what the page plays; their date, notebook version and checksums are in <a href="../data/fig12/2026-11-12/index.json">index.json</a>. The creamy head is drawn on the surface, not computed.</p>
+                    </section>
+
+                    <section class="psec" id="p-mode">
+                        <h3><span class="psec__n">03</span>The first sloshing mode&nbsp;★</h3>
+                        <p class="psec__lead">For small swings the stout&#8217;s rocking is a sum of standing waves, the modes of the glass. The slowest is the one that tips the surface as a whole, and its frequency we can calculate.</p>
+                        <p>Near the surface the Guinness tulip is almost a cylinder: within the top 20 mm its radius changes by less than 1 mm, and that is where the swing lives, because its flow fades with depth as \(e^{-kz}\) over \(1/k = R/\xi_{11} = 21\) mm (see (3) below). We therefore take an upright cylinder of the radius at the surface, \(R = R(h) = 39.1\) mm, filled to the depth \(h = 125\) mm. A liquid without viscosity that starts from rest stays free of rotation (Kelvin&#8217;s circulation theorem), so its velocity is the gradient of a potential, \(\mathbf u = \nabla\phi\), and incompressibility makes the potential harmonic, \(\nabla^2\phi = 0\). In cylindrical coordinates \((r, \theta, z)\), with \(z\) up from the floor, we look for a standing wave that tips the surface once around the glass:</p>
+                        \[ \phi = \cos\omega t\;\cos\theta\;J_1(kr)\,\cosh kz . \tag{2} \]
+                        <p>Here \(J_1\) is the Bessel function of order one; it solves the radial part of Laplace&#8217;s equation for a \(\cos\theta\) dependence, and \(\cosh kz\) the vertical part, with the same \(k\). The hyperbolic cosine in \(z\) makes \(\partial\phi/\partial z = 0\) at the floor, \(z = 0\): no flow through the bottom. The wall allows no flow through it either, \(\partial\phi/\partial r = 0\) at \(r = R\), so</p>
+                        \[ J_1'(kR) = 0 \quad\Rightarrow\quad kR = \xi_{11} = 1.8412 , \tag{3} \]
+                        <p>the first zero of \(J_1'\). At the free surface two conditions hold; for small swings we apply them at the surface&#8217;s rest height \(z = h\) instead of at the moving surface, which changes them only at second order in the swing. The surface moves with the liquid, \(\partial\eta/\partial t = \partial\phi/\partial z\), and the pressure there is the air&#8217;s, which for small motions is Bernoulli&#8217;s law \(\partial\phi/\partial t + g\eta = 0\). Differentiating the second in time and using the first eliminates \(\eta\):</p>
+                        \[ \frac{\partial^2\phi}{\partial t^2} + g\,\frac{\partial\phi}{\partial z} = 0 \quad\text{at } z = h . \tag{4} \]
+                        <p>Putting (2) into (4) gives \(-\omega^2\cosh kh + gk\sinh kh = 0\), that is,</p>
+                        \[ \omega_{11}^2 = \frac{g\,\xi_{11}}{R}\,\tanh\frac{\xi_{11}h}{R} . \tag{5} \]
+                        <p>The same result is in Abramson&#8217;s review of sloshing in cylindrical tanks [2, §2.3].</p>
+                        <div class="pbox">
+                            <span class="pbox__t">Key result · the first sloshing frequency</span>
+                            <p>An upright cylinder of radius \(R\) filled to depth \(h\) rocks its surface at \(\omega_{11}^2 = (g\xi_{11}/R)\tanh(\xi_{11}h/R)\), \(\xi_{11} = 1.8412\). For a glass deeper than its radius, \(\tanh \approx 1\) and the frequency depends on the width alone.</p>
+                        </div>
+                        <div class="pbox">
+                            <span class="pbox__t">Example 3.1 · the pint</span>
+                            <p>With \(R = 0.0391\) m and \(h = 0.125\) m, \(\xi_{11}h/R = 5.886\) and \(\tanh 5.886 = 0.99998\): the depth plays no part. Then \(\omega_{11}^2 = 9.81 \times 1.8412/0.0391 = 461.9\ \mathrm{s^{-2}}\), \(\omega_{11} = 21.49\ \mathrm{rad/s}\) and \(f_{11} = \omega_{11}/2\pi = 3.421\ \mathrm{Hz}\), one swing every 0.292 s. Check of units: \(g/R\) is \(\mathrm{m\,s^{-2}/m = s^{-2}}\), as \(\omega^2\) must be.</p>
+                        </div>
+                        <p>The surface of this mode is \(\eta \propto J_1(kr)\cos\theta\): it rises at the front wall (\(\theta = 0\)), falls by as much at the back wall (\(\theta = \pi\)) and stays at rest along the line across the glass. We call its height at the wall \(q(t)\), so that at the wall \(\eta = q\cos\theta\). A steady push \(a\) along the road tips the surface: in the glass&#8217;s frame the effective gravity \(\mathbf g - \mathbf a_g\) leans back by the angle \(a/g\), and a liquid at rest lies at right angles to its gravity, so the surface falls at the front by \(Ra/g\). In the first mode alone this is the wall height \(q = -\tfrac{2R}{\xi_{11}^2 - 1}\,\tfrac{a}{g} = -0.837\,R\,\tfrac{a}{g}\) (the Fig. 12 note&#8217;s eq. (17) with \(\ddot q = 0\); the higher modes carry the rest of the tilt). We shall need this in section 7.</p>
+                    </section>
+
+                    <section class="psec" id="p-damp">
+                        <h3><span class="psec__n">04</span>How fast a real swing dies</h3>
+                        <p class="psec__lead">Viscosity matters only in a thin skin of stout along the glass, and that skin sets how long the pint rings.</p>
+                        <p>Picture the stout sliding to and fro along the wall a few times a second. The glass holds the layer touching it still, and the layer next to it is dragged along a little less, and so on; but every half swing the slide reverses before the drag can reach far into the liquid. The depth it reaches in one swing is the Stokes layer, \(\delta_s = \sqrt{2\nu/\omega}\), where \(\nu\) is the kinematic viscosity. With water&#8217;s \(\nu = 1.0\times10^{-6}\ \mathrm{m^2/s}\), which the site uses for the stout, and \(\omega_{11} = 21.49\ \mathrm{rad/s}\), the layer is 0.31 mm thick. All the friction of the swing happens there.</p>
+                        <p>The size of the effect follows from a scaling argument. In the layer the velocity changes by about the swing&#8217;s velocity \(U\) over the thickness \(\delta_s\), so the power lost per unit wall area is about \(\rho\nu U^2/\delta_s\), and over the wetted wall, of order \(R^2\), about \(\rho\nu U^2R^2/\delta_s\). The swing&#8217;s energy is about \(\rho U^2R^3\). Their ratio, times the period, is the fraction lost per swing: \(\nu/(\delta_s R\,\omega) \sim \sqrt{\nu/\omega}/R\). With \(\omega^2 \sim g/R\) for a deep glass this is \(\nu^{1/2}R^{-3/4}g^{-1/4}\). The careful calculation for the first mode of a deep cylinder, by laminar boundary-layer theory, gives the logarithmic decrement \(\Lambda\), the natural logarithm of the ratio of two successive swing heights, as [1, eq. (3)]</p>
+                        \[ \Lambda = K\,\nu^{1/2}\,R^{-3/4}\,g^{-1/4} , \qquad K = 3.52 , \tag{6} \]
+                        <p>and experiments on cylinders of many sizes and liquids found the same law with \(K = 5.23\) [1, eq. (13)], half as much again. Since the energy goes as the square of the height, a swing loses the fraction \(1 - e^{-2\Lambda} \approx 2\Lambda\) of its energy per swing. The damping ratio of section 5 is \(\zeta = \Lambda/2\pi\).</p>
+                        <div class="pbox">
+                            <span class="pbox__t">Example 4.1 · how long the pint rings</span>
+                            <p>\(\nu^{1/2}R^{-3/4}g^{-1/4} = 10^{-3} \times 11.37 \times 0.565 = 0.00643\) (dimensionless: \(\mathrm{m\,s^{-1/2}\cdot m^{-3/4}\cdot m^{-1/4}s^{1/2}}\)). So \(\Lambda = 0.0226\) and \(\zeta = 0.0036\) by theory, \(\Lambda = 0.0336\) and \(\zeta = 0.0053\) by experiment. In section 5 we show that the swing&#8217;s height falls by the factor \(e\) in the time \(\tau = 1/(\zeta\omega_{11})\): 12.9 s by theory and 8.7 s by experiment, that is 44 or 30 swings. This is a clean liquid in a smooth glass held still; a real head of foam damps more (the Fig. 12 note estimates four to seven times more), but still over seconds, not a fraction of one.</p>
+                        </div>
+                        <p><b>The cart damps too.</b> The glass is not held still: it rides on a cart whose speed loop and rolling drag resist any change of speed. When the swing pushes the glass to and fro, the motor pushes back, and some of the swing&#8217;s energy goes into the motor and the drag. We measured this with the site&#8217;s reduced model of the stout, three sloshing modes on the same cart and road (<code>tools/fig12/cart_damping.cjs</code>): with the stout&#8217;s own damping switched off, its swing after the last bump dies with \(\zeta = 0.0067\) to \(0.0074\) at the three speeds; with the wall&#8217;s 0.0053 added, \(\zeta = 0.012\) to \(0.013\). So in Kaggle&#8217;s setup, which has no wall friction, the swing should die with \(\zeta \approx 0.007\), the height falling by \(e\) in about 7 s.</p>
+                    </section>
+
+                    <section class="psec" id="p-phase">
+                        <h3><span class="psec__n">05</span>One swing in phase space</h3>
+                        <p class="psec__lead">Two numbers tell where a swing is: how far it is out, and how fast it is moving. Plotted against each other they turn the swing into a path.</p>
+                        <p>For small swings every mode is a harmonic oscillator: its height \(q\) has a restoring acceleration \(-\omega^2 q\) from gravity, as (4) and (5) say, and a little damping adds a drag proportional to its rate. Once the road is flat again the first mode swings freely and obeys</p>
+                        \[ \ddot q + 2\zeta\omega_{11}\,\dot q + \omega_{11}^2\,q = 0 . \tag{7} \]
+                        <p>We draw its state as the point \((q, \dot q/\omega_{11})\), the <em>phase space</em> of the swing. Dividing the rate by \(\omega_{11}\) gives both axes the unit of a length, and it makes an undamped swing a circle: with \(\zeta = 0\), \(q = A\cos\omega_{11}t\) and \(\dot q/\omega_{11} = -A\sin\omega_{11}t\), so \(q^2 + (\dot q/\omega_{11})^2 = A^2\). The radius of the circle is the swing&#8217;s amplitude, and the point goes round once per swing.</p>
+                        <p>With damping, multiply (7) by \(\dot q\). The first and third terms are the time derivative of \(E = \tfrac12(\dot q^2 + \omega_{11}^2q^2)\), which is the swing&#8217;s energy divided by a constant mass:</p>
+                        \[ \frac{\mathrm d}{\mathrm dt}\,\tfrac12\big(\dot q^2 + \omega_{11}^2 q^2\big) = -2\zeta\omega_{11}\,\dot q^2 . \tag{8} \]
+                        <p>The right side is never positive: the energy only drains. Over one swing of a nearly free oscillator the two parts of \(E\) are equal on average, so \(\dot q^2\) averages \(E\), and (8) becomes \(\mathrm dE/\mathrm dt = -2\zeta\omega_{11}E\) on average: \(E \propto e^{-2\zeta\omega_{11}t}\). The amplitude, the square root of the energy, falls as \(e^{-\zeta\omega_{11}t}\). The exact solution of (7) says the same: \(q = A e^{-\zeta\omega_{11}t}\cos(\omega_d t + \varphi)\) with \(\omega_d = \omega_{11}\sqrt{1 - \zeta^2}\).</p>
+                        <div class="pbox">
+                            <span class="pbox__t">Key result · the spiral and its time</span>
+                            <p>In the plane \((q, \dot q/\omega_{11})\) a free swing is a circle when undamped and an inward spiral when damped. Its radius, the amplitude, falls by the factor \(e\) in the time \(\tau = 1/(\zeta\omega_{11})\); from one swing to the next it falls by \(e^{-2\pi\zeta}\) (for small \(\zeta\)).</p>
+                        </div>
+                        <p>The second figure of the page is this plane for the stored ride. The stout on this cart, without wall friction as on Kaggle, would after a bump draw a tight spiral of some sixteen turns before its radius halves (\(\ln 2/2\pi\zeta\) turns with \(\zeta = 0.007\)). Reading \(\tau\) off the stored data gives \(\zeta = 1/(\omega_{11}\tau)\), and that is how section 7 measures the stored rides.</p>
+                    </section>
+
+                    <section class="psec" id="p-read">
+                        <h3><span class="psec__n">06</span>Reading the mode from stored surfaces</h3>
+                        <p class="psec__lead">The file holds heights on 17 rings of 64 points, 30 times a second, rounded to 0.2 mm. From these we want \(q\) and \(\dot q\) without adding errors of our own.</p>
+                        <p><b>Which ring.</b> Near the wall the notebook could not count particles reliably, because the grid&#8217;s columns there are cut by the glass and hold too few. Within 5.25 mm of the wall (3.5 cells) it therefore did not use the particles at all: it extended the heights of columns further in straight out along the radius. On the stored grid this concerns rings 14, 15 and 16. The stored data show a second fault further in: at rest, when the surface is level, rings 0 to 10 lie at 126.2 mm, but rings 11 and 12 (\(r = 27\) to \(29\) mm, near the radius of the tulip&#8217;s waist below) lie 8 mm lower and ring 13 1.2 mm lower, the same in every ride. Ring 13, at \(r = 31.8\) mm, is the outermost ring made from particles; its offset is the same all round it (to 0.08 mm), and a constant offset drops out of \(q\) below, so we read the mode there.</p>
+                        <p><b>The height \(q\).</b> Write the stored height around ring 13 as a Fourier series in the angle, \(\eta(\theta) = c_0 + \sum_m (a_m\cos m\theta + b_m\sin m\theta)\). On the 64 equally spaced angles \(\theta_j = 2\pi j/64\) the cosines are orthogonal: \(\sum_j\cos\theta_j\cos m\theta_j = 0\) for every \(m \ne 1\) the grid can hold, and \(\sum_j\cos^2\theta_j = 32\). So the sum \(\tfrac{2}{64}\sum_j\eta(\theta_j)\cos\theta_j\) is exactly \(a_1\): a lift of the whole surface, \(c_0\), drops out because \(\sum_j\cos\theta_j = 0\), and so do the sideways swing \(b_1\) and everything that varies as \(\cos 2\theta\), \(\cos 3\theta\) and so on. The first mode&#8217;s shape across the glass is \(J_1(kr)\), so at ring 13 its height is smaller than at the wall by \(J_1(\xi_{11}\,13/16)/J_1(\xi_{11})\). Undoing that,</p>
+                        \[ q = S\,\frac{2}{64}\sum_{j=0}^{63}\eta(r_{13}, \theta_j)\cos\theta_j , \qquad S = \frac{J_1(\xi_{11})}{J_1(\xi_{11}\,13/16)} = 1.044 . \tag{9} \]
+                        <p>Two other modes also vary as \(\cos\theta\): the second and third standing waves with the same angular shape, \(kR = 5.331\) and \(8.536\), which swing at 5.82 and 7.37 Hz by (5). They pass through (9) too; the fit of section 7 tells them apart by their frequency. The lean the Readings show, front height minus back height at the wall, is \(\Delta\eta = 2(a_1 + a_3 + a_5 + \dots)\) of the outer ring: \(2q\) for a pure first mode, but moved by every odd harmonic, by the extended outer rings, and by any error at just those two points.</p>
+                        <p><b>The rounding.</b> Each stored height is the true one rounded to the nearest 0.2 mm, an error spread evenly between \(-0.1\) and \(+0.1\) mm, with a root mean square of \(0.2/\sqrt{12} = 0.058\) mm. The lean, a difference of two rounded heights, can be off by up to 0.2 mm; over all 1,803 stored frames the stored lean, taken by Kaggle before rounding, and the lean of the rounded grid differ by at most 0.19 mm. In (9) the 64 errors are averaged: if they are independent, the error of the sum is \(\tfrac{2}{64}\sqrt{\sum_j\cos^2\theta_j}\times0.058 = \tfrac{2}{64}\sqrt{32}\times0.058 = 0.010\) mm, and of \(q\) 0.011 mm.</p>
+                        <p><b>The rate \(\dot q\)&nbsp;★.</b> The file has no rates, only frames \(h = 1/30\) s apart, 8.8 frames per swing. The usual estimate, the central difference \((q_{n+1} - q_{n-1})/2h\), then reads the rate of a swing at \(\omega_{11}\) too low by the factor \(\sin(\omega_{11}h)/(\omega_{11}h)\). To see why, take a pure swing, \(q_n = A\cos(\omega_{11}nh + \varphi)\). The identity \(\cos(x + y) - \cos(x - y) = -2\sin x\sin y\) gives</p>
+                        \[ q_{n+1} - q_{n-1} = -2A\sin(\omega_{11}nh + \varphi)\,\sin\omega_{11}h = \frac{2\sin\omega_{11}h}{\omega_{11}}\;\dot q(t_n) . \tag{10} \]
+                        <p>So the page divides by \(2\sin\omega_{11}h\) instead of \(2\omega_{11}h\):</p>
+                        \[ p_n = \frac{q_{n+1} - q_{n-1}}{2\sin\omega_{11}h} , \tag{11} \]
+                        <p>which equals \(\dot q/\omega_{11}\) exactly for a swing at \(\omega_{11}\), so a free undamped swing would draw a true circle. With \(\omega_{11}h = 21.49/30 = 0.716\) the plain central difference would have been 8 % low (\(\sin 0.716/0.716 = 0.917\)). A swing at another frequency is read with an error: the second cos θ mode, at 5.82 Hz, comes out 16 % short in \(\dot q/\omega_{11}\), the third, at 7.37 Hz, 29 % short. Only the first mode is drawn true.</p>
+                        <div class="pbox">
+                            <span class="pbox__t">Key result · reading the swing from stored frames</span>
+                            <p>The first mode&#8217;s height is the cos θ part of the outermost ring built from particles, scaled to the wall by the mode&#8217;s shape, (9); it ignores lifts of the whole surface and errors at single points. Its scaled rate is (11). The stored frames, 30 a second, are more than twice as fast as the first three modes that tip the wall as cos θ (3.42, 5.82 and 7.37 Hz), so none of them is mistaken for a slower one.</p>
+                        </div>
+                    </section>
+
+                    <section class="psec" id="p-measured">
+                        <h3><span class="psec__n">07</span>What the stored rides show</h3>
+                        <p class="psec__lead">After the last bump, at 9 m, the road is flat and the cart rolls at a steady speed. By section 4 the stout should now ring for several seconds. We measure what the stored rides do instead.</p>
+                        <p><b>The method.</b> For every frame we take \(q\) from (9). From two frames after the cart leaves the last bump we fit 3 s of it, 90 frames, with the free decay of section 5 plus a slow drift, \(q = Ae^{-t/\tau}\cos(\omega t + \varphi) + c + st\), by least squares (<code>tools/fig12/kaggle_decay.py</code>). For given \(\tau\) and \(\omega\) the fit is linear in the other four numbers; \(\tau\) and \(\omega\) are found by a search over a fine grid. On made-up decays with rounding noise and drift the fit returns the true \(\tau\) within 1.5 %, from 0.32 s to 12.9 s.</p>
+                        <p><b>The pace is right.</b> The fitted frequency is 3.32 Hz in the 1.0 m/s ride and 3.41 Hz in the 1.5 m/s ride, within 3 % of the 3.421 Hz of (5). The 0.5 m/s ride swings only 0.3 mm after its last bump, too little to fit (its fit lands at 2.6 Hz, outside any mode), and we leave it out.</p>
+                        <p><b>The swing dies far too fast.</b> The fitted times are \(\tau = 0.48\) s at 1.0 m/s and 0.34 s at 1.5 m/s. Read on rings 8 and 10, which are level at rest, the swing dies even faster (\(\zeta = 0.14\) to 0.21); ring 13 gives the slowest decay of the three, so the numbers below are the ones most favourable to the stored data.</p>
+                        <div class="pbox">
+                            <span class="pbox__t">Example 7.1 · the damping of the stored stout</span>
+                            <p>At 1.5 m/s, \(\zeta = 1/(\omega\tau) = 1/(2\pi\times3.407\times0.344) = 0.136\); at 1.0 m/s, 0.100. The same cart and road with the reduced model gave 0.007 from the cart alone (section 4), so the stored swing dies 14 to 19 times too fast for Kaggle&#8217;s own setup, and 8 to 11 times too fast even against the cart and the real wall together (0.012). Its height halves in 0.24 s, less than one swing; on this cart it should take about 5 s.</p>
+                        </div>
+                        <p>The cart&#8217;s share is already counted, and (1) has no other physical loss: no viscosity and no wall friction. The rest must therefore come from the numerical method, the hand-over between particles and grid or the pressure solution, or from how the surface is built from the particles. APIC was designed to avoid the strong dissipation of plain particle-in-cell transfers [3, abstract], so a damping this large points at a fault to be found in the notebook rather than at the method itself. That is an inference; the test proposed in section 10 separates the solver from everything else.</p>
+                        <p><b>The lean at the wall drifts.</b> Over the last 5 s of the 1.5 m/s ride, at a steady speed on a flat road, the stored lean averages 6.36 mm while \(2q\) from (9) averages 1.21 mm. In the other two rides the lean averages 1.90 and 0.56 mm over the same span.</p>
+                        <div class="pbox">
+                            <span class="pbox__t">Example 7.2 · what push a 6 mm lean would need</span>
+                            <p>By section 3 a steady push \(a\) tilts the whole surface, \(\eta = -(a/g)\,r\cos\theta\), so the lean at the wall is \(\Delta\eta = 2Ra/g\). A lean of 6.36 mm would need \(a = 6.36\times10^{-3} \times 9.81/(2 \times 0.0391) = 0.80\ \mathrm{m/s^2}\), held for seconds. The stored cart speed is 1.5000 m/s in every frame of those 5 s, so its acceleration is below 0.00002 m/s². The drift is not the stout answering a push.</p>
+                        </div>
+                        <p>Two further facts point at the reconstruction of the surface near the wall. At rest, at the start of every ride, the stored outer ring sits about 7 mm above the axis (133 mm against 126 mm in the 0.5 m/s ride), although a liquid at rest is level. And the outer three rings are not data but the straight extension described in section 6, while rings 11 and 12 sit 8 mm too low at rest. Both are inferences about the cause; the particles that would settle it were not stored.</p>
+                    </section>
+
+                    <section class="psec" id="p-play">
+                        <h3><span class="psec__n">08</span>Playing stored data back</h3>
+                        <p class="psec__lead">A page that plays computed data has three rules: show only what was computed, never jump, and say plainly when it shows something else.</p>
+                        <p><b>Only stored frames.</b> At ride time \(t\) the page shows frame \(n = \mathrm{round}(t f_s)\), \(f_s = 30\) per second, and never a blend of two frames: a blend of two stored surfaces is not a surface anybody computed. The speed control likewise stops only at speeds that exist: 0.5, 1.0 and 1.5 m/s are computed on Kaggle (filled dots), 2.0 and 2.5 m/s are not (hollow dots).</p>
+                        <p><b>No jumps.</b> The playback rate \(r\), seconds of ride shown per second of the clock, is the smaller of two speeds:</p>
+                        \[ r = \min\!\big(r_g,\ \sqrt{\ell/\tau_e}\,\big) , \qquad \tau_e = 3\ \mathrm s . \tag{12} \]
+                        <p>The first, \(r_g\), comes from a governor, a first-order lag of time constant \(\tau_g = 0.45\) s towards a goal: \(\dot r_g = (r_\text{goal} - r_g)/\tau_g\), which the page steps exactly between two frames \(\Delta t\) apart, \(r_g \to r_g + (r_\text{goal} - r_g)(1 - e^{-\Delta t/\tau_g})\). The goal is \(1 - 0.8c\), where \(c\), the closeness, rises smoothly from 0 to 1 over the last 28 % of the computed speeds on the speed control and is 1 beyond them; so the ride slows to a fifth of real time at the edge of what was computed. The second term caps the rate near the end of the computed time; \(\ell\) is the ride time left. While the cap holds, \(\mathrm d\ell/\mathrm dt_\text{clock} = -\sqrt{\ell/\tau_e}\). The cap starts to act when \(\ell = \tau_e\), where it equals 1. Separating the variables, \(\mathrm d\ell/\sqrt\ell = -\mathrm dt_\text{clock}/\sqrt{\tau_e}\), and integrating from \(\ell = \tau_e\) at \(t_\text{clock} = 0\) gives \(\sqrt\ell = \sqrt{\tau_e} - t_\text{clock}/(2\sqrt{\tau_e})\), so</p>
+                        \[ r = \sqrt{\ell/\tau_e} = 1 - \frac{t_\text{clock}}{2\tau_e} . \tag{13} \]
+                        <div class="pbox">
+                            <span class="pbox__t">Key result · stopping exactly at the end</span>
+                            <p>Under the cap in (12) the picture slows down at a constant rate, from real time to rest in \(2\tau_e = 6\) s of the clock while it plays the last 3 s of the ride, and it reaches rest exactly at the last stored frame. A law with a softer approach, such as \(r \propto \ell\), would never arrive: the time left would only halve and halve again.</p>
+                        </div>
+                        <p><b>Saying what is shown.</b> On a hollow stop the page shows a live preview computed in your browser by the site&#8217;s own coarse solver (the 4 mm grid of Fig. 12 with about 25,700 particles and half the glass mirrored; its free swing is 3.21 Hz, 6 % slow). It runs in a background thread at about a fifth of real time, so the ride slows to wait for its frames. A label over the figure says that it is a preview and not Kaggle&#8217;s result. Only when no stored frame is left and the rate has eased to zero does the notice fade in that shows the way new data would take, from this page through the link <code>kaggle-bridge</code> to Kaggle&#8217;s graphics card and back; that link is not switched on yet, and the notice says so.</p>
+                    </section>
+
+                    <section class="psec" id="p-screen">
+                        <h3><span class="psec__n">09</span>What the picture shows</h3>
+                        <p>The glass, the cart and the road are drawn by the same code as Fig. 12 (<code>stout-view.js</code>), through a camera that looks down at 16° and rides with the cart. The surface of the stout is the stored grid: each of the 17 × 64 nodes is drawn at its stored height exactly, and between nodes the height is interpolated along straight lines. The outer three rings are drawn as stored, though they are the notebook&#8217;s straight extension and not particle data, and so are rings 11 and 12, which sit 8 mm too low even at rest: the faint trench in the head about 10 mm in from the wall is a fault of the stored data (section 6). The cream head is a band 12 mm thick laid on that surface: drawing, not data. The cart&#8217;s position, speed and heights are the stored ones of the frame on screen. The phase space below the cart is the plane of section 5 with \(q\) from (9) and \(\dot q/\omega_{11}\) from (11): the whole ride pale, the last second dark, the frame on screen as a dot, and a dashed circle whose radius is the present amplitude \(\sqrt{q^2 + (\dot q/\omega_{11})^2}\), the path an undamped swing would keep to. The data panel (the Data tab) lists every one of these numbers with three proofs: the stored value, the value worked out again from stored inputs, and the colour read back from the picture.</p>
+                    </section>
+
+                    <section class="psec" id="p-limits">
+                        <h3><span class="psec__n">10</span>Limits, and the next model</h3>
+                        <p>The stored rides have the right pace and the wrong damping, and their lean at the wall can be off by several millimetres (6.4 mm against a first-mode lean of 1.2 mm in Example 7.2). Two corrections are needed before more rides are worth computing.</p>
+                        <p>First, the method&#8217;s own losses must be found and removed. The test is the one this note used, made clean: tip the stout in a glass at rest and let it go, with no cart and no road, and measure \(\zeta\) from the decay of \(q\). With the cart gone, nothing physical in (1) damps the swing, so whatever damping the solver shows is its own error; it should be far below the wall&#8217;s 0.005 and shrink as the grid is refined. Second, the real wall friction must then be put back. The Stokes layer, 0.31 mm, is five times thinner than a 1.5 mm cell, so no affordable grid resolves it; its effect has to be added as a model, a drag on the liquid next to the wall chosen so that (6) is reproduced. The surface near the wall should be rebuilt from the particles there, not extended from the columns further in, and \(q\) from (9) is the safer reading to store and show than the lean at two wall points.</p>
+                        <p>Beyond that lie the parts no model here contains: the foam of the head, which damps more than the wall does, and the nitrogen bubbles that rise through a fresh pint.</p>
+                        <div class="pbox pbox--ex">
+                            <span class="pbox__t">Problems</span>
+                            <p><b>10.1</b> With \(\zeta = 0.0053\), after how many swings has the amplitude of the pint halved? (Answer: \(\ln 2/(2\pi\zeta) \approx 21\).)</p>
+                            <p><b>10.2</b> Show from (10) that the plain central difference \((q_{n+1} - q_{n-1})/2h\) reads the rate of a swing at \(\omega\) too low by \(\sin(\omega h)/(\omega h)\). How many frames a second keep this error under 1 % at 3.421 Hz?</p>
+                            <p><b>10.3</b> By (6) the damping ratio scales as \(R^{-3/4}\). A glass twice as wide, filled as deep: how much longer does it ring, measured in seconds? (Mind that \(\omega_{11}\) changes too. Answer: \(\tau \propto R^{5/4}\), so \(2^{5/4} = 2.38\) times longer.)</p>
+                        </div>
+                    </section>
+
+                    <section class="psec" id="p-refs">
+                        <h3><span class="psec__n">11</span>Sources</h3>
+                        <ol class="prefs">
+                            <li>R. L. Stephens, H. W. Leonard, T. W. Perry, &#8220;Investigation of the damping of liquids in right-circular cylindrical tanks, including the effects of a time-variant liquid depth&#8221;, NASA TN D-1367 (1962), <a href="https://ntrs.nasa.gov/api/citations/19620004069/downloads/19620004069.pdf">NTRS</a>: summary, and pp. 6&#8211;7, eqs. (2)&#8211;(3), and eq. (13).</li>
+                            <li>H. N. Abramson (ed.), <i>The Dynamic Behavior of Liquids in Moving Containers</i>, NASA SP-106 (1966), <a href="https://ntrs.nasa.gov/api/citations/19670006555/downloads/19670006555.pdf">NTRS</a>: §2.3, the circular cylindrical tank, pp. 21&#8211;22.</li>
+                            <li>C. Jiang, C. Schroeder, A. Selle, J. Teran, A. Stomakhin, &#8220;The affine particle-in-cell method&#8221;, <i>ACM Trans. Graph.</i> 34 (4), 51 (2015), <a href="https://math.ucdavis.edu/~jteran/papers/JSSTS15.pdf">PDF</a>: abstract and §1.</li>
+                            <li>The lecture note of <a href="beer-slosh.html#paper">Fig. 12</a> on this site: section 4, eq. (17), the first mode under a push; section 5, damping; section 14, the foam estimate.</li>
+                            <li>The Kaggle notebook that computed the rides, version 3, <a href="https://www.kaggle.com/code/numakoudsie/guinness-on-a-cart-stout-sloshing">kaggle.com</a> (private: the link opens only for the site&#8217;s owner): the solver, <code>polar_surface</code> and <code>record</code>; and the stored data, <a href="../data/fig12/2026-11-12/index.json">index.json</a>.</li>
+                        </ol>
+                        <p>Sources 1&#8211;3 were opened and read for this note at the places cited; in source 1 the equations are printed as images, and the law (6) and its two constants are stated in its text. Source 2 was read for the setting of the problem; the formula (5) is derived here.</p>
+                    </section>
+                </div>
+            </div>
+        </article>
     </main>
 
     <footer class="sim-foot">
@@ -125,10 +293,12 @@
         <span><a href="../simulations.html">All simulations ↑</a> · <a href="../index.html">Home page</a></span>
     </footer>
 
+    <script src="../scripts/fold.js"></script>
     <script src="../scripts/sim.js"></script>
     <script src="../scripts/dataset.js"></script>
     <script src="../scripts/guinness-glass.js"></script>
     <script src="../scripts/stout-view.js"></script>
+    <script src="../scripts/kaggle-flow.js"></script>
     <script src="../scripts/guinness-playback.js"></script>
 </body>
 </html>
