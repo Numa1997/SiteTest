@@ -120,7 +120,7 @@ You are continuing work from a previous chat. That chat is gone; this file is th
 | Gate analysis | done | `tools/fig12/of/analyse_swing.py` (`--pair slip noslip`) | `410e59a` |
 | Gate batch 1 (8 cases) | done, gates fail | GitHub run 43116028422, `notes/fig12/of-runs/` | 1.1 coarse still; medium mass +3.6e-4 (unexplained). 1.2 fails on all meshes: solver 0.0040/0.0033/0.0012, friction estimate 0.0036/0.0009/0.0067 (pairs had different time steps) |
 | Time-step share | measured | local coarse slip 4 s | zeta = 0.0037 + 1.59/s x dt; 0.0016 at 1 ms, 0.0004 at 0.25 ms; the rest is the space grid |
-| Gate batch 2 (4 cases) | running | `notes/fig12/of-request.json` | medium + fine, slip/no-slip, fixed 0.25 ms, 6 s; workflow now fails when a case does not reach its end time |
+| Gate batch 2 (4 cases) | cancelled by the user (12 Nov, run 43217272678) | `notes/fig12/of-request.json` | medium + fine, slip/no-slip, fixed 0.25 ms, 6 s, about 4-5 h. The user: "kill all runs requiring this amount of time". Do not restart runs of this length without the user's yes |
 | Foam head, cart friction sources, spill check, swirl | not started | — | Phase 1.4–1.5, 1.3 |
 | Pipeline packs/release/Cloudflare fetch | not started | — | Phase 2 |
 | Playback page + phase space | not started | — | Phase 3 |
@@ -129,7 +129,7 @@ You are continuing work from a previous chat. That chat is gone; this file is th
 Local OpenFOAM install (fresh container): `sudo sh -c "wget -q -O - https://dl.openfoam.org/gpg.key > /etc/apt/trusted.gpg.d/openfoam.asc"; echo "deb [arch=amd64] http://dl.openfoam.org/ubuntu noble main" > /etc/apt/sources.list.d/openfoam.list; apt-get update; apt-get install -y openfoam13 bc; useradd -m foam`.
 
 ## 11. Next steps
-1. **Next action:** when batch 2 lands in `notes/fig12/of-runs/*-dt025/`, run `python3 tools/fig12/of/analyse_swing.py --pair <slip> <noslip>` for medium and fine. Gate 1.2 needs solver damping below 0.1 x friction (about 0.0005). If fine still fails, the space grid dominates: try a finer surface band or a higher-order time scheme (CrankNicolson), measured the same way.
+1. **Next action:** decide with the user how to proceed given the cost (fine mesh at 0.25 ms: about 8.6 h per 12 s ride, about 74,000 runner-hours for 8,580 rides; medium about 2.1 h per ride, 38 days with 20 jobs). Batch 2 was cancelled. Once a cheaper route is agreed: when results land in `notes/fig12/of-runs/*-dt025/`, run `python3 tools/fig12/of/analyse_swing.py --pair <slip> <noslip>` for medium and fine. Gate 1.2 needs solver damping below 0.1 x friction (about 0.0005). If fine still fails, the space grid dominates: try a finer surface band or a higher-order time scheme (CrankNicolson), measured the same way.
 2. Explain the medium rest run's mass gain (+3.6e-4) and the stout carried out through the top during swings (fraction smeared into the air); gate 1.5.
 3. Gates 1.3 (swirl onset vs Royon-Lebeaud, Hopfinger & Cartellier 2007), 1.4 (foam head, cart friction terms with sources), 1.6 (108-ride proof set).
 4. Phase 2: measure one 12 s ride on a runner (fine mesh at a fixed small step may exceed the 6 h job limit: split rides into restarts), state total runner hours, pilot release files -> Cloudflare build fetch.
