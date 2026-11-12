@@ -443,3 +443,35 @@ processor's solver at 4 mm (half glass, slow motion) and says so in the caption.
   Foam, Sauret's (w/τ_f) scaled from cell width w to radius R: ζ_f 0.019–0.037 for the pint (inference). Walked at 5 mm with
   a second harmonic of 0.3: the mug spills from 1.5 steps/s, the pint at 1.5 and 1.75 steps/s, with a head only at 1.75 (3 ml).
 - The mug is run in the live model by the tool, not offered on the page.
+
+## Computed on Kaggle, played back (12 November 2026)
+
+`public/simulations/guinness-kaggle.html` with `public/scripts/guinness-playback.js` plays rides of the pint that were
+computed ahead of time on Kaggle; the page computes nothing physical. It is linked from the lede of Fig. 12.
+
+**Data.** `public/data/fig12/2026-11-12/` (named by the date Kaggle computed it): `rides.json` (715,166 bytes) and
+`index.json` (Kaggle notebook `numakoudsie/guinness-on-a-cart-stout-sloshing` version 3, Tesla T4, output SHA-256,
+measured times, SHA-256 of `rides.json`). The same rides stay in that notebook's output (`guinness.html`). Per frame
+(30 a second, 601 frames per 20 s ride): cart x, speed, body and axle heights, lean (front minus back wall, mm), spilled
+mass (g), and the stout surface on StoutView's polar grid (17 rings x 64 angles) as uint8 in 0.2 mm steps about the fill,
+zlib-packed and base64; plus the road profile every 5 mm.
+
+**Solver (on Kaggle, not in the repository).** Taichi 1.7.4 on CUDA: incompressible flow with a free surface, APIC
+particles on a staggered grid of 1.5 mm (370,386 cells, 1,002,808 particles), pressure by conjugate gradients with
+cut-cell face fractions for the glass R(z), in the glass's frame; the cart is a port of `Cart` (stout-cart.js), coupled
+both ways (F = -dP/dt). No wall friction and no viscosity yet: the sloshing loses energy only through the method's own
+losses, not yet measured. The head is drawn.
+
+**Rides.** One road (hump 10 mm x 0.6 m at 1.5 m, dip 8 mm x 0.6 m at 3.5 m, four ripples 5 mm x 0.5 m from 5.5 to 7.5 m,
+bump 10 mm x 0.25 m at 9 m, then flat), speeds 0.5, 1.0, 1.5 m/s, 20 s each, motor holding the set speed, no active
+suspension. Measured on Kaggle: 10,000 steps per ride, 21.8 / 20.2 / 20.3 min, 123 ms a step; lean up to 4.5 / 8.7 /
+8.0 mm; cart speed within +-0.03 m/s; nothing spilled.
+
+**Edge of the computed data.** Only computed rides can be chosen (the speed control has one position per ride; changing
+it cross-fades the picture over 0.35 s). In the last 3 s of a ride the playback rate falls as sqrt(time left / 3 s), so
+the picture slows smoothly and stops exactly at the end of the data; only then a pop-up fades in that shows the pipeline
+(page -> kaggle-bridge -> Kaggle GPU -> stored -> back) and says that computing on request is not yet connected; "Ride
+again" cross-fades to the start. Not yet built: the live browser preview and fetching new rides through kaggle-bridge.
+
+**Tested** in headless Chromium at 360, 390, 1024 and 1440 px: no errors, no sideways scroll, playback advances, the
+slow-down ends at 20.0 s and the pop-up shows.

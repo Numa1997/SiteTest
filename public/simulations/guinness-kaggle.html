@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Pint of Guinness on a One-Wheel Cart, computed on Kaggle · Numa Koudsie</title>
+    <meta name="description" content="A pint of Guinness in its tulip glass rides a one-wheel cart over a gentle road. The stout was computed ahead of time on Kaggle&#8217;s GPU, a million particles in the real glass; this page only plays the stored rides back in 3D.">
+    <meta name="theme-color" content="#f5f1ea">
+    <link rel="stylesheet" href="../styles/sim.css">
+    <link rel="stylesheet" href="../styles/data.css">
+    <link rel="stylesheet" href="../styles/fold.css"><script src="../scripts/flip.js"></script>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%237a1f2b'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='38' fill='%23f5f1ea'%3EN%3C/text%3E%3C/svg%3E">
+    <style>
+        .stage__canvas canvas { display: block; width: 100%; height: 100%; }
+        .kpop { position: absolute; inset: auto 4% 6% 4%; background: rgba(252,248,240,0.96); border: 1.5px solid #3f2c23; border-radius: 12px; padding: 14px 16px; opacity: 0; transition: opacity 0.6s ease; box-shadow: 0 4px 18px rgba(0,0,0,0.12); }
+        .kpop.is-on { opacity: 1; }
+        .kpop__t { font: 400 22px/1.2 'Instrument Serif', serif; margin: 0 0 6px; color: #5a0f21; }
+        .kpop__d { width: 100%; height: auto; display: block; margin: 4px 0; }
+        .kpop__x { font-size: 13.5px; line-height: 1.5; color: #6f5b4c; margin: 4px 0 10px; }
+        .k-box { fill: #f8f2e6; stroke: #8b8079; stroke-width: 1.2; } .k-on { fill: #f1e2c4; stroke: #7d1d2f; }
+        .k-arrow { stroke: #8b8079; stroke-width: 1.4; fill: none; stroke-dasharray: 4 4; animation: kflow 1.2s linear infinite; }
+        @keyframes kflow { to { stroke-dashoffset: -16; } }
+        .kread { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin: 0; font-family: 'IBM Plex Mono', monospace; }
+        .kread dt { font-size: 11px; color: var(--ink-3); } .kread dd { margin: 0; font-size: 16px; }
+        #cv { transition: opacity 0.35s ease; }
+    </style>
+</head>
+<body>
+    <header class="sim-top">
+        <span style="display:inline-flex;align-items:center;gap:14px"><a href="../index.html" aria-label="Phyein Usul, home page" style="display:inline-block;line-height:0"><img src="../images/phyein-usul-mark.svg" alt="Phyein Usul" width="87" height="48" /></a><a href="../simulations.html">← All simulations</a></span>
+        <nav class="sim-nav" aria-label="Simulations">
+            <span>Fig.</span>
+            <a href="Circular Wave Interference Visualization.html">1</a>
+            <a href="Double Pendulum.html">2</a>
+            <a href="Interactive Double-Slit Experiment Visualization.html">3</a>
+            <a href="Transverse and longitudinal waves.html">4</a>
+            <a href="water-wave.html">5</a>
+            <a href="wave-interference.html">6</a>
+            <a href="phasor-sums.html">7</a>
+            <a href="draw-decompose.html">8</a>
+            <a href="driven-oscillator.html">9</a>
+            <a href="wind-turbine.html">10</a>
+            <a href="pendulum-control.html">11</a> <a href="beer-slosh.html">12</a> <a href="momentum-spirographs.html">13</a>
+        </nav>
+    </header>
+
+    <main class="sim">
+        <noscript><p class="sim-error"><b>This simulation needs JavaScript.</b> <a href="../simulations.html">Back to the simulations</a></p></noscript>
+        <div class="sim__head">
+            <p class="sim__num">Fig. 12 · computed on Kaggle · played back</p>
+            <h1>A Pint of Guinness on a One-Wheel Cart<span class="dot">.</span></h1>
+            <p class="sim__lede">The same pint and cart as <a href="beer-slosh.html">Fig. 12</a>, but nothing is computed on your device. The stout was computed ahead of time on Kaggle&#8217;s graphics card, a million particles in the real glass, for twenty seconds of ride over a gentle road at three speeds. This page only plays those stored rides back, the same on every device.</p>
+        </div>
+
+        <div class="sim__grid">
+            <figure class="stage">
+                <div class="stage__canvas" id="stage" style="--ar: 14 / 13; --ar-m: 1 / 1.05; position: relative;">
+                    <canvas id="cv" aria-label="A pint of stout on a one-wheel cart rolling over a gentle road; the surface of the stout rocks, played back from stored Kaggle data"></canvas>
+                    <div id="pop" class="kpop" hidden>
+                        <p class="kpop__t">The computed ride ends here</p>
+                        <svg viewBox="0 0 520 90" class="kpop__d" aria-hidden="true">
+                            <g font-family="IBM Plex Mono, monospace" font-size="11" text-anchor="middle">
+                                <rect x="4" y="28" width="84" height="34" rx="6" class="k-box k-on"/><text x="46" y="49">this page</text>
+                                <rect x="112" y="28" width="96" height="34" rx="6" class="k-box"/><text x="160" y="49">kaggle-bridge</text>
+                                <rect x="232" y="28" width="96" height="34" rx="6" class="k-box"/><text x="280" y="49">Kaggle GPU</text>
+                                <rect x="352" y="28" width="72" height="34" rx="6" class="k-box"/><text x="388" y="49">stored</text>
+                                <rect x="446" y="28" width="70" height="34" rx="6" class="k-box k-on"/><text x="481" y="49">back here</text>
+                                <path d="M88 45h24M208 45h24M328 45h24M424 45h22" class="k-arrow"/>
+                            </g>
+                        </svg>
+                        <p class="kpop__x">Every picture so far was computed on Kaggle and stored on this site. Asking Kaggle for more on the spot (the bridge in the middle) is being built; until then the ride starts again.</p>
+                        <button type="button" class="btn" id="again">Ride again</button>
+                    </div>
+                </div>
+                <figcaption class="stage__cap">
+                    <span><b>Fig. 12</b> · stored Kaggle data, played back · nothing computed here</span>
+                    <span id="cap-t">—</span>
+                </figcaption>
+            </figure>
+
+            <aside class="panel" aria-label="Controls">
+                <div class="panel__group">
+                    <p class="panel__label">Run</p>
+                    <div class="actions"><button type="button" class="btn" id="play">Pause</button></div>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>Time</span><output id="t-out" for="tbar"></output></span>
+                        <input type="range" id="tbar" min="0" max="1000" step="1" value="0">
+                    </label>
+                </div>
+                <div class="panel__group">
+                    <p class="panel__label">Ride</p>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>Set speed</span><output id="v-out" for="vbar"></output></span>
+                        <input type="range" id="vbar" min="0" max="2" step="1" value="1" list="vmarks">
+                    </label>
+                    <p class="panel__note" id="road-name"></p>
+                    <p class="panel__note">Only computed rides can be chosen: every position of the speed control is its own ride, computed on Kaggle. Near the end of a ride the playback slows down smoothly and stops where the computed data ends.</p>
+                </div>
+                <div class="panel__group">
+                    <p class="panel__label">Readings</p>
+                    <dl class="kread">
+                        <div><dt>cart speed</dt><dd id="r-v">—</dd></div>
+                        <div><dt>surface lean</dt><dd id="r-l">—</dd></div>
+                        <div><dt>stout spilled</dt><dd id="r-s">—</dd></div>
+                    </dl>
+                    <p class="panel__note">Lean: the stout&#8217;s height at the front wall minus the back wall. All three numbers are stored with every picture; the page computes none of them.</p>
+                </div>
+            </aside>
+        </div>
+
+        <section class="sim__notes" style="max-width:760px;margin:28px auto 0;font-size:15px;line-height:1.6">
+            <h2 style="font:400 26px/1.2 'Instrument Serif',serif">What was computed, and how</h2>
+            <p>On Kaggle&#8217;s Tesla T4 graphics card the stout is a million particles (1,002,808) moving through a grid of 370,386 cells of 1.5 mm in the measured Guinness glass: incompressible flow with a free surface and gravity, in the glass&#8217;s moving frame, with the stout and the cart pushing on each other. Each 20 s ride took 20 to 22 minutes (123 ms per step, 10,000 steps). The cart is the same model as Fig. 12: one wheel, a spring of 600 N/m, a damper of 8 N s/m, and a motor that holds the set speed.</p>
+            <p>The road: a long hump 10 mm high, a dip 8 mm deep, four ripples 5 mm high and a short bump 10 mm high, then flat road so the stout settles in view.</p>
+            <p><b>What is not in it yet.</b> The glass wall&#8217;s friction and the stout&#8217;s viscosity are left out, so the sloshing dies away only through the method&#8217;s own losses, which are not yet measured. The creamy head is drawn, not computed. The surface is stored 30 times a second on a grid of 17 rings by 64 angles in 0.2 mm steps, and drawn by the same code as Fig. 12.</p>
+            <p>Data: <a href="../data/fig12/2026-11-12/index.json">generated on Kaggle on 12 November 2026</a> (notebook version, checksums, measured times).</p>
+        </section>
+    </main>
+
+    <footer class="sim-foot">
+        <span>© 2026 Numa Koudsie</span>
+        <span><a href="../simulations.html">All simulations ↑</a> · <a href="../index.html">Home page</a></span>
+    </footer>
+
+    <script src="../scripts/guinness-glass.js"></script>
+    <script src="../scripts/stout-view.js"></script>
+    <script src="../scripts/guinness-playback.js"></script>
+</body>
+</html>
