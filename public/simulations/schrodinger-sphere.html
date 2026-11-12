@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Wave Packet Meets a Sphere · Numa Koudsie</title>
+    <meta name="description" content="The time-dependent Schrödinger equation in three dimensions: a wave packet meets a sphere of raised potential energy. 405 runs computed on Kaggle's GPUs and stored; the page only plays them back, and near the edge of the computed range it slows down and computes a live preview.">
+    <meta name="theme-color" content="#f5f1ea">
+    <link rel="stylesheet" href="../styles/sim.css">
+    <link rel="stylesheet" href="../styles/data.css">
+    <link rel="stylesheet" href="../styles/fold.css">
+    <link rel="stylesheet" href="../styles/kaggle-flow.css">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%237a1f2b'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='38' fill='%23f5f1ea'%3EN%3C/text%3E%3C/svg%3E">
+    <style>
+        .sim, .sim-top { max-width: 1440px; }
+        .figs { display: grid; gap: 16px; min-width: 0; }
+        @media (min-width: 1100px) { .figs { grid-template-columns: minmax(0, 1.12fr) minmax(0, 1fr); } }
+        .stage__canvas.sq { --ar: 1 / 1; --ar-m: 1 / 1; background-image: none; }
+        .stage__canvas.plot { --ar: 1 / 1.02; --ar-m: 4 / 3.2; background-image: none; }
+        .src { border: 1px solid var(--rule); border-left: 3px solid var(--accent); border-radius: 8px; padding: 9px 11px; font-size: 12.5px; line-height: 1.5; color: var(--ink-2); background: var(--card-soft); }
+        .src b { font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); font-weight: 500; display: block; margin-bottom: 2px; }
+        .src code { font-family: var(--mono); font-size: 11px; word-break: break-all; }
+        .seg { display: flex; gap: 6px; }
+        .seg .btn { flex: 1; padding: 7px 8px; font-size: 12.5px; }
+        .seg .btn[aria-pressed="true"] { background: var(--accent); color: #fff; border-color: var(--accent); }
+        .speed { font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+        .speed i { display: inline-block; height: 4px; width: 70px; vertical-align: middle; border: 1px solid var(--rule); border-radius: 2px; position: relative; margin-left: 6px; }
+        .speed i span { position: absolute; left: 0; top: 0; bottom: 0; background: var(--accent); }
+    </style>
+</head>
+<body>
+    <header class="sim-top">
+        <span style="display:inline-flex;align-items:center;gap:14px"><a href="../index.html" aria-label="Phyein Usul, home page" style="display:inline-block;line-height:0"><img src="../images/phyein-usul-mark.svg" alt="Phyein Usul" width="87" height="48" /></a><a href="../simulations.html">← All simulations</a></span>
+        <nav class="sim-nav" aria-label="Simulations">
+            <span>Fig.</span>
+            <a href="Circular Wave Interference Visualization.html">1</a>
+            <a href="Double Pendulum.html">2</a>
+            <a href="Interactive Double-Slit Experiment Visualization.html">3</a>
+            <a href="Transverse and longitudinal waves.html">4</a>
+            <a href="water-wave.html">5</a>
+            <a href="wave-interference.html">6</a>
+            <a href="phasor-sums.html">7</a>
+            <a href="draw-decompose.html">8</a>
+            <a href="driven-oscillator.html">9</a>
+            <a href="wind-turbine.html">10</a>
+            <a href="pendulum-control.html">11</a> <a href="beer-slosh.html">12</a> <a href="momentum-spirographs.html">13</a> <a href="schrodinger-sphere.html" aria-current="page">14</a>
+        </nav>
+    </header>
+
+    <main class="sim">
+        <noscript><p class="sim-error"><b>This simulation needs JavaScript.</b> <a href="../simulations.html">Back to the simulations</a></p></noscript>
+        <div class="sim__head">
+            <p class="sim__num">Fig. 14 · quantum mechanics · computed on Kaggle</p>
+            <h1>A Wave Packet Meets a Sphere<span class="dot">.</span></h1>
+            <p class="sim__lede">A quantum particle, spread out as a wave, flies at a ball it does not have the energy to enter. Part of the wave bounces back, part flows round it. Every frame here was computed in three dimensions on Kaggle’s graphics cards and stored; this page computes nothing, it plays the stored runs back.</p>
+        </div>
+
+        <div class="sim__grid">
+            <div class="figs">
+                <figure class="stage">
+                    <div class="stage__canvas sq" id="stage">
+                        <canvas id="vol" aria-label="The wave packet in three dimensions meeting the sphere; drag to turn the view"></canvas>
+                        <canvas id="ov" aria-hidden="true" style="pointer-events:none"></canvas>
+                    </div>
+                    <figcaption class="stage__cap">
+                        <span><b>Fig. 14</b> · the probability density <span class="tx">\(|\psi(\mathbf r,t)|^2\)</span> in three dimensions · drag to turn</span>
+                        <span id="cap-t">t = —</span>
+                    </figcaption>
+                </figure>
+                <figure class="stage">
+                    <div class="stage__canvas plot" id="stage2">
+                        <canvas id="plot" aria-label="Probability behind, inside, ahead of the sphere and lost at the border, against time"></canvas>
+                    </div>
+                    <figcaption class="stage__cap">
+                        <span><b>Fig. 14b</b> · where the probability is, against time</span>
+                        <span id="cap-p">—</span>
+                    </figcaption>
+                </figure>
+            </div>
+
+            <aside class="panel" aria-label="Controls">
+                <div class="panel__group">
+                    <p class="panel__label">Run</p>
+                    <div class="actions">
+                        <button type="button" class="btn" id="play">Pause</button>
+                        <button type="button" class="btn btn--ghost" id="replay">From the start</button>
+                    </div>
+                    <p class="speed" id="speed">playback speed <i><span></span></i></p>
+                </div>
+                <div class="panel__group" id="params">
+                    <p class="panel__label">The particle and the sphere</p>
+                </div>
+                <div class="panel__group">
+                    <p class="panel__label">Time</p>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>Time <i>t</i> (ħ = m = 1)</span><output id="time-out" for="time"></output></span>
+                        <input type="range" id="time" min="0" max="47" step="1" value="0">
+                    </label>
+                </div>
+                <dl class="readouts">
+                    <div><dt>Behind (x &lt; −R)</dt><dd id="r-b">—</dd></div>
+                    <div><dt>Ahead (x &gt; R)</dt><dd id="r-a">—</dd></div>
+                    <div><dt>Inside |x| ≤ R</dt><dd id="r-i">—</dd></div>
+                    <div><dt>Lost at border</dt><dd id="r-l">—</dd></div>
+                    <div class="wide"><dt>Guide: 1D slab of thickness 2R</dt><dd id="r-g">—</dd></div>
+                </dl>
+                <div class="src" id="src"><b>Where these numbers come from</b><span id="src-t">loading…</span></div>
+            </aside>
+        </div>
+
+        <article class="paper" id="paper" aria-labelledby="paper-title">
+            <header class="paper__head">
+                <p class="paper__kicker">Lecture note · Fig. 14 · quantum mechanics</p>
+                <h2 class="paper__title" id="paper-title">A wave packet meets a sphere: the Schrödinger equation in three dimensions</h2>
+                <p class="paper__by">Numa Koudsie · for readers meeting quantum mechanics for the first time, from school to the second year of university</p>
+                <div class="paper__abstract"><b>Abstract.</b> A ball thrown at a wall comes back; a swell in a harbour runs round a pillar and closes up behind it. A quantum particle does some of each, and the figure above shows how much. In this note we write down the Schrödinger equation and the starting wave packet, follow a free packet as it moves and spreads, solve the textbook problem of a wall in one dimension, and then see why a sphere in three dimensions gives a completely different answer. We then take apart the method that computed the figure, the split-step Fourier method, show why it keeps the total probability fixed and how large its errors are, and finish with what each colour and curve on the screen means. Every number is measured from the stored runs or by running the page's own code, and every result is checked with the page's own values in a worked example. Paragraphs marked ★ carry extra mathematics; you can skip them, because their results are restated without the star.</div>
+            </header>
+            <div class="paper__grid">
+                <nav class="paper__toc" aria-label="Contents">
+                    <p>Contents</p>
+                    <ol>
+                        <li><a href="#p-picture"><span>1</span>A ball, a wall and a pillar</a></li>
+                        <li><a href="#p-model"><span>2</span>The model</a></li>
+                        <li><a href="#p-free"><span>3</span>A packet in free flight</a></li>
+                        <li><a href="#p-wall"><span>4</span>A wall in one dimension</a></li>
+                        <li><a href="#p-sphere"><span>5</span>A sphere in three dimensions</a></li>
+                        <li><a href="#p-method"><span>6</span>The split-step Fourier method</a></li>
+                        <li><a href="#p-border"><span>7</span>The border and the checks</a></li>
+                        <li><a href="#p-kaggle"><span>8</span>Computed once, played back</a></li>
+                        <li><a href="#p-screen"><span>9</span>From the equation to the screen</a></li>
+                        <li><a href="#p-limits"><span>10</span>What the model leaves out</a></li>
+                    </ol>
+                </nav>
+                <div class="paper__body">
+                    <section class="psec" id="p-picture">
+                        <h3><span class="psec__n">01</span>A ball, a wall and a pillar</h3>
+                        <p class="psec__lead">Throw a tennis ball at a garden wall and it comes straight back. Watch a swell roll into a harbour and meet a stone pillar standing in the water: the wave is not thrown back as a whole. It wraps round the pillar, and a few pillar-widths behind it the crests have closed up again as if the pillar were hardly there.</p>
+                        <p>These are the two pictures of motion that classical physics offers. A ball is at one place at a time and follows one path; whether it gets over an obstacle is decided by its energy. A wave is spread out, it is partly reflected and partly bent round an obstacle, and how much of each happens depends on how the size of the obstacle compares with the wavelength. Quantum mechanics says that an electron, a proton or an atom is neither of these and borrows from both. It is described by a wave, and the strength of that wave at a place tells us how likely we are to find the particle there when we look. The particle is always found whole, like a ball; but where it is found is decided by a wave, which can reflect, bend and interfere.</p>
+                        <p>The figure above follows such a wave. A particle, spread out as a small cloud called a <em>wave packet</em>, flies along the \(x\) axis towards a sphere. Inside the sphere the particle's potential energy is raised by a fixed amount, as if the sphere were a round hill with a flat top and steep sides. With the page's default settings the particle does not have enough energy to climb onto that hill. A classical ball aimed at it would bounce off. In the one-dimensional problem of every textbook, where the hill is a wall across the whole path, the wave would be reflected almost completely: we will find that only 2.5 parts in ten million get through. Yet at the end of the stored run 63 % of the probability lies ahead of the sphere, 24 % behind it, and 13 % still beside it. This note explains why, and how the computer found these numbers.</p>
+                        <figure class="pfig">
+                            <div class="pfig__plate">
+                                <svg viewBox="0 0 720 392" role="img" aria-label="The computational box seen in the plane z = 0: the sphere of radius R at the centre, the starting packet at x = −14, the three slabs behind, inside and ahead, and the absorbing border." xmlns="http://www.w3.org/2000/svg">
+                                <rect x="0" y="0" width="720" height="392" fill="#fff"/>
+                                <path d="M40 26 h340.0 v340.0 h-340.0 Z M71.9 57.9 v276.2 h276.2 v-276.2 Z" fill="#efe6d8" fill-rule="evenodd"/>
+                                <rect x="40" y="26" width="340.0" height="340.0" fill="none" stroke="#8b8079" stroke-width="1.2"/>
+                                <line x1="188.8" y1="26" x2="188.8" y2="366.0" stroke="#8b8079" stroke-width="1" stroke-dasharray="5 4"/>
+                                <line x1="231.2" y1="26" x2="231.2" y2="366.0" stroke="#8b8079" stroke-width="1" stroke-dasharray="5 4"/>
+                                <circle cx="135.6" cy="196.0" r="31.9" fill="#7a1f2b" fill-opacity="0.1"/>
+                                <circle cx="135.6" cy="196.0" r="23.9" fill="#7a1f2b" fill-opacity="0.16"/>
+                                <circle cx="135.6" cy="196.0" r="15.9" fill="#7a1f2b" fill-opacity="0.26"/>
+                                <circle cx="135.6" cy="196.0" r="8.0" fill="#7a1f2b" fill-opacity="0.4"/>
+                                <circle cx="210.0" cy="196.0" r="21.2" fill="#d9c4c0" stroke="#1c1518" stroke-width="1.3" stroke-dasharray="6 5"/>
+                                <line x1="135.6" y1="196.0" x2="183.4" y2="196.0" stroke="#1c1518" stroke-width="1.6"/><path d="M182.4 191.0 L192.4 196.0 L182.4 201.0 Z" fill="#1c1518"/>
+                                <text class="m" x="169.4" y="187.0">k<tspan class="mu" font-size="12" dy="4">0</tspan></text>
+                                <text class="lbl" x="135.6" y="243.8" text-anchor="middle">packet at x₀ = −14</text>
+                                <line x1="210.0" y1="196.0" x2="225.0" y2="181.0" stroke="#1c1518" stroke-width="1"/>
+                                <text class="m" x="216.4" y="176.9">R</text>
+                                <text class="lbl" x="114.4" y="19.0" text-anchor="middle">behind</text>
+                                <text class="lbl" x="210.0" y="19.0" text-anchor="middle">inside</text>
+                                <text class="lbl" x="305.6" y="19.0" text-anchor="middle">ahead</text>
+                                <text class="lbl" x="210.0" y="382.0" text-anchor="middle">x = −R and x = +R (dashed)</text>
+                                <text class="lbl" x="44" y="38">absorbing border, 6 a</text>
+                                <line x1="284.4" y1="339.4" x2="337.5" y2="339.4" stroke="#1c1518" stroke-width="1.6"/><text class="tick" x="310.9" y="333.4" text-anchor="middle">10 a</text>
+                                <text class="m" x="388.0" y="201.0">x</text><text class="m" x="24.0" y="40.0">y</text>
+                                <text class="lbl" x="440" y="46">Box: side 64 a, periodic</text>
+                                <text class="lbl" x="440" y="66">128³ points, Δx = 0.5 a</text>
+                                <text class="lbl" x="440" y="106">Sphere: radius R, V = V₀ inside</text>
+                                <text class="lbl" x="440" y="126">Packet: width σ₀ = 3 a,</text>
+                                <text class="lbl" x="440" y="146">centre x₀ = −14 a, wave number k₀</text>
+                                <text class="lbl" x="440" y="186">Slabs counted from the whole 3D ψ:</text>
+                                <text class="lbl" x="440" y="206">behind  x < −R</text>
+                                <text class="lbl" x="440" y="226">inside  −R ≤ x ≤ R</text>
+                                <text class="lbl" x="440" y="246">ahead   x > R</text>
+                                <text class="lbl" x="440" y="286">Shaded frame: the outer 12 cells</text>
+                                <text class="lbl" x="440" y="306">of each face, where the mask</text>
+                                <text class="lbl" x="440" y="326">removes the wave</text>
+                                </svg>
+                            </div>
+                            <figcaption><span class="pfig__n">Figure 1</span>The computed region in the plane through the sphere's centre, to scale. The packet starts at \(x_0 = -14\,a\) with width \(\sigma_0 = 3\,a\) (the rings mark 0.5, 1, 1.5 and 2 widths) and moves along \(+x\). The sphere of radius \(R\) (here \(4\,a\)) sits at the centre. The dashed lines \(x = \pm R\) divide space into three slabs, behind, inside and ahead, in which the page counts the probability. The shaded frame is the absorbing border of section 7.</figcaption>
+                        </figure>
+                    </section>
+
+                    <section class="psec" id="p-model">
+                        <h3><span class="psec__n">02</span>The model</h3>
+                        <h4><span class="psub__n">2.1</span>The wave function and its equation</h4>
+                        <p>The state of one particle is described by a complex number at every point \(\mathbf r = (x, y, z)\) of space and every time \(t\), the <em>wave function</em> \(\psi(\mathbf r, t)\). A complex number has a size and an angle, \(\psi = |\psi|\,e^{i\varphi}\). The size tells us where the particle is likely to be; the angle \(\varphi\), called the <em>phase</em>, is what lets two parts of the wave add up or cancel when they meet. The rule that connects the wave to what we observe is <em>Born's rule</em>: the probability of finding the particle inside a region \(\Omega\) is</p>
+                        \[ P_\Omega(t) = \int_\Omega |\psi(\mathbf r, t)|^2 \, \mathrm{d}^3 r , \qquad \int_{\text{all space}} |\psi|^2\,\mathrm{d}^3 r = 1 . \tag{1} \]
+                        <p>The second statement, the <em>normalisation</em>, says that the particle is certainly somewhere. The quantity \(|\psi|^2\) is a <em>probability density</em>: probability per unit volume.</p>
+                        <p>How the wave changes in time is fixed by the time-dependent Schrödinger equation,</p>
+                        \[ i\hbar\,\frac{\partial\psi}{\partial t} = -\frac{\hbar^2}{2m}\,\nabla^2\psi + V(\mathbf r)\,\psi . \tag{2} \]
+                        <p>Here \(m\) is the particle's mass, \(\hbar = 1.054\,6\times10^{-34}\ \mathrm{J\,s}\) is Planck's constant divided by \(2\pi\), \(V(\mathbf r)\) is the potential energy the particle would have at \(\mathbf r\), and \(\nabla^2 = \partial^2/\partial x^2 + \partial^2/\partial y^2 + \partial^2/\partial z^2\) is the <em>Laplacian</em>, which measures how much \(\psi\) at a point differs from its average over the neighbourhood. The right-hand side is the total energy acting on the wave: the first term is the kinetic energy and the second the potential energy. We will see in section 3 why the kinetic energy takes this form. Equation (2) cannot be derived from older physics; it is the basic law of non-relativistic quantum mechanics, in the same way as Newton's second law is the basic law of classical mechanics, and it is tested by every atom whose spectrum it predicts.</p>
+                        <p>Two properties of (2) matter for everything that follows. It is <em>linear</em>: if \(\psi_1\) and \(\psi_2\) are solutions, so is any sum \(c_1\psi_1 + c_2\psi_2\). Waves therefore pass through each other and add, which is the origin of interference. And it keeps the normalisation (1): the total probability that is 1 at the start stays 1 for ever. Probability can flow from one region to another, but it is never created or destroyed. In section 6 we will see the numerical method inherit this property exactly.</p>
+                        <h4><span class="psub__n">2.2</span>The sphere and the units</h4>
+                        <p>The obstacle is a sphere of radius \(R\) centred at the origin, inside which the potential energy is raised by \(V_0\):</p>
+                        \[ V(\mathbf r) = \begin{cases} V_0, & |\mathbf r| &lt; R, \\ 0, & |\mathbf r| \ge R. \end{cases} \tag{3} \]
+                        <p>We measure lengths in a unit \(a\) of our choosing, the <em>grid unit</em>, and choose units of time and energy so that \(\hbar = 1\) and \(m = 1\). The unit of time is then \(m a^2/\hbar\) and the unit of energy \(\hbar^2/(m a^2)\). Every number on the page is in these units, and (2) becomes</p>
+                        \[ i\,\frac{\partial\psi}{\partial t} = -\frac{1}{2}\,\nabla^2\psi + V(\mathbf r)\,\psi . \tag{4} \]
+                        <p>Nothing is lost by this choice. The equation looks the same for every particle and every size of sphere; only the meaning of one unit changes.</p>
+                        <div class="pbox">
+                            <span class="pbox__t">Example 2.1 · what one unit means for an electron</span>
+                            <p>Take an electron, \(m = 9.109\times10^{-31}\ \mathrm{kg}\), and let one grid unit be \(a = 0.1\ \mathrm{nm}\), about the radius of an atom. The unit of energy is \(\hbar^2/(m a^2) = 7.62\ \mathrm{eV}\) and the unit of time \(m a^2/\hbar = 8.64\times10^{-17}\ \mathrm{s}\). The default packet energy \(E = 2.5\) is then \(19.0\ \mathrm{eV}\) and the default barrier \(V_0 = 3\) is \(22.9\ \mathrm{eV}\). The sphere of radius \(4\,a\) is \(0.4\ \mathrm{nm}\) across its radius, and the whole stored run, \(t = 13.16\), lasts \(1.14\times10^{-15}\ \mathrm{s}\), about one femtosecond. These are the scales of an electron scattering from an atom or a small molecule.</p>
+                        </div>
+                        <h4><span class="psub__n">2.3</span>The starting packet</h4>
+                        <p>At \(t = 0\) the particle is a <em>Gaussian wave packet</em> centred at \((x_0, 0, 0)\):</p>
+                        \[ \psi(\mathbf r, 0) = \left(2\pi\sigma_0^2\right)^{-3/4} \exp\!\left[-\frac{(x - x_0)^2 + y^2 + z^2}{4\sigma_0^2} + i k_0 x\right] . \tag{5} \]
+                        <p>Read it in two parts. The real exponential is a bell shape: \(|\psi|^2\) falls off as \(e^{-(x-x_0)^2/(2\sigma_0^2)}\) along each axis, so \(\sigma_0\) is the <em>standard deviation</em> of the particle's position, its width. The factor \(e^{i k_0 x}\) has size 1 and only turns the phase, by one full turn every \(2\pi/k_0\) along \(x\). That turning phase is what makes the packet move, as section 3 will show; \(k_0\) is called the <em>mean wave number</em>. The number in front makes the total probability exactly 1. The page sets \(x_0 = -14\,a\), \(\sigma_0 = 3\,a\) and \(k_0 = \sqrt{2E}\), where \(E\) is the packet energy chosen with the slider (we will see in section 3 where the square root comes from).</p>
+                        <p>Table 1 collects the page's parameters and the combinations of them that decide what happens. Each of these combinations is a pure number, independent of the units, and each will appear in the following sections.</p>
+                        <table class="ptab">
+                            <thead><tr><th>quantity</th><th>symbol</th><th>on the page</th><th>default</th></tr></thead>
+                            <tbody>
+                                <tr><td>packet energy</td><td>\(E\)</td><td>0.5 to 4.5 in steps of 0.5</td><td>2.5</td></tr>
+                                <tr><td>barrier height</td><td>\(V_0\)</td><td>0, 0.5, 1, 1.5, 2, 3, 4, 6, 8</td><td>3</td></tr>
+                                <tr><td>sphere radius</td><td>\(R\)</td><td>2, 3, 4, 5, 6</td><td>4</td></tr>
+                                <tr><td>packet width, start</td><td>\(\sigma_0,\ x_0\)</td><td>3, −14</td><td>3, −14</td></tr>
+                                <tr><td>mean wave number</td><td>\(k_0 = \sqrt{2E}\)</td><td>1 to 3</td><td>2.236</td></tr>
+                                <tr><td>wavelength</td><td>\(\lambda = 2\pi/k_0\)</td><td>6.28 to 2.09</td><td>2.81</td></tr>
+                                <tr><td>phase turns across the packet</td><td>\(k_0\sigma_0\)</td><td>3 to 9</td><td>6.71</td></tr>
+                                <tr><td>sphere against wavelength</td><td>\(k_0 R\)</td><td>2 to 18</td><td>8.94</td></tr>
+                                <tr><td>sphere against packet</td><td>\(R/\sigma_0\)</td><td>0.67 to 2</td><td>1.33</td></tr>
+                                <tr><td>energy against barrier</td><td>\(E/V_0\)</td><td>0.06 to ∞</td><td>0.83</td></tr>
+                            </tbody>
+                        </table>
+                        <p class="eqnote">Table 1. The page's parameters in the units \(\hbar = m = 1\), lengths in \(a\). The 405 combinations of \(E\), \(V_0\) and \(R\) are all computed and stored (section 8).</p>
+                    </section>
+
+                    <section class="psec" id="p-free">
+                        <h3><span class="psec__n">03</span>A packet in free flight</h3>
+                        <p>Before the packet meets the sphere it flies through empty space, \(V = 0\). This free flight already shows the two facts that make a quantum particle different from a ball: its wave moves at one speed while its crests move at another, and it spreads.</p>
+                        <h4><span class="psub__n">3.1</span>Plane waves</h4>
+                        <p>The simplest solution of (4) with \(V = 0\) is a <em>plane wave</em> running along \(x\), \(\psi = e^{i(kx - \omega t)}\), with a wave number \(k\) and an angular frequency \(\omega\) still to be related. Its time derivative is \(\partial\psi/\partial t = -i\omega\psi\), so the left side of (4) is \(i(-i\omega)\psi = \omega\psi\). Its second space derivative is \(\partial^2\psi/\partial x^2 = (ik)^2\psi = -k^2\psi\), so the right side is \(-\tfrac12(-k^2)\psi = \tfrac12 k^2\psi\). The two sides agree if</p>
+                        \[ \omega = \tfrac12 k^2 \qquad\text{or, with the units restored,}\qquad \hbar\omega = \frac{(\hbar k)^2}{2m} . \tag{6} \]
+                        <p>This relation between frequency and wave number is called the <em>dispersion relation</em>. With de Broglie's identification of momentum \(p = \hbar k\) and Planck's identification of energy \(E = \hbar\omega\), the second form of (6) is simply \(E = p^2/(2m)\), the kinetic energy of a free particle. That is why the kinetic term in (2) has the form it has, and it is why the page sets \(k_0 = \sqrt{2E}\): in our units a plane wave of energy \(E\) has \(k = \sqrt{2E}\).</p>
+                        <p>A plane wave has the same size everywhere, so by (1) it describes a particle that could be anywhere: it cannot be normalised. A particle that starts in a definite region must be a sum of many plane waves with nearby wave numbers, arranged to add up in that region and cancel elsewhere. That sum is the wave packet.</p>
+                        <h4><span class="psub__n">3.2</span>The packet as a sum of plane waves</h4>
+                        <p>Along \(x\) the packet (5) is a sum of plane waves, which we write as a <em>Fourier integral</em>,</p>
+                        \[ \psi(x, 0) = \frac{1}{\sqrt{2\pi}}\int_{-\infty}^{\infty} \phi(k)\,e^{ikx}\,\mathrm{d}k, \qquad |\phi(k)|^2 = \sqrt{\frac{2\sigma_0^2}{\pi}}\;e^{-2\sigma_0^2 (k-k_0)^2} . \tag{7} \]
+                        <p>The weight \(\phi(k)\) of each wave number is the <em>Fourier transform</em> of \(\psi(x,0)\); for a Gaussian it is again a Gaussian (Problem 10.1 asks you to check this). The weights are centred on \(k_0\), and comparing the exponent with \(e^{-(k-k_0)^2/(2\sigma_k^2)}\) gives the spread of wave numbers \(\sigma_k = 1/(2\sigma_0)\). So</p>
+                        \[ \sigma_x\,\sigma_k = \sigma_0 \cdot \frac{1}{2\sigma_0} = \frac12 , \tag{8} \]
+                        <p>and, with \(p = \hbar k\), \(\sigma_x\sigma_p = \hbar/2\). This is the smallest product that Heisenberg's uncertainty relation allows: a narrow packet needs a wide range of wave numbers, and a sharp wave number needs a long packet. In the \(y\) and \(z\) directions the packet has no \(e^{ik_0 x}\) factor, so there the wave numbers are centred on zero with the same spread \(1/(2\sigma_0)\).</p>
+                        <p>The spread of wave numbers is a spread of energies. The mean of \(k_x^2\) over (7) is \(k_0^2 + \sigma_k^2\), and the means of \(k_y^2\) and \(k_z^2\) are \(\sigma_k^2\) each, so the mean energy of the packet is</p>
+                        \[ \langle E \rangle = \tfrac12\left(k_0^2 + 3\sigma_k^2\right) = \frac{k_0^2}{2} + \frac{3}{8\sigma_0^2} . \tag{9} \]
+                        <p>The slider's \(E = k_0^2/2\) is therefore the mean kinetic energy of the motion along \(x\); the true mean energy is larger by \(3/(8\sigma_0^2) = 0.042\). (We checked (9) on the page's own grid: the Fourier transform of the starting packet gives \(\langle k^2\rangle/2 = 2.541\,667\) for \(E = 2.5\).) More important than this small shift is the width of the energy distribution along \(x\): roughly \(k_0\sigma_k\), which is 0.37 for the default packet. Part of the packet carries more energy than the average and part less, and near a barrier that matters, as we will see in section 5.</p>
+                        <h4><span class="psub__n">3.3</span>How the packet moves and spreads<span class="star" title="heavier mathematics">★</span></h4>
+                        <p>Each plane wave in (7) evolves on its own, because the equation is linear and the plane waves are solutions: the wave with wave number \(k\) simply acquires the factor \(e^{-i\omega t} = e^{-ik^2 t/2}\). So</p>
+                        \[ \psi(x,t) = \frac{1}{\sqrt{2\pi}}\int \phi(k)\,e^{i(kx - k^2 t/2)}\,\mathrm{d}k . \tag{10} \]
+                        <p>We write \(k = k_0 + q\) and expand the exponent: \(kx - k^2t/2 = (k_0x - k_0^2t/2) + q(x - k_0 t) - q^2 t/2\). The first bracket does not depend on \(q\) and comes out of the integral as a phase. Taking \(x_0 = 0\) for brevity, \(\phi \propto e^{-\sigma_0^2 q^2}\), and what remains is</p>
+                        \[ \psi(x,t) \propto \int e^{-\alpha q^2 + i\beta q}\,\mathrm{d}q = \sqrt{\frac{\pi}{\alpha}}\;e^{-\beta^2/(4\alpha)}, \qquad \alpha = \sigma_0^2 + \frac{it}{2} = \sigma_0^2(1 + i\tau),\quad \beta = x - k_0 t , \]
+                        <p>where \(\tau = t/(2\sigma_0^2)\), and we used the Gaussian integral obtained by completing the square in \(q\). The probability density is the square of the size: \(|e^{-\beta^2/(4\alpha)}|^2 = e^{-\beta^2\,\mathrm{Re}(1/\alpha)/2}\). Multiplying top and bottom of \(1/\alpha\) by the complex conjugate \(\sigma_0^2(1 - i\tau)\) gives \(\mathrm{Re}(1/\alpha) = 1/[\sigma_0^2(1 + \tau^2)]\), so</p>
+                        \[ |\psi(x,t)|^2 \propto \exp\!\left[-\frac{(x - k_0 t)^2}{2\sigma_0^2(1+\tau^2)}\right] . \]
+                        <p>This is again a Gaussian. Its centre has moved to \(x = k_0 t\), and its width has grown to \(\sigma_0\sqrt{1+\tau^2}\). (We checked with SymPy that the closed-form \(\psi(x,t)\) satisfies (4) and that its variance is \(\sigma_0^2 + t^2/(4\sigma_0^2)\).) The same calculation in \(y\) and \(z\), with \(k_0 = 0\), gives the same width and no motion.</p>
+                        <div class="pbox">
+                            <span class="pbox__t">Key result · the free packet</span>
+                            <p>A free Gaussian packet keeps its Gaussian shape. Its centre moves with the <em>group velocity</em> \(v_g = \mathrm{d}\omega/\mathrm{d}k = k_0\) (with units, \(\hbar k_0/m = p/m\), the classical velocity), and its width grows as</p>
+                            \[ \sigma(t) = \sigma_0\sqrt{1 + \left(\frac{t}{2\sigma_0^2}\right)^{2}} \qquad\text{in every direction.} \tag{11} \]
+                            <p>The crests inside the packet move at the <em>phase velocity</em> \(\omega/k_0 = k_0/2\), half as fast: they appear at the back of the packet, run forward through it and fade at the front.</p>
+                        </div>
+                        <p>Why does the packet spread? Its waves have different wave numbers, and by (6) different wave numbers travel at different speeds: the fast components run ahead and the slow ones fall behind. The spreading is slow at first, because \(\sqrt{1+\tau^2} \approx 1 + \tau^2/2\) for small \(\tau\), and becomes a steady growth at the rate \(\sigma_k = 1/(2\sigma_0)\) once \(t\) exceeds the <em>spreading time</em> \(2\sigma_0^2\). A narrow packet has a wide spread of wave numbers and spreads fast; a wide one spreads slowly. In the limit \(\sigma_0\to\infty\) we recover the plane wave, which never changes shape.</p>
+                        <div class="pbox">
+                            <span class="pbox__t">Example 3.1 · the default packet</span>
+                            <p>For \(E = 2.5\), \(k_0 = \sqrt5 = 2.236\) per \(a\), the wavelength is \(\lambda = 2\pi/k_0 = 2.81\,a\), and the packet moves at \(2.236\,a\) per unit time. The spreading time is \(2\sigma_0^2 = 18\). The stored run lasts \(t = 13.16\), so the packet travels \(29.4\,a\), from \(x = -14\) to \(x = 15.4\), and by (11) its width grows from 3 to \(3\sqrt{1 + (13.16/18)^2} = 3.716\,a\). In the stored run without the sphere (\(V_0 = 0\)) the measured width across the flight, \(\sigma_y\), is \(3.7163\,a\) at the end, the same to the four digits stored. Over all 45 stored runs with \(V_0 = 0\), \(\sigma_y\) follows (11) to within \(9.4\times10^{-5}\,a\) at every frame. A slow packet takes longer: for \(E = 0.5\) the run lasts \(t = 29.61\) and the width reaches \(5.78\,a\).</p>
+                        </div>
+                    </section>
+
+                    <section class="psec" id="p-wall">
+                        <h3><span class="psec__n">04</span>A wall in one dimension</h3>
+                        <p>Before the sphere, we solve the problem every quantum mechanics course solves first: a wall of height \(V_0\) and thickness \(d\) across the whole path, so that nothing can go round it. Everything then depends on \(x\) alone. We look for waves of one definite energy \(E\), of the form \(\psi(x,t) = u(x)\,e^{-iEt}\). Putting this into (4), the time derivative brings down \(-iE\) and we are left with the <em>time-independent Schrödinger equation</em>,</p>
+                        \[ -\tfrac12\,u''(x) + V(x)\,u(x) = E\,u(x), \qquad\text{that is,}\qquad u'' = -2\,(E - V)\,u . \tag{12} \]
+                        <h4><span class="psub__n">4.1</span>Inside the wall: the evanescent wave</h4>
+                        <p>Where \(V\) is constant, (12) is the equation of a simple harmonic oscillator in space when \(E > V\), and its solutions are \(e^{\pm i k' x}\) with \(k' = \sqrt{2(E - V)}\): waves, shorter where the particle is faster. When \(E &lt; V\) the sign flips, \(u'' = +\kappa^2 u\) with</p>
+                        \[ \kappa = \sqrt{2\,(V_0 - E)} , \tag{13} \]
+                        <p>and the solutions are the growing and decaying exponentials \(e^{\pm\kappa x}\). A classical particle with \(E &lt; V_0\) can never be inside the wall: its kinetic energy would be negative. The wave, though, does not stop at the face of the wall. It enters as \(e^{-\kappa x}\), shrinking by the factor \(e\) every \(1/\kappa\), and its probability density shrinks twice as fast. Such a wave, which does not oscillate and only fades, is called <em>evanescent</em>. The distance \(1/\kappa\) is the <em>penetration depth</em>.</p>
+                        <p>Two conditions join the pieces of \(u\) at a face of the wall. The function \(u\) is continuous, because a jump would make \(u''\) infinitely large. Its slope \(u'\) is continuous too: integrating (12) across the face over a tiny width, the left side changes by the jump of \(u'\), while the right side, \(-2(E-V)u\), is finite and contributes nothing as the width shrinks to zero. A jump in the potential produces only a jump in the curvature \(u''\).</p>
+                        <h4><span class="psub__n">4.2</span>Through the wall<span class="star" title="heavier mathematics">★</span></h4>
+                        <p>Let the wall occupy \(0 &lt; x &lt; d\) and let a wave of wave number \(k = \sqrt{2E}\) arrive from the left. On the left there is the incoming wave and a reflected one, inside the two exponentials, on the right only a transmitted wave:</p>
+                        \[ u(x) = \begin{cases} e^{ikx} + r\,e^{-ikx}, & x &lt; 0, \\ C\,e^{\kappa x} + D\,e^{-\kappa x}, & 0 &lt; x &lt; d, \\ t\,e^{ikx}, & x &gt; d. \end{cases} \]
+                        <p>Continuity of \(u\) and \(u'\) at \(x = 0\) and at \(x = d\) gives four equations for the four unknowns \(r, C, D, t\):</p>
+                        \[ 1 + r = C + D, \quad ik(1 - r) = \kappa(C - D), \quad C e^{\kappa d} + D e^{-\kappa d} = t\,e^{ikd}, \quad \kappa\left(C e^{\kappa d} - D e^{-\kappa d}\right) = ik\,t\,e^{ikd} . \]
+                        <p>The last two give \(C\) and \(D\) in terms of \(t\): adding and subtracting them, \(C = \tfrac12 t\,e^{ikd}(1 + ik/\kappa)\,e^{-\kappa d}\) and \(D = \tfrac12 t\,e^{ikd}(1 - ik/\kappa)\,e^{\kappa d}\). From the first two we remove \(r\): the first gives \(1 - r = 2 - C - D\), and the second becomes \(2ik = (\kappa + ik)C - (\kappa - ik)D\). Inserting \(C\) and \(D\),</p>
+                        \[ 2ik = \frac{t\,e^{ikd}}{2\kappa}\left[(\kappa + ik)^2 e^{-\kappa d} - (\kappa - ik)^2 e^{\kappa d}\right] = \frac{t\,e^{ikd}}{\kappa}\left[2ik\kappa\cosh\kappa d - (\kappa^2 - k^2)\sinh\kappa d\right] , \]
+                        <p>where we expanded \((\kappa \pm ik)^2 = \kappa^2 - k^2 \pm 2ik\kappa\) and collected \(e^{\pm\kappa d}\) into \(\cosh\) and \(\sinh\). The <em>transmission probability</em> is \(T = |t|^2\), because the transmitted wave has the same wave number, and so the same speed, as the incoming one. Taking the square of the size and using \(\cosh^2 = 1 + \sinh^2\),</p>
+                        \[ T = \frac{4k^2\kappa^2}{4k^2\kappa^2 + (\kappa^2 + k^2)^2\sinh^2\kappa d} . \]
+                        <p>Finally \(\kappa^2 + k^2 = 2V_0\) and \(4k^2\kappa^2 = 16E(V_0 - E)\). For \(E &gt; V_0\) the same algebra holds with \(\kappa\) replaced by \(ik'\), and \(\sinh(ik'd) = i\sin k'd\). (Both branches were checked against a direct numerical solution of the four matching equations and against the page's own function <code>T1D</code>; they agree to all printed digits.)</p>
+                        <div class="pbox">
+                            <span class="pbox__t">Key result · the rectangular barrier</span>
+                            <p>A wave of energy \(E\) meeting a wall of height \(V_0\) and thickness \(d\) gets through with probability</p>
+                            \[ T = \left[1 + \frac{V_0^2\,\sinh^2(\kappa d)}{4E\,(V_0 - E)}\right]^{-1}\ (E &lt; V_0), \qquad T = \left[1 + \frac{V_0^2\,\sin^2(k' d)}{4E\,(E - V_0)}\right]^{-1}\ (E &gt; V_0), \tag{14} \]
+                            <p>with \(\kappa = \sqrt{2(V_0 - E)}\) and \(k' = \sqrt{2(E - V_0)}\). For a thick wall, \(\kappa d \gg 1\), \(\sinh\kappa d \approx \tfrac12 e^{\kappa d}\) and \(T \approx \dfrac{16E(V_0-E)}{V_0^2}\,e^{-2\kappa d}\): passing through the wall, called <em>tunnelling</em>, falls off exponentially with the wall's thickness measured in penetration depths. Above the barrier, \(T\) is less than 1, except when a whole number of half-wavelengths fits into the wall, \(k'd = n\pi\).</p>
+                        </div>
+                        <p>Two limits check (14). When \(V_0 \to 0\), the fraction in the bracket vanishes and \(T \to 1\): no wall, no reflection. When \(E\) approaches \(V_0\) from either side, both branches tend to \(T = 1/(1 + V_0 d^2/2)\), which is what the page's code uses at \(E = V_0\) exactly. Note also that \(T &lt; 1\) for \(E\) above the barrier: a classical ball with enough energy always passes, but a wave is partly reflected at every sudden change of the medium, as light is partly reflected by a window pane.</p>
+                        <div class="pbox">
+                            <span class="pbox__t">Example 4.1 · the page's barrier, flattened</span>
+                            <p>The readout "Guide: 1D slab of thickness 2R" evaluates (14) with \(d = 2R\), the thickness of the sphere along its centre line. With the defaults, \(E = 2.5\), \(V_0 = 3\): \(\kappa = \sqrt{2\times0.5} = 1\) per \(a\), so the penetration depth is \(1\,a\), two grid points. The slab is \(d = 8\,a\) thick, eight penetration depths, and \(\sinh 8 = 1490\), so \(T = [1 + 9\times1490^2/(4\times2.5\times0.5)]^{-1} = 2.50\times10^{-7}\). The thick-wall formula gives \(2.22\times e^{-16} = 2.50\times10^{-7}\) as well. Searching all the page's combinations with \(E &lt; V_0\), the largest value of (14) is \(1.34\times10^{-3}\), for \(E = 0.5\), \(V_0 = 1\), \(R = 2\). Above the barrier, \(E = 4.5\), \(V_0 = 4\), \(R = 2\) gives \(k' = 1\), \(k'd = 4\), \(\sin^2 4 = 0.573\) and \(T = 0.495\): half the wave reflected although the particle has energy to spare.</p>
+                        </div>
+                    </section>
+
+                    <section class="psec" id="p-sphere">
+                        <h3><span class="psec__n">05</span>A sphere in three dimensions</h3>
+                        <p>If (14) were the whole story, the figure would show the packet bouncing back almost entirely for every \(E &lt; V_0\). It does not. With the defaults, 63 % of the probability ends up ahead of the sphere, against \(2.5\times10^{-7}\) for the slab. The difference is not a subtle quantum effect. It is geometry: the packet is about as wide as the sphere, and a sphere, unlike a wall across the whole path, can be passed on the side.</p>
+                        <h4><span class="psub__n">5.1</span>What a classical ball would do</h4>
+                        <p>We first ask what a cloud of classical balls with the same spread of positions and velocities as the packet would do. Two numbers come from geometry alone. Across the flight, the packet's probability density is \(\frac{1}{2\pi\sigma_0^2}e^{-\rho^2/(2\sigma_0^2)}\), where \(\rho = \sqrt{y^2+z^2}\) is the distance from the axis. A ball hits the sphere only if its <em>impact parameter</em>, the distance \(b\) of its line of flight from the centre, is less than \(R\). Integrating the density over the disc \(\rho &lt; R\) with the area element \(2\pi\rho\,\mathrm{d}\rho\),</p>
+                        \[ f_\text{aimed} = \int_0^R \frac{e^{-\rho^2/(2\sigma_0^2)}}{2\pi\sigma_0^2}\,2\pi\rho\,\mathrm{d}\rho = 1 - e^{-R^2/(2\sigma_0^2)} . \tag{15} \]
+                        <p>For \(R = 4\) this is 0.589: four balls in ten miss the sphere altogether. Those that hit it are reflected like light from a polished ball. A ball arriving with impact parameter \(b\) meets the surface where the normal makes the angle \(\alpha\) with the line of flight, \(\sin\alpha = b/R\). The angle of reflection equals the angle of incidence, so the ball is turned through</p>
+                        \[ \theta = \pi - 2\alpha = \pi - 2\arcsin(b/R) . \tag{16} \]
+                        <p>A head-on ball, \(b = 0\), comes straight back, \(\theta = \pi\). A grazing ball, \(b \to R\), is hardly deflected. The ball moves backwards, \(\theta &gt; \pi/2\), only if \(\alpha &lt; \pi/4\), that is, \(b &lt; R/\sqrt2\). By (15) with \(R\) replaced by \(R/\sqrt2\), the fraction sent backwards is \(1 - e^{-R^2/(4\sigma_0^2)} = 0.359\) for \(R = 4\). Most balls that hit the sphere glance off sideways or forwards.</p>
+                        <p>To compare with the computed wave in full we followed 400 000 classical balls. For a Gaussian packet this comparison is fair: positions are drawn with the spread \(\sigma_0\) around \((x_0, 0, 0)\) and wave numbers with the spread \(1/(2\sigma_0)\) around \((k_0, 0, 0)\), which is exactly the distribution of position and momentum that (5) describes. Each ball flies straight; at the sphere's surface it keeps the part of its momentum along the surface and enters if the part along the normal carries more kinetic energy than \(V_0\), slowing and bending like light entering glass, or is reflected otherwise. We counted the balls in the three slabs at the end time of the stored run.</p>
+                        <h4><span class="psub__n">5.2</span>What the wave does</h4>
+                        <figure class="pfig">
+                            <div class="pfig__plate">
+                                <svg viewBox="0 0 720 330" role="img" aria-label="Probability behind, inside and ahead of the sphere and lost at the border against time, for E = 2.5, V0 = 3, R = 4, from the stored run." xmlns="http://www.w3.org/2000/svg">
+                                <defs><clipPath id="clip14b"><rect x="64" y="36" width="634" height="242"/></clipPath></defs>
+                                <rect x="0" y="0" width="720" height="330" fill="#fff"/>
+                                <line x1="64" x2="698" y1="278.0" y2="278.0" stroke="#eee6d9" stroke-width="1"/><text class="tick" x="56" y="282.0" text-anchor="end">0.00</text>
+                                <line x1="64" x2="698" y1="217.5" y2="217.5" stroke="#eee6d9" stroke-width="1"/><text class="tick" x="56" y="221.5" text-anchor="end">0.25</text>
+                                <line x1="64" x2="698" y1="157.0" y2="157.0" stroke="#eee6d9" stroke-width="1"/><text class="tick" x="56" y="161.0" text-anchor="end">0.50</text>
+                                <line x1="64" x2="698" y1="96.5" y2="96.5" stroke="#eee6d9" stroke-width="1"/><text class="tick" x="56" y="100.5" text-anchor="end">0.75</text>
+                                <line x1="64" x2="698" y1="36.0" y2="36.0" stroke="#eee6d9" stroke-width="1"/><text class="tick" x="56" y="40.0" text-anchor="end">1.00</text>
+                                <line x1="64.0" x2="64.0" y1="278" y2="283" stroke="#8b8079"/><text class="tick" x="64.0" y="297" text-anchor="middle">0</text>
+                                <line x1="160.4" x2="160.4" y1="278" y2="283" stroke="#8b8079"/><text class="tick" x="160.4" y="297" text-anchor="middle">2</text>
+                                <line x1="256.7" x2="256.7" y1="278" y2="283" stroke="#8b8079"/><text class="tick" x="256.7" y="297" text-anchor="middle">4</text>
+                                <line x1="353.1" x2="353.1" y1="278" y2="283" stroke="#8b8079"/><text class="tick" x="353.1" y="297" text-anchor="middle">6</text>
+                                <line x1="449.4" x2="449.4" y1="278" y2="283" stroke="#8b8079"/><text class="tick" x="449.4" y="297" text-anchor="middle">8</text>
+                                <line x1="545.8" x2="545.8" y1="278" y2="283" stroke="#8b8079"/><text class="tick" x="545.8" y="297" text-anchor="middle">10</text>
+                                <line x1="642.1" x2="642.1" y1="278" y2="283" stroke="#8b8079"/><text class="tick" x="642.1" y="297" text-anchor="middle">12</text>
+                                <line x1="64" x2="698" y1="278" y2="278" stroke="#8b8079"/><line x1="64" x2="64" y1="36" y2="278" stroke="#8b8079"/>
+                                <text class="lbl" x="698" y="316" text-anchor="end">time t (in m a²/ħ)</text><text class="lbl" x="56" y="22">probability</text>
+                                <path d="M64.0 36.1 L77.5 36.3 L91.0 36.6 L104.5 37.1 L118.0 38.0 L131.4 39.4 L144.9 41.7 L158.4 45.1 L171.9 50.1 L185.4 57.0 L198.9 66.0 L212.4 77.4 L225.9 91.0 L239.4 106.6 L252.9 123.6 L266.3 141.4 L279.8 159.1 L293.3 175.8 L306.8 191.0 L320.3 204.0 L333.8 214.5 L347.3 222.6 L360.8 228.3 L374.3 231.9 L387.7 233.8 L401.2 234.4 L414.7 234.2 L428.2 233.3 L441.7 232.1 L455.2 230.8 L468.7 229.4 L482.2 228.2 L495.7 227.0 L509.1 226.0 L522.6 225.1 L536.1 224.4 L549.6 223.7 L563.1 223.1 L576.6 222.6 L590.1 222.2 L603.6 221.7 L617.1 221.4 L630.6 221.1 L644.0 220.8 L657.5 220.5 L671.0 220.3 L684.5 220.2 L698.0 220.1" fill="none" stroke="#1c1518" stroke-width="2" clip-path="url(#clip14b)"/>
+                                <path d="M64.0 277.9 L77.5 277.7 L91.0 277.4 L104.5 276.9 L118.0 276.1 L131.4 274.6 L144.9 272.3 L158.4 268.9 L171.9 263.9 L185.4 257.1 L198.9 248.0 L212.4 236.7 L225.9 223.1 L239.4 207.5 L252.9 190.5 L266.3 172.8 L279.8 155.3 L293.3 138.9 L306.8 124.3 L320.3 112.2 L333.8 103.0 L347.3 97.0 L360.8 94.1 L374.3 94.4 L387.7 97.5 L401.2 103.0 L414.7 110.8 L428.2 120.2 L441.7 130.8 L455.2 142.2 L468.7 154.0 L482.2 165.6 L495.7 176.8 L509.1 187.2 L522.6 196.7 L536.1 205.2 L549.6 212.6 L563.1 218.9 L576.6 224.3 L590.1 228.9 L603.6 232.7 L617.1 235.9 L630.6 238.6 L644.0 240.9 L657.5 242.9 L671.0 244.6 L684.5 246.1 L698.0 247.5" fill="none" stroke="#b07a6a" stroke-width="2" stroke-dasharray="6 4" clip-path="url(#clip14b)"/>
+                                <path d="M64.0 278.0 L77.5 278.0 L91.0 278.0 L104.5 278.0 L118.0 278.0 L131.4 278.0 L144.9 278.0 L158.4 278.0 L171.9 278.0 L185.4 278.0 L198.9 278.0 L212.4 278.0 L225.9 278.0 L239.4 277.9 L252.9 277.9 L266.3 277.8 L279.8 277.6 L293.3 277.3 L306.8 276.8 L320.3 275.9 L333.8 274.5 L347.3 272.5 L360.8 269.7 L374.3 265.8 L387.7 260.8 L401.2 254.6 L414.7 247.2 L428.2 238.6 L441.7 229.2 L455.2 219.1 L468.7 208.7 L482.2 198.3 L495.7 188.3 L509.1 178.9 L522.6 170.3 L536.1 162.6 L549.6 155.9 L563.1 150.1 L576.6 145.2 L590.1 141.1 L603.6 137.7 L617.1 134.9 L630.6 132.5 L644.0 130.6 L657.5 128.9 L671.0 127.5 L684.5 126.3 L698.0 125.3" fill="none" stroke="#7a1f2b" stroke-width="2" clip-path="url(#clip14b)"/>
+                                <path d="M64.0 278.0 L77.5 278.0 L91.0 278.0 L104.5 278.0 L118.0 278.0 L131.4 278.0 L144.9 278.0 L158.4 278.0 L171.9 278.0 L185.4 278.0 L198.9 278.0 L212.4 278.0 L225.9 278.0 L239.4 278.0 L252.9 278.0 L266.3 278.0 L279.8 278.0 L293.3 277.9 L306.8 277.9 L320.3 277.9 L333.8 277.9 L347.3 277.9 L360.8 277.9 L374.3 277.9 L387.7 277.9 L401.2 277.9 L414.7 277.9 L428.2 277.9 L441.7 277.9 L455.2 277.9 L468.7 277.9 L482.2 277.9 L495.7 277.9 L509.1 277.9 L522.6 277.9 L536.1 277.9 L549.6 277.9 L563.1 277.9 L576.6 277.9 L590.1 277.9 L603.6 277.8 L617.1 277.8 L630.6 277.8 L644.0 277.7 L657.5 277.7 L671.0 277.5 L684.5 277.4 L698.0 277.1" fill="none" stroke="#8b8079" stroke-width="2" stroke-dasharray="2 3" clip-path="url(#clip14b)"/>
+                                <line x1="470" x2="494" y1="120" y2="120" stroke="#1c1518" stroke-width="2"/><text class="lbl" x="500" y="124">behind</text>
+                                <line x1="580" x2="604" y1="120" y2="120" stroke="#b07a6a" stroke-width="2" stroke-dasharray="6 4"/><text class="lbl" x="610" y="124">inside</text>
+                                <line x1="470" x2="494" y1="142" y2="142" stroke="#7a1f2b" stroke-width="2"/><text class="lbl" x="500" y="146">ahead</text>
+                                <line x1="580" x2="604" y1="142" y2="142" stroke="#8b8079" stroke-width="2" stroke-dasharray="2 3"/><text class="lbl" x="610" y="146">lost</text>
+                                </svg>
+                            </div>
+                            <figcaption><span class="pfig__n">Figure 2</span>The default run, \(E = 2.5\), \(V_0 = 3\), \(R = 4\), from the stored file: probability in the slab behind the sphere (\(x &lt; -R\)), in the slab of the sphere (\(|x| \le R\)) and ahead of it (\(x &gt; R\)), and the probability lost at the border, at the 48 stored times. The same curves are drawn live in Fig. 14b of the page.</figcaption>
+                        </figure>
+                        <p>Figure 2 shows the default run in four acts. Until \(t \approx 3\) the packet approaches and the probability behind stays near 1. Between \(t \approx 3\) and \(t \approx 7\) it reaches the sphere: the slab of the sphere holds up to 0.76 of the probability at \(t = 6.16\). The probability behind falls to its lowest value, 0.18, at \(t = 7.0\), and then rises again to 0.24 as the reflected wave travels back across \(x = -R\). Meanwhile the probability ahead overtakes the probability behind at \(t = 7.84\) and settles at 0.63. At the end, 0.126 is still in the slab of the sphere: these are the parts of the wave deflected sideways, which travel in \(y\) and \(z\) and so stay between \(x = -R\) and \(x = R\). Note that the slab "inside" is \(|x| \le R\) across the whole box, not the sphere itself.</p>
+                        <table class="ptab">
+                            <thead><tr><th>\(E,\ V_0,\ R\)</th><th>behind, classical</th><th>behind, quantum</th><th>ahead, classical</th><th>ahead, quantum</th><th>1D slab \(T\)</th></tr></thead>
+                            <tbody>
+                                <tr><td>2.5, 3, 4 (default)</td><td>0.312</td><td>0.239</td><td>0.577</td><td>0.631</td><td>\(2.5\times10^{-7}\)</td></tr>
+                                <tr><td>2.5, 8, 4</td><td>0.316</td><td>0.277</td><td>0.577</td><td>0.597</td><td>\(3\times10^{-23}\)</td></tr>
+                                <tr><td>2.5, 8, 2</td><td>0.093</td><td>0.084</td><td>0.886</td><td>0.897</td><td>\(1\times10^{-11}\)</td></tr>
+                                <tr><td>2.5, 8, 6</td><td>0.570</td><td>0.458</td><td>0.253</td><td>0.256</td><td>\(9\times10^{-35}\)</td></tr>
+                                <tr><td>4.5, 4, 2</td><td>0.075</td><td>0.049</td><td>0.899</td><td>0.930</td><td>0.495</td></tr>
+                            </tbody>
+                        </table>
+                        <p class="eqnote">Table 2. End of the stored run: probability behind and ahead of the sphere for 400 000 classical balls drawn from the packet's own spread, for the stored quantum runs (from the whole three-dimensional \(\psi\)), and the one-dimensional slab formula (14) with \(d = 2R\). Classical counts include balls that have flown into the border region; the quantum values exclude what the border has absorbed (0.4 % to 7 % here, section 7).</p>
+                        <p>Table 2 and Figure 3 compare the three descriptions. The one-dimensional slab is wrong by orders of magnitude, because it forbids the side roads. The classical cloud is close, which tells us that at these sizes, with the sphere a few wavelengths across, most of the answer is the geometry of section 5.1. The differences between the wave and the balls are the quantum part of the story, and they have a clear pattern: the wave sends <em>less</em> backwards and <em>more</em> ahead than the balls, by 0.07 and 0.05 in the default run. The reason is the harbour pillar of section 1. A wave that passes an obstacle bends into its shadow, by an angle of order \(\lambda/(2R)\), which is \(2.81/8 = 0.35\) rad, about 20°, in the default run. Behind a sphere the balls leave a sharp empty shadow; the wave fills part of it in. The bending is stronger for longer wavelengths and smaller spheres, and it vanishes in the limit \(\lambda \ll R\), where the wave behaves like the balls.</p>
+                        <figure class="pfig">
+                            <div class="pfig__plate">
+                                <svg viewBox="0 0 720 350" role="img" aria-label="Probability ahead of the sphere at the end of the run against the barrier height, for E = 2.5 and R = 2, 4, 6: the stored quantum runs, a classical ensemble, and the 1D slab formula." xmlns="http://www.w3.org/2000/svg">
+                                <defs><clipPath id="clip14c"><rect x="64" y="36" width="634" height="262"/></clipPath></defs>
+                                <rect x="0" y="0" width="720" height="350" fill="#fff"/>
+                                <line x1="64" x2="698" y1="298.0" y2="298.0" stroke="#eee6d9" stroke-width="1"/><text class="tick" x="56" y="302.0" text-anchor="end">0.00</text>
+                                <line x1="64" x2="698" y1="232.5" y2="232.5" stroke="#eee6d9" stroke-width="1"/><text class="tick" x="56" y="236.5" text-anchor="end">0.25</text>
+                                <line x1="64" x2="698" y1="167.0" y2="167.0" stroke="#eee6d9" stroke-width="1"/><text class="tick" x="56" y="171.0" text-anchor="end">0.50</text>
+                                <line x1="64" x2="698" y1="101.5" y2="101.5" stroke="#eee6d9" stroke-width="1"/><text class="tick" x="56" y="105.5" text-anchor="end">0.75</text>
+                                <line x1="64" x2="698" y1="36.0" y2="36.0" stroke="#eee6d9" stroke-width="1"/><text class="tick" x="56" y="40.0" text-anchor="end">1.00</text>
+                                <line x1="64.0" x2="64.0" y1="298" y2="303" stroke="#8b8079"/><text class="tick" x="64.0" y="317" text-anchor="middle">0</text>
+                                <line x1="143.2" x2="143.2" y1="298" y2="303" stroke="#8b8079"/><text class="tick" x="143.2" y="317" text-anchor="middle">1</text>
+                                <line x1="222.5" x2="222.5" y1="298" y2="303" stroke="#8b8079"/><text class="tick" x="222.5" y="317" text-anchor="middle">2</text>
+                                <line x1="301.8" x2="301.8" y1="298" y2="303" stroke="#8b8079"/><text class="tick" x="301.8" y="317" text-anchor="middle">3</text>
+                                <line x1="381.0" x2="381.0" y1="298" y2="303" stroke="#8b8079"/><text class="tick" x="381.0" y="317" text-anchor="middle">4</text>
+                                <line x1="460.2" x2="460.2" y1="298" y2="303" stroke="#8b8079"/><text class="tick" x="460.2" y="317" text-anchor="middle">5</text>
+                                <line x1="539.5" x2="539.5" y1="298" y2="303" stroke="#8b8079"/><text class="tick" x="539.5" y="317" text-anchor="middle">6</text>
+                                <line x1="618.8" x2="618.8" y1="298" y2="303" stroke="#8b8079"/><text class="tick" x="618.8" y="317" text-anchor="middle">7</text>
+                                <line x1="698.0" x2="698.0" y1="298" y2="303" stroke="#8b8079"/><text class="tick" x="698.0" y="317" text-anchor="middle">8</text>
+                                <line x1="64" x2="698" y1="298" y2="298" stroke="#8b8079"/><line x1="64" x2="64" y1="36" y2="298" stroke="#8b8079"/>
+                                <text class="lbl" x="698" y="336" text-anchor="end">barrier height V₀ (E = 2.5)</text><text class="lbl" x="56" y="22">probability ahead at the end of the run</text>
+                                <path d="M64.0 36.0 L66.0 36.0 L68.0 36.0 L69.9 36.1 L71.9 36.1 L73.9 36.2 L75.9 36.2 L77.9 36.3 L79.8 36.4 L81.8 36.6 L83.8 36.7 L85.8 36.8 L87.8 36.8 L89.8 36.9 L91.7 36.9 L93.7 36.9 L95.7 36.8 L97.7 36.7 L99.7 36.6 L101.6 36.4 L103.6 36.3 L105.6 36.1 L107.6 36.0 L109.6 36.0 L111.6 36.1 L113.5 36.3 L115.5 36.6 L117.5 37.1 L119.5 37.8 L121.5 38.7 L123.4 39.8 L125.4 41.0 L127.4 42.4 L129.4 43.9 L131.4 45.4 L133.3 46.9 L135.3 48.3 L137.3 49.5 L139.3 50.4 L141.3 51.0 L143.2 51.2 L145.2 51.0 L147.2 50.3 L149.2 49.1 L151.2 47.6 L153.2 45.6 L155.1 43.5 L157.1 41.2 L159.1 39.1 L161.1 37.3 L163.1 36.2 L165.0 36.1 L167.0 37.1 L169.0 39.4 L171.0 43.1 L173.0 48.1 L175.0 54.1 L176.9 60.7 L178.9 67.5 L180.9 74.2 L182.9 80.2 L184.9 85.2 L186.8 88.8 L188.8 90.8 L190.8 90.9 L192.8 88.9 L194.8 84.7 L196.7 78.3 L198.7 69.8 L200.7 59.8 L202.7 49.5 L204.7 40.8 L206.7 36.2 L208.6 38.1 L210.6 47.8 L212.6 64.1 L214.6 84.5 L216.6 105.5 L218.5 124.6 L220.5 140.0 L222.5 151.1 L224.5 157.2 L226.5 157.9 L228.4 152.3 L230.4 138.9 L232.4 115.5 L234.4 81.5 L236.4 46.1 L238.4 39.1 L240.3 81.8 L242.3 143.5 L244.3 191.0 L246.3 219.5 L248.3 233.9 L250.2 237.0 L252.2 224.9 L254.2 168.8 L256.2 39.8 L258.2 245.2 L260.1 287.2 L262.1 294.8 L264.1 296.8 L266.1 297.5 L268.1 297.8 L270.1 297.9 L272.0 297.9 L274.0 298.0 L276.0 298.0 L278.0 298.0 L280.0 298.0 L281.9 298.0 L283.9 298.0 L285.9 298.0 L287.9 298.0 L289.9 298.0 L291.8 298.0 L293.8 298.0 L295.8 298.0 L297.8 298.0 L299.8 298.0 L301.8 298.0 L303.7 298.0 L305.7 298.0 L307.7 298.0 L309.7 298.0 L311.7 298.0 L313.6 298.0 L315.6 298.0 L317.6 298.0 L319.6 298.0 L321.6 298.0 L323.5 298.0 L325.5 298.0 L327.5 298.0 L329.5 298.0 L331.5 298.0 L333.5 298.0 L335.4 298.0 L337.4 298.0 L339.4 298.0 L341.4 298.0 L343.4 298.0 L345.3 298.0 L347.3 298.0 L349.3 298.0 L351.3 298.0 L353.3 298.0 L355.2 298.0 L357.2 298.0 L359.2 298.0 L361.2 298.0 L363.2 298.0 L365.2 298.0 L367.1 298.0 L369.1 298.0 L371.1 298.0 L373.1 298.0 L375.1 298.0 L377.0 298.0 L379.0 298.0 L381.0 298.0 L383.0 298.0 L385.0 298.0 L386.9 298.0 L388.9 298.0 L390.9 298.0 L392.9 298.0 L394.9 298.0 L396.9 298.0 L398.8 298.0 L400.8 298.0 L402.8 298.0 L404.8 298.0 L406.8 298.0 L408.7 298.0 L410.7 298.0 L412.7 298.0 L414.7 298.0 L416.7 298.0 L418.6 298.0 L420.6 298.0 L422.6 298.0 L424.6 298.0 L426.6 298.0 L428.6 298.0 L430.5 298.0 L432.5 298.0 L434.5 298.0 L436.5 298.0 L438.5 298.0 L440.4 298.0 L442.4 298.0 L444.4 298.0 L446.4 298.0 L448.4 298.0 L450.3 298.0 L452.3 298.0 L454.3 298.0 L456.3 298.0 L458.3 298.0 L460.2 298.0 L462.2 298.0 L464.2 298.0 L466.2 298.0 L468.2 298.0 L470.2 298.0 L472.1 298.0 L474.1 298.0 L476.1 298.0 L478.1 298.0 L480.1 298.0 L482.0 298.0 L484.0 298.0 L486.0 298.0 L488.0 298.0 L490.0 298.0 L492.0 298.0 L493.9 298.0 L495.9 298.0 L497.9 298.0 L499.9 298.0 L501.9 298.0 L503.8 298.0 L505.8 298.0 L507.8 298.0 L509.8 298.0 L511.8 298.0 L513.7 298.0 L515.7 298.0 L517.7 298.0 L519.7 298.0 L521.7 298.0 L523.7 298.0 L525.6 298.0 L527.6 298.0 L529.6 298.0 L531.6 298.0 L533.6 298.0 L535.5 298.0 L537.5 298.0 L539.5 298.0 L541.5 298.0 L543.5 298.0 L545.4 298.0 L547.4 298.0 L549.4 298.0 L551.4 298.0 L553.4 298.0 L555.4 298.0 L557.3 298.0 L559.3 298.0 L561.3 298.0 L563.3 298.0 L565.3 298.0 L567.2 298.0 L569.2 298.0 L571.2 298.0 L573.2 298.0 L575.2 298.0 L577.1 298.0 L579.1 298.0 L581.1 298.0 L583.1 298.0 L585.1 298.0 L587.1 298.0 L589.0 298.0 L591.0 298.0 L593.0 298.0 L595.0 298.0 L597.0 298.0 L598.9 298.0 L600.9 298.0 L602.9 298.0 L604.9 298.0 L606.9 298.0 L608.8 298.0 L610.8 298.0 L612.8 298.0 L614.8 298.0 L616.8 298.0 L618.8 298.0 L620.7 298.0 L622.7 298.0 L624.7 298.0 L626.7 298.0 L628.7 298.0 L630.6 298.0 L632.6 298.0 L634.6 298.0 L636.6 298.0 L638.6 298.0 L640.5 298.0 L642.5 298.0 L644.5 298.0 L646.5 298.0 L648.5 298.0 L650.5 298.0 L652.4 298.0 L654.4 298.0 L656.4 298.0 L658.4 298.0 L660.4 298.0 L662.3 298.0 L664.3 298.0 L666.3 298.0 L668.3 298.0 L670.3 298.0 L672.2 298.0 L674.2 298.0 L676.2 298.0 L678.2 298.0 L680.2 298.0 L682.2 298.0 L684.1 298.0 L686.1 298.0 L688.1 298.0 L690.1 298.0 L692.1 298.0 L694.0 298.0 L696.0 298.0 L698.0 298.0" fill="none" stroke="#8b8079" stroke-width="1.4" stroke-dasharray="2 3" clip-path="url(#clip14c)"/>
+                                <path d="M64.0 36.4 L103.6 36.8 L143.2 38.2 L182.9 42.1 L222.5 48.6 L301.8 56.4 L381.0 59.1 L539.5 61.7 L698.0 63.0" fill="none" stroke="#c99a8f" stroke-width="2" clip-path="url(#clip14c)"/>
+                                <circle cx="64.0" cy="36.4" r="3.2" fill="#c99a8f" stroke="#c99a8f" stroke-width="1.4"/>
+                                <circle cx="103.6" cy="36.8" r="3.2" fill="#c99a8f" stroke="#c99a8f" stroke-width="1.4"/>
+                                <circle cx="143.2" cy="38.2" r="3.2" fill="#c99a8f" stroke="#c99a8f" stroke-width="1.4"/>
+                                <circle cx="182.9" cy="42.1" r="3.2" fill="#c99a8f" stroke="#c99a8f" stroke-width="1.4"/>
+                                <circle cx="222.5" cy="48.6" r="3.2" fill="#c99a8f" stroke="#c99a8f" stroke-width="1.4"/>
+                                <circle cx="301.8" cy="56.4" r="3.2" fill="#c99a8f" stroke="#c99a8f" stroke-width="1.4"/>
+                                <circle cx="381.0" cy="59.1" r="3.2" fill="#c99a8f" stroke="#c99a8f" stroke-width="1.4"/>
+                                <circle cx="539.5" cy="61.7" r="3.2" fill="#c99a8f" stroke="#c99a8f" stroke-width="1.4"/>
+                                <circle cx="698.0" cy="63.0" r="3.2" fill="#c99a8f" stroke="#c99a8f" stroke-width="1.4"/>
+                                <path d="M64.0 36.0 L103.6 36.1 L143.2 38.0 L182.9 47.3 L222.5 57.3 L301.8 65.7 L381.0 65.7 L539.5 65.8 L698.0 65.9" fill="none" stroke="#c99a8f" stroke-width="1.3" stroke-dasharray="5 4" clip-path="url(#clip14c)"/>
+                                <circle cx="64.0" cy="36.0" r="3.2" fill="#fff" stroke="#c99a8f" stroke-width="1.4"/>
+                                <circle cx="103.6" cy="36.1" r="3.2" fill="#fff" stroke="#c99a8f" stroke-width="1.4"/>
+                                <circle cx="143.2" cy="38.0" r="3.2" fill="#fff" stroke="#c99a8f" stroke-width="1.4"/>
+                                <circle cx="182.9" cy="47.3" r="3.2" fill="#fff" stroke="#c99a8f" stroke-width="1.4"/>
+                                <circle cx="222.5" cy="57.3" r="3.2" fill="#fff" stroke="#c99a8f" stroke-width="1.4"/>
+                                <circle cx="301.8" cy="65.7" r="3.2" fill="#fff" stroke="#c99a8f" stroke-width="1.4"/>
+                                <circle cx="381.0" cy="65.7" r="3.2" fill="#fff" stroke="#c99a8f" stroke-width="1.4"/>
+                                <circle cx="539.5" cy="65.8" r="3.2" fill="#fff" stroke="#c99a8f" stroke-width="1.4"/>
+                                <circle cx="698.0" cy="65.9" r="3.2" fill="#fff" stroke="#c99a8f" stroke-width="1.4"/>
+                                <path d="M64.0 36.7 L103.6 38.5 L143.2 47.5 L182.9 73.6 L222.5 109.6 L301.8 132.7 L381.0 136.1 L539.5 139.6 L698.0 141.5" fill="none" stroke="#7a1f2b" stroke-width="2" clip-path="url(#clip14c)"/>
+                                <circle cx="64.0" cy="36.7" r="3.2" fill="#7a1f2b" stroke="#7a1f2b" stroke-width="1.4"/>
+                                <circle cx="103.6" cy="38.5" r="3.2" fill="#7a1f2b" stroke="#7a1f2b" stroke-width="1.4"/>
+                                <circle cx="143.2" cy="47.5" r="3.2" fill="#7a1f2b" stroke="#7a1f2b" stroke-width="1.4"/>
+                                <circle cx="182.9" cy="73.6" r="3.2" fill="#7a1f2b" stroke="#7a1f2b" stroke-width="1.4"/>
+                                <circle cx="222.5" cy="109.6" r="3.2" fill="#7a1f2b" stroke="#7a1f2b" stroke-width="1.4"/>
+                                <circle cx="301.8" cy="132.7" r="3.2" fill="#7a1f2b" stroke="#7a1f2b" stroke-width="1.4"/>
+                                <circle cx="381.0" cy="136.1" r="3.2" fill="#7a1f2b" stroke="#7a1f2b" stroke-width="1.4"/>
+                                <circle cx="539.5" cy="139.6" r="3.2" fill="#7a1f2b" stroke="#7a1f2b" stroke-width="1.4"/>
+                                <circle cx="698.0" cy="141.5" r="3.2" fill="#7a1f2b" stroke="#7a1f2b" stroke-width="1.4"/>
+                                <path d="M64.0 36.3 L103.6 37.0 L143.2 51.7 L182.9 86.5 L222.5 123.0 L301.8 146.5 L381.0 146.8 L539.5 147.2 L698.0 146.9" fill="none" stroke="#7a1f2b" stroke-width="1.3" stroke-dasharray="5 4" clip-path="url(#clip14c)"/>
+                                <circle cx="64.0" cy="36.3" r="3.2" fill="#fff" stroke="#7a1f2b" stroke-width="1.4"/>
+                                <circle cx="103.6" cy="37.0" r="3.2" fill="#fff" stroke="#7a1f2b" stroke-width="1.4"/>
+                                <circle cx="143.2" cy="51.7" r="3.2" fill="#fff" stroke="#7a1f2b" stroke-width="1.4"/>
+                                <circle cx="182.9" cy="86.5" r="3.2" fill="#fff" stroke="#7a1f2b" stroke-width="1.4"/>
+                                <circle cx="222.5" cy="123.0" r="3.2" fill="#fff" stroke="#7a1f2b" stroke-width="1.4"/>
+                                <circle cx="301.8" cy="146.5" r="3.2" fill="#fff" stroke="#7a1f2b" stroke-width="1.4"/>
+                                <circle cx="381.0" cy="146.8" r="3.2" fill="#fff" stroke="#7a1f2b" stroke-width="1.4"/>
+                                <circle cx="539.5" cy="147.2" r="3.2" fill="#fff" stroke="#7a1f2b" stroke-width="1.4"/>
+                                <circle cx="698.0" cy="146.9" r="3.2" fill="#fff" stroke="#7a1f2b" stroke-width="1.4"/>
+                                <path d="M64.0 38.1 L103.6 45.1 L143.2 76.6 L182.9 146.0 L222.5 203.1 L301.8 224.6 L381.0 227.1 L539.5 229.6 L698.0 230.9" fill="none" stroke="#1c1518" stroke-width="2" clip-path="url(#clip14c)"/>
+                                <circle cx="64.0" cy="38.1" r="3.2" fill="#1c1518" stroke="#1c1518" stroke-width="1.4"/>
+                                <circle cx="103.6" cy="45.1" r="3.2" fill="#1c1518" stroke="#1c1518" stroke-width="1.4"/>
+                                <circle cx="143.2" cy="76.6" r="3.2" fill="#1c1518" stroke="#1c1518" stroke-width="1.4"/>
+                                <circle cx="182.9" cy="146.0" r="3.2" fill="#1c1518" stroke="#1c1518" stroke-width="1.4"/>
+                                <circle cx="222.5" cy="203.1" r="3.2" fill="#1c1518" stroke="#1c1518" stroke-width="1.4"/>
+                                <circle cx="301.8" cy="224.6" r="3.2" fill="#1c1518" stroke="#1c1518" stroke-width="1.4"/>
+                                <circle cx="381.0" cy="227.1" r="3.2" fill="#1c1518" stroke="#1c1518" stroke-width="1.4"/>
+                                <circle cx="539.5" cy="229.6" r="3.2" fill="#1c1518" stroke="#1c1518" stroke-width="1.4"/>
+                                <circle cx="698.0" cy="230.9" r="3.2" fill="#1c1518" stroke="#1c1518" stroke-width="1.4"/>
+                                <path d="M64.0 37.5 L103.6 42.3 L143.2 77.0 L182.9 143.3 L222.5 204.7 L301.8 231.6 L381.0 231.4 L539.5 231.8 L698.0 231.6" fill="none" stroke="#1c1518" stroke-width="1.3" stroke-dasharray="5 4" clip-path="url(#clip14c)"/>
+                                <circle cx="64.0" cy="37.5" r="3.2" fill="#fff" stroke="#1c1518" stroke-width="1.4"/>
+                                <circle cx="103.6" cy="42.3" r="3.2" fill="#fff" stroke="#1c1518" stroke-width="1.4"/>
+                                <circle cx="143.2" cy="77.0" r="3.2" fill="#fff" stroke="#1c1518" stroke-width="1.4"/>
+                                <circle cx="182.9" cy="143.3" r="3.2" fill="#fff" stroke="#1c1518" stroke-width="1.4"/>
+                                <circle cx="222.5" cy="204.7" r="3.2" fill="#fff" stroke="#1c1518" stroke-width="1.4"/>
+                                <circle cx="301.8" cy="231.6" r="3.2" fill="#fff" stroke="#1c1518" stroke-width="1.4"/>
+                                <circle cx="381.0" cy="231.4" r="3.2" fill="#fff" stroke="#1c1518" stroke-width="1.4"/>
+                                <circle cx="539.5" cy="231.8" r="3.2" fill="#fff" stroke="#1c1518" stroke-width="1.4"/>
+                                <circle cx="698.0" cy="231.6" r="3.2" fill="#fff" stroke="#1c1518" stroke-width="1.4"/>
+                                <line x1="262.1" x2="262.1" y1="36" y2="298" stroke="#8b8079" stroke-width="1" stroke-dasharray="1 4"/><text class="tick" x="267.1" y="290">V₀ = E</text>
+                                <circle cx="380" cy="182" r="3.2" fill="#c99a8f" stroke="#c99a8f"/><text class="lbl" x="392" y="186">R = 2</text>
+                                <circle cx="490" cy="182" r="3.2" fill="#7a1f2b" stroke="#7a1f2b"/><text class="lbl" x="502" y="186">R = 4</text>
+                                <circle cx="600" cy="182" r="3.2" fill="#1c1518" stroke="#1c1518"/><text class="lbl" x="612" y="186">R = 6</text>
+                                <line x1="368" x2="392" y1="160" y2="160" stroke="#1c1518" stroke-width="2"/><circle cx="380" cy="160" r="3.2" fill="#1c1518"/><text class="lbl" x="398" y="164">quantum (stored runs)</text>
+                                <line x1="590" x2="614" y1="160" y2="160" stroke="#1c1518" stroke-width="1.3" stroke-dasharray="5 4"/><circle cx="602" cy="160" r="3.2" fill="#fff" stroke="#1c1518" stroke-width="1.4"/><text class="lbl" x="620" y="164">classical</text>
+                                <line x1="368" x2="392" y1="204" y2="204" stroke="#8b8079" stroke-width="1.4" stroke-dasharray="2 3"/><text class="lbl" x="398" y="208">1D slab of thickness 2R = 8</text>
+                                </svg>
+                            </div>
+                            <figcaption><span class="pfig__n">Figure 3</span>Probability ahead of the sphere at the end of the run against the barrier height, for \(E = 2.5\) and three radii. Filled points: the stored quantum runs. Open points, dashed: the classical cloud of section 5.1. Dotted: the one-dimensional slab formula (14) for \(d = 8\), which collapses to zero as soon as \(V_0\) exceeds \(E\) and oscillates above the barrier.</figcaption>
+                        </figure>
+                        <p>Figure 3 shows a second quantum effect near \(V_0 = E\). For the balls, raising \(V_0\) above \(E\) changes almost nothing, because a ball with \(E &lt; V_0\) is reflected whatever the height. For the wave, the probability behind keeps growing with \(V_0\): with \(R = 4\) it is 0.239 at \(V_0 = 3\) and 0.277 at \(V_0 = 8\). A low barrier is soft for the wave: the penetration depth \(1/\kappa\) is \(1\,a\) at \(V_0 = 3\) but \(0.30\,a\) at \(V_0 = 8\), and the packet's spread of energies (section 3.2) means that 11 % of the default packet has more energy than \(V_0 = 3\). (This fraction is the probability that \(|\mathbf k|^2/2 &gt; V_0\) for the Gaussian distribution of wave numbers, 0.113, computed exactly from the non-central \(\chi^2\) distribution.) Only for very high walls does the wave approach the hard-sphere answer from below.</p>
+                        <div class="pbox">
+                            <span class="pbox__t">Key result · what decides the outcome in three dimensions</span>
+                            <p>For a packet about as wide as the sphere, the outcome is decided first by geometry: the fraction aimed at the sphere, \(1 - e^{-R^2/(2\sigma_0^2)}\), and the angle at which it meets the curved surface, (16). Tunnelling through the sphere is negligible for every stored run with \(E &lt; V_0\) (at most \(1.3\times10^{-3}\) even for the flat slab). The wave differs from classical balls by bending into the sphere's shadow, which sends more ahead and less behind, and by the softness of a barrier close to its energy.</p>
+                        </div>
+                        <div class="pbox">
+                            <span class="pbox__t">Example 5.1 · the default run, counted three ways</span>
+                            <p>With \(R = 4\) and \(\sigma_0 = 3\): by (15), 58.9 % of the packet is aimed at the sphere, and by (16) a hard sphere would send 35.9 % backwards. The classical cloud, counted in slabs at \(t = 13.16\), gives 31.2 % behind, 57.7 % ahead and 11.1 % beside the sphere; the backward fraction is lower than 35.9 % because balls turned through just over 90° move back slowly and have not all crossed \(x = -R\) by the end. The stored quantum run gives 23.9 % behind, 63.1 % ahead, 12.6 % beside and 0.4 % absorbed by the border. The one-dimensional slab gives 0.000 025 %.</p>
+                        </div>
+                    </section>
+
+                    <section class="psec" id="p-method">
+                        <h3><span class="psec__n">06</span>The split-step Fourier method</h3>
+                        <p>Equation (4) has no solution in closed form for a sphere and a packet, so it is solved on a computer. The page itself computes nothing: every frame was computed beforehand on Kaggle's graphics cards by <code>tools/kaggle/schrodinger-sphere/solver.py</code>, and the page plays the stored frames back (section 8). This section describes what the solver does.</p>
+                        <h4><span class="psub__n">6.1</span>The grid</h4>
+                        <p>Space is a cube of side \(L = 64\,a\), cut into \(N = 128\) points along each axis, \(128^3 = 2\,097\,152\) points in all, spaced \(\Delta x = L/N = 0.5\,a\) apart, at \(x_j = (j - 64)\,\Delta x\) from \(-32\) to \(31.5\). The cube is <em>periodic</em>: a wave leaving through one face comes back through the opposite face, as on the screen of an old arcade game. On such a grid every function is a sum of the plane waves that fit the box a whole number of times, with wave numbers \(k_n = 2\pi n/L\) for \(n = -64, \dots, 63\). The <em>fast Fourier transform</em> (FFT) converts the \(N\) values at the grid points into the \(N\) weights of these plane waves, and back, in about \(N\log_2 N\) operations instead of \(N^2\).</p>
+                        <p>The grid can only represent wave numbers up to</p>
+                        \[ k_\text{max} = \frac{\pi}{\Delta x} = 6.28\ \text{per}\ a . \tag{17} \]
+                        <p>The reason is that a wave sampled at grid points cannot be told apart from a wave whose wave number differs by \(2\pi/\Delta x\): at every grid point \(e^{i(k + 2\pi/\Delta x)x_j} = e^{ikx_j}e^{2\pi i(j-64)} = e^{ikx_j}\). A shorter wave would be mistaken for a longer one, an error called <em>aliasing</em>, like the wagon wheels that turn backwards in films. The grid is fine enough if every wave number the packet contains stays below \(k_\text{max}\). By (7), the weights fall to \(e^{-8} = 3\times10^{-4}\) of their peak four spreads from \(k_0\), at \(k_0 + 4\sigma_k = k_0 + 0.67\), which is 3.67 for the fastest packet, \(E = 4.5\): 58 % of \(k_\text{max}\), or 4.2 grid points per wavelength at \(k_0 = 3\).</p>
+                        <h4><span class="psub__n">6.2</span>One step: half a push, a free flight, half a push</h4>
+                        <p>Write (4) as \(i\,\partial\psi/\partial t = \hat H\psi\) with the <em>Hamiltonian</em> \(\hat H = \hat T + \hat V\), the sum of the kinetic-energy operator \(\hat T = -\tfrac12\nabla^2\) and the potential-energy operator \(\hat V\), which multiplies by \(V(\mathbf r)\). (A hat marks an operator: a rule that turns one function into another.) Over a short time \(\Delta t\) the exact solution is \(\psi(t + \Delta t) = e^{-i\hat H\Delta t}\psi(t)\). Each half of \(\hat H\) alone is easy. The potential alone, \(i\,\partial\psi/\partial t = V\psi\), only turns the phase at each point: \(\psi \to e^{-iV\Delta t}\psi\). The kinetic energy alone is a free flight, which by section 3 only turns the phase of each plane wave: \(\psi \to \mathrm{FFT}^{-1}\big[e^{-ik^2\Delta t/2}\,\mathrm{FFT}[\psi]\big]\), with \(k^2 = k_x^2 + k_y^2 + k_z^2\). The difficulty is that \(\hat T\) and \(\hat V\) do not <em>commute</em>: doing one after the other is not the same as doing them together, \(e^{-i\hat H\Delta t} \ne e^{-i\hat V\Delta t}e^{-i\hat T\Delta t}\). Strang's symmetric splitting puts half of one on each side of the other:</p>
+                        \[ \psi(t + \Delta t) \approx e^{-i\hat V\Delta t/2}\;\mathrm{FFT}^{-1}\!\left[e^{-ik^2\Delta t/2}\,\mathrm{FFT}\!\left[e^{-i\hat V\Delta t/2}\,\psi(t)\right]\right] . \tag{18} \]
+                        <p>Read it as a recipe: give the wave half a kick from the potential, let it fly freely for the whole step, and give it the other half of the kick. This is what the solver's loop body does, line for line: <code>p = halfV * p; p = jnp.fft.ifftn(kin * jnp.fft.fftn(p)); p = halfV * p</code>, followed by the border mask of section 7. The page uses \(\Delta t = 0.01\), about 1300 steps for the default run. In the chemistry literature this scheme is called the split-step Fourier method, after Feit, Fleck and Steiger (1982), and the symmetric splitting first appeared in print in a paper by Strang (1968); both facts are as Blanes, Casas and Murua report them (reference 3).</p>
+                        <div class="pbox">
+                            <span class="pbox__t">Key result · the split step keeps the probability exactly</span>
+                            <p>Each factor in (18) multiplies a complex number by \(e^{-i\theta}\) with a real angle \(\theta\), which turns it without changing its size; the Fourier transform, with its normalisation, only changes the description from points to plane waves and keeps the sum of \(|\psi|^2\) (Parseval's theorem). Every factor is therefore <em>unitary</em>, and so is their product: in exact arithmetic, \(\sum_j |\psi_j|^2\,\Delta x^3\) is the same after any number of steps, whatever \(\Delta t\). The method can never blow up, and any loss of probability must come from elsewhere.</p>
+                        </div>
+                        <p>We measured this with the page's own solver on this workspace's processor, with the border switched off. In 64-bit arithmetic the total changed by \(3.6\times10^{-13}\) in 1500 steps, which is rounding error. In 32-bit arithmetic, the precision used on Kaggle, it fell by \(3.3\times10^{-4}\) in 1500 steps, about \(2\times10^{-7}\) per step: rounding in single precision has a small bias. On Kaggle's T4 cards the stored runs lose about \(4.6\times10^{-7}\) per step before any wave reaches the border.</p>
+                        <h4><span class="psub__n">6.3</span>The error of one step<span class="star" title="heavier mathematics">★</span></h4>
+                        <p>How far is (18) from the exact \(e^{-i\hat H\Delta t}\)? The Baker–Campbell–Hausdorff formula combines a product of exponentials of operators into a single exponential, with corrections made of commutators \([\hat A, \hat B] = \hat A\hat B - \hat B\hat A\). For the symmetric product the terms of order \(\Delta t^2\) cancel, because the product reads the same backwards, and the first correction is of order \(\Delta t^3\):</p>
+                        \[ e^{-i\hat V\Delta t/2}\,e^{-i\hat T\Delta t}\,e^{-i\hat V\Delta t/2} = \exp\!\Big\{-i\Delta t\Big[\hat H + \frac{\Delta t^2}{24}\Big([\hat V,[\hat V,\hat T]] + 2\,[\hat T,[\hat V,\hat T]]\Big) + O(\Delta t^4)\Big]\Big\} . \tag{19} \]
+                        <p>(We checked the coefficients with random \(6\times6\) matrices: the remainder after the \(\Delta t^2\) term shrinks as \(\Delta t^2\) relative to it, as it should.) Equation (19) has a pleasant reading. The bracket is a Hermitian operator, so the split step is the <em>exact</em> evolution under a slightly modified Hamiltonian \(\hat H_\text{eff}\). The method solves a neighbouring problem exactly, which is why it stays unitary. Each step differs from the true one by a term of size \(\Delta t^3\); over a fixed time there are \(t/\Delta t\) steps, so the error in \(\psi\) grows like \(\Delta t^2\): the method is of <em>second order</em>.</p>
+                        <p>The commutators tell us where the error lives. For \(\hat T = -\tfrac12\nabla^2\) one finds \([\hat V,[\hat V,\hat T]] = -|\nabla V|^2\), and \([\hat T,[\hat V,\hat T]]\) also contains derivatives of \(V\). Where \(V\) is constant, both vanish. For the sphere, \(V\) jumps at the surface, so the whole splitting error sits on the sphere's surface, the one place where the wave is reflected.</p>
+                        <p>We measured the order with the solver in 64-bit arithmetic, the border switched off, for \(E = 2\), \(V_0 = 3\), \(R = 4\) up to \(t = 7.28\), while the packet is on the sphere. Halving \(\Delta t\) from 0.04 to 0.0025, the change in the whole wave function, \(\big(\sum|\psi_{\Delta t} - \psi_{\Delta t/2}|^2\Delta x^3\big)^{1/2}\), was \(1.21\times10^{-3}\), \(2.99\times10^{-4}\), \(7.45\times10^{-5}\) and \(1.86\times10^{-5}\): each halving divides it by 4.0, the signature of second order. At the page's \(\Delta t = 0.01\) the error of the wave function is therefore about \(\tfrac43\times7.45\times10^{-5} = 1.0\times10^{-4}\), and the probability behind the sphere changes by \(6\times10^{-6}\) when \(\Delta t\) is halved.</p>
+                        <p>In words: the split step is exact for a free particle and exact for a particle that does not move; the error comes only from their interplay, it is concentrated where the potential changes, and it shrinks four times when the step is halved.</p>
+                        <div class="pbox">
+                            <span class="pbox__t">Example 6.1 · is the step short enough?</span>
+                            <p>In one step the fastest wave the grid can hold, \(k_\text{max} = 2\pi\), turns its phase by \(k_\text{max}^2\Delta t/2 = 0.197\) rad; the packet's own fastest components, \(k = 3.67\), by 0.067 rad, and the highest barrier, \(V_0 = 8\), by \(V_0\Delta t = 0.08\) rad. All are small compared with one radian, so each step changes the wave only a little. Unlike the explicit schemes of many textbooks, the split step stays stable for any \(\Delta t\); a longer step makes it less accurate, never unstable.</p>
+                        </div>
+                        <p>Two more comparisons fix the size of the remaining errors. Precision: for \(E = 2\), \(V_0 = 3\), \(R = 4\), the probability ahead at the end is 0.627 80 on Kaggle (32-bit), 0.628 02 with the same solver on this workspace's processor (32-bit) and 0.628 21 in 64-bit. Grid: the same run on \(256^3\) points, \(\Delta x = 0.25\,a\), computed here in 5 minutes, gives 0.624 83 ahead and 0.249 23 behind, against 0.628 02 and 0.248 87 on \(128^3\). Halving the grid spacing changes the probability ahead by \(3\times10^{-3}\), the largest of the numerical errors: the staircase of grid cubes that stands in for the sphere's surface is the coarsest part of the model. The stored default run, recomputed here with the unchanged solver, matches the stored curves to \(3.4\times10^{-4}\) at every frame.</p>
+                    </section>
+
+                    <section class="psec" id="p-border">
+                        <h3><span class="psec__n">07</span>The border and the checks</h3>
+                        <h4><span class="psub__n">7.1</span>An absorbing border</h4>
+                        <p>The periodic box of section 6 has a price: whatever leaves at \(x = +32\) would come back at \(x = -32\) and run into the sphere again. The solver prevents this with an absorbing border. After every step it multiplies \(\psi\) by a <em>mask</em> \(M(\mathbf r) = m(x)\,m(y)\,m(z)\), which is 1 in the interior and falls to 0 over the outer \(W = 12\) points of each face, \(6\,a\):</p>
+                        \[ m(x_j) = \left[\sin\frac{\pi j}{2W}\right]^{1/8} \ \ (j = 0, \dots, W-1), \qquad m = 1 \ \text{further in}, \tag{20} \]
+                        <p>mirrored at the opposite face. The eighth root makes the mask rise steeply at the very edge and then creep up to 1: \(m = 0,\ 0.775,\ 0.845,\ \dots,\ 0.990,\ 0.996,\ 0.999\) at \(j = 0, 1, 2, \dots, 9, 10, 11\). A wave crossing the frame is thinned a little at every step instead of being cut off at once, because a sudden edge would itself reflect the wave, as any sudden change does (section 4.2). The mask is not part of the physics. It stands for the rest of an infinite space, into which waves leave and never return.</p>
+                        <p>Because the mask is applied once per step, its strength per unit time depends on \(\Delta t\): halve the step and the frame absorbs a little more in the same time. With the border on, halving \(\Delta t\) from 0.01 to 0.005 raised the probability lost by \(t = 14.57\) by \(8\times10^{-4}\) and lowered the probability behind by \(5\times10^{-4}\) (\(E = 2\), \(V_0 = 3\), \(R = 4\), 64-bit). Late in a run, numbers at the \(10^{-3}\) level are therefore set by the border, not by the equation.</p>
+                        <h4><span class="psub__n">7.2</span>What "lost" means</h4>
+                        <p>The page reads the probability that has left the box as</p>
+                        \[ P_\text{lost}(t) = 1 - \sum_{j} |\psi_j(t)|^2\,\Delta x^3 , \tag{21} \]
+                        <p>the sum running over all \(128^3\) points. It has two sources. The main one is the border: the front of the transmitted packet, and the waves scattered sideways, reach the frame towards the end of a run. The other is the 32-bit rounding of section 6.2. Before any wave reaches the frame, the rounding is all there is: in the default run \(P_\text{lost}\) is \(1.5\times10^{-4}\) after 336 steps, while the same run in 64-bit loses only \(3.5\times10^{-6}\) in 300 steps. At the end of the run \(P_\text{lost} = 0.0039\). For \(E = 2\), \(V_0 = 3\), \(R = 4\) the stored run ends with \(P_\text{lost} = 0.0047\) and the 64-bit run with 0.0040, so about 85 % of the final loss is real absorption at the border.</p>
+                        <p>Over all 405 runs, \(P_\text{lost}\) at the end lies between \(7\times10^{-4}\) and 0.123. The largest loss belongs to the slowest packet at the largest and highest sphere, \(E = 0.5\), \(V_0 = 8\), \(R = 6\): its run lasts \(t = 29.61\), long enough for the reflected and side-scattered waves to reach the frame. In the first quarter of every run (frames 0 to 12), before anything reaches the frame, the total probability stays within \(5.2\times10^{-4}\) of 1.</p>
+                        <div class="pbox">
+                            <span class="pbox__t">Example 7.1 · the checks, in one place</span>
+                            <p>Three tests tell us that the stored runs solve (4). First, the free packet: with \(V_0 = 0\) the measured width \(\sigma_y\) follows (11) to \(9.4\times10^{-5}\,a\) in all 45 such runs. Second, the books balance: \(P_\text{behind} + P_\text{inside} + P_\text{ahead} + P_\text{lost} = 1\) by construction, and \(P_\text{lost}\) stays below \(5.2\times10^{-4}\) until the waves reach the border. Third, convergence: the time step contributes about \(10^{-4}\) to \(\psi\), single precision a few \(10^{-4}\) to the probabilities, the border up to \(10^{-3}\) late in a run, and the grid up to \(3\times10^{-3}\). The probabilities on the page are good to about two parts in a thousand.</p>
+                        </div>
+                    </section>
+
+                    <section class="psec" id="p-kaggle">
+                        <h3><span class="psec__n">08</span>Computed once, played back</h3>
+                        <p>A single run moves two million complex numbers through about 1000 to 3000 steps, each with two three-dimensional FFTs. That is too much to do in a visitor's browser at the speed of an animation, so the whole grid of parameters was computed once on Kaggle, a free service with graphics cards (GPUs), and stored. On one Tesla T4 card one step at \(128^3\) takes 1.61 ms in 32-bit arithmetic, 0.77 ns per grid point, and 2.6 ms with the measurements of each frame. The 405 runs, every combination of the 9 energies, 9 barrier heights and 5 radii in Table 1, took 880.8 s on two cards, between 2.3 s and 6.9 s each.</p>
+                        <p>Each run takes \(n_\text{target} = \mathrm{round}\big(30/(k_0\Delta t)\big)\) steps as its target, the time for the packet's centre to fly \(30\,a\). It stores 48 frames, one every \(s = \lfloor n_\text{target}/47\rfloor\) steps, so it really takes \(47s\) steps: for the default packet \(n_\text{target} = 1342\), \(s = 28\), and the run ends after 1316 steps at \(t = 13.16\), one frame every \(\Delta t_\text{frame} = 0.28\). Each frame stores, from the whole three-dimensional \(\psi\): the total \(\sum|\psi|^2\Delta x^3\), the probability behind (\(x &lt; -R\)) and ahead (\(x &gt; R\)), and the width across the flight, \(\sigma_y = \big[\sum (y - \bar y)^2|\psi|^2 / \sum |\psi|^2\big]^{1/2}\). It also stores \(|\psi|\) in the plane \(z = 0\) at all \(128\times128\) points as whole numbers from 0 to 255 (section 9). On the website the 405 files take 46.4 MB; the phase picture computed with them stays with the Kaggle notebook. The browser checks every file it downloads against its SHA-256 fingerprint in the index, and the panel reports the result.</p>
+                        <h4><span class="psub__n">8.1</span>The live preview</h4>
+                        <p>The controls also offer values outside the stored grid (\(E\) up to 6, \(V_0\) up to 12, \(R\) from 1 to 8). There the page computes a preview in the browser, in a background thread (<code>scripts/schrodinger-live-worker.js</code>), with the same method on a coarser grid of \(64^3\) points and frames at the same times as the stored runs. The box is \(64\,a\) wide, so \(\Delta x = 1\,a\), unless the packet is fast: by (17) the grid must hold \(k_0 + 0.67\), so the box shrinks to \(L = 64\pi/(k_0 + 0.67)\) whenever \(k_0 + 0.67 &gt; \pi\), that is, for \(E &gt; 3.05\). The step is about 0.04, adjusted so that a whole number of steps fills each frame interval.</p>
+                        <table class="ptab">
+                            <thead><tr><th>\(E,\ V_0,\ R\)</th><th>behind, live / stored</th><th>ahead, live / stored</th><th>largest difference, any frame</th></tr></thead>
+                            <tbody>
+                                <tr><td>2.5, 3, 4</td><td>0.272 / 0.239</td><td>0.622 / 0.631</td><td>0.035</td></tr>
+                                <tr><td>2, 3, 4</td><td>0.269 / 0.249</td><td>0.628 / 0.628</td><td>0.023</td></tr>
+                                <tr><td>0.5, 8, 6</td><td>0.403 / 0.388</td><td>0.271 / 0.272</td><td>0.076</td></tr>
+                                <tr><td>4.5, 4, 2</td><td>0.068 / 0.049</td><td>0.891 / 0.930</td><td>0.039</td></tr>
+                            </tbody>
+                        </table>
+                        <p class="eqnote">Table 3. The live preview against the stored runs: end of the run, and the largest difference in the probability behind or ahead over all 48 frames. The page's worker was run unchanged in Node; a whole run took 11.6 s to 35.6 s on one core of this workspace.</p>
+                        <p>The preview is a sketch, not a measurement. With one grid point per \(a\) the sphere's surface is a staircase of coarse cubes and the penetration depth (\(1\,a\) by default) is a single point, so the reflection is less accurate; the preview puts up to 0.03 more probability behind the sphere at the end, and differs by up to 0.08 at some frame. The page marks the preview on the figure and in the source box.</p>
+                    </section>
+
+                    <section class="psec" id="p-screen">
+                        <h3><span class="psec__n">09</span>From the equation to the screen</h3>
+                        <p>The square picture, Fig. 14, shows the wave itself in three dimensions, seen from an angle that you change by dragging. Because the packet flies along \(x\) through the centre of the sphere, and both the starting packet (5) and the potential (2) are unchanged by any rotation about the \(x\) axis, the angular momentum about that axis, \(\hat L_x = -i(y\,\partial_z - z\,\partial_y)\), commutes with the Hamiltonian; the packet starts with \(\hat L_x\psi = 0\) and keeps it, so at every time \(\psi(x, y, z, t) = \psi(x, \rho, t)\) with \(\rho = \sqrt{y^2 + z^2}\), the distance from the axis. The whole three-dimensional wave is therefore fixed by its values on one half-plane through the axis. Kaggle computed every run on the full \(128^3\) grid and stored the plane \(z = 0\); the page keeps its half \(y = \rho \ge 0\), \(128 \times 64\) points \(0.5\,a\) apart, as two levels per point: \(q = \mathrm{round}\big(255\,|\psi|/|\psi|_\text{peak}\big)\), with \(|\psi|_\text{peak}\) the largest value in the first frame, and \(p\), the phase \(\arg\psi\) in 256 steps from \(-\pi\) to \(\pi\). To draw a frame the page spins this half-plane about the axis: every point of a box \(64\,a\) long and \(48\,a\) wide takes \(\mathrm{Re}\,\psi = (q/255)\cos(\text{phase})\) of the stored point at its \(x\) and its \(\rho\), linear between the two stored \(\rho\) values around it.</p>
+                        <p>The picture is drawn as coloured fog: crests (\(\mathrm{Re}\,\psi &gt; 0\)) wine, troughs ink and fainter, each sample along a pixel's line of sight adding opacity \(1 - e^{-45(\mathrm{Re}\,\psi)^2\Delta s}\) (a third of that for troughs), so the fronts of the wave read as bands; the sphere is a glass shell. Three things differ from the model. First, the symmetry holds exactly only on paper: on the square grid the sphere is a staircase, so the computed wave is round about the axis only to within a small error. The data panel shows two measurements of it: the two halves \(y\) and \(-y\) of every stored plane agree to 4 levels of 255, and a full three-dimensional run computed in this workspace (\(E = 2\), \(V_0 = 3\), \(R = 4\)) equals its spun plane to 2 levels of 127 in the root mean square and to 24 of 127 at worst, at a few points on the sphere's surface. Second, the levels stop at 255: where the incoming and reflected waves overlap in front of the sphere the crests of the standing pattern can exceed the first frame's peak; in the default run up to 43 of the 16 384 points of the plane (frame 19 of 48) are clipped. Third, time is shown in jumps: the page shows the stored frame at or before the playback time and never blends two frames. A whole run plays in about 9 s at full speed; the playback slows towards the end of a run and when a control is near the edge of the computed range. The probabilities in the readouts and in Fig. 14b come from the whole \(\psi\) on Kaggle's grid, not from the picture.</p>
+                        <p>The graph Fig. 14b draws the curves of Figure 2 for the chosen run: behind in black, inside (the slab \(|x| \le R\)) in rose, dashed, ahead in wine, and lost at the border in grey, dotted. The readouts below the controls give the same four numbers at the frame shown; with the defaults at the last frame they read 0.239, 0.631, 0.126 and 0.0039. The guide line evaluates (14) for a slab of thickness \(2R\) and says when \(E &lt; V_0\); it is a reference for the central ray only, not a prediction for the sphere. The data panel holds every stored number with its source, and checks the inside and lost values, the free-packet width (11) and the guide (14) against their formulas.</p>
+                    </section>
+
+                    <section class="psec" id="p-limits">
+                        <h3><span class="psec__n">10</span>What the model leaves out</h3>
+                        <p>The model is a single particle without spin, moving slowly enough for (2) to hold, in a potential with a perfectly sharp edge. Real scatterers are softer: the potential of an atom or a nucleus changes smoothly over a distance comparable to its size, and a smooth edge reflects less than a sharp one, as Problem 10.5 lets you explore. Electrons have spin, and at high speed they need the Dirac equation; many electrons repel each other and are identical, which (2) for one particle cannot describe. The model also stops at the wave: it does not describe what happens when a detector finds the particle in one place, which is where the probabilities of (1) are turned into counts.</p>
+                        <p>The computation has its own limits, all measured above: a box of finite size whose border removes waves and so ends each run after a fixed time; a time step and a grid that leave errors of order \(10^{-4}\) and \(10^{-3}\); single precision; and a picture of one plane in 256 levels. At the end of a run the scattering is not finished: in the default run 12.6 % of the probability is still beside the sphere, moving outwards.</p>
+                        <p>The next model is the stationary theory of scattering. Instead of following one packet, one sends in a plane wave of a single energy and asks for the outgoing spherical wave far away, whose strength in each direction is the <em>differential cross-section</em>. For a sphere the wave is expanded in <em>partial waves</em> of definite angular momentum; a wave with angular momentum \(\ell\) passes the centre at a distance of about \(\ell/k\), so for \(k_0R = 8.94\) about nine partial waves meet the sphere, too many for the simple low-energy results and too few for pure ray optics, which is why the computed pictures show both reflection and diffraction. This theory is the subject of the scattering chapters of the textbooks listed below.</p>
+                        <div class="pbox pbox--ex">
+                            <span class="pbox__t">Problems</span>
+                            <p><b>10.1</b> Compute the Fourier transform of the one-dimensional packet \(\psi(x,0) = (2\pi\sigma_0^2)^{-1/4}e^{-x^2/(4\sigma_0^2) + ik_0x}\) by completing the square, and confirm \(|\phi(k)|^2\) in (7) and \(\sigma_x\sigma_k = \tfrac12\).</p>
+                            <p><b>10.2</b> Show from (11) that the width has grown by the factor \(\sqrt2\) at \(t = 2\sigma_0^2\). On the page, set \(V_0 = 0\) and compare \(\sigma_y\) with \(\sigma_\text{free}\) in the data panel at the last frame for \(E = 0.5\) and \(E = 4.5\). Explain why the slow packet has spread more by the end although both have the same \(\sigma_0\).</p>
+                            <p><b>10.3</b> Derive the \(E &gt; V_0\) branch of (14) from the \(E &lt; V_0\) branch with \(\kappa \to ik'\). For \(E = 2.5\) and \(d = 8\), find the barrier heights \(V_0 &lt; E\) at which the slab is perfectly transparent, and locate them on the dotted curve of Figure 3.</p>
+                            <p><b>10.4</b> Using (15) and (16), show that a hard sphere sends the fraction \(1 - e^{-R^2/(4\sigma_0^2)}\) of a Gaussian beam backwards, and evaluate it for \(R = 2, 4, 6\). Compare with the stored probability behind for \(E = 2.5\), \(V_0 = 8\): 0.084, 0.277 and 0.458.</p>
+                            <p><b>10.5</b> Suppose the sphere's edge were smooth, \(V\) rising from 0 to \(V_0\) over a distance \(w\). Using the commutator in (19), explain why the split step would become more accurate. Then use the remark of section 4.2, that a wave is partly reflected at every sudden change, to argue why a smooth edge reflects less of a wave with \(E &gt; V_0\) than a sharp one when \(w \gg \lambda\).</p>
+                            <p><b>10.6</b> For the live preview, \(\Delta x = 1\,a\) in a box of \(64\,a\). Using (17) and the criterion \(k_0 + 4\sigma_k &lt; \pi/\Delta x\), show that the box must shrink for \(E &gt; 3.05\), and find the box side the worker uses for \(E = 6\).</p>
+                        </div>
+                        <h4><span class="psub__n">10.1</span>Further reading</h4>
+                        <ol class="prefs">
+                            <li>D. J. Griffiths and D. F. Schroeter, <a href="https://www.cambridge.org/highereducation/books/introduction-to-quantum-mechanics/990799CA07A83FC5312402AF6860311E"><em>Introduction to Quantum Mechanics</em></a>, 3rd edition, Cambridge University Press, 2018: chapter 2, “Time-independent Schrödinger Equation” (the free particle and the finite well and barrier), and chapter 10, “Scattering”.</li>
+                            <li>J. J. Sakurai and J. Napolitano, <a href="https://www.cambridge.org/core/books/modern-quantum-mechanics/DF43277E8AEDF83CC12EA62887C277DC"><em>Modern Quantum Mechanics</em></a>, 3rd edition, Cambridge University Press, 2020: chapter 2, “Quantum Dynamics” (the time-evolution operator), and chapter 6, “Scattering Theory”.</li>
+                            <li>S. Blanes, F. Casas and A. Murua, <a href="https://arxiv.org/abs/2401.01722">“Splitting methods for differential equations”</a>, <em>Acta Numerica</em> (2024), arXiv:2401.01722: section 1.1 (Lie–Trotter and Strang splitting, the error constant of the symmetric product) and section 1.6 (the time-dependent Schrödinger equation, the split-step Fourier method, unitarity, and \([\hat V,[\hat T,\hat V]] = |\nabla V|^2\)).</li>
+                            <li>M. D. Feit, J. A. Fleck Jr. and A. Steiger, <a href="https://doi.org/10.1016/0021-9991(82)90091-2">“Solution of the Schrödinger equation by a spectral method”</a>, <em>Journal of Computational Physics</em> 47, 412–433 (1982), and G. Strang, <a href="https://doi.org/10.1137/0705041">“On the construction and comparison of difference schemes”</a>, <em>SIAM Journal on Numerical Analysis</em> 5, 506–517 (1968): the original papers of the method and of the symmetric splitting. Only their publisher records could be opened for this note (the full texts are behind paywalls); what this note says about them is taken from reference 3.</li>
+                        </ol>
+                    </section>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <footer class="sim-foot">
+        <span>© 2026 Numa Koudsie</span>
+        <span><a href="../simulations.html">All simulations ↑</a> · <a href="../index.html">Home page</a></span>
+    </footer>
+
+    <script src="../scripts/fold.js"></script>
+    <script src="../scripts/sim.js"></script>
+    <script src="../scripts/dataset.js"></script>
+    <script src="../scripts/kaggle-flow.js"></script>
+    <script src="../scripts/volume-view.js"></script>
+    <script>
+    (function () {
+        'use strict';
+        /* ---------- where the stored runs are served from: the one line to change when the store moves ---------- */
+        var DATA_BASE = '../data/schrodinger-sphere/';   /* generations.json lists the dated generations; each has its own index.json */
+        var BRIDGE_URL = null;   /* kaggle-bridge's address once it is deployed; null: not connected (docs/kaggle-pipeline.md) */
+        var PROJECT = 'schrodinger-sphere';
+        /* the controls offer stops beyond the computed grid: those are the regions not computed yet */
+        var EXTRA = { E: [5.0, 5.5, 6.0], V0: [10.0, 12.0], R: [1.0, 7.0, 8.0] };
+        var PLAY_SECONDS = 9;    /* a whole run plays in about this many seconds at full speed */
+        var LIVE_MS = { note: 'measured in Node 22 on one core of a 4-core workspace: 11 to 34 s for a whole run' };
+
+        var stage = document.getElementById('stage'), volCanvas = document.getElementById('vol'), ovBox = Sim.canvas2d(document.getElementById('ov')), octx = ovBox.ctx;
+        var reading = false;   /* Read values on: dragging pins a point instead of turning the view */
+        var view = VolumeView(volCanvas, { offset: 0, canTurn: function () { return !reading; }, onTurn: function () { dirty = true; } }), dirty = true, shownId = null;
+        view.signed = true; view.kappa = 45; view.dist = 1.9; view.fov = 0.5; view.yaw = -0.32; view.pitch = 0.36; var RMAX = 24;   /* the 3D box shows rho up to 24 a around the flight axis */
+        if (!view.ok) document.getElementById('src-t').textContent = 'This browser has no WebGL2, which the 3D view needs.';
+        var plotBox = Sim.canvas2d(document.getElementById('plot')), pctx = plotBox.ctx;
+        var timeIn = document.getElementById('time'), timeOut = document.getElementById('time-out');
+        var IDX = null, byKey = {}, by2d = {}, cache = {}, live = null, liveKey = null, worker = null, job = 0;
+        var tPhys = 0, playing = true, endHeld = false, fade = { from: null, a: 1 }, lastKey = null, lastSrc = null, shownReal = false;
+        var gov = KaggleFlow.governor(0.45, 0), pop = KaggleFlow.popup(stage), bridge = KaggleFlow.bridge({ url: BRIDGE_URL, project: PROJECT });
+        var requested = {}, sliders = {};
+        var prev = document.createElement('canvas'), pg = prev.getContext('2d');
+
+        /* ---------- the store (scripts/dataset.js): every number shown is written here where it is read or computed ---------- */
+        var ds = Sim.dataset({ title: 'A wave packet meets a sphere', attrs: { figure: 14, page: 'schrodinger-sphere.html', units: 'hbar = m = 1; lengths in the grid unit a, times in m a^2 / hbar, energies in hbar^2 / (m a^2)', solver: 'tools/kaggle/schrodinger-sphere/solver.py (Kaggle); scripts/schrodinger-live-worker.js (live preview)', data: DATA_BASE + 'index.json' } });
+        ds.var('E', [], 'float', { symbol: 'E', long_name: 'packet energy (mean kinetic energy k₀²/2)', computed_in: 'energy slider', digits: 2 });
+        ds.var('V0', [], 'float', { symbol: 'V<sub>0</sub>', long_name: 'potential energy inside the sphere', computed_in: 'barrier slider', digits: 2 });
+        ds.var('R', [], 'float', { symbol: 'R', units: 'a', long_name: 'sphere radius', computed_in: 'radius slider', digits: 2 });
+        ds.var('k0', [], 'float', { symbol: 'k<sub>0</sub>', units: '1/a', long_name: 'mean wave number of the packet', computed_in: 'readouts()', formula: '√(2E)', digits: 4 });
+        ds.var('stored', [], 'bool', { symbol: 'stored', long_name: 'this (E, V₀, R) was computed on Kaggle and is stored', computed_in: 'pick()', source: 'Looked up in index.json.' });
+        ds.var('source', [], 'str', { symbol: 'source', long_name: 'where the picture comes from now', computed_in: 'pick() / live()', source: 'kaggle: the stored run; live: the browser preview; none: nothing yet.' });
+        ds.var('file', [], 'str', { symbol: 'file', long_name: 'the stored run file', computed_in: 'pick()', source: 'From index.json.' });
+        ds.var('sha_ok', [], 'bool', { symbol: 'SHA-256 ✓', long_name: 'the file’s SHA-256 equals the one in index.json', computed_in: 'load()', source: 'crypto.subtle.digest on the downloaded bytes.' });
+        ds.var('steps', [], 'int', { symbol: 'steps', long_name: 'time steps of Δt = 0.01 in the stored run', computed_in: 'load(), from the run file', digits: 0 });
+        ds.var('wall', [], 'float', { symbol: 't<sub>GPU</sub>', units: 's', long_name: 'seconds the run took on Kaggle’s T4', computed_in: 'load(), from the run file', digits: 2 });
+        ds.var('t', [], 'float', { symbol: 't', units: 'm a²/ħ', long_name: 'time of the frame shown', computed_in: 'frame(), the stored frame time', digits: 3 });
+        ds.var('frame', [], 'int', { symbol: 'frame', long_name: 'index of the stored frame shown (0 to 47)', computed_in: 'frame()', digits: 0 });
+        ds.var('ready', [], 'int', { symbol: 'frames ready', long_name: 'frames available: 48 when stored, fewer while the live preview computes', computed_in: 'frame()', digits: 0 });
+        ds.var('norm', [], 'float', { symbol: '∫|ψ|²', long_name: 'total probability in the box at this frame (from the whole 3D ψ)', computed_in: 'stored curve, column 1', digits: 6 });
+        ds.var('behind', [], 'float', { symbol: 'P<sub>behind</sub>', long_name: 'probability with x < −R', computed_in: 'stored curve, column 2', digits: 5 });
+        ds.var('ahead', [], 'float', { symbol: 'P<sub>ahead</sub>', long_name: 'probability with x > R', computed_in: 'stored curve, column 3', digits: 5 });
+        ds.var('inside', [], 'float', { symbol: 'P<sub>inside</sub>', long_name: 'probability with |x| ≤ R', computed_in: 'readouts()', formula: '∫|ψ|² − P<sub>behind</sub> − P<sub>ahead</sub>', digits: 5 });
+        ds.var('lost', [], 'float', { symbol: 'P<sub>lost</sub>', long_name: 'probability absorbed by the border layer so far', computed_in: 'readouts()', formula: '1 − ∫|ψ|²', digits: 5 });
+        ds.var('sigma_y', [], 'float', { symbol: 'σ<sub>y</sub>', units: 'a', long_name: 'width of the packet across the flight', computed_in: 'stored curve, column 4', digits: 4 });
+        ds.var('sigma_free', [], 'float', { symbol: 'σ<sub>free</sub>', units: 'a', long_name: 'width of a free packet at the same time (the law, for V₀ = 0)', computed_in: 'readouts()', formula: 'σ₀ √(1 + (t / 2σ₀²)²)', digits: 4 });
+        ds.var('T1D', [], 'float', { symbol: 'T<sub>1D</sub>', long_name: 'transmission of a flat slab of thickness 2R (a guide only)', computed_in: 'readouts()', formula: 'rectangular barrier formula', digits: 4 });
+        ds.var('speed', [], 'float', { symbol: 'speed', long_name: 'playback speed relative to normal (eased)', computed_in: 'tick()', digits: 3 });
+        ds.var('edge', [], 'float', { symbol: 'edge', long_name: 'how close a control is to the edge of the computed range: 0 inside, 1 at the edge', computed_in: 'tick()', digits: 3 });
+        ds.var('live_done', [], 'float', { symbol: 'live', long_name: 'fraction of the live preview computed', computed_in: 'worker messages', digits: 3 });
+        ds.dim('xi', 128); ds.dim('rho', 64);
+        ds.coord('xc', 'xi', Float32Array, { symbol: 'x', units: 'a', long_name: 'x of each stored point, along the flight axis', computed_in: 'grid of the Kaggle runs, 0.5 a apart' });
+        ds.coord('rc', 'rho', Float32Array, { symbol: 'ρ', units: 'a', long_name: 'distance from the flight axis of each stored point', computed_in: 'grid of the Kaggle runs, 0.5 a apart' });
+        ds.var('amp', ['xi', 'rho'], Uint8Array, { symbol: 'q', long_name: 'stored level of |ψ| on the half-plane through the axis, 0 to 255 of the first frame’s peak', computed_in: 'frame(), copied from the run file', digits: 0 });
+        ds.var('phase', ['xi', 'rho'], Uint8Array, { symbol: 'p', long_name: 'stored level of arg ψ, 0 to 255 for −π to π (0 where q < 3)', computed_in: 'frame(), copied from the run file', digits: 0 });
+        ds.var('sym_mirror', [], 'int', { symbol: 'mirror', long_name: 'largest |ψ| level difference between the cut’s two halves, y and −y, over all stored runs', computed_in: 'index.json (to_site_axisym.py)', digits: 0 });
+        var AMP = ds.alloc('amp'), PHS = ds.alloc('phase'), XC = ds.alloc('xc'), RC = ds.alloc('rc');
+
+        /* ---------- the grid ---------- */
+        function stopsOf(grid, extra) { return grid.concat(extra).sort(function (a, b) { return a - b; }).filter(function (v, i, a) { return i === 0 || v !== a[i - 1]; }); }
+        function key(E, V, R) { return E.toFixed(2) + '_' + V.toFixed(2) + '_' + R.toFixed(2); }
+        function current() { return { E: sliders.E.value, V0: sliders.V0.value, R: sliders.R.value }; }
+        function isStored(E, V, R) { return !!byKey[key(E, V, R)]; }   /* stored in 3D (the 2D generation of 2026-11-12 is kept for its numbers) */
+
+        /* ---------- load one stored run: fetch, check its SHA-256, inflate ---------- */
+        function hex(buf) { return Array.prototype.map.call(new Uint8Array(buf), function (b) { return ('0' + b.toString(16)).slice(-2); }).join(''); }
+        function load(r) {
+            var k = key(r.E, r.V0, r.R);
+            if (cache[k]) return cache[k].ready;
+            var c = cache[k] = { source: 'kaggle', meta: r };
+            c.ready = fetch(r.base + r.file).then(function (res) { if (!res.ok) throw new Error(res.status + ' for ' + r.file); return res.arrayBuffer(); }).then(function (buf) {
+                var check = (window.crypto && crypto.subtle) ? crypto.subtle.digest('SHA-256', buf).then(function (h) { return hex(h) === r.sha256; }) : Promise.resolve(null);
+                var dv = new DataView(buf), H = dv.getUint32(4, true), head = JSON.parse(new TextDecoder().decode(new Uint8Array(buf, 8, H)));
+                var body = new Blob([new Uint8Array(buf, 8 + H)]).stream().pipeThrough(new DecompressionStream('deflate'));
+                return Promise.all([check, new Response(body).arrayBuffer()]).then(function (res) {
+                    var all = new Uint8Array(res[1]), n = head.n;
+                    c.head = head; c.n = n; c.nx = head.nx; c.nr = head.nr; c.step = head.step; c.x0 = head.x0; c.ready_n = n; var m = n * c.nx * c.nr; c.A = all.subarray(0, m); c.P = all.subarray(m, 2 * m); c.curves = head.curves; c.sha = res[0];   /* n frames of the half-plane (x, rho) */
+                    return c;
+                });
+            });
+            c.ready.catch(function (e) { c.error = String(e.message || e); });
+            return c.ready;
+        }
+
+        /* ---------- the live preview: same equation, coarser grid, in a Web Worker ---------- */
+        function startLive(p) {
+            var k = key(p.E, p.V0, p.R);
+            if (liveKey === k && live) return;
+            if (worker) worker.terminate();
+            liveKey = k; job++;
+            live = { source: 'live', meta: p, n: 48, nx: 64, nr: 32, step: 1, x0: -32, ready_n: 0, A: new Uint8Array(48 * 64 * 32), P: new Uint8Array(48 * 64 * 32), curves: [], t0: performance.now() };
+            var mine = live, id = job;
+            worker = new Worker('../scripts/schrodinger-live-worker.js');
+            worker.onmessage = function (e) {
+                var m = e.data; if (m.id !== id || mine !== live) return;
+                if (m.type === 'frame') { var o = m.out; mine.step = m.L / o; mine.x0 = -m.L / 2; for (var a = 0; a < o; a++) for (var b = 0; b < o / 2; b++) { mine.A[(m.f * o + a) * (o / 2) + b] = m.amp[a * o + o / 2 + b]; mine.P[(m.f * o + a) * (o / 2) + b] = m.ph[a * o + o / 2 + b]; } mine.curves[m.f] = m.curve; mine.ready_n = m.f + 1; }   /* the half y >= 0 of the live cut */
+                else if (m.type === 'done') { mine.ms = m.ms; mine.done = true; }
+                else if (m.type === 'error') { mine.error = m.message; }
+            };
+            worker.postMessage({ id: id, E: p.E, V0: p.V0, R: p.R });
+        }
+
+        /* ---------- what to show: the stored run, else the live preview ---------- */
+        function entry() {
+            var p = current(), r = byKey[key(p.E, p.V0, p.R)];
+            if (r) { var c = cache[key(p.E, p.V0, p.R)]; if (!c) load(r); return c && c.A ? c : null; }
+            startLive(p);
+            return live && liveKey === key(p.E, p.V0, p.R) ? live : null;
+        }
+        function frameDt(c) { return c.curves.length > 1 && c.curves[1] ? c.curves[1][0] - c.curves[0][0] : 0.3; }
+        function tEnd(c) { return frameDt(c) * (c.n - 1); }
+
+        /* ---------- drawing: the stored cloud through VolumeView, labels on a 2D canvas above it ---------- */
+        function L() { return (IDX && IDX.L) || 64; }
+        /* the 3D wave by rotational symmetry: the packet flies along x through the sphere's centre, so psi(x, y, z) = psi(x, rho)
+           with rho = sqrt(y^2 + z^2) (L_x commutes with the Hamiltonian; see the lecture note). Each voxel takes Re psi of the stored
+           half-plane at its rho, linearly between the two stored rho points around it, from the stored levels: Re psi = q/255 cos(p);
+           as a signed level, 127 Re psi + 128. The voxels sit at the stored x points and at cell centres in y and z. */
+        var revBuf = null;
+        function revolve(c, f) {
+            var nx = c.nx, nr = c.nr, st = c.step, M = Math.min(nr - 1, Math.floor(RMAX / st)), ny = 2 * M, base = f * nx * nr, A = c.A, P = c.P;
+            var re = new Float32Array(nx * nr); for (var q = 0; q < nx * nr; q++) { var a = A[base + q]; re[q] = a < 3 ? 0 : a / 255 * Math.cos(P[base + q] / 255 * 2 * Math.PI - Math.PI); }
+            var n = nx * ny * ny; if (!revBuf || revBuf.length !== n) revBuf = new Uint8Array(n);
+            var R0 = new Float32Array(ny * ny), I0 = new Int32Array(ny * ny);
+            for (var j = 0; j < ny; j++) for (var k = 0; k < ny; k++) { var y = (j + 0.5 - M) * st, z = (k + 0.5 - M) * st, rr = Math.sqrt(y * y + z * z) / st, r0 = Math.floor(rr); I0[j * ny + k] = r0; R0[j * ny + k] = rr - r0; }
+            for (var i = 0; i < nx; i++) { var row = i * nr, o = i * ny * ny;
+                for (var jk = 0; jk < ny * ny; jk++) { var r0b = I0[jk], w = R0[jk], v = r0b + 1 < nr ? re[row + r0b] * (1 - w) + re[row + r0b + 1] * w : 0; revBuf[o + jk] = Math.max(1, Math.min(255, Math.round(127 * v + 128))); } }
+            var hx = nx * st / 2 / (L() / 2), hy = M * st / (L() / 2);
+            return { data: revBuf, nx: nx, ny: ny, half: [hx, hy, hy], off: [-(c.x0 + nx * st / 2) / (nx * st) - 0.5 / nx, 0, 0] };
+        }
+        function drawView(c, f, hold) {
+            var W = ovBox.w, Hh = ovBox.h, dpr = window.devicePixelRatio || 1;
+            if (volCanvas.width !== Math.round(W * dpr) || volCanvas.height !== Math.round(Hh * dpr)) { volCanvas.width = Math.round(W * dpr); volCanvas.height = Math.round(Hh * dpr); dirty = true; }
+            var id = c && !hold ? (c.source + (c.meta.E + '_' + c.meta.V0 + '_' + c.meta.R) + ':' + f) : 'none';
+            if (id !== shownId) {
+                if (c && !hold) { var V = revolve(c, f); view.setVolume(V.data, V.nx, V.ny, V.ny); view.half = V.half; view.offset = V.off; } else view.clear();
+                shownId = id; dirty = true;
+            }
+            var p = current(); if (view.sphere !== p.R / (L() / 2)) { view.sphere = p.R / (L() / 2); dirty = true; }
+            if (dirty && view.ok) { view.render(); dirty = false; }
+            octx.clearRect(0, 0, W, Hh);
+            if (hold && fade.from) { octx.globalAlpha = 0.55; octx.drawImage(prev, 0, 0, W, Hh); octx.globalAlpha = 1; fade.a = 0; }   /* the last picture, held and dimmed, until frames reach the visitor's time */
+            else if (fade.a < 1 && fade.from) { octx.globalAlpha = 1 - fade.a; octx.drawImage(prev, 0, 0, W, Hh); octx.globalAlpha = 1; }
+            octx.fillStyle = '#5a504b'; octx.font = '12px "IBM Plex Mono", monospace';
+            octx.fillText('flight along x · glass sphere R = ' + p.R + ' a', 10, Hh - 12);
+            if (c && c.source === 'live' && !hold) { octx.fillStyle = '#7a1f2b'; octx.fillText('live preview in your browser · 64³ points · being computed', 10, 20); }
+        }
+        function snapshot() { prev.width = volCanvas.width; prev.height = volCanvas.height; pg.setTransform(1, 0, 0, 1, 0, 0); pg.drawImage(volCanvas, 0, 0); fade.from = true; fade.a = 0; }
+        function drawPlot(c, f) {
+            var W = plotBox.w, Hh = plotBox.h, m = { l: 42, r: 10, t: 34, b: 30 }; pctx.clearRect(0, 0, W, Hh);
+            pctx.fillStyle = '#fffaf3'; pctx.fillRect(0, 0, W, Hh);
+            var tm = c ? tEnd(c) : 1, X = function (t) { return m.l + (W - m.l - m.r) * t / tm; }, Y = function (v) { return Hh - m.b - (Hh - m.t - m.b) * v; };
+            pctx.font = '11px "IBM Plex Mono", monospace'; pctx.lineWidth = 1;
+            for (var v = 0; v <= 1.0001; v += 0.25) { pctx.strokeStyle = '#e6dfd2'; pctx.beginPath(); pctx.moveTo(m.l, Y(v)); pctx.lineTo(W - m.r, Y(v)); pctx.stroke(); pctx.fillStyle = '#8b8079'; pctx.fillText(v.toFixed(2), 4, Y(v) + 4); }
+            pctx.fillText('0', m.l, Hh - 12); if (c) pctx.fillText('t = ' + tm.toFixed(1) + ' →', W - m.r - 78, Hh - 12);
+            var ser = [['behind', function (q) { return q[2]; }, '#1c1518', []], ['inside', function (q) { return q[1] - q[2] - q[3]; }, '#b07a6a', [4, 3]], ['ahead', function (q) { return q[3]; }, '#7a1f2b', []], ['lost', function (q) { return 1 - q[1]; }, '#8b8079', [2, 3]]];
+            ser.forEach(function (s, i) {
+                var lx = m.l + i * Math.min(92, (W - m.l) / 4);
+                pctx.strokeStyle = s[2]; pctx.setLineDash(s[3]); pctx.lineWidth = 2; pctx.beginPath(); pctx.moveTo(lx, 16); pctx.lineTo(lx + 18, 16); pctx.stroke();
+                pctx.setLineDash([]); pctx.fillStyle = '#3a322e'; pctx.fillText(s[0], lx + 22, 20);
+                if (!c) return;
+                pctx.strokeStyle = s[2]; pctx.setLineDash(s[3]); pctx.beginPath();
+                for (var j = 0; j < c.ready_n; j++) { var q = c.curves[j]; if (!q) break; j ? pctx.lineTo(X(q[0]), Y(s[1](q))) : pctx.moveTo(X(q[0]), Y(s[1](q))); }
+                pctx.stroke(); pctx.setLineDash([]);
+            });
+            if (c && c.curves[f]) { var xt = X(c.curves[f][0]); pctx.strokeStyle = '#1c1518'; pctx.lineWidth = 1; pctx.beginPath(); pctx.moveTo(xt, m.t); pctx.lineTo(xt, Hh - m.b); pctx.stroke(); }
+        }
+
+        /* ---------- numbers ---------- */
+        function T1D(E, V, a) {
+            if (V === 0) return 1; if (Math.abs(E - V) < 1e-9) return 1 / (1 + a * a * V / 2);
+            if (E < V) { var k = Math.sqrt(2 * (V - E)), s = Math.sinh(k * a); return 1 / (1 + V * V * s * s / (4 * E * (V - E))); }
+            var k2 = Math.sqrt(2 * (E - V)), s2 = Math.sin(k2 * a); return 1 / (1 + V * V * s2 * s2 / (4 * E * (E - V)));
+        }
+        function readouts(c, f, any) {   /* c: the data drawn now (null while the picture is held); any: the run being computed */
+            var p = current(), s0 = (IDX && IDX.sigma0) || 3;
+            ds.set('E', p.E); ds.set('V0', p.V0); ds.set('R', p.R); ds.set('k0', Math.sqrt(2 * p.E)); ds.set('T1D', T1D(p.E, p.V0, 2 * p.R));
+            var st = isStored(p.E, p.V0, p.R); ds.set('stored', st); ds.set('source', c ? c.source : any ? 'held: ' + any.source + ' still computing' : 'none');
+            ds.set('file', st ? byKey[key(p.E, p.V0, p.R)].file : '—');
+            if (c && c.curves[f]) {
+                var q = c.curves[f]; ds.set('t', q[0]); ds.set('frame', f); ds.set('norm', q[1]); ds.set('behind', q[2]); ds.set('ahead', q[3]); ds.set('sigma_y', q[4]);
+                ds.set('inside', q[1] - q[2] - q[3]); ds.set('lost', 1 - q[1]); ds.set('sigma_free', s0 * Math.sqrt(1 + Math.pow(q[0] / (2 * s0 * s0), 2)));
+                ds.set('ready', c.ready_n);
+                if (c.source === 'kaggle') { ds.set('sha_ok', c.sha === true); ds.set('steps', c.head.steps); ds.set('wall', c.head.wall); }
+                if (c.source === 'kaggle') { var m2 = c.nx * c.nr; AMP.set(c.A.subarray(f * m2, (f + 1) * m2)); PHS.set(c.P.subarray(f * m2, (f + 1) * m2)); ds.touch('amp'); ds.touch('phase'); }
+            }
+            var fx = function (v, d) { return v == null || !isFinite(v) ? '—' : v.toFixed(d); };
+            document.getElementById('r-b').textContent = fx(ds.get('behind'), 3); document.getElementById('r-a').textContent = fx(ds.get('ahead'), 3);
+            document.getElementById('r-i').textContent = fx(ds.get('inside'), 3); document.getElementById('r-l').textContent = fx(ds.get('lost'), 4);
+            document.getElementById('r-g').textContent = (p.E < p.V0 ? 'E < V₀, forbidden classically · ' : '') + 'T = ' + fx(ds.get('T1D'), 3);
+            document.getElementById('cap-t').textContent = 't = ' + fx(ds.get('t'), 2) + (c ? ' · frame ' + (f + 1) + ' of ' + c.n : '');
+            document.getElementById('cap-p').textContent = c ? (c.source === 'kaggle' ? 'stored, from Kaggle' : 'live preview, ' + c.ready_n + ' of 48 frames') : any ? 'live preview, ' + any.ready_n + ' of 48 frames: the picture waits' : 'not computed yet';
+            var src = document.getElementById('src-t'); if (!c && any) c = any;
+            if (c && c.source === 'kaggle') src.innerHTML = 'Computed on Kaggle on ' + c.meta.generated + ', Tesla T4, 128³ points, stored as 64³ cells, ' + c.head.steps + ' steps of Δt = 0.01 in ' + c.head.wall.toFixed(1) + ' s. File <code>' + c.meta.generated + '/' + c.meta.file + '</code>, SHA-256 ' + (c.sha === true ? 'checked ✓' : c.sha === false ? '<b>does not match</b>' : 'not checked (no crypto in this browser)') + '.';
+            else if (c) src.innerHTML = 'Not computed on Kaggle yet. This is a <b style="display:inline">live preview</b> computed in your browser on a coarser grid (64³), ' + c.ready_n + ' of 48 frames so far. Checked against Kaggle on stored runs: the probabilities agree to within 0.08 at every frame. ' + (by2d[key(p.E, p.V0, p.R)] ? 'Kaggle’s 2D generation of this run gives at the end: behind ' + by2d[key(p.E, p.V0, p.R)].behind.toFixed(3) + ', ahead ' + by2d[key(p.E, p.V0, p.R)].ahead.toFixed(3) + '. ' : '') + (bridge.connected ? '' : 'The link that would have Kaggle compute it in 3D (kaggle-bridge) is not switched on yet.');
+            else src.textContent = 'Not computed yet.';
+        }
+
+        /* ---------- the clock ---------- */
+        function frameOf(c) { if (!c) return 0; var f = Math.floor(tPhys / frameDt(c) + 1e-6); return Math.max(0, Math.min(c.ready_n - 1, c.n - 1, f)); }
+        var clk = Sim.clock(function (dt) {
+            if (!IDX) return;
+            var c = entry(), p = current(), k = key(p.E, p.V0, p.R), src = c ? c.source : 'none';
+            if (k !== lastKey || src !== lastSrc) { if (lastKey !== null && shownReal) snapshot(); lastKey = k; lastSrc = src; }   /* keep the last real picture for the cross-fade and the hold */
+            if (fade.a < 1) fade.a = Math.min(1, fade.a + dt / 0.45 + (dt === 0 ? 0.02 : 0));
+            /* how fast to play: slower near any edge of the computed range, zero where no data is left */
+            var edge = Math.max(sliders.E.closeness(), sliders.V0.closeness(), sliders.R.closeness());
+            var goal = playing ? 1 - 0.8 * edge : 0;
+            if (c) {
+                var te = tEnd(c), tReady = frameDt(c) * Math.max(0, c.ready_n - 1);
+                var zone = Math.max(0.25 * te, frameDt(c) * 2);
+                if (c.ready_n < c.n) goal = Math.min(goal, KaggleFlow.smooth((tReady - tPhys) / (zone * 0.6)));   /* the live preview: slow to the last frame computed */
+                else goal = Math.min(goal, 0.06 + 0.94 * KaggleFlow.smooth((te - tPhys) / zone));                    /* the stored run: slow towards its end */
+            } else goal = 0;
+            var sp = gov.step(goal, dt || 0.016);
+            /* time only moves forward, and only as far as there are frames: entering a region still being computed, the
+               visitor's time is kept and the picture holds until the preview reaches it (no jump back to t = 0) */
+            var cap = c ? (c.ready_n >= c.n ? tEnd(c) : frameDt(c) * Math.max(0, c.ready_n - 1)) : 0;
+            if (c && playing && tPhys < cap) tPhys = Math.min(tPhys + dt * (tEnd(c) / PLAY_SECONDS) * sp, cap);
+            if (c && c.ready_n >= c.n && tPhys > tEnd(c)) tPhys = tEnd(c);   /* a stored run shorter in time than where the visitor stands: its last frame */
+            var behind = !c || tPhys > cap + 1e-6;
+            ds.set('speed', sp); ds.set('edge', edge); ds.set('live_done', live ? live.ready_n / 48 : 0);
+            document.querySelector('#speed span').style.width = (100 * sp).toFixed(0) + '%';
+            /* the visitor is heading out of the computed range: ask kaggle-bridge for the next block at once */
+            ['E', 'V0', 'R'].forEach(function (nm) { var s = sliders[nm], h = s.heading(); if (h && !requested[nm + h + k]) { requested[nm + h + k] = true; bridge.request({ heading: nm, direction: h, from: p }); } });
+            /* the notice: only when nothing is left to show */
+            var starved = behind || (c.ready_n < c.n && tPhys >= cap - 1e-6 && sp < 0.05);
+            if (starved && !isStored(p.E, p.V0, p.R)) {
+                var lp = live && liveKey === k ? live.ready_n / 48 : 0;
+                pop.set({ stage: bridge.connected ? 1 : 0, broken: bridge.connected ? -1 : 1, title: 'E = ' + p.E + ', V₀ = ' + p.V0 + ', R = ' + p.R + ' has not been computed yet',
+                    text: (bridge.connected ? 'Asked kaggle-bridge to have it computed on Kaggle’s GPU; it will be stored and come back here.' : 'The link to Kaggle, <b>kaggle-bridge</b>, is not switched on yet (dashed above), so Kaggle cannot be asked from this page. ') +
+                        ' Meanwhile your browser computes a live preview on a coarser grid: ' + Math.round(100 * lp) + ' %. The animation goes on as soon as the next frame is ready.', progress: lp });
+                pop.show();
+            } else if (pop.shown) pop.hide();
+            var f = frameOf(c);
+            timeIn.max = c ? c.n - 1 : 47; timeIn.value = f; timeIn.style.setProperty('--p', (c ? 100 * f / (c.n - 1) : 0) + '%'); timeOut.textContent = (behind ? tPhys : c && c.curves[f] ? c.curves[f][0] : 0).toFixed(2);
+            if (behind) { drawView(c, 0, true); shownReal = false; } else { drawView(c, f); shownReal = true; }
+            drawPlot(c, f); readouts(behind ? null : c, f, c);
+        });
+        function setPlay(p) { playing = p; document.getElementById('play').textContent = p ? 'Pause' : 'Play'; }
+        document.getElementById('play').addEventListener('click', function () { var c = entry(); if (!playing && c && c.ready_n >= c.n && tPhys >= tEnd(c) - 1e-9) { snapshot(); tPhys = 0; endHeld = false; } setPlay(!playing); });
+        document.getElementById('replay').addEventListener('click', function () { snapshot(); tPhys = 0; endHeld = false; gov.set(0); setPlay(true); });
+        timeIn.addEventListener('input', function () { var c = entry(); if (c) { tPhys = +timeIn.value * frameDt(c); } });
+
+        /* ---------- start: read the index, build the controls ---------- */
+        /* every generation (a dated folder) adds its runs; a later generation replaces a run computed again */
+        fetch(DATA_BASE + 'generations.json').then(function (r) { return r.json(); }).then(function (gens) {
+            return Promise.all(gens.map(function (g) { return fetch(DATA_BASE + g.index).then(function (r) { return r.json(); }).then(function (ix) { ix.base = DATA_BASE + g.date + '/'; return ix; }); }));
+        }).then(function (ixs) {
+            var grid = { Es: [], Vs: [], Rs: [] };
+            ixs.forEach(function (ix) { ix.runs.forEach(function (r) { r.base = ix.base; r.generated = ix.generated; byKey[key(r.E, r.V0, r.R)] = r; }); ['Es', 'Vs', 'Rs'].forEach(function (n) { grid[n] = grid[n].concat(ix[n]); }); if (ix.mirror_check) ds.set('sym_mirror', ix.mirror_check.largest_level_difference); });
+            var idx = IDX = Object.assign({}, ixs[ixs.length - 1], grid);
+            for (var i = 0; i < 128; i++) XC[i] = (i - 64) * idx.L / 128; for (var r2 = 0; r2 < 64; r2++) RC[r2] = r2 * idx.L / 128; ds.touch('xc'); ds.touch('rc');
+            var host = document.getElementById('params'), defs = [
+                ['E', 'Packet energy <i>E</i>', stopsOf(idx.Es, EXTRA.E), 2.5],
+                ['V0', 'Barrier height <i>V</i><sub>0</sub>', stopsOf(idx.Vs, EXTRA.V0), 3.0],
+                ['R', 'Sphere radius <i>R</i>', stopsOf(idx.Rs, EXTRA.R), 4.0]];
+            defs.forEach(function (d) {
+                var nm = d[0], stops = d[2];
+                sliders[nm] = KaggleFlow.slider({ host: host, label: d[1], aria: d[1].replace(/<[^>]+>/g, ''), stops: stops, index: stops.indexOf(d[3]), format: function (v) { return v.toFixed(nm === 'R' ? 1 : 2) + (nm === 'R' ? ' a' : ''); },
+                    stored: function (i) { var p = { E: sliders.E ? sliders.E.value : 2.5, V0: sliders.V0 ? sliders.V0.value : 3, R: sliders.R ? sliders.R.value : 4 }; p[nm] = stops[i]; return isStored(p.E, p.V0, p.R); },
+                    onChange: function () { ['E', 'V0', 'R'].forEach(function (o) { if (o !== nm && sliders[o]) sliders[o].refresh(); }); } });
+            });
+            ['E', 'V0', 'R'].forEach(function (o) { sliders[o].refresh(); });
+            load(byKey[key(2.5, 3.0, 4.0)]);
+        }).catch(function (e) { document.getElementById('src-t').textContent = 'The stored runs could not be read: ' + e.message; });
+        Sim.onResize(stage, function () { ovBox.fit(); plotBox.fit(); dirty = true; });
+        window.__fig14 = { ds: ds, entry: entry, sliders: function () { return sliders; }, setT: function (t) { tPhys = t; }, play: setPlay };
+
+        /* ---------- the data panel (scripts/datalog.js) reads the store; these hooks only say where things are drawn ---------- */
+        /* a stored point (x_i, rho_r) of the half-plane -> where it lands on the screen (at the angle where z = 0, y = rho);
+           a screen point -> the voxel of largest |Re psi| along its ray -> the stored point at its x and rho */
+        function pointOf(q) { var i = Math.floor(q / 64), r = q % 64; return [XC[i] / (L() / 2), RC[r] / (L() / 2), 0]; }
+        function screenOf(q) { return view.project(pointOf(q), ovBox.w, ovBox.h); }
+        function pixelCheck(q) {
+            var at = screenOf(q), c = entry(), dpr = volCanvas.width / ovBox.w;
+            if (!c || !view.data) return { what: 'the picture', drawn: 'nothing drawn yet', expected: '—', ok: true };
+            if (at.x < 0 || at.y < 0 || at.x >= ovBox.w || at.y >= ovBox.h) return { what: 'stored point ' + q, drawn: 'outside the view', expected: '—', ok: true, note: 'Turn the view to bring this point on screen.' };
+            var gl = volCanvas.getContext('webgl2'), px = new Uint8Array(4), X = Math.floor(at.x * dpr), Y = Math.floor(at.y * dpr);
+            gl.readPixels(X, volCanvas.height - 1 - Y, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, px);
+            if (px[3] === 0) return { what: 'screen pixel at stored point ' + q, drawn: 'nothing (transparent)', expected: 'a filled pixel', ok: false };
+            var want = view.expected((X + 0.5) / dpr, (Y + 0.5) / dpr, ovBox.w, ovBox.h), d = Math.max(Math.abs(px[0] - want[0]), Math.abs(px[1] - want[1]), Math.abs(px[2] - want[2]));
+            return { what: 'screen pixel where stored point ' + q + ' lands, (' + at.x.toFixed(1) + ', ' + at.y.toFixed(1) + ') css px', drawn: 'rgb(' + px[0] + ', ' + px[1] + ', ' + px[2] + ')', expected: 'rgb(' + want.join(', ') + '): the sum along that pixel’s ray through the 3D wave built from the stored levels, recomputed here', ok: d <= 3,
+                note: 'The pixel sums 192 samples along its ray through the 3D wave (each voxel Re ψ = q/255 · cos p of the stored half-plane at its distance ρ from the axis, linear between stored ρ points; crests wine, troughs ink, opacity 1 − exp(−45 (Re ψ)² Δs) for crests and 0.35 of that for troughs) and the glass shell of the sphere; the page repeats the sum on the CPU. Up to 3 colour units apart is accepted for rounding on the graphics card.' };
+        }
+        Sim.data = {
+            ds: ds, kicker: 'Fig. 14 · data', file: 'fig14-wave-packet-sphere',
+            playing: function () { return playing; },
+            groups: [
+                { title: 'What you set', note: 'the three stops of the controls', vars: ['E', 'V0', 'R', 'k0'] },
+                { title: 'The stored run', note: 'read from the run file Kaggle wrote', vars: ['stored', 'source', 'file', 'sha_ok', 'steps', 'wall', 'ready', 'live_done'] },
+                { title: 'This frame', note: 'stored values; inside and lost added up from them', vars: ['t', 'frame', 'norm', 'behind', 'ahead', 'inside', 'lost', 'sigma_y', 'sigma_free', 'T1D'] },
+                { title: 'The picture', note: 'the stored half-plane of this frame (x along the flight, ρ from the axis); the 3D wave is it spun about the axis', vars: ['xc', 'rc', 'amp', 'phase', 'sym_mirror'] },
+                { title: 'Playback', note: 'how the page plays', vars: ['speed', 'edge'] }
+            ],
+            probe: function (x, y) {
+                var b = view.pick(x, y, ovBox.w, ovBox.h), c = entry(); if (!b || !c) return null;
+                var M = b.ix, dm = view.dims, st = c.step, yv = (b.iy + 0.5 - dm[1] / 2) * st, zv = (b.iz + 0.5 - dm[2] / 2) * st, r = Math.min(63, Math.round(Math.sqrt(yv * yv + zv * zv) / st));
+                return { q: b.ix * 64 + r };
+            },
+            inspect: function (ref) {
+                var q = ref.q, i = Math.floor(q / 64), r = q % 64, a = AMP[q], ph = PHS[q], phi = ph / 255 * 2 * Math.PI - Math.PI;
+                return { title: 'stored point x = ' + XC[i].toFixed(2) + ' a, ρ = ' + RC[r].toFixed(2) + ' a (the strongest wave along the ray you pointed at; every point on the circle of radius ρ around the axis has these values)', at: screenOf(q),
+                    rows: [['x', XC[i], 'a', 'xc', i], ['ρ', RC[r], 'a', 'rc', r], ['q (|ψ|)', a, '', 'amp', q], ['p (arg ψ)', ph, '', 'phase', q], ['|ψ| / |ψ|<sub>peak,0</sub>', a / 255, ''], ['arg ψ', phi, 'rad'], ['Re ψ / |ψ|<sub>peak,0</sub>', a < 3 ? 0 : a / 255 * Math.cos(phi), '']] };
+            },
+            locate: function (name, idx) { if (name === 'amp' || name === 'phase') return screenOf(idx); return null; },
+            check: {
+                k0: function () { return { formula: '√(2E)', inputs: [['E', ds.get('E'), '', 2]], value: Math.sqrt(2 * ds.get('E')) }; },
+                inside: function () { return { formula: '∫|ψ|² − P<sub>behind</sub> − P<sub>ahead</sub>', inputs: [['∫|ψ|²', ds.get('norm'), '', 6], ['P<sub>behind</sub>', ds.get('behind'), '', 5], ['P<sub>ahead</sub>', ds.get('ahead'), '', 5]], value: ds.get('norm') - ds.get('behind') - ds.get('ahead') }; },
+                lost: function () { return { formula: '1 − ∫|ψ|²', inputs: [['∫|ψ|²', ds.get('norm'), '', 6]], value: 1 - ds.get('norm') }; },
+                sigma_free: function () { var s0 = IDX.sigma0; return { formula: 'σ₀ √(1 + (t / 2σ₀²)²)', inputs: [['σ₀', s0, 'a', 1], ['t', ds.get('t'), '', 3]], value: s0 * Math.sqrt(1 + Math.pow(ds.get('t') / (2 * s0 * s0), 2)) }; },
+                T1D: function () { return { formula: 'rectangular barrier, thickness 2R', inputs: [['E', ds.get('E'), '', 2], ['V<sub>0</sub>', ds.get('V0'), '', 2], ['2R', 2 * ds.get('R'), 'a', 1]], value: T1D(ds.get('E'), ds.get('V0'), 2 * ds.get('R')) }; },
+                t: function () { var c = entry(); return c ? { formula: 'frame · Δt<sub>frame</sub>', inputs: [['frame', ds.get('frame'), '', 0], ['Δt<sub>frame</sub>', frameDt(c), '', 3]], value: ds.get('frame') * frameDt(c) } : null; }
+            },
+            drawn: { amp: pixelCheck, phase: pixelCheck },
+            round: { time: 't', label: function () { return 'one stored run, ' + (ds.get('ready') || 48) + ' frames'; }, length: function () { var c = entry(); return c ? tEnd(c) : 10; }, columns: ['behind', 'ahead', 'inside', 'lost', 'sigma_y'] },
+            play: function () { setPlay(true); },
+            about: 'The packet flies along x through the sphere’s centre and both are round about that axis, so the wave is the same at every angle around it: ψ(x, y, z) = ψ(x, ρ) with ρ = √(y² + z²). Kaggle computed every run in full 3D on 128³ points and stored the cut through the axis; the page keeps its half ρ ≥ 0 (128 × 64 points, 0.5 a apart: |ψ| and arg ψ in 256 levels each) and spins it about the axis: every voxel takes Re ψ = q/255 · cos p at its ρ, linear between the two stored ρ points around it. The picture draws Re ψ, the wave itself, as fog: crests wine, troughs ink and fainter, opacity growing with (Re ψ)². Checks of the symmetry: the two halves of every stored cut agree to the number shown as “mirror” (levels of 255); a full 3D run computed in this workspace (E = 2, V₀ = 3, R = 4, Re ψ on 96 × 64 × 64 points) equals its spun cut to 2 levels of 127 (root mean square) and at worst 24 of 127 at a few points on the sphere’s surface, where the square grid makes the sphere a staircase. The probabilities come from the whole 3D ψ on Kaggle. Between stored frames nothing is interpolated. Where a run is not stored the picture is the live preview from your browser (64³ points), spun the same way and marked on the figure.'
+        };
+    })();
+    </script>
+    <script src="../scripts/datalog.js"></script>
+</body>
+</html>

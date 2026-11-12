@@ -1,0 +1,43 @@
+/* Kaggle flow (scripts/kaggle-flow.js): sliders that show the computed range, and the loading notice with the pipeline.
+   House design: one accent (the wine), every box outlined, no shadows, labels in IBM Plex Mono. */
+.kf-slider { position: relative; }
+.kf-track { position: relative; height: 26px; margin: 2px 8px 0; cursor: pointer; touch-action: none; outline: none; }
+.kf-track:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 4px; }
+.kf-track > span { position: absolute; top: 9px; height: 6px; border-radius: 3px; }
+/* the whole range, hatched: not computed */
+.kf-hatch { left: 0; right: 0; background: repeating-linear-gradient(135deg, var(--rule) 0 3px, transparent 3px 7px); border: 1px solid var(--rule); top: 8px !important; height: 8px !important; }
+/* the stored band, solid */
+.kf-band { background: var(--accent); opacity: .85; }
+/* the soft zones: the band fades towards its edge */
+.kf-soft--hi { background: linear-gradient(90deg, rgba(122, 31, 43, 0), rgba(245, 241, 234, .75)); }
+.kf-soft--lo { background: linear-gradient(90deg, rgba(245, 241, 234, .75), rgba(122, 31, 43, 0)); }
+.kf-dots { left: 0; right: 0; top: 20px !important; height: 6px !important; }
+.kf-dots i { position: absolute; top: 0; width: 6px; height: 6px; margin-left: -3px; border-radius: 50%; background: var(--accent); border: 1px solid var(--accent); }
+.kf-dots i.no { background: var(--card); border-color: var(--muted); }
+.kf-thumb { top: 3px !important; width: 18px; height: 18px !important; margin-left: -9px; border-radius: 50% !important; background: var(--card); border: 2px solid var(--accent);
+  box-shadow: 0 0 0 calc(var(--heavy, 0) * 7px) rgba(122, 31, 43, .16); transition: box-shadow .25s ease; }
+.kf-slider.is-out .kf-thumb { border-style: dashed; }
+.kf-slider.is-drag .kf-thumb { background: var(--accent); }
+.kf-note { min-height: 1.3em; font-family: var(--mono); font-size: 10.5px; letter-spacing: .04em; color: var(--accent); }
+
+/* the loading notice: fades in over the figure only when nothing is left to show */
+.kf-pop { position: absolute; left: 50%; top: 50%; width: min(560px, calc(100% - 24px)); transform: translate(-50%, calc(-50% + 10px)); opacity: 0; pointer-events: none;
+  background: var(--card); border: 1px solid var(--ink); border-left: 3px solid var(--accent); border-radius: 10px; padding: 14px 16px 12px; transition: opacity .6s ease, transform .6s ease; z-index: 5; }
+.kf-pop.is-on { opacity: 1; transform: translate(-50%, -50%); pointer-events: auto; }
+.kf-pop__kicker { margin: 0; font: 500 10.5px var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--accent); }
+.kf-pop__title { margin: 2px 0 6px; font: 400 24px/1.15 var(--serif); color: var(--accent-dark); }
+.kf-pop__text { margin: 8px 0 0; font-size: 13.5px; line-height: 1.5; color: var(--ink-2); }
+.kf-pipe { display: block; width: 100%; height: auto; }
+.kf-pipe text { font: 11px var(--mono); fill: var(--ink-3); text-anchor: middle; }
+.kf-edge { stroke: var(--rule); stroke-width: 2; }
+.kf-edge.is-done { stroke: var(--accent); }
+.kf-edge.is-off { stroke-dasharray: 4 4; stroke: var(--muted); }
+.kf-node circle { fill: var(--card); stroke: var(--rule); stroke-width: 2; }
+.kf-node.is-done circle { fill: var(--accent); stroke: var(--accent); }
+.kf-node.is-now circle { stroke: var(--accent); stroke-width: 3; }
+.kf-node.is-now text { fill: var(--accent); }
+.kf-node.is-off circle { stroke-dasharray: 3 3; stroke: var(--muted); }
+.kf-packet { fill: var(--accent); }
+.kf-pop__bar { height: 4px; border: 1px solid var(--rule); border-radius: 3px; overflow: hidden; }
+.kf-pop__bar span { display: block; height: 100%; width: 0; background: var(--accent); transition: width .4s ease; }
+@media (prefers-reduced-motion: reduce) { .kf-pop, .kf-thumb { transition: none; } }

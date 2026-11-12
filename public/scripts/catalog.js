@@ -38,7 +38,8 @@
         { id: 'fluids', name: 'Fluids', blurb: 'Flow, pressure and waves in liquids.' },
         { id: 'optics', name: 'Wave optics', blurb: 'Light and water as waves: path difference, phase, interference.' },
         { id: 'methods', name: 'Mathematical methods', blurb: 'Complex numbers, Fourier series and transforms, drawn.' },
-        { id: 'control', name: 'Control systems', blurb: 'Systems driven from outside, and controllers that answer back.' }
+        { id: 'control', name: 'Control systems', blurb: 'Systems driven from outside, and controllers that answer back.' },
+        { id: 'quantum', name: 'Quantum mechanics', blurb: 'Wave functions, the Schrödinger equation, and probability that flows.' }
     ];
 
     var ALL = ['derivation', 'walkthrough', 'data', 'read', 'round', 'check'];
@@ -264,6 +265,23 @@
             concepts: ['Hamiltonian mechanics', 'chaos', 'periodic orbit', 'Floquet theory', 'Poincar\u00e9 map', 'energy shaping', 'LQR', 'Riccati equation', 'controllability', 'Fourier series'],
             has: ['derivation', 'read'],
             added: '2026-11-08'
+        },
+        {
+            id: 'schrodinger-sphere',
+            fig: 14,
+            title: 'A Wave Packet Meets a Sphere',
+            file: 'simulations/schrodinger-sphere.html',
+            field: 'quantum',
+            stage: 2,
+            subject: 'quantum mechanics · computed on Kaggle',
+            summary: 'A quantum particle, spread out as a wave packet, flies at a sphere of raised potential energy. Part of the wave bounces back, part flows round, a little leaks through. Every one of 405 runs (9 energies, 9 barrier heights, 5 radii) was computed in three dimensions on Kaggle\u2019s GPUs and stored; the page only plays them back, and near the edge of the computed range it slows down and computes a live preview in the browser.',
+            equation: 'i\\hbar\\,\\frac{\\partial \\psi}{\\partial t} = -\\frac{\\hbar^2}{2m}\\nabla^2\\psi + V(\\mathbf r)\\,\\psi, \\qquad V = V_0 \\ \\text{for}\\ |\\mathbf r| < R',
+            model: 'time-dependent Schrödinger equation in three dimensions; a Gaussian wave packet and a spherical step of potential energy; units \u0127 = m = 1',
+            method: 'split-step Fourier (Strang) on 128\u00b3 points in JAX on Kaggle\u2019s Tesla T4 GPUs, stored as compressed frames; a 64\u00b3 live preview in a Web Worker beyond the stored range',
+            controls: 'packet energy, barrier height and sphere radius on the computed grid and beyond it; time; amplitude or phase',
+            concepts: ['Schrödinger equation', 'wave packet', 'tunnelling', 'scattering', 'split-step Fourier', 'probability current', 'GPU', 'Kaggle'],
+            has: ['derivation', 'data', 'read', 'round', 'check'],
+            added: '2026-11-12'
         },
     ];
 })();
