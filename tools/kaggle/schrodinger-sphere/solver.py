@@ -11,7 +11,9 @@ def setup(N, L, dtype=jnp.complex64):
     mask = m1[:, None, None] * m1[None, :, None] * m1[None, None, :]
     return dict(N=N, L=L, dx=dx, x=x, K2=K2, mask=mask, dtype=dtype)
 
-def run(g, E, V0, R, sigma0=3.0, x0=-14.0, travel=30.0, dt=0.01, nframes=48, out=128):
+def run(g, E, V0, R, sigma0=3.0, x0=-14.0, travel=30.0, dt=0.01, nframes=48, out=128, vol=0):
+    """vol > 0 also stores the 3D cloud: per frame the root-mean-square |psi| over cells of (N/vol)^3 points, so its square is the
+    mean probability density of the cell; as uint8 levels of the first frame's peak cell (frames[f, x, y, z])."""
     N, dx, x, dtype = g["N"], g["dx"], g["x"], g["dtype"]
     rdt = jnp.float32 if dtype == jnp.complex64 else jnp.float64
     k0 = np.sqrt(2 * E)
@@ -38,13 +40,21 @@ def run(g, E, V0, R, sigma0=3.0, x0=-14.0, travel=30.0, dt=0.01, nframes=48, out
         my = (ry * xs).sum() / norm; sy = jnp.sqrt((ry * (xs - my)**2).sum() / norm)
         pz = p[:, :, N // 2]                # the plane z = 0, through the sphere's centre
         sl = jnp.abs(pz); ph = jnp.angle(pz)
-        return norm, behind, ahead, sy, sl, ph
-    st = max(1, N // out); amp0 = None; F = []; P = []; curves = []
+        if vol:
+            b = N // vol
+            cell = jnp.sqrt((jnp.abs(p)**2).astype(rdt).reshape(vol, b, vol, b, vol, b).mean(axis=(1, 3, 5)))
+        else:
+            cell = jnp.zeros((1, 1, 1), rdt)
+        return norm, behind, ahead, sy, sl, ph, cell
+    st = max(1, N // out); amp0 = None; vol0 = None; F = []; P = []; VF = []; curves = []
     t0 = time.time()
     for f in range(nframes):
         if f: psi = chunk(psi)
-        n, b, a, sy, sl, ph = jax.device_get(measure(psi))
+        n, b, a, sy, sl, ph, cell = jax.device_get(measure(psi))
         if amp0 is None: amp0 = sl.max()
+        if vol:
+            if vol0 is None: vol0 = cell.max()
+            VF.append(np.clip(np.round(255 * np.nan_to_num(cell) / vol0), 0, 255).astype(np.uint8))
         qa = np.clip(np.round(255 * np.nan_to_num(sl[::st, ::st]) / amp0), 0, 255).astype(np.uint8)
         qp = (np.round((np.nan_to_num(ph[::st, ::st]) + np.pi) / (2 * np.pi) * 255) % 256).astype(np.uint8)
         qp[qa < 3] = 0                      # no phase where there is (almost) no wave: compresses well
@@ -52,4 +62,4 @@ def run(g, E, V0, R, sigma0=3.0, x0=-14.0, travel=30.0, dt=0.01, nframes=48, out
         curves.append((f * per * dt, float(n), float(b), float(a), float(sy)))
     jax.block_until_ready(psi)
     return dict(E=E, V0=V0, R=R, steps=per * (nframes - 1), dt=dt, amp=np.array(F), phase=np.array(P),
-                curves=np.array(curves), wall=time.time() - t0)
+                vol=np.array(VF) if vol else None, curves=np.array(curves), wall=time.time() - t0)
