@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-2025 files, 125.6 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+2027 files, 125.6 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -38,7 +38,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Shared by the portfolio sources (not served)](#shared-by-the-portfolio-sources-not-served) | 1 |
 | [Template sources](#template-sources) | 2 |
 | [Documentation](#documentation) | 40 |
-| [Tools](#tools) | 107 |
+| [Tools](#tools) | 109 |
 | [Translation tables](#translation-tables) | 54 |
 | [Agents of the lecture-note review](#agents-of-the-lecture-note-review) | 4 |
 | [Working notes of project 07, the electron beam](#working-notes-of-project-07-the-electron-beam) | 52 |
@@ -1406,17 +1406,19 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/i18n/ingest.py`](../tools/i18n/ingest.py) | 1.9 kB | Stores checked translations made outside the tables (page pieces, script strings, walkthrough prose). | [i18n.md](i18n.md) |
 | [`tools/i18n/package.json`](../tools/i18n/package.json) | 285 B | The parser wrap.cjs needs (acorn); npm install --prefix tools/i18n. | [i18n.md](i18n.md) |
 | [`tools/i18n/wrap.cjs`](../tools/i18n/wrap.cjs) | 3.7 kB | Wraps the reader-visible strings of a page's scripts in _t(), with a JavaScript parser (acorn). | [i18n.md](i18n.md) |
-| [`tools/inventory.py`](../tools/inventory.py) | 87.8 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
+| [`tools/inventory.py`](../tools/inventory.py) | 88.1 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
 | [`tools/kaggle/schrodinger-sphere/build_3d.py`](../tools/kaggle/schrodinger-sphere/build_3d.py) | 5.6 kB | Schrödinger on Kaggle: writes full3d.ipynb, the 3D generation, for a given commit. | [kaggle.md](kaggle.md) |
 | [`tools/kaggle/schrodinger-sphere/build_full.py`](../tools/kaggle/schrodinger-sphere/build_full.py) | 6.9 kB | Schrödinger on Kaggle: writes full.ipynb for a given commit. | [kaggle.md](kaggle.md) |
 | [`tools/kaggle/schrodinger-sphere/build_smoke.py`](../tools/kaggle/schrodinger-sphere/build_smoke.py) | 5.9 kB | Schrödinger on Kaggle: writes smoke.ipynb for a given commit. | [kaggle.md](kaggle.md) |
+| [`tools/kaggle/schrodinger-sphere/build_wave.py`](../tools/kaggle/schrodinger-sphere/build_wave.py) | 5.6 kB | Schrödinger on Kaggle: writes wave3d.ipynb, the 3D wave generation, for a given commit. | [kaggle.md](kaggle.md) |
 | [`tools/kaggle/schrodinger-sphere/full.ipynb`](../tools/kaggle/schrodinger-sphere/full.ipynb) | 7.6 kB | Schrödinger on Kaggle: the full grid, 405 runs on both GPUs, one JSON file per run plus index.json and a preview panel; written by build_full.py. | [kaggle.md](kaggle.md) |
 | [`tools/kaggle/schrodinger-sphere/full3d.ipynb`](../tools/kaggle/schrodinger-sphere/full3d.ipynb) | 6.0 kB | Schrödinger on Kaggle: the 3D generation, 81 runs at R = 4 on both GPUs, each stored as 48 frames of the 3D cloud on 64^3 cells in the website format; written by build_3d.py. | [kaggle.md](kaggle.md) |
 | [`tools/kaggle/schrodinger-sphere/pack.py`](../tools/kaggle/schrodinger-sphere/pack.py) | 1.0 kB | Schrödinger on Kaggle: packs runs (zlib, base64) into the panel page. | [kaggle.md](kaggle.md) |
 | [`tools/kaggle/schrodinger-sphere/panel_template.html`](../tools/kaggle/schrodinger-sphere/panel_template.html) | 12.4 kB | Schrödinger on Kaggle: the animator panel that only plays stored runs (sliders with computed positions marked, amplitude or phase, probability curves). | [kaggle.md](kaggle.md) |
 | [`tools/kaggle/schrodinger-sphere/smoke.ipynb`](../tools/kaggle/schrodinger-sphere/smoke.ipynb) | 6.0 kB | Schrödinger on Kaggle: the GPU test notebook (timing, accuracy, 8 runs, panel), written by build_smoke.py. | [kaggle.md](kaggle.md) |
-| [`tools/kaggle/schrodinger-sphere/solver.py`](../tools/kaggle/schrodinger-sphere/solver.py) | 3.8 kB | Schrödinger on Kaggle: the 3D split-step Fourier solver (JAX) for a wave packet meeting a spherical barrier; one run, its frames and its curves. | [kaggle.md](kaggle.md) |
+| [`tools/kaggle/schrodinger-sphere/solver.py`](../tools/kaggle/schrodinger-sphere/solver.py) | 4.3 kB | Schrödinger on Kaggle: the 3D split-step Fourier solver (JAX) for a wave packet meeting a spherical barrier; one run, its frames and its curves. | [kaggle.md](kaggle.md) |
 | [`tools/kaggle/schrodinger-sphere/to_site.py`](../tools/kaggle/schrodinger-sphere/to_site.py) | 4.0 kB | Schrödinger on Kaggle: turns the notebook's run files into the website's data (one binary file per run with its SHA-256, and index.json). | [kaggle.md](kaggle.md) |
+| [`tools/kaggle/schrodinger-sphere/wave3d.ipynb`](../tools/kaggle/schrodinger-sphere/wave3d.ipynb) | 6.0 kB | Schrödinger on Kaggle: the 3D wave, 81 runs at R = 4 on both GPUs, each 32 frames of Re psi on every computed point of a 96 x 64 x 64 box; written by build_wave.py. | [kaggle.md](kaggle.md) |
 | [`tools/perf/addresses.cjs`](../tools/perf/addresses.cjs) | 6.1 kB | Every page at every address a reader can use (x.html, x, x/, folder/), and every link of every page, on a running site; exits 1 on any wrong answer. | [performance.md](performance.md) |
 | [`tools/perf/clockcheck.cjs`](../tools/perf/clockcheck.cjs) | 3.2 kB | Each figure runs on screen, holds off screen, resumes; the store stays live for an open data panel and the walkthrough. | [performance.md](performance.md) |
 | [`tools/perf/film.cjs`](../tools/perf/film.cjs) | 3.1 kB | A repeat visit as a reader sees it: screenshots at fixed times and every LCP candidate with its element, to tell a metric from the screen. | [performance.md](performance.md) |
