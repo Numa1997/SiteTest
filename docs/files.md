@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-1673 files, 77.8 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+1689 files, 84.2 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -45,7 +45,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Working notes of project 07, the electron beam](#working-notes-of-project-07-the-electron-beam) | 52 |
 | [Working notes of the Rotor Pendula study](#working-notes-of-the-rotor-pendula-study) | 86 |
 | [Working notes of the Droplet Collection study](#working-notes-of-the-droplet-collection-study) | 121 |
-| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 569 |
+| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 585 |
 
 ## Repository root
 
@@ -893,7 +893,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`docs/simulations/fig10-wind-turbine.md`](simulations/fig10-wind-turbine.md) | 57.3 kB | Documentation: Fig. 10 · Wind Turbine Control. | [fig10-wind-turbine.md](simulations/fig10-wind-turbine.md) |
 | [`docs/simulations/fig11-double-inverted-pendulum.md`](simulations/fig11-double-inverted-pendulum.md) | 61.0 kB | Documentation: Project 05 · Balancing Two Rods on a Cart (Fig. 11 from 3 to 4 November 2026). | [fig11-double-inverted-pendulum.md](simulations/fig11-double-inverted-pendulum.md) |
 | [`docs/simulations/fig11-pendulum-control.md`](simulations/fig11-pendulum-control.md) | 28.8 kB | Documentation: Fig. 11 · Double Pendulum under Control (Fig. 11 again since 4 November 2026; a project from 3 to 4 November). | [fig11-pendulum-control.md](simulations/fig11-pendulum-control.md) |
-| [`docs/simulations/fig12-beer-slosh.md`](simulations/fig12-beer-slosh.md) | 56.0 kB | Documentation: Fig. 12 · A Pint of Guinness on a One-Wheel Cart (`public/simulations/beer-slosh.html`). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`docs/simulations/fig12-beer-slosh.md`](simulations/fig12-beer-slosh.md) | 57.4 kB | Documentation: Fig. 12 · A Pint of Guinness on a One-Wheel Cart (`public/simulations/beer-slosh.html`). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`docs/simulations/fig13-momentum-spirographs.md`](simulations/fig13-momentum-spirographs.md) | 26.9 kB | Documentation: Fig. 13 · Spirographs in Momentum Space, the Flower Hunt, the dashboard and the films. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`docs/simulations/project06-rods-in-liquid.md`](simulations/project06-rods-in-liquid.md) | 9.7 kB | Documentation: Project 06 · Balancing Two Rods in a Liquid. | [project06-rods-in-liquid.md](simulations/project06-rods-in-liquid.md) |
 | [`docs/styles.md`](styles.md) | 52.1 kB | Documentation: Stylesheets: `public/styles/`. | [styles.md](styles.md) |
@@ -1767,7 +1767,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/fig12/check-8-6.md`](../notes/fig12/check-8-6.md) | 12.8 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/check.md`](../notes/fig12/check.md) | 24.2 kB | Fig. 12: the derivation checker's table of equations and numbers. | [notes.md](notes.md) |
 
-<details><summary>37 files: Fig. 12: a measuring script of the review, or its saved output.</summary>
+<details><summary>53 files: Fig. 12: a measuring script of the review, or its saved output.</summary>
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
@@ -1783,21 +1783,37 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/fig12/note-shots.cjs`](../notes/fig12/note-shots.cjs) | 2.2 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/of-request.json`](../notes/fig12/of-request.json) | 1.6 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/of-runs/rest-coarse/case.json`](../notes/fig12/of-runs/rest-coarse/case.json) | 198 B | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
-| [`notes/fig12/of-runs/rest-coarse/log.foamRun.tail.gz`](../notes/fig12/of-runs/rest-coarse/log.foamRun.tail.gz) | 583 B | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/of-runs/rest-coarse/log.foamRun.tail.gz`](../notes/fig12/of-runs/rest-coarse/log.foamRun.tail.gz) | 24.2 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/of-runs/rest-coarse/stoutMonitor.dat.gz`](../notes/fig12/of-runs/rest-coarse/stoutMonitor.dat.gz) | 1.16 MB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/of-runs/rest-coarse/walltime`](../notes/fig12/of-runs/rest-coarse/walltime) | 15 B | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/of-runs/rest-medium/case.json`](../notes/fig12/of-runs/rest-medium/case.json) | 198 B | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
-| [`notes/fig12/of-runs/rest-medium/log.foamRun.tail.gz`](../notes/fig12/of-runs/rest-medium/log.foamRun.tail.gz) | 583 B | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/of-runs/rest-medium/log.foamRun.tail.gz`](../notes/fig12/of-runs/rest-medium/log.foamRun.tail.gz) | 25.3 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/of-runs/rest-medium/stoutMonitor.dat.gz`](../notes/fig12/of-runs/rest-medium/stoutMonitor.dat.gz) | 1.25 MB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/of-runs/rest-medium/walltime`](../notes/fig12/of-runs/rest-medium/walltime) | 15 B | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/of-runs/swing-noslip-coarse/case.json`](../notes/fig12/of-runs/swing-noslip-coarse/case.json) | 204 B | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
-| [`notes/fig12/of-runs/swing-noslip-coarse/log.foamRun.tail.gz`](../notes/fig12/of-runs/swing-noslip-coarse/log.foamRun.tail.gz) | 583 B | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/of-runs/swing-noslip-coarse/log.foamRun.tail.gz`](../notes/fig12/of-runs/swing-noslip-coarse/log.foamRun.tail.gz) | 25.6 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/of-runs/swing-noslip-coarse/stoutMonitor.dat.gz`](../notes/fig12/of-runs/swing-noslip-coarse/stoutMonitor.dat.gz) | 455.3 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/of-runs/swing-noslip-coarse/walltime`](../notes/fig12/of-runs/swing-noslip-coarse/walltime) | 14 B | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/of-runs/swing-noslip-fine/case.json`](../notes/fig12/of-runs/swing-noslip-fine/case.json) | 200 B | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
-| [`notes/fig12/of-runs/swing-noslip-fine/log.foamRun.tail.gz`](../notes/fig12/of-runs/swing-noslip-fine/log.foamRun.tail.gz) | 583 B | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/of-runs/swing-noslip-fine/log.foamRun.tail.gz`](../notes/fig12/of-runs/swing-noslip-fine/log.foamRun.tail.gz) | 26.6 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/of-runs/swing-noslip-fine/stoutMonitor.dat.gz`](../notes/fig12/of-runs/swing-noslip-fine/stoutMonitor.dat.gz) | 619.1 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/of-runs/swing-noslip-fine/walltime`](../notes/fig12/of-runs/swing-noslip-fine/walltime) | 15 B | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/of-runs/swing-noslip-medium/case.json`](../notes/fig12/of-runs/swing-noslip-medium/case.json) | 204 B | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
-| [`notes/fig12/of-runs/swing-noslip-medium/log.foamRun.tail.gz`](../notes/fig12/of-runs/swing-noslip-medium/log.foamRun.tail.gz) | 583 B | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/of-runs/swing-noslip-medium/log.foamRun.tail.gz`](../notes/fig12/of-runs/swing-noslip-medium/log.foamRun.tail.gz) | 25.2 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/of-runs/swing-noslip-medium/stoutMonitor.dat.gz`](../notes/fig12/of-runs/swing-noslip-medium/stoutMonitor.dat.gz) | 532.4 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/of-runs/swing-noslip-medium/walltime`](../notes/fig12/of-runs/swing-noslip-medium/walltime) | 15 B | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/of-runs/swing-slip-coarse/case.json`](../notes/fig12/of-runs/swing-slip-coarse/case.json) | 197 B | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
-| [`notes/fig12/of-runs/swing-slip-coarse/log.foamRun.tail.gz`](../notes/fig12/of-runs/swing-slip-coarse/log.foamRun.tail.gz) | 583 B | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/of-runs/swing-slip-coarse/log.foamRun.tail.gz`](../notes/fig12/of-runs/swing-slip-coarse/log.foamRun.tail.gz) | 26.0 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/of-runs/swing-slip-coarse/stoutMonitor.dat.gz`](../notes/fig12/of-runs/swing-slip-coarse/stoutMonitor.dat.gz) | 487.0 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/of-runs/swing-slip-coarse/walltime`](../notes/fig12/of-runs/swing-slip-coarse/walltime) | 14 B | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/of-runs/swing-slip-fine/case.json`](../notes/fig12/of-runs/swing-slip-fine/case.json) | 193 B | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
-| [`notes/fig12/of-runs/swing-slip-fine/log.foamRun.tail.gz`](../notes/fig12/of-runs/swing-slip-fine/log.foamRun.tail.gz) | 583 B | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/of-runs/swing-slip-fine/log.foamRun.tail.gz`](../notes/fig12/of-runs/swing-slip-fine/log.foamRun.tail.gz) | 27.1 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/of-runs/swing-slip-fine/stoutMonitor.dat.gz`](../notes/fig12/of-runs/swing-slip-fine/stoutMonitor.dat.gz) | 892.7 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/of-runs/swing-slip-fine/walltime`](../notes/fig12/of-runs/swing-slip-fine/walltime) | 15 B | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/of-runs/swing-slip-medium/case.json`](../notes/fig12/of-runs/swing-slip-medium/case.json) | 197 B | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
-| [`notes/fig12/of-runs/swing-slip-medium/log.foamRun.tail.gz`](../notes/fig12/of-runs/swing-slip-medium/log.foamRun.tail.gz) | 583 B | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/of-runs/swing-slip-medium/log.foamRun.tail.gz`](../notes/fig12/of-runs/swing-slip-medium/log.foamRun.tail.gz) | 27.0 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/of-runs/swing-slip-medium/stoutMonitor.dat.gz`](../notes/fig12/of-runs/swing-slip-medium/stoutMonitor.dat.gz) | 782.5 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/of-runs/swing-slip-medium/walltime`](../notes/fig12/of-runs/swing-slip-medium/walltime) | 15 B | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/panel-test.cjs`](../notes/fig12/panel-test.cjs) | 3.5 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/panel-test2.cjs`](../notes/fig12/panel-test2.cjs) | 6.4 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/phase1.md`](../notes/fig12/phase1.md) | 11.9 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |

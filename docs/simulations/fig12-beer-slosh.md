@@ -76,6 +76,20 @@ gate 1.2. Mass: 1.31×10⁻⁵ kg gone in 4 s, half of it out through the top (r
 surface stays 20 mm below the rim: stout fraction smeared into the air and carried out), half destroyed. The stout
 fraction peaks at 1.0005 (the advection scheme overshoots).
 
+**First gate batch on GitHub (run 43116028422, 12 November 2026; monitors in `notes/fig12/of-runs/`).** The first try
+(run 43104401700) stored logs only: Open MPI refused four processes on the runner's hardware threads; `run.sh` now starts
+`mpirun --use-hwthread-cpus`. Wall times on one 4-core runner: rest 30 s coarse 1715 s, medium 4654 s; free swing 8 s
+coarse 720–916 s, medium 1275–2799 s, fine 5149–8355 s.
+- *Gate 1.1, rest 30 s.* Coarse: kinetic energy at most 9.3 µJ, front minus back wall height 0.005 mm, mass −1.6×10⁻⁵
+  (relative). Medium: heights still (−0.001 mm), but the mass grows by +3.6×10⁻⁴, the largest mass error of the batch,
+  not yet explained.
+- *Gate 1.2, free swing 8 s, 125 mm fill* (`analyse_swing.py --pair`): solver's own damping ratio (slip walls, viscosity
+  10⁻⁹ m²/s) 0.0040 coarse, 0.0033 medium, 0.0012 fine; the friction's (no-slip minus slip) 0.0036, 0.0009, 0.0067; ratio
+  1.10, 3.53, 0.185 against the limit 0.1: fail on every mesh. The friction's estimate does not converge, and the slip and
+  no-slip runs did not share a time step: on medium and fine the slip runs stepped at a median 0.52–0.56 ms (the Courant
+  limit, the stout sliding fast past the thin wall cells), the no-slip runs at the 1 ms ceiling. Fine no-slip loses
+  1.0×10⁻⁵ kg to the numerics and its swing energy still ends at −5.7 µJ.
+
 **What the page will offer (agreed 11 November 2026).** Every result is precomputed on GitHub and only played back. Roads
 come from a menu of about ten: single bumps of 5, 10, 15, 20 and 25 mm, a kerb, a pothole, and three periodic rows (for
 Poincaré sections). Each road is computed for 11 speeds (0.5–1.5 m/s), 13 fills (80–140 mm), the three controllers,
