@@ -1,0 +1,108 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Wave packet and sphere</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#f5f1ea;--white:#fffdf9;--ink:#1c1518;--muted:#6b5d58;--rule:#d8cfc3;--wine:#7a1f2b;--wdeep:#4d0f18}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.5 "IBM Plex Sans",sans-serif}
+.wrap{max-width:1040px;margin:0 auto;padding:16px}
+.eyebrow{font:500 11.5px "IBM Plex Mono",monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--wine)}
+h1{font:400 40px/1.1 "Instrument Serif",serif;color:var(--wdeep);margin:4px 0 6px}
+.lede{color:var(--muted);margin:0 0 14px;max-width:62em}
+.card{background:var(--white);border:1px solid var(--ink);border-radius:10px;padding:14px}
+.figs{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:14px}
+@media(max-width:760px){.figs{grid-template-columns:1fr}}
+canvas{width:100%;height:auto;display:block;background:var(--paper);border:1px solid var(--rule);border-radius:6px}
+.cap{font:12px "IBM Plex Mono",monospace;color:var(--muted);margin:6px 0 0}
+.ctl{display:grid;grid-template-columns:minmax(120px,170px) 1fr minmax(84px,auto);gap:4px 12px;align-items:center;margin-top:14px}
+.ctl label{font-size:14px}.ctl output{font:13px "IBM Plex Mono",monospace;text-align:right}
+.sl{position:relative;padding-bottom:10px}.sl input{width:100%;accent-color:var(--wine);margin:0}
+.ticks{position:absolute;left:8px;right:8px;bottom:0;height:8px}
+.ticks i{position:absolute;top:0;width:7px;height:7px;margin-left:-3.5px;border-radius:50%;border:1.3px solid var(--wine);background:var(--wine)}
+.ticks i.no{background:transparent;border-color:var(--rule)}
+.btns{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap}
+button{font:500 13px "IBM Plex Mono",monospace;background:var(--wine);color:#fff;border:1px solid var(--wine);border-radius:6px;padding:7px 14px;cursor:pointer}
+button.ghost{background:transparent;color:var(--wine)}button[aria-pressed=true]{background:var(--wdeep);color:#fff}
+.read{margin-top:12px;font:13px/1.6 "IBM Plex Mono",monospace;color:var(--ink);border-top:1px solid var(--rule);padding-top:10px}
+.read b{font-weight:500;color:var(--wine)}
+details{margin-top:12px;border:1px solid var(--rule);border-radius:6px;padding:8px 12px;background:var(--paper)}
+summary{cursor:pointer;font:500 12px "IBM Plex Mono",monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--wine)}
+details p{margin:8px 0;font-size:14px}
+</style></head><body><div class="wrap">
+<div class="eyebrow">Time-dependent Schrödinger equation · computed on Kaggle · played back here</div>
+<h1>A wave packet meets a sphere</h1>
+<p class="lede">A quantum particle, spread out as a wave packet, flies along <i>x</i> towards a sphere of radius <i>R</i> inside which the potential energy is raised to <i>V</i><sub>0</sub>. Kaggle solved the equation in three dimensions on __CELLS__ cells for every run below; this page computes nothing, it only plays the stored results. The picture is the plane <i>z</i> = 0 through the sphere's centre.</p>
+<div class="card">
+<div class="figs">
+<div><canvas id="f" width="640" height="640"></canvas><p class="cap" id="fcap"></p></div>
+<div><canvas id="p" width="560" height="640"></canvas><p class="cap">Probability behind the sphere (x &lt; −R), inside its slab (|x| ≤ R), ahead of it (x &gt; R), and lost into the absorbing border, against time. The vertical line is the frame shown.</p></div>
+</div>
+<div class="ctl">
+<label for="sE">Packet energy <i>E</i></label><div class="sl"><input id="sE" type="range" min="0" step="1"><div class="ticks" id="tE"></div></div><output id="oE"></output>
+<label for="sV">Barrier height <i>V</i><sub>0</sub></label><div class="sl"><input id="sV" type="range" min="0" step="1"><div class="ticks" id="tV"></div></div><output id="oV"></output>
+<label for="sR">Sphere radius <i>R</i></label><div class="sl"><input id="sR" type="range" min="0" step="1"><div class="ticks" id="tR"></div></div><output id="oR"></output>
+<label for="sT">Time <i>t</i></label><div class="sl"><input id="sT" type="range" min="0" step="1" value="0"></div><output id="oT"></output>
+</div>
+<p class="cap">Filled dots under a slider: positions computed and stored. Hollow dots: not computed yet.</p>
+<div class="btns"><button id="go">Play</button><button id="st" class="ghost">Step</button><button id="mA" class="ghost" aria-pressed="true">Colour: amplitude</button><button id="mP" class="ghost" aria-pressed="false">Colour: phase</button></div>
+<div class="read" id="rd"></div>
+<details><summary>What is stored, and how the picture differs from it</summary>
+<p>Units: ħ = m = 1, lengths in the grid unit a, energies in ħ²/(m a²). Kaggle integrates iħ∂ψ/∂t = −(ħ²/2m)∇²ψ + Vψ with the split-step Fourier method (half a potential step, a full kinetic step in Fourier space, half a potential step), __DT__ per step, on a periodic box of side __L__ with an absorbing layer in its outer tenth so that nothing re-enters from the other side.</p>
+<p>Stored per run: __NF__ frames of |ψ| in the plane z = 0, on __OUT__ × __OUT__ points, in 256 levels relative to the first frame's peak (so |ψ|² is that level squared), and the phase arg ψ in 256 levels, set to zero where the amplitude is below 3 levels. The curves are computed from the whole 3D ψ, not from the slice. The picture scales the stored levels to the canvas with smoothing; in amplitude mode the colour runs from paper (0) to wine (peak) and is clipped above the first frame's peak.</p>
+<p>Checks you can read here: the total probability (sum of the four curves) stays 1 until the packet reaches the border; with V<sub>0</sub> = 0 the measured width σ<sub>y</sub>(t) is compared with the free-particle law σ<sub>0</sub>√(1 + (t/2σ<sub>0</sub>²)²). The one-dimensional rectangular-barrier formula for a slab of thickness 2R is shown only as a guide for the central ray; a sphere is not a slab.</p>
+</details>
+</div></div>
+<script>
+const D=__DATA__;
+const $=id=>document.getElementById(id);
+const F=$("f"),g=F.getContext("2d"),P=$("p"),h=P.getContext("2d");
+const off=document.createElement("canvas");off.width=D.out;off.height=D.out;const og=off.getContext("2d"),img=og.createImageData(D.out,D.out);
+const byKey={};for(const r of D.runs)byKey[r.i+"_"+r.j+"_"+r.k]=r;
+const cache={};
+async function inflate(b64){const s=atob(b64),a=new Uint8Array(s.length);for(let i=0;i<s.length;i++)a[i]=s.charCodeAt(i);
+ const st=new Blob([a]).stream().pipeThrough(new DecompressionStream("deflate"));return new Uint8Array(await new Response(st).arrayBuffer())}
+async function load(r){if(!cache[r.id])cache[r.id]={a:await inflate(r.amp),p:await inflate(r.ph)};return cache[r.id]}
+let run=null,fr=0,playing=false,last=0,mode="amp";
+for(const [s,t,arr] of [["sE","tE",D.Es],["sV","tV",D.Vs],["sR","tR",D.Rs]]){$(s).max=arr.length-1;$(s).value=D.start[s]}
+function ticks(){const i=+sE.value,j=+sV.value,k=+sR.value;
+ const fill=(id,n,f)=>{$(id).innerHTML="";for(let q=0;q<n;q++){const e=document.createElement("i");e.style.left=(n>1?100*q/(n-1):50)+"%";if(!f(q))e.className="no";$(id).appendChild(e)}};
+ fill("tE",D.Es.length,q=>byKey[q+"_"+j+"_"+k]);fill("tV",D.Vs.length,q=>byKey[i+"_"+q+"_"+k]);fill("tR",D.Rs.length,q=>byKey[i+"_"+j+"_"+q])}
+function T1D(E,V,a){if(V==0)return 1;if(Math.abs(E-V)<1e-9)return 1/(1+a*a*V/2);
+ if(E<V){const k=Math.sqrt(2*(V-E)),s=Math.sinh(k*a);return 1/(1+V*V*s*s/(4*E*(V-E)))}const k=Math.sqrt(2*(E-V)),s=Math.sin(k*a);return 1/(1+V*V*s*s/(4*E*(E-V)))}
+async function pick(){const i=+sE.value,j=+sV.value,k=+sR.value;oE.textContent=D.Es[i];oV.textContent=D.Vs[j];oR.textContent=D.Rs[k];ticks();
+ const r=byKey[i+"_"+j+"_"+k];if(!r){run=null;blank();return}await load(r);run=r;sT.max=r.n-1;if(fr>r.n-1)fr=r.n-1;draw()}
+function blank(){g.fillStyle="#f5f1ea";g.fillRect(0,0,F.width,F.height);h.clearRect(0,0,P.width,P.height);
+ g.fillStyle="#6b5d58";g.font="22px 'IBM Plex Mono'";g.textAlign="center";g.fillText("not computed yet",F.width/2,F.height/2);g.textAlign="left";
+ rd.textContent="This combination has not been computed. Filled dots mark the stored runs.";fcap.textContent=""}
+function hsl2rgb(H,L){const C=(1-Math.abs(2*L-1)),X=C*(1-Math.abs((H*6)%2-1)),m=L-C/2;const s=Math.floor(H*6)%6;
+ const t=[[C,X,0],[X,C,0],[0,C,X],[0,X,C],[X,0,C],[C,0,X]][s];return[(t[0]+m)*255,(t[1]+m)*255,(t[2]+m)*255]}
+const ramp=[];for(let v=0;v<256;v++){const t=v/255;ramp.push([245+t*(122-245),241+t*(31-241),234+t*(43-234)])}
+function draw(){const c=cache[run.id],n=D.out*D.out,o=fr*n,a=c.a,p=c.p;
+ for(let x=0;x<D.out;x++)for(let y=0;y<D.out;y++){const s=o+x*D.out+y,q=4*((D.out-1-y)*D.out+x),v=a[s];let col;
+  if(mode=="amp")col=ramp[v];else{const L=0.96-0.5*Math.min(1,v/160);col=v<3?[245,241,234]:hsl2rgb(p[s]/255,L)}
+  img.data[q]=col[0];img.data[q+1]=col[1];img.data[q+2]=col[2];img.data[q+3]=255}
+ og.putImageData(img,0,0);g.imageSmoothingEnabled=true;g.drawImage(off,0,0,F.width,F.height);
+ const sc=F.width/D.L;g.strokeStyle="#1c1518";g.setLineDash([6,5]);g.lineWidth=1.4;g.beginPath();g.arc(F.width/2,F.height/2,run.R*sc,0,2*Math.PI);g.stroke();g.setLineDash([]);
+ g.fillStyle="#6b5d58";g.font="14px 'IBM Plex Mono'";g.fillText("x →",F.width-46,F.height-10);g.fillText("y ↑",8,20);
+ g.strokeStyle="#1c1518";g.lineWidth=1.5;g.beginPath();g.moveTo(14,F.height-14);g.lineTo(14+10*sc,F.height-14);g.stroke();g.fillText("10 a",14,F.height-20);
+ plot();const cv=run.c[fr],t=cv[0];sT.value=fr;oT.textContent=t.toFixed(1);
+ const [tt,nn,b,ah,sy]=cv,inside=nn-b-ah,lost=1-nn,E=run.E,V=run.V0;
+ let s=`run ${run.id+1} of ${D.runs.length} · frame ${fr+1} of ${run.n} · ${run.steps} steps of ${D.dt} on ${D.cells} · ${run.wall.toFixed(1)} s on ${D.device}<br>`;
+ s+=`behind <b>${b.toFixed(3)}</b> · inside <b>${inside.toFixed(3)}</b> · ahead <b>${ah.toFixed(3)}</b> · lost at border ${lost.toFixed(4)} · total in box ${nn.toFixed(6)}<br>`;
+ s+=V==0?`free packet: σ<sub>y</sub> measured ${sy.toFixed(4)} · free law ${(D.s0*Math.sqrt(1+(t/(2*D.s0*D.s0))**2)).toFixed(4)}`:
+   `E ${E<V?"&lt;":"≥"} V<sub>0</sub>${E<V?" (classically the sphere is forbidden)":""} · 1D slab guide T(E, V<sub>0</sub>, 2R) = ${T1D(E,V,2*run.R).toFixed(3)}`;
+ rd.innerHTML=s;fcap.textContent=(mode=="amp"?"|ψ| in z = 0, paper = 0, wine = first-frame peak":"phase arg ψ as hue, lightness from |ψ|")+" · dashed circle: the sphere"}
+function plot(){const W=P.width,H=P.height,m={l:44,r:12,t:16,b:34},c=run.c,tmax=c[c.length-1][0];h.clearRect(0,0,W,H);
+ const X=t=>m.l+(W-m.l-m.r)*t/tmax,Y=v=>H-m.b-(H-m.t-m.b)*v;h.strokeStyle="#d8cfc3";h.lineWidth=1;h.font="12px 'IBM Plex Mono'";h.fillStyle="#6b5d58";
+ for(let v=0;v<=1.0001;v+=0.25){h.beginPath();h.moveTo(m.l,Y(v));h.lineTo(W-m.r,Y(v));h.stroke();h.fillText(v.toFixed(2),4,Y(v)+4)}
+ h.fillText("t →",W-40,H-10);h.fillText("0",m.l,H-16);h.fillText(tmax.toFixed(0),W-m.r-24,H-16);
+ const ser=[["behind",q=>q[2],"#1c1518",[]],["inside",q=>q[1]-q[2]-q[3],"#b07a6a",[4,3]],["ahead",q=>q[3],"#7a1f2b",[]],["lost",q=>1-q[1],"#6b5d58",[2,3]]];
+ ser.forEach(([nm,f,col,dash],n)=>{h.strokeStyle=col;h.setLineDash(dash);h.lineWidth=2;h.beginPath();c.forEach((q,s)=>{s?h.lineTo(X(q[0]),Y(f(q))):h.moveTo(X(q[0]),Y(f(q)))});h.stroke();
+  h.setLineDash(dash);h.beginPath();h.moveTo(m.l+8+n*112,m.t+22);h.lineTo(m.l+30+n*112,m.t+22);h.stroke();h.setLineDash([]);h.fillStyle="#1c1518";h.fillText(nm,m.l+34+n*112,m.t+26)});
+ h.setLineDash([]);h.strokeStyle="#1c1518";h.lineWidth=1;const xt=X(c[fr][0]);h.beginPath();h.moveTo(xt,m.t+16);h.lineTo(xt,H-m.b);h.stroke()}
+function loop(t){if(!playing)return;if(run&&t-last>70){last=t;fr=(fr+1)%run.n;draw()}requestAnimationFrame(loop)}
+go.onclick=()=>{playing=!playing;go.textContent=playing?"Pause":"Play";if(playing)requestAnimationFrame(loop)};
+st.onclick=()=>{if(run){fr=(fr+1)%run.n;draw()}};
+mA.onclick=()=>{mode="amp";mA.setAttribute("aria-pressed","true");mP.setAttribute("aria-pressed","false");if(run)draw()};
+mP.onclick=()=>{mode="ph";mP.setAttribute("aria-pressed","true");mA.setAttribute("aria-pressed","false");if(run)draw()};
+sT.oninput=()=>{if(run){fr=+sT.value;draw()}};sE.oninput=pick;sV.oninput=pick;sR.oninput=pick;pick();
+</script></body></html>
