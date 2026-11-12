@@ -11,7 +11,8 @@
 | Catalog entry | [public/scripts/catalog.js](../../public/scripts/catalog.js) (`id: 'schrodinger-sphere'`, `fig: 14`, `field: 'quantum'`, a new field "Quantum mechanics") |
 
 A quantum particle, spread out as a Gaussian wave packet, flies along $x$ at a sphere of radius $R$ inside which the potential
-energy is raised to $V_0$. The page plays runs of the time-dependent Schrödinger equation in three dimensions, computed ahead of
+energy is raised to $V_0$. **The figure shows the wave itself, $\mathrm{Re}\,\psi$, in three dimensions** (crests wine, troughs ink),
+seen from an angle the reader turns by dragging. The page plays runs of the time-dependent Schrödinger equation in three dimensions, computed ahead of
 time on Kaggle's GPUs and stored. **It computes nothing for a stored run.** Beyond the stored grid it computes a coarser live
 preview in a Web Worker and says so on the figure.
 
@@ -84,3 +85,29 @@ At these last frames the preview agrees to 0.02–0.06 in probability; over all 
 - Energy to 6.0 (not computed): within 2.5 s the speed has eased to 0.004 and the notice is shown, the picture held; the preview
   passes the visitor's time after about 7.5 s, the notice fades out, playback resumes at 0.2 (the uncomputed region's speed);
   all 48 frames after about 15 s.
+
+
+## The 3D view (12 November 2026, evening)
+
+Numa asked for the wave in three dimensions. The packet flies along $x$ through the centre of the sphere, and both are round
+about that axis, so $\hat L_x$ commutes with the Hamiltonian and $\psi(x, y, z) = \psi(x, \rho)$, $\rho = \sqrt{y^2 + z^2}$: the
+whole 3D wave is the stored cut through the axis spun about it. No new computation is needed.
+
+- **Data** (generation 2026-11-12, `kind: axisym`, written by [to_site_axisym.py](../../tools/kaggle/schrodinger-sphere/to_site_axisym.py)
+  from the Kaggle output of `numakoudsie/schrodinger-sphere-full-grid` version 1): per run the half-plane $y = \rho \ge 0$ of the
+  stored cut, 128 × 64 points 0.5 a apart, $|\psi|$ and $\arg\psi$ levels, 48 frames; 405 files, 62.7 MB, largest 202 kB. This
+  replaced the amplitude-only files of the afternoon (46.4 MB), which had no phase and so could not show crests.
+- **Drawing** ([volume-view.js](../../public/scripts/volume-view.js)): each frame the page spins the half-plane into a box of
+  128 × 96 × 96 voxels ($64\,a$ along $x$, $48\,a$ across), each voxel $\mathrm{Re}\,\psi = (q/255)\cos p$ at its $\rho$, linear between
+  stored $\rho$; WebGL2 marches 192 samples along each pixel's ray, crests wine with opacity $1 - e^{-45(\mathrm{Re}\psi)^2\Delta s}$,
+  troughs ink at 0.35 of that, and a glass shell for the sphere. `expected(x, y)` repeats the sum on the CPU from the same stored
+  levels; the data panel's Check compares it with the pixel read back: equal in every test (four points, 12 November 2026).
+- **Symmetry checks**: the two halves of every stored cut agree to 4 levels of 255 (`mirror_check` in `index.json`); a full 3D run in
+  this workspace (E = 2, V₀ = 3, R = 4, $\mathrm{Re}\,\psi$ on 96 × 64 × 64 points,
+  [notes/fig14/wave3d_test.py](../../notes/fig14/wave3d_test.py)) equals its spun cut to 2 of 127 levels (root mean square) and 24 of 127
+  at worst, at points on the sphere's staircase surface.
+- **Live preview** beyond the stored grid: the worker's own cut (64 × 64), spun the same way.
+- **Read values** points at the strongest wave along the ray and reports the stored half-plane point at that $x$ and $\rho$.
+- **Kaggle runs not used**: `numakoudsie/schrodinger-sphere-3d-generation` (the smooth 3D envelope, no crests) and
+  `numakoudsie/schrodinger-sphere-3d-wave` (Re ψ in 3D, which the symmetry makes redundant; it could not be stopped from this
+  session because the connector does not show a running session's id). Their outputs stay on Kaggle.

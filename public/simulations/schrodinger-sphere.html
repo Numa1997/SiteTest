@@ -524,8 +524,8 @@
 
                     <section class="psec" id="p-screen">
                         <h3><span class="psec__n">09</span>From the equation to the screen</h3>
-                        <p>The square picture, Fig. 14, is the plane \(z = 0\) through the sphere's centre, seen from above, \(x\) to the right and \(y\) up, the whole box of \(64\,a\). Its colour shows the size \(|\psi(x, y, 0, t)|\), not \(|\psi|^2\): paper-white where the wave is zero, deep wine where it is strongest. Each stored point carries a level \(q = \mathrm{round}\big(255\,|\psi| / |\psi|_\text{peak}\big)\), where \(|\psi|_\text{peak}\) is the largest value in the first frame, and the colour runs in a straight line from the paper colour at \(q = 0\) to wine at \(q = 255\). Because \(|\psi|\) is drawn rather than \(|\psi|^2\), faint parts of the wave, such as the evanescent fringe inside the sphere and the waves bent round it, stay visible. The dashed circle is the sphere, of radius \(R\); the bar marks \(10\,a\). The \(128\times128\) stored points are stretched over the canvas with the browser's smoothing (535 pixels for \(64\,a\), 8.4 pixels per \(a\), in a window 1440 pixels wide), so between points the colour is blended.</p>
-                        <p>Three things on the picture differ from the model. First, the levels stop at 255. Where the incoming and the reflected waves overlap in front of the sphere they interfere, and the crests of this standing pattern can exceed the first frame's peak; in the default run up to 43 of the 16 384 points (frame 19 of 48) are clipped at 255, between frames 11 and 26, and drawn at full wine whatever their true value. Second, the picture is one plane of a three-dimensional wave: the probabilities in the readouts and in Fig. 14b come from the whole \(\psi\), not from the picture. Third, time is shown in jumps: the page shows the stored frame at or before the playback time and never blends two frames. A whole run plays in about 9 s at full speed; the playback slows towards the end of a run and when a control is near the edge of the computed range.</p>
+                        <p>The square picture, Fig. 14, shows the wave itself in three dimensions, seen from an angle that you change by dragging. Because the packet flies along \(x\) through the centre of the sphere, and both the starting packet (5) and the potential (2) are unchanged by any rotation about the \(x\) axis, the angular momentum about that axis, \(\hat L_x = -i(y\,\partial_z - z\,\partial_y)\), commutes with the Hamiltonian; the packet starts with \(\hat L_x\psi = 0\) and keeps it, so at every time \(\psi(x, y, z, t) = \psi(x, \rho, t)\) with \(\rho = \sqrt{y^2 + z^2}\), the distance from the axis. The whole three-dimensional wave is therefore fixed by its values on one half-plane through the axis. Kaggle computed every run on the full \(128^3\) grid and stored the plane \(z = 0\); the page keeps its half \(y = \rho \ge 0\), \(128 \times 64\) points \(0.5\,a\) apart, as two levels per point: \(q = \mathrm{round}\big(255\,|\psi|/|\psi|_\text{peak}\big)\), with \(|\psi|_\text{peak}\) the largest value in the first frame, and \(p\), the phase \(\arg\psi\) in 256 steps from \(-\pi\) to \(\pi\). To draw a frame the page spins this half-plane about the axis: every point of a box \(64\,a\) long and \(48\,a\) wide takes \(\mathrm{Re}\,\psi = (q/255)\cos(\text{phase})\) of the stored point at its \(x\) and its \(\rho\), linear between the two stored \(\rho\) values around it.</p>
+                        <p>The picture is drawn as coloured fog: crests (\(\mathrm{Re}\,\psi &gt; 0\)) wine, troughs ink and fainter, each sample along a pixel's line of sight adding opacity \(1 - e^{-45(\mathrm{Re}\,\psi)^2\Delta s}\) (a third of that for troughs), so the fronts of the wave read as bands; the sphere is a glass shell. Three things differ from the model. First, the symmetry holds exactly only on paper: on the square grid the sphere is a staircase, so the computed wave is round about the axis only to within a small error. The data panel shows two measurements of it: the two halves \(y\) and \(-y\) of every stored plane agree to 4 levels of 255, and a full three-dimensional run computed in this workspace (\(E = 2\), \(V_0 = 3\), \(R = 4\)) equals its spun plane to 2 levels of 127 in the root mean square and to 24 of 127 at worst, at a few points on the sphere's surface. Second, the levels stop at 255: where the incoming and reflected waves overlap in front of the sphere the crests of the standing pattern can exceed the first frame's peak; in the default run up to 43 of the 16 384 points of the plane (frame 19 of 48) are clipped. Third, time is shown in jumps: the page shows the stored frame at or before the playback time and never blends two frames. A whole run plays in about 9 s at full speed; the playback slows towards the end of a run and when a control is near the edge of the computed range. The probabilities in the readouts and in Fig. 14b come from the whole \(\psi\) on Kaggle's grid, not from the picture.</p>
                         <p>The graph Fig. 14b draws the curves of Figure 2 for the chosen run: behind in black, inside (the slab \(|x| \le R\)) in rose, dashed, ahead in wine, and lost at the border in grey, dotted. The readouts below the controls give the same four numbers at the frame shown; with the defaults at the last frame they read 0.239, 0.631, 0.126 and 0.0039. The guide line evaluates (14) for a slab of thickness \(2R\) and says when \(E &lt; V_0\); it is a reference for the central ray only, not a prediction for the sphere. The data panel holds every stored number with its source, and checks the inside and lost values, the free-packet width (11) and the guide (14) against their formulas.</p>
                     </section>
 
@@ -580,7 +580,8 @@
 
         var stage = document.getElementById('stage'), volCanvas = document.getElementById('vol'), ovBox = Sim.canvas2d(document.getElementById('ov')), octx = ovBox.ctx;
         var reading = false;   /* Read values on: dragging pins a point instead of turning the view */
-        var view = VolumeView(volCanvas, { offset: 0.25 / 64, canTurn: function () { return !reading; }, onTurn: function () { dirty = true; } }), dirty = true, shownId = null;
+        var view = VolumeView(volCanvas, { offset: 0, canTurn: function () { return !reading; }, onTurn: function () { dirty = true; } }), dirty = true, shownId = null;
+        view.signed = true; view.kappa = 45; view.dist = 1.9; view.fov = 0.5; view.yaw = -0.32; view.pitch = 0.36; var RMAX = 24;   /* the 3D box shows rho up to 24 a around the flight axis */
         if (!view.ok) document.getElementById('src-t').textContent = 'This browser has no WebGL2, which the 3D view needs.';
         var plotBox = Sim.canvas2d(document.getElementById('plot')), pctx = plotBox.ctx;
         var timeIn = document.getElementById('time'), timeOut = document.getElementById('time-out');
@@ -616,10 +617,13 @@
         ds.var('speed', [], 'float', { symbol: 'speed', long_name: 'playback speed relative to normal (eased)', computed_in: 'tick()', digits: 3 });
         ds.var('edge', [], 'float', { symbol: 'edge', long_name: 'how close a control is to the edge of the computed range: 0 inside, 1 at the edge', computed_in: 'tick()', digits: 3 });
         ds.var('live_done', [], 'float', { symbol: 'live', long_name: 'fraction of the live preview computed', computed_in: 'worker messages', digits: 3 });
-        ds.dim('cx', 64); ds.dim('cy', 64); ds.dim('cz', 64);
-        ds.coord('xc', 'cx', Float32Array, { symbol: 'x', units: 'a', long_name: 'centre of each stored cell along x (the same along y and z)', computed_in: 'grid: cells of 2 × 2 × 2 Kaggle points' });
-        ds.var('cloud', ['cx', 'cy', 'cz'], Uint8Array, { symbol: 'q', long_name: 'stored level of the cell: root-mean-square |ψ| over its 8 Kaggle points, 0 to 255 of the first frame’s peak cell; q² is the cell’s mean probability density in that unit', computed_in: 'frame(), copied from the run file', digits: 0 });
-        var CLOUD = ds.alloc('cloud'), XC = ds.alloc('xc');
+        ds.dim('xi', 128); ds.dim('rho', 64);
+        ds.coord('xc', 'xi', Float32Array, { symbol: 'x', units: 'a', long_name: 'x of each stored point, along the flight axis', computed_in: 'grid of the Kaggle runs, 0.5 a apart' });
+        ds.coord('rc', 'rho', Float32Array, { symbol: 'ρ', units: 'a', long_name: 'distance from the flight axis of each stored point', computed_in: 'grid of the Kaggle runs, 0.5 a apart' });
+        ds.var('amp', ['xi', 'rho'], Uint8Array, { symbol: 'q', long_name: 'stored level of |ψ| on the half-plane through the axis, 0 to 255 of the first frame’s peak', computed_in: 'frame(), copied from the run file', digits: 0 });
+        ds.var('phase', ['xi', 'rho'], Uint8Array, { symbol: 'p', long_name: 'stored level of arg ψ, 0 to 255 for −π to π (0 where q < 3)', computed_in: 'frame(), copied from the run file', digits: 0 });
+        ds.var('sym_mirror', [], 'int', { symbol: 'mirror', long_name: 'largest |ψ| level difference between the cut’s two halves, y and −y, over all stored runs', computed_in: 'index.json (to_site_axisym.py)', digits: 0 });
+        var AMP = ds.alloc('amp'), PHS = ds.alloc('phase'), XC = ds.alloc('xc'), RC = ds.alloc('rc');
 
         /* ---------- the grid ---------- */
         function stopsOf(grid, extra) { return grid.concat(extra).sort(function (a, b) { return a - b; }).filter(function (v, i, a) { return i === 0 || v !== a[i - 1]; }); }
@@ -638,8 +642,8 @@
                 var dv = new DataView(buf), H = dv.getUint32(4, true), head = JSON.parse(new TextDecoder().decode(new Uint8Array(buf, 8, H)));
                 var body = new Blob([new Uint8Array(buf, 8 + H)]).stream().pipeThrough(new DecompressionStream('deflate'));
                 return Promise.all([check, new Response(body).arrayBuffer()]).then(function (res) {
-                    var all = new Uint8Array(res[1]), n = head.n, v = head.vol;
-                    c.head = head; c.n = n; c.vn = v; c.L = head.L; c.ready_n = n; c.vol = all; c.curves = head.curves; c.sha = res[0];   /* n frames of v^3 cells */
+                    var all = new Uint8Array(res[1]), n = head.n;
+                    c.head = head; c.n = n; c.nx = head.nx; c.nr = head.nr; c.step = head.step; c.x0 = head.x0; c.ready_n = n; var m = n * c.nx * c.nr; c.A = all.subarray(0, m); c.P = all.subarray(m, 2 * m); c.curves = head.curves; c.sha = res[0];   /* n frames of the half-plane (x, rho) */
                     return c;
                 });
             });
@@ -653,12 +657,12 @@
             if (liveKey === k && live) return;
             if (worker) worker.terminate();
             liveKey = k; job++;
-            live = { source: 'live', meta: p, n: 48, vn: 64, L: 64, ready_n: 0, vol: new Uint8Array(48 * 262144), curves: [], t0: performance.now() };
+            live = { source: 'live', meta: p, n: 48, nx: 64, nr: 32, step: 1, x0: -32, ready_n: 0, A: new Uint8Array(48 * 64 * 32), P: new Uint8Array(48 * 64 * 32), curves: [], t0: performance.now() };
             var mine = live, id = job;
             worker = new Worker('../scripts/schrodinger-live-worker.js');
             worker.onmessage = function (e) {
                 var m = e.data; if (m.id !== id || mine !== live) return;
-                if (m.type === 'frame') { mine.vol.set(m.vol, m.f * 262144); mine.L = m.L; mine.curves[m.f] = m.curve; mine.ready_n = m.f + 1; }
+                if (m.type === 'frame') { var o = m.out; mine.step = m.L / o; mine.x0 = -m.L / 2; for (var a = 0; a < o; a++) for (var b = 0; b < o / 2; b++) { mine.A[(m.f * o + a) * (o / 2) + b] = m.amp[a * o + o / 2 + b]; mine.P[(m.f * o + a) * (o / 2) + b] = m.ph[a * o + o / 2 + b]; } mine.curves[m.f] = m.curve; mine.ready_n = m.f + 1; }   /* the half y >= 0 of the live cut */
                 else if (m.type === 'done') { mine.ms = m.ms; mine.done = true; }
                 else if (m.type === 'error') { mine.error = m.message; }
             };
@@ -668,7 +672,7 @@
         /* ---------- what to show: the stored run, else the live preview ---------- */
         function entry() {
             var p = current(), r = byKey[key(p.E, p.V0, p.R)];
-            if (r) { var c = cache[key(p.E, p.V0, p.R)]; if (!c) load(r); return c && c.vol ? c : null; }
+            if (r) { var c = cache[key(p.E, p.V0, p.R)]; if (!c) load(r); return c && c.A ? c : null; }
             startLive(p);
             return live && liveKey === key(p.E, p.V0, p.R) ? live : null;
         }
@@ -677,12 +681,28 @@
 
         /* ---------- drawing: the stored cloud through VolumeView, labels on a 2D canvas above it ---------- */
         function L() { return (IDX && IDX.L) || 64; }
+        /* the 3D wave by rotational symmetry: the packet flies along x through the sphere's centre, so psi(x, y, z) = psi(x, rho)
+           with rho = sqrt(y^2 + z^2) (L_x commutes with the Hamiltonian; see the lecture note). Each voxel takes Re psi of the stored
+           half-plane at its rho, linearly between the two stored rho points around it, from the stored levels: Re psi = q/255 cos(p);
+           as a signed level, 127 Re psi + 128. The voxels sit at the stored x points and at cell centres in y and z. */
+        var revBuf = null;
+        function revolve(c, f) {
+            var nx = c.nx, nr = c.nr, st = c.step, M = Math.min(nr - 1, Math.floor(RMAX / st)), ny = 2 * M, base = f * nx * nr, A = c.A, P = c.P;
+            var re = new Float32Array(nx * nr); for (var q = 0; q < nx * nr; q++) { var a = A[base + q]; re[q] = a < 3 ? 0 : a / 255 * Math.cos(P[base + q] / 255 * 2 * Math.PI - Math.PI); }
+            var n = nx * ny * ny; if (!revBuf || revBuf.length !== n) revBuf = new Uint8Array(n);
+            var R0 = new Float32Array(ny * ny), I0 = new Int32Array(ny * ny);
+            for (var j = 0; j < ny; j++) for (var k = 0; k < ny; k++) { var y = (j + 0.5 - M) * st, z = (k + 0.5 - M) * st, rr = Math.sqrt(y * y + z * z) / st, r0 = Math.floor(rr); I0[j * ny + k] = r0; R0[j * ny + k] = rr - r0; }
+            for (var i = 0; i < nx; i++) { var row = i * nr, o = i * ny * ny;
+                for (var jk = 0; jk < ny * ny; jk++) { var r0b = I0[jk], w = R0[jk], v = r0b + 1 < nr ? re[row + r0b] * (1 - w) + re[row + r0b + 1] * w : 0; revBuf[o + jk] = Math.max(1, Math.min(255, Math.round(127 * v + 128))); } }
+            var hx = nx * st / 2 / (L() / 2), hy = M * st / (L() / 2);
+            return { data: revBuf, nx: nx, ny: ny, half: [hx, hy, hy], off: [-(c.x0 + nx * st / 2) / (nx * st) - 0.5 / nx, 0, 0] };
+        }
         function drawView(c, f, hold) {
             var W = ovBox.w, Hh = ovBox.h, dpr = window.devicePixelRatio || 1;
             if (volCanvas.width !== Math.round(W * dpr) || volCanvas.height !== Math.round(Hh * dpr)) { volCanvas.width = Math.round(W * dpr); volCanvas.height = Math.round(Hh * dpr); dirty = true; }
             var id = c && !hold ? (c.source + (c.meta.E + '_' + c.meta.V0 + '_' + c.meta.R) + ':' + f) : 'none';
             if (id !== shownId) {
-                if (c && !hold) { view.setVolume(c.vol.subarray(f * c.vn * c.vn * c.vn, (f + 1) * c.vn * c.vn * c.vn), c.vn); view.extent = (c.L || 64) / L(); } else view.clear();
+                if (c && !hold) { var V = revolve(c, f); view.setVolume(V.data, V.nx, V.ny, V.ny); view.half = V.half; view.offset = V.off; } else view.clear();
                 shownId = id; dirty = true;
             }
             var p = current(); if (view.sphere !== p.R / (L() / 2)) { view.sphere = p.R / (L() / 2); dirty = true; }
@@ -731,7 +751,7 @@
                 ds.set('inside', q[1] - q[2] - q[3]); ds.set('lost', 1 - q[1]); ds.set('sigma_free', s0 * Math.sqrt(1 + Math.pow(q[0] / (2 * s0 * s0), 2)));
                 ds.set('ready', c.ready_n);
                 if (c.source === 'kaggle') { ds.set('sha_ok', c.sha === true); ds.set('steps', c.head.steps); ds.set('wall', c.head.wall); }
-                if (c.vn === 64) { CLOUD.set(c.vol.subarray(f * 262144, (f + 1) * 262144)); ds.touch('cloud'); }
+                if (c.source === 'kaggle') { var m2 = c.nx * c.nr; AMP.set(c.A.subarray(f * m2, (f + 1) * m2)); PHS.set(c.P.subarray(f * m2, (f + 1) * m2)); ds.touch('amp'); ds.touch('phase'); }
             }
             var fx = function (v, d) { return v == null || !isFinite(v) ? '—' : v.toFixed(d); };
             document.getElementById('r-b').textContent = fx(ds.get('behind'), 3); document.getElementById('r-a').textContent = fx(ds.get('ahead'), 3);
@@ -797,9 +817,9 @@
             return Promise.all(gens.map(function (g) { return fetch(DATA_BASE + g.index).then(function (r) { return r.json(); }).then(function (ix) { ix.base = DATA_BASE + g.date + '/'; return ix; }); }));
         }).then(function (ixs) {
             var grid = { Es: [], Vs: [], Rs: [] };
-            ixs.forEach(function (ix) { ix.runs.forEach(function (r) { r.base = ix.base; r.generated = ix.generated; (ix.kind === '3d' ? byKey : by2d)[key(r.E, r.V0, r.R)] = r; }); ['Es', 'Vs', 'Rs'].forEach(function (n) { grid[n] = grid[n].concat(ix[n]); }); });
-            var idx = IDX = Object.assign({}, ixs.filter(function (ix) { return ix.kind === '3d'; }).pop() || ixs[ixs.length - 1], grid);
-            for (var i = 0; i < 64; i++) XC[i] = (i - 32) * idx.L / 64 + 0.25; ds.touch('xc');
+            ixs.forEach(function (ix) { ix.runs.forEach(function (r) { r.base = ix.base; r.generated = ix.generated; byKey[key(r.E, r.V0, r.R)] = r; }); ['Es', 'Vs', 'Rs'].forEach(function (n) { grid[n] = grid[n].concat(ix[n]); }); if (ix.mirror_check) ds.set('sym_mirror', ix.mirror_check.largest_level_difference); });
+            var idx = IDX = Object.assign({}, ixs[ixs.length - 1], grid);
+            for (var i = 0; i < 128; i++) XC[i] = (i - 64) * idx.L / 128; for (var r2 = 0; r2 < 64; r2++) RC[r2] = r2 * idx.L / 128; ds.touch('xc'); ds.touch('rc');
             var host = document.getElementById('params'), defs = [
                 ['E', 'Packet energy <i>E</i>', stopsOf(idx.Es, EXTRA.E), 2.5],
                 ['V0', 'Barrier height <i>V</i><sub>0</sub>', stopsOf(idx.Vs, EXTRA.V0), 3.0],
@@ -817,18 +837,20 @@
         window.__fig14 = { ds: ds, entry: entry, sliders: function () { return sliders; }, setT: function (t) { tPhys = t; }, play: setPlay };
 
         /* ---------- the data panel (scripts/datalog.js) reads the store; these hooks only say where things are drawn ---------- */
-        /* a stored cell -> where it lands on the screen; a screen point -> the brightest stored cell along its ray */
-        function cellPoint(q) { var n = 64, ix = Math.floor(q / 4096), iy = Math.floor(q / 64) % 64, iz = q % 64, e = view.extent; return [ix, iy, iz].map(function (i) { return ((i + 0.5) / n - 0.5 + view.offset) * 2 * e; }); }
-        function screenOf(q) { return view.project(cellPoint(q), ovBox.w, ovBox.h); }
+        /* a stored point (x_i, rho_r) of the half-plane -> where it lands on the screen (at the angle where z = 0, y = rho);
+           a screen point -> the voxel of largest |Re psi| along its ray -> the stored point at its x and rho */
+        function pointOf(q) { var i = Math.floor(q / 64), r = q % 64; return [XC[i] / (L() / 2), RC[r] / (L() / 2), 0]; }
+        function screenOf(q) { return view.project(pointOf(q), ovBox.w, ovBox.h); }
         function pixelCheck(q) {
             var at = screenOf(q), c = entry(), dpr = volCanvas.width / ovBox.w;
             if (!c || !view.data) return { what: 'the picture', drawn: 'nothing drawn yet', expected: '—', ok: true };
+            if (at.x < 0 || at.y < 0 || at.x >= ovBox.w || at.y >= ovBox.h) return { what: 'stored point ' + q, drawn: 'outside the view', expected: '—', ok: true, note: 'Turn the view to bring this point on screen.' };
             var gl = volCanvas.getContext('webgl2'), px = new Uint8Array(4), X = Math.floor(at.x * dpr), Y = Math.floor(at.y * dpr);
             gl.readPixels(X, volCanvas.height - 1 - Y, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, px);
-            if (px[3] === 0) return { what: 'screen pixel at cell ' + q, drawn: 'nothing (transparent)', expected: 'a filled pixel', ok: false };
+            if (px[3] === 0) return { what: 'screen pixel at stored point ' + q, drawn: 'nothing (transparent)', expected: 'a filled pixel', ok: false };
             var want = view.expected((X + 0.5) / dpr, (Y + 0.5) / dpr, ovBox.w, ovBox.h), d = Math.max(Math.abs(px[0] - want[0]), Math.abs(px[1] - want[1]), Math.abs(px[2] - want[2]));
-            return { what: 'screen pixel where cell ' + q + ' lands, (' + at.x.toFixed(1) + ', ' + at.y.toFixed(1) + ') css px', drawn: 'rgb(' + px[0] + ', ' + px[1] + ', ' + px[2] + ')', expected: 'rgb(' + want.join(', ') + '): the shader’s sum along that ray, recomputed here from the stored cells', ok: d <= 3,
-                note: 'Each pixel sums ' + 192 + ' samples of the stored cloud along its ray (trilinear between cell centres, opacity 1 − exp(−30 q² Δs)), plus the glass shell of the sphere; the page repeats that sum on the CPU from the same stored levels. Up to 3 colour units apart is accepted for rounding on the graphics card.' };
+            return { what: 'screen pixel where stored point ' + q + ' lands, (' + at.x.toFixed(1) + ', ' + at.y.toFixed(1) + ') css px', drawn: 'rgb(' + px[0] + ', ' + px[1] + ', ' + px[2] + ')', expected: 'rgb(' + want.join(', ') + '): the sum along that pixel’s ray through the 3D wave built from the stored levels, recomputed here', ok: d <= 3,
+                note: 'The pixel sums 192 samples along its ray through the 3D wave (each voxel Re ψ = q/255 · cos p of the stored half-plane at its distance ρ from the axis, linear between stored ρ points; crests wine, troughs ink, opacity 1 − exp(−45 (Re ψ)² Δs) for crests and 0.35 of that for troughs) and the glass shell of the sphere; the page repeats the sum on the CPU. Up to 3 colour units apart is accepted for rounding on the graphics card.' };
         }
         Sim.data = {
             ds: ds, kicker: 'Fig. 14 · data', file: 'fig14-wave-packet-sphere',
@@ -837,16 +859,20 @@
                 { title: 'What you set', note: 'the three stops of the controls', vars: ['E', 'V0', 'R', 'k0'] },
                 { title: 'The stored run', note: 'read from the run file Kaggle wrote', vars: ['stored', 'source', 'file', 'sha_ok', 'steps', 'wall', 'ready', 'live_done'] },
                 { title: 'This frame', note: 'stored values; inside and lost added up from them', vars: ['t', 'frame', 'norm', 'behind', 'ahead', 'inside', 'lost', 'sigma_y', 'sigma_free', 'T1D'] },
-                { title: 'The picture', note: 'the stored cloud of this frame, 64 × 64 × 64 cells', vars: ['xc', 'cloud'] },
+                { title: 'The picture', note: 'the stored half-plane of this frame (x along the flight, ρ from the axis); the 3D wave is it spun about the axis', vars: ['xc', 'rc', 'amp', 'phase', 'sym_mirror'] },
                 { title: 'Playback', note: 'how the page plays', vars: ['speed', 'edge'] }
             ],
-            probe: function (x, y) { var b = view.pick(x, y, ovBox.w, ovBox.h); return b ? { q: (b.ix * 64 + b.iy) * 64 + b.iz } : null; },
-            inspect: function (ref) {
-                var q = ref.q, ix = Math.floor(q / 4096), iy = Math.floor(q / 64) % 64, iz = q % 64, lv = CLOUD[q];
-                return { title: 'cell at x = ' + XC[ix].toFixed(2) + ' a, y = ' + XC[iy].toFixed(2) + ' a, z = ' + XC[iz].toFixed(2) + ' a (the brightest along the ray you pointed at)', at: screenOf(q),
-                    rows: [['x', XC[ix], 'a', 'xc', ix], ['y', XC[iy], 'a', 'xc', iy], ['z', XC[iz], 'a', 'xc', iz], ['q', lv, '', 'cloud', q], ['q / 255', lv / 255, ''], ['density (q / 255)²', (lv / 255) * (lv / 255), '']] };
+            probe: function (x, y) {
+                var b = view.pick(x, y, ovBox.w, ovBox.h), c = entry(); if (!b || !c) return null;
+                var M = b.ix, dm = view.dims, st = c.step, yv = (b.iy + 0.5 - dm[1] / 2) * st, zv = (b.iz + 0.5 - dm[2] / 2) * st, r = Math.min(63, Math.round(Math.sqrt(yv * yv + zv * zv) / st));
+                return { q: b.ix * 64 + r };
             },
-            locate: function (name, idx) { if (name === 'cloud') return screenOf(idx); return null; },
+            inspect: function (ref) {
+                var q = ref.q, i = Math.floor(q / 64), r = q % 64, a = AMP[q], ph = PHS[q], phi = ph / 255 * 2 * Math.PI - Math.PI;
+                return { title: 'stored point x = ' + XC[i].toFixed(2) + ' a, ρ = ' + RC[r].toFixed(2) + ' a (the strongest wave along the ray you pointed at; every point on the circle of radius ρ around the axis has these values)', at: screenOf(q),
+                    rows: [['x', XC[i], 'a', 'xc', i], ['ρ', RC[r], 'a', 'rc', r], ['q (|ψ|)', a, '', 'amp', q], ['p (arg ψ)', ph, '', 'phase', q], ['|ψ| / |ψ|<sub>peak,0</sub>', a / 255, ''], ['arg ψ', phi, 'rad'], ['Re ψ / |ψ|<sub>peak,0</sub>', a < 3 ? 0 : a / 255 * Math.cos(phi), '']] };
+            },
+            locate: function (name, idx) { if (name === 'amp' || name === 'phase') return screenOf(idx); return null; },
             check: {
                 k0: function () { return { formula: '√(2E)', inputs: [['E', ds.get('E'), '', 2]], value: Math.sqrt(2 * ds.get('E')) }; },
                 inside: function () { return { formula: '∫|ψ|² − P<sub>behind</sub> − P<sub>ahead</sub>', inputs: [['∫|ψ|²', ds.get('norm'), '', 6], ['P<sub>behind</sub>', ds.get('behind'), '', 5], ['P<sub>ahead</sub>', ds.get('ahead'), '', 5]], value: ds.get('norm') - ds.get('behind') - ds.get('ahead') }; },
@@ -855,10 +881,10 @@
                 T1D: function () { return { formula: 'rectangular barrier, thickness 2R', inputs: [['E', ds.get('E'), '', 2], ['V<sub>0</sub>', ds.get('V0'), '', 2], ['2R', 2 * ds.get('R'), 'a', 1]], value: T1D(ds.get('E'), ds.get('V0'), 2 * ds.get('R')) }; },
                 t: function () { var c = entry(); return c ? { formula: 'frame · Δt<sub>frame</sub>', inputs: [['frame', ds.get('frame'), '', 0], ['Δt<sub>frame</sub>', frameDt(c), '', 3]], value: ds.get('frame') * frameDt(c) } : null; }
             },
-            drawn: { cloud: pixelCheck },
+            drawn: { amp: pixelCheck, phase: pixelCheck },
             round: { time: 't', label: function () { return 'one stored run, ' + (ds.get('ready') || 48) + ' frames'; }, length: function () { var c = entry(); return c ? tEnd(c) : 10; }, columns: ['behind', 'ahead', 'inside', 'lost', 'sigma_y'] },
             play: function () { setPlay(true); },
-            about: 'The picture is the stored cloud of 64 × 64 × 64 cells (each the root-mean-square |ψ| over 2 × 2 × 2 of Kaggle’s 128³ points, in 256 levels of the first frame’s peak cell), drawn as fog: along each pixel’s ray 192 samples, trilinear between cell centres, each adding opacity 1 − exp(−30 q² Δs), so the fog is as dense as the probability; the sphere is a glass shell. That smoothing between cell centres is the only thing the picture adds to the stored numbers, and any pixel can be checked against the same sum recomputed from the store. The probabilities come from the whole ψ on Kaggle’s 128³ grid. Between stored frames nothing is interpolated. Where a run is not stored in 3D the picture is the live preview from your browser (64³ points), marked on the figure.'
+            about: 'The packet flies along x through the sphere’s centre and both are round about that axis, so the wave is the same at every angle around it: ψ(x, y, z) = ψ(x, ρ) with ρ = √(y² + z²). Kaggle computed every run in full 3D on 128³ points and stored the cut through the axis; the page keeps its half ρ ≥ 0 (128 × 64 points, 0.5 a apart: |ψ| and arg ψ in 256 levels each) and spins it about the axis: every voxel takes Re ψ = q/255 · cos p at its ρ, linear between the two stored ρ points around it. The picture draws Re ψ, the wave itself, as fog: crests wine, troughs ink and fainter, opacity growing with (Re ψ)². Checks of the symmetry: the two halves of every stored cut agree to the number shown as “mirror” (levels of 255); a full 3D run computed in this workspace (E = 2, V₀ = 3, R = 4, Re ψ on 96 × 64 × 64 points) equals its spun cut to 2 levels of 127 (root mean square) and at worst 24 of 127 at a few points on the sphere’s surface, where the square grid makes the sphere a staircase. The probabilities come from the whole 3D ψ on Kaggle. Between stored frames nothing is interpolated. Where a run is not stored the picture is the live preview from your browser (64³ points), spun the same way and marked on the figure.'
         };
     })();
     </script>

@@ -42,6 +42,8 @@ both named by the date Kaggle generated it.
   [build_full.py](../tools/kaggle/schrodinger-sphere/build_full.py)). Kaggle keeps the output of every notebook version.
   Fig. 14's first generation, 2026-11-12, was computed before this rule: it lies at the top of version 1's output (`runs/`,
   `index.json`), and its `index.json` on the website names that notebook and version.
+- Use the problem's symmetry before storing 3D: Fig. 14 is round about its flight axis, so a cut through the axis holds the whole
+  3D field (62.7 MB for 405 runs instead of gigabytes of volumes); prove the symmetry on the stored data and show the proof.
 - The website keeps the compact form, the notebook the full one. Fig. 14 stores only the amplitude of ψ on the website,
   46.4 MB for 405 runs, largest file 145 kB; with the phase picture it was 120.0 MB. No number on the page comes from the
   phase, and the full output, phase included, stays on Kaggle. Every file stays far under Cloudflare's 25 MiB per static file

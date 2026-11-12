@@ -2,6 +2,7 @@
  {
   "date": "2026-11-12",
   "index": "2026-11-12/index.json",
+  "kind": "axisym",
   "runs": 405,
   "kaggle": "numakoudsie/schrodinger-sphere-full-grid",
   "version": "1",

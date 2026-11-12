@@ -11,12 +11,12 @@
    (1 for the Kaggle cube of 64 a; the live preview's smaller boxes for fast packets are less than 1). */
 (function () {
     'use strict';
-    var STEPS = 192, KAPPA = 30.0;                       /* march steps through the cube; opacity per unit density and view length */
+    var STEPS = 192, KAPPA = 30.0, TROUGH = 0.35;   /* troughs drawn at 0.35 of the crests' opacity, so the fronts read as bands */                       /* march steps through the cube; opacity per unit density and view length */
     var INK = [28 / 255, 21 / 255, 24 / 255], PAPER = [245 / 255, 241 / 255, 234 / 255], WINE = [122 / 255, 31 / 255, 43 / 255], DEEP = [77 / 255, 15 / 255, 24 / 255];
     var VS = '#version 300 es\nin vec2 p; out vec2 uv; void main(){ uv = p; gl_Position = vec4(p, 0.0, 1.0); }';
     var FS = '#version 300 es\nprecision highp float; precision highp sampler3D;\n' +
-        'in vec2 uv; out vec4 o; uniform sampler3D vol; uniform mat3 rot; uniform float dist, fov, aspect, sph, kappa, has; uniform vec3 paper, wine, deep, ink3, ext3; uniform float off, signed;\n' +
-        'const int STEPS = ' + STEPS + ';\n' +
+        'in vec2 uv; out vec4 o; uniform sampler3D vol; uniform mat3 rot; uniform float dist, fov, aspect, sph, kappa, has; uniform vec3 paper, wine, deep, ink3, ext3, off3; uniform float signed;\n' +
+        'const int STEPS = ' + STEPS + ';\nconst float TROUGH = ' + TROUGH.toFixed(3) + ';\n' +
         'bool box(vec3 ro, vec3 rd, out float t0, out float t1){ vec3 a = (-ext3 - ro) / rd, b = (ext3 - ro) / rd; vec3 lo = min(a, b), hi = max(a, b); t0 = max(max(lo.x, lo.y), lo.z); t1 = min(min(hi.x, hi.y), hi.z); return t1 > max(t0, 0.0); }\n' +
         'void main(){\n' +
         '  vec3 ro = rot * vec3(0.0, 0.0, dist); vec3 rd = normalize(rot * vec3(uv.x * aspect * fov, uv.y * fov, -1.0));\n' +
@@ -30,8 +30,8 @@
         '      float t = t0 + (float(i) + 0.5) * dt;\n' +
         '      if (hit0 && t >= s0 && t - dt < s0) { float f = abs(dot(normalize(ro + rd * s0), rd)); float a = 0.10 + 0.30 * pow(1.0 - f, 3.0); col += T * a * vec3(0.11, 0.08, 0.09); T *= 1.0 - a; hit0 = false; }\n' +
         '      if (hit1 && t >= s1 && t - dt < s1) { float f = abs(dot(normalize(ro + rd * s1), rd)); float a = 0.05 + 0.20 * pow(1.0 - f, 3.0); col += T * a * vec3(0.11, 0.08, 0.09); T *= 1.0 - a; hit1 = false; }\n' +
-        '      vec3 pos = ro + rd * t; float q = texture(vol, pos / ext3 * 0.5 + 0.5 - off).r; float sv = signed > 0.5 ? (q * 255.0 - 128.0) / 127.0 : q; float d = sv * sv;\n' +
-        '      float a = 1.0 - exp(-kappa * d * dt); vec3 c = signed > 0.5 ? (sv > 0.0 ? wine : ink3) : mix(wine, deep, clamp(d * 1.5, 0.0, 1.0));\n' +
+        '      vec3 pos = ro + rd * t; float q = texture(vol, pos / ext3 * 0.5 + 0.5 - off3).r; float sv = signed > 0.5 ? (q * 255.0 - 128.0) / 127.0 : q; float d = sv * sv;\n' +
+        '      float a = 1.0 - exp(-kappa * d * (signed > 0.5 && sv < 0.0 ? TROUGH : 1.0) * dt); vec3 c = signed > 0.5 ? (sv > 0.0 ? wine : ink3) : mix(wine, deep, clamp(d * 1.5, 0.0, 1.0));\n' +
         '      col += T * a * c; T *= 1.0 - a; if (T < 0.004) break;\n' +
         '    }\n' +
         '  }\n' +
@@ -52,13 +52,15 @@
         var api = { ok: !!gl, yaw: opt.yaw == null ? -0.65 : opt.yaw, pitch: opt.pitch == null ? 0.42 : opt.pitch, dist: 2.15, fov: 0.46, sphere: 0, n: 0, data: null, kappa: KAPPA, offset: opt.offset || 0, extent: 1, dims: [0, 0, 0], half: null, signed: false };
         /* half sides of the stored box in view units: api.half if given, else a cube of half side api.extent */
         api.ext3 = function () { return api.half || [api.extent, api.extent, api.extent]; };
+        /* the texture shift on each axis (a number shifts all three alike) */
+        api.off3 = function () { var o = api.offset; return typeof o === 'number' ? [o, o, o] : o; };
         if (!gl) return api;
         function sh(type, src) { var s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s)); return s; }
         var prog = gl.createProgram(); gl.attachShader(prog, sh(gl.VERTEX_SHADER, VS)); gl.attachShader(prog, sh(gl.FRAGMENT_SHADER, FS)); gl.linkProgram(prog);
         if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(prog));
         var buf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buf); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
         var loc = gl.getAttribLocation(prog, 'p'), U = {};
-        ['vol', 'rot', 'dist', 'fov', 'aspect', 'sph', 'kappa', 'has', 'paper', 'wine', 'deep', 'off', 'ext3', 'ink3', 'signed'].forEach(function (k) { U[k] = gl.getUniformLocation(prog, k); });
+        ['vol', 'rot', 'dist', 'fov', 'aspect', 'sph', 'kappa', 'has', 'paper', 'wine', 'deep', 'off3', 'ext3', 'ink3', 'signed'].forEach(function (k) { U[k] = gl.getUniformLocation(prog, k); });
         var tex = gl.createTexture();
         gl.bindTexture(gl.TEXTURE_3D, tex);
         gl.texParameteri(gl.TEXTURE_3D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); gl.texParameteri(gl.TEXTURE_3D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
@@ -82,7 +84,7 @@
             gl.uniformMatrix3fv(U.rot, false, rotation(api.yaw, api.pitch));
             gl.uniform1f(U.dist, api.dist); gl.uniform1f(U.fov, api.fov); gl.uniform1f(U.aspect, w / h); gl.uniform1f(U.sph, api.sphere);
             gl.uniform1f(U.kappa, api.kappa); gl.uniform1f(U.has, api.data ? 1 : 0);
-            gl.uniform1f(U.off, api.offset); gl.uniform3fv(U.ext3, api.ext3()); gl.uniform3fv(U.ink3, INK); gl.uniform1f(U.signed, api.signed ? 1 : 0); gl.uniform3fv(U.paper, PAPER); gl.uniform3fv(U.wine, WINE); gl.uniform3fv(U.deep, DEEP);
+            gl.uniform3fv(U.off3, api.off3()); gl.uniform3fv(U.ext3, api.ext3()); gl.uniform3fv(U.ink3, INK); gl.uniform1f(U.signed, api.signed ? 1 : 0); gl.uniform3fv(U.paper, PAPER); gl.uniform3fv(U.wine, WINE); gl.uniform3fv(U.deep, DEEP);
             gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
         };
         /* the ray through a point of the canvas, in css px from the top left */
@@ -99,7 +101,7 @@
         /* the stored level at a point of the cube, trilinear between cell centres as the texture unit does (clamped at the edges) */
         function level(p) {
             var dm = api.dims, D = api.data, i0 = [0, 0, 0], w = [0, 0, 0], E3 = api.ext3();
-            for (var k = 0; k < 3; k++) { var c = (p[k] / E3[k] * 0.5 + 0.5 - api.offset) * dm[k] - 0.5; c = Math.max(0, Math.min(dm[k] - 1, c)); i0[k] = Math.min(dm[k] - 2, Math.floor(c)); w[k] = c - i0[k]; }
+            for (var k = 0; k < 3; k++) { var c = (p[k] / E3[k] * 0.5 + 0.5 - api.off3()[k]) * dm[k] - 0.5; c = Math.max(0, Math.min(dm[k] - 1, c)); i0[k] = Math.min(dm[k] - 2, Math.floor(c)); w[k] = c - i0[k]; }
             var s = 0;
             for (var a = 0; a < 2; a++) for (var b = 0; b < 2; b++) for (var c2 = 0; c2 < 2; c2++) {
                 var x = i0[0] + a, y = i0[1] + b, z = i0[2] + c2, wt = (a ? w[0] : 1 - w[0]) * (b ? w[1] : 1 - w[1]) * (c2 ? w[2] : 1 - w[2]);
@@ -122,7 +124,7 @@
                     var t = bh[0] + (i + 0.5) * dt;
                     if (hit[0] && t >= s0 && t - dt < s0) { shell(s0, 0); hit[0] = false; }
                     if (hit[1] && t >= s1 && t - dt < s1) { shell(s1, 1); hit[1] = false; }
-                    var q = level([ro[0] + rd[0] * t, ro[1] + rd[1] * t, ro[2] + rd[2] * t]), sv = api.signed ? (q * 255 - 128) / 127 : q, d = sv * sv, a = 1 - Math.exp(-api.kappa * d * dt), m = Math.max(0, Math.min(1, d * 1.5));
+                    var q = level([ro[0] + rd[0] * t, ro[1] + rd[1] * t, ro[2] + rd[2] * t]), sv = api.signed ? (q * 255 - 128) / 127 : q, d = sv * sv, a = 1 - Math.exp(-api.kappa * d * (api.signed && sv < 0 ? TROUGH : 1) * dt), m = Math.max(0, Math.min(1, d * 1.5));
                     for (var k = 0; k < 3; k++) col[k] += T * a * (api.signed ? (sv > 0 ? WINE[k] : INK[k]) : WINE[k] + (DEEP[k] - WINE[k]) * m);
                     T *= 1 - a; if (T < 0.004) break;
                 }
@@ -137,7 +139,7 @@
             var dm = api.dims, best = null, bl = -1, dt = (bh[1] - bh[0]) / STEPS, E3 = api.ext3();
             for (var i = 0; i < STEPS; i++) {
                 var t = bh[0] + (i + 0.5) * dt, p = [r.ro[0] + r.rd[0] * t, r.ro[1] + r.rd[1] * t, r.ro[2] + r.rd[2] * t];
-                var o = api.offset, ix = Math.max(0, Math.min(dm[0] - 1, Math.floor((p[0] / E3[0] * 0.5 + 0.5 - o) * dm[0]))), iy = Math.max(0, Math.min(dm[1] - 1, Math.floor((p[1] / E3[1] * 0.5 + 0.5 - o) * dm[1]))), iz = Math.max(0, Math.min(dm[2] - 1, Math.floor((p[2] / E3[2] * 0.5 + 0.5 - o) * dm[2])));
+                var O = api.off3(), ix = Math.max(0, Math.min(dm[0] - 1, Math.floor((p[0] / E3[0] * 0.5 + 0.5 - O[0]) * dm[0]))), iy = Math.max(0, Math.min(dm[1] - 1, Math.floor((p[1] / E3[1] * 0.5 + 0.5 - O[1]) * dm[1]))), iz = Math.max(0, Math.min(dm[2] - 1, Math.floor((p[2] / E3[2] * 0.5 + 0.5 - O[2]) * dm[2])));
                 var q = api.data[(ix * dm[1] + iy) * dm[2] + iz], mag = api.signed ? Math.abs(q - 128) : q; if (mag > bl) { bl = mag; best = { ix: ix, iy: iy, iz: iz, q: q, p: p }; }
             }
             return best;
