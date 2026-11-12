@@ -157,7 +157,7 @@ A project brings five things; nothing in `kaggle-flow.js` or the bridge changes.
 4. **Its measured cost per block** on Kaggle, so the bridge can size jobs and give an honest time. Fig. 14: 2.3 to 6.9 s per run on a T4
    (`wall` in `index.json`), plus the session's start, not yet measured on its own; the whole grid 880.8 s on two T4s.
 5. **Its page**: `kaggle-flow.js` controls, its drawing, and if it can, a live preview checked against Kaggle with the difference
-   stated. Fig. 14 states 0.02 to 0.06 in probability. A project whose browser solver is not checked shows the held picture and the
+   stated. Fig. 14 states “within 0.08” in probability. A project whose browser solver is not checked shows the held picture and the
    notice instead of a preview.
 
 ## Measured numbers (12 November 2026)

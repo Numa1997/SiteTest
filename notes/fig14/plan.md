@@ -53,3 +53,21 @@ Griffiths & Schroeter, *Introduction to Quantum Mechanics* (3rd ed.), ch. 2 (fre
 the rectangular barrier); Sakurai & Napolitano, *Modern Quantum Mechanics*, ch. 2 (time evolution, wave packets); Feit, Fleck &
 Steiger, J. Comput. Phys. 47, 412 (1982); Strang, SIAM J. Numer. Anal. 5, 506 (1968); an open source on absorbing boundaries
 (Kosloff & Kosloff 1986) and on splitting error (Jahnke & Lubich 2000) if they open. Each one only if opened in this session.
+
+## Outcome (12 November 2026)
+
+- Note written as planned, ten sections, equations (1)–(21), Figures 1–3 (inline SVG from `svgs.py`), Tables 1–3, four
+  Key results, seven worked examples, six Problems. Inserted by one exact replacement of the placeholder article; page
+  L112–L555 is the article, nothing else in the page changed. Source with figure placeholders: `note.html`.
+- Chromium (Playwright, build in the scratchpad, `page.cjs`, `page-out.json`), 1440 × 900 and 390 × 844: no console
+  errors, no `.katex-error`, tags (1)–(21) in order, no horizontal page scroll; on the phone Table 2 scrolls inside its own
+  box. Store with the defaults at the last frame: behind 0.239096, ahead 0.630915, inside 0.126125, lost 0.003864,
+  t = 13.16, frame 47, 1316 steps, SHA-256 checked; canvas 535 px for 64 a at 1440 px.
+- Measured here: the stored run recomputed on CPU agrees with Kaggle to 3.4e-4; 32-bit 0.62802 / 64-bit 0.62821 /
+  Kaggle 0.62780 ahead (E = 2, V0 = 3, R = 4); 256³ 0.62483 ahead, 0.24923 behind; time order without the border:
+  whole-ψ differences 1.21e-3, 2.99e-4, 7.45e-5, 1.86e-5 (ratio 4.0); with the border the loss grows 8e-4 per halving of
+  Δt (mask applied per step); unitarity: 3.6e-13 (64-bit) and 3.3e-4 (32-bit) in 1500 steps without the border; live
+  worker against Kaggle: largest difference over all frames 0.023–0.076, 11.6–35.6 s per run on one core.
+- Open: the page's source box says the live preview agrees "to 0.02 – 0.06"; over all frames the measured largest
+  difference reaches 0.076 (E = 0.5, V0 = 8, R = 6). docs/kaggle.md quotes 0.63250 / 0.63293 for the smoke test, which
+  ran to a different end time than the stored full-grid run (0.62780); not a contradiction, but the two should not be mixed.

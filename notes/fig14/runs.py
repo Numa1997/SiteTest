@@ -1,7 +1,7 @@
 """Fig. 14: reads the stored Kaggle runs (public/data/schrodinger-sphere/*.bin) and prints the numbers the note quotes.
 Usage: python3 notes/fig14/runs.py [E V0 R ...]"""
 import json, struct, zlib, sys, os, numpy as np
-D = os.path.join(os.path.dirname(__file__), '..', '..', 'public', 'data', 'schrodinger-sphere')
+D = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'public', 'data', 'schrodinger-sphere', '2026-11-12')   # the first generation (generations.json)
 IDX = json.load(open(os.path.join(D, 'index.json')))
 def read(r, frames=False):
     b = open(os.path.join(D, r['file']), 'rb').read()
@@ -9,7 +9,7 @@ def read(r, frames=False):
     H = struct.unpack('<I', b[4:8])[0]; head = json.loads(b[8:8 + H])
     if frames:
         raw = np.frombuffer(zlib.decompress(b[8 + H:]), np.uint8); n, o = head['n'], head['out']
-        head['amp'] = raw[:n * o * o].reshape(n, o, o); head['ph'] = raw[n * o * o:].reshape(n, o, o)
+        head['amp'] = raw[:n * o * o].reshape(n, o, o)   # amplitude only on the website since 12 November 2026
     head['c'] = np.array(head['curves']); return head
 def find(E, V, R):
     for r in IDX['runs']:

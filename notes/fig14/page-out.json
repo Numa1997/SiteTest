@@ -1,0 +1,318 @@
+{
+ "1440x900": {
+  "errors": [],
+  "first": {
+   "E": 2.5,
+   "V0": 3,
+   "R": 4,
+   "k0": 2.23606797749979,
+   "stored": true,
+   "source": "kaggle",
+   "file": "e4_v5_r2.bin",
+   "sha_ok": true,
+   "steps": 1316,
+   "wall": 3.74,
+   "t": 0,
+   "frame": 0,
+   "ready": 48,
+   "norm": 1,
+   "behind": 0.999431,
+   "ahead": 0,
+   "inside": 0.0005690000000000417,
+   "lost": 0,
+   "sigma_y": 3,
+   "sigma_free": 3,
+   "T1D": 2.5007815978888606e-7
+  },
+  "last": {
+   "E": 2.5,
+   "V0": 3,
+   "R": 4,
+   "k0": 2.23606797749979,
+   "stored": true,
+   "source": "kaggle",
+   "file": "e4_v5_r2.bin",
+   "sha_ok": true,
+   "steps": 1316,
+   "wall": 3.74,
+   "t": 13.16,
+   "frame": 47,
+   "ready": 48,
+   "norm": 0.996136,
+   "behind": 0.239096,
+   "ahead": 0.630915,
+   "inside": 0.12612500000000004,
+   "lost": 0.0038639999999999786,
+   "sigma_y": 9.625621,
+   "sigma_free": 3.7162765116593666,
+   "T1D": 2.5007815978888606e-7
+  },
+  "mid": {
+   "E": 2.5,
+   "V0": 3,
+   "R": 4,
+   "k0": 2.23606797749979,
+   "stored": true,
+   "source": "kaggle",
+   "file": "e4_v5_r2.bin",
+   "sha_ok": true,
+   "steps": 1316,
+   "wall": 3.74,
+   "t": 6.44,
+   "frame": 23,
+   "ready": 48,
+   "norm": 0.999702,
+   "behind": 0.190623,
+   "ahead": 0.050361,
+   "inside": 0.758718,
+   "lost": 0.00029800000000002047,
+   "sigma_y": 4.046533,
+   "sigma_free": 3.186227305834354,
+   "T1D": 2.5007815978888606e-7
+  },
+  "readouts": [
+   [
+    "r-b",
+    "0.191"
+   ],
+   [
+    "r-a",
+    "0.050"
+   ],
+   [
+    "r-i",
+    "0.759"
+   ],
+   [
+    "r-l",
+    "0.0003"
+   ],
+   [
+    "r-g",
+    "E < V₀, forbidden classically · T = 0.000"
+   ],
+   [
+    "cap-t",
+    "t = 6.44 · frame 24 of 48"
+   ],
+   [
+    "cap-p",
+    "stored, from Kaggle"
+   ],
+   [
+    "src-t",
+    "Computed on Kaggle on 2026-11-12, Tesla T4, 128³ points, 1316 steps of Δt = 0.01 in 3.7 s. File 2026-11-12/e4_v5_r2.bin, SHA-256 checked ✓."
+   ]
+  ],
+  "canvas": {
+   "css_w": 534.75,
+   "css_h": 534.75,
+   "px_w": 535,
+   "px_h": 535,
+   "px_per_a": 8.35546875
+  },
+  "health": {
+   "katex_errors": 0,
+   "tags": [
+    "(1)",
+    "(2)",
+    "(3)",
+    "(4)",
+    "(5)",
+    "(6)",
+    "(7)",
+    "(8)",
+    "(9)",
+    "(10)",
+    "(11)",
+    "(12)",
+    "(13)",
+    "(14)",
+    "(15)",
+    "(16)",
+    "(17)",
+    "(18)",
+    "(19)",
+    "(20)",
+    "(21)"
+   ],
+   "scrollW": 1440,
+   "clientW": 1440,
+   "sections": 10,
+   "figs": 3,
+   "boxes": [
+    "Example 2.1 · what one unit means for an electron",
+    "Key result · the free packet",
+    "Example 3.1 · the default packet",
+    "Key result · the rectangular barrier",
+    "Example 4.1 · the page's barrier, flattened",
+    "Key result · what decides the outcome in three dimensions",
+    "Example 5.1 · the default run, counted three ways",
+    "Key result · the split step keeps the probability exactly",
+    "Example 6.1 · is the step short enough?",
+    "Example 7.1 · the checks, in one place",
+    "Problems"
+   ],
+   "wide": 0,
+   "paperW": 1376
+  }
+ },
+ "390x844": {
+  "errors": [],
+  "first": {
+   "E": 2.5,
+   "V0": 3,
+   "R": 4,
+   "k0": 2.23606797749979,
+   "stored": true,
+   "source": "kaggle",
+   "file": "e4_v5_r2.bin",
+   "sha_ok": true,
+   "steps": 1316,
+   "wall": 3.74,
+   "t": 0,
+   "frame": 0,
+   "ready": 48,
+   "norm": 1,
+   "behind": 0.999431,
+   "ahead": 0,
+   "inside": 0.0005690000000000417,
+   "lost": 0,
+   "sigma_y": 3,
+   "sigma_free": 3,
+   "T1D": 2.5007815978888606e-7
+  },
+  "last": {
+   "E": 2.5,
+   "V0": 3,
+   "R": 4,
+   "k0": 2.23606797749979,
+   "stored": true,
+   "source": "kaggle",
+   "file": "e4_v5_r2.bin",
+   "sha_ok": true,
+   "steps": 1316,
+   "wall": 3.74,
+   "t": 13.16,
+   "frame": 47,
+   "ready": 48,
+   "norm": 0.996136,
+   "behind": 0.239096,
+   "ahead": 0.630915,
+   "inside": 0.12612500000000004,
+   "lost": 0.0038639999999999786,
+   "sigma_y": 9.625621,
+   "sigma_free": 3.7162765116593666,
+   "T1D": 2.5007815978888606e-7
+  },
+  "mid": {
+   "E": 2.5,
+   "V0": 3,
+   "R": 4,
+   "k0": 2.23606797749979,
+   "stored": true,
+   "source": "kaggle",
+   "file": "e4_v5_r2.bin",
+   "sha_ok": true,
+   "steps": 1316,
+   "wall": 3.74,
+   "t": 6.44,
+   "frame": 23,
+   "ready": 48,
+   "norm": 0.999702,
+   "behind": 0.190623,
+   "ahead": 0.050361,
+   "inside": 0.758718,
+   "lost": 0.00029800000000002047,
+   "sigma_y": 4.046533,
+   "sigma_free": 3.186227305834354,
+   "T1D": 2.5007815978888606e-7
+  },
+  "readouts": [
+   [
+    "r-b",
+    "0.191"
+   ],
+   [
+    "r-a",
+    "0.050"
+   ],
+   [
+    "r-i",
+    "0.759"
+   ],
+   [
+    "r-l",
+    "0.0003"
+   ],
+   [
+    "r-g",
+    "E < V₀, forbidden classically · T = 0.000"
+   ],
+   [
+    "cap-t",
+    "t = 6.44 · frame 24 of 48"
+   ],
+   [
+    "cap-p",
+    "stored, from Kaggle"
+   ],
+   [
+    "src-t",
+    "Computed on Kaggle on 2026-11-12, Tesla T4, 128³ points, 1316 steps of Δt = 0.01 in 3.7 s. File 2026-11-12/e4_v5_r2.bin, SHA-256 checked ✓."
+   ]
+  ],
+  "canvas": {
+   "css_w": 356,
+   "css_h": 356,
+   "px_w": 356,
+   "px_h": 356,
+   "px_per_a": 5.5625
+  },
+  "health": {
+   "katex_errors": 0,
+   "tags": [
+    "(1)",
+    "(2)",
+    "(3)",
+    "(4)",
+    "(5)",
+    "(6)",
+    "(7)",
+    "(8)",
+    "(9)",
+    "(10)",
+    "(11)",
+    "(12)",
+    "(13)",
+    "(14)",
+    "(15)",
+    "(16)",
+    "(17)",
+    "(18)",
+    "(19)",
+    "(20)",
+    "(21)"
+   ],
+   "scrollW": 390,
+   "clientW": 390,
+   "sections": 10,
+   "figs": 3,
+   "boxes": [
+    "Example 2.1 · what one unit means for an electron",
+    "Key result · the free packet",
+    "Example 3.1 · the default packet",
+    "Key result · the rectangular barrier",
+    "Example 4.1 · the page's barrier, flattened",
+    "Key result · what decides the outcome in three dimensions",
+    "Example 5.1 · the default run, counted three ways",
+    "Key result · the split step keeps the probability exactly",
+    "Example 6.1 · is the step short enough?",
+    "Example 7.1 · the checks, in one place",
+    "Problems"
+   ],
+   "wide": 1,
+   "paperW": 358
+  }
+ }
+}

@@ -76,7 +76,7 @@ last frame, in Node 22 on one core of this workspace (12 November 2026):
 | 4.5, 4, 2 | 0.068 / 0.049 | 0.891 / 0.930 | 11 |
 | 1, 0, 4 (free) | 0.000 / 0.000 | 0.986 / 0.985 | 24 |
 
-So the preview agrees to 0.02–0.06 in probability; the page says this beside it.
+At these last frames the preview agrees to 0.02–0.06 in probability; over all frames the largest difference measured is 0.076 (E = 0.5, V₀ = 8, R = 6, notes/fig14/), and the page says “within 0.08”.
 
 ## Measured on the page (headless Chromium, 12 November 2026, local server)
 

@@ -35,13 +35,15 @@ if task == 'stored':          # the stored default run and the E=2 test run, sol
         out[f'{E}_{V0}_{R}'] = dict(cpu=[float(v) for v in c], kaggle=[float(v) for v in s], steps=int(r['steps']), wall=time.time() - t,
                                     maxdiff=float(np.max(np.abs(r['curves'] - read(find(E, V0, R))['c']))))
         print(out)
+elif task == 'grid256':       # the grid error: the same run on 256^3 points (dx = 0.25 a), solver.run unchanged, 32-bit
+    g = setup(256, 64.0); t = time.time(); r = run(g, 2.0, 3.0, 4.0); out['256'] = [float(v) for v in r['curves'][-1]]; out['s'] = time.time() - t; print(out)
 elif task == 'bits':          # 32-bit against 64-bit, same run, solver.run unchanged
     g = setup(128, 64.0, dtype=jnp.complex128); r = run(g, 2.0, 3.0, 4.0); out['c128'] = [float(v) for v in r['curves'][-1]]; print(out)
-elif task == 'order':         # the time error: same end time, dt halved again and again, 64-bit, whole psi compared
-    g = setup(128, 64.0, dtype=jnp.complex128); psi0, V = init(g, 2.0, 3.0, 4.0); T = 14.57
+elif task in ('order', 'order_nomask'):   # the time error: same end time, dt halved again and again, 64-bit, whole psi compared
+    g = setup(128, 64.0, dtype=jnp.complex128); psi0, V = init(g, 2.0, 3.0, 4.0); T = 14.57 if task == 'order' else 7.28
     res = {}
     for dt in [0.04, 0.02, 0.01, 0.005, 0.0025]:
-        n = int(round(T / dt)); t = time.time(); p = stepper(g, V, dt, jnp.complex128)(jnp.asarray(psi0), n); p = np.asarray(p)
+        n = int(round(T / dt)); t = time.time(); p = stepper(g, V, dt, jnp.complex128, use_mask=(task == 'order'))(jnp.asarray(psi0), n); p = np.asarray(p)
         res[dt] = p; nb, b, a = slabs(g, p, 4.0); out[dt] = dict(steps=n, norm=nb, behind=b, ahead=a, s=time.time() - t)
         print(dt, out[dt], flush=True)
     dts = sorted(res)[::-1]

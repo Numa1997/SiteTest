@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-2000 files, 125.3 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+2021 files, 125.6 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -44,7 +44,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Working notes of project 07, the electron beam](#working-notes-of-project-07-the-electron-beam) | 52 |
 | [Working notes of the Rotor Pendula study](#working-notes-of-the-rotor-pendula-study) | 86 |
 | [Working notes of the Droplet Collection study](#working-notes-of-the-droplet-collection-study) | 123 |
-| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 492 |
+| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 513 |
 
 ## Repository root
 
@@ -155,7 +155,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/simulations/pendulum-control.html`](../public/simulations/pendulum-control.html) | 208.1 kB | Fig. 11 · Double Pendulum under Control: the simulation, its data panel, walkthrough and lecture note. | [fig11-pendulum-control.md](simulations/fig11-pendulum-control.md) |
 | [`public/simulations/phasor-sums.html`](../public/simulations/phasor-sums.html) | 273.2 kB | Fig. 7 · Phasor Sums: the simulation, its data panel, walkthrough and lecture note. | [fig07-phasor-sums.md](simulations/fig07-phasor-sums.md) |
 | [`public/simulations/rods-in-liquid.html`](../public/simulations/rods-in-liquid.html) | 403.2 kB | Project 06 · Balancing Two Rods in a Liquid (7 November 2026): project 05's script with its own settings, a machine that can swing the rods up in water, glycerol and honey, a slim cart, and the controller told the flow; data panel, walkthrough dipc and lecture note. | [project06-rods-in-liquid.md](simulations/project06-rods-in-liquid.md) |
-| [`public/simulations/schrodinger-sphere.html`](../public/simulations/schrodinger-sphere.html) | 40.7 kB | Fig. 14 · A Wave Packet Meets a Sphere: the simulation, its data panel, walkthrough and lecture note. | [fig14-schrodinger-sphere.md](simulations/fig14-schrodinger-sphere.md) |
+| [`public/simulations/schrodinger-sphere.html`](../public/simulations/schrodinger-sphere.html) | 136.2 kB | Fig. 14 · A Wave Packet Meets a Sphere: the simulation, its data panel, walkthrough and lecture note. | [fig14-schrodinger-sphere.md](simulations/fig14-schrodinger-sphere.md) |
 | [`public/simulations/water-wave.html`](../public/simulations/water-wave.html) | 170.6 kB | Fig. 5 · Circular Water Waves: the simulation, its data panel, walkthrough and lecture note. | [fig05-water-wave.md](simulations/fig05-water-wave.md) |
 | [`public/simulations/wave-interference.html`](../public/simulations/wave-interference.html) | 181.8 kB | Fig. 6 · Wave Interference Simulator: the simulation, its data panel, walkthrough and lecture note. | [fig06-wave-bench.md](simulations/fig06-wave-bench.md) |
 | [`public/simulations/wind-turbine.html`](../public/simulations/wind-turbine.html) | 200.2 kB | Fig. 10 · Wind Turbine Control: the simulation, its data panel, walkthrough and lecture note. | [fig10-wind-turbine.md](simulations/fig10-wind-turbine.md) |
@@ -1312,7 +1312,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`docs/simulations/fig11-pendulum-control.md`](simulations/fig11-pendulum-control.md) | 28.8 kB | Documentation: Fig. 11 · Double Pendulum under Control (Fig. 11 again since 4 November 2026; a project from 3 to 4 November). | [fig11-pendulum-control.md](simulations/fig11-pendulum-control.md) |
 | [`docs/simulations/fig12-beer-slosh.md`](simulations/fig12-beer-slosh.md) | 46.9 kB | Documentation: Fig. 12 · A Pint of Guinness on a One-Wheel Cart (`public/simulations/beer-slosh.html`). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`docs/simulations/fig13-momentum-spirographs.md`](simulations/fig13-momentum-spirographs.md) | 29.4 kB | Documentation: Fig. 13 · Spirographs in Momentum Space, the Flower Hunt, the dashboard and the films. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
-| [`docs/simulations/fig14-schrodinger-sphere.md`](simulations/fig14-schrodinger-sphere.md) | 7.3 kB | Documentation: Fig. 14 · A Wave Packet Meets a Sphere. | [fig14-schrodinger-sphere.md](simulations/fig14-schrodinger-sphere.md) |
+| [`docs/simulations/fig14-schrodinger-sphere.md`](simulations/fig14-schrodinger-sphere.md) | 7.4 kB | Documentation: Fig. 14 · A Wave Packet Meets a Sphere. | [fig14-schrodinger-sphere.md](simulations/fig14-schrodinger-sphere.md) |
 | [`docs/simulations/project06-rods-in-liquid.md`](simulations/project06-rods-in-liquid.md) | 9.7 kB | Documentation: Project 06 · Balancing Two Rods in a Liquid. | [project06-rods-in-liquid.md](simulations/project06-rods-in-liquid.md) |
 | [`docs/styles.md`](styles.md) | 52.1 kB | Documentation: Stylesheets: `public/styles/`. | [styles.md](styles.md) |
 | [`docs/usul.md`](usul.md) | 11.4 kB | Documentation: Phyein Usul · the website at phyeinusul.com. | [usul.md](usul.md) |
@@ -2314,16 +2314,54 @@ to confirm that every file is described. Sizes are those of the files when the l
 
 </details>
 
+<details><summary>14 files: Fig. 14: a measuring script of the review, or its saved output.</summary>
+
 | File | Size | What it is | Explained in |
 |---|---|---|---|
+| [`notes/fig14/classical.json`](../notes/fig14/classical.json) | 7.6 kB | Fig. 14: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig14/classical.py`](../notes/fig14/classical.py) | 3.6 kB | Fig. 14: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig14/derive.py`](../notes/fig14/derive.py) | 6.1 kB | Fig. 14: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
-| [`notes/fig14/plan.md`](../notes/fig14/plan.md) | 7.3 kB | Fig. 14: the teacher's verdict on each section of the note, and what it changed. | [notes.md](notes.md) |
+| [`notes/fig14/fig1.svg`](../notes/fig14/fig1.svg) | 3.1 kB | Fig. 14: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig14/fig2.svg`](../notes/fig14/fig2.svg) | 5.7 kB | Fig. 14: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig14/fig3.svg`](../notes/fig14/fig3.svg) | 13.9 kB | Fig. 14: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig14/figdata.json`](../notes/fig14/figdata.json) | 3.8 kB | Fig. 14: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig14/figdata.py`](../notes/fig14/figdata.py) | 1.7 kB | Fig. 14: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig14/live-2.5_3_4_2_3_4_0.5_8_6_4.5_4_2.json`](../notes/fig14/live-2.5_3_4_2_3_4_0.5_8_6_4.5_4_2.json) | 1.4 kB | Fig. 14: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig14/live-2_3_4_0.5_8_6_4.5_4_2_2.5_3_4.json`](../notes/fig14/live-2_3_4_0.5_8_6_4.5_4_2_2.5_3_4.json) | 1.4 kB | Fig. 14: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig14/live.cjs`](../notes/fig14/live.cjs) | 2.9 kB | Fig. 14: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig14/note.html`](../notes/fig14/note.html) | 67.5 kB | Fig. 14: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig14/page-out.json`](../notes/fig14/page-out.json) | 5.9 kB | Fig. 14: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig14/page.cjs`](../notes/fig14/page.cjs) | 3.9 kB | Fig. 14: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+
+</details>
+
+| File | Size | What it is | Explained in |
+|---|---|---|---|
+| [`notes/fig14/plan.md`](../notes/fig14/plan.md) | 9.1 kB | Fig. 14: the teacher's verdict on each section of the note, and what it changed. | [notes.md](notes.md) |
+
+<details><summary>14 files: Fig. 14: a measuring script of the review, or its saved output.</summary>
+
+| File | Size | What it is | Explained in |
+|---|---|---|---|
+| [`notes/fig14/reproduce-bits.json`](../notes/fig14/reproduce-bits.json) | 113 B | Fig. 14: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig14/reproduce-energy.json`](../notes/fig14/reproduce-energy.json) | 135 B | Fig. 14: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig14/reproduce-grid256.json`](../notes/fig14/reproduce-grid256.json) | 137 B | Fig. 14: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig14/reproduce-maskloss.json`](../notes/fig14/reproduce-maskloss.json) | 481 B | Fig. 14: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig14/reproduce-order.json`](../notes/fig14/reproduce-order.json) | 924 B | Fig. 14: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig14/reproduce-order_nomask.json`](../notes/fig14/reproduce-order_nomask.json) | 938 B | Fig. 14: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig14/reproduce-stored.json`](../notes/fig14/reproduce-stored.json) | 603 B | Fig. 14: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig14/reproduce-unitary.json`](../notes/fig14/reproduce-unitary.json) | 603 B | Fig. 14: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
-| [`notes/fig14/reproduce.log`](../notes/fig14/reproduce.log) | 1.9 kB | Fig. 14: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
-| [`notes/fig14/reproduce.py`](../notes/fig14/reproduce.py) | 5.0 kB | Fig. 14: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
-| [`notes/fig14/runs.py`](../notes/fig14/runs.py) | 2.5 kB | Fig. 14: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig14/reproduce.log`](../notes/fig14/reproduce.log) | 2.2 kB | Fig. 14: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig14/reproduce.py`](../notes/fig14/reproduce.py) | 5.3 kB | Fig. 14: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig14/reproduce2.log`](../notes/fig14/reproduce2.log) | 927 B | Fig. 14: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig14/runs.py`](../notes/fig14/runs.py) | 2.6 kB | Fig. 14: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig14/svgs.py`](../notes/fig14/svgs.py) | 9.7 kB | Fig. 14: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig14/time_cpu.py`](../notes/fig14/time_cpu.py) | 564 B | Fig. 14: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+
+</details>
+
+| File | Size | What it is | Explained in |
+|---|---|---|---|
 | [`notes/home/longlines.cjs`](../notes/home/longlines.cjs) | 1.2 kB | Browser measurements of the home page: index size, column widths, characters per line, section screenshots. | [styles.md](styles.md) |
 | [`notes/home/measure.cjs`](../notes/home/measure.cjs) | 2.6 kB | Browser measurements of the home page: index size, column widths, characters per line, section screenshots. | [styles.md](styles.md) |
 | [`notes/home/sections.cjs`](../notes/home/sections.cjs) | 891 B | Browser measurements of the home page: index size, column widths, characters per line, section screenshots. | [styles.md](styles.md) |
