@@ -178,7 +178,7 @@
         ds.var('live_done', [], 'float', { symbol: 'live', long_name: 'fraction of the live preview computed', computed_in: 'worker messages', digits: 3 });
         ds.dim('x', 128); ds.dim('y', 128);
         ds.coord('xc', 'x', Float32Array, { symbol: 'x', units: 'a', long_name: 'x of each stored point', computed_in: 'grid' });
-        ds.var('level', ['x', 'y'], Uint8Array, { symbol: 'q', long_name: 'stored amplitude level of |ψ| in the plane z = 0, 0 to 255 of the first frame’s peak', computed_in: 'frame(), copied from the run file' });
+        ds.var('level', ['x', 'y'], Uint8Array, { symbol: 'q', long_name: 'stored amplitude level of |ψ| in the plane z = 0, 0 to 255 of the first frame’s peak', computed_in: 'frame(), copied from the run file', digits: 0 });
         var LEVEL = ds.alloc('level'), XC = ds.alloc('xc');
 
         /* ---------- the grid ---------- */
