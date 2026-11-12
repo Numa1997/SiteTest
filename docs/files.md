@@ -857,7 +857,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`docs/files.md`](files.md) | this file | This list. Written by tools/inventory.py; do not edit by hand. | [files.md](files.md) |
 | [`docs/glossary.md`](glossary.md) | 17.0 kB | Documentation: Glossary: English, German, Arabic. | [glossary.md](glossary.md) |
 | [`docs/i18n.md`](i18n.md) | 18.5 kB | Documentation: The site in German and Arabic: `tools/i18n/`, `i18n/`, `public/de/`, `public/ar/`. | [i18n.md](i18n.md) |
-| [`docs/kaggle.md`](kaggle.md) | 2.6 kB | Documentation: Computing on Kaggle: the Schrödinger test. | [kaggle.md](kaggle.md) |
+| [`docs/kaggle.md`](kaggle.md) | 3.4 kB | Documentation: Computing on Kaggle: the Schrödinger test. | [kaggle.md](kaggle.md) |
 | [`docs/minor-issues-report.md`](minor-issues-report.md) | 19.5 kB | Documentation: Minor issues · final verification report. | [minor-issues-report.md](minor-issues-report.md) |
 | [`docs/notes.md`](notes.md) | 5.4 kB | Documentation: The lecture-note review: `notes/` and `.claude/agents/`. | [notes.md](notes.md) |
 | [`docs/pages.md`](pages.md) | 54.1 kB | Documentation: The site's own pages: home, simulations catalog, Portfolios, robots.txt. | [pages.md](pages.md) |
@@ -982,7 +982,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/kaggle/schrodinger-sphere/build_smoke.py`](../tools/kaggle/schrodinger-sphere/build_smoke.py) | 5.9 kB | Schrödinger on Kaggle: writes smoke.ipynb for a given commit. | [kaggle.md](kaggle.md) |
 | [`tools/kaggle/schrodinger-sphere/pack.py`](../tools/kaggle/schrodinger-sphere/pack.py) | 1.0 kB | Schrödinger on Kaggle: packs runs (zlib, base64) into the panel page. | [kaggle.md](kaggle.md) |
 | [`tools/kaggle/schrodinger-sphere/panel_template.html`](../tools/kaggle/schrodinger-sphere/panel_template.html) | 12.4 kB | Schrödinger on Kaggle: the animator panel that only plays stored runs (sliders with computed positions marked, amplitude or phase, probability curves). | [kaggle.md](kaggle.md) |
-| [`tools/kaggle/schrodinger-sphere/smoke.ipynb`](../tools/kaggle/schrodinger-sphere/smoke.ipynb) | 5.9 kB | Schrödinger on Kaggle: the GPU test notebook (timing, accuracy, 8 runs, panel), written by build_smoke.py. | [kaggle.md](kaggle.md) |
+| [`tools/kaggle/schrodinger-sphere/smoke.ipynb`](../tools/kaggle/schrodinger-sphere/smoke.ipynb) | 6.0 kB | Schrödinger on Kaggle: the GPU test notebook (timing, accuracy, 8 runs, panel), written by build_smoke.py. | [kaggle.md](kaggle.md) |
 | [`tools/kaggle/schrodinger-sphere/solver.py`](../tools/kaggle/schrodinger-sphere/solver.py) | 3.1 kB | Schrödinger on Kaggle: the 3D split-step Fourier solver (JAX) for a wave packet meeting a spherical barrier; one run, its frames and its curves. | [kaggle.md](kaggle.md) |
 | [`tools/perf/addresses.cjs`](../tools/perf/addresses.cjs) | 6.1 kB | Every page at every address a reader can use (x.html, x, x/, folder/), and every link of every page, on a running site; exits 1 on any wrong answer. | [performance.md](performance.md) |
 | [`tools/perf/clockcheck.cjs`](../tools/perf/clockcheck.cjs) | 3.2 kB | Each figure runs on screen, holds off screen, resumes; the store stays live for an open data panel and the walkthrough. | [performance.md](performance.md) |

@@ -14,4 +14,20 @@ ahead of time on its GPU, the results are stored once, and the page only plays t
 | [`smoke.ipynb`](../tools/kaggle/schrodinger-sphere/smoke.ipynb) | The GPU test: checks the GPU (installs GPU JAX if missing, stops if there is no GPU), times one step on 128³ and 256³ cells in 32-bit and 64-bit, compares 32-bit with 64-bit and Δt with Δt/2 on one barrier run, computes 8 runs and writes `schrodinger_sphere.html`, `timing.json` and `progress.log`. |
 
 Measured before Kaggle (this workspace, 4 CPU cores, 64³ cells): the free packet's width follows the free law to 2 × 10⁻⁶;
-one step takes about 2.2 ms (8.4 ns per cell). The GPU numbers go here once measured.
+one step takes about 2.2 ms (8.4 ns per cell).
+
+## Measured on Kaggle (12 November 2026, notebook `numakoudsie/schrodinger-sphere-gpu-smoke-test`, version 1)
+
+Card: Tesla T4 (the session had two; the notebook used one). JAX 0.11.1 was already installed with GPU support.
+Whole run 152 s from start to the written panel, 2.8 MB for 7 runs.
+
+| Grid | 32-bit, ms per step | 64-bit, ms per step | ns per cell and step (32-bit / 64-bit) |
+|---|---|---|---|
+| 128³ | 1.61 | 5.10 | 0.77 / 2.43 |
+| 256³ | 13.4 | 39.5 | 0.80 / 2.36 |
+
+A real run (step plus the measurements every 30 steps) costs 2.6 ms per step at 128³ and 20.9 ms at 256³.
+
+Accuracy, the run E = 2, V₀ = 3, R = 4 at 128³, probability ahead of the sphere at the end: 32-bit 0.63250, 64-bit 0.63293,
+32-bit with Δt halved 0.63179; at 256³ 0.6247 against 0.6278 at 128³ (same end time). So 32-bit and Δt = 0.01 change the
+result by under 10⁻³, the grid by 3 × 10⁻³.
