@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Wave Packet Meets a Sphere · Numa Koudsie</title>
+    <meta name="description" content="The time-dependent Schrödinger equation in three dimensions: a wave packet meets a sphere of raised potential energy. 405 runs computed on Kaggle's GPUs and stored; the page only plays them back, and near the edge of the computed range it slows down and computes a live preview.">
+    <meta name="theme-color" content="#f5f1ea">
+    <link rel="stylesheet" href="../styles/sim.css">
+    <link rel="stylesheet" href="../styles/data.css">
+    <link rel="stylesheet" href="../styles/fold.css">
+    <link rel="stylesheet" href="../styles/kaggle-flow.css">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%237a1f2b'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='38' fill='%23f5f1ea'%3EN%3C/text%3E%3C/svg%3E">
+    <style>
+        .sim, .sim-top { max-width: 1440px; }
+        .figs { display: grid; gap: 16px; min-width: 0; }
+        @media (min-width: 1100px) { .figs { grid-template-columns: minmax(0, 1.12fr) minmax(0, 1fr); } }
+        .stage__canvas.sq { --ar: 1 / 1; --ar-m: 1 / 1; background-image: none; }
+        .stage__canvas.plot { --ar: 1 / 1.02; --ar-m: 4 / 3.2; background-image: none; }
+        .src { border: 1px solid var(--rule); border-left: 3px solid var(--accent); border-radius: 8px; padding: 9px 11px; font-size: 12.5px; line-height: 1.5; color: var(--ink-2); background: var(--card-soft); }
+        .src b { font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); font-weight: 500; display: block; margin-bottom: 2px; }
+        .src code { font-family: var(--mono); font-size: 11px; word-break: break-all; }
+        .seg { display: flex; gap: 6px; }
+        .seg .btn { flex: 1; padding: 7px 8px; font-size: 12.5px; }
+        .seg .btn[aria-pressed="true"] { background: var(--accent); color: #fff; border-color: var(--accent); }
+        .speed { font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+        .speed i { display: inline-block; height: 4px; width: 70px; vertical-align: middle; border: 1px solid var(--rule); border-radius: 2px; position: relative; margin-left: 6px; }
+        .speed i span { position: absolute; left: 0; top: 0; bottom: 0; background: var(--accent); }
+    </style>
+</head>
+<body>
+    <header class="sim-top">
+        <span style="display:inline-flex;align-items:center;gap:14px"><a href="../index.html" aria-label="Phyein Usul, home page" style="display:inline-block;line-height:0"><img src="../images/phyein-usul-mark.svg" alt="Phyein Usul" width="87" height="48" /></a><a href="../simulations.html">← All simulations</a></span>
+        <nav class="sim-nav" aria-label="Simulations">
+            <span>Fig.</span>
+            <a href="Circular Wave Interference Visualization.html">1</a>
+            <a href="Double Pendulum.html">2</a>
+            <a href="Interactive Double-Slit Experiment Visualization.html">3</a>
+            <a href="Transverse and longitudinal waves.html">4</a>
+            <a href="water-wave.html">5</a>
+            <a href="wave-interference.html">6</a>
+            <a href="phasor-sums.html">7</a>
+            <a href="draw-decompose.html">8</a>
+            <a href="driven-oscillator.html">9</a>
+            <a href="wind-turbine.html">10</a>
+            <a href="pendulum-control.html">11</a> <a href="beer-slosh.html">12</a> <a href="momentum-spirographs.html">13</a> <a href="schrodinger-sphere.html" aria-current="page">14</a>
+        </nav>
+    </header>
+
+    <main class="sim">
+        <noscript><p class="sim-error"><b>This simulation needs JavaScript.</b> <a href="../simulations.html">Back to the simulations</a></p></noscript>
+        <div class="sim__head">
+            <p class="sim__num">Fig. 14 · quantum mechanics · computed on Kaggle</p>
+            <h1>A Wave Packet Meets a Sphere<span class="dot">.</span></h1>
+            <p class="sim__lede">A quantum particle, spread out as a wave, flies at a ball it does not have the energy to enter. Part of the wave bounces back, part flows round, a little leaks through. Every frame here was computed in three dimensions on Kaggle’s graphics cards and stored; this page computes nothing, it plays the stored runs back.</p>
+        </div>
+
+        <div class="sim__grid">
+            <div class="figs">
+                <figure class="stage">
+                    <div class="stage__canvas sq" id="stage">
+                        <canvas id="field" aria-label="The wave packet in the plane through the sphere's centre"></canvas>
+                    </div>
+                    <figcaption class="stage__cap">
+                        <span><b>Fig. 14</b> · <span class="tx">\(|\psi(x,y,0,t)|\)</span> in the plane through the sphere’s centre</span>
+                        <span id="cap-t">t = —</span>
+                    </figcaption>
+                </figure>
+                <figure class="stage">
+                    <div class="stage__canvas plot" id="stage2">
+                        <canvas id="plot" aria-label="Probability behind, inside, ahead of the sphere and lost at the border, against time"></canvas>
+                    </div>
+                    <figcaption class="stage__cap">
+                        <span><b>Fig. 14b</b> · where the probability is, against time</span>
+                        <span id="cap-p">—</span>
+                    </figcaption>
+                </figure>
+            </div>
+
+            <aside class="panel" aria-label="Controls">
+                <div class="panel__group">
+                    <p class="panel__label">Run</p>
+                    <div class="actions">
+                        <button type="button" class="btn" id="play">Pause</button>
+                        <button type="button" class="btn btn--ghost" id="replay">From the start</button>
+                    </div>
+                    <div class="seg" role="group" aria-label="Colour">
+                        <button type="button" class="btn btn--ghost" id="m-amp" aria-pressed="true">Amplitude</button>
+                        <button type="button" class="btn btn--ghost" id="m-ph" aria-pressed="false">Phase</button>
+                    </div>
+                    <p class="speed" id="speed">playback speed <i><span></span></i></p>
+                </div>
+                <div class="panel__group" id="params">
+                    <p class="panel__label">The particle and the sphere</p>
+                </div>
+                <div class="panel__group">
+                    <p class="panel__label">Time</p>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>Time <i>t</i> (ħ = m = 1)</span><output id="time-out" for="time"></output></span>
+                        <input type="range" id="time" min="0" max="47" step="1" value="0">
+                    </label>
+                </div>
+                <dl class="readouts">
+                    <div><dt>Behind (x &lt; −R)</dt><dd id="r-b">—</dd></div>
+                    <div><dt>Ahead (x &gt; R)</dt><dd id="r-a">—</dd></div>
+                    <div><dt>Inside |x| ≤ R</dt><dd id="r-i">—</dd></div>
+                    <div><dt>Lost at border</dt><dd id="r-l">—</dd></div>
+                    <div class="wide"><dt>Guide: 1D slab of thickness 2R</dt><dd id="r-g">—</dd></div>
+                </dl>
+                <div class="src" id="src"><b>Where these numbers come from</b><span id="src-t">loading…</span></div>
+            </aside>
+        </div>
+
+        <article class="paper" id="paper" aria-labelledby="paper-title">
+            <h2 id="paper-title">Lecture note</h2>
+            <p>The lecture note for this figure is being written.</p>
+        </article>
+    </main>
+
+    <footer class="sim-foot">
+        <span>© 2026 Numa Koudsie</span>
+        <span><a href="../simulations.html">All simulations ↑</a> · <a href="../index.html">Home page</a></span>
+    </footer>
+
+    <script src="../scripts/fold.js"></script>
+    <script src="../scripts/sim.js"></script>
+    <script src="../scripts/dataset.js"></script>
+    <script src="../scripts/kaggle-flow.js"></script>
+    <script>
+    (function () {
+        'use strict';
+        /* ---------- where the stored runs are served from: the one line to change when the store moves ---------- */
+        var DATA_BASE = '../data/schrodinger-sphere/';
+        var BRIDGE_URL = null;   /* kaggle-bridge's address once it is deployed; null: not connected (docs/kaggle-pipeline.md) */
+        var PROJECT = 'schrodinger-sphere';
+        /* the controls offer stops beyond the computed grid: those are the regions not computed yet */
+        var EXTRA = { E: [5.0, 5.5, 6.0], V0: [10.0, 12.0], R: [1.0, 7.0, 8.0] };
+        var PLAY_SECONDS = 9;    /* a whole run plays in about this many seconds at full speed */
+        var LIVE_MS = { note: 'measured in Node 22 on one core of a 4-core workspace: 11 to 34 s for a whole run' };
+
+        var stage = document.getElementById('stage'), fieldBox = Sim.canvas2d(document.getElementById('field')), fctx = fieldBox.ctx;
+        var plotBox = Sim.canvas2d(document.getElementById('plot')), pctx = plotBox.ctx;
+        var timeIn = document.getElementById('time'), timeOut = document.getElementById('time-out');
+        var IDX = null, byKey = {}, cache = {}, mode = 'amp', live = null, liveKey = null, worker = null, job = 0;
+        var tPhys = 0, playing = true, endHeld = false, fade = { from: null, a: 1 }, lastKey = null, lastSrc = null, shownReal = false;
+        var gov = KaggleFlow.governor(0.45, 0), pop = KaggleFlow.popup(stage), bridge = KaggleFlow.bridge({ url: BRIDGE_URL, project: PROJECT });
+        var requested = {}, sliders = {};
+        var off = document.createElement('canvas'), og = off.getContext('2d');
+        var prev = document.createElement('canvas'), pg = prev.getContext('2d');
+
+        /* ---------- the store (scripts/dataset.js): every number shown is written here where it is read or computed ---------- */
+        var ds = Sim.dataset({ title: 'A wave packet meets a sphere', attrs: { figure: 14, page: 'schrodinger-sphere.html', units: 'hbar = m = 1; lengths in the grid unit a, times in m a^2 / hbar, energies in hbar^2 / (m a^2)', solver: 'tools/kaggle/schrodinger-sphere/solver.py (Kaggle); scripts/schrodinger-live-worker.js (live preview)', data: DATA_BASE + 'index.json' } });
+        ds.var('E', [], 'float', { symbol: 'E', long_name: 'packet energy (mean kinetic energy k₀²/2)', computed_in: 'energy slider', digits: 2 });
+        ds.var('V0', [], 'float', { symbol: 'V<sub>0</sub>', long_name: 'potential energy inside the sphere', computed_in: 'barrier slider', digits: 2 });
+        ds.var('R', [], 'float', { symbol: 'R', units: 'a', long_name: 'sphere radius', computed_in: 'radius slider', digits: 2 });
+        ds.var('k0', [], 'float', { symbol: 'k<sub>0</sub>', units: '1/a', long_name: 'mean wave number of the packet', computed_in: 'readouts()', formula: '√(2E)', digits: 4 });
+        ds.var('stored', [], 'bool', { symbol: 'stored', long_name: 'this (E, V₀, R) was computed on Kaggle and is stored', computed_in: 'pick()', source: 'Looked up in index.json.' });
+        ds.var('source', [], 'str', { symbol: 'source', long_name: 'where the picture comes from now', computed_in: 'pick() / live()', source: 'kaggle: the stored run; live: the browser preview; none: nothing yet.' });
+        ds.var('file', [], 'str', { symbol: 'file', long_name: 'the stored run file', computed_in: 'pick()', source: 'From index.json.' });
+        ds.var('sha_ok', [], 'bool', { symbol: 'SHA-256 ✓', long_name: 'the file’s SHA-256 equals the one in index.json', computed_in: 'load()', source: 'crypto.subtle.digest on the downloaded bytes.' });
+        ds.var('steps', [], 'int', { symbol: 'steps', long_name: 'time steps of Δt = 0.01 in the stored run', computed_in: 'load(), from the run file', digits: 0 });
+        ds.var('wall', [], 'float', { symbol: 't<sub>GPU</sub>', units: 's', long_name: 'seconds the run took on Kaggle’s T4', computed_in: 'load(), from the run file', digits: 2 });
+        ds.var('t', [], 'float', { symbol: 't', units: 'm a²/ħ', long_name: 'time of the frame shown', computed_in: 'frame(), the stored frame time', digits: 3 });
+        ds.var('frame', [], 'int', { symbol: 'frame', long_name: 'index of the stored frame shown (0 to 47)', computed_in: 'frame()', digits: 0 });
+        ds.var('ready', [], 'int', { symbol: 'frames ready', long_name: 'frames available: 48 when stored, fewer while the live preview computes', computed_in: 'frame()', digits: 0 });
+        ds.var('norm', [], 'float', { symbol: '∫|ψ|²', long_name: 'total probability in the box at this frame (from the whole 3D ψ)', computed_in: 'stored curve, column 1', digits: 6 });
+        ds.var('behind', [], 'float', { symbol: 'P<sub>behind</sub>', long_name: 'probability with x < −R', computed_in: 'stored curve, column 2', digits: 5 });
+        ds.var('ahead', [], 'float', { symbol: 'P<sub>ahead</sub>', long_name: 'probability with x > R', computed_in: 'stored curve, column 3', digits: 5 });
+        ds.var('inside', [], 'float', { symbol: 'P<sub>inside</sub>', long_name: 'probability with |x| ≤ R', computed_in: 'readouts()', formula: '∫|ψ|² − P<sub>behind</sub> − P<sub>ahead</sub>', digits: 5 });
+        ds.var('lost', [], 'float', { symbol: 'P<sub>lost</sub>', long_name: 'probability absorbed by the border layer so far', computed_in: 'readouts()', formula: '1 − ∫|ψ|²', digits: 5 });
+        ds.var('sigma_y', [], 'float', { symbol: 'σ<sub>y</sub>', units: 'a', long_name: 'width of the packet across the flight', computed_in: 'stored curve, column 4', digits: 4 });
+        ds.var('sigma_free', [], 'float', { symbol: 'σ<sub>free</sub>', units: 'a', long_name: 'width of a free packet at the same time (the law, for V₀ = 0)', computed_in: 'readouts()', formula: 'σ₀ √(1 + (t / 2σ₀²)²)', digits: 4 });
+        ds.var('T1D', [], 'float', { symbol: 'T<sub>1D</sub>', long_name: 'transmission of a flat slab of thickness 2R (a guide only)', computed_in: 'readouts()', formula: 'rectangular barrier formula', digits: 4 });
+        ds.var('speed', [], 'float', { symbol: 'speed', long_name: 'playback speed relative to normal (eased)', computed_in: 'tick()', digits: 3 });
+        ds.var('edge', [], 'float', { symbol: 'edge', long_name: 'how close a control is to the edge of the computed range: 0 inside, 1 at the edge', computed_in: 'tick()', digits: 3 });
+        ds.var('live_done', [], 'float', { symbol: 'live', long_name: 'fraction of the live preview computed', computed_in: 'worker messages', digits: 3 });
+        ds.dim('x', 128); ds.dim('y', 128);
+        ds.coord('xc', 'x', Float32Array, { symbol: 'x', units: 'a', long_name: 'x of each stored point', computed_in: 'grid' });
+        ds.var('level', ['x', 'y'], Uint8Array, { symbol: 'q', long_name: 'stored amplitude level of |ψ| in the plane z = 0, 0 to 255 of the first frame’s peak', computed_in: 'frame(), copied from the run file' });
+        var LEVEL = ds.alloc('level'), XC = ds.alloc('xc');
+
+        /* ---------- the grid ---------- */
+        function stopsOf(grid, extra) { return grid.concat(extra).sort(function (a, b) { return a - b; }).filter(function (v, i, a) { return i === 0 || v !== a[i - 1]; }); }
+        function key(E, V, R) { return E.toFixed(2) + '_' + V.toFixed(2) + '_' + R.toFixed(2); }
+        function current() { return { E: sliders.E.value, V0: sliders.V0.value, R: sliders.R.value }; }
+        function isStored(E, V, R) { return !!byKey[key(E, V, R)]; }
+
+        /* ---------- load one stored run: fetch, check its SHA-256, inflate ---------- */
+        function hex(buf) { return Array.prototype.map.call(new Uint8Array(buf), function (b) { return ('0' + b.toString(16)).slice(-2); }).join(''); }
+        function load(r) {
+            var k = key(r.E, r.V0, r.R);
+            if (cache[k]) return cache[k].ready;
+            var c = cache[k] = { source: 'kaggle', meta: r };
+            c.ready = fetch(DATA_BASE + r.file).then(function (res) { if (!res.ok) throw new Error(res.status + ' for ' + r.file); return res.arrayBuffer(); }).then(function (buf) {
+                var check = (window.crypto && crypto.subtle) ? crypto.subtle.digest('SHA-256', buf).then(function (h) { return hex(h) === r.sha256; }) : Promise.resolve(null);
+                var dv = new DataView(buf), H = dv.getUint32(4, true), head = JSON.parse(new TextDecoder().decode(new Uint8Array(buf, 8, H)));
+                var body = new Blob([new Uint8Array(buf, 8 + H)]).stream().pipeThrough(new DecompressionStream('deflate'));
+                return Promise.all([check, new Response(body).arrayBuffer()]).then(function (res) {
+                    var all = new Uint8Array(res[1]), n = head.n, o = head.out;
+                    c.head = head; c.n = n; c.out = o; c.ready_n = n; c.amp = all.subarray(0, n * o * o); c.ph = all.subarray(n * o * o); c.curves = head.curves; c.sha = res[0];
+                    return c;
+                });
+            });
+            c.ready.catch(function (e) { c.error = String(e.message || e); });
+            return c.ready;
+        }
+
+        /* ---------- the live preview: same equation, coarser grid, in a Web Worker ---------- */
+        function startLive(p) {
+            var k = key(p.E, p.V0, p.R);
+            if (liveKey === k && live) return;
+            if (worker) worker.terminate();
+            liveKey = k; job++;
+            live = { source: 'live', meta: p, n: 48, out: 64, ready_n: 0, amp: new Uint8Array(48 * 64 * 64), ph: new Uint8Array(48 * 64 * 64), curves: [], t0: performance.now() };
+            var mine = live, id = job;
+            worker = new Worker('../scripts/schrodinger-live-worker.js');
+            worker.onmessage = function (e) {
+                var m = e.data; if (m.id !== id || mine !== live) return;
+                if (m.type === 'frame') { mine.amp.set(m.amp, m.f * 4096); mine.ph.set(m.ph, m.f * 4096); mine.curves[m.f] = m.curve; mine.ready_n = m.f + 1; }
+                else if (m.type === 'done') { mine.ms = m.ms; mine.done = true; }
+                else if (m.type === 'error') { mine.error = m.message; }
+            };
+            worker.postMessage({ id: id, E: p.E, V0: p.V0, R: p.R });
+        }
+
+        /* ---------- what to show: the stored run, else the live preview ---------- */
+        function entry() {
+            var p = current(), r = byKey[key(p.E, p.V0, p.R)];
+            if (r) { var c = cache[key(p.E, p.V0, p.R)]; if (!c) load(r); return c && c.amp ? c : null; }
+            startLive(p);
+            return live && liveKey === key(p.E, p.V0, p.R) ? live : null;
+        }
+        function frameDt(c) { return c.curves.length > 1 && c.curves[1] ? c.curves[1][0] - c.curves[0][0] : 0.3; }
+        function tEnd(c) { return frameDt(c) * (c.n - 1); }
+
+        /* ---------- drawing ---------- */
+        var ramp = []; for (var v = 0; v < 256; v++) { var s = v / 255; ramp.push([Math.round(245 + s * (122 - 245)), Math.round(241 + s * (31 - 241)), Math.round(234 + s * (43 - 234))]); }
+        function hsl(h, l) { var c = (1 - Math.abs(2 * l - 1)), x = c * (1 - Math.abs((h * 6) % 2 - 1)), m = l - c / 2, k = Math.floor(h * 6) % 6, t = [[c, x, 0], [x, c, 0], [0, c, x], [0, x, c], [x, 0, c], [c, 0, x]][k]; return [(t[0] + m) * 255, (t[1] + m) * 255, (t[2] + m) * 255]; }
+        function paintImage(c, f) {
+            var o = c.out; if (off.width !== o) { off.width = off.height = o; }
+            var img = og.createImageData(o, o), base = f * o * o, A = c.amp, P = c.ph;
+            for (var x = 0; x < o; x++) for (var y = 0; y < o; y++) {
+                var s = base + x * o + y, q = 4 * ((o - 1 - y) * o + x), lv = A[s], col;
+                if (mode === 'amp') col = ramp[lv]; else col = lv < 3 ? ramp[0] : hsl(P[s] / 255, 0.95 - 0.5 * Math.min(1, lv / 160));
+                img.data[q] = col[0]; img.data[q + 1] = col[1]; img.data[q + 2] = col[2]; img.data[q + 3] = 255;
+            }
+            og.putImageData(img, 0, 0);
+        }
+        function L() { return (IDX && IDX.L) || 64; }
+        function drawField(c, f, hold) {
+            var W = fieldBox.w, Hh = fieldBox.h; fctx.clearRect(0, 0, W, Hh);
+            fctx.fillStyle = '#f5f1ea'; fctx.fillRect(0, 0, W, Hh);
+            if (hold && fade.from) { fctx.globalAlpha = 0.55; fctx.drawImage(prev, 0, 0, W, Hh); fctx.globalAlpha = 1; fade.a = 0; }   /* the last picture, held and dimmed, until frames reach the visitor's time */
+            if (c) {
+                paintImage(c, f);
+                /* the live grid covers a box of side Lc (64 a, smaller for fast packets): draw it at its true size, centred */
+                var Lc = c.source === 'live' ? 64 * Math.min(1, Math.PI / (Math.sqrt(2 * c.meta.E) + 0.67)) : L(), side = W * Lc / L(), x0 = (W - side) / 2;
+                fctx.imageSmoothingEnabled = true; fctx.globalAlpha = 1; fctx.drawImage(off, x0, (Hh - side) / 2, side, side);
+            }
+            if (fade.a < 1 && fade.from) { fctx.globalAlpha = 1 - fade.a; fctx.drawImage(prev, 0, 0, W, Hh); fctx.globalAlpha = 1; }
+            var p = current(), sc = W / L();
+            fctx.strokeStyle = '#1c1518'; fctx.lineWidth = 1.3; fctx.setLineDash([6, 5]); fctx.beginPath(); fctx.arc(W / 2, Hh / 2, p.R * sc, 0, 2 * Math.PI); fctx.stroke(); fctx.setLineDash([]);
+            fctx.fillStyle = '#5a504b'; fctx.font = '12px "IBM Plex Mono", monospace';
+            fctx.fillText('x →', W - 38, Hh - 10); fctx.fillText('y ↑', 8, 18);
+            fctx.beginPath(); fctx.moveTo(12, Hh - 14); fctx.lineTo(12 + 10 * sc, Hh - 14); fctx.stroke(); fctx.fillText('10 a', 12, Hh - 20);
+            if (c && c.source === 'live') { fctx.fillStyle = '#7a1f2b'; fctx.fillText('live preview in your browser · coarser grid · being computed', 10, 36); }
+        }
+        function snapshot() { prev.width = fieldBox.canvas.width; prev.height = fieldBox.canvas.height; pg.setTransform(1, 0, 0, 1, 0, 0); pg.drawImage(fieldBox.canvas, 0, 0); fade.from = true; fade.a = 0; }
+        function drawPlot(c, f) {
+            var W = plotBox.w, Hh = plotBox.h, m = { l: 42, r: 10, t: 34, b: 30 }; pctx.clearRect(0, 0, W, Hh);
+            pctx.fillStyle = '#fffaf3'; pctx.fillRect(0, 0, W, Hh);
+            var tm = c ? tEnd(c) : 1, X = function (t) { return m.l + (W - m.l - m.r) * t / tm; }, Y = function (v) { return Hh - m.b - (Hh - m.t - m.b) * v; };
+            pctx.font = '11px "IBM Plex Mono", monospace'; pctx.lineWidth = 1;
+            for (var v = 0; v <= 1.0001; v += 0.25) { pctx.strokeStyle = '#e6dfd2'; pctx.beginPath(); pctx.moveTo(m.l, Y(v)); pctx.lineTo(W - m.r, Y(v)); pctx.stroke(); pctx.fillStyle = '#8b8079'; pctx.fillText(v.toFixed(2), 4, Y(v) + 4); }
+            pctx.fillText('0', m.l, Hh - 12); if (c) pctx.fillText('t = ' + tm.toFixed(1) + ' →', W - m.r - 78, Hh - 12);
+            var ser = [['behind', function (q) { return q[2]; }, '#1c1518', []], ['inside', function (q) { return q[1] - q[2] - q[3]; }, '#b07a6a', [4, 3]], ['ahead', function (q) { return q[3]; }, '#7a1f2b', []], ['lost', function (q) { return 1 - q[1]; }, '#8b8079', [2, 3]]];
+            ser.forEach(function (s, i) {
+                var lx = m.l + i * Math.min(92, (W - m.l) / 4);
+                pctx.strokeStyle = s[2]; pctx.setLineDash(s[3]); pctx.lineWidth = 2; pctx.beginPath(); pctx.moveTo(lx, 16); pctx.lineTo(lx + 18, 16); pctx.stroke();
+                pctx.setLineDash([]); pctx.fillStyle = '#3a322e'; pctx.fillText(s[0], lx + 22, 20);
+                if (!c) return;
+                pctx.strokeStyle = s[2]; pctx.setLineDash(s[3]); pctx.beginPath();
+                for (var j = 0; j < c.ready_n; j++) { var q = c.curves[j]; if (!q) break; j ? pctx.lineTo(X(q[0]), Y(s[1](q))) : pctx.moveTo(X(q[0]), Y(s[1](q))); }
+                pctx.stroke(); pctx.setLineDash([]);
+            });
+            if (c && c.curves[f]) { var xt = X(c.curves[f][0]); pctx.strokeStyle = '#1c1518'; pctx.lineWidth = 1; pctx.beginPath(); pctx.moveTo(xt, m.t); pctx.lineTo(xt, Hh - m.b); pctx.stroke(); }
+        }
+
+        /* ---------- numbers ---------- */
+        function T1D(E, V, a) {
+            if (V === 0) return 1; if (Math.abs(E - V) < 1e-9) return 1 / (1 + a * a * V / 2);
+            if (E < V) { var k = Math.sqrt(2 * (V - E)), s = Math.sinh(k * a); return 1 / (1 + V * V * s * s / (4 * E * (V - E))); }
+            var k2 = Math.sqrt(2 * (E - V)), s2 = Math.sin(k2 * a); return 1 / (1 + V * V * s2 * s2 / (4 * E * (E - V)));
+        }
+        function readouts(c, f, any) {   /* c: the data drawn now (null while the picture is held); any: the run being computed */
+            var p = current(), s0 = (IDX && IDX.sigma0) || 3;
+            ds.set('E', p.E); ds.set('V0', p.V0); ds.set('R', p.R); ds.set('k0', Math.sqrt(2 * p.E)); ds.set('T1D', T1D(p.E, p.V0, 2 * p.R));
+            var st = isStored(p.E, p.V0, p.R); ds.set('stored', st); ds.set('source', c ? c.source : any ? 'held: ' + any.source + ' still computing' : 'none');
+            ds.set('file', st ? byKey[key(p.E, p.V0, p.R)].file : '—');
+            if (c && c.curves[f]) {
+                var q = c.curves[f]; ds.set('t', q[0]); ds.set('frame', f); ds.set('norm', q[1]); ds.set('behind', q[2]); ds.set('ahead', q[3]); ds.set('sigma_y', q[4]);
+                ds.set('inside', q[1] - q[2] - q[3]); ds.set('lost', 1 - q[1]); ds.set('sigma_free', s0 * Math.sqrt(1 + Math.pow(q[0] / (2 * s0 * s0), 2)));
+                ds.set('ready', c.ready_n);
+                if (c.source === 'kaggle') { ds.set('sha_ok', c.sha === true); ds.set('steps', c.head.steps); ds.set('wall', c.head.wall); }
+                var o = c.out, base = f * o * o;
+                if (o === 128) { LEVEL.set(c.amp.subarray(base, base + o * o)); ds.touch('level'); }
+            }
+            var fx = function (v, d) { return v == null || !isFinite(v) ? '—' : v.toFixed(d); };
+            document.getElementById('r-b').textContent = fx(ds.get('behind'), 3); document.getElementById('r-a').textContent = fx(ds.get('ahead'), 3);
+            document.getElementById('r-i').textContent = fx(ds.get('inside'), 3); document.getElementById('r-l').textContent = fx(ds.get('lost'), 4);
+            document.getElementById('r-g').textContent = (p.E < p.V0 ? 'E < V₀, forbidden classically · ' : '') + 'T = ' + fx(ds.get('T1D'), 3);
+            document.getElementById('cap-t').textContent = 't = ' + fx(ds.get('t'), 2) + (c ? ' · frame ' + (f + 1) + ' of ' + c.n : '');
+            document.getElementById('cap-p').textContent = c ? (c.source === 'kaggle' ? 'stored, from Kaggle' : 'live preview, ' + c.ready_n + ' of 48 frames') : any ? 'live preview, ' + any.ready_n + ' of 48 frames: the picture waits' : 'not computed yet';
+            var src = document.getElementById('src-t'); if (!c && any) c = any;
+            if (c && c.source === 'kaggle') src.innerHTML = 'Computed on Kaggle, Tesla T4, 128³ points, ' + c.head.steps + ' steps of Δt = 0.01 in ' + c.head.wall.toFixed(1) + ' s. File <code>' + byKey[key(p.E, p.V0, p.R)].file + '</code>, SHA-256 ' + (c.sha === true ? 'checked ✓' : c.sha === false ? '<b>does not match</b>' : 'not checked (no crypto in this browser)') + '.';
+            else if (c) src.innerHTML = 'Not computed on Kaggle yet. This is a <b style="display:inline">live preview</b> computed in your browser on a coarser grid (64³), ' + c.ready_n + ' of 48 frames so far. Checked against Kaggle on stored runs: the probabilities agree to 0.02 – 0.06. ' + (bridge.connected ? '' : 'The link that would have Kaggle compute it precisely (kaggle-bridge) is not switched on yet.');
+            else src.textContent = 'Not computed yet.';
+        }
+
+        /* ---------- the clock ---------- */
+        function frameOf(c) { if (!c) return 0; var f = Math.floor(tPhys / frameDt(c) + 1e-6); return Math.max(0, Math.min(c.ready_n - 1, c.n - 1, f)); }
+        var clk = Sim.clock(function (dt) {
+            if (!IDX) return;
+            var c = entry(), p = current(), k = key(p.E, p.V0, p.R), src = c ? c.source : 'none';
+            if (k !== lastKey || src !== lastSrc) { if (lastKey !== null && shownReal) snapshot(); lastKey = k; lastSrc = src; }   /* keep the last real picture for the cross-fade and the hold */
+            if (fade.a < 1) fade.a = Math.min(1, fade.a + dt / 0.45 + (dt === 0 ? 0.02 : 0));
+            /* how fast to play: slower near any edge of the computed range, zero where no data is left */
+            var edge = Math.max(sliders.E.closeness(), sliders.V0.closeness(), sliders.R.closeness());
+            var goal = playing ? 1 - 0.8 * edge : 0;
+            if (c) {
+                var te = tEnd(c), tReady = frameDt(c) * Math.max(0, c.ready_n - 1);
+                var zone = Math.max(0.25 * te, frameDt(c) * 2);
+                if (c.ready_n < c.n) goal = Math.min(goal, KaggleFlow.smooth((tReady - tPhys) / (zone * 0.6)));   /* the live preview: slow to the last frame computed */
+                else goal = Math.min(goal, 0.06 + 0.94 * KaggleFlow.smooth((te - tPhys) / zone));                    /* the stored run: slow towards its end */
+            } else goal = 0;
+            var sp = gov.step(goal, dt || 0.016);
+            /* time only moves forward, and only as far as there are frames: entering a region still being computed, the
+               visitor's time is kept and the picture holds until the preview reaches it (no jump back to t = 0) */
+            var cap = c ? (c.ready_n >= c.n ? tEnd(c) : frameDt(c) * Math.max(0, c.ready_n - 1)) : 0;
+            if (c && playing && tPhys < cap) tPhys = Math.min(tPhys + dt * (tEnd(c) / PLAY_SECONDS) * sp, cap);
+            if (c && c.ready_n >= c.n && tPhys > tEnd(c)) tPhys = tEnd(c);   /* a stored run shorter in time than where the visitor stands: its last frame */
+            var behind = !c || tPhys > cap + 1e-6;
+            ds.set('speed', sp); ds.set('edge', edge); ds.set('live_done', live ? live.ready_n / 48 : 0);
+            document.querySelector('#speed span').style.width = (100 * sp).toFixed(0) + '%';
+            /* the visitor is heading out of the computed range: ask kaggle-bridge for the next block at once */
+            ['E', 'V0', 'R'].forEach(function (nm) { var s = sliders[nm], h = s.heading(); if (h && !requested[nm + h + k]) { requested[nm + h + k] = true; bridge.request({ heading: nm, direction: h, from: p }); } });
+            /* the notice: only when nothing is left to show */
+            var starved = behind || (c.ready_n < c.n && tPhys >= cap - 1e-6 && sp < 0.05);
+            if (starved && !isStored(p.E, p.V0, p.R)) {
+                var lp = live && liveKey === k ? live.ready_n / 48 : 0;
+                pop.set({ stage: bridge.connected ? 1 : 0, broken: bridge.connected ? -1 : 1, title: 'E = ' + p.E + ', V₀ = ' + p.V0 + ', R = ' + p.R + ' has not been computed yet',
+                    text: (bridge.connected ? 'Asked kaggle-bridge to have it computed on Kaggle’s GPU; it will be stored and come back here.' : 'The link to Kaggle, <b>kaggle-bridge</b>, is not switched on yet (dashed above), so Kaggle cannot be asked from this page. ') +
+                        ' Meanwhile your browser computes a live preview on a coarser grid: ' + Math.round(100 * lp) + ' %. The animation goes on as soon as the next frame is ready.', progress: lp });
+                pop.show();
+            } else if (pop.shown) pop.hide();
+            var f = frameOf(c);
+            timeIn.max = c ? c.n - 1 : 47; timeIn.value = f; timeIn.style.setProperty('--p', (c ? 100 * f / (c.n - 1) : 0) + '%'); timeOut.textContent = (behind ? tPhys : c && c.curves[f] ? c.curves[f][0] : 0).toFixed(2);
+            if (behind) { drawField(null, 0, true); shownReal = false; } else { drawField(c, f); shownReal = true; }
+            drawPlot(c, f); readouts(behind ? null : c, f, c);
+        });
+        function setPlay(p) { playing = p; document.getElementById('play').textContent = p ? 'Pause' : 'Play'; }
+        document.getElementById('play').addEventListener('click', function () { var c = entry(); if (!playing && c && c.ready_n >= c.n && tPhys >= tEnd(c) - 1e-9) { snapshot(); tPhys = 0; endHeld = false; } setPlay(!playing); });
+        document.getElementById('replay').addEventListener('click', function () { snapshot(); tPhys = 0; endHeld = false; gov.set(0); setPlay(true); });
+        timeIn.addEventListener('input', function () { var c = entry(); if (c) { tPhys = +timeIn.value * frameDt(c); } });
+        function setMode(m) { mode = m; document.getElementById('m-amp').setAttribute('aria-pressed', m === 'amp'); document.getElementById('m-ph').setAttribute('aria-pressed', m === 'ph'); }
+        document.getElementById('m-amp').addEventListener('click', function () { setMode('amp'); });
+        document.getElementById('m-ph').addEventListener('click', function () { setMode('ph'); });
+
+        /* ---------- start: read the index, build the controls ---------- */
+        fetch(DATA_BASE + 'index.json').then(function (r) { return r.json(); }).then(function (idx) {
+            IDX = idx; idx.runs.forEach(function (r) { byKey[key(r.E, r.V0, r.R)] = r; });
+            for (var i = 0; i < 128; i++) XC[i] = (i - 64) * idx.L / 128; ds.touch('xc');
+            var host = document.getElementById('params'), defs = [
+                ['E', 'Packet energy <i>E</i>', stopsOf(idx.Es, EXTRA.E), 2.5],
+                ['V0', 'Barrier height <i>V</i><sub>0</sub>', stopsOf(idx.Vs, EXTRA.V0), 3.0],
+                ['R', 'Sphere radius <i>R</i>', stopsOf(idx.Rs, EXTRA.R), 4.0]];
+            defs.forEach(function (d) {
+                var nm = d[0], stops = d[2];
+                sliders[nm] = KaggleFlow.slider({ host: host, label: d[1], aria: d[1].replace(/<[^>]+>/g, ''), stops: stops, index: stops.indexOf(d[3]), format: function (v) { return v.toFixed(nm === 'R' ? 1 : 2) + (nm === 'R' ? ' a' : ''); },
+                    stored: function (i) { var p = { E: sliders.E ? sliders.E.value : 2.5, V0: sliders.V0 ? sliders.V0.value : 3, R: sliders.R ? sliders.R.value : 4 }; p[nm] = stops[i]; return isStored(p.E, p.V0, p.R); },
+                    onChange: function () { ['E', 'V0', 'R'].forEach(function (o) { if (o !== nm && sliders[o]) sliders[o].refresh(); }); } });
+            });
+            ['E', 'V0', 'R'].forEach(function (o) { sliders[o].refresh(); });
+            load(byKey[key(2.5, 3.0, 4.0)]);
+        }).catch(function (e) { document.getElementById('src-t').textContent = 'The stored runs could not be read: ' + e.message; });
+        Sim.onResize(stage, function () { fieldBox.fit(); plotBox.fit(); });
+        window.__fig14 = { ds: ds, entry: entry, sliders: function () { return sliders; }, setT: function (t) { tPhys = t; }, play: setPlay, mode: setMode };
+
+        /* ---------- the data panel (scripts/datalog.js) reads the store; these hooks only say where things are drawn ---------- */
+        function screenOf(gx, gy) { var W = fieldBox.w, Hh = fieldBox.h; return { x: (gx + 0.5) / 128 * W, y: Hh - (gy + 0.5) / 128 * Hh }; }
+        function pixelCheck(q) {
+            var gx = Math.floor(q / 128), gy = q % 128, at = screenOf(gx, gy), c = entry();
+            if (!c || c.source !== 'kaggle') return { what: 'the picture', drawn: 'not compared', expected: '—', ok: true, note: 'Only a stored Kaggle run is compared pixel by pixel.' };
+            var px = fctx.getImageData(Math.round(at.x * fieldBox.dpr), Math.round(at.y * fieldBox.dpr), 1, 1).data, lv = LEVEL[q], want = mode === 'amp' ? ramp[lv] : null;
+            if (px[3] === 0) return { what: 'screen pixel at grid point (' + gx + ', ' + gy + ')', drawn: 'nothing (transparent)', expected: 'a filled pixel', ok: false };
+            var d = want ? Math.max(Math.abs(px[0] - want[0]), Math.abs(px[1] - want[1]), Math.abs(px[2] - want[2])) : 0;
+            return { what: 'screen pixel at grid point (' + gx + ', ' + gy + ')', drawn: 'rgb(' + px[0] + ', ' + px[1] + ', ' + px[2] + ')', expected: want ? 'rgb(' + want.join(', ') + ') for level ' + lv : 'a phase colour', ok: !want || d <= 24,
+                note: 'The 128 × 128 stored points are stretched over the canvas with smoothing, so a pixel between points mixes its neighbours: up to 24 colour units apart is accepted. In phase mode the hue is the stored phase level.' };
+        }
+        Sim.data = {
+            ds: ds, kicker: 'Fig. 14 · data', file: 'fig14-wave-packet-sphere',
+            playing: function () { return playing; },
+            groups: [
+                { title: 'What you set', note: 'the three stops of the controls', vars: ['E', 'V0', 'R', 'k0'] },
+                { title: 'The stored run', note: 'read from the run file Kaggle wrote', vars: ['stored', 'source', 'file', 'sha_ok', 'steps', 'wall', 'ready', 'live_done'] },
+                { title: 'This frame', note: 'stored values; inside and lost added up from them', vars: ['t', 'frame', 'norm', 'behind', 'ahead', 'inside', 'lost', 'sigma_y', 'sigma_free', 'T1D'] },
+                { title: 'The picture', note: 'the stored levels of |ψ| in the plane z = 0', vars: ['xc', 'level'] },
+                { title: 'Playback', note: 'how the page plays', vars: ['speed', 'edge'] }
+            ],
+            probe: function (x, y) { var W = fieldBox.w, Hh = fieldBox.h, gx = Math.floor(x / W * 128), gy = Math.floor((Hh - y) / Hh * 128); return gx < 0 || gy < 0 || gx > 127 || gy > 127 ? null : { q: gx * 128 + gy }; },
+            inspect: function (ref) {
+                var gx = Math.floor(ref.q / 128), gy = ref.q % 128, lv = LEVEL[ref.q];
+                return { title: 'point x = ' + XC[gx].toFixed(2) + ' a, y = ' + XC[gy].toFixed(2) + ' a', at: screenOf(gx, gy),
+                    rows: [['x', XC[gx], 'a', 'xc', gx], ['y', XC[gy], 'a', 'xc', gy], ['q', lv, '', 'level', ref.q], ['|ψ| / |ψ|<sub>peak,0</sub>', lv / 255, ''], ['|ψ|² / |ψ|²<sub>peak,0</sub>', (lv / 255) * (lv / 255), '']] };
+            },
+            locate: function (name, idx) { if (name === 'level') return screenOf(Math.floor(idx / 128), idx % 128); return null; },
+            check: {
+                k0: function () { return { formula: '√(2E)', inputs: [['E', ds.get('E'), '', 2]], value: Math.sqrt(2 * ds.get('E')) }; },
+                inside: function () { return { formula: '∫|ψ|² − P<sub>behind</sub> − P<sub>ahead</sub>', inputs: [['∫|ψ|²', ds.get('norm'), '', 6], ['P<sub>behind</sub>', ds.get('behind'), '', 5], ['P<sub>ahead</sub>', ds.get('ahead'), '', 5]], value: ds.get('norm') - ds.get('behind') - ds.get('ahead') }; },
+                lost: function () { return { formula: '1 − ∫|ψ|²', inputs: [['∫|ψ|²', ds.get('norm'), '', 6]], value: 1 - ds.get('norm') }; },
+                sigma_free: function () { var s0 = IDX.sigma0; return { formula: 'σ₀ √(1 + (t / 2σ₀²)²)', inputs: [['σ₀', s0, 'a', 1], ['t', ds.get('t'), '', 3]], value: s0 * Math.sqrt(1 + Math.pow(ds.get('t') / (2 * s0 * s0), 2)) }; },
+                T1D: function () { return { formula: 'rectangular barrier, thickness 2R', inputs: [['E', ds.get('E'), '', 2], ['V<sub>0</sub>', ds.get('V0'), '', 2], ['2R', 2 * ds.get('R'), 'a', 1]], value: T1D(ds.get('E'), ds.get('V0'), 2 * ds.get('R')) }; },
+                t: function () { var c = entry(); return c ? { formula: 'frame · Δt<sub>frame</sub>', inputs: [['frame', ds.get('frame'), '', 0], ['Δt<sub>frame</sub>', frameDt(c), '', 3]], value: ds.get('frame') * frameDt(c) } : null; }
+            },
+            drawn: { level: pixelCheck },
+            round: { time: 't', label: function () { return 'one stored run, ' + (ds.get('ready') || 48) + ' frames'; }, length: function () { var c = entry(); return c ? tEnd(c) : 10; }, columns: ['behind', 'ahead', 'inside', 'lost', 'sigma_y'] },
+            play: function () { setPlay(true); },
+            about: 'The picture is the stored 128 × 128 grid of amplitude levels of the plane z = 0, stretched over the canvas with smoothing; the stored levels are 0 to 255 of the first frame’s peak, so |ψ|² is the level squared, in the same unit. The probabilities come from the whole three-dimensional ψ on Kaggle, not from the picture. Between stored frames nothing is interpolated: the page shows the stored frame at or before the playback time. In a region not computed on Kaggle the picture is the live preview from your browser (64³ points), marked as such on the figure.'
+        };
+    })();
+    </script>
+    <script src="../scripts/datalog.js"></script>
+</body>
+</html>
