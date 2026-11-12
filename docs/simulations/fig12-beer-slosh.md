@@ -89,6 +89,11 @@ coarse 720–916 s, medium 1275–2799 s, fine 5149–8355 s.
   no-slip runs did not share a time step: on medium and fine the slip runs stepped at a median 0.52–0.56 ms (the Courant
   limit, the stout sliding fast past the thin wall cells), the no-slip runs at the 1 ms ceiling. Fine no-slip loses
   1.0×10⁻⁵ kg to the numerics and its swing energy still ends at −5.7 µJ.
+- *The time step's share* (local, coarse, slip, 4 s, same windows): damping ratio 0.00527 at Δt = 1.0 ms, 0.00408 at a
+  fixed 0.25 ms (1162 s on 4 cores). Linear in Δt: 0.0037 + 1.59 s⁻¹ × Δt, so the time step gives 0.0016 at 1 ms and 0.0004
+  at 0.25 ms; the rest, 0.0037, comes from the space grid on the coarse mesh. A pure oscillator under backward Euler would
+  give a slope of ω/2 = 10.7 s⁻¹, so the coupled scheme damps far less than that bound. The damping ratio also depends on
+  the fitting window: the same 1 ms coarse swing gives 0.00527 over 4 s and 0.00399 over 8 s.
 
 **What the page will offer (agreed 11 November 2026).** Every result is precomputed on GitHub and only played back. Roads
 come from a menu of about ten: single bumps of 5, 10, 15, 20 and 25 mm, a kerb, a pothole, and three periodic rows (for
