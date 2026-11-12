@@ -586,3 +586,17 @@ stored with `tools/i18n/ingest.py strings`). The page itself is English only, li
 `ENGLISH_ONLY` of `tools/i18n/build.py` (it was missing there, so `build.py --check` failed on `main` until this change).
 Tested: the catalogue in English at 1100 and 390 px and in German and Arabic at 390 px, no errors, no sideways scroll, two
 Fig. 12 cards among 15.
+
+
+**Lecture note (12 November 2026).** The page's short section "What was computed, and how" is replaced by a lecture note,
+`<article class="paper" id="paper">`, written to `notes/STANDARD.md` (Taylor's way: every step, Key results, worked examples
+with the page's numbers, Problems; ★ on section 3 and on the rate estimate). Sections: 1 the pint that keeps rocking;
+2 what Kaggle computed, eq. (1); 3 the first sloshing mode, (2)-(5), f11 = 3.421 Hz; 4 boundary-layer damping, (6), zeta =
+0.0036 (theory) and 0.0053 (experiment), tau = 12.9 and 8.7 s, Stokes layer 0.31 mm; 5 phase space of the damped swing,
+(7)-(8); 6 reading q from the stored ring, (9), rounding errors, the scaled rate (10)-(11), and how it misreads modes 2 and 3
+(16 % and 29 % short); 7 the measurements of `tools/fig12/kaggle_decay.py`, with the push a 6 mm lean would need (0.95
+m/s^2); 8 playback laws (12)-(13): under the square-root cap the picture slows at a constant rate from real time to rest in
+6 s; 9 equation to screen; 10 limits, the free-swing test and a wall-drag model as the next steps, three Problems; 11
+sources (NASA TN D-1367, NASA SP-106, the APIC paper, the Fig. 12 note, the notebook), each opened for this note. `fold.js`
+is now loaded, so the sections fold like every other note. Rendered at 390 and 1440 px: 13 numbered equations, no KaTeX
+errors, no sideways scroll. The catalogue entry now lists `derivation`.

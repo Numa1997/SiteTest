@@ -263,7 +263,7 @@
             method: 'APIC particles on a 1.5 mm grid (370,386 cells, 1,002,808 particles) in Taichi on Kaggle’s Tesla T4 GPU, stored 30 times a second and played back; beyond the computed speeds a live preview on a 4 mm grid in a Web Worker',
             controls: 'speed on the computed stops and beyond them; time; pause and ride again',
             concepts: ['sloshing', 'free surface', 'phase space', 'particle-in-cell', 'APIC', 'non-inertial frame', 'damping', 'GPU', 'Kaggle'],
-            has: ['data', 'read', 'round', 'check'],
+            has: ['derivation', 'data', 'read', 'round', 'check'],
             added: '2026-11-12'
         },
         {
