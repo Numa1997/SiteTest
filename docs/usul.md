@@ -53,6 +53,12 @@ build of the latest `main` commit (Retry build / Deploy). If that also does noth
 is still there; reconnecting it there (Disconnect, then Connect to Numa1997/SiteTest, branch `main`) restores the doorbell. GitHub's side
 of it is the Cloudflare app under github.com → Settings → Applications → Installed GitHub Apps, which must have access to SiteTest.
 
+**The same commit on a branch and on `main` (12 November 2026).** Merge `f831bbf` (Fig. 14 shapes and 3D views) was pushed to its branch and to
+`main` as one and the same commit. Its "Workers Builds: phyein-usul" check shows failure with start and end in the same second
+(22:10:28 UTC): the instant refusal a branch gets, not a build of `main`. `npm run build` and `npx wrangler deploy --dry-run` on that commit pass
+(1978 files, none over 24 MB). The live site kept the old page until the next commit on `main` started a real build. Remedy: any new commit on
+`main`, or Retry build in the dashboard.
+
 **Addresses (since 31 October 2026).** `wrangler.jsonc` sets `"html_handling": "none"`: Cloudflare serves `x.html` and
 `folder/index.html` as they are, the addresses every link of the site uses, with no redirect. Before, it answered each with a 307
 to `x` or `folder/`, one round trip on every click ([performance.md](performance.md), change 6). The short addresses, which readers
