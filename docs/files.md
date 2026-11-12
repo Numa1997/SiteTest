@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-1693 files, 84.2 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+1694 files, 84.2 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -39,7 +39,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Shared by the portfolio sources (not served)](#shared-by-the-portfolio-sources-not-served) | 1 |
 | [Template sources](#template-sources) | 2 |
 | [Documentation](#documentation) | 37 |
-| [Tools](#tools) | 123 |
+| [Tools](#tools) | 124 |
 | [Translation tables](#translation-tables) | 54 |
 | [Agents of the lecture-note review](#agents-of-the-lecture-note-review) | 4 |
 | [Working notes of project 07, the electron beam](#working-notes-of-project-07-the-electron-beam) | 52 |
@@ -921,6 +921,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/fig12/kaggle/README.md`](../tools/fig12/kaggle/README.md) | 3.0 kB | Fig. 12, Kaggle: how the OpenFOAM cases run on the user’s Kaggle account, what each notebook stores, and what was measured. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/kaggle/compare.py`](../tools/fig12/kaggle/compare.py) | 3.5 kB | Fig. 12, Kaggle: one OpenFOAM case run on two machines compared column by column, with both swings analysed and both wall times. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/kaggle/make_notebook.py`](../tools/fig12/kaggle/make_notebook.py) | 17.9 kB | Fig. 12, Kaggle: writes one self-contained Kaggle notebook for one OpenFOAM case (install OpenFOAM 13, sparse clone at a pinned commit, build, run on all cores, the outputs of notes/fig12/of-runs/ with timing and checksums). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`tools/fig12/kaggle/notebooks/swing-slip-coarse.ipynb`](../tools/fig12/kaggle/notebooks/swing-slip-coarse.ipynb) | 14.6 kB | Fig. 12, Kaggle: a generated notebook of one OpenFOAM case, exactly the text sent to Kaggle (by make_notebook.py). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/linfit.cjs`](../tools/fig12/linfit.cjs) | 2.0 kB | Fig. 12: fits the free swing (amplitude, frequency) in the files linearity.cjs saves. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/of/analyse_swing.py`](../tools/fig12/of/analyse_swing.py) | 7.2 kB | Fig. 12, OpenFOAM, gates 1.2 and 1.5: the free swing’s frequency and damping from a run’s monitor, with the mass books (out through the top, lost by the numerics), the swing energy measured from the rest state of the stout actually present, and the time step’s own damping; a slip/no-slip pair gives the solver’s own damping against the real friction’s. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/of/cart/cart.H`](../tools/fig12/of/cart/cart.H) | 7.0 kB | Fig. 12, OpenFOAM: the cart’s equations of motion in C++, a line-by-line port of Cart in stout-cart.js (bit-identical rides, test_cart.cpp). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
