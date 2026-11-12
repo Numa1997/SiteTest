@@ -6,7 +6,7 @@
         </div>
 
         <figure class="stage" style="margin:0 auto;max-width:460px">
-            <iframe src="fig13/live-catch.html" title="Catching the butterfly, computed live: choose a strike or a random chaotic state" style="display:block;width:100%;aspect-ratio:9/16;border:0;border-radius:10px;background:#140d10"></iframe>
+            <iframe src="fig13/live-catch.html" title="Catching the butterfly, computed live: drag the pendulum into chaos, then ask the motor for the butterfly" style="display:block;width:100%;aspect-ratio:9/16;border:0;border-radius:10px;background:#140d10"></iframe>
             <figcaption class="eqnote" style="margin-top:8px">Live: <b>Random chaos</b> starts the pendulum from random angles and momenta; <b>Choose a strike</b> opens the chaos map of momentum space, a tap strikes both rods hanging still with that (p₁, p₂). <a href="fig13/live-catch.html">Full screen</a> · <a href="fig13/film.html">the whole gift film</a> · <a href="butterfly-dashboard.html">the butterfly dashboard</a></figcaption>
         </figure>
 
@@ -153,7 +153,7 @@
                                         <path d="M390 110 V168"/><path d="M550 110 Q550 198 492 198"/><path d="M290 198 Q230 198 230 112"/>
                                     </g>
                                     <g class="tick" text-anchor="middle">
-                                        <text x="147" y="32">t = 8 s</text><text x="312" y="32">E, P settled</text><text x="467" y="32">d &lt; 0.6</text><text x="632" y="32">held, d &lt; 0.005</text>
+                                        <text x="147" y="32">your press</text><text x="312" y="32">E, P settled</text><text x="467" y="32">d &lt; 0.6</text><text x="632" y="32">held, d &lt; 0.005</text>
                                         <text x="405" y="140" text-anchor="start">12 s, nothing near</text><text x="575" y="160" text-anchor="start">slip: d &gt; 1</text><text x="200" y="150" text-anchor="end">not settled in 12 s</text>
                                     </g>
                                 </svg>
@@ -161,16 +161,17 @@
                             <figcaption><span class="pfig__n">Fig. 1</span>The phases of <code>Run.prototype.ctrl</code> in <code>pendulum.js</code> (and <code>catch_anywhere</code> in <code>butterfly_control.py</code>). Arrows carry the condition that changes the phase.</figcaption>
                         </figure>
                         <p><b>Before the film starts</b> (<code>PEND.design()</code>, about 0.1 s in the browser): integrate the butterfly from its strike, store its 2401 states; obtain each \(\Phi_k, b_k\) of (12) by central differences of one control step (\(\varepsilon = 10^{-6}\) in the state, \(10^{-3}\ \mathrm{N\,m}\) in the torque); run the recursion (15) around the lap until \(\Pi\) changes by less than \(10^{-9}\) of itself in a lap; keep the 2400 gain rows \(K_k\).</p>
-                        <p><b>While the film plays</b> (<code>Run.advance</code>): every control step of 1.108 ms, compute the torque from the phase's law, hold it, and integrate (4) over the step with four classical Runge–Kutta sub-steps of 0.277 ms; record the state every four steps for the drawing. The film's clock asks for the state at its own time and the run integrates just ahead of it (0.6 s), so the motion is computed as you watch, never recorded.</p>
+                        <p><b>While the film plays</b> (<code>Run.advance</code>): every control step of 1.108 ms, compute the torque from the phase's law, hold it, and integrate (4) over the step with four classical Runge–Kutta sub-steps of 0.277 ms; record the state every four steps for the drawing. The film's clock asks for the state at its own time and the run integrates just ahead of it (0.15 s, so a press is answered at once), so the motion is computed as you watch, never recorded.</p>
                         <pre class="notex" style="font:13px/1.55 var(--mono);background:var(--quote);padding:12px 14px;border-radius:6px;overflow-x:auto">for each control step k (h = T/2400):
     E, w1, P      = energy(s), dtheta1/dt, p1 + p2
     reach         = max |P| over the last 3 s
-    phase chaos:  tau = 0                                   until t = 8 s
+    phase chaos:  tau = 0                                   until the reader presses Catch it
     phase pump:   tau = law (9)                             -> wait when |E - E*| &lt; 5 J and |reach - 15.77| &lt; 3
                   (a drain after a miss aims law (9) at 60 J)
     phase wait:   tau = 0; d, nearest point, mirror sign = (11)  -> catch when d &lt; 0.6, miss after 12 s
     phase catch:  re-index to the nearest point; tau = -K[k] (s - sign S[k])   (15)
-                  miss if d &gt; 1; let go after 4 laps when d &lt; 0.005
+                  miss if d &gt; 1; held until the reader presses Let go
+                  (the gift film, ?auto=1: on after 6 s, let go after 4 laps when d &lt; 0.005)
     tau = clip(tau, -60, 60) N m
     integrate (4) over h with 4 RK4 sub-steps, tau held</pre>
                     </section>
@@ -184,7 +185,9 @@
                                 <tr><td>Butterfly from its strike, browser (RK4, step ≤ 0.2 ms) against <code>orbit24.json</code> (DOP853)</td><td>angles agree to \(3.9\times10^{-7}\) rad over a lap; closes to \(4\times10^{-7}\)</td></tr>
                                 <tr><td>Energy of the strike, from (3)</td><td>390.7777 J in both codes</td></tr>
                                 <tr><td>Gains \(K_k\): browser (finite differences) against Python (variational equations)</td><td>equal to three decimals, e.g. \(K_0 = (-0.191, -2.456, 12.395, -15.064)\)</td></tr>
-                                <tr><td>The film's run, struck with (2, 4): catch time, browser against Python</td><td>not a fixed number: 8 s of chaos amplify the last digit of the arithmetic. Caught after 73 s in Chromium, 118 s in Node, 43 s in Python; 12.5 s if the strike is changed by \(10^{-6}\). Only statistics over many starts can be compared</td></tr>
+                                <tr><td>The page's own start: let go from rest at \((\theta_1, \theta_2) = (2.85, 3.0)\) rad (energy 18.9 J, where hanging still is −19.6 J: the lower rod goes over the top 13 times in 6 s). <em>Catch it</em> pressed at 40 moments, every 0.5 s from 1 s to 20.5 s</td><td>caught in all 40, in 31 at the first try; from the press to the catch: median 6.1 s, slowest 65 s (Node 22, the page's <code>pendulum.js</code>, 12 November 2026)</td></tr>
+                                <tr><td>60 poses as a finger would leave them (tip anywhere within reach, at rest), <em>Catch it</em> pressed 4 s after letting go</td><td>caught in all 60, in 43 at the first try; median 6.7 s from the press, 90 % within 29 s, slowest 71 s</td></tr>
+                                <tr><td>The time to the catch of one given start</td><td>not a fixed number: chaos amplifies the last digit of the arithmetic, so two browsers disagree, and so does a strike changed by \(10^{-6}\). Only counts over many starts can be compared</td></tr>
                                 <tr><td>Integration step of the controller</td><td>one RK4 step per 1.108 ms lets the free orbit drift \(2\times10^{-3}\) a lap, and an early count of "30 of 30" made that way was withdrawn; four sub-steps: \(4\times10^{-6}\) a lap. The count below was repeated with 8 and with 16 sub-steps: 100 of 100 each time</td></tr>
                                 <tr><td>The catch's basin: a random point of the lap, a random direction, 200 states per distance; held = within 0.005 without slipping past 1</td><td>0.1: 199/200, 0.2: 171/200, 0.3: 140/200, 0.4: 112/200, 0.6: 62/200, 0.8: 26/200</td></tr>
                                 <tr><td>100 random starts (half struck from rest with \(|p_i| \le 12\), half random angles with \(|p_i| \le 6\)), 900 s allowed</td><td>three sets of 100 (seeds 1, 2, 2026): 100 caught and held in each; median 18.5, 18.9, 17.5 s after the motor switches on; 83, 84, 82 within 60 s; slowest 229, 226, 149 s</td></tr>
@@ -200,11 +203,11 @@
                         <h3><span class="psec__n">11</span>Equation to screen</h3>
                         <p class="psec__lead">What each drawn thing is.</p>
                         <ul>
-                            <li><b>The rods</b>: \(\theta_1, \theta_2\) of the live run; <b>the pen</b> at the tip draws \(x = l(\sin\theta_1+\sin\theta_2)\), \(h = -l(\cos\theta_1+\cos\theta_2)\); the trail is the last 0.8 s while searching, everything since the catch afterwards.</li>
+                            <li><b>The rods</b>: \(\theta_1, \theta_2\) of the live run; <b>the pen</b> at the tip draws \(x = l(\sin\theta_1+\sin\theta_2)\), \(h = -l(\cos\theta_1+\cos\theta_2)\); the trail is the last 0.8 s while free or searching, the last two laps once caught.</li>
                             <li><b>The motor</b>: six stator coils glow in proportion to the current \(|I| = |\tau|/k_t\); the motor constant \(k_t = 2.5\ \mathrm{N\,m/A}\) is assumed (a direct-drive torque motor; 60 N·m at 24 A); it is not part of the model, which takes the torque as given. The four rotor magnets turn with \(\theta_1\). The arc beside the motor is \(\tau\), its length \(|\tau|/60\ \mathrm{N\,m}\).</li>
                             <li><b>The faint butterfly</b> is \(s^*(t)\), the target; it fades once the pendulum is held.</li>
                             <li><b>Energy</b> is \(H\) of (3); the bar's mark is \(E^*\). <b>Distance</b> is \(d\) of (11), shown from the waiting phase on.</li>
-                            <li><b>The clock</b>: chaos at half real speed, the first try at a quarter, waiting at full speed, a search after a miss fast-forwarded four times, from a second after the catch at half speed. The physics does not change with the clock; only what one second of film shows.</li>
+                            <li><b>The clock</b>: the free pendulum at real speed; the motor at work and the butterfly at half speed (the butterfly's lower rod turns nine times a second); a new try after a miss at double speed. The physics does not change with the clock; only what one second of film shows.</li>
                         </ul>
                     </section>
 

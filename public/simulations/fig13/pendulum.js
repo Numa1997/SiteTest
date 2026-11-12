@@ -115,6 +115,12 @@ const SET = { kE: 0.01, kA: 0.05, kI: 0.005, waitMax: 12, steerMax: 12, win: 3, 
         this.log = { t: [], th1: [], th2: [], tau: [], E: [], dist: [], mode: [] };
         this.tau = 0; this.record();
     };
+    // The motor waits for a request: with tFree = Infinity the pendulum stays free until engage() is called. letGo() frees it again.
+    Run.prototype.engage = function () {
+        if (this.mode === 3) { this.mode = -1; this.ev.catch = null; this.ev.release = null; this.ev.wait = null; this.zA = 0; this.zE = 0; this.drain = false; this.hops = 0; this.dist = 9; }
+        if (this.mode === -1) { this.tFree = this.t; this.ev.on = this.t; }
+    };
+    Run.prototype.letGo = function () { if (this.mode >= 0 && this.mode !== 3) { this.mode = 3; this.ev.release = this.t; } };
     Run.prototype.record = function () {
         const L = this.log, s = this.s;
         L.t.push(this.t); L.th1.push(s[0]); L.th2.push(s[1]); L.tau.push(this.tau); L.E.push(energy(s)); L.dist.push(this.dist); L.mode.push(this.mode);

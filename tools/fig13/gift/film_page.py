@@ -118,7 +118,8 @@ setTheme(theme); fit(); addEventListener('resize', fit); load(Math.max(1, Math.m
 </body>
 </html>
 '''
-ALL = [['live-gift.html', 'For رِيمْ', 1080, 1920], ['live-construction.html', 'built by hand', 1080, 1920], ['live-catch.html', 'caught and let go', 1080, 1920]]
+ALL = [['live-gift.html', 'For رِيمْ', 1080, 1920], ['live-construction.html', 'built by hand', 1080, 1920], ['live-catch.html?auto=1', 'caught and let go', 1080, 1920]]
+CATCH = ['live-catch.html', 'drag it, then ask for the butterfly', 1080, 1920]   # interactive: the motor waits for the reader's press
 MORE = [['dive.html', 'from a kick to a butterfly', 1080, 1920], ['together.html?scene=phone', 'one motion, six pictures', 1080, 1920],
         ['turning.html?scene=wheel', 'turning the paper: a wheel', 1920, 1080], ['turning.html?scene=butterfly', 'turning the paper: the butterfly', 1920, 1080],
         ['bell.html', 'the bell above the floor', 1920, 1080]]   # the other Fig. 13 films (publish_films.py), all drawn live
@@ -126,7 +127,7 @@ PAGES = {   # file: (title, parts)
     'film.html': ('For رِيمْ: the whole film, live', ALL + MORE),
     'reem.html': ('For رِيمْ', ALL + MORE),
     'construction.html': ('Constructing the butterfly by hand', [ALL[1]]),
-    'catch.html': ('Catching the butterfly', [ALL[2]]),
+    'catch.html': ('Catching the butterfly', [CATCH]),
 }
 import json
 for name, (title, parts) in PAGES.items():
