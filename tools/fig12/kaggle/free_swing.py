@@ -5,7 +5,9 @@ def energies(S):
 
 
 def free_swing(dx, model):
-    S = Stout(R, DZP, FILL, RHO, dx, PPC, model=MODELS[model])
+    model, o = run_opts(model); tag = model + ''.join(f'@{k}={v:g}' for k, v in o.items() if (k, v) not in (('dt', 0.002), ('seed', 1), ('a', PUSH_A_DEFAULT)))
+    PUSH_A = o['a']
+    S = Stout(R, DZP, FILL, RHO, dx, PPC, model=MODELS[model], seed=int(o['seed']))
     log(f"grid {dx * 1e3:.1f} mm, {model}: {S.n} x {S.n} x {S.nz} = {S.ncells:,} cells, {S.N:,} particles; stout {S.rho * S.V * 1e3:.1f} g; "
         f"glass area in the cells {S.wall_check['area_cells'] * 1e4:.1f} cm^2 (profile {S.wall_check['area_profile_below_rim'] * 1e4:.1f}); "
         f"wall rate {S.gs:.2e} m/s, foam Lambda0 {S.lam0:.3f} kg/(m s)")
@@ -27,7 +29,7 @@ def free_swing(dx, model):
         ax = PUSH_A * math.sin(math.pi * (t - SETTLE) / PUSH_T) if SETTLE <= t < SETTLE + PUSH_T else 0.0
         if t >= next_frame - 1e-9: record(next_frame, ax); next_frame += 1.0 / FPS
         vmax = S.max_speed() if nsteps % 10 == 0 else vmax
-        dt = min(0.002, 0.8 * dx / max(vmax, 1e-6), end - t)
+        dt = min(o['dt'], 0.8 * dx / max(vmax, 1e-6), end - t)
         ax = PUSH_A * math.sin(math.pi * (t + 0.5 * dt - SETTLE) / PUSH_T) if SETTLE <= t + 0.5 * dt < SETTLE + PUSH_T else 0.0
         cg_last = S.step(dt, -ax, -9.81); its += cg_last
         t += dt; nsteps += 1
@@ -39,7 +41,7 @@ def free_swing(dx, model):
     wall = time.time() - T1
     log(f"grid {dx * 1e3:.1f} mm, {model} done: {nsteps:,} steps in {wall / 60:.1f} min ({wall / nsteps * 1e3:.0f} ms a step), {its / nsteps:.0f} pressure iterations a step; "
         f"spilled {int(S.spilled[None])} particles; wall took {S.ewall[None] * 1e3:.3f} mJ, foam {S.efoam[None] * 1e3:.3f} mJ")
-    rec.update(dx=dx, model=model, physics=S.model, cells=S.ncells, particles=S.N, mp=S.mp, steps=nsteps, wall_s=wall, cg_per_step=its / max(nsteps, 1),
+    rec.update(dx=dx, model=tag, opts=o, physics=S.model, cells=S.ncells, particles=S.N, mp=S.mp, steps=nsteps, wall_s=wall, cg_per_step=its / max(nsteps, 1),
                wall_check=S.wall_check, frames=base64.b64encode(zlib.compress(np.stack(surf).tobytes(), 9)).decode())
     return rec
 
@@ -48,6 +50,6 @@ results = []
 for g, m in RUNS:
     results.append(free_swing(g, m))
     json.dump(dict(generated=STAMP, solver="v2", test="free swing: glass held still, one half-sine push along x", fill=FILL, rho=RHO,
-                   settle=SETTLE, push_a=PUSH_A, push_t=PUSH_T, free=FREE, fps=FPS, nr=NR, nth=NTH, q=0.0002, runs=results),
+                   settle=SETTLE, push_a=PUSH_A_DEFAULT, push_t=PUSH_T, free=FREE, fps=FPS, nr=NR, nth=NTH, q=0.0002, runs=results),
               open(WORK / "free_swing_v2.json", "w"))
 log(f"all runs done; wrote {WORK / 'free_swing_v2.json'} ({(WORK / 'free_swing_v2.json').stat().st_size / 1e6:.1f} MB)")
