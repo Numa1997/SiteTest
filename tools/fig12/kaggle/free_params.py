@@ -26,7 +26,8 @@ def log(msg):
     with open(WORK / "progress.log", "a") as f: f.write(line + "\n")
 
 steps = (SETTLE + PUSH_T + FREE) / 0.002
-print("What the machine does: holds the pint still, gives it one short push, and lets the stout swing freely,")
-print("once for each grid and piece of physics, recording the stout's energy, momentum and surface 30 times a second.")
-for g, m in RUNS: print(f"grid {g * 1e3:.1f} mm, {m}: {steps:,.0f} steps x {MS_STEP.get(g, 145)} ms = {steps * MS_STEP.get(g, 145) / 6e4:.1f} min")
-print(f"total about {sum(steps * MS_STEP.get(g, 145) for g, m in RUNS) / 6e4:.1f} min, plus about 2 min to start")
+if os.environ.get("NB_JOB", "free") == "free":   # the rides reuse this cell for FILL, RHO, PPC, FPS, WORK and log
+    print("What the machine does: holds the pint still, gives it one short push, and lets the stout swing freely,")
+    print("once for each grid and piece of physics, recording the stout's energy, momentum and surface 30 times a second.")
+    for g, m in RUNS: print(f"grid {g * 1e3:.1f} mm, {m}: {steps:,.0f} steps x {MS_STEP.get(g, 145)} ms = {steps * MS_STEP.get(g, 145) / 6e4:.1f} min")
+    print(f"total about {sum(steps * MS_STEP.get(g, 145) for g, m in RUNS) / 6e4:.1f} min, plus about 2 min to start")
