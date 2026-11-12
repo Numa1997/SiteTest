@@ -8,7 +8,8 @@
      the butterfly. The motion is computed live as the film plays (pendulum.js: the pendulum's equations and the controller of
      tools/fig13/butterfly_control.py, its gains designed in the browser at start): free from
      rest at (2.85, 3.0) rad, or from where the reader drags it; on the reader's press: pump and steer, wait, catch with the periodic
-     LQR along the orbit, hold until the reader lets go. ?auto=1 does it unasked (on after 6 s, four laps held), for the gift's films.
+     LQR along the orbit, hold until the reader lets go. The reader can ask for any of the fourteen closed drawings of the flower
+     hunt (PEND.TARGETS); the flowers are steered by energy, angular momentum and turn (pendulum.js, Run.whirlTau). ?auto=1 does it unasked (on after 6 s, four laps held), for the gift's films.
      Serve the repository root; tools/fig13/gift/render.cjs THEME OUT 1 all catch x 1080x1920 writes the frames. -->
 <style>
 @font-face { font-family: 'Instrument Serif'; src: url(../../../public/fonts/instrument-serif/instrument-serif-400-latin.woff2) format('woff2'); }
@@ -21,14 +22,16 @@ html, body { margin:0; background:var(--bg); height:100%; overflow:hidden; }
 #stage { position:absolute; left:0; top:0; width:1080px; height:1920px; background:var(--bg); color:var(--ink); font-family:'Instrument Sans',sans-serif; overflow:hidden; transform-origin:0 0; }
 canvas { position:absolute; left:0; top:0; }
 #h1 { position:absolute; left:40px; top:40px; font-family:'Instrument Serif',serif; font-size:64px; line-height:1; margin:0; font-weight:400; }
-#h2 { overflow:hidden;  position:absolute; left:42px; top:116px; width:560px; font-size:22px; line-height:1.45; color:var(--muted); }
+#h2 { overflow:hidden;  position:absolute; left:42px; top:116px; width:540px; font-size:22px; line-height:1.45; color:var(--muted); }
 .capt { overflow:hidden;  position:absolute; left:40px; top:1690px; width:1000px; font-size:30px; line-height:1.42; color:var(--ink); }
 .capt b { font-weight:400; color:var(--accent); }
 .ctl { position:absolute; right:40px; width:400px; height:66px; font:500 28px 'Instrument Sans',sans-serif; color:var(--ink); background:transparent;
        border:2px solid var(--accent); border-radius:14px; cursor:pointer; z-index:3; }
-#bRand { top:30px; right:256px; width:200px; } #bPick { top:108px; right:256px; width:200px; }
+#bPat { top:30px; right:256px; width:220px; } #bRand { top:108px; right:256px; width:220px; }
+#bPick { top:1112px; right:auto; left:60px; width:250px; height:58px; font-size:24px; border-width:1px; background:var(--bg); opacity:.86; }
 #bCatch { top:30px; right:40px; width:200px; height:144px; background:var(--accent); color:var(--bg); font-size:32px; }
 #grab { position:absolute; left:40px; top:190px; width:1000px; height:1000px; z-index:2; touch-action:none; cursor:grab; }
+#pat { position:absolute; left:40px; top:190px; width:1000px; height:1000px; display:none; z-index:5; cursor:pointer; touch-action:none; }
 #pick { position:absolute; left:40px; top:190px; width:1000px; height:1000px; display:none; z-index:4; cursor:crosshair; touch-action:none; }
 </style>
 </head>
@@ -36,14 +39,16 @@ canvas { position:absolute; left:0; top:0; }
 <div id="stage">
   <canvas id="cv"></canvas>
   <h1 id="h1">Catching the butterfly</h1>
-  <div id="h2">drag it into chaos, then ask the motor for the butterfly</div>
+  <div id="h2">drag it into chaos, then ask the motor for a pattern</div>
   <div class="capt" id="capA"></div>
   <div class="capt" id="capB"></div>
+  <button type="button" class="ctl" id="bPat">Choose a pattern</button>
   <button type="button" class="ctl" id="bRand">Random chaos</button>
   <button type="button" class="ctl" id="bPick">Choose a strike</button>
   <button type="button" class="ctl ctl--go" id="bCatch">Catch it</button>
   <div id="grab" aria-label="Drag the pendulum to a new start"></div>
   <canvas id="pick" width="1000" height="1000"></canvas>
+  <canvas id="pat" width="1000" height="1000"></canvas>
 </div>
 <script src="pendulum.js"></script>
 <script>
@@ -73,9 +78,26 @@ let START = [2.85, 3.0, 0, 0], START_NAME = 'let go from rest with both rods nea
 const AUTO = !!Q.get('auto'), T_FREE = AUTO ? 6 : Infinity, HOLD_LAPS = AUTO ? 4 : Infinity, FREE_LAPS = 4, LOG_EVERY = 4;
 let RESTARTS = 0, OWN_F = 0, HOLDING = false;   // HOLDING: a finger holds the pendulum still at the pose it will start from
 let DES, RUN, D, N = 0;
-function stateAt(t) {     // linear interpolation of the run so far (samples every D.h seconds)
+// The motor's target: any closed drawing of the flower hunt (PEND.TARGETS: ten flowers, four butterflies). The 24-turn butterfly first.
+const BFLY = PEND.TARGETS.findIndex(g => g.kind === 'butterfly' && g.k === 24), DESIGNS = {};
+let TARGET = BFLY;
+const designOf = i => DESIGNS[i] || (DESIGNS[i] = i === BFLY ? PEND.design() : PEND.design(PEND.TARGETS[i]));   // gains computed on first use, ~0.1 s
+const TG = () => PEND.TARGETS[TARGET], tgName = () => TG().kind === 'butterfly' ? (TARGET === BFLY ? 'butterfly' : `butterfly of ${TG().k} turns`) : `flower of ${TG().k} petals`;
+function useDesign() {      // what the drawing needs of the present target
+    const st = Math.max(1, Math.floor(DES.M / 600)), OB = DES.S.filter((x, i) => i % st === 0 || i === DES.M);
+    D.orbit_th1 = OB.map(x => x[0]); D.orbit_th2 = OB.map(x => x[1]); D.E_max = Math.max(420, 1.12 * DES.Estar);
+}
+function setTarget(i) {     // the reader asks for a pattern: the motor goes for it at once, wherever the pendulum is
+    TARGET = i; DES = designOf(i); RUN.setTarget(DES); useDesign(); RUN.engage(); for (const k in memo) delete memo[k]; syncButtons();
+}
+function idxAt(t) {       // the last record at or before t (records are evenly spaced only while the target stays the same)
+    const T_ = RUN.log.t; let lo = 0, hi = N - 1;
+    while (hi - lo > 1) { const m = (lo + hi) >> 1; if (T_[m] <= t) lo = m; else hi = m; }
+    return lo;
+}
+function stateAt(t) {     // linear interpolation of the run so far
     if (N < 2) return { th1: START[0], th2: START[1], tau: 0, E: PEND.energy(START), dist: 9, mode: -1 };   // nothing integrated yet: the start itself
-    const L0 = RUN.log, u = clamp(t / D.h, 0, N - 1.000001), i = Math.floor(u), f = u - i, L = k => lerp(L0[k][i], L0[k][Math.min(i + 1, N - 1)], f);
+    const L0 = RUN.log, i = idxAt(t), j = Math.min(i + 1, N - 1), f = j > i ? clamp((t - L0.t[i]) / (L0.t[j] - L0.t[i]), 0, 1) : 0, L = k => lerp(L0[k][i], L0[k][j], f);
     return { th1: L('th1'), th2: L('th2'), tau: L('tau'), E: L('E'), dist: L('dist'), mode: L0.mode[i] };
 }
 const tip = (a, b) => [Math.sin(a) + Math.sin(b), -(Math.cos(a) + Math.cos(b))];
@@ -130,7 +152,7 @@ function drawScene(g, f) {
         g.strokeStyle = rgba(TH.ghost, gA); g.lineWidth = 1.4; g.beginPath();
         for (let i = 0; i < D.orbit_th1.length; i++) { const [x, h] = tip(D.orbit_th1[i], D.orbit_th2[i]); i ? g.lineTo(CX + SC * x, CY - SC * h) : g.moveTo(CX + SC * x, CY - SC * h); }
         g.stroke();
-        text(g, 'the butterfly (target)', PL.x + 20, PL.y + 36, 20, rgba(TH.ghost, Math.min(1, 3 * gA)));
+        text(g, `asked for: the ${tgName()}`, PL.x + 20, PL.y + 36, 20, rgba(TH.ghost, Math.min(1, 3 * gA)));
     }
     // the trail of the tip: the last 0.8 s while it searches; since the catch once it is held
     const t0 = held ? Math.max(D.catch_t, t - 2 * D.T) : Math.max(0, t - 0.8);   // the pen's line: the last 0.8 s while free or searching, the last two laps once on the butterfly
@@ -195,21 +217,21 @@ function drawScene(g, f) {
         text(g, `${i + 1}  ${a}`, x + 16, ST.y + 54, 22, on ? TH.accent : done ? TH.ink : TH.muted, 'left', on ? 500 : 400);
         text(g, b, x + 16, ST.y + 86, 16, TH.muted);
     });
-    const rows = [[`t = ${t.toFixed(2)} s`, TH.ink], [`energy ${s.E.toFixed(1)} J  (butterfly: ${D.E_star.toFixed(1)} J)`, rgba(TH.energy, 1)],
+    const rows = [[`t = ${t.toFixed(2)} s`, TH.ink], [`energy ${s.E.toFixed(1)} J  (${TG().kind}: ${D.E_star.toFixed(1)} J)`, rgba(TH.energy, 1)],
         [`motor torque ${Math.abs(tq).toFixed(1)} N·m  (limit ${D.tau_max.toFixed(0)})`, rgba(TH.motor, 1)],
-        [s.mode >= 1 ? `distance from the butterfly ${s.dist.toFixed(s.dist < 0.01 ? 4 : 3)}` : 'distance from the butterfly: not yet near', TH.ink]];
+        [s.mode >= 1 ? `distance from the ${TG().kind} ${s.dist.toFixed(s.dist < 0.01 ? 4 : 3)}` : `distance from the ${TG().kind}: not yet near`, TH.ink]];
     rows.forEach(([r, c], i) => text(g, r, ST.x + 24 + (i % 2) * 490, ST.y + 156 + Math.floor(i / 2) * 50, 23, c));
     text(g, `energy bar`, ST.x + 24, ST.y + 268, 17, TH.muted);
-    const bx = ST.x + 130, bw = ST.w - 160, ef = clamp(s.E / 420, 0, 1), ex = bx + bw * D.E_star / 420;
+    const bx = ST.x + 130, bw = ST.w - 160, ef = clamp(s.E / D.E_max, 0, 1), ex = bx + bw * D.E_star / D.E_max;
     g.fillStyle = rgba(TH.energy, 0.2); g.fillRect(bx, ST.y + 254, bw, 16); g.fillStyle = rgba(TH.energy, 0.85); g.fillRect(bx, ST.y + 254, bw * ef, 16);
     g.strokeStyle = TH.ink; g.lineWidth = 2; g.beginPath(); g.moveTo(ex, ST.y + 246); g.lineTo(ex, ST.y + 278); g.stroke();
     // the record: energy and torque against time
     card(g, CH.x, CH.y, CH.w, CH.h);
-    const tx = tt => CH.x + 20 + (CH.w - 40) * tt / TL.tEnd, ey = E => CH.y + CH.h - 16 - (CH.h - 32) * clamp(E / 420, 0, 1), qy = q => CH.y + CH.h / 2 - (CH.h / 2 - 16) * q / D.tau_max;
+    const tx = tt => CH.x + 20 + (CH.w - 40) * tt / TL.tEnd, ey = E => CH.y + CH.h - 16 - (CH.h - 32) * clamp(E / D.E_max, 0, 1), qy = q => CH.y + CH.h / 2 - (CH.h / 2 - 16) * q / D.tau_max;
     g.strokeStyle = TH.rule; g.lineWidth = 1; g.beginPath(); g.moveTo(tx(D.t_free), CH.y + 10); g.lineTo(tx(D.t_free), CH.y + CH.h - 10); g.moveTo(tx(D.catch_t), CH.y + 10); g.lineTo(tx(D.catch_t), CH.y + CH.h - 10); g.stroke();
     for (const [key, y, col] of [['tau', qy, TH.motor], ['E', ey, TH.energy]]) {
         g.strokeStyle = rgba(col, 0.9); g.lineWidth = 1.6; g.beginPath();
-        const m = Math.min(N - 1, Math.floor(t / D.h)), Lg = RUN.log;
+        const m = idxAt(t), Lg = RUN.log;
         for (let i = 0; i <= m; i += 2) { const X = tx(Lg.t[i]), Y = y(Lg[key][i]); i ? g.lineTo(X, Y) : g.moveTo(X, Y); }
         g.stroke();
     }
@@ -223,6 +245,11 @@ function captions() {
     const F = v => v === null ? Infinity : v;
     TL.on = TL.on; const ON = F(TL.on), CA = F(TL.catch), RE = F(TL.release);
     const E0 = PEND.energy(START).toFixed(0);
+    const nm = tgName(), Es = D.E_star.toFixed(1), fl = TG().kind === 'flower', stab = TG().stability;
+    const after = TARGET === BFLY ? 'The butterfly is only barely unstable, so the pen keeps drawing it by itself for minutes.'
+        : stab === 'stable' ? `This ${TG().kind} is stable: left alone, the pen keeps drawing it.`
+        : stab === 'unstable' ? `This ${TG().kind} is unstable: left alone, the drawing comes apart within seconds.`
+        : `Left alone, this ${TG().kind} keeps its shape for a long while and slowly drifts.`;
     CAPS = AUTO ? [
         [0, `A double pendulum, ${START_NAME}. Nothing holds it: it tumbles, and no two tumbles are alike. A pen at its tip, a motor at its pin, switched off.`],
         [ON, 'The motor switches on. It pushes in step with the upper rod to raise the energy to the butterfly\'s 390.8 J, and sizes the swing.'],
@@ -230,11 +257,12 @@ function captions() {
         [CA + 200, 'Caught. The corrections shrink to almost nothing.'],
         [RE, 'Let go: the motor is off, and the pen keeps drawing the butterfly by itself.'],
     ] : [
-        [0, `<b>Drag the pendulum</b> anywhere and let go, or press Random chaos. It is free now (${START_NAME}): it tumbles, and no two tumbles are alike. Press <b>Catch it</b> when you want the motor to bring it to the butterfly.`],
-        [ON, 'You asked for the butterfly. The motor pushes in step with the upper rod to raise the energy to the butterfly\'s 390.8 J, and sizes the swing. Then it waits for the motion to pass close. A miss means: slow down and try again.'],
-        [CA, 'Close enough: now small, quick corrections along the butterfly\'s own lap.'],
-        [CA + 200, 'Caught and held: the motor\'s corrections shrink to almost nothing. Press <b>Let go</b> to switch the motor off.'],
-        [RE, 'The motor is off. The butterfly is only barely unstable, so the pen keeps drawing it by itself for minutes. Drag the pendulum away, or press Catch it again.'],
+        [0, `<b>Drag the pendulum</b> anywhere and let go, or press Random chaos. It is free now (${START_NAME}): it tumbles, and no two tumbles are alike. Press <b>Catch it</b> for the ${nm}, or <b>Choose a pattern</b>: ten flowers and four butterflies.`],
+        [ON, fl ? `You asked for the ${nm}. The motor spins the pendulum up to ${Es} J and sets how much it turns about the pin. With those two right the pen already draws the flower; then the motor turns the whole flower into place.`
+                : `You asked for the ${nm}. The motor pushes in step with the upper rod to raise the energy to ${Es} J, and sizes the swing. Then it waits for the motion to pass close. A miss means: slow down and try again.`],
+        [CA, fl && DES.steady ? 'In place. The motor now only trims the energy, the turning and the angle of the flower.' : `Close enough: now small, quick corrections along the ${TG().kind}'s own lap.`],
+        [CA + 200, `Caught and held: the ${nm}, with almost no torque. Press <b>Let go</b> to switch the motor off, or choose another pattern: the motor takes it there from here.`],
+        [RE, `The motor is off. ${after} Drag the pendulum away, press Catch it again, or choose another pattern.`],
     ];
 }
 const memo = {};
@@ -256,13 +284,13 @@ function renderFrame(f) { g.setTransform(DPR, 0, 0, DPR, 0, 0); drawScene(g, f);
 window.renderFrame = renderFrame;
 async function boot() {
     DPR = window.devicePixelRatio || 1;
-    DES = PEND.design();                                     // the orbit, its linearisation and the motor's gains: computed here, ~0.1 s
+    DES = designOf(TARGET);                                  // the orbit, its linearisation and the motor's gains: computed here, ~0.1 s
     RUN = new PEND.Run(DES, START, T_FREE, HOLD_LAPS); RUN.ev.on = T_FREE;
-    const C = PEND.consts, OB = DES.S.filter((x, i) => i % 4 === 0);
-    D = { h: LOG_EVERY * C.H, T: C.T, get t_free() { return isFinite(RUN.ev.on) ? RUN.ev.on : Infinity; }, E_star: DES.Estar, tau_max: C.TAU_MAX, kt: C.KT, orbit_th1: OB.map(x => x[0]), orbit_th2: OB.map(x => x[1]),
+    const C = PEND.consts;
+    D = { h: LOG_EVERY * C.H, get T() { return DES.T; }, get t_free() { return isFinite(RUN.ev.on) ? RUN.ev.on : Infinity; }, get E_star() { return DES.Estar; }, tau_max: C.TAU_MAX, kt: C.KT,
           get catch_t() { return RUN.ev.catch === null ? Infinity : RUN.ev.catch; }, get release_t() { return RUN.ev.release === null ? Infinity : RUN.ev.release; } };
-    N = RUN.log.t.length; captions();
-    window.LIVE = { get run() { return RUN; }, get frameTimes() { return FT; } };   // read-only view for checks
+    useDesign(); N = RUN.log.t.length; captions();
+    window.LIVE = { get run() { return RUN; }, get frameTimes() { return FT; }, get target() { return TARGET; }, setTarget };   // read-only view for checks
     const c = $('cv'); c.width = 1080 * DPR; c.height = 1920 * DPR; c.style.width = '1080px'; c.style.height = '1920px'; g = c.getContext('2d');
     await document.fonts.ready;
     await Promise.all(['Instrument Sans', 'Instrument Serif'].map(fn => document.fonts.load(`20px "${fn}"`)));
@@ -301,6 +329,27 @@ function drawPick() {
     q.fillStyle = TH.accent; q.font = '500 24px "Instrument Sans"'; q.fillText('the butterfly\'s own strike', bx + 22, by + 52);
     q.fillStyle = TH.ink; q.font = '24px "Instrument Sans"'; q.fillText('tap outside the square or here to close', 24, W - 24);
 }
+// ------------------------------------------------------------------------------------------------ choosing a pattern
+// Fourteen tiles, each the tip's closed drawing integrated here from its strike (PEND.orbit). A tap asks the motor for it.
+const PATC = 4, PATW = 250, PATH0 = 96, PATH = 224; let patCurves = null;
+function drawPat() {
+    const c = $('pat'), q = c.getContext('2d'), W = 1000;
+    if (!patCurves) patCurves = PEND.TARGETS.map(tg => PEND.orbit(tg, 700));
+    q.fillStyle = TH.paper; q.fillRect(0, 0, W, W);
+    q.fillStyle = TH.ink; q.font = '500 32px "Instrument Sans"'; q.textAlign = 'left'; q.fillText('Tap a pattern: the motor brings the pendulum onto it', 24, 46);
+    q.font = '22px "Instrument Sans"'; q.fillStyle = TH.muted; q.fillText('each is what the pen draws when the hanging pendulum is struck just so; tap outside to close', 24, 80);
+    PEND.TARGETS.forEach((tg, i) => {
+        const x0 = (i % PATC) * PATW, y0 = PATH0 + Math.floor(i / PATC) * PATH, cx = x0 + PATW / 2, cy = y0 + 86, sc = 38, o = patCurves[i];
+        q.fillStyle = i === TARGET ? rgba(TH.curve, 0.14) : 'rgba(0,0,0,0)'; q.strokeStyle = i === TARGET ? TH.accent : TH.rule; q.lineWidth = i === TARGET ? 3 : 1;
+        q.beginPath(); q.roundRect(x0 + 8, y0 + 4, PATW - 16, PATH - 10, 12); q.fill(); q.stroke();
+        q.strokeStyle = rgba(TH.curve, 0.95); q.lineWidth = 1.6; q.beginPath();
+        for (let j = 0; j < o.th1.length; j++) { const [x, h] = tip(o.th1[j], o.th2[j]); j ? q.lineTo(cx + sc * x, cy - sc * h) : q.moveTo(cx + sc * x, cy - sc * h); }
+        q.stroke();
+        q.textAlign = 'center'; q.fillStyle = TH.ink; q.font = '500 23px "Instrument Sans"'; q.fillText(tg.kind === 'flower' ? `flower, ${tg.k} petals` : `butterfly, ${tg.k} turns`, cx, y0 + PATH - 38);
+        q.fillStyle = TH.muted; q.font = '19px "Instrument Sans"'; q.fillText(`${PEND.energy([0, 0, tg.p1, tg.p2]).toFixed(0)} J · ${tg.stability}`, cx, y0 + PATH - 15);
+    });
+    q.textAlign = 'left';
+}
 function syncButtons() {
     const b = $('bCatch'); if (!b) return;
     b.style.display = AUTO ? 'none' : '';
@@ -321,13 +370,20 @@ function setupControls() {
     grab.addEventListener('pointermove', e => { if (HOLDING) pose(e); });
     const up = () => { HOLDING = false; grab.style.cursor = 'grab'; };
     grab.addEventListener('pointerup', up); grab.addEventListener('pointercancel', up);
-    if (AUTO) { grab.style.display = 'none'; $('bRand').style.display = 'none'; $('bPick').style.display = 'none'; }
+    if (AUTO) { grab.style.display = 'none'; $('bRand').style.display = 'none'; $('bPick').style.display = 'none'; $('bPat').style.display = 'none'; }
     mapImg = new Image(); mapImg.src = '../../../public/images/fig13/chaos-map-rods-P20.png'; mapImg.onload = drawPick;
     $('bRand').onclick = () => {
         const r = () => Math.random(), s0 = [(2 * r() - 1) * Math.PI, (2 * r() - 1) * Math.PI, (2 * r() - 1) * 4, (2 * r() - 1) * 4];
         restart(s0, `started from a random state (θ₁ ${(s0[0] * 180 / Math.PI).toFixed(0)}°, θ₂ ${(s0[1] * 180 / Math.PI).toFixed(0)}°, p = (${s0[2].toFixed(1)}, ${s0[3].toFixed(1)}) kg·m²/s)`);
     };
-    $('bPick').onclick = () => { const c = $('pick'); c.style.display = c.style.display === 'block' ? 'none' : 'block'; drawPick(); };
+    $('bPat').onclick = () => { const c = $('pat'); $('pick').style.display = 'none'; c.style.display = c.style.display === 'block' ? 'none' : 'block'; if (c.style.display === 'block') drawPat(); };
+    $('pat').onpointerdown = e => {
+        const c = $('pat'), b = c.getBoundingClientRect(), u = (e.clientX - b.left) / b.width * 1000, v = (e.clientY - b.top) / b.height * 1000;
+        c.style.display = 'none';
+        const i = Math.floor(u / PATW) + PATC * Math.floor((v - PATH0) / PATH);
+        if (v >= PATH0 && i >= 0 && i < PEND.TARGETS.length) setTarget(i);
+    };
+    $('bPick').onclick = () => { $('pat').style.display = 'none'; const c = $('pick'); c.style.display = c.style.display === 'block' ? 'none' : 'block'; drawPick(); };
     $('pick').onpointerdown = e => {
         const c = $('pick'), b = c.getBoundingClientRect(), u = (e.clientX - b.left) / b.width, v = (e.clientY - b.top) / b.height;
         c.style.display = 'none';

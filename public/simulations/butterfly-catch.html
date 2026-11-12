@@ -61,11 +61,12 @@
                         <li><a href="#c-wait"><span>6</span>Wait, and the mirror butterfly</a></li>
                         <li><a href="#c-catch"><span>7</span>The catch: feedback designed on the orbit</a></li>
                         <li><a href="#c-release"><span>8</span>Hold, let go, and miss</a></li>
-                        <li><a href="#c-program"><span>9</span>The program</a></li>
-                        <li><a href="#c-checks"><span>10</span>Checks and measurements</a></li>
-                        <li><a href="#c-screen"><span>11</span>Equation to screen</a></li>
-                        <li><a href="#c-limits"><span>12</span>Limits and the next model</a></li>
-                        <li><a href="#c-src"><span>13</span>Further reading</a></li>
+                        <li><a href="#c-flowers"><span>9</span>Flowers: the same motor, a different lock</a></li>
+                        <li><a href="#c-program"><span>10</span>The program</a></li>
+                        <li><a href="#c-checks"><span>11</span>Checks and measurements</a></li>
+                        <li><a href="#c-screen"><span>12</span>Equation to screen</a></li>
+                        <li><a href="#c-limits"><span>13</span>Limits and the next model</a></li>
+                        <li><a href="#c-src"><span>14</span>Further reading</a></li>
                     </ol>
                 </nav>
                 <div class="paper__body">
@@ -98,7 +99,7 @@
                         <p>Equation (5) is a boundary condition in time; the strike was found by Newton's method on it (<code>tools/fig13/butterfly.py</code>), closing to about \(10^{-11}\). Call the orbit \(s^*(t)\).</p>
                         <p><b>Stability.</b> Follow a nearby state \(s^*(0)+\delta s\) for one lap. To first order the error obeys the variational equation \(\dot{\delta s} = J(s^*(t))\,\delta s\), with \(J = \partial f/\partial s\) the Jacobian of the right-hand side of (4); integrated over a lap it gives the monodromy matrix \(\Phi(T)\), \(\delta s(T) = \Phi(T)\,\delta s(0)\). Its eigenvalues, the Floquet multipliers, computed from the exact Jacobian (SymPy) and DOP853 at relative tolerance \(10^{-12}\), are</p>
                         \[ \mu = 1.01977,\quad 0.98062,\quad 1 \pm 0.0017i,\qquad \det\Phi(T) = 1 \pm 2\times10^{-12}. \tag{6} \]
-                        <p>The pair near 1 belongs to every periodic orbit of a conservative system: a shift along the orbit stays a shift, and a change of energy changes the period (it would be a Jordan block at exactly 1; the 0.0017 is the numerical splitting of that block). The determinant 1 is Liouville's theorem: the flow keeps phase-space volume. The other pair, \(\mu\) and \(1/\mu\), says the butterfly is a saddle: one direction grows by 1.98 % a lap, one shrinks by the same factor. An error of \(10^{-6}\) needs \(\ln(10^5)/\ln 1.0198 \approx 590\) laps, 26 minutes, to reach 0.1. Measured on the full equations, on 40 pendulums the motor had caught and released (section 10): they stayed within 0.1 of the orbit for 403 s in the median (about 150 laps), the shortest for 41 s, the longest for more than 800 s. That is shorter than the 2 % a lap suggests, because the loop stretches a small error unevenly: within the first few laps it can grow twenty times before the slow growth takes over. One run followed for 1500 laps (66 minutes) kept its wings between 135.55° and 135.83°, never over the top: the exact drawing is lost within minutes, the butterfly shape is not.</p>
+                        <p>The pair near 1 belongs to every periodic orbit of a conservative system: a shift along the orbit stays a shift, and a change of energy changes the period (it would be a Jordan block at exactly 1; the 0.0017 is the numerical splitting of that block). The determinant 1 is Liouville's theorem: the flow keeps phase-space volume. The other pair, \(\mu\) and \(1/\mu\), says the butterfly is a saddle: one direction grows by 1.98 % a lap, one shrinks by the same factor. An error of \(10^{-6}\) needs \(\ln(10^5)/\ln 1.0198 \approx 590\) laps, 26 minutes, to reach 0.1. Measured on the full equations, on 40 pendulums the motor had caught and released (section 11): they stayed within 0.1 of the orbit for 403 s in the median (about 150 laps), the shortest for 41 s, the longest for more than 800 s. That is shorter than the 2 % a lap suggests, because the loop stretches a small error unevenly: within the first few laps it can grow twenty times before the slow growth takes over. One run followed for 1500 laps (66 minutes) kept its wings between 135.55° and 135.83°, never over the top: the exact drawing is lost within minutes, the butterfly shape is not.</p>
                         <div class="pbox"><span class="pbox__t">Why catching is needed at all</span><p>A saddle is never reached by the free motion from outside: the states that flow into it form a thin surface (its stable manifold), and a chaotic or a regular motion crosses near it only now and then. Without friction, nothing can make the free pendulum settle on the butterfly; with friction, it would lose the 390.8 J. Something has to put energy in, choose the swing, and correct the last error: the motor.</p></div>
                     </section>
 
@@ -123,7 +124,7 @@
                         <p><b>The energy term</b> is energy shaping, the method Åström and Furuta used to swing a pendulum up. Alone, it gives by (7) \(\dot E = k_E(E^*-E)\dot\theta_1^2\). With \(V = \tfrac12(E-E^*)^2\),</p>
                         \[ \dot V = (E-E^*)\,\dot E = -k_E\,(E-E^*)^2\,\dot\theta_1^2 \le 0, \tag{10} \]
                         <p>so the energy error never grows and shrinks whenever the upper rod moves: a Lyapunov function. The push is in step with the rod's own motion, like the child on the swing.</p>
-                        <p><b>The swing term</b> pushes along \(P\) when the swing is too small and against it when too big; by (8) it feeds or brakes the slow pendulum. The integrals are memories against a steady error, as in the PID control of Fig. 9: a proportional push alone needs a leftover error to keep pushing. The two terms interact (energy given to the swing is energy taken from the spin, at fixed total), so (9) has no simple Lyapunov proof; it is tuned and measured (section 10).</p>
+                        <p><b>The swing term</b> pushes along \(P\) when the swing is too small and against it when too big; by (8) it feeds or brakes the slow pendulum. The integrals are memories against a steady error, as in the PID control of Fig. 9: a proportional push alone needs a leftover error to keep pushing. The two terms interact (energy given to the swing is energy taken from the spin, at fixed total), so (9) has no simple Lyapunov proof; it is tuned and measured (section 11).</p>
                         <p>When \(|E-E^*| < 5\ \mathrm{J}\) and \(|P_{\text{reach}} - P^*_{\text{reach}}| < 3\ \mathrm{kg\,m^2/s}\), and at least 3 s after the motor started, the pendulum is moving like a butterfly of nearly the right size; its phase, where it is along the loop compared with the spin, is still wrong.</p>
                     </section>
 
@@ -151,7 +152,7 @@
                         \[ \Pi_k = Qh + \Phi_k^{\mathsf T}\Pi_{k+1}\Phi_k - \frac{\Phi_k^{\mathsf T}\Pi_{k+1}b_k\;b_k^{\mathsf T}\Pi_{k+1}\Phi_k}{R + b_k^{\mathsf T}\Pi_{k+1}b_k},\qquad K_k = \frac{b_k^{\mathsf T}\Pi_{k+1}\Phi_k}{R + b_k^{\mathsf T}\Pi_{k+1}b_k},\qquad \tau_k = -K_k\,\delta s_k . \tag{15} \]
                         <p>Run backwards around the lap again and again, \(\Pi\) settles on a periodic solution (here after 5 laps); its gains \(K_k\) are the controller. With them, the closed-loop monodromy \(\prod_k(\Phi_k - b_kK_k)\) has all four multipliers of modulus 0.074 to 0.081: an error shrinks to 8 % of itself each lap, where the free orbit would have let it grow by 2 %.</p>
                         <p><b>Following the loop, not a clock.</b> The reference \(s^*(t_k)\) used in \(\delta s_k = s - \sigma s^*(t_k)\) is re-chosen every step as the nearest point of the loop (11), searching 30 steps around the last one. A clock-locked reference would ask the motor to correct the timing too. The timing can only be changed by changing the energy and waiting while the period shifts, and (13) shows the energy to be the costliest direction; tried, it saturated the motor and lost the pendulum. The re-indexed reference lets the pendulum keep its own timing and corrects only the error across the loop.</p>
-                        <p><b>How far away it can catch.</b> Measured (section 10), from 200 random states at each distance: from 0.1 the catch holds 199 times, from 0.2 171, from 0.3 140, from 0.4 112, from 0.6 62, from 0.8 26. The threshold 0.6 is a trade. A catch tried from that far holds about one time in three, and a slip (distance above 1) is a miss and a new try; but a closer pass is rarer, and waiting for it costs more time than the lost tries (with the threshold at 0.2 only 29 of 40 starts were caught within 400 s).</p>
+                        <p><b>How far away it can catch.</b> Measured (section 11), from 200 random states at each distance: from 0.1 the catch holds 199 times, from 0.2 171, from 0.3 140, from 0.4 112, from 0.6 62, from 0.8 26. The threshold 0.6 is a trade. A catch tried from that far holds about one time in three, and a slip (distance above 1) is a miss and a new try; but a closer pass is rarer, and waiting for it costs more time than the lost tries (with the threshold at 0.2 only 29 of 40 starts were caught within 400 s).</p>
                     </section>
 
                     <section class="psec" id="c-release">
@@ -161,8 +162,29 @@
                         <p><b>A miss</b> (steering not settled within 12 s, nothing near within 12 s of waiting, or a catch that slips past 1) makes the motor drain the pendulum back down to 60 J with the energy law (9) aimed at 60 J (at most 6 s), and start again. At 60 J the double pendulum is chaotic, and chaos scrambles the next approach: each try is a fresh draw from the many ways of having the right energy and swing. The search is a sequence of independent tries, each with a fair chance.</p>
                     </section>
 
+                    <section class="psec" id="c-flowers">
+                        <h3><span class="psec__n">09</span>Flowers: the same motor, a different lock</h3>
+                        <p class="psec__lead">The flower hunt found ten flowers and three more butterflies (<a href="flower-hunt.html">The Flower Hunt</a>). The reader can ask the motor for any of them. The flowers need a different law, and it works better than the butterfly's.</p>
+                        <p><b>The picture.</b> A skater in a spin pulls her arms in and turns faster, but nothing pushes her round: how much she turns, her angular momentum, stays what it was. A double pendulum that whirls fast is nearly that skater. Gravity can give or take 39 J at most between the lowest and the highest pose; a flower carries 262 to 970 J. Gravity is a ripple on it. Without gravity two things would stay exactly constant with the motor off: the energy \(E\), and by (8) the angular momentum about the pin, \(P = p_1 + p_2\).</p>
+                        <p>Measured on the ten flowers: over a lap \(P\) stays within 1 to 8 % of its mean \(\bar P\) (standard deviation 0.3 to 0.8 against means of 7.6 to 27.3 kg·m²/s). On the butterfly it runs between 1.2 and 15.8. So the orbits fall into two kinds, and <code>design()</code> tells them apart by that spread: <b>swinging</b> (the butterflies: the upper rod swings to and fro) and <b>whirling</b> (the flowers: both rods go round).</p>
+                        <p><b>Why two numbers are enough for the picture.</b> Without gravity nothing marks a direction in space. Turn the whole pendulum about the pin by any angle \(\psi\) and it moves exactly as before. So every motion with the flower's energy and the flower's \(\bar P\), with the lower rod overtaking the upper one in the same sense, draws <em>the same flower, turned by some angle</em>. Set \(E\) and \(\bar P\) and the pen already draws the flower. A third number, the turn \(\psi\), puts it in place.</p>
+                        <p><b>Setting two things with one torque.</b> Take \(\tau = a\,\dot\theta_1 + b\). By (7) and (8), averaged over a few petals (gravity averages out),</p>
+                        \[ \dot E = a\,\langle\dot\theta_1^2\rangle + b\,\langle\dot\theta_1\rangle,\qquad \dot P = a\,\langle\dot\theta_1\rangle + b . \tag{16} \]
+                        <p>Ask for the energy and the angular momentum to close on their targets at chosen rates, \(\dot E = c_E\,(E^* - E)\) and \(\dot P = c_L\,(P_{\text{ref}} - \langle P\rangle)\), and solve (16):</p>
+                        \[ a = \frac{\dot E - \langle\dot\theta_1\rangle\,\dot P}{\langle\dot\theta_1^2\rangle - \langle\dot\theta_1\rangle^2},\qquad b = \dot P - a\,\langle\dot\theta_1\rangle . \tag{17} \]
+                        <p>The denominator is the unevenness of the upper rod's turning. If the rod turned perfectly evenly it would be zero, and one torque could not set two things: a steady push would change both together and nothing could separate them. The rod speeds up and slows down with each petal, and that is what the motor uses. In the program \(c_E = 2\ \mathrm{s^{-1}}\), \(c_L = 1.5\ \mathrm{s^{-1}}\), the averages are running means over 0.2 s, and below 0.6 \(E^*\) the motor simply pumps with the energy term of (9). Of the two mirror images the motor takes the one whose lower rod already turns the right way: it holds the upper rod and cannot quickly reverse the lower one.</p>
+                        <p><b>Turning the flower into place.</b> The angle between the rods and the two momenta do not change when the pendulum is turned as a whole. Matching \((\theta_1 - \theta_2,\ p_1,\ p_2)\) to the stored lap gives the place \(k\) on the lap, and then the turn is \(\psi = \theta_1 - \theta_1^*(t_k)\). A little too much angular momentum makes the whole flower creep forward:</p>
+                        \[ \dot\psi = c_\psi\,\big(\langle P\rangle - \bar P\big). \tag{18} \]
+                        <p>\(c_\psi\) is measured once per flower: strike it slightly differently along the direction \((-\dot\theta_2,\ \dot\theta_1)\) in \((p_1, p_2)\), which leaves the energy alone, run one lap and read the turn. It comes out between 0.58 and 4.46 rad/s per kg·m²/s. So the motor asks for a slightly wrong angular momentum on purpose,</p>
+                        \[ P_{\text{ref}} = \pm\bar P - \frac{k_\psi}{c_\psi}\,\psi,\qquad\text{so that}\qquad \dot\psi = -k_\psi\,\psi,\quad k_\psi = 0.8\ \mathrm{s^{-1}}, \tag{19} \]
+                        <p>never more than 12 % off \(\bar P\). The turn dies away and the detuning with it. This is a phase-locked loop, the circuit that keeps a radio on its station: run a little fast while behind, a little slow while ahead. The flower counts as caught when the distance (11) falls below 0.2, and as lost above 0.7; a lost flower still has its energy and angular momentum, so the motor steers on without starting over.</p>
+                        <p><b>Four flowers are caught with the gains of section 7 instead</b>: the 5 petals at 768 J and at 669 J, the unstable 7 petals at 313 J and the 8 petals at 506 J. On these the upper rod stops and turns back during the lap, the turn loop (18) has no steady whirl to work on, and the catch of section 7 takes over at \(d < 0.6\) once \(E\) and \(\bar P\) are set.</p>
+                        <div class="pbox"><span class="pbox__t">Measured · 60 starts for each pattern</span><p>The page's own start and 59 poses as a finger leaves them, <em>Catch it</em> pressed after 4 s; "held" means still caught six seconds (or six laps) later; 300 s allowed. <b>Each of the ten flowers: held in 60 of 60, never needing to start over; half within 2.6 to 5.7 s of the press, the slowest 14 s.</b> The butterflies stay on the wait-and-catch of sections 5 to 8 and are slower: 12 turns 56 of 60 (median 12 s); 18 turns 60 (8 s); 24 turns 60 (21 s, slowest 122 s); 32 turns 60 (35 s, slowest 161 s). For the 24-turn butterfly the first catch holds in about six of ten tries; the others slip and the motor starts over.</p></div>
+                        <p><b>How well they are held.</b> The six flowers on the lock stay within 0.04 to 0.09 of the loop on average (0.18 at worst) with a mean torque of 0.3 to 1.1 N·m: the lock keeps trimming and never quite rests. The four caught with gains settle towards zero torque, like the butterfly. <b>After letting go</b>, 20 s later: the stable flowers (3, 5 and 8 petals) are still within 0.04; the neutral ones have drifted by up to 0.6 (the flower turns slowly); the unstable 7-petal flower is gone (1.5), as it must be.</p>
+                    </section>
+
                     <section class="psec" id="c-program">
-                        <h3><span class="psec__n">09</span>The program</h3>
+                        <h3><span class="psec__n">10</span>The program</h3>
                         <p class="psec__lead">A state machine of five phases, and three computations behind it.</p>
                         <figure class="pfig">
                             <div class="pfig__plate">
@@ -197,7 +219,8 @@
                         <pre class="notex" style="font:13px/1.55 var(--mono);background:var(--quote);padding:12px 14px;border-radius:6px;overflow-x:auto">for each control step k (h = T/2400):
     E, w1, P      = energy(s), dtheta1/dt, p1 + p2
     reach         = max |P| over the last 3 s
-    phase chaos:  tau = 0                                   until the reader presses Catch it
+    phase chaos:  tau = 0                                   until the reader presses Catch it or taps a pattern
+    (a flower: laws (17) and (19) instead of pump and wait; caught at d &lt; 0.2, lost at d &gt; 0.7)
     phase pump:   tau = law (9)                             -> wait when |E - E*| &lt; 5 J and |reach - 15.77| &lt; 3
                   (a drain after a miss aims law (9) at 60 J)
     phase wait:   tau = 0; d, nearest point, mirror sign = (11)  -> catch when d &lt; 0.6, miss after 12 s
@@ -209,7 +232,7 @@
                     </section>
 
                     <section class="psec" id="c-checks">
-                        <h3><span class="psec__n">10</span>Checks and measurements</h3>
+                        <h3><span class="psec__n">11</span>Checks and measurements</h3>
                         <p class="psec__lead">Every number above was computed, and the browser's code was compared with the reference code.</p>
                         <table class="ptab">
                             <thead><tr><th>Check</th><th>Result</th></tr></thead>
@@ -217,8 +240,9 @@
                                 <tr><td>Butterfly from its strike, browser (RK4, step ≤ 0.2 ms) against <code>orbit24.json</code> (DOP853)</td><td>angles agree to \(3.9\times10^{-7}\) rad over a lap; closes to \(4\times10^{-7}\)</td></tr>
                                 <tr><td>Energy of the strike, from (3)</td><td>390.7777 J in both codes</td></tr>
                                 <tr><td>Gains \(K_k\): browser (finite differences) against Python (variational equations)</td><td>equal to three decimals, e.g. \(K_0 = (-0.191, -2.456, 12.395, -15.064)\)</td></tr>
-                                <tr><td>The page's own start: let go from rest at \((\theta_1, \theta_2) = (2.85, 3.0)\) rad (energy 18.9 J, where hanging still is −19.6 J: the lower rod goes over the top 13 times in 6 s). <em>Catch it</em> pressed at 40 moments, every 0.5 s from 1 s to 20.5 s</td><td>caught in all 40, in 31 at the first try; from the press to the catch: median 6.1 s, slowest 65 s (Node 22, the page's <code>pendulum.js</code>, 12 November 2026)</td></tr>
-                                <tr><td>60 poses as a finger would leave them (tip anywhere within reach, at rest), <em>Catch it</em> pressed 4 s after letting go</td><td>caught in all 60, in 43 at the first try; median 6.7 s from the press, 90 % within 29 s, slowest 71 s</td></tr>
+                                <tr><td>The page's own start: let go from rest at \((\theta_1, \theta_2) = (2.85, 3.0)\) rad (energy 18.9 J, where hanging still is −19.6 J: the lower rod goes over the top 13 times in 6 s). <em>Catch it</em> pressed at 40 moments, every 0.5 s from 1 s to 20.5 s; target the butterfly</td><td>held in all 40 (still caught six laps later); the first catch held in 26, in the others it slipped and the motor started over. From the press to the catch that holds: median 15.7 s, nine in ten within 82 s, slowest 193 s (Node 22, the page's <code>pendulum.js</code>, 12 November 2026)</td></tr>
+                                <tr><td>60 poses as a finger would leave them (tip anywhere within reach, at rest), <em>Catch it</em> pressed 4 s after letting go; target the butterfly</td><td>held in all 60; the first catch held in 30; median 22.3 s, nine in ten within 96 s, slowest 152 s</td></tr>
+                                <tr><td>The other thirteen patterns</td><td>section 9</td></tr>
                                 <tr><td>The time to the catch of one given start</td><td>not a fixed number: chaos amplifies the last digit of the arithmetic, so two browsers disagree, and so does a strike changed by \(10^{-6}\). Only counts over many starts can be compared</td></tr>
                                 <tr><td>Integration step of the controller</td><td>one RK4 step per 1.108 ms lets the free orbit drift \(2\times10^{-3}\) a lap, and an early count of "30 of 30" made that way was withdrawn; four sub-steps: \(4\times10^{-6}\) a lap. The count below was repeated with 8 and with 16 sub-steps: 100 of 100 each time</td></tr>
                                 <tr><td>The catch's basin: a random point of the lap, a random direction, 200 states per distance; held = within 0.005 without slipping past 1</td><td>0.1: 199/200, 0.2: 171/200, 0.3: 140/200, 0.4: 112/200, 0.6: 62/200, 0.8: 26/200</td></tr>
@@ -232,7 +256,7 @@
                     </section>
 
                     <section class="psec" id="c-screen">
-                        <h3><span class="psec__n">11</span>Equation to screen</h3>
+                        <h3><span class="psec__n">12</span>Equation to screen</h3>
                         <p class="psec__lead">What each drawn thing is.</p>
                         <ul>
                             <li><b>The rods</b>: \(\theta_1, \theta_2\) of the live run; <b>the pen</b> at the tip draws \(x = l(\sin\theta_1+\sin\theta_2)\), \(h = -l(\cos\theta_1+\cos\theta_2)\); the trail is the last 0.8 s while free or searching, the last two laps once caught.</li>
@@ -244,7 +268,7 @@
                     </section>
 
                     <section class="psec" id="c-limits">
-                        <h3><span class="psec__n">12</span>Limits and the next model</h3>
+                        <h3><span class="psec__n">13</span>Limits and the next model</h3>
                         <p class="psec__lead">An ideal pendulum and an ideal motor.</p>
                         <p>The pins have no friction; the motor makes exactly the torque asked, at once, held over each 1.1 ms; the controller knows the state exactly. A real machine needs: friction, which at 9 whirls a second would drain the butterfly within seconds and make the motor work all the time, not only to catch; the motor's electrical dynamics (inductance, back-emf, \(V = R_mI + \Lambda\dot I + k_t\dot\theta_1\), as in Fig. 9) between the command and the torque; measurement, and an observer that estimates \(p_1, p_2\) from encoder angles; and limits on speed. The method has no proof of global success: the measured catch rate is a statistic over 100 starts, not a theorem. Natural next steps are a transverse (orbital) linearisation that removes the timing direction from the design itself (Shiriaev and co-workers), and model-predictive control that plans the approach over a lap instead of waiting for it.</p>
                         <div class="pbox pbox--ex">
@@ -259,7 +283,7 @@
                     </section>
 
                     <section class="psec" id="c-src">
-                        <h3><span class="psec__n">13</span>Further reading</h3>
+                        <h3><span class="psec__n">14</span>Further reading</h3>
                         <ul class="prefs">
                             <li>K. J. Åström and K. Furuta, <a href="https://doi.org/10.1016/S0005-1098(99)00140-5">“Swinging up a pendulum by energy control”</a>, <i>Automatica</i> 36 (2000) 287–295. The energy law, its Lyapunov function \(V = (E-E_0)^2/2\), and the advice to combine energy control with a catching controller near the target (read).</li>
                             <li>E. Ott, C. Grebogi and J. A. Yorke, <a href="https://doi.org/10.1103/PhysRevLett.64.1196">“Controlling chaos”</a>, <i>Phys. Rev. Lett.</i> 64 (1990) 1196. Waiting for a chaotic motion to come near an unstable periodic orbit and holding it with small corrections (citation checked; the full text could not be opened from this session).</li>
