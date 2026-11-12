@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-2024 files, 125.6 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+2025 files, 125.6 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -44,7 +44,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Working notes of project 07, the electron beam](#working-notes-of-project-07-the-electron-beam) | 52 |
 | [Working notes of the Rotor Pendula study](#working-notes-of-the-rotor-pendula-study) | 86 |
 | [Working notes of the Droplet Collection study](#working-notes-of-the-droplet-collection-study) | 123 |
-| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 513 |
+| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 514 |
 
 ## Repository root
 
@@ -155,7 +155,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/simulations/pendulum-control.html`](../public/simulations/pendulum-control.html) | 208.1 kB | Fig. 11 · Double Pendulum under Control: the simulation, its data panel, walkthrough and lecture note. | [fig11-pendulum-control.md](simulations/fig11-pendulum-control.md) |
 | [`public/simulations/phasor-sums.html`](../public/simulations/phasor-sums.html) | 273.2 kB | Fig. 7 · Phasor Sums: the simulation, its data panel, walkthrough and lecture note. | [fig07-phasor-sums.md](simulations/fig07-phasor-sums.md) |
 | [`public/simulations/rods-in-liquid.html`](../public/simulations/rods-in-liquid.html) | 403.2 kB | Project 06 · Balancing Two Rods in a Liquid (7 November 2026): project 05's script with its own settings, a machine that can swing the rods up in water, glycerol and honey, a slim cart, and the controller told the flow; data panel, walkthrough dipc and lecture note. | [project06-rods-in-liquid.md](simulations/project06-rods-in-liquid.md) |
-| [`public/simulations/schrodinger-sphere.html`](../public/simulations/schrodinger-sphere.html) | 136.2 kB | Fig. 14 · A Wave Packet Meets a Sphere: the simulation, its data panel, walkthrough and lecture note. | [fig14-schrodinger-sphere.md](simulations/fig14-schrodinger-sphere.md) |
+| [`public/simulations/schrodinger-sphere.html`](../public/simulations/schrodinger-sphere.html) | 137.2 kB | Fig. 14 · A Wave Packet Meets a Sphere: the simulation, its data panel, walkthrough and lecture note. | [fig14-schrodinger-sphere.md](simulations/fig14-schrodinger-sphere.md) |
 | [`public/simulations/water-wave.html`](../public/simulations/water-wave.html) | 170.6 kB | Fig. 5 · Circular Water Waves: the simulation, its data panel, walkthrough and lecture note. | [fig05-water-wave.md](simulations/fig05-water-wave.md) |
 | [`public/simulations/wave-interference.html`](../public/simulations/wave-interference.html) | 181.8 kB | Fig. 6 · Wave Interference Simulator: the simulation, its data panel, walkthrough and lecture note. | [fig06-wave-bench.md](simulations/fig06-wave-bench.md) |
 | [`public/simulations/wind-turbine.html`](../public/simulations/wind-turbine.html) | 200.2 kB | Fig. 10 · Wind Turbine Control: the simulation, its data panel, walkthrough and lecture note. | [fig10-wind-turbine.md](simulations/fig10-wind-turbine.md) |
@@ -227,7 +227,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/scripts/i18n/strings-ar.js`](../public/scripts/i18n/strings-ar.js) | 485.0 kB | The Arabic string table the scripts read through T(), generated; do not edit. | [i18n.md](i18n.md) |
 | [`public/scripts/i18n/strings-de.js`](../public/scripts/i18n/strings-de.js) | 416.5 kB | The German string table the scripts read through T(), generated; do not edit. | [i18n.md](i18n.md) |
 | [`public/scripts/kaggle-flow.js`](../public/scripts/kaggle-flow.js) | 14.3 kB | The page side of the Kaggle pipeline: sliders that show the computed range and grow heavy near its edge, eased speed, the loading notice with the pipeline, the kaggle-bridge client. | [kaggle-pipeline.md](kaggle-pipeline.md) |
-| [`public/scripts/schrodinger-live-worker.js`](../public/scripts/schrodinger-live-worker.js) | 8.1 kB | Fig. 14 live preview: the same split-step Schrödinger solver as on Kaggle, 64^3 points, in a Web Worker, for regions not computed yet. | [fig14-schrodinger-sphere.md](simulations/fig14-schrodinger-sphere.md) |
+| [`public/scripts/schrodinger-live-worker.js`](../public/scripts/schrodinger-live-worker.js) | 8.6 kB | Fig. 14 live preview: the same split-step Schrödinger solver as on Kaggle, 64^3 points, in a Web Worker, for regions not computed yet. | [fig14-schrodinger-sphere.md](simulations/fig14-schrodinger-sphere.md) |
 | [`public/scripts/sim.js`](../public/scripts/sim.js) | 43.8 kB | Shared helpers of the simulation pages: KaTeX typesetting of the notes, the walkthrough engine. | [sim.md](scripts/sim.md) |
 | [`public/scripts/stout-cart.js`](../public/scripts/stout-cart.js) | 132.7 kB | Fig. 12: the solver: 3D Navier–Stokes for the stout in the glass by APIC on a MAC grid (cut-cell wall, ghost-fluid surface, half glass by symmetry), the road, the one-wheel cart, and their two-way coupling. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`public/scripts/stout-gpu-view.js`](../public/scripts/stout-gpu-view.js) | 15.5 kB | Fig. 12: draws the GPU solver’s stout on the graphics chip (screen-space fluid rendering: sphere depth, bilateral smoothing, thickness for Beer–Lambert, the head as the top 12 mm). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
@@ -237,7 +237,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/scripts/stout-view.js`](../public/scripts/stout-view.js) | 35.5 kB | Fig. 12: draws the cart, the road and the pint on a canvas from the solver’s state; the head of the stout is drawn, not computed. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`public/scripts/stout-worker.js`](../public/scripts/stout-worker.js) | 1.1 kB | Fig. 12: one worker thread of the stout solver: waits for a task, does its share of a loop. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`public/scripts/twoway.js`](../public/scripts/twoway.js) | 57.7 kB | The solved, two-way fluid of projects 05 and 06 (offered on 06 since 7 November 2026): a tank as deep as the cart (its size set by the page through setCart), 2D Navier–Stokes on a MAC grid, the cart coupled through the pressure, the rods as lines of forces; runs the page's 1 ms machine steps inside its 20 ms fluid steps. | [twoway.md](scripts/twoway.md) |
-| [`public/scripts/volume-view.js`](../public/scripts/volume-view.js) | 13.6 kB | Draws a stored 3D cloud as fog by ray marching in WebGL2, with a glass sphere and a camera turned by dragging; recomputes any pixel on the CPU for the data panel (Fig. 14). | [fig14-schrodinger-sphere.md](simulations/fig14-schrodinger-sphere.md) |
+| [`public/scripts/volume-view.js`](../public/scripts/volume-view.js) | 14.6 kB | Draws a stored 3D cloud as fog by ray marching in WebGL2, with a glass sphere and a camera turned by dragging; recomputes any pixel on the CPU for the data panel (Fig. 14). | [fig14-schrodinger-sphere.md](simulations/fig14-schrodinger-sphere.md) |
 
 ## Stylesheets
 
@@ -1406,12 +1406,12 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/i18n/ingest.py`](../tools/i18n/ingest.py) | 1.9 kB | Stores checked translations made outside the tables (page pieces, script strings, walkthrough prose). | [i18n.md](i18n.md) |
 | [`tools/i18n/package.json`](../tools/i18n/package.json) | 285 B | The parser wrap.cjs needs (acorn); npm install --prefix tools/i18n. | [i18n.md](i18n.md) |
 | [`tools/i18n/wrap.cjs`](../tools/i18n/wrap.cjs) | 3.7 kB | Wraps the reader-visible strings of a page's scripts in _t(), with a JavaScript parser (acorn). | [i18n.md](i18n.md) |
-| [`tools/inventory.py`](../tools/inventory.py) | 87.3 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
+| [`tools/inventory.py`](../tools/inventory.py) | 87.8 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
 | [`tools/kaggle/schrodinger-sphere/build_3d.py`](../tools/kaggle/schrodinger-sphere/build_3d.py) | 5.6 kB | Schrödinger on Kaggle: writes full3d.ipynb, the 3D generation, for a given commit. | [kaggle.md](kaggle.md) |
 | [`tools/kaggle/schrodinger-sphere/build_full.py`](../tools/kaggle/schrodinger-sphere/build_full.py) | 6.9 kB | Schrödinger on Kaggle: writes full.ipynb for a given commit. | [kaggle.md](kaggle.md) |
 | [`tools/kaggle/schrodinger-sphere/build_smoke.py`](../tools/kaggle/schrodinger-sphere/build_smoke.py) | 5.9 kB | Schrödinger on Kaggle: writes smoke.ipynb for a given commit. | [kaggle.md](kaggle.md) |
 | [`tools/kaggle/schrodinger-sphere/full.ipynb`](../tools/kaggle/schrodinger-sphere/full.ipynb) | 7.6 kB | Schrödinger on Kaggle: the full grid, 405 runs on both GPUs, one JSON file per run plus index.json and a preview panel; written by build_full.py. | [kaggle.md](kaggle.md) |
-| [`tools/kaggle/schrodinger-sphere/full3d.ipynb`](../tools/kaggle/schrodinger-sphere/full3d.ipynb) | 5.9 kB | Schrödinger on Kaggle: the 3D generation, 81 runs at R = 4 on both GPUs, each stored as 48 frames of the 3D cloud on 64^3 cells in the website format; written by build_3d.py. | [kaggle.md](kaggle.md) |
+| [`tools/kaggle/schrodinger-sphere/full3d.ipynb`](../tools/kaggle/schrodinger-sphere/full3d.ipynb) | 6.0 kB | Schrödinger on Kaggle: the 3D generation, 81 runs at R = 4 on both GPUs, each stored as 48 frames of the 3D cloud on 64^3 cells in the website format; written by build_3d.py. | [kaggle.md](kaggle.md) |
 | [`tools/kaggle/schrodinger-sphere/pack.py`](../tools/kaggle/schrodinger-sphere/pack.py) | 1.0 kB | Schrödinger on Kaggle: packs runs (zlib, base64) into the panel page. | [kaggle.md](kaggle.md) |
 | [`tools/kaggle/schrodinger-sphere/panel_template.html`](../tools/kaggle/schrodinger-sphere/panel_template.html) | 12.4 kB | Schrödinger on Kaggle: the animator panel that only plays stored runs (sliders with computed positions marked, amplitude or phase, probability curves). | [kaggle.md](kaggle.md) |
 | [`tools/kaggle/schrodinger-sphere/smoke.ipynb`](../tools/kaggle/schrodinger-sphere/smoke.ipynb) | 6.0 kB | Schrödinger on Kaggle: the GPU test notebook (timing, accuracy, 8 runs, panel), written by build_smoke.py. | [kaggle.md](kaggle.md) |
@@ -2365,6 +2365,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
+| [`notes/fig14/wave3d_test.py`](../notes/fig14/wave3d_test.py) | 1.5 kB | Fig. 14: the test that computed one run on 128^3 points in this workspace and stored Re psi in 3D (96 x 64 x 64 points, 32 frames, int8). | [fig14-schrodinger-sphere.md](simulations/fig14-schrodinger-sphere.md) |
 | [`notes/home/longlines.cjs`](../notes/home/longlines.cjs) | 1.2 kB | Browser measurements of the home page: index size, column widths, characters per line, section screenshots. | [styles.md](styles.md) |
 | [`notes/home/measure.cjs`](../notes/home/measure.cjs) | 2.6 kB | Browser measurements of the home page: index size, column widths, characters per line, section screenshots. | [styles.md](styles.md) |
 | [`notes/home/sections.cjs`](../notes/home/sections.cjs) | 891 B | Browser measurements of the home page: index size, column widths, characters per line, section screenshots. | [styles.md](styles.md) |
