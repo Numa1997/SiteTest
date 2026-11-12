@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-3306 files, 403.9 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+3309 files, 403.9 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -39,7 +39,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Shared by the portfolio sources (not served)](#shared-by-the-portfolio-sources-not-served) | 1 |
 | [Template sources](#template-sources) | 2 |
 | [Documentation](#documentation) | 41 |
-| [Tools](#tools) | 120 |
+| [Tools](#tools) | 123 |
 | [Translation tables](#translation-tables) | 54 |
 | [Agents of the lecture-note review](#agents-of-the-lecture-note-review) | 4 |
 | [Working notes of project 07, the electron beam](#working-notes-of-project-07-the-electron-beam) | 52 |
@@ -157,7 +157,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/simulations/pendulum-control.html`](../public/simulations/pendulum-control.html) | 208.1 kB | Fig. 11 · Double Pendulum under Control: the simulation, its data panel, walkthrough and lecture note. | [fig11-pendulum-control.md](simulations/fig11-pendulum-control.md) |
 | [`public/simulations/phasor-sums.html`](../public/simulations/phasor-sums.html) | 273.2 kB | Fig. 7 · Phasor Sums: the simulation, its data panel, walkthrough and lecture note. | [fig07-phasor-sums.md](simulations/fig07-phasor-sums.md) |
 | [`public/simulations/rods-in-liquid.html`](../public/simulations/rods-in-liquid.html) | 403.2 kB | Project 06 · Balancing Two Rods in a Liquid (7 November 2026): project 05's script with its own settings, a machine that can swing the rods up in water, glycerol and honey, a slim cart, and the controller told the flow; data panel, walkthrough dipc and lecture note. | [project06-rods-in-liquid.md](simulations/project06-rods-in-liquid.md) |
-| [`public/simulations/schrodinger-sphere.html`](../public/simulations/schrodinger-sphere.html) | 176.4 kB | Fig. 14 · A Wave Packet Meets a Sphere: the simulation, its data panel, walkthrough and lecture note. | [fig14-schrodinger-sphere.md](simulations/fig14-schrodinger-sphere.md) |
+| [`public/simulations/schrodinger-sphere.html`](../public/simulations/schrodinger-sphere.html) | 185.4 kB | Fig. 14 · A Wave Packet Meets a Sphere: the simulation, its data panel, walkthrough and lecture note. | [fig14-schrodinger-sphere.md](simulations/fig14-schrodinger-sphere.md) |
 | [`public/simulations/water-wave.html`](../public/simulations/water-wave.html) | 170.6 kB | Fig. 5 · Circular Water Waves: the simulation, its data panel, walkthrough and lecture note. | [fig05-water-wave.md](simulations/fig05-water-wave.md) |
 | [`public/simulations/wave-interference.html`](../public/simulations/wave-interference.html) | 181.8 kB | Fig. 6 · Wave Interference Simulator: the simulation, its data panel, walkthrough and lecture note. | [fig06-wave-bench.md](simulations/fig06-wave-bench.md) |
 | [`public/simulations/wind-turbine.html`](../public/simulations/wind-turbine.html) | 200.2 kB | Fig. 10 · Wind Turbine Control: the simulation, its data panel, walkthrough and lecture note. | [fig10-wind-turbine.md](simulations/fig10-wind-turbine.md) |
@@ -2615,10 +2615,10 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`docs/simulations/fig11-pendulum-control.md`](simulations/fig11-pendulum-control.md) | 28.8 kB | Documentation: Fig. 11 · Double Pendulum under Control (Fig. 11 again since 4 November 2026; a project from 3 to 4 November). | [fig11-pendulum-control.md](simulations/fig11-pendulum-control.md) |
 | [`docs/simulations/fig12-beer-slosh.md`](simulations/fig12-beer-slosh.md) | 63.2 kB | Documentation: Fig. 12 · A Pint of Guinness on a One-Wheel Cart (`public/simulations/beer-slosh.html`). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`docs/simulations/fig13-momentum-spirographs.md`](simulations/fig13-momentum-spirographs.md) | 29.4 kB | Documentation: Fig. 13 · Spirographs in Momentum Space, the Flower Hunt, the dashboard and the films. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
-| [`docs/simulations/fig14-schrodinger-sphere.md`](simulations/fig14-schrodinger-sphere.md) | 15.9 kB | Documentation: Fig. 14 · A Wave Packet Meets a Sphere. | [fig14-schrodinger-sphere.md](simulations/fig14-schrodinger-sphere.md) |
+| [`docs/simulations/fig14-schrodinger-sphere.md`](simulations/fig14-schrodinger-sphere.md) | 17.4 kB | Documentation: Fig. 14 · A Wave Packet Meets a Sphere. | [fig14-schrodinger-sphere.md](simulations/fig14-schrodinger-sphere.md) |
 | [`docs/simulations/project06-rods-in-liquid.md`](simulations/project06-rods-in-liquid.md) | 9.7 kB | Documentation: Project 06 · Balancing Two Rods in a Liquid. | [project06-rods-in-liquid.md](simulations/project06-rods-in-liquid.md) |
 | [`docs/styles.md`](styles.md) | 52.1 kB | Documentation: Stylesheets: `public/styles/`. | [styles.md](styles.md) |
-| [`docs/usul.md`](usul.md) | 11.4 kB | Documentation: Phyein Usul · the website at phyeinusul.com. | [usul.md](usul.md) |
+| [`docs/usul.md`](usul.md) | 12.0 kB | Documentation: Phyein Usul · the website at phyeinusul.com. | [usul.md](usul.md) |
 
 ## Tools
 
@@ -2710,15 +2710,18 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/i18n/ingest.py`](../tools/i18n/ingest.py) | 1.9 kB | Stores checked translations made outside the tables (page pieces, script strings, walkthrough prose). | [i18n.md](i18n.md) |
 | [`tools/i18n/package.json`](../tools/i18n/package.json) | 285 B | The parser wrap.cjs needs (acorn); npm install --prefix tools/i18n. | [i18n.md](i18n.md) |
 | [`tools/i18n/wrap.cjs`](../tools/i18n/wrap.cjs) | 3.7 kB | Wraps the reader-visible strings of a page's scripts in _t(), with a JavaScript parser (acorn). | [i18n.md](i18n.md) |
-| [`tools/inventory.py`](../tools/inventory.py) | 94.7 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
+| [`tools/inventory.py`](../tools/inventory.py) | 95.9 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
 | [`tools/kaggle/schrodinger-shapes/build_flat.py`](../tools/kaggle/schrodinger-shapes/build_flat.py) | 5.6 kB | Fig. 14 flat wall: writes flat.ipynb (Kaggle, CPU, 585 runs) for a given commit. | [fig14-schrodinger-sphere.md](simulations/fig14-schrodinger-sphere.md) |
 | [`tools/kaggle/schrodinger-shapes/build_pillar.py`](../tools/kaggle/schrodinger-shapes/build_pillar.py) | 5.8 kB | Fig. 14 pillar: writes pillar.ipynb (Kaggle, CPU, 585 runs) for a given commit. | [fig14-schrodinger-sphere.md](simulations/fig14-schrodinger-sphere.md) |
+| [`tools/kaggle/schrodinger-shapes/build_radial.py`](../tools/kaggle/schrodinger-shapes/build_radial.py) | 5.8 kB | Fig. 14 spherical waves: writes radial.ipynb (Kaggle, CPU, 1170 runs) for a given commit. | [fig14-schrodinger-sphere.md](simulations/fig14-schrodinger-sphere.md) |
 | [`tools/kaggle/schrodinger-shapes/check_flat.py`](../tools/kaggle/schrodinger-shapes/check_flat.py) | 2.2 kB | Fig. 14 flat wall: checks the transmission formula against the matching equations, the free Gaussian with SymPy, and the solver against T_packet. | [fig14-schrodinger-sphere.md](simulations/fig14-schrodinger-sphere.md) |
 | [`tools/kaggle/schrodinger-shapes/check_pillar.py`](../tools/kaggle/schrodinger-shapes/check_pillar.py) | 1.3 kB | Fig. 14 pillar: convergence in the time step and the mirror check. | [fig14-schrodinger-sphere.md](simulations/fig14-schrodinger-sphere.md) |
 | [`tools/kaggle/schrodinger-shapes/flat.ipynb`](../tools/kaggle/schrodinger-shapes/flat.ipynb) | 5.0 kB | Fig. 14 flat wall: the Kaggle notebook as run (version 1), written by build_flat.py. | [fig14-schrodinger-sphere.md](simulations/fig14-schrodinger-sphere.md) |
 | [`tools/kaggle/schrodinger-shapes/flat.py`](../tools/kaggle/schrodinger-shapes/flat.py) | 5.6 kB | Fig. 14 flat wall: the 1D Crank-Nicolson solver (fourth-order Laplacian, hard wall by odd mirror) for psi = chi(x) g(y) g(z), and the exact plane-wave and packet transmission. | [fig14-schrodinger-sphere.md](simulations/fig14-schrodinger-sphere.md) |
 | [`tools/kaggle/schrodinger-shapes/pillar.ipynb`](../tools/kaggle/schrodinger-shapes/pillar.ipynb) | 5.2 kB | Fig. 14 pillar: the Kaggle notebook as run (version 1), written by build_pillar.py. | [fig14-schrodinger-sphere.md](simulations/fig14-schrodinger-sphere.md) |
 | [`tools/kaggle/schrodinger-shapes/pillar.py`](../tools/kaggle/schrodinger-shapes/pillar.py) | 3.2 kB | Fig. 14 pillar: the 2D split-step Fourier solver for psi = phi(x, y) g(z) (hard column by setting psi = 0 inside after every step). | [fig14-schrodinger-sphere.md](simulations/fig14-schrodinger-sphere.md) |
+| [`tools/kaggle/schrodinger-shapes/radial.ipynb`](../tools/kaggle/schrodinger-shapes/radial.ipynb) | 4.9 kB | Fig. 14 spherical waves: the Kaggle notebook as run (version 1), written by build_radial.py. | [fig14-schrodinger-sphere.md](simulations/fig14-schrodinger-sphere.md) |
+| [`tools/kaggle/schrodinger-shapes/radial.py`](../tools/kaggle/schrodinger-shapes/radial.py) | 4.6 kB | Fig. 14 spherical waves: u = r psi with l = 0, the 1D half-line problem solved on the whole line with u odd (Crank-Nicolson, fourth-order Laplacian); a shell leaving the centre or closing in. | [fig14-schrodinger-sphere.md](simulations/fig14-schrodinger-sphere.md) |
 | [`tools/kaggle/schrodinger-sphere/build_3d.py`](../tools/kaggle/schrodinger-sphere/build_3d.py) | 5.6 kB | Schrödinger on Kaggle: writes full3d.ipynb, the 3D generation, for a given commit. | [kaggle.md](kaggle.md) |
 | [`tools/kaggle/schrodinger-sphere/build_full.py`](../tools/kaggle/schrodinger-sphere/build_full.py) | 6.9 kB | Schrödinger on Kaggle: writes full.ipynb for a given commit. | [kaggle.md](kaggle.md) |
 | [`tools/kaggle/schrodinger-sphere/build_smoke.py`](../tools/kaggle/schrodinger-sphere/build_smoke.py) | 5.9 kB | Schrödinger on Kaggle: writes smoke.ipynb for a given commit. | [kaggle.md](kaggle.md) |

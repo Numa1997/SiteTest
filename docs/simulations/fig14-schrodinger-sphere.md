@@ -164,3 +164,18 @@ wells and no hard wall yet (GPU runs).
   lighting changes brightness, not hue, so the class is what can be checked. Measured at 360, 390, 1024 and 1440 px: no horizontal
   overflow; the four test points pass after the on-sheet rule (a point within a fifth of $c$ of the level may show either sheet).
 
+
+## Spherical waves (12 November 2026, late)
+
+Asked for by the owner: a wave whose crests are spheres. Switch **Wave**: Packet, Spherical from the centre (`rout`), Spherical
+closing in (`rin`). With $l = 0$, $u = r\psi$ solves the 1D equation on the half-line with $u(0) = 0$ (note equation 25; the identity
+$\nabla^2\psi = (1/r)\,\partial_r^2(r\psi)$ checked with SymPy). [radial.py](../../tools/kaggle/schrodinger-shapes/radial.py) solves it on the
+whole line with $u$ odd (Crank–Nicolson, fourth-order Laplacian, $\Delta r = 0.05$, $\sigma_0 = 2$).
+
+- `rout`: shell from $r_0 = 6$ through a spherical shell wall at $r = 16$, thickness $d \in \{0.5, 1, 1.5, 2, 3\}$; the radial problem is
+  the flat wall's, so $T_\text{packet}$ (24) with $\sigma_0 = 2$ is exact. `rin`: shell from $r_0 = 28$ closing in on a ball of radius
+  $R = 2 \ldots 6$. Both: 9 energies × 13 heights (wells, hard wall). 1170 runs, Kaggle `numakoudsie/schrodinger-spherical-wave`
+  (CPU), files `SPHR` in `2026-11-12/radial/` ($\psi(r)$ at 97 radii, levels of each frame's peak plus the list of peaks).
+- Drawing: the 3D field is $\psi(|\mathbf r|)$ on a cube $[-24, 24)^3$, 0.75 a apart (64³), so whole spheres fit; spherical waves open in
+  the Cutaway view. The barrier is drawn as a glass sphere of radius 16 (the shell wall) or $R$ (the ball).
+- Not yet: spherical waves from a point beside the barrier, or meeting the pillar or the wall (true 3D, GPU).
