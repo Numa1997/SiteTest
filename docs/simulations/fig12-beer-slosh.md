@@ -576,3 +576,13 @@ Tested in headless Chromium at 360, 390, 1024 and 1440 px: no errors, no sideway
 change of rate 0.009 to 0.015; slowing to the end of a stored ride, the largest change 0.020 to 0.023 (the last step to 0);
 the notice appears only after that and disappears on Ride again. Data panel with the preview on screen: 81 checks agree,
 none differ, no read-back fails; with a stored ride: 88 agree, none differ.
+
+
+**Catalogue (12 November 2026).** `public/scripts/catalog.js` has an entry `guinness-kaggle` (fig 12, field fluids, stage
+2, subject "fluid dynamics · computed on Kaggle"), so the catalogue shows two Fig. 12 cards, the live solver and the Kaggle
+playback, side by side. Thumbnail `public/images/sims/guinness-kaggle.webp`, 800 x 500, a still of the 1.5 m/s ride at
+6.6 s (the swing after the last bump). The card's German and Arabic texts are in `i18n/de|ar/strings.json` (five strings each,
+stored with `tools/i18n/ingest.py strings`). The page itself is English only, like Fig. 12: `guinness-kaggle.html` is in
+`ENGLISH_ONLY` of `tools/i18n/build.py` (it was missing there, so `build.py --check` failed on `main` until this change).
+Tested: the catalogue in English at 1100 and 390 px and in German and Arabic at 390 px, no errors, no sideways scroll, two
+Fig. 12 cards among 15.

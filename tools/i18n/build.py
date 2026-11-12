@@ -22,7 +22,7 @@ LANGS = ('de', 'ar')
 NAMES = {'en': 'English', 'de': 'Deutsch', 'ar': 'العربية'}
 # Pages that exist in English only (Numa, 6 November 2026: Fig. 12 has no German or Arabic version). Links to them from the
 # German and Arabic pages point at the English page (rebase below), and they carry no language switch.
-ENGLISH_ONLY = {'schrodinger-sphere.html', 'beer-slosh.html', 'momentum-spirographs.html', 'flower-hunt.html', 'butterfly-dashboard.html', 'butterfly-catch.html'}   # Fig. 13 pages: English only (Numa, 8 November 2026: publish now)
+ENGLISH_ONLY = {'schrodinger-sphere.html', 'beer-slosh.html', 'guinness-kaggle.html', 'momentum-spirographs.html', 'flower-hunt.html', 'butterfly-dashboard.html', 'butterfly-catch.html'}   # Fig. 13 pages: English only (Numa, 8 November 2026: publish now)
 # (source file, served path). The served path is the address under the site root; translations go to <lang>/<served path>.
 PAGES = [
     ('index.html', 'index.html'),
