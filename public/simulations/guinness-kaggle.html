@@ -115,6 +115,7 @@
             <p>On Kaggle&#8217;s Tesla T4 graphics card the stout is a million particles (1,002,808) moving through a grid of 370,386 cells of 1.5 mm in the measured Guinness glass: incompressible flow with a free surface and gravity, in the glass&#8217;s moving frame, with the stout and the cart pushing on each other. Each 20 s ride took 20 to 22 minutes (123 ms per step, 10,000 steps). The cart is the same model as Fig. 12: one wheel, a spring of 600 N/m, a damper of 8 N s/m, and a motor that holds the set speed.</p>
             <p>The road: a long hump 10 mm high, a dip 8 mm deep, four ripples 5 mm high and a short bump 10 mm high, then flat road so the stout settles in view.</p>
             <p><b>What is not in it yet.</b> The glass wall&#8217;s friction and the stout&#8217;s viscosity are left out, so the sloshing dies away only through the method&#8217;s own losses, which are not yet measured. The creamy head is drawn, not computed. The surface is stored 30 times a second on a grid of 17 rings by 64 angles in 0.2 mm steps, and drawn by the same code as Fig. 12.</p>
+            <p><b>The data panel.</b> The Data tab at the side of the page lists every number on this page: the stored ride, the frame on screen and what the picture draws. Each number is shown three ways: as stored, worked out again from the stored numbers, and read back from the pixels of the picture. The file&#8217;s fingerprint is checked against the one written when it was committed. Read values under the figure pins a point of the stout, the wheel or the body. Save downloads it all for NumPy.</p>
             <p>Data: <a href="../data/fig12/2026-11-12/index.json">generated on Kaggle on 12 November 2026</a> (notebook version, checksums, measured times).</p>
         </section>
     </main>
@@ -124,6 +125,8 @@
         <span><a href="../simulations.html">All simulations ↑</a> · <a href="../index.html">Home page</a></span>
     </footer>
 
+    <script src="../scripts/sim.js"></script>
+    <script src="../scripts/dataset.js"></script>
     <script src="../scripts/guinness-glass.js"></script>
     <script src="../scripts/stout-view.js"></script>
     <script src="../scripts/guinness-playback.js"></script>

@@ -85,7 +85,7 @@ value, the formula recomputed from the stored inputs, the pixel or SVG element r
 `Sim.data.round` says what a round is (one period, one loop, ten seconds); every frame of it is copied (all scalars and the pinned point,
 at most 600 samples), then shown as charts and a table and saved as .npz + CSV; at most five rounds are kept. Save: the store as .npz +
 dataset.json + the rounds as CSV + README. The contract is at the top of datalog.js. A page loads dataset.js after sim.js and datalog.js
-after its own script (all eleven figures, project 05 Balancing Two Rods on a Cart (`simulations/double-inverted-pendulum.html`, whose store is proved honest by the tests in `notes/fig11/panel/`), the Droplet Collection page, the three pages (English, German, Arabic) of Iron, Cotton and the Head, whose hooks are in
+after its own script (all eleven figures, the Fig. 12 page computed on Kaggle (`simulations/guinness-kaggle.html`, whose `guinness-playback.js` appends datalog.js once its store is declared), project 05 Balancing Two Rods on a Cart (`simulations/double-inverted-pendulum.html`, whose store is proved honest by the tests in `notes/fig11/panel/`), the Droplet Collection page, the three pages (English, German, Arabic) of Iron, Cotton and the Head, whose hooks are in
 `portfolios-src/impact/datahooks.js`, and the ideal and servo presses of the Hydraulic Press Study, whose store and hooks sit in their
 own pages, and the simulation and wind tabs of Rotor Pendula, whose stores sit in `portfolios-src/rotor-pendula/rotor_sim.html` and `rotor_wind.html` and
 whose links to the shared files `tools/build_combined.py --site` rewrites). `Sim.live()` reads the store too. Keep the taps where the page computes a value; keep the

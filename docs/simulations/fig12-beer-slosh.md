@@ -475,3 +475,46 @@ again" cross-fades to the start. Not yet built: the live browser preview and fet
 
 **Tested** in headless Chromium at 360, 390, 1024 and 1440 px: no errors, no sideways scroll, playback advances, the
 slow-down ends at 20.0 s and the pop-up shows.
+
+**Data panel (12 November 2026).** The page loads `sim.js` and `dataset.js` before its own script, and `datalog.js` after
+it once the store is declared (`guinness-playback.js`, `defineData`). The store, `Sim.dataset('Fig. 12 computed on
+Kaggle')`, has dimensions `n` (frames of the chosen ride, 601), `ir` (17 rings), `ith` (64 angles) and `m` (road samples
+every 5 mm). It holds:
+- what the reader chose: `ride_i` (speed control), `v0`, `road`, `n_rides`;
+- the file: `generated`, `nb_version`, `file_bytes`, `sha_file` (SHA-256 of `rides.json` as fetched, computed in the
+  browser by `crypto.subtle`), `fill`, `q`, `fps`, `nr`, `nth`, `ml`, `R_fill` (glass radius at the fill), `z_rim`;
+- the stored ride, the very typed arrays the playback reads: `t_n`, `x`, `v`, `zb`, `zw`, `lean`, `spill`, `eta_q`
+  (the uint8 surface, n x 17 x 64), `road_x`, `road_zr`, with `n_frames`, `dur`, `lean_max`, `v_min`, `v_max`,
+  `spill_end` worked out when a ride is chosen (`pick` -> `store`);
+- playback now, written every frame in `tick`: `playing`, `t_play`, `rate`, `i_now`, `x_now`, `v_now`, `zb_now`,
+  `zw_now`, `lean_now`, `spill_now`, `i_text` (the frame the Readings words show), and `lean_gap`;
+- what StoutView draws, written by StoutView itself through `view.ds`: `eta_draw` (17 x 64 heights as drawn),
+  `eta_front`, `eta_back`, `dw`, `eta_mid`, the camera (`scale`, `elev`, `azim`, `cam_dist`, `cam_zt`, `focal`, `cam_cx`,
+  `cam_cy`) and the drawn points in css px (`axle_px_*`, `body_px_*`, `glass_px_*`, `front_px_*`, `back_px_*`, `ground_px`).
+
+Checks (recomputed from stored inputs only): the file's size and SHA-256 against `index.json`; `v0`, `road`, `n_frames`
+against the file and `index.json`; `R_fill` and `z_rim` from the glass table; `t_n` = n / fps; the ride's extremes by a
+loop over the stored arrays; `i_now` = round(t fps); every `*_now` = the stored array at `i_now`; `eta_draw[i,j]` =
+fill + (b - 128) q from the stored byte; `dw` = front - back; `lean_gap` = lean - 1000 dw; `rate` from the time left;
+every drawn point by the pinhole camera written out again from its stored constants. Read-backs from the picture (alpha
+checked first): the hub dot (ink), the body's bottom edge (ink, 2 px search), the head's band three quarters up at the
+front wall and its top on the axis (cream, 3 px search, because from this camera the glass's near rim line and its white
+highlight cross both points), every grid node of the head's sheet (cream, 2 px search), and the three Readings words
+against the stored value at `i_text`. `x_now` is not read back as a pixel (the camera rides with the cart).
+
+What differs between store and picture is said in the panel's `about`: the surface is stored rounded to 0.2 mm, while
+Kaggle took the lean before rounding, so `lean` and the grid's lean differ by up to 0.2 mm (measured over all 1,803 stored
+frames of the three rides: at most 0.19 mm, mean 0.065 mm); the surface between grid nodes is bilinear; the head, the
+glass's tint and highlights are drawing only; only stored frames are shown, never a blend.
+
+Read values: a click pins a grid node of the head (nearest within 12 px, then rings of 12 and 22 px), the wheel or the
+body; the strip sits under the figure. One round: 4 s of the stored ride.
+
+**Panel tested** in headless Chromium at 360, 390, 1024 and 1440 px (script in the session's scratchpad, not
+committed): no console errors; 66 checks agree with the stored values (identical, or to the last digits of double
+precision), none differ, 21 values are inputs read from the file; SHA-256 equal to `index.json`; every read-back shows
+its value (the axis point and the front band only with the 3 px search described above). A pointer swept across the
+figure paints 0 overlay pixels with Read values off and on. A click pins, the strip's top equals the figure's bottom,
+and its words change 4.00 times a second. One round records; Save gives a zip that `zipfile.testzip()` accepts and
+`numpy.load` reads (`x` (601,), `eta_q` (601, 17, 64) uint8, `eta_draw` (17, 64)), with `round-1.csv` and units in
+`dataset.json`. The panel's loop is idle before opening and after closing.
