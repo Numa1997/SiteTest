@@ -518,3 +518,28 @@ figure paints 0 overlay pixels with Read values off and on. A click pins, the st
 and its words change 4.00 times a second. One round records; Save gives a zip that `zipfile.testzip()` accepts and
 `numpy.load` reads (`x` (601,), `eta_q` (601, 17, 64) uint8, `eta_draw` (17, 64)), with `round-1.csv` and units in
 `dataset.json`. The panel's loop is idle before opening and after closing.
+
+
+**Phase space and what the stored rides get wrong (12 November 2026).** A second figure under the cart (`#stage-phase`,
+canvas `#ph`, `drawPhase` in `guinness-playback.js`) draws the first sloshing mode: q, the cos θ part of the outer ring
+of the stored surface, (2/64) Σ_j η(R, θ_j) cos θ_j in mm (at the wall the first mode is η = q cos θ, note section 4.5),
+against p = (q_{n+1} − q_{n−1}) / (2 sin ω11 h), h = 1/30 s, ω11 = 2π · 3.421 Hz. The sine instead of ω11 h makes a pure
+swing at f11 an exact circle; the plain central difference reads it 8 % low (sin 0.716 / 0.716 = 0.917). Both axes share
+one scale (`ph_s`, px per mm); the plot half-width is 1.1 times the ride's largest |q| or |p|. Pale: the whole ride;
+dark: the last 30 frames; dashed rose: the circle of the present amplitude; wine dot: the frame on screen. Store:
+`f11`, `w11`, `q1`, `p1`, `ph_range`, `q_now`, `p_now`, `amp_now`, `ph_cx`, `ph_cy`, `ph_s`, `ph_x_px`, `ph_y_px`; each
+checked (q1 from the 64 stored bytes of the outer ring, p1 from its neighbours, the dot from centre and scale) and the dot
+read back (wine). Tested at 390 and 1440 px: 84 checks agree, none differ, the dot reads back wine.
+
+`tools/fig12/kaggle_decay.py` measures from `rides.json` (output of 12 November 2026):
+
+- strongest swing between 2.5 and 4.5 Hz: 3.043 / 3.433 / 3.393 Hz at 0.5 / 1.0 / 1.5 m/s (3.421 Hz theory; the 0.5 m/s
+  ride swings too little, 0.4 mm, for a clean peak);
+- decay after the last bump (band-pass 2.5–4.5 Hz, envelope, log fit over 1.5 s): e-folding time 0.76 / 0.41 / 0.32 s,
+  damping ratio 0.061 / 0.115 / 0.147, against 0.0035 (theory) to 0.0053 (experiment) for real stout (table above). The
+  solver's own losses are 12 to 40 times too large: the stored rides are far too calm after each bump;
+- drift: over the last 5 s, at steady speed on flat road, the stored wall lean averages 1.90 / 0.56 / 6.36 mm while q
+  averages 0.28 / 0.30 / 0.89 mm. The lean at single wall nodes drifts; the surface as a whole hardly tilts. At rest the
+  stored outer ring also sits about 7 mm above the axis (133 mm against 126 mm at t = 0, 0.5 m/s ride): the wall
+  columns' linear extension in the notebook's `polar_surface`. Both point at the wall reconstruction, not the stout
+  (an inference; confirming it needs the solver's particles, which are not stored).

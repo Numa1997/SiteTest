@@ -25,6 +25,7 @@
         .kread { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin: 0; font-family: 'IBM Plex Mono', monospace; }
         .kread dt { font-size: 11px; color: var(--ink-3); } .kread dd { margin: 0; font-size: 16px; }
         #cv { transition: opacity 0.35s ease; }
+        #ph { display: block; width: 100%; height: 100%; }
     </style>
 </head>
 <body>
@@ -55,6 +56,7 @@
         </div>
 
         <div class="sim__grid">
+            <div>
             <figure class="stage">
                 <div class="stage__canvas" id="stage" style="--ar: 14 / 13; --ar-m: 1 / 1.05; position: relative;">
                     <canvas id="cv" aria-label="A pint of stout on a one-wheel cart rolling over a gentle road; the surface of the stout rocks, played back from stored Kaggle data"></canvas>
@@ -79,6 +81,16 @@
                     <span id="cap-t">—</span>
                 </figcaption>
             </figure>
+            <figure class="stage" style="margin-top: 16px;">
+                <div class="stage__canvas" id="stage-phase" style="--ar: 16 / 9; --ar-m: 1 / 1;">
+                    <canvas id="ph" aria-label="Phase space of the first sloshing mode: its height at the wall q across, its scaled rate up; the whole ride as a pale path, the last second dark, the frame on screen as a dot, and a dashed circle of the present amplitude"></canvas>
+                </div>
+                <figcaption class="stage__cap">
+                    <span><b>Phase space</b> · first sloshing mode, height at the wall <i>q</i> against its rate <i>q&#775;</i>/<i>&omega;</i><sub>11</sub>, from the stored surface</span>
+                    <span id="cap-ph">—</span>
+                </figcaption>
+            </figure>
+            </div>
 
             <aside class="panel" aria-label="Controls">
                 <div class="panel__group">
@@ -114,7 +126,9 @@
             <h2 style="font:400 26px/1.2 'Instrument Serif',serif">What was computed, and how</h2>
             <p>On Kaggle&#8217;s Tesla T4 graphics card the stout is a million particles (1,002,808) moving through a grid of 370,386 cells of 1.5 mm in the measured Guinness glass: incompressible flow with a free surface and gravity, in the glass&#8217;s moving frame, with the stout and the cart pushing on each other. Each 20 s ride took 20 to 22 minutes (123 ms per step, 10,000 steps). The cart is the same model as Fig. 12: one wheel, a spring of 600 N/m, a damper of 8 N s/m, and a motor that holds the set speed.</p>
             <p>The road: a long hump 10 mm high, a dip 8 mm deep, four ripples 5 mm high and a short bump 10 mm high, then flat road so the stout settles in view.</p>
-            <p><b>What is not in it yet.</b> The glass wall&#8217;s friction and the stout&#8217;s viscosity are left out, so the sloshing dies away only through the method&#8217;s own losses, which are not yet measured. The creamy head is drawn, not computed. The surface is stored 30 times a second on a grid of 17 rings by 64 angles in 0.2 mm steps, and drawn by the same code as Fig. 12.</p>
+            <p><b>What is not in it yet.</b> The glass wall&#8217;s friction and the stout&#8217;s viscosity are left out, so the sloshing dies away only through the method&#8217;s own losses; those are measured below, and they are far too large. The creamy head is drawn, not computed. The surface is stored 30 times a second on a grid of 17 rings by 64 angles in 0.2 mm steps, and drawn by the same code as Fig. 12.</p>
+            <p><b>Phase space.</b> The second figure draws the stout&#8217;s first sloshing mode, the way it rocks front to back, as a point: across, <i>q</i>, how high the swing lifts the surface at the front wall; up, how fast that height changes, divided by the swing&#8217;s own pace (3.421 Hz for a deep glass of this width), so that a swing nobody damps would go round a circle. The whole ride is the pale path, the last second the dark one, and the dashed circle is the swing the stout has now. Both numbers are worked out on this page from the stored surface: <i>q</i> is the front-to-back tilt of the outer ring, fitted over all 64 angles, and its rate comes from the stored frames on either side. The corners are real: the file holds 30 pictures a second, about nine per swing, and nothing is drawn between them.</p>
+            <p><b>What the stored rides get wrong (measured from the stored data, 12 November 2026).</b> The swing dies far too fast: after the last bump it loses two thirds of its height in 0.3 to 0.8 s, a damping ratio of 0.06 to 0.15. Real stout in a glass rings about twenty times longer (damping ratio 0.0035 by theory, 0.0053 measured; see the Fig. 12 note). The lean at the wall also drifts: at 1.5 m/s on flat road it stays near 6 mm for the last 5 s, while the whole surface&#8217;s tilt <i>q</i> stays under 1 mm. So the &#8220;surface lean&#8221; reading partly shows a fault of how the surface is reconstructed at the wall, not the stout. The pace of the swing is right: 3.39 to 3.43 Hz at 1.0 and 1.5 m/s, against 3.421 Hz from theory. Both faults are in Kaggle&#8217;s computation; fixing them needs a new run there. Script: <code>tools/fig12/kaggle_decay.py</code>.</p>
             <p><b>The data panel.</b> The Data tab at the side of the page lists every number on this page: the stored ride, the frame on screen and what the picture draws. Each number is shown three ways: as stored, worked out again from the stored numbers, and read back from the pixels of the picture. The file&#8217;s fingerprint is checked against the one written when it was committed. Read values under the figure pins a point of the stout, the wheel or the body. Save downloads it all for NumPy.</p>
             <p>Data: <a href="../data/fig12/2026-11-12/index.json">generated on Kaggle on 12 November 2026</a> (notebook version, checksums, measured times).</p>
         </section>
