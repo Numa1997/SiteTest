@@ -38,5 +38,15 @@
   "kaggle": "numakoudsie/schrodinger-pillar",
   "version": "1",
   "commit": "89f6e9d3305f243b2507ae64f6ab9c4a186bdbef"
+ },
+ {
+  "date": "2026-11-12",
+  "index": "2026-11-12/radial/index.json",
+  "kind": "radial",
+  "shape": "spherical",
+  "runs": 1170,
+  "kaggle": "numakoudsie/schrodinger-spherical-wave",
+  "version": "1",
+  "commit": "13dda4cef3aeb6cd00ea3dbb48ee8a770344afcc"
  }
 ]
