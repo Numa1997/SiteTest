@@ -6,6 +6,27 @@
   "runs": 405,
   "kaggle": "numakoudsie/schrodinger-sphere-full-grid",
   "version": "1",
-  "commit": "10dc1d64200446165d40456972d9b51047846f71"
+  "commit": "10dc1d64200446165d40456972d9b51047846f71",
+  "shape": "sphere"
+ },
+ {
+  "date": "2026-11-12",
+  "index": "2026-11-12/wave3d/index.json",
+  "kind": "wave",
+  "shape": "sphere",
+  "runs": 81,
+  "kaggle": "numakoudsie/schrodinger-sphere-3d-wave",
+  "version": "1",
+  "commit": "7083b64c90303ffabe4355e7359a347a392a6485"
+ },
+ {
+  "date": "2026-11-12",
+  "index": "2026-11-12/flat/index.json",
+  "kind": "axisym",
+  "shape": "slab",
+  "runs": 585,
+  "kaggle": "numakoudsie/schrodinger-flat-wall",
+  "version": "1",
+  "commit": "76c7ce089557d9939ed1f63f5535021057f387ee"
  }
 ]

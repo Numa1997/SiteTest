@@ -3,7 +3,8 @@
 | | |
 |---|---|
 | Page | [public/simulations/schrodinger-sphere.html](../../public/simulations/schrodinger-sphere.html) (English only, listed in `ENGLISH_ONLY` of [tools/i18n/build.py](../../tools/i18n/build.py)) |
-| Data | [public/data/schrodinger-sphere/](../../public/data/schrodinger-sphere/): `generations.json`, and the generation of 2026-11-12 (`2026-11-12/index.json` and 405 run files `e{i}_v{j}_r{k}.bin`, amplitude only, 46.4 MB) |
+| Data | [public/data/schrodinger-sphere/](../../public/data/schrodinger-sphere/): `generations.json`, and the generation of 2026-11-12: `index.json` with 405 sphere cuts, `wave3d/` (true 3D, 81 runs), `flat/` (585 runs), `pillar/` (585 runs); see "Barrier shapes" below |
+| 3D views | [public/scripts/wave3d-view.js](../../public/scripts/wave3d-view.js) (three.js in [public/vendor/three/](../../public/vendor/three/)) and [public/scripts/volume-view.js](../../public/scripts/volume-view.js) (fog) |
 | Shared page script | [public/scripts/kaggle-flow.js](../../public/scripts/kaggle-flow.js) and [public/styles/kaggle-flow.css](../../public/styles/kaggle-flow.css) ([kaggle-pipeline.md](../kaggle-pipeline.md)) |
 | Live preview | [public/scripts/schrodinger-live-worker.js](../../public/scripts/schrodinger-live-worker.js) |
 | Kaggle code | [tools/kaggle/schrodinger-sphere/](../../tools/kaggle/schrodinger-sphere/) ([kaggle.md](../kaggle.md)) |
@@ -108,6 +109,54 @@ whole 3D wave is the stored cut through the axis spun about it. No new computati
   at worst, at points on the sphere's staircase surface.
 - **Live preview** beyond the stored grid: the worker's own cut (64 × 64), spun the same way.
 - **Read values** points at the strongest wave along the ray and reports the stored half-plane point at that $x$ and $\rho$.
-- **Kaggle runs not used**: `numakoudsie/schrodinger-sphere-3d-generation` (the smooth 3D envelope, no crests) and
-  `numakoudsie/schrodinger-sphere-3d-wave` (Re ψ in 3D, which the symmetry makes redundant; it could not be stopped from this
-  session because the connector does not show a running session's id). Their outputs stay on Kaggle.
+- **Kaggle runs**: `numakoudsie/schrodinger-sphere-3d-wave` version 1 (Re ψ on every point of the 3D box, 81 runs at R = 4) is
+  now stored on the site and drawn (see below). `numakoudsie/schrodinger-sphere-3d-generation` (the smooth 3D envelope, 81 runs
+  at R = 4) stays on Kaggle; it is kept for a later cross-check of the probabilities.
+
+## Barrier shapes and the lit 3D views (12 November 2026, night)
+
+The owner asked for every barrier shape that can be done (sphere, pillar, flat wall, coin, tube; finite, hard, well) and for all
+three lit 3D views. Status: **sphere, pillar and flat wall are on the page**; **coin and tube** need GPU runs, which wait for the
+owner's yes (their buttons are shown, disabled, marked "not computed yet").
+
+| Shape | Potential | Why fewer dimensions are exact | Computed | Stored (on the site) |
+|---|---|---|---|---|
+| sphere | $V_0$ for $r < R$ | $[\hat L_x, \hat H] = 0$: $\psi(x, 
+ho)$ | Kaggle T4 GPUs, 3D, 128³ | `2026-11-12/` cuts (405 runs), `2026-11-12/wave3d/` true 3D at R = 4 (81 runs, 97 MB) |
+| pillar | $V_0$ for $x^2 + y^2 < R^2$, all $z$ | $[\hat p_z, \hat H] = 0$: $\psi = \varphi(x, y)\,g(z)$ | Kaggle CPU, 2D split-step, 128², `numakoudsie/schrodinger-pillar` | `2026-11-12/pillar/` (585 runs + `gz.bin`) |
+| flat wall | $V_0$ for $\lvert x
+vert < a/2$, all $y, z$ | $V = V(x)$: $\psi = \chi(x)\,g(y)\,g(z)$ | Kaggle CPU, 1D Crank–Nicolson, $\Delta x = 0.05$, `numakoudsie/schrodinger-flat-wall` | `2026-11-12/flat/` (585 runs, 51 MB) |
+
+Grids: $E = 0.5 \ldots 4.5$ (9), and for pillar and wall $V_0 \in \{-4, -2, -1, 0, 0.5, 1, 1.5, 2, 3, 4, 6, 8\}$ and the **hard wall**
+(stored as $V_0 = 10^6$, $\psi = 0$ inside), $R = 2 \ldots 6$ (pillar) or $a \in \{0.5, 1, 1.5, 2, 3\}$ (wall). The sphere has no
+wells and no hard wall yet (GPU runs).
+
+- **Solvers** ([tools/kaggle/schrodinger-shapes/](../../tools/kaggle/schrodinger-shapes/)): `flat.py` (CN with the fourth-order
+  Laplacian; a hard wall removes the points $|x| \le a/2$ and closes the stencil with the odd mirror image), `pillar.py` (Strang split
+  step on the sphere's grid; the absorbing border made mirror-symmetric, finite everywhere and the same per unit time for every
+  $\Delta t$; a hard column sets $\psi = 0$ inside after every step). Notebooks `flat.ipynb`, `pillar.ipynb` (as run, version 1),
+  written by `build_flat.py`, `build_pillar.py`; files are written by Kaggle in the website's format and copied byte for byte.
+- **Checks** (printed in each notebook's log, numbers below measured):
+  - flat wall: the plane-wave transmission $T(E)$ agrees with a direct solution of the four matching equations to $1.6\times10^{-15}$
+    (`check_flat.py`, 120 × 11 × 5 cases); the free Gaussian $g$ solves the free equation exactly (SymPy residual 0, norm 1); in the
+    510 runs that end with less than 0.002 inside the wall, the probability ahead equals the exact packet transmission
+    $T_\text{packet} = \int|\phi(k)|^2 T(k)\,dk$ to 0.0045; in all 540 finite runs $|P_\text{ahead} - T_\text{packet}| \le P_\text{inside} + 0.005$
+    (where they differ more, part of the wave is still inside at the end: $E$ near $V_0$, thick wall). The hard wall lets
+    through at most $10^{-6}$; its norm is $1 - 2.9\times10^{-6}$ from the start, because the starting packet's tail inside the wall is cut.
+  - pillar: halving $\Delta t$ changes the probability ahead by $9\times10^{-4}$, then $4\times10^{-4}$ (finite, $\Delta t = 0.0025$ used)
+    and by $2\times10^{-4}$, then $9\times10^{-5}$ (hard, $\Delta t = 0.0005$ used): first order, measured; the sharp edge of the column
+    is the likely cause. The field is mirror-symmetric in $y$ to $10^{-12}$. The hard column loses about 4 % of the norm at the wall
+    (the projection), shown as "lost".
+- **Lit views** ([wave3d-view.js](../../public/scripts/wave3d-view.js), [docs/scripts/wave3d-view.md](../scripts/wave3d-view.md),
+  three.js 0.170.0 vendored in `public/vendor/three/`): **Sheets** (surfaces $\mathrm{Re}\,\psi = \pm c$, $c = 0.3$ of the frame's
+  largest $|\mathrm{Re}\,\psi|$ in the box, by marching cubes), **Surface** (the plane $z = 0$ lifted by $\mathrm{Re}\,\psi$), **Cutaway**
+  (sheets with the quarter $y > 0, z > 0$ removed), and **Fog** (the earlier volume view). All four draw the same 3D field on the
+  box $-24 \le x < 24$, $|y|, |z| < 16$, $0.5\,a$ apart: the true 3D levels where stored (sphere, R = 4), else the stored cut spun
+  about the axis (sphere, wall), else $\varphi(x, y)\,g(z)$ (pillar). The barrier is drawn as its solid: glass (finite), opaque (hard),
+  tan (well).
+- **Data panel**: new values `shape`, `view`, `T_packet`, `remax`, `iso`, `triangles`, and for true 3D runs the stored plane `rew`
+  ($z = 0$, 96 × 64). The Check of a stored point in a lit view projects it (lifted by its $\mathrm{Re}\,\psi$ on the surface), reads the
+  5 × 5 drawn pixels around it and compares their colour class (wine, slate, paper) with the sign of the stored $\mathrm{Re}\,\psi$;
+  lighting changes brightness, not hue, so the class is what can be checked. Measured at 360, 390, 1024 and 1440 px: no horizontal
+  overflow; the four test points pass after the on-sheet rule (a point within a fifth of $c$ of the level may show either sheet).
+

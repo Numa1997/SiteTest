@@ -3,6 +3,17 @@
 These folders hold files the site uses but does not compute: a maths typesetter, the typefaces, ten still pictures and the
 Phyein Usul logo. None of them is edited by hand.
 
+## `public/vendor/three/` · the 3D library (3 files, 0.73 MB)
+
+three.js draws lit, shaded 3D scenes with WebGL. Fig. 14 uses it for its lit views ([wave3d-view.md](scripts/wave3d-view.md)).
+Version **0.170.0** (npm package `three@0.170.0`), MIT licence (`LICENSE`).
+
+| File | What it is |
+|---|---|
+| `three.module.min.js` | The library as an ES module (`build/three.module.min.js` of the package). |
+| `MarchingCubes.js` | The addon `examples/jsm/objects/MarchingCubes.js`, with its import changed from `'three'` to `'./three.module.min.js'`; Fig. 14 imports only its `edgeTable` and `triTable`. |
+| `LICENSE` | The MIT licence of three.js. |
+
 ## `public/vendor/katex/` · the maths typesetter (24 files, 0.56 MB)
 
 KaTeX turns LaTeX written in a page, such as `\( \omega_0 = \sqrt{k/m} \)`, into typeset mathematics in the browser, the way

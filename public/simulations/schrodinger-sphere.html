@@ -28,6 +28,9 @@
         .speed { font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
         .speed i { display: inline-block; height: 4px; width: 70px; vertical-align: middle; border: 1px solid var(--rule); border-radius: 2px; position: relative; margin-left: 6px; }
         .speed i span { position: absolute; left: 0; top: 0; bottom: 0; background: var(--accent); }
+        .chips { display: flex; flex-wrap: wrap; gap: 6px; } .chips button { border: 1px solid var(--rule); background: var(--card-soft); border-radius: 999px; padding: 5px 11px; font: 13.5px var(--sans); color: var(--ink-2); cursor: pointer; } .chips button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff; } .chips button:disabled { opacity: .45; cursor: default; }
+        .chips-note { margin: 0; font-family: var(--mono); font-size: 11px; color: var(--muted); line-height: 1.45; }
+        #v3 { touch-action: none; }
     </style>
 </head>
 <body>
@@ -54,18 +57,19 @@
         <div class="sim__head">
             <p class="sim__num">Fig. 14 · quantum mechanics · computed on Kaggle</p>
             <h1>A Wave Packet Meets a Sphere<span class="dot">.</span></h1>
-            <p class="sim__lede">A quantum particle, spread out as a wave, flies at a ball it does not have the energy to enter. Part of the wave bounces back, part flows round it. Every frame here was computed in three dimensions on Kaggle’s graphics cards and stored; this page computes nothing, it plays the stored runs back.</p>
+            <p class="sim__lede">A quantum particle, spread out as a wave, flies at a ball it does not have the energy to enter. Part of the wave bounces back, part flows round it. Swap the ball for a pillar or a flat wall, make it hard, or turn it into a well, and watch the wave change. Every frame here was computed on Kaggle and stored: the sphere in three dimensions on its graphics cards, the pillar and the wall, which need only two and one, on its processors. This page computes nothing; it draws the stored runs.</p>
         </div>
 
         <div class="sim__grid">
             <div class="figs">
                 <figure class="stage">
                     <div class="stage__canvas sq" id="stage">
-                        <canvas id="vol" aria-label="The wave packet in three dimensions meeting the sphere; drag to turn the view"></canvas>
+                        <canvas id="vol" aria-label="The wave packet in three dimensions meeting the barrier, drawn as fog; drag to turn the view"></canvas>
+                        <canvas id="v3" aria-label="The wave packet in three dimensions meeting the barrier, drawn as lit surfaces; drag to turn the view"></canvas>
                         <canvas id="ov" aria-hidden="true" style="pointer-events:none"></canvas>
                     </div>
                     <figcaption class="stage__cap">
-                        <span><b>Fig. 14</b> · the probability density <span class="tx">\(|\psi(\mathbf r,t)|^2\)</span> in three dimensions · drag to turn</span>
+                        <span><b>Fig. 14</b> · the wave <span class="tx">\(\mathrm{Re}\,\psi(\mathbf r,t)\)</span> in three dimensions · drag to turn</span>
                         <span id="cap-t">t = —</span>
                     </figcaption>
                 </figure>
@@ -89,8 +93,28 @@
                     </div>
                     <p class="speed" id="speed">playback speed <i><span></span></i></p>
                 </div>
+                <div class="panel__group">
+                    <p class="panel__label">Barrier</p>
+                    <div class="chips" id="shape-chips" role="group" aria-label="Barrier shape">
+                        <button type="button" data-s="sphere" aria-pressed="true">Sphere</button>
+                        <button type="button" data-s="pillar" aria-pressed="false">Pillar</button>
+                        <button type="button" data-s="slab" aria-pressed="false">Flat wall</button>
+                        <button type="button" data-s="coin" aria-pressed="false" disabled title="Not computed yet: needs GPU runs on Kaggle">Coin</button>
+                        <button type="button" data-s="tube" aria-pressed="false" disabled title="Not computed yet: needs GPU runs on Kaggle">Tube</button>
+                    </div>
+                    <p class="chips-note" id="shape-note">—</p>
+                </div>
+                <div class="panel__group">
+                    <p class="panel__label">View</p>
+                    <div class="chips" id="view-chips" role="group" aria-label="How the wave is drawn">
+                        <button type="button" data-v="sheets" aria-pressed="true">Sheets</button>
+                        <button type="button" data-v="surface" aria-pressed="false">Surface</button>
+                        <button type="button" data-v="cutaway" aria-pressed="false">Cutaway</button>
+                        <button type="button" data-v="fog" aria-pressed="false">Fog</button>
+                    </div>
+                </div>
                 <div class="panel__group" id="params">
-                    <p class="panel__label">The particle and the sphere</p>
+                    <p class="panel__label">The particle and the barrier</p>
                 </div>
                 <div class="panel__group">
                     <p class="panel__label">Time</p>
@@ -104,7 +128,7 @@
                     <div><dt>Ahead (x &gt; R)</dt><dd id="r-a">—</dd></div>
                     <div><dt>Inside |x| ≤ R</dt><dd id="r-i">—</dd></div>
                     <div><dt>Lost at border</dt><dd id="r-l">—</dd></div>
-                    <div class="wide"><dt>Guide: 1D slab of thickness 2R</dt><dd id="r-g">—</dd></div>
+                    <div class="wide"><dt id="r-g-t">Guide: 1D slab of thickness 2R</dt><dd id="r-g">—</dd></div>
                 </dl>
                 <div class="src" id="src"><b>Where these numbers come from</b><span id="src-t">loading…</span></div>
             </aside>
@@ -524,9 +548,20 @@
 
                     <section class="psec" id="p-screen">
                         <h3><span class="psec__n">09</span>From the equation to the screen</h3>
-                        <p>The square picture, Fig. 14, shows the wave itself in three dimensions, seen from an angle that you change by dragging. Because the packet flies along \(x\) through the centre of the sphere, and both the starting packet (5) and the potential (2) are unchanged by any rotation about the \(x\) axis, the angular momentum about that axis, \(\hat L_x = -i(y\,\partial_z - z\,\partial_y)\), commutes with the Hamiltonian; the packet starts with \(\hat L_x\psi = 0\) and keeps it, so at every time \(\psi(x, y, z, t) = \psi(x, \rho, t)\) with \(\rho = \sqrt{y^2 + z^2}\), the distance from the axis. The whole three-dimensional wave is therefore fixed by its values on one half-plane through the axis. Kaggle computed every run on the full \(128^3\) grid and stored the plane \(z = 0\); the page keeps its half \(y = \rho \ge 0\), \(128 \times 64\) points \(0.5\,a\) apart, as two levels per point: \(q = \mathrm{round}\big(255\,|\psi|/|\psi|_\text{peak}\big)\), with \(|\psi|_\text{peak}\) the largest value in the first frame, and \(p\), the phase \(\arg\psi\) in 256 steps from \(-\pi\) to \(\pi\). To draw a frame the page spins this half-plane about the axis: every point of a box \(64\,a\) long and \(48\,a\) wide takes \(\mathrm{Re}\,\psi = (q/255)\cos(\text{phase})\) of the stored point at its \(x\) and its \(\rho\), linear between the two stored \(\rho\) values around it.</p>
-                        <p>The picture is drawn as coloured fog: crests (\(\mathrm{Re}\,\psi &gt; 0\)) wine, troughs ink and fainter, each sample along a pixel's line of sight adding opacity \(1 - e^{-45(\mathrm{Re}\,\psi)^2\Delta s}\) (a third of that for troughs), so the fronts of the wave read as bands; the sphere is a glass shell. Three things differ from the model. First, the symmetry holds exactly only on paper: on the square grid the sphere is a staircase, so the computed wave is round about the axis only to within a small error. The data panel shows two measurements of it: the two halves \(y\) and \(-y\) of every stored plane agree to 4 levels of 255, and a full three-dimensional run computed in this workspace (\(E = 2\), \(V_0 = 3\), \(R = 4\)) equals its spun plane to 2 levels of 127 in the root mean square and to 24 of 127 at worst, at a few points on the sphere's surface. Second, the levels stop at 255: where the incoming and reflected waves overlap in front of the sphere the crests of the standing pattern can exceed the first frame's peak; in the default run up to 43 of the 16 384 points of the plane (frame 19 of 48) are clipped. Third, time is shown in jumps: the page shows the stored frame at or before the playback time and never blends two frames. A whole run plays in about 9 s at full speed; the playback slows towards the end of a run and when a control is near the edge of the computed range. The probabilities in the readouts and in Fig. 14b come from the whole \(\psi\) on Kaggle's grid, not from the picture.</p>
+                        <p>The square picture, Fig. 14, shows the wave itself in three dimensions, seen from an angle that you change by dragging. Because the packet flies along \(x\) through the centre of the sphere, and both the starting packet (5) and the potential (2) are unchanged by any rotation about the \(x\) axis, the angular momentum about that axis, \(\hat L_x = -i(y\,\partial_z - z\,\partial_y)\), commutes with the Hamiltonian; the packet starts with \(\hat L_x\psi = 0\) and keeps it, so at every time \(\psi(x, y, z, t) = \psi(x, \rho, t)\) with \(\rho = \sqrt{y^2 + z^2}\), the distance from the axis. The whole three-dimensional wave is therefore fixed by its values on one half-plane through the axis. Kaggle computed every run on the full \(128^3\) grid and stored the plane \(z = 0\); the page keeps its half \(y = \rho \ge 0\), \(128 \times 64\) points \(0.5\,a\) apart, as two levels per point: \(q = \mathrm{round}\big(255\,|\psi|/|\psi|_\text{peak}\big)\), with \(|\psi|_\text{peak}\) the largest value in the first frame, and \(p\), the phase \(\arg\psi\) in 256 steps from \(-\pi\) to \(\pi\). To draw a frame the page spins this half-plane about the axis: every point of a box \(48\,a\) long and \(32\,a\) wide takes \(\mathrm{Re}\,\psi = (q/255)\cos(\text{phase})\) of the stored point at its \(x\) and its \(\rho\), linear between the two stored \(\rho\) values around it.</p>
+                        <p>The square figure draws this three-dimensional \(\mathrm{Re}\,\psi\) in one of four ways, chosen under <em>View</em>. <em>Sheets</em> shows two surfaces, the places where \(\mathrm{Re}\,\psi = +c\) (wine, the crests) and where \(\mathrm{Re}\,\psi = -c\) (slate, the troughs), with \(c\) three tenths of the largest \(|\mathrm{Re}\,\psi|\) in the drawn box at that moment. Think of the crests of sea waves frozen into glass and lit by the sun: each crest is a curved sheet, and the distance between neighbouring wine sheets is one wavelength \(2\pi/k_0\). The sheets are found by the <em>marching cubes</em> method: every little cube of eight neighbouring grid points whose corners lie on both sides of \(c\) is cut by a few triangles, placed where linear interpolation along its edges reaches \(c\). <em>Cutaway</em> is the same with a quarter removed, so we can see how the sheets bend into the barrier. <em>Surface</em> takes the plane \(z = 0\) through the flight axis and lifts every point by its \(\mathrm{Re}\,\psi\), like a rubber sheet pushed up from below: crests are hills, troughs are valleys. <em>Fog</em> is the earlier view, coloured mist whose opacity grows with \((\mathrm{Re}\,\psi)^2\) along each line of sight. All four views draw the same numbers on the same box, \(-24 \le x &lt; 24\) and \(|y|, |z| &lt; 16\), \(0.5\,a\) apart. For the sphere at \(R = 4\), Kaggle stored \(\mathrm{Re}\,\psi\) on every point of that box from the full three-dimensional run, and the page draws those values. For the other radii it spins the stored half-plane about the axis, as described above. Three things differ from the model. First, the symmetry holds exactly only on paper: on the square grid the sphere is a staircase, so the computed wave is round about the axis only to within a small error. Measured on the stored true three-dimensional run \(E = 2\), \(V_0 = 1.5\), \(R = 4\), \(\mathrm{Re}\,\psi\) off the axis differs from its value at the same \(x\) and \(\rho\) in the plane \(z = 0\) by 0.9 levels of 127 in the root mean square and 17 at worst, at the moment of impact. Second, the levels stop at 255: where the incoming and reflected waves overlap, crests can exceed the first frame's peak and are clipped. Third, time is shown in jumps: the page shows the stored frame at or before the playback time and never blends two frames. The probabilities in the readouts and in Fig. 14b come from Kaggle's whole \(\psi\), not from the picture.</p>
                         <p>The graph Fig. 14b draws the curves of Figure 2 for the chosen run: behind in black, inside (the slab \(|x| \le R\)) in rose, dashed, ahead in wine, and lost at the border in grey, dotted. The readouts below the controls give the same four numbers at the frame shown; with the defaults at the last frame they read 0.239, 0.631, 0.126 and 0.0039. The guide line evaluates (14) for a slab of thickness \(2R\) and says when \(E &lt; V_0\); it is a reference for the central ray only, not a prediction for the sphere. The data panel holds every stored number with its source, and checks the inside and lost values, the free-packet width (11) and the guide (14) against their formulas.</p>
+                                            <h4><span class="psub__n">9.1</span>Other barriers: a pillar and a flat wall</h4>
+                        <p>Under <em>Barrier</em> the sphere can be replaced by a round pillar standing upright, endless along \(z\), or by a flat wall \(|x| &lt; a/2\), endless across the path. Each can be <em>soft</em> (\(V = V_0\) inside, so the wave partly enters), <em>hard</em> (\(\psi = 0\) inside: the wave cannot enter at all, the limit \(V_0 \to \infty\)), or a <em>well</em> (\(V_0 &lt; 0\): the particle speeds up inside, as a ball rolling over a dip in the ground). Both shapes are easier to compute than the sphere, and the reason is the same as for the sphere's rotational symmetry: a quantity that the potential does not change is kept.</p>
+                        <p>For the pillar, \(V\) does not depend on \(z\). Then the momentum along \(z\), \(\hat p_z = -i\,\partial_z\), commutes with \(\hat H\), and the kinetic energy splits into a part across the pillar and a part along it, \(\hat H = \big[-\tfrac12(\partial_x^2 + \partial_y^2) + V(x, y)\big] - \tfrac12\partial_z^2\). The starting packet (5) is a product of a function of \((x, y)\) and a Gaussian in \(z\), and a product of solutions of the two parts solves the whole equation:</p>
+                        \[ \psi(x, y, z, t) = \varphi(x, y, t)\,g(z, t), \qquad i\,\partial_t\varphi = -\tfrac12\left(\partial_x^2 + \partial_y^2\right)\varphi + V(x, y)\,\varphi, \qquad i\,\partial_t g = -\tfrac12\,\partial_z^2 g . \tag{22} \]
+                        <p>Substituting (22) into (4) and dividing by \(\varphi g\) shows it: the two sides separate term by term. Here \(g\) is the free Gaussian of section 3, spreading by (11), \(g(z, t) = (2\pi\sigma_0^2)^{-1/4}\,(1 + it/2\sigma_0^2)^{-1/2}\exp\!\big[-z^2/\big(4\sigma_0^2(1 + it/2\sigma_0^2)\big)\big]\). (We checked with SymPy that it solves its equation exactly and has norm 1.) So the pillar is a problem in the plane: Kaggle solved \(\varphi\) on \(128^2\) points with the method of section 6, and the page draws \(\varphi\) at every height \(z\), weighted by \(g(z)\).</p>
+                        <p>For the flat wall, \(V\) depends on \(x\) alone, and the same argument splits off both \(y\) and \(z\):</p>
+                        \[ \psi(x, y, z, t) = \chi(x, t)\,g(y, t)\,g(z, t), \qquad i\,\partial_t\chi = -\tfrac12\,\partial_x^2\chi + V(x)\,\chi . \tag{23} \]
+                        <p>This is exactly the one-dimensional problem of section 4, so the wall can be checked against the formula (14), averaged over the momenta of the packet (7):</p>
+                        \[ T_\text{packet} = \int_0^\infty |\phi(k)|^2\,T\!\left(\tfrac12 k^2\right)\mathrm{d}k . \tag{24} \]
+                        <p>Kaggle solved \(\chi\) on a fine line, \(\Delta x = 0.05\,a\), by the Crank–Nicolson method, \(\big(1 + \tfrac{i}{2}\Delta t\,\hat H\big)\chi^{n+1} = \big(1 - \tfrac{i}{2}\Delta t\,\hat H\big)\chi^n\), which keeps the norm exactly because the two factors are each other's complex conjugates, and stored the result on the same half-plane as the sphere. The check: in the 510 stored runs that end with less than 0.002 of the probability inside the wall, the probability ahead equals (24) to 0.0045. (The transmission (14) itself agrees with a direct solution of the four matching equations to \(1.6\times10^{-15}\).) A hard wall lets through at most \(10^{-6}\).</p>
+                        <p>A hard barrier needs care in a computation, because \(V_0 = \infty\) cannot be put into \(e^{-iV\Delta t}\). For the wall, the points inside are removed and the condition \(\psi = 0\) at the face is built into the second derivative next to it. For the pillar, \(\psi\) is set to zero inside after every step. That removes the small part of the wave that each free step pushes into the column, about 4 % of the probability over a run, which the page shows as "lost". Halving the time step changes the probability ahead of the pillar by less than \(10^{-3}\). The coin (a disc across the path) and the tube (a pipe the packet flies through) need new three-dimensional runs on Kaggle's graphics cards; their buttons are shown but not active yet.</p>
                     </section>
 
                     <section class="psec" id="p-limits">
@@ -566,6 +601,7 @@
     <script src="../scripts/dataset.js"></script>
     <script src="../scripts/kaggle-flow.js"></script>
     <script src="../scripts/volume-view.js"></script>
+    <script type="module" src="../scripts/wave3d-view.js"></script>
     <script>
     (function () {
         'use strict';
@@ -575,6 +611,15 @@
         var PROJECT = 'schrodinger-sphere';
         /* the controls offer stops beyond the computed grid: those are the regions not computed yet */
         var EXTRA = { E: [5.0, 5.5, 6.0], V0: [10.0, 12.0], R: [1.0, 7.0, 8.0] };
+        /* the barrier shapes: each has its own stored grid; size is R (sphere, pillar) or the thickness a (flat wall) */
+        var HARD = 1e6;   /* V0 at or above this: a hard wall, psi = 0 inside (stored so by the solvers) */
+        var SHAPES = {
+            sphere: { size: 'R', label: 'Sphere radius <i>R</i>', def: 4.0, note: 'A ball of radius R: V = V₀ inside. Computed in full 3D on Kaggle’s GPUs (128³ points); at R = 4 the true 3D wave is stored, elsewhere the cut through the axis, spun about it.' },
+            pillar: { size: 'R', label: 'Pillar radius <i>R</i>', def: 4.0, note: 'A round column of radius R standing upright, endless along z: V = V₀ inside. Exact in 2D: ψ = φ(x, y) g(z); φ computed on Kaggle (CPU, 128² points), g the free spread.' },
+            slab: { size: 'a', label: 'Wall thickness <i>a</i>', def: 1.0, note: 'A flat wall |x| < a/2, endless across: V = V₀ inside. Exact in 1D: ψ = χ(x) g(y) g(z); χ computed on Kaggle (CPU, Crank–Nicolson), checked against the exact transmission.' }
+        };
+        var SHAPE = 'sphere', VIEW = 'sheets', GRID = {}, byWave = {}, GZ = null, GZ_OK = null;
+        var NX3 = 96, NY3 = 64, X3 = -24, Y3 = -16, H3 = 0.5, ISO = 0.3;   /* sheets at Re psi = +-0.3 of the frame's largest |Re psi| in the box */   /* the 3D box drawn: x in [-24, 24), y and z in [-16, 16), 0.5 a apart (the grid of the true 3D runs) */
         var PLAY_SECONDS = 9;    /* a whole run plays in about this many seconds at full speed */
         var LIVE_MS = { note: 'measured in Node 22 on one core of a 4-core workspace: 11 to 34 s for a whole run' };
 
@@ -623,20 +668,32 @@
         ds.var('amp', ['xi', 'rho'], Uint8Array, { symbol: 'q', long_name: 'stored level of |ψ| on the half-plane through the axis, 0 to 255 of the first frame’s peak', computed_in: 'frame(), copied from the run file', digits: 0 });
         ds.var('phase', ['xi', 'rho'], Uint8Array, { symbol: 'p', long_name: 'stored level of arg ψ, 0 to 255 for −π to π (0 where q < 3)', computed_in: 'frame(), copied from the run file', digits: 0 });
         ds.var('sym_mirror', [], 'int', { symbol: 'mirror', long_name: 'largest |ψ| level difference between the cut’s two halves, y and −y, over all stored runs', computed_in: 'index.json (to_site_axisym.py)', digits: 0 });
-        var AMP = ds.alloc('amp'), PHS = ds.alloc('phase'), XC = ds.alloc('xc'), RC = ds.alloc('rc');
+        ds.var('shape', [], 'str', { symbol: 'shape', long_name: 'the barrier: sphere, pillar (column along z) or slab (flat wall)', computed_in: 'shape buttons' });
+        ds.var('view', [], 'str', { symbol: 'view', long_name: 'how the wave is drawn: sheets, surface, cutaway or fog', computed_in: 'view buttons' });
+        ds.var('triangles', [], 'int', { symbol: 'triangles', long_name: 'triangles of the two sheets Re ψ = ±c found by marching cubes in this frame', computed_in: 'Wave3D.setField (scripts/wave3d-view.js)', digits: 0 });
+        ds.var('remax', [], 'float', { symbol: 'max |Re ψ|', long_name: 'largest |Re ψ| in the drawn box in this frame, as a fraction of the first frame’s peak |ψ|', computed_in: 'drawView(), from the stored levels', digits: 4 });
+        ds.var('iso', [], 'float', { symbol: 'c', long_name: 'level of the sheets: crests at Re ψ = +c, troughs at −c; c = 0.3 · max |Re ψ|', computed_in: 'drawView()', formula: '0.3 · max |Re ψ|', digits: 4 });
+        ds.var('T_packet', [], 'float', { symbol: 'T<sub>packet</sub>', long_name: 'flat wall: the exact transmission of this packet, ∫|φ(k)|² T(k) dk, computed on Kaggle with the run', computed_in: 'run file header (tools/kaggle/schrodinger-shapes/flat.py)', digits: 5 });
+        ds.dim('wx', 96); ds.dim('wy', 64);
+        ds.coord('wxc', 'wx', Float32Array, { symbol: 'x', units: 'a', long_name: 'x of the drawn 3D box (the grid of the true 3D runs)', computed_in: 'box −24 ≤ x < 24, 0.5 a apart' });
+        ds.coord('wyc', 'wy', Float32Array, { symbol: 'y', units: 'a', long_name: 'y of the drawn 3D box', computed_in: 'box −16 ≤ y < 16, 0.5 a apart' });
+        ds.var('rew', ['wx', 'wy'], Int8Array, { symbol: 'w', long_name: 'true 3D runs: stored level of Re ψ in the plane z = 0, −127 to 127 of the first frame’s peak |ψ|', computed_in: 'frame(), copied from the SPHW run file', digits: 0 });
+        var AMP = ds.alloc('amp'), PHS = ds.alloc('phase'), XC = ds.alloc('xc'), RC = ds.alloc('rc'), REW = ds.alloc('rew'), WXC = ds.alloc('wxc'), WYC = ds.alloc('wyc');
 
         /* ---------- the grid ---------- */
         function stopsOf(grid, extra) { return grid.concat(extra).sort(function (a, b) { return a - b; }).filter(function (v, i, a) { return i === 0 || v !== a[i - 1]; }); }
-        function key(E, V, R) { return E.toFixed(2) + '_' + V.toFixed(2) + '_' + R.toFixed(2); }
+        function keyS(sh, E, V, R) { return sh + '_' + E.toFixed(2) + '_' + V.toFixed(2) + '_' + R.toFixed(2); }
+        function key(E, V, R) { return keyS(SHAPE, E, V, R); }
+        function fmtV(v) { return v >= HARD ? 'hard (∞)' : v.toFixed(2); }
         function current() { return { E: sliders.E.value, V0: sliders.V0.value, R: sliders.R.value }; }
         function isStored(E, V, R) { return !!byKey[key(E, V, R)]; }   /* stored in 3D (the 2D generation of 2026-11-12 is kept for its numbers) */
 
         /* ---------- load one stored run: fetch, check its SHA-256, inflate ---------- */
         function hex(buf) { return Array.prototype.map.call(new Uint8Array(buf), function (b) { return ('0' + b.toString(16)).slice(-2); }).join(''); }
         function load(r) {
-            var k = key(r.E, r.V0, r.R);
+            var k = r.key;
             if (cache[k]) return cache[k].ready;
-            var c = cache[k] = { source: 'kaggle', meta: r };
+            var c = cache[k] = { source: 'kaggle', meta: r, shape: r.shape };
             c.ready = fetch(r.base + r.file).then(function (res) { if (!res.ok) throw new Error(res.status + ' for ' + r.file); return res.arrayBuffer(); }).then(function (buf) {
                 var check = (window.crypto && crypto.subtle) ? crypto.subtle.digest('SHA-256', buf).then(function (h) { return hex(h) === r.sha256; }) : Promise.resolve(null);
                 var dv = new DataView(buf), H = dv.getUint32(4, true), head = JSON.parse(new TextDecoder().decode(new Uint8Array(buf, 8, H)));
@@ -649,6 +706,32 @@
             });
             c.ready.catch(function (e) { c.error = String(e.message || e); });
             return c.ready;
+        }
+        /* the true 3D wave (sphere, R = 4): 'SPHW' files, 32 frames of Re psi on every point of the 3D box, int8 levels + 128 */
+        function loadWave(r) {
+            var k = 'W' + r.key;
+            if (cache[k]) return cache[k].ready;
+            var c = cache[k] = { source: 'kaggle', wave: true, meta: r, shape: 'sphere' };
+            c.ready = fetch(r.base + r.file).then(function (res) { if (!res.ok) throw new Error(res.status + ' for ' + r.file); return res.arrayBuffer(); }).then(function (buf) {
+                var check = (window.crypto && crypto.subtle) ? crypto.subtle.digest('SHA-256', buf).then(function (h) { return hex(h) === r.sha256; }) : Promise.resolve(null);
+                var dv = new DataView(buf), H = dv.getUint32(4, true), head = JSON.parse(new TextDecoder().decode(new Uint8Array(buf, 8, H)));
+                var body = new Blob([new Uint8Array(buf, 8 + H)]).stream().pipeThrough(new DecompressionStream('deflate'));
+                return Promise.all([check, new Response(body).arrayBuffer()]).then(function (res) {
+                    c.head = head; c.n = head.n; c.ready_n = head.n; c.W = new Uint8Array(res[1]); c.curves = head.curves; c.sha = res[0]; c.dims = head.shape;
+                    return c;
+                });
+            });
+            c.ready.catch(function (e) { c.error = String(e.message || e); });
+            return c.ready;
+        }
+        /* the free spread g(z, t) of the pillar runs, stored once per energy (pillar/gz.bin, float32 [i][frame][z][re, im]) */
+        function loadGz(ix) {
+            if (GZ || !ix.gz) return;
+            GZ = 'loading';
+            fetch(ix.base + ix.gz.file).then(function (res) { return res.arrayBuffer(); }).then(function (buf) {
+                var ok = (window.crypto && crypto.subtle) ? crypto.subtle.digest('SHA-256', buf).then(function (h) { return hex(h) === ix.gz.sha256; }) : Promise.resolve(null);
+                return ok.then(function (o) { GZ_OK = o; GZ = new Float32Array(buf); GZ.Es = ix.Es; dirty = true; shownId = null; });
+            }).catch(function () { GZ = null; });
         }
 
         /* ---------- the live preview: same equation, coarser grid, in a Web Worker ---------- */
@@ -671,8 +754,10 @@
 
         /* ---------- what to show: the stored run, else the live preview ---------- */
         function entry() {
-            var p = current(), r = byKey[key(p.E, p.V0, p.R)];
-            if (r) { var c = cache[key(p.E, p.V0, p.R)]; if (!c) load(r); return c && c.A ? c : null; }
+            var p = current(), w = SHAPE === 'sphere' ? byWave[key(p.E, p.V0, p.R)] : null, r = byKey[key(p.E, p.V0, p.R)];
+            if (w) { var cw = cache['W' + w.key]; if (!cw) loadWave(w); if (cw && cw.W) return cw; if (!r) return null; }   /* the true 3D wave first; the cut while it loads */
+            if (r) { var c = cache[r.key]; if (!c) load(r); return c && c.A ? c : null; }
+            if (SHAPE !== 'sphere' || p.V0 >= HARD) return null;   /* the browser preview solves the sphere with a finite height only */
             startLive(p);
             return live && liveKey === key(p.E, p.V0, p.R) ? live : null;
         }
@@ -681,6 +766,44 @@
 
         /* ---------- drawing: the stored cloud through VolumeView, labels on a 2D canvas above it ---------- */
         function L() { return (IDX && IDX.L) || 64; }
+        /* ---------- the 3D field of Re psi (fraction of the first frame's peak) on the drawn box, from what is stored ----------
+           true 3D runs: the stored levels as they are; sphere and flat wall: the cut through the axis spun about it (psi(x, rho));
+           pillar: phi(x, y) of the top view times the free spread g(z) (psi = phi g, exact because V does not depend on z) */
+        var F3 = new Float32Array(NX3 * NY3 * NY3), F3id = null;
+        function reAt(c, f, i, r) { var q = (f * c.nx + i) * c.nr + r, a = c.A[q]; return a < 3 ? 0 : a / 255 * Math.cos(c.P[q] / 255 * 2 * Math.PI - Math.PI); }
+        function field3d(c, f) {
+            var id = (c.wave ? 'W' : '') + (c.meta.key || c.source + JSON.stringify(c.meta)) + ':' + f;
+            if (id === F3id) return F3;
+            var N2 = NY3 * NY3;
+            if (c.wave) { var base = f * NX3 * N2; for (var q = 0; q < NX3 * N2; q++) F3[q] = (c.W[base + q] - 128) / 127; }
+            else {
+                var st = c.step, i0 = Math.round((X3 - c.x0) / st), pillar = c.shape === 'pillar';
+                var gre = null, gim = null;
+                if (pillar) {
+                    gre = new Float32Array(NY3); gim = new Float32Array(NY3);
+                    var ie = GZ && GZ.Es ? GZ.Es.indexOf(c.meta.E) : -1, g00 = Math.pow(2 * Math.PI * 9, -0.25);
+                    for (var k = 0; k < NY3; k++) { var zr = Math.abs(Y3 + k * H3) / 0.5, z0 = Math.min(63, Math.round(zr)); if (ie >= 0) { var o = ((ie * 48 + f) * 64 + z0) * 2; gre[k] = GZ[o] / g00; gim[k] = GZ[o + 1] / g00; } else { gre[k] = 0; gim[k] = 0; } }
+                }
+                for (var i = 0; i < NX3; i++) {
+                    var ic = Math.max(0, Math.min(c.nx - 1, i0 + Math.round(i * H3 / st)));
+                    for (var j = 0; j < NY3; j++) {
+                        var yv = Y3 + j * H3;
+                        if (pillar) {
+                            var ry = Math.min(c.nr - 1, Math.round(Math.abs(yv) / st)), qq = (f * c.nx + ic) * c.nr + ry, a = c.A[qq], ph = c.P[qq] / 255 * 2 * Math.PI - Math.PI, pr = a < 3 ? 0 : a / 255 * Math.cos(ph), pim = a < 3 ? 0 : a / 255 * Math.sin(ph);
+                            for (var k2 = 0; k2 < NY3; k2++) F3[(i * NY3 + j) * NY3 + k2] = pr * gre[k2] - pim * gim[k2];
+                        } else for (var k3 = 0; k3 < NY3; k3++) {
+                            var zv = Y3 + k3 * H3, rr = Math.sqrt(yv * yv + zv * zv) / st, r0 = Math.floor(rr), w = rr - r0;
+                            F3[(i * NY3 + j) * NY3 + k3] = r0 + 1 < c.nr ? reAt(c, f, ic, r0) * (1 - w) + reAt(c, f, ic, r0 + 1) * w : 0;
+                        }
+                    }
+                }
+            }
+            F3id = id; return F3;
+        }
+        var PL = new Float32Array(NX3 * NY3);
+        function plane0(F) { for (var i = 0; i < NX3; i++) for (var j = 0; j < NY3; j++) PL[i * NY3 + j] = F[(i * NY3 + j) * NY3 + NY3 / 2]; return PL; }   /* the plane z = 0 */
+        var fogBuf = new Uint8Array(NX3 * NY3 * NY3);
+        function fogVolume(F) { for (var q = 0; q < F.length; q++) fogBuf[q] = Math.max(1, Math.min(255, Math.round(127 * F[q] + 128))); return fogBuf; }
         /* the 3D wave by rotational symmetry: the packet flies along x through the sphere's centre, so psi(x, y, z) = psi(x, rho)
            with rho = sqrt(y^2 + z^2) (L_x commutes with the Hamiltonian; see the lecture note). Each voxel takes Re psi of the stored
            half-plane at its rho, linearly between the two stored rho points around it, from the stored levels: Re psi = q/255 cos(p);
@@ -697,24 +820,48 @@
             var hx = nx * st / 2 / (L() / 2), hy = M * st / (L() / 2);
             return { data: revBuf, nx: nx, ny: ny, half: [hx, hy, hy], off: [-(c.x0 + nx * st / 2) / (nx * st) - 0.5 / nx, 0, 0] };
         }
+        var v3c = document.getElementById('v3'), w3 = null, barrierId = null;
+        function initW3() { if (w3 || !window.Wave3D) return; try { w3 = Wave3D.create(v3c, { canTurn: function () { return !reading; }, onTurn: function () { dirty = true; } }); w3.setMode(VIEW === 'fog' ? 'sheets' : VIEW); shownId = null; dirty = true; } catch (e) { w3 = null; document.getElementById('src-t').textContent = 'This browser could not start the 3D view: ' + e.message; } }
+        window.addEventListener('wave3d-ready', initW3); initW3();
         function drawView(c, f, hold) {
-            var W = ovBox.w, Hh = ovBox.h, dpr = window.devicePixelRatio || 1;
-            if (volCanvas.width !== Math.round(W * dpr) || volCanvas.height !== Math.round(Hh * dpr)) { volCanvas.width = Math.round(W * dpr); volCanvas.height = Math.round(Hh * dpr); dirty = true; }
-            var id = c && !hold ? (c.source + (c.meta.E + '_' + c.meta.V0 + '_' + c.meta.R) + ':' + f) : 'none';
-            if (id !== shownId) {
-                if (c && !hold) { var V = revolve(c, f); view.setVolume(V.data, V.nx, V.ny, V.ny); view.half = V.half; view.offset = V.off; } else view.clear();
-                shownId = id; dirty = true;
+            var W = ovBox.w, Hh = ovBox.h, dpr = Math.min(2, window.devicePixelRatio || 1), fog = VIEW === 'fog', p = current();
+            volCanvas.style.visibility = fog ? 'visible' : 'hidden'; v3c.style.visibility = fog ? 'hidden' : 'visible';
+            var id = c && !hold ? ((c.wave ? 'W' : '') + c.source + (c.meta.key || (c.meta.E + '_' + c.meta.V0 + '_' + c.meta.R)) + ':' + f + ':' + VIEW + (GZ && GZ.Es ? 'g' : '')) : 'none:' + VIEW;
+            if (fog) {
+                if (volCanvas.width !== Math.round(W * dpr) || volCanvas.height !== Math.round(Hh * dpr)) { volCanvas.width = Math.round(W * dpr); volCanvas.height = Math.round(Hh * dpr); dirty = true; }
+                if (id !== shownId) {
+                    if (c && !hold) { var F = field3d(c, f); view.setVolume(fogVolume(F), NX3, NY3, NY3); view.half = [NX3 * H3 / 2 / (L() / 2), NY3 * H3 / 2 / (L() / 2), NY3 * H3 / 2 / (L() / 2)]; view.offset = [-0.5 / NX3, 0, 0]; } else view.clear();
+                    shownId = id; dirty = true;
+                }
+                var sph = SHAPE === 'sphere' ? p.R / (L() / 2) : 0; if (view.sphere !== sph) { view.sphere = sph; dirty = true; }
+                if (dirty && view.ok) { view.render(); dirty = false; }
+            } else if (w3) {
+                if (v3c.width !== Math.round(W * dpr) || v3c.height !== Math.round(Hh * dpr)) { w3.resize(W, Hh, dpr); dirty = true; }
+                var bid = SHAPE + p.E + '_' + p.V0 + '_' + p.R;
+                if (bid !== barrierId) { w3.setBarrier({ shape: SHAPE, R: p.R, a: p.R, hard: p.V0 >= HARD, V0: p.V0 }); barrierId = bid; dirty = true; }
+                if (id !== shownId) {
+                    if (c && !hold) {
+                        var F2 = field3d(c, f), mx = 0; for (var q2 = 0; q2 < F2.length; q2++) { var av = F2[q2] < 0 ? -F2[q2] : F2[q2]; if (av > mx) mx = av; }
+                        ds.set('remax', mx); ds.set('iso', ISO * mx);
+                        if (VIEW === 'surface') w3.setPlane(plane0(F2), NX3, NY3, X3, Y3, H3, mx); else w3.setField(F2, NX3, NY3, NY3, X3, Y3, Y3, H3, ISO * mx);
+                    }
+                    else if (!hold) w3.clear();
+                    shownId = id; dirty = true;
+                }
+                if (dirty) { w3.render(); dirty = false; }
             }
-            var p = current(); if (view.sphere !== p.R / (L() / 2)) { view.sphere = p.R / (L() / 2); dirty = true; }
-            if (dirty && view.ok) { view.render(); dirty = false; }
             octx.clearRect(0, 0, W, Hh);
             if (hold && fade.from) { octx.globalAlpha = 0.55; octx.drawImage(prev, 0, 0, W, Hh); octx.globalAlpha = 1; fade.a = 0; }   /* the last picture, held and dimmed, until frames reach the visitor's time */
             else if (fade.a < 1 && fade.from) { octx.globalAlpha = 1 - fade.a; octx.drawImage(prev, 0, 0, W, Hh); octx.globalAlpha = 1; }
             octx.fillStyle = '#5a504b'; octx.font = '12px "IBM Plex Mono", monospace';
-            octx.fillText('flight along x · glass sphere R = ' + p.R + ' a', 10, Hh - 12);
+            var hardTxt = p.V0 >= HARD ? 'hard ' : p.V0 < 0 ? 'well: ' : 'glass ';
+            octx.fillText('flight along x · ' + hardTxt + (SHAPE === 'sphere' ? 'sphere R = ' + p.R + ' a' : SHAPE === 'pillar' ? 'pillar R = ' + p.R + ' a, upright along z' : 'wall a = ' + p.R + ' a thick') + (c && c.wave && !hold ? ' · true 3D data' : ''), 10, Hh - 12);
+            if (VIEW === 'sheets' || VIEW === 'cutaway') { octx.fillStyle = '#a3303f'; octx.textAlign = 'right'; octx.fillText('■ crests  Re ψ = +c', W - 10, 20); octx.fillStyle = '#55607a'; octx.fillText('■ troughs Re ψ = −c', W - 10, 36); octx.fillStyle = '#8b8079'; octx.fillText('c = 0.3 · largest |Re ψ|', W - 10, 52); octx.textAlign = 'left'; }
+            else if (VIEW === 'surface') { octx.fillStyle = '#5a504b'; octx.textAlign = 'right'; octx.fillText('height and colour: Re ψ in the plane z = 0', W - 10, 20); octx.textAlign = 'left'; }
+            if (!fog && !w3) { octx.fillStyle = '#5a504b'; octx.fillText('starting the 3D view…', 10, 20); }
             if (c && c.source === 'live' && !hold) { octx.fillStyle = '#7a1f2b'; octx.fillText('live preview in your browser · 64³ points · being computed', 10, 20); }
         }
-        function snapshot() { prev.width = volCanvas.width; prev.height = volCanvas.height; pg.setTransform(1, 0, 0, 1, 0, 0); pg.drawImage(volCanvas, 0, 0); fade.from = true; fade.a = 0; }
+        function snapshot() { var src = VIEW === 'fog' || !w3 ? volCanvas : v3c; prev.width = src.width; prev.height = src.height; pg.setTransform(1, 0, 0, 1, 0, 0); pg.drawImage(src, 0, 0); fade.from = true; fade.a = 0; }
         function drawPlot(c, f) {
             var W = plotBox.w, Hh = plotBox.h, m = { l: 42, r: 10, t: 34, b: 30 }; pctx.clearRect(0, 0, W, Hh);
             pctx.fillStyle = '#fffaf3'; pctx.fillRect(0, 0, W, Hh);
@@ -743,7 +890,10 @@
         }
         function readouts(c, f, any) {   /* c: the data drawn now (null while the picture is held); any: the run being computed */
             var p = current(), s0 = (IDX && IDX.sigma0) || 3;
-            ds.set('E', p.E); ds.set('V0', p.V0); ds.set('R', p.R); ds.set('k0', Math.sqrt(2 * p.E)); ds.set('T1D', T1D(p.E, p.V0, 2 * p.R));
+            var thick = SHAPE === 'slab' ? p.R : 2 * p.R;
+            ds.set('E', p.E); ds.set('V0', p.V0); ds.set('R', p.R); ds.set('k0', Math.sqrt(2 * p.E)); ds.set('T1D', p.V0 >= HARD ? 0 : T1D(p.E, p.V0, thick));
+            ds.set('shape', SHAPE); ds.set('view', VIEW); ds.set('triangles', w3 && VIEW !== 'fog' && VIEW !== 'surface' ? (w3.triangles || 0) : 0);
+            ds.set('T_packet', c && c.head && c.head.T_packet != null ? c.head.T_packet : NaN);
             var st = isStored(p.E, p.V0, p.R); ds.set('stored', st); ds.set('source', c ? c.source : any ? 'held: ' + any.source + ' still computing' : 'none');
             ds.set('file', st ? byKey[key(p.E, p.V0, p.R)].file : '—');
             if (c && c.curves[f]) {
@@ -751,18 +901,28 @@
                 ds.set('inside', q[1] - q[2] - q[3]); ds.set('lost', 1 - q[1]); ds.set('sigma_free', s0 * Math.sqrt(1 + Math.pow(q[0] / (2 * s0 * s0), 2)));
                 ds.set('ready', c.ready_n);
                 if (c.source === 'kaggle') { ds.set('sha_ok', c.sha === true); ds.set('steps', c.head.steps); ds.set('wall', c.head.wall); }
-                if (c.source === 'kaggle') { var m2 = c.nx * c.nr; AMP.set(c.A.subarray(f * m2, (f + 1) * m2)); PHS.set(c.P.subarray(f * m2, (f + 1) * m2)); ds.touch('amp'); ds.touch('phase'); }
+                if (c.source === 'kaggle' && !c.wave) { var m2 = c.nx * c.nr; AMP.set(c.A.subarray(f * m2, (f + 1) * m2)); PHS.set(c.P.subarray(f * m2, (f + 1) * m2)); ds.touch('amp'); ds.touch('phase'); }
+                if (c.wave) { var b3 = f * NX3 * NY3 * NY3; for (var i3 = 0; i3 < NX3; i3++) for (var j3 = 0; j3 < NY3; j3++) REW[i3 * NY3 + j3] = c.W[b3 + (i3 * NY3 + j3) * NY3 + NY3 / 2] - 128; ds.touch('rew'); }
             }
             var fx = function (v, d) { return v == null || !isFinite(v) ? '—' : v.toFixed(d); };
             document.getElementById('r-b').textContent = fx(ds.get('behind'), 3); document.getElementById('r-a').textContent = fx(ds.get('ahead'), 3);
             document.getElementById('r-i').textContent = fx(ds.get('inside'), 3); document.getElementById('r-l').textContent = fx(ds.get('lost'), 4);
-            document.getElementById('r-g').textContent = (p.E < p.V0 ? 'E < V₀, forbidden classically · ' : '') + 'T = ' + fx(ds.get('T1D'), 3);
+            var hs = SHAPE === 'slab' ? 'a/2' : 'R';
+            document.getElementById('r-b').previousElementSibling.textContent = 'Behind (x < −' + hs + ')'; document.getElementById('r-a').previousElementSibling.textContent = 'Ahead (x > ' + hs + ')'; document.getElementById('r-i').previousElementSibling.textContent = 'Inside |x| ≤ ' + hs;
+            if (SHAPE === 'slab') { document.getElementById('r-g-t').textContent = 'Exact: the packet through this wall'; document.getElementById('r-g').textContent = p.V0 >= HARD ? 'hard wall: T = 0' : 'T = ' + fx(ds.get('T_packet'), 4) + ' (ahead at the end: ' + fx(c && c.curves[c.n - 1] ? c.curves[c.n - 1][3] : NaN, 4) + ')'; }
+            else { document.getElementById('r-g-t').textContent = 'Guide: 1D slab of thickness 2R'; document.getElementById('r-g').textContent = p.V0 >= HARD ? 'hard: T = 0' : (p.E < p.V0 ? 'E < V₀, forbidden classically · ' : '') + 'T = ' + fx(ds.get('T1D'), 3); }
             document.getElementById('cap-t').textContent = 't = ' + fx(ds.get('t'), 2) + (c ? ' · frame ' + (f + 1) + ' of ' + c.n : '');
             document.getElementById('cap-p').textContent = c ? (c.source === 'kaggle' ? 'stored, from Kaggle' : 'live preview, ' + c.ready_n + ' of 48 frames') : any ? 'live preview, ' + any.ready_n + ' of 48 frames: the picture waits' : 'not computed yet';
             var src = document.getElementById('src-t'); if (!c && any) c = any;
-            if (c && c.source === 'kaggle') src.innerHTML = 'Computed on Kaggle on ' + c.meta.generated + ', Tesla T4, 128³ points, stored as 64³ cells, ' + c.head.steps + ' steps of Δt = 0.01 in ' + c.head.wall.toFixed(1) + ' s. File <code>' + c.meta.generated + '/' + c.meta.file + '</code>, SHA-256 ' + (c.sha === true ? 'checked ✓' : c.sha === false ? '<b>does not match</b>' : 'not checked (no crypto in this browser)') + '.';
+            if (c && c.source === 'kaggle') {
+                var how = c.wave ? 'in full 3D on a Tesla T4, 128³ points; stored: the true 3D wave, Re ψ on every point of the box drawn (96 × 64 × 64)'
+                    : c.shape === 'slab' ? 'on Kaggle’s CPU in 1D (Crank–Nicolson, Δx = 0.05 a), ψ = χ(x) g(y) g(z); stored: the cut through the axis'
+                    : c.shape === 'pillar' ? 'on Kaggle’s CPU in 2D (split-step Fourier, 128² points), ψ = φ(x, y) g(z); stored: the top view φ' + (GZ_OK === true ? ', and g(z) (SHA-256 ✓)' : '')
+                    : 'in full 3D on a Tesla T4, 128³ points; stored: the cut through the axis, spun about it';
+                src.innerHTML = 'Computed on Kaggle on ' + c.meta.generated + ', ' + how + '; ' + c.head.steps + ' steps of Δt = ' + c.head.dt + ' in ' + c.head.wall.toFixed(1) + ' s. File <code>' + c.meta.file + '</code>, SHA-256 ' + (c.sha === true ? 'checked ✓' : c.sha === false ? '<b>does not match</b>' : 'not checked (no crypto in this browser)') + '.';
+            }
             else if (c) src.innerHTML = 'Not computed on Kaggle yet. This is a <b style="display:inline">live preview</b> computed in your browser on a coarser grid (64³), ' + c.ready_n + ' of 48 frames so far. Checked against Kaggle on stored runs: the probabilities agree to within 0.08 at every frame. ' + (by2d[key(p.E, p.V0, p.R)] ? 'Kaggle’s 2D generation of this run gives at the end: behind ' + by2d[key(p.E, p.V0, p.R)].behind.toFixed(3) + ', ahead ' + by2d[key(p.E, p.V0, p.R)].ahead.toFixed(3) + '. ' : '') + (bridge.connected ? '' : 'The link that would have Kaggle compute it in 3D (kaggle-bridge) is not switched on yet.');
-            else src.textContent = 'Not computed yet.';
+            else src.textContent = SHAPE === 'sphere' && p.V0 >= HARD ? 'Not computed yet: the hard sphere needs new GPU runs on Kaggle, which wait for the owner’s yes.' : SHAPE === 'sphere' && p.V0 < 0 ? 'Not computed yet on Kaggle.' : 'Not computed yet.';
         }
 
         /* ---------- the clock ---------- */
@@ -796,9 +956,9 @@
             var starved = behind || (c.ready_n < c.n && tPhys >= cap - 1e-6 && sp < 0.05);
             if (starved && !isStored(p.E, p.V0, p.R)) {
                 var lp = live && liveKey === k ? live.ready_n / 48 : 0;
-                pop.set({ stage: bridge.connected ? 1 : 0, broken: bridge.connected ? -1 : 1, title: 'E = ' + p.E + ', V₀ = ' + p.V0 + ', R = ' + p.R + ' has not been computed yet',
+                pop.set({ stage: bridge.connected ? 1 : 0, broken: bridge.connected ? -1 : 1, title: (SHAPES[SHAPE] ? SHAPE.replace('slab', 'flat wall') + ': ' : '') + 'E = ' + p.E + ', V₀ = ' + fmtV(p.V0) + ', ' + SHAPES[SHAPE].size + ' = ' + p.R + ' has not been computed yet',
                     text: (bridge.connected ? 'Asked kaggle-bridge to have it computed on Kaggle’s GPU; it will be stored and come back here.' : 'The link to Kaggle, <b>kaggle-bridge</b>, is not switched on yet (dashed above), so Kaggle cannot be asked from this page. ') +
-                        ' Meanwhile your browser computes a live preview on a coarser grid: ' + Math.round(100 * lp) + ' %. The animation goes on as soon as the next frame is ready.', progress: lp });
+                        (SHAPE === 'sphere' && p.V0 < HARD ? ' Meanwhile your browser computes a live preview on a coarser grid: ' + Math.round(100 * lp) + ' %. The animation goes on as soon as the next frame is ready.' : ' There is no browser preview for this case.'), progress: lp });
                 pop.show();
             } else if (pop.shown) pop.hide();
             var f = frameOf(c);
@@ -814,34 +974,93 @@
         /* ---------- start: read the index, build the controls ---------- */
         /* every generation (a dated folder) adds its runs; a later generation replaces a run computed again */
         fetch(DATA_BASE + 'generations.json').then(function (r) { return r.json(); }).then(function (gens) {
-            return Promise.all(gens.map(function (g) { return fetch(DATA_BASE + g.index).then(function (r) { return r.json(); }).then(function (ix) { ix.base = DATA_BASE + g.date + '/'; return ix; }); }));
+            return Promise.all(gens.map(function (g) { return fetch(DATA_BASE + g.index).then(function (r) { return r.json(); }).then(function (ix) { ix.base = DATA_BASE + g.index.replace(/index\.json$/, ''); return ix; }); }));
         }).then(function (ixs) {
-            var grid = { Es: [], Vs: [], Rs: [] };
-            ixs.forEach(function (ix) { ix.runs.forEach(function (r) { r.base = ix.base; r.generated = ix.generated; byKey[key(r.E, r.V0, r.R)] = r; }); ['Es', 'Vs', 'Rs'].forEach(function (n) { grid[n] = grid[n].concat(ix[n]); }); if (ix.mirror_check) ds.set('sym_mirror', ix.mirror_check.largest_level_difference); });
-            var idx = IDX = Object.assign({}, ixs[ixs.length - 1], grid);
+            ixs.forEach(function (ix) {
+                var sh = ix.shape || 'sphere', wave = ix.kind === 'wave', g = GRID[sh] = GRID[sh] || { Es: [], Vs: [], Rs: [] };
+                ix.runs.forEach(function (r) {
+                    r.base = ix.base; r.generated = ix.generated; r.shape = sh;
+                    var size = sh === 'slab' ? r.a : r.R; r.key = keyS(sh, r.E, r.V0, size);
+                    if (wave) byWave[r.key] = r; else byKey[r.key] = r;
+                });
+                if (!wave) { g.Es = g.Es.concat(ix.Es); g.Vs = g.Vs.concat(ix.Vs); g.Rs = g.Rs.concat(sh === 'slab' ? ix.As : ix.Rs); }
+                if (ix.mirror_check) ds.set('sym_mirror', ix.mirror_check.largest_level_difference);
+                if (sh === 'pillar') loadGz(ix);
+                if (sh === 'sphere' && !wave) IDX = ix;
+            });
+            var idx = IDX = Object.assign({}, IDX || ixs[0]);
             for (var i = 0; i < 128; i++) XC[i] = (i - 64) * idx.L / 128; for (var r2 = 0; r2 < 64; r2++) RC[r2] = r2 * idx.L / 128; ds.touch('xc'); ds.touch('rc');
-            var host = document.getElementById('params'), defs = [
-                ['E', 'Packet energy <i>E</i>', stopsOf(idx.Es, EXTRA.E), 2.5],
-                ['V0', 'Barrier height <i>V</i><sub>0</sub>', stopsOf(idx.Vs, EXTRA.V0), 3.0],
-                ['R', 'Sphere radius <i>R</i>', stopsOf(idx.Rs, EXTRA.R), 4.0]];
+            for (var i4 = 0; i4 < NX3; i4++) WXC[i4] = X3 + i4 * H3; for (var j4 = 0; j4 < NY3; j4++) WYC[j4] = Y3 + j4 * H3; ds.touch('wxc'); ds.touch('wyc');
+            ['pillar', 'slab'].forEach(function (sh) { var b = document.querySelector('#shape-chips [data-s="' + sh + '"]'); if (!GRID[sh]) { b.disabled = true; b.title = 'Not stored yet'; } });
+            buildSliders({ E: 2.5, V0: 3.0, R: 4.0 });
+        }).catch(function (e) { document.getElementById('src-t').textContent = 'The stored runs could not be read: ' + e.message; });
+        /* the controls of the chosen shape: its own stored grid, plus the stops not computed yet */
+        function nearest(stops, v) { var b = 0; stops.forEach(function (s2, i) { if (Math.abs(s2 - v) < Math.abs(stops[b] - v)) b = i; }); return b; }
+        function buildSliders(want) {
+            var host = document.getElementById('params'), g = GRID[SHAPE], sh = SHAPES[SHAPE];
+            Array.prototype.slice.call(host.querySelectorAll('.kf-slider')).forEach(function (el) { el.remove(); });
+            var ex = SHAPE === 'sphere' ? EXTRA : { E: EXTRA.E, V0: [], R: [] };
+            var defs = [
+                ['E', 'Packet energy <i>E</i>', stopsOf(g.Es, ex.E), want.E],
+                ['V0', 'Barrier height <i>V</i><sub>0</sub> (below 0: a well)', stopsOf(g.Vs.concat(SHAPE === 'sphere' ? [-4, -2, -1, HARD] : []), ex.V0), want.V0],
+                ['R', sh.label, stopsOf(g.Rs, ex.R), want.R]];
+            sliders = {};
             defs.forEach(function (d) {
                 var nm = d[0], stops = d[2];
-                sliders[nm] = KaggleFlow.slider({ host: host, label: d[1], aria: d[1].replace(/<[^>]+>/g, ''), stops: stops, index: stops.indexOf(d[3]), format: function (v) { return v.toFixed(nm === 'R' ? 1 : 2) + (nm === 'R' ? ' a' : ''); },
-                    stored: function (i) { var p = { E: sliders.E ? sliders.E.value : 2.5, V0: sliders.V0 ? sliders.V0.value : 3, R: sliders.R ? sliders.R.value : 4 }; p[nm] = stops[i]; return isStored(p.E, p.V0, p.R); },
+                sliders[nm] = KaggleFlow.slider({ host: host, label: d[1], aria: d[1].replace(/<[^>]+>/g, ''), stops: stops, index: nearest(stops, d[3]), format: function (v) { return nm === 'V0' ? fmtV(v) : v.toFixed(nm === 'R' ? 1 : 2) + (nm === 'R' ? ' a' : ''); },
+                    stored: function (i) { var p = { E: sliders.E ? sliders.E.value : want.E, V0: sliders.V0 ? sliders.V0.value : want.V0, R: sliders.R ? sliders.R.value : want.R }; p[nm] = stops[i]; return isStored(p.E, p.V0, p.R) || (SHAPE === 'sphere' && !!byWave[key(p.E, p.V0, p.R)]); },
                     onChange: function () { ['E', 'V0', 'R'].forEach(function (o) { if (o !== nm && sliders[o]) sliders[o].refresh(); }); } });
             });
             ['E', 'V0', 'R'].forEach(function (o) { sliders[o].refresh(); });
-            load(byKey[key(2.5, 3.0, 4.0)]);
-        }).catch(function (e) { document.getElementById('src-t').textContent = 'The stored runs could not be read: ' + e.message; });
+            document.getElementById('shape-note').textContent = sh.note;
+            var p0 = current(), r0 = byKey[key(p0.E, p0.V0, p0.R)]; if (r0) load(r0);
+        }
+        function setShape(sh) {
+            if (!GRID[sh] || sh === SHAPE) return;
+            var p = sliders.E ? current() : { E: 2.5, V0: 3, R: 4 };
+            if (shownReal) snapshot();
+            var was = SHAPE; SHAPE = sh; shownId = null; barrierId = null; dirty = true;
+            buildSliders({ E: p.E, V0: p.V0, R: sh === 'slab' ? SHAPES.slab.def : (was === 'slab' ? 4.0 : p.R) });
+            document.querySelectorAll('#shape-chips button').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.s === sh ? 'true' : 'false'); });
+        }
+        function setView(v) {
+            VIEW = v; shownId = null; dirty = true; if (w3 && v !== 'fog') w3.setMode(v);
+            document.querySelectorAll('#view-chips button').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.v === v ? 'true' : 'false'); });
+        }
+        document.querySelectorAll('#shape-chips button').forEach(function (b) { b.addEventListener('click', function () { setShape(b.dataset.s); }); });
+        document.querySelectorAll('#view-chips button').forEach(function (b) { b.addEventListener('click', function () { setView(b.dataset.v); }); });
         Sim.onResize(stage, function () { ovBox.fit(); plotBox.fit(); dirty = true; });
-        window.__fig14 = { ds: ds, entry: entry, sliders: function () { return sliders; }, setT: function (t) { tPhys = t; }, play: setPlay };
+        window.__fig14 = { ds: ds, entry: entry, sliders: function () { return sliders; }, setT: function (t) { tPhys = t; }, play: setPlay, setShape: setShape, setView: setView, w3: function () { return w3; }, field: function () { return F3; } };
 
         /* ---------- the data panel (scripts/datalog.js) reads the store; these hooks only say where things are drawn ---------- */
         /* a stored point (x_i, rho_r) of the half-plane -> where it lands on the screen (at the angle where z = 0, y = rho);
            a screen point -> the voxel of largest |Re psi| along its ray -> the stored point at its x and rho */
         function pointOf(q) { var i = Math.floor(q / 64), r = q % 64; return [XC[i] / (L() / 2), RC[r] / (L() / 2), 0]; }
-        function screenOf(q) { return view.project(pointOf(q), ovBox.w, ovBox.h); }
+        function screenOf(q) { if (VIEW !== 'fog' && w3) { var pt = reOfPoint(q); return pt ? w3.project([pt.x, pt.y, VIEW === 'surface' ? pt.v / ds.get('remax') * w3.height : 0]) : { x: -1, y: -1 }; } return view.project(pointOf(q), ovBox.w, ovBox.h); }
+        /* the lit views: the stored point (x, rho -> y, z = 0), on the surface lifted by its Re psi; the drawn pixel there, read back */
+        function reOfPoint(q) { var c = entry(); if (!c) return null; var i = Math.floor(q / 64), r = q % 64, x = XC[i], y = RC[r], iw = Math.round((x - X3) / H3), jw = Math.round((y - Y3) / H3);
+            if (iw < 0 || iw >= NX3 || jw < 0 || jw >= NY3) return null; var F = field3d(c, frameOf(c)); return { v: F[(iw * NY3 + jw) * NY3 + NY3 / 2], x: X3 + iw * H3, y: Y3 + jw * H3 }; }
+        function hueClass(px) { var r = px[0], g = px[1], b = px[2]; if (r - b > 18 && r - g > 18) return 'wine'; if (b - r > 8) return 'slate'; return 'paper'; }
+        function pixelCheck3(q) {
+            var pt = reOfPoint(q); if (!pt) return { what: 'stored point ' + q, drawn: 'outside the drawn box', expected: '—', ok: true, note: 'The lit views draw −24 ≤ x < 24 and |y|, |z| < 16.' };
+            var z = VIEW === 'surface' ? pt.v / ds.get('remax') * w3.height : 0, at = w3.project([pt.x, pt.y, z]);
+            if (at.x < 0 || at.y < 0 || at.x >= ovBox.w || at.y >= ovBox.h) return { what: 'stored point ' + q, drawn: 'outside the view', expected: '—', ok: true, note: 'Turn the view to bring this point on screen.' };
+            w3.render(); var px = w3.readPixel(at.x, at.y), votes = { wine: 0, slate: 0, paper: 0 };
+            for (var dx = -2; dx <= 2; dx++) for (var dy = -2; dy <= 2; dy++) votes[hueClass(w3.readPixel(at.x + dx, at.y + dy))]++;   /* 5 × 5 pixels: an edge between two sheets mixes their colours */
+            var cls = votes.wine >= votes.slate && votes.wine >= votes.paper ? 'wine' : votes.slate >= votes.paper ? 'slate' : 'paper';
+            if (px[3] === 0) return { what: 'screen pixel at stored point ' + q, drawn: 'nothing (transparent)', expected: 'a filled pixel', ok: false };
+            if (VIEW === 'surface') {
+                var vs = pt.v / ds.get('remax'), want = Math.abs(vs) < 0.08 ? 'paper' : vs > 0 ? 'wine' : 'slate', sc = Wave3D.surfaceColour(vs);
+                return { what: 'screen pixel where the surface point (x = ' + pt.x.toFixed(1) + ', y = ' + pt.y.toFixed(1) + ') lands', drawn: 'rgb(' + px.slice(0, 3).join(', ') + '); 5 × 5 around it: ' + votes.wine + ' wine, ' + votes.slate + ' slate, ' + votes.paper + ' paper → ' + cls, expected: want + ' (Re ψ = ' + pt.v.toFixed(3) + '; unlit colour rgb(' + [sc.r, sc.g, sc.b].map(function (u) { return Math.round(255 * u); }).join(', ') + '))', ok: cls === want || Math.abs(vs) < 0.12,
+                    note: 'The surface is lit and shaded, so the pixel’s brightness depends on the angle of the light; its hue does not. The check compares the hue class: wine for Re ψ > 0, slate for Re ψ < 0, paper near 0 (|Re ψ| below 0.08 of the frame’s largest; between 0.08 and 0.12 either is accepted). Another part of the surface or the barrier can stand in front of the point: turn the view if the classes differ.' };
+            }
+            var cl = ds.get('iso');
+            var want2 = pt.v >= cl ? 'wine (inside a crest sheet)' : pt.v <= -cl ? 'slate (inside a trough sheet)' : 'whatever lies behind the point: |Re ψ| < c here';
+            return { what: 'screen pixel where the point (x = ' + pt.x.toFixed(1) + ', y = ' + pt.y.toFixed(1) + ', z = 0) lands', drawn: 'rgb(' + px.slice(0, 3).join(', ') + '); 5 × 5 around it: ' + votes.wine + ' wine, ' + votes.slate + ' slate, ' + votes.paper + ' paper → ' + cls, expected: want2 + ' (Re ψ = ' + pt.v.toFixed(3) + ', c = ' + cl.toFixed(3) + ')', ok: Math.abs(Math.abs(pt.v) - cl) < 0.2 * cl ? cls !== 'paper' : pt.v >= cl ? cls === 'wine' : pt.v <= -cl ? cls === 'slate' : true,
+                note: 'The sheets are the surfaces Re ψ = +c (wine) and −c (slate), c = 0.3 of the frame’s largest |Re ψ|, found by marching cubes in the 3D field of this frame. A point where Re ψ ≥ c lies inside a crest, so the nearest sheet in front of it is a crest unless another sheet or the barrier is closer to the eye; in the cutaway the quarter y > 0, z > 0 is removed. Where |Re ψ| is within a fifth of c from c the point lies on a sheet, and the 5 × 5 pixels around it may show the next sheet too: then either sheet colour passes.' };
+        }
         function pixelCheck(q) {
+            if (VIEW !== 'fog') { if (!w3) return { what: 'the picture', drawn: 'the 3D view is starting', expected: '—', ok: true }; return pixelCheck3(q); }
             var at = screenOf(q), c = entry(), dpr = volCanvas.width / ovBox.w;
             if (!c || !view.data) return { what: 'the picture', drawn: 'nothing drawn yet', expected: '—', ok: true };
             if (at.x < 0 || at.y < 0 || at.x >= ovBox.w || at.y >= ovBox.h) return { what: 'stored point ' + q, drawn: 'outside the view', expected: '—', ok: true, note: 'Turn the view to bring this point on screen.' };
@@ -856,18 +1075,22 @@
             ds: ds, kicker: 'Fig. 14 · data', file: 'fig14-wave-packet-sphere',
             playing: function () { return playing; },
             groups: [
-                { title: 'What you set', note: 'the three stops of the controls', vars: ['E', 'V0', 'R', 'k0'] },
+                { title: 'What you set', note: 'the shape, the view and the three stops of the controls (R is the thickness a for the flat wall)', vars: ['shape', 'view', 'E', 'V0', 'R', 'k0'] },
                 { title: 'The stored run', note: 'read from the run file Kaggle wrote', vars: ['stored', 'source', 'file', 'sha_ok', 'steps', 'wall', 'ready', 'live_done'] },
-                { title: 'This frame', note: 'stored values; inside and lost added up from them', vars: ['t', 'frame', 'norm', 'behind', 'ahead', 'inside', 'lost', 'sigma_y', 'sigma_free', 'T1D'] },
-                { title: 'The picture', note: 'the stored half-plane of this frame (x along the flight, ρ from the axis); the 3D wave is it spun about the axis', vars: ['xc', 'rc', 'amp', 'phase', 'sym_mirror'] },
+                { title: 'This frame', note: 'stored values; inside and lost added up from them', vars: ['t', 'frame', 'norm', 'behind', 'ahead', 'inside', 'lost', 'sigma_y', 'sigma_free', 'T1D', 'T_packet'] },
+                { title: 'The picture', note: 'the stored plane of this frame: the half-plane through the axis (x along the flight, ρ from it; for the pillar, the top view x, y ≥ 0), or, for the true 3D runs, Re ψ in the plane z = 0', vars: ['xc', 'rc', 'amp', 'phase', 'wxc', 'wyc', 'rew', 'remax', 'iso', 'triangles', 'sym_mirror'] },
                 { title: 'Playback', note: 'how the page plays', vars: ['speed', 'edge'] }
             ],
             probe: function (x, y) {
+                if (VIEW !== 'fog' && w3) { var hp = w3.pickPlane(x, y); if (!hp) return null; var ii = Math.round((hp[0] + L() / 2) / (L() / 128)), rr2 = Math.round(Math.abs(hp[1]) / (L() / 128)); if (ii < 0 || ii > 127 || rr2 > 63) return null; return { q: ii * 64 + rr2 }; }
                 var b = view.pick(x, y, ovBox.w, ovBox.h), c = entry(); if (!b || !c) return null;
                 var M = b.ix, dm = view.dims, st = c.step, yv = (b.iy + 0.5 - dm[1] / 2) * st, zv = (b.iz + 0.5 - dm[2] / 2) * st, r = Math.min(63, Math.round(Math.sqrt(yv * yv + zv * zv) / st));
                 return { q: b.ix * 64 + r };
             },
             inspect: function (ref) {
+                var cw = entry();
+                if (cw && cw.wave) { var pt = reOfPoint(ref.q); if (!pt) return null; var iw = Math.round((pt.x - X3) / H3), jw = Math.round((pt.y - Y3) / H3), qw = iw * NY3 + jw;
+                    return { title: 'true 3D run: the stored point x = ' + pt.x.toFixed(2) + ' a, y = ' + pt.y.toFixed(2) + ' a, z = 0', at: screenOf(ref.q), rows: [['x', WXC[iw], 'a', 'wxc', iw], ['y', WYC[jw], 'a', 'wyc', jw], ['w (Re ψ level)', REW[qw], '', 'rew', qw], ['Re ψ / |ψ|<sub>peak,0</sub>', REW[qw] / 127, '']] }; }
                 var q = ref.q, i = Math.floor(q / 64), r = q % 64, a = AMP[q], ph = PHS[q], phi = ph / 255 * 2 * Math.PI - Math.PI;
                 return { title: 'stored point x = ' + XC[i].toFixed(2) + ' a, ρ = ' + RC[r].toFixed(2) + ' a (the strongest wave along the ray you pointed at; every point on the circle of radius ρ around the axis has these values)', at: screenOf(q),
                     rows: [['x', XC[i], 'a', 'xc', i], ['ρ', RC[r], 'a', 'rc', r], ['q (|ψ|)', a, '', 'amp', q], ['p (arg ψ)', ph, '', 'phase', q], ['|ψ| / |ψ|<sub>peak,0</sub>', a / 255, ''], ['arg ψ', phi, 'rad'], ['Re ψ / |ψ|<sub>peak,0</sub>', a < 3 ? 0 : a / 255 * Math.cos(phi), '']] };
@@ -881,7 +1104,7 @@
                 T1D: function () { return { formula: 'rectangular barrier, thickness 2R', inputs: [['E', ds.get('E'), '', 2], ['V<sub>0</sub>', ds.get('V0'), '', 2], ['2R', 2 * ds.get('R'), 'a', 1]], value: T1D(ds.get('E'), ds.get('V0'), 2 * ds.get('R')) }; },
                 t: function () { var c = entry(); return c ? { formula: 'frame · Δt<sub>frame</sub>', inputs: [['frame', ds.get('frame'), '', 0], ['Δt<sub>frame</sub>', frameDt(c), '', 3]], value: ds.get('frame') * frameDt(c) } : null; }
             },
-            drawn: { amp: pixelCheck, phase: pixelCheck },
+            drawn: { amp: pixelCheck, phase: pixelCheck, rew: function (q) { var i = Math.floor(q / 64), j = q % 64, x = WXC[i], y = WYC[j]; var ii = Math.round((x + 32) / 0.5), rr = Math.round(Math.abs(y) / 0.5); return pixelCheck(ii * 64 + rr); } },
             round: { time: 't', label: function () { return 'one stored run, ' + (ds.get('ready') || 48) + ' frames'; }, length: function () { var c = entry(); return c ? tEnd(c) : 10; }, columns: ['behind', 'ahead', 'inside', 'lost', 'sigma_y'] },
             play: function () { setPlay(true); },
             about: 'The packet flies along x through the sphere’s centre and both are round about that axis, so the wave is the same at every angle around it: ψ(x, y, z) = ψ(x, ρ) with ρ = √(y² + z²). Kaggle computed every run in full 3D on 128³ points and stored the cut through the axis; the page keeps its half ρ ≥ 0 (128 × 64 points, 0.5 a apart: |ψ| and arg ψ in 256 levels each) and spins it about the axis: every voxel takes Re ψ = q/255 · cos p at its ρ, linear between the two stored ρ points around it. The picture draws Re ψ, the wave itself, as fog: crests wine, troughs ink and fainter, opacity growing with (Re ψ)². Checks of the symmetry: the two halves of every stored cut agree to the number shown as “mirror” (levels of 255); a full 3D run computed in this workspace (E = 2, V₀ = 3, R = 4, Re ψ on 96 × 64 × 64 points) equals its spun cut to 2 levels of 127 (root mean square) and at worst 24 of 127 at a few points on the sphere’s surface, where the square grid makes the sphere a staircase. The probabilities come from the whole 3D ψ on Kaggle. Between stored frames nothing is interpolated. Where a run is not stored the picture is the live preview from your browser (64³ points), spun the same way and marked on the figure.'
