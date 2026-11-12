@@ -536,7 +536,7 @@ read back (wine). Tested at 390 and 1440 px: 84 checks agree, none differ, the d
 - strongest swing between 2.5 and 4.5 Hz: 3.043 / 3.433 / 3.393 Hz at 0.5 / 1.0 / 1.5 m/s (3.421 Hz theory; the 0.5 m/s
   ride swings too little, 0.4 mm, for a clean peak);
 - decay after the last bump (band-pass 2.5–4.5 Hz, envelope, log fit over 1.5 s): e-folding time 0.76 / 0.41 / 0.32 s,
-  damping ratio 0.061 / 0.115 / 0.147, against 0.0035 (theory) to 0.0053 (experiment) for real stout (table above). The
+  damping ratio 0.061 / 0.115 / 0.147, against 0.0036 (theory) to 0.0053 (experiment) for real stout. The
   solver's own losses are 12 to 40 times too large: the stored rides are far too calm after each bump;
 - drift: over the last 5 s, at steady speed on flat road, the stored wall lean averages 1.90 / 0.56 / 6.36 mm while q
   averages 0.28 / 0.30 / 0.89 mm. The lean at single wall nodes drifts; the surface as a whole hardly tilts. At rest the
@@ -600,3 +600,18 @@ m/s^2); 8 playback laws (12)-(13): under the square-root cap the picture slows a
 sources (NASA TN D-1367, NASA SP-106, the APIC paper, the Fig. 12 note, the notebook), each opened for this note. `fold.js`
 is now loaded, so the sections fold like every other note. Rendered at 390 and 1440 px: 13 numbered equations, no KaTeX
 errors, no sideways scroll. The catalogue entry now lists `derivation`.
+
+
+**Review of the note and corrected measurement (12 November 2026).** An independent derivation check and a blind referee
+read the note. Their findings that changed it: (1) the band-pass and envelope fit first used in `kaggle_decay.py` was
+biased (a made-up tau of 0.32 s read 0.42 s); the script now fits q = A exp(-t/tau) cos(wt + phi) + c + st directly
+(linear least squares inside a grid search over tau and w, numpy only), and `--selftest` recovers made-up tau from 0.32 to
+12.9 s within 1.5 %. (2) The cart damps the swing too: `tools/fig12/cart_damping.cjs` runs the reduced model on the same
+cart and road; with the stout's own damping off the swing dies with zeta 0.0067-0.0074 (with the wall's, 0.012-0.013), so
+`--modal` compares. (3) q is now read from ring 13, the outermost ring the notebook built from particles, scaled to the
+wall by J1(xi)/J1(xi 13/16) = 1.044 (page: `q_ring`, `q_scale`, `q1`). (4) The stored surface at rest is level at
+126.2 mm on rings 0-10 but 118.1 and 117.6 mm on rings 11-12 and 125.0, 125.5, 129.4, 133.3 mm on rings 13-16, in every
+ride: a reconstruction fault near the tulip's waist radius, visible as a faint trench in the head. Corrected results:
+1.0 m/s tau 0.481 s, 3.32 Hz, zeta 0.100; 1.5 m/s tau 0.344 s, 3.41 Hz, zeta 0.136 (0.5 m/s swings 0.3 mm, not fitted);
+on rings 8 and 10 zeta 0.14-0.21. Against the cart alone (0.007) 14-19 times too much; against cart and wall (0.012) 8-11
+times. Example 7.2 now uses the tilt of the whole surface, lean = 2Ra/g, so a 6.36 mm lean needs 0.80 m/s^2.
