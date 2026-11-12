@@ -610,13 +610,13 @@ class Stout:
     @ti.kernel
     def rnorm(self) -> ti.f32:
         s = 0.0
-        for I in ti.grouped(self.r): s = ti.max(s, ti.abs(self.r[I]))
+        for I in ti.grouped(self.r): ti.atomic_max(s, ti.abs(self.r[I]))   # a reduction (s = max(s, ...) races on the GPU)
         return s
 
     @ti.kernel
     def bnorm(self) -> ti.f32:
         s = 0.0
-        for I in ti.grouped(self.b): s = ti.max(s, ti.abs(self.b[I]))
+        for I in ti.grouped(self.b): ti.atomic_max(s, ti.abs(self.b[I]))
         return s
 
     def solve(self, tol=1e-5, maxit=600):
