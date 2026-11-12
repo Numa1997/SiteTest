@@ -104,6 +104,16 @@ twice that until it is built), so about 13 h with 80 rides at once on GitHub's f
 compressed surfaces (7 kB per second of ride, measured). A freehand road cannot be offered: no solution exists for it
 until it is computed.
 
+**Where the runs execute (12 November 2026).** At the user's direction the stout's data is computed on the user's
+Kaggle account and kept there; GitHub's workflow (`.github/workflows/fig12-openfoam.yml`) stays as a second route.
+`tools/fig12/kaggle/make_notebook.py` turns any case of `notes/fig12/of-request.json` into one self-contained Kaggle
+notebook: it installs OpenFOAM 13 with the workflow's own commands, clones `tools/fig12` and `public/scripts` at a
+pinned commit, builds the case with `tools/fig12/of/make_case.py`, runs `tools/fig12/of/run.sh` on all cores of a CPU
+session (no GPU hours), and leaves the files of `notes/fig12/of-runs/<case>/` plus the free surface, `timing.json`,
+`progress.log` and `SHA256SUMS.txt` as the notebook's output. `tools/fig12/kaggle/compare.py` checks one case run on
+both machines. Every Kaggle notebook, version, commit and checksum is listed in `notes/fig12/of-runs/index.json`; the
+raw data stays on Kaggle and later goes to the website through a GitHub release, never into the repository's history.
+
 **The page on this branch** does not run at present: its script and data panel were built around the removed parts. It
 is being replaced by a page that only plays back solutions computed on GitHub. The page on `main` is unchanged.
 

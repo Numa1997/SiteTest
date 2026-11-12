@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-1689 files, 84.2 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+1693 files, 84.2 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -39,13 +39,13 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Shared by the portfolio sources (not served)](#shared-by-the-portfolio-sources-not-served) | 1 |
 | [Template sources](#template-sources) | 2 |
 | [Documentation](#documentation) | 37 |
-| [Tools](#tools) | 120 |
+| [Tools](#tools) | 123 |
 | [Translation tables](#translation-tables) | 54 |
 | [Agents of the lecture-note review](#agents-of-the-lecture-note-review) | 4 |
 | [Working notes of project 07, the electron beam](#working-notes-of-project-07-the-electron-beam) | 52 |
 | [Working notes of the Rotor Pendula study](#working-notes-of-the-rotor-pendula-study) | 86 |
 | [Working notes of the Droplet Collection study](#working-notes-of-the-droplet-collection-study) | 121 |
-| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 585 |
+| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 586 |
 
 ## Repository root
 
@@ -893,7 +893,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`docs/simulations/fig10-wind-turbine.md`](simulations/fig10-wind-turbine.md) | 57.3 kB | Documentation: Fig. 10 · Wind Turbine Control. | [fig10-wind-turbine.md](simulations/fig10-wind-turbine.md) |
 | [`docs/simulations/fig11-double-inverted-pendulum.md`](simulations/fig11-double-inverted-pendulum.md) | 61.0 kB | Documentation: Project 05 · Balancing Two Rods on a Cart (Fig. 11 from 3 to 4 November 2026). | [fig11-double-inverted-pendulum.md](simulations/fig11-double-inverted-pendulum.md) |
 | [`docs/simulations/fig11-pendulum-control.md`](simulations/fig11-pendulum-control.md) | 28.8 kB | Documentation: Fig. 11 · Double Pendulum under Control (Fig. 11 again since 4 November 2026; a project from 3 to 4 November). | [fig11-pendulum-control.md](simulations/fig11-pendulum-control.md) |
-| [`docs/simulations/fig12-beer-slosh.md`](simulations/fig12-beer-slosh.md) | 58.0 kB | Documentation: Fig. 12 · A Pint of Guinness on a One-Wheel Cart (`public/simulations/beer-slosh.html`). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`docs/simulations/fig12-beer-slosh.md`](simulations/fig12-beer-slosh.md) | 59.0 kB | Documentation: Fig. 12 · A Pint of Guinness on a One-Wheel Cart (`public/simulations/beer-slosh.html`). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`docs/simulations/fig13-momentum-spirographs.md`](simulations/fig13-momentum-spirographs.md) | 26.9 kB | Documentation: Fig. 13 · Spirographs in Momentum Space, the Flower Hunt, the dashboard and the films. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`docs/simulations/project06-rods-in-liquid.md`](simulations/project06-rods-in-liquid.md) | 9.7 kB | Documentation: Project 06 · Balancing Two Rods in a Liquid. | [project06-rods-in-liquid.md](simulations/project06-rods-in-liquid.md) |
 | [`docs/styles.md`](styles.md) | 52.1 kB | Documentation: Stylesheets: `public/styles/`. | [styles.md](styles.md) |
@@ -918,6 +918,9 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/fig12/gpu-shake.cjs`](../tools/fig12/gpu-shake.cjs) | 4.1 kB | Fig. 12: the whole glass (GPU solver, headless Chromium) shaken near resonance: does the swing turn into a swirl? | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/gpu-study.cjs`](../tools/fig12/gpu-study.cjs) | 5.2 kB | Fig. 12: the cart over a bump or a rough road with the GPU solver (World.advanceGpu) in headless Chromium, in batches; lean, accelerations, spill, controllers. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/irish-imperial-pint.svg`](../tools/fig12/irish-imperial-pint.svg) | 54.0 kB | Fig. 12: dimensions.com’s dimensioned elevation and section of the tulip pint glass (source of the profile). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`tools/fig12/kaggle/README.md`](../tools/fig12/kaggle/README.md) | 3.0 kB | Fig. 12, Kaggle: how the OpenFOAM cases run on the user’s Kaggle account, what each notebook stores, and what was measured. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`tools/fig12/kaggle/compare.py`](../tools/fig12/kaggle/compare.py) | 3.5 kB | Fig. 12, Kaggle: one OpenFOAM case run on two machines compared column by column, with both swings analysed and both wall times. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`tools/fig12/kaggle/make_notebook.py`](../tools/fig12/kaggle/make_notebook.py) | 17.9 kB | Fig. 12, Kaggle: writes one self-contained Kaggle notebook for one OpenFOAM case (install OpenFOAM 13, sparse clone at a pinned commit, build, run on all cores, the outputs of notes/fig12/of-runs/ with timing and checksums). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/linfit.cjs`](../tools/fig12/linfit.cjs) | 2.0 kB | Fig. 12: fits the free swing (amplitude, frequency) in the files linearity.cjs saves. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/of/analyse_swing.py`](../tools/fig12/of/analyse_swing.py) | 7.2 kB | Fig. 12, OpenFOAM, gates 1.2 and 1.5: the free swing’s frequency and damping from a run’s monitor, with the mass books (out through the top, lost by the numerics), the swing energy measured from the rest state of the stout actually present, and the time step’s own damping; a slip/no-slip pair gives the solver’s own damping against the real friction’s. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/of/cart/cart.H`](../tools/fig12/of/cart/cart.H) | 7.0 kB | Fig. 12, OpenFOAM: the cart’s equations of motion in C++, a line-by-line port of Cart in stout-cart.js (bit-identical rides, test_cart.cpp). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
@@ -1020,7 +1023,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/i18n/ingest.py`](../tools/i18n/ingest.py) | 1.9 kB | Stores checked translations made outside the tables (page pieces, script strings, walkthrough prose). | [i18n.md](i18n.md) |
 | [`tools/i18n/package.json`](../tools/i18n/package.json) | 285 B | The parser wrap.cjs needs (acorn); npm install --prefix tools/i18n. | [i18n.md](i18n.md) |
 | [`tools/i18n/wrap.cjs`](../tools/i18n/wrap.cjs) | 3.7 kB | Wraps the reader-visible strings of a page's scripts in _t(), with a JavaScript parser (acorn). | [i18n.md](i18n.md) |
-| [`tools/inventory.py`](../tools/inventory.py) | 85.4 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
+| [`tools/inventory.py`](../tools/inventory.py) | 86.3 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
 | [`tools/perf/addresses.cjs`](../tools/perf/addresses.cjs) | 6.1 kB | Every page at every address a reader can use (x.html, x, x/, folder/), and every link of every page, on a running site; exits 1 on any wrong answer. | [performance.md](performance.md) |
 | [`tools/perf/clockcheck.cjs`](../tools/perf/clockcheck.cjs) | 3.2 kB | Each figure runs on screen, holds off screen, resumes; the store stays live for an open data panel and the walkthrough. | [performance.md](performance.md) |
 | [`tools/perf/film.cjs`](../tools/perf/film.cjs) | 3.1 kB | A repeat visit as a reader sees it: screenshots at fixed times and every LCP candidate with its element, to tell a metric from the screen. | [performance.md](performance.md) |
@@ -1767,7 +1770,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/fig12/check-8-6.md`](../notes/fig12/check-8-6.md) | 12.8 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/check.md`](../notes/fig12/check.md) | 24.2 kB | Fig. 12: the derivation checker's table of equations and numbers. | [notes.md](notes.md) |
 
-<details><summary>53 files: Fig. 12: a measuring script of the review, or its saved output.</summary>
+<details><summary>54 files: Fig. 12: a measuring script of the review, or its saved output.</summary>
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
@@ -1778,10 +1781,11 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/fig12/fig-bump.svg`](../notes/fig12/fig-bump.svg) | 28.8 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/fig-glass.svg`](../notes/fig12/fig-glass.svg) | 17.2 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/gpu-page-test.cjs`](../notes/fig12/gpu-page-test.cjs) | 2.4 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
-| [`notes/fig12/handoff-fig12-guinness.md`](../notes/fig12/handoff-fig12-guinness.md) | 18.1 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/handoff-fig12-guinness.md`](../notes/fig12/handoff-fig12-guinness.md) | 18.5 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/nopush.cjs`](../notes/fig12/nopush.cjs) | 2.0 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/note-shots.cjs`](../notes/fig12/note-shots.cjs) | 2.2 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/of-request.json`](../notes/fig12/of-request.json) | 913 B | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/of-runs/index.json`](../notes/fig12/of-runs/index.json) | 795 B | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/of-runs/rest-coarse/case.json`](../notes/fig12/of-runs/rest-coarse/case.json) | 198 B | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/of-runs/rest-coarse/log.foamRun.tail.gz`](../notes/fig12/of-runs/rest-coarse/log.foamRun.tail.gz) | 24.2 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/of-runs/rest-coarse/stoutMonitor.dat.gz`](../notes/fig12/of-runs/rest-coarse/stoutMonitor.dat.gz) | 1.16 MB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |

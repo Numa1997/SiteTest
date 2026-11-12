@@ -1,0 +1,12 @@
+{
+ "about": "Fig. 12 OpenFOAM runs: where each case was computed, with its notebook or workflow reference, version, commit and output checksums. Never the data itself. Kaggle runs: tools/fig12/kaggle/README.md.",
+ "updated": "2026-11-12",
+ "github": {
+  "workflow": ".github/workflows/fig12-openfoam.yml",
+  "runs": [
+   {"run_id": 43116028422, "cases": ["rest-coarse", "rest-medium", "swing-slip-coarse", "swing-noslip-coarse", "swing-slip-medium", "swing-noslip-medium", "swing-slip-fine", "swing-noslip-fine"], "stored": "notes/fig12/of-runs/<case>/"},
+   {"run_id": 43217272678, "cases": ["swing-slip-medium-dt025", "swing-noslip-medium-dt025", "swing-slip-fine-dt025", "swing-noslip-fine-dt025"], "stored": null, "note": "cancelled by the user on 12 November 2026"}
+  ]
+ },
+ "kaggle": []
+}
