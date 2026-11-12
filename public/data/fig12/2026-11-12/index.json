@@ -1,0 +1,49 @@
+{
+ "about": "Fig. 12 computed on Kaggle: stored rides of the pint on the one-wheel cart, played back by public/simulations/guinness-kaggle.html. Generated on Kaggle on 2026-11-12.",
+ "generated": "2026-11-12",
+ "kaggle": {
+  "notebook": "numakoudsie/guinness-on-a-cart-stout-sloshing",
+  "url": "https://www.kaggle.com/code/numakoudsie/guinness-on-a-cart-stout-sloshing",
+  "version": 3,
+  "machine": "Tesla T4 GPU",
+  "output_file": "guinness.html",
+  "output_sha256": "8a2551ef7f38d62b8c2a9ec568e1c2cb890a892964f1a5de0385a63257010b83"
+ },
+ "code": "Taichi 1.7.4 APIC solver on a 1.5 mm grid, 370,386 cells, 1,002,808 particles; glass profile and drawing code from SiteTest commit 816dda6cf741e4350bf2802e2419b127ad1d0bae",
+ "rides": [
+  {
+   "road": "gentle road: hump, dip, ripples, bump",
+   "v0": 0.5,
+   "frames": 601,
+   "seconds": 20.0
+  },
+  {
+   "road": "gentle road: hump, dip, ripples, bump",
+   "v0": 1.0,
+   "frames": 601,
+   "seconds": 20.0
+  },
+  {
+   "road": "gentle road: hump, dip, ripples, bump",
+   "v0": 1.5,
+   "frames": 601,
+   "seconds": 20.0
+  }
+ ],
+ "measured": {
+  "minutes_per_ride": [
+   21.8,
+   20.2,
+   20.3
+  ],
+  "steps_per_ride": 10000,
+  "ms_per_step": 123
+ },
+ "files": [
+  {
+   "path": "rides.json",
+   "bytes": 715166,
+   "sha256": "0b158b432cfb7f6d58c5e80b04408fb754f46160e3542162f6c38a7d95ef61e6"
+  }
+ ]
+}
