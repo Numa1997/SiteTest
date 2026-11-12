@@ -18,7 +18,7 @@ runTimeModifiable no;
 adjustTimeStep  yes;
 maxCo           MAXCO;
 maxAlphaCo      MAXCO;
-maxDeltaT       1e-3;
+maxDeltaT       MAXDT;
 // the coded monitor (and later the cart) are compiled at the start of a run: OpenFOAM requires this switch for that
 InfoSwitches { allowSystemOperations 1; }
 functions

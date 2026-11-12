@@ -67,7 +67,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
-| [`.github/workflows/fig12-openfoam.yml`](../.github/workflows/fig12-openfoam.yml) | 5.1 kB | Fig. 12: OpenFOAM runs on GitHub’s free runners, started by hand only: one case per 4-core job, the monitors committed to notes/fig12/of-runs/. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`.github/workflows/fig12-openfoam.yml`](../.github/workflows/fig12-openfoam.yml) | 5.9 kB | Fig. 12: OpenFOAM runs on GitHub’s free runners, started by hand only: one case per 4-core job, the monitors committed to notes/fig12/of-runs/. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 
 ## Pages under public/
 
@@ -939,7 +939,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/fig12/of/case/constant/phaseProperties`](../tools/fig12/of/case/constant/phaseProperties) | 121 B | Fig. 12, OpenFOAM case template: incompressible two-phase Navier–Stokes (volume of fluid), stout and air, no-slip glass, the glass’s frame as an acceleration source, the stout monitor (mass, energy, momentum, spill, surface heights). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/of/case/constant/physicalProperties.air`](../tools/fig12/of/case/constant/physicalProperties.air) | 149 B | Fig. 12, OpenFOAM case template: incompressible two-phase Navier–Stokes (volume of fluid), stout and air, no-slip glass, the glass’s frame as an acceleration source, the stout monitor (mass, energy, momentum, spill, surface heights). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/of/case/constant/physicalProperties.stout`](../tools/fig12/of/case/constant/physicalProperties.stout) | 145 B | Fig. 12, OpenFOAM case template: incompressible two-phase Navier–Stokes (volume of fluid), stout and air, no-slip glass, the glass’s frame as an acceleration source, the stout monitor (mass, energy, momentum, spill, surface heights). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
-| [`tools/fig12/of/case/system/controlDict`](../tools/fig12/of/case/system/controlDict) | 809 B | Fig. 12, OpenFOAM case template: incompressible two-phase Navier–Stokes (volume of fluid), stout and air, no-slip glass, the glass’s frame as an acceleration source, the stout monitor (mass, energy, momentum, spill, surface heights). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`tools/fig12/of/case/system/controlDict`](../tools/fig12/of/case/system/controlDict) | 810 B | Fig. 12, OpenFOAM case template: incompressible two-phase Navier–Stokes (volume of fluid), stout and air, no-slip glass, the glass’s frame as an acceleration source, the stout monitor (mass, energy, momentum, spill, surface heights). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/of/case/system/fvSchemes`](../tools/fig12/of/case/system/fvSchemes) | 485 B | Fig. 12, OpenFOAM case template: incompressible two-phase Navier–Stokes (volume of fluid), stout and air, no-slip glass, the glass’s frame as an acceleration source, the stout monitor (mass, energy, momentum, spill, surface heights). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/of/case/system/fvSolution`](../tools/fig12/of/case/system/fvSolution) | 746 B | Fig. 12, OpenFOAM case template: incompressible two-phase Navier–Stokes (volume of fluid), stout and air, no-slip glass, the glass’s frame as an acceleration source, the stout monitor (mass, energy, momentum, spill, surface heights). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/of/case/system/setFieldsDict`](../tools/fig12/of/case/system/setFieldsDict) | 230 B | Fig. 12, OpenFOAM case template: incompressible two-phase Navier–Stokes (volume of fluid), stout and air, no-slip glass, the glass’s frame as an acceleration source, the stout monitor (mass, energy, momentum, spill, surface heights). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
@@ -949,7 +949,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
-| [`tools/fig12/of/make_case.py`](../tools/fig12/of/make_case.py) | 4.8 kB | Fig. 12, OpenFOAM: builds a case of the stout in the tulip (mesh, fill, forcing, physical parameters) from the template. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`tools/fig12/of/make_case.py`](../tools/fig12/of/make_case.py) | 5.0 kB | Fig. 12, OpenFOAM: builds a case of the stout in the tulip (mesh, fill, forcing, physical parameters) from the template. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/of/run.sh`](../tools/fig12/of/run.sh) | 877 B | Fig. 12, OpenFOAM: runs one case (serial or split over processes) and records its wall time. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/of/tulip_mesh.py`](../tools/fig12/of/tulip_mesh.py) | 8.3 kB | Fig. 12, OpenFOAM: the wall-fitted O-grid mesh of the Guinness tulip (boundary layers at the glass and the floor resolved; air and a spill ring above the rim), three levels for the convergence proof. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/profile.cjs`](../tools/fig12/profile.cjs) | 1.5 kB | Fig. 12: times one fluid step of the stout solver by phase (level set, transfers, pressure, advection). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
@@ -1778,10 +1778,10 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/fig12/fig-bump.svg`](../notes/fig12/fig-bump.svg) | 28.8 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/fig-glass.svg`](../notes/fig12/fig-glass.svg) | 17.2 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/gpu-page-test.cjs`](../notes/fig12/gpu-page-test.cjs) | 2.4 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
-| [`notes/fig12/handoff-fig12-guinness.md`](../notes/fig12/handoff-fig12-guinness.md) | 17.8 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/handoff-fig12-guinness.md`](../notes/fig12/handoff-fig12-guinness.md) | 18.1 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/nopush.cjs`](../notes/fig12/nopush.cjs) | 2.0 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/note-shots.cjs`](../notes/fig12/note-shots.cjs) | 2.2 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
-| [`notes/fig12/of-request.json`](../notes/fig12/of-request.json) | 1.6 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/of-request.json`](../notes/fig12/of-request.json) | 913 B | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/of-runs/rest-coarse/case.json`](../notes/fig12/of-runs/rest-coarse/case.json) | 198 B | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/of-runs/rest-coarse/log.foamRun.tail.gz`](../notes/fig12/of-runs/rest-coarse/log.foamRun.tail.gz) | 24.2 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/of-runs/rest-coarse/stoutMonitor.dat.gz`](../notes/fig12/of-runs/rest-coarse/stoutMonitor.dat.gz) | 1.16 MB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |

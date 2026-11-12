@@ -1,6 +1,6 @@
 # active-memory handoff: Fig. 12 · A pint of Guinness on a one-wheel cart (phyeinusul.com)
 
-**Handoff #1** · 2026-11-11 · Lineage: #1 (2026-11-11): mode model removed; particle solver debugged and retired; OpenFOAM route built (mesh, case, coupled cart); gates waiting on a GitHub Actions outage
+**Handoff #1** · 2026-11-11 (state updated 2026-11-12) · Lineage: #1 (2026-11-11): mode model removed; particle solver debugged and retired; OpenFOAM route built (mesh, case, coupled cart); gates waiting on a GitHub Actions outage
 
 ## 0. Instructions for Claude (read first)
 
@@ -118,8 +118,9 @@ You are continuing work from a previous chat. That chat is gone; this file is th
 | OpenFOAM case template + builder | done | `tools/fig12/of/case/`, `make_case.py`, `run.sh` | `--forcing rest|tilt|cart`, `--wall noslip|slip`; must not run as root (use a user, e.g. `foam`) |
 | Cart port + coupling | done | `tools/fig12/of/cart/cart.H`, `write_cart.cjs`, `test_cart.cpp`, `case/constant/fvModels.cart` | `3ef38b9` |
 | Gate analysis | done | `tools/fig12/of/analyse_swing.py` (`--pair slip noslip`) | `410e59a` |
-| Gate batch 1 (8 cases) | queued | GitHub run 43098031881 | stuck in GitHub Actions major outage (from ~20:48 UTC 11 Nov) |
-| Local coarse swings | running when chat ended | `/home/foam/cases/swing-{slip,noslip}-coarse` | lost if the container restarted |
+| Gate batch 1 (8 cases) | done, gates fail | GitHub run 43116028422, `notes/fig12/of-runs/` | 1.1 coarse still; medium mass +3.6e-4 (unexplained). 1.2 fails on all meshes: solver 0.0040/0.0033/0.0012, friction estimate 0.0036/0.0009/0.0067 (pairs had different time steps) |
+| Time-step share | measured | local coarse slip 4 s | zeta = 0.0037 + 1.59/s x dt; 0.0016 at 1 ms, 0.0004 at 0.25 ms; the rest is the space grid |
+| Gate batch 2 (4 cases) | running | `notes/fig12/of-request.json` | medium + fine, slip/no-slip, fixed 0.25 ms, 6 s; workflow now fails when a case does not reach its end time |
 | Foam head, cart friction sources, spill check, swirl | not started | — | Phase 1.4–1.5, 1.3 |
 | Pipeline packs/release/Cloudflare fetch | not started | — | Phase 2 |
 | Playback page + phase space | not started | — | Phase 3 |
@@ -128,11 +129,11 @@ You are continuing work from a previous chat. That chat is gone; this file is th
 Local OpenFOAM install (fresh container): `sudo sh -c "wget -q -O - https://dl.openfoam.org/gpg.key > /etc/apt/trusted.gpg.d/openfoam.asc"; echo "deb [arch=amd64] http://dl.openfoam.org/ubuntu noble main" > /etc/apt/sources.list.d/openfoam.list; apt-get update; apt-get install -y openfoam13 bc; useradd -m foam`.
 
 ## 11. Next steps
-1. **Next action:** check GitHub run 43098031881 (Fig. 12 OpenFOAM runs) and `notes/fig12/of-runs/`; if results exist, run `python3 tools/fig12/of/analyse_swing.py --pair <slip>/stoutMonitor.dat.gz <noslip>/stoutMonitor.dat.gz` per mesh level and read the rest runs (KE, mass, probe heights over 30 s) for gate 1.1.
-2. Commit gate results and verdicts into `docs/simulations/fig12-beer-slosh.md`; if gate 1.2 fails, find the dominant numerical loss before going on.
-3. Gates 1.3 (whole glass is native in OpenFOAM; swirl onset vs Royon-Lebeaud, Hopfinger & Cartellier, J. Fluid Mech. 2007), 1.4 (foam head damping, cart friction terms with sources), 1.5 (mass bound), 1.6 (108-ride proof set). Send the user one short report when Phase 1 is done.
-4. Phase 2: measure one ride on a runner, state total runner hours, pilot one road through release files → Cloudflare build fetch (test with one small file first).
-5. Phases 3–5.
+1. **Next action:** when batch 2 lands in `notes/fig12/of-runs/*-dt025/`, run `python3 tools/fig12/of/analyse_swing.py --pair <slip> <noslip>` for medium and fine. Gate 1.2 needs solver damping below 0.1 x friction (about 0.0005). If fine still fails, the space grid dominates: try a finer surface band or a higher-order time scheme (CrankNicolson), measured the same way.
+2. Explain the medium rest run's mass gain (+3.6e-4) and the stout carried out through the top during swings (fraction smeared into the air); gate 1.5.
+3. Gates 1.3 (swirl onset vs Royon-Lebeaud, Hopfinger & Cartellier 2007), 1.4 (foam head, cart friction terms with sources), 1.6 (108-ride proof set).
+4. Phase 2: measure one 12 s ride on a runner (fine mesh at a fixed small step may exceed the 6 h job limit: split rides into restarts), state total runner hours, pilot release files -> Cloudflare build fetch.
+5. Phases 3-5.
 
 ## 12. Open questions ⚠️
 - Surface tension: keep σ = 0 (stated effect ~1 % on frequency) or include σ ≈ 0.045 N/m (source still needed) at the cost of spurious currents? Engineering choice; justify in the note.

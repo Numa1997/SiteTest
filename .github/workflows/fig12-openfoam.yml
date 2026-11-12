@@ -3,7 +3,7 @@
 # that file starts nothing), or with workflow_dispatch once this file is on the default branch (GitHub dispatches only
 # workflows found there). The request (or the input 'cases') is a JSON list of
 #   {"name": "...", "level": "coarse|medium|fine", "forcing": "rest|tilt", "fill": 0.125, "end": 8, "write": 1,
-#    "wall": "noslip|slip", "sigma": 0, "nu": 2.05e-6, "rho": 1000, "maxco": 0.5}
+#    "wall": "noslip|slip", "sigma": 0, "nu": 2.05e-6, "rho": 1000, "maxco": 0.5, "maxdt": 0.001}
 # Each case runs as one job on 4 cores (tools/fig12/of/make_case.py, tools/fig12/of/run.sh). The last job commits the
 # monitors and logs (not the flow fields) to notes/fig12/of-runs/<name>/ on the branch the workflow ran from. A push made
 # with GITHUB_TOKEN starts no workflow, so nothing loops. A case already stored there is skipped (rerun = only the missing).
@@ -58,6 +58,7 @@ jobs:
           sudo apt-get update -qq
           sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq openfoam13 bc > /dev/null
       - name: Build and run the case
+        id: runcase
         if: steps.stored.outputs.skip == 'false'
         env:
           CASE_JSON: ${{ toJSON(matrix.case) }}
@@ -66,9 +67,9 @@ jobs:
           mkdir -p "$RUNNER_TEMP/case"
           python3 tools/fig12/of/make_case.py "$RUNNER_TEMP/case/run" --level "$(arg level)" --forcing "$(arg forcing)" \
             --fill "$(arg fill)" --end "$(arg end)" --write "$(arg write)" --wall "$(arg wall)" --sigma "$(arg sigma)" --nu "$(arg nu)" \
-            --rho "$(arg rho)" --maxco "$(arg maxco)"
+            --rho "$(arg rho)" --maxco "$(arg maxco)" --maxdt "$(md=$(arg maxdt); echo ${md:-0.001})"
           echo "cores: $(nproc)"
-          bash tools/fig12/of/run.sh "$RUNNER_TEMP/case/run" 4 || echo "run ended with an error"
+          ok=yes; bash tools/fig12/of/run.sh "$RUNNER_TEMP/case/run" 4 || { echo "run ended with an error"; ok=no; }
           out="out/${{ matrix.case.name }}"; mkdir -p "$out"
           for f in "$RUNNER_TEMP/case/run/stoutMonitor.dat" "$RUNNER_TEMP"/case/run/processor0/stoutMonitor.dat; do
             if [ -f "$f" ]; then cp "$f" "$out/stoutMonitor.dat"; break; fi
@@ -78,11 +79,17 @@ jobs:
           tail -c 200000 "$RUNNER_TEMP/case/run/log.foamRun" | gzip -9 > "$out/log.foamRun.tail.gz" || true
           echo "$CASE_JSON" > "$out/case.json"
           ls -la "$out"
+          # a case counts as done only if the solver exited cleanly and the monitor reaches the end time
+          if [ "$ok" = yes ] && [ -f "$out/stoutMonitor.dat.gz" ] && python3 -c "import gzip,json,os,sys; e=float(json.loads(os.environ['CASE_JSON'])['end']); t=float(gzip.open(sys.argv[1],'rt').read().split()[-12]); sys.exit(0 if t >= e - 1e-6 else 1)" "$out/stoutMonitor.dat.gz"; then echo "done=yes" >> "$GITHUB_OUTPUT"; else echo "done=no" >> "$GITHUB_OUTPUT"; fi
       - uses: actions/upload-artifact@v6
         if: steps.stored.outputs.skip == 'false'
         with:
           name: fig12-of-${{ matrix.case.name }}
           path: out/
+      - name: Fail if the case did not finish
+        if: steps.stored.outputs.skip == 'false' && steps.runcase.outputs.done != 'yes'
+        run: |
+          echo "case ${{ matrix.case.name }} did not reach its end time; its log is stored"; exit 1
   store:
     needs: run
     if: always()

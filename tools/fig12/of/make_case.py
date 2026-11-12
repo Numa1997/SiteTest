@@ -30,6 +30,7 @@ def main():
     ap.add_argument('--end', type=float, required=True); ap.add_argument('--forcing', required=True, choices=['rest', 'tilt', 'cart'])
     ap.add_argument('--ride', help='forcing cart: the ride as JSON for tools/fig12/of/cart/write_cart.cjs (road, v0, ctrl, susp)')
     ap.add_argument('--write', type=float, default=0.05); ap.add_argument('--maxco', type=float, default=0.5)
+    ap.add_argument('--maxdt', type=float, default=1e-3, help='largest time step in s; set it below what the Courant limit allows to hold the step fixed')
     ap.add_argument('--wall', required=True, choices=['noslip', 'slip'])
     ap.add_argument('--sigma', type=float, required=True); ap.add_argument('--nu', type=float, required=True); ap.add_argument('--rho', type=float, required=True)
     a = ap.parse_args()
@@ -37,7 +38,7 @@ def main():
     shutil.copytree(os.path.join(HERE, 'case'), a.case)
     tulip_mesh.main(a.case, a.level)
     dzp, Rp = tulip_mesh.profile(); zrim = (len(Rp) - 1) * dzp
-    subs = {'END': '%g' % a.end, 'WRITE': '%g' % a.write, 'MAXCO': '%g' % a.maxco, 'SIGMA': '%g' % a.sigma, 'NU': '%g' % a.nu, 'RHO': '%g' % a.rho,
+    subs = {'END': '%g' % a.end, 'WRITE': '%g' % a.write, 'MAXCO': '%g' % a.maxco, 'MAXDT': '%g' % a.maxdt, 'SIGMA': '%g' % a.sigma, 'NU': '%g' % a.nu, 'RHO': '%g' % a.rho,
             'FILL': '%g' % a.fill, 'GLASSU': 'noSlip' if a.wall == 'noslip' else 'slip', 'PROBER': '%g' % (tulip_mesh.R_at(a.fill, dzp, Rp) - 0.001), 'ZTOP': '%g' % (zrim + tulip_mesh.HEAD)}
     for root, _, files in os.walk(a.case):
         for f in files:
@@ -60,6 +61,6 @@ def main():
         for t, v in velocity_table(a.forcing, a.end): fh.write('    (%.6f (%.9g 0 0))\n' % (t, -v))
     env = 'source /opt/openfoam13/etc/bashrc && cd %s && blockMesh > log.blockMesh 2>&1 && cp 0/alpha.stout.orig 0/alpha.stout && setFields > log.setFields 2>&1' % a.case
     subprocess.run(['bash', '-c', env], check=True)
-    print('case %s ready: level %s, fill %.4f m, %s, %g s, wall %s' % (a.case, a.level, a.fill, a.forcing, a.end, a.wall))
+    print('case %s ready: level %s, fill %.4f m, %s, %g s, wall %s, largest step %g s' % (a.case, a.level, a.fill, a.forcing, a.end, a.wall, a.maxdt))
 
 if __name__ == '__main__': main()
