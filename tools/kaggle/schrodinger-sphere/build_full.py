@@ -74,7 +74,7 @@ for r in INDEX:
         d = json.load(open("/kaggle/working/runs/" + r["file"]))
         recs.append(d)
 R4 = [dict(id=n, i=d["i"], j=d["j"], k=d["k"], E=d["E"], V0=d["V0"], R=d["R"], n=d["n"], steps=d["steps"], wall=d["wall"], amp=d["amp"], ph=d["ph"], c=d["c"]) for n, d in enumerate(recs)]
-D = dict(Es=Es, Vs=Vs, Rs=Rs, out=OUT, L=L, dt=DT, s0=S0, cells=f"{N}³", device="Kaggle " + jax.devices()[0].device_kind, start=dict(sE=3, sV=5, sR=2), runs=R4)
+D = dict(Es=Es, Vs=Vs, Rs=Rs, out=OUT, L=L, dt=DT, s0=S0, cells=f"{N}³", device="Kaggle " + jax.devices()[0].device_kind, start=dict(sE=4, sV=5, sR=2), runs=R4)
 page = (TEMPLATE.replace("__DATA__", json.dumps(D, separators=(",", ":"))).replace("__CELLS__", f"{N}³ = {N**3:,}".replace(",", " "))
         .replace("__DT__", f"Δt = {DT}").replace("__L__", f"{L:g} a").replace("__NF__", str(NF)).replace("__OUT__", str(OUT))
         .replace("Hollow dots: not computed yet.", "Hollow dots: computed and stored in runs/, but not inside this preview file (it holds R = 4 and every other energy only)."))
