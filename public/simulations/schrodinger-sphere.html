@@ -86,10 +86,6 @@
                         <button type="button" class="btn" id="play">Pause</button>
                         <button type="button" class="btn btn--ghost" id="replay">From the start</button>
                     </div>
-                    <div class="seg" role="group" aria-label="Colour">
-                        <button type="button" class="btn btn--ghost" id="m-amp" aria-pressed="true">Amplitude</button>
-                        <button type="button" class="btn btn--ghost" id="m-ph" aria-pressed="false">Phase</button>
-                    </div>
                     <p class="speed" id="speed">playback speed <i><span></span></i></p>
                 </div>
                 <div class="panel__group" id="params">
@@ -132,7 +128,7 @@
     (function () {
         'use strict';
         /* ---------- where the stored runs are served from: the one line to change when the store moves ---------- */
-        var DATA_BASE = '../data/schrodinger-sphere/';
+        var DATA_BASE = '../data/schrodinger-sphere/';   /* generations.json lists the dated generations; each has its own index.json */
         var BRIDGE_URL = null;   /* kaggle-bridge's address once it is deployed; null: not connected (docs/kaggle-pipeline.md) */
         var PROJECT = 'schrodinger-sphere';
         /* the controls offer stops beyond the computed grid: those are the regions not computed yet */
@@ -143,7 +139,7 @@
         var stage = document.getElementById('stage'), fieldBox = Sim.canvas2d(document.getElementById('field')), fctx = fieldBox.ctx;
         var plotBox = Sim.canvas2d(document.getElementById('plot')), pctx = plotBox.ctx;
         var timeIn = document.getElementById('time'), timeOut = document.getElementById('time-out');
-        var IDX = null, byKey = {}, cache = {}, mode = 'amp', live = null, liveKey = null, worker = null, job = 0;
+        var IDX = null, byKey = {}, cache = {}, live = null, liveKey = null, worker = null, job = 0;
         var tPhys = 0, playing = true, endHeld = false, fade = { from: null, a: 1 }, lastKey = null, lastSrc = null, shownReal = false;
         var gov = KaggleFlow.governor(0.45, 0), pop = KaggleFlow.popup(stage), bridge = KaggleFlow.bridge({ url: BRIDGE_URL, project: PROJECT });
         var requested = {}, sliders = {};
@@ -193,13 +189,13 @@
             var k = key(r.E, r.V0, r.R);
             if (cache[k]) return cache[k].ready;
             var c = cache[k] = { source: 'kaggle', meta: r };
-            c.ready = fetch(DATA_BASE + r.file).then(function (res) { if (!res.ok) throw new Error(res.status + ' for ' + r.file); return res.arrayBuffer(); }).then(function (buf) {
+            c.ready = fetch(r.base + r.file).then(function (res) { if (!res.ok) throw new Error(res.status + ' for ' + r.file); return res.arrayBuffer(); }).then(function (buf) {
                 var check = (window.crypto && crypto.subtle) ? crypto.subtle.digest('SHA-256', buf).then(function (h) { return hex(h) === r.sha256; }) : Promise.resolve(null);
                 var dv = new DataView(buf), H = dv.getUint32(4, true), head = JSON.parse(new TextDecoder().decode(new Uint8Array(buf, 8, H)));
                 var body = new Blob([new Uint8Array(buf, 8 + H)]).stream().pipeThrough(new DecompressionStream('deflate'));
                 return Promise.all([check, new Response(body).arrayBuffer()]).then(function (res) {
                     var all = new Uint8Array(res[1]), n = head.n, o = head.out;
-                    c.head = head; c.n = n; c.out = o; c.ready_n = n; c.amp = all.subarray(0, n * o * o); c.ph = all.subarray(n * o * o); c.curves = head.curves; c.sha = res[0];
+                    c.head = head; c.n = n; c.out = o; c.ready_n = n; c.amp = all.subarray(0, n * o * o); c.curves = head.curves; c.sha = res[0];   /* the website stores the amplitude only (docs/kaggle-pipeline.md) */
                     return c;
                 });
             });
@@ -213,12 +209,12 @@
             if (liveKey === k && live) return;
             if (worker) worker.terminate();
             liveKey = k; job++;
-            live = { source: 'live', meta: p, n: 48, out: 64, ready_n: 0, amp: new Uint8Array(48 * 64 * 64), ph: new Uint8Array(48 * 64 * 64), curves: [], t0: performance.now() };
+            live = { source: 'live', meta: p, n: 48, out: 64, ready_n: 0, amp: new Uint8Array(48 * 64 * 64), curves: [], t0: performance.now() };
             var mine = live, id = job;
             worker = new Worker('../scripts/schrodinger-live-worker.js');
             worker.onmessage = function (e) {
                 var m = e.data; if (m.id !== id || mine !== live) return;
-                if (m.type === 'frame') { mine.amp.set(m.amp, m.f * 4096); mine.ph.set(m.ph, m.f * 4096); mine.curves[m.f] = m.curve; mine.ready_n = m.f + 1; }
+                if (m.type === 'frame') { mine.amp.set(m.amp, m.f * 4096); mine.curves[m.f] = m.curve; mine.ready_n = m.f + 1; }
                 else if (m.type === 'done') { mine.ms = m.ms; mine.done = true; }
                 else if (m.type === 'error') { mine.error = m.message; }
             };
@@ -237,13 +233,11 @@
 
         /* ---------- drawing ---------- */
         var ramp = []; for (var v = 0; v < 256; v++) { var s = v / 255; ramp.push([Math.round(245 + s * (122 - 245)), Math.round(241 + s * (31 - 241)), Math.round(234 + s * (43 - 234))]); }
-        function hsl(h, l) { var c = (1 - Math.abs(2 * l - 1)), x = c * (1 - Math.abs((h * 6) % 2 - 1)), m = l - c / 2, k = Math.floor(h * 6) % 6, t = [[c, x, 0], [x, c, 0], [0, c, x], [0, x, c], [x, 0, c], [c, 0, x]][k]; return [(t[0] + m) * 255, (t[1] + m) * 255, (t[2] + m) * 255]; }
         function paintImage(c, f) {
             var o = c.out; if (off.width !== o) { off.width = off.height = o; }
-            var img = og.createImageData(o, o), base = f * o * o, A = c.amp, P = c.ph;
+            var img = og.createImageData(o, o), base = f * o * o, A = c.amp;
             for (var x = 0; x < o; x++) for (var y = 0; y < o; y++) {
-                var s = base + x * o + y, q = 4 * ((o - 1 - y) * o + x), lv = A[s], col;
-                if (mode === 'amp') col = ramp[lv]; else col = lv < 3 ? ramp[0] : hsl(P[s] / 255, 0.95 - 0.5 * Math.min(1, lv / 160));
+                var s = base + x * o + y, q = 4 * ((o - 1 - y) * o + x), col = ramp[A[s]];
                 img.data[q] = col[0]; img.data[q + 1] = col[1]; img.data[q + 2] = col[2]; img.data[q + 3] = 255;
             }
             og.putImageData(img, 0, 0);
@@ -314,7 +308,7 @@
             document.getElementById('cap-t').textContent = 't = ' + fx(ds.get('t'), 2) + (c ? ' · frame ' + (f + 1) + ' of ' + c.n : '');
             document.getElementById('cap-p').textContent = c ? (c.source === 'kaggle' ? 'stored, from Kaggle' : 'live preview, ' + c.ready_n + ' of 48 frames') : any ? 'live preview, ' + any.ready_n + ' of 48 frames: the picture waits' : 'not computed yet';
             var src = document.getElementById('src-t'); if (!c && any) c = any;
-            if (c && c.source === 'kaggle') src.innerHTML = 'Computed on Kaggle, Tesla T4, 128³ points, ' + c.head.steps + ' steps of Δt = 0.01 in ' + c.head.wall.toFixed(1) + ' s. File <code>' + byKey[key(p.E, p.V0, p.R)].file + '</code>, SHA-256 ' + (c.sha === true ? 'checked ✓' : c.sha === false ? '<b>does not match</b>' : 'not checked (no crypto in this browser)') + '.';
+            if (c && c.source === 'kaggle') src.innerHTML = 'Computed on Kaggle on ' + c.meta.generated + ', Tesla T4, 128³ points, ' + c.head.steps + ' steps of Δt = 0.01 in ' + c.head.wall.toFixed(1) + ' s. File <code>' + c.meta.generated + '/' + c.meta.file + '</code>, SHA-256 ' + (c.sha === true ? 'checked ✓' : c.sha === false ? '<b>does not match</b>' : 'not checked (no crypto in this browser)') + '.';
             else if (c) src.innerHTML = 'Not computed on Kaggle yet. This is a <b style="display:inline">live preview</b> computed in your browser on a coarser grid (64³), ' + c.ready_n + ' of 48 frames so far. Checked against Kaggle on stored runs: the probabilities agree to 0.02 – 0.06. ' + (bridge.connected ? '' : 'The link that would have Kaggle compute it precisely (kaggle-bridge) is not switched on yet.');
             else src.textContent = 'Not computed yet.';
         }
@@ -364,13 +358,15 @@
         document.getElementById('play').addEventListener('click', function () { var c = entry(); if (!playing && c && c.ready_n >= c.n && tPhys >= tEnd(c) - 1e-9) { snapshot(); tPhys = 0; endHeld = false; } setPlay(!playing); });
         document.getElementById('replay').addEventListener('click', function () { snapshot(); tPhys = 0; endHeld = false; gov.set(0); setPlay(true); });
         timeIn.addEventListener('input', function () { var c = entry(); if (c) { tPhys = +timeIn.value * frameDt(c); } });
-        function setMode(m) { mode = m; document.getElementById('m-amp').setAttribute('aria-pressed', m === 'amp'); document.getElementById('m-ph').setAttribute('aria-pressed', m === 'ph'); }
-        document.getElementById('m-amp').addEventListener('click', function () { setMode('amp'); });
-        document.getElementById('m-ph').addEventListener('click', function () { setMode('ph'); });
 
         /* ---------- start: read the index, build the controls ---------- */
-        fetch(DATA_BASE + 'index.json').then(function (r) { return r.json(); }).then(function (idx) {
-            IDX = idx; idx.runs.forEach(function (r) { byKey[key(r.E, r.V0, r.R)] = r; });
+        /* every generation (a dated folder) adds its runs; a later generation replaces a run computed again */
+        fetch(DATA_BASE + 'generations.json').then(function (r) { return r.json(); }).then(function (gens) {
+            return Promise.all(gens.map(function (g) { return fetch(DATA_BASE + g.index).then(function (r) { return r.json(); }).then(function (ix) { ix.base = DATA_BASE + g.date + '/'; return ix; }); }));
+        }).then(function (ixs) {
+            var grid = { Es: [], Vs: [], Rs: [] };
+            ixs.forEach(function (ix) { ix.runs.forEach(function (r) { r.base = ix.base; r.generated = ix.generated; byKey[key(r.E, r.V0, r.R)] = r; }); ['Es', 'Vs', 'Rs'].forEach(function (n) { grid[n] = grid[n].concat(ix[n]); }); });
+            var idx = IDX = Object.assign({}, ixs[ixs.length - 1], grid);
             for (var i = 0; i < 128; i++) XC[i] = (i - 64) * idx.L / 128; ds.touch('xc');
             var host = document.getElementById('params'), defs = [
                 ['E', 'Packet energy <i>E</i>', stopsOf(idx.Es, EXTRA.E), 2.5],
@@ -386,18 +382,18 @@
             load(byKey[key(2.5, 3.0, 4.0)]);
         }).catch(function (e) { document.getElementById('src-t').textContent = 'The stored runs could not be read: ' + e.message; });
         Sim.onResize(stage, function () { fieldBox.fit(); plotBox.fit(); });
-        window.__fig14 = { ds: ds, entry: entry, sliders: function () { return sliders; }, setT: function (t) { tPhys = t; }, play: setPlay, mode: setMode };
+        window.__fig14 = { ds: ds, entry: entry, sliders: function () { return sliders; }, setT: function (t) { tPhys = t; }, play: setPlay };
 
         /* ---------- the data panel (scripts/datalog.js) reads the store; these hooks only say where things are drawn ---------- */
         function screenOf(gx, gy) { var W = fieldBox.w, Hh = fieldBox.h; return { x: (gx + 0.5) / 128 * W, y: Hh - (gy + 0.5) / 128 * Hh }; }
         function pixelCheck(q) {
             var gx = Math.floor(q / 128), gy = q % 128, at = screenOf(gx, gy), c = entry();
             if (!c || c.source !== 'kaggle') return { what: 'the picture', drawn: 'not compared', expected: '—', ok: true, note: 'Only a stored Kaggle run is compared pixel by pixel.' };
-            var px = fctx.getImageData(Math.round(at.x * fieldBox.dpr), Math.round(at.y * fieldBox.dpr), 1, 1).data, lv = LEVEL[q], want = mode === 'amp' ? ramp[lv] : null;
+            var px = fctx.getImageData(Math.round(at.x * fieldBox.dpr), Math.round(at.y * fieldBox.dpr), 1, 1).data, lv = LEVEL[q], want = ramp[lv];
             if (px[3] === 0) return { what: 'screen pixel at grid point (' + gx + ', ' + gy + ')', drawn: 'nothing (transparent)', expected: 'a filled pixel', ok: false };
             var d = want ? Math.max(Math.abs(px[0] - want[0]), Math.abs(px[1] - want[1]), Math.abs(px[2] - want[2])) : 0;
             return { what: 'screen pixel at grid point (' + gx + ', ' + gy + ')', drawn: 'rgb(' + px[0] + ', ' + px[1] + ', ' + px[2] + ')', expected: want ? 'rgb(' + want.join(', ') + ') for level ' + lv : 'a phase colour', ok: !want || d <= 24,
-                note: 'The 128 × 128 stored points are stretched over the canvas with smoothing, so a pixel between points mixes its neighbours: up to 24 colour units apart is accepted. In phase mode the hue is the stored phase level.' };
+                note: 'The 128 × 128 stored points are stretched over the canvas with smoothing, so a pixel between points mixes its neighbours: up to 24 colour units apart is accepted.' };
         }
         Sim.data = {
             ds: ds, kicker: 'Fig. 14 · data', file: 'fig14-wave-packet-sphere',

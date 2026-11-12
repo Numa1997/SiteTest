@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | Page | [public/simulations/schrodinger-sphere.html](../../public/simulations/schrodinger-sphere.html) (English only, listed in `ENGLISH_ONLY` of [tools/i18n/build.py](../../tools/i18n/build.py)) |
-| Data | [public/data/schrodinger-sphere/](../../public/data/schrodinger-sphere/): `index.json` and 405 run files `e{i}_v{j}_r{k}.bin`, 120.0 MB in all |
+| Data | [public/data/schrodinger-sphere/](../../public/data/schrodinger-sphere/): `generations.json`, and the generation of 2026-11-12 (`2026-11-12/index.json` and 405 run files `e{i}_v{j}_r{k}.bin`, amplitude only, 46.4 MB) |
 | Shared page script | [public/scripts/kaggle-flow.js](../../public/scripts/kaggle-flow.js) and [public/styles/kaggle-flow.css](../../public/styles/kaggle-flow.css) ([kaggle-pipeline.md](../kaggle-pipeline.md)) |
 | Live preview | [public/scripts/schrodinger-live-worker.js](../../public/scripts/schrodinger-live-worker.js) |
 | Kaggle code | [tools/kaggle/schrodinger-sphere/](../../tools/kaggle/schrodinger-sphere/) ([kaggle.md](../kaggle.md)) |
@@ -18,24 +18,25 @@ preview in a Web Worker and says so on the figure.
 ## What the reader sees and sets
 
 - **The figure**: $|\psi|$ in the plane $z = 0$ through the sphere's centre, 128 × 128 stored points stretched over a square
-  canvas, paper (0) to wine (the first frame's peak); or the phase $\arg\psi$ as hue with lightness from $|\psi|$. The sphere is
-  a dashed circle, a 10 a bar gives the scale.
+  canvas, paper (0) to wine (the first frame's peak). The sphere is a dashed circle, a 10 a bar gives the scale. The phase is not
+  on the website (it doubled the data); it is in the Kaggle notebook's output.
 - **Fig. 14b**: the probability behind the sphere ($x < -R$), inside its slab ($|x| \le R$), ahead ($x > R$) and lost into the
   absorbing border, against time, from the whole 3D $\psi$; a vertical line marks the frame shown.
 - **Controls** (`KaggleFlow.slider`): packet energy $E$ (stops 0.5…4.5 computed, 5.0, 5.5, 6.0 not), barrier height $V_0$
   (0…8 computed, 10, 12 not), sphere radius $R$ (2…6 computed, 1, 7, 8 not); a time slider over the 48 stored frames; Play or
-  Pause, From the start, Amplitude or Phase; a playback-speed bar.
+  Pause, From the start; a playback-speed bar.
 - **Readouts**: the four probabilities, and the 1D rectangular barrier transmission for a slab of thickness $2R$ as a guide.
 - **Where these numbers come from**: the Kaggle card, grid, steps and seconds of the run, its file name and whether its SHA-256
   matched `index.json`; or, beyond the grid, that the picture is a live preview and how far it has got.
 
 ## How it works
 
-1. At start the page reads `DATA_BASE + 'index.json'` (`DATA_BASE = '../data/schrodinger-sphere/'`, the one line to change if
-   the store moves), builds the three controls with the stored stops marked, and loads the run E = 2.5, V₀ = 3, R = 4.
+1. At start the page reads `DATA_BASE + 'generations.json'` (`DATA_BASE = '../data/schrodinger-sphere/'`, the one line to change
+   if the store moves), then each generation's `index.json`, builds the three controls with the stored stops marked, and loads the
+   run E = 2.5, V₀ = 3, R = 4.
 2. `load(r)` fetches a run file, computes its SHA-256 and compares it with the index, reads the JSON header (parameters and the
    48 rows `[t, ∫|ψ|², P_behind, P_ahead, σ_y]`), and inflates the zlib body (`DecompressionStream('deflate')`) into 48 × 128 × 128
-   amplitude levels followed by as many phase levels; index `f·128² + x·128 + y`.
+   amplitude levels; index `f·128² + x·128 + y`.
 3. The clock (`Sim.clock`) advances the physical time at (run length / 9 s) × speed. The speed goes through
    `KaggleFlow.governor` (0.45 s) towards a goal: 1 − 0.8 × (the largest closeness of the three controls), lowered towards 0.06 over
    the last quarter of a stored run and to zero at the last frame a live preview has computed.

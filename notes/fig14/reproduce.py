@@ -55,6 +55,13 @@ elif task == 'unitary':       # norm without the absorbing border: each factor u
         for k in range(5):
             p = f(p, 300); n = float(np.sum(np.abs(np.asarray(p, np.complex128))**2) * g['dx']**3); rows.append((300 * (k + 1), n - n0))
         out[str(dtype.__name__ if hasattr(dtype, '__name__') else dtype)] = dict(n0=n0, rows=rows); print(out, flush=True)
+elif task == 'maskloss':      # 64-bit with the border on: what the border alone removes early in the run
+    g = setup(128, 64.0, dtype=jnp.complex128)
+    for (E, V0, R) in [(2.5, 3.0, 4.0), (0.5, 8.0, 6.0)]:
+        psi0, V = init(g, E, V0, R); p = jnp.asarray(psi0); f = stepper(g, V, 0.01, jnp.complex128); rows = []; n0 = slabs(g, psi0, R)[0]
+        for k in range(5):
+            p = f(p, 300); rows.append((300 * (k + 1), slabs(g, np.asarray(p), R)[0] - n0))
+        out[f'{E}_{V0}_{R}'] = rows; print(out, flush=True)
 elif task == 'energy':        # mean energy of the starting packet, from its Fourier transform: k0^2/2 + 3/(8 sigma0^2)?
     g = setup(128, 64.0); psi0, V = init(g, 2.5, 0.0, 4.0); ph = np.fft.fftn(psi0); w = np.abs(ph)**2
     out['norm'] = float(np.sum(np.abs(psi0)**2) * g['dx']**3); out['mean_k2_over_2'] = float(np.sum(w * g['K2']) / np.sum(w) / 2)

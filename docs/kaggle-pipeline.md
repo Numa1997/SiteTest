@@ -18,7 +18,7 @@ the oven through one door, the Worker `kaggle-bridge`.
 |---|---|---|
 | Notebook that computes one block of runs | per project, e.g. [tools/kaggle/schrodinger-sphere/](../tools/kaggle/schrodinger-sphere/) | working; Fig. 14's 405 runs computed and stored |
 | Converter to the site's format | per project, e.g. [to_site.py](../tools/kaggle/schrodinger-sphere/to_site.py) | working |
-| The store the page reads | one base address per page (`DATA_BASE` in the page's script) | `public/data/<project>/` on the site itself; whether the files move to a Cloudflare R2 bucket is Numa's decision, not yet taken |
+| The store the page reads | one base address per page (`DATA_BASE` in the page's script) | on the website itself, `public/data/<project>/<YYYY-MM-DD>/` (Numa's decision, 12 November 2026; see Storage) |
 | The shared page script | [public/scripts/kaggle-flow.js](../public/scripts/kaggle-flow.js), [public/styles/kaggle-flow.css](../public/styles/kaggle-flow.css) | working on Fig. 14 |
 | Live preview | per project, a Web Worker, e.g. [schrodinger-live-worker.js](../public/scripts/schrodinger-live-worker.js) | working on Fig. 14 |
 | The Worker `kaggle-bridge` | Cloudflare, account of the site | exists with Cloudflare's starter code and the secret `KAGGLE_API_TOKEN` (set by Numa); **no pipeline code deployed**; the pages run with `BRIDGE_URL = null` and say so |
@@ -27,6 +27,25 @@ Not yet tested, and needed before the bridge can start Kaggle runs: T1, a Worker
 parameters, reads its status and fetches its output (Kaggle's public API, `kaggle kernels push/status/output`); T2, a running
 notebook posts its progress and results out to the Worker. Kaggle's own run log stays empty until a run ends (seen on
 12 November 2026), so live progress has to be pushed by the notebook.
+
+## Storage: on the website and with the notebook, named by the date of generation
+
+Numa's rule, 12 November 2026, for every project: the data is placed **on the website** and **stays with its Kaggle notebook**,
+both named by the date Kaggle generated it.
+
+- On the website: `public/data/<project>/<YYYY-MM-DD>/`, one folder per generation, with its own `index.json` (generation date,
+  Kaggle notebook reference and version, git commit of the solver, and per file its size and SHA-256), and
+  `public/data/<project>/generations.json` listing the generations. A page reads `generations.json`, then every generation's
+  index; a block computed again in a later generation replaces the earlier one. New blocks get their own date; nothing already
+  published is rewritten.
+- On Kaggle: the notebook's output, filed under the same date (`/kaggle/working/<YYYY-MM-DD>/`, see
+  [build_full.py](../tools/kaggle/schrodinger-sphere/build_full.py)). Kaggle keeps the output of every notebook version.
+  Fig. 14's first generation, 2026-11-12, was computed before this rule: it lies at the top of version 1's output (`runs/`,
+  `index.json`), and its `index.json` on the website names that notebook and version.
+- The website keeps the compact form, the notebook the full one. Fig. 14 stores only the amplitude of ψ on the website,
+  46.4 MB for 405 runs, largest file 145 kB; with the phase picture it was 120.0 MB. No number on the page comes from the
+  phase, and the full output, phase included, stays on Kaggle. Every file stays far under Cloudflare's 25 MiB per static file
+  (developers.cloudflare.com/workers/platform/limits, "Static Assets"; 20 000 files per Worker version on the free plan).
 
 ## Store first
 
@@ -149,5 +168,5 @@ A project brings five things; nothing in `kaggle-flow.js` or the bridge changes.
 | One split-step, 128³, 32-bit | 1.61 ms (2.6 ms with the per-frame measurements) | smoke notebook, version 1 |
 | Whole Fig. 14 grid, 405 runs | 880.8 s on 2 GPUs, 906 s in the notebook, about 30 min of session | full-grid notebook, version 1 |
 | GPU quota used by both notebooks | 3 275 s (from 2 495 s to 5 770 s) | `get_accelerator_quota` before and after |
-| Stored data | 405 files, 120.0 MB | `to_site.py` |
+| Stored data on the website | 405 files, 46.4 MB (amplitude only; 120.0 MB with the phase) | `to_site.py` |
 | Live preview, whole run | 11 to 34 s on one core | Node 22, this workspace |
