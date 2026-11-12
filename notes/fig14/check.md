@@ -175,9 +175,9 @@ Verdicts are "verified", "wrong, because …" (with the correct result) or "unve
 | 509 | ahead 0.62780 on Kaggle | verified | Stored `e3_v5_r2.bin` end: 0.62780. |
 | 509 | 0.62802 CPU 32-bit | verified | My run of `solver.run`, complex64: 0.628017. |
 | 509 | 0.62821 64-bit | verified | complex128: 0.628214. |
-| 509 | 256³: 0.62483 ahead, 0.24923 behind; 128³: 0.62802, 0.24887 | partly verified | The 128³ values are verified (0.628017, 0.248865). For the 256³ grid, see the note at the end of this file. |
-| 509 | grid effect 3e-3 | verified for 128³ | It follows from the two values once the 256³ run is in (see the end of this file). |
-| 509 | "computed here in 5 minutes" | unverifiable, because timing depends on the machine | |
+| 509 | 256³: 0.62483 ahead, 0.24923 behind; 128³: 0.62802, 0.24887 | verified | `solver.run` on `setup(256, 64.0)`, 32-bit, CPU here: ahead 0.624829, behind 0.249231. On 128³: 0.628017, 0.248865. |
+| 509 | grid effect 3e-3 | verified | 0.628017 − 0.624829 = 3.19e-3. |
+| 509 | "computed here in 5 minutes" | unverifiable, because timing depends on the machine | It took 6.6 min here. |
 | 509 | the default recomputed matches the stored curves to 3.4e-4 at every frame | verified | complex64 rerun of E = 2.5, V0 = 3, R = 4: the largest difference over 48 frames in norm, behind and ahead is 3.33e-4. |
 
 ## Numbers, section 7
@@ -287,9 +287,3 @@ Verdicts are "verified", "wrong, because …" (with the correct result) or "unve
 | 575 | P10.2: √2 at t = 2σ0² | verified | From (11). |
 | 577 | P10.4: 0.084, 0.277, 0.458 | verified | Stored, for E = 2.5, V0 = 8. |
 | 579 | P10.6: E > 3.05 | verified | 3.054. The box for E = 6 is 48.6 a. |
-
-## Note on the 256³ run (line 509)
-
-The 256³ grid run (E = 2, V0 = 3, R = 4, 32-bit, `solver.py` unchanged, `setup(256, 64.0)`) was started on this
-workspace's CPU. If it finished before this file was handed over, its result is in the row below. Otherwise the 256³ numbers
-0.62483 and 0.24923 stay **unverifiable**, because the run did not finish within this check.
