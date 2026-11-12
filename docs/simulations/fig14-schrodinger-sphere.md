@@ -176,6 +176,15 @@ whole line with $u$ odd (Crank–Nicolson, fourth-order Laplacian, $\Delta r = 0
   the flat wall's, so $T_\text{packet}$ (24) with $\sigma_0 = 2$ is exact. `rin`: shell from $r_0 = 28$ closing in on a ball of radius
   $R = 2 \ldots 6$. Both: 9 energies × 13 heights (wells, hard wall). 1170 runs, Kaggle `numakoudsie/schrodinger-spherical-wave`
   (CPU), files `SPHR` in `2026-11-12/radial/` ($\psi(r)$ at 97 radii, levels of each frame's peak plus the list of peaks).
-- Drawing: the 3D field is $\psi(|\mathbf r|)$ on a cube $[-24, 24)^3$, 0.75 a apart (64³), so whole spheres fit; spherical waves open in
-  the Cutaway view. The barrier is drawn as a glass sphere of radius 16 (the shell wall) or $R$ (the ball).
+- Drawing (revised after the live check of 12 November, 23:40): the views draw $\mathrm{Re}\,(r\psi)$ (so shells far out, weakened by $1/r$, stay
+  visible). Sheets and Cutaway are **exact spheres** (`Wave3D.setShells`) at the radii where the stored profile, interpolated by
+  Catmull-Rom between its points 0.5 a apart, crosses $\pm c$, out to $r = 36$; Surface is a surface of revolution on a polar mesh
+  (rings 0.08 a apart, 192 angles, `Wave3D.setRevolution`); Fog uses the 64³ cube, 0.75 a apart, emptied beyond $r = 23.5$ so it is round.
+  The first version ran marching cubes on the 64³ cube, which aliased the thin shells into holes and needles. The room is larger for
+  spherical waves (floor at $z = -38$, camera at 118 a). The data panel's field and pixel checks still use $\psi(|\mathbf r|)$ on the cube.
+  The barrier is drawn as a glass sphere of radius 16 (the shell wall) or $R$ (the ball).
+- A spherical wave is stored only with the round barrier at its centre: with a spherical wave chosen, the Pillar, Flat wall, Coin
+  and Tube buttons are disabled and say "not computed yet" (they no longer switch the wave back to the packet).
+- The hard pillar's source box now says that the projection removes about 4 % of the probability at the wall (0.3 % to 26 % across
+  the grid, side border included).
 - Not yet: spherical waves from a point beside the barrier, or meeting the pillar or the wall (true 3D, GPU).

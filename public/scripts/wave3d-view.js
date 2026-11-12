@@ -72,9 +72,9 @@ export function create(canvas, opt) {
     sun.shadow.bias = -0.0004; sun.shadow.normalBias = 0.06; scene.add(sun);
     const fill = new THREE.DirectionalLight(0xffeedd, 0.9); fill.position.set(-40, 5, 30); scene.add(fill);
     const FLOOR = -17.5;
-    const floor = new THREE.Mesh(new THREE.PlaneGeometry(72, 48), new THREE.MeshStandardMaterial({ color: CARD, roughness: 1 }));
+    const floor = new THREE.Mesh(new THREE.PlaneGeometry(110, 90), new THREE.MeshStandardMaterial({ color: CARD, roughness: 1 }));
     floor.rotation.x = -Math.PI / 2; floor.position.y = FLOOR; floor.receiveShadow = true; scene.add(floor);
-    const grid = new THREE.GridHelper(72, 36, 0xd9d0c2, 0xe6dfd2); grid.scale.z = 48 / 72; grid.position.y = FLOOR + 0.01; scene.add(grid);
+    const grid = new THREE.GridHelper(110, 55, 0xd9d0c2, 0xe6dfd2); grid.scale.z = 90 / 110; grid.position.y = FLOOR + 0.01; scene.add(grid);
     const axisLine = new THREE.Line(new THREE.BufferGeometry().setFromPoints([P(-26, 0, 0), P(26, 0, 0)]), new THREE.LineDashedMaterial({ color: 0x8b8079, dashSize: 0.8, gapSize: 0.5 }));
     axisLine.computeLineDistances(); scene.add(axisLine);
     scene.add(new THREE.ArrowHelper(new THREE.Vector3(1, 0, 0), P(-27, 0, 0), 5, 0x1c1518, 1.1, 0.55));
@@ -136,6 +136,42 @@ export function create(canvas, opt) {
         }
         g.attributes.position.needsUpdate = true; g.attributes.color.needsUpdate = true; g.computeVertexNormals();
         api.lastPlane = { plane, nx, ny, x0, y0, h };
+    };
+    /* spherical waves: psi depends on r alone, so the surfaces Re psi = +c and -c are exact spheres, at the radii where the
+       stored radial profile crosses +c and -c (the page finds them). Drawn as true spheres, not by marching cubes on a grid. */
+    function spheresGeo(radii) {
+        const parts = radii.map((rr) => new THREE.SphereGeometry(rr, 128, 64).toNonIndexed());
+        let n = 0; parts.forEach((g) => { n += g.attributes.position.count; });
+        const pos = new Float32Array(3 * n), nor = new Float32Array(3 * n); let o = 0;
+        parts.forEach((g) => { pos.set(g.attributes.position.array, o); nor.set(g.attributes.normal.array, o); o += g.attributes.position.array.length; g.dispose(); });
+        return { pos, nor };
+    }
+    api.setShells = function (crestRadii, troughRadii) {
+        const c = spheresGeo(crestRadii), t = spheresGeo(troughRadii);
+        setGeo(crest, c); setGeo(trough, t); api.triangles = (c.pos.length + t.pos.length) / 9; api.shells = { crest: crestRadii.slice(), trough: troughRadii.slice() };
+    };
+    /* spherical waves in the Surface view: the plane z = 0 lifted by Re psi(r), a surface of revolution on a fine polar mesh */
+    api.setRevolution = function (re, rmax, dr, scale) {     /* re(r): Re psi at radius r; rings every dr out to rmax */
+        api.scale = scale || 1;
+        const nr = Math.floor(rmax / dr) + 1, nt = 192, N = nr * nt;
+        let g = surf.geometry;
+        if (!g.attributes.position || g.attributes.position.count !== N || !g.userData.polar) {
+            g.dispose(); g = new THREE.BufferGeometry(); g.userData.polar = true;
+            g.setAttribute('position', new THREE.BufferAttribute(new Float32Array(N * 3), 3)); g.setAttribute('color', new THREE.BufferAttribute(new Float32Array(N * 3), 3));
+            const idx = []; for (let i = 0; i < nr - 1; i++) for (let j = 0; j < nt; j++) { const a = i * nt + j, b = a + nt, a1 = i * nt + (j + 1) % nt, b1 = a1 + nt; idx.push(a, b, a1, a1, b, b1); }
+            g.setIndex(idx); surf.geometry = g;
+        }
+        const pos = g.attributes.position.array, col = g.attributes.color.array;
+        for (let i = 0; i < nr; i++) {
+            const r = i * dr, v = re(r) / api.scale, c = surfaceColour(v).convertSRGBToLinear();
+            for (let j = 0; j < nt; j++) { const q = i * nt + j, th = 2 * Math.PI * j / nt; pos[3 * q] = r * Math.cos(th); pos[3 * q + 1] = v * api.height; pos[3 * q + 2] = r * Math.sin(th); col[3 * q] = c.r; col[3 * q + 1] = c.g; col[3 * q + 2] = c.b; }
+        }
+        g.attributes.position.needsUpdate = true; g.attributes.color.needsUpdate = true; g.computeVertexNormals();
+        api.lastPlane = { radial: true };
+    };
+    api.setRoom = function (floorY, dist) {   /* spherical waves fill a larger space: a lower floor and a farther camera */
+        floor.position.y = floorY; grid.position.y = floorY + 0.01; api.dist = dist;
+        Object.assign(sun.shadow.camera, { left: -60, right: 60, top: 60, bottom: -60, far: 220 }); sun.shadow.camera.updateProjectionMatrix();
     };
     api.clear = function () { setGeo(crest, { pos: new Float32Array(0), nor: new Float32Array(0) }); setGeo(trough, { pos: new Float32Array(0), nor: new Float32Array(0) }); api.lastField = null; };
 

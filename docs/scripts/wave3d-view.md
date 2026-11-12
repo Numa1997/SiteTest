@@ -20,6 +20,11 @@ files. When loaded it sets `window.Wave3D` and fires the window event `wave3d-re
 
 Axes: physics $(x, y, z)$ go to three's $(x, z, y)$, so physics $z$ is up on screen.
 
+## Spherical waves
+
+`setShells(crestRadii, troughRadii)` draws exact spheres (128 × 64 segments each); `setRevolution(re, rmax, dr, scale)` lifts the
+plane z = 0 by a function of r on a polar mesh (192 angles); `setRoom(floorY, dist)` moves the floor and the camera for them.
+
 ## API
 
 `Wave3D.create(canvas, {canTurn, onTurn})` returns `api` with `setField`, `setPlane`, `setBarrier`, `setMode('sheets' | 'surface' |
