@@ -116,7 +116,7 @@ whole 3D wave is the stored cut through the axis spun about it. No new computati
 ## Barrier shapes and the lit 3D views (12 November 2026, night)
 
 The owner asked for every barrier shape that can be done (sphere, pillar, flat wall, coin, tube; finite, hard, well) and for all
-three lit 3D views. Status: **sphere, pillar and flat wall are on the page**; **coin and tube** need GPU runs, which wait for the
+three lit 3D views. Status: **sphere, pillar and flat wall are on the page** (wall thickness written $d$, as in (14)); **coin and tube** need GPU runs, which wait for the
 owner's yes (their buttons are shown, disabled, marked "not computed yet").
 
 | Shape | Potential | Why fewer dimensions are exact | Computed | Stored (on the site) |
@@ -143,10 +143,14 @@ wells and no hard wall yet (GPU runs).
     $T_\text{packet} = \int|\phi(k)|^2 T(k)\,dk$ to 0.0045; in all 540 finite runs $|P_\text{ahead} - T_\text{packet}| \le P_\text{inside} + 0.005$
     (where they differ more, part of the wave is still inside at the end: $E$ near $V_0$, thick wall). The hard wall lets
     through at most $10^{-6}$; its norm is $1 - 2.9\times10^{-6}$ from the start, because the starting packet's tail inside the wall is cut.
-  - pillar: halving $\Delta t$ changes the probability ahead by $9\times10^{-4}$, then $4\times10^{-4}$ (finite, $\Delta t = 0.0025$ used)
-    and by $2\times10^{-4}$, then $9\times10^{-5}$ (hard, $\Delta t = 0.0005$ used): first order, measured; the sharp edge of the column
-    is the likely cause. The field is mirror-symmetric in $y$ to $10^{-12}$. The hard column loses about 4 % of the norm at the wall
-    (the projection), shown as "lost".
+  - pillar (measured on Kaggle, `numakoudsie/schrodinger-pillar` version 1, and here): at the end of the run $E = 2$, $R = 4$, halving
+    $\Delta t$ from 0.0025 to 0.00125 changes the probability ahead by $3\times10^{-7}$ (finite $V_0 = 3$); for the hard column, from 0.0005
+    to 0.00025, by $9\times10^{-5}$ ahead, $8\times10^{-4}$ behind and $10^{-3}$ in the norm (the projection is first order). The
+    notebook's log also compares $\Delta t = 0.005$ and $0.001$, which end at another time (the frame interval 0.3175 is not a whole
+    number of those steps), so those lines are not a convergence test; `check_pillar.py` now uses steps that divide the interval. An
+    earlier local test that looked first order had the same end-time mismatch. The field is mirror-symmetric in $y$ to $10^{-12}$. The
+    hard column loses about 4 % of the norm at the wall (the projection); in 2D the scattered wave also reaches the side border and is
+    absorbed, up to 26 % in some runs; both show as "lost". All 585 files and `gz.bin` matched their SHA-256 (103 MB).
 - **Lit views** ([wave3d-view.js](../../public/scripts/wave3d-view.js), [docs/scripts/wave3d-view.md](../scripts/wave3d-view.md),
   three.js 0.170.0 vendored in `public/vendor/three/`): **Sheets** (surfaces $\mathrm{Re}\,\psi = \pm c$, $c = 0.3$ of the frame's
   largest $|\mathrm{Re}\,\psi|$ in the box, by marching cubes), **Surface** (the plane $z = 0$ lifted by $\mathrm{Re}\,\psi$), **Cutaway**

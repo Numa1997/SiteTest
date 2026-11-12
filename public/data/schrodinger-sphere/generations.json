@@ -28,5 +28,15 @@
   "kaggle": "numakoudsie/schrodinger-flat-wall",
   "version": "1",
   "commit": "76c7ce089557d9939ed1f63f5535021057f387ee"
+ },
+ {
+  "date": "2026-11-12",
+  "index": "2026-11-12/pillar/index.json",
+  "kind": "plane",
+  "shape": "pillar",
+  "runs": 585,
+  "kaggle": "numakoudsie/schrodinger-pillar",
+  "version": "1",
+  "commit": "89f6e9d3305f243b2507ae64f6ab9c4a186bdbef"
  }
 ]

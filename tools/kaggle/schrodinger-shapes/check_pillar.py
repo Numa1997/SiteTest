@@ -1,8 +1,9 @@
-"""Convergence of pillar.py in the time step, for one finite and one hard column (E = 2, R = 4): the probabilities behind and
+"""Convergence of pillar.py in the time step (version 1 of the notebook also tried dt = 0.005 and 0.001, which end at another time
+because the frame interval 0.3175 is not a whole number of those steps; those two lines of its log are not a convergence test), for one finite and one hard column (E = 2, R = 4): the probabilities behind and
 ahead of the column at the end, and the norm, for dt and dt/2, and the mirror symmetry y -> -y of the whole field."""
 import numpy as np
 from pillar import run, HARD
-for V0, dts in ((3.0, (0.005, 0.0025, 0.00125)), (HARD, (0.001, 0.0005, 0.00025))):
+for V0, dts in ((3.0, (0.0025, 0.00125, 0.000625)), (HARD, (0.0005, 0.00025, 0.000125))):   # each divides the frame interval 0.3175: all end at the same time
     rows = []
     for dt in dts:
         r = run(2.0, V0, 4.0, dt=dt, hard_dt=dt); t, n, b, a, sy = r["curves"][-1]; rows.append((dt, n, b, a))
