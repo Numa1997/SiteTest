@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-6312 files, 895.2 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+6313 files, 895.2 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -46,13 +46,13 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Working notes of project 07, the electron beam](#working-notes-of-project-07-the-electron-beam) | 52 |
 | [Working notes of the Rotor Pendula study](#working-notes-of-the-rotor-pendula-study) | 86 |
 | [Working notes of the Droplet Collection study](#working-notes-of-the-droplet-collection-study) | 123 |
-| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 642 |
+| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 643 |
 
 ## Repository root
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
-| [`.gitignore`](../.gitignore) | 39 B | Files git leaves out: Python caches, node_modules, build output. | [files.md](files.md) |
+| [`.gitignore`](../.gitignore) | 102 B | Files git leaves out: Python caches, node_modules, build output. | [files.md](files.md) |
 | [`AGENTS.md`](../AGENTS.md) | 15.9 kB | The maintainer's summary: ownership, layout, design rules, folds, the data pipeline, platform quirks. | [build-and-deploy.md](build-and-deploy.md) |
 | [`CLAUDE.md`](../CLAUDE.md) | 5.1 kB | How Numa expects an AI assistant to work on the project. | [build-and-deploy.md](build-and-deploy.md) |
 | [`README.md`](../README.md) | 8.9 kB | Start here: what the project is, how the files fit together, where each one is explained. | [README.md](../README.md) |
@@ -5491,7 +5491,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
-| [`worker/r2.js`](../worker/r2.js) | 1.5 kB | The site’s Worker: serves the large stored runs from the R2 bucket RUNS under /r2/ (Fig. 15 generation 2); every other path is an asset, as before. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
+| [`worker/r2.js`](../worker/r2.js) | 1.6 kB | The site’s Worker: serves the large stored runs from the R2 bucket RUNS under /r2/ (Fig. 15 generation 2); every other path is an asset, as before. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
 
 ## Documentation
 
@@ -5666,7 +5666,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/kaggle/resonant-tunnelling/exact1d.py`](../tools/kaggle/resonant-tunnelling/exact1d.py) | 6.5 kB | Fig. 15, 3D: the exact 1D numbers for the 3D geometry (T(E), packet average, resonance, I–V, real units), the check of the 3D runs. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
 | [`tools/kaggle/resonant-tunnelling/extract_t.py`](../tools/kaggle/resonant-tunnelling/extract_t.py) | 7.6 kB | Fig. 15, Step B1: reads the single-barrier t(k), r(k) off Fig. 14’s stored runs, to check the exact amplitudes. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
 | [`tools/kaggle/resonant-tunnelling/file_rt3d.py`](../tools/kaggle/resonant-tunnelling/file_rt3d.py) | 9.0 kB | Fig. 15, 3D: files the Kaggle runs on the site (SHA-256 checked against each notebook’s index) and writes kaggle/index.json with provenance and the numbers read from each run. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
-| [`tools/kaggle/resonant-tunnelling/file_rt3d2.py`](../tools/kaggle/resonant-tunnelling/file_rt3d2.py) | 9.3 kB | Fig. 15, 3D generation 2: files the Kaggle runs (SHA-256 checked) and writes kaggle/index.json; draft, generalised from file_rt3d.py. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
+| [`tools/kaggle/resonant-tunnelling/file_rt3d2.py`](../tools/kaggle/resonant-tunnelling/file_rt3d2.py) | 10.5 kB | Fig. 15, 3D generation 2: files the Kaggle runs (SHA-256 checked) and writes kaggle/index.json; draft, generalised from file_rt3d.py. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
 | [`tools/kaggle/resonant-tunnelling/iv.py`](../tools/kaggle/resonant-tunnelling/iv.py) | 6.3 kB | Fig. 15: the current–voltage curve by the Tsu–Esaki formula, with the biased barriers as a staircase of transfer matrices (convergence checked). | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
 | [`tools/kaggle/resonant-tunnelling/pack.py`](../tools/kaggle/resonant-tunnelling/pack.py) | 5.5 kB | Fig. 15: files the reconstructed runs under public/data/resonant-tunnelling/ with SHA-256 and provenance (the Fig. 14 parent runs). | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
 | [`tools/kaggle/resonant-tunnelling/read_rt3d.py`](../tools/kaggle/resonant-tunnelling/read_rt3d.py) | 2.1 kB | Fig. 15, 3D: reads the RT3C run files from Kaggle and prints the checks of each run (timing, start state, 3D vs 1D twin, transmission). | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
@@ -6796,6 +6796,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/fig14/wave3d_test.py`](../notes/fig14/wave3d_test.py) | 1.5 kB | Fig. 14: the test that computed one run on 128^3 points in this workspace and stored Re psi in 3D (96 x 64 x 64 points, 32 frames, int8). | [fig14-schrodinger-sphere.md](simulations/fig14-schrodinger-sphere.md) |
 | [`notes/fig15/BRIEF.md`](../notes/fig15/BRIEF.md) | 23.9 kB | Fig. 15 (resonant tunnelling, built on the stored runs of Fig. 14): the brief for the session that builds it, written on the owner's instruction on 13 November 2026. | [BRIEF.md](../notes/fig15/BRIEF.md) |
 | [`notes/fig15/LESSONS.md`](../notes/fig15/LESSONS.md) | 11.4 kB | Fig. 15: the final goal (data generated on Kaggle, stored, played smoothly by the page) and every mistake made on Fig. 14, written on the owner's instruction for the Fig. 15 session. | [LESSONS.md](../notes/fig15/LESSONS.md) |
+| [`notes/fig15/STATE.md`](../notes/fig15/STATE.md) | 4.4 kB | Fig. 15: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig15/derive.md`](../notes/fig15/derive.md) | 1.6 kB | Fig. 15: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig15/derive.py`](../notes/fig15/derive.py) | 6.4 kB | Fig. 15: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig15/grid_test.py`](../notes/fig15/grid_test.py) | 2.9 kB | Fig. 15: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
