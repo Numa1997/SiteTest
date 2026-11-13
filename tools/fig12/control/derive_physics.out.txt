@@ -56,3 +56,22 @@ Sources checked against these results (13 November 2026):
     Yano & Terashima (Trans. ISCIE 10 (1997) 440-448) compare their H-infinity controller against. Our design is that
     conventional feedback plus a road-preview feed-forward; a shaped profile is not possible here because the push comes from
     the road, not from a planned path. Inference: robustness to a change of fill (their point) is a stated limit of ours.
+
+Block 5. Spillover: the true stout has modes 1-3 (cart + three modes as one Lagrangian, push back included; probes read
+  q1 + q2 + q3); the controller and filter model mode 1 only, as the site's. Frequencies scaled to the Kaggle solver's 3.31 Hz:
+  3.310, 5.633, 7.127 Hz; zeta_n = 0.018 (w1/wn)^(1/2) = 0.0180, 0.0138, 0.0123; Pc_n 0.05578, 0.00665, 0.00260 kg;
+  m_n 0.03621, 0.01711, 0.01092 kg.
+  2 ms monodromy, 12 states: largest |eigenvalue| 0.99499, stable. Poles (1/s): swing -10.33 +- 7.31j (damping ratio 0.82;
+  -11.55 +- 8.11j with mode 1 alone); mode 2 -3.23 +- 33.37j (0.096, from 0.0138 open loop); mode 3 -2.51 +- 43.98j
+  (0.057, from 0.0123); filter -16.82 +- 39.77j and -3168; current loop -197.9 +- 296.9j; integral -2.61.
+  The unmodelled modes are not destabilised; the loop damps them too (the probes see them as part of q).
+Block 6. The suspension loop sampled at 1 ms with the 5 ms actuator lag (u_cmd = -K_s y from stroke gauge, two accelerometers,
+  load cell): K_s = (-502.62, 11.632, -6.091, 612.63); poles (1/s): body -5.88 +- 4.09j (design -4.94 +- 4.98j), wheel hop
+  -25.08 +- 266.73j (design -31.98 +- 259.91j), actuator -182.7; largest |eigenvalue| per 1 ms 0.99414, stable.
+  Loop broken at the force command: |L| = 0.84 with phase 180 deg at low frequency. The LQR, which weighs the body's
+  acceleration, uses the actuator to cancel 84 % of the spring's static stiffness; so an actuator 19 % stronger than modelled
+  (gain margin 1.5 dB) would cancel all of it and the body would lose its static support. Smallest |1 + L| 0.16 (sensitivity 6),
+  the same in the continuous design without lag (0.162): a property of the cost, not of the sample or the lag.
+  Gain crossovers 6.9 rad/s (phase margin 17 deg) and 24.0 rad/s (163 deg); high-frequency gain margin 38.4 dB at 684 rad/s.
+  Inference: the suspension design is stable but not robust to actuator-gain error; the tuning stage must add a robustness
+  bound (for example a weight on the static spring force, or |1 + L| >= 0.5) before the controlled rides are taken as final.

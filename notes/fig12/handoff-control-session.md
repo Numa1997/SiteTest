@@ -466,3 +466,11 @@ it is shown to matter, and store only what the page and the proofs need (say the
 **Order (the user, 13 November)**: the old session first finishes and installs the "before control" animation (the three
 baseline rides of `public/data/fig12/2026-11-13/`, live on main), and then tells you where to go from there. Build on those
 rides; they are the "without control" side of your comparison.
+
+**The user, 13 November 2026, about 01:20 UTC:** "you will include all possible controls, all necessary ones." Every control of
+section 4.4 and section 11 runs in the GPU loop and is stored and shown, not a selection: off, speed PI with anti-windup, road
+preview feed-forward, skyhook, the slosh LQR with integral on the Kalman estimate, the heave cancellation, the suspension LQR,
+the joint design of all of them; then the gradient-tuned weights and the preview (model-predictive) controller. Also the user:
+Wolfram for the physics, the derivations, the modelling and every hand-written numerical method, checked against published
+sources and engineering practice; JAX after that.
+
