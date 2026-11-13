@@ -1,5 +1,5 @@
 # Fig. 12 in JAX on Kaggle's GPU, third run: the full model (stout 2.06 mPa s, glass boundary layer, surface skin, head of foam with
-# the full Tcholakova flow law), the surface read from the stout each column holds, the particles kept evenly spread, and a guard
+# the full Tcholakova flow law), the surface read from the level set with the derived radius 0.505 dx, and a guard
 # that stops the session if the pint at rest is not flat and full (run_b.py, task "rest").
 # Code from github.com/Numa1997/SiteTest at commit __COMMIT__, tools/fig12/kaggle/.
 import subprocess, sys, os, json, re, urllib.request, runpy
