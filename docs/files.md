@@ -1500,7 +1500,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | File | Size | What it is | Explained in |
 |---|---|---|---|
 | [`notes/fig12/research.md`](../notes/fig12/research.md) | 5.6 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
-| [`notes/fig12/research/guinness-materials.md`](../notes/fig12/research/guinness-materials.md) | 37.2 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/research/guinness-materials.md`](../notes/fig12/research/guinness-materials.md) | 39.3 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/research/sources/acuna-nelson2020-jnanomater-8640818-bsa-glass.txt`](../notes/fig12/research/sources/acuna-nelson2020-jnanomater-8640818-bsa-glass.txt) | 1.5 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/research/sources/ba-draught-beer-quality-manual-2011-gas-blends.txt`](../notes/fig12/research/sources/ba-draught-beer-quality-manual-2011-gas-blends.txt) | 1.7 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/research/sources/benilov2012-arxiv1205.5233.txt`](../notes/fig12/research/sources/benilov2012-arxiv1205.5233.txt) | 3.5 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |

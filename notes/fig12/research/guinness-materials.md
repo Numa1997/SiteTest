@@ -1,7 +1,8 @@
 # Guinness on a jolted cart: the stout, its head, and the layers between them and the glass
 
 Research note for Fig. 12, written 13 November 2026 on branch `claude/guinness-materials-research`. No fluid simulation was run.
-Another session checks everything here before any computation. Every number is marked **Fact** (with source file and page),
+**Report to:** the parent session "Guinness cart page rebuild" (session_01DGmqiq8T8BLo2FkMX6RM1D), which verifies everything here
+before any computation. Every number is marked **Fact** (with source file and page),
 **Inference** (my reasoning or arithmetic from facts, with the file that holds the arithmetic) or **Opinion**.
 Source extracts are in `sources/`, derivations in `wolfram/` (first) and `sympy/` (check).
 
@@ -44,6 +45,28 @@ Source extracts are in `sources/`, derivations in `wolfram/` (first) and `sympy/
 | θ, Δcos θ | contact angle, hysteresis of stout on glass | 30–45°, 0.27 | 0.06 (clean) – 0.68 (protein-coated) | Fact for model liquids: wang2017 p.10, acuna-nelson2020. No stout measurement |
 
 Derived, not free: ρ_f = φ_l ρ_l; G₀ and τ_y from (R, φ_l, γ); bubble slip from (R, μ, ρ); the damping of each layer from (ν, ω, R).
+
+### The two composite materials, in numbers
+
+| | Stout (a bubbly liquid) | Head (a foam) |
+|---|---|---|
+| What it is | liquid with rigid 27–61 µm gas spheres (radius) | packed bubbles, R 25–100 µm (no stout-head measurement) |
+| Gas fraction | 0.08 canned bulk; ≈ 0.1 pub draught; 0.02 served; < 10⁻³ settled (> 2 min) | Φ = 0.6–0.95 (φ_l 0.05–0.4) |
+| Density | ρ_m = (1 − α) 1007: 987 at α = 0.02, 957 at α = 0.05 kg/m³ | ρ_f = φ_l ρ_l = 50–400 kg/m³ (201 at φ_l = 0.2) |
+| Viscosity or stiffness | μ_m = 2.06 mPa s × (1 + 2.5α): 2.16 at 0.02, 2.32 at 0.05 | G₀ 26–371 Pa; τ_y 0.8–87 Pa; flow τ ∝ Ca^0.47 above yield |
+| Slip or drift | bubble slip (2a²ρ/9μ)(Du/Dt − g_eff): 0.7–4.0 mm/s at 1 g | drainage ≈ 0.03 mm/s of height (h_f/650 s) |
+| Lifetime | settles in ≈ 120 s | drains in 633–757 s; no coarsening in 180 s |
+| Rheology | Newtonian (beer, 92–921 s⁻¹, r² ≥ 0.99) | Herschel–Bulkley (yield stress + Ca^0.47) |
+
+### Every boundary layer as a boundary condition (details in 3.3)
+
+| Interface | Condition | Numbers |
+|---|---|---|
+| Stout on glass | no slip; Stokes layer δ = √(2ν/ω) | δ = 0.436 mm; ζ = 0.0051, γ_d = 0.110–0.119 s⁻¹ for mode (1,1) |
+| Stout contact line on glass | Coulomb friction: the line holds until γ(cos θ − cos θ_s) > γΔcos θ/2 | θ_s ≈ 30–45°, Δcos θ ≈ 0.27 (0.06–0.68); ×1.5–2.4 on the wall damping |
+| Head on glass | sliding with Plateau-border friction τ_w ≈ (ξγ/R)Ca^(2/3), ξ = 6.82 | 18–36 Pa at 0.01 m/s, 85–170 Pa at 0.1 m/s; finite-time stop (Viola α = 0.010–0.030) |
+| Head on stout | the head is a lid with no slip: u_t(stout) = u_f; normal stress p = ρ_f h_f (g_eff·n) | ρ_f h_f ≈ 3.8 kg/m² (1–7.6); foam velocity decays upward over 16.8 mm (Sauret); adds ζ ≈ 0.0051 |
+| Bare stout surface (after a spill) | p = −γκ; protein skin close to inextensible (tangential no slip on the surface) | γ = 0.045 N/m (0.038–0.055); dilatational modulus 5–25 mN/m; adds ζ ≈ 0.0051 |
 
 ---
 
