@@ -325,6 +325,7 @@ class Stout:
         has = W > 1e-12
         ph_near = jnp.where(has, jnp.sqrt(jnp.sum((S / jnp.where(has, W, 1.0)[..., None]) ** 2, -1)) - self.rls, 3.0 * dx)
         ph = jnp.where(near, ph_near, jnp.where(cnt > 0, -2.0 * dx, 2.0 * dx))
+        phr = ph.astype(F32)            # the level set as the particles give it, before the pressure step's adjustments: read-outs use this
         liq = (ph < 0) | (cnt > 0)
         ph = jnp.where((cnt > 0) & (ph >= 0), -0.05 * dx, ph).astype(F32)
         thu, thv, thw = self.th
@@ -337,7 +338,7 @@ class Stout:
             best = jnp.minimum(best, jnp.where((cut_hi(thw, 2) > 0) & sh(liq, 1, 2, False) & (above < -0.5 * dx), above, 1.0))
             take = (~liq) & self.wallcut & (best < 1.0)
             liq = liq | take; ph = jnp.where(take, jnp.minimum(best, -0.05 * dx), ph)
-        return ph, liq, nsel
+        return ph, liq, nsel, phr
 
     # ---------------------------------------------------------------- viscosity and friction (Taichi viscosity, friction)
     def viscosity(self, vel, mass, dt):
@@ -416,17 +417,17 @@ class Stout:
         fmask = lo(t, 2, False) | hi(t, 2, False)                                           # the vertical faces of the top cells
         return jnp.where(fmask & ok, w + dw[:, :, None], w)
 
-    def surface(self, ph, liq):
-        """The free surface of the main body of stout, as a height on the grid's columns: in each column the lowest air cell
-        of the cavity (with air above it too) that stands on a liquid cell of the cavity, and the zero of the level set between
-        the two cell centres. Columns that hold no stout inside the glass read NaN."""
+    def surface(self, phr):
+        """The free surface of the main body of stout, as a height on the grid's columns, read from the particles' own level set
+        (phr: negative in the stout, positive in the air, a distance in metres near the surface). In each column: the lowest cell
+        of the cavity that is air, has air above it too, and stands on a cell of stout in the cavity; the surface is where phr
+        crosses zero between the two cell centres. Columns that hold no stout inside the glass read NaN."""
         dx = self.dx
-        liqc = liq & self.cavc; air = self.cavc & ~liq
-        cand = air & sh(air, 1, 2, True) & sh(liqc, -1, 2, False)
+        wet = self.cavc & (phr < 0); air = self.cavc & (phr >= 0)
+        cand = air & sh(air, 1, 2, True) & sh(wet, -1, 2, False)
         has = jnp.any(cand, 2); k = jnp.argmax(cand, 2); kb = jnp.maximum(k - 1, 0)
-        pa = jnp.take_along_axis(ph, k[..., None], 2)[..., 0]; pb = jnp.take_along_axis(ph, kb[..., None], 2)[..., 0]
-        good = (pa - pb > 1e-12) & (pb < 0) & (pa > 0)
-        frac = jnp.where(good, jnp.clip(-pb / jnp.where(good, pa - pb, 1.0), 0.0, 1.0), 0.5)
+        pa = jnp.take_along_axis(phr, k[..., None], 2)[..., 0]; pb = jnp.take_along_axis(phr, kb[..., None], 2)[..., 0]
+        frac = jnp.clip(-pb / jnp.maximum(pa - pb, 1e-12), 0.0, 1.0)
         return jnp.where(has, self.cc[2][kb] + frac * dx, jnp.nan).astype(F32)
 
     def head_spill(self, s, H, dt, gx, gz):
@@ -589,8 +590,8 @@ class Stout:
         dt = jnp.asarray(dt, F32); gx = jnp.asarray(gx, F32); gz = jnp.asarray(gz, F32)
         vel, mass, cnt = self.p2g(s)
         vel = self.normalize_force(vel, mass, dt, gx, gz)
-        ph, liq, nsel = self.level_set(s, cnt)
-        H = self.surface(ph, liq)
+        ph, liq, nsel, phr = self.level_set(s, cnt)
+        H = self.surface(phr)
         if self.nu > 0: vel = self.viscosity(vel, mass, dt)
         z = jnp.zeros((), F64); ew = es = ef = z
         if self.gs > 0 or self.skin or self.head: vel, ew, es, ef = self.friction(vel, mass, ph, liq, dt, s["hf"])
@@ -621,8 +622,8 @@ class Stout:
         Drops: the particles more than 1.5 dx above their column's surface, and those in free flight outside the glass."""
         dx = self.dx; G = self.G
         vel, mass, cnt = self.p2g(s)
-        ph, liq, nsel = self.level_set(s, cnt)
-        H = self.surface(ph, liq)
+        ph, liq, nsel, phr = self.level_set(s, cnt)
+        H = self.surface(phr)
         # drops
         X, act, fly = s["xp"], s["act"], s["fly"]
         i = jnp.clip(jnp.floor((X[:, 0] - G.x0) / dx).astype(I32), 0, self.n - 1)
