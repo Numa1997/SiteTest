@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-4508 files, 417.7 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+4510 files, 417.7 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -39,7 +39,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Shared by the portfolio sources (not served)](#shared-by-the-portfolio-sources-not-served) | 1 |
 | [Template sources](#template-sources) | 2 |
 | [Documentation](#documentation) | 41 |
-| [Tools](#tools) | 143 |
+| [Tools](#tools) | 145 |
 | [Translation tables](#translation-tables) | 54 |
 | [Agents of the lecture-note review](#agents-of-the-lecture-note-review) | 4 |
 | [Working notes of project 07, the electron beam](#working-notes-of-project-07-the-electron-beam) | 52 |
@@ -3850,8 +3850,10 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/fig12/kaggle/free_swing.py`](../tools/fig12/kaggle/free_swing.py) | 4.4 kB | Fig. 12 computed on Kaggle: the free-swing test of solver v2 (glass held still, one push), per grid and piece of physics | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/kaggle/free_swing_fit.py`](../tools/fig12/kaggle/free_swing_fit.py) | 1.3 kB | Fig. 12 computed on Kaggle: fits the damping ratio and frequency of every stored free swing | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/kaggle/rides.py`](../tools/fig12/kaggle/rides.py) | 3.3 kB | Fig. 12 computed on Kaggle: drives the pint over the road at each speed with solver v2 and writes rides.json in the page’s format, saved after every ride | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`tools/fig12/kaggle/run_b.py`](../tools/fig12/kaggle/run_b.py) | 9.7 kB | Fig. 12 in JAX on Kaggle’s GPU, first run: the stout at rest, its free swing (frequency and damping, three grids) and two rides that spill; each task only if the measured time says it ends inside the budget | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/kaggle/solver.py`](../tools/fig12/kaggle/solver.py) | 50.3 kB | Fig. 12 computed on Kaggle: the GPU solver v2 (Taichi): the stout as APIC particles on a 1.5 mm grid with a ghost-fluid free surface and free-slip glass faces, the wall’s boundary layer and the foam as drags, coupled both ways to the port of the site’s cart; the notebooks download it at a pinned commit | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/kaggle/store_rides.py`](../tools/fig12/kaggle/store_rides.py) | 2.2 kB | Fig. 12 computed on Kaggle: stores a generation of rides in public/data/fig12/<date>/ with index.json (notebook, version, code commit, measured times, SHA-256) | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`tools/fig12/kaggle/stout_jax.py`](../tools/fig12/kaggle/stout_jax.py) | 38.8 kB | Fig. 12 in JAX on Kaggle’s GPU: the stout (APIC particles, cut-cell glass, level-set free surface with ghost-fluid pressure, wall and foam friction), the drops that leave over the rim, and the cart, all computed on the GPU and coupled both ways; the algorithm of solver.py written again in JAX | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/kaggle_decay.py`](../tools/fig12/kaggle_decay.py) | 4.7 kB | Fig. 12 computed on Kaggle: measures from the stored rides the first mode’s frequency and how fast its swing dies after the last bump (a direct fit of the free decay, self-tested), and how far the wall lean drifts at steady speed. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/linearity.cjs`](../tools/fig12/linearity.cjs) | 2.9 kB | Fig. 12: both fluid models from rest under the same half-sine push, no cart: where the linear modes fail (lean, swing, spill). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/linfit.cjs`](../tools/fig12/linfit.cjs) | 2.0 kB | Fig. 12: fits the free swing (amplitude, frequency) in the files linearity.cjs saves. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
@@ -3923,7 +3925,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/i18n/ingest.py`](../tools/i18n/ingest.py) | 1.9 kB | Stores checked translations made outside the tables (page pieces, script strings, walkthrough prose). | [i18n.md](i18n.md) |
 | [`tools/i18n/package.json`](../tools/i18n/package.json) | 285 B | The parser wrap.cjs needs (acorn); npm install --prefix tools/i18n. | [i18n.md](i18n.md) |
 | [`tools/i18n/wrap.cjs`](../tools/i18n/wrap.cjs) | 3.7 kB | Wraps the reader-visible strings of a page's scripts in _t(), with a JavaScript parser (acorn). | [i18n.md](i18n.md) |
-| [`tools/inventory.py`](../tools/inventory.py) | 101.0 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
+| [`tools/inventory.py`](../tools/inventory.py) | 101.7 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
 | [`tools/kaggle/schrodinger-shapes/build_flat.py`](../tools/kaggle/schrodinger-shapes/build_flat.py) | 5.6 kB | Fig. 14 flat wall: writes flat.ipynb (Kaggle, CPU, 585 runs) for a given commit. | [fig14-schrodinger-sphere.md](simulations/fig14-schrodinger-sphere.md) |
 | [`tools/kaggle/schrodinger-shapes/build_pillar.py`](../tools/kaggle/schrodinger-shapes/build_pillar.py) | 5.8 kB | Fig. 14 pillar: writes pillar.ipynb (Kaggle, CPU, 585 runs) for a given commit. | [fig14-schrodinger-sphere.md](simulations/fig14-schrodinger-sphere.md) |
 | [`tools/kaggle/schrodinger-shapes/build_radial.py`](../tools/kaggle/schrodinger-shapes/build_radial.py) | 5.8 kB | Fig. 14 spherical waves: writes radial.ipynb (Kaggle, CPU, 1170 runs) for a given commit. | [fig14-schrodinger-sphere.md](simulations/fig14-schrodinger-sphere.md) |
