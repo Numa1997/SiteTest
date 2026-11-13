@@ -116,8 +116,8 @@ Version 7, commit 87e3720, 1360 s on the T4. Rest guard passed (0.54 mm, rms 0.1
 
 | Road | speed held only (run 6) | controlled (run 7) |
 |---|---|---|
-| five 20 mm bumps, 1.0 m/s | lean 9.8 mm | joint 1.2 mm; current up to 1.70 A, active force up to 7.1 N |
-| one 25 mm bump, 1.0 m/s | lean 6.9 mm | joint 3.7 mm; 1.63 A, 7.9 N |
+| five 20 mm bumps, 1.0 m/s | tilt 11.4, lean 9.8 mm | joint: tilt 1.05, lean 1.2 mm; current up to 1.70 A, active force up to 7.1 N |
+| one 25 mm bump, 1.0 m/s | tilt 7.3, lean 6.9 mm | joint: tilt 0.98, lean 3.7 mm (one wall column, x = 39.0 mm, 6.65 mm low at 5.83 s); 1.63 A, 7.9 N |
 | kerb 30 mm, 1.5 m/s | 19.7 mm, 4.08 mL head, 0.008 g stout | joint 17.4 mm, 2.74 mL, 0 g; slosh 16.5 mm, 2.79 mL, 0 g; preview 15.7 mm, 3.66 mL, 0 g |
 
 At the kerb the commands reach 37-41 A (slosh, joint) and 8.7 A (preview) against the 3 A limit, for 5-6 stored pictures: the

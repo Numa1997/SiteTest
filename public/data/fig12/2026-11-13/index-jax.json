@@ -32,7 +32,8 @@
     "head_spilled_ml": 0.0,
     "lean_max_mm": 6.8832783699035645,
     "control": null,
-    "i_max_stored_A": 1.996
+    "i_max_stored_A": 1.996,
+    "tilt_max_mm": 7.3
    }
   },
   {
@@ -80,7 +81,8 @@
       ]
      }
     },
-    "i_max_stored_A": 1.634
+    "i_max_stored_A": 1.634,
+    "tilt_max_mm": 0.98
    }
   },
   {
@@ -108,7 +110,8 @@
     "head_spilled_ml": 0.0,
     "lean_max_mm": 9.79931640625,
     "control": null,
-    "i_max_stored_A": 2.393
+    "i_max_stored_A": 2.393,
+    "tilt_max_mm": 11.37
    }
   },
   {
@@ -156,7 +159,8 @@
       ]
      }
     },
-    "i_max_stored_A": 1.699
+    "i_max_stored_A": 1.699,
+    "tilt_max_mm": 1.05
    }
   },
   {
@@ -184,7 +188,8 @@
     "head_spilled_ml": 4.08,
     "lean_max_mm": 19.713573455810547,
     "control": null,
-    "i_max_stored_A": 2.984
+    "i_max_stored_A": 2.984,
+    "tilt_max_mm": 15.94
    }
   },
   {
@@ -232,7 +237,8 @@
       ]
      }
     },
-    "i_max_stored_A": 2.93
+    "i_max_stored_A": 2.93,
+    "tilt_max_mm": 15.66
    }
   },
   {
@@ -280,7 +286,8 @@
       ]
      }
     },
-    "i_max_stored_A": 2.95
+    "i_max_stored_A": 2.95,
+    "tilt_max_mm": 15.32
    }
   },
   {
@@ -328,7 +335,8 @@
       ]
      }
     },
-    "i_max_stored_A": 2.972
+    "i_max_stored_A": 2.972,
+    "tilt_max_mm": 15.62
    }
   },
   {
@@ -356,7 +364,8 @@
     "head_spilled_ml": 0.0,
     "lean_max_mm": null,
     "control": null,
-    "i_max_stored_A": null
+    "i_max_stored_A": null,
+    "tilt_max_mm": 6.14
    }
   },
   {
@@ -384,7 +393,8 @@
     "head_spilled_ml": 0.0,
     "lean_max_mm": null,
     "control": null,
-    "i_max_stored_A": null
+    "i_max_stored_A": null,
+    "tilt_max_mm": 8.31
    }
   }
  ]

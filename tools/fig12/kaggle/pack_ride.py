@@ -66,7 +66,10 @@ idx["files"] = [f for f in idx["files"] if f["path"] != name + ".json"] + [dict(
     path=name + ".json", label=label, kind=task["kind"], default=(name == "ride_resonant_joint"), bytes=len(b), sha256=sha, frames=int(nf), seconds=round((nf - 1) / 30, 3),
     road=task.get("road"), v0=task.get("v0"), ctrl=task.get("ctrl", "speed") if task["kind"] == "ride" else None, kaggle_version=int(version), commit=commit,
     measured=dict({k: task.get(k) for k in ("steps", "ms_per_step", "its_per_step", "run_s", "cells", "particles", "spilled_g", "head_spilled_ml", "lean_max_mm", "control")},
-                  i_max_stored_A=(round(float(np.abs(Z["i"]).max()), 3) if "i" in Z.files else None)))]
+                  i_max_stored_A=(round(float(np.abs(Z["i"]).max()), 3) if "i" in Z.files else None),
+                  # the tilt: twice the cos(theta) part of the stored surface on the outermost ring, 2 (2/64) sum eta cos theta, the
+                  # first mode's front-minus-back without what single columns at the wall add to the two-point lean
+                  tilt_max_mm=round(float(2 * np.abs((2 / Z["polar"].shape[2]) * (Z["polar"][:, -1] * np.cos(2 * np.pi * np.arange(Z["polar"].shape[2]) / Z["polar"].shape[2])).sum(1)).max() * 1e3), 2)))]
 idx["files"].sort(key=lambda f: (f["kind"] != "ride", f["path"]))
 json.dump(idx, open(idx_path, "w"), indent=1)
 print(dst, len(b), sha)

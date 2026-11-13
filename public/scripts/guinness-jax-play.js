@@ -70,9 +70,9 @@
       let road = null;
       for (const i of order) {
         const f = files[i], m = f.measured || {};
-        if (f.road !== road) { road = f.road; const th = document.createElement('tr'); th.className = 'cmp-road'; th.innerHTML = `<th colspan="5">${road}, ${(f.v0 || 0).toFixed(1)} m/s</th>`; tb.appendChild(th); }
+        if (f.road !== road) { road = f.road; const th = document.createElement('tr'); th.className = 'cmp-road'; th.innerHTML = `<th colspan="6">${road}, ${(f.v0 || 0).toFixed(1)} m/s</th>`; tb.appendChild(th); }
         const tr = cmpRows[i]; tr.tabIndex = 0;
-        tr.innerHTML = `<td>${CT[f.ctrl] || f.ctrl}</td><td>${fmt(m.lean_max_mm, 1)}</td><td>${fmt(m.head_spilled_ml, 2)}</td><td>${fmt(m.spilled_g, 2)}</td><td>${fmt(m.i_max_stored_A, 2)}</td>`;
+        tr.innerHTML = `<td>${CT[f.ctrl] || f.ctrl}</td><td>${fmt(m.tilt_max_mm, 1)}</td><td>${fmt(m.lean_max_mm, 1)}</td><td>${fmt(m.head_spilled_ml, 2)}</td><td>${fmt(m.spilled_g, 2)}</td><td>${fmt(m.i_max_stored_A, 2)}</td>`;
         tr.addEventListener('click', () => choose(i)); tr.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); choose(i); } });
         tb.appendChild(tr);
       }

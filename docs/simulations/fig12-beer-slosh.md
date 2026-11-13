@@ -450,7 +450,7 @@ processor's solver at 4 mm (half glass, slow motion) and says so in the caption.
 solver [`tools/fig12/kaggle/stout_jax.py`](../../tools/fig12/kaggle/stout_jax.py) on Kaggle's GPU, run by
 [`run_b.py`](../../tools/fig12/kaggle/run_b.py) and packed by [`pack_ride.py`](../../tools/fig12/kaggle/pack_ride.py) into
 `public/data/fig12/2026-11-13/` (listed in `index-jax.json`, each file with its SHA-256). The page computes nothing physical. Its
-scripts (lines 549–555): `fold.js`, `sim.js`, `dataset.js`, `guinness-glass.js`, `stout-view.js`, `stout-view2.js` (`StoutRide`
+scripts (lines 790–796): `fold.js`, `sim.js`, `dataset.js`, `guinness-glass.js`, `stout-view.js`, `stout-view2.js` (`StoutRide`
 unpacks a ride, `StoutView2` draws the glass from the stored fields), `guinness-jax-play.js` (the player). It no longer loads
 `guinness-playback.js`, `kaggle-flow.js` or `datalog.js`: there is no speed slider, governor, live preview, pop-up or data panel on
 it now, and everything below this section about those describes the earlier generations.
@@ -490,34 +490,42 @@ the GPU loop: `Cart` of `stout_jax.py` is a line-by-line port of `Cart.sample`, 
 integral, the joint design: slosh LQR + heave cancellation + suspension LQR), sampled every 1 ms, the cart sub-stepped at 0.1 ms,
 the two wall probes read once per fluid step from the surface the last step left (`Stout.prepare`, `Stout.probes`). The plant
 is run 6's measured swing with the head (3.278 Hz, ζ 0.467, β 1.541); gains K = (70.78, −1206.70, −38.59, −150.00),
-Ks = (−501.21, 11.92, −6.34, 630.06). The port was checked against the JS cart before the GPU
+Ks = (−501.22, 11.92, −6.34, 630.00) for the 454.4 g of stout and head the rides start with (the port check's 454.5 g gives
+630.06 for the last). The port was checked against the JS cart before the GPU
 (`tools/fig12/kaggle/portcheck/`, output `notes/fig12/handoff-jax/portcheck.txt`): speed, preview, skyhook to 1e-13; slosh and
-joint to 3e-8 A. Results against run 6 (speed held only): five bumps lean 9.8 → 1.2 mm (joint); one 25 mm bump 6.9 → 3.7 mm
-(joint); kerb 19.7 mm, 4.08 mL of head, 0.008 g of stout → joint 17.4 mm, 2.74 mL, 0; slosh 16.5 mm, 2.79 mL, 0; preview
-15.7 mm, 3.66 mL, 0. At the kerb every controller's command passes the 3 A limit for 5–6 stored pictures. All checks passed.
+joint to 3e-8 A. Results against run 6 (speed held only), tilt (twice the cos θ part of the outer ring) and two-point lean:
+five bumps 11.4 / 9.8 → 1.05 / 1.2 mm (joint); one 25 mm bump 7.3 / 6.9 → 0.98 / 3.7 mm (joint; the lean's 3.7 mm is one
+column at the front wall, x = 39.0 mm, reading 6.65 mm low at 5.83 s); kerb 15.9 / 19.7 mm, 4.08 mL of head, 0.008 g of stout
+→ joint 15.7 / 17.4 mm, 2.74 mL, 0; slosh 15.6 / 16.5 mm, 2.79 mL, 0; preview 15.3 / 15.7 mm, 3.66 mL, 0. At the kerb every
+controller's command passes the 3 A limit for 5–6 stored pictures. All checks passed. Gains stored by run 7 (full glass,
+454.4 g): K = (70.781, −1206.701, −38.591, −150.000), Ks = (−501.216, 11.923, −6.343, 630.004).
 The page lists all ten files (run 6's five, run 7's five; each index entry names its notebook version and commit), shows the
 motor current and the active force under Readings, and a table "With and without control" built from the numbers stored in
-`index-jax.json` (largest lean, head, stout, the largest stored current); a row plays its ride. The default ride is the five
+`index-jax.json` (largest tilt, computed by `pack_ride.py` from the stored outer ring; largest lean, head, stout, the largest
+stored current); a row plays its ride. The default ride is the five
 bumps with joint control.
 
-**The lecture note (rewritten 13 November 2026 for the JAX solver; lines 102–541 of the page).** Written to `notes/STANDARD.md`
-(verdict of 21 October 2026); plan in [`notes/fig12/plan-kaggle-jax.md`](../../notes/fig12/plan-kaggle-jax.md). Twelve sections,
-20 numbered equations, 3 inline SVG figures, 4 tables, Key results, worked examples, 7 Problems, 14 sources:
+**The lecture note (rewritten 13 November 2026 for the JAX solver; lines 118–782 of the page).** Written to `notes/STANDARD.md`
+(verdict of 21 October 2026); plan in [`notes/fig12/plan-kaggle-jax.md`](../../notes/fig12/plan-kaggle-jax.md), and for section 11,
+added the same evening with the controlled rides, in [`notes/fig12/plan-kaggle-control.md`](../../notes/fig12/plan-kaggle-control.md).
+Thirteen sections, 36 numbered equations, 4 inline SVG figures, 7 tables, 7 Key results, 13 worked examples, 11 Problems,
+16 sources:
 
 | Section (id, line) | What it says |
 |---|---|
-| 1 `p-pint` (128) | carrying a full pint; what the page shows; the road map |
-| 2 `p-measure` (136) | the glass (R(125 mm) = 39.1 mm, rim 147.5 mm, 426.6 mL, 429.6 g), the stout (1007 kg/m³, 2.06 mPa s, ν = 2.05e-6 m²/s), the head (19 mm, R32 34 µm, liquid fraction 0.27, 272 kg/m³, γ 44.2, E∞ 18.7 mN/m); Table 1; Figure 1 (the glass to scale); Example 2.1 (51 Pa, 91.31 mL on 2217 columns, 24.8 g) |
-| 3 `p-mode` (195) ★ | eq. (1) in the glass's frame; the first mode (2)–(5), f11 = 3.421 Hz (5.821, 7.365 Hz for the next cos θ modes); the driven swing (6), β = 1.541, derived by projecting r cos θ on J1 (wall share 0.837); Example 3.2: steady push R a/g, a sudden Δv leaves (ω/g)(2R/(ξ²−1))Δv (7.2 mm for 0.1 m/s) |
-| 4 `p-layers` (239) | the Stokes layer derived (7)–(8), δ = 0.436 mm; the code's drag ρ√(νω/2)u is the in-phase part; Figure 2; ζ_wall from the energy integrals (9) = 0.0051 (Miles's K = 3.50 against 3.52 quoted by Stephens et al.; their experiments 5.23, ζ = 0.0077); skin (10) 0.0051; bulk 0.0004; total 0.0107 |
-| 5 `p-head` (305) | p_L = 2400 Pa, G0 = 166 Pa, τy = 5.4 Pa (11); Tcholakova's flow law (12), 11.7 Pa at 10 1/s; the head sheet (13); a rough balance: the yield stress holds swings below about 0.5 mm; Cantat's wall stress (14), 2.1–45 Pa at 1–100 mm/s, h_eff = 9.9 mm derived; the spill rule (15), ε* = 4.1 mm, the wall must rise 7.6 mm |
-| 6 `p-cart` (342) | the cart; the glass's frame; F = −dP/dt (16) from Newton's third law; the impulse book telescopes (impulse = −P exactly) and the cart feels each push one step late; Table 2 (the six tasks of `run_b.py`, run 6); Example 6.1 (the cart alone with a frozen pint: largest push 1.6 / 28.8 / 1.0 m/s², g + a_z from −0.7 / −2.4 / 1.5 to 20.0 / 20.6 / 17.6 m/s², undamped first-mode swing 45 / 24 / 8.5 mm) |
-| 7 `p-method` (379) | particles and grid (370,386 cells, 1,001,952 particles, 7.93 per cell, 0.429 mg each); APIC (17); the ten steps of `Stout.step`; the pressure (face fractions, PCG 1e-5, ≤ 600 iterations; run 3 at rest 90 on average, 226 at most); the ghost-fluid rule (18); the level set (19) and the radii 0.9 Δx and 0.505 Δx (centroid 0.5054 Δx below the top); columns capped by the glass have no surface; a drop stands 1.5 Δx above its column and the eight around; 2 ms steps, 17 per stored frame at rest, 72.6 ms a step on the T4 (run 3) |
-| 8 `p-rest` (415) | a pint at rest must stay at rest; the books (20); run 3's guard (4.62 mm worst, 0.484 mm rms, 108 of 1977 columns off); Table 3 and Figure 3 (629 µJ lost, 774 µJ "dissipated"); the two faults as physics; the same test on the CPU before and after the fixes |
-| 9 `p-play` (466) | what is stored, how it is played, the readings, what is data and what is drawing |
-| 10 `p-results` (475) | predictions; how each number is read from the stored data (natural frequency √(ω² + 1/t_d²), ζ = 1/(ω0 t_d)); run 6's numbers: the pint at rest and its books, the swing without and with the head, Table 4 (the three rides) |
-| 11 `p-limits` (499) | the head's inertia (left out; it would lower f11 to 3.07 Hz, derived), what else is left out (sideways flow of the head, drainage, film, contact line, the flow law beyond its range, the spill rule's factor, drops as single particles, the 2 ms delay, the method's own loss measured only together with the glass's layer); the controller next; Problems 11.1–11.7 |
-| 12 `p-refs` (519) | sources, each opened (Völp & Willenbacher, Stephens et al., Jiang et al., Zhu & Bridson and Batty et al. in full; the rest in the extracts of `notes/fig12/research/sources/`) |
+| 1 `p-pint` (145) | carrying a full pint; what the page shows; the road map |
+| 2 `p-measure` (153) | the glass (R(125 mm) = 39.1 mm, rim 147.5 mm, 426.6 mL, 429.6 g), the stout (1007 kg/m³, 2.06 mPa s, ν = 2.05e-6 m²/s), the head (19 mm, R32 34 µm, liquid fraction 0.27, 272 kg/m³, γ 44.2, E∞ 18.7 mN/m); Table 1; Figure 1 (the glass to scale); Example 2.1 (51 Pa, 91.31 mL on 2217 columns, 24.8 g) |
+| 3 `p-mode` (212) ★ | eq. (1) in the glass's frame; the first mode (2)–(5), f11 = 3.421 Hz (5.821, 7.365 Hz for the next cos θ modes); the driven swing (6), β = 1.541, derived by projecting r cos θ on J1 (wall share 0.837); Example 3.2: steady push R a/g, a sudden Δv leaves (ω/g)(2R/(ξ²−1))Δv (7.2 mm for 0.1 m/s) |
+| 4 `p-layers` (256) | the Stokes layer derived (7)–(8), δ = 0.436 mm; the code's drag ρ√(νω/2)u is the in-phase part; Figure 2; ζ_wall from the energy integrals (9) = 0.0051 (Miles's K = 3.50 against 3.52 quoted by Stephens et al.; their experiments 5.23, ζ = 0.0077); skin (10) 0.0051; bulk 0.0004; total 0.0107 |
+| 5 `p-head` (322) | p_L = 2400 Pa, G0 = 166 Pa, τy = 5.4 Pa (11); Tcholakova's flow law (12), 11.7 Pa at 10 1/s; the head sheet (13); a rough balance: the yield stress holds swings below about 0.5 mm; Cantat's wall stress (14), 2.1–45 Pa at 1–100 mm/s, h_eff = 9.9 mm derived; the spill rule (15), ε* = 4.1 mm, the wall must rise 7.6 mm |
+| 6 `p-cart` (359) | the cart; the glass's frame; F = −dP/dt (16) from Newton's third law; the impulse book telescopes (impulse = −P exactly) and the cart feels each push one step late; Table 2 (the six tasks of `run_b.py`, run 6); Example 6.1 (the cart alone with a frozen pint: largest push 1.6 / 28.8 / 1.0 m/s², g + a_z from −0.7 / −2.4 / 1.5 to 20.0 / 20.6 / 17.6 m/s², undamped first-mode swing 45 / 24 / 8.5 mm) |
+| 7 `p-method` (396) | particles and grid (370,386 cells, 1,001,952 particles, 7.93 per cell, 0.429 mg each); APIC (17); the ten steps of `Stout.step`; the pressure (face fractions, PCG 1e-5, ≤ 600 iterations; run 3 at rest 90 on average, 226 at most); the ghost-fluid rule (18); the level set (19) and the radii 0.9 Δx and 0.505 Δx (centroid 0.5054 Δx below the top); columns capped by the glass have no surface; a drop stands 1.5 Δx above its column and the eight around; 2 ms steps, 17 per stored frame at rest, 72.6 ms a step on the T4 (run 3) |
+| 8 `p-rest` (432) | a pint at rest must stay at rest; the books (20); run 3's guard (4.62 mm worst, 0.484 mm rms, 108 of 1977 columns off); Table 3 and Figure 3 (629 µJ lost, 774 µJ "dissipated"); the two faults as physics; the same test on the CPU before and after the fixes |
+| 9 `p-play` (483) | what is stored, how it is played, the readings (with the motor current and the active force of the controlled rides), what is data and what is drawing |
+| 10 `p-results` (492) | predictions; how each number is read from the stored data (natural frequency √(ω² + 1/t_d²), ζ = 1/(ω0 t_d)); run 6's numbers: the pint at rest and its books, the swing without and with the head, Table 4 (the three rides) |
+| 11 `p-control` (516) | a waiter's four habits as four controllers (Table 5); 11.2 how hard the motor can push: M_x = 2.529 kg with stout and head, b I_max = 15 N, 5.93 m/s², 2.25 A forward at 1.5 m/s (supply and back-EMF), grip μN₀ 17.7 N; the kerb with the cart alone: road push −N z_a′ up to 82 N (tyre load 105 N, slope 0.785) in two blows within 44 ms, wheel in the air 92 ms in six hops; speed 1.50 → 1.21 m/s (PI), 1.23 m/s with full current from 4 ms early, bound 0.25 m/s lost; Figure 4; first peak of a kicked damped swing derived, 10.6 mm for 0.25 m/s, 60 ms after the kick; Key result (no controller with this motor prevents the jolt); 11.3 PI (23)–(24), gains for 2.505 kg, poles −21.6, −29.0 s⁻¹, windup, \|S\| = 0.400 (0.409 with lag and half-sample delay) at 3.278 Hz; 11.4 preview (25), lag as delay, 1.16 A on the bumps, 3.47 A asked on the kerb where 16 A would be needed; 11.5 ★ the slosh LQR (26)–(28), Bryson's rule, \|K₄\| = √(Q₄₄/r) = 150 A/m derived, the plant = run 6's measured swing (World's rule), K = (70.78, −1206.70, −38.59, −150.00), swing poles −9.62 ± 18.21j → −12.40 ± 6.49j (bare stout 0.23 → 12.0 s⁻¹); Key result (the head has done most of the regulator's work); 11.6 ★ probes y_q, the Kalman filter (29)–(33), Van Loan's identity derived, settled gains (0.953, 0.053, −1.453, 0.722 s⁻¹), a speed surprise read as a swing; the sampled loop with lag, filter and integral stable (0.9949 per 2 ms; swing −12.35 ± 6.50j); 11.7 ★ the heave: i_par (34) derived, 139.3 A/m; Floquet threshold with the head 1.89 g at 1.79 ω (bare stout 4ζ, 0.42 m/s²); the suspension LQR with cross term (35)–(36), gains −501.22, 11.92, −6.34, 630.00, 84 % of the spring cancelled, body 2.75 Hz/0.11 → 1.12 Hz/0.70; one design = two blocks; 11.8 Table 6 (every limit and clock), the port check rerun; 11.9 predictions of the one-mode model coupled to the cart (Table 7; PI 8.5/18.5/6.3 mm and 2.41/2.98/2.00 A against run 6's 9.8/19.7/6.9 mm and 2.39/2.98/2.00 A; on the kerb every controller 17.6–18.5 mm), the method of reading run 7, run 6's baseline currents, and one paragraph `<!-- RESULTS-RUN7 -->` for run 7's numbers |
+| 12 `p-limits` (733) | the head's inertia (left out; it would lower f11 to 3.07 Hz, derived), what else is left out (sideways flow of the head, drainage, film, contact line, the flow law beyond its range, the spill rule's factor, drops as single particles, the 2 ms delay, the method's own loss measured only together with the glass's layer); what the controllers leave out (one linear mode, the static load in the preview, no plan beyond one current lag); the next model (a drive and approach sized for kerbs, a model-predictive controller over the road ahead, the head's inertia, a plant with the yield stress); Problems 12.1–12.11 (12.8–12.11 on the integral gain, i_par, the lag as a delay, the first peak) |
+| 13 `p-refs` (758) | sources, each opened (Völp & Willenbacher, Stephens et al., Jiang et al., Zhu & Bridson, Batty et al., Åström & Murray's *Feedback Systems* (v3.1.5) and Kalman (1960) in full; the rest in the extracts of `notes/fig12/research/sources/`); Van Loan (1978) could not be opened (Cornell's server refused with HTTP 429; IEEE paywalled), so its identity is derived in 11.6 and not cited |
 
 How its numbers were measured (13 November 2026, this session; scripts not committed): the geometry, particle count and head
 from `Geometry` and `Stout` of `stout_jax.py` on the CPU at 1.5 mm; the theory (mode, Stokes layer, energy integrals, the
@@ -530,6 +538,20 @@ lost / kinetic / "dissipated" 2.3 / 0.37 / 57.2 µJ (run 3's code; the T4 run ga
 0.033 µJ; the 0.505 Δx read-out on an ideal seeded lattice (reads 0.001–0.063 cell low; 0.9 Δx reads 0.52–0.56 cell high). The
 note rendered in headless Chromium at 390 and 1440 px: 20 numbered equations in order, no KaTeX errors, no wide displays, no
 sideways scroll, no console errors.
+
+How section 11's numbers were measured (13 November 2026; scratch scripts, not committed): the load from `Geometry`, `Stout` and
+`ride_extra`'s formula at 1.5 mm (stout 429.58 g, head 24.83 g); M_x, b, the limits and i_0 from `CART_COMMON` and `Cart`; the
+gains and eigenvalues from `slosh_lqr`, `susp_lqr` and `numpy.linalg.eigvals`; the filter's A_d, B_d, Q_d from `observer_design`
+and its settled two-sample cycle by iterating (32)–(33) 20,000 samples; the sampled loop as one 10-state map over 2 ms (plant with
+the 2 ms lag, exact over 1 ms; filter; integral; held current); the Floquet thresholds with SciPy (`solve_ivp`, `brentq`, minimum
+over Ω); the kerb with `Cart` alone (F = 0), PI, 0.1 ms sub-steps, plus a subclass that commands full forward current one 2τ_i
+ahead of the climb, and the no-lag bound from the PI run's road force and tyre load; the one-mode predictions with `Cart` coupled
+to the plant (exact step over 2 ms with the mean a_x, a_z; probes y_q = q read before the cart's sub-steps; push −d(P_c q′)/dt),
+read at the stored pictures' times; run 6's largest current and pictures at the reachable limit from the stored `i`, `v` of
+`ride_*.json`; the port check rerun from a scratch copy of `tools/fig12/kaggle/portcheck/` (identical output). Figure 4 plotted
+from the kerb series, one point per millisecond. The note rendered in headless Chromium (built page) at 390 and 1440 px: 36
+numbered equations in order, 1199 KaTeX expressions with no error, no display wider than its box, no sideways scroll, no console
+errors; Table 7, like Tables 2 and 4, scrolls inside its box at 390 px.
 
 ## Computed on Kaggle, played back (12 November 2026)
 
