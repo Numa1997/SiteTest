@@ -60,7 +60,11 @@ TASKS_CONTROL = [
 # and books per frame. The controllers are designed on the swing this run measures with the head (free_full_1.5, ring 13), as a
 # control engineer identifies the plant before closing the loop; the swing without the head (no head, so unchanged by the head's
 # mass) comes last and is computed only if the budget still allows it.
-TASKS_RUN8 = [TASKS[0], TASKS[2], TASKS[1], TASKS[3], TASKS[4]] + TASKS_CONTROL[1:] + [TASKS[5]]
+# Order: each road with the speed held and with joint control side by side, so that if the budget runs short the comparisons
+# already computed are whole; then the kerb's other two controllers; the swing without the head last.
+_C = {t["name"]: t for t in TASKS + TASKS_CONTROL}
+TASKS_RUN8 = [_C[n] for n in ("rest", "free_full_1.5", "ride_sharp30", "ride_sharp30_joint", "ride_resonant", "ride_resonant_joint", "ride_bump25",
+                              "ride_bump25_joint", "ride_sharp30_slosh", "ride_sharp30_preview", "free_wall_1.5")]
 if os.environ.get("RUNSET") == "control":
     TASKS = TASKS_CONTROL
 elif os.environ.get("RUNSET") == "run8":
@@ -82,13 +86,15 @@ def fit_swing(t, q):
     f0 = 3.4; A0 = float(np.max(np.abs(q - q.mean())))
     fun = lambda t, A, tau, w, ph, c: A * np.exp(-t / tau) * np.cos(w * t + ph) + c
     best = None
-    for ph in np.linspace(0, 2 * np.pi, 8, endpoint=False):
-        try:
-            p, _ = curve_fit(fun, t, q, p0=[A0, 5.0, 2 * np.pi * f0, ph, q.mean()], maxfev=20000)
-            r = np.sum((fun(t, *p) - q) ** 2)
-            if best is None or r < best[1]: best = (p, r)
-        except Exception:
-            pass
+    # starting guesses: the bare stout's swing (3.4 Hz, slow decay) and the swing with the head (3.0 to 3.3 Hz, decay in 0.1 to 0.3 s)
+    for fg, taug in ((f0, 5.0), (3.3, 0.3), (3.0, 0.3), (3.3, 0.1), (3.0, 0.1)):
+        for ph in np.linspace(0, 2 * np.pi, 8, endpoint=False):
+            try:
+                p, _ = curve_fit(fun, t, q, p0=[A0, taug, 2 * np.pi * fg, ph, q.mean()], maxfev=20000)
+                r = np.sum((fun(t, *p) - q) ** 2)
+                if best is None or r < best[1]: best = (p, r)
+            except Exception:
+                pass
     if best is None: return dict(f=None, zeta=None)
     A, tau, w, ph, c = best[0]
     w0 = float(np.sqrt(w * w + 1.0 / (tau * tau)))
@@ -183,7 +189,7 @@ for task in TASKS:
             info["fit_ring13"] = fit_swing(tt[m] - tt[m][0], q13[m]); info["fit_ring16"] = fit_swing(tt[m] - tt[m][0], q16[m])
             if PLANT_FROM_RUN and task["model"] == "full":
                 F = info["fit_ring13"]
-                ok = F.get("f0") is not None and 2.5 < F["f0"] < 3.5 and 0 < F["zeta"] < 1 and F["rms_mm"] < 0.25 * F["A_mm"]
+                ok = F.get("f0") is not None and 2.5 < F["f0"] < 3.5 and 0 < F["zeta"] < 0.95 and F["A_mm"] < 20 and F["rms_mm"] < 0.25 * F["A_mm"]
                 log(f"  the plant for the controllers, measured here: {'PASS' if ok else 'FAIL'} {F}")
                 if not ok and not os.environ.get("CODECHECK"):
                     log("STOP: the swing with the head gave no clean first mode; no controlled ride is computed"); raise SystemExit(0)
