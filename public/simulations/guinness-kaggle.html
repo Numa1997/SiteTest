@@ -6,7 +6,7 @@
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>A Pint of Guinness on a One-Wheel Cart, computed on Kaggle · Numa Koudsie</title>
-    <meta name="description" content="A pint of Guinness in its tulip glass rides a one-wheel cart over a gentle road. The stout was computed ahead of time on Kaggle&#8217;s GPU, a million particles in the real glass; this page only plays the stored rides back in 3D.">
+    <meta name="description" content="A pint of Guinness in its tulip glass rides a one-wheel cart over bumps. The stout, its head of foam and the cart were computed ahead of time on Kaggle&#8217;s GPU; this page only plays the stored rides back in 3D.">
     <meta name="theme-color" content="#f5f1ea">
     <link rel="stylesheet" href="../styles/sim.css">
     <link rel="stylesheet" href="../styles/data.css">
@@ -19,7 +19,10 @@
         .kread dt { font-size: 11px; color: var(--ink-3); } .kread dd { margin: 0; font-size: 16px; }
         #cv { transition: opacity 0.45s ease; }
         #cv.is-held { opacity: 0.55; }
-        #cv-old { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; pointer-events: none; }
+        .g-rides { display: grid; gap: 6px; } .g-ride { text-align: left; font-size: 13px; line-height: 1.3; padding: 8px 10px; }
+        .g-ride[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); box-shadow: inset 3px 0 0 var(--accent); }
+        #road { display: block; width: 100%; height: 84px; border: 1px solid var(--line, rgba(28,21,24,.25)); border-radius: 6px; background: var(--card); margin-top: 10px; }
+        .kread { grid-template-columns: 1fr 1fr; }
         .g-badge { position: absolute; left: 12px; top: 12px; right: 12px; max-width: 520px; margin: 0; padding: 8px 12px; background: var(--card); border: 1px solid var(--ink); border-left: 3px solid var(--accent); border-radius: 8px; font-size: 13px; line-height: 1.45; color: var(--ink-2); z-index: 4; }
         .g-badge b { font: 500 11px var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--accent); }
         .ask-note { font-family: var(--mono); font-size: 11px; line-height: 1.5; color: var(--ink-3); min-height: 1.2em; }
@@ -50,31 +53,21 @@
         <div class="sim__head">
             <p class="sim__num">Fig. 12 · computed on Kaggle · played back</p>
             <h1>A Pint of Guinness on a One-Wheel Cart<span class="dot">.</span></h1>
-            <p class="sim__lede">The same pint and cart as <a href="beer-slosh.html">Fig. 12</a>, but nothing is computed on your device. The stout was computed ahead of time on Kaggle&#8217;s graphics card, a million particles in the real glass, for twenty seconds of ride over a gentle road at three speeds. This page only plays those stored rides back, the same on every device.</p>
+            <p class="sim__lede">The same pint and cart as <a href="beer-slosh.html">Fig. 12</a>, but nothing is computed on your device. The stout, its head of foam and the cart were computed ahead of time on Kaggle&#8217;s graphics card: a million particles of stout in the real glass, the head lying on it, the cart feeling both. This page only plays those stored rides back, at their real speed.</p>
         </div>
 
         <div class="sim__grid">
             <div>
             <figure class="stage">
                 <div class="stage__canvas" id="stage" style="--ar: 14 / 13; --ar-m: 1 / 1.05; position: relative;">
-                    <canvas id="cv" aria-label="A pint of stout on a one-wheel cart rolling over a gentle road; the surface of the stout rocks, played back from stored Kaggle data"></canvas>
-                    <canvas id="cv-old" aria-hidden="true"></canvas>
-                    <p id="src-badge" class="g-badge" hidden><b>Live preview</b>, computed in your browser by the site&#8217;s coarse solver (4 mm grid, half the glass mirrored; it swings 6 % slow). Not Kaggle&#8217;s result: Kaggle has not computed this speed, and computing it there on request is not connected yet.</p>
+                    <canvas id="cv" aria-label="A pint of stout with its head of foam on a one-wheel cart rolling over bumps; the stout rocks, the head rides on it, drops and lumps of head leave over the rim; played back from stored Kaggle data"></canvas>
                 </div>
                 <figcaption class="stage__cap">
                     <span><b>Fig. 12</b> · stored Kaggle data, played back · nothing computed here</span>
                     <span id="cap-t">—</span>
                 </figcaption>
             </figure>
-            <figure class="stage" style="margin-top: 16px;">
-                <div class="stage__canvas" id="stage-phase" style="--ar: 16 / 9; --ar-m: 1 / 1;">
-                    <canvas id="ph" aria-label="Phase space of the first sloshing mode: its height at the wall q across, its scaled rate up; the whole ride as a pale path, the last second dark, the frame on screen as a dot, and a dashed circle of the present amplitude"></canvas>
-                </div>
-                <figcaption class="stage__cap">
-                    <span><b>Phase space</b> · first sloshing mode, height at the wall <i>q</i> against its rate <i>q&#775;</i>/<i>&omega;</i><sub>11</sub>, from the stored surface</span>
-                    <span id="cap-ph">—</span>
-                </figcaption>
-            </figure>
+            
             </div>
 
             <aside class="panel" aria-label="Controls">
@@ -88,7 +81,11 @@
                 </div>
                 <div class="panel__group">
                     <p class="panel__label">Ride</p>
-                    <div id="speed-host"></div>
+                    <div id="ride-host" class="g-rides"></div>
+                    <p class="panel__note" id="ride-note"></p>
+                    <canvas id="road" aria-label="The road of the chosen ride and the cart&#8217;s place on it"></canvas>
+                    <p class="panel__note">Every ride listed here was computed on Kaggle and is stored on this site; nothing else is offered, and nothing is filled in between rides.</p>
+                </div>
                     <p class="ask-note" id="ask-note" aria-live="polite"></p>
                     <p class="panel__note" id="road-name"></p>
                     <p class="panel__note">Filled dots: speeds computed on Kaggle and stored on this site. Hollow dots: not computed yet; there your browser computes a live preview with the site&#8217;s coarse solver, clearly labelled. Near the edge of the computed speeds the control grows heavier and the ride slows; near the end of the computed time the ride slows smoothly to a stop.</p>
@@ -97,10 +94,11 @@
                     <p class="panel__label">Readings</p>
                     <dl class="kread">
                         <div><dt>cart speed</dt><dd id="r-v">—</dd></div>
-                        <div><dt>surface lean</dt><dd id="r-l">—</dd></div>
                         <div><dt>stout spilled</dt><dd id="r-s">—</dd></div>
+                        <div><dt>head spilled</dt><dd id="r-h">—</dd></div>
+                        <div><dt>drops and lumps in the air</dt><dd id="r-d">—</dd></div>
                     </dl>
-                    <p class="panel__note">Lean: the stout&#8217;s height at the front wall minus the back wall. All three numbers are stored with every picture; the page computes none of them.</p>
+                    <p class="panel__note">All four numbers are stored with every picture; the page computes none of them.</p>
                 </div>
             </aside>
         </div>
@@ -291,7 +289,7 @@
     <script src="../scripts/dataset.js"></script>
     <script src="../scripts/guinness-glass.js"></script>
     <script src="../scripts/stout-view.js"></script>
-    <script src="../scripts/kaggle-flow.js"></script>
-    <script src="../scripts/guinness-playback.js"></script>
+    <script src="../scripts/stout-view2.js"></script>
+    <script src="../scripts/guinness-jax-play.js"></script>
 </body>
 </html>
