@@ -48,7 +48,9 @@ if "x" in Z.files:
     src_run = open(os.path.join(here, "run_b.py")).read(); a = src_run.index("ROADS = {"); b = src_run.index("\n}\n", a) + 2
     ROADS = eval(src_run[a + len("ROADS = "):b])            # the roads as run_b.py defines them (cosine bumps: centre x, height h, length L)
     out.update(bumps=ROADS[task["road"]]["bumps"], v0=task.get("v0"), road=task.get("road"), x=r5(Z["x"], 5), v=r5(Z["v"], 4), zb=r5(Z["zb"], 6), zw=r5(Z["zw"], 6),
-               i=r5(Z["i"], 4), Fx=r5(Z["Fx"], 4), Fz=r5(Z["Fz"], 4))
+               i=r5(Z["i"], 4), Fx=r5(Z["Fx"], 4), Fz=r5(Z["Fz"], 4), ctrl=task.get("ctrl", "speed"))
+    for k, nd_ in (("icmd", 4), ("us", 3), ("qhat", 6), ("yq", 6), ("ipar", 4)):   # the controller's signals (run 7 on)
+        if k in Z.files and len(Z[k]) == nf: out[k] = r5(Z[k], nd_)
 dst = os.path.join(out_dir, name + ".json")
 json.dump(out, open(dst, "w"), separators=(",", ":"))
 b = open(dst, "rb").read(); sha = hashlib.sha256(b).hexdigest()
@@ -57,11 +59,14 @@ idx = json.load(open(idx_path)) if os.path.exists(idx_path) else dict(
     about="Fig. 12 computed in JAX on Kaggle's GPU: the stout, its head of foam and the cart, one file per ride.", generated=date,
     kaggle=dict(notebook="numakoudsie/guinness-on-a-cart-stout-in-jax", url="https://www.kaggle.com/code/numakoudsie/guinness-on-a-cart-stout-in-jax",
                 version=int(version), machine=S.get("device")), code=f"tools/fig12/kaggle/stout_jax.py and run_b.py at SiteTest commit {commit}", files=[])
-label = (f"{task['road'][0].upper()}{task['road'][1:]}, {task['v0']:.1f} m/s" if task["kind"] == "ride"
+CTRL_LABEL = {"speed": "speed held only", "preview": "road preview", "slosh": "slosh LQR", "joint": "joint control"}
+label = (f"{task['road'][0].upper()}{task['road'][1:]}, {task['v0']:.1f} m/s · {CTRL_LABEL[task.get('ctrl', 'speed')]}" if task["kind"] == "ride"
          else ("Standing still, one push" if task["push"][1] > 0 else "Standing still") + ("" if task["model"] == "full" else ", no head"))
 idx["files"] = [f for f in idx["files"] if f["path"] != name + ".json"] + [dict(
     path=name + ".json", label=label, kind=task["kind"], default=(name == "ride_resonant"), bytes=len(b), sha256=sha, frames=int(nf), seconds=round((nf - 1) / 30, 3),
-    measured={k: task.get(k) for k in ("steps", "ms_per_step", "its_per_step", "run_s", "cells", "particles", "spilled_g", "head_spilled_ml")})]
+    road=task.get("road"), v0=task.get("v0"), ctrl=task.get("ctrl", "speed") if task["kind"] == "ride" else None, kaggle_version=int(version), commit=commit,
+    measured=dict({k: task.get(k) for k in ("steps", "ms_per_step", "its_per_step", "run_s", "cells", "particles", "spilled_g", "head_spilled_ml", "lean_max_mm", "control")},
+                  i_max_stored_A=(round(float(np.abs(Z["i"]).max()), 3) if "i" in Z.files else None)))]
 idx["files"].sort(key=lambda f: (f["kind"] != "ride", f["path"]))
 json.dump(idx, open(idx_path, "w"), indent=1)
 print(dst, len(b), sha)
