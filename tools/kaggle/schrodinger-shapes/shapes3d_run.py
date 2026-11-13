@@ -3,7 +3,7 @@ T0 = time.time()
 LOG = open("/kaggle/working/progress.log", "a")
 def say(*a):
     s = f"[{time.time()-T0:7.1f} s] " + " ".join(str(x) for x in a); print(s, flush=True); LOG.write(s + "\n"); LOG.flush()
-print(subprocess.run(["nvidia-smi", "--query-gpu=name,memory.total,driver_version", "--format=csv"], capture_output=True, text=True).stdout)
+if not globals().get("CPU"): print(subprocess.run(["nvidia-smi", "--query-gpu=name,memory.total,driver_version", "--format=csv"], capture_output=True, text=True).stdout)
 def backend():  # ask a separate Python process, so this process imports jax only once
     r = subprocess.run([sys.executable, "-c", "import jax; print(jax.default_backend())"], capture_output=True, text=True)
     return r.stdout.strip().splitlines()[-1] if r.stdout.strip() else "none: " + r.stderr[-300:]

@@ -22,7 +22,8 @@ smoke = json.load(open(os.path.join(HERE, "..", "schrodinger-sphere", "smoke.ipy
 c1 = smoke["cells"][1]["source"]          # GPU check: stops at once if there is no GPU
 # a run on Kaggle's CPU (no GPU hours): the loader sets CPU = 1; then no GPU is asked for and the one CPU device does every run
 c1 = c1.replace('if b != "gpu":', 'if b != "gpu" and not globals().get("CPU"):').replace('assert any(d.platform == "gpu" for d in DEV)', 'assert globals().get("CPU") or any(d.platform == "gpu" for d in DEV)')
-assert 'globals().get("CPU")' in c1 and c1.count('globals().get("CPU")') == 2
+c1 = c1.replace('print(subprocess.run(["nvidia-smi"', 'if not globals().get("CPU"): print(subprocess.run(["nvidia-smi"')
+assert c1.count('globals().get("CPU")') == 3
 md0 = ("# Schrodinger, Fig. 14: the remaining 3D cases (GPU, JAX). An electron wave meets a barrier, solved in 3D (split-step Fourier, 128^3 points, hbar = m = 1): "
        "the coin and the tube, the wells and the hard ball, and a spherical wave from the side onto a ball, a flat wall and a pillar. 1458 runs on both GPUs. "
        "Each run is written when it finishes; index.json lists them with SHA-256. The code is fetched from the website's repository at a pinned commit and printed below.")
