@@ -7,8 +7,9 @@ the two differ, this file wins. Its purpose: you must not repeat a single one of
 
 **A working, smooth, functioning animation, live on the website.** The pipeline, fixed:
 
-1. **Generate the data on Kaggle.** That means every frame of every case the page offers. CPU notebooks are enough for this 1D
-   project; a GPU needs the owner's yes and a bill.
+1. **Generate the data on Kaggle.** That means every frame of every case the page offers. The project is 3D (see the CORRECTION
+   in `BRIEF.md`): the 3D runs go on Kaggle's GPUs, each launch with the owner's yes and a bill. It is built on all the stored 3D
+   data of Fig. 14, not only the flat wall.
 2. **Bring it into the repository** (GitHub), filed under `public/data/resonant-tunnelling/<date>/…` with SHA-256 and provenance.
    Cloudflare then serves it on the website.
 3. **The page only plays the stored frames.** Between two stored frames it interpolates smoothly (section 3, item 1). It never
@@ -40,7 +41,7 @@ is a failure.
   set the level relative to each frame's largest value.
 - **Torn sheets from coarse storage.** One stored set kept only 127 levels relative to the *first* frame's peak; once the wave had
   spread, a crest was a handful of levels. Fix: store 8-bit levels of **each frame's own peak**, with the list of peaks in the file
-  header. Better still, for 1D data that is small, store float32.
+  header.
 - **Rendering details**, each of which cost a round with the owner:
   - colours washed out (vertex colours must be converted from sRGB to linear in three.js);
   - moiré (a surface must not receive its own shadow);
@@ -61,7 +62,7 @@ The owner's judgement of the first animation: "horrible, glitches and slow". Eve
   ψ(t₀ + τ) = e^{−iEτ} [(1 − s) ψ_f + s e^{iEΔt} ψ_{f+1}], with s = τ/Δt.
 
   At a stored frame this gives exactly that frame. Better still for Fig. 15: store enough frames (e.g. 200 to 400 per run for a
-  1D wave; that is cheap) so the interpolation only smooths.
+  run) so the interpolation only smooths.
 - **Freezes on every new frame.** Resampling took 25 to 70 ms and marching cubes 100 to 200 ms, on the main thread. Fix: Web
   Workers that work ahead of the playhead; no per-frame allocation (reuse typed arrays, a colour lookup table). Target under 5 ms
   of page work per screen frame, **measured**.
@@ -138,3 +139,11 @@ The owner's judgement of the first animation: "horrible, glitches and slow". Eve
 6. One worked example carried through note, code checks and data panel.
 7. Before claiming anything works: real browser, screenshots you have looked at, frame times measured, live page checked after
    merge.
+
+## 4. A mistake made in writing this brief (13 November 2026)
+
+The first version of `BRIEF.md` and of this file framed Fig. 15 as one-dimensional and CPU-only, built on the 1D flat-wall cut
+alone. It ignored the 3D runs already stored (sphere, true-3D sphere, pillar, spherical waves, coin, tube, the side cases), though
+the owner had said again and again that the new figure must use the data we already have. That framing is withdrawn; see the
+CORRECTION at the top of `BRIEF.md`.
+

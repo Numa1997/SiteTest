@@ -7,6 +7,43 @@ long because every part of it matters to the owner of this website, a physicist 
 last day the owner has been badly let down by sloppy work: skipped steps, claims quoted from memory, untracked jobs, broken
 animations. Your job is to do this one properly, top to bottom, and to be honest at every step.
 
+## CORRECTION (13 November 2026, 14:10 UTC, by the session that wrote this brief, on the owner's order)
+
+This brief first framed Fig. 15 as a one-dimensional problem to be run on CPUs, built only on the 1D flat-wall cut of Fig. 14. **That
+was wrong, the owner never wanted it, and it is withdrawn.** What holds instead:
+
+- **Fig. 15 is three-dimensional and continues Fig. 14.** It shows a real 3D electron wave packet meeting stacked barriers, computed
+  in 3D (128³ split-step Fourier, `tools/kaggle/schrodinger-sphere/solver.py`, `tools/kaggle/schrodinger-shapes/solver3d.py`) on
+  Kaggle's GPUs, and plays it as a 3D animation in the house style of Fig. 14 (meshed sheet, sheets, cutaway).
+- **It is built on ALL the data already stored, not just the flat wall.** In `public/data/schrodinger-sphere/`:
+  - `2026-11-12/`: 405 sphere runs (cut through the axis, 3D GPU);
+  - `2026-11-12/wave3d/`: 81 true-3D sphere runs (Re ψ on 96 × 64 × 64);
+  - `2026-11-12/flat/`: 585 flat-wall runs;
+  - `2026-11-12/pillar/`: 585 pillar runs (φ(x, y) and g(z));
+  - `2026-11-12/radial/`: 1170 spherical-wave runs;
+  - `2026-11-13/shapes3d/`: 1458 3D GPU runs, of which 243 were corrected as version 2: coin, tube, sphere wells and hard ball,
+    and a spherical wave from the side onto a ball, a wall and a pillar.
+
+  Every exact rule that lets a stored run serve a new case must be used:
+  - superposition (the equation is linear);
+  - mirror images and translations;
+  - separable cases (the flat wall is exactly 1D, the pillar exactly 2D × 1D);
+  - transfer-matrix composition where it is exact;
+  - the stored single-barrier runs as the limit and check of every stacked case.
+
+  Where no exact rule exists (barriers of finite size stacked in 3D), the new 3D runs are computed on Kaggle's GPUs. They are
+  compared against the stored single-barrier runs and against the 1D theory in the limit of wide flat walls.
+- **The 1D transfer-matrix theory (Griffiths & Steinke) is the exact core and the check, not the scope.** For infinitely wide flat
+  walls the 3D problem separates, and the 3D runs must reproduce the 1D result. Use that as a verification.
+- **Kaggle:** GPU runs need the owner's explicit yes, given in your chat, with a proper bill:
+  - runs × 128³ cells × steps × the measured 1.2 ns per cell-step on a T4;
+  - the share of the 30 weekly GPU hours, after reading `get_accelerator_quota`;
+  - a progress tracker you can read while the job runs.
+
+  CPU is for small side calculations only.
+- Everywhere below that says "1D", "CPU" or "one-dimensional" as the scope of the project, read it in the light of this
+  correction.
+
 **Read `notes/fig15/LESSONS.md` together with this brief. It overrides this brief wherever they differ.**
 
 ## 0. Where you are
@@ -167,7 +204,7 @@ The owner rejected three previous attempts because they skipped steps and threw 
   as `flat.py`) for a chosen subset of cases.
 - Compare ψ(x, t) frame by frame with the reconstruction from B3 (L² error, transmitted and reflected probabilities,
   trapped-probability curve).
-- Also run on Kaggle's CPU: the bias sweep for the current-voltage curve. A bias makes the potential a sloped line. Treat it as a fine
+- Also run on Kaggle (CPU is enough for this 1D side calculation): the bias sweep for the current-voltage curve. A bias makes the potential a sloped line. Treat it as a fine
   staircase of steps composed by transfer matrices, and check convergence as the staircase gets finer. Airy functions are the exact
   alternative: do both and compare.
 - The current comes from the Tsu–Esaki formula: J ∝ ∫ T(E, V) [f_L(E) − f_R(E + eV)] dE, with Fermi functions at a stated
@@ -195,7 +232,7 @@ its own place and its own provenance.
 - Register it as `AGENTS.md` says: catalog entry, thumbnail, Fig. links on every simulation page, redirects (`tools/redirects.py`),
   inventory (`tools/inventory.py`), German and Arabic pages (`tools/i18n/build.py`, phyein-usul-i18n skill).
 - **What the reader sees:**
-  1. **The main animation:** the packet meeting two barriers in 1D (|ψ|² and Re ψ, with the potential drawn as a solid, static
+  1. **The main animation:** the 3D packet meeting stacked barriers, drawn like Fig. 14 (|ψ|² and Re ψ, with the potential drawn as a solid, static
      landscape that never moves with the wave), played smoothly. The owner judged Fig. 14's first animation "horrible, glitches and
      slow". On Fig. 14 the fix was to play stored frames with interpolation in the frame turning at the energy E
      (ψ(t₀ + τ) = e^{−iEτ}[(1 − s)ψ₀ + s e^{iEΔt}ψ₁]), with heavy work in Web Workers and no slow-downs. Here, B3 gives ψ at any t
@@ -230,7 +267,7 @@ its own place and its own provenance.
 1. **Kaggle:**
    - Every GPU launch needs the owner's explicit yes, given in chat for that exact run, with its bill: runs × cells × steps ×
      measured time per cell-step = GPU hours, and its share of the 30 weekly hours (read `get_accelerator_quota` first).
-   - CPU notebooks need no GPU hours; prefer them for 1D work, which is all of this project.
+   - CPU notebooks need no GPU hours, but this project is 3D: the main runs go on the GPU with the owner's yes (see CORRECTION).
    - Before any launch, you must have a progress tracker **you yourself can read while the job runs**. The Kaggle connector returns
      logs only after a session ends. So either split work into short notebooks that finish and report, or find and test another
      road before launching. Never launch something you cannot watch. If you cannot watch it, say so to the owner before launching,
@@ -269,7 +306,7 @@ its own place and its own provenance.
 1. Read the files of section 0 and the Griffiths & Steinke paper.
 2. Then, before building anything, send the owner one reply with:
    - a one-page plan: the figure's sections; the exact list of derived and new data, with file layout and sizes; which Kaggle
-     notebooks (CPU), with run counts and measured or estimated times; how you will track them;
+     notebooks (GPU for the 3D runs, with the bill; CPU only for side calculations), with run counts and measured or estimated times; how you will track them;
    - Part A's derivation as you intend to present it in the note, every step and symbol shown, the running example in it, verified
      in Wolfram, so the owner can judge its readability first;
    - a first measurement of Step B1 on two or three stored flat-wall runs: does the extraction of t(k) from the stored data work, and
