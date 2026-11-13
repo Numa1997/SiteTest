@@ -206,7 +206,10 @@ our colours".
   stored $\varphi$ is multiplied by $g(0, t)$ first. `radialTable()` does the same for $u = r\psi$ along $r$ (192 points, $u$ odd,
   period 96 a) onto a table 0.01 a apart, and `radialSheet()` takes $\psi = u/r$ at every point of the sheet $-32 \le x, y \le 32$
   (385 × 385 points). The kernel is 1 at its own stored point and 0 at the others, so the sheet has the stored value at every stored
-  point. The page says so in the source box: "The drawn sheet is a resampling of the stored grid".
+  point. Measured with [notes/fig14/band_test.cjs](../../notes/fig14/band_test.cjs) (Node, the page's own `bandMatrix`): plane waves
+  that fit the box, wavelengths 12.8 to 1.07 a, are reproduced on the sheet's points to $4 \times 10^{-14}$; a Gaussian packet with
+  $k_0 = 3$ ($E = 4.5$) to $4 \times 10^{-14}$; the weights at stored points are $(1, 0, 0, \dots)$ to $10^{-16}$. In the browser the
+  sheet's vertex height over the scale equals the stored value to $7 \times 10^{-8}$ (32-bit rounding). The page says so in the source box: "The drawn sheet is a resampling of the stored grid".
 - **Height scale**, new in each frame (`meshOf()`): the tallest point is a seventh of the sheet's width, or lower so that the
   steepest slope is 1.5. The first trial used a seventh of the width always: with wavelengths of 2 to 6 a on a sheet 48 or 64 a
   wide the crests stood as needles. The overlay says which rule holds ("height scaled: steepest slope 1.5").
