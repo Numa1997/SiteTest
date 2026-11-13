@@ -42,18 +42,20 @@ MODELS = {
     # (protein skin, or the head as a lid), and the head of foam: its weight on the stout, its friction on the glass, its spilling
     "full": dict(nu=NU_STOUT, wall=True, skin=True, head=True),
 }
-# The head of foam. Measured, or derived from the two unmeasured inputs R and PHI_F (notes/fig12/research/guinness-materials.md):
-HEAD0 = 0.019        # m, the head as served: 18-20 mm (Nature Reviews Physics 5, 197 (2023))
-GAMMA = 0.045        # N/m, surface tension of beer: 38-47.4 at rest (Ronteltap 1989, Table 4.5; Chatzigiannakis 2025)
-RBUB = 50e-6         # m, bubble radius in the head: NOT MEASURED (inference, 25-100 um: stout bubbles 27-61 um, N2 beer foam ~100 um)
-PHI_F = 0.20         # liquid fraction of the head: NOT MEASURED (inference, 0.05-0.4: Ronteltap p.82; Lee et al. 2018 use 0.2)
-A_Y = 0.75           # yield-stress prefactor, 0.5-1 (Hoehler & Cohen-Addad 2005, as quoted by Costa 2012): the middle
-PHI_C = 0.64         # gas fraction at jamming (same source)
+# The head of foam: every number from notes/fig12/research/data-for-solver.md (13 Nov 2026).
+HEAD0 = 0.019        # m, the head as served: 18-20 mm specification; 17.5-22.2 mm measured two minutes after pouring (KegWorks 2019)
+GAMMA = 0.0442       # N/m, surface tension of degassed Guinness, 20 C, pendant drop (Voelp & Willenbacher 2021, Table 2)
+E_INF = 0.0187       # N/m, its surface dilatational elasticity (same table)
+RBUB = 34e-6         # m, Sauter radius of the head's bubbles: the stout's own (mean diameter 61 um, log-normal sigma 0.24; Watamura 2019)
+PHI_F = 0.27         # liquid fraction of the head: 0.24-0.36 from the column equilibrium and its slow drainage (data-for-solver.md)
 GAS = 1.0 - PHI_F
-TAU_Y = A_Y * GAMMA / RBUB * (GAS - PHI_C) ** 2          # Pa, the head's yield stress
+PHI_C = 0.635        # gas fraction at jamming (Voelp & Willenbacher 2021)
+P_GEN = (GAMMA + 2.0 * E_INF) / RBUB                     # Pa, the generalized Laplace pressure, 2400 Pa
+G_HEAD = 1.0 * P_GEN * GAS * (GAS - PHI_C)                # Pa, shear modulus, 166 Pa (a_d = 1)
+TAU_Y = 0.25 * P_GEN * (GAS - PHI_C) ** 2                 # Pa, yield stress, 5.4 Pa (k_d = 0.25)
 # Wall friction of the head (Cantat, Phys. Fluids 25, 031303 (2013), eq. 18-49; stiff protein surfaces, the sliding branch), with
-# her fitted prefactor Z and meniscus ratio l/r_m against liquid fraction (her Fig. 14, data of Marze et al.). Checked: the same
-# law predicts Viola et al. 2016's measured foam damping within 4-11 % (notes/fig12/research/wolfram/04_verification).
+# her fitted prefactor Z and meniscus ratio l/r_m against liquid fraction (her Fig. 14, data of Marze et al.; held at the 0.25
+# values beyond 0.25). Checked: the same law predicts Viola et al. 2016's measured foam damping within 4-11 %.
 _PHI_TAB = np.array([0.10, 0.15, 0.20, 0.25]); _Z_TAB = np.array([0.6, 0.44, 0.32, 0.18]); _LR_TAB = np.array([0.5, 0.25, 0.09, 0.004])
 Z_WALL = float(np.interp(PHI_F, _PHI_TAB, _Z_TAB)); LR_WALL = float(np.interp(PHI_F, _PHI_TAB, _LR_TAB))
 
@@ -65,7 +67,7 @@ def head_wall_stress(v):
     v = jnp.abs(v); Ca = MU_STOUT * v / GAMMA
     slide = Z_WALL * GAMMA / RBUB * (6.82 * Ca ** (2.0 / 3.0) + 0.94 * LR_WALL * Ca ** (1.0 / 3.0))
     Cas = MU_STOUT * v / (2.0 * GAMMA)
-    carry = TAU_Y + GAMMA / RBUB * 1.162 * Cas ** 0.47 * GAS ** (5.0 / 6.0) * max(GAS - 0.74, 1e-6) ** 0.1 / PHI_F ** 0.5
+    carry = TAU_Y + GAMMA / RBUB * 0.7 * Cas ** 0.47 * GAS ** (5.0 / 6.0) / PHI_F ** 0.5   # films term, eq. 54 (as data-for-solver.md)
     return jnp.minimum(slide, carry)
 
 
@@ -223,7 +225,7 @@ class Stout:
 
     # ---------------------------------------------------------------- state
     def init_state(self):
-        N = self.N; n = self.n; G = self.G
+        N = self.N; G = self.G
         hf0 = jnp.where(self.rc < G.Rfill, HEAD0 if self.head else 0.0, 0.0).astype(F32)
         z64 = jnp.zeros((), F64)
         return dict(xp=jnp.asarray(self.P0), vp=jnp.zeros((N, 3), F32), C=jnp.zeros((N, 3, 3), F32),
@@ -545,15 +547,20 @@ class Stout:
         vel, mass, cnt = self.p2g(s)
         vel = self.normalize_force(vel, mass, dt, gx, gz)
         ph, liq, nsel = self.level_set(s, cnt)
+        H = self.surface(ph, liq)
         if self.nu > 0: vel = self.viscosity(vel, mass, dt)
-        ew = ef = jnp.zeros((), F64)
-        if self.gs > 0 or self.lam0 > 0: vel, ew, ef = self.friction(vel, mass, ph, liq, dt)
-        vel, known, p, it, res = self.pressure(vel, ph, liq, s["p"])
+        z = jnp.zeros((), F64); ew = es = ef = z
+        if self.gs > 0 or self.skin or self.head: vel, ew, es, ef = self.friction(vel, mass, ph, liq, dt, s["hf"])
+        # the head's weight on the surface (verification.md item 4), in the solver's pressure units (Pa x dt / rho)
+        ps = (self.rho_f * s["hf"] * jnp.maximum(-gz, 0.0) * dt / self.rho).astype(F32) if self.head else jnp.zeros((self.n, self.n), F32)
+        vel, known, p, it, res = self.pressure(vel, ph, liq, s["p"], ps)
         vel = self.extrapolate(vel, known)
         s, mom = self.g2p(s, vel, dt, gx, gz)
-        s = dict(s, p=p, ewall=s["ewall"] + ew, efoam=s["efoam"] + ef)
+        if self.head: s = self.head_spill(s, H, dt, gx, gz)
+        s = dict(s, p=p, ewall=s["ewall"] + ew, eskin=s["eskin"] + es, efoam=s["efoam"] + ef)
         vmax = jnp.max(jnp.where(s["act"][:, None], jnp.abs(s["vp"]), 0.0))
-        diag = dict(it=it, res=res, mom=mom, nact=jnp.sum(s["act"], dtype=I32), nsel=nsel, vmax=vmax)
+        mhead = self.rho_f * jnp.sum(s["hf"].astype(F64)) * self.dx ** 2
+        diag = dict(it=it, res=res, mom=mom, nact=jnp.sum(s["act"], dtype=I32), nsel=nsel, vmax=vmax, mhead=mhead)
         return s, diag
 
     def resort(self, s):
@@ -572,17 +579,7 @@ class Stout:
         dx = self.dx; G = self.G
         vel, mass, cnt = self.p2g(s)
         ph, liq, nsel = self.level_set(s, cnt)
-        air = self.cavc & ~liq
-        seen = lax.cummax(liq.astype(I32), axis=2) > 0
-        cand = air & sh(seen, -1, 2, False)
-        has = jnp.any(cand, 2); k = jnp.argmax(cand, 2)                           # first air cell above liquid
-        kb = jnp.maximum(k - 1, 0)
-        pa = jnp.take_along_axis(ph, k[..., None], 2)[..., 0]; pb = jnp.take_along_axis(ph, kb[..., None], 2)[..., 0]
-        zc = self.cc[2]
-        frac = jnp.clip(pb / jnp.where(pa - pb > 1e-12, pa - pb, 1.0), 0.0, 1.0)
-        frac = jnp.where((pa - pb > 1e-12) & (pb < 0), frac, 0.5)
-        H = jnp.where(has, zc[kb] + frac * dx, jnp.nan)
-        H = jnp.where(jnp.any(liq & self.cavc, 2), H, jnp.nan).astype(F32)
+        H = self.surface(ph, liq)
         # drops
         X, act, fly = s["xp"], s["act"], s["fly"]
         i = jnp.clip(jnp.floor((X[:, 0] - G.x0) / dx).astype(I32), 0, self.n - 1)
@@ -600,7 +597,8 @@ class Stout:
         Px = self.mp * jnp.sum(jnp.where(act, v[:, 0], 0.0))
         return dict(H=H, drops=drops.astype(F32), ndrops=nd, nloose=jnp.sum(loose, dtype=I32), nfly=jnp.sum(fly, dtype=I32),
                     nlanded=jnp.sum(s["landed"], dtype=I32), nact=jnp.sum(act, dtype=I32), KE=KE, PE=PE, Px=Px,
-                    ewall=s["ewall"], efoam=s["efoam"], nliq=jnp.sum(liq, dtype=I32), nsel=nsel)
+                    ewall=s["ewall"], efoam=s["efoam"], eskin=s["eskin"], nliq=jnp.sum(liq, dtype=I32), nsel=nsel,
+                    hf=s["hf"], lumps=s["bx"], lumpvol=s["bvol"], foam_spill=s["foam_spill"], foam0=s["foam0"])
 
     def polar(self, H, nr=16, nth=64, Rmax=None):
         """The stored surface H sampled (bilinear, on the GPU) on rings r = Rmax ir / nr, theta = 2 pi ith / nth;
@@ -736,7 +734,7 @@ def make_advance(S, mode, cart=None, cfl=0.8, dtmax=0.002, push=None):
             s, d = S.step(s, dt, -ax, -9.81 - az)
             P = d["mom"] * S.mp
             F = jnp.where(ex["haveP"], -(P - ex["P"]) / dt, 0.0)
-            cs = dict(cs, ml=S.rho * S.V * d["nact"].astype(F64) / S.N)
+            cs = dict(cs, ml=S.rho * S.V * d["nact"].astype(F64) / S.N + d["mhead"])
             ex = dict(ex, cart=cs, P=P, F=jnp.stack([F[0], F[2]]), haveP=jnp.ones((), bool), vmax=d["vmax"].astype(F64),
                       imp=ex["imp"] + jnp.stack([F[0], F[2]]) * dt)
         st = dict(steps=st["steps"] + 1, its=st["its"] + d["it"], itmax=jnp.maximum(st["itmax"], d["it"]),
@@ -752,6 +750,6 @@ def make_advance(S, mode, cart=None, cfl=0.8, dtmax=0.002, push=None):
 
 
 def ride_extra(S, cart_obj, x0=0.5):
-    ml = S.rho * S.V
+    ml = S.rho * S.V + (S.rho_f * HEAD0 * float(np.sum(np.asarray(S.rc) < S.G.Rfill)) * S.dx ** 2 if S.head else 0.0)
     return dict(cart=cart_obj.init(x0, ml), P=jnp.zeros(3, F64), F=jnp.zeros(2, F64), haveP=jnp.zeros((), bool),
                 vmax=jnp.zeros((), F64), imp=jnp.zeros(2, F64), t_end=jnp.zeros((), F64))

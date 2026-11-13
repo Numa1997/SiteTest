@@ -5,7 +5,7 @@ import os, json, time, datetime
 from pathlib import Path
 import numpy as np
 import jax, jax.numpy as jnp
-from stout_jax import Geometry, Stout, Cart, CART_COMMON, road_table, make_advance, ride_extra, F64
+from stout_jax import Geometry, Stout, Cart, CART_COMMON, road_table, make_advance, ride_extra, F64, RBUB, PHI_F, GAMMA, E_INF, G_HEAD, TAU_Y, Z_WALL, LR_WALL
 
 R = json.load(open(os.environ["GLASS_JSON"]))["R"]; DZP = 0.0005
 FILL, RHO, FPS = 0.125, 1007.0, 30
@@ -27,14 +27,11 @@ ROADS = {
     # five 20 mm bumps 0.29 m apart: at 1 m/s they come 3.4 times a second, in step with the swing (3.42 Hz)
     "five 20 mm bumps in step with the swing": {"kind": "bumps", "bumps": [{"x": 1.5 + 0.29 * i, "h": 0.020, "L": 0.25} for i in range(5)]},
 }
-TASKS = [
+TASKS = [   # second run (13 Nov 2026): the full model of notes/fig12/research/verification.md with data-for-solver.md's numbers
     dict(name="rest", kind="free", dx=0.0015, model="full", end=2.0, push=(0.3, 0.0, 0.146)),
-    dict(name="free_full_1.5", kind="free", dx=0.0015, model="full", end=5.0, push=(0.3, 1.0, 0.146)),
     dict(name="ride_resonant", kind="ride", dx=0.0015, model="full", end=8.0, road="five 20 mm bumps in step with the swing", v0=1.0),
+    dict(name="free_full_1.5", kind="free", dx=0.0015, model="full", end=5.0, push=(0.3, 1.0, 0.146)),
     dict(name="ride_bump25", kind="ride", dx=0.0015, model="full", end=8.0, road="one 25 mm bump", v0=1.0),
-    dict(name="free_inviscid_1.5", kind="free", dx=0.0015, model="inviscid", end=5.0, push=(0.3, 1.0, 0.146)),
-    dict(name="free_inviscid_2", kind="free", dx=0.002, model="inviscid", end=5.0, push=(0.3, 1.0, 0.146)),
-    dict(name="free_inviscid_3", kind="free", dx=0.003, model="inviscid", end=5.0, push=(0.3, 1.0, 0.146)),
 ]
 if os.environ.get("CODECHECK"):   # a check of this script only: two frames on a 6 mm grid, results thrown away
     TASKS = [dict(t, dx=0.006, end=2 / FPS) for t in TASKS[:4]]
@@ -79,14 +76,16 @@ for task in TASKS:
         adv = make_advance(S, "ride", cart=cart); ex = ride_extra(S, cart)
     obs = jax.jit(S.observe); pol = jax.jit(S.polar)
     nf = int(round(task["end"] * FPS)); rec = {k: [] for k in ("t", "H", "polar", "drops", "ndrops", "nfly", "nlanded", "nact", "KE", "PE", "Px",
-                                                              "ewall", "efoam", "steps", "its", "itmax", "resmax", "nselmax", "wall_s",
+                                                              "ewall", "efoam", "eskin", "hf", "lumps", "lumpvol", "foam_spill", "steps", "its", "itmax", "resmax", "nselmax", "wall_s",
                                                               "x", "v", "zb", "zw", "i", "Nwheel", "Fx", "Fz")}
 
     def record(s, t, ex, st, wall):
         o = obs(s); P = pol(o["H"])
         rec["t"].append(float(t)); rec["H"].append(np.asarray(o["H"])); rec["polar"].append(np.asarray(P))
         rec["drops"].append(np.asarray(o["drops"]).astype(np.float16))
-        for k in ("ndrops", "nfly", "nlanded", "nact", "KE", "PE", "Px", "ewall", "efoam"): rec[k].append(float(o[k]))
+        for k in ("ndrops", "nfly", "nlanded", "nact", "KE", "PE", "Px", "ewall", "efoam", "eskin", "foam_spill"): rec[k].append(float(o[k]))
+        rec["hf"].append(np.asarray(o["hf"]).astype(np.float16)); rec["lumps"].append(np.asarray(o["lumps"]).astype(np.float16))
+        rec["lumpvol"].append(np.asarray(o["lumpvol"]).astype(np.float32))
         for k in ("steps", "its", "itmax", "resmax", "nselmax"): rec[k].append(float(st[k]) if st is not None else 0.0)
         rec["wall_s"].append(wall)
         if task["kind"] == "ride":
@@ -117,7 +116,9 @@ for task in TASKS:
                 ms_per_step=round(run_s / max(steps - 1, 1) * 1e3, 1), its_per_step=round(its / max(steps, 1), 1),
                 itmax=int(out["itmax"].max()), resmax=float(out["resmax"].max()), nselmax=int(out["nselmax"].max()), K=S.K,
                 s_per_simulated_s=round(rate_now, 1), spilled_g=round((S.N - out["nact"][-1]) * S.mp * 1e3, 2),
-                drops_max=int(out["ndrops"].max()), volume_kept=float(out["nact"][-1] / S.N))
+                drops_max=int(out["ndrops"].max()), volume_kept=float(out["nact"][-1] / S.N),
+                head_spilled_ml=round(float(out["foam_spill"][-1]) * 1e6, 2), head_ml=round(float(np.asarray(S.init_state()["foam0"])) * 1e6, 1),
+                head=dict(R32=RBUB, phi_l=PHI_F, gamma=GAMMA, E_inf=E_INF, G0=G_HEAD, tau_y=TAU_Y, Z=Z_WALL, lr=LR_WALL))
     dev = (pol_arr - FILL) * 1e3
     if task["kind"] == "free":
         th = 2 * np.pi * np.arange(pol_arr.shape[2]) / pol_arr.shape[2]
