@@ -648,3 +648,17 @@ all 46 comparisons agree to the digits the site gives. It also prints the gains 
 zeta 0.018, 429.6 g, a probe every 2 samples): K = (75.73, -1913.3, -40.07, -150.0), filter gain 0.0800 and 1.654 1/s.
 Not done yet: the same matrices evaluated a second time in Wolfram. The user's decision of 13 November 2026: the
 controlled rides are computed in JAX only (no Taichi fallback), after the baseline rides are finished.
+
+**Stage A in Wolfram, the physics and the loop (13 November 2026).** `tools/fig12/control/derive.wl` evaluates every number
+of `derive.py` again (RiccatiSolve, MatrixExp, Bessel zeros) and agrees to the digits printed (`derive.wl.out.txt`).
+`tools/fig12/control/derive_physics.wl` (output `derive_physics.out.txt`) derives in Wolfram: the first mode from the
+Lagrangian of the potential flow in the glass's frame (modal mass, omega^2, the heave factor (g + a_z)/g, beta, and that the
+stout's relative momentum Pc q' and its coupling to the push share the constant rho pi R^3/xi^2, so its reaction on the cart is
+-dP/dt); the cart and the mode as one Lagrangian, and what the controller's model leaves out (the push back changes the gains
+by under 1 % and the swing poles from -11.65 +- 8.13j to -11.62 +- 8.13j); the whole motor loop as one sampled system as the
+code runs it (filter, 2 ms lag, 1 ms sample, probes every 2 ms): stable, swing poles -11.55 +- 8.11j, phase margin 51 deg,
+gain margin 17.5 dB, delay margin 3.5 ms; the heave threshold eps = 4 zeta (Floquet and harmonic balance); the cart's
+symplectic Euler at 0.1 ms (pole error 1e-4 and 1e-3). Checked against Dodge's update of NASA SP-106 (frequencies, the slosh
+mass, the damping correlation), Van Loan (1978), and the slosh-control literature (Feddema 1997, Grundelius 2001, Yano &
+Terashima 1997); the list with what was read is at the end of `derive_physics.out.txt`. Still open: the suspension block and
+the three-mode plant in the same form, and where the heave cancellation is exact.
