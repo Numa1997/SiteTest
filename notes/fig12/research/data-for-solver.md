@@ -76,7 +76,7 @@ sources are in `sources/`. Each number carries one status:
 
 ## 4. Still not measured by anyone found
 
-- A weighing of a Guinness head, to confirm ε = 0.24–0.36.
+- A weighing of a Guinness head, to confirm ε = 0.24–0.36. Searched again on 13 November 2026 (8 plain web searches, 5 page fetches, the Ronteltap thesis, 1 Exa search): none exists; see sources/search-log-head-liquid-fraction-2026-11-13.txt. Closest: CO₂ beers, foam density 0.14–0.24 g/mL at 1 min (Constant 1992), drier because their ~10× larger bubbles drain ~100× faster.
 - A slosh or ringdown of a real pint, with or without its head.
 - The published row order of Hamlett's Table 2.
 - The Table 2 values of Völp & Willenbacher, read by us directly (the 44.2 and 18.7 are Gemini's quote).

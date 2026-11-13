@@ -1,0 +1,26 @@
+SEARCH LOG: measured liquid fraction (or density) of a Guinness / nitrogenated-stout head. 13 November 2026.
+Roads, in the order the owner asked (plain search and fetch first, crawlers only last):
+1. WebSearch x8 (standard and extended): "beer foam liquid fraction measured conductivity Guinness nitrogen foam density head";
+   "beer foam liquid fraction stout nitrogen"; "Guinness head foam density g/ml"; "beer foam liquid content percent ... Ronteltap";
+   "nitro cold brew / nitrogenated beer foam liquid fraction"; "Experimental and Numerical Investigation of Beer Foam".
+2. WebFetch: Krüss AR275 (three light beers, 25 °C; no liquid fraction, no stout); Google Patents US4279938 (Guinness 1981; N2 0.015-0.035
+   and CO2 0.8-1.8 vols/vol; no foam numbers); US9420822 (Sapporo; no foam numbers); Straight Dope "beer head data" (no data);
+   ResearchGate Lyu et al. 2023 (403). USPTO PDF (403).
+3. Local: Ronteltap 1989 thesis text (edepot.wur.nl/202245), p.85: "Suppose that a foam initially is 3 cm high, and contains 60% gas and
+   40% liquid. For fresh beer foam these figures are quite realistic. Also suppose that as a result of drainage the foam contains 90% gas
+   and 10% liquid after a certain period of time ... The decrease in foam height may take place in about two minutes" (CO2-beer foam,
+   bubbles of order 200 µm; an illustration, not a measurement). p.102: "The density of the foam is defined as the ratio of the liquid in
+   the foam and the foam volume ... can be measured in various obvious ways" (no stout values).
+4. Exa search x1 (crawler road, used last): found only items already held, plus:
+   - Guinness patent US4279938 (freepatentsonline): "In the latter--draught--case the foam is more creamy which can be objectively
+     measured by a high foam density." (no number)
+   - Maruszewski, Marquette bachelor essay: "For a stable foam, a surface tension of about 44 dynes is desirable." (44 mN/m; consistent
+     with Völp & Willenbacher's 44.2 mN/m for Guinness)
+   - ESGI 70 (Wits copy): "N2 is 100 times less soluble than CO2 at 8 °C" (by mass concentration; our molar ratio from Henry constants
+     is 66).
+   - Helm & Richardt 1936 J. Inst. Brew.: foam measured as "the quantity of beer found in the foam" (Carlsberg and Blom methods); no stout.
+   - Constant 1992 J. Am. Soc. Brew. Chem. 50, 37: poured-foam density 0.14-0.24 g/mL at 1 min, commercial (CO2) beers (abstract).
+RESULT: no published direct measurement of the liquid fraction or density of a Guinness or nitro-stout head was found. The derived value
+(guinness-materials.md 2.5; wolfram/05): 0.24-0.36, from 34 µm bubbles held by surface tension against the head's weight, with 25-110 min
+needed to drain to equilibrium. CO2-beer foams (bubbles ~10x larger) are drier at 1 min (0.14-0.24 g/mL, Constant 1992) because they
+drain ~100x faster; this is consistent with, not a contradiction of, the derived range.
