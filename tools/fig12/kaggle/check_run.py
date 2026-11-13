@@ -37,6 +37,16 @@ for t in S["tasks"]:
     else:
         f13 = t.get("fit_ring13") or {}
         if f13.get("f"):
-            print(f"   free swing: {f13['f']:.3f} Hz, damping ratio {f13['zeta']:.4f}, amplitude {f13['A_mm']:.2f} mm, fit rms {f13['rms_mm']:.3f} mm")
-            check("swing frequency within 3 % of 3.42 Hz", abs(f13["f"] / 3.42 - 1) < 0.03, f"{f13['f']:.3f} Hz")
+            # run 4's summary gave zeta' = 1/(tau w_d); the natural frequency is w0 = w_d sqrt(1 + zeta'^2), zeta = zeta'/sqrt(1 + zeta'^2)
+            f0 = f13.get("f0") or f13["f"] * (1 + f13["zeta"] ** 2) ** 0.5
+            z = f13["zeta"] if "f0" in f13 else f13["zeta"] / (1 + f13["zeta"] ** 2) ** 0.5
+            print(f"   free swing: rings at {f13['f']:.3f} Hz, natural frequency {f0:.3f} Hz, damping ratio {z:.4f}, amplitude {f13['A_mm']:.2f} mm, fit rms {f13['rms_mm']:.3f} mm")
+            if t["model"] != "full":
+                # Gate E: the solver's own swing (no head) against the theory of the bare stout, 3.421 Hz
+                check("natural frequency within 3 % of 3.421 Hz", abs(f0 / 3.421 - 1) < 0.03, f"{f0:.3f} Hz")
+            else:
+                # with the head (weight, no inertia in this model) the swing's natural frequency is the bare stout's; Gate C predicted
+                # that the head stops the swing within about one period (zeta of order 0.5)
+                print(f"   Gate C: the head should stop the swing within about one period; here e-folding in {1 / (z * 2 * 3.14159265 * f0):.3f} s, "
+                      f"{1 / (z * 2 * 3.14159265 * f0) * f0:.2f} periods")
 print("\nALL", "PASS" if ok_all else "FAIL")

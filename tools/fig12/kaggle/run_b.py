@@ -37,6 +37,9 @@ TASKS = [   # third run (13 Nov 2026): the head as a sheet that resists shear; s
     dict(name="free_full_1.5", kind="free", dx=0.0015, model="full", end=5.0, push=(0.3, 1.0, 0.146)),
     dict(name="ride_sharp30", kind="ride", dx=0.0015, model="full", end=4.0, road="one sharp 30 mm bump", v0=1.5),
     dict(name="ride_bump25", kind="ride", dx=0.0015, model="full", end=8.0, road="one 25 mm bump", v0=1.0),
+    # the solver's own swing (13 Nov 2026, after run 4): no head, so it rings and its frequency and damping can be read against
+    # theory, 3.421 Hz and zeta = 0.0056 (glass and bulk, Bongarzone & Gallaire 2022 eq. 17; research/verification.md check 1)
+    dict(name="free_wall_1.5", kind="free", dx=0.0015, model="wall", end=5.0, push=(0.3, 1.0, 0.146)),
 ]
 if os.environ.get("ONLY"):   # run only the named tasks, comma-separated (one Colab job per task: Colab caps a job at 3600 s)
     TASKS = [t for t in TASKS if t["name"] in os.environ["ONLY"].split(",")]
@@ -47,7 +50,8 @@ summary = dict(generated=STAMP, device=jax.devices()[0].device_kind, jax=jax.__v
 
 
 def fit_swing(t, q):
-    """q = A exp(-t/tau) cos(w t + phi) + c, least squares (scipy); returns frequency (Hz) and damping ratio."""
+    """q = A exp(-t/tau) cos(w t + phi) + c, least squares (scipy). Returns the damped frequency f = w/2pi, the natural frequency
+    f0 = sqrt(w^2 + 1/tau^2)/2pi and the damping ratio zeta = 1/(tau w0) (run 4 reported 1/(tau w) as zeta: 0.526 for 0.465)."""
     from scipy.optimize import curve_fit
     f0 = 3.4; A0 = float(np.max(np.abs(q - q.mean())))
     fun = lambda t, A, tau, w, ph, c: A * np.exp(-t / tau) * np.cos(w * t + ph) + c
@@ -61,7 +65,8 @@ def fit_swing(t, q):
             pass
     if best is None: return dict(f=None, zeta=None)
     A, tau, w, ph, c = best[0]
-    return dict(f=float(abs(w) / (2 * np.pi)), zeta=float(1 / (abs(w) * tau)), A_mm=float(abs(A) * 1e3), rms_mm=float(np.sqrt(best[1] / len(t)) * 1e3))
+    w0 = float(np.sqrt(w * w + 1.0 / (tau * tau)))
+    return dict(f=float(abs(w) / (2 * np.pi)), f0=w0 / (2 * np.pi), zeta=float(1 / (abs(tau) * w0)), A_mm=float(abs(A) * 1e3), rms_mm=float(np.sqrt(best[1] / len(t)) * 1e3))
 
 
 for task in TASKS:
