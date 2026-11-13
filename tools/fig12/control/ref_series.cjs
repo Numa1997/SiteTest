@@ -24,6 +24,14 @@ for (const [ctrl, susp] of [['off', false], ['speed', false], ['preview', false]
   row();
   while (w.t < T - 1e-9) { w.advance(1 / 200); row(); }
   const key = ctrl + (susp ? '+skyhook' : '');
+  if (!out.consts) {
+    const o = c.obs, r = w.cart.road, xs = []; for (let k = 0; k <= 400; k++) xs.push(0.5 + k * 0.005);
+    out.consts = { fluid: { Rs: f.Rs, h: f.h, zRim: f.zRim, Rrim: f.Rrim, rho: f.rho, V: f.V, w: f.w, beta: f.beta, zeta: f.zeta, Pc: f.Pc, mLiquid: f.mLiquid },
+      obs: { Ad: o.Ad, Bd: o.Bd, Qd: o.Qd, sigV: o.sigV, sigQ: o.sigQ, WF: o.WF, Wa: o.Wa, w: o.w, zeta: o.zeta, beta: o.beta },
+      cart: { Mb: c.Mb, mw: c.mw, Rw: c.Rw, Iw: c.Iw, k: c.k, c: c.c, kt: c.kt, ct: c.ct, cx: c.cx, v0: c.v0, Ls: c.Ls, g: c.g, Ngear: c.Ngear, Km: c.Km, Ra: c.Ra, Jm: c.Jm,
+        Vmax: c.Vmax, Imax: c.Imax, tauI: c.tauI, Ts: c.Ts, Kp: c.Kp, Ki: c.Ki, csky: c.csky, Umax: c.Umax, tauU: c.tauU, mu: c.mu, x0: 0.5 },
+      road: { bumps: bumps.slice(0, 6), Rw: r.Rw, xmin: r.xmin, xmax: r.xmax, h: r.h, test_x: xs, test_za: xs.map((x) => r.axle(x)[0]), test_dza: xs.map((x) => r.axle(x)[1]) } };
+  }
   out.runs[key] = { lean_max_mm: +(lmax * 1000).toFixed(3), plant: c.sloshMode, K: c.lqrGains(), Ks: c.suspGains(), Mx: c.massX(), ml: c.ml, rows: rows.map((r) => r.map((v) => +v.toPrecision(12))) };
   process.stderr.write(`${key}: largest lean ${(lmax * 1000).toFixed(2)} mm\n`);
 }
