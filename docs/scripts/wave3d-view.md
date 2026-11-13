@@ -14,6 +14,12 @@ files. When loaded it sets `window.Wave3D` and fires the window event `wave3d-re
   the quarter $y > 0, z > 0$ is removed.
 - **Surface**: a plane of $\mathrm{Re}\,\psi$ (the page passes $z = 0$) lifted by its value and coloured by `surfaceColour(v)`:
   paper at 0, towards wine ($v > 0$) or slate ($v < 0$), full at $|v| = 0.5$ of the scale passed (the frame's largest $|\mathrm{Re}\,\psi|$).
+- **Mesh** (the page's default, `setMesh`): one height surface on the grid the page gives, coloured by `meshColour(v)` in the
+  house colours (card paper at $v = 0$, wine at $+1$, slate at $-1$, mixed in sRGB), with a wire mesh on every `every`-th grid line
+  (ink, sharing the surface's vertex buffer) and the barrier's outline as polylines lying on the sheet. Normals come from central
+  differences of the heights. In this mode the floor, grid, axis, barrier solid and fog of the room are hidden, the lights are
+  white (hemisphere 1.55, sun 1.9, so a level patch shows its own colour) and the material is not tone-mapped: the page's pixel
+  check inverts the ramp with `meshV(px)`. The mode keeps its own camera (`api.meshCam`, distance 1.34 × the sheet's width).
 - **Room**: paper background, a floor with a grid at $z = -17.5$, a hemisphere light, a sun with soft shadows, a fill light, the
   dashed flight axis with an arrow. **Barrier** (`setBarrier({shape, R, a, hard, V0})`): sphere, slab ($|x| < a/2$, drawn over
   the box), pillar (column along $z$, drawn 32 a tall), coin, tube; glass for a finite height, opaque for a hard wall, tan for a well.
@@ -27,9 +33,10 @@ plane z = 0 by a function of r on a polar mesh (192 angles); `setRoom(floorY, di
 
 ## API
 
-`Wave3D.create(canvas, {canTurn, onTurn})` returns `api` with `setField`, `setPlane`, `setBarrier`, `setMode('sheets' | 'surface' |
-'cutaway')`, `clear`, `resize(w, h, dpr)`, `render`, `project([x, y, z])` (CSS pixels), `pickPlane(cx, cy)` (the point where the
-pixel's ray meets $z = 0$), `readPixel(cx, cy)` (the drawn RGBA; the renderer keeps its drawing buffer for this), and the numbers
+`Wave3D.create(canvas, {canTurn, onTurn})` returns `api` with `setField` (optional last argument: the spacing along $x$ when it
+differs), `setPlane`, `setBarrier`, `setMesh({nx, ny, x0, y0, h, H, T, every, outline, key})`, `setMeshView(span)`, `meshVertex(k)`,
+`heightAt(x, y)`, `setMode('mesh' | 'sheets' | 'surface' | 'cutaway')`, `clear`, `resize(w, h, dpr)`, `render`, `project([x, y, z])` (CSS pixels), `pickPlane(cx, cy)` (the point where the
+pixel's ray meets $z = 0$; in the mesh mode, where it first meets the sheet), `readPixel(cx, cy)` (the drawn RGBA; the renderer keeps its drawing buffer for this), and the numbers
 `triangles`, `level`, `scale`, `height`, `yaw`, `pitch`, `dist`. Turning: press and drag (never a mere pass of the pointer).
 
 ## Measured (headless Chromium with SwiftShader, 12 November 2026)

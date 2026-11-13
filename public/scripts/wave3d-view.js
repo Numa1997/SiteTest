@@ -1,7 +1,9 @@
 /* Wave3D: the lit 3D views of Fig. 14 (three.js 0.170, vendored in vendor/three/). Three ways to draw the same stored wave:
      'sheets'  - the surfaces Re psi = +c (crests, wine) and Re psi = -c (troughs, slate), lit and shaded, in a room with a floor;
      'cutaway' - the same sheets with the quarter y > 0, z > 0 cut away, so the inside of the wave and of the barrier shows;
-     'surface' - the plane z = 0 through the flight axis, lifted by Re psi: a height map, coloured by the sign of Re psi.
+     'surface' - the plane z = 0 through the flight axis, lifted by Re psi: a height map, coloured by the sign of Re psi;
+     'mesh'    - the default: the plane z = 0 as a smooth height surface with a thin wire mesh on it, in the house colours (paper
+                 at zero, wine on the crests, ink slate in the troughs), no floor and no box; the barrier as an outline on the sheet.
    The page hands over numbers it read from Kaggle's files; this module only draws them: a 3D field of Re psi on a grid (for the
    sheets, found by marching cubes), or a 2D plane of Re psi (for the surface). Physics axes: x along the flight, z up on screen.
    Turning: press and drag on the canvas (never a mere pass of the pointer). Docs: docs/scripts/wave3d-view.md. */
@@ -15,41 +17,53 @@ const P = (x, y, z) => new THREE.Vector3(x, z, y);          /* physics (x, y, z)
 /* corners as in vendor/three/MarchingCubes.js (Bourke): bit b of the cube index is set when corner b is below the level */
 const CORNER = [[0, 0, 0], [1, 0, 0], [1, 1, 0], [0, 1, 0], [0, 0, 1], [1, 0, 1], [1, 1, 1], [0, 1, 1]];
 const EDGE = [[0, 1], [1, 2], [3, 2], [0, 3], [4, 5], [5, 6], [7, 6], [4, 7], [0, 4], [1, 5], [2, 6], [3, 7]];
-export function marching(field, nx, ny, nz, level, sign, x0, y0, z0, h) {
-    const pos = [], nor = [], vx = new Float32Array(12 * 3), vn = new Float32Array(12 * 3);
+export function marching(field, nx, ny, nz, level, sign, x0, y0, z0, h, hx) {   /* hx: the spacing along x when it differs from h */
+    hx = hx || h;
+    let cap = 1 << 16, pos = new Float32Array(cap), nor = new Float32Array(cap), n = 0;      /* grown as needed: no per-number pushes */
+    const vx = new Float32Array(12 * 3), vn = new Float32Array(12 * 3);
     const at = (i, j, k) => sign * field[(i * ny + j) * nz + k];
     const grad = (i, j, k, out, o) => {         /* -grad of (sign * field): points from the crest out into lower values */
         const i0 = Math.max(0, i - 1), i1 = Math.min(nx - 1, i + 1), j0 = Math.max(0, j - 1), j1 = Math.min(ny - 1, j + 1), k0 = Math.max(0, k - 1), k1 = Math.min(nz - 1, k + 1);
-        out[o] = -(at(i1, j, k) - at(i0, j, k)) / (i1 - i0); out[o + 1] = -(at(i, j1, k) - at(i, j0, k)) / (j1 - j0); out[o + 2] = -(at(i, j, k1) - at(i, j, k0)) / (k1 - k0);
+        out[o] = -(at(i1, j, k) - at(i0, j, k)) / (i1 - i0) * (h / hx); out[o + 1] = -(at(i, j1, k) - at(i, j0, k)) / (j1 - j0); out[o + 2] = -(at(i, j, k1) - at(i, j, k0)) / (k1 - k0);
     };
     const g0 = new Float32Array(3), g1 = new Float32Array(3), val = new Float32Array(8);
-    for (let i = 0; i < nx - 1; i++) for (let j = 0; j < ny - 1; j++) for (let k = 0; k < nz - 1; k++) {
-        let ci = 0;
-        for (let c = 0; c < 8; c++) { const v = at(i + CORNER[c][0], j + CORNER[c][1], k + CORNER[c][2]); val[c] = v; if (v < level) ci |= 1 << c; }
-        const bits = edgeTable[ci]; if (!bits) continue;
-        for (let e = 0; e < 12; e++) {
-            if (!(bits & (1 << e))) continue;
-            const a = EDGE[e][0], b = EDGE[e][1], A = CORNER[a], B = CORNER[b];
-            const t = (level - val[a]) / (val[b] - val[a]);
-            vx[3 * e] = x0 + h * (i + A[0] + t * (B[0] - A[0])); vx[3 * e + 1] = y0 + h * (j + A[1] + t * (B[1] - A[1])); vx[3 * e + 2] = z0 + h * (k + A[2] + t * (B[2] - A[2]));
-            grad(i + A[0], j + A[1], k + A[2], g0, 0); grad(i + B[0], j + B[1], k + B[2], g1, 0);
-            let nxv = g0[0] + t * (g1[0] - g0[0]), nyv = g0[1] + t * (g1[1] - g0[1]), nzv = g0[2] + t * (g1[2] - g0[2]); const m = Math.hypot(nxv, nyv, nzv) || 1;
-            vn[3 * e] = nxv / m; vn[3 * e + 1] = nyv / m; vn[3 * e + 2] = nzv / m;
-        }
-        const o = ci * 16;
-        for (let q = 0; triTable[o + q] !== -1; q += 3) {
-            let e0 = triTable[o + q], e1 = triTable[o + q + 1], e2 = triTable[o + q + 2];
-            /* wind each triangle so that its face normal agrees with the gradient normal: lighting is then right on both sides.
-               (The test is made in physics axes; swapping y and z for three's axes mirrors the space and reverses the winding,
-               so a triangle agreeing here is kept as it is only when the dot product is negative.) */
-            const ax = vx[3 * e1] - vx[3 * e0], ay = vx[3 * e1 + 1] - vx[3 * e0 + 1], az = vx[3 * e1 + 2] - vx[3 * e0 + 2];
-            const bx = vx[3 * e2] - vx[3 * e0], by = vx[3 * e2 + 1] - vx[3 * e0 + 1], bz = vx[3 * e2 + 2] - vx[3 * e0 + 2];
-            const fx = ay * bz - az * by, fy = az * bx - ax * bz, fz = ax * by - ay * bx;
-            if (fx * (vn[3 * e0] + vn[3 * e1] + vn[3 * e2]) + fy * (vn[3 * e0 + 1] + vn[3 * e1 + 1] + vn[3 * e2 + 1]) + fz * (vn[3 * e0 + 2] + vn[3 * e1 + 2] + vn[3 * e2 + 2]) > 0) { const s = e1; e1 = e2; e2 = s; }
-            for (const e of [e0, e1, e2]) { pos.push(vx[3 * e], vx[3 * e + 2], vx[3 * e + 1]); nor.push(vn[3 * e], vn[3 * e + 2], vn[3 * e + 1]); }   /* to three's axes */
+    const sx = ny * nz, sy = nz, L = sign * level;                    /* sign * f < level  <=>  f < L (sign +1) or f > L (sign -1) */
+    for (let i = 0; i < nx - 1; i++) for (let j = 0; j < ny - 1; j++) {
+        let b = (i * ny + j) * nz;
+        for (let k = 0; k < nz - 1; k++, b++) {
+            /* the eight corners straight from the array; most cubes lie wholly on one side of the level and are left at once */
+            const f0 = field[b], f1 = field[b + sx], f2 = field[b + sx + sy], f3 = field[b + sy], f4 = field[b + 1], f5 = field[b + sx + 1], f6 = field[b + sx + sy + 1], f7 = field[b + sy + 1];
+            let ci;
+            if (sign > 0) ci = (f0 < L ? 1 : 0) | (f1 < L ? 2 : 0) | (f2 < L ? 4 : 0) | (f3 < L ? 8 : 0) | (f4 < L ? 16 : 0) | (f5 < L ? 32 : 0) | (f6 < L ? 64 : 0) | (f7 < L ? 128 : 0);
+            else ci = (f0 > L ? 1 : 0) | (f1 > L ? 2 : 0) | (f2 > L ? 4 : 0) | (f3 > L ? 8 : 0) | (f4 > L ? 16 : 0) | (f5 > L ? 32 : 0) | (f6 > L ? 64 : 0) | (f7 > L ? 128 : 0);
+            if (ci === 0 || ci === 255) continue;
+            const bits = edgeTable[ci]; if (!bits) continue;
+            val[0] = sign * f0; val[1] = sign * f1; val[2] = sign * f2; val[3] = sign * f3; val[4] = sign * f4; val[5] = sign * f5; val[6] = sign * f6; val[7] = sign * f7;
+            for (let e = 0; e < 12; e++) {
+                if (!(bits & (1 << e))) continue;
+                const a = EDGE[e][0], c2 = EDGE[e][1], A = CORNER[a], B = CORNER[c2];
+                const t = (level - val[a]) / (val[c2] - val[a]);
+                vx[3 * e] = x0 + hx * (i + A[0] + t * (B[0] - A[0])); vx[3 * e + 1] = y0 + h * (j + A[1] + t * (B[1] - A[1])); vx[3 * e + 2] = z0 + h * (k + A[2] + t * (B[2] - A[2]));
+                grad(i + A[0], j + A[1], k + A[2], g0, 0); grad(i + B[0], j + B[1], k + B[2], g1, 0);
+                let nxv = g0[0] + t * (g1[0] - g0[0]), nyv = g0[1] + t * (g1[1] - g0[1]), nzv = g0[2] + t * (g1[2] - g0[2]); const m = Math.hypot(nxv, nyv, nzv) || 1;
+                vn[3 * e] = nxv / m; vn[3 * e + 1] = nyv / m; vn[3 * e + 2] = nzv / m;
+            }
+            const o = ci * 16;
+            for (let q = 0; triTable[o + q] !== -1; q += 3) {
+                let e0 = triTable[o + q], e1 = triTable[o + q + 1], e2 = triTable[o + q + 2];
+                /* wind each triangle so that its face normal agrees with the gradient normal: lighting is then right on both sides.
+                   (The test is made in physics axes; swapping y and z for three's axes mirrors the space and reverses the winding,
+                   so a triangle agreeing here is kept as it is only when the dot product is negative.) */
+                const ax = vx[3 * e1] - vx[3 * e0], ay = vx[3 * e1 + 1] - vx[3 * e0 + 1], az = vx[3 * e1 + 2] - vx[3 * e0 + 2];
+                const bx = vx[3 * e2] - vx[3 * e0], by = vx[3 * e2 + 1] - vx[3 * e0 + 1], bz = vx[3 * e2 + 2] - vx[3 * e0 + 2];
+                const fx = ay * bz - az * by, fy = az * bx - ax * bz, fz = ax * by - ay * bx;
+                if (fx * (vn[3 * e0] + vn[3 * e1] + vn[3 * e2]) + fy * (vn[3 * e0 + 1] + vn[3 * e1 + 1] + vn[3 * e2 + 1]) + fz * (vn[3 * e0 + 2] + vn[3 * e1 + 2] + vn[3 * e2 + 2]) > 0) { const s = e1; e1 = e2; e2 = s; }
+                if (n + 9 > cap) { cap *= 2; const p2 = new Float32Array(cap), n2 = new Float32Array(cap); p2.set(pos); n2.set(nor); pos = p2; nor = n2; }
+                for (let w = 0; w < 3; w++) { const e = w === 0 ? e0 : w === 1 ? e1 : e2; pos[n] = vx[3 * e]; pos[n + 1] = vx[3 * e + 2]; pos[n + 2] = vx[3 * e + 1]; nor[n] = vn[3 * e]; nor[n + 1] = vn[3 * e + 2]; nor[n + 2] = vn[3 * e + 1]; n += 3; }   /* to three's axes */
+            }
         }
     }
-    return { pos: new Float32Array(pos), nor: new Float32Array(nor) };
+    return { pos: pos.slice(0, n), nor: nor.slice(0, n) };
 }
 
 /* the colour of the height surface for a value v of Re psi (fraction of the first frame's peak): paper at 0, towards wine (v > 0)
@@ -59,6 +73,25 @@ export function surfaceColour(v) {
     return c.lerp(t, a);
 }
 
+/* the colour of the meshed sheet, in the house colours, for v in [-1, 1] (the height drawn over the largest on the sheet):
+   card paper at 0, towards wine for v > 0 (crests) and towards the ink slate for v < 0 (troughs), full at |v| = 1; mixed in
+   sRGB as the page states it. Exported so that the data panel can invert it from a read-back pixel. */
+export const MESH_ZERO = [0xfb, 0xf6, 0xee], MESH_CREST = [0xa3, 0x30, 0x3f], MESH_TROUGH = [0x55, 0x60, 0x7a];
+export function meshColour(v) {
+    v = Math.max(-1, Math.min(1, v)); const e = v >= 0 ? MESH_CREST : MESH_TROUGH, a = Math.abs(v);
+    return new THREE.Color((MESH_ZERO[0] + a * (e[0] - MESH_ZERO[0])) / 255, (MESH_ZERO[1] + a * (e[1] - MESH_ZERO[1])) / 255, (MESH_ZERO[2] + a * (e[2] - MESH_ZERO[2])) / 255);
+}
+/* the inverse used by the pixel check. White light scales a colour's three linear components by one factor, which leaves the
+   ratios of its sRGB components nearly unchanged. Towards wine the ratio g / r falls from 246/251 to 48/163; towards slate the
+   ratio r / b falls from 251/238 to 85/122. Each ratio is solved for |v|; a pixel with more blue against red than the paper has is on the slate side. */
+export function meshV(px) {
+    const r = px[0], g = px[1], b = px[2]; if (r <= 0 || b <= 0) return NaN;
+    const Z = MESH_ZERO, C = MESH_CREST, T = MESH_TROUGH, q1 = g / r, q2 = r / b;
+    const vw = (Z[1] - q1 * Z[0]) / ((Z[1] - C[1]) - q1 * (Z[0] - C[0]));      /* g / r = (Zg - v (Zg - Cg)) / (Zr - v (Zr - Cr)) */
+    const vs = (Z[0] - q2 * Z[2]) / ((Z[0] - T[0]) - q2 * (Z[2] - T[2]));      /* r / b = (Zr - v (Zr - Tr)) / (Zb - v (Zb - Tb)) */
+    return q2 < Z[0] / Z[2] ? -vs : vw;                                        /* more blue than the paper has: the slate side */
+}
+
 export function create(canvas, opt) {
     opt = opt || {};
     const r = new THREE.WebGLRenderer({ canvas, antialias: true, preserveDrawingBuffer: true, alpha: false });
@@ -66,7 +99,7 @@ export function create(canvas, opt) {
     r.toneMapping = THREE.ACESFilmicToneMapping; r.toneMappingExposure = 1.15;
     const scene = new THREE.Scene(); scene.fog = new THREE.Fog(PAPER, 80, 160);
     const cam = new THREE.PerspectiveCamera(34, 1, 0.5, 400);
-    scene.add(new THREE.HemisphereLight(0xfffaf3, 0xb8aea4, 1.6));
+    const hemi = new THREE.HemisphereLight(0xfffaf3, 0xb8aea4, 1.6); scene.add(hemi); const roomFog = scene.fog;
     const sun = new THREE.DirectionalLight(0xffffff, 2.2); sun.position.set(-18, 40, 22); sun.castShadow = true;
     sun.shadow.mapSize.set(2048, 2048); Object.assign(sun.shadow.camera, { left: -36, right: 36, top: 30, bottom: -30, near: 1, far: 140 });
     sun.shadow.bias = -0.0004; sun.shadow.normalBias = 0.06; scene.add(sun);
@@ -77,7 +110,7 @@ export function create(canvas, opt) {
     const grid = new THREE.GridHelper(110, 55, 0xd9d0c2, 0xe6dfd2); grid.scale.z = 90 / 110; grid.position.y = FLOOR + 0.01; scene.add(grid);
     const axisLine = new THREE.Line(new THREE.BufferGeometry().setFromPoints([P(-26, 0, 0), P(26, 0, 0)]), new THREE.LineDashedMaterial({ color: 0x8b8079, dashSize: 0.8, gapSize: 0.5 }));
     axisLine.computeLineDistances(); scene.add(axisLine);
-    scene.add(new THREE.ArrowHelper(new THREE.Vector3(1, 0, 0), P(-27, 0, 0), 5, 0x1c1518, 1.1, 0.55));
+    const arrow = new THREE.ArrowHelper(new THREE.Vector3(1, 0, 0), P(-27, 0, 0), 5, 0x1c1518, 1.1, 0.55); scene.add(arrow);
     /* the cutaway removes the quarter y > 0 and z > 0 (physics): three's z > 0 and y > 0; an object is clipped only where both planes clip */
     const cut = [new THREE.Plane(new THREE.Vector3(0, 0, -1), 0), new THREE.Plane(new THREE.Vector3(0, -1, 0), 0)];
     const matSheet = (color) => new THREE.MeshPhysicalMaterial({ color, roughness: 0.32, metalness: 0, clearcoat: 0.6, clearcoatRoughness: 0.3, side: THREE.DoubleSide, clipIntersection: true });
@@ -87,7 +120,16 @@ export function create(canvas, opt) {
     const surfMat = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.55, side: THREE.DoubleSide });
     const surf = new THREE.Mesh(new THREE.BufferGeometry(), surfMat); surf.castShadow = true; surf.receiveShadow = false;   /* no self-shadow: a lifted sheet shadowing itself shows moiré */ surf.frustumCulled = false; scene.add(surf);
     const barrier = new THREE.Group(); scene.add(barrier);
-    const api = { yaw: -0.62, pitch: 0.42, dist: 64, mode: 'sheets', level: 0.25, height: 6, ok: true, renderer: r, THREE };
+    /* ---------- the meshed sheet (mode 'mesh'): one smooth surface, a thin wire mesh lying on it, the barrier's outline ---------- */
+    const meshMat = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.6, metalness: 0, side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1 });
+    meshMat.toneMapped = false;   /* the ramp's colours as stated, only shaded by the light: the pixel check inverts them */
+    const sheet = new THREE.Mesh(new THREE.BufferGeometry(), meshMat); sheet.frustumCulled = false; scene.add(sheet);
+    const wireMat = new THREE.LineBasicMaterial({ color: 0x1c1518, transparent: true, opacity: 0.26 }); wireMat.toneMapped = false;
+    const wire = new THREE.LineSegments(new THREE.BufferGeometry(), wireMat); wire.frustumCulled = false; scene.add(wire);
+    const outMat = new THREE.LineBasicMaterial({ color: 0x1c1518, transparent: true, opacity: 0.85 }); outMat.toneMapped = false;
+    const outline = new THREE.Group(); scene.add(outline);
+    const LUT = new Float32Array(1025 * 3); for (let q = 0; q <= 1024; q++) { const c = meshColour(q / 512 - 1).convertSRGBToLinear(); LUT[3 * q] = c.r; LUT[3 * q + 1] = c.g; LUT[3 * q + 2] = c.b; }
+    const api = { yaw: -0.62, pitch: 0.42, dist: 64, mode: 'sheets', level: 0.25, height: 6, ok: true, renderer: r, THREE, meshCam: { yaw: -0.79, pitch: 0.55, dist: 80 } };
 
     /* ---------- the barrier as its true solid: glass for a finite height, opaque for a hard wall, tan for a well ---------- */
     api.setBarrier = function (b) {
@@ -109,9 +151,9 @@ export function create(canvas, opt) {
     };
 
     /* ---------- data in ---------- */
-    api.setField = function (field, nx, ny, nz, x0, y0, z0, h, level) {
+    api.setField = function (field, nx, ny, nz, x0, y0, z0, h, level, hx) {
         if (level != null) api.level = level;
-        const c = marching(field, nx, ny, nz, api.level, 1, x0, y0, z0, h), t = marching(field, nx, ny, nz, api.level, -1, x0, y0, z0, h);
+        const c = marching(field, nx, ny, nz, api.level, 1, x0, y0, z0, h, hx), t = marching(field, nx, ny, nz, api.level, -1, x0, y0, z0, h, hx);
         setGeo(crest, c); setGeo(trough, t);
         api.lastField = { field, nx, ny, nz, x0, y0, z0, h }; api.triangles = (c.pos.length + t.pos.length) / 9;
     };
@@ -169,6 +211,49 @@ export function create(canvas, opt) {
         g.attributes.position.needsUpdate = true; g.attributes.color.needsUpdate = true; g.computeVertexNormals();
         api.lastPlane = { radial: true };
     };
+    /* o: { nx, ny, x0, y0, h: the grid of the sheet (physics x = x0 + i h, y = y0 + j h); H[i * ny + j]: its height (physics z, in a);
+            T[i * ny + j]: its colour, 0 (trough slate) through 0.5 (paper) to 1 (crest wine); every: a mesh line on every every-th grid line; outline: polylines
+            [x0, y0, x1, y1, ...] in the plane, drawn on the sheet; key: a new key rebuilds the grid } */
+    api.setMesh = function (o) {
+        const nx = o.nx, ny = o.ny, N = nx * ny, h = o.h, H = o.H, T = o.T;
+        let g = sheet.geometry;
+        if (!g.attributes.position || g.userData.key !== o.key) {
+            g.dispose(); g = new THREE.BufferGeometry(); g.userData = { key: o.key };
+            const pos = new THREE.BufferAttribute(new Float32Array(N * 3), 3); pos.setUsage(THREE.DynamicDrawUsage);
+            g.setAttribute('position', pos); g.setAttribute('normal', new THREE.BufferAttribute(new Float32Array(N * 3), 3)); g.setAttribute('color', new THREE.BufferAttribute(new Float32Array(N * 3), 3));
+            const idx = new Uint32Array((nx - 1) * (ny - 1) * 6); let k = 0;
+            for (let i = 0; i < nx - 1; i++) for (let j = 0; j < ny - 1; j++) { const a = i * ny + j, b = a + ny; idx[k++] = a; idx[k++] = a + 1; idx[k++] = b; idx[k++] = b; idx[k++] = a + 1; idx[k++] = b + 1; }
+            g.setIndex(new THREE.BufferAttribute(idx, 1)); sheet.geometry = g;
+            const li = [], ev = o.every;
+            for (let i = 0; i < nx; i += ev) for (let j = 0; j < ny - 1; j++) li.push(i * ny + j, i * ny + j + 1);
+            for (let j = 0; j < ny; j += ev) for (let i = 0; i < nx - 1; i++) li.push(i * ny + j, (i + 1) * ny + j);
+            const wg = new THREE.BufferGeometry(); wg.setAttribute('position', pos); wg.setIndex(li); wire.geometry.dispose(); wire.geometry = wg;
+        }
+        const pos = g.attributes.position.array, nor = g.attributes.normal.array, col = g.attributes.color.array;
+        for (let i = 0; i < nx; i++) {
+            const i0 = i > 0 ? i - 1 : 0, i1 = i < nx - 1 ? i + 1 : nx - 1;
+            for (let j = 0; j < ny; j++) {
+                const q = i * ny + j, j0 = j > 0 ? j - 1 : 0, j1 = j < ny - 1 ? j + 1 : ny - 1;
+                pos[3 * q] = o.x0 + i * h; pos[3 * q + 1] = H[q]; pos[3 * q + 2] = o.y0 + j * h;     /* physics (x, y, z) -> three (x, z, y) */
+                const hx = (H[i1 * ny + j] - H[i0 * ny + j]) / ((i1 - i0) * h), hy = (H[i * ny + j1] - H[i * ny + j0]) / ((j1 - j0) * h), m = 1 / Math.sqrt(1 + hx * hx + hy * hy);
+                nor[3 * q] = -hx * m; nor[3 * q + 1] = m; nor[3 * q + 2] = -hy * m;
+                const t = T[q], u = Math.round(1024 * (t < 0 ? 0 : t > 1 ? 1 : t)) * 3; col[3 * q] = LUT[u]; col[3 * q + 1] = LUT[u + 1]; col[3 * q + 2] = LUT[u + 2];
+            }
+        }
+        g.attributes.position.needsUpdate = true; g.attributes.normal.needsUpdate = true; g.attributes.color.needsUpdate = true; g.computeBoundingSphere();
+        while (outline.children.length) { const c = outline.children.pop(); c.geometry.dispose(); }
+        const at = (x, y) => {                          /* the sheet's height at (x, y), bilinear between its grid points */
+            const u = Math.max(0, Math.min(nx - 1.0001, (x - o.x0) / h)), v = Math.max(0, Math.min(ny - 1.0001, (y - o.y0) / h)), i = Math.floor(u), j = Math.floor(v), a = u - i, b = v - j;
+            return (1 - a) * ((1 - b) * H[i * ny + j] + b * H[i * ny + j + 1]) + a * ((1 - b) * H[(i + 1) * ny + j] + b * H[(i + 1) * ny + j + 1]);
+        };
+        (o.outline || []).forEach((pl) => {
+            const pts = []; for (let k = 0; k < pl.length; k += 2) pts.push(new THREE.Vector3(pl[k], at(pl[k], pl[k + 1]) + 0.06, pl[k + 1]));
+            const ln = new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), outMat); ln.frustumCulled = false; outline.add(ln);
+        });
+        api.lastMesh = o; api.heightAt = at;
+    };
+    api.meshVertex = function (k) { const a = sheet.geometry.attributes.position; return a ? [a.array[3 * k], a.array[3 * k + 2], a.array[3 * k + 1]] : null; };   /* the drawn sheet's own vertex k, in physics (x, y, z) */
+    api.setMeshView = function (span) { api.meshCam.dist = 1.34 * span; };   /* the sheet's width in a: the camera stands back to see all of it */
     api.setRoom = function (floorY, dist) {   /* spherical waves fill a larger space: a lower floor and a farther camera */
         floor.position.y = floorY; grid.position.y = floorY + 0.01; api.dist = dist;
         Object.assign(sun.shadow.camera, { left: -60, right: 60, top: 60, bottom: -60, far: 220 }); sun.shadow.camera.updateProjectionMatrix();
@@ -176,8 +261,13 @@ export function create(canvas, opt) {
     api.clear = function () { setGeo(crest, { pos: new Float32Array(0), nor: new Float32Array(0) }); setGeo(trough, { pos: new Float32Array(0), nor: new Float32Array(0) }); api.lastField = null; };
 
     function applyMode() {
-        const sheets = api.mode !== 'surface', clip = api.mode === 'cutaway' ? cut : [];
-        crest.visible = trough.visible = sheets; surf.visible = !sheets;
+        const mesh = api.mode === 'mesh', sheets = api.mode === 'sheets' || api.mode === 'cutaway', clip = api.mode === 'cutaway' ? cut : [];
+        crest.visible = trough.visible = sheets; surf.visible = api.mode === 'surface';
+        sheet.visible = wire.visible = outline.visible = mesh; barrier.visible = floor.visible = grid.visible = axisLine.visible = arrow.visible = !mesh;
+        scene.fog = mesh ? null : roomFog;
+        /* the sheet is lit by white light only (its colours are read back by the pixel check); the room keeps its warm light */
+        hemi.color.set(mesh ? 0xffffff : 0xfffaf3); hemi.groundColor.set(mesh ? 0x8a8a8a : 0xb8aea4); hemi.intensity = mesh ? 1.55 : 1.6;
+        sun.intensity = mesh ? 1.9 : 2.2;   /* a level patch of the sheet then shows its own colour: (1.55 + 1.9 cos 35°) / pi = 1.0 */ sun.castShadow = !mesh; fill.intensity = mesh ? 0 : 0.9;
         crestMat.clippingPlanes = troughMat.clippingPlanes = clip;
         barrier.children.forEach((m) => { m.material.clippingPlanes = clip; m.material.needsUpdate = true; });
         crestMat.needsUpdate = troughMat.needsUpdate = true;
@@ -185,11 +275,12 @@ export function create(canvas, opt) {
     api.setMode = function (m) { api.mode = m; applyMode(); };
 
     /* ---------- camera, rendering, projection ---------- */
+    const camOf = () => api.mode === 'mesh' ? api.meshCam : api;   /* the meshed sheet keeps its own camera */
     function place() {
-        const cp = Math.cos(api.pitch), w = canvas.clientWidth || canvas.width, hh = canvas.clientHeight || canvas.height;
+        const C = camOf(), cp = Math.cos(C.pitch), w = canvas.clientWidth || canvas.width, hh = canvas.clientHeight || canvas.height;
         cam.aspect = w / hh; cam.fov = cam.aspect < 1 ? 34 / Math.max(0.62, cam.aspect) : 34; cam.updateProjectionMatrix();
-        cam.position.set(api.dist * cp * Math.sin(api.yaw), api.dist * Math.sin(api.pitch), api.dist * cp * Math.cos(api.yaw));
-        cam.lookAt(1, -2, 0);
+        cam.position.set(C.dist * cp * Math.sin(C.yaw), C.dist * Math.sin(C.pitch), C.dist * cp * Math.cos(C.yaw));
+        if (api.mode === 'mesh') cam.lookAt(0, 0, 0); else cam.lookAt(1, -2, 0);
     }
     api.resize = function (w, h, dpr) { r.setPixelRatio(dpr || 1); r.setSize(w, h, false); };
     api.render = function () { place(); r.render(scene, cam); };
@@ -200,6 +291,7 @@ export function create(canvas, opt) {
     api.pickPlane = function (cx, cy) {   /* CSS pixel -> the physics point where its ray meets the plane z = 0 through the axis */
         place(); const w = canvas.clientWidth, hh = canvas.clientHeight, rc = new THREE.Raycaster(), hit = new THREE.Vector3();
         rc.setFromCamera(new THREE.Vector2(cx / w * 2 - 1, 1 - cy / hh * 2), cam);
+        if (api.mode === 'mesh') { const hits = rc.intersectObject(sheet, false); if (hits.length) { const p = hits[0].point; return [p.x, p.z, p.y]; } return null; }   /* the meshed sheet: where the ray first meets it */
         return rc.ray.intersectPlane(new THREE.Plane(new THREE.Vector3(0, 1, 0), 0), hit) ? [hit.x, hit.z, hit.y] : null;
     };
     api.readPixel = function (cx, cy) {   /* the drawn picture at CSS pixel (cx, cy): [r, g, b, a] */
@@ -210,12 +302,12 @@ export function create(canvas, opt) {
 
     /* ---------- turning: press and drag ---------- */
     let drag = null;
-    canvas.addEventListener('pointerdown', (e) => { if (opt.canTurn && !opt.canTurn()) return; drag = { x: e.clientX, y: e.clientY, yaw: api.yaw, pitch: api.pitch }; canvas.setPointerCapture(e.pointerId); });
-    canvas.addEventListener('pointermove', (e) => { if (!drag) return; api.yaw = drag.yaw - (e.clientX - drag.x) * 0.008; api.pitch = Math.max(-0.2, Math.min(1.35, drag.pitch + (e.clientY - drag.y) * 0.008)); if (opt.onTurn) opt.onTurn(); });
+    canvas.addEventListener('pointerdown', (e) => { if (opt.canTurn && !opt.canTurn()) return; const C = camOf(); drag = { x: e.clientX, y: e.clientY, yaw: C.yaw, pitch: C.pitch, C }; canvas.setPointerCapture(e.pointerId); });
+    canvas.addEventListener('pointermove', (e) => { if (!drag) return; drag.C.yaw = drag.yaw - (e.clientX - drag.x) * 0.008; drag.C.pitch = Math.max(-0.2, Math.min(1.35, drag.pitch + (e.clientY - drag.y) * 0.008)); if (opt.onTurn) opt.onTurn(); });
     const up = () => { drag = null; }; canvas.addEventListener('pointerup', up); canvas.addEventListener('pointercancel', up);
     applyMode();
     return api;
 }
 
-window.Wave3D = { create, marching, surfaceColour };
+window.Wave3D = { create, marching, surfaceColour, meshColour, meshV, MESH_ZERO, MESH_CREST, MESH_TROUGH };
 window.dispatchEvent(new Event('wave3d-ready'));

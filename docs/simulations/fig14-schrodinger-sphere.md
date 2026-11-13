@@ -188,3 +188,41 @@ whole line with $u$ odd (Crank–Nicolson, fourth-order Laplacian, $\Delta r = 0
 - The hard pillar's source box now says that the projection removes about 4 % of the probability at the wall (0.3 % to 26 % across
   the grid, side border included).
 - Not yet: spherical waves from a point beside the barrier, or meeting the pillar or the wall (true 3D, GPU).
+
+## The meshed sheet, two sources, smoother sheets (13 November 2026)
+
+Asked for by the owner with a reference picture (a smooth height surface with a wire mesh on it) and the words "in our design, in
+our colours".
+
+- **Mesh** is the default view and the first button under View; **Surface** is gone from the switch (Mesh replaces it; the code
+  path of `setPlane` and `setRevolution` remains in the module, unused by the page). The sheet is the plane $z = 0$ lifted by
+  $\mathrm{Re}\,\psi$, or by $|\psi|^2$ (buttons "Height Re ψ" and "Height |ψ|²"). House colours: slate `#55607a` at the lowest,
+  card paper `#fbf6ee` at zero, wine `#a3303f` at the highest, mixed in sRGB (`Wave3D.meshColour`); mesh lines in ink `#1c1518`,
+  48 squares per side; the barrier is the ink line where it cuts the plane (circle of radius $R$; two lines $x = \pm d/2$; circles
+  $16 \pm d/2$). No floor, no box. Camera 31.5° above the plane, turned 45°.
+- **Smoothness.** The stored points are 0.5 a apart (4.2 points per wavelength at $E = 4.5$). `packetSheet()` resamples the stored
+  complex cut on $-24 \le x, y \le 24$ at 1/6 a (289 × 289 points, 12.5 points per wavelength at $E = 4.5$) with the periodic sinc
+  of the 128-point box, $\sin(N t/2) / (N \tan(t/2))$, first along $x$, then along $y$ (the cut is even in $y$). For the pillar the
+  stored $\varphi$ is multiplied by $g(0, t)$ first. `radialTable()` does the same for $u = r\psi$ along $r$ (192 points, $u$ odd,
+  period 96 a) onto a table 0.01 a apart, and `radialSheet()` takes $\psi = u/r$ at every point of the sheet $-32 \le x, y \le 32$
+  (385 × 385 points). The kernel is 1 at its own stored point and 0 at the others, so the sheet has the stored value at every stored
+  point. The page says so in the source box: "The drawn sheet is a resampling of the stored grid".
+- **Height scale**, new in each frame (`meshOf()`): the tallest point is a seventh of the sheet's width, or lower so that the
+  steepest slope is 1.5. The first trial used a seventh of the width always: with wavelengths of 2 to 6 a on a sheet 48 or 64 a
+  wide the crests stood as needles. The overlay says which rule holds ("height scaled: steepest slope 1.5").
+- **Two sources** (`two`, under Wave): $\psi = \psi_1 + \psi_2$ (note equation 27), each the stored free spherical wave
+  (`rout` with $V_0 = 0$, $d = 1$) about its own centre at $x = \pm s/2$; $s \in \{2, 4, 6, 8, 10, 12, 16\}$ a. No new run and no
+  new file: the equation is linear. Drawn on the mesh only (the other views are disabled and say so); the barrier buttons are
+  disabled and say why. The readouts show one source alone.
+- **Sheets and Cutaway**: before marching cubes the field is resampled with the Lanczos kernel of three lobes to 1/6 a along $x$
+  and 1/3 a across (`upsample()`); it returns the stored values at stored points. `marching()` now reads the eight corners straight
+  from the array and leaves empty cubes at once, and writes into grown typed arrays (same triangles as before, measured: 34 184 on
+  a test field before and after).
+- **Data panel.** New group "The meshed sheet" (`hq`, `hmax`, `gmax`, `hscale`, `mesh_n`, `mesh_dx`, `ppw`, `sep`) and the stored
+  radial profile (`rcr`, `ramp`, `rphase`, `rpeak`). The check in the Mesh view (`pixelCheckMesh`) has two parts: the sheet's own
+  vertex at the stored point, divided by the scale, against the value from the stored levels; and the pixel's colour read back and
+  inverted through the ramp (`Wave3D.meshV`, which uses the ratios g/r and r/b, nearly unchanged by white light), for the 5 × 5
+  pixels around the vertex: the stored value over the frame's largest must lie within their span, widened by 0.12. A point hidden behind a crest (found with a ray from the eye) has its
+  height checked and its colour not. Spherical waves are checked where the circle of the stored radius crosses the $x$ axis; two
+  sources at $(s/2 + r_j, 0)$, where both distances are stored radii.
+
