@@ -438,21 +438,33 @@ class Stout:
         return jnp.where(fmask & ok, w + dw[:, :, None], w)
 
     def surface(self, phr):
-        """The free surface of the main body of stout, as a height on the grid's columns, read from the particles' level set with
-        the read-out radius 0.505 dx (phr was built with 0.9 dx, so the field is phr + 0.395 dx). Read from the top down: the
-        highest cell of the column that holds stout and has stout in the two cells below it too (so a drop in the air, one or two
-        cells across, is not taken for the surface, and a gap between particles inside the stout cannot read as one), and the
-        zero of the field between that cell's centre and the centre above. Columns with no such run inside the glass: NaN.
-        13 Nov 2026, after two read-outs were tried and dropped: counting particles per column (they wander by +-8 in a 4 mm column,
-        4-5 mm of false height at rest), and the lowest air cell with radius 0.505 dx (it fell into gaps at the glass, -13 mm)."""
-        dx = self.dx; q = phr + (self.rls - self.rread)
-        wet = self.cavc & (q < 0)
+        """The free surface of the main body of stout, as a height on the grid's columns. Two fields from the same particles:
+        phr, built with radius 0.9 dx, closes the small gaps that open between particles; q = phr + 0.395 dx, the same field with
+        the read-out radius 0.505 dx, puts its zero on the stout's true top (a flat seeded layer reads -0.09..+0.02 cell).
+        1. The body: the highest cell of the column where phr marks stout in it and in the two cells below (so a drop in the air,
+           one or two cells across, is not taken for the stout).
+        2. The surface: the highest zero of q in the top three cells of that body, between two cell centres.
+        If q marks no stout in those three cells, the body's top less the mean offset of the 0.9 dx field (0.68 cell) is used,
+        and the column is counted (the second value returned; stored per frame as `nfallback`).
+        13 Nov 2026, run 3: reading the top of a three-cell run of q alone fell into gaps 1-2 cells below the surface, 3-4.6 mm,
+        in single columns at r = 29-31 mm after 1.8 s at rest; the guard stopped the run."""
+        dx = self.dx; q = phr + (self.rls - self.rread); nz = phr.shape[2]
+        wet = self.cavc & (phr < 0)
         run = wet & sh(wet, -1, 2, False) & sh(wet, -2, 2, False)
-        has = jnp.any(run, 2); nz = run.shape[2]
-        kt = nz - 1 - jnp.argmax(run[:, :, ::-1], 2); ka = jnp.minimum(kt + 1, nz - 1)
-        pb = jnp.take_along_axis(q, kt[..., None], 2)[..., 0]; pa = jnp.take_along_axis(q, ka[..., None], 2)[..., 0]
-        frac = jnp.where(pa > pb, jnp.clip(-pb / jnp.maximum(pa - pb, 1e-12), 0.0, 1.0), 0.5)
-        return jnp.where(has, self.cc[2][kt] + frac * dx, jnp.nan).astype(F32)
+        has = jnp.any(run, 2)
+        kt = nz - 1 - jnp.argmax(run[:, :, ::-1], 2)                     # top cell of the body (phr)
+        qa = lambda k: jnp.take_along_axis(q, jnp.clip(k, 0, nz - 1)[..., None], 2)[..., 0]
+        Hs, found = jnp.zeros(kt.shape, F32), jnp.zeros(kt.shape, bool)
+        for j in (2, 1, 0):                                                # lowest first; a higher crossing overwrites it
+            k = kt - j; pb, pa = qa(k), qa(k + 1)
+            cross = (pb < 0) & ((pa >= 0) | (j == 0))
+            frac = jnp.where(pa > pb, jnp.clip(-pb / jnp.maximum(pa - pb, 1e-12), 0.0, 1.0), 0.5)
+            Hk = self.cc[2][jnp.clip(k, 0, nz - 1)] + frac * dx
+            Hs = jnp.where(cross, Hk, Hs); found = found | cross
+        pt, pu = jnp.take_along_axis(phr, kt[..., None], 2)[..., 0], qa(kt + 1) - (self.rls - self.rread)
+        f9 = jnp.where(pu > pt, jnp.clip(-pt / jnp.maximum(pu - pt, 1e-12), 0.0, 1.0), 0.5)
+        Hf = self.cc[2][kt] + f9 * dx - 0.68 * dx
+        return jnp.where(has, jnp.where(found, Hs, Hf), jnp.nan).astype(F32), jnp.sum(has & ~found, dtype=I32)
 
     def head_spill(self, s, H, dt, gx, gz):
         """The head above the rim (verification.md, item 6): where the head's top stands e above the rim, at the glass, the part
@@ -615,7 +627,7 @@ class Stout:
         vel, mass, cnt = self.p2g(s)
         vel = self.normalize_force(vel, mass, dt, gx, gz)
         ph, liq, nsel, phr = self.level_set(s, cnt)
-        H = self.surface(phr)
+        H, _ = self.surface(phr)
         if self.nu > 0: vel = self.viscosity(vel, mass, dt)
         z = jnp.zeros((), F64); ew = es = ef = z
         if self.gs > 0 or self.skin or self.head: vel, ew, es, ef = self.friction(vel, mass, ph, liq, dt, s["hf"])
@@ -647,7 +659,7 @@ class Stout:
         dx = self.dx; G = self.G
         vel, mass, cnt = self.p2g(s)
         ph, liq, nsel, phr = self.level_set(s, cnt)
-        H = self.surface(phr)
+        H, nfb = self.surface(phr)
         # drops
         X, act, fly = s["xp"], s["act"], s["fly"]
         i = jnp.clip(jnp.floor((X[:, 0] - G.x0) / dx).astype(I32), 0, self.n - 1)
@@ -663,7 +675,7 @@ class Stout:
         KE = 0.5 * self.mp * jnp.sum(jnp.where(act[:, None], v * v, 0.0))
         PE = self.mp * 9.81 * jnp.sum(jnp.where(act, z, 0.0))
         Px = self.mp * jnp.sum(jnp.where(act, v[:, 0], 0.0))
-        return dict(H=H, drops=drops.astype(F32), ndrops=nd, nloose=jnp.sum(loose, dtype=I32), nfly=jnp.sum(fly, dtype=I32),
+        return dict(H=H, nfallback=nfb, drops=drops.astype(F32), ndrops=nd, nloose=jnp.sum(loose, dtype=I32), nfly=jnp.sum(fly, dtype=I32),
                     nlanded=jnp.sum(s["landed"], dtype=I32), nstuck=jnp.sum(s["stuck"], dtype=I32), nact=jnp.sum(act, dtype=I32), KE=KE, PE=PE, Px=Px,
                     ewall=s["ewall"], efoam=s["efoam"], eskin=s["eskin"], nliq=jnp.sum(liq, dtype=I32), nsel=nsel,
                     hf=s["hf"], lumps=s["bx"], lumpvol=s["bvol"], foam_spill=s["foam_spill"], foam0=s["foam0"])
