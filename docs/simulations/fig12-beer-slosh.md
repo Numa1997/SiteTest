@@ -511,6 +511,30 @@ current; `lean_max_mm_run` keeps the run's own lean); a row plays its ride. `pub
 generation (runs 6 and 7) as the one the page plays. The default ride is the five
 bumps with joint control.
 
+**Run 8: the head's mass, every ride recomputed, books every frame (code of 13 November 2026, commits `6cf0028` to `96e8a1d`).**
+- `Stout.pressure` (stout_jax.py) carries the head's mass m_s = ρ_f h_f (272 kg/m³ × 19 mm = 5.17 kg/m²) as a Robin condition on
+  the z-faces the surface crosses (liquid below, air above): the face fraction θ becomes θ + μ/Δx with μ = m_s/ρ = 5.13 mm, and
+  the surface load μ (g_eff Δt + w* − w_h) replaces the weight on those faces (note eq. 18a). The head's own vertical velocity
+  `wh` (one value per column) is new state, set after each pressure step to the face velocity under the head. Taking w_h from
+  the particles' handed-over velocity instead gave 2.905 Hz and a third of the swing on the CPU (rejected).
+  `Stout(..., head_mass=True)` is the default; `MODELS["lid"]` (the head's weight and mass, no sheet) is a test model.
+- CPU checks (scratch `hm/swing.py`, `ro/restbooks.py`): 6 mm free swing 2.958 Hz without the mass, 2.737 Hz with it, against
+  2.958/√(1 + μk) = 2.722 Hz with k = ω²/g of the grid's own swing (+0.5 %); at rest on 4 mm for 1.5 s the books are the same
+  with and without the mass (59 and 61 µJ of potential energy lost, 22.8 and 23.8 µJ dissipated; the creep is the 4 mm grid's).
+- `observe` returns `vhead`, the head still in the glass (Σ h_f · afill · Δx², float64). `run_b.py` stores it every frame and
+  writes `books` per task: stout particles in the glass + in the air + on the cart + on the ground = poured (`stout_err_particles_max`),
+  head in the glass + broken off = served (`head_err_ml_max`). On the 6 mm kerb ride with joint control: 0 particles and
+  1.4e-14 mL (86.9717 + 4.0003 = 90.972 mL). `check_run.py` checks both and the swing with the head's mass against 2.957 Hz
+  (run 6's 3.278 Hz × 1/√(1 + μk), k from run 6's swing without the head) within 3 %.
+- `RUNSET=run8`: rest, the swing with the head, then each road with the speed held and with joint control side by side, the kerb's
+  slosh LQR and preview, and the swing without the head last (it has no head, so the mass does not change it; computed only if
+  the budget allows). The controllers' plant is the swing this run measures with the head (ring 13): the run stops before any
+  controlled ride if that fit is not a clean first mode (2.5–3.5 Hz, ζ < 0.95, amplitude < 20 mm, fit rms < a quarter of it).
+  `fit_swing` now also starts from the head's decay times (0.1 and 0.3 s); refitting run 6's swings gives their numbers exactly.
+- `pack_ride.py` writes per frame `stout_g` (in the glass, to 1 mg), `spill_g` (to 1 mg), `head_glass_ml`, `head_spill_ml`, and per
+  file `books` and `plant`; the index's `measured` carries `books`, `head_mass` and `fit_ring13`. The page shows "stout in the
+  glass" and "head in the glass" under Readings.
+
 **The lecture note (rewritten 13 November 2026 for the JAX solver; lines 118–782 of the page).** Written to `notes/STANDARD.md`
 (verdict of 21 October 2026); plan in [`notes/fig12/plan-kaggle-jax.md`](../../notes/fig12/plan-kaggle-jax.md), and for section 11,
 added the same evening with the controlled rides, in [`notes/fig12/plan-kaggle-control.md`](../../notes/fig12/plan-kaggle-control.md).
