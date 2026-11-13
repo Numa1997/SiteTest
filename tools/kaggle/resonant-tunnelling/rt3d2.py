@@ -86,20 +86,23 @@ def tau_est(sp, tm):
     run length (3 tau after the flight), so that the trapped wave has decayed when the run stops."""
     if sp["shape"] == "shell": return 30.0
     k0 = np.sqrt(2 * sp["E"]); dE = k0 / (2 * sp["sx"])
-    Es = np.linspace(max(0.02, sp["E"] - 4 * dE), sp["E"] + 4 * dE, 1200)
+    Es = np.linspace(max(0.02, sp["E"] - 4 * dE - 0.3), sp["E"] + 4 * dE + 0.3, 2400)   # wide enough that no peak in the window is cut
+    lo, hi = sp["E"] - 4 * dE, sp["E"] + 4 * dE
     segs = segs_1d(sp); T = np.array([abs(tm.solve(e, segs)[0])**2 for e in Es]); tau = 5.0
     for i in range(1, len(T) - 1):
         if T[i] > 0.5 and T[i] >= T[i - 1] and T[i] >= T[i + 1]:
             h = T[i] / 2; l = i; r = i
             while l > 0 and T[l] > h: l -= 1
             while r < len(T) - 1 and T[r] > h: r += 1
-            if T[l] <= h and T[r] <= h and r > l: tau = max(tau, 1 / (Es[r] - Es[l]))
+            if T[l] <= h and T[r] <= h and r > l and lo <= Es[i] <= hi: tau = max(tau, 1 / (Es[r] - Es[l]))
     return float(min(tau, 60.0 if sp["sx"] <= 4 else 150.0))
 
 
 def t_end_of(sp, tm):
+    """The flight of the packet's trailing edge (2 sx behind its centre) from the start to 20 a past the last face, plus three
+    lifetimes of the longest-lived resonance the packet holds."""
     xl, xr = extent(sp); v = np.sqrt(2 * sp["E"])
-    return float((xr + 20 - x0_of(sp)) / v + 3 * tau_est(sp, tm))
+    return float((xr + 20 - x0_of(sp) + 2 * sp["sx"]) / v + 3 * tau_est(sp, tm))
 
 
 def run(g, sp, t_end, dt=0.01, nframes=200):
