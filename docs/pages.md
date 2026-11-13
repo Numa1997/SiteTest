@@ -7,7 +7,7 @@ Five files make the frame around the twelve simulation pages:
 | [`index.html`](../index.html) | `/` | 1547 | The home page: the Phyein Usul logo and note, CV, projects, ten figure plates (one per simulation), a live double pendulum. |
 | [`public/simulations.html`](../public/simulations.html) | `/simulations.html` | 212 | The catalog: one fold card per simulation, no search and no chips since 3 November 2026. |
 | [`public/portfolios.html`](../public/portfolios.html) | `/portfolios.html` | 472 | The Projects page (address `portfolios.html`, kept so old links work): the Bachelor thesis and four studies, and the links into their pages. |
-| [`public/lucretius.html`](../public/lucretius.html) | `/lucretius.html` | 177 | The poem page (10 November 2026): Lucretius I 146–224 as 20 verses in English, German and Arabic; see the last section. |
+| [`public/lucretius.html`](../public/lucretius.html) | `/lucretius.html` | 177 | The poem page (10 November 2026, redesigned 13 November 2026): Lucretius I 146–224 as 20 verses in four columns, Latin, English, German and Arabic; see the last section. |
 | [`public/robots.txt`](../public/robots.txt) | `/robots.txt` | 4 | Rules for search-engine crawlers. |
 
 The build copies everything under `public/` to the site root, so a page under `public/` links to `styles/…` and
@@ -519,36 +519,53 @@ Lucretius I 146–158 as an inscription (Instrument Serif, a wine rule on its le
 stage is 4 : 3 there. Each of the four sentences (`p.lq-s`, `translate="no"`, `lang="la"`) shows, on a resting mouse (150 ms; 70 ms
 from one sentence to the next; hidden 240 ms after leaving), a tap or keyboard focus, one card with its published translation: Leonard
 (1916) on the English page, Diels (1924) on the German page, and on the Arabic page (since 10 November 2026) an Arabic translation
-made for this site, since 11 November 2026 from Leonard's English (`notes/lucretius/poem-ar-146-158.json`; the card says it is not a published translation, the only
+made for this site, since 11 November 2026 from Leonard's English (`notes/lucretius/poem-ar-146-224.json`, ninth version, fully vowelled, since 13 November 2026; the card says it is not a published translation, the only
 published one, Cairo 2018, being under copyright), with the source of the Latin under it; on desktop the card rises beside the verse
 (left of it where the text is; right of it on the mirrored Arabic page), otherwise just below the sentence; a click pins it, Esc or a
 second click closes it. Written by `notes/lucretius/make_home.py` from `notes/lucretius/poem-146-224.json` and the Arabic file.
 Measured on the built site: at 1366 × 768, 1440 × 900 and 1920 × 1080, in English, German and Arabic, the quote and the buttons are in
 the first screen, no errors, no sideways scroll; on a phone the quote follows the buttons.
 
-## The poem page, `lucretius.html` (10 November 2026, rebuilt 11 November 2026)
+## The poem page, `lucretius.html` (10 November 2026, four columns since 13 November 2026)
 
-Numa: a button on the home page to the whole poem, on a page of its own. On 11 November 2026 he set its form: one language per page,
-the way every page of the site works (an English page with a German and an Arabic version), only the poem, no Latin (it stands on the
-home page), no languages side by side, decorated, the verses well separated. The home band has, under its caption, a link "Read lines
-146–224 in English, German and Arabic →" (`p.lq-all`). The page (`public/lucretius.html`, with `/de/` and `/ar/` versions made by
-`tools/i18n/build.py`, which lists it in `PAGES`, and short addresses in `public/_redirects`) carries William Ellery Leonard's English
-verse (1916); the German page carries Hermann Diels (1924) and the Arabic page the Arabic made for this site. **How the three texts
-get there:** each of the 20 verses is one translatable piece, `<p class="lp__v">`, its lines parted by `<br>`; `make_page.py` writes
-the English page and puts, under the key of each English verse, Diels' verse into `i18n/de/lucretius.html.json` and the Arabic verse
-into `i18n/ar/lucretius.html.json`, from `poem-146-224.json` and the two Arabic files, so nothing is retyped and the generator
-treats the poem like any other text. The credit under the title is a piece too ("English verse by William Ellery Leonard, 1916" →
-"Deutsche Verse von Hermann Diels, 1924" → the Arabic credit), and so is the book title (German: Diels' own, "Von der Natur").
+Numa: a button on the home page to the whole poem, on a page of its own. On 11 November 2026 he had set one language per page and no
+languages side by side; on 13 November 2026 he reversed it: "all languages in 4 columns next to each other, with beautiful modern and
+subtle separations between them", the phone left to me. The home band has, under its caption, a link "Read lines 146–224 in English,
+German and Arabic →" (`p.lq-all`). The page (`public/lucretius.html`, with `/de/` and `/ar/` versions made by `tools/i18n/build.py`,
+which lists it in `PAGES`, and short addresses in `public/_redirects`) shows, for each of the 20 verses, four cells in a row:
+the Latin (italic, with the number of each Latin line in the margin; line 155 stands after 158, as in the manuscripts), William Ellery
+Leonard's English (1916), Hermann Diels' German (1924) and the Arabic made for this site (ninth version, fully vowelled, `poem-ar-146-224.json`,
+README). **How the texts get there:** the verses stand in the page itself, each cell marked `translate="no"` with its own `lang` (and
+`dir="rtl"` for the Arabic), so the generator copies them unchanged into the German and Arabic pages and the tables
+`i18n/de|ar/lucretius.html.json` hold only the words around them (title, lede, the column credits "the original" and "made for this
+site", the sources). The four columns are in the same order on all three pages (the grid is `direction: ltr`), the Arabic cell reads
+right to left. `notes/lucretius/make_page.py` writes the page and drops table entries that are no longer on it. Do not edit
+`public/lucretius.html` by hand: run `make_page.py`, then `tools/i18n/build.py`.
 
-The poem is set as the leaf of a book (`article.lp-book`, 760 px, a wine frame with a second line outside it and an eight-pointed
-star, a khatam, on each corner): the poet's name, the title in Instrument Serif, book and lines, the credit, an ornament of stars and
-quatrefoils, then the 20 verses (`section.lp`, address `#l146` and so on). Above every verse a heading (`h2.lp__n`): rule, lozenge,
-rule, star, the line numbers of the Latin in the accent colour, star, rule, lozenge, rule. The verses are in Instrument Serif, 23 px
-(19.5 px on a phone), the first with a wine drop capital; on the Arabic page in Noto Naskh Arabic, 23 px on a 2.05 line, right to
-left, without the capital, and the title in Amiri. A closing ornament ends the leaf; the sources follow below it. All ornaments are
-inline SVG in the accent colour. Do not edit `public/lucretius.html` by hand: run `notes/lucretius/make_page.py`, then
-`tools/i18n/build.py`. The Arabic (`poem-ar-146-158.json`, `poem-ar-159-224.json`, sixth version, README) follows Leonard's English
-verse by verse, is not a published translation, has no second reader, and the page says so in its source notes.
-Measured on the built site: English, German and Arabic at 1280 and 390 px: 20 verses, each page holds only its own language (0 Arabic
-letters in the English and German verses, 0 Latin letters in the Arabic ones), no pending piece, no errors, no sideways scroll; the
-four home cards fit in all three languages.
+**The leaf.** The poem is set as the leaf of a book (`article.lp-book`, up to 1240 px, a wine frame with a second line outside it and an
+eight-pointed star, a khatam, on each corner): the poet's name, the title in Instrument Serif, book and lines, an ornament of stars and
+quatrefoils, the head `div.lp-cols` (the four languages named in their own words, Latina, English, Deutsch, العربية, with their credits;
+sticky at the top of the window while the verses pass under it), then the 20 verses (`section.lp`, address `#l146` and so on; `:target`
+tints the row; each section is named "Lines 146 to 148" and so on for screen readers). The verses stand in `div.lp-body`, so each
+language runs down its own column as one text: behind them `div.lp-rules` (a grid with the same columns) draws three hairlines between
+the columns, unbroken from the first verse to the last and fading only at the two ends. Between two verses there is no heading and no
+line across the page: each cell after the first verse begins with its own small mark (`i.lp__sep`, a short hairline fading at both ends
+with a small lozenge, 44 % of the column, at most 150 px), so the mark never crosses into the next column. The line numbers of the Latin
+stand only beside the Latin. The head names each column in a larger type (27 px; the Arabic in Amiri 24 px) with a short wine bar under
+the name and the credit under that. Columns are 0.9 : 0.95 : 1 : 1.5 (the Arabic widest, so the vowel marks have room); lines that wrap hang
+(a hanging indent), so a new line of the verse stays distinct from a wrap. The Latin is italic; the Arabic is Noto Naskh Arabic 20 px on
+a 2.25 line (tall enough for the vowel marks), its couplets spaced a little apart. A closing ornament ends the leaf; the sources follow below it. All ornaments are inline
+SVG in the accent colour.
+
+**Smaller screens.** From 1100 px up: four columns. Below 1100 px: **one language at a time**, in one column up to 640 px wide; the head becomes four buttons
+(`aria-pressed`, a wine underline on the one shown) and a small script at the end of the page shows one cell per verse, starting with the
+language of the page (English on the English page, Deutsch on `/de/`, العربية on `/ar/`). When the language is changed, the verse that
+was at the top of the window stays at the top (the script moves the scroll by the difference, `overflow-anchor: none` on the leaf stops the
+browser from doing it a second time). Without JavaScript the four cells stand one under the other, each named by its label. A short note
+under the lede, shown only below 1100 px, says that the languages come one at a time. Up to 760 px the frame and the head are narrower.
+
+Measured on the built site (headless Chromium, English, German and Arabic pages, 1600, 1280, 900 and 390 px; 13 November 2026, ninth
+version): 20 verse rows, 52 pieces on each translated page and none pending, no page errors, no sideways scroll; at 1600 and 1280 px four
+cells per verse (223, 235, 248 and 372 px), at 900 px one cell of 640 px and at 390 px one of 308 px, the one of the page's language;
+the column hairlines on the Arabic page stand at the same places as on the English one (`direction: ltr` on `.lp-rules`); earlier, at
+the four-column launch, clicking each of the four buttons showed that cell and left the verse at the same height (−44 px before and after).

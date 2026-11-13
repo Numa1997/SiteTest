@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-5981 files, 723.6 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+5995 files, 727.9 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -16,7 +16,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Walkthroughs](#walkthroughs) | 36 |
 | [Ledgers of the data panel](#ledgers-of-the-data-panel) | 5 |
 | [Shared scripts](#shared-scripts) | 26 |
-| [Computed data played back by the pages (named by date of generation)](#computed-data-played-back-by-the-pages-named-by-date-of-generation) | 4330 |
+| [Computed data played back by the pages (named by date of generation)](#computed-data-played-back-by-the-pages-named-by-date-of-generation) | 4335 |
 | [Stylesheets](#stylesheets) | 16 |
 | [KaTeX](#katex) | 24 |
 | [three.js](#threejs) | 3 |
@@ -39,13 +39,13 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Shared by the portfolio sources (not served)](#shared-by-the-portfolio-sources-not-served) | 1 |
 | [Template sources](#template-sources) | 2 |
 | [Documentation](#documentation) | 41 |
-| [Tools](#tools) | 128 |
+| [Tools](#tools) | 135 |
 | [Translation tables](#translation-tables) | 54 |
 | [Agents of the lecture-note review](#agents-of-the-lecture-note-review) | 4 |
 | [Working notes of project 07, the electron beam](#working-notes-of-project-07-the-electron-beam) | 52 |
 | [Working notes of the Rotor Pendula study](#working-notes-of-the-rotor-pendula-study) | 86 |
 | [Working notes of the Droplet Collection study](#working-notes-of-the-droplet-collection-study) | 123 |
-| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 517 |
+| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 519 |
 
 ## Repository root
 
@@ -55,7 +55,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`AGENTS.md`](../AGENTS.md) | 15.9 kB | The maintainer's summary: ownership, layout, design rules, folds, the data pipeline, platform quirks. | [build-and-deploy.md](build-and-deploy.md) |
 | [`CLAUDE.md`](../CLAUDE.md) | 5.1 kB | How Numa expects an AI assistant to work on the project. | [build-and-deploy.md](build-and-deploy.md) |
 | [`README.md`](../README.md) | 8.9 kB | Start here: what the project is, how the files fit together, where each one is explained. | [README.md](../README.md) |
-| [`index.html`](../index.html) | 84.7 kB | The home page: CV, research, simulation plates, index; also the build entry page. | [pages.md](pages.md) |
+| [`index.html`](../index.html) | 85.4 kB | The home page: CV, research, simulation plates, index; also the build entry page. | [pages.md](pages.md) |
 | [`package.json`](../package.json) | 479 B | Build declaration: vite build; template dependencies. | [build-and-deploy.md](build-and-deploy.md) |
 | [`postcss.config.js`](../postcss.config.js) | 81 B | PostCSS settings (template; unused by the site). | [build-and-deploy.md](build-and-deploy.md) |
 | [`tailwind.config.js`](../tailwind.config.js) | 155 B | Tailwind settings (template; unused by the site). | [build-and-deploy.md](build-and-deploy.md) |
@@ -69,7 +69,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 |---|---|---|---|
 | [`public/_headers`](../public/_headers) | 2.1 kB | Response headers Cloudflare sets on phyeinusul.com: security headers on every file, a year of caching for font files; read by Cloudflare, never served. | [usul.md](usul.md) |
 | [`public/_redirects`](../public/_redirects) | 11.6 kB | Each page at its short address (x, folder/, /), for Cloudflare with html_handling none; written by tools/redirects.py, read by Cloudflare, never served. | [usul.md](usul.md) |
-| [`public/lucretius.html`](../public/lucretius.html) | 36.2 kB | The poem page: Lucretius I 146-224 in English; /de/ and /ar/ carry the German and the Arabic (written by make_page.py). | [pages.md#the-poem-page-lucretiushtml-10-november-2026-rebuilt-11-november-2026](pages.md#the-poem-page-lucretiushtml-10-november-2026-rebuilt-11-november-2026) |
+| [`public/lucretius.html`](../public/lucretius.html) | 76.4 kB | The poem page: Lucretius I 146-224 in four columns, Latin, English, German, Arabic (written by make_page.py; /de/ and /ar/ differ only in the words around the poem). | [pages.md#the-poem-page-lucretiushtml-10-november-2026-rebuilt-11-november-2026](pages.md#the-poem-page-lucretiushtml-10-november-2026-rebuilt-11-november-2026) |
 | [`public/portfolios.html`](../public/portfolios.html) | 51.2 kB | The Portfolios page: the two research projects. | [pages.md](pages.md) |
 | [`public/robots.txt`](../public/robots.txt) | 58 B | Instructions for search-engine crawlers. | [pages.md](pages.md) |
 | [`public/simulations.html`](../public/simulations.html) | 12.7 kB | The simulations catalog: one titled fold card per simulation, search and chips. | [pages.md](pages.md) |
@@ -78,8 +78,8 @@ to confirm that every file is described. Sizes are those of the files when the l
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
-| [`public/de/index.html`](../public/de/index.html) | 83.9 kB | German index.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
-| [`public/de/lucretius.html`](../public/de/lucretius.html) | 37.1 kB | German lucretius.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
+| [`public/de/index.html`](../public/de/index.html) | 84.5 kB | German index.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
+| [`public/de/lucretius.html`](../public/de/lucretius.html) | 76.7 kB | German lucretius.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
 | [`public/de/portfolios.html`](../public/de/portfolios.html) | 54.3 kB | German portfolios.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
 | [`public/de/simulations.html`](../public/de/simulations.html) | 12.9 kB | German simulations.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
 | [`public/de/simulations/Circular Wave Interference Visualization.html`](../public/de/simulations/Circular%20Wave%20Interference%20Visualization.html) | 203.7 kB | German simulations/Circular Wave Interference Visualization.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
@@ -100,8 +100,8 @@ to confirm that every file is described. Sizes are those of the files when the l
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
-| [`public/ar/index.html`](../public/ar/index.html) | 87.2 kB | Arabic index.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
-| [`public/ar/lucretius.html`](../public/ar/lucretius.html) | 39.0 kB | Arabic lucretius.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
+| [`public/ar/index.html`](../public/ar/index.html) | 87.8 kB | Arabic index.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
+| [`public/ar/lucretius.html`](../public/ar/lucretius.html) | 78.1 kB | Arabic lucretius.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
 | [`public/ar/portfolios.html`](../public/ar/portfolios.html) | 64.8 kB | Arabic portfolios.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
 | [`public/ar/simulations.html`](../public/ar/simulations.html) | 13.7 kB | Arabic simulations.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
 | [`public/ar/simulations/Circular Wave Interference Visualization.html`](../public/ar/simulations/Circular%20Wave%20Interference%20Visualization.html) | 213.0 kB | Arabic simulations/Circular Wave Interference Visualization.html, generated by tools/i18n/build.py; do not edit. | [i18n.md](i18n.md) |
@@ -152,7 +152,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/simulations/fig13/together.html`](../public/simulations/fig13/together.html) | 29.1 kB | Fig. 13 film that plays live in the browser, generated by tools/fig13/gift/publish_films.py from tools/fig13/gift/together.html; do not edit. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`public/simulations/fig13/turning.html`](../public/simulations/fig13/turning.html) | 20.4 kB | Fig. 13 film that plays live in the browser, generated by tools/fig13/gift/publish_films.py from tools/fig13/gift/morph.html; do not edit. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`public/simulations/flower-hunt.html`](../public/simulations/flower-hunt.html) | 39.7 kB | Fig. 13 study · The Flower Hunt: closed flowers and butterflies found as periodic orbits by Newton's method, a test bench and study notes. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
-| [`public/simulations/guinness-kaggle.html`](../public/simulations/guinness-kaggle.html) | 49.1 kB | Fig. 12 · A Pint of Guinness on a One-Wheel Cart: the simulation, its data panel, walkthrough and lecture note. | [fig12-guinness-kaggle.md](simulations/fig12-guinness-kaggle.md) |
+| [`public/simulations/guinness-kaggle.html`](../public/simulations/guinness-kaggle.html) | 47.5 kB | Fig. 12 · A Pint of Guinness on a One-Wheel Cart: the simulation, its data panel, walkthrough and lecture note. | [fig12-guinness-kaggle.md](simulations/fig12-guinness-kaggle.md) |
 | [`public/simulations/momentum-spirographs.html`](../public/simulations/momentum-spirographs.html) | 153.4 kB | Fig. 13 · Spirographs in Momentum Space: a live grid of double pendulums, each kicked with the (p1, p2) of its cell, drawn as long exposures over the chaos map. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`public/simulations/pendulum-control.html`](../public/simulations/pendulum-control.html) | 208.1 kB | Fig. 11 · Double Pendulum under Control: the simulation, its data panel, walkthrough and lecture note. | [fig11-pendulum-control.md](simulations/fig11-pendulum-control.md) |
 | [`public/simulations/phasor-sums.html`](../public/simulations/phasor-sums.html) | 273.2 kB | Fig. 7 · Phasor Sums: the simulation, its data panel, walkthrough and lecture note. | [fig07-phasor-sums.md](simulations/fig07-phasor-sums.md) |
@@ -226,7 +226,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/scripts/flip.js`](../public/scripts/flip.js) | 3.5 kB | Turns the page over on a change of language (cross-document view transition), and only then. | [i18n.md](i18n.md) |
 | [`public/scripts/fold.js`](../public/scripts/fold.js) | 25.5 kB | Fold-out sections on every page: pinned header bands, remembered state, Expand/Collapse all. | [fold.md](scripts/fold.md) |
 | [`public/scripts/guinness-glass.js`](../public/scripts/guinness-glass.js) | 3.1 kB | Fig. 12: inner radius of the Guinness tulip pint every 0.5 mm, written by tools/fig12/glass_profile.py; do not edit. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
-| [`public/scripts/guinness-playback.js`](../public/scripts/guinness-playback.js) | 74.0 kB | Fig. 12, computed on Kaggle: plays the stored Kaggle rides through stout-view.js; the speed control from kaggle-flow.js, eased speed, a labelled live preview on speeds Kaggle has not computed, cross-fades, the pipeline notice only at zero speed; the store and the data panel hooks; the phase space. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`public/scripts/guinness-playback.js`](../public/scripts/guinness-playback.js) | 74.1 kB | Fig. 12, computed on Kaggle: plays the stored Kaggle rides through stout-view.js; the speed control from kaggle-flow.js, eased speed, a labelled live preview on speeds Kaggle has not computed, cross-fades, the pipeline notice only at zero speed; the store and the data panel hooks; the phase space. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`public/scripts/guinness-preview-worker.js`](../public/scripts/guinness-preview-worker.js) | 2.6 kB | Fig. 12, computed on Kaggle: the live preview in a Worker, the site’s coarse solver (stout-cart.js, 4 mm) over the same road, one frame per 1/30 s in the stored rides’ format. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`public/scripts/i18n/strings-ar.js`](../public/scripts/i18n/strings-ar.js) | 487.6 kB | The Arabic string table the scripts read through T(), generated; do not edit. | [i18n.md](i18n.md) |
 | [`public/scripts/i18n/strings-de.js`](../public/scripts/i18n/strings-de.js) | 418.7 kB | The German string table the scripts read through T(), generated; do not edit. | [i18n.md](i18n.md) |
@@ -248,8 +248,13 @@ to confirm that every file is described. Sizes are those of the files when the l
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
-| [`public/data/fig12/2026-11-12/index.json`](../public/data/fig12/2026-11-12/index.json) | 1.3 kB | Fig. 12 Kaggle data index: generation date, Kaggle notebook and version, solver, measured times, SHA-256 of each file. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`public/data/fig12/2026-11-12/free_swing_v2.json`](../public/data/fig12/2026-11-12/free_swing_v2.json) | 1.02 MB | Fig. 12 computed on Kaggle: free swings of solver v2 on a glass held still (energy, surface, damping), the test behind the numerical share of the stored damping | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`public/data/fig12/2026-11-12/free_swing_v2_repair.json`](../public/data/fig12/2026-11-12/free_swing_v2_repair.json) | 339.6 kB | Fig. 12 computed on Kaggle: free swings of solver v2 on a glass held still (energy, surface, damping), the test behind the numerical share of the stored damping | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`public/data/fig12/2026-11-12/index.json`](../public/data/fig12/2026-11-12/index.json) | 2.3 kB | Fig. 12 Kaggle data index: generation date, Kaggle notebook and version, solver, measured times, SHA-256 of each file. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`public/data/fig12/2026-11-12/rides.json`](../public/data/fig12/2026-11-12/rides.json) | 715.2 kB | Fig. 12 rides computed on Kaggle, named by the date of generation: per frame the cart state, lean, spill and the stout surface on the 17 x 64 polar grid (uint8, zlib, base64). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`public/data/fig12/2026-11-13/index.json`](../public/data/fig12/2026-11-13/index.json) | 1.6 kB | Fig. 12 Kaggle data index: generation date, Kaggle notebook and version, solver, measured times, SHA-256 of each file. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`public/data/fig12/2026-11-13/rides.json`](../public/data/fig12/2026-11-13/rides.json) | 1.80 MB | Fig. 12 rides computed on Kaggle, named by the date of generation: per frame the cart state, lean, spill and the stout surface on the 17 x 64 polar grid (uint8, zlib, base64). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`public/data/fig12/generations.json`](../public/data/fig12/generations.json) | 566 B | Fig. 12 computed on Kaggle: the list of stored generations of rides, newest last, with the solver of each | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 
 <details><summary>405 files: Fig. 14 data generated on Kaggle on 2026-11-12: one stored run (header with the probability curves, then the zlib frames of |psi| and arg psi on the half-plane through the flight axis, from which the page spins the 3D wave).</summary>
 
@@ -5326,7 +5331,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`docs/kaggle.md`](kaggle.md) | 4.1 kB | Documentation: Computing on Kaggle: the Schrödinger test. | [kaggle.md](kaggle.md) |
 | [`docs/minor-issues-report.md`](minor-issues-report.md) | 19.5 kB | Documentation: Minor issues · final verification report. | [minor-issues-report.md](minor-issues-report.md) |
 | [`docs/notes.md`](notes.md) | 5.4 kB | Documentation: The lecture-note review: `notes/` and `.claude/agents/`. | [notes.md](notes.md) |
-| [`docs/pages.md`](pages.md) | 54.1 kB | Documentation: The site's own pages: home, simulations catalog, Portfolios, robots.txt. | [pages.md](pages.md) |
+| [`docs/pages.md`](pages.md) | 56.3 kB | Documentation: The site's own pages: home, simulations catalog, Portfolios, robots.txt. | [pages.md](pages.md) |
 | [`docs/performance.md`](performance.md) | 53.8 kB | Documentation: Performance: what was measured, what was slow, what changed. | [performance.md](performance.md) |
 | [`docs/portfolios.md`](portfolios.md) | 68.5 kB | Documentation: The four research projects: `public/portfolios/`. | [portfolios.md](portfolios.md) |
 | [`docs/research-theory-audit.md`](research-theory-audit.md) | 30.0 kB | Documentation: Readability audit: Droplet Collection and Rotor Pendula. | [research-theory-audit.md](research-theory-audit.md) |
@@ -5351,7 +5356,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`docs/simulations/fig10-wind-turbine.md`](simulations/fig10-wind-turbine.md) | 57.3 kB | Documentation: Fig. 10 · Wind Turbine Control. | [fig10-wind-turbine.md](simulations/fig10-wind-turbine.md) |
 | [`docs/simulations/fig11-double-inverted-pendulum.md`](simulations/fig11-double-inverted-pendulum.md) | 61.0 kB | Documentation: Project 05 · Balancing Two Rods on a Cart (Fig. 11 from 3 to 4 November 2026). | [fig11-double-inverted-pendulum.md](simulations/fig11-double-inverted-pendulum.md) |
 | [`docs/simulations/fig11-pendulum-control.md`](simulations/fig11-pendulum-control.md) | 28.8 kB | Documentation: Fig. 11 · Double Pendulum under Control (Fig. 11 again since 4 November 2026; a project from 3 to 4 November). | [fig11-pendulum-control.md](simulations/fig11-pendulum-control.md) |
-| [`docs/simulations/fig12-beer-slosh.md`](simulations/fig12-beer-slosh.md) | 63.2 kB | Documentation: Fig. 12 · A Pint of Guinness on a One-Wheel Cart (`public/simulations/beer-slosh.html`). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`docs/simulations/fig12-beer-slosh.md`](simulations/fig12-beer-slosh.md) | 64.8 kB | Documentation: Fig. 12 · A Pint of Guinness on a One-Wheel Cart (`public/simulations/beer-slosh.html`). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`docs/simulations/fig13-momentum-spirographs.md`](simulations/fig13-momentum-spirographs.md) | 29.4 kB | Documentation: Fig. 13 · Spirographs in Momentum Space, the Flower Hunt, the dashboard and the films. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`docs/simulations/fig14-schrodinger-sphere.md`](simulations/fig14-schrodinger-sphere.md) | 25.6 kB | Documentation: Fig. 14 · A Wave Packet Meets a Sphere. | [fig14-schrodinger-sphere.md](simulations/fig14-schrodinger-sphere.md) |
 | [`docs/simulations/project06-rods-in-liquid.md`](simulations/project06-rods-in-liquid.md) | 9.7 kB | Documentation: Project 06 · Balancing Two Rods in a Liquid. | [project06-rods-in-liquid.md](simulations/project06-rods-in-liquid.md) |
@@ -5377,6 +5382,13 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/fig12/gpu-study.cjs`](../tools/fig12/gpu-study.cjs) | 5.3 kB | Fig. 12: the cart over a bump or a rough road with the GPU solver (World.advanceGpu) in headless Chromium, in batches; lean, accelerations, spill, controllers. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/ident.cjs`](../tools/fig12/ident.cjs) | 3.2 kB | Fig. 12: fits one oscillator (frequency, damping, coupling) to the 3D solver’s runs from rest. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/irish-imperial-pint.svg`](../tools/fig12/irish-imperial-pint.svg) | 54.0 kB | Fig. 12: dimensions.com’s dimensioned elevation and section of the tulip pint glass (source of the profile). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`tools/fig12/kaggle/env.py`](../tools/fig12/kaggle/env.py) | 1.1 kB | Fig. 12 computed on Kaggle: installs Taichi, stops if no GPU, fetches the glass profile and drawing code at a pinned commit | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`tools/fig12/kaggle/free_params.py`](../tools/fig12/kaggle/free_params.py) | 3.0 kB | Fig. 12 computed on Kaggle: the parameters and the progress log shared by the free-swing tests and the rides | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`tools/fig12/kaggle/free_swing.py`](../tools/fig12/kaggle/free_swing.py) | 4.4 kB | Fig. 12 computed on Kaggle: the free-swing test of solver v2 (glass held still, one push), per grid and piece of physics | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`tools/fig12/kaggle/free_swing_fit.py`](../tools/fig12/kaggle/free_swing_fit.py) | 1.3 kB | Fig. 12 computed on Kaggle: fits the damping ratio and frequency of every stored free swing | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`tools/fig12/kaggle/rides.py`](../tools/fig12/kaggle/rides.py) | 3.3 kB | Fig. 12 computed on Kaggle: drives the pint over the road at each speed with solver v2 and writes rides.json in the page’s format, saved after every ride | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`tools/fig12/kaggle/solver.py`](../tools/fig12/kaggle/solver.py) | 50.3 kB | Fig. 12 computed on Kaggle: the GPU solver v2 (Taichi): the stout as APIC particles on a 1.5 mm grid with a ghost-fluid free surface and free-slip glass faces, the wall’s boundary layer and the foam as drags, coupled both ways to the port of the site’s cart; the notebooks download it at a pinned commit | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`tools/fig12/kaggle/store_rides.py`](../tools/fig12/kaggle/store_rides.py) | 2.2 kB | Fig. 12 computed on Kaggle: stores a generation of rides in public/data/fig12/<date>/ with index.json (notebook, version, code commit, measured times, SHA-256) | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/kaggle_decay.py`](../tools/fig12/kaggle_decay.py) | 4.7 kB | Fig. 12 computed on Kaggle: measures from the stored rides the first mode’s frequency and how fast its swing dies after the last bump (a direct fit of the free decay, self-tested), and how far the wall lean drifts at steady speed. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/linearity.cjs`](../tools/fig12/linearity.cjs) | 2.9 kB | Fig. 12: both fluid models from rest under the same half-sine push, no cart: where the linear modes fail (lean, swing, spill). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/linfit.cjs`](../tools/fig12/linfit.cjs) | 2.0 kB | Fig. 12: fits the free swing (amplitude, frequency) in the files linearity.cjs saves. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
@@ -5448,7 +5460,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/i18n/ingest.py`](../tools/i18n/ingest.py) | 1.9 kB | Stores checked translations made outside the tables (page pieces, script strings, walkthrough prose). | [i18n.md](i18n.md) |
 | [`tools/i18n/package.json`](../tools/i18n/package.json) | 285 B | The parser wrap.cjs needs (acorn); npm install --prefix tools/i18n. | [i18n.md](i18n.md) |
 | [`tools/i18n/wrap.cjs`](../tools/i18n/wrap.cjs) | 3.7 kB | Wraps the reader-visible strings of a page's scripts in _t(), with a JavaScript parser (acorn). | [i18n.md](i18n.md) |
-| [`tools/inventory.py`](../tools/inventory.py) | 97.7 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
+| [`tools/inventory.py`](../tools/inventory.py) | 99.7 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
 | [`tools/kaggle/schrodinger-shapes/build_flat.py`](../tools/kaggle/schrodinger-shapes/build_flat.py) | 5.6 kB | Fig. 14 flat wall: writes flat.ipynb (Kaggle, CPU, 585 runs) for a given commit. | [fig14-schrodinger-sphere.md](simulations/fig14-schrodinger-sphere.md) |
 | [`tools/kaggle/schrodinger-shapes/build_pillar.py`](../tools/kaggle/schrodinger-shapes/build_pillar.py) | 5.8 kB | Fig. 14 pillar: writes pillar.ipynb (Kaggle, CPU, 585 runs) for a given commit. | [fig14-schrodinger-sphere.md](simulations/fig14-schrodinger-sphere.md) |
 | [`tools/kaggle/schrodinger-shapes/build_radial.py`](../tools/kaggle/schrodinger-shapes/build_radial.py) | 5.8 kB | Fig. 14 spherical waves: writes radial.ipynb (Kaggle, CPU, 1170 runs) for a given commit. | [fig14-schrodinger-sphere.md](simulations/fig14-schrodinger-sphere.md) |
@@ -5504,7 +5516,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`i18n/ar/hydraulics__theory_template.json`](../i18n/ar/hydraulics__theory_template.json) | 2.2 kB | Arabic table of hydraulics__theory_template: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
 | [`i18n/ar/hydraulics_strings.json`](../i18n/ar/hydraulics_strings.json) | 34.2 kB | Arabic table of hydraulics_strings: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
 | [`i18n/ar/index.html.json`](../i18n/ar/index.html.json) | 39.3 kB | Arabic table of index.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
-| [`i18n/ar/lucretius.html.json`](../i18n/ar/lucretius.html.json) | 17.8 kB | Arabic table of lucretius.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
+| [`i18n/ar/lucretius.html.json`](../i18n/ar/lucretius.html.json) | 10.4 kB | Arabic table of lucretius.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
 | [`i18n/ar/portfolios.html.json`](../i18n/ar/portfolios.html.json) | 124.5 kB | Arabic table of portfolios.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
 | [`i18n/ar/simulations.html.json`](../i18n/ar/simulations.html.json) | 6.8 kB | Arabic table of simulations.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
 | [`i18n/ar/simulations__Circular Wave Interference Visualization.html.json`](../i18n/ar/simulations__Circular%20Wave%20Interference%20Visualization.html.json) | 86.0 kB | Arabic table of simulations__Circular Wave Interference Visualization.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
@@ -5531,7 +5543,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`i18n/de/hydraulics__theory_template.json`](../i18n/de/hydraulics__theory_template.json) | 1.9 kB | German table of hydraulics__theory_template: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
 | [`i18n/de/hydraulics_strings.json`](../i18n/de/hydraulics_strings.json) | 28.3 kB | German table of hydraulics_strings: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
 | [`i18n/de/index.html.json`](../i18n/de/index.html.json) | 34.6 kB | German table of index.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
-| [`i18n/de/lucretius.html.json`](../i18n/de/lucretius.html.json) | 16.0 kB | German table of lucretius.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
+| [`i18n/de/lucretius.html.json`](../i18n/de/lucretius.html.json) | 9.0 kB | German table of lucretius.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
 | [`i18n/de/portfolios.html.json`](../i18n/de/portfolios.html.json) | 109.3 kB | German table of portfolios.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
 | [`i18n/de/simulations.html.json`](../i18n/de/simulations.html.json) | 5.9 kB | German table of simulations.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
 | [`i18n/de/simulations__Circular Wave Interference Visualization.html.json`](../i18n/de/simulations__Circular%20Wave%20Interference%20Visualization.html.json) | 76.9 kB | German table of simulations__Circular Wave Interference Visualization.html: per piece, the English it was translated from and the translation. | [i18n.md](i18n.md) |
@@ -6227,7 +6239,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/fig12/check-8-6.md`](../notes/fig12/check-8-6.md) | 12.8 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/check.md`](../notes/fig12/check.md) | 24.2 kB | Fig. 12: the derivation checker's table of equations and numbers. | [notes.md](notes.md) |
 
-<details><summary>19 files: Fig. 12: a measuring script of the review, or its saved output.</summary>
+<details><summary>22 files: Fig. 12: a measuring script of the review, or its saved output.</summary>
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
@@ -6238,6 +6250,9 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/fig12/fig-bump.svg`](../notes/fig12/fig-bump.svg) | 28.8 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/fig-glass.svg`](../notes/fig12/fig-glass.svg) | 17.2 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/gpu-page-test.cjs`](../notes/fig12/gpu-page-test.cjs) | 2.4 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/handoff-control-session.md`](../notes/fig12/handoff-control-session.md) | 36.7 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/kaggle-v2/free_swing_v2_2026-11-12.json.gz`](../notes/fig12/kaggle-v2/free_swing_v2_2026-11-12.json.gz) | 706.7 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/kaggle-v2/free_swing_v2_repair_2026-11-12.json.gz`](../notes/fig12/kaggle-v2/free_swing_v2_repair_2026-11-12.json.gz) | 230.4 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/nopush.cjs`](../notes/fig12/nopush.cjs) | 2.0 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/note-shots.cjs`](../notes/fig12/note-shots.cjs) | 2.2 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/panel-test.cjs`](../notes/fig12/panel-test.cjs) | 3.5 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
@@ -6436,13 +6451,12 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/home/longlines.cjs`](../notes/home/longlines.cjs) | 1.2 kB | Browser measurements of the home page: index size, column widths, characters per line, section screenshots. | [styles.md](styles.md) |
 | [`notes/home/measure.cjs`](../notes/home/measure.cjs) | 2.6 kB | Browser measurements of the home page: index size, column widths, characters per line, section screenshots. | [styles.md](styles.md) |
 | [`notes/home/sections.cjs`](../notes/home/sections.cjs) | 891 B | Browser measurements of the home page: index size, column widths, characters per line, section screenshots. | [styles.md](styles.md) |
-| [`notes/lucretius/README.md`](../notes/lucretius/README.md) | 6.6 kB | Lucretius I 146-224 kept for the site: sources, corrections, what is where. | [README.md](../notes/lucretius/README.md) |
+| [`notes/lucretius/README.md`](../notes/lucretius/README.md) | 11.7 kB | Lucretius I 146-224 kept for the site: sources, corrections, what is where. | [README.md](../notes/lucretius/README.md) |
 | [`notes/lucretius/extract.py`](../notes/lucretius/extract.py) | 5.1 kB | Cuts Lucretius I 146-224 out of the downloaded sources without retyping. | [README.md](../notes/lucretius/README.md) |
 | [`notes/lucretius/make_home.py`](../notes/lucretius/make_home.py) | 11.6 kB | Writes the Lucretius band of the home page from the first four sentences. | [README.md](../notes/lucretius/README.md) |
-| [`notes/lucretius/make_page.py`](../notes/lucretius/make_page.py) | 14.1 kB | Writes public/lucretius.html (Lucretius I 146-224 in the English of Leonard) and the German and Arabic verses into the i18n tables. | [README.md](../notes/lucretius/README.md) |
+| [`notes/lucretius/make_page.py`](../notes/lucretius/make_page.py) | 23.1 kB | Writes public/lucretius.html: Lucretius I 146-224 in four columns (Latin, Leonard, Diels, Arabic). | [README.md](../notes/lucretius/README.md) |
 | [`notes/lucretius/poem-146-224.json`](../notes/lucretius/poem-146-224.json) | 15.8 kB | Lucretius I 146-224 per Latin sentence: Latin, Leonard (English), Diels (German), cut from the sources. | [README.md](../notes/lucretius/README.md) |
-| [`notes/lucretius/poem-ar-146-158.json`](../notes/lucretius/poem-ar-146-158.json) | 2.2 kB | The Arabic of Lucretius I 146-158 (the home cards), made from the Latin for this site. | [README.md](../notes/lucretius/README.md) |
-| [`notes/lucretius/poem-ar-159-224.json`](../notes/lucretius/poem-ar-159-224.json) | 7.9 kB | The Arabic of Lucretius I 159-224, made from the Latin for this site. | [README.md](../notes/lucretius/README.md) |
+| [`notes/lucretius/poem-ar-146-224.json`](../notes/lucretius/poem-ar-146-224.json) | 11.7 kB | The Arabic of Lucretius I 146-224 (ninth version, free verse, fully vowelled), made from Leonard for this site. | [README.md](../notes/lucretius/README.md) |
 | [`notes/skills/phyein-usul-data-panel/SKILL.md`](../notes/skills/phyein-usul-data-panel/SKILL.md) | 26.9 kB | The revised skill phyein-usul-data-panel, to be uploaded to Numa's account (the synced copy in a session is read-only). | [README.md](../notes/fig11/panel/README.md) |
 | [`notes/verify.mjs`](../notes/verify.mjs) | 4.7 kB | Checks the ten simulation pages in headless Chromium at desktop and phone size. | [notes.md](notes.md) |
 | [`notes/walkcheck.cjs`](../notes/walkcheck.cjs) | 1.7 kB | Searches every quoted code line of the ten walkthroughs in its page. | [notes.md](notes.md) |

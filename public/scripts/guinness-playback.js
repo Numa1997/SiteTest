@@ -13,14 +13,14 @@
  * from the picture. */
 (function () {
   'use strict';
-  const DIR = '../data/fig12/2026-11-12/';
+  const DIR = '../data/fig12/2026-11-13/';
   const DATA_URL = DIR + 'rides.json', INDEX_URL = DIR + 'index.json';
   const XI11 = 1.841184, QRING = 13;   // first zero of J1'; the ring q is read from: the outermost one Kaggle built from particles
   const J1 = (x) => { let t = x / 2, s = 0; for (let k = 0; k < 60; k++) { s += t; t *= -(x * x / 4) / ((k + 1) * (k + 2)); } return s; };
   const F11 = 3.421;         // Hz, first sloshing mode of a deep cylinder of radius R(h) = 39.1 mm (note, eq. 16)
   const SLOW = 3.0;          // s of ride before the computed end over which the playback slows to zero
   const STOPS = [0.5, 1.0, 1.5, 2.0, 2.5];   // m/s, the speed control's stops; those not in the file are computed as a live preview
-  // the computed road (the notebook's ROADS, version 3): cosine bumps, centre x, height h, length L (m); the preview uses the same
+  // the computed road (the notebook's ROADS, versions 3 and 5): cosine bumps, centre x, height h, length L (m); the preview uses the same
   const BUMPS = [{ x: 1.5, h: 0.01, L: 0.6 }, { x: 3.5, h: -0.008, L: 0.6 }, { x: 5.75, h: 0.005, L: 0.5 }, { x: 6.25, h: 0.005, L: 0.5 },
     { x: 6.75, h: 0.005, L: 0.5 }, { x: 7.25, h: 0.005, L: 0.5 }, { x: 9.0, h: 0.01, L: 0.25 }];
   const BRIDGE_URL = null, PROJECT = 'guinness-cart';   // kaggle-bridge is not connected yet (docs/kaggle-pipeline.md)
