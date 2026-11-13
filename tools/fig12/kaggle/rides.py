@@ -1,6 +1,7 @@
 # Fig. 12 on Kaggle, solver v2: the three stored rides again (same road, same cart, 20 s each), the stout with the Fig. 12
 # note's wall and foam friction ("full"), the surface read with the open-column reconstruction (right next to the waist).
 # Writes rides.json in the website's format (public/data/fig12/<date>/) and timing.json.
+import base64, zlib
 ROADS = {'gentle road: hump, dip, ripples, bump': {'kind': 'bumps', 'bumps': [{'x': 1.5, 'h': 0.01, 'L': 0.6}, {'x': 3.5, 'h': -0.008, 'L': 0.6}, {'x': 5.75, 'h': 0.005, 'L': 0.5}, {'x': 6.25, 'h': 0.005, 'L': 0.5}, {'x': 6.75, 'h': 0.005, 'L': 0.5}, {'x': 7.25, 'h': 0.005, 'L': 0.5}, {'x': 9.0, 'h': 0.01, 'L': 0.25}]}}
 SPEEDS = [float(v) for v in os.environ.get("NB_SPEEDS", "0.5,1.0,1.5").split(",")]
 END = float(os.environ.get("NB_END", "20.0")); DX = 0.0015; MS_STEP = 100   # ms per 2 ms step at 1.5 mm, measured (free swing v2, 12 Nov)
