@@ -1,0 +1,11 @@
+[
+ {
+  "date": "2026-11-13",
+  "index": "2026-11-13/derived/index.json",
+  "curves": "2026-11-13/curves.json",
+  "kind": "derived",
+  "runs": 72,
+  "source": "tools/kaggle/resonant-tunnelling/recon.py",
+  "commit": "bb085a6c3f7489cb3913b1cc9789bdca848b1848"
+ }
+]

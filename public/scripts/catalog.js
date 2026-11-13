@@ -300,5 +300,22 @@
             has: ['derivation', 'data', 'read', 'round', 'check'],
             added: '2026-11-12'
         },
+        {
+            id: 'resonant-tunnelling',
+            fig: 15,
+            title: 'Resonant Tunnelling',
+            file: 'simulations/resonant-tunnelling.html',
+            field: 'quantum',
+            stage: 2,
+            subject: 'quantum mechanics · built from stored data',
+            summary: 'One thin barrier stops almost all of a slow quantum particle; two identical barriers a few nanometres apart let it through completely at one special energy. The wave builds up between them, rings, and leaks out — a resonant-tunnelling diode, the fastest electronic oscillator we have. Every frame is built from the exact rules of one-dimensional scattering (transfer matrices) applied to data already computed, then stored; the page only plays it. Transmission peaks, the trapped-state lifetime τ = ħ/Γ, and a current–voltage curve with negative differential resistance.',
+            equation: 'T_2(E) = \\left|\\frac{t^2 e^{iks}}{1 - r^2 e^{2iks}}\\right|^2, \\qquad \\tau = \\frac{\\hbar}{\\Gamma}',
+            model: 'time-independent Schrödinger equation in one dimension; two square barriers; exact transfer-matrix scattering states superposed into a moving packet; units ħ = m = 1, then GaAs/AlGaAs real units',
+            method: 'transfer-matrix reconstruction (tools/kaggle/resonant-tunnelling/recon.py) stored as float16 frames with SHA-256 and provenance; checked against a Crank–Nicolson solve and against Fig. 14’s single-barrier runs; the page plays the stored frames',
+            controls: 'barrier spacing (resonant, detuned, wide well); pulse length (short/long in energy); packet energy across the resonances; time; probability, wave, or space–time view',
+            concepts: ['Schrödinger equation', 'quantum tunnelling', 'resonance', 'transfer matrix', 'Breit–Wigner', 'lifetime', 'negative differential resistance', 'resonant-tunnelling diode', 'band structure', 'derived data'],
+            has: ['derivation', 'data', 'read', 'round', 'check'],
+            added: '2026-11-13'
+        },
     ];
 })();

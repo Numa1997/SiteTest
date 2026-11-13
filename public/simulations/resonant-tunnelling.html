@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resonant Tunnelling · Numa Koudsie</title>
+    <meta name="description" content="Two thin barriers a few nanometres apart let a quantum particle through completely at special energies, though one barrier alone stops almost all of it. The resonant-tunnelling diode: transmission peaks, a trapped state that leaks out, and a current-voltage curve that slopes backwards. Every frame is built from stored data by the exact rules of one-dimensional scattering; the page only plays it.">
+    <meta name="theme-color" content="#f5f1ea">
+    <link rel="stylesheet" href="../styles/sim.css">
+    <link rel="stylesheet" href="../styles/data.css">
+    <link rel="stylesheet" href="../styles/fold.css">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%237a1f2b'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='38' fill='%23f5f1ea'%3EN%3C/text%3E%3C/svg%3E">
+    <style>
+        .sim, .sim-top { max-width: 1440px; }
+        .figs { display: grid; gap: 16px; min-width: 0; }
+        .stage__canvas.wave { --ar: 16 / 8.2; --ar-m: 4 / 3.4; background-image: none; }
+        .stage__canvas.chart { --ar: 16 / 6.6; --ar-m: 4 / 3; background-image: none; }
+        .src { border: 1px solid var(--rule); border-left: 3px solid var(--accent); border-radius: 8px; padding: 9px 11px; font-size: 12.5px; line-height: 1.5; color: var(--ink-2); background: var(--card-soft); }
+        .src b { font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); font-weight: 500; display: block; margin-bottom: 2px; }
+        .src code { font-family: var(--mono); font-size: 11px; word-break: break-all; }
+        .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+        .chips button { border: 1px solid var(--rule); background: var(--card-soft); border-radius: 999px; padding: 5px 11px; font: 13.5px var(--sans); color: var(--ink-2); cursor: pointer; }
+        .chips button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+        .chips button:disabled { opacity: .45; cursor: default; }
+        .chips-note { margin: 0; font-family: var(--mono); font-size: 11px; color: var(--muted); line-height: 1.45; }
+        .ru { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 8px; margin: 0; }
+        .ru div { background: var(--card-soft); border: 1px solid var(--rule-soft); border-radius: 8px; padding: 7px 10px; }
+        .ru dt { font-family: var(--mono); font-size: 9.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+        .ru dd { margin: 2px 0 0; font-family: var(--mono); font-size: 12.5px; color: var(--ink); }
+        .paper .katex-display { overflow-x: auto; overflow-y: hidden; max-width: 100%; }
+        .paper .katex { position: relative; }
+    </style>
+</head>
+<body>
+    <header class="sim-top">
+        <span style="display:inline-flex;align-items:center;gap:14px"><a href="../index.html" aria-label="Phyein Usul, home page" style="display:inline-block;line-height:0"><img src="../images/phyein-usul-mark.svg" alt="Phyein Usul" width="87" height="48" /></a><a href="../simulations.html">← All simulations</a></span>
+        <nav class="sim-nav" aria-label="Simulations">
+            <span>Fig.</span>
+            <a href="Circular Wave Interference Visualization.html">1</a>
+            <a href="Double Pendulum.html">2</a>
+            <a href="Interactive Double-Slit Experiment Visualization.html">3</a>
+            <a href="Transverse and longitudinal waves.html">4</a>
+            <a href="water-wave.html">5</a>
+            <a href="wave-interference.html">6</a>
+            <a href="phasor-sums.html">7</a>
+            <a href="draw-decompose.html">8</a>
+            <a href="driven-oscillator.html">9</a>
+            <a href="wind-turbine.html">10</a>
+            <a href="pendulum-control.html">11</a> <a href="beer-slosh.html">12</a> <a href="momentum-spirographs.html">13</a> <a href="schrodinger-sphere.html">14</a> <a href="resonant-tunnelling.html" aria-current="page">15</a>
+        </nav>
+    </header>
+
+    <main class="sim">
+        <noscript><p class="sim-error"><b>This simulation needs JavaScript.</b> <a href="../simulations.html">Back to the simulations</a></p></noscript>
+        <div class="sim__head">
+            <p class="sim__num">Fig. 15 · quantum mechanics · built from stored data</p>
+            <h1>Resonant Tunnelling<span class="dot">.</span></h1>
+            <p class="sim__lede">One thin barrier lets a slow quantum particle through about six times in a hundred. Put a second identical barrier a few nanometres behind the first, and at just the right energy the particle passes with certainty — a hundred times in a hundred. The wave builds up in the gap, rings for a while, and leaks out the far side. This is the resonant-tunnelling diode, the fastest solid-state oscillator we have. Every frame here was built from the exact rules of one-dimensional scattering applied to data already computed; the page only plays it back.</p>
+        </div>
+
+        <div class="sim__grid">
+            <div class="figs">
+                <figure class="stage">
+                    <div class="stage__canvas wave" id="stage">
+                        <canvas id="wave" aria-label="A quantum wave packet meeting two potential barriers; the barriers stand still as solid blocks while the wave moves"></canvas>
+                    </div>
+                    <figcaption class="stage__cap">
+                        <span><b>Fig. 15</b> · <span id="cap-view">the wave meeting two barriers</span></span>
+                        <span id="cap-t">t = —</span>
+                    </figcaption>
+                </figure>
+                <figure class="stage">
+                    <div class="stage__canvas chart" id="stage-te"><canvas id="te" aria-label="Transmission against energy, with the resonance peaks marked"></canvas></div>
+                    <figcaption class="stage__cap"><span><b>Fig. 15b</b> · transmission against energy</span><span id="cap-te">—</span></figcaption>
+                </figure>
+                <figure class="stage">
+                    <div class="stage__canvas chart" id="stage-pt"><canvas id="pt" aria-label="Where the probability is — reflected, trapped and transmitted — against time"></canvas></div>
+                    <figcaption class="stage__cap"><span><b>Fig. 15c</b> · where the probability is, against time</span><span id="cap-pt">—</span></figcaption>
+                </figure>
+            </div>
+
+            <aside class="panel" aria-label="Controls">
+                <div class="panel__group">
+                    <p class="panel__label">Run</p>
+                    <div class="actions">
+                        <button type="button" class="btn" id="play">Pause</button>
+                        <button type="button" class="btn btn--ghost" id="replay">From the start</button>
+                    </div>
+                </div>
+                <div class="panel__group">
+                    <p class="panel__label">Two barriers (height V₀ = 3, width 1)</p>
+                    <div class="chips" id="gap-chips" role="group" aria-label="Spacing of the two barriers">
+                        <button type="button" data-g="0" aria-pressed="true">Resonant pair</button>
+                        <button type="button" data-g="1" aria-pressed="false">Detuned pair</button>
+                        <button type="button" data-g="2" aria-pressed="false">Wide well</button>
+                    </div>
+                    <p class="chips-note" id="gap-note">—</p>
+                </div>
+                <div class="panel__group">
+                    <p class="panel__label">The pulse</p>
+                    <div class="chips" id="pkt-chips" role="group" aria-label="Length of the pulse">
+                        <button type="button" data-p="3" aria-pressed="true">Short (broad in energy)</button>
+                        <button type="button" data-p="12" aria-pressed="false">Long (sharp in energy)</button>
+                    </div>
+                    <p class="chips-note" id="pkt-note">—</p>
+                </div>
+                <div class="panel__group">
+                    <p class="panel__label">Show</p>
+                    <div class="chips" id="view-chips" role="group" aria-label="What to draw">
+                        <button type="button" data-v="prob" aria-pressed="true">Probability |ψ|²</button>
+                        <button type="button" data-v="rewave" aria-pressed="false">Wave Re ψ</button>
+                        <button type="button" data-v="spacetime" aria-pressed="false">Space–time</button>
+                    </div>
+                </div>
+                <div class="panel__group">
+                    <p class="panel__label">Energy</p>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>Packet energy <i>E</i> (ħ = m = 1)</span><output id="e-out" for="energy"></output></span>
+                        <input type="range" id="energy" min="0" max="20" step="1" value="5">
+                    </label>
+                </div>
+                <div class="panel__group">
+                    <p class="panel__label">Time</p>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>Time <i>t</i></span><output id="t-out" for="time"></output></span>
+                        <input type="range" id="time" min="0" max="239" step="1" value="0">
+                    </label>
+                </div>
+                <dl class="readouts">
+                    <div><dt>Reflected</dt><dd id="r-ref">—</dd></div>
+                    <div><dt>Transmitted</dt><dd id="r-tra">—</dd></div>
+                    <div><dt>Trapped in the gap</dt><dd id="r-trap">—</dd></div>
+                    <div><dt>T at this energy (1 barrier)</dt><dd id="r-t1">—</dd></div>
+                    <div class="wide"><dt>Plane wave through both barriers · packet average</dt><dd id="r-t2">—</dd></div>
+                </dl>
+                <div class="src" id="src"><b>Where these numbers come from</b><span id="src-t">loading…</span></div>
+            </aside>
+        </div>
+
+        <section class="band" aria-label="The device" style="margin-top:22px">
+            <div class="figs" style="grid-template-columns:minmax(0,1fr)">
+                <figure class="stage">
+                    <div class="stage__canvas chart" id="stage-iv"><canvas id="iv" aria-label="Current against voltage for a resonant-tunnelling diode, with the backward-sloping region marked"></canvas></div>
+                    <figcaption class="stage__cap"><span><b>Fig. 15d</b> · the diode: current against voltage</span><span id="cap-iv">Tsu–Esaki</span></figcaption>
+                </figure>
+            </div>
+            <div class="src" id="ru-box" style="margin-top:12px"><b>The same device in real units · GaAs / AlGaAs</b>
+                <dl class="ru" id="ru"></dl>
+                <span id="ru-note" style="display:block;margin-top:8px;color:var(--ink-2)"></span>
+            </div>
+        </section>
+
+        <article class="paper" id="paper" aria-labelledby="paper-title"></article>
+    </main>
+
+    <footer class="sim-foot">
+        <p>Phyein Usul · <a href="../simulations.html">All simulations</a> · <a href="../index.html">Home</a></p>
+    </footer>
+
+    <script src="../scripts/fold.js"></script>
+    <script src="../scripts/sim.js"></script>
+    <script src="../scripts/dataset.js"></script>
+    <script src="../scripts/resonant-note.js"></script>
+    <script>
+    (function () {
+        'use strict';
+        var DATA_BASE = '../data/resonant-tunnelling/';
+        var PLAY_SECONDS = 12;
+        var INK = '#1c1518', WINE = '#a3303f', ACCENT = '#7a1f2b', SLATE = '#55607a', PAPER = '#fbf6ee',
+            TAN = '#efe4c8', TANINK = '#7a4b12', MUT = '#8b8079', RULE = '#d9d0c2';
+        var GAP_NAME = ['Resonant pair', 'Detuned pair', 'Wide double well'];
+
+        /* ---- float16 ---- */
+        function f16(h) { var s = (h & 0x8000) >> 15, e = (h & 0x7c00) >> 10, f = h & 0x03ff;
+            if (e === 0) return (s ? -1 : 1) * Math.pow(2, -14) * (f / 1024);
+            if (e === 31) return f ? NaN : (s ? -Infinity : Infinity);
+            return (s ? -1 : 1) * Math.pow(2, e - 15) * (1 + f / 1024); }
+        function decodeF16(u16) { var out = new Float32Array(u16.length); for (var i = 0; i < u16.length; i++) out[i] = f16(u16[i]); return out; }
+
+        /* ---- canvases ---- */
+        var waveBox = Sim.canvas2d(document.getElementById('wave')), wctx = waveBox.ctx;
+        var teBox = Sim.canvas2d(document.getElementById('te')), tectx = teBox.ctx;
+        var ptBox = Sim.canvas2d(document.getElementById('pt')), ptctx = ptBox.ctx;
+        var ivBox = Sim.canvas2d(document.getElementById('iv')), ivctx = ivBox.ctx;
+
+        /* ---- state ---- */
+        var INDEX = null, CURVES = null, RUNMAP = {}, ENERGIES = {}, cache = {};
+        var gap = 0, sig = 3, VIEW = 'prob', Ei = 0, run = null, loading = false;
+        var tPhys = 0, playing = true, endRest = 0, dirty = true;
+        var reW = null, imW = null, psiRe = null, psiIm = null;   /* current run arrays + working buffers */
+
+        var energyIn = document.getElementById('energy'), eOut = document.getElementById('e-out');
+        var timeIn = document.getElementById('time'), tOut = document.getElementById('t-out');
+
+        /* ---------- data load ---------- */
+        function key(g, s, E) { return g + '_' + s + '_' + E.toFixed(4); }
+        async function boot() {
+            var gens = await (await fetch(DATA_BASE + 'generations.json')).json();
+            var g = gens[gens.length - 1];
+            INDEX = await (await fetch(DATA_BASE + g.index)).json();
+            CURVES = await (await fetch(DATA_BASE + g.curves)).json();
+            INDEX.runs.forEach(function (r) { RUNMAP[key(r.gap, r.sigma0, r.E)] = r; });
+            [3, 12].forEach(function (s) { ENERGIES[s] = {}; [0, 1, 2].forEach(function (gg) {
+                ENERGIES[s][gg] = INDEX.runs.filter(function (r) { return r.sigma0 === s && r.gap === gg; })
+                    .map(function (r) { return r.E; }).sort(function (a, b) { return a - b; }); }); });
+            setupControls();
+            drawIV();
+            fillRealUnits();
+            Ei = ENERGIES[3][0].indexOf(1.0); if (Ei < 0) Ei = 0;
+            refreshEnergies();
+            await loadRun();
+            Sim.onResize(document.getElementById('stage'), function () { dirty = true; });
+            Sim.onResize(document.getElementById('stage-te'), function () { dirty = true; });
+            Sim.onResize(document.getElementById('stage-pt'), function () { dirty = true; });
+            Sim.onResize(document.getElementById('stage-iv'), function () { drawIV(); });
+            start();
+        }
+
+        async function loadRun() {
+            var es = ENERGIES[sig][gap]; if (Ei >= es.length) Ei = es.length - 1; if (Ei < 0) Ei = 0;
+            var E = es[Ei], r = RUNMAP[key(gap, sig, E)];
+            if (!r) return;
+            loading = true;
+            var c = cache[r.file];
+            if (!c) {
+                var buf = await (await fetch(DATA_BASE + INDEX.generated + '/derived/' + r.file)).arrayBuffer();
+                var dig = await crypto.subtle.digest('SHA-256', buf);
+                var hex = Array.from(new Uint8Array(dig)).map(function (b) { return b.toString(16).padStart(2, '0'); }).join('');
+                var H = new DataView(buf).getUint32(4, true);
+                var head = JSON.parse(new TextDecoder().decode(new Uint8Array(buf, 8, H)));
+                var off = 8 + H, nf = head.nf, nx = head.nx;
+                var re = decodeF16(new Uint16Array(buf, off, nf * nx));
+                var im = decodeF16(new Uint16Array(buf, off + 2 * nf * nx, nf * nx));
+                c = { head: head, re: re, im: im, sha_ok: hex === r.sha256, rec: r, st: null };
+                cache[r.file] = c;
+            }
+            run = c; reW = c.re; imW = c.im;
+            psiRe = new Float32Array(c.head.nx); psiIm = new Float32Array(c.head.nx);
+            tPhys = 0; endRest = 0;
+            timeIn.max = c.head.nf - 1;
+            loading = false; dirty = true;
+            writeRunStore();
+            drawTE();
+        }
+
+        function frac() { var h = run.head, dt = h.frame_dt, f = Math.floor(tPhys / dt + 1e-9);
+            if (f >= h.nf - 1) return { f: h.nf - 1, s: 0 }; return { f: f, s: tPhys / dt - f }; }
+
+        /* interpolate the complex wave at tPhys, in the frame turning at the packet energy (LESSONS.md) */
+        function interp() {
+            var h = run.head, nx = h.nx, fs = frac(), f = fs.f, s = fs.s, dt = h.frame_dt, E = h.E;
+            var a0 = f * nx, a1 = (f + 1) * nx;
+            var cr1 = Math.cos(E * dt), ci1 = Math.sin(E * dt);         /* e^{+iEΔt} on frame f+1 */
+            var tau = s * dt, cph = Math.cos(E * tau), sph = -Math.sin(E * tau);   /* e^{-iEτ} */
+            if (s === 0) { for (var i = 0; i < nx; i++) { psiRe[i] = reW[a0 + i]; psiIm[i] = imW[a0 + i]; } return; }
+            for (var i = 0; i < nx; i++) {
+                var gr = reW[a1 + i], gi = imW[a1 + i];
+                var rr = cr1 * gr - ci1 * gi, ri = cr1 * gi + ci1 * gr;    /* e^{iEΔt} ψ_{f+1} */
+                var br = (1 - s) * reW[a0 + i] + s * rr, bi = (1 - s) * imW[a0 + i] + s * ri;
+                psiRe[i] = cph * br - sph * bi; psiIm[i] = sph * br + cph * bi;
+            }
+        }
+
+        /* ---------- clock ---------- */
+        var clk = Sim.clock(function (dt) {
+            if (!run || loading) return;
+            var h = run.head, tEnd = h.t[h.nf - 1];
+            if (playing) {
+                if (tPhys >= tEnd - 1e-9) { endRest += dt; if (endRest > 1.0) { tPhys = 0; endRest = 0; } }
+                else { tPhys = Math.min(tEnd, tPhys + dt * tEnd / PLAY_SECONDS); endRest = 0; }
+            }
+            interp();
+            writeFrameStore();
+            drawWave(); drawPT();
+            timeIn.value = frac().f;
+            tOut.textContent = 't = ' + tPhys.toFixed(2);
+            document.getElementById('cap-t').textContent = 't = ' + tPhys.toFixed(2);
+        });
+        function start() { clk.set && clk.set(true); }
+
+        /* ---------- drawing: the wave ---------- */
+        function xmap(w, h, x) { return (x - h.x_first) / ((h.nx - 1) * h.dx) * w; }
+        function drawWave() {
+            if (VIEW === 'spacetime') return drawSpacetime();
+            var W = waveBox.w, H = waveBox.h, h = run.head; wctx.clearRect(0, 0, W, H);
+            var padL = 8, padR = 8, padT = 12, padB = 26, pw = W - padL - padR, ph = H - padT - padB;
+            var Vtop = h.V0 + 1.2, y0 = padT + ph;                       /* energy = 0 at the bottom */
+            function ey(en) { return y0 - en / Vtop * ph; }
+            function xx(x) { return padL + xmap(pw, h, x); }
+            /* barriers: static solid blocks from 0 to V0 */
+            h.barriers.forEach(function (b) {
+                var x1 = xx(b[0]), x2 = xx(b[1]);
+                wctx.fillStyle = TAN; wctx.fillRect(x1, ey(b[2]), x2 - x1, ey(0) - ey(b[2]));
+                wctx.strokeStyle = TANINK; wctx.lineWidth = 1.2; wctx.strokeRect(x1, ey(b[2]), x2 - x1, ey(0) - ey(b[2]));
+            });
+            /* floor and energy line */
+            wctx.strokeStyle = RULE; wctx.lineWidth = 1; wctx.beginPath(); wctx.moveTo(padL, ey(0)); wctx.lineTo(W - padR, ey(0)); wctx.stroke();
+            wctx.strokeStyle = ACCENT; wctx.lineWidth = 1; wctx.setLineDash([5, 4]); wctx.beginPath();
+            wctx.moveTo(padL, ey(h.E)); wctx.lineTo(W - padR, ey(h.E)); wctx.stroke(); wctx.setLineDash([]);
+            wctx.fillStyle = ACCENT; wctx.font = '11px ui-monospace,monospace'; wctx.textAlign = 'left';
+            wctx.fillText('E = ' + h.E.toFixed(2), padL + 2, ey(h.E) - 4);
+            wctx.textAlign = 'right'; wctx.fillStyle = TANINK; wctx.fillText('V₀ = ' + h.V0.toFixed(0), W - padR - 2, ey(h.V0) + 12);
+            /* the wave riding on the energy line */
+            var base = ey(h.E), head = 0.82 * (base - padT);              /* head-room above the E line */
+            if (VIEW === 'prob') {
+                var sc = head / (h.peak * h.peak);
+                wctx.beginPath(); wctx.moveTo(xx(h.x_first), base);
+                for (var i = 0; i < h.nx; i++) { var d = psiRe[i] * psiRe[i] + psiIm[i] * psiIm[i]; wctx.lineTo(padL + i / (h.nx - 1) * pw, base - d * sc); }
+                wctx.lineTo(xx(h.x_first + (h.nx - 1) * h.dx), base); wctx.closePath();
+                wctx.fillStyle = 'rgba(163,48,63,.22)'; wctx.fill();
+                wctx.strokeStyle = WINE; wctx.lineWidth = 1.6; wctx.stroke();
+            } else {
+                var sa = head / h.peak;
+                wctx.beginPath();
+                for (var i = 0; i < h.nx; i++) { var y = base - psiRe[i] * sa; if (i === 0) wctx.moveTo(padL, y); else wctx.lineTo(padL + i / (h.nx - 1) * pw, y); }
+                wctx.strokeStyle = INK; wctx.lineWidth = 1.3; wctx.stroke();
+                /* a faint |ψ| envelope */
+                wctx.beginPath();
+                for (var i = 0; i < h.nx; i++) { var m = Math.sqrt(psiRe[i] * psiRe[i] + psiIm[i] * psiIm[i]); var y = base - m * sa; if (i === 0) wctx.moveTo(padL, y); else wctx.lineTo(padL + i / (h.nx - 1) * pw, y); }
+                wctx.strokeStyle = 'rgba(163,48,63,.5)'; wctx.lineWidth = 1; wctx.stroke();
+            }
+            /* x ticks */
+            wctx.fillStyle = MUT; wctx.font = '10px ui-monospace,monospace'; wctx.textAlign = 'center';
+            for (var xv = -40; xv <= 40; xv += 20) { if (xv < h.x_first || xv > -h.x_first) continue; wctx.fillText(xv + ' a', xx(xv), H - 8); }
+            document.getElementById('cap-view').textContent = (VIEW === 'prob' ? 'probability density |ψ|²' : 'the wave Re ψ') + ', riding on the energy line';
+        }
+        /* css position of stored point i, matching drawWave's mapping, for the Read-values marker */
+        function pinXY(i) {
+            var W = waveBox.w, H = waveBox.h, h = run.head, padL = 8, padT = 12, padB = 26, pw = W - 16, ph = H - padT - padB;
+            var Vtop = h.V0 + 1.2, y0 = padT + ph, base = y0 - h.E / Vtop * ph, headr = 0.82 * (base - padT);
+            var val = VIEW === 'prob' ? (psiRe[i] * psiRe[i] + psiIm[i] * psiIm[i]) : psiRe[i];
+            var sc = VIEW === 'prob' ? headr / (h.peak * h.peak) : headr / h.peak;
+            return { x: padL + i / (h.nx - 1) * pw, y: base - val * sc };
+        }
+
+        var stCanvas = document.createElement('canvas'), stCtx = stCanvas.getContext('2d');
+        function buildSpacetime() {
+            var h = run.head, nx = h.nx, nf = h.nf;
+            var cols = Math.min(nx, 520), rows = nf;
+            var img = stCtx.createImageData(cols, rows);
+            var pk = h.peak * h.peak;
+            for (var f = 0; f < nf; f++) { var a = f * nx;
+                for (var c = 0; c < cols; c++) { var i = Math.round(c / (cols - 1) * (nx - 1));
+                    var d = reW[a + i] * reW[a + i] + imW[a + i] * imW[a + i], u = Math.sqrt(d / pk);
+                    if (u > 1) u = 1;
+                    /* paper -> wine */
+                    var rr = Math.round(251 + u * (163 - 251)), gg = Math.round(246 + u * (48 - 246)), bb = Math.round(238 + u * (63 - 238));
+                    var o = (f * cols + c) * 4; img.data[o] = rr; img.data[o + 1] = gg; img.data[o + 2] = bb; img.data[o + 3] = 255;
+                } }
+            run.st = { img: img, cols: cols, rows: rows };
+        }
+        function drawSpacetime() {
+            var W = waveBox.w, H = waveBox.h, h = run.head; wctx.clearRect(0, 0, W, H);
+            if (!run.st) buildSpacetime();
+            var padL = 8, padR = 8, padT = 10, padB = 24, pw = W - padL - padR, ph = H - padT - padB;
+            stCanvas.width = run.st.cols; stCanvas.height = run.st.rows;
+            stCtx.putImageData(run.st.img, 0, 0);
+            wctx.imageSmoothingEnabled = true; wctx.drawImage(stCanvas, padL, padT, pw, ph);
+            /* barriers as ink lines */
+            wctx.strokeStyle = 'rgba(28,21,24,.55)'; wctx.lineWidth = 1.2;
+            h.barriers.forEach(function (b) { for (var k = 0; k < 2; k++) { var x = padL + (b[k] - h.x_first) / ((h.nx - 1) * h.dx) * pw;
+                wctx.beginPath(); wctx.moveTo(x, padT); wctx.lineTo(x, padT + ph); wctx.stroke(); } });
+            /* playhead */
+            var yl = padT + tPhys / h.t[h.nf - 1] * ph;
+            wctx.strokeStyle = ACCENT; wctx.lineWidth = 1.5; wctx.beginPath(); wctx.moveTo(padL, yl); wctx.lineTo(padL + pw, yl); wctx.stroke();
+            wctx.fillStyle = MUT; wctx.font = '10px ui-monospace,monospace'; wctx.textAlign = 'left';
+            wctx.fillText('x →', padL + 2, padT + ph + 16); wctx.textAlign = 'right'; wctx.fillText('time ↓', padL + pw, padT + 12);
+            document.getElementById('cap-view').textContent = '|ψ(x, t)|² over space and time (paper → wine)';
+        }
+
+        /* ---------- chart helpers ---------- */
+        function axes(ctx, box, opt) {
+            var W = box.w, H = box.h; ctx.clearRect(0, 0, W, H);
+            var L = opt.L || 40, R = opt.R || 12, T = opt.T || 12, B = opt.B || 26, pw = W - L - R, ph = H - T - B;
+            ctx.fillStyle = '#fff'; ctx.fillRect(L, T, pw, ph);
+            ctx.strokeStyle = RULE; ctx.lineWidth = 1; ctx.strokeRect(L, T, pw, ph);
+            ctx.fillStyle = MUT; ctx.font = '10px ui-monospace,monospace';
+            var i, X = function (v) { return L + (v - opt.x0) / (opt.x1 - opt.x0) * pw; }, Y = function (v) { return T + ph - (v - opt.y0) / (opt.y1 - opt.y0) * ph; };
+            (opt.xticks || []).forEach(function (v) { var x = X(v); ctx.strokeStyle = RULE; ctx.beginPath(); ctx.moveTo(x, T + ph); ctx.lineTo(x, T + ph + 3); ctx.stroke(); ctx.textAlign = 'center'; ctx.fillText(opt.xfmt ? opt.xfmt(v) : v, x, T + ph + 15); });
+            (opt.yticks || []).forEach(function (v) { var y = Y(v); ctx.strokeStyle = RULE; ctx.beginPath(); ctx.moveTo(L - 3, y); ctx.lineTo(L, y); ctx.stroke(); ctx.textAlign = 'right'; ctx.fillText(opt.yfmt ? opt.yfmt(v) : v, L - 5, y + 3); });
+            if (opt.xlabel) { ctx.textAlign = 'right'; ctx.fillStyle = MUT; ctx.fillText(opt.xlabel, W - R, T + ph + 15); }
+            if (opt.ylabel) { ctx.save(); ctx.translate(11, T + 4); ctx.textAlign = 'left'; ctx.fillText(opt.ylabel, 0, 0); ctx.restore(); }
+            return { X: X, Y: Y, L: L, T: T, pw: pw, ph: ph };
+        }
+        function plot(ctx, ax, xs, ys, col, wd, dash) { ctx.strokeStyle = col; ctx.lineWidth = wd || 1.5; ctx.setLineDash(dash || []); ctx.beginPath();
+            for (var i = 0; i < xs.length; i++) { var x = ax.X(xs[i]), y = ax.Y(ys[i]); if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y); } ctx.stroke(); ctx.setLineDash([]); }
+
+        function drawTE() {
+            if (!run) return; var g = CURVES.geometries[gap], h = run.head;
+            var ax = axes(tectx, teBox, { x0: 0, x1: 3, y0: 0, y1: 1.02, xticks: [0, 1, 2, 3], yticks: [0, 0.5, 1], xlabel: 'energy E', ylabel: 'T', xfmt: function (v) { return v; }, yfmt: function (v) { return v; } });
+            /* one barrier, faint */
+            plot(tectx, ax, CURVES.single.E, CURVES.single.T, 'rgba(85,96,122,.7)', 1.2, [4, 3]);
+            /* two barriers */
+            plot(tectx, ax, g.T_E.E, g.T_E.T, WINE, 1.8);
+            /* resonances */
+            g.resonances.forEach(function (r) { if (r.E > 3) return; var x = ax.X(r.E);
+                tectx.strokeStyle = 'rgba(122,31,43,.3)'; tectx.setLineDash([2, 3]); tectx.beginPath(); tectx.moveTo(x, ax.T); tectx.lineTo(x, ax.T + ax.ph); tectx.stroke(); tectx.setLineDash([]); });
+            /* the packet's mean energy marker */
+            var xe = ax.X(h.E); tectx.strokeStyle = ACCENT; tectx.lineWidth = 1.3; tectx.beginPath(); tectx.moveTo(xe, ax.T); tectx.lineTo(xe, ax.T + ax.ph); tectx.stroke();
+            tectx.fillStyle = ACCENT; tectx.beginPath(); tectx.arc(xe, ax.Y(h.T_k0), 3.5, 0, 7); tectx.fill();
+            document.getElementById('cap-te').textContent = 'dashed: one barrier · wine: two · packet T̄ = ' + h.T_packet.toFixed(3);
+        }
+
+        function drawPT() {
+            if (!run) return; var h = run.head, t = h.t;
+            var ax = axes(ptctx, ptBox, { x0: 0, x1: t[h.nf - 1], y0: 0, y1: 1.02, xticks: [0, t[h.nf - 1] / 2, t[h.nf - 1]], yticks: [0, 0.5, 1], xlabel: 'time t', ylabel: 'P', xfmt: function (v) { return v.toFixed(0); }, yfmt: function (v) { return v; } });
+            plot(ptctx, ax, t, h.P_left, SLATE, 1.5);
+            plot(ptctx, ax, t, h.P_right, WINE, 1.5);
+            plot(ptctx, ax, t, h.P_in, TANINK, 1.5);
+            /* exponential fit on the trapped curve */
+            if (h.fit && h.fit.tau) { var xs = [], ys = []; for (var k = 0; k < 60; k++) { var tt = h.fit.t_from + k / 59 * (h.fit.t_to - h.fit.t_from); xs.push(tt); ys.push(h.fit.A * Math.exp(-tt / h.fit.tau)); }
+                plot(ptctx, ax, xs, ys, INK, 1, [3, 3]); }
+            /* playhead */
+            var xp = ax.X(tPhys); ptctx.strokeStyle = 'rgba(122,31,43,.5)'; ptctx.lineWidth = 1; ptctx.beginPath(); ptctx.moveTo(xp, ax.T); ptctx.lineTo(xp, ax.T + ax.ph); ptctx.stroke();
+            ptctx.font = '10px ui-monospace,monospace'; ptctx.textAlign = 'left';
+            ptctx.fillStyle = SLATE; ptctx.fillText('reflected', ax.L + 6, ax.T + 12);
+            ptctx.fillStyle = TANINK; ptctx.fillText('trapped', ax.L + 6, ax.T + 24);
+            ptctx.fillStyle = WINE; ptctx.fillText('transmitted', ax.L + 6, ax.T + 36);
+            document.getElementById('cap-pt').textContent = h.fit && h.fit.tau ? 'trapped state lifetime τ = ' + h.fit.tau.toFixed(1) : '';
+        }
+
+        function drawIV() {
+            var g = CURVES && CURVES.geometries[gap]; if (!g || !g.iv) { ivctx.clearRect(0, 0, ivBox.w, ivBox.h); ivctx.fillStyle = MUT; ivctx.font = '12px ui-monospace,monospace'; ivctx.fillText('current–voltage curve loading…', 20, 24); return; }
+            var iv = g.iv, jmax = Math.max.apply(null, iv.J) * 1.08;
+            var ax = axes(ivctx, ivBox, { x0: 0, x1: iv.V[iv.V.length - 1], y0: 0, y1: jmax, xticks: [0, 1, 2, 3], yticks: [0, jmax / 2, jmax], xlabel: 'bias V', ylabel: 'J', xfmt: function (v) { return v.toFixed(0); }, yfmt: function (v) { return v.toFixed(2); } });
+            /* negative-slope region shaded */
+            if (iv.V_peak != null && iv.V_valley != null) { ivctx.fillStyle = 'rgba(122,31,43,.08)'; var x1 = ax.X(iv.V_peak), x2 = ax.X(iv.V_valley); ivctx.fillRect(x1, ax.T, x2 - x1, ax.ph); }
+            plot(ivctx, ax, iv.V, iv.J, WINE, 1.8);
+            if (iv.V_peak != null) { ivctx.fillStyle = ACCENT; ivctx.beginPath(); ivctx.arc(ax.X(iv.V_peak), ax.Y(iv.J_peak), 3.5, 0, 7); ivctx.fill();
+                ivctx.beginPath(); ivctx.arc(ax.X(iv.V_valley), ax.Y(iv.J_valley), 3.5, 0, 7); ivctx.fill();
+                ivctx.fillStyle = INK; ivctx.font = '10px ui-monospace,monospace'; ivctx.textAlign = 'center'; ivctx.fillText('peak', ax.X(iv.V_peak), ax.Y(iv.J_peak) - 8); ivctx.fillText('valley', ax.X(iv.V_valley), ax.Y(iv.J_valley) + 16); }
+            document.getElementById('cap-iv').textContent = 'Tsu–Esaki · ' + GAP_NAME[gap] + (iv.pvr ? ' · peak-to-valley ' + iv.pvr.toFixed(1) : '');
+        }
+
+        /* ---------- real units ---------- */
+        function fillRealUnits() {
+            var ru = CURVES.real_units; if (!ru) return;
+            var el = document.getElementById('ru'); el.innerHTML = '';
+            ru.rows.forEach(function (r) { var d = document.createElement('div'); d.innerHTML = '<dt>' + r[0] + '</dt><dd>' + r[1] + '</dd>'; el.appendChild(d); });
+            document.getElementById('ru-note').innerHTML = ru.note;
+        }
+
+        /* ---------- controls ---------- */
+        function setupControls() {
+            document.getElementById('play').addEventListener('click', function () { playing = !playing; this.textContent = playing ? 'Pause' : 'Play'; });
+            document.getElementById('replay').addEventListener('click', function () { tPhys = 0; endRest = 0; });
+            document.querySelectorAll('#gap-chips button').forEach(function (b) { b.addEventListener('click', function () {
+                gap = +b.dataset.g; press('#gap-chips', b); setGapNote(); refreshEnergies(); loadRun(); drawIV(); }); });
+            document.querySelectorAll('#pkt-chips button').forEach(function (b) { b.addEventListener('click', function () {
+                sig = +b.dataset.p; press('#pkt-chips', b); setPktNote(); refreshEnergies(); loadRun(); }); });
+            document.querySelectorAll('#view-chips button').forEach(function (b) { b.addEventListener('click', function () {
+                VIEW = b.dataset.v; press('#view-chips', b); dirty = true; ds.set('view', VIEW); }); });
+            energyIn.addEventListener('input', function () { Ei = +energyIn.value; loadRun(); });
+            timeIn.addEventListener('input', function () { tPhys = run.head.t[+timeIn.value]; playing = false; document.getElementById('play').textContent = 'Play'; });
+            setGapNote(); setPktNote(); refreshEnergies();
+        }
+        function press(sel, b) { document.querySelectorAll(sel + ' button').forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); }); }
+        function refreshEnergies() { var es = ENERGIES[sig][gap]; energyIn.max = es.length - 1; if (Ei >= es.length) Ei = es.length - 1;
+            energyIn.value = Ei; eOut.textContent = 'E = ' + es[Ei].toFixed(2); }
+        function setGapNote() { var g = CURVES.geometries[gap], res = g.resonances.filter(function (r) { return r.E <= 2.6; });
+            document.getElementById('gap-note').textContent = GAP_NAME[gap] + ': centres ' + g.s.toFixed(3) + ' a apart; ' +
+                res.length + ' resonance' + (res.length === 1 ? '' : 's') + ' below E = 2.6' + (res[0] ? ' (first at E = ' + res[0].E.toFixed(3) + ')' : ''); }
+        function setPktNote() { document.getElementById('pkt-note').textContent = sig === 3 ?
+            'σ₀ = 3: a short pulse carries a wide spread of energies, so even on resonance only part passes.' :
+            'σ₀ = 12: a long pulse is sharp in energy; on resonance much more of it passes. Stored at the resonance energies only.'; }
+
+        /* ---------- the store (dataset.js) ---------- */
+        var ds;
+        function buildStore() {
+            ds = Sim.dataset({ title: 'Resonant tunnelling', attrs: { figure: 15, page: 'resonant-tunnelling.html',
+                units: 'hbar = m = 1; lengths in the grid unit a, energies in hbar^2/(m a^2)',
+                source: 'tools/kaggle/resonant-tunnelling/recon.py (transfer-matrix superposition); the page only plays the stored frames',
+                data: DATA_BASE + 'latest/derived/index.json' } });
+            ds.var('gap_name', [], 'str', { symbol: 'geometry', long_name: 'which pair of barriers', computed_in: 'control' });
+            ds.var('s', [], 'float', { symbol: 's', units: 'a', long_name: 'centre-to-centre spacing of the two barriers', computed_in: 'control', digits: 3 });
+            ds.var('V0', [], 'float', { symbol: 'V₀', long_name: 'barrier height', computed_in: 'constant', digits: 1 });
+            ds.var('d', [], 'float', { symbol: 'd', units: 'a', long_name: 'barrier width', computed_in: 'constant', digits: 1 });
+            ds.var('sigma0', [], 'float', { symbol: 'σ₀', units: 'a', long_name: 'width of the incident pulse', computed_in: 'control', digits: 1 });
+            ds.var('E', [], 'float', { symbol: 'E', long_name: 'mean kinetic energy of the pulse', computed_in: 'control', digits: 2 });
+            ds.var('k0', [], 'float', { symbol: 'k₀', units: '1/a', long_name: 'mean wave number', computed_in: 'run header', formula: '√(2E)', digits: 4 });
+            ds.var('view', [], 'str', { symbol: 'view', long_name: 'what is drawn', computed_in: 'control' });
+            ds.var('file', [], 'str', { symbol: 'file', long_name: 'the stored run file', computed_in: 'loadRun()' });
+            ds.var('sha_ok', [], 'bool', { symbol: 'SHA-256 ✓', long_name: 'the file matched its SHA-256 in the index', computed_in: 'loadRun()', source: 'crypto.subtle.digest on the bytes.' });
+            ds.var('t', [], 'float', { symbol: 't', long_name: 'time shown', computed_in: 'clock', digits: 2 });
+            ds.var('frame', [], 'int', { symbol: 'frame', long_name: 'stored frame at or before t', computed_in: 'clock', digits: 0 });
+            ds.var('reflected', [], 'float', { symbol: 'P_ref', long_name: 'probability reflected (left of the pair)', computed_in: 'run header, interpolated', digits: 5 });
+            ds.var('transmitted', [], 'float', { symbol: 'P_tr', long_name: 'probability transmitted (right of the pair)', computed_in: 'run header, interpolated', digits: 5 });
+            ds.var('trapped', [], 'float', { symbol: 'P_in', long_name: 'probability between the two barriers', computed_in: 'run header, interpolated', digits: 5 });
+            ds.var('norm', [], 'float', { symbol: '∫|ψ|²', long_name: 'total probability', computed_in: 'readouts()', formula: 'P_ref + P_in + P_tr', digits: 5 });
+            ds.var('T_k0', [], 'float', { symbol: 'T(E)', long_name: 'plane-wave transmission at the mean energy, through both barriers', computed_in: 'run header', digits: 4 });
+            ds.var('T_one', [], 'float', { symbol: 'T₁(E)', long_name: 'plane-wave transmission at the mean energy, one barrier', computed_in: 'curves', digits: 4 });
+            ds.var('T_packet', [], 'float', { symbol: 'T̄', long_name: 'the packet average ∫|φ(k)|² T(k) dk', computed_in: 'run header', digits: 4 });
+            ds.var('tau', [], 'float', { symbol: 'τ', long_name: 'lifetime of the trapped state, fitted from P_in(t)', computed_in: 'run header', digits: 1 });
+            ds.var('fp16', [], 'float', { symbol: 'fp16 err', long_name: 'largest storage (float16) error, fraction of the peak', computed_in: 'run header', digits: 6 });
+            ds.var('xc', ['i'], Float32Array, { symbol: 'x', units: 'a', long_name: 'the stored x points', computed_in: 'run header' });
+            ds.var('density', ['i'], Float32Array, { symbol: '|ψ|²', long_name: 'probability density at this frame', computed_in: 'interp()' });
+        }
+        function writeRunStore() {
+            var h = run.head, es = ENERGIES[sig][gap];
+            ds.set('gap_name', GAP_NAME[gap]); ds.set('s', h.s); ds.set('V0', h.V0); ds.set('d', h.d); ds.set('sigma0', h.sigma0);
+            ds.set('E', h.E); ds.set('k0', h.k0); ds.set('view', VIEW); ds.set('file', run.rec.file.replace('runs/', ''));
+            ds.set('sha_ok', run.sha_ok); ds.set('T_k0', h.T_k0); ds.set('T_packet', h.T_packet); ds.set('tau', h.fit && h.fit.tau || 0);
+            ds.set('fp16', h.fp16_max_rel);
+            var g = CURVES.geometries[gap], arr = CURVES.single, j = 0; for (var k = 1; k < arr.E.length; k++) if (Math.abs(arr.E[k] - h.E) < Math.abs(arr.E[j] - h.E)) j = k;
+            ds.set('T_one', arr.T[j]);
+            var xc = ds.alloc('xc'); for (var i = 0; i < h.nx; i++) xc[i] = h.x_first + i * h.dx; ds.touch('xc');
+            updateSrc();
+        }
+        function lin(arr, t) { var h = run.head, dt = h.frame_dt, f = Math.min(h.nf - 2, Math.max(0, Math.floor(t / dt))), s = t / dt - f; return arr[f] + s * (arr[f + 1] - arr[f]); }
+        function writeFrameStore() {
+            if (!run) return; var h = run.head, fo = frac();
+            ds.set('t', tPhys); ds.set('frame', fo.f);
+            var pr = lin(h.P_left, tPhys), pt = lin(h.P_right, tPhys), pin = lin(h.P_in, tPhys);
+            ds.set('reflected', pr); ds.set('transmitted', pt); ds.set('trapped', pin); ds.set('norm', pr + pt + pin);
+            var dens = ds.alloc('density'); for (var i = 0; i < h.nx; i++) dens[i] = psiRe[i] * psiRe[i] + psiIm[i] * psiIm[i]; ds.touch('density');
+            document.getElementById('r-ref').textContent = pr.toFixed(4);
+            document.getElementById('r-tra').textContent = pt.toFixed(4);
+            document.getElementById('r-trap').textContent = pin.toFixed(4);
+            document.getElementById('r-t1').textContent = ds.get('T_one').toFixed(4);
+            document.getElementById('r-t2').textContent = h.T_k0.toFixed(4) + '  ·  T̄ = ' + h.T_packet.toFixed(4);
+        }
+        function updateSrc() {
+            var h = run.head;
+            document.getElementById('src-t').innerHTML = ' This run is ' + run.rec.file.replace('runs/', '<code>') + '</code>, ' +
+                (run.sha_ok ? 'its SHA-256 matched the index' : '<b style="color:var(--accent)">its SHA-256 did NOT match</b>') + '. It holds ' + h.nf +
+                ' frames to t = ' + h.t[h.nf - 1].toFixed(1) + ', built from the exact two-barrier scattering states (transfer matrices) superposed with the pulse. ' +
+                'Largest storage error ' + (h.fp16_max_rel * 100).toFixed(3) + '% of the peak. The page interpolates between stored frames and computes nothing else.';
+        }
+
+        /* ---------- data panel ---------- */
+        Sim.data = {
+            get ds() { return ds; }, kicker: 'Fig. 15 · data', file: 'fig15-resonant-tunnelling',
+            playing: function () { return playing; }, play: function () { playing = true; document.getElementById('play').textContent = 'Pause'; },
+            groups: [
+                { title: 'What you set', note: 'the two barriers, the pulse and what is drawn', vars: ['gap_name', 's', 'V0', 'd', 'sigma0', 'E', 'k0', 'view'] },
+                { title: 'The stored run', note: 'read from the derived file (built from stored data; the page only plays it)', vars: ['file', 'sha_ok', 'tau', 'fp16'] },
+                { title: 'This frame', note: 'the probabilities are stored per frame and interpolated; the density is the wave the page draws', vars: ['t', 'frame', 'reflected', 'trapped', 'transmitted', 'norm', 'density'] },
+                { title: 'Transmission', note: 'the exact plane-wave values and the packet average', vars: ['T_one', 'T_k0', 'T_packet'] },
+                { title: 'The picture', note: 'the stored x points', vars: ['xc'] }
+            ],
+            check: {
+                k0: function () { return { formula: '√(2E)', inputs: [['E', ds.get('E'), '', 2]], value: Math.sqrt(2 * ds.get('E')) }; },
+                norm: function () { return { formula: 'P_ref + P_in + P_tr', inputs: [['P_ref', ds.get('reflected'), '', 5], ['P_in', ds.get('trapped'), '', 5], ['P_tr', ds.get('transmitted'), '', 5]], value: ds.get('reflected') + ds.get('trapped') + ds.get('transmitted') }; }
+            },
+            probe: function (x, y) { if (VIEW === 'spacetime' || !run) return null; var h = run.head;
+                var i = Math.round((x - 8) / (waveBox.w - 16) * (h.nx - 1)); i = Math.max(0, Math.min(h.nx - 1, i)); return { i: i }; },
+            inspect: function (ref) { var h = run.head, i = ref.i, x = h.x_first + i * h.dx, d = psiRe[i] * psiRe[i] + psiIm[i] * psiIm[i];
+                return { title: 'the wave at x = ' + x.toFixed(2) + ' a', at: pinXY(i), rows: [['x', x, 'a', 'xc', i], ['Re ψ', psiRe[i], ''], ['Im ψ', psiIm[i], ''], ['|ψ|²', d, '', 'density', i], ['|ψ|² / peak', d / (h.peak * h.peak), '']] }; },
+            locate: function (name, i) { if (!run || VIEW === 'spacetime') return null; return pinXY(i); },
+            round: { time: 't', label: function () { return 'one run, ' + (run ? run.head.nf : 0) + ' frames to t = ' + (run ? run.head.t[run.head.nf - 1].toFixed(1) : '—'); },
+                length: function () { return run ? run.head.t[run.head.nf - 1] : 10; }, columns: ['reflected', 'trapped', 'transmitted'] },
+            about: 'Every frame is built from the exact scattering states of the two barriers (transfer matrices, Griffiths & Steinke 2001) superposed with the incident pulse: ψ(x, t) = ∫ φ(k) ψ_k(x) e^{−iE_k t} dk, exact for V ≥ 0 when the pulse starts left of the barriers. The reconstruction runs in tools/kaggle/resonant-tunnelling/recon.py; its frames are stored under public/data/resonant-tunnelling/ with their parents (the Fig. 14 single-barrier runs that confirm the amplitudes). The page plays the stored frames, interpolating between them in the frame that turns at the pulse energy, and computes nothing. The barriers are drawn as static solid blocks. An independent Crank–Nicolson solve of the same system agrees frame by frame to 0.6% of the peak.'
+        };
+
+        buildStore();
+        boot();
+    })();
+    </script>
+    <script src="../scripts/datalog.js"></script>
+</body>
+</html>

@@ -181,3 +181,32 @@ A project brings five things; nothing in `kaggle-flow.js` or the bridge changes.
   for are (road, speed, 0 to 20 s) and (road, speed, 20 to 40 s). Its live preview is `guinness-preview-worker.js`, the site's
   coarse solver, labelled as such; it is not checked against Kaggle, and the stored Kaggle rides themselves are measured to be
   damped 12 to 40 times too strongly (`tools/fig12/kaggle_decay.py`). Details: [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md).
+
+## Derived data: generated from stored runs
+
+Started 13 November 2026 with Fig. 15 ([fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md)). Numa's rule,
+from the Fig. 15 brief: **data generated from other data must have its own place and its own provenance**, so that a reader can
+trace any frame back to the runs it was built from.
+
+The Schrödinger equation is linear, so a solution computed once is a basis to build on; we should not pay for a new full
+simulation to get a new system from one we already solved. The clean exact rule is the composition of one-dimensional
+scattering by transfer matrices: one barrier is fully described at each energy by its transmission and reflection amplitudes,
+and several barriers are the product of their matrices and of free-flight phases between them. Fig. 15 builds a two-barrier
+diode this way from Fig. 14's single-barrier runs.
+
+**The layout** (the rule for every future derived figure):
+
+- A new tree `public/data/<project>/` with its own `generations.json` and dated folders `YYYY-MM-DD/`. Inside each generation,
+  separate subfolders, each with an `index.json`:
+  - `derived/` for data computed from other stored data (Fig. 15's reconstructed frames);
+  - `kaggle/` for new runs computed on Kaggle, as above.
+- **Every derived file's index entry names its parents**: the generation, file name and SHA-256 of every stored run it was
+  computed from, plus the script and commit that computed it. Fig. 15's `derived/index.json` names the 45 Fig. 14 flat-wall
+  runs of the same barrier (`V₀ = 3`) that confirm the single-barrier amplitudes.
+- Every Kaggle file's entry names its notebook, version and commit, as above.
+- The scripts live in `tools/kaggle/<project>/` (for Fig. 15: the transfer matrices, the reconstruction, the independent
+  Crank–Nicolson check, the I–V curve, the real-units mapping, and the packer). **The page computes nothing it can read from
+  the store**: the reconstruction runs in a tool script and its frames are stored; the page plays them.
+- Derived data carries its own honesty checks in the index: for Fig. 15, the agreement with an independent time-dependent
+  solve (0.6 % of the peak), the start-overlap error, the float16 storage error, and the cross-check of the single-barrier
+  amplitudes against Fig. 14 (a few percent on the stored grid — used as a check, not a source).
