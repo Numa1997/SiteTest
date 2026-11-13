@@ -1,5 +1,5 @@
 # Writes public/lucretius.html: Lucretius I 146-224 as a page of its own, in FOUR languages side by side: the Latin, Leonard's English
-# (1916), Diels' German (1924) and the Arabic made for this site (seventh version, 13 November 2026). The English page is the source of
+# (1916), Diels' German (1924) and the Arabic made for this site (eighth version, 13 November 2026, fully vowelled). The English page is the source of
 # the site's generator (tools/i18n/build.py), which makes /de/ and /ar/ from it and the tables i18n/<lang>/lucretius.html.json. The verses
 # are the same on all three pages: they stand in the page marked translate="no" (each in its own lang= and dir=), so the tables hold only
 # the words around them (title, lede, column credits, sources). Wide screens: four columns with fading hairlines, a sticky head. Tablets:
@@ -61,7 +61,7 @@ logo = re.search(r'<span style="display:inline-flex;align-items:center;gap:14px"
 CSS = """      /* Lucretius I 146-224 in four languages side by side, set as the page of a book: a framed leaf with a star at each corner, a title,
          a head that names the four columns, and 20 verses, each under a heading of ornaments that carries the line numbers of the Latin.
          Between the columns run hairlines that fade out at both ends of every verse. */
-      .lp-book { --lp-cols: minmax(0, .95fr) minmax(0, 1fr) minmax(0, 1.05fr) minmax(0, 1.2fr); }
+      .lp-book { --lp-cols: minmax(0, .9fr) minmax(0, .95fr) minmax(0, 1fr) minmax(0, 1.5fr); }
       .lp-lede { max-width: 66ch; }
       .lp-note { display: none; margin: 10px 0 0; max-width: 66ch; font-size: 14.5px; line-height: 1.6; color: var(--ink-2, var(--ink)); }
       .lp-book { overflow-anchor: none; position: relative; margin: 34px 12px 10px; padding: 50px 36px 44px; background: rgba(255, 255, 255, .42);
@@ -111,7 +111,7 @@ CSS = """      /* Lucretius I 146-224 in four languages side by side, set as the
       .lp__c--la .ln { position: relative; padding-left: 3em; text-indent: -.8em; }
       .lp__c--la .no { position: absolute; left: 0; top: .52em; width: 2em; font: 500 10px var(--mono); font-style: normal; letter-spacing: .04em; text-indent: 0; color: var(--accent); opacity: .85; }
       /* the Arabic reads right to left; its lines go in couplets, a little air after every second line */
-      .lp__c--ar .lp__v { font: 400 20px/1.95 'Noto Naskh Arabic', 'Amiri', serif; letter-spacing: 0; }
+      .lp__c--ar .lp__v { font: 400 20px/2.25 'Noto Naskh Arabic', 'Amiri', serif; letter-spacing: 0; }
       .lp__c--ar .ln { padding-left: 0; padding-right: 1.4em; text-indent: -1.4em; }
       .lp__c--ar .ln:nth-child(even):not(:last-child) { margin-bottom: .55em; }
       .lp-src { margin: 34px auto 0; padding: 0; list-style: none; max-width: 760px; }
@@ -254,7 +254,7 @@ page = f'''<!doctype html>
         <li><b>Latin.</b> <a href="https://www.thelatinlibrary.com/lucretius/lucretius1.shtml">The Latin Library</a>, Book I, lines 146 to 224, line by line. The Latin has fewer lines than Leonard’s English, so the four columns run by sentence, not by line: the numbers over each verse say which lines of the Latin it renders.</li>
         <li><b>English.</b> William Ellery Leonard, <i>Of the Nature of Things: A Metrical Translation</i> (1916), <a href="https://www.gutenberg.org/ebooks/785">Project Gutenberg 785</a>, public domain. His verse takes more lines than the Latin.</li>
         <li><b>German.</b> Hermann Diels, <i>Lukrez: Von der Natur</i> (Berlin, 1924), line for line, from <a href="https://www.textlog.de/lukrez-natur-dinge.html">textlog.de</a>. Two places are corrected: “wild” to “wird” (line 156, as the excerpt in the Falter has it) and the break of line 147. Line 173 is as printed online and has not been compared with the book.</li>
-        <li><b>Arabic.</b> Made for this site on 13 November 2026 from Leonard’s English, verse by verse, and compared with the Latin. It is free verse in modern literary Arabic, with rhyme only here and there and no classical metre. It is not a published translation and has not been checked by a second reader. The only published Arabic translation, from the Egyptian National Centre for Translation (Cairo, 2018), is under copyright and was not used.</li>
+        <li><b>Arabic.</b> Made for this site on 13 November 2026 from Leonard’s English, verse by verse, and compared with the Latin. It is free verse in an elevated modern literary Arabic, with every letter fully vowelled, rhyme only here and there and no classical metre. It is not a published translation and has not been checked by a second reader. The only published Arabic translation, from the Egyptian National Centre for Translation (Cairo, 2018), is under copyright and was not used.</li>
         <li><b>Line numbers.</b> They are those of the Latin of Book I as <a href="https://www.thelatinlibrary.com/lucretius/lucretius1.shtml">The Latin Library</a> prints it, in the order of the manuscripts, which give line 155 after line 158; checked at lines 149, 155 to 158 and 218 against the edition of Hermann Diels (Berlin, 1923).</li>
       </ul>
     </main>
