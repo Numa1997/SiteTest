@@ -1,4 +1,4 @@
-Stage A, physics and loop, evaluated in the Wolfram cloud kernel (Wolfram connector), 13 November 2026, about 02:00-02:30 UTC.
+Stage A, physics and loop, evaluated in the Wolfram cloud kernel (Wolfram connector), 13 November 2026, 00:55-01:15 UTC (01:55-02:15 Berlin).
 Code: tools/fig12/control/derive_physics.wl (four blocks, each run as one stateless call).
 
 Block 1. Linear sloshing of mode (1,n) in an upright cylinder from the Lagrangian T - V of the potential flow, in the glass's frame

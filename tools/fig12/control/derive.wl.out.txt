@@ -1,4 +1,4 @@
-Output of tools/fig12/control/derive.wl, Wolfram cloud kernel through the Wolfram connector, 13 November 2026 (about 01:40 UTC).
+Output of tools/fig12/control/derive.wl, Wolfram cloud kernel through the Wolfram connector, 13 November 2026 (about 00:50 UTC, 01:50 Berlin).
 The controllability lines were evaluated in a second call (the first call's MatrixPower form stayed unevaluated; fixed in the script).
 
 zeros of J1': {1.841184, 5.331443, 8.536316}
