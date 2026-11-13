@@ -177,7 +177,7 @@ RULES = [
     (r'notes/lucretius/extract\.py', 'Cuts Lucretius I 146-224 out of the downloaded sources without retyping.', 'notes/lucretius/README.md'),
     (r'notes/lucretius/make_home\.py', 'Writes the Lucretius band of the home page from the first four sentences.', 'notes/lucretius/README.md'),
     (r'notes/lucretius/make_page\.py', 'Writes public/lucretius.html: Lucretius I 146-224 in four columns (Latin, Leonard, Diels, Arabic).', 'notes/lucretius/README.md'),
-    (r'notes/lucretius/poem-ar-146-224\.json', 'The Arabic of Lucretius I 146-224 (ninth version, free verse, fully vowelled), made from Leonard for this site.', 'notes/lucretius/README.md'),
+    (r'notes/lucretius/poem-ar-146-224\.json', 'The Arabic of Lucretius I 146-224 (tenth version, free verse, fully vowelled), translated from the Latin for this site.', 'notes/lucretius/README.md'),
     (r'public/lucretius\.html', 'The poem page: Lucretius I 146-224 in four columns, Latin, English, German, Arabic (written by make_page.py; /de/ and /ar/ differ only in the words around the poem).', 'docs/pages.md#the-poem-page-lucretiushtml-10-november-2026-rebuilt-11-november-2026'),
     (r'public/robots\.txt', 'Instructions for search-engine crawlers.', 'docs/pages.md'),
     (r'public/cv/index\.html', 'The CV page (phyeinusul.com/cv/): both pages of the CV as images, with Open and Download PDF.', 'docs/pages.md'),
