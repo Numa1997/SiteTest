@@ -1,0 +1,12 @@
+/* Lucretius page: background ornaments. Wine fractal curves run down both margins; the SVGs come from notes/lucretius/make_bg.py.
+   ?bg=a, b or c on the address picks one (a script in the page sets html[data-bg]); a, the branches, is the default.
+   Each strip is drawn 360 px wide and set 250 px wide here, so it sits in the margin beside the 1240 px content column. */
+body { position: relative; }
+.lp-deco { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.lp-deco i { position: absolute; top: 0; bottom: 0; width: 250px; background: url(../images/lucretius/bg-a.svg) 0 0 / 250px 1600px repeat-y; }
+.lp-deco i:first-child { left: calc(50% - 840px); }
+.lp-deco i:last-child { right: calc(50% - 840px); transform: scaleX(-1); background-position: 0 800px; }
+html[data-bg='b'] .lp-deco i { background-image: url(../images/lucretius/bg-b.svg); }
+html[data-bg='c'] .lp-deco i { background-image: url(../images/lucretius/bg-c.svg); }
+.cat-top, .cat { position: relative; z-index: 1; }
+@media (max-width: 760px) { .lp-deco i { opacity: .5; } .lp-deco i:first-child { left: -190px; } .lp-deco i:last-child { right: -190px; } }

@@ -163,7 +163,8 @@ page = f'''<!doctype html>
     <meta name="theme-color" content="#f5f1ea" />{alt}
     <link rel="stylesheet" href="styles/site.css" />
     <link rel="stylesheet" href="styles/catalog.css" />
-    <link rel="stylesheet" href="styles/i18n.css" /><script src="scripts/flip.js"></script>
+    <link rel="stylesheet" href="styles/i18n.css" />
+    <link rel="stylesheet" href="styles/lucretius-deco.css" /><script src="scripts/flip.js"></script>
     <link rel="stylesheet" href="fonts/arabic.css" />
 {fav}    <script>
       document.documentElement.className = 'js';
@@ -173,6 +174,8 @@ page = f'''<!doctype html>
   </head>
 
   <body>
+    <div class="lp-deco" aria-hidden="true"><i></i><i></i></div>
+    <script>(function(){{var m=/[?&]bg=([abc])/.exec(location.search);if(m)document.documentElement.dataset.bg=m[1];}})();</script>
     <a class="skip-link" href="#poem">Skip to the poem</a>
 
     <header class="cat-top">
