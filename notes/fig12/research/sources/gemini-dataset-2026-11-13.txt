@@ -1,0 +1,203 @@
+RELAYED FILE: the owner's Gemini live-search dataset, uploaded in conversation on 13 November 2026, kept verbatim below.
+STATUS: links and quotes are Gemini's; pages not opened by us unless data-for-solver.md says so. Treat every value as M-G (measured, quoted with link, unverified by us).
+
+# Empirical Physics Dataset: Guinness Stout & Beer Foam Measurements
+
+All measurements below are reported in metric units. Every entry includes the measured value and unit, experimental method, liquid used, temperature, direct source link, and a short exact quote from the source, along with explicit notes on any sub-parameters that were not found and the repositories searched.
+
+---
+
+## 1. Surface Tension of Guinness or Stout (Drop Counting, Capillary Tube, Ring, Hanging Drop)
+
+### 1A. Guinness Stout — Hanging / Pendant Drop Method
+* **Value and unit:** Surface tension $\gamma = 44.2\text{ mN/m}$ ($0.0442\text{ N/m}$); interfacial dilatational modulus $E = 18.7\text{ mN/m}$ ($0.0187\text{ N/m}$).
+* **How it was measured:** Hanging drop (pendant drop) tensiometry using a Sinterface PAT1 tensiometer.
+* **Liquid used:** Degassed Guinness stout beer.
+* **Temperature:** $20^\circ\text{C}$ ($293.15\text{ K}$).
+* **Link:** https://pubs.rsc.org/sm/article/17/14/3937/708463/Shear-modulus-and-yield-stress-of-foams and https://www.researchgate.net/publication/349974781_Shear_modulus_and_yield-stress_of_foams_Contribution_of_interfacial_elasticity
+* **Short exact quote:** `"pendant drop method (PAT1, Sintaface)"` / `"Guinness stout beer, Degassed; at 20 $^\circ$C"` / `"Guinness stout, 44.2, 18.7"`
+
+### 1B. Beer — Drop-Weight / Drop-Counting Method
+* **Value and unit:** Surface tension $\sigma = 41.55 \pm 1.39\text{ mN/m}$ ($0.04155 \pm 0.00139\text{ N/m}$); liquid density $\rho_{\text{beer}} = 1012\text{ kg/m}^3$.
+* **How it was measured:** Drop-weight (drop counting/weighing) method originally measured by A. Rudin (1956, *Journal of the Institute of Brewing*, Vol. 62, pp. $27\text{--}30$) and collated in Pereira et al. (2023).
+* **Liquid used:** Lager-style beer ($92\text{--}96\text{ wt.\%}$ $\text{H}_2\text{O}$).
+* **Temperature:** $25^\circ\text{C}$ ($298.15\text{ K}$).
+* **Link:** https://royalsocietypublishing.org/rsos/article/10/6/230376/92159/The-physics-of-dancing-peanuts-in-beerThe-physics and https://epub.ub.uni-muenchen.de/132940/1/rsos.230376.pdf
+* **Short exact quote:** `"Beer-vapour surface tension was also retrieved from the literature ($\sigma = 41.55 \pm 1.39\text{ mN m}^{-1}$) [6]."` and `"6. Rudin A. 1956 Measurement of surface tension of beer by the drop-weight method. J. Instit. Brewing 62, 27-30."`
+
+---
+
+## 2. Contact Angle of Beer or Stout on Glass (Clean Glass vs. "Beer-Clean" Glass)
+
+### 2A. Beer on Clean Glass Substrate
+* **Value and unit:** Contact angle $\Psi_{\text{glass}} = 23.20^\circ \pm 2.80^\circ$ ($0.405 \pm 0.049\text{ rad}$) on glass in air (compared with $\Psi_{\text{peanut}} = 46.48^\circ \pm 2.43^\circ$ on a peanut skin in air; supplementary contact angle measured through the gas phase $= 180^\circ - \Psi$).
+* **How it was measured:** Sessile drop goniometry ($10$ replicate measurements of beer droplets placed on a flat glass surface in air, imaged with a $5\text{ mm}$ scale bar).
+* **Liquid used:** Lager-style beer.
+* **Temperature:** $25^\circ\text{C}$ ($298.15\text{ K}$).
+* **Link:** https://royalsocietypublishing.org/rsos/article/10/6/230376/92159/The-physics-of-dancing-peanuts-in-beerThe-physics and https://epub.ub.uni-muenchen.de/132940/1/rsos.230376.pdf
+* **Short exact quote:** `"Contact angle ($\Psi$) measurements between the involved phases (solid-liquid-gas) were carried out using the sessile drop method [8]. ... The average values of 10 measurements are $\Psi_{\text{peanut}} = 46.48 \pm 2.43^\circ$ and $\Psi_{\text{glass}} = 23.20 \pm 2.80^\circ$"`
+
+### 2B. Difference Between Standard Clean Glass and "Beer-Clean" Glass
+* **Value and unit:** Clean glass exhibits an acute wetting contact angle between $0^\circ$ and $90^\circ$ (approaching $0^\circ$ where the meniscus grazes a perfectly clean glass wall). An exact numerical degree difference comparing a standard washed glass to a "beer-clean" glass specifically for stout was **not found** (looked in Royal Society Open Science, ResearchGate, Master Brewers Association of the Americas, Brewers Association Draught Quality resources, Lonerider, Druthers Brewing, and KegWorks).
+* **How it was measured:** Industry "Sheeting Test" (dipping the glass in water to verify unbroken continuous film wetting with near-zero contact angle versus droplet bead formation caused by trace lipid/detergent films), "Salt Test" (sprinkling salt on the wet interior wall to detect hydrophobic grease patches), and "Lacing Test" (checking whether foam adheres in parallel rings during consumption); washing standards specify $54.4^\circ\text{C}$ to $60.0^\circ\text{C}$ ($130^\circ\text{F}$ to $140^\circ\text{F}$) with non-fat detergent and chemical sanitizer, or $82.2^\circ\text{C}$ ($180^\circ\text{F}$) high-temperature sanitization, followed by chiller storage at $2.2^\circ\text{C}$ to $4.4^\circ\text{C}$ ($36^\circ\text{F}$ to $40^\circ\text{F}$) or room temperature.
+* **Liquid used:** Rinse water and poured beer/stout.
+* **Temperature:** $3^\circ\text{C}$ to $7^\circ\text{C}$ serving temperature; $2.2^\circ\text{C}$ to $4.4^\circ\text{C}$ glass chiller temperature.
+* **Link:** https://loneriderbeer.com/guide/beer-clean-glassware and https://www.druthersbrewing.com/a-beer-clean-glass-what-it-is-and-why-it-matters/ and https://www.arvindguptatoys.com/arvindgupta/dunk-doughnut.pdf
+* **Short exact quote:** `"Sheeting test. Dip the glass in water and lift it out. On a clean glass, water coats the surface in an even sheet. Droplets or dry patches mean a film is still there."` and `"if the glass is perfectly clean the meniscus will appear to just graze the glass surface"`
+
+---
+
+## 3. Bubble Size in a Guinness Head / Disperse Foam
+
+### 3A. High-Speed Microscope Measurement of Canned Draught Guinness Bubbles & Liquid Properties
+* **Value and unit:** Mean bubble diameter $d = 61\text{ }\mu\text{m}$ ($0.061\text{ mm}$), with $50\text{ }\mu\text{m}$ typical dispersed diameter and literature comparison markers at $94\text{ }\mu\text{m}$ and $122\text{ }\mu\text{m}$ in Fig. S2; initial dispersed bubble volume concentration $\alpha = 8\%$ ($0.08$); degassed Guinness liquid density $\rho = 1006\text{ kg/m}^3$; dynamic viscosity $\mu = 2.1 \times 10^{-3}\text{ Pa}\cdot\text{s}$; kinematic viscosity $\nu = 2.03\text{ mm}^2/\text{s}$ ($2.03 \times 10^{-6}\text{ m}^2/\text{s}$) above $10^\circ\text{C}$ and extrapolated to $\nu = 2.23\text{ mm}^2/\text{s}$ at $5^\circ\text{C}$.
+* **How it was measured:** High-speed video camera fitted with a microscope lens across three experimental runs (greater than $3000$ bubbles measured to fit a log-normal probability density distribution); kinematic viscosity measured via a rolling-ball viscometer (Anton-Paar Lovis 2000M/ME) and liquid density via an oscillating U-tube density meter (Anton-Paar DMA 35N) on $80\text{ g}$ samples degassed in a centrifugal evaporator at $500\text{ G}$ and $100\text{ mbar}$ ($10\text{ kPa}$) for $20\text{ min}$.
+* **Liquid used:** Canned Guinness Draught ($330\text{ mL}$ widget can).
+* **Temperature:** $5^\circ\text{C}$ to $20^\circ\text{C}$ ($25^\circ\text{C}$ for synthetic hollow-glass-particle test fluid).
+* **Link:** https://pmc.ncbi.nlm.nih.gov/articles/PMC6450914/ and https://www.researchgate.net/publication/332367939_Supplementary_Material_1/data/5cafe5904585156cd7916346/41598-2019-42094-MOESM1-ESM.pdf
+* **Short exact quote:** `"Note that we measured the density and viscosity of liquid in Guinness beer ourselves and found that the liquid density was $\rho = 1006\text{ kg/m}^3$ and viscosity was $\mu = 2.1 \times 10^{-3}\text{ Pa}\cdot\text{s}$ (see also Supplementary Fig. S1). The mean diameter of bubbles in Guinness was $61\text{ }\mu\text{m}$, and the volume-concentration of the bubbles was $\alpha = 8\%$."`
+
+### 3B. Guinness vs. Lager Bubble Diameter and Interbubble Distance
+* **Value and unit:** Guinness mean bubble diameter $= 59 \pm 15\text{ }\mu\text{m}$ ($0.059 \pm 0.015\text{ mm}$) with mean interbubble spacing $= 0.13\text{ mm}$ ($130\text{ }\mu\text{m}$), compared with Heineken lager mean bubble diameter $= 459 \pm 31\text{ }\mu\text{m}$ ($0.459 \pm 0.031\text{ mm}$) with mean interbubble spacing $= 2.1\text{ mm}$.
+* **How it was measured:** Microscopic high-speed video imaging and statistical particle sizing of $N = 301$ Guinness bubbles and $N = 220$ Heineken bubbles.
+* **Liquid used:** Canned draught Guinness stout and Heineken lager.
+* **Temperature:** Standard laboratory/serving conditions.
+* **Link:** https://link.aps.org/doi/10.1103/PhysRevE.103.063103
+* **Short exact quote:** `"Guinness beer | $59 \pm 15$, 301 | 0.13 ... Heineken beer | $459 \pm 31$, 220 | 2.1"`
+
+### 3C. Bubble Radius, Stokes Velocities, and Precritical Nucleation Scale
+* **Value and unit:** Characteristic bubble radius $r = 61\text{ }\mu\text{m}$ ($0.061\text{ mm}$); beer density $\rho_{\text{beer}} = 1007\text{ kg/m}^3$; gas bubble density $\rho_{\text{bubble}} = 1.223\text{ kg/m}^3$; dynamic viscosity $\mu = 2.06 \times 10^{-3}\text{ Pa}\cdot\text{s}$; Stokes velocity components $u_{\text{Stokes}} = 3.45 \times 10^{-4}\text{ m/s}$ and $v_{\text{Stokes}} = 3.95 \times 10^{-3}\text{ m/s}$. In high-speed nucleation experiments, the microscope frame width is $270\text{ }\mu\text{m}$ ($0.27\text{ mm}$), and a precritical bubble radius $R = 0.25\text{ }\mu\text{m}$ expands to $R \approx 0.31\text{ }\mu\text{m}$ when liquid pressure drops from $100\text{ kPa}$ ($1\text{ bar}$) to $50\text{ kPa}$ ($0.5\text{ bar}$), while critical radius $R_c$ drops from $0.29\text{ }\mu\text{m}$ to $0.24\text{ }\mu\text{m}$.
+* **How it was measured:** High-speed microscopy measured frame-by-frame in MATLAB and hydrodynamic drift-flux parameter tables.
+* **Liquid used:** Guinness Draught stout.
+* **Temperature:** $8^\circ\text{C}$ ($281.15\text{ K}$).
+* **Link:** https://eprints.hud.ac.uk/id/eprint/34109/1/sinking.bubbles.pdf and https://www.iaeng.org/publication/WCE2011/WCE2011_pp160-164.pdf and https://miis.maths.ox.ac.uk/395/1/ESGI70_7.pdf
+* **Short exact quote:** `"$\rho_{\text{beer}}$ $1007\text{ kg m}^{-3}$ ... $\rho_{\text{bubble}}$ $1.223\text{ kg m}^{-3}$ ... $\mu$ $2.06 \times 10^{-3}\text{ Pa s}$ ... $r$ $61\text{ }\mu\text{m}$ ... $\phi_{\text{Head}}$ $0.80$"` and `"The width of the entire frame is approximately $270\text{ }\mu\text{m}$. bubble is measured frame by frame using MATLAB."`
+
+---
+
+## 4. Foam Wetness (Weight / Foam-to-Liquid Ratio) and Foam Stability (NIBEM, Rudin)
+
+### 4A. Foam-to-Liquid Ratio in the Settled Head vs. Freshly Poured Bubbly Mixture
+* **Value and unit:** Settled stout head bubble volume fraction $\phi_{\text{Head}} = 0.80$ ($80\%$ gas by volume, meaning a $20\%$ or $0.20$ volumetric liquid fraction in the head, or a $5:1$ foam-to-liquid volume ratio). In the freshly poured bubbly Guinness dispersion prior to phase separation, the gas volume fraction is $\alpha = 0.08$ ($8\%$ gas, $92\%$ liquid by volume). An experiment where someone weighed an isolated spoonful of Guinness foam in grams was **not found** (looked in ResearchGate, PubMed Central, Reddit r/Guinness, r/cocktails, and Homebrewtalk; r/cocktails only documented adding $1\text{ g}$ soy lecithin and $1\text{ g}$ xanthan gum per $200\text{ mL}$ of Guinness to spoon stabilized foam without weighing the spoonful).
+* **How it was measured:** Pouring canned Draught Guinness into an overflowing $210\text{ mL}$ measuring cup within $10\text{ s}$ of opening, leveling the top foam off with a spatula, wiping exterior drops, and weighing the cup on a digital scale against degassed Guinness liquid ($\rho = 1006\text{ kg/m}^3$); head volume fraction $\phi_{\text{Head}} = 0.80$ reported in Huddersfield stout settling hydrodynamics.
+* **Liquid used:** Canned Guinness Draught ($330\text{ mL}$ widget can) and draught stout.
+* **Temperature:** $5^\circ\text{C}$ to $20^\circ\text{C}$.
+* **Link:** https://www.researchgate.net/publication/332367939_Supplementary_Material_1/data/5cafe5904585156cd7916346/41598-2019-42094-MOESM1-ESM.pdf and https://eprints.hud.ac.uk/id/eprint/34109/1/sinking.bubbles.pdf
+* **Short exact quote:** `"To measure the bubble volume-concentration, we poured Guinness into a 210-ml measuring cup that overflowed within 10 seconds after opening a can. The foam above the cup was removed with a spatula, and drops attached at the outer wall of the cup were wiped immediately. The measuring cup was placed on a digital weight scale, and then the weight of bubbly Guinness was measured."` and `"$\phi_{\text{Head}}$ $0.80$"`
+
+### 4B. Wet Foam Height vs. Dry Foam Height During Drainage
+* **Value and unit:** Initial wet foam layer height $= 24.6\text{ mm}$ out of a total initial foam height of $\sim 70\text{--}80\text{ mm}$ generated from a $100\text{ mL}$ pour, monitored over $600\text{ s}$ ($10\text{ min}$) of liquid drainage.
+* **How it was measured:** Digital camera (Canon EOS 1100D at $500\text{ mm}$ distance) capturing images every $5\text{ s}$ for $600\text{ s}$, computing dry foam height $H_t(\text{DFP}) = H_t(F) + H_t(L) - H_{\max}(L)$ and wet draining foam height $H_t(\text{WFP}) = H_t(F) - H_t(\text{DFP})$ as foam collapses back into liquid beer.
+* **Liquid used:** Bottled dark beer (Osjecka pivovara d.d., Croatia) compared with pale lager.
+* **Temperature:** Ambient laboratory temperature.
+* **Link:** https://e-university.tu-sofia.bg/e-publ/files/12597_Paper_UKRAINIAN_FOOD_JOURNAL_2020_V.9_Is.4.pdf
+* **Short exact quote:** `"difference between light and dark beer, where the samples of dark beer showed a higher initial height of the wet part of the foam (24.6 mm)"`
+
+### 4C. NIBEM Foam Stability of Guinness
+* **Value and unit:** $\text{NIBEM} = 260\text{ s}$ for Beninese Guinness Foreign Extra Stout (BF), compared with $287\text{ s}$ and $250\text{ s}$ for Nigerian reference samples, $220\text{ s}$ for La Beninoise, and $209\text{ s}$ for Goldberg (overall range $190\text{--}300\text{ s}$).
+* **How it was measured:** Haffmans NIBEM foam stability timer following European Brewery Convention (EBC) Method 9.42.1.
+* **Liquid used:** Bottled Guinness Foreign Extra Stout and lagers.
+* **Temperature:** $20^\circ\text{C} \pm 3^\circ\text{C}$.
+* **Link:** https://www.researchgate.net/publication/349055897_Health_and_Nutritional_Qualities_of_Drinks_Produced_in_the_Beninese_Brewery_Company_and_Those_Sold_on_the_Benin_Market and https://scispace.com/pdf/health-and-nutritional-qualities-of-drinks-produced-in-the-2ku7ujwyi0.pdf
+* **Short exact quote:** `"190-300 seconds at 20 $^\circ$C $\pm$ 3 depending on the criteria set. In fact, Bigoin ... (287s at 20 $^\circ$C; 250 s at 20 $^\circ$C) than Guinness. BF (260 s at 20 $^\circ$C), 'La Beninoise' (220s at 20 $^\circ$C) and Goldberg (209s"`
+
+### 4D. Rudin Foam Stability Benchmark at Guinness and Stout/Lager Comparison
+* **Value and unit:** Institute of Brewing & Distilling (IBD) / Guinness Rudin standard benchmark is greater than $90\text{ s}$ (and $100\text{ s}$ weekly quality target in *Standards of Brewing*); in comparative testing across commercial beers including Cascade Stout and Coopers Best Extra Stout, NIBEM ranged from $211\text{ s}$ to $359\text{ s}$, $5\text{-min}$ manual-pour Foam Stability Score (from a $35\text{ mm}$ initial head in a Perfect Pint glass) ranged from $0.5$ to $5.0$, and the correlation between NIBEM and Rudin Head Retention Value (HRV) was $r = 0.371$.
+* **How it was measured:** Rudin test (degassed beer sparged through a sintered glass frit to form a foam column whose liquid drainage time is recorded) and Haffmans NIBEM electrode array.
+* **Liquid used:** Guinness (IBD standard note), Cascade Stout, Coopers Best Extra Stout, and commercial lagers.
+* **Temperature:** $20^\circ\text{C}$.
+* **Link:** https://www.scribd.com/doc/78068021/All-IBD-Articles and https://www.rexresearch1.com/BrewingLibrary/standardsbrewing.pdf and https://www.researchgate.net/publication/259159112_Comparison_of_the_Rudin_and_NIBEM_Methods_for_Measuring_Foam_Stability_with_a_Manual_Pour_Method_to_Identify_Beer_Characteristics_That_Deliver_Consumers_Stable_Beer_Foam
+* **Short exact quote:** `"Standard: A satisfactory head is one that lasts for longer than 90 seconds by Rudin method. ... At Guinness we had a person who championed this and it went well."` and `"NIBEM of 211-359 sec, and FSS of 0.5-5.0"`
+
+---
+
+## 5. Head Height of a Served Guinness Over Time (in Minutes) and Lacing Thickness
+
+### 5A. Direct Ruler Measurements of Served Guinness Head Height by Pour Technique
+* **Value and unit:** Standard two-part Guinness pour head height $= 17.46\text{ mm}$ ($11/16\text{ in}$); "Irish pour" head height $= 20.64\text{ mm}$ ($13/16\text{ in}$); "busy bartender" single-pour head height $= 22.225\text{ mm}$ ($14/16\text{ in}$, noted as $2.225\text{ mm}$ above former Guinness Master Brewer Fergal Murray's $20\text{ mm}$ upper specification; standard pub target is $10\text{--}15\text{ mm}$ or $10\text{--}20\text{ mm}$).
+* **How it was measured:** Direct ruler measurement against the side of a $568\text{ mL}$ ($20\text{ imp oz}$) Guinness Imperial Pint glass dispensed at $241.3\text{ kPa}$ ($35\text{ psi}$; standard range $206.8\text{--}241.3\text{ kPa}$ or $30\text{--}35\text{ psi}$) after a $92.5\text{ s}$ ($1\text{ min }32.5\text{ s}$) surge settle.
+* **Liquid used:** Guinness Draught from a tap.
+* **Temperature:** Standard draught serving temperature ($6^\circ\text{C}$ to $7^\circ\text{C}$).
+* **Link:** https://www.kegworks.com/blog/how-to-pour-a-guinness-the-right-way-but-does-it-really-matter and https://www.littleisland.cz/blog/en/how-to-pour-the-perfect-guinness
+* **Short exact quote:** `"The amount of foamy head from the tried-and-true, proper way to pour a Guinness, measured in at 11/16" exactly. ... The standard busy bartender pour produced a beer head size of exactly 14/16", a whopping 3/16" larger than our Guinness standard pour. It's also 2.225-mm above Murray's range for a perfect Guinness pint."`
+
+### 5B. Guinness Head Retention Over Minutes and Measured Lacing Ring Height/Thickness
+* **Value and unit:** Settled head height $= 10\text{--}20\text{ mm}$ ($1\text{--}2\text{ cm}$); undisturbed resting period $= 2\text{--}3\text{ min}$; full head structural retention $= 4\text{--}5\text{ min}$ (gravity-fed $355\text{ mL}$ tulip glass pour starts with a $38.1\text{ mm}$ head that dissipates into lacing within $1\text{--}2\text{ min}$, whereas nitro-pressurized dispense starts with a $50\text{ mm}$ foam layer that takes greater than $3\text{ min}$ to dissipate). For the clinging foam lacing band on the glass wall, automated RGB image analysis measured a residual lacing band height of $26\text{ px} \approx 4\text{ mm}$ clinging to the glass wall after $40\text{ s}$ (radial radial wall-film thickness in millimeters of a dry Guinness lace ring was **not found**; looked in MDPI *Beverages*, MBAA, ResearchGate, and hospitality guides).
+* **How it was measured:** Digital scale stage verification ($127.5\text{ mL} \pm 2.5\text{ mL}$), visual timing in minutes, and RGB + 3D depth-camera automated image analysis ($654\text{ mm}$ camera-to-table distance, sampling $5\text{ frames}$ every $10\text{ s}$ over $300\text{ s}$ / $5\text{ min}$).
+* **Liquid used:** Guinness Draught from tap ($250\text{--}300\text{ kPa}$ / $2.5\text{--}3.0\text{ bar}$, $75/25$ $\text{N}_2/\text{CO}_2$ gas mix) and lager beer (for the $4\text{ mm}$ RGB lacing measurement).
+* **Temperature:** $6^\circ\text{C}$ to $7^\circ\text{C}$ (standard cold draught) and $13^\circ\text{C}$ to $15^\circ\text{C}$ (traditional gravity-fed variant).
+* **Link:** https://bookings.hants.gov.uk/hospitality-innovation-5 and https://love-beer.co.uk/featured/guinness/how-to-pour-the-perfect-guinness-at-home-the-ultimate-guide-for-home-bar-enthusiasts/ and https://www.mdpi.com/2311-5637/7/2/46
+* **Short exact quote:** `"Completion: The pour is finished when the glass is filled to the brim, with the head 1-2 cm (0.4-0.8 inches) thick. ... Resting Period: The pint is left undisturbed for 2-3 minutes before serving. ... Visual Cue: A perfect head will retain its structure for 4-5 minutes"` and `"One major drawback of the non-invasive automated image analysis of RGB images is that it is sensitive to foam lacing or clinging. For example, s06 has a foam height of 26 px (or about 4 mm) after 40 s (see Table 1)."`
+
+---
+
+## 6. Tilted, Shaken, Walked With, or Upside-Down Pint Measurements
+
+### 6A. Glass Tilt Angles, Roll-Wave Cascade Velocity, and Settling Time
+* **Value and unit:** Initial pour glass tilt $= 45^\circ$ ($0.785\text{ rad}$); total two-part pour and settling duration $= 119.5\text{ s}$ ($90\text{--}120\text{ s}$ settling phase); tulip pint glass wall inclination angle $= 15^\circ$ over vertical height $30\text{ mm}$ to $70\text{ mm}$; laboratory inclination angle $\beta$ swept from $0^\circ$ (vertical) to $70^\circ$, with roll-wave gravity-current instabilities forming strictly when $5^\circ \lt \beta \lt 20^\circ$ and propagating downward at velocity $\approx -35\text{ mm/s}$, driven by a clear bubble-free liquid boundary layer at distance $y = 0.1\text{ mm}$ from the inclined wall and travelling waves at $y = 0.5\text{ mm}$ and $y = 1.0\text{ mm}$.
+* **How it was measured:** High-speed video, Particle Image Velocimetry (PIV) with $15\text{ }\mu\text{m}$ fluorescent resin tracer particles, and laser photo-bleaching molecular tagging ($447\text{ nm}$ laser sheet) in a pint glass and inclinable trapezium/rectangular cells.
+* **Liquid used:** Canned Guinness Draught ($330\text{ mL}$ widget can) and tap Guinness Draught.
+* **Temperature:** $6^\circ\text{C}$ (pub serving temperature) and $5^\circ\text{C}$ to $25^\circ\text{C}$ (laboratory test range).
+* **Link:** https://pmc.ncbi.nlm.nih.gov/articles/PMC6450914/ and https://www.guinness-storehouse.com/en/whats-hoppening/most-popular-questions-about-guinness
+* **Short exact quote:** `"The inclination angle $\beta$ was adjusted from 0 degrees (vertical) to 70 degrees. ... Visually, the texture can be easily observed at $30\text{ mm} \lt x \lt 70\text{ mm}$, where the wall is inclined due to the tapered shape of the glass with inclined angle of 15 degrees. ... The texture appearing in a glass propagates downwards with a travelling velocity of $\sim -35\text{ mm/s}$ ... For $5\text{ degrees} \lt \beta \lt 20\text{ degrees}$, however, the texture appeared"`
+
+### 6B. Sloshing Damping by Foam Under Horizontal Oscillation / Cart Motion
+* **Value and unit:** First-mode sloshing frequency $f_1 \approx 3.1\text{ Hz}$ with foam (versus $3.3\text{ Hz}$ without foam); liquid-only damping rate $1/\tau_\ell \approx 2\text{ s}^{-1}$ for liquid depth $H = 40\text{ mm}$ ($4\text{ cm}$), cell width $w = 3\text{ mm}$, and length $L = 70\text{ mm}$ ($7\text{ cm}$); under continuous harmonic lateral excitation of amplitude $X_0 = 1\text{ mm}$, the free-surface sloshing wave amplitude reaches $\sim 10\text{ mm}$ ($1\text{ cm}$) without foam, whereas adding $\xi_c = 5 \pm 2$ layers of bubbles (diameter $D = 3\text{ mm}$) suppresses sloshing by viscous dissipation against the container walls.
+* **How it was measured:** Mechanical horizontal shaker driving rectangular and 3D cells with high-speed video tracking of the foam-liquid interface and vertical velocity profiles across the wall boundary layer.
+* **Liquid used:** Model foaming solution ($90\%\text{ v/v}$ water, $5\%\text{ v/v}$ glycerol, $5\%\text{ v/v}$ Dawn surfactant) formulated to model beer foam sloshing resistance when carrying a pint.
+* **Temperature:** Room temperature ($\sim 20^\circ\text{C}$).
+* **Link:** https://sauretlab.me.ucsb.edu/sites/default/files/papers/2015_Sauret_PhysFluids.pdf and https://arxiv.org/abs/1411.6542
+* **Short exact quote:** `"However, beer does not slosh as readily as water, which suggests that foam could be used to damp sloshing. ... Indeed, without foam, the free surface has a maximum amplitude of the order of 1 cm; the addition of only $\xi = 5$ layers of bubbles leads..."`
+
+### 6C. Upside-Down Pint Trick Videos & Critical Tilt Before Settled Head Moves
+* **Value and unit:** $180^\circ$ inversion in the "upside-down Guinness challenge" (inverting a full pint glass using a flat card/crisp packet and plate, then pulling the sheet out so atmospheric pressure and meniscus surface tension hold the liquid) and "the flip" ($180^\circ$ vertical inversion of an opened Guinness widget can inside the glass during pouring). An exact angular measurement in degrees of how far a settled Guinness pint can be tilted before the foam head shears or slides was **not found** (looked in YouTube descriptions, Reddit r/Guinness, Irish Star, and fluid mechanics journals; sources note qualitatively that a sharp tilt "bruises" the head without giving a degree threshold).
+* **How it was measured:** Video recordings of pub demonstrations and home-pour methods ($60\text{ s}$ and $11\text{ s}$ video clips).
+* **Liquid used:** Draught Guinness pint and canned Guinness Draught.
+* **Temperature:** Pub serving temperature ($\sim 6^\circ\text{C}$).
+* **Link:** http://www.youtube.com/watch?v=ZwnJ2TOMT68 and http://www.youtube.com/watch?v=EYTdKeaMDAQ and http://www.youtube.com/watch?v=R3y2d1vZIN4 and https://www.irishstar.com/news/us-news/guinness-challenge-las-vegas-man-31624257 and https://www.guinness.com/en/experiences/guinness-at-home
+* **Short exact quote:** `"Man tries hilarious Guinness challenge in Las Vegas - turning pint over without spilling a drop."` and `"Using a clean can, flip the can upside down into the glass lifting out slowly as the liquid rises to meet it."`
+
+---
+
+## 7. Sharp Photos with Known Scale (Close-Up Guinness Head & Meniscus at Glass Wall)
+
+### 7A. Side-View Beer Meniscus Against Glass Wall with Printed $5\text{ mm}$ Scale Bar
+* **Value and unit:** Printed $5\text{ mm}$ scale bar on Figure 2b showing the side-view meniscus where beer meets the flat glass substrate at contact angle $\Psi_{\text{glass}} = 23.20^\circ \pm 2.80^\circ$.
+* **How it was measured:** Optical sessile drop photography with calibrated $5\text{ mm}$ scale bar.
+* **Liquid used:** Lager-style beer on glass in air.
+* **Temperature:** $25^\circ\text{C}$.
+* **Link:** https://www.researchgate.net/figure/Example-of-a-measurement-of-contact-angle-PS-between-a-peanut-beer-immersed-in-air-and_fig2_371539968 and full high-resolution PDF: https://epub.ub.uni-muenchen.de/132940/1/rsos.230376.pdf
+* **Short exact quote:** `"Figure 2. Example of a measurement of contact angle $\Psi$ between (a) peanut-beer immersed in air and (b) glass-beer immersed in air. The average values of 10 measurements are $\Psi_{\text{peanut}} = 46.48 \pm 2.43^\circ$ and $\Psi_{\text{glass}} = 23.20 \pm 2.80^\circ$."`
+
+### 7B. Close-Up Guinness Head, Wall Boundary Layer, and Microscope Bubble Photos with Known Glass Dimensions
+* **Value and unit:** Standard $568\text{ mL}$ ($570\text{ mL}$ nominal) Guinness tulip pint glass has top rim diameter $= 85\text{ mm}$ ($8.5\text{ cm}$) and height $= 160\text{ mm}$ ($16\text{ cm}$) (Willibecher $0.5\text{ L}$ variant: top diameter $= 78\text{ mm}$, height $= 158\text{ mm}$; $350\text{ mL}$ glass: top diameter $= 70\text{ mm}$, bottom diameter $= 58\text{ mm}$, height $= 144\text{ mm}$; $250\text{ mL}$ half-pint glass: diameter $= 65\text{ mm}$, height $= 150\text{ mm}$). In KegWorks' ruler-scaled pour comparison photos, the heads measure $17.46\text{ mm}$ ($11/16\text{ in}$), $20.64\text{ mm}$ ($13/16\text{ in}$), and $22.225\text{ mm}$ ($14/16\text{ in}$). In Watamura et al. (2019), Figure 3 scales the pint glass wall over $30\text{ mm} \lt x \lt 70\text{ mm}$ ($15^\circ$ inclination), Figure 4b shows the microscope photo of Guinness bubbles (mean diameter $61\text{ }\mu\text{m}$), and Figure 5c images the clear-fluid meniscus/boundary layer at $y = 0.1\text{ mm}$, $0.5\text{ mm}$, and $1.0\text{ mm}$ from the glass wall.
+* **How it was measured:** High-speed microscopy, laser-sheet fluorescent imaging, ruler photography, and commercial glassware specifications.
+* **Liquid used:** Canned Guinness Draught ($330\text{ mL}$ widget can) and tap Guinness Draught.
+* **Temperature:** $5^\circ\text{C}$ to $20^\circ\text{C}$.
+* **Link:** https://pmc.ncbi.nlm.nih.gov/articles/PMC6450914/ and https://www.kegworks.com/blog/how-to-pour-a-guinness-the-right-way-but-does-it-really-matter and https://commons.wikimedia.org/wiki/File:GuinnessPint.jpg and https://commons.wikimedia.org/wiki/File:A_pint_of_Guinness.jpg
+* **Short exact quote:** `"Capacity 20oz / 570ml; Dimensions 160(H) x 85(D)mm"` and `"Figure 4. ... b) Microscope image of bubbles in the trapezium."`
+
+---
+
+## 8. Direct Image Links & Embedded Photo Gallery
+
+* **Value and unit:** Direct image files and figure PDFs with known physical dimensions ($85\text{ mm}$ pint rim diameter, $17.46\text{--}22.225\text{ mm}$ ruler-measured heads, $5\text{ mm}$ meniscus contact-angle scale bar, $270\text{ }\mu\text{m}$ microscope frame width, and $61\text{ }\mu\text{m}$ mean bubble diameter).
+* **How it was measured:** Digital photography (Canon PowerShot A410 at $1600 \times 1200\text{ px}$, focal length $8.111\text{ mm}$), sessile drop goniometry, and high-speed microscopy.
+* **Liquid used:** Guinness Draught (tap, bottle, and widget can) and lager beer.
+* **Temperature:** $5^\circ\text{C}$ to $25^\circ\text{C}$.
+* **Link (Direct Image & Figure URLs):**
+  1. **Close-Up Guinness Pint Head & Glass Wall Interface (Direct JPEG):** https://upload.wikimedia.org/wikipedia/commons/9/92/Guinness.jpg
+  2. **Bottled Draught Guinness Head Development & Surge Sequence (Direct JPEG):** https://upload.wikimedia.org/wikipedia/commons/1/10/BDG_Dev_Seq.wiki.jpg
+  3. **Settled Guinness Pint in $85\text{ mm}$ Rim Diameter Tulip Glass ($1600 \times 1200\text{ px}$ Wikimedia File):** https://commons.wikimedia.org/wiki/File:GuinnessPint.jpg
+  4. **Side-Profile Pint of Guinness Showing Head-to-Liquid Interface ($768 \times 1024\text{ px}$ CC0 File):** https://commons.wikimedia.org/wiki/File:A_pint_of_Guinness.jpg (Original source page: http://www.pdphoto.org/PictureDetail.php?mat=&pg=8748)
+  5. **Side-View Meniscus / Contact Angle Photo with $5\text{ mm}$ Scale Bar ($\Psi_{\text{glass}} = 23.20^\circ \pm 2.80^\circ$, Figure 2b):** https://www.researchgate.net/figure/Example-of-a-measurement-of-contact-angle-PS-between-a-peanut-beer-immersed-in-air-and_fig2_371539968 and direct open-access PDF: https://epub.ub.uni-muenchen.de/132940/1/rsos.230376.pdf
+  6. **Ruler-Measured Guinness Pours ($17.46\text{ mm}$, $20.64\text{ mm}$, and $22.225\text{ mm}$ Heads):** https://www.kegworks.com/blog/how-to-pour-a-guinness-the-right-way-but-does-it-really-matter
+  7. **Microscope Image of Guinness Bubbles ($61\text{ }\mu\text{m}$ Mean Diameter) & Near-Wall Boundary Layer ($y = 0.1\text{--}1.0\text{ mm}$):** https://pmc.ncbi.nlm.nih.gov/articles/PMC6450914/ and Supplementary PDF (Fig. S1 & Fig. S2): https://www.researchgate.net/publication/332367939_Supplementary_Material_1/data/5cafe5904585156cd7916346/41598-2019-42094-MOESM1-ESM.pdf
+  8. **High-Speed Microscope Frame ($270\text{ }\mu\text{m}$ Width) of Stout Bubble Growth:** https://www.iaeng.org/publication/WCE2011/WCE2011_pp160-164.pdf
+* **Short exact quote:** `"https://upload.wikimedia.org/wikipedia/commons/1/10/BDG_Dev_Seq.wiki.jpg"` and `"http://upload.wikimedia.org/wikipedia/commons/9/92/Guinness.jpg"`
+
+### Embedded Direct Previews
+
+![Close-up of Guinness Pint Head and Glass Wall](https://upload.wikimedia.org/wikipedia/commons/9/92/Guinness.jpg)
+
+![Bottled Draught Guinness Head Development Sequence](https://upload.wikimedia.org/wikipedia/commons/1/10/BDG_Dev_Seq.wiki.jpg)

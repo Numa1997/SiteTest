@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-1427 files, 65.5 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+1428 files, 65.5 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -40,7 +40,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Agents of the lecture-note review](#agents-of-the-lecture-note-review) | 4 |
 | [Working notes of the Rotor Pendula study](#working-notes-of-the-rotor-pendula-study) | 86 |
 | [Working notes of the Droplet Collection study](#working-notes-of-the-droplet-collection-study) | 121 |
-| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 576 |
+| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 577 |
 
 ## Repository root
 
@@ -1495,12 +1495,12 @@ to confirm that every file is described. Sizes are those of the files when the l
 |---|---|---|---|
 | [`notes/fig12/referee.md`](../notes/fig12/referee.md) | 27.9 kB | Fig. 12: the blind referee's report on the note. | [notes.md](notes.md) |
 
-<details><summary>209 files: Fig. 12: a measuring script of the review, or its saved output.</summary>
+<details><summary>210 files: Fig. 12: a measuring script of the review, or its saved output.</summary>
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
 | [`notes/fig12/research.md`](../notes/fig12/research.md) | 5.6 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
-| [`notes/fig12/research/data-for-solver.md`](../notes/fig12/research/data-for-solver.md) | 8.5 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/research/data-for-solver.md`](../notes/fig12/research/data-for-solver.md) | 9.9 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/research/guinness-materials.md`](../notes/fig12/research/guinness-materials.md) | 47.7 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/research/sources/acuna-nelson2020-jnanomater-8640818-bsa-glass.txt`](../notes/fig12/research/sources/acuna-nelson2020-jnanomater-8640818-bsa-glass.txt) | 1.5 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/research/sources/ba-draught-beer-quality-manual-2011-gas-blends.txt`](../notes/fig12/research/sources/ba-draught-beer-quality-manual-2011-gas-blends.txt) | 1.7 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
@@ -1515,6 +1515,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/fig12/research/sources/chatzigiannakis2025-pof37.txt`](../notes/fig12/research/sources/chatzigiannakis2025-pof37.txt) | 1.7 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/research/sources/costa2012-thesis.txt`](../notes/fig12/research/sources/costa2012-thesis.txt) | 3.0 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/research/sources/forel2016-softmatter12.txt`](../notes/fig12/research/sources/forel2016-softmatter12.txt) | 1.2 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/research/sources/gemini-dataset-2026-11-13.txt`](../notes/fig12/research/sources/gemini-dataset-2026-11-13.txt) | 32.0 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/research/sources/gerard-varet-hillairet2020-arxiv1905.08208-einstein-viscosity.txt`](../notes/fig12/research/sources/gerard-varet-hillairet2020-arxiv1905.08208-einstein-viscosity.txt) | 1.8 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/research/sources/haines-mazzucato2012-arxiv1104.1102-einstein-proof.txt`](../notes/fig12/research/sources/haines-mazzucato2012-arxiv1104.1102-einstein-proof.txt) | 830 B | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/research/sources/hofer-schubert2021-arxiv2008.04813-einstein-sedimentation.txt`](../notes/fig12/research/sources/hofer-schubert2021-arxiv2008.04813-einstein-sedimentation.txt) | 996 B | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |

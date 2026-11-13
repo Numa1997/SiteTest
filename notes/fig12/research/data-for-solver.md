@@ -80,3 +80,17 @@ sources are in `sources/`. Each number carries one status:
 - A slosh or ringdown of a real pint, with or without its head.
 - The published row order of Hamlett's Table 2.
 - The Table 2 values of Völp & Willenbacher, read by us directly (the 44.2 and 18.7 are Gemini's quote).
+
+## 5. Added from the owner's Gemini dataset (sources/gemini-dataset-2026-11-13.txt), checked against the above
+
+| Item | Value | Status and how it fits |
+|---|---|---|
+| Lager surface tension, drop-weight method | 41.55 ± 1.39 mN/m at 25 °C (Rudin 1956, J. Inst. Brew. 62, 27, via Pereira et al. 2023) | M-G; inside the beer range 38–47 mN/m |
+| Lager on clean glass, sessile drop, 10 drops | 23.2 ± 2.8° at 25 °C | M-G; agrees with Hamlett's 19–30° for four beers and 28.5° for Guinness |
+| "Head gas fraction 0.80" (Huddersfield sinking-bubbles paper) | ε = 0.20 | a model input in a parameter table, not a measurement; slightly drier than our derived 0.24–0.36 (equilibrium top 0.235) |
+| Huddersfield table "r = 61 µm" | radius 61 µm | taken from Robinson's diameter 122 µm; rejected as above (X) |
+| IBD Rudin standard | a satisfactory head lasts > 90 s (Rudin) | M-G; consistent with stouts 102–120 s |
+| Lacing band left on the glass (lager, image analysis) | band height ≈ 4 mm after 40 s | M-G (MDPI Fermentation 7, 46); a band height, not the film thickness |
+| Guinness pint glass, catalogue dimensions | rim diameter 85 mm, height 160 mm (570 mL) | M-G; useful as a scale for photographs |
+| Upside-down pint trick | held by the card and atmospheric pressure, not by the head | no number for the tilt at which a head slides |
+| Dark beer, wet foam layer | 24.6 mm initial (100 mL pour, 10 min watched) | M-G; a Croatian dark lager, not Guinness |
