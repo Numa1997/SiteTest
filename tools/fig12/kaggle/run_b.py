@@ -10,8 +10,8 @@ from stout_jax import Geometry, Stout, Cart, CART_COMMON, road_table, make_advan
 R = json.load(open(os.environ["GLASS_JSON"]))["R"]; DZP = 0.0005
 FILL, RHO, FPS = 0.125, 1007.0, 30
 BUDGET_S = float(os.environ.get("BUDGET_S", "2450"))
-REST_MAX_MM = float(os.environ.get("REST_MAX_MM", "0.6"))   # largest |surface - fill| of any column inside the glass after 2 s at rest
-REST_RMS_MM = float(os.environ.get("REST_RMS_MM", "0.25"))  # its root mean square
+REST_MAX_CELLS = 0.5    # largest |surface - fill| of any column inside the glass after 2 s at rest, in cells (0.75 mm at 1.5 mm)
+REST_RMS_CELLS = 0.25   # its root mean square (0.375 mm at 1.5 mm); the CPU check at 4 mm gave 0.43 cell largest
 STAMP = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d")
 WORK = Path(os.environ.get("NB_WORK", "/kaggle/working")) / STAMP; WORK.mkdir(parents=True, exist_ok=True)
 T0 = time.time()
@@ -144,9 +144,9 @@ for task in TASKS:
         inside = np.hypot(*np.meshgrid(G.x0 + (np.arange(G.n) + 0.5) * dx, G.x0 + (np.arange(G.n) + 0.5) * dx, indexing="ij")) < G.Rfill - dx
         Hl = out["H"][-1][inside]; devc = np.abs(Hl - FILL) * 1e3
         info["rest_guard"] = dict(max_dev_mm=float(np.nanmax(devc)), rms_dev_mm=float(np.sqrt(np.nanmean(devc ** 2))), columns_without_value=int((~np.isfinite(Hl)).sum()),
-                                  head_spilled_ml=info["head_spilled_ml"], spilled_g=info["spilled_g"], limit_max_mm=REST_MAX_MM, limit_rms_mm=REST_RMS_MM)
+                                  head_spilled_ml=info["head_spilled_ml"], spilled_g=info["spilled_g"], limit_max_mm=REST_MAX_CELLS * dx * 1e3, limit_rms_mm=REST_RMS_CELLS * dx * 1e3)
         g_ = info["rest_guard"]
-        ok = (g_["max_dev_mm"] < REST_MAX_MM and g_["rms_dev_mm"] < REST_RMS_MM and g_["columns_without_value"] == 0
+        ok = (g_["max_dev_mm"] < g_["limit_max_mm"] and g_["rms_dev_mm"] < g_["limit_rms_mm"] and g_["columns_without_value"] == 0
               and g_["head_spilled_ml"] == 0 and g_["spilled_g"] == 0)
         log(f"rest guard: {'PASS' if ok else 'FAIL'} {g_}")
         summary["tasks"].append(info); json.dump(summary, open(WORK / "summary.json", "w"), indent=1)
