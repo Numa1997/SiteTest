@@ -44,6 +44,19 @@
    "path": "rides.json",
    "bytes": 715166,
    "sha256": "0b158b432cfb7f6d58c5e80b04408fb754f46160e3542162f6c38a7d95ef61e6"
+  },
+  {
+   "path": "free_swing_v2.json",
+   "bytes": 1019274,
+   "sha256": "fac49421cc8ca4023ffe60e24fc17d0ff76266abc3ca4d0b219a0b122a199344",
+   "what": "free swing of solver v2 (glass held still, one push, 5 s): 7 runs on 3, 2 and 1.5 mm grids; Kaggle notebook numakoudsie/guinness-free-swing-v2 version 4, code at SiteTest commit 2b3e8e9"
+  },
+  {
+   "path": "free_swing_v2_repair.json",
+   "bytes": 339570,
+   "sha256": "28d8b6d9f0f25a9655f67165eeb47cd81f02a9f53792edbf40877f77cb029abd",
+   "what": "free swing of solver v2 without friction on the 2 mm grid: another seed, time step 1 ms, half the push; notebook numakoudsie/guinness-free-swing-v2 version 5, code at SiteTest commit 3d6f61a"
   }
- ]
+ ],
+ "note": "rides.json here was computed with solver v1 and is over-damped (damping ratio 0.10 to 0.14 after the last bump); the rides of 2026-11-13 replace it on the page. The free-swing files are tests of solver v2."
 }
