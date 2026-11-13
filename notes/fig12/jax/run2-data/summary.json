@@ -1,0 +1,160 @@
+{
+ "generated": "2026-11-13",
+ "device": "Tesla T4",
+ "jax": "0.11.1",
+ "fill": 0.125,
+ "rho": 1007.0,
+ "fps": 30,
+ "tasks": [
+  {
+   "name": "rest",
+   "kind": "free",
+   "dx": 0.0015,
+   "model": "full",
+   "end": 2.0,
+   "push": [
+    0.3,
+    0.0,
+    0.146
+   ],
+   "cells": 370386,
+   "particles": 1002808,
+   "mp": 4.283804211963943e-07,
+   "steps": 1022,
+   "compile_s": 9.6,
+   "run_s": 63.9,
+   "ms_per_step": 62.6,
+   "its_per_step": 104.8,
+   "itmax": 244,
+   "resmax": 9.999725079978816e-06,
+   "nselmax": 204801,
+   "K": 350982,
+   "s_per_simulated_s": 32.5,
+   "spilled_g": 0.0,
+   "drops_max": 14,
+   "volume_kept": 1.0,
+   "head_spilled_ml": 2.69,
+   "head_ml": 91.0,
+   "head": {
+    "R32": 3.4e-05,
+    "phi_l": 0.27,
+    "gamma": 0.0442,
+    "E_inf": 0.0187,
+    "G0": 166.43999999999994,
+    "tau_y": 5.4149999999999965,
+    "Z": 0.18,
+    "lr": 0.004
+   },
+   "max_dev_mm": 14.638781547546387,
+   "max_dev_last_s_mm": 14.638781547546387,
+   "energy_J": [
+    0.3069723237328339,
+    0.3053666804448555
+   ]
+  },
+  {
+   "name": "ride_resonant",
+   "kind": "ride",
+   "dx": 0.0015,
+   "model": "full",
+   "end": 8.0,
+   "road": "five 20 mm bumps in step with the swing",
+   "v0": 1.0,
+   "cells": 370386,
+   "particles": 1002808,
+   "mp": 4.283804211963943e-07,
+   "steps": 4881,
+   "compile_s": 10.3,
+   "run_s": 543.5,
+   "ms_per_step": 111.4,
+   "its_per_step": 202.7,
+   "itmax": 286,
+   "resmax": 9.999512258218601e-06,
+   "nselmax": 425460,
+   "K": 350982,
+   "s_per_simulated_s": 68.2,
+   "spilled_g": 9.04,
+   "drops_max": 12106,
+   "volume_kept": 0.9789660632942697,
+   "head_spilled_ml": 11.58,
+   "head_ml": 91.0,
+   "head": {
+    "R32": 3.4e-05,
+    "phi_l": 0.27,
+    "gamma": 0.0442,
+    "E_inf": 0.0187,
+    "G0": 166.43999999999994,
+    "tau_y": 5.4149999999999965,
+    "Z": 0.18,
+    "lr": 0.004
+   },
+   "lean_max_mm": 32.45000457763672,
+   "v_range": [
+    0.944444370257089,
+    1.0513002194191718
+   ],
+   "impulse_vs_momentum": {
+    "impulse_x": -0.0005799429973246125,
+    "momentum_x_end": 0.0005799516289265525
+   }
+  },
+  {
+   "name": "free_full_1.5",
+   "kind": "free",
+   "dx": 0.0015,
+   "model": "full",
+   "end": 5.0,
+   "push": [
+    0.3,
+    1.0,
+    0.146
+   ],
+   "cells": 370386,
+   "particles": 1002808,
+   "mp": 4.283804211963943e-07,
+   "steps": 2554,
+   "compile_s": 9.4,
+   "run_s": 194.6,
+   "ms_per_step": 76.2,
+   "its_per_step": 104.9,
+   "itmax": 296,
+   "resmax": 9.999996109399945e-06,
+   "nselmax": 351074,
+   "K": 350982,
+   "s_per_simulated_s": 39.2,
+   "spilled_g": 0.0,
+   "drops_max": 16,
+   "volume_kept": 1.0,
+   "head_spilled_ml": 3.62,
+   "head_ml": 91.0,
+   "head": {
+    "R32": 3.4e-05,
+    "phi_l": 0.27,
+    "gamma": 0.0442,
+    "E_inf": 0.0187,
+    "G0": 166.43999999999994,
+    "tau_y": 5.4149999999999965,
+    "Z": 0.18,
+    "lr": 0.004
+   },
+   "max_dev_mm": 20.389482498168945,
+   "max_dev_last_s_mm": 20.389482498168945,
+   "fit_ring13": {
+    "f": 3.3375121893799524,
+    "zeta": 0.025523477091431167,
+    "A_mm": 3.8283309307277307,
+    "rms_mm": 0.22982825693559908
+   },
+   "fit_ring16": {
+    "f": 3.337107342203727,
+    "zeta": 0.03523637608563285,
+    "A_mm": 4.573074928510889,
+    "rms_mm": 0.34378142662700545
+   },
+   "energy_J": [
+    0.3069723237328339,
+    0.3034978016464693
+   ]
+  }
+ ]
+}

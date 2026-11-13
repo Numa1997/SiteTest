@@ -1,0 +1,7 @@
+Stokes-layer dissipation per area: mu U^2/(2 d)  =  rho U^2 Sqrt[nu w]/(2 Sqrt[2])
+j11' root = 1.84118, k = 47.0891 1/m, f11 = 3.42067 Hz, tanh(kh) = 0.999985
+Stokes layer delta = sqrt(2 nu/omega) = 0.436303 mm
+decay rate of amplitude (1/s): side wall 0.110121, bottom 3.40695 10^-6, total 0.110124
+damping ratio zeta = gamma/omega = 0.0051238
+extra decay with an inextensible surface (no-slip lid): 0.110394 1/s, zeta_top = 0.00513636
+coefficient C in zeta_wall = C sqrt(nu/(R^(3/2) g^(1/2))): 0.557472

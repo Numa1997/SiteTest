@@ -328,10 +328,10 @@ a FLIP/APIC blend, more particles per cell near the surface, a tighter pressure 
 - B2. The 3D stout in JAX on the GPU, with the cart, controller and filter **inside the time loop**. The user asked for
   JAX. Fixed-size arrays, `jit`, `lax.while_loop` for the pressure solve, `segment_sum` or scatter-add for particle to grid.
   **Opinion of the old session:** port solver v2's algorithm first and prove it equal to the Taichi one on the free swing,
-  then improve it (section 5, "Open"). The case against: a rewrite costs days and GPU minutes before the first controlled
-  ride; the Taichi solver v2 already runs at 15 min a ride and its cart port already carries `preview` and skyhook. If the
-  JAX solver is not through its gates within the first budget, generate the first controlled rides with the Taichi solver
-  (adding the filter and the LQR to its `Cart`), publish them, and say on the page which solver made which ride.
+  then improve it (section 5, "Open").
+  **The user's decision, 13 November 2026 (it replaces the old session's fallback, which the user rejected):** JAX only.
+  No controlled ride is generated with the Taichi solver. Nothing is launched on Kaggle until the mother session has
+  finished its baseline rides and given the go; then everything runs in JAX.
 - **Gate B** (all on the GPU, short launches): (1) at rest for 2 s, every ring of the stored surface within 0.3 mm of the
   fill and no spurious lean; (2) free swing: frequency within 2 % of 3.421 Hz, numerical zeta stated with its grid
   convergence; (3) volume kept within 0.1 %; (4) the coupling: stout's momentum change equals minus the impulse on the
@@ -466,3 +466,11 @@ it is shown to matter, and store only what the page and the proofs need (say the
 **Order (the user, 13 November)**: the old session first finishes and installs the "before control" animation (the three
 baseline rides of `public/data/fig12/2026-11-13/`, live on main), and then tells you where to go from there. Build on those
 rides; they are the "without control" side of your comparison.
+
+**The user, 13 November 2026, about 01:20 UTC:** "you will include all possible controls, all necessary ones." Every control of
+section 4.4 and section 11 runs in the GPU loop and is stored and shown, not a selection: off, speed PI with anti-windup, road
+preview feed-forward, skyhook, the slosh LQR with integral on the Kalman estimate, the heave cancellation, the suspension LQR,
+the joint design of all of them; then the gradient-tuned weights and the preview (model-predictive) controller. Also the user:
+Wolfram for the physics, the derivations, the modelling and every hand-written numerical method, checked against published
+sources and engineering practice; JAX after that.
+

@@ -1,0 +1,73 @@
+{
+ "about": "Fig. 12 computed in JAX on Kaggle's GPU: the stout, its head of foam and the cart, one file per ride.",
+ "generated": "2026-11-13",
+ "kaggle": {
+  "notebook": "numakoudsie/guinness-on-a-cart-stout-in-jax",
+  "url": "https://www.kaggle.com/code/numakoudsie/guinness-on-a-cart-stout-in-jax",
+  "version": 2,
+  "machine": "Tesla T4"
+ },
+ "code": "tools/fig12/kaggle/stout_jax.py and run_b.py at SiteTest commit afe52121716cdff800992387132a38f9a5797396",
+ "files": [
+  {
+   "path": "ride_resonant.json",
+   "label": "Five 20 mm bumps in step with the swing, 1.0 m/s",
+   "kind": "ride",
+   "default": true,
+   "bytes": 1021239,
+   "sha256": "48ead2f3d7b7a9de73d69d9fba407d53e7d39f197c671b1ec1f2f4e788f55c3f",
+   "frames": 241,
+   "seconds": 8.0,
+   "measured": {
+    "steps": 4881,
+    "ms_per_step": 111.4,
+    "its_per_step": 202.7,
+    "run_s": 543.5,
+    "cells": 370386,
+    "particles": 1002808,
+    "spilled_g": 9.04,
+    "head_spilled_ml": 11.58
+   }
+  },
+  {
+   "path": "free_full_1.5.json",
+   "label": "Standing still, one push",
+   "kind": "free",
+   "default": false,
+   "bytes": 109866,
+   "sha256": "5d2b9650f49eb3cafdf0725e2dd6f50052ec463b14547cdb925e2187225248d3",
+   "frames": 151,
+   "seconds": 5.0,
+   "measured": {
+    "steps": 2554,
+    "ms_per_step": 76.2,
+    "its_per_step": 104.9,
+    "run_s": 194.6,
+    "cells": 370386,
+    "particles": 1002808,
+    "spilled_g": 0.0,
+    "head_spilled_ml": 3.62
+   }
+  },
+  {
+   "path": "rest.json",
+   "label": "Standing still",
+   "kind": "free",
+   "default": false,
+   "bytes": 32338,
+   "sha256": "9c8e2746158002de35c49b702c92cf9a7468c293c7d9edeb76c4fd58355ce557",
+   "frames": 61,
+   "seconds": 2.0,
+   "measured": {
+    "steps": 1022,
+    "ms_per_step": 62.6,
+    "its_per_step": 104.8,
+    "run_s": 63.9,
+    "cells": 370386,
+    "particles": 1002808,
+    "spilled_g": 0.0,
+    "head_spilled_ml": 2.69
+   }
+  }
+ ]
+}

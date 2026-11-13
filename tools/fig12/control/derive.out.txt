@@ -1,0 +1,85 @@
+1. First sloshing mode of an upright cylinder, radius R, depth h
+   zeros of J1': 1.841183781, 5.331442774, 8.536316366
+   site, R(h) = 39.1 mm, h = 125 mm: f_11, f_12, f_13 = 3.421, 5.821, 7.365 Hz; omega_11 = 21.49 rad/s
+   ok   f_11 (Hz): 3.42067 (site 3.421, tolerance 0.0005)
+   ok   f_12 (Hz): 5.82088 (site 5.821, tolerance 0.0005)
+   ok   f_13 (Hz): 7.36549 (site 7.365, tolerance 0.0005)
+   linear breaking amplitude g/omega^2 = 21.2 mm at the wall
+   ok   g/omega^2 (mm): 21.2367 (site 21.2, tolerance 0.05)
+2. The push expanded in the modes, and the coupling beta
+   wall-height shares 2/(xi_n^2 - 1), n = 1..3: 0.8368, 0.0729, 0.0278
+   sum of 2/(xi_n^2 - 1) over the first 200 modes = 0.99899 (-> 1)
+   beta = 2*xi*tanh(h*xi/R)/(xi**2 - 1)
+   beta(first mode) = 1.5407
+   ok   beta: 1.54074 (site 1.5407, tolerance 5e-05)
+   ok   first mode's share: 0.836835 (site 0.837, tolerance 0.0005)
+3. Wall boundary-layer damping, Lambda = K nu^(1/2) R^(-3/4) g^(-1/4), zeta = Lambda / (2 pi)
+   K = 3.52 (laminar theory): zeta = 0.00360
+   ok   zeta, K = 3.52: 0.00360009 (site 0.0036, tolerance 5e-05)
+   K = 5.23 (measured, NASA TN D-1367): zeta = 0.00535
+   ok   zeta, K = 5.23: 0.00534899 (site 0.0053, tolerance 5e-05)
+   Stokes layer sqrt(2 nu/omega) = 0.305 mm
+4. The linear plant and what each actuator can reach
+   b = N K_m / R_w = 5 N/A;  M_x = 2.5016 kg (site, stout 426.6 g), 2.5046 kg (Kaggle, 429.6 g)
+   ok   M_x site (kg): 2.5016 (site 2.5016, tolerance 5e-05)
+   PI speed loop: K_p = M_x w_c / b = 25.1790 A/(m/s), K_i = K_p w_c / 4 = 316.408 A/m (Kaggle mass)
+   ok   K_p Kaggle: 25.179 (site 25.1788, tolerance 0.001)
+   ok   K_i Kaggle: 316.408 (site 316.406, tolerance 0.02)
+   ok   c_sky Kaggle: 47.6362 (site 47.636, tolerance 0.001)
+   controllability determinant, motor current: b**4*beta**2*omega**4/M_x**4
+   = beta^2 b^4 omega^4 / M_x^4: non-zero whenever beta, b, omega are; the current reaches all four states.
+   rank of the controllability matrix from u_s on the 7 states (dv, q, q', s, v_b, v_w, d): 4; rows of (dv, q, q') all zero: True
+   So the active force reaches the four vertical states and, linearly, nothing of the speed or the swing (note 8.6).
+5. Slosh LQR: minimise int (x'Qx + r u^2) dt, Bryson weights 0.05 m/s, 2 mm, 2 mm x omega, 0.02 m, 3 A
+   site 3D plant (4 mm grid: 3.214 Hz, zeta 0.008): K = (76.69, -1934.0, -41.32, -150.0);  poles -256.40, -11.33+7.54j, -11.33-7.54j, -2.57;  swing damping ratio 0.832;  Riccati residual 2.3e-14
+   ok   K[0]: 76.6864 (site 76.69, tolerance 0.02)
+   ok   K[1]: -1933.99 (site -1934, tolerance 1)
+   ok   K[2]: -41.3163 (site -41.32, tolerance 0.02)
+   ok   K[3]: -150 (site -150, tolerance 0.05)
+   ok   swing pole, real part (1/s): -11.3291 (site -11.33, tolerance 0.01)
+   ok   swing pole, |imaginary part| (1/s): 7.54322 (site 7.54, tolerance 0.01)
+   ok   swing damping ratio: 0.832374 (site 0.832, tolerance 0.001)
+   site live model (3.421 Hz, zeta 0.005349): K = (75.03, -1938.9, -38.81, -150.0);  poles -243.95, -12.01+8.82j, -12.01-8.82j, -2.56;  swing damping ratio 0.806;  Riccati residual 6.8e-15
+   ok   K_live[0]: 75.0347 (site 75.03, tolerance 0.02)
+   ok   K_live[1]: -1938.94 (site -1939, tolerance 1)
+   ok   K_live[2]: -38.8127 (site -38.81, tolerance 0.02)
+   ok   K_live[3]: -150 (site -150, tolerance 0.05)
+   ok   live swing pole, real part: -12.0112 (site -12.01, tolerance 0.01)
+   ok   live swing pole, |imaginary part|: 8.81855 (site 8.82, tolerance 0.01)
+   K[3] = -sqrt(Q_44 / r) = -(1/0.02) x 3 = -150 A/m exactly (the integral state's weight against the current's).
+   Kaggle solver v2 plant (3.31 Hz, zeta 0.018, 429.6 g): K = (75.73, -1913.3, -40.07, -150.0);  poles -250.10, -11.65+8.13j, -11.65-8.13j, -2.57;  swing damping ratio 0.820;  Riccati residual 7.1e-15
+6. Suspension LQR on y = (stroke, v_b, v_w, tyre compression); cost: body acceleration 0.5 m/s^2, stroke 10 mm, tyre 0.2 mm, force 40 N
+   site mass: K_s = (-502.6, 11.63, -6.09, 612.6);  poles -31.98 +- 259.91j, -4.94 +- 4.98j
+   ok   K_s[0]: -502.621 (site -502.6, tolerance 0.1)
+   ok   K_s[1]: 11.6319 (site 11.6, tolerance 0.06)
+   ok   K_s[2]: -6.09091 (site -6.1, tolerance 0.06)
+   ok   K_s[3]: 612.631 (site 612.6, tolerance 0.1)
+   ok   slow suspension pole, real part: -4.93654 (site -4.94, tolerance 0.01)
+   ok   slow suspension pole, |imaginary part|: 4.97694 (site 4.98, tolerance 0.01)
+   ok   fast suspension pole, real part: -31.9766 (site -32, tolerance 0.06)
+   ok   fast suspension pole, |imaginary part|: 259.905 (site 259.9, tolerance 0.06)
+   Kaggle mass (429.6 g): K_s = (-502.47, 11.663, -6.118, 614.49)
+7. Kalman filter on z = (v, q, q'): exact zero-order hold over T_s = 1 ms, Van Loan's Q_d, Joseph form
+   site 3D plant: A_d = [[ 9.9920e-01  0.0000e+00  0.0000e+00]  [ 6.1565e-07  9.9980e-01  9.9977e-04]  [ 1.2310e-03 -4.0771e-01  9.9947e-01]]
+   B_d = [ 1.9979e-03 -1.5391e-06 -3.0776e-03]  Q_d diag = [7.9834e-05 6.3831e-11 1.9143e-04]
+   ok   A_d[2,1]: -0.40771 (site -0.4077, tolerance 5e-05)
+   ok   A_d[2,0]: 0.00123103 (site 0.001231, tolerance 5e-07)
+   ok   B_d[0]: 0.00199792 (site 0.001998, tolerance 5e-07)
+   ok   B_d[2]: -0.00307758 (site -0.003078, tolerance 5e-07)
+   ok   Q_d[0,0]: 7.98339e-05 (site 7.983e-05, tolerance 5e-09)
+   ok   Q_d[1,1]: 6.38309e-11 (site 6.383e-11, tolerance 5e-15)
+   ok   Q_d[2,2]: 0.000191429 (site 0.0001914, tolerance 5e-08)
+   Van Loan against 12-point quadrature of the definition: largest relative difference 1.4e-16
+   probes every 5 samples (the site's 5 ms fluid step): gain on y_q = (0.1429, 2.187 1/s); sd of q after it 0.302 mm
+   ok   Kalman gain q: 0.142921 (site 0.1429, tolerance 5e-05)
+   ok   Kalman gain q' (1/s): 2.18669 (site 2.187, tolerance 0.0005)
+   ok   Kalman gain v on speed: 0.954358 (site 0.9544, tolerance 5e-05)
+   ok   estimate sd of q (mm): 0.302439 (site 0.302, tolerance 0.0005)
+   ok   live model: Kalman gain q: 0.139395 (site 0.1394, tolerance 5e-05)
+   ok   live model: Kalman gain q' (1/s): 2.07503 (site 2.075, tolerance 0.0005)
+   Kaggle plant (3.31 Hz, zeta 0.018), probes every 2 samples (Kaggle's 2 ms fluid step): gain on y_q = (0.0800, 1.654 1/s); sd of q 0.226 mm
+8. The joint controller's cancellation current
+   i_par = -M_x*a_z*omega**2*q/(b*beta*g)   (stout-cart.js line 1602: -M_x w^2 (a_z/g) q / (beta b))
+   example: a_z = 3 m/s^2, q = 5 mm, 3.31 Hz, Kaggle mass: i_par = -0.215 A (limit 3 A)
+
+GATE A: passed, every site number reproduced to the digits given

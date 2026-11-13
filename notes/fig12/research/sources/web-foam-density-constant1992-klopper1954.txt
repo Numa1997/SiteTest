@@ -1,0 +1,23 @@
+TWO SHORT SOURCES ON BEER-FOAM LIQUID CONTENT (neither is Guinness)
+
+(1) TITLE: A Practical Method for Characterizing Poured Beer Foam Quality
+AUTHOR: Marc D. Constant
+PUBLISHED: J. Am. Soc. Brew. Chem. 50(2), 37-47 (1992); DOI 10.1094/ASBCJ-50-0037
+URL: https://doi.org/10.1094/asbcj-50-0037
+DATE READ: 2026-11-13 -- ABSTRACT ONLY (via Exa); full paper not read (paywalled)
+SAMPLE: "fully carbonated packaged beers" (CO2 beers, not nitro stout); poured foam.
+--- verbatim abstract excerpts ---
+"a method to characterize numerous properties of total poured foams from fully carbonated packaged beers was developed. Visual measurements were obtained with readily available equipment."
+"The total foam stability of commercial beers, expressed as half-life, was typically found to be in the range of 2–5 min—a value greater than that reported for beer drainage. Foam densities at 1 min typically ranged between 0.14 and 0.24 g/ml. The half-life and density were found to increase with foam volume produced at dispense."
+
+(2) TITLE: On Head Retention (J. Inst. Brew. monthly review, 1954)
+AUTHOR: W. J. Klopper (Experimental Station of the Dutch Brewing and Malting Industry, Rotterdam) -- the origin of the NIBEM method
+URL READ: https://crescentcitybrewtalk.com/on-head-retention/ (blog reprint of the 1954 text, posted 2022-10-18)
+DATE READ: 2026-11-13 (Exa highlights and Nimble search snippet; the page was not fetched in full)
+LICENCE: none stated (reprint)
+--- verbatim ---
+"Eventually, also, the foam density (percentage of fluid present in the foam) can be estimated without any extra work. This measurement is performed one minute after foam production by observing the foam volume. If there has, e.g., separated off after one minute 60 ml. of beer from the foam and the foam volume is 320 ml., it follows that this foam contains 100 less 60 = 40 ml. liquid, and the foam density is 40/320 X 100 = 12∙6."
+(This is a worked example of the method with 100 ml beer foamed to 400 ml by a porous candle, not a measured stout.)
+"A calibrated funnel of 7 cm. diam. and 500 ml. content is used. In this funnel, 100 ml. of slightly de-carbonated beer is foamed up to the calibration of 400 ml. by means of a porous candle."
+"The range is from 180-600 sec. for beers."  [foam time = time for 95 ml of the 100 ml to drain back]
+"foam adhesion ... is estimated by measuring the highest continuous foam ring in the cylinder six minutes after the foam production"

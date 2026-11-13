@@ -1,0 +1,16 @@
+SOURCE: S. Besson, G. Debrégeas, S. Cohen-Addad, R. Höhler, "Dissipation in a sheared foam: from bubble adhesion to
+foam rheology", Phys. Rev. Lett. 101, 214504 (2008). doi:10.1103/PhysRevLett.101.214504
+Read from: HAL preprint hal-00294239v3, https://hal.science/hal-00294239/file/Article.pdf (dated 14 Oct 2008).
+Licence: HAL open deposit. Read in full 2026-11-13 (5 pp.). Page numbers = preprint pages.
+
+p.2: "We adjust the gas and liquid flow rates to produce foams with Phi_l = (5.0 ± 0.2)%." ; "the mean bubble radius
+is measured: It is equal to 24 um ± 2.0 um at the age of" [12 min]. Solution: "tetramethyltetradecylammonium bromide
+diluted at a concentration of 3g/l in a water/glycerol mixture (volume ratio of 75/25)"; gas "nitrogen saturated with
+perfluorohexane vapor to slow down the coarsening".
+p.3, Fig. 4 caption: "The lines represent the moduli predicted by (Eq. 1) with G0 = 206 Pa and tau = 246 s."
+Eq. (1): "G* = G' + iG'' = G0 iw tau/(1 + iw tau)" (coarsening-induced Maxwell relaxation)
+"a sinusoidal shear strain of amplitude 0.01 much smaller than the yield strain (of the order of 0.1)"
+"The elastic modulus is observed to be almost constant over the whole range of frequencies [0.01-10 Hz] while the loss
+modulus goes through a minimum around 1Hz."
+Princen 2D: "Princen predicted the static shear modulus G0 = sigma/epsilon = gamma/(sqrt3 r)."
+[surface tension of the solution is not stated in the text read.]

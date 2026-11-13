@@ -1,0 +1,18 @@
+TITLE: Do bubbles in Guinness go down? -- "The filming" page (and mirror at zarelab.com)
+AUTHORS: Andrew Alexander and Richard Zare (Stanford / Edinburgh), web page "(c) 2004 Alexander & Zare"
+URLS: https://web.stanford.edu/group/Zarelab/guinness/filming.html ; mirror https://zarelab.com/articles-presentations/do-bubbles-in-guinness-go-down/
+DATE READ: 2026-11-13 (Exa web_fetch_exa, full page)
+LICENCE: none stated
+SAMPLE: canned Guinness Draught (widget), at room temperature ("we used the cans at room temperature"). Bubbles in the settling liquid near the glass wall, NOT the head.
+METHOD: high-speed video (Kodak HS4540), 750 frames/s, zoom lens ~6x, field of view ~3 mm; sizes read off individual frames.
+
+--- verbatim ---
+"Most of the footage you can see on this site was taken at 750 frames per second, and is replayed at 25 frames per second - effectively slowing the bubbles down 30 times. We used a zoom lens at around 6 times magnification to see the bubbles, giving a field of view (size of the whole picture) of about 3 mm or 1/8" - about the same as the width of two pennies. What can we say about the size of the bubbles? We can measure them from the individual frames: see the picture opposite. We find that they are about 40 to 120 micrometers (1 to 4 thousandths of an inch) in diameter."
+"The time between the two frames below is 20 thousandths of a second. The same single bubble has been circled in yellow at both times. So the bubble travels 0.422 mm (0.0166") in 0.02 s. At that speed it could travel 2.11 cm (0.831") in 1 second"
+"Our bubble is only 0.011 cm wide (0.0043")"
+
+--- from the mirror page (zarelab.com), verbatim ---
+"Fortunately, the Guinness company makes their draught stout available in cans, using a special patented pouring device (the "widget") that creates all those creamy bubbles. Although we tried refrigeration before using them, condensation on the glass caused difficulties, so we used the cans at room temperature."
+
+--- FAQ page (https://web.stanford.edu/group/Zarelab/guinness/faq.html), verbatim ---
+"The shape of the glass is not that important. We obtained similar results in curved and straight glasses."

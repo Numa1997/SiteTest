@@ -1,0 +1,37 @@
+SOURCE: T. Watamura, F. Iwatsubo, K. Sugiyama, K. Yamamoto, Y. Yotsumoto, T. Shiono, "Bubble cascade in Guinness
+  beer is caused by gravity current instability", Sci. Rep. 9, 5718 (2019), doi:10.1038/s41598-019-42094-0.
+  Plus Supplementary Information (MOESM1, 4 pages).
+URLs: https://www.nature.com/articles/s41598-019-42094-0.pdf ;
+  https://static-content.springer.com/esm/art%3A10.1038%2Fs41598-019-42094-0/MediaObjects/41598_2019_42094_MOESM1_ESM.pdf
+LICENCE: Creative Commons Attribution 4.0 International (stated on p.9).
+DATE READ: 2026-11-13. Page numbers = article PDF pages; SI pages as printed "- n -".
+
+p.1: "a vast number of small bubbles with a mean diameter of 50 μm (only 1/10 the size of those in Budweiser or
+champagne1–3) disperse throughout the entire glass."
+p.2: "we poured Guinness beer in the containers from a 330-ml can of Draught Guinness. Note that we measured the
+density and viscosity of liquid in Guinness beer ourselves and found that the liquid density was ρ0 = 1006 kg/m3 and
+viscosity was μ = 2.1 × 10−3 Pa·s (see also Supplementary Fig. S1). The mean diameter of bubbles in Guinness was
+61 μm, and the volume-concentration of the bubbles was α = 8%."
+p.4: "a snapshot of the texture as the number-density distribution of bubbles in a pint glass 10 seconds after
+pouring Guinness."
+p.8: champagne "contains sub-millimetre-sized bubbles (300−500 μm)1–3, we cannot observe the texture-formation"
+
+SI p.1 (Appendix A): "we prepared degassed Guinness. ... The 8 samples (2 batches from 4 different production lots)
+were degassed by means of a centrifugal evaporator ... At different temperatures, we measured the kinematic viscosity
+ν (Fig. S1a) and density ρ (Fig. S1b), 8 times for each sample. The viscosity was measured in the range above 10 °C;
+therefore, we extrapolated ν = 2.03 mm2/s using a linear approximation and ν = 2.23 mm2/s at 5 °C."
+SI p.1: "To measure the bubble volume-concentration, we poured Guinness into a 210-ml measuring cup that overflowed
+within 10 seconds after opening a can. ... the bubble volume-concentration ... was estimated from the weight ratio of
+bubbly medium to the degassed Guinness liquid"
+SI p.2 (Appendix B): "At least 3000 samples were measured in each case. ... The log-normal distribution was found to
+give a good fit for the bubble and particle size distribution ... We also found that the bubble size distribution does
+not show any remarkable change with increasing time."
+SI p.3, Fig. S1 caption: "The kinematic viscosity was measured by means of a rolling ball type viscometer (Anton-paar
+GmbH, Lovis 2000M/ME). ... The density was measured by means of an oscillating U-tube-type density meter (Anton-paar
+GmbH, DMA 35N)."
+SI p.3, Fig. S2 caption: "The bubble diameters were measured at three different times after pouring Guinness into a
+trapezium container, which show relatively small differences." (legend: t = 15, 30, 45 s)
+SI p.4, Table S1 "Fluid properties of Guinness beer":
+  Robinson et al.: 5 °C, 1007 kg/m3, 2 × 10−3 Pa·s, α 23.3 – 26.6 %, Db 94, 122 μm, vSt 4.06 – 2.40 mm/s
+  Benilov et al.:  6 °C, 1007, 2.06 × 10−3, α 2, 5, 10 %, Db 122, 90 μm, vSt 3.94 – 2.14 mm/s
+  Present work:    5 °C, 1006, 2.03 × 10−3 – 2.21 × 10−3 Pa·s, α 8 %, Db 54 – 68 μm, vSt 0.716 – 1.15 mm/s

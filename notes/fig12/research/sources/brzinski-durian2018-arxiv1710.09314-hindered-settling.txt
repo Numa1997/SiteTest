@@ -1,0 +1,21 @@
+SOURCE: T. A. Brzinski III, D. J. Durian, "The hindered settling function at low Re has two branches",
+  arXiv:1710.09314v3 [cond-mat.soft] (13 Nov 2018); published Soft Matter 14, 9643 (2018).
+URL: https://arxiv.org/abs/1710.09314 (11-page PDF read in full)
+LICENCE: arXiv non-exclusive distribution licence. Short quotes.
+DATE READ: 2026-11-13. Page numbers = arXiv PDF pages.
+Used as the readable open source for Richardson & Zaki, Trans. Instn Chem. Engrs 32, S82-S100 (1954) (original not
+found online) and Batchelor, J. Fluid Mech. 52, 245 (1972).
+
+p.1 (abstract): "the data fall onto two distinct branches, both of which are well-described by a hindered settling
+function of the Richardson-Zaki form H(φ) = (1 − φ)^n but with different exponents: n = 5.6 ± 0.1 for Brownian systems
+with Péclet number Pe < Pec, and n = 4.48 ± 0.04 for non-Brownian systems with Pe > Pec. The crossover Péclet number is
+Pec ≈ 10^8, which is surprisingly large."
+p.2: "In 1972 Batchelor predicted H(φ) = 1 − 6.55φ + O(φ²) [18]. In 1988 Brady & Durlofsky predicted
+H(φ) = (1 − φ)³/(1 + 2φ) = 1 − 5φ + O(φ²)"
+p.2, Eq. (4): "Pe ≡ vs a/Do = 4π∆ρ g a^4 / (3kT)" ; Eq. (3): "Re ≡ ρf vs a/η = 2ρf ∆ρ g a³/(9η²)"
+p.2: "Lastly, we may compare the speed v = vs H(φ) of sedimentation driven by the pressure gradient ∆ρg ..."
+p.4, Table I: "[13] Richardson54, Fig.14a (s,f) 0.015 1.00 1.06 217 n-B 8.0E+07 6.8E-02" (η g/cm-s, ρf, ρp, d µm,
+type, Pe, Re)
+READER CALCULATION (Inference): Guinness bubble, ∆ρ = 1006 kg/m³, T = 279 K, d = 61 µm (a = 30.5 µm):
+Pe ≈ 9×10^6; d = 122 µm: Pe ≈ 1.5×10^8. Guinness bubbles sit near Pec, so n between 4.5 and 5.6.
+At φ = 0.02-0.05: (1−φ)^4.5 = 0.91-0.79; (1−φ)^5.6 = 0.89-0.75; Batchelor 1 − 6.55φ = 0.87-0.67.

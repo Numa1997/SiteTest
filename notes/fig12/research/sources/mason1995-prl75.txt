@@ -1,0 +1,30 @@
+SOURCE: T. G. Mason, J. Bibette, D. A. Weitz, "Elasticity of Compressed Emulsions",
+Phys. Rev. Lett. 75, 2051-2054 (1995). DOI 10.1103/PhysRevLett.75.2051.
+URL read: authors' copy linked from https://weitzlab.seas.harvard.edu/publications-1995/
+(Google Drive file 1jkF2rCMf_jQiuGxCbQ9fVTgwQQJMXLOw), 4 pages, pdftotext -layout.
+Licence: (c) 1995 American Physical Society; author-hosted copy. Paywalled at publisher -> quotes kept short.
+Date read: 2026-11-13. Whole paper read.
+Notation: phi = oil (dispersed) volume fraction; r = undeformed droplet radius; sigma = interfacial tension
+(9.8 dyn/cm here); G'_p = plateau storage modulus; phi_eff = phi(1 + 3h/2r), h = water film thickness.
+Symbols re-rendered from font glyphs.
+
+--- p. 2051, abstract ---
+"The elastic shear modulus of monodisperse emulsions is shown to exhibit a universal dependence on droplet volume
+fraction phi when scaled by the Laplace pressure of the droplets, increasing as phi(phi - phi_c), where
+phi_c ≈ 0.635, the value of random close packing of solid spheres."
+
+--- p. 2052, dry limit ---
+"A random, dry foam, is predicted to have G' ≈ 0.55 sigma/r [2]. Our results suggest that G' approaches
+0.6 sigma/r, in excellent agreement with this prediction."
+
+--- p. 2053, linear rise ---
+"Here G'_p decreases approximately linearly with phi_eff - phi_c ... The data for Pi also exhibit an approximately
+linear increase above phi_c, although with more scatter, until they diverge near phi_eff ≈ 0.8."
+
+--- p. 2054, the scaling law ---
+"Since the density of springs varies as phi_eff, we expect G'_p ~ phi_eff (phi_eff - phi_c) sigma/r; this does
+describe the data, as shown by the solid line in Fig. 4."
+
+NOTE (what is NOT printed): this paper gives NO numerical prefactor for G'_p = A phi(phi - phi_c) sigma/r.
+The often-quoted "1.7" is not in the text. [Inference: matching the stated dry limit 0.6 sigma/r at phi = 1 with
+phi_c = 0.635 gives A = 0.6/0.365 = 1.64 ≈ 1.6-1.7.] Data range: phi_eff ≈ 0.55-0.9, r = 0.25-0.74 µm (Fig. 3).

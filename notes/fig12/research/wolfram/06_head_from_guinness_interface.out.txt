@@ -1,0 +1,6 @@
+generalized Laplace pressure (s + 2 Einf)/R32 = 2400. Pa  (plain s/R = 1300. Pa)
+e = 0.22: G0 = 271.44 Pa; tau_y = 12.615 Pa; Bi(1 m/s2) = 2.99696; Bi(10 m/s2) = 0.299696; shear-wave crossing time of 19 mm = 17.165 ms
+e = 0.24: G0 = 228. Pa; tau_y = 9.375 Pa; Bi(1 m/s2) = 2.04163; Bi(10 m/s2) = 0.204163; shear-wave crossing time of 19 mm = 19.5617 ms
+e = 0.27: G0 = 166.44 Pa; tau_y = 5.415 Pa; Bi(1 m/s2) = 1.04822; Bi(10 m/s2) = 0.104822; shear-wave crossing time of 19 mm = 24.2841 ms
+e = 0.3: G0 = 109.2 Pa; tau_y = 2.535 Pa; Bi(1 m/s2) = 0.441645; Bi(10 m/s2) = 0.0441645; shear-wave crossing time of 19 mm = 31.6022 ms
+e = 0.34: G0 = 39.6 Pa; tau_y = 0.375 Pa; Bi(1 m/s2) = 0.057646; Bi(10 m/s2) = 0.0057646; shear-wave crossing time of 19 mm = 55.8676 ms

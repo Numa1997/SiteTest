@@ -1,0 +1,19 @@
+SOURCE: E. Chatzigiannakis, A. Alicke, L. Le Bars, L. Bidoire, J. Vermant, "The hidden subtlety of beer foam
+stability: A blueprint for advanced foam formulations", Phys. Fluids 37, 082139 (2025). doi:10.1063/5.0274943
+Read from: TU/e repository https://pure.tue.nl/ws/portalfiles/portal/366050996/082139_1_5.0274943.pdf (version of
+record). Licence: CC BY-NC. Read 2026-11-13 (methods II B 3-6, results III A, Table I). Page numbers = article pages.
+p.082139-3: "The surface tension (sigma) of the beer–air surface was measured at room temperature with a platinum
+Wilhelmy plate" ; "The bulk viscosity ... at a temperature of 25 C"
+Table I "Measured beer properties" (eta mPa s; sigma mN/m):
+"Tripel1 1.59 ± 0.02, 41.6 ± 0.3 | Tripel2 1.55 ± 0.01, 40.8 ± 1.3 | Lager1 1.41 ± 0.01, 48.1 ± 0.6 |
+ Lager2 1.25 ± 0.03, 42.7 ± 0.4 | Dubbel 1.38 ± 0.02, 43.9 ± 2.2 | Singel 1.35 ± 0.03, 46.1 ± 0.5"
+"The values of sigma ... are dominated by the ethanol content. Thus, the two Tripel beers that have a higher ethanol
+concentration show the lowest surface tension."
+"The surface tension of all beers was found to slowly decrease with time, which has been attributed to protein
+rearrangement at the interface"
+Foam test: "10 ml of degassed beer ... glass cylinder with an inner diameter of 3 cm ... Compressed air ... foam with a
+height of approximately 10 cm ... The half-life of the foam ... is defined as the time at which half of the initial
+liquid volume is entrained in the foam." "the foam of Lager 2 and Singel collapsed much faster and completely
+disappeared in less than 10 min."
+"For the two lager beers, it is Bq ≫ 1, which indicates that we expect 'immobile' surfaces"
+[No stout or nitrogenated beer was studied.]

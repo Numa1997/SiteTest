@@ -1,0 +1,27 @@
+SOURCE: A. Saint-Jalmes, "Physical chemistry in foam drainage and coarsening", Soft Matter 2, 836-849 (2006).
+DOI 10.1039/b606780h.
+URL read: https://perso.univ-rennes1.fr/arnaud.saint-jalmes/review_saintjalmes_drainage_coarsening_final.pdf
+(author's final version). Direct curl and Firecrawl failed (proxy tunnel reset / timeout); TinyFish returned empty;
+read via Exa web_fetch (text extraction, 60 k characters). Licence: (c) RSC 2006; author copy; quotes short.
+Date read: 2026-11-13. Sections 1-2 read; 3-4 skimmed. Page numbers of the journal version are not shown in the
+extraction, so sections are cited.
+Notation: e = liquid fraction (epsilon); L = PB length; D = bubble diameter; m = mu viscosity; c = gamma.
+
+--- Sec. 1 ---
+"For low liquid fraction (e ≲ 0.05), the bubbles are polyhedral ... at e_c = 0.36 (random close packing of solid
+spheres) bubbles are no longer deformed." "the Kelvin geometry ... for which one gets D = 2.7L"
+
+--- Sec. 2.2, channel-dominated (immobile surfaces) ---
+"Assuming immobile PB surfaces, a Poiseuille flow is obtained inside these solid tubes ... In this case,
+k(e) = Kc e L^2." "v = Kc rho g L^2 e/mu (2)" "for immobile PB walls, the value of Kc depends only on the PB geometry,
+and numerical simulations give Kc = 1/150 ≈ 0.0067. This drainage regime is called the 'channel dominated' regime."
+
+--- Sec. 2.2, node-dominated and series resistances ---
+"k(e) = Kn √e L^2" "v = Kn rho g L^2 √e/mu (3)" "The value of Kn is expected to be of the same order of magnitude
+as Kc." "L^2/k(e) = 1/(e Kc) + 1/(√e Kn)   (4)"
+
+--- Sec. 2.4.1 (protein vs SDS, Fig. 5: D = 2 mm, casein vs SDS) ---
+"interfaces covered by proteins usually have much higher interfacial elasticities and viscosities than surfactant
+layers. For a small surfactant, v is proportional to √e (consistent with the node-dominated regime, eqn (3)), while
+v ∝ e for the protein foam (as predicted for the channel-dominated regime, eqn (2))." Also: Kc and Kn extracted from
+data "are not constant and depend on the system and bubble size."

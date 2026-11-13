@@ -1,0 +1,48 @@
+SOURCE: Silveira, S. & Abramson, H. N., "Damping of liquid motions and lateral sloshing", chapter 4 of
+  H. N. Abramson (ed.), The Dynamic Behavior of Liquids in Moving Containers, with Applications to Space
+  Vehicle Technology, NASA SP-106 (Washington, 1966), pp. 105-143.
+URL: https://ntrs.nasa.gov/api/citations/19670006555/downloads/19670006555.pdf  (NTRS id 19670006555)
+LICENCE: US Government work, public domain.
+DATE READ: 2026-11-13. Read: printed pp. 105-111 (PDF pp. 111-117) in full, as page images, because the
+  OCR text layer drops the equations. Equations below were transcribed from the page images.
+
+p. 106, eq. (4.3)-(4.6):
+  "delta ~ Delta E / 2E << 1   (4.3)"
+  "... for small values of gamma   delta = 2 pi gamma = 2 pi c/c_c   (4.4)"
+  "gamma = (1/4pi) Delta E / E   (4.5)"
+  "The damping ratio in the form used by Miles (ref. 4.2) ... gamma = - (dE/dt, mean) / (2 omega E)   (4.6)"
+  (delta = logarithmic decrement, gamma = damping ratio c/c_c, E = energy of motion.)
+
+p. 109, Circular Cylindrical Tank:
+  "The effects on damping of the liquid depth, liquid amplitude, kinematic viscosity, and surface tension were
+   specifically investigated in reference 4.15, and an empirical relationship for calculating the damping
+   coefficient was obtained in the form
+     delta = 4.98 nu^(1/2) R^(-3/4) g^(-1/4) [ 1 + (0.318 / sinh(1.84 h/R)) ( (1 - h/R)/cosh(1.84 h/R) + 1 ) ]   (4.8a)
+   where nu is the kinematic viscosity, R is the tank radius, g is the acceleration of gravity, h is the liquid
+   depth, and delta is the logarithmic decrement"
+  Footnote 3: "It is not clear from the text (ref. 4.15) whether this equation was obtained from an examination of
+   the experimental data or was obtained by using experimental data to modify equations which appear in a
+   mentioned but unreferenced report of work by Rabinovich."
+  (ref. 4.15 = Mikishev, G. N. and Dorozhkin, N. Ya., 1961.)
+
+p. 110:
+  "For large depths, h/R > 1.0, equation (4.8a) may be approximated by
+     delta = 4.98 nu^(1/2) R^(-3/4) g^(-1/4)   (4.8b)"
+  "the effect of surface tension on the damping was investigated. It was concluded that, at least for small
+   tanks, surface tension can significantly affect the damping coefficient, as shown in figure 4.4."
+   [Fig. 4.4: damping factor vs surface tension 25-75 dyn/cm, tanks d = 20 cm and 51.8 cm; for the 20 cm tank
+    the factor rises steeply with surface tension.]
+  "a damping factor was employed which is very similar (but not equivalent) to that given by equation (4.8a).
+     delta = K nu^(1/2) R^(-3/4) g^(-1/4) tanh(1.84 h/R) [ 1 + 2 (1 - h/R) csch(3.68 h/R) ]   (4.10a)"
+  Footnote 4: "This equation was obtained independently by others (refs. 4.3 and 4.4)." (4.3 = Miles 1958;
+   4.4 = Case & Parkinson 1957.)
+
+p. 111:
+  "The theoretical value of K given by Miles (ref. 4.3) of K = 0.56 x 2 pi differs from the value determined by
+   these experiments of K = 5.23. For large depths (h/R > 1), equation (4.10a) reduces to
+     delta = 5.23 nu^(1/2) R^(-3/4) g^(-1/4)   (4.10b)"
+  "either equations (4.8) or (4.10) may be used to obtain results which contain discrepancies of no more than
+   the same order as the experimental scatter."
+  Fig. 4.6 data table: tank radii 3.8-152.5 cm; water nu = 0.00929 stokes; kerosene 0.0223; SAE 10-W oil 0.836.
+  p. 110: "liquid amplitudes measured at the wall less than 0.1R had no effect on the damping ... no relation was
+   found to exist between damping and liquid amplitude for a range of amplitudes at least up to 0.05R."

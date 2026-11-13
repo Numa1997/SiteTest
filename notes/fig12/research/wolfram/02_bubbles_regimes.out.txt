@@ -1,0 +1,15 @@
+steady slip v - u = 2 a^2 (A - G) rho/(9 mu)  (A = Du/Dt, G = effective gravity vector)
+relaxation time of the slip (added mass / drag) = a^2 rho/(9 mu)
+a = 45 um: Stokes rise U = 2.15796 mm/s, Re = 0.0949398, tau = 109.988 us, time to rise 125 mm = 57.925 s
+a = 50 um: Stokes rise U = 2.66415 mm/s, Re = 0.130233, tau = 135.787 us, time to rise 125 mm = 46.9193 s
+a = 61 um: Stokes rise U = 3.96532 mm/s, Re = 0.236483, tau = 202.106 us, time to rise 125 mm = 31.5233 s
+slip speed scales with |g - a_glass|: range factor {-0.019368, 2.01937}
+acoustic transit time H/c = 84.4595 us
+pressure swing rho a H for a = 10 m/s^2: 1258.75 Pa = 1.24229 % of 1 atm
+water hammer rho c dv for dv = 0.1 m/s (glass knocked, sub-0.1 ms stop): 149.036 kPa
+alpha = 0.02: rho_m = 986.86 kg/m3, mu_m(Einstein, rigid spheres) = 2.163 mPa s
+alpha = 0.05: rho_m = 956.65 kg/m3, mu_m(Einstein, rigid spheres) = 2.3175 mPa s
+buoyancy frequency N = 1.98091 rad/s vs slosh omega = 21.49 rad/s; N/omega = 0.0921782
+Richardson-like ratio alpha g H / U^2 for U = 0.1 m/s, alpha=0.02: 2.4525
+Re of slosh (U=0.1 m/s, L=R) = 1911.34;  Womersley R sqrt(omega/nu) = 126.725
+viscous diffusion time R^2/nu = 747.336 s

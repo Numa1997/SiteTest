@@ -1,0 +1,28 @@
+TITLE: ギネスビールの泡が見せる美しい模様 (Beautiful Bubble Texture in Guinness Beer), review
+AUTHORS: Tomoaki Watamura (Univ. Tokyo), Kazuyasu Sugiyama (Osaka Univ.)
+PUBLISHED: Oleoscience 24(6), 261-268 (2024); DOI 10.5650/oleoscience.24.261
+URL READ: https://www.jstage.jst.go.jp/article/oleoscience/24/6/24_261/_pdf (downloaded PDF, pdftotext -layout; Japanese text, read the relevant sections)
+DATE READ: 2026-11-13
+LICENCE: "Copyright ©2024 by Japan Oil Chemists' Society" (no open licence stated)
+SAMPLE: the authors' own measurements of bubbles in the LIQUID of poured drinks (not the head). Temperature not given in Table 1.
+
+--- Table 1, verbatim (p.267) ---
+"Table 1   飲料中の平均気泡直径と体積率
+            平均気泡直径 D［μ m］   平均気泡体積率〈α〉［％］
+ギネスビール            59±15          9.7
+ハイネケンビール        459±31         2.3
+一番搾り                434±59         1.5
+シャンパン              422±51         8.6
+スパークリングワイン    370±46         7.0
+コーラ                  469±51         2.4
+炭酸水                  844±111        4.4"
+(Translation: Table 1, mean bubble diameter and volume fraction in drinks. Rows: Guinness, Heineken, Kirin Ichiban Shibori, champagne,
+sparkling wine, cola, carbonated water.)
+Text introducing it (verbatim): "Table 1 は我々が計測した様々な飲料に含まれる気泡の直径と体積率を比較した表である。ギネスビールの気泡は他の飲料に比べて，1 桁小さい。"
+(Translation: "Table 1 compares the diameter and volume fraction of bubbles in various drinks that we measured. Guinness bubbles are one order of magnitude smaller than in the other drinks.")
+
+--- other verbatim statements ---
+"ギネスビールに含まれる気泡の直径は約 60 μm であり，その終端速度は 1 mm/s となる。単一の気泡は，高さ 100 mm のグラス内を約 100 秒かけて浮上することになる。"
+(Translation: bubble diameter in Guinness about 60 µm, terminal velocity 1 mm/s; a single bubble takes about 100 s to rise through a 100 mm glass.)
+"ギネスビールに含まれる気泡の体積率は約 9％であり，干渉沈降係数は 0.5 を下回る。つまり，周囲気泡の影響を考慮すると，気泡は高さ 100 mm のグラス内を 200 秒以上もかけて浮上し，分離することになる。"
+(Translation: the bubble volume fraction in Guinness is about 9 %, the hindered-settling factor is below 0.5; taking neighbours into account a bubble needs over 200 s to rise through a 100 mm glass.)

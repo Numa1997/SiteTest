@@ -1,0 +1,13 @@
+SOURCE: T. Watamura, F. Iwatsubo, K. Sugiyama, K. Yamamoto, Y. Yotsumoto, T. Shiono, "Bubble cascade in Guinness beer
+is caused by gravity current instability", Sci. Rep. 9, 5718 (2019). doi:10.1038/s41598-019-42094-0
+Read from: https://www.nature.com/articles/s41598-019-42094-0.pdf. Licence: CC BY 4.0 (Scientific Reports, open
+access). Read 2026-11-13 (introduction, experiments, results on phase separation). Page numbers = article pages.
+p.1: "a vast number of small bubbles with a mean diameter of 50 um (only 1/10 the size of those in Budweiser or
+champagne) disperse throughout the entire glass."
+p.2 (Experiments): "we poured Guinness beer in the containers from a 330-ml can of Draught Guinness. Note that we
+measured the density and viscosity of liquid in Guinness beer ourselves and found that the liquid density was
+rho0 = 1006 kg/m3 and viscosity was mu = 2.1 × 10^-3 Pa·s ... The mean diameter of bubbles in Guinness was 61 um, and
+the volume-concentration of the bubbles was alpha = 8%."
+p.3: "Finally, the glass of Guinness is completely separated into two contrasting phases (namely, the liquid and the
+head of foam)". "The texture appearing in a glass propagates downwards with a travelling velocity of ~-35 mm/s"
+[bubble sizes are for the settling body; no measurement inside the head]

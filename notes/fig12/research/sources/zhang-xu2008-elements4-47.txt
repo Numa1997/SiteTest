@@ -1,0 +1,17 @@
+SOURCE: Y. Zhang, Z. Xu, "'Fizzics' of bubble growth in beer and champagne", Elements 4(1), 47-49 (Feb 2008).
+URL: https://public.websites.umich.edu/~youxue/publications/Zhang2008Elements.pdf (3 pages read in full)
+LICENCE: none stated (author's web copy). Extract kept short.
+DATE READ: 2026-11-13.
+
+p.47: "We measured viscosity using a calibrated Cannon-Fenske viscometer. The viscosities of (1) Budweiser beer
+(containing CO2), (2) White Star Moet & Chandon Champagne (containing CO2), and (3) Guinness beer (containing N2) are,
+respectively, 1.44, 1.67, and 1.40 times that of water."  (measurement temperature not stated)
+p.48: "Guinness beer contains about 2 bars of N2 and 0.014 bars of CO2 (personal communication with the manufacturer).
+Although the gas pressure is similar, the concentration of gas in Guinness beer is much lower than in Budweiser beer
+because the solubility of N2 is only 1/65 times that of CO2."
+p.49: "Hence, bubble growth rate in undegassed Guinness beer is much lower, only about 1/50 that in undegassed Budweiser
+beer. Therefore, once released from a widget, the bubbles do not grow much at all in Guinness beer."
+p.49: "a bubble with a radius of 0.5 mm rises in beer at 90 mm/s, but a bubble with a radius of 0.03 mm rises at only
+1.0 mm/s."
+READER NOTE: 0.014 bar CO2 conflicts with Guinness patents (0.8-1.8 vol/vol CO2, i.e. ~0.6-0.8 bar at 6 °C) and
+with ESGI (0.8 bar); treat it as an error or mis-transcription.

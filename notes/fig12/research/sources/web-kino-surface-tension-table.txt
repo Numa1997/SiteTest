@@ -1,0 +1,42 @@
+TITLE: Measured surface tension and interface tension values of common articles of everyday use
+AUTHOR: KINO Scientific Instrument Inc. (tensiometer maker), company tech note; no named author
+URL: http://www.surface-tension.org/newsshow_61.html
+PAGE DATE: "Release time:2020-08-25"
+DATE READ: 2026-11-13 (downloaded with curl, HTML stripped to text; read in full)
+LICENCE: none stated
+METHOD: not stated on the page (KINO sells Wilhelmy-plate / du Nouy-ring / pendant-drop tensiometers; which one was used is NOT said).
+NOTE: no Guinness or stout in the table. Lagers only. Temperatures are room temperature (25-27 C), not serving temperature.
+
+--- verbatim table header ---
+"sample name
+Temperature
+（℃）
+surface tension
+（
+SFT
+）
+(mN/m)
+Interfacial tension
+( IFT) (mN/m)"
+
+--- verbatim beer rows (sample / temperature C / surface tension mN/m) ---
+"TSINGTAO Beer
+27.13
+33.787"
+
+"HARBIN BEER
+25.31
+38.944"
+
+"Heineken lager beer
+25.56
+42.179"
+
+"Budweiser
+26.06
+43.918"
+
+--- for scale, a water-like row on the same page ---
+"BORSEC
+31.31
+70.608"

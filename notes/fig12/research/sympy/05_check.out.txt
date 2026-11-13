@@ -1,0 +1,5 @@
+K=3.2 ec=0.36: liquid fraction at the top of a 19 mm head = 0.2352
+K=7.3 ec=0.26: liquid fraction at the top of a 19 mm head = 0.1792
+e=0.22: G0(1.4)=202.3 Pa, tau_y=17.28 Pa
+e=0.27: G0(1.4)=121.7 Pa, tau_y=8.17 Pa
+e=0.34: G0(1.4)=24.5 Pa, tau_y=1.08 Pa

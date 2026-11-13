@@ -1,0 +1,98 @@
+SOURCE: A. D. Ronteltap, "Beer foam physics", PhD thesis, Agricultural University Wageningen (1989), 133 pp.
+Promotor: Prof. Dr. A. Prins. doi:10.18174/202245
+Read from: https://edepot.wur.nl/202245 (WUR eDepot scan with OCR, 142 PDF pages). Licence: not stated on the scan
+(WUR eDepot public deposit). Found via OpenAlex (open_access oa_url). Read 2026-11-13: abstract, ch.3 (drainage),
+ch.4 surface tension parts, ch.5 results figures/tables, ch.6 (beer foam phenomena) in full, ch.8 (measurement) in
+full from 8.1 to 8.5. OCR has dropped most spaces; quotes below are re-spaced, wording unchanged.
+Page numbers: printed thesis page numbers (printed = PDF page - 9).
+
+NOTE: the beers A-H are anonymous commercial beers (no stout is named). The "nitrogen beer foam" in ch.8 is a
+foam made by sparging N2 through degassed beer E, not a nitrogenated stout.
+
+--- p.(abstract) ---
+"Disproportionation in a foam is mainly influenced by partial gas pressure differences. Surface rheological aspects
+dominate the rate of disproportionation when the gas composition throughout a foam is uniform."
+"The disappearance of beer foam is a result of the combined action of drainage and gas diffusion from the foam to the
+surrounding atmosphere."
+
+--- p.10, Eq. [3.1]-[3.3] (film drainage, Reynolds law; equations badly OCR'd) ---
+"The rate of drainage from films can be approximated with the classical Reynolds (1886) law ... Assuming that dP is
+equal to (2 sigma/r), the critical drainage time becomes: [3.3] t_c = 3 eta r^3 / (4 e_c^2 sigma)" [reconstructed from
+OCR "3Tjr3 / 4elo"; e_c = critical film thickness. Check against the scan before use.]
+
+--- p.35 (ch.4, Langmuir trough, single barrier, Fig. 4.13) ---
+"The equilibrium surface tension varies from 38 mN m^-1 to 47.4 mN m^-1. When the surface is expanded 400% the
+surface tension of all beers rises. The final surface tension of beers under dynamic conditions lies between
+45.1 mN m^-1 and 51.9 mN m^-1." (linear barrier speed 2.3e-2 m/s)
+--- p.36 ---
+"At high deformation rate the surface tension does not increase as much as at lower deformation rates showing that
+beer is shear thinning with respect to the surface dilational viscosity."
+--- p.38, Table 4.5 (overflowing cylinder, dlnA/dt approximately 2 s^-1); columns: equilibrium / dynamic, mN/m ---
+"A 47.4 55.0 | B 42.2 52.9 | C 43.0 53.0 | D 42.8 52.6 | E 41.6 52.0 | F 41.9 52.1 | G 38.0 52.8"
+--- p.39 (Table 4.6 / Fig 4.16): bulk viscosities of beers A-G 1.21-1.34 mN s m^-2 (= mPa s).
+--- p.59 (ch.5 model) "The solubility of carbon dioxide in water is about 50 times higher than the solubility of
+nitrogen. ... The equilibrium surface tension is 40 mN m^-1." (model input)
+
+--- p.81 (6.1 creaminess) ---
+"Creaminess is a foam characteristic, that depends mainly on the bubble-size distribution, on the liquid fraction and
+the whiteness of the foam. A homodisperse size distribution of small bubbles is desired ... In addition, the fraction
+of liquid in the foam must be high, because it facilitates the flow properties of the foam."
+--- p.82 (6.2 rise of the foam-liquid interface) ---
+"Suppose that a foam initially is 3 cm high, and contains 60% gas and 40% liquid. For fresh beer foam these figures
+are quite realistic. Also suppose that as a result of drainage the foam contains 90% gas and 10% liquid after a
+certain period of time. Then, the foam height is 2 cm. ... The decrease in foam height may take place in about two
+minutes, depending on various parameters, like the viscosity."
+--- p.83 (6.3 temperature) "the drainage rate as measured with a Rudin tube is proportional to the viscosity, if
+viscosity is manipulated by varying temperature." [sic: as printed]
+--- p.85-87 (6.5 collapse) ---
+"Foam collapse is mainly the result of the escape of gas from the foam." "under normal conditions, coalescence does
+not much contribute to foam collapse."
+"the bubble in the upper layer of the foam shrinks to about 2% of its original volume. This shrinking process does not
+take more than several seconds (figure 5.12)." [CO2 foam under air]
+"A foam of 3 cm height, in a glass with a diameter of 6 cm is considered. Suppose the gas fraction is initially 0.6
+and all bubbles have an initial radius of 200 um. In that case the foam contains approximately 1.5 million bubbles
+distributed over about 100 layers." ... "When all bubbles have gone through the diffusion process the foam will
+consist of about 7 layers of bubbles with a radius of about 50 um. The height of the foam will then be 0.4 mm, taking
+into account that the gas fraction in the foam has become 0.9."
+"If the rapid carbon dioxide and air exchange through a single foam film takes 1 second (chapter 5.5), and if every 14
+layers of foam bubbles becomes one layer ... the 100 layers of bubbles collapse in about 400 seconds."
+--- p.88 ---
+"Now also the observation, that a nitrogen foam is much more stable against collapse than a carbon dioxide foam, can
+be explained. Gas diffusion from a nitrogen foam to the surrounding atmosphere proceeds much slower than the diffusion
+of carbon dioxide, because the partial pressure differences and the solubility of nitrogen are much smaller. In fact,
+if the foam contains 100% nitrogen and the surrounding atmosphere is air ... the foam expands."
+"A little amount of nitrogen in a predominantly carbon dioxide foam already greatly improves the stability of the foam
+against collapse."
+--- p.89 ---
+"This explains why the addition of nitrogen to beer is such a successful way to improve head retention times"
+"After foam collapse, a monolayer of small bubbles remains on the beer surface for a long period of time."
+--- p.90 (6.6 cling) ---
+"Cling is the phenomenon that a part of the foam adheres to the wall when the upper level of the foam decreases. ...
+the gas diffusion process of carbon dioxide outward and air inward is essential for the deposition of cling. The small
+bubbles at the foam surface adhere more strongly to the wall than larger ones." "The bond between the bubble and the
+glass wall seems to be stronger than the bond between bubbles." "foam collapses more rapidly near the glass wall than
+in the middle of the glass."
+
+--- p.101 (8.1, NIBEM) ---
+"With the Nibem foam stability tester the collapse of the foam in the glass is measured with a conductivity probe. The
+probe follows the upper foam level as a function of time. The time elapse from 1 cm to 4 cm below the top of the glass
+is measured every cm." ... reproducibility "may depend on the slamming of a door, the opening of a window"
+--- p.107 (8.3) Modified NIBEM: "Only CO2 was used, because the nitrogen foam is too stable against collapse to allow
+reproducible measurement."  Rudin tube: 600 x 25 mm column, G2 glass filter, 25 C, interface rise between 3 and 8 cm.
+--- p.112, Table 8.1 "Foam numbers ... Rudin CO2 (s), Rudin N2 (s), eta (mN s m^-2), Nibem (s), modified Nibem (s)":
+"A 142 643 1.21 175 137 | B 235 757 1.34 215 92 | C 206 633 1.34 224 108 | D 250 715 1.29 254 165 |
+ E 241 727 1.34 278 163 | F 293 654 1.34 - 176 | G 273 722 1.32 422 285"
+"There appears to be a very large difference between foam numbers determined with carbon dioxide and nitrogen. With
+nitrogen much higher foam numbers are obtained. Mostly, drainage and coalescence appear to occur in a nitrogen foam.
+Disproportionation will proceed very slow, because the solubility of nitrogen is low."
+--- p.114 ---
+"Figure 8.4 shows the bubble-size distribution of a fresh beer E foam generated by sparging nitrogen through a
+G2-glass filter with well defined pores. The foam is almost homodisperse directly after generation and the bubbles
+have a mean radius of about 100 um ... Figure 8.5 shows the same foam, but three minutes later. The bubble-size
+distribution has widened and the mean bubble radius has increased. Most important is the observation that no bubbles
+have become smaller, meaning that disproportionation did not occur."
+--- p.115 ---
+"Using carbon dioxide instead of nitrogen practically the same bubble-size distribution is obtained directly after
+generation of the foam (figure 8.6). After three minutes however a completely different picture is obtained. A very
+large number of smaller bubbles than initially present was measured. ... It is evident that disproportionation has
+taken place."  (histogram radius axes 50-1050 um)

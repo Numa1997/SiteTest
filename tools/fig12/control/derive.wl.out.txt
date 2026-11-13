@@ -1,0 +1,21 @@
+Output of tools/fig12/control/derive.wl, Wolfram cloud kernel through the Wolfram connector, 13 November 2026 (about 00:50 UTC, 01:50 Berlin).
+The controllability lines were evaluated in a second call (the first call's MatrixPower form stayed unevaluated; fixed in the script).
+
+zeros of J1': {1.841184, 5.331443, 8.536316}
+f11, f12, f13 (Hz): {3.4206723, 5.8208798, 7.3654877}
+c_n integrals minus closed form: {0.e-24, 0.e-25, -0.e-25}
+shares 2/(xi^2-1): {0.8368349, 0.07292807, 0.02782853}
+beta: 1.540743049
+M_x site, Kaggle: 2.50160, 2.50460
+controllability determinant: (bb^4*be^2*w^4)/M^4
+from u_s: rank, rows (dv, q, q') all zero: {4, True}
+LQR 3.214 Hz: K = {76.68645, -1933.986, -41.31631, -150.} poles {-256.3992, -11.32915 + 7.543216 I, -11.32915 - 7.543216 I, -2.574071}
+LQR live 3.421 Hz: K = {75.03472, -1938.94, -38.81272, -150.} poles {-243.948, -12.01119 + 8.818547 I, -12.01119 - 8.818547 I, -2.556858}
+LQR Kaggle 3.31 Hz: K = {75.72576, -1913.344, -40.07022, -150.} poles {-250.1034, -11.65044 + 8.132603 I, -11.65044 - 8.132603 I, -2.565328}
+suspension: K_s = {-502.6206, 11.63194, -6.090909, 612.6313} poles {-31.97661 +- 259.9052 I, -4.936545 +- 4.976943 I}
+Kalman 3.214 Hz, probe every 5: A_d = {{0.9992008, 0., 0.}, {6.156517e-7, 0.9997961, 0.0009997705}, {0.001231031, -0.4077104, 0.9994731}}
+  B_d = {0.001997922, -1.539129e-6, -0.003077578}  Q_d diag = {0.00007983385, 6.383085e-11, 0.0001914288}
+  gain at a probe sample (rows v, q, q'; columns speed, swing): {{0.954358, -0.004313918}, {-0.0006902268, 0.1429208}, {-1.468275, 2.186694}} sd q (mm): 0.3024389
+Kalman Kaggle 3.31 Hz, probe every 2: gain {{0.9542578, -0.004629522}, {-0.0007407235, 0.07998683}, {-1.468196, 1.654453}} sd q (mm): 0.2262555
+
+Against derive.py (SymPy, SciPy): every number above equals derive.out.txt to the digits printed there.

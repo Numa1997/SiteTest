@@ -1,0 +1,8 @@
+SOURCE: W. T. Lee, S. Kaar, S. B. G. O'Brien, "Sinking bubbles in stout beers", Am. J. Phys. 86, 250 (2018).
+doi:10.1119/1.5021361. Read ONLY as an Exa search extract (highlights of the full text), 2026-11-13; the PDF was not
+downloaded. Treat as secondary until checked.
+"stout beer bubbles are typically a tenth of a millimetre in size whereas in carbonated beers typical sizes are of the
+order of millimetres."
+Eq. (13) context: "where phi_Head ≈ 0.8 is the bubble volume fraction of the head of a pint of beer."
+Table (parameters): "rho beer 1007 kg m^-3 | mu 2.06 × 10^-3 Pa s | r 61 um | ... | phi_0 0.02 | phi_Head 0.80"
+[phi_Head = 0.80 is a model parameter (no measurement cited in the extract).]

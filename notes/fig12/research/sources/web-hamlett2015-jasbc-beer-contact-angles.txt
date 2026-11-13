@@ -1,0 +1,44 @@
+TITLE: The effect of vessel wettability on the foamability of 'ideal' surfactants and 'real-world' beer heads
+AUTHORS: Christopher A. E. Hamlett, John D. Wallis, Robert J. Pugh, David J. Fairhurst (Nottingham Trent University; Univ. Geneva)
+PUBLISHED: J. Am. Soc. Brew. Chem. 73(3) (2015); DOI 10.1094/ASBCJ-2015-0503-01 (DOI confirmed via Crossref API)
+URL READ: https://irep.ntu.ac.uk/id/eprint/9054/1/219637_PubSub2621_Hamlett.pdf (author accepted manuscript, line-numbered)
+ROAD: curl got a Cloudflare challenge page; TinyFish fetch = bot_blocked; Firecrawl scrape redirected to the new NORA repository home page;
+      Exa web_fetch_exa returned the full manuscript text (read in full, 2026-11-13). Figures were not obtained.
+LICENCE: none stated in the text obtained (repository deposit)
+
+--- sample and conditions (verbatim) ---
+"The beers used in this study were Guinness Original (4.2% ABV), Banks's Bitter (3.8% ABV),
+Bass No 1 (4.4% ABV) and Harvest Pale (4.3% ABV) purchased in 500mL bottles ... They were used at room temperature and none of the beer bottles contained a widget."
+"2mL of surfactant solution or beer, which had been allowed to degas by pouring 10ml of beer into a glass vial which was the left open for 72 hrs"
+(NOTE: Guinness Original = the CO2-only bottled stout, not Guinness Draught; beer degassed 72 h; room temperature.)
+
+--- method (verbatim) ---
+"rendered hydrophilic by immersion in 30% hydrochloric acid (Fisher Scientific, UK) for 16 hrs. The glass containers were then rinsed using copious amounts of water and dried at 80°C for 3 hrs."
+"The static (θW), advancing (θWA) and receding (θWR) contact angles of a water droplet on flat glass microscope slides subjected to the same chemical treatments as the vials were measured using a Krüss DSA 10 goniometer (Hamburg, Germany) and Krüss DSA software."
+"Table 2 confirms that glass microscope slides cleaned in HCl exhibit beer contact angles (θB) less than 90° and those Grangers' modified microscope slides display contact angles greater than 90°"
+"The necessity to check the beer contact angles is that the surface tension of beer is less than water as is shown by the beer contact angles (Table 2) being less than the ones of water droplets on equivalent surfaces (Table 1)."
+
+--- Table 1 (water on treated glass), as extracted ---
+"Static contact angle (θW) 20.9° ± 3.0° [HCl] | 37.4° ± 4.2° [APTMS] | 79.4° ± 1.4° [CTMS] | 113.5° ± 1.0° [Grangers]
+ Advancing contact angle (θWA) 25.8° ± 3.3° | 47.9° ± 4.0° | 89.8° ± 1.8° | 115.6° ± 2.8°
+ Receding contact angle (θWR) (pinned contact line 0°) | 19.1° ± 5.8° | 74.5° ± 1.2° | 100.3° ± 3.5°"
+
+--- Table 2 (beer on HCl-cleaned and Grangers glass slides), as extracted ---
+"Table 2. Contact angle of different beers on hydrophilic (HCl washed) and hydrophobic (modified with Grangers) glass slides
+Guinness Original | Bass No 1 | Banks's Bitter | Harvest Pale ; each HCl | Grangers
+Static contact angle (θB): 28.5° ±2.0° | 109.2° ±1.2° | 21.5° ±4.8° | 99.6° ±2.0° | 19.0° ±4.5° | 105.2° ±2.5° | 30.1° ±2.6° | 103.6° ±1.4°
+Advancing contact angle (θBA): 22.3° ±2.1° | 115.3° ±1.1° | 22.6° ±2.5° | 108.3° ±2.5° | 23.1° ±4.2° | 111.2° ±2.9° | 30.9° ±2.8° | 109.6° ±1.6°
+Receding contact angle (θBR): 4.2° ±2.4° | 15.8° ±2.6° | 4.1° ±0.6° | 9.6° ±2.0° | 6.2° ±1.3° | 19.9° ±1.4° | 6.3° ±0.8° | 13.3° ±3.7°"
+CAVEAT (reader's note): the row labels came out of the text layer below the numbers; the assignment of row 2 = advancing, row 3 = receding is
+the order of the labels in the extraction. For Guinness on clean glass the "advancing" value (22.3°) is below the static value (28.5°), which is
+unusual; the published JASBC table should be checked before this is used as hysteresis.
+
+--- head on poured beer (figures not obtained) ---
+"Figure 5. Images showing the effect of hydrophilic and hydrophobic glasses on the foaming properties of four different beers after being poured from their bottle by hand. The scale bars for the beer images are 20mm for the images in which both glasses are shown and 5mm for the images of only the foam head."
+"Figure 6. Stability and height of foam head formed from hand pouring different beers into hydrophilic (open symbols) and hydrophobic (filled symbols) glasses"
+"Bottled drinks (beer or champagne) were poured into unmodified or chemically modified 1/3 pint glasses ... with the glass held at an angle of ~35° with the opening of the drinks bottle a distance of ~5 cm from the inside wall of the glass."
+"The graph in Figure 6 shows numerically that the head height and the stability increased for Guinness, Bank's Bitter and Bass No 1 in the hydrophilic glasses"
+"Figure 7. Guinness after being poured into a glass that had been half submerged in Granger's solution"
+
+--- cited value for glass from Zuidberg 1997 (secondary, verbatim) ---
+"Zuidberg [27] studied the effect of the wettability of a container on the head of beer by using containers made of different materials. Glass containers ((static contact angle (θ) = 0° and advancing contact angle (θA) = 45°) generated the most foam"

@@ -1,0 +1,16 @@
+SOURCE: S.-M. Acuna-Nelson, J.-M. Bastias-Montes, F.-R. Cerda-Leal, J.-E. Parra-Flores, J.-S. Aguirre-Garcia,
+  P. G. Toledo, "Nanocoatings of Bovine Serum Albumin on Glass: Effects of pH and Temperature", Journal of
+  Nanomaterials 2020, 8640818 (2020). doi:10.1155/2020/8640818
+URL: https://onlinelibrary.wiley.com/doi/10.1155/2020/8640818 (direct fetch: HTTP 403; text read through the Exa
+  fetch/search extract of the same page)
+LICENCE: page marked "Open Access" (Hindawi/Wiley); exact CC licence not verified. DATE READ: 2026-11-13.
+Read: abstract, sec. 2.4, sec. 3 tables 1, 2, 4 (as returned by the Exa extract). No page numbers (online article).
+
+Sec. 2.4: "the advancing (immersion) and receding (ascension) dynamic contact angle according to the Wilhelmy method"
+Table 1 (clean glass, deionized water): theta_adv 51.3 +/- 1.9 deg, theta_rec 46.6 +/- 1.5 deg,
+  "Hysteresis*: |cos theta_advancing - cos theta_receding|" = 0.06 +/- 0.01. "The low hysteresis value, 0.06,
+  indicates that the surface of the glass is relatively smooth."
+Table 2 (water on BSA-coated glass, SAMs): e.g. pH 5.0, 25 C, 4 h: theta_adv 68.8 +/- 2.9, theta_rec 45.9 +/- 3.1,
+  hysteresis 0.33 +/- 0.07; pH 4.5, 25 C, 4 h: 83.2 / 36.6, 0.68; range of hysteresis over table 0.27-0.68.
+Table 4 (LB film, 6 mN/m): theta_adv 75.1 +/- 2.9, theta_rec 57.4 +/- 4.3, hysteresis 0.61 +/- 0.10.
+NOTE: these are WATER angles on a protein-coated glass, not protein solution angles.

@@ -1,0 +1,16 @@
+SOURCE: W. T. Lee, S. Kaar, S. B. G. O'Brien, "Sinking bubbles in stout beers", Am. J. Phys. 86(4) (2018).
+URL READ: University of Limerick repository, accepted manuscript dated 23 Nov 2017:
+  https://researchrepository.ul.ie/server/api/core/bitstreams/99f31846-5e94-4909-a4e8-356d45787d8f/content
+  (handle https://hdl.handle.net/10344/7193)
+LICENCE: CC BY-NC-SA 1.0 (stated on repository cover page).
+DATE READ: 2026-11-13. Line numbers = manuscript line numbers.
+
+p.4, Table I "Physical and geometric properties": "ρbeer 1007 kg m−3 [ref 7]; ρbubble 1.223 kg m−3 [13];
+µ 2.06 × 10−3 Pa s [7]; r 61 µm [6]; θ 5°; g 9.81 m s−2; L 2 cm; φ0 0.02 [13]; φHead 0.80;
+uStokes 3.45 × 10−4 m s−1; vStokes 3.95 × 10−3 m s−1"
+  ([6] Robinson 2008; [7] Zhang & Xu 2008; [13] Benilov 2013)
+lines 151-153: "This equation can be solved using initial condition φ(x, 0) = φ0 ≈ 0.02 ... where φHead ≈ 0.8 is the
+bubble volume fraction of the head of a pint of beer."
+lines 39-40: "(For the impatient drinker the small bubbles are also responsible for the long wait for a pint of stout
+beer to settle.)"
+READER NOTE: all three property values are borrowed, not new measurements.

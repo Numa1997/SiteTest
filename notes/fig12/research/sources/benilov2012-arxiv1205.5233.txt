@@ -1,0 +1,44 @@
+SOURCE: E. S. Benilov, C. P. Cummins, W. T. Lee, "Why do bubbles in Guinness sink?",
+  arXiv:1205.5233v1 [physics.flu-dyn] (23 May 2012); published Am. J. Phys. 81(2), 88-91 (2013), doi:10.1119/1.4769377
+URL: https://arxiv.org/abs/1205.5233  (PDF read in full: https://arxiv.org/pdf/1205.5233, 5 pages)
+LICENCE: arXiv non-exclusive distribution licence (no CC licence stated). Short quotes only.
+DATE READ: 2026-11-13. Page numbers = arXiv PDF pages.
+
+p.1, Sec. II "Properties of Guinness":
+"We shall model Guinness by a liquid of density ρl and viscosity µl, with randomly distributed bubbles of gas
+of density ρg and viscosity µg. For a temperature of 6°C (recommended for consumption of Guinness by its
+producer "Diageo") and normal atmospheric pressure, we have
+  ρl = 1007 kg m−3   µl = 2.06 × 10−3 Pa s
+  ρg = 1.223 kg m−3  µg = 0.017 × 10−3 Pa s
+where the former values have been measured by ourselves and verified against the extrapolation formula of Ref. 4."
+  [Ref. 4 = Zhang & Xu, Elements 4, 47 (2008)]
+
+p.1: "Assuming db = 122 µm (as reported in Ref. 11) and σ = 0.745 N m−1 (which corresponds to water/air
+interface), we obtain Bo ≈ 0.002 – which is sufficiently small to assume that bubbles in Guinness are spherical."
+  [Ref. 11 = Robinson et al., Phys. Fluids 20, 067101 (2008). NOTE (reader): 0.745 N/m is a typo for 0.0745 N/m;
+   with 0.0745 N/m, Bo = ρ g d²/σ = 1007·9.81·(122e-6)²/0.0745 ≈ 0.0020, so the stated Bo is right.]
+
+p.1: "Guinness (as well as vast majority of 'real' liquids) contains a lot of surfactants, which make the bubbles
+behave as rigid spheres. ... ub = (ρl − ρb) g db² / (18 µl) ≈ 3.96 mm s−1." ... "Re = ρl ub db / µl ≈ 0.24"
+  [db is the bubble DIAMETER: 1007·9.81·(122e-6)²/(18·2.06e-3) = 3.97e-3 m/s, checked by reader.]
+
+p.2: "Finally, we introduce the void fraction f, i.e. the gas's share of the volume of the liquid/gas mixture.
+For canned Guinness, f ≈ 0.05 (see Ref. 11), whereas for draught Guinness served in pubs, f ≈ 0.1 (according to
+our own measurements). Note, however, that, traditionally, bartenders first fill, say, 80% of the glass and wait
+until it has fully settled (i.e. all the bubbles have gone out of the liquid into the foamy head), after which they
+would fill the glass full. Thus, when Guinness is served to the customer, the void fraction can be estimated as
+f ≈ 0.02, which is the value used in this work."
+
+p.2: "In this model the bubbles are assumed to be all of the same size."
+
+p.2: "It has turned out that, surprisingly, the dependence of Ts on f is very weak: e.g., an increase in f from 0.02
+to 0.05 results in a decrease in Ts from 43 to 46 seconds (the settling time here was defined such that
+f(Ts) = 10−6). The dependence of Ts on db is much stronger: a decrease in db from 122 to 90 micron results in an
+increase in Ts from 43 to 83 seconds."  [NOTE (reader): "decrease ... from 43 to 46" is self-contradictory as printed.]
+
+p.2: "Note also that the settling time of, approximately, 43 seconds computed for db = 122 µm and the pint container
+does not agree with our experimental estimate of approximately 120 seconds. ... One can then conjecture that smaller
+bubbles leave the liquid later than those of the median size ..."
+
+READER NOTE: Ref. 11 (Robinson 2008) actually reports local near-wall void fractions 0.23-0.32, not 0.05 (see
+robinson2008-physfluids20-067101.txt); the "f ≈ 0.05 for canned" attribution could not be traced to Ref. 11.

@@ -1,0 +1,24 @@
+TITLE: How to Pour a Guinness the Right Way...But Does it Really Matter?
+AUTHOR: "Chris", KegWorks blog (draught-equipment retailer)
+URL: https://www.kegworks.com/blog/how-to-pour-a-guinness-the-right-way-but-does-it-really-matter
+DATE: 26 February 2019; DATE READ: 2026-11-13 (Exa web_fetch_exa, full page)
+LICENCE: none stated
+SAMPLE: Guinness Draught from a nitro tap at 35 psi, 20-oz Guinness Imperial Pint glass; one pour per method; head measured after 2 min settling.
+METHOD: photograph + ruler, read in sixteenths of an inch. Single pours, no repeats.
+
+--- verbatim ---
+"Per Fergal Murray, Guinness master brewer and global ambassador, the head size on your Guinness should be between 18-20mm"
+"We let each beer sit for 2 minutes after the process of the pour was complete. This allowed each beer to fully settle, and for Guinness to turn to its dark stout color. We then took a photo of each and measured the head size of each pour."
+"We also used the same 20-oz Guinness Imperial Pint Glass for each beer."
+"We poured all of these Guinness beers at 35 PSI."
+"The amount of foamy head from the tried-and-true, proper way to pour a Guinness, measured in at 11/16" exactly."   [= 17.5 mm]
+"The foam atop the Irish pour was measured at exactly 13/16", slightly above the ideal Guinness head size described by Fergal Murray."   [= 20.6 mm]
+"The standard busy bartender pour produced a beer head size of exactly 14/16", a whopping 3/16" larger than our Guinness standard pour."   [= 22.2 mm]
+"When looking at the three beers, it was clear that the bubbles on the Guinness pour were also the tightest."
+"Let the beer surge, or cascade. According to Guinness, this process takes exactly 1 minute and 32.5 seconds."
+"The official word from Guinness is that this entire 6-step process takes 119.5 seconds in total."
+
+--- related, Stuff.tv (https://www.stuff.tv/features/can-guinness-nitrosurge-give-me-the-perfect-pint/, 16 Dec 2022, Jack Needham), read same day ---
+"We're looking for a black beer with a 2cm domage."
+"I'm in my kitchen analysing beer foam with a tape measure."   (no number reported for Guinness Original)
+"we achieve an optimum pour with a 2cm foam"   (said of Guinness Cold Brew Coffee Beer with Nitrosurge)
