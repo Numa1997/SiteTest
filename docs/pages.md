@@ -519,7 +519,7 @@ Lucretius I 146–158 as an inscription (Instrument Serif, a wine rule on its le
 stage is 4 : 3 there. Each of the four sentences (`p.lq-s`, `translate="no"`, `lang="la"`) shows, on a resting mouse (150 ms; 70 ms
 from one sentence to the next; hidden 240 ms after leaving), a tap or keyboard focus, one card with its published translation: Leonard
 (1916) on the English page, Diels (1924) on the German page, and on the Arabic page (since 10 November 2026) an Arabic translation
-made for this site, since 11 November 2026 from Leonard's English (`notes/lucretius/poem-ar-146-224.json`, ninth version, fully vowelled, since 13 November 2026; the card says it is not a published translation, the only
+made for this site, since 13 November 2026 translated from the Latin (`notes/lucretius/poem-ar-146-224.json`, tenth version, fully vowelled; the card says it is not a published translation, the only
 published one, Cairo 2018, being under copyright), with the source of the Latin under it; on desktop the card rises beside the verse
 (left of it where the text is; right of it on the mirrored Arabic page), otherwise just below the sentence; a click pins it, Esc or a
 second click closes it. Written by `notes/lucretius/make_home.py` from `notes/lucretius/poem-146-224.json` and the Arabic file.
@@ -534,7 +534,7 @@ subtle separations between them", the phone left to me. The home band has, under
 German and Arabic →" (`p.lq-all`). The page (`public/lucretius.html`, with `/de/` and `/ar/` versions made by `tools/i18n/build.py`,
 which lists it in `PAGES`, and short addresses in `public/_redirects`) shows, for each of the 20 verses, four cells in a row:
 the Latin (italic, with the number of each Latin line in the margin; line 155 stands after 158, as in the manuscripts), William Ellery
-Leonard's English (1916), Hermann Diels' German (1924) and the Arabic made for this site (ninth version, fully vowelled, `poem-ar-146-224.json`,
+Leonard's English (1916), Hermann Diels' German (1924) and the Arabic made for this site (tenth version, from the Latin, fully vowelled, `poem-ar-146-224.json`,
 README). **How the texts get there:** the verses stand in the page itself, each cell marked `translate="no"` with its own `lang` (and
 `dir="rtl"` for the Arabic), so the generator copies them unchanged into the German and Arabic pages and the tables
 `i18n/de|ar/lucretius.html.json` hold only the words around them (title, lede, the column credits "the original" and "made for this
