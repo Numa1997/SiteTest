@@ -519,7 +519,7 @@ Lucretius I 146–158 as an inscription (Instrument Serif, a wine rule on its le
 stage is 4 : 3 there. Each of the four sentences (`p.lq-s`, `translate="no"`, `lang="la"`) shows, on a resting mouse (150 ms; 70 ms
 from one sentence to the next; hidden 240 ms after leaving), a tap or keyboard focus, one card with its published translation: Leonard
 (1916) on the English page, Diels (1924) on the German page, and on the Arabic page (since 10 November 2026) an Arabic translation
-made for this site, since 11 November 2026 from Leonard's English (`notes/lucretius/poem-ar-146-224.json`, seventh version since 13 November 2026; the card says it is not a published translation, the only
+made for this site, since 11 November 2026 from Leonard's English (`notes/lucretius/poem-ar-146-224.json`, eighth version, fully vowelled, since 13 November 2026; the card says it is not a published translation, the only
 published one, Cairo 2018, being under copyright), with the source of the Latin under it; on desktop the card rises beside the verse
 (left of it where the text is; right of it on the mirrored Arabic page), otherwise just below the sentence; a click pins it, Esc or a
 second click closes it. Written by `notes/lucretius/make_home.py` from `notes/lucretius/poem-146-224.json` and the Arabic file.
@@ -534,7 +534,7 @@ subtle separations between them", the phone left to me. The home band has, under
 German and Arabic →" (`p.lq-all`). The page (`public/lucretius.html`, with `/de/` and `/ar/` versions made by `tools/i18n/build.py`,
 which lists it in `PAGES`, and short addresses in `public/_redirects`) shows, for each of the 20 verses, four cells in a row:
 the Latin (italic, with the number of each Latin line in the margin; line 155 stands after 158, as in the manuscripts), William Ellery
-Leonard's English (1916), Hermann Diels' German (1924) and the Arabic made for this site (seventh version, `poem-ar-146-224.json`,
+Leonard's English (1916), Hermann Diels' German (1924) and the Arabic made for this site (eighth version, fully vowelled, `poem-ar-146-224.json`,
 README). **How the texts get there:** the verses stand in the page itself, each cell marked `translate="no"` with its own `lang` (and
 `dir="rtl"` for the Arabic), so the generator copies them unchanged into the German and Arabic pages and the tables
 `i18n/de|ar/lucretius.html.json` hold only the words around them (title, lede, the column credits "the original" and "made for this
@@ -548,9 +548,9 @@ quatrefoils, the head `div.lp-cols` (the four languages named in their own words
 sticky at the top of the window while the verses pass under it), then the 20 verses (`section.lp`, address `#l146` and so on; `:target`
 tints the row). Above every verse a heading (`h2.lp__n`): rule, lozenge, rule, star, the line numbers of the Latin, star, rule, lozenge,
 rule. Between the four cells run hairlines (`.lp__c + .lp__c::before`, a 1 px gradient that fades out at both ends of every verse), so
-the separations are lines that breathe and not a grid. Columns are 0.95 : 1 : 1.05 : 1.2 (the Arabic widest); lines that wrap hang
+the separations are lines that breathe and not a grid. Columns are 0.9 : 0.95 : 1 : 1.5 (the Arabic widest, so the vowel marks have room); lines that wrap hang
 (a hanging indent), so a new line of the verse stays distinct from a wrap. The Latin is italic; the Arabic is Noto Naskh Arabic 20 px on
-a 1.95 line, its couplets spaced a little apart. A closing ornament ends the leaf; the sources follow below it. All ornaments are inline
+a 2.25 line (tall enough for the vowel marks), its couplets spaced a little apart. A closing ornament ends the leaf; the sources follow below it. All ornaments are inline
 SVG in the accent colour.
 
 **Smaller screens.** From 1100 px up: four columns. From 761 to 1099 px: two by two (Latin and English above, German and Arabic below),

@@ -12,7 +12,7 @@ me (one language at a time, chosen with four buttons; tablets show two by two).
 |---|---|
 | `poem-146-224.json` | The passage in 20 Latin sentences: line numbers, Latin, Leonard's English, Diels' German, per sentence. |
 | `extract.py` | Cuts the passage out of the downloaded sources by first and last words, so nothing is retyped (paths point at the scratch folder where the sources were downloaded; download them again to rerun). |
-| `poem-ar-146-224.json` | The Arabic (seventh version, 13 November 2026), 20 groups of lines, one per sentence of the Latin (`lines` = first and last Latin line); free verse in modern literary Arabic, with rhyme only here and there, made from Leonard's English for this site (not published, not reviewed by a second reader). The first four groups are the home band. |
+| `poem-ar-146-224.json` | The Arabic (eighth version, 13 November 2026), 20 groups of lines, one per sentence of the Latin (`lines` = first and last Latin line); free verse in an elevated modern literary Arabic, fully vowelled (tashkeel on every letter), with rhyme only here and there, made from Leonard's English for this site (not published, not reviewed by a second reader). The first four groups are the home band. |
 | `make_page.py` | Writes `public/lucretius.html`: 20 verses in four columns (Latin with its line numbers, Leonard, Diels, the Arabic). The verses stand in the page itself, marked `translate="no"` with their own `lang`, so the i18n tables hold only the words around them (rebuilt 13 November 2026). |
 | `make_home.py` | Writes the home page band (between `<!--LUCRETIUS-->` markers in `index.html`) from the first four sentences of the JSON. |
 
@@ -31,9 +31,9 @@ gesondert die Kraft ruht") is as printed online and unchecked against the print.
 **What Numa first had** (from Gemini): lines 149 and 218 misquoted, an English text attributed to Leonard that is not his, lines
 192–214 missing.
 
-**Which Arabic is on the site, and why.** The Arabic on the site is the **seventh version** (13 November 2026). Numa's rule for it: it
+**Which Arabic is on the site, and why.** The Arabic on the site is the **eighth version** (13 November 2026). Numa's rule for it: it
 must say what the English says. So it follows Leonard's English verse by verse, in lines, not word for word, in strong modern literary
-Arabic. Five versions came before it, and the reasons they were rejected are the rules for any later change:
+Arabic. Seven versions came before it, and the reasons they were rejected are the rules for any later change:
 
 1. First (10 Nov, bea5607 and 9120b8d): close to the Latin, case vowels everywhere. Numa called it "Gulf and Peninsula Arabic" and,
    after the three that followed, "the least bad". It was restored for a few hours on 11 November (78c4e89) and is in git.
@@ -53,11 +53,13 @@ Arabic. Five versions came before it, and the reasons they were rejected are the
    poetry, and the page says "rhyme only here and there". No second reader has checked it. Whether it is poetry enough is for Numa to
    judge; the layout does part of the work (the Arabic stands in its own column, its couplets spaced). Its verdict is not yet known.
 
+8. Eighth (13 Nov, the page now): Numa asked for tashkeel on every letter and a more majestic, poetic Arabic, "as if the poem was originally written in Arabic". The seventh version's content, kept to Leonard's English and the same rules, was raised in register (groups 9 and 14 are largely reworded: the earth that "yields" roses in spring and wheat in the summer heat; giants wading seas on foot) and fully vowelled: every consonant carries a fatha, damma, kasra, sukun or shadda; long-vowel letters, hamzat wasl and the sun-letter lam are left bare as in standard vocalised print; the article has sukun on the moon-letter lam; case endings are written inside a line, and the last word of each line is in pause form (sukun, no tanween). A script checked that no consonant lacks a mark (`0` flags); it cannot check that the case endings are grammatically right. A native reader has not done that. The page note says "fully vowelled" and "not checked by a second reader". The Arabic cell is set in Noto Naskh Arabic 20 px on a 2.25 line, and the Arabic column is the widest (1.5 of 4.35 parts), so the marks are not clipped and few lines wrap.
+
 Rules that hold for every version: the Arabic says what the English says, no more and no less; *nihilum* is «العدم»; darkness is «ظلام» (never «عتمة»); no calques («لا يُولَد شيءٌ من العدم بفعل
 الآلهة أبدًا» was rejected as word for word); no archaic particles; no Quranic ornament.
 
 **What the first version got wrong** (corrected in 868d8f6; the sixth version follows Leonard there). The review of 10 November (Opus) found, among others, *erumpere* (line 162) rendered «تنفلق», *secreta facultas* (line 173) rendered «قدرةً
-خاصّةً مستترة», and *alienis partibus anni* (line 181) rendered «من أجزاءِ السنة التي لا تناسبها». The seventh version has no second reader. The page
+خاصّةً مستترة», and *alienis partibus anni* (line 181) rendered «من أجزاءِ السنة التي لا تناسبها». The eighth version has no second reader. The page
 note (`i18n/ar/lucretius.html.json`, key d11ce3c93aa4) says so in the reader's words.
 
 **Sources read for the Arabic voice** (11 November 2026): Felix Fares' translation of Nietzsche's Zarathustra as serialised in الرسالة,
