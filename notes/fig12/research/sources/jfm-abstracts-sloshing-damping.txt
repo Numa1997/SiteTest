@@ -1,0 +1,41 @@
+SOURCE: publisher abstracts only (NOT full texts; all papers below are paywalled and no open copy was found via
+  Unpaywall, Semantic Scholar, arXiv, Infoscience). Read from Cambridge Core "citation_abstract" metadata via doi.org.
+LICENCE: Cambridge University Press copyright; abstracts quoted for citation. DATE READ: 2026-11-13.
+
+[1] K. M. Case & W. C. Parkinson, "Damping of surface waves in an incompressible liquid", J. Fluid Mech. 2, 172-184
+  (1957). doi:10.1017/S0022112057000051. Abstract: "The damping of surface waves of small amplitude in liquid
+  contained in cylinders has been calculated. Viscous dissipation in an assumed laminar boundary layer was taken to
+  be the primary cause of damping. Experimental results were obtained for the logarithmic decrement as a function of
+  the ratio of liquid height to cylinder radius for several water-filled cylinders. Theory and experiment were found
+  to be in good agreement."
+[2] L. M. Hocking, "The damping of capillary-gravity waves at a rigid boundary", J. Fluid Mech. 179, 253-266 (1987).
+  doi:10.1017/S0022112087001514. Abstract (excerpt): "An edge condition that models to some extent the dynamics
+  associated with moving contact lines, but not contact-angle hysteresis, is given by making the slope of the free
+  surface at contact proportional to its velocity. ... it is shown that the dissipation associated with the surface
+  forces can exceed that produced by viscosity."
+[3] M. Henderson (sic: D. M. Henderson) & J. W. Miles, "Surface-wave damping in a circular cylinder with a fixed
+  contact line", J. Fluid Mech. 275, 285-299 (1994). doi:10.1017/S0022112094002363. Abstract (excerpt): "calculated on
+  the assumptions of a fixed contact line, Stokes boundary layers, and either a clean or a fully contaminated surface.
+  ... brimfull, sharp-edged cylinder of radius 2.77 cm and depth 3.80 cm. ... The difference between the predicted
+  and observed damping ratio for the dominant mode with a clean surface was 20%; this difference was significantly
+  larger for the higher modes with a clean surface and for all of the modes with a contaminated surface."
+[4] J. W. Miles & D. M. Henderson, "A note on interior vs. boundary-layer damping of surface waves in a circular
+  cylinder", J. Fluid Mech. 364, 319-323 (1998). doi:10.1017/S0022112098001189. Excerpt: "interior damping may be
+  comparable with boundary-layer damping for surface waves in small cylinders ... The corresponding calculations for
+  a fully contaminated (inextensible) surface reduce the discrepancy between calculation and experiment but ...
+  leave a significant residual discrepancy."
+[5] D. M. Henderson, "Effects of surfactants on Faraday-wave dynamics", J. Fluid Mech. 365, 89-107 (1998).
+  doi:10.1017/S0022112098001086. Excerpt: "Measured damping rates increased with increasing film concentration as
+  predicted ... the measured damping rates for large-slope waves on these films were equivalent to those of waves on
+  a clean surface. ... Contact-line effects are incorporated, using an empirical value for contact-line speed"
+[6] R. Cocciaro, S. Faetti & M. Nobili, "Capillarity effects on surface gravity waves in a cylindrical container:
+  wetting boundary conditions", J. Fluid Mech. 231, 325-343 (1991). doi:10.1017/S0022112091003415. Excerpt: "The
+  damping of the fundamental surface mode is found to exhibit nonlinear behaviour which is in qualitative agreement
+  with the predictions of the Miles (1967) theory of capillary damping."
+[7] R. Cocciaro, S. Faetti & C. Festa, "Experimental investigation of capillarity effects on surface gravity waves:
+  non-wetting boundary conditions", J. Fluid Mech. 246, 43-66 (1993). doi:10.1017/S0022112093000035. Excerpt: "a
+  systematic experimental investigation of the static and dynamic properties of surface waves in a cylindrical
+  container where the free surface makes a static contact angle [value lost in metadata; 62 deg per Viola 2016
+  thesis p.186] ... A satisfactory agreement is found to exist between theory and experiment."
+Not obtained even as abstract: J. W. Miles, Proc. R. Soc. A 297, 459-475 (1967) doi:10.1098/rspa.1967.0081;
+  G. H. Keulegan, J. Fluid Mech. 6, 33-50 (1959) doi:10.1017/S0022112059000489 (no abstract in metadata).

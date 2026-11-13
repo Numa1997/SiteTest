@@ -1,0 +1,12 @@
+SOURCE: E. S. Benilov, C. P. Cummins, W. T. Lee, "Why do bubbles in Guinness sink?", Am. J. Phys. 81, 88-91 (2013).
+doi:10.1119/1.4769377. Read from author page https://eugene.benilov.com/pubs/ajp13.pdf (accepted version).
+Licence: not stated. Read 2026-11-13 (sections I-II and results; body flow, not head).
+p.88, Eq. (1): "For a temperature of 6 C ... rho_l = 1007 kg m^-3, mu_l = 2.06 × 10^-3 Pa [s]; ... where the values for
+rho_l and mu_l have been measured by ourselves"
+p.88: "Assuming d_b = 122 um (as reported in Ref. 11) and sigma = 0.0745 N m^-1 (which corresponds to an water/air
+interface)" [Ref 11 = Robinson et al. 2008. The 0.0745 N/m is water, NOT a stout measurement.]
+"As with the vast majority of 'real' liquids Guinness contains a lot of surfactants, which make the bubbles behave as
+rigid spheres."
+p.88: "For canned Guinness f ≈ 0.05 (see Ref. 11), whereas for draught Guinness served in pubs f ≈ 0.1 (according to our
+own measurements)." [f = void fraction of the settling body, not of the head]
+p.89-90: settling time "approximately 43 s computed for d_b = 122 um" vs "experimental estimate of approximately 120 s"
