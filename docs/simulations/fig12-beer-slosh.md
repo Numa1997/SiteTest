@@ -484,6 +484,22 @@ to the stout's below 1.5 mm), drops as 1.1 mm dots, lumps as balls of their stor
 lettering and camera are drawing only. "Drops and lumps in the air" counts everything stored outside the stout's body, including
 drops and lumps that have come to rest on the cart's body (`stuck`, `BODY_TOP`).
 
+**With control (run 7, Kaggle notebook version 7, 13 November 2026, commit `87e3720`).** The site's controllers run inside
+the GPU loop: `Cart` of `stout_jax.py` is a line-by-line port of `Cart.sample`, `lqrGains`, `suspGains` and `Observer` of
+`public/scripts/stout-cart.js` (speed PI with anti-windup, road preview, skyhook, the slosh LQR on the Kalman estimate with its
+integral, the joint design: slosh LQR + heave cancellation + suspension LQR), sampled every 1 ms, the cart sub-stepped at 0.1 ms,
+the two wall probes read once per fluid step from the surface the last step left (`Stout.prepare`, `Stout.probes`). The plant
+is run 6's measured swing with the head (3.278 Hz, ζ 0.467, β 1.541); gains K = (70.78, −1206.70, −38.59, −150.00),
+Ks = (−501.21, 11.92, −6.34, 630.06). The port was checked against the JS cart before the GPU
+(`tools/fig12/kaggle/portcheck/`, output `notes/fig12/handoff-jax/portcheck.txt`): speed, preview, skyhook to 1e-13; slosh and
+joint to 3e-8 A. Results against run 6 (speed held only): five bumps lean 9.8 → 1.2 mm (joint); one 25 mm bump 6.9 → 3.7 mm
+(joint); kerb 19.7 mm, 4.08 mL of head, 0.008 g of stout → joint 17.4 mm, 2.74 mL, 0; slosh 16.5 mm, 2.79 mL, 0; preview
+15.7 mm, 3.66 mL, 0. At the kerb every controller's command passes the 3 A limit for 5–6 stored pictures. All checks passed.
+The page lists all ten files (run 6's five, run 7's five; each index entry names its notebook version and commit), shows the
+motor current and the active force under Readings, and a table "With and without control" built from the numbers stored in
+`index-jax.json` (largest lean, head, stout, the largest stored current); a row plays its ride. The default ride is the five
+bumps with joint control.
+
 **The lecture note (rewritten 13 November 2026 for the JAX solver; lines 102–541 of the page).** Written to `notes/STANDARD.md`
 (verdict of 21 October 2026); plan in [`notes/fig12/plan-kaggle-jax.md`](../../notes/fig12/plan-kaggle-jax.md). Twelve sections,
 20 numbered equations, 3 inline SVG figures, 4 tables, Key results, worked examples, 7 Problems, 14 sources:

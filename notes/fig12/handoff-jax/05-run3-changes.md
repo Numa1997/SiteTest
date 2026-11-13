@@ -107,3 +107,18 @@ and 2 s (`rest_particles_15.npz`, `rest_particles_60.npz`) so any read-out can b
 Gate E's swing check now reads the natural frequency of the swing without the head (3 % of 3.421 Hz). With the head the model
 gives weight but no inertia, so its natural frequency is the bare stout's; a real head's mass would lower it to about 3.07 Hz
 (the note, section 11). That, and the method's own loss (0.0105, twice the glass's), are the next model's work.
+
+## Run 7: the controlled rides (13 November 2026, 20:20-20:43 UTC)
+
+The user's "Please do" (relayed, then "Go on" in this chat). The site's controllers ported line by line into `stout_jax.Cart`
+and checked against the JS cart before any GPU (`portcheck.txt`: 1e-13 for speed, preview, skyhook; 3e-8 A for slosh and joint).
+Version 7, commit 87e3720, 1360 s on the T4. Rest guard passed (0.54 mm, rms 0.125 mm). Every check of `check_run.py` passed.
+
+| Road | speed held only (run 6) | controlled (run 7) |
+|---|---|---|
+| five 20 mm bumps, 1.0 m/s | lean 9.8 mm | joint 1.2 mm; current up to 1.70 A, active force up to 7.1 N |
+| one 25 mm bump, 1.0 m/s | lean 6.9 mm | joint 3.7 mm; 1.63 A, 7.9 N |
+| kerb 30 mm, 1.5 m/s | 19.7 mm, 4.08 mL head, 0.008 g stout | joint 17.4 mm, 2.74 mL, 0 g; slosh 16.5 mm, 2.79 mL, 0 g; preview 15.7 mm, 3.66 mL, 0 g |
+
+At the kerb the commands reach 37-41 A (slosh, joint) and 8.7 A (preview) against the 3 A limit, for 5-6 stored pictures: the
+kerb's push (28.8 m/s^2) is beyond what 15 N of drive can answer on 2.4 kg.

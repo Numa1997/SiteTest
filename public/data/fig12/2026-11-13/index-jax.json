@@ -1,23 +1,26 @@
 {
- "about": "Fig. 12 computed in JAX on Kaggle's GPU: the stout, its head of foam and the cart, one file per ride.",
+ "about": "Fig. 12 computed in JAX on Kaggle's GPU: the stout, its head of foam and the cart, one file per ride. Run 6 (notebook version 6): the rides with the speed held only, and the free swings; run 7 (version 7): the same roads with the site's controllers in the loop. Each file names its version and code commit.",
  "generated": "2026-11-13",
  "kaggle": {
   "notebook": "numakoudsie/guinness-on-a-cart-stout-in-jax",
   "url": "https://www.kaggle.com/code/numakoudsie/guinness-on-a-cart-stout-in-jax",
-  "version": 6,
   "machine": "Tesla T4"
  },
- "code": "tools/fig12/kaggle/stout_jax.py and run_b.py at SiteTest commit 4c105275d3efe381335a3cb6cc23efbf0b13a9f6",
  "files": [
   {
    "path": "ride_bump25.json",
-   "label": "One 25 mm bump, 1.0 m/s",
+   "label": "One 25 mm bump, 1.0 m/s \u00b7 speed held only",
    "kind": "ride",
    "default": false,
-   "bytes": 317300,
-   "sha256": "8a8ca0b1b8e2a1d0e6c780275d435c045ab9d1d43cbb75104deb5520033bdcf6",
+   "bytes": 317315,
+   "sha256": "ff87d27d2ec160f6b9aca623bd2ddf341772210287abc753d01115e0dfae5027",
    "frames": 241,
    "seconds": 8.0,
+   "road": "one 25 mm bump",
+   "v0": 1.0,
+   "ctrl": "speed",
+   "kaggle_version": 6,
+   "commit": "4c105275d3efe381335a3cb6cc23efbf0b13a9f6",
    "measured": {
     "steps": 4080,
     "ms_per_step": 78.6,
@@ -26,18 +29,74 @@
     "cells": 370386,
     "particles": 1001952,
     "spilled_g": 0.0,
-    "head_spilled_ml": 0.0
+    "head_spilled_ml": 0.0,
+    "lean_max_mm": 6.8832783699035645,
+    "control": null,
+    "i_max_stored_A": 1.996
+   }
+  },
+  {
+   "path": "ride_bump25_joint.json",
+   "label": "One 25 mm bump, 1.0 m/s \u00b7 joint control",
+   "kind": "ride",
+   "default": false,
+   "bytes": 304083,
+   "sha256": "e139803ca0d9e593581463d5fa9f2ea8ec6cef1168ebd915eb94535c8650ce52",
+   "frames": 241,
+   "seconds": 8.0,
+   "road": "one 25 mm bump",
+   "v0": 1.0,
+   "ctrl": "joint",
+   "kaggle_version": 7,
+   "commit": "87e37209199e74d6039af224a5a739f17b3e4fbc",
+   "measured": {
+    "steps": 4080,
+    "ms_per_step": 78.1,
+    "its_per_step": 61.0,
+    "run_s": 318.6,
+    "cells": 370386,
+    "particles": 1001952,
+    "spilled_g": 0.0,
+    "head_spilled_ml": 0.0,
+    "lean_max_mm": 3.6670267581939697,
+    "control": {
+     "i_max_A": 1.6339179245686735,
+     "icmd_max_A": 1.6473593314255637,
+     "frames_current_limited": 0,
+     "us_max_N": 7.922779040812219,
+     "ipar_max_A": 0.014747260228316014,
+     "gains": {
+      "K": [
+       70.78107225412417,
+       -1206.7008688785409,
+       -38.59088850291106,
+       -149.99999999999713
+      ],
+      "Ks": [
+       -501.2156998123334,
+       11.923168259572924,
+       -6.34279425396823,
+       630.0044481464855
+      ]
+     }
+    },
+    "i_max_stored_A": 1.634
    }
   },
   {
    "path": "ride_resonant.json",
-   "label": "Five 20 mm bumps in step with the swing, 1.0 m/s",
+   "label": "Five 20 mm bumps in step with the swing, 1.0 m/s \u00b7 speed held only",
    "kind": "ride",
-   "default": true,
-   "bytes": 426163,
-   "sha256": "90996ee62dae98200dd617b26c46e8cbd420006f7d4b37b001a31ac7adbb25cf",
+   "default": false,
+   "bytes": 426178,
+   "sha256": "ea4136a92bbb2983c98b9b6c4295ff89fc8ece104168f259f0812690515dfc0f",
    "frames": 241,
    "seconds": 8.0,
+   "road": "five 20 mm bumps in step with the swing",
+   "v0": 1.0,
+   "ctrl": "speed",
+   "kaggle_version": 6,
+   "commit": "4c105275d3efe381335a3cb6cc23efbf0b13a9f6",
    "measured": {
     "steps": 4080,
     "ms_per_step": 79.1,
@@ -46,18 +105,74 @@
     "cells": 370386,
     "particles": 1001952,
     "spilled_g": 0.0,
-    "head_spilled_ml": 0.0
+    "head_spilled_ml": 0.0,
+    "lean_max_mm": 9.79931640625,
+    "control": null,
+    "i_max_stored_A": 2.393
+   }
+  },
+  {
+   "path": "ride_resonant_joint.json",
+   "label": "Five 20 mm bumps in step with the swing, 1.0 m/s \u00b7 joint control",
+   "kind": "ride",
+   "default": true,
+   "bytes": 326692,
+   "sha256": "76cf5b4e0872bf1e0885f40e69c6ccfce7a5abacc90de144a01ffe2ce8e8c216",
+   "frames": 241,
+   "seconds": 8.0,
+   "road": "five 20 mm bumps in step with the swing",
+   "v0": 1.0,
+   "ctrl": "joint",
+   "kaggle_version": 7,
+   "commit": "87e37209199e74d6039af224a5a739f17b3e4fbc",
+   "measured": {
+    "steps": 4080,
+    "ms_per_step": 75.6,
+    "its_per_step": 75.4,
+    "run_s": 308.5,
+    "cells": 370386,
+    "particles": 1001952,
+    "spilled_g": 0.0,
+    "head_spilled_ml": 0.0,
+    "lean_max_mm": 1.1852234601974487,
+    "control": {
+     "i_max_A": 1.698783787528571,
+     "icmd_max_A": 1.6963753475676218,
+     "frames_current_limited": 0,
+     "us_max_N": 7.06055104016322,
+     "ipar_max_A": 0.016365719337902786,
+     "gains": {
+      "K": [
+       70.78107225412417,
+       -1206.7008688785409,
+       -38.59088850291106,
+       -149.99999999999713
+      ],
+      "Ks": [
+       -501.2156998123334,
+       11.923168259572924,
+       -6.34279425396823,
+       630.0044481464855
+      ]
+     }
+    },
+    "i_max_stored_A": 1.699
    }
   },
   {
    "path": "ride_sharp30.json",
-   "label": "One sharp 30 mm bump, 1.5 m/s",
+   "label": "One sharp 30 mm bump, 1.5 m/s \u00b7 speed held only",
    "kind": "ride",
    "default": false,
-   "bytes": 280513,
-   "sha256": "4f4034bf90ad9ef4625e1c231ae806a414b2aad87637b34d10b01707b15666cf",
+   "bytes": 280528,
+   "sha256": "ddbf39760b8eff47f0970e05c146898da2de77613328fcbdcdfc33f130903e5e",
    "frames": 121,
    "seconds": 4.0,
+   "road": "one sharp 30 mm bump",
+   "v0": 1.5,
+   "ctrl": "speed",
+   "kaggle_version": 6,
+   "commit": "4c105275d3efe381335a3cb6cc23efbf0b13a9f6",
    "measured": {
     "steps": 2042,
     "ms_per_step": 93.1,
@@ -66,7 +181,154 @@
     "cells": 370386,
     "particles": 1001952,
     "spilled_g": 0.01,
-    "head_spilled_ml": 4.08
+    "head_spilled_ml": 4.08,
+    "lean_max_mm": 19.713573455810547,
+    "control": null,
+    "i_max_stored_A": 2.984
+   }
+  },
+  {
+   "path": "ride_sharp30_joint.json",
+   "label": "One sharp 30 mm bump, 1.5 m/s \u00b7 joint control",
+   "kind": "ride",
+   "default": false,
+   "bytes": 264753,
+   "sha256": "ac308a5b61b4b2d8e9d28bff32495b69e94fdd21086d448c5dae7b390c500336",
+   "frames": 121,
+   "seconds": 4.0,
+   "road": "one sharp 30 mm bump",
+   "v0": 1.5,
+   "ctrl": "joint",
+   "kaggle_version": 7,
+   "commit": "87e37209199e74d6039af224a5a739f17b3e4fbc",
+   "measured": {
+    "steps": 2041,
+    "ms_per_step": 86.2,
+    "its_per_step": 112.9,
+    "run_s": 175.9,
+    "cells": 370386,
+    "particles": 1001952,
+    "spilled_g": 0.0,
+    "head_spilled_ml": 2.74,
+    "lean_max_mm": 17.389066696166992,
+    "control": {
+     "i_max_A": 2.929698494261964,
+     "icmd_max_A": 36.80362485307846,
+     "frames_current_limited": 5,
+     "us_max_N": 11.464566205713005,
+     "ipar_max_A": 0.9753311606210058,
+     "gains": {
+      "K": [
+       70.78107225412417,
+       -1206.7008688785409,
+       -38.59088850291106,
+       -149.99999999999713
+      ],
+      "Ks": [
+       -501.2156998123334,
+       11.923168259572924,
+       -6.34279425396823,
+       630.0044481464855
+      ]
+     }
+    },
+    "i_max_stored_A": 2.93
+   }
+  },
+  {
+   "path": "ride_sharp30_preview.json",
+   "label": "One sharp 30 mm bump, 1.5 m/s \u00b7 road preview",
+   "kind": "ride",
+   "default": false,
+   "bytes": 279845,
+   "sha256": "987fee05e21ff7bc5c2818deaf7d7cd6fd1c46908c65775e85911ff4fd419194",
+   "frames": 121,
+   "seconds": 4.0,
+   "road": "one sharp 30 mm bump",
+   "v0": 1.5,
+   "ctrl": "preview",
+   "kaggle_version": 7,
+   "commit": "87e37209199e74d6039af224a5a739f17b3e4fbc",
+   "measured": {
+    "steps": 2041,
+    "ms_per_step": 90.9,
+    "its_per_step": 130.3,
+    "run_s": 185.4,
+    "cells": 370386,
+    "particles": 1001952,
+    "spilled_g": 0.0,
+    "head_spilled_ml": 3.66,
+    "lean_max_mm": 15.743523597717285,
+    "control": {
+     "i_max_A": 2.950426538863916,
+     "icmd_max_A": 8.730020816134754,
+     "frames_current_limited": 6,
+     "us_max_N": 0.0,
+     "ipar_max_A": 0.0,
+     "gains": {
+      "K": [
+       70.78107225412417,
+       -1206.7008688785409,
+       -38.59088850291106,
+       -149.99999999999713
+      ],
+      "Ks": [
+       -501.2156998123334,
+       11.923168259572924,
+       -6.34279425396823,
+       630.0044481464855
+      ]
+     }
+    },
+    "i_max_stored_A": 2.95
+   }
+  },
+  {
+   "path": "ride_sharp30_slosh.json",
+   "label": "One sharp 30 mm bump, 1.5 m/s \u00b7 slosh LQR",
+   "kind": "ride",
+   "default": false,
+   "bytes": 268819,
+   "sha256": "e3cb8b90c04b97918e02f121899f25852bbe1a452f59840da5f69bafd7b0b9b3",
+   "frames": 121,
+   "seconds": 4.0,
+   "road": "one sharp 30 mm bump",
+   "v0": 1.5,
+   "ctrl": "slosh",
+   "kaggle_version": 7,
+   "commit": "87e37209199e74d6039af224a5a739f17b3e4fbc",
+   "measured": {
+    "steps": 2041,
+    "ms_per_step": 93.8,
+    "its_per_step": 130.9,
+    "run_s": 191.4,
+    "cells": 370386,
+    "particles": 1001952,
+    "spilled_g": 0.0,
+    "head_spilled_ml": 2.79,
+    "lean_max_mm": 16.495019912719727,
+    "control": {
+     "i_max_A": 2.971553485685984,
+     "icmd_max_A": 41.370826649755784,
+     "frames_current_limited": 5,
+     "us_max_N": 0.0,
+     "ipar_max_A": 0.0,
+     "gains": {
+      "K": [
+       70.78107225412417,
+       -1206.7008688785409,
+       -38.59088850291106,
+       -149.99999999999713
+      ],
+      "Ks": [
+       -501.2156998123334,
+       11.923168259572924,
+       -6.34279425396823,
+       630.0044481464855
+      ]
+     }
+    },
+    "i_max_stored_A": 2.972
    }
   },
   {
@@ -78,6 +340,11 @@
    "sha256": "e245d8705ed368e3130cc669ddcb6fba8b3d8924321d57d8320b4ceaee80cf58",
    "frames": 151,
    "seconds": 5.0,
+   "road": null,
+   "v0": null,
+   "ctrl": null,
+   "kaggle_version": 6,
+   "commit": "4c105275d3efe381335a3cb6cc23efbf0b13a9f6",
    "measured": {
     "steps": 2550,
     "ms_per_step": 66.8,
@@ -86,7 +353,10 @@
     "cells": 370386,
     "particles": 1001952,
     "spilled_g": 0.0,
-    "head_spilled_ml": 0.0
+    "head_spilled_ml": 0.0,
+    "lean_max_mm": null,
+    "control": null,
+    "i_max_stored_A": null
    }
   },
   {
@@ -98,6 +368,11 @@
    "sha256": "b2721dc8427aee1aaa7719226927aee5417f5d651d65fef6302d7e50f564c7d9",
    "frames": 151,
    "seconds": 5.0,
+   "road": null,
+   "v0": null,
+   "ctrl": null,
+   "kaggle_version": 6,
+   "commit": "4c105275d3efe381335a3cb6cc23efbf0b13a9f6",
    "measured": {
     "steps": 2550,
     "ms_per_step": 94.6,
@@ -106,7 +381,10 @@
     "cells": 370386,
     "particles": 1001952,
     "spilled_g": 0.0,
-    "head_spilled_ml": 0.0
+    "head_spilled_ml": 0.0,
+    "lean_max_mm": null,
+    "control": null,
+    "i_max_stored_A": null
    }
   }
  ]
