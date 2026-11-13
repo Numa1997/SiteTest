@@ -57,8 +57,11 @@ idx = json.load(open(idx_path)) if os.path.exists(idx_path) else dict(
     about="Fig. 12 computed in JAX on Kaggle's GPU: the stout, its head of foam and the cart, one file per ride.", generated=date,
     kaggle=dict(notebook="numakoudsie/guinness-on-a-cart-stout-in-jax", url="https://www.kaggle.com/code/numakoudsie/guinness-on-a-cart-stout-in-jax",
                 version=int(version), machine=S.get("device")), code=f"tools/fig12/kaggle/stout_jax.py and run_b.py at SiteTest commit {commit}", files=[])
+label = (f"{task['road'][0].upper()}{task['road'][1:]}, {task['v0']:.1f} m/s" if task["kind"] == "ride"
+         else ("Standing still, one push" if task["push"][1] > 0 else "Standing still"))
 idx["files"] = [f for f in idx["files"] if f["path"] != name + ".json"] + [dict(
-    path=name + ".json", bytes=len(b), sha256=sha, frames=int(nf), seconds=round((nf - 1) / 30, 3),
+    path=name + ".json", label=label, kind=task["kind"], default=(name == "ride_resonant"), bytes=len(b), sha256=sha, frames=int(nf), seconds=round((nf - 1) / 30, 3),
     measured={k: task.get(k) for k in ("steps", "ms_per_step", "its_per_step", "run_s", "cells", "particles", "spilled_g", "head_spilled_ml")})]
+idx["files"].sort(key=lambda f: (f["kind"] != "ride", f["path"]))
 json.dump(idx, open(idx_path, "w"), indent=1)
 print(dst, len(b), sha)
