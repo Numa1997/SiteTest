@@ -7,7 +7,8 @@ The file (JSON): the cart's lists per stored frame, and four packed blocks (base
   hf   uint8 [frames][n][n]  thickness of the head of foam on that column, in steps of qhf
   drops int16 [sum nd][3]    the drops of stout in the air in each frame (nd[frame] of them), x, y, z in the glass's frame, steps of qd
   lumps int16 [sum nl][4]    the lumps of head in the air (nl[frame] of them): x, y, z in steps of qd, volume in steps of qv
-Run: python3 tools/fig12/kaggle/pack_ride.py <ride.npz> <summary.json> <task name> <date> <notebook version> <commit>"""
+Run: python3 tools/fig12/kaggle/pack_ride.py <ride.npz> <summary.json> <task name> <data folder> <notebook version> <commit>
+(data folder: the folder under public/data/fig12/, e.g. 2026-11-13 for runs 6 and 7, 2026-11-14-run8 for run 8)"""
 import base64, hashlib, json, os, sys, zlib
 import numpy as np
 
@@ -68,8 +69,11 @@ nd, drops = cloud(Z["drops"]); nl, lumps = cloud(Z["lumps"], Z["lumpvol"])
 r5 = lambda a, k: [round(float(v), k) for v in a]
 out = dict(name=name, generated=date, n=int(n), frames=int(nf), fps=30, dx=float(Z["dx"]), x0=float(Z["x0"]), fill=float(Z["fill"]),
            qH=QH, qhf=QHF, qd=QD, qv=QV, t=r5(Z["t"], 4),
-           mp=float(Z["mp"]), particles=int(Z["N"]), stout_g=r5(Z["nact"] * float(Z["mp"]) * 1e3, 2),
-           spill_g=r5((int(Z["N"]) - Z["nact"]) * float(Z["mp"]) * 1e3, 2), head_spill_ml=r5(Z["foam_spill"] * 1e6, 3),
+           # the books per frame, as the run counted them: stout in the glass (particles still in it times their mass, to 1 mg, 2.3
+           # particles) and out of it; head in the glass (its thickness summed over the columns on the GPU, run 8 on) and broken off
+           mp=float(Z["mp"]), particles=int(Z["N"]), stout_g=r5(Z["nact"] * float(Z["mp"]) * 1e3, 3),
+           spill_g=r5((int(Z["N"]) - Z["nact"]) * float(Z["mp"]) * 1e3, 3), head_spill_ml=r5(Z["foam_spill"] * 1e6, 3),
+           head_glass_ml=(r5(Z["vhead"] * 1e6, 3) if "vhead" in Z.files else None), books=task.get("books"), plant=task.get("plant"),
            head=task.get("head"), head_ml=task.get("head_ml"), task={k: task[k] for k in ("kind", "model", "dx", "end") if k in task},
            nd=nd, nl=nl, H=pk(Hd), hf=pk(hf), drops=pk(drops), lumps=pk(lumps))
 if "x" in Z.files:
@@ -93,7 +97,7 @@ label = (f"{task['road'][0].upper()}{task['road'][1:]}, {task['v0']:.1f} m/s · 
 idx["files"] = [f for f in idx["files"] if f["path"] != name + ".json"] + [dict(
     path=name + ".json", label=label, kind=task["kind"], default=(name == "ride_resonant_joint"), bytes=len(b), sha256=sha, frames=int(nf), seconds=round((nf - 1) / 30, 3),
     road=task.get("road"), v0=task.get("v0"), ctrl=task.get("ctrl", "speed") if task["kind"] == "ride" else None, kaggle_version=int(version), commit=commit,
-    measured=dict({k: task.get(k) for k in ("steps", "ms_per_step", "its_per_step", "run_s", "cells", "particles", "spilled_g", "head_spilled_ml", "control")},
+    measured=dict({k: task.get(k) for k in ("steps", "ms_per_step", "its_per_step", "run_s", "cells", "particles", "spilled_g", "head_spilled_ml", "control", "books", "head_mass", "fit_ring13")},
                   i_max_stored_A=(round(float(np.abs(Z["i"]).max()), 3) if "i" in Z.files else None),
                   # on the outer ring (R_fill - dx/2) from the trusted columns, as the page reads them: the lean (front wall minus back)
                   # and the tilt (twice the cos(theta) part, 2 (2/64) sum eta cos theta). lean_max_mm_run: the run's own lean, which

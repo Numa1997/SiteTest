@@ -125,8 +125,11 @@
         lastTxt = now;
         $('t-out').textContent = `${fmt(D.t[k], 2)} of ${fmt(dur(), 1)} s`;
         $('r-v').textContent = D.v ? fmt(D.v[k], 2) + ' m/s' : 'at rest';
-        $('r-s').textContent = fmt(D.spill_g[k], 2) + ' g';                 // stored to 0.01 g: 23 particles are 0.01 g
-        $('r-h').textContent = fmt(D.head_spill_ml[k], 1) + ' mL';
+        // the books as the run counted them (stored to 1 mg, 2.3 particles of 0.429 mg, and to 0.001 mL); older files hold no head volume
+        if ($('r-sg')) $('r-sg').textContent = D.stout_g ? fmt(D.stout_g[k], 3) + ' g' : '—';
+        $('r-s').textContent = fmt(D.spill_g[k], 3) + ' g';
+        if ($('r-hg')) $('r-hg').textContent = D.head_glass_ml ? fmt(D.head_glass_ml[k], 2) + ' mL' : (D.head ? '—' : 'no head');
+        $('r-h').textContent = fmt(D.head_spill_ml[k], 2) + ' mL';
         $('r-d').textContent = String(D.nd[k] + D.nl[k]);
         if ($('r-i')) $('r-i').textContent = D.i ? fmt(D.i[k], 2) + ' A' : '—';
         if ($('r-u')) $('r-u').textContent = D.us ? fmt(D.us[k], 1) + ' N' : (D.i ? '0 N' : '—');

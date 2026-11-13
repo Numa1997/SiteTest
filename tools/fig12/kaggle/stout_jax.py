@@ -756,7 +756,8 @@ class Stout:
         return dict(H=H, nfallback=nfb, drops=drops.astype(F32), ndrops=nd, nloose=jnp.sum(loose, dtype=I32), nfly=jnp.sum(fly, dtype=I32),
                     nlanded=jnp.sum(s["landed"], dtype=I32), nstuck=jnp.sum(s["stuck"], dtype=I32), nact=jnp.sum(act, dtype=I32), KE=KE, PE=PE, Px=Px,
                     ewall=s["ewall"], efoam=s["efoam"], eskin=s["eskin"], nliq=jnp.sum(liq, dtype=I32), nsel=nsel,
-                    hf=s["hf"], lumps=s["bx"], lumpvol=s["bvol"], foam_spill=s["foam_spill"], foam0=s["foam0"])
+                    hf=s["hf"], lumps=s["bx"], lumpvol=s["bvol"], foam_spill=s["foam_spill"], foam0=s["foam0"],
+                    vhead=jnp.sum((s["hf"] * self.afill).astype(F64)) * dx * dx)   # the head still in the glass (m^3), for the books
 
     def polar(self, H, nr=16, nth=64, Rmax=None):
         """The stored surface H sampled (bilinear, on the GPU) on rings r = Rmax ir / nr, theta = 2 pi ith / nth;

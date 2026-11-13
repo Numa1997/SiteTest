@@ -56,8 +56,17 @@ TASKS_CONTROL = [
     dict(name="ride_sharp30_preview", kind="ride", dx=0.0015, model="full", end=4.0, road="one sharp 30 mm bump", v0=1.5, ctrl="preview"),
     dict(name="ride_bump25_joint", kind="ride", dx=0.0015, model="full", end=8.0, road="one 25 mm bump", v0=1.0, ctrl="joint"),
 ]
+# run 8 (13-14 Nov 2026): the head with its mass (stout_jax.Stout.pressure, Robin condition), every ride the page plays recomputed,
+# and books per frame. The controllers are designed on the swing this run measures with the head (free_full_1.5, ring 13), as a
+# control engineer identifies the plant before closing the loop; the swing without the head (no head, so unchanged by the head's
+# mass) comes last and is computed only if the budget still allows it.
+TASKS_RUN8 = [TASKS[0], TASKS[2], TASKS[1], TASKS[3], TASKS[4]] + TASKS_CONTROL[1:] + [TASKS[5]]
 if os.environ.get("RUNSET") == "control":
     TASKS = TASKS_CONTROL
+elif os.environ.get("RUNSET") == "run8":
+    TASKS = TASKS_RUN8
+PLANT_FROM_RUN = os.environ.get("RUNSET") == "run8"
+HEAD_MASS = os.environ.get("HEAD_MASS", "1") == "1"
 if os.environ.get("ONLY"):   # run only the named tasks, comma-separated (one Colab job per task: Colab caps a job at 3600 s)
     TASKS = [t for t in TASKS if t["name"] in os.environ["ONLY"].split(",")]
 if os.environ.get("CODECHECK"):   # a check of this script only: two frames on a 6 mm grid, results thrown away
@@ -93,7 +102,9 @@ for task in TASKS:
     if time.time() - T0 + est > BUDGET_S:
         log(f"skip {name}: needs about {est:.0f} s, {BUDGET_S - (time.time() - T0):.0f} s left in the budget"); continue
     log(f"start {name}: grid {dx * 1e3:.1f} mm, {task['model']}, {task['end']} s of stout; about {est:.0f} s")
-    G = Geometry(R, DZP, FILL, dx); S = Stout(G, model=task["model"], rho=RHO)
+    if task.get("ctrl") and PLANT_FROM_RUN and "measured" not in PLANT and not os.environ.get("CODECHECK"):
+        log(f"STOP: {name} needs the plant measured in this run (free_full_1.5), and there is none"); raise SystemExit(0)
+    G = Geometry(R, DZP, FILL, dx); S = Stout(G, model=task["model"], rho=RHO, head_mass=HEAD_MASS)
     log(f"  {G.n} x {G.n} x {G.nz} = {G.n * G.n * G.nz:,} cells, {S.N:,} particles, stout {S.rho * S.V * 1e3:.1f} g; "
         f"glass area in the cells {G.area_cells * 1e4:.1f} cm^2 (profile {G.area_profile * 1e4:.1f})")
     s = S.init_state(); t = jnp.zeros((), F64)
@@ -105,14 +116,14 @@ for task in TASKS:
         adv = make_advance(S, "ride", cart=cart); ex = ride_extra(S, cart)
     obs = jax.jit(S.observe); pol = jax.jit(S.polar)
     nf = int(round(task["end"] * FPS)); rec = {k: [] for k in ("t", "H", "nfallback", "polar", "drops", "ndrops", "nfly", "nlanded", "nstuck", "nact", "KE", "PE", "Px",
-                                                              "ewall", "efoam", "eskin", "hf", "lumps", "lumpvol", "foam_spill", "steps", "its", "itmax", "resmax", "nselmax", "wall_s",
+                                                              "ewall", "efoam", "eskin", "hf", "lumps", "lumpvol", "foam_spill", "vhead", "steps", "its", "itmax", "resmax", "nselmax", "wall_s",
                                                               "x", "v", "zb", "zw", "i", "Nwheel", "Fx", "Fz", "icmd", "us", "qhat", "yq", "ipar")}
 
     def record(s, t, ex, st, wall):
         o = obs(s); P = pol(o["H"])
         rec["t"].append(float(t)); rec["H"].append(np.asarray(o["H"])); rec["polar"].append(np.asarray(P))
         rec["drops"].append(np.asarray(o["drops"]).astype(np.float16))
-        for k in ("nfallback", "ndrops", "nfly", "nlanded", "nstuck", "nact", "KE", "PE", "Px", "ewall", "efoam", "eskin", "foam_spill"): rec[k].append(float(o[k]))
+        for k in ("nfallback", "ndrops", "nfly", "nlanded", "nstuck", "nact", "KE", "PE", "Px", "ewall", "efoam", "eskin", "foam_spill", "vhead"): rec[k].append(float(o[k]))
         if name == "rest" and int(round(float(t) * FPS)) in (15, 2 * FPS):   # the particles themselves at 0.5 s and 2 s, to check any read-out offline
             np.savez_compressed(WORK / f"rest_particles_{int(round(float(t) * FPS))}.npz", xp=np.asarray(s["xp"]), act=np.asarray(s["act"]), hf=np.asarray(s["hf"]), H=np.asarray(o["H"]))
         rec["hf"].append(np.asarray(o["hf"]).astype(np.float16)); rec["lumps"].append(np.asarray(o["lumps"]).astype(np.float16))
@@ -151,7 +162,17 @@ for task in TASKS:
                 s_per_simulated_s=round(rate_now, 1), spilled_g=round((S.N - out["nact"][-1]) * S.mp * 1e3, 2),
                 drops_max=int(out["ndrops"].max()), volume_kept=float(out["nact"][-1] / S.N),
                 head_spilled_ml=round(float(out["foam_spill"][-1]) * 1e6, 2), head_ml=round(float(np.asarray(S.init_state()["foam0"])) * 1e6, 1),
-                head=dict(R32=RBUB, phi_l=PHI_F, gamma=GAMMA, E_inf=E_INF, G0=G_HEAD, tau_y=TAU_Y, Z=Z_WALL, lr=LR_WALL))
+                head=dict(R32=RBUB, phi_l=PHI_F, gamma=GAMMA, E_inf=E_INF, G0=G_HEAD, tau_y=TAU_Y, Z=Z_WALL, lr=LR_WALL), head_mass=bool(HEAD_MASS and S.head))
+    # the books, every stored frame: each particle of stout is in the glass, in the air, on the cart or on the ground; the head is
+    # in the glass (its thickness summed over the columns, float64 on the GPU) or broken off over the rim (the lumps' volumes)
+    foam0 = float(np.asarray(S.init_state()["foam0"]))
+    nsum = out["nact"] + out["nfly"] + out["nlanded"] + out["nstuck"]
+    info["books"] = dict(stout_particles=S.N, stout_err_particles_max=int(np.abs(nsum - S.N).max()),
+                         stout_glass_g_end=round(float(out["nact"][-1]) * S.mp * 1e3, 4), stout_out_g_end=round(float(S.N - out["nact"][-1]) * S.mp * 1e3, 4),
+                         head_ml0=round(foam0 * 1e6, 4), head_glass_ml_end=round(float(out["vhead"][-1]) * 1e6, 4), head_off_ml_end=round(float(out["foam_spill"][-1]) * 1e6, 4),
+                         head_err_ml_max=float(np.abs(out["vhead"] + out["foam_spill"] - foam0).max() * 1e6))
+    log(f"  books, every frame: stout {S.N:,} particles = glass + air + cart + ground, largest error {info['books']['stout_err_particles_max']} particles; "
+        f"head {foam0 * 1e6:.3f} mL = glass + broken off, largest error {info['books']['head_err_ml_max']:.2e} mL")
     dev = (pol_arr - FILL) * 1e3
     if task["kind"] == "free":
         th = 2 * np.pi * np.arange(pol_arr.shape[2]) / pol_arr.shape[2]
@@ -160,12 +181,19 @@ for task in TASKS:
         if task["push"][1] > 0 and (tt > task["push"][0] + task["push"][2] + 0.1).sum() > 30:
             m = tt > task["push"][0] + task["push"][2] + 0.1
             info["fit_ring13"] = fit_swing(tt[m] - tt[m][0], q13[m]); info["fit_ring16"] = fit_swing(tt[m] - tt[m][0], q16[m])
+            if PLANT_FROM_RUN and task["model"] == "full":
+                F = info["fit_ring13"]
+                ok = F.get("f0") is not None and 2.5 < F["f0"] < 3.5 and 0 < F["zeta"] < 1 and F["rms_mm"] < 0.25 * F["A_mm"]
+                log(f"  the plant for the controllers, measured here: {'PASS' if ok else 'FAIL'} {F}")
+                if not ok and not os.environ.get("CODECHECK"):
+                    log("STOP: the swing with the head gave no clean first mode; no controlled ride is computed"); raise SystemExit(0)
+                if ok: PLANT.update(w=2 * math.pi * F["f0"], zeta=F["zeta"], measured=f"run's own {name}, ring 13")
         E = out["KE"] + out["PE"]; info["energy_J"] = [float(E[0]), float(E[-1])]
     else:
         lean = (pol_arr[:, 16, 0] - pol_arr[:, 16, 32]) * 1e3
         info["lean_max_mm"] = float(np.nanmax(np.abs(lean))); info["v_range"] = [float(out["v"].min()), float(out["v"].max())]
         info["impulse_vs_momentum"] = dict(impulse_x=float(np.asarray(ex["imp"][0])), momentum_x_end=float(np.asarray(ex["P"][0])))
-        info["ctrl"] = task.get("ctrl", "speed"); info["plant"] = PLANT
+        info["ctrl"] = task.get("ctrl", "speed"); info["plant"] = dict(PLANT)
         info["control"] = dict(i_max_A=float(np.abs(out["i"]).max()), icmd_max_A=float(np.abs(out["icmd"]).max()),
                                frames_current_limited=int((np.abs(out["icmd"]) >= CART_COMMON["Imax"]).sum()),
                                us_max_N=float(np.abs(out["us"]).max()), ipar_max_A=float(np.abs(out["ipar"]).max()),
