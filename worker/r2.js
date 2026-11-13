@@ -17,6 +17,7 @@ export default {
       obj.writeHttpMetadata(h);
       h.set('etag', obj.httpEtag);
       h.set('content-type', 'application/octet-stream');
+      h.set('x-content-type-options', 'nosniff');
       h.set('cache-control', 'public, max-age=31536000, immutable');   // a run file never changes: a new run gets a new name
       return new Response(request.method === 'HEAD' ? null : obj.body, { headers: h });
     }
