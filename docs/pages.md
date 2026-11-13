@@ -542,27 +542,21 @@ site", the sources). The four columns are in the same order on all three pages (
 right to left. `notes/lucretius/make_page.py` writes the page and drops table entries that are no longer on it. Do not edit
 `public/lucretius.html` by hand: run `make_page.py`, then `tools/i18n/build.py`.
 
-**The leaf.** The poem is set as the leaf of a book (`article.lp-book`, up to 1240 px, a wine frame with a second line outside it and an
-eight-pointed star, a khatam, on each corner): the poet's name, the title in Instrument Serif, book and lines, an ornament of stars and
-quatrefoils, the head `div.lp-cols` (the four languages named in their own words, Latina, English, Deutsch, العربية, with their credits;
-sticky at the top of the window while the verses pass under it), then the 20 verses (`section.lp`, address `#l146` and so on; `:target`
-tints the row; each section is named "Lines 146 to 148" and so on for screen readers). The verses stand in `div.lp-body`, so each
-language runs down its own column as one text: behind them `div.lp-rules` (a grid with the same columns) draws three hairlines between
-the columns, unbroken from the first verse to the last and fading only at the two ends. Between two verses there is no heading and no
-line across the page: each cell after the first verse begins with its own small mark (`i.lp__sep`, a short hairline fading at both ends
-with a small lozenge, 44 % of the column, at most 150 px), so the mark never crosses into the next column. The line numbers of the Latin
-stand only beside the Latin. The head names each column in a larger type (27 px; the Arabic in Amiri 24 px) with a short wine bar under
-the name and the credit under that. Columns are 0.9 : 0.95 : 1 : 1.5 (the Arabic widest, so the vowel marks have room); lines that wrap hang
+**The layout.** Since 13 November 2026 the poem is set flat and modern, with no paper sheet, frame, corner stars or ornament rows (`article.lp-book`, no border, no background). It opens with the head `div.lp-cols`, under a 1 px dark rule across the full width: for each language a small mono index in wine (01 to 04), the name in its own words (Latina, English, Deutsch, العربية; Instrument Serif 27 px, the Arabic in Amiri 24 px) and the credit in mono; a light rule under it; sticky at the top of the window on a translucent paper ground with a blur. Then the 20 verses (`section.lp`, address `#l146` and so on; `:target` tints the row; each section is named "Lines 146 to 148" and so on for screen readers). The verses stand in `div.lp-body`, so each
+language runs down its own column as one text: behind them `div.lp-rules` (a grid with the same columns) draws three plain light hairlines
+(`--rule-soft`) between the columns, unbroken from the first verse to the last. Between two verses there is no heading and no
+line across the page: each cell after the first verse begins with its own short dash (`i.lp__sep`, 22 px, 1 px, `--rule`, at the
+start of the line: left in the Latin, English and German, right in the Arabic), so the mark never crosses into the next column. The line numbers of the Latin
+stand only beside the Latin. Columns are 0.9 : 0.95 : 1 : 1.5 (the Arabic widest, so the vowel marks have room); lines that wrap hang
 (a hanging indent), so a new line of the verse stays distinct from a wrap. The Latin is italic; the Arabic is Noto Naskh Arabic 20 px on
-a 2.25 line (tall enough for the vowel marks), its couplets spaced a little apart. A closing ornament ends the leaf; the sources follow below it. All ornaments are inline
-SVG in the accent colour.
+a 2.25 line (tall enough for the vowel marks), its couplets spaced a little apart. A light rule ends the poem; the sources follow below it.
 
 **Smaller screens.** From 1100 px up: four columns. Below 1100 px: **one language at a time**, in one column up to 640 px wide; the head becomes four buttons
 (`aria-pressed`, a wine underline on the one shown) and a small script at the end of the page shows one cell per verse, starting with the
 language of the page (English on the English page, Deutsch on `/de/`, العربية on `/ar/`). When the language is changed, the verse that
 was at the top of the window stays at the top (the script moves the scroll by the difference, `overflow-anchor: none` on the leaf stops the
 browser from doing it a second time). Without JavaScript the four cells stand one under the other, each named by its label. A short note
-under the lede, shown only below 1100 px, says that the languages come one at a time. Up to 760 px the frame and the head are narrower.
+under the lede, shown only below 1100 px, says that the languages come one at a time. Up to 760 px the head drops the index numbers and the credits.
 
 Measured on the built site (headless Chromium, English, German and Arabic pages, 1600, 1280, 900 and 390 px; 13 November 2026, ninth
 version): 20 verse rows, 52 pieces on each translated page and none pending, no page errors, no sideways scroll; at 1600 and 1280 px four

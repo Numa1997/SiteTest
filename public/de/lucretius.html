@@ -22,51 +22,34 @@
     </script>
     <style>
       /* Lucretius I 146-224 in four languages side by side, set as the page of a book: a framed leaf with a star at each corner, a title,
-         a head that names the four columns, and 20 verses. Each language runs down its own column as one text: hairlines between the
+         Modern and flat since 13 November 2026: no paper sheet, frame or ornaments; a head with a dark top rule names the four columns
+         (index number, name, credit), and 20 verses. Each language runs down its own column as one text: hairlines between the
          columns run unbroken from the first verse to the last, and between two verses each column has only a small mark of its own
          (a short fading hairline with a lozenge) that never crosses into the next column. */
       .lp-book { --lp-cols: minmax(0, .9fr) minmax(0, .95fr) minmax(0, 1fr) minmax(0, 1.5fr); }
       .lp-lede { max-width: 66ch; }
       .lp-note { display: none; margin: 10px 0 0; max-width: 66ch; font-size: 14.5px; line-height: 1.6; color: var(--ink-2, var(--ink)); }
-      .lp-book { overflow-anchor: none; position: relative; margin: 34px 12px 10px; padding: 50px 36px 44px; background: rgba(255, 255, 255, .42);
-        border: 1px solid rgba(122, 31, 43, .42); outline: 1px solid rgba(122, 31, 43, .18); outline-offset: 7px; }
-      .lp-corner { position: absolute; width: 22px; height: 22px; color: var(--accent); }
-      .lp-corner svg { width: 22px; height: 22px; display: block; fill: currentColor; } .lp-corner svg .h { fill: var(--paper); }
-      .lp-corner--a { top: -11px; left: -11px; } .lp-corner--b { top: -11px; right: -11px; } .lp-corner--c { bottom: -11px; left: -11px; } .lp-corner--d { bottom: -11px; right: -11px; }
-      .lp-title { text-align: center; margin: 0 0 8px; }
-      .lp-title p { margin: 0; }
-      .lp-title__a { font: 500 11px var(--mono); letter-spacing: .22em; text-transform: uppercase; color: var(--accent); }
-      .lp-title__t { font: 400 44px/1.1 'Instrument Serif', Georgia, serif; color: var(--ink); margin: 10px 0 8px !important; }
-      .lp-title__s { font: 400 italic 17px/1.4 var(--serif); color: var(--ink-2, var(--ink)); }
-      html[lang='ar'] .lp-title__t { font: 700 40px/1.4 'Amiri', 'Noto Naskh Arabic', serif; }
-      html[lang='ar'] .lp-title__a { font: 500 14px 'Noto Naskh Arabic', serif; letter-spacing: 0; text-transform: none; }
-      html[lang='ar'] .lp-title__s { font: 400 17px/1.6 'Noto Naskh Arabic', serif; }
-      .lp-orn { display: flex; align-items: center; justify-content: center; gap: 10px; max-width: 420px; margin: 26px auto 6px; color: var(--accent); }
-      .lp-orn--end { margin: 40px auto 0; }
-      .lp-orn span { flex: 1; height: 1px; background: linear-gradient(to right, rgba(122, 31, 43, .04), rgba(122, 31, 43, .34), rgba(122, 31, 43, .04)); }
-      .lp-orn svg { flex: none; display: block; fill: currentColor; } .lp-orn svg .h { fill: #faf7f1; }
-      .lp-orn > svg:nth-of-type(3) { width: 26px; height: 26px; } .lp-orn > svg:first-of-type, .lp-orn > svg:last-of-type { opacity: .55; }
+      .lp-book { overflow-anchor: none; position: relative; margin: 44px 0 0; }
       /* the head: names the four columns; it stays at the top of the window while the verses pass under it */
-      .lp-cols { position: sticky; top: 0; z-index: 5; display: grid; grid-template-columns: var(--lp-cols); direction: ltr; margin: 24px -36px 0; padding: 0 36px;
-        background: rgba(250, 247, 241, .94); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
-      .lp-cols::after { content: ''; position: absolute; left: 36px; right: 36px; bottom: 0; height: 1px; background: linear-gradient(to right, rgba(122, 31, 43, .04), rgba(122, 31, 43, .34), rgba(122, 31, 43, .04)); }
-      .lp-cols button { position: relative; display: block; margin: 0; padding: 18px 22px 14px; border: 0; background: none; color: var(--ink); font: inherit; text-align: left; cursor: default; }
+      .lp-cols { position: sticky; top: 0; z-index: 5; display: grid; grid-template-columns: var(--lp-cols); direction: ltr; margin: 0; padding: 0;
+        background: rgba(245, 241, 234, .92); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); border-top: 1px solid var(--ink); }
+      .lp-cols::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: var(--rule); }
+      .lp-cols button { position: relative; display: block; margin: 0; padding: 14px 22px 16px; border: 0; background: none; color: var(--ink); font: inherit; text-align: left; cursor: default; }
       .lp-cols button:disabled { opacity: 1; color: var(--ink); }
       .lp-cols button[data-l='ar'] { text-align: right; }
       .lp-cols b { display: block; font: 400 27px/1.15 'Instrument Serif', Georgia, serif; }
-      .lp-cols b::after { content: ''; display: block; width: 30px; height: 2px; margin: 9px 0 0; background: var(--accent); opacity: .75; }
-      .lp-cols button[data-l='ar'] b::after { margin-left: auto; }
+      .lp-cols .ix { display: block; margin: 0 0 10px; font: 500 10.5px var(--mono); font-style: normal; letter-spacing: .12em; color: var(--accent); }
+     
       .lp-cols b[lang='ar'] { font: 700 24px/1.4 'Amiri', 'Noto Naskh Arabic', serif; }
       .lp-cols small { display: block; margin-top: 8px; font: 500 10.5px var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted, var(--ink-3)); }
       html[lang='ar'] .lp-cols small { font: 400 13px 'Noto Naskh Arabic', serif; letter-spacing: 0; text-transform: none; }
       /* one verse = one row of four cells */
       .lp { padding: 0; scroll-margin-top: 112px; }
-      .lp-body { position: relative; padding: 30px 0 4px; }
+      .lp-body { position: relative; padding: 34px 0 8px; border-bottom: 1px solid var(--rule); }
       .lp-rules { position: absolute; inset: 0; direction: ltr; display: grid; grid-template-columns: var(--lp-cols); pointer-events: none; }
-      .lp-rules i + i { border-left: 1px solid transparent; border-image: linear-gradient(to bottom, rgba(122, 31, 43, 0), rgba(122, 31, 43, .26) 40px, rgba(122, 31, 43, .26) calc(100% - 40px), rgba(122, 31, 43, 0)) 1; }
-      .lp__sep { position: relative; display: block; width: 44%; max-width: 150px; height: 9px; margin: 22px auto 22px; }
-      .lp__sep::before { content: ''; position: absolute; left: 0; right: 0; top: 4px; height: 1px; background: linear-gradient(to right, rgba(122, 31, 43, 0), rgba(122, 31, 43, .3), rgba(122, 31, 43, 0)); }
-      .lp__sep::after { content: ''; position: absolute; left: 50%; top: 1.5px; width: 6px; height: 6px; margin-left: -3px; background: var(--accent); opacity: .5; transform: rotate(45deg); }
+      .lp-rules i + i { border-left: 1px solid var(--rule-soft); }
+      .lp__sep { display: block; width: 22px; height: 1px; margin: 30px 0 28px; background: var(--rule); }
+      .lp__c--ar .lp__sep { margin-left: auto; }
       .lp__row { display: grid; grid-template-columns: var(--lp-cols); direction: ltr; align-items: start; }
       .lp:target .lp__row { background: rgba(122, 31, 43, .045); box-shadow: 0 0 0 10px rgba(122, 31, 43, .045); }
       .lp__c { position: relative; padding: 2px 22px 4px; }
@@ -112,11 +95,9 @@
       }
       /* phones: a narrower frame and smaller head */
       @media (max-width: 760px) {
-        .lp-book { padding: 34px 20px 30px; outline-offset: 4px; margin-left: 4px; margin-right: 4px; }
-        .lp-title__t { font-size: 34px; }
-        .lp-corner { width: 18px; height: 18px; } .lp-corner svg { width: 18px; height: 18px; } .lp-corner--a, .lp-corner--b { top: -9px; } .lp-corner--c, .lp-corner--d { bottom: -9px; } .lp-corner--a, .lp-corner--c { left: -9px; } .lp-corner--b, .lp-corner--d { right: -9px; }
-        .lp-cols { margin: 18px -20px 0; padding: 0 20px; max-width: none; }
-        .lp-cols::after { left: 20px; right: 20px; }
+        .lp-book { margin-top: 30px; }
+        .lp-cols { max-width: none; }
+        .lp-cols .ix { display: none; }
         .lp-cols b { font-size: 19px; } .lp-cols b[lang='ar'] { font-size: 17px; }
         .lp-cols small { display: none; }
         .lp__v { font-size: 20.5px; } .lp__c--ar .lp__v { font-size: 21px; }
@@ -127,7 +108,7 @@
     </style>
   
     <script src="../scripts/i18n/strings-de.js"></script>
-    <meta name="translated-from" content="English public/lucretius.html, commit e6a7ca34+" />
+    <meta name="translated-from" content="English public/lucretius.html, commit a419f87f+" />
   </head>
 
   <body>
@@ -155,18 +136,11 @@
       </div>
 
       <article class="lp-book">
-        <i class="lp-corner lp-corner--a" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 20 20"><rect x="4.2" y="4.2" width="11.6" height="11.6"/><rect x="4.2" y="4.2" width="11.6" height="11.6" transform="rotate(45 10 10)"/><circle class="h" cx="10" cy="10" r="2.6"/></svg></i><i class="lp-corner lp-corner--b" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 20 20"><rect x="4.2" y="4.2" width="11.6" height="11.6"/><rect x="4.2" y="4.2" width="11.6" height="11.6" transform="rotate(45 10 10)"/><circle class="h" cx="10" cy="10" r="2.6"/></svg></i><i class="lp-corner lp-corner--c" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 20 20"><rect x="4.2" y="4.2" width="11.6" height="11.6"/><rect x="4.2" y="4.2" width="11.6" height="11.6" transform="rotate(45 10 10)"/><circle class="h" cx="10" cy="10" r="2.6"/></svg></i><i class="lp-corner lp-corner--d" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 20 20"><rect x="4.2" y="4.2" width="11.6" height="11.6"/><rect x="4.2" y="4.2" width="11.6" height="11.6" transform="rotate(45 10 10)"/><circle class="h" cx="10" cy="10" r="2.6"/></svg></i>
-        <header class="lp-title">
-          <p class="lp-title__a">Titus Lucretius Carus</p>
-          <p class="lp-title__t">Von der Natur</p>
-          <p class="lp-title__s">Buch I, Verse 146 bis 224</p>
-        </header>
-        <div class="lp-orn" aria-hidden="true"><span></span><svg width="7" height="7" viewBox="0 0 10 10"><rect x="2" y="2" width="6" height="6" transform="rotate(45 5 5)"/></svg><span></span><svg width="16" height="16" viewBox="0 0 20 20"><circle cx="10" cy="4.6" r="3.9"/><circle cx="15.4" cy="10" r="3.9"/><circle cx="10" cy="15.4" r="3.9"/><circle cx="4.6" cy="10" r="3.9"/><circle class="h" cx="10" cy="10" r="2.2"/></svg><svg width="18" height="18" viewBox="0 0 20 20"><rect x="4.2" y="4.2" width="11.6" height="11.6"/><rect x="4.2" y="4.2" width="11.6" height="11.6" transform="rotate(45 10 10)"/><circle class="h" cx="10" cy="10" r="2.6"/></svg><svg width="16" height="16" viewBox="0 0 20 20"><circle cx="10" cy="4.6" r="3.9"/><circle cx="15.4" cy="10" r="3.9"/><circle cx="10" cy="15.4" r="3.9"/><circle cx="4.6" cy="10" r="3.9"/><circle class="h" cx="10" cy="10" r="2.2"/></svg><span></span><svg width="7" height="7" viewBox="0 0 10 10"><rect x="2" y="2" width="6" height="6" transform="rotate(45 5 5)"/></svg><span></span></div>
         <div class="lp-cols" role="group" aria-label="Angezeigte Sprache">
-          <button type="button" data-l="la" aria-pressed="false"><b lang="la" translate="no">Latina</b><small>das Original</small></button>
-          <button type="button" data-l="en" aria-pressed="false"><b lang="en" translate="no">English</b><small translate="no">Leonard, 1916</small></button>
-          <button type="button" data-l="de" aria-pressed="false"><b lang="de" translate="no">Deutsch</b><small translate="no">Diels, 1924</small></button>
-          <button type="button" data-l="ar" aria-pressed="false"><b lang="ar" translate="no">العربية</b><small>für diese Seite gemacht</small></button>
+          <button type="button" data-l="la" aria-pressed="false"><i class="ix" aria-hidden="true">01</i><b lang="la" translate="no">Latina</b><small>das Original</small></button>
+          <button type="button" data-l="en" aria-pressed="false"><i class="ix" aria-hidden="true">02</i><b lang="en" translate="no">English</b><small translate="no">Leonard, 1916</small></button>
+          <button type="button" data-l="de" aria-pressed="false"><i class="ix" aria-hidden="true">03</i><b lang="de" translate="no">Deutsch</b><small translate="no">Diels, 1924</small></button>
+          <button type="button" data-l="ar" aria-pressed="false"><i class="ix" aria-hidden="true">04</i><b lang="ar" translate="no">العربية</b><small>für diese Seite gemacht</small></button>
         </div>
         <div class="lp-body">
           <div class="lp-rules" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
@@ -913,7 +887,6 @@
           </div>
         </section>
         </div>
-        <div class="lp-orn lp-orn--end" aria-hidden="true"><span></span><svg width="7" height="7" viewBox="0 0 10 10"><rect x="2" y="2" width="6" height="6" transform="rotate(45 5 5)"/></svg><span></span><svg width="18" height="18" viewBox="0 0 20 20"><rect x="4.2" y="4.2" width="11.6" height="11.6"/><rect x="4.2" y="4.2" width="11.6" height="11.6" transform="rotate(45 10 10)"/><circle class="h" cx="10" cy="10" r="2.6"/></svg><svg width="16" height="16" viewBox="0 0 20 20"><circle cx="10" cy="4.6" r="3.9"/><circle cx="15.4" cy="10" r="3.9"/><circle cx="10" cy="15.4" r="3.9"/><circle cx="4.6" cy="10" r="3.9"/><circle class="h" cx="10" cy="10" r="2.2"/></svg><svg width="18" height="18" viewBox="0 0 20 20"><rect x="4.2" y="4.2" width="11.6" height="11.6"/><rect x="4.2" y="4.2" width="11.6" height="11.6" transform="rotate(45 10 10)"/><circle class="h" cx="10" cy="10" r="2.6"/></svg><span></span><svg width="7" height="7" viewBox="0 0 10 10"><rect x="2" y="2" width="6" height="6" transform="rotate(45 5 5)"/></svg><span></span></div>
       </article>
 
       <h2 class="lp-h">Quellen</h2>
