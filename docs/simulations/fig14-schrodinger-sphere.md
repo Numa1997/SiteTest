@@ -256,3 +256,38 @@ at commit `a269119` (written by [build_shapes3d.py](../../tools/kaggle/schroding
 - **Progress:** the notebook prints one line per finished run (`1349/1458 coin …`); Kaggle's connector shows the log only
   after the session ends, but the notebook's page on kaggle.com shows it while it runs.
 
+## The animation made smooth (13 November 2026, 03:00 UTC)
+
+The owner: "The animation looks horrible ... glitches and slow." Causes found and what changed:
+
+- **It stepped five times a second.** A run has 48 stored frames, and the page showed one, then the next. Now the meshed sheet
+  moves on every screen frame. Between stored frames 0 and 1 the page draws
+  $\psi(t_0 + \tau) = e^{-iE\tau}\,[(1 - s)\,\psi_0 + s\,e^{+iE\Delta t}\,\psi_1]$ with $s = \tau/\Delta t$: both frames are taken
+  into the frame turning at the wave's energy $E$ (where $\psi$ changes only as slowly as its envelope moves, since an elastic run
+  holds energies near $E$ only), blended, and turned back. At a stored frame the sheet is that frame exactly. The data panel's
+  height check uses the same blend of the two frames' stored values (measured between frames: $2 \times 10^{-8}$).
+- **Each new frame froze the page for 25 to 70 ms.** The fine sheets are now computed in a worker
+  ([fig14-sheet-worker.js](../../public/scripts/fig14-sheet-worker.js)), four frames ahead of the playhead. What is left on the
+  page per screen frame: 4 ms (packets, 289² points), 10 ms (spherical waves, 385² points), measured in headless Chromium.
+- **The height scale jumped** from frame to frame (it was set from each frame's largest value). It is now blended between the
+  two frames like the wave.
+- **Playback slowed down** to a fifth near the edge of a slider's range, and crawled through the last quarter of every run.
+  A stored run now plays at full speed, rests 1.2 s at its end and starts again. (The slow-down remains for the browser's live
+  preview, which has to wait for its own frames.)
+- **Sheets and Cutaway froze for 100 to 200 ms per frame.** They are now cut in a module worker
+  ([fig14-iso-worker.js](../../public/scripts/fig14-iso-worker.js), marching cubes moved to
+  [marching.js](../../public/scripts/marching.js)); the newest frame asked for is cut next, frames in between are skipped.
+  Median gap between screen frames while playing: 17 ms.
+- **The sphere's sheets were torn late in a run.** The true 3D files hold Re ψ in 127 levels of the first frame's peak; once the
+  wave has spread, a crest is a handful of levels. The sphere's sheets are now spun from the cut (255 levels of |ψ| and its
+  phase), as for the other radii. The true 3D files of 12 November stay stored and listed; the page no longer draws from them.
+- **Wrong start waves in the 3D generation of 13 November (version 1).** (a) Spherical wave from the side: the source stood at
+  x = −12 with r₀ = 6, so the shell began inside the barrier. (b) Hard walls: the tail of the start wave inside the wall was
+  left there and stayed (levels up to 216 of 255 inside the hard ball in the side case). Fixed in
+  [solver3d.py](../../tools/kaggle/schrodinger-shapes/solver3d.py): source at x = −17, r₀ = 5 (amplitude 0.018 of the peak at a
+  barrier of radius 4); the start wave is set to zero inside a hard wall and normalised again. The 243 affected runs (108
+  side-wave runs, 135 hard runs of sphere, coin and tube) are computed again on Kaggle's CPU, four notebooks
+  `numakoudsie/schrodinger-shapes-3d-v2-a … d` (no GPU hours). Until they are on the site the page does not offer the wave
+  from the side, and says under a hard-wall run of version 1 what is wrong with it.
+- The live preview in the browser is drawn as fog also when Mesh is chosen (it has no fine sheet).
+
