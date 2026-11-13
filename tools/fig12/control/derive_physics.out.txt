@@ -75,3 +75,12 @@ Block 6. The suspension loop sampled at 1 ms with the 5 ms actuator lag (u_cmd =
   Gain crossovers 6.9 rad/s (phase margin 17 deg) and 24.0 rad/s (163 deg); high-frequency gain margin 38.4 dB at 684 rad/s.
   Inference: the suspension design is stable but not robust to actuator-gain error; the tuning stage must add a robustness
   bound (for example a weight on the static spring force, or |1 + L| >= 0.5) before the controlled rides are taken as final.
+
+Block 7. Which sensor sees which state, and the heave cancellation (symbolic, Wolfram):
+  Observability rank of (v, q, q'): controller's model, encoder alone 1 (the model has no path from the swing to the speed);
+  encoder + wall probes 3. True coupled plant, encoder alone 3, determinant Pc^2 w^4 / (M_x - beta Pc)^2: the encoder does see
+  the swing through the stout's push back, but weakly (Pc = 0.056 kg against M_x = 2.5 kg); the probes are what make it seen well.
+  Swing equation with i_par = -M_x w^2 (a_z,meas/g) q_hat / (beta b) applied: the heave term left is
+  (w^2/g) (a_z,meas q_hat - a_z q) = (w^2/g) (da_z q - a_z e_q - da_z e_q), with da_z the accelerometer's error and e_q = q - q_hat.
+  Exact only when both are zero; otherwise first order in each error. The same current pushes the cart: dv/dt changes by
+  -(w^2/(beta g)) a_z,meas q_hat, which the speed loop then sees as a disturbance.
