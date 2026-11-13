@@ -104,7 +104,8 @@ for task in TASKS:
         if comp_s is None: comp_s = w        # the first frame includes compiling
         steps += int(st["steps"]); its += int(st["its"])
         record(s, t, ex, st, w)
-        if int(st["nselmax"]) >= S.K: log(f"  WARNING frame {f}: {int(st['nselmax'])} particles near the surface, the list holds {S.K}")
+        if int(st["nselmax"]) >= S.K: log(f"  STOP frame {f}: {int(st['nselmax'])} particles near the surface, the list holds {S.K}"); break
+        if int(rec["ndrops"][-1]) >= S.M: log(f"  STOP frame {f}: {int(rec['ndrops'][-1])} drops, the list holds {S.M}"); break
         if not np.isfinite(rec["KE"][-1]) or rec["KE"][-1] > 10: log(f"  STOP: kinetic energy {rec['KE'][-1]} J at t = {float(t):.3f} s"); break
         if time.time() - Tlast > 60:
             Tlast = time.time(); el = Tlast - Tc - comp_s
