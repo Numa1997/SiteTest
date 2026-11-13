@@ -30,14 +30,24 @@ from jax import lax
 
 F32, F64, I32 = jnp.float32, jnp.float64, jnp.int32
 
+NU_STOUT = 2.06e-3 / 1007.0   # m^2/s: Guinness at 6 C, mu = 2.06e-3 Pa s, rho = 1007 kg/m^3 (Benilov, Cummins & Lee, arXiv 1205.5233, sec. II)
 MODELS = {
-    # no friction at all: what the numerical method alone loses (used to measure numerical damping)
-    "inviscid": dict(nu=0.0, wall=False, foam_rub=False),
-    # the stout's viscosity and the glass's boundary layer
-    "wall": dict(nu=1.0e-6, wall=True, foam_rub=False),
-    # plus the head of foam rubbing the glass (Sauret, Boulogne, Cappello, Dressaire & Stone, Phys. Fluids 27, 022103, 2015)
-    "full": dict(nu=1.0e-6, wall=True, foam_rub=True),
+    # no friction and no head: what the numerical method alone loses (used to measure numerical damping)
+    "inviscid": dict(nu=0.0, wall=False, foam_rub=False, head=False),
+    # the stout's viscosity and the glass's boundary layer, no head
+    "wall": dict(nu=NU_STOUT, wall=True, foam_rub=False, head=False),
+    # the whole model: viscosity, the glass's boundary layer, and the head of foam (its weight on the stout, its rubbing on
+    # the glass (Sauret, Boulogne, Cappello, Dressaire & Stone, Phys. Fluids 27, 022103, 2015), lacing, collapse and spill)
+    "full": dict(nu=NU_STOUT, wall=True, foam_rub=True, head=True),
 }
+# The head of foam (model; each number with its source or marked as an estimate):
+HEAD0 = 0.019        # m, thickness of the head as served: 18 to 20 mm (Nature Reviews Physics, s42254-023-00579-y)
+PHI_F = 0.20         # liquid fraction of the head (estimate: wet beer foam, 0.15 to 0.3)
+GAMMA = 0.045        # N/m, surface tension of beer (estimate: 42 to 47 mN/m)
+RBUB = 60e-6         # m, bubble radius in the head (Guinness bubbles 90 to 122 um across in the stout, Benilov et al.; the head's a little coarser)
+TAU_Y = 0.51 * GAMMA / RBUB * ((1 - PHI_F) - 0.635) ** 2   # Pa, yield stress (Mason, Bibette & Weitz 1996 scaling for wet foams)
+LACE = 2 * 2 * RBUB  # m, foam film left on the glass where the head slides down it: two bubble diameters (estimate)
+V_COLLAPSE = 4e-5    # m/s, the head's slow collapse at rest, 10 mm in about 250 s (estimate, NIBEM-type foam half-lives)
 OMEGA = 2 * math.pi * 3.42     # rad/s, the first sloshing mode (Stokes layer thickness)
 FOAM_C = 0.0235                # m/s, Sauret et al.'s w / tau for a confined foam (1.6 to 3.1 cm/s)
 FOAM_KS = 45.5                 # 1/m, Sauret et al.
@@ -187,13 +197,28 @@ class Stout:
         o = np.array([(a, b, c) for a in range(-1, 3) for b in range(-1, 3) for c in range(-1, 3)], np.int32)
         self.off64 = jnp.asarray(o)
         self.corners = jnp.asarray(np.array([(a, b, c) for a in (0, 1) for b in (0, 1) for c in (0, 1)], np.int32))
+        # the head of foam lives on the columns of the grid (n x n); lacing on the glass is kept on 64 angles x 0.5 mm bands
+        self.head = M["head"]; self.rho_f = PHI_F * rho
+        self.h_y = 2.0 * TAU_Y / (self.rho_f * 9.81)        # m, foam that stands above the rim before it slumps (vertical cut, Tresca)
+        X, Y = np.meshgrid(G.xc, G.xc, indexing="ij")
+        self.rc = jnp.asarray(np.hypot(X, Y), F32); self.colx = jnp.asarray(X, F32); self.coly = jnp.asarray(Y, F32)
+        self.abin = jnp.asarray(np.floor((np.arctan2(Y, X) % (2 * np.pi)) / (2 * np.pi) * 64).astype(np.int32) % 64)
+        self.lace_z0 = 0.090; self.lace_dz = 0.0005; self.nlz = int(round((G.zrim - self.lace_z0) / self.lace_dz))
+        self.MF = 4096
 
     # ---------------------------------------------------------------- state
     def init_state(self):
         N = self.N
+        n = self.n; G = self.G
+        hf0 = jnp.where(self.rc < G.Rfill, HEAD0 if self.head else 0.0, 0.0).astype(F32)
+        z64 = jnp.zeros((), F64)
         return dict(xp=jnp.asarray(self.P0), vp=jnp.zeros((N, 3), F32), C=jnp.zeros((N, 3, 3), F32),
                     act=jnp.ones(N, bool), fly=jnp.zeros(N, bool), landed=jnp.zeros(N, bool),
-                    p=jnp.zeros(self.dims, F32), ewall=jnp.zeros((), F64), efoam=jnp.zeros((), F64))
+                    p=jnp.zeros(self.dims, F32), ewall=z64, efoam=z64,
+                    hf=hf0, Hprev=jnp.full((n, n), G.fill, F32), lace=jnp.zeros((64, self.nlz), F32),
+                    foam_spill=z64, foam_lace=z64, foam_coll=z64, foam0=jnp.sum(hf0.astype(F64)) * self.dx ** 2,
+                    bx=jnp.full((self.MF, 3), jnp.nan, F32), bv=jnp.zeros((self.MF, 3), F32), bvol=jnp.zeros(self.MF, F32),
+                    bptr=jnp.zeros((), I32))
 
     # ---------------------------------------------------------------- helpers
     def Rz(self, z):
@@ -304,9 +329,9 @@ class Stout:
             out.append(jnp.where(ok, f + c * lap, f))
         return out
 
-    def friction(self, vel, mass, ph, liq, dt):
+    def friction(self, vel, mass, ph, liq, dt, hf):
         dV = self.rho * self.dx ** 3; ew = jnp.zeros((), F64); ef = jnp.zeros((), F64); out = []
-        band = liq & (self.ac > 0) & (ph >= -self.Hb)
+        band = liq & (self.ac > 0) & (ph >= -self.Hb) & (hf[:, :, None] > 0)    # the head rubs only where there is head
         for comp in range(3):
             u0 = vel[comp]; a = self.af[comp]; ok = (a > 0) & (mass[comp] > 1e-6)
             gw = self.gs * a
@@ -334,19 +359,28 @@ class Stout:
         tRL = jnp.where(cRL, jnp.clip(phR / jnp.where(cRL, phR - phL, -1.0), 0.05, 1.0), 1.0)   # surface's place, R liquid
         return liqL, liqR, tLR, tRL
 
-    def pressure(self, vel, ph, liq, p_prev):
-        dx = self.dx; diag = jnp.zeros(self.dims, F32); div = jnp.zeros(self.dims, F32); cp, cm, faces = [], [], []
+    def pressure(self, vel, ph, liq, p_prev, ps):
+        """ps: the pressure on the free surface (the weight of the head), in the solver's units (Pa x dt / rho), one value per
+        column, set on the air side of the surface. Ghost fluid: p = ps at the surface, so the air neighbour of a liquid cell
+        reads p_ghost = p_liq (1 - 1/theta) + ps / theta: the diagonal gets th / theta and the right side th ps / theta."""
+        dx = self.dx; diag = jnp.zeros(self.dims, F32); div = jnp.zeros(self.dims, F32); rhs = jnp.zeros(self.dims, F32)
+        cp, cm, faces = [], [], []
+        ps3 = jnp.broadcast_to(ps[:, :, None], self.dims).astype(F32)
         for ax in range(3):
             th = self.th[ax]; liqL, liqR, tLR, tRL = self._faces(ph, liq, ax); faces.append((liqL, liqR, tLR, tRL))
             open_ = th > 0
             dL = jnp.where(open_, jnp.where(liqR, th, th / tLR), 0.0)
             dR = jnp.where(open_, jnp.where(liqL, th, th / tRL), 0.0)
             diag = diag + cut_hi(dL, ax) + cut_lo(dR, ax)
+            psL, psR = lo(ps3, ax, 0.0), hi(ps3, ax, 0.0)
+            sL = jnp.where(open_ & liqL & ~liqR, th * psR / tLR, 0.0)      # liquid L, air R: the surface load seen by L
+            sR = jnp.where(open_ & liqR & ~liqL, th * psL / tRL, 0.0)
+            rhs = rhs + cut_hi(sL, ax) + cut_lo(sR, ax)
             cp.append(cut_hi(th * liqR, ax)); cm.append(cut_lo(th * liqL, ax))
             flux = th * vel[ax]; div = div + cut_hi(flux, ax) - cut_lo(flux, ax)
         A = liq & (diag > 0)
         diag = jnp.where(A, diag, 0.0); cp = [jnp.where(A, c, 0.0) for c in cp]; cm = [jnp.where(A, c, 0.0) for c in cm]
-        b = jnp.where(A, -div * dx, 0.0)
+        b = jnp.where(A, -div * dx + rhs, 0.0)
         inv = jnp.where(A, 1.0 / jnp.where(A, diag, 1.0), 0.0)
 
         def mv(x):
