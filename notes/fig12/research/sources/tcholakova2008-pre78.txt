@@ -1,0 +1,35 @@
+SOURCE: S. Tcholakova, N. D. Denkov, K. Golemanov, K. P. Ananthapadmanabhan, A. Lips, "Theoretical model of viscous
+friction inside steadily sheared foams and concentrated emulsions", Phys. Rev. E 78, 011405 (2008).
+doi:10.1103/PhysRevE.78.011405 (verified via Crossref 2026-11-13)
+Read from: arXiv:0805.4283, https://arxiv.org/abs/0805.4283 (47 pp. preprint). Licence: arXiv distribution licence.
+Read 2026-11-13: sections 1, 2.1, 2.5 definitions, 4 (results), 5 (comparison). Page numbers = preprint pages.
+
+--- p.2, Eq. (1) ---
+"The rheological properties of foams and concentrated emulsions, subject to steady shear deformation, are usually
+described by the Herschel-Bulkley model, which includes three parameters – yield stress tau0, power-law index n, and
+consistency, k:  tau = tau0 + tau_V(gamma_dot) = tau0 + k gamma_dot^n  (1)"
+p.2-3: "power-law indexes n ≈ 0.40 and n ≈ 0.25 were reported for foams, which were stabilized by surfactants
+exhibiting low and high surface modulus, respectively, with the viscous stress being much higher for the second type"
+p.3: "we are interested mostly in the shear rates characterizing the foam/emulsion transportation (ca. 0.5 to 200 s^-1)"
+--- p.4-5, osmotic pressure (Princen & Kiss), dimensionless P_OSM = P_OSM/(sigma/R0) ---
+"P_OSM(Phi) = 0.237 ((Phi - 0.715)/(1 - Phi)) - 0.068 ln(0.285/(1 - Phi)) - 0.098   0.715 < Phi < 0.90  (7a)
+ P_OSM(Phi) = 0.00819 Phi^2/(1 - 0.9639 Phi)^2   0.90 < Phi < 0.99  (7b)"
+--- p.? (sec 2.5) "Ca = mu gamma_dot R0/sigma"
+--- Eq. (36)-(37): "tau_VF = tau_VF/(sigma/R0) = 0.39 u^(1/2) Phi E_DF ≈ 0.474 Ca^(1/2) Phi^(5/6) E_DF (36)
+ mu_EF = mu_EF/mu = tau_VF/(mu gamma_dot) = tau_VF/Ca ≈ 0.474 Phi^(5/6) Ca^(-1/2) E_DF (37)"
+"applicable to both emulsions and foams, provided that the surfaces of the drops/bubbles are tangentially immobile"
+--- p.18, Eqs. (47)-(49) ---
+"the numerical results in the ranges 0.80 ≤ Phi ≤ 0.99 and 10^-7 ≤ Ca ≤ 10^-2 could be described very well by:
+ E_DF ≈ 1.7 Ca^-0.035/(1 - Phi)^0.5   (47a);  E_DF ≈ 2.45 Ca^-0.03 (Phi - 0.74)^0.1/(1 - Phi)^0.5  (47b)"
+"tau_VF ≈ 0.806 Ca^0.465 Phi^(5/6)/(1 - Phi)^0.5 (48a); tau_VF ≈ 1.162 Ca^0.47 Phi^(5/6) (Phi - 0.74)^0.1/(1 - Phi)^0.5 (48b)
+ mu_EF ≈ 0.806 Ca^-0.535 Phi^(5/6)/(1 - Phi)^0.5 (49a); mu_EF ≈ 1.162 Ca^-0.53 Phi^(5/6)(Phi - 0.74)^0.1/(1 - Phi)^0.5 (49b)"
+"Note that Eqs. (47)-(49) should be used in their range of validity only. The extrapolation to Phi -> 1 is not justified"
+--- p.22-23, Eqs. (54)-(55), film + meniscus friction (dimensionless, stress in units sigma/R0) ---
+"tau_V ≈ 0.7 Ca^0.47 Phi^(5/6)/(1 - Phi)^0.5 + 8 Ca^0.7 Phi^(5/6)/(1 - Phi)^0.15   (54)
+ mu_EF ≈ 0.5 Ca^-0.535 Phi^(5/6)/(1 - Phi)^0.5 + 6.2 Ca^-0.3 Phi^(5/6)/(1 - Phi)^0.2   (55)"
+"At low values of Ca and/or high values of Phi the first term dominates ... at high Ca and low Phi the friction in the
+meniscus could dominate."
+p.23: comparison with Princen & Kiss emulsions "no difference larger than 15 % was found"; for SLES+CAPB foams the
+film-only model Eq. (48) agreed best: "the surface of the bubbles in the meniscus region might be tangentially mobile".
+[Phi here = gas (dispersed) volume fraction, i.e. 1 - liquid fraction. Validity 0.80 ≤ Phi ≤ 0.99 means liquid
+fraction 0.01-0.20.]

@@ -1,0 +1,27 @@
+SOURCE: O. A. Power, W. Lee, A. C. Fowler, P. J. Dellar, L. W. Schwartz, S. Lukaschuk, G. Lessells, A. F. Hegarty,
+M. O'Sullivan, Y. Liu (industry representatives C. Browne, R. Swallow), "The initiation of Guinness",
+Proceedings of the 70th European Study Group with Industry (ESGI 70), Limerick 2009, pp. 141-182.
+Read from: https://miis.maths.ox.ac.uk/miis/395/1/ESGI70_7.pdf (Mathematics-in-Industry Information Service).
+Licence: not stated. Found via Exa search. Read 2026-11-13 (abstract, sec.1, sec.2 parts, sec.6, sec.8 of 42 pp).
+Page numbers = printed proceedings page numbers.
+
+p.143: "Guinness Draught is unusual in that it is packaged and dispensed using a gas mixture of carbon dioxide (CO2) and
+nitrogen (N2) ... at 3.8 bar and 8 C the gas mixture is about 79 mole % N2 and 21 mole % CO2. This yields the desired
+CO2 concentration of ~ 2 g l^-1 and the desired N2 concentration of ~ 0.072 g l^-1"
+p.143-144: "N2 is 100 times less soluble than CO2 at 8 C. ... The small bubbles give Guinness Draught a finer 'creamier'
+head of foam than that on a carbonated beer like Guinness Extra Stout. Furthermore, the head is longer-lasting since
+Ostwald ripening, the main process by which foam becomes coarser, is slowed down by a factor of 100 due to the lower
+solubility of N2 [3]." [ref 3 = Bamforth, J. Inst. Brew. 110, 259 (2004)]
+sec.2 (p.~147): "(gamma ≈ 40 mN m^-1 [3]) and an initial supersaturation ratio of 2.8, which is typical for draught
+Guinness, the critical radius is 0.3 um." [surface tension value taken from Bamforth 2004, not measured here]
+p.169: "As time progresses further, the mean bubble radius drops to about 50 um because the bubble growth rate decreases
+as the dissolved gas concentration in the liquid falls. ... the height of the head is shown in Figure 13; it is
+approximately 12 mm after 5 s." [model result, surger initiation]
+p.176, Table 8: Henry's constants for N2 in water: 0.0283 (0 C), 0.0241 (8 C), 0.0209 (15 C), 0.0192 (20 C) g/l/bar;
+CO2: 3.42, 2.50, 2.05, 1.76 g/l/bar.
+p.177: "This corresponds to about one billion 50 um radius bubbles, 50 um being close to the average bubble radius [19]
+... This number of bubbles would create a head 14 cm thick! In practice, most of the CO2 cannot escape as bubbles"
+[19] = Robinson, Fowler, Alexander, O'Brien, "Waves in Guinness", Phys. Fluids 20, 067101 (2008).
+p.177: "how many bubbles, each with x_N2 = 0.3 and R = 50 um, can be created before the N2 runs out: ... ≈ 1.5 × 10^8
+bubbles. This reduces the height of the head to about 2 cm, which is reasonably close to the observed value of about
+1 cm considering the approximations made."

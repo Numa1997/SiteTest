@@ -1,0 +1,18 @@
+SOURCE: P. A. Wierenga, E. S. Basheva, R. J. B. M. Delahaije et al., "Variations in foam collapse and thin film
+  stability with constant interfacial and bulk properties", Advances in Colloid and Interface Science 312 (2023)
+  102845. doi:10.1016/j.cis.2023.102845
+URL: https://edepot.wur.nl/588142
+LICENCE: "open access article under the CC BY-NC-ND license". DATE READ: 2026-11-13. Read pp.1-6 (sections 1-2.3).
+Page numbers = journal pages of the article (1-15).
+
+p.4: "The foam stability of 24 lager beers, brewed according to similar recipes by various breweries, was analysed"
+p.4: "The interfacial dilatational modulus was increased from 5 to ~25 mN m-1 for surface pressures between ~25-30
+  mN m-1 (Fig. 4B). For all samples, the phase angle was on average 23 +/- 3 deg, and the real (elastic) part was
+  0.92 * the complex modulus. The low surface modulus, as well as the shape of the Ed-Pi curve is different from
+  typical curves measured for pure protein systems ... seems similar to the curves observed in mixed protein
+  surfactant systems"
+p.5 Table 1 (24 lagers): "Viscosity at 20 C [mPa s] 1.5 1.7 1.6"; "Alcohol by volume [% w/v] 4.6 5.2 5.0";
+  "High molecular protein [mg kg-1] 112 206 159"; "pH 4.1 4.7 4.4"; "Specific gravity 1.0".
+p.5: "none of the interfacial properties showed any significant differences between the samples."
+p.5: "the frequency dependence of the dilatational elastic modulus ... showed similar data for all samples"
+NOTE: lagers, not stout. Surface pressure Pi = gamma_water - gamma_beer.

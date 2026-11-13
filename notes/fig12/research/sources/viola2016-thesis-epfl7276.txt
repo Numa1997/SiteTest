@@ -1,0 +1,59 @@
+SOURCE: F. Viola, "Resonance in swirling wakes and sloshing waves: non-normal and sublinear effects", EPFL doctoral
+  thesis no. 7276 (2016), 245 pp. Supervisor F. Gallaire. Chapter 7 = Viola, Brun, Dollet & Gallaire, Phys. Fluids
+  28, 091701 (2016) (see viola2016-pof28.txt); chapter 8 = the paper published as Viola, Brun & Gallaire,
+  "Capillary hysteresis in sloshing dynamics: a weakly nonlinear analysis", J. Fluid Mech. 837, 788-818 (2018),
+  doi:10.1017/jfm.2017.860.
+URL: https://infoscience.epfl.ch/server/api/core/bitstreams/c990883e-b116-40ff-ad1e-943bce298eb9/content
+LICENCE: EPFL Infoscience open thesis (author copyright). DATE READ: 2026-11-13.
+Read: chapters 7 and 8 in full (pp.171-206). Page numbers = printed thesis pages.
+
+p.174 (water, no foam, R = 37.05 mm, "deep water condition H > 2R", 3.50 Hz):
+  "For the case h = 0 (no foam), we recover the classical result of a constant damping rate. ... We found
+   sigma = 0.0098, which exceeds the theoretical expression (Case & Parkinson, 1957) of the viscous damping rate by
+   a factor 2. This result is in line with other experimental measurements in the literature (Cocciaro et al.,
+   1991) and is commonly attributed to the advancing and receding of the dynamic contact line (Ibrahim, 2005)."
+  (sigma here is the damping ratio of eq. 7.3: Xddot + omega0^2 X = -2 sigma omega0 Xdot - ...; p.177:
+   "omega0 = 22.00 rad/s, sigma = 9.8e-3".)
+p.175, eq. (7.1): "F_f ~ (h/d) R gamma^(1/3) mu^(2/3) Xdot |Xdot|^(-1/3)" ; eq. (7.3):
+  "Xddot + omega0^2 X = -2 sigma omega0 Xdot - alpha omega0^(4/3) R^(1/3) Xdot |Xdot|^(-1/3)"
+  "sigma is the viscous damping coefficient which is proportional to sigma ~ nu/(R^(3/4) g^(1/4))" [sic; p.178-179
+   writes sigma ~ nu^(1/2) g^(-1/4) R^(-3/4)]
+p.180, eq. (7.15): "c = (1/2pi) int_0^2pi sin^2(t+phi) |-sin(t+phi)|^(-1/3) dt = 2 Gamma(1/3)/(5 Gamma(5/6) sqrt(pi))
+  ~ 0.5356"
+p.178, eq. (7.6): "t* = (3/(sigma omega0)) ln[ 1 + c^(-1) (sigma/alpha(h)) (X0/R)^(1/3) ]"
+p.174 Fig 7.2 legend: alpha = 0.010, 0.013, 0.016, 0.023, 0.030 for foam h = 2.5, 3.3, 4, 5, 6.5 mm.
+p.178: "A small foam layer (h = 2.5 mm) is sufficient to bring this time to a finite and relatively small value
+  (t* ~ 12 s). Other values ... (the smallest is 5 s)"
+p.179: "We therefore anticipate that alpha(h) does not remain linear for arbitrarily large values of h, but instead
+  saturates"
+p.179: "During sloshing, this advancing and receding contact line will generate a small, yet nonlinear, friction
+  force (Cantat, 2013), which affects the damping rate measured in the experiments"
+
+p.184: "experiments of Benjamin & Ursell (1954); Case & Parkinson (1957); Keulegan (1959) and Cocciaro et al. (1991)
+  reveal that the theoretical values of the damping rates significantly underestimate the damping of gravity waves
+  measured in laboratory-size containers. In fact, controlled conditions with carefully polished brass container are
+  needed to recover experimental values close to theoretical estimates" ; "Keulegan (1959) ... found that the damping
+  depends on the material of the container and is in general higher than the one provided by the aforementioned
+  linear theory ... his pioneer work revealed a dependence of damping on the wave amplitude. The damping at small
+  amplitude after several wave cycles was indeed found higher than the one at larger amplitude."
+p.185: Hocking (1987) wetting condition "d eta/dt|_R = alpha d eta/dr  (8.3)" ; "Note that the capillary
+  contribution to damping vanishes for the two limiting cases alpha = infinity and alpha = 0 which correspond to the
+  free-end and pinned-end edge conditions"
+p.186: "Cocciaro et al. (1993) carried out experiments in order to measure alpha ... with static contact angle
+  theta_s = 62 deg. They demonstrated that alpha is not constant during the sloshing motion and it increases with the
+  contact line velocity."
+p.188, eq. (8.8): theta - theta_s = alpha_A Ca d eta/dt|_{r=1} + Delta/2 (advancing), alpha_R Ca d eta/dt - Delta/2
+  (receding), "Ca = mu sqrt(R g)/gamma". "measured ... alpha_A = 45 and alpha_R = 104 [silicone oil 10 cP] ... water
+  drops ... Puthenveettil et al. (2013) ... alpha_A = 58 and alpha_R = 108 ... Winkels et al. (2011) ... alpha_R = 67."
+  "The contact angle hysteresis depends on the roughness and chemical contamination of the solid surface, the
+  presence of surfactants and polymers in the liquid ... Delta varies from few degrees to more than hundred"
+p.196, eq. (8.42)-(8.43): kappa = (eta^dagger eta_1A)_{r=1} / int (eta^dagger Phi_1A + Phi^dagger eta_1A) d eta0 ,
+  zeta = omega sin(theta_s) alpha_hat kappa / Bo ,  chi = sin(theta_s) Delta_hat kappa / (pi Bo |eta_1A|) ;
+  "dA/dT + zeta A + chi A/|A| = 0,  (8.43)" ; "|A(T)| = (A0 + chi/zeta) e^(-zeta T) - chi/zeta  (8.44)"
+p.197: reference case "Bo = 500 and theta_s = pi/4 ... Ca = 0.01, alpha = 60 and Delta = 10 deg"
+p.198: "gamma(t=0) = -zeta - chi/A0  (8.47)" ; "t* = (1/zeta) log(1 + A0 zeta/chi)  (8.49)" ;
+  "even a small value of the contact angle hysteresis as small as 1 deg is enough to introduce a significant
+  dissipative effect"
+p.202: "ẍ + x + alpha xdot + Delta sgn xdot = 0, (8.51) ... This means that the hysteresis term acts as Coulomb solid
+  friction."
+p.190: Bo = 500 "typically corresponds to ... a glass (here R = 0.05 m) filled with water"

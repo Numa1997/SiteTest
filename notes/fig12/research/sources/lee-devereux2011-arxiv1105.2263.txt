@@ -1,0 +1,27 @@
+SOURCE: W. T. Lee, M. G. Devereux, "Foaming in stout beers", arXiv:1105.2263v1 [physics.chem-ph] (11 May 2011);
+  published Am. J. Phys. 79, 991 (2011).
+URL: https://arxiv.org/abs/1105.2263 (PDF read in full, 9 pages)
+LICENCE: arXiv non-exclusive distribution licence. Short quotes only.
+DATE READ: 2026-11-13. Page numbers = arXiv PDF pages.
+
+p.1: "Nitrogen is roughly 50 times less soluble in water than carbon dioxide and this affects the character of the
+bubbles and the foam in the head of the beer. One important difference is that while champagne and carbonated beers
+foam spontaneously, stout beers require special technology to promote foaming."
+
+p.1, Table I "Parameters used in the calculations": "r 6.00 × 10−6 m; λ 14.00 × 10−6 m; γ 47.00 × 10−3 N m−1;
+D1 1.40 × 10−9 m2 s−1; D2 2.00 × 10−9 m2 s−1; H1 3.4 × 10−4 mol m−1 N−1; H2 6.1 × 10−6 mol m−1 N−1; T 293 K;
+P0 1.00 × 10^5 Pa; ... Stout Beer P1 0.80 × 10^5 Pa [ref 5]; P2 3.00 × 10^5 Pa [ref 5]"
+  (index 1 = CO2, 2 = N2; H units as printed "mol m−1 N−1" = mol m−3 Pa−1; ref 5 = Power et al., "The initiation of
+   Guinness", ESGI 70 (2009) - see power2009-esgi70-initiation-of-guinness.txt)
+
+p.4: "In draught form the beer is forced at high pressure through a narrow aperture. In cans widgets are used. ...
+The gas jet rapidly breaks up into the hundred million or so bubble nuclei needed to form the head."
+
+p.6: "the cellulose fibre nucleation mechanism in stout beers is about 15 times slower than in carbonated beers and
+about 30 times slower than in champagne." (bubbling timescale τ tscale = 1.28 s per fibre)
+
+p.6: "If at this point the can is poured into a beer glass then no head will form and no bubbling will be visible:
+the beer will be similar in appearance to flat cola."  [can opened slowly, widget not triggered]
+
+p.8: "The head of a stout beer should contain approximately 10^8 bubbles. In order to produce these 10^8 bubbles in
+the 30 s it takes to pour a stout beer from the can into a glass, we require 4.3 × 10^6 fibres ..."

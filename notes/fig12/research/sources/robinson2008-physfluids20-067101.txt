@@ -1,0 +1,25 @@
+SOURCE: M. Robinson, A. C. Fowler, A. J. Alexander, S. B. G. O'Brien, "Waves in Guinness",
+  Phys. Fluids 20, 067101 (2008), doi:10.1063/1.2929369.
+URL READ: Oxford Research Archive copy (AIP version of record):
+  https://ora.ox.ac.uk/objects/uuid:abffa30c-1f54-4f09-b81d-5ddf328cf029/files/ma4c157611dd5aa28bde830fcee9b1b0a
+  (core.ac.uk copy blocked by a bot challenge; found via Unpaywall)
+LICENCE: AIP copyright ("Redistribution subject to AIP license or copyright"). Extract kept under 300 words.
+DATE READ: 2026-11-13. Page numbers = journal pages 067101-n.
+
+p.067101-8: "Bubble sizes from one frame are shown in Fig. 10. They are approximately normally distributed, with a
+mean diameter of 122 µm (a = 61 µm); another image produced a normal distribution with smaller mean radius, 47 µm.
+The density of Guinness is determined from its specific gravity ... The SG is taken as 1.007, from information
+provided by Roche at Diageo ... The viscosity is not apparently publicly available and we have measured it. We find
+that at a temperature of about 5 °C, the viscosity is µ ≈ 2 × 10−3 Pa s."
+p.067101-8, Fig. 10 caption: "Histogram of bubble sizes in diameters, from an image about two-thirds up the glass.
+The mean diameter is 122 µm and there is quite a wide distribution."
+p.067101-9: "With short depth of focus, one can estimate an areal bubble fraction, and with a measured mean bubble
+radius, and the assumption of uniform bubble packing, it is straightforward to estimate the bubble volume fraction α.
+Obviously, this changes with location and time, tending to zero at late times and deep position. From four different
+images, low on the glass and early in the settling, we measured α = 0.237, 0.233, 0.242, and 0.266. At a higher
+location, about a centimeter below the accumulating head, we found α = 0.315."
+p.067101-9: "The waves consist of 4 – 5 mm length regions of bubbles, separated by plugs of bubble-free pure fluid,
+some 1.4 – 1.8 mm in length." ... "histogram of measured wave speeds, with mean 20.9 mm s−1."
+p.067101-8: "the dimensional time for the periodic waves to evolve from the initial condition was typically of the
+order of one second."
+READER NOTE: the α values are near-wall image estimates early in settling, not the bulk void fraction.

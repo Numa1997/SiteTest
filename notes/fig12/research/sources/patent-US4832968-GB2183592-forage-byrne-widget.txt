@@ -1,0 +1,23 @@
+SOURCE: A. J. Forage, W. J. Byrne (assignee Arthur Guinness Son & Co. (Dublin) Ltd), "Beverage package and a method of
+  packaging a beverage containing gas in solution", US 4,832,968 A (priority 29 Nov 1985, filed 8 Oct 1986, granted
+  23 May 1989). Same text as GB 2 183 592 A "Carbonated beverage container" (the original can widget).
+URLs: https://patents.google.com/patent/US4832968A/en ; https://patents.google.com/patent/GB2183592A/en (full text read)
+LICENCE: patent documents (public). DATE READ: 2026-11-13. Location = Detailed description of drawings.
+
+US4832968, description: "the preparation of a sealed can containing stout having in solution a mixture of nitrogen and
+carbon dioxide gases, the former preferably being present to the extent of at least 1.5% vols/vol and typically in the
+range 1.5% to 3.5% vols/vol and the carbon dioxide being present at a considerably lower level than the amount of carbon
+dioxide which would normally be present in conventional, wholly carbonated, bottled or canned stout and typically in the
+range 0.8 to 1.8 vols/vol (1.46 to 3.29 grams/liter). a definition of the term "vols/vol" ... "the number of volumes of
+gas which are dissolved in a unit volume of the beverage, said volumes of gas being determined at a pressure of 760
+millimeters of mercury and at a temperature of 15.6° C.""
+US4832968: "the can is charged with approximately 440 milliliters of stout ... the stout 8 is supersaturated with the
+mixed carbon dioxide and nitrogen gases, typically the carbon dioxide gas being present at 1.5 vols/vol (2.74
+grams/liter) and the nitrogen gas being present at 2% vols/vol. the charging of the can 1 with the stout may be achieved
+in conventional manner, that is under a counterpressure and at a temperature of approximately 0° C."
+US4832968: pressure in headspaces "greater than atmospheric pressure, typically in the order of 25lbs per square inch
+(1.72 bars)."
+GB2183592: "the 2%vols/vol nitrogen gas necessary to achieve the required solution of mixed gas in the packaged stout is
+derived from the liquid nitrogen dosing of the headspace in the can."
+READER CONVERSION (Inference): 2 % v/v N2 at 15.6 °C, 1 atm = 0.02 × 101325/(8.314 × 288.75) mol/L = 0.84 mol/m³
+= 0.024 g/L (≈ 24 mg/kg). Range 1.5-3.5 % v/v = 0.018-0.041 g/L.

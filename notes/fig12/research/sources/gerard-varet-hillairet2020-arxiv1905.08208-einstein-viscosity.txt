@@ -1,0 +1,20 @@
+SOURCE: D. Gérard-Varet, M. Hillairet, "Analysis of the viscosity of dilute suspensions beyond Einstein's formula",
+  arXiv:1905.08208v4 [math.AP] (12 Aug 2020); published Arch. Ration. Mech. Anal. 238, 1349-1411 (2020).
+URL: https://arxiv.org/abs/1905.08208 (introduction and Sec. 1 read; later sections skimmed)
+LICENCE: arXiv non-exclusive distribution licence. Short quotes.
+DATE READ: 2026-11-13. Page numbers = arXiv PDF pages.
+Used as the readable open source for Einstein (1906) [Ann. Phys. 19, 289-306; correction Ann. Phys. 34, 591 (1911)],
+whose original was not reachable (Wiley bot challenge; no Wikisource transcription found).
+
+p.1 (abstract): "Our objective is to go beyond the Einstein's approximation µeff = (1 + 5/2 φ)µ."
+p.3: "The celebrated Einstein's formula, µ′ = µ + (5/2) φµ + o(φ). (1.9) was derived under the assumption that the
+particles are homogeneously and isotropically distributed, and neglecting the interactions between particles. In other
+words, the correction µ1 = (5/2) µ is obtained by summing N times the contribution of one spherical particle to the
+effective stress."
+p.3: Haines and Mazzucato's "main result is that µN = µ + (5/2) φµ + O(φ^3/2)."
+p.4: "they [Batchelor and Green] claim that under a pure strain, the particles induce a viscosity of the form
+µ′ = µ + (5/2) φµ + 7.6 φ² µ + o(φ²) (1.11) Although the result of Batchelor and Green is generally accepted by the
+fluid mechanics community, the lack of clarity about their renormalization technique has led to debates"
+READER NOTE: the 5/2 coefficient is for RIGID spheres (no-slip surface). Guinness bubbles behave as rigid spheres
+because of surfactants (Benilov p.1; ESGI p.150). At φ = 0.02-0.05: 1 + 2.5φ = 1.05-1.125; Batchelor-Green adds
+7.6φ² = 0.003-0.019.

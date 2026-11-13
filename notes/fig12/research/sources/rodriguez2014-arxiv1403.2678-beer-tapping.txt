@@ -1,0 +1,23 @@
+SOURCE: J. Rodríguez-Rodríguez, A. Casado-Chacón, D. Fuster, "Physics of beer tapping", arXiv:1403.2678v3
+  [physics.flu-dyn] (8 Nov 2014); published Phys. Rev. Lett. 113, 214501 (2014).
+URL: https://arxiv.org/abs/1403.2678 (PDF read in full). Companion: arXiv:1310.3747 (APS/DFD gallery, read).
+LICENCE: arXiv non-exclusive distribution licence. Short quotes.
+DATE READ: 2026-11-13. Page numbers = arXiv PDF pages.
+
+p.1 (abstract): "In the bubble-collapse stage, the impact generates a train of expansion-compression waves in the
+liquid that leads to the fragmentation of pre-existing gas cavities. Upon bubble fragmentation, the sudden increase of
+the interface-area-to-volume ratio enhances mass transfer significantly ..."
+p.1: "When the wave reaches the base of the bottle, it is partially transmitted to the liquid as an expansion wave
+that travels towards the free surface, where it bounces back as a compression wave."
+p.2: "This first stage of the overall foaming-up process lasts of the order of the acoustic time of the liquid volume,
+usually tac = 2H/c ≈ 0.2 ms, assuming a typical liquid height H ≈ 10 cm and a speed of sound around c ≈ 1000 m/s."
+p.2: "the most unstable mode is given by nm = (1/3)(7 + 3Γm)^1/2 − 2 ... we find a most unstable mode of the order of
+nm ≈ 10^2 and a number of fragments N ≈ 10^6."
+p.3, Fig. 2 caption: "A bubble of initial radius R0 ≈ 180 µm, induced by a laser pulse nearly a second before the
+impact ... for a bubble subjected to a pressure pulse with an amplitude, pA = 100 kPa, and period, T = 0.24 ms,
+measured at the bubble's location with a hydrophone."
+p.1: "the shock is more efficiently transmitted into the liquid in the case of a glass container than in a softer
+bottle (e.g. plastic)"
+p.4: "our observations suggest that, once the plume is initiated, its dynamics do not seem
+to depend on the particular initiation mechanism."
+READER NOTE: the mechanism needs (i) pre-existing gas cavities and (ii) a ~100 kPa, sub-millisecond expansion wave.

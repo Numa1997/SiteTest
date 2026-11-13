@@ -1,0 +1,42 @@
+SOURCE: A. Bongarzone and F. Gallaire, "Numerical estimate of the viscous damping of capillary-gravity waves:
+  A macroscopic depth-dependent slip-length model", arXiv:2207.06907v1 [physics.flu-dyn], 14 Jul 2022, 9 pp.
+URL: https://arxiv.org/abs/2207.06907 (PDF https://arxiv.org/pdf/2207.06907)
+LICENCE: arXiv non-exclusive distribution licence (preprint).
+DATE READ: 2026-11-13, read in full (pdftotext). Page numbers = preprint pages.
+
+p.1: "the linear viscous dissipation at the free-surface, at the solid walls and in the bulk for low-viscosity fluids
+  was typically accounted for by a boundary layer approximation [Case & Parkinson 1957; Miles 1967]. These classic
+  theoretical approaches are built on the assumption that the free liquid surface, eta, intersects the lateral wall
+  orthogonally, and the contact line can freely slip with constant zero slope, d_n eta = 0 (free-end edge condition)"
+p.1: "the numerical damping strongly underestimates the one predicted according to Case & Parkinson (1957), which
+  instead agrees fairly well with their experimental measurements ... a slip-length value of 25 um is significantly
+  larger than the one observed experimentally, i.e. 0.1 - 10 nm."
+p.2: "the Reynolds number is defined as Re = sqrt(g R^3)/nu." "The Bond number is defined as Bo = rho g R^2/gamma."
+  Lengths scaled by R, velocity by sqrt(gR) (so time by sqrt(R/g)).
+p.3: "delta_St = sqrt(2/(omega_mn Re)),  (15)" ; "omega_mn^inv = sqrt((k_mn + k_mn^3/Bo) tanh(k_mn H)).  (16)
+  In (16) the wavenumber k_mn is given by the nth-root of the first derivative of the mth-order Bessel function"
+p.4: "We neglect more complex phenomena acting at the contact line, e.g. hysteretic contact angle dynamics due to
+  solid-like friction, or at the free surface, e.g. surface contamination, etc.. Under these assumptions,
+  capillary-gravity waves, over their motion, are damped by viscous dissipation occurring (i) at the oscillating
+  Stokes layers at the solid bottom and sidewall, (ii) in the fluid bulk and (iii) at the free surface, the latter
+  being typically negligible for ideal surface waves (clean surface). The damping coefficient ... was evaluated
+  asymptotically in the limit of small kinematic viscosity nu (or large Re >> 1) by Case & Parkinson (1957) and by
+  Miles (1967), who derived the well-known analytical approximation,
+    sigma^th_mn = 2 k_mn^2/Re  [bulk]  + sqrt(omega^inv_mn/(2Re)) k_mn/sinh(2 k_mn H)  [bottom]
+      + sqrt(omega^inv_mn/(2Re)) [ (1/2) (1 + (m/k_mn)^2)/(1 - (m/k_mn)^2) - k_mn H/sinh(2 k_mn H) ]  [sidewall]   (17)"
+  (Equation layout reconstructed from the two-column text; the same equation with the same terms is printed as
+   eq. (4.48) in Bongarzone's EPFL thesis (2023) p.135. Checked numerically against Table I below: R = 0.04 m,
+   H = 3, water gives sigma = 0.005068 vs tabulated 0.00507.)
+p.4: "Based on (17), Henderson & Miles (1990) proposed the following viscous correction to the inviscid natural
+  frequencies  omega^th_mn ~ omega^inv_mn (1 - sigma^th_mn/omega^inv_mn).  (18)"
+p.4: "pure water with rho = 1000 kg/m3, gamma = 0.073 N/m and mu = 0.001 kg/(m s)." "maximum deviation of approximately 12 %"
+p.6 Table I (mode (1,1), water; theory / numerics), H = 3 column:
+   R = 0.040 m: 0.00507 / 0.00535 ; R = 0.030 m: 0.00639 / 0.00670 ; R = 0.050 m: 0.00425 / 0.00444
+p.6 Fig. 4 caption: "(m, n) = (1, 1) surface oscillations in a polished right circular cylinders of radius
+  R = 0.0381 m and 0.0762 m. Results are expressed in terms of logarithmic decrement 2 pi sigma_11/omega_11. Black
+  solid lines: theoretical prediction according to (17). Black circles: experimental measurements by Case &
+  Parkinson (1957)."
+p.6: "For a carefully polished sidewall, the agreement between experiments and theoretical predictions is rather
+  satisfactory"
+p.7 (conclusion): "in absence of free surface contamination and complex contact angle dynamics. Although these
+  conditions are only ideal and rarely met in real-life lab-scale experiments"

@@ -1,0 +1,11 @@
+SOURCE: R. M. Höfer, R. Schubert, "The influence of Einstein's effective viscosity on sedimentation at very small
+  particle volume fraction", arXiv:2008.04813v2 [math.AP] (8 Feb 2021); published Ann. Inst. H. Poincaré C (2021).
+URL: https://arxiv.org/abs/2008.04813 (abstract and introduction read)
+LICENCE: arXiv non-exclusive distribution licence. DATE READ: 2026-11-13. Page numbers = arXiv PDF pages.
+
+p.1 (abstract): "It is known that the presence of the particles leads to an increase of the effective viscosity of the
+suspension. By Einstein's formula this effect is of the order of the particle volume fraction φ. The disturbance of the
+fluid flow responsible for this increase of viscosity is very singular (like |x|^−2)."
+p.4: "On the other hand, it is known that the particles change the effective viscosity of the fluid. According to
+Einstein's formula [Ein06], this effective viscosity is given by µeff = 1 + 5/2φ, to first order in the (local)
+particle volume fraction φ."

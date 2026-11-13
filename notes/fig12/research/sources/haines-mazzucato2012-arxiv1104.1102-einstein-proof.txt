@@ -1,0 +1,9 @@
+SOURCE: B. M. Haines, A. L. Mazzucato, "A proof of Einstein's effective viscosity for a dilute suspension of spheres",
+  arXiv:1104.1102v1 [math.AP] (6 Apr 2011); published SIAM J. Math. Anal. 44(3), 2120-2145 (2012).
+URL: https://arxiv.org/abs/1104.1102 (abstract and introduction read)
+LICENCE: arXiv non-exclusive distribution licence. DATE READ: 2026-11-13.
+
+p.1 (abstract): "We present a mathematical proof of Einstein's formula for the effective viscosity of a dilute
+suspension of rigid neutrally–buoyant spheres when the spheres are centered on the vertices of a cubic lattice. ...
+Einstein's formula is recovered as a first-order asymptotic expansion of the effective viscosity in the volume fraction."
+Reference list: "[11] A. Einstein. Eine neue bestimmung der moleküldimensionen. Ann. Physik., 19:289–306, 1906."

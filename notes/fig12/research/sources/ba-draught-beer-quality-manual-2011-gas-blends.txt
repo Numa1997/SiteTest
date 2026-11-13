@@ -1,0 +1,21 @@
+SOURCE: Brewers Association Technical Committee, Draught Beer Quality Manual, 2nd edition (Brewers Association,
+  Boulder CO, 2011). © Brewers Association 2011.
+URL READ: https://u.osu.edu/elevatorbrewerysecondaryresearch/files/2015/09/Draught_Quality_Manual-24vty9k.pdf
+  (third-party host; gas sections pp.30-42 read)
+LICENCE: copyright Brewers Association. Short quotes.
+DATE READ: 2026-11-13. Page numbers = printed manual pages.
+
+p.30: "These blends are typically available in blends of approximately 70% CO2 / 30% N2 for dispensing regularly
+carbonated beer, and approximately 25% CO2 / 75% N2 used to dispense nitrogenated beers (often called "G-Mix" or
+"Guinness Gas")."
+p.30: "In the past, the default blend for regularly carbonated beers was often 60% CO2/40% N2. Recent studies in retail
+establishments have shown that a 70% CO2 / 30% N2 blend will more likely result in proper carbonation of draught beer
+in most retail draught beer systems."
+p.30: "Pre-mixed cylinders containing a mix of between 30-25% CO2 and 70-75% N2 are intended for use with
+nitrogen-infused beers or "nitro" beers, such as some stouts. These blends are not intended for use with regularly
+carbonated beers (those with more than 2.0 volumes or 3.9 grams/liter of CO2)"
+p.40: "Most nitrogenated beers are poured through a special faucet that, because of its added restriction, requires the
+beer to be dispensed between 30 – 40 psi."
+p.40: "Beer does not absorb nitrogen gas to any significant degree."
+READER NOTE: "60/40" and "70/30" in this manual are CO2/N2 blends for ordinary lagers/ales; the stout blend is
+25/75 to 30/70 CO2/N2 (i.e. 70-75 % N2). No Diageo specification is quoted.

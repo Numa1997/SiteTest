@@ -1,0 +1,57 @@
+SOURCE: O. A. Power, W. Lee, A. C. Fowler, P. J. Dellar, L. W. Schwartz, S. Lukaschuk, G. Lessells, A. F. Hegarty,
+  M. O'Sullivan, Y. Liu (industry representatives: Conor Browne, Diageo Ireland, St James's Gate; Richard Swallow,
+  VGraph UK), "The initiation of Guinness", in Proceedings of the Seventieth European Study Group with Industry
+  (ESGI 70, Limerick, 2009), eds S. B. G. O'Brien et al., pp. 141-182.
+URL: https://ul.ie/media/35188/download  (41-page PDF read in full)
+LICENCE: none stated. Quotes kept short and passage-specific.
+DATE READ: 2026-11-13. Page numbers: printed proceedings page (PDF page in brackets).
+
+p.143 [pdf 3]: "In particular, at 3.8 bar and 8 °C the gas mixture is about 79 mole % N2 and 21 mole % CO2. This
+yields the desired CO2 concentration of ∼ 2 g l−1 and the desired N2 concentration of ∼ 0.072 g l−1 (Section 8).
+For comparison, a beer dispensed at the same pressure using only CO2 would have a CO2 concentration of ∼ 9.5 g l−1."
+p.143 [pdf 3]: "N2 is 100 times less soluble than CO2 at 8 °C."
+p.143 [pdf 3]: "If such a can is carefully opened and poured into a clean glass, little or no head forms. However,
+if the glass is now placed on a 'surger' unit, which vibrates ultrasonically, a surge of bubbles appears ..."
+p.144 [pdf 4]: "In all these forms, the container is pressurised to 3.8 bar at 8 °C with a 79 mole % nitrogen and a
+21 mole % carbon dioxide gas mixture."
+p.144 [pdf 4]: "One line leads to a premixed gas cylinder containing nitrogen and carbon dioxide. ... the Guinness is
+forced at high speed through an orifice plate with five small holes."  (no blend ratio given for the cylinder)
+p.147 [pdf 7]: "For beer (γ ≈ 40 mN m−1 [3]) and an initial supersaturation ratio of 2.8, which is typical for
+draught Guinness, the critical radius is 0.3 µm." ... "homogeneous nucleation, requires a supersaturation ratio of
+several hundred to over a thousand to be observable [9, 10]."
+p.150 [pdf 10]: "Guinness, being weakly supersaturated, will have no observable homogeneous nucleation within the
+body of the liquid. Since surger-ready Guinness can be poured with very little or no head forming, the heterogeneous
+nucleation rate on the surface of the glass must also be very low."
+p.150 [pdf 10]: "beer bubbles experience a drag similar to that which would be experienced by a solid sphere of the
+same radius, the combination of low CO2 content (∼ 6 g l−1) and high surfactant concentration (∼ 100 mg l−1 [12])"
+p.151 [pdf 11]: "Entrapment of gas bubbles: If a container is shaken, then some of the gas above the liquid level is
+mixed into the liquid as small bubbles. ... Splashing a liquid into a glass, rather than pouring it slowly down the
+side of the glass, can also entrap air bubbles with R > Rc, as can banging a glass of liquid down or swirling the glass."
+p.151 [pdf 11]: "a drop in liquid pressure from 1 bar to 0.5 bar causes a precritical Guinness bubble with
+R = 0.25 µm to expand until R ≈ 0.31 µm, while the critical radius drops from 0.29 µm to 0.24 µm."
+p.152 [pdf 12], Table 7: "Shaking container | Entrapment of gas bubbles | I"; "Banging glass down | Entrapment of gas
+bubbles | I"; "Ultrasound | Pressure fluctuations | II".
+p.166 [pdf 26]: "For bubbles with radii of order 50 µm in Guinness (ρl ≈ 10^3 kg m−3, µ ≈ 2 × 10−3 Pa s [19]),
+U ≈ 0.1 cm s−1, Re ≈ 0.07 and Pe ≈ 68." ... "For pure nitrogen bubbles in Guinness, we obtain κ ≈ 3 µm s−1"
+p.167 [pdf 27]: "Assuming the plate of the surger unit oscillates sinusoidally with amplitude A ... The corresponding
+acceleration is g = z̈ = ω² A sin(ωt). This creates the pressure field ps = ρl g (h − z) = ρl ω² A (h − z) sin(ωt)"
+p.168 [pdf 28]: "Inserting appropriate values (ρl = 10^3 kg m−3, ω = 250π × 10^3 rad s−1, A = 89 nm, h = 10 cm), we
+find that Ps varies from 55 bar at the bottom (z = 0) of the liquid to 0 bar at the top (z = h). ... It does, however,
+seem like an unusually large pressure and there is uncertainty regarding the exact value of A."
+  [READER: ω = 250π×10^3 rad/s means f = 125 kHz; ω²A = 5.5×10^4 m/s². The Diageo patent US7520212 gives 20-80 kHz,
+   example 40 kHz - see patent-US7520212-diageo-surger.txt.]
+p.169 [pdf 29]: "the ultrasound period 2π/ω ≈ 8 µs over the duration of the surge and settle (∼ 1 min)." ...
+"As time progresses further, the mean bubble radius drops to about 50 µm because the bubble growth rate decreases as
+the dissolved gas concentration in the liquid falls." ... "the height of the head ... is approximately 12 mm after 5 s."
+p.172 [pdf 32]: "for champagne, 80% of the dissolved CO2 molecules escape by this method [12]" (diffusion through
+the free surface, not considered in their model); "it only vibrates for 1 − 2 s after pressing the activation button"
+p.176 [pdf 36]: "Vol. CO2 = g l−1 CO2 × 0.509." ... "Vol. N2 = g l−1 N2 × 0.800." ... "pCO2 = cCO2/HCO2 =
+2 g l−1 / 2.5 g l−1 bar−1 = 0.8 bar."
+p.177 [pdf 37], Table 8 "Henry's law constants for CO2 and N2 in pure water. Sources: [23] and [24].":
+  "0 °C: HCO2 3.42, HN2 0.0283 | 8 °C: 2.50, 0.0241 | 15 °C: 2.05, 0.0209 | 20 °C: 1.76, 0.0192  (g l−1 bar−1)"
+  [23] Horvath (1975) Physical properties of inorganic compounds; [24] Murer (2005) Brauwelt International 2, 100-107.
+p.177 [pdf 37]: "cN2 = HN2 pN2 = 0.0241 g l−1 bar−1 (3 bar) = 0.0723 g l−1, or 5.78% v/v. If 1 l of Guinness has a
+mass of 1 kg, then the solubility of N2 is 72.3ppm." ... "about 0.0282 g of N2 and 1 g of CO2 must escape from every
+pint (∼ 500 ml) of Guinness to bring the dissolved gas concentrations into equilibrium with their atmospheric partial
+pressures. This corresponds to about one billion 50 µm radius bubbles ... In practice, most of the CO2 cannot escape
+as bubbles and must instead diffuse through the free liquid surface."

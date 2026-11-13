@@ -1,0 +1,22 @@
+SOURCE: Junjing Wang, "Influences of Key Components and Surface Modifications on Beer Lacing", MSc thesis, Lund
+  University (2017), 33 pp. Supervisors Yi Lu, Bjorn Bergenstahl.
+URL: https://lup.lub.lu.se/student-papers/search/publication/8921851 (PDF .../record/8921851/file/8921853)
+LICENCE: Lund University student paper, open (author copyright). DATE READ: 2026-11-13; read pp.1-20.
+Page numbers = printed thesis pages.
+
+p.8 (method): "5 uL each sample solution was dropped on the edge of glass slide. The recording camera of tensiometer
+  (THE TRACKER from TECLIS - I.T.C) was focused ... Software (WINDROP_2008_PXR) was used to calculate the contact
+  angles."  [static sessile-drop angles; no advancing/receding measured]
+p.8 (design): "Low level of protein was achieved by diluting beer with pH 4 buffer and adding maltodextrin ... Each
+  solution was spiked with ethanol to simulate beer with 3% alcohol." Factors: protein 0.15 %, 0.3 %; iso-alpha-acid
+  25, 50, 75, 100 mg/L; surface hydrophobic, hydrophilic.
+p.10: "contact angles for hydrophobized surface and hydrophilized glass are 90 deg and 33.1 deg respectively"
+  [Milli-Q water; hydrophilic = glass cleaned in 30 % HCl; hydrophobic = 0.1 % C18H37Cl3Si]
+p.10 Fig. 3.2 (beer-based samples):
+  hydrophobic glass, protein 0.3 %: 59.2, 54.8, 53.3, 47.2 deg (iso-alpha 25, 50, 75, 100 mg/L)
+  hydrophobic glass, protein 0.15 %: 72.2, 72.1, 70.1, 65.9 deg
+  hydrophilic glass, protein 0.3 %: 46.0, 41.2, 29.6, 29.4 deg
+  hydrophilic glass, protein 0.15 %: 41.4, 34.6, 33.3, 37.6 deg
+p.11: "contact angle decreased along with the increase of the amount of iso-alpha-acid"
+p.20: "iso-alpha-acid is an ideal surfactant and it can help beer to wet on glass surface as its concentration
+  increasing, on both the hydrophilic/hydrophobic glass surface."
