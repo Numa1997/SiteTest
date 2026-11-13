@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-4626 files, 419.3 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+4627 files, 419.3 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -45,7 +45,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Working notes of project 07, the electron beam](#working-notes-of-project-07-the-electron-beam) | 52 |
 | [Working notes of the Rotor Pendula study](#working-notes-of-the-rotor-pendula-study) | 86 |
 | [Working notes of the Droplet Collection study](#working-notes-of-the-droplet-collection-study) | 123 |
-| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 630 |
+| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 631 |
 
 ## Repository root
 
@@ -3858,7 +3858,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/fig12/kaggle/run_b.py`](../tools/fig12/kaggle/run_b.py) | 10.3 kB | Fig. 12 in JAX on Kaggle’s GPU, first run: the stout at rest, its free swing (frequency and damping, three grids) and two rides that spill; each task only if the measured time says it ends inside the budget | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/kaggle/solver.py`](../tools/fig12/kaggle/solver.py) | 50.3 kB | Fig. 12 computed on Kaggle: the GPU solver v2 (Taichi): the stout as APIC particles on a 1.5 mm grid with a ghost-fluid free surface and free-slip glass faces, the wall’s boundary layer and the foam as drags, coupled both ways to the port of the site’s cart; the notebooks download it at a pinned commit | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/kaggle/store_rides.py`](../tools/fig12/kaggle/store_rides.py) | 2.2 kB | Fig. 12 computed on Kaggle: stores a generation of rides in public/data/fig12/<date>/ with index.json (notebook, version, code commit, measured times, SHA-256) | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
-| [`tools/fig12/kaggle/stout_jax.py`](../tools/fig12/kaggle/stout_jax.py) | 52.1 kB | Fig. 12 in JAX on Kaggle’s GPU: the stout (APIC particles, cut-cell glass, level-set free surface with ghost-fluid pressure, wall and foam friction), the drops that leave over the rim, and the cart, all computed on the GPU and coupled both ways; the algorithm of solver.py written again in JAX | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`tools/fig12/kaggle/stout_jax.py`](../tools/fig12/kaggle/stout_jax.py) | 52.3 kB | Fig. 12 in JAX on Kaggle’s GPU: the stout (APIC particles, cut-cell glass, level-set free surface with ghost-fluid pressure, wall and foam friction), the drops that leave over the rim, and the cart, all computed on the GPU and coupled both ways; the algorithm of solver.py written again in JAX | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/kaggle_decay.py`](../tools/fig12/kaggle_decay.py) | 4.7 kB | Fig. 12 computed on Kaggle: measures from the stored rides the first mode’s frequency and how fast its swing dies after the last bump (a direct fit of the free decay, self-tested), and how far the wall lean drifts at steady speed. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/linearity.cjs`](../tools/fig12/linearity.cjs) | 2.9 kB | Fig. 12: both fluid models from rest under the same half-sine push, no cart: where the linear modes fail (lean, swing, spill). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/linfit.cjs`](../tools/fig12/linfit.cjs) | 2.0 kB | Fig. 12: fits the free swing (amplitude, frequency) in the files linearity.cjs saves. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
@@ -4704,7 +4704,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/fig12/check-8-6.md`](../notes/fig12/check-8-6.md) | 12.8 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/check.md`](../notes/fig12/check.md) | 24.2 kB | Fig. 12: the derivation checker's table of equations and numbers. | [notes.md](notes.md) |
 
-<details><summary>34 files: Fig. 12: a measuring script of the review, or its saved output.</summary>
+<details><summary>35 files: Fig. 12: a measuring script of the review, or its saved output.</summary>
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
@@ -4720,6 +4720,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/fig12/handoff-jax/01-mistakes-and-rules.md`](../notes/fig12/handoff-jax/01-mistakes-and-rules.md) | 7.4 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/handoff-jax/02-launch-gates.md`](../notes/fig12/handoff-jax/02-launch-gates.md) | 6.2 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/handoff-jax/03-model-and-numbers.md`](../notes/fig12/handoff-jax/03-model-and-numbers.md) | 5.5 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/handoff-jax/04-latest-findings.md`](../notes/fig12/handoff-jax/04-latest-findings.md) | 5.1 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/handoff-jax/handoff-guinness-cart.md`](../notes/fig12/handoff-jax/handoff-guinness-cart.md) | 17.2 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/jax/run2-data/free_full_1.5.json`](../notes/fig12/jax/run2-data/free_full_1.5.json) | 109.9 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/jax/run2-data/index-jax.json`](../notes/fig12/jax/run2-data/index-jax.json) | 1.9 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
