@@ -1,7 +1,7 @@
 # Fig. 12 in JAX on Kaggle's GPU, first run (13 Nov 2026): the stout at rest, its free swing, and two rides that spill.
 # Writes to /kaggle/working/<date>/: one .npz per task (surface, drops, cart, books, every frame), summary.json, progress.log.
 # Each task is started only if the time measured so far says it ends inside BUDGET_S.
-import os, json, time, datetime
+import os, json, time, datetime, math
 from pathlib import Path
 import numpy as np
 import jax, jax.numpy as jnp
@@ -41,10 +41,27 @@ TASKS = [   # third run (13 Nov 2026): the head as a sheet that resists shear; s
     # theory, 3.421 Hz and zeta = 0.0056 (glass and bulk, Bongarzone & Gallaire 2022 eq. 17; research/verification.md check 1)
     dict(name="free_wall_1.5", kind="free", dx=0.0015, model="wall", end=5.0, push=(0.3, 1.0, 0.146)),
 ]
+# the controlled rides (13 Nov 2026, evening; the user: "Please do"): the same roads and speeds as run 6, with the site's
+# controllers ported line by line from stout-cart.js (Cart.sample, Observer): "joint" on all three roads, "slosh" and "preview"
+# on the kerb. Run 6's rides (speed PI) are the baseline. The controller's plant is the first mode as this solver has it with the
+# head (run 6's free swing: natural frequency 3.278 Hz, damping ratio 0.467) and beta of the cylinder of the surface's radius,
+# as World of stout-cart.js takes the mode of each model.
+XI1 = 1.8412; R_S = 0.0391
+PLANT = dict(w=2 * math.pi * 3.278, zeta=0.467, beta=2 * XI1 * math.tanh(XI1 * FILL / R_S) / (XI1 ** 2 - 1))
+TASKS_CONTROL = [
+    dict(name="rest", kind="free", dx=0.0015, model="full", end=2.0, push=(0.3, 0.0, 0.146)),
+    dict(name="ride_resonant_joint", kind="ride", dx=0.0015, model="full", end=8.0, road="five 20 mm bumps in step with the swing", v0=1.0, ctrl="joint"),
+    dict(name="ride_sharp30_joint", kind="ride", dx=0.0015, model="full", end=4.0, road="one sharp 30 mm bump", v0=1.5, ctrl="joint"),
+    dict(name="ride_sharp30_slosh", kind="ride", dx=0.0015, model="full", end=4.0, road="one sharp 30 mm bump", v0=1.5, ctrl="slosh"),
+    dict(name="ride_sharp30_preview", kind="ride", dx=0.0015, model="full", end=4.0, road="one sharp 30 mm bump", v0=1.5, ctrl="preview"),
+    dict(name="ride_bump25_joint", kind="ride", dx=0.0015, model="full", end=8.0, road="one 25 mm bump", v0=1.0, ctrl="joint"),
+]
+if os.environ.get("RUNSET") == "control":
+    TASKS = TASKS_CONTROL
 if os.environ.get("ONLY"):   # run only the named tasks, comma-separated (one Colab job per task: Colab caps a job at 3600 s)
     TASKS = [t for t in TASKS if t["name"] in os.environ["ONLY"].split(",")]
 if os.environ.get("CODECHECK"):   # a check of this script only: two frames on a 6 mm grid, results thrown away
-    TASKS = [dict(t, dx=0.006, end=2 / FPS) for t in TASKS[:4]]
+    TASKS = [dict(t, dx=0.006, end=float(os.environ.get("CODECHECK_END", 2 / FPS))) for t in TASKS[:int(os.environ.get("CODECHECK_N", 4))]]
 measured = {}   # dx -> seconds per simulated second (fluid), from finished tasks
 summary = dict(generated=STAMP, device=jax.devices()[0].device_kind, jax=jax.__version__, fill=FILL, rho=RHO, fps=FPS, tasks=[])
 
@@ -84,12 +101,12 @@ for task in TASKS:
         adv = make_advance(S, "free", push=task["push"]); ex = dict(vmax=jnp.zeros((), F64), t_end=jnp.zeros((), F64))
     else:
         road = road_table(ROADS[task["road"]], xmax=0.5 + task["v0"] * task["end"] * 1.3 + 2)
-        cart = Cart(dict(CART_COMMON, v0=task["v0"], ctrl=1, susp=0), road)
+        cart = Cart(dict(CART_COMMON, v0=task["v0"], ctrl=task.get("ctrl", "speed"), susp=task.get("susp", 0), plant=PLANT), road)
         adv = make_advance(S, "ride", cart=cart); ex = ride_extra(S, cart)
     obs = jax.jit(S.observe); pol = jax.jit(S.polar)
     nf = int(round(task["end"] * FPS)); rec = {k: [] for k in ("t", "H", "nfallback", "polar", "drops", "ndrops", "nfly", "nlanded", "nstuck", "nact", "KE", "PE", "Px",
                                                               "ewall", "efoam", "eskin", "hf", "lumps", "lumpvol", "foam_spill", "steps", "its", "itmax", "resmax", "nselmax", "wall_s",
-                                                              "x", "v", "zb", "zw", "i", "Nwheel", "Fx", "Fz")}
+                                                              "x", "v", "zb", "zw", "i", "Nwheel", "Fx", "Fz", "icmd", "us", "qhat", "yq", "ipar")}
 
     def record(s, t, ex, st, wall):
         o = obs(s); P = pol(o["H"])
@@ -104,7 +121,8 @@ for task in TASKS:
         rec["wall_s"].append(wall)
         if task["kind"] == "ride":
             c = ex["cart"]
-            for k, kk in (("x", "x"), ("v", "vx"), ("zb", "zb"), ("zw", "zw"), ("i", "i"), ("Nwheel", "N")): rec[k].append(float(c[kk]))
+            for k, kk in (("x", "x"), ("v", "vx"), ("zb", "zb"), ("zw", "zw"), ("i", "i"), ("Nwheel", "N"), ("icmd", "icmd"), ("us", "us"), ("yq", "py"), ("ipar", "ipar")): rec[k].append(float(c[kk]))
+            rec["qhat"].append(float(c["oxh"][1]))
             rec["Fx"].append(float(ex["F"][0])); rec["Fz"].append(float(ex["F"][1]))
 
     record(s, t, ex, None, 0.0)
@@ -147,6 +165,11 @@ for task in TASKS:
         lean = (pol_arr[:, 16, 0] - pol_arr[:, 16, 32]) * 1e3
         info["lean_max_mm"] = float(np.nanmax(np.abs(lean))); info["v_range"] = [float(out["v"].min()), float(out["v"].max())]
         info["impulse_vs_momentum"] = dict(impulse_x=float(np.asarray(ex["imp"][0])), momentum_x_end=float(np.asarray(ex["P"][0])))
+        info["ctrl"] = task.get("ctrl", "speed"); info["plant"] = PLANT
+        info["control"] = dict(i_max_A=float(np.abs(out["i"]).max()), icmd_max_A=float(np.abs(out["icmd"]).max()),
+                               frames_current_limited=int((np.abs(out["icmd"]) >= CART_COMMON["Imax"]).sum()),
+                               us_max_N=float(np.abs(out["us"]).max()), ipar_max_A=float(np.abs(out["ipar"]).max()),
+                               gains=dict(K=[float(v) for v in np.asarray(cart.K)], Ks=[float(v) for v in np.asarray(cart.Ks)]))
     if name == "rest":
         # the guard (the user's order: "stop the run if it does not have proper numbers"): a pint standing still must stay flat,
         # keep all its stout and all its head. If it does not, every ride after it would be wrong too: stop the session here.
