@@ -819,5 +819,7 @@ def make_advance(S, mode, cart=None, cfl=0.8, dtmax=0.002, push=None):
 
 def ride_extra(S, cart_obj, x0=0.5):
     ml = S.rho * S.V + (S.rho_f * HEAD0 * float(np.sum(np.asarray(S.rc) < S.G.Rfill)) * S.dx ** 2 if S.head else 0.0)
-    return dict(cart=cart_obj.init(x0, ml), P=jnp.zeros(3, F64), F=jnp.zeros(2, F64), haveP=jnp.zeros((), bool),
+    # the stout starts at rest in the glass, so its momentum relative to the glass is exactly zero: the push of the very first
+    # step counts too (13 Nov 2026; before, the first step's push was skipped, 4 % of the impulse in a two-frame check)
+    return dict(cart=cart_obj.init(x0, ml), P=jnp.zeros(3, F64), F=jnp.zeros(2, F64), haveP=jnp.ones((), bool),
                 vmax=jnp.zeros((), F64), imp=jnp.zeros(2, F64), t_end=jnp.zeros((), F64))
