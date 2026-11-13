@@ -291,3 +291,28 @@ The owner: "The animation looks horrible ... glitches and slow." Causes found an
   from the side, and says under a hard-wall run of version 1 what is wrong with it.
 - The live preview in the browser is drawn as fog also when Mesh is chosen (it has no fine sheet).
 
+## Version 2 of the 243 runs is on the site (13 November 2026, 03:35 UTC)
+
+The owner asked for the GPU instead of the CPU. `numakoudsie/schrodinger-shapes-3d`, version 2 (2 × T4, loader with
+`JOBSEL = 'hard_and_shells'`, code at commit `94d1281`): 243 of 243 runs, none failed, 1192 s on the clock, 2239 GPU-seconds of
+runs (0.62 h; estimate before launch 0.76 h and 23 min), 1 068 639 steps. Merged by
+[merge_v2.py](../../tools/kaggle/schrodinger-shapes/merge_v2.py): every SHA-256 checked, the 243 files and index entries
+replaced (marked `v: 2`), `shell` set to the new source (x = −17, r₀ = 5, travel 24). The four CPU notebooks `…-v2-a` to `-d`
+started earlier compute the same runs; their output is not used (the connector could not cancel them: its cancel call needs a
+session number that neither its status nor its info call returns).
+
+Measured on the stored files of version 2 (levels × the frame's peak, in units of the first frame's peak in the plane z = 0):
+
+| | start wave inside the barrier | hard wall: largest value inside during the run | more than one grid point inside |
+|---|---|---|---|
+| sphere, hard | 0 | 0.043 | 0.009 |
+| coin, hard | 0 | 0.030 | 0 |
+| tube, hard | 0 | 0.044 | 0 |
+| side wave onto ball / pillar / wall, hard | 0 | 0.003 / 0.003 / 0.001 | 0.0006 / 0.0006 / 0 |
+| side wave, finite heights | below the lowest stored level (3 of 255) | | |
+
+In version 1 the same numbers were up to 0.85 (216 of 255 levels deep inside the hard ball in the side case). The few per cent
+left at the first grid point inside a hard wall are the wave's reach into a wall of height 200 (0.05 a) seen on a grid of 0.5 a.
+With `shell.src_x = -17` in the index the page offers "Spherical, from the side" again, and runs marked `v: 2` no longer carry
+the note about the start wave.
+

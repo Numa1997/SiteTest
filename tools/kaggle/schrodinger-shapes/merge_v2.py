@@ -1,5 +1,5 @@
-"""Merges version 2 of the 3D runs (the four CPU notebooks numakoudsie/schrodinger-shapes-3d-v2-a ... d: the 243 runs whose start
-wave was wrong in version 1) into the website's 3D generation: unpacks each part, checks every SHA-256, replaces the run files and
+"""Merges version 2 of the 3D runs (numakoudsie/schrodinger-shapes-3d, version 2, on the GPUs: the 243 runs whose start
+wave was wrong in version 1; the same runs were also started on four CPU notebooks ...-v2-a to -d, whose output is not used) into the website's 3D generation: unpacks each part, checks every SHA-256, replaces the run files and
 their index entries (marked v = 2), sets the shell constants of version 2 and records the source.
 Usage: python3 merge_v2.py <public/data/schrodinger-sphere/<date>/shapes3d> <commit> <part-folder> [<part-folder> ...]"""
 import hashlib, json, os, sys, tarfile
@@ -21,6 +21,6 @@ for part in parts:
         r["v"] = 2; ix["runs"][by[r["file"]]] = r; done += 1; walls += r["wall"]
     ix["shell"] = px["shell"]
 ix["version2"] = dict(runs=done, what="hard walls: start wave zero inside; spherical wave from the side: source at -17, r0 = 5, starts outside the barrier",
-                      kaggle=["numakoudsie/schrodinger-shapes-3d-v2-" + c for c in "abcd"], commit=commit, device="cpu", cpu_seconds=round(walls, 1))
+                      kaggle="numakoudsie/schrodinger-shapes-3d", version="2", commit=commit, device="2 x Tesla T4", gpu_seconds=round(walls, 1))
 json.dump(ix, open(os.path.join(dst, "index.json"), "w"), separators=(",", ":"))
-print(f"{done} runs replaced, all SHA-256 checked; {walls/3600:.2f} CPU hours of runs")
+print(f"{done} runs replaced, all SHA-256 checked; {walls/3600:.2f} device hours of runs")
