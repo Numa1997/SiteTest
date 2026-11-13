@@ -241,19 +241,24 @@ class Stout:
         self.head = M["head"]; self.rho_f = PHI_F * rho
         X, Y = np.meshgrid(G.xc, G.xc, indexing="ij")
         self.rc = jnp.asarray(np.hypot(X, Y), F32); self.colx = jnp.asarray(X, F32); self.coly = jnp.asarray(Y, F32)
+        # the open part of each column at the fill (the horizontal face nearest the fill height): the head lies on every column
+        # that holds stout there, out to the glass, and a column's head counts hf x this area (13 Nov 2026, run 3: the head lay
+        # only on columns whose centre is inside the glass; its weight, 51 Pa, then squeezed the stout up into the bare columns
+        # at the glass at 11 mm/s in one step from rest, and the pint at rest stirred itself)
+        self.afill = jnp.asarray(G.thw[:, :, int(round((G.fill - G.z0) / dx))], F32)
         self.ell = G.Rfill / 1.84118         # m, the depth over which the foam's sliding speed dies away upward, 1/k (Sauret 2015)
         self.Rrim = float(G.Rz(G.zrim - 1e-6))
         self.MF = 4096                       # lumps of head in flight, at most
 
     # ---------------------------------------------------------------- state
     def init_state(self):
-        N = self.N; G = self.G
-        hf0 = jnp.where(self.rc < G.Rfill, HEAD0 if self.head else 0.0, 0.0).astype(F32)
+        N = self.N
+        hf0 = jnp.where(self.afill > 0, HEAD0 if self.head else 0.0, 0.0).astype(F32)
         z64 = jnp.zeros((), F64)
         return dict(xp=jnp.asarray(self.P0), vp=jnp.zeros((N, 3), F32), C=jnp.zeros((N, 3, 3), F32),
                     act=jnp.ones(N, bool), fly=jnp.zeros(N, bool), landed=jnp.zeros(N, bool), stuck=jnp.zeros(N, bool),
                     p=jnp.zeros(self.dims, F32), ewall=z64, efoam=z64, eskin=z64,
-                    hf=hf0, foam_spill=z64, foam0=jnp.sum(hf0.astype(F64)) * self.dx ** 2,
+                    hf=hf0, foam_spill=z64, foam0=jnp.sum((hf0 * self.afill).astype(F64)) * self.dx ** 2,
                     bx=jnp.full((self.MF, 3), jnp.nan, F32), bv=jnp.zeros((self.MF, 3), F32), bvol=jnp.zeros(self.MF, F32),
                     bptr=jnp.zeros((), I32))
 
@@ -485,7 +490,7 @@ class Stout:
         sc = self.Rrim / jnp.maximum(self.rc.reshape(-1), 1e-9)
         pos = jnp.stack([self.colx.reshape(-1) * sc, self.coly.reshape(-1) * sc, G.zrim + 0.5 * cut.reshape(-1)], -1)
         bx = s["bx"].at[slot].set(pos.astype(F32), mode="drop"); bv = s["bv"].at[slot].set(0.0, mode="drop")
-        bvol = s["bvol"].at[slot].set((cut.reshape(-1) * dx * dx).astype(F32), mode="drop")
+        bvol = s["bvol"].at[slot].set(((cut * self.afill).reshape(-1) * dx * dx).astype(F32), mode="drop")
         onbody = (jnp.abs(bx[:, 0]) < BODY_HALF[0]) & (jnp.abs(bx[:, 1]) < BODY_HALF[1])
         flying = jnp.isfinite(bx[:, 2]) & (bx[:, 2] > -0.25) & ~((bx[:, 2] <= BODY_TOP) & onbody & (bv[:, 2] == 0))
         bv = jnp.where(flying[:, None], bv + dt * jnp.array([gx, 0.0, gz], F32), bv)
@@ -493,7 +498,7 @@ class Stout:
         bn = jnp.where(hitb[:, None], bn.at[:, 2].set(BODY_TOP), bn); bv = jnp.where(hitb[:, None], 0.0, bv)
         bx = jnp.where(flying[:, None], bn, bx)
         return dict(s, hf=(hf - cut).astype(F32), bx=bx, bv=bv, bvol=bvol, bptr=(s["bptr"] + nnew) % self.MF,
-                    foam_spill=s["foam_spill"] + jnp.sum(cut.astype(F64)) * dx * dx)
+                    foam_spill=s["foam_spill"] + jnp.sum((cut * self.afill).astype(F64)) * dx * dx)
 
     # ---------------------------------------------------------------- pressure (Taichi build, matvec, solve, project)
     def _faces(self, ph, liq, ax):
@@ -625,12 +630,17 @@ class Stout:
     def step(self, s, dt, gx, gz):
         dt = jnp.asarray(dt, F32); gx = jnp.asarray(gx, F32); gz = jnp.asarray(gz, F32)
         vel, mass, cnt = self.p2g(s)
-        vel = self.normalize_force(vel, mass, dt, gx, gz)
+        # 13 Nov 2026, run 3: gravity's kick of this step (dt g) was added before the viscous and thin-layer stresses, so the glass's
+        # Stokes layer and the head braked gravity itself: a pint at rest lost 0.63 mJ of potential energy in 2 s, the books
+        # counted 0.77 mJ "dissipated", and the stout stirred (up to 3.7 mm/s). The stresses now act on the velocity the stout
+        # has (the last step's, free of divergence); the body force is added after them, just before the pressure step.
+        vel = self.normalize_force(vel, mass, dt, 0.0, 0.0)
         ph, liq, nsel, phr = self.level_set(s, cnt)
         H, _ = self.surface(phr)
         if self.nu > 0: vel = self.viscosity(vel, mass, dt)
         z = jnp.zeros((), F64); ew = es = ef = z
         if self.gs > 0 or self.skin or self.head: vel, ew, es, ef = self.friction(vel, mass, ph, liq, dt, s["hf"])
+        vel = [jnp.where((mass[c] > 1e-6) & (self.th[c] > 0), vel[c] + dt * (gx if c == 0 else (gz if c == 2 else 0.0)), vel[c]).astype(F32) for c in range(3)]
         # the head's weight on the surface (verification.md item 4), in the solver's pressure units (Pa x dt / rho)
         ps = (self.rho_f * s["hf"] * jnp.maximum(-gz, 0.0) * dt / self.rho).astype(F32) if self.head else jnp.zeros((self.n, self.n), F32)
         vel, known, p, it, res = self.pressure(vel, ph, liq, s["p"], ps)
@@ -639,7 +649,7 @@ class Stout:
         if self.head: s = self.head_spill(s, H, dt, gx, gz)
         s = dict(s, p=p, ewall=s["ewall"] + ew, eskin=s["eskin"] + es, efoam=s["efoam"] + ef)
         vmax = jnp.max(jnp.where(s["act"][:, None], jnp.abs(s["vp"]), 0.0))
-        mhead = self.rho_f * jnp.sum(s["hf"].astype(F64)) * self.dx ** 2
+        mhead = self.rho_f * jnp.sum((s["hf"] * self.afill).astype(F64)) * self.dx ** 2
         diag = dict(it=it, res=res, mom=mom, nact=jnp.sum(s["act"], dtype=I32), nsel=nsel, vmax=vmax, mhead=mhead)
         return s, diag
 

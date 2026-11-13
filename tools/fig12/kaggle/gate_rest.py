@@ -15,7 +15,7 @@ def gate(R, dx=0.004, seconds=1.0, log=print):
     s = S.init_state(); t = jnp.zeros((), F64)
     adv = make_advance(S, "free", push=(0.3, 0.0, 0.146)); obs = jax.jit(S.observe)
     ex = dict(vmax=jnp.zeros((), F64), t_end=jnp.zeros((), F64))
-    o0 = obs(s); head0 = float(jnp.sum(o0["hf"])) * dx * dx; nsel = 0
+    o0 = obs(s); head0 = float(jnp.sum(o0["hf"] * S.afill)) * dx * dx; nsel = 0
     for f in range(1, int(round(seconds * 30)) + 1):
         ex = dict(ex, t_end=jnp.asarray(f / 30, F64)); s, t, ex, st = adv(s, t, ex); nsel = max(nsel, int(st["nselmax"]))
     o = obs(s); H = np.asarray(o["H"]); hf = np.asarray(o["hf"])
@@ -30,7 +30,7 @@ def gate(R, dx=0.004, seconds=1.0, log=print):
         # at dx = 4 mm the fill (125 mm) lies a quarter of a cell from the nearest cell centre, so heights rounded to cell centres fail this
         ("the surface at rest is within 0.2 cells of the fill", bool(np.nanmax(dev) < 0.2 * dx), f"largest deviation {np.nanmax(dev) * 1e3:.3f} mm, cell {dx * 1e3:.1f} mm"),
         ("no column outside the glass holds a value", bool(not np.isfinite(H[outside]).any()), f"{int(np.isfinite(H[outside]).sum())} columns"),
-        ("the head has lost nothing at rest", bool(abs(float(hf.sum()) * dx * dx - head0) < 1e-9 and float(o["foam_spill"]) == 0.0), f"{head0 * 1e6:.2f} mL before, {float(hf.sum()) * dx * dx * 1e6:.2f} mL after, spilled {float(o['foam_spill']) * 1e6:.3f} mL"),
+        ("the head has lost nothing at rest", bool(abs(float((hf * np.asarray(S.afill)).sum()) * dx * dx - head0) < 1e-9 and float(o["foam_spill"]) == 0.0), f"{head0 * 1e6:.2f} mL before, {float((hf * np.asarray(S.afill)).sum()) * dx * dx * 1e6:.2f} mL after, spilled {float(o['foam_spill']) * 1e6:.3f} mL"),
         ("the head is HEAD0 thick where there is stout", bool(abs(float(hf[inside].max()) - HEAD0) < 1e-6), f"{float(hf[inside].max()) * 1e3:.2f} mm"),
         ("no stout has left the glass", bool(int(o["nact"]) == S.N and int(o["nfly"]) == 0), f"{S.N - int(o['nact'])} particles"),
         ("the stout is still", bool(float(o["KE"]) < 1e-5), f"kinetic energy {float(o['KE']):.2e} J"),
