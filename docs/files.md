@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-6109 files, 748.9 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+6110 files, 748.9 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -39,7 +39,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Shared by the portfolio sources (not served)](#shared-by-the-portfolio-sources-not-served) | 1 |
 | [Template sources](#template-sources) | 2 |
 | [Documentation](#documentation) | 42 |
-| [Tools](#tools) | 155 |
+| [Tools](#tools) | 156 |
 | [Translation tables](#translation-tables) | 54 |
 | [Agents of the lecture-note review](#agents-of-the-lecture-note-review) | 4 |
 | [Working notes of project 07, the electron beam](#working-notes-of-project-07-the-electron-beam) | 52 |
@@ -5568,12 +5568,13 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/kaggle/resonant-tunnelling/read_rt3d.py`](../tools/kaggle/resonant-tunnelling/read_rt3d.py) | 2.1 kB | Fig. 15, 3D: reads the RT3C run files from Kaggle and prints the checks of each run (timing, start state, 3D vs 1D twin, transmission). | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
 | [`tools/kaggle/resonant-tunnelling/real_units.py`](../tools/kaggle/resonant-tunnelling/real_units.py) | 4.0 kB | Fig. 15: turns the dimensionless numbers into GaAs/AlGaAs nanometres, millivolts, femtoseconds and kA/cm², written into curves.json. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
 | [`tools/kaggle/resonant-tunnelling/recon.py`](../tools/kaggle/resonant-tunnelling/recon.py) | 12.2 kB | Fig. 15: builds the time-dependent double-barrier wave from the exact scattering states superposed with the packet spectrum, and stores the frames (RTF1) with the probabilities, T(E), resonances and the trapped-state fit. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
-| [`tools/kaggle/resonant-tunnelling/rt3d.py`](../tools/kaggle/resonant-tunnelling/rt3d.py) | 8.2 kB | Fig. 15, 3D: split-step Fourier solver (JAX, GPU) for a wave packet meeting two barriers in 3D (two walls, two coins, two concentric shells) and the single barriers; and the walls’ exact 1D twin. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
+| [`tools/kaggle/resonant-tunnelling/rt3d.py`](../tools/kaggle/resonant-tunnelling/rt3d.py) | 8.6 kB | Fig. 15, 3D: split-step Fourier solver (JAX, GPU) for a wave packet meeting two barriers in 3D (two walls, two coins, two concentric shells) and the single barriers; and the walls’ exact 1D twin. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
 | [`tools/kaggle/resonant-tunnelling/rt3d_all_0of4.ipynb`](../tools/kaggle/resonant-tunnelling/rt3d_all_0of4.ipynb) | 1.5 kB | Fig. 15, 3D: the Kaggle loader notebook (all_0of4), written by build_rt3d.py for a pinned commit; fetches rt3d.py, tm.py, rt3d_run.py and runs them on the GPUs. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
 | [`tools/kaggle/resonant-tunnelling/rt3d_all_1of4.ipynb`](../tools/kaggle/resonant-tunnelling/rt3d_all_1of4.ipynb) | 1.5 kB | Fig. 15, 3D: the Kaggle loader notebook (all_1of4), written by build_rt3d.py for a pinned commit; fetches rt3d.py, tm.py, rt3d_run.py and runs them on the GPUs. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
 | [`tools/kaggle/resonant-tunnelling/rt3d_all_2of4.ipynb`](../tools/kaggle/resonant-tunnelling/rt3d_all_2of4.ipynb) | 1.5 kB | Fig. 15, 3D: the Kaggle loader notebook (all_2of4), written by build_rt3d.py for a pinned commit; fetches rt3d.py, tm.py, rt3d_run.py and runs them on the GPUs. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
 | [`tools/kaggle/resonant-tunnelling/rt3d_all_3of4.ipynb`](../tools/kaggle/resonant-tunnelling/rt3d_all_3of4.ipynb) | 1.5 kB | Fig. 15, 3D: the Kaggle loader notebook (all_3of4), written by build_rt3d.py for a pinned commit; fetches rt3d.py, tm.py, rt3d_run.py and runs them on the GPUs. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
-| [`tools/kaggle/resonant-tunnelling/rt3d_run.py`](../tools/kaggle/resonant-tunnelling/rt3d_run.py) | 9.1 kB | Fig. 15, 3D: the run code the Kaggle notebook fetches at a pinned commit (one worker per GPU, each run written as it finishes, one progress line per run, index with SHA-256). | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
+| [`tools/kaggle/resonant-tunnelling/rt3d_run.py`](../tools/kaggle/resonant-tunnelling/rt3d_run.py) | 9.3 kB | Fig. 15, 3D: the run code the Kaggle notebook fetches at a pinned commit (one worker per GPU, each run written as it finishes, one progress line per run, index with SHA-256). | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
+| [`tools/kaggle/resonant-tunnelling/rt3d_singles_v2.ipynb`](../tools/kaggle/resonant-tunnelling/rt3d_singles_v2.ipynb) | 1.5 kB | Fig. 15, 3D: the Kaggle loader notebook (singles_v2), written by build_rt3d.py for a pinned commit; fetches rt3d.py, tm.py, rt3d_run.py and runs them on the GPUs. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
 | [`tools/kaggle/resonant-tunnelling/rt3d_smoke.ipynb`](../tools/kaggle/resonant-tunnelling/rt3d_smoke.ipynb) | 1.5 kB | Fig. 15, 3D: the Kaggle loader notebook (smoke), written by build_rt3d.py for a pinned commit; fetches rt3d.py, tm.py, rt3d_run.py and runs them on the GPUs. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
 | [`tools/kaggle/resonant-tunnelling/tm.py`](../tools/kaggle/resonant-tunnelling/tm.py) | 3.5 kB | Fig. 15: transfer matrices for piecewise-constant potentials (edge, flight, the single and double barrier, the scattering state). | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
 | [`tools/kaggle/schrodinger-shapes/build_flat.py`](../tools/kaggle/schrodinger-shapes/build_flat.py) | 5.6 kB | Fig. 14 flat wall: writes flat.ipynb (Kaggle, CPU, 585 runs) for a given commit. | [fig14-schrodinger-sphere.md](simulations/fig14-schrodinger-sphere.md) |
