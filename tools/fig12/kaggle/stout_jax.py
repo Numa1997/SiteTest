@@ -215,7 +215,8 @@ class Stout:
         M = MODELS[model]; self.model = model
         self.nu = M["nu"]; self.gs = math.sqrt(M["nu"] * OMEGA / 2) if M["wall"] else 0.0
         self.skin = M["skin"]
-        dx = G.dx; self.dx = dx; self.Hb = 2.0 * dx; self.rls = 0.505 * dx;   # derived 13 Nov 2026: puts the level set's zero on the top of a flat seeded layer to -0.09..+0.02 cell (0.9 dx read 0.5-1.0 cell high)
+        dx = G.dx; self.dx = dx; self.Hb = 2.0 * dx; self.rls = 0.9 * dx      # the pressure step's level set: closes the gaps between the sparse particles at the glass
+        self.rread = 0.505 * dx  # the read-out's: derived 13 Nov 2026, reads a flat seeded layer to -0.09..+0.02 cell (0.9 dx reads 0.5-1.0 cell high)
         self.tol = tol; self.maxit = maxit
         n, nz = G.n, G.nz; self.n, self.nz = n, nz
         self.dims = (n, n, nz)
@@ -437,19 +438,21 @@ class Stout:
         return jnp.where(fmask & ok, w + dw[:, :, None], w)
 
     def surface(self, phr):
-        """The free surface of the main body of stout, as a height on the grid's columns: where the particles' own level set
-        (phr: negative in the stout, positive in the air) crosses zero, between the centres of the last stout cell and the
-        first air cell of the column inside the glass. This is the surface the pressure step itself holds at zero pressure.
-        With the radius 0.505 dx it reads a flat seeded layer to -0.09..+0.02 cell. Columns with no stout inside the glass: NaN.
-        (13 Nov 2026: a read-out that counted the particles in each column was tried and dropped: particles wander between
-        columns by +-8 in a 4 mm column at rest, 4-5 mm of false height, while the stout itself does not move.)"""
-        dx = self.dx
-        wet = self.cavc & (phr < 0); air = self.cavc & (phr >= 0)
-        cand = air & sh(air, 1, 2, True) & sh(wet, -1, 2, False)
-        has = jnp.any(cand, 2); k = jnp.argmax(cand, 2); kb = jnp.maximum(k - 1, 0)
-        pa = jnp.take_along_axis(phr, k[..., None], 2)[..., 0]; pb = jnp.take_along_axis(phr, kb[..., None], 2)[..., 0]
-        frac = jnp.clip(-pb / jnp.maximum(pa - pb, 1e-12), 0.0, 1.0)
-        return jnp.where(has, self.cc[2][kb] + frac * dx, jnp.nan).astype(F32)
+        """The free surface of the main body of stout, as a height on the grid's columns, read from the particles' level set with
+        the read-out radius 0.505 dx (phr was built with 0.9 dx, so the field is phr + 0.395 dx). Read from the top down: the
+        highest cell of the column that holds stout and has stout in the two cells below it too (so a drop in the air, one or two
+        cells across, is not taken for the surface, and a gap between particles inside the stout cannot read as one), and the
+        zero of the field between that cell's centre and the centre above. Columns with no such run inside the glass: NaN.
+        13 Nov 2026, after two read-outs were tried and dropped: counting particles per column (they wander by +-8 in a 4 mm column,
+        4-5 mm of false height at rest), and the lowest air cell with radius 0.505 dx (it fell into gaps at the glass, -13 mm)."""
+        dx = self.dx; q = phr + (self.rls - self.rread)
+        wet = self.cavc & (q < 0)
+        run = wet & sh(wet, -1, 2, False) & sh(wet, -2, 2, False)
+        has = jnp.any(run, 2); nz = run.shape[2]
+        kt = nz - 1 - jnp.argmax(run[:, :, ::-1], 2); ka = jnp.minimum(kt + 1, nz - 1)
+        pb = jnp.take_along_axis(q, kt[..., None], 2)[..., 0]; pa = jnp.take_along_axis(q, ka[..., None], 2)[..., 0]
+        frac = jnp.where(pa > pb, jnp.clip(-pb / jnp.maximum(pa - pb, 1e-12), 0.0, 1.0), 0.5)
+        return jnp.where(has, self.cc[2][kt] + frac * dx, jnp.nan).astype(F32)
 
     def head_spill(self, s, H, dt, gx, gz):
         """The head above the rim (verification.md, item 6): where the head's top stands e above the rim, at the glass, the part
