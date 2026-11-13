@@ -434,7 +434,7 @@ class Stout:
         column, set on the air side of the surface. Ghost fluid: p = ps at the surface, so the air neighbour of a liquid cell
         reads p_ghost = p_liq (1 - 1/theta) + ps / theta: the diagonal gets th / theta and the right side th ps / theta."""
         dx = self.dx; diag = jnp.zeros(self.dims, F32); div = jnp.zeros(self.dims, F32); rhs = jnp.zeros(self.dims, F32)
-        cp, cm, faces = [], [], []
+        cp, cm, faces, loads = [], [], [], []
         ps3 = jnp.broadcast_to(ps[:, :, None], self.dims).astype(F32)
         for ax in range(3):
             th = self.th[ax]; liqL, liqR, tLR, tRL = self._faces(ph, liq, ax); faces.append((liqL, liqR, tLR, tRL))
@@ -442,7 +442,7 @@ class Stout:
             dL = jnp.where(open_, jnp.where(liqR, th, th / tLR), 0.0)
             dR = jnp.where(open_, jnp.where(liqL, th, th / tRL), 0.0)
             diag = diag + cut_hi(dL, ax) + cut_lo(dR, ax)
-            psL, psR = lo(ps3, ax, 0.0), hi(ps3, ax, 0.0)
+            psL, psR = lo(ps3, ax, 0.0), hi(ps3, ax, 0.0); loads.append((psL, psR))
             sL = jnp.where(open_ & liqL & ~liqR, th * psR / tLR, 0.0)      # liquid L, air R: the surface load seen by L
             sR = jnp.where(open_ & liqR & ~liqL, th * psL / tRL, 0.0)
             rhs = rhs + cut_hi(sL, ax) + cut_lo(sR, ax)
@@ -481,8 +481,9 @@ class Stout:
         for ax in range(3):
             liqL, liqR, tLR, tRL = faces[ax]
             pL, pR = lo(p, ax, 0.0), hi(p, ax, 0.0)
-            psR = jnp.where(liqR, pR, jnp.where(liqL, pL * (1.0 - 1.0 / tLR), 0.0))
-            psL = jnp.where(liqL, pL, jnp.where(liqR, pR * (1.0 - 1.0 / tRL), 0.0))
+            qL, qR = loads[ax]                                         # the head's load on the surface, as in the matrix
+            psR = jnp.where(liqR, pR, jnp.where(liqL, pL * (1.0 - 1.0 / tLR) + qR / tLR, 0.0))
+            psL = jnp.where(liqL, pL, jnp.where(liqR, pR * (1.0 - 1.0 / tRL) + qL / tRL, 0.0))
             upd = (self.th[ax] > 0) & (liqL | liqR)
             f = jnp.where(upd, vel[ax] - (psR - psL) / dx, vel[ax]); k = upd
             if ax == 2:
