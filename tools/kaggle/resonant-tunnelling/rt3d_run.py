@@ -37,6 +37,7 @@ GROUPS = dict(dflat=dict(sizes=[0.0], Es=E_DOUBLE), dcoin=dict(sizes=[2.0, 4.0, 
 jobs = [(sh, E, s) for sh, G in GROUPS.items() for s in G["sizes"] for E in G["Es"]]
 JOBSEL = globals().get("JOBSEL", "all")
 if JOBSEL == "smoke": jobs = [("dflat", 0.735, 0.0), ("dcoin", 0.735, 4.0)]
+if JOBSEL == "singles_v2": jobs = [j for j in jobs if j[0] in ("sflat", "scoin")]   # version 2: the single wall and discs, now 2 cells thick
 if globals().get("ONLY"): jobs = [j for j in jobs if j[0] in ONLY]
 jobs.sort(key=lambda j: -rt3d.t_end_of(j[1]))                        # long runs first
 if globals().get("SHARD"): jobs = jobs[SHARD[0]::SHARD[1]]
@@ -65,7 +66,7 @@ def one(g, dev, sh, E, size):
     if sh in ("dflat", "sflat"):
         o = rt3d.run1d(g, E, single=(sh == "sflat"), dt=DT, nframes=NF)
         p3 = r["prof"] / r["prof"].sum(1, keepdims=True); p1 = o["prof"] / o["prof"].sum(1, keepdims=True)
-        segs = [(-rt3d.D / 2, rt3d.D / 2, r["V0"])] if sh == "sflat" else tm.double(r["V0"], rt3d.D, rt3d.S)
+        segs = [(-rt3d.S / 2 - rt3d.D / 2, -rt3d.S / 2 + rt3d.D / 2, r["V0"])] if sh == "sflat" else tm.double(r["V0"], rt3d.D, rt3d.S)
         head.update(has_1d=True, sep_check_max=float(np.abs(p3 - p1).max() / p1.max()), T_1d_splitstep=o["transmitted"],
                     R_1d_splitstep=o["reflected"], T_packet_exact=T_packet(segs, E))
         body += o["prof"].astype(np.float32).tobytes()

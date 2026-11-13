@@ -9,7 +9,9 @@
 #   dflat   two infinite walls |x -/+ S/2| < D/2                      (separable: x-marginal = the 1D problem exactly)
 #   dcoin   two discs of radius size, same x profile, axis along the flight
 #   dshell  two concentric spherical shells |r - Rc| < D/2, Rc = size and size + S, about the origin
-#   sflat, scoin, sshell   the single barriers (one wall / disc at x = 0, one shell at r = size): the limit and check of each stack
+#   sflat, scoin, sshell   the single barriers: the pair's left wall / disc alone (|x + S/2| < D/2), one shell at r = size;
+#                          the limit and check of each stack. (Version 1 of 13 November put the single wall and disc at x = 0,
+#                          where |x| < D/2 holds one grid point only: half the intended thickness. Corrected; those runs are not used.)
 # Stored per run (on the host, every frame): the half y >= 0 of the plane z = 0 over x in [-32, 32), |psi| and arg psi as 8-bit
 # levels of each frame's own peak (peaks in the header); the probability profile along x (integral over y, z), float32;
 # region probabilities from the whole psi.
@@ -41,9 +43,9 @@ def geometry(shape, size, X, Y, Z):
             slab = (np.abs(X - S / 2) < D / 2) | (np.abs(X + S / 2) < D / 2)
             outer = S / 2 + D / 2; inner = S / 2 - D / 2
             regions = dict(left=X < -outer, right=X > outer, well=(np.abs(X) < inner) & lat)
-        else:
-            slab = np.abs(X) < D / 2
-            regions = dict(left=X < -D / 2, right=X > D / 2)
+        else:                                                   # the pair's left barrier alone (faces on cell boundaries)
+            slab = np.abs(X + S / 2) < D / 2
+            regions = dict(left=X < -S / 2 - D / 2, right=X > -S / 2 + D / 2)
         return slab & lat, regions
     if shape in ("dshell", "sshell"):
         r = np.sqrt(X**2 + rho2)
@@ -122,7 +124,7 @@ def run1d(g, E, V0=V0_DEF, single=False, dt=0.01, nframes=200, t_end=None):
     x, dx = g["x"], g["dx"]; n = x.size
     k = 2 * np.pi * np.fft.fftfreq(n, dx)
     W = max(4, n // 10); m = np.ones(n); e = np.arange(W); m[:W] = np.sin(0.5 * np.pi * e / W) ** 0.125; m[-W:] = m[:W][::-1]
-    slab = (np.abs(x) < D / 2) if single else ((np.abs(x - S / 2) < D / 2) | (np.abs(x + S / 2) < D / 2))
+    slab = (np.abs(x + S / 2) < D / 2) if single else ((np.abs(x - S / 2) < D / 2) | (np.abs(x + S / 2) < D / 2))
     V = np.where(slab, V0, 0.0); k0 = np.sqrt(2 * E)
     chi = np.exp(-(x - X0)**2 / (4 * SIG0**2) + 1j * k0 * x).astype(np.complex128); chi /= np.sqrt((abs(chi)**2).sum() * dx)
     hv = np.exp(-0.5j * V * dt); kin = np.exp(-0.5j * k**2 * dt)
@@ -135,6 +137,6 @@ def run1d(g, E, V0=V0_DEF, single=False, dt=0.01, nframes=200, t_end=None):
             before = abs(chi)**2; chi = chi * m; d = (before - abs(chi)**2) * dx
             lost_l += d[x < 0].sum(); lost_r += d[x > 0].sum()
         prof.append((abs(chi)**2).astype(np.float32))
-    edge = D / 2 if single else S / 2 + D / 2
-    return dict(prof=np.array(prof), transmitted=float((abs(chi[x > edge])**2).sum() * dx + lost_r),
-                reflected=float((abs(chi[x < -edge])**2).sum() * dx + lost_l), norm_end=float((abs(chi)**2).sum() * dx))
+    hi = -S / 2 + D / 2 if single else S / 2 + D / 2; lo = -S / 2 - D / 2
+    return dict(prof=np.array(prof), transmitted=float((abs(chi[x > hi])**2).sum() * dx + lost_r),
+                reflected=float((abs(chi[x < lo])**2).sum() * dx + lost_l), norm_end=float((abs(chi)**2).sum() * dx))
