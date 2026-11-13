@@ -1,0 +1,12 @@
+TITLE: Assessment of beer foam stability by high performance liquid immunoaffinity chromatography (HPLIAC)
+AUTHORS: S. B. Mohan, Laura Perry, Julia M. Malhotra, Andrew Lyddiatt
+PUBLISHED: J. Inst. Brew. 99 (1993); DOI 10.1002/j.2050-0416.1993.tb01165.x
+URL: https://doi.org/10.1002/j.2050-0416.1993.tb01165.x
+DATE READ: 2026-11-13 -- ONLY the abstract and the passages returned by Exa (web_search_exa highlights). Full paper NOT read (Wiley).
+LICENCE: not stated
+SAMPLE: 10 commercial beers: 4 bitters, 4 lagers, 2 stouts (brands not given in the passages read). HRV = Rudin head retention value (s).
+
+--- verbatim ---
+"Foam stability of ten commercial beers (4 bitters, 4 lagers including lager C and 2 stouts) tested by HPLIAC showed a correlation of 0.733 with head retention value (HRV)."
+"The HRV of the lagers tested were lower (85-100.5 sec) than the stouts and the bitters (102-120 sec)."
+"500 ml of beer was poured, without any previous degassing, from a standard height of 20 cm into a straight-sided separating funnel (8 cm diameter and 27 cm in height). Under these conditions a large volume of foam was formed. After 10 min the bulk beer and any foam which might have collapsed during this time was drained. Two fractions of foam collapsed between 10-20 and 20-30 min were collected to give fractions 1 and 2. At this stage only the foam adhering to the sides of the funnel was left and this was collected by washing the funnel with 5 ml of PBS to give fraction 3."
