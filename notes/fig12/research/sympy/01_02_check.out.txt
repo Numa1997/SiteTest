@@ -1,0 +1,9 @@
+Stokes dissipation per area: U**2*mu/(2*delta) = sqrt(2)*U**2*sqrt(nu)*sqrt(omega)*rho/4
+theta integral = pi ; z integral = 1/(2*k)
+j11' = 1.84118378134066  omega(deep) = 21.49288402726611  gamma side (quadrature) = 0.110132270158242  closed form = 0.110132270158242
+coefficient C in zeta = C sqrt(nu/(R^1.5 g^0.5)), deep water: 0.557507662917281
+slip v - u = 2*a**2*rho*(A - G)/(9*mu)
+relaxation time = a**2*rho/(9*mu)
+a = 45 um: U = 2.158 mm/s
+a = 50 um: U = 2.664 mm/s
+a = 61 um: U = 3.965 mm/s

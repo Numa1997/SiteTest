@@ -1,0 +1,52 @@
+SOURCE: F. Viola, P.-T. Brun, B. Dollet, F. Gallaire, "Foam on troubled water: Capillary induced finite-time arrest
+of sloshing waves", Phys. Fluids 28, 091701 (2016). doi:10.1063/1.4961260
+Read from: HAL hal-01367501v1, https://hal.science/hal-01367501/file/SublinerFoamSloshing.pdf (author version,
+dated 6 August 2016), 8 pp. Licence: HAL open archive deposit ("HAL Authorization"). Read in full 2026-11-13.
+Page numbers = author-version page numbers (title page = p.1).
+
+--- p.2 (Sec. II, experiment) ---
+"cylindrical Plexiglas container of internal radius R = 37.05 mm ... filled with a column of water of height H
+which is surmounted by a foam layer of thickness h"
+"The foam is produced when injecting a commercial hand soap (Hypron SA) through a nozzle with a grid with pore size
+0.2 mm and has typical bubbles diameter d = 0.25 mm. The foam's liquid fraction is measured to be 25% once poured on
+top of the water column (evaluated using the weight of a volume of foam). This large value relative to dry foams, is
+due to capillary forces yielding an intake of water effectively enlarging the foam Plateau borders."
+"thickness ranges from h = 2.5 mm to 6.5 mm"
+"we measured the surface tension, gamma = 31.5 mN/m, of the soap solution. Its viscoelastic surface dilatational
+modulus ... is found below resolution (0.1 mN/m), showing that the interface can be considered as mobile and that
+free shear boundary conditions apply."
+"Experiments are initiated by tilting the container of an angle psi and then releasing it"
+
+--- p.3 ---
+"The frequency of oscillations, 3.50 Hz, matches the theoretical inviscid prediction w0 = 1.84 sqrt(g/R) within 1%.
+... This frequency is found unchanged when adding foam (0 < h < 6.5 mm)"
+"first peak, systematically chosen to X0 = 5 mm"
+"We found sigma = 0.0098, which exceeds the theoretical expression of the viscous damping rate by a factor 2."
+"the damping rate is greater with foam ... but also evidently increases as the amplitude of oscillations decreases.
+... the interface does not relax exponentially at a given rate, but instead its decay is progressively hastened."
+Fig. 2 legend (p.3): SLM alpha = 0.01 (h=2.5 mm), 0.013 (h=3.3 mm), 0.016 (h=4 mm), 0.023 (h=5 mm), 0.030 (h=6.5 mm).
+"Ff increases linearly with the foam thickness h, i.e. with the number of layers of oscillating bubbles."
+
+--- p.4 (Sec. III A, model) ---
+"we neglect foam's inertia relative to the one of water."
+"the friction force per unit length of a wall Plateau border scaling as gamma Ca^(2/3), where Ca = mu X'/gamma ...
+The total length of surface Plateau borders is given by their typical length, d, times the number of Plateau borders
+in contact with the container that scales as 2 pi R h/d^2. Thus, the friction force acting at the wall in the foam
+layer reads
+  F_f ~ (h/d) R gamma^(1/3) mu^(2/3) X'|X'|^(-1/3),   (1)
+... valid for a mobile interface"
+Eq. (3): "X'' + w0^2 X = -2 sigma w0 X' - alpha w0^(4/3) R^(1/3) X'|X'|^(-1/3)"
+p.5: "alpha ... scales as alpha ~ h d^-1 gamma^(1/3) mu^(2/3) rho^-1 R^(-5/3) g^(-2/3)."
+Eq. (5): "X(t) = [X0^(1/3) - c R^(1/3) (alpha/sigma)(e^(sigma w0 t/3) - 1)]^3 e^(-sigma w0 t) cos(w0 t)"
+"(w0 = 22.00 rad/s, sigma = 9.8 · 10^-3)" ; "the damping coefficient alpha increases linearly with the foam thickness h"
+[the constant c is defined only in the supplementary material, not read]
+
+--- p.6 ---
+Eq. (6): "t* = (3/(sigma w0)) ln[1 + c^-1 (sigma/alpha(h)) (X0/R)^(1/3)]"
+"A small foam layer (h = 2.5 mm) is sufficient to bring this time to a finite and relatively small value (t* ≃ 12 s).
+Other values of t* corresponding to larger values of h are of the same order (the smallest is 5 s)"
+--- p.7 ---
+"Sloshing with a large amount of foam may lead to the situation where only a fraction of the total volume of foam is
+effectively in motion. The upper part of the foam layer remains still ... We therefore anticipate that alpha(h) does
+not remain linear for arbitrarily large values of h, but instead saturates"
+"The authors warmly thank Dr Gabs brewery for their inspiring foam"

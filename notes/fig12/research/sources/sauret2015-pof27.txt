@@ -1,0 +1,65 @@
+SOURCE: A. Sauret, F. Boulogne, J. Cappello, E. Dressaire, H. A. Stone,
+"Damping of liquid sloshing by foams", Phys. Fluids 27, 022103 (2015). doi:10.1063/1.4907048
+Read from: arXiv:1411.6542v2 (3 Feb 2015), https://arxiv.org/abs/1411.6542 (PDF https://arxiv.org/pdf/1411.6542), 17 pages.
+Licence: arXiv non-exclusive distribution licence (preprint). Read in full 2026-11-13 (pdftotext -layout).
+Page numbers below = preprint page numbers printed in running header.
+
+--- p.2-3 (Sec. II A, foam and fluids) ---
+"This solution is made of 90% v/v water, 5% v/v glycerol and 5% v/v of commercial surfactant (Dawn
+dish-washing liquid, Procter & Gamble). The surfactant molecules lead to a stable foam with low surface modulus."
+Table I (p.3): "foam solution  1.4 [nu, 1e-6 m2/s]  25 [gamma, 1e-3 N/m]  1.02 [rho, 1e3 kg/m3]" (measured at 20 C)
+"This method leads to a monodisperse foam with bubbles of diameter D = 3 mm."
+Cell: "The cell has a length of L = 70 mm, a height of 92 mm and a varying width w in [3; 19] mm." (p.2)
+
+--- p.6, Eq. (7), damping of liquid alone (wall Stokes layers) ---
+"1/tau_l ~ sqrt(2 pi f nu) (1/L + 1/w)."  (7)
+"the damping in the bulk is negligible compared to the contribution in the wall boundary layers in our experiments."
+
+--- p.7 (Sec. IV A) ---
+"In all experiments, no topological rearrangements (T1) are observed. As a result, the foam behaves like a
+visco-elastic fluid without plastic deformation."
+"In the presence of a foam, the spectrum exhibits a peak located around f1 ≃ 3.1 Hz. This value is similar to the
+frequency of the first mode in the absence of foam, which is predicted to be 3.3 Hz from equation (1). This result
+suggests that the presence of foam does not significantly modify the characteristic frequency of the system."
+"This result indicates that the elasticity at the interface between the air and the foam can be neglected at first
+order thus leading to no supplementary contribution in the dispersion relation (1)."
+"without foam, the free-surface has a maximum amplitude of the order of 1 cm; the addition of only xi = 5 layers of
+bubbles leads to a maximum amplitude of the order 1 mm, which is a factor of ten reduction." (forcing at f1, X0 = 1 mm)
+"the damping coefficient 1/tau increases exponentially toward a plateau over a typical rescaled length corresponding
+to 5 layers of bubbles."
+Eq. (8): "1/tau = 1/tau_l + (1/tau_f^inf) [1 - exp(-xi/xi_c)]"
+"where 1/tau_f^inf = 9 ± 3 s^-1, a plateau 1/tau_l + 1/tau_f^inf = 11 ± 3 s^-1 and xi_c = 5 ± 2 for the considered
+experimental parameters. The damping coefficient of the foam solution alone is estimated to be 1/tau_l ≃ 2 s^-1"
+(H = 4 cm, w = 3 mm, L = 7 cm)
+
+--- p.8 (velocity profile in the foam) ---
+"For fewer than two layers of bubbles the velocity is mostly vertical. The velocity becomes more horizontal as the
+number of layers increases, except for bubbles near the vertical walls, which have a non-negligible vertical velocity
+due to the boundary conditions. ... the mean bubble velocity decreases exponentially <|v_b|> ∝ exp(-z/(xi_c D)) with
+a characteristic length scale of xi_c D = 16.8±1.8 mm corresponding to xi_c ≃ 5 layers of bubbles."
+
+--- p.9 (Sec. IV B, wall friction model) ---
+"the friction force of the Plateau borders on two solid walls can be estimated as f_b = K gamma_f Ca^(2/3), where
+Ca = mu_f v_b / gamma_f is the Capillary number and K is a constant for given geometrical parameters describing the
+Plateau borders. The typical Capillary number considered in our experiments is of order Ca ~ 3 × 10^-3 ...
+Note that the present scaling for the friction force is no longer valid for Ca > 10^-2 due to inertial effects"
+Eq. (10): "<|E_f'|> = K' Σ <v_b^(5/3)>  with K' = K gamma_f^(1/3) mu_f^(2/3)."
+p.10: "We note that the order of magnitude of the lengthscale over which the velocity decreases has the same order of
+magnitude as the length scale associated with the first mode of resonance 1/k1 = L/pi ≃ 22 mm."
+Eq. (14): "1/tau_f = [12 pi xi_c K' <|cos(wt)|^(5/3)> / (5 rho w L (v0max)^(1/3))] [1 - exp(-5 xi/(3 xi_c))]"
+Eq. (15)-(16): prefactor fit "= 2.76 cm/s which leads to K ≈ 1.9 m/s with v0max ≈ 0.1 m/s. The value of K can be
+compared with the phenomenological law K = 5.13 (R_p/sqrt(A))^(-0.48)"  ... "we obtain a prediction of K = 9.1 m/s."
+[Note: K is printed with units m/s in the paper although f_b = K gamma Ca^(2/3) suggests dimensionless; reported as printed.]
+"the strongest variation of the liquid fraction happens between the first and the second layer of bubbles because the
+first layer is directly in contact with the liquid bath"
+
+--- p.11 (Sec. IV C, confined 3D) ---
+"we consider that only the Plateau borders in contact with the walls contribute to the energy dissipation and that the
+bubbles in the bulk are simply advected by the bubbles in contact with the walls. Thus ... the damping coefficient,
+1/tau_f, should scale as the inverse of the width of the cell, 1/w."
+"The exponential trend leads to a value of the plateau w/tau_f^inf = 1.6 ± 0.3 cm s^-1 whereas the best fit suggests
+that the plateau has a value of w/tau_f^inf ≃ 3.1 cm s^-1."
+"the saturation value of the rescaled damping coefficient w/tau_f seems to slightly increase with the width of the
+cell. This observation indicates that the dissipation in the bulk could add a small contribution"
+p.12: "the cells used in this study are narrow, which means that the number of bubbles in the transverse direction
+does not exceed 6 bubbles. Thus, further investigation of 3D foams is necessary"

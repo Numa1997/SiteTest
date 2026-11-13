@@ -1,0 +1,21 @@
+SOURCE: W. T. Lee and M. G. Devereux, "Foaming in stout beers", Am. J. Phys. 79, 991-998 (2011).
+Read from: arXiv:1105.2263, https://arxiv.org/abs/1105.2263 (9 pp). Licence: arXiv distribution licence.
+Read in full 2026-11-13. Page numbers = arXiv preprint pages.
+
+--- p.1, Table I "Parameters used in the calculations" ---
+"gamma  47.00 × 10^-3 N m^-1  [ref.] 2"  -- ref. 2 is G. Liger-Belair, C. Voisin, P. Jeandet, J. Phys. Chem. B 109,
+14573 (2005), a champagne/carbonated-beverage nucleation paper. So this is a borrowed model parameter, NOT a
+measurement on stout.
+"Stout Beer  P1 0.80 × 10^5 Pa [CO2]  P2 3.00 × 10^5 Pa [N2]" (ref. 5, Power et al., "The initiation of Guinness",
+ESGI 70, 2009)
+--- p.1 ---
+"Nitrogen is roughly 50 times [less soluble than CO2]" (text broken across columns in the PDF)
+--- p.4 (Sec. IV) ---
+"The lower solubility of nitrogen results in smaller bubbles: these give the head of a stout a creamy mouthfeel. The
+low solubility of nitrogen ensures that the head of a stout beer lasts much longer that of a carbonated beer.[3]"
+[ref. 3 = C. W. Bamforth, J. Inst. Brew. 110, 259-266 (2004)]
+"The small bubble size is responsible for the famous sinking bubbles in stout beers."
+--- p.8 ---
+"The head of a stout beer should contain approximately 10^8 bubbles. In order to produce these 10^8 bubbles in the
+30 s it takes to pour a stout beer from the can into a glass ..."
+[No measured bubble size distribution, liquid fraction or decay rate of the head is given in this paper.]
