@@ -456,8 +456,12 @@ class Stout:
         dx = self.dx; q = phr + (self.rls - self.rread); nz = phr.shape[2]
         wet = self.cavc & (phr < 0)
         run = wet & sh(wet, -1, 2, False) & sh(wet, -2, 2, False)
-        has = jnp.any(run, 2)
         kt = nz - 1 - jnp.argmax(run[:, :, ::-1], 2)                     # top cell of the body (phr)
+        # a column whose body ends because the glass ends there (the cell above has its centre outside the glass), not because
+        # air begins, has no surface of its own: at the glass the tulip is widest at z = 116 mm (39.3 mm), so columns whose centre
+        # is outside at the fill but inside lower down read 120 mm, and their stout above as 84 drops at rest (run 4, 13 Nov 2026)
+        capped = ~jnp.take_along_axis(self.cavc, jnp.minimum(kt + 1, nz - 1)[..., None], 2)[..., 0]
+        has = jnp.any(run, 2) & ~capped
         qa = lambda k: jnp.take_along_axis(q, jnp.clip(k, 0, nz - 1)[..., None], 2)[..., 0]
         Hs, found = jnp.zeros(kt.shape, F32), jnp.zeros(kt.shape, bool)
         for j in (2, 1, 0):                                                # lowest first; a higher crossing overwrites it
@@ -674,7 +678,11 @@ class Stout:
         X, act, fly = s["xp"], s["act"], s["fly"]
         i = jnp.clip(jnp.floor((X[:, 0] - G.x0) / dx).astype(I32), 0, self.n - 1)
         j = jnp.clip(jnp.floor((X[:, 1] - G.x0) / dx).astype(I32), 0, self.n - 1)
-        Hp = H[i, j]
+        # a drop stands more than 1.5 dx above the surface of its column and of the eight around it (stout climbing the glass in a
+        # cut column is not a drop)
+        Hm = jnp.where(jnp.isfinite(H), H, -jnp.inf); Hm = jnp.maximum(Hm, jnp.maximum(sh(Hm, 1, 0, -jnp.inf), sh(Hm, -1, 0, -jnp.inf)))
+        Hm = jnp.maximum(Hm, jnp.maximum(sh(Hm, 1, 1, -jnp.inf), sh(Hm, -1, 1, -jnp.inf)))
+        Hp = Hm[i, j]
         loose = act & jnp.isfinite(Hp) & (X[:, 2] > Hp + 1.5 * dx)
         dmask = loose | fly | s["stuck"]
         nd = jnp.sum(dmask, dtype=I32)
