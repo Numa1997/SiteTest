@@ -37,9 +37,11 @@ GROUPS = dict(
     sslab=dict(Vs=[-2.0, 2.0, 6.0, HARD], sizes=[1.0]),
     spil=dict(Vs=[-2.0, 2.0, 6.0, HARD], sizes=[4.0]))
 def nsteps(shape, i, j):
-    tr = 22.0 if shape in SHELLS else 30.0
+    tr = SH_TRAVEL if shape in SHELLS else 30.0
     return round(tr / np.sqrt(2 * Es[i]) / DT) * (HARD_SUB if GROUPS[shape]["Vs"][j] >= HARD else 1)
 jobs = [(sh, i, j, k) for sh, G in GROUPS.items() for i in range(len(Es)) for j in range(len(G["Vs"])) for k in range(len(G["sizes"]))]
+if globals().get("JOBSEL") == "hard_and_shells":           # version 2: only the runs whose start wave was wrong in version 1
+    jobs = [t for t in jobs if t[0] in SHELLS or GROUPS[t[0]]["Vs"][t[2]] >= HARD]
 jobs.sort(key=lambda t: -nsteps(t[0], t[1], t[2]))          # long runs first
 for sh in GROUPS: os.makedirs(f"{OUTD}/{sh}", exist_ok=True)
 total_steps = sum(nsteps(sh, i, j) for sh, i, j, k in jobs)
@@ -112,7 +114,7 @@ while True:
     except queue.Empty: break
 idx = dict(generated=GEN, kind="shapes3d", N=N, L=L, dt=DT, nframes=NF, Es=Es, hard_V0=HARD, hard_V=HARD_V, hard_substeps=HARD_SUB,
            groups={sh: dict(Vs=G["Vs"], sizes=G["sizes"]) for sh, G in GROUPS.items()}, coin_thickness=COIN_A, tube_wall=TUBE_W,
-           shell=dict(src_x=SRC_X, r0=SH_R0, sigma0=SH_S0, travel=22.0), packet=dict(x0=-14.0, sigma0=3.0, travel=30.0),
+           shell=dict(src_x=SRC_X, r0=SH_R0, sigma0=SH_S0, travel=SH_TRAVEL), jobsel=globals().get("JOBSEL", "all"), packet=dict(x0=-14.0, sigma0=3.0, travel=30.0),
            device=jax.devices()[0].device_kind, gpus=len(DEVS), sweep_s=round(SWEEP_S, 1), failed=ERR, not_started=left,
            method="Strang split-step Fourier, 3D; hard wall: height 200 with a step four times shorter (no probability removed)",
            units="hbar = m = 1, lengths in the grid unit a", runs=INDEX)

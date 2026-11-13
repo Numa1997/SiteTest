@@ -7,13 +7,17 @@
 #   shape 'sslab'  : spherical wave onto a flat wall |x| < size / 2
 #   shape 'spil'   : spherical wave onto a pillar of radius size along z (rho_z = sqrt(x^2 + y^2) < size)
 # Waves: a Gaussian packet from x0 = -14 a along +x (sphere, coin, tube), or a spherical shell (l = 0 about its own centre
-# at (SRC_X, 0, 0), u = r psi as in radial.py: r0 = 6 a, sigma0 = 2 a, outgoing).
+# at (SRC_X, 0, 0) = (-17, 0, 0), u = r psi as in radial.py, r0 = 5 a, sigma0 = 2 a, outgoing: at the start its amplitude at the
+# nearest point of a barrier of radius 4 is exp(-(13 - 5)^2 / 16) = 0.018 of its peak, so the wave starts outside the barrier).
+# Version 2 (13 November 2026, 02:40 UTC): version 1 put the source at -12 with r0 = 6, so the shell began inside the barrier;
+# and it left the start wave's tail inside hard walls, where it stayed. Now the start wave is set to zero inside a hard wall
+# and normalised again (a hard wall means psi = 0 inside).
 # Hard wall: the height HARD_V = 200 (the wave reaches 1 / sqrt(2 * 200) = 0.05 a into it, a tenth of the grid spacing; every
 # energy of the grid is below 2.3 % of it) with a step four times shorter. Pure phase factors: no probability is removed.
 # Stored per run: the half y >= 0 of the plane z = 0, |psi| and arg psi as 8-bit levels of EACH frame's peak |psi| in the plane
 # (the list of peaks is in the header), and the probability curves from the whole psi.
 import numpy as np, jax, jax.numpy as jnp, time
-HARD_V, HARD_SUB, COIN_A, TUBE_W, SRC_X, SH_R0, SH_S0 = 200.0, 4, 1.0, 1.0, -12.0, 6.0, 2.0
+HARD_V, HARD_SUB, COIN_A, TUBE_W, SRC_X, SH_R0, SH_S0, SH_TRAVEL = 200.0, 4, 1.0, 1.0, -17.0, 5.0, 2.0, 24.0
 SHELLS = ("soff", "sslab", "spil")
 
 def setup(N, L, dtype=jnp.complex64):
@@ -60,7 +64,9 @@ def run3(g, shape, E, V0, size, hard=False, travel=None, dt=0.01, nframes=48, wa
     psi, k0 = start(shape, E, X, Y, Z, dx)
     inside, mb, ma = barrier(shape, size, X, Y, Z)
     del X, Y, Z
-    if travel is None: travel = 22.0 if shape in SHELLS else 30.0
+    if travel is None: travel = SH_TRAVEL if shape in SHELLS else 30.0
+    if hard:                                                    # psi = 0 inside a hard wall from the start
+        psi = np.where(inside, 0.0, psi); psi = psi / np.sqrt((np.abs(psi)**2).sum() * dx**3)
     sub = HARD_SUB if hard else 1; h = dt / sub
     V = np.where(inside, HARD_V if hard else V0, 0.0)
     steps = int(round(travel / k0 / dt)); per = max(1, steps // (nframes - 1))   # per: frame interval in steps of dt
