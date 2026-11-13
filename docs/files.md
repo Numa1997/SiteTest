@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-6310 files, 895.2 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+6311 files, 895.2 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -38,6 +38,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Source of project 07, the electron beam (not served)](#source-of-project-07-the-electron-beam-not-served) | 88 |
 | [Shared by the portfolio sources (not served)](#shared-by-the-portfolio-sources-not-served) | 1 |
 | [Template sources](#template-sources) | 2 |
+| [The site’s Worker (Cloudflare)](#the-sites-worker-cloudflare) | 1 |
 | [Documentation](#documentation) | 42 |
 | [Tools](#tools) | 188 |
 | [Translation tables](#translation-tables) | 54 |
@@ -61,7 +62,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tailwind.config.js`](../tailwind.config.js) | 155 B | Tailwind settings (template; unused by the site). | [build-and-deploy.md](build-and-deploy.md) |
 | [`tsconfig.json`](../tsconfig.json) | 485 B | TypeScript settings for src/ (template; unused by the site). | [build-and-deploy.md](build-and-deploy.md) |
 | [`vite.config.ts`](../vite.config.ts) | 226 B | Vite settings: relative base, output folder from the platform. | [build-and-deploy.md](build-and-deploy.md) |
-| [`wrangler.jsonc`](../wrangler.jsonc) | 898 B | Cloudflare settings: the Worker phyein-usul, the dist/ folder, the custom domains phyeinusul.com and www. | [usul.md](usul.md) |
+| [`wrangler.jsonc`](../wrangler.jsonc) | 1.2 kB | Cloudflare settings: the Worker phyein-usul, the dist/ folder, the custom domains phyeinusul.com and www. | [usul.md](usul.md) |
 
 ## Pages under public/
 
@@ -156,7 +157,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/simulations/momentum-spirographs.html`](../public/simulations/momentum-spirographs.html) | 153.4 kB | Fig. 13 · Spirographs in Momentum Space: a live grid of double pendulums, each kicked with the (p1, p2) of its cell, drawn as long exposures over the chaos map. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`public/simulations/pendulum-control.html`](../public/simulations/pendulum-control.html) | 208.1 kB | Fig. 11 · Double Pendulum under Control: the simulation, its data panel, walkthrough and lecture note. | [fig11-pendulum-control.md](simulations/fig11-pendulum-control.md) |
 | [`public/simulations/phasor-sums.html`](../public/simulations/phasor-sums.html) | 273.3 kB | Fig. 7 · Phasor Sums: the simulation, its data panel, walkthrough and lecture note. | [fig07-phasor-sums.md](simulations/fig07-phasor-sums.md) |
-| [`public/simulations/resonant-tunnelling.html`](../public/simulations/resonant-tunnelling.html) | 58.0 kB | Fig. 15 · Resonant Tunnelling: the simulation, its data panel, walkthrough and lecture note. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
+| [`public/simulations/resonant-tunnelling.html`](../public/simulations/resonant-tunnelling.html) | 63.1 kB | Fig. 15 · Resonant Tunnelling: the simulation, its data panel, walkthrough and lecture note. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
 | [`public/simulations/rods-in-liquid.html`](../public/simulations/rods-in-liquid.html) | 403.2 kB | Project 06 · Balancing Two Rods in a Liquid (7 November 2026): project 05's script with its own settings, a machine that can swing the rods up in water, glycerol and honey, a slim cart, and the controller told the flow; data panel, walkthrough dipc and lecture note. | [project06-rods-in-liquid.md](simulations/project06-rods-in-liquid.md) |
 | [`public/simulations/schrodinger-sphere.html`](../public/simulations/schrodinger-sphere.html) | 233.5 kB | Fig. 14 · A Wave Packet Meets a Sphere: the simulation, its data panel, walkthrough and lecture note. | [fig14-schrodinger-sphere.md](simulations/fig14-schrodinger-sphere.md) |
 | [`public/simulations/water-wave.html`](../public/simulations/water-wave.html) | 170.6 kB | Fig. 5 · Circular Water Waves: the simulation, its data panel, walkthrough and lecture note. | [fig05-water-wave.md](simulations/fig05-water-wave.md) |
@@ -237,7 +238,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/scripts/kaggle-flow.js`](../public/scripts/kaggle-flow.js) | 14.3 kB | The page side of the Kaggle pipeline: sliders that show the computed range and grow heavy near its edge, eased speed, the loading notice with the pipeline, the kaggle-bridge client. | [kaggle-pipeline.md](kaggle-pipeline.md) |
 | [`public/scripts/marching.js`](../public/scripts/marching.js) | 5.7 kB | Marching cubes on a rectangular grid (tables from three.js), shared by wave3d-view.js and fig14-iso-worker.js. | [wave3d-view.md](scripts/wave3d-view.md) |
 | [`public/scripts/resonant-note.js`](../public/scripts/resonant-note.js) | 36.8 kB | Fig. 15 lecture note: the whole study, injected into the page’s <article> and typeset by sim.js (KaTeX); the 1D theory as the exact core, the 3D computation and its measured grid error, discs and shells, the device. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
-| [`public/scripts/rt3d-view.js`](../public/scripts/rt3d-view.js) | 13.0 kB | Fig. 15: the 3D view (three.js): the meshed height sheet in the house colours and the barriers as static lit glass solids at their true place; turning by press and drag. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
+| [`public/scripts/rt3d-view.js`](../public/scripts/rt3d-view.js) | 13.6 kB | Fig. 15: the 3D view (three.js): the meshed height sheet in the house colours and the barriers as static lit glass solids at their true place; turning by press and drag. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
 | [`public/scripts/rt3d-worker.js`](../public/scripts/rt3d-worker.js) | 3.3 kB | Fig. 15: the background thread that fetches one stored 3D run, checks its SHA-256, inflates it and turns the 8-bit levels into ψ. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
 | [`public/scripts/schrodinger-live-worker.js`](../public/scripts/schrodinger-live-worker.js) | 8.6 kB | Fig. 14 live preview: the same split-step Schrödinger solver as on Kaggle, 64^3 points, in a Web Worker, for regions not computed yet. | [fig14-schrodinger-sphere.md](simulations/fig14-schrodinger-sphere.md) |
 | [`public/scripts/sim.js`](../public/scripts/sim.js) | 43.8 kB | Shared helpers of the simulation pages: KaTeX typesetting of the notes, the walkthrough engine. | [sim.md](scripts/sim.md) |
@@ -418,7 +419,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/data/resonant-tunnelling/2026-11-13/kaggle/runs/sshell_R3_E1.000.bin`](../public/data/resonant-tunnelling/2026-11-13/kaggle/runs/sshell_R3_E1.000.bin) | 1.53 MB | Fig. 15 3D run (2026-11-13, sshell): RT3C, 200 frames of \|ψ\| and arg ψ on the plane z = 0 (8-bit), the profile along x, region probabilities; as Kaggle wrote it. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
 | [`public/data/resonant-tunnelling/2026-11-13/kaggle/runs/sshell_R3_E1.500.bin`](../public/data/resonant-tunnelling/2026-11-13/kaggle/runs/sshell_R3_E1.500.bin) | 1.54 MB | Fig. 15 3D run (2026-11-13, sshell): RT3C, 200 frames of \|ψ\| and arg ψ on the plane z = 0 (8-bit), the profile along x, region probabilities; as Kaggle wrote it. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
 | [`public/data/resonant-tunnelling/2026-11-13/kaggle/runs/sshell_R3_E2.000.bin`](../public/data/resonant-tunnelling/2026-11-13/kaggle/runs/sshell_R3_E2.000.bin) | 1.59 MB | Fig. 15 3D run (2026-11-13, sshell): RT3C, 200 frames of \|ψ\| and arg ψ on the plane z = 0 (8-bit), the profile along x, region probabilities; as Kaggle wrote it. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
-| [`public/data/resonant-tunnelling/generations.json`](../public/data/resonant-tunnelling/generations.json) | 876 B | Fig. 15 data: the list of generations, each with its Kaggle index, the exact 1D check, the notebooks and the source scripts. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
+| [`public/data/resonant-tunnelling/generations.json`](../public/data/resonant-tunnelling/generations.json) | 1.1 kB | Fig. 15 data: the list of generations, each with its Kaggle index, the exact 1D check, the notebooks and the source scripts. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
 
 <details><summary>405 files: Fig. 14 data generated on Kaggle on 2026-11-12: one stored run (header with the probability curves, then the zlib frames of |psi| and arg psi on the half-plane through the flight axis, from which the page spins the 3D wave).</summary>
 
@@ -5486,6 +5487,12 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`src/main.ts`](../src/main.ts) | 23 B | Template script entry; index.html does not load it. | [build-and-deploy.md](build-and-deploy.md) |
 | [`src/styles.css`](../src/styles.css) | 73 B | Template Tailwind directives; unused. | [build-and-deploy.md](build-and-deploy.md) |
 
+## The site’s Worker (Cloudflare)
+
+| File | Size | What it is | Explained in |
+|---|---|---|---|
+| [`worker/r2.js`](../worker/r2.js) | 1.5 kB | The site’s Worker: serves the large stored runs from the R2 bucket RUNS under /r2/ (Fig. 15 generation 2); every other path is an asset, as before. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
+
 ## Documentation
 
 | File | Size | What it is | Explained in |
@@ -5649,7 +5656,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/i18n/ingest.py`](../tools/i18n/ingest.py) | 1.9 kB | Stores checked translations made outside the tables (page pieces, script strings, walkthrough prose). | [i18n.md](i18n.md) |
 | [`tools/i18n/package.json`](../tools/i18n/package.json) | 285 B | The parser wrap.cjs needs (acorn); npm install --prefix tools/i18n. | [i18n.md](i18n.md) |
 | [`tools/i18n/wrap.cjs`](../tools/i18n/wrap.cjs) | 3.7 kB | Wraps the reader-visible strings of a page's scripts in _t(), with a JavaScript parser (acorn). | [i18n.md](i18n.md) |
-| [`tools/inventory.py`](../tools/inventory.py) | 115.8 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
+| [`tools/inventory.py`](../tools/inventory.py) | 116.1 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
 | [`tools/kaggle/resonant-tunnelling/b1_first.py`](../tools/kaggle/resonant-tunnelling/b1_first.py) | 5.2 kB | Fig. 15: the first B1 measurement on three stored flat-wall runs, error split by source. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
 | [`tools/kaggle/resonant-tunnelling/b1_survey.py`](../tools/kaggle/resonant-tunnelling/b1_survey.py) | 2.2 kB | Fig. 15: the B1 check across every finite single-barrier run of Fig. 14. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
 | [`tools/kaggle/resonant-tunnelling/build_rt3d.py`](../tools/kaggle/resonant-tunnelling/build_rt3d.py) | 2.4 kB | Fig. 15, 3D: writes the Kaggle loader notebook for a commit, job set and shard. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
@@ -5659,7 +5666,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/kaggle/resonant-tunnelling/exact1d.py`](../tools/kaggle/resonant-tunnelling/exact1d.py) | 6.5 kB | Fig. 15, 3D: the exact 1D numbers for the 3D geometry (T(E), packet average, resonance, I–V, real units), the check of the 3D runs. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
 | [`tools/kaggle/resonant-tunnelling/extract_t.py`](../tools/kaggle/resonant-tunnelling/extract_t.py) | 7.6 kB | Fig. 15, Step B1: reads the single-barrier t(k), r(k) off Fig. 14’s stored runs, to check the exact amplitudes. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
 | [`tools/kaggle/resonant-tunnelling/file_rt3d.py`](../tools/kaggle/resonant-tunnelling/file_rt3d.py) | 9.0 kB | Fig. 15, 3D: files the Kaggle runs on the site (SHA-256 checked against each notebook’s index) and writes kaggle/index.json with provenance and the numbers read from each run. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
-| [`tools/kaggle/resonant-tunnelling/file_rt3d2.py`](../tools/kaggle/resonant-tunnelling/file_rt3d2.py) | 9.4 kB | Fig. 15, 3D generation 2: files the Kaggle runs (SHA-256 checked) and writes kaggle/index.json; draft, generalised from file_rt3d.py. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
+| [`tools/kaggle/resonant-tunnelling/file_rt3d2.py`](../tools/kaggle/resonant-tunnelling/file_rt3d2.py) | 9.3 kB | Fig. 15, 3D generation 2: files the Kaggle runs (SHA-256 checked) and writes kaggle/index.json; draft, generalised from file_rt3d.py. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
 | [`tools/kaggle/resonant-tunnelling/iv.py`](../tools/kaggle/resonant-tunnelling/iv.py) | 6.3 kB | Fig. 15: the current–voltage curve by the Tsu–Esaki formula, with the biased barriers as a staircase of transfer matrices (convergence checked). | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
 | [`tools/kaggle/resonant-tunnelling/pack.py`](../tools/kaggle/resonant-tunnelling/pack.py) | 5.5 kB | Fig. 15: files the reconstructed runs under public/data/resonant-tunnelling/ with SHA-256 and provenance (the Fig. 14 parent runs). | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
 | [`tools/kaggle/resonant-tunnelling/read_rt3d.py`](../tools/kaggle/resonant-tunnelling/read_rt3d.py) | 2.1 kB | Fig. 15, 3D: reads the RT3C run files from Kaggle and prints the checks of each run (timing, start state, 3D vs 1D twin, transmission). | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
