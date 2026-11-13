@@ -1,0 +1,27 @@
+TITLE: Damping of liquid sloshing by foams: from everyday observations to liquid transport
+AUTHORS: Jean Cappello, Alban Sauret, François Boulogne, Emilie Dressaire, Howard A. Stone
+PUBLISHED: J. Visualization 18, 269-271 (2015); DOI 10.1007/s12650-014-0250-1; arXiv:1411.2123
+URL READ: https://arxiv.org/abs/1411.2123 (full text v1 via Exa search result, 2026-11-13)
+LICENCE: arXiv non-exclusive distribution licence
+SAMPLE: model foam (90 % water, 5 % glycerol, 5 % Dawn), monodisperse 3 mm bubbles, Hele-Shaw-like cell 70 x 92 x 16 mm. NOT beer.
+(The companion Phys. Fluids 27, 022103 paper is already in sources as sauret2015-pof27.txt.)
+
+--- verbatim ---
+"It is a common observation that beer does not slosh as readily as water, which suggests that the presence of foam could be used to damp sloshing, as illustrated in Figure 1."
+"Figure 1: Photographs of a glass of coffee (left) and a glass of beer (right). The glass is filled to a height H1 of liquid and a foam layer of thickness H0 lies in the top of the beer."
+"The experimental setup consists of a rectangular cell of height H=92 mm, length L=70 mm and width w=16 mm."
+"The frequency of the oscillation is independent of the foam thickness: f=3.22 ± 0.11 s−1 but the timescale τ over which the oscillations decay decreases with the foam thickness: τ=1.81 ± 0.05 s without foam, τ=0.63 ± 0.04 s for 6 mm of foam and τ=0.37 ± 0.01 s for 20 mm of foam."
+"The increase of damping, 1/τ is likely due to viscous dissipation as the foam is displaced along the sidewalls of the container."
+
+--- APS DFD 2014 abstract H16.00009 (https://meetings.aps.org/Meeting/DFD14/Session/H16.9), verbatim ---
+"2 to 3 layers of bubbles are sufficient to significantly damp the oscillations. For more than 5 layers of bubbles, the original vertical motion of the foam becomes mainly horizontal."
+
+--- press items (secondary; read as Exa highlights 2026-11-13) ---
+Business Standard / IANS, 2015-02-25 (https://www.business-standard.com/article/news-ians/revealed-why-foamy-beer-doesn-t-spill-over-115022500527_1.html):
+"we noticed that when we were carrying a pint of Guinness beer which is a very foamy beer, the sloshing almost did not happen at all," said Alban Sauret
+New Scientist, 2014-11-27 (https://www.newscientist.com/article/2013199-bubble-physics-explains-beers-own-anti-spill-mechanism-2/):
+"It turns out just 0.3 centimetres of foam is enough to dampen much of the sloshing motion, and 3 centimetres stops it almost completely."
+The World / PRX, 2014-12-23 (https://theworld.org/stories/2014/12/23/marvelously-stabilizing-power-beer-foam):
+"Guinness was the winner in the study. The researchers studied four different commercial beers and found that Guinness performed the best because it had the finest foam and the smallest bubbles."
+  -> UNVERIFIED: neither the J. Vis. paper, the arXiv text nor the APS abstract reports any measurement with commercial beers; this is a
+     journalist's paraphrase and should not be used as data.

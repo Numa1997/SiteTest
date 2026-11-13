@@ -1,0 +1,16 @@
+ABSTRACT-LEVEL SOURCES ON HEAD HEIGHT / COLLAPSE (no Guinness in either). Read 2026-11-13 via Consensus search and Exa highlights; full papers not read.
+
+(1) Evans, Oberdieck, Redd, Newman, "Comparison of the Rudin and NIBEM Methods for Measuring Foam Stability with a Manual Pour Method ...",
+J. Am. Soc. Brew. Chem. 70(1), 70-78 (2012). URL https://www.tandfonline.com/doi/abs/10.1094/ASBCJ-2011-1205-01
+--- verbatim abstract ---
+"Most of the survey participants preferred the presence of lacing on the glass during or after consumption and, on average, considered approx. 20 mm of foam immediately after dispensing into a glass as being optimal."
+"a simple method of manually pouring a beer into a Perfect Pint glass (approx. 35 mm of foam formed) and visually scoring the stability after 5 min"
+"The NIBEM and Rudin foam stability measures were significantly but relatively poorly correlated (r = 0.371)."
+
+(2) Wallin, DiPietro, Schwarz, Bamforth, "A Comparison of Three Methods for the Assessment of Foam Stability of Beer", J. Inst. Brew. (2010),
+DOI 10.1002/j.2050-0416.2010.tb00401.x. URL https://doi.org/10.1002/j.2050-0416.2010.tb00401.x
+SAMPLE: nine American ales and lagers (no stout).
+--- verbatim ---
+"The method as delineated by Constant 2 was followed, with measurement of liquid height (L) and total height (T) (in duplicate) after elapsed times (t) in the range 0-5 min. Foam height (F) is calculated according to (T -L) and the rate of foam collapse calculated according to ln(F) = a + bt In turn, foam half-life (min) was determined as ln(0.5) / b."
+Table (Steinfurth s / NIBEM s / Constant half-life min): "A | 109.9 (1.08) [1] | 294.5 (8.6) [1] | 5.2 (0.42) [2] ... I | 79.1 (0.82) [9] | 173.5 (4.5) [8] | 3.5 (0.34) [7=]"
+(A = "American amber ale (34 Bitterness Units, BU)"; I = "American light lager, rice adjunct (10 BU)")
