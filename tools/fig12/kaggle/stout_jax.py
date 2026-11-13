@@ -251,17 +251,15 @@ class Stout:
         self.ell = G.Rfill / 1.84118         # m, the depth over which the foam's sliding speed dies away upward, 1/k (Sauret 2015)
         self.Rrim = float(G.Rz(G.zrim - 1e-6))
         self.MF = 4096                       # lumps of head in flight, at most
-        # how many particles each cell holds when the stout is evenly spread: its volume inside the glass over the volume one
-        # seeded particle stands for (h x h x hz); used by relax() to undo the particles' slow crowding
-        hz_ = G.fill / max(1, round(G.fill / (dx / ppc))); vp = (dx / ppc) ** 2 * hz_; sub = (np.arange(4) + 0.5) / 4
-        xs4 = G.x0 + dx * (np.arange(n)[:, None] + sub[None, :]).ravel(); X4, Y4 = np.meshgrid(xs4, xs4, indexing="ij")
-        frac = np.zeros((n, n, nz))
-        for k in range(nz):
-            acc = np.zeros((n, n))
-            for c in sub:
-                acc += G.inside(X4, Y4, np.full(X4.shape, G.z0 + dx * (k + c))).reshape(n, 4, n, 4).mean((1, 3))
-            frac[:, :, k] = acc / 4
-        self.n_even = jnp.asarray(frac * dx ** 3 / vp, F32)
+        # how many particles each cell holds when the stout is evenly spread: the points of the seeding lattice in that cell,
+        # all layers up to the rim (the lattice the surface read-out counts against). 13 Nov 2026: taken first from the cell's
+        # volume inside the glass, which is larger than the seeded volume at the wall (the lattice stops 0.25 h short of it);
+        # relax() then pulled stout to the wall 30 times a second, the wall columns rose 11.6 mm and the head spilled at rest.
+        xs_, hz_, L_, mask_, h_ = seed_lattice(G, ppc); ne = np.zeros((n, n, nz))
+        for k in range(L_):
+            z = hz_ * (k + 0.5); kc = int(math.floor((z - G.z0) / dx))
+            if 0 <= kc < nz: ne[:, :, kc] += mask_(z).reshape(n, ppc, n, ppc).sum((1, 3))
+        self.n_even = jnp.asarray(ne, F32)
         Ccum, self.hz = column_capacity(G, ppc); self.Ccum = jnp.asarray(Ccum); self.Lz = Ccum.shape[2] - 1
 
     # ---------------------------------------------------------------- state
