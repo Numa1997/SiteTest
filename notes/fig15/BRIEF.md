@@ -7,6 +7,8 @@ long because every part of it matters to the owner of this website, a physicist 
 last day the owner has been badly let down by sloppy work: skipped steps, claims quoted from memory, untracked jobs, broken
 animations. Your job is to do this one properly, top to bottom, and to be honest at every step.
 
+**Read `notes/fig15/LESSONS.md` together with this brief. It overrides this brief wherever they differ.**
+
 ## 0. Where you are
 
 - **The site:** Phyein Usul, https://phyeinusul.com, built from this repository's `main`. Cloudflare deploys every push to `main`
@@ -197,7 +199,9 @@ its own place and its own provenance.
      landscape that never moves with the wave), played smoothly. The owner judged Fig. 14's first animation "horrible, glitches and
      slow". On Fig. 14 the fix was to play stored frames with interpolation in the frame turning at the energy E
      (ψ(t₀ + τ) = e^{−iEτ}[(1 − s)ψ₀ + s e^{iEΔt}ψ₁]), with heavy work in Web Workers and no slow-downs. Here, B3 gives ψ at any t
-     analytically from stored spectra, so the motion can be exact at every screen frame. Prefer that.
+     analytically from stored spectra, but **the owner's rule (13 November, final): all frames are generated on Kaggle,
+     stored in the repository (GitHub, served by Cloudflare) and the page only plays them, interpolating smoothly between stored
+     frames. The page never generates the wave step by step.** See `notes/fig15/LESSONS.md`, section 1.
   2. **Controls** for energy, barrier height, barrier width, gap and bias, with stops tied to stored data, as the other Kaggle
      figures do (`scripts/kaggle-flow.js`).
   3. **T(E)** with its resonances marked; **the trapped probability against time** with the exponential fit; **the I–V curve**
