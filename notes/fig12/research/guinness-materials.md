@@ -1,5 +1,7 @@
 # Guinness on a jolted cart: the stout, its head, and the layers between them and the glass
 
+All numbers for the solver in one list: `data-for-solver.md`.
+
 Research note for Fig. 12, written 13 November 2026 on branch `claude/guinness-materials-research`. No fluid simulation was run.
 **Report to:** the parent session "Guinness cart page rebuild" (session_01DGmqiq8T8BLo2FkMX6RM1D), which verifies everything here
 before any computation. Every number is marked **Fact** (with source file and page),
