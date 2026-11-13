@@ -38,6 +38,8 @@ TASKS = [   # third run (13 Nov 2026): the head as a sheet that resists shear; s
     dict(name="ride_sharp30", kind="ride", dx=0.0015, model="full", end=4.0, road="one sharp 30 mm bump", v0=1.5),
     dict(name="ride_bump25", kind="ride", dx=0.0015, model="full", end=8.0, road="one 25 mm bump", v0=1.0),
 ]
+if os.environ.get("ONLY"):   # run only the named tasks, comma-separated (one Colab job per task: Colab caps a job at 3600 s)
+    TASKS = [t for t in TASKS if t["name"] in os.environ["ONLY"].split(",")]
 if os.environ.get("CODECHECK"):   # a check of this script only: two frames on a 6 mm grid, results thrown away
     TASKS = [dict(t, dx=0.006, end=2 / FPS) for t in TASKS[:4]]
 measured = {}   # dx -> seconds per simulated second (fluid), from finished tasks
