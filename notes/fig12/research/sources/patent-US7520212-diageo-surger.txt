@@ -1,0 +1,15 @@
+SOURCE: P. Smith, J. Walshe (assignee Diageo Ireland), "Apparatus for forming a head on a beverage", US 7,520,212 B2
+  (priority 31 Jul 2002, filed 30 Jul 2003, granted 2009). The Guinness "surger".
+URL: https://patents.google.com/patent/US7520212B2/en (full text read). Public patent document. DATE READ: 2026-11-13.
+
+Description: "The range of frequencies for current supplied to the transducer will be fixed at manufacture. These will
+generally be in the order of 20 kHz to 80 kHz."
+Description: "At time 0 the apparatus initially generates an alternating current at 40 kHz (used solely by way of
+example for the purposes of explanation, this parameter will vary depending on materials used in manufacture etc and
+can be determined by those skilled in the art). 40 kHz represents the median M frequency required for excitation of an
+'average' glass of beer."
+Description: "control means will perform multiple sweeps of frequencies between e.g. 39 and 41 kHz for three seconds"
+Description: "The total application time for either the basic or advanced method is preferably between one and five
+seconds." ... "It is noteworthy that even this fraction of a time (which may amount to hundredths of a second) is
+sufficient to cause the required excitation."
+(No vibration amplitude is given in the patent.)

@@ -1,0 +1,18 @@
+SOURCE: L. Severa, J. Los, "On the influence of temperature on dynamic viscosity of dark beer", Acta Univ. Agric. et
+  Silvic. Mendel. Brun. LVI(2), 303-308 (2008), doi:10.11118/actaun200856020303.
+URL: https://acta.mendelu.cz/pdfs/acu/2008/02/39.pdf (6 pages read in full). Open access journal; no licence line.
+DATE READ: 2026-11-13.
+
+p.303: "The beer samples have been tested in the wide range of temperatures (from 2 to 90 °C) by means of rotary
+viscometer. The dynamic viscoity ranged from 3.91 to 1.01 mPas."
+p.303: "Beer has an almost ideally viscous behavior and is therefore a Newtonian liquid (Steffe, 1996)."
+p.303: "The special dark 12° bottom fermented beer was brewed in the laboratory brewery."  (not a stout)
+p.304: "was measured on the digital rotary viscometer Anton Paar DV3-P" ... "Measuring device of the rotary viscometer
+was of parallel cylinder geometry."
+p.305: "The values of dark beer dynamic viscosity [mPas] measured under different temperatures [°C] at share rate of
+34 s−1 are listed in Table I."
+p.305, Table I: "Temperature [°C] 2 5 7.5 10 12.5 15 20 25 30 35 40 45 50 65 80 90 /
+Viscosity [mPas] 3.91 3.61 3.36 3.17 3.02 2.81 2.53 2.21 2.01 1.9 1.73 1.57 1.47 1.25 1.1 1.01"
+p.305: "The value of activating energy has been set as Ea = 14902 and A = 0.0031." (Arrhenius, R² = 0.993)
+READER NOTE: one shear rate only (34 1/s), so this paper ASSUMES Newtonian behaviour; it does not test it.
+Its absolute values (3.6 mPa s at 5 °C) are ~1.7× the Guinness values measured by Watamura/Benilov/Robinson.

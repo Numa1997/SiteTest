@@ -1,0 +1,53 @@
+SOURCE: A. Bongarzone, "Self-sustained dynamics and forced resonant oscillations in flows: cross-junction jets and
+  sloshing liquids", EPFL doctoral thesis no. 10334 (2023), 408 pp. Supervisor F. Gallaire.
+URL: https://infoscience.epfl.ch/server/api/core/bitstreams/410c0f17-2704-4bf1-b4dd-2aa4e2c142e7/content
+  (record https://infoscience.epfl.ch/entities/publication/77d2515f-18bf-4560-a733-672956ebe6f9)
+LICENCE: EPFL Infoscience open thesis (author copyright). DATE READ: 2026-11-13.
+Read: ch.4 appendix 4.5 (pp.135-137), sec. 6.2.3 (pp.196-197), Part IV introduction (pp.281-286), parts of ch.9.
+Page numbers = printed thesis pages.
+
+p.135, eq. (4.48): "A well-known formula for the prediction of the viscous damping coefficient of capillary-gravity
+  waves in upright cylindrical containers was provided by Case and Parkinson (1957) and Miles (1967) ...
+   sigma = 2k_mn^2/Re + (omega_mn/2Re)^(1/2) k_mn/sinh(2k_mn H)
+           + (omega_mn/2Re)^(1/2) [ (1/2)(1+(m/k_mn)^2)/(1-(m/k_mn)^2) - k_mn H/sinh(2k_mn H) ]   (4.48)
+  where the first term represents the bulk dissipation, whereas the second and third terms are related to the
+  dissipation occurring at the solid bottom and sidewall ... Re = g^(1/2) R^(3/2)/nu"
+p.135-136: "the values Re = 60 480, k21 = 3.0542 and omega21 = 1.7561 give a non-dimensional viscous damping
+  coefficient sigma = 0.0051, mostly produced by the sidewall boundary layer."
+p.136: "a prefactor of 1.35 is sufficient to provide a fairly good prediction of the jump-down frequency."
+  "contact line dynamics may rule the overall dissipation, with a measured damping coefficient up to 10-20 times
+  larger (Benjamin and Ursell, 1954; Hocking, 1987; Kidambi, 2009a) than that predicted by (4.48)."
+  "Henderson and Miles (1990) used an effective fluid viscosity 3 times larger than the actual one. Recently,
+  Bauerlein and Avila (2021) have measured the damping coefficient of the first anti-symmetric sloshing mode in a
+  quasi-two-dimensional rectangular container, which was seen to be approximately 1.5 larger than that predicted"
+p.136: "Henderson and Miles (1990) have considered a fully contaminated free surface, which can be modelled by a
+  surface film that is free to move vertically but cannot stretch horizontally. They have also derived an
+  analytical expression for the associated damping, which reads (omega_mn/2Re)^(1/2) k_mn cosh^2 k_mn H /
+  sinh 2k_mn H. If such a contribution was accounted for in (4.48), it would produce a value of 0.0109, which is
+  approximately twice the damping obtained without contamination"
+p.196, eq. (6.13): sigma = 2k^2/Re [bulk] + sqrt(omega0/2Re) k cosh^2(kH)/sinh(2kH) [surf. contamination]
+  + sqrt(omega0/2Re) k/sinh(2kH) [bottom] + sqrt(omega0/2Re) [ (1/2)(1+(1/k)^2)/(1-(1/k)^2) - kH/sinh(2kH) ] [sidewall]
+  "...in a container of diameter D = 2R = 0.172 m filled to a depth H = h/R = 1.744 with distilled water ...
+   Re = 78 952 (Reynolds number), amounts to sigma = 0.0055."
+p.196-197: "expression (6.13) englobes different effects, i.e. viscous dissipation occurring in the Stokes boundary
+  layers (at the solid lateral and bottom wall), bulk dissipation and possible sources of dissipation associated
+  with free surface contamination effects ... but it does not account for any form of dissipation induced by contact
+  angle dynamics"
+p.282-283 (Part IV intro): "an intermediate boundary condition that assumes a linear relation between the contact
+  line speed and slope, d eta/dn ~ d eta/dt (Hocking, 1987) ... the limiting values M -> 0 and M -> infinity would
+  correspond, respectively, to free-end and pinned-end edge contact line conditions."
+  "these assumptions altogether, by overlooking the actual nonlinear contact line dynamics, have led to a
+  considerable underestimation of the actual overall dissipation in most of the small-size lab-scale experiments"
+p.284-285: "Cocciaro et al. (1993, 1991) thoroughly characterized the contact angle dynamics during the natural
+  (free-of-forcing) relaxation phase of the fundamental asymmetric sloshing mode in a small circular cylindrical
+  container. ... First, the contact line slides over the solid substrate experiencing progressive stick-slip
+  transitions ... the damping increases considerably as the wave amplitude decreases, until it reaches a maximum
+  value, after which it starts to decrease, and the small amplitude regime is established. A finite time of arrest
+  for the contact line is found: the interface irreversibly pins and the following pure bulk motion is seen to
+  decay exponentially ... The natural oscillations frequency initially matches the value associated with a free-end
+  eigenmode, it increases during the decay, and it eventually tends to the value associated with a pinned-end
+  eigenmode."
+  Fig. IV.2(c) (redrawn from Cocciaro et al. 1993): damping rate axis 0 to 0.3 Hz vs |phi| 0-15 deg; Fig. IV.2(a)
+  caption: water drop "finite contact angle hysteresis (Delta ~ 10 - 15 degrees) (Noblin et al., 2004)".
+ch.9 (2D test case): "pure water in a container of width l = 5 cm ... Hocking law are theta_s = pi/2,
+  alpha = 77 rad with Delta = 20 deg"; another case "theta_s = pi/2, alpha = 123 rad and Delta = 18.5 deg".

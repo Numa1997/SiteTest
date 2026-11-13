@@ -1,0 +1,20 @@
+SOURCE: R. Sander, "Compilation of Henry's law constants (version 4.0) for water as solvent", Atmos. Chem. Phys. 15,
+  4399-4981 (2015), doi:10.5194/acp-15-4399-2015.
+URL: https://acp.copernicus.org/articles/15/4399/2015/acp-15-4399-2015.pdf (583 pp.; definitions and the N2, CO2
+  entries read)
+LICENCE: "© Author(s) 2015. CC Attribution 3.0 License." (p.4399)
+DATE READ: 2026-11-13.
+
+p.4401: "Hcp = ca/p." ... "The SI unit for Hcp is mol m−3 Pa−1."
+Table columns: Hcp at 298.15 K [mol m−3 Pa−1] and d ln Hcp / d(1/T) [K].
+p.4409, nitrogen N2 [7727-37-9]: "6.4×10−6 1600 Warneck and Williams (2012) L; 6.4×10−6 1300 Sander et al. (2011) L;
+6.4×10−6 1300 Sander et al. (2006) L; 6.5×10−6 1200 Fernández-Prini et al. (2003) L; 6.5×10−6 1200 Battino et al.
+(1984) L; 6.4×10−6 1300 Wilhelm et al. (1977) L"
+p.4488, carbon dioxide CO2 [124-38-9]: "3.3×10−4 2400 Sander et al. (2011) L; 3.3×10−4 2400 Sander et al. (2006) L;
+3.3×10−4 2300 Fernández-Prini et al. (2003) L; 3.4×10−4 2300 Carroll et al. (1991) L; 3.4×10−4 2400 Crovetto (1991) L;
+3.4×10−4 2400 Weiss (1974) L"
+
+READER CALCULATION (Inference, van 't Hoff form H(T) = H298 exp[B(1/T − 1/298.15)], pure water):
+  6 °C: CO2 Hcp = 5.71e-4 mol m−3 Pa−1 = 2.51 g L−1 bar−1 ; N2 Hcp = 8.61e-6 mol m−3 Pa−1 = 0.0241 g L−1 bar−1
+  8 °C: CO2 2.36, N2 0.0233 g L−1 bar−1 (ESGI Table 8 from Horvath 1975: 2.50, 0.0241)
+  Molar ratio Hcp(CO2)/Hcp(N2) at 6 °C ≈ 66.

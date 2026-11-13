@@ -1,0 +1,24 @@
+SOURCE: Y.-L. Jin, R. A. Speers, A. T. Paulson, R. J. Stewart, "Effects of β-glucans and environmental factors on the
+  viscosities of wort and beer", J. Inst. Brew. 110(2), 104-116 (2004), doi:10.1002/j.2050-0416.2004.tb00189.x.
+URL: Wiley PDF blocked by a bot challenge (curl, pdfdirect); full text read through Exa web_fetch of the DOI
+  (no page numbers in that text). Unpaywall lists it as free-to-read at Wiley.
+LICENCE: Wiley/IBD copyright. Extract < 300 words.
+DATE READ: 2026-11-13. Location = section headings (page numbers not available in the text read).
+
+Introduction: "Fluids with viscosities independent of shear rates are termed "Newtonian fluids". Wort and beer
+viscosities normally have little, if any, shear dependence."
+Introduction: "beer viscosity can vary between 1.45-1.96 mPa • s at 20°C"
+Materials and Methods, "Determination of wort and beer viscosities": "Viscosities of wort and beer were measured with a
+Bohlin VOR controlled-rate rheometer ... by using a C-14 coaxial cylinder geometry ... shear rates of 91.9, 184, 367,
+581, 731 and 921 s-1 ... Measurement temperature was 20°C for wort and 5°C for beer unless otherwise specified. Shear
+stress values were measured and the viscosity was obtained from linear regressions of the dependence of shear stress
+on shear rate (r2 ≥ 0.99; n = 3). Previously, Oonsivilai had reported possible shear thickening in commercial worts at
+shear rates below 100 s-1. However, the wort and beer samples were found to be Newtonian at the higher range of shear
+rates (91.9-921 s-1) employed in this study."
+Methods: beers were reconstituted "Degassed "beer" samples ... which contained 5.0% v/v of ethanol and 3.3% w/w of real
+extract at pH 4.2" (model beers from beer concentrate, not a commercial stout).
+Abstract: "Shearing wort and beer at approximately 13,000 s-1 for 35 s was found to increase the wort viscosity but
+reduce beer viscosity."
+Also seen (abstract only, Consensus): Ragot et al., J. Inst. Brew. 95 (1989): "By measuring the viscosity of beer with
+a rheogoniometer, it was shown that beer is a newtonian fluid, i.e., shear stress increased linearly with shear rate."
+(full text not read)

@@ -1,0 +1,17 @@
+SOURCE: Arthur Guinness Son & Co. Ltd, "Preparation of beverages containing gas in solution", GB 1 588 624 A
+  (filed 1976-09-20, published 1981-04-29).
+URL: https://patents.google.com/patent/GB1588624A/en (full text read). Public patent document. DATE READ: 2026-11-13.
+
+Description: nitrogen "(a) it is relatively insoluble in fermented liquor such as beer, e.g. in the order of less than
+5% by volume as compared with 100%"
+Description: "stout where there is a major difference in quality between stout with a carbon dioxide content above
+2.0 vols./vol. of beer as dispensed from a sealed package ... and similar stout containing dissolved nitrogen and with a
+carbon dioxide content in the range of 0.8 to 1.8 vols./vol. of beer when dispensed in draught form from a keg
+pressurised with nitrogen and carbon dioxide"
+Description: "Conventionally the nitrogen and carbon dioxide release and the formation of very small enduring bubbles is
+achieved by the draught beverage being subjected to cavitation as it suffers a pressure drop in passing through an
+array of small orifices in a plate"
+Description: "excitation ... (a) vibration of at least audio frequency applied externally to a container ... The
+vibration mentioned at (a) above is preferably ultrasonic."
+Description: nitrogen "preferably being present to the extent of at least 1.5% vols./vol. and typically in the range
+1.5% to 3.5% vols./vol."
