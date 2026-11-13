@@ -77,3 +77,13 @@ All of it:
 7. **The head's mass** rides with the glass in the cart's equation, and leaves it with each lump.
 
 Free inputs: R and φ_l (no measurement). Everything else is measured or derived from them.
+
+## Added after the research session's final data set (13 November 2026, later)
+
+- **Read directly:** Völp & Willenbacher, Soft Matter 17, 3937 (2021), Table 2, in the KIT repository copy
+  (<https://publikationen.bibliothek.kit.edu/1000131878>, CC BY-NC): "Guinness stout 44.2 … 18.7" (interfacial tension and
+  high-frequency dilatational modulus, mN/m), and the prefactors "a_d = 1 … k_d = 0.25". So these two values are measured and read,
+  not relayed. The paper's DOI is 10.1039/d0sm02246b; `guinness-materials.md` and its extract print 10.1039/D0SM02148B, which is wrong.
+- **Not re-checked by this session:** the other new extracts of commits 90f89fe to b8a3e09 were read in full but their sources
+  were not reopened, on the user's order ("Use the goddamn numbers you have at hand").
+- The model taken into the solver changed after this note's first version: see `notes/fig12/handoff-jax/03-model-and-numbers.md`.

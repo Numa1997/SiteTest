@@ -1,0 +1,32 @@
+TITLE: Bubble cascade in Guinness beer is caused by gravity current instability -- Figure 3 and Supplementary Appendix A only
+AUTHORS: T. Watamura, F. Iwatsubo, K. Sugiyama, K. Yamamoto, Y. Yotsumoto, T. Shiono
+PUBLISHED: Sci. Rep. 9, 5718 (2019); DOI 10.1038/s41598-019-42094-0
+URLS READ: https://www.nature.com/articles/s41598-019-42094-0 (HTML, curl);
+  Fig. 3 image: https://media.springernature.com/full/springer-static/image/art%3A10.1038%2Fs41598-019-42094-0/MediaObjects/41598_2019_42094_Fig3_HTML.png (1493 x 1154 px, downloaded and inspected)
+  Supplement: https://media.springernature.com/original/springer-static/esm/art%3A10.1038%2Fs41598-019-42094-0/MediaObjects/41598_2019_42094_MOESM1_ESM.pdf (read via Exa highlights)
+DATE READ: 2026-11-13
+LICENCE: CC BY 4.0 (creativecommons.org/licenses/by/4.0/ in the article page)
+NOTE: the bubble diameter 54-68 µm is ALREADY KNOWN to the lead; this extract adds (i) the void-fraction method, (ii) the head-growth record in Fig. 3b.
+
+--- main text, verbatim ---
+"we poured Guinness beer in the containers from a 330-ml can of Draught Guinness."
+"Figure 3b shows the temporal change in the phase separation: the black region (liquid of beer), the grey region (bubbly flow), and the white region (head of foam). The bubbly flow region gradually decreases with increasing time and the amount of foam head increases."
+"the tapered shape of the glass with inclined angle of ≈ 15 degrees"
+"The texture appearing in a glass propagates downwards with a travelling velocity of ~−35 mm/s (Fig. 3c, Supplementary Movie S1)"
+
+--- Supplementary Appendix A, verbatim (void fraction by weighing) ---
+"To measure the bubble volume-concentration, we poured Guinness into a 210-ml measuring cup that overflowed within 10 seconds after opening a can. The foam above the cup was removed with a spatula, and drops attached at the outer wall of the cup were wiped immediately. The measuring cup was placed on a digital weight scale, and then the weight of bubbly Guinness was measured. Finally, the bubble volume-concentration (see Fig. S1c) was estimated from the weight ratio of bubbly medium to the degassed Guinness liquid, subtracting the weight of the measuring cup."
+Table S1 row: "Guinness (present work) | 5 [°C] | 1006 [kg/m3] | 2.03 × 10−3 – 2.21 × 10−3 [Pa·s] | 8 [%] | 54 – 68 [µm] | 0.716 – 1.15 [mm/s]"
+
+--- Fig. 3 axes (read from the image) ---
+Panel a: side view of the pint glass, axes "x [mm]" 0-150 (height) and "z [mm]" -40..40 (width): a calibrated side view of a Guinness pint.
+Panel b: grey level along the centre line vs time, "x [mm]" 0-150 vs "t [sec.]" -10..115.
+READER'S PIXEL READ-OUT of Fig. 3b (MY measurement from the published PNG, not the authors' numbers; axis calibration from tick-label centres:
+  t: 0 s at column 490.5, 8.39 px/s; x: 0 mm at row 501.5, 2.72 px/mm; "white" = grey >= 235):
+  t =  5 s: white head from ~133.6 mm down to ~120.0 mm (thickness ~13.6 mm)
+  t = 30 s: top ~132.2 mm, bottom ~113.8 mm (~18.4 mm)
+  t = 60 s: top ~130.7 mm, bottom ~108.3 mm (~22.4 mm)
+  t = 90 s: top ~129.5 mm, bottom ~107.9 mm (~21.6 mm)
+  t =115 s: top ~129 mm,   bottom ~108.3 mm (~20.7 mm)
+  A narrow dark band at x ~ 127-128.5 mm is present at all times (a fixed glass feature, not foam) and was bridged when reading the top.
+  The foam/liquid boundary falls ~12 mm in the first ~60 s and then stays put; the top of the head sinks ~4-5 mm over 110 s.

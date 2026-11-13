@@ -1,5 +1,7 @@
 # Guinness on a jolted cart: the stout, its head, and the layers between them and the glass
 
+All numbers for the solver in one list: `data-for-solver.md`.
+
 Research note for Fig. 12, written 13 November 2026 on branch `claude/guinness-materials-research`. No fluid simulation was run.
 **Report to:** the parent session "Guinness cart page rebuild" (session_01DGmqiq8T8BLo2FkMX6RM1D), which verifies everything here
 before any computation. Every number is marked **Fact** (with source file and page),
@@ -14,18 +16,21 @@ Source extracts are in `sources/`, derivations in `wolfram/` (first) and `sympy/
    traps air does.
 3. Free surface without a head: no stress, plus a protein skin that makes the surface close to inextensible. That skin about doubles
    the wall damping.
-4. The head is a soft solid, not a liquid. It has a yield stress τ_y = a_y (γ/R)(Φ − 0.64)² and a modulus G₀ = 1.4 (γ/R) Φ(Φ − 0.64),
-   where R is the bubble radius, Φ = 1 − φ_l the gas fraction, γ the surface tension.
-5. Its natural shear wave crosses the 19 mm head in 7–65 ms, against a slosh period of 292 ms. So the head rides the stout surface as
-   one quasi-rigid sheet and has no waves of its own.
+4. The head is a very soft, very viscous solid made of the stout's own bubbles (Sauter radius R₃₂ = 34 µm). It is wet: liquid
+   fraction 0.24–0.36, because a 19 mm column of 34 µm bubbles cannot drain drier and takes 25–110 min even to reach that.
+   Yield stress τ_y = 0.51 (γ/R)(Φ − 0.62)² = 1–17 Pa; modulus G₀ = 1.4–1.64 (γ/R) Φ(Φ − 0.64) = 25–240 Pa
+   (Φ = 1 − φ_l, the gas fraction; γ the surface tension).
+5. Its effective viscosity is 300–10 000 times the stout's (0.65–21 Pa s at 1–30 s⁻¹). A wave of its own would die in 2–120 ms,
+   against a slosh period of 292 ms. So the head rides the stout surface as one sheet and makes no waves of its own.
 6. On the stout the head acts as a lid with mass ρ_f h_f per unit area. It presses down with ρ_f h_f g_eff, does not slip on the
    liquid, and slides on the glass with Plateau-border friction f = ξ γ Ca^(2/3) per unit border length.
-7. It yields (flows) only where the stress beats τ_y. The test is the Bingham number Bi = τ_y/(ρ_f a h_f), which is 0.15–9 at
-   10 m/s² and 1.5–90 at 1 m/s².
-8. Thrown out, a yield-stress material breaks into pieces of size L* ≈ τ_y/(ρ_f a) = 3–170 mm at 10 m/s², so it leaves as lumps.
-   Stout breaks at the capillary scale √(γ/ρa) = 2 mm, so it leaves as drops.
-9. Over a 20 s ride the head loses volume only by spilling and by what it leaves on the glass. Its drainage (633–757 s) and nitrogen
-   bubble coarsening (none in 3 min) are far too slow to matter.
+7. It yields (flows) only where the stress beats τ_y. The test is the Bingham number Bi = τ_y/(ρ_f a h_f). At 1 m/s² Bi = 0.2–4:
+   it holds its shape at the drier end. At 10 m/s² Bi = 0.02–0.4: it yields at the hardest jolts and then flows like a thick cream.
+8. Thrown out, a lump 10 mm across needs 0.16–0.58 s to be pulled apart (time = η_eff L/γ), longer than it flies, so the head leaves
+   as lumps. Stout breaks at the capillary scale √(γ/ρa) = 2 mm, so it leaves as drops.
+9. Over a 20 s ride the head loses volume only by spilling and by what it leaves on the glass. Its drainage (25–110 min for 34 µm
+   bubbles) and nitrogen bubble coarsening (none in 3 min) are far too slow to matter. Stout recedes from glass at a contact angle of
+   about 4–6° (Guinness, Hamlett 2015): it leaves a film, 7–140 µm thick depending on speed (Landau–Levich–Derjaguin).
 10. Damping of the first mode, ζ = γ_d/ω: wall Stokes layer 0.0051, plus protein skin about 0.0051, plus contact line (up to ×2.4).
     A foam lid adds sub-linear wall friction that stops the slosh in finite time.
 
@@ -36,13 +41,14 @@ Source extracts are in `sources/`, derivations in `wolfram/` (first) and `sympy/
 | ρ_l | stout density, 5–6 °C | 1007 kg/m³ | 1006–1007 | Fact: benilov2012 p.1; watamura2019-scirep9-5718 SI Table S1 |
 | μ_l | stout viscosity, 6 °C | 2.06 mPa s | 2.0–2.23 | Fact: benilov2012 p.1; watamura2019 (2.03–2.21 at 5 °C); robinson2008 |
 | γ | surface tension of beer | 0.045 N/m | 0.038–0.048 static; 0.052–0.055 while stretched | Fact: ronteltap1989 Table 4.5 p.38; chatzigiannakis2025 Table I (lagers and ales, not stout) |
-| R | bubble radius in the head | 50 µm | 25–100 µm | Inference: nitrogen beer foam starts near 100 µm (ronteltap1989 pp.114–115); stout body bubbles 27–61 µm (watamura2019, robinson2008). No head measurement exists |
-| φ_l | liquid fraction of the head | 0.2 | 0.05–0.4 | Inference: Ronteltap calls 0.4 "realistic" for fresh foam (p.82); a model input of 0.2 (Lee 2018). No measurement for stout |
-| h_f | head thickness as served | 19 mm | 10–24 mm | Fact: 18–20 mm (brief, Nature Rev. Phys. 5, 197, not re-read here); ESGI "about 1 cm" (power2009 p.177); my read-off of Watamura Movie S2 ≈ 24 ± 4 mm (catalogue below) |
-| a_y | yield-stress prefactor | 0.5 | 0.5–1 | Fact: costa2012 (quoting Höhler & Cohen-Addad 2005) |
-| Φ_c | gas fraction at jamming | 0.64 | 0.635–0.64 | Fact: costa2012 |
+| R | bubble (Sauter) radius in the head | 34 µm | 33–36 µm | Inference: the head is made of the stout's own bubbles and N₂ stops them growing; Sauter radius of Watamura's measured log-normal (mean D 61 µm, σ = 0.24 read off SI Fig. S2; wolfram/04). Confirmed by Watamura & Sugiyama 2024: D = 59 ± 15 µm (web-watamura2024-oleoscience-table1.txt) and by the settling time (61 µm clears 125 mm in 126 s, measured ≈ 120 s) |
+| φ_l | liquid fraction of the head | 0.27 | 0.24–0.36 | Inference (wolfram/05): equilibrium of a 19 mm column of 34 µm bubbles gives 0.36 at the bottom → 0.24 at the top (K = 3.2; 0.18 for an ordered foam); reaching it takes 25–110 min, so a 2–5 min old head is at least this wet. No weighing of a Guinness head found |
+| h_f | head thickness as served | 19 mm | 10–24 mm | Fact: 18–20 mm (brief, Nature Rev. Phys. 5, 197, not re-read here); ESGI "about 1 cm" (power2009 p.177); my read-off of Watamura Movie S1 ≈ 24 ± 4 mm (catalogue below); 17.5–22.2 mm two minutes after three kinds of pour (web-kegworks2019) |
+| C | yield-stress prefactor, τ_y = C (γ/R)(Φ − Φ_c)² | 0.51 (Φ_c = 0.62) | 0.51–0.53 | Fact: mason1996-jcis179.txt p.443 (C = 0.51, Φ_c = 0.62, emulsions); saintjalmes-durian1999 (0.53, foam) |
+| a | modulus prefactor, G₀ = a (γ/R) Φ(Φ − 0.64) | 1.4 | 1.4–1.64 | Inference from Facts: 0.51/0.365 (dry-foam limit, saintjalmes-durian1999) = 1.40, as costa2012 quotes; 0.6/0.365 (mason1995, which prints no prefactor) = 1.64. The "1.7" of the brief is not printed in any source read |
+| Φ_c | gas fraction at jamming | 0.64 | 0.62–0.64 | Fact: saintjalmes-durian1999 (0.635 ± 0.01), mason1996 (0.62 fit) |
 | ξ | Plateau-border wall-friction coefficient, stiff surfaces | 6.82 | 4.94–6.82; fits need up to ×4 | Fact: cantat2013 |
-| θ, Δcos θ | contact angle, hysteresis of stout on glass | 30–45°, 0.27 | 0.06 (clean) – 0.68 (protein-coated) | Fact for model liquids: wang2017 p.10, acuna-nelson2020. No stout measurement |
+| θ, θ_r | contact angle of Guinness on clean glass: static, receding | 28.5° ± 2.0°, 4.2° ± 2.4° | static 19–30° for four beers; receding 4–6° | Fact: Hamlett et al. 2015 J. Am. Soc. Brew. Chem. 73, Table 2 (web-hamlett2015-jasbc-beer-contact-angles.txt), bottled Guinness Original degassed, room temperature, HCl-cleaned glass. Row order of the table to be confirmed against the journal |
 
 Derived, not free: ρ_f = φ_l ρ_l; G₀ and τ_y from (R, φ_l, γ); bubble slip from (R, μ, ρ); the damping of each layer from (ν, ω, R).
 
@@ -50,12 +56,12 @@ Derived, not free: ρ_f = φ_l ρ_l; G₀ and τ_y from (R, φ_l, γ); bubble sl
 
 | | Stout (a bubbly liquid) | Head (a foam) |
 |---|---|---|
-| What it is | liquid with rigid 27–61 µm gas spheres (radius) | packed bubbles, R 25–100 µm (no stout-head measurement) |
-| Gas fraction | 0.08 canned bulk; ≈ 0.1 pub draught; 0.02 served; < 10⁻³ settled (> 2 min) | Φ = 0.6–0.95 (φ_l 0.05–0.4) |
-| Density | ρ_m = (1 − α) 1007: 987 at α = 0.02, 957 at α = 0.05 kg/m³ | ρ_f = φ_l ρ_l = 50–400 kg/m³ (201 at φ_l = 0.2) |
-| Viscosity or stiffness | μ_m = 2.06 mPa s × (1 + 2.5α): 2.16 at 0.02, 2.32 at 0.05 | G₀ 26–371 Pa; τ_y 0.8–87 Pa; flow τ ∝ Ca^0.47 above yield |
-| Slip or drift | bubble slip (2a²ρ/9μ)(Du/Dt − g_eff): 0.7–4.0 mm/s at 1 g | drainage ≈ 0.03 mm/s of height (h_f/650 s) |
-| Lifetime | settles in ≈ 120 s | drains in 633–757 s; no coarsening in 180 s |
+| What it is | liquid with rigid gas spheres, mean diameter 59–61 µm (radius ≈ 30 µm), log-normal σ ≈ 0.24 | packed bubbles of the same population, Sauter radius 34 µm |
+| Gas fraction | 0.08–0.097 canned bulk; ≈ 0.1 pub draught; 0.02 served; < 10⁻³ settled (> 2 min) | Φ = 0.64–0.76 (φ_l 0.24–0.36), mean ≈ 0.73 |
+| Density | ρ_m = (1 − α) 1007: 987 at α = 0.02, 957 at α = 0.05 kg/m³ | ρ_f = φ_l ρ_l = 240–360 kg/m³ (272 at φ_l = 0.27) |
+| Viscosity or stiffness | μ_m = 2.06 mPa s × (1 + 2.5α): 2.16 at 0.02, 2.32 at 0.05 | G₀ 25–240 Pa (122–143 at φ_l = 0.27); τ_y 1–17 Pa (8 at 0.27); effective viscosity 0.65–21 Pa s at 1–30 s⁻¹ |
+| Slip or drift | bubble slip (2a²ρ/9μ)(Du/Dt − g_eff): 1.0 mm/s at 1 g for 61 µm | drainage 1.2–2.1 µm/s by gravity; 25–110 min to equilibrium |
+| Lifetime | settles in ≈ 120 s | drains over 25–110 min; no coarsening in 180 s; head 17.5–22 mm two minutes after the pour (web-kegworks2019) |
 | Rheology | Newtonian (beer, 92–921 s⁻¹, r² ≥ 0.99) | Herschel–Bulkley (yield stress + Ca^0.47) |
 
 ### Every boundary layer as a boundary condition (details in 3.3)
@@ -63,7 +69,7 @@ Derived, not free: ρ_f = φ_l ρ_l; G₀ and τ_y from (R, φ_l, γ); bubble sl
 | Interface | Condition | Numbers |
 |---|---|---|
 | Stout on glass | no slip; Stokes layer δ = √(2ν/ω) | δ = 0.436 mm; ζ = 0.0051, γ_d = 0.110–0.119 s⁻¹ for mode (1,1) |
-| Stout contact line on glass | Coulomb friction: the line holds until γ(cos θ − cos θ_s) > γΔcos θ/2 | θ_s ≈ 30–45°, Δcos θ ≈ 0.27 (0.06–0.68); ×1.5–2.4 on the wall damping |
+| Stout contact line on glass | Coulomb friction: the line holds until γ(cos θ − cos θ_s) exceeds the hysteresis; it recedes at θ_r ≈ 4° and leaves a film h = 0.946 ℓ_c Ca^(2/3) (×2.5 for rigid surfaces) | θ_s = 28.5°, θ_r = 4.2° (Hamlett 2015, Guinness); Δcos θ = cos 4.2° − cos 28.5° = 0.12; film 7–140 µm at 1 mm/s–0.1 m/s; ×1.5–2.4 on the wall damping |
 | Head on glass | sliding with Plateau-border friction τ_w ≈ (ξγ/R)Ca^(2/3), ξ = 6.82 | 18–36 Pa at 0.01 m/s, 85–170 Pa at 0.1 m/s; finite-time stop (Viola α = 0.010–0.030) |
 | Head on stout | the head is a lid with no slip: u_t(stout) = u_f; normal stress p = ρ_f h_f (g_eff·n) | ρ_f h_f ≈ 3.8 kg/m² (1–7.6); foam velocity decays upward over 16.8 mm (Sauret); adds ζ ≈ 0.0051 |
 | Bare stout surface (after a spill) | p = −γκ; protein skin close to inextensible (tangential no slip on the surface) | γ = 0.045 N/m (0.038–0.055); dilatational modulus 5–25 mN/m; adds ζ ≈ 0.0051 |
@@ -189,7 +195,7 @@ gerard-varet-hillairet2020, not in Einstein's own papers.
   - **τ_y = a_y (γ/R)(Φ − Φ_c)²**, with a_y = 0.5–1.
 
   Fact: one measured check, 5 % liquid and R = 24 µm, gave G₀ = 206 Pa, below the formula (besson2008-hal.txt). So the prefactor is
-  uncertain by a factor of a few. The Mason–Bibette–Weitz 1.7 prefactor in the brief was not verified: the paper could not be opened.
+  uncertain by a factor of a few. Later read in the originals (mason1995-prl75.txt, mason1996-jcis179.txt, saintjalmes-durian1999-jrheol43.txt): Mason 1995 prints no modulus prefactor (its dry limit 0.6 σ/r implies 1.64); the yield law is τ_y = 0.51 (σ/a)(φ − 0.62)² (Mason 1996 p.443); the "1.7" of the brief is printed nowhere.
 - **Flow beyond yield.** Fact: for 1–20 % liquid (tcholakova2008-pre78.txt), stresses in units of γ/R with Ca = μγ̇R/γ:
   - films only: τ ≈ 1.162 Ca^0.47 Φ^(5/6) (Φ − 0.74)^0.1 (1 − Φ)^(−1/2);
   - films and menisci: τ ≈ 0.7 Ca^0.47 Φ^(5/6)/(1 − Φ)^0.5 + 8 Ca^0.7 Φ^(5/6)/(1 − Φ)^0.15.
@@ -288,7 +294,7 @@ intact. A 3D foam phase (level-set material flag, same Bingham law) is needed on
 - Q_cling: a film of foam left on the glass where the head's edge recedes. Its thickness is not measured (see 2.5).
 - Q_drain, Q_collapse: about h_f/650 s ≈ 0.03 mm/s. Inference: about 0.6 mm in a 20 s ride, so they can be left out.
 
-**Regime numbers at the cart's accelerations** (wolfram/03, checked in sympy/03; R = 50/100 µm, a_y = 0.5–1):
+**Regime numbers at the cart's accelerations** (wolfram/03, checked in sympy/03; R = 50/100 µm, a_y = 0.5–1). Superseded by 2.5, which fixes R = 34 µm and φ_l = 0.24–0.36 from physics; kept for the record:
 
 | φ_l | G₀ Pa | τ_y Pa | Bi at 10 m/s² | Bi at 1 m/s² | L* at 10 m/s², mm |
 |---|---|---|---|---|---|
@@ -309,19 +315,71 @@ Reading it (Inference):
 | Quantity | Value | Range | Status |
 |---|---|---|---|
 | γ | 0.045 N/m | 0.038–0.055 | Fact for beer (ronteltap1989, chatzigiannakis2025) |
-| R | 50 µm | 25–100 µm | Inference (no head measurement) |
-| φ_l | 0.2 | 0.05–0.4 | Inference |
-| ρ_f = φ_l ρ_l | 201 kg/m³ | 50–400 | derived |
-| G₀ | 161 Pa | 26–371 | derived, prefactor uncertain ×3 (besson2008) |
-| τ_y | 11.5 Pa | 0.8–87 | derived |
+| R₃₂ | 34 µm | 33–36 µm | Inference from measured distributions (2.5) |
+| φ_l | 0.27 | 0.24–0.36 | Inference from the column equilibrium and drainage time (2.5) |
+| ρ_f = φ_l ρ_l | 272 kg/m³ | 240–360 | derived |
+| G₀ | 122–143 Pa | 25–240 | derived (prefactor 1.4–1.64) |
+| τ_y | 8 Pa | 1–17 | derived (C = 0.51, Φ_c = 0.62) |
+| effective viscosity | 2 Pa s at 10 s⁻¹ | 0.65–21 Pa s at 1–30 s⁻¹ | derived (Tcholakova 2008 + τ_y) |
 | h_f | 19 mm | 10–24 | Fact / read-off |
 | ξ (wall friction) | 6.82 | 4.94–27 | Fact (cantat2013, fits up to ×4) |
 
-### 2.5 Uncertain, and how to measure it
+### 2.5 Worked out from the bubble size (added 13 November 2026, after review)
 
-- **R and φ_l of a real head.**
-  - R: a macro photograph of the head against the glass wall with a scale; bubble sizes as in Watamura's SI.
-  - φ_l: weigh a known volume of the head, scooped with a syringe barrel (ρ_f = φ_l ρ_l).
+The first version left the head's bubble size and liquid fraction as guesses (25–100 µm, 0.05–0.4). Both follow from physics and
+from measurements of the stout:
+
+1. **Bubble size.** The head is built from the bubbles that rise out of the stout; nitrogen bubbles do not coarsen in minutes
+   (ronteltap1989 pp.114–115). So the head's bubbles are the stout's. Watamura's measured distribution (≥ 3000 bubbles, microscope
+   lens, log-normal, mean D = 61 µm) read off their SI Fig. S2 has half-heights near 47 and 82 µm, so σ = 0.24 ± 0.05 and the Sauter
+   diameter D₃₂ = 68 µm: **R₃₂ = 34 µm (33–36)** (wolfram/04, sympy/04). Two checks: Watamura & Sugiyama 2024 measured
+   59 ± 15 µm; and 61 µm bubbles clear a 125 mm column in 126 s by Stokes' law, against the measured ≈ 120 s, while Robinson's
+   122 µm would clear it in 32 s. Robinson counted at the wall without a microscope; their 94–122 µm sit in the tail of Watamura's
+   distribution (marked as arrows in SI Fig. S2).
+2. **Liquid fraction.** A foam column is held by surface tension against its weight: the osmotic pressure Π = K (γ/R)(ε_c − ε)²/√ε
+   (forel2016, quoting Maestro 2013; K = 3.2, ε_c = 0.36 disordered) rises with height as dΠ/dz = ρg(1 − ε). With R = 34 µm the
+   capillary pressure γ/R = 1324 Pa is ten times the weight of the head (131 Pa), so the head cannot drain dry: at equilibrium
+   ε = 0.36 at its base, 0.27 at 10 mm, **0.235 at the top of 19 mm** (0.18 for an ordered foam). Reaching that equilibrium takes
+   25–95 min by capillary diffusion and hours by gravity (permeability k = R²ε²/300, rigid protein surfaces); Ronteltap's measured
+   N₂ foam drainage, 633–757 s at R ≈ 100 µm, scaled by R² gives 91–109 min. So **a 2–5 min old head has ε between 0.24 and 0.36**
+   (wolfram/05, sympy/05). Gemini's unsourced "0.05–0.15 drained" is ruled out.
+3. **What follows.** At ε = 0.22 / 0.27 / 0.30 / 0.34: G₀ = 202–237 / 122–143 / 78–91 / 24–29 Pa; τ_y = 17 / 8.2 / 4.3 / 1.1 Pa;
+   Bi at 1 m/s² = 4.1 / 1.6 / 0.75 / 0.17; at 10 m/s² = 0.41 / 0.16 / 0.075 / 0.017; effective viscosity at 10 s⁻¹ = 3.1 / 2.0 / 1.5 /
+   1.1 Pa s (500–1500 × stout); damping time of a wave of its own (k = 47 m⁻¹) 0.016–0.07 s at 10 s⁻¹; breakup time of a 10 mm
+   lump 0.58 / 0.35 / 0.25 / 0.16 s.
+4. **Reading it.** The head is not a stiff plug: it is a soft solid (τ_y of a few pascals) with an enormous viscosity. It keeps its
+   shape under its own weight and gentle motion, yields under the hard jolts, and when it flows it flows like thick cream. Its own
+   waves are overdamped, and a thrown piece does not have time to fragment: lumps, not spray.
+5. **The film left on the glass** (lacing). Guinness recedes from clean glass at θ_r = 4.2° (Hamlett 2015), so the contact line
+   does not pull back cleanly: it leaves a film. Landau–Levich–Derjaguin (snoeijer2008, rio-boulogne2017): h = 0.946 ℓ_c Ca^(2/3),
+   ℓ_c = √(γ/ρg) = 2.13 mm, ×4^(2/3) = 2.5 for rigid protein surfaces: 6.5 µm at 1 mm/s, 19 µm at 5 mm/s, 48 µm at 2 cm/s,
+   140 µm at 0.1 m/s (wolfram/04). Valid for Ca < 10⁻² (here 5 × 10⁻⁵ to 5 × 10⁻³).
+6. **Contact angle from a photograph** (for a later check): the meniscus climbs h = ℓ_c √(2(1 − sin θ)) up a vertical wall:
+   2.13 mm at 30°, 1.80 mm at 40° (wolfram/04).
+
+### 2.6 Measured by others (web, 13 November 2026), with how they were measured
+
+| Quantity | Value | Who, how | File |
+|---|---|---|---|
+| Contact angle, Guinness on HCl-cleaned glass | static 28.5 ± 2.0°; other rows 22.3 ± 2.1°, 4.2 ± 2.4° | Hamlett et al. 2015, Krüss DSA10 sessile drop, bottled Guinness Original degassed 72 h, room temperature | web-hamlett2015-jasbc-beer-contact-angles.txt |
+| Same on hydrophobised glass | 109.2° static | same | same |
+| Bubble diameter, Guinness | 59 ± 15 µm at 9.7 % gas | Watamura & Sugiyama 2024, Oleoscience Table 1 | web-watamura2024-oleoscience-table1.txt |
+| Bubble diameter, canned Guinness | 40–120 µm | Alexander & Zare, Stanford, 750 frames per second | web-zare-stanford-guinness-filming.txt |
+| Head 2 min after pouring, tap Guinness | 17.5 mm (two-part), 20.6 mm (Irish), 22.2 mm (one-shot) | KegWorks 2019, one pour each | web-kegworks2019-guinness-head-height.txt |
+| Head thickness, can into pint | ≈ 14 mm at 5 s, 22 at 60 s, 21 at 115 s | pixel read-out of Watamura 2019 Fig. 3 (mm axes) | web-watamura2019-scirep-fig3-supplement.txt |
+| Rudin head retention, stouts | 102–120 s (lagers 85–100.5 s) | Mohan et al. 1993, J. Inst. Brew. (abstract) | web-mohan1993-jib-hrv-stouts.txt |
+| Foam density of poured CO₂ beers | 0.14–0.24 g/mL at 1 min | Constant 1992 (abstract) | web-foam-density-constant1992-klopper1954.txt |
+| Surface tension, lagers 25–27 °C | 33.8–43.9 mN/m | KINO company note 2020 | web-kino-surface-tension-table.txt |
+| Head bubble size, Diageo design value | ≈ 55 µm, "may be closer to 100 µm", packing 0.64 assumed | patent US9604775B2 | web-diageo-patent-US9604775.txt |
+| Slosh decay with dish-soap foam (not beer) | 1.81 s no foam, 0.63 s with 6 mm, 0.37 s with 20 mm | Cappello, Sauret et al. 2015 | web-cappello2015-jvis-sloshing-and-press.txt |
+
+Not found anywhere: a surface-tension measurement on stout itself, a weighing of a Guinness head, a measurement of a tilted or
+sloshed pint.
+
+### 2.7 Uncertain, and how to measure it
+
+- **φ_l of a real head** (computed 0.24–0.36): weigh a known volume of the head, scooped with a syringe barrel (ρ_f = φ_l ρ_l).
+- **R of the head** (computed 34 µm): a macro photograph of the head against the glass wall with a scale.
 - **τ_y.** Tilt a glass slowly and read the tilt at which the head starts to flow over itself: τ_y ≈ ρ_f g h_f sin θ.
 - **Lacing thickness:** not measured anywhere I found. Weigh the glass before and after a known area of cling.
 - **The prefactor of G₀ and τ_y** for stiff-surface beer foam: no source found. Ronteltap's rheometer chapter may have it, not
@@ -425,11 +483,11 @@ Drive folder: <https://drive.google.com/drive/folders/14BjGMr_hyN7_nZa3Q4tiMx-Qp
 
 | File | Source | Author | Licence | Used | What it shows | Measured |
 |---|---|---|---|---|---|---|
-| watamura2019_S2_pint_pour_settle_CC-BY.mp4 (Drive id 1zilkZf3bBr4_ofmW8j5iX5-MjUFtjfTg) | Sci. Rep. 9, 5718 (2019), Supplementary Movie 2, static-content.springer.com/esm/art%3A10.1038%2Fs41598-019-42094-0/MediaObjects/41598_2019_42094_MOESM2_ESM.mp4 | Watamura, Iwatsubo, Sugiyama, Yamamoto, Kaneda, Ogasawara, Takahira | CC BY 4.0 | whole, 0–80 s (196 × 384 px, 25 fps) | A pint glass filled from a tap. The head forms, the stout darkens from the bottom up as the bubbles clear, and the head grows to its final height. The head stays a flat white band with a sharp lower edge | In the centre column, at 79 s the head spans rows 86–137, i.e. 51 px. The glass's inner height is about 310 px; for 150 mm that is ≈ 0.48 mm/px, so the head is ≈ 24 ± 4 mm. The clearing front (pixels darker than 30) rose from row ≈ 264 at 40 s to ≈ 192 at 60 s to ≈ 150 at 79 s: ≈ 1.7 then 1.1 mm/s. Whether the clip runs in real time is not stated (Inference) |
-| watamura2019_S4_tilted_tank_pour_CC-BY.mp4 (Drive id 1tlsEnqUJZ2zBJqCGiJTscvouY-joYE3L) | same paper, Movie 4, …MOESM4_ESM.mp4 | same | CC BY 4.0 | whole, 0–60 s | A tilted thin tank filled with stout. Large bubbles in the head burst, and the head thins from a coarse foam to a thin white skin. The bulk clears from the bottom, more slowly along the overhanging wall | qualitative: the head on a wide surface coarsens and thins within about 30 s in this tank, where bubbles are large. No scale bar read |
-| not uploaded: watamura2019_S3 (4.1 MB) | same paper, Movie 3, …MOESM3_ESM.mp4 | same | CC BY 4.0 | 0–5.1 s, 20 fps, 1188 × 586 | microscope view of bubbles near the wall, with tracked velocity arrows pointing downward | the file is over the connector's 3.1 MB upload limit. It is publicly available at the link |
+| watamura2019_S2_pint_pour_settle_CC-BY.mp4 (Drive id 1zilkZf3bBr4_ofmW8j5iX5-MjUFtjfTg) | Sci. Rep. 9, 5718 (2019), Supplementary Movie S1 (Springer file MOESM2), static-content.springer.com/esm/art%3A10.1038%2Fs41598-019-42094-0/MediaObjects/41598_2019_42094_MOESM2_ESM.mp4 | Watamura, Iwatsubo, Sugiyama, Yamamoto, Kaneda, Ogasawara, Takahira | CC BY 4.0 | whole, 0–80 s (196 × 384 px, 25 fps) | A pint glass filled from a tap. The head forms, the stout darkens from the bottom up as the bubbles clear, and the head grows to its final height. The head stays a flat white band with a sharp lower edge | In the centre column, at 79 s the head spans rows 86–137, i.e. 51 px. The glass's inner height is about 310 px; for 150 mm that is ≈ 0.48 mm/px, so the head is ≈ 24 ± 4 mm. The clearing front (pixels darker than 30) rose from row ≈ 264 at 40 s to ≈ 192 at 60 s to ≈ 150 at 79 s: ≈ 1.7 then 1.1 mm/s. Whether the clip runs in real time is not stated (Inference) |
+| watamura2019_S4_tilted_tank_pour_CC-BY.mp4 (Drive id 1tlsEnqUJZ2zBJqCGiJTscvouY-joYE3L) | same paper, Movie S3 (file MOESM4; the paper's tilted-container/Boycott movie) | same | CC BY 4.0 | whole, 0–60 s | A tilted thin tank filled with stout. Large bubbles in the head burst, and the head thins from a coarse foam to a thin white skin. The bulk clears from the bottom, more slowly along the overhanging wall | qualitative: the head on a wide surface coarsens and thins within about 30 s in this tank, where bubbles are large. No scale bar read |
+| not uploaded: file MOESM3 (4.1 MB) | same paper, Movie S2 (file MOESM3) | same | CC BY 4.0 | 0–5.1 s, 20 fps, 1188 × 586 | microscope view of bubbles near the wall, with tracked velocity arrows pointing downward | the file is over the connector's 3.1 MB upload limit. It is publicly available at the link |
 
-Movies 1 and 5 of the same paper returned HTTP 403 from Springer's server.
+Springer files MOESM1 and MOESM5 returned HTTP 403. Numbering: the paper's Movie S1 = file MOESM2, S2 = MOESM3, S3 = MOESM4 (the file names on Drive carry the file numbers S2 and S4, not the paper's movie numbers).
 
 ### Candidates found but not downloaded
 

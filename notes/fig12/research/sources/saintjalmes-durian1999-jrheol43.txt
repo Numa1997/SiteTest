@@ -1,0 +1,29 @@
+SOURCE: A. Saint-Jalmes, D. J. Durian, "Vanishing elasticity for wet foams: Equivalence with emulsions and role of
+polydispersity", J. Rheol. 43(6), 1411-1422 (1999). DOI 10.1122/1.551052.
+URL read: University of Pennsylvania repository, https://repository.upenn.edu/server/api/core/bitstreams/
+e0082c70-4a8d-43c7-9548-5ff350aaf3fc/content (Unpaywall OA location), pdftotext -layout.
+Licence: (c) 1999 The Society of Rheology; repository copy; quotes kept short. Date read: 2026-11-13. Whole paper read.
+Notation: phi = GAS volume fraction (liquid fraction = 1 - phi); sigma = surface tension (17 mN/m); R = mean bubble
+radius (55 µm); sigma_y = yield stress; gamma_y = yield strain; G = low-strain storage modulus at 1 rad/s.
+Symbols re-rendered from font glyphs.
+
+--- p. 1411, abstract ---
+"While phi decreases toward phi_c = 0.635±0.01, G goes to zero, and the yield stress decreases by many orders of
+magnitude with a quadratic behavior. The yield strain, which can be extrapolated to 0.18±0.02 at phi = 1, has a minimum
+value of 0.045±0.010 at phi_c."
+
+--- p. 1419, yield stress coefficient for foams ---
+"In our case, sigma/R = 310 Pa ... we show the same form empirically used by Mason et al. (1996) for emulsions:
+sigma_y ∝ (phi - phi_c)^2; the result is in excellent agreement with our data [Fig. 4(b)]. Especially for the numerical
+coefficient: we found a value of 0.53 for the best fit on sigma_y [Fig. 4(b)] while it is 0.52 for emulsions."
+
+--- p. 1419, shear modulus ---
+"For monodisperse emulsions, it has been proposed that G behaves like phi(phi - phi_c), in units of sigma/R, with
+phi_c = 0.63 [Mason et al. (1995)]. ... For monodisperse emulsions, G(phi = 1) = 0.6 in units of Laplace pressure; we
+find here G(phi = 1) = 0.51. Both results agree with the prediction G(phi = 1) = 0.55"
+
+--- p. 1418 (Fig. 4 caption) and p. 1420, Princen ---
+"Princen's formula ∝ phi^(1/3)(phi - phi'_c) with phi'_c = 0.72 (phi > 0.75)"; "the phi dependence of G is proposed to
+be ∝ phi^(1/3)(phi - phi_c) with phi_c = 0.712."
+Range: drainage may corrupt data for phi < 0.69 (Fig. 4 caption, shaded area). Polydisperse foam, R = 55 µm.
+[Inference: G(1) = 0.51 sigma/R with G = A phi(phi - 0.635) sigma/R gives A = 0.51/0.365 = 1.40.]

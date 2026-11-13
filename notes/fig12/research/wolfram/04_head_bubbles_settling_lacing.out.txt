@@ -1,0 +1,25 @@
+log-normal sigma from FWHM = 0.236354
+sigma=0.19: median=59.9088 um, D32 (Sauter) = 65.5671 um, R32 = 32.7835 um
+sigma=0.236354: median=59.3197 um, D32 (Sauter) = 68.2106 um, R32 = 34.1053 um
+sigma=0.29: median=58.4881 um, D32 (Sauter) = 72.1736 um, R32 = 36.0868 um
+D = 54 um: U = 0.776866 mm/s; t(125 mm) free = 160.903 s; hindered (alpha 0.08, n 5) = 244.132 s
+D = 61 um: U = 0.99133 mm/s; t(125 mm) free = 126.093 s; hindered (alpha 0.08, n 5) = 191.317 s
+D = 68 um: U = 1.2319 mm/s; t(125 mm) free = 101.469 s; hindered (alpha 0.08, n 5) = 153.955 s
+D = 94 um: U = 2.35404 mm/s; t(125 mm) free = 53.1001 s; hindered (alpha 0.08, n 5) = 80.5669 s
+D = 122 um: U = 3.96532 mm/s; t(125 mm) free = 31.5233 s; hindered (alpha 0.08, n 5) = 47.8291 s
+measured settling (Benilov 2012 p.2): about 120 s
+alpha0 = 0.02: head thickness for Phi = 0.64/0.75 with H_l = 106 mm: 3.3125 / 2.82667 mm
+alpha0 = 0.08: head thickness for Phi = 0.64/0.75 with H_l = 106 mm: 13.25 / 11.3067 mm
+alpha0 = 0.1: head thickness for Phi = 0.64/0.75 with H_l = 106 mm: 16.5625 / 14.1333 mm
+alpha0 = 0.15: head thickness for Phi = 0.64/0.75 with H_l = 106 mm: 24.8438 / 21.2 mm
+capillary length = 2.13431 mm
+V = 0.001 m/s: Ca = 0.0000457778; h_LLD (mobile, 0.946 lc Ca^(2/3)) = 2.58375 um; rigid (x 4^(2/3)) = 6.51065 um
+V = 0.005 m/s: Ca = 0.000228889; h_LLD (mobile, 0.946 lc Ca^(2/3)) = 7.55494 um; rigid (x 4^(2/3)) = 19.0373 um
+V = 0.02 m/s: Ca = 0.000915556; h_LLD (mobile, 0.946 lc Ca^(2/3)) = 19.0373 um; rigid (x 4^(2/3)) = 47.9709 um
+V = 0.1 m/s: Ca = 0.00457778; h_LLD (mobile, 0.946 lc Ca^(2/3)) = 55.6653 um; rigid (x 4^(2/3)) = 140.268 um
+theta = 0 deg: meniscus height = 3.01837 mm
+theta = 20 deg: meniscus height = 2.44838 mm
+theta = 30 deg: meniscus height = 2.13431 mm
+theta = 40 deg: meniscus height = 1.80399 mm
+theta = 50 deg: meniscus height = 1.45995 mm
+theta = 60 deg: meniscus height = 1.1048 mm

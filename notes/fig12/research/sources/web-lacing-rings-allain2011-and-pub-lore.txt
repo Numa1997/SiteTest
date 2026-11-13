@@ -1,0 +1,23 @@
+LACING / RING SOURCES (no mass or thickness measurement found for Guinness)
+
+(1) TITLE: How Many Sips in a Bottle of Beer?  AUTHOR: Rhett Allain (physics professor), WIRED blog, 2011-11-18
+URL: https://www.wired.com/2011/11/how-many-sips-in-a-bottle-of-beer/
+DATE READ: 2026-11-13 (Exa highlights only, not the full page)
+SAMPLE: an unnamed 12-oz bottled beer in a straight glass (not Guinness). METHOD: Tracker video analysis of ring heights in a photograph.
+--- verbatim ---
+"Here is a plot of the height of the different rings on the glass."
+"it seems like the height between the rings is pretty consistent."
+"So, the slope of the line above is -0.07 glasses per sip."
+"Using Tracker, I find that the diameter of the glass is 0.443 gh. Also, the top ring is at 0.721 gh."
+"I think 14.7 cm is a bit short for that glass."
+"So, 10 sips of beer - at least for my sized sips."
+
+(2) Pub lore on Guinness rings (not measurements):
+Cayman Compass / AP, 2000-03-24 (https://www.caymancompass.com/2000/03/24/st-patricks-day-tale-guinness-mystery):
+"Each swig of Guinness leaves one ring and legend has it that an Irishman will leave in the region of five to six rings and an American will have 17 to 20 (they sip)."
+Matador Network, 2019-03-14 (https://matadornetwork.com/read/guinness-myths-debunked/):
+"Your perfectly poured pint should have a curved dome of foam on the head that's 15 millimeters high."
+"The idea behind this is that the foam head of Guinness leaves a lacing at each point you drank your beer down."
+
+(3) Lacing test (glass cleanliness), Imperial Beverage "Raising the Bar" coursework (https://www.imperialbeverage.com/raisingthebar/coursework/BeerAdvanced/AB12.php):
+"Lacing Test: Fill the glass with beer. If the glass is clean, foam will adhere to the inside of the glass in parallel rings after each sip, forming a lacing pattern. If not properly cleaned, foam will adhere in a random pattern, or may not adhere at all."

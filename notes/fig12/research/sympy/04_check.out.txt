@@ -1,0 +1,8 @@
+sigma = 0.2364, median = 59.32 um, D32 = 68.21 um
+D = 61 um: U = 0.991 mm/s, t = 126.1 s
+D = 122 um: U = 3.965 mm/s, t = 31.5 s
+lc = 2.1343 mm
+V=0.001: h = 2.58 um, rigid 6.51 um
+V=0.100: h = 55.67 um, rigid 140.27 um
+theta 30: meniscus 2.134 mm
+theta 40: meniscus 1.804 mm

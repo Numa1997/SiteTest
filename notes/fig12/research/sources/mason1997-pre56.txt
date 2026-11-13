@@ -1,0 +1,27 @@
+SOURCE: T. G. Mason, M.-D. Lacasse, G. S. Grest, D. Levine, J. Bibette, D. A. Weitz, "Osmotic pressure and
+viscoelastic shear moduli of concentrated emulsions", Phys. Rev. E 56, 3150-3166 (1997). DOI 10.1103/PhysRevE.56.3150.
+URL read: authors' copy linked from https://weitzlab.seas.harvard.edu/publications-1997/
+(Google Drive file 1-ja5Vz9R5MuYa-zqg-qpcFGKw-hB3nG0), pdftotext -layout.
+Licence: (c) 1997 American Physical Society; author-hosted copy; quotes kept short.
+Date read: 2026-11-13. Sections II-III read in full; Sec. IV (simulation) skimmed.
+Notation: phi = dispersed volume fraction; R = undeformed drop radius; sigma = interfacial tension; Pi = osmotic
+pressure. Symbols re-rendered from font glyphs (w -> phi, s -> sigma, P -> Pi, 5 -> =, 2 -> -).
+
+--- p. 3153, Eq. (5), osmotic pressure of a weakly compressed (ordered) packing ---
+"Pi(phi)/(sigma/R) = B phi^2 (phi - phi_c),   (5)
+where both constants B and phi_c depend on the geometry of the droplet packing."
+(no value of B is printed)
+
+--- p. 3154, dry limit ---
+"For a random 3D isotropic system of flat interfaces, theoretical work suggests that G(1)/(sigma/R) ≈ 0.55 at
+phi ≈ 1 [36]. Princen's measurements [8,19] of polydisperse emulsions qualitatively support these predictions;
+he reported a divergence of Pi and G(1)/(sigma/R) ≈ 0.5."
+
+--- p. 3159, fitted osmotic equation of state ---
+"This is shown in Fig. 3 by the solid line, which is a fit to Eq. (5), choosing alpha = 2. With this choice, a
+effective critical value of phi_c = 0.60(2) is obtained ... A similar behavior has been reported for polydisperse
+emulsions [19], albeit with a considerably larger phi_c ≈ 0.72. ... Near phi_eff ≈ 1, our data show that Pi begins
+to diverge, with Pi ≈ sigma/R at phi_eff ≈ 0.9"
+"G'_p(phi) tracks the osmotic pressure, rising nearly linearly with phi_eff above the critical volume fraction
+phi_c ≈ 0.64 corresponding to rcp." "we find that G'_p(phi) approaches 0.6 sigma/R"
+Fit range for Eq. (5): phi_eff <= 0.80 (Fig. 3 caption). Drop radius for Pi: R = 0.48 µm.

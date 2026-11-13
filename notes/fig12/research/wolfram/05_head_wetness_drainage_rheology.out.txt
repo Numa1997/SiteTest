@@ -1,0 +1,26 @@
+K=3.2, ec=0.36 (disordered): {height mm, liquid fraction} = {{1., 0.33026}, {2., 0.318079}, {5., 0.294218}, {10., 0.267944}, {15., 0.248323}, {19., 0.235221}}
+K=7.3, ec=0.26 (ordered):    {height mm, liquid fraction} = {{1., 0.24057}, {2., 0.232653}, {5., 0.217204}, {10., 0.200251}, {15., 0.187607}, {19., 0.179159}}
+e = 0.25: gravity drainage speed = 1.15491 um/s (H/v = 274.192 min); capillary diffusivity = 2.41829 10^-7 m^2/s (H^2/D = 24.8798 min)
+e = 0.3: gravity drainage speed = 1.66307 um/s (H/v = 190.411 min); capillary diffusivity = 1.64023 10^-7 m^2/s (H^2/D = 36.6818 min)
+e = 0.34: gravity drainage speed = 2.13612 um/s (H/v = 148.244 min); capillary diffusivity = 6.37487 10^-8 m^2/s (H^2/D = 94.381 min)
+Ronteltap N2 beer foam (R ~ 100 um) drains in 633-757 s; scaled by (100/34)^2 = 8.65052 -> 91.263-109.141 min
+e = 0.22 (Phi 0.78), rho_f = 221.54: G0 = 202.341-237.028 Pa; tau_y = 17.28 Pa; Bi(1 m/s2) = 4.10523; Bi(10 m/s2) = 0.410523
+   shear rate 1 1/s: viscous stress 3.92131 Pa; effective viscosity = 21.2013 Pa s = 10291.9 x stout; wave damping time = 0.00235614 s
+   shear rate 10 1/s: viscous stress 13.487 Pa; effective viscosity = 3.0767 Pa s = 1493.55 x stout; wave damping time = 0.016236 s
+   shear rate 30 1/s: viscous stress 24.8461 Pa; effective viscosity = 1.4042 Pa s = 681.653 x stout; wave damping time = 0.0355741 s
+   viscous-capillary breakup time of a 10 mm lump, eta L/gamma = 0.580241 s
+e = 0.27 (Phi 0.73), rho_f = 271.89: G0 = 121.738-142.608 Pa; tau_y = 8.1675 Pa; Bi(1 m/s2) = 1.58104; Bi(10 m/s2) = 0.158104
+   shear rate 1 1/s: viscous stress 3.40851 Pa; effective viscosity = 11.576 Pa s = 5619.42 x stout; wave damping time = 0.00529599 s
+   shear rate 10 1/s: viscous stress 11.816 Pa; effective viscosity = 1.99835 Pa s = 970.073 x stout; wave damping time = 0.0306785 s
+   shear rate 30 1/s: viscous stress 21.8609 Pa; effective viscosity = 1.00095 Pa s = 485.897 x stout; wave damping time = 0.0612484 s
+   viscous-capillary breakup time of a 10 mm lump, eta L/gamma = 0.349126 s
+e = 0.3 (Phi 0.7), rho_f = 302.1: G0 = 77.8235-91.1647 Pa; tau_y = 4.32 Pa; Bi(1 m/s2) = 0.752626; Bi(10 m/s2) = 0.0752626
+   shear rate 1 1/s: viscous stress 3.15181 Pa; effective viscosity = 7.47181 Pa s = 3627.09 x stout; wave damping time = 0.0091167 s
+   shear rate 10 1/s: viscous stress 10.9715 Pa; effective viscosity = 1.52915 Pa s = 742.304 x stout; wave damping time = 0.0445466 s
+   shear rate 30 1/s: viscous stress 20.3436 Pa; effective viscosity = 0.822122 Pa s = 399.088 x stout; wave damping time = 0.0828566 s
+   viscous-capillary breakup time of a 10 mm lump, eta L/gamma = 0.249559 s
+e = 0.34 (Phi 0.66), rho_f = 342.38: G0 = 24.4588-28.6518 Pa; tau_y = 1.08 Pa; Bi(1 m/s2) = 0.166021; Bi(10 m/s2) = 0.0166021
+   shear rate 1 1/s: viscous stress 2.85139 Pa; effective viscosity = 3.93139 Pa s = 1908.44 x stout; wave damping time = 0.019637 s
+   shear rate 10 1/s: viscous stress 9.97541 Pa; effective viscosity = 1.10554 Pa s = 536.67 x stout; wave damping time = 0.0698307 s
+   shear rate 30 1/s: viscous stress 18.5461 Pa; effective viscosity = 0.654203 Pa s = 317.574 x stout; wave damping time = 0.118007 s
+   viscous-capillary breakup time of a 10 mm lump, eta L/gamma = 0.161342 s

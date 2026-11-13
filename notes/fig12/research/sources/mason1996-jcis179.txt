@@ -1,0 +1,32 @@
+SOURCE: T. G. Mason, J. Bibette, D. A. Weitz, "Yielding and Flow of Monodisperse Emulsions",
+J. Colloid Interface Sci. 179, 439-448 (1996). DOI 10.1006/jcis.1996.0235.
+URLs: https://www.sciencedirect.com/science/article/pii/S0021979796902350 (Elsevier open archive; read via Firecrawl
+scrape of the /pdf link, 13 Nov 2026) and the authors' copy linked from https://weitzlab.seas.harvard.edu/publications-1996/
+(Google Drive file 1NtiIzSqLQLnuIp1SIzlCh3eAFh2ONINF), downloaded and read with pdftotext -layout.
+Licence: Elsevier open archive, CC BY-NC-ND 4.0 from 2002-05-25 (Crossref licence record).
+Date read: 2026-11-13. Whole paper read (10 pages).
+Notation: phi = volume fraction of DISPERSED (oil) phase; a = droplet radius; sigma = interfacial tension;
+phi_eff = phi corrected for the water film between drops. For a foam, phi is the GAS fraction; liquid fraction = 1 - phi.
+Symbols below re-rendered from the PDF font glyphs (f->phi, t->tau, g->gamma, s->sigma, "Å"/"5"->"=", "0"->"-").
+
+--- p. 439, abstract ---
+"The phi dependence of gamma_y is independent of a and exhibits a minimum near the critical volume fraction,
+phi_c ≈ 0.635, associated with the random close packing of monodisperse spheres. We show that the yield stress,
+tau_y, increases dramatically as the volume fraction increases above phi_c; tau_y also scales with the Laplace
+pressure, sigma/a, where sigma is the interfacial tension."
+
+--- p. 443, yield strain minimum ---
+"This minimum occurs at phi_eff = 0.63 ... Below phi_c, the yield strain increases to gamma_y ≈ 0.045 near
+phi_eff = 0.58 ... Above phi_c, the yield strain increases to more than gamma_y ≈ 0.1 as phi_eff approaches 1"
+
+--- p. 443, yield stress law (THE FORMULA) ---
+"in the limit as phi_eff -> 1, the yield stress approaches 0.1 sigma/a, about one-sixth the measured limit for G'.
+... Above phi_c, the scaled yield stress can be empirically fit by a quadratic form,
+   tau_y/(sigma/a) = C (phi_eff - phi_c)^2,
+as shown by the solid line in Fig. 4 with C = 0.51 and phi_c = 0.62."
+"... not surprising, since gamma_y and G' each rise nearly linearly above phi_c; thus their product, the scaled
+yield stress, is well described by this quadratic form."
+
+Data range (p. 443, Fig. 4 caption): radii a = 0.25, 0.37, 0.53, 0.74 µm; silicone oil in water, SDS.
+No uncertainty is printed for C = 0.51 or phi_c = 0.62 (phi_c elsewhere 0.635; "experimental error in measuring
+phi_eff" is mentioned, p. 443).

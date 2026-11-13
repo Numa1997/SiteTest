@@ -1,0 +1,12 @@
+TITLE: The Science, Art, and Soul of Beer Foam: What 200+ Breweries Taught Me About the Crown
+AUTHOR: "James Thornton", Glass & Note blog
+URL: https://glassandnote.com/beer/foam
+PAGE DATE: 2026-08-04; DATE READ: 2026-11-13 (Exa and TinyFish search highlights only; page not fetched in full)
+LICENCE: none stated
+RELIABILITY: DO NOT USE AS DATA. The numbers carry no method, and the cited sources look invented (a "Malting Institute of the University of
+Leeds" with "micro-CT scans"; "2022 sensory trials at the Siebel Institute"). The text has the marks of machine-generated content. Recorded
+here only so nobody re-finds it and mistakes it for a measurement.
+
+--- verbatim (for the record) ---
+"a nitro-stout like Guinness Draught achieves 1.2 cm of dense, velvety foam with 110–125 µm bubble diameter and a half-life of 142 seconds at 6°C."
+"Nitrogen-infused beers like Guinness Draught rely on a 75:25 N₂:CO₂ blend to generate ultra-fine bubbles (median diameter 112 µm, SD ±14 µm, per Malting Institute of the University of Leeds micro-CT scans)."

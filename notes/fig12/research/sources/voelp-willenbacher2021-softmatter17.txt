@@ -1,0 +1,17 @@
+SOURCE: A. R. Völp, N. Willenbacher, "Shear modulus and yield stress of foams: contribution of interfacial elasticity",
+Soft Matter 17, 3937 (2021). doi:10.1039/D0SM02148B (as given by the RSC page link pubs.rsc.org/sm/article/17/14/3937).
+URL READ: https://www.researchgate.net/publication/349974781 (full text via Exa web_fetch, 13 Nov 2026). RSC HTML: not reachable (CRAWL_NOT_FOUND).
+Found by: the owner's Gemini live search (relayed in conversation); text read by us.
+LICENCE: not stated in the text obtained.
+
+Method (verbatim): "The gas/liquid interfaces of the foaming solutions were characterized in oscillatory dilation at frequencies between
+0.05 Hz and 0.67 Hz using the pendant drop method (PAT1, Sintaface) ... the values obtained at the maximum applicable frequency were
+treated as the equilibrium values E_inf."
+Table 1 (verbatim, as extracted): "Guinness stout beer | Degassed; at 20 °C"
+Table 2 caption (verbatim): "Interfacial tension s (max. 4% error), interfacial elastic moduli in shear G'i (max. 33% error) and dilation
+E_inf (max. 22% error) in mN m-1". The Table 2 values did NOT come through in our extraction. The Guinness row "44.2, 18.7"
+(sigma, E_inf) is as quoted by the owner's Gemini search: NOT read by us.
+Law (verbatim, eqs. 8-9 and conclusions): "G0 = a_d [(s + 2E_inf)/R32] (phi(phi - phi_c)) and tau_y = k_d [(s + 2E_inf)/R32] (phi - phi_c)^2
+are confirmed. The numerical pre-factors a_d = 1 and k_d = 0.25 ... The term (s + 2E_inf)/R32 represents a generalized Laplace pressure."
+"The critical gas volume fraction phi_c was set to 0.635". Gas volume fractions tested 0.85–0.95.
+Also verbatim: Mason et al. "found numerical pre-factors a = 1.64 and k = 0.51 ... phi_c ≈ 0.635"; Marze et al. (foams) "a = 1.53 and k = 0.62".
