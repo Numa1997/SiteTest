@@ -20,13 +20,16 @@ COMMIT = sys.argv[1] if len(sys.argv) > 1 else "main"
 BASE = f"https://raw.githubusercontent.com/Numa1997/SiteTest/{COMMIT}/tools/kaggle/schrodinger-shapes/"
 smoke = json.load(open(os.path.join(HERE, "..", "schrodinger-sphere", "smoke.ipynb")))
 c1 = smoke["cells"][1]["source"]          # GPU check: stops at once if there is no GPU
+# a run on Kaggle's CPU (no GPU hours): the loader sets CPU = 1; then no GPU is asked for and the one CPU device does every run
+c1 = c1.replace('if b != "gpu":', 'if b != "gpu" and not globals().get("CPU"):').replace('assert any(d.platform == "gpu" for d in DEV)', 'assert globals().get("CPU") or any(d.platform == "gpu" for d in DEV)')
+assert 'globals().get("CPU")' in c1 and c1.count('globals().get("CPU")') == 2
 md0 = ("# Schrodinger, Fig. 14: the remaining 3D cases (GPU, JAX). An electron wave meets a barrier, solved in 3D (split-step Fourier, 128^3 points, hbar = m = 1): "
        "the coin and the tube, the wells and the hard ball, and a spherical wave from the side onto a ball, a flat wall and a pillar. 1458 runs on both GPUs. "
        "Each run is written when it finishes; index.json lists them with SHA-256. The code is fetched from the website's repository at a pinned commit and printed below.")
 c3 = r'''import threading, queue, datetime, hashlib, struct, zlib, traceback, numpy as np
 GEN = datetime.datetime.utcnow().strftime("%Y-%m-%d"); OUTD = f"/kaggle/working/{GEN}/shapes3d"
 N, L, DT, NF = 128, 64.0, 0.01, 48
-LIMIT_S = 8400                                              # no new run starts after this many seconds
+LIMIT_S = 8400 if not globals().get("CPU") else 36000                                              # no new run starts after this many seconds
 WAVE = (slice(16, 112), slice(32, 96), slice(32, 96))       # x -24..24, y and z -16..16 at 0.5 a
 HARD = 1e6                                                  # the grid's name for the hard wall; the solver uses HARD_V
 Es = [0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5]
@@ -45,6 +48,8 @@ jobs = [(sh, i, j, k) for sh, G in GROUPS.items() for i in range(len(Es)) for j 
 if globals().get("JOBSEL") == "hard_and_shells":           # version 2: only the runs whose start wave was wrong in version 1
     jobs = [t for t in jobs if t[0] in SHELLS or GROUPS[t[0]]["Vs"][t[2]] >= HARD]
 jobs.sort(key=lambda t: -nsteps(t[0], t[1], t[2]))          # long runs first
+if globals().get("SHARD"):                                  # (i, n): this notebook takes every n-th run, starting at the i-th
+    jobs = jobs[SHARD[0]::SHARD[1]]
 for sh in GROUPS: os.makedirs(f"{OUTD}/{sh}", exist_ok=True)
 total_steps = sum(nsteps(sh, i, j) for sh, i, j, k in jobs)
 say(f"{len(jobs)} runs; cells x steps x time per cell-step = {N**3} x {total_steps} x 1.2e-9 s = {N**3*total_steps*1.2e-9/3600:.2f} GPU hours "
@@ -100,7 +105,7 @@ def worker(dev):
                 bad += 1
                 with LOCK: ERR.append(dict(job=[sh, i, j, k], error=repr(e)[:500]))
                 say("RUN FAILED", sh, i, j, k, "on", dev, repr(e)[:300]); say(traceback.format_exc()[-600:])
-DEVS = [d for d in jax.devices() if d.platform == "gpu"]
+DEVS = [d for d in jax.devices() if d.platform == "gpu"] or [jax.devices()[0]]
 TS = time.time()
 threads = [threading.Thread(target=worker, args=(d,)) for d in DEVS]
 [t.start() for t in threads]; [t.join() for t in threads]
@@ -116,7 +121,7 @@ while True:
     except queue.Empty: break
 idx = dict(generated=GEN, kind="shapes3d", N=N, L=L, dt=DT, nframes=NF, Es=Es, hard_V0=HARD, hard_V=HARD_V, hard_substeps=HARD_SUB,
            groups={sh: dict(Vs=G["Vs"], sizes=G["sizes"]) for sh, G in GROUPS.items()}, coin_thickness=COIN_A, tube_wall=TUBE_W,
-           shell=dict(src_x=SRC_X, r0=SH_R0, sigma0=SH_S0, travel=SH_TRAVEL), jobsel=globals().get("JOBSEL", "all"), packet=dict(x0=-14.0, sigma0=3.0, travel=30.0),
+           shell=dict(src_x=SRC_X, r0=SH_R0, sigma0=SH_S0, travel=SH_TRAVEL), jobsel=globals().get("JOBSEL", "all"), shard=globals().get("SHARD"), packet=dict(x0=-14.0, sigma0=3.0, travel=30.0),
            device=jax.devices()[0].device_kind, gpus=len(DEVS), sweep_s=round(SWEEP_S, 1), failed=ERR, not_started=left,
            method="Strang split-step Fourier, 3D; hard wall: height 200 with a step four times shorter (no probability removed)",
            units="hbar = m = 1, lengths in the grid unit a", runs=INDEX)
@@ -144,7 +149,7 @@ run_py = "\n".join([c1, 'exec(open("solver3d.py").read())\nsay("solver3d.py and 
 open(os.path.join(HERE, "shapes3d_run.py"), "w").write(run_py)
 if os.environ.get("FLAT"):   # the run file and the solver as one file, for a name check: FLAT=out.py python3 build_shapes3d.py; python3 -m pyflakes out.py
     open(os.environ["FLAT"], "w").write(run_py.replace('exec(open("solver3d.py").read())', open(os.path.join(HERE, "solver3d.py")).read()))
-loader = ("JOBSEL = '" + os.environ.get("JOBSEL", "all") + "'; import urllib.request; B = '" + BASE + "'; [urllib.request.urlretrieve(B + f, f) for f in ('solver3d.py', 'shapes3d_run.py')]; "
+loader = ("JOBSEL = '" + os.environ.get("JOBSEL", "all") + "'; CPU = " + os.environ.get("CPU", "0") + "; SHARD = " + os.environ.get("SHARD", "None") + "; import urllib.request; B = '" + BASE + "'; [urllib.request.urlretrieve(B + f, f) for f in ('solver3d.py', 'shapes3d_run.py')]; "
           "print(open('shapes3d_run.py').read()); exec(open('shapes3d_run.py').read())")
 cells = [dict(cell_type="markdown", metadata={}, source=md0, id="s0"),
          dict(cell_type="code", execution_count=None, metadata={}, outputs=[], source=loader, id="s1")]

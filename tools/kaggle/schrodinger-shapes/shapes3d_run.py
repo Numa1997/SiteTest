@@ -8,7 +8,7 @@ def backend():  # ask a separate Python process, so this process imports jax onl
     r = subprocess.run([sys.executable, "-c", "import jax; print(jax.default_backend())"], capture_output=True, text=True)
     return r.stdout.strip().splitlines()[-1] if r.stdout.strip() else "none: " + r.stderr[-300:]
 b = backend(); say("jax backend before install:", b)
-if b != "gpu":
+if b != "gpu" and not globals().get("CPU"):
     say("installing jax[cuda12]")
     subprocess.run([sys.executable, "-m", "pip", "install", "-q", "-U", "jax[cuda12]"], check=True)
     say("jax backend after install:", backend())
@@ -16,7 +16,7 @@ import jax
 jax.config.update("jax_enable_x64", True)
 DEV = jax.devices()
 say("devices:", DEV, "jax", jax.__version__)
-assert any(d.platform == "gpu" for d in DEV), "NO GPU: stopping so no quota is wasted on a CPU fallback"
+assert globals().get("CPU") or any(d.platform == "gpu" for d in DEV), "NO GPU: stopping so no quota is wasted on a CPU fallback"
 
 exec(open("solver3d.py").read())
 say("solver3d.py and shapes3d_run.py from the repository, as fetched by the loader cell")
@@ -24,7 +24,7 @@ say("solver3d.py and shapes3d_run.py from the repository, as fetched by the load
 import threading, queue, datetime, hashlib, struct, zlib, traceback, numpy as np
 GEN = datetime.datetime.utcnow().strftime("%Y-%m-%d"); OUTD = f"/kaggle/working/{GEN}/shapes3d"
 N, L, DT, NF = 128, 64.0, 0.01, 48
-LIMIT_S = 8400                                              # no new run starts after this many seconds
+LIMIT_S = 8400 if not globals().get("CPU") else 36000                                              # no new run starts after this many seconds
 WAVE = (slice(16, 112), slice(32, 96), slice(32, 96))       # x -24..24, y and z -16..16 at 0.5 a
 HARD = 1e6                                                  # the grid's name for the hard wall; the solver uses HARD_V
 Es = [0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5]
@@ -43,6 +43,8 @@ jobs = [(sh, i, j, k) for sh, G in GROUPS.items() for i in range(len(Es)) for j 
 if globals().get("JOBSEL") == "hard_and_shells":           # version 2: only the runs whose start wave was wrong in version 1
     jobs = [t for t in jobs if t[0] in SHELLS or GROUPS[t[0]]["Vs"][t[2]] >= HARD]
 jobs.sort(key=lambda t: -nsteps(t[0], t[1], t[2]))          # long runs first
+if globals().get("SHARD"):                                  # (i, n): this notebook takes every n-th run, starting at the i-th
+    jobs = jobs[SHARD[0]::SHARD[1]]
 for sh in GROUPS: os.makedirs(f"{OUTD}/{sh}", exist_ok=True)
 total_steps = sum(nsteps(sh, i, j) for sh, i, j, k in jobs)
 say(f"{len(jobs)} runs; cells x steps x time per cell-step = {N**3} x {total_steps} x 1.2e-9 s = {N**3*total_steps*1.2e-9/3600:.2f} GPU hours "
@@ -98,7 +100,7 @@ def worker(dev):
                 bad += 1
                 with LOCK: ERR.append(dict(job=[sh, i, j, k], error=repr(e)[:500]))
                 say("RUN FAILED", sh, i, j, k, "on", dev, repr(e)[:300]); say(traceback.format_exc()[-600:])
-DEVS = [d for d in jax.devices() if d.platform == "gpu"]
+DEVS = [d for d in jax.devices() if d.platform == "gpu"] or [jax.devices()[0]]
 TS = time.time()
 threads = [threading.Thread(target=worker, args=(d,)) for d in DEVS]
 [t.start() for t in threads]; [t.join() for t in threads]
@@ -114,7 +116,7 @@ while True:
     except queue.Empty: break
 idx = dict(generated=GEN, kind="shapes3d", N=N, L=L, dt=DT, nframes=NF, Es=Es, hard_V0=HARD, hard_V=HARD_V, hard_substeps=HARD_SUB,
            groups={sh: dict(Vs=G["Vs"], sizes=G["sizes"]) for sh, G in GROUPS.items()}, coin_thickness=COIN_A, tube_wall=TUBE_W,
-           shell=dict(src_x=SRC_X, r0=SH_R0, sigma0=SH_S0, travel=SH_TRAVEL), jobsel=globals().get("JOBSEL", "all"), packet=dict(x0=-14.0, sigma0=3.0, travel=30.0),
+           shell=dict(src_x=SRC_X, r0=SH_R0, sigma0=SH_S0, travel=SH_TRAVEL), jobsel=globals().get("JOBSEL", "all"), shard=globals().get("SHARD"), packet=dict(x0=-14.0, sigma0=3.0, travel=30.0),
            device=jax.devices()[0].device_kind, gpus=len(DEVS), sweep_s=round(SWEEP_S, 1), failed=ERR, not_started=left,
            method="Strang split-step Fourier, 3D; hard wall: height 200 with a step four times shorter (no probability removed)",
            units="hbar = m = 1, lengths in the grid unit a", runs=INDEX)
