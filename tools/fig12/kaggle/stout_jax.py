@@ -62,6 +62,14 @@ _PHI_TAB = np.array([0.10, 0.15, 0.20, 0.25]); _Z_TAB = np.array([0.6, 0.44, 0.3
 Z_WALL = float(np.interp(PHI_F, _PHI_TAB, _Z_TAB)); LR_WALL = float(np.interp(PHI_F, _PHI_TAB, _LR_TAB))
 
 
+def foam_flow_stress(Ca):
+    """Viscous stress (Pa) of the wet foam flowing at capillary number Ca = mu gamma_dot R32 / gamma: Tcholakova et al., PRE 78,
+    011405 (2008), films and menisci, in units of gamma/R32 (notes/fig12/research handover, part B2):
+        tau / (gamma/R) = 0.7 Ca^0.47 Phi^(5/6) / (1 - Phi)^0.5 + 8 Ca^0.7 Phi^(5/6) / (1 - Phi)^0.15.
+    At 10 1/s (Ca = 1.58e-5) the two terms are 7.5 and 4.2 Pa; their sum, 11.8 Pa, is the research file's value (wolfram/05)."""
+    return GAMMA / RBUB * GAS ** (5.0 / 6.0) * (0.7 * Ca ** 0.47 / PHI_F ** 0.5 + 8.0 * Ca ** 0.7 / PHI_F ** 0.15)
+
+
 def head_wall_stress(v):
     """Stress (Pa) of the head's edge sliding on the glass at speed |v| (m/s): the smaller of the sliding law (Cantat 2013) and
     what the foam itself can carry, its yield stress plus its viscous stress (Tcholakova et al., PRE 78, 011405 (2008), eq. 48b)
@@ -69,7 +77,7 @@ def head_wall_stress(v):
     v = jnp.abs(v); Ca = MU_STOUT * v / GAMMA
     slide = Z_WALL * GAMMA / RBUB * (6.82 * Ca ** (2.0 / 3.0) + 0.94 * LR_WALL * Ca ** (1.0 / 3.0))
     Cas = MU_STOUT * v / (2.0 * GAMMA)
-    carry = TAU_Y + GAMMA / RBUB * 0.7 * Cas ** 0.47 * GAS ** (5.0 / 6.0) / PHI_F ** 0.5   # films term, eq. 54 (as data-for-solver.md)
+    carry = TAU_Y + foam_flow_stress(Cas)
     return jnp.minimum(slide, carry)
 
 
@@ -243,6 +251,17 @@ class Stout:
         self.ell = G.Rfill / 1.84118         # m, the depth over which the foam's sliding speed dies away upward, 1/k (Sauret 2015)
         self.Rrim = float(G.Rz(G.zrim - 1e-6))
         self.MF = 4096                       # lumps of head in flight, at most
+        # how many particles each cell holds when the stout is evenly spread: its volume inside the glass over the volume one
+        # seeded particle stands for (h x h x hz); used by relax() to undo the particles' slow crowding
+        hz_ = G.fill / max(1, round(G.fill / (dx / ppc))); vp = (dx / ppc) ** 2 * hz_; sub = (np.arange(4) + 0.5) / 4
+        xs4 = G.x0 + dx * (np.arange(n)[:, None] + sub[None, :]).ravel(); X4, Y4 = np.meshgrid(xs4, xs4, indexing="ij")
+        frac = np.zeros((n, n, nz))
+        for k in range(nz):
+            acc = np.zeros((n, n))
+            for c in sub:
+                acc += G.inside(X4, Y4, np.full(X4.shape, G.z0 + dx * (k + c))).reshape(n, 4, n, 4).mean((1, 3))
+            frac[:, :, k] = acc / 4
+        self.n_even = jnp.asarray(frac * dx ** 3 / vp, F32)
         Ccum, self.hz = column_capacity(G, ppc); self.Ccum = jnp.asarray(Ccum); self.Lz = Ccum.shape[2] - 1
 
     # ---------------------------------------------------------------- state
@@ -418,7 +437,7 @@ class Stout:
         gyx = face(0.5 * (sh(ws, 1, 1, 0.0) - sh(ws, -1, 1, 0.0)) / dx, 0); gxy = face(0.5 * (sh(ws, 1, 0, 0.0) - sh(ws, -1, 0, 0.0)) / dx, 1)
         def eta(g):
             g = jnp.maximum(g, 0.05); Ca = MU_STOUT * g * RBUB / GAMMA
-            return (TAU_Y + GAMMA / RBUB * 0.7 * Ca ** 0.47 * GAS ** (5.0 / 6.0) / PHI_F ** 0.5) / g
+            return (TAU_Y + foam_flow_stress(Ca)) / g
         both = lambda ax: has & sh(has, 1, ax, False)
         cx = jnp.where(both(0), face(hf, 0) * eta(jnp.sqrt(gx_ ** 2 + gyx ** 2)), 0.0) / dx ** 2     # coupling to the column at i + 1
         cy = jnp.where(both(1), face(hf, 1) * eta(jnp.sqrt(gy_ ** 2 + gxy ** 2)), 0.0) / dx ** 2
@@ -495,7 +514,7 @@ class Stout:
         tRL = jnp.where(cRL, jnp.clip(phR / jnp.where(cRL, phR - phL, -1.0), 0.05, 1.0), 1.0)   # surface's place, R liquid
         return liqL, liqR, tLR, tRL
 
-    def pressure(self, vel, ph, liq, p_prev, ps):
+    def pressure(self, vel, ph, liq, p_prev, ps, src=None):
         """ps: the pressure on the free surface (the weight of the head), in the solver's units (Pa x dt / rho), one value per
         column, set on the air side of the surface. Ghost fluid: p = ps at the surface, so the air neighbour of a liquid cell
         reads p_ghost = p_liq (1 - 1/theta) + ps / theta: the diagonal gets th / theta and the right side th ps / theta."""
@@ -516,7 +535,7 @@ class Stout:
             flux = th * vel[ax]; div = div + cut_hi(flux, ax) - cut_lo(flux, ax)
         A = liq & (diag > 0)
         diag = jnp.where(A, diag, 0.0); cp = [jnp.where(A, c, 0.0) for c in cp]; cm = [jnp.where(A, c, 0.0) for c in cm]
-        b = jnp.where(A, -div * dx + rhs, 0.0)
+        b = jnp.where(A, -div * dx + rhs + (0.0 if src is None else src), 0.0)
         inv = jnp.where(A, 1.0 / jnp.where(A, diag, 1.0), 0.0)
 
         def mv(x):
@@ -631,6 +650,39 @@ class Stout:
         mhead = self.rho_f * jnp.sum(s["hf"].astype(F64)) * self.dx ** 2
         diag = dict(it=it, res=res, mom=mom, nact=jnp.sum(s["act"], dtype=I32), nsel=nsel, vmax=vmax, mhead=mhead)
         return s, diag
+
+    def relax(self, s, beta=0.5):
+        """Undo the particles' crowding (13 Nov 2026). The pressure step keeps the velocity free of divergence on the grid, but
+        nothing keeps the particles evenly spread: over a second at rest some columns gained or lost 6 % of their particles,
+        which reads as surface bumps of several millimetres while the stout itself does not move (kinetic energy 6e-6 J).
+        Incompressibility for the mass itself: where a liquid cell holds more particles than its share (n_even), the excess
+        e = n/n_even - 1 must spread out. Solve, with the pressure step's own matrix and its free surface at zero,
+        div(d) = beta e for a displacement d = grad(phi), and move the particles by d. Only positions change, never velocities,
+        so no energy is added. Picture: a crowd in a hall that drifts into clumps; each person steps a little away from the crowd.
+        Done once per stored frame (30 a second). Only cells away from the free surface take part (the surface is left to the flow)."""
+        dx = self.dx; G = self.G
+        vel, mass, cnt = self.p2g(s)
+        ph, liq, nsel, phr = self.level_set(s, cnt)
+        inner = liq
+        for ax in range(3):
+            th = self.th[ax]
+            inner = inner & ((cut_hi(th, ax) == 0) | sh(liq, 1, ax, False)) & ((cut_lo(th, ax) == 0) | sh(liq, -1, ax, False))
+        e = jnp.where(inner & (self.n_even > 0.5), jnp.clip(cnt / jnp.maximum(self.n_even, 1e-6) - 1.0, -0.5, 0.5), 0.0)
+        zero = [jnp.zeros(sh_, F32) for sh_ in self.fshape]
+        d, known, _, _, _ = self.pressure(zero, ph, liq, jnp.zeros(self.dims, F32), jnp.zeros((self.n, self.n), F32), src=(dx * dx * beta * e).astype(F32))
+        d = self.extrapolate(d, known)
+        X, act = s["xp"], s["act"]; g = (X - self.origin) / dx; dp = []
+        for comp in range(3):
+            fl, ok, w, wv, cf, fr = self._corners(g, comp, self.fshape[comp])
+            dp.append(jnp.sum(w * jnp.where(ok, d[comp].reshape(-1)[fl], 0.0), 0))
+        dp = jnp.stack(dp, -1); dp = jnp.clip(dp, -0.25 * dx, 0.25 * dx)
+        Xn = X + jnp.where(act[:, None], dp, 0.0)
+        Xn = Xn.at[:, 2].set(jnp.where(act, jnp.maximum(Xn[:, 2], 0.1 * dx), Xn[:, 2]))
+        r = jnp.sqrt(Xn[:, 0] ** 2 + Xn[:, 1] ** 2); Rw = self.Rz(Xn[:, 2]) - 0.1 * dx
+        out = act & (Xn[:, 2] < G.zrim) & (r > Rw) & (r > 0)
+        sc = jnp.where(out, Rw / jnp.maximum(r, 1e-12), 1.0)
+        Xn = Xn.at[:, 0].multiply(sc).at[:, 1].multiply(sc)
+        return dict(s, xp=Xn.astype(F32))
 
     def resort(self, s):
         """Sort the particles by cell (only the order in memory changes), so that neighbours on the grid are neighbours in
@@ -813,7 +865,7 @@ def make_advance(S, mode, cart=None, cfl=0.8, dtmax=0.002, push=None):
     def advance(s, t, ex):
         st = dict(steps=jnp.zeros((), I32), its=jnp.zeros((), I32), itmax=jnp.zeros((), I32), resmax=jnp.zeros((), F64), nselmax=jnp.zeros((), I32))
         s, t, ex, st = lax.while_loop(lambda c: c[1] < c[2]["t_end"] - 1e-9, body, (s, t, ex, st))
-        return S.resort(s), t, ex, st
+        return S.resort(S.relax(s)), t, ex, st
 
     return jax.jit(advance)
 

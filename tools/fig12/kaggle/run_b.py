@@ -10,6 +10,8 @@ from stout_jax import Geometry, Stout, Cart, CART_COMMON, road_table, make_advan
 R = json.load(open(os.environ["GLASS_JSON"]))["R"]; DZP = 0.0005
 FILL, RHO, FPS = 0.125, 1007.0, 30
 BUDGET_S = float(os.environ.get("BUDGET_S", "2450"))
+REST_MAX_MM = float(os.environ.get("REST_MAX_MM", "0.6"))   # largest |surface - fill| of any column inside the glass after 2 s at rest
+REST_RMS_MM = float(os.environ.get("REST_RMS_MM", "0.25"))  # its root mean square
 STAMP = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d")
 WORK = Path(os.environ.get("NB_WORK", "/kaggle/working")) / STAMP; WORK.mkdir(parents=True, exist_ok=True)
 T0 = time.time()
@@ -136,6 +138,21 @@ for task in TASKS:
         lean = (pol_arr[:, 16, 0] - pol_arr[:, 16, 32]) * 1e3
         info["lean_max_mm"] = float(np.nanmax(np.abs(lean))); info["v_range"] = [float(out["v"].min()), float(out["v"].max())]
         info["impulse_vs_momentum"] = dict(impulse_x=float(np.asarray(ex["imp"][0])), momentum_x_end=float(np.asarray(ex["P"][0])))
+    if name == "rest":
+        # the guard (the user's order: "stop the run if it does not have proper numbers"): a pint standing still must stay flat,
+        # keep all its stout and all its head. If it does not, every ride after it would be wrong too: stop the session here.
+        inside = np.hypot(*np.meshgrid(G.x0 + (np.arange(G.n) + 0.5) * dx, G.x0 + (np.arange(G.n) + 0.5) * dx, indexing="ij")) < G.Rfill - dx
+        Hl = out["H"][-1][inside]; devc = np.abs(Hl - FILL) * 1e3
+        info["rest_guard"] = dict(max_dev_mm=float(np.nanmax(devc)), rms_dev_mm=float(np.sqrt(np.nanmean(devc ** 2))), columns_without_value=int((~np.isfinite(Hl)).sum()),
+                                  head_spilled_ml=info["head_spilled_ml"], spilled_g=info["spilled_g"], limit_max_mm=REST_MAX_MM, limit_rms_mm=REST_RMS_MM)
+        g_ = info["rest_guard"]
+        ok = (g_["max_dev_mm"] < REST_MAX_MM and g_["rms_dev_mm"] < REST_RMS_MM and g_["columns_without_value"] == 0
+              and g_["head_spilled_ml"] == 0 and g_["spilled_g"] == 0)
+        log(f"rest guard: {'PASS' if ok else 'FAIL'} {g_}")
+        summary["tasks"].append(info); json.dump(summary, open(WORK / "summary.json", "w"), indent=1)
+        if not ok:
+            log("STOP: the pint at rest is not flat and full; no ride is computed"); raise SystemExit(0)
+        continue
     summary["tasks"].append(info)
     json.dump(summary, open(WORK / "summary.json", "w"), indent=1)
     log(f"done {name}: {steps:,} steps, compile {comp_s:.0f} s, {info['ms_per_step']} ms a step, {info['its_per_step']} pressure iterations a step; "

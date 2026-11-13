@@ -20,7 +20,10 @@ def gate(R, dx=0.004, seconds=1.0, log=print):
         ex = dict(ex, t_end=jnp.asarray(f / 30, F64)); s, t, ex, st = adv(s, t, ex); nsel = max(nsel, int(st["nselmax"]))
     o = obs(s); H = np.asarray(o["H"]); hf = np.asarray(o["hf"])
     c = G.x0 + (np.arange(G.n) + 0.5) * dx; X, Y = np.meshgrid(c, c, indexing="ij"); r = np.hypot(X, Y)
-    inside = r < G.Rfill - 1.0 * dx; outside = r > float(G.R.max())
+    inside = r < G.Rfill - 1.0 * dx
+    # a column lies wholly outside the glass when even its nearest corner is beyond the widest radius; a column whose centre is
+    # outside but whose inner part is inside the glass rightly holds stout (13 Nov 2026: the count read-out reads such columns)
+    outside = r - dx / np.sqrt(2) > float(G.R.max())
     dev = np.abs(H[inside] - 0.125)
     checks = [
         ("every column well inside the glass holds a surface value", bool(np.isfinite(H[inside]).all()), f"{int(np.isfinite(H[inside]).sum())} of {int(inside.sum())}"),
