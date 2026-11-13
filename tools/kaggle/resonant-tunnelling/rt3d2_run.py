@@ -62,6 +62,10 @@ def jobs():
     return J
 
 
+# the runs of shards 1 and 2 (commit cdcade4) that commit a39e2cc lengthens by more than 15 %: rerun as JOBSEL "fix1"
+FIX1 = [36, 271, 793, 840, 1591, 3679, 3684, 3685, 3690, 3691, 3726, 3727, 3732, 3733, 3738]
+
+
 def cost(s, t_end):
     return s["Nx"] * 128 * 128 * round(t_end / DT) * NS
 
@@ -94,7 +98,9 @@ else:
     if globals().get("JOBSEL") == "smoke":
         J = [(spec("flat", 2, 2.0, 1.0, 2.5, 0.0, 0.735), "A"), (spec("coin", 3, 2.0, 1.0, 2.5, 6.0, 0.9), "E"),
              (spec("flat", 2, 2.0, 1.0, 2.5, 0.0, 0.5, bias=0.75), "F"), (spec("shell", 2, 2.0, 1.0, 2.5, 3.0, 0.735), "B")]
-    if globals().get("SHARD"):
+    if globals().get("JOBSEL") == "fix1":   # shards 1 and 2 ran at commit cdcade4, whose run length missed the packet's trailing
+        J = [j for k, j in enumerate(J) if k in FIX1]   # edge and cut-off resonance peaks: these 15 runs ran >15 % too short
+    elif globals().get("SHARD"):
         i, n = SHARD; J = J[i::n]
     tends = [rt3d2.t_end_of(s, tm) for s, _ in J]
     order = sorted(range(len(J)), key=lambda k: -cost(J[k][0], tends[k]))
