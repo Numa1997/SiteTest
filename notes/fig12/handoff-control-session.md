@@ -408,3 +408,61 @@ If the JAX solver's step is slower or faster, the ride minutes scale with it; sa
 
 Three or four plain lines: what you read, the stages A to D with the first visible result and when, and the one budget of
 section 9 with its arithmetic for one yes. Then start Stage A at once (it needs no GPU and no yes).
+
+---
+
+## 11. Added 13 November 2026, about 00:45 UTC: what the user demands of the control (their words first)
+
+"The control on the cart MUST BE RATHER SOPHISTICATED AND CANNOT BE JUST ONE DAMN SPRING. I wanna see a sophisticated system
+of engineering physics live in action, mathematically sound, beautiful, complete, and computationally optimised and fitting."
+"I wanna see all of the engineering components in that animation, a proper correct and detailed treatment. Again,
+mathematically complete system, no bullshit."
+
+What that means for your work. These are requirements, not options.
+
+**The system that runs inside the GPU loop is the whole one, all parts together** (the `joint` design of section 4.4 as the
+floor, not the ceiling):
+- the motor loop: state feedback (LQR) on the estimated swing and speed, with integral action;
+- the estimator: a Kalman filter fed by two height probes on the glass wall, the speed encoder and the measured current,
+  with the heave put into its model; sensor noise switched on, seeded, and stored;
+- the road preview feed-forward that cancels the bump's push one current lag ahead;
+- the active suspension with its own LQR on (stroke, body speed, wheel speed, tyre compression), read from a stroke sensor,
+  two accelerometers and the axle load cell;
+- the current that cancels the heave's parametric term in the swing's equation;
+- every limit real: current +-3 A, supply 12 V with the back-EMF, active force +-40 N with its 5 ms lag, tyre grip mu N,
+  the 1 ms sample, the 2 ms current lag. Saturation handled (anti-windup) and shown when it happens.
+Beyond that floor, and only after it is reproduced: tune the weights through the differentiable JAX model of Stage B1
+(gradient of a stated cost: lean, spill, current, stroke) and say what the tuning changed; a finite-horizon preview
+controller (model-predictive, using the known road ahead) is the natural next design if the floor leaves lean on the table.
+Every design choice gets one line of why and the strongest case against.
+
+**Mathematically complete** (Stage A's output, in the lecture note and checked by the derivation-checker and the referee):
+- the closed loop written as ONE state-space system: first mode(s) of the stout, cart (x, z_b, z_w), motor current,
+  actuator lag, filter states, integrator; continuous form, then the exact discrete forms at the three clocks (1 ms control,
+  2 ms fluid, 0.1 ms cart);
+- controllability and observability, with ranks and the physical reading (what the motor can steer, what the suspension
+  cannot, which sensor sees which state);
+- the Riccati equations for both regulators and the filter, their solutions, the closed-loop poles;
+- stability margins of the motor loop (gain and phase margin, the delay it tolerates) and what the 1 ms sample and the
+  2 ms lag cost; the separation principle and where it stops holding (breaking at a wall amplitude of 21.2 mm, saturation);
+- the parametric term: the swing under heave is a Mathieu-type equation; say where the cancellation is exact and where not;
+- each number verified by Wolfram and by an independent numerical route, and stored so the data panel proves it three ways.
+
+**Every engineering component is in the animation, drawn where it sits and doing what it does** (drawing from stored data
+only; `stout-view.js` already draws part of this for Fig. 12, read it first):
+- motor, gearbox, wheel and tyre (its compression), spring, damper, the active-force actuator with an arrow for its force;
+- the sensors: the two wall probes with their readings, the speed encoder, the body accelerometer, the stroke gauge,
+  the axle load cell;
+- the signals, live beside the cart: motor current and its command against +-3 A, the voltage against 12 V, the active
+  force against +-40 N, the estimate of the swing against the true swing read from the stored surface, the road ahead
+  that the preview reads, the phase space of the first mode with and without control;
+- a block diagram of the loop that lights up the path a signal takes (probe -> filter -> regulator -> motor -> cart ->
+  stout -> probe), in the house design. Nothing reacts to the pointer merely crossing a figure.
+
+**Computationally optimised and fitting**: measure before you tune. State the time per step and where it goes (pressure
+solve, particle transfers, level set), choose the grid from a convergence study and not from habit, use float64 only where
+it is shown to matter, and store only what the page and the proofs need (say the size of every file before committing).
+
+**Order (the user, 13 November)**: the old session first finishes and installs the "before control" animation (the three
+baseline rides of `public/data/fig12/2026-11-13/`, live on main), and then tells you where to go from there. Build on those
+rides; they are the "without control" side of your comparison.
