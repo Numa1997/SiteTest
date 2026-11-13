@@ -9,7 +9,7 @@ if g0[1].endswith('leuchtende') and g0[2].startswith('Helle Scheuchen'):   # Die
     G[0]['de'] = [g0[0], g0[1] + ' Helle', 'S' + g0[2][len('Helle S'):]]
 E = html.escape
 rows = ''.join(f'<p class="lq-s" data-g="{k}" tabindex="0" translate="no" lang="la">' + ''.join(f'<span class="lq-l">{E(t)}</span>' for t in g['la']) + '</p>' for k, g in enumerate(G))
-A = json.load(io.open('notes/lucretius/poem-ar-146-158.json', encoding='utf-8'))['groups']   # my Arabic, made from the Latin (not published)
+A = json.load(io.open('notes/lucretius/poem-ar-146-224.json', encoding='utf-8'))['groups'][:4]   # my Arabic, made from the Latin (not published)
 assert [a['lines'] for a in A] == [[min(g['lines']), max(g['lines'])] for g in G]
 data = json.dumps([{'n': [min(g['lines']), max(g['lines'])], 'en': g['en'], 'de': g['de'], 'ar': a['ar']} for g, a in zip(G, A)], ensure_ascii=False)
 block = """<!--LUCRETIUS-->
