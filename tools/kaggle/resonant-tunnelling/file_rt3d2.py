@@ -24,7 +24,10 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import read_rt3d, tm, iv
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".."))
-COMMIT = "cdcade45884c3894ef02581d6f70f7f4c80d895f"
+COMMITS = {"shard-1-of-6": "cdcade45884c3894ef02581d6f70f7f4c80d895f", "shard-2-of-6": "cdcade45884c3894ef02581d6f70f7f4c80d895f",
+           "smoke": "cdcade45884c3894ef02581d6f70f7f4c80d895f"}          # every later notebook: 57770d2 (corrected run length)
+COMMIT_LATER = "57770d20f1651e76406bd2e6a2b871913ef31ea5"
+def commit_of(slug): return next((c for k, c in COMMITS.items() if slug.endswith(k)), COMMIT_LATER)
 EF, KT = 1.0, 0.05
 
 
@@ -68,12 +71,15 @@ def supply(E, V):
 
 def main(src, date, dest):
     os.makedirs(dest, exist_ok=True)
-    runs, nbs = [], []
-    for slug in sorted(os.listdir(src)):
+    runs, nbs, replaced = [], [], []
+    # a fix notebook (slug with "fix") reruns runs of an earlier notebook under the same file name: its version replaces the other
+    slugs = sorted(os.listdir(src), key=lambda s: ("fix" in s, s))
+    for slug in slugs:
         d = os.path.join(src, slug)
         if not os.path.isdir(d) or not os.path.exists(os.path.join(d, "index.json")): continue
         idx = json.load(open(os.path.join(d, "index.json"))); sha = {r["file"]: r["sha256"] for r in idx["runs"]}
         tars = [f for f in os.listdir(d) if f.endswith(".tar")]
+        COMMIT = commit_of(slug)
         nb = dict(kaggle="numakoudsie/" + slug, version=1, commit=COMMIT, solver="tools/kaggle/resonant-tunnelling/rt3d2.py",
                   runner="tools/kaggle/resonant-tunnelling/rt3d2_run.py", jobsel=idx.get("jobsel"), shard=idx.get("shard"),
                   device=idx.get("device"), devices=idx.get("devices"), sweep_s=idx.get("sweep_s"), failed=idx.get("failed"),
@@ -88,7 +94,14 @@ def main(src, date, dest):
                     open(os.path.join(dest, name), "wb").write(blob)
                     rec = dict(file=name, group=h["group"], spec=h["spec"], bytes=len(blob), sha256=sha[name], notebook=nb["kaggle"],
                                version=1, commit=COMMIT, box=h["box"])
-                    rec.update(summary(h, prof)); runs.append(rec); nb["filed"] += 1
+                    rec.update(summary(h, prof))
+                    old = next((k for k, r in enumerate(runs) if r["file"] == name), None)
+                    if old is not None:
+                        replaced.append(dict(file=name, old_notebook=runs[old]["notebook"], old_commit=runs[old]["commit"], old_sha256=runs[old]["sha256"],
+                                             new_notebook=nb["kaggle"], why="the run length of commit cdcade4 missed the packet's trailing edge and cut-off resonance peaks; this run was more than 15 % too short"))
+                        runs[old] = rec
+                    else: runs.append(rec)
+                    nb["filed"] += 1
         nbs.append(nb)
     key = lambda r: (r["group"], r["spec"]["shape"], r["spec"]["N"], r["spec"]["V0"], r["spec"]["D"], r["spec"]["P"], r["spec"]["R"], r["spec"]["bias"], r["spec"]["sx"], r["spec"]["E"])
     runs.sort(key=key)
@@ -123,7 +136,7 @@ def main(src, date, dest):
                dx=0.5, dt=0.01, nframes=200, method="Strang split-step Fourier, 3D, complex64; absorbing border sin^(1/8) in the outer tenth of each axis",
                units="hbar = m = 1, lengths in the grid unit a", runs_base=f"resonant-tunnelling/{date}/runs/", notebooks=nbs,
                numbers=__doc__.split("Per run, the index carries")[1].strip(), script="tools/kaggle/resonant-tunnelling/file_rt3d2.py",
-               iv=ivs, exact=exact, exact_note="exact 1D transfer matrices (tm.py) for walls of the same N, V0, D, P: T is the single-energy transmission, Tbar its average over the packet's spread of wave numbers (sigma_k = 1/(2 sigma_x)); key N|V0|D|P|sigma_x", runs=runs)
+               replaced=replaced, iv=ivs, exact=exact, exact_note="exact 1D transfer matrices (tm.py) for walls of the same N, V0, D, P: T is the single-energy transmission, Tbar its average over the packet's spread of wave numbers (sigma_k = 1/(2 sigma_x)); key N|V0|D|P|sigma_x", runs=runs)
     p = os.path.join(ROOT, "public", "data", "resonant-tunnelling", date, "kaggle", "index.json"); os.makedirs(os.path.dirname(p), exist_ok=True)
     json.dump(out, open(p, "w"), separators=(",", ":"), ensure_ascii=False)
     print(len(runs), "runs filed;", round(sum(r["bytes"] for r in runs) / 1e9, 3), "GB; index", round(os.path.getsize(p) / 1e6, 2), "MB")
