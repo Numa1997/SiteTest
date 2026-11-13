@@ -37,6 +37,10 @@ def gate(R, dx=0.004, seconds=1.0, log=print):
         ("the near-surface list did not overflow", bool(nsel < S.K), f"{nsel} of {S.K}"),
         ("nothing is NaN", bool(np.isfinite(np.asarray(s["xp"])).all() and np.isfinite(np.asarray(s["vp"])).all()), ""),
     ]
+    d = (H - 0.125) * 1e3
+    for a, b in [(0, .5), (.5, .8), (.8, .9), (.9, .95), (.95, 1.0), (1.0, 1.1)]:
+        m = (r >= a * G.Rfill) & (r < b * G.Rfill) & np.isfinite(H)
+        if m.any(): log(f"  surface - fill, r/R {a:.2f}-{b:.2f}: mean {d[m].mean():+.2f}, min {d[m].min():+.2f}, max {d[m].max():+.2f} mm ({int(m.sum())} columns)")
     ok = True
     for name, passed, detail in checks:
         log(f"{'PASS' if passed else 'FAIL'}  {name}  ({detail})"); ok = ok and passed

@@ -661,10 +661,13 @@ class Stout:
         dx = self.dx; G = self.G
         vel, mass, cnt = self.p2g(s)
         ph, liq, nsel, phr = self.level_set(s, cnt)
-        inner = liq
+        # a cell takes part when every open face leads to stout or to space the stout was never seeded in (beyond the lattice at
+        # the glass): so the cells cut by the glass take part, and only the cells at the free surface are left out
+        inner = liq; seeded = self.n_even > 0
         for ax in range(3):
             th = self.th[ax]
-            inner = inner & ((cut_hi(th, ax) == 0) | sh(liq, 1, ax, False)) & ((cut_lo(th, ax) == 0) | sh(liq, -1, ax, False))
+            inner = inner & ((cut_hi(th, ax) == 0) | sh(liq & seeded, 1, ax, False) | ~sh(seeded, 1, ax, False)) \
+                          & ((cut_lo(th, ax) == 0) | sh(liq & seeded, -1, ax, False) | ~sh(seeded, -1, ax, False))
         e = jnp.where(inner & (self.n_even > 0.5), jnp.clip(cnt / jnp.maximum(self.n_even, 1e-6) - 1.0, -0.5, 0.5), 0.0)
         zero = [jnp.zeros(sh_, F32) for sh_ in self.fshape]
         d, known, _, _, _ = self.pressure(zero, ph, liq, jnp.zeros(self.dims, F32), jnp.zeros((self.n, self.n), F32), src=(dx * dx * beta * e).astype(F32))
