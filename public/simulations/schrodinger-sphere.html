@@ -101,6 +101,7 @@
                         <button type="button" data-w="packet" aria-pressed="true">Packet</button>
                         <button type="button" data-w="rout" aria-pressed="false">Spherical, from the centre</button>
                         <button type="button" data-w="rin" aria-pressed="false">Spherical, closing in</button>
+                        <button type="button" data-w="side" aria-pressed="false">Spherical, from the side</button>
                         <button type="button" data-w="two" aria-pressed="false">Two sources</button>
                     </div>
                 </div>
@@ -110,8 +111,8 @@
                         <button type="button" data-s="sphere" aria-pressed="true">Sphere</button>
                         <button type="button" data-s="pillar" aria-pressed="false">Pillar</button>
                         <button type="button" data-s="slab" aria-pressed="false">Flat wall</button>
-                        <button type="button" data-s="coin" aria-pressed="false" disabled title="Not computed yet: needs GPU runs on Kaggle">Coin</button>
-                        <button type="button" data-s="tube" aria-pressed="false" disabled title="Not computed yet: needs GPU runs on Kaggle">Tube</button>
+                        <button type="button" data-s="coin" aria-pressed="false" disabled title="Arriving from Kaggle">Coin</button>
+                        <button type="button" data-s="tube" aria-pressed="false" disabled title="Arriving from Kaggle">Tube</button>
                     </div>
                     <p class="chips-note" id="shape-note">—</p>
                 </div>
@@ -644,6 +645,11 @@
             rout: { size: 'd', label: 'Shell wall thickness <i>d</i>', def: 1.0, radial: true, note: 'A spherical wave leaves the centre: its crests are spheres. At r = 16 it meets a spherical shell wall of thickness d (V = V₀ there). Exact in 1D: u = r ψ with no dependence on direction; computed on Kaggle (CPU), checked against the exact transmission. With the pillar, the flat wall, the coin or the tube a spherical wave is not computed yet: those are true 3D problems for Kaggle’s graphics cards.' },
             rin: { size: 'R', label: 'Ball radius <i>R</i>', def: 4.0, radial: true, note: 'A spherical wave closes in on the centre from r = 28, where a ball of radius R sits (V = V₀ inside). Exact in 1D: u = r ψ; computed on Kaggle (CPU). With the other barriers a spherical wave is not computed yet (true 3D, Kaggle’s graphics cards).' },
             two: { size: 's', label: 'Distance between the sources <i>s</i>', def: 8.0, radial: true, two: true, note: 'Two spherical waves in free space, from two centres a distance s apart on the x axis. The equation is linear, so their sum is again a solution: ψ = ψ₁ + ψ₂, each the stored free spherical wave (computed on Kaggle, CPU) about its own centre. Where crest meets crest the sheet rises; where crest meets trough it stays flat: the lines of no motion are hyperbolas.' },
+            coin: { size: 'R', label: 'Coin radius <i>R</i>', def: 4.0, note: 'A coin facing the packet: a disc of radius R, 1 a thick, its axis along the flight (V = V₀ inside). Computed in full 3D on Kaggle’s GPUs (128³ points); stored: the cut through the axis, spun about it.' },
+            tube: { size: 'R', label: 'Tube radius <i>R</i>', def: 4.0, note: 'An endless tube along the flight: a wall 1 a thick at the distance R from the axis (V = V₀ in the wall). The packet flies down the middle. Computed in full 3D on Kaggle’s GPUs (128³ points); stored: the cut through the axis, spun about it.' },
+            soff: { size: 'R', label: 'Ball radius <i>R</i>', def: 4.0, side: true, chip: 'sphere', note: 'A spherical wave leaves a point 12 a to the left of a ball of radius R (V = V₀ inside) and washes over it. Computed in full 3D on Kaggle’s GPUs (128³ points); stored: the cut through the line from the source to the ball, spun about it.' },
+            spil: { size: 'R', label: 'Pillar radius <i>R</i>', def: 4.0, side: true, chip: 'pillar', note: 'A spherical wave leaves a point 12 a to the left of an upright pillar of radius R (V = V₀ inside). Nothing here is round about an axis: computed in full 3D on Kaggle’s GPUs and stored as the plane z = 0 (for the mesh) and the true 3D wave (for the sheets and the fog).' },
+            sslab: { size: 'd', label: 'Wall thickness <i>d</i>', def: 1.0, side: true, chip: 'slab', note: 'A spherical wave leaves a point 12 a to the left of a flat wall of thickness d (V = V₀ inside). Computed in full 3D on Kaggle’s GPUs (128³ points); stored: the cut through the line from the source to the wall, spun about it.' },
             slab: { size: 'd', label: 'Wall thickness <i>d</i>', def: 1.0, note: 'A flat wall |x| < d/2 of thickness d, endless across: V = V₀ inside. Exact in 1D: ψ = χ(x) g(y) g(z); χ computed on Kaggle (CPU, Crank–Nicolson), checked against the exact transmission.' }
         };
         var SHAPE = 'sphere', VIEW = 'mesh', GRID = {}, byWave = {}, GZ = null, GZ_OK = null;
@@ -747,7 +753,7 @@
                 return Promise.all([check, new Response(body).arrayBuffer()]).then(function (res) {
                     var all = new Uint8Array(res[1]), n = head.n;
                     if (head.kind === 'out' || head.kind === 'in') { c.radial = true; c.head = head; c.n = n; c.nr = head.nr; c.rstep = head.rstep; c.ready_n = n; var mr = n * c.nr; c.A = all.subarray(0, mr); c.P = all.subarray(mr, 2 * mr); c.curves = head.curves; c.sha = res[0]; c.peaks = head.peaks; return c; }
-                    c.head = head; c.n = n; c.nx = head.nx; c.nr = head.nr; c.step = head.step; c.x0 = head.x0; c.ready_n = n; var m = n * c.nx * c.nr; c.A = all.subarray(0, m); c.P = all.subarray(m, 2 * m); c.curves = head.curves; c.sha = res[0];   /* n frames of the half-plane (x, rho) */
+                    c.head = head; c.pk = head.peaks || null; c.n = n; c.nx = head.nx; c.nr = head.nr; c.step = head.step; c.x0 = head.x0; c.ready_n = n; var m = n * c.nx * c.nr; c.A = all.subarray(0, m); c.P = all.subarray(m, 2 * m); c.curves = head.curves; c.sha = res[0];   /* n frames of the half-plane (x, rho) */
                     return c;
                 });
             });
@@ -758,7 +764,7 @@
         function loadWave(r) {
             var k = 'W' + r.key;
             if (cache[k]) return cache[k].ready;
-            var c = cache[k] = { source: 'kaggle', wave: true, meta: r, shape: 'sphere' };
+            var c = cache[k] = { source: 'kaggle', wave: true, meta: r, shape: r.shape || 'sphere' };
             c.ready = fetch(r.base + r.file).then(function (res) { if (!res.ok) throw new Error(res.status + ' for ' + r.file); return res.arrayBuffer(); }).then(function (buf) {
                 var check = (window.crypto && crypto.subtle) ? crypto.subtle.digest('SHA-256', buf).then(function (h) { return hex(h) === r.sha256; }) : Promise.resolve(null);
                 var dv = new DataView(buf), H = dv.getUint32(4, true), head = JSON.parse(new TextDecoder().decode(new Uint8Array(buf, 8, H)));
@@ -801,8 +807,9 @@
 
         /* ---------- what to show: the stored run, else the live preview ---------- */
         function entry() {
-            var p = current(), w = SHAPE === 'sphere' && VIEW !== 'mesh' ? byWave[key(p.E, p.V0, p.R)] : null, r = byKey[key(p.E, p.V0, p.R)];   /* the mesh draws the plane z = 0 from the complex cut (it has |psi| and arg psi; the true 3D files have Re psi only) */
-            if (w) { var cw = cache['W' + w.key]; if (!cw) loadWave(w); if (cw && cw.W) return cw; if (!r) return null; }   /* the true 3D wave first; the cut while it loads */
+            var p = current(), w = (SHAPE === 'sphere' || SHAPE === 'spil') && VIEW !== 'mesh' ? byWave[key(p.E, p.V0, p.R)] : null, r = byKey[key(p.E, p.V0, p.R)];   /* the mesh draws the plane z = 0 from the complex cut (it has |psi| and arg psi; the true 3D files have Re psi only) */
+            if (w) { var cw = cache['W' + w.key]; if (!cw) loadWave(w); if (cw && cw.W) return cw; if (!r || SHAPE === 'spil') return null; }   /* the pillar with a spherical wave is not round about an axis: its sheets need the true 3D file */
+            if (SHAPE === 'spil' && VIEW !== 'mesh') return null;   /* the true 3D wave first; the cut while it loads */
             if (r) { var c = cache[r.key]; if (!c) load(r); return c && c.A ? c : null; }
             if (SHAPE !== 'sphere' || p.V0 >= HARD) return null;   /* the browser preview solves the sphere with a finite height only */
             startLive(p);
@@ -817,12 +824,13 @@
            true 3D runs: the stored levels as they are; sphere and flat wall: the cut through the axis spun about it (psi(x, rho));
            pillar: phi(x, y) of the top view times the free spread g(z) (psi = phi g, exact because V does not depend on z) */
         var F3 = new Float32Array(NX3 * NY3 * NY3), F3id = null;
-        function reAt(c, f, i, r) { var q = (f * c.nx + i) * c.nr + r, a = c.A[q]; return a < 3 ? 0 : a / 255 * Math.cos(c.P[q] / 255 * 2 * Math.PI - Math.PI); }
+        function pkOf(c, f) { return c && c.pk ? c.pk[f] : 1; }   /* files of 13 November 2026 on: levels of each frame's own peak, the peaks listed in the header; older files: of the first frame's peak */
+        function reAt(c, f, i, r) { var q = (f * c.nx + i) * c.nr + r, a = c.A[q]; return a < 3 ? 0 : a / 255 * pkOf(c, f) * Math.cos(c.P[q] / 255 * 2 * Math.PI - Math.PI); }
         function field3d(c, f) {
             var id = (c.wave ? 'W' : '') + (c.meta.key || c.source + JSON.stringify(c.meta)) + ':' + f;
             if (id === F3id) return F3;
             var N2 = NY3 * NY3;
-            if (c.wave) { var base = f * NX3 * N2; for (var q = 0; q < NX3 * N2; q++) F3[q] = (c.W[base + q] - 128) / 127; }
+            if (c.wave) { var base = f * NX3 * N2, ws = c.head.wscale ? c.head.wscale[f] : 1; for (var q = 0; q < NX3 * N2; q++) F3[q] = (c.W[base + q] - 128) / 127 * ws; }
             else if (c.radial) {   /* psi depends on r alone: Re psi at r = |(x, y, z)|, linear between stored r points; levels of each frame's peak, rescaled to the first frame's */
                 var nr = c.nr, rs = c.rstep, sc = c.peaks[f] / c.peaks[0] / 255, ob = f * nr, reR = new Float32Array(nr);
                 for (var q3 = 0; q3 < nr; q3++) { var a3 = c.A[ob + q3]; reR[q3] = a3 < 3 ? 0 : a3 * sc * Math.cos(c.P[ob + q3] / 255 * 2 * Math.PI - Math.PI); }
@@ -923,7 +931,7 @@
             return PKM;
         }
         function packetSheet(c, f) {   /* psi(x, y, 0) on the sheet: the stored cut psi(x, rho) at rho = |y| (sphere, flat wall), or phi(x, |y|) g(0, t) (pillar) */
-            var K = packetMats(), n = K.n, S = K.S, T = K.T, M = K.M, base = f * c.nx * c.nr, gr = 1, gi = 0;
+            var K = packetMats(), n = K.n, S = K.S, T = K.T, M = K.M, base = f * c.nx * c.nr, gr = pkOf(c, f), gi = 0;
             if (c.shape === 'pillar') { var ie = GZ && GZ.Es ? GZ.Es.indexOf(c.meta.E) : -1, g00 = Math.pow(2 * Math.PI * 9, -0.25); if (ie >= 0) { var o = (ie * 48 + f) * 64 * 2; gr = GZ[o] / g00; gi = GZ[o + 1] / g00; } }
             for (var i = 0; i < 128; i++) for (var jy = 0; jy < 128; jy++) {
                 var rr = Math.abs(jy - 64), q = 2 * (i * 128 + jy), re = 0, im = 0;
@@ -989,9 +997,11 @@
         function circle(R) { var a = []; for (var k = 0; k <= 256; k++) { var t = 2 * Math.PI * k / 256; a.push(R * Math.cos(t), R * Math.sin(t)); } return a; }
         function outlineOf(x0, span) {   /* where the barrier cuts the plane z = 0, drawn on the sheet */
             var p = current(), y1 = x0 + span;
-            if (SHAPE === 'sphere' || SHAPE === 'pillar' || SHAPE === 'rin') return [circle(p.R)];
+            if (SHAPE === 'sphere' || SHAPE === 'pillar' || SHAPE === 'rin' || SHAPE === 'soff' || SHAPE === 'spil') return [circle(p.R)];
+            if (SHAPE === 'coin') { var cz = [], yy; for (var k1 = 0; k1 <= 64; k1++) { yy = -p.R + 2 * p.R * k1 / 64; cz.push(-0.5, yy); } for (var k2 = 64; k2 >= 0; k2--) { yy = -p.R + 2 * p.R * k2 / 64; cz.push(0.5, yy); } cz.push(-0.5, -p.R); return [cz]; }   /* the coin's cut: a strip 1 a wide, 2R long */
+            if (SHAPE === 'tube') { var ls = [[], [], [], []]; for (var k3 = 0; k3 <= 192; k3++) { var xx = x0 + span * k3 / 192; ls[0].push(xx, p.R - 0.5); ls[1].push(xx, p.R + 0.5); ls[2].push(xx, -p.R + 0.5); ls[3].push(xx, -p.R - 0.5); } return ls; }   /* the tube's wall cut twice by the plane */
             if (SHAPE === 'rout') return [circle(16 - p.R / 2), circle(16 + p.R / 2)];
-            if (SHAPE === 'slab') { var l = [], r = []; for (var k = 0; k <= 192; k++) { var y = x0 + span * k / 192; l.push(-p.R / 2, y); r.push(p.R / 2, y); } return [l, r]; }
+            if (SHAPE === 'slab' || SHAPE === 'sslab') { var l = [], r = []; for (var k = 0; k <= 192; k++) { var y = x0 + span * k / 192; l.push(-p.R / 2, y); r.push(p.R / 2, y); } return [l, r]; }
             return [];
         }
         var v3c = document.getElementById('v3'), w3 = null, barrierId = null;
@@ -1008,12 +1018,12 @@
                         for (var q8 = 0; q8 < F.length; q8++) { var a8 = Math.abs(F[q8]); if (a8 > fm) fm = a8; } if (fm > 0) for (var q9 = 0; q9 < F.length; q9++) F[q9] /= fm; F3id = null; } view.setVolume(fogVolume(F), NX3, NY3, NY3); view.half = [NX3 * H3 / 2 / (L() / 2), NY3 * H3 / 2 / (L() / 2), NY3 * H3 / 2 / (L() / 2)]; view.offset = [-0.5 / NX3, 0, 0]; } else view.clear();
                     shownId = id; dirty = true;
                 }
-                var sph = SHAPE === 'sphere' || SHAPE === 'rin' ? p.R / (L() / 2) : SHAPE === 'rout' ? 16 / (L() / 2) : 0; if (view.sphere !== sph) { view.sphere = sph; dirty = true; }
+                var sph = SHAPE === 'sphere' || SHAPE === 'rin' || SHAPE === 'soff' ? p.R / (L() / 2) : SHAPE === 'rout' ? 16 / (L() / 2) : 0; if (view.sphere !== sph) { view.sphere = sph; dirty = true; }
                 if (dirty && view.ok) { view.render(); dirty = false; }
             } else if (w3) {
                 if (v3c.width !== Math.round(W * dpr) || v3c.height !== Math.round(Hh * dpr)) { w3.resize(W, Hh, dpr); dirty = true; }
                 var bid = SHAPE + p.E + '_' + p.V0 + '_' + p.R;
-                if (bid !== barrierId) { w3.setBarrier({ shape: SHAPE === 'rout' || SHAPE === 'rin' ? 'sphere' : SHAPE, R: SHAPE === 'rout' ? 16 : p.R, a: p.R, hard: p.V0 >= HARD, V0: p.V0 }); barrierId = bid; dirty = true; }
+                if (bid !== barrierId) { w3.setBarrier({ shape: SHAPE === 'rout' || SHAPE === 'rin' ? 'sphere' : (SHAPES[SHAPE].chip || SHAPE), R: SHAPE === 'rout' ? 16 : p.R, a: SHAPE === 'coin' ? 1 : p.R, hard: p.V0 >= HARD, V0: p.V0 }); barrierId = bid; dirty = true; }
                 if (id !== shownId) {
                     if (c && !hold && VIEW === 'mesh') {
                         var tM = performance.now(), MO = meshOf(c, f); w3.setMeshView(MO.span); w3.setMesh(MO); MESH = MO; MESHMS = performance.now() - tM;
@@ -1040,7 +1050,7 @@
             else if (fade.a < 1 && fade.from) { octx.globalAlpha = 1 - fade.a; octx.drawImage(prev, 0, 0, W, Hh); octx.globalAlpha = 1; }
             octx.fillStyle = '#5a504b'; octx.font = '12px "IBM Plex Mono", monospace';
             var hardTxt = p.V0 >= HARD ? 'hard barrier · ' : p.V0 < 0 ? 'well · ' : '';
-            octx.fillText((SHAPES[SHAPE].radial ? '' : 'flight along x · ') + hardTxt + (SHAPE === 'sphere' ? 'sphere R = ' + p.R + ' a' : SHAPE === 'two' ? 'two spherical waves, sources s = ' + p.R + ' a apart, free space' : SHAPE === 'pillar' ? 'pillar R = ' + p.R + ' a, upright along z' : SHAPE === 'rout' ? 'spherical wave from the centre · shell wall at r = 16, d = ' + p.R + ' a' : SHAPE === 'rin' ? 'spherical wave closing in · ball R = ' + p.R + ' a' : 'wall d = ' + p.R + ' a thick') + (c && c.wave && !hold ? ' · true 3D data' : ''), 10, Hh - 12);
+            octx.fillText((SHAPES[SHAPE].radial ? '' : SHAPES[SHAPE].side ? 'spherical wave from x = −12 a · ' : 'flight along x · ') + hardTxt + (SHAPE === 'sphere' || SHAPE === 'soff' ? 'sphere R = ' + p.R + ' a' : SHAPE === 'coin' ? 'coin R = ' + p.R + ' a, 1 a thick' : SHAPE === 'tube' ? 'tube R = ' + p.R + ' a, wall 1 a' : SHAPE === 'spil' ? 'pillar R = ' + p.R + ' a, upright along z' : SHAPE === 'two' ? 'two spherical waves, sources s = ' + p.R + ' a apart, free space' : SHAPE === 'pillar' ? 'pillar R = ' + p.R + ' a, upright along z' : SHAPE === 'rout' ? 'spherical wave from the centre · shell wall at r = 16, d = ' + p.R + ' a' : SHAPE === 'rin' ? 'spherical wave closing in · ball R = ' + p.R + ' a' : 'wall d = ' + p.R + ' a thick') + (c && c.wave && !hold ? ' · true 3D data' : ''), 10, Hh - 12);
             if (VIEW === 'mesh') { octx.fillStyle = '#5a504b'; octx.textAlign = 'right'; octx.fillText('height and shade: ' + (HQ === 'abs2' ? '|ψ|²' : 'Re ψ') + ' in the plane z = 0', W - 10, 20); octx.fillStyle = '#8b8079'; octx.fillText(MESH && MESH.top < MESH.span / 7 - 1e-6 ? 'height scaled: steepest slope 1.5' : 'tallest = 1/7 of the sheet’s width', W - 10, 36); octx.fillStyle = '#a3303f'; octx.fillText('■ crests', W - 92, 52); octx.fillStyle = '#55607a'; octx.fillText('■ troughs', W - 10, 52); if (SHAPE !== 'two') { octx.fillStyle = '#1c1518'; octx.fillText('— barrier, where it cuts z = 0', W - 10, 68); } octx.textAlign = 'left'; }
             else if (VIEW === 'sheets' || VIEW === 'cutaway') { octx.fillStyle = '#a3303f'; var qn = SHAPES[SHAPE].radial ? 'Re(rψ)' : 'Re ψ'; octx.textAlign = 'right'; octx.fillText('■ crests  ' + qn + ' = +c', W - 10, 20); octx.fillStyle = '#55607a'; octx.fillText('■ troughs ' + qn + ' = −c', W - 10, 36); octx.fillStyle = '#8b8079'; octx.fillText('c = 0.3 · largest |' + qn + '|', W - 10, 52); octx.textAlign = 'left'; }
             else if (VIEW === 'surface') { octx.fillStyle = '#5a504b'; octx.textAlign = 'right'; octx.fillText('height and colour: ' + (SHAPES[SHAPE].radial ? 'Re(rψ)' : 'Re ψ') + ' in the plane z = 0', W - 10, 20); octx.textAlign = 'left'; }
@@ -1072,6 +1082,10 @@
         /* ---------- numbers ---------- */
         function LABELS() {   /* the three regions the stored curves count, in the words of the case shown */
             var p = current(), hs = SHAPE === 'slab' ? 'd/2' : 'R';
+            if (SHAPE === 'tube') return ['Inside the tube (ρ < R − ½)', 'In its wall', 'Outside (ρ > R + ½)', 'inside', 'in wall', 'outside'];
+            if (SHAPE === 'coin') return ['Behind (x < −½)', 'In the coin’s slab |x| ≤ ½', 'Ahead (x > ½)', 'behind', 'inside', 'ahead'];
+            if (SHAPE === 'sslab') return ['Source side (x < −d/2)', 'Inside |x| ≤ d/2', 'Beyond the wall (x > d/2)', 'source side', 'inside', 'beyond'];
+            if (SHAPE === 'soff' || SHAPE === 'spil') return ['Source side (x < −R)', 'Inside |x| ≤ R', 'Beyond (x > R)', 'source side', 'inside', 'beyond'];
             if (SHAPE === 'two') return ['One source alone: r < 15.5', 'r from 15.5 to 16.5', 'r > 16.5', 'r < 15.5', '15.5–16.5', 'r > 16.5'];
             if (SHAPE === 'rout') return ['Inside the wall (r < 16 − d/2)', 'In the wall', 'Beyond it (r > 16 + d/2)', 'inside', 'in wall', 'beyond'];
             if (SHAPE === 'rin') return ['In the ball (r < R)', '—', 'Outside it (r > R)', 'in ball', '', 'outside'];
@@ -1104,7 +1118,10 @@
             document.getElementById('r-i').textContent = fx(ds.get('inside'), 3); document.getElementById('r-l').textContent = fx(ds.get('lost'), 4);
             var hs = SHAPE === 'slab' ? 'd/2' : 'R', LB = LABELS();
             document.getElementById('r-b').previousElementSibling.textContent = LB[0]; document.getElementById('r-a').previousElementSibling.textContent = LB[2]; document.getElementById('r-i').previousElementSibling.textContent = LB[1];
-            if (SHAPE === 'two') { document.getElementById('r-g-t').textContent = 'Two sources, s = ' + p.R + ' a apart'; document.getElementById('r-g').textContent = 'ψ = ψ₁ + ψ₂; numbers at left: one source alone'; }
+            if (SHAPES[SHAPE].side) { document.getElementById('r-g-t').textContent = 'Spherical wave from x = −12 a'; document.getElementById('r-g').textContent = 'most of it never meets the barrier and leaves through the border'; }
+            else if (SHAPE === 'tube') { document.getElementById('r-g-t').textContent = 'The tube'; document.getElementById('r-g').textContent = 'wall 1 a thick at ρ = ' + p.R + ' a; no 1D guide'; }
+            else if (SHAPE === 'coin') { document.getElementById('r-g-t').textContent = 'Guide: 1D slab of thickness 1 a'; document.getElementById('r-g').textContent = p.V0 >= HARD ? 'hard: T = 0' : 'T = ' + fx(T1D(p.E, p.V0, 1), 3) + ' (the coin covers only ρ < R)'; }
+            else if (SHAPE === 'two') { document.getElementById('r-g-t').textContent = 'Two sources, s = ' + p.R + ' a apart'; document.getElementById('r-g').textContent = 'ψ = ψ₁ + ψ₂; numbers at left: one source alone'; }
             else if (SHAPE === 'rout') { document.getElementById('r-g-t').textContent = 'Exact: this wave through the shell wall'; document.getElementById('r-g').textContent = p.V0 >= HARD ? 'hard wall: T = 0' : 'T = ' + fx(ds.get('T_packet'), 4) + ' (beyond at the end: ' + fx(c && c.curves[c.n - 1] ? c.curves[c.n - 1][3] : NaN, 4) + ')'; }
             else if (SHAPE === 'rin') { document.getElementById('r-g-t').textContent = 'Where the wave is'; document.getElementById('r-g').textContent = 'mean radius ⟨r⟩ = ' + fx(c && c.curves[f] ? c.curves[f][4] : NaN, 2) + ' a'; }
             else if (SHAPE === 'slab') { document.getElementById('r-g-t').textContent = 'Exact: the packet through this wall'; document.getElementById('r-g').textContent = p.V0 >= HARD ? 'hard wall: T = 0' : 'T = ' + fx(ds.get('T_packet'), 4) + ' (ahead at the end: ' + fx(c && c.curves[c.n - 1] ? c.curves[c.n - 1][3] : NaN, 4) + ')'; }
@@ -1119,6 +1136,9 @@
                     : c.shape === 'pillar' ? 'on Kaggle’s CPU in 2D (split-step Fourier, 128² points), ψ = φ(x, y) g(z); stored: the top view φ' + (GZ_OK === true ? ', and g(z) (SHA-256 ✓)' : '')
                     : 'in full 3D on a Tesla T4, 128³ points; stored: the cut through the axis, spun about it';
                 if (c.shape === 'pillar' && c.head.hard) how += '. <b style="display:inline">Hard column:</b> the method sets ψ = 0 inside after every step, which removes about 4 % of the probability at the wall over a run (0.3 % to 26 % across the grid, side border included); it is counted in “lost”';
+                if (c.head && c.head.wave && !c.wave) how = 'in full 3D on Kaggle’s graphics cards, 128³ points; stored: ' + (c.shape === 'spil' ? 'the plane z = 0' : 'the cut through the axis, spun about it') + ', in levels of each frame’s own peak';
+                if (c.wave && c.shape === 'spil') how = 'in full 3D on Kaggle’s graphics cards, 128³ points; stored: the true 3D wave, Re ψ on 96 × 64 × 64 points, every second frame';
+                if (c.head && c.head.hard_V) how += '. <b style="display:inline">Hard wall:</b> computed as a wall ' + c.head.hard_V + ' high (the wave reaches 0.05 a into it, a tenth of the grid spacing) with a step four times shorter; no probability is removed';
                 if (SHAPE === 'two') how = 'on Kaggle’s CPU in 1D in the radius (the free spherical wave, u = r ψ, Crank–Nicolson, Δr = 0.05 a); drawn twice, about two centres s = ' + p.R + ' a apart, and added';
                 if (VIEW === 'mesh') how += '. The drawn sheet is a resampling of the stored grid (band-limited, 3 × finer), which passes through every stored value and adds no wave the run did not have';
                 src.innerHTML = 'Computed on Kaggle on ' + c.meta.generated + ', ' + how + '; ' + c.head.steps + ' steps of Δt = ' + c.head.dt + ' in ' + c.head.wall.toFixed(1) + ' s. File <code>' + c.meta.file + '</code>, SHA-256 ' + (c.sha === true ? 'checked ✓' : c.sha === false ? '<b>does not match</b>' : 'not checked (no crypto in this browser)') + '.';
@@ -1187,6 +1207,14 @@
                     ix.Es.forEach(function (E) { var fr = byKey[keyS('rout', E, 0, 1.0)]; if (fr) GRID.two.Rs.forEach(function (sd) { byKey[keyS('two', E, 0, sd)] = fr; }); });
                     return;
                 }
+                if (ix.kind === 'shapes3d') {   /* the 3D generation of 13 November: several shapes in one index; files under their shape's folder */
+                    Object.keys(ix.groups).forEach(function (sh) { var G = ix.groups[sh], g3 = GRID[sh] = GRID[sh] || { Es: [], Vs: [], Rs: [] }; g3.Es = g3.Es.concat(ix.Es); g3.Vs = g3.Vs.concat(G.Vs); g3.Rs = g3.Rs.concat(G.sizes); });
+                    ix.runs.forEach(function (r) {
+                        r.base = ix.base; r.generated = ix.generated; r.R = r.size; r.key = keyS(r.shape, r.E, r.V0, r.size); byKey[r.key] = r;
+                        if (r.wave_file) byWave[r.key] = { file: r.wave_file, sha256: r.wave_sha256, base: ix.base, generated: ix.generated, key: r.key, shape: r.shape, E: r.E, V0: r.V0, R: r.size };
+                    });
+                    return;
+                }
                 var sh = ix.shape || 'sphere', wave = ix.kind === 'wave', g = GRID[sh] = GRID[sh] || { Es: [], Vs: [], Rs: [] };
                 ix.runs.forEach(function (r) {
                     r.base = ix.base; r.generated = ix.generated; r.shape = sh;
@@ -1201,7 +1229,8 @@
             var idx = IDX = Object.assign({}, IDX || ixs[0]);
             for (var i = 0; i < 128; i++) XC[i] = (i - 64) * idx.L / 128; for (var r2 = 0; r2 < 64; r2++) RC[r2] = r2 * idx.L / 128; ds.touch('xc'); ds.touch('rc');
             for (var i4 = 0; i4 < NX3; i4++) WXC[i4] = X3 + i4 * H3; for (var j4 = 0; j4 < NY3; j4++) WYC[j4] = Y3 + j4 * H3; ds.touch('wxc'); ds.touch('wyc');
-            ['pillar', 'slab'].forEach(function (sh) { var b = document.querySelector('#shape-chips [data-s="' + sh + '"]'); if (!GRID[sh]) { b.disabled = true; b.title = 'Not stored yet'; } });
+            ['pillar', 'slab', 'coin', 'tube'].forEach(function (sh) { var b = document.querySelector('#shape-chips [data-s="' + sh + '"]'); b.disabled = !GRID[sh]; b.title = GRID[sh] ? '' : 'Not stored yet'; });
+            var bs = document.querySelector('#wave-chips [data-w="side"]'); if (!GRID.soff && !GRID.spil && !GRID.sslab) { bs.disabled = true; bs.title = 'Not stored yet'; }
             ['rout', 'rin', 'two'].forEach(function (sh) { var b = document.querySelector('#wave-chips [data-w="' + sh + '"]'); if (!GRID[sh]) { b.disabled = true; b.title = 'Not stored yet'; } });
             buildSliders({ E: 2.5, V0: 3.0, R: 4.0 });
         }).catch(function (e) { document.getElementById('src-t').textContent = 'The stored runs could not be read: ' + e.message; });
@@ -1210,7 +1239,7 @@
         function buildSliders(want) {
             var host = document.getElementById('params'), g = GRID[SHAPE], sh = SHAPES[SHAPE];
             Array.prototype.slice.call(host.querySelectorAll('.kf-slider')).forEach(function (el) { el.remove(); });
-            var ex = SHAPE === 'sphere' ? EXTRA : SHAPE === 'two' ? { E: [], V0: [], R: [] } : { E: EXTRA.E, V0: [], R: [] };
+            var ex = SHAPE === 'sphere' ? EXTRA : SHAPE === 'two' || SHAPES[SHAPE].side ? { E: [], V0: [], R: [] } : { E: EXTRA.E, V0: [], R: [] };
             var defs = [
                 ['E', 'Packet energy <i>E</i>', stopsOf(g.Es, ex.E), want.E],
                 ['V0', 'Barrier height <i>V</i><sub>0</sub> (below 0: a well)', stopsOf(g.Vs.concat(SHAPE === 'sphere' ? [-4, -2, -1, HARD] : []), ex.V0), want.V0],
@@ -1223,7 +1252,7 @@
                     onChange: function () { ['E', 'V0', 'R'].forEach(function (o) { if (o !== nm && sliders[o]) sliders[o].refresh(); }); } });
             });
             ['E', 'V0', 'R'].forEach(function (o) { sliders[o].refresh(); });
-            var kfs = host.querySelectorAll('.kf-slider'); if (kfs[1]) kfs[1].style.display = SHAPE === 'two' ? 'none' : '';   /* two sources: free space, no barrier height */
+            var kfs = host.querySelectorAll('.kf-slider'); if (kfs[1]) kfs[1].style.display = SHAPE === 'two' ? 'none' : ''; if (kfs[2]) kfs[2].style.display = SHAPES[SHAPE].side ? 'none' : '';   /* one stored size: nothing to slide */   /* two sources: free space, no barrier height */
             document.getElementById('shape-note').textContent = sh.note;
             var p0 = current(), r0 = byKey[key(p0.E, p0.V0, p0.R)]; if (r0) load(r0);
         }
@@ -1233,21 +1262,27 @@
             if (shownReal) snapshot();
             var was = SHAPE; SHAPE = sh; shownId = null; barrierId = null; dirty = true;
             buildSliders({ E: p.E, V0: sh === 'two' ? 0 : p.V0, R: SHAPES[sh].size !== 'R' ? SHAPES[sh].def : (SHAPES[was].size !== 'R' ? 4.0 : p.R) });
-            if (!SHAPES[sh].radial) document.querySelectorAll('#shape-chips button').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.s === sh ? 'true' : 'false'); });
+            if (!SHAPES[sh].radial) document.querySelectorAll('#shape-chips button').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.s === (SHAPES[sh].chip || sh) ? 'true' : 'false'); });
         }
         var lastPacketShape = 'sphere';
+        var SIDE = { sphere: 'soff', pillar: 'spil', slab: 'sslab' }, lastSide = 'soff';
         function setWave(w) {
-            if (w !== 'packet' && !GRID[w]) return;
-            if (w3) { if (w === 'packet') w3.setRoom(-17.5, 64); else w3.setRoom(-38, 118); }
+            if (w === 'side') { if (!GRID.soff && !GRID.spil && !GRID.sslab) return; }
+            else if (w !== 'packet' && !GRID[w]) return;
+            var flat = w === 'packet' || w === 'side';   /* drawn in the packet's box and room */
+            if (w3) { if (flat) w3.setRoom(-17.5, 64); else w3.setRoom(-38, 118); }
+            if (SHAPES[SHAPE].side) lastSide = SHAPE; else if (!SHAPES[SHAPE].radial) lastPacketShape = SHAPE;
             if (w === 'packet') { setBox(false); setShape(lastPacketShape); }
-            else { if (!SHAPES[SHAPE].radial) lastPacketShape = SHAPE; setBox(true); setShape(w); }
+            else if (w === 'side') { setBox(false); setShape(GRID[lastSide] ? lastSide : GRID.soff ? 'soff' : GRID.sslab ? 'sslab' : 'spil'); }
+            else { setBox(true); setShape(w); }
             document.querySelectorAll('#wave-chips button').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.w === w ? 'true' : 'false'); });
-            /* a spherical wave is stored only with the round barrier at its centre: the other barriers say so, they do not switch the wave */
+            /* every barrier button says what is stored for the chosen wave; none switches the wave */
             document.querySelectorAll('#shape-chips button').forEach(function (b) {
                 var s2 = b.dataset.s;
-                if (w === 'packet') { b.disabled = (s2 === 'coin' || s2 === 'tube' || !GRID[s2]); b.title = b.disabled ? (s2 === 'coin' || s2 === 'tube' ? 'Not computed yet: needs GPU runs on Kaggle' : 'Not stored yet') : ''; b.setAttribute('aria-pressed', s2 === lastPacketShape ? 'true' : 'false'); }
-                else if (w === 'two') { b.disabled = true; b.title = 'Two sources in free space: no barrier. With a barrier, two sources are a true 3D problem (Kaggle’s graphics cards).'; b.setAttribute('aria-pressed', 'false'); }
-                else { b.disabled = s2 !== 'sphere'; b.title = s2 === 'sphere' ? 'The spherical wave meets a round barrier centred on its source' : 'Spherical wave with this barrier: not computed yet (a true 3D problem, needs GPU runs on Kaggle)'; b.setAttribute('aria-pressed', s2 === 'sphere' ? 'true' : 'false'); }
+                if (w === 'packet') { b.disabled = !GRID[s2]; b.title = b.disabled ? 'Not stored yet' : ''; b.setAttribute('aria-pressed', s2 === lastPacketShape ? 'true' : 'false'); }
+                else if (w === 'side') { b.disabled = !SIDE[s2] || !GRID[SIDE[s2]]; b.title = b.disabled ? 'A spherical wave from the side is stored with the sphere, the pillar and the flat wall' : ''; b.setAttribute('aria-pressed', SIDE[s2] === SHAPE ? 'true' : 'false'); }
+                else if (w === 'two') { b.disabled = true; b.title = 'Two sources in free space: no barrier'; b.setAttribute('aria-pressed', 'false'); }
+                else { b.disabled = s2 !== 'sphere'; b.title = s2 === 'sphere' ? 'The spherical wave meets a round barrier centred on its source' : 'With its source at the centre the wave is stored with the round barrier only; choose “Spherical, from the side” for the pillar and the wall'; b.setAttribute('aria-pressed', s2 === 'sphere' ? 'true' : 'false'); }
             });
             /* two sources: their sum is not round, so it is drawn as the meshed sheet only; the other views say so */
             document.querySelectorAll('#view-chips button').forEach(function (b) { var off = w === 'two' && b.dataset.v !== 'mesh'; b.disabled = off; b.title = off ? 'Two sources are drawn as the meshed sheet only' : ''; });
@@ -1258,7 +1293,7 @@
             document.querySelectorAll('#view-chips button').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.v === v ? 'true' : 'false'); });
             document.getElementById('height-chips').style.display = v === 'mesh' ? '' : 'none';
         }
-        document.querySelectorAll('#shape-chips button').forEach(function (b) { b.addEventListener('click', function () { if (SHAPES[SHAPE].radial) return; setShape(b.dataset.s); }); });
+        document.querySelectorAll('#shape-chips button').forEach(function (b) { b.addEventListener('click', function () { if (SHAPES[SHAPE].radial) return; setShape(SHAPES[SHAPE].side ? SIDE[b.dataset.s] : b.dataset.s); }); });
         document.querySelectorAll('#view-chips button').forEach(function (b) { b.addEventListener('click', function () { setView(b.dataset.v); }); });
         document.querySelectorAll('#wave-chips button').forEach(function (b) { b.addEventListener('click', function () { setWave(b.dataset.w); }); });
         document.querySelectorAll('#height-chips button').forEach(function (b) { b.addEventListener('click', function () { HQ = b.dataset.h; shownId = null; dirty = true; document.querySelectorAll('#height-chips button').forEach(function (o) { o.setAttribute('aria-pressed', o === b ? 'true' : 'false'); }); }); });
@@ -1283,7 +1318,7 @@
                 x = s / 2 + q * 0.5; y = 0; re = p1[0] + p2[0]; im = p1[1] + p2[1]; parts = [p1, p2];
             } else {
                 var a = AMP[q], ph = PHS[q] / 255 * 2 * Math.PI - Math.PI, gr = 1, gi = 0; x = XC[Math.floor(q / 64)]; y = RC[q % 64];
-                re = a < 3 ? 0 : a / 255 * Math.cos(ph); im = a < 3 ? 0 : a / 255 * Math.sin(ph);
+                var pkm = pkOf(c, frameOf(c)); re = a < 3 ? 0 : a / 255 * pkm * Math.cos(ph); im = a < 3 ? 0 : a / 255 * pkm * Math.sin(ph);
                 if (c.shape === 'pillar') { var ie = GZ && GZ.Es ? GZ.Es.indexOf(c.meta.E) : -1, g00 = Math.pow(2 * Math.PI * 9, -0.25); if (ie >= 0) { var o = (ie * 48 + frameOf(c)) * 64 * 2; gr = GZ[o] / g00; gi = GZ[o + 1] / g00; } var r0 = re; re = r0 * gr - im * gi; im = r0 * gi + im * gr; }
             }
             var i = Math.round((x - M.x0) / M.h), j = Math.round((y - M.y0) / M.h); if (i < 0 || j < 0 || i >= M.nx || j >= M.ny) return null;
