@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-4565 files, 417.9 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+4567 files, 418.0 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -15,7 +15,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Simulation pages](#simulation-pages) | 39 |
 | [Walkthroughs](#walkthroughs) | 36 |
 | [Ledgers of the data panel](#ledgers-of-the-data-panel) | 5 |
-| [Shared scripts](#shared-scripts) | 26 |
+| [Shared scripts](#shared-scripts) | 27 |
 | [Computed data played back by the pages (named by date of generation)](#computed-data-played-back-by-the-pages-named-by-date-of-generation) | 2840 |
 | [Stylesheets](#stylesheets) | 16 |
 | [KaTeX](#katex) | 24 |
@@ -39,7 +39,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Shared by the portfolio sources (not served)](#shared-by-the-portfolio-sources-not-served) | 1 |
 | [Template sources](#template-sources) | 2 |
 | [Documentation](#documentation) | 41 |
-| [Tools](#tools) | 146 |
+| [Tools](#tools) | 147 |
 | [Translation tables](#translation-tables) | 54 |
 | [Agents of the lecture-note review](#agents-of-the-lecture-note-review) | 4 |
 | [Working notes of project 07, the electron beam](#working-notes-of-project-07-the-electron-beam) | 52 |
@@ -239,6 +239,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/scripts/stout-nm.js`](../public/scripts/stout-nm.js) | 3.0 kB | Fig. 12: the coefficients of the nonlinear (Narimanov–Moiseev) live model, written by tools/fig12/nm_coeffs.py; do not edit. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`public/scripts/stout-pool.js`](../public/scripts/stout-pool.js) | 4.9 kB | Fig. 12: shares four loops of the stout solver over worker threads with shared memory; identical numbers. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`public/scripts/stout-view.js`](../public/scripts/stout-view.js) | 35.5 kB | Fig. 12: draws the cart, the road and the pint on a canvas from the solver’s state; the head of the stout is drawn, not computed. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`public/scripts/stout-view2.js`](../public/scripts/stout-view2.js) | 14.9 kB | Fig. 12 in JAX: unpacks a stored ride (StoutRide) and draws the glass from its stored fields (StoutView2, on StoutView’s cart, road and camera): the stout’s body, the head of the stored thickness, drops and lumps of head, the lettering on the glass; computes nothing physical | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`public/scripts/stout-worker.js`](../public/scripts/stout-worker.js) | 1.1 kB | Fig. 12: one worker thread of the stout solver: waits for a task, does its share of a loop. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`public/scripts/twoway.js`](../public/scripts/twoway.js) | 57.7 kB | The solved, two-way fluid of projects 05 and 06 (offered on 06 since 7 November 2026): a tank as deep as the cart (its size set by the page through setCart), 2D Navier–Stokes on a MAC grid, the cart coupled through the pressure, the rods as lines of forces; runs the page's 1 ms machine steps inside its 20 ms fluid steps. | [twoway.md](scripts/twoway.md) |
 | [`public/scripts/volume-view.js`](../public/scripts/volume-view.js) | 15.1 kB | Draws a stored 3D cloud as fog by ray marching in WebGL2, with a glass sphere and a camera turned by dragging; recomputes any pixel on the CPU for the data panel (Fig. 14). | [fig14-schrodinger-sphere.md](simulations/fig14-schrodinger-sphere.md) |
@@ -3850,6 +3851,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/fig12/kaggle/free_swing.py`](../tools/fig12/kaggle/free_swing.py) | 4.4 kB | Fig. 12 computed on Kaggle: the free-swing test of solver v2 (glass held still, one push), per grid and piece of physics | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/kaggle/free_swing_fit.py`](../tools/fig12/kaggle/free_swing_fit.py) | 1.3 kB | Fig. 12 computed on Kaggle: fits the damping ratio and frequency of every stored free swing | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/kaggle/nb/run_b_cell.py`](../tools/fig12/kaggle/nb/run_b_cell.py) | 1.6 kB | Fig. 12 in JAX: the one cell of the Kaggle notebook guinness-on-a-cart-stout-in-jax (version 1): checks the GPU, fetches stout_jax.py and run_b.py at a pinned commit, runs them | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`tools/fig12/kaggle/pack_ride.py`](../tools/fig12/kaggle/pack_ride.py) | 4.8 kB | Fig. 12 in JAX: packs one ride computed on Kaggle (.npz) into the page’s file (surface on the solver’s columns, head thickness, drops, lumps of head, the cart) and lists it in index-jax.json with its SHA-256; computes nothing | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/kaggle/rides.py`](../tools/fig12/kaggle/rides.py) | 3.3 kB | Fig. 12 computed on Kaggle: drives the pint over the road at each speed with solver v2 and writes rides.json in the page’s format, saved after every ride | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/kaggle/run_b.py`](../tools/fig12/kaggle/run_b.py) | 10.0 kB | Fig. 12 in JAX on Kaggle’s GPU, first run: the stout at rest, its free swing (frequency and damping, three grids) and two rides that spill; each task only if the measured time says it ends inside the budget | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/kaggle/solver.py`](../tools/fig12/kaggle/solver.py) | 50.3 kB | Fig. 12 computed on Kaggle: the GPU solver v2 (Taichi): the stout as APIC particles on a 1.5 mm grid with a ghost-fluid free surface and free-slip glass faces, the wall’s boundary layer and the foam as drags, coupled both ways to the port of the site’s cart; the notebooks download it at a pinned commit | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
@@ -3926,7 +3928,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/i18n/ingest.py`](../tools/i18n/ingest.py) | 1.9 kB | Stores checked translations made outside the tables (page pieces, script strings, walkthrough prose). | [i18n.md](i18n.md) |
 | [`tools/i18n/package.json`](../tools/i18n/package.json) | 285 B | The parser wrap.cjs needs (acorn); npm install --prefix tools/i18n. | [i18n.md](i18n.md) |
 | [`tools/i18n/wrap.cjs`](../tools/i18n/wrap.cjs) | 3.7 kB | Wraps the reader-visible strings of a page's scripts in _t(), with a JavaScript parser (acorn). | [i18n.md](i18n.md) |
-| [`tools/inventory.py`](../tools/inventory.py) | 103.4 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
+| [`tools/inventory.py`](../tools/inventory.py) | 104.1 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
 | [`tools/kaggle/schrodinger-shapes/build_flat.py`](../tools/kaggle/schrodinger-shapes/build_flat.py) | 5.6 kB | Fig. 14 flat wall: writes flat.ipynb (Kaggle, CPU, 585 runs) for a given commit. | [fig14-schrodinger-sphere.md](simulations/fig14-schrodinger-sphere.md) |
 | [`tools/kaggle/schrodinger-shapes/build_pillar.py`](../tools/kaggle/schrodinger-shapes/build_pillar.py) | 5.8 kB | Fig. 14 pillar: writes pillar.ipynb (Kaggle, CPU, 585 runs) for a given commit. | [fig14-schrodinger-sphere.md](simulations/fig14-schrodinger-sphere.md) |
 | [`tools/kaggle/schrodinger-shapes/build_radial.py`](../tools/kaggle/schrodinger-shapes/build_radial.py) | 5.8 kB | Fig. 14 spherical waves: writes radial.ipynb (Kaggle, CPU, 1170 runs) for a given commit. | [fig14-schrodinger-sphere.md](simulations/fig14-schrodinger-sphere.md) |
