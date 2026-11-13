@@ -1,0 +1,28 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Fig. 12 in JAX: drawing test</title>
+<link rel="stylesheet" href="/public/fonts/instrument-plex.css">
+<style>body{margin:0;background:#f5f1ea;font-family:"IBM Plex Sans",sans-serif}canvas{display:block}</style>
+<canvas id="cv"></canvas><pre id="log"></pre>
+<script src="/public/scripts/guinness-glass.js"></script>
+<script src="/public/scripts/stout-view.js"></script>
+<script src="/public/scripts/stout-view2.js"></script>
+<script>
+// Test page (not on the site): draws one stored frame of one packed ride. ?ride=<file>&k=<frame>&w=<css px>&h=<css px>&vh=<metres shown>
+(async () => {
+  const q = new URLSearchParams(location.search), W = +(q.get('w') || 900), Hc = +(q.get('h') || 840), dpr = +(q.get('dpr') || 2);
+  const D = await (await fetch(q.get('ride'))).json(), ride = await new StoutRide(D).unpack();
+  const G = window.GUINNESS_GLASS, Rz = (z) => { const f = Math.max(0, z) / G.dz, i = Math.min(Math.floor(f), G.R.length - 2); return G.R[i] + (f - i) * (G.R[i + 1] - G.R[i]); };
+  const zRim = (G.R.length - 1) * G.dz, k = Math.min(D.frames - 1, +(q.get('k') || 0));
+  const bumps = D.bumps || [], zr = (x) => bumps.reduce((s, b) => { const u = (x - b.x) / b.L; return s + (Math.abs(u) < 0.5 ? 0.5 * b.h * (1 + Math.cos(2 * Math.PI * u)) : 0); }, 0);
+  const cart = { x: D.x ? D.x[k] : 0.5, vx: D.v ? D.v[k] : 0, zw: D.zw ? D.zw[k] : 0.04 - 0.0011, zb: D.zb ? D.zb[k] : 0.04 - 0.0011 + 0.135 - 0.0316, Rw: 0.04, Mb: 1.5, ml: 0.43, Ls: 0.135, g: 9.81, k: 600, us: 0, glassFloor: 0.012, road: { zr } };
+  const fluid = { modal: true, h0: D.fill, zRim, H: zRim, Rbox: Infinity, dx: D.dx, Rz };
+  const cv = document.getElementById('cv'); cv.style.width = W + 'px'; cv.style.height = Hc + 'px'; cv.width = W * dpr; cv.height = Hc * dpr;
+  await document.fonts.load('400 100px "Instrument Serif"');
+  const view = new StoutView2(cv, { fluid, cart, drops: [] }, { viewHeight: +(q.get('vh') || 0.40), groundY: 0.95, elevDeg: +(q.get('elev') || 16), azimDeg: -24 });
+  view.cssW = W; view.glassWall = 0.0032; view.glassBase = 0.014;
+  view.setFrame(ride, k); view.draw();
+  document.getElementById('log').textContent = `frame ${k} of ${D.frames}, t = ${D.t[k]} s, drops ${D.nd[k]}, lumps ${D.nl[k]}, stout spilled ${D.spill_g[k]} g, head spilled ${D.head_spill_ml[k]} mL`;
+  window.done = true;
+})().catch((e) => { document.getElementById('log').textContent = 'ERROR ' + e.stack; window.done = true; });
+</script>

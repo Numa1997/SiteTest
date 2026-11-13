@@ -45,7 +45,9 @@ out = dict(name=name, generated=date, n=int(n), frames=int(nf), fps=30, dx=float
            head=task.get("head"), head_ml=task.get("head_ml"), task={k: task[k] for k in ("kind", "model", "dx", "end") if k in task},
            nd=nd, nl=nl, H=pk(Hd), hf=pk(hf), drops=pk(drops), lumps=pk(lumps))
 if "x" in Z.files:
-    out.update(v0=task.get("v0"), road=task.get("road"), x=r5(Z["x"], 5), v=r5(Z["v"], 4), zb=r5(Z["zb"], 6), zw=r5(Z["zw"], 6),
+    src_run = open(os.path.join(here, "run_b.py")).read(); a = src_run.index("ROADS = {"); b = src_run.index("\n}\n", a) + 2
+    ROADS = eval(src_run[a + len("ROADS = "):b])            # the roads as run_b.py defines them (cosine bumps: centre x, height h, length L)
+    out.update(bumps=ROADS[task["road"]]["bumps"], v0=task.get("v0"), road=task.get("road"), x=r5(Z["x"], 5), v=r5(Z["v"], 4), zb=r5(Z["zb"], 6), zw=r5(Z["zw"], 6),
                i=r5(Z["i"], 4), Fx=r5(Z["Fx"], 4), Fz=r5(Z["Fz"], 4))
 dst = os.path.join(out_dir, name + ".json")
 json.dump(out, open(dst, "w"), separators=(",", ":"))

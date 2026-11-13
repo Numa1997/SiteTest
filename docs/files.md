@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-4567 files, 418.0 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+4569 files, 418.0 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -45,7 +45,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Working notes of project 07, the electron beam](#working-notes-of-project-07-the-electron-beam) | 52 |
 | [Working notes of the Rotor Pendula study](#working-notes-of-the-rotor-pendula-study) | 86 |
 | [Working notes of the Droplet Collection study](#working-notes-of-the-droplet-collection-study) | 123 |
-| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 573 |
+| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 575 |
 
 ## Repository root
 
@@ -3851,7 +3851,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/fig12/kaggle/free_swing.py`](../tools/fig12/kaggle/free_swing.py) | 4.4 kB | Fig. 12 computed on Kaggle: the free-swing test of solver v2 (glass held still, one push), per grid and piece of physics | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/kaggle/free_swing_fit.py`](../tools/fig12/kaggle/free_swing_fit.py) | 1.3 kB | Fig. 12 computed on Kaggle: fits the damping ratio and frequency of every stored free swing | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/kaggle/nb/run_b_cell.py`](../tools/fig12/kaggle/nb/run_b_cell.py) | 1.6 kB | Fig. 12 in JAX: the one cell of the Kaggle notebook guinness-on-a-cart-stout-in-jax (version 1): checks the GPU, fetches stout_jax.py and run_b.py at a pinned commit, runs them | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
-| [`tools/fig12/kaggle/pack_ride.py`](../tools/fig12/kaggle/pack_ride.py) | 4.8 kB | Fig. 12 in JAX: packs one ride computed on Kaggle (.npz) into the page’s file (surface on the solver’s columns, head thickness, drops, lumps of head, the cart) and lists it in index-jax.json with its SHA-256; computes nothing | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`tools/fig12/kaggle/pack_ride.py`](../tools/fig12/kaggle/pack_ride.py) | 5.1 kB | Fig. 12 in JAX: packs one ride computed on Kaggle (.npz) into the page’s file (surface on the solver’s columns, head thickness, drops, lumps of head, the cart) and lists it in index-jax.json with its SHA-256; computes nothing | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/kaggle/rides.py`](../tools/fig12/kaggle/rides.py) | 3.3 kB | Fig. 12 computed on Kaggle: drives the pint over the road at each speed with solver v2 and writes rides.json in the page’s format, saved after every ride | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/kaggle/run_b.py`](../tools/fig12/kaggle/run_b.py) | 10.0 kB | Fig. 12 in JAX on Kaggle’s GPU, first run: the stout at rest, its free swing (frequency and damping, three grids) and two rides that spill; each task only if the measured time says it ends inside the budget | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`tools/fig12/kaggle/solver.py`](../tools/fig12/kaggle/solver.py) | 50.3 kB | Fig. 12 computed on Kaggle: the GPU solver v2 (Taichi): the stout as APIC particles on a 1.5 mm grid with a ghost-fluid free surface and free-slip glass faces, the wall’s boundary layer and the foam as drags, coupled both ways to the port of the site’s cart; the notebooks download it at a pinned commit | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
@@ -3928,7 +3928,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/i18n/ingest.py`](../tools/i18n/ingest.py) | 1.9 kB | Stores checked translations made outside the tables (page pieces, script strings, walkthrough prose). | [i18n.md](i18n.md) |
 | [`tools/i18n/package.json`](../tools/i18n/package.json) | 285 B | The parser wrap.cjs needs (acorn); npm install --prefix tools/i18n. | [i18n.md](i18n.md) |
 | [`tools/i18n/wrap.cjs`](../tools/i18n/wrap.cjs) | 3.7 kB | Wraps the reader-visible strings of a page's scripts in _t(), with a JavaScript parser (acorn). | [i18n.md](i18n.md) |
-| [`tools/inventory.py`](../tools/inventory.py) | 104.1 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
+| [`tools/inventory.py`](../tools/inventory.py) | 104.5 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
 | [`tools/kaggle/schrodinger-shapes/build_flat.py`](../tools/kaggle/schrodinger-shapes/build_flat.py) | 5.6 kB | Fig. 14 flat wall: writes flat.ipynb (Kaggle, CPU, 585 runs) for a given commit. | [fig14-schrodinger-sphere.md](simulations/fig14-schrodinger-sphere.md) |
 | [`tools/kaggle/schrodinger-shapes/build_pillar.py`](../tools/kaggle/schrodinger-shapes/build_pillar.py) | 5.8 kB | Fig. 14 pillar: writes pillar.ipynb (Kaggle, CPU, 585 runs) for a given commit. | [fig14-schrodinger-sphere.md](simulations/fig14-schrodinger-sphere.md) |
 | [`tools/kaggle/schrodinger-shapes/build_radial.py`](../tools/kaggle/schrodinger-shapes/build_radial.py) | 5.8 kB | Fig. 14 spherical waves: writes radial.ipynb (Kaggle, CPU, 1170 runs) for a given commit. | [fig14-schrodinger-sphere.md](simulations/fig14-schrodinger-sphere.md) |
@@ -4702,7 +4702,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/fig12/check-8-6.md`](../notes/fig12/check-8-6.md) | 12.8 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/check.md`](../notes/fig12/check.md) | 24.2 kB | Fig. 12: the derivation checker's table of equations and numbers. | [notes.md](notes.md) |
 
-<details><summary>22 files: Fig. 12: a measuring script of the review, or its saved output.</summary>
+<details><summary>24 files: Fig. 12: a measuring script of the review, or its saved output.</summary>
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
@@ -4714,6 +4714,8 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/fig12/fig-glass.svg`](../notes/fig12/fig-glass.svg) | 17.2 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/gpu-page-test.cjs`](../notes/fig12/gpu-page-test.cjs) | 2.4 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/handoff-control-session.md`](../notes/fig12/handoff-control-session.md) | 37.3 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/jax/shots.cjs`](../notes/fig12/jax/shots.cjs) | 1.2 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/jax/view-test.html`](../notes/fig12/jax/view-test.html) | 2.5 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/kaggle-v2/free_swing_v2_2026-11-12.json.gz`](../notes/fig12/kaggle-v2/free_swing_v2_2026-11-12.json.gz) | 706.7 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/kaggle-v2/free_swing_v2_repair_2026-11-12.json.gz`](../notes/fig12/kaggle-v2/free_swing_v2_repair_2026-11-12.json.gz) | 230.4 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/nopush.cjs`](../notes/fig12/nopush.cjs) | 2.0 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
