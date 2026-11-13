@@ -46,3 +46,42 @@ from the fill, or the root mean square is above 0.25 cell, or any head or stout 
 ("stop the run if it does not have proper numbers", the user). A list overflow (near-surface particles or drops) now stops a task
 instead of warning. The whole script ran end to end on the CPU at 6 mm for two frames per task (rest, guard, two rides, free
 swing, summary) before launch.
+
+## Run 3 (notebook version 3, commit eb7471f): the guard stopped it, and why
+
+The pint at rest, 2 s at 1.5 mm on the T4: no stout and no head lost, but the surface was 4.62 mm off at worst (limit 0.75 mm)
+and 0.484 mm root mean square (limit 0.375 mm). About 100 columns read low by 1-3 cells, none high, first at the glass, then
+spreading inward in blocks of 2-4 columns. The session stopped before any ride (74 ms a step, about 260 s of quota).
+
+The read-out was not the cause. The stout was moving. Energy books of the pint at rest (`rest.npz`, run 3):
+
+| t | potential energy lost | kinetic energy | "dissipated" by the glass, skin and head |
+|---|---|---|---|
+| 0.1 s | 2.4 uJ | 0.32 uJ | 57.5 uJ |
+| 1.0 s | 235 uJ | 1.69 uJ | 405.5 uJ |
+| 2.0 s | 629 uJ | 2.99 uJ | 773.7 uJ |
+
+A pint at rest has nothing to dissipate. Two faults, both found by one step from rest at 4 mm (`step1.py`, scratch):
+
+1. **The head lay only on columns whose centre is inside the glass.** The columns at the glass whose centre is outside but
+   which hold stout got no head, so the head's weight, rho_f g h_f = 272 x 9.81 x 0.019 = 51 Pa, pressed the inner columns and
+   not these. The stout was squeezed up into them: after one step from rest the fastest stout moved at 10.9 mm/s with the head
+   and 0.61 mm/s without it (models "full" and "wall"/"inviscid"). Particles per column at 0.1 s confirmed it: the columns at
+   the glass lost 7-9 particles each (1.3-1.7 mm of stout). Fix: the head lies on every column whose horizontal face at the
+   fill is open (`afill`, from the glass's face fractions), and every head volume (start, spill, lumps, the cart's load)
+   counts hf x afill x dx^2. Head: 91.31 mL against pi R_fill^2 x 19 mm = 91.25 mL. One step from rest: 0.61 mm/s, the same
+   as without the head.
+2. **The thin layers braked gravity.** The glass's Stokes layer, the skin and the head acted on the face velocities after
+   gravity's kick of the step (dt g, about 20 mm/s at dt = 2 ms) had been added; the pressure step then cancels that kick
+   everywhere except where it had been braked, which acts as a spurious push. The stresses now act on the velocity the stout
+   has, and the body force is added after them, just before the pressure step.
+
+4 mm, 1 s at rest, CPU, before and after both fixes: "dissipated" 233 -> 9.5 uJ, kinetic energy 2.6 -> 0.75 uJ, surface worst
+1.63 -> 0.97 mm (0.24 cell), root mean square 0.82 -> 0.43 mm (0.11 cell); nothing spilled. What remains (0.6 mm/s in the
+first step at the corner of the surface and the glass, and a slow mean drop of the read surface, -0.35 mm at 1 s) is the
+method's own: it is the same with no friction and no head.
+
+Also changed for run 4 (commits 183347c, 490b55d): the surface read-out takes the body from the 0.9 dx field and the surface
+from the 0.505 dx field in the top three cells of that body (a column where the 0.505 dx field finds no surface there falls
+back to the body's top less 0.68 cell, and is counted per frame as `nfallback`); the rest task stores the particles at 0.5 s
+and 2 s (`rest_particles_15.npz`, `rest_particles_60.npz`) so any read-out can be checked afterwards.
