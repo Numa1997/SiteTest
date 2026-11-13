@@ -12,25 +12,17 @@ shape go into one tar and index.json (with SHA-256 of every file) is written.
 File 'SPHC' (little-endian): 'SPHC', uint32 H, H bytes JSON header, one zlib stream of n*nx*nr |psi| levels then as many
 arg-psi levels, index f*nx*nr + i*nr + r (x = x0 + i*step, y = r*step >= 0, z = 0); levels are of each frame's own peak, the
 header's `peaks`. File 'SPHW' (spil only): Re psi on 96 x 64 x 64 points, int8 + 128, levels of each stored frame's peak (`wpeaks`).
-Usage: python3 build_shapes3d.py <commit>"""
+The notebook is a one-line loader; the code that runs is shapes3d_run.py (written here too) and solver3d.py at the pinned commit.
+Usage: python3 build_shapes3d.py <commit>   (commit: one that already holds solver3d.py and shapes3d_run.py)"""
 import json, os, sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 COMMIT = sys.argv[1] if len(sys.argv) > 1 else "main"
 BASE = f"https://raw.githubusercontent.com/Numa1997/SiteTest/{COMMIT}/tools/kaggle/schrodinger-shapes/"
 smoke = json.load(open(os.path.join(HERE, "..", "schrodinger-sphere", "smoke.ipynb")))
 c1 = smoke["cells"][1]["source"]          # GPU check: stops at once if there is no GPU
-md0 = """# Schrödinger, Fig. 14: the remaining 3D cases (GPU, JAX)
-
-An electron wave meets a barrier, solved in 3D (split-step Fourier, 128³ points, ħ = m = 1). This notebook computes every case
-of the website's Fig. 14 that needs true 3D and was missing: the coin and the tube, the wells and the hard ball, and a
-spherical wave coming from the side onto a ball, a flat wall and a pillar. 1458 runs on both GPUs. Each run is written when it
-finishes; `index.json` lists them with SHA-256."""
-c2 = f'''import urllib.request
-BASE = "{BASE}"
-urllib.request.urlretrieve(BASE + "solver3d.py", "solver3d.py")
-exec(open("solver3d.py").read())
-say("code from", BASE)
-'''
+md0 = ("# Schrodinger, Fig. 14: the remaining 3D cases (GPU, JAX). An electron wave meets a barrier, solved in 3D (split-step Fourier, 128^3 points, hbar = m = 1): "
+       "the coin and the tube, the wells and the hard ball, and a spherical wave from the side onto a ball, a flat wall and a pillar. 1458 runs on both GPUs. "
+       "Each run is written when it finishes; index.json lists them with SHA-256. The code is fetched from the website's repository at a pinned commit and printed below.")
 c3 = r'''import threading, queue, datetime, hashlib, struct, zlib, traceback, numpy as np
 GEN = datetime.datetime.utcnow().strftime("%Y-%m-%d"); OUTD = f"/kaggle/working/{GEN}/shapes3d"
 N, L, DT, NF = 128, 64.0, 0.01, 48
@@ -144,11 +136,16 @@ json.dump(dict(total_s=round(time.time() - T0, 1), sweep_s=round(SWEEP_S, 1), gp
                steps_total=int(sum(r["steps"] for r in INDEX))), open(OUTD + "/timing.json", "w"))
 say(f"all done in {time.time()-T0:.0f} s")
 '''
-cells = [dict(cell_type="markdown", metadata={}, source=md0, id="s0")]
-for n, c in enumerate([c1, c2, c3, c4]):
-    cells.append(dict(cell_type="code", execution_count=None, metadata={}, outputs=[], source=c, id=f"s{n+1}"))
+# The notebook itself is a short loader: it fetches solver3d.py and shapes3d_run.py (the three cells above as one file) from
+# the website's repository at the pinned commit, prints the code into its log and runs it. So the code that ran is the code in git.
+run_py = "\n".join([c1, 'exec(open("solver3d.py").read())\nsay("solver3d.py and shapes3d_run.py from the repository, as fetched by the loader cell")\n', c3, c4])
+open(os.path.join(HERE, "shapes3d_run.py"), "w").write(run_py)
+if os.environ.get("FLAT"):   # the run file and the solver as one file, for a name check: FLAT=out.py python3 build_shapes3d.py; python3 -m pyflakes out.py
+    open(os.environ["FLAT"], "w").write(run_py.replace('exec(open("solver3d.py").read())', open(os.path.join(HERE, "solver3d.py")).read()))
+loader = ("import urllib.request; B = '" + BASE + "'; [urllib.request.urlretrieve(B + f, f) for f in ('solver3d.py', 'shapes3d_run.py')]; "
+          "print(open('shapes3d_run.py').read()); exec(open('shapes3d_run.py').read())")
+cells = [dict(cell_type="markdown", metadata={}, source=md0, id="s0"),
+         dict(cell_type="code", execution_count=None, metadata={}, outputs=[], source=loader, id="s1")]
 nb = dict(cells=cells, metadata=smoke["metadata"], nbformat=4, nbformat_minor=5)
 open(os.path.join(HERE, "shapes3d.ipynb"), "w").write(json.dumps(nb))
-if os.environ.get("FLAT"):   # the cells and the solver as one file, for a name check: FLAT=out.py python3 build_shapes3d.py; python3 -m pyflakes out.py
-    open(os.environ["FLAT"], "w").write("\n".join([c1, c2, c3, c4]).replace('exec(open("solver3d.py").read())', open(os.path.join(HERE, "solver3d.py")).read()))
-print("notebook bytes", len(json.dumps(nb)))
+print("notebook bytes", len(json.dumps(nb)), "run file bytes", len(run_py))
