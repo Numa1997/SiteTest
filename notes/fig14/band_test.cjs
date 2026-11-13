@@ -1,5 +1,5 @@
-const fs = require('fs'); const s = fs.readFileSync(__dirname + '/../../public/simulations/schrodinger-sphere.html', 'utf8');
-const i = s.indexOf('function bandMatrix('), j = s.indexOf('var PKM = null');
+const fs = require('fs'); const s = fs.readFileSync(__dirname + '/../../public/scripts/fig14-sheet-worker.js', 'utf8');
+const i = s.indexOf('function bandMatrix('), j = s.indexOf('var PKM = null;');
 eval(s.slice(i, j) + '; globalThis.bandMatrix = bandMatrix;');
 // a wave that fits the 64 a box: k = 2 pi n / 64; the largest stored energy E = 4.5 has k0 = 3 -> n = 30.6; test n = 31 and a packet
 const N = 128, d = 0.5, xs = new Float64Array(289); for (let a = 0; a < 289; a++) xs[a] = -24 + a / 6 + 32;

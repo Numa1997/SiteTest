@@ -12,7 +12,7 @@ me (one language at a time, chosen with four buttons; tablets show two by two).
 |---|---|
 | `poem-146-224.json` | The passage in 20 Latin sentences: line numbers, Latin, Leonard's English, Diels' German, per sentence. |
 | `extract.py` | Cuts the passage out of the downloaded sources by first and last words, so nothing is retyped (paths point at the scratch folder where the sources were downloaded; download them again to rerun). |
-| `poem-ar-146-224.json` | The Arabic (seventh version, 13 November 2026), 20 groups of lines, one per sentence of the Latin (`lines` = first and last Latin line); free verse in modern literary Arabic, with rhyme only here and there, made from Leonard's English for this site (not published, not reviewed by a second reader). The first four groups are the home band. |
+| `poem-ar-146-224.json` | The Arabic (tenth version, 13 November 2026), 20 groups of lines, one per sentence of the Latin (`lines` = first and last Latin line); free verse in an elevated modern literary Arabic, fully vowelled (tashkeel on every letter), with rhyme only here and there, translated for this site from the Latin with a poet's freedom (not published, not reviewed by a second reader). The first four groups are the home band. |
 | `make_page.py` | Writes `public/lucretius.html`: 20 verses in four columns (Latin with its line numbers, Leonard, Diels, the Arabic). The verses stand in the page itself, marked `translate="no"` with their own `lang`, so the i18n tables hold only the words around them (rebuilt 13 November 2026). |
 | `make_home.py` | Writes the home page band (between `<!--LUCRETIUS-->` markers in `index.html`) from the first four sentences of the JSON. |
 
@@ -26,14 +26,14 @@ Einstein), line for line, from [textlog.de](https://www.textlog.de/lukrez-natur-
 ("leuchtende Helle / Scheuchen", the online copy has "leuchtende / Helle Scheuchen"; `make_home.py` applies it); line 173 ("…tut jedes
 gesondert die Kraft ruht") is as printed online and unchecked against the print. Arabic: the only published translation found
 (المركز القومي للترجمة, Cairo 2018) is under copyright and was not used; the Arabic on the site (`poem-ar-146-224.json`, 13 November
-2026) is a translation made from Leonard's English for this site, read against Leonard and Diels, not reviewed by a second reader, and labelled so on the cards.
+2026) is a translation made from the Latin for this site, read against Leonard and Diels, not reviewed by a second reader, and labelled so on the cards.
 
 **What Numa first had** (from Gemini): lines 149 and 218 misquoted, an English text attributed to Leonard that is not his, lines
 192–214 missing.
 
-**Which Arabic is on the site, and why.** The Arabic on the site is the **seventh version** (13 November 2026). Numa's rule for it: it
-must say what the English says. So it follows Leonard's English verse by verse, in lines, not word for word, in strong modern literary
-Arabic. Five versions came before it, and the reasons they were rejected are the rules for any later change:
+**Which Arabic is on the site, and why.** The Arabic on the site is the **tenth version** (13 November 2026). Versions six to nine
+followed Leonard's English; the tenth is translated from the Latin, as a poem, with the same freedom Leonard's English takes with
+the Latin. Nine versions came before it, and the reasons they were rejected are the rules for any later change:
 
 1. First (10 Nov, bea5607 and 9120b8d): close to the Latin, case vowels everywhere. Numa called it "Gulf and Peninsula Arabic" and,
    after the three that followed, "the least bad". It was restored for a few hours on 11 November (78c4e89) and is in git.
@@ -53,11 +53,40 @@ Arabic. Five versions came before it, and the reasons they were rejected are the
    poetry, and the page says "rhyme only here and there". No second reader has checked it. Whether it is poetry enough is for Numa to
    judge; the layout does part of the work (the Arabic stands in its own column, its couplets spaced). Its verdict is not yet known.
 
-Rules that hold for every version: the Arabic says what the English says, no more and no less; *nihilum* is «العدم»; darkness is «ظلام» (never «عتمة»); no calques («لا يُولَد شيءٌ من العدم بفعل
-الآلهة أبدًا» was rejected as word for word); no archaic particles; no Quranic ornament.
+8. Eighth (13 Nov, replaced the same night): Numa asked for tashkeel on every letter and a more majestic, poetic Arabic, "as if the poem was originally written in Arabic". The seventh version's content, kept to Leonard's English and the same rules, was raised in register (groups 9 and 14 are largely reworded: the earth that "yields" roses in spring and wheat in the summer heat; giants wading seas on foot) and fully vowelled: every consonant carries a fatha, damma, kasra, sukun or shadda; long-vowel letters, hamzat wasl and the sun-letter lam are left bare as in standard vocalised print; the article has sukun on the moon-letter lam; case endings are written inside a line, and the last word of each line is in pause form (sukun, no tanween). A script checked that no consonant lacks a mark (`0` flags); it cannot check that the case endings are grammatically right. A native reader has not done that. The page note says "fully vowelled" and "not checked by a second reader". The Arabic cell is set in Noto Naskh Arabic 20 px on a 2.25 line, and the Arabic column is the widest (1.5 of 4.35 parts), so the marks are not clipped and few lines wrap.
+9. Ninth (13 Nov, replaced the same night), written by Claude Opus after Numa said he did not trust the eighth (Sonnet's) with Arabic. His brief:
+   still a translation of Leonard, but a poem that does not read plainly; a religious feeling and at the same time an anti-religious,
+   anti-establishment one; the strong hand that loves its own hand and its own nature, not the one that bows to superstition and fear.
+   How it does that: it borrows the vocabulary and cadence of scripture and turns each word toward nature. Nature has a *sunna*
+   («بِسُنَّةِ الطَّبِيعَةِ», 188) and a lawful seed («بَذْرَتِهِ الْمَشْرُوعَةْ»); the first teaching is a *fatiha* («فَاتِحَةُ تَعْلِيمِهَا», 149);
+   the new creation is *revealed* («يَتَجَلَّى») at its *appointed time* («مِيقَاتِهَا», 174–179); "Confess" becomes a creed of matter,
+   «فَاشْهَدْ إِذَنْ أَنْ لَا شَيْءَ يَكُونُ مِنَ الْعَدَمْ» (205); it is we who raise the seeds to life, «نَبْعَثُهَا نَحْنُ إِلَى الْحَيَاةِ» (208–214),
+   with the toil of our hands («كَدِّ أَيْدِينَا»), while the gods have no hand in it («وَمَا لِلْآلِهَةِ فِيهِ مِنْ يَدْ», 155–158) and men only
+   imagine their hands at work («فَيَحْسَبُونَ أَيْدِيَ الْآلِهَةِ هُنَاكَ تَعْمَلْ», 151–154). Fear does not merely rule, it is a tyrant
+   («اسْتَبَدَّ»). The voice is that of al-Maʿarri's *Luzumiyyat* (reason as the only imam, against superstition and the clergy) and of the
+   prophetic, psalm-like register Adonis turned against orthodoxy in *Songs of Mihyar the Damascene*. Allusions, never quotations.
+   This lifts an older rule ("no Quranic ornament") at Numa's request; «العدم» and «ظلام» stay, and every line still renders a line or
+   clause of Leonard. Where it goes beyond his words it does so by one image: «عَقِيمٌ» (barren) for "from nothing nothing can be create",
+   «طِينَتِهِ» (its clay) for "its own stuff", «رَاوَدَهَا الْخَرِيفْ» (the autumn courts it) for "when the autumn lures", «خَبْطَ عَشْوَاءَ»
+   for "by chance". Fully vowelled by the same conventions as the eighth; the checker finds no consonant without a mark; the case
+   endings have not been checked by a native reader.
+10. Tenth (13 Nov, the page now), by Claude Opus. The user's verdict on the ninth: "does not sound like Arabic". His brief for the
+   tenth: translate the Latin, not the English; a poem, with the same freedom the English poetic translation had; Arabic, not a
+   one-to-one word translation; and no calques such as «حقًّا» for "indeed" ("we don't say that in Arabic"). So the Latin's
+   connectives (*quippe*, *nam*, *videlicet*, *igitur*) are not given a word each but carried by the build of the Arabic sentence
+   («فَـ», «لَوْ … لَـ», «فَلَا شَكَّ», «فَلَا مَفَرَّ مِنَ الْإِقْرَارِ»). The scriptural overlay of the ninth is dropped; what stays is the Latin's
+   own edge against the gods: «وَلَوْ شَاءَتْهُ الْآلِهَةْ» for *divinitus* (150), «وَلَيْسَ لِلْآلِهَةِ فِيهَا يَدْ» for *sine divom* (158),
+   «فَيَحْسَبُونَهَا مِنْ صُنْعِ الْآلِهَةْ» for *divino numine rentur* (154). Images where the Latin has them: *incerto partu* as wombs
+   whose birth no one can foretell («أَرْحَامٌ لَا يُدْرَى مَا تَلِدْ»), *vere … autumno suadente* as the autumn that tempts the vines,
+   *per vada* as the sea crossed «كَأَنَّهُ مَخَاضَةْ», *ut verbis elementa* as words sharing their letters, the last line
+   *nullius exitium patitur natura videri* as «فَلَا تَرْضَى الطَّبِيعَةُ أَنْ يُرَى مَوْتُ شَيْءْ». Fully vowelled, line ends in pause form;
+   the checker flags only «فَتًى», which is correct. Case endings not checked by a native reader.
+
+Rules that hold for every version: the Arabic says what the Latin says (since the tenth version; before, what Leonard's English says), with a poet's freedom in the images but no new claims; *nihilum* is «العدم»; darkness is «ظلام» (never «عتمة»); no calques («لا يُولَد شيءٌ من العدم بفعل
+الآلهة أبدًا» was rejected as word for word); no archaic particles; no Quranic ornament (lifted for the ninth version only); no word-for-word stand-ins for Latin or English connectives («حقًّا» for *indeed*).
 
 **What the first version got wrong** (corrected in 868d8f6; the sixth version follows Leonard there). The review of 10 November (Opus) found, among others, *erumpere* (line 162) rendered «تنفلق», *secreta facultas* (line 173) rendered «قدرةً
-خاصّةً مستترة», and *alienis partibus anni* (line 181) rendered «من أجزاءِ السنة التي لا تناسبها». The seventh version has no second reader. The page
+خاصّةً مستترة», and *alienis partibus anni* (line 181) rendered «من أجزاءِ السنة التي لا تناسبها». The tenth version has no second reader. The page
 note (`i18n/ar/lucretius.html.json`, key d11ce3c93aa4) says so in the reader's words.
 
 **Sources read for the Arabic voice** (11 November 2026): Felix Fares' translation of Nietzsche's Zarathustra as serialised in الرسالة,

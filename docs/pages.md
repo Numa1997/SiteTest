@@ -519,7 +519,7 @@ Lucretius I 146–158 as an inscription (Instrument Serif, a wine rule on its le
 stage is 4 : 3 there. Each of the four sentences (`p.lq-s`, `translate="no"`, `lang="la"`) shows, on a resting mouse (150 ms; 70 ms
 from one sentence to the next; hidden 240 ms after leaving), a tap or keyboard focus, one card with its published translation: Leonard
 (1916) on the English page, Diels (1924) on the German page, and on the Arabic page (since 10 November 2026) an Arabic translation
-made for this site, since 11 November 2026 from Leonard's English (`notes/lucretius/poem-ar-146-224.json`, seventh version since 13 November 2026; the card says it is not a published translation, the only
+made for this site, since 13 November 2026 translated from the Latin (`notes/lucretius/poem-ar-146-224.json`, tenth version, fully vowelled; the card says it is not a published translation, the only
 published one, Cairo 2018, being under copyright), with the source of the Latin under it; on desktop the card rises beside the verse
 (left of it where the text is; right of it on the mirrored Arabic page), otherwise just below the sentence; a click pins it, Esc or a
 second click closes it. Written by `notes/lucretius/make_home.py` from `notes/lucretius/poem-146-224.json` and the Arabic file.
@@ -534,7 +534,7 @@ subtle separations between them", the phone left to me. The home band has, under
 German and Arabic →" (`p.lq-all`). The page (`public/lucretius.html`, with `/de/` and `/ar/` versions made by `tools/i18n/build.py`,
 which lists it in `PAGES`, and short addresses in `public/_redirects`) shows, for each of the 20 verses, four cells in a row:
 the Latin (italic, with the number of each Latin line in the margin; line 155 stands after 158, as in the manuscripts), William Ellery
-Leonard's English (1916), Hermann Diels' German (1924) and the Arabic made for this site (seventh version, `poem-ar-146-224.json`,
+Leonard's English (1916), Hermann Diels' German (1924) and the Arabic made for this site (tenth version, from the Latin, fully vowelled, `poem-ar-146-224.json`,
 README). **How the texts get there:** the verses stand in the page itself, each cell marked `translate="no"` with its own `lang` (and
 `dir="rtl"` for the Arabic), so the generator copies them unchanged into the German and Arabic pages and the tables
 `i18n/de|ar/lucretius.html.json` hold only the words around them (title, lede, the column credits "the original" and "made for this
@@ -542,26 +542,32 @@ site", the sources). The four columns are in the same order on all three pages (
 right to left. `notes/lucretius/make_page.py` writes the page and drops table entries that are no longer on it. Do not edit
 `public/lucretius.html` by hand: run `make_page.py`, then `tools/i18n/build.py`.
 
-**The leaf.** The poem is set as the leaf of a book (`article.lp-book`, up to 1240 px, a wine frame with a second line outside it and an
-eight-pointed star, a khatam, on each corner): the poet's name, the title in Instrument Serif, book and lines, an ornament of stars and
-quatrefoils, the head `div.lp-cols` (the four languages named in their own words, Latina, English, Deutsch, العربية, with their credits;
-sticky at the top of the window while the verses pass under it), then the 20 verses (`section.lp`, address `#l146` and so on; `:target`
-tints the row). Above every verse a heading (`h2.lp__n`): rule, lozenge, rule, star, the line numbers of the Latin, star, rule, lozenge,
-rule. Between the four cells run hairlines (`.lp__c + .lp__c::before`, a 1 px gradient that fades out at both ends of every verse), so
-the separations are lines that breathe and not a grid. Columns are 0.95 : 1 : 1.05 : 1.2 (the Arabic widest); lines that wrap hang
-(a hanging indent), so a new line of the verse stays distinct from a wrap. The Latin is italic; the Arabic is Noto Naskh Arabic 20 px on
-a 1.95 line, its couplets spaced a little apart. A closing ornament ends the leaf; the sources follow below it. All ornaments are inline
-SVG in the accent colour.
+**Background.** Wine-red fractal curves run down both margins of the page, behind everything (`div.lp-deco` with two strips, the
+right one mirrored and shifted half a tile; `styles/lucretius-deco.css`). The strips are SVG tiles 1600 px tall that join seamlessly,
+drawn by `notes/lucretius/make_bg.py` into `images/lucretius/`: **a** (the default) a slow stem with recursive curved branches, like the
+branching of the site's mark; **b** seven Weierstrass lines, x(y) = x₀ + Σ 0.55ᵏ cos(2π 2ᵏ y / H + φₖ), eight octaves; **c** a sine vine
+with logarithmic-spiral curls, each sprouting smaller curls. Adding `?bg=b` or `?bg=c` to the address shows the other two (a small
+script sets `html[data-bg]`). Each strip is drawn 360 px wide and set 250 px wide, its left edge at 50 % − 840 px, so on wide screens it
+stays in the margin; up to 760 px it is pushed almost off the screen at half strength.
 
-**Smaller screens.** From 1100 px up: four columns. From 761 to 1099 px: two by two (Latin and English above, German and Arabic below),
-each cell named by a small label above it, the head hidden. Up to 760 px: **one language at a time**; the head becomes four buttons
+**The layout.** Since 13 November 2026 the poem is set flat and modern, with no paper sheet, frame, corner stars or ornament rows (`article.lp-book`, no border, no background). It opens with the head `div.lp-cols`, under a 1 px dark rule across the full width: for each language a small mono index in wine (01 to 04), the name in its own words (Latina, English, Deutsch, العربية; Instrument Serif 27 px, the Arabic in Amiri 24 px) and the credit in mono; a light rule under it; sticky at the top of the window on a translucent paper ground with a blur. Then the 20 verses (`section.lp`, address `#l146` and so on; `:target` tints the row; each section is named "Lines 146 to 148" and so on for screen readers). The verses stand in `div.lp-body`, so each
+language runs down its own column as one text: behind them `div.lp-rules` (a grid with the same columns) draws three plain light hairlines
+(`--rule-soft`) between the columns, unbroken from the first verse to the last. Between two verses there is no heading and no
+line across the page: each cell after the first verse begins with its own short dash (`i.lp__sep`, 22 px, 1 px, `--rule`, at the
+start of the line: left in the Latin, English and German, right in the Arabic), so the mark never crosses into the next column. The line numbers of the Latin
+stand only beside the Latin. Columns are 0.9 : 0.95 : 1 : 1.5 (the Arabic widest, so the vowel marks have room); lines that wrap hang
+(a hanging indent), so a new line of the verse stays distinct from a wrap. The Latin is italic; the Arabic is Noto Naskh Arabic 20 px on
+a 2.25 line (tall enough for the vowel marks), its couplets spaced a little apart. A light rule ends the poem; the sources follow below it.
+
+**Smaller screens.** From 1100 px up: four columns. Below 1100 px: **one language at a time**, in one column up to 640 px wide; the head becomes four buttons
 (`aria-pressed`, a wine underline on the one shown) and a small script at the end of the page shows one cell per verse, starting with the
 language of the page (English on the English page, Deutsch on `/de/`, العربية on `/ar/`). When the language is changed, the verse that
 was at the top of the window stays at the top (the script moves the scroll by the difference, `overflow-anchor: none` on the leaf stops the
 browser from doing it a second time). Without JavaScript the four cells stand one under the other, each named by its label. A short note
-under the lede, shown only on phones, says that the languages come one at a time.
+under the lede, shown only below 1100 px, says that the languages come one at a time. Up to 760 px the head drops the index numbers and the credits.
 
-Measured on the built site (headless Chromium, English, German and Arabic pages, 1600, 1280, 900 and 390 px): 20 verse rows, 33 pieces
-on each translated page and none pending, no page errors, no sideways scroll; at 1600 and 1280 px four cells per verse (270 px wide at
-1280 px for the Latin; 308 px for the Arabic), at 900 px two columns of 369 px, at 390 px one cell of 308 px, the one of the page's
-language; clicking each of the four buttons showed that cell and left the verse at the same height (−44 px before and after).
+Measured on the built site (headless Chromium, English, German and Arabic pages, 1600, 1280, 900 and 390 px; 13 November 2026, ninth
+version): 20 verse rows, 52 pieces on each translated page and none pending, no page errors, no sideways scroll; at 1600 and 1280 px four
+cells per verse (223, 235, 248 and 372 px), at 900 px one cell of 640 px and at 390 px one of 308 px, the one of the page's language;
+the column hairlines on the Arabic page stand at the same places as on the English one (`direction: ltr` on `.lp-rules`); earlier, at
+the four-column launch, clicking each of the four buttons showed that cell and left the verse at the same height (−44 px before and after).

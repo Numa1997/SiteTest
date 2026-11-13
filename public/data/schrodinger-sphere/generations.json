@@ -48,5 +48,15 @@
   "kaggle": "numakoudsie/schrodinger-spherical-wave",
   "version": "1",
   "commit": "13dda4cef3aeb6cd00ea3dbb48ee8a770344afcc"
+ },
+ {
+  "date": "2026-11-13",
+  "index": "2026-11-13/shapes3d/index.json",
+  "kind": "shapes3d",
+  "shape": "coin, tube, sphere wells and hard ball, spherical wave from the side",
+  "runs": 1458,
+  "kaggle": "numakoudsie/schrodinger-shapes-3d",
+  "version": "1",
+  "commit": "a2691194927b8da12f0692c6c3b632ff4e9e76f6"
  }
 ]

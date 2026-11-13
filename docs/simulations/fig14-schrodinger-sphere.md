@@ -229,3 +229,90 @@ our colours".
   height checked and its colour not. Spherical waves are checked where the circle of the stored radius crosses the $x$ axis; two
   sources at $(s/2 + r_j, 0)$, where both distances are stored radii.
 
+## The remaining 3D cases (13 November 2026, night)
+
+One GPU launch for everything that needs true 3D (the owner's "all of them"). Kaggle notebook
+`numakoudsie/schrodinger-shapes-3d`, version 1, private, 2 × T4: a one-line loader that fetches
+[solver3d.py](../../tools/kaggle/schrodinger-shapes/solver3d.py) and [shapes3d_run.py](../../tools/kaggle/schrodinger-shapes/shapes3d_run.py)
+at commit `a269119` (written by [build_shapes3d.py](../../tools/kaggle/schrodinger-shapes/build_shapes3d.py)). Grid as before:
+128³ points, 0.5 a, Δt = 0.01, absorbing border, Strang split-step Fourier.
+
+- **Runs (1458, none failed):** coin (disc radius R = 2 … 6, 1 a thick, axis along the flight) and tube (wall 1 a thick at
+  ρ = R, endless along the flight), each 9 energies × 13 heights (wells −4, −2, −1; 0 … 8; hard) × 5 sizes = 585; the sphere's
+  wells and hard ball, 9 × 4 × 5 = 180; a spherical wave from x = −12 a (shell r₀ = 6, σ₀ = 2, outgoing) onto a ball R = 4
+  (`soff`), a flat wall d = 1 (`sslab`) and an upright pillar R = 4 (`spil`), each 9 × 4 heights (−2, 2, 6, hard) = 36.
+- **Hard wall:** height 200 with a step four times shorter (0.0025): pure phase factors, no probability removed; the wave
+  reaches $1/\sqrt{400} = 0.05$ a into it.
+- **Stored:** per run a `SPHC` file, the half y ≥ 0 of the plane z = 0 (|ψ| and arg ψ in 8-bit levels of each frame's own
+  peak; the peaks are in the header), 48 frames, and the curves from the whole ψ. Coin, tube, sphere and the side cases onto
+  the ball and the wall are round about the x axis, so the page spins the cut as before. The pillar with a spherical wave is
+  not: it also stores the true 3D wave, Re ψ on 96 × 64 × 64 points every second frame (`SPHW`, levels of each frame's peak,
+  `wscale` in the header); its Sheets, Cutaway and Fog use that file.
+- **Measured (timing.json):** 1458 of 1458 runs in 3993 s on two GPUs, 7315 GPU-seconds of runs (2.03 h), 2 926 032 steps;
+  the estimate before launch was 2.08 h and 62 min. Lowest total probability at the end of any run: see index.json `norm_end`.
+- **Files:** `public/data/schrodinger-sphere/2026-11-13/shapes3d/` (1495 files, 300 MB), every SHA-256 checked by
+  [to_site_shapes3d.py](../../tools/kaggle/schrodinger-shapes/to_site_shapes3d.py); generations.json lists the generation.
+- **Page:** Coin and Tube buttons under Barrier; "Spherical, from the side" under Wave, with Sphere, Pillar and Flat wall.
+- **Progress:** the notebook prints one line per finished run (`1349/1458 coin …`); Kaggle's connector shows the log only
+  after the session ends, but the notebook's page on kaggle.com shows it while it runs.
+
+## The animation made smooth (13 November 2026, 03:00 UTC)
+
+The owner: "The animation looks horrible ... glitches and slow." Causes found and what changed:
+
+- **It stepped five times a second.** A run has 48 stored frames, and the page showed one, then the next. Now the meshed sheet
+  moves on every screen frame. Between stored frames 0 and 1 the page draws
+  $\psi(t_0 + \tau) = e^{-iE\tau}\,[(1 - s)\,\psi_0 + s\,e^{+iE\Delta t}\,\psi_1]$ with $s = \tau/\Delta t$: both frames are taken
+  into the frame turning at the wave's energy $E$ (where $\psi$ changes only as slowly as its envelope moves, since an elastic run
+  holds energies near $E$ only), blended, and turned back. At a stored frame the sheet is that frame exactly. The data panel's
+  height check uses the same blend of the two frames' stored values (measured between frames: $2 \times 10^{-8}$).
+- **Each new frame froze the page for 25 to 70 ms.** The fine sheets are now computed in a worker
+  ([fig14-sheet-worker.js](../../public/scripts/fig14-sheet-worker.js)), four frames ahead of the playhead. What is left on the
+  page per screen frame: 4 ms (packets, 289² points), 10 ms (spherical waves, 385² points), measured in headless Chromium.
+- **The height scale jumped** from frame to frame (it was set from each frame's largest value). It is now blended between the
+  two frames like the wave.
+- **Playback slowed down** to a fifth near the edge of a slider's range, and crawled through the last quarter of every run.
+  A stored run now plays at full speed, rests 1.2 s at its end and starts again. (The slow-down remains for the browser's live
+  preview, which has to wait for its own frames.)
+- **Sheets and Cutaway froze for 100 to 200 ms per frame.** They are now cut in a module worker
+  ([fig14-iso-worker.js](../../public/scripts/fig14-iso-worker.js), marching cubes moved to
+  [marching.js](../../public/scripts/marching.js)); the newest frame asked for is cut next, frames in between are skipped.
+  Median gap between screen frames while playing: 17 ms.
+- **The sphere's sheets were torn late in a run.** The true 3D files hold Re ψ in 127 levels of the first frame's peak; once the
+  wave has spread, a crest is a handful of levels. The sphere's sheets are now spun from the cut (255 levels of |ψ| and its
+  phase), as for the other radii. The true 3D files of 12 November stay stored and listed; the page no longer draws from them.
+- **Wrong start waves in the 3D generation of 13 November (version 1).** (a) Spherical wave from the side: the source stood at
+  x = −12 with r₀ = 6, so the shell began inside the barrier. (b) Hard walls: the tail of the start wave inside the wall was
+  left there and stayed (levels up to 216 of 255 inside the hard ball in the side case). Fixed in
+  [solver3d.py](../../tools/kaggle/schrodinger-shapes/solver3d.py): source at x = −17, r₀ = 5 (amplitude 0.018 of the peak at a
+  barrier of radius 4); the start wave is set to zero inside a hard wall and normalised again. The 243 affected runs (108
+  side-wave runs, 135 hard runs of sphere, coin and tube) are computed again on Kaggle's CPU, four notebooks
+  `numakoudsie/schrodinger-shapes-3d-v2-a … d` (no GPU hours). Until they are on the site the page does not offer the wave
+  from the side, and says under a hard-wall run of version 1 what is wrong with it.
+- The live preview in the browser is drawn as fog also when Mesh is chosen (it has no fine sheet).
+
+## Version 2 of the 243 runs is on the site (13 November 2026, 03:35 UTC)
+
+The owner asked for the GPU instead of the CPU. `numakoudsie/schrodinger-shapes-3d`, version 2 (2 × T4, loader with
+`JOBSEL = 'hard_and_shells'`, code at commit `94d1281`): 243 of 243 runs, none failed, 1192 s on the clock, 2239 GPU-seconds of
+runs (0.62 h; estimate before launch 0.76 h and 23 min), 1 068 639 steps. Merged by
+[merge_v2.py](../../tools/kaggle/schrodinger-shapes/merge_v2.py): every SHA-256 checked, the 243 files and index entries
+replaced (marked `v: 2`), `shell` set to the new source (x = −17, r₀ = 5, travel 24). The four CPU notebooks `…-v2-a` to `-d`
+started earlier compute the same runs; their output is not used (the connector could not cancel them: its cancel call needs a
+session number that neither its status nor its info call returns).
+
+Measured on the stored files of version 2 (levels × the frame's peak, in units of the first frame's peak in the plane z = 0):
+
+| | start wave inside the barrier | hard wall: largest value inside during the run | more than one grid point inside |
+|---|---|---|---|
+| sphere, hard | 0 | 0.043 | 0.009 |
+| coin, hard | 0 | 0.030 | 0 |
+| tube, hard | 0 | 0.044 | 0 |
+| side wave onto ball / pillar / wall, hard | 0 | 0.003 / 0.003 / 0.001 | 0.0006 / 0.0006 / 0 |
+| side wave, finite heights | below the lowest stored level (3 of 255) | | |
+
+In version 1 the same numbers were up to 0.85 (216 of 255 levels deep inside the hard ball in the side case). The few per cent
+left at the first grid point inside a hard wall are the wave's reach into a wall of height 200 (0.05 a) seen on a grid of 0.5 a.
+With `shell.src_x = -17` in the index the page offers "Spherical, from the side" again, and runs marked `v: 2` no longer carry
+the note about the start wave.
+

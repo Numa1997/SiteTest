@@ -101,6 +101,7 @@
                         <button type="button" data-w="packet" aria-pressed="true">Packet</button>
                         <button type="button" data-w="rout" aria-pressed="false">Spherical, from the centre</button>
                         <button type="button" data-w="rin" aria-pressed="false">Spherical, closing in</button>
+                        <button type="button" data-w="side" aria-pressed="false">Spherical, from the side</button>
                         <button type="button" data-w="two" aria-pressed="false">Two sources</button>
                     </div>
                 </div>
@@ -110,8 +111,8 @@
                         <button type="button" data-s="sphere" aria-pressed="true">Sphere</button>
                         <button type="button" data-s="pillar" aria-pressed="false">Pillar</button>
                         <button type="button" data-s="slab" aria-pressed="false">Flat wall</button>
-                        <button type="button" data-s="coin" aria-pressed="false" disabled title="Not computed yet: needs GPU runs on Kaggle">Coin</button>
-                        <button type="button" data-s="tube" aria-pressed="false" disabled title="Not computed yet: needs GPU runs on Kaggle">Tube</button>
+                        <button type="button" data-s="coin" aria-pressed="false" disabled title="Arriving from Kaggle">Coin</button>
+                        <button type="button" data-s="tube" aria-pressed="false" disabled title="Arriving from Kaggle">Tube</button>
                     </div>
                     <p class="chips-note" id="shape-note">—</p>
                 </div>
@@ -564,7 +565,7 @@
                     <section class="psec" id="p-screen">
                         <h3><span class="psec__n">09</span>From the equation to the screen</h3>
                         <p>The square picture, Fig. 14, shows the wave itself in three dimensions, seen from an angle that you change by dragging. Because the packet flies along \(x\) through the centre of the sphere, and both the starting packet (5) and the potential (3) are unchanged by any rotation about the \(x\) axis, the angular momentum about that axis, \(\hat L_x = -i(y\,\partial_z - z\,\partial_y)\), commutes with the Hamiltonian; the packet starts with \(\hat L_x\psi = 0\) and keeps it, so at every time \(\psi(x, y, z, t) = \psi(x, \rho, t)\) with \(\rho = \sqrt{y^2 + z^2}\), the distance from the axis. The whole three-dimensional wave is therefore fixed by its values on one half-plane through the axis. Kaggle computed every run on the full \(128^3\) grid and stored the plane \(z = 0\); the page keeps its half \(y = \rho \ge 0\), \(128 \times 64\) points \(0.5\,a\) apart, as two levels per point: \(q = \mathrm{round}\big(255\,|\psi|/|\psi|_\text{peak}\big)\), with \(|\psi|_\text{peak}\) the largest value in the first frame, and \(p\), the phase \(\arg\psi\) in 256 steps from \(-\pi\) to \(\pi\). To draw a frame the page spins this half-plane about the axis: every point of a box \(48\,a\) long and \(32\,a\) wide takes \(\mathrm{Re}\,\psi = (q/255)\cos(\text{phase})\) of the stored point at its \(x\) and its \(\rho\), linear between the two stored \(\rho\) values around it.</p>
-                        <p>The square figure draws this three-dimensional \(\mathrm{Re}\,\psi\) in one of four ways, chosen under <em>View</em>. <em>Mesh</em>, the view the figure opens with, takes the plane \(z = 0\) through the flight axis and lifts every point by its \(\mathrm{Re}\,\psi\), like the surface of a pond seen from the bank: crests are hills, coloured wine; troughs are valleys, coloured slate; where the wave is zero the sheet lies flat in the colour of the paper. A thin mesh of lines lies on the sheet, 48 squares along each side, so that its shape can be read from any angle, and the barrier is the dark line where it cuts the plane. A second button lifts the sheet by \(|\psi|^2\), the probability density, instead. The stored points are \(0.5\,a\) apart, only four to six for each wavelength, and a sheet stretched over those points alone would be a chain of flat facets. The page therefore resamples the stored plane on a grid three times finer, \(a/6\) apart, which gives at least twelve points for each wavelength. It does so by <em>band-limited interpolation</em>: on the solver's periodic grid the wave is a sum of the plane waves that fit the box (section 6), and that same sum can be evaluated between the grid points. (The flat wall and the spherical waves were computed by another method on a grid ten times finer; their stored samples, \(0.5\,a\) apart, are interpolated in the same way, for the spherical waves along \(r\) on \(u = r\psi\).) The drawn sheet is therefore a resampling of the stored grid: it passes through every stored value and contains no wave that the run did not have. The height is scaled anew in every frame, so that the tallest point is a seventh of the sheet's width, or lower where that would make the sheet steeper than a slope of 1.5 anywhere; the waves are short compared with the sheet, and at a seventh of its width their crests would stand as needles. <em>Sheets</em> shows two surfaces, the places where \(\mathrm{Re}\,\psi = +c\) (wine, the crests) and where \(\mathrm{Re}\,\psi = -c\) (slate, the troughs), with \(c\) three tenths of the largest \(|\mathrm{Re}\,\psi|\) in the drawn box at that moment. Think of the crests of sea waves frozen into glass and lit by the sun: each crest is a curved sheet, and the distance between neighbouring wine sheets is one wavelength \(2\pi/k_0\). The sheets are found by the <em>marching cubes</em> method: every little cube of eight neighbouring grid points whose corners lie on both sides of \(c\) is cut by a few triangles, placed where linear interpolation along its edges reaches \(c\). Before the cubes are cut, the field is resampled more finely, \(a/6\) apart along the flight and \(a/3\) across, with a smooth local kernel that returns the stored values at the stored points; cut on the stored points alone, the rims of the sheets came out as saw teeth. <em>Cutaway</em> is the same with a quarter removed, so we can see how the sheets bend into the barrier. <em>Fog</em> is the earliest view, coloured mist whose opacity grows with \((\mathrm{Re}\,\psi)^2\) along each line of sight. All four views draw the same stored numbers: the mesh on the square \(-24 \le x, y \le 24\) of the plane \(z = 0\), the other three in the box \(-24 \le x &lt; 24\), \(-16 \le y, z &lt; 16\). For the sphere at \(R = 4\), Kaggle stored \(\mathrm{Re}\,\psi\) on every point of that box from the full three-dimensional run, and the page draws those values. For the other radii it spins the stored half-plane about the axis, as described above. Three things differ from the model. First, the symmetry holds exactly only on paper: on the square grid the sphere is a staircase, so the computed wave is round about the axis only to within a small error. Measured on the stored true three-dimensional run \(E = 2\), \(V_0 = 1.5\), \(R = 4\), \(\mathrm{Re}\,\psi\) off the axis differs from its value at the same \(x\) and \(\rho\) in the plane \(z = 0\) by at most 0.9 of the 127 steps between zero and the first frame's peak in the root mean square (late in the run, \(t \approx 11\)), and by 17 steps at worst at a single point while the packet is on the sphere (\(t = 6.72\)). Second, the stored levels stop at the first frame's peak (255 for the cuts, \(\pm 127\) for the true three-dimensional runs): where the incoming and reflected waves overlap, crests can exceed it and are clipped; this happens in 72 of the 81 true three-dimensional runs. Third, time is shown in jumps: the page shows the stored frame at or before the playback time and never blends two frames. The probabilities in the readouts and in Fig. 14b come from Kaggle's whole \(\psi\), not from the picture.</p>
+                        <p>The square figure draws this three-dimensional \(\mathrm{Re}\,\psi\) in one of four ways, chosen under <em>View</em>. <em>Mesh</em>, the view the figure opens with, takes the plane \(z = 0\) through the flight axis and lifts every point by its \(\mathrm{Re}\,\psi\), like the surface of a pond seen from the bank: crests are hills, coloured wine; troughs are valleys, coloured slate; where the wave is zero the sheet lies flat in the colour of the paper. A thin mesh of lines lies on the sheet, 48 squares along each side, so that its shape can be read from any angle, and the barrier is the dark line where it cuts the plane. A second button lifts the sheet by \(|\psi|^2\), the probability density, instead. The stored points are \(0.5\,a\) apart, only four to six for each wavelength, and a sheet stretched over those points alone would be a chain of flat facets. The page therefore resamples the stored plane on a grid three times finer, \(a/6\) apart, which gives at least twelve points for each wavelength. It does so by <em>band-limited interpolation</em>: on the solver's periodic grid the wave is a sum of the plane waves that fit the box (section 6), and that same sum can be evaluated between the grid points. (The flat wall and the spherical waves were computed by another method on a grid ten times finer; their stored samples, \(0.5\,a\) apart, are interpolated in the same way, for the spherical waves along \(r\) on \(u = r\psi\).) The drawn sheet is therefore a resampling of the stored grid: it passes through every stored value and contains no wave that the run did not have. The height is scaled anew in every frame, so that the tallest point is a seventh of the sheet's width, or lower where that would make the sheet steeper than a slope of 1.5 anywhere; the waves are short compared with the sheet, and at a seventh of its width their crests would stand as needles. <em>Sheets</em> shows two surfaces, the places where \(\mathrm{Re}\,\psi = +c\) (wine, the crests) and where \(\mathrm{Re}\,\psi = -c\) (slate, the troughs), with \(c\) three tenths of the largest \(|\mathrm{Re}\,\psi|\) in the drawn box at that moment. Think of the crests of sea waves frozen into glass and lit by the sun: each crest is a curved sheet, and the distance between neighbouring wine sheets is one wavelength \(2\pi/k_0\). The sheets are found by the <em>marching cubes</em> method: every little cube of eight neighbouring grid points whose corners lie on both sides of \(c\) is cut by a few triangles, placed where linear interpolation along its edges reaches \(c\). Before the cubes are cut, the field is resampled more finely, \(a/6\) apart along the flight and \(a/3\) across, with a smooth local kernel that returns the stored values at the stored points; cut on the stored points alone, the rims of the sheets came out as saw teeth. <em>Cutaway</em> is the same with a quarter removed, so we can see how the sheets bend into the barrier. <em>Fog</em> is the earliest view, coloured mist whose opacity grows with \((\mathrm{Re}\,\psi)^2\) along each line of sight. All four views draw the same stored numbers: the mesh on the square \(-24 \le x, y \le 24\) of the plane \(z = 0\), the other three in the box \(-24 \le x &lt; 24\), \(-16 \le y, z &lt; 16\). The sheets, the cutaway and the fog spin the stored half-plane about the axis, as described above. (For the sphere at \(R = 4\) Kaggle also stored \(\mathrm{Re}\,\psi\) on every point of that box from the full three-dimensional run, in 127 levels of the first frame's peak. Once the wave has spread, a crest is only a handful of such levels and the sheets cut from them came out torn, so the page draws from the cut, which holds 255 levels of \(|\psi|\) and its phase; the three-dimensional files remain stored and serve the symmetry check below.) Three things differ from the model. First, the symmetry holds exactly only on paper: on the square grid the sphere is a staircase, so the computed wave is round about the axis only to within a small error. Measured on the stored true three-dimensional run \(E = 2\), \(V_0 = 1.5\), \(R = 4\), \(\mathrm{Re}\,\psi\) off the axis differs from its value at the same \(x\) and \(\rho\) in the plane \(z = 0\) by at most 0.9 of the 127 steps between zero and the first frame's peak in the root mean square (late in the run, \(t \approx 11\)), and by 17 steps at worst at a single point while the packet is on the sphere (\(t = 6.72\)). Second, the stored levels stop at the first frame's peak (255 for the cuts, \(\pm 127\) for the true three-dimensional runs): where the incoming and reflected waves overlap, crests can exceed it and are clipped; this happens in 72 of the 81 true three-dimensional runs. Third, a run is stored as 48 frames. The sheets and the fog show the stored frame at or before the playback time. The mesh moves between two stored frames: it takes both into the frame that turns at the wave's own energy, \(\psi\,e^{iEt}\), where the wave changes only as slowly as its envelope moves, blends them in proportion to the time elapsed, and turns the result back, \(\psi(t_0 + \tau) = e^{-iE\tau}\big[(1 - s)\,\psi_0 + s\,e^{iE\Delta t}\,\psi_1\big]\) with \(s = \tau/\Delta t\). At a stored frame the mesh is that frame exactly; in between it is a blend, not a computed solution. The probabilities in the readouts and in Fig. 14b come from Kaggle's whole \(\psi\), not from the picture.</p>
                         <p>The graph Fig. 14b draws the curves of Figure 2 for the chosen run: behind in black, inside (the slab \(|x| \le R\)) in rose, dashed, ahead in wine, and lost at the border in grey, dotted. The readouts below the controls give the same four numbers at the frame shown; with the defaults at the last frame (\(t = 13.33\), the true three-dimensional run) they read 0.239, 0.633, 0.123 and 0.0048. The guide line evaluates (14) for a slab of thickness \(2R\) and says when \(E &lt; V_0\); it is a reference for the central ray only, not a prediction for the sphere. The data panel holds every stored number with its source, and checks the inside and lost values, the free-packet width (11) and the guide (14) against their formulas.</p>
                                             <h4><span class="psub__n">9.1</span>Other barriers: a pillar and a flat wall</h4>
                         <p>Under <em>Barrier</em> the sphere can be replaced by a round pillar standing upright, endless along \(z\), or by a flat wall \(|x| &lt; d/2\) of thickness \(d\), endless across the path. Each can be <em>soft</em> (\(V = V_0\) inside, so the wave partly enters), <em>hard</em> (\(\psi = 0\) inside: the wave cannot enter at all, the limit \(V_0 \to \infty\)), or a <em>well</em> (\(V_0 &lt; 0\): the particle speeds up inside, as a ball rolling over a dip in the ground). Wells and hard walls are stored for the pillar and the wall; for the sphere they still need runs on Kaggle's graphics cards. Both shapes are easier to compute than the sphere, because for them a quantity that the potential does not change lets us drop whole dimensions from the computation. (The sphere was computed in full three dimensions; its rotational symmetry was used only to store and draw the wave.)</p>
@@ -644,6 +645,11 @@
             rout: { size: 'd', label: 'Shell wall thickness <i>d</i>', def: 1.0, radial: true, note: 'A spherical wave leaves the centre: its crests are spheres. At r = 16 it meets a spherical shell wall of thickness d (V = V₀ there). Exact in 1D: u = r ψ with no dependence on direction; computed on Kaggle (CPU), checked against the exact transmission. With the pillar, the flat wall, the coin or the tube a spherical wave is not computed yet: those are true 3D problems for Kaggle’s graphics cards.' },
             rin: { size: 'R', label: 'Ball radius <i>R</i>', def: 4.0, radial: true, note: 'A spherical wave closes in on the centre from r = 28, where a ball of radius R sits (V = V₀ inside). Exact in 1D: u = r ψ; computed on Kaggle (CPU). With the other barriers a spherical wave is not computed yet (true 3D, Kaggle’s graphics cards).' },
             two: { size: 's', label: 'Distance between the sources <i>s</i>', def: 8.0, radial: true, two: true, note: 'Two spherical waves in free space, from two centres a distance s apart on the x axis. The equation is linear, so their sum is again a solution: ψ = ψ₁ + ψ₂, each the stored free spherical wave (computed on Kaggle, CPU) about its own centre. Where crest meets crest the sheet rises; where crest meets trough it stays flat: the lines of no motion are hyperbolas.' },
+            coin: { size: 'R', label: 'Coin radius <i>R</i>', def: 4.0, note: 'A coin facing the packet: a disc of radius R, 1 a thick, its axis along the flight (V = V₀ inside). Computed in full 3D on Kaggle’s GPUs (128³ points); stored: the cut through the axis, spun about it.' },
+            tube: { size: 'R', label: 'Tube radius <i>R</i>', def: 4.0, note: 'An endless tube along the flight: a wall 1 a thick at the distance R from the axis (V = V₀ in the wall). The packet flies down the middle. Computed in full 3D on Kaggle’s GPUs (128³ points); stored: the cut through the axis, spun about it.' },
+            soff: { size: 'R', label: 'Ball radius <i>R</i>', def: 4.0, side: true, chip: 'sphere', note: 'A spherical wave leaves a point 17 a to the left of a ball of radius R (V = V₀ inside) and washes over it. Computed in full 3D on Kaggle’s GPUs (128³ points); stored: the cut through the line from the source to the ball, spun about it.' },
+            spil: { size: 'R', label: 'Pillar radius <i>R</i>', def: 4.0, side: true, chip: 'pillar', note: 'A spherical wave leaves a point 17 a to the left of an upright pillar of radius R (V = V₀ inside). Nothing here is round about an axis: computed in full 3D on Kaggle’s GPUs and stored as the plane z = 0 (for the mesh) and the true 3D wave (for the sheets and the fog).' },
+            sslab: { size: 'd', label: 'Wall thickness <i>d</i>', def: 1.0, side: true, chip: 'slab', note: 'A spherical wave leaves a point 17 a to the left of a flat wall of thickness d (V = V₀ inside). Computed in full 3D on Kaggle’s GPUs (128³ points); stored: the cut through the line from the source to the wall, spun about it.' },
             slab: { size: 'd', label: 'Wall thickness <i>d</i>', def: 1.0, note: 'A flat wall |x| < d/2 of thickness d, endless across: V = V₀ inside. Exact in 1D: ψ = χ(x) g(y) g(z); χ computed on Kaggle (CPU, Crank–Nicolson), checked against the exact transmission.' }
         };
         var SHAPE = 'sphere', VIEW = 'mesh', GRID = {}, byWave = {}, GZ = null, GZ_OK = null;
@@ -652,6 +658,7 @@
             if (radial) { NX3 = 64; NY3 = 64; X3 = -24; Y3 = -24; H3 = 0.75; } else { NX3 = 96; NY3 = 64; X3 = -24; Y3 = -16; H3 = 0.5; }
             F3 = new Float32Array(NX3 * NY3 * NY3); F3id = null; PL = new Float32Array(NX3 * NY3); fogBuf = new Uint8Array(NX3 * NY3 * NY3);
         }   /* sheets at Re psi = +-0.3 of the frame's largest |Re psi| in the box */   /* the 3D box drawn: x in [-24, 24), y and z in [-16, 16), 0.5 a apart (the grid of the true 3D runs) */
+        var endRest = 0;
         var PLAY_SECONDS = 9;    /* a whole run plays in about this many seconds at full speed */
         var LIVE_MS = { note: 'measured in Node 22 on one core of a 4-core workspace: 11 to 34 s for a whole run' };
 
@@ -747,7 +754,7 @@
                 return Promise.all([check, new Response(body).arrayBuffer()]).then(function (res) {
                     var all = new Uint8Array(res[1]), n = head.n;
                     if (head.kind === 'out' || head.kind === 'in') { c.radial = true; c.head = head; c.n = n; c.nr = head.nr; c.rstep = head.rstep; c.ready_n = n; var mr = n * c.nr; c.A = all.subarray(0, mr); c.P = all.subarray(mr, 2 * mr); c.curves = head.curves; c.sha = res[0]; c.peaks = head.peaks; return c; }
-                    c.head = head; c.n = n; c.nx = head.nx; c.nr = head.nr; c.step = head.step; c.x0 = head.x0; c.ready_n = n; var m = n * c.nx * c.nr; c.A = all.subarray(0, m); c.P = all.subarray(m, 2 * m); c.curves = head.curves; c.sha = res[0];   /* n frames of the half-plane (x, rho) */
+                    c.head = head; c.pk = head.peaks || null; c.n = n; c.nx = head.nx; c.nr = head.nr; c.step = head.step; c.x0 = head.x0; c.ready_n = n; var m = n * c.nx * c.nr; c.A = all.subarray(0, m); c.P = all.subarray(m, 2 * m); c.curves = head.curves; c.sha = res[0];   /* n frames of the half-plane (x, rho) */
                     return c;
                 });
             });
@@ -758,7 +765,7 @@
         function loadWave(r) {
             var k = 'W' + r.key;
             if (cache[k]) return cache[k].ready;
-            var c = cache[k] = { source: 'kaggle', wave: true, meta: r, shape: 'sphere' };
+            var c = cache[k] = { source: 'kaggle', wave: true, meta: r, shape: r.shape || 'sphere' };
             c.ready = fetch(r.base + r.file).then(function (res) { if (!res.ok) throw new Error(res.status + ' for ' + r.file); return res.arrayBuffer(); }).then(function (buf) {
                 var check = (window.crypto && crypto.subtle) ? crypto.subtle.digest('SHA-256', buf).then(function (h) { return hex(h) === r.sha256; }) : Promise.resolve(null);
                 var dv = new DataView(buf), H = dv.getUint32(4, true), head = JSON.parse(new TextDecoder().decode(new Uint8Array(buf, 8, H)));
@@ -801,8 +808,9 @@
 
         /* ---------- what to show: the stored run, else the live preview ---------- */
         function entry() {
-            var p = current(), w = SHAPE === 'sphere' && VIEW !== 'mesh' ? byWave[key(p.E, p.V0, p.R)] : null, r = byKey[key(p.E, p.V0, p.R)];   /* the mesh draws the plane z = 0 from the complex cut (it has |psi| and arg psi; the true 3D files have Re psi only) */
-            if (w) { var cw = cache['W' + w.key]; if (!cw) loadWave(w); if (cw && cw.W) return cw; if (!r) return null; }   /* the true 3D wave first; the cut while it loads */
+            var p = current(), w = SHAPE === 'spil' && VIEW !== 'mesh' ? byWave[key(p.E, p.V0, p.R)] : null, r = byKey[key(p.E, p.V0, p.R)];   /* the sphere's sheets are spun from its cut: the cut holds 255 levels of |psi| and its phase, the sphere's true 3D files only 127 levels of Re psi of the first frame's peak, too few once the wave has spread */   /* the mesh draws the plane z = 0 from the complex cut (it has |psi| and arg psi; the true 3D files have Re psi only) */
+            if (w) { var cw = cache['W' + w.key]; if (!cw) loadWave(w); if (cw && cw.W) return cw; if (!r || SHAPE === 'spil') return null; }   /* the pillar with a spherical wave is not round about an axis: its sheets need the true 3D file */
+            if (SHAPE === 'spil' && VIEW !== 'mesh') return null;   /* the true 3D wave first; the cut while it loads */
             if (r) { var c = cache[r.key]; if (!c) load(r); return c && c.A ? c : null; }
             if (SHAPE !== 'sphere' || p.V0 >= HARD) return null;   /* the browser preview solves the sphere with a finite height only */
             startLive(p);
@@ -817,12 +825,13 @@
            true 3D runs: the stored levels as they are; sphere and flat wall: the cut through the axis spun about it (psi(x, rho));
            pillar: phi(x, y) of the top view times the free spread g(z) (psi = phi g, exact because V does not depend on z) */
         var F3 = new Float32Array(NX3 * NY3 * NY3), F3id = null;
-        function reAt(c, f, i, r) { var q = (f * c.nx + i) * c.nr + r, a = c.A[q]; return a < 3 ? 0 : a / 255 * Math.cos(c.P[q] / 255 * 2 * Math.PI - Math.PI); }
+        function pkOf(c, f) { return c && c.pk ? c.pk[f] : 1; }   /* files of 13 November 2026 on: levels of each frame's own peak, the peaks listed in the header; older files: of the first frame's peak */
+        function reAt(c, f, i, r) { var q = (f * c.nx + i) * c.nr + r, a = c.A[q]; return a < 3 ? 0 : a / 255 * pkOf(c, f) * Math.cos(c.P[q] / 255 * 2 * Math.PI - Math.PI); }
         function field3d(c, f) {
             var id = (c.wave ? 'W' : '') + (c.meta.key || c.source + JSON.stringify(c.meta)) + ':' + f;
             if (id === F3id) return F3;
             var N2 = NY3 * NY3;
-            if (c.wave) { var base = f * NX3 * N2; for (var q = 0; q < NX3 * N2; q++) F3[q] = (c.W[base + q] - 128) / 127; }
+            if (c.wave) { var base = f * NX3 * N2, ws = c.head.wscale ? c.head.wscale[f] : 1; for (var q = 0; q < NX3 * N2; q++) F3[q] = (c.W[base + q] - 128) / 127 * ws; }
             else if (c.radial) {   /* psi depends on r alone: Re psi at r = |(x, y, z)|, linear between stored r points; levels of each frame's peak, rescaled to the first frame's */
                 var nr = c.nr, rs = c.rstep, sc = c.peaks[f] / c.peaks[0] / 255, ob = f * nr, reR = new Float32Array(nr);
                 for (var q3 = 0; q3 < nr; q3++) { var a3 = c.A[ob + q3]; reR[q3] = a3 < 3 ? 0 : a3 * sc * Math.cos(c.P[ob + q3] / 255 * 2 * Math.PI - Math.PI); }
@@ -868,6 +877,20 @@
             for (a = 0; a < mx * my; a++) { o = a * my; var s3 = a * nz; for (k = 0; k < my; k++) { var k6 = k * 6; C[o + k] = ay2.W[k6] * B[s3 + ay2.I[k6]] + ay2.W[k6 + 1] * B[s3 + ay2.I[k6 + 1]] + ay2.W[k6 + 2] * B[s3 + ay2.I[k6 + 2]] + ay2.W[k6 + 3] * B[s3 + ay2.I[k6 + 3]] + ay2.W[k6 + 4] * B[s3 + ay2.I[k6 + 4]] + ay2.W[k6 + 5] * B[s3 + ay2.I[k6 + 5]]; } }
             return { F: C, nx: mx, ny: my, nz: my, hx: H3 / UPX, h: H3 / UPY };
         }
+        /* The sheets are cut in a worker (scripts/fig14-iso-worker.js), so the page never waits for them: the newest frame asked for
+           is the next one cut, frames in between are skipped. Where module workers are missing the page cuts them itself. */
+        var ISOW = null, isoBusy = false, isoNext = null, isoSeq = 0, isoShown = '';
+        function isoSend(F, level, tag) { isoBusy = true; var Fc = new Float32Array(F); ISOW.postMessage({ id: tag, F: Fc, nx: NX3, ny: NY3, nz: NY3, x0: X3, y0: Y3, z0: Y3, h: H3, level: level, upx: UPX, upy: UPY }, [Fc.buffer]); }
+        function isoCut(F, level, tag) {
+            if (ISOW === null) {
+                try { ISOW = new Worker('../scripts/fig14-iso-worker.js', { type: 'module' });
+                    ISOW.onmessage = function (e) { var m = e.data; if (m.ready) return; isoBusy = false; if (w3 && (VIEW === 'sheets' || VIEW === 'cutaway') && !SHAPES[SHAPE].radial) { w3.setSheets(m.crest, m.trough); isoShown = m.id; dirty = true; } if (isoNext) { var nx2 = isoNext; isoNext = null; isoSend(nx2.F, nx2.level, nx2.tag); } };
+                    ISOW.onerror = function () { ISOW = false; isoBusy = false; shownId = null; dirty = true; };
+                } catch (err) { ISOW = false; }
+            }
+            if (ISOW === false) { var U = upsample(F, NX3, NY3, NY3); w3.setField(U.F, U.nx, U.ny, U.nz, X3, Y3, Y3, U.h, level, U.hx); return; }
+            if (isoBusy) isoNext = { F: new Float32Array(F), level: level, tag: tag }; else isoSend(F, level, tag);
+        }
         var PL = new Float32Array(NX3 * NY3), RMAXS = 36;   /* spherical waves are drawn out to r = 36 a */
         /* the stored radial profile as a smooth function of r: Catmull-Rom through the stored points (0.5 a apart), on Re psi and
            Im psi separately, in fractions of the first frame's peak; between two stored points it passes through both exactly */
@@ -907,98 +930,71 @@
            adds no wave the run did not have, and at the stored points it returns the stored values themselves. Spherical waves:
            u = r psi of the stored profile, interpolated the same way along r (u odd in r), then psi = u / r at every point. */
         var HQ = 're', MS = 1 / 6, MESH = null, SLOPE = 1.5;   /* height: 're' (Re psi) or 'abs2' (|psi|^2); two sources: their distance SEP; sheet spacing MS */
-        function bandMatrix(N, d, xs) {        /* N samples spaced d apart, periodic with period N d (N even); row a: weights at offset xs[a] from sample 0 */
-            var M = new Float64Array(xs.length * N), P = N * d;
-            for (var a = 0; a < xs.length; a++) for (var j = 0; j < N; j++) {
-                var s = xs[a] - j * d; s -= P * Math.round(s / P); var t = 2 * Math.PI * s / P;
-                M[a * N + j] = Math.abs(s) < 1e-9 ? 1 : Math.sin(N * t / 2) / (N * Math.tan(t / 2));   /* the periodic sinc of an even N */
-            }
-            return M;
+        /* The fine sheets are computed in a worker (scripts/fig14-sheet-worker.js), a few stored frames ahead of the playhead, so
+           the page never waits for one. Between two stored frames the page draws, on every screen frame,
+               psi(t0 + tau) = exp(-i E tau) [ (1 - s) psi_0 + s exp(+i E dt) psi_1 ],   s = tau / dt,
+           that is: both frames are brought into the frame turning at the wave's own energy E (there psi changes only as slowly as
+           its envelope moves, since everything in an elastic run has energies near E), blended, and turned back. At a stored
+           frame (s = 0) the sheet is that frame exactly. The height scale is blended the same way, so it never jumps. */
+        var SHW = null, SHR = { id: null, frames: {}, want: '' }, MH = null, MT = null, meshStamp = '';
+        function sheetWorker() {
+            if (!SHW) { SHW = new Worker('../scripts/fig14-sheet-worker.js'); SHW.onmessage = function (e) { var m = e.data; if (m.id !== SHR.id) return; SHR.frames[m.f] = m; meshStamp = ''; dirty = true; }; }
+            return SHW;
         }
-        var PKM = null;   /* packets: the sheet -24 <= x, y <= 24, 289 x 289 points; the weights from the 128 stored x (and y) points */
-        function packetMats() {
-            if (PKM) return PKM;
-            var n = 289, xs = new Float64Array(n); for (var a = 0; a < n; a++) xs[a] = (-24 + a * MS) + 32;   /* offset from the first stored point, x = -32 */
-            PKM = { n: n, x0: -24, M: bandMatrix(128, 0.5, xs), S: new Float64Array(2 * 128 * 128), T: new Float64Array(2 * n * 128), RE: new Float32Array(n * n), IM: new Float32Array(n * n) };
-            return PKM;
+        function sheetRun(c) {   /* hand the run to the worker once: its stored levels as they are, and what scales them */
+            var p = current(), two = SHAPE === 'two', pil = c.shape === 'pillar', id = c.meta.key + ':' + SHAPE + ':' + (two ? p.R : '') + (pil ? (GZ && GZ.Es ? 'g' : 'n') : '');
+            if (SHR.id === id) return;
+            SHR = { id: id, frames: {}, want: '' };
+            var m = { type: 'run', id: id, n: c.n, nr: c.nr, A: c.A.slice(), P: c.P.slice() };
+            if (c.radial) { m.kind = 'radial'; m.rstep = c.rstep; m.two = two ? p.R : 0; m.sc = c.peaks.map(function (pk) { return pk / c.peaks[0] / 255; }); }
+            else { m.kind = 'packet'; m.nx = c.nx; m.pk = c.pk || null; m.g = null;
+                if (pil) { var ie = GZ && GZ.Es ? GZ.Es.indexOf(c.meta.E) : -1, g00 = Math.pow(2 * Math.PI * 9, -0.25); m.g = new Float32Array(2 * c.n); for (var f = 0; f < c.n; f++) { var o = (ie * 48 + f) * 64 * 2; m.g[2 * f] = ie >= 0 ? GZ[o] / g00 : 0; m.g[2 * f + 1] = ie >= 0 ? GZ[o + 1] / g00 : 0; } } }
+            sheetWorker().postMessage(m, [m.A.buffer, m.P.buffer]);
         }
-        function packetSheet(c, f) {   /* psi(x, y, 0) on the sheet: the stored cut psi(x, rho) at rho = |y| (sphere, flat wall), or phi(x, |y|) g(0, t) (pillar) */
-            var K = packetMats(), n = K.n, S = K.S, T = K.T, M = K.M, base = f * c.nx * c.nr, gr = 1, gi = 0;
-            if (c.shape === 'pillar') { var ie = GZ && GZ.Es ? GZ.Es.indexOf(c.meta.E) : -1, g00 = Math.pow(2 * Math.PI * 9, -0.25); if (ie >= 0) { var o = (ie * 48 + f) * 64 * 2; gr = GZ[o] / g00; gi = GZ[o + 1] / g00; } }
-            for (var i = 0; i < 128; i++) for (var jy = 0; jy < 128; jy++) {
-                var rr = Math.abs(jy - 64), q = 2 * (i * 128 + jy), re = 0, im = 0;
-                if (rr < c.nr) { var a2 = c.A[base + i * c.nr + rr]; if (a2 >= 3) { var ph = c.P[base + i * c.nr + rr] / 255 * 2 * Math.PI - Math.PI; re = a2 / 255 * Math.cos(ph); im = a2 / 255 * Math.sin(ph); } }
-                S[q] = re * gr - im * gi; S[q + 1] = re * gi + im * gr;
-            }
-            for (var a = 0; a < n; a++) {   /* along x: T[a][jy] = sum_i M[a][i] S[i][jy] */
-                var ta = 2 * a * 128; for (var z = 0; z < 256; z++) T[ta + z] = 0;
-                for (var i2 = 0; i2 < 128; i2++) { var w = M[a * 128 + i2]; if (w === 0) continue; var si = 2 * i2 * 128; for (var jy2 = 0; jy2 < 256; jy2++) T[ta + jy2] += w * S[si + jy2]; }
-            }
-            var half = (n - 1) / 2;   /* along y, for y >= 0; the cut is even in y, so the half y < 0 is its mirror */
-            for (var b = half; b < n; b++) for (var a3 = 0; a3 < n; a3++) {
-                var sr = 0, sim = 0, tb = 2 * a3 * 128, mb = b * 128;
-                for (var jy3 = 0; jy3 < 128; jy3++) { var w2 = M[mb + jy3 - 0]; sr += w2 * T[tb + 2 * jy3]; sim += w2 * T[tb + 2 * jy3 + 1]; }
-                K.RE[a3 * n + b] = K.RE[a3 * n + (n - 1 - b)] = sr; K.IM[a3 * n + b] = K.IM[a3 * n + (n - 1 - b)] = sim;
-            }
-            return { n: n, x0: K.x0, RE: K.RE, IM: K.IM };
+        function wantSheets(f, n) {   /* this frame and the next four; older ones are dropped */
+            var list = []; for (var g = f; g <= Math.min(n - 1, f + 4); g++) if (!SHR.frames[g]) list.push(g);
+            for (var k in SHR.frames) if (+k < f - 1 || +k > f + 8) delete SHR.frames[k];
+            var key = list.join(','); if (key !== SHR.want) { SHR.want = key; if (list.length) SHW.postMessage({ type: 'want', id: SHR.id, frames: list }); }
         }
-        var RDM = null, RDR = 0.01, RDN = 5601;   /* spherical waves: psi(r) tabulated every 0.01 a out to 56 a, from the 97 stored radii */
-        function radialTable(c, f) {
-            if (!RDM) { var xs = new Float64Array(RDN); for (var t = 0; t < RDN; t++) xs[t] = t * RDR + 48; RDM = { M: bandMatrix(192, 0.5, xs), re: new Float64Array(RDN), im: new Float64Array(RDN), ur: new Float64Array(192), ui: new Float64Array(192) }; }
-            var nr = c.nr, rs = c.rstep, sc = c.peaks[f] / c.peaks[0] / 255, ob = f * nr, ur = RDM.ur, ui = RDM.ui, M = RDM.M;
-            for (var k = 0; k < 192; k++) {   /* u = r psi on the whole line, odd in r: samples at r = -48 + 0.5 k */
-                var r = -48 + k * rs, j = Math.round(Math.abs(r) / rs), sg = r < 0 ? -1 : 1, a = j < nr ? c.A[ob + j] : 0, re = 0, im = 0;
-                if (a >= 3) { var ph = c.P[ob + j] / 255 * 2 * Math.PI - Math.PI; re = a * sc * Math.cos(ph); im = a * sc * Math.sin(ph); }
-                ur[k] = sg * Math.abs(r) * re; ui[k] = sg * Math.abs(r) * im;
-            }
-            for (var t2 = 0; t2 < RDN; t2++) {
-                var r2 = t2 * RDR, sr = 0, si = 0, mo = t2 * 192;
-                if (r2 > 48) { RDM.re[t2] = 0; RDM.im[t2] = 0; continue; }
-                for (var k2 = 0; k2 < 192; k2++) { var w = M[mo + k2]; sr += w * ur[k2]; si += w * ui[k2]; }
-                RDM.re[t2] = sr; RDM.im[t2] = si;   /* u(r) for now */
-            }
-            var u1r = RDM.re[1], u1i = RDM.im[1];
-            for (var t3 = 1; t3 < RDN; t3++) { RDM.re[t3] /= t3 * RDR; RDM.im[t3] /= t3 * RDR; }   /* psi = u / r */
-            RDM.re[0] = u1r / RDR; RDM.im[0] = u1i / RDR;                                            /* at r = 0: u(0.01) / 0.01 */
-            return RDM;
-        }
-        function psiR(D, r) { var u = r / RDR, i = Math.floor(u), w = u - i; if (i >= RDN - 1) return [0, 0]; return [D.re[i] * (1 - w) + D.re[i + 1] * w, D.im[i] * (1 - w) + D.im[i + 1] * w]; }
-        var RSH = { n: 385, x0: -32, RE: new Float32Array(385 * 385), IM: new Float32Array(385 * 385) };   /* spherical waves: the sheet -32 <= x, y <= 32 */
-        function radialSheet(c, f, two) {
-            var D = radialTable(c, f), n = RSH.n, h = MS, s2 = current().R / 2;
-            for (var i = 0; i < n; i++) { var x = RSH.x0 + i * h; for (var j = 0; j < n; j++) { var y = RSH.x0 + j * h, q = i * n + j, p1, p2;
-                if (two) { p1 = psiR(D, Math.sqrt((x - s2) * (x - s2) + y * y)); p2 = psiR(D, Math.sqrt((x + s2) * (x + s2) + y * y)); RSH.RE[q] = p1[0] + p2[0]; RSH.IM[q] = p1[1] + p2[1]; }   /* psi = psi_1 + psi_2: two sources, each the stored free spherical wave about its own centre */
-                else { p1 = psiR(D, Math.sqrt(x * x + y * y)); RSH.RE[q] = p1[0]; RSH.IM[q] = p1[1]; } } }
-            return RSH;
-        }
-        var MH = null, MT = null;
-        function meshOf(c, f) {   /* the sheet handed to Wave3D.setMesh: heights scaled so the tallest is a seventh of the sheet's width */
-            var sh = c.radial ? radialSheet(c, f, SHAPE === 'two') : packetSheet(c, f), n = sh.n, N = n * n, span = (n - 1) * MS;
+        function meshNow(c) {   /* the sheet at the playhead; null while its first frame is on the way */
+            var dtF = frameDt(c), tc = Math.max(0, Math.min(tPhys / dtF, c.n - 1)), f = Math.min(c.n - 1, Math.floor(tc + 1e-9)), s = f >= c.n - 1 ? 0 : tc - f, p = current();
+            sheetRun(c); wantSheets(f, c.n);
+            var S0 = SHR.frames[f], S1 = SHR.frames[f + 1]; if (!S0) return null;
+            if (s < 1e-6 || !S1) s = 0;   /* the next frame is not there yet: hold this one */
+            var stamp = SHR.id + ':' + f + ':' + s.toFixed(5) + ':' + HQ + ':' + p.R + ':' + p.V0; if (stamp === meshStamp && MESH) return MESH;
+            var n = S0.n, N = n * n, span = (n - 1) * MS, ab = HQ === 'abs2';
             if (!MH || MH.length !== N) { MH = new Float32Array(N); MT = new Float32Array(N); }
-            var mx = 0, v;
-            for (var q = 0; q < N; q++) { v = HQ === 'abs2' ? sh.RE[q] * sh.RE[q] + sh.IM[q] * sh.IM[q] : sh.RE[q]; MH[q] = v; if (Math.abs(v) > mx) mx = Math.abs(v); }
-            /* the height scale: the tallest point a seventh of the sheet's width, unless that makes the sheet steeper than
-               slope 1.5 (56 degrees) somewhere: the waves are short (wavelength 2 to 6 a on a sheet 48 or 64 a wide), and at a
-               seventh of the width their crests would stand as needles; then the steepest slope is held at 1.5 */
-            var gm = 0; for (var i = 1; i < n - 1; i++) for (var j = 1; j < n - 1; j++) { var q3 = i * n + j, gx = (MH[q3 + n] - MH[q3 - n]) / (2 * MS), gy = (MH[q3 + 1] - MH[q3 - 1]) / (2 * MS), g2 = gx * gx + gy * gy; if (g2 > gm) gm = g2; }
-            gm = Math.sqrt(gm);
-            var sc = mx > 0 ? Math.min(span / 7 / mx, gm > 0 ? SLOPE / gm : Infinity) : 1;
-            for (var q2 = 0; q2 < N; q2++) { v = MH[q2] / (mx || 1); MT[q2] = (v + 1) / 2;   /* 0: trough slate, 0.5: paper, 1: crest wine; |psi|^2 is never negative, so it runs from paper to wine */ MH[q2] *= sc; }
-            return { nx: n, ny: n, x0: sh.x0, y0: sh.x0, h: MS, H: MH, T: MT, every: c.radial ? 8 : 6, key: n + HQ, span: span, hmax: mx, scale: sc, gmax: gm, top: mx * sc, sheet: sh, outline: outlineOf(sh.x0, span) };
+            var mx = ab ? S0.mab : S0.mre, gm = ab ? S0.gab : S0.gre;
+            if (s > 0) { mx = (1 - s) * mx + s * (ab ? S1.mab : S1.mre); gm = (1 - s) * gm + s * (ab ? S1.gab : S1.gre); }
+            /* the height scale: the tallest point a seventh of the sheet's width, unless that makes the sheet steeper than slope 1.5
+               (56 degrees) somewhere: the waves are short (2 to 6 a on a sheet 48 or 64 a wide) and would stand as needles */
+            var sc = mx > 0 ? Math.min(span / 7 / mx, gm > 0 ? SLOPE / gm : Infinity) : 1, im = mx > 0 ? 0.5 / mx : 0, R0 = S0.RE, I0 = S0.IM, q, v;
+            if (s === 0) { for (q = 0; q < N; q++) { v = ab ? R0[q] * R0[q] + I0[q] * I0[q] : R0[q]; MH[q] = v * sc; MT[q] = v * im + 0.5; } }
+            else {
+                var R1 = S1.RE, I1 = S1.IM, th = p.E * dtF, c1 = Math.cos(th), s1 = Math.sin(th), ph = p.E * s * dtF, cr = Math.cos(ph), sr = Math.sin(ph), a = 1 - s, br, bi, re;
+                for (q = 0; q < N; q++) {
+                    br = a * R0[q] + s * (R1[q] * c1 - I1[q] * s1); bi = a * I0[q] + s * (R1[q] * s1 + I1[q] * c1); re = br * cr + bi * sr;
+                    v = ab ? br * br + bi * bi : re; MH[q] = v * sc; MT[q] = v * im + 0.5;   /* 0: trough slate, 0.5: paper, 1: crest wine */
+                }
+            }
+            meshStamp = stamp;
+            return { nx: n, ny: n, x0: S0.x0, y0: S0.x0, h: MS, H: MH, T: MT, every: c.radial ? 8 : 6, key: n + HQ, span: span, hmax: mx, scale: sc, gmax: gm, top: mx * sc, f: f, s: s, dtF: dtF, E: p.E, fresh: true, outline: outlineOf(S0.x0, span) };
         }
         function circle(R) { var a = []; for (var k = 0; k <= 256; k++) { var t = 2 * Math.PI * k / 256; a.push(R * Math.cos(t), R * Math.sin(t)); } return a; }
         function outlineOf(x0, span) {   /* where the barrier cuts the plane z = 0, drawn on the sheet */
             var p = current(), y1 = x0 + span;
-            if (SHAPE === 'sphere' || SHAPE === 'pillar' || SHAPE === 'rin') return [circle(p.R)];
+            if (SHAPE === 'sphere' || SHAPE === 'pillar' || SHAPE === 'rin' || SHAPE === 'soff' || SHAPE === 'spil') return [circle(p.R)];
+            if (SHAPE === 'coin') { var cz = [], yy; for (var k1 = 0; k1 <= 64; k1++) { yy = -p.R + 2 * p.R * k1 / 64; cz.push(-0.5, yy); } for (var k2 = 64; k2 >= 0; k2--) { yy = -p.R + 2 * p.R * k2 / 64; cz.push(0.5, yy); } cz.push(-0.5, -p.R); return [cz]; }   /* the coin's cut: a strip 1 a wide, 2R long */
+            if (SHAPE === 'tube') { var ls = [[], [], [], []]; for (var k3 = 0; k3 <= 192; k3++) { var xx = x0 + span * k3 / 192; ls[0].push(xx, p.R - 0.5); ls[1].push(xx, p.R + 0.5); ls[2].push(xx, -p.R + 0.5); ls[3].push(xx, -p.R - 0.5); } return ls; }   /* the tube's wall cut twice by the plane */
             if (SHAPE === 'rout') return [circle(16 - p.R / 2), circle(16 + p.R / 2)];
-            if (SHAPE === 'slab') { var l = [], r = []; for (var k = 0; k <= 192; k++) { var y = x0 + span * k / 192; l.push(-p.R / 2, y); r.push(p.R / 2, y); } return [l, r]; }
+            if (SHAPE === 'slab' || SHAPE === 'sslab') { var l = [], r = []; for (var k = 0; k <= 192; k++) { var y = x0 + span * k / 192; l.push(-p.R / 2, y); r.push(p.R / 2, y); } return [l, r]; }
             return [];
         }
         var v3c = document.getElementById('v3'), w3 = null, barrierId = null;
         function initW3() { if (w3 || !window.Wave3D) return; try { w3 = Wave3D.create(v3c, { canTurn: function () { return !reading; }, onTurn: function () { dirty = true; } }); w3.setMode(VIEW === 'fog' ? 'sheets' : VIEW); if (!SHAPES[SHAPE].radial) w3.setRoom(-17.5, 64); shownId = null; dirty = true; } catch (e) { w3 = null; document.getElementById('src-t').textContent = 'This browser could not start the 3D view: ' + e.message; } }
         window.addEventListener('wave3d-ready', initW3); initW3();
         function drawView(c, f, hold) {
-            var W = ovBox.w, Hh = ovBox.h, dpr = Math.min(2, window.devicePixelRatio || 1), fog = VIEW === 'fog', p = current();
+            var W = ovBox.w, Hh = ovBox.h, dpr = Math.min(2, window.devicePixelRatio || 1), fog = VIEW === 'fog' || (VIEW === 'mesh' && c && c.source === 'live'), p = current();   /* the browser's live preview has no fine sheet: it shows as fog */
             volCanvas.style.visibility = fog ? 'visible' : 'hidden'; v3c.style.visibility = fog ? 'hidden' : 'visible';
             var id = c && !hold ? ((c.wave ? 'W' : '') + c.source + (c.meta.key || (c.meta.E + '_' + c.meta.V0 + '_' + c.meta.R)) + ':' + f + ':' + VIEW + (GZ && GZ.Es ? 'g' : '') + ':' + SHAPE + ':' + HQ + ':' + p.R) : 'none:' + VIEW;
             if (fog) {
@@ -1008,18 +1004,19 @@
                         for (var q8 = 0; q8 < F.length; q8++) { var a8 = Math.abs(F[q8]); if (a8 > fm) fm = a8; } if (fm > 0) for (var q9 = 0; q9 < F.length; q9++) F[q9] /= fm; F3id = null; } view.setVolume(fogVolume(F), NX3, NY3, NY3); view.half = [NX3 * H3 / 2 / (L() / 2), NY3 * H3 / 2 / (L() / 2), NY3 * H3 / 2 / (L() / 2)]; view.offset = [-0.5 / NX3, 0, 0]; } else view.clear();
                     shownId = id; dirty = true;
                 }
-                var sph = SHAPE === 'sphere' || SHAPE === 'rin' ? p.R / (L() / 2) : SHAPE === 'rout' ? 16 / (L() / 2) : 0; if (view.sphere !== sph) { view.sphere = sph; dirty = true; }
+                var sph = SHAPE === 'sphere' || SHAPE === 'rin' || SHAPE === 'soff' ? p.R / (L() / 2) : SHAPE === 'rout' ? 16 / (L() / 2) : 0; if (view.sphere !== sph) { view.sphere = sph; dirty = true; }
                 if (dirty && view.ok) { view.render(); dirty = false; }
             } else if (w3) {
                 if (v3c.width !== Math.round(W * dpr) || v3c.height !== Math.round(Hh * dpr)) { w3.resize(W, Hh, dpr); dirty = true; }
                 var bid = SHAPE + p.E + '_' + p.V0 + '_' + p.R;
-                if (bid !== barrierId) { w3.setBarrier({ shape: SHAPE === 'rout' || SHAPE === 'rin' ? 'sphere' : SHAPE, R: SHAPE === 'rout' ? 16 : p.R, a: p.R, hard: p.V0 >= HARD, V0: p.V0 }); barrierId = bid; dirty = true; }
-                if (id !== shownId) {
-                    if (c && !hold && VIEW === 'mesh') {
-                        var tM = performance.now(), MO = meshOf(c, f); w3.setMeshView(MO.span); w3.setMesh(MO); MESH = MO; MESHMS = performance.now() - tM;
-                        ds.set('hmax', MO.hmax); ds.set('hscale', MO.scale); ds.set('gmax', MO.gmax); ds.set('mesh_n', MO.nx); ds.set('mesh_dx', MO.h); ds.set('ppw', 2 * Math.PI / Math.sqrt(2 * p.E) / MO.h); ds.set('hq', HQ === 'abs2' ? '|ψ|²' : 'Re ψ'); ds.set('sep', SHAPE === 'two' ? p.R : NaN);
-                    }
-                    else if (c && !hold) {
+                if (bid !== barrierId) { w3.setBarrier({ shape: SHAPE === 'rout' || SHAPE === 'rin' ? 'sphere' : (SHAPES[SHAPE].chip || SHAPE), R: SHAPE === 'rout' ? 16 : p.R, a: SHAPE === 'coin' ? 1 : p.R, hard: p.V0 >= HARD, V0: p.V0 }); barrierId = bid; dirty = true; }
+                if (VIEW === 'mesh') {
+                    if (c && !hold) { var tM = performance.now(), MO = meshNow(c); if (MO && MO.fresh) { MO.fresh = false; w3.setMeshView(MO.span); w3.setMesh(MO); MESH = MO; dirty = true; MESHMS = performance.now() - tM;
+                        ds.set('hmax', MO.hmax); ds.set('hscale', MO.scale); ds.set('gmax', MO.gmax); ds.set('mesh_n', MO.nx); ds.set('mesh_dx', MO.h); ds.set('ppw', 2 * Math.PI / Math.sqrt(2 * p.E) / MO.h); ds.set('hq', HQ === 'abs2' ? '|ψ|²' : 'Re ψ'); ds.set('sep', SHAPE === 'two' ? p.R : NaN); } }
+                    shownId = id;
+                }
+                else if (id !== shownId) {
+                    if (c && !hold) {
                         var F2 = field3d(c, f), mx = 0; for (var q2 = 0; q2 < F2.length; q2++) { var av = F2[q2] < 0 ? -F2[q2] : F2[q2]; if (av > mx) mx = av; }
                         ds.set('remax', mx); ds.set('iso', ISO * mx);
                         if (c.radial) {   /* spherical waves: exact spheres and a smooth surface of revolution, from the stored profile psi(r) */
@@ -1028,7 +1025,7 @@
                             if (VIEW === 'surface') w3.setRevolution(RP, RMAXS, 0.08, rx);
                             else { var cr = [], tr = [], lv = ISO * rx, prev6 = RP(0); for (var q7 = 1; q7 <= RMAXS / 0.02; q7++) { var rq = q7 * 0.02, cur = RP(rq); if ((prev6 - lv) * (cur - lv) < 0) cr.push(rq - 0.02 * (cur - lv) / (cur - prev6)); if ((prev6 + lv) * (cur + lv) < 0) tr.push(rq - 0.02 * (cur + lv) / (cur - prev6)); prev6 = cur; } w3.setShells(cr, tr); }
                         }
-                        else if (VIEW === 'surface') w3.setPlane(plane0(F2), NX3, NY3, X3, Y3, H3, mx); else { var tU = performance.now(), U = upsample(F2, NX3, NY3, NY3); w3.setField(U.F, U.nx, U.ny, U.nz, X3, Y3, Y3, U.h, ISO * mx, U.hx); UPMS = performance.now() - tU; }
+                        else if (VIEW === 'surface') w3.setPlane(plane0(F2), NX3, NY3, X3, Y3, H3, mx); else isoCut(F2, ISO * mx, id);
                     }
                     else if (!hold) w3.clear();
                     shownId = id; dirty = true;
@@ -1040,7 +1037,7 @@
             else if (fade.a < 1 && fade.from) { octx.globalAlpha = 1 - fade.a; octx.drawImage(prev, 0, 0, W, Hh); octx.globalAlpha = 1; }
             octx.fillStyle = '#5a504b'; octx.font = '12px "IBM Plex Mono", monospace';
             var hardTxt = p.V0 >= HARD ? 'hard barrier · ' : p.V0 < 0 ? 'well · ' : '';
-            octx.fillText((SHAPES[SHAPE].radial ? '' : 'flight along x · ') + hardTxt + (SHAPE === 'sphere' ? 'sphere R = ' + p.R + ' a' : SHAPE === 'two' ? 'two spherical waves, sources s = ' + p.R + ' a apart, free space' : SHAPE === 'pillar' ? 'pillar R = ' + p.R + ' a, upright along z' : SHAPE === 'rout' ? 'spherical wave from the centre · shell wall at r = 16, d = ' + p.R + ' a' : SHAPE === 'rin' ? 'spherical wave closing in · ball R = ' + p.R + ' a' : 'wall d = ' + p.R + ' a thick') + (c && c.wave && !hold ? ' · true 3D data' : ''), 10, Hh - 12);
+            octx.fillText((SHAPES[SHAPE].radial ? '' : SHAPES[SHAPE].side ? 'spherical wave from x = −17 a · ' : 'flight along x · ') + hardTxt + (SHAPE === 'sphere' || SHAPE === 'soff' ? 'sphere R = ' + p.R + ' a' : SHAPE === 'coin' ? 'coin R = ' + p.R + ' a, 1 a thick' : SHAPE === 'tube' ? 'tube R = ' + p.R + ' a, wall 1 a' : SHAPE === 'spil' ? 'pillar R = ' + p.R + ' a, upright along z' : SHAPE === 'two' ? 'two spherical waves, sources s = ' + p.R + ' a apart, free space' : SHAPE === 'pillar' ? 'pillar R = ' + p.R + ' a, upright along z' : SHAPE === 'rout' ? 'spherical wave from the centre · shell wall at r = 16, d = ' + p.R + ' a' : SHAPE === 'rin' ? 'spherical wave closing in · ball R = ' + p.R + ' a' : 'wall d = ' + p.R + ' a thick') + (c && c.wave && !hold ? ' · true 3D data' : ''), 10, Hh - 12);
             if (VIEW === 'mesh') { octx.fillStyle = '#5a504b'; octx.textAlign = 'right'; octx.fillText('height and shade: ' + (HQ === 'abs2' ? '|ψ|²' : 'Re ψ') + ' in the plane z = 0', W - 10, 20); octx.fillStyle = '#8b8079'; octx.fillText(MESH && MESH.top < MESH.span / 7 - 1e-6 ? 'height scaled: steepest slope 1.5' : 'tallest = 1/7 of the sheet’s width', W - 10, 36); octx.fillStyle = '#a3303f'; octx.fillText('■ crests', W - 92, 52); octx.fillStyle = '#55607a'; octx.fillText('■ troughs', W - 10, 52); if (SHAPE !== 'two') { octx.fillStyle = '#1c1518'; octx.fillText('— barrier, where it cuts z = 0', W - 10, 68); } octx.textAlign = 'left'; }
             else if (VIEW === 'sheets' || VIEW === 'cutaway') { octx.fillStyle = '#a3303f'; var qn = SHAPES[SHAPE].radial ? 'Re(rψ)' : 'Re ψ'; octx.textAlign = 'right'; octx.fillText('■ crests  ' + qn + ' = +c', W - 10, 20); octx.fillStyle = '#55607a'; octx.fillText('■ troughs ' + qn + ' = −c', W - 10, 36); octx.fillStyle = '#8b8079'; octx.fillText('c = 0.3 · largest |' + qn + '|', W - 10, 52); octx.textAlign = 'left'; }
             else if (VIEW === 'surface') { octx.fillStyle = '#5a504b'; octx.textAlign = 'right'; octx.fillText('height and colour: ' + (SHAPES[SHAPE].radial ? 'Re(rψ)' : 'Re ψ') + ' in the plane z = 0', W - 10, 20); octx.textAlign = 'left'; }
@@ -1072,6 +1069,10 @@
         /* ---------- numbers ---------- */
         function LABELS() {   /* the three regions the stored curves count, in the words of the case shown */
             var p = current(), hs = SHAPE === 'slab' ? 'd/2' : 'R';
+            if (SHAPE === 'tube') return ['Inside the tube (ρ < R − ½)', 'In its wall', 'Outside (ρ > R + ½)', 'inside', 'in wall', 'outside'];
+            if (SHAPE === 'coin') return ['Behind (x < −½)', 'In the coin’s slab |x| ≤ ½', 'Ahead (x > ½)', 'behind', 'inside', 'ahead'];
+            if (SHAPE === 'sslab') return ['Source side (x < −d/2)', 'Inside |x| ≤ d/2', 'Beyond the wall (x > d/2)', 'source side', 'inside', 'beyond'];
+            if (SHAPE === 'soff' || SHAPE === 'spil') return ['Source side (x < −R)', 'Inside |x| ≤ R', 'Beyond (x > R)', 'source side', 'inside', 'beyond'];
             if (SHAPE === 'two') return ['One source alone: r < 15.5', 'r from 15.5 to 16.5', 'r > 16.5', 'r < 15.5', '15.5–16.5', 'r > 16.5'];
             if (SHAPE === 'rout') return ['Inside the wall (r < 16 − d/2)', 'In the wall', 'Beyond it (r > 16 + d/2)', 'inside', 'in wall', 'beyond'];
             if (SHAPE === 'rin') return ['In the ball (r < R)', '—', 'Outside it (r > R)', 'in ball', '', 'outside'];
@@ -1104,7 +1105,10 @@
             document.getElementById('r-i').textContent = fx(ds.get('inside'), 3); document.getElementById('r-l').textContent = fx(ds.get('lost'), 4);
             var hs = SHAPE === 'slab' ? 'd/2' : 'R', LB = LABELS();
             document.getElementById('r-b').previousElementSibling.textContent = LB[0]; document.getElementById('r-a').previousElementSibling.textContent = LB[2]; document.getElementById('r-i').previousElementSibling.textContent = LB[1];
-            if (SHAPE === 'two') { document.getElementById('r-g-t').textContent = 'Two sources, s = ' + p.R + ' a apart'; document.getElementById('r-g').textContent = 'ψ = ψ₁ + ψ₂; numbers at left: one source alone'; }
+            if (SHAPES[SHAPE].side) { document.getElementById('r-g-t').textContent = 'Spherical wave from x = −17 a'; document.getElementById('r-g').textContent = 'most of it never meets the barrier and leaves through the border'; }
+            else if (SHAPE === 'tube') { document.getElementById('r-g-t').textContent = 'The tube'; document.getElementById('r-g').textContent = 'wall 1 a thick at ρ = ' + p.R + ' a; no 1D guide'; }
+            else if (SHAPE === 'coin') { document.getElementById('r-g-t').textContent = 'Guide: 1D slab of thickness 1 a'; document.getElementById('r-g').textContent = p.V0 >= HARD ? 'hard: T = 0' : 'T = ' + fx(T1D(p.E, p.V0, 1), 3) + ' (the coin covers only ρ < R)'; }
+            else if (SHAPE === 'two') { document.getElementById('r-g-t').textContent = 'Two sources, s = ' + p.R + ' a apart'; document.getElementById('r-g').textContent = 'ψ = ψ₁ + ψ₂; numbers at left: one source alone'; }
             else if (SHAPE === 'rout') { document.getElementById('r-g-t').textContent = 'Exact: this wave through the shell wall'; document.getElementById('r-g').textContent = p.V0 >= HARD ? 'hard wall: T = 0' : 'T = ' + fx(ds.get('T_packet'), 4) + ' (beyond at the end: ' + fx(c && c.curves[c.n - 1] ? c.curves[c.n - 1][3] : NaN, 4) + ')'; }
             else if (SHAPE === 'rin') { document.getElementById('r-g-t').textContent = 'Where the wave is'; document.getElementById('r-g').textContent = 'mean radius ⟨r⟩ = ' + fx(c && c.curves[f] ? c.curves[f][4] : NaN, 2) + ' a'; }
             else if (SHAPE === 'slab') { document.getElementById('r-g-t').textContent = 'Exact: the packet through this wall'; document.getElementById('r-g').textContent = p.V0 >= HARD ? 'hard wall: T = 0' : 'T = ' + fx(ds.get('T_packet'), 4) + ' (ahead at the end: ' + fx(c && c.curves[c.n - 1] ? c.curves[c.n - 1][3] : NaN, 4) + ')'; }
@@ -1119,6 +1123,9 @@
                     : c.shape === 'pillar' ? 'on Kaggle’s CPU in 2D (split-step Fourier, 128² points), ψ = φ(x, y) g(z); stored: the top view φ' + (GZ_OK === true ? ', and g(z) (SHA-256 ✓)' : '')
                     : 'in full 3D on a Tesla T4, 128³ points; stored: the cut through the axis, spun about it';
                 if (c.shape === 'pillar' && c.head.hard) how += '. <b style="display:inline">Hard column:</b> the method sets ψ = 0 inside after every step, which removes about 4 % of the probability at the wall over a run (0.3 % to 26 % across the grid, side border included); it is counted in “lost”';
+                if (c.head && c.head.wave && !c.wave) how = 'in full 3D on Kaggle’s graphics cards, 128³ points; stored: ' + (c.shape === 'spil' ? 'the plane z = 0' : 'the cut through the axis, spun about it') + ', in levels of each frame’s own peak';
+                if (c.wave && c.shape === 'spil') how = 'in full 3D on Kaggle’s graphics cards, 128³ points; stored: the true 3D wave, Re ψ on 96 × 64 × 64 points, every second frame';
+                if (c.head && c.head.hard_V) how += '. <b style="display:inline">Hard wall:</b> computed as a wall ' + c.head.hard_V + ' high (the wave reaches 0.05 a into it, a tenth of the grid spacing) with a step four times shorter; no probability is removed' + (c.meta.v === 2 ? '' : '. In this first version the faint tail of the start wave inside the wall was not removed and stays there; the corrected run is being computed');
                 if (SHAPE === 'two') how = 'on Kaggle’s CPU in 1D in the radius (the free spherical wave, u = r ψ, Crank–Nicolson, Δr = 0.05 a); drawn twice, about two centres s = ' + p.R + ' a apart, and added';
                 if (VIEW === 'mesh') how += '. The drawn sheet is a resampling of the stored grid (band-limited, 3 × finer), which passes through every stored value and adds no wave the run did not have';
                 src.innerHTML = 'Computed on Kaggle on ' + c.meta.generated + ', ' + how + '; ' + c.head.steps + ' steps of Δt = ' + c.head.dt + ' in ' + c.head.wall.toFixed(1) + ' s. File <code>' + c.meta.file + '</code>, SHA-256 ' + (c.sha === true ? 'checked ✓' : c.sha === false ? '<b>does not match</b>' : 'not checked (no crypto in this browser)') + '.';
@@ -1136,8 +1143,12 @@
             if (fade.a < 1) fade.a = Math.min(1, fade.a + dt / 0.45 + (dt === 0 ? 0.02 : 0));
             /* how fast to play: slower near any edge of the computed range, zero where no data is left */
             var edge = Math.max(sliders.E.closeness(), sliders.V0.closeness(), sliders.R.closeness());
-            var goal = playing ? 1 - 0.8 * edge : 0;
-            if (c) {
+            var goal = playing ? 1 - 0.8 * edge : 0, kag = c && c.source === 'kaggle' && c.ready_n >= c.n;
+            if (kag) {   /* a stored run plays at full speed to its end, rests a moment and starts again */
+                goal = playing ? 1 : 0;
+                if (playing && tPhys >= tEnd(c) - 1e-9) { endRest += dt || 0.016; if (endRest > 1.2) { tPhys = 0; endRest = 0; } } else endRest = 0;
+            }
+            else if (c) {
                 var te = tEnd(c), tReady = frameDt(c) * Math.max(0, c.ready_n - 1);
                 var zone = Math.max(0.25 * te, frameDt(c) * 2);
                 if (c.ready_n < c.n) goal = Math.min(goal, KaggleFlow.smooth((tReady - tPhys) / (zone * 0.6)));   /* the live preview: slow to the last frame computed */
@@ -1187,6 +1198,16 @@
                     ix.Es.forEach(function (E) { var fr = byKey[keyS('rout', E, 0, 1.0)]; if (fr) GRID.two.Rs.forEach(function (sd) { byKey[keyS('two', E, 0, sd)] = fr; }); });
                     return;
                 }
+                if (ix.kind === 'shapes3d') {   /* the 3D generation of 13 November: several shapes in one index; files under their shape's folder */
+                    var v2shell = ix.shell && ix.shell.src_x <= -16;   /* version 1 began the spherical wave inside the barrier: not shown */
+                    Object.keys(ix.groups).forEach(function (sh) { if (!v2shell && (sh === 'soff' || sh === 'sslab' || sh === 'spil')) return; var G = ix.groups[sh], g3 = GRID[sh] = GRID[sh] || { Es: [], Vs: [], Rs: [] }; g3.Es = g3.Es.concat(ix.Es); g3.Vs = g3.Vs.concat(G.Vs); g3.Rs = g3.Rs.concat(G.sizes); });
+                    ix.runs.forEach(function (r) {
+                        if (!v2shell && (r.shape === 'soff' || r.shape === 'sslab' || r.shape === 'spil')) return;
+                        r.base = ix.base; r.generated = ix.generated; r.R = r.size; r.key = keyS(r.shape, r.E, r.V0, r.size); byKey[r.key] = r;
+                        if (r.wave_file) byWave[r.key] = { file: r.wave_file, sha256: r.wave_sha256, base: ix.base, generated: ix.generated, key: r.key, shape: r.shape, E: r.E, V0: r.V0, R: r.size };
+                    });
+                    return;
+                }
                 var sh = ix.shape || 'sphere', wave = ix.kind === 'wave', g = GRID[sh] = GRID[sh] || { Es: [], Vs: [], Rs: [] };
                 ix.runs.forEach(function (r) {
                     r.base = ix.base; r.generated = ix.generated; r.shape = sh;
@@ -1201,7 +1222,8 @@
             var idx = IDX = Object.assign({}, IDX || ixs[0]);
             for (var i = 0; i < 128; i++) XC[i] = (i - 64) * idx.L / 128; for (var r2 = 0; r2 < 64; r2++) RC[r2] = r2 * idx.L / 128; ds.touch('xc'); ds.touch('rc');
             for (var i4 = 0; i4 < NX3; i4++) WXC[i4] = X3 + i4 * H3; for (var j4 = 0; j4 < NY3; j4++) WYC[j4] = Y3 + j4 * H3; ds.touch('wxc'); ds.touch('wyc');
-            ['pillar', 'slab'].forEach(function (sh) { var b = document.querySelector('#shape-chips [data-s="' + sh + '"]'); if (!GRID[sh]) { b.disabled = true; b.title = 'Not stored yet'; } });
+            ['pillar', 'slab', 'coin', 'tube'].forEach(function (sh) { var b = document.querySelector('#shape-chips [data-s="' + sh + '"]'); b.disabled = !GRID[sh]; b.title = GRID[sh] ? '' : 'Not stored yet'; });
+            var bs = document.querySelector('#wave-chips [data-w="side"]'); if (!GRID.soff && !GRID.spil && !GRID.sslab) { bs.disabled = true; bs.title = 'Being computed again: the first version began the wave inside the barrier'; }
             ['rout', 'rin', 'two'].forEach(function (sh) { var b = document.querySelector('#wave-chips [data-w="' + sh + '"]'); if (!GRID[sh]) { b.disabled = true; b.title = 'Not stored yet'; } });
             buildSliders({ E: 2.5, V0: 3.0, R: 4.0 });
         }).catch(function (e) { document.getElementById('src-t').textContent = 'The stored runs could not be read: ' + e.message; });
@@ -1210,7 +1232,7 @@
         function buildSliders(want) {
             var host = document.getElementById('params'), g = GRID[SHAPE], sh = SHAPES[SHAPE];
             Array.prototype.slice.call(host.querySelectorAll('.kf-slider')).forEach(function (el) { el.remove(); });
-            var ex = SHAPE === 'sphere' ? EXTRA : SHAPE === 'two' ? { E: [], V0: [], R: [] } : { E: EXTRA.E, V0: [], R: [] };
+            var ex = SHAPE === 'sphere' ? EXTRA : SHAPE === 'two' || SHAPES[SHAPE].side ? { E: [], V0: [], R: [] } : { E: EXTRA.E, V0: [], R: [] };
             var defs = [
                 ['E', 'Packet energy <i>E</i>', stopsOf(g.Es, ex.E), want.E],
                 ['V0', 'Barrier height <i>V</i><sub>0</sub> (below 0: a well)', stopsOf(g.Vs.concat(SHAPE === 'sphere' ? [-4, -2, -1, HARD] : []), ex.V0), want.V0],
@@ -1223,7 +1245,7 @@
                     onChange: function () { ['E', 'V0', 'R'].forEach(function (o) { if (o !== nm && sliders[o]) sliders[o].refresh(); }); } });
             });
             ['E', 'V0', 'R'].forEach(function (o) { sliders[o].refresh(); });
-            var kfs = host.querySelectorAll('.kf-slider'); if (kfs[1]) kfs[1].style.display = SHAPE === 'two' ? 'none' : '';   /* two sources: free space, no barrier height */
+            var kfs = host.querySelectorAll('.kf-slider'); if (kfs[1]) kfs[1].style.display = SHAPE === 'two' ? 'none' : ''; if (kfs[2]) kfs[2].style.display = SHAPES[SHAPE].side ? 'none' : '';   /* one stored size: nothing to slide */   /* two sources: free space, no barrier height */
             document.getElementById('shape-note').textContent = sh.note;
             var p0 = current(), r0 = byKey[key(p0.E, p0.V0, p0.R)]; if (r0) load(r0);
         }
@@ -1233,37 +1255,43 @@
             if (shownReal) snapshot();
             var was = SHAPE; SHAPE = sh; shownId = null; barrierId = null; dirty = true;
             buildSliders({ E: p.E, V0: sh === 'two' ? 0 : p.V0, R: SHAPES[sh].size !== 'R' ? SHAPES[sh].def : (SHAPES[was].size !== 'R' ? 4.0 : p.R) });
-            if (!SHAPES[sh].radial) document.querySelectorAll('#shape-chips button').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.s === sh ? 'true' : 'false'); });
+            if (!SHAPES[sh].radial) document.querySelectorAll('#shape-chips button').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.s === (SHAPES[sh].chip || sh) ? 'true' : 'false'); });
         }
         var lastPacketShape = 'sphere';
+        var SIDE = { sphere: 'soff', pillar: 'spil', slab: 'sslab' }, lastSide = 'soff';
         function setWave(w) {
-            if (w !== 'packet' && !GRID[w]) return;
-            if (w3) { if (w === 'packet') w3.setRoom(-17.5, 64); else w3.setRoom(-38, 118); }
+            if (w === 'side') { if (!GRID.soff && !GRID.spil && !GRID.sslab) return; }
+            else if (w !== 'packet' && !GRID[w]) return;
+            var flat = w === 'packet' || w === 'side';   /* drawn in the packet's box and room */
+            if (w3) { if (w === 'packet') w3.setRoom(-17.5, 64); else if (w === 'side') w3.setRoom(-17.5, 92); else w3.setRoom(-38, 118); }   /* a wave from the side fills the whole box: the camera stands farther back */
+            if (SHAPES[SHAPE].side) lastSide = SHAPE; else if (!SHAPES[SHAPE].radial) lastPacketShape = SHAPE;
             if (w === 'packet') { setBox(false); setShape(lastPacketShape); }
-            else { if (!SHAPES[SHAPE].radial) lastPacketShape = SHAPE; setBox(true); setShape(w); }
+            else if (w === 'side') { setBox(false); setShape(GRID[lastSide] ? lastSide : GRID.soff ? 'soff' : GRID.sslab ? 'sslab' : 'spil'); }
+            else { setBox(true); setShape(w); }
             document.querySelectorAll('#wave-chips button').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.w === w ? 'true' : 'false'); });
-            /* a spherical wave is stored only with the round barrier at its centre: the other barriers say so, they do not switch the wave */
+            /* every barrier button says what is stored for the chosen wave; none switches the wave */
             document.querySelectorAll('#shape-chips button').forEach(function (b) {
                 var s2 = b.dataset.s;
-                if (w === 'packet') { b.disabled = (s2 === 'coin' || s2 === 'tube' || !GRID[s2]); b.title = b.disabled ? (s2 === 'coin' || s2 === 'tube' ? 'Not computed yet: needs GPU runs on Kaggle' : 'Not stored yet') : ''; b.setAttribute('aria-pressed', s2 === lastPacketShape ? 'true' : 'false'); }
-                else if (w === 'two') { b.disabled = true; b.title = 'Two sources in free space: no barrier. With a barrier, two sources are a true 3D problem (Kaggle’s graphics cards).'; b.setAttribute('aria-pressed', 'false'); }
-                else { b.disabled = s2 !== 'sphere'; b.title = s2 === 'sphere' ? 'The spherical wave meets a round barrier centred on its source' : 'Spherical wave with this barrier: not computed yet (a true 3D problem, needs GPU runs on Kaggle)'; b.setAttribute('aria-pressed', s2 === 'sphere' ? 'true' : 'false'); }
+                if (w === 'packet') { b.disabled = !GRID[s2]; b.title = b.disabled ? 'Not stored yet' : ''; b.setAttribute('aria-pressed', s2 === lastPacketShape ? 'true' : 'false'); }
+                else if (w === 'side') { b.disabled = !SIDE[s2] || !GRID[SIDE[s2]]; b.title = b.disabled ? 'A spherical wave from the side is stored with the sphere, the pillar and the flat wall' : ''; b.setAttribute('aria-pressed', SIDE[s2] === SHAPE ? 'true' : 'false'); }
+                else if (w === 'two') { b.disabled = true; b.title = 'Two sources in free space: no barrier'; b.setAttribute('aria-pressed', 'false'); }
+                else { b.disabled = s2 !== 'sphere'; b.title = s2 === 'sphere' ? 'The spherical wave meets a round barrier centred on its source' : 'With its source at the centre the wave is stored with the round barrier only; choose “Spherical, from the side” for the pillar and the wall'; b.setAttribute('aria-pressed', s2 === 'sphere' ? 'true' : 'false'); }
             });
             /* two sources: their sum is not round, so it is drawn as the meshed sheet only; the other views say so */
             document.querySelectorAll('#view-chips button').forEach(function (b) { var off = w === 'two' && b.dataset.v !== 'mesh'; b.disabled = off; b.title = off ? 'Two sources are drawn as the meshed sheet only' : ''; });
             if (w === 'two' && VIEW !== 'mesh') setView('mesh');
         }
         function setView(v) {
-            VIEW = v; shownId = null; dirty = true; if (w3 && v !== 'fog') w3.setMode(v);
+            VIEW = v; shownId = null; meshStamp = ''; dirty = true; if (w3 && v !== 'fog') w3.setMode(v);
             document.querySelectorAll('#view-chips button').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.v === v ? 'true' : 'false'); });
             document.getElementById('height-chips').style.display = v === 'mesh' ? '' : 'none';
         }
-        document.querySelectorAll('#shape-chips button').forEach(function (b) { b.addEventListener('click', function () { if (SHAPES[SHAPE].radial) return; setShape(b.dataset.s); }); });
+        document.querySelectorAll('#shape-chips button').forEach(function (b) { b.addEventListener('click', function () { if (SHAPES[SHAPE].radial) return; setShape(SHAPES[SHAPE].side ? SIDE[b.dataset.s] : b.dataset.s); }); });
         document.querySelectorAll('#view-chips button').forEach(function (b) { b.addEventListener('click', function () { setView(b.dataset.v); }); });
         document.querySelectorAll('#wave-chips button').forEach(function (b) { b.addEventListener('click', function () { setWave(b.dataset.w); }); });
-        document.querySelectorAll('#height-chips button').forEach(function (b) { b.addEventListener('click', function () { HQ = b.dataset.h; shownId = null; dirty = true; document.querySelectorAll('#height-chips button').forEach(function (o) { o.setAttribute('aria-pressed', o === b ? 'true' : 'false'); }); }); });
+        document.querySelectorAll('#height-chips button').forEach(function (b) { b.addEventListener('click', function () { HQ = b.dataset.h; shownId = null; meshStamp = ''; dirty = true; document.querySelectorAll('#height-chips button').forEach(function (o) { o.setAttribute('aria-pressed', o === b ? 'true' : 'false'); }); }); });
         Sim.onResize(stage, function () { ovBox.fit(); plotBox.fit(); dirty = true; });
-        window.__fig14 = { up: function (a, b) { if (a) { UPX = a; UPY = b; shownId = null; dirty = true; } return [UPMS, MESHMS]; }, meshPoint: function (q) { return meshPoint(q); }, meshCheck: function (q) { return pixelCheckMesh(q); }, mesh: function () { return MESH; }, setHeight: function (h) { HQ = h; shownId = null; dirty = true; }, ds: ds, entry: entry, sliders: function () { return sliders; }, setT: function (t) { tPhys = t; }, play: setPlay, setShape: setShape, setView: setView, setWave: setWave, w3: function () { return w3; }, field: function () { return F3; } };
+        window.__fig14 = { up: function (a, b) { if (a) { UPX = a; UPY = b; shownId = null; dirty = true; } return [UPMS, MESHMS]; }, meshPoint: function (q) { return meshPoint(q); }, meshCheck: function (q) { return pixelCheckMesh(q); }, mesh: function () { return MESH; }, setHeight: function (h) { HQ = h; shownId = null; meshStamp = ''; dirty = true; }, ds: ds, entry: entry, sliders: function () { return sliders; }, setT: function (t) { tPhys = t; }, play: setPlay, setShape: setShape, setView: setView, setWave: setWave, w3: function () { return w3; }, field: function () { return F3; } };
 
         /* ---------- the data panel (scripts/datalog.js) reads the store; these hooks only say where things are drawn ---------- */
         /* a stored point (x_i, rho_r) of the half-plane -> where it lands on the screen (at the angle where z = 0, y = rho);
@@ -1275,17 +1303,27 @@
            also a stored radius. The sheet's grid (1/6 a) contains every stored point (0.5 a), and the resampling returns the stored
            value there, so the height drawn must equal the stored value times the scale. */
         function radPsi(j) { if (j < 0 || j > 96) return [0, 0]; var a = RAMP[j], sc = ds.get('rpeak') / 255; if (a < 3) return [0, 0]; var ph = RPHS[j] / 255 * 2 * Math.PI - Math.PI; return [a * sc * Math.cos(ph), a * sc * Math.sin(ph)]; }
+        /* psi at a stored point in stored frame f, from the run's levels as Kaggle wrote them */
+        function radPsiF(c, f, j) { if (j < 0 || j >= c.nr) return [0, 0]; var a = c.A[f * c.nr + j]; if (a < 3) return [0, 0]; var sc = c.peaks[f] / c.peaks[0] / 255, ph = c.P[f * c.nr + j] / 255 * 2 * Math.PI - Math.PI; return [a * sc * Math.cos(ph), a * sc * Math.sin(ph)]; }
+        function cutPsiF(c, f, q) {
+            var o = f * c.nx * c.nr + q, a = c.A[o]; if (a < 3) return [0, 0];
+            var ph = c.P[o] / 255 * 2 * Math.PI - Math.PI, pk = pkOf(c, f), re = a / 255 * pk * Math.cos(ph), im = a / 255 * pk * Math.sin(ph);
+            if (c.shape === 'pillar') { var ie = GZ && GZ.Es ? GZ.Es.indexOf(c.meta.E) : -1, g00 = Math.pow(2 * Math.PI * 9, -0.25); if (ie >= 0) { var og = (ie * 48 + f) * 64 * 2, gr = Math.fround(GZ[og] / g00), gi = Math.fround(GZ[og + 1] / g00), r0 = re; re = r0 * gr - im * gi; im = r0 * gi + im * gr; } }
+            return [re, im];
+        }
+        function storedPsi(c, f, q) {
+            if (!c.radial) return cutPsiF(c, f, q);
+            var p1 = radPsiF(c, f, q); if (SHAPE !== 'two') return p1;
+            var p2 = radPsiF(c, f, q + Math.round(2 * current().R)); return [p1[0] + p2[0], p1[1] + p2[1]];
+        }
         function meshPoint(q) {
-            var M = MESH, c = entry(); if (!M || !c || VIEW !== 'mesh') return null;
-            var x, y, re, im, parts = null;
-            if (c.radial) {
-                var s = SHAPE === 'two' ? current().R : 0, p1 = radPsi(q), p2 = SHAPE === 'two' ? radPsi(q + Math.round(2 * s)) : [0, 0];
-                x = s / 2 + q * 0.5; y = 0; re = p1[0] + p2[0]; im = p1[1] + p2[1]; parts = [p1, p2];
-            } else {
-                var a = AMP[q], ph = PHS[q] / 255 * 2 * Math.PI - Math.PI, gr = 1, gi = 0; x = XC[Math.floor(q / 64)]; y = RC[q % 64];
-                re = a < 3 ? 0 : a / 255 * Math.cos(ph); im = a < 3 ? 0 : a / 255 * Math.sin(ph);
-                if (c.shape === 'pillar') { var ie = GZ && GZ.Es ? GZ.Es.indexOf(c.meta.E) : -1, g00 = Math.pow(2 * Math.PI * 9, -0.25); if (ie >= 0) { var o = (ie * 48 + frameOf(c)) * 64 * 2; gr = GZ[o] / g00; gi = GZ[o + 1] / g00; } var r0 = re; re = r0 * gr - im * gi; im = r0 * gi + im * gr; }
+            var M = MESH, c = entry(); if (!M || !c || VIEW !== 'mesh' || c.source !== 'kaggle') return null;
+            var x, y, P0 = storedPsi(c, M.f, q), re = P0[0], im = P0[1], parts = null;
+            if (M.s > 0) {   /* between two stored frames: the same blend the picture uses, from the two frames' stored values */
+                var P1 = storedPsi(c, M.f + 1, q), th = M.E * M.dtF, c1 = Math.cos(th), s1 = Math.sin(th), ph2 = M.E * M.s * M.dtF, cr = Math.cos(ph2), sr = Math.sin(ph2);
+                var br = (1 - M.s) * P0[0] + M.s * (P1[0] * c1 - P1[1] * s1), bi = (1 - M.s) * P0[1] + M.s * (P1[0] * s1 + P1[1] * c1); re = br * cr + bi * sr; im = bi * cr - br * sr;
             }
+            if (c.radial) { x = (SHAPE === 'two' ? current().R / 2 : 0) + q * 0.5; y = 0; } else { x = XC[Math.floor(q / 64)]; y = RC[q % 64]; }
             var i = Math.round((x - M.x0) / M.h), j = Math.round((y - M.y0) / M.h); if (i < 0 || j < 0 || i >= M.nx || j >= M.ny) return null;
             var vtx = w3.meshVertex(i * M.ny + j), v = HQ === 'abs2' ? re * re + im * im : re;
             return { x: x, y: y, re: re, im: im, v: v, k: i * M.ny + j, vtx: vtx, drawn: vtx[2] / M.scale, parts: parts };

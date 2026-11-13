@@ -43,3 +43,11 @@ pixel's ray meets $z = 0$; in the mesh mode, where it first meets the sheet), `r
 
 The default sphere run (true 3D data, 96 × 64 × 64): about 15 000 to 29 000 triangles per frame for the two sheets. No horizontal
 overflow at 360, 390, 1024 or 1440 px.
+
+## Off the main thread (13 November 2026)
+
+`marching()` lives in [marching.js](../../public/scripts/marching.js) (re-exported here). The page hands the 3D field to the module
+worker [fig14-iso-worker.js](../../public/scripts/fig14-iso-worker.js), which resamples it and returns the triangles of both sheets;
+`api.setSheets(crest, trough)` takes them. `setField` (resample and cut on the page) remains as the fallback where module workers
+are missing.
+

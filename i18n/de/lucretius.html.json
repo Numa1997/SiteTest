@@ -3,17 +3,25 @@
   "src": "the original",
   "tr": "das Original"
  },
+ "0cf5f46480d4": {
+  "src": "Lines 155 to 158",
+  "tr": "Verse 155 bis 158"
+ },
  "1503f07be1a9": {
   "src": "<b>Line numbers.</b> They are those of the Latin of Book I as <a href=\"https://www.thelatinlibrary.com/lucretius/lucretius1.shtml\">The Latin Library</a> prints it, in the order of the manuscripts, which give line 155 after line 158; checked at lines 149, 155 to 158 and 218 against the edition of Hermann Diels (Berlin, 1923).",
   "tr": "<b>Verszahlen.</b> Es sind die des lateinischen Textes von Buch I, wie ihn <a href=\"https://www.thelatinlibrary.com/lucretius/lucretius1.shtml\">The Latin Library</a> druckt, in der Reihenfolge der Handschriften, die Vers 155 nach Vers 158 stellen; geprüft an den Versen 149, 155 bis 158 und 218 gegen die Ausgabe von Hermann Diels (Berlin, 1923)."
  },
- "2a2c3407e0d6": {
-  "src": "Book I, lines 146 to 224",
-  "tr": "Buch I, Verse 146 bis 224"
+ "215eb3fed609": {
+  "src": "Lines 192 to 198",
+  "tr": "Verse 192 bis 198"
  },
  "2d68abff3037": {
   "src": "Language shown",
   "tr": "Angezeigte Sprache"
+ },
+ "2e25b4c2e86b": {
+  "src": "<b>Arabic.</b> Made for this site on 13 November 2026, translated from the Latin verse by verse, as a poem: it takes the same freedom with the Latin that Leonard’s English takes. It is free verse in modern literary Arabic, fully vowelled, with rhyme only here and there and no classical metre. It is not a published translation and has not been checked by a second reader. The only published Arabic translation, from the Egyptian National Centre for Translation (Cairo, 2018), is under copyright and was not used.",
+  "tr": "<b>Arabisch.</b> Am 13. November 2026 für diese Seite angefertigt, Vers für Vers aus dem Latein übersetzt, als Gedicht: Es nimmt sich gegenüber dem Latein dieselbe Freiheit, die sich Leonards Englisch nimmt. Es sind freie Verse in modernem Hocharabisch, voll vokalisiert, nur hier und da gereimt und ohne klassisches Versmaß. Es ist keine veröffentlichte Übersetzung und wurde von keiner zweiten Person geprüft. Die einzige veröffentlichte arabische Übersetzung, vom Ägyptischen Nationalen Übersetzungszentrum (Kairo, 2018), steht unter Urheberrecht und wurde nicht benutzt."
  },
  "2eb56be3c2d9": {
   "src": "Sources",
@@ -23,29 +31,61 @@
   "src": "© 2026 Numa Koudsie",
   "tr": "© 2026 Numa Koudsie"
  },
- "43418e1fd222": {
-  "src": "Titus Lucretius Carus",
-  "tr": "Titus Lucretius Carus"
+ "37a2d43b0baf": {
+  "src": "Lines 174 to 179",
+  "tr": "Verse 174 bis 179"
+ },
+ "3c478b2ac2ca": {
+  "src": "Lines 199 to 204",
+  "tr": "Verse 199 bis 204"
+ },
+ "433c5de6aae7": {
+  "src": "Lines 217 to 218",
+  "tr": "Verse 217 bis 218"
  },
  "438eb726fcb7": {
   "src": "Nothing from nothing<span class=\"dot\">.</span>",
   "tr": "Nichts aus dem Nichts<span class=\"dot\">.</span>"
  },
+ "496743948804": {
+  "src": "Lines 180 to 183",
+  "tr": "Verse 180 bis 183"
+ },
  "504887c57661": {
   "src": "Lucretius, On the Nature of Things, Book I, lines 146–224 (nothing comes from nothing): the Latin and three translations side by side, English (Leonard), German (Diels) and Arabic.",
   "tr": "Lukrez, Über die Natur der Dinge, Buch I, Verse 146–224 (nichts aus dem Nichts): das Latein und drei Übersetzungen nebeneinander, Englisch (Leonard), Deutsch (Diels) und Arabisch."
+ },
+ "58edb8ac5ff8": {
+  "src": "On a narrower screen the four languages are shown one at a time: choose one with the buttons above the poem.",
+  "tr": "Auf einem schmaleren Bildschirm werden die vier Sprachen nacheinander gezeigt: Wähle eine mit den Schaltflächen über dem Gedicht."
  },
  "5b6825d3c67a": {
   "src": "Site",
   "tr": "Website"
  },
+ "5c76aff9a5d6": {
+  "src": "Lines 188 to 191",
+  "tr": "Verse 188 bis 191"
+ },
  "61f3ef637ed6": {
   "src": "Lucretius, On the Nature of Things · Numa Koudsie",
   "tr": "Lukrez, Über die Natur der Dinge · Numa Koudsie"
  },
- "69f745fa6470": {
-  "src": "<b>Arabic.</b> Made for this site on 13 November 2026 from Leonard’s English, verse by verse, and compared with the Latin. It is free verse in modern literary Arabic, with rhyme only here and there and no classical metre. It is not a published translation and has not been checked by a second reader. The only published Arabic translation, from the Egyptian National Centre for Translation (Cairo, 2018), is under copyright and was not used.",
-  "tr": "<b>Arabisch.</b> Am 13. November 2026 für diese Seite aus Leonards Englisch angefertigt, Vers für Vers, und mit dem Latein verglichen. Es sind freie Verse in modernem Hocharabisch, nur hier und da gereimt und ohne klassisches Versmaß. Es ist keine veröffentlichte Übersetzung und wurde von keiner zweiten Person geprüft. Die einzige veröffentlichte arabische Übersetzung, vom Ägyptischen Nationalen Übersetzungszentrum (Kairo, 2018), steht unter Urheberrecht und wurde nicht benutzt."
+ "657f6fff3595": {
+  "src": "The opening of the argument of Lucretius, in the Latin and in three translations side by side. The terror of the mind is dispelled not by daylight but by looking at nature, and the first thing nature shows is that nothing is ever born from nothing, and nothing is destroyed into nothing. The small numbers beside the Latin are its line numbers.",
+  "tr": "Der Beginn der Beweisführung des Lukrez, auf Latein und in drei Übersetzungen nebeneinander. Die Angst des Geistes vertreibt nicht das Tageslicht, sondern der Blick auf die Natur, und das Erste, was die Natur zeigt, ist, dass nichts je aus dem Nichts entsteht und nichts ins Nichts vergeht. Die kleinen Zahlen neben dem Latein sind seine Verszahlen."
+ },
+ "67cc543ced88": {
+  "src": "Lines 215 to 216",
+  "tr": "Verse 215 bis 216"
+ },
+ "6a3651dababe": {
+  "src": "Lines 205 to 207",
+  "tr": "Verse 205 bis 207"
+ },
+ "6f458ba8d3be": {
+  "src": "Lines 149 to 150",
+  "tr": "Verse 149 bis 150"
  },
  "702b201c4b40": {
   "src": "Phyein Usul",
@@ -75,17 +115,25 @@
   "src": "Lucretius · On the Nature of Things · Book I",
   "tr": "Lukrez · Über die Natur der Dinge · Buch I"
  },
- "8d9470d517bc": {
-  "src": "On the Nature of Things",
-  "tr": "Von der Natur"
- },
  "9521dba25709": {
   "src": "Home page",
   "tr": "Startseite"
  },
- "bae8b0b458be": {
-  "src": "The opening of the argument of Lucretius, in the Latin and in three translations side by side. The terror of the mind is dispelled not by daylight but by looking at nature, and the first thing nature shows is that nothing is ever born from nothing, and nothing is destroyed into nothing. The numbers over the verses are the lines of the Latin.",
-  "tr": "Der Beginn der Beweisführung des Lukrez, auf Latein und in drei Übersetzungen nebeneinander. Die Angst des Geistes vertreibt nicht das Tageslicht, sondern der Blick auf die Natur, und das Erste, was die Natur zeigt, ist, dass nichts je aus dem Nichts entsteht und nichts ins Nichts vergeht. Die Zahlen über den Versen sind die Verse des lateinischen Textes."
+ "988e727fa357": {
+  "src": "Lines 167 to 168",
+  "tr": "Verse 167 bis 168"
+ },
+ "a927f12e57a4": {
+  "src": "Lines 169 to 173",
+  "tr": "Verse 169 bis 173"
+ },
+ "b4aa32d214e0": {
+  "src": "Lines 219 to 220",
+  "tr": "Verse 219 bis 220"
+ },
+ "b965d80e241c": {
+  "src": "Lines 146 to 148",
+  "tr": "Verse 146 bis 148"
  },
  "bdae96ae90ea": {
   "src": "<b>Latin.</b> <a href=\"https://www.thelatinlibrary.com/lucretius/lucretius1.shtml\">The Latin Library</a>, Book I, lines 146 to 224, line by line. The Latin has fewer lines than Leonard’s English, so the four columns run by sentence, not by line: the numbers over each verse say which lines of the Latin it renders.",
@@ -94,6 +142,10 @@
  "be601df25eea": {
   "src": "Research",
   "tr": "Forschung"
+ },
+ "ca8ce7b52dfa": {
+  "src": "Lines 221 to 224",
+  "tr": "Verse 221 bis 224"
  },
  "ca940dd9c892": {
   "src": "<b>German.</b> Hermann Diels, <i>Lukrez: Von der Natur</i> (Berlin, 1924), line for line, from <a href=\"https://www.textlog.de/lukrez-natur-dinge.html\">textlog.de</a>. Two places are corrected: “wild” to “wird” (line 156, as the excerpt in the Falter has it) and the break of line 147. Line 173 is as printed online and has not been compared with the book.",
@@ -107,9 +159,17 @@
   "src": "Numa Koudsie",
   "tr": "Numa Koudsie"
  },
+ "d100019850aa": {
+  "src": "Lines 208 to 214",
+  "tr": "Verse 208 bis 214"
+ },
  "d1622a8321e0": {
   "src": "Phyein Usul, home page",
   "tr": "Phyein Usul, Startseite"
+ },
+ "d7af5ac1b867": {
+  "src": "Lines 159 to 160",
+  "tr": "Verse 159 bis 160"
  },
  "e09212c7d3ea": {
   "src": "Skills",
@@ -119,12 +179,20 @@
   "src": "Skip to the poem",
   "tr": "Zum Gedicht springen"
  },
+ "e73a9e94a047": {
+  "src": "Lines 161 to 166",
+  "tr": "Verse 161 bis 166"
+ },
+ "f61bba495524": {
+  "src": "Lines 151 to 154",
+  "tr": "Verse 151 bis 154"
+ },
  "f72f0eda6052": {
   "src": "Simulations",
   "tr": "Simulationen"
  },
- "ff86cd3a3cb2": {
-  "src": "On a narrow screen the four languages are shown one at a time: choose one with the buttons above the poem.",
-  "tr": "Auf einem schmalen Bildschirm werden die vier Sprachen nacheinander gezeigt: Wähle eine mit den Schaltflächen über dem Gedicht."
+ "fcd80c84a231": {
+  "src": "Lines 184 to 187",
+  "tr": "Verse 184 bis 187"
  }
 }
