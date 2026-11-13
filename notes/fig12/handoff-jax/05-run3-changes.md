@@ -85,3 +85,25 @@ Also changed for run 4 (commits 183347c, 490b55d): the surface read-out takes th
 from the 0.505 dx field in the top three cells of that body (a column where the 0.505 dx field finds no surface there falls
 back to the body's top less 0.68 cell, and is counted per frame as `nfallback`); the rest task stores the particles at 0.5 s
 and 2 s (`rest_particles_15.npz`, `rest_particles_60.npz`) so any read-out can be checked afterwards.
+
+## Runs 4, 5 and 6 (13 November 2026, evening)
+
+- **Run 4** (version 4, commit 490b55d). Rest guard passed (0.54 mm, rms 0.125 mm). All rides ran. Free swing with the head:
+  rings at 2.900 Hz, decays in 0.104 s, natural frequency 3.277 +- 0.034 Hz, damping ratio 0.465 (the summary's "0.526" was
+  1/(tau w_d); `fit_swing` now reports f, f0 and zeta = 1/(tau w0)). Gate C predicted that the head stops the swing within about
+  one period, and research/verification.md check 3 that a sliding Guinness head arrests a free slosh within about one period.
+  Not stored, for one fault seen in the pictures: 84 "drops" along the glass in the pint at rest. Columns whose centre is outside
+  the glass at the fill but inside lower down (the tulip is widest at 116 mm, 39.3 mm) read their surface at 120 mm, where their
+  centre leaves the glass, and their stout above that as drops. Fix (commit 4c10527): such a column has no surface value, and a
+  drop must stand 1.5 dx above its column and the eight around it. At the start: 0 drops, every column within 0.25 mm.
+- **Run 5** (version 5): computed nothing. The budget guessed 1340 s for the free swing without the head (no rate measured yet
+  in that session) against 900 s allowed, and skipped it. About 1 minute of quota.
+- **Run 6** (version 6, commit 4c10527): stored on the page. Every check of `check_run.py` passed. Rest 0.54 mm, rms 0.125 mm,
+  books 24.5 uJ lost, 0.33 uJ kinetic, 8.4 uJ dissipated. Free swing without the head: 3.331 Hz (-2.6 %), zeta 0.0160 against
+  0.0055 from the glass and viscosity, so the method adds about 0.0105. With the head: 3.278 Hz natural, zeta 0.47. Rides: five
+  bumps lean 9.8 mm, no spill; kerb lean 19.7 mm, 4.08 mL of head from 0.67 s, 0.008 g of stout from 1.00 s; 25 mm bump 6.9 mm.
+  1373 s on the T4.
+
+Gate E's swing check now reads the natural frequency of the swing without the head (3 % of 3.421 Hz). With the head the model
+gives weight but no inertia, so its natural frequency is the bare stout's; a real head's mass would lower it to about 3.07 Hz
+(the note, section 11). That, and the method's own loss (0.0105, twice the glass's), are the next model's work.

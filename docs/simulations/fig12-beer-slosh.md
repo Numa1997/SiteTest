@@ -444,9 +444,80 @@ processor's solver at 4 mm (half glass, slow motion) and says so in the caption.
   a second harmonic of 0.3: the mug spills from 1.5 steps/s, the pint at 1.5 and 1.75 steps/s, with a head only at 1.75 (3 ml).
 - The mug is run in the live model by the tool, not offered on the page.
 
+## Computed on Kaggle in JAX, played back (13 November 2026: what the page does now)
+
+[`public/simulations/guinness-kaggle.html`](../../public/simulations/guinness-kaggle.html) plays rides computed by the JAX
+solver [`tools/fig12/kaggle/stout_jax.py`](../../tools/fig12/kaggle/stout_jax.py) on Kaggle's GPU, run by
+[`run_b.py`](../../tools/fig12/kaggle/run_b.py) and packed by [`pack_ride.py`](../../tools/fig12/kaggle/pack_ride.py) into
+`public/data/fig12/2026-11-13/` (listed in `index-jax.json`, each file with its SHA-256). The page computes nothing physical. Its
+scripts (lines 549–555): `fold.js`, `sim.js`, `dataset.js`, `guinness-glass.js`, `stout-view.js`, `stout-view2.js` (`StoutRide`
+unpacks a ride, `StoutView2` draws the glass from the stored fields), `guinness-jax-play.js` (the player). It no longer loads
+`guinness-playback.js`, `kaggle-flow.js` or `datalog.js`: there is no speed slider, governor, live preview, pop-up or data panel on
+it now, and everything below this section about those describes the earlier generations.
+
+**The player** (`guinness-jax-play.js`): one button per file of `index-jax.json` (the one marked `default` is chosen first); each
+file is fetched, its SHA-256 compared with the index (refused if different), unpacked. The ride clock T advances by the real time
+between animation frames (at most 0.1 s per frame); the frame drawn is `round(30 T)`, never a blend; at the end it stops and the
+button reads "Ride again". The Readings (cart speed, stout spilled, head spilled, drops and lumps) and the time are rewritten at
+most every 250 ms. Measured 13 November 2026 in headless Chromium at 1440 and 390 px on the built page, with run 2's packed files
+(`notes/fig12/jax/run2-data/`, same format) served in place of run 4's: every sampled frame (152 and 174 in 3 s) showed
+`round(30 T)`, the ride clock advanced 1.0000 s per second, the words changed 11 times in 3 s, the ride stopped at 8.00 s on
+picture 241 of 241, no console errors, no sideways scroll. Measured again with run 6's files on the built page at 360, 390,
+1024 and 1440 px (`node notes/fig12/jax/page-test.cjs <out dir>`): all five rides listed, the five bumps chosen first, no
+console errors, no sideways scroll; the kerb ride sought to 0.867 s draws picture 27 of 121 with 3.6 mL of head spilled and
+503 drops and lumps. The stout spilled is shown to 0.01 g (it is stored to 0.01 g; the kerb spills 0.008 g, 19 particles).
+
+**The stored run (run 6, Kaggle notebook version 6, 13 November 2026, commit `4c10527`).** All checks of `check_run.py` pass.
+Pint at rest after 2 s: surface within 0.54 mm (rms 0.125 mm) over the 1977 inner columns; books 24.5 µJ lost, 0.33 µJ kinetic,
+8.4 µJ dissipated. Free swing without the head (model `wall`): 3.331 Hz (−2.6 %), ζ = 0.0160 against 0.0055 from the glass and
+viscosity. With the head: rings at 2.899 Hz, decays in 0.104 s, natural frequency 3.278 Hz, ζ = 0.47. Rides: five bumps in step
+lean 9.8 mm, no spill; kerb lean 19.7 mm, 4.08 mL of head from 0.67 s and 0.008 g of stout from 1.00 s; one 25 mm bump lean
+6.9 mm, no spill. Files: `ride_resonant.json` (default), `ride_sharp30.json`, `ride_bump25.json`, `free_full_1.5.json`,
+`free_wall_1.5.json` (3.3 MB in all). Runs 3 to 5 and why they were not stored: `notes/fig12/handoff-jax/05-run3-changes.md`.
+
+**What one stored frame holds** (`pack_ride.py`): the stout's surface on the solver's 57 × 57 columns (int16, steps of 0.02 mm,
+differences from the previous frame), the head's thickness per column (uint8, 0.1 mm), the drops (int16, 0.1 mm), the lumps of
+head (position and volume, 0.1 mm³), and per frame the cart's x, v, body and wheel heights, current, the stout's push Fx, Fz, the
+stout spilled (g) and the head spilled (mL). `StoutView2` draws the surface on 14 rings × 96 angles, bilinear between the four
+stored columns around each point (columns without stout left out), the head as a layer of the stored thickness (its colour fading
+to the stout's below 1.5 mm), drops as 1.1 mm dots, lumps as balls of their stored volume; glass tint, Beer–Lambert colour,
+lettering and camera are drawing only. "Drops and lumps in the air" counts everything stored outside the stout's body, including
+drops and lumps that have come to rest on the cart's body (`stuck`, `BODY_TOP`).
+
+**The lecture note (rewritten 13 November 2026 for the JAX solver; lines 102–541 of the page).** Written to `notes/STANDARD.md`
+(verdict of 21 October 2026); plan in [`notes/fig12/plan-kaggle-jax.md`](../../notes/fig12/plan-kaggle-jax.md). Twelve sections,
+20 numbered equations, 3 inline SVG figures, 4 tables, Key results, worked examples, 7 Problems, 14 sources:
+
+| Section (id, line) | What it says |
+|---|---|
+| 1 `p-pint` (128) | carrying a full pint; what the page shows; the road map |
+| 2 `p-measure` (136) | the glass (R(125 mm) = 39.1 mm, rim 147.5 mm, 426.6 mL, 429.6 g), the stout (1007 kg/m³, 2.06 mPa s, ν = 2.05e-6 m²/s), the head (19 mm, R32 34 µm, liquid fraction 0.27, 272 kg/m³, γ 44.2, E∞ 18.7 mN/m); Table 1; Figure 1 (the glass to scale); Example 2.1 (51 Pa, 91.31 mL on 2217 columns, 24.8 g) |
+| 3 `p-mode` (195) ★ | eq. (1) in the glass's frame; the first mode (2)–(5), f11 = 3.421 Hz (5.821, 7.365 Hz for the next cos θ modes); the driven swing (6), β = 1.541, derived by projecting r cos θ on J1 (wall share 0.837); Example 3.2: steady push R a/g, a sudden Δv leaves (ω/g)(2R/(ξ²−1))Δv (7.2 mm for 0.1 m/s) |
+| 4 `p-layers` (239) | the Stokes layer derived (7)–(8), δ = 0.436 mm; the code's drag ρ√(νω/2)u is the in-phase part; Figure 2; ζ_wall from the energy integrals (9) = 0.0051 (Miles's K = 3.50 against 3.52 quoted by Stephens et al.; their experiments 5.23, ζ = 0.0077); skin (10) 0.0051; bulk 0.0004; total 0.0107 |
+| 5 `p-head` (305) | p_L = 2400 Pa, G0 = 166 Pa, τy = 5.4 Pa (11); Tcholakova's flow law (12), 11.7 Pa at 10 1/s; the head sheet (13); a rough balance: the yield stress holds swings below about 0.5 mm; Cantat's wall stress (14), 2.1–45 Pa at 1–100 mm/s, h_eff = 9.9 mm derived; the spill rule (15), ε* = 4.1 mm, the wall must rise 7.6 mm |
+| 6 `p-cart` (342) | the cart; the glass's frame; F = −dP/dt (16) from Newton's third law; the impulse book telescopes (impulse = −P exactly) and the cart feels each push one step late; Table 2 (the six tasks of `run_b.py`, run 6); Example 6.1 (the cart alone with a frozen pint: largest push 1.6 / 28.8 / 1.0 m/s², g + a_z from −0.7 / −2.4 / 1.5 to 20.0 / 20.6 / 17.6 m/s², undamped first-mode swing 45 / 24 / 8.5 mm) |
+| 7 `p-method` (379) | particles and grid (370,386 cells, 1,001,952 particles, 7.93 per cell, 0.429 mg each); APIC (17); the ten steps of `Stout.step`; the pressure (face fractions, PCG 1e-5, ≤ 600 iterations; run 3 at rest 90 on average, 226 at most); the ghost-fluid rule (18); the level set (19) and the radii 0.9 Δx and 0.505 Δx (centroid 0.5054 Δx below the top); columns capped by the glass have no surface; a drop stands 1.5 Δx above its column and the eight around; 2 ms steps, 17 per stored frame at rest, 72.6 ms a step on the T4 (run 3) |
+| 8 `p-rest` (415) | a pint at rest must stay at rest; the books (20); run 3's guard (4.62 mm worst, 0.484 mm rms, 108 of 1977 columns off); Table 3 and Figure 3 (629 µJ lost, 774 µJ "dissipated"); the two faults as physics; the same test on the CPU before and after the fixes |
+| 9 `p-play` (466) | what is stored, how it is played, the readings, what is data and what is drawing |
+| 10 `p-results` (475) | predictions; how each number is read from the stored data (natural frequency √(ω² + 1/t_d²), ζ = 1/(ω0 t_d)); run 6's numbers: the pint at rest and its books, the swing without and with the head, Table 4 (the three rides) |
+| 11 `p-limits` (499) | the head's inertia (left out; it would lower f11 to 3.07 Hz, derived), what else is left out (sideways flow of the head, drainage, film, contact line, the flow law beyond its range, the spill rule's factor, drops as single particles, the 2 ms delay, the method's own loss measured only together with the glass's layer); the controller next; Problems 11.1–11.7 |
+| 12 `p-refs` (519) | sources, each opened (Völp & Willenbacher, Stephens et al., Jiang et al., Zhu & Bridson and Batty et al. in full; the rest in the extracts of `notes/fig12/research/sources/`) |
+
+How its numbers were measured (13 November 2026, this session; scripts not committed): the geometry, particle count and head
+from `Geometry` and `Stout` of `stout_jax.py` on the CPU at 1.5 mm; the theory (mode, Stokes layer, energy integrals, the
+projection on J1, the head's inertia, the wedge check of the spill rule) re-derived with SymPy and evaluated with SciPy; the
+head's functions (`foam_flow_stress`, `head_wall_stress`, `heff`) called directly; Example 6.1 from `Cart` of `stout_jax.py` run
+alone (F = 0) at 0.1 ms sub-steps over 2 ms steps; run 3's books from its stored `rest.npz`; the one-step and 0.1 s comparisons
+from `Stout.step` of commit `eb7471f` (run 3) and of the present code on the CPU at 1.5 mm: one step from rest, fastest particle
+30.3 mm/s (run 3's code) against 0.76 mm/s (fixed code, the same as the frictionless model `inviscid`); at 0.1 s potential energy
+lost / kinetic / "dissipated" 2.3 / 0.37 / 57.2 µJ (run 3's code; the T4 run gave 2.4 / 0.32 / 57.5) against 0.27 / 0.005 /
+0.033 µJ; the 0.505 Δx read-out on an ideal seeded lattice (reads 0.001–0.063 cell low; 0.9 Δx reads 0.52–0.56 cell high). The
+note rendered in headless Chromium at 390 and 1440 px: 20 numbered equations in order, no KaTeX errors, no wide displays, no
+sideways scroll, no console errors.
+
 ## Computed on Kaggle, played back (12 November 2026)
 
-**Second generation, 13 November 2026 (what the page plays now).** `DIR` in `guinness-playback.js` is
+**Second generation, 13 November 2026 (played until the JAX player above replaced it the same day).** `DIR` in `guinness-playback.js` is
 `public/data/fig12/2026-11-13/`: `rides.json` (1,795,977 bytes, SHA-256 5619dd27...) and `index.json` (notebook
 `numakoudsie/guinness-on-a-cart-stout-sloshing` version 5, code at commit 70703de, 87-89 ms a step, 14.5-14.8 min a ride,
 171-176 pressure iterations a step). `public/data/fig12/generations.json` lists both generations. Solver v2 is in the
@@ -603,7 +674,7 @@ Tested: the catalogue in English at 1100 and 390 px and in German and Arabic at 
 Fig. 12 cards among 15.
 
 
-**Lecture note (12 November 2026).** The page's short section "What was computed, and how" is replaced by a lecture note,
+**Lecture note (12 November 2026; replaced on 13 November 2026 by the note described in the JAX section above).** The page's short section "What was computed, and how" is replaced by a lecture note,
 `<article class="paper" id="paper">`, written to `notes/STANDARD.md` (Taylor's way: every step, Key results, worked examples
 with the page's numbers, Problems; ★ on section 3 and on the rate estimate). Sections: 1 the pint that keeps rocking;
 2 what Kaggle computed, eq. (1); 3 the first sloshing mode, (2)-(5), f11 = 3.421 Hz; 4 boundary-layer damping, (6), zeta =

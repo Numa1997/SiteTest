@@ -176,8 +176,12 @@ A project brings five things; nothing in `kaggle-flow.js` or the bridge changes.
 ## Projects plugged in
 
 - Fig. 14, the wave packet and the sphere: the first, described above.
-- Fig. 12 computed on Kaggle, the Guinness cart (`simulations/guinness-kaggle.html`, 12 November 2026): one speed control
-  (`KaggleFlow.slider`, 0.5 to 2.5 m/s, 0.5/1.0/1.5 stored), `governor`, `popup` and `bridge` with `url: null`; blocks asked
-  for are (road, speed, 0 to 20 s) and (road, speed, 20 to 40 s). Its live preview is `guinness-preview-worker.js`, the site's
-  coarse solver, labelled as such; it is not checked against Kaggle, and the stored Kaggle rides themselves are measured to be
-  damped 12 to 40 times too strongly (`tools/fig12/kaggle_decay.py`). Details: [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md).
+- Fig. 12 computed on Kaggle, the Guinness cart (`simulations/guinness-kaggle.html`). Since 13 November 2026 it plays rides
+  computed by the JAX solver (`tools/fig12/kaggle/stout_jax.py`, `run_b.py`, packed by `pack_ride.py` into
+  `public/data/fig12/2026-11-13/`, listed in `index-jax.json` with each file's SHA-256) through `guinness-jax-play.js` and
+  `stout-view2.js`. It follows rules 1, 2, 3 and 5 of "Store first" (one file per ride, an index, a fingerprint check in the
+  browser, provenance) and rule 4 (no interpolation: the frame drawn is `round(30 T)`), but uses none of `kaggle-flow.js`: one
+  button per stored ride, no slider, governor, live preview, pop-up or bridge; it plays at real speed and stops at the end of
+  the stored time. The stored rides are run 6's (Kaggle notebook version 6, 13 November 2026), five files, 3.3 MB. The earlier
+  generations (12 and 13 November, the Taichi solver, with `KaggleFlow.slider`, `governor`, `popup`, `bridge` with `url: null`
+  and the live preview `guinness-preview-worker.js`) are described in [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md).

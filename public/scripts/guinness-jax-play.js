@@ -104,7 +104,7 @@
         lastTxt = now;
         $('t-out').textContent = `${fmt(D.t[k], 2)} of ${fmt(dur(), 1)} s`;
         $('r-v').textContent = D.v ? fmt(D.v[k], 2) + ' m/s' : 'at rest';
-        $('r-s').textContent = fmt(D.spill_g[k], 1) + ' g';
+        $('r-s').textContent = fmt(D.spill_g[k], 2) + ' g';                 // stored to 0.01 g: 23 particles are 0.01 g
         $('r-h').textContent = fmt(D.head_spill_ml[k], 1) + ' mL';
         $('r-d').textContent = String(D.nd[k] + D.nl[k]);
         $('cap-t').textContent = `stored picture ${k + 1} of ${D.frames} · ${files[cur].path}`;

@@ -1,0 +1,113 @@
+{
+ "about": "Fig. 12 computed in JAX on Kaggle's GPU: the stout, its head of foam and the cart, one file per ride.",
+ "generated": "2026-11-13",
+ "kaggle": {
+  "notebook": "numakoudsie/guinness-on-a-cart-stout-in-jax",
+  "url": "https://www.kaggle.com/code/numakoudsie/guinness-on-a-cart-stout-in-jax",
+  "version": 6,
+  "machine": "Tesla T4"
+ },
+ "code": "tools/fig12/kaggle/stout_jax.py and run_b.py at SiteTest commit 4c105275d3efe381335a3cb6cc23efbf0b13a9f6",
+ "files": [
+  {
+   "path": "ride_bump25.json",
+   "label": "One 25 mm bump, 1.0 m/s",
+   "kind": "ride",
+   "default": false,
+   "bytes": 317300,
+   "sha256": "8a8ca0b1b8e2a1d0e6c780275d435c045ab9d1d43cbb75104deb5520033bdcf6",
+   "frames": 241,
+   "seconds": 8.0,
+   "measured": {
+    "steps": 4080,
+    "ms_per_step": 78.6,
+    "its_per_step": 92.9,
+    "run_s": 320.7,
+    "cells": 370386,
+    "particles": 1001952,
+    "spilled_g": 0.0,
+    "head_spilled_ml": 0.0
+   }
+  },
+  {
+   "path": "ride_resonant.json",
+   "label": "Five 20 mm bumps in step with the swing, 1.0 m/s",
+   "kind": "ride",
+   "default": true,
+   "bytes": 426163,
+   "sha256": "90996ee62dae98200dd617b26c46e8cbd420006f7d4b37b001a31ac7adbb25cf",
+   "frames": 241,
+   "seconds": 8.0,
+   "measured": {
+    "steps": 4080,
+    "ms_per_step": 79.1,
+    "its_per_step": 96.4,
+    "run_s": 322.4,
+    "cells": 370386,
+    "particles": 1001952,
+    "spilled_g": 0.0,
+    "head_spilled_ml": 0.0
+   }
+  },
+  {
+   "path": "ride_sharp30.json",
+   "label": "One sharp 30 mm bump, 1.5 m/s",
+   "kind": "ride",
+   "default": false,
+   "bytes": 280513,
+   "sha256": "4f4034bf90ad9ef4625e1c231ae806a414b2aad87637b34d10b01707b15666cf",
+   "frames": 121,
+   "seconds": 4.0,
+   "measured": {
+    "steps": 2042,
+    "ms_per_step": 93.1,
+    "its_per_step": 132.9,
+    "run_s": 190.0,
+    "cells": 370386,
+    "particles": 1001952,
+    "spilled_g": 0.01,
+    "head_spilled_ml": 4.08
+   }
+  },
+  {
+   "path": "free_full_1.5.json",
+   "label": "Standing still, one push",
+   "kind": "free",
+   "default": false,
+   "bytes": 190536,
+   "sha256": "e245d8705ed368e3130cc669ddcb6fba8b3d8924321d57d8320b4ceaee80cf58",
+   "frames": 151,
+   "seconds": 5.0,
+   "measured": {
+    "steps": 2550,
+    "ms_per_step": 66.8,
+    "its_per_step": 47.0,
+    "run_s": 170.4,
+    "cells": 370386,
+    "particles": 1001952,
+    "spilled_g": 0.0,
+    "head_spilled_ml": 0.0
+   }
+  },
+  {
+   "path": "free_wall_1.5.json",
+   "label": "Standing still, one push, no head",
+   "kind": "free",
+   "default": false,
+   "bytes": 326715,
+   "sha256": "b2721dc8427aee1aaa7719226927aee5417f5d651d65fef6302d7e50f564c7d9",
+   "frames": 151,
+   "seconds": 5.0,
+   "measured": {
+    "steps": 2550,
+    "ms_per_step": 94.6,
+    "its_per_step": 200.3,
+    "run_s": 241.1,
+    "cells": 370386,
+    "particles": 1001952,
+    "spilled_g": 0.0,
+    "head_spilled_ml": 0.0
+   }
+  }
+ ]
+}
