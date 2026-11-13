@@ -43,6 +43,8 @@ MODELS = {
     # the whole model (notes/fig12/research/verification.md): viscosity, the glass's boundary layer, the surface that cannot stretch
     # (protein skin, or the head as a lid), and the head of foam: its weight on the stout, its friction on the glass, its spilling
     "full": dict(nu=NU_STOUT, wall=True, skin=True, head=True),
+    # the head as a heavy lid only (weight and mass, no shear resistance, no friction on the glass): the check of its inertia
+    "lid": dict(nu=NU_STOUT, wall=True, skin=False, head=True, sheet=False),
 }
 # The head of foam: every number from notes/fig12/research/data-for-solver.md (13 Nov 2026).
 HEAD0 = 0.019        # m, the head as served: 18-20 mm specification; 17.5-22.2 mm measured two minutes after pouring (KegWorks 2019)
@@ -210,7 +212,7 @@ def cut_lo(f, ax):     # the face below each cell (index i), cell-shaped
 
 # ====================================================================== the solver
 class Stout:
-    def __init__(self, G, model="full", ppc=2, seed=1, rho=1007.0, K_frac=0.62, M_drops=16384, tol=1e-5, maxit=600):
+    def __init__(self, G, model="full", ppc=2, seed=1, rho=1007.0, K_frac=0.62, M_drops=16384, tol=1e-5, maxit=600, head_mass=True):
         self.G = G; self.rho = rho; self.ppc = ppc
         M = MODELS[model]; self.model = model
         self.nu = M["nu"]; self.gs = math.sqrt(M["nu"] * OMEGA / 2) if M["wall"] else 0.0
@@ -238,7 +240,10 @@ class Stout:
         self.off64 = jnp.asarray(o)
         self.corners = jnp.asarray(np.array([(a, b, c) for a in (0, 1) for b in (0, 1) for c in (0, 1)], np.int32))
         # the head of foam lives on the columns of the grid (n x n), as a thickness h_f on top of the stout's surface
-        self.head = M["head"]; self.rho_f = PHI_F * rho
+        self.head = M["head"]; self.rho_f = PHI_F * rho; self.sheet = M.get("sheet", True)
+        # the head's mass (13 Nov 2026, run 8): the head moves up and down with the stout's surface, so the stout must accelerate
+        # it; set False to recover runs 6 and 7 (weight only)
+        self.head_mass = head_mass
         X, Y = np.meshgrid(G.xc, G.xc, indexing="ij")
         self.rc = jnp.asarray(np.hypot(X, Y), F32); self.colx = jnp.asarray(X, F32); self.coly = jnp.asarray(Y, F32)
         # the open part of each column at the fill (the horizontal face nearest the fill height): the head lies on every column
@@ -258,7 +263,7 @@ class Stout:
         return dict(xp=jnp.asarray(self.P0), vp=jnp.zeros((N, 3), F32), C=jnp.zeros((N, 3, 3), F32),
                     act=jnp.ones(N, bool), fly=jnp.zeros(N, bool), landed=jnp.zeros(N, bool), stuck=jnp.zeros(N, bool),
                     p=jnp.zeros(self.dims, F32), ewall=z64, efoam=z64, eskin=z64,
-                    hf=hf0, foam_spill=z64, foam0=jnp.sum((hf0 * self.afill).astype(F64)) * self.dx ** 2,
+                    hf=hf0, wh=jnp.zeros((self.n, self.n), F32), foam_spill=z64, foam0=jnp.sum((hf0 * self.afill).astype(F64)) * self.dx ** 2,
                     bx=jnp.full((self.MF, 3), jnp.nan, F32), bv=jnp.zeros((self.MF, 3), F32), bvol=jnp.zeros(self.MF, F32),
                     bptr=jnp.zeros((), I32))
 
@@ -394,7 +399,7 @@ class Stout:
                 u1 = u; tf = lo(top, comp, False) | hi(top, comp, False)
                 u = jnp.where(ok & tf, u * jnp.exp(-self.gs / dx * dt), u)
                 es = es + 0.5 * dV * jnp.sum(jnp.where(ok, u1 * u1 - u * u, 0.0).astype(F64))
-            if self.head and comp == 2:                                       # the head: a sheet that resists shear
+            if self.head and self.sheet and comp == 2:                        # the head: a sheet that resists shear
                 u1 = u; u = self.head_sheet(u, ok, top, hf, dt)
                 ef = ef + 0.5 * dV * jnp.sum(jnp.where(ok, u1 * u1 - u * u, 0.0).astype(F64))
             out.append(u.astype(F32))
@@ -514,20 +519,39 @@ class Stout:
         tRL = jnp.where(cRL, jnp.clip(phR / jnp.where(cRL, phR - phL, -1.0), 0.05, 1.0), 1.0)   # surface's place, R liquid
         return liqL, liqR, tLR, tRL
 
-    def pressure(self, vel, ph, liq, p_prev, ps):
+    def _surf_faces(self, ph, liq):
+        liqL, liqR, tLR, tRL = self._faces(ph, liq, 2)
+        return liqL & ~liqR & (self.th[2] > 0)
+
+    def pressure(self, vel, ph, liq, p_prev, ps, mu=None, w_old=None, geff_dt=0.0):
         """ps: the pressure on the free surface (the weight of the head), in the solver's units (Pa x dt / rho), one value per
         column, set on the air side of the surface. Ghost fluid: p = ps at the surface, so the air neighbour of a liquid cell
-        reads p_ghost = p_liq (1 - 1/theta) + ps / theta: the diagonal gets th / theta and the right side th ps / theta."""
+        reads p_ghost = p_liq (1 - 1/theta) + ps / theta: the diagonal gets th / theta and the right side th ps / theta.
+        mu (run 8): the head's mass per area over rho, m_s/rho = rho_f h_f/rho (m), one value per column. The head moves up and
+        down with the surface, so under it p_s = m_s (g_eff + dw/dt): in the solver's units P_s = mu (g_eff dt + w' - w_old),
+        with w' the new vertical velocity of the face the surface crosses (liquid below, air above). Put into the ghost-fluid
+        rule this is a Robin condition: the face takes theta + mu/dx in place of theta, and the load mu (g_eff dt + w* - w_old),
+        w* the face's velocity before the pressure step. At rest it gives the hydrostatic pressure with the head's weight; in
+        motion the stout carries the head's inertia, implicitly (an explicit, lagged load would be unstable for short waves:
+        mu k = 5.1 mm x 2094 1/m = 10.7 at the grid's shortest wave)."""
         dx = self.dx; diag = jnp.zeros(self.dims, F32); div = jnp.zeros(self.dims, F32); rhs = jnp.zeros(self.dims, F32)
         cp, cm, faces, loads = [], [], [], []
         ps3 = jnp.broadcast_to(ps[:, :, None], self.dims).astype(F32)
         for ax in range(3):
-            th = self.th[ax]; liqL, liqR, tLR, tRL = self._faces(ph, liq, ax); faces.append((liqL, liqR, tLR, tRL))
+            th = self.th[ax]; liqL, liqR, tLR, tRL = self._faces(ph, liq, ax)
+            surf = None
+            if ax == 2 and mu is not None:                                   # the head's mass on the faces the surface crosses
+                surf = liqL & ~liqR & (th > 0); muF = jnp.broadcast_to(mu[:, :, None], tLR.shape)
+                tLR = jnp.where(surf, tLR + muF / dx, tLR)
+            faces.append((liqL, liqR, tLR, tRL))
             open_ = th > 0
             dL = jnp.where(open_, jnp.where(liqR, th, th / tLR), 0.0)
             dR = jnp.where(open_, jnp.where(liqL, th, th / tRL), 0.0)
             diag = diag + cut_hi(dL, ax) + cut_lo(dR, ax)
-            psL, psR = lo(ps3, ax, 0.0), hi(ps3, ax, 0.0); loads.append((psL, psR))
+            psL, psR = lo(ps3, ax, 0.0), hi(ps3, ax, 0.0)
+            if surf is not None:
+                psR = jnp.where(surf, muF * (geff_dt + vel[2] - w_old), psR).astype(F32)
+            loads.append((psL, psR))
             sL = jnp.where(open_ & liqL & ~liqR, th * psR / tLR, 0.0)      # liquid L, air R: the surface load seen by L
             sR = jnp.where(open_ & liqR & ~liqL, th * psL / tRL, 0.0)
             rhs = rhs + cut_hi(sL, ax) + cut_lo(sR, ax)
@@ -668,6 +692,9 @@ class Stout:
         # counted 0.77 mJ "dissipated", and the stout stirred (up to 3.7 mm/s). The stresses now act on the velocity the stout
         # has (the last step's, free of divergence); the body force is added after them, just before the pressure step.
         vel = self.normalize_force(vel, mass, dt, 0.0, 0.0)
+        # the head's vertical velocity as the step starts: its own, kept from the last step (the particles' hand-over smooths
+        # the stout's velocity at the surface, and the head's momentum equation must close step by step)
+        w_old = jnp.broadcast_to(s["wh"][:, :, None], vel[2].shape)
         ph, liq, nsel, H = pr["ph"], pr["liq"], pr["nsel"], pr["H"]
         if self.nu > 0: vel = self.viscosity(vel, mass, dt)
         z = jnp.zeros((), F64); ew = es = ef = z
@@ -675,7 +702,12 @@ class Stout:
         vel = [jnp.where((mass[c] > 1e-6) & (self.th[c] > 0), vel[c] + dt * (gx if c == 0 else (gz if c == 2 else 0.0)), vel[c]).astype(F32) for c in range(3)]
         # the head's weight on the surface (verification.md item 4), in the solver's pressure units (Pa x dt / rho)
         ps = (self.rho_f * s["hf"] * jnp.maximum(-gz, 0.0) * dt / self.rho).astype(F32) if self.head else jnp.zeros((self.n, self.n), F32)
-        vel, known, p, it, res = self.pressure(vel, ph, liq, s["p"], ps)
+        mu = (self.rho_f * s["hf"] / self.rho).astype(F32) if (self.head and self.head_mass) else None
+        vel, known, p, it, res = self.pressure(vel, ph, liq, s["p"], ps, mu=mu, w_old=w_old, geff_dt=jnp.maximum(-gz, 0.0) * dt)
+        if mu is not None:   # the head's new vertical velocity: that of the face its surface crosses (liquid below, air above)
+            sf = self._surf_faces(ph, liq); nsf = jnp.sum(sf, 2)
+            wh = jnp.where(nsf > 0, jnp.sum(jnp.where(sf, vel[2], 0.0), 2) / jnp.maximum(nsf, 1), s["wh"]).astype(F32)
+            s = dict(s, wh=wh)
         vel = self.extrapolate(vel, known)
         s, mom = self.g2p(s, vel, dt, gx, gz)
         if self.head: s = self.head_spill(s, H, dt, gx, gz)
