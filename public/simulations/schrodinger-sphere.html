@@ -1270,7 +1270,7 @@
             if (w === 'side') { if (!GRID.soff && !GRID.spil && !GRID.sslab) return; }
             else if (w !== 'packet' && !GRID[w]) return;
             var flat = w === 'packet' || w === 'side';   /* drawn in the packet's box and room */
-            if (w3) { if (flat) w3.setRoom(-17.5, 64); else w3.setRoom(-38, 118); }
+            if (w3) { if (w === 'packet') w3.setRoom(-17.5, 64); else if (w === 'side') w3.setRoom(-17.5, 92); else w3.setRoom(-38, 118); }   /* a wave from the side fills the whole box: the camera stands farther back */
             if (SHAPES[SHAPE].side) lastSide = SHAPE; else if (!SHAPES[SHAPE].radial) lastPacketShape = SHAPE;
             if (w === 'packet') { setBox(false); setShape(lastPacketShape); }
             else if (w === 'side') { setBox(false); setShape(GRID[lastSide] ? lastSide : GRID.soff ? 'soff' : GRID.sslab ? 'sslab' : 'spil'); }

@@ -229,3 +229,30 @@ our colours".
   height checked and its colour not. Spherical waves are checked where the circle of the stored radius crosses the $x$ axis; two
   sources at $(s/2 + r_j, 0)$, where both distances are stored radii.
 
+## The remaining 3D cases (13 November 2026, night)
+
+One GPU launch for everything that needs true 3D (the owner's "all of them"). Kaggle notebook
+`numakoudsie/schrodinger-shapes-3d`, version 1, private, 2 × T4: a one-line loader that fetches
+[solver3d.py](../../tools/kaggle/schrodinger-shapes/solver3d.py) and [shapes3d_run.py](../../tools/kaggle/schrodinger-shapes/shapes3d_run.py)
+at commit `a269119` (written by [build_shapes3d.py](../../tools/kaggle/schrodinger-shapes/build_shapes3d.py)). Grid as before:
+128³ points, 0.5 a, Δt = 0.01, absorbing border, Strang split-step Fourier.
+
+- **Runs (1458, none failed):** coin (disc radius R = 2 … 6, 1 a thick, axis along the flight) and tube (wall 1 a thick at
+  ρ = R, endless along the flight), each 9 energies × 13 heights (wells −4, −2, −1; 0 … 8; hard) × 5 sizes = 585; the sphere's
+  wells and hard ball, 9 × 4 × 5 = 180; a spherical wave from x = −12 a (shell r₀ = 6, σ₀ = 2, outgoing) onto a ball R = 4
+  (`soff`), a flat wall d = 1 (`sslab`) and an upright pillar R = 4 (`spil`), each 9 × 4 heights (−2, 2, 6, hard) = 36.
+- **Hard wall:** height 200 with a step four times shorter (0.0025): pure phase factors, no probability removed; the wave
+  reaches $1/\sqrt{400} = 0.05$ a into it.
+- **Stored:** per run a `SPHC` file, the half y ≥ 0 of the plane z = 0 (|ψ| and arg ψ in 8-bit levels of each frame's own
+  peak; the peaks are in the header), 48 frames, and the curves from the whole ψ. Coin, tube, sphere and the side cases onto
+  the ball and the wall are round about the x axis, so the page spins the cut as before. The pillar with a spherical wave is
+  not: it also stores the true 3D wave, Re ψ on 96 × 64 × 64 points every second frame (`SPHW`, levels of each frame's peak,
+  `wscale` in the header); its Sheets, Cutaway and Fog use that file.
+- **Measured (timing.json):** 1458 of 1458 runs in 3993 s on two GPUs, 7315 GPU-seconds of runs (2.03 h), 2 926 032 steps;
+  the estimate before launch was 2.08 h and 62 min. Lowest total probability at the end of any run: see index.json `norm_end`.
+- **Files:** `public/data/schrodinger-sphere/2026-11-13/shapes3d/` (1495 files, 300 MB), every SHA-256 checked by
+  [to_site_shapes3d.py](../../tools/kaggle/schrodinger-shapes/to_site_shapes3d.py); generations.json lists the generation.
+- **Page:** Coin and Tube buttons under Barrier; "Spherical, from the side" under Wave, with Sphere, Pillar and Flat wall.
+- **Progress:** the notebook prints one line per finished run (`1349/1458 coin …`); Kaggle's connector shows the log only
+  after the session ends, but the notebook's page on kaggle.com shows it while it runs.
+
