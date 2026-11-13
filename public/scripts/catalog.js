@@ -300,5 +300,22 @@
             has: ['derivation', 'data', 'read', 'round', 'check'],
             added: '2026-11-12'
         },
+        {
+            id: 'resonant-tunnelling',
+            fig: 15,
+            title: 'Resonant Tunnelling',
+            file: 'simulations/resonant-tunnelling.html',
+            field: 'quantum',
+            stage: 2,
+            subject: 'quantum mechanics · 3D, computed on Kaggle GPUs',
+            summary: 'An electron wave packet meets two thin barriers in three dimensions: two walls, two discs or two spherical shells. One barrier passes 14 % of the waves at the resonant energy; the pair passes all of them, as the wave builds up between the barriers, rings and leaks out. 115 runs of the full 3D Schrödinger equation on a 192 × 128 × 128 grid, computed on Kaggle GPUs and stored; the page only plays them. For walls the exact one-dimensional theory checks the runs; finite discs show what the line cannot: the trapped wave also leaks out sideways. With the resonant-tunnelling diode and its backward-sloping current.',
+            equation: 'T_2(E) = \\left|\\frac{t^2 e^{iks}}{1 - r^2 e^{2iks}}\\right|^2, \\qquad \\tau = \\frac{\\hbar}{\\Gamma}',
+            model: 'time-dependent Schrödinger equation in three dimensions; two square barriers (walls, discs or spherical shells) of height 2 and thickness 1; a Gaussian packet; units ħ = m = 1, then GaAs/AlGaAs real units; the exact 1D transfer-matrix theory as the check for walls',
+            method: 'Strang split-step Fourier on Kaggle GPUs (tools/kaggle/resonant-tunnelling/rt3d.py), 115 runs stored with SHA-256, notebook, version and commit; the page plays the stored frames, interpolating in the frame that turns at the packet energy',
+            controls: 'barrier shape (walls, discs, shells); two or one; disc radius; packet energy; wave or probability; sheet height; time; turn the view by dragging',
+            concepts: ['Schrödinger equation', 'quantum tunnelling', 'resonance', 'transfer matrix', 'Breit–Wigner', 'lifetime', 'separation of variables', 'split-step Fourier', 'negative differential resistance', 'resonant-tunnelling diode'],
+            has: ['derivation', 'data', 'read', 'round', 'check'],
+            added: '2026-11-13'
+        },
     ];
 })();

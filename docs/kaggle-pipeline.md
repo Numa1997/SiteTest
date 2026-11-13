@@ -185,3 +185,37 @@ A project brings five things; nothing in `kaggle-flow.js` or the bridge changes.
   the stored time. The stored rides are run 6's (Kaggle notebook version 6, 13 November 2026), five files, 3.3 MB. The earlier
   generations (12 and 13 November, the Taichi solver, with `KaggleFlow.slider`, `governor`, `popup`, `bridge` with `url: null`
   and the live preview `guinness-preview-worker.js`) are described in [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md).
+- Fig. 15, resonant tunnelling in 3D (`simulations/resonant-tunnelling.html`, 13 November 2026): 115 runs from five notebooks
+  (`numakoudsie/fig15-rt3d-shard-{1..4}-of-4`, `numakoudsie/fig15-rt3d-singles-v2`), filed by `file_rt3d.py` under
+  `public/data/resonant-tunnelling/2026-11-13/kaggle/` with each file's notebook, version, commit and SHA-256; the page checks the
+  SHA-256 in a worker and interpolates between stored frames. Uses none of `kaggle-flow.js`. Details:
+  [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md).
+
+## Derived data: generated from stored runs
+
+Started 13 November 2026 with Fig. 15 ([fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md)). Numa's rule,
+from the Fig. 15 brief: **data generated from other data must have its own place and its own provenance**, so that a reader can
+trace any frame back to the runs it was built from.
+
+The Schrödinger equation is linear, so a solution computed once is a basis to build on. Where an exact rule exists
+(superposition, mirror images, translations, separation of variables, transfer matrices) a new system is built from data
+already stored rather than paid for again; where none exists, the system is computed afresh on Kaggle's GPUs.
+
+Fig. 15 first tried the shortcut alone: a one-dimensional double barrier built by transfer matrices (72 derived runs, `V₀ = 3`).
+The owner rejected that on 13 November 2026: the figure continues Fig. 14 and must be three-dimensional. It now plays 115 new 3D
+Kaggle runs (`kaggle/`). The exact rules remain where they are exact: separation of variables makes the 3D walls equal to the 1D
+problem, so the runs carry their 1D twin and `derived/exact-1d.json` holds the exact transfer-matrix numbers for the same geometry,
+**labelled as the check of the 3D runs**; and the page draws the stored half-plane `y ≥ 0` with its mirror image, which is exact
+because every barrier and the start packet are symmetric about the flight axis. The 1D derived runs were removed.
+
+**The layout** (the rule for every future derived figure):
+
+- A new tree `public/data/<project>/` with its own `generations.json` and dated folders `YYYY-MM-DD/`. Inside each generation,
+  separate subfolders:
+  - `kaggle/` for new runs computed on Kaggle, with `index.json` (per file: notebook, version, commit, SHA-256);
+  - `derived/` for data computed from other stored data or from exact theory, each file saying what it is (`role`) and which
+    script made it.
+- Runs that a later version replaced are not shipped; the index says which, why, and what replaced them (Fig. 15: the 20
+  single-wall and single-disc runs of version 1, one grid point thick, replaced by `fig15-rt3d-singles-v2`).
+- The scripts live in `tools/kaggle/<project>/`. **The page computes nothing it can read from the store**: numbers such as Fig. 15's
+  share-through and lifetimes are read from the stored curves once, by `file_rt3d.py`, and written into the index.
