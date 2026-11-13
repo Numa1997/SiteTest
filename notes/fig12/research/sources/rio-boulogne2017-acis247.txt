@@ -1,0 +1,21 @@
+SOURCE: E. Rio, F. Boulogne, "Withdrawing a solid from a bath: How much liquid is coated?",
+Adv. Colloid Interface Sci. 247, 100-114 (2017). DOI 10.1016/j.cis.2017.01.006. HAL hal-01704033.
+URL read: https://arxiv.org/pdf/1612.04602 (arXiv:1612.04602v2, 31 Jan 2017; file also on HAL), pdftotext -layout.
+Licence: arXiv / HAL open deposit. Date read: 2026-11-13. Sections 2-3 read. Page numbers are arXiv pages.
+
+--- arXiv p. 4, Eq. (8a,b), LLD prefactors (h~ = h0/l_c for plates, h0/b for fibres of radius b) ---
+"This full calculation gives
+   h~_LLD^p = 0.94 Ca^(2/3)   for plates,   (8a)
+   h~_LLD^f = 1.34 Ca^(2/3)   for fibers,   (8b)"
+
+--- arXiv p. 4, range of validity ---
+"Considering a small effect gravity for Ca^(1/3) < 10^-1, we expect that the Landau-Levich prediction is valid for
+Ca < 10^-3. Thus, gravitational effects appear at large pulling velocities and this regime is called the Derjaguin
+regime ... the deviation from the LLD law is visible above Ca ~ 10^-2."
+Derjaguin (gravity-dominated) regime: "h0 ~ l_c Ca^(1/2)   (9)"
+
+--- arXiv p. 7, Sec. 3.2.1, rigid (surfactant-laden, incompressible) interface ---
+"the interfacial stress can dominate such that the boundary condition at the liquid-air becomes V(h) = 0. This limit is
+often referred as the rigid limit ... In this limit, the Landau-Levich model still holds (including the prefactor)
+provided that the velocity V is replaced by 4V [36], leading to a maximum thickening factor alpha_max = 4^(2/3) ≈ 2.5,
+i.e.   h~0 = 4^(2/3) h~_LLD.   (11)"

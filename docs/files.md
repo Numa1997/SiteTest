@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-1383 files, 65.4 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+1421 files, 65.4 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -40,7 +40,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Agents of the lecture-note review](#agents-of-the-lecture-note-review) | 4 |
 | [Working notes of the Rotor Pendula study](#working-notes-of-the-rotor-pendula-study) | 86 |
 | [Working notes of the Droplet Collection study](#working-notes-of-the-droplet-collection-study) | 121 |
-| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 532 |
+| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 570 |
 
 ## Repository root
 
@@ -1495,12 +1495,12 @@ to confirm that every file is described. Sizes are those of the files when the l
 |---|---|---|---|
 | [`notes/fig12/referee.md`](../notes/fig12/referee.md) | 27.9 kB | Fig. 12: the blind referee's report on the note. | [notes.md](notes.md) |
 
-<details><summary>165 files: Fig. 12: a measuring script of the review, or its saved output.</summary>
+<details><summary>203 files: Fig. 12: a measuring script of the review, or its saved output.</summary>
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
 | [`notes/fig12/research.md`](../notes/fig12/research.md) | 5.6 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
-| [`notes/fig12/research/guinness-materials.md`](../notes/fig12/research/guinness-materials.md) | 39.3 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/research/guinness-materials.md`](../notes/fig12/research/guinness-materials.md) | 47.6 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/research/sources/acuna-nelson2020-jnanomater-8640818-bsa-glass.txt`](../notes/fig12/research/sources/acuna-nelson2020-jnanomater-8640818-bsa-glass.txt) | 1.5 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/research/sources/ba-draught-beer-quality-manual-2011-gas-blends.txt`](../notes/fig12/research/sources/ba-draught-beer-quality-manual-2011-gas-blends.txt) | 1.7 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/research/sources/benilov2012-arxiv1205.5233.txt`](../notes/fig12/research/sources/benilov2012-arxiv1205.5233.txt) | 3.5 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
@@ -1508,49 +1508,87 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/fig12/research/sources/besson2008-hal.txt`](../notes/fig12/research/sources/besson2008-hal.txt) | 1.4 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/research/sources/bongarzone-gallaire2022-arxiv2207.06907.txt`](../notes/fig12/research/sources/bongarzone-gallaire2022-arxiv2207.06907.txt) | 4.0 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/research/sources/bongarzone2023-thesis-epfl10334.txt`](../notes/fig12/research/sources/bongarzone2023-thesis-epfl10334.txt) | 5.2 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/research/sources/boulogne2023-langmuir-si.txt`](../notes/fig12/research/sources/boulogne2023-langmuir-si.txt) | 1.7 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/research/sources/brzinski-durian2018-arxiv1710.09314-hindered-settling.txt`](../notes/fig12/research/sources/brzinski-durian2018-arxiv1710.09314-hindered-settling.txt) | 1.8 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/research/sources/cantat2013-pof25.txt`](../notes/fig12/research/sources/cantat2013-pof25.txt) | 3.8 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/research/sources/chatzigiannakis2025-pof37.txt`](../notes/fig12/research/sources/chatzigiannakis2025-pof37.txt) | 1.7 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/research/sources/costa2012-thesis.txt`](../notes/fig12/research/sources/costa2012-thesis.txt) | 3.0 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/research/sources/forel2016-softmatter12.txt`](../notes/fig12/research/sources/forel2016-softmatter12.txt) | 1.2 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/research/sources/gerard-varet-hillairet2020-arxiv1905.08208-einstein-viscosity.txt`](../notes/fig12/research/sources/gerard-varet-hillairet2020-arxiv1905.08208-einstein-viscosity.txt) | 1.8 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/research/sources/haines-mazzucato2012-arxiv1104.1102-einstein-proof.txt`](../notes/fig12/research/sources/haines-mazzucato2012-arxiv1104.1102-einstein-proof.txt) | 830 B | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/research/sources/hofer-schubert2021-arxiv2008.04813-einstein-sedimentation.txt`](../notes/fig12/research/sources/hofer-schubert2021-arxiv2008.04813-einstein-sedimentation.txt) | 996 B | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/research/sources/jfm-abstracts-sloshing-damping.txt`](../notes/fig12/research/sources/jfm-abstracts-sloshing-damping.txt) | 4.3 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/research/sources/jin2004-jinstbrew110-104-beer-viscosity-newtonian.txt`](../notes/fig12/research/sources/jin2004-jinstbrew110-104-beer-viscosity-newtonian.txt) | 2.2 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/research/sources/koehler1998-pre58.txt`](../notes/fig12/research/sources/koehler1998-pre58.txt) | 1.4 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/research/sources/koehler2000-langmuir16.txt`](../notes/fig12/research/sources/koehler2000-langmuir16.txt) | 2.5 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/research/sources/lee-devereux2011-arxiv1105.2263.txt`](../notes/fig12/research/sources/lee-devereux2011-arxiv1105.2263.txt) | 2.1 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/research/sources/lee-kaar-obrien2018-ajp86.txt`](../notes/fig12/research/sources/lee-kaar-obrien2018-ajp86.txt) | 1.2 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/research/sources/lee2011-stoutfoaming.txt`](../notes/fig12/research/sources/lee2011-stoutfoaming.txt) | 1.5 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/research/sources/lee2018-ajp86.txt`](../notes/fig12/research/sources/lee2018-ajp86.txt) | 709 B | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/research/sources/mason1995-prl75.txt`](../notes/fig12/research/sources/mason1995-prl75.txt) | 2.0 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/research/sources/mason1996-jcis179.txt`](../notes/fig12/research/sources/mason1996-jcis179.txt) | 2.5 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/research/sources/mason1997-pre56.txt`](../notes/fig12/research/sources/mason1997-pre56.txt) | 2.1 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/research/sources/nasa-sp106-abramson1966-ch4.txt`](../notes/fig12/research/sources/nasa-sp106-abramson1966-ch4.txt) | 3.5 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/research/sources/patent-GB1588624-guinness-ultrasonic-excitation.txt`](../notes/fig12/research/sources/patent-GB1588624-guinness-ultrasonic-excitation.txt) | 1.4 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/research/sources/patent-US4832968-GB2183592-forage-byrne-widget.txt`](../notes/fig12/research/sources/patent-US4832968-GB2183592-forage-byrne-widget.txt) | 2.3 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/research/sources/patent-US7520212-diageo-surger.txt`](../notes/fig12/research/sources/patent-US7520212-diageo-surger.txt) | 1.3 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/research/sources/power2009-esgi70-guinness.txt`](../notes/fig12/research/sources/power2009-esgi70-guinness.txt) | 2.6 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/research/sources/power2009-esgi70-initiation-of-guinness.txt`](../notes/fig12/research/sources/power2009-esgi70-initiation-of-guinness.txt) | 5.9 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/research/sources/princen-kiss1986-jcis112.txt`](../notes/fig12/research/sources/princen-kiss1986-jcis112.txt) | 1.8 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/research/sources/princen-kiss1989-jcis128.txt`](../notes/fig12/research/sources/princen-kiss1989-jcis128.txt) | 1.6 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/research/sources/rio-boulogne2017-acis247.txt`](../notes/fig12/research/sources/rio-boulogne2017-acis247.txt) | 1.5 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/research/sources/robinson2008-physfluids20-067101.txt`](../notes/fig12/research/sources/robinson2008-physfluids20-067101.txt) | 2.3 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/research/sources/rodriguez2014-arxiv1403.2678-beer-tapping.txt`](../notes/fig12/research/sources/rodriguez2014-arxiv1403.2678-beer-tapping.txt) | 2.0 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/research/sources/ronteltap1989-thesis.txt`](../notes/fig12/research/sources/ronteltap1989-thesis.txt) | 8.3 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/research/sources/saintjalmes-durian1999-jrheol43.txt`](../notes/fig12/research/sources/saintjalmes-durian1999-jrheol43.txt) | 2.2 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/research/sources/saintjalmes2006-softmatter2.txt`](../notes/fig12/research/sources/saintjalmes2006-softmatter2.txt) | 2.1 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/research/sources/sander2015-acp15-4399-henry.txt`](../notes/fig12/research/sources/sander2015-acp15-4399-henry.txt) | 1.5 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/research/sources/sauret2015-pof27.txt`](../notes/fig12/research/sources/sauret2015-pof27.txt) | 5.5 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/research/sources/severa-los2008-acta56-303-dark-beer-viscosity.txt`](../notes/fig12/research/sources/severa-los2008-acta56-303-dark-beer-viscosity.txt) | 1.5 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/research/sources/snoeijer2008-prl100.txt`](../notes/fig12/research/sources/snoeijer2008-prl100.txt) | 1.4 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/research/sources/tcholakova2008-pre78.txt`](../notes/fig12/research/sources/tcholakova2008-pre78.txt) | 3.3 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/research/sources/viola2016-pof28.txt`](../notes/fig12/research/sources/viola2016-pof28.txt) | 4.0 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/research/sources/viola2016-thesis-epfl7276.txt`](../notes/fig12/research/sources/viola2016-thesis-epfl7276.txt) | 5.3 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/research/sources/wang2017-lund-beer-lacing.txt`](../notes/fig12/research/sources/wang2017-lund-beer-lacing.txt) | 1.8 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/research/sources/watamura2019-scirep9-5718.txt`](../notes/fig12/research/sources/watamura2019-scirep9-5718.txt) | 3.3 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/research/sources/watamura2019-scirep9.txt`](../notes/fig12/research/sources/watamura2019-scirep9.txt) | 1.3 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/research/sources/web-cappello2015-jvis-sloshing-and-press.txt`](../notes/fig12/research/sources/web-cappello2015-jvis-sloshing-and-press.txt) | 3.0 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/research/sources/web-diageo-patent-US9604775.txt`](../notes/fig12/research/sources/web-diageo-patent-US9604775.txt) | 2.9 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/research/sources/web-foam-density-constant1992-klopper1954.txt`](../notes/fig12/research/sources/web-foam-density-constant1992-klopper1954.txt) | 2.5 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/research/sources/web-foam-stability-abstracts-evans2012-wallin2010.txt`](../notes/fig12/research/sources/web-foam-stability-abstracts-evans2012-wallin2010.txt) | 1.8 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/research/sources/web-glassandnote-unverified.txt`](../notes/fig12/research/sources/web-glassandnote-unverified.txt) | 1.1 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/research/sources/web-hamlett2015-jasbc-beer-contact-angles.txt`](../notes/fig12/research/sources/web-hamlett2015-jasbc-beer-contact-angles.txt) | 5.2 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/research/sources/web-hepworth2003-imperial-thesis.txt`](../notes/fig12/research/sources/web-hepworth2003-imperial-thesis.txt) | 2.7 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/research/sources/web-kegworks2019-guinness-head-height.txt`](../notes/fig12/research/sources/web-kegworks2019-guinness-head-height.txt) | 2.2 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/research/sources/web-kino-surface-tension-table.txt`](../notes/fig12/research/sources/web-kino-surface-tension-table.txt) | 1.1 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/research/sources/web-lacing-rings-allain2011-and-pub-lore.txt`](../notes/fig12/research/sources/web-lacing-rings-allain2011-and-pub-lore.txt) | 1.9 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/research/sources/web-mohan1993-jib-hrv-stouts.txt`](../notes/fig12/research/sources/web-mohan1993-jib-hrv-stouts.txt) | 1.5 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/research/sources/web-myscienceproject-guinness-head.txt`](../notes/fig12/research/sources/web-myscienceproject-guinness-head.txt) | 1.3 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/research/sources/web-watamura2019-scirep-fig3-supplement.txt`](../notes/fig12/research/sources/web-watamura2019-scirep-fig3-supplement.txt) | 3.4 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/research/sources/web-watamura2024-oleoscience-table1.txt`](../notes/fig12/research/sources/web-watamura2024-oleoscience-table1.txt) | 2.7 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/research/sources/web-wikimedia-guinness-images.txt`](../notes/fig12/research/sources/web-wikimedia-guinness-images.txt) | 2.8 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/research/sources/web-zare-stanford-guinness-filming.txt`](../notes/fig12/research/sources/web-zare-stanford-guinness-filming.txt) | 2.2 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/research/sources/web-zippyfacts-guinness-foam-microscope.txt`](../notes/fig12/research/sources/web-zippyfacts-guinness-foam-microscope.txt) | 1.6 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/research/sources/wierenga2023-acis312-102845.txt`](../notes/fig12/research/sources/wierenga2023-acis312-102845.txt) | 1.5 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/research/sources/zhang-xu2008-elements4-47.txt`](../notes/fig12/research/sources/zhang-xu2008-elements4-47.txt) | 1.5 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/research/sympy/01_02_check.out.txt`](../notes/fig12/research/sympy/01_02_check.out.txt) | 498 B | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/research/sympy/01_02_check.py`](../notes/fig12/research/sympy/01_02_check.py) | 2.4 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/research/sympy/03_check.out.txt`](../notes/fig12/research/sympy/03_check.out.txt) | 1.0 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/research/sympy/03_check.py`](../notes/fig12/research/sympy/03_check.py) | 1.1 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/research/sympy/04_check.out.txt`](../notes/fig12/research/sympy/04_check.out.txt) | 274 B | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/research/sympy/04_check.py`](../notes/fig12/research/sympy/04_check.py) | 791 B | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/research/sympy/05_check.out.txt`](../notes/fig12/research/sympy/05_check.out.txt) | 254 B | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/research/sympy/05_check.py`](../notes/fig12/research/sympy/05_check.py) | 1.1 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/research/wolfram/01_slosh_stokes_layer.out.txt`](../notes/fig12/research/wolfram/01_slosh_stokes_layer.out.txt) | 504 B | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/research/wolfram/01_slosh_stokes_layer.wl`](../notes/fig12/research/wolfram/01_slosh_stokes_layer.wl) | 2.3 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/research/wolfram/02_bubbles_regimes.out.txt`](../notes/fig12/research/wolfram/02_bubbles_regimes.out.txt) | 1.2 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/research/wolfram/02_bubbles_regimes.wl`](../notes/fig12/research/wolfram/02_bubbles_regimes.wl) | 1.9 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/research/wolfram/03_head_soft_solid.out.txt`](../notes/fig12/research/wolfram/03_head_soft_solid.out.txt) | 2.6 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/research/wolfram/03_head_soft_solid.wl`](../notes/fig12/research/wolfram/03_head_soft_solid.wl) | 2.8 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/research/wolfram/04_head_bubbles_settling_lacing.out.txt`](../notes/fig12/research/wolfram/04_head_bubbles_settling_lacing.out.txt) | 1.9 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/research/wolfram/04_head_bubbles_settling_lacing.wl`](../notes/fig12/research/wolfram/04_head_bubbles_settling_lacing.wl) | 1.7 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/research/wolfram/05_head_wetness_drainage_rheology.out.txt`](../notes/fig12/research/wolfram/05_head_wetness_drainage_rheology.out.txt) | 3.2 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/research/wolfram/05_head_wetness_drainage_rheology.wl`](../notes/fig12/research/wolfram/05_head_wetness_drainage_rheology.wl) | 3.3 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/road-shots.cjs`](../notes/fig12/road-shots.cjs) | 1.9 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/runs/coffee-5mm.txt`](../notes/fig12/runs/coffee-5mm.txt) | 1.2 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/runs/coffee.txt`](../notes/fig12/runs/coffee.txt) | 2.1 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |

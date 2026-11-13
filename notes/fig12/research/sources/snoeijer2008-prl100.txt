@@ -1,0 +1,17 @@
+SOURCE: J. H. Snoeijer, J. Ziegler, B. Andreotti, M. Fermigier, J. Eggers, "Thick Films of Viscous Fluid Coating a
+Plate Withdrawn from a Liquid Reservoir", Phys. Rev. Lett. 100, 244502 (2008). DOI 10.1103/PhysRevLett.100.244502.
+URL read: https://arxiv.org/pdf/0803.3950 (arXiv:0803.3950v1, 27 Mar 2008, preprint title "Thick films coating a
+plate withdrawn from a bath"), pdftotext -layout. Licence: arXiv non-exclusive distribution licence.
+Date read: 2026-11-13. Whole preprint read (4 pages). Page numbers are arXiv pages.
+
+--- arXiv p. 1, the LLD law ---
+"The relative size of viscous drag and capillary retention in the film is measured by the capillary number
+Ca = U eta/gamma, where eta is the viscosity and gamma the surface tension. At the foot of the film, LLD introduced
+the requirement that the film be matched smoothly to a static capillary meniscus ..., whose size is controlled by the
+capillary length l_c = √(gamma/rho g). In the limit of small Ca, this matching yields
+   h_LLD = 0.946 l_c Ca^(2/3)"
+Fig. 1 caption: "Ca = 9.27 × 10^-3; the solid line is the classical LLD solution, which predicts h_f = 57 µm."
+
+--- arXiv p. 2, thick-film branch (partial wetting) ---
+"h_f ≃ (3Ca)^(1/2) − (1/2) Q Ca^(2/3)   (5)"  (lengths in units of l_c), Q ∈ [0, Qmax], "Qmax ≈ 1.376".
+Validity: lubrication theory, small Ca, stress-free (clean) liquid-air interface; perfectly wetting -> LLD film.

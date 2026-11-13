@@ -1,0 +1,17 @@
+SOURCE: S. A. Koehler, H. A. Stone, M. P. Brenner, J. Eggers, "Dynamics of foam drainage",
+Phys. Rev. E 58(2), 2097-2106 (1998). DOI 10.1103/PhysRevE.58.2097.
+URL read: https://people.maths.bris.ac.uk/~majge/p2097_1.pdf (J. Eggers' page), pdftotext -layout.
+Licence: (c) 1998 American Physical Society; author-hosted; quotes short. Date read: 2026-11-13. Sections I-III.A read.
+Symbols re-rendered from font glyphs (h -> eta, g -> gamma, d -> delta, e -> epsilon, 5 -> =).
+
+--- p. 2099, Plateau-border area and the channel foam drainage equation ---
+"For a foam consisting of a monodisperse collection of bubbles, on dimensional grounds, A = delta r_c^2; considering
+the Plateau border cross section as the curved triangular area between three touching circles ..., the constant is
+determined as delta = √3 − π/2."
+"∂A/∂t + (rho g/eta) ∂A^2/∂z − (gamma delta^(1/2)/2eta) ∇·(A^(1/2)∇A) = 0,   (3)   where z is taken as positive
+downward." [eta = effective viscosity that "hides much ignorance of the actual detailed flow"]
+"If R is the 'effective' bubble radius, then A = c_N R^2 eps/(1 − eps) [8]"
+
+--- p. 2099, steady (equilibrium) profile of a draining column ---
+"A(z) = A0 [1 + (rho g A0^(1/2)/(gamma delta^(1/2))) (L − z)]^(-2)"   (A0 = A at the bottom, z = L)
+Validity: dry foam, channel (no-slip-like) model, continuum scale >> bubble size.

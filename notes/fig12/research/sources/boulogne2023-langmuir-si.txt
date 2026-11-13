@@ -1,0 +1,20 @@
+SOURCE: F. Boulogne, E. Rio, F. Restagno, "Evaporation-induced temperature gradient in a foam column",
+Langmuir (2023), DOI 10.1021/acs.langmuir.3c01463 — SUPPORTING INFORMATION only.
+URL read: https://pubs.acs.org/langd5/article-supplement/323906/pdf/la3c01463_si_001/ via Exa web_fetch (text
+extraction; equation layout partly garbled). Licence: ACS supporting information (free to read); quotes short.
+Date read: 2026-11-13. Whole SI (2 pages) read.
+ROLE: OPEN SECONDARY SOURCE for (i) the Cantat et al. book (Foams: Structure and Dynamics, OUP 2013, p. 124) drainage
+constants and (ii) the Maestro et al. 2013 gravity profile, both not read in the original.
+Notation: phi = liquid fraction; R = bubble radius; l_c = √(gamma/rho g).
+
+--- p. S-1, Eqs. (S2)-(S3) ---
+"u_m = (alpha(phi)/eta) [ −rho g + (gamma/(delta R)) ∂phi^(-1/2)/∂z ],  (S2) ... alpha(phi) is the foam permeability and
+delta = 1.73 is a geometric constant (See [1], p. 124)."
+"alpha(phi) = kappa Kp R^2 phi^2,  (S3)  with kappa ≈ 0.16 a geometrical coefficient and Kp the permeability
+coefficient. For large Boussinesq numbers, i.e. immobile interfaces, Kp = 0.02 [1]."
+Stationary profile (their own result): "phi~ = (z~ + phi~_c^(-1/2))^(-2)  (S9)", phi~ = phi R^2 delta^2/l_c^2, z~ = z/l_c.
+
+--- p. S-2, Maestro et al. profile (inverted form, Eq. S10; printed layout garbled in extraction) ---
+z~(phi) = k(√phi_c − √phi)·3 + [term in phi_c and phi] + (k/2)(3 − 2phi_c − phi_c^2) ln[(√phi + 1)(√phi_c − 1)/
+((√phi − 1)(√phi_c + 1))]   "with a numerical prefactor k = 7.3."
+(Middle term not legible in the extraction; the structure is checked against my own integration in coef.md.)

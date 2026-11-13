@@ -1,0 +1,22 @@
+SOURCE: H. M. Princen, A. D. Kiss, "Rheology of foams and highly concentrated emulsions: III. Static shear modulus",
+J. Colloid Interface Sci. 112, 427-437 (1986). DOI 10.1016/0021-9797(86)90111-6.
+URL: https://www.sciencedirect.com/science/article/abs/pii/0021979786901116 (abstract page, read via Firecrawl
+scrape, direct-quote mode). Licence: (c) Academic Press/Elsevier; NOT open access (Unpaywall, Semantic Scholar:
+closed). ONLY THE ABSTRACT WAS READ; the body (fit data, uncertainty) was not.
+Date read: 2026-11-13.
+
+--- p. 427, abstract (fraction layout lost in the HTML scrape; restored in brackets) ---
+"The static shear modulus of a series of concentrated, well-characterized oil-in-water emulsions has been determined
+and is found to be accurately represented by G = 1.769 σR32φ13(φ − 0.712),
+   [ G = 1.769 (σ/R32) φ^(1/3) (φ − 0.712) ]
+where σ is the interfacial tension, R 32 is the surface-volume mean drop radius, and φ is the volume fraction of the
+dispersed phase. The equation is believed to have universal applicability, and should be equally valid for foams,
+although the values of the numerical constants may depend slightly on the drop size distribution and the thickness
+of the aqueous films between the droplets."
+
+Corroboration (secondary): Paruta-Tuarez et al., Ind. Eng. Chem. Res. 50, 10359 (2011), Eqs. (6)-(7), quoted by Exa:
+"E(phi) = 1.769 phi - 1.259 = 1.769 (phi - 0.712)" and "G = 1.769 sigma/R32 phi^(1/3) (phi - 0.712)".
+Validity: Princen & Kiss data are for phi > 0.74 (Saint-Jalmes & Durian 1999, p. 1420: "experiments have only been
+performed with high phi emulsions (phi > 0.75)").
+[Inference: at phi = 1 the formula gives 1.769 x 0.288 = 0.509 σ/R32, the "0.51" often quoted; 0.51 is the dry-limit
+value, not the prefactor.]
