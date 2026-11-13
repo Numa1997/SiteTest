@@ -98,28 +98,61 @@
                     </div>
                 </div>
                 <div class="panel__group">
-                    <p class="panel__label">Barriers (height V₀ = 2, thickness 1, centres 2.5 apart)</p>
-                    <div class="chips" id="shape-chips" role="group" aria-label="Shape of the barriers">
-                        <button type="button" data-s="flat" aria-pressed="true">Walls</button>
-                        <button type="button" data-s="coin" aria-pressed="false">Discs</button>
-                        <button type="button" data-s="shell" aria-pressed="false">Spherical shells</button>
+                    <p class="panel__label">The barriers</p>
+                    <div class="chips" data-key="shape" role="group" aria-label="Shape of the barriers">
+                        <button type="button" data-v="flat">Walls</button>
+                        <button type="button" data-v="coin">Discs</button>
+                        <button type="button" data-v="shell">Spherical shells</button>
                     </div>
-                    <div class="chips" id="pair-chips" role="group" aria-label="Two barriers or one" style="margin-top:6px">
-                        <button type="button" data-p="d" aria-pressed="true">Two</button>
-                        <button type="button" data-p="s" aria-pressed="false">One alone</button>
+                    <div class="chips" data-key="N" role="group" aria-label="How many barriers" style="margin-top:6px">
+                        <button type="button" data-v="1">One</button>
+                        <button type="button" data-v="2">Two</button>
+                        <button type="button" data-v="3">Three</button>
+                        <button type="button" data-v="5">Five</button>
+                        <button type="button" data-v="10">Ten</button>
                     </div>
-                    <div class="chips" id="size-chips" role="group" aria-label="Radius of the discs" style="margin-top:6px" hidden>
-                        <button type="button" data-r="2" aria-pressed="false">R = 2</button>
-                        <button type="button" data-r="4" aria-pressed="false">R = 4</button>
-                        <button type="button" data-r="6" aria-pressed="true">R = 6</button>
+                    <div class="chips" data-key="R" role="group" aria-label="Radius of the discs or of the inner shell" style="margin-top:6px">
+                        <button type="button" data-v="2">R = 2</button>
+                        <button type="button" data-v="3">R = 3</button>
+                        <button type="button" data-v="4">R = 4</button>
+                        <button type="button" data-v="5">R = 5</button>
+                        <button type="button" data-v="6">R = 6</button>
+                        <button type="button" data-v="9">R = 9</button>
+                        <button type="button" data-v="12">R = 12</button>
+                    </div>
+                    <div class="chips" data-key="VD" role="group" aria-label="Height and thickness of each barrier" style="margin-top:6px">
+                        <button type="button" data-v="2|1">V₀ 2 · d 1</button>
+                        <button type="button" data-v="1.5|1">V₀ 1.5</button>
+                        <button type="button" data-v="3|1">V₀ 3</button>
+                        <button type="button" data-v="2|1.5">d 1.5</button>
+                        <button type="button" data-v="2|2">d 2</button>
+                    </div>
+                    <div class="chips" data-key="P" role="group" aria-label="Spacing of the barriers, centre to centre" style="margin-top:6px">
+                        <button type="button" data-v="2.5">s = 2.5</button>
+                        <button type="button" data-v="3">s = 3</button>
+                        <button type="button" data-v="3.5">s = 3.5</button>
+                        <button type="button" data-v="4.5">s = 4.5</button>
+                        <button type="button" data-v="5.5">s = 5.5</button>
+                    </div>
+                    <div class="chips" data-key="sx" role="group" aria-label="Length of the packet" style="margin-top:6px">
+                        <button type="button" data-v="3">Short packet</button>
+                        <button type="button" data-v="12">Long packet</button>
                     </div>
                     <p class="chips-note" id="shape-note">—</p>
+                </div>
+                <div class="panel__group">
+                    <p class="panel__label">The diode</p>
+                    <label class="ctl">
+                        <span class="ctl__row"><span>Voltage across the barriers</span><output id="b-out" for="bias"></output></span>
+                        <input type="range" id="bias" min="0" max="19" step="1" value="0">
+                    </label>
+                    <p class="chips-note" id="bias-note">—</p>
                 </div>
                 <div class="panel__group">
                     <p class="panel__label">Energy</p>
                     <label class="ctl">
                         <span class="ctl__row"><span>Mean energy <i>E</i> of the packet</span><output id="e-out" for="energy"></output></span>
-                        <input type="range" id="energy" min="0" max="17" step="1" value="4">
+                        <input type="range" id="energy" min="0" max="46" step="1" value="0">
                     </label>
                 </div>
                 <div class="panel__group">
@@ -185,21 +218,25 @@
     <script>
     (function () {
         'use strict';
-        var DATA_BASE = '../data/resonant-tunnelling/';
+        /* Fig. 15, generation 2: the page walks the whole stored parameter space. It reads kaggle/index.json (every run's spec, file,
+           SHA-256 and the numbers read from it once by file_rt3d2.py) and loads one run at a time from the run store (Cloudflare R2,
+           served under /r2/ by the site's Worker). It interpolates between stored frames and computes nothing else. */
+        var DATA_BASE = '../data/resonant-tunnelling/', RUNS_ROOT = '/r2/';
         var PLAY_SECONDS = 15, HS = 6;                    /* a run plays in 15 s; height 1 of the scale is 6 a on screen */
         var INK = '#1c1518', WINE = '#a3303f', ACCENT = '#7a1f2b', SLATE = '#55607a', MUT = '#8b8079', RULE = '#d9d0c2', GLASSC = 'rgba(139,128,121,.28)';
         var MONO = "10px 'IBM Plex Mono', ui-monospace, monospace";
-        var NX = 128, NR = 64, NY = 2 * NR - 1, X0 = -32, Y0 = -31.5, DX = 0.5;   /* the stored half-plane, mirrored about y = 0 */
+        var NR = 64, NY = 2 * NR - 1, Y0 = -31.5, DX = 0.5;   /* the stored half-plane y >= 0, 64 rows, mirrored about y = 0 */
+        var NX = 128, X0 = -32;                                 /* along x: set per run (its box) */
 
         /* ---------- state ---------- */
-        var IDX = null, EX = null, GEN = null, RUNS = {}, cache = {}, order = [];
-        var family = 'flat', pair = 'd', radius = 6, Ei = 4, VIEW = 're', GAIN = 1;
+        var IDX = null, EX = null, GEN = null, TUP = {}, TKEYS = [], cache = {};
+        var sel = { shape: 'flat', N: 2, V0: 2, D: 1, P: 2.5, R: 0, bias: 0, sx: 3 }, E = 0.735, VIEW = 're', GAIN = 1;
         var run = null, want = null, tPhys = 0, playing = true, endRest = 0;
-        var psiRe = new Float32Array(NX * NR), psiIm = new Float32Array(NX * NR), Hs = new Float32Array(NX * NY), Ts = new Float32Array(NX * NY);
-        var profNow = new Float32Array(192), twinNow = new Float32Array(192);
-        var v3 = null, worker = null, jobs = {}, jobN = 0, frameMs = [], lastTs = 0, cost = [];   /* per drawn frame: [sheet ms, WebGL submit ms, store and charts ms] */
+        var psiRe, psiIm, Hs, Ts, profNow, twinNow;
+        var v3 = null, worker = null, jobs = {}, jobN = 0, frameMs = [], lastTs = 0, cost = [];
 
         var energyIn = document.getElementById('energy'), eOut = document.getElementById('e-out');
+        var biasIn = document.getElementById('bias'), bOut = document.getElementById('b-out');
         var timeIn = document.getElementById('time'), tOut = document.getElementById('t-out');
         var stageEl = document.getElementById('stage'), canvas = document.getElementById('wave');
         var pxBox = Sim.canvas2d(document.getElementById('px')), pxc = pxBox.ctx;
@@ -207,10 +244,11 @@
         var teBox = Sim.canvas2d(document.getElementById('te')), tec = teBox.ctx;
         var ivBox = Sim.canvas2d(document.getElementById('iv')), ivc = ivBox.ctx;
 
-        function shapeName() { return pair + family; }
-        function sizeOf() { return family === 'coin' ? radius : family === 'shell' ? 3 : 0; }
-        function key(shape, size, E) { return shape + '|' + (+size).toFixed(1) + '|' + (+E).toFixed(3); }
-        function energies(shape, size) { return order.filter(function (r) { return r.shape === shape && r.size === size; }).map(function (r) { return r.E; }); }
+        var FIELDS = ['shape', 'N', 'V0', 'D', 'P', 'R', 'bias', 'sx'];
+        function tkey(s) { return FIELDS.map(function (f) { return s[f]; }).join('|'); }
+        function exKey(s) { return s.N + '|' + s.V0 + '|' + s.D + '|' + s.P + '|' + s.sx; }
+        function energies() { var t = TUP[tkey(sel)]; return t ? t.Es : []; }
+        function recAt(Ev) { var t = TUP[tkey(sel)]; return t ? t.byE[Ev.toFixed(4)] : null; }
 
         /* ---------- data in ---------- */
         async function boot() {
@@ -218,10 +256,14 @@
             GEN = gens[gens.length - 1];
             IDX = await (await fetch(DATA_BASE + GEN.index)).json();
             EX = await (await fetch(DATA_BASE + GEN.exact)).json();
-            IDX.runs.forEach(function (r) { RUNS[key(r.shape, r.size, r.E)] = r; order.push(r); });
+            IDX.runs.forEach(function (r) {
+                var s = r.spec, k = tkey(s), t = TUP[k] || (TUP[k] = { spec: s, Es: [], byE: {} });
+                t.Es.push(s.E); t.byE[(+s.E).toFixed(4)] = r;
+            });
+            TKEYS = Object.keys(TUP); TKEYS.forEach(function (k) { TUP[k].Es.sort(function (a, b) { return a - b; }); });
             worker = new Worker('../scripts/rt3d-worker.js');
             worker.onmessage = function (ev) { var j = jobs[ev.data.id]; delete jobs[ev.data.id]; if (j) j(ev.data); };
-            setupControls(); drawIV(); fillRealUnits(); refreshEnergies(); setShapeNote();
+            setupControls(); fillRealUnits(); syncControls(); drawIV();
             Sim.onResize(document.getElementById('stage-px'), function () { drawPX(); });
             Sim.onResize(document.getElementById('stage-pt'), function () { drawPT(); });
             Sim.onResize(document.getElementById('stage-te'), function () { drawTE(); });
@@ -235,45 +277,50 @@
                     if (!d.ok) return rej(new Error(d.error));
                     d.rec = rec; d.sha_ok = d.sha === rec.sha256; d.peakMax = Math.max.apply(null, d.head.peaks);
                     var names = d.head.curve_names, c = d.head.curves; d.C = {}; names.forEach(function (n, k) { d.C[n] = c.map(function (row) { return row[k]; }); });
-                    cache[rec.file] = d; var ks = Object.keys(cache); if (ks.length > 6) delete cache[ks[0]];   /* keep at most 6 runs (about 100 MB) */
+                    cache[rec.file] = d; var ks = Object.keys(cache); if (ks.length > 6) delete cache[ks[0]];   /* at most 6 runs kept */
                     res(d);
                 };
-                worker.postMessage({ url: DATA_BASE + GEN.date + '/kaggle/' + rec.file, id: id });
+                worker.postMessage({ url: RUNS_ROOT + IDX.runs_base + rec.file, id: id });
             });
         }
         async function loadRun() {
-            var es = energies(shapeName(), sizeOf()); if (Ei >= es.length) Ei = es.length - 1; if (Ei < 0) Ei = 0;
-            var rec = RUNS[key(shapeName(), sizeOf(), es[Ei])]; if (!rec) return;
-            want = rec.file; document.getElementById('load').textContent = cache[rec.file] ? '' : 'loading ' + rec.file.replace('runs/', '') + ' …';
+            var es = energies(); if (!es.length) return;
+            var j = 0; es.forEach(function (e, i) { if (Math.abs(e - E) < Math.abs(es[j] - E)) j = i; }); E = es[j];
+            var rec = recAt(E); if (!rec) return;
+            want = rec.file; document.getElementById('load').textContent = cache[rec.file] ? '' : 'loading ' + rec.file + ' …';
             var d; try { d = await fetchRun(rec); } catch (e) { document.getElementById('load').textContent = 'could not load: ' + e.message; return; }
-            if (want !== rec.file) return;                                   /* the reader moved on while it loaded */
+            if (want !== rec.file) return;
             document.getElementById('load').textContent = '';
-            var keepT = run && run.head.E === d.head.E ? tPhys : 0;
-            run = d; tPhys = Math.min(keepT, run.C.t[run.C.t.length - 1]); endRest = 0;
-            timeIn.max = run.head.n - 1;
-            if (v3) v3.setBarriers({ shape: run.head.shape, size: run.head.size, D: run.head.D, S: run.head.S, H: 8, W: 64 });
-            writeRunStore(); setLabels(); drawTE(); drawFrame();
+            var keep = run ? tPhys / run.C.t[run.C.t.length - 1] : 0;
+            run = d; var h = run.head; NX = h.nxs; X0 = h.x_first;
+            psiRe = new Float32Array(NX * NR); psiIm = new Float32Array(NX * NR); Hs = new Float32Array(NX * NY); Ts = new Float32Array(NX * NY);
+            profNow = new Float32Array(h.prof_nx); twinNow = new Float32Array(h.prof_nx);
+            tPhys = Math.min(keep, 1) * run.C.t[run.C.t.length - 1]; endRest = 0; timeIn.max = h.n - 1;
+            placeBarriers(); writeRunStore(); setLabels(); drawTE(); drawIV(); drawFrame();
+        }
+        function placeBarriers() {
+            if (!v3 || !run) return; var h = run.head, s = h.spec;
+            v3.setBarriers({ shape: s.shape, size: s.R, D: s.D, S: s.P, centres: h.centres, radii: s.shape === 'shell' ? Array.from({ length: s.N }, function (_, k) { return s.R + k * s.P; }) : null, H: 8, W: 64 });
+            v3.setSpan(NX * DX);
         }
 
         /* ---------- time: the stored frames, interpolated (LESSONS.md):
-             psi(t_f + tau) = e^{-iE tau} [ (1 - s) psi_f + s e^{iE dt} psi_{f+1} ],  s = tau / dt
-           The wave turns at about e^{-iEt}; taking that turn out before mixing two frames keeps the mix from cancelling. ---------- */
+             psi(t_f + tau) = e^{-iE tau} [ (1 - s) psi_f + s e^{iE dt} psi_{f+1} ],  s = tau / dt ---------- */
         function frac() { var dt = run.head.frame_dt, n = run.head.n, f = Math.floor(tPhys / dt + 1e-9); if (f >= n - 1) return { f: n - 1, s: 0 }; return { f: f, s: tPhys / dt - f }; }
         function interp() {
-            var h = run.head, per = NX * NR, fs = frac(), f = fs.f, s = fs.s, dt = h.frame_dt, E = h.E, re = run.re, im = run.im, a0 = f * per, a1 = (f + 1) * per, k;
+            var h = run.head, per = NX * NR, fs = frac(), f = fs.f, s = fs.s, dt = h.frame_dt, Ek = h.E, re = run.re, im = run.im, a0 = f * per, a1 = (f + 1) * per, k;
             if (s === 0) { for (k = 0; k < per; k++) { psiRe[k] = re[a0 + k]; psiIm[k] = im[a0 + k]; } }
             else {
-            var cr = Math.cos(E * dt), ci = Math.sin(E * dt), tau = s * dt, cp = Math.cos(E * tau), sp = -Math.sin(E * tau);
-            for (k = 0; k < per; k++) {
-                var gr = re[a1 + k], gi = im[a1 + k], rr = cr * gr - ci * gi, ri = cr * gi + ci * gr;
-                var br = (1 - s) * re[a0 + k] + s * rr, bi = (1 - s) * im[a0 + k] + s * ri;
-                psiRe[k] = cp * br - sp * bi; psiIm[k] = sp * br + cp * bi;
-            }
+                var cr = Math.cos(Ek * dt), ci = Math.sin(Ek * dt), tau = s * dt, cp = Math.cos(Ek * tau), sp = -Math.sin(Ek * tau);
+                for (k = 0; k < per; k++) {
+                    var gr = re[a1 + k], gi = im[a1 + k], rr = cr * gr - ci * gi, ri = cr * gi + ci * gr;
+                    var br = (1 - s) * re[a0 + k] + s * rr, bi = (1 - s) * im[a0 + k] + s * ri;
+                    psiRe[k] = cp * br - sp * bi; psiIm[k] = sp * br + cp * bi;
+                }
             }
             var nx = h.prof_nx, p = run.prof, q = run.prof1d, b0 = f * nx, b1 = Math.min(h.n - 1, f + 1) * nx;
             for (k = 0; k < nx; k++) { profNow[k] = (1 - s) * p[b0 + k] + s * p[b1 + k]; if (q) twinNow[k] = (1 - s) * q[b0 + k] + s * q[b1 + k]; }
         }
-        /* the sheet: the stored half-plane y >= 0 mirrored to y < 0 (every shape and the start packet are symmetric about the axis) */
         function buildSheet() {
             var S = run.peakMax, g = GAIN;
             for (var i = 0; i < NX; i++) for (var jj = 0; jj < NY; jj++) {
@@ -285,7 +332,7 @@
         function drawFrame() {
             if (!run) return;
             var c0 = performance.now(); interp(); buildSheet();
-            if (v3) { fit3(); v3.setSheet({ nx: NX, ny: NY, x0: X0, y0: Y0, h: DX, H: Hs, T: Ts, every: 2, key: 'rt3d' }); }
+            if (v3) { fit3(); v3.setSheet({ nx: NX, ny: NY, x0: X0, y0: Y0, h: DX, H: Hs, T: Ts, every: 2, key: 'rt3d' + NX }); }
             var c1 = performance.now(); if (v3) v3.render(); var c2 = performance.now();
             writeFrameStore(); drawPX(); drawPT(); var c3 = performance.now();
             cost.push([c1 - c0, c2 - c1, c3 - c2]); if (cost.length > 240) cost.shift();
@@ -295,7 +342,6 @@
             var w = stageEl.clientWidth, h = stageEl.clientHeight, dpr = Math.min(2, window.devicePixelRatio || 1);
             if (canvas.width !== Math.round(w * dpr) || canvas.height !== Math.round(h * dpr)) v3.resize(w, h, dpr);
         }
-
         var clk = Sim.clock(function (dt) {
             var now = performance.now(); if (lastTs) { frameMs.push(now - lastTs); if (frameMs.length > 240) frameMs.shift(); } lastTs = now;
             if (!run) return;
@@ -307,12 +353,11 @@
             drawFrame();
         });
 
-        /* ---------- the 3D view ---------- */
         function initV3() {
             if (v3 || !window.RT3DView) return;
             try {
                 v3 = RT3DView.create(canvas, { canTurn: function () { return !stageEl.classList.contains('dp-reading'); }, onTurn: function () { document.getElementById('hint').textContent = ''; } });
-                if (run) v3.setBarriers({ shape: run.head.shape, size: run.head.size, D: run.head.D, S: run.head.S, H: 8, W: 64 });
+                placeBarriers();
             } catch (e) { v3 = null; document.getElementById('src-t').textContent = 'This browser could not start the 3D view: ' + e.message; }
         }
         window.addEventListener('rt3d-view-ready', initV3); initV3();
@@ -330,7 +375,7 @@
             if (o.ylabel) { ctx.textAlign = 'left'; ctx.fillText(o.ylabel, L + 5, T + 11); }
             return { X: X, Y: Y, L: L, T: T, pw: pw, ph: ph };
         }
-        function ticks(tEnd) { var st = tEnd > 60 ? 20 : 10, out = []; for (var v = 0; v <= tEnd - 0.12 * tEnd; v += st) out.push(v); return out; }
+        function ticks(tEnd) { var st = tEnd > 150 ? 50 : tEnd > 60 ? 20 : 10, out = []; for (var v = 0; v <= tEnd - 0.12 * tEnd; v += st) out.push(v); return out; }
         function plot(ctx, ax, xs, ys, col, wd, dash) {
             ctx.strokeStyle = col; ctx.lineWidth = wd || 1.5; ctx.setLineDash(dash || []); ctx.beginPath();
             for (var i = 0; i < xs.length; i++) { var x = ax.X(xs[i]), y = ax.Y(ys[i]); if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y); }
@@ -340,53 +385,64 @@
             var x = ax.L + ax.pw - 8, y = ax.T + 13; ctx.font = MONO; ctx.textAlign = 'right';
             items.forEach(function (it) { ctx.fillStyle = it[1]; ctx.fillText(it[0], x - 24, y); ctx.strokeStyle = it[1]; ctx.lineWidth = 2; ctx.setLineDash(it[2] || []); ctx.beginPath(); ctx.moveTo(x - 20, y - 3); ctx.lineTo(x, y - 3); ctx.stroke(); ctx.setLineDash([]); y += 13; });
         }
-        function barrierBands(ctx, ax, h) {
-            var xs = h.shape[0] === 'd' ? [-h.S / 2, h.S / 2] : [-h.S / 2], spans = [];
-            if (h.shape.endsWith('shell')) { (h.shape[0] === 'd' ? [h.size, h.size + h.S] : [h.size]).forEach(function (R) { spans.push([R - h.D / 2, R + h.D / 2], [-R - h.D / 2, -R + h.D / 2]); }); }
-            else xs.forEach(function (x) { spans.push([x - h.D / 2, x + h.D / 2]); });
-            ctx.fillStyle = GLASSC; spans.forEach(function (s) { ctx.fillRect(ax.X(s[0]), ax.T, ax.X(s[1]) - ax.X(s[0]), ax.ph); });
-            ctx.fillStyle = 'rgba(28,21,24,.05)'; [[-48, -38.4], [38.4, 48]].forEach(function (s) { ctx.fillRect(ax.X(s[0]), ax.T, ax.X(s[1]) - ax.X(s[0]), ax.ph); });
+        function barrierSpans(h) {
+            var s = h.spec, spans = [];
+            if (s.shape === 'shell') { for (var k = 0; k < s.N; k++) { var R = s.R + k * s.P; spans.push([R - s.D / 2, R + s.D / 2], [-R - s.D / 2, -R + s.D / 2]); } }
+            else h.centres.forEach(function (c) { spans.push([c - s.D / 2, c + s.D / 2]); });
+            return spans;
         }
-        /* Fig. 15b: p(x, t) = the integral of |psi|^2 across (over y and z), stored every frame; each curve divided by its own total
-           in the box, so that the side border's loss does not hide the shape. The walls' exact 1D twin on the same axis, dashed. */
+        /* the potential along the flight axis, from the run's spec (the input, not data): barriers V0 plus the bias ramp */
+        function potential(h, x) {
+            var s = h.spec, v = 0, ext = h.extent;
+            if (s.shape !== 'shell') h.centres.forEach(function (c) { if (Math.abs(x - c) < s.D / 2) v += s.V0; });
+            else for (var k = 0; k < s.N; k++) { if (Math.abs(Math.abs(x) - (s.R + k * s.P)) < s.D / 2) v += s.V0; }
+            if (s.bias) v -= s.bias * Math.max(0, Math.min(1, (x - ext[0]) / (ext[1] - ext[0])));
+            return v;
+        }
+        /* Fig. 15b: p(x, t), the integral of |psi|^2 across, each curve divided by its own total in the box; the walls' 1D twin dashed;
+           the potential along the axis in slate (scale on the right) */
         function drawPX() {
-            if (!run) return; var h = run.head, nx = h.prof_nx, x0 = h.prof_x_first, dx = h.step, i, s1 = 0, s2 = 0, mx = 0;
+            if (!run) return; var h = run.head, nx = h.prof_nx, x0 = h.prof_x_first, dx = h.step, i, s1 = 0, s2 = 0, mx = 0, L = nx * dx / 2;
             for (i = 0; i < nx; i++) { s1 += profNow[i] * dx; s2 += twinNow[i] * dx; }
             var xs = [], a = [], b = [];
             for (i = 0; i < nx; i++) { xs.push(x0 + i * dx); a.push(profNow[i] / s1); b.push(run.prof1d ? twinNow[i] / s2 : 0); mx = Math.max(mx, a[i], b[i]); }
-            var top = Math.max(0.02, Math.ceil(mx * 1.15 / 0.02) * 0.02);
-            var ax = axes(pxc, pxBox, { x0: -48, x1: 48, y0: 0, y1: top, xticks: [-40, -20, 0, 20, 40], yticks: [0, top / 2, top], xlabel: 'x (a)', ylabel: 'p(x) / P in box', yfmt: function (v) { return v.toFixed(3); } });
-            barrierBands(pxc, ax, h);
+            var top = Math.max(0.02, Math.ceil(mx * 1.15 / 0.02) * 0.02), tk = L > 100 ? 50 : 20, xt = [];
+            for (var v = -Math.floor(L / tk) * tk; v <= L; v += tk) xt.push(v);
+            var ax = axes(pxc, pxBox, { x0: -L, x1: L, y0: 0, y1: top, xticks: xt, yticks: [0, top / 2, top], xlabel: 'x (a)', ylabel: 'p(x) / P in box', yfmt: function (v) { return v.toFixed(3); }, R: 34 });
+            pxc.fillStyle = GLASSC; barrierSpans(h).forEach(function (s) { pxc.fillRect(ax.X(s[0]), ax.T, Math.max(1, ax.X(s[1]) - ax.X(s[0])), ax.ph); });
+            var inner = (nx / 2 - Math.max(4, Math.floor(nx / 10))) * dx;
+            pxc.fillStyle = 'rgba(28,21,24,.05)'; [[-L, -inner], [inner, L]].forEach(function (s) { pxc.fillRect(ax.X(s[0]), ax.T, ax.X(s[1]) - ax.X(s[0]), ax.ph); });
+            var Vmax = Math.max(h.spec.V0, 0.5), Vmin = -(h.spec.bias || 0), vy = function (vv) { return ax.T + ax.ph - (vv - Vmin) / (Vmax - Vmin) * ax.ph * 0.8 - ax.ph * 0.1; };
+            pxc.strokeStyle = SLATE; pxc.lineWidth = 1; pxc.beginPath(); for (i = 0; i < 801; i++) { var xx = -L + 2 * L * i / 800, yy = vy(potential(h, xx)); if (i) pxc.lineTo(ax.X(xx), yy); else pxc.moveTo(ax.X(xx), yy); } pxc.stroke();
+            pxc.fillStyle = SLATE; pxc.textAlign = 'left'; pxc.fillText('V = ' + Vmax, ax.L + ax.pw + 3, vy(Vmax) + 3); if (Vmin) pxc.fillText(Vmin.toFixed(2), ax.L + ax.pw + 3, vy(Vmin) + 3);
             pxc.fillStyle = 'rgba(163,48,63,.14)'; pxc.beginPath(); pxc.moveTo(ax.X(xs[0]), ax.Y(0)); for (i = 0; i < nx; i++) pxc.lineTo(ax.X(xs[i]), ax.Y(a[i])); pxc.lineTo(ax.X(xs[nx - 1]), ax.Y(0)); pxc.fill();
             plot(pxc, ax, xs, a, WINE, 1.8);
             var items = [['3D run', WINE]];
             if (run.prof1d) { plot(pxc, ax, xs, b, INK, 1.2, [4, 3]); items.push(['exact 1D twin (walls)', INK, [4, 3]]); }
+            items.push(['potential V(x), right scale', SLATE]);
             legend(pxc, ax, items);
-            document.getElementById('cap-px').textContent = run.prof1d ? 'walls separate: the two must agree' : 'no 1D twin for ' + (h.shape.endsWith('coin') ? 'discs' : 'shells');
+            document.getElementById('cap-px').textContent = run.prof1d ? 'walls separate: the two must agree' : 'no 1D twin for ' + (h.spec.shape === 'coin' ? 'discs' : 'shells');
         }
-        function regionNames(shape) {
-            if (shape === 'dshell') return [['core', 'inside the inner shell', SLATE], ['gap', 'between the shells', WINE], ['out', 'outside', MUT]];
-            if (shape === 'sshell') return [['core', 'inside the shell', WINE], ['out', 'outside', MUT]];
-            if (shape[0] === 'd') return [['left', 'before', SLATE], ['well', 'between', WINE], ['right', 'beyond', INK]];
-            return [['left', 'before', SLATE], ['right', 'beyond', INK]];
+        function regionNames(s) {
+            if (s.shape === 'shell') return s.N > 1 ? [['core', 'inside the inner shell', SLATE], ['gap', 'between the shells', WINE], ['out', 'outside', MUT]] : [['core', 'inside the shell', WINE], ['out', 'outside', MUT]];
+            return s.N > 1 ? [['left', 'before', SLATE], ['well', 'between', WINE], ['right', 'beyond', INK]] : [['left', 'before', SLATE], ['right', 'beyond', INK]];
         }
         function lin(arr, t) { var dt = run.head.frame_dt, n = arr.length, f = Math.min(n - 2, Math.max(0, Math.floor(t / dt))), s = Math.min(1, t / dt - f); return arr[f] + s * (arr[f + 1] - arr[f]); }
-        /* Fig. 15c: the stored probabilities of each region against time, the total left in the box, and the lifetime fit */
+        function Pin(C, s) { return s.shape === 'shell' ? C.core.map(function (v, i) { return v + (C.gap ? C.gap[i] : 0); }) : (C.well || null); }
+        /* Fig. 15c: the stored region probabilities against time, the total left in the box, the lifetime fit */
         function drawPT() {
-            if (!run) return; var h = run.head, C = run.C, t = C.t, tEnd = t[t.length - 1], rec = run.rec, names = regionNames(h.shape);
-            var inName = h.shape === 'dshell' ? null : names.length === 3 || h.shape === 'sshell' ? (h.shape === 'sshell' ? 'core' : 'well') : null;
-            var Pin = h.shape === 'dshell' ? C.gap.map(function (v, i) { return v + C.core[i]; }) : inName ? C[inName] : null;
-            var big = Pin && Math.max.apply(null, Pin) < 0.25, y1 = 1.02;
-            var ax = axes(ptc, ptBox, { x0: 0, x1: tEnd, y0: 0, y1: y1, xticks: ticks(tEnd), yticks: [0, 0.5, 1], xlabel: 'time t', ylabel: 'P', xfmt: function (v) { return v.toFixed(0); }, yfmt: function (v) { return v; } });
+            if (!run) return; var h = run.head, s = h.spec, C = run.C, t = C.t, tEnd = t[t.length - 1], rec = run.rec, names = regionNames(s);
+            var P = Pin(C, s), big = P && Math.max.apply(null, P) < 0.25;
+            var ax = axes(ptc, ptBox, { x0: 0, x1: tEnd, y0: 0, y1: 1.02, xticks: ticks(tEnd), yticks: [0, 0.5, 1], xlabel: 'time t', ylabel: 'P', xfmt: function (v) { return v.toFixed(0); }, yfmt: function (v) { return v; } });
             var items = [];
-            names.forEach(function (n) { if ((h.shape === 'dshell' && n[0] !== 'out') || n[0] === 'well' || (h.shape === 'sshell' && n[0] === 'core')) return; plot(ptc, ax, t, C[n[0]], n[2], 1.6); items.push([n[1], n[2]]); });
+            names.forEach(function (n) { if (n[0] === 'well' || n[0] === 'core' || n[0] === 'gap') return; plot(ptc, ax, t, C[n[0]], n[2], 1.6); items.push([n[1], n[2]]); });
             plot(ptc, ax, t, C.norm, MUT, 1.2, [2, 3]); items.push(['total in box', MUT, [2, 3]]);
-            if (Pin) {
-                var sc = big ? 4 : 1, yy = Pin.map(function (v) { return v * sc; });
-                plot(ptc, ax, t, yy, WINE, 2); items.push([(h.shape === 'dshell' ? 'inside the outer shell' : h.shape === 'sshell' ? 'inside the shell' : 'between') + (big ? ' × 4' : ''), WINE]);
+            if (P) {
+                var sc = big ? 4 : 1; plot(ptc, ax, t, P.map(function (v) { return v * sc; }), WINE, 2);
+                items.push([(s.shape === 'shell' ? 'inside the outer shell' : 'between the first and last') + (big ? ' × 4' : ''), WINE]);
                 if (rec.tau && isFinite(rec.tau.tau)) {
-                    var t0 = rec.tau.t0, t1 = rec.tau.t1, A = lin(Pin, t0), fx = [], fy = [];
-                    for (var k = 0; k <= 60; k++) { var tt = t0 + (Math.min(tEnd, t1 + 2 * rec.tau.tau) - t0) * k / 60; fx.push(tt); fy.push(sc * A * Math.exp(-(tt - t0) / rec.tau.tau)); }
+                    var t0 = rec.tau.t0, A = lin(P, t0), fx = [], fy = [], t1 = Math.min(tEnd, rec.tau.t1 + 2 * rec.tau.tau);
+                    for (var k = 0; k <= 60; k++) { var tt = t0 + (t1 - t0) * k / 60; fx.push(tt); fy.push(sc * A * Math.exp(-(tt - t0) / rec.tau.tau)); }
                     plot(ptc, ax, fx, fy, ACCENT, 1.2, [5, 3]); items.push(['fit e^(−t/τ), τ = ' + rec.tau.tau.toFixed(1), ACCENT, [5, 3]]);
                 }
             }
@@ -394,43 +450,44 @@
             var x = ax.X(tPhys); ptc.strokeStyle = INK; ptc.lineWidth = 1; ptc.beginPath(); ptc.moveTo(x, ax.T); ptc.lineTo(x, ax.T + ax.ph); ptc.stroke();
             document.getElementById('cap-pt').textContent = 'stored every ' + h.frame_dt.toFixed(2) + ' in time';
         }
-        /* Fig. 15d: walls and discs: T_far of every 3D run (points) against the exact 1D packet average (lines). Shells: the
-           lifetime of the trapped wave against energy. */
+        function through(r) { return r.twin ? r.twin.T : r.T_far ? r.T_far.value : null; }   /* walls: the 1D twin (3D walls equal it); discs: T_far */
+        /* Fig. 15d: walls and discs: the share that got through, every stored energy of this structure (points), against the exact 1D
+           lines for walls of the same structure. Shells: the lifetime against energy. */
         function drawTE() {
-            if (!run || !EX) return; var h = run.head, shell = h.shape.endsWith('shell');
-            if (shell) {
+            if (!run) return; var s = run.head.spec, t = TUP[tkey(sel)], Es = t.Es, x0 = Math.min(0.25, Es[0] - 0.05), x1 = Math.max(2.65, Es[Es.length - 1] + 0.05);
+            if (s.shape === 'shell') {
                 document.getElementById('cap-te-t').textContent = 'how long the wave stays inside the shells, against energy';
-                var ax = axes(tec, teBox, { x0: 0.3, x1: 2.1, y0: 0, y1: 50, xticks: [0.4, 0.8, 1.2, 1.6, 2.0], yticks: [0, 25, 50], xlabel: 'energy E', ylabel: 'lifetime τ', xfmt: function (v) { return v.toFixed(1); } });
-                [['dshell', WINE, 'two shells'], ['sshell', SLATE, 'one shell']].forEach(function (g) {
-                    order.filter(function (r) { return r.shape === g[0] && r.tau; }).forEach(function (r) { dot(tec, ax, r.E, r.tau.tau, g[1], r.file === run.rec.file); });
-                });
-                legend(tec, ax, [['two shells (3D)', WINE], ['one shell (3D)', SLATE]]);
-                document.getElementById('cap-te').textContent = 'τ fitted to the stored P(t)'; return;
+                var taus = Es.map(function (e) { var r = t.byE[e.toFixed(4)]; return r.tau ? r.tau.tau : null; }), tm = Math.max(10, Math.ceil(Math.max.apply(null, taus.filter(Boolean)) / 10) * 10);
+                var ax = axes(tec, teBox, { x0: x0, x1: x1, y0: 0, y1: tm, xticks: [0.5, 1, 1.5, 2, 2.5], yticks: [0, tm / 2, tm], xlabel: 'energy E', ylabel: 'lifetime τ', xfmt: function (v) { return v.toFixed(1); } });
+                Es.forEach(function (e, i) { if (taus[i]) dot(tec, ax, e, taus[i], WINE, Math.abs(e - E) < 1e-9); });
+                document.getElementById('cap-te').textContent = 'τ fitted to the stored P(t), ' + Es.length + ' runs'; return;
             }
-            document.getElementById('cap-te-t').textContent = 'the share that got through, against energy';
-            var ax2 = axes(tec, teBox, { x0: 0.3, x1: 2.1, y0: 0, y1: 1.02, xticks: [0.4, 0.735, 1.2, 1.6, 2.0], yticks: [0, 0.5, 1], xlabel: 'energy E', ylabel: 'share through', xfmt: function (v) { return v === 0.735 ? '0.735' : v.toFixed(1); } });
-            plot(tec, ax2, EX.T_E.E, EX.T_E.pair, 'rgba(163,48,63,.35)', 1);
-            plot(tec, ax2, EX.Tbar.E, EX.Tbar.pair, WINE, 1.8);
-            plot(tec, ax2, EX.Tbar.E, EX.Tbar.one, SLATE, 1.4, [5, 3]);
-            var R = h.size, fam = h.shape.slice(1);
-            ['d', 's'].forEach(function (p) { order.filter(function (r) { return r.shape === p + fam && r.size === R && r.T_far; }).forEach(function (r) { dot(tec, ax2, r.E, r.T_far.value, p === 'd' ? WINE : SLATE, r.file === run.rec.file, p === 's'); }); });
-            legend(tec, ax2, [['exact 1D, plane wave', 'rgba(163,48,63,.5)'], ['exact 1D, this packet: two', WINE], ['one barrier', SLATE, [5, 3]], ['3D runs: ● two, ○ one', INK]]);
-            document.getElementById('cap-te').textContent = fam === 'flat' ? 'walls: the 3D points should sit on the lines' : 'discs of radius ' + R + ': the wave also goes round';
+            document.getElementById('cap-te-t').textContent = 'the share that got through, against energy' + (s.bias ? ' (voltage ' + s.bias + ')' : '');
+            var ax2 = axes(tec, teBox, { x0: x0, x1: x1, y0: 0, y1: 1.02, xticks: [0.5, 1, 1.5, 2, 2.5], yticks: [0, 0.5, 1], xlabel: 'energy E', ylabel: 'share through', xfmt: function (v) { return v.toFixed(1); } });
+            var ex = !s.bias && IDX.exact[exKey(s)], items = [];
+            if (ex) {
+                plot(tec, ax2, ex.E, ex.T, 'rgba(163,48,63,.35)', 1); plot(tec, ax2, ex.E, ex.Tbar, s.shape === 'flat' ? WINE : SLATE, 1.8, s.shape === 'flat' ? [] : [5, 3]);
+                items.push(['exact 1D, one energy', 'rgba(163,48,63,.5)'], [s.shape === 'flat' ? 'exact 1D, this packet' : 'exact 1D for walls (the large-R limit)', s.shape === 'flat' ? WINE : SLATE, s.shape === 'flat' ? [] : [5, 3]]);
+            }
+            Es.forEach(function (e) { var r = t.byE[e.toFixed(4)], v = through(r); if (v != null) dot(tec, ax2, e, v, INK, Math.abs(e - E) < 1e-9); });
+            items.push(['3D runs (' + Es.length + ')', INK]); legend(tec, ax2, items);
+            document.getElementById('cap-te').textContent = s.shape === 'flat' ? 'walls: the 3D points should sit on the thick line' : 'discs of radius ' + s.R + ': the wave also goes round';
         }
-        function dot(ctx, ax, x, y, col, now, hollow) {
-            ctx.beginPath(); ctx.arc(ax.X(x), ax.Y(y), now ? 5 : 3.2, 0, 2 * Math.PI);
-            if (hollow) { ctx.fillStyle = '#fff'; ctx.fill(); ctx.strokeStyle = col; ctx.lineWidth = 1.5; ctx.stroke(); } else { ctx.fillStyle = col; ctx.fill(); }
-            if (now) { ctx.strokeStyle = INK; ctx.lineWidth = 1.5; ctx.stroke(); }
-        }
+        function dot(ctx, ax, x, y, col, now) { ctx.beginPath(); ctx.arc(ax.X(x), ax.Y(y), now ? 5 : 2.6, 0, 2 * Math.PI); ctx.fillStyle = col; ctx.fill(); if (now) { ctx.strokeStyle = WINE; ctx.lineWidth = 2; ctx.stroke(); } }
+        /* Fig. 15e: the diode. Lines: the current integrated from the stored bias runs (file_rt3d2.py); the exact 1D Tsu-Esaki curve. */
         function drawIV() {
-            if (!EX) return; var iv = EX.iv, jmax = Math.max.apply(null, iv.J) * 1.1;
-            var ax = axes(ivc, ivBox, { x0: 0, x1: iv.V[iv.V.length - 1], y0: 0, y1: jmax, xticks: [0, 0.5, 1, 1.5, 2, 2.5], yticks: [0, jmax / 2, jmax], xlabel: 'bias V (units of E_u)', ylabel: 'current J', xfmt: function (v) { return v.toFixed(1); }, yfmt: function (v) { return v.toFixed(2); } });
-            if (iv.V_valley) { ivc.fillStyle = 'rgba(163,48,63,.08)'; ivc.fillRect(ax.X(iv.V_peak), ax.T, ax.X(iv.V_valley) - ax.X(iv.V_peak), ax.ph); }
-            plot(ivc, ax, iv.V, iv.J, WINE, 2);
-            ivc.fillStyle = INK; ivc.font = MONO; ivc.textAlign = 'left';
-            ivc.fillText('peak', ax.X(iv.V_peak) + 4, ax.Y(iv.J_peak) - 4);
-            if (iv.V_valley) ivc.fillText('valley · current falls as the voltage rises', ax.X(iv.V_valley) + 4, ax.Y(iv.J_valley) - 6);
-            document.getElementById('cap-iv').textContent = 'peak-to-valley ' + (iv.pvr ? iv.pvr.toFixed(1) : '—');
+            if (!EX || !IDX) return; var iv = EX.iv, runs = IDX.iv || [], jm = Math.max.apply(null, iv.J);
+            runs.forEach(function (c) { c.J_runs.forEach(function (p) { jm = Math.max(jm, p[1]); }); });
+            jm *= 1.1;
+            var ax = axes(ivc, ivBox, { x0: 0, x1: 2.5, y0: 0, y1: jm, xticks: [0, 0.5, 1, 1.5, 2, 2.5], yticks: [0, jm / 2, jm], xlabel: 'voltage V (units of E_u)', ylabel: 'current J', xfmt: function (v) { return v.toFixed(1); }, yfmt: function (v) { return v.toFixed(2); } });
+            if (iv.V_valley) { ivc.fillStyle = 'rgba(163,48,63,.07)'; ivc.fillRect(ax.X(iv.V_peak), ax.T, ax.X(iv.V_valley) - ax.X(iv.V_peak), ax.ph); }
+            plot(ivc, ax, iv.V, iv.J, 'rgba(163,48,63,.45)', 1.2); var items = [['exact 1D, one energy at a time', 'rgba(163,48,63,.6)']];
+            runs.forEach(function (c) { if (!c.J_runs.length) return; var col = c.shape === 'flat' ? WINE : SLATE;
+                plot(ivc, ax, c.J_runs.map(function (p) { return p[0]; }), c.J_runs.map(function (p) { return p[1]; }), col, 2);
+                c.J_runs.forEach(function (p) { dot(ivc, ax, p[0], p[1], col, run && run.head.spec.bias === p[0] && run.head.spec.shape === c.shape && run.head.spec.R === c.R); });
+                items.push([(c.shape === 'flat' ? 'two walls' : 'two discs, R = ' + c.R) + ': 3D runs', col]); });
+            legend(ivc, ax, items);
+            document.getElementById('cap-iv').textContent = runs.some(function (c) { return c.J_runs.length; }) ? 'from ' + runs.reduce(function (n, c) { return n + c.J_runs.length * c.energies.length; }, 0) + ' 3D runs' : 'Tsu–Esaki';
         }
         function fillRealUnits() {
             var ru = EX.real_units, el = document.getElementById('ru'); el.innerHTML = '';
@@ -438,53 +495,87 @@
             document.getElementById('ru-note').textContent = ru.note;
         }
 
-        /* ---------- controls ---------- */
-        function press(sel, b) { document.querySelectorAll(sel + ' button').forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); }); }
+        /* ---------- controls: every control moves to the nearest stored structure that has the value asked for ---------- */
+        var WEIGHT = { shape: 100, N: 30, sx: 20, bias: 8, V0: 6, D: 6, P: 4, R: 2 };
+        function choose(fix) {
+            var best = null, bs = 1e9;
+            TKEYS.forEach(function (k) {
+                var sp = TUP[k].spec, ok = true, sc = 0;
+                for (var f in fix) if (sp[f] !== fix[f]) ok = false;
+                if (!ok) return;
+                FIELDS.forEach(function (f) { if (!(f in fix) && sp[f] !== sel[f]) sc += WEIGHT[f] * (typeof sp[f] === 'number' ? 1 + Math.abs(sp[f] - sel[f]) / 10 : 1); });
+                if (sc < bs) { bs = sc; best = sp; }
+            });
+            if (!best) return false;
+            FIELDS.forEach(function (f) { sel[f] = best[f]; }); return true;
+        }
+        function has(fix) { return TKEYS.some(function (k) { var sp = TUP[k].spec; for (var f in fix) if (sp[f] !== fix[f]) return false; return true; }); }
+        function syncControls() {
+            document.querySelectorAll('.chips[data-key]').forEach(function (g) {
+                var key = g.dataset.key, any = 0;
+                g.querySelectorAll('button').forEach(function (b) {
+                    var fix = {}, v = b.dataset.v;
+                    if (key === 'VD') { var p = v.split('|'); fix = { V0: +p[0], D: +p[1] }; } else fix[key] = key === 'shape' ? v : +v;
+                    var on = key === 'VD' ? (sel.V0 === fix.V0 && sel.D === fix.D) : sel[key] === fix[key];
+                    var withShape = Object.assign({ shape: sel.shape }, fix), avail = key === 'shape' ? has(fix) : has(withShape);
+                    if (key === 'R' && sel.shape === 'flat') avail = false;
+                    b.hidden = !avail; if (avail) any++;
+                    b.setAttribute('aria-pressed', on ? 'true' : 'false');
+                });
+                g.hidden = any < 2;
+            });
+            var bs = []; TKEYS.forEach(function (k) { var sp = TUP[k].spec, same = FIELDS.every(function (f) { return f === 'bias' || sp[f] === sel[f]; }); if (same) bs.push(sp.bias); });
+            bs.sort(function (a, b) { return a - b; }); biasIn.max = Math.max(0, bs.length - 1); biasIn.value = Math.max(0, bs.indexOf(sel.bias)); biasIn.disabled = bs.length < 2; biasIn.dataset.vals = JSON.stringify(bs);
+            bOut.textContent = 'V = ' + sel.bias.toFixed(3);
+            document.getElementById('bias-note').textContent = bs.length < 2 ? 'Stored under a voltage: two walls, or two discs of radius 6, height 2, thickness 1, spacing 2.5, short packet.' : bs.length + ' voltages stored for these barriers; the current–voltage curve below is built from them.';
+            var es = energies(); energyIn.max = es.length - 1; var j = 0; es.forEach(function (e, i) { if (Math.abs(e - E) < Math.abs(es[j] - E)) j = i; }); energyIn.value = j; showE();
+            setShapeNote();
+        }
+        function showE() { var es = energies(), e = es[+energyIn.value]; eOut.textContent = e != null ? e.toFixed(3) + ' · ' + es.length + ' runs' : '—'; }
+        function setShapeNote() {
+            var s = sel, n = { flat: s.N === 1 ? 'One wall, infinite across.' : s.N + ' walls, infinite across: the wave separates, so along the flight it is exactly the 1D problem.',
+                               coin: (s.N === 1 ? 'One disc' : s.N + ' discs') + ' of radius ' + s.R + ' on the flight axis: the wave also goes round them, and what is trapped leaks out at the side.',
+                               shell: (s.N === 1 ? 'One spherical shell of radius ' + s.R : 'Two spherical shells, radii ' + s.R + ' and ' + (s.R + s.P)) + ' round the origin.' }[s.shape];
+            document.getElementById('shape-note').textContent = n + ' Height ' + s.V0 + ', thickness ' + s.D + (s.N > 1 ? ', centres ' + s.P + ' apart' : '') + (s.sx > 3 ? '; long packet (σₓ = ' + s.sx + '), narrow in energy.' : '.');
+        }
         function setupControls() {
             document.getElementById('play').addEventListener('click', function () { playing = !playing; this.textContent = playing ? 'Pause' : 'Play'; });
             document.getElementById('replay').addEventListener('click', function () { tPhys = 0; endRest = 0; playing = true; document.getElementById('play').textContent = 'Pause'; });
             document.getElementById('home').addEventListener('click', function () { if (v3) { v3.home(); drawFrame(); } });
-            document.querySelectorAll('#shape-chips button').forEach(function (b) { b.addEventListener('click', function () { family = b.dataset.s; press('#shape-chips', b); document.getElementById('size-chips').hidden = family !== 'coin'; changed(); }); });
-            document.querySelectorAll('#pair-chips button').forEach(function (b) { b.addEventListener('click', function () { pair = b.dataset.p; press('#pair-chips', b); changed(); }); });
-            document.querySelectorAll('#size-chips button').forEach(function (b) { b.addEventListener('click', function () { radius = +b.dataset.r; press('#size-chips', b); changed(); }); });
+            document.querySelectorAll('.chips[data-key]').forEach(function (g) { g.addEventListener('click', function (ev) {
+                var b = ev.target.closest('button'); if (!b) return; var key = g.dataset.key, v = b.dataset.v, fix = {};
+                if (key === 'VD') { var p = v.split('|'); fix = { V0: +p[0], D: +p[1] }; } else fix[key] = key === 'shape' ? v : +v;
+                if (choose(fix)) { syncControls(); loadRun(); }
+            }); });
+            biasIn.addEventListener('input', function () { var bs = JSON.parse(biasIn.dataset.vals || '[0]'); if (choose({ bias: bs[+biasIn.value] })) { syncControls(); loadRun(); } });
             document.querySelectorAll('#view-chips button').forEach(function (b) { b.addEventListener('click', function () { VIEW = b.dataset.v; press('#view-chips', b); ds.set('view', VIEW === 're' ? 'Re ψ' : '|ψ|²'); drawFrame(); }); });
             document.querySelectorAll('#gain-chips button').forEach(function (b) { b.addEventListener('click', function () { GAIN = +b.dataset.g; press('#gain-chips', b); ds.set('gain', GAIN); setGainNote(); drawFrame(); }); });
-            energyIn.addEventListener('input', function () { Ei = +energyIn.value; showE(); loadRun(); });
+            energyIn.addEventListener('input', function () { E = energies()[+energyIn.value]; showE(); loadRun(); });
             timeIn.addEventListener('input', function () { tPhys = +timeIn.value * run.head.frame_dt; playing = false; document.getElementById('play').textContent = 'Play'; drawFrame(); });
             setGainNote();
         }
-        function changed() {
-            var Eold = run ? run.head.E : 0.735, es; refreshEnergies(); es = energies(shapeName(), sizeOf());
-            var best = 0; es.forEach(function (e, i) { if (Math.abs(e - Eold) < Math.abs(es[best] - Eold)) best = i; }); Ei = best; energyIn.value = Ei; showE();
-            setShapeNote(); loadRun();
-        }
-        function refreshEnergies() { var es = energies(shapeName(), sizeOf()); energyIn.max = es.length - 1; if (Ei > es.length - 1) Ei = es.length - 1; energyIn.value = Ei; showE(); }
-        function showE() { var es = energies(shapeName(), sizeOf()), E = es[Ei]; eOut.textContent = E.toFixed(E === 0.735 ? 3 : 1) + (Math.abs(E - 0.735) < 1e-6 ? ' · resonance' : ''); }
+        function press(q, b) { document.querySelectorAll(q + ' button').forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); }); }
         function setGainNote() { document.getElementById('gain-note').textContent = 'One scale for the whole run: the start packet’s peak is height ' + GAIN + (GAIN > 1 ? ' (heights above 1.25 are clipped).' : '.'); }
-        function setShapeNote() {
-            var n = { dflat: 'Two walls, infinite across. The wave separates: along the flight it is exactly the 1D problem.',
-                      dcoin: 'Two discs of radius ' + radius + ' on the flight axis. The wave can also go round them, and what is trapped between them leaks out sideways.',
-                      dshell: 'Two spherical shells round the origin, radii 3 and 5.5. Part of the wave gets inside and rings there.',
-                      sflat: 'One wall alone: the pair’s left wall. No gap, so nothing to ring.',
-                      scoin: 'One disc of radius ' + radius + ' alone.', sshell: 'One spherical shell of radius 3 alone.' }[shapeName()];
-            document.getElementById('shape-note').textContent = n + (pair === 's' ? ' Stored at 5 energies.' : ' Stored at 18 energies.');
-        }
         function setLabels() {
-            var names = regionNames(run.head.shape), la = ['l-a', 'l-b', 'l-c'];
-            la.forEach(function (id, k) { var el = document.getElementById(id), dd = document.getElementById('r-' + 'abc'[k]); if (names[k]) { el.textContent = names[k][1][0].toUpperCase() + names[k][1].slice(1); el.parentNode.hidden = false; } else el.parentNode.hidden = true; });
-            document.getElementById('cap-view').textContent = (VIEW === 're' ? 'Re ψ' : '|ψ|²') + ' in the plane through the flight axis; the barriers in glass';
+            var names = regionNames(run.head.spec);
+            ['l-a', 'l-b', 'l-c'].forEach(function (id, k) { var el = document.getElementById(id); if (names[k]) { el.textContent = names[k][1][0].toUpperCase() + names[k][1].slice(1); el.parentNode.hidden = false; } else el.parentNode.hidden = true; });
+            document.getElementById('cap-view').textContent = (VIEW === 're' ? 'Re ψ' : '|ψ|²') + ' in the plane through the flight axis; the barriers in glass' + (run.head.spec.bias ? '; voltage ' + run.head.spec.bias : '');
         }
 
-        /* ---------- the store (dataset.js): every number shown is written here where it is read ---------- */
+        /* ---------- the store (dataset.js) ---------- */
         var ds;
         function buildStore() {
             ds = Sim.dataset({ title: 'Resonant tunnelling in 3D', attrs: { figure: 15, page: 'resonant-tunnelling.html',
                 units: 'hbar = m = 1; lengths in the grid unit a, energies in hbar^2/(m a^2), times in m a^2/hbar',
-                source: 'Kaggle GPU runs (tools/kaggle/resonant-tunnelling/rt3d.py), filed with SHA-256 in kaggle/index.json; the page only plays the stored frames',
-                data: DATA_BASE + '2026-11-13/kaggle/index.json' } });
-            ds.var('shape', [], 'str', { symbol: 'shape', long_name: 'the barriers', computed_in: 'control' });
+                source: 'Kaggle GPU runs (tools/kaggle/resonant-tunnelling/rt3d2.py), filed with SHA-256 in kaggle/index.json; the page only plays the stored frames' } });
+            ds.var('shape', [], 'str', { symbol: 'shape', long_name: 'the barriers: walls, discs or spherical shells', computed_in: 'control' });
+            ds.var('N', [], 'int', { symbol: 'N', long_name: 'number of barriers', computed_in: 'control', digits: 0 });
+            ds.var('V0', [], 'float', { symbol: 'V₀', long_name: 'barrier height', computed_in: 'control', digits: 2 });
+            ds.var('D', [], 'float', { symbol: 'd', units: 'a', long_name: 'barrier thickness', computed_in: 'control', digits: 2 });
+            ds.var('P', [], 'float', { symbol: 's', units: 'a', long_name: 'spacing of the barriers, centre to centre', computed_in: 'control', digits: 2 });
             ds.var('size', [], 'float', { symbol: 'R', units: 'a', long_name: 'disc radius, or inner shell radius', computed_in: 'control', digits: 1 });
-            ds.var('V0', [], 'float', { symbol: 'V₀', long_name: 'barrier height', computed_in: 'run header', digits: 1 });
+            ds.var('bias', [], 'float', { symbol: 'V', long_name: 'voltage across the barriers (the potential falls by V from the first face to the last)', computed_in: 'control', digits: 3 });
+            ds.var('sx', [], 'float', { symbol: 'σₓ', units: 'a', long_name: 'length of the packet along the flight', computed_in: 'control', digits: 1 });
             ds.var('E', [], 'float', { symbol: 'E', long_name: 'mean kinetic energy of the packet', computed_in: 'run header', digits: 3 });
             ds.var('k0', [], 'float', { symbol: 'k₀', units: '1/a', long_name: 'mean wave number', computed_in: 'drawFrame()', formula: '√(2E)', digits: 4 });
             ds.var('view', [], 'str', { symbol: 'view', long_name: 'what lifts the sheet', computed_in: 'control' });
@@ -500,55 +591,43 @@
             ds.var('P_c', [], 'float', { symbol: 'P₃', long_name: 'probability in the third region (beyond / outside)', computed_in: 'run header, linear in t', digits: 5 });
             ds.var('norm', [], 'float', { symbol: 'P_box', long_name: 'total probability still in the box', computed_in: 'run header, linear in t', digits: 5 });
             ds.var('lost', [], 'float', { symbol: 'P_lost', long_name: 'taken by the absorbing border', computed_in: 'writeFrameStore()', formula: '1 − P_box', digits: 5 });
-            ds.var('T_far', [], 'float', { symbol: 'T_far', long_name: 'share that got through, read from the stored curves (index.json)', computed_in: 'file_rt3d.py', digits: 4 });
-            ds.var('T_far_frame', [], 'int', { symbol: 'f*', long_name: 'the frame T_far is read at: the last before the wave reaches the end borders', computed_in: 'file_rt3d.py', digits: 0 });
+            ds.var('T_far', [], 'float', { symbol: 'T_far', long_name: 'share that got through, read from the stored curves (index.json)', computed_in: 'file_rt3d2.py', digits: 4 });
+            ds.var('T_far_frame', [], 'int', { symbol: 'f*', long_name: 'the frame T_far is read at: the last before the wave reaches the end borders', computed_in: 'file_rt3d2.py', digits: 0 });
             ds.var('T_twin', [], 'float', { symbol: 'T_1D', long_name: 'walls: transmitted share of the exact 1D twin (same grid, border losses counted)', computed_in: 'Kaggle run header', digits: 4 });
-            ds.var('T_exact', [], 'float', { symbol: 'T̄', long_name: 'walls: the exact transfer-matrix packet average', computed_in: 'Kaggle run header', digits: 4 });
-            ds.var('tau', [], 'float', { symbol: 'τ', long_name: 'lifetime of the trapped wave, fitted to the stored P(t)', computed_in: 'file_rt3d.py', digits: 2 });
+            ds.var('T_exact', [], 'float', { symbol: 'T̄', long_name: 'walls without voltage: the exact transfer-matrix packet average', computed_in: 'Kaggle run header', digits: 4 });
+            ds.var('tau', [], 'float', { symbol: 'τ', long_name: 'lifetime of the trapped wave, fitted to the stored P(t)', computed_in: 'file_rt3d2.py', digits: 2 });
             ds.var('frame_ms', [], 'float', { symbol: 'Δt_screen', units: 'ms', long_name: 'median time between screen frames, last 240', computed_in: 'clock', digits: 1 });
-            ds.dim('xi', NX); ds.dim('yj', NR);
-            ds.coord('xc', 'xi', Float32Array, { symbol: 'x', units: 'a', long_name: 'x of each stored point', computed_in: 'grid of the Kaggle runs, 0.5 a apart' });
-            ds.coord('yc', 'yj', Float32Array, { symbol: 'y', units: 'a', long_name: 'y of each stored point (y ≥ 0; drawn mirrored)', computed_in: 'grid of the Kaggle runs' });
-            ds.var('amp', ['xi', 'yj'], Uint8Array, { symbol: 'q', long_name: 'stored level of |ψ| at the frame at or before t, 0 to 255 of that frame’s peak', computed_in: 'rt3d-worker.js, copied from the run file', digits: 0 });
-            ds.var('phase', ['xi', 'yj'], Uint8Array, { symbol: 'p', long_name: 'stored level of arg ψ, 0 to 255 for −π to π', computed_in: 'rt3d-worker.js', digits: 0 });
-            ds.var('rew', ['xi', 'yj'], Float32Array, { symbol: 'Re ψ', long_name: 'Re ψ at time t, interpolated between the stored frames', computed_in: 'interp()' });
-            ds.var('imw', ['xi', 'yj'], Float32Array, { symbol: 'Im ψ', long_name: 'Im ψ at time t, interpolated', computed_in: 'interp()' });
-            var xc = ds.alloc('xc'), yc = ds.alloc('yc'); for (var i = 0; i < NX; i++) xc[i] = X0 + i * DX; for (var j = 0; j < NR; j++) yc[j] = j * DX;
         }
         function writeRunStore() {
-            var h = run.head, r = run.rec;
-            ds.set('shape', { dflat: 'two walls', dcoin: 'two discs', dshell: 'two shells', sflat: 'one wall', scoin: 'one disc', sshell: 'one shell' }[h.shape]);
-            ds.set('size', h.size); ds.set('V0', h.V0); ds.set('E', h.E); ds.set('view', VIEW === 're' ? 'Re ψ' : '|ψ|²'); ds.set('gain', GAIN);
-            ds.set('file', r.file.replace('runs/', '')); ds.set('notebook', r.notebook + ' v' + r.version); ds.set('sha_ok', run.sha_ok); ds.set('peak_max', run.peakMax);
+            var h = run.head, r = run.rec, s = h.spec;
+            ds.set('shape', { flat: 'walls', coin: 'discs', shell: 'spherical shells' }[s.shape]); ds.set('N', s.N); ds.set('V0', s.V0); ds.set('D', s.D); ds.set('P', s.P);
+            ds.set('size', s.R); ds.set('bias', s.bias); ds.set('sx', s.sx); ds.set('E', h.E); ds.set('view', VIEW === 're' ? 'Re ψ' : '|ψ|²'); ds.set('gain', GAIN);
+            ds.set('file', r.file); ds.set('notebook', r.notebook + ' v' + r.version); ds.set('sha_ok', run.sha_ok); ds.set('peak_max', run.peakMax);
             ds.set('T_far', r.T_far ? r.T_far.value : NaN); ds.set('T_far_frame', r.T_far ? r.T_far.frame : -1);
-            ds.set('T_twin', r.twin ? r.twin.T : NaN); ds.set('T_exact', r.twin ? r.twin.T_exact : NaN); ds.set('tau', r.tau ? r.tau.tau : NaN);
-            var s = 'This run is <code>' + r.file.replace('runs/', '') + '</code>, computed on Kaggle (' + r.notebook + ', version ' + r.version + ', solver at commit <code>' + r.commit.slice(0, 7) + '</code>) on a ' + IDX.box.join(' × ') + ' grid, ' + h.steps + ' steps in ' + h.wall.toFixed(0) + ' s. ' +
-                (run.sha_ok ? 'Its SHA-256 matched the index.' : '<b style="color:var(--accent)">Its SHA-256 did NOT match the index.</b>') + ' The page interpolates between its ' + h.n + ' stored frames and computes nothing else.';
-            if (r.twin) s += ' Walls separate, so the run carries its exact 1D twin; the two differ by at most ' + (r.twin.sep_check_max).toExponential(1) + ' of the peak.';
-            document.getElementById('src-t').innerHTML = ' ' + s;
+            ds.set('T_twin', r.twin ? r.twin.T : NaN); ds.set('T_exact', r.twin && r.twin.T_exact != null ? r.twin.T_exact : NaN); ds.set('tau', r.tau ? r.tau.tau : NaN);
+            var txt = 'This run is <code>' + r.file + '</code>, computed on Kaggle (' + r.notebook + ', version ' + r.version + ', solver at commit <code>' + r.commit.slice(0, 7) + '</code>) on a ' + h.box.join(' × ') + ' grid, ' + h.steps + ' steps in ' + h.wall.toFixed(0) + ' s. ' +
+                (run.sha_ok ? 'Its SHA-256 matched the index.' : '<b style="color:var(--accent)">Its SHA-256 did NOT match the index.</b>') + ' The page interpolates between its ' + h.n + ' stored frames and computes nothing else. ' + IDX.runs.length + ' runs are stored in all.';
+            if (r.twin) txt += ' Walls separate, so the run carries its exact 1D twin; the two differ by at most ' + r.twin.sep_check_max.toExponential(1) + ' of the peak.';
+            document.getElementById('src-t').innerHTML = ' ' + txt;
         }
         function writeFrameStore() {
-            var h = run.head, fo = frac(), names = regionNames(h.shape), C = run.C;
+            var h = run.head, fo = frac(), names = regionNames(h.spec), C = run.C;
             ds.set('t', tPhys); ds.set('frame', fo.f); ds.set('k0', Math.sqrt(2 * h.E));
             var P = names.map(function (n) { return lin(C[n[0]], tPhys); }), nrm = lin(C.norm, tPhys);
             ds.set('P_a', P[0]); ds.set('P_b', P[1] != null ? P[1] : NaN); ds.set('P_c', P[2] != null ? P[2] : NaN); ds.set('norm', nrm); ds.set('lost', 1 - nrm);
             if (frameMs.length > 20) { var m = frameMs.slice().sort(function (a, b) { return a - b; }); ds.set('frame_ms', m[m.length >> 1]); }
-            var A = ds.alloc('amp'), Ph = ds.alloc('phase'), RW = ds.alloc('rew'), IW = ds.alloc('imw'), o = fo.f * NX * NR;
-            A.set(run.amp.subarray(o, o + NX * NR)); Ph.set(run.phase.subarray(o, o + NX * NR)); RW.set(psiRe); IW.set(psiIm);
-            ds.touch('amp'); ds.touch('phase'); ds.touch('rew'); ds.touch('imw');
             ['r-a', 'r-b', 'r-c'].forEach(function (id, k) { if (P[k] != null) document.getElementById(id).textContent = P[k].toFixed(4); });
             document.getElementById('r-lost').textContent = (1 - nrm).toFixed(4);
-            var r = run.rec, tt = r.T_far ? r.T_far.value.toFixed(3) : '—';
-            document.getElementById('l-t').textContent = h.shape.endsWith('shell') ? 'Lifetime τ inside the shells' : 'Share that got through · trapped lifetime τ';
-            document.getElementById('r-t').textContent = h.shape.endsWith('shell') ? (r.tau ? r.tau.tau.toFixed(1) : '—') : tt + (r.twin ? ' (1D twin ' + r.twin.T.toFixed(3) + ')' : '') + (r.tau && h.shape[0] === 'd' ? ' · τ = ' + r.tau.tau.toFixed(1) : '');
+            var r = run.rec, v = through(r);
+            document.getElementById('l-t').textContent = h.spec.shape === 'shell' ? 'Lifetime τ inside the shells' : 'Share that got through · trapped lifetime τ';
+            document.getElementById('r-t').textContent = h.spec.shape === 'shell' ? (r.tau ? r.tau.tau.toFixed(1) : '—') : (v != null ? v.toFixed(3) : '—') + (r.twin ? ' (1D twin)' : r.T_far ? ' (3D, T_far)' : '') + (r.tau && h.spec.N > 1 ? ' · τ = ' + r.tau.tau.toFixed(1) : '');
         }
 
-        /* ---------- read values: one stored point of the sheet ---------- */
+        /* ---------- read values ---------- */
         function vertexOf(i, jj) { return i * NY + jj; }
         function pointAt(i, jj) {
             var j = Math.abs(jj - (NR - 1)), k = i * NR + j, re = psiRe[k], im = psiIm[k], S = run.peakMax;
-            var v = VIEW === 're' ? re / S * GAIN : (re * re + im * im) / (S * S) * GAIN;
-            var vtx = v3 ? v3.vertex(vertexOf(i, jj)) : null;
+            var v = VIEW === 're' ? re / S * GAIN : (re * re + im * im) / (S * S) * GAIN, vtx = v3 ? v3.vertex(vertexOf(i, jj)) : null;
             return { x: X0 + i * DX, y: Y0 + jj * DX, j: j, k: k, re: re, im: im, v: v, drawn: vtx ? vtx[2] / HS : NaN, vtx: vtx };
         }
         function pixelCheck(ref) {
@@ -556,8 +635,7 @@
             var p = pointAt(ref.i, ref.jj), want = Math.max(-1.25, Math.min(1.25, p.v)), dh = Math.abs(p.drawn - want), hOk = dh < 1e-5;
             v3.render(); var at = v3.project(p.vtx), px = v3.readPixel(at.x, at.y);
             if (px[3] === 0) return { what: 'screen pixel at (x = ' + p.x.toFixed(1) + ', y = ' + p.y.toFixed(1) + ')', drawn: 'nothing (transparent)', expected: 'a filled pixel', ok: false };
-            var hit = v3.pick(at.x, at.y), vs = [];
-            var hidden = !hit || Math.hypot(hit[0] - p.x, hit[1] - p.y) > 0.75;
+            var hit = v3.pick(at.x, at.y), vs = [], hidden = !hit || Math.hypot(hit[0] - p.x, hit[1] - p.y) > 0.75;
             if (!hidden) for (var dx = -2; dx <= 2; dx++) for (var dy = -2; dy <= 2; dy++) { var e = RT3DView.colourV(v3.readPixel(at.x + dx, at.y + dy)); if (isFinite(e)) vs.push(e); }
             vs.sort(function (a, b) { return a - b; }); var med = vs.length ? vs[vs.length >> 1] : NaN, cv = Math.max(-1, Math.min(1, p.v));
             var cOk = hidden || (vs.length && cv >= vs[0] - 0.12 && cv <= vs[vs.length - 1] + 0.12);
@@ -570,34 +648,29 @@
             get ds() { return ds; }, kicker: 'Fig. 15 · data', file: 'fig15-resonant-tunnelling-3d',
             playing: function () { return playing; }, play: function () { playing = true; document.getElementById('play').textContent = 'Pause'; },
             groups: [
-                { title: 'What you set', note: 'the barriers, the packet and the drawing', vars: ['shape', 'size', 'V0', 'E', 'k0', 'view', 'gain'] },
+                { title: 'What you set', note: 'the barriers, the voltage, the packet and the drawing', vars: ['shape', 'N', 'V0', 'D', 'P', 'size', 'bias', 'sx', 'E', 'k0', 'view', 'gain'] },
                 { title: 'The stored run', note: 'read from the Kaggle file and its index entry', vars: ['file', 'notebook', 'sha_ok', 'peak_max', 'T_far', 'T_far_frame', 'T_twin', 'T_exact', 'tau'] },
-                { title: 'This frame', note: 'region probabilities are stored per frame and interpolated linearly in t; the wave in the frame turning at E', vars: ['t', 'frame', 'P_a', 'P_b', 'P_c', 'norm', 'lost', 'frame_ms'] },
-                { title: 'The plane z = 0 (y ≥ 0)', note: 'the stored levels of the frame at or before t, and the interpolated wave the sheet is built from', vars: ['xc', 'yc', 'amp', 'phase', 'rew', 'imw'] }
+                { title: 'This frame', note: 'region probabilities are stored per frame and interpolated linearly in t; the wave in the frame turning at E', vars: ['t', 'frame', 'P_a', 'P_b', 'P_c', 'norm', 'lost', 'frame_ms'] }
             ],
             check: {
                 k0: function () { return { formula: '√(2E)', inputs: [['E', ds.get('E'), '', 3]], value: Math.sqrt(2 * ds.get('E')) }; },
                 lost: function () { return { formula: '1 − P_box', inputs: [['P_box', ds.get('norm'), '', 5]], value: 1 - ds.get('norm') }; },
                 T_far: function () {
-                    var r = run.rec, h = run.head, C = run.C; if (!r.T_far) return null; var f = r.T_far.frame, inr = C.well ? C.well[f] : 0;
+                    var r = run.rec, C = run.C; if (!r.T_far) return null; var f = r.T_far.frame, inr = C.well ? C.well[f] : 0;
                     return { formula: '(P_beyond + P_between / 2) / P_box at frame f*', inputs: [['P_beyond', C.right[f], '', 6], ['P_between', inr, '', 6], ['P_box', C.norm[f], '', 6]], value: (C.right[f] + 0.5 * inr) / C.norm[f] };
-                },
-                rew: function (q) { var i = Math.floor(q / NR), j = q % NR, o = frac().f * NX * NR + q, lv = run.amp[o], pp = run.phase[o], pk = run.head.peaks[frac().f];
-                    return { formula: 'frame f stored: q/255 · peak_f · cos(p/255 · 2π − π)  (the page then interpolates in t)', inputs: [['q', lv, '', 0], ['p', pp, '', 0], ['peak_f', pk, '', 6]], value: frac().s === 0 ? lv / 255 * pk * Math.cos(pp / 255 * 2 * Math.PI - Math.PI) : psiRe[q] }; }
+                }
             },
-            drawn: { rew: function (q) { var i = Math.floor(q / NR), j = q % NR; return pixelCheck({ i: i, jj: j + NR - 1 }); }, amp: function (q) { var i = Math.floor(q / NR), j = q % NR; return pixelCheck({ i: i, jj: j + NR - 1 }); } },
             probe: function (x, y) { if (!run || !v3) return null; var p = v3.pick(x, y); if (!p) return null;
                 var i = Math.round((p[0] - X0) / DX), jj = Math.round((p[1] - Y0) / DX); if (i < 0 || i >= NX || jj < 0 || jj >= NY) return null; return { i: i, jj: jj }; },
-            inspect: function (ref) { var p = pointAt(ref.i, ref.jj), q = ref.i * NR + p.j;
+            inspect: function (ref) { var p = pointAt(ref.i, ref.jj), c = pixelCheck(ref);
                 return { title: 'the wave at x = ' + p.x.toFixed(2) + ' a, y = ' + p.y.toFixed(2) + ' a', at: v3 ? v3.project(p.vtx) : null,
-                    rows: [['x', p.x, 'a', 'xc', ref.i], ['|y|', Math.abs(p.y), 'a', 'yc', p.j], ['Re ψ', p.re, '', 'rew', q], ['Im ψ', p.im, '', 'imw', q], ['|ψ|²', p.re * p.re + p.im * p.im, ''], ['drawn height / 6 a', p.drawn, '']] }; },
-            locate: function (name, idx) { if (!run || !v3 || ['amp', 'phase', 'rew', 'imw'].indexOf(name) < 0) return null; var i = Math.floor(idx / NR), j = idx % NR; return v3.project(pointAt(i, j + NR - 1).vtx); },
+                    rows: [['x', p.x, 'a'], ['|y|', Math.abs(p.y), 'a'], ['Re ψ', p.re, ''], ['Im ψ', p.im, ''], ['|ψ|²', p.re * p.re + p.im * p.im, ''], ['drawn height / 6 a', p.drawn, ''], ['pixel check', c.ok ? 1 : 0, c.ok ? 'passes' : 'fails']] }; },
+            locate: function () { return null; },
             round: { time: 't', label: function () { return 'one run, ' + (run ? run.head.n : 0) + ' frames to t = ' + (run ? run.C.t[run.C.t.length - 1].toFixed(1) : '—'); },
                 length: function () { return run ? run.C.t[run.C.t.length - 1] : 10; }, columns: ['P_a', 'P_b', 'P_c', 'norm'] },
-            about: 'The frames are the 3D runs as Kaggle stored them: on the plane z = 0, half y ≥ 0, |ψ| and arg ψ as 8-bit levels of each frame’s own peak, 200 frames per run. Between two frames the page mixes them in the frame that turns at the packet energy (ψ = e^{−iEτ}[(1−s)ψ_f + s e^{iEΔt}ψ_{f+1}]); the region probabilities and the profile along x are mixed linearly. The sheet draws the stored half-plane and its mirror image y → −y: every barrier and the start packet are symmetric about the flight axis, so ψ(x, −y, 0) = ψ(x, y, 0) exactly. One scale per run (the run’s largest |ψ|, times the height you choose), so the sheet sinks as the packet spreads in 3D. Heights beyond 1.25 of the scale are clipped. The barriers are glass solids at their true place; they do not move. Read values checks the sheet’s height against the store and its colour against the pixels.'
+            about: 'The frames are the 3D runs as Kaggle stored them: on the plane z = 0, half y ≥ 0, |ψ| and arg ψ as 8-bit levels of each frame’s own peak, 200 frames per run. Between two frames the page mixes them in the frame that turns at the packet energy (ψ = e^{−iEτ}[(1−s)ψ_f + s e^{iEΔt}ψ_{f+1}]); the region probabilities and the profile along x are mixed linearly. The sheet draws the stored half-plane and its mirror image y → −y, exact because every barrier and the start packet are symmetric about the flight axis. One scale per run. The barriers are glass solids at their true place; they do not move. The potential drawn in Fig. 15b is the input of the run (its spec), not data. The current–voltage curve from the runs is integrated once, by file_rt3d2.py, and stored in the index.'
         };
-
-        window.__fig15 = { cost: function () { return cost.slice(); }, frames: function () { return frameMs.slice(); } };   /* for the browser test (docs) */
+        window.__fig15 = { cost: function () { return cost.slice(); }, frames: function () { return frameMs.slice(); }, sel: function () { return sel; } };
         buildStore();
         boot();
     })();
