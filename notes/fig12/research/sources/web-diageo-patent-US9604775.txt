@@ -1,0 +1,25 @@
+TITLE: US9604775B2 "Beverage container" (nanostructured surface for nitrogen bubble nucleation in stout cans)
+APPLICANT/ASSIGNEE: Diageo Ireland (with Battelle Memorial Institute); inventors Stephen Geoffrey Price, Amy Heintz, Adeline Lay Kuen Koay
+DATES: priority GB 2012-08-14; filed US 2013-08-14; granted 2017-03-28
+URL: https://patents.google.com/patent/US9604775B2/en  (curl got Google "Sorry" bot page; read in full via Exa web_fetch_exa, 2026-11-13)
+LICENCE: patent document (public)
+STATUS OF NUMBERS: company tech note. The 55 µm and ~100 µm are a TARGET and an ESTIMATE ("further testing and some open literature
+  suggested"), not a stated measurement protocol; head height 20 mm and packing density 0.64 are design assumptions; "approximately 18 mm"
+  is the head obtained with their surface.
+
+--- verbatim ---
+"There is a range of bubble sizes in a stout beer head, however, a target mean bubble size of approximately 55 μm is needed to form a smooth/fine head on a stout beer."
+"To achieve 50 μm bubbles in the head of stout beers, the cavity radius must be less than approximately 0.01 μm for contact angles in the range of 10-170°."
+"Initially, the number of bubbles in the head was calculated by using an estimate of 55 μm for the average bubble diameter. Combining this with the required head volume yielded a target rate of approximately 600 bubbles/mm2·s.
+However, further testing and some open literature suggested that the average diameter may be closer to 100 μm. In which case:
+- Bubble diameter=0.1 mm/Bubble volume=9.05×10−4 mm3
+- Head height=20 mm/Head volume=9.6×104 mm3
+- Packing density=0.64
+- Bubbles in head=6.8×107
+It follows that for 441 mL with a surge time of 30 seconds, bubbles need to nucleate and detach at rate of=5.1×103 bubbles/mL·sec."
+"Calculations suggest that the target nucleation rate for sufficient foam to form can be achieved with a nucleation site density inside the can of approximately 0.003%, with the assumption that the target bubble rate is 5.3×104 bubbles/mL·s; Inner surface area of can is 364 cm2 and volume of Beer=441 mL"
+"using a detachment diameter of 55 μm and level of supersaturation ratio of 2.9"
+"Overall, the engineered surface of the invention creates the spontaneous bubble generation phenomenon required upon opening a container which further results in the appearance of liquid draining down between a large mass of slowly rising N2 gas bubbles, leading to the formation of a stable white head on the beer of approximately 18 mm in depth."
+"bubble growth rates for microstructured surfaces are two orders of magnitude lower than the existing estimate of bubble release rate to achieve the required head and bubble sizes are twice as large as is desired."
+
+READER'S CHECK (inference): head volume 9.6e4 mm3 over 20 mm height implies a head cross-section of 4800 mm2, i.e. a glass diameter of ~78 mm.

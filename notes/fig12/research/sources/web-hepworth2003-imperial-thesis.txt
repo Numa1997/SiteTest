@@ -1,0 +1,22 @@
+TITLE: Characterisation of gas-liquid dispersions for beer analogues (PhD thesis)
+AUTHOR: Neil James Hepworth, Imperial College London, Dept. of Chemical Engineering, 2003 (advisor Dr Julie Varley; sponsor BRi / Dr John Hammond)
+URL: https://spiral.imperial.ac.uk/entities/publication/548dd487-a5cf-4689-8d0a-5274f869a8ee ; PDF https://spiral.imperial.ac.uk/bitstreams/9c9de8bd-27e8-492f-96a5-d86806097ed8/download (51 MB, OCR text layer)
+DATE READ: 2026-11-13 (record via TinyFish fetch; PDF downloaded, pdftotext; searched for bubble-size results, read Ch. 6 results and Ch. 8 conclusions passages)
+LICENCE: "Attribution NoDerivatives 4.0 International Licence (CC BY-ND)" (record page)
+SAMPLE: a SYNTHETIC model beer dispensed through a nozzle with N2/CO2 headspace gas (5-80 % N2), with and without sparkler; "tested using
+  commercial beer". These are bubbles in the settling LIQUID ("bubble haze"), not the head. Not Guinness.
+METHOD: CCD camera image analysis in a thin-section receiving vessel.
+OCR NOTE: the text layer renders µm as "pm" and splits "of" as "o f"; quotes below keep the OCR text.
+
+--- verbatim ---
+"A novel CCD (Charge Coupled Device) camera based image analysis procedure was developed for use with a specifically designed thin-section receiving vessel to determine bubble size distributions and also individual bubble velocities."
+"The median diameter o f the bubbles created (d = 20 - 90 pm) also decreased with increasing flow rate and nitrogen content in the gas headspace as shown in Table 6.2."
+"Examining the data for 10 sec for 3.8 L m in'1 shows that the median bubble diameter has grown to an average 55 pm, substantially smaller than the initial bubble diameter for 0.6 L m in'1."
+Table 6.4 (OCR): "30 sec / 40 sec / 60 sec
+0.6 L min-1  134 jam   -   -
+2.2 L min-1  101pm   119 pm   -
+3.8 L min-1  69 pm   75 pm   83 pm
+Table 6.4 - The median bubble diameter at the point that the haze clears and the equivalent bubble diameters for the other flow rates at that point (if appropriate)."
+"For the case o f 3.8 L m in'1 the experimentally determined average bubble diameter increases from -3 0 pm to - 8 0 pm during the clearing o f the haze. However within the distribution the average bubble diameter had increased to - 5 0 pm after only 10 seconds and for all time points after this the maximum bubble diameter recorded was -1 0 0 pm."
+"Experimental bubble diameters were in the range 25 - 90 pm. The median bubble diameter increased with time, but decreased with increasing beer flow rate and nitrogen content in the gas headspace."
+"The surge time was found to increase with increasing beer flow rate, nitrogen content in the supply gas and with the addition of a sparkler."

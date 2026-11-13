@@ -1,0 +1,17 @@
+TITLE: Why Is Guinness Stout Foam White When the Beer Is Black and What Is Guinness Head Made Of?
+AUTHOR: page byline "Karen Hill" (zippyfacts.com, trivia site; first posted 2010-07-16, page dated March 22, 2022)
+URL: https://zippyfacts.com/why-is-guinness-stout-foam-white-when-the-beer-is-black-and-what-is-guinness-head-made-of/
+DATE READ: 2026-11-13 (Exa web_fetch_exa, full page)
+LICENCE: none stated
+PROVENANCE WARNING: anonymous re-telling; reads like a reprinted reader answer (style of New Scientist "The Last Word"), original author, date,
+  microscope and scale NOT given. A WebSearch for the original New Scientist item found nothing. Treat as a weak, unreferenced hobbyist observation.
+SAMPLE: a poured Guinness (draught or can not stated); HEAD foam placed in a dish.
+METHOD: "low-powered microscope", no scale, no count.
+
+--- verbatim ---
+"In the interest of science a Guinness was poured in a glass until the rising bubbles had formed a creamy head."
+"Some of this was put in a dish and examined it through a low-powered microscope."
+"Unlike bath foam, which has many semi-coalesced bubbles, Guinness foam is made mainly of uniformly sized, spherical bubbles of about 0.1 to 0.2 millimeters in diameter, suspended in the good fluid itself."
+"Near the edge of the drop of foam it was possible to find isolated examples of bubbles, and by viewing objects held behind these it was clear that they were acting as tiny divergent lenses."
+"In the foam there is not so much liquid, most of the space is taken up by air."
+"Needless to say, to ensure reproducibility the experiment was repeated several times."
