@@ -1,5 +1,5 @@
 {
- "about": "Fig. 12 computed in JAX on Kaggle's GPU: the stout, its head of foam and the cart, one file per ride. Run 6 (notebook version 6): the rides with the speed held only, and the free swings; run 7 (version 7): the same roads with the site's controllers in the loop. Each file names its version and code commit.",
+ "about": "Fig. 12 computed in JAX on Kaggle's GPU: the stout, its head of foam and the cart, one file per ride. Run 6 (notebook version 6): the rides with the speed held only, and the free swings; run 7 (version 7): the same roads with the site's controllers in the loop. Each file names its version and code commit. Only the columns more than one cell inside the glass are stored (pack_ride.py).",
  "generated": "2026-11-13",
  "kaggle": {
   "notebook": "numakoudsie/guinness-on-a-cart-stout-in-jax",
@@ -12,8 +12,8 @@
    "label": "One 25 mm bump, 1.0 m/s \u00b7 speed held only",
    "kind": "ride",
    "default": false,
-   "bytes": 317315,
-   "sha256": "ff87d27d2ec160f6b9aca623bd2ddf341772210287abc753d01115e0dfae5027",
+   "bytes": 297935,
+   "sha256": "3fb89828cfe37cc7cab7fd000df16a774180af502922c880f47168b20f1f6d7f",
    "frames": 241,
    "seconds": 8.0,
    "road": "one 25 mm bump",
@@ -30,10 +30,11 @@
     "particles": 1001952,
     "spilled_g": 0.0,
     "head_spilled_ml": 0.0,
-    "lean_max_mm": 6.8832783699035645,
     "control": null,
     "i_max_stored_A": 1.996,
-    "tilt_max_mm": 7.3
+    "lean_max_mm_run": 6.8832783699035645,
+    "lean_max_mm": 10.64,
+    "tilt_max_mm": 9.04
    }
   },
   {
@@ -41,8 +42,8 @@
    "label": "One 25 mm bump, 1.0 m/s \u00b7 joint control",
    "kind": "ride",
    "default": false,
-   "bytes": 304083,
-   "sha256": "e139803ca0d9e593581463d5fa9f2ea8ec6cef1168ebd915eb94535c8650ce52",
+   "bytes": 288011,
+   "sha256": "b77da1b0dbd60bd0acf7dd4ea76aa6aee0a18dce7beb8408b2d67b89dee7f843",
    "frames": 241,
    "seconds": 8.0,
    "road": "one 25 mm bump",
@@ -59,7 +60,6 @@
     "particles": 1001952,
     "spilled_g": 0.0,
     "head_spilled_ml": 0.0,
-    "lean_max_mm": 3.6670267581939697,
     "control": {
      "i_max_A": 1.6339179245686735,
      "icmd_max_A": 1.6473593314255637,
@@ -82,7 +82,9 @@
      }
     },
     "i_max_stored_A": 1.634,
-    "tilt_max_mm": 0.98
+    "lean_max_mm_run": 3.6670267581939697,
+    "lean_max_mm": 0.89,
+    "tilt_max_mm": 1.05
    }
   },
   {
@@ -90,8 +92,8 @@
    "label": "Five 20 mm bumps in step with the swing, 1.0 m/s \u00b7 speed held only",
    "kind": "ride",
    "default": false,
-   "bytes": 426178,
-   "sha256": "ea4136a92bbb2983c98b9b6c4295ff89fc8ece104168f259f0812690515dfc0f",
+   "bytes": 398550,
+   "sha256": "44c0a58a5d6012425a5dd08930ab19c4606244b35e9f508da1174e87aa2b6390",
    "frames": 241,
    "seconds": 8.0,
    "road": "five 20 mm bumps in step with the swing",
@@ -108,10 +110,11 @@
     "particles": 1001952,
     "spilled_g": 0.0,
     "head_spilled_ml": 0.0,
-    "lean_max_mm": 9.79931640625,
     "control": null,
     "i_max_stored_A": 2.393,
-    "tilt_max_mm": 11.37
+    "lean_max_mm_run": 9.79931640625,
+    "lean_max_mm": 17.34,
+    "tilt_max_mm": 15.08
    }
   },
   {
@@ -119,8 +122,8 @@
    "label": "Five 20 mm bumps in step with the swing, 1.0 m/s \u00b7 joint control",
    "kind": "ride",
    "default": true,
-   "bytes": 326692,
-   "sha256": "76cf5b4e0872bf1e0885f40e69c6ccfce7a5abacc90de144a01ffe2ce8e8c216",
+   "bytes": 307760,
+   "sha256": "e2ae9f6688f76bea47bdf7e94b2a00ca51e223d1254c533c3745af68accb36f6",
    "frames": 241,
    "seconds": 8.0,
    "road": "five 20 mm bumps in step with the swing",
@@ -137,7 +140,6 @@
     "particles": 1001952,
     "spilled_g": 0.0,
     "head_spilled_ml": 0.0,
-    "lean_max_mm": 1.1852234601974487,
     "control": {
      "i_max_A": 1.698783787528571,
      "icmd_max_A": 1.6963753475676218,
@@ -160,7 +162,9 @@
      }
     },
     "i_max_stored_A": 1.699,
-    "tilt_max_mm": 1.05
+    "lean_max_mm_run": 1.1852234601974487,
+    "lean_max_mm": 1.05,
+    "tilt_max_mm": 1.02
    }
   },
   {
@@ -168,8 +172,8 @@
    "label": "One sharp 30 mm bump, 1.5 m/s \u00b7 speed held only",
    "kind": "ride",
    "default": false,
-   "bytes": 280528,
-   "sha256": "ddbf39760b8eff47f0970e05c146898da2de77613328fcbdcdfc33f130903e5e",
+   "bytes": 255916,
+   "sha256": "3704e8fb4da70b26a4c8eeda0cc7f9d4a3f5ba0ce5ac1647735963dd7c4da4f9",
    "frames": 121,
    "seconds": 4.0,
    "road": "one sharp 30 mm bump",
@@ -186,10 +190,11 @@
     "particles": 1001952,
     "spilled_g": 0.01,
     "head_spilled_ml": 4.08,
-    "lean_max_mm": 19.713573455810547,
     "control": null,
     "i_max_stored_A": 2.984,
-    "tilt_max_mm": 15.94
+    "lean_max_mm_run": 19.713573455810547,
+    "lean_max_mm": 34.08,
+    "tilt_max_mm": 27.64
    }
   },
   {
@@ -197,8 +202,8 @@
    "label": "One sharp 30 mm bump, 1.5 m/s \u00b7 joint control",
    "kind": "ride",
    "default": false,
-   "bytes": 264753,
-   "sha256": "ac308a5b61b4b2d8e9d28bff32495b69e94fdd21086d448c5dae7b390c500336",
+   "bytes": 242041,
+   "sha256": "23f75bb8e89e4522dd193083b68e3b1546df1bf0d19b98dd5593f9146bba324b",
    "frames": 121,
    "seconds": 4.0,
    "road": "one sharp 30 mm bump",
@@ -215,7 +220,6 @@
     "particles": 1001952,
     "spilled_g": 0.0,
     "head_spilled_ml": 2.74,
-    "lean_max_mm": 17.389066696166992,
     "control": {
      "i_max_A": 2.929698494261964,
      "icmd_max_A": 36.80362485307846,
@@ -238,7 +242,9 @@
      }
     },
     "i_max_stored_A": 2.93,
-    "tilt_max_mm": 15.66
+    "lean_max_mm_run": 17.389066696166992,
+    "lean_max_mm": 29.96,
+    "tilt_max_mm": 28.23
    }
   },
   {
@@ -246,8 +252,8 @@
    "label": "One sharp 30 mm bump, 1.5 m/s \u00b7 road preview",
    "kind": "ride",
    "default": false,
-   "bytes": 279845,
-   "sha256": "987fee05e21ff7bc5c2818deaf7d7cd6fd1c46908c65775e85911ff4fd419194",
+   "bytes": 255341,
+   "sha256": "0aa80449c57b070b97af83a6b71ede20de36bae197fe9eb005c9c1c49dc1fcc6",
    "frames": 121,
    "seconds": 4.0,
    "road": "one sharp 30 mm bump",
@@ -264,7 +270,6 @@
     "particles": 1001952,
     "spilled_g": 0.0,
     "head_spilled_ml": 3.66,
-    "lean_max_mm": 15.743523597717285,
     "control": {
      "i_max_A": 2.950426538863916,
      "icmd_max_A": 8.730020816134754,
@@ -287,7 +292,9 @@
      }
     },
     "i_max_stored_A": 2.95,
-    "tilt_max_mm": 15.32
+    "lean_max_mm_run": 15.743523597717285,
+    "lean_max_mm": 25.06,
+    "tilt_max_mm": 26.72
    }
   },
   {
@@ -295,8 +302,8 @@
    "label": "One sharp 30 mm bump, 1.5 m/s \u00b7 slosh LQR",
    "kind": "ride",
    "default": false,
-   "bytes": 268819,
-   "sha256": "e3cb8b90c04b97918e02f121899f25852bbe1a452f59840da5f69bafd7b0b9b3",
+   "bytes": 246971,
+   "sha256": "3b3361ce71941a1e04c142f76b61c9a7b10a39f0eed0549c4fd101fda33e75f4",
    "frames": 121,
    "seconds": 4.0,
    "road": "one sharp 30 mm bump",
@@ -313,7 +320,6 @@
     "particles": 1001952,
     "spilled_g": 0.0,
     "head_spilled_ml": 2.79,
-    "lean_max_mm": 16.495019912719727,
     "control": {
      "i_max_A": 2.971553485685984,
      "icmd_max_A": 41.370826649755784,
@@ -336,7 +342,9 @@
      }
     },
     "i_max_stored_A": 2.972,
-    "tilt_max_mm": 15.62
+    "lean_max_mm_run": 16.495019912719727,
+    "lean_max_mm": 29.06,
+    "tilt_max_mm": 24.45
    }
   },
   {
@@ -344,8 +352,8 @@
    "label": "Standing still, one push",
    "kind": "free",
    "default": false,
-   "bytes": 190536,
-   "sha256": "e245d8705ed368e3130cc669ddcb6fba8b3d8924321d57d8320b4ceaee80cf58",
+   "bytes": 178360,
+   "sha256": "bd933a699eb71947aadb7e27f085b68630677248504145f1ff239259dcba7c0d",
    "frames": 151,
    "seconds": 5.0,
    "road": null,
@@ -362,10 +370,11 @@
     "particles": 1001952,
     "spilled_g": 0.0,
     "head_spilled_ml": 0.0,
-    "lean_max_mm": null,
     "control": null,
     "i_max_stored_A": null,
-    "tilt_max_mm": 6.14
+    "lean_max_mm_run": null,
+    "lean_max_mm": 8.28,
+    "tilt_max_mm": 7.48
    }
   },
   {
@@ -373,8 +382,8 @@
    "label": "Standing still, one push, no head",
    "kind": "free",
    "default": false,
-   "bytes": 326715,
-   "sha256": "b2721dc8427aee1aaa7719226927aee5417f5d651d65fef6302d7e50f564c7d9",
+   "bytes": 303495,
+   "sha256": "9f7f245313106cf5e1121245fa8386c304a3a3893f05d193a7b98e49a15c8f81",
    "frames": 151,
    "seconds": 5.0,
    "road": null,
@@ -391,10 +400,11 @@
     "particles": 1001952,
     "spilled_g": 0.0,
     "head_spilled_ml": 0.0,
-    "lean_max_mm": null,
     "control": null,
     "i_max_stored_A": null,
-    "tilt_max_mm": 8.31
+    "lean_max_mm_run": null,
+    "lean_max_mm": 10.72,
+    "tilt_max_mm": 10.7
    }
   }
  ]

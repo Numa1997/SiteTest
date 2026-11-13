@@ -19,6 +19,34 @@ QH, QHF, QD, QV = 2e-5, 1e-4, 1e-4, 1e-10          # m, m, m, m^3 (0.1 mm^3)
 pk = lambda a: base64.b64encode(zlib.compress(np.ascontiguousarray(a).tobytes(), 9)).decode()
 
 H = Z["H"].astype(np.float64); nf, n, _ = H.shape
+# Only the columns the run's rest guard trusts are stored for the page: those whose centre lies more than one cell inside the
+# glass at the fill (r < R_fill - dx). The columns at the glass are cut by it; some read their surface far too low (run 7's
+# controlled 25 mm bump: one column at x = 39.0 mm read 6.65 mm low at 5.83 s, and the two-point lean took it up). Leaving
+# them out, the page draws the surface from the trusted columns out to the glass, and every reading below uses the same set.
+DXc, X0c, RF = float(Z["dx"]), float(Z["x0"]), float(Z["Rfill"])
+cc_ = X0c + (np.arange(n) + 0.5) * DXc; RC = np.hypot(*np.meshgrid(cc_, cc_, indexing="ij"))
+H = np.where(np.isfinite(H) & (RC < RF - DXc)[None], H, np.nan)
+
+
+def ring(Hs, r, th):
+    """The stored surface at radius r and angle th in every frame, read as the page reads it (StoutRide.at and atInward of
+    stout-view2.js): bilinear over the four columns around the point, leaving out columns without a value, stepping inward
+    by half a cell until one has a value."""
+    out = np.full(Hs.shape[0], np.nan); q = r
+    while q > 0 and np.isnan(out).any():
+        fx = (q * np.cos(th) - X0c) / DXc - 0.5; fy = (q * np.sin(th) - X0c) / DXc - 0.5
+        i, j = int(np.floor(fx)), int(np.floor(fy)); tx, ty = fx - i, fy - j; num = np.zeros(Hs.shape[0]); den = np.zeros(Hs.shape[0])
+        for a, b_, w in ((0, 0, (1 - tx) * (1 - ty)), (1, 0, tx * (1 - ty)), (0, 1, (1 - tx) * ty), (1, 1, tx * ty)):
+            ii, jj = i + a, j + b_
+            if 0 <= ii < n and 0 <= jj < n:
+                v = Hs[:, ii, jj]; ok = np.isfinite(v); num += np.where(ok, w * np.nan_to_num(v), 0.0); den += np.where(ok, w, 0.0)
+        val = np.where(den > 1e-6, num / np.maximum(den, 1e-12), np.nan); out = np.where(np.isnan(out), val, out); q -= 0.5 * DXc
+    return out
+
+
+R16 = RF - 0.5 * DXc; TH = 2 * np.pi * np.arange(64) / 64
+RING = np.stack([ring(H, R16, th) for th in TH], 1)                       # [frames][64], the outer ring as the page reads it
+LEAN = (RING[:, 0] - RING[:, 32]) * 1e3; TILT = 2 * (2 / 64) * (RING * np.cos(TH)[None]).sum(1) * 1e3
 Hq = np.where(np.isfinite(H), np.clip(np.round(H / QH), -32767, 32767), -32768).astype(np.int16)
 Hd = Hq.copy(); Hd[1:] = (Hq[1:].astype(np.int32) - Hq[:-1].astype(np.int32)).astype(np.int16)      # wraps modulo 2^16, undone by a running sum
 hf = np.clip(np.round(Z["hf"].astype(np.float64) / QHF), 0, 255).astype(np.uint8)
@@ -65,11 +93,12 @@ label = (f"{task['road'][0].upper()}{task['road'][1:]}, {task['v0']:.1f} m/s · 
 idx["files"] = [f for f in idx["files"] if f["path"] != name + ".json"] + [dict(
     path=name + ".json", label=label, kind=task["kind"], default=(name == "ride_resonant_joint"), bytes=len(b), sha256=sha, frames=int(nf), seconds=round((nf - 1) / 30, 3),
     road=task.get("road"), v0=task.get("v0"), ctrl=task.get("ctrl", "speed") if task["kind"] == "ride" else None, kaggle_version=int(version), commit=commit,
-    measured=dict({k: task.get(k) for k in ("steps", "ms_per_step", "its_per_step", "run_s", "cells", "particles", "spilled_g", "head_spilled_ml", "lean_max_mm", "control")},
+    measured=dict({k: task.get(k) for k in ("steps", "ms_per_step", "its_per_step", "run_s", "cells", "particles", "spilled_g", "head_spilled_ml", "control")},
                   i_max_stored_A=(round(float(np.abs(Z["i"]).max()), 3) if "i" in Z.files else None),
-                  # the tilt: twice the cos(theta) part of the stored surface on the outermost ring, 2 (2/64) sum eta cos theta, the
-                  # first mode's front-minus-back without what single columns at the wall add to the two-point lean
-                  tilt_max_mm=round(float(2 * np.abs((2 / Z["polar"].shape[2]) * (Z["polar"][:, -1] * np.cos(2 * np.pi * np.arange(Z["polar"].shape[2]) / Z["polar"].shape[2])).sum(1)).max() * 1e3), 2)))]
+                  # on the outer ring (R_fill - dx/2) from the trusted columns, as the page reads them: the lean (front wall minus back)
+                  # and the tilt (twice the cos(theta) part, 2 (2/64) sum eta cos theta). lean_max_mm_run: the run's own lean, which
+                  # included the columns at the glass (run_b.py)
+                  lean_max_mm_run=task.get("lean_max_mm"), lean_max_mm=round(float(np.nanmax(np.abs(LEAN))), 2), tilt_max_mm=round(float(np.nanmax(np.abs(TILT))), 2)))]
 idx["files"].sort(key=lambda f: (f["kind"] != "ride", f["path"]))
 json.dump(idx, open(idx_path, "w"), indent=1)
 print(dst, len(b), sha)

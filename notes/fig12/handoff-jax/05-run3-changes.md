@@ -116,9 +116,17 @@ Version 7, commit 87e3720, 1360 s on the T4. Rest guard passed (0.54 mm, rms 0.1
 
 | Road | speed held only (run 6) | controlled (run 7) |
 |---|---|---|
-| five 20 mm bumps, 1.0 m/s | tilt 11.4, lean 9.8 mm | joint: tilt 1.05, lean 1.2 mm; current up to 1.70 A, active force up to 7.1 N |
-| one 25 mm bump, 1.0 m/s | tilt 7.3, lean 6.9 mm | joint: tilt 0.98, lean 3.7 mm (one wall column, x = 39.0 mm, 6.65 mm low at 5.83 s); 1.63 A, 7.9 N |
-| kerb 30 mm, 1.5 m/s | 19.7 mm, 4.08 mL head, 0.008 g stout | joint 17.4 mm, 2.74 mL, 0 g; slosh 16.5 mm, 2.79 mL, 0 g; preview 15.7 mm, 3.66 mL, 0 g |
+| five 20 mm bumps, 1.0 m/s | tilt 15.1, lean 17.3 mm | joint: tilt 1.02, lean 1.05 mm; current up to 1.70 A, active force up to 7.1 N |
+| one 25 mm bump, 1.0 m/s | tilt 9.0, lean 10.6 mm | joint: tilt 1.05, lean 0.89 mm; 1.63 A, 7.9 N |
+| kerb 30 mm, 1.5 m/s | tilt 27.6, lean 34.1 mm, 4.08 mL head, 0.008 g stout | joint 28.2 / 30.0 mm, 2.74 mL, 0 g; slosh 24.4 / 29.1 mm, 2.79 mL, 0 g; preview 26.7 / 25.1 mm, 3.66 mL, 0 g |
 
 At the kerb the commands reach 37-41 A (slosh, joint) and 8.7 A (preview) against the 3 A limit, for 5-6 stored pictures: the
 kerb's push (28.8 m/s^2) is beyond what 15 N of drive can answer on 2.4 kg.
+
+Readings corrected the same evening (no GPU): tilt and lean are read by `pack_ride.py` from the columns more than one cell inside
+the glass, as the page draws them. The runs' own `lean_max_mm` came from `Stout.polar`, which fills every column without a value
+with the surface's mean height before sampling the ring, pulling the wall toward level (run 6: 9.8 / 19.7 / 6.9 mm against
+17.3 / 34.1 / 10.6 mm); and on run 7's controlled 25 mm bump one column cut by the glass (x = 39.0 mm, 6.65 mm low at 5.83 s)
+made the run's lean 3.7 mm. Check: ring 13, well inside, gives the five-bump swing as 14.55 mm, 15.3 mm at the wall by the
+mode's shape (0.951), against 15.1 mm read now. Next run: `polar` should leave out columns without a value (renormalised
+weights, as the page), and `observe` should store only trusted columns.

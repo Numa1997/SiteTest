@@ -471,11 +471,15 @@ console errors, no sideways scroll; the kerb ride sought to 0.867 s draws pictur
 Pint at rest after 2 s: surface within 0.54 mm (rms 0.125 mm) over the 1977 inner columns; books 24.5 µJ lost, 0.33 µJ kinetic,
 8.4 µJ dissipated. Free swing without the head (model `wall`): 3.331 Hz (−2.6 %), ζ = 0.0160 against 0.0055 from the glass and
 viscosity. With the head: rings at 2.899 Hz, decays in 0.104 s, natural frequency 3.278 Hz, ζ = 0.47. Rides: five bumps in step
-lean 9.8 mm, no spill; kerb lean 19.7 mm, 4.08 mL of head from 0.67 s and 0.008 g of stout from 1.00 s; one 25 mm bump lean
-6.9 mm, no spill. Files: `ride_resonant.json` (default), `ride_sharp30.json`, `ride_bump25.json`, `free_full_1.5.json`,
+tilt 15.1 mm, lean 17.3 mm, no spill; kerb tilt 27.6 mm, lean 34.1 mm, 4.08 mL of head from 0.67 s and 0.008 g of stout from
+1.00 s; one 25 mm bump tilt 9.0 mm, lean 10.6 mm, no spill (tilt and lean read from the trusted columns, see below; the run's
+own `lean_max_mm`, 9.8 / 19.7 / 6.9 mm, came from `Stout.polar`, which gives every column without a value the surface's mean
+height before sampling and so pulled the wall toward level). Files: `ride_resonant.json` (default), `ride_sharp30.json`, `ride_bump25.json`, `free_full_1.5.json`,
 `free_wall_1.5.json` (3.3 MB in all). Runs 3 to 5 and why they were not stored: `notes/fig12/handoff-jax/05-run3-changes.md`.
 
-**What one stored frame holds** (`pack_ride.py`): the stout's surface on the solver's 57 × 57 columns (int16, steps of 0.02 mm,
+**What one stored frame holds** (`pack_ride.py`): the stout's surface on the solver's 57 × 57 columns, only those whose centre
+lies more than one cell inside the glass at the fill (the columns the rest guard trusts; a column cut by the glass read 6.65 mm
+low late in run 7's controlled 25 mm bump), (int16, steps of 0.02 mm,
 differences from the previous frame), the head's thickness per column (uint8, 0.1 mm), the drops (int16, 0.1 mm), the lumps of
 head (position and volume, 0.1 mm³), and per frame the cart's x, v, body and wheel heights, current, the stout's push Fx, Fz, the
 stout spilled (g) and the head spilled (mL). `StoutView2` draws the surface on 14 rings × 96 angles, bilinear between the four
@@ -493,16 +497,18 @@ is run 6's measured swing with the head (3.278 Hz, ζ 0.467, β 1.541); gains K 
 Ks = (−501.22, 11.92, −6.34, 630.00) for the 454.4 g of stout and head the rides start with (the port check's 454.5 g gives
 630.06 for the last). The port was checked against the JS cart before the GPU
 (`tools/fig12/kaggle/portcheck/`, output `notes/fig12/handoff-jax/portcheck.txt`): speed, preview, skyhook to 1e-13; slosh and
-joint to 3e-8 A. Results against run 6 (speed held only), tilt (twice the cos θ part of the outer ring) and two-point lean:
-five bumps 11.4 / 9.8 → 1.05 / 1.2 mm (joint); one 25 mm bump 7.3 / 6.9 → 0.98 / 3.7 mm (joint; the lean's 3.7 mm is one
-column at the front wall, x = 39.0 mm, reading 6.65 mm low at 5.83 s); kerb 15.9 / 19.7 mm, 4.08 mL of head, 0.008 g of stout
-→ joint 15.7 / 17.4 mm, 2.74 mL, 0; slosh 15.6 / 16.5 mm, 2.79 mL, 0; preview 15.3 / 15.7 mm, 3.66 mL, 0. At the kerb every
+joint to 3e-8 A. Results against run 6 (speed held only), tilt (twice the cos θ part of the outer ring) / lean (front wall
+minus back), both read by `pack_ride.py` from the trusted columns as the page draws them (StoutRide.at and atInward in Python):
+five bumps 15.1 / 17.3 → 1.02 / 1.05 mm (joint); one 25 mm bump 9.0 / 10.6 → 1.05 / 0.89 mm (joint); kerb 27.6 / 34.1 mm,
+4.08 mL of head, 0.008 g of stout → joint 28.2 / 30.0 mm, 2.74 mL, 0; slosh 24.4 / 29.1 mm, 2.79 mL, 0; preview 26.7 / 25.1 mm,
+3.66 mL, 0. At the kerb every
 controller's command passes the 3 A limit for 5–6 stored pictures. All checks passed. Gains stored by run 7 (full glass,
 454.4 g): K = (70.781, −1206.701, −38.591, −150.000), Ks = (−501.216, 11.923, −6.343, 630.004).
 The page lists all ten files (run 6's five, run 7's five; each index entry names its notebook version and commit), shows the
 motor current and the active force under Readings, and a table "With and without control" built from the numbers stored in
-`index-jax.json` (largest tilt, computed by `pack_ride.py` from the stored outer ring; largest lean, head, stout, the largest
-stored current); a row plays its ride. The default ride is the five
+`index-jax.json` (largest tilt and lean, read by `pack_ride.py` from the trusted columns; head, stout, the largest stored
+current; `lean_max_mm_run` keeps the run's own lean); a row plays its ride. `public/data/fig12/generations.json` lists the JAX
+generation (runs 6 and 7) as the one the page plays. The default ride is the five
 bumps with joint control.
 
 **The lecture note (rewritten 13 November 2026 for the JAX solver; lines 118–782 of the page).** Written to `notes/STANDARD.md`

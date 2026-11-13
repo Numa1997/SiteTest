@@ -2,6 +2,12 @@
  "about": "Generations of the Fig. 12 rides computed on Kaggle, newest last. The page plays the newest; older ones are kept for the record.",
  "generations": [
   {"date": "2026-11-12", "solver": "v1", "note": "over-damped (damping ratio 0.10 to 0.14 after the last bump): glass faces held at zero velocity, a no-slip wall one cell thick; kept for the record, with the free-swing tests of solver v2"},
-  {"date": "2026-11-13", "solver": "v2", "note": "ghost-fluid surface, free-slip glass faces, the Fig. 12 note's wall and foam friction; played by the page"}
+  {"date": "2026-11-13", "solver": "v2", "files": "2026-11-13/index.json, rides.json", "note": "Taichi: ghost-fluid surface, free-slip glass faces, the Fig. 12 note's wall and foam friction; played by the page until 13 November 2026, evening; kept for the record"},
+  {"date": "2026-11-13", "solver": "jax", "files": "2026-11-13/index-jax.json and the files it lists", "notebook": "numakoudsie/guinness-on-a-cart-stout-in-jax",
+   "runs": [
+    {"run": 6, "version": 6, "commit": "4c105275d3efe381335a3cb6cc23efbf0b13a9f6", "what": "the three rides with the speed held only, and the free swings with and without the head"},
+    {"run": 7, "version": 7, "commit": "87e37209199e74d6039af224a5a739f17b3e4fbc", "what": "the same roads with the site's controllers in the loop: joint control on all three, slosh LQR and road preview on the kerb"}
+   ],
+   "note": "JAX (tools/fig12/kaggle/stout_jax.py): APIC particles on a 1.5 mm grid, the head of foam as a sheet with its weight, yield stress and wall friction, the cart and its controllers coupled both ways; played by the page"}
  ]
 }
