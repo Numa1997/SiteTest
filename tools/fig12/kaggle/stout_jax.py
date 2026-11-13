@@ -32,6 +32,8 @@ F32, F64, I32 = jnp.float32, jnp.float64, jnp.int32
 
 NU_STOUT = 2.06e-3 / 1007.0   # m^2/s: Guinness at 6 C, mu = 2.06e-3 Pa s, rho = 1007 kg/m^3 (Benilov, Cummins & Lee, arXiv 1205.5233, sec. II)
 MU_STOUT = 2.06e-3
+BODY_TOP = -0.014              # m, the top of the cart's body below the glass's inner floor (the glass's foot is 14 mm thick)
+BODY_HALF = (0.11, 0.06)       # m, half the body's length and width (as drawn: 220 mm by 120 mm)
 OMEGA = 2 * math.pi * 3.42     # rad/s, the first sloshing mode: sets the Stokes layer, sqrt(2 nu / omega) = 0.44 mm
 MODELS = {
     # no friction and no head: what the numerical method alone loses (used to measure numerical damping)
@@ -190,7 +192,7 @@ def cut_lo(f, ax):     # the face below each cell (index i), cell-shaped
 
 # ====================================================================== the solver
 class Stout:
-    def __init__(self, G, model="full", ppc=2, seed=1, rho=1007.0, K_frac=0.35, M_drops=4096, tol=1e-5, maxit=600):
+    def __init__(self, G, model="full", ppc=2, seed=1, rho=1007.0, K_frac=0.62, M_drops=16384, tol=1e-5, maxit=600):
         self.G = G; self.rho = rho; self.ppc = ppc
         M = MODELS[model]; self.model = model
         self.nu = M["nu"]; self.gs = math.sqrt(M["nu"] * OMEGA / 2) if M["wall"] else 0.0
@@ -229,7 +231,7 @@ class Stout:
         hf0 = jnp.where(self.rc < G.Rfill, HEAD0 if self.head else 0.0, 0.0).astype(F32)
         z64 = jnp.zeros((), F64)
         return dict(xp=jnp.asarray(self.P0), vp=jnp.zeros((N, 3), F32), C=jnp.zeros((N, 3, 3), F32),
-                    act=jnp.ones(N, bool), fly=jnp.zeros(N, bool), landed=jnp.zeros(N, bool),
+                    act=jnp.ones(N, bool), fly=jnp.zeros(N, bool), landed=jnp.zeros(N, bool), stuck=jnp.zeros(N, bool),
                     p=jnp.zeros(self.dims, F32), ewall=z64, efoam=z64, eskin=z64,
                     hf=hf0, foam_spill=z64, foam0=jnp.sum(hf0.astype(F64)) * self.dx ** 2,
                     bx=jnp.full((self.MF, 3), jnp.nan, F32), bv=jnp.zeros((self.MF, 3), F32), bvol=jnp.zeros(self.MF, F32),
@@ -353,14 +355,10 @@ class Stout:
         - the glass: the Stokes-layer stress rho sqrt(nu omega/2) u on the glass's area in each cut cell;
         - the surface that cannot stretch (protein skin, or the head held still by the glass): the same stress on the horizontal
           velocity of the faces of the top liquid cells, over one cell's area per cell;
-        - the head's edge sliding up and down the glass: the head's wall stress (head_wall_stress) on the vertical velocity of the
-          liquid in the top two cells next to the glass, over the head's effective height, clamped so that it can stop the motion
-          but never reverse it.
+        - the head of foam (head_sheet): a sheet lying on the stout that resists being sheared and rubs on the glass.
         Returns the velocities and the energy each one took (J)."""
         dx = self.dx; dV = self.rho * dx ** 3; z = jnp.zeros((), F64); ew, es, ef = z, z, z; out = []
         top = liq & ~sh(liq, 1, 2, False)                                    # liquid cells with air above
-        band = liq & (self.ac > 0) & (ph >= -self.Hb) & (hf[:, :, None] > 0)  # where the head's edge meets the glass
-        aeff = (self.heff(hf) / self.Hb)[:, :, None]                         # the head's sliding height packed into the band
         for comp in range(3):
             u0 = vel[comp]; ok = (self.th[comp] > 0) & (mass[comp] > 1e-6); u = u0
             if self.gs > 0:                                                   # glass
@@ -370,28 +368,66 @@ class Stout:
                 u1 = u; tf = lo(top, comp, False) | hi(top, comp, False)
                 u = jnp.where(ok & tf, u * jnp.exp(-self.gs / dx * dt), u)
                 es = es + 0.5 * dV * jnp.sum(jnp.where(ok, u1 * u1 - u * u, 0.0).astype(F64))
-            if self.head and comp == 2:                                       # the head's edge on the glass
-                u1 = u; bf = lo(band, 2, False) | hi(band, 2, False)
-                a3 = 0.5 * (lo(aeff * jnp.ones(self.dims, F32), 2, 0.0) + hi(aeff * jnp.ones(self.dims, F32), 2, 0.0))
-                dv = dt * head_wall_stress(u) * self.af[2] * a3 / self.rho
-                u = jnp.where(ok & bf, jnp.sign(u) * jnp.maximum(jnp.abs(u) - dv, 0.0), u)
+            if self.head and comp == 2:                                       # the head: a sheet that resists shear
+                u1 = u; u = self.head_sheet(u, ok, top, hf, dt)
                 ef = ef + 0.5 * dV * jnp.sum(jnp.where(ok, u1 * u1 - u * u, 0.0).astype(F64))
             out.append(u.astype(F32))
         return out, ew, es, ef
 
-    def surface(self, ph, liq):
-        """The free surface of the main body of stout, as a height on the grid's columns: in each column, the first air cell
-        above liquid that rests on the bottom, and the zero of the level set between it and the liquid cell below it."""
+    def head_sheet(self, w, ok, top, hf, dt):
+        """The head as a sheet in vertical shear. The head rides on the stout, so its vertical velocity in each column is the
+        stout's there, w_s(x, y). Where neighbouring columns move at different speeds the head between them is sheared, and it
+        resists with the stress of a wet foam: its yield stress plus its viscous stress (Herschel-Bulkley; Tcholakova et al. 2008,
+        eq. 54, films term), tau = (tau_y + tau_v(g)) with g = |grad w_s| the shear rate. Over the head's thickness h_f that is a
+        force per unit area of surface f = div(h_f tau grad w_s / g); at the glass the head's edge rubs with head_wall_stress
+        over the height heff. The force acts on the top layer of the stout (two cells, mass rho 2 dx per area), implicitly:
+            rho 2dx (w' - w)/dt = div(h_f eta grad w') - kappa w',  eta = tau/g (g no smaller than 0.05 1/s: below it the head
+        is locked), kappa = wall stress / |w| x wall area per column area. Solved by conjugate gradients on the columns; the
+        change w' - w goes onto the vertical faces of the top cells; the pressure projection then passes it to the stout below."""
         dx = self.dx
-        air = self.cavc & ~liq
-        seen = lax.cummax(liq.astype(I32), axis=2) > 0
-        cand = air & sh(seen, -1, 2, False)
+        wc = 0.5 * (cut_lo(w, 2) + cut_hi(w, 2)); okc = cut_lo(ok, 2) | cut_hi(ok, 2)
+        t = top & self.cavc & okc
+        cntc = jnp.sum(t, 2); has = (cntc > 0) & (hf > 0)
+        ws = jnp.where(has, jnp.sum(jnp.where(t, wc, 0.0), 2) / jnp.maximum(cntc, 1), 0.0)
+        acs = jnp.sum(jnp.where(t, self.ac, 0.0), 2) / jnp.maximum(cntc, 1)                 # wall area per volume at the surface cell, 1/m
+        m = self.rho * self.Hb
+        # shear rate on the faces between columns, from the velocity now
+        def face(a, ax): return 0.5 * (a + sh(a, 1, ax, 0.0))
+        gx_ = (sh(ws, 1, 0, 0.0) - ws) / dx; gy_ = (sh(ws, 1, 1, 0.0) - ws) / dx
+        gyx = face(0.5 * (sh(ws, 1, 1, 0.0) - sh(ws, -1, 1, 0.0)) / dx, 0); gxy = face(0.5 * (sh(ws, 1, 0, 0.0) - sh(ws, -1, 0, 0.0)) / dx, 1)
+        def eta(g):
+            g = jnp.maximum(g, 0.05); Ca = MU_STOUT * g * RBUB / GAMMA
+            return (TAU_Y + GAMMA / RBUB * 0.7 * Ca ** 0.47 * GAS ** (5.0 / 6.0) / PHI_F ** 0.5) / g
+        both = lambda ax: has & sh(has, 1, ax, False)
+        cx = jnp.where(both(0), face(hf, 0) * eta(jnp.sqrt(gx_ ** 2 + gyx ** 2)), 0.0) / dx ** 2     # coupling to the column at i + 1
+        cy = jnp.where(both(1), face(hf, 1) * eta(jnp.sqrt(gy_ ** 2 + gxy ** 2)), 0.0) / dx ** 2
+        kap = jnp.where(has, acs * self.heff(hf) * head_wall_stress(ws) / jnp.maximum(jnp.abs(ws), 1e-3), 0.0)
+        diag = m + dt * (cx + sh(cx, -1, 0, 0.0) + cy + sh(cy, -1, 1, 0.0) + kap)
+        def A(x):
+            return diag * x - dt * (cx * sh(x, 1, 0, 0.0) + sh(cx * x, -1, 0, 0.0) + cy * sh(x, 1, 1, 0.0) + sh(cy * x, -1, 1, 0.0))
+        b = m * ws; x = ws; r = b - A(x); z = r / diag; d = z; rz = jnp.sum(r * z)
+        def it(_, c):
+            x, r, d, rz = c
+            q = A(d); al = rz / jnp.maximum(jnp.sum(d * q), 1e-30)
+            x = x + al * d; r = r - al * q; z = r / diag; rz2 = jnp.sum(r * z)
+            return x, r, z + rz2 / jnp.maximum(rz, 1e-30) * d, rz2
+        x, r, d, rz = lax.fori_loop(0, 60, it, (x, r, d, rz))
+        dw = jnp.where(has, x - ws, 0.0).astype(F32)
+        fmask = lo(t, 2, False) | hi(t, 2, False)                                           # the vertical faces of the top cells
+        return jnp.where(fmask & ok, w + dw[:, :, None], w)
+
+    def surface(self, ph, liq):
+        """The free surface of the main body of stout, as a height on the grid's columns: in each column the lowest air cell
+        of the cavity (with air above it too) that stands on a liquid cell of the cavity, and the zero of the level set between
+        the two cell centres. Columns that hold no stout inside the glass read NaN."""
+        dx = self.dx
+        liqc = liq & self.cavc; air = self.cavc & ~liq
+        cand = air & sh(air, 1, 2, True) & sh(liqc, -1, 2, False)
         has = jnp.any(cand, 2); k = jnp.argmax(cand, 2); kb = jnp.maximum(k - 1, 0)
         pa = jnp.take_along_axis(ph, k[..., None], 2)[..., 0]; pb = jnp.take_along_axis(ph, kb[..., None], 2)[..., 0]
-        frac = jnp.clip(pb / jnp.where(pa - pb > 1e-12, pa - pb, 1.0), 0.0, 1.0)
-        frac = jnp.where((pa - pb > 1e-12) & (pb < 0), frac, 0.5)
-        H = jnp.where(has, self.cc[2][kb] + frac * dx, jnp.nan)
-        return jnp.where(jnp.any(liq & self.cavc, 2), H, jnp.nan).astype(F32)
+        good = (pa - pb > 1e-12) & (pb < 0) & (pa > 0)
+        frac = jnp.where(good, jnp.clip(-pb / jnp.where(good, pa - pb, 1.0), 0.0, 1.0), 0.5)
+        return jnp.where(has, self.cc[2][kb] + frac * dx, jnp.nan).astype(F32)
 
     def head_spill(self, s, H, dt, gx, gz):
         """The head above the rim (verification.md, item 6): where the head's top stands e above the rim, at the glass, the part
@@ -413,9 +449,12 @@ class Stout:
         pos = jnp.stack([self.colx.reshape(-1) * sc, self.coly.reshape(-1) * sc, G.zrim + 0.5 * cut.reshape(-1)], -1)
         bx = s["bx"].at[slot].set(pos.astype(F32), mode="drop"); bv = s["bv"].at[slot].set(0.0, mode="drop")
         bvol = s["bvol"].at[slot].set((cut.reshape(-1) * dx * dx).astype(F32), mode="drop")
-        flying = jnp.isfinite(bx[:, 2]) & (bx[:, 2] > -0.25)
+        onbody = (jnp.abs(bx[:, 0]) < BODY_HALF[0]) & (jnp.abs(bx[:, 1]) < BODY_HALF[1])
+        flying = jnp.isfinite(bx[:, 2]) & (bx[:, 2] > -0.25) & ~((bx[:, 2] <= BODY_TOP) & onbody & (bv[:, 2] == 0))
         bv = jnp.where(flying[:, None], bv + dt * jnp.array([gx, 0.0, gz], F32), bv)
-        bx = jnp.where(flying[:, None], bx + dt * bv, bx)
+        bn = bx + dt * bv; hitb = flying & (bn[:, 2] < BODY_TOP) & (bx[:, 2] >= BODY_TOP) & onbody
+        bn = jnp.where(hitb[:, None], bn.at[:, 2].set(BODY_TOP), bn); bv = jnp.where(hitb[:, None], 0.0, bv)
+        bx = jnp.where(flying[:, None], bn, bx)
         return dict(s, hf=(hf - cut).astype(F32), bx=bx, bv=bv, bvol=bvol, bptr=(s["bptr"] + nnew) % self.MF,
                     foam_spill=s["foam_spill"] + jnp.sum(cut.astype(F64)) * dx * dx)
 
@@ -532,13 +571,16 @@ class Stout:
         leave = act & (over | top)
         act2 = act & ~leave
         # drops in free flight (gravity minus the glass's acceleration), until 0.25 m below the floor
+        # a drop that comes down on the cart's body (its top is BODY_TOP below the glass's inner floor) stays where it lands
         fly = s["fly"]; vf = s["vp"] + dt * jnp.array([gx, 0.0, gz], F32); xf = s["xp"] + dt * vf
-        land = fly & (xf[:, 2] < -0.25)
+        hit = fly & (xf[:, 2] < BODY_TOP) & (s["xp"][:, 2] >= BODY_TOP) & (jnp.abs(xf[:, 0]) < BODY_HALF[0]) & (jnp.abs(xf[:, 1]) < BODY_HALF[1])
+        xf = jnp.where(hit[:, None], xf.at[:, 2].set(BODY_TOP), xf); vf = jnp.where(hit[:, None], 0.0, vf)
+        land = fly & ~hit & (xf[:, 2] < -0.25)
         xp = jnp.where(act[:, None], Xn, jnp.where(fly[:, None], xf, s["xp"]))
         vp = jnp.where(act[:, None], newv, jnp.where(fly[:, None], vf, s["vp"]))
-        fly2 = (fly & ~land) | leave
+        fly2 = (fly & ~land & ~hit) | leave
         s = dict(s, xp=xp.astype(F32), vp=vp.astype(F32), C=jnp.where(act[:, None, None], C, 0.0).astype(F32),
-                 act=act2, fly=fly2, landed=s["landed"] | land)
+                 act=act2, fly=fly2, landed=s["landed"] | land, stuck=s["stuck"] | hit)
         mom = jnp.sum(jnp.where(act2[:, None], newv, 0.0).astype(F64), 0)
         return s, mom
 
@@ -587,7 +629,7 @@ class Stout:
         j = jnp.clip(jnp.floor((X[:, 1] - G.x0) / dx).astype(I32), 0, self.n - 1)
         Hp = H[i, j]
         loose = act & jnp.isfinite(Hp) & (X[:, 2] > Hp + 1.5 * dx)
-        dmask = loose | fly
+        dmask = loose | fly | s["stuck"]
         nd = jnp.sum(dmask, dtype=I32)
         di = jnp.nonzero(dmask, size=self.M, fill_value=0)[0]
         drops = jnp.where((jnp.arange(self.M) < nd)[:, None], X[di], jnp.nan)
@@ -597,7 +639,7 @@ class Stout:
         PE = self.mp * 9.81 * jnp.sum(jnp.where(act, z, 0.0))
         Px = self.mp * jnp.sum(jnp.where(act, v[:, 0], 0.0))
         return dict(H=H, drops=drops.astype(F32), ndrops=nd, nloose=jnp.sum(loose, dtype=I32), nfly=jnp.sum(fly, dtype=I32),
-                    nlanded=jnp.sum(s["landed"], dtype=I32), nact=jnp.sum(act, dtype=I32), KE=KE, PE=PE, Px=Px,
+                    nlanded=jnp.sum(s["landed"], dtype=I32), nstuck=jnp.sum(s["stuck"], dtype=I32), nact=jnp.sum(act, dtype=I32), KE=KE, PE=PE, Px=Px,
                     ewall=s["ewall"], efoam=s["efoam"], eskin=s["eskin"], nliq=jnp.sum(liq, dtype=I32), nsel=nsel,
                     hf=s["hf"], lumps=s["bx"], lumpvol=s["bvol"], foam_spill=s["foam_spill"], foam0=s["foam0"])
 

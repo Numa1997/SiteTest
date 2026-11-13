@@ -26,11 +26,14 @@ ROADS = {
     "one 25 mm bump": {"kind": "bumps", "bumps": [{"x": 1.5, "h": 0.025, "L": 0.30}]},
     # five 20 mm bumps 0.29 m apart: at 1 m/s they come 3.4 times a second, in step with the swing (3.42 Hz)
     "five 20 mm bumps in step with the swing": {"kind": "bumps", "bumps": [{"x": 1.5 + 0.29 * i, "h": 0.020, "L": 0.25} for i in range(5)]},
+    # one short, sharp bump, 30 mm high and 0.12 m long, taken at 1.5 m/s: a kerb-like jolt
+    "one sharp 30 mm bump": {"kind": "bumps", "bumps": [{"x": 1.5, "h": 0.030, "L": 0.12}]},
 }
-TASKS = [   # second run (13 Nov 2026): the full model of notes/fig12/research/verification.md with data-for-solver.md's numbers
+TASKS = [   # third run (13 Nov 2026): the head as a sheet that resists shear; surface read-out corrected
     dict(name="rest", kind="free", dx=0.0015, model="full", end=2.0, push=(0.3, 0.0, 0.146)),
     dict(name="ride_resonant", kind="ride", dx=0.0015, model="full", end=8.0, road="five 20 mm bumps in step with the swing", v0=1.0),
     dict(name="free_full_1.5", kind="free", dx=0.0015, model="full", end=5.0, push=(0.3, 1.0, 0.146)),
+    dict(name="ride_sharp30", kind="ride", dx=0.0015, model="full", end=4.0, road="one sharp 30 mm bump", v0=1.5),
     dict(name="ride_bump25", kind="ride", dx=0.0015, model="full", end=8.0, road="one 25 mm bump", v0=1.0),
 ]
 if os.environ.get("CODECHECK"):   # a check of this script only: two frames on a 6 mm grid, results thrown away
@@ -75,7 +78,7 @@ for task in TASKS:
         cart = Cart(dict(CART_COMMON, v0=task["v0"], ctrl=1, susp=0), road)
         adv = make_advance(S, "ride", cart=cart); ex = ride_extra(S, cart)
     obs = jax.jit(S.observe); pol = jax.jit(S.polar)
-    nf = int(round(task["end"] * FPS)); rec = {k: [] for k in ("t", "H", "polar", "drops", "ndrops", "nfly", "nlanded", "nact", "KE", "PE", "Px",
+    nf = int(round(task["end"] * FPS)); rec = {k: [] for k in ("t", "H", "polar", "drops", "ndrops", "nfly", "nlanded", "nstuck", "nact", "KE", "PE", "Px",
                                                               "ewall", "efoam", "eskin", "hf", "lumps", "lumpvol", "foam_spill", "steps", "its", "itmax", "resmax", "nselmax", "wall_s",
                                                               "x", "v", "zb", "zw", "i", "Nwheel", "Fx", "Fz")}
 
@@ -83,7 +86,7 @@ for task in TASKS:
         o = obs(s); P = pol(o["H"])
         rec["t"].append(float(t)); rec["H"].append(np.asarray(o["H"])); rec["polar"].append(np.asarray(P))
         rec["drops"].append(np.asarray(o["drops"]).astype(np.float16))
-        for k in ("ndrops", "nfly", "nlanded", "nact", "KE", "PE", "Px", "ewall", "efoam", "eskin", "foam_spill"): rec[k].append(float(o[k]))
+        for k in ("ndrops", "nfly", "nlanded", "nstuck", "nact", "KE", "PE", "Px", "ewall", "efoam", "eskin", "foam_spill"): rec[k].append(float(o[k]))
         rec["hf"].append(np.asarray(o["hf"]).astype(np.float16)); rec["lumps"].append(np.asarray(o["lumps"]).astype(np.float16))
         rec["lumpvol"].append(np.asarray(o["lumpvol"]).astype(np.float32))
         for k in ("steps", "its", "itmax", "resmax", "nselmax"): rec[k].append(float(st[k]) if st is not None else 0.0)
