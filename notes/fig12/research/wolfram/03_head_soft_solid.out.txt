@@ -1,0 +1,24 @@
+R um  phi_l rho_f  G0 Pa  tau_y Pa (ay=0.5, 1)  Bi at 10 m/s2   Bi at 1 m/s2  Bi own weight  lump L* mm      shear-wave h/c ms
+50    0.05  50.35  371.1  {43.2, 86.5}          {4.52, 9.04}    {45.2, 90.4}  {4.61, 9.22}   {85.9, 171.8}   7.0
+50    0.10  100.7  294.8  {30.4, 60.8}          {1.59, 3.18}    {15.9, 31.8}  {1.62, 3.24}   {30.2, 60.4}    11.1
+50    0.20  201.4  161.3  {11.5, 23.0}          {0.30, 0.60}    {3.0, 6.0}    {0.31, 0.61}   {5.7, 11.4}     21.2
+50    0.30  302.1  52.9   {1.6, 3.2}            {0.03, 0.06}    {0.3, 0.6}    {0.03, 0.06}   {0.5, 1.1}      45.4
+100   0.05  50.35  185.5  {21.6, 43.2}          {2.26, 4.52}    {22.6, 45.2}  {2.30, 4.61}   {42.9, 85.9}    9.9
+100   0.10  100.7  147.4  {15.2, 30.4}          {0.79, 1.59}    {7.9, 15.9}   {0.81, 1.62}   {15.1, 30.2}    15.7
+100   0.20  201.4  80.6   {5.8, 11.5}           {0.15, 0.30}    {1.5, 3.0}    {0.15, 0.31}   {2.9, 5.7}      30.0
+100   0.30  302.1  26.5   {0.8, 1.6}            {0.01, 0.03}    {0.1, 0.3}    {0.01, 0.03}   {0.3, 0.5}      64.2
+stout drop scale sqrt(gam/(rho 10)) = 2.11393 mm
+V = 0.001 m/s: Ca = 0.0000457778, f = 0.000392735 N/m, wall stress ~ f/R (R=50um) = 7.85471 Pa, (R=100um) = 3.92735 Pa
+V = 0.01 m/s: Ca = 0.000457778, f = 0.00182292 N/m, wall stress ~ f/R (R=50um) = 36.4583 Pa, (R=100um) = 18.2292 Pa
+V = 0.05 m/s: Ca = 0.00228889, f = 0.00533024 N/m, wall stress ~ f/R (R=50um) = 106.605 Pa, (R=100um) = 53.3024 Pa
+V = 0.1 m/s: Ca = 0.00457778, f = 0.00846123 N/m, wall stress ~ f/R (R=50um) = 169.225 Pa, (R=100um) = 84.6123 Pa
+V = 0.3 m/s: Ca = 0.0137333, f = 0.0176001 N/m, wall stress ~ f/R (R=50um) = 352.001 Pa, (R=100um) = 176.001 Pa
+R=50 phi_l=0.1: m k/rho = 0.0894693, D k^4/(rho g) = 0.335513, f/f0 (plate-on-fluid estimate) = 1.10718
+R=50 phi_l=0.2: m k/rho = 0.178939, D k^4/(rho g) = 0.183528, f/f0 (plate-on-fluid estimate) = 1.00195
+R=50 phi_l=0.3: m k/rho = 0.268408, D k^4/(rho g) = 0.0602202, f/f0 (plate-on-fluid estimate) = 0.914259
+R=100 phi_l=0.1: m k/rho = 0.0894693, D k^4/(rho g) = 0.167756, f/f0 (plate-on-fluid estimate) = 1.03531
+R=100 phi_l=0.2: m k/rho = 0.178939, D k^4/(rho g) = 0.0917642, f/f0 (plate-on-fluid estimate) = 0.96232
+R=100 phi_l=0.3: m k/rho = 0.268408, D k^4/(rho g) = 0.0301101, f/f0 (plate-on-fluid estimate) = 0.901183
+alpha = 0: amplitude below 0.05 mm after 21.5 s; amplitude at 2 s, 4 s: {3.24875, 2.11036} mm
+alpha = 0.01: amplitude below 0.05 mm after 7. s; amplitude at 2 s, 4 s: {1.89369, 0.566956} mm
+alpha = 0.03: amplitude below 0.05 mm after 3. s; amplitude at 2 s, 4 s: {0.419246, 0.0000209952} mm

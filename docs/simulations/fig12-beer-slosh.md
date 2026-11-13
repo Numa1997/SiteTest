@@ -443,3 +443,19 @@ processor's solver at 4 mm (half glass, slow motion) and says so in the caption.
   Foam, Sauret's (w/τ_f) scaled from cell width w to radius R: ζ_f 0.019–0.037 for the pint (inference). Walked at 5 mm with
   a second harmonic of 0.3: the mug spills from 1.5 steps/s, the pint at 1.5 and 1.75 steps/s, with a head only at 1.75 (3 ml).
 - The mug is run in the live model by the tool, not offered on the page.
+
+## Research: the stout, its head and the boundary layers (13 November 2026)
+
+`notes/fig12/research/guinness-materials.md` gathers, for a later model of the real pint, what is known about the stout as a
+liquid, the head as a foam, and the layers between them and the glass. For each it gives the facts with quotes and pages, the
+equations, a parameter table and what is still unmeasured. Then come a video catalogue and the list of sources.
+- `sources/`: one verbatim extract per source read.
+- `wolfram/`: the derivations, each `.wl` with its saved `.out.txt`.
+- `sympy/`: the checks of those derivations.
+
+Video clips are kept in the owner's private Drive, never in this repository. Nothing here has changed the page or its solver yet.
+Its first findings for the solver:
+- ν of stout is 2.05 × 10⁻⁶ m²/s, not water's 10⁻⁶.
+- Mode (1,1) is at 3.42 Hz, with wall damping ζ = 0.0051.
+- A protein skin or the head doubles that damping.
+- The head is a yield-stress sheet riding on the surface.

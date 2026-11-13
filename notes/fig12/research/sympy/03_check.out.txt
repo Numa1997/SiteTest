@@ -1,0 +1,12 @@
+Bingham number tau_y/(rho_f a h) = -a_y*gamma*(Phi - Phi_c)**2/(R*a*h*rho_l*(Phi - 1))
+lump size L* = tau_y/(rho_f a) = -a_y*gamma*(Phi - Phi_c)**2/(R*a*rho_l*(Phi - 1))
+R= 50 um phi_l=0.05  G0= 371.1 Pa  tau_y(ay=.5,1)= 43.2, 86.5 Pa  Bi(10 m/s2, ay=.5)=4.52
+R= 50 um phi_l=0.10  G0= 294.8 Pa  tau_y(ay=.5,1)= 30.4, 60.8 Pa  Bi(10 m/s2, ay=.5)=1.59
+R= 50 um phi_l=0.20  G0= 161.3 Pa  tau_y(ay=.5,1)= 11.5, 23.0 Pa  Bi(10 m/s2, ay=.5)=0.30
+R= 50 um phi_l=0.30  G0=  52.9 Pa  tau_y(ay=.5,1)=  1.6,  3.2 Pa  Bi(10 m/s2, ay=.5)=0.03
+R=100 um phi_l=0.05  G0= 185.5 Pa  tau_y(ay=.5,1)= 21.6, 43.2 Pa  Bi(10 m/s2, ay=.5)=2.26
+R=100 um phi_l=0.10  G0= 147.4 Pa  tau_y(ay=.5,1)= 15.2, 30.4 Pa  Bi(10 m/s2, ay=.5)=0.79
+R=100 um phi_l=0.20  G0=  80.6 Pa  tau_y(ay=.5,1)=  5.8, 11.5 Pa  Bi(10 m/s2, ay=.5)=0.15
+R=100 um phi_l=0.30  G0=  26.5 Pa  tau_y(ay=.5,1)=  0.8,  1.6 Pa  Bi(10 m/s2, ay=.5)=0.01
+V=0.01 m/s Ca=4.578e-04  f=6.82 gam Ca^(2/3)=1.823e-03 N/m
+V=0.10 m/s Ca=4.578e-03  f=6.82 gam Ca^(2/3)=8.461e-03 N/m
