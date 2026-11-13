@@ -630,3 +630,35 @@ ride: a reconstruction fault near the tulip's waist radius, visible as a faint t
 1.0 m/s tau 0.481 s, 3.32 Hz, zeta 0.100; 1.5 m/s tau 0.344 s, 3.41 Hz, zeta 0.136 (0.5 m/s swings 0.3 mm, not fitted);
 on rings 8 and 10 zeta 0.14-0.21. Against the cart alone (0.007) 14-19 times too much; against cart and wall (0.012) 8-11
 times. Example 7.2 now uses the tilt of the whole surface, lean = 2Ra/g, so a 6.36 mm lean needs 0.80 m/s^2.
+
+
+**Control on Kaggle, Stage A: the model and the controllers derived again (13 November 2026).**
+`python3 tools/fig12/control/derive.py` (SymPy, SciPy, mpmath; output saved in `tools/fig12/control/derive.out.txt`)
+derives, without simulating anything: the zeros of J1' and f11, f12, f13 = 3.421, 5.821, 7.365 Hz; the push r cos(theta)
+expanded in the J1 modes (wall-height shares 2/(xi_n^2 - 1) = 0.837, 0.073, 0.028, summing to 1) and from it
+beta = 2 xi tanh(xi h/R)/(xi^2 - 1) = 1.5407; the wall damping 0.0036 and 0.0053; the controllability determinant of
+(speed, swing, swing rate, integral) from the motor current, beta^2 b^4 omega^4 / M_x^4, never zero; that the active
+suspension force reaches the four vertical states and, linearly, nothing of the speed or the swing (rank 4 of 7, the three
+rows zero); the slosh LQR by the continuous Riccati equation, K = (76.69, -1934.0, -41.32, -150.0) and swing poles
+-11.33 +- 7.54j for the 4 mm plant, (75.03, -1938.9, -38.81, -150.0) and -12.01 +- 8.82j for the live model; the suspension
+LQR with its cross term, K_s = (-502.6, 11.63, -6.09, 612.6); the Kalman filter's A_d, B_d and Van Loan's Q_d (equal to a
+12-point quadrature of the definition to 1e-16) and its settled gain with a probe every 5 samples, 0.1429 and 2.187 1/s;
+the joint controller's cancellation current. Each is compared with what `node tools/fig12/observer.cjs 3d|modal` prints:
+all 46 comparisons agree to the digits the site gives. It also prints the gains for the Kaggle solver's plant (3.31 Hz,
+zeta 0.018, 429.6 g, a probe every 2 samples): K = (75.73, -1913.3, -40.07, -150.0), filter gain 0.0800 and 1.654 1/s.
+Not done yet: the same matrices evaluated a second time in Wolfram. The user's decision of 13 November 2026: the
+controlled rides are computed in JAX only (no Taichi fallback), after the baseline rides are finished.
+
+**Stage A in Wolfram, the physics and the loop (13 November 2026).** `tools/fig12/control/derive.wl` evaluates every number
+of `derive.py` again (RiccatiSolve, MatrixExp, Bessel zeros) and agrees to the digits printed (`derive.wl.out.txt`).
+`tools/fig12/control/derive_physics.wl` (output `derive_physics.out.txt`) derives in Wolfram: the first mode from the
+Lagrangian of the potential flow in the glass's frame (modal mass, omega^2, the heave factor (g + a_z)/g, beta, and that the
+stout's relative momentum Pc q' and its coupling to the push share the constant rho pi R^3/xi^2, so its reaction on the cart is
+-dP/dt); the cart and the mode as one Lagrangian, and what the controller's model leaves out (the push back changes the gains
+by under 1 % and the swing poles from -11.65 +- 8.13j to -11.62 +- 8.13j); the whole motor loop as one sampled system as the
+code runs it (filter, 2 ms lag, 1 ms sample, probes every 2 ms): stable, swing poles -11.55 +- 8.11j, phase margin 51 deg,
+gain margin 17.5 dB, delay margin 3.5 ms; the heave threshold eps = 4 zeta (Floquet and harmonic balance); the cart's
+symplectic Euler at 0.1 ms (pole error 1e-4 and 1e-3). Checked against Dodge's update of NASA SP-106 (frequencies, the slosh
+mass, the damping correlation), Van Loan (1978), and the slosh-control literature (Feddema 1997, Grundelius 2001, Yano &
+Terashima 1997); the list with what was read is at the end of `derive_physics.out.txt`. Still open: the suspension block and
+the three-mode plant in the same form, and where the heave cancellation is exact.

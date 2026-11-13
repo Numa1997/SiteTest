@@ -1,0 +1,86 @@
+Stage A, physics and loop, evaluated in the Wolfram cloud kernel (Wolfram connector), 13 November 2026, 00:55-01:15 UTC (01:55-02:15 Berlin).
+Code: tools/fig12/control/derive_physics.wl (four blocks, each run as one stateless call).
+
+Block 1. Linear sloshing of mode (1,n) in an upright cylinder from the Lagrangian T - V of the potential flow, in the glass's frame
+(kinetic energy as the surface integral of phi phi_z; gravity g + a_z; the fictitious force as rho a_x times the integral of x eta):
+  modal mass m_n          = pi R^3 rho (xi^2 - 1) coth(xi h/R) / (2 xi^3)
+  omega^2                 = g xi tanh(xi h/R) / R
+  heave                   : omega^2 multiplied by (g + a_z)/g   (parametric)
+  beta                    = 2 xi tanh(xi h/R) / (xi^2 - 1)      (beta - this = 0 exactly)
+  relative momentum P_x   = (rho pi R^3 / xi^2) q'               (= Pc of stout-cart.js ModalFluid, difference 0)
+  push coupling dV/dq per a_x = rho pi R^3 / xi^2 = P_x/q'       (difference 0: the push and the momentum share one constant,
+                                                                  so the stout's reaction on the cart is -dP_x/dt)
+Block 2. Cart and mode 1 as one Lagrangian, L = 1/2 M_x x'^2 + Pc x' q' + 1/2 m_n q'^2 - 1/2 m_n w^2 q^2:
+  cart: x'' = m_n (b i + Pc w^2 q + 2 Pc w zeta q' - c_x x') / (m_n M_x - Pc^2);  mode eq. minus the code's form = 0.
+  rho 1007, R 39.1 mm, h 125 mm: Pc 0.05578 kg, m_n 0.03621 kg, beta 1.54074, sloshing mass Pc^2/m_n 0.08595 kg,
+  M_x 2.5046 kg, M_x - Pc beta 2.41865 kg.
+  The site's controller model leaves out the stout's push back on the cart. Effect (Kaggle plant 3.31 Hz, zeta 0.018):
+  K designed without it (75.73, -1913.3, -40.07, -150.0), with it (75.71, -1910.8, -39.82, -150.0);
+  site K on the true coupled plant: swing poles -11.62 +- 8.13j (designed -11.65 +- 8.13j), fast pole -260.0 (-250.1).
+  With the cart free, the push back raises the swing from 3.31 to 3.368 Hz.
+Block 3. The motor loop as one sampled system, exactly as Cart.sample + Observer + Cart.step run it, level road:
+  plant (dv, q, q', i) with push back and the 2 ms current lag, exact zero-order hold over 1 ms; filter predicts with the current
+  measured at the sample, corrects with the speed every sample and the probes every 2nd (2 ms fluid step); integral of the
+  true speed error; the 2 ms monodromy of the 8 states (plant 4, integral, estimate 3).
+  Settled Kalman gains: probe sample [[0.95426, -0.00463], [-0.00074, 0.07999], [-1.4682, 1.6545]]; speed only (0.95426, -0.00080, -1.4695).
+  Largest |eigenvalue| of the monodromy 0.99487 (stable). Closed-loop poles (1/s): -2.570; swing -11.554 +- 8.110j;
+  filter -21.22 +- 29.54j and -3168; current loop -197.0 +- 297.0j (the design's -250.1, turned into a pair by the lag and the
+  sample). With an ideal sensor instead of the filter: -2.570, -11.554 +- 8.110j, -197.7 +- 297.6j.
+  Margins (loop broken at the current command, probes every sample): gain crossover 254 rad/s (40 Hz), phase there -129.0 deg,
+  so phase margin 51.0 deg; phase crossover 945 rad/s with |L| 0.133, so gain margin 7.5 (17.5 dB);
+  delay margin 0.890 rad / 254 rad/s = 3.5 ms (inference from the two numbers).
+Block 4a. The heave's parametric term, q'' + 2 zeta w q' + w^2 (1 + eps cos(2 w t)) q = 0, Floquet monodromy (NDSolve):
+  threshold eps* = 0.021200 at zeta 0.0053 (4 zeta = 0.0212), 0.072005 at zeta 0.018 (0.072), 0.10001 at zeta 0.025 (0.100):
+  the first-order rule eps* = 4 zeta holds to 1e-4. At zeta 0.018: a heave of 0.706 m/s^2 at 6.62 Hz makes the swing grow.
+Block 4b. The cart's integrator, symplectic Euler at 0.1 ms, on the quarter car: exact poles -1.957 +- 17.276j and -21.783 +- 260.959j;
+  symplectic Euler -1.957 +- 17.278j and -21.835 +- 261.249j; relative error 1.0e-4 and 1.1e-3.
+Block 4c. The same threshold by first-order harmonic balance (q = a cos(Om t/2) + b sin(Om t/2), Wolfram):
+  transition curves eps(Om) = sqrt((Om^2 - 4 w^2)^2 + 16 zeta^2 Om^2 w^2) / (2 w^2); at Om = 2 w, eps = 4 zeta exactly,
+  which the Floquet computation of Block 4a confirms to 1e-4.
+
+Sources checked against these results (13 November 2026):
+  - Dodge, "The New Dynamic Behavior of Liquids in Moving Containers" (SwRI 2000, the update of NASA SP-106),
+    https://www2.swri.org/www2/fluid-slosh/dodge-sp-106-update.pdf (downloaded and read):
+    eq. (1.40) w^2 = (g xi/a) tanh(xi h/a), eq. (1.41) xi = 1.841, 5.331, 8.536: as Block 1.
+    Table 3.2 (Bauer 1964) slosh mass m_n = m_liq d tanh(2 xi h/d) / (xi (xi^2 - 1) h), d = 2R: with m_liq = rho pi R^2 h this is
+    2 rho pi R^3 tanh(xi h/R) / (xi (xi^2 - 1)), identical to Pc^2/m_n of Block 2 (0.08595 kg here).
+    Eq. (2.7b) (Stephens et al. 1962) damping ratio 0.83 Re1^(-1/2), Re1 = sqrt(g R^3)/nu: 0.83 x 24218^(-1/2) = 0.00533 for
+    R = 39.1 mm, against the site's 5.23/(2 pi) = 0.832 times the same factor, 0.00535.
+  - Van Loan, IEEE Trans. Autom. Control 23 (1978) 395-404: Q_d from one exponential of a 2n x 2n block matrix, the method in
+    MATLAB's kalmd and lqrd (A. Sala, UPV notes, https://personales.upv.es/asala/YT/V/vanloanEN.html). derive.py checks it
+    against a 12-point quadrature of the definition (1e-16).
+  - Industrial and laboratory practice for slosh-free transport: open-loop shaped acceleration profiles (Feddema et al., IEEE
+    Control Systems 17 (1997) 29-36, input shaping and IIR filters; Grundelius, PhD thesis, Lund 2001, minimum-time and
+    minimum-energy profiles and iterative learning control, https://lup.lub.lu.se/search/files/4822223/1001901.pdf, read).
+    Feedback on a measured surface with a Kalman filter and integral action (LQI + Kalman) is the conventional design that
+    Yano & Terashima (Trans. ISCIE 10 (1997) 440-448) compare their H-infinity controller against. Our design is that
+    conventional feedback plus a road-preview feed-forward; a shaped profile is not possible here because the push comes from
+    the road, not from a planned path. Inference: robustness to a change of fill (their point) is a stated limit of ours.
+
+Block 5. Spillover: the true stout has modes 1-3 (cart + three modes as one Lagrangian, push back included; probes read
+  q1 + q2 + q3); the controller and filter model mode 1 only, as the site's. Frequencies scaled to the Kaggle solver's 3.31 Hz:
+  3.310, 5.633, 7.127 Hz; zeta_n = 0.018 (w1/wn)^(1/2) = 0.0180, 0.0138, 0.0123; Pc_n 0.05578, 0.00665, 0.00260 kg;
+  m_n 0.03621, 0.01711, 0.01092 kg.
+  2 ms monodromy, 12 states: largest |eigenvalue| 0.99499, stable. Poles (1/s): swing -10.33 +- 7.31j (damping ratio 0.82;
+  -11.55 +- 8.11j with mode 1 alone); mode 2 -3.23 +- 33.37j (0.096, from 0.0138 open loop); mode 3 -2.51 +- 43.98j
+  (0.057, from 0.0123); filter -16.82 +- 39.77j and -3168; current loop -197.9 +- 296.9j; integral -2.61.
+  The unmodelled modes are not destabilised; the loop damps them too (the probes see them as part of q).
+Block 6. The suspension loop sampled at 1 ms with the 5 ms actuator lag (u_cmd = -K_s y from stroke gauge, two accelerometers,
+  load cell): K_s = (-502.62, 11.632, -6.091, 612.63); poles (1/s): body -5.88 +- 4.09j (design -4.94 +- 4.98j), wheel hop
+  -25.08 +- 266.73j (design -31.98 +- 259.91j), actuator -182.7; largest |eigenvalue| per 1 ms 0.99414, stable.
+  Loop broken at the force command: |L| = 0.84 with phase 180 deg at low frequency. The LQR, which weighs the body's
+  acceleration, uses the actuator to cancel 84 % of the spring's static stiffness; so an actuator 19 % stronger than modelled
+  (gain margin 1.5 dB) would cancel all of it and the body would lose its static support. Smallest |1 + L| 0.16 (sensitivity 6),
+  the same in the continuous design without lag (0.162): a property of the cost, not of the sample or the lag.
+  Gain crossovers 6.9 rad/s (phase margin 17 deg) and 24.0 rad/s (163 deg); high-frequency gain margin 38.4 dB at 684 rad/s.
+  Inference: the suspension design is stable but not robust to actuator-gain error; the tuning stage must add a robustness
+  bound (for example a weight on the static spring force, or |1 + L| >= 0.5) before the controlled rides are taken as final.
+
+Block 7. Which sensor sees which state, and the heave cancellation (symbolic, Wolfram):
+  Observability rank of (v, q, q'): controller's model, encoder alone 1 (the model has no path from the swing to the speed);
+  encoder + wall probes 3. True coupled plant, encoder alone 3, determinant Pc^2 w^4 / (M_x - beta Pc)^2: the encoder does see
+  the swing through the stout's push back, but weakly (Pc = 0.056 kg against M_x = 2.5 kg); the probes are what make it seen well.
+  Swing equation with i_par = -M_x w^2 (a_z,meas/g) q_hat / (beta b) applied: the heave term left is
+  (w^2/g) (a_z,meas q_hat - a_z q) = (w^2/g) (da_z q - a_z e_q - da_z e_q), with da_z the accelerometer's error and e_q = q - q_hat.
+  Exact only when both are zero; otherwise first order in each error. The same current pushes the cart: dv/dt changes by
+  -(w^2/(beta g)) a_z,meas q_hat, which the speed loop then sees as a disturbance.
