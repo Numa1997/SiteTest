@@ -1,0 +1,7 @@
+{
+ "about": "Generations of the Fig. 12 rides computed on Kaggle, newest last. The page plays the newest; older ones are kept for the record.",
+ "generations": [
+  {"date": "2026-11-12", "solver": "v1", "note": "over-damped (damping ratio 0.10 to 0.14 after the last bump): glass faces held at zero velocity, a no-slip wall one cell thick; kept for the record, with the free-swing tests of solver v2"},
+  {"date": "2026-11-13", "solver": "v2", "note": "ghost-fluid surface, free-slip glass faces, the Fig. 12 note's wall and foam friction; played by the page"}
+ ]
+}

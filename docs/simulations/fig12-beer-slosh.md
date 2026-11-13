@@ -446,6 +446,21 @@ processor's solver at 4 mm (half glass, slow motion) and says so in the caption.
 
 ## Computed on Kaggle, played back (12 November 2026)
 
+**Second generation, 13 November 2026 (what the page plays now).** `DIR` in `guinness-playback.js` is
+`public/data/fig12/2026-11-13/`: `rides.json` (1,795,977 bytes, SHA-256 5619dd27...) and `index.json` (notebook
+`numakoudsie/guinness-on-a-cart-stout-sloshing` version 5, code at commit 70703de, 87-89 ms a step, 14.5-14.8 min a ride,
+171-176 pressure iterations a step). `public/data/fig12/generations.json` lists both generations. Solver v2 is in the
+repository, `tools/fig12/kaggle/` (`solver.py`, `rides.py`, `free_params.py`, `env.py`; the notebooks download them at a
+pinned commit): level-set surface (Zhu & Bridson) with ghost-fluid pressure, glass-closed faces extrapolated (free slip on
+the grid; v1 held them at zero, a no-slip wall one cell thick, the cause of v1's over-damping), nu = 1e-6, the wall's Stokes
+layer and the foam (note section 14) as drags, the surface read by open-column length (`polar_surface_fixed`, fixes v1's
+8 mm waist error; rings 11-12 now read 1.7 mm low at rest). Measured with `kaggle_decay.py` on the new rides: 3.255, 3.271,
+3.279 Hz and zeta 0.0266, 0.0246, 0.0211 at 0.5, 1.0, 1.5 m/s. Free swings on a glass held still
+(`public/data/fig12/2026-11-12/free_swing_v2*.json`, `tools/fig12/kaggle/free_swing_fit.py`): with no friction zeta
+0.015-0.025 (the method's own loss), wall only 0.014-0.015, wall and foam 0.016-0.036; frequency 3.22-3.33 Hz rising with
+resolution; dt = 1 ms gave more loss (0.035), half the push less (0.011-0.016). The note (sections 2, 7, 9, 10, 11 and the
+abstract) states these numbers. Everything below this paragraph describes the first generation (solver v1).
+
 `public/simulations/guinness-kaggle.html` with `public/scripts/guinness-playback.js` plays rides of the pint that were
 computed ahead of time on Kaggle; the page computes nothing physical. It is linked from the lede of Fig. 12.
 

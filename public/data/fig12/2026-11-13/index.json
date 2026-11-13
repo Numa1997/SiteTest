@@ -1,0 +1,61 @@
+{
+ "about": "Fig. 12 computed on Kaggle: stored rides of the pint on the one-wheel cart, played back by public/simulations/guinness-kaggle.html. Generated on Kaggle on 2026-11-13.",
+ "generated": "2026-11-13",
+ "kaggle": {
+  "notebook": "numakoudsie/guinness-on-a-cart-stout-sloshing",
+  "url": "https://www.kaggle.com/code/numakoudsie/guinness-on-a-cart-stout-sloshing",
+  "version": 5,
+  "machine": "Tesla T4 GPU",
+  "output_file": "rides.json"
+ },
+ "code": "Solver v2 (tools/fig12/kaggle/solver.py at SiteTest commit 70703de1821fc5f28a5592a1a74c8d3c84a73488): Taichi 1.7.4 APIC on a 1.5 mm grid, ghost-fluid free surface, free-slip glass faces on the grid, the Fig. 12 note's wall (Stokes layer) and foam (Sauret et al. 2015) friction; model {\"ghost\": true, \"fill\": false, \"closed\": \"extrap\", \"nu\": 1e-06, \"wall\": true, \"foam\": true, \"omega\": 21.488493750554184, \"foamC\": 0.0235}",
+ "rides": [
+  {
+   "road": "gentle road: hump, dip, ripples, bump",
+   "v0": 0.5,
+   "frames": 601,
+   "seconds": 20.0
+  },
+  {
+   "road": "gentle road: hump, dip, ripples, bump",
+   "v0": 1.0,
+   "frames": 601,
+   "seconds": 20.0
+  },
+  {
+   "road": "gentle road: hump, dip, ripples, bump",
+   "v0": 1.5,
+   "frames": 601,
+   "seconds": 20.0
+  }
+ ],
+ "measured": {
+  "minutes_per_ride": [
+   14.5,
+   14.8,
+   14.5
+  ],
+  "steps_per_ride": [
+   10005,
+   10000,
+   10000
+  ],
+  "ms_per_step": [
+   87,
+   89,
+   87
+  ],
+  "cg_iterations_per_step": [
+   171,
+   176,
+   171
+  ]
+ },
+ "files": [
+  {
+   "path": "rides.json",
+   "bytes": 1795977,
+   "sha256": "5619dd27d325addfafbaf959019a04f1351f0a9136c3920573db13faca26680a"
+  }
+ ]
+}
