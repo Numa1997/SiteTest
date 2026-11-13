@@ -188,25 +188,25 @@ Started 13 November 2026 with Fig. 15 ([fig15-resonant-tunnelling.md](simulation
 from the Fig. 15 brief: **data generated from other data must have its own place and its own provenance**, so that a reader can
 trace any frame back to the runs it was built from.
 
-The Schrödinger equation is linear, so a solution computed once is a basis to build on; we should not pay for a new full
-simulation to get a new system from one we already solved. The clean exact rule is the composition of one-dimensional
-scattering by transfer matrices: one barrier is fully described at each energy by its transmission and reflection amplitudes,
-and several barriers are the product of their matrices and of free-flight phases between them. Fig. 15 builds a two-barrier
-diode this way from Fig. 14's single-barrier runs.
+The Schrödinger equation is linear, so a solution computed once is a basis to build on. Where an exact rule exists
+(superposition, mirror images, translations, separation of variables, transfer matrices) a new system is built from data
+already stored rather than paid for again; where none exists, the system is computed afresh on Kaggle's GPUs.
+
+Fig. 15 first tried the shortcut alone: a one-dimensional double barrier built by transfer matrices (72 derived runs, `V₀ = 3`).
+The owner rejected that on 13 November 2026: the figure continues Fig. 14 and must be three-dimensional. It now plays 115 new 3D
+Kaggle runs (`kaggle/`). The exact rules remain where they are exact: separation of variables makes the 3D walls equal to the 1D
+problem, so the runs carry their 1D twin and `derived/exact-1d.json` holds the exact transfer-matrix numbers for the same geometry,
+**labelled as the check of the 3D runs**; and the page draws the stored half-plane `y ≥ 0` with its mirror image, which is exact
+because every barrier and the start packet are symmetric about the flight axis. The 1D derived runs were removed.
 
 **The layout** (the rule for every future derived figure):
 
 - A new tree `public/data/<project>/` with its own `generations.json` and dated folders `YYYY-MM-DD/`. Inside each generation,
-  separate subfolders, each with an `index.json`:
-  - `derived/` for data computed from other stored data (Fig. 15's reconstructed frames);
-  - `kaggle/` for new runs computed on Kaggle, as above.
-- **Every derived file's index entry names its parents**: the generation, file name and SHA-256 of every stored run it was
-  computed from, plus the script and commit that computed it. Fig. 15's `derived/index.json` names the 45 Fig. 14 flat-wall
-  runs of the same barrier (`V₀ = 3`) that confirm the single-barrier amplitudes.
-- Every Kaggle file's entry names its notebook, version and commit, as above.
-- The scripts live in `tools/kaggle/<project>/` (for Fig. 15: the transfer matrices, the reconstruction, the independent
-  Crank–Nicolson check, the I–V curve, the real-units mapping, and the packer). **The page computes nothing it can read from
-  the store**: the reconstruction runs in a tool script and its frames are stored; the page plays them.
-- Derived data carries its own honesty checks in the index: for Fig. 15, the agreement with an independent time-dependent
-  solve (0.6 % of the peak), the start-overlap error, the float16 storage error, and the cross-check of the single-barrier
-  amplitudes against Fig. 14 (a few percent on the stored grid — used as a check, not a source).
+  separate subfolders:
+  - `kaggle/` for new runs computed on Kaggle, with `index.json` (per file: notebook, version, commit, SHA-256);
+  - `derived/` for data computed from other stored data or from exact theory, each file saying what it is (`role`) and which
+    script made it.
+- Runs that a later version replaced are not shipped; the index says which, why, and what replaced them (Fig. 15: the 20
+  single-wall and single-disc runs of version 1, one grid point thick, replaced by `fig15-rt3d-singles-v2`).
+- The scripts live in `tools/kaggle/<project>/`. **The page computes nothing it can read from the store**: numbers such as Fig. 15's
+  share-through and lifetimes are read from the stored curves once, by `file_rt3d.py`, and written into the index.

@@ -1,0 +1,4528 @@
+{
+"generated": "2026-11-13",
+"kind": "rt3d",
+"title": "Fig. 15, 3D: an electron wave packet meets two barriers (walls, discs, spherical shells) and one barrier",
+"box": [
+192,
+128,
+128
+],
+"dx": 0.5,
+"dt": 0.01,
+"nframes": 200,
+"V0": 2.0,
+"D": 1.0,
+"S": 2.5,
+"packet": {
+"x0": -20.0,
+"sigma0": 3.0
+},
+"method": "Strang split-step Fourier, 3D, complex64; absorbing border sin^(1/8) in the outer tenth of each axis",
+"units": "hbar = m = 1, lengths in the grid unit a",
+"notebooks": [
+{
+"kaggle": "numakoudsie/fig15-rt3d-shard-1-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"loader": "tools/kaggle/resonant-tunnelling/rt3d_all_0of4.ipynb",
+"solver": "tools/kaggle/resonant-tunnelling/rt3d.py",
+"runner": "tools/kaggle/resonant-tunnelling/rt3d_run.py",
+"jobsel": "all",
+"shard": [
+0,
+4
+],
+"device": "Tesla T4",
+"devices": 2,
+"sweep_s": 336.9,
+"filed": 24,
+"not_filed": [
+"scoin_R4_E0.735.bin",
+"scoin_R4_E1.000.bin",
+"scoin_R4_E2.000.bin",
+"scoin_R6_E0.400.bin",
+"sflat_R0_E1.500.bin"
+]
+},
+{
+"kaggle": "numakoudsie/fig15-rt3d-shard-2-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"loader": "tools/kaggle/resonant-tunnelling/rt3d_all_1of4.ipynb",
+"solver": "tools/kaggle/resonant-tunnelling/rt3d.py",
+"runner": "tools/kaggle/resonant-tunnelling/rt3d_run.py",
+"jobsel": "all",
+"shard": [
+1,
+4
+],
+"device": "Tesla T4",
+"devices": 2,
+"sweep_s": 341.5,
+"filed": 24,
+"not_filed": [
+"scoin_R2_E1.500.bin",
+"scoin_R6_E0.735.bin",
+"scoin_R6_E1.000.bin",
+"scoin_R6_E2.000.bin",
+"sflat_R0_E0.400.bin"
+]
+},
+{
+"kaggle": "numakoudsie/fig15-rt3d-shard-3-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"loader": "tools/kaggle/resonant-tunnelling/rt3d_all_2of4.ipynb",
+"solver": "tools/kaggle/resonant-tunnelling/rt3d.py",
+"runner": "tools/kaggle/resonant-tunnelling/rt3d_run.py",
+"jobsel": "all",
+"shard": [
+2,
+4
+],
+"device": "Tesla T4",
+"devices": 2,
+"sweep_s": 336.3,
+"filed": 24,
+"not_filed": [
+"scoin_R2_E0.400.bin",
+"scoin_R4_E1.500.bin",
+"sflat_R0_E0.735.bin",
+"sflat_R0_E1.000.bin",
+"sflat_R0_E2.000.bin"
+]
+},
+{
+"kaggle": "numakoudsie/fig15-rt3d-shard-4-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"loader": "tools/kaggle/resonant-tunnelling/rt3d_all_3of4.ipynb",
+"solver": "tools/kaggle/resonant-tunnelling/rt3d.py",
+"runner": "tools/kaggle/resonant-tunnelling/rt3d_run.py",
+"jobsel": "all",
+"shard": [
+3,
+4
+],
+"device": "Tesla T4",
+"devices": 2,
+"sweep_s": 313.7,
+"filed": 23,
+"not_filed": [
+"scoin_R2_E0.735.bin",
+"scoin_R2_E1.000.bin",
+"scoin_R2_E2.000.bin",
+"scoin_R4_E0.400.bin",
+"scoin_R6_E1.500.bin"
+]
+},
+{
+"kaggle": "numakoudsie/fig15-rt3d-singles-v2",
+"version": 1,
+"commit": "db0a60cc9f3ed5d63b1b4c7e9fb4d51ed4160f79",
+"loader": "tools/kaggle/resonant-tunnelling/rt3d_singles_v2.ipynb",
+"solver": "tools/kaggle/resonant-tunnelling/rt3d.py",
+"runner": "tools/kaggle/resonant-tunnelling/rt3d_run.py",
+"jobsel": "singles_v2",
+"shard": null,
+"device": "Tesla T4",
+"devices": 2,
+"sweep_s": 230.4,
+"filed": 20,
+"not_filed": []
+}
+],
+"replaced": {
+"what": "the 20 single-wall and single-disc runs of the four shard notebooks (version 1)",
+"why": "rt3d.py at commit eb3cff0 centred the single wall and disc at x = 0, where the test |x| < D/2 holds one grid point of the 0.5 a grid: half the intended thickness, so they passed far too much (T = 0.388 against the exact 0.075 at E = 0.735). Corrected at commit db0a60c: the single barrier is the pair's left barrier alone, |x + S/2| < D/2, two grid points; rerun in numakoudsie/fig15-rt3d-singles-v2.",
+"by": "numakoudsie/fig15-rt3d-singles-v2, version 1"
+},
+"numbers": {
+"T_far": "",
+"note": "also carries numbers read from the stored file (computed here once, so that the page only reads them):\n  T_far   the share of the wave on the far side of the barriers, (P_right + P_in / 2) / P_total, at the last frame before any\n          of the wave reaches the absorbing border at the ends of the flight (|x| > 38.4 a holding < 1e-3 of it). Half of what\n          is still trapped is counted as leaving forwards (a symmetric pair leaks equally both ways). Dividing by P_total\n          removes the share the side border took. For the walls it is checked against the exact 1D twin in the same file.\n  tau     the lifetime of the trapped wave, from a straight-line fit of ln P_in(t) where P_in has fallen from 60 % to 5 % of\n          its largest value (P_in: between the barriers for walls and discs; inside the inner shell for shells).\nUsage: python3 file_rt3d.py <kaggle_main folder> <date>"
+},
+"script": "tools/kaggle/resonant-tunnelling/file_rt3d.py",
+"runs": [
+{
+"file": "runs/dflat_R0_E0.400.bin",
+"shape": "dflat",
+"size": 0.0,
+"E": 0.4,
+"bytes": 1114193,
+"sha256": "df5aea02b274a3df48f2327c36d441d0467cedf6f7ded6835133fbfa81bac1c2",
+"notebook": "numakoudsie/fig15-rt3d-shard-1-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.43,
+"n": 200,
+"t_end": 85.57,
+"peak_max": 1.0,
+"peak0": 0.04849346727132797,
+"end": {
+"norm": 0.134436,
+"left": 0.130449,
+"right": 0.003343,
+"well": 0.000557
+},
+"start_in_barrier": 4.990245855637876e-10,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 8557,
+"wall": 27.11,
+"device": "cuda:0",
+"T_far": {
+"value": 0.04262,
+"frame": 91,
+"t": 39.13
+},
+"P_in_max": 0.081838,
+"tau": {
+"tau": 15.574,
+"t0": 28.38,
+"t1": 60.63,
+"n": 76
+},
+"twin": {
+"T": 0.042364,
+"R": 0.956937,
+"T_exact": 0.034651,
+"sep_check_max": 7.906073733465746e-05,
+"tau": 15.676
+}
+},
+{
+"file": "runs/dflat_R0_E0.500.bin",
+"shape": "dflat",
+"size": 0.0,
+"E": 0.5,
+"bytes": 1122635,
+"sha256": "a5164452f4974864d0bd7ad18abc13bc5a7a54f3cf36ced772bb92e57001d7f6",
+"notebook": "numakoudsie/fig15-rt3d-shard-3-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.41000000000000003,
+"n": 200,
+"t_end": 81.59,
+"peak_max": 1.065861,
+"peak0": 0.04849346727132797,
+"end": {
+"norm": 0.10007,
+"left": 0.086362,
+"right": 0.011147,
+"well": 0.002188
+},
+"start_in_barrier": 4.990245855637876e-10,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 8159,
+"wall": 24.74,
+"device": "cuda:1",
+"T_far": {
+"value": 0.09437,
+"frame": 88,
+"t": 36.08
+},
+"P_in_max": 0.147424,
+"tau": {
+"tau": 15.207,
+"t0": 29.52,
+"t1": 65.19,
+"n": 88
+},
+"twin": {
+"T": 0.098056,
+"R": 0.899201,
+"T_exact": 0.086796,
+"sep_check_max": 9.263371612178162e-05,
+"tau": 15.343
+}
+},
+{
+"file": "runs/dflat_R0_E0.600.bin",
+"shape": "dflat",
+"size": 0.0,
+"E": 0.6,
+"bytes": 1108775,
+"sha256": "125fb547305aec67899312c56c37351b269416d0415c792ad4b56feff88e3b76",
+"notebook": "numakoudsie/fig15-rt3d-shard-4-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.39,
+"n": 200,
+"t_end": 77.61,
+"peak_max": 1.151096,
+"peak0": 0.048493463546037674,
+"end": {
+"norm": 0.088013,
+"left": 0.058128,
+"right": 0.023759,
+"well": 0.005227
+},
+"start_in_barrier": 4.990245855637875e-10,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 7761,
+"wall": 23.79,
+"device": "cuda:0",
+"T_far": {
+"value": 0.14838,
+"frame": 87,
+"t": 33.93
+},
+"P_in_max": 0.199739,
+"tau": {
+"tau": 15.113,
+"t0": 31.2,
+"t1": 67.86,
+"n": 95
+},
+"twin": {
+"T": 0.155693,
+"R": 0.837823,
+"T_exact": 0.148823,
+"sep_check_max": 0.00012967511429451406,
+"tau": 15.296
+}
+},
+{
+"file": "runs/dflat_R0_E0.700.bin",
+"shape": "dflat",
+"size": 0.0,
+"E": 0.7,
+"bytes": 1092711,
+"sha256": "6f98add4f1fae1ce09eda3ea8c7c494efffa1868fc438e931c52ea980a4ae53d",
+"notebook": "numakoudsie/fig15-rt3d-shard-1-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.38,
+"n": 200,
+"t_end": 75.62,
+"peak_max": 1.220429,
+"peak0": 0.048493463546037674,
+"end": {
+"norm": 0.080096,
+"left": 0.040242,
+"right": 0.031253,
+"well": 0.007345
+},
+"start_in_barrier": 4.990245855637877e-10,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 7562,
+"wall": 23.09,
+"device": "cuda:1",
+"T_far": {
+"value": 0.17792,
+"frame": 84,
+"t": 31.92
+},
+"P_in_max": 0.212092,
+"tau": {
+"tau": 15.104,
+"t0": 32.3,
+"t1": 69.92,
+"n": 100
+},
+"twin": {
+"T": 0.185477,
+"R": 0.805473,
+"T_exact": 0.190262,
+"sep_check_max": 0.00018022362201008946,
+"tau": 15.314
+}
+},
+{
+"file": "runs/dflat_R0_E0.735.bin",
+"shape": "dflat",
+"size": 0.0,
+"E": 0.735,
+"bytes": 1079724,
+"sha256": "553bbcd5826f8fbbd4b9c042e3e08f65f9a87e60eee50d83d6cbede3b037bdf5",
+"notebook": "numakoudsie/fig15-rt3d-shard-2-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.37,
+"n": 200,
+"t_end": 73.63,
+"peak_max": 1.239446,
+"peak0": 0.04849346727132797,
+"end": {
+"norm": 0.085121,
+"left": 0.040263,
+"right": 0.03499,
+"well": 0.008427
+},
+"start_in_barrier": 4.990245855637877e-10,
+"start_in_border": 2.517843367091191e-13,
+"steps": 7363,
+"wall": 22.77,
+"device": "cuda:0",
+"T_far": {
+"value": 0.17933,
+"frame": 85,
+"t": 31.45
+},
+"P_in_max": 0.205959,
+"tau": {
+"tau": 15.112,
+"t0": 32.56,
+"t1": 70.3,
+"n": 103
+},
+"twin": {
+"T": 0.186134,
+"R": 0.803537,
+"T_exact": 0.195912,
+"sep_check_max": 0.0001797468139557168,
+"tau": 15.33
+}
+},
+{
+"file": "runs/dflat_R0_E0.800.bin",
+"shape": "dflat",
+"size": 0.0,
+"E": 0.8,
+"bytes": 1072826,
+"sha256": "93f79bf58fd87dc91ab79c7e495c248994903a427144bff180eef5dcb0d4fa82",
+"notebook": "numakoudsie/fig15-rt3d-shard-4-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.37,
+"n": 200,
+"t_end": 73.63,
+"peak_max": 1.270465,
+"peak0": 0.04849346727132797,
+"end": {
+"norm": 0.074615,
+"left": 0.033696,
+"right": 0.031795,
+"well": 0.007798
+},
+"start_in_barrier": 4.990245855637876e-10,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 7363,
+"wall": 22.32,
+"device": "cuda:0",
+"T_far": {
+"value": 0.17041,
+"frame": 82,
+"t": 30.34
+},
+"P_in_max": 0.183475,
+"tau": {
+"tau": 15.128,
+"t0": 32.93,
+"t1": 70.67,
+"n": 103
+},
+"twin": {
+"T": 0.177007,
+"R": 0.813443,
+"T_exact": 0.193759,
+"sep_check_max": 0.00018778593221213669,
+"tau": 15.38
+}
+},
+{
+"file": "runs/dflat_R0_E0.900.bin",
+"shape": "dflat",
+"size": 0.0,
+"E": 0.9,
+"bytes": 1068208,
+"sha256": "faef01fdc6bef217dbe3f5a9210bbf5639c5989b2ca728256c05392ccad43a22",
+"notebook": "numakoudsie/fig15-rt3d-shard-1-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.36,
+"n": 200,
+"t_end": 71.64,
+"peak_max": 1.300087,
+"peak0": 0.048493463546037674,
+"end": {
+"norm": 0.062393,
+"left": 0.028517,
+"right": 0.026231,
+"well": 0.00653
+},
+"start_in_barrier": 4.990245855637876e-10,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 7164,
+"wall": 22.13,
+"device": "cuda:0",
+"T_far": {
+"value": 0.13809,
+"frame": 81,
+"t": 29.16
+},
+"P_in_max": 0.134522,
+"tau": {
+"tau": 15.143,
+"t0": 32.76,
+"t1": 70.92,
+"n": 107
+},
+"twin": {
+"T": 0.143378,
+"R": 0.848661,
+"T_exact": 0.166247,
+"sep_check_max": 0.00016848626546561718,
+"tau": 15.411
+}
+},
+{
+"file": "runs/dflat_R0_E1.000.bin",
+"shape": "dflat",
+"size": 0.0,
+"E": 1.0,
+"bytes": 1065602,
+"sha256": "1f996ee3f0a02ad9674a009f16c818b341b97c938e1f22062e88342df45966e0",
+"notebook": "numakoudsie/fig15-rt3d-shard-2-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.35000000000000003,
+"n": 200,
+"t_end": 69.65,
+"peak_max": 1.309188,
+"peak0": 0.048493463546037674,
+"end": {
+"norm": 0.044365,
+"left": 0.021025,
+"right": 0.018132,
+"well": 0.004429
+},
+"start_in_barrier": 4.990245855637876e-10,
+"start_in_border": 2.517843367091191e-13,
+"steps": 6965,
+"wall": 21.77,
+"device": "cuda:1",
+"T_far": {
+"value": 0.10106,
+"frame": 80,
+"t": 28.0
+},
+"P_in_max": 0.089127,
+"tau": {
+"tau": 14.999,
+"t0": 31.15,
+"t1": 69.3,
+"n": 110
+},
+"twin": {
+"T": 0.104729,
+"R": 0.889874,
+"T_exact": 0.127169,
+"sep_check_max": 0.00014321586058940738,
+"tau": 15.206
+}
+},
+{
+"file": "runs/dflat_R0_E1.100.bin",
+"shape": "dflat",
+"size": 0.0,
+"E": 1.1,
+"bytes": 1054835,
+"sha256": "f2d71ecfb4773c27a0179148eb910b2c1cc93b9811eae5939e4b8f26de075f7d",
+"notebook": "numakoudsie/fig15-rt3d-shard-4-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.34,
+"n": 200,
+"t_end": 67.66,
+"peak_max": 1.331504,
+"peak0": 0.048493463546037674,
+"end": {
+"norm": 0.026746,
+"left": 0.013018,
+"right": 0.010773,
+"well": 0.002485
+},
+"start_in_barrier": 4.990245855637876e-10,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 6766,
+"wall": 20.78,
+"device": "cuda:0",
+"T_far": {
+"value": 0.07236,
+"frame": 80,
+"t": 27.2
+},
+"P_in_max": 0.062156,
+"tau": {
+"tau": 15.0,
+"t0": 26.52,
+"t1": 62.9,
+"n": 108
+},
+"twin": {
+"T": 0.074369,
+"R": 0.922584,
+"T_exact": 0.092871,
+"sep_check_max": 0.00013940419012214988,
+"tau": 15.09
+}
+},
+{
+"file": "runs/dflat_R0_E1.200.bin",
+"shape": "dflat",
+"size": 0.0,
+"E": 1.2,
+"bytes": 1054572,
+"sha256": "06448a5a806e5c6ab15d86f46a24496360ab254e7eba4cf69c54e9455cd20a53",
+"notebook": "numakoudsie/fig15-rt3d-shard-1-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.34,
+"n": 200,
+"t_end": 67.66,
+"peak_max": 1.388345,
+"peak0": 0.048493463546037674,
+"end": {
+"norm": 0.012213,
+"left": 0.005941,
+"right": 0.004923,
+"well": 0.001128
+},
+"start_in_barrier": 4.990245855637876e-10,
+"start_in_border": 2.517843367091192e-13,
+"steps": 6766,
+"wall": 20.79,
+"device": "cuda:0",
+"T_far": {
+"value": 0.05532,
+"frame": 77,
+"t": 26.18
+},
+"P_in_max": 0.048959,
+"tau": {
+"tau": 15.226,
+"t0": 19.04,
+"t1": 55.76,
+"n": 109
+},
+"twin": {
+"T": 0.05639,
+"R": 0.94222,
+"T_exact": 0.070597,
+"sep_check_max": 0.00015045437612570822,
+"tau": 15.277
+}
+},
+{
+"file": "runs/dflat_R0_E1.300.bin",
+"shape": "dflat",
+"size": 0.0,
+"E": 1.3,
+"bytes": 1045369,
+"sha256": "8f7af3f676da24e3d308dd61a9a67bf5d4a58796a53132201a0bf92a5c24fe4e",
+"notebook": "numakoudsie/fig15-rt3d-shard-2-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.33,
+"n": 200,
+"t_end": 65.67,
+"peak_max": 1.433388,
+"peak0": 0.048493463546037674,
+"end": {
+"norm": 0.00571,
+"left": 0.002847,
+"right": 0.002288,
+"well": 0.000468
+},
+"start_in_barrier": 4.990245855637876e-10,
+"start_in_border": 2.517843367091191e-13,
+"steps": 6567,
+"wall": 20.76,
+"device": "cuda:0",
+"T_far": {
+"value": 0.0488,
+"frame": 77,
+"t": 25.41
+},
+"P_in_max": 0.044123,
+"tau": {
+"tau": 13.149,
+"t0": 15.84,
+"t1": 43.89,
+"n": 86
+},
+"twin": {
+"T": 0.049219,
+"R": 0.95019,
+"T_exact": 0.060819,
+"sep_check_max": 0.00016524730017408729,
+"tau": 13.161
+}
+},
+{
+"file": "runs/dflat_R0_E1.400.bin",
+"shape": "dflat",
+"size": 0.0,
+"E": 1.4,
+"bytes": 1043160,
+"sha256": "3a267cacbeca07b1ec0cc3c50f4fb7bd854a6b4a9b7ea5ae8a44470f8949ad92",
+"notebook": "numakoudsie/fig15-rt3d-shard-3-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.33,
+"n": 200,
+"t_end": 65.67,
+"peak_max": 1.464425,
+"peak0": 0.048493463546037674,
+"end": {
+"norm": 0.002161,
+"left": 0.001113,
+"right": 0.000843,
+"well": 0.000163
+},
+"start_in_barrier": 4.990245855637876e-10,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 6567,
+"wall": 20.36,
+"device": "cuda:1",
+"T_far": {
+"value": 0.05059,
+"frame": 75,
+"t": 24.75
+},
+"P_in_max": 0.044543,
+"tau": {
+"tau": 6.271,
+"t0": 14.19,
+"t1": 28.38,
+"n": 44
+},
+"twin": {
+"T": 0.050746,
+"R": 0.949043,
+"T_exact": 0.061611,
+"sep_check_max": 0.0002190318627981469,
+"tau": 6.273
+}
+},
+{
+"file": "runs/dflat_R0_E1.500.bin",
+"shape": "dflat",
+"size": 0.0,
+"E": 1.5,
+"bytes": 1047799,
+"sha256": "1b4c15d2ed2965feb3c45b1d0c56a752694b190ee9a4608bf4052f132d7a810e",
+"notebook": "numakoudsie/fig15-rt3d-shard-4-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.33,
+"n": 200,
+"t_end": 65.67,
+"peak_max": 1.479735,
+"peak0": 0.048493459820747375,
+"end": {
+"norm": 0.00077,
+"left": 0.000419,
+"right": 0.000284,
+"well": 5.1e-05
+},
+"start_in_barrier": 4.990245855637876e-10,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 6567,
+"wall": 20.32,
+"device": "cuda:0",
+"T_far": {
+"value": 0.05959,
+"frame": 73,
+"t": 24.09
+},
+"P_in_max": 0.048437,
+"tau": {
+"tau": 2.199,
+"t0": 13.2,
+"t1": 18.48,
+"n": 17
+},
+"twin": {
+"T": 0.059642,
+"R": 0.940289,
+"T_exact": 0.071475,
+"sep_check_max": 0.0003026483755093068,
+"tau": 2.199
+}
+},
+{
+"file": "runs/dflat_R0_E1.600.bin",
+"shape": "dflat",
+"size": 0.0,
+"E": 1.6,
+"bytes": 1036210,
+"sha256": "02e4c1df26a18103940413e7e2c1dbb0914f1e5ca9f82a391a07124529e29c2c",
+"notebook": "numakoudsie/fig15-rt3d-shard-2-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.32,
+"n": 200,
+"t_end": 63.68,
+"peak_max": 1.477845,
+"peak0": 0.048493463546037674,
+"end": {
+"norm": 0.000292,
+"left": 0.000167,
+"right": 0.000102,
+"well": 1.6e-05
+},
+"start_in_barrier": 4.990245855637877e-10,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 6368,
+"wall": 19.99,
+"device": "cuda:1",
+"T_far": {
+"value": 0.07609,
+"frame": 73,
+"t": 23.36
+},
+"P_in_max": 0.055612,
+"tau": {
+"tau": 1.433,
+"t0": 12.8,
+"t1": 16.32,
+"n": 12
+},
+"twin": {
+"T": 0.076113,
+"R": 0.923864,
+"T_exact": 0.09026,
+"sep_check_max": 0.00043185355025343597,
+"tau": 1.433
+}
+},
+{
+"file": "runs/dflat_R0_E1.700.bin",
+"shape": "dflat",
+"size": 0.0,
+"E": 1.7,
+"bytes": 1032942,
+"sha256": "c1c5d9798210bfa669aad38fcf55f14eb0817e0781eb1d2a4a588ea789814113",
+"notebook": "numakoudsie/fig15-rt3d-shard-3-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.32,
+"n": 200,
+"t_end": 63.68,
+"peak_max": 1.45912,
+"peak0": 0.04849346727132797,
+"end": {
+"norm": 0.0001,
+"left": 6.3e-05,
+"right": 3e-05,
+"well": 4e-06
+},
+"start_in_barrier": 4.990245855637876e-10,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 6368,
+"wall": 19.68,
+"device": "cuda:0",
+"T_far": {
+"value": 0.10144,
+"frame": 72,
+"t": 23.04
+},
+"P_in_max": 0.065859,
+"tau": {
+"tau": 1.018,
+"t0": 12.48,
+"t1": 14.72,
+"n": 8
+},
+"twin": {
+"T": 0.101455,
+"R": 0.898538,
+"T_exact": 0.11893,
+"sep_check_max": 0.0007182890549302101,
+"tau": 1.018
+}
+},
+{
+"file": "runs/dflat_R0_E1.800.bin",
+"shape": "dflat",
+"size": 0.0,
+"E": 1.8,
+"bytes": 1032246,
+"sha256": "5758e2baf366b7ef9a3263e4d68d78bdc0c63b3270fd0b36a5fa328a98813a86",
+"notebook": "numakoudsie/fig15-rt3d-shard-4-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.32,
+"n": 200,
+"t_end": 63.68,
+"peak_max": 1.426324,
+"peak0": 0.048493463546037674,
+"end": {
+"norm": 3.6e-05,
+"left": 2.6e-05,
+"right": 9e-06,
+"well": 1e-06
+},
+"start_in_barrier": 4.990245855637876e-10,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 6368,
+"wall": 19.52,
+"device": "cuda:1",
+"T_far": {
+"value": 0.1374,
+"frame": 70,
+"t": 22.4
+},
+"P_in_max": 0.079232,
+"tau": {
+"tau": 0.924,
+"t0": 12.48,
+"t1": 14.4,
+"n": 7
+},
+"twin": {
+"T": 0.137408,
+"R": 0.86259,
+"T_exact": 0.158878,
+"sep_check_max": 0.0011130101047456264,
+"tau": 0.924
+}
+},
+{
+"file": "runs/dflat_R0_E1.900.bin",
+"shape": "dflat",
+"size": 0.0,
+"E": 1.9,
+"bytes": 1017835,
+"sha256": "79c2a0f019bc12ed238afd64bce797d8f223a5036bfb6213e0c04c144bbe7920",
+"notebook": "numakoudsie/fig15-rt3d-shard-1-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.31,
+"n": 200,
+"t_end": 61.69,
+"peak_max": 1.384727,
+"peak0": 0.048493463546037674,
+"end": {
+"norm": 1.6e-05,
+"left": 1.2e-05,
+"right": 3e-06,
+"well": 0.0
+},
+"start_in_barrier": 4.990245855637877e-10,
+"start_in_border": 2.517843367091191e-13,
+"steps": 6169,
+"wall": 19.08,
+"device": "cuda:0",
+"T_far": {
+"value": 0.18536,
+"frame": 71,
+"t": 22.01
+},
+"P_in_max": 0.09545,
+"tau": {
+"tau": 0.977,
+"t0": 12.4,
+"t1": 14.26,
+"n": 7
+},
+"twin": {
+"T": 0.185361,
+"R": 0.814638,
+"T_exact": 0.211093,
+"sep_check_max": 0.0015467103803530335,
+"tau": 0.977
+}
+},
+{
+"file": "runs/dflat_R0_E2.000.bin",
+"shape": "dflat",
+"size": 0.0,
+"E": 2.0,
+"bytes": 1025587,
+"sha256": "8efda5a63167df6d73b7486146dac5638aef158677e34ad2a98db3e4dbde691a",
+"notebook": "numakoudsie/fig15-rt3d-shard-2-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.31,
+"n": 200,
+"t_end": 61.69,
+"peak_max": 1.340895,
+"peak0": 0.048493459820747375,
+"end": {
+"norm": 8e-06,
+"left": 7e-06,
+"right": 1e-06,
+"well": 0.0
+},
+"start_in_barrier": 4.990245855637875e-10,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 6169,
+"wall": 19.41,
+"device": "cuda:0",
+"T_far": {
+"value": 0.24554,
+"frame": 69,
+"t": 21.39
+},
+"P_in_max": 0.114639,
+"tau": {
+"tau": 1.025,
+"t0": 12.4,
+"t1": 14.57,
+"n": 8
+},
+"twin": {
+"T": 0.245544,
+"R": 0.754456,
+"T_exact": 0.275372,
+"sep_check_max": 0.002184229204431176,
+"tau": 1.025
+}
+},
+{
+"file": "runs/dcoin_R2_E0.400.bin",
+"shape": "dcoin",
+"size": 2.0,
+"E": 0.4,
+"bytes": 1548557,
+"sha256": "a0b8b3ad916451d1ca0544cd32d8fe2385fe86f0ffc9026a60716796317bc6a5",
+"notebook": "numakoudsie/fig15-rt3d-shard-2-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.43,
+"n": 200,
+"t_end": 85.57,
+"peak_max": 1.0,
+"peak0": 0.04849346727132797,
+"end": {
+"norm": 0.154271,
+"left": 0.00316,
+"right": 0.150592,
+"well": 1e-06
+},
+"start_in_barrier": 9.008416309148048e-11,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 8557,
+"wall": 27.25,
+"device": "cuda:1",
+"T_far": {
+"value": 0.94176,
+"frame": 96,
+"t": 41.28
+},
+"P_in_max": 0.003318,
+"tau": {
+"tau": 3.854,
+"t0": 24.94,
+"t1": 34.4,
+"n": 23
+}
+},
+{
+"file": "runs/dcoin_R2_E0.500.bin",
+"shape": "dcoin",
+"size": 2.0,
+"E": 0.5,
+"bytes": 1578700,
+"sha256": "da80d19561482c3fd2312b197346024806559ac64159377909c8a9cb83dc03f8",
+"notebook": "numakoudsie/fig15-rt3d-shard-4-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.41000000000000003,
+"n": 200,
+"t_end": 81.59,
+"peak_max": 1.0,
+"peak0": 0.04849346727132797,
+"end": {
+"norm": 0.084274,
+"left": 0.002063,
+"right": 0.08184,
+"well": 1e-06
+},
+"start_in_barrier": 9.008416309148047e-11,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 8159,
+"wall": 24.87,
+"device": "cuda:1",
+"T_far": {
+"value": 0.94805,
+"frame": 93,
+"t": 38.13
+},
+"P_in_max": 0.004502,
+"tau": {
+"tau": 3.006,
+"t0": 23.37,
+"t1": 30.34,
+"n": 18
+}
+},
+{
+"file": "runs/dcoin_R2_E0.600.bin",
+"shape": "dcoin",
+"size": 2.0,
+"E": 0.6,
+"bytes": 1595687,
+"sha256": "80991ce03fac18fe654f7caeb348cbe74d7c3e1a139f3c6809c42d625c01076b",
+"notebook": "numakoudsie/fig15-rt3d-shard-1-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.39,
+"n": 200,
+"t_end": 77.61,
+"peak_max": 1.038255,
+"peak0": 0.048493463546037674,
+"end": {
+"norm": 0.047898,
+"left": 0.001473,
+"right": 0.046176,
+"well": 0.0
+},
+"start_in_barrier": 9.008416309148046e-11,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 7761,
+"wall": 23.42,
+"device": "cuda:0",
+"T_far": {
+"value": 0.94555,
+"frame": 91,
+"t": 35.49
+},
+"P_in_max": 0.005539,
+"tau": {
+"tau": 2.438,
+"t0": 21.84,
+"t1": 27.69,
+"n": 16
+}
+},
+{
+"file": "runs/dcoin_R2_E0.700.bin",
+"shape": "dcoin",
+"size": 2.0,
+"E": 0.7,
+"bytes": 1623924,
+"sha256": "fb2e592a5ada0f1c8a2b636a9fa0a53bbe1e07929c7a2be07bc7e81ae9cabe08",
+"notebook": "numakoudsie/fig15-rt3d-shard-2-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.38,
+"n": 200,
+"t_end": 75.62,
+"peak_max": 1.133415,
+"peak0": 0.048493463546037674,
+"end": {
+"norm": 0.023918,
+"left": 0.001034,
+"right": 0.02267,
+"well": 0.0
+},
+"start_in_barrier": 9.008416309148048e-11,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 7562,
+"wall": 23.75,
+"device": "cuda:1",
+"T_far": {
+"value": 0.93903,
+"frame": 88,
+"t": 33.44
+},
+"P_in_max": 0.006258,
+"tau": {
+"tau": 2.152,
+"t0": 20.9,
+"t1": 25.84,
+"n": 14
+}
+},
+{
+"file": "runs/dcoin_R2_E0.735.bin",
+"shape": "dcoin",
+"size": 2.0,
+"E": 0.735,
+"bytes": 1615781,
+"sha256": "c8b2fa0b8d64b52a90fedae33e24ef3561172c3f6d8da54ba1e13d8860b112ee",
+"notebook": "numakoudsie/fig15-rt3d-shard-3-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.37,
+"n": 200,
+"t_end": 73.63,
+"peak_max": 1.162296,
+"peak0": 0.04849346727132797,
+"end": {
+"norm": 0.021232,
+"left": 0.000949,
+"right": 0.020122,
+"well": 0.0
+},
+"start_in_barrier": 9.008416309148048e-11,
+"start_in_border": 2.517843367091191e-13,
+"steps": 7363,
+"wall": 22.58,
+"device": "cuda:0",
+"T_far": {
+"value": 0.93637,
+"frame": 89,
+"t": 32.93
+},
+"P_in_max": 0.006406,
+"tau": {
+"tau": 2.065,
+"t0": 20.72,
+"t1": 25.53,
+"n": 14
+}
+},
+{
+"file": "runs/dcoin_R2_E0.800.bin",
+"shape": "dcoin",
+"size": 2.0,
+"E": 0.8,
+"bytes": 1644502,
+"sha256": "79b57035401cad3664c0822d5f7ffc8a8c6a27d64c04bd6d6cb2a55e841b64ed",
+"notebook": "numakoudsie/fig15-rt3d-shard-1-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.37,
+"n": 200,
+"t_end": 73.63,
+"peak_max": 1.2107,
+"peak0": 0.04849346727132797,
+"end": {
+"norm": 0.012394,
+"left": 0.000759,
+"right": 0.011461,
+"well": 0.0
+},
+"start_in_barrier": 9.008416309148047e-11,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 7363,
+"wall": 22.42,
+"device": "cuda:1",
+"T_far": {
+"value": 0.93067,
+"frame": 86,
+"t": 31.82
+},
+"P_in_max": 0.006537,
+"tau": {
+"tau": 2.002,
+"t0": 20.35,
+"t1": 24.79,
+"n": 13
+}
+},
+{
+"file": "runs/dcoin_R2_E0.900.bin",
+"shape": "dcoin",
+"size": 2.0,
+"E": 0.9,
+"bytes": 1657767,
+"sha256": "bd7c5adbe79666f637acf0cff9f1b117e06aefcca45f470fdad7f950068b8da7",
+"notebook": "numakoudsie/fig15-rt3d-shard-2-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.36,
+"n": 200,
+"t_end": 71.64,
+"peak_max": 1.272156,
+"peak0": 0.048493463546037674,
+"end": {
+"norm": 0.006695,
+"left": 0.000574,
+"right": 0.00599,
+"well": 0.0
+},
+"start_in_barrier": 9.008416309148048e-11,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 7164,
+"wall": 22.2,
+"device": "cuda:0",
+"T_far": {
+"value": 0.92241,
+"frame": 85,
+"t": 30.6
+},
+"P_in_max": 0.006367,
+"tau": {
+"tau": 1.951,
+"t0": 19.8,
+"t1": 24.12,
+"n": 13
+}
+},
+{
+"file": "runs/dcoin_R2_E1.000.bin",
+"shape": "dcoin",
+"size": 2.0,
+"E": 1.0,
+"bytes": 1674357,
+"sha256": "951e982d642a031be00e1daaa747409890a7b1c054168ee77d2d0531aa290b39",
+"notebook": "numakoudsie/fig15-rt3d-shard-3-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.35000000000000003,
+"n": 200,
+"t_end": 69.65,
+"peak_max": 1.3147,
+"peak0": 0.048493463546037674,
+"end": {
+"norm": 0.003758,
+"left": 0.000442,
+"right": 0.003224,
+"well": 0.0
+},
+"start_in_barrier": 9.008416309148047e-11,
+"start_in_border": 2.517843367091191e-13,
+"steps": 6965,
+"wall": 21.35,
+"device": "cuda:1",
+"T_far": {
+"value": 0.91498,
+"frame": 83,
+"t": 29.05
+},
+"P_in_max": 0.00584,
+"tau": {
+"tau": 1.926,
+"t0": 19.25,
+"t1": 23.8,
+"n": 14
+}
+},
+{
+"file": "runs/dcoin_R2_E1.100.bin",
+"shape": "dcoin",
+"size": 2.0,
+"E": 1.1,
+"bytes": 1691194,
+"sha256": "dac5c70f80bf6ec3db7ffeeef29f7c6e2083996a56bd319162bd21ea6da3ee1b",
+"notebook": "numakoudsie/fig15-rt3d-shard-1-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.34,
+"n": 200,
+"t_end": 67.66,
+"peak_max": 1.341921,
+"peak0": 0.048493463546037674,
+"end": {
+"norm": 0.002172,
+"left": 0.000341,
+"right": 0.001771,
+"well": 0.0
+},
+"start_in_barrier": 9.008416309148047e-11,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 6766,
+"wall": 20.83,
+"device": "cuda:1",
+"T_far": {
+"value": 0.91062,
+"frame": 83,
+"t": 28.22
+},
+"P_in_max": 0.00511,
+"tau": {
+"tau": 2.009,
+"t0": 18.7,
+"t1": 23.12,
+"n": 14
+}
+},
+{
+"file": "runs/dcoin_R2_E1.200.bin",
+"shape": "dcoin",
+"size": 2.0,
+"E": 1.2,
+"bytes": 1737667,
+"sha256": "44a889e6a537890ef1b0357366bb6452cd6b0cefb41295ee24a6279b331c16b3",
+"notebook": "numakoudsie/fig15-rt3d-shard-2-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.34,
+"n": 200,
+"t_end": 67.66,
+"peak_max": 1.351929,
+"peak0": 0.048493463546037674,
+"end": {
+"norm": 0.001135,
+"left": 0.00025,
+"right": 0.000835,
+"well": 0.0
+},
+"start_in_barrier": 9.008416309148048e-11,
+"start_in_border": 2.517843367091192e-13,
+"steps": 6766,
+"wall": 21.37,
+"device": "cuda:1",
+"T_far": {
+"value": 0.90865,
+"frame": 80,
+"t": 27.2
+},
+"P_in_max": 0.004402,
+"tau": {
+"tau": 2.067,
+"t0": 18.02,
+"t1": 22.78,
+"n": 15
+}
+},
+{
+"file": "runs/dcoin_R2_E1.300.bin",
+"shape": "dcoin",
+"size": 2.0,
+"E": 1.3,
+"bytes": 1748080,
+"sha256": "9a87f4b84c6e96908687cb9df004f7b7b75dcf5f4a96697f650f2210308c7f12",
+"notebook": "numakoudsie/fig15-rt3d-shard-3-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.33,
+"n": 200,
+"t_end": 65.67,
+"peak_max": 1.401047,
+"peak0": 0.048493463546037674,
+"end": {
+"norm": 0.000683,
+"left": 0.000185,
+"right": 0.000469,
+"well": 0.0
+},
+"start_in_barrier": 9.00841630914805e-11,
+"start_in_border": 2.517843367091191e-13,
+"steps": 6567,
+"wall": 20.31,
+"device": "cuda:0",
+"T_far": {
+"value": 0.90932,
+"frame": 80,
+"t": 26.4
+},
+"P_in_max": 0.003993,
+"tau": {
+"tau": 2.282,
+"t0": 16.83,
+"t1": 22.11,
+"n": 17
+}
+},
+{
+"file": "runs/dcoin_R2_E1.400.bin",
+"shape": "dcoin",
+"size": 2.0,
+"E": 1.4,
+"bytes": 1791830,
+"sha256": "9add9a33cc940032871da6a9bee1219dfa147121351024029668b86808c510d7",
+"notebook": "numakoudsie/fig15-rt3d-shard-4-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.33,
+"n": 200,
+"t_end": 65.67,
+"peak_max": 1.45546,
+"peak0": 0.048493463546037674,
+"end": {
+"norm": 0.000374,
+"left": 0.000127,
+"right": 0.000226,
+"well": 0.0
+},
+"start_in_barrier": 9.008416309148048e-11,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 6567,
+"wall": 20.25,
+"device": "cuda:1",
+"T_far": {
+"value": 0.91164,
+"frame": 77,
+"t": 25.41
+},
+"P_in_max": 0.003896,
+"tau": {
+"tau": 2.68,
+"t0": 15.18,
+"t1": 21.12,
+"n": 19
+}
+},
+{
+"file": "runs/dcoin_R2_E1.500.bin",
+"shape": "dcoin",
+"size": 2.0,
+"E": 1.5,
+"bytes": 1826838,
+"sha256": "e5ca165ac78d8340d906085ed537865d0e988226db38a169f4504dd5b09eefd9",
+"notebook": "numakoudsie/fig15-rt3d-shard-1-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.33,
+"n": 200,
+"t_end": 65.67,
+"peak_max": 1.500028,
+"peak0": 0.048493459820747375,
+"end": {
+"norm": 0.000207,
+"left": 8.4e-05,
+"right": 0.000109,
+"well": 0.0
+},
+"start_in_barrier": 9.008416309148048e-11,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 6567,
+"wall": 20.25,
+"device": "cuda:0",
+"T_far": {
+"value": 0.91552,
+"frame": 75,
+"t": 24.75
+},
+"P_in_max": 0.004033,
+"tau": {
+"tau": 2.959,
+"t0": 13.53,
+"t1": 20.13,
+"n": 21
+}
+},
+{
+"file": "runs/dcoin_R2_E1.600.bin",
+"shape": "dcoin",
+"size": 2.0,
+"E": 1.6,
+"bytes": 1817827,
+"sha256": "d2899e2d7ebeb750743f4557af32fca6ea799edb041c1788c848aaefcabfc746",
+"notebook": "numakoudsie/fig15-rt3d-shard-3-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.32,
+"n": 200,
+"t_end": 63.68,
+"peak_max": 1.534711,
+"peak0": 0.048493463546037674,
+"end": {
+"norm": 0.000129,
+"left": 5.8e-05,
+"right": 6.4e-05,
+"well": 0.0
+},
+"start_in_barrier": 9.00841630914805e-11,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 6368,
+"wall": 19.47,
+"device": "cuda:1",
+"T_far": {
+"value": 0.91994,
+"frame": 75,
+"t": 24.0
+},
+"P_in_max": 0.004321,
+"tau": {
+"tau": 2.79,
+"t0": 12.8,
+"t1": 18.88,
+"n": 20
+}
+},
+{
+"file": "runs/dcoin_R2_E1.700.bin",
+"shape": "dcoin",
+"size": 2.0,
+"E": 1.7,
+"bytes": 1843815,
+"sha256": "114295fd45c669022e1425270d1f28947d9b6132006ae6c177906659ef338ec6",
+"notebook": "numakoudsie/fig15-rt3d-shard-4-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.32,
+"n": 200,
+"t_end": 63.68,
+"peak_max": 1.559232,
+"peak0": 0.04849346727132797,
+"end": {
+"norm": 7.2e-05,
+"left": 3.6e-05,
+"right": 3.2e-05,
+"well": 0.0
+},
+"start_in_barrier": 9.008416309148048e-11,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 6368,
+"wall": 19.95,
+"device": "cuda:0",
+"T_far": {
+"value": 0.92466,
+"frame": 73,
+"t": 23.36
+},
+"P_in_max": 0.004753,
+"tau": {
+"tau": 2.312,
+"t0": 12.16,
+"t1": 17.6,
+"n": 18
+}
+},
+{
+"file": "runs/dcoin_R2_E1.800.bin",
+"shape": "dcoin",
+"size": 2.0,
+"E": 1.8,
+"bytes": 1865946,
+"sha256": "bf3928f350d3e0db2ad4d6609d4ba0fbd3c5d477f8c979e272e1062f7d12023d",
+"notebook": "numakoudsie/fig15-rt3d-shard-1-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.32,
+"n": 200,
+"t_end": 63.68,
+"peak_max": 1.577426,
+"peak0": 0.048493463546037674,
+"end": {
+"norm": 4e-05,
+"left": 2.2e-05,
+"right": 1.6e-05,
+"well": 0.0
+},
+"start_in_barrier": 9.008416309148048e-11,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 6368,
+"wall": 20.13,
+"device": "cuda:1",
+"T_far": {
+"value": 0.92961,
+"frame": 72,
+"t": 23.04
+},
+"P_in_max": 0.005311,
+"tau": {
+"tau": 1.762,
+"t0": 11.84,
+"t1": 16.0,
+"n": 14
+}
+},
+{
+"file": "runs/dcoin_R2_E1.900.bin",
+"shape": "dcoin",
+"size": 2.0,
+"E": 1.9,
+"bytes": 1848433,
+"sha256": "f220ec9bd9f579fe650453103709827b813396a3fed7c98e4dd2b61a716b115e",
+"notebook": "numakoudsie/fig15-rt3d-shard-2-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.31,
+"n": 200,
+"t_end": 61.69,
+"peak_max": 1.587529,
+"peak0": 0.048493463546037674,
+"end": {
+"norm": 2.7e-05,
+"left": 1.5e-05,
+"right": 1e-05,
+"well": 0.0
+},
+"start_in_barrier": 9.00841630914805e-11,
+"start_in_border": 2.517843367091191e-13,
+"steps": 6169,
+"wall": 19.62,
+"device": "cuda:1",
+"T_far": {
+"value": 0.93395,
+"frame": 72,
+"t": 22.32
+},
+"P_in_max": 0.005961,
+"tau": {
+"tau": 1.383,
+"t0": 11.47,
+"t1": 14.88,
+"n": 12
+}
+},
+{
+"file": "runs/dcoin_R2_E2.000.bin",
+"shape": "dcoin",
+"size": 2.0,
+"E": 2.0,
+"bytes": 1865449,
+"sha256": "fa0020547ba94e508e2cc9d14e19b54fed10855f888efb0a895fd979bd9d0c17",
+"notebook": "numakoudsie/fig15-rt3d-shard-3-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.31,
+"n": 200,
+"t_end": 61.69,
+"peak_max": 1.589292,
+"peak0": 0.048493459820747375,
+"end": {
+"norm": 1.6e-05,
+"left": 1e-05,
+"right": 5e-06,
+"well": 0.0
+},
+"start_in_barrier": 9.008416309148046e-11,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 6169,
+"wall": 19.69,
+"device": "cuda:1",
+"T_far": {
+"value": 0.9384,
+"frame": 71,
+"t": 22.01
+},
+"P_in_max": 0.006745,
+"tau": {
+"tau": 1.161,
+"t0": 11.47,
+"t1": 13.95,
+"n": 9
+}
+},
+{
+"file": "runs/dcoin_R4_E0.400.bin",
+"shape": "dcoin",
+"size": 4.0,
+"E": 0.4,
+"bytes": 1699610,
+"sha256": "ba2a697c872f2ecfc7e613307ae91d2cb329724acf06d5c430378dfdf0e56bb7",
+"notebook": "numakoudsie/fig15-rt3d-shard-3-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.43,
+"n": 200,
+"t_end": 85.57,
+"peak_max": 1.089244,
+"peak0": 0.04849346727132797,
+"end": {
+"norm": 0.155366,
+"left": 0.025954,
+"right": 0.128657,
+"well": 1e-06
+},
+"start_in_barrier": 2.864341870506589e-10,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 8557,
+"wall": 26.6,
+"device": "cuda:1",
+"T_far": {
+"value": 0.75045,
+"frame": 95,
+"t": 40.85
+},
+"P_in_max": 0.007829,
+"tau": {
+"tau": 4.744,
+"t0": 23.65,
+"t1": 33.97,
+"n": 25
+}
+},
+{
+"file": "runs/dcoin_R4_E0.500.bin",
+"shape": "dcoin",
+"size": 4.0,
+"E": 0.5,
+"bytes": 1738359,
+"sha256": "ad397b7c20e838b9632e6e904bfbf9b0219cc6f61037c14b3a50c6d6f737116c",
+"notebook": "numakoudsie/fig15-rt3d-shard-1-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.41000000000000003,
+"n": 200,
+"t_end": 81.59,
+"peak_max": 1.160658,
+"peak0": 0.04849346727132797,
+"end": {
+"norm": 0.088001,
+"left": 0.016376,
+"right": 0.071148,
+"well": 1e-06
+},
+"start_in_barrier": 2.8643418705065885e-10,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 8159,
+"wall": 24.53,
+"device": "cuda:0",
+"T_far": {
+"value": 0.75043,
+"frame": 92,
+"t": 37.72
+},
+"P_in_max": 0.012907,
+"tau": {
+"tau": 1.875,
+"t0": 22.96,
+"t1": 27.47,
+"n": 12
+}
+},
+{
+"file": "runs/dcoin_R4_E0.600.bin",
+"shape": "dcoin",
+"size": 4.0,
+"E": 0.6,
+"bytes": 1778621,
+"sha256": "338823b70c8905207b63e78452e8dfd2be07c56e43efb222ebf54dccef99c15a",
+"notebook": "numakoudsie/fig15-rt3d-shard-2-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.39,
+"n": 200,
+"t_end": 77.61,
+"peak_max": 1.252921,
+"peak0": 0.048493463546037674,
+"end": {
+"norm": 0.052067,
+"left": 0.010355,
+"right": 0.0414,
+"well": 2e-06
+},
+"start_in_barrier": 2.864341870506588e-10,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 7761,
+"wall": 23.71,
+"device": "cuda:0",
+"T_far": {
+"value": 0.74617,
+"frame": 90,
+"t": 35.1
+},
+"P_in_max": 0.018092,
+"tau": {
+"tau": 2.248,
+"t0": 22.62,
+"t1": 27.69,
+"n": 14
+}
+},
+{
+"file": "runs/dcoin_R4_E0.700.bin",
+"shape": "dcoin",
+"size": 4.0,
+"E": 0.7,
+"bytes": 1838711,
+"sha256": "b0658c0c88ae0f49c89a10008ddfd1ceb55c6b73d2e95220c27d3b822acad03a",
+"notebook": "numakoudsie/fig15-rt3d-shard-3-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.38,
+"n": 200,
+"t_end": 75.62,
+"peak_max": 1.317275,
+"peak0": 0.048493463546037674,
+"end": {
+"norm": 0.027116,
+"left": 0.005685,
+"right": 0.021192,
+"well": 2e-06
+},
+"start_in_barrier": 2.864341870506589e-10,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 7562,
+"wall": 23.14,
+"device": "cuda:0",
+"T_far": {
+"value": 0.73597,
+"frame": 87,
+"t": 33.06
+},
+"P_in_max": 0.021954,
+"tau": {
+"tau": 2.936,
+"t0": 22.04,
+"t1": 29.64,
+"n": 21
+}
+},
+{
+"file": "runs/dcoin_R4_E0.735.bin",
+"shape": "dcoin",
+"size": 4.0,
+"E": 0.735,
+"bytes": 1840918,
+"sha256": "40e55be865273092dae4f66a0e544cc433d33dc9a83de06712732d9263eb4c9d",
+"notebook": "numakoudsie/fig15-rt3d-shard-4-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.37,
+"n": 200,
+"t_end": 73.63,
+"peak_max": 1.332166,
+"peak0": 0.04849346727132797,
+"end": {
+"norm": 0.024491,
+"left": 0.005155,
+"right": 0.019147,
+"well": 1e-06
+},
+"start_in_barrier": 2.8643418705065885e-10,
+"start_in_border": 2.517843367091191e-13,
+"steps": 7363,
+"wall": 22.44,
+"device": "cuda:1",
+"T_far": {
+"value": 0.73079,
+"frame": 88,
+"t": 32.56
+},
+"P_in_max": 0.022881,
+"tau": {
+"tau": 3.197,
+"t0": 21.83,
+"t1": 29.97,
+"n": 23
+}
+},
+{
+"file": "runs/dcoin_R4_E0.800.bin",
+"shape": "dcoin",
+"size": 4.0,
+"E": 0.8,
+"bytes": 1878717,
+"sha256": "23298b3c90c2edcfbd9f3682392b352b7ac18d95a8cb8c918d4b4f94c8ebe541",
+"notebook": "numakoudsie/fig15-rt3d-shard-2-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.37,
+"n": 200,
+"t_end": 73.63,
+"peak_max": 1.353003,
+"peak0": 0.04849346727132797,
+"end": {
+"norm": 0.014606,
+"left": 0.00322,
+"right": 0.011201,
+"well": 1e-06
+},
+"start_in_barrier": 2.8643418705065885e-10,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 7363,
+"wall": 23.13,
+"device": "cuda:1",
+"T_far": {
+"value": 0.71833,
+"frame": 85,
+"t": 31.45
+},
+"P_in_max": 0.023874,
+"tau": {
+"tau": 3.642,
+"t0": 21.46,
+"t1": 30.71,
+"n": 26
+}
+},
+{
+"file": "runs/dcoin_R4_E0.900.bin",
+"shape": "dcoin",
+"size": 4.0,
+"E": 0.9,
+"bytes": 1906494,
+"sha256": "d7cb0c1f5cd4e1d0d2942558d09b5348db3ea15fa8ca452435901b88bfd10b65",
+"notebook": "numakoudsie/fig15-rt3d-shard-3-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.36,
+"n": 200,
+"t_end": 71.64,
+"peak_max": 1.360592,
+"peak0": 0.048493463546037674,
+"end": {
+"norm": 0.008184,
+"left": 0.001955,
+"right": 0.006092,
+"well": 1e-06
+},
+"start_in_barrier": 2.8643418705065885e-10,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 7164,
+"wall": 22.24,
+"device": "cuda:0",
+"T_far": {
+"value": 0.69579,
+"frame": 84,
+"t": 30.24
+},
+"P_in_max": 0.024039,
+"tau": {
+"tau": 4.173,
+"t0": 20.16,
+"t1": 30.6,
+"n": 30
+}
+},
+{
+"file": "runs/dcoin_R4_E1.000.bin",
+"shape": "dcoin",
+"size": 4.0,
+"E": 1.0,
+"bytes": 1927500,
+"sha256": "467da97684bc7e04b6a4048388ad13858afd65b128b180cbb27b2a303097f6a2",
+"notebook": "numakoudsie/fig15-rt3d-shard-4-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.35000000000000003,
+"n": 200,
+"t_end": 69.65,
+"peak_max": 1.345275,
+"peak0": 0.048493463546037674,
+"end": {
+"norm": 0.004796,
+"left": 0.001274,
+"right": 0.003424,
+"well": 1e-06
+},
+"start_in_barrier": 2.8643418705065885e-10,
+"start_in_border": 2.517843367091191e-13,
+"steps": 6965,
+"wall": 21.28,
+"device": "cuda:1",
+"T_far": {
+"value": 0.67219,
+"frame": 83,
+"t": 29.05
+},
+"P_in_max": 0.023011,
+"tau": {
+"tau": 4.516,
+"t0": 18.9,
+"t1": 29.75,
+"n": 32
+}
+},
+{
+"file": "runs/dcoin_R4_E1.100.bin",
+"shape": "dcoin",
+"size": 4.0,
+"E": 1.1,
+"bytes": 1937822,
+"sha256": "23d2651c2645994ede376d874f510fec186df77d3d1f1b39263d1270abf2b056",
+"notebook": "numakoudsie/fig15-rt3d-shard-2-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.34,
+"n": 200,
+"t_end": 67.66,
+"peak_max": 1.344901,
+"peak0": 0.048493463546037674,
+"end": {
+"norm": 0.002928,
+"left": 0.000863,
+"right": 0.002,
+"well": 1e-06
+},
+"start_in_barrier": 2.8643418705065885e-10,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 6766,
+"wall": 21.09,
+"device": "cuda:0",
+"T_far": {
+"value": 0.6514,
+"frame": 82,
+"t": 27.88
+},
+"P_in_max": 0.021336,
+"tau": {
+"tau": 4.497,
+"t0": 18.02,
+"t1": 28.22,
+"n": 31
+}
+},
+{
+"file": "runs/dcoin_R4_E1.200.bin",
+"shape": "dcoin",
+"size": 4.0,
+"E": 1.2,
+"bytes": 1976205,
+"sha256": "dac675335dfa15cce7fb0ca09641b98661e8efa384947ea3ea657a80dbbf5ea0",
+"notebook": "numakoudsie/fig15-rt3d-shard-3-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.34,
+"n": 200,
+"t_end": 67.66,
+"peak_max": 1.37979,
+"peak0": 0.048493463546037674,
+"end": {
+"norm": 0.001512,
+"left": 0.00049,
+"right": 0.000969,
+"well": 1e-06
+},
+"start_in_barrier": 2.8643418705065885e-10,
+"start_in_border": 2.517843367091192e-13,
+"steps": 6766,
+"wall": 21.05,
+"device": "cuda:1",
+"T_far": {
+"value": 0.63574,
+"frame": 79,
+"t": 26.86
+},
+"P_in_max": 0.019519,
+"tau": {
+"tau": 3.656,
+"t0": 17.0,
+"t1": 25.84,
+"n": 27
+}
+},
+{
+"file": "runs/dcoin_R4_E1.300.bin",
+"shape": "dcoin",
+"size": 4.0,
+"E": 1.3,
+"bytes": 1981334,
+"sha256": "a326b76628e87c360f5005c30341e1b04dcbc85f9905d3cf4efc7321a2e22de0",
+"notebook": "numakoudsie/fig15-rt3d-shard-4-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.33,
+"n": 200,
+"t_end": 65.67,
+"peak_max": 1.411393,
+"peak0": 0.048493463546037674,
+"end": {
+"norm": 0.000942,
+"left": 0.000337,
+"right": 0.000574,
+"well": 0.0
+},
+"start_in_barrier": 2.864341870506589e-10,
+"start_in_border": 2.517843367091191e-13,
+"steps": 6567,
+"wall": 20.15,
+"device": "cuda:0",
+"T_far": {
+"value": 0.62604,
+"frame": 79,
+"t": 26.07
+},
+"P_in_max": 0.01828,
+"tau": {
+"tau": 2.143,
+"t0": 16.17,
+"t1": 21.78,
+"n": 18
+}
+},
+{
+"file": "runs/dcoin_R4_E1.400.bin",
+"shape": "dcoin",
+"size": 4.0,
+"E": 1.4,
+"bytes": 2012118,
+"sha256": "2a60e9cb93b370bfaa2065c14a1f4480be2b63b891257d19450fbb82381fc950",
+"notebook": "numakoudsie/fig15-rt3d-shard-1-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.33,
+"n": 200,
+"t_end": 65.67,
+"peak_max": 1.437176,
+"peak0": 0.048493463546037674,
+"end": {
+"norm": 0.000496,
+"left": 0.000197,
+"right": 0.000276,
+"well": 0.0
+},
+"start_in_barrier": 2.8643418705065885e-10,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 6567,
+"wall": 20.28,
+"device": "cuda:1",
+"T_far": {
+"value": 0.62216,
+"frame": 77,
+"t": 25.41
+},
+"P_in_max": 0.0182,
+"tau": {
+"tau": 2.034,
+"t0": 15.18,
+"t1": 20.13,
+"n": 16
+}
+},
+{
+"file": "runs/dcoin_R4_E1.500.bin",
+"shape": "dcoin",
+"size": 4.0,
+"E": 1.5,
+"bytes": 2032924,
+"sha256": "681b8797459db39bd67f482b841d9d1aff8e6b1c9c4003031d5e286b271c1cc1",
+"notebook": "numakoudsie/fig15-rt3d-shard-2-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.33,
+"n": 200,
+"t_end": 65.67,
+"peak_max": 1.447046,
+"peak0": 0.048493459820747375,
+"end": {
+"norm": 0.000264,
+"left": 0.000116,
+"right": 0.000132,
+"well": 0.0
+},
+"start_in_barrier": 2.8643418705065885e-10,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 6567,
+"wall": 20.69,
+"device": "cuda:1",
+"T_far": {
+"value": 0.62358,
+"frame": 75,
+"t": 24.75
+},
+"P_in_max": 0.019207,
+"tau": {
+"tau": 2.396,
+"t0": 13.86,
+"t1": 19.14,
+"n": 17
+}
+},
+{
+"file": "runs/dcoin_R4_E1.600.bin",
+"shape": "dcoin",
+"size": 4.0,
+"E": 1.6,
+"bytes": 2018069,
+"sha256": "5a9335ac7edaa28b0f66bc7036509888c60f05044d1cbb208909a02389396ed6",
+"notebook": "numakoudsie/fig15-rt3d-shard-4-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.32,
+"n": 200,
+"t_end": 63.68,
+"peak_max": 1.448736,
+"peak0": 0.048493463546037674,
+"end": {
+"norm": 0.000168,
+"left": 8.4e-05,
+"right": 7.6e-05,
+"well": 0.0
+},
+"start_in_barrier": 2.864341870506589e-10,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 6368,
+"wall": 19.48,
+"device": "cuda:1",
+"T_far": {
+"value": 0.62973,
+"frame": 75,
+"t": 24.0
+},
+"P_in_max": 0.02131,
+"tau": {
+"tau": 2.581,
+"t0": 12.8,
+"t1": 18.56,
+"n": 19
+}
+},
+{
+"file": "runs/dcoin_R4_E1.700.bin",
+"shape": "dcoin",
+"size": 4.0,
+"E": 1.7,
+"bytes": 2027278,
+"sha256": "856a3db420c6597a80a2401a264bda65c9a0760fa6464fe17aa6e41f4e0bb13b",
+"notebook": "numakoudsie/fig15-rt3d-shard-1-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.32,
+"n": 200,
+"t_end": 63.68,
+"peak_max": 1.439227,
+"peak0": 0.04849346727132797,
+"end": {
+"norm": 9.2e-05,
+"left": 5e-05,
+"right": 3.7e-05,
+"well": 0.0
+},
+"start_in_barrier": 2.8643418705065885e-10,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 6368,
+"wall": 19.68,
+"device": "cuda:0",
+"T_far": {
+"value": 0.64034,
+"frame": 73,
+"t": 23.36
+},
+"P_in_max": 0.024315,
+"tau": {
+"tau": 2.52,
+"t0": 12.48,
+"t1": 17.6,
+"n": 17
+}
+},
+{
+"file": "runs/dcoin_R4_E1.800.bin",
+"shape": "dcoin",
+"size": 4.0,
+"E": 1.8,
+"bytes": 2036991,
+"sha256": "f8a4740f9d522a040d0881c17eb97f2a195d767e3d91c3dcecbe0a49a549a239",
+"notebook": "numakoudsie/fig15-rt3d-shard-2-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.32,
+"n": 200,
+"t_end": 63.68,
+"peak_max": 1.414421,
+"peak0": 0.048493463546037674,
+"end": {
+"norm": 5.1e-05,
+"left": 3e-05,
+"right": 1.8e-05,
+"well": 0.0
+},
+"start_in_barrier": 2.8643418705065885e-10,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 6368,
+"wall": 19.89,
+"device": "cuda:0",
+"T_far": {
+"value": 0.65484,
+"frame": 71,
+"t": 22.72
+},
+"P_in_max": 0.028493,
+"tau": {
+"tau": 2.069,
+"t0": 12.16,
+"t1": 16.64,
+"n": 15
+}
+},
+{
+"file": "runs/dcoin_R4_E1.900.bin",
+"shape": "dcoin",
+"size": 4.0,
+"E": 1.9,
+"bytes": 2016976,
+"sha256": "8a4ef4a70fbfedb08c0451a8f39cb7fa87bed5b209f3068292f8de6b4d6473fc",
+"notebook": "numakoudsie/fig15-rt3d-shard-3-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.31,
+"n": 200,
+"t_end": 61.69,
+"peak_max": 1.377491,
+"peak0": 0.048493463546037674,
+"end": {
+"norm": 3.5e-05,
+"left": 2.2e-05,
+"right": 1.2e-05,
+"well": 0.0
+},
+"start_in_barrier": 2.864341870506589e-10,
+"start_in_border": 2.517843367091191e-13,
+"steps": 6169,
+"wall": 19.25,
+"device": "cuda:1",
+"T_far": {
+"value": 0.67322,
+"frame": 72,
+"t": 22.32
+},
+"P_in_max": 0.033428,
+"tau": {
+"tau": 1.457,
+"t0": 12.09,
+"t1": 15.5,
+"n": 12
+}
+},
+{
+"file": "runs/dcoin_R4_E2.000.bin",
+"shape": "dcoin",
+"size": 4.0,
+"E": 2.0,
+"bytes": 2031929,
+"sha256": "0c524572803832ec03e7a78fbb5fdf3c47c50a0ff5a2486dcbd8bb476e575199",
+"notebook": "numakoudsie/fig15-rt3d-shard-4-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.31,
+"n": 200,
+"t_end": 61.69,
+"peak_max": 1.333218,
+"peak0": 0.048493459820747375,
+"end": {
+"norm": 2e-05,
+"left": 1.3e-05,
+"right": 6e-06,
+"well": 0.0
+},
+"start_in_barrier": 2.8643418705065874e-10,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 6169,
+"wall": 19.29,
+"device": "cuda:0",
+"T_far": {
+"value": 0.6943,
+"frame": 70,
+"t": 21.7
+},
+"P_in_max": 0.039534,
+"tau": {
+"tau": 1.135,
+"t0": 11.78,
+"t1": 14.57,
+"n": 10
+}
+},
+{
+"file": "runs/dcoin_R6_E0.400.bin",
+"shape": "dcoin",
+"size": 6.0,
+"E": 0.4,
+"bytes": 1718624,
+"sha256": "dc99d9801285a24ca72deae736bdaf655cad267fe30a7662ff404ce85cceeefe",
+"notebook": "numakoudsie/fig15-rt3d-shard-4-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.43,
+"n": 200,
+"t_end": 85.57,
+"peak_max": 1.0,
+"peak0": 0.04849346727132797,
+"end": {
+"norm": 0.150094,
+"left": 0.056938,
+"right": 0.092306,
+"well": 2.3e-05
+},
+"start_in_barrier": 4.2681550192188926e-10,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 8557,
+"wall": 26.67,
+"device": "cuda:1",
+"T_far": {
+"value": 0.50615,
+"frame": 93,
+"t": 39.99
+},
+"P_in_max": 0.02437,
+"tau": {
+"tau": 8.965,
+"t0": 25.37,
+"t1": 39.56,
+"n": 34
+}
+},
+{
+"file": "runs/dcoin_R6_E0.500.bin",
+"shape": "dcoin",
+"size": 6.0,
+"E": 0.5,
+"bytes": 1780045,
+"sha256": "f0865181f0d8b72d4d1a48f74bf1343f41249df71f1e34ff56f786bcee4032e3",
+"notebook": "numakoudsie/fig15-rt3d-shard-2-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.41000000000000003,
+"n": 200,
+"t_end": 81.59,
+"peak_max": 1.052339,
+"peak0": 0.04849346727132797,
+"end": {
+"norm": 0.087268,
+"left": 0.034933,
+"right": 0.051679,
+"well": 6.4e-05
+},
+"start_in_barrier": 4.268155019218892e-10,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 8159,
+"wall": 25.0,
+"device": "cuda:0",
+"T_far": {
+"value": 0.50857,
+"frame": 90,
+"t": 36.9
+},
+"P_in_max": 0.044623,
+"tau": {
+"tau": 8.842,
+"t0": 25.83,
+"t1": 44.69,
+"n": 47
+}
+},
+{
+"file": "runs/dcoin_R6_E0.600.bin",
+"shape": "dcoin",
+"size": 6.0,
+"E": 0.6,
+"bytes": 1761974,
+"sha256": "49ad2dc428c04bcdea4ed46a3933328d8883669bd8fbda3b2513d51a457d10ac",
+"notebook": "numakoudsie/fig15-rt3d-shard-3-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.39,
+"n": 200,
+"t_end": 77.61,
+"peak_max": 1.123446,
+"peak0": 0.048493463546037674,
+"end": {
+"norm": 0.055169,
+"left": 0.022093,
+"right": 0.032498,
+"well": 0.000119
+},
+"start_in_barrier": 4.2681550192188916e-10,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 7761,
+"wall": 23.73,
+"device": "cuda:1",
+"T_far": {
+"value": 0.51116,
+"frame": 88,
+"t": 34.32
+},
+"P_in_max": 0.063896,
+"tau": {
+"tau": 8.965,
+"t0": 26.13,
+"t1": 46.8,
+"n": 54
+}
+},
+{
+"file": "runs/dcoin_R6_E0.700.bin",
+"shape": "dcoin",
+"size": 6.0,
+"E": 0.7,
+"bytes": 1698795,
+"sha256": "23c11882a8a820a1e41af6e14c01c0da43544b125e6eb0e0c2513c565d2064e4",
+"notebook": "numakoudsie/fig15-rt3d-shard-4-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.38,
+"n": 200,
+"t_end": 75.62,
+"peak_max": 1.184242,
+"peak0": 0.048493463546037674,
+"end": {
+"norm": 0.032761,
+"left": 0.012741,
+"right": 0.019398,
+"well": 0.000167
+},
+"start_in_barrier": 4.2681550192188926e-10,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 7562,
+"wall": 22.91,
+"device": "cuda:1",
+"T_far": {
+"value": 0.50143,
+"frame": 85,
+"t": 32.3
+},
+"P_in_max": 0.073865,
+"tau": {
+"tau": 9.027,
+"t0": 26.6,
+"t1": 47.88,
+"n": 57
+}
+},
+{
+"file": "runs/dcoin_R6_E0.735.bin",
+"shape": "dcoin",
+"size": 6.0,
+"E": 0.735,
+"bytes": 1669631,
+"sha256": "34c9e799ffe051280611866e204b4cea673d5bc0923cc7a92486487c7efe29c3",
+"notebook": "numakoudsie/fig15-rt3d-shard-1-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.37,
+"n": 200,
+"t_end": 73.63,
+"peak_max": 1.2041,
+"peak0": 0.04849346727132797,
+"end": {
+"norm": 0.030882,
+"left": 0.01192,
+"right": 0.018319,
+"well": 0.000199
+},
+"start_in_barrier": 4.2681550192188916e-10,
+"start_in_border": 2.517843367091191e-13,
+"steps": 7363,
+"wall": 22.66,
+"device": "cuda:1",
+"T_far": {
+"value": 0.49406,
+"frame": 86,
+"t": 31.82
+},
+"P_in_max": 0.074302,
+"tau": {
+"tau": 9.035,
+"t0": 26.64,
+"t1": 47.73,
+"n": 58
+}
+},
+{
+"file": "runs/dcoin_R6_E0.800.bin",
+"shape": "dcoin",
+"size": 6.0,
+"E": 0.8,
+"bytes": 1661277,
+"sha256": "24c9154f88802b773fb124dc69c45427601c6a88e9b80b1a823781c55be63e9f",
+"notebook": "numakoudsie/fig15-rt3d-shard-3-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.37,
+"n": 200,
+"t_end": 73.63,
+"peak_max": 1.235314,
+"peak0": 0.04849346727132797,
+"end": {
+"norm": 0.021761,
+"left": 0.008581,
+"right": 0.012569,
+"well": 0.000187
+},
+"start_in_barrier": 4.268155019218891e-10,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 7363,
+"wall": 22.52,
+"device": "cuda:1",
+"T_far": {
+"value": 0.47448,
+"frame": 83,
+"t": 30.71
+},
+"P_in_max": 0.071179,
+"tau": {
+"tau": 9.031,
+"t0": 26.27,
+"t1": 48.1,
+"n": 60
+}
+},
+{
+"file": "runs/dcoin_R6_E0.900.bin",
+"shape": "dcoin",
+"size": 6.0,
+"E": 0.9,
+"bytes": 1648420,
+"sha256": "122054f02103a58fa80f142f85ac0aef63b8f0f120eb6f2ea42511462670abaf",
+"notebook": "numakoudsie/fig15-rt3d-shard-4-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.36,
+"n": 200,
+"t_end": 71.64,
+"peak_max": 1.273804,
+"peak0": 0.048493463546037674,
+"end": {
+"norm": 0.015742,
+"left": 0.006723,
+"right": 0.00849,
+"well": 0.000174
+},
+"start_in_barrier": 4.2681550192188916e-10,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 7164,
+"wall": 21.67,
+"device": "cuda:0",
+"T_far": {
+"value": 0.43697,
+"frame": 82,
+"t": 29.52
+},
+"P_in_max": 0.059768,
+"tau": {
+"tau": 9.074,
+"t0": 25.92,
+"t1": 47.52,
+"n": 61
+}
+},
+{
+"file": "runs/dcoin_R6_E1.000.bin",
+"shape": "dcoin",
+"size": 6.0,
+"E": 1.0,
+"bytes": 1652440,
+"sha256": "638347ae88807a8b82a65824e78e49729266baca9bc294a4df4effb177862549",
+"notebook": "numakoudsie/fig15-rt3d-shard-1-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.35000000000000003,
+"n": 200,
+"t_end": 69.65,
+"peak_max": 1.29645,
+"peak0": 0.048493463546037674,
+"end": {
+"norm": 0.01135,
+"left": 0.005217,
+"right": 0.005728,
+"well": 0.000141
+},
+"start_in_barrier": 4.268155019218892e-10,
+"start_in_border": 2.517843367091191e-13,
+"steps": 6965,
+"wall": 21.42,
+"device": "cuda:0",
+"T_far": {
+"value": 0.3992,
+"frame": 81,
+"t": 28.35
+},
+"P_in_max": 0.047405,
+"tau": {
+"tau": 9.063,
+"t0": 24.15,
+"t1": 45.85,
+"n": 63
+}
+},
+{
+"file": "runs/dcoin_R6_E1.100.bin",
+"shape": "dcoin",
+"size": 6.0,
+"E": 1.1,
+"bytes": 1661052,
+"sha256": "3dc68e342f9e8d7e564d4a5fc4ed57f60c91022db89b8253b19c340b6e0774c4",
+"notebook": "numakoudsie/fig15-rt3d-shard-3-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.34,
+"n": 200,
+"t_end": 67.66,
+"peak_max": 1.32694,
+"peak0": 0.048493463546037674,
+"end": {
+"norm": 0.007579,
+"left": 0.003589,
+"right": 0.003713,
+"well": 0.000105
+},
+"start_in_barrier": 4.2681550192188916e-10,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 6766,
+"wall": 21.03,
+"device": "cuda:0",
+"T_far": {
+"value": 0.36896,
+"frame": 81,
+"t": 27.54
+},
+"P_in_max": 0.03864,
+"tau": {
+"tau": 8.878,
+"t0": 21.08,
+"t1": 42.84,
+"n": 65
+}
+},
+{
+"file": "runs/dcoin_R6_E1.200.bin",
+"shape": "dcoin",
+"size": 6.0,
+"E": 1.2,
+"bytes": 1696646,
+"sha256": "8bc5d494e937a47b94c9f5a4efd3da9948e499754145d501312059bd5b1ac63b",
+"notebook": "numakoudsie/fig15-rt3d-shard-4-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.34,
+"n": 200,
+"t_end": 67.66,
+"peak_max": 1.396981,
+"peak0": 0.048493463546037674,
+"end": {
+"norm": 0.003779,
+"left": 0.001784,
+"right": 0.001837,
+"well": 5e-05
+},
+"start_in_barrier": 4.268155019218892e-10,
+"start_in_border": 2.517843367091192e-13,
+"steps": 6766,
+"wall": 20.85,
+"device": "cuda:1",
+"T_far": {
+"value": 0.34821,
+"frame": 78,
+"t": 26.52
+},
+"P_in_max": 0.033223,
+"tau": {
+"tau": 8.244,
+"t0": 17.68,
+"t1": 38.08,
+"n": 61
+}
+},
+{
+"file": "runs/dcoin_R6_E1.300.bin",
+"shape": "dcoin",
+"size": 6.0,
+"E": 1.3,
+"bytes": 1716126,
+"sha256": "eeb67a009d4b81e8ba1b9b557cc96ab8e72b6c18a964382f88a2c2f1a77d5e1d",
+"notebook": "numakoudsie/fig15-rt3d-shard-1-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.33,
+"n": 200,
+"t_end": 65.67,
+"peak_max": 1.4553,
+"peak0": 0.048493463546037674,
+"end": {
+"norm": 0.002108,
+"left": 0.000992,
+"right": 0.001024,
+"well": 3.2e-05
+},
+"start_in_barrier": 4.2681550192188926e-10,
+"start_in_border": 2.517843367091191e-13,
+"steps": 6567,
+"wall": 20.33,
+"device": "cuda:0",
+"T_far": {
+"value": 0.33636,
+"frame": 78,
+"t": 25.74
+},
+"P_in_max": 0.030993,
+"tau": {
+"tau": 6.246,
+"t0": 15.84,
+"t1": 30.36,
+"n": 45
+}
+},
+{
+"file": "runs/dcoin_R6_E1.400.bin",
+"shape": "dcoin",
+"size": 6.0,
+"E": 1.4,
+"bytes": 1763926,
+"sha256": "9d735d02a6ccfb404abdc73a2313d57e6349779d093c7c6fe6e2a9438664a475",
+"notebook": "numakoudsie/fig15-rt3d-shard-2-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.33,
+"n": 200,
+"t_end": 65.67,
+"peak_max": 1.497117,
+"peak0": 0.048493463546037674,
+"end": {
+"norm": 0.000934,
+"left": 0.00044,
+"right": 0.000447,
+"well": 1.3e-05
+},
+"start_in_barrier": 4.2681550192188926e-10,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 6567,
+"wall": 20.71,
+"device": "cuda:0",
+"T_far": {
+"value": 0.33185,
+"frame": 76,
+"t": 25.08
+},
+"P_in_max": 0.031458,
+"tau": {
+"tau": 4.329,
+"t0": 14.19,
+"t1": 24.42,
+"n": 32
+}
+},
+{
+"file": "runs/dcoin_R6_E1.500.bin",
+"shape": "dcoin",
+"size": 6.0,
+"E": 1.5,
+"bytes": 1818320,
+"sha256": "8c89220b4fda03cfafe0f47390f07dba18d81cbaf00bc50d2ab192ca96eb2c53",
+"notebook": "numakoudsie/fig15-rt3d-shard-3-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.33,
+"n": 200,
+"t_end": 65.67,
+"peak_max": 1.518712,
+"peak0": 0.048493459820747375,
+"end": {
+"norm": 0.000408,
+"left": 0.000192,
+"right": 0.000192,
+"well": 5e-06
+},
+"start_in_barrier": 4.268155019218892e-10,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 6567,
+"wall": 20.22,
+"device": "cuda:1",
+"T_far": {
+"value": 0.33381,
+"frame": 74,
+"t": 24.42
+},
+"P_in_max": 0.034025,
+"tau": {
+"tau": 2.626,
+"t0": 13.2,
+"t1": 19.8,
+"n": 21
+}
+},
+{
+"file": "runs/dcoin_R6_E1.600.bin",
+"shape": "dcoin",
+"size": 6.0,
+"E": 1.6,
+"bytes": 1850468,
+"sha256": "089f9193e1ab583b1ee508bcdeaa1a94f87b77dce11a8ddf3089f29c88755ae8",
+"notebook": "numakoudsie/fig15-rt3d-shard-1-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.32,
+"n": 200,
+"t_end": 63.68,
+"peak_max": 1.518124,
+"peak0": 0.048493463546037674,
+"end": {
+"norm": 0.000209,
+"left": 0.000101,
+"right": 9.5e-05,
+"well": 3e-06
+},
+"start_in_barrier": 4.268155019218893e-10,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 6368,
+"wall": 19.54,
+"device": "cuda:1",
+"T_far": {
+"value": 0.34223,
+"frame": 74,
+"t": 23.68
+},
+"P_in_max": 0.038608,
+"tau": {
+"tau": 2.209,
+"t0": 12.8,
+"t1": 17.6,
+"n": 16
+}
+},
+{
+"file": "runs/dcoin_R6_E1.700.bin",
+"shape": "dcoin",
+"size": 6.0,
+"E": 1.7,
+"bytes": 1900358,
+"sha256": "690a8ce97354a39da15fd343917cd6b24a4d73242f35cc86e35f3d51709d7904",
+"notebook": "numakoudsie/fig15-rt3d-shard-2-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.32,
+"n": 200,
+"t_end": 63.68,
+"peak_max": 1.497319,
+"peak0": 0.04849346727132797,
+"end": {
+"norm": 9.6e-05,
+"left": 4.7e-05,
+"right": 4.2e-05,
+"well": 1e-06
+},
+"start_in_barrier": 4.268155019218892e-10,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 6368,
+"wall": 20.1,
+"device": "cuda:1",
+"T_far": {
+"value": 0.35767,
+"frame": 72,
+"t": 23.04
+},
+"P_in_max": 0.045357,
+"tau": {
+"tau": 1.792,
+"t0": 12.48,
+"t1": 16.64,
+"n": 14
+}
+},
+{
+"file": "runs/dcoin_R6_E1.800.bin",
+"shape": "dcoin",
+"size": 6.0,
+"E": 1.8,
+"bytes": 1948820,
+"sha256": "866dbc868aa7053308aa54fd4f3e5f4074298824db5905d07a3110521985393b",
+"notebook": "numakoudsie/fig15-rt3d-shard-3-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.32,
+"n": 200,
+"t_end": 63.68,
+"peak_max": 1.455078,
+"peak0": 0.048493463546037674,
+"end": {
+"norm": 4.7e-05,
+"left": 2.3e-05,
+"right": 2e-05,
+"well": 0.0
+},
+"start_in_barrier": 4.268155019218892e-10,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 6368,
+"wall": 19.72,
+"device": "cuda:0",
+"T_far": {
+"value": 0.38095,
+"frame": 71,
+"t": 22.72
+},
+"P_in_max": 0.053937,
+"tau": {
+"tau": 1.231,
+"t0": 12.16,
+"t1": 15.36,
+"n": 11
+}
+},
+{
+"file": "runs/dcoin_R6_E1.900.bin",
+"shape": "dcoin",
+"size": 6.0,
+"E": 1.9,
+"bytes": 1964003,
+"sha256": "1ee16b0837852d5ac887d626d311232dfb7f3a0c831c5e5c47cfd198edcaa150",
+"notebook": "numakoudsie/fig15-rt3d-shard-4-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.31,
+"n": 200,
+"t_end": 61.69,
+"peak_max": 1.398981,
+"peak0": 0.048493463546037674,
+"end": {
+"norm": 2.9e-05,
+"left": 1.6e-05,
+"right": 1.2e-05,
+"well": 0.0
+},
+"start_in_barrier": 4.268155019218892e-10,
+"start_in_border": 2.517843367091191e-13,
+"steps": 6169,
+"wall": 19.25,
+"device": "cuda:0",
+"T_far": {
+"value": 0.41236,
+"frame": 71,
+"t": 22.01
+},
+"P_in_max": 0.06472,
+"tau": {
+"tau": 1.073,
+"t0": 12.09,
+"t1": 14.57,
+"n": 9
+}
+},
+{
+"file": "runs/dcoin_R6_E2.000.bin",
+"shape": "dcoin",
+"size": 6.0,
+"E": 2.0,
+"bytes": 1993985,
+"sha256": "fcc0dfa293ff7331bfde8627589d7d8e2ec28fb480cccaf1d97ed4a13290d6b6",
+"notebook": "numakoudsie/fig15-rt3d-shard-1-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.31,
+"n": 200,
+"t_end": 61.69,
+"peak_max": 1.342946,
+"peak0": 0.048493459820747375,
+"end": {
+"norm": 1.7e-05,
+"left": 9e-06,
+"right": 7e-06,
+"well": 0.0
+},
+"start_in_barrier": 4.268155019218891e-10,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 6169,
+"wall": 19.38,
+"device": "cuda:1",
+"T_far": {
+"value": 0.45208,
+"frame": 70,
+"t": 21.7
+},
+"P_in_max": 0.077104,
+"tau": {
+"tau": 1.092,
+"t0": 12.09,
+"t1": 14.57,
+"n": 9
+}
+},
+{
+"file": "runs/dshell_R3_E0.400.bin",
+"shape": "dshell",
+"size": 3.0,
+"E": 0.4,
+"bytes": 1806058,
+"sha256": "f3b6b6607c40949e39f9c0df8c632bf7e826331626aca6111dbde123588595d1",
+"notebook": "numakoudsie/fig15-rt3d-shard-1-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.43,
+"n": 200,
+"t_end": 85.57,
+"peak_max": 1.087969,
+"peak0": 0.04849346727132797,
+"end": {
+"norm": 0.137916,
+"core": 0.000837,
+"gap": 0.00045,
+"out": 0.136475
+},
+"start_in_barrier": 3.150549436617954e-07,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 8557,
+"wall": 27.09,
+"device": "cuda:1",
+"P_in_max": 0.013011,
+"tau": {
+"tau": 38.612,
+"t0": 22.79,
+"t1": 85.57,
+"n": 147
+}
+},
+{
+"file": "runs/dshell_R3_E0.500.bin",
+"shape": "dshell",
+"size": 3.0,
+"E": 0.5,
+"bytes": 1742183,
+"sha256": "4a6675abfd3138f537d78c504e36addeec654cec533e6a67476197a3b5235721",
+"notebook": "numakoudsie/fig15-rt3d-shard-3-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.41000000000000003,
+"n": 200,
+"t_end": 81.59,
+"peak_max": 1.165561,
+"peak0": 0.04849346727132797,
+"end": {
+"norm": 0.088864,
+"core": 0.001092,
+"gap": 0.001706,
+"out": 0.085593
+},
+"start_in_barrier": 3.1505494366179546e-07,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 8159,
+"wall": 25.25,
+"device": "cuda:0",
+"P_in_max": 0.025479,
+"tau": {
+"tau": 32.83,
+"t0": 25.42,
+"t1": 81.59,
+"n": 138
+}
+},
+{
+"file": "runs/dshell_R3_E0.600.bin",
+"shape": "dshell",
+"size": 3.0,
+"E": 0.6,
+"bytes": 1671390,
+"sha256": "f285b1d82fa84798f4b8c10919606f5199b5f294840a7fbd025c92c57a1ecc49",
+"notebook": "numakoudsie/fig15-rt3d-shard-4-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.39,
+"n": 200,
+"t_end": 77.61,
+"peak_max": 1.255844,
+"peak0": 0.048493463546037674,
+"end": {
+"norm": 0.066323,
+"core": 0.000564,
+"gap": 0.004404,
+"out": 0.060391
+},
+"start_in_barrier": 3.1505494366179546e-07,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 7761,
+"wall": 23.41,
+"device": "cuda:0",
+"P_in_max": 0.041273,
+"tau": {
+"tau": 30.045,
+"t0": 30.03,
+"t1": 77.61,
+"n": 123
+}
+},
+{
+"file": "runs/dshell_R3_E0.700.bin",
+"shape": "dshell",
+"size": 3.0,
+"E": 0.7,
+"bytes": 1628773,
+"sha256": "a5b96b0b19c1644540829c51ab004a01c0cf9cc9ea8b47604a9d7650abadf1cb",
+"notebook": "numakoudsie/fig15-rt3d-shard-1-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.38,
+"n": 200,
+"t_end": 75.62,
+"peak_max": 1.327587,
+"peak0": 0.048493463546037674,
+"end": {
+"norm": 0.052609,
+"core": 0.000298,
+"gap": 0.0069,
+"out": 0.043984
+},
+"start_in_barrier": 3.1505494366179546e-07,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 7562,
+"wall": 22.89,
+"device": "cuda:0",
+"P_in_max": 0.05722,
+"tau": {
+"tau": 28.544,
+"t0": 31.54,
+"t1": 75.62,
+"n": 117
+}
+},
+{
+"file": "runs/dshell_R3_E0.735.bin",
+"shape": "dshell",
+"size": 3.0,
+"E": 0.735,
+"bytes": 1608955,
+"sha256": "7d9e8816af45ecee55049434623c5491be993923c63a60a906e29b49dd47f96e",
+"notebook": "numakoudsie/fig15-rt3d-shard-2-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.37,
+"n": 200,
+"t_end": 73.63,
+"peak_max": 1.347614,
+"peak0": 0.04849346727132797,
+"end": {
+"norm": 0.053551,
+"core": 0.000507,
+"gap": 0.007781,
+"out": 0.043569
+},
+"start_in_barrier": 3.1505494366179557e-07,
+"start_in_border": 2.517843367091191e-13,
+"steps": 7363,
+"wall": 23.25,
+"device": "cuda:1",
+"P_in_max": 0.062237,
+"tau": {
+"tau": 28.071,
+"t0": 31.45,
+"t1": 73.63,
+"n": 115
+}
+},
+{
+"file": "runs/dshell_R3_E0.800.bin",
+"shape": "dshell",
+"size": 3.0,
+"E": 0.8,
+"bytes": 1607849,
+"sha256": "cd53fc29cc94c23fce78e48a0fe3da82f10ff14cdc3cd62306513d79dbacb88a",
+"notebook": "numakoudsie/fig15-rt3d-shard-4-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.37,
+"n": 200,
+"t_end": 73.63,
+"peak_max": 1.380918,
+"peak0": 0.04849346727132797,
+"end": {
+"norm": 0.046958,
+"core": 0.000745,
+"gap": 0.008285,
+"out": 0.036123
+},
+"start_in_barrier": 3.1505494366179546e-07,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 7363,
+"wall": 22.77,
+"device": "cuda:1",
+"P_in_max": 0.070339,
+"tau": {
+"tau": 27.388,
+"t0": 31.45,
+"t1": 73.63,
+"n": 115
+}
+},
+{
+"file": "runs/dshell_R3_E0.900.bin",
+"shape": "dshell",
+"size": 3.0,
+"E": 0.9,
+"bytes": 1583460,
+"sha256": "a375970c68006391a526f8c5c5f5d794aab2b94e82cb42b243cb576f36953eb8",
+"notebook": "numakoudsie/fig15-rt3d-shard-1-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.36,
+"n": 200,
+"t_end": 71.64,
+"peak_max": 1.419341,
+"peak0": 0.048493463546037674,
+"end": {
+"norm": 0.043101,
+"core": 0.001842,
+"gap": 0.008212,
+"out": 0.031048
+},
+"start_in_barrier": 3.1505494366179546e-07,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 7164,
+"wall": 22.35,
+"device": "cuda:1",
+"P_in_max": 0.07932,
+"tau": {
+"tau": 26.309,
+"t0": 30.6,
+"t1": 71.64,
+"n": 115
+}
+},
+{
+"file": "runs/dshell_R3_E1.000.bin",
+"shape": "dshell",
+"size": 3.0,
+"E": 1.0,
+"bytes": 1561660,
+"sha256": "0fff1cb2d71dccd5afedf5ddd2698cfa60985f18a2a9f11a67b7eec0c54cbb2c",
+"notebook": "numakoudsie/fig15-rt3d-shard-2-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.35000000000000003,
+"n": 200,
+"t_end": 69.65,
+"peak_max": 1.439486,
+"peak0": 0.048493463546037674,
+"end": {
+"norm": 0.038488,
+"core": 0.002829,
+"gap": 0.007322,
+"out": 0.026304
+},
+"start_in_barrier": 3.1505494366179546e-07,
+"start_in_border": 2.517843367091191e-13,
+"steps": 6965,
+"wall": 21.98,
+"device": "cuda:0",
+"P_in_max": 0.084305,
+"tau": {
+"tau": 25.164,
+"t0": 29.4,
+"t1": 69.65,
+"n": 116
+}
+},
+{
+"file": "runs/dshell_R3_E1.100.bin",
+"shape": "dshell",
+"size": 3.0,
+"E": 1.1,
+"bytes": 1545542,
+"sha256": "21de33349c37d911d77e1862f5cf841e90e4afaaccf54e4fd56136dd4f1ffa5c",
+"notebook": "numakoudsie/fig15-rt3d-shard-4-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.34,
+"n": 200,
+"t_end": 67.66,
+"peak_max": 1.480608,
+"peak0": 0.048493463546037674,
+"end": {
+"norm": 0.033715,
+"core": 0.003098,
+"gap": 0.006408,
+"out": 0.022258
+},
+"start_in_barrier": 3.1505494366179557e-07,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 6766,
+"wall": 20.75,
+"device": "cuda:0",
+"P_in_max": 0.086235,
+"tau": {
+"tau": 23.904,
+"t0": 27.54,
+"t1": 67.66,
+"n": 119
+}
+},
+{
+"file": "runs/dshell_R3_E1.200.bin",
+"shape": "dshell",
+"size": 3.0,
+"E": 1.2,
+"bytes": 1535907,
+"sha256": "ba132fa63acae141ea518da505d204eea7bd7584627188e9012d9cbd7bd1c066",
+"notebook": "numakoudsie/fig15-rt3d-shard-1-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.34,
+"n": 200,
+"t_end": 67.66,
+"peak_max": 1.55922,
+"peak0": 0.048493463546037674,
+"end": {
+"norm": 0.027406,
+"core": 0.002825,
+"gap": 0.005272,
+"out": 0.017643
+},
+"start_in_barrier": 3.1505494366179546e-07,
+"start_in_border": 2.517843367091192e-13,
+"steps": 6766,
+"wall": 20.79,
+"device": "cuda:1",
+"P_in_max": 0.086433,
+"tau": {
+"tau": 22.689,
+"t0": 25.84,
+"t1": 67.66,
+"n": 124
+}
+},
+{
+"file": "runs/dshell_R3_E1.300.bin",
+"shape": "dshell",
+"size": 3.0,
+"E": 1.3,
+"bytes": 1523038,
+"sha256": "2ee5af80d6d21a6ec1d8df7b0c208a186f5f36dfb792f0c0ae3dbeedb430d0df",
+"notebook": "numakoudsie/fig15-rt3d-shard-2-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.33,
+"n": 200,
+"t_end": 65.67,
+"peak_max": 1.608568,
+"peak0": 0.048493463546037674,
+"end": {
+"norm": 0.024771,
+"core": 0.0023,
+"gap": 0.005099,
+"out": 0.015955
+},
+"start_in_barrier": 3.1505494366179546e-07,
+"start_in_border": 2.517843367091191e-13,
+"steps": 6567,
+"wall": 20.95,
+"device": "cuda:1",
+"P_in_max": 0.085997,
+"tau": {
+"tau": 21.43,
+"t0": 24.42,
+"t1": 65.67,
+"n": 126
+}
+},
+{
+"file": "runs/dshell_R3_E1.400.bin",
+"shape": "dshell",
+"size": 3.0,
+"E": 1.4,
+"bytes": 1516638,
+"sha256": "3a1050dbfa6fdadce2516923f230b588f250c2fb1852361dc3e297cc2818ab24",
+"notebook": "numakoudsie/fig15-rt3d-shard-3-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.33,
+"n": 200,
+"t_end": 65.67,
+"peak_max": 1.658874,
+"peak0": 0.048493463546037674,
+"end": {
+"norm": 0.020688,
+"core": 0.002162,
+"gap": 0.004113,
+"out": 0.013147
+},
+"start_in_barrier": 3.1505494366179546e-07,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 6567,
+"wall": 20.53,
+"device": "cuda:0",
+"P_in_max": 0.085791,
+"tau": {
+"tau": 20.471,
+"t0": 23.1,
+"t1": 65.67,
+"n": 130
+}
+},
+{
+"file": "runs/dshell_R3_E1.500.bin",
+"shape": "dshell",
+"size": 3.0,
+"E": 1.5,
+"bytes": 1509341,
+"sha256": "81b51c59893ffbf8cd173f46cde2aff2b4f03e3b0bcdcdea436816e0d746ce70",
+"notebook": "numakoudsie/fig15-rt3d-shard-4-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.33,
+"n": 200,
+"t_end": 65.67,
+"peak_max": 1.733904,
+"peak0": 0.048493459820747375,
+"end": {
+"norm": 0.017678,
+"core": 0.002171,
+"gap": 0.003311,
+"out": 0.010999
+},
+"start_in_barrier": 3.1505494366179546e-07,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 6567,
+"wall": 20.77,
+"device": "cuda:1",
+"P_in_max": 0.08646,
+"tau": {
+"tau": 19.815,
+"t0": 21.78,
+"t1": 65.67,
+"n": 134
+}
+},
+{
+"file": "runs/dshell_R3_E1.600.bin",
+"shape": "dshell",
+"size": 3.0,
+"E": 1.6,
+"bytes": 1493094,
+"sha256": "5664499c7d2ab84646e38809afd1ea8c21dcea2ae33a9eb1be985ce3a565eae7",
+"notebook": "numakoudsie/fig15-rt3d-shard-2-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.32,
+"n": 200,
+"t_end": 63.68,
+"peak_max": 1.831537,
+"peak0": 0.048493463546037674,
+"end": {
+"norm": 0.017039,
+"core": 0.002346,
+"gap": 0.003057,
+"out": 0.010372
+},
+"start_in_barrier": 3.1505494366179546e-07,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 6368,
+"wall": 19.8,
+"device": "cuda:0",
+"P_in_max": 0.088622,
+"tau": {
+"tau": 19.155,
+"t0": 20.48,
+"t1": 63.68,
+"n": 136
+}
+},
+{
+"file": "runs/dshell_R3_E1.700.bin",
+"shape": "dshell",
+"size": 3.0,
+"E": 1.7,
+"bytes": 1487325,
+"sha256": "59cc51f9dca670a367878d427af25c0a3f70c87709d40c9a61f2f6a2aca5e456",
+"notebook": "numakoudsie/fig15-rt3d-shard-3-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.32,
+"n": 200,
+"t_end": 63.68,
+"peak_max": 1.948552,
+"peak0": 0.04849346727132797,
+"end": {
+"norm": 0.014881,
+"core": 0.002427,
+"gap": 0.002451,
+"out": 0.008772
+},
+"start_in_barrier": 3.150549436617955e-07,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 6368,
+"wall": 19.97,
+"device": "cuda:1",
+"P_in_max": 0.092695,
+"tau": {
+"tau": 18.653,
+"t0": 19.2,
+"t1": 63.68,
+"n": 140
+}
+},
+{
+"file": "runs/dshell_R3_E1.800.bin",
+"shape": "dshell",
+"size": 3.0,
+"E": 1.8,
+"bytes": 1483302,
+"sha256": "7fd0dd4c2b4144a08ce455e1f4305bf75649bd34df3cb198b96783d4f1605d1c",
+"notebook": "numakoudsie/fig15-rt3d-shard-4-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.32,
+"n": 200,
+"t_end": 63.68,
+"peak_max": 2.071072,
+"peak0": 0.048493463546037674,
+"end": {
+"norm": 0.012917,
+"core": 0.002366,
+"gap": 0.001961,
+"out": 0.00743
+},
+"start_in_barrier": 3.1505494366179546e-07,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 6368,
+"wall": 19.47,
+"device": "cuda:1",
+"P_in_max": 0.098915,
+"tau": {
+"tau": 17.461,
+"t0": 17.92,
+"t1": 60.16,
+"n": 133
+}
+},
+{
+"file": "runs/dshell_R3_E1.900.bin",
+"shape": "dshell",
+"size": 3.0,
+"E": 1.9,
+"bytes": 1473772,
+"sha256": "c9b8aacc88df4e34d2e81575cd67d2f761d59284906624cc31b9ac4cddaeb25f",
+"notebook": "numakoudsie/fig15-rt3d-shard-1-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.31,
+"n": 200,
+"t_end": 61.69,
+"peak_max": 2.199527,
+"peak0": 0.048493463546037674,
+"end": {
+"norm": 0.012175,
+"core": 0.002325,
+"gap": 0.001693,
+"out": 0.007021
+},
+"start_in_barrier": 3.1505494366179546e-07,
+"start_in_border": 2.517843367091191e-13,
+"steps": 6169,
+"wall": 19.1,
+"device": "cuda:0",
+"P_in_max": 0.107039,
+"tau": {
+"tau": 15.677,
+"t0": 16.74,
+"t1": 55.18,
+"n": 125
+}
+},
+{
+"file": "runs/dshell_R3_E2.000.bin",
+"shape": "dshell",
+"size": 3.0,
+"E": 2.0,
+"bytes": 1458014,
+"sha256": "a3856528de7af7fa025884c7a94c8d467dbe5edf0de55cae010771cf9d7f2b5b",
+"notebook": "numakoudsie/fig15-rt3d-shard-2-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.31,
+"n": 200,
+"t_end": 61.69,
+"peak_max": 2.323547,
+"peak0": 0.048493459820747375,
+"end": {
+"norm": 0.010265,
+"core": 0.001968,
+"gap": 0.001333,
+"out": 0.005998
+},
+"start_in_barrier": 3.1505494366179546e-07,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 6169,
+"wall": 19.97,
+"device": "cuda:1",
+"P_in_max": 0.116918,
+"tau": {
+"tau": 13.611,
+"t0": 15.81,
+"t1": 49.6,
+"n": 110
+}
+},
+{
+"file": "runs/sflat_R0_E0.400.bin",
+"shape": "sflat",
+"size": 0.0,
+"E": 0.4,
+"bytes": 1126259,
+"sha256": "86e3f703a306db46cf22966e23db3eb1758c28703481ba8d8ae5db79ec20600a",
+"notebook": "numakoudsie/fig15-rt3d-singles-v2",
+"version": 1,
+"commit": "db0a60cc9f3ed5d63b1b4c7e9fb4d51ed4160f79",
+"frame_dt": 0.43,
+"n": 200,
+"t_end": 85.57,
+"peak_max": 1.014544,
+"peak0": 0.04849346727132797,
+"end": {
+"norm": 0.130174,
+"left": 0.123442,
+"right": 0.006687
+},
+"start_in_barrier": 4.970345744280983e-10,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 8557,
+"wall": 26.85,
+"device": "cuda:0",
+"T_far": {
+"value": 0.07851,
+"frame": 91,
+"t": 39.13
+},
+"P_in_max": 0.0,
+"twin": {
+"T": 0.078971,
+"R": 0.920981,
+"T_exact": 0.074499,
+"sep_check_max": 6.979026511544362e-05
+}
+},
+{
+"file": "runs/sflat_R0_E0.735.bin",
+"shape": "sflat",
+"size": 0.0,
+"E": 0.735,
+"bytes": 1072957,
+"sha256": "a3e60dbfc0bdef81024ab5af04af12f02da4b2fcb31f557e8d26e4f2f3da64cd",
+"notebook": "numakoudsie/fig15-rt3d-singles-v2",
+"version": 1,
+"commit": "db0a60cc9f3ed5d63b1b4c7e9fb4d51ed4160f79",
+"frame_dt": 0.37,
+"n": 200,
+"t_end": 73.63,
+"peak_max": 1.244883,
+"peak0": 0.04849346727132797,
+"end": {
+"norm": 0.015864,
+"left": 0.014141,
+"right": 0.001681
+},
+"start_in_barrier": 4.970345744280984e-10,
+"start_in_border": 2.517843367091191e-13,
+"steps": 7363,
+"wall": 22.38,
+"device": "cuda:1",
+"T_far": {
+"value": 0.15062,
+"frame": 85,
+"t": 31.45
+},
+"P_in_max": 0.0,
+"twin": {
+"T": 0.150768,
+"R": 0.849189,
+"T_exact": 0.14942,
+"sep_check_max": 0.0003216844634152949
+}
+},
+{
+"file": "runs/sflat_R0_E1.000.bin",
+"shape": "sflat",
+"size": 0.0,
+"E": 1.0,
+"bytes": 1057188,
+"sha256": "8c24701e8ddb32f34488e8eab6a563673242126ba90a17e8c8bae3d88f8daec5",
+"notebook": "numakoudsie/fig15-rt3d-singles-v2",
+"version": 1,
+"commit": "db0a60cc9f3ed5d63b1b4c7e9fb4d51ed4160f79",
+"frame_dt": 0.35000000000000003,
+"n": 200,
+"t_end": 69.65,
+"peak_max": 1.257111,
+"peak0": 0.048493463546037674,
+"end": {
+"norm": 0.002823,
+"left": 0.00231,
+"right": 0.000487
+},
+"start_in_barrier": 4.970345744280983e-10,
+"start_in_border": 2.517843367091191e-13,
+"steps": 6965,
+"wall": 21.24,
+"device": "cuda:1",
+"T_far": {
+"value": 0.21151,
+"frame": 80,
+"t": 28.0
+},
+"P_in_max": 0.0,
+"twin": {
+"T": 0.211596,
+"R": 0.788377,
+"T_exact": 0.21676,
+"sep_check_max": 0.0005468281451612711
+}
+},
+{
+"file": "runs/sflat_R0_E1.500.bin",
+"shape": "sflat",
+"size": 0.0,
+"E": 1.5,
+"bytes": 1045870,
+"sha256": "46c6bce3c39e325f6a642e3773a8acfa5d2a0252ab9e3c715b603aa6ba9c8e49",
+"notebook": "numakoudsie/fig15-rt3d-singles-v2",
+"version": 1,
+"commit": "db0a60cc9f3ed5d63b1b4c7e9fb4d51ed4160f79",
+"frame_dt": 0.33,
+"n": 200,
+"t_end": 65.67,
+"peak_max": 1.396954,
+"peak0": 0.048493459820747375,
+"end": {
+"norm": 0.000131,
+"left": 8.1e-05,
+"right": 4.6e-05
+},
+"start_in_barrier": 4.970345744280983e-10,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 6567,
+"wall": 19.85,
+"device": "cuda:1",
+"T_far": {
+"value": 0.33276,
+"frame": 73,
+"t": 24.09
+},
+"P_in_max": 0.0,
+"twin": {
+"T": 0.332734,
+"R": 0.667263,
+"T_exact": 0.356958,
+"sep_check_max": 0.0008517634123563766
+}
+},
+{
+"file": "runs/sflat_R0_E2.000.bin",
+"shape": "sflat",
+"size": 0.0,
+"E": 2.0,
+"bytes": 1049029,
+"sha256": "0526f743e5410942d71333ea7cec3b15c70c248709d2b5e557dc40f3b170106c",
+"notebook": "numakoudsie/fig15-rt3d-singles-v2",
+"version": 1,
+"commit": "db0a60cc9f3ed5d63b1b4c7e9fb4d51ed4160f79",
+"frame_dt": 0.31,
+"n": 200,
+"t_end": 61.69,
+"peak_max": 1.396208,
+"peak0": 0.048493459820747375,
+"end": {
+"norm": 7e-06,
+"left": 4e-06,
+"right": 3e-06
+},
+"start_in_barrier": 4.970345744280982e-10,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 6169,
+"wall": 18.92,
+"device": "cuda:1",
+"T_far": {
+"value": 0.45627,
+"frame": 69,
+"t": 21.39
+},
+"P_in_max": 0.0,
+"twin": {
+"T": 0.456233,
+"R": 0.543766,
+"T_exact": 0.50164,
+"sep_check_max": 0.002723341342061758
+}
+},
+{
+"file": "runs/scoin_R2_E0.400.bin",
+"shape": "scoin",
+"size": 2.0,
+"E": 0.4,
+"bytes": 1515886,
+"sha256": "1943c1b48b1e43bedb3ca9c27a7ca33edd24501b2723850536ebc618a21774c4",
+"notebook": "numakoudsie/fig15-rt3d-singles-v2",
+"version": 1,
+"commit": "db0a60cc9f3ed5d63b1b4c7e9fb4d51ed4160f79",
+"frame_dt": 0.43,
+"n": 200,
+"t_end": 85.57,
+"peak_max": 1.0,
+"peak0": 0.04849346727132797,
+"end": {
+"norm": 0.151698,
+"left": 0.005294,
+"right": 0.146294
+},
+"start_in_barrier": 8.972492530463123e-11,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 8557,
+"wall": 27.16,
+"device": "cuda:1",
+"T_far": {
+"value": 0.94646,
+"frame": 95,
+"t": 40.85
+},
+"P_in_max": 0.0
+},
+{
+"file": "runs/scoin_R2_E0.735.bin",
+"shape": "scoin",
+"size": 2.0,
+"E": 0.735,
+"bytes": 1601970,
+"sha256": "1ff1a47c71ea0266850d4203efba0d92f31db75965dfcd929a13473fbd3b57de",
+"notebook": "numakoudsie/fig15-rt3d-singles-v2",
+"version": 1,
+"commit": "db0a60cc9f3ed5d63b1b4c7e9fb4d51ed4160f79",
+"frame_dt": 0.37,
+"n": 200,
+"t_end": 73.63,
+"peak_max": 1.15302,
+"peak0": 0.04849346727132797,
+"end": {
+"norm": 0.020462,
+"left": 0.001543,
+"right": 0.018875
+},
+"start_in_barrier": 8.972492530463123e-11,
+"start_in_border": 2.517843367091191e-13,
+"steps": 7363,
+"wall": 23.78,
+"device": "cuda:0",
+"T_far": {
+"value": 0.94254,
+"frame": 89,
+"t": 32.93
+},
+"P_in_max": 0.0
+},
+{
+"file": "runs/scoin_R2_E1.000.bin",
+"shape": "scoin",
+"size": 2.0,
+"E": 1.0,
+"bytes": 1660017,
+"sha256": "1c0138377897e35a53c08891bcf154c435a509eb821e2da1cdb23929ed35c445",
+"notebook": "numakoudsie/fig15-rt3d-singles-v2",
+"version": 1,
+"commit": "db0a60cc9f3ed5d63b1b4c7e9fb4d51ed4160f79",
+"frame_dt": 0.35000000000000003,
+"n": 200,
+"t_end": 69.65,
+"peak_max": 1.296761,
+"peak0": 0.048493463546037674,
+"end": {
+"norm": 0.003721,
+"left": 0.000528,
+"right": 0.003168
+},
+"start_in_barrier": 8.972492530463121e-11,
+"start_in_border": 2.517843367091191e-13,
+"steps": 6965,
+"wall": 21.44,
+"device": "cuda:0",
+"T_far": {
+"value": 0.93724,
+"frame": 83,
+"t": 29.05
+},
+"P_in_max": 0.0
+},
+{
+"file": "runs/scoin_R2_E1.500.bin",
+"shape": "scoin",
+"size": 2.0,
+"E": 1.5,
+"bytes": 1764264,
+"sha256": "d5c15a8ef9273407103866a5c4435d3d5a4f8374f821577ea5022ecdf8a50869",
+"notebook": "numakoudsie/fig15-rt3d-singles-v2",
+"version": 1,
+"commit": "db0a60cc9f3ed5d63b1b4c7e9fb4d51ed4160f79",
+"frame_dt": 0.33,
+"n": 200,
+"t_end": 65.67,
+"peak_max": 1.471739,
+"peak0": 0.048493459820747375,
+"end": {
+"norm": 0.000201,
+"left": 6.1e-05,
+"right": 0.000137
+},
+"start_in_barrier": 8.972492530463123e-11,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 6567,
+"wall": 20.54,
+"device": "cuda:0",
+"T_far": {
+"value": 0.93506,
+"frame": 75,
+"t": 24.75
+},
+"P_in_max": 0.0
+},
+{
+"file": "runs/scoin_R2_E2.000.bin",
+"shape": "scoin",
+"size": 2.0,
+"E": 2.0,
+"bytes": 1799418,
+"sha256": "adb337ffa2c9aba38a201cc06ce4f587b502ab1621c5e2229c0f7755d5f8a44c",
+"notebook": "numakoudsie/fig15-rt3d-singles-v2",
+"version": 1,
+"commit": "db0a60cc9f3ed5d63b1b4c7e9fb4d51ed4160f79",
+"frame_dt": 0.31,
+"n": 200,
+"t_end": 61.69,
+"peak_max": 1.610073,
+"peak0": 0.048493459820747375,
+"end": {
+"norm": 1.3e-05,
+"left": 7e-06,
+"right": 6e-06
+},
+"start_in_barrier": 8.97249253046312e-11,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 6169,
+"wall": 19.32,
+"device": "cuda:0",
+"T_far": {
+"value": 0.93998,
+"frame": 71,
+"t": 22.01
+},
+"P_in_max": 0.0
+},
+{
+"file": "runs/scoin_R4_E0.400.bin",
+"shape": "scoin",
+"size": 4.0,
+"E": 0.4,
+"bytes": 1643770,
+"sha256": "2b2d03ab76dd73be710ca2277c324ed7cb9e319d9c743322d275fe96a5d2808f",
+"notebook": "numakoudsie/fig15-rt3d-singles-v2",
+"version": 1,
+"commit": "db0a60cc9f3ed5d63b1b4c7e9fb4d51ed4160f79",
+"frame_dt": 0.43,
+"n": 200,
+"t_end": 85.57,
+"peak_max": 1.106015,
+"peak0": 0.04849346727132797,
+"end": {
+"norm": 0.152942,
+"left": 0.027945,
+"right": 0.124835
+},
+"start_in_barrier": 2.852919442867499e-10,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 8557,
+"wall": 25.42,
+"device": "cuda:1",
+"T_far": {
+"value": 0.75722,
+"frame": 95,
+"t": 40.85
+},
+"P_in_max": 0.0
+},
+{
+"file": "runs/scoin_R4_E0.735.bin",
+"shape": "scoin",
+"size": 4.0,
+"E": 0.735,
+"bytes": 1764948,
+"sha256": "fdfbbb0a5399d9ea60db630040c4124d017cf383852e44fde41dffb890b09228",
+"notebook": "numakoudsie/fig15-rt3d-singles-v2",
+"version": 1,
+"commit": "db0a60cc9f3ed5d63b1b4c7e9fb4d51ed4160f79",
+"frame_dt": 0.37,
+"n": 200,
+"t_end": 73.63,
+"peak_max": 1.342673,
+"peak0": 0.04849346727132797,
+"end": {
+"norm": 0.02306,
+"left": 0.005912,
+"right": 0.017102
+},
+"start_in_barrier": 2.8529194428674985e-10,
+"start_in_border": 2.517843367091191e-13,
+"steps": 7363,
+"wall": 22.27,
+"device": "cuda:1",
+"T_far": {
+"value": 0.71903,
+"frame": 88,
+"t": 32.56
+},
+"P_in_max": 0.0
+},
+{
+"file": "runs/scoin_R4_E1.000.bin",
+"shape": "scoin",
+"size": 4.0,
+"E": 1.0,
+"bytes": 1847721,
+"sha256": "58c80cd7dca197c3cb2458e401d72a5f4b7ad5a2d677bf301a62e4c9b3361bab",
+"notebook": "numakoudsie/fig15-rt3d-singles-v2",
+"version": 1,
+"commit": "db0a60cc9f3ed5d63b1b4c7e9fb4d51ed4160f79",
+"frame_dt": 0.35000000000000003,
+"n": 200,
+"t_end": 69.65,
+"peak_max": 1.309831,
+"peak0": 0.048493463546037674,
+"end": {
+"norm": 0.004194,
+"left": 0.001279,
+"right": 0.002888
+},
+"start_in_barrier": 2.8529194428674985e-10,
+"start_in_border": 2.517843367091191e-13,
+"steps": 6965,
+"wall": 21.23,
+"device": "cuda:1",
+"T_far": {
+"value": 0.71085,
+"frame": 82,
+"t": 28.7
+},
+"P_in_max": 0.0
+},
+{
+"file": "runs/scoin_R4_E1.500.bin",
+"shape": "scoin",
+"size": 4.0,
+"E": 1.5,
+"bytes": 1948405,
+"sha256": "e9c98c0aa8a889ab8d5a7ed463978411a3e27b0fe424fe0d7a7dec540c7bff2e",
+"notebook": "numakoudsie/fig15-rt3d-singles-v2",
+"version": 1,
+"commit": "db0a60cc9f3ed5d63b1b4c7e9fb4d51ed4160f79",
+"frame_dt": 0.33,
+"n": 200,
+"t_end": 65.67,
+"peak_max": 1.377358,
+"peak0": 0.048493459820747375,
+"end": {
+"norm": 0.00023,
+"left": 8.5e-05,
+"right": 0.000141
+},
+"start_in_barrier": 2.8529194428674985e-10,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 6567,
+"wall": 20.19,
+"device": "cuda:1",
+"T_far": {
+"value": 0.72522,
+"frame": 74,
+"t": 24.42
+},
+"P_in_max": 0.0
+},
+{
+"file": "runs/scoin_R4_E2.000.bin",
+"shape": "scoin",
+"size": 4.0,
+"E": 2.0,
+"bytes": 1968125,
+"sha256": "e581854c8d944f08fa8a172ac9d1fcbc078f2357634373a58ca172feea4d708e",
+"notebook": "numakoudsie/fig15-rt3d-singles-v2",
+"version": 1,
+"commit": "db0a60cc9f3ed5d63b1b4c7e9fb4d51ed4160f79",
+"frame_dt": 0.31,
+"n": 200,
+"t_end": 61.69,
+"peak_max": 1.364471,
+"peak0": 0.048493459820747375,
+"end": {
+"norm": 1.6e-05,
+"left": 7e-06,
+"right": 8e-06
+},
+"start_in_barrier": 2.852919442867498e-10,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 6169,
+"wall": 19.01,
+"device": "cuda:1",
+"T_far": {
+"value": 0.76059,
+"frame": 70,
+"t": 21.7
+},
+"P_in_max": 0.0
+},
+{
+"file": "runs/scoin_R6_E0.400.bin",
+"shape": "scoin",
+"size": 6.0,
+"E": 0.4,
+"bytes": 1662386,
+"sha256": "c9b2f36e402fe7e51cdaeb70ddeae0126269b37d722ab32754de736aae861f62",
+"notebook": "numakoudsie/fig15-rt3d-singles-v2",
+"version": 1,
+"commit": "db0a60cc9f3ed5d63b1b4c7e9fb4d51ed4160f79",
+"frame_dt": 0.43,
+"n": 200,
+"t_end": 85.57,
+"peak_max": 1.012745,
+"peak0": 0.04849346727132797,
+"end": {
+"norm": 0.152366,
+"left": 0.056807,
+"right": 0.095406
+},
+"start_in_barrier": 4.2511344629921933e-10,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 8557,
+"wall": 25.62,
+"device": "cuda:0",
+"T_far": {
+"value": 0.52309,
+"frame": 92,
+"t": 39.56
+},
+"P_in_max": 0.0
+},
+{
+"file": "runs/scoin_R6_E0.735.bin",
+"shape": "scoin",
+"size": 6.0,
+"E": 0.735,
+"bytes": 1750013,
+"sha256": "144a0b8bad9ac2559ffd1047e956ee3d71c4b497540d0e05924fc97aad9edf08",
+"notebook": "numakoudsie/fig15-rt3d-singles-v2",
+"version": 1,
+"commit": "db0a60cc9f3ed5d63b1b4c7e9fb4d51ed4160f79",
+"frame_dt": 0.37,
+"n": 200,
+"t_end": 73.63,
+"peak_max": 1.213099,
+"peak0": 0.04849346727132797,
+"end": {
+"norm": 0.022576,
+"left": 0.009478,
+"right": 0.013033
+},
+"start_in_barrier": 4.2511344629921923e-10,
+"start_in_border": 2.517843367091191e-13,
+"steps": 7363,
+"wall": 23.07,
+"device": "cuda:0",
+"T_far": {
+"value": 0.47237,
+"frame": 86,
+"t": 31.82
+},
+"P_in_max": 0.0
+},
+{
+"file": "runs/scoin_R6_E1.000.bin",
+"shape": "scoin",
+"size": 6.0,
+"E": 1.0,
+"bytes": 1809239,
+"sha256": "4c4d7f95627895cabfdd4e64c6ad09496dac597b805a4332e16229366f261fa9",
+"notebook": "numakoudsie/fig15-rt3d-singles-v2",
+"version": 1,
+"commit": "db0a60cc9f3ed5d63b1b4c7e9fb4d51ed4160f79",
+"frame_dt": 0.35000000000000003,
+"n": 200,
+"t_end": 69.65,
+"peak_max": 1.244981,
+"peak0": 0.048493463546037674,
+"end": {
+"norm": 0.004138,
+"left": 0.001862,
+"right": 0.00224
+},
+"start_in_barrier": 4.251134462992193e-10,
+"start_in_border": 2.517843367091191e-13,
+"steps": 6965,
+"wall": 21.29,
+"device": "cuda:0",
+"T_far": {
+"value": 0.47341,
+"frame": 81,
+"t": 28.35
+},
+"P_in_max": 0.0
+},
+{
+"file": "runs/scoin_R6_E1.500.bin",
+"shape": "scoin",
+"size": 6.0,
+"E": 1.5,
+"bytes": 1890209,
+"sha256": "72d99b36a0af73aa9aff940eb49b3e7f704053510f48e434cd11e7c0e4e2676f",
+"notebook": "numakoudsie/fig15-rt3d-singles-v2",
+"version": 1,
+"commit": "db0a60cc9f3ed5d63b1b4c7e9fb4d51ed4160f79",
+"frame_dt": 0.33,
+"n": 200,
+"t_end": 65.67,
+"peak_max": 1.417635,
+"peak0": 0.048493459820747375,
+"end": {
+"norm": 0.000208,
+"left": 9e-05,
+"right": 0.000113
+},
+"start_in_barrier": 4.2511344629921933e-10,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 6567,
+"wall": 20.39,
+"device": "cuda:0",
+"T_far": {
+"value": 0.52046,
+"frame": 73,
+"t": 24.09
+},
+"P_in_max": 0.0
+},
+{
+"file": "runs/scoin_R6_E2.000.bin",
+"shape": "scoin",
+"size": 6.0,
+"E": 2.0,
+"bytes": 1920162,
+"sha256": "8c0edd90d9b32705db0b23fea1329404b600f74e524dc7fb0fe648e7f8dbab06",
+"notebook": "numakoudsie/fig15-rt3d-singles-v2",
+"version": 1,
+"commit": "db0a60cc9f3ed5d63b1b4c7e9fb4d51ed4160f79",
+"frame_dt": 0.31,
+"n": 200,
+"t_end": 61.69,
+"peak_max": 1.406848,
+"peak0": 0.048493459820747375,
+"end": {
+"norm": 1.3e-05,
+"left": 6e-06,
+"right": 7e-06
+},
+"start_in_barrier": 4.251134462992192e-10,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 6169,
+"wall": 18.94,
+"device": "cuda:0",
+"T_far": {
+"value": 0.59326,
+"frame": 69,
+"t": 21.39
+},
+"P_in_max": 0.0
+},
+{
+"file": "runs/sshell_R3_E0.400.bin",
+"shape": "sshell",
+"size": 3.0,
+"E": 0.4,
+"bytes": 1550774,
+"sha256": "3e55f90d31e387624cbb4499013c9d571151a6a4522ffdef7287ac400ec1ca54",
+"notebook": "numakoudsie/fig15-rt3d-shard-2-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.43,
+"n": 200,
+"t_end": 85.57,
+"peak_max": 1.0,
+"peak0": 0.04849346727132797,
+"end": {
+"norm": 0.15788,
+"core": 0.001131,
+"out": 0.156668
+},
+"start_in_barrier": 2.1331539198772384e-09,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 8557,
+"wall": 26.11,
+"device": "cuda:1",
+"P_in_max": 0.005277,
+"tau": {
+"tau": 43.302,
+"t0": 42.57,
+"t1": 85.57,
+"n": 101
+}
+},
+{
+"file": "runs/sshell_R3_E0.735.bin",
+"shape": "sshell",
+"size": 3.0,
+"E": 0.735,
+"bytes": 1575116,
+"sha256": "e6cab798d11d155bd575cb4eaa260cbf2af72a279aece265595b86e108d7ad12",
+"notebook": "numakoudsie/fig15-rt3d-shard-3-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.37,
+"n": 200,
+"t_end": 73.63,
+"peak_max": 1.131439,
+"peak0": 0.04849346727132797,
+"end": {
+"norm": 0.028909,
+"core": 0.001144,
+"out": 0.027671
+},
+"start_in_barrier": 2.1331539198772384e-09,
+"start_in_border": 2.517843367091191e-13,
+"steps": 7363,
+"wall": 22.51,
+"device": "cuda:0",
+"P_in_max": 0.012346,
+"tau": {
+"tau": 26.475,
+"t0": 22.94,
+"t1": 73.63,
+"n": 138
+}
+},
+{
+"file": "runs/sshell_R3_E1.000.bin",
+"shape": "sshell",
+"size": 3.0,
+"E": 1.0,
+"bytes": 1525201,
+"sha256": "b04780cfd101db91a0f485628cc138f707130eed23407752e0e766863c2b4727",
+"notebook": "numakoudsie/fig15-rt3d-shard-3-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.35000000000000003,
+"n": 200,
+"t_end": 69.65,
+"peak_max": 1.212298,
+"peak0": 0.048493463546037674,
+"end": {
+"norm": 0.010075,
+"core": 0.000709,
+"out": 0.009262
+},
+"start_in_barrier": 2.1331539198772384e-09,
+"start_in_border": 2.517843367091191e-13,
+"steps": 6965,
+"wall": 21.58,
+"device": "cuda:1",
+"P_in_max": 0.019998,
+"tau": {
+"tau": 15.617,
+"t0": 25.55,
+"t1": 64.05,
+"n": 111
+}
+},
+{
+"file": "runs/sshell_R3_E1.500.bin",
+"shape": "sshell",
+"size": 3.0,
+"E": 1.5,
+"bytes": 1539923,
+"sha256": "fab0c68112d10e121a68d52b77d57a3af64251078a17eaf08b76f742ea2e760d",
+"notebook": "numakoudsie/fig15-rt3d-shard-1-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.33,
+"n": 200,
+"t_end": 65.67,
+"peak_max": 1.375092,
+"peak0": 0.048493459820747375,
+"end": {
+"norm": 0.002027,
+"core": 0.000207,
+"out": 0.001786
+},
+"start_in_barrier": 2.1331539198772384e-09,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 6567,
+"wall": 20.17,
+"device": "cuda:0",
+"P_in_max": 0.030854,
+"tau": {
+"tau": 9.311,
+"t0": 16.83,
+"t1": 39.27,
+"n": 69
+}
+},
+{
+"file": "runs/sshell_R3_E2.000.bin",
+"shape": "sshell",
+"size": 3.0,
+"E": 2.0,
+"bytes": 1590194,
+"sha256": "3df89a607134e5dc0bda1b53c91616bc9016ac2191ce840c97664c70bc86166f",
+"notebook": "numakoudsie/fig15-rt3d-shard-3-of-4",
+"version": 1,
+"commit": "eb3cff020f755221e5a3d4005e9707106506d6c1",
+"frame_dt": 0.31,
+"n": 200,
+"t_end": 61.69,
+"peak_max": 1.904748,
+"peak0": 0.048493459820747375,
+"end": {
+"norm": 0.000468,
+"core": 2e-05,
+"out": 0.000443
+},
+"start_in_barrier": 2.133153919877238e-09,
+"start_in_border": 2.5178433670911915e-13,
+"steps": 6169,
+"wall": 18.93,
+"device": "cuda:0",
+"P_in_max": 0.042577,
+"tau": {
+"tau": 5.953,
+"t0": 14.88,
+"t1": 29.45,
+"n": 48
+}
+}
+]
+}

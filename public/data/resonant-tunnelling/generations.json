@@ -1,11 +1,18 @@
 [
  {
   "date": "2026-11-13",
-  "index": "2026-11-13/derived/index.json",
-  "curves": "2026-11-13/curves.json",
-  "kind": "derived",
-  "runs": 72,
-  "source": "tools/kaggle/resonant-tunnelling/recon.py",
-  "commit": "bb085a6c3f7489cb3913b1cc9789bdca848b1848"
+  "kind": "rt3d",
+  "index": "2026-11-13/kaggle/index.json",
+  "exact": "2026-11-13/derived/exact-1d.json",
+  "runs": 115,
+  "source": "Kaggle GPU (2 x Tesla T4): tools/kaggle/resonant-tunnelling/rt3d.py through rt3d_run.py; filed by file_rt3d.py",
+  "notebooks": [
+   "numakoudsie/fig15-rt3d-shard-1-of-4",
+   "numakoudsie/fig15-rt3d-shard-2-of-4",
+   "numakoudsie/fig15-rt3d-shard-3-of-4",
+   "numakoudsie/fig15-rt3d-shard-4-of-4",
+   "numakoudsie/fig15-rt3d-singles-v2"
+  ],
+  "note": "Replaces the one-dimensional generation of the same day (72 runs built by transfer-matrix superposition for barriers V0 = 3, s = 2.343): the figure is three-dimensional and continues Fig. 14, so its frames are the 3D runs. What remains of the 1D work is derived/exact-1d.json, the exact 1D numbers for the 3D geometry, kept as the check of the 3D runs."
  }
 ]
