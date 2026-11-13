@@ -31,26 +31,42 @@ from jax import lax
 F32, F64, I32 = jnp.float32, jnp.float64, jnp.int32
 
 NU_STOUT = 2.06e-3 / 1007.0   # m^2/s: Guinness at 6 C, mu = 2.06e-3 Pa s, rho = 1007 kg/m^3 (Benilov, Cummins & Lee, arXiv 1205.5233, sec. II)
+MU_STOUT = 2.06e-3
+OMEGA = 2 * math.pi * 3.42     # rad/s, the first sloshing mode: sets the Stokes layer, sqrt(2 nu / omega) = 0.44 mm
 MODELS = {
     # no friction and no head: what the numerical method alone loses (used to measure numerical damping)
-    "inviscid": dict(nu=0.0, wall=False, foam_rub=False, head=False),
-    # the stout's viscosity and the glass's boundary layer, no head
-    "wall": dict(nu=NU_STOUT, wall=True, foam_rub=False, head=False),
-    # the whole model: viscosity, the glass's boundary layer, and the head of foam (its weight on the stout, its rubbing on
-    # the glass (Sauret, Boulogne, Cappello, Dressaire & Stone, Phys. Fluids 27, 022103, 2015), lacing, collapse and spill)
-    "full": dict(nu=NU_STOUT, wall=True, foam_rub=True, head=True),
+    "inviscid": dict(nu=0.0, wall=False, skin=False, head=False),
+    # the stout's viscosity and the glass's boundary layer, clean surface, no head
+    "wall": dict(nu=NU_STOUT, wall=True, skin=False, head=False),
+    # the whole model (notes/fig12/research/verification.md): viscosity, the glass's boundary layer, the surface that cannot stretch
+    # (protein skin, or the head as a lid), and the head of foam: its weight on the stout, its friction on the glass, its spilling
+    "full": dict(nu=NU_STOUT, wall=True, skin=True, head=True),
 }
-# The head of foam (model; each number with its source or marked as an estimate):
-HEAD0 = 0.019        # m, thickness of the head as served: 18 to 20 mm (Nature Reviews Physics, s42254-023-00579-y)
-PHI_F = 0.20         # liquid fraction of the head (estimate: wet beer foam, 0.15 to 0.3)
-GAMMA = 0.045        # N/m, surface tension of beer (estimate: 42 to 47 mN/m)
-RBUB = 60e-6         # m, bubble radius in the head (Guinness bubbles 90 to 122 um across in the stout, Benilov et al.; the head's a little coarser)
-TAU_Y = 0.51 * GAMMA / RBUB * ((1 - PHI_F) - 0.635) ** 2   # Pa, yield stress (Mason, Bibette & Weitz 1996 scaling for wet foams)
-LACE = 2 * 2 * RBUB  # m, foam film left on the glass where the head slides down it: two bubble diameters (estimate)
-V_COLLAPSE = 4e-5    # m/s, the head's slow collapse at rest, 10 mm in about 250 s (estimate, NIBEM-type foam half-lives)
-OMEGA = 2 * math.pi * 3.42     # rad/s, the first sloshing mode (Stokes layer thickness)
-FOAM_C = 0.0235                # m/s, Sauret et al.'s w / tau for a confined foam (1.6 to 3.1 cm/s)
-FOAM_KS = 45.5                 # 1/m, Sauret et al.
+# The head of foam. Measured, or derived from the two unmeasured inputs R and PHI_F (notes/fig12/research/guinness-materials.md):
+HEAD0 = 0.019        # m, the head as served: 18-20 mm (Nature Reviews Physics 5, 197 (2023))
+GAMMA = 0.045        # N/m, surface tension of beer: 38-47.4 at rest (Ronteltap 1989, Table 4.5; Chatzigiannakis 2025)
+RBUB = 50e-6         # m, bubble radius in the head: NOT MEASURED (inference, 25-100 um: stout bubbles 27-61 um, N2 beer foam ~100 um)
+PHI_F = 0.20         # liquid fraction of the head: NOT MEASURED (inference, 0.05-0.4: Ronteltap p.82; Lee et al. 2018 use 0.2)
+A_Y = 0.75           # yield-stress prefactor, 0.5-1 (Hoehler & Cohen-Addad 2005, as quoted by Costa 2012): the middle
+PHI_C = 0.64         # gas fraction at jamming (same source)
+GAS = 1.0 - PHI_F
+TAU_Y = A_Y * GAMMA / RBUB * (GAS - PHI_C) ** 2          # Pa, the head's yield stress
+# Wall friction of the head (Cantat, Phys. Fluids 25, 031303 (2013), eq. 18-49; stiff protein surfaces, the sliding branch), with
+# her fitted prefactor Z and meniscus ratio l/r_m against liquid fraction (her Fig. 14, data of Marze et al.). Checked: the same
+# law predicts Viola et al. 2016's measured foam damping within 4-11 % (notes/fig12/research/wolfram/04_verification).
+_PHI_TAB = np.array([0.10, 0.15, 0.20, 0.25]); _Z_TAB = np.array([0.6, 0.44, 0.32, 0.18]); _LR_TAB = np.array([0.5, 0.25, 0.09, 0.004])
+Z_WALL = float(np.interp(PHI_F, _PHI_TAB, _Z_TAB)); LR_WALL = float(np.interp(PHI_F, _PHI_TAB, _LR_TAB))
+
+
+def head_wall_stress(v):
+    """Stress (Pa) of the head's edge sliding on the glass at speed |v| (m/s): the smaller of the sliding law (Cantat 2013) and
+    what the foam itself can carry, its yield stress plus its viscous stress (Tcholakova et al., PRE 78, 011405 (2008), eq. 48b)
+    in a layer one bubble diameter thick."""
+    v = jnp.abs(v); Ca = MU_STOUT * v / GAMMA
+    slide = Z_WALL * GAMMA / RBUB * (6.82 * Ca ** (2.0 / 3.0) + 0.94 * LR_WALL * Ca ** (1.0 / 3.0))
+    Cas = MU_STOUT * v / (2.0 * GAMMA)
+    carry = TAU_Y + GAMMA / RBUB * 1.162 * Cas ** 0.47 * GAS ** (5.0 / 6.0) * max(GAS - 0.74, 1e-6) ** 0.1 / PHI_F ** 0.5
+    return jnp.minimum(slide, carry)
 
 
 # ====================================================================== geometry (built once, before the run)
@@ -176,7 +192,7 @@ class Stout:
         self.G = G; self.rho = rho; self.ppc = ppc
         M = MODELS[model]; self.model = model
         self.nu = M["nu"]; self.gs = math.sqrt(M["nu"] * OMEGA / 2) if M["wall"] else 0.0
-        self.lam0 = FOAM_C * rho / (2 * FOAM_KS) if M["foam_rub"] else 0.0
+        self.skin = M["skin"]
         dx = G.dx; self.dx = dx; self.Hb = 2.0 * dx; self.rls = 0.9 * dx; self.tol = tol; self.maxit = maxit
         n, nz = G.n, G.nz; self.n, self.nz = n, nz
         self.dims = (n, n, nz)
@@ -197,28 +213,29 @@ class Stout:
         o = np.array([(a, b, c) for a in range(-1, 3) for b in range(-1, 3) for c in range(-1, 3)], np.int32)
         self.off64 = jnp.asarray(o)
         self.corners = jnp.asarray(np.array([(a, b, c) for a in (0, 1) for b in (0, 1) for c in (0, 1)], np.int32))
-        # the head of foam lives on the columns of the grid (n x n); lacing on the glass is kept on 64 angles x 0.5 mm bands
+        # the head of foam lives on the columns of the grid (n x n), as a thickness h_f on top of the stout's surface
         self.head = M["head"]; self.rho_f = PHI_F * rho
-        self.h_y = 2.0 * TAU_Y / (self.rho_f * 9.81)        # m, foam that stands above the rim before it slumps (vertical cut, Tresca)
         X, Y = np.meshgrid(G.xc, G.xc, indexing="ij")
         self.rc = jnp.asarray(np.hypot(X, Y), F32); self.colx = jnp.asarray(X, F32); self.coly = jnp.asarray(Y, F32)
-        self.abin = jnp.asarray(np.floor((np.arctan2(Y, X) % (2 * np.pi)) / (2 * np.pi) * 64).astype(np.int32) % 64)
-        self.lace_z0 = 0.090; self.lace_dz = 0.0005; self.nlz = int(round((G.zrim - self.lace_z0) / self.lace_dz))
-        self.MF = 4096
+        self.ell = G.Rfill / 1.84118         # m, the depth over which the foam's sliding speed dies away upward, 1/k (Sauret 2015)
+        self.Rrim = float(G.Rz(G.zrim - 1e-6))
+        self.MF = 4096                       # lumps of head in flight, at most
 
     # ---------------------------------------------------------------- state
     def init_state(self):
-        N = self.N
-        n = self.n; G = self.G
+        N = self.N; n = self.n; G = self.G
         hf0 = jnp.where(self.rc < G.Rfill, HEAD0 if self.head else 0.0, 0.0).astype(F32)
         z64 = jnp.zeros((), F64)
         return dict(xp=jnp.asarray(self.P0), vp=jnp.zeros((N, 3), F32), C=jnp.zeros((N, 3, 3), F32),
                     act=jnp.ones(N, bool), fly=jnp.zeros(N, bool), landed=jnp.zeros(N, bool),
-                    p=jnp.zeros(self.dims, F32), ewall=z64, efoam=z64,
-                    hf=hf0, Hprev=jnp.full((n, n), G.fill, F32), lace=jnp.zeros((64, self.nlz), F32),
-                    foam_spill=z64, foam_lace=z64, foam_coll=z64, foam0=jnp.sum(hf0.astype(F64)) * self.dx ** 2,
+                    p=jnp.zeros(self.dims, F32), ewall=z64, efoam=z64, eskin=z64,
+                    hf=hf0, foam_spill=z64, foam0=jnp.sum(hf0.astype(F64)) * self.dx ** 2,
                     bx=jnp.full((self.MF, 3), jnp.nan, F32), bv=jnp.zeros((self.MF, 3), F32), bvol=jnp.zeros(self.MF, F32),
                     bptr=jnp.zeros((), I32))
+
+    def heff(self, hf):
+        """Height of glass over which a head of thickness hf slides, weighted by its sliding speed to the power 5/3."""
+        return 0.6 * self.ell * (1.0 - jnp.exp(-5.0 * hf / (3.0 * self.ell)))
 
     # ---------------------------------------------------------------- helpers
     def Rz(self, z):
@@ -330,24 +347,75 @@ class Stout:
         return out
 
     def friction(self, vel, mass, ph, liq, dt, hf):
-        dV = self.rho * self.dx ** 3; ew = jnp.zeros((), F64); ef = jnp.zeros((), F64); out = []
-        band = liq & (self.ac > 0) & (ph >= -self.Hb) & (hf[:, :, None] > 0)    # the head rubs only where there is head
+        """The three thin layers the 1.5 mm grid cannot resolve, as stresses on the faces next to them (verification.md, items 2, 3, 5):
+        - the glass: the Stokes-layer stress rho sqrt(nu omega/2) u on the glass's area in each cut cell;
+        - the surface that cannot stretch (protein skin, or the head held still by the glass): the same stress on the horizontal
+          velocity of the faces of the top liquid cells, over one cell's area per cell;
+        - the head's edge sliding up and down the glass: the head's wall stress (head_wall_stress) on the vertical velocity of the
+          liquid in the top two cells next to the glass, over the head's effective height, clamped so that it can stop the motion
+          but never reverse it.
+        Returns the velocities and the energy each one took (J)."""
+        dx = self.dx; dV = self.rho * dx ** 3; z = jnp.zeros((), F64); ew, es, ef = z, z, z; out = []
+        top = liq & ~sh(liq, 1, 2, False)                                    # liquid cells with air above
+        band = liq & (self.ac > 0) & (ph >= -self.Hb) & (hf[:, :, None] > 0)  # where the head's edge meets the glass
+        aeff = (self.heff(hf) / self.Hb)[:, :, None]                         # the head's sliding height packed into the band
         for comp in range(3):
-            u0 = vel[comp]; a = self.af[comp]; ok = (a > 0) & (mass[comp] > 1e-6)
-            gw = self.gs * a
-            if self.lam0 > 0:
-                bf = lo(band, comp, False) | hi(band, comp, False)
-                sp = jnp.maximum(jnp.abs(u0), 0.005)
-                gf = jnp.where(bf, self.lam0 * (sp / 0.1) ** (-1.0 / 3.0) * a / (self.rho * self.Hb), 0.0)
-            else:
-                gf = jnp.zeros_like(u0)
-            g = gw + gf; use = ok & (g > 0)
-            u1 = jnp.where(use, u0 * jnp.exp(-g * dt), u0)
-            dE = 0.5 * dV * (u0 * u0 - u1 * u1); gsafe = jnp.where(use, g, 1.0)
-            ew = ew + jnp.sum(jnp.where(use, dE * gw / gsafe, 0.0).astype(F64))
-            ef = ef + jnp.sum(jnp.where(use, dE * gf / gsafe, 0.0).astype(F64))
-            out.append(u1.astype(F32))
-        return out, ew, ef
+            u0 = vel[comp]; ok = (self.th[comp] > 0) & (mass[comp] > 1e-6); u = u0
+            if self.gs > 0:                                                   # glass
+                g = self.gs * self.af[comp]; u = jnp.where(ok & (g > 0), u * jnp.exp(-g * dt), u)
+                ew = ew + 0.5 * dV * jnp.sum(jnp.where(ok, u0 * u0 - u * u, 0.0).astype(F64))
+            if self.skin and comp < 2:                                        # surface that cannot stretch
+                u1 = u; tf = lo(top, comp, False) | hi(top, comp, False)
+                u = jnp.where(ok & tf, u * jnp.exp(-self.gs / dx * dt), u)
+                es = es + 0.5 * dV * jnp.sum(jnp.where(ok, u1 * u1 - u * u, 0.0).astype(F64))
+            if self.head and comp == 2:                                       # the head's edge on the glass
+                u1 = u; bf = lo(band, 2, False) | hi(band, 2, False)
+                a3 = 0.5 * (lo(aeff * jnp.ones(self.dims, F32), 2, 0.0) + hi(aeff * jnp.ones(self.dims, F32), 2, 0.0))
+                dv = dt * head_wall_stress(u) * self.af[2] * a3 / self.rho
+                u = jnp.where(ok & bf, jnp.sign(u) * jnp.maximum(jnp.abs(u) - dv, 0.0), u)
+                ef = ef + 0.5 * dV * jnp.sum(jnp.where(ok, u1 * u1 - u * u, 0.0).astype(F64))
+            out.append(u.astype(F32))
+        return out, ew, es, ef
+
+    def surface(self, ph, liq):
+        """The free surface of the main body of stout, as a height on the grid's columns: in each column, the first air cell
+        above liquid that rests on the bottom, and the zero of the level set between it and the liquid cell below it."""
+        dx = self.dx
+        air = self.cavc & ~liq
+        seen = lax.cummax(liq.astype(I32), axis=2) > 0
+        cand = air & sh(seen, -1, 2, False)
+        has = jnp.any(cand, 2); k = jnp.argmax(cand, 2); kb = jnp.maximum(k - 1, 0)
+        pa = jnp.take_along_axis(ph, k[..., None], 2)[..., 0]; pb = jnp.take_along_axis(ph, kb[..., None], 2)[..., 0]
+        frac = jnp.clip(pb / jnp.where(pa - pb > 1e-12, pa - pb, 1.0), 0.0, 1.0)
+        frac = jnp.where((pa - pb > 1e-12) & (pb < 0), frac, 0.5)
+        H = jnp.where(has, self.cc[2][kb] + frac * dx, jnp.nan)
+        return jnp.where(jnp.any(liq & self.cavc, 2), H, jnp.nan).astype(F32)
+
+    def head_spill(self, s, H, dt, gx, gz):
+        """The head above the rim (verification.md, item 6): where the head's top stands e above the rim, at the glass, the part
+        above the rim breaks away once its weight and outward push beat its strength, rho_f (|g_eff| e/2 + a_out e) >= tau_y.
+        It leaves as a lump in free flight. Lumps already flying move under gravity minus the glass's acceleration."""
+        G = self.G; dx = self.dx; hf = s["hf"]
+        ok = jnp.isfinite(H)
+        Hs = jnp.where(ok, H, 0.0)
+        atwall = ok & (self.rc >= self.Rz(Hs) - 1.5 * dx)
+        e = jnp.where(atwall, Hs + hf - G.zrim, 0.0)
+        aout = gx * self.colx / jnp.maximum(self.rc, 1e-9)                   # outward push per unit mass in the glass's frame
+        fail = (e > 0) & (hf > 0) & (self.rho_f * (jnp.abs(gz) * 0.5 + jnp.maximum(aout, 0.0)) * e >= TAU_Y)
+        cut = jnp.where(fail, jnp.minimum(e, hf), 0.0)
+        # lumps: one per breaking column, at the rim, starting at rest relative to the glass
+        m = cut.reshape(-1) > 0; nnew = jnp.sum(m, dtype=I32)
+        rank = jnp.cumsum(m.astype(I32)) - 1
+        slot = jnp.where(m, (s["bptr"] + rank) % self.MF, self.MF)            # MF = out of range: dropped by mode="drop"
+        sc = self.Rrim / jnp.maximum(self.rc.reshape(-1), 1e-9)
+        pos = jnp.stack([self.colx.reshape(-1) * sc, self.coly.reshape(-1) * sc, G.zrim + 0.5 * cut.reshape(-1)], -1)
+        bx = s["bx"].at[slot].set(pos.astype(F32), mode="drop"); bv = s["bv"].at[slot].set(0.0, mode="drop")
+        bvol = s["bvol"].at[slot].set((cut.reshape(-1) * dx * dx).astype(F32), mode="drop")
+        flying = jnp.isfinite(bx[:, 2]) & (bx[:, 2] > -0.25)
+        bv = jnp.where(flying[:, None], bv + dt * jnp.array([gx, 0.0, gz], F32), bv)
+        bx = jnp.where(flying[:, None], bx + dt * bv, bx)
+        return dict(s, hf=(hf - cut).astype(F32), bx=bx, bv=bv, bvol=bvol, bptr=(s["bptr"] + nnew) % self.MF,
+                    foam_spill=s["foam_spill"] + jnp.sum(cut.astype(F64)) * dx * dx)
 
     # ---------------------------------------------------------------- pressure (Taichi build, matvec, solve, project)
     def _faces(self, ph, liq, ax):
