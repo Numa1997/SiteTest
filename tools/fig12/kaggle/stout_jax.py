@@ -183,15 +183,6 @@ def seed_particles(G, ppc=2, seed=1):
     return P
 
 
-def column_capacity(G, ppc=2):
-    """How many seeded points each column of the grid holds below each layer boundary, up to the rim: Ccum[i, j, k] = points
-    of column (i, j) in layers 0 .. k-1. The stout in a column is counted against this, so a column holds exactly the fill at
-    the start, and every particle more or less raises or lowers it by its share of the layer it sits in."""
-    xs, hz, L, mask, h = seed_lattice(G, ppc); n = G.n
-    cap = np.stack([mask(hz * (k + 0.5)).reshape(n, ppc, n, ppc).sum((1, 3)) for k in range(L)], 2)
-    return np.concatenate([np.zeros((n, n, 1), np.int32), np.cumsum(cap, 2).astype(np.int32)], 2), hz
-
-
 # ====================================================================== shifted arrays
 def sh(a, d, ax, fill=0):
     """out[..., i, ...] = a[..., i + d, ...] along axis ax; `fill` where i + d falls outside."""
@@ -224,7 +215,8 @@ class Stout:
         M = MODELS[model]; self.model = model
         self.nu = M["nu"]; self.gs = math.sqrt(M["nu"] * OMEGA / 2) if M["wall"] else 0.0
         self.skin = M["skin"]
-        dx = G.dx; self.dx = dx; self.Hb = 2.0 * dx; self.rls = 0.9 * dx; self.tol = tol; self.maxit = maxit
+        dx = G.dx; self.dx = dx; self.Hb = 2.0 * dx; self.rls = 0.505 * dx;   # derived 13 Nov 2026: puts the level set's zero on the top of a flat seeded layer to -0.09..+0.02 cell (0.9 dx read 0.5-1.0 cell high)
+        self.tol = tol; self.maxit = maxit
         n, nz = G.n, G.nz; self.n, self.nz = n, nz
         self.dims = (n, n, nz)
         self.fshape = [(n + 1, n, nz), (n, n + 1, nz), (n, n, nz + 1)]
@@ -251,16 +243,6 @@ class Stout:
         self.ell = G.Rfill / 1.84118         # m, the depth over which the foam's sliding speed dies away upward, 1/k (Sauret 2015)
         self.Rrim = float(G.Rz(G.zrim - 1e-6))
         self.MF = 4096                       # lumps of head in flight, at most
-        # how many particles each cell holds when the stout is evenly spread: the points of the seeding lattice in that cell,
-        # all layers up to the rim (the lattice the surface read-out counts against). 13 Nov 2026: taken first from the cell's
-        # volume inside the glass, which is larger than the seeded volume at the wall (the lattice stops 0.25 h short of it);
-        # relax() then pulled stout to the wall 30 times a second, the wall columns rose 11.6 mm and the head spilled at rest.
-        xs_, hz_, L_, mask_, h_ = seed_lattice(G, ppc); ne = np.zeros((n, n, nz))
-        for k in range(L_):
-            z = hz_ * (k + 0.5); kc = int(math.floor((z - G.z0) / dx))
-            if 0 <= kc < nz: ne[:, :, kc] += mask_(z).reshape(n, ppc, n, ppc).sum((1, 3))
-        self.n_even = jnp.asarray(ne, F32)
-        Ccum, self.hz = column_capacity(G, ppc); self.Ccum = jnp.asarray(Ccum); self.Lz = Ccum.shape[2] - 1
 
     # ---------------------------------------------------------------- state
     def init_state(self):
@@ -454,24 +436,20 @@ class Stout:
         fmask = lo(t, 2, False) | hi(t, 2, False)                                           # the vertical faces of the top cells
         return jnp.where(fmask & ok, w + dw[:, :, None], w)
 
-    def surface(self, s):
-        """The free surface of the main body of stout, as a height on the grid's columns, read from the stout each column holds
-        (13 Nov 2026; before, from the zero of the level set, which stands 0.3 cell above the stout's top at rest and up to a
-        cell above it at the glass). Count the particles in the column, then climb the column's layers, each holding as many
-        particles as were seeded in it (column_capacity), until the count is used up: the height reached is the surface.
-        Picture: reading the depth of a jug from how much is in it, not from where the meniscus seems to be. A column outside
-        the glass, or holding no stout, reads NaN. Stout above the rim in a column is spread over a layer as wide as the last."""
-        dx = self.dx; X, act = s["xp"], s["act"]
-        i = jnp.floor((X[:, 0] - self.G.x0) / dx).astype(I32); j = jnp.floor((X[:, 1] - self.G.x0) / dx).astype(I32)
-        ok = act & (i >= 0) & (i < self.n) & (j >= 0) & (j < self.n)
-        c = jnp.zeros(self.n * self.n, I32).at[jnp.where(ok, i * self.n + j, 0)].add(ok.astype(I32)).reshape(self.n, self.n)
-        C = self.Ccum; full = C[:, :, -1]
-        k = jnp.sum(C[:, :, 1:] < c[..., None], 2)     # layers the count passes; a layer that ends exactly at the count is the top one
-        kk = jnp.minimum(k, self.Lz - 1)
-        lo_ = jnp.take_along_axis(C, kk[..., None], 2)[..., 0]; hi_ = jnp.take_along_axis(C, kk[..., None] + 1, 2)[..., 0]
-        frac = (c - lo_).astype(F32) / jnp.maximum(hi_ - lo_, 1).astype(F32)
-        H = (kk.astype(F32) + frac) * self.hz
-        return jnp.where((full > 0) & (c > 0), H, jnp.nan).astype(F32)
+    def surface(self, phr):
+        """The free surface of the main body of stout, as a height on the grid's columns: where the particles' own level set
+        (phr: negative in the stout, positive in the air) crosses zero, between the centres of the last stout cell and the
+        first air cell of the column inside the glass. This is the surface the pressure step itself holds at zero pressure.
+        With the radius 0.505 dx it reads a flat seeded layer to -0.09..+0.02 cell. Columns with no stout inside the glass: NaN.
+        (13 Nov 2026: a read-out that counted the particles in each column was tried and dropped: particles wander between
+        columns by +-8 in a 4 mm column at rest, 4-5 mm of false height, while the stout itself does not move.)"""
+        dx = self.dx
+        wet = self.cavc & (phr < 0); air = self.cavc & (phr >= 0)
+        cand = air & sh(air, 1, 2, True) & sh(wet, -1, 2, False)
+        has = jnp.any(cand, 2); k = jnp.argmax(cand, 2); kb = jnp.maximum(k - 1, 0)
+        pa = jnp.take_along_axis(phr, k[..., None], 2)[..., 0]; pb = jnp.take_along_axis(phr, kb[..., None], 2)[..., 0]
+        frac = jnp.clip(-pb / jnp.maximum(pa - pb, 1e-12), 0.0, 1.0)
+        return jnp.where(has, self.cc[2][kb] + frac * dx, jnp.nan).astype(F32)
 
     def head_spill(self, s, H, dt, gx, gz):
         """The head above the rim (verification.md, item 6): where the head's top stands e above the rim, at the glass, the part
@@ -512,7 +490,7 @@ class Stout:
         tRL = jnp.where(cRL, jnp.clip(phR / jnp.where(cRL, phR - phL, -1.0), 0.05, 1.0), 1.0)   # surface's place, R liquid
         return liqL, liqR, tLR, tRL
 
-    def pressure(self, vel, ph, liq, p_prev, ps, src=None):
+    def pressure(self, vel, ph, liq, p_prev, ps):
         """ps: the pressure on the free surface (the weight of the head), in the solver's units (Pa x dt / rho), one value per
         column, set on the air side of the surface. Ghost fluid: p = ps at the surface, so the air neighbour of a liquid cell
         reads p_ghost = p_liq (1 - 1/theta) + ps / theta: the diagonal gets th / theta and the right side th ps / theta."""
@@ -533,7 +511,7 @@ class Stout:
             flux = th * vel[ax]; div = div + cut_hi(flux, ax) - cut_lo(flux, ax)
         A = liq & (diag > 0)
         diag = jnp.where(A, diag, 0.0); cp = [jnp.where(A, c, 0.0) for c in cp]; cm = [jnp.where(A, c, 0.0) for c in cm]
-        b = jnp.where(A, -div * dx + rhs + (0.0 if src is None else src), 0.0)
+        b = jnp.where(A, -div * dx + rhs, 0.0)
         inv = jnp.where(A, 1.0 / jnp.where(A, diag, 1.0), 0.0)
 
         def mv(x):
@@ -634,6 +612,7 @@ class Stout:
         vel, mass, cnt = self.p2g(s)
         vel = self.normalize_force(vel, mass, dt, gx, gz)
         ph, liq, nsel, phr = self.level_set(s, cnt)
+        H = self.surface(phr)
         if self.nu > 0: vel = self.viscosity(vel, mass, dt)
         z = jnp.zeros((), F64); ew = es = ef = z
         if self.gs > 0 or self.skin or self.head: vel, ew, es, ef = self.friction(vel, mass, ph, liq, dt, s["hf"])
@@ -642,48 +621,12 @@ class Stout:
         vel, known, p, it, res = self.pressure(vel, ph, liq, s["p"], ps)
         vel = self.extrapolate(vel, known)
         s, mom = self.g2p(s, vel, dt, gx, gz)
-        if self.head: s = self.head_spill(s, self.surface(s), dt, gx, gz)    # the surface after this step's move
+        if self.head: s = self.head_spill(s, H, dt, gx, gz)
         s = dict(s, p=p, ewall=s["ewall"] + ew, eskin=s["eskin"] + es, efoam=s["efoam"] + ef)
         vmax = jnp.max(jnp.where(s["act"][:, None], jnp.abs(s["vp"]), 0.0))
         mhead = self.rho_f * jnp.sum(s["hf"].astype(F64)) * self.dx ** 2
         diag = dict(it=it, res=res, mom=mom, nact=jnp.sum(s["act"], dtype=I32), nsel=nsel, vmax=vmax, mhead=mhead)
         return s, diag
-
-    def relax(self, s, beta=0.5):
-        """Undo the particles' crowding (13 Nov 2026). The pressure step keeps the velocity free of divergence on the grid, but
-        nothing keeps the particles evenly spread: over a second at rest some columns gained or lost 6 % of their particles,
-        which reads as surface bumps of several millimetres while the stout itself does not move (kinetic energy 6e-6 J).
-        Incompressibility for the mass itself: where a liquid cell holds more particles than its share (n_even), the excess
-        e = n/n_even - 1 must spread out. Solve, with the pressure step's own matrix and its free surface at zero,
-        div(d) = beta e for a displacement d = grad(phi), and move the particles by d. Only positions change, never velocities,
-        so no energy is added. Picture: a crowd in a hall that drifts into clumps; each person steps a little away from the crowd.
-        Done once per stored frame (30 a second). Only cells away from the free surface take part (the surface is left to the flow)."""
-        dx = self.dx; G = self.G
-        vel, mass, cnt = self.p2g(s)
-        ph, liq, nsel, phr = self.level_set(s, cnt)
-        # a cell takes part when every open face leads to stout or to space the stout was never seeded in (beyond the lattice at
-        # the glass): so the cells cut by the glass take part, and only the cells at the free surface are left out
-        inner = liq; seeded = self.n_even > 0
-        for ax in range(3):
-            th = self.th[ax]
-            inner = inner & ((cut_hi(th, ax) == 0) | sh(liq & seeded, 1, ax, False) | ~sh(seeded, 1, ax, False)) \
-                          & ((cut_lo(th, ax) == 0) | sh(liq & seeded, -1, ax, False) | ~sh(seeded, -1, ax, False))
-        e = jnp.where(inner & (self.n_even > 0.5), jnp.clip(cnt / jnp.maximum(self.n_even, 1e-6) - 1.0, -0.5, 0.5), 0.0)
-        zero = [jnp.zeros(sh_, F32) for sh_ in self.fshape]
-        d, known, _, _, _ = self.pressure(zero, ph, liq, jnp.zeros(self.dims, F32), jnp.zeros((self.n, self.n), F32), src=(dx * dx * beta * e).astype(F32))
-        d = self.extrapolate(d, known)
-        X, act = s["xp"], s["act"]; g = (X - self.origin) / dx; dp = []
-        for comp in range(3):
-            fl, ok, w, wv, cf, fr = self._corners(g, comp, self.fshape[comp])
-            dp.append(jnp.sum(w * jnp.where(ok, d[comp].reshape(-1)[fl], 0.0), 0))
-        dp = jnp.stack(dp, -1); dp = jnp.clip(dp, -0.25 * dx, 0.25 * dx)
-        Xn = X + jnp.where(act[:, None], dp, 0.0)
-        Xn = Xn.at[:, 2].set(jnp.where(act, jnp.maximum(Xn[:, 2], 0.1 * dx), Xn[:, 2]))
-        r = jnp.sqrt(Xn[:, 0] ** 2 + Xn[:, 1] ** 2); Rw = self.Rz(Xn[:, 2]) - 0.1 * dx
-        out = act & (Xn[:, 2] < G.zrim) & (r > Rw) & (r > 0)
-        sc = jnp.where(out, Rw / jnp.maximum(r, 1e-12), 1.0)
-        Xn = Xn.at[:, 0].multiply(sc).at[:, 1].multiply(sc)
-        return dict(s, xp=Xn.astype(F32))
 
     def resort(self, s):
         """Sort the particles by cell (only the order in memory changes), so that neighbours on the grid are neighbours in
@@ -701,7 +644,7 @@ class Stout:
         dx = self.dx; G = self.G
         vel, mass, cnt = self.p2g(s)
         ph, liq, nsel, phr = self.level_set(s, cnt)
-        H = self.surface(s)
+        H = self.surface(phr)
         # drops
         X, act, fly = s["xp"], s["act"], s["fly"]
         i = jnp.clip(jnp.floor((X[:, 0] - G.x0) / dx).astype(I32), 0, self.n - 1)
@@ -866,7 +809,7 @@ def make_advance(S, mode, cart=None, cfl=0.8, dtmax=0.002, push=None):
     def advance(s, t, ex):
         st = dict(steps=jnp.zeros((), I32), its=jnp.zeros((), I32), itmax=jnp.zeros((), I32), resmax=jnp.zeros((), F64), nselmax=jnp.zeros((), I32))
         s, t, ex, st = lax.while_loop(lambda c: c[1] < c[2]["t_end"] - 1e-9, body, (s, t, ex, st))
-        return S.resort(S.relax(s)), t, ex, st
+        return S.resort(s), t, ex, st
 
     return jax.jit(advance)
 
