@@ -70,6 +70,8 @@ if os.environ.get("RUNSET") == "control":
 elif os.environ.get("RUNSET") == "run8":
     TASKS = TASKS_RUN8
 PLANT_FROM_RUN = os.environ.get("RUNSET") == "run8"
+if os.environ.get("PLANT_F0"):   # a task computed alone after run 8 (ONLY=...): the plant run 8 measured, given as numbers
+    PLANT.update(w=2 * math.pi * float(os.environ["PLANT_F0"]), zeta=float(os.environ["PLANT_ZETA"]), measured=os.environ.get("PLANT_FROM", "given"))
 HEAD_MASS = os.environ.get("HEAD_MASS", "1") == "1"
 if os.environ.get("ONLY"):   # run only the named tasks, comma-separated (one Colab job per task: Colab caps a job at 3600 s)
     TASKS = [t for t in TASKS if t["name"] in os.environ["ONLY"].split(",")]
