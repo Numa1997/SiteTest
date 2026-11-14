@@ -140,3 +140,5 @@ sign e^{+i int f dt}; Fig. 15b dashed curve is the 1D twin on the grid; long-pac
 d=2 run ends with wave still trapped; shells cut = window ends at run end AND < 1 lifetime (2 of 4); 'lowest filed energy';
 N=10 shares are the twins'; Tbar by quadrature (0.540, exact1d.tbar); s=4.5 top level -> broad peak at 2.028 (FWHM 0.314);
 missing full stop. Round 4 next.
+
+## Round 4 (launched ~04:40 UTC on 95824f5): fresh referee, owner, student, derivation checker; outputs scratchpad/readers/r4-*.md, scratchpad/derivation-check-r4.md, notes/fig15/referee.md.
