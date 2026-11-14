@@ -273,3 +273,10 @@ Build at ad6738d: 1086 KaTeX formulas, 0 errors, no page errors, no horizontal o
 the derivation checker of round 9 found no errors in the note as it stood then (8aa4802).
 
 READY at ad6738d
+
+## Round-10 derivation checker (arrived after READY at ad6738d): 5 errors, all fixed in c0ae537:
+side-border loss compared different regions (now the twin between the same inner faces, via rt3d2.run1d: 6 / 36 / 36 %, not
+19 / 40 / 45 %); d=2 grid-accuracy low end 0.30 (index T_exact too coarse; exact1d.tbar nk 8001); k up to ~3, < 0.05 rad/step;
+disc gain 1.15 at R=12 (unrounded); ten-wall share rises again above 1.4, not 1.8. Build: 1086 KaTeX, 0 errors, no overflow.
+
+READY at c0ae537
