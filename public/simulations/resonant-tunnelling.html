@@ -688,6 +688,8 @@
                 length: function () { return run ? run.C.t[run.C.t.length - 1] : 10; }, columns: ['P_a', 'P_b', 'P_c', 'norm'] },
             about: 'The frames are the 3D runs as Kaggle stored them: on the plane z = 0, half y ≥ 0, |ψ| and arg ψ as 8-bit levels of each frame’s own peak, 200 frames per run. Between two frames the page mixes them in the frame that turns at the packet energy (ψ = e^{−iEτ}[(1−s)ψ_f + s e^{iEΔt}ψ_{f+1}]); the region probabilities and the profile along x are mixed linearly. The sheet draws the stored half-plane and its mirror image y → −y, exact because every barrier and the start packet are symmetric about the flight axis. One scale per run. The barriers are glass solids at their true place; they do not move. The potential drawn in Fig. 15b is the input of the run (its spec), not data. The current–voltage curve from the runs is integrated once, by file_rt3d2.py, and stored in the index.'
         };
+        /* Expand all / Collapse all (fold.js) also open and close the plain <details> boxes inside the lecture note */
+        if (window.Fold) { var prevAll = Fold.onAll; Fold.onAll = function (open) { if (prevAll) prevAll(open); document.querySelectorAll('#paper details').forEach(function (d) { d.open = open; }); }; }
         window.__fig15 = { cost: function () { return cost.slice(); }, frames: function () { return frameMs.slice(); }, sel: function () { return sel; } };
         buildStore();
         boot();
