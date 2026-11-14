@@ -76,11 +76,10 @@ def from_exact(h, dk=5e-4, nslice=2000):
     yy = np.arange(64) * h["step"]; Hy = ew.h_free(yy, t, sp["sp"]).T      # (n, 64); h(0, t) = Hy[:, 0]
     slab = chi[:, i0:i0 + nxs, None] * Hy[:, None, :] * Hy[:, 0, None, None]
     prof = np.abs(chi)**2                                    # the transverse factor has norm 1 on the whole plane
-    R = X.regions(t)
+    half = 0.5 * h["prof_nx"] * h["step"]
+    R, lo, hi = X.regions_and_tails(t, -half, half)
     # the same regions as the stored file, counted over the box (|x| <= box half-length) so that "total in box" keeps its meaning;
     # the whole-line values are kept beside them
-    half = 0.5 * h["prof_nx"] * h["step"]
-    lo, hi = X.box_tails(t, -half, half)
     curves = [t, 1 - lo - hi, R["left"] - lo, R["right"] - hi] + ([R["well"]] if h["spec"]["N"] > 1 else [])
     names = ["t", "norm", "left", "right"] + (["well"] if h["spec"]["N"] > 1 else [])
     extra = dict(left_line=R["left"], right_line=R["right"], struct=R["struct"], closure=R["closure"])

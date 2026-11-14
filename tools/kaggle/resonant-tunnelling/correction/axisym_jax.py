@@ -27,7 +27,7 @@ def bessel_rows(Q, rho_out):
 
 
 def run(sp, t_end, hx=0.0625, Lx=None, Nr=160, Rmax=40.0, Wr=8.0, dt=0.01, nframes=200, rule="cell", dtype="c128",
-        out_x=None, out_rho=None, frame_dt=None):
+        out_x=None, out_rho=None, frame_dt=None, box_half=None):
     if dtype == "c128": jax.config.update("jax_enable_x64", True)
     cdt = jnp.complex128 if dtype == "c128" else jnp.complex64; rdt = jnp.float64 if dtype == "c128" else jnp.float32
     Lx = Lx or sp["Nx"] * 0.5
@@ -48,7 +48,10 @@ def run(sp, t_end, hx=0.0625, Lx=None, Nr=160, Rmax=40.0, Wr=8.0, dt=0.01, nfram
     Mr = jnp.asarray(Q["T"] @ (np.exp(-0.5j * Q["k"]**2 * dt)[:, None] * Q["T"]), cdt)
     Dx = jnp.asarray(np.exp(-0.5j * kx**2 * dt)[:, None], cdt)
     M = jnp.asarray(mask, rdt)
+    inbox = (np.abs(x) <= box_half)[:, None] if box_half else np.ones((Nx, 1), bool)
+    reg = {k: np.asarray(v) & inbox for k, v in reg.items()}
     S = {k: jnp.asarray(v, rdt) for k, v in side.items()}; Rg = {k: jnp.asarray(v, rdt) for k, v in reg.items()}
+    IB = jnp.asarray(np.broadcast_to(inbox, (Nx, Nr)), rdt)
 
     @jax.jit
     def chunk(u):
@@ -63,7 +66,7 @@ def run(sp, t_end, hx=0.0625, Lx=None, Nr=160, Rmax=40.0, Wr=8.0, dt=0.01, nfram
     @jax.jit
     def measure(u):
         d = jnp.abs(u)**2 * wq
-        return d.sum(), {k: (d * m).sum() for k, m in Rg.items()}, {k: (d * m).sum() for k, m in S.items()}
+        return (d * IB).sum(), d.sum(), {k: (d * m).sum() for k, m in Rg.items()}, {k: (d * m).sum() for k, m in S.items()}
 
     # output points
     if out_x is not None:
@@ -76,8 +79,8 @@ def run(sp, t_end, hx=0.0625, Lx=None, Nr=160, Rmax=40.0, Wr=8.0, dt=0.01, nfram
     for f in range(nframes):
         if f:
             p, aL, aR, aM = chunk(p); A["L"] += float(aL); A["R"] += float(aR); A["M"] += float(aM)
-        n, rg, sd = jax.device_get(measure(p))
-        curves.append([f * per * dt, float(n)] + [float(rg[k]) for k in sorted(reg)] + [A["L"], A["R"], A["M"]])
+        n, ntot, rg, sd = jax.device_get(measure(p))
+        curves.append([f * per * dt, float(n)] + [float(rg[k]) for k in sorted(reg)] + [A["L"], A["R"], A["M"], float(ntot)])
         if out_x is not None:
             half = (p[IX] @ B.T)                          # (len(out_x), len(out_rho)) complex psi
             frames.append(np.asarray(half))
@@ -85,11 +88,11 @@ def run(sp, t_end, hx=0.0625, Lx=None, Nr=160, Rmax=40.0, Wr=8.0, dt=0.01, nfram
             prof = line[ix]
             profs.append(prof)
     wall = time.time() - t0
-    C = np.array(curves); names = ["t", "norm"] + sorted(reg) + ["absL", "absR", "absM"]
+    C = np.array(curves); names = ["t", "norm"] + sorted(reg) + ["absL", "absR", "absM", "total"]
     last = C[-1]; cn = dict(zip(names, last))
-    _, _, sd = jax.device_get(measure(p))
+    _, _, _, sd = jax.device_get(measure(p))
     T = float(sd["R"]) + A["R"] + 0.5 * (float(sd["M"]) + A["M"])
-    drift = float(np.max(np.abs(C[:, 1] + C[:, -3] + C[:, -2] + C[:, -1] - 1)))
+    drift = float(np.max(np.abs(C[:, -1] + C[:, -4] + C[:, -3] + C[:, -2] - 1)))
     return dict(T=T, T_unc=0.5 * (float(sd["M"]) + A["M"]), curves=C, names=names, steps=per * (nframes - 1), frame_dt=per * dt,
                 wall=wall, s_per_step=wall / max(1, per * (nframes - 1)), drift=drift, cells=Nx * Nr,
                 frames=np.array(frames) if frames else None, profs=np.array(profs) if profs else None)

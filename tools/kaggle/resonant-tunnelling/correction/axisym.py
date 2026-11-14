@@ -94,20 +94,24 @@ def potential(sp, x, hx, Q, rule="cell", sub=8):
             th = (np.arange(180) + 0.5) * np.pi / 2 / 180
             yc = np.round(rho[:, None] * np.cos(th) / 0.5) * 0.5; zc = np.round(rho[:, None] * np.sin(th) / 0.5) * 0.5
             r2c = yc**2 + zc**2; xc = np.round((x - 0.0) / 0.5) * 0.5
-            rr = np.sqrt(xc[:, None, None]**2 + r2c[None])
-            ins = np.zeros(rr.shape, bool)
-            for Rc in Rs: ins |= np.abs(rr - Rc) < D / 2
-            V = V0 * ins.mean(2)
+            V = np.empty((len(x), len(rho)))
+            for a in range(0, len(x), 256):
+                rr = np.sqrt(xc[a:a + 256, None, None]**2 + r2c[None])
+                ins = np.zeros(rr.shape, bool)
+                for Rc in Rs: ins |= np.abs(rr - Rc) < D / 2
+                V[a:a + 256] = V0 * ins.mean(2)
         else:
             # cell averages by sub x sub sampling, area-weighted in rho
             u = (np.arange(sub) + 0.5) / sub
             xs = (x[:, None] - hx / 2 + hx * u[None])                       # (Nx, sub)
             rs = e[:-1, None] + (e[1:] - e[:-1])[:, None] * u[None]         # (Nr, sub)
             wr = rs / rs.sum(1, keepdims=True)
-            r = np.sqrt(xs[:, :, None, None]**2 + rs[None, None]**2)        # (Nx, sub, Nr, sub)
-            ins = np.zeros(r.shape, bool)
-            for Rc in Rs: ins |= np.abs(r - Rc) < D / 2
-            V = V0 * (ins * wr[None, None]).sum(3).mean(1)
+            V = np.empty((len(x), len(rho)))
+            for a in range(0, len(x), 256):                                 # chunks of x keep memory small
+                r = np.sqrt(xs[a:a + 256, :, None, None]**2 + rs[None, None]**2)   # (chunk, sub, Nr, sub)
+                ins = np.zeros(r.shape, bool)
+                for Rc in Rs: ins |= np.abs(r - Rc) < D / 2
+                V[a:a + 256] = V0 * (ins * wr[None, None]).sum(3).mean(1)
     if sp.get("bias"):
         V = V - sp["bias"] * np.clip((x - xl) / (xr - xl), 0, 1)[:, None]
     X = x[:, None]; Rh = rho[None, :]

@@ -205,40 +205,54 @@ class Exact:
         ph = np.exp(-1j * np.outer(self.S.E, times))  # (nk, nt)
         return B @ ph                                  # (nx, nt)
 
-    def flux_integrals(self, times, dt=0.02):
-        """P_left(t), P_right(t) at the given times by integrating the flux at xl and xr in time (Simpson on a fine time grid)."""
+    def _flux_cum(self, times, pairs, dt=0.02, chunk=1000):
+        """Cumulative Int_0^t j dt' at the given times for several points at once; pairs = [(psi coefficients, psi' coefficients)].
+        e^{-iEt} on the fine time grid is built by recurrence chunk to chunk (one exp table per run)."""
         tmax = float(np.max(times)); n = int(np.ceil(tmax / dt)); n += (n % 2 == 1); n = max(n, 2)
         tt = np.linspace(0, tmax, n + 1); h = tmax / n
-        jl = np.empty(len(tt)); jr = np.empty(len(tt))
-        for a in range(0, len(tt), 2000):
-            ph = np.exp(-1j * np.outer(tt[a:a + 2000], self.S.E))
-            pl, dl = ph @ self.fl[0], ph @ self.fl[1]; pr, dr = ph @ self.fr[0], ph @ self.fr[1]
-            jl[a:a + 2000] = np.imag(np.conj(pl) * dl); jr[a:a + 2000] = np.imag(np.conj(pr) * dr)
-        # cumulative Simpson at even nodes, linear (trapezoid) blend at odd nodes
-        cl = np.zeros(len(tt)); cr = np.zeros(len(tt))
-        cl[2::2] = np.cumsum(h / 3 * (jl[0:-2:2] + 4 * jl[1:-1:2] + jl[2::2]))
-        cr[2::2] = np.cumsum(h / 3 * (jr[0:-2:2] + 4 * jr[1:-1:2] + jr[2::2]))
-        cl[1::2] = cl[0:-1:2] + 0.5 * h * (jl[0:-1:2] + jl[1::2]); cr[1::2] = cr[0:-1:2] + 0.5 * h * (jr[0:-1:2] + jr[1::2])
-        return self.PL0 - np.interp(times, tt, cl), np.interp(times, tt, cr)
+        F = np.stack([c for pr in pairs for c in pr], 1)                   # (nk, 2 * npoints)
+        J = np.empty((len(tt), len(pairs)))
+        base = np.exp(-1j * np.outer(np.arange(chunk) * h, self.S.E))     # (chunk, nk)
+        step = np.exp(-1j * self.S.E * chunk * h)
+        cur = np.ones_like(self.S.E, complex)
+        for a in range(0, len(tt), chunk):
+            m = min(chunk, len(tt) - a)
+            V = (base[:m] * cur) @ F
+            for q in range(len(pairs)): J[a:a + m, q] = np.imag(np.conj(V[:, 2 * q]) * V[:, 2 * q + 1])
+            cur = cur * step
+        out = []
+        for q in range(len(pairs)):
+            j = J[:, q]; c = np.zeros(len(tt)); c[2::2] = np.cumsum(h / 3 * (j[0:-2:2] + 4 * j[1:-1:2] + j[2::2]))
+            c[1::2] = c[0:-1:2] + 0.5 * h * (j[0:-1:2] + j[1::2]); out.append(np.interp(times, tt, c))
+        return out
+
+    def flux_integrals(self, times, dt=0.02):
+        cl, cr = self._flux_cum(times, [self.fl, self.fr], dt)
+        return self.PL0 - cl, cr
+
+    def lead_pair(self, x0):
+        k, kR, S = self.k, self.S.kR, self.S
+        if x0 < self.S.xl:
+            e = np.exp(1j * k * x0)
+            return (self.aP * (e + S.r / e) + self.aM * (S.tp / e), self.aP * 1j * k * (e - S.r / e) - self.aM * 1j * k * S.tp / e)
+        e = np.exp(1j * kR * x0)
+        return (self.aP * S.t * e + self.aM * (1 / e + S.rp * e), self.aP * 1j * kR * S.t * e + self.aM * 1j * kR * (-1 / e + S.rp * e))
 
     def box_tails(self, times, xlo, xhi, dt=0.02):
-        """Int_{-inf}^{xlo} |chi|^2 and Int_{xhi}^{inf} |chi|^2 at the given times: the start packet's share there minus (plus) the
-        time integral of the flux through xlo (xhi). xlo < xl and xhi > xr (lead regions, analytic psi)."""
-        k, kR, S = self.k, self.S.kR, self.S
-        el, eh = np.exp(1j * k * xlo), np.exp(1j * kR * xhi)
-        fl = (self.aP * (el + S.r / el) + self.aM * (S.tp / el), self.aP * 1j * k * (el - S.r / el) - self.aM * 1j * k * S.tp / el)
-        fh = (self.aP * S.t * eh + self.aM * (1 / eh + S.rp * eh), self.aP * 1j * kR * S.t * eh + self.aM * 1j * kR * (-1 / eh + S.rp * eh))
-        tmax = float(np.max(times)); n = int(np.ceil(tmax / dt)); n += (n % 2 == 1); n = max(n, 2)
-        tt = np.linspace(0, tmax, n + 1); h = tmax / n; jl = np.empty(len(tt)); jh = np.empty(len(tt))
-        for a in range(0, len(tt), 2000):
-            ph = np.exp(-1j * np.outer(tt[a:a + 2000], self.S.E))
-            jl[a:a + 2000] = np.imag(np.conj(ph @ fl[0]) * (ph @ fl[1])); jh[a:a + 2000] = np.imag(np.conj(ph @ fh[0]) * (ph @ fh[1]))
-        def cum(j):
-            c = np.zeros(len(tt)); c[2::2] = np.cumsum(h / 3 * (j[0:-2:2] + 4 * j[1:-1:2] + j[2::2]))
-            c[1::2] = c[0:-1:2] + 0.5 * h * (j[0:-1:2] + j[1::2]); return np.interp(times, tt, c)
+        cl, ch = self._flux_cum(times, [self.lead_pair(xlo), self.lead_pair(xhi)], dt)
         s = self.sp["sx"]; x0 = x0_of(self.sp)
         lo0 = 0.5 * erfc((x0 - xlo) / (sqrt(2) * s)); hi0 = 0.5 * erfc((xhi - x0) / (sqrt(2) * s))
-        return lo0 - cum(jl), hi0 + cum(jh)
+        return lo0 - cl, hi0 + ch
+
+    def regions_and_tails(self, times, xlo, xhi, dt=0.02):
+        """regions() and box_tails() with one shared time table."""
+        cf = self.chi(times, "fine"); rho = np.abs(cf)**2
+        Pst = (self.wf[:, None] * rho).sum(0); Pw = (self.wf[self.well][:, None] * rho[self.well]).sum(0)
+        cl, cr, clo, chi_ = self._flux_cum(times, [self.fl, self.fr, self.lead_pair(xlo), self.lead_pair(xhi)], dt)
+        PL, PR = self.PL0 - cl, cr
+        s = self.sp["sx"]; x0 = x0_of(self.sp)
+        lo = 0.5 * erfc((x0 - xlo) / (sqrt(2) * s)) - clo; hi = 0.5 * erfc((xhi - x0) / (sqrt(2) * s)) + chi_
+        return dict(left=PL, right=PR, well=Pw, struct=Pst, closure=PL + PR + Pst), lo, hi
 
     def regions(self, times):
         cf = self.chi(times, "fine"); rho = np.abs(cf)**2
