@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-6372 files, 905.7 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+6373 files, 905.7 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -46,7 +46,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Working notes of project 07, the electron beam](#working-notes-of-project-07-the-electron-beam) | 52 |
 | [Working notes of the Rotor Pendula study](#working-notes-of-the-rotor-pendula-study) | 86 |
 | [Working notes of the Droplet Collection study](#working-notes-of-the-droplet-collection-study) | 123 |
-| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 669 |
+| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 670 |
 
 ## Repository root
 
@@ -237,7 +237,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/scripts/i18n/strings-de.js`](../public/scripts/i18n/strings-de.js) | 421.9 kB | The German string table the scripts read through T(), generated; do not edit. | [i18n.md](i18n.md) |
 | [`public/scripts/kaggle-flow.js`](../public/scripts/kaggle-flow.js) | 14.3 kB | The page side of the Kaggle pipeline: sliders that show the computed range and grow heavy near its edge, eased speed, the loading notice with the pipeline, the kaggle-bridge client. | [kaggle-pipeline.md](kaggle-pipeline.md) |
 | [`public/scripts/marching.js`](../public/scripts/marching.js) | 5.7 kB | Marching cubes on a rectangular grid (tables from three.js), shared by wave3d-view.js and fig14-iso-worker.js. | [wave3d-view.md](scripts/wave3d-view.md) |
-| [`public/scripts/resonant-note.js`](../public/scripts/resonant-note.js) | 187.3 kB | Fig. 15 lecture note: the whole study, injected into the page’s <article> and typeset by sim.js (KaTeX); the 1D theory as the exact core, the 3D computation and its measured grid error, discs and shells, the device. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
+| [`public/scripts/resonant-note.js`](../public/scripts/resonant-note.js) | 187.5 kB | Fig. 15 lecture note: the whole study, injected into the page’s <article> and typeset by sim.js (KaTeX); the 1D theory as the exact core, the 3D computation and its measured grid error, discs and shells, the device. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
 | [`public/scripts/rt3d-view.js`](../public/scripts/rt3d-view.js) | 13.6 kB | Fig. 15: the 3D view (three.js): the meshed height sheet in the house colours and the barriers as static lit glass solids at their true place; turning by press and drag. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
 | [`public/scripts/rt3d-worker.js`](../public/scripts/rt3d-worker.js) | 3.0 kB | Fig. 15: the background thread that fetches one stored 3D run, checks its SHA-256, inflates it and turns the 8-bit levels into ψ. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
 | [`public/scripts/schrodinger-live-worker.js`](../public/scripts/schrodinger-live-worker.js) | 8.6 kB | Fig. 14 live preview: the same split-step Schrödinger solver as on Kaggle, 64^3 points, in a Web Worker, for regions not computed yet. | [fig14-schrodinger-sphere.md](simulations/fig14-schrodinger-sphere.md) |
@@ -6845,12 +6845,13 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/fig15/BRIEF.md`](../notes/fig15/BRIEF.md) | 23.9 kB | Fig. 15 (resonant tunnelling, built on the stored runs of Fig. 14): the brief for the session that builds it, written on the owner's instruction on 13 November 2026. | [BRIEF.md](../notes/fig15/BRIEF.md) |
 | [`notes/fig15/LESSONS.md`](../notes/fig15/LESSONS.md) | 11.4 kB | Fig. 15: the final goal (data generated on Kaggle, stored, played smoothly by the page) and every mistake made on Fig. 14, written on the owner's instruction for the Fig. 15 session. | [LESSONS.md](../notes/fig15/LESSONS.md) |
 
-<details><summary>16 files: Fig. 15: a measuring script of the review, or its saved output.</summary>
+<details><summary>17 files: Fig. 15: a measuring script of the review, or its saved output.</summary>
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
-| [`notes/fig15/NOTE_STATE.md`](../notes/fig15/NOTE_STATE.md) | 26.7 kB | Fig. 15: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
-| [`notes/fig15/STATE.md`](../notes/fig15/STATE.md) | 12.2 kB | Fig. 15: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig15/NOTE_STATE.md`](../notes/fig15/NOTE_STATE.md) | 27.2 kB | Fig. 15: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig15/STATE.md`](../notes/fig15/STATE.md) | 12.9 kB | Fig. 15: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig15/derivation-check-gen2-r10.md`](../notes/fig15/derivation-check-gen2-r10.md) | 21.2 kB | Fig. 15: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig15/derivation-check-gen2-r2.md`](../notes/fig15/derivation-check-gen2-r2.md) | 17.3 kB | Fig. 15: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig15/derivation-check-gen2-r3.md`](../notes/fig15/derivation-check-gen2-r3.md) | 15.8 kB | Fig. 15: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig15/derivation-check-gen2-r4.md`](../notes/fig15/derivation-check-gen2-r4.md) | 12.9 kB | Fig. 15: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
@@ -6862,7 +6863,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/fig15/derive.md`](../notes/fig15/derive.md) | 1.6 kB | Fig. 15: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig15/derive.py`](../notes/fig15/derive.py) | 6.4 kB | Fig. 15: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig15/gen1_profile_check.py`](../notes/fig15/gen1_profile_check.py) | 2.4 kB | Fig. 15: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
-| [`notes/fig15/gen2_numbers.py`](../notes/fig15/gen2_numbers.py) | 29.7 kB | Fig. 15: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig15/gen2_numbers.py`](../notes/fig15/gen2_numbers.py) | 30.6 kB | Fig. 15: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig15/grid_test.py`](../notes/fig15/grid_test.py) | 2.9 kB | Fig. 15: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig15/grid_test2.py`](../notes/fig15/grid_test2.py) | 1.3 kB | Fig. 15: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 
