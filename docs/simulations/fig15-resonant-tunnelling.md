@@ -62,7 +62,10 @@ separation of variables, the large-radius limit for discs.
 - **Fig. 15b**: `p(x, t)` along the flight, each curve divided by its total in the box; for walls the exact 1D twin dashed on top.
 - **Fig. 15c**: the stored region probabilities against time, the total left in the box, and the lifetime fit.
 - **Fig. 15d**: walls and discs: `T_far` of every 3D run against the exact 1D curves; shells: the lifetime against energy.
-- **Fig. 15e** and the real-units panel: the diode from the exact 1D theory.
+- **Fig. 15e** and the real-units panel: the diode. Generation 2 draws the current integrated from the stored bias runs (walls and
+  discs of radius 6, 20 biases × 25 energies each, 1000 filed runs; `file_rt3d2.py`) beside the exact 1D Tsu-Esaki curve. The bias
+  axis is V_b in units of E_u = 150 meV; the current axis is in units of e m* kT E_u / (2π²ħ³) = 1.22 MA/cm² (m* = 0.067 mₑ,
+  kT = 0.05 E_u). The scale of the sheet is the run's largest |ψ| (height 1). Expand all also opens the note's plain boxes.
 
 The page draws the stored half-plane and its mirror (exact: every shape and the packet are symmetric about the axis), and
 interpolates every screen frame: `ψ(t_f + τ) = e^{−iEτ}[(1 − s)ψ_f + s e^{iEΔt}ψ_{f+1}]`; profiles and region probabilities

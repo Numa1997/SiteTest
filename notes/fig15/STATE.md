@@ -119,6 +119,11 @@ c80244e inventory · 923b43f filer per-notebook commit, replaced record · c21bd
 - Waiting for the writing session (session_01DGmqiqazJ9UxECtFYiespR) to write READY on claude/fig15-gen2-note.
   Then: merge it, build, page check with the note, merge to main, verify live.
 
+## Merged for release (14 Nov ~10:30 UTC)
+- Owner's order via the coordinating chat: publish now. Writer READY at ad6738d (branch claude/fig15-gen2-note), merged.
+- Page items done: gain note, energy readout, Fig. 15e title/labels/units/count, Read values line, Fermi energy wording.
+- Checked locally on the full data: 1086 KaTeX, 0 errors, 14 sections, Expand all opens the box, no overflow, 390/1440.
+
 ## Left (Next = the first open item)
 1. Shards 4-6 and the fix job (two at a time as slots free; check-ins by `send_later`); download each, check SHA-256.
 2. File with `file_rt3d2.py` (date of filing), add the generation to `generations.json`.

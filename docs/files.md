@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-6340 files, 902.3 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+6351 files, 902.6 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -46,7 +46,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Working notes of project 07, the electron beam](#working-notes-of-project-07-the-electron-beam) | 52 |
 | [Working notes of the Rotor Pendula study](#working-notes-of-the-rotor-pendula-study) | 86 |
 | [Working notes of the Droplet Collection study](#working-notes-of-the-droplet-collection-study) | 123 |
-| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 650 |
+| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 661 |
 
 ## Repository root
 
@@ -157,7 +157,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/simulations/momentum-spirographs.html`](../public/simulations/momentum-spirographs.html) | 153.4 kB | Fig. 13 · Spirographs in Momentum Space: a live grid of double pendulums, each kicked with the (p1, p2) of its cell, drawn as long exposures over the chaos map. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`public/simulations/pendulum-control.html`](../public/simulations/pendulum-control.html) | 208.1 kB | Fig. 11 · Double Pendulum under Control: the simulation, its data panel, walkthrough and lecture note. | [fig11-pendulum-control.md](simulations/fig11-pendulum-control.md) |
 | [`public/simulations/phasor-sums.html`](../public/simulations/phasor-sums.html) | 273.3 kB | Fig. 7 · Phasor Sums: the simulation, its data panel, walkthrough and lecture note. | [fig07-phasor-sums.md](simulations/fig07-phasor-sums.md) |
-| [`public/simulations/resonant-tunnelling.html`](../public/simulations/resonant-tunnelling.html) | 64.8 kB | Fig. 15 · Resonant Tunnelling: the simulation, its data panel, walkthrough and lecture note. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
+| [`public/simulations/resonant-tunnelling.html`](../public/simulations/resonant-tunnelling.html) | 66.7 kB | Fig. 15 · Resonant Tunnelling: the simulation, its data panel, walkthrough and lecture note. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
 | [`public/simulations/rods-in-liquid.html`](../public/simulations/rods-in-liquid.html) | 403.2 kB | Project 06 · Balancing Two Rods in a Liquid (7 November 2026): project 05's script with its own settings, a machine that can swing the rods up in water, glycerol and honey, a slim cart, and the controller told the flow; data panel, walkthrough dipc and lecture note. | [project06-rods-in-liquid.md](simulations/project06-rods-in-liquid.md) |
 | [`public/simulations/schrodinger-sphere.html`](../public/simulations/schrodinger-sphere.html) | 233.5 kB | Fig. 14 · A Wave Packet Meets a Sphere: the simulation, its data panel, walkthrough and lecture note. | [fig14-schrodinger-sphere.md](simulations/fig14-schrodinger-sphere.md) |
 | [`public/simulations/water-wave.html`](../public/simulations/water-wave.html) | 170.6 kB | Fig. 5 · Circular Water Waves: the simulation, its data panel, walkthrough and lecture note. | [fig05-water-wave.md](simulations/fig05-water-wave.md) |
@@ -237,7 +237,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/scripts/i18n/strings-de.js`](../public/scripts/i18n/strings-de.js) | 421.9 kB | The German string table the scripts read through T(), generated; do not edit. | [i18n.md](i18n.md) |
 | [`public/scripts/kaggle-flow.js`](../public/scripts/kaggle-flow.js) | 14.3 kB | The page side of the Kaggle pipeline: sliders that show the computed range and grow heavy near its edge, eased speed, the loading notice with the pipeline, the kaggle-bridge client. | [kaggle-pipeline.md](kaggle-pipeline.md) |
 | [`public/scripts/marching.js`](../public/scripts/marching.js) | 5.7 kB | Marching cubes on a rectangular grid (tables from three.js), shared by wave3d-view.js and fig14-iso-worker.js. | [wave3d-view.md](scripts/wave3d-view.md) |
-| [`public/scripts/resonant-note.js`](../public/scripts/resonant-note.js) | 36.8 kB | Fig. 15 lecture note: the whole study, injected into the page’s <article> and typeset by sim.js (KaTeX); the 1D theory as the exact core, the 3D computation and its measured grid error, discs and shells, the device. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
+| [`public/scripts/resonant-note.js`](../public/scripts/resonant-note.js) | 187.3 kB | Fig. 15 lecture note: the whole study, injected into the page’s <article> and typeset by sim.js (KaTeX); the 1D theory as the exact core, the 3D computation and its measured grid error, discs and shells, the device. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
 | [`public/scripts/rt3d-view.js`](../public/scripts/rt3d-view.js) | 13.6 kB | Fig. 15: the 3D view (three.js): the meshed height sheet in the house colours and the barriers as static lit glass solids at their true place; turning by press and drag. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
 | [`public/scripts/rt3d-worker.js`](../public/scripts/rt3d-worker.js) | 3.0 kB | Fig. 15: the background thread that fetches one stored 3D run, checks its SHA-256, inflates it and turns the 8-bit levels into ψ. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
 | [`public/scripts/schrodinger-live-worker.js`](../public/scripts/schrodinger-live-worker.js) | 8.6 kB | Fig. 14 live preview: the same split-step Schrödinger solver as on Kaggle, 64^3 points, in a Web Worker, for regions not computed yet. | [fig14-schrodinger-sphere.md](simulations/fig14-schrodinger-sphere.md) |
@@ -5552,7 +5552,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`docs/simulations/fig12-beer-slosh.md`](simulations/fig12-beer-slosh.md) | 92.7 kB | Documentation: Fig. 12 · A Pint of Guinness on a One-Wheel Cart (`public/simulations/beer-slosh.html`). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`docs/simulations/fig13-momentum-spirographs.md`](simulations/fig13-momentum-spirographs.md) | 29.4 kB | Documentation: Fig. 13 · Spirographs in Momentum Space, the Flower Hunt, the dashboard and the films. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`docs/simulations/fig14-schrodinger-sphere.md`](simulations/fig14-schrodinger-sphere.md) | 30.8 kB | Documentation: Fig. 14 · A Wave Packet Meets a Sphere. | [fig14-schrodinger-sphere.md](simulations/fig14-schrodinger-sphere.md) |
-| [`docs/simulations/fig15-resonant-tunnelling.md`](simulations/fig15-resonant-tunnelling.md) | 8.0 kB | Documentation: Fig. 15 · Resonant Tunnelling (3D). | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
+| [`docs/simulations/fig15-resonant-tunnelling.md`](simulations/fig15-resonant-tunnelling.md) | 11.2 kB | Documentation: Fig. 15 · Resonant Tunnelling (3D). | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
 | [`docs/simulations/project06-rods-in-liquid.md`](simulations/project06-rods-in-liquid.md) | 9.7 kB | Documentation: Project 06 · Balancing Two Rods in a Liquid. | [project06-rods-in-liquid.md](simulations/project06-rods-in-liquid.md) |
 | [`docs/styles.md`](styles.md) | 52.1 kB | Documentation: Stylesheets: `public/styles/`. | [styles.md](styles.md) |
 | [`docs/usul.md`](usul.md) | 14.2 kB | Documentation: Phyein Usul · the website at phyeinusul.com. | [usul.md](usul.md) |
@@ -5683,10 +5683,10 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/kaggle/resonant-tunnelling/build_rt3d2.py`](../tools/kaggle/resonant-tunnelling/build_rt3d2.py) | 2.5 kB | Fig. 15, 3D generation 2: writes the Kaggle loader notebook for a commit, job set and shard. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
 | [`tools/kaggle/resonant-tunnelling/check_cn.py`](../tools/kaggle/resonant-tunnelling/check_cn.py) | 1.2 kB | Fig. 15: compares the reconstruction with the Crank–Nicolson solve, frame by frame. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
 | [`tools/kaggle/resonant-tunnelling/cn.py`](../tools/kaggle/resonant-tunnelling/cn.py) | 2.4 kB | Fig. 15: an independent Crank–Nicolson solver of the double barrier (the scheme of flat.py), to check the reconstruction. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
-| [`tools/kaggle/resonant-tunnelling/exact1d.py`](../tools/kaggle/resonant-tunnelling/exact1d.py) | 6.5 kB | Fig. 15, 3D: the exact 1D numbers for the 3D geometry (T(E), packet average, resonance, I–V, real units), the check of the 3D runs. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
+| [`tools/kaggle/resonant-tunnelling/exact1d.py`](../tools/kaggle/resonant-tunnelling/exact1d.py) | 6.6 kB | Fig. 15, 3D: the exact 1D numbers for the 3D geometry (T(E), packet average, resonance, I–V, real units), the check of the 3D runs. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
 | [`tools/kaggle/resonant-tunnelling/extract_t.py`](../tools/kaggle/resonant-tunnelling/extract_t.py) | 7.6 kB | Fig. 15, Step B1: reads the single-barrier t(k), r(k) off Fig. 14’s stored runs, to check the exact amplitudes. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
 | [`tools/kaggle/resonant-tunnelling/file_rt3d.py`](../tools/kaggle/resonant-tunnelling/file_rt3d.py) | 9.0 kB | Fig. 15, 3D: files the Kaggle runs on the site (SHA-256 checked against each notebook’s index) and writes kaggle/index.json with provenance and the numbers read from each run. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
-| [`tools/kaggle/resonant-tunnelling/file_rt3d2.py`](../tools/kaggle/resonant-tunnelling/file_rt3d2.py) | 12.0 kB | Fig. 15, 3D generation 2: files the Kaggle runs (SHA-256 checked) and writes kaggle/index.json; draft, generalised from file_rt3d.py. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
+| [`tools/kaggle/resonant-tunnelling/file_rt3d2.py`](../tools/kaggle/resonant-tunnelling/file_rt3d2.py) | 12.1 kB | Fig. 15, 3D generation 2: files the Kaggle runs (SHA-256 checked) and writes kaggle/index.json; draft, generalised from file_rt3d.py. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
 | [`tools/kaggle/resonant-tunnelling/iv.py`](../tools/kaggle/resonant-tunnelling/iv.py) | 6.3 kB | Fig. 15: the current–voltage curve by the Tsu–Esaki formula, with the biased barriers as a staircase of transfer matrices (convergence checked). | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
 | [`tools/kaggle/resonant-tunnelling/pack.py`](../tools/kaggle/resonant-tunnelling/pack.py) | 5.5 kB | Fig. 15: files the reconstructed runs under public/data/resonant-tunnelling/ with SHA-256 and provenance (the Fig. 14 parent runs). | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
 | [`tools/kaggle/resonant-tunnelling/read_rt3d.py`](../tools/kaggle/resonant-tunnelling/read_rt3d.py) | 2.1 kB | Fig. 15, 3D: reads the RT3C run files from Kaggle and prints the checks of each run (timing, start state, 3D vs 1D twin, transmission). | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
@@ -6833,12 +6833,33 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/fig14/wave3d_test.py`](../notes/fig14/wave3d_test.py) | 1.5 kB | Fig. 14: the test that computed one run on 128^3 points in this workspace and stored Re psi in 3D (96 x 64 x 64 points, 32 frames, int8). | [fig14-schrodinger-sphere.md](simulations/fig14-schrodinger-sphere.md) |
 | [`notes/fig15/BRIEF.md`](../notes/fig15/BRIEF.md) | 23.9 kB | Fig. 15 (resonant tunnelling, built on the stored runs of Fig. 14): the brief for the session that builds it, written on the owner's instruction on 13 November 2026. | [BRIEF.md](../notes/fig15/BRIEF.md) |
 | [`notes/fig15/LESSONS.md`](../notes/fig15/LESSONS.md) | 11.4 kB | Fig. 15: the final goal (data generated on Kaggle, stored, played smoothly by the page) and every mistake made on Fig. 14, written on the owner's instruction for the Fig. 15 session. | [LESSONS.md](../notes/fig15/LESSONS.md) |
-| [`notes/fig15/STATE.md`](../notes/fig15/STATE.md) | 11.0 kB | Fig. 15: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+
+<details><summary>16 files: Fig. 15: a measuring script of the review, or its saved output.</summary>
+
+| File | Size | What it is | Explained in |
+|---|---|---|---|
+| [`notes/fig15/NOTE_STATE.md`](../notes/fig15/NOTE_STATE.md) | 26.7 kB | Fig. 15: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig15/STATE.md`](../notes/fig15/STATE.md) | 11.7 kB | Fig. 15: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig15/derivation-check-gen2-r2.md`](../notes/fig15/derivation-check-gen2-r2.md) | 17.3 kB | Fig. 15: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig15/derivation-check-gen2-r3.md`](../notes/fig15/derivation-check-gen2-r3.md) | 15.8 kB | Fig. 15: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig15/derivation-check-gen2-r4.md`](../notes/fig15/derivation-check-gen2-r4.md) | 12.9 kB | Fig. 15: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig15/derivation-check-gen2-r5.md`](../notes/fig15/derivation-check-gen2-r5.md) | 13.1 kB | Fig. 15: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig15/derivation-check-gen2-r6.md`](../notes/fig15/derivation-check-gen2-r6.md) | 22.1 kB | Fig. 15: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig15/derivation-check-gen2-r8.md`](../notes/fig15/derivation-check-gen2-r8.md) | 19.2 kB | Fig. 15: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig15/derivation-check-gen2-r9.md`](../notes/fig15/derivation-check-gen2-r9.md) | 12.9 kB | Fig. 15: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig15/derivation-check-gen2.md`](../notes/fig15/derivation-check-gen2.md) | 16.5 kB | Fig. 15: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig15/derive.md`](../notes/fig15/derive.md) | 1.6 kB | Fig. 15: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig15/derive.py`](../notes/fig15/derive.py) | 6.4 kB | Fig. 15: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig15/gen1_profile_check.py`](../notes/fig15/gen1_profile_check.py) | 2.4 kB | Fig. 15: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig15/gen2_numbers.py`](../notes/fig15/gen2_numbers.py) | 29.7 kB | Fig. 15: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig15/grid_test.py`](../notes/fig15/grid_test.py) | 2.9 kB | Fig. 15: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig15/grid_test2.py`](../notes/fig15/grid_test2.py) | 1.3 kB | Fig. 15: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
-| [`notes/fig15/referee.md`](../notes/fig15/referee.md) | 11.4 kB | Fig. 15: the blind referee's report on the note. | [notes.md](notes.md) |
+
+</details>
+
+| File | Size | What it is | Explained in |
+|---|---|---|---|
+| [`notes/fig15/referee.md`](../notes/fig15/referee.md) | 11.2 kB | Fig. 15: the blind referee's report on the note. | [notes.md](notes.md) |
 | [`notes/home/longlines.cjs`](../notes/home/longlines.cjs) | 1.2 kB | Browser measurements of the home page: index size, column widths, characters per line, section screenshots. | [styles.md](styles.md) |
 | [`notes/home/measure.cjs`](../notes/home/measure.cjs) | 2.6 kB | Browser measurements of the home page: index size, column widths, characters per line, section screenshots. | [styles.md](styles.md) |
 | [`notes/home/sections.cjs`](../notes/home/sections.cjs) | 891 B | Browser measurements of the home page: index size, column widths, characters per line, section screenshots. | [styles.md](styles.md) |
