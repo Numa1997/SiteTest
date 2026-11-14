@@ -34,8 +34,9 @@ if not globals().get("CPU") and jax.default_backend() != "gpu":
     say("NO GPU BACKEND"); raise SystemExit("NO GPU BACKEND")
 import axisym as ax, axisym_jax as aj
 
-GRID = dict(hx=0.0625, Nr=256, Rmax=64.0, Wr=12.0, dt=0.01, box_factor=2.0)
-GRID.update(globals().get("GRID", {}))
+_GRID_SET = dict(globals().get("GRID", {}))        # the loader's override, read BEFORE the default is assigned (bug fixed 14 Nov:
+GRID = dict(hx=0.0625, Nr=256, Rmax=64.0, Wr=12.0, dt=0.01, box_factor=2.0)   # the override used to be lost)
+GRID.update(_GRID_SET)
 DTYPE = globals().get("DTYPE", "c64")
 
 
