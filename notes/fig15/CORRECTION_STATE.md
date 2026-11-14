@@ -27,6 +27,14 @@ last, GPU only with the owner's yes on a bill.
    cost per run (CPU, T4 estimate); stratified sample of 60-80 references; reuse rules and pass rates; classification of the
    2,609 disc and shell runs.  -> STOP 2, report.
 
+## Live work (14 Nov)
+- Walls: CPU batch (rebuild_walls_all.py) stopped by the owner at 488 of 1,088 (records: notes/fig15/correction/walls_rebuild.jsonl,
+  files in scratchpad rebuilt/). The other 600 (correction/walls_left.json) run on Kaggle: numakoudsie/fig15-correction-walls-exact
+  v1, kernel 144992045, launched ~12:40 UTC, commit 63fddef, exact_wall_jax.py (complex128, checked against the CPU code on one run:
+  T to 6e-9, levels to 1, curves to 1e-7). Quota before launch: 48,167 s used of 108,000.
+- Owner, 14 Nov: when everything is done, integrate ALL data into one new generation: kept stored runs + 1,088 exact walls
+  (488 CPU + 600 GPU) + 2D discs and shells, one index.
+
 ## Numbers (filled as measured)
 ### Walls, exact solver (`tools/kaggle/resonant-tunnelling/correction/exact_wall.py`)
 - Method: chi = Int dk/2pi [c+ psi+ + (k/kR) c- psi-] e^{-iEt}; both scattering families (left- and right-incident), exact
