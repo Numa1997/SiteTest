@@ -58,7 +58,34 @@
      "what": "the free swing without the head (no head, so the head's mass cannot change it), packed again into this folder"
     }
    ],
-   "note": "JAX (tools/fig12/kaggle/stout_jax.py) with the head's mass in the pressure step (a Robin condition; the note's eqs. 15a, 15b, 18a); played by the page"
+   "note": "JAX (tools/fig12/kaggle/stout_jax.py) with the head's mass in the pressure step (a Robin condition; the note's eqs. 15a, 15b, 18a); played by the page from 14 November 2026 until the switch to run 10 the same day, kept for the record"
+  },
+  {
+   "date": "2026-11-14",
+   "solver": "jax, the head with its mass; controllers with the head's drive coefficient",
+   "files": "2026-11-14-run10/index-jax.json and the files it lists",
+   "notebook": "numakoudsie/guinness-on-a-cart-stout-in-jax",
+   "runs": [
+    {
+     "run": 10,
+     "version": 10,
+     "commit": "58eea6870a20b8edfaa9ef46ee655cf1e890fdfe",
+     "what": "the five controlled rides again (joint control on all three roads, slosh LQR and road preview on the kerb) with beta 1.241, the drive coefficient with the head's mass; plant 2.915 Hz, damping ratio 0.425 from run 8; books checked in every stored frame; all checks pass"
+    },
+    {
+     "run": 8,
+     "version": 8,
+     "commit": "96e8a1da32568524ddfba80eb709e03edb26bec2",
+     "what": "the three roads with the speed held only and the free swing with the head, packed again into this folder"
+    },
+    {
+     "run": 6,
+     "version": 6,
+     "commit": "4c105275d3efe381335a3cb6cc23efbf0b13a9f6",
+     "what": "the free swing without the head, packed again into this folder"
+    }
+   ],
+   "note": "played by the page, with the lecture note rewritten on these files (notes/fig12/note/), from 14 November 2026"
   }
  ]
 }
