@@ -58,7 +58,25 @@ not spill, and show with and without control side by side.
   Never touch their kernels; do not message that chat.
 - The same message asks for no new control work (the five controllers are the control system) and, while waiting, a full
   rewrite of the Fig. 12 lecture note to a high standard (every number printed by a script from the stored runs, derivations,
-  derivation-checker and referee agents). Asked the user to confirm before starting it (14 November, 01:50 UTC).
+  derivation-checker and referee agents). Asked the user to confirm; the user said yes (14 November, about 01:55 UTC):
+  "Yes, since you haven't much to do now except that and pushing".
+
+## The note rewrite (started 14 November, about 02:00 UTC)
+
+Brief (from the coordinating chat, approved by the user): honest (every number printed by a script from the stored runs; a
+paragraph where the picture differs from the data; every approximation named with its cost; the kerb limit 82 N vs 15 N);
+derived (Navier-Stokes in the cart's accelerating frame, free surface, APIC vs PIC; the first slosh mode and its frequency;
+each of the five controllers (speed, preview, slosh LQR, joint, skyhook) with law, state, reason, LQR cost and Riccati,
+skyhook's inertial damper; the mass books and tolerated drift); every equation numbered, every symbol defined with unit where
+it first appears, limits checked; everyday picture first; short plain sentences; no forward references; every figure caption
+says axes, colours, what to notice, and which page control gives which view. No new control work.
+Judging: independent readers (referee agent) given only "Fig. 12" and the page path: one as the owner (BSc physics, reading
+for pleasure), one as a strong school student or first-year; fix every stop; fresh readers again until a full reading has
+no stops; the derivation-checker alongside. Report: what was written, each round's marks and the answer to each, the
+checker's result, and when run 10 launched.
+Plan: round 0 readers and checker on the current note (outputs in notes/fig12/readers/), while writing the numbers script
+tools/fig12/kaggle/note_numbers.py (prints every run number from public/data/fig12/2026-11-13-run8/ and the summaries) and a
+check that each number in the note matches it; then rewrite section by section; rounds until no stops.
 - After it runs: download outputs to scratch run10/, check_run.py, pack into a new folder public/data/fig12/2026-11-14-run10/
   with run 8's speed-held rides and swings copied beside it (the page plays one folder), point DIR in guinness-jax-play.js at
   it, update generations.json, the note (sections 10 to 12: Tables 7 and 8, the beta caveat removed), the docs; test in
