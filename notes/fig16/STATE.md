@@ -101,5 +101,14 @@ The control system is the centre of the work; the cart is designed to give it th
 - Packed (tools/fig16/kaggle/pack16.py, format conversion only) into public/data/fig16/2026-11-14/ (index-16.json, 1.1 MB).
 - Player prototype notes/fig16/proto/ride16.html: Fig. 12's best ride and the new cart side by side, same clock, stored frames only.
 
+## The page (14 November 2026, owner: "Yes please" to the real page)
+- public/simulations/guinness-cart-control.html (built by tools/fig16/build_page.py from notes/fig16/page/*.src.html, 48 numbers from
+  stored data), public/scripts/guinness16-play.js, public/scripts/cart16-view.js (moved from proto), thumbnail
+  public/images/sims/guinness-cart-control.webp, catalog entry fig 16 (field control), "16" link added to the nav of 19 simulation
+  pages (incl. Fig. 12's and Fig. 15's pages: registration only), ENGLISH_ONLY, i18n strings (9 de, 9 ar), redirects, inventory rules,
+  docs/simulations/fig16-guinness-cart-control.md. Tested built dist in Chromium at 1440/390: no errors, 0 KaTeX errors, no scroll.
+- Open: full lecture note (STANDARD.md, readers), data panel and three-way proof, kerb scatter, Kaggle dataset fig16-..., the
+  rotating frame's non-uniform forces.
+
 ## Commits
 - 1st: brief + state. 2nd: model tools in progress.

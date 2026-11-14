@@ -317,5 +317,22 @@
             has: ['derivation', 'data', 'read', 'round', 'check'],
             added: '2026-11-13'
         },
+        {
+            id: 'guinness-cart-control',
+            fig: 16,
+            title: 'A Pint of Guinness on a Cart Built to Carry It',
+            file: 'simulations/guinness-cart-control.html',
+            field: 'control',
+            stage: 2,
+            subject: 'control · fluid dynamics · computed on Kaggle',
+            summary: 'Fig. 12’s pint of stout with its head of foam, clamped to the deck of a four-wheel cart whose struts carry actuators. A control system reads the road ahead with a scanner and tilts and lifts the deck so that the stout feels almost no sideways push. Over the 30 mm kerb at 1.5 m/s, where Fig. 12’s best controller lost 1.63 mL of head, it loses 0.004 mL; switched off, the same cart throws stout and foam over the rim. Every ride was computed with Fig. 12’s own fluid solver on Kaggle’s GPU; the page plays it beside Fig. 12’s best ride on one clock.',
+            equation: '\\tan\\theta^* = -\\frac{a_x}{g + a_z}, \\qquad \\mathbf u_k = -K\\mathbf x_k - \\sum_{j=0}^{N_p-1} K_j\\,\\mathbf w_{k+j}',
+            model: 'Fig. 12’s stout and head in the measured tulip glass, clamped to a pitching and heaving deck; four wheels on swing arms, coil-over struts with voice-coil actuators, rear hub motors; the effective gravity turned into the glass’s frame',
+            method: 'Fig. 12’s JAX fluid solver unchanged (APIC, 1.5 mm grid, about a million particles) with the new cart and its controller in the loop, on Kaggle’s Tesla T4; LQR with 0.25 s of road preview and a Kalman filter on the wall probes; stored 30 times a second with SHA-256 and played back',
+            controls: 'ride (road, control on or off); time; pause and ride again',
+            concepts: ['sloshing', 'effective gravity', 'non-inertial frame', 'active suspension', 'LQR', 'preview control', 'Riccati equation', 'Kalman filter', 'GPU', 'Kaggle'],
+            has: ['derivation', 'data'],
+            added: '2026-11-14'
+        },
     ];
 })();
