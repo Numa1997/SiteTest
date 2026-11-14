@@ -193,3 +193,9 @@ counts of the singles named; 4 % caused by the rule; 66 % context. Left: data-pe
 ## Round 6 owner (17 marks, read before 034bc81): remaining fixed: Fig. 15e has two kinds of curve in the key; n paragraph split;
 'here' -> E; sigma vs width; shells centred at x = 0, caught in the gap (and, tunnelling again, the inner shell); supply is a pure
 number, product in (32) units; Fig. 2 base line; sec 11 box caveat for 12 %; 'earlier, shorter rule'.
+
+## Round 6 referee (51 marks, notes/fig15/referee.md): fixed the house frame — the note now builds header + paper__grid with a
+contents list (paper__toc, 14 entries from the section titles, maths stripped) + paper__body, so the body sets in Latin Modern
+(it was IBM Plex Sans since generation 1; paper.css applies the font only through .paper__body) and the TOC observer in sim.js
+works. Also: T_2 defined; wide-gap star ended; k -> E change of variable; flux T equals |t|^2 for equal k; problem 3 uses L_eff.
+Remaining open marks are data-pending (refresh at full index) or declined (textbook; table scroll cue is house .ptab).
