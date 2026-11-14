@@ -149,3 +149,5 @@ Section 4: exact chi(x,t) for one wall run, compared with the stored file.
 - 23:42-23:46 walls-calib v3 (commit c53a447, topic -walls): all 13 groups batched == single-wall path (dT 0 or <= 3.5e-18,
   dlevel 0); 120 walls done, 0 failed, tar 170 MB. PREDICTION for 1,088 walls: compute 2,612 s, one notebook ~1,383 s.
 - ~23:50 walls-gpu v2 (kernel 144997790) launched: all 1,088 walls, CALIB False, topic -wallsall, timeout 7200 s.
+- 00:00 UTC 15 Nov: shells-2-of-2 COMPLETE (141, 0 failed, 3,442 s, rt2d_all_1of2.tar 220.5 MB). All 282 shells done at Rmax 160
+  (both logs confirm grid). Records of all 2,609 2D runs in notes/fig15/correction/rt2d_runs/ (discs_*-of-4, shells-*-of-2).
