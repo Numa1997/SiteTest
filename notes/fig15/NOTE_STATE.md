@@ -119,3 +119,13 @@ Live site: /r2/resonant-tunnelling/2026-11-14/runs/... returns 404 on phyeinusul
 
 ## Round 3 (launched ~03:45 UTC on 1aacf39): fresh referee, owner, student, derivation checker. Outputs: notes/fig15/referee.md,
 scratchpad/readers/r3-{owner,student}.md, scratchpad/derivation-check-r3.md. Coordinator told: live R2 404, page gain note, V0=3 long packets.
+
+## Round 3 readers (on 1aacf39): owner 22 marks, student 28 (scratchpad/readers/r3-*.md). Fixed in the commit after this line:
+two rendering faults from round-2 edits (double-escaped quotes in sec 11; raw \\( in sec 13 products); eta not a (a = length unit);
+v on both sides of the flux; 1/sqrt R dropped in (17) said; why the d=2 fit reads short; FIX1 explained (earlier run-length rule,
+share read before the border); long-packet energies not on the grid; peak energy named for (19); N=10 gap with a likely cause;
+sec 7 gap called a grid error with pointer to sec 11; tau of walls 15.1 at 0.65 explained (lifetime belongs to the resonance,
+not the packet's mean energy); problem 6 rewritten to work with R = 2 now; NDR power argument; discs' current sentence; filed and
+SHA-256 explained; a = 2.75 nm given in sec 2; phase-function step in separation; step r from (5); very-wide-gap paragraph starred;
+P^N form reason; Fig. 3 redrawn at V_b = 0.8 (eV_b arrow from emitter band bottom, no coincident levels); Fig. 1 V0 arrow.
+Not done: Fig. 15e axis-label overlap and run-count heading (page code, told coordinator); Fig. 2 tick marks (minor, next pass).
