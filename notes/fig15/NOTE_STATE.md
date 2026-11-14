@@ -163,3 +163,6 @@ centre-phase e^{+-ikd/2}, t_2 defined, Lorentzian substitution shown, tan substi
 FIX1 direction (share reads low), 'almost exponentially', 0.59 rad meaning, tilt paragraph split, d^2k step, thin line of
 Fig. 15e, N-1 per band, xi = +-cosh mu, 'possible cause', 66 %, Maekawa without 'fastest', diode leak sentence, laser wording.
 Declined: textbook (unread), dimensionless-number box (next pass if time), page font (stylesheet), links (merge).
+
+## Round 5 (launched 03:12 UTC on ddcd0ed): fresh referee, owner, student, derivation checker. (Earlier 'UTC' times in this file
+were estimates; the real clock is about two hours earlier than written.)
