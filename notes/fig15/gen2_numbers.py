@@ -250,6 +250,7 @@ for j, Nb in enumerate((2, 3, 5, 10)):
     FIG.append(f'<polyline points="{pts}" fill="none" stroke="#a3303f" stroke-width="1.4"/>')
     FIG.append(f'<text class="mu" x="8" y="{y0 + 34}">N = {Nb}</text>')
 for e in (0.4, 0.6, 0.8, 1.0, 1.2):
+    FIG.append(f'<line x1="{X(e):.1f}" y1="256" x2="{X(e):.1f}" y2="263" stroke="#1c1518" stroke-width="1"/>')
     FIG.append(f'<text class="mu" x="{X(e) - 10:.1f}" y="292">{e:.1f}</text>')
 FIG.append(f'<text class="mu" x="{X(edges[0]) + 4:.1f}" y="22" style="fill:#7a1f2b">band</text>')
 FIG.append(f'<text class="mu" x="{X(1.1):.1f}" y="22" style="fill:#5a504b">gap</text>')
