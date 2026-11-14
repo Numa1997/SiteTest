@@ -180,4 +180,5 @@ needs is in `public/data/fig12/2026-11-13-run8/`. Scratch scripts of the analysi
 
 The user: "Hand it over for god sake". The full prompt is in notes/fig12/handoff-note-writer.md; the writer session
 "Fig. 12 Guinness: lecture note" works on branch claude/fig12-note (from this branch at the commit that added that file)
-and publishes run 10 with the note. This chat does not write the note any more.
+and publishes run 10 with the note. This chat does not write the note any more. Writer session id:
+session_01DGmqimuLzhKNXguwGiokgt (created 09:50 UTC).
