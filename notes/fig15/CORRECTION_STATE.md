@@ -97,3 +97,10 @@ last, GPU only with the owner's yes on a bill.
 
 ## Next
 Section 4: exact chi(x,t) for one wall run, compared with the stored file.
+
+## 13:20-13:30 UTC, owner: "run the GPU scripts"
+- create_notebook_session (slug fig15-correction-walls-gpu) at 13:20 started a run (search_notebooks: last_run_time 13:20:36;
+  quota climbing ~1 s/s from 48,167 s). get_notebook_session_status keeps answering {} even while it runs: not a reliable signal.
+- A save_notebook for version 2 was refused: "Maximum batch GPU session count of 2 reached" -> two batch sessions are held:
+  walls-gpu v1 (13:20) and walls-exact v1 (12:28, the old 600-wall job). cancel_notebook_session is denied in this session.
+- file_corrected.py (step 9) written: gate, statuses kept / rebuilt / recomputed / failed / missing, diode J(V) from T_ref.
