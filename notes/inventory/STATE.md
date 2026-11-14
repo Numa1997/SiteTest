@@ -156,7 +156,15 @@ Held: Fig. 15 (`fig15-*`, 15 notebooks incl. the 3 `fig15-correction-walls-*` of
 | a4d30b4, 9d9ed85, dffd28a, 5ce56d1 | brief, state, Kaggle and R2 records |
 | (this commit) | INVENTORY.md, inventory.json, ACTIONS.md, raw/ |
 
-## Left to do
+## Left to do (after Phase 2, 14 November 2026, 14:00 UTC)
+
+1. Fig. 14 still has 6 notebooks and Fig. 12 has 3, all named in live `generations.json` records. To reach one notebook per figure:
+   add to each record a pointer to its dataset folder (`dataset: numakoudsie/fig14-schrodinger-sphere`, `path: <notebook>/v<N>/`),
+   test the pages, merge, then delete the notebooks the records no longer need. Future reruns go into one notebook per figure.
+2. Fig. 15 (15 notebooks, about 7 GB) and Fig. 16: same treatment when their sessions end.
+3. Scripts kept on purpose (named somewhere, possibly by accident): 60; a stricter, full-path check could free more.
+
+Earlier list (Phase 1):
 
 Nothing in Phase 1. Phase 2 waits for the owner. First proposed yes: groups A + B1 + C1 + G.
 Open measurements that Phase 2 must do before any deletion: sizes of the Fig. 12 `.npz` (versions 6 to 10); outputs of the old versions; SHA-256 of Kaggle's `free_swing_v2.json` and `rides.json` against the site; the CPU shards `v2-a..d` indices against the site.
