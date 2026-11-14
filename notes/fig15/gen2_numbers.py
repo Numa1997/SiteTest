@@ -140,7 +140,9 @@ def nearest(rs, E):
 
 base = dict(N=2, V0=2.0, D=1.0, bias=0.0, sx=3.0)
 
-put('n_runs', len(RUNS), 'index.json: runs filed so far')
+put('n_runs', len(RUNS), 'index.json: runs filed')
+put('n_dup', sum(1 for r in RUNS if len(r.get('groups', [])) > 1), 'index.json: specs computed in two groups, filed once')
+put('n_replaced', len(IDX.get('replaced', [])), 'index.json replaced: runs the fix notebook reran')
 put('run_tmin', round(min(r['t_end'] for r in RUNS)), 'shortest run length t_end in the index')
 put('run_tmax', round(max(r['t_end'] for r in RUNS)), 'longest run length t_end in the index')
 put('start_in_max', float(f"{max(r['start_in_barrier'] for r in RUNS):.1e}"), 'largest share of a start packet inside a barrier')
@@ -338,6 +340,13 @@ for c in IDX['iv']:
     iv_ = ip + int(np.argmin(Js[ip:]));
     put(f'{tag}_Vp', Vs[ip], 'index.json iv J_runs: current peak'); put(f'{tag}_Vv', Vs[iv_], 'index.json iv J_runs: valley after it')
     put(f'{tag}_pvr', round(Js[ip] / Js[iv_], 1), 'peak / valley')
+    put(f'{tag}_Jp', round(Js[ip], 2), 'index.json iv J_runs: current at the peak'); put(f'{tag}_Jend', round(Js[-1], 2), 'index.json iv J_runs: current at the last voltage')
+    put(f'{tag}_valley_at_end', iv_ == len(Js) - 1, 'True: the lowest current after the peak is at the last voltage computed')
+    X = c.get('J_exact_single_energy_same_points')
+    if X:
+        Xs = [p[1] for p in X]; jp = int(np.argmax(Xs[:len(Xs) * 3 // 4])); jv = jp + int(np.argmin(Xs[jp:]))
+        put(f'{tag}_xs_Vp', Vs[jp], 'index.json iv J_exact_single_energy_same_points: peak (exact T at the 25 run energies)')
+        put(f'{tag}_xs_Vv', Vs[jv], 'same: valley after it'); put(f'{tag}_xs_pvr', round(Xs[jp] / Xs[jv], 1), 'same: peak / valley')
     nF = len([r for r in RUNS if r['spec']['shape'] == c['shape'] and r['spec']['R'] == c['R'] and r['spec']['N'] == 2 and r['spec']['V0'] == 2
               and r['spec']['D'] == 1 and r['spec']['P'] == 2.5 and r['spec']['sx'] == 3 and round(r['spec']['E'], 3) in set(c['energies'])])
     put(f'{tag}_nruns', nF, 'runs on the diode grid (bias 0 ... 2.375 x energies 0.10 ... 1.30) filed so far; 500 planned')

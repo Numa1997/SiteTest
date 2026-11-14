@@ -230,3 +230,9 @@ origin/claude/fig15-resonant-tunnelling (b122f6f) into this branch (clean), rege
 E 0.75 (R 9 missing): tau 1.88, 3.69, 9.06, 12.9 vs walls 15.1; tau_side 2.15, 4.87, 22.6, 85.9 vs (28) 4, 12, 18, 36; one-disc
 yardstick; P3.5 run at 0.40 tau 68.4; diode runs 420/500 (still withheld). Added data-conditional sentences (side-leak comparison,
 R=2 pair below one disc, shells' lowest energy 0.30, problem 6). Next check-in 09:30 UTC.
+
+## 08:50 UTC: full index (3697 runs = 3739 jobs - 42 filed once; 15 replaced by fix1) merged (07bb188).
+gen2_numbers.py --write; new keys n_dup, n_replaced, iv_*_Jp/Jend/valley_at_end, iv_walls_xs_* (exact T at the same 25 energies).
+Status sentences rewritten as findings: method paragraph (reruns done, 7 notebooks, 18.6 h summed), long packets (15 of 15),
+diode walls 0.75 / 1.625 / 4.4 against exact 0.875 / 1.825 / 4.3, same-points exact 1.125 / 16.7 (aliasing), discs 3.46 -> 2.82
+(ratio 1.2, valley at range end). Build: 997 KaTeX, 0 errors, 390 and 1440. Next: fresh round (referee, owner, student, checker).
