@@ -1,0 +1,75 @@
+{
+ "notebook": "numakoudsie/phyein-sim-run-case-fem",
+ "version": 1,
+ "files": [
+  {
+   "file": "commit.txt",
+   "saved": true,
+   "bytes": 41,
+   "sha256": "0530a7b97c33d249c2e4d843bad91f075729d6ea5c532f60307113d29285ef0a"
+  },
+  {
+   "file": "run0/beam.12d",
+   "bytes": 0,
+   "saved": false
+  },
+  {
+   "file": "run0/beam.cvg",
+   "bytes": 274,
+   "saved": false
+  },
+  {
+   "file": "run0/beam.dat",
+   "bytes": 4558,
+   "saved": false
+  },
+  {
+   "file": "run0/beam.frd",
+   "bytes": 2542908,
+   "saved": false
+  },
+  {
+   "file": "run0/beam.inp",
+   "bytes": 251409,
+   "saved": false
+  },
+  {
+   "file": "run0/beam.sta",
+   "bytes": 98,
+   "saved": false
+  },
+  {
+   "file": "run0/log.run",
+   "bytes": 655,
+   "saved": false
+  },
+  {
+   "file": "run0/result.json",
+   "saved": true,
+   "bytes": 1729,
+   "sha256": "73a19c6af8628fc9e94cc54fbc49fe0acbb2a9956d25be9af412f1346a6670fb"
+  },
+  {
+   "file": "run0/run.py",
+   "saved": true,
+   "bytes": 8169,
+   "sha256": "522b857132e30d3116fdca3e45db6562671f01f0b427e98657cc36ff1505bbd6"
+  },
+  {
+   "file": "run0/spooles.out",
+   "bytes": 0,
+   "saved": false
+  },
+  {
+   "file": "run0/walltime_s",
+   "bytes": 3,
+   "saved": false
+  },
+  {
+   "file": "timing.json",
+   "saved": true,
+   "bytes": 2147,
+   "sha256": "fe45298a4e95137caf983c96177e03cc7a902fb8c22616784432d31028e0a689"
+  }
+ ]
+}

@@ -1,0 +1,45 @@
+[{"stream_name":"stderr","time":8.011202529,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":8.011265897,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":8.011277411,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":8.011280132,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stderr","time":8.608796085,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":8.60882795,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":8.608831597,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":8.608834673,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stdout","time":9.986677722,"data":"name, memory.total [MiB], driver_version\n"}
+,{"stream_name":"stdout","time":9.986713398,"data":"Tesla T4, 15360 MiB, 580.178.04\n"}
+,{"stream_name":"stdout","time":9.98671663,"data":"Tesla T4, 15360 MiB, 580.178.04\n"}
+,{"stream_name":"stdout","time":9.986720263,"data":"\n"}
+,{"stream_name":"stdout","time":33.430623442,"data":"[   23.7 s] jax backend before install: gpu\n"}
+,{"stream_name":"stdout","time":35.084337237,"data":"[   25.3 s] devices: [CudaDevice(id=0), CudaDevice(id=1)] jax 0.11.1\n"}
+,{"stream_name":"stdout","time":35.620630379,"data":"[   25.9 s] code from https://raw.githubusercontent.com/Numa1997/SiteTest/c705a42d3abd534725af4eb899fff949e033c332/tools/kaggle/schrodinger-sphere/\n"}
+,{"stream_name":"stdout","time":38.392552741,"data":"[   28.6 s] bench {'N': 128, 'dtype': 'complex64', 'ms_per_step': 1.613, 'ns_per_cell_step': 0.769}\n"}
+,{"stream_name":"stdout","time":40.216388582,"data":"[   30.5 s] bench {'N': 128, 'dtype': 'complex128', 'ms_per_step': 5.096, 'ns_per_cell_step': 2.43}\n"}
+,{"stream_name":"stdout","time":47.385480748,"data":"[   37.6 s] bench {'N': 256, 'dtype': 'complex64', 'ms_per_step': 13.378, 'ns_per_cell_step': 0.797}\n"}
+,{"stream_name":"stdout","time":60.476942225,"data":"[   50.7 s] bench {'N': 256, 'dtype': 'complex128', 'ms_per_step': 39.535, 'ns_per_cell_step': 2.356}\n"}
+,{"stream_name":"stdout","time":64.951618409,"data":"[   55.2 s] accuracy c64 dt=0.01 {'norm': np.float64(0.9926533102989197), 'behind': np.float64(0.24823394417762756), 'ahead': np.float64(0.6324953436851501), 'wall': 4.09, 'steps': 1496}\n"}
+,{"stream_name":"stdout","time":75.825154491,"data":"[   66.1 s] accuracy c128 dt=0.01 {'norm': np.float64(0.9933511582954013), 'behind': np.float64(0.24841930647764343), 'ahead': np.float64(0.6329267249814616), 'wall': 10.54, 'steps': 1496}\n"}
+,{"stream_name":"stdout","time":82.562239534,"data":"[   72.8 s] accuracy c64 dt=0.005 {'norm': np.float64(0.9906501173973083), 'behind': np.float64(0.24728986620903015), 'ahead': np.float64(0.6317890286445618), 'wall': 6.44, 'steps': 2992}\n"}
+,{"stream_name":"stdout","time":85.997561577,"data":"[   76.2 s] run E=2.0 V0=0.0 R=4.0: 1457 steps in 3.1 s, ahead 0.996\n"}
+,{"stream_name":"stdout","time":90.208379694,"data":"[   80.5 s] run E=2.0 V0=1.0 R=4.0: 1457 steps in 3.9 s, ahead 0.913\n"}
+,{"stream_name":"stdout","time":94.410492948,"data":"[   84.7 s] run E=2.0 V0=2.0 R=4.0: 1457 steps in 3.8 s, ahead 0.662\n"}
+,{"stream_name":"stdout","time":98.599195106,"data":"[   88.8 s] run E=2.0 V0=3.0 R=4.0: 1457 steps in 3.8 s, ahead 0.628\n"}
+,{"stream_name":"stdout","time":102.620692794,"data":"[   92.9 s] run E=2.0 V0=4.0 R=4.0: 1457 steps in 3.7 s, ahead 0.616\n"}
+,{"stream_name":"stdout","time":106.599560903,"data":"[   96.8 s] run E=2.0 V0=6.0 R=4.0: 1457 steps in 3.6 s, ahead 0.603\n"}
+,{"stream_name":"stdout","time":110.097493085,"data":"[  100.3 s] run E=3.0 V0=3.0 R=4.0: 1222 steps in 3.2 s, ahead 0.640\n"}
+,{"stream_name":"stdout","time":143.683352897,"data":"[  133.9 s] 256^3 run: 1457 steps in 30.5 s, ahead 0.6247 (128^3: 0.6278)\n"}
+,{"stream_name":"stdout","time":144.409064025,"data":"[  134.7 s] panel 2.8 MB written; all done in 135 s\n"}
+,{"stream_name":"stderr","time":144.448422683,"data":"/usr/local/lib/python3.13/dist-packages/IPython/core/display.py:724: UserWarning: Consider using IPython.display.IFrame instead\n"}
+,{"stream_name":"stderr","time":144.44845701,"data":"  warnings.warn(\"Consider using IPython.display.IFrame instead\")\n"}
+,{"stream_name":"stderr","time":144.448462958,"data":"\n"}
+,{"stream_name":"stderr","time":144.448467522,"data":"/usr/local/lib/python3.13/dist-packages/IPython/core/display.py:724: UserWarning: Consider using IPython.display.IFrame instead\n"}
+,{"stream_name":"stderr","time":144.448472362,"data":"  warnings.warn(\"Consider using IPython.display.IFrame instead\")\n"}
+,{"stream_name":"stderr","time":147.963067596,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":147.963097252,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":148.128427344,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":148.128452356,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":148.916782786,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to notebook\n"}
+,{"stream_name":"stderr","time":149.039197701,"data":"[NbConvertApp] Writing 2788700 bytes to __notebook__.ipynb\n"}
+,{"stream_name":"stderr","time":151.589007144,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to html\n"}
+,{"stream_name":"stderr","time":152.224650855,"data":"[NbConvertApp] Writing 3085791 bytes to __results__.html\n"}
+]

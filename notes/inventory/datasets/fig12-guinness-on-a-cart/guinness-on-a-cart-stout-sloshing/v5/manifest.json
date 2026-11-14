@@ -1,0 +1,21 @@
+{
+ "notebook": "numakoudsie/guinness-on-a-cart-stout-sloshing",
+ "version": 5,
+ "files": [
+  {
+   "file": "2026-11-13/progress.log",
+   "bytes": 6232,
+   "sha256": "8196e5f572b618ca185b5fbef94501462bc2a2bdd4c48e56aa8fae07af20f4d3"
+  },
+  {
+   "file": "2026-11-13/rides.json",
+   "bytes": 1795977,
+   "sha256": "5619dd27d325addfafbaf959019a04f1351f0a9136c3920573db13faca26680a"
+  },
+  {
+   "file": "2026-11-13/timing.json",
+   "bytes": 850,
+   "sha256": "cdaef15a41f15bb1a7a710d021ccbb654e237df3f3d9c072088db18f5aab5214"
+  }
+ ]
+}

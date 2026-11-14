@@ -1,0 +1,52 @@
+{
+ "notebook": "numakoudsie/phyein-sim-jax-swingup-gpu",
+ "version": 2,
+ "files": [
+  {
+   "file": "full/result.json",
+   "saved": true,
+   "bytes": 19640,
+   "sha256": "6675777be2caf8a48af6b0ca8e83aa93bf59d39c393058f2d3516af9cff591fb"
+  },
+  {
+   "file": "full/swingup.png",
+   "bytes": 60673,
+   "saved": false
+  },
+  {
+   "file": "full/swingup_data.json",
+   "saved": true,
+   "bytes": 5470,
+   "sha256": "f9090740bb2d2c159ff99fe48ed91e34689743f3fcf7c9ab61bc15193700a62d"
+  },
+  {
+   "file": "full/timing.json",
+   "saved": true,
+   "bytes": 258,
+   "sha256": "d18de29197e524441c30366dbf929e63d884a63029c81b51fdffbb1e6ab1ee57"
+  },
+  {
+   "file": "smoke/result.json",
+   "saved": true,
+   "bytes": 2067,
+   "sha256": "e61d7f42e2ad4172de21bcc4853ccb4c8aa138703f52223f6e68eafe5e3b4bce"
+  },
+  {
+   "file": "smoke/swingup.png",
+   "bytes": 58750,
+   "saved": false
+  },
+  {
+   "file": "smoke/swingup_data.json",
+   "saved": true,
+   "bytes": 5481,
+   "sha256": "c4ef4e5f55d6c4a2d516b07047a9dbed5aaf79169f17f8042610040947c41306"
+  },
+  {
+   "file": "smoke/timing.json",
+   "saved": true,
+   "bytes": 252,
+   "sha256": "03cc3d72811c8888282ee00fb6fb13f37d15d552e9eeb7791395886e8e92aba0"
+  }
+ ]
+}

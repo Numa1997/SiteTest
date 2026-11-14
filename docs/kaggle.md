@@ -20,6 +20,9 @@ one step takes about 2.2 ms (8.4 ns per cell).
 
 ## Measured on Kaggle (12 November 2026, notebook `numakoudsie/schrodinger-sphere-gpu-smoke-test`, version 1)
 
+The test notebook was deleted on 14 November 2026. Its code, log and `timing.json` (the source of the numbers below) are kept in
+[notes/inventory/raw/kaggle-copies/schrodinger-sphere-gpu-smoke-test/](../notes/inventory/raw/kaggle-copies/schrodinger-sphere-gpu-smoke-test/).
+
 Card: Tesla T4 (the session had two; the notebook used one). JAX 0.11.1 was already installed with GPU support.
 Whole run 152 s from start to the written panel, 2.8 MB for 7 runs.
 

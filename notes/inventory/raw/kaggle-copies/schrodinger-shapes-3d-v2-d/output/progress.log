@@ -1,0 +1,72 @@
+[    8.5 s] jax backend before install: cpu
+[    9.6 s] devices: [CpuDevice(id=0)] jax 0.11.1
+[    9.6 s] solver3d.py and shapes3d_run.py from the repository, as fetched by the loader cell
+[    9.6 s] 60 runs; cells x steps x time per cell-step = 2097152 x 264941 x 1.2e-9 s = 0.19 GPU hours (1.2 ns measured on a T4 over the 405 sphere runs of 2026-11-12); on two GPUs about 6 min
+[  506.6 s]    1/60 sphere E=0.5 V0=hard size=5.0 on cpu:0: 11844 steps, 495.6 s, 239 kB, norm 0.924, ahead 0.402
+[ 1003.1 s]    2/60 coin E=0.5 V0=hard size=4.0 on cpu:0: 11844 steps, 495.9 s, 194 kB, norm 0.980, ahead 0.570
+[ 1492.0 s]    3/60 tube E=0.5 V0=hard size=3.0 on cpu:0: 11844 steps, 488.4 s, 182 kB, norm 0.826, ahead 0.485
+[ 1891.9 s]    4/60 soff E=0.5 V0=hard size=4.0 on cpu:0: 9588 steps, 399.1 s, 289 kB, norm 0.592, ahead 0.102
+[ 2238.5 s]    5/60 sphere E=1.0 V0=hard size=3.0 on cpu:0: 8460 steps, 346.0 s, 200 kB, norm 0.988, ahead 0.737
+[ 2599.1 s]    6/60 coin E=1.0 V0=hard size=2.0 on cpu:0: 8460 steps, 360.0 s, 168 kB, norm 0.992, ahead 0.852
+[ 2976.4 s]    7/60 coin E=1.0 V0=hard size=6.0 on cpu:0: 8460 steps, 376.7 s, 166 kB, norm 0.992, ahead 0.235
+[ 3349.1 s]    8/60 tube E=1.0 V0=hard size=5.0 on cpu:0: 8460 steps, 372.1 s, 159 kB, norm 0.929, ahead 0.163
+[ 3634.2 s]    9/60 sphere E=1.5 V0=hard size=4.0 on cpu:0: 6768 steps, 284.5 s, 202 kB, norm 0.987, ahead 0.573
+[ 3914.6 s]   10/60 coin E=1.5 V0=hard size=3.0 on cpu:0: 6768 steps, 279.8 s, 163 kB, norm 0.997, ahead 0.672
+[ 4199.3 s]   11/60 tube E=1.5 V0=hard size=2.0 on cpu:0: 6768 steps, 284.2 s, 153 kB, norm 0.934, ahead 0.807
+[ 4476.4 s]   12/60 tube E=1.5 V0=hard size=6.0 on cpu:0: 6768 steps, 276.6 s, 146 kB, norm 0.969, ahead 0.084
+[ 4735.6 s]   13/60 sphere E=2.0 V0=hard size=2.0 on cpu:0: 5828 steps, 258.7 s, 164 kB, norm 0.998, ahead 0.877
+[ 4985.1 s]   14/60 sphere E=2.0 V0=hard size=6.0 on cpu:0: 5828 steps, 249.0 s, 224 kB, norm 0.921, ahead 0.239
+[ 5224.4 s]   15/60 coin E=2.0 V0=hard size=5.0 on cpu:0: 5828 steps, 238.8 s, 152 kB, norm 0.998, ahead 0.328
+[ 5479.4 s]   16/60 tube E=2.0 V0=hard size=4.0 on cpu:0: 5828 steps, 254.4 s, 149 kB, norm 0.948, ahead 0.363
+[ 5698.8 s]   17/60 sslab E=1.5 V0=hard size=1.0 on cpu:0: 5452 steps, 218.7 s, 225 kB, norm 0.581, ahead 0.003
+[ 5915.3 s]   18/60 sphere E=2.5 V0=hard size=4.0 on cpu:0: 5264 steps, 216.0 s, 198 kB, norm 0.990, ahead 0.570
+[ 6131.7 s]   19/60 coin E=2.5 V0=hard size=3.0 on cpu:0: 5264 steps, 215.8 s, 155 kB, norm 0.998, ahead 0.661
+[ 6342.3 s]   20/60 tube E=2.5 V0=hard size=2.0 on cpu:0: 5264 steps, 210.1 s, 142 kB, norm 0.956, ahead 0.827
+[ 6561.2 s]   21/60 tube E=2.5 V0=hard size=6.0 on cpu:0: 5264 steps, 218.4 s, 135 kB, norm 0.979, ahead 0.093
+[ 6760.3 s]   22/60 sphere E=3.0 V0=hard size=5.0 on cpu:0: 4888 steps, 198.5 s, 214 kB, norm 0.961, ahead 0.387
+[ 6960.9 s]   23/60 coin E=3.0 V0=hard size=4.0 on cpu:0: 4888 steps, 200.1 s, 154 kB, norm 0.998, ahead 0.483
+[ 7155.2 s]   24/60 tube E=3.0 V0=hard size=3.0 on cpu:0: 4888 steps, 193.8 s, 140 kB, norm 0.957, ahead 0.604
+[ 7348.2 s]   25/60 soff E=2.0 V0=hard size=4.0 on cpu:0: 4700 steps, 192.2 s, 256 kB, norm 0.585, ahead 0.108
+[ 7533.5 s]   26/60 sphere E=3.5 V0=hard size=3.0 on cpu:0: 4512 steps, 184.8 s, 180 kB, norm 0.997, ahead 0.741
+[ 7715.7 s]   27/60 coin E=3.5 V0=hard size=2.0 on cpu:0: 4512 steps, 181.7 s, 147 kB, norm 0.998, ahead 0.840
+[ 7913.1 s]   28/60 coin E=3.5 V0=hard size=6.0 on cpu:0: 4512 steps, 196.9 s, 150 kB, norm 0.998, ahead 0.218
+[ 8112.3 s]   29/60 tube E=3.5 V0=hard size=5.0 on cpu:0: 4512 steps, 198.7 s, 137 kB, norm 0.975, ahead 0.201
+[ 8303.6 s]   30/60 spil E=2.5 V0=hard size=4.0 on cpu:0: 4136 steps, 190.0 s, 247 kB, norm 0.600, ahead 0.071
+[ 8491.2 s]   31/60 sphere E=4.0 V0=hard size=5.0 on cpu:0: 4136 steps, 187.0 s, 198 kB, norm 0.974, ahead 0.376
+[ 8669.8 s]   32/60 coin E=4.0 V0=hard size=4.0 on cpu:0: 4136 steps, 178.0 s, 146 kB, norm 0.999, ahead 0.487
+[ 8851.3 s]   33/60 tube E=4.0 V0=hard size=3.0 on cpu:0: 4136 steps, 181.0 s, 133 kB, norm 0.970, ahead 0.616
+[ 9022.2 s]   34/60 sphere E=4.5 V0=hard size=2.0 on cpu:0: 3948 steps, 170.4 s, 156 kB, norm 0.999, ahead 0.880
+[ 9185.0 s]   35/60 sphere E=4.5 V0=hard size=6.0 on cpu:0: 3948 steps, 162.3 s, 219 kB, norm 0.925, ahead 0.232
+[ 9359.6 s]   36/60 coin E=4.5 V0=hard size=5.0 on cpu:0: 3948 steps, 174.1 s, 146 kB, norm 0.999, ahead 0.338
+[ 9527.2 s]   37/60 tube E=4.5 V0=hard size=4.0 on cpu:0: 3948 steps, 167.0 s, 136 kB, norm 0.975, ahead 0.388
+[ 9689.2 s]   38/60 sslab E=3.0 V0=hard size=1.0 on cpu:0: 3760 steps, 161.3 s, 209 kB, norm 0.606, ahead 0.007
+[ 9845.9 s]   39/60 spil E=3.5 V0=hard size=4.0 on cpu:0: 3572 steps, 155.5 s, 243 kB, norm 0.585, ahead 0.077
+[ 9985.0 s]   40/60 soff E=4.5 V0=hard size=4.0 on cpu:0: 3196 steps, 138.4 s, 239 kB, norm 0.574, ahead 0.117
+[10082.6 s]   41/60 soff E=0.5 V0=2.0 size=4.0 on cpu:0: 2397 steps, 96.9 s, 291 kB, norm 0.593, ahead 0.105
+[10180.9 s]   42/60 sslab E=0.5 V0=6.0 size=1.0 on cpu:0: 2397 steps, 97.6 s, 247 kB, norm 0.592, ahead 0.007
+[10252.6 s]   43/60 soff E=1.0 V0=-2.0 size=4.0 on cpu:0: 1692 steps, 71.0 s, 239 kB, norm 0.574, ahead 0.114
+[10324.3 s]   44/60 sslab E=1.0 V0=2.0 size=1.0 on cpu:0: 1692 steps, 71.0 s, 256 kB, norm 0.574, ahead 0.089
+[10396.1 s]   45/60 spil E=1.0 V0=6.0 size=4.0 on cpu:0: 1692 steps, 70.7 s, 277 kB, norm 0.574, ahead 0.076
+[10454.4 s]   46/60 sslab E=1.5 V0=-2.0 size=1.0 on cpu:0: 1363 steps, 57.7 s, 253 kB, norm 0.581, ahead 0.131
+[10514.4 s]   47/60 spil E=1.5 V0=2.0 size=4.0 on cpu:0: 1363 steps, 58.8 s, 269 kB, norm 0.581, ahead 0.079
+[10566.0 s]   48/60 soff E=2.0 V0=6.0 size=4.0 on cpu:0: 1175 steps, 50.9 s, 257 kB, norm 0.585, ahead 0.110
+[10620.5 s]   49/60 spil E=2.0 V0=-2.0 size=4.0 on cpu:0: 1175 steps, 53.3 s, 258 kB, norm 0.585, ahead 0.118
+[10667.7 s]   50/60 soff E=2.5 V0=2.0 size=4.0 on cpu:0: 1034 steps, 46.6 s, 249 kB, norm 0.600, ahead 0.108
+[10714.3 s]   51/60 sslab E=2.5 V0=6.0 size=1.0 on cpu:0: 1034 steps, 46.0 s, 222 kB, norm 0.600, ahead 0.027
+[10757.1 s]   52/60 soff E=3.0 V0=-2.0 size=4.0 on cpu:0: 940 steps, 42.0 s, 210 kB, norm 0.606, ahead 0.113
+[10799.6 s]   53/60 sslab E=3.0 V0=2.0 size=1.0 on cpu:0: 940 steps, 41.8 s, 229 kB, norm 0.606, ahead 0.132
+[10842.3 s]   54/60 spil E=3.0 V0=6.0 size=4.0 on cpu:0: 940 steps, 41.5 s, 240 kB, norm 0.606, ahead 0.072
+[10882.8 s]   55/60 sslab E=3.5 V0=-2.0 size=1.0 on cpu:0: 893 steps, 39.9 s, 233 kB, norm 0.585, ahead 0.160
+[10923.4 s]   56/60 spil E=3.5 V0=2.0 size=4.0 on cpu:0: 893 steps, 39.5 s, 242 kB, norm 0.585, ahead 0.094
+[10961.1 s]   57/60 soff E=4.0 V0=6.0 size=4.0 on cpu:0: 846 steps, 37.0 s, 243 kB, norm 0.574, ahead 0.118
+[10997.5 s]   58/60 spil E=4.0 V0=-2.0 size=4.0 on cpu:0: 846 steps, 35.3 s, 241 kB, norm 0.574, ahead 0.127
+[11031.9 s]   59/60 soff E=4.5 V0=2.0 size=4.0 on cpu:0: 799 steps, 33.6 s, 238 kB, norm 0.574, ahead 0.126
+[11070.1 s]   60/60 sslab E=4.5 V0=6.0 size=1.0 on cpu:0: 799 steps, 37.6 s, 215 kB, norm 0.574, ahead 0.044
+[11070.1 s] 60 of 60 runs in 11061 s on 1 GPU(s); failed 0; not started 0
+[11070.2 s] sphere 11 files -> sphere.tar 2.2 MB ok
+[11070.2 s] coin 11 files -> coin.tar 1.8 MB ok
+[11070.2 s] tube 11 files -> tube.tar 1.6 MB ok
+[11070.2 s] soff 10 files -> soff.tar 2.5 MB ok
+[11070.2 s] sslab 9 files -> sslab.tar 2.1 MB ok
+[11070.2 s] spil 16 files -> spil.tar 16.9 MB ok
+[11070.2 s] all done in 11070 s

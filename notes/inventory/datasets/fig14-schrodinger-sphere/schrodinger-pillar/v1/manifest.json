@@ -1,0 +1,2966 @@
+{
+ "notebook": "numakoudsie/schrodinger-pillar",
+ "version": 1,
+ "files": [
+  {
+   "file": "2026-11-12/index.json",
+   "bytes": 156187,
+   "sha256": "fc0f020702a0134102a405dc6737462bad673fa13f9b4085425efdae58266957"
+  },
+  {
+   "file": "2026-11-12/pillar/e0_v0_r0.bin",
+   "bytes": 197801,
+   "sha256": "26569a9f19bd3aee9674837ed414dd79f3dca9abec6fee5e2acc647f237cfcec"
+  },
+  {
+   "file": "2026-11-12/pillar/e0_v0_r1.bin",
+   "bytes": 214029,
+   "sha256": "00be217b5036e0b2df08d8d8c215ce3c6b62a63cbb6129cbdf0d3580b925bfc5"
+  },
+  {
+   "file": "2026-11-12/pillar/e0_v0_r2.bin",
+   "bytes": 228719,
+   "sha256": "5061a5bb408a6157519c276a57429a05e1ac29ad2ffb49bd1723c335816d313b"
+  },
+  {
+   "file": "2026-11-12/pillar/e0_v0_r3.bin",
+   "bytes": 241244,
+   "sha256": "9821924fdbe6e0d4c8bc653da6940ed9019924669ea966b7e68c32605b9545e2"
+  },
+  {
+   "file": "2026-11-12/pillar/e0_v0_r4.bin",
+   "bytes": 252823,
+   "sha256": "c66a763c5fb693acc32f9ca60f34f9ae0d0771fcc2ebf1b0a43297a9d99d8708"
+  },
+  {
+   "file": "2026-11-12/pillar/e0_v10_r0.bin",
+   "bytes": 194854,
+   "sha256": "6643f14b2e7d5923b84206e682eda842148bf7b757277888f3cbacd939281126"
+  },
+  {
+   "file": "2026-11-12/pillar/e0_v10_r1.bin",
+   "bytes": 201486,
+   "sha256": "35163002a2ac637082e2cd0a61cba803ee7b81380f9cd672163f42003876f59d"
+  },
+  {
+   "file": "2026-11-12/pillar/e0_v10_r2.bin",
+   "bytes": 206874,
+   "sha256": "2f4f31855f5d053a3800352cde112400bea1cf79e80e09685d0ec08545a1039c"
+  },
+  {
+   "file": "2026-11-12/pillar/e0_v10_r3.bin",
+   "bytes": 217532,
+   "sha256": "cdb56464aa1d2a40d4edb602eb5604501691d02e0d51a15f0fe65e8f8e1390cf"
+  },
+  {
+   "file": "2026-11-12/pillar/e0_v10_r4.bin",
+   "bytes": 234430,
+   "sha256": "42fb81e43a9cb483486a133a35c34a082d28b688f08d5fbd5a127c6e7e363088"
+  },
+  {
+   "file": "2026-11-12/pillar/e0_v11_r0.bin",
+   "bytes": 195257,
+   "sha256": "0ff7899fac52951676986d0d01f14b6041efd8ea2d2e47143282e23d2c82d303"
+  },
+  {
+   "file": "2026-11-12/pillar/e0_v11_r1.bin",
+   "bytes": 202082,
+   "sha256": "0cc074528b163c07960b12b05abdd8db19fec526e768f0e5556d8d31089cddb8"
+  },
+  {
+   "file": "2026-11-12/pillar/e0_v11_r2.bin",
+   "bytes": 208051,
+   "sha256": "9525e85a9e34806411a7ad714020b3c350c8abead5f720399d3f3bd6e0a1d0b9"
+  },
+  {
+   "file": "2026-11-12/pillar/e0_v11_r3.bin",
+   "bytes": 221255,
+   "sha256": "085f86eb0344170eb4c54db4ef5309f61d83ed835ef3445b4048e62f5abba9a7"
+  },
+  {
+   "file": "2026-11-12/pillar/e0_v11_r4.bin",
+   "bytes": 239952,
+   "sha256": "d9106190909233cdf9348b361255cd78257a3e0b567ef4b949589438a08bcf0b"
+  },
+  {
+   "file": "2026-11-12/pillar/e0_v12_r0.bin",
+   "bytes": 195591,
+   "sha256": "f871a3c57ae526dcd6fa438048b75cb19c0a8487daee9a9db2d72178accc0b24"
+  },
+  {
+   "file": "2026-11-12/pillar/e0_v12_r1.bin",
+   "bytes": 199191,
+   "sha256": "19046ea0a53fa55de406a45fea4e07d7f163194b9eff276123d745243e8025bb"
+  },
+  {
+   "file": "2026-11-12/pillar/e0_v12_r2.bin",
+   "bytes": 201748,
+   "sha256": "840ded99498182d0d912732cac15c44688393709ef0fcb115ab1b662f05b87c5"
+  },
+  {
+   "file": "2026-11-12/pillar/e0_v12_r3.bin",
+   "bytes": 202630,
+   "sha256": "2ca69664ceb15c7f3ea5df5b3d4ad74554a19b026b843605cc5bbfab2a72f581"
+  },
+  {
+   "file": "2026-11-12/pillar/e0_v12_r4.bin",
+   "bytes": 203210,
+   "sha256": "18975a370ea77b961294a3f92b4a40f6fedabeb51d46ee7c9ff472ba54500187"
+  },
+  {
+   "file": "2026-11-12/pillar/e0_v1_r0.bin",
+   "bytes": 196330,
+   "sha256": "8937a4f8858e69e30532e309dc4b1b1a0db2294082a989980b978ade89786e57"
+  },
+  {
+   "file": "2026-11-12/pillar/e0_v1_r1.bin",
+   "bytes": 205734,
+   "sha256": "1f06e548fc8893ae86e8f515ce993a36117129ed7c096331457c751c5f157d64"
+  },
+  {
+   "file": "2026-11-12/pillar/e0_v1_r2.bin",
+   "bytes": 221006,
+   "sha256": "2c1e95d6650df716710d7d15d02eee437cdfc62fdc037dff09dfdb03247a6176"
+  },
+  {
+   "file": "2026-11-12/pillar/e0_v1_r3.bin",
+   "bytes": 230520,
+   "sha256": "5203dd3ac017e2905dc6c9cdb2a51bd417699c43c21dc2281704ebbef7c99b89"
+  },
+  {
+   "file": "2026-11-12/pillar/e0_v1_r4.bin",
+   "bytes": 240083,
+   "sha256": "1b798b39d8a28eddc786d00e7d64396e85252332bf7f592e80bb39e24ec4b8b3"
+  },
+  {
+   "file": "2026-11-12/pillar/e0_v2_r0.bin",
+   "bytes": 183981,
+   "sha256": "d5548398ee7ca3184c228064c293b5e13d24e84a83a6340872545151860ef29f"
+  },
+  {
+   "file": "2026-11-12/pillar/e0_v2_r1.bin",
+   "bytes": 199507,
+   "sha256": "688d00f2af0de7a507e829197a8a5f9bcfc836b9280d5bd4aff5b19e1e22ceb2"
+  },
+  {
+   "file": "2026-11-12/pillar/e0_v2_r2.bin",
+   "bytes": 208008,
+   "sha256": "b8bca121aa93f8575ed37170b4129862a9b8897f0f06aa52ab49001b0af33f37"
+  },
+  {
+   "file": "2026-11-12/pillar/e0_v2_r3.bin",
+   "bytes": 217767,
+   "sha256": "852650718d898ee0b146148537f83b5accd6889c5461874fa3b5e5b35d2b3237"
+  },
+  {
+   "file": "2026-11-12/pillar/e0_v2_r4.bin",
+   "bytes": 225475,
+   "sha256": "9fe06e861a151731c8ab7b4acd5fd448d9ce40ecb4f8be469aca035a38302fd0"
+  },
+  {
+   "file": "2026-11-12/pillar/e0_v3_r0.bin",
+   "bytes": 110874,
+   "sha256": "4de15870fd75aaeb090598cb84602f7e59f321775f36dbab2a7c9b18d8989a64"
+  },
+  {
+   "file": "2026-11-12/pillar/e0_v3_r1.bin",
+   "bytes": 110869,
+   "sha256": "7ed717aa2b04376934e896b1fc4b063dc6e1a0fdfdc90c958041480ccb4526fc"
+  },
+  {
+   "file": "2026-11-12/pillar/e0_v3_r2.bin",
+   "bytes": 110866,
+   "sha256": "70a7909bb706a7707bb5b774b250c7de3c36030f9a8eb22cfebf84f1f2b10ec1"
+  },
+  {
+   "file": "2026-11-12/pillar/e0_v3_r3.bin",
+   "bytes": 110853,
+   "sha256": "a3de063607fdfa369989201018ec2f7bfb37a1d8a5d8958a091e02495308bddb"
+  },
+  {
+   "file": "2026-11-12/pillar/e0_v3_r4.bin",
+   "bytes": 110840,
+   "sha256": "37b69b415c839c695ddf7e52e1b852fad097e24e3cfe0d529ac715cd3a14c676"
+  },
+  {
+   "file": "2026-11-12/pillar/e0_v4_r0.bin",
+   "bytes": 178562,
+   "sha256": "15ff5b5a69b3fbb54b4b26dcda098f61d6ef3f5adb658858d86b170fe5e97faf"
+  },
+  {
+   "file": "2026-11-12/pillar/e0_v4_r1.bin",
+   "bytes": 190799,
+   "sha256": "5e7bee3c1a273b2a4f97c27824e8be266266edcc41031835feb751426418d09f"
+  },
+  {
+   "file": "2026-11-12/pillar/e0_v4_r2.bin",
+   "bytes": 198317,
+   "sha256": "b7e185b105d5c7b145a54c5720cfc6b9a7876878cea7a5efb7e8b72a722397f1"
+  },
+  {
+   "file": "2026-11-12/pillar/e0_v4_r3.bin",
+   "bytes": 205940,
+   "sha256": "fee8eb364c51064b7a8ba820f3c24708982061322c7e3310e6cf601452c7428d"
+  },
+  {
+   "file": "2026-11-12/pillar/e0_v4_r4.bin",
+   "bytes": 212676,
+   "sha256": "6652cd7e5df0434ba20d2f02e38baf618e10aa8a7095b725f52ee02911488025"
+  },
+  {
+   "file": "2026-11-12/pillar/e0_v5_r0.bin",
+   "bytes": 188984,
+   "sha256": "125d4a4a23b4e384895744e46926ad532809994002e9ab579a652378b4495528"
+  },
+  {
+   "file": "2026-11-12/pillar/e0_v5_r1.bin",
+   "bytes": 198202,
+   "sha256": "d7ac1018728fbfaca254017d1ffe70216e4fb5472a359c9395abaf9ce4413b62"
+  },
+  {
+   "file": "2026-11-12/pillar/e0_v5_r2.bin",
+   "bytes": 203613,
+   "sha256": "5181e23151197ee89609d7794756e8dd77395e2bcc02e83685d569508a3157f7"
+  },
+  {
+   "file": "2026-11-12/pillar/e0_v5_r3.bin",
+   "bytes": 208982,
+   "sha256": "8d54a32014c43c37eb076aca7811c6ca7b182bbbe8e6d18d5d2a39007fd947ad"
+  },
+  {
+   "file": "2026-11-12/pillar/e0_v5_r4.bin",
+   "bytes": 215786,
+   "sha256": "870602ecfe73aff6c6038269ea59bc2c0f40c81aa0bfebb64b7017376b358dd3"
+  },
+  {
+   "file": "2026-11-12/pillar/e0_v6_r0.bin",
+   "bytes": 191831,
+   "sha256": "1bf19008706eea81b38bf373aaef3462ae373c0315428b8e617ba81fb20fbfdb"
+  },
+  {
+   "file": "2026-11-12/pillar/e0_v6_r1.bin",
+   "bytes": 199435,
+   "sha256": "013bb1844feef551f513e9ccec9f4372e9de01d669c415a903a31739e542303e"
+  },
+  {
+   "file": "2026-11-12/pillar/e0_v6_r2.bin",
+   "bytes": 203801,
+   "sha256": "7a3a0d945c52201f985c26af4fb6a84d3c6bf92ec2faee83d8acbe7848f1438a"
+  },
+  {
+   "file": "2026-11-12/pillar/e0_v6_r3.bin",
+   "bytes": 209426,
+   "sha256": "d7584507f175e97052ac8174ef0f55050f6e58cc74d44963fd482cde0a611373"
+  },
+  {
+   "file": "2026-11-12/pillar/e0_v6_r4.bin",
+   "bytes": 219558,
+   "sha256": "99ba124e5241152cfe7c3667fea823249125ce5ac1ad6078f7fee1efc01dd119"
+  },
+  {
+   "file": "2026-11-12/pillar/e0_v7_r0.bin",
+   "bytes": 192917,
+   "sha256": "f7dd710a507bd8f4acaf005c9b59939b57d3acb80fcf3c89f2ce873f20d01b9d"
+  },
+  {
+   "file": "2026-11-12/pillar/e0_v7_r1.bin",
+   "bytes": 199989,
+   "sha256": "658a5747dd9cd132ed1356371b577a0253515dc235c36edcab6b4fbbe2891589"
+  },
+  {
+   "file": "2026-11-12/pillar/e0_v7_r2.bin",
+   "bytes": 204581,
+   "sha256": "d4614aa68a5ebe7373b11ffda0ad286732be6af336a1c26a821a3e09752eef46"
+  },
+  {
+   "file": "2026-11-12/pillar/e0_v7_r3.bin",
+   "bytes": 210051,
+   "sha256": "b332aee3ed7c8ebb7c0b2c12ee6d202613b928bb8f6478b358a65995457d69fa"
+  },
+  {
+   "file": "2026-11-12/pillar/e0_v7_r4.bin",
+   "bytes": 221683,
+   "sha256": "e98e96cf7fb1553a5de4e5c74a69cc16cb120aed3db5cdf2db2aa8999e11cb03"
+  },
+  {
+   "file": "2026-11-12/pillar/e0_v8_r0.bin",
+   "bytes": 194512,
+   "sha256": "a3e54368e5b61a622c0e093ed7e3fb3b630c5c2e99173c8e0f6f12d05afaad07"
+  },
+  {
+   "file": "2026-11-12/pillar/e0_v8_r1.bin",
+   "bytes": 200327,
+   "sha256": "04f497525a38db11f3e43cfbcc5f41bbeec409a66abb1e5a81360a536c913999"
+  },
+  {
+   "file": "2026-11-12/pillar/e0_v8_r2.bin",
+   "bytes": 205471,
+   "sha256": "1d4c8d6fbd90cbd3652487148644574b7df50357bb8e18df7f145ed41d8d9f60"
+  },
+  {
+   "file": "2026-11-12/pillar/e0_v8_r3.bin",
+   "bytes": 212797,
+   "sha256": "21f47d01fe0b68b85b4c916ddf5b851c19fb0b26b31422503b577eef040fef4d"
+  },
+  {
+   "file": "2026-11-12/pillar/e0_v8_r4.bin",
+   "bytes": 225153,
+   "sha256": "d52ff7e85b20b2e67a08886e2994ff6ebaaf5d15b6ecf63d737dbc8f6c41a96c"
+  },
+  {
+   "file": "2026-11-12/pillar/e0_v9_r0.bin",
+   "bytes": 194392,
+   "sha256": "43d18ae118d51e0b7f8643380e6d0c643fed356f714c9f51175b027445fac843"
+  },
+  {
+   "file": "2026-11-12/pillar/e0_v9_r1.bin",
+   "bytes": 201170,
+   "sha256": "0b39cb05cbd546c281b70a8723249f134aad97d9b814707c4abd0522ff9a588e"
+  },
+  {
+   "file": "2026-11-12/pillar/e0_v9_r2.bin",
+   "bytes": 205664,
+   "sha256": "2469a18fadee26371e398ea202a22601c0b05c403a48e1fcb0e4f8cb7e4dfe7b"
+  },
+  {
+   "file": "2026-11-12/pillar/e0_v9_r3.bin",
+   "bytes": 214523,
+   "sha256": "c12173f46bd8e77aae4d0d878ae98d8a8fa08a9e944133f5061ee8f887edfe82"
+  },
+  {
+   "file": "2026-11-12/pillar/e0_v9_r4.bin",
+   "bytes": 227626,
+   "sha256": "68ba24995beb0463b4ffb0f47a7a26f65bf28c0c23f7100ac1c7767f5a76f416"
+  },
+  {
+   "file": "2026-11-12/pillar/e1_v0_r0.bin",
+   "bytes": 186152,
+   "sha256": "fe4708043ac00335da686b0cc395bad224120cbd752dea3c009a88737b592799"
+  },
+  {
+   "file": "2026-11-12/pillar/e1_v0_r1.bin",
+   "bytes": 202168,
+   "sha256": "3c4a933f74e4578d29b3c242e465f0b6109c4b5eaadd8b70b2591cf46a2e5eb5"
+  },
+  {
+   "file": "2026-11-12/pillar/e1_v0_r2.bin",
+   "bytes": 214751,
+   "sha256": "84d71b630fb436f8218cf52cb44adb69f8693b8fb5a5deb5729a327ebcf3c64b"
+  },
+  {
+   "file": "2026-11-12/pillar/e1_v0_r3.bin",
+   "bytes": 228956,
+   "sha256": "a98c14626403d358f504c1f559e51bac454e47b9fecac2b55c1256481ff6a96b"
+  },
+  {
+   "file": "2026-11-12/pillar/e1_v0_r4.bin",
+   "bytes": 240595,
+   "sha256": "536b102a6cdc37eaa90bcba4f2c2b3de05b30a30589f77ab7ca028ce2db33e32"
+  },
+  {
+   "file": "2026-11-12/pillar/e1_v10_r0.bin",
+   "bytes": 183419,
+   "sha256": "1c5a81d99934a9d0dd9b35ed548dd10cb66b095ffbcbcca3b03c26ca30f22517"
+  },
+  {
+   "file": "2026-11-12/pillar/e1_v10_r1.bin",
+   "bytes": 192716,
+   "sha256": "340183a77ed4c0f8f046c75204266976f4961c1c519deb8b033df82f67ffff52"
+  },
+  {
+   "file": "2026-11-12/pillar/e1_v10_r2.bin",
+   "bytes": 200156,
+   "sha256": "b1b8cb710df3526e4f9998611b1f105c7716e5ff9e61ad519384e4cbcb29c25d"
+  },
+  {
+   "file": "2026-11-12/pillar/e1_v10_r3.bin",
+   "bytes": 212930,
+   "sha256": "d04219414175b14b0192eca4a104eb58e3c5af3dbdb9415bfbea39be5c95ff29"
+  },
+  {
+   "file": "2026-11-12/pillar/e1_v10_r4.bin",
+   "bytes": 232871,
+   "sha256": "a4964f47c62d6687a76164a795faf43b988f267dc4b6c025c9edff56168a15d2"
+  },
+  {
+   "file": "2026-11-12/pillar/e1_v11_r0.bin",
+   "bytes": 184567,
+   "sha256": "495200374cf840894acdab2dd542bee6fa52a23cfd8c60582315fe55888b3759"
+  },
+  {
+   "file": "2026-11-12/pillar/e1_v11_r1.bin",
+   "bytes": 193460,
+   "sha256": "68856188bdfde1d2be343c079fedfc4e9f918b8e7b4c8128d1e878a9bfeb0d62"
+  },
+  {
+   "file": "2026-11-12/pillar/e1_v11_r2.bin",
+   "bytes": 202198,
+   "sha256": "380a9e868429fcc4e0db8c06cf32a74faf68d30af3be76c71c7a772d84271df4"
+  },
+  {
+   "file": "2026-11-12/pillar/e1_v11_r3.bin",
+   "bytes": 217651,
+   "sha256": "4e0b9dd3712447209dfc0082db7ee6eb515c1088aadecd9847c48b92aa5a0ffd"
+  },
+  {
+   "file": "2026-11-12/pillar/e1_v11_r4.bin",
+   "bytes": 238238,
+   "sha256": "d09313b18637a2af94e600239e69ac9d833fee305de06f7ee3016ab99db94f73"
+  },
+  {
+   "file": "2026-11-12/pillar/e1_v12_r0.bin",
+   "bytes": 184605,
+   "sha256": "15af8225b8322fc6a3d9f64679121d3899f039f761ba26074f3af2e678903d27"
+  },
+  {
+   "file": "2026-11-12/pillar/e1_v12_r1.bin",
+   "bytes": 190297,
+   "sha256": "5a55461e61c48d488927a5d9ce585a41717adc4c7dbdeaf786c2446beec5d940"
+  },
+  {
+   "file": "2026-11-12/pillar/e1_v12_r2.bin",
+   "bytes": 195156,
+   "sha256": "f40b68ff2004f82b5d8be14db13d64b3b88ed9e853903cd2f41b6ab5a7d127b9"
+  },
+  {
+   "file": "2026-11-12/pillar/e1_v12_r3.bin",
+   "bytes": 198719,
+   "sha256": "a83e752bb6bee4a80798de4ba6224d249f86eb7fcb7a416d4af7e30afa14cc2d"
+  },
+  {
+   "file": "2026-11-12/pillar/e1_v12_r4.bin",
+   "bytes": 200213,
+   "sha256": "13eff4a0dc9593226a32a0647f1773c1dcdc6984917b5e68ab96a04f15ac45a6"
+  },
+  {
+   "file": "2026-11-12/pillar/e1_v1_r0.bin",
+   "bytes": 179790,
+   "sha256": "b698a2dc61dc6b46498595f6039316ff1b4fc5b9d8b383dad71fb80bc58f612b"
+  },
+  {
+   "file": "2026-11-12/pillar/e1_v1_r1.bin",
+   "bytes": 193280,
+   "sha256": "b6f984b5ad29d70fd03f4b9a38f6f082b06099890514cac51c7afb962ec208f3"
+  },
+  {
+   "file": "2026-11-12/pillar/e1_v1_r2.bin",
+   "bytes": 204978,
+   "sha256": "6afc5bce5e7aa88200b882750c3698587d2aeb62374aa20a73df435e33a88671"
+  },
+  {
+   "file": "2026-11-12/pillar/e1_v1_r3.bin",
+   "bytes": 215347,
+   "sha256": "6655d54a65ff22130bcd5db6ebb41518dbfcaba2e079008dfc9f05f930a59390"
+  },
+  {
+   "file": "2026-11-12/pillar/e1_v1_r4.bin",
+   "bytes": 223595,
+   "sha256": "1183112d48f66683a637cd8adb87cbd7437f5d2e5b947a235dbe6b6748179d36"
+  },
+  {
+   "file": "2026-11-12/pillar/e1_v2_r0.bin",
+   "bytes": 167013,
+   "sha256": "1ec5465de9c4070f42f76e263c7431564eaf6aab1a5ce8dee0ac93737e1ef7fa"
+  },
+  {
+   "file": "2026-11-12/pillar/e1_v2_r1.bin",
+   "bytes": 180546,
+   "sha256": "b8e846f389cf080f7ddc6cda783fffe278f8c4263fa1985d72be7f751dcb6652"
+  },
+  {
+   "file": "2026-11-12/pillar/e1_v2_r2.bin",
+   "bytes": 190471,
+   "sha256": "1383e6e7e022fca28a80934154f4b72b542e8f972bd18dcfba203dc362d7e9a6"
+  },
+  {
+   "file": "2026-11-12/pillar/e1_v2_r3.bin",
+   "bytes": 199349,
+   "sha256": "0cef15e818beb9633a1e1e99bfbeb74d88defc2adb4ed45a3d25dd33c4dc713f"
+  },
+  {
+   "file": "2026-11-12/pillar/e1_v2_r4.bin",
+   "bytes": 205507,
+   "sha256": "3f2bbf85f3b8b7f69952a79a3f4cd72570b64c9914312dd65fa84008824a80e7"
+  },
+  {
+   "file": "2026-11-12/pillar/e1_v3_r0.bin",
+   "bytes": 95352,
+   "sha256": "cb0d7375d56685d24b1d5fea5a06823a74a4e63aee963d57b6a0ea59892a7b15"
+  },
+  {
+   "file": "2026-11-12/pillar/e1_v3_r1.bin",
+   "bytes": 95356,
+   "sha256": "9f7ea7b704d34a3519519d2b714585ae40e05835770860e59913b20058b2f453"
+  },
+  {
+   "file": "2026-11-12/pillar/e1_v3_r2.bin",
+   "bytes": 95338,
+   "sha256": "79a41914df8cbbe5cad77dbef68b3095a3ce76c765a8155a3e000363465c1e20"
+  },
+  {
+   "file": "2026-11-12/pillar/e1_v3_r3.bin",
+   "bytes": 95325,
+   "sha256": "805b652cbd2d61e65d390fb26755e9a82f55a75efe8a399de066c7c17d7198f0"
+  },
+  {
+   "file": "2026-11-12/pillar/e1_v3_r4.bin",
+   "bytes": 95315,
+   "sha256": "6dd74d568b1cace77b17a766f20cf9d46e5021acc72c7f4c85635a9be4470532"
+  },
+  {
+   "file": "2026-11-12/pillar/e1_v4_r0.bin",
+   "bytes": 158354,
+   "sha256": "eafd56804191476b29bb6c3b17db34a3e86c693e6ea6e2d11f86335d0f6faa03"
+  },
+  {
+   "file": "2026-11-12/pillar/e1_v4_r1.bin",
+   "bytes": 170298,
+   "sha256": "f496fb622f0ded2fd3d8fdd3b4a5b438ec2768d4cfe5a42a63a97bfb5fdb3e16"
+  },
+  {
+   "file": "2026-11-12/pillar/e1_v4_r2.bin",
+   "bytes": 179508,
+   "sha256": "8b7407808b803bfb74efb1d04b5bd9ca4319ecb44083884f54e36a338e783ab2"
+  },
+  {
+   "file": "2026-11-12/pillar/e1_v4_r3.bin",
+   "bytes": 187932,
+   "sha256": "695d5292fa2588741c38bf9db2e20e8b380eb55b4e103b9469f987d0c38b55c3"
+  },
+  {
+   "file": "2026-11-12/pillar/e1_v4_r4.bin",
+   "bytes": 195628,
+   "sha256": "d64c5ac1c77b3f0ce8330cf7d5581c12a2fe757f59484e112206751fc1215a67"
+  },
+  {
+   "file": "2026-11-12/pillar/e1_v5_r0.bin",
+   "bytes": 174157,
+   "sha256": "263b78e54a38dc39e9ec439ef6792acd492a6d18befd451d4ced841e7f6cb7bf"
+  },
+  {
+   "file": "2026-11-12/pillar/e1_v5_r1.bin",
+   "bytes": 184980,
+   "sha256": "1b20eebc5b69e2f3b3cc4c312561f72ce1690eb70042fde602d1f225df97f64d"
+  },
+  {
+   "file": "2026-11-12/pillar/e1_v5_r2.bin",
+   "bytes": 193261,
+   "sha256": "d75aa2bf55262a3f8f11f21814aa06d7178c368a67af689bc2e74028f95b66d3"
+  },
+  {
+   "file": "2026-11-12/pillar/e1_v5_r3.bin",
+   "bytes": 201311,
+   "sha256": "cbfcdc1823607a7f328fd6eb14afff92da1ba09a74b9b4db531aed146aad918b"
+  },
+  {
+   "file": "2026-11-12/pillar/e1_v5_r4.bin",
+   "bytes": 212972,
+   "sha256": "52773ac034463f8f17a09caddc764b00b802af2746996bbf6bd117020eb0f52c"
+  },
+  {
+   "file": "2026-11-12/pillar/e1_v6_r0.bin",
+   "bytes": 179179,
+   "sha256": "622e7560b7b4b828b2ac27905bfe5905715aab34f6de43b21be4af132bd05d60"
+  },
+  {
+   "file": "2026-11-12/pillar/e1_v6_r1.bin",
+   "bytes": 189134,
+   "sha256": "637765667cd5ab7d15a470c32902eb506aca8d805df600ee4963efc4178e0d5d"
+  },
+  {
+   "file": "2026-11-12/pillar/e1_v6_r2.bin",
+   "bytes": 197371,
+   "sha256": "910c1dae31dd821820beead93f048ed733dff2a177633a82044617f9dbdc5b3e"
+  },
+  {
+   "file": "2026-11-12/pillar/e1_v6_r3.bin",
+   "bytes": 205261,
+   "sha256": "4424f86754cd33eb143b666eff91ac09300f20e6fa5d38a3a729a349fa514e39"
+  },
+  {
+   "file": "2026-11-12/pillar/e1_v6_r4.bin",
+   "bytes": 216083,
+   "sha256": "21d37822c894fab26e65210140bfe9b8f92d47176cd3d61ba014c3de00b8508f"
+  },
+  {
+   "file": "2026-11-12/pillar/e1_v7_r0.bin",
+   "bytes": 180675,
+   "sha256": "ac853d332a057e1640788eb77dfb6de3a796f6c8a8f20a8298c6280b7a9fdf06"
+  },
+  {
+   "file": "2026-11-12/pillar/e1_v7_r1.bin",
+   "bytes": 189821,
+   "sha256": "18907385e2aaa7eed4f850d6248317befdd056c6bf42e8ebf0e3e8f42d1b1e30"
+  },
+  {
+   "file": "2026-11-12/pillar/e1_v7_r2.bin",
+   "bytes": 196557,
+   "sha256": "86d1cb4d5bcbcbd1a256f2df1d6ebc6e08dc19026cd5c904e8055f0c2e2b13b0"
+  },
+  {
+   "file": "2026-11-12/pillar/e1_v7_r3.bin",
+   "bytes": 204468,
+   "sha256": "5831d9e7e8d5cddb62e1e831eb0a5084dfe3ac281b0f6b21642ca2fe2d471f15"
+  },
+  {
+   "file": "2026-11-12/pillar/e1_v7_r4.bin",
+   "bytes": 218135,
+   "sha256": "8649b9fcc4cc4a37e916a7b52e3136ea851b748ef4aba20597d6e6dbb23501c5"
+  },
+  {
+   "file": "2026-11-12/pillar/e1_v8_r0.bin",
+   "bytes": 183090,
+   "sha256": "1c8bf8396b3c12c65d080a9aee2641b7f6e8d855c0777e43af333a6d6b4ffcd6"
+  },
+  {
+   "file": "2026-11-12/pillar/e1_v8_r1.bin",
+   "bytes": 191030,
+   "sha256": "2b0b36135a91c4a842debabadb13b8908724e6e13a7851f57b0ef22314f1b76c"
+  },
+  {
+   "file": "2026-11-12/pillar/e1_v8_r2.bin",
+   "bytes": 198659,
+   "sha256": "2884e65b7ed7127f34b1165e2a2edf58cb3ed25fe66cf734133836b45540b9c0"
+  },
+  {
+   "file": "2026-11-12/pillar/e1_v8_r3.bin",
+   "bytes": 207405,
+   "sha256": "1734bee348687d0b0a8265102d7a3977785aa6b6d8158562e8bf66e9c568c1c4"
+  },
+  {
+   "file": "2026-11-12/pillar/e1_v8_r4.bin",
+   "bytes": 223439,
+   "sha256": "111bb87930911e58c8033ae2a62579aa50e3d03b596a1bec12cba7c6c8d99aa0"
+  },
+  {
+   "file": "2026-11-12/pillar/e1_v9_r0.bin",
+   "bytes": 183782,
+   "sha256": "30e1059ad051c4aca315525e8edb229ddd365a47e62265cf0db5f25f59d2adfc"
+  },
+  {
+   "file": "2026-11-12/pillar/e1_v9_r1.bin",
+   "bytes": 191193,
+   "sha256": "95162448f6dec6f7d96acd785c247231097a6bb8c81d6b15134c13450bba45bf"
+  },
+  {
+   "file": "2026-11-12/pillar/e1_v9_r2.bin",
+   "bytes": 199683,
+   "sha256": "a77478c2c4a99cf8bf03616cbd4d34bf1f04506af7f12aa2506e14cefd058531"
+  },
+  {
+   "file": "2026-11-12/pillar/e1_v9_r3.bin",
+   "bytes": 209651,
+   "sha256": "04474d389cf1529441c8fac78d28a0ba043c2534df015df2a89290250213deff"
+  },
+  {
+   "file": "2026-11-12/pillar/e1_v9_r4.bin",
+   "bytes": 226376,
+   "sha256": "6d8ed39a059022f9641dee87870f0937a02ee964734a42796a3143d9888016ce"
+  },
+  {
+   "file": "2026-11-12/pillar/e2_v0_r0.bin",
+   "bytes": 179091,
+   "sha256": "32ae49b54d769630b2146229fe96ea5444359df0a987e1ae181544dc0140e0f2"
+  },
+  {
+   "file": "2026-11-12/pillar/e2_v0_r1.bin",
+   "bytes": 192905,
+   "sha256": "c0eecd93609b6862583ebbe407cfe992bca726eec591a84bd1b31fd755de08d4"
+  },
+  {
+   "file": "2026-11-12/pillar/e2_v0_r2.bin",
+   "bytes": 207436,
+   "sha256": "7736913ccea204edfe401321ac9e76660d823e9ad84d486ea0ab36bbe9ee8790"
+  },
+  {
+   "file": "2026-11-12/pillar/e2_v0_r3.bin",
+   "bytes": 221738,
+   "sha256": "a3bf2f0718023b3928b747cc767f7a9661b67420a691273a2ea24a1b77622611"
+  },
+  {
+   "file": "2026-11-12/pillar/e2_v0_r4.bin",
+   "bytes": 233408,
+   "sha256": "77d15da7f12de32b8b89829f37b3f339222db8a85f38724e101c3726d91448b3"
+  },
+  {
+   "file": "2026-11-12/pillar/e2_v10_r0.bin",
+   "bytes": 178629,
+   "sha256": "fd35e73d734250e7831f712919647090528af08d7eca4d3e0b2672d99edb6e00"
+  },
+  {
+   "file": "2026-11-12/pillar/e2_v10_r1.bin",
+   "bytes": 189480,
+   "sha256": "2c553e58c29746268c56012c4015a352fa2b931b2decd8050ae39a21846dc6c3"
+  },
+  {
+   "file": "2026-11-12/pillar/e2_v10_r2.bin",
+   "bytes": 198923,
+   "sha256": "1f932e5bfd9ecd0ac2963d80099a8ff09af1e894c8ae6354308b5777cfa0f410"
+  },
+  {
+   "file": "2026-11-12/pillar/e2_v10_r3.bin",
+   "bytes": 213807,
+   "sha256": "305580dcba453c2fbdea275e743eaf2f5a51bee2e7111ee29709140e0e5c356f"
+  },
+  {
+   "file": "2026-11-12/pillar/e2_v10_r4.bin",
+   "bytes": 232523,
+   "sha256": "0dc7f074b6ba1ff4d87f6d086971f9a56666d2ee88e5107578c459e289c49c0a"
+  },
+  {
+   "file": "2026-11-12/pillar/e2_v11_r0.bin",
+   "bytes": 179724,
+   "sha256": "70fd8e678689dd63dea4b9d28d6a02dfebee9d8ab4eeb08ed6899504aaef47e4"
+  },
+  {
+   "file": "2026-11-12/pillar/e2_v11_r1.bin",
+   "bytes": 190219,
+   "sha256": "669b88bee45637e87cdda09a9ac9120ef78884949b6564f5c5713f364c77c058"
+  },
+  {
+   "file": "2026-11-12/pillar/e2_v11_r2.bin",
+   "bytes": 200436,
+   "sha256": "dc7d15cca0867c5642594a0f055038a5f0ffd229d56a93ac4f95f722083ddbdc"
+  },
+  {
+   "file": "2026-11-12/pillar/e2_v11_r3.bin",
+   "bytes": 217034,
+   "sha256": "bebe21d1057e495d9f8fbb271c96a43925aef789224ff2873bc188f7b8065421"
+  },
+  {
+   "file": "2026-11-12/pillar/e2_v11_r4.bin",
+   "bytes": 238439,
+   "sha256": "a5d1480ca593ecc099cf14792e1fcc503ff8d1d630f2da328e8895619f8407f6"
+  },
+  {
+   "file": "2026-11-12/pillar/e2_v12_r0.bin",
+   "bytes": 179791,
+   "sha256": "18be9ae057bb51e956274d663d17c3c066ae4c8cd90273705defe8075828dbf8"
+  },
+  {
+   "file": "2026-11-12/pillar/e2_v12_r1.bin",
+   "bytes": 187540,
+   "sha256": "9b76342c7dcd1eb4e92588f16b4ceaa158a29677b15c7669e74329253427423d"
+  },
+  {
+   "file": "2026-11-12/pillar/e2_v12_r2.bin",
+   "bytes": 192910,
+   "sha256": "8fe1106a60e6001ca0a72c45ff8763f889317887c84c86013309df1b587dbe2f"
+  },
+  {
+   "file": "2026-11-12/pillar/e2_v12_r3.bin",
+   "bytes": 197997,
+   "sha256": "e25f38ec41c1eae6c9c7a805ccf14d15fa6d4818dfbde3ef65d0618b9b192a29"
+  },
+  {
+   "file": "2026-11-12/pillar/e2_v12_r4.bin",
+   "bytes": 198928,
+   "sha256": "4b2a6e9bfa92b455465a2aec8bfaeea25792c6558165883315e77a2bf1ed5e89"
+  },
+  {
+   "file": "2026-11-12/pillar/e2_v1_r0.bin",
+   "bytes": 169137,
+   "sha256": "5e563cef678ddef813d3dfef6cba46332a08cab43b87001927dbb561a784ac23"
+  },
+  {
+   "file": "2026-11-12/pillar/e2_v1_r1.bin",
+   "bytes": 183606,
+   "sha256": "4ac3f69b3ddbf219c07d954a417b42bd906085b93abeedcad2fbe71b408e9284"
+  },
+  {
+   "file": "2026-11-12/pillar/e2_v1_r2.bin",
+   "bytes": 194062,
+   "sha256": "bf81dfb08d2466328feed7980d601b1b7f32ca5db2cd61709b680ca8db3eebe4"
+  },
+  {
+   "file": "2026-11-12/pillar/e2_v1_r3.bin",
+   "bytes": 206302,
+   "sha256": "9f8907d8aecbab914fdca35a2569a5e43f7416c232db62da06c24b08359cfffa"
+  },
+  {
+   "file": "2026-11-12/pillar/e2_v1_r4.bin",
+   "bytes": 214306,
+   "sha256": "79d9ca0583af29929b00a96ed2656d2880840d2688b0010c95dd09b3ba9182bc"
+  },
+  {
+   "file": "2026-11-12/pillar/e2_v2_r0.bin",
+   "bytes": 157235,
+   "sha256": "99caad81ef19115dc4c95b40ed6bd7b211d0bd89bd1523e1050a0856cb4a73b9"
+  },
+  {
+   "file": "2026-11-12/pillar/e2_v2_r1.bin",
+   "bytes": 171754,
+   "sha256": "d2478ca940bb589ce2cf54956c8e1ce7242293c6882cbd0225f0d1eccf0b89e1"
+  },
+  {
+   "file": "2026-11-12/pillar/e2_v2_r2.bin",
+   "bytes": 181572,
+   "sha256": "5110c2b9f9ca8d8cbc9e33d46a762d49ff9dcbe8bb6b57299981f38d4e123f40"
+  },
+  {
+   "file": "2026-11-12/pillar/e2_v2_r3.bin",
+   "bytes": 191331,
+   "sha256": "a5b40990dc8bad73c2db492983a79a68e2680ecd8c3e5b92f657d4770c533049"
+  },
+  {
+   "file": "2026-11-12/pillar/e2_v2_r4.bin",
+   "bytes": 197689,
+   "sha256": "cf11382ecda5378d4cd7dbd527204aa6bee0da20bcf4bb3b2495b16899f43aff"
+  },
+  {
+   "file": "2026-11-12/pillar/e2_v3_r0.bin",
+   "bytes": 88429,
+   "sha256": "57896232201c6bd9f1897c8b71254d65892638f72c3f5a7bc73735b5645ef7fa"
+  },
+  {
+   "file": "2026-11-12/pillar/e2_v3_r1.bin",
+   "bytes": 88417,
+   "sha256": "b3151688cced03bb1290266def476776357f1028b8573d179c97381c0b2c9c1a"
+  },
+  {
+   "file": "2026-11-12/pillar/e2_v3_r2.bin",
+   "bytes": 88396,
+   "sha256": "334b90bbe6e87c11447341d341da7bad934d25c22178ef9e460dc284e62b7054"
+  },
+  {
+   "file": "2026-11-12/pillar/e2_v3_r3.bin",
+   "bytes": 88381,
+   "sha256": "273d5afb695a100d7c1b4184200b058f9ae469d0c945f127c4689db4458c00a2"
+  },
+  {
+   "file": "2026-11-12/pillar/e2_v3_r4.bin",
+   "bytes": 88362,
+   "sha256": "be1af291d7516e47db6d38b94650b5595233dd92bfcc2a832221698f3e3edfae"
+  },
+  {
+   "file": "2026-11-12/pillar/e2_v4_r0.bin",
+   "bytes": 146956,
+   "sha256": "9df2868a74cd2ca622250e4a13aea6b847ea570ac3e50e7b76c131b16801900d"
+  },
+  {
+   "file": "2026-11-12/pillar/e2_v4_r1.bin",
+   "bytes": 159739,
+   "sha256": "a9906aae097ed72d98fe804b2cc6a83049510bbe1c00ccd4f13f229bea4991ed"
+  },
+  {
+   "file": "2026-11-12/pillar/e2_v4_r2.bin",
+   "bytes": 169948,
+   "sha256": "879a679ea22a8ed06034f7afc657aab6395780a059d0349d316ee112e27753f9"
+  },
+  {
+   "file": "2026-11-12/pillar/e2_v4_r3.bin",
+   "bytes": 180129,
+   "sha256": "b35ee1656214af01dc60da94fa8b1441c1459434c8d90c13531523e5d96cc398"
+  },
+  {
+   "file": "2026-11-12/pillar/e2_v4_r4.bin",
+   "bytes": 187028,
+   "sha256": "322086e4597747b2d2a7746f4a470a3d8f0e398398d1850c088a0f8a753699d3"
+  },
+  {
+   "file": "2026-11-12/pillar/e2_v5_r0.bin",
+   "bytes": 163980,
+   "sha256": "0bade488d3839141f81f7d17136ee3c8ef1ed649f417d898e3bc6cef5a38fc3c"
+  },
+  {
+   "file": "2026-11-12/pillar/e2_v5_r1.bin",
+   "bytes": 175011,
+   "sha256": "1e46da1d923d9a8986d931f0e52bb987184572fdb2658c0da601b73760d208c4"
+  },
+  {
+   "file": "2026-11-12/pillar/e2_v5_r2.bin",
+   "bytes": 186010,
+   "sha256": "636e700b31b99b5850f0058b9b841bec4a553ff1b4b8f0721de374669459e10d"
+  },
+  {
+   "file": "2026-11-12/pillar/e2_v5_r3.bin",
+   "bytes": 196936,
+   "sha256": "11d9f00a3f85ab6f150f90606c2c4d231879e36c83a72eb096f9d161f6a4f6ed"
+  },
+  {
+   "file": "2026-11-12/pillar/e2_v5_r4.bin",
+   "bytes": 208392,
+   "sha256": "610545d1d6de479455df6de9f2a8312059e15f3f5f79e3110be80ea50a994632"
+  },
+  {
+   "file": "2026-11-12/pillar/e2_v6_r0.bin",
+   "bytes": 171330,
+   "sha256": "cc4a7cac549ea67fbfc406cafaf566d2c1c4c9d80011724b3ea909ba437adfc1"
+  },
+  {
+   "file": "2026-11-12/pillar/e2_v6_r1.bin",
+   "bytes": 182455,
+   "sha256": "5b8a84bbc2612518e7f1be2cafa26a54c83e64c99a46fce8c8d072ebd33e2ac6"
+  },
+  {
+   "file": "2026-11-12/pillar/e2_v6_r2.bin",
+   "bytes": 191779,
+   "sha256": "86d3c720b490f43e706f6e9c61563076c87c41f39108764fb05ebfcb8f9e6853"
+  },
+  {
+   "file": "2026-11-12/pillar/e2_v6_r3.bin",
+   "bytes": 203678,
+   "sha256": "e294b85a97acc4bd3faba993bb80f60b878aada107de50d31bafbf8373942959"
+  },
+  {
+   "file": "2026-11-12/pillar/e2_v6_r4.bin",
+   "bytes": 217908,
+   "sha256": "f3ff2da491c0d0f2e6e559fabaff335a63ccacca245d9f3b084204a0f87f158d"
+  },
+  {
+   "file": "2026-11-12/pillar/e2_v7_r0.bin",
+   "bytes": 174942,
+   "sha256": "6501d51c9a5c132dc73d06b1536c786318485f014077efae6d81485ce5e54b1d"
+  },
+  {
+   "file": "2026-11-12/pillar/e2_v7_r1.bin",
+   "bytes": 186339,
+   "sha256": "32b024a17e68a087bb49962336698d6fbd5b28bf5f65668cad6fbd6fb3e9097a"
+  },
+  {
+   "file": "2026-11-12/pillar/e2_v7_r2.bin",
+   "bytes": 195096,
+   "sha256": "0a01c34d5f322f7db8acfd5b12181e3058eac2d63ce65cc0edc87c63e46a2d12"
+  },
+  {
+   "file": "2026-11-12/pillar/e2_v7_r3.bin",
+   "bytes": 207165,
+   "sha256": "c671ecdc828ec352228292c8285b33f1c2111358342d4a40477565387b7bfd12"
+  },
+  {
+   "file": "2026-11-12/pillar/e2_v7_r4.bin",
+   "bytes": 219230,
+   "sha256": "8321a6e1ed57ef4bf2ab74c55e895b3e672684c21068167c6bc183ca50b758b6"
+  },
+  {
+   "file": "2026-11-12/pillar/e2_v8_r0.bin",
+   "bytes": 177587,
+   "sha256": "e33dcfaf66cfc678b4da6af30faa29bc5195f5a7c41f899448dd15c044470b70"
+  },
+  {
+   "file": "2026-11-12/pillar/e2_v8_r1.bin",
+   "bytes": 187239,
+   "sha256": "5d8c2ff14497bbdfab9aff8546e372fea1cfb96297dd57a8d8bcc391733bde26"
+  },
+  {
+   "file": "2026-11-12/pillar/e2_v8_r2.bin",
+   "bytes": 195163,
+   "sha256": "f96fd561e1f74fede39601a6b4d36c52f4d30dd6b6046b1748835eb05d608539"
+  },
+  {
+   "file": "2026-11-12/pillar/e2_v8_r3.bin",
+   "bytes": 207903,
+   "sha256": "4124102e15d799f69ecb020e3cea25369e6acdc0b3b238bc437c3dc4aa8ff69d"
+  },
+  {
+   "file": "2026-11-12/pillar/e2_v8_r4.bin",
+   "bytes": 222499,
+   "sha256": "2f07bcc161cef457499b6abce82c03c102e02c65254dcaabf4a9d8dc9ecee9d4"
+  },
+  {
+   "file": "2026-11-12/pillar/e2_v9_r0.bin",
+   "bytes": 178396,
+   "sha256": "410acf10fba6ae7e0f030af0acc28eb0a98e37b91d71fc4814089900f7ac7c67"
+  },
+  {
+   "file": "2026-11-12/pillar/e2_v9_r1.bin",
+   "bytes": 187584,
+   "sha256": "a0e78fa45c0e18ad2412d6a21c626d2d99b9ba8efac81ae0bd4aeb1fdd440a21"
+  },
+  {
+   "file": "2026-11-12/pillar/e2_v9_r2.bin",
+   "bytes": 196664,
+   "sha256": "2131843203ff8ead7bbad03bbc59cb50d196f5ef0f48ab4310863459e3a354b9"
+  },
+  {
+   "file": "2026-11-12/pillar/e2_v9_r3.bin",
+   "bytes": 210350,
+   "sha256": "4e93e7de3957886c0ea1029ea92a507c7f853b4bfb3c667782fefb08be648520"
+  },
+  {
+   "file": "2026-11-12/pillar/e2_v9_r4.bin",
+   "bytes": 226704,
+   "sha256": "2095733ec6d64d4ba4536b1197eee10c77673314f48286fae69c84bcb8e49294"
+  },
+  {
+   "file": "2026-11-12/pillar/e3_v0_r0.bin",
+   "bytes": 170778,
+   "sha256": "693cc2f5a5a4d0a324bb26f6b4e4084e5e2171e365703d696635891d12dd444c"
+  },
+  {
+   "file": "2026-11-12/pillar/e3_v0_r1.bin",
+   "bytes": 187704,
+   "sha256": "ca88e4d6c9dcf4e7e1fbb8f7c9da1d774d255d8cdcacd09f91c7e5c65ce1696a"
+  },
+  {
+   "file": "2026-11-12/pillar/e3_v0_r2.bin",
+   "bytes": 200509,
+   "sha256": "e2ac08a1fca2c05a653e7c91a6b55162d830b5a33c30540fc214e060e51f14a2"
+  },
+  {
+   "file": "2026-11-12/pillar/e3_v0_r3.bin",
+   "bytes": 213784,
+   "sha256": "29a3b9788ea24c6ab13cf91a9ce83e42ab6ed297d7e5e8279abb937a09a63fed"
+  },
+  {
+   "file": "2026-11-12/pillar/e3_v0_r4.bin",
+   "bytes": 226626,
+   "sha256": "64f6cb92b49c8a477f0aa5619a039b68c67f4f3030b393cb265748fe5ded1a26"
+  },
+  {
+   "file": "2026-11-12/pillar/e3_v10_r0.bin",
+   "bytes": 175605,
+   "sha256": "e8a29a55a689f6e7fc01c5ad75689ebb81b37c9296f925faeb8527351877480b"
+  },
+  {
+   "file": "2026-11-12/pillar/e3_v10_r1.bin",
+   "bytes": 187214,
+   "sha256": "ea76314d708898ad563e5a4117ccf9402e315c9870f84fae045deb0261a11808"
+  },
+  {
+   "file": "2026-11-12/pillar/e3_v10_r2.bin",
+   "bytes": 198260,
+   "sha256": "83c582a059a54bf6b5e3cef70412827b3b994f5efdde53d954ae4a151d2b8f28"
+  },
+  {
+   "file": "2026-11-12/pillar/e3_v10_r3.bin",
+   "bytes": 213112,
+   "sha256": "0b938fc28f11de14ba30d2a6eb334eabc277bf726570a21f49c8384f55f1e7e6"
+  },
+  {
+   "file": "2026-11-12/pillar/e3_v10_r4.bin",
+   "bytes": 233335,
+   "sha256": "698f5db4174b44bedd295c2a1308f3619283646b1e55a9fceb2e284e77ddfa11"
+  },
+  {
+   "file": "2026-11-12/pillar/e3_v11_r0.bin",
+   "bytes": 176425,
+   "sha256": "ccf9a6f987056aefa149562e5aa1b1ebb757833e98eca47ac96758e30396a5a8"
+  },
+  {
+   "file": "2026-11-12/pillar/e3_v11_r1.bin",
+   "bytes": 188539,
+   "sha256": "230b855db2ba1fe214ede3acb54a0b480e3812b15558ed2bbd501d010118adac"
+  },
+  {
+   "file": "2026-11-12/pillar/e3_v11_r2.bin",
+   "bytes": 200413,
+   "sha256": "3baea0d2c9c5b64117b055aad7290a5893f67bc59a35719e78e5d1c42329c95b"
+  },
+  {
+   "file": "2026-11-12/pillar/e3_v11_r3.bin",
+   "bytes": 216029,
+   "sha256": "e145a91e5589ff8f92f679edef2af576c5fd2a29e7e5c830c5ac925cf66bf172"
+  },
+  {
+   "file": "2026-11-12/pillar/e3_v11_r4.bin",
+   "bytes": 238277,
+   "sha256": "67bc94b7683bf9e477c3ea221d3b11c722b3898c410fb4ac748021dadd661727"
+  },
+  {
+   "file": "2026-11-12/pillar/e3_v12_r0.bin",
+   "bytes": 176774,
+   "sha256": "3538d9cd7d82d114e9e24cf6891c0a85829655ae3997d9b9e9fcd45380a9c89d"
+  },
+  {
+   "file": "2026-11-12/pillar/e3_v12_r1.bin",
+   "bytes": 185571,
+   "sha256": "30bdeafdfb3ba21f737f3d1761b0581c2883c24dc0f08ee1de5b5d23ab7a8919"
+  },
+  {
+   "file": "2026-11-12/pillar/e3_v12_r2.bin",
+   "bytes": 191632,
+   "sha256": "03a4751d77fa2ebc45ab9f56e97187a705aae7f8c088d72cec131af6614374cd"
+  },
+  {
+   "file": "2026-11-12/pillar/e3_v12_r3.bin",
+   "bytes": 196588,
+   "sha256": "3199b0dd6b279be6ea4dfe170bcecd6d1aaafc0879023a673d08a6dbb7c7b230"
+  },
+  {
+   "file": "2026-11-12/pillar/e3_v12_r4.bin",
+   "bytes": 198419,
+   "sha256": "4195dc9999b87da6e437acbf49f0d56d971d7dbe0757e795616bbff30e19128f"
+  },
+  {
+   "file": "2026-11-12/pillar/e3_v1_r0.bin",
+   "bytes": 162580,
+   "sha256": "3f0714bb896260e648be8c7ab70485cc5f01a5bf580213b09a3fb43e88f9d067"
+  },
+  {
+   "file": "2026-11-12/pillar/e3_v1_r1.bin",
+   "bytes": 176408,
+   "sha256": "21d5c46ab0554e8fd12eaa9efdc1edda273f5ece9a9c18409e0511e4ddeb575c"
+  },
+  {
+   "file": "2026-11-12/pillar/e3_v1_r2.bin",
+   "bytes": 187456,
+   "sha256": "1959fba8ee5de151b03c7fbd841462b28d74885600e7acffbf1782d5d2607602"
+  },
+  {
+   "file": "2026-11-12/pillar/e3_v1_r3.bin",
+   "bytes": 198438,
+   "sha256": "aceaa4b9dd1a6965f8640b9ad79bcb7e03b2f7853f8618e210cb731bd9d5e489"
+  },
+  {
+   "file": "2026-11-12/pillar/e3_v1_r4.bin",
+   "bytes": 207686,
+   "sha256": "0485fa8c40d4cfed47a0245991a65d5ba374532b72dae2f65be4ea6200c322fd"
+  },
+  {
+   "file": "2026-11-12/pillar/e3_v2_r0.bin",
+   "bytes": 150491,
+   "sha256": "e406d24e75138ce35a87d857ac04a83d2908c2d59f277e18d60e111944315fa5"
+  },
+  {
+   "file": "2026-11-12/pillar/e3_v2_r1.bin",
+   "bytes": 164499,
+   "sha256": "d325370f48f153e2f34daf8db61195558d94612d461593bd6867fb6e7bf1b288"
+  },
+  {
+   "file": "2026-11-12/pillar/e3_v2_r2.bin",
+   "bytes": 174930,
+   "sha256": "d692ac378dde5897d0dd99f9e8bfc0ca665e6e8314294962bd467d8a39f5f90a"
+  },
+  {
+   "file": "2026-11-12/pillar/e3_v2_r3.bin",
+   "bytes": 183370,
+   "sha256": "aba40b61b1285727926962e0b203dbf26aef47755c5e12c2680be6ed52690c95"
+  },
+  {
+   "file": "2026-11-12/pillar/e3_v2_r4.bin",
+   "bytes": 190762,
+   "sha256": "6a8117a933a44ed30058521023640d7b85892c183ec3c02e08bf2d93a4320329"
+  },
+  {
+   "file": "2026-11-12/pillar/e3_v3_r0.bin",
+   "bytes": 84476,
+   "sha256": "d82e8a995dcfd8327cfe7dd9276635b65046487642b113abe41755d74d3d0f9e"
+  },
+  {
+   "file": "2026-11-12/pillar/e3_v3_r1.bin",
+   "bytes": 84464,
+   "sha256": "af1ea1a34dfc1bd58ca80219f8d44e5a8b6ab380e4a4731c5e730d53416ffdd1"
+  },
+  {
+   "file": "2026-11-12/pillar/e3_v3_r2.bin",
+   "bytes": 84444,
+   "sha256": "24d78f3838bab6d3929f50711dd3ee99f0836b6e86e27c6298424c9b0fa4b0c6"
+  },
+  {
+   "file": "2026-11-12/pillar/e3_v3_r3.bin",
+   "bytes": 84423,
+   "sha256": "b005435da06d8beb2f6a8fcdde9c3cb9a16fa9470eeb8600ecf96e224d944ae0"
+  },
+  {
+   "file": "2026-11-12/pillar/e3_v3_r4.bin",
+   "bytes": 84410,
+   "sha256": "12a4e448fed3a6ab1851de1c8ff1a0bdf9ef39867a4154d7ea25d9f2af85cc3c"
+  },
+  {
+   "file": "2026-11-12/pillar/e3_v4_r0.bin",
+   "bytes": 138706,
+   "sha256": "c498cf5b6b19e8ad4747e38c434085616dbdfe26f16725922e197b5bb3968ce0"
+  },
+  {
+   "file": "2026-11-12/pillar/e3_v4_r1.bin",
+   "bytes": 151607,
+   "sha256": "6671dd6e87ea56be8a0f926e54ab53ce94736a8403cddccdc5af8129851ef4f9"
+  },
+  {
+   "file": "2026-11-12/pillar/e3_v4_r2.bin",
+   "bytes": 163541,
+   "sha256": "7cf49777acb6be13e68fd1bbf578c761f34d25665b42674594acd48e505090f2"
+  },
+  {
+   "file": "2026-11-12/pillar/e3_v4_r3.bin",
+   "bytes": 172112,
+   "sha256": "793064916f7f84e9b1fa54b3e105c1a5327a2ad3e29388db0bc76ddd0f589bef"
+  },
+  {
+   "file": "2026-11-12/pillar/e3_v4_r4.bin",
+   "bytes": 179065,
+   "sha256": "06bc0edd65e01c39c95f07b813d2387a06e4ab5fe868ecf46916bb0dd044858e"
+  },
+  {
+   "file": "2026-11-12/pillar/e3_v5_r0.bin",
+   "bytes": 156110,
+   "sha256": "7f1ff9175a4fb6103ecaa0e97e8d261aaec9c93bf17388c59dd30d4d2fd6d4ad"
+  },
+  {
+   "file": "2026-11-12/pillar/e3_v5_r1.bin",
+   "bytes": 168615,
+   "sha256": "987e83d6eaaf4ebdd671c8c7611694c7f89fe37206c42ca2067312a3c7238326"
+  },
+  {
+   "file": "2026-11-12/pillar/e3_v5_r2.bin",
+   "bytes": 180096,
+   "sha256": "60461d559f0ed12a58a3f978df84723ab6e5ef39df3fdf7ff4b8d210514477aa"
+  },
+  {
+   "file": "2026-11-12/pillar/e3_v5_r3.bin",
+   "bytes": 193770,
+   "sha256": "0d38988c4050f377037c0325e8f5cfa332317a491cf8de72f6b1c904ff66d513"
+  },
+  {
+   "file": "2026-11-12/pillar/e3_v5_r4.bin",
+   "bytes": 203189,
+   "sha256": "1aa96573df36e7f6dcc7fb4972566da693694b7c78a17e52f40faa4f0a18c961"
+  },
+  {
+   "file": "2026-11-12/pillar/e3_v6_r0.bin",
+   "bytes": 164431,
+   "sha256": "cdbb1ef7bd9b288576fc9846140f5c95b25ba5cc752e732f85215f357fdbf08f"
+  },
+  {
+   "file": "2026-11-12/pillar/e3_v6_r1.bin",
+   "bytes": 177328,
+   "sha256": "2064a9b861199186e0bb1c951f22dd3fcdf791f63ce91cc955c7869181c26c2a"
+  },
+  {
+   "file": "2026-11-12/pillar/e3_v6_r2.bin",
+   "bytes": 187006,
+   "sha256": "2739d3e315449eced2bdf08b7f2116760a0ea081cb84cd68620360ed8742316e"
+  },
+  {
+   "file": "2026-11-12/pillar/e3_v6_r3.bin",
+   "bytes": 200822,
+   "sha256": "932f10740c43df18cfdb92a442e9a4dfd10daee2dbffef2543fcca73917983c5"
+  },
+  {
+   "file": "2026-11-12/pillar/e3_v6_r4.bin",
+   "bytes": 214431,
+   "sha256": "7d4127ef62135f3d4567f5b4f2300e9a58b0e1e9e38400079667ba0c6f09ea01"
+  },
+  {
+   "file": "2026-11-12/pillar/e3_v7_r0.bin",
+   "bytes": 169145,
+   "sha256": "fb9b7266158a0480fe77324fa9375dc42f2b549aeeab681a37df7582d83ec2f5"
+  },
+  {
+   "file": "2026-11-12/pillar/e3_v7_r1.bin",
+   "bytes": 181519,
+   "sha256": "8a7042e12b5d7493d2fa3a225558944ea2baaee2378c044bd4807878c01e87ea"
+  },
+  {
+   "file": "2026-11-12/pillar/e3_v7_r2.bin",
+   "bytes": 191251,
+   "sha256": "4650d29c2f088a76867f7fb1611dc623f0ac2ec24352a419f6f330f1b303e816"
+  },
+  {
+   "file": "2026-11-12/pillar/e3_v7_r3.bin",
+   "bytes": 207606,
+   "sha256": "0b6fceb83fed420f0106027581d3985eef63323c2facfb9e276fcbf2d5cd69e6"
+  },
+  {
+   "file": "2026-11-12/pillar/e3_v7_r4.bin",
+   "bytes": 220979,
+   "sha256": "f46fe168c32ea543dc394e45f70bafc457a9c9c86a9f0372e77d394c0714d870"
+  },
+  {
+   "file": "2026-11-12/pillar/e3_v8_r0.bin",
+   "bytes": 173723,
+   "sha256": "94ea33f9e0fb71f0aa5bfa7795f7629e09342f9c135ec10fbd2f009bc94f3d61"
+  },
+  {
+   "file": "2026-11-12/pillar/e3_v8_r1.bin",
+   "bytes": 186398,
+   "sha256": "544d6c63280cd07b01548777049911a3b2e0cbcf0fa71cb945e96e520093d6f7"
+  },
+  {
+   "file": "2026-11-12/pillar/e3_v8_r2.bin",
+   "bytes": 195207,
+   "sha256": "8fbb32c76c56701b4d0351352da865c9f4aef8a0809593e67035462a00cfcfb8"
+  },
+  {
+   "file": "2026-11-12/pillar/e3_v8_r3.bin",
+   "bytes": 208169,
+   "sha256": "e45e99518ec72c6333ee68603e3792de3121d203d2d3adbbe8f8d0306b2ad3ac"
+  },
+  {
+   "file": "2026-11-12/pillar/e3_v8_r4.bin",
+   "bytes": 221596,
+   "sha256": "29778633a6c63feab1b3a25e5d6a86eb4d91bb050efcac23d9dedef0bd66094d"
+  },
+  {
+   "file": "2026-11-12/pillar/e3_v9_r0.bin",
+   "bytes": 174624,
+   "sha256": "1e5bbb8e2c9d696bacd2461f53a1640316636f514664397838eaf275f7746d7a"
+  },
+  {
+   "file": "2026-11-12/pillar/e3_v9_r1.bin",
+   "bytes": 186056,
+   "sha256": "ec7af262a75fb7d57aa9f0fddbe343310917e564df2011a48c8260d6e94d36a7"
+  },
+  {
+   "file": "2026-11-12/pillar/e3_v9_r2.bin",
+   "bytes": 196081,
+   "sha256": "136cc10c3cf777cd6f0d05f6689dde4f1a8354d91dc5573c895f63ba687b27a2"
+  },
+  {
+   "file": "2026-11-12/pillar/e3_v9_r3.bin",
+   "bytes": 210060,
+   "sha256": "8558b875b86b9a7e4dafafb5f5d9614d91cce3eaf931f61b4e3c93ecce5885f3"
+  },
+  {
+   "file": "2026-11-12/pillar/e3_v9_r4.bin",
+   "bytes": 227091,
+   "sha256": "4aedbb86f61339bf8ccd34597d2075ed2c3c5c5341bc55ac18ff9fa62eddf591"
+  },
+  {
+   "file": "2026-11-12/pillar/e4_v0_r0.bin",
+   "bytes": 169684,
+   "sha256": "c0c203ffad57c9423796a2a6a92ae424cc77e7d2143f10b1e79707951d082681"
+  },
+  {
+   "file": "2026-11-12/pillar/e4_v0_r1.bin",
+   "bytes": 184142,
+   "sha256": "4ca510e8399068f19bf9de12cae2f88840ef8af20cdf67d50cfa12d322e4eb15"
+  },
+  {
+   "file": "2026-11-12/pillar/e4_v0_r2.bin",
+   "bytes": 197842,
+   "sha256": "ed858c50d033804177d80d0c9a3d376a043bad2e927519147136b89aafa731bb"
+  },
+  {
+   "file": "2026-11-12/pillar/e4_v0_r3.bin",
+   "bytes": 209928,
+   "sha256": "e437cdc4fbde5d37b065d6fd555d7e9755cf55a8b242caaf90b117338c0391cd"
+  },
+  {
+   "file": "2026-11-12/pillar/e4_v0_r4.bin",
+   "bytes": 222671,
+   "sha256": "7d2fc888df934fac99c163d305d5745572059f2dc160ba3d11775f0db9fadb2a"
+  },
+  {
+   "file": "2026-11-12/pillar/e4_v10_r0.bin",
+   "bytes": 174279,
+   "sha256": "28e4bebf8899c38399a02b8f40433ee69dd5d8b00174e3b4c2952ae1f0a409e9"
+  },
+  {
+   "file": "2026-11-12/pillar/e4_v10_r1.bin",
+   "bytes": 187201,
+   "sha256": "ef74deed77c22f9e6c4a663c68833c921266380cc4aee5753c7d71c96296e8ce"
+  },
+  {
+   "file": "2026-11-12/pillar/e4_v10_r2.bin",
+   "bytes": 198857,
+   "sha256": "618bf8e34bd8191d8eb55732f05ed7a52f739f30324fee7d7570ff3e6fce95f0"
+  },
+  {
+   "file": "2026-11-12/pillar/e4_v10_r3.bin",
+   "bytes": 214406,
+   "sha256": "926a9b41eb2c133ba8a96a14e467f9592f1476dd62b212e74313a1f3d4e6ce7b"
+  },
+  {
+   "file": "2026-11-12/pillar/e4_v10_r4.bin",
+   "bytes": 233235,
+   "sha256": "835101b099d47ce3d2f53394f79d2606edd3a17293945403e73586c04f21ec17"
+  },
+  {
+   "file": "2026-11-12/pillar/e4_v11_r0.bin",
+   "bytes": 175254,
+   "sha256": "74a70ed5e28b2bc189c849457cf6298509cc13f23525631e8f65d890ea660f47"
+  },
+  {
+   "file": "2026-11-12/pillar/e4_v11_r1.bin",
+   "bytes": 188284,
+   "sha256": "70b8d892e7ce210e5a0643c9536bb76b7ce85f3a524659895c495159277d5917"
+  },
+  {
+   "file": "2026-11-12/pillar/e4_v11_r2.bin",
+   "bytes": 201018,
+   "sha256": "490da842923a0db9a6ca45a674df83e01d96c0c441726ca35a3e288751602896"
+  },
+  {
+   "file": "2026-11-12/pillar/e4_v11_r3.bin",
+   "bytes": 216663,
+   "sha256": "469d1896cf2612123a4b047368307febf07ed8bed1d6798e7a553cf5532509c9"
+  },
+  {
+   "file": "2026-11-12/pillar/e4_v11_r4.bin",
+   "bytes": 238266,
+   "sha256": "36ef68b444e1752da278f379097e8c11695c173f3d8341066a12cc210c5152c2"
+  },
+  {
+   "file": "2026-11-12/pillar/e4_v12_r0.bin",
+   "bytes": 175436,
+   "sha256": "bfd908c49a858e0115a1a152c7e5466b613692790eff395eb8f330c2b7703463"
+  },
+  {
+   "file": "2026-11-12/pillar/e4_v12_r1.bin",
+   "bytes": 185951,
+   "sha256": "e3d61f8df0d2c1621134291c3aa11234b472d51a34f2d8792963e0517f95a1a1"
+  },
+  {
+   "file": "2026-11-12/pillar/e4_v12_r2.bin",
+   "bytes": 191664,
+   "sha256": "981dea653d5a057b6d0a420891b83e9155c0f4f07b9ef60826092c6812fdae48"
+  },
+  {
+   "file": "2026-11-12/pillar/e4_v12_r3.bin",
+   "bytes": 197154,
+   "sha256": "c10e3105010293d7e2c6d0f6e330cad93c9b334d20ffa71e6a97a51ea012990a"
+  },
+  {
+   "file": "2026-11-12/pillar/e4_v12_r4.bin",
+   "bytes": 198824,
+   "sha256": "d21c03103828525baf5a7764f3652f781bb368eda1c76e5d1380648b2f6f2a29"
+  },
+  {
+   "file": "2026-11-12/pillar/e4_v1_r0.bin",
+   "bytes": 158703,
+   "sha256": "d3544f08b3105f764f6edf4bceed8cb840bf6d933e6cfcfd9a372b68687b97e9"
+  },
+  {
+   "file": "2026-11-12/pillar/e4_v1_r1.bin",
+   "bytes": 173369,
+   "sha256": "497d37a5ed47481bb44017a292366171321e61d5eb87e631f97ef87c8cce1f5e"
+  },
+  {
+   "file": "2026-11-12/pillar/e4_v1_r2.bin",
+   "bytes": 184515,
+   "sha256": "ff8aa2920fd99887f14896ae5c879c2bccde6b3007f9aa65c14739c61d0b0787"
+  },
+  {
+   "file": "2026-11-12/pillar/e4_v1_r3.bin",
+   "bytes": 194883,
+   "sha256": "73279043ae1f5ff225c2b9b378da5e0688fd6fcb520d25f180e9f97a891bca3b"
+  },
+  {
+   "file": "2026-11-12/pillar/e4_v1_r4.bin",
+   "bytes": 204555,
+   "sha256": "8919fc0ab5f0c38c427f87aabc5a451ada47f3667cf39128d7977d7c2ef69f50"
+  },
+  {
+   "file": "2026-11-12/pillar/e4_v2_r0.bin",
+   "bytes": 145656,
+   "sha256": "26f648684bfdf688556fde49f3673141c905340227a63a9ef22238fb9a9786f7"
+  },
+  {
+   "file": "2026-11-12/pillar/e4_v2_r1.bin",
+   "bytes": 160646,
+   "sha256": "1a2b65b67da77e264e1011b271d2d3656afc54ee67a166ecc7408811b5110a4e"
+  },
+  {
+   "file": "2026-11-12/pillar/e4_v2_r2.bin",
+   "bytes": 170571,
+   "sha256": "0994c44f3214095dfd089c5f508752061fed2ef8ea6d38ea5c1581d7b8f341bd"
+  },
+  {
+   "file": "2026-11-12/pillar/e4_v2_r3.bin",
+   "bytes": 179021,
+   "sha256": "a7a4aff7d516f84ac93c390d7adc46d9ee34740048e1698e4fb01c1e4bb8117d"
+  },
+  {
+   "file": "2026-11-12/pillar/e4_v2_r4.bin",
+   "bytes": 185803,
+   "sha256": "4797d5a7c5e94e0f9df49d09352581b31cf0c7828f6080eb4ae1bb11818046af"
+  },
+  {
+   "file": "2026-11-12/pillar/e4_v3_r0.bin",
+   "bytes": 82390,
+   "sha256": "06d6565b0a95f0feeb9d2fc41ad1d6a384e289f0c98d3f79af5f5986bd282f92"
+  },
+  {
+   "file": "2026-11-12/pillar/e4_v3_r1.bin",
+   "bytes": 82374,
+   "sha256": "62fc953e041ff8b160b3c703f9e26fa739db47041c10fc282bf76e23a9bbac85"
+  },
+  {
+   "file": "2026-11-12/pillar/e4_v3_r2.bin",
+   "bytes": 82354,
+   "sha256": "d6cc69fcfedda85645101f6f4332b4cefd7f0557a17ff94e3c50481c3a2470e6"
+  },
+  {
+   "file": "2026-11-12/pillar/e4_v3_r3.bin",
+   "bytes": 82341,
+   "sha256": "18b76de2f4a4a464bf4cfebba2190d96bb6561aa8f266486369a7057358f7058"
+  },
+  {
+   "file": "2026-11-12/pillar/e4_v3_r4.bin",
+   "bytes": 82322,
+   "sha256": "0b80462c6a0eb8c9463cca2a2cc838cc3933a508d5c2c823d623a09c4306ad0c"
+  },
+  {
+   "file": "2026-11-12/pillar/e4_v4_r0.bin",
+   "bytes": 131371,
+   "sha256": "ece8ed0536abf147df202dadb73e2207638f907f05c2e5eea398b772a0968d5a"
+  },
+  {
+   "file": "2026-11-12/pillar/e4_v4_r1.bin",
+   "bytes": 145398,
+   "sha256": "4f22fe019e4355207a44da708447b9a098028c3c80b873acc33ca76229a2ac4b"
+  },
+  {
+   "file": "2026-11-12/pillar/e4_v4_r2.bin",
+   "bytes": 157694,
+   "sha256": "4ef347d721527c01a9d531e4d73347786d2b2aceb38a38db0c6e8bf2447336df"
+  },
+  {
+   "file": "2026-11-12/pillar/e4_v4_r3.bin",
+   "bytes": 168212,
+   "sha256": "af7ec1582fd3bb54b32bc56e798eb22550c5a5de3e9686c9bc3c40a2d29aec29"
+  },
+  {
+   "file": "2026-11-12/pillar/e4_v4_r4.bin",
+   "bytes": 171508,
+   "sha256": "f92c8da19403ba0510187cf0c801f5e713e22585f008f923281b77bfaeca5b5b"
+  },
+  {
+   "file": "2026-11-12/pillar/e4_v5_r0.bin",
+   "bytes": 150980,
+   "sha256": "8c71af4b923ab72c5e23a2658a54b9402ed905b08fbd65a26485e32941f6e7e2"
+  },
+  {
+   "file": "2026-11-12/pillar/e4_v5_r1.bin",
+   "bytes": 164927,
+   "sha256": "492e97ecc1d358cd1f22f8d26192aef556bc3a744668aed8a5af41f805559d01"
+  },
+  {
+   "file": "2026-11-12/pillar/e4_v5_r2.bin",
+   "bytes": 177431,
+   "sha256": "5889cc46b98da563554c50daab96d2bd07b3578ecd848462bb06b941edbb5059"
+  },
+  {
+   "file": "2026-11-12/pillar/e4_v5_r3.bin",
+   "bytes": 191131,
+   "sha256": "fa8943f8751aa9c03c1120e157538a932138d1c82bbe3d972a473bef5c9079cd"
+  },
+  {
+   "file": "2026-11-12/pillar/e4_v5_r4.bin",
+   "bytes": 198992,
+   "sha256": "34cc7529bee285c5992ad2b305bf60778b1ac8695e428ace2f13fb9dfa1dd7a2"
+  },
+  {
+   "file": "2026-11-12/pillar/e4_v6_r0.bin",
+   "bytes": 159597,
+   "sha256": "9287ff49a621e51712d987ae3381eb03976bb2e71727deba8d2980165f2e13f1"
+  },
+  {
+   "file": "2026-11-12/pillar/e4_v6_r1.bin",
+   "bytes": 174372,
+   "sha256": "5ef9441758c001c4ee233f560fd1f295267eb9350255ca6b273a2ac9900e0f73"
+  },
+  {
+   "file": "2026-11-12/pillar/e4_v6_r2.bin",
+   "bytes": 186175,
+   "sha256": "79d2966649526a1cf3e68caff6f0714579535960017195e3292ae3714626c0a8"
+  },
+  {
+   "file": "2026-11-12/pillar/e4_v6_r3.bin",
+   "bytes": 201226,
+   "sha256": "d2520bbc25ea49f1c69174f1b15765ccd8adc38a658c1812563a7388bb9d4dc2"
+  },
+  {
+   "file": "2026-11-12/pillar/e4_v6_r4.bin",
+   "bytes": 212581,
+   "sha256": "65682066b65bfe2e6e4d82e736afea556f0a9f1406f250421a133346f55fc908"
+  },
+  {
+   "file": "2026-11-12/pillar/e4_v7_r0.bin",
+   "bytes": 165458,
+   "sha256": "df33553237d7f3819774437b12b09eaee802e55cd5f3089bbb69a57aff460241"
+  },
+  {
+   "file": "2026-11-12/pillar/e4_v7_r1.bin",
+   "bytes": 179697,
+   "sha256": "dc52a89a37f39f06732a9337f020ae30b48f9e91da308ea6ecb63e0c70a43010"
+  },
+  {
+   "file": "2026-11-12/pillar/e4_v7_r2.bin",
+   "bytes": 190333,
+   "sha256": "c3ad6bc4b5d911c7e164550a30079f1b725e85cf7fe334a2dd0ea8e6d167764a"
+  },
+  {
+   "file": "2026-11-12/pillar/e4_v7_r3.bin",
+   "bytes": 205781,
+   "sha256": "97cf8cf13cad938b645e356ac276a45098eebc1a1ae4a211d4f97f455e4000da"
+  },
+  {
+   "file": "2026-11-12/pillar/e4_v7_r4.bin",
+   "bytes": 219019,
+   "sha256": "022ee15752372cf41f080de037732d9d655ea3da6a1bd382c037f326b71539c7"
+  },
+  {
+   "file": "2026-11-12/pillar/e4_v8_r0.bin",
+   "bytes": 171383,
+   "sha256": "948a9dee3fb9a1bd704925a5e40c71cb42550502c4c6ffdeabc7049b3506f3d7"
+  },
+  {
+   "file": "2026-11-12/pillar/e4_v8_r1.bin",
+   "bytes": 185593,
+   "sha256": "5f661675666d4b30f921e182cea7cf33d15ed0c0780bd1a7483f52c0186c6fb6"
+  },
+  {
+   "file": "2026-11-12/pillar/e4_v8_r2.bin",
+   "bytes": 196645,
+   "sha256": "3b92caa31d2efac9f64f47b63372e4b9e1197bf32039df9592a268b004a4cd56"
+  },
+  {
+   "file": "2026-11-12/pillar/e4_v8_r3.bin",
+   "bytes": 211245,
+   "sha256": "c2de7229b200bec7432d9a47a28ef16777d58c29cc94b21d461100aea36203e2"
+  },
+  {
+   "file": "2026-11-12/pillar/e4_v8_r4.bin",
+   "bytes": 224947,
+   "sha256": "ced2777b17e66e3d9d29ce752f28cdebf00a6d53139ba395d9103488fd5e625c"
+  },
+  {
+   "file": "2026-11-12/pillar/e4_v9_r0.bin",
+   "bytes": 173334,
+   "sha256": "3c31bf3d9c2b84c3f950075a9474c832f8fbcda6b69f66246160061c637899cd"
+  },
+  {
+   "file": "2026-11-12/pillar/e4_v9_r1.bin",
+   "bytes": 186266,
+   "sha256": "4fc1bcff988cf57e8f0101b4a0b757bc349936544b5bb88726d2b750a5ee78ea"
+  },
+  {
+   "file": "2026-11-12/pillar/e4_v9_r2.bin",
+   "bytes": 196545,
+   "sha256": "cdef16ac9d8ec68b8f52d5ca9efb9a5550238922b38c5131b640830a77973810"
+  },
+  {
+   "file": "2026-11-12/pillar/e4_v9_r3.bin",
+   "bytes": 209881,
+   "sha256": "778407bc09c2e06f621785067da2a7c834d034c20bc0990d202adb5d07baf75d"
+  },
+  {
+   "file": "2026-11-12/pillar/e4_v9_r4.bin",
+   "bytes": 226268,
+   "sha256": "c065ebce87ba5a930a23ad4c333d13110ebbf45393b1157c79d8109af4a2e71f"
+  },
+  {
+   "file": "2026-11-12/pillar/e5_v0_r0.bin",
+   "bytes": 167028,
+   "sha256": "e8e893169da057554838a1e8ed9701736abfddedc90bb23e05678db8e31bb74a"
+  },
+  {
+   "file": "2026-11-12/pillar/e5_v0_r1.bin",
+   "bytes": 181183,
+   "sha256": "23366f3a5363887101861b4367614989f0fcc739c3f88bea1d25d6ddd530c478"
+  },
+  {
+   "file": "2026-11-12/pillar/e5_v0_r2.bin",
+   "bytes": 194938,
+   "sha256": "b1bf921649c341f1af9be7ce83ee016c3be430254de8e26e1cd40a08817283c7"
+  },
+  {
+   "file": "2026-11-12/pillar/e5_v0_r3.bin",
+   "bytes": 206242,
+   "sha256": "9d7f21fcd2aa954625a2dd40624efe99fe2296698904cf5038dfb970df54c8fa"
+  },
+  {
+   "file": "2026-11-12/pillar/e5_v0_r4.bin",
+   "bytes": 218941,
+   "sha256": "bb684e5b192a7a5565c5d635e0fac394da88c29c73d9295f0b5ae971d557c06d"
+  },
+  {
+   "file": "2026-11-12/pillar/e5_v10_r0.bin",
+   "bytes": 172428,
+   "sha256": "f0b03819a8b44653986dd14807d7c61420b9bc6eb818cfca03ddb3a298d57f01"
+  },
+  {
+   "file": "2026-11-12/pillar/e5_v10_r1.bin",
+   "bytes": 185338,
+   "sha256": "772ef50061e31348afa827b460ce85f05de7dbc807a814920574f7e9e0c2c88c"
+  },
+  {
+   "file": "2026-11-12/pillar/e5_v10_r2.bin",
+   "bytes": 197960,
+   "sha256": "8676a3d89976720f68145ae1e9cd0f04987a00a4c7cf67367bc8a7a0db918d0d"
+  },
+  {
+   "file": "2026-11-12/pillar/e5_v10_r3.bin",
+   "bytes": 214084,
+   "sha256": "6c0709d35338af1330062e5eca3d9f60c99def46e0abbe9ba39661c23b3ff1f5"
+  },
+  {
+   "file": "2026-11-12/pillar/e5_v10_r4.bin",
+   "bytes": 233382,
+   "sha256": "942c5f1c9201a856138545aeda3d83bc827991319919a475859624f469da14b8"
+  },
+  {
+   "file": "2026-11-12/pillar/e5_v11_r0.bin",
+   "bytes": 173447,
+   "sha256": "7b33da7ad413b682c35cb17d03034bf586aef8f02bcf7405a74a6ee940106ea0"
+  },
+  {
+   "file": "2026-11-12/pillar/e5_v11_r1.bin",
+   "bytes": 187290,
+   "sha256": "8c7c0df74d7e606204a8aa89aed9d4ec68b1b167e78619e25e4544a63c586700"
+  },
+  {
+   "file": "2026-11-12/pillar/e5_v11_r2.bin",
+   "bytes": 200349,
+   "sha256": "6f8e170bd9e80359709f5cea4896b51528597fbaffd53a72d152d88a42b36e62"
+  },
+  {
+   "file": "2026-11-12/pillar/e5_v11_r3.bin",
+   "bytes": 216785,
+   "sha256": "86f524912f0ed5ad604f9a672b4454243ef6bbb429a93668b56eec080f29d0db"
+  },
+  {
+   "file": "2026-11-12/pillar/e5_v11_r4.bin",
+   "bytes": 238194,
+   "sha256": "4d0573214b4ccc010c0078ea5d2a3f877bedce8b7e7a024144ee5104070a0c9b"
+  },
+  {
+   "file": "2026-11-12/pillar/e5_v12_r0.bin",
+   "bytes": 173797,
+   "sha256": "3426a8b50843892ba4046c5ef3eee2d567946811600c7daac529f8a29ef50504"
+  },
+  {
+   "file": "2026-11-12/pillar/e5_v12_r1.bin",
+   "bytes": 185211,
+   "sha256": "fcc8e9ac8419ffb2cfb57be9146fb28017a9b2f5b5b0a1f7182939039b537e9a"
+  },
+  {
+   "file": "2026-11-12/pillar/e5_v12_r2.bin",
+   "bytes": 191116,
+   "sha256": "ef82470e2fea9635dfb81a8a05bbfbc02eb3c1b5ca0d18c1eba698e1fc829865"
+  },
+  {
+   "file": "2026-11-12/pillar/e5_v12_r3.bin",
+   "bytes": 197606,
+   "sha256": "0f3b471e8dfb523dbe35c3e6f1ab48ede2b4169da81cf51a1f80ecc202c6de7a"
+  },
+  {
+   "file": "2026-11-12/pillar/e5_v12_r4.bin",
+   "bytes": 199280,
+   "sha256": "5dcfb8ee2aaeee4f7161b6e9eb39677943a3e16d994e80be19a9361c117666e3"
+  },
+  {
+   "file": "2026-11-12/pillar/e5_v1_r0.bin",
+   "bytes": 155098,
+   "sha256": "ae382bb159589e0f07f78cecb082ca04b5b0ce0d0ed47ac5b7a19a5eef48c455"
+  },
+  {
+   "file": "2026-11-12/pillar/e5_v1_r1.bin",
+   "bytes": 169636,
+   "sha256": "df1eb19c778b9a8739c95fcff547b89d087977090064fdd1571e37f43d858db2"
+  },
+  {
+   "file": "2026-11-12/pillar/e5_v1_r2.bin",
+   "bytes": 180696,
+   "sha256": "ee3f9404f2222912cb1cb4bc1f37d9bacf5bb63f629a7d1def296bece3da3415"
+  },
+  {
+   "file": "2026-11-12/pillar/e5_v1_r3.bin",
+   "bytes": 191387,
+   "sha256": "58681f828ba5966fb3d2783022c93d573813fc16e4f0812c5ad52a30c00e3a42"
+  },
+  {
+   "file": "2026-11-12/pillar/e5_v1_r4.bin",
+   "bytes": 201125,
+   "sha256": "84125b68942b74b0124e825057a6c47c76bfd32abe922c14edaebd6f6385062f"
+  },
+  {
+   "file": "2026-11-12/pillar/e5_v2_r0.bin",
+   "bytes": 141002,
+   "sha256": "566d0c467fd6825ca9252e40e7084aaa5753086d40474e3ee2b943ed186030e9"
+  },
+  {
+   "file": "2026-11-12/pillar/e5_v2_r1.bin",
+   "bytes": 156126,
+   "sha256": "6691e9e2e5f2f723a8a270cdf2696e0fcbbed4875eeac9a1e495398c8f74f420"
+  },
+  {
+   "file": "2026-11-12/pillar/e5_v2_r2.bin",
+   "bytes": 166181,
+   "sha256": "e6130c6b68f93cde1de9a89baa1d4f4462891ea9f761067d5b5829868cf45c2f"
+  },
+  {
+   "file": "2026-11-12/pillar/e5_v2_r3.bin",
+   "bytes": 174164,
+   "sha256": "ebbdf14df3db6bf339b1ca3a3d199a5712fac7e7e24521c07dadad5278112848"
+  },
+  {
+   "file": "2026-11-12/pillar/e5_v2_r4.bin",
+   "bytes": 181257,
+   "sha256": "66c7c3be74f9e7ce1b9a054f83c3f94f55b586acd6acaab1ade954bc8a274dc0"
+  },
+  {
+   "file": "2026-11-12/pillar/e5_v3_r0.bin",
+   "bytes": 80119,
+   "sha256": "23bf905a84c075b718bd75487a35f309b782a700d1b2513e2aa681abff06a277"
+  },
+  {
+   "file": "2026-11-12/pillar/e5_v3_r1.bin",
+   "bytes": 80103,
+   "sha256": "e5259055e39349abad44bd6808d869c08172a06482e9c3ca4f797bd00bc7faf0"
+  },
+  {
+   "file": "2026-11-12/pillar/e5_v3_r2.bin",
+   "bytes": 80085,
+   "sha256": "69252629812ce3294426a22c5642cedb5e431987de80ee965bad5ee9a0e7b34f"
+  },
+  {
+   "file": "2026-11-12/pillar/e5_v3_r3.bin",
+   "bytes": 80073,
+   "sha256": "521c5f0d39583c09793308768de2d07bbf5067afe76b91ac59dc1e4f4bd8c48f"
+  },
+  {
+   "file": "2026-11-12/pillar/e5_v3_r4.bin",
+   "bytes": 80056,
+   "sha256": "c61c959d7d87bd976362ec9e725754a8f4ebe4f0a193c6058f4ddd667c57e92c"
+  },
+  {
+   "file": "2026-11-12/pillar/e5_v4_r0.bin",
+   "bytes": 126564,
+   "sha256": "4ec4cd242866595dace83f6241222992ebdf35afc763fcfe4cd6161b8cecc982"
+  },
+  {
+   "file": "2026-11-12/pillar/e5_v4_r1.bin",
+   "bytes": 142097,
+   "sha256": "bcd6cec410b8ad51ae6c265b3dcc096877784c211ac7804c21b4d90904823367"
+  },
+  {
+   "file": "2026-11-12/pillar/e5_v4_r2.bin",
+   "bytes": 151980,
+   "sha256": "83f64924b780cea0079b2ddf8befd7bb022ccd3ac5c87e77b5fa48d857d7b91d"
+  },
+  {
+   "file": "2026-11-12/pillar/e5_v4_r3.bin",
+   "bytes": 162942,
+   "sha256": "5ddbf0d067c2ce95a7a58587c93833dbb88e777dceab4f31f628e749f82efb6b"
+  },
+  {
+   "file": "2026-11-12/pillar/e5_v4_r4.bin",
+   "bytes": 166610,
+   "sha256": "d773ee06eb109b4cf5057ec729b05922bef29887c8093c87c1c80b545e76b4f7"
+  },
+  {
+   "file": "2026-11-12/pillar/e5_v5_r0.bin",
+   "bytes": 146526,
+   "sha256": "a699ed046e0b95be2de3d8c970f8be5e80dde06d06e8453648a80683dbfb2f2d"
+  },
+  {
+   "file": "2026-11-12/pillar/e5_v5_r1.bin",
+   "bytes": 160589,
+   "sha256": "fce15fed2d765579572cf0e6a8566eb41dea5f50f5a1a50122744a12466f070f"
+  },
+  {
+   "file": "2026-11-12/pillar/e5_v5_r2.bin",
+   "bytes": 172979,
+   "sha256": "4ab28bdd8d6c21d5fc18d9511cc7be4b9f11f71eebc513a065c107eefa2b8cbb"
+  },
+  {
+   "file": "2026-11-12/pillar/e5_v5_r3.bin",
+   "bytes": 186858,
+   "sha256": "2a50375b7ea05c5feb443040fe27cdd85880411e44c30f9abf45caff7305884f"
+  },
+  {
+   "file": "2026-11-12/pillar/e5_v5_r4.bin",
+   "bytes": 194026,
+   "sha256": "60470a253eca10ef8eda79984d79123d9e7dd1d73b22e87a90568b38404fc993"
+  },
+  {
+   "file": "2026-11-12/pillar/e5_v6_r0.bin",
+   "bytes": 154997,
+   "sha256": "db1749c26b7fa9a26e92fb2a487440c4dce6791cd4108efe36548aa2bf01a22c"
+  },
+  {
+   "file": "2026-11-12/pillar/e5_v6_r1.bin",
+   "bytes": 169781,
+   "sha256": "89586388647d09a0ddfcc41263c4e5721ce37eb5093ff26aa7eedda8bafa9a8d"
+  },
+  {
+   "file": "2026-11-12/pillar/e5_v6_r2.bin",
+   "bytes": 183383,
+   "sha256": "19b1918e599c8afa92e178bb9b543f750890a165fb80e95f638827f4c28c7fe6"
+  },
+  {
+   "file": "2026-11-12/pillar/e5_v6_r3.bin",
+   "bytes": 199006,
+   "sha256": "6bffe4bb5223c4ccece6f5c4120e395e69913569e45c4c2330a43ff83f9c1f12"
+  },
+  {
+   "file": "2026-11-12/pillar/e5_v6_r4.bin",
+   "bytes": 208255,
+   "sha256": "56ec1fa73545fbb2a5bc7f447a3d9ab9676d35b4681dcd23175f3b2c1c1d5b45"
+  },
+  {
+   "file": "2026-11-12/pillar/e5_v7_r0.bin",
+   "bytes": 161660,
+   "sha256": "173553a040e2c390655d29541f68acf18599494d67937fdf509ef0407ae9899a"
+  },
+  {
+   "file": "2026-11-12/pillar/e5_v7_r1.bin",
+   "bytes": 176455,
+   "sha256": "1767c285e70372891f8b46b8d76f66848ec66300ce0323e25111575f623c9663"
+  },
+  {
+   "file": "2026-11-12/pillar/e5_v7_r2.bin",
+   "bytes": 189344,
+   "sha256": "8f5066e8c14bfd8c9ed9083d7044995a4e1b31d5eab27a8926f96a001717086d"
+  },
+  {
+   "file": "2026-11-12/pillar/e5_v7_r3.bin",
+   "bytes": 203920,
+   "sha256": "f29f7af58e4bb12775d37722e4013bb37c727b778e8206bdb00e8be2a7262286"
+  },
+  {
+   "file": "2026-11-12/pillar/e5_v7_r4.bin",
+   "bytes": 217243,
+   "sha256": "13fee0290bd4cee27eabac9fc636c8ef0185ef7b530f50d55a3c0fb5d62d78c6"
+  },
+  {
+   "file": "2026-11-12/pillar/e5_v8_r0.bin",
+   "bytes": 168907,
+   "sha256": "7d0a4a38953007991ddc7fb7c1d4d70aecd946af9693950a9f73d8b7d0a91677"
+  },
+  {
+   "file": "2026-11-12/pillar/e5_v8_r1.bin",
+   "bytes": 182580,
+   "sha256": "3ec0e3f77aa01dd809e025370e10002b9fd08c8b4f52a4019fc0e624a14b5ef8"
+  },
+  {
+   "file": "2026-11-12/pillar/e5_v8_r2.bin",
+   "bytes": 196673,
+   "sha256": "22badcf63cd106576e559baccab6efba685d4e04727d95832cf35f1b947238ce"
+  },
+  {
+   "file": "2026-11-12/pillar/e5_v8_r3.bin",
+   "bytes": 212325,
+   "sha256": "211cd431a909318250e8f9b90143a3d7cfb473481eca3a9f88db41d71758e48f"
+  },
+  {
+   "file": "2026-11-12/pillar/e5_v8_r4.bin",
+   "bytes": 225027,
+   "sha256": "8b7ab9bfedd9d41eb66151851ea451f2e5a2cbf3a400ab6466fc234f649a34d6"
+  },
+  {
+   "file": "2026-11-12/pillar/e5_v9_r0.bin",
+   "bytes": 171478,
+   "sha256": "d1317769a0b5fa5f49fd3358ca01324532265ad1c5442a4d6019416f85610fa1"
+  },
+  {
+   "file": "2026-11-12/pillar/e5_v9_r1.bin",
+   "bytes": 185794,
+   "sha256": "f7cfd8bad5c5dd961876260cd5540d1208e8bce71a5a98345a66212b36e73146"
+  },
+  {
+   "file": "2026-11-12/pillar/e5_v9_r2.bin",
+   "bytes": 197345,
+   "sha256": "e251829ea7b93917611157d6f9ff899ead20a29bbff4b21d43ff9b0a318f2aa4"
+  },
+  {
+   "file": "2026-11-12/pillar/e5_v9_r3.bin",
+   "bytes": 211799,
+   "sha256": "095c5392cb836a44cf33c1abe4a7798bc1f18c3e8733c46cb63768e4360524af"
+  },
+  {
+   "file": "2026-11-12/pillar/e5_v9_r4.bin",
+   "bytes": 226326,
+   "sha256": "9f92a0d31b5cb8c55a6f45aa67edb81419bd6c35cdb7712734609a996bcdfe59"
+  },
+  {
+   "file": "2026-11-12/pillar/e6_v0_r0.bin",
+   "bytes": 163986,
+   "sha256": "10e756297fd1963a768d41456b42458f2ecffc85fcdc9de7d5c2caf523683cb6"
+  },
+  {
+   "file": "2026-11-12/pillar/e6_v0_r1.bin",
+   "bytes": 177477,
+   "sha256": "e57af59461326d21ec5054bb167b6e76cc8ef8b987d7966ed5103d05a1598fee"
+  },
+  {
+   "file": "2026-11-12/pillar/e6_v0_r2.bin",
+   "bytes": 192073,
+   "sha256": "ecdb44fbc349d308645bc4821037575c867b0975a9a98a9a8f791d247e35ec14"
+  },
+  {
+   "file": "2026-11-12/pillar/e6_v0_r3.bin",
+   "bytes": 202003,
+   "sha256": "8fced3d428d4b0e37cac149e54bfe111be123996bcce1a8aa2a8c0a8590796e6"
+  },
+  {
+   "file": "2026-11-12/pillar/e6_v0_r4.bin",
+   "bytes": 215882,
+   "sha256": "7baa44bdd60cd2807c4cf19abc3ab37a74701bd9df1aa3f40e1890908d4516b4"
+  },
+  {
+   "file": "2026-11-12/pillar/e6_v10_r0.bin",
+   "bytes": 170582,
+   "sha256": "ae6f288c9a06feef6f629fe97178170c1b1c7c8c0e48ae619f76eb7e128ab238"
+  },
+  {
+   "file": "2026-11-12/pillar/e6_v10_r1.bin",
+   "bytes": 184725,
+   "sha256": "810b9b3f5513780c54984089a51223339299f8f3a53c23b00e2992f13fb275b4"
+  },
+  {
+   "file": "2026-11-12/pillar/e6_v10_r2.bin",
+   "bytes": 197304,
+   "sha256": "e5b985b1ef760c6837448f0e545149befb25d56e5fc39f4fc688947527d67d56"
+  },
+  {
+   "file": "2026-11-12/pillar/e6_v10_r3.bin",
+   "bytes": 213650,
+   "sha256": "74cef669e09eb07e80fdb13b543d74bb226f1795d02f31b1ec59c591ae3a5fc1"
+  },
+  {
+   "file": "2026-11-12/pillar/e6_v10_r4.bin",
+   "bytes": 232815,
+   "sha256": "1f0e83d566e57332484848e356e8fcafe429704d011e6a9a66b2d487f24e80cf"
+  },
+  {
+   "file": "2026-11-12/pillar/e6_v11_r0.bin",
+   "bytes": 172322,
+   "sha256": "f8ac0c22d4481fa2e5bf2d96a92c1581cd7cabd6efb041f191aab0e588d9f73e"
+  },
+  {
+   "file": "2026-11-12/pillar/e6_v11_r1.bin",
+   "bytes": 186574,
+   "sha256": "ff027d91a90e16867eb0b437ac28dccbe8f59e891498f1c7019d3d731ad41bc3"
+  },
+  {
+   "file": "2026-11-12/pillar/e6_v11_r2.bin",
+   "bytes": 199132,
+   "sha256": "271034c81a88df2dd33648096b68f523e8980831b6c473e20d9085bf15e1185c"
+  },
+  {
+   "file": "2026-11-12/pillar/e6_v11_r3.bin",
+   "bytes": 216209,
+   "sha256": "f6863ec11afd12cd348501a56816286944d88ddd3eba9f5b4a4a8d9571873ca8"
+  },
+  {
+   "file": "2026-11-12/pillar/e6_v11_r4.bin",
+   "bytes": 238088,
+   "sha256": "ed875ee7c161a7bd1f06c1379983f6741f20ebfb8270fd7911f8511b39babcf6"
+  },
+  {
+   "file": "2026-11-12/pillar/e6_v12_r0.bin",
+   "bytes": 172631,
+   "sha256": "403794278beeee213308ecf4e7df07258da89a3b89b4213fcec608be40455b89"
+  },
+  {
+   "file": "2026-11-12/pillar/e6_v12_r1.bin",
+   "bytes": 184000,
+   "sha256": "f280621bbcfe41c346d19ea7671c1050c84da719f2a31c903957f146bfe6aa38"
+  },
+  {
+   "file": "2026-11-12/pillar/e6_v12_r2.bin",
+   "bytes": 190627,
+   "sha256": "1a85faade1e48455ca48d0695b3f9f574b9ff0fa6dca663d38cee814b9dd2425"
+  },
+  {
+   "file": "2026-11-12/pillar/e6_v12_r3.bin",
+   "bytes": 196965,
+   "sha256": "6c6f8a58ba2ebb0ea5dd39e02c9be87c0223d38bed3988a670059bce0c92e8b3"
+  },
+  {
+   "file": "2026-11-12/pillar/e6_v12_r4.bin",
+   "bytes": 200532,
+   "sha256": "f09063219ff3d49600be496735244799bac4a2c21a76705e83e6edf95ef8c38a"
+  },
+  {
+   "file": "2026-11-12/pillar/e6_v1_r0.bin",
+   "bytes": 151598,
+   "sha256": "1a9d2d221a63efd90523b76bf4d8a67f1b6660db55c0c580e1cf43990dff2a39"
+  },
+  {
+   "file": "2026-11-12/pillar/e6_v1_r1.bin",
+   "bytes": 165309,
+   "sha256": "f1e1edb433c713e8bc24c52edba8e4d7421f3b8ff59064f1f5b9c194401daddc"
+  },
+  {
+   "file": "2026-11-12/pillar/e6_v1_r2.bin",
+   "bytes": 178535,
+   "sha256": "a25706c8094d5717259f5d1bc6afae0640140dac56dca1e32d85f06750b9703d"
+  },
+  {
+   "file": "2026-11-12/pillar/e6_v1_r3.bin",
+   "bytes": 187178,
+   "sha256": "7561f6d49fde5d4459d67fde408b49b0cf7e3bd07b6328918a6a1c1aca3b72b8"
+  },
+  {
+   "file": "2026-11-12/pillar/e6_v1_r4.bin",
+   "bytes": 198456,
+   "sha256": "d76c66b98ece7d9ff2907ca021b971f6b18f8aa8fee05c77033ca586e15c30e8"
+  },
+  {
+   "file": "2026-11-12/pillar/e6_v2_r0.bin",
+   "bytes": 136233,
+   "sha256": "d5bff2b67bd49a5b837ef7570097d16103f34fdf4e4196ae3131fdc0aba379ee"
+  },
+  {
+   "file": "2026-11-12/pillar/e6_v2_r1.bin",
+   "bytes": 151440,
+   "sha256": "5378b0a185c061922a5123b0bc15d68828fdbcab3206bf26a9be66ff35c8e7ff"
+  },
+  {
+   "file": "2026-11-12/pillar/e6_v2_r2.bin",
+   "bytes": 162476,
+   "sha256": "ef2e8d62dddf005e36ceb12819937c204f7ceb76429d284c155ac52beba91940"
+  },
+  {
+   "file": "2026-11-12/pillar/e6_v2_r3.bin",
+   "bytes": 169051,
+   "sha256": "ce0148bc9f393c34ed144cf1e3a675d6fdd1097064d8b5e18bad5da32284498f"
+  },
+  {
+   "file": "2026-11-12/pillar/e6_v2_r4.bin",
+   "bytes": 178139,
+   "sha256": "52343a485774757dd327a5264f553a58d922416510c7dbe221f781ec0a8f29f9"
+  },
+  {
+   "file": "2026-11-12/pillar/e6_v3_r0.bin",
+   "bytes": 78588,
+   "sha256": "25454c3142dc18e72ec09a367515f6da9dfb0897659dc0367df4a658ee8d70b8"
+  },
+  {
+   "file": "2026-11-12/pillar/e6_v3_r1.bin",
+   "bytes": 78567,
+   "sha256": "b1ffbdc5bc51d06cdd2109dcb89a52354da9d69e0bf1ab4f79d5ab2932fce403"
+  },
+  {
+   "file": "2026-11-12/pillar/e6_v3_r2.bin",
+   "bytes": 78556,
+   "sha256": "89daebf0b973131f4e5a2b28c14e3fffe3940de84f390e89ba0a16a85861c8e4"
+  },
+  {
+   "file": "2026-11-12/pillar/e6_v3_r3.bin",
+   "bytes": 78537,
+   "sha256": "4199a3bc729e8dc437fc08afaea2ca3903253a22ef4b2fb3e71f2899d9b94395"
+  },
+  {
+   "file": "2026-11-12/pillar/e6_v3_r4.bin",
+   "bytes": 78517,
+   "sha256": "932fe5ed46532e13054c3499f4df4483611631dffd6e7b9dd1fa605489d92304"
+  },
+  {
+   "file": "2026-11-12/pillar/e6_v4_r0.bin",
+   "bytes": 122937,
+   "sha256": "88bac4a2b38ee0098d00d0570404ae9f9c091fb139984779f7a5ccba1d271f44"
+  },
+  {
+   "file": "2026-11-12/pillar/e6_v4_r1.bin",
+   "bytes": 136791,
+   "sha256": "83364ddfe9fa4ef4b1191aec629d4a9c2e52d5394c17599be44583e5c89abe23"
+  },
+  {
+   "file": "2026-11-12/pillar/e6_v4_r2.bin",
+   "bytes": 149408,
+   "sha256": "83667602e32806a29d4c2803e0a27f933a2f2fc176727bef67e26ebd33773752"
+  },
+  {
+   "file": "2026-11-12/pillar/e6_v4_r3.bin",
+   "bytes": 154652,
+   "sha256": "b9568796296cf733bf9b95b3c702706255e56c2b394c44a47aa797380a9f8177"
+  },
+  {
+   "file": "2026-11-12/pillar/e6_v4_r4.bin",
+   "bytes": 161497,
+   "sha256": "10828ad464538184fecaa1d47faa1c51fd57b14dec7a48304d56bfb84620abc3"
+  },
+  {
+   "file": "2026-11-12/pillar/e6_v5_r0.bin",
+   "bytes": 142671,
+   "sha256": "f5ef6209cf624dea0d7dc88ea531a4fb8d9ccfaa437ba16f2ec733da8e02d900"
+  },
+  {
+   "file": "2026-11-12/pillar/e6_v5_r1.bin",
+   "bytes": 156878,
+   "sha256": "f6341769d19e96969a2d623e9951e939f2d8b5b36c9202d295e8bbc4af39e0e4"
+  },
+  {
+   "file": "2026-11-12/pillar/e6_v5_r2.bin",
+   "bytes": 170288,
+   "sha256": "75b71a9036792d845b786c90577398dbcad249e11969c3f9ee47b33043eeb8b5"
+  },
+  {
+   "file": "2026-11-12/pillar/e6_v5_r3.bin",
+   "bytes": 181968,
+   "sha256": "9edbdc2baf5f8e870693c2648392c383c47c60b2d59456b9e1f31515fd9ac528"
+  },
+  {
+   "file": "2026-11-12/pillar/e6_v5_r4.bin",
+   "bytes": 191099,
+   "sha256": "f00b319c227aaccb24edcfea2a20d85d9ee1c46ea515c3d2649b5a82877ca7a2"
+  },
+  {
+   "file": "2026-11-12/pillar/e6_v6_r0.bin",
+   "bytes": 150940,
+   "sha256": "a1b77dd4a503a471e12fd09bb5304154549d077b4358797c5bf683591bf7fc63"
+  },
+  {
+   "file": "2026-11-12/pillar/e6_v6_r1.bin",
+   "bytes": 166245,
+   "sha256": "41159f75510f0fe0a1e2c0499ec6fbd8b9a400218c514c0876e6a888578dbd7f"
+  },
+  {
+   "file": "2026-11-12/pillar/e6_v6_r2.bin",
+   "bytes": 179705,
+   "sha256": "fe87dde3f6d30f5aadee24b15901aced53f4568160f9d75cd6fa84e45067a4cf"
+  },
+  {
+   "file": "2026-11-12/pillar/e6_v6_r3.bin",
+   "bytes": 194855,
+   "sha256": "08da7488c7dc289aa43fe8e20c572a5d126bf89a8b4ef3ba191fb402937bfad3"
+  },
+  {
+   "file": "2026-11-12/pillar/e6_v6_r4.bin",
+   "bytes": 205518,
+   "sha256": "33f98df4853331c8b2bc779dc9760420424f2812f1db7c6db56ab563713af8ad"
+  },
+  {
+   "file": "2026-11-12/pillar/e6_v7_r0.bin",
+   "bytes": 157306,
+   "sha256": "9dfbe4c79ff648c0e99f5b83d4f83f8bd5fa1181a7199d0d8227489d9a79848d"
+  },
+  {
+   "file": "2026-11-12/pillar/e6_v7_r1.bin",
+   "bytes": 172842,
+   "sha256": "aee0067c6d3736fdf2a2a4567689eed8e2e059496c249a6bb3bde011ba19b61a"
+  },
+  {
+   "file": "2026-11-12/pillar/e6_v7_r2.bin",
+   "bytes": 187248,
+   "sha256": "5dbac162ed11b4d6daa2d62f7a119c53c585b2c68a51eb5c3a08f12d754c1426"
+  },
+  {
+   "file": "2026-11-12/pillar/e6_v7_r3.bin",
+   "bytes": 202566,
+   "sha256": "f3691373677c09cc02205653e1d84d86f642bbcd974c6bbaccd812eeff7743c7"
+  },
+  {
+   "file": "2026-11-12/pillar/e6_v7_r4.bin",
+   "bytes": 214744,
+   "sha256": "e3ea1cc8ceb229ded748dd8f1116cdb67418eeff457536b489b2fd2a478a8142"
+  },
+  {
+   "file": "2026-11-12/pillar/e6_v8_r0.bin",
+   "bytes": 165613,
+   "sha256": "86e233f77bbbcc8d239d96a40a279c82b06809c937c5d0c66841d836c5a51d84"
+  },
+  {
+   "file": "2026-11-12/pillar/e6_v8_r1.bin",
+   "bytes": 180012,
+   "sha256": "fd6a2e84f8e1836766225668510d78e449f1487bad91d2808b6875c3b88549a6"
+  },
+  {
+   "file": "2026-11-12/pillar/e6_v8_r2.bin",
+   "bytes": 194038,
+   "sha256": "40bd4e9437b601e2ed3758d42233333dc4f3eb687bcfdb70bf8fc9af52dbb6d6"
+  },
+  {
+   "file": "2026-11-12/pillar/e6_v8_r3.bin",
+   "bytes": 211542,
+   "sha256": "153009aecb194ef2fe724991e2174875dfe3e3a2b8bc725ad3c051e6be6e59f7"
+  },
+  {
+   "file": "2026-11-12/pillar/e6_v8_r4.bin",
+   "bytes": 224857,
+   "sha256": "46960cd54e2e3aef963e5bec7c9acbfccdd6c079c9e40b41804eedbaec4977a7"
+  },
+  {
+   "file": "2026-11-12/pillar/e6_v9_r0.bin",
+   "bytes": 169311,
+   "sha256": "2d1368964ff0d1a238cfb95577a880eab0a5f45bbb377664b57a735741253cd4"
+  },
+  {
+   "file": "2026-11-12/pillar/e6_v9_r1.bin",
+   "bytes": 184315,
+   "sha256": "1851b036fe95cdd528bef7d089c44b9e951fe9464c816e7cfdf780acc8fc221e"
+  },
+  {
+   "file": "2026-11-12/pillar/e6_v9_r2.bin",
+   "bytes": 197312,
+   "sha256": "fbaeca61ae51666907bc79bb0e163ab16a058e5f4073872d34ac92a2778c1752"
+  },
+  {
+   "file": "2026-11-12/pillar/e6_v9_r3.bin",
+   "bytes": 214169,
+   "sha256": "7b6d92c335180e598c1724088c516952c4b08a3ac4cc99a5620db3e7f4e7be50"
+  },
+  {
+   "file": "2026-11-12/pillar/e6_v9_r4.bin",
+   "bytes": 227962,
+   "sha256": "24fc0d9d7187ce923f0069fc7a4315e0c0f7f21ab362ff18fa8ce45a2d5d80fe"
+  },
+  {
+   "file": "2026-11-12/pillar/e7_v0_r0.bin",
+   "bytes": 162950,
+   "sha256": "85e8e195ed5c31b370fc08849cca826983b65c47887352b77a7ca15b8fd81b83"
+  },
+  {
+   "file": "2026-11-12/pillar/e7_v0_r1.bin",
+   "bytes": 175707,
+   "sha256": "461f361d1fe9289e01b45d0355595c7a2328f33de8f10e912a8f6ae6274b8665"
+  },
+  {
+   "file": "2026-11-12/pillar/e7_v0_r2.bin",
+   "bytes": 191408,
+   "sha256": "bfd7ed21804ec05bc2a7141edbe7cdc542e1e8286a912c2172076c4ea7c4fc1e"
+  },
+  {
+   "file": "2026-11-12/pillar/e7_v0_r3.bin",
+   "bytes": 200721,
+   "sha256": "0048e91683d489ed9c796ea3686dae22625bb4bc27d1e3771c33e33fb29a0032"
+  },
+  {
+   "file": "2026-11-12/pillar/e7_v0_r4.bin",
+   "bytes": 213992,
+   "sha256": "2358f37357e2835f3df369643b31d6b4fe67e19cda86a78d2dec73607003486c"
+  },
+  {
+   "file": "2026-11-12/pillar/e7_v10_r0.bin",
+   "bytes": 170830,
+   "sha256": "dbf7b23250f24daf9b46e095a3e6ace1c5752d509a1febaee76179e68ac12c62"
+  },
+  {
+   "file": "2026-11-12/pillar/e7_v10_r1.bin",
+   "bytes": 185228,
+   "sha256": "0eeb68e19101e358187cec72d872d4d44165a1b69f074a1d679b9b685d5ad13e"
+  },
+  {
+   "file": "2026-11-12/pillar/e7_v10_r2.bin",
+   "bytes": 196730,
+   "sha256": "c76f8fdc97c1640b57d3415b6617d79b8317b896e4ea1823d0f6ee319876231b"
+  },
+  {
+   "file": "2026-11-12/pillar/e7_v10_r3.bin",
+   "bytes": 213069,
+   "sha256": "cb1ac11c35f6ff7c6be9645eea7ae8830c79621356f9ae300501558f895f85f2"
+  },
+  {
+   "file": "2026-11-12/pillar/e7_v10_r4.bin",
+   "bytes": 233173,
+   "sha256": "5d04c312446708e324018fb17f48958770414e640fd92de0bc54dc1631ddabfc"
+  },
+  {
+   "file": "2026-11-12/pillar/e7_v11_r0.bin",
+   "bytes": 172246,
+   "sha256": "8e83f7f10e1ab0f2767a982869b7bc2d43f5240a70b46bc96d4e91476c922f90"
+  },
+  {
+   "file": "2026-11-12/pillar/e7_v11_r1.bin",
+   "bytes": 186776,
+   "sha256": "f585b24bd63ffabe201bc6ac320d77cf887e90cfa2dacbf53426e89ea3fd0b67"
+  },
+  {
+   "file": "2026-11-12/pillar/e7_v11_r2.bin",
+   "bytes": 199037,
+   "sha256": "441c0ddd2ddc228d4a3138b4162ae7677ece1420492cb94d544524ee538181c0"
+  },
+  {
+   "file": "2026-11-12/pillar/e7_v11_r3.bin",
+   "bytes": 216203,
+   "sha256": "ed789b0424e4798d8ce82db6114d4d9370b759710581cd4f362ae591d5bcd60c"
+  },
+  {
+   "file": "2026-11-12/pillar/e7_v11_r4.bin",
+   "bytes": 238884,
+   "sha256": "9218e871662caf4e056fad2262c0501fe2429720f783f0b60042e46caf49df1a"
+  },
+  {
+   "file": "2026-11-12/pillar/e7_v12_r0.bin",
+   "bytes": 172683,
+   "sha256": "8379d3da76fe9bf21dddcbb928f2827da065bc3dea2a51d444e10152c87aa869"
+  },
+  {
+   "file": "2026-11-12/pillar/e7_v12_r1.bin",
+   "bytes": 184183,
+   "sha256": "00b5c03db9baf6303c734c36aae15bb4644d4f1c984f1cb5d1c2969d698ee56a"
+  },
+  {
+   "file": "2026-11-12/pillar/e7_v12_r2.bin",
+   "bytes": 190588,
+   "sha256": "17d39eaf7d1ad6df60fb780658417f4b9990e64a3cb1295934673524b45d10f2"
+  },
+  {
+   "file": "2026-11-12/pillar/e7_v12_r3.bin",
+   "bytes": 196928,
+   "sha256": "45d3be5a74cd3f0697fae02f96cb13eccc01e2d353e4b8e75c6849c515cd6f8d"
+  },
+  {
+   "file": "2026-11-12/pillar/e7_v12_r4.bin",
+   "bytes": 201693,
+   "sha256": "a56f3b51fe61249a03fe525dae1a4621a0aa285315d8a58cefc4446341a718e8"
+  },
+  {
+   "file": "2026-11-12/pillar/e7_v1_r0.bin",
+   "bytes": 150771,
+   "sha256": "9891ea6a1b6418c4a309a22c9c7fdca9264f2af8f0c3ba9497b5487e2f5cdd93"
+  },
+  {
+   "file": "2026-11-12/pillar/e7_v1_r1.bin",
+   "bytes": 163579,
+   "sha256": "6495bde2ec0002a52078ff325f8e96414710fc646b7cff0ad88da710e0315cb6"
+  },
+  {
+   "file": "2026-11-12/pillar/e7_v1_r2.bin",
+   "bytes": 177049,
+   "sha256": "40f9e0863ace15f5c50a1ee1dade3b7987fb648a507e08c43a7686121333e19b"
+  },
+  {
+   "file": "2026-11-12/pillar/e7_v1_r3.bin",
+   "bytes": 184569,
+   "sha256": "425a380e29ffdd51845efbf95ee49160c420067f2ff9f315e02474edb913fd6f"
+  },
+  {
+   "file": "2026-11-12/pillar/e7_v1_r4.bin",
+   "bytes": 196766,
+   "sha256": "2c552c261d84f94eba4b089c24dcc388f13443f40a10ede5eb57ee86e9345911"
+  },
+  {
+   "file": "2026-11-12/pillar/e7_v2_r0.bin",
+   "bytes": 133168,
+   "sha256": "269ceb8958e0eab0bf90c694baaa8aa04fd81a5a1c0500091ec97c1fffd6a48a"
+  },
+  {
+   "file": "2026-11-12/pillar/e7_v2_r1.bin",
+   "bytes": 148681,
+   "sha256": "a22889cc33992561e34286ae109dfbd367a205398373373df72212c480f0de58"
+  },
+  {
+   "file": "2026-11-12/pillar/e7_v2_r2.bin",
+   "bytes": 160994,
+   "sha256": "22d0dfd4448e345802a79c2d912db3ef3555def53ad45defa84d5682e72d6fb7"
+  },
+  {
+   "file": "2026-11-12/pillar/e7_v2_r3.bin",
+   "bytes": 165027,
+   "sha256": "7ab0223bb84f2131406845b49eae5584afbcc21932c61b4ec89629e3ec4b42c9"
+  },
+  {
+   "file": "2026-11-12/pillar/e7_v2_r4.bin",
+   "bytes": 175534,
+   "sha256": "7adcbacab24abac50d7b45467585ebe37e8cf2d10733eb44eacee83cc5a99972"
+  },
+  {
+   "file": "2026-11-12/pillar/e7_v3_r0.bin",
+   "bytes": 77084,
+   "sha256": "2a51ab3d53478f896104df65fd469c861219aad71a35a9c6ab723fa7e746a738"
+  },
+  {
+   "file": "2026-11-12/pillar/e7_v3_r1.bin",
+   "bytes": 77063,
+   "sha256": "bd97facbe8b91ccb81d15d3286ce0b4c3ea795cfb25c3eab3a7945559d39a6e5"
+  },
+  {
+   "file": "2026-11-12/pillar/e7_v3_r2.bin",
+   "bytes": 77049,
+   "sha256": "e7db572d3b87ad7bb1cb5b49731535ce37efe251ad232924901ab51b761d0a48"
+  },
+  {
+   "file": "2026-11-12/pillar/e7_v3_r3.bin",
+   "bytes": 77030,
+   "sha256": "be098469dc5f1e0ae23d34110e340de179764a20f4d17edf25aa132f506364a9"
+  },
+  {
+   "file": "2026-11-12/pillar/e7_v3_r4.bin",
+   "bytes": 77014,
+   "sha256": "4164f4a7f77b392cf0aa1a8e15d5799c8f7b87ee67c8fedcbc0229364c2f6a9c"
+  },
+  {
+   "file": "2026-11-12/pillar/e7_v4_r0.bin",
+   "bytes": 118885,
+   "sha256": "5ceadd1b36371fef0d2bc2e00ff43bb1330df04b62c7696176080e470bb7899a"
+  },
+  {
+   "file": "2026-11-12/pillar/e7_v4_r1.bin",
+   "bytes": 134705,
+   "sha256": "ee7548497973d1260053db838f3597596c5d3cb7547d929bdb03af9835cc1256"
+  },
+  {
+   "file": "2026-11-12/pillar/e7_v4_r2.bin",
+   "bytes": 145698,
+   "sha256": "a35acc0ffec40e74b30056d4dd7c61a422c5ca817d9dd00deefcfff835473037"
+  },
+  {
+   "file": "2026-11-12/pillar/e7_v4_r3.bin",
+   "bytes": 146769,
+   "sha256": "c54b5589b00777bce604d2a7e5b659aa2ada2324c25b90e61642e70b9d92eefd"
+  },
+  {
+   "file": "2026-11-12/pillar/e7_v4_r4.bin",
+   "bytes": 158533,
+   "sha256": "1d5de2e66770f18c014bbe6be31e9dc67a97a4a8188dfa012871a6bbd01abd72"
+  },
+  {
+   "file": "2026-11-12/pillar/e7_v5_r0.bin",
+   "bytes": 139883,
+   "sha256": "c544b334ed27c81c9f7d500f6d9f5d353a3e8358c8c062c9abff8f63db9fc56c"
+  },
+  {
+   "file": "2026-11-12/pillar/e7_v5_r1.bin",
+   "bytes": 153644,
+   "sha256": "f7e1ab104ec702f3a7ca3047f27c2ed4ea960451bdbaacf97f6d47ffa37959bf"
+  },
+  {
+   "file": "2026-11-12/pillar/e7_v5_r2.bin",
+   "bytes": 168433,
+   "sha256": "7f87402669fd212c2650ea4b9136bc7f419ba8940026257013effba738f7c3d3"
+  },
+  {
+   "file": "2026-11-12/pillar/e7_v5_r3.bin",
+   "bytes": 176162,
+   "sha256": "4f8366e4dcc5289ab9a65cb63c4849dfe23cdc597f2ffbfa2fcb6429bf63e6f1"
+  },
+  {
+   "file": "2026-11-12/pillar/e7_v5_r4.bin",
+   "bytes": 188886,
+   "sha256": "350faaa9829673e76fd5b0d17c47b1ddeb1dec620d36b74966892cecc8b39496"
+  },
+  {
+   "file": "2026-11-12/pillar/e7_v6_r0.bin",
+   "bytes": 149284,
+   "sha256": "04a6d4c8ac76915ee460e6c95541ce5efd2064f84e30d94c40535194fc8eda49"
+  },
+  {
+   "file": "2026-11-12/pillar/e7_v6_r1.bin",
+   "bytes": 164257,
+   "sha256": "3c4bc8fc038bc97b44313da7c973f310bbe273df1b484f883759f3b12741e37f"
+  },
+  {
+   "file": "2026-11-12/pillar/e7_v6_r2.bin",
+   "bytes": 178786,
+   "sha256": "1066cfbc2ffb0103738d8c4b4adf72b95698dd01477f39505fa6e999b5f087fd"
+  },
+  {
+   "file": "2026-11-12/pillar/e7_v6_r3.bin",
+   "bytes": 191034,
+   "sha256": "2f8374f334e953aa0b92a080ed8361e4703b6de6d86c1ba2491711229e12159c"
+  },
+  {
+   "file": "2026-11-12/pillar/e7_v6_r4.bin",
+   "bytes": 204425,
+   "sha256": "324c94a3f95935c6f3b11698bb7cbe3010b19837c2e5bad4e7c9177a910dbc87"
+  },
+  {
+   "file": "2026-11-12/pillar/e7_v7_r0.bin",
+   "bytes": 155317,
+   "sha256": "bd417489bb8325eaafbe636277d83d3882e5971031382e273ce831643a02d714"
+  },
+  {
+   "file": "2026-11-12/pillar/e7_v7_r1.bin",
+   "bytes": 170854,
+   "sha256": "6d28040fcb71b63d80ece8f5a6bf01f370230aeac7ad4a5415835915232a89b2"
+  },
+  {
+   "file": "2026-11-12/pillar/e7_v7_r2.bin",
+   "bytes": 184972,
+   "sha256": "0d31f8a9247d71468ad7e1ff3d8399dd7bce7944660bb2ff63ec6f1b3d76e9d3"
+  },
+  {
+   "file": "2026-11-12/pillar/e7_v7_r3.bin",
+   "bytes": 200747,
+   "sha256": "cfb8f1e56307a099080e9b8e565910a11312b543d9bebcedecbd35126ed38cb9"
+  },
+  {
+   "file": "2026-11-12/pillar/e7_v7_r4.bin",
+   "bytes": 213921,
+   "sha256": "868ba4ad818ad3ede4e514cecbd62eb4c80773c4c4049a1e6f078c8798f7a391"
+  },
+  {
+   "file": "2026-11-12/pillar/e7_v8_r0.bin",
+   "bytes": 164037,
+   "sha256": "f8613a166b4ed1023610f4e344e2cebdbd3e705b60deefbcdb02f7576ac3f308"
+  },
+  {
+   "file": "2026-11-12/pillar/e7_v8_r1.bin",
+   "bytes": 178780,
+   "sha256": "d477f052e6c9a8ed9ae115eeccd1c1dddc16fad22f6bce16d63a334ca9ce33c7"
+  },
+  {
+   "file": "2026-11-12/pillar/e7_v8_r2.bin",
+   "bytes": 192770,
+   "sha256": "68785efd84922c6ede8862571294913526b241a0cfefcf74523540c9583987a9"
+  },
+  {
+   "file": "2026-11-12/pillar/e7_v8_r3.bin",
+   "bytes": 209850,
+   "sha256": "b0fb9c973846cd890a448b0876e93d3a33614c8a3226492b006bcd2de41163b6"
+  },
+  {
+   "file": "2026-11-12/pillar/e7_v8_r4.bin",
+   "bytes": 224579,
+   "sha256": "881a2e5fc3cee3341a0c3ed98dc39481030577c7522532df76afda52c885828e"
+  },
+  {
+   "file": "2026-11-12/pillar/e7_v9_r0.bin",
+   "bytes": 168520,
+   "sha256": "641163738b9966e71e65631b69d7f62d31cb605b731a0a3e882441145cab81da"
+  },
+  {
+   "file": "2026-11-12/pillar/e7_v9_r1.bin",
+   "bytes": 183517,
+   "sha256": "728a67e86aa02ee62e57e26e638ec9164cdce64dc00764e7fd97f42f5805e089"
+  },
+  {
+   "file": "2026-11-12/pillar/e7_v9_r2.bin",
+   "bytes": 197916,
+   "sha256": "befb07d415da447384aaafa30804812258ffb8207dbec3ef1ad68ce0f52269e4"
+  },
+  {
+   "file": "2026-11-12/pillar/e7_v9_r3.bin",
+   "bytes": 214937,
+   "sha256": "234c5776d84951addd23a1b218a82b30ccdc29762c957c584129e038d1deaf31"
+  },
+  {
+   "file": "2026-11-12/pillar/e7_v9_r4.bin",
+   "bytes": 229775,
+   "sha256": "01655da027f7c8bbda7bea792a97f07f840da664f8049954ef33d254709721a3"
+  },
+  {
+   "file": "2026-11-12/pillar/e8_v0_r0.bin",
+   "bytes": 162802,
+   "sha256": "22087b06a1808722acc7cac0af1b4ffeabe110459ddd1e567606f264eae9d44e"
+  },
+  {
+   "file": "2026-11-12/pillar/e8_v0_r1.bin",
+   "bytes": 174819,
+   "sha256": "41e7489163ad02ab37ada143363ecb90368cac48d727f7835471cb1072c0a5c8"
+  },
+  {
+   "file": "2026-11-12/pillar/e8_v0_r2.bin",
+   "bytes": 189648,
+   "sha256": "2bede008d0af8f9a72b101f24d4019af1083e0d872813d8d1108cfbf41907e9b"
+  },
+  {
+   "file": "2026-11-12/pillar/e8_v0_r3.bin",
+   "bytes": 199247,
+   "sha256": "343c2401ec5fa3efcc7dbcf178dbd38e8849f44e8772567956e5ab9bf3b94247"
+  },
+  {
+   "file": "2026-11-12/pillar/e8_v0_r4.bin",
+   "bytes": 212406,
+   "sha256": "1e15fff34a31d8d39627526f32d5d6014e1c09dbf73f6966739a2aeb717fc240"
+  },
+  {
+   "file": "2026-11-12/pillar/e8_v10_r0.bin",
+   "bytes": 170923,
+   "sha256": "34098122453ca1aaf1be4a06598b25054d05d07f945c68bc652fe5d3ac947914"
+  },
+  {
+   "file": "2026-11-12/pillar/e8_v10_r1.bin",
+   "bytes": 185587,
+   "sha256": "7676f00e736b49b55d8140daa3bc90968b949101956ac12d79331b173d285b27"
+  },
+  {
+   "file": "2026-11-12/pillar/e8_v10_r2.bin",
+   "bytes": 198387,
+   "sha256": "2e611288b25e5638e3996cbd043ac65e0a39e69a5819892d0b221aa480f9174c"
+  },
+  {
+   "file": "2026-11-12/pillar/e8_v10_r3.bin",
+   "bytes": 213675,
+   "sha256": "bf743d54228745b2d30bda4b06c86af8dbeec05eaa1c9ed7ee2b9a5c7c8a8cc1"
+  },
+  {
+   "file": "2026-11-12/pillar/e8_v10_r4.bin",
+   "bytes": 233114,
+   "sha256": "a24036e4d8da62546f5d439245c8e28bd699952303af2dc2b092cdf4fbefce90"
+  },
+  {
+   "file": "2026-11-12/pillar/e8_v11_r0.bin",
+   "bytes": 171535,
+   "sha256": "6ca91ac841c3818cfd247c348d1a4c1829d36307571fed68e284492130ca9888"
+  },
+  {
+   "file": "2026-11-12/pillar/e8_v11_r1.bin",
+   "bytes": 186194,
+   "sha256": "c3ffb11366c07cb271b639eb5a984564515754b071de5746a9c84e34804a8b6f"
+  },
+  {
+   "file": "2026-11-12/pillar/e8_v11_r2.bin",
+   "bytes": 199153,
+   "sha256": "6cce5e06acfe984a9f1882618e2bf5c243ac61f10e90f9335de06f1efb2d2815"
+  },
+  {
+   "file": "2026-11-12/pillar/e8_v11_r3.bin",
+   "bytes": 215769,
+   "sha256": "41f82f1c14d1fe50531b4983a7d2d48b708ad404573b397c8255118d44d367a1"
+  },
+  {
+   "file": "2026-11-12/pillar/e8_v11_r4.bin",
+   "bytes": 239061,
+   "sha256": "92a826e3af1c7a4823f1558f902a23bbe020b3c91e1882639cc9449c223e9537"
+  },
+  {
+   "file": "2026-11-12/pillar/e8_v12_r0.bin",
+   "bytes": 172150,
+   "sha256": "5e6c19eae6184b7255989cb0b7acb12164c27adf90fc6e7af8ee7ed2e5d456a1"
+  },
+  {
+   "file": "2026-11-12/pillar/e8_v12_r1.bin",
+   "bytes": 183974,
+   "sha256": "fbff3d0d8a516bbfb6b32a32002ec7e036b532c36ba1926b8d6aa9a66b488b6a"
+  },
+  {
+   "file": "2026-11-12/pillar/e8_v12_r2.bin",
+   "bytes": 190788,
+   "sha256": "ff10b1c2b86f2b27d8410c571a3d812975f5d75fa39dbef08656beb9b4dfc0a6"
+  },
+  {
+   "file": "2026-11-12/pillar/e8_v12_r3.bin",
+   "bytes": 196639,
+   "sha256": "594568e93a04cc3ef5982d8ad9288a790faae9130c4007bf42bf80d6a2d87000"
+  },
+  {
+   "file": "2026-11-12/pillar/e8_v12_r4.bin",
+   "bytes": 202535,
+   "sha256": "a011f36727150e405f23296f66020d3475d6ff524e6219e94991ec4e4799cc61"
+  },
+  {
+   "file": "2026-11-12/pillar/e8_v1_r0.bin",
+   "bytes": 149059,
+   "sha256": "0531e483fe885c32864fbce5fe66e85122eb9cc4b8ab54d2a48322f12f71320b"
+  },
+  {
+   "file": "2026-11-12/pillar/e8_v1_r1.bin",
+   "bytes": 161661,
+   "sha256": "d4013f55f3ad6e515d6631214188f5860469041abe64eacf3fe619a82f823ba6"
+  },
+  {
+   "file": "2026-11-12/pillar/e8_v1_r2.bin",
+   "bytes": 175104,
+   "sha256": "c231e8f68a40c499c8b1d1dbee6f47313f86420bcb7a3720092f16c2782613d5"
+  },
+  {
+   "file": "2026-11-12/pillar/e8_v1_r3.bin",
+   "bytes": 182329,
+   "sha256": "d3767df88b5f0f1ae18401cb66338bbd53247bfd8d91a05fb7e0aeb8226376c0"
+  },
+  {
+   "file": "2026-11-12/pillar/e8_v1_r4.bin",
+   "bytes": 194160,
+   "sha256": "0041a047345ea05d152522f1dd8059e0f7c08c43d1727381b25421ac2511971e"
+  },
+  {
+   "file": "2026-11-12/pillar/e8_v2_r0.bin",
+   "bytes": 132601,
+   "sha256": "d529e4b89f789b78d48ec2441df7acefa10a478544dc54af301235723af3dae8"
+  },
+  {
+   "file": "2026-11-12/pillar/e8_v2_r1.bin",
+   "bytes": 146498,
+   "sha256": "79a5ecb4c47e07bc23f53f9ef5029b6de2ef709f2fad4eaf94cba8c510f5eaa2"
+  },
+  {
+   "file": "2026-11-12/pillar/e8_v2_r2.bin",
+   "bytes": 159093,
+   "sha256": "187d1bf6fa01b309a45d07b044bf9a0e7a24ab86b4d2a661aa343a2ca307afc1"
+  },
+  {
+   "file": "2026-11-12/pillar/e8_v2_r3.bin",
+   "bytes": 162858,
+   "sha256": "0ff95bb5f8af831080d0a9adac89cb411747677aba340a4cd8db71791ff81003"
+  },
+  {
+   "file": "2026-11-12/pillar/e8_v2_r4.bin",
+   "bytes": 172939,
+   "sha256": "4ae4c545dd16f3979876cd09fa544522096afab433fc4cba4d61c62609ac3dee"
+  },
+  {
+   "file": "2026-11-12/pillar/e8_v3_r0.bin",
+   "bytes": 75977,
+   "sha256": "96f8346a35b8f027a18cccb17caa8de77a3205876f3e6df9483293483c323b16"
+  },
+  {
+   "file": "2026-11-12/pillar/e8_v3_r1.bin",
+   "bytes": 75968,
+   "sha256": "a8f69a06519719bf5882e7eea25164d02cbc65a8ff2cd9216c820ad345873063"
+  },
+  {
+   "file": "2026-11-12/pillar/e8_v3_r2.bin",
+   "bytes": 75951,
+   "sha256": "489922db4ef098df860a53c48bfd22b2eebde1a8003afa41b4f33ae019b33c6f"
+  },
+  {
+   "file": "2026-11-12/pillar/e8_v3_r3.bin",
+   "bytes": 75931,
+   "sha256": "0b89ea94281101a9035c463df55d4f49bcea36067b2311d0a14e3f7d54774c3e"
+  },
+  {
+   "file": "2026-11-12/pillar/e8_v3_r4.bin",
+   "bytes": 75908,
+   "sha256": "9d4e65b2e71da90a869810f4866e1aaba282ddfe8b51138179a898290b7ea1e5"
+  },
+  {
+   "file": "2026-11-12/pillar/e8_v4_r0.bin",
+   "bytes": 113157,
+   "sha256": "4f1791ac5d4e2995506787098623d913c75bd96dad70c0f32560f7f4321790cc"
+  },
+  {
+   "file": "2026-11-12/pillar/e8_v4_r1.bin",
+   "bytes": 130849,
+   "sha256": "62a35c53f2724a325ed800327444d09dce0d13045a8a197486cc0a50cce2056f"
+  },
+  {
+   "file": "2026-11-12/pillar/e8_v4_r2.bin",
+   "bytes": 142352,
+   "sha256": "4c9d3544ca8911138b380d63f22147718de1cd4687353847a5b415a7afb4c901"
+  },
+  {
+   "file": "2026-11-12/pillar/e8_v4_r3.bin",
+   "bytes": 142223,
+   "sha256": "68e548a34be9beb1f1287a559e7e047dd6dc699b3cf54315a563273c9c7deab3"
+  },
+  {
+   "file": "2026-11-12/pillar/e8_v4_r4.bin",
+   "bytes": 152774,
+   "sha256": "0ea332bdf1058ed208b796be752aea8275def7f65de4233a456185bae42210de"
+  },
+  {
+   "file": "2026-11-12/pillar/e8_v5_r0.bin",
+   "bytes": 137064,
+   "sha256": "74395c289ac9f9d628068b621ce04d393f78857c4a160b6e8bcaabfceb555157"
+  },
+  {
+   "file": "2026-11-12/pillar/e8_v5_r1.bin",
+   "bytes": 151683,
+   "sha256": "732ae59d07c0b094af88fe3fe443dad7417327bbf0d0770fa9297795b26a9bab"
+  },
+  {
+   "file": "2026-11-12/pillar/e8_v5_r2.bin",
+   "bytes": 165440,
+   "sha256": "a0de39e05e2cf8ca75325e3a589be47b7ed3a0854c1fe2097faff9ea7bc070da"
+  },
+  {
+   "file": "2026-11-12/pillar/e8_v5_r3.bin",
+   "bytes": 170651,
+   "sha256": "fa449ffae40ef52479d899b3ed1a5165080936e4554832b38ef107b77de4c9c4"
+  },
+  {
+   "file": "2026-11-12/pillar/e8_v5_r4.bin",
+   "bytes": 185340,
+   "sha256": "c221d4c9ee2ddd4f334dab9ad7f5872b7c3b9e40685a61657711d1da923a9554"
+  },
+  {
+   "file": "2026-11-12/pillar/e8_v6_r0.bin",
+   "bytes": 147072,
+   "sha256": "5414c7497fb2b53dcd5febcc1f1ace8bf38db746ea2228ef7f21c68c4bc99653"
+  },
+  {
+   "file": "2026-11-12/pillar/e8_v6_r1.bin",
+   "bytes": 161550,
+   "sha256": "97dcc231a4ba5a6e8c9dc853142c3e3a449096240f917f0f08023bd9daa4ddea"
+  },
+  {
+   "file": "2026-11-12/pillar/e8_v6_r2.bin",
+   "bytes": 176816,
+   "sha256": "6b5bf45e5a3039268388ee37ba24c992a59ec5292443e666d6e7a9dec48131f6"
+  },
+  {
+   "file": "2026-11-12/pillar/e8_v6_r3.bin",
+   "bytes": 186648,
+   "sha256": "d013492eb0ccaa70942f9e9da5517ebe400b600f489d671ab058d829eea6c3c2"
+  },
+  {
+   "file": "2026-11-12/pillar/e8_v6_r4.bin",
+   "bytes": 201703,
+   "sha256": "9cd81faefc1d9673011aa8f57cd0fa5ae5b1e823634391262951e9b46d16c632"
+  },
+  {
+   "file": "2026-11-12/pillar/e8_v7_r0.bin",
+   "bytes": 153233,
+   "sha256": "b545e27dace6aeb831071e0a7aedd2d99c455dabef969ad8bd9c95a65cf232d7"
+  },
+  {
+   "file": "2026-11-12/pillar/e8_v7_r1.bin",
+   "bytes": 169086,
+   "sha256": "cb746e70d75f41ecd2e66f568409f36ae240a167da6ae1191a7d6d7cf941fbb6"
+  },
+  {
+   "file": "2026-11-12/pillar/e8_v7_r2.bin",
+   "bytes": 183980,
+   "sha256": "883b47ff62ffee64f36bfe48dd8eb8e728a44d40fe56c5c16d1dbd37aa4f443e"
+  },
+  {
+   "file": "2026-11-12/pillar/e8_v7_r3.bin",
+   "bytes": 196703,
+   "sha256": "e196887a5146026a2f9fc152d064d64dcb03642ff584ccadcabc798ce04a8126"
+  },
+  {
+   "file": "2026-11-12/pillar/e8_v7_r4.bin",
+   "bytes": 212560,
+   "sha256": "09af61ec0e79dd86cb1f473a190471c7dc3ff3b30b166146cb5d948a7857554a"
+  },
+  {
+   "file": "2026-11-12/pillar/e8_v8_r0.bin",
+   "bytes": 162066,
+   "sha256": "980c645bcb8abaf2454c248e5a4317b657dd8bb97976749158c3479c6a32b2af"
+  },
+  {
+   "file": "2026-11-12/pillar/e8_v8_r1.bin",
+   "bytes": 177133,
+   "sha256": "94688bd98c39ff41471de8506ab9557417a617e0c9fe175abad16d8651668614"
+  },
+  {
+   "file": "2026-11-12/pillar/e8_v8_r2.bin",
+   "bytes": 191914,
+   "sha256": "4e5222a3d492321c5ced15e996d0304fcda6a9a618fed5209e18e28bb8432bf3"
+  },
+  {
+   "file": "2026-11-12/pillar/e8_v8_r3.bin",
+   "bytes": 209074,
+   "sha256": "e1e7bbafdb06fbe8a95fb4e5dc9e569a653b23e05a6744f042262bddbddea694"
+  },
+  {
+   "file": "2026-11-12/pillar/e8_v8_r4.bin",
+   "bytes": 224244,
+   "sha256": "b2e1a0fab7f5b1f2d39818bb2dcc27e51072bc2fde2f2199db6ceab954bd609a"
+  },
+  {
+   "file": "2026-11-12/pillar/e8_v9_r0.bin",
+   "bytes": 167242,
+   "sha256": "e737de7095d7bc14549645316cc775bd21c1526dfdfbb9bdcb3dd6b6119c0b3d"
+  },
+  {
+   "file": "2026-11-12/pillar/e8_v9_r1.bin",
+   "bytes": 181582,
+   "sha256": "e35a0b221608fdb8b9b8917064cc2443dfaae5aaa26a98761dc8050b3e6983ad"
+  },
+  {
+   "file": "2026-11-12/pillar/e8_v9_r2.bin",
+   "bytes": 196781,
+   "sha256": "3df217935e5207c4a9d5a3e83b7ae84e8854f827f977a65a2104af9184245b1d"
+  },
+  {
+   "file": "2026-11-12/pillar/e8_v9_r3.bin",
+   "bytes": 214210,
+   "sha256": "28d161f98dec03366767c23cbd692ecf5ea6ce4d0b8dd76ef83ec37d8e355dad"
+  },
+  {
+   "file": "2026-11-12/pillar/e8_v9_r4.bin",
+   "bytes": 230490,
+   "sha256": "83b4fa58b5f46a328652a51e7cc1e5a6fbb0bef26ca8061faa6a2270a5f5e3e2"
+  },
+  {
+   "file": "2026-11-12/pillar/gz.bin",
+   "bytes": 221184,
+   "sha256": "56726d5379e6c5d0f1f91123befaa7ba82fa9e69f40c7bae2cd6c00451dff2c7"
+  },
+  {
+   "file": "__pycache__/flat.cpython-313.pyc",
+   "bytes": 9103,
+   "sha256": "25820117591edcf5a78d1ee99b14227719ea9d1c4de50d9f53e4d933b746944a"
+  },
+  {
+   "file": "__pycache__/pillar.cpython-313.pyc",
+   "bytes": 5574,
+   "sha256": "394b7a26e512a9de16bdc0304df7b4ac7ddb8a40d5fe9e0f426ab694cc3fba5e"
+  },
+  {
+   "file": "check_pillar.py",
+   "bytes": 1006,
+   "sha256": "a15499167bca0895012079e5b927ad68aea9d85450f926ac5168dfc83b5690f4"
+  },
+  {
+   "file": "flat.py",
+   "bytes": 5585,
+   "sha256": "a34a7a54226d2a6e575d55930d6285d545b492cf65184a0598e5859a762b0675"
+  },
+  {
+   "file": "pillar.py",
+   "bytes": 3189,
+   "sha256": "68c907c34ec0d5d616b4103641486bd8435423879f16beaea73aef1fdb66973b"
+  }
+ ]
+}

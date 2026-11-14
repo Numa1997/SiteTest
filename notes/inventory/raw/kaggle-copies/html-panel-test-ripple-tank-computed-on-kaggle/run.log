@@ -1,0 +1,36 @@
+[{"stream_name":"stderr","time":10.547225942,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":10.54732309,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":10.547328489,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":10.547331508,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stderr","time":11.406090206,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":11.406131538,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":11.40613814,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":11.406142584,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stdout","time":25.184906277,"data":"11 of 121 runs done; last d = 20, lambda = 20: 1412 steps on 320 x 200 cells in 1.0 s\n"}
+,{"stream_name":"stdout","time":37.403250101,"data":"22 of 121 runs done; last d = 25, lambda = 20: 1412 steps on 320 x 200 cells in 1.1 s\n"}
+,{"stream_name":"stdout","time":49.866536209,"data":"33 of 121 runs done; last d = 30, lambda = 20: 1412 steps on 320 x 200 cells in 1.1 s\n"}
+,{"stream_name":"stdout","time":62.344022621,"data":"44 of 121 runs done; last d = 35, lambda = 20: 1412 steps on 320 x 200 cells in 1.2 s\n"}
+,{"stream_name":"stdout","time":74.486608242,"data":"55 of 121 runs done; last d = 40, lambda = 20: 1412 steps on 320 x 200 cells in 1.1 s\n"}
+,{"stream_name":"stdout","time":87.002600113,"data":"66 of 121 runs done; last d = 45, lambda = 20: 1412 steps on 320 x 200 cells in 1.1 s\n"}
+,{"stream_name":"stdout","time":100.096979101,"data":"77 of 121 runs done; last d = 50, lambda = 20: 1412 steps on 320 x 200 cells in 1.2 s\n"}
+,{"stream_name":"stdout","time":112.542510933,"data":"88 of 121 runs done; last d = 55, lambda = 20: 1412 steps on 320 x 200 cells in 1.2 s\n"}
+,{"stream_name":"stdout","time":125.505003003,"data":"99 of 121 runs done; last d = 60, lambda = 20: 1412 steps on 320 x 200 cells in 1.2 s\n"}
+,{"stream_name":"stdout","time":137.406751575,"data":"110 of 121 runs done; last d = 65, lambda = 20: 1412 steps on 320 x 200 cells in 1.1 s\n"}
+,{"stream_name":"stdout","time":149.494952318,"data":"121 of 121 runs done; last d = 70, lambda = 20: 1412 steps on 320 x 200 cells in 1.1 s\n"}
+,{"stream_name":"stdout","time":149.497283324,"data":"stored frames: 15.5 MB\n"}
+,{"stream_name":"stdout","time":149.497336321,"data":"all 121 runs in 136.5 s; frames stored at 160 x 100\n"}
+,{"stream_name":"stdout","time":150.073163561,"data":"panel written to /kaggle/working/ripple_tank.html (15.8 MB)\n"}
+,{"stream_name":"stderr","time":150.074420481,"data":"/usr/local/lib/python3.13/dist-packages/IPython/core/display.py:724: UserWarning: Consider using IPython.display.IFrame instead\n"}
+,{"stream_name":"stderr","time":150.074465556,"data":"  warnings.warn(\"Consider using IPython.display.IFrame instead\")\n"}
+,{"stream_name":"stderr","time":150.074473823,"data":"\n"}
+,{"stream_name":"stderr","time":150.074479465,"data":"/usr/local/lib/python3.13/dist-packages/IPython/core/display.py:724: UserWarning: Consider using IPython.display.IFrame instead\n"}
+,{"stream_name":"stderr","time":150.074485358,"data":"  warnings.warn(\"Consider using IPython.display.IFrame instead\")\n"}
+,{"stream_name":"stderr","time":154.730953348,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":154.731024897,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":154.970965208,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":154.970998896,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":155.962846412,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to notebook\n"}
+,{"stream_name":"stderr","time":156.389595134,"data":"[NbConvertApp] Writing 15874963 bytes to __notebook__.ipynb\n"}
+,{"stream_name":"stderr","time":159.932527766,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to html\n"}
+,{"stream_name":"stderr","time":161.27365975,"data":"[NbConvertApp] Writing 16175027 bytes to __results__.html\n"}
+]

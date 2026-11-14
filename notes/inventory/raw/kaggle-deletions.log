@@ -1,0 +1,12 @@
+2026-11-14T13:32:39Z delete numakoudsie/notebookddfec594b7 -> {} HTTP 200
+2026-11-14T13:32:39Z delete numakoudsie/html-panel-test-ripple-tank-computed-on-kaggle -> {} HTTP 200
+2026-11-14T13:32:39Z delete numakoudsie/phyein-sim-native-install-test -> {} HTTP 200
+2026-11-14T13:32:40Z delete numakoudsie/phyein-sim-run-case -> {} HTTP 200
+2026-11-14T13:32:40Z delete numakoudsie/phyein-sim-run-case-fem -> {} HTTP 200
+2026-11-14T13:32:41Z delete numakoudsie/phyein-sim-jax-swingup-gpu -> {} HTTP 200
+2026-11-14T13:32:41Z delete numakoudsie/schrodinger-sphere-gpu-smoke-test -> {} HTTP 200
+2026-11-14T13:32:41Z delete numakoudsie/schrodinger-shapes-3d-v2-a -> {} HTTP 200
+2026-11-14T13:32:42Z delete numakoudsie/schrodinger-shapes-3d-v2-b -> {} HTTP 200
+2026-11-14T13:32:42Z delete numakoudsie/schrodinger-shapes-3d-v2-c -> {} HTTP 200
+2026-11-14T13:32:43Z delete numakoudsie/schrodinger-shapes-3d-v2-d -> {} HTTP 200
+2026-11-14T13:40:12Z delete numakoudsie/schrodinger-sphere-3d-generation -> {} HTTP 200 (data and code in dataset numakoudsie/fig14-schrodinger-sphere)

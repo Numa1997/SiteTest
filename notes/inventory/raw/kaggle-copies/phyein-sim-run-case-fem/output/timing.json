@@ -1,0 +1,100 @@
+{
+ "tool": "fem",
+ "case": "beam",
+ "np": 4,
+ "cores": 4,
+ "install_s": 131.0,
+ "runs": [
+  {
+   "set": "",
+   "exit": 0,
+   "wall_s": 19.4,
+   "result": {
+    "parameters": {
+     "L": 0.5,
+     "b": 0.02,
+     "h": 0.02,
+     "E": 210000000000.0,
+     "nu": 0.3,
+     "rho": 7850.0,
+     "nx": 40,
+     "ny": 4,
+     "nz": 4,
+     "nmodes": 12,
+     "tol": 0.02,
+     "ccx": 1
+    },
+    "modes": [
+     {
+      "kind": "bending-y",
+      "mode": 1,
+      "f_fem_Hz": 66.93023096597773,
+      "f_euler_bernoulli_Hz": 66.84132978615898,
+      "rel_error": 0.0013300330813759143
+     },
+     {
+      "kind": "bending-y",
+      "mode": 2,
+      "f_fem_Hz": 416.35618752142483,
+      "f_euler_bernoulli_Hz": 418.88744360593654,
+      "rel_error": -0.006042807258011207
+     },
+     {
+      "kind": "bending-y",
+      "mode": 3,
+      "f_fem_Hz": 1152.3926520955558,
+      "f_euler_bernoulli_Hz": 1172.8969764933768,
+      "rel_error": -0.01748177786178884
+     },
+     {
+      "kind": "bending-z",
+      "mode": 1,
+      "f_fem_Hz": 66.93023142207139,
+      "f_euler_bernoulli_Hz": 66.84132978615898,
+      "rel_error": 0.001330039904903435
+     },
+     {
+      "kind": "bending-z",
+      "mode": 2,
+      "f_fem_Hz": 416.35618756093555,
+      "f_euler_bernoulli_Hz": 418.88744360593654,
+      "rel_error": -0.006042807163688213
+     },
+     {
+      "kind": "bending-z",
+      "mode": 3,
+      "f_fem_Hz": 1152.392652110443,
+      "f_euler_bernoulli_Hz": 1172.8969764933768,
+      "rel_error": -0.017481777849096214
+     },
+     {
+      "kind": "axial",
+      "mode": 1,
+      "f_fem_Hz": 2589.851060972368,
+      "f_euler_bernoulli_Hz": 2586.0970765174256,
+      "rel_error": 0.001451602296383081
+     }
+    ],
+    "reference": "Euler-Bernoulli cantilever, beta_n L = 1.8751, 4.6941",
+    "tolerance": 0.02,
+    "max_error_modes_1_2": 0.006042807258011207,
+    "pass": true,
+    "calculix_Hz": [
+     66.94064,
+     66.94064,
+     416.4264,
+     416.4264,
+     1152.601,
+     1152.601,
+     1475.373,
+     2222.178,
+     2222.178,
+     2589.977,
+     3600.234,
+     3600.234
+    ],
+    "calculix_vs_fem_max_rel": 0.0002056332124167337
+   }
+  }
+ ]
+}

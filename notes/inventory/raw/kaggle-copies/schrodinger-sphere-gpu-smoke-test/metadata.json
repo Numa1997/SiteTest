@@ -1,0 +1,20 @@
+{
+ "id": 144634957,
+ "ref": "numakoudsie/schrodinger-sphere-gpu-smoke-test",
+ "title": "Schrodinger sphere: GPU smoke test",
+ "author": "Numa Koudsie",
+ "slug": "schrodinger-sphere-gpu-smoke-test",
+ "lastRunTime": "2026-11-11T13:31:25.403613700Z",
+ "language": "python",
+ "kernelType": "notebook",
+ "isPrivate": true,
+ "enableGpu": true,
+ "enableInternet": true,
+ "categoryIds": [
+  "gpu"
+ ],
+ "enableTpu": false,
+ "currentVersionNumber": 1,
+ "dockerImage": "gcr.io/kaggle-private-byod/python@sha256:de153e6d303881930c51286216393d56f56b26458d0661350305a1e8144eea01",
+ "machineShape": "NvidiaTeslaT4"
+}

@@ -1,0 +1,51 @@
+{
+ "notebook": "numakoudsie/guinness-on-a-cart-stout-in-jax",
+ "version": 1,
+ "files": [
+  {
+   "file": "2026-11-13/free_full_1.5.npz",
+   "bytes": 139269,
+   "sha256": "c6cbd21b8294489900a4c3b61afee52f3321e2a3bd19084c2c1280b635caa2a4"
+  },
+  {
+   "file": "2026-11-13/free_inviscid_1.5.npz",
+   "bytes": 107188,
+   "sha256": "c0911a717b3e687009d2a325ba5ba67ae5a96f35ce9e5e29a6566599f62c4723"
+  },
+  {
+   "file": "2026-11-13/free_inviscid_2.npz",
+   "bytes": 85963,
+   "sha256": "34a63f04774bace780f2b5659b466bb0f6d8f5478b068bb15d855e3e122a77b3"
+  },
+  {
+   "file": "2026-11-13/free_inviscid_3.npz",
+   "bytes": 83242,
+   "sha256": "cc7c5f12bc58bf646a933fef955a64146bd90bcbc1fe75cf1731c83da0160995"
+  },
+  {
+   "file": "2026-11-13/progress.log",
+   "bytes": 5601,
+   "sha256": "4c7bd2750f768891c4b21217003a23f2a8360eee49958d04e1fbcb99f69e591c"
+  },
+  {
+   "file": "2026-11-13/rest.npz",
+   "bytes": 25661,
+   "sha256": "04bc2e4d0f3a61b74d9e027e616d2a73764f9723ed4a6115e1846fea5242b3fd"
+  },
+  {
+   "file": "2026-11-13/ride_bump25.npz",
+   "bytes": 237265,
+   "sha256": "f49a72c47b34be506400a7f68d29266bd13c59a4ae8eac3e063dc53560717666"
+  },
+  {
+   "file": "2026-11-13/ride_resonant.npz",
+   "bytes": 592312,
+   "sha256": "218f4a8740151c01f6e2a12c732545d0e3b3c7cd8e4cae5071e6f4e69b58bd9d"
+  },
+  {
+   "file": "2026-11-13/summary.json",
+   "bytes": 6237,
+   "sha256": "2142f4cc4ef68b129130076e0d4c4ca97cbd59612305308bacfd26a8fb385c31"
+  }
+ ]
+}

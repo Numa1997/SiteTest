@@ -1,0 +1,71 @@
+{
+ "notebook": "numakoudsie/guinness-on-a-cart-stout-in-jax",
+ "version": 8,
+ "files": [
+  {
+   "file": "2026-11-13/free_full_1.5.npz",
+   "bytes": 1363381,
+   "sha256": "9b5f794c4b2694ad562db11b8c92ff93fcb46db52cada6fc64299250fe82ac3e"
+  },
+  {
+   "file": "2026-11-13/progress.log",
+   "bytes": 10071,
+   "sha256": "71b296ecf88004c6dae846412fb4f3b4db6ca5aad0d0b88a264179f6e71b8057"
+  },
+  {
+   "file": "2026-11-13/rest.npz",
+   "bytes": 553058,
+   "sha256": "53325f69bf21419fd2f8a48f5193ad1879af315ee9739ef960930c4c42197488"
+  },
+  {
+   "file": "2026-11-13/rest_particles_15.npz",
+   "bytes": 10677318,
+   "sha256": "dffbb4bf2b96a726f9e85bad78f91e3999aea9ad3f7cffe771e69bf264a81358"
+  },
+  {
+   "file": "2026-11-13/rest_particles_60.npz",
+   "bytes": 10697099,
+   "sha256": "988c0b221e275d2e40757e8c0853cd109cd584a109d029c921dc97664f44fce8"
+  },
+  {
+   "file": "2026-11-13/ride_bump25.npz",
+   "bytes": 2186976,
+   "sha256": "cde2819e925cd9768c3d3e45f02ad7991340656d8edd81cb26cbf8303bb757be"
+  },
+  {
+   "file": "2026-11-13/ride_bump25_joint.npz",
+   "bytes": 2182432,
+   "sha256": "b4fc955b6d8e9e5473ed3f4dbf073b62061e46928d6680a08c5eb847818f61e4"
+  },
+  {
+   "file": "2026-11-13/ride_resonant.npz",
+   "bytes": 2254824,
+   "sha256": "a2d5ffeef3231e7797aa06b5ef6adeb3242ee71249c289b07f3afa7cacf35ae1"
+  },
+  {
+   "file": "2026-11-13/ride_resonant_joint.npz",
+   "bytes": 2191778,
+   "sha256": "bc398c9260b06d795bf9aaed8c41c4e638580cb13aec655a1a594878f5f20f0f"
+  },
+  {
+   "file": "2026-11-13/ride_sharp30.npz",
+   "bytes": 1122026,
+   "sha256": "353b4c5d99bd595df179383ddb1ad9c9a80c79863f385b69deb57c4ec77df523"
+  },
+  {
+   "file": "2026-11-13/ride_sharp30_joint.npz",
+   "bytes": 1110782,
+   "sha256": "2c0490d4f2a150e6759a1b0ec0df4b95a09ec54a181a7916c003b280348f6282"
+  },
+  {
+   "file": "2026-11-13/ride_sharp30_slosh.npz",
+   "bytes": 1104689,
+   "sha256": "51e3839a38ef72b093d4e72f0b27d252f5be1c096de51ab7351fb529f26d7bfe"
+  },
+  {
+   "file": "2026-11-13/summary.json",
+   "bytes": 16640,
+   "sha256": "2e3c196d2b8244d0556cdd963cfbc288fc413f75f0d71dfc6c951743284f88fe"
+  }
+ ]
+}

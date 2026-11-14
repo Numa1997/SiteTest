@@ -1,0 +1,17 @@
+{
+ "id": 144536870,
+ "ref": "numakoudsie/phyein-sim-run-case",
+ "title": "phyein-sim run case",
+ "author": "Numa Koudsie",
+ "slug": "phyein-sim-run-case",
+ "lastRunTime": "2026-11-11T13:31:47.530950Z",
+ "language": "python",
+ "kernelType": "script",
+ "isPrivate": true,
+ "enableGpu": false,
+ "enableInternet": true,
+ "enableTpu": false,
+ "currentVersionNumber": 1,
+ "dockerImage": "gcr.io/kaggle-images/python@sha256:0717e81990be591f8c5f98f033d29ab23e9ffde057e5b3a6bd4371f93969e962",
+ "machineShape": "None"
+}
