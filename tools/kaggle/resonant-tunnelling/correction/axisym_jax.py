@@ -58,8 +58,9 @@ def run(sp, t_end, hx=0.0625, Lx=None, Nr=160, Rmax=40.0, Wr=8.0, dt=0.01, nfram
         def body(i, c):
             u, aL, aR, aM = c
             u = hv * u; u = jnp.fft.ifft(Dx * jnp.fft.fft(u, axis=0), axis=0) @ Mr; u = hv * u
-            b = jnp.abs(u)**2; u = u * M; lost = (b - jnp.abs(u)**2) * wq
-            return u, aL + (lost * S["L"]).sum(), aR + (lost * S["R"]).sum(), aM + (lost * S["M"]).sum()
+            b = jnp.abs(u)**2; u = (u * M).astype(cdt); lost = ((b - jnp.abs(u)**2) * wq).astype(rdt)
+            # explicit dtypes: after a complex128 run x64 stays on, and numpy constants would promote a complex64 run's carry
+            return u, (aL + (lost * S["L"]).sum()).astype(rdt), (aR + (lost * S["R"]).sum()).astype(rdt), (aM + (lost * S["M"]).sum()).astype(rdt)
         z = jnp.zeros((), rdt)
         return jax.lax.fori_loop(0, per, body, (u, z, z, z))
 
