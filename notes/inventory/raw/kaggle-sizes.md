@@ -136,3 +136,49 @@ Consequence (Fact): for the Taichi generations the site already holds byte-ident
 
 The JAX notebook is different: the site holds packed `.json` rides (0.2 to 0.4 MB each), Kaggle holds the raw `.npz` (1.1 to 2.4 MB per ride,
 10.7 MB per particle snapshot). The raw files exist only on Kaggle: 159.03 MB in 73 files over ten versions.
+
+## Fig. 14 (exact bytes; per-run bytes from each notebook's own `index.json`, the rest by range request)
+
+| Notebook, version | What | Files | Bytes | MB |
+|---|---|---|---|---|
+| schrodinger-sphere-full-grid v1 | `runs/` 405 JSON (cut z = 0 with amplitude **and phase**) | 405 | 159 325 619 | 159.3 |
+| … | + `schrodinger_sphere_preview.html` 17 809 324; index.json 67 945; progress.log 33 248; panel_template.html 12 426; solver.py 3 067; pack.py 1 004; timing.json 47 | 7 | 17 927 061 | 17.9 |
+| … total | | 412 | 177 252 680 | 177.3 |
+| schrodinger-sphere-3d-generation v1 | `2026-11-12/runs3d/` 81 .bin (full 3D cloud, 64³, 48 frames) | 81 | 59 664 248 | 59.7 |
+| … | + index.json 23 422; timing.json 47; progress.log 7 162; solver.py 3 761 | 4 | 34 392 | |
+| schrodinger-sphere-3d-wave v1 | `2026-11-12/wave3d/` 81 .bin | 81 | 100 985 150 | 101.0 |
+| schrodinger-flat-wall v1 | `2026-11-12/flat/` 585 .bin | 585 | 51 929 764 | 51.9 |
+| schrodinger-pillar v1 | `2026-11-12/pillar/` 585 .bin (+ gz.bin) | 585 | 106 234 675 | 106.2 |
+| schrodinger-spherical-wave v1 | `2026-11-12/radial/` 1 170 .bin | 1 170 | 7 538 677 | 7.5 |
+| schrodinger-shapes-3d **v1** | six tars: coin 82 606 080; tube 84 101 120; spil 97 239 040; sphere 28 794 880; soff 10 813 440; sslab 9 400 320 (1 458 runs + 36 wave files; run bytes in index 310 238 128) | 6 tars | 312 954 880 | 313.0 |
+| … | + index.json 448 251; runs.jsonl 498 458; timing.json 176; progress.log 163 504; shapes3d_run.py 8 858; solver3d.py 6 891 | 6 | 1 126 138 | 1.1 |
+| schrodinger-shapes-3d **v2** | six tars: coin 7 178 240; tube 6 666 240; spil 78 080 000; sphere 9 082 880; soff 8 980 480; sslab 8 437 760 (243 runs + 36 wave files; run bytes 117 885 686) | 6 tars | 118 425 600 | 118.4 |
+| … | + index.json 80 929; runs.jsonl 88 571; timing.json 174; progress.log 27 925; shapes3d_run.py 9 452; solver3d.py 7 601 | 6 | 214 652 | 0.2 |
+| schrodinger-sphere-gpu-smoke-test v1 | schrodinger_sphere.html 2 770 505; timing.json 1 735; progress.log 1 837; solver.py 3 067; pack.py 1 004; panel_template.html 12 426 | 6 | 2 790 574 | 2.8 |
+
+Fig. 14 on Kaggle without the four CPU shard notebooks: 935.4 MB (the four CPU shards add about 118 MB, see `kaggle-outputs.md`).
+
+## Fig. 14: is the site's data the same as Kaggle's? (every run compared by SHA-256, 14 November 2026)
+
+Method: each notebook's `index.json` was downloaded from Kaggle and compared, run by run, with the site's index of the same part;
+then every file on disk under `public/data/schrodinger-sphere/` was hashed and compared with the site's own index.
+
+| Part on the site | Runs | Kaggle source | Same SHA-256 | Different | Missing on site | Site files that differ from the site index |
+|---|---|---|---|---|---|---|
+| `2026-11-12/wave3d/` | 81 | schrodinger-sphere-3d-wave v1 | **81** | 0 | 0 | 0 of 81 |
+| `2026-11-12/flat/` | 585 | schrodinger-flat-wall v1 | **585** | 0 | 0 | 0 of 585 |
+| `2026-11-12/pillar/` (+ gz.bin) | 585 | schrodinger-pillar v1 | **585** (gz.bin equal too) | 0 | 0 | 0 of 585 |
+| `2026-11-12/radial/` | 1 170 | schrodinger-spherical-wave v1 | **1 170** | 0 | 0 | 0 of 1 170 |
+| `2026-11-13/shapes3d/` | 1 458 (+36 wave) | schrodinger-shapes-3d v1, with v2 laid over it | **1 215 from v1 + 243 from v2 = 1 458**; wave files 36 of 36 | 0 | 0 | 0 of 1 458 |
+| `2026-11-12/` sphere (405 .bin) | 405 | schrodinger-sphere-full-grid v1 | not comparable byte for byte: the site stores a converted, amplitude-only form (`to_site_axisym.py`); the Kaggle JSON also holds the phase | | | |
+
+Consequences (Facts):
+1. For wave3d, flat wall, pillar, spherical wave and shapes3d the site holds a **byte-identical** copy of everything those notebooks produced
+   that is in use. Their Kaggle outputs are a second copy, not the only one.
+2. `schrodinger-shapes-3d` **v1** holds 243 runs that v2 replaced (the runs whose start wave was wrong). Those 243 old files exist only
+   in v1's tars on Kaggle; they are superseded by design and recorded as such in the site index (`version2`).
+3. `schrodinger-sphere-full-grid` holds the only copy of the sphere runs **with phase** (159.3 MB in 405 JSON files) and of the 17.8 MB
+   preview panel.
+4. `schrodinger-sphere-3d-generation` (59.7 MB, 81 runs) is on no page and in no site record; Kaggle is its only copy.
+5. A copy of the smoke test's `timing.json` (1 735 B; the source of "1.61 ms per split-step" in `docs/kaggle-pipeline.md`) is now kept in
+   `notes/inventory/raw/kaggle-copies/` with its SHA-256, so the cited numbers no longer depend on that notebook.
