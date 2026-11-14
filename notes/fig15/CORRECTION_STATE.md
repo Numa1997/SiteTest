@@ -151,3 +151,7 @@ Section 4: exact chi(x,t) for one wall run, compared with the stored file.
 - ~23:50 walls-gpu v2 (kernel 144997790) launched: all 1,088 walls, CALIB False, topic -wallsall, timeout 7200 s.
 - 00:00 UTC 15 Nov: shells-2-of-2 COMPLETE (141, 0 failed, 3,442 s, rt2d_all_1of2.tar 220.5 MB). All 282 shells done at Rmax 160
   (both logs confirm grid). Records of all 2,609 2D runs in notes/fig15/correction/rt2d_runs/ (discs_*-of-4, shells-*-of-2).
+- 23:49-23:57 UTC walls-gpu v2 (commit c53a447): ALL 1,088 walls done, 0 failed, 466 s, 13/13 group checks identical, all batched,
+  closure max 2.6e-5 (none > 1e-4), walls.tar 1,275 MB. Records: notes/fig15/correction/walls_runs.jsonl, walls_summary.json.
+- 23:52 classify-2d (CPU, kernel 145093811, commit 329fb3c) launched: keep / recompute for every disc and shell (margin 0.002).
+- Quota 81,855 s of 108,000 s at 23:55 (includes other sessions' Fig. 12/14/16 notebooks and the idle editor sessions).
