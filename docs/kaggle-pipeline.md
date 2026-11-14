@@ -49,6 +49,23 @@ both named by the date Kaggle generated it.
   phase, and the full output, phase included, stays on Kaggle. Every file stays far under Cloudflare's 25 MiB per static file
   (developers.cloudflare.com/workers/platform/limits, "Static Assets"; 20 000 files per Worker version on the free plan).
 
+## Layout on Kaggle: one notebook and one dataset per figure (rule of 14 November 2026)
+
+Kaggle has no folders. Order comes from two things it does have: versions inside one notebook, and datasets that hold many files.
+
+- **One notebook per figure.** A rerun is a new version of the same notebook, not a new notebook. A job too big for one
+  session is split into shards (`-shard-k-of-n`), and the shards are deleted once their output is in the figure's dataset.
+- **One dataset per figure** (private), named `numakoudsie/fig<N>-<topic>`. It holds every output file of every run of the
+  figure, byte for byte, laid out as `<notebook>/v<version>/output/`, with each run's log, the notebook's code and a
+  `manifest.json` (size and SHA-256 of every file). After a run, its output goes into the dataset as a new dataset version.
+- **Tests and smoke runs** are deleted once the numbers they gave are written into the docs, and their code and small records
+  are copied to `notes/inventory/raw/kaggle-copies/`.
+- **Nothing that a live record names is deleted** (`generations.json`, `index.json`) until that record points to the dataset copy.
+
+Datasets made on 14 November 2026: `numakoudsie/fig14-schrodinger-sphere` (8 notebook runs, 937 MB) and
+`numakoudsie/fig12-guinness-on-a-cart` (19 notebook versions, 158 MB); their file lists are in `notes/inventory/datasets/`.
+Fig. 15 and Fig. 16 follow when their running sessions end. The deletions and their reasons: `notes/inventory/raw/kaggle-deletions.md`.
+
 ## Store first
 
 A visitor never waits for something already computed. The rules:
@@ -178,11 +195,7 @@ A project brings five things; nothing in `kaggle-flow.js` or the bridge changes.
 - Fig. 14, the wave packet and the sphere: the first, described above.
 - Fig. 12 computed on Kaggle, the Guinness cart (`simulations/guinness-kaggle.html`). Since 13 November 2026 it plays rides
   computed by the JAX solver (`tools/fig12/kaggle/stout_jax.py`, `run_b.py`, packed by `pack_ride.py` into
-<<<<<<< HEAD
-  `public/data/fig12/2026-11-14-run10/` since 14 November 2026 (run 8's folder `2026-11-13-run8/` before that), listed in `index-jax.json` with each file's SHA-256) through `guinness-jax-play.js` and
-=======
   `public/data/fig12/2026-11-14-run10/` since 14 November 2026 (run 10's controlled rides with run 8's other rides; run 8 alone in `2026-11-13-run8/`), listed in `index-jax.json` with each file's SHA-256) through `guinness-jax-play.js` and
->>>>>>> origin/main
   `stout-view2.js`. It follows rules 1, 2, 3 and 5 of "Store first" (one file per ride, an index, a fingerprint check in the
   browser, provenance) and rule 4 (no interpolation: the frame drawn is `round(30 T)`), but uses none of `kaggle-flow.js`: one
   button per stored ride, no slider, governor, live preview, pop-up or bridge; it plays at real speed and stops at the end of
