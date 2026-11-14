@@ -198,6 +198,18 @@ for V0, D, P in ((1.5, 1.0, 2.5), (2.0, 1.0, 2.5), (3.0, 1.0, 2.5), (2.0, 1.5, 3
             e = IDX['exact'][key]
             put(f'{tag}_Tbar{sx}', r3(float(np.interp(Es[0], e['E'], e['Tbar']))), f'index.json exact[{key}]: packet average at E1 (linear between 0.01 steps)')
 
+# ---------- the Fabry-Perot form of the running example ----------
+def theta(E, V0=2.0, D=1.0, P=2.5):
+    t, r = tm.solve(E, segs(1, V0, D, P))[:2]; return 2 * np.angle(r) + 2 * np.sqrt(2 * E) * P, abs(r) ** 2
+Er = OUT['V2D1_E1']; th0, Rr = theta(Er); h = 1e-5
+thp = ((theta(Er + h)[0] - theta(Er - h)[0] + np.pi) % (2 * np.pi) - np.pi) / (2 * h)
+put('FP_theta_mod', round(float(th0 % (2 * np.pi)), 4), 'round-trip phase 2 arg r + 2 k s at E_r, modulo 2 pi (2 pi = 6.2832)')
+put('FP_tp', round(float(thp), 2), 'hbar d theta / dE at E_r: the round-trip time')
+put('FP_2Lv', round(float(2 * (1.5 + 2 / np.sqrt(2 * (2 - Er))) / np.sqrt(2 * Er)), 2), '2 L_eff / v at E_r')
+put('FP_R', round(float(Rr), 3), 'R of one barrier at E_r')
+put('FP_G', r3(float(2 * (1 - Rr) / (np.sqrt(Rr) * thp))), 'Gamma = 2 T / (sqrt(R) theta prime)')
+put('spread_t40', round(3 * np.sqrt(1 + (40 / (2 * 9)) ** 2), 1), 'sigma_perp(t) = sigma_perp sqrt(1 + (t / 2 sigma_perp^2)^2), sigma_perp = 3, t = 40')
+
 # ---------- 3. N barriers ----------
 Eg = np.linspace(0.05, 2.65, 5201); X = np.array([xi(e, 2.0, 1.0, 2.5) for e in Eg]); inb = np.abs(X) <= 1
 coarse = [Eg[i] for i in range(1, len(Eg)) if inb[i] != inb[i - 1]]
