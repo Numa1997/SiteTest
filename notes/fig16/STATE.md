@@ -17,7 +17,7 @@ The control system is the centre of the work; the cart is designed to give it th
 1. Read the brief and section 1's files — done for the modelling stage (CLAUDE.md, AGENTS.md, STANDARD.md, kaggle-pipeline.md,
    the solver, run_b.py, pack_ride.py, 06/07 notes, REPORT.md, the note's sections 4, 6.5, 7, 12.3, the control skill).
    Still to read whole before page work: docs/styles.md, the page HTML, guinness-jax-play.js, the readers' files.
-2. [in progress] Build a low-order slosh model from the stored Fig. 12 rides on the CPU; validate it against run 10's controlled rides
+2. [DONE, see model.md section 3] Build a low-order slosh model from the stored Fig. 12 rides on the CPU; validate it against run 10's controlled rides
    without fitting to them. Report the validation to the coordinator (≤ 12 lines).
 3. Design 2–3 cart concepts on that model (masses, motor, wheel, gimbal; tilt, spill, peak force, current vs limit; weak point).
    **STOP: report the concepts to the coordinator and the owner; the owner picks one.**
@@ -47,6 +47,9 @@ The control system is the centre of the work; the cart is designed to give it th
 - One mode + linear damping: gentle controlled rides of run 10 predicted to 0.07-0.08 mm rms tilt, 0.005 A current (not fitted).
   Big swings too small (kerb 18-19 vs 21-25 mm): add modes 2-3 (16 % of a tilt) and the head's Ca^(2/3) friction (fit running).
 - Stout push F_x vs -q'': 79.7 / 71.7 g on the gentle training rides (corr 0.96) vs 55.8 g cylinder theory; using 75.7 g.
+
+- VALIDATED (validation.json): run 10's five controlled rides, never fitted: head spilled 2.07/2.14, 1.63/1.58, 2.51/2.46 mL
+  (stored/model); tilt rms error 0.07-0.08 mm gentle, 0.7-1.1 mm kerb; fitted friction power n = 0.6665 (Cantat: 2/3).
 
 ## Commits
 - 1st: brief + state. 2nd: model tools in progress.

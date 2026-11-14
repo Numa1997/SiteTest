@@ -83,6 +83,12 @@ def damping(w, zeta, n, qref, eps=1e-4):
     return f
 
 
+def fitted():
+    """The model as fit.py left it (training rides of run 8 only): three modes, the head's friction with its fitted power."""
+    f = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "fit.json")))
+    return dict(N=f["N"], zeta=f["zeta"], n=f["n"], zeta_hi=f["zeta_hi"], qref=f["qref"])
+
+
 def _setup(model):
     m = dict(N=1, f0=PLANT8["f0"], zeta=PLANT8["zeta"], zeta_hi=None, n=1.0, qref=0.005, beta_scale=1.0, gamma_scale=GAMMA_SCALE); m.update(model or {})
     md = modes(m["N"], f1=m["f0"])

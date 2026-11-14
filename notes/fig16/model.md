@@ -46,3 +46,25 @@ controllers, observer, sub-steps of 0.1 ms in fluid steps of 2 ms; the probes re
 so the wall must rise about 7.6 mm before foam leaves.
 
 ## 3. Training and validation (filled in by validate.py)
+
+Printed by `python3 tools/fig16/validate.py --plot` (numbers in `tools/fig16/validation.json`, picture `notes/fig16/validation.png`).
+
+Fitted on the training records only (`tools/fig16/fit.py`, `fit.json`): three modes; ζ = 0.213 at q_ref = 5 mm, friction power
+n = 0.6665 (Cantat's law predicts 2/3; the fit was free), ζ of modes 2 and 3 = 0.365; linear friction
+(n = 1) fits 2.4 times worse. Push coefficient γ = 75.7 g. Spill strip w_s = 2.74 mm, from run 8's kerb with the speed held alone.
+
+| ride (first three: training; last five: validation, never fitted) | tilt max stored / model, mm | rms tilt error of rms tilt, mm | largest speed error, m/s | rms current error, A | head spilled stored / model, mL |
+|---|---|---|---|---|---|
+| run8/ride_resonant | 13.54 / 13.78 | 0.23 of 2.79 | 0.001 | 0.004 | 0.01 / 0.00 |
+| run8/ride_bump25 | 7.96 / 8.31 | 0.10 of 1.05 | 0.001 | 0.001 | 0.00 / 0.00 |
+| run8/ride_sharp30 | 22.23 / 26.18 | 1.06 of 5.17 | 0.016 | 0.008 | 2.44 / 2.44 |
+| run10/ride_resonant_joint | 1.00 / 0.87 | 0.07 of 0.27 | 0.002 | 0.006 | 0.00 / 0.00 |
+| run10/ride_bump25_joint | 1.03 / 0.95 | 0.08 of 0.16 | 0.003 | 0.004 | 0.00 / 0.00 |
+| run10/ride_sharp30_joint | 24.55 / 27.47 | 1.05 of 4.89 | 0.023 | 0.149 | 2.07 / 2.14 |
+| run10/ride_sharp30_slosh | 20.81 / 25.67 | 0.70 of 3.53 | 0.020 | 0.097 | 1.63 / 1.58 |
+| run10/ride_sharp30_preview | 23.03 / 24.89 | 1.11 of 5.37 | 0.016 | 0.006 | 2.51 / 2.46 |
+
+The model's largest tilt is taken over every 2 ms step, the stored one over 30 pictures a second, so on the kerb the model's peak
+is 2 to 5 mm higher partly because the stored pictures miss the peak. Bands to carry into the design: tilt ±1.1 mm rms on the kerb,
+±0.1 mm on gentle roads; head spilled ±0.07 mL (the solver's own run-to-run scatter is ±0.05 mL); current ±0.15 A on the kerb.
+What the model does not have: splashing, drops of stout, the surface's roughness, the stout's vertical push on the cart, swirl.
