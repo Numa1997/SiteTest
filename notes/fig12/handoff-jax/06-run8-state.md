@@ -64,7 +64,7 @@ not spill, and show with and without control side by side.
 ## The note rewrite (started 14 November, about 02:00 UTC)
 
 Brief (from the coordinating chat, approved by the user): honest (every number printed by a script from the stored runs; a
-paragraph where the picture differs from the data; every approximation named with its cost; the kerb limit 82 N vs 15 N);
+paragraph where the picture differs from the data; every approximation named with its cost; the kerb limit: up to 82 N against the motor's 11.25 N at 1.5 m/s, 15 N being its absolute maximum);
 derived (Navier-Stokes in the cart's accelerating frame, free surface, APIC vs PIC; the first slosh mode and its frequency;
 each of the five controllers (speed, preview, slosh LQR, joint, skyhook) with law, state, reason, LQR cost and Riccati,
 skyhook's inertial damper; the mass books and tolerated drift); every equation numbered, every symbol defined with unit where
@@ -104,7 +104,7 @@ check that each number in the note matches it; then rewrite section by section; 
    `run8-summary.json`). GPU time needs the user's yes, with the one-line cost first.
 2. The kerb. No controller cuts the kerb's lean much (24.3 mm held, 25.4 joint, 21.8 slosh, 21.2 preview); slosh LQR cuts the
    head spilled most (2.44 -> 1.65 mL). The note says why (section 11, Figure 4, key result "what no controller with this
-   motor can prevent"): the kerb pushes the wheel back with up to 82 N, the motor gives at most 15 N. Nothing ordered on it.
+   motor can prevent"): the kerb pushes the wheel back with up to 82 N; at 1.5 m/s the motor gives at most 11.25 N (back-EMF limits the current to 2.25 A; 15 N, at 3 A, is its absolute maximum). Nothing ordered on it.
 3. The user's coordinating chat was not told directly: the message to it was refused (not in the same channel). The
    user has the report in this chat.
 4. Kaggle: at most 2 batch GPU sessions per account; another chat's Fig. 15 shards held both before run 8. The weekly quota
