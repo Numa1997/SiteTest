@@ -72,11 +72,16 @@ it first appears, limits checked; everyday picture first; short plain sentences;
 says axes, colours, what to notice, and which page control gives which view. No new control work.
 Judging: independent readers (referee agent) given only "Fig. 12" and the page path: one as the owner (BSc physics, reading
 for pleasure), one as a strong school student or first-year; fix every stop; fresh readers again until a full reading has
-no stops; the derivation-checker alongside. Report: what was written, each round's marks and the answer to each, the
+no stops; the derivation-checker alongside. Round 0 done (notes/fig12/readers/): first-year reader 104 marks, owner reader 116, derivation check 213 verified / 9
+wrong / 26 unverifiable. The rewrite waits on the user's choice (asked 02:30 UTC): write it here, or hand it to a new writer
+session as the coordinating chat proposed (prompt to be saved first in notes/fig12/handoff-note-writer.md).
+Report: what was written, each round's marks and the answer to each, the
 checker's result, and when run 10 launched.
 Plan: round 0 readers and checker on the current note (outputs in notes/fig12/readers/), while writing the numbers script
 tools/fig12/kaggle/note_numbers.py (prints every run number from public/data/fig12/2026-11-13-run8/ and the summaries) and a
 check that each number in the note matches it; then rewrite section by section; rounds until no stops.
+- LAUNCHED 14 November 08:01 UTC as notebook version 10 (quota 46,099 s used, 0 reserved, of 108,000 s; no Fig. 15
+  session held a slot). Next: wait for COMPLETE, download to scratch run10/, then the steps below.
 - After it runs: download outputs to scratch run10/, check_run.py, pack into a new folder public/data/fig12/2026-11-14-run10/
   with run 8's speed-held rides and swings copied beside it (the page plays one folder), point DIR in guinness-jax-play.js at
   it, update generations.json, the note (sections 10 to 12: Tables 7 and 8, the beta caveat removed), the docs; test in
