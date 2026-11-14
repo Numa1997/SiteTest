@@ -33,6 +33,6 @@
    "numakoudsie/fig15-rt3d2-fix1"
   ],
   "note": "The whole parameter space in 3D, walls included: spacing, height, thickness, 1 to 10 barriers, discs to R = 12, shells, the diode under bias, long packets. 3739 runs planned; 42 specs computed in two groups are filed once; 15 runs rerun by the fix notebook replace the earlier ones (index: replaced). 6.53 GB in R2. Generation 1 (2026-11-13, 115 runs) stays filed beside it.",
-  "bytes": 6526950000
+  "bytes": 6526952030
  }
 ]
