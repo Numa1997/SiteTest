@@ -25,7 +25,7 @@ Reread first after any compaction. Prompt: `notes/fig16/PROMPT-computational-phy
   `cart4.py`: FLOOR_ABOVE_DECK = 0.030 (z_S = 0.092 m in the solver). CPU code check (6 mm, 2 pictures): runs.
 
 ## Next
-1. Launch run 3 on Kaggle (notebook numakoudsie/fig-16-guinness-cart-with-control, version 3). Bill: about 0.8 GPU h expected,
+1. Launch run 3 on Kaggle (refused twice at 23:10 and 23:25 UTC: two GPU sessions of other figures already running; retry scheduled) (notebook numakoudsie/fig-16-guinness-cart-with-control, version 3). Bill: about 0.8 GPU h expected,
    1.4 h at most (budget 3600 s, timeout 5400 s); quota 76,012 s used of 108,000 s on 14 Nov 23:00 UTC.
 2. Audit `notes/guinness-rebuild/audit.md`: rot-frame effect = run 3 kerb_full vs run 2 kerb_full, against the seed scatter.
 3. Pack, then the animation: wheels, 3D fluid, the on/off switch for both figures.
