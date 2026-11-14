@@ -1,0 +1,75 @@
+device Tesla T4 jax 0.11.1
+
+== rest: free, 2.0 s, 1020 steps, 75.9 ms a step, run 77.3 s
+PASS  near-surface list never full  (76283 of 621210)
+PASS  pressure residual small  (largest 1.00e-05)
+PASS  stout books: glass + air + cart + ground = poured, every frame  (largest error 0 particles)
+PASS  head books: glass + broken off = served, every frame  (largest error 0.00e+00 mL)
+PASS  rest guard  ({'max_dev_mm': 0.4975050687789917, 'rms_dev_mm': 0.12921637296676636, 'columns_without_value': 0, 'fallback_columns_max': 0, 'head_spilled_ml': 0.0, 'spilled_g': 0.0, 'limit_max_mm': 0.75, 'limit_rms_mm': 0.375})
+
+== ride_sharp30_joint: ride, 4.0 s, 2040 steps, 88.6 ms a step, run 180.7 s
+PASS  near-surface list never full  (161610 of 621210)
+PASS  pressure residual small  (largest 1.00e-05)
+PASS  stout books: glass + air + cart + ground = poured, every frame  (largest error 0 particles)
+PASS  head books: glass + broken off = served, every frame  (largest error 8.38e-09 mL)
+PASS  drop list never full  (largest 2)
+PASS  energy book ewall never negative  (end 1.008e-04 J)
+PASS  energy book eskin never negative  (end 1.288e-04 J)
+PASS  energy book efoam never negative  (end 2.293e-03 J)
+PASS  impulse on the cart = minus the stout's momentum  ({'impulse_x': 5.195105382496474e-05, 'momentum_x_end': -5.195105382496463e-05})
+   spilled 0.00 g of stout, 2.07 mL of head; lean up to 16.0 mm; speed [1.230349599811961, 1.5493222647935943]
+   frames to look at: 0, 60 (mid), 20 (first spill), 120 (end)
+
+== ride_resonant_joint: ride, 8.0 s, 4080 steps, 89.3 ms a step, run 364.2 s
+PASS  near-surface list never full  (117959 of 621210)
+PASS  pressure residual small  (largest 1.00e-05)
+PASS  stout books: glass + air + cart + ground = poured, every frame  (largest error 0 particles)
+PASS  head books: glass + broken off = served, every frame  (largest error 0.00e+00 mL)
+PASS  drop list never full  (largest 0)
+PASS  energy book ewall never negative  (end 1.939e-06 J)
+PASS  energy book eskin never negative  (end 1.337e-05 J)
+PASS  energy book efoam never negative  (end 5.225e-05 J)
+PASS  impulse on the cart = minus the stout's momentum  ({'impulse_x': 8.31178378491877e-07, 'momentum_x_end': -8.31178378491877e-07})
+   spilled 0.00 g of stout, 0.00 mL of head; lean up to 1.8 mm; speed [0.9914063187255611, 1.0054445655942121]
+   frames to look at: 0, 120 (mid), None (first spill), 240 (end)
+
+== ride_bump25_joint: ride, 8.0 s, 4080 steps, 84.3 ms a step, run 343.7 s
+PASS  near-surface list never full  (120236 of 621210)
+PASS  pressure residual small  (largest 1.00e-05)
+PASS  stout books: glass + air + cart + ground = poured, every frame  (largest error 0 particles)
+PASS  head books: glass + broken off = served, every frame  (largest error 0.00e+00 mL)
+PASS  drop list never full  (largest 0)
+PASS  energy book ewall never negative  (end 1.302e-06 J)
+PASS  energy book eskin never negative  (end 1.227e-05 J)
+PASS  energy book efoam never negative  (end 1.796e-05 J)
+PASS  impulse on the cart = minus the stout's momentum  ({'impulse_x': -2.7889261930063707e-06, 'momentum_x_end': 2.788926193006374e-06})
+   spilled 0.00 g of stout, 0.00 mL of head; lean up to 0.9 mm; speed [0.9912470183971026, 1.0058999674705802]
+   frames to look at: 0, 120 (mid), None (first spill), 240 (end)
+
+== ride_sharp30_slosh: ride, 4.0 s, 2040 steps, 89.8 ms a step, run 183.1 s
+PASS  near-surface list never full  (144869 of 621210)
+PASS  pressure residual small  (largest 1.00e-05)
+PASS  stout books: glass + air + cart + ground = poured, every frame  (largest error 0 particles)
+PASS  head books: glass + broken off = served, every frame  (largest error 1.05e-08 mL)
+PASS  drop list never full  (largest 5)
+PASS  energy book ewall never negative  (end 7.386e-05 J)
+PASS  energy book eskin never negative  (end 1.006e-04 J)
+PASS  energy book efoam never negative  (end 1.730e-03 J)
+PASS  impulse on the cart = minus the stout's momentum  ({'impulse_x': -0.0003618897556013913, 'momentum_x_end': 0.0003618897556013913})
+   spilled 0.00 g of stout, 1.63 mL of head; lean up to 14.2 mm; speed [1.2157911712445897, 1.5435198193005633]
+   frames to look at: 0, 60 (mid), 20 (first spill), 120 (end)
+
+== ride_sharp30_preview: ride, 4.0 s, 2040 steps, 92.8 ms a step, run 189.2 s
+PASS  near-surface list never full  (174552 of 621210)
+PASS  pressure residual small  (largest 1.00e-05)
+PASS  stout books: glass + air + cart + ground = poured, every frame  (largest error 0 particles)
+PASS  head books: glass + broken off = served, every frame  (largest error 1.26e-08 mL)
+PASS  drop list never full  (largest 8)
+PASS  energy book ewall never negative  (end 1.437e-04 J)
+PASS  energy book eskin never negative  (end 1.842e-04 J)
+PASS  energy book efoam never negative  (end 3.259e-03 J)
+PASS  impulse on the cart = minus the stout's momentum  ({'impulse_x': 4.48275842594941e-06, 'momentum_x_end': -4.482758425949414e-06})
+   spilled 0.00 g of stout, 2.51 mL of head; lean up to 14.1 mm; speed [1.224551475122735, 1.5364262905694954]
+   frames to look at: 0, 60 (mid), 20 (first spill), 120 (end)
+
+ALL PASS

@@ -82,6 +82,13 @@ tools/fig12/kaggle/note_numbers.py (prints every run number from public/data/fig
 check that each number in the note matches it; then rewrite section by section; rounds until no stops.
 - LAUNCHED 14 November 08:01 UTC as notebook version 10 (quota 46,099 s used, 0 reserved, of 108,000 s; no Fig. 15
   session held a slot). Next: wait for COMPLETE, download to scratch run10/, then the steps below.
+- DONE 08:26 UTC, ALL PASS (notes/fig12/jax/run10-check/). Books closed every frame (0 particles; head <= 1.26e-8 mL).
+  Gains K = (71.121, -1228.717, -40.499, -150). Leans / tilts / head spilled (run 8 in brackets): five bumps joint 1.03 (0.95)
+  mm; 25 mm bump joint 0.88 (0.76); kerb joint 25.41 (25.37) mm, 2.07 (2.00) mL; slosh 21.84 (21.83), 1.63 (1.65) mL;
+  preview 23.87 (21.17), 2.51 (2.46) mL. No stout spilled. The correction changes almost nothing; slightly larger leans
+  (smaller gains). Packed in public/data/fig12/2026-11-14-run10/ (run 10's five + run 8's speed-held three + free_full,
+  run 6's free_wall). NOT yet on the page: section 11's design numbers (gains, eigenvalues, sampled loop, Floquet,
+  Examples) all follow from beta and must be recomputed in the note first; the page stays on run 8 until then.
 - After it runs: download outputs to scratch run10/, check_run.py, pack into a new folder public/data/fig12/2026-11-14-run10/
   with run 8's speed-held rides and swings copied beside it (the page plays one folder), point DIR in guinness-jax-play.js at
   it, update generations.json, the note (sections 10 to 12: Tables 7 and 8, the beta caveat removed), the docs; test in
