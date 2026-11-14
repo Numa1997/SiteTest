@@ -129,6 +129,7 @@ def main(src, date, dest):
             if len(pts) < 5: continue
             E = np.array([p[0] for p in pts]); T = np.array([p[1] for p in pts]); J.append([V, float(np.trapezoid(T * supply(E, V), E))])
             if shape == "flat":
+                iv.V0, iv.D = 2.0, 1.0   # this diode's barriers (iv.py defaults to V0 = 3 for generation 1)
                 Tx = iv.T_biased_vec(E, 2.5, V); Jx.append([V, float(np.trapezoid(Tx * supply(E, V), E))])
         ivs.append(dict(shape=shape, R=R, EF=EF, kT=KT, energies=sorted({r["spec"]["E"] for r in F}), J_runs=J,
                         J_exact_single_energy_same_points=(Jx or None)))
