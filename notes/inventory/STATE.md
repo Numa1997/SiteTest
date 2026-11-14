@@ -4,7 +4,7 @@ Chat state written into the repository first (CLAUDE.md, "Write the chat's state
 reread this file and `BRIEF.md` before anything else. Keep it current at every step that changes what is live or what is left.
 Never write the owner's name in files of this folder.
 
-Last update: 14 November 2026, start of Phase 1.
+Last update: 14 November 2026, end of Phase 1 (deliverables written, awaiting the owner's yes).
 
 ## Aim
 
@@ -15,7 +15,7 @@ delete or merge what is redundant, and set one layout rule for the future. Full 
 
 ## Phase
 
-**Phase 1 (read-only), in progress.** Nothing is deleted or changed anywhere outside this folder. Phase 2 starts only on the
+**Phase 1 (read-only) is finished; STOP. Waiting for the owner's yes, group by group (see ACTIONS.md).** Nothing is deleted or changed anywhere outside this folder. Phase 2 starts only on the
 owner's yes to a named group of actions.
 
 ## The owner's rules (from the brief, CLAUDE.md and the owner's preferences)
@@ -37,9 +37,9 @@ owner's yes to a named group of actions.
 |---|---|
 | `BRIEF.md` | in place (staged from the brief's branch) |
 | `STATE.md` | this file |
-| `INVENTORY.md` | not started |
-| `inventory.json` | not started |
-| `ACTIONS.md` | not started |
+| `INVENTORY.md` | written |
+| `inventory.json` | written (generated from the scans; 6 698 lines) |
+| `ACTIONS.md` | written (groups A to H, layout rule) |
 
 ## Facts established so far (14 November 2026)
 
@@ -121,8 +121,11 @@ owner's yes to a named group of actions.
 
 | Commit | What |
 |---|---|
-| (none yet) | `BRIEF.md` staged, `STATE.md` written; first commit pending |
+| a4d30b4, 9d9ed85, dffd28a, 5ce56d1 | brief, state, Kaggle and R2 records |
+| (this commit) | INVENTORY.md, inventory.json, ACTIONS.md, raw/ |
 
 ## Left to do
 
-Everything in the Method list above. Nothing has been inventoried yet.
+Nothing in Phase 1. Phase 2 waits for the owner. First proposed yes: groups A + B1 + C1 + G.
+Open measurements that Phase 2 must do before any deletion: sizes of the Fig. 12 `.npz` (versions 6 to 10); outputs of the old versions; SHA-256 of Kaggle's `free_swing_v2.json` and `rides.json` against the site; the CPU shards `v2-a..d` indices against the site.
+Known limits of Phase 1: Workers listed by name only; scheduled tasks: first page of 20 plus the enabled-only list; script statuses are rule-based (rules in INVENTORY.md); 112 unmerged branches not individually classified (none besides `claude/fig15-correction` touches data or Kaggle code).

@@ -61,3 +61,9 @@ packed from those outputs; whether the raw `.npz` exist anywhere else is to be c
 Fact: generation 2 shard tars on Kaggle total 6552.5 MB; runs 624 + 5 x 623 = 3739.
 Fact: generation 1 runs 29+29+29+28 = 115 (+ 20 in singles-v2); the shard sizes of generation 1 are not in the logs.
 Fact: generation-2 shard folders are dated by the day the shard ended: shards 1, 2: `2026-11-13`; shards 3-6, fix1: `2026-11-14`.
+
+## Older versions (label format `v<N>` works for `get_notebook_info` and `list_notebook_session_output`; `6`, `8`, `Version 8` do not)
+
+- guinness-on-a-cart-stout-in-jax **v8** (run 8, commit 96e8a1d): output `2026-11-13/`: 12 files: `free_full_1.5.npz`, `rest.npz`, `rest_particles_15.npz`, `rest_particles_60.npz`, `ride_bump25.npz`, `ride_bump25_joint.npz`, `ride_resonant.npz`, `ride_resonant_joint.npz`, `ride_sharp30.npz`, `ride_sharp30_joint.npz`, `ride_sharp30_slosh.npz`, `summary.json` (+ progress.log); session 2370 s. Skipped inside the run for budget: `ride_sharp30_preview`, `free_wall_1.5`.
+- The raw `.npz` of runs 6 to 10 are on Kaggle only; the site holds packed `.json` of each ride (about 0.2 to 0.4 MB each).
+- Not listed: outputs of v1-v7, v9 (JAX); v1-v4 (stout-sloshing); v1-v4 (free-swing-v2); v1 of shapes-3d.
