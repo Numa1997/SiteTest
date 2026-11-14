@@ -1,133 +1,119 @@
-# Fig. 15 · referee report, round 9 (resonant tunnelling)
+# Fig. 15 · referee report, round 10 (resonant tunnelling)
 
-Read as rendered at commit `8aa4802` (branch `claude/fig15-gen2-note`). `npm run build` exit 0; `dist/` served on port 8923;
-opened in headless Chromium (Playwright) at 1400 px, "Expand all" pressed, each of the 14 sections screenshotted; the text
-extracted with every KaTeX formula replaced by its TeX source. KaTeX: 1010 formulas, 0 errors, no page errors. At 390 px no
-table, figure or display equation overflows (document width 390). `plan.md` and `check.md` were not read. The 3D panel was
-not judged.
+Read as rendered at commit `4bae4a5` (branch `claude/fig15-gen2-note`, "round 9 fixes"). `npm run build` exit 0; `dist/`
+served on port 9845; opened in headless Chromium (Playwright 1.63) at 1400 px, "Expand all" pressed, each of the 14
+`section.psec` screenshotted; the text extracted with every KaTeX formula replaced by its TeX source. KaTeX: 1056 formulas,
+0 errors, no page errors. At 390 px the document is 390 wide and no display equation, table or figure overflows.
+`plan.md` and `check.md` were not read. The 3D panel was not judged.
 
-Numbers re-derived independently while reading (Python, from the formulas of the note, not from the repository's scripts):
-k, κ, e^{-κd}, T = 0.144, |r| = 0.925, (9) = 0.154, Example 3.1 (22.5), Example 4.1 table, ħθ′-free checks
-(−2 ln R = 0.3108, 2T/√R = 0.3111, 2T = 0.2879), Γ from the half-maximum of (13) = 0.0704, (17) = 0.0633, L_eff = 2.76,
-(21) = 0.649, the phase-averaged T/(2−T) = 0.078, σ_E = 0.202, (19) = 0.218, packet averages (18) 0.196 (pair) and 0.149
-(one barrier), long packet 0.54 / 0.500 at E = 0.713, thick-barrier averages 0.0351 / 0.0319, band edges 0.590 / 0.955 /
-2.082 and ξ = 0 at 0.735, σ_⊥(12) = 3.6 and σ_⊥(40) = 7.3, the GaAs table (a = 2.75 nm, 4.39 fs, 62 fs, 10.6 meV,
-k_BT = 0.05 → 87 K), the 3739-run count by group, τ_side from (27) for every disc row, the tilted peaks (0.486, 0.230 at
-V_b = 0.5, 1 on a 300-step staircase; heights 0.878, 0.562) and the Tsu–Esaki curve (top 0.875, valley ≈ 1.81–1.825,
-ratio 4.3). All agree with the note to its printed precision.
+Numbers re-derived while reading (Python, from the note's own formulas): T = 0.14395, |w|² = 6.95, Example 3.1, (9) = 0.154,
+Example 4.1 (all seven entries, from (1 − R^{ν+1})²), ρ and n = 0, L_eff = 2.757, 2L_eff/v = 4.55, −2 ln R = 0.3109,
+2T/√R = 0.3112 (the note's 0.3108 and 0.3111 differ in the last digit, as from the unrounded E_r; not marked), 2T = 0.2879, Γ(17) = 0.0632, T/(2−T) = 0.078, σ_E = 0.202 and 0.0505 (FWHM 0.119), (19) = 0.218 and
+0.0359, the long-packet percentages (32 %, 31 %), the hard-box and (21) values of §7, every κd, T and Γ(17) of the §8 table,
+the band numbers of §9, k_max²Δt/2, the 3739 / 3697 run count (42 = 2 × 21 shared energies), σ_⊥(12) = 3.6 and
+σ_⊥(40) = 7.3, τ_side from (27) for every disc row (and the 76.1 / 88.5 from rounded values), the disc ratios 1.14 / 1.06 /
+0.99, the GaAs table (a = 2.754 nm, 4.39 fs, 10.6 meV, 62 fs, 87 K), the supply numbers 14.2 and 18 and the products 1.03
+and 0.73 of §13, the supply-function algebra (30)–(31). All agree with the note to its printed precision, except the two
+items marked below.
 
 Two readers: **S**, a school student good at mathematics; **G**, a physics graduate.
 
 ## Errors (fix first)
 
-None. No wrong number, wrong equation or broken sentence was found. The round-8 error (the dangling "that half" in §6)
-is fixed: the sentence now defines the half before using it.
+E1. **§10, "The step", the phase per step.** "the fastest wave the grid can hold, \(k=\pi/\Delta x=6.28\), turns its phase by
+    \(k^2\Delta t/2=0.2\) rad per step, so no part of the wave turns by more than a fifth of a radian in one step." The grid
+    is three-dimensional: the fastest mode is the corner of the Fourier box, \(|\mathbf k|^2=3(\pi/\Delta x)^2\), which turns
+    by 0.59 rad per step. The "no part" claim is false as written. Either say "along any one axis" or give 0.6 rad for the
+    corner mode (and say that these modes carry almost nothing of the packet).
+
+E2. **§11, last paragraph.** "this reading gives 0.178 against 0.187 from the same run's twin, a 4.5 % gap." From the
+    printed numbers the gap is 4.8 % (1 − 0.178/0.187) or 5.1 % (0.187/0.178 − 1); a reader who checks cannot get 4.5 %.
+    Print the gap from the same rounded values, or print three-figure values that give 4.5 %.
 
 ## Reading stops, in note order
 
-1. **§1, Figure 1 caption and §9, Figure 2 caption (rendering).** "… and \(E=0.735\)⏎, the energy at which …" and
-   "… \(|\xi|\le1\)⏎, from 0.59 to 0.955". In both captions the comma after an inline formula breaks onto the next line
-   at 1400 px. Both readers see a line starting with a comma. Bind the punctuation to the formula (put it inside the
-   `\( \)` or join with a no-break span).
-2. **§1, Fig. 15c bullet.** "The dashed curve is an exponential decay fitted to the wave trapped between the barriers
-   (section 5)." Section 5 only defers to section 11, which states the fit rule (60 % to 5 % of the peak). G looks for the
-   rule and has to chase it twice. Point to section 11.
-3. **§1, first paragraph.** "This is a Fabry–Pérot interferometer, the principle of a laser's mirrors." S cannot tell what
-   "the principle of a laser's mirrors" means. The intended claim is that a laser's two mirrors form such a cavity; say so.
-4. **§2, box "Our running example".** "\(\sigma_E/\Gamma=2.9\)": both symbols are used before they are defined (the box
-   admits it, "two quantities we work out in sections 5 and 6"). S has a number without a meaning at this point. A
-   half-clause in words ("the packet's spread of energies is about three times the width of the resonance") would carry it
-   without the symbols.
-5. **§2, separation of variables (unstarred).** "Such a function \(f(t)\) can be removed by multiplying that bracket's
-   factor … by the phase \(e^{+i\int f\,dt}\) … The three functions \(f\) must add up to zero …" This is the heaviest step
-   of the section and it is not marked ★; S loses the thread here, and the restatement ("the product is the solution for
-   all time …") comes only after a paragraph about the packet. Either star the argument or move the plain result up.
-6. **§2, order of the argument.** "Our packet starts as a Gaussian, and the Gaussian \(\psi_0\propto\dots\), is such a
-   product. … Conversely, if \(\chi\) and \(g\) solve (2), their product solves (1)." The "Conversely" belongs to the
-   derivation before the packet paragraph; placed after the packet's size and start position it reads as if it followed
-   from them. Also a stray comma: "the Gaussian … , is such a product".
-7. **§3, no picture of the wave inside a barrier.** The transfer matrix is derived carefully, but nowhere does the note
-   show (or describe in a sentence) what \(\chi\) looks like across one barrier: oscillating, then a falling exponential,
-   then a smaller oscillation. S would understand "tunnelling" from Figure 1 only as a shaded box. One sentence pointing
-   to Fig. 15b (where the decaying tail is visible inside a barrier) would supply the picture.
-8. **§3 and later, one symbol, several meanings.** \(t\) is a time and an amplitude (§3 flags it), \(R\) is the reflection
-   coefficient and a disc radius (§12 flags it), \(T\) is the transmission and a temperature (§13 flags it), \(n\) counts
-   resonances from 0 in §5 and from 1 in §7 (flagged). Every clash is announced, so no one is misled, but the house rule
-   (Taylor verdict, point 2) is "one symbol one meaning". \(R_d\) or \(\varrho\) for the radius and \(\Theta\) or
-   \(k_BT\) written only as one unit for temperature would remove two of them.
-9. **§5, the ★ on the reflection delay.** "And the phase also adds the time the wave spends inside the barriers." G
-   stops: the next sentences compute only the step's reflection delay \(2/\kappa\) (from the face) and do not say how the
-   "take back \(2d\)" and the "+\(2/\kappa\) per reflection" combine into \(2L_{\text{eff}}=2(s-d)+4/\kappa\). The result
-   is right; one clause ("two reflections per round trip, each delayed by \(2/\kappa\), so the round trip is
-   \(2(s-d)+4/\kappa\)") closes the step.
-10. **§6, Long packets, the thick-barrier paragraph.** Eleven numbers in six sentences (0.7432, 0.0197, 0.023, 0.0351,
-    0.7215, 0.0225, 0.026, 0.0319, 509, 344, 0.00736, 39 %). S cannot hold them; the point (the long packet still sees a
-    resonance much narrower than itself, and the run ends before it drains) is buried. A two-row `.ptab` like the one in
-    §7 would carry the numbers and leave the prose its point.
-11. **§6, (19) at σ_E/Γ = 2.9.** "Equation (19) gives \(\bar T\approx0.218\); the exact average (18) is 0.196." (19) was
-    derived for \(\sigma_E\gg\Gamma\); G wants one clause saying the 11 % gap is the price of using it at a ratio of only
-    2.9, which the later thick-barrier agreement (ratio 17, gap 2 %) confirms.
-12. **§8, last paragraph.** "early in the decay the parts of the packet off resonance are still draining faster, and a fit
-    that sees only that stretch reads short." §12 then asserts "The fitted lifetime belongs to the resonance the packet
-    feeds … so it hardly depends on the packet's mean energy." G sees the two side by side and wants the reconciliation
-    (the off-resonant parts are gone by the time the 60 %-to-5 % window opens, except when the run is cut short, as here).
-13. **§10, the numerical method: why these steps.** Standard item 5 asks why the step sizes were chosen and where they
-    fail. The note gives \(\Delta x=0.5\) and \(\Delta t=0.01\) without the reason. G wants the two numbers that justify
-    them: the running example's wavelength 5.18 is about 10 grid points, and the fastest grid mode (\(k_{\max}=\pi/\Delta x
-    =6.3\)) turns by \(k_{\max}^2\Delta t/2\approx0.2\) rad per step. "Splitting is exact where the two commute" is fine;
-    "we have not measured the time-step error on its own" is honest but leaves the reader without an expected size.
-14. **§11, first paragraph.** "The measurements below were made on the running example in an earlier batch of 115 runs."
-    Every grid-quality number of the section comes from runs the page does not play. G accepts the method ("exactly the
-    method, grid and step"), but the only bridge to the present batch is §12's "walls give 15.1 at E = 0.75, as the earlier
-    batch did at 0.735". Say that bridge here, where the doubt arises.
-15. **§11, "a lower share through at the peak … say the grid's peak is a little narrower".** S does not see why a lower
-    share means a narrower peak. The link is (19): for a packet wider than the resonance the share is proportional to
-    \(\Gamma\). Cite (19).
-16. **§12, discs table.** "one disc" for radius 12 is printed "0.16" while every other entry has three figures; the walls
-    row has "—" in that column although the single-wall runs exist (§10, "each barrier alone, for walls …"), so the
-    yardstick the next paragraph describes is missing exactly for the case it is measured against.
-17. **§12, Key result.** "the narrower the discs, … the less the pair gains over one disc at the resonance." The gains
-    read from the table are 0.023, 0.025, 0.024, 0.015, −0.006 for radius 12, 9, 6, 4, 2: flat from 12 to 6, then
-    falling. "Below radius 6" would be what the table supports.
-18. **§12, Shells.** "For the part of the wave that is the same in every direction, \(u=r\psi\) obeys the same
-    one-dimensional equation … We have not worked out their energies here." G stops twice: the packet arrives from one
-    side and so is mostly not the part that is the same in every direction (the other parts feel an extra centrifugal
-    barrier, which the note does not mention), and the shells' lifetimes are the only results in the note compared with
-    no theory at all. One sentence on the centrifugal term would supply the physical picture; the missing comparison should
-    at least be named in §14 as a limit.
-19. **§13, "The current".** "Current therefore flows when the trapped level lies among the filled states on the left."
-    With \(E_F=1\) the level (0.735) is among the filled states on the left at zero voltage, where the current is zero.
-    S stops. The condition needs its second half, which Figure 3's caption has: "… and above the filled states on the
-    right, so few electrons flow back."
-20. **§13, the tilt.** "The exact calculation gives peak heights 1, 0.877 and 0.559; (11), which assumes the same wave
-    number on both sides, explains why they fall." The claim of explanation has no number behind it. G wants
-    \(T_a\), \(T_b\) at \(V_b=0.5\) and the value of \(4T_aT_b/(T_a+T_b)^2\) beside 0.877.
-21. **§13, Figure 3 labels.** "filled up to E_F", "level at V_b = 0", "eV_b" are set as plain label text with text
-    subscripts, while the caption and body set the same symbols in KaTeX italic. Minor, but the reader sees two styles for
-    one symbol.
-22. **§14 / Further reading, links (state, not prose).** The links to `notes/fig15/gen2_numbers.py`,
-    `notes/fig15/gen1_profile_check.py` (§11) and `public/data/resonant-tunnelling/2026-11-14/kaggle/index.json` point to
-    `main`, where these files do not exist yet (`git cat-file -e origin/main:…` fails); they resolve only after this branch
-    is merged. `derive.py` is on `main`. Not an error of the note, but check after the merge.
+1. **§2, separation of variables, still unstarred.** "Call the first bracket's function \(f_1(t)\) … Multiply \(\chi\) by
+   \(e^{iF_1}\) … The wave itself, their product, then gains the phase \(e^{i(F_1+F_2+F_3)}\), which is 1 …" This is the
+   heaviest step of the section and S has no exit; the plain result ("the product is the solution for all time … along the
+   flight it does exactly what a one-dimensional electron does") arrives a paragraph later, after the packet. Mark the
+   phase-removal argument ★ and restate its result in one plain sentence right after (2).
+2. **§2, order of the argument.** "… which starts \(4\sigma_x=48\) before the first face. Back to the general argument.
+   Conversely, if \(\chi\) and \(g\) solve (2), their product solves (1)." "Back to the general argument" is a visible seam:
+   the packet paragraph interrupts a derivation. Move the "Conversely …" sentence up to follow (2) directly, then describe the
+   packet; the uniqueness sentence ("The start is such a product …") then follows the packet naturally.
+3. **§2, symbol before definition (G).** In "Then \(F_1+F_2+F_3\) … is 1 because the three \(f\) add up to zero": the
+   integrals are fixed only up to constants, so the sum is a constant, not zero. Say "choose the constants of integration so
+   that the sum is zero" (one clause).
+4. **§3, no picture of the wave inside a barrier.** Still nowhere a sentence that says what \(\chi\) looks like across one
+   barrier (ripples, a smooth fall by \(e^{-\kappa d}\), smaller ripples beyond) and where to see it (Fig. 15b, the tail
+   inside the shaded barrier). The §2 box says "it falls by 0.204", which is the number but not the picture.
+5. **§5, ★ opened mid-paragraph.** "… at the group velocity. ★ The reflection phase \(2\rho\) corrects this …" The star sits
+   in the middle of a running paragraph; S does not see where to resume. "(End of ★.) In short: …" is good; put the ★
+   passage in its own paragraph so the skip is visible.
+6. **§5, "This is the exponential law of any slow leak."** The sentence follows (16), \(\tau=\hbar/\Gamma\), but refers to
+   the decay \(e^{-t/\tau}\) two sentences before. S reads it as describing (16). Move it next to \(R^{2t/t_{\rm rt}}=e^{-t/\tau}\).
+7. **§6, "Long packets", paragraph after the table.** The order jumps: running example, then \(V_0=3\), then back to the
+   running example ("For the running example the long packet passes far more than the short one does at the peak,
+   \(\bar T=0.196\)"), then the thick barriers. The sentence about the running example belongs before the \(V_0=3\)
+   sentence. The thick-barrier part still packs 509, 344, 39 %, \(\sigma_E=0.051\), 0.744, 0.0359, 0.0351 into five
+   sentences; with the table now holding the shares, this is readable for G, still heavy for S.
+8. **§7, a parenthesis inside a formula sentence.** "Then a whole number \(n\) of half-wavelengths fits in (this \(n\) starts
+   at 1, so it labels the lowest resonance, \(n=0\) in section 5, as \(n=1\); only the label differs) \(L_{\text{eff}}=L+2/\kappa\),
+   \(k=n\pi/L_{\text{eff}}\), and". The parenthesis splits "fits in" from its object; S loses what fits in what. Move the
+   parenthesis after (21).
+9. **§8, last paragraph, fit window.** "a straight line … from \(t=92.7\), where the trapped probability has fallen to 60 % of
+   its peak … to the end gives 210". G wants to know when the run ends relative to that start (217 − 92.7 = 124, about a third
+   of a lifetime): say that the window is only a third of a lifetime, which is the real reason the fit cannot measure 344.
+10. **§10, "The runs", the 42 shared runs.** "42 of the runs belong to two groups at once (the diode's points at zero voltage
+    are also pairs of the first group)". S computes 2 × 25 = 50 diode runs at zero voltage and stops. Add "those at the 21
+    energies from 0.30 up, which both groups use".
+11. **§10, "What the page does", dangling "it".** "… which matters only for the small part of the wave that reaches it.
+    Between two stored frames … it first undoes the steady turning of the phase". The last "it" before was the border; the
+    subject here is the page. Write "the page first undoes".
+12. **§12, Shells, first paragraph, one run-on sentence.** "The packet, within about 3.6 of the axis, meets the shells
+    head-on: much of it is reflected, or tunnels straight through: in through the outer shell and the inner one, and out
+    again …, four crossings in all, and a part tunnels through the outer shell, is caught in the gap … and rings there for a
+    long time, because …" Three colons and four clauses in one sentence; S cannot parse it. Split into three sentences:
+    reflected; tunnels straight through (four crossings); caught and rings.
+13. **§12, Shells, second paragraph.** "(for such a wave \(\nabla^2\psi=\tfrac1r\,d^2(r\psi)/dr^2\) … centrifugal barrier,
+    \(l(l+1)/2r^2\) …, which we do not treat)". Correct and now complete for G, but this is unstarred graduate material in the
+    middle of a sentence. Either ★ the parenthesis or put the plain picture first ("a wave spread evenly round the centre
+    behaves along the radius like the wave between walls, with a hard wall at the centre").
+14. **§13, Figure 3 and Figure 2 labels.** "filled up to EF", "filled up to EF − eVb", "level at Vb = 0" are set upright
+    with text subscripts; "N = 2 … N = 10" in Figure 2 are upright, while the body and captions set \(E_F\), \(V_b\), \(N\) in
+    KaTeX italic. Two styles for one symbol. Minor.
+15. **§13, "The tilt", the share under bias.** "the share that crosses is the flow of probability, \(T=(k_R/k_L)\,|t|^2\)".
+    The same paragraph quotes peak heights 1, 0.877, 0.559 and §13 later 0.65 and 0.34; G wants one word that these heights are
+    of this flux-weighted \(T\), not of \(|t|^2\).
+16. **§14 / Further reading, links (state, not prose).** `notes/fig15/gen2_numbers.py`, `notes/fig15/gen1_profile_check.py`
+    and `public/data/resonant-tunnelling/2026-11-14/kaggle/index.json` are linked on GitHub `main`, where they do not exist
+    yet (`git cat-file -e origin/main:…` fails); they resolve only after this branch is merged. `derive.py` and the
+    2026-11-13 index are on `main`. Check after the merge.
+
+Fixed since round 9 and not repeated: caption commas bound to their formulas (Figs. 1, 2); the Fig. 15c pointer to
+section 11; the laser sentence of §1; the σ_E/Γ box now says it in words; the 2L_eff closing clause in the §5 ★; (19)'s
+11 % gap explained; the long-packet numbers in a table; the §8/§12 reconciliation; reasons for Δx and Δt; the bridge to the
+earlier batch in §11; (19) cited for "narrower"; the disc yardstick row; the key-result wording on ratios; the centrifugal
+term; the current-flow condition; (11) now said to give the reason, not the size.
 
 ## Verdict per section (against `notes/STANDARD.md`)
 
 | § | title | verdict | marks |
 |---|---|---|---|
-| 1 | Two panes of glass | clear; two small fixes | 1, 2, 3 |
-| 2 | The model in three dimensions | needs work (small): star or reorder the separation argument; undefined σ_E/Γ in the box | 4, 5, 6 |
-| 3 | One barrier | clear; a missing picture of the wave in the barrier | 7, 8 |
+| 1 | Two panes of glass | clear, leave it | none |
+| 2 | The model in three dimensions | needs work (small): star the phase argument, close the seam, one clause on constants | 1, 2, 3 |
+| 3 | One barrier | clear; one sentence of picture missing | 4 |
 | 4 | Two barriers, two ways | clear, leave it | none |
-| 5 | The sharp peak and the trapped wave | clear; one clause missing in the ★ | 9 |
-| 6 | A wave packet is not a single energy | needs work (small): the thick-barrier paragraph is a wall of numbers | 10, 11 |
-| 7 | A wider well sings lower | clear, leave it | none |
-| 8 | Taller and thicker barriers | clear; one reconciliation with §12 | 12 |
-| 9 | Three, five and ten barriers | clear, leave it (caption comma only) | 1 |
-| 10 | What was computed, and how | needs work (small): reasons for Δx and Δt (standard item 5) | 13 |
-| 11 | How good the grid is | clear; two one-clause links | 14, 15 |
-| 12 | Discs and shells | needs work (small): table yardstick, key-result wording, shells' physical picture | 16, 17, 18 |
-| 13 | The device | needs work (small): the current-flow condition is half stated | 19, 20, 21 |
-| 14 | Limits and reading | clear, leave it (links resolve after merge) | 22 |
+| 5 | The sharp peak and the trapped wave | clear; layout of the ★ and one misplaced sentence | 5, 6 |
+| 6 | A wave packet is not a single energy | needs work (small): reorder the paragraph after the table | 7 |
+| 7 | A wider well sings lower | clear; move one parenthesis | 8 |
+| 8 | Taller and thicker barriers | clear; one clause on the fit window | 9 |
+| 9 | Three, five and ten barriers | clear, leave it | 14 (labels only) |
+| 10 | What was computed, and how | needs work (small): the 3D phase-per-step claim is wrong | E1, 10, 11 |
+| 11 | How good the grid is | needs work (small): the 4.5 % does not follow from the printed numbers | E2 |
+| 12 | Discs and shells | needs work (small): split the shells sentence; star or soften the radial equation | 12, 13 |
+| 13 | The device | clear; label style and one word on the flux-weighted T | 14, 15 |
+| 14 | Limits and reading | clear, leave it (links resolve after merge) | 16 |
 
-Overall: the note is correct throughout and reads as a textbook chapter; no stop is an error of fact. The stops that
-matter most for S are 5, 10 and 19; for G, 9, 13 and 18.
+Overall: the note is correct and reads as a textbook chapter; two small factual slips (E1, E2), no wrong equation. The stops
+that matter most for S are 1, 8 and 12; for G, E1, 3 and 9.

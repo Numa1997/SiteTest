@@ -320,7 +320,8 @@ for R in (3.0, 5.0):
         b1 = max(one, key=lambda r: r['tau']['tau'])
         put(f'sh1_{R:g}_taumax', r3(b1['tau']['tau']), b1['file']); put(f'sh1_{R:g}_taumax_E', b1['spec']['E'], b1['file'])
         put(f'sh1_{R:g}_cut', bool(b1['tau']['t1'] >= b1['t_end'] - 2 * b1['frame_dt'] and (b1['tau']['t1'] - b1['tau']['t0']) < b1['tau']['tau']), 'one shell: fit window cut by the run end')
-put('walls_Tfar', r3(walls['T_far']['value']), walls['file'] + ': region reading (T_far) of the walls run the disc table compares with')
+put('walls_Tfar', round(walls['T_far']['value'], 4), walls['file'] + ': region reading (T_far) of the walls run the disc table compares with')
+put('walls_twin4', round(through(walls), 4), walls['file'] + ': twin share, 4 decimals')
 put('walls_Tfar_gap', round(100 * (1 - walls['T_far']['value'] / through(walls)), 1), 'per cent the region reading lies below the twin, same run')
 put('gpu_run_h', round(sum(r['wall'] for r in RUNS) / 3600, 1), 'index.json runs: sum of wall, hours on one GPU each')
 
