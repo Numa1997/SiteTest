@@ -201,3 +201,11 @@ works. Also: T_2 defined; wide-gap star ended; k -> E change of variable; flux T
 Remaining open marks are data-pending (refresh at full index) or declined (textbook; table scroll cue is house .ptab).
 
 ## Round 7 launched 03:29 UTC on 8cc9769: referee, owner, student (round-6 derivation checker still running).
+
+## Round 7 readers (owner 25, student 24 marks): fixed: long-packet net gap stated (0.51 + half of 0.0286 = 0.52 vs 0.500, a few
+% above, as the grid does just below a peak); sigma_E no longer offered as a cause of the run's shortfall; border factor profile
+(sin^{1/8}, to 0 at the outermost point); 'well before that point'; Fig. 3 dash/dot wording and finer dots; plain restatement of
+what (23) says (star in sec 9); long packet widths as FWHM vs Gamma; peak height 1 because equal; 'each of the two operations';
+R = 2 fit = lump draining; x4 label; long start 4 sigma_x = 48; R changes slowly; 22.5; width 0.0704 (Gamma); hbar/E_u = ma^2/hbar;
+12 % in sec 14; shells crossed four times; (11) explains why, exact gives numbers; B, E, C group contents; side-border caveat;
+4 % reason; uniqueness reason; six-part rotation gives 0.75.
