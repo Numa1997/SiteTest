@@ -20,8 +20,23 @@ The control system is the centre of the work; the cart is designed to give it th
   system must master that.
 - So: the model must become a two-axle cart with pitch (half-car), the glass rigid on the deck; actuators: hub motors (rear),
   a voice-coil actuator in each strut (heave and pitch of the deck); sensors: IMU on the deck, load cells, encoders, road scanner.
-- 3D prototype: `notes/fig16/proto/cart3d.html` (three.js from public/vendor/three), screenshots cart3d-iso/side/explode.png.
-  Screenshot script (no server; a background server is refused by the owner's rules): scratch shot.cjs, Playwright page.route.
+- The owner (same day, after a three.js mock-up with a home-made glass): "use everything from the mother figure; the fluid
+  remains the same; all we add here are controls; check the repo, the HTML, the Kaggle data and notebooks."
+  RULE: build Fig. 16 ON Fig. 12's assets, never beside them:
+  * drawing: `Cart16View` extends `StoutView2` (public/scripts/stout-view2.js, stout-view.js, guinness-glass.js, not edited):
+    Fig. 12's camera, projection and `drawGlass` (the Guinness tulip with harp and lettering, ruby edges, the stout and head from
+    the stored fields, drops and lumps). The deck's tilt reaches the glass by wrapping `project` during `drawGlass`.
+    Prototype: `notes/fig16/proto/cart16.html` + `cart16-view.js`; screenshots cart16-kerb/flat/side/phone.png.
+    (The three.js mock-up cart3d.* was deleted.)
+  * data: StoutRide unpacks the stored rides (public/data/fig12/2026-11-14-run10/); the page plays stored data only.
+  * control: the mother's reduced plant in JAX `tools/fig12/control/cartctl.py` (cart + three modes + controllers + Kalman
+    filter, line-by-line port of stout-cart.js), its derivations `tools/fig12/control/derive.py`, the brief
+    `notes/fig12/handoff-control-session.md` (sections 4 physics, 6 mistakes not to repeat, 8 how a Kaggle launch is built),
+    `notes/fig12/plan-kaggle-control.md`, `notes/fig12/realism.md`, the nonlinear modal fluid NMFluid in stout-cart.js.
+  * Kaggle: the notebook cell `tools/fig12/kaggle/nb/run_b_cell.py`, run_b.py, check_run.py, pack_ride.py; notebook
+    numakoudsie/guinness-on-a-cart-stout-in-jax (private). Launch rules in the handoff, section 8.
+  Screenshot scripts (no server; a background server is refused by the owner's rules): scratch shot16.cjs, shot12.cjs; Playwright
+  `page.route((u) => u.hostname === ...)` answers from disk (pages carry upgrade-insecure-requests, so match the host, not http).
 
 ## Steps (status)
 1. Read the brief and section 1's files — done for the modelling stage (CLAUDE.md, AGENTS.md, STANDARD.md, kaggle-pipeline.md,
