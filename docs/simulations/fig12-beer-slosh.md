@@ -458,7 +458,7 @@ it now, and everything below this section about those describes the earlier gene
 **The player** (`guinness-jax-play.js`): one button per file of `index-jax.json` (the one marked `default` is chosen first); each
 file is fetched, its SHA-256 compared with the index (refused if different), unpacked. The ride clock T advances by the real time
 between animation frames (at most 0.1 s per frame); the frame drawn is `round(30 T)`, never a blend; at the end it stops and the
-button reads "Ride again". The Readings (cart speed, stout in the glass, stout spilled, head in the glass, head spilled, drops and
+Pause button reads "Play" (pressed there, it starts the ride over; the separate "Ride again" button does the same at any time). The Readings (cart speed, stout in the glass, stout spilled, head in the glass, head spilled, drops and
 lumps, motor current, active force) and the time are rewritten at most every 250 ms. Stout is shown to 1 mg (`stout_g`, `spill_g`),
 head to 0.01 mL (`head_glass_ml`, `head_spill_ml`); a file without `head_glass_ml` (run 6's swing without the head) reads "no head". Measured 13 November 2026 in headless Chromium at 1440 and 390 px on the built page, with run 2's packed files
 (`notes/fig12/jax/run2-data/`, same format) served in place of run 4's: every sampled frame (152 and 174 in 3 s) showed

@@ -191,3 +191,20 @@ section 11 updated by hand to run 10's numbers (Table 8, the gentle-road and ker
 result), with one plain sentence that 11.5-11.7's eigenvalues, sampled loop and Floquet threshold are still for beta 1.541.
 The writer session recomputes those in its rewrite (it will need to rebase over this commit's change to paper.html).
 Tested in Chromium (page-test.cjs at four widths, the comparison table, a run-10 ride, KaTeX): no errors.
+
+## Diagnosis of the four open items and the Play button (14 November 2026, from 11:22 UTC)
+
+Asked by the coordinating chat (session_01DGmqintkoYzahfGQQzdXYL) on the owner's order, after the rewritten note went live
+(main edb6c2a). CPU only, no Kaggle, no rerun without the owner's yes.
+- Play button: at the end of a ride the Pause button read "Ride again" beside the real "Ride again" button. Now it reads
+  "Play" (pressing it there starts over); the test hook seek() also sets "Play". Tested at 390 and 1440 px.
+- Lean two ways (single bump): run's own 5.78 mm = polar() at R_fill - dx/2 with NaN columns filled by the frame's mean; at
+  theta = 0 and pi its bilinear uses a cut column 0.05 cell inside the glass that is empty 94-95 % of frames, so the wall
+  reads the mean level: biased low. pack_ride's 8.94 mm (trusted columns) is what the page shows; first-mode fit on trusted
+  columns gives 2q = 7.80 mm, tilt 7.97 mm. No stored number changes.
+- Rim points stepped in (28 of 64 read at R - dx): J1 ratio 0.9987; measured tilt changes 0.0-0.2 %. No number changes.
+- Lean after the kerb (joint 2.54 +- 0.94 mm, slosh 1.49 +- 1.57 mm, last 1 s): not a tilt. First-mode fit 2q 0.12 / 0.00
+  mm, plane slope 0.16 / 0.01 mm, front and back wall bands equal to 0.01 mm; cart acceleration 0.02-0.04 mm; head
+  redistribution 0.25 mm. It is the two-point reading of local roughness (fit residual 0.18-0.29 mm rms). Side finding: on
+  the kerb the mean surface rises 0.85-1.44 mm (particles conserved: the particle cloud bulks), on gentle roads <= 0.10 mm.
+- Numerical damping: CPU free swings in scratch damp/ (inviscid at 6, 4.5, 3 mm; dt 1 ms; PIC vs APIC; wall model).

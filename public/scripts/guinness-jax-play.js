@@ -116,7 +116,7 @@
       requestAnimationFrame(tick);
       if (!ride) return;
       const dt = last == null ? 0 : Math.min(0.1, (now - last) / 1000); last = now;
-      if (playing) { T += dt; if (T >= dur()) { T = dur(); playing = false; play.textContent = 'Ride again'; } }
+      if (playing) { T += dt; if (T >= dur()) { T = dur(); playing = false; play.textContent = 'Play'; } }   // 'Ride again' is its own button; Play at the end starts over
       const D = ride.D, k = Math.min(D.frames - 1, Math.round(T * ride.fps));
       if (D.x) { cart.x = D.x[k]; cart.vx = D.v[k]; cart.zb = D.zb[k]; cart.zw = D.zw[k]; cart.us = D.us ? D.us[k] : 0; } else { cart.x = 0.5; cart.vx = 0; cart.zb = REST.zb; cart.zw = REST.zw; cart.us = 0; }
       view.setFrame(ride, k); view.draw();
@@ -139,6 +139,6 @@
     }
     await choose(Math.max(0, files.findIndex((f) => f.default)));
     requestAnimationFrame(tick);
-    window.GuinnessJax = { view: view, files: files, state: () => ({ T: T, k: Math.round(T * ride.fps), playing: playing, cur: cur }), choose: choose, seek: (t) => { T = t; playing = false; } };
+    window.GuinnessJax = { view: view, files: files, state: () => ({ T: T, k: Math.round(T * ride.fps), playing: playing, cur: cur }), choose: choose, seek: (t) => { T = t; playing = false; play.textContent = 'Play'; } };
   }
 })();
