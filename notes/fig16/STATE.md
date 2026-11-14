@@ -83,5 +83,17 @@ The control system is the centre of the work; the cart is designed to give it th
 - OPEN for the GPU stage: a tilting glass needs the rotating frame's forces beside the fluid step (brief: do not change the fluid
   part) -> ask before any launch. The tilt physics (mechanical analogue) is not validated by stored data.
 
+## Kaggle (14 November 2026)
+- The owner: everything is computed on Kaggle, in the owner's notebooks; nothing physical here. GPU bill approved ("sure go ahead"):
+  about 0.5 GPU h (smoke + full run). Quota before: 48,167 s used of 108,000 s.
+- `tools/fig16/kaggle/cart4.py` (four-wheel cart, deck pitch, LQR + 0.25 s road preview + Kalman on the probes), `modal4.py`,
+  `run16.py` (Fig. 12's Stout unchanged; g_eff turned into the glass's frame), `nb_cell.py`, `diag16.py`.
+- GPU notebook numakoudsie/fig-16-guinness-cart-with-control: v1 smoke test PASSED (6 mm, 2 frames per task, ~2 min T4).
+- CPU notebook numakoudsie/fig-16-cart-diagnostics-cpu v1, v2 (no GPU quota): controlled cart stable on all roads (kerb wall
+  2.2 mm, gentle 0.04 mm in the modal stand-in); passive cart decays but pitches +10/-20 deg on the kerb (200 mm swing in the
+  stand-in): violent, not unstable. Fix kept: the stout's push acts on the deck at the mode's point (hg).
+- Full run (commit 2041127, BUDGET_S 2100, timeout 2700 s) REFUSED by the permission check: it exceeds the approved 0.5 GPU h.
+  Waiting for the owner's yes on the bill.
+
 ## Commits
 - 1st: brief + state. 2nd: model tools in progress.
