@@ -92,8 +92,14 @@ The control system is the centre of the work; the cart is designed to give it th
 - CPU notebook numakoudsie/fig-16-cart-diagnostics-cpu v1, v2 (no GPU quota): controlled cart stable on all roads (kerb wall
   2.2 mm, gentle 0.04 mm in the modal stand-in); passive cart decays but pitches +10/-20 deg on the kerb (200 mm swing in the
   stand-in): violent, not unstable. Fix kept: the stout's push acts on the deck at the mode's point (hg).
-- Full run (commit 2041127, BUDGET_S 2100, timeout 2700 s) REFUSED by the permission check: it exceeds the approved 0.5 GPU h.
-  Waiting for the owner's yes on the bill.
+- Full run approved ("Sure"), launched 14:11 UTC as GPU notebook version 2 (commit 2041127), done 14:30 UTC, 19.0 min of T4.
+  Rest guard PASS; books closed in every ride (0 particles; head <= 1e-8 mL). Design chose weighting {'q': 0.00025}.
+  kerb_full: tilt 2.64 mm (stored pictures), head spilled 0.004 mL, stout 0, pitch 4.0 deg, motor at its 8 A limit, actuators 46 N.
+  kerb_off: stopped at frame 23 (0.73 s, drop list full) with 8.35 mL head and 9.79 g stout already spilled; tilt 55 mm, pitch 15 deg.
+  resonant_full: tilt 0.65 mm, 0 spilled. bump25_full: tilt 0.50 mm, 0 spilled. (Fig. 12 best: kerb 20.81 mm / 1.63 mL slosh LQR;
+  five bumps 1.00 mm, 25 mm bump 1.03 mm, joint.)
+- Packed (tools/fig16/kaggle/pack16.py, format conversion only) into public/data/fig16/2026-11-14/ (index-16.json, 1.1 MB).
+- Player prototype notes/fig16/proto/ride16.html: Fig. 12's best ride and the new cart side by side, same clock, stored frames only.
 
 ## Commits
 - 1st: brief + state. 2nd: model tools in progress.
