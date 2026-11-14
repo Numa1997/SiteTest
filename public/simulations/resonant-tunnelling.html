@@ -166,7 +166,7 @@
                         <button type="button" data-g="3" aria-pressed="false">× 3</button>
                         <button type="button" data-g="10" aria-pressed="false">× 10</button>
                     </div>
-                    <p class="chips-note" id="gain-note">One scale for the whole run: the start packet's peak is height 1.</p>
+                    <p class="chips-note" id="gain-note">One scale for the whole run: the largest |ψ| the run reaches is height 1.</p>
                 </div>
                 <div class="panel__group">
                     <p class="panel__label">Time</p>
@@ -573,7 +573,7 @@
             setGainNote();
         }
         function press(q, b) { document.querySelectorAll(q + ' button').forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); }); }
-        function setGainNote() { document.getElementById('gain-note').textContent = 'One scale for the whole run: the start packet’s peak is height ' + GAIN + (GAIN > 1 ? ' (heights above 1.25 are clipped).' : '.'); }
+        function setGainNote() { document.getElementById('gain-note').textContent = 'One scale for the whole run: the largest |ψ| the run reaches is height 1' + (GAIN > 1 ? ', here drawn ' + GAIN + ' times higher (heights above 1.25 are clipped).' : '.'); }
         function setLabels() {
             var names = regionNames(run.head.spec);
             ['l-a', 'l-b', 'l-c'].forEach(function (id, k) { var el = document.getElementById(id); if (names[k]) { el.textContent = names[k][1][0].toUpperCase() + names[k][1].slice(1); el.parentNode.hidden = false; } else el.parentNode.hidden = true; });
