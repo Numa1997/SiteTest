@@ -257,3 +257,12 @@ independence caveat, current condition both sides, Fabry-Perot, stray comma, 2L_
 (19)/(16) cited in section 11, dx/dt reasons, inside-barrier picture, centrifugal barrier, eigenvector/trace/Fourier
 defined, border width b, no-wrap for short formula + punctuation, gamma phase, f steps, long-packet table, twin defined.
 Kept: symbol reuse (flagged at each switch), signpost references, Problems whose answers can be checked in tables, no textbook.
+
+## Round 10 (on 4bae4a5). Referee: 2 errors (3D diagonal mode 0.6 rad/step; 4.5 % from unrounded) + 16 stops; student: 0 wrong
+numbers, 17 stops; owner: 4 errors, all confirmed against the index: (1) long-packet "half trapped" used the 3D well, which has
+lost wave to the side border; now the twin's 1 - T - R (d=2 best run then meets exact: 0.0318 vs 0.0319); (2) side-border loss
+shortens every 3D lifetime (3D trapped share at run end 19 / 40 / 45 % below the twin's: running example, s=3.5, d=2) - now said
+in sections 7, 8, 11, 14; (3) current condition "above the filled states on the right" contradicted the supply function - fixed;
+(4) 2D Gaussian: 39 % within one sigma, not "within". Also: R2/R4 lifetimes below one round trip flagged, disc diode not a device
+current, grid accuracy ranges for other structures (0.32-0.92 d=2, 0.69-1.8 V0=3), shells' fit region, disc-table measures,
+(28) width, ten-wall run counts. Derivation checker r10 still running.

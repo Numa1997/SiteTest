@@ -199,8 +199,12 @@ for V0, D, P in ((1.5, 1.0, 2.5), (2.0, 1.0, 2.5), (3.0, 1.0, 2.5), (2.0, 1.5, 3
         best = max(g, key=lambda r: through(r) or 0)
         put(f'{tag}_long_T', r3(through(best)), best['file']); put(f'{tag}_long_n', len(g), 'G runs filed for this structure')
         put(f'{tag}_long_E', best['spec']['E'], best['file'])
+        def half(r):   # share through plus half of what is still trapped, both from the 1D twin (the 3D trapped share has lost wave to the side border)
+            return r['twin']['T'] + (1 - r['twin']['T'] - r['twin']['R']) / 2 if r.get('twin') else None
         atE = nearest(g, Es[0]); put(f'{tag}_long_atE_E', atE['spec']['E'], atE['file']); put(f'{tag}_long_atE_T', r3(through(atE)), atE['file'])
         put(f'{tag}_long_atE_well', r3(atE['end']['well']), 'probability still between the walls at the end of that run')
+        put(f'{tag}_long_atE_Th', r3(half(atE)), 'twin T + (1 - T - R)/2, nearest run'); put(f'{tag}_long_Th', r3(half(best)), 'twin T + (1 - T - R)/2, best run')
+        put(f'{tag}_long_twin_trap', r3(1 - best['twin']['T'] - best['twin']['R']), 'twin: still trapped at the end of the best run'); put(f'{tag}_long_3d_well', r3(best['end']['well']), '3D: still between the walls at the end of the best run')
         ek = f'2|{V0:g}|{D:g}|{P:g}|12'
         if ek in IDX['exact']:
             exact1d.SIG0 = 12.0; put(f'{tag}_long_exact', r3(exact1d.tbar(best['spec']['E'], segs(2, V0, D, P), nk=2001)), 'exact1d.tbar, sigma_x 12, at the run energy (quadrature)')
@@ -278,6 +282,7 @@ for Nb in (3, 5, 10):
     put(f'N{Nb}_files', [r['file'] for r in ins + gap], 'files')
     bi = [through(r) for r in ins]; gi = [through(r) for r in gap if r['spec']['E'] <= 1.6 and r['spec']['E'] >= edges[1] + 0.1]
     put(f'N{Nb}_band_mean', r3(float(np.mean(bi))) if bi else None, f'mean share through over {len(bi)} band energies')
+    put(f'N{Nb}_band_n', len(bi), 'band runs averaged'); put(f'N{Nb}_band_lo', min(r['spec']['E'] for r in ins) if ins else None, 'lowest'); put(f'N{Nb}_band_hi', max(r['spec']['E'] for r in ins) if ins else None, 'highest'); put(f'N{Nb}_gap_n', len(gi), 'gap runs averaged')
     put(f'N{Nb}_gap_mean', r3(float(np.mean(gi))) if gi else None, f'mean share through over {len(gi)} energies from band top + 0.1 to 1.6')
     ek = f'{Nb}|2|1|2.5|3'
     if ek in IDX['exact']:
@@ -323,6 +328,15 @@ for R in (3.0, 5.0):
 put('walls_Tfar', round(walls['T_far']['value'], 4), walls['file'] + ': region reading (T_far) of the walls run the disc table compares with')
 put('walls_twin4', round(through(walls), 4), walls['file'] + ': twin share, 4 decimals')
 put('walls_Tfar_gap', round(100 * (1 - walls['T_far']['value'] / through(walls)), 1), 'per cent the region reading lies below the twin, same run')
+for tg, kw, E in (('sl_V2D1', dict(V0=2.0, D=1.0, P=2.5), 0.75), ('sl_P3_5', dict(V0=2.0, D=1.0, P=3.5), 0.4), ('sl_V2D2', dict(V0=2.0, D=2.0, P=3.5), 0.75)):
+    r = [x for x in runs(shape='flat', N=2, bias=0.0, sx=3.0, R=0.0, **kw) if abs(x['spec']['E'] - E) < 1e-9][0]
+    tt = 1 - r['twin']['T'] - r['twin']['R']
+    put(tg, round(100 * (1 - r['end']['well'] / tt)), r['file'] + ': per cent of the trapped wave the 3D run has lost sideways by its end (3D well against the twin\'s 1 - T - R)')
+    put(tg + '_t', round(r['t_end']), 'end of that run')
+for tg, kw in (('ge_V2D2', dict(V0=2.0, D=2.0, P=3.5)), ('ge_V3D1', dict(V0=3.0, D=1.0, P=2.5)), ('ge_V2D1', dict(V0=2.0, D=1.0, P=2.5))):
+    rs = [x for x in runs(shape='flat', N=2, bias=0.0, sx=3.0, R=0.0, **kw) if x.get('twin') and x['twin']['T_exact'] > 1e-3]
+    q = [x['twin']['T'] / x['twin']['T_exact'] for x in rs]
+    put(tg + '_lo', round(min(q), 2), 'smallest ratio twin T / exact T over the stored energies'); put(tg + '_hi', round(max(q), 2), 'largest')
 put('gpu_run_h', round(sum(r['wall'] for r in RUNS) / 3600, 1), 'index.json runs: sum of wall, hours on one GPU each')
 
 # ---------- 5. the diode ----------
