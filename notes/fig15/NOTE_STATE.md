@@ -116,3 +116,6 @@ arrival 3.7, one-disc yardstick, shells >= marks and no-model statement, supply 
 E_F choice, eV_b = V_b in our units). Not done: textbook (only read sources), Fig. 15e runs curve (page code), house font in
 SVG (same classes as gen-1 Figure 1), links to main 404 until merge.
 Live site: /r2/resonant-tunnelling/2026-11-14/runs/... returns 404 on phyeinusul.com (checker): told the coordinator.
+
+## Round 3 (launched ~03:45 UTC on 1aacf39): fresh referee, owner, student, derivation checker. Outputs: notes/fig15/referee.md,
+scratchpad/readers/r3-{owner,student}.md, scratchpad/derivation-check-r3.md. Coordinator told: live R2 404, page gain note, V0=3 long packets.
