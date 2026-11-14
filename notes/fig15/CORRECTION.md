@@ -1,5 +1,33 @@
 # Fig. 15 correction: brief for the correcting session
 
+## ADDENDUM, 14 November 11:05 UTC, on the owner's order: speed first ("as efficiently as possible, as fast as possible";
+## GPU wherever it is faster). This overrides the sections below where they differ.
+
+- **Walls:** CPU, now. Rebuild every failing wall exactly (section 4), in minutes. A GPU would not be faster here: Kaggle start-up
+  alone takes 3–5 minutes.
+- **Discs and shells:** drop the 60–80-run sample study and the difference-rule study. Computing all 2,609 runs in 2D on the GPU is
+  faster than studying them. Work in parallel with the walls:
+  1. Write the axisymmetric solver (section 5) in JAX: spectral along x, order-0 Hankel transform in ρ, cell-averaged V.
+     Cell-averaged faces at Δx = 0.0625 a (the twin needs this for the gate); choose Δρ by measurement.
+  2. On the CPU, in minutes, check three things:
+     - a disc wider than the ρ range reproduces the exact wall answer;
+     - the results converge in Δx, Δρ and Δt on 3 runs;
+     - with rt3d2's 0.5 a drawing rules, the solver reproduces 3 stored 3D runs to about 10⁻³.
+  3. Run a Kaggle smoke test on a T4 (a few runs). From the measured step times, write the bill: runs, steps, seconds per step,
+     GPU-hours and quota.
+  4. Launch the full disc and shell set in shards, two at a time.
+     - **Pre-approved by the owner up to 14 GPU-hours of quota.** The week has 16.6 h left at 11:00 UTC, resets 21 Nov 00:00 UTC.
+       Post the bill in your chat and to the coordinator, then launch without waiting.
+     - Beyond 14 h: stop and ask.
+     - Every notebook writes a progress line that can be read while it runs.
+  5. Produce the same RT3C files the page plays: the z = 0 plane is ψ(x, |y|) directly. Use the stored frame times.
+- **Keep what passes:** a stored run whose T and curves pass the gate against the new reference keeps its stored file. The index
+  points to it.
+- **Uploading:** you may upload the new files to R2 under a new generation date, `resonant-tunnelling/<new date>/runs/`. The token
+  is already on this environment; never print it. Never delete or overwrite an existing R2 object.
+- **Main:** do not merge into `main` yourself. Tell the coordinator when the new generation is filed and passes; the coordinator
+  verifies and merges at once.
+
 Written 14 November 2026 by the coordinating chat (session_01DGmqintkoYzahfGQQzdXYL), on the owner's order:
 "direct and deploy a new session to correct everything from the resonant tunneling".
 You are that session. Read this file whole, then the files it names, before any work. Never write the owner's name.
