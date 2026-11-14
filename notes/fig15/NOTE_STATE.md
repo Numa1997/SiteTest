@@ -26,11 +26,16 @@ walks: spacing P, height V0 and thickness D, N = 3, 5, 10 barriers (bands), disc
 - Commit messages end with Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
 
 ## Done
-- (14 Nov) branch created, this file.
+- (14 Nov 01:30) branch created, this file.
+- gen2_numbers.py: prints every number with its source; `--write` fills the NUM and FIG2 blocks of resonant-note.js.
+  Exact parts from tm.py/iv.py (finite-well levels, widths, band edges via xi = Re(e^{-ikP}/t), T_N formula check 2e-12).
+- Note drafted (commit 9bbf6f7): 14 sections, eqs (1)-(27), Figures 1-3; byline without the owner's name (task rule).
+- Page lead + meta description rewritten for gen 2.
+- Built; headless Chromium at 1440/390: 589 KaTeX, 0 errors, eqs (1)-(27), no page errors, no overflow. Figure 3 labels fixed.
+  Screenshots in scratchpad/shots (open folds first: the 'Expand all' button).
+- No walkthrough key for this page (no data-walk attribute): walkthrough-keeper not needed.
 
 ## Left
-1. Read the index, file_rt3d2.py docstring, page HTML; write gen2_numbers.py.
-2. Draft the note.
-3. Agents, fixes, build, browser check, screenshots, docs.
+3. derivation-checker (running; report -> notes/fig15/derivation-check-gen2.md), then referee; fix; docs section.
 4. Refresh numbers with the full index.
 5. Write "READY at <commit>".
