@@ -24,11 +24,12 @@ def fetch(name):
     if os.path.exists(p):
         b = open(p, "rb").read()
         if hashlib.sha256(b).hexdigest() == BY[name]["sha256"]: return b
-    for a in range(4):
-        try:
-            b = urllib.request.urlopen(BASE + name, timeout=60).read(); break
-        except Exception:
-            time.sleep(2 * (a + 1))
+    import subprocess
+    for a in range(5):
+        r = subprocess.run(["curl", "-sSf", "--max-time", "120", "-o", p + ".part", BASE + name])
+        if r.returncode == 0: break
+        time.sleep(2 * (a + 1))
+    b = open(p + ".part", "rb").read(); os.remove(p + ".part")
     assert hashlib.sha256(b).hexdigest() == BY[name]["sha256"], "SHA-256 mismatch " + name
     open(p, "wb").write(b); return b
 

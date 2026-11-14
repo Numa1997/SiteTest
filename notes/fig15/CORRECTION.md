@@ -1,5 +1,82 @@
 # Fig. 15 correction: brief for the correcting session
 
+## ADDENDUM, 14 November 11:05 UTC, on the owner's order: speed first ("as efficiently as possible, as fast as possible";
+## GPU wherever it is faster). This overrides the sections below where they differ.
+
+- **Walls:** CPU, now. Rebuild every failing wall exactly (section 4), in minutes. A GPU would not be faster here: Kaggle start-up
+  alone takes 3–5 minutes.
+- **Discs and shells:** drop the 60–80-run sample study and the difference-rule study. Computing all 2,609 runs in 2D on the GPU is
+  faster than studying them. Work in parallel with the walls:
+  1. Write the axisymmetric solver (section 5) in JAX: spectral along x, order-0 Hankel transform in ρ, cell-averaged V.
+     Cell-averaged faces at Δx = 0.0625 a (the twin needs this for the gate); choose Δρ by measurement.
+  2. On the CPU, in minutes, check three things:
+     - a disc wider than the ρ range reproduces the exact wall answer;
+     - the results converge in Δx, Δρ and Δt on 3 runs;
+     - with rt3d2's 0.5 a drawing rules, the solver reproduces 3 stored 3D runs to about 10⁻³.
+  3. Run a Kaggle smoke test on a T4 (a few runs). From the measured step times, write the bill: runs, steps, seconds per step,
+     GPU-hours and quota.
+  4. Launch the full disc and shell set in shards, two at a time.
+     - **Pre-approved by the owner up to 14 GPU-hours of quota.** The week has 16.6 h left at 11:00 UTC, resets 21 Nov 00:00 UTC.
+       Post the bill in your chat and to the coordinator, then launch without waiting.
+     - Beyond 14 h: stop and ask.
+     - Every notebook writes a progress line that can be read while it runs.
+  5. Produce the same RT3C files the page plays: the z = 0 plane is ψ(x, |y|) directly. Use the stored frame times.
+- **Keep what passes:** a stored run whose T and curves pass the gate against the new reference keeps its stored file. The index
+  points to it.
+- **Uploading:** you may upload the new files to R2 under a new generation date, `resonant-tunnelling/<new date>/runs/`. The token
+  is already on this environment; never print it. Never delete or overwrite an existing R2 object.
+- **Main:** do not merge into `main` yourself. Tell the coordinator when the new generation is filed and passes; the coordinator
+  verifies and merges at once.
+
+## ADDENDUM 2, 14 November 11:15 UTC, on the owner's order: a change log for the note writer, and a hand-over to it
+
+The lecture note (live, `public/scripts/resonant-note.js`, writer session session_01DGmqiqazJ9UxECtFYiespR) describes the old data.
+When you are done, the writer must rewrite whatever your correction changed, without having to dig for it. So keep, from your
+first edit, a change log on your branch. It has two files, kept current and pushed.
+
+**1. `notes/fig15/CORRECTION_LOG.md` (for a reader).**
+- **Method, old against new, per shape** (walls, discs, shells), with the equations:
+  - how V was drawn;
+  - grid, box and border;
+  - the exact superposition for walls;
+  - the axisymmetric equation for discs and shells;
+  - the gate and its tolerance.
+- **The note, section by section.** For each of sections 1–14, the Problems and the figure guide:
+  - which statements are no longer true, quoted exactly;
+  - why;
+  - what replaces them, with the new number and its handle.
+
+  Cover at least:
+  - section 11, the grid accuracy;
+  - every place that blames the grid, the side border or "not traced";
+  - the 3D lifetimes cut by the side border (6 %, 36 %, 36 %);
+  - the long-packet table;
+  - the disc table and τ_side;
+  - the 17 % lifetime gap;
+  - the shell lifetimes;
+  - the diode curves;
+  - Fig. 15b's dashed twin;
+  - the run counts and GPU hours;
+  - section 10, the method.
+- **What is new** and has no place in the note yet: the exact wall construction, the 2D reduction, the gate, the kept runs.
+- **Figures and page panels** that change (Figs. 15–15e, the chips and readouts).
+
+**2. `notes/fig15/correction_numbers.json` (for checking).**
+- **Every key of the note's NUM block.** Run `notes/fig15/gen2_numbers.py` on the old index and on the new one. For each key give
+  the old value, the new value and the run file or curve it comes from.
+- **One row per run:** file, shape, old T, reference T, new T, error, and the status. The status is one of: kept, rebuilt exactly
+  (wall), or recomputed in 2D.
+
+**When the new generation is filed and passes the gate:**
+- Tell the coordinator.
+- In the same step, send the writer session (session_01DGmqiqazJ9UxECtFYiespR) a send_message of at most 12 lines:
+  - what changed;
+  - the branch and commit;
+  - the paths of both log files;
+  - the order: rewrite every passage the log lists, regenerate the NUM block from the new index with `gen2_numbers.py`, and run
+    the readers and the derivation checker as before.
+- This message is the one exception the owner makes to "message no session but the coordinator".
+
 Written 14 November 2026 by the coordinating chat (session_01DGmqintkoYzahfGQQzdXYL), on the owner's order:
 "direct and deploy a new session to correct everything from the resonant tunneling".
 You are that session. Read this file whole, then the files it names, before any work. Never write the owner's name.

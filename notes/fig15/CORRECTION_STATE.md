@@ -42,8 +42,32 @@ last, GPU only with the owner's yes on a bill.
 - The grid twin's chi equals the stored prof1d to 4.6e-8 (relative). Rebuilt |psi| levels: max diff 1 level (1.1 % of points);
   arg levels: max diff 1 where |psi| >= 10 levels (<= 3 where 3-10 levels).
 - NEW finding (Fact, measured): the stored 3D run loses norm steadily from t = 0, before any wave reaches a border: 3D transverse
-  share / exact discrete transverse share = 0.99981 at t 4.5, 0.99784 at t 45, 0.99536 at t 89.6. Inference: complex64 rounding of
-  the kinetic phase factor on the GPU (|exp(-i K^2 dt/2)| != 1 in float32), about 4e-7 per step. Effect: curves up to 2.4e-3 low.
+  share / exact discrete transverse share = 0.99981 at t 4.5, 0.99784 at t 45, 0.99536 at t 89.6. Cause NOT yet known. My first
+  inference (float32 rounding of the kinetic factor) is ruled out by measurement: weighted over the packet's spectrum it removes
+  3.6e-9 per step, 3.2e-5 over the run, 1/140 of the loss. Remaining suspects: the float32 FFT itself on the GPU. Effect: curves
+  up to 2.4e-3 low. The 2D solver must show its own drift below 1e-3 (owner's rule).
+
+### 2D solver, first measurements (`correction/axisym_jax.py`, CPU, complex128)
+- Wall limit, N2 V2 D1 P2.5 E0.75 sx3, hx 0.0625, Nr 64, Rmax 40, t 100: exact T 0.196820.
+  Box 96 a, dt 0.01: 0.200847 (+0.0040). Box 192 a, dt 0.01: 0.196889 (+7e-5). Box 96 a, dt 0.0025: 0.210937 (+0.014).
+  Norm drift (|psi|^2 + absorbed - 1): 1.2e-12. CPU 3.7 ms per step at 98,304 cells (4 cores shared with the wall batch).
+- Fact: the sin^(1/8) mask applied every step reflects part of the wave back; its strength grows as 1/dt (the mask is a CAP of
+  imaginary height -ln(m)/dt). This explains the predecessor's "unexplained" +0.004 at dt 0.0025 (BRIEF 3). Inference: the stored
+  3D runs carry the same reflection from their x and side borders. Rule for the references: box 2x the stored one (reflection
+  returns after the read time), and measure it.
+
+## Outside sources, part B (14 Nov, 20 min; WebSearch and WebFetch answered, pdftotext read the PDF)
+1. Order-0 QDHT (Guizar-Sicairos & Gutierrez-Vega 2004) is the standard radial transform: pyhank (pyhank.readthedocs.io) uses it
+   for radially symmetric beam propagation, replacing the 2D FFT across by one 1D transform; XMDS2 has a "bessel" dimension used
+   for cylindrical Gross-Pitaevskii runs (testsuite bessel_cosine_evolution.xmds), grids 64x256 to 160x1024 (arXiv 2005.00368).
+2. Both note the Bessel basis imposes psi = 0 at the outer radius: a wave reaching it reflects unless absorbed first.
+3. Yu & Esry, arXiv 1710.04338 (read): judge an absorber by its reflection R(k) for stationary states, R <= Rc over [kmin, kmax].
+   The absorber must be long enough to hold the longest wavelength: for an exponential CAP, kmin * beta >= 1.1 for Rc = 1e-3.
+4. The rt3d2 border is the cos^(1/8) mask (their Table I, "cosine masking function"); they find optimised exponential CAPs
+   need 3-4x less range for the same R. Inference: slow components (small k, e.g. transverse spreading) reflect off a 6 a mask.
+5. For the 2D solver: make the rho absorber at least ~10 a and measure its reflection (Rmax 40 vs 60); count what it absorbs.
+6. Float32 drift: no source measures it for split-step; NVIDIA forum report: accumulate sums in float64. My own test rules out the
+   kinetic factor (above). The 2D solver runs complex128 on CPU; on the T4 measure the drift before trusting float32.
 
 ## Files and commits
 - `notes/fig15/CORRECTION.md`, `notes/fig15/coordinator/*` (brief and coordinator's checks, from branch ccr-0bb034eb-nkmdd2)
