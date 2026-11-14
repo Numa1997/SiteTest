@@ -177,3 +177,5 @@ sideways momentum kept on crossing (why the current falls); (11) explains the tr
 e^{-2 kappa d} reason; dividing by the total; lifetime belongs to the resonance (reason); shells tunnelled into; hbar theta'
 is a time (reason); uniqueness for the product; AC power argument for NDR; Gamma from (17) to 3 figures.
 Coordinator already has the page items (Fig. 15e, gain note). Next: round 6.
+
+## Round 6 launched 03:18 UTC on ada0993 (fresh referee, owner, student, derivation checker).
