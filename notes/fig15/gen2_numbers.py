@@ -198,9 +198,12 @@ for V0, D, P in ((1.5, 1.0, 2.5), (2.0, 1.0, 2.5), (3.0, 1.0, 2.5), (2.0, 1.5, 3
         best = max(g, key=lambda r: through(r) or 0)
         put(f'{tag}_long_T', r3(through(best)), best['file']); put(f'{tag}_long_n', len(g), 'G runs filed for this structure')
         put(f'{tag}_long_E', best['spec']['E'], best['file'])
+        atE = nearest(g, Es[0]); put(f'{tag}_long_atE_E', atE['spec']['E'], atE['file']); put(f'{tag}_long_atE_T', r3(through(atE)), atE['file'])
+        put(f'{tag}_long_atE_well', r3(atE['end']['well']), 'probability still between the walls at the end of that run')
         ek = f'2|{V0:g}|{D:g}|{P:g}|12'
         if ek in IDX['exact']:
             exact1d.SIG0 = 12.0; put(f'{tag}_long_exact', r3(exact1d.tbar(best['spec']['E'], segs(2, V0, D, P), nk=2001)), 'exact1d.tbar, sigma_x 12, at the run energy (quadrature)')
+            put(f'{tag}_long_atE_exact', r3(exact1d.tbar(atE['spec']['E'], segs(2, V0, D, P), nk=2001)), 'exact1d.tbar, sigma_x 12, at the energy of the run nearest E1')
             put(f'{tag}_long_tend', round(best['t_end']), best['file']); put(f'{tag}_long_well', r3(best['end']['well']), 'probability still between the walls at the end of the run')
     s3 = runs(shape='flat', V0=V0, D=D, P=P, R=0.0, N=2, bias=0.0, sx=3.0); r = nearest(s3, Es[0])
     ok = r is not None and abs(r['spec']['E'] - Es[0]) <= 0.05
@@ -294,6 +297,7 @@ for R in (2.0, 4.0, 6.0, 9.0, 12.0):
     if r and r[0].get('tau'):
         t = r[0]['tau']['tau']; put(f'{tag}_tau', r3(t), r[0]['file']); put(f'{tag}_T', r3(through(r[0])), r[0]['file'])
         put(f'{tag}_tau_side', r3(1 / (1 / t - 1 / tw)) if t < tw else None, '1/(1/tau - 1/tau_walls)')
+        put(f'{tag}_tau_side_rnd', r3(1 / (1 / r3(t) - 1 / r3(tw))) if r3(t) < r3(tw) else None, 'the same from the rounded lifetimes printed in the table')
     else:
         put(f'{tag}_tau', None, f'missing: discs R {R} at E {walls["spec"]["E"]}'); put(f'{tag}_T', None, 'missing'); put(f'{tag}_tau_side', None, 'missing')
     put(f'{tag}_T1', r3(through(one[0])) if one else None, one[0]['file'] if one else 'missing: one disc')
