@@ -52,6 +52,10 @@ Held: Fig. 15 (`fig15-*`, 15 notebooks incl. the 3 `fig15-correction-walls-*` of
 (`fig-16-guinness-cart-with-control`): not touched while those sessions run. 
 ## The owner's rules (from the brief, CLAUDE.md and the owner's preferences)
 
+- **No delete command of any kind (files, notebooks, datasets, branches, `rm`, `git rm`, API delete) without the owner's explicit
+  authorization of that exact deletion** (owner, 14 November 2026, after a blocked `rm -rf ./*`). Temporary files go into new folders.
+- Do not touch anything that is running now: Fig. 15 (`fig15-*` notebooks, `tools/kaggle/resonant-tunnelling/`, its R2 data,
+  branch `claude/fig15-correction`) and Fig. 16 (`fig-16-guinness-cart-with-control`, `tools/fig12/control/`, branch `claude/fig16-cart`).
 - Phase 1 changes nothing anywhere. No deletion before the owner's yes on that group. No GPU, no new Kaggle run, no R2 write, nothing that costs money.
 - Preserve data and its record of origin before anything is deleted. A Kaggle notebook named in a live `generations.json` or `index.json`
   is NOT deletable until that record points to a preserved copy.
