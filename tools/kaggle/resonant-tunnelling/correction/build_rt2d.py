@@ -13,9 +13,11 @@ md = ("# Fig. 15 correction: discs and shells in the exact (x, rho) reduction (G
       f"Job set: {JOBSEL}" + (f", shard {SHARD[0]} of {SHARD[1]}" if SHARD else "") + f". Code from the website's repository at commit {COMMIT}.")
 c1 = ('import jax; print(jax.devices())\nif jax.default_backend() != "gpu":\n    print("NO GPU BACKEND"); raise SystemExit("NO GPU BACKEND")\n'
       f'import urllib.request\nBASE = "{BASE}"\n'
-      'for f in ("axisym.py", "axisym_jax.py", "rt2d_run.py", "rt2d_smoke.py", "jobs_2d.json"):\n'
+      'for f in ("axisym.py", "axisym_jax.py", "rt2d_run.py", "rt2d_smoke.py", "rt2d_shellconv.py", "jobs_2d.json"):\n'
       '    urllib.request.urlretrieve(BASE + f, f)\n    if f.endswith(".py"): print("=" * 20, f, "=" * 20); print(open(f).read())\n')
-if JOBSEL == "smoke":
+if JOBSEL == "shellconv":
+    c2 = f'NTFY = {NTFY!r}\nexec(open("rt2d_shellconv.py").read())\n'
+elif JOBSEL == "smoke":
     c2 = f'NTFY = {NTFY!r}\nexec(open("rt2d_smoke.py").read())\n'
 else:
     EXTRA = os.environ.get("EXTRA", "")                      # e.g. 'SHAPE = "coin"\nDTYPE = "c64"\nGRID = dict(Rmax=96.0, Nr=384)'
