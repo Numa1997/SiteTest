@@ -216,3 +216,6 @@ xi = 0 from U_1 = 2 xi; w = e^{-i phi}/sqrt T step; splitting error from [K, V] 
 double-barrier equation with u = 0 at the centre; 1/kappa = 0.63 = 1.3 grid spacings as possible cause; chi'/m* keeps the current
 continuous; 'very sensitive'; gamma aside removed; T_2(k) via E = k^2/2.
 Declined/pending: textbook; status wording (full index); page items (coordinator); comma-wrap nit; table scroll cue (house .ptab).
+
+## Waiting for the full index. Check-in scheduled 08:40 UTC (send_later trig_015qJd9wuG4GdSQudXZGFJv3): fetch, refresh numbers,
+rewrite status sentences as findings, one fresh reader round + checker, READY. Round-6 derivation checker still running at 03:37.
