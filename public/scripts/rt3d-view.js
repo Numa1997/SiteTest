@@ -64,8 +64,11 @@ export function create(canvas, opt) {
             const e = new THREE.LineSegments(new THREE.EdgesGeometry(g, 30), edge()); e.position.x = x; e.renderOrder = 4; barrier.add(e);
             return m;
         };
-        const flat = b.shape.endsWith('flat'), coin = b.shape.endsWith('coin'), shell = b.shape.endsWith('shell'), two = b.shape[0] === 'd';
-        const xs = two ? [-b.S / 2, b.S / 2] : [-b.S / 2];
+        /* b.shape: 'flat' | 'coin' | 'shell' (generation 2) or 'dflat' ... 'sshell' (generation 1); b.centres: the barrier centres along x
+           (walls, discs); b.radii: the shell radii. Generation 1 gives neither: its pair sits at -S/2, +S/2 (one barrier: -S/2). */
+        const kind = b.shape.replace(/^[ds](?=(flat|coin|shell)$)/, ''), flat = kind === 'flat', coin = kind === 'coin', shell = kind === 'shell';
+        const two = b.shape[0] === 'd';
+        const xs = b.centres || (two ? [-b.S / 2, b.S / 2] : [-b.S / 2]);
         const Hh = b.H || 8, W = b.W || 64;
         if (flat || coin) xs.forEach((x) => {
             let g;
@@ -78,7 +81,7 @@ export function create(canvas, opt) {
             const l = new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(pts), cut()); l.renderOrder = 4; barrier.add(l);
         });
         if (shell) {
-            const radii = two ? [b.size, b.size + b.S] : [b.size];
+            const radii = b.radii || (two ? [b.size, b.size + b.S] : [b.size]);
             radii.forEach((Rc) => {
                 for (const R of [Rc - b.D / 2, Rc + b.D / 2]) {
                     const m = new THREE.Mesh(new THREE.SphereGeometry(R, 96, 64), glass()); m.renderOrder = 3; barrier.add(m);
@@ -150,6 +153,7 @@ export function create(canvas, opt) {
         return Array.from(px);
     };
     api.home = function () { api.yaw = -0.72; api.pitch = 0.52; };
+    api.setSpan = function (L) { arrow.position.x = -L / 2 - 12; api.dist = 112 * Math.max(1, L / 77); };   /* the sheet's length along x: the arrow sits before it, the camera stands back to see it */
 
     let drag = null;
     canvas.addEventListener('pointerdown', (e) => { if (opt.canTurn && !opt.canTurn()) return; drag = { x: e.clientX, y: e.clientY, yaw: api.yaw, pitch: api.pitch }; canvas.setPointerCapture(e.pointerId); });

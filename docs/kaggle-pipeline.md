@@ -193,6 +193,13 @@ A project brings five things; nothing in `kaggle-flow.js` or the bridge changes.
   `public/data/resonant-tunnelling/2026-11-13/kaggle/` with each file's notebook, version, commit and SHA-256; the page checks the
   SHA-256 in a worker and interpolates between stored frames. Uses none of `kaggle-flow.js`. Details:
   [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md).
+- Fig. 15, generation 2 (14 November 2026): the whole parameter space, 3739 runs planned from six shard notebooks
+  (`numakoudsie/fig15-rt3d2-shard-{1..6}-of-6`) and a fix notebook (`numakoudsie/fig15-rt3d2-fix1`, the 15 runs that the
+  run-length fix of commit 57770d2 lengthened by more than 15 %). Filed by `file_rt3d2.py` under
+  `public/data/resonant-tunnelling/2026-11-14/kaggle/index.json` (per run: notebook, version, commit, SHA-256, groups; a spec
+  computed in two groups is filed once; a fix notebook's rerun replaces the earlier file and the index records it under
+  `replaced`). The run files are not in the repository: they are in the R2 bucket `phyein-usul-runs`, served under `/r2/` by the
+  site's Worker ([usul.md](usul.md), "The run store").
 
 ## Derived data: generated from stored runs
 

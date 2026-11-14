@@ -13,10 +13,11 @@ backup ([below](#github-pages)).
 | Part | Where | Notes |
 |---|---|---|
 | Domain `phyeinusul.com` | A zone in Numa's Cloudflare account | Zone plan: Free. Active since 20 October 2026. |
-| Website | Cloudflare Worker `phyein-usul`, static assets only | No server code, no database, no login. Every request is a file. |
+| Website | Cloudflare Worker `phyein-usul`: static assets, plus one small script for stored runs | No database, no login. Every request is a file: a static asset, or (under `/r2/`) a stored run file from R2. |
+| Run store | R2 bucket `phyein-usul-runs` (binding `RUNS`), served by [`worker/r2.js`](../worker/r2.js) under `/r2/<key>` | Since 14 November 2026, for files too large for the repository (Fig. 15 generation 2). See "The run store" below. |
 | Addresses | `phyeinusul.com`, `www.phyeinusul.com` (Worker custom domains), `phyein-usul.phyeinusul.workers.dev` | All three serve the same files. |
 | Source | GitHub `Numa1997/SiteTest`, branch `main` | `index.html` and `public/` are the site; `docs/` and `tools/` are not served. |
-| Config | [`wrangler.jsonc`](../wrangler.jsonc) | Worker name, the `dist/` folder, the two custom domains. |
+| Config | [`wrangler.jsonc`](../wrangler.jsonc) | Worker name, the `dist/` folder, the two custom domains, the script `worker/r2.js` and the R2 binding. |
 
 Plans and costs (checked 20 October 2026): the Workers Free plan serves requests to static assets "free and unlimited"
 ([Cloudflare Workers pricing](https://developers.cloudflare.com/workers/platform/pricing/)); the site pays only the domain. A site
@@ -24,6 +25,25 @@ can hold up to 20 000 files of at most 25 MiB each on the free plan
 ([limits](https://developers.cloudflare.com/workers/platform/limits/)); a build of `main` gave 285 on 20 October 2026 and gives 233 on
 29 October 2026, after this branch removed six unused figures (`npm run build && find dist -type f | wc -l`). Numa's decision, 20 October 2026: stay on the
 free plan; dynamic features (for example a shared live counter) are for later and would need server code (Workers, D1).
+
+## The run store (R2, since 14 November 2026)
+
+Fig. 15's second generation holds about 3700 run files, several GB: too much for the repository (and for the 25 MiB-per-file,
+20 000-file asset limits it would be close to). They live in the R2 bucket `phyein-usul-runs` on the same Cloudflare account; the
+owner switched R2 on on 13 November 2026. What changed and what did not:
+
+- `wrangler.jsonc` names a script, `worker/r2.js`, and binds the bucket as `RUNS`. The script answers only `GET` and `HEAD` under
+  `/r2/`, and only for keys of the form `resonant-tunnelling/YYYY-MM-DD/runs/<name>.bin` (anything else under `/r2/` is a 404,
+  other methods 405). It sends `cache-control: public, max-age=31536000, immutable` (a run file never changes; a new run gets a new
+  name), `content-type: application/octet-stream` and `x-content-type-options: nosniff`.
+- Every other request goes to `env.ASSETS.fetch(request)`, so the static site is served exactly as before (`html_handling: none`,
+  `_redirects`, `_headers`). Checked before the merge with `tools/perf/addresses.cjs` against `wrangler dev`.
+- The bucket needs no trust of its own: each page checks every run file's SHA-256 against its index, which lives in the repository.
+- Upload: the Cloudflare REST API, `PUT /client/v4/accounts/<account>/r2/buckets/phyein-usul-runs/objects/<key>`, with an R2
+  token (Admin Read & Write) that the cloud session's proxy injects; the token is never written anywhere. After each upload R2's
+  etag is compared with the file's MD5.
+- Cost (checked 14 November 2026, [R2 pricing](https://developers.cloudflare.com/r2/pricing/)): the free tier is 10 GB-month of storage, 1 million writes and 10 million reads a month, and no charge for traffic out.
+  Above 10 GB it is $0.015 per GB-month. The measured size is stated in the Fig. 15 doc.
 
 ## Build and deploy
 
