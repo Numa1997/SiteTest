@@ -254,6 +254,39 @@ class Stout:
         self.ell = G.Rfill / 1.84118         # m, the depth over which the foam's sliding speed dies away upward, 1/k (Sauret 2015)
         self.Rrim = float(G.Rz(G.zrim - 1e-6))
         self.MF = 4096                       # lumps of head in flight, at most
+        # face centres (x, z) of the u and w faces, for the rotating frame's forces (Fig. 16; unused when rot is None)
+        xf = G.x0 + dx * np.arange(n + 1); zf = G.z0 + dx * np.arange(nz + 1)
+        self.fu_x = jnp.asarray(xf[:, None, None], F32); self.fu_z = jnp.asarray(G.zc[None, None, :], F32)
+        self.fw_x = jnp.asarray(G.xc[:, None, None], F32); self.fw_z = jnp.asarray(zf[None, None, :], F32)
+
+    # ---------------------------------------------------------------- the glass's frame when the glass also turns (Fig. 16)
+    @staticmethod
+    def frame_accel(x, z, vx, vz, gx, gz, rot):
+        """Acceleration felt in the glass's frame at (x, z) by matter moving at (vx, vz) relative to the glass, when the glass turns
+        about the y axis at rate om (rad/s, positive from e_x towards e_z, i.e. the deck's nose-up pitch rate) with angular
+        acceleration al, and its point S = (0, 0, zS) accelerates so that the uniform part there is (gx, gz):
+            a = g_eff(S) - al x (r - S) - om x (om x (r - S)) - 2 om x v
+              = (gx + al Z + om^2 X + 2 om vz,   gz - al X + om^2 Z - 2 om vx),   X = x, Z = z - zS.
+        Euler (al), centrifugal (om^2) and Coriolis (2 om v) terms; rot = (om, al, zS). With rot None: (gx, gz)."""
+        if rot is None: return gx, gz
+        om, al, zS = rot; Z = z - zS
+        return gx + al * Z + om * om * x + 2.0 * om * vz, gz - al * x + om * om * Z - 2.0 * om * vx
+
+    def body_force(self, vel, mass, dt, gx, gz, rot):
+        """dt times the body force on every open face with stout. rot None: the uniform effective gravity (Fig. 12, unchanged).
+        rot = (om, al, zS): plus the Euler and centrifugal forces at each face's centre, and the Coriolis force as an exact rotation
+        of each cell's velocity by -2 om dt (it does no work), handed to the faces as the mean of the two cells' changes."""
+        if rot is None:
+            return [jnp.where((mass[c] > 1e-6) & (self.th[c] > 0), vel[c] + dt * (gx if c == 0 else (gz if c == 2 else 0.0)), vel[c]).astype(F32) for c in range(3)]
+        om, al, zS = rot
+        ax_u, _ = self.frame_accel(self.fu_x, self.fu_z, 0.0, 0.0, gx, gz, rot)
+        _, az_w = self.frame_accel(self.fw_x, self.fw_z, 0.0, 0.0, gx, gz, rot)
+        uc = 0.5 * (cut_lo(vel[0], 0) + cut_hi(vel[0], 0)); wc = 0.5 * (cut_lo(vel[2], 2) + cut_hi(vel[2], 2))
+        ph = 2.0 * om * dt; cph, sph = jnp.cos(ph) - 1.0, jnp.sin(ph)
+        du = cph * uc + sph * wc; dw = -sph * uc + cph * wc                   # (u, w) -> R(-2 om dt) (u, w), minus (u, w)
+        du_f = 0.5 * (lo(du, 0, 0.0) + hi(du, 0, 0.0)); dw_f = 0.5 * (lo(dw, 2, 0.0) + hi(dw, 2, 0.0))
+        inc = [dt * ax_u + du_f, None, dt * az_w + dw_f]
+        return [jnp.where((mass[c] > 1e-6) & (self.th[c] > 0), vel[c] + inc[c], vel[c]).astype(F32) if c != 1 else vel[1] for c in range(3)]
 
     # ---------------------------------------------------------------- state
     def init_state(self):
@@ -480,7 +513,7 @@ class Stout:
         Hf = self.cc[2][kt] + f9 * dx - 0.68 * dx
         return jnp.where(has, jnp.where(found, Hs, Hf), jnp.nan).astype(F32), jnp.sum(has & ~found, dtype=I32)
 
-    def head_spill(self, s, H, dt, gx, gz):
+    def head_spill(self, s, H, dt, gx, gz, rot=None):
         """The head above the rim (verification.md, item 6): where the head's top stands e above the rim, at the glass, the part
         above the rim breaks away once its weight and outward push beat its strength, rho_f (|g_eff| e/2 + a_out e) >= tau_y.
         It leaves as a lump in free flight. Lumps already flying move under gravity minus the glass's acceleration."""
@@ -489,8 +522,9 @@ class Stout:
         Hs = jnp.where(ok, H, 0.0)
         atwall = ok & (self.rc >= self.Rz(Hs) - 1.5 * dx)
         e = jnp.where(atwall, Hs + hf - G.zrim, 0.0)
-        aout = gx * self.colx / jnp.maximum(self.rc, 1e-9)                   # outward push per unit mass in the glass's frame
-        fail = (e > 0) & (hf > 0) & (self.rho_f * (jnp.abs(gz) * 0.5 + jnp.maximum(aout, 0.0)) * e >= TAU_Y)
+        gxr, gzr = self.frame_accel(self.colx, G.zrim, 0.0, 0.0, gx, gz, rot)   # the field at the rim (uniform when rot is None)
+        aout = gxr * self.colx / jnp.maximum(self.rc, 1e-9)                  # outward push per unit mass in the glass's frame
+        fail = (e > 0) & (hf > 0) & (self.rho_f * (jnp.abs(gzr) * 0.5 + jnp.maximum(aout, 0.0)) * e >= TAU_Y)
         cut = jnp.where(fail, jnp.minimum(e, hf), 0.0)
         # lumps: one per breaking column, at the rim, starting at rest relative to the glass
         m = cut.reshape(-1) > 0; nnew = jnp.sum(m, dtype=I32)
@@ -502,7 +536,10 @@ class Stout:
         bvol = s["bvol"].at[slot].set(((cut * self.afill).reshape(-1) * dx * dx).astype(F32), mode="drop")
         onbody = (jnp.abs(bx[:, 0]) < BODY_HALF[0]) & (jnp.abs(bx[:, 1]) < BODY_HALF[1])
         flying = jnp.isfinite(bx[:, 2]) & (bx[:, 2] > -0.25) & ~((bx[:, 2] <= BODY_TOP) & onbody & (bv[:, 2] == 0))
-        bv = jnp.where(flying[:, None], bv + dt * jnp.array([gx, 0.0, gz], F32), bv)
+        if rot is None: acc = jnp.array([gx, 0.0, gz], F32)
+        else:
+            a_x, a_z = self.frame_accel(bx[:, 0], bx[:, 2], bv[:, 0], bv[:, 2], gx, gz, rot); acc = jnp.stack([a_x, jnp.zeros_like(a_x), a_z], -1)
+        bv = jnp.where(flying[:, None], bv + dt * acc, bv)
         bn = bx + dt * bv; hitb = flying & (bn[:, 2] < BODY_TOP) & (bx[:, 2] >= BODY_TOP) & onbody
         bn = jnp.where(hitb[:, None], bn.at[:, 2].set(BODY_TOP), bn); bv = jnp.where(hitb[:, None], 0.0, bv)
         bx = jnp.where(flying[:, None], bn, bx)
@@ -613,7 +650,7 @@ class Stout:
         return out
 
     # ---------------------------------------------------------------- grid to particles, move, glass, rim (Taichi g2p)
-    def g2p(self, s, vel, dt, gx, gz):
+    def g2p(self, s, vel, dt, gx, gz, rot=None):
         dx = self.dx; G = self.G; X, act = s["xp"], s["act"]
         g = (X - self.origin) / dx; vs, Cs = [], []
         for comp in range(3):
@@ -642,7 +679,11 @@ class Stout:
         act2 = act & ~leave
         # drops in free flight (gravity minus the glass's acceleration), until 0.25 m below the floor
         # a drop that comes down on the cart's body (its top is BODY_TOP below the glass's inner floor) stays where it lands
-        fly = s["fly"]; vf = s["vp"] + dt * jnp.array([gx, 0.0, gz], F32); xf = s["xp"] + dt * vf
+        if rot is None: acc = jnp.array([gx, 0.0, gz], F32)
+        else:
+            a_x, a_z = self.frame_accel(s["xp"][:, 0], s["xp"][:, 2], s["vp"][:, 0], s["vp"][:, 2], gx, gz, rot)
+            acc = jnp.stack([a_x, jnp.zeros_like(a_x), a_z], -1)
+        fly = s["fly"]; vf = s["vp"] + dt * acc; xf = s["xp"] + dt * vf
         hit = fly & (xf[:, 2] < BODY_TOP) & (s["xp"][:, 2] >= BODY_TOP) & (jnp.abs(xf[:, 0]) < BODY_HALF[0]) & (jnp.abs(xf[:, 1]) < BODY_HALF[1])
         xf = jnp.where(hit[:, None], xf.at[:, 2].set(BODY_TOP), xf); vf = jnp.where(hit[:, None], 0.0, vf)
         land = fly & ~hit & (xf[:, 2] < -0.25)
@@ -683,8 +724,10 @@ class Stout:
             return h1 + (r - r1) * (h1 - h2) / (r1 - r2)
         return (0.5 * (at(1.0) - at(-1.0))).astype(F64)
 
-    def step(self, s, dt, gx, gz, prep=None):
+    def step(self, s, dt, gx, gz, prep=None, rot=None):
+        """rot = (om, al, zS): the glass also turns (Fig. 16); None: the glass only translates (Fig. 12, unchanged)."""
         dt = jnp.asarray(dt, F32); gx = jnp.asarray(gx, F32); gz = jnp.asarray(gz, F32)
+        if rot is not None: rot = tuple(jnp.asarray(r, F32) for r in rot)
         pr = self.prepare(s) if prep is None else prep
         vel, mass = pr["vel"], pr["mass"]
         # 13 Nov 2026, run 3: gravity's kick of this step (dt g) was added before the viscous and thin-layer stresses, so the glass's
@@ -699,18 +742,22 @@ class Stout:
         if self.nu > 0: vel = self.viscosity(vel, mass, dt)
         z = jnp.zeros((), F64); ew = es = ef = z
         if self.gs > 0 or self.skin or self.head: vel, ew, es, ef = self.friction(vel, mass, ph, liq, dt, s["hf"])
-        vel = [jnp.where((mass[c] > 1e-6) & (self.th[c] > 0), vel[c] + dt * (gx if c == 0 else (gz if c == 2 else 0.0)), vel[c]).astype(F32) for c in range(3)]
-        # the head's weight on the surface (verification.md item 4), in the solver's pressure units (Pa x dt / rho)
-        ps = (self.rho_f * s["hf"] * jnp.maximum(-gz, 0.0) * dt / self.rho).astype(F32) if self.head else jnp.zeros((self.n, self.n), F32)
+        vel = self.body_force(vel, mass, dt, gx, gz, rot)
+        # the head's weight on the surface (verification.md item 4), in the solver's pressure units (Pa x dt / rho); with rot, the
+        # vertical field of each column at the fill height
+        gzh = gz if rot is None else self.frame_accel(self.colx, self.G.fill, 0.0, 0.0, gx, gz, rot)[1]
+        ps = (self.rho_f * s["hf"] * jnp.maximum(-gzh, 0.0) * dt / self.rho).astype(F32) if self.head else jnp.zeros((self.n, self.n), F32)
         mu = (self.rho_f * s["hf"] / self.rho).astype(F32) if (self.head and self.head_mass) else None
-        vel, known, p, it, res = self.pressure(vel, ph, liq, s["p"], ps, mu=mu, w_old=w_old, geff_dt=jnp.maximum(-gz, 0.0) * dt)
+        gdt = jnp.maximum(-gzh, 0.0) * dt
+        if rot is not None: gdt = gdt[:, :, None]
+        vel, known, p, it, res = self.pressure(vel, ph, liq, s["p"], ps, mu=mu, w_old=w_old, geff_dt=gdt)
         if mu is not None:   # the head's new vertical velocity: that of the face its surface crosses (liquid below, air above)
             sf = self._surf_faces(ph, liq); nsf = jnp.sum(sf, 2)
             wh = jnp.where(nsf > 0, jnp.sum(jnp.where(sf, vel[2], 0.0), 2) / jnp.maximum(nsf, 1), s["wh"]).astype(F32)
             s = dict(s, wh=wh)
         vel = self.extrapolate(vel, known)
-        s, mom = self.g2p(s, vel, dt, gx, gz)
-        if self.head: s = self.head_spill(s, H, dt, gx, gz)
+        s, mom = self.g2p(s, vel, dt, gx, gz, rot)
+        if self.head: s = self.head_spill(s, H, dt, gx, gz, rot)
         s = dict(s, p=p, ewall=s["ewall"] + ew, eskin=s["eskin"] + es, efoam=s["efoam"] + ef)
         vmax = jnp.max(jnp.where(s["act"][:, None], jnp.abs(s["vp"]), 0.0))
         mhead = self.rho_f * jnp.sum((s["hf"] * self.afill).astype(F64)) * self.dx ** 2

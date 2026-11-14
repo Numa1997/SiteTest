@@ -69,6 +69,9 @@ CART4 = dict(
     Umax=50.0, tauU=0.003,     # N per axle (two voice coils of 25 N), s
     Ts=0.001, Np=250,   # s, controller sample; preview samples (0.25 s)
 )
+# the glass's inner floor above the deck's centre (seat 16 mm + the glass's foot 14 mm), so S stands at z_S = h_g - 0.030 m in the
+# fluid solver's coordinates (z = 0 at the inner floor): the point about which the rotating frame's forces are taken (run 3, 14 Nov)
+FLOOR_ABOVE_DECK = 0.030
 # the swing the controller is designed on: run 8's measured swing with the head (free_full_1.5, ring 13) and beta with the head's mass
 PLANT_F0, PLANT_ZETA, PLANT_BETA = 2.9152394311359466, 0.4250231022393094, 1.2409479382789539
 # Bryson weights (the largest acceptable value of each), the controller's tuning

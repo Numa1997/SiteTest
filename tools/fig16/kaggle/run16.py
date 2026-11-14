@@ -19,7 +19,11 @@ from stout_jax import Geometry, Stout, road_table, make_advance, F64, I32, HEAD0
 import cart4 as C4
 
 R = json.load(open(os.environ["GLASS_JSON"]))["R"]; DZP = 0.0005
-FILL, RHO, FPS = 0.125, 1007.0, 30
+FILL, RHO = 0.125, 1007.0
+FPS = int(os.environ.get("FPS", "60"))         # stored pictures a second (run 3: 60, so that the played motion is smooth)
+M_DROPS = int(os.environ.get("M_DROPS", "131072"))   # drops tracked (run 2 stopped the uncontrolled kerb at 16,384)
+DROPS_KEEP = 16384                              # drops stored per picture for the drawing (an even subsample when there are more)
+ROT = os.environ.get("ROT", "1") == "1"         # the rotating frame's forces in the fluid (run 3); "0" reproduces run 2's model
 BUDGET_S = float(os.environ.get("BUDGET_S", "2000")); CODECHECK = bool(os.environ.get("CODECHECK"))
 STAMP = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d")
 WORK = Path(os.environ.get("NB_WORK", "/kaggle/working")) / STAMP; WORK.mkdir(parents=True, exist_ok=True)
@@ -39,19 +43,27 @@ ROADS = eval(_src[_a + len("ROADS = "):_b])       # Fig. 12's roads, exactly as 
 KERB, RES, B25 = "one sharp 30 mm bump", "five 20 mm bumps in step with the swing", "one 25 mm bump"
 dx0 = 0.006 if CODECHECK else 0.0015
 end_ = lambda e: 2 / FPS if CODECHECK else e
+# run 3 (14 Nov 2026): the rotating frame's forces; the control-off rides of every road; the kerb twice more for the scatter.
+# Run 2's gentle rides with control (pitch rate <= 0.04 rad/s, al r <= 0.06 m/s^2) are kept: not recomputed.
 TASKS = [dict(name="rest", kind="free", end=end_(2.0)),
          dict(name="design", kind="design"),
-         dict(name="kerb_full", kind="ride", road=KERB, v0=1.5, ctrl="full", end=end_(4.0)),
          dict(name="kerb_off", kind="ride", road=KERB, v0=1.5, ctrl="off", end=end_(4.0)),
-         dict(name="resonant_full", kind="ride", road=RES, v0=1.0, ctrl="full", end=end_(8.0)),
-         dict(name="bump25_full", kind="ride", road=B25, v0=1.0, ctrl="full", end=end_(8.0))]
+         dict(name="kerb_full", kind="ride", road=KERB, v0=1.5, ctrl="full", end=end_(4.0)),
+         dict(name="resonant_off", kind="ride", road=RES, v0=1.0, ctrl="off", end=end_(8.0)),
+         dict(name="bump25_off", kind="ride", road=B25, v0=1.0, ctrl="off", end=end_(8.0)),
+         dict(name="kerb_full_seed2", kind="ride", road=KERB, v0=1.5, ctrl="full", end=end_(4.0), seed=2),
+         dict(name="kerb_off_seed2", kind="ride", road=KERB, v0=1.5, ctrl="off", end=end_(4.0), seed=2)]
 if os.environ.get("ONLY"): TASKS = [t for t in TASKS if t["name"] in os.environ["ONLY"].split(",") + ["rest", "design"]]
-summary = dict(generated=STAMP, device=jax.devices()[0].device_kind, jax=jax.__version__, fill=FILL, rho=RHO, fps=FPS, cart=C4.CART4,
+summary = dict(generated=STAMP, device=jax.devices()[0].device_kind, jax=jax.__version__, fill=FILL, rho=RHO, fps=FPS, cart=C4.CART4, rot=ROT,
+               m_drops=M_DROPS, zS=C4.CART4["hg"] - C4.FLOOR_ABOVE_DECK,
                plant=dict(f0=C4.PLANT_F0, zeta=C4.PLANT_ZETA, beta=C4.PLANT_BETA), tasks=[])
 WEIGHTS = None
 
 
 def save_summary(): json.dump(summary, open(WORK / "summary.json", "w"), indent=1, default=float)
+
+
+ZS = C4.CART4["hg"] - C4.FLOOR_ABOVE_DECK
 
 
 def make_advance16(S, cart, cfl=0.8, dtmax=0.002):
@@ -67,12 +79,18 @@ def make_advance16(S, cart, cfl=0.8, dtmax=0.002):
         cs = dict(ex["cart"], py=S.probes(prep["H"]), pfresh=jnp.where(ex["probeOk"], 1.0, ex["cart"]["pfresh"]))
         nsub = jnp.maximum(1, jnp.round(dt / 1e-4).astype(I32)); hc = dt / nsub
         def sub(k, a):
-            cc, gxs, gzs = a; cc = cart.step(cc, hc, ex["F"][0], ex["F"][1]); return (cc, gxs + cc["gx"], gzs + cc["gz"])
-        cs, gxs, gzs = lax.fori_loop(0, nsub, sub, (cs, jnp.zeros((), F64), jnp.zeros((), F64)))
-        gx, gz = gxs / nsub, gzs / nsub
-        s, d = S.step(s, dt, gx, gz, prep=prep)
+            cc, gxs, gzs, oms, als = a; cc = cart.step(cc, hc, ex["F"][0], ex["F"][1])
+            return (cc, gxs + cc["gx"], gzs + cc["gz"], oms + cc["om"], als + cc["al"])
+        z0 = jnp.zeros((), F64)
+        cs, gxs, gzs, oms, als = lax.fori_loop(0, nsub, sub, (cs, z0, z0, z0, z0))
+        gx, gz, om, al = gxs / nsub, gzs / nsub, oms / nsub, als / nsub
+        rot = (om, al, ZS) if ROT else None
+        s, d = S.step(s, dt, gx, gz, prep=prep, rot=rot)
         P = d["mom"] * S.mp
-        F = jnp.where(ex["haveP"], -(P - ex["P"]) / dt, 0.0)
+        # the stout's push on the glass: minus the rate of change of its momentum relative to the glass, taken in the inertial frame
+        # (run 3): dP/dt + om x P, with om x P = om (-P_z, 0, P_x) in the glass's axes; run 2 had dP/dt alone
+        OxP = jnp.stack([-P[2], 0.0 * P[1], P[0]]) * (om if ROT else 0.0)
+        F = jnp.where(ex["haveP"], -((P - ex["P"]) / dt + OxP), 0.0)
         ex = dict(ex, cart=cs, P=P, F=jnp.stack([F[0], F[2]]), haveP=jnp.ones((), bool), vmax=d["vmax"].astype(F64),
                   imp=ex["imp"] + jnp.stack([F[0], F[2]]) * dt, probeOk=jnp.ones((), bool), gx=gx, gz=gz)
         st = dict(steps=st["steps"] + 1, its=st["its"] + d["it"], itmax=jnp.maximum(st["itmax"], d["it"]),
@@ -121,7 +139,7 @@ for task in TASKS:
     if time.time() - T0 + est > BUDGET_S:
         log(f"skip {name}: needs about {est:.0f} s, {BUDGET_S - (time.time() - T0):.0f} s left in the budget"); continue
     log(f"start {name}: grid {dx0 * 1e3:.1f} mm, {task['end']:.3f} s of stout; about {est:.0f} s")
-    G = Geometry(R, DZP, FILL, dx0); S = Stout(G, model="full", rho=RHO, head_mass=True)
+    G = Geometry(R, DZP, FILL, dx0); S = Stout(G, model="full", rho=RHO, head_mass=True, seed=task.get("seed", 1), M_drops=M_DROPS)
     s = S.init_state(); t = jnp.zeros((), F64)
     ml = S.rho * S.V + S.rho_f * HEAD0 * float(np.sum(np.asarray(S.afill))) * S.dx ** 2
     if task["kind"] == "free":
@@ -133,14 +151,18 @@ for task in TASKS:
         ex = dict(cart=cart.init(0.5, ml), P=jnp.zeros(3, F64), F=jnp.zeros(2, F64), haveP=jnp.ones((), bool), vmax=jnp.zeros((), F64),
                   imp=jnp.zeros(2, F64), t_end=jnp.zeros((), F64), probeOk=jnp.zeros((), bool), gx=jnp.zeros((), F64), gz=jnp.asarray(-9.81, F64))
     obs = jax.jit(S.observe); pol = jax.jit(S.polar)
-    KC = ("x", "v", "zc", "th", "zf", "zr", "i", "icmd", "uf", "ur", "ufc", "urc", "Nf", "Nr", "Ff", "Fr", "Fdrive", "aeff", "py", "sat", "stopf", "stopr", "vzc", "om")
+    KC = ("x", "v", "zc", "th", "zf", "zr", "i", "icmd", "uf", "ur", "ufc", "urc", "Nf", "Nr", "Ff", "Fr", "Fdrive", "aeff", "py", "sat", "stopf", "stopr", "vzc", "om",
+          "al", "vzf", "vzr", "zaf", "zar", "xi")
     rec = {k: [] for k in ("t", "H", "nfallback", "polar", "drops", "ndrops", "nfly", "nlanded", "nstuck", "nact", "KE", "PE", "Px", "ewall", "efoam", "eskin",
                            "hf", "lumps", "lumpvol", "foam_spill", "vhead", "steps", "its", "itmax", "resmax", "nselmax", "wall_s", "Fx", "Fz", "gx", "gz", "qh", "qhd") + KC}
 
     def record(s, t, ex, st, wall):
         o = obs(s); P = pol(o["H"])
         rec["t"].append(float(t)); rec["H"].append(np.asarray(o["H"])); rec["polar"].append(np.asarray(P))
-        rec["drops"].append(np.asarray(o["drops"]).astype(np.float16))
+        dr = np.asarray(o["drops"]); nd = int(o["ndrops"])
+        if nd > DROPS_KEEP: dr = dr[np.linspace(0, nd - 1, DROPS_KEEP).round().astype(int)]
+        else: dr = dr[:DROPS_KEEP]
+        rec["drops"].append(dr.astype(np.float16))
         for k in ("nfallback", "ndrops", "nfly", "nlanded", "nstuck", "nact", "KE", "PE", "Px", "ewall", "efoam", "eskin", "foam_spill", "vhead"): rec[k].append(float(o[k]))
         rec["hf"].append(np.asarray(o["hf"]).astype(np.float16)); rec["lumps"].append(np.asarray(o["lumps"]).astype(np.float16))
         rec["lumpvol"].append(np.asarray(o["lumpvol"]).astype(np.float32))
