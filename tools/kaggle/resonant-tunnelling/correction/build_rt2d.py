@@ -18,11 +18,12 @@ c1 = ('import jax; print(jax.devices())\nif jax.default_backend() != "gpu":\n   
 if JOBSEL == "smoke":
     c2 = f'NTFY = {NTFY!r}\nexec(open("rt2d_smoke.py").read())\n'
 else:
-    c2 = f'NTFY = {NTFY!r}\nRUN = True\nGEN = "2026-11-14b"\nSHARD = {SHARD}\nexec(open("rt2d_run.py").read())\n'
+    EXTRA = os.environ.get("EXTRA", "")                      # e.g. 'SHAPE = "coin"\nDTYPE = "c64"\nGRID = dict(Rmax=96.0, Nr=384)'
+    c2 = f'NTFY = {NTFY!r}\nRUN = True\nGEN = "2026-11-15"\nSHARD = {SHARD}\n{EXTRA}\nLIMIT_S = 11.5 * 3600\nexec(open("rt2d_run.py").read())\n'
 cells = [dict(cell_type="markdown", metadata={}, source=md, id="m0"),
          dict(cell_type="code", execution_count=None, metadata={}, outputs=[], source=c1, id="c1"),
          dict(cell_type="code", execution_count=None, metadata={}, outputs=[], source=c2, id="c2")]
 nb = dict(cells=cells, metadata={"kernelspec": {"display_name": "Python 3", "language": "python", "name": "python3"},
                                  "language_info": {"name": "python"}}, nbformat=4, nbformat_minor=5)
-name = "rt2d_" + JOBSEL + (f"_{SHARD[0]}of{SHARD[1]}" if SHARD else "") + ".ipynb"
+name = "rt2d_" + os.environ.get("TAG", "") + JOBSEL + (f"_{SHARD[0]}of{SHARD[1]}" if SHARD else "") + ".ipynb"
 open(os.path.join(HERE, name), "w").write(json.dumps(nb, indent=1)); print(name, "written")

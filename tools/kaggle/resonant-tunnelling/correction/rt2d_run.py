@@ -16,7 +16,7 @@ ROOT = globals().get("OUTROOT", "/kaggle/working"); os.makedirs(ROOT, exist_ok=T
 LOG = open(ROOT + "/progress.log", "a")
 import urllib.request as _ur, threading as _th
 NTFY = globals().get("NTFY"); _LAST = [0.0]          # live tracker (owner-approved, this use only): progress lines to ntfy.sh/<NTFY>
-_KEY = ("group", "check", "PREDICTION", "done", "FAILED", "failed", "NO GPU", "devices", "MISMATCH", "tar", "smoke", " A ", " B ", " C ", " T ")
+_KEY = ("RUN FAILED", "group", "check", "PREDICTION", "done", "FAILED", "failed", "NO GPU", "devices", "MISMATCH", "tar", "smoke", " A ", " B ", " C ", " T ")
 def push(s, force=False):
     if not NTFY or (not force and time.time() - _LAST[0] < 30): return
     _LAST[0] = time.time()
@@ -85,8 +85,10 @@ def one(job, dev):
 if __name__ == "__main__" or globals().get("RUN"):
     say("devices:", jax.devices(), "jax", jax.__version__, "dtype", DTYPE, "grid", GRID)
     J = json.load(open(globals().get("JOBS", "jobs_2d.json")))
+    if globals().get("SHAPE"): J = [j for j in J if j["spec"]["shape"] == SHAPE]     # e.g. "coin" or "shell"
     if globals().get("JOBSEL") == "smoke": J = [j for j in J if j["file"] in SMOKE]
     elif globals().get("SHARD"): i, nsh = SHARD; J = J[i::nsh]
+    COST = sum(j["cost"] for j in J) or 1.0; DONEC = [0.0]
     GEN = globals().get("GEN", "2026-11-14b"); OUTD = f"{ROOT}/{GEN}/rt2d"; os.makedirs(OUTD, exist_ok=True)
     done = {l.split()[0] for l in open(OUTD + "/done.txt")} if os.path.exists(OUTD + "/done.txt") else set()
     Q = queue.Queue(); [Q.put(j) for j in sorted(J, key=lambda j: -j["cost"]) if j["file"] not in done]
@@ -106,7 +108,9 @@ if __name__ == "__main__" or globals().get("RUN"):
                                s_per_step=o["s_per_step"], cells=o["cells"], device=str(dev))
                     with LOCK:
                         CNT[0] += 1; JL.write(json.dumps(rec) + "\n"); JL.flush(); DL.write(j["file"] + "\n"); DL.flush()
-                        say(f"{CNT[0]}/{len(J)} {j['file']} on {dev}: T {o['T']:.5f} +- {o['T_unc']:.1e}, drift {o['drift']:.1e}, "
+                        DONEC[0] += j["cost"]; el = time.time() - T0; fr = DONEC[0] / COST
+                        say(f"{CNT[0]}/{len(J)} ({100*fr:.1f} % of the work) elapsed {el/60:.1f} min ETA {el*(1/fr-1)/60:.0f} min | "
+                            f"{j['file']} on {dev}: T {o['T']:.5f} +- {o['T_unc']:.1e}, drift {o['drift']:.1e}, "
                             f"{o['steps']} steps, {o['wall']:.1f} s ({o['s_per_step']*1e3:.3f} ms/step)")
                 except Exception as e:
                     with LOCK: ERR.append(dict(file=j["file"], error=repr(e)[:400]))
