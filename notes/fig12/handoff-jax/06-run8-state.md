@@ -175,3 +175,9 @@ needs is in `public/data/fig12/2026-11-13-run8/`. Scratch scripts of the analysi
   then verify the live site. A change is not done until the docs describe the code. Push to `claude/nifty-lamport-iz5pua`
   and fast-forward main.
 - First write the chat's full state into the repository (this file), and keep it current.
+
+## The note handed over (14 November 2026, about 08:50 UTC)
+
+The user: "Hand it over for god sake". The full prompt is in notes/fig12/handoff-note-writer.md; the writer session
+"Fig. 12 Guinness: lecture note" works on branch claude/fig12-note (from this branch at the commit that added that file)
+and publishes run 10 with the note. This chat does not write the note any more.

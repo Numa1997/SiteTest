@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-6345 files, 902.3 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+6346 files, 902.4 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -45,7 +45,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Working notes of project 07, the electron beam](#working-notes-of-project-07-the-electron-beam) | 52 |
 | [Working notes of the Rotor Pendula study](#working-notes-of-the-rotor-pendula-study) | 86 |
 | [Working notes of the Droplet Collection study](#working-notes-of-the-droplet-collection-study) | 123 |
-| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 656 |
+| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 657 |
 
 ## Repository root
 
@@ -6506,9 +6506,10 @@ to confirm that every file is described. Sizes are those of the files when the l
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
-| [`notes/fig12/handoff-jax/06-run8-state.md`](../notes/fig12/handoff-jax/06-run8-state.md) | 16.1 kB | Fig. 12 in JAX: the full state of the chat that ran run 8 (aim, what is live, what is left, commits, files, the user’s rules); reread after a compaction | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`notes/fig12/handoff-jax/06-run8-state.md`](../notes/fig12/handoff-jax/06-run8-state.md) | 16.4 kB | Fig. 12 in JAX: the full state of the chat that ran run 8 (aim, what is live, what is left, commits, files, the user’s rules); reread after a compaction | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`notes/fig12/handoff-jax/handoff-guinness-cart.md`](../notes/fig12/handoff-jax/handoff-guinness-cart.md) | 17.2 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/handoff-jax/portcheck.txt`](../notes/fig12/handoff-jax/portcheck.txt) | 1.4 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/handoff-note-writer.md`](../notes/fig12/handoff-note-writer.md) | 15.6 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/jax/page-test.cjs`](../notes/fig12/jax/page-test.cjs) | 3.0 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/jax/run10-check/run10-check.txt`](../notes/fig12/jax/run10-check/run10-check.txt) | 5.1 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/jax/run10-check/run10-summary.json`](../notes/fig12/jax/run10-check/run10-summary.json) | 11.5 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
