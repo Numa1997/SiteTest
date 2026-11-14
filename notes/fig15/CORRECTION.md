@@ -28,6 +28,55 @@
 - **Main:** do not merge into `main` yourself. Tell the coordinator when the new generation is filed and passes; the coordinator
   verifies and merges at once.
 
+## ADDENDUM 2, 14 November 11:15 UTC, on the owner's order: a change log for the note writer, and a hand-over to it
+
+The lecture note (live, `public/scripts/resonant-note.js`, writer session session_01DGmqiqazJ9UxECtFYiespR) describes the old data.
+When you are done, the writer must rewrite whatever your correction changed, without having to dig for it. So keep, from your
+first edit, a change log on your branch. It has two files, kept current and pushed.
+
+**1. `notes/fig15/CORRECTION_LOG.md` (for a reader).**
+- **Method, old against new, per shape** (walls, discs, shells), with the equations:
+  - how V was drawn;
+  - grid, box and border;
+  - the exact superposition for walls;
+  - the axisymmetric equation for discs and shells;
+  - the gate and its tolerance.
+- **The note, section by section.** For each of sections 1–14, the Problems and the figure guide:
+  - which statements are no longer true, quoted exactly;
+  - why;
+  - what replaces them, with the new number and its handle.
+
+  Cover at least:
+  - section 11, the grid accuracy;
+  - every place that blames the grid, the side border or "not traced";
+  - the 3D lifetimes cut by the side border (6 %, 36 %, 36 %);
+  - the long-packet table;
+  - the disc table and τ_side;
+  - the 17 % lifetime gap;
+  - the shell lifetimes;
+  - the diode curves;
+  - Fig. 15b's dashed twin;
+  - the run counts and GPU hours;
+  - section 10, the method.
+- **What is new** and has no place in the note yet: the exact wall construction, the 2D reduction, the gate, the kept runs.
+- **Figures and page panels** that change (Figs. 15–15e, the chips and readouts).
+
+**2. `notes/fig15/correction_numbers.json` (for checking).**
+- **Every key of the note's NUM block.** Run `notes/fig15/gen2_numbers.py` on the old index and on the new one. For each key give
+  the old value, the new value and the run file or curve it comes from.
+- **One row per run:** file, shape, old T, reference T, new T, error, and the status. The status is one of: kept, rebuilt exactly
+  (wall), or recomputed in 2D.
+
+**When the new generation is filed and passes the gate:**
+- Tell the coordinator.
+- In the same step, send the writer session (session_01DGmqiqazJ9UxECtFYiespR) a send_message of at most 12 lines:
+  - what changed;
+  - the branch and commit;
+  - the paths of both log files;
+  - the order: rewrite every passage the log lists, regenerate the NUM block from the new index with `gen2_numbers.py`, and run
+    the readers and the derivation checker as before.
+- This message is the one exception the owner makes to "message no session but the coordinator".
+
 Written 14 November 2026 by the coordinating chat (session_01DGmqintkoYzahfGQQzdXYL), on the owner's order:
 "direct and deploy a new session to correct everything from the resonant tunneling".
 You are that session. Read this file whole, then the files it names, before any work. Never write the owner's name.
