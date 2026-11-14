@@ -152,6 +152,7 @@ for P in (2.5, 3.5, 4.5, 5.5):
     put(f'{tag}_n', len([e for e in Es if e < 2.0]), f'tm.py: resonances below V0 = 2, walls P = {P}')
     put(f'{tag}_E1', round(Es[0], 3), f'tm.py: first resonance, walls P = {P}')
     if len(Es) > 1: put(f'{tag}_E2', round(Es[1], 3), f'tm.py: second resonance, walls P = {P}')
+    put(f'{tag}_all', [round(e, 3) for e in Es if e < 2.0], f'tm.py: every resonance below V0 = 2, walls P = {P}')
     G = width(sg, Es[0]); put(f'{tag}_G1', r3(G), f'tm.py: FWHM of the first resonance, P = {P}')
     put(f'{tag}_tau1', r3(1 / G), f'1/Gamma, P = {P}')
     L = P - 1.0; k1 = np.sqrt(2 * (2.0 - Es[0]))
@@ -258,7 +259,7 @@ for Nb in (3, 5, 10):
 # ---------- 4. discs and shells ----------
 E1 = OUT['P2_5_E1']; wr = runs(shape='flat', P=2.5, R=0.0, **base)
 walls = ([r for r in wr if abs(r['spec']['E'] - 0.75) < 1e-9] or [nearest(wr, E1)])[0]   # 0.75: the grid energy nearest E1
-put('disc_E', walls['spec']['E'], 'the stored energy nearest the resonance, walls P 2.5')
+put('disc_E', walls['spec']['E'], 'the energy of the disc comparison: 0.75 (grid energy nearest E_r) once filed, else the nearest filed')
 tw = walls['tau']['tau']; put('disc_tau_walls', r3(tw), walls['file']); put('disc_T_walls', r3(through(walls)), walls['file'])
 for R in (2.0, 4.0, 6.0, 9.0, 12.0):
     tag = f'R{R:g}'
@@ -278,6 +279,7 @@ for R in (3.0, 5.0):
             b = max(rs, key=lambda r: r['tau']['tau'])
             put(f'{tag}_taumax', r3(b['tau']['tau']), b['file']); put(f'{tag}_taumax_E', b['spec']['E'], b['file'])
             put(f'{tag}_n', len(rs), 'shell runs with a fitted lifetime')
+            put(f'{tag}_cut', bool(b['tau']['t1'] >= b['t_end'] - 2 * b['frame_dt']), 'True: the fit window ends at the end of the run, so tau rests on part of the decay')
 
 # ---------- 5. the diode ----------
 iv.V0 = 2.0
@@ -286,6 +288,13 @@ for B in (0.0, 0.5, 1.0):
     T = np.array([iv.T_biased(e, 2.5, B, nper=60) for e in Eg]); i = int(np.argmax(T))
     put(f'Er_bias{B:g}'.replace('.', '_'), round(float(Eg[i]), 3), f'iv.py T_biased: transmission peak at bias {B}, walls P 2.5')
     put(f'Tpk_bias{B:g}'.replace('.', '_'), r3(float(T[i])), f'iv.py T_biased: height of that peak (below 1: the tilted barriers differ)')
+def supf(E, V, EF=1.0, kT=0.05): return np.log((1 + np.exp((EF - E) / kT)) / (1 + np.exp((EF - E - V) / kT)))
+Ef = np.linspace(0.005, 1.3, 2600)
+for B in (0.0, 0.875, 1.25):
+    T = np.array([iv.T_biased(e, 2.5, B, nper=60) for e in Ef]); i = int(np.argmax(T[:2000])); m = (Ef > Ef[i] - 0.25) & (Ef < Ef[i] + 0.25)
+    tg = f'{B:g}'.replace('.', '_')
+    put(f'area_b{tg}', round(float(np.trapezoid(T[m], Ef[m])), 3), f'iv.py: area under the transmission peak (+-0.25 around it) at bias {B}')
+    put(f'sup_b{tg}', round(float(supf(Ef[i], B)), 1), f'supply function at the peak energy, bias {B}')
 x = EX1['iv']
 put('iv_exact_Vp', x['V_peak'], 'exact-1d.json iv'); put('iv_exact_Vv', round(x['V_valley'], 3), 'exact-1d.json iv')
 put('iv_exact_pvr', round(x['pvr'], 1), 'exact-1d.json iv')
@@ -301,10 +310,14 @@ for c in IDX['iv']:
               and r['spec']['D'] == 1 and r['spec']['P'] == 2.5 and r['spec']['sx'] == 3 and round(r['spec']['E'], 3) in set(c['energies'])])
     put(f'{tag}_nruns', nF, 'runs on the diode grid (bias 0 ... 2.375 x energies 0.10 ... 1.30) filed so far; 500 planned')
     put(f'{tag}_J', [[p[0], r3(p[1])] for p in J], 'index.json iv J_runs')
+    put(f'{tag}_complete', nF >= 500, 'all 20 voltages x 25 energies filed: only then are peak, valley and ratio quoted')
 
 # ---------- 6. long packets ----------
 put('dE_short', round(np.sqrt(2 * E1) / (2 * 3), 3), 'k0 / (2 sigma_x), sigma_x = 3, at E1 of the running example')
 put('dE_long', round(np.sqrt(2 * E1) / (2 * 12), 3), 'k0 / (2 sigma_x), sigma_x = 12')
+put('box_long', round(512 / 192, 2), 'Nx 512 for long packets against 192: the box is this many times longer')
+put('dE_long_fwhm', round(2 * np.sqrt(2 * np.log(2)) * np.sqrt(2 * E1) / 24, 3), 'full width at half maximum of the long packet in energy, 2.355 sigma_E')
+put('long_rerun_pending', not any('fix1' in n['kaggle'] for n in IDX['notebooks']), 'the running example long-packet runs of shards 1-2 are on rt3d2_run.py FIX1 (ran >15 % short) until the fix notebook is filed')
 g = runs(shape='flat', V0=2.0, D=1.0, P=2.5, R=0.0, N=2, bias=0.0, sx=12.0)
 put('long_files', [r['file'] for r in g], 'G runs, walls of the running example')
 
