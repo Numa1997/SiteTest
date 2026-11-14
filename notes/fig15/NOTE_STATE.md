@@ -224,3 +224,9 @@ rewrite status sentences as findings, one fresh reader round + checker, READY. R
 run-length rule (stated); supply grows only between E_F - eV_b and E_F, then levels at eV_b/kT; shells share the centre of the
 PAIRS (singles and rows of 3, 5 sit at 0.25); filed energies shift one step per voltage (half shared); d=2 long run 'more than one
 lifetime (344)'.
+
+## 08:41 UTC check-in: index NOT yet full (3084 of 3739; shards 1-5 filed, shard 6 + fix1 pending). Merged
+origin/claude/fig15-resonant-tunnelling (b122f6f) into this branch (clean), regenerated NUM. Now present: discs R 2, 4, 6, 12 at
+E 0.75 (R 9 missing): tau 1.88, 3.69, 9.06, 12.9 vs walls 15.1; tau_side 2.15, 4.87, 22.6, 85.9 vs (28) 4, 12, 18, 36; one-disc
+yardstick; P3.5 run at 0.40 tau 68.4; diode runs 420/500 (still withheld). Added data-conditional sentences (side-leak comparison,
+R=2 pair below one disc, shells' lowest energy 0.30, problem 6). Next check-in 09:30 UTC.
