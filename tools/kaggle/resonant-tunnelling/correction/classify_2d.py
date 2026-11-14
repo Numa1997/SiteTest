@@ -32,11 +32,19 @@ def main(index, runs_dir, out, jobs="jobs_2d.json", base="https://phyeinusul.com
     t0 = time.time()
     for k, (name, n) in enumerate(sorted(NEW.items())):
         o = OLD[name]; shape = o["spec"]["shape"]; T_ref = float(n["T_ref"])
-        T_old = shell_T_old(o, base) if shape == "shell" else float(o["T_far"]["value"])
-        err = T_old - T_ref; gate = max(0.005, 0.01 * abs(T_ref))
-        status = "keep" if abs(err) <= gate - MARGIN else "recompute"
-        row = dict(file=name, shape=shape, T_old=round(T_old, 6), T_ref=round(T_ref, 7), error=round(err, 7), gate=round(gate, 6),
-                   passes=abs(err) <= gate, status=status, drift=n.get("drift"), T_unc=n.get("T_unc"))
+        gate = max(0.005, 0.01 * abs(T_ref)); why = None
+        try:
+            T_old = shell_T_old(o, base) if shape == "shell" else float(o["T_far"]["value"])
+        except Exception as e:                                     # unreadable stored file: recompute, never guess
+            T_old = None; why = repr(e)[:200]
+        if T_old is None:
+            row = dict(file=name, shape=shape, T_old=None, T_ref=round(T_ref, 7), error=None, gate=round(gate, 6), passes=False,
+                       status="recompute", why=why, drift=n.get("drift"), T_unc=n.get("T_unc"))
+        else:
+            err = T_old - T_ref
+            status = "keep" if abs(err) <= gate - MARGIN else "recompute"
+            row = dict(file=name, shape=shape, T_old=round(T_old, 6), T_ref=round(T_ref, 7), error=round(err, 7), gate=round(gate, 6),
+                       passes=abs(err) <= gate, status=status, drift=n.get("drift"), T_unc=n.get("T_unc"))
         rows.append(row)
         if status == "recompute": redo.append(J[name])
         log.write(json.dumps(row) + "\n"); log.flush()
@@ -46,9 +54,9 @@ def main(index, runs_dir, out, jobs="jobs_2d.json", base="https://phyeinusul.com
     for shape in ("coin", "shell"):
         R = [r for r in rows if r["shape"] == shape]
         if not R: continue
-        e = np.abs([r["error"] for r in R])
+        e = np.abs([r["error"] for r in R if r["error"] is not None] or [0.0])
         S[shape] = dict(n=len(R), passes=sum(r["passes"] for r in R), keep=sum(r["status"] == "keep" for r in R),
-                        recompute=sum(r["status"] == "recompute" for r in R), err_median=float(np.median(e)), err_max=float(e.max()),
+                        recompute=sum(r["status"] == "recompute" for r in R), unreadable=sum(r["T_old"] is None for r in R), err_median=float(np.median(e)), err_max=float(e.max()),
                         recompute_steps=int(sum(J[r["file"]]["steps"] for r in R if r["status"] == "recompute")))
     json.dump(dict(summary=S, margin=MARGIN, rows=rows), open(os.path.join(out, "classify_2d_summary.json"), "w"), indent=1)
     print(json.dumps(S, indent=1))

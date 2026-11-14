@@ -54,7 +54,8 @@ def summary(h, prof):
 
 
 def shell_T_old(rec, base):
-    blob = urllib.request.urlopen(base + rec["file"], timeout=120).read()
+    req = urllib.request.Request(base + rec["file"], headers={"User-Agent": "Mozilla/5.0 (fig15-correction filer)"})
+    blob = urllib.request.urlopen(req, timeout=120).read()      # the site answers 403 to Python's default user agent
     assert hashlib.sha256(blob).hexdigest() == rec["sha256"], rec["file"]
     h, amp, ph, prof, p1 = read_rt3d.read(blob); C = curves(h); f = border_frame(h, prof, C)
     return float(C["out"][f] / C["norm"][f])
