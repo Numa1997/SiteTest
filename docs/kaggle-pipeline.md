@@ -51,7 +51,9 @@ both named by the date Kaggle generated it.
 
 ## Layout on Kaggle: one notebook and one dataset per figure (rule of 14 November 2026)
 
-Kaggle has no folders. Order comes from two things it does have: versions inside one notebook, and datasets that hold many files.
+Order on Kaggle comes from versions inside one notebook and from datasets that hold many files. Kaggle also has Collections
+(folders in Your Work, <https://www.kaggle.com/product-announcements/476860>), but they can only be made in the web page: the
+API has no call for them.
 
 - **One notebook per figure.** A rerun is a new version of the same notebook, not a new notebook. A job too big for one
   session is split into shards (`-shard-k-of-n`), and the shards are deleted once their output is in the figure's dataset.
@@ -65,6 +67,18 @@ Kaggle has no folders. Order comes from two things it does have: versions inside
   folder `<notebook>/v<version>/`, or a list of them) where the run's whole Kaggle output lies. The pages do not read these two
   fields.
 - **Nothing that a live record names is deleted** (`generations.json`, `index.json`) until that record points to the dataset copy.
+
+**The figure notebooks** (made 14 November 2026, built by `tools/kaggle/figures/build.py`): `numakoudsie/fig-14-schrodinger-sphere`
+and `numakoudsie/fig-12-guinness-on-a-cart`, each with its dataset attached. Each holds every job of its figure in one table (job name,
+what it computes, machine, pinned commit, folder in the dataset). The setting `JOB` in its first code cell picks what a run does:
+`check` (the default, CPU, free) checks every stored file against its manifest (size and SHA-256) and that every job's code compiles and
+names its pinned commit, and writes `check.json`; any job name reruns that job with the exact code that made the data, read from the
+dataset (`<old notebook>/source-current-version.ipynb`) and run cell by cell; that code fetches its solver from this repository at the
+pinned commit. A GPU job needs `enable_gpu` set in the notebook's `kernel-metadata.json` before the push. Push:
+`kaggle kernels push -p tools/kaggle/figures/<slug>`. Version 1 of both ran `check` on 14 November 2026: Fig. 14, 2961 files,
+all identical (12 shapes tars unpacked by Kaggle, 5 `.pyc` caches dropped), 587 s; Fig. 12, 138 files, all identical, 63 s.
+The old notebooks of these two figures (Fig. 14: six; Fig. 12: three) are replaced by these and stay on Kaggle until the owner
+authorises their deletion one by one.
 
 Datasets made on 14 November 2026: `numakoudsie/fig14-schrodinger-sphere` (8 notebook runs, 937 MB) and
 `numakoudsie/fig12-guinness-on-a-cart` (19 notebook versions, 158 MB); their file lists are in `notes/inventory/datasets/`.

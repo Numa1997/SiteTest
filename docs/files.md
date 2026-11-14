@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-6495 files, 911.5 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+6500 files, 911.5 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -40,7 +40,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Template sources](#template-sources) | 2 |
 | [The site’s Worker (Cloudflare)](#the-sites-worker-cloudflare) | 1 |
 | [Documentation](#documentation) | 42 |
-| [Tools](#tools) | 194 |
+| [Tools](#tools) | 199 |
 | [Translation tables](#translation-tables) | 54 |
 | [Agents of the lecture-note review](#agents-of-the-lecture-note-review) | 4 |
 | [Working notes of project 07, the electron beam](#working-notes-of-project-07-the-electron-beam) | 52 |
@@ -5531,7 +5531,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`docs/files.md`](files.md) | this file | This list. Written by tools/inventory.py; do not edit by hand. | [files.md](files.md) |
 | [`docs/glossary.md`](glossary.md) | 17.0 kB | Documentation: Glossary: English, German, Arabic. | [glossary.md](glossary.md) |
 | [`docs/i18n.md`](i18n.md) | 18.5 kB | Documentation: The site in German and Arabic: `tools/i18n/`, `i18n/`, `public/de/`, `public/ar/`. | [i18n.md](i18n.md) |
-| [`docs/kaggle-pipeline.md`](kaggle-pipeline.md) | 20.8 kB | Documentation: The Kaggle pipeline: computing on Kaggle, playing on the website. | [kaggle-pipeline.md](kaggle-pipeline.md) |
+| [`docs/kaggle-pipeline.md`](kaggle-pipeline.md) | 22.3 kB | Documentation: The Kaggle pipeline: computing on Kaggle, playing on the website. | [kaggle-pipeline.md](kaggle-pipeline.md) |
 | [`docs/kaggle.md`](kaggle.md) | 4.4 kB | Documentation: Computing on Kaggle: the Schrödinger test. | [kaggle.md](kaggle.md) |
 | [`docs/minor-issues-report.md`](minor-issues-report.md) | 19.5 kB | Documentation: Minor issues · final verification report. | [minor-issues-report.md](minor-issues-report.md) |
 | [`docs/notes.md`](notes.md) | 5.4 kB | Documentation: The lecture-note review: `notes/` and `.claude/agents/`. | [notes.md](notes.md) |
@@ -5689,7 +5689,12 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/i18n/ingest.py`](../tools/i18n/ingest.py) | 1.9 kB | Stores checked translations made outside the tables (page pieces, script strings, walkthrough prose). | [i18n.md](i18n.md) |
 | [`tools/i18n/package.json`](../tools/i18n/package.json) | 285 B | The parser wrap.cjs needs (acorn); npm install --prefix tools/i18n. | [i18n.md](i18n.md) |
 | [`tools/i18n/wrap.cjs`](../tools/i18n/wrap.cjs) | 3.7 kB | Wraps the reader-visible strings of a page's scripts in _t(), with a JavaScript parser (acorn). | [i18n.md](i18n.md) |
-| [`tools/inventory.py`](../tools/inventory.py) | 119.4 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
+| [`tools/inventory.py`](../tools/inventory.py) | 120.1 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
+| [`tools/kaggle/figures/build.py`](../tools/kaggle/figures/build.py) | 10.0 kB | One Kaggle notebook per figure: writes each figure notebook (every job of the figure in one table, JOB = check verifies the figure dataset, any job name reruns it with the stored code at its pinned commit) and its kernel-metadata.json. | [kaggle-pipeline.md](kaggle-pipeline.md) |
+| [`tools/kaggle/figures/fig-12-guinness-on-a-cart/fig-12-guinness-on-a-cart.ipynb`](../tools/kaggle/figures/fig-12-guinness-on-a-cart/fig-12-guinness-on-a-cart.ipynb) | 6.3 kB | The Kaggle notebook fig-12-guinness-on-a-cart (one notebook for the whole figure), written by build.py: the notebook as pushed. | [kaggle-pipeline.md](kaggle-pipeline.md) |
+| [`tools/kaggle/figures/fig-12-guinness-on-a-cart/kernel-metadata.json`](../tools/kaggle/figures/fig-12-guinness-on-a-cart/kernel-metadata.json) | 421 B | The Kaggle notebook fig-12-guinness-on-a-cart (one notebook for the whole figure), written by build.py: its push settings (slug, dataset attached, CPU). | [kaggle-pipeline.md](kaggle-pipeline.md) |
+| [`tools/kaggle/figures/fig-14-schrodinger-sphere/fig-14-schrodinger-sphere.ipynb`](../tools/kaggle/figures/fig-14-schrodinger-sphere/fig-14-schrodinger-sphere.ipynb) | 7.8 kB | The Kaggle notebook fig-14-schrodinger-sphere (one notebook for the whole figure), written by build.py: the notebook as pushed. | [kaggle-pipeline.md](kaggle-pipeline.md) |
+| [`tools/kaggle/figures/fig-14-schrodinger-sphere/kernel-metadata.json`](../tools/kaggle/figures/fig-14-schrodinger-sphere/kernel-metadata.json) | 421 B | The Kaggle notebook fig-14-schrodinger-sphere (one notebook for the whole figure), written by build.py: its push settings (slug, dataset attached, CPU). | [kaggle-pipeline.md](kaggle-pipeline.md) |
 | [`tools/kaggle/resonant-tunnelling/b1_first.py`](../tools/kaggle/resonant-tunnelling/b1_first.py) | 5.2 kB | Fig. 15: the first B1 measurement on three stored flat-wall runs, error split by source. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
 | [`tools/kaggle/resonant-tunnelling/b1_survey.py`](../tools/kaggle/resonant-tunnelling/b1_survey.py) | 2.2 kB | Fig. 15: the B1 check across every finite single-barrier run of Fig. 14. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
 | [`tools/kaggle/resonant-tunnelling/build_rt3d.py`](../tools/kaggle/resonant-tunnelling/build_rt3d.py) | 2.4 kB | Fig. 15, 3D: writes the Kaggle loader notebook for a commit, job set and shard. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
@@ -6875,7 +6880,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/inventory/ACTIONS.md`](../notes/inventory/ACTIONS.md) | 14.1 kB | Inventory and clean-up of the computations (Kaggle, R2, scripts): state, records, copies of deleted Kaggle notebooks, manifests of the per-figure Kaggle datasets. | [STATE.md](../notes/inventory/STATE.md) |
 | [`notes/inventory/BRIEF.md`](../notes/inventory/BRIEF.md) | 7.0 kB | Inventory and clean-up of the computations (Kaggle, R2, scripts): state, records, copies of deleted Kaggle notebooks, manifests of the per-figure Kaggle datasets. | [STATE.md](../notes/inventory/STATE.md) |
 | [`notes/inventory/INVENTORY.md`](../notes/inventory/INVENTORY.md) | 14.8 kB | Inventory and clean-up of the computations (Kaggle, R2, scripts): state, records, copies of deleted Kaggle notebooks, manifests of the per-figure Kaggle datasets. | [STATE.md](../notes/inventory/STATE.md) |
-| [`notes/inventory/STATE.md`](../notes/inventory/STATE.md) | 16.1 kB | Inventory and clean-up of the computations (Kaggle, R2, scripts): state, records, copies of deleted Kaggle notebooks, manifests of the per-figure Kaggle datasets. | [STATE.md](../notes/inventory/STATE.md) |
+| [`notes/inventory/STATE.md`](../notes/inventory/STATE.md) | 16.4 kB | Inventory and clean-up of the computations (Kaggle, R2, scripts): state, records, copies of deleted Kaggle notebooks, manifests of the per-figure Kaggle datasets. | [STATE.md](../notes/inventory/STATE.md) |
 | [`notes/inventory/datasets/fig12-guinness-on-a-cart/README.md`](../notes/inventory/datasets/fig12-guinness-on-a-cart/README.md) | 2.0 kB | Inventory and clean-up of the computations (Kaggle, R2, scripts): state, records, copies of deleted Kaggle notebooks, manifests of the per-figure Kaggle datasets. | [STATE.md](../notes/inventory/STATE.md) |
 | [`notes/inventory/datasets/fig12-guinness-on-a-cart/guinness-free-swing-v2/v2/manifest.json`](../notes/inventory/datasets/fig12-guinness-on-a-cart/guinness-free-swing-v2/v2/manifest.json) | 380 B | Inventory and clean-up of the computations (Kaggle, R2, scripts): state, records, copies of deleted Kaggle notebooks, manifests of the per-figure Kaggle datasets. | [STATE.md](../notes/inventory/STATE.md) |
 | [`notes/inventory/datasets/fig12-guinness-on-a-cart/guinness-free-swing-v2/v3/manifest.json`](../notes/inventory/datasets/fig12-guinness-on-a-cart/guinness-free-swing-v2/v3/manifest.json) | 381 B | Inventory and clean-up of the computations (Kaggle, R2, scripts): state, records, copies of deleted Kaggle notebooks, manifests of the per-figure Kaggle datasets. | [STATE.md](../notes/inventory/STATE.md) |

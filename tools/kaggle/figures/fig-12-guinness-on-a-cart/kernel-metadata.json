@@ -1,0 +1,17 @@
+{
+ "id": "numakoudsie/fig-12-guinness-on-a-cart",
+ "title": "Fig 12 Guinness on a cart",
+ "code_file": "fig-12-guinness-on-a-cart.ipynb",
+ "language": "python",
+ "kernel_type": "notebook",
+ "is_private": true,
+ "enable_gpu": false,
+ "enable_tpu": false,
+ "enable_internet": true,
+ "dataset_sources": [
+  "numakoudsie/fig12-guinness-on-a-cart"
+ ],
+ "competition_sources": [],
+ "kernel_sources": [],
+ "model_sources": []
+}

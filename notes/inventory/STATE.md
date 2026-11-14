@@ -4,7 +4,7 @@ Chat state written into the repository first (CLAUDE.md, "Write the chat's state
 reread this file and `BRIEF.md` before anything else. Keep it current at every step that changes what is live or what is left.
 Never write the owner's name in files of this folder.
 
-Last update: 14 November 2026, 13:35 UTC, Phase 2 running (owner's go: "one notebook per figure ... one data set per figure ... delete all redundant").
+Last update: 14 November 2026, about 16:00 UTC. Phase 2: Fig. 12 and Fig. 14 organised (one notebook and one dataset each); Fig. 15 and 16 held.
 
 ## Aim
 
@@ -52,6 +52,14 @@ Done in Phase 2:
    `public/data/fig12/generations.json` (Fig. 12: every run) now has `dataset` and `dataset_path`; old content unchanged
    (checked by comparing the JSON without the new keys); all 15 paths exist in the datasets; documented in
    `docs/kaggle-pipeline.md`; Fig. 14 page tested in Chromium at 390 and 1440 px (9 data files, 0 errors). Nothing deleted.
+
+9. One notebook per figure (owner, 14 November 2026: "Organize every single figure and all of its notebooks properly, except for
+   the ones that are still running"). `tools/kaggle/figures/build.py` writes `numakoudsie/fig-14-schrodinger-sphere` (7 jobs) and
+   `numakoudsie/fig-12-guinness-on-a-cart` (3 jobs), each with its dataset attached; `JOB = "check"` verifies the dataset, a job name
+   reruns that job with the stored code at its pinned commit (commits read from the stored code; three typed from memory were wrong and
+   were corrected before the push). Both pushed as version 1 on CPU and ran `check`: Fig. 14 ALL OK (2961 files, 587 s), Fig. 12 ALL OK
+   (138 files, 63 s). Documented in `docs/kaggle-pipeline.md` (also corrected: Kaggle does have folders, Collections, web page only).
+   Nothing deleted. The 9 old notebooks of Fig. 12 and 14 are now replaced; they stay until the owner authorises each deletion.
 
 Held: Fig. 15 (`fig15-*`, 15 notebooks incl. the 3 `fig15-correction-walls-*` of the running correction session) and Fig. 16
 (`fig-16-guinness-cart-with-control`): not touched while those sessions run. 
@@ -165,7 +173,18 @@ Held: Fig. 15 (`fig15-*`, 15 notebooks incl. the 3 `fig15-correction-walls-*` of
 | a4d30b4, 9d9ed85, dffd28a, 5ce56d1 | brief, state, Kaggle and R2 records |
 | (this commit) | INVENTORY.md, inventory.json, ACTIONS.md, raw/ |
 
-## Left to do (after Phase 2, 14 November 2026, 14:00 UTC)
+## Left to do (14 November 2026, about 16:00 UTC)
+
+- Waiting for the owner's authorization (each is a deletion): the 9 replaced notebooks (Fig. 14: `schrodinger-sphere-full-grid`,
+  `schrodinger-sphere-3d-wave`, `schrodinger-flat-wall`, `schrodinger-pillar`, `schrodinger-spherical-wave`, `schrodinger-shapes-3d`;
+  Fig. 12: `guinness-on-a-cart-stout-in-jax`, `guinness-on-a-cart-stout-sloshing`, `guinness-free-swing-v2`); Fig. 12 Taichi scripts (C4);
+  Fig. 12 run 8 folder (D1); more of the 60 kept scripts.
+- No deletion needed, not yet done: tags on the pinned commits (Group G, pushing tags needs the owner's yes); Collections per figure
+  (web page only, the owner's hands); classify the 112 unmerged branches; `tools/inventory.py` section listing notebooks named in records.
+- Held while their sessions run: Fig. 15 (now 16 notebooks with `fig15-correction-2d-smoke`) and Fig. 16 (now 2 with
+  `fig-16-cart-diagnostics-cpu`).
+
+### Earlier list (after Phase 2, 14:00 UTC)
 
 1. Fig. 14 still has 6 notebooks and Fig. 12 has 3. Their records now point to the datasets (step 8). Removing the notebooks is a
    deletion and waits for the owner's explicit authorization, notebook by notebook. Future reruns go into one notebook per figure.
