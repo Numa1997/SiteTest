@@ -137,3 +137,11 @@ Section 4: exact chi(x,t) for one wall run, compared with the stored file.
 - ~21:45 UTC: disc shards 3-of-4 (582 runs, 0 failed, 3,719 s, rt2d_all_2of4.tar 1,076.6 MB) and 4-of-4 (581, 0 failed, 3,670 s,
   rt2d_all_3of4.tar 1,074.4 MB) COMPLETE. All 2,327 discs computed (c64, base grid). Quota 71,565 s.
 - Shell convergence test launched: numakoudsie/fig15-correction-2d-shellconv (kernel 145080157, commit 98110c3, topic -shellconv).
+- 22:10-22:40 UTC shell convergence (fig15-correction-2d-shellconv, c64): T at Rmax 64/96/128/160/192 a:
+  N2R3E0.75 0.6122/0.6220/0.6251/0.6277/0.6285; N2R5E0.30 0.5070/0.5190/0.5225/0.5245/0.5248;
+  N1R3E1.50 0.8376/0.8401/0.8409/0.8417/0.8421; N1R5E0.75 0.6348/0.6422/0.6447/0.6467/0.6474.
+  160 -> 192 changes all <= 0.0008: production shells at Rmax 160, Nr 640, Wr 24 (~3.6 ms/step).
+- BUG found (mine): rt2d_run.py assigned the default GRID before reading the loader's override, so shells-1-of-2 v1 ran at Rmax 64
+  (unconverged; discard its output). Fixed in 07ac9bf. Discs unaffected (they used the default grid on purpose).
+- 22:41 shells-1-of-2 v2 (kernel 145082018, topic -shellB0; first line confirms Rmax 160 Nr 640) and 22:52 shells-2-of-2
+  (145084455, topic -shellB1) launched.
