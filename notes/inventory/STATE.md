@@ -84,6 +84,26 @@ owner's yes to a named group of actions.
 - **Fact:** `list_notebook_session_output` returns file names (no sizes) and the run log; for the Fig. 15 shard the answer was 195 kB of text,
   saved to a file by the harness. Sizes need HEAD requests on the signed URLs (not yet tried).
 
+
+## Facts from R2 and the repository (14 November 2026)
+
+- **Fact:** R2 bucket `phyein-usul-runs` (created 2026-11-13T22:14Z, ENAM, Standard): ONE prefix, `resonant-tunnelling/2026-11-14/runs/`,
+  3697 objects, 6 526 952 030 B = 6.527 GB (6.08 GiB), last modified 2026-11-14T08:41Z. Handle: `notes/inventory/raw/r2-summary.md`,
+  listing through `GET /accounts/<id>/r2/buckets/phyein-usul-runs/objects` (paged, read-only). Free tier: 10 GB-month.
+- **Fact:** the 3697 files named in `public/data/resonant-tunnelling/2026-11-14/kaggle/index.json` are exactly the 3697 R2 objects:
+  0 missing, 0 extra, 0 size mismatches (script in the scratchpad; command in `raw/r2-summary.md`).
+  The index records 15 `replaced` runs; 42 specs computed in two groups are filed once; Kaggle shard tars (6552.5 MB) therefore hold more than R2.
+- **Fact:** the page `simulations/resonant-tunnelling.html` reads `data/resonant-tunnelling/generations.json` (line 256), the index and `exact` file, and `/r2/` for runs.
+  `simulations/schrodinger-sphere.html` reads `data/schrodinger-sphere/generations.json` (line 1189). `simulations/guinness-kaggle.html` loads
+  `guinness-jax-play.js`, which reads `data/fig12/2026-11-14-run10/` (line 7). No page loads `guinness-playback.js` (reads `fig12/2026-11-13/`) (grep over `public/**/*.html`).
+- **Fact:** `public/data` sizes (apparent): fig12 12.1 MB (4 folders), resonant-tunnelling 187.6 MB (gen 1: 184.7 MB in the repo; gen 2 index 2.9 MB), schrodinger-sphere 618.6 MB
+  (2026-11-12: 330.3 MB in 2832 files; 2026-11-13 shapes3d: 288.3 MB in 1495 files).
+- **Fact:** Fig. 14 `shapes3d` record: `source` names `schrodinger-shapes-3d` version 1, commit `a269419` (that run is not in the account's current version list);
+  `version2` names the same notebook, version 2, commit `94d1281`, 243 runs, 2 x T4, 2239.3 GPU s. The four CPU notebooks `v2-a..d` are named by no record.
+- **Fact:** the Fig. 14 notebook `schrodinger-sphere-3d-generation` (81 runs, 60 MB, `runs3d/`) has no folder on the site; `docs/simulations/fig14-schrodinger-sphere.md` mentions it.
+- **Fact:** Fig. 12 repository folders: `2026-11-12` (Taichi v1), `2026-11-13` (Taichi v2 `rides.json` + JAX runs 6 and 7), `2026-11-13-run8`, `2026-11-14-run10` (played).
+  Several files in `run8` and `run10` have identical sizes (e.g. `free_full_1.5.json` 181 056 B), consistent with run 10 carrying run 8's rides: to be verified with sha256.
+
 ## Method (order of work, Phase 1)
 
 1. Repository: list branches, every data folder under `public/data/` (size, generation, whether a page loads it, by reading the
