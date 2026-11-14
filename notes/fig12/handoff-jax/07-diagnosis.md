@@ -60,7 +60,7 @@ JAX solver, fix and run". CPU only, nothing rerun. Complete as of 14 November 20
   - rest guard: ruled out by the code; it only checks the pint at rest and stops the run, it never changes the state.
   **Cause:** the APIC hand-over between particles and grid, once per step, which smooths the velocity on the scale of a cell;
   it shrinks with the grid as about Δx^1.3 to Δx^2. **Effect:** run 6's swing without the head, which the page plays, decays at
-  ζ = 0.016 against about 0.0055 for the real stout, so about three times too fast (a ring time of 3.0 s instead of 8.5 s); the
+  ζ = 0.016 against about 0.0055 for the real stout, so about three times too fast (a decay time 1/(ζω) of 3.0 s instead of 8.7 s); the
   note already says the swing dies too fast. With the head (ζ = 0.425) the method's 0.006 to 0.010 is 1.5 to 2.5 % of the
   damping: no visible effect on the rides, and the plant the controllers were designed on (0.425, measured in the run) already
   contains it. **Fix cost:** a finer grid (1 mm would give roughly 0.004 to 0.006, at 3.4 times the cells and about 1.5 times
