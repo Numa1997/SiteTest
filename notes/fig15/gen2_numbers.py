@@ -310,6 +310,7 @@ for R in (2.0, 4.0, 6.0, 9.0, 12.0):
     else:
         put(f'{tag}_tau', None, f'missing: discs R {R} at E {walls["spec"]["E"]}'); put(f'{tag}_T', None, 'missing'); put(f'{tag}_tau_side', None, 'missing')
     put(f'{tag}_T1', r3(through(one[0])) if one else None, one[0]['file'] if one else 'missing: one disc')
+    put(f'{tag}_gain', round(through(r[0]) / through(one[0]), 2) if (r and one) else None, 'pair share / one-disc share, unrounded')
 for R in (3.0, 5.0):
     for P in (2.5, 3.5):
         rs = [r for r in runs(shape='shell', N=2, R=R, P=P, V0=2.0, D=1.0, bias=0.0, sx=3.0) if r.get('tau')]
@@ -328,14 +329,22 @@ for R in (3.0, 5.0):
 put('walls_Tfar', round(walls['T_far']['value'], 4), walls['file'] + ': region reading (T_far) of the walls run the disc table compares with')
 put('walls_twin4', round(through(walls), 4), walls['file'] + ': twin share, 4 decimals')
 put('walls_Tfar_gap', round(100 * (1 - walls['T_far']['value'] / through(walls)), 1), 'per cent the region reading lies below the twin, same run')
+import types   # the page's own 1D twin solver, rt3d2.run1d (numpy only; jax is imported by rt3d2 but not used by run1d)
+if 'jax' not in sys.modules:
+    _j = types.ModuleType('jax'); _j.numpy = types.ModuleType('jax.numpy'); sys.modules['jax'] = _j; sys.modules['jax.numpy'] = _j.numpy
+import rt3d2  # noqa: E402
 for tg, kw, E in (('sl_V2D1', dict(V0=2.0, D=1.0, P=2.5), 0.75), ('sl_P3_5', dict(V0=2.0, D=1.0, P=3.5), 0.4), ('sl_V2D2', dict(V0=2.0, D=2.0, P=3.5), 0.75)):
     r = [x for x in runs(shape='flat', N=2, bias=0.0, sx=3.0, R=0.0, **kw) if abs(x['spec']['E'] - E) < 1e-9][0]
-    tt = 1 - r['twin']['T'] - r['twin']['R']
-    put(tg, round(100 * (1 - r['end']['well'] / tt)), r['file'] + ': per cent of the trapped wave the 3D run has lost sideways by its end (3D well against the twin\'s 1 - T - R)')
+    gg = rt3d2.setup(Nx=r['box'][0], N=r['box'][1]); o = rt3d2.run1d(gg, dict(r['spec']), r['t_end'])
+    assert abs(o['transmitted'] - r['twin']['T']) < 1e-5, 'run1d does not reproduce the stored twin'
+    cc = rt3d2.centres(r['spec']); xg = gg['x']; inner = (xg > min(cc) + kw['D'] / 2) & (xg < max(cc) - kw['D'] / 2)
+    tw_in = float(o['prof'][-1][inner].sum() * gg['dx'])
+    put(tg, round(100 * (1 - r['end']['well'] / tw_in)), r['file'] + ': per cent of the trapped wave the 3D run has lost sideways by its end (3D well against the twin between the same inner faces, last frame, rt3d2.run1d)')
     put(tg + '_t', round(r['t_end']), 'end of that run')
 for tg, kw in (('ge_V2D2', dict(V0=2.0, D=2.0, P=3.5)), ('ge_V3D1', dict(V0=3.0, D=1.0, P=2.5)), ('ge_V2D1', dict(V0=2.0, D=1.0, P=2.5))):
     rs = [x for x in runs(shape='flat', N=2, bias=0.0, sx=3.0, R=0.0, **kw) if x.get('twin') and x['twin']['T_exact'] > 1e-3]
-    q = [x['twin']['T'] / x['twin']['T_exact'] for x in rs]
+    exact1d.SIG0 = 3.0
+    q = [x['twin']['T'] / exact1d.tbar(x['spec']['E'], segs(2, kw['V0'], kw['D'], kw['P']), nk=8001) for x in rs]   # not the index's T_exact (1201 points: too coarse for d = 2's narrow peak)
     put(tg + '_lo', round(min(q), 2), 'smallest ratio twin T / exact T over the stored energies'); put(tg + '_hi', round(max(q), 2), 'largest')
 put('gpu_run_h', round(sum(r['wall'] for r in RUNS) / 3600, 1), 'index.json runs: sum of wall, hours on one GPU each')
 
