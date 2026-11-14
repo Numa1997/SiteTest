@@ -134,3 +134,6 @@ Section 4: exact chi(x,t) for one wall run, compared with the stored file.
   downloaded to scratchpad kaggle/2d-2-of-4/. Tracker of 1-of-4 went silent at 19:47 (ntfy throttling) while the run went on.
 - 20:39 UTC: shards 3-of-4 (kernel 145067461) and 4-of-4 (145067465) launched, topics -disc2/-disc3. Quota 64,095 s before.
 - Next: shell Rmax convergence test (96/128/160) when a slot frees; then shells; then compare and recompute failures in c128; walls.
+- ~21:45 UTC: disc shards 3-of-4 (582 runs, 0 failed, 3,719 s, rt2d_all_2of4.tar 1,076.6 MB) and 4-of-4 (581, 0 failed, 3,670 s,
+  rt2d_all_3of4.tar 1,074.4 MB) COMPLETE. All 2,327 discs computed (c64, base grid). Quota 71,565 s.
+- Shell convergence test launched: numakoudsie/fig15-correction-2d-shellconv (kernel 145080157, commit 98110c3, topic -shellconv).
