@@ -36,7 +36,7 @@ walks: spacing P, height V0 and thickness D, N = 3, 5, 10 barriers (bands), disc
 - No walkthrough key for this page (no data-walk attribute): walkthrough-keeper not needed.
 
 ## Left
-3. derivation-checker (running; report -> notes/fig15/derivation-check-gen2.md), then referee; fix; docs section.
+3. Round 1 running (14 Nov ~02:10): derivation-checker (on commit 9bbf6f7, old numbering: map old->new eqs), referee -> notes/fig15/referee.md, readers -> scratchpad/readers/r1-{owner,student}.md. Eqs renumbered at 6aaf232: old 1,2->1,2; new 3 spread; old 3-10 -> 4-11; old 11 BW->15, 12 tau->16, 13 leak->17; old 14-27 -> 18-29 then supply 30, J 31, Jruns 32 (old 25->29, 26->31, 27->32).
 4. Refresh numbers with the full index.
 5. Write "READY at <commit>".
 
