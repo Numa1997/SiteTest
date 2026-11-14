@@ -199,3 +199,5 @@ contents list (paper__toc, 14 entries from the section titles, maths stripped) +
 (it was IBM Plex Sans since generation 1; paper.css applies the font only through .paper__body) and the TOC observer in sim.js
 works. Also: T_2 defined; wide-gap star ended; k -> E change of variable; flux T equals |t|^2 for equal k; problem 3 uses L_eff.
 Remaining open marks are data-pending (refresh at full index) or declined (textbook; table scroll cue is house .ptab).
+
+## Round 7 launched 03:29 UTC on 8cc9769: referee, owner, student (round-6 derivation checker still running).
