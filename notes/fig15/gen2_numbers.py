@@ -209,6 +209,9 @@ put('FP_tp', round(float(thp), 2), 'hbar d theta / dE at E_r: the round-trip tim
 put('FP_2Lv', round(float(2 * (1.5 + 2 / np.sqrt(2 * (2 - Er))) / np.sqrt(2 * Er)), 2), '2 L_eff / v at E_r')
 put('FP_R', round(float(Rr), 3), 'R of one barrier at E_r')
 put('FP_G', r3(float(2 * (1 - Rr) / (np.sqrt(Rr) * thp))), 'Gamma = 2 T / (sqrt(R) theta prime)')
+put('FP_lnR', round(float(-2 * np.log(Rr)), 4), '-2 ln R: exact decay per round trip (probability R^2 left after two reflections)')
+put('FP_2TsR', round(float(2 * (1 - Rr) / np.sqrt(Rr)), 4), '2 T / sqrt(R): what the Lorentzian width gives')
+put('FP_2T', round(float(2 * (1 - Rr)), 4), '2 T: two leaks per round trip, counted naively')
 put('spread_t40', round(3 * np.sqrt(1 + (40 / (2 * 9)) ** 2), 1), 'sigma_perp(t) = sigma_perp sqrt(1 + (t / 2 sigma_perp^2)^2), sigma_perp = 3, t = 40')
 
 # ---------- 3. N barriers ----------

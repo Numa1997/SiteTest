@@ -68,3 +68,22 @@ All 27 equations of that version re-derive. 12 text/number errors, all fixed in 
 6 long-packet runs of the running example are FIX1 (due rerun) -> said while pending. 7 finite well: lowest level to
 thousandths, upper to hundredths; all resonances listed. 8 bias wording. 9 unequal-pair wording. 10 (8) not (9) in sec 8.
 11 "three round trips". 12 band middle in xi; peaks 0.02-0.17 apart; shell faces; "twenty-two"; "and more steps".
+
+## Round 1 readers (14 Nov ~02:15-02:35): referee 65 marks (notes/fig15/referee.md), owner reader 32, student reader 45
+(full lists: scratchpad/readers/r1-owner.md, r1-student.md). Fixed (commit after this line):
+- Terms/symbols: star explained; figure-key paragraph moved to sec 1; E_u defined; matrix element z -> gamma (z is the coordinate);
+  t amplitude vs time noted; R radius vs reflection noted in sec 12; k_B T noted; voltage renamed V_b in sec 13 (V = potential);
+  tau in eq (26) -> delta; Delta E -> sigma_E; widths (sigma, not 2 sigma) consistent.
+- Derivations: separation of variables with the brackets; Gaussian spreading solution given; time reversal + flux argument for M;
+  explicit w and gamma (checked against tm.py); unequal-pair peak step; L_eff from step reflection phase (d -2arctan(k/kappa)/dk
+  = 2/kappa); tau = hbar/Gamma via R^2 per round trip: -2 ln R = 0.3109 vs 2T/sqrt R = 0.3112 (not "sqrt R ~ 1"); phase-average
+  integral shown; Bloch eigenvalue step; odd states; units + limits of (13)/(15)/(17); Strang global order and dt reason (0.2 rad).
+- Facts: glass fringes faint (4 %); bucket (Torricelli) replaced by cooling tea; STM claim cut; "fastest" -> 1.92 THz cited;
+  "current runs backwards" title -> "falls as the voltage rises"; hysteresis; next model named; BenDaniel-Duke mentioned;
+  flux factor k_R/k_L under bias; 131 / 274 mV; 12 % vs 6-8 % not traced (said); third finite-well level explained;
+  0.735 not a slider energy (Fig. 1 caption); Fig. 14 linked; 115 vs 3739 runs reconciled; shells geometry; "two walls with d=2";
+  Fig. 2 strip scale and gap beyond the plot; Fig. 3 redrawn (flat level inside the filled states, shading stops at band bottom).
+- Links: DOIs added to all five references (checked they resolve); repository paths now GitHub links.
+Not changed (outside my files / by design): body font (shared stylesheet; same in every note); Fig. 15e axis label and "from 1000
+3D runs" heading and caption (page code); blank 3D panels in a local build (runs live on R2); the picture-vs-data box stays
+closed by default (CLAUDE.md: "a paragraph the reader can open"); no textbook added (only sources actually read).
