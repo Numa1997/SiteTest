@@ -24,7 +24,13 @@ one brightness scale per run, smooth playback.
   - shard 2 `numakoudsie/fig15-rt3d2-shard-2-of-6`, launched 20:48 UTC, commit cdcade4: DONE, 623 runs, 0 failed,
     620 files, SHA-256 0 bad; downloaded
   - shard 3 launched 14 Nov 00:12 UTC (kernel 144885421, version 1); due about 03:40 UTC
-  - shard 4 launched 14 Nov 01:22 UTC (kernel 144897867); due about 04:50 UTC. Check-in scheduled 03:50 UTC.
+  - shard 3: DONE, 623 runs, 0 failed; filed and uploaded (14 Nov 03:55): 1853 runs, 3.24 GB in R2
+  - shard 4: DONE, 623 runs, 0 failed; filed and uploaded (14 Nov 05:10): 2468 runs, 4.33 GB in R2
+  - shard 6 launched 14 Nov 05:02 UTC (kernel 144929204); due about 08:30 UTC.
+  - shard 5: DONE, 623 runs, 0 failed; filed and uploaded (14 Nov 07:35): 3084 runs, 5.43 GB in R2
+  - fix1 launched 14 Nov 07:27 UTC (kernel 144950619), 15 runs. Check-in scheduled 08:35 UTC.
+  - Fix1 overwrites 15 keys in R2 before anything is live; the Worker's immutable cache header is safe because no browser has fetched them.
+  - Kaggle output paths since shard 3: `2026-11-14/rt3d2/*` (the runner's date), not `2026-11-13/`.
   - shards 3-6 `numakoudsie/fig15-rt3d2-shard-{3..6}-of-6`, loaders `rt3d2_all_{2..5}of6.ipynb`, commit 57770d2
   - fix job `numakoudsie/fig15-rt3d2-fix1`, loader `rt3d2_fix1.ipynb`, commit 57770d2: reruns the 15 runs of shards 1-2
     whose run length at cdcade4 was more than 15 % short (`FIX1` in rt3d2_run.py).
@@ -85,6 +91,23 @@ c80244e inventory · 923b43f filer per-notebook commit, replaced record · c21bd
 - Gen-2 solver, runner, loaders, filer `file_rt3d2.py` (SHA-256, per-notebook commit, replaced-run record, I-V, exact curves).
 - Gen-2 page on the branch (chips for shape, N, R, V0/D, P, sigma_x; bias slider; Fig. 15b-e), tested on the smoke runs.
 - Worker `worker/r2.js` and `wrangler.jsonc`, checked with `wrangler deploy --dry-run` and `wrangler dev`.
+
+## The writing session (14 Nov 01:33 UTC)
+- A separate cloud session writes the lecture note on branch `claude/fig15-gen2-note` (its own state file
+  `notes/fig15/NOTE_STATE.md`; "READY at <commit>" when done). It owns `public/scripts/resonant-note.js`, the page's lead and
+  meta description, `notes/fig15/gen2_numbers.py`, and the note sections of the Fig. 15 doc. Merge that branch into this one
+  before the final check; then rerun its gen2_numbers.py on the full index and refresh the numbers if needed.
+
+## Finishing each shard
+- Download into `scratchpad/kaggle_g2/<slug>/` (see above), then `scratchpad/after_shard.sh`: files ALL shards again (the filer
+  asserts every SHA-256), uploads what is new or changed (MD5 against the upload logs), prints keys in R2 and GB filed.
+
+## Measured on the page (14 Nov, local server, headless Chromium without GPU)
+- Index of 1237 runs: 1.02 MB, 169 kB gzipped; full batch about 3 MB, about 0.5 MB gzipped. Parsed once at load.
+- One run file 1.7 MB (192 box), 3.3-3.4 MB (256, 512). A loaded run now holds 4-10 MB (8-bit levels), 6 kept.
+- Page work per frame 1.5-3 ms (interpolate + sheet, WebGL submit, charts); the frame rate in headless Chromium (50-125 ms)
+  is the software renderer, not the page. A chip switch: 160-280 ms locally until the new run plays.
+- A fast drag over 20 energies: settles 0.3 s after release (one file in flight at a time).
 
 ## Left (Next = the first open item)
 1. Shards 4-6 and the fix job (two at a time as slots free; check-ins by `send_later`); download each, check SHA-256.

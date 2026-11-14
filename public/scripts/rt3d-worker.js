@@ -3,8 +3,9 @@
    It does three things and nothing else:
      1. the SHA-256 of the bytes as they arrived (compared by the page with kaggle/index.json);
      2. inflates the body (zlib) and splits it into its parts, exactly as read_rt3d.py does;
-     3. turns the 8-bit levels into numbers: |psi| = q / 255 * peak_f (each frame's own peak, from the header) and
-        arg psi = p / 255 * 2 pi - pi, so psi = |psi| (cos arg + i sin arg) on the stored half-plane z = 0, y >= 0.
+     3. hands over the 8-bit levels; the page turns them into numbers, two frames at a time: |psi| = q / 255 * peak_f (each
+        frame's own peak, from the header) and arg psi = p / 255 * 2 pi - pi, so psi = |psi| (cos arg + i sin arg) on the stored
+        half-plane z = 0, y >= 0.
    The page interpolates in time and draws; it computes nothing else. Docs: docs/simulations/fig15-resonant-tunnelling.md. */
 'use strict';
 self.onmessage = async function (ev) {
@@ -27,17 +28,12 @@ self.onmessage = async function (ev) {
         const pb = raw.buffer.slice(raw.byteOffset + 2 * a, raw.byteOffset + 2 * a + 4 * n * nx);
         const prof = new Float32Array(pb);
         const prof1d = head.has_1d ? new Float32Array(raw.buffer.slice(raw.byteOffset + 2 * a + 4 * n * nx, raw.byteOffset + 2 * a + 8 * n * nx)) : null;
-        const re = new Float32Array(a), im = new Float32Array(a), lv = new Uint8Array(amp), pl = new Uint8Array(ph);
-        const COS = new Float32Array(256), SIN = new Float32Array(256);
-        for (let q = 0; q < 256; q++) { const t = q / 255 * 2 * Math.PI - Math.PI; COS[q] = Math.cos(t); SIN[q] = Math.sin(t); }
-        const per = nxs * nr;
-        for (let f = 0; f < n; f++) {
-            const s = head.peaks[f] / 255, o = f * per;
-            for (let k = o; k < o + per; k++) { const m = lv[k] * s, p = pl[k]; re[k] = m * COS[p]; im[k] = m * SIN[p]; }
-        }
-        const transfer = [re.buffer, im.buffer, lv.buffer, pl.buffer, prof.buffer];
+        /* The levels are sent as they are (2 bytes per stored cell); the page turns only the two frames it is mixing into
+           numbers, by the formula above. Sending psi as float32 for every frame cost 10 bytes per cell: 20 to 52 MB a run. */
+        const lv = new Uint8Array(amp), pl = new Uint8Array(ph);
+        const transfer = [lv.buffer, pl.buffer, prof.buffer];
         if (prof1d) transfer.push(prof1d.buffer);
-        self.postMessage({ id, ok: true, sha, bytes: buf.byteLength, head, re, im, amp: lv, phase: pl, prof, prof1d, ms: performance.now() - t0 }, transfer);
+        self.postMessage({ id, ok: true, sha, bytes: buf.byteLength, head, amp: lv, phase: pl, prof, prof1d, ms: performance.now() - t0 }, transfer);
     } catch (e) {
         self.postMessage({ id, ok: false, error: String(e && e.message || e) });
     }
