@@ -166,3 +166,14 @@ Declined: textbook (unread), dimensionless-number box (next pass if time), page 
 
 ## Round 5 (launched 03:12 UTC on ddcd0ed): fresh referee, owner, student, derivation checker. (Earlier 'UTC' times in this file
 were estimates; the real clock is about two hours earlier than written.)
+
+## Round 5 (readers on d45d8c5..ddcd0ed): owner 18, student 23, referee 45 marks (notes/fig15/referee.md); fixed:
+the self-contradicting long-packet sentence (grid passes a little more just below the peak, plus 0.0286 trapped at the end);
+end-of-star markers in sec 5, 9, 13; plain restatement of L_eff after the starred step; s/lambda line removed (misleading);
+w -> W for the trapped width; P^N vs a row of N barriers (last travel taken back); n = 0 with rho in (-pi, pi]; C group =
+4 x 3 shapes; x0 for long packets 4 sigma_x; start share over all runs; (1+R)^2 step; sinh beats V0^2; lowest diode energy
+0.10; 'hard box, lowest level'; stray full stop; Bloch condition wording; 'possible cause'; ns of GPU time; energy and
+sideways momentum kept on crossing (why the current falls); (11) explains the trend only; 150 mV per unit; even levels;
+e^{-2 kappa d} reason; dividing by the total; lifetime belongs to the resonance (reason); shells tunnelled into; hbar theta'
+is a time (reason); uniqueness for the product; AC power argument for NDR; Gamma from (17) to 3 figures.
+Coordinator already has the page items (Fig. 15e, gain note). Next: round 6.
