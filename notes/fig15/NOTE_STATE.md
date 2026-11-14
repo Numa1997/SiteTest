@@ -189,3 +189,7 @@ numerator); n = 0 (phase count) vs n = 1 (box count) stated; nu for round trips 
 pointers (psi, twin, border, discs/shells); x4 label rule; colours in the probability view; long-packet start rule; 'stored
 energies' not 'grid'; packet energy FWHM named; (3) written with hbar, m; Tsu and Esaki (1973); Poisson defined; fit rule early;
 counts of the singles named; 4 % caused by the rule; 66 % context. Left: data-pending items (refresh at full index).
+
+## Round 6 owner (17 marks, read before 034bc81): remaining fixed: Fig. 15e has two kinds of curve in the key; n paragraph split;
+'here' -> E; sigma vs width; shells centred at x = 0, caught in the gap (and, tunnelling again, the inner shell); supply is a pure
+number, product in (32) units; Fig. 2 base line; sec 11 box caveat for 12 %; 'earlier, shorter rule'.
