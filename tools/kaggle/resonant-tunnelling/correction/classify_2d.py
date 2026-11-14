@@ -38,6 +38,7 @@ def main(index, runs_dir, out, jobs="jobs_2d.json", base="https://phyeinusul.com
         except Exception as e:                                     # unreadable stored file: recompute, never guess
             T_old = None; why = repr(e)[:200]
         if T_old is None:
+            status = "recompute"
             row = dict(file=name, shape=shape, T_old=None, T_ref=round(T_ref, 7), error=None, gate=round(gate, 6), passes=False,
                        status="recompute", why=why, drift=n.get("drift"), T_unc=n.get("T_unc"))
         else:
