@@ -266,3 +266,10 @@ in sections 7, 8, 11, 14; (3) current condition "above the filled states on the 
 (4) 2D Gaussian: 39 % within one sigma, not "within". Also: R2/R4 lifetimes below one round trip flagged, disc diode not a device
 current, grid accuracy ranges for other structures (0.32-0.92 d=2, 0.69-1.8 V0=3), shells' fit region, disc-table measures,
 (28) width, ten-wall run counts. Derivation checker r10 still running.
+
+## Final (owner's order relayed 09:53 UTC: finish the current round, no further reader rounds)
+Build at ad6738d: 1086 KaTeX formulas, 0 errors, no page errors, no horizontal overflow at 390 and 1440 px; screenshots at
+390 and 1440 (title, sections 7, 9, 12, 13) checked by eye. Round-10 derivation checker had not reported when READY was written;
+the derivation checker of round 9 found no errors in the note as it stood then (8aa4802).
+
+READY at ad6738d
