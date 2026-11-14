@@ -108,3 +108,9 @@ Section 4: exact chi(x,t) for one wall run, compared with the stored file.
   Launched numakoudsie/fig15-correction-walls-calib v1 (kernel 145000508, two batches per group, timeout 3600 s); started 13:29:55.
   Quota at 13:31: 48,930 s. Another session's notebook (fig-16-guinness-cart-with-control, 13:28) holds the second GPU slot.
   Live tracking: Kaggle shows logs only after a run ends; ntfy.sh relay was refused by this session's permission check.
+- 14:19 UTC: owner allowed ntfy.sh for the live tracker, this use only. Commit c53a447: say() pushes progress lines (every 30 s,
+  key events at once) to a private-name ntfy.sh topic given by the loader (topic kept out of the repository).
+- walls-calib v1 (13:30, no tracker): never released output; quota froze at 51,863.9 s by 14:32-14:41 (no session running).
+  sessionTimeoutSeconds 3600 did not show as a stop at 14:30 (output list stayed empty).
+- 14:42 UTC: numakoudsie/fig15-correction-2d-smoke v1 launched (kernel 145008546, commit c53a447, tracker on).
+  walls-calib v2 refused: "Maximum batch GPU session count of 2 reached" (second slot held).
