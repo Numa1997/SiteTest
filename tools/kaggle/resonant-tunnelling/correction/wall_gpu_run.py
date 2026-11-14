@@ -11,7 +11,7 @@ Check on the GPU: the first wall of every group is also computed by the verified
 by more than 1e-9 or any amplitude level differs by more than 1 (a rounding flip), the whole group falls back to the single-wall path (logged).
 
 One thread per GPU; one progress line per batch in progress.log; runs.jsonl; walls.tar at the end.
-Globals a loader may set: OUTROOT, CPU (test without a GPU), JOBS, START, STOP, BATCH_MAX, MEM_BUDGET."""
+Globals a loader may set: OUTROOT, CPU (test without a GPU), JOBS, START, STOP, BATCH_MAX, MEM_BUDGET, CALIB.\nTracking: every progress line carries done/total, elapsed, rate and ETA; timing.json holds per group the compile time and the steady\nseconds per wall; with CALIB = True only two batches per group run and timing.json predicts the time for all walls."""
 import os, sys, json, time, hashlib, threading, queue, tarfile, traceback
 from types import SimpleNamespace
 from math import erfc, sqrt, pi
@@ -216,6 +216,9 @@ if globals().get("RUN"):
     OUTD = ROOT + "/walls"; os.makedirs(OUTD, exist_ok=True)
     groups = {}
     for j in J: groups.setdefault(gkey(j["spec"]), []).append(j)
+    if globals().get("CALIB"):
+        FULL = {}
+        for j in json.load(open(globals().get("JOBS", "walls_all.json"))): FULL[gkey(j["spec"])] = FULL.get(gkey(j["spec"]), 0) + 1
     G = {}
     for key, jobs in groups.items():
         try:
@@ -223,6 +226,9 @@ if globals().get("RUN"):
             say("group", key, len(jobs), "walls, K", G[key].K, "batch", G[key].B, f"{G[key].bytes_per_wall/1e9:.2f} GB/wall")
         except Exception as e:
             G[key] = None; say("group", key, "single-wall path:", repr(e)[:200])
+    if globals().get("CALIB"):                               # two batches per group: the first carries the compile
+        groups = {k: v[:2 * (G[k].B if G[k] else 1)] for k, v in groups.items()}; J = [j for v in groups.values() for j in v]
+    TIM = []                                                 # one record per batch: group, size, seconds, first
     Q = queue.Queue()
     for key, jobs in groups.items():
         B = G[key].B if G[key] else 1
@@ -235,7 +241,9 @@ if globals().get("RUN"):
             rec["path"] = how; open(f"{OUTD}/{rec['file']}", "wb").write(blob)
             with LOCK:
                 CNT[0] += 1; JL.write(json.dumps(rec) + "\n"); JL.flush()
-                say(f"{CNT[0]}/{len(J)} {rec['file']} {dev} {how}: T_ref {rec['T_ref']:.6f} closure {rec['closure_max']:.1e} {rec['s']} s/wall")
+                el = time.time() - T0; eta = el / CNT[0] * (len(J) - CNT[0])
+                say(f"{CNT[0]}/{len(J)} ({100*CNT[0]/len(J):.0f} %) elapsed {el/60:.1f} min, rate {CNT[0]/el*60:.1f} walls/min, "
+                    f"ETA {eta/60:.1f} min | {rec['file']} {dev} {how}: T_ref {rec['T_ref']:.6f} closure {rec['closure_max']:.1e} {rec['s']} s/wall")
     def worker(dev):
         with jax.default_device(dev):
             while True:
@@ -245,7 +253,8 @@ if globals().get("RUN"):
                 g = G[key]
                 try:
                     if g is None: raise RuntimeError("single")
-                    res = g.run(batch, dev)
+                    tb0 = time.time(); res = g.run(batch, dev)
+                    with LOCK: TIM.append(dict(group=str(key), n=len(batch), B=g.B, s=round(time.time() - tb0, 2), first=first, dev=str(dev)))
                     if first:                                         # equivalence check against the verified path
                         b1, r1, A1 = one(batch[0], dev); _, r0, A0 = res[0]
                         dT = abs(r1["T_ref"] - r0["T_ref"]); dA = int(np.abs(np.asarray(A1, int) - np.asarray(A0, int)).max())
@@ -261,7 +270,9 @@ if globals().get("RUN"):
                     if first and not DONE[key].is_set(): G[key] = None; DONE[key].set()
                     if str(e) not in ("single", "mismatch"): say("batch failed, single path:", repr(e)[:300]); say(traceback.format_exc()[-600:])
                     for j in batch:
-                        try: emit([one(j, dev)], dev, "single")
+                        try:
+                            tb0 = time.time(); emit([one(j, dev)], dev, "single")
+                            with LOCK: TIM.append(dict(group=str(key), n=1, B=1, s=round(time.time() - tb0, 2), first=False, single=True, dev=str(dev)))
                         except Exception as e2:
                             with LOCK: ERR.append(dict(file=j["file"], error=repr(e2)[:400]))
                             say("FAILED", j["file"], repr(e2)[:300])
@@ -274,4 +285,23 @@ if globals().get("RUN"):
     for f in os.listdir(OUTD):
         if f.endswith(".bin"): os.remove(f"{OUTD}/{f}")
     json.dump(dict(done=CNT[0], failed=ERR, checks=CHK, total_s=round(time.time() - T0, 1)), open(OUTD + "/summary.json", "w"))
+    # timing: per group, compile (first batch minus a steady batch of the same size) and steady seconds per wall
+    ndev = len(devs); per = {}
+    for t in TIM: per.setdefault(t["group"], []).append(t)
+    tg = {}
+    for k, L in per.items():
+        st = [t for t in L if not t["first"] and not t.get("single")]; fi = [t for t in L if t["first"]]
+        spw = (sum(t["s"] for t in st) / sum(t["n"] for t in st)) if st else (sum(t["s"] for t in L) / sum(t["n"] for t in L))
+        comp = max(0.0, fi[0]["s"] - spw * fi[0]["n"]) if fi else 0.0
+        tg[k] = dict(s_per_wall=round(spw, 3), compile_s=round(comp, 1), B=L[0]["B"], batches=len(L))
+    T = dict(devices=[str(d) for d in devs], total_s=round(time.time() - T0, 1), groups=tg, batches=TIM)
+    if globals().get("CALIB"):
+        pred = {k: FULL[eval(k)] * v["s_per_wall"] for k, v in tg.items()}
+        comp = sum(v["compile_s"] for v in tg.values())
+        T["prediction"] = dict(walls=sum(FULL.values()), compute_s=round(sum(pred.values()), 1), compile_s_per_gpu=round(comp, 1),
+                               wall_clock_s_one_notebook=round(sum(pred.values()) / ndev + comp + 60, 1),
+                               wall_clock_s_two_notebooks=round(sum(pred.values()) / (2 * ndev) + comp + 60, 1),
+                               note="GPU quota is charged per session wall-clock, not per GPU; two notebooks halve the wall clock")
+        say("PREDICTION", json.dumps(T["prediction"]))
+    json.dump(T, open(OUTD + "/timing.json", "w"), indent=1)
     say(f"done {CNT[0]}, failed {len(ERR)}, tar {os.path.getsize(OUTD + '/walls.tar')/1e6:.0f} MB")
