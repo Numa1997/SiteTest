@@ -73,6 +73,20 @@ def sim_doc(fig, sid):
 
 # (pattern, description, doc). The first matching pattern wins. A description may be a function of the regex match.
 RULES = [
+    (r'public/scripts/cart16-view\.js', "Fig. 16: Cart16View, the four-wheel cart drawn on Fig. 12's StoutView2 (its camera and glass); the deck's pose from stored data.", 'docs/simulations/fig16-guinness-cart-control.md'),
+    (r'public/scripts/guinness16-play\.js', "Fig. 16: the player; Fig. 12's best stored ride and the new cart's on one clock, SHA-256 checked, the comparison table from both indexes.", 'docs/simulations/fig16-guinness-cart-control.md'),
+    (r'public/data/fig16/(\d{4}-\d\d-\d\d)/index-16\.json', 'Fig. 16 data generated on Kaggle: the notebook, version, commit, design, and per ride its file, size, SHA-256 and measured numbers.', 'docs/simulations/fig16-guinness-cart-control.md'),
+    (r'public/data/fig16/(\d{4}-\d\d-\d\d)/\w+\.json', "Fig. 16 data generated on Kaggle: one stored ride in Fig. 12's format plus the four-wheel cart's pose and control signals.", 'docs/simulations/fig16-guinness-cart-control.md'),
+    (r'tools/fig16/kaggle/cart4\.py', 'Fig. 16: the four-wheel cart, deck pitch and heave, and its control system (LQR, road preview, Kalman filter), JAX float64.', 'docs/simulations/fig16-guinness-cart-control.md'),
+    (r'tools/fig16/kaggle/modal4\.py', "Fig. 16: the cart with the few-mode stout, used in the notebook to choose the controller's weighting.", 'docs/simulations/fig16-guinness-cart-control.md'),
+    (r'tools/fig16/kaggle/run16\.py', "Fig. 16: the Kaggle run: rest guard, design step, rides with Fig. 12's fluid solver unchanged; books per frame.", 'docs/simulations/fig16-guinness-cart-control.md'),
+    (r'tools/fig16/kaggle/nb_cell\.py', 'Fig. 16: the Kaggle notebook cell (files fetched at a pinned commit).', 'docs/simulations/fig16-guinness-cart-control.md'),
+    (r'tools/fig16/kaggle/diag16\.py', "Fig. 16: diagnostics on Kaggle's CPU, control on and off, variants of the stout's push.", 'docs/simulations/fig16-guinness-cart-control.md'),
+    (r'tools/fig16/kaggle/pack16\.py', "Fig. 16: packs a Kaggle ride into the page's format (no computation).", 'docs/simulations/fig16-guinness-cart-control.md'),
+    (r'tools/fig16/build_page\.py', 'Fig. 16: builds the page from its source, every number filled from the stored data; --check.', 'docs/simulations/fig16-guinness-cart-control.md'),
+    (r'tools/fig16/(rides|slosh_model|spill|validate|fit|gamma_check|holder|sweep|concepts|show_concepts|cart16)\.py', "Fig. 16 design study (before the GPU run): decoding Fig. 12's rides, the few-mode stout fitted and validated, the head's spill rule, the early concept studies.", 'docs/simulations/fig16-guinness-cart-control.md'),
+    (r'tools/fig16/\w+\.json', 'Fig. 16 design study: stored results (fit, validation, sweep, concepts).', 'docs/simulations/fig16-guinness-cart-control.md'),
+    (r'notes/fig16/.+', 'Fig. 16 working notes: brief, state, model, concepts, prototypes, run summary, page source.', 'docs/simulations/fig16-guinness-cart-control.md'),
     # the repository's own files (not part of the app)
     (r'README\.md', 'Start here: what the project is, how the files fit together, where each one is explained.', 'README.md'),
     (r'docs/files\.md', 'This list. Written by tools/inventory.py; do not edit by hand.', 'docs/files.md'),

@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fig. 16 prototype: the kerb, Fig. 12 against Fig. 16</title>
+<link rel="stylesheet" href="../../../public/fonts/instrument-plex.css">
+<style>
+  html, body { margin: 0; background: #f5f1ea; color: #1c1518; font-family: 'IBM Plex Sans', sans-serif; }
+  header { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; padding: 10px 16px 0; }
+  h1 { font: 400 26px 'Instrument Serif', serif; margin: 0 12px 0 0; }
+  button, select { font: 12px 'IBM Plex Mono', monospace; background: #fffdf9; border: 1px solid #1c1518; padding: 4px 10px; cursor: pointer; }
+  #pair { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 8px 16px; }
+  @media (max-width: 760px) { #pair { grid-template-columns: 1fr; } }
+  .pane { border: 1px solid #1c1518; background: #f5f1ea; }
+  .pane h2 { font: 400 20px 'Instrument Serif', serif; margin: 6px 10px 0; }
+  .pane canvas { display: block; width: 100%; aspect-ratio: 4 / 3.2; }
+  .read { font: 12px/1.5 'IBM Plex Mono', monospace; padding: 4px 10px 8px; display: grid; grid-template-columns: repeat(3, auto); gap: 2px 16px; }
+  .read b { font-weight: 500; color: #7a1f2b; }
+  #t { font: 12px 'IBM Plex Mono', monospace; }
+  #src { font: 11px/1.4 'IBM Plex Mono', monospace; color: #6b6166; padding: 0 16px 12px; }
+</style>
+</head>
+<body>
+<header><h1>The kerb · Fig. 12 against Fig. 16</h1>
+  <select id="pick"><option value="kerb">the kerb, 30 mm, 1.5 m/s</option><option value="resonant">five 20 mm bumps, 1.0 m/s</option><option value="bump25">one 25 mm bump, 1.0 m/s</option></select>
+  <select id="mine"><option value="full">new cart, control system on</option><option value="off">new cart, control system off</option></select>
+  <button id="play">Pause</button><button id="again">Ride again</button><span id="t"></span></header>
+<div id="pair">
+  <div class="pane"><h2>Fig. 12 · one wheel, its best controller</h2><canvas id="c12"></canvas>
+    <div class="read"><span>tilt <b id="a-tilt"></b></span><span>head spilled <b id="a-head"></b></span><span>stout spilled <b id="a-stout"></b></span></div></div>
+  <div class="pane"><h2>Fig. 16 · four wheels, deck control</h2><canvas id="c16"></canvas>
+    <div class="read"><span>tilt <b id="b-tilt"></b></span><span>head spilled <b id="b-head"></b></span><span>stout spilled <b id="b-stout"></b></span>
+      <span>deck pitch <b id="b-pitch"></b></span><span>motor <b id="b-i"></b></span><span>actuators <b id="b-u"></b></span></div></div>
+</div>
+<div id="src"></div>
+<script src="../../../public/scripts/guinness-glass.js"></script>
+<script src="../../../public/scripts/stout-view.js"></script>
+<script src="../../../public/scripts/stout-view2.js"></script>
+<script src="../../../public/scripts/cart16-view.js"></script>
+<script>
+(async function () {
+  'use strict';
+  const Q = new URLSearchParams(location.search), $ = (id) => document.getElementById(id), fmt = (v, d) => (v == null || !isFinite(v)) ? '—' : v.toFixed(d);
+  const GP = window.GUINNESS_GLASS, G16 = window.Cart16View.G;
+  const Rz = (z) => { const f = Math.max(0, z) / GP.dz, i = Math.min(Math.floor(f), GP.R.length - 2); return GP.R[i] + (f - i) * (GP.R[i + 1] - GP.R[i]); };
+  const zRim = (GP.R.length - 1) * GP.dz;
+  const D12 = '../../../public/data/fig12/2026-11-14-run10/', D16 = '../../../public/data/fig16/2026-11-14/';
+  // Fig. 12's best stored ride on each road (index-jax.json: least head spilled, then least tilt): kerb slosh LQR, gentle roads joint
+  const BEST12 = { kerb: 'ride_sharp30_slosh', resonant: 'ride_resonant_joint', bump25: 'ride_bump25_joint' };
+  const NAME16 = { kerb: 'kerb', resonant: 'resonant', bump25: 'bump25' };
+  const mk = (canvas, View, o) => {
+    const fluid = { modal: true, h0: 0.125, zRim: zRim, H: zRim, Rbox: Infinity, dx: 0.0015, Rz: Rz }, bumps = [];
+    const zr = (x) => { let s = 0; for (const b of bumps) { const u = (x - b.x) / b.L; if (Math.abs(u) < 0.5) s += 0.5 * b.h * (1 + Math.cos(2 * Math.PI * u)); } return s; };
+    const cart = { x: 0.5, vx: 0, zw: 0.04, zb: 0.14, Rw: 0.04, Mb: 1.5, ml: 0.43, Ls: 0.135, g: 9.81, k: 600, us: 0, glassFloor: 0.012, road: { zr: zr } };
+    const v = new View(canvas, { fluid: fluid, cart: cart, drops: [] }, o); v.glassWall = 0.0032; v.glassBase = 0.014;
+    return { v, cart, fluid, bumps };
+  };
+  const A = mk($('c12'), window.StoutView2, { viewHeight: 0.42, groundY: 0.93, elevDeg: 16, azimDeg: -24 });
+  const B = mk($('c16'), window.Cart16View, { viewHeight: 0.50, groundY: 0.90, elevDeg: 16, azimDeg: -24 }); B.v.targetZ = 0.20; B.v.names = false;
+  if (document.fonts && document.fonts.load) { try { await document.fonts.load('400 100px "Instrument Serif"'); } catch (e) { /* serif fallback */ } }
+  const load = async (url) => { const D = await (await fetch(url)).json(); return new window.StoutRide(D).unpack(); };
+  let r12 = null, r16 = null, T = 0, playing = true, last = null, lastTxt = 0;
+  async function choose() {
+    const road = $('pick').value;
+    [r12, r16] = await Promise.all([load(D12 + BEST12[road] + '.json'), load(D16 + NAME16[road] + '_' + $('mine').value + '.json')]);
+    for (const [P, r] of [[A, r12], [B, r16]]) { P.bumps.length = 0; (r.D.bumps || []).forEach((b) => P.bumps.push(b)); P.fluid.h0 = r.fill; P.fluid.dx = r.dx; }
+    T = 0; playing = true; $('play').textContent = 'Pause';
+    $('src').textContent = `Left: Fig. 12, ${r12.D.name} (run 10, stored). Right: Fig. 16, ${r16.D.name} (Kaggle notebook fig-16-guinness-cart-with-control, version 2, Tesla T4). ` +
+      `Both are Fig. 12's fluid solver; the pictures are the stored frames, 30 a second, none interpolated. ${r16.frames < r12.frames ? 'The right ride stopped early on Kaggle (drop list full) at ' + fmt(r16.D.t[r16.frames - 1], 2) + ' s.' : ''}`;
+  }
+  $('pick').onchange = choose; $('mine').onchange = choose;
+  $('play').onclick = () => { playing = !playing; $('play').textContent = playing ? 'Pause' : 'Play'; };
+  $('again').onclick = () => { T = 0; playing = true; $('play').textContent = 'Pause'; };
+  function size() { for (const P of [A, B]) { const c = P.v.cv, r = c.getBoundingClientRect(), d = Math.min(2, devicePixelRatio || 1); c.width = Math.round(r.width * d); c.height = Math.round(r.height * d); P.v.cssW = r.width; } }
+  addEventListener('resize', size); size();
+  if (Q.get('pick')) $('pick').value = Q.get('pick'); if (Q.get('mine')) $('mine').value = Q.get('mine');
+  await choose();
+  if (Q.get('t')) { T = +Q.get('t'); playing = false; }
+  function frame(now) {
+    requestAnimationFrame(frame);
+    const dt = last == null ? 0 : Math.min(0.1, (now - last) / 1000); last = now;
+    const dur = (r12.frames - 1) / 30; if (playing) { T += dt; if (T >= dur) { T = dur; playing = false; $('play').textContent = 'Play'; } }
+    // left: Fig. 12's ride as its own player draws it
+    const k1 = Math.min(r12.frames - 1, Math.round(T * 30)), D1 = r12.D;
+    Object.assign(A.cart, { x: D1.x[k1], vx: D1.v[k1], zb: D1.zb[k1], zw: D1.zw[k1], us: D1.us ? D1.us[k1] : 0 });
+    A.v.setFrame(r12, k1); A.v.draw();
+    // right: the new cart's stored pose (axles, deck height and pitch, measured from the first frame), its stored stout
+    const k2 = Math.min(r16.frames - 1, Math.round(T * 30)), D2 = r16.D;
+    B.cart.x = D2.x[k2]; B.cart.vx = D2.v[k2];
+    B.v.pose = { zwF: D2.zf[k2] + G16.Rw - D2.zf[0], zwR: D2.zr[k2] + G16.Rw - D2.zr[0], zc: D2.zc[k2] - D2.zc[0] + G16.Rw + 0.098, pitch: D2.th[k2] - D2.th[0],
+                 wheelAng: -D2.x[k2] / G16.Rw, us: [D2.uf[k2] / 2, D2.uf[k2] / 2, D2.ur[k2] / 2, D2.ur[k2] / 2] };
+    B.v.setFrame(r16, k2); B.v.draw();
+    if (now - lastTxt > 250) {
+      lastTxt = now;
+      $('t').textContent = `${fmt(T, 2)} of ${fmt(dur, 1)} s`;
+      $('a-tilt').textContent = fmt(Math.abs(stTilt(r12, k1)), 1) + ' mm'; $('a-head').textContent = fmt(D1.head_spill_ml[k1], 2) + ' mL'; $('a-stout').textContent = fmt(D1.spill_g[k1], 2) + ' g';
+      $('b-tilt').textContent = fmt(Math.abs(D2.tilt_mm[k2]), 1) + ' mm'; $('b-head').textContent = fmt(D2.head_spill_ml[k2], 2) + ' mL'; $('b-stout').textContent = fmt(D2.spill_g[k2], 2) + ' g';
+      $('b-pitch').textContent = fmt((D2.th[k2] - D2.th[0]) * 180 / Math.PI, 1) + '°'; $('b-i').textContent = fmt(D2.i[k2], 1) + ' A'; $('b-u').textContent = fmt(D2.uf[k2], 0) + ' / ' + fmt(D2.ur[k2], 0) + ' N';
+    }
+    window.__ready = true; window.__T = T;
+  }
+  // Fig. 12's stored tilt per frame is not in its file: read on the outer ring as pack_ride.py does, from the stored surface (display of a stored field)
+  function stTilt(r, k) {
+    const R = r.fill ? Rz(r.fill) - 0.5 * r.dx : 0.038, n = 64; let s = 0;
+    for (let j = 0; j < n; j++) { const th = 2 * Math.PI * j / n, h = r.atInward ? r.atInward(k, R, th) : null; if (h) s += h[0] * Math.cos(th); }
+    return 2 * (2 / n) * s * 1000;
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fig. 16 prototype: the cart, drawn with Fig. 12's engine</title>
+<link rel="stylesheet" href="../../../public/fonts/instrument-plex.css">
+<style>
+  html, body { margin: 0; background: #f5f1ea; color: #1c1518; font-family: 'IBM Plex Sans', sans-serif; }
+  #stage { position: relative; width: 100vw; height: 100vh; overflow: hidden; }
+  #cv { display: block; width: 100%; height: 100%; touch-action: none; cursor: grab; }
+  #lines { position: absolute; inset: 0; pointer-events: none; }
+  .lab { position: absolute; font: 12px/1.25 'IBM Plex Mono', monospace; background: #fffdf9; border: 1px solid #1c1518; padding: 3px 6px; white-space: nowrap; pointer-events: none; }
+  .lab b { color: #7a1f2b; font-weight: 500; }
+  #bar { position: absolute; left: 16px; top: 12px; right: 16px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  #bar h1 { font: 400 26px 'Instrument Serif', serif; margin: 0 12px 0 0; }
+  button { font: 12px 'IBM Plex Mono', monospace; background: #fffdf9; border: 1px solid #1c1518; padding: 4px 10px; cursor: pointer; }
+  button[aria-pressed="true"] { background: #7a1f2b; color: #fff; border-color: #7a1f2b; }
+  label { font: 12px 'IBM Plex Mono', monospace; display: flex; gap: 8px; align-items: center; }
+  #note { position: absolute; left: 16px; top: 52px; right: 16px; font: 12px/1.4 'IBM Plex Mono', monospace; color: #6b6166; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <canvas id="cv"></canvas><svg id="lines"></svg>
+  <div id="bar"><h1>Fig. 16 · the cart</h1><button id="bl" aria-pressed="true">Names</button>
+    <label>place on the road <input id="xs" type="range" min="900" max="2100" value="1375" step="5"> <output id="xo"></output></label></div>
+  <div id="note"></div>
+</div>
+<script src="../../../public/scripts/guinness-glass.js"></script>
+<script src="../../../public/scripts/stout-view.js"></script>
+<script src="../../../public/scripts/stout-view2.js"></script>
+<script src="../../../public/scripts/cart16-view.js"></script>
+<script>
+(async function () {
+  'use strict';
+  const Q = new URLSearchParams(location.search), $ = (id) => document.getElementById(id);
+  const cv = $('cv'), stage = $('stage'), svg = $('lines');
+  const GP = window.GUINNESS_GLASS, V = window.Cart16View, G = V.G;
+  const Rz = (z) => { const f = Math.max(0, z) / GP.dz, i = Math.min(Math.floor(f), GP.R.length - 2); return GP.R[i] + (f - i) * (GP.R[i + 1] - GP.R[i]); };
+  const zRim = (GP.R.length - 1) * GP.dz;
+  const fluid = { modal: true, h0: 0.125, zRim: zRim, H: zRim, Rbox: Infinity, dx: 0.0015, Rz: Rz };
+  const bumps = [{ x: 1.5, h: 0.030, L: 0.12 }];                        // Fig. 12's kerb (run_b.py, "one sharp 30 mm bump")
+  const zr = (x) => { let s = 0; for (const b of bumps) { const u = (x - b.x) / b.L; if (Math.abs(u) < 0.5) s += 0.5 * b.h * (1 + Math.cos(2 * Math.PI * u)); } return s; };
+  const cart = { x: 1.375, vx: 0, zw: G.Rw, zb: 0.15, Rw: G.Rw, Mb: 1.5, ml: 0.43, Ls: 0.135, g: 9.81, k: 600, us: 0, glassFloor: 0.012, road: { zr: zr } };
+  const view = new V(cv, { fluid: fluid, cart: cart, drops: [] }, { viewHeight: +(Q.get('vh') || 0.56), groundY: 0.90, elevDeg: +(Q.get('el') || 16), azimDeg: +(Q.get('az') || -24) });
+  view.glassWall = 0.0032; view.glassBase = 0.014; view.targetZ = 0.20;
+  if (document.fonts && document.fonts.load) { try { await document.fonts.load('400 100px "Instrument Serif"'); await document.fonts.load('12px "IBM Plex Mono"'); } catch (e) { /* falls back */ } }
+  // the stout and its head: a stored picture of Fig. 12 (the pint at rest), unpacked by Fig. 12's own StoutRide
+  const FILE = '../../../public/data/fig12/2026-11-14-run10/' + (Q.get('ride') || 'free_full_1.5') + '.json';
+  const ride = await new window.StoutRide(await (await fetch(FILE)).json()).unpack();
+  fluid.h0 = ride.fill; fluid.dx = ride.dx; view.setFrame(ride, +(Q.get('k') || 0));
+  // the pose, from the road's geometry alone (a drawing aid until the rides are computed): each axle rides on the envelope of
+  // a rigid wheel over the road; the deck stands at its rest height above the two axles and takes the slope between them
+  const axle = (x) => { let m = -1; for (let q = -40; q <= 40; q++) { const s = q / 40 * G.Rw; m = Math.max(m, zr(x + s) + Math.sqrt(G.Rw * G.Rw - s * s)); } return m; };
+  function pose() {
+    const zF = axle(cart.x + G.wb / 2), zR = axle(cart.x - G.wb / 2);
+    view.pose = { zwF: zF, zwR: zR, zc: 0.5 * (zF + zR) + 0.098, pitch: Math.atan2(zF - zR, G.wb), wheelAng: -cart.x / G.Rw, us: [0, 0, 0, 0] };
+  }
+  const NAMES = [['L', 'glass', 'Fig. 12&#8217;s pint, <b>clamped to the deck</b>'], ['L', 'clamp', 'clamp ring and seat plate'], ['L', 'ctl', 'controller and motor drives'],
+    ['L', 'battery', 'battery, 24 V'], ['L', 'motor', '<b>hub motor</b> in each rear wheel'], ['R', 'cell', 'load cell: the force this wheel carries'],
+    ['R', 'coil', '<b>voice-coil actuator</b>: pushes the deck up or down'], ['R', 'imu', '<b>IMU</b>: the deck&#8217;s tilt and acceleration'], ['R', 'scanner', '<b>road scanner</b>: reads the bump before the wheel meets it'],
+    ['R', 'spring', 'coil spring over a damper'], ['R', 'hinge', 'hinge of the swing arm, under the deck'], ['R', 'arm', 'swing arm: carries the wheel'], ['R', 'encoder', 'wheel encoder'],
+    ['R', 'road', 'the kerb of Fig. 12: 30 mm high, 0.12 m long']];
+  const labs = NAMES.map((n) => { const d = document.createElement('div'); d.className = 'lab'; d.innerHTML = n[2]; stage.appendChild(d); return d; });
+  let names = Q.get('names') !== '0', drag = null;
+  $('bl').onclick = () => { names = !names; $('bl').setAttribute('aria-pressed', names ? 'true' : 'false'); frame(); };
+  $('xs').oninput = () => { cart.x = $('xs').value / 1000; frame(); };
+  if (Q.get('x')) { cart.x = +Q.get('x'); $('xs').value = cart.x * 1000; }
+  cv.addEventListener('pointerdown', (e) => { drag = [e.clientX, e.clientY]; cv.setPointerCapture(e.pointerId); });
+  cv.addEventListener('pointermove', (e) => { if (!drag) return; view.azim -= (e.clientX - drag[0]) * 0.006; view.elev = Math.max(0.03, Math.min(1.2, view.elev + (e.clientY - drag[1]) * 0.004)); drag = [e.clientX, e.clientY]; frame(); });
+  cv.addEventListener('pointerup', () => { drag = null; });
+  function frame() {
+    const box = stage.getBoundingClientRect(), dpr = Math.min(2, window.devicePixelRatio || 1);
+    cv.width = Math.round(box.width * dpr); cv.height = Math.round(box.height * dpr); view.cssW = box.width;
+    pose(); view.draw();
+    $('xo').textContent = cart.x.toFixed(3) + ' m';
+    $('note').textContent = 'Glass, stout and head: Fig. 12’s own drawing of its stored picture ' + (view.k + 1) + ' of ' + ride.frames + ' (' + ride.D.name + ', the pint at rest). ' +
+      'Pose: from the road’s shape only (deck pitch ' + (view.pose.pitch * 180 / Math.PI).toFixed(1) + '°); no ride of this cart is computed yet. Drag to turn.';
+    let h = ''; const cols = { L: [], R: [] }, W = box.width;
+    NAMES.forEach((n, i) => { const a = view.anchors[n[1]]; cols[n[0]].push({ i, x: a[0], y: a[1] }); });
+    for (const side of ['L', 'R']) {
+      const c = cols[side].sort((a, b) => a.y - b.y); let y = 96;
+      c.forEach((p) => { const d = labs[p.i]; d.style.display = names ? 'block' : 'none'; if (!names) return; y = Math.max(y, p.y - 70);
+        const w = d.offsetWidth, x = side === 'L' ? 16 : W - 16 - w; d.style.left = x + 'px'; d.style.top = y + 'px';
+        h += `<line x1="${side === 'L' ? x + w : x}" y1="${y + 11}" x2="${p.x}" y2="${p.y}" stroke="#1c1518" stroke-width="0.8"/><circle cx="${p.x}" cy="${p.y}" r="2.5" fill="#7a1f2b"/>`; y += 30; });
+    }
+    svg.setAttribute('width', box.width); svg.setAttribute('height', box.height); svg.innerHTML = h;
+    window.__ready = true;
+  }
+  window.addEventListener('resize', frame); frame();
+})();
+</script>
+</body>
+</html>

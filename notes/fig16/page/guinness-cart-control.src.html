@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Pint of Guinness on a Cart Built to Carry It · Numa Koudsie</title>
+    <meta name="description" content="Fig. 12's pint of Guinness on a four-wheel cart with a control system: the deck is tilted and lifted by actuators so that the stout barely feels the road. Computed on Kaggle's GPU with Fig. 12's fluid solver and played back beside Fig. 12's best ride.">
+    <meta name="theme-color" content="#f5f1ea">
+    <link rel="stylesheet" href="../styles/sim.css">
+    <link rel="stylesheet" href="../styles/fold.css"><script src="../scripts/flip.js"></script>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%237a1f2b'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='38' fill='%23f5f1ea'%3EN%3C/text%3E%3C/svg%3E">
+    <style>
+        .g16-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        @media (max-width: 900px) { .g16-pair { grid-template-columns: 1fr; } }
+        .g16-pane { position: relative; border: 1px solid var(--ink); border-radius: 8px; background: var(--paper, #f5f1ea); overflow: hidden; }
+        .g16-pane h2 { font: 400 19px var(--serif, 'Instrument Serif', serif); margin: 8px 12px 0; }
+        .g16-pane .cv { position: relative; width: 100%; aspect-ratio: 4 / 3.3; }
+        .g16-pane canvas { display: block; width: 100%; height: 100%; }
+        .kread { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px 10px; margin: 0; padding: 6px 12px 10px; font-family: 'IBM Plex Mono', monospace; }
+        .kread dt { font-size: 11px; color: var(--ink-3); } .kread dd { margin: 0; font-size: 15px; }
+        .g-rides { display: grid; gap: 6px; } .btn.g-ride { white-space: normal; justify-content: flex-start; text-align: left; height: auto; min-height: 0; font-size: 13px; line-height: 1.3; padding: 8px 10px; }
+        .g-ride[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); box-shadow: inset 3px 0 0 var(--accent); }
+        .g-cmp { width: 100%; border-collapse: collapse; font: 12px/1.35 var(--mono); }
+        .g-cmp th, .g-cmp td { text-align: right; padding: 3px 4px; border-bottom: 1px solid var(--line, rgba(28,21,24,.15)); }
+        .g-cmp th:first-child, .g-cmp td:first-child { text-align: left; }
+        .g-cmp thead th { font-size: 10px; color: var(--ink-3); font-weight: 400; }
+        .g-cmp .cmp-road th { text-align: left; font-size: 11px; color: var(--ink-2); padding-top: 8px; font-weight: 500; }
+        .g16-wide { max-width: 1480px; }
+    </style>
+</head>
+<body>
+    <header class="sim-top">
+        <span style="display:inline-flex;align-items:center;gap:14px"><a href="../index.html" aria-label="Phyein Usul, home page" style="display:inline-block;line-height:0"><img src="../images/phyein-usul-mark.svg" alt="Phyein Usul" width="87" height="48" /></a><a href="../simulations.html">← All simulations</a></span>
+        <nav class="sim-nav" aria-label="Simulations">
+            {{NAV}}
+        </nav>
+    </header>
+
+    <main class="sim g16-wide">
+        <noscript><p class="sim-error"><b>This simulation needs JavaScript.</b> <a href="../simulations.html">Back to the simulations</a></p></noscript>
+        <div class="sim__head">
+            <p class="sim__num">Fig. 16 · computed on Kaggle · played back</p>
+            <h1>A Pint of Guinness on a Cart Built to Carry It<span class="dot">.</span></h1>
+            <p class="sim__lede">The same pint as <a href="guinness-kaggle.html">Fig. 12</a>, the same stout and head of foam, the same fluid solver and the same roads. The cart is new: four wheels, a deck that actuators can lift and tilt, and a control system that sees the road coming. On the kerb, where every controller of Fig. 12 lost head over the rim, it keeps the stout nearly flat. Nothing is computed on your device: both rides were computed on Kaggle&#8217;s graphics card and are played back from the stored pictures.</p>
+        </div>
+
+        <figure class="stage">
+            <div class="g16-pair">
+                <div class="g16-pane"><h2 id="h12">Fig. 12</h2><div class="cv"><canvas id="c12" aria-label="Fig. 12's one-wheel cart with its best controller on the chosen road, played from stored Kaggle data"></canvas></div>
+                    <dl class="kread"><div><dt>tilt of the stout</dt><dd id="a-tilt">—</dd></div><div><dt>head spilled</dt><dd id="a-head">—</dd></div><div><dt>stout spilled</dt><dd id="a-stout">—</dd></div></dl></div>
+                <div class="g16-pane"><h2 id="h16">Fig. 16</h2><div class="cv"><canvas id="c16" aria-label="The four-wheel cart with its control system on the same road, played from stored Kaggle data"></canvas></div>
+                    <dl class="kread"><div><dt>tilt of the stout</dt><dd id="b-tilt">—</dd></div><div><dt>head spilled</dt><dd id="b-head">—</dd></div><div><dt>stout spilled</dt><dd id="b-stout">—</dd></div>
+                        <div><dt>deck pitch</dt><dd id="b-pitch">—</dd></div><div><dt>hub motors</dt><dd id="b-i">—</dd></div><div><dt>actuators front / rear</dt><dd id="b-u">—</dd></div>
+                        <div><dt>speed</dt><dd id="b-v">—</dd></div></dl></div>
+            </div>
+            <figcaption class="stage__cap"><span><b>Fig. 16</b> · stored Kaggle data, played back on one clock · nothing computed here</span><span id="cap-t">—</span></figcaption>
+        </figure>
+
+        <div class="sim__grid">
+            <div class="panel" aria-label="Controls">
+                <div class="panel__group">
+                    <p class="panel__label">Run</p>
+                    <div class="actions"><button type="button" class="btn" id="play">Pause</button><button type="button" class="btn btn--ghost" id="again">Ride again</button></div>
+                    <label class="ctl"><span class="ctl__row"><span>Time</span><output id="t-out" for="tbar"></output></span><input type="range" id="tbar" min="0" max="1000" step="1" value="0"></label>
+                </div>
+                <div class="panel__group">
+                    <p class="panel__label">Ride of the new cart</p>
+                    <div id="ride-host" class="g-rides"></div>
+                    <p class="panel__note" id="ride-note"></p>
+                </div>
+            </div>
+            <aside class="panel" aria-label="Comparison">
+                <div class="panel__group">
+                    <p class="panel__label">Fig. 12 against Fig. 16, every stored ride</p>
+                    <table class="g-cmp" id="cmp"><thead><tr><th>cart and controller</th><th>tilt, mm</th><th>head, mL</th><th>stout, g</th><th>current, A</th></tr></thead></table>
+                    <p class="panel__note">Largest tilt (twice the cos&#8239;θ part of the surface on the outer ring, read from the columns more than one cell inside the glass), head and stout spilled, and largest motor current, each as stored in the rides&#8217; indexes. * The run stopped at {{off_end_s}} s, when its list of flying drops was full; its spills are those reached by then.</p>
+                </div>
+            </aside>
+        </div>
+
+        <article class="paper" id="paper" aria-labelledby="paper-title">
+            <header class="paper__head">
+                <p class="paper__kicker">Lecture note · Fig. 16 computed on Kaggle · control · fluid dynamics</p>
+                <h2 class="paper__title" id="paper-title">Carrying a pint over a kerb</h2>
+                <p class="paper__by">Numa Koudsie · first version, 14 November 2026; the full chapter, refereed as Fig. 12&#8217;s was, follows</p>
+                <div class="paper__abstract"><b>Abstract.</b> Fig. 12 showed that no controller can save the head of a pint on a one-wheel cart that meets a 30 mm kerb at 1.5 m/s: the road pushes back with up to 82 N, the motor can answer with at most 11.25 N, and the sudden loss of speed sets the stout swinging over the rim. Here the pint is clamped to the deck of a four-wheel cart whose struts carry actuators, and a control system tilts and lifts the deck so that the stout feels almost no sideways push. We derive what the stout feels on a tilting deck, build the control law (optimal state feedback, road preview and a Kalman filter on the glass&#8217;s level probes), and read the rides computed with Fig. 12&#8217;s own fluid solver: on the kerb the tilt falls from {{f12_kerb_tilt}} to {{f16_kerb_tilt}} mm and the head lost from {{f12_kerb_head}} to {{f16_kerb_head}} mL.</div>
+            </header>
+            <div class="paper__grid">
+                <nav class="paper__toc" aria-label="Contents">
+                    <p>Contents</p>
+                    <ol>
+                        <li><a href="#p-why"><span>1</span>Why Fig. 12 could not save the head</a></li>
+                        <li><a href="#p-machine"><span>2</span>The machine</a></li>
+                        <li><a href="#p-feel"><span>3</span>What the stout feels on a tilting deck</a></li>
+                        <li><a href="#p-control"><span>4</span>The control system&nbsp;★</a></li>
+                        <li><a href="#p-compute"><span>5</span>How the rides were computed</a></li>
+                        <li><a href="#p-result"><span>6</span>What the rides show</a></li>
+                        <li><a href="#p-limits"><span>7</span>Limits, and what comes next</a></li>
+                    </ol>
+                </nav>
+                <div class="paper__body">
+                    <section class="psec" id="p-why">
+                        <h3><span class="psec__n">01</span>Why Fig. 12 could not save the head</h3>
+                        <p class="psec__lead">Walk over a kerb with a full pint in your hand and you do two things without thinking: you slow down before it, and you let your wrist give, so that the glass stays level while your body jolts.</p>
+                        <p>Fig. 12&#8217;s cart could do neither well. Its glass stood on a body with one wheel and one motor. When the wheel climbed the 30 mm kerb at 1.5 m/s, the road pushed it back with up to 82 N within about 40 ms, while the motor, held back by its own back-EMF at that speed, could push forward with at most 11.25 N. The cart lost speed suddenly, the stout carried on and climbed the front wall, and with the best of its five controllers {{f12_kerb_head}} mL of the head broke over the rim (tilt {{f12_kerb_tilt}} mm). A controller can only choose what the motor does; it cannot remove the jolt, and it cannot tilt the glass.</p>
+                        <p>So the new cart is built around the two things the hand does: it reads the road ahead, and it can tilt and lift the glass.</p>
+                    </section>
+                    <section class="psec" id="p-machine">
+                        <h3><span class="psec__n">02</span>The machine</h3>
+                        <p>The glass is clamped to a deck, {{Md}} kg with everything on it (the glass, battery, controller and scanner) plus the {{ml_g}} g of stout and head. The deck stands on four wheels of radius {{Rw_mm}} mm, two axles {{wb_mm}} mm apart. Each wheel hangs on a swing arm hinged under the deck; from the arm a coil spring over a damper rises to a tower on the deck ({{k}} N/m and {{c}} N&#8239;s/m for each axle&#8217;s pair, so the deck alone would bounce at {{f_bounce}} Hz). At the top of each strut sits a voice-coil actuator, a coil in a magnet&#8217;s gap that pushes the deck up or down with a force set by its current, up to {{Umax}} N for each axle, and a load cell that weighs what the wheel carries. Two hub motors drive the rear wheels, {{b}} N per ampere each at the road, at most {{Imax}} A from a {{Vmax}} V battery. An inertial measurement unit (IMU) on the deck measures its tilt and acceleration; encoders measure the wheels&#8217; turning; a road scanner on a boom measures the height of the road up to {{preview_s}} s ahead. Fig. 12&#8217;s two level probes on the glass&#8217;s wall measure the stout&#8217;s swing.</p>
+                        <p>Everything that moves the deck therefore moves the glass: the deck heaves (moves up and down) and pitches (tilts nose up or down) as the wheels meet the road, and the actuators can make it heave and pitch on purpose.</p>
+                    </section>
+                    <section class="psec" id="p-feel">
+                        <h3><span class="psec__n">03</span>What the stout feels on a tilting deck</h3>
+                        <p>Fig. 12 computes the stout in the glass&#8217;s own frame, where it feels gravity minus the glass&#8217;s acceleration, the effective gravity \(\mathbf g_\text{eff} = \mathbf g - \mathbf a_S\). Its first mode of sloshing is driven by the part of \(\mathbf g_\text{eff}\) that lies across the glass, along the glass&#8217;s own forward axis. When the glass is tilted nose up by the angle \(\theta\), that axis is \(\mathbf e_x = (\cos\theta, \sin\theta)\) and the axis along the glass is \(\mathbf e_z = (-\sin\theta, \cos\theta)\). With \(\mathbf g = (0, -g)\) and \(\mathbf a_S = (a_x, a_z)\),</p>
+                        \[ g_x = \mathbf g_\text{eff}\cdot\mathbf e_x = -(g + a_z)\sin\theta - a_x\cos\theta, \qquad g_z = \mathbf g_\text{eff}\cdot\mathbf e_z = -(g + a_z)\cos\theta + a_x\sin\theta . \tag{1} \]
+                        <p>The sideways push vanishes when \(g_x = 0\), that is when</p>
+                        \[ \tan\theta^* = -\frac{a_x}{g + a_z} . \tag{2} \]
+                        <p>This is the waiter&#8217;s trick: braking (\(a_x \lt 0\)) calls for the glass to tilt nose up, accelerating for nose down, by the angle at which the glass&#8217;s axis points along the effective gravity. A kerb that slows the cart at 10 m/s² would ask for 45°, which no deck can give, so the controller cannot simply follow (2); it must spread the jolt in time, lean partly, and use the road scanner to start before the wheel arrives. For the glass the relevant acceleration \(\mathbf a_S\) is that of the point S where the first mode lives, \({{hg_mm}}\) mm above the deck&#8217;s centre of mass: the deck&#8217;s own pitching adds \(-h\ddot\theta\) to \(a_x\) there, so a deck that tilts too quickly pushes the stout as hard as one that brakes.</p>
+                        <p>Equation (1) is what the fluid solver receives at every step: Fig. 12&#8217;s code is unchanged, only the direction and size of its effective gravity now follow the deck. The rotation of the glass also adds forces that vary across it (\(\ddot\theta\,r\) and \(\dot\theta^2 r\) about S); they are left out, and section 7 says how large they are.</p>
+                    </section>
+                    <section class="psec" id="p-control">
+                        <h3><span class="psec__n">04</span>The control system&nbsp;★</h3>
+                        <p>The controller sees the cart through twelve numbers, the state: the error of the speed and its integral, the deck&#8217;s height and pitch and their rates, the two axles&#8217; heights and rates, and the swing of the stout \(q\) (its height at the front wall) and its rate. It acts with three: the drive force of the hub motors and the forces of the front and rear actuators. Newton&#8217;s law for the deck, the axles and the cart, with the first mode of Fig. 12 (frequency {{f0}} Hz, damping ratio {{zeta}}, drive coefficient {{beta}}, as run 8 measured them), linearised about steady driving, gives</p>
+                        \[ \dot{\mathbf x} = A\mathbf x + B\mathbf u + E\mathbf w , \tag{3} \]
+                        <p>where \(\mathbf w\) holds the road&#8217;s height and slope under the two axles. Sampled every {{Ts_ms}} ms, the controller minimises the cost \(\sum_k (\mathbf x_k^\top Q\mathbf x_k + \mathbf u_k^\top R\mathbf u_k)\), with each weight the inverse square of the largest acceptable value (Bryson&#8217;s rule): {{q_mm}} mm for the swing, {{th_deg}}° for the pitch, {{stroke_mm}} mm for the struts&#8217; travel, 40 N for each force. The answer is the linear quadratic regulator (LQR) with preview,</p>
+                        \[ \mathbf u_k = -K\mathbf x_k - \sum_{j=0}^{N_p-1} K_j\,\mathbf w_{k+j}, \qquad K_j = (R + B_d^\top P B_d)^{-1}B_d^\top (A_\text{cl}^\top)^{j} P E_d , \tag{4} \]
+                        <p>where \(P\) solves the discrete Riccati equation, \(A_\text{cl} = A_d - B_dK\), and \(N_p = {{Np}}\) samples ({{preview_s}} s) of road come from the scanner. The first term is feedback: it answers what has already happened. The second is the feed-forward of a disturbance that is known in advance: each future piece of road is weighted by how much the closed loop will still remember of it when it arrives. The swing \(q\) and its rate are estimated by a Kalman filter that predicts them from the IMU&#8217;s measured acceleration and corrects them with Fig. 12&#8217;s two wall probes once per fluid step. The weighting was chosen in the notebook itself, among {{ncand}} candidates tried on the kerb with a few-mode model of the stout validated on Fig. 12&#8217;s stored rides; the one with the least head spilled was kept.</p>
+                    </section>
+                    <section class="psec" id="p-compute">
+                        <h3><span class="psec__n">05</span>How the rides were computed</h3>
+                        <p>Every ride was computed on Kaggle, a service that rents graphics cards, in one run of the notebook <i>fig-16-guinness-cart-with-control</i> (version {{nb_version}}, on a {{device}}). The stout is Fig. 12&#8217;s: about a million particles of stout on a 1.5 mm grid, the head of foam with its mass, the drops and lumps that leave over the rim; its code is unchanged. The cart and its controller are a new module, stepped every 0.1 ms inside each fluid step and pushed back by the stout&#8217;s change of momentum, as in Fig. 12. Before any ride the pint stood still for 2 s and had to stay flat and full (it did, to {{rest_max_mm}} mm). The books closed in every stored picture: no particle of stout was lost, and the head in the glass plus the head broken off equals the head served to {{head_err}} mL. A step took about {{ms_step}} ms; the four rides and the rest took {{gpu_min}} minutes of the card.</p>
+                    </section>
+                    <section class="psec" id="p-result">
+                        <h3><span class="psec__n">06</span>What the rides show</h3>
+                        <table class="ptab">
+                            <caption>Table 1 · Fig. 12&#8217;s best stored ride and the new cart, on the same roads (stored numbers)</caption>
+                            <tr><th>Road</th><th>Fig. 12, best: tilt; head spilled</th><th>Fig. 16, control on: tilt; head spilled</th></tr>
+                            <tr><td>one sharp 30 mm bump (the kerb), 1.5 m/s</td><td>{{f12_kerb_tilt}} mm; {{f12_kerb_head}} mL</td><td>{{f16_kerb_tilt}} mm; {{f16_kerb_head}} mL</td></tr>
+                            <tr><td>five 20 mm bumps, 1.0 m/s</td><td>{{f12_res_tilt}} mm; {{f12_res_head}} mL</td><td>{{f16_res_tilt}} mm; {{f16_res_head}} mL</td></tr>
+                            <tr><td>one 25 mm bump, 1.0 m/s</td><td>{{f12_b25_tilt}} mm; {{f12_b25_head}} mL</td><td>{{f16_b25_tilt}} mm; {{f16_b25_head}} mL</td></tr>
+                        </table>
+                        <p>On the kerb the deck pitches by at most {{f16_kerb_pitch}}°; the hub motors work at their limit of {{f16_kerb_i}} A, and the actuators reach {{f16_kerb_u}} N of their {{Umax}} N. The same machine with its control system switched off shows what the control buys: its deck pitched by up to {{off_pitch}}°, and by {{off_end_s}} s, when Kaggle stopped the ride because its list of flying drops was full, it had already lost {{off_head}} mL of head and {{off_stout}} g of stout.</p>
+                    </section>
+                    <section class="psec" id="p-limits">
+                        <h3><span class="psec__n">07</span>Limits, and what comes next</h3>
+                        <p>The control system is at its edge on the kerb: the motors saturate and the actuators come close to theirs. The forces of the rotating glass that vary across it are left out of the fluid; at the pitch rates of these rides they are a small part of the effective gravity, but they have not been measured. The estimator&#8217;s states other than the swing are taken from ideal sensors. Each ride was computed once; Fig. 12 found that two runs of the same kerb part at the splash by about ±0.05 mL of head, and the new cart&#8217;s scatter has not been measured. The full lecture note, with every step derived, every number printed by script and refereed as Fig. 12&#8217;s was, is still to be written.</p>
+                    </section>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <footer class="sim-foot">
+        <span>© 2026 Numa Koudsie</span>
+        <span><a href="../simulations.html">All simulations ↑</a> · <a href="../index.html">Home page</a></span>
+    </footer>
+
+    <script src="../scripts/fold.js"></script>
+    <script src="../scripts/sim.js"></script>
+    <script src="../scripts/guinness-glass.js"></script>
+    <script src="../scripts/stout-view.js"></script>
+    <script src="../scripts/stout-view2.js"></script>
+    <script src="../scripts/cart16-view.js"></script>
+    <script src="../scripts/guinness16-play.js"></script>
+</body>
+</html>
