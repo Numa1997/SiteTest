@@ -90,3 +90,16 @@ closed by default (CLAUDE.md: "a paragraph the reader can open"); no textbook ad
 
 ## Round 2 (launched ~02:50 UTC on db61bec): fresh referee, owner reader, student reader, derivation checker.
 Outputs: notes/fig15/referee.md, scratchpad/readers/r2-{owner,student}.md, scratchpad/derivation-check-r2.md.
+
+## Round 2 readers (on db61bec): owner 23 marks, student 39 (scratchpad/readers/r2-*.md). Fixed in the commit after this line:
+star passages restructured (sec 3 only "why the matrix has this form" starred, plain restatement of M/w; sec 5 theta defined
+unstarred; sec 9 xi introduced unstarred); probability current defined; units-without-unit rule; n branch of rho explained;
+half-wavelength vs L_eff (2.59 vs 2.76); naive 2T count explained; T_2(k) in (18); sigma_E wording; long-packet runs compared
+with the exact average AT THEIR OWN ENERGY (0.51 vs 0.499; d=2: 0.0225 vs 0.0318); N=10 band/gap with exact averages
+(0.129 vs 0.158; 0.0218 vs 0.032); 210 called a lower bound; fit window rule incl. "to the end of the run"; run lengths 30-517;
+start share <= 2.1e-5; arg psi levels of a full turn; Strang: each half exact for all modes, error where V changes (0.59 rad
+diagonal mode noted); disc table with R^2 estimate column and labelled walls row; R=2 tau shorter than a round trip; shells
+centre radius, longest tau at lowest energies; band bottom and E_F defined before Fig. 3; supply-function wording; volts of
+the area numbers; (13) not (31) for broader peaks; Fig. 3 redrawn TO SCALE in energy at V_b = 1 (level between collector
+E_F - eV_b and emitter band bottom), collector filled states drawn; chips, panel naming, Fig. 1 E/V0 wording.
+Data question for the coordinator: long-packet runs for V0 = 3 pass 0.188 at E 0.783 where the exact packet average is 0.077.

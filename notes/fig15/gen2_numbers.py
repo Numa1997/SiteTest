@@ -140,6 +140,9 @@ def nearest(rs, E):
 base = dict(N=2, V0=2.0, D=1.0, bias=0.0, sx=3.0)
 
 put('n_runs', len(RUNS), 'index.json: runs filed so far')
+put('run_tmin', round(min(r['t_end'] for r in RUNS)), 'shortest run length t_end in the index')
+put('run_tmax', round(max(r['t_end'] for r in RUNS)), 'longest run length t_end in the index')
+put('start_in_max', float(f"{max(r['start_in_barrier'] for r in RUNS):.1e}"), 'largest share of a start packet inside a barrier')
 put('n_planned', 3739, 'rt3d2_run.py jobs(): the whole batch')
 put('n_nb', len(IDX['notebooks']), 'index.json: notebooks filed')
 put('gpu_h', round(sum(n.get('sweep_s', 0) for n in IDX['notebooks']) / 3600, 1), 'index.json notebooks: sum of sweep_s (clock hours, two T4 each)')
@@ -189,6 +192,10 @@ for V0, D, P in ((1.5, 1.0, 2.5), (2.0, 1.0, 2.5), (3.0, 1.0, 2.5), (2.0, 1.5, 3
     if g:
         best = max(g, key=lambda r: through(r) or 0)
         put(f'{tag}_long_T', r3(through(best)), best['file']); put(f'{tag}_long_n', len(g), 'G runs filed for this structure')
+        put(f'{tag}_long_E', best['spec']['E'], best['file'])
+        ek = f'2|{V0:g}|{D:g}|{P:g}|12'
+        if ek in IDX['exact']:
+            e = IDX['exact'][ek]; put(f'{tag}_long_exact', r3(float(np.interp(best['spec']['E'], e['E'], e['Tbar']))), f'index.json exact[{ek}] Tbar at the run energy')
     s3 = runs(shape='flat', V0=V0, D=D, P=P, R=0.0, N=2, bias=0.0, sx=3.0); r = nearest(s3, Es[0])
     ok = r is not None and abs(r['spec']['E'] - Es[0]) <= 0.05
     put(f'{tag}_short_T', r3(through(r)) if ok else None, r['file'] if ok else 'missing: short packet within 0.05 of E1')
@@ -258,6 +265,12 @@ for Nb in (3, 5, 10):
     bi = [through(r) for r in ins]; gi = [through(r) for r in gap if r['spec']['E'] <= 1.6 and r['spec']['E'] >= edges[1] + 0.1]
     put(f'N{Nb}_band_mean', r3(float(np.mean(bi))) if bi else None, f'mean share through over {len(bi)} band energies')
     put(f'N{Nb}_gap_mean', r3(float(np.mean(gi))) if gi else None, f'mean share through over {len(gi)} energies from band top + 0.1 to 1.6')
+    ek = f'{Nb}|2|1|2.5|3'
+    if ek in IDX['exact']:
+        e = IDX['exact'][ek]
+        bE = [r['spec']['E'] for r in ins]; gE = [r['spec']['E'] for r in gap if edges[1] + 0.1 <= r['spec']['E'] <= 1.6]
+        put(f'N{Nb}_band_exact', r3(float(np.mean(np.interp(bE, e['E'], e['Tbar'])))) if bE else None, f'exact packet average (18) at the same band energies, index.json exact[{ek}]')
+        put(f'N{Nb}_gap_exact', r3(float(np.mean(np.interp(gE, e['E'], e['Tbar'])))) if gE else None, 'same, gap energies')
 
 # ---------- 4. discs and shells ----------
 E1 = OUT['P2_5_E1']; wr = runs(shape='flat', P=2.5, R=0.0, **base)
