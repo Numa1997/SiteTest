@@ -145,3 +145,7 @@ Section 4: exact chi(x,t) for one wall run, compared with the stored file.
   (unconverged; discard its output). Fixed in 07ac9bf. Discs unaffected (they used the default grid on purpose).
 - 22:41 shells-1-of-2 v2 (kernel 145082018, topic -shellB0; first line confirms Rmax 160 Nr 640) and 22:52 shells-2-of-2
   (145084455, topic -shellB1) launched.
+- 23:38 shells-1-of-2 v2 COMPLETE: 141 runs, 0 failed, 3,432 s (Rmax 160 grid). shells-2-of-2 at 88 % at 23:47.
+- 23:42-23:46 walls-calib v3 (commit c53a447, topic -walls): all 13 groups batched == single-wall path (dT 0 or <= 3.5e-18,
+  dlevel 0); 120 walls done, 0 failed, tar 170 MB. PREDICTION for 1,088 walls: compute 2,612 s, one notebook ~1,383 s.
+- ~23:50 walls-gpu v2 (kernel 144997790) launched: all 1,088 walls, CALIB False, topic -wallsall, timeout 7200 s.
