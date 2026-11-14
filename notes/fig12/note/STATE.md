@@ -24,13 +24,21 @@ the page to run 10 (`DIR` in `public/scripts/guinness-jax-play.js`), `generation
 - phyeinusul.com plays run 8 (`public/data/fig12/2026-11-13-run8/`) with the old note. Unchanged by this session so far.
 
 ## Progress
-- [ ] STATE.md written and pushed
-- [ ] Read round-0 reader files, existing note, scripts, solver constants
-- [ ] Extend note_numbers.py (run 10, beta 1.241, design numbers via stout_jax)
-- [ ] Rewrite paper.html
+- [x] STATE.md written and pushed
+- [x] Read round-0 reader files, existing note, scripts, solver constants
+- [x] note_numbers.py rewritten: reads run 10 folder, decodes stored files, runs the cart alone (cached in
+      notes/fig12/note/cart-alone.json), designs the controllers with stout_jax's own functions (beta_h 1.241: K equals the
+      stored gains), draws Figures 1-6 as SVG. --check now runs on the SOURCE and lists hand-typed numbers (only labels left).
+- [x] paper.html rewritten (14 sections, eqs. 1-52, Figures 1-6, Tables 1-8, 12 Problems); built, KaTeX 0 errors at 1440/390 px
+      (test script /tmp/claude-0/test.cjs; parts drafted in /tmp/claude-0/p*.html, now merged).
+- Symbols changed for one-symbol-one-meaning: x_e (schedule error), F_a (active force), k_s,c_s (spring), d_t (tyre compression),
+  z_s (stroke), lambda_h=m_s/rho, mu_g (grip), X (Riccati), f (noise), d (distance from wall), Ca_f/Ca_w, j imaginary unit.
+- Run 3 story and its numbers dropped (data not stored); one-mode Table 7 dropped (code not stored); other Fig. 12 page no longer cited.
 - [ ] Reader rounds
 - [ ] Publish (DIR, generations.json, docs, inventory, build, Chromium, main, live)
 - [ ] REPORT.md
 
 ## Commits on this branch (newest first)
+- (next) note rewrite, round 1 pending
+- 0e6dd63 state file
 - (start) 8109801 hand-off prompt
