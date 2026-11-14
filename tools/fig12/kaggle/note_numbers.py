@@ -31,8 +31,14 @@ os.environ.setdefault("JAX_PLATFORMS", "cpu")
 N = {}   # name -> (value, printed text)
 
 
+SUP = str.maketrans("-0123456789", "⁻⁰¹²³⁴⁵⁶⁷⁸⁹")
+
+
 def put(name, value, fmt):
-    N[name] = (value, fmt.format(value))
+    if fmt.startswith("sci"):
+        d = int(fmt[3:] or 2); m, e = f"{value:.{d - 1}e}".split("e"); e = int(e)
+        N[name] = (value, (f"{m} × 10" if m not in ("1", "1.0") else "10") + str(e).translate(SUP)); return
+    N[name] = (value, fmt.format(value).replace("-", "−") if isinstance(value, (int, float)) and value < 0 else fmt.format(value))
 
 
 def put_text(name, text):
@@ -134,8 +140,8 @@ put("sigma_skin", sig_skin, "{:.3f}"); put("zeta_skin", z_skin, "{:.4f}")
 sig_bulk = 2 * NU * k ** 2; put("sigma_bulk", sig_bulk, "{:.4f}"); put("zeta_bulk", sig_bulk / w_code, "{:.4f}")
 z_lid = z_wall + z_skin + sig_bulk / w_code; put("zeta_lid", z_lid, "{:.4f}"); put("zeta_lid3", z_lid, "{:.3f}")
 z_bare = z_wall + sig_bulk / w_code; put("zeta_bare", z_bare, "{:.4f}"); put("zeta_bare3", z_bare, "{:.3f}")   # a free, clean surface
-put("t_e_bare_s", 1 / (z_bare * w11), "{:.1f}"); put("halve_swings", math.log(2) / (2 * math.pi * z_bare), "{:.1f}")
-put("tenth_s", math.log(10) / (z_bare * w11), "{:.1f}")
+zr_ = float(f"{z_bare:.4f}"); put("t_e_bare_s", 1 / (zr_ * float(f"{w11:.2f}")), "{:.1f}"); put("halve_swings", math.log(2) / (2 * math.pi * zr_), "{:.1f}")
+put("tenth_s", math.log(10) / (zr_ * float(f"{w11:.2f}")), "{:.1f}")
 put("logdec_pct", 100 * (1 - math.exp(-2 * math.pi * z_bare)), "{:.0f}")
 Kst = 2 * math.pi * (XI ** 2 + 1) / (4 * (XI ** 2 - 1)) * math.sqrt(2) * XI ** 0.25 / XI    # Lambda = K nu^1/2 R^-3/4 g^-1/4
 c_zeta = (XI ** 2 + 1) / (4 * (XI ** 2 - 1)) * math.sqrt(2) * XI ** -0.25
@@ -209,7 +215,7 @@ m_st = rest["books"]["stout_glass_g_end"] * 1e-3
 put("rest_sink_um", dE / (m_st * G) * 1e6, "{:.1f}")
 put("rest_ms_step", rest["ms_per_step"], "{:.1f}"); put("rest_its", rest["its_per_step"], "{:.0f}")
 put("rest_s_per_s", rest["s_per_simulated_s"], "{:.0f}")
-put("tol_cg", 1e-5, "{:.0e}"); put("maxit", 600, "{:d}")
+put("tol_cg", 1e-5, "sci1"); put("maxit", 600, "{:d}")
 put("head_served_mL", rest["books"]["head_ml0"], "{:.3f}"); put("stout_g", m_st * 1e3, "{:.1f}")
 put("head_g", rest["books"]["head_ml0"] * 1e-6 * rho_f * 1e3, "{:.1f}")
 put("load_g", m_st * 1e3 + rest["books"]["head_ml0"] * 1e-6 * rho_f * 1e3, "{:.1f}")
@@ -278,18 +284,18 @@ for nm in FILES:
             put(f"{nm}.probe_rms_mm", float(np.sqrt(np.mean(yq ** 2))) * 1e3, "{:.2f}")
     T = T10.get(nm) if FILES[nm]["commit"].startswith("58eea") else T8.get(nm)
     if T and T.get("impulse_vs_momentum"):
-        iv = T["impulse_vs_momentum"]; put(f"{nm}.impulse_rel", abs(iv["impulse_x"] + iv["momentum_x_end"]) / max(abs(iv["momentum_x_end"]), 1e-30), "{:.0e}")
+        iv = T["impulse_vs_momentum"]; put(f"{nm}.impulse_rel", abs(iv["impulse_x"] + iv["momentum_x_end"]) / max(abs(iv["momentum_x_end"]), 1e-30), "sci1")
         put(f"{nm}.momentum_end", abs(iv["momentum_x_end"]), "{:.1e}")
     if T: put(f"{nm}.s_per_s", T["s_per_simulated_s"], "{:.0f}")
     b = m.get("books") or {}
-    if b: put(f"{nm}.head_err", b["head_err_ml_max"], "{:.1e}"); put(f"{nm}.stout_err", b["stout_err_particles_max"], "{:d}")
+    if b: put(f"{nm}.head_err", b["head_err_ml_max"], "sci2"); put(f"{nm}.stout_err", b["stout_err_particles_max"], "{:d}")
 put("lean_round_diff_max_mm", max(abs(N[f"{nm}.lean_stored_mm"][0] - FILES[nm]["measured"]["lean_max_mm"]) for nm in FILES), "{:.2f}")
-put("books_head_err_max", max((FILES[nm]["measured"].get("books") or {}).get("head_err_ml_max") or 0 for nm in FILES), "{:.1e}")
+put("books_head_err_max", max((FILES[nm]["measured"].get("books") or {}).get("head_err_ml_max") or 0 for nm in FILES), "sci2")
 put("books_stout_err_max", max((FILES[nm]["measured"].get("books") or {}).get("stout_err_particles_max") or 0 for nm in FILES), "{:d}")
-imp_all = [N[k][0] for k in N if k.endswith(".impulse_rel")]; put("impulse_rel_max", max(imp_all), "{:.0e}")
+imp_all = [N[k][0] for k in N if k.endswith(".impulse_rel")]; put("impulse_rel_max", max(imp_all), "sci1")
 put("ms_step_lo", min(FILES[nm]["measured"]["ms_per_step"] for nm in FILES if nm.startswith("ride")), "{:.0f}")
 put("ms_step_hi", max(FILES[nm]["measured"]["ms_per_step"] for nm in FILES if nm.startswith("ride")), "{:.0f}")
-put("s_per_s_lo", min(N[k][0] for k in N if k.endswith(".s_per_s")), "{:.0f}"); put("s_per_s_hi", max(N[k][0] for k in N if k.endswith(".s_per_s")), "{:.0f}")
+put("s_per_s_lo", min(N[k][0] for k in N if k.endswith(".s_per_s") and k.startswith("ride")), "{:.0f}"); put("s_per_s_hi", max(N[k][0] for k in N if k.endswith(".s_per_s") and k.startswith("ride")), "{:.0f}")
 put("ride8_min", 8 * N["s_per_s_hi"][0] / 60, "{:.0f}")
 lean = lambda nm: FILES[nm]["measured"]["lean_max_mm"]
 put("resonant_joint_factor", lean("ride_resonant") / lean("ride_resonant_joint"), "{:.0f}")
@@ -396,6 +402,10 @@ put("hb_kerb_mm", 30, "{:d}"); put("L_kerb_m", 0.12, "{:.2f}")
 
 
 # ============================================================================================ 7. the cart alone (frozen pint)
+_xm, _h, _za, _zr = sj.road_table(dict(kind="bumps", bumps=ROADS["sharp30"]), xmax=6.0)
+X_TOUCH = float(_xm + _h * np.nonzero(_za > _za[0] + 1e-7)[0][0])          # where the wheel's rim first lifts the axle
+
+
 def cart_alone():
     import jax, jax.numpy as jnp
     jax.config.update("jax_enable_x64", True)
@@ -405,8 +415,8 @@ def cart_alone():
         for mode in (("speed", "early") if rk == "sharp30" else ("speed",)):
             road = sj.road_table(dict(kind="bumps", bumps=ROADS[rk]), xmax=0.5 + v0 * T * 1.3 + 2)
             cart = sj.Cart(dict(sj.CART_COMMON, v0=v0, ctrl="speed"), road)
-            if mode == "early":                                  # full forward current from 4 ms before the climb to its end
-                x_on = 1.5 - 0.06 - 0.04 - v0 * 0.004; x_off = 1.5
+            if mode == "early":                                  # full forward current from 4 ms before the axle first rises to the top
+                x_on = X_TOUCH - v0 * 0.004; x_off = 1.5
                 base = cart.sample
                 def sample(c, base=base):
                     c2 = base(c); on = (c["x"] >= x_on) & (c["x"] < x_off)
@@ -446,9 +456,9 @@ h_src = hashlib.sha256(open(os.path.join(HERE, "stout_jax.py"), "rb").read()).he
 CA = None
 if os.path.exists(CACHE):
     c_ = json.load(open(CACHE))
-    if c_.get("stout_jax_sha256") == h_src and c_.get("ml") == ml: CA = c_["runs"]
+    if c_.get("stout_jax_sha256") == h_src and c_.get("ml") == ml and c_.get("x_touch") == X_TOUCH: CA = c_["runs"]
 if CA is None:
-    CA = cart_alone(); json.dump(dict(stout_jax_sha256=h_src, ml=ml, runs=CA), open(CACHE, "w"))
+    CA = cart_alone(); json.dump(dict(stout_jax_sha256=h_src, ml=ml, x_touch=X_TOUCH, runs=CA), open(CACHE, "w"))
 put("plant_w0", W0, "{:.2f}"); put("plant_f0", W0 / (2 * math.pi), "{:.3f}"); put("plant_zeta", Z0, "{:.3f}")
 for rk in ROADS:
     r_ = CA[f"{rk}_speed"]; ax = np.array(r_["ax"]); az = np.array(r_["az"]); tm = np.array(r_["tm"])
@@ -465,12 +475,14 @@ put("kerb_blow_ms", (t_[idx[-1]] - t_[idx[0]]) * 1e3 if len(idx) else 0, "{:.0f}
 put("kerb_over15_ms", float(np.sum(-Fr > b * P["Imax"])) * 1.0, "{:.0f}")         # samples every 1 ms
 put("kerb_air_ms", ks["air_ms"], "{:.0f}"); put("kerb_air_events", ks["air_events"], "{:d}")
 put("kerb_v_min", ks["v_min"], "{:.2f}"); put("kerb_dv", 1.5 - ks["v_min"], "{:.2f}"); put("kerb_early_v_min", ke["v_min"], "{:.2f}")
-put("kerb_early_dv", 1.5 - ke["v_min"], "{:.2f}"); put("kerb_Fr_vs_motor", -float(np.min(Fr)) / (b * P["Imax"]), "{:.1f}")
+tke_ = np.array(ke["t"]); vke_ = np.array(ke["v"]); ve_peak = float(vke_[tke_ <= tke_[np.argmin(vke_)]].max())
+put("kerb_early_vpeak", ve_peak, "{:.2f}"); put("kerb_early_dv", ve_peak - ke["v_min"], "{:.2f}"); put("kerb_early_net", 1.5 - ke["v_min"], "{:.2f}")
+put("kerb_Fr_vs_motor", -float(np.min(Fr)) / (b * (P["Vmax"] - b * 1.5) / P["Ra"]), "{:.1f}")
 put("kerb_i_cmd_need", -float(np.min(Fr)) / b, "{:.0f}")
 put("kerb_prev_static_A", N0 * N["sharp30_axle_slope"][0] / b, "{:.2f}")
 put("kerb_i_max_speed", float(np.max(np.abs(ks["i"]))), "{:.2f}")
 # the kick into the stout: its first peak (with the head's plant) for the best case's loss of speed
-dvk = 1.5 - ke["v_min"]; wd = W0 * math.sqrt(1 - Z0 ** 2); tp = math.atan(math.sqrt(1 - Z0 ** 2) / Z0) / wd
+dvk = ve_peak - ke["v_min"]; wd = W0 * math.sqrt(1 - Z0 ** 2); tp = math.atan(math.sqrt(1 - Z0 ** 2) / Z0) / wd
 put("tp_ms", tp * 1e3, "{:.0f}"); put("wd_tp", wd * tp, "{:.3f}"); put("kick_rate_mm", beta_h * dvk / W0 * 1e3, "{:.1f}")
 put("kick_exp", math.exp(-Z0 * W0 * tp), "{:.3f}"); put("kick_peak_mm", beta_h * dvk / W0 * math.exp(-Z0 * W0 * tp) * 1e3, "{:.1f}")
 put("kick_exp_bare", math.exp(-z_bare * math.atan(math.sqrt(1 - z_bare ** 2) / z_bare) / math.sqrt(1 - z_bare ** 2)), "{:.3f}")
@@ -482,7 +494,7 @@ cx = P["cx"]
 K = sj.slosh_lqr(Mx, b, cx, W0, Z0, beta_h, P["Imax"])
 for i_, v in enumerate(K): put(f"K{i_ + 1}", v, "{:.2f}")
 K_run = FILES["ride_sharp30_joint"]["measured"]["control"]["gains"]["K"]
-put("K_vs_run_max", max(abs(a - b_) for a, b_ in zip(K, K_run)), "{:.0e}")
+put("K_vs_run_max", max(abs(a - b_) for a, b_ in zip(K, K_run)), "sci1")
 put("K4_hand", P["Imax"] / 0.02, "{:.0f}")
 for nm_, v in (("lqr_dv_m", 0.05), ("lqr_q_m_mm", 2), ("lqr_xi_m_cm", 2)): put(nm_, v, "{:.2f}" if v < 1 else "{:.0f}")
 A4 = np.array([[-cx / Mx, 0, 0, 0], [0, 0, 1, 0], [beta_h * cx / Mx, -W0 ** 2, -2 * Z0 * W0, 0], [-1, 0, 0, 0]])
@@ -544,13 +556,21 @@ for Om_r in np.linspace(1.2, 2.6, 57):
         if floquet(mid, Om_r * W0, W0, Z0) > 1: hi = mid
         else: lo = mid
     if best is None or hi < best[0]: best = (hi, Om_r)
-put("floq_eps", best[0], "{:.2f}"); put("floq_ratio", best[1], "{:.2f}"); put("floq_az", best[0] * G, "{:.1f}"); put("floq_f", best[1] * W0 / (2 * math.pi), "{:.1f}")
+for Om_r in np.linspace(best[1] - 0.03, best[1] + 0.03, 13):
+    lo, hi = 0.0, 4.0
+    if floquet(hi, Om_r * W0, W0, Z0) < 1: continue
+    for _ in range(30):
+        mid = 0.5 * (lo + hi)
+        if floquet(mid, Om_r * W0, W0, Z0) > 1: hi = mid
+        else: lo = mid
+    if hi < best[0]: best = (hi, Om_r)
+put("floq_eps", best[0], "{:.2f}"); put("floq_ratio", best[1], "{:.2f}"); put("floq_az", best[0] * G, "{:.1f}"); put("floq_f", best[1] * W0 / (2 * math.pi), "{:.2f}")
 put("floq_bare_az", 4 * z_bare * G, "{:.2f}"); put("floq_bare_f", 2 * f11, "{:.2f}")
 put("az_rides_max", max(N[f"{rk}_az_absmax"][0] for rk in ROADS), "{:.0f}")
 # the suspension's LQR
 Ks = sj.susp_lqr(Ms, P["mw"], P["k"], P["c"], P["kt"], P["ct"])
 for i_, v in enumerate(Ks): put(f"Ks{i_ + 1}", v, "{:.2f}")
-put("Ks_run_diff", max(abs(a - b_) for a, b_ in zip(Ks, FILES["ride_sharp30_joint"]["measured"]["control"]["gains"]["Ks"])), "{:.0e}")
+put("Ks_run_diff", max(abs(a - b_) for a, b_ in zip(Ks, FILES["ride_sharp30_joint"]["measured"]["control"]["gains"]["Ks"])), "sci1")
 put("susp_cancel_pct", 100 * -Ks[0] / P["k"], "{:.0f}"); put("k_eff", P["k"] + Ks[0], "{:.0f}")
 As = np.array([[0, 1, -1, 0], [-P["k"] / Ms, -P["c"] / Ms, P["c"] / Ms, 0], [P["k"] / P["mw"], P["c"] / P["mw"], -(P["c"] + P["ct"]) / P["mw"], P["kt"] / P["mw"]], [0, 0, -1, 0]])
 Bs = np.array([[0.0], [1 / Ms], [-1 / P["mw"]], [0.0]])
@@ -573,7 +593,7 @@ for rk, tn in (("resonant", "ride_resonant"), ("bump25", "ride_bump25"), ("sharp
     put(f"{rk}_hb_mm", ROADS[rk][0]["h"] * 1e3, "{:.0f}"); put(f"{rk}_L", ROADS[rk][0]["L"], "{:.2f}")
 put("start_gap_m", ROADS["resonant"][0]["x"] - 0.5, "{:.0f}")
 put("kerb_lead_ms", 4, "{:d}")
-put("kerb_t_touch", (1.5 - 0.06 - P["Rw"] - 0.5) / 1.5, "{:.1f}")
+put("kerb_t_touch", (X_TOUCH - 0.5) / 1.5, "{:.2f}"); put("x_touch", X_TOUCH, "{:.3f}")
 put("resonant_t_first", (ROADS["resonant"][0]["x"] - 0.125 - P["Rw"] - 0.5) / 1.0, "{:.1f}")
 put("resonant_t_last", (ROADS["resonant"][-1]["x"] + 0.125 + P["Rw"] - 0.5) / 1.0, "{:.1f}")
 put("prob3_ratio", 2 ** 1.25, "{:.2f}")
@@ -583,7 +603,50 @@ put("fit_after_s", 0.1, "{:.1f}"); put("tail_after_s", 1.5, "{:.1f}"); put("ex_d
 put("ex_xe_cm", 1, "{:d}"); put("WF_tau", 0.1, "{:.1f}"); put("par_ex_q_mm", 5, "{:d}"); put("par_ex_az", 10, "{:d}"); put("prob_par_q_mm", 8, "{:d}"); put("prob_par_az", 12, "{:d}")
 _pc = open(os.path.join(ROOT, "notes", "fig12", "handoff-jax", "portcheck.txt")).read()
 _ic = {m.group(1) + m.group(2): float(m.group(3)) for m in re.finditer(r"^(\w+)\s+susp (\d):.*?icmd ([0-9.e+-]+)", _pc, re.M)}
-put("port_simple_A", max(_ic["speed0"], _ic["preview0"], _ic["speed1"]), "{:.0e}"); put("port_lqr_A", max(_ic["slosh0"], _ic["joint0"]), "{:.0e}")
+put("port_simple_A", max(_ic["speed0"], _ic["preview0"], _ic["speed1"]), "sci1"); put("port_lqr_A", max(_ic["slosh0"], _ic["joint0"]), "sci1")
+
+# ---- round 1: further numbers the readers asked for
+th_ = np.linspace(0, 2 * np.pi, 20001); I_s = float(np.mean(np.abs(np.sin(th_)) ** (5 / 3))); I_c = float(np.trapezoid(np.abs(np.cos(th_)) ** (5 / 3), th_))
+C_e = sj.Z_WALL * sj.GAMMA / sj.RBUB * 6.82 * (MU / sj.GAMMA) ** (2 / 3)
+zeta_edge = lambda q, w: C_e * h_eff * R * (w * q) ** (5 / 3) * I_s * I_c / (2 * w * 0.5 * RHO * G * q * q * math.pi * R * R * (1 - 1 / XI ** 2) / 2)
+put("I_s", I_s, "{:.3f}"); put("I_c", I_c, "{:.3f}"); put("C_edge", C_e, "{:.1f}")
+for q_ in (1, 5): put(f"zeta_edge_{q_}mm", zeta_edge(q_ * 1e-3, w_h), "{:.2f}")
+A_fit = FILES["free_full_1.5"]["measured"]["fit_ring13"]["A_mm"] * float(jv(1, XI)) / float(jv(1, k * r13))
+put("edge_vs_bare_lo", zeta_edge(5e-3, w_h) / z_bare, "{:.0f}"); put("edge_vs_bare_hi", zeta_edge(1e-3, w_h) / z_bare, "{:.0f}")
+put("A_fit_wall_mm", A_fit, "{:.1f}"); put("zeta_edge_fit", zeta_edge(A_fit * 1e-3, w_h), "{:.2f}")
+put("zeta_edge_vs_meas_pct", 100 * (zeta_edge(A_fit * 1e-3, w_h) / Z0 - 1), "{:.0f}")
+Rr = RIDES["ride_resonant"]; fr_ = ring(Rr["D"], Rr["H"], R - 0.5 * DX, 0.0); bk_ = ring(Rr["D"], Rr["H"], R - 0.5 * DX, np.pi)
+ib = int(np.nanargmax(bk_[Rr["t"] <= 1.5])); put("res_back_rise_mm", (bk_[ib] - FILL) * 1e3, "{:.1f}"); put("res_back_rise_t", Rr["t"][ib], "{:.2f}")
+put("res_front_then_mm", -(fr_[ib] - FILL) * 1e3, "{:.1f}")
+for nm in ("ride_sharp30", "ride_sharp30_preview", "ride_sharp30_slosh", "ride_sharp30_joint"):
+    m_ = RIDES[nm]["t"] >= 1.5; put(f"{nm}.lean_late", float(np.mean(RIDES[nm]["lean"][m_])), "{:.1f}")
+put("kerb_late_lo", min(N[f"{nm}.lean_late"][0] for nm in ("ride_sharp30", "ride_sharp30_preview", "ride_sharp30_slosh", "ride_sharp30_joint")), "{:.1f}")
+put("kerb_late_hi", max(N[f"{nm}.lean_late"][0] for nm in ("ride_sharp30", "ride_sharp30_preview", "ride_sharp30_slosh", "ride_sharp30_joint")), "{:.1f}")
+put("held_lean_mm", 2 * q_yield * 1e3, "{:.1f}")
+drops = [T.get("drops_max") or 0 for T in list(T10.values()) + list(T8.values())]; put("drops_max_any", max(drops), "{:d}")
+put("a_foam_break", G * (zrim - FILL - HEAD0 + eps_star) / R, "{:.1f}")
+put("T_head_theory_ms", 1000 / (w_h / (2 * math.pi)), "{:.0f}")
+put("prev_ahead_mm_10", 1.0 * P["tauI"] * 1e3, "{:.0f}")
+put("frames_ms", 1000 / 30, "{:.0f}")
+for nm in ("ride_sharp30", "ride_sharp30_preview", "ride_sharp30_slosh", "ride_sharp30_joint"):
+    put(f"{nm}.ms_3A", N[f"{nm}.frames_3A"][0] * 1000 / 30, "{:.0f}")
+for nm in ("ride_resonant", "ride_bump25", "ride_sharp30"):
+    v_ = np.array(RIDES[nm]["D"]["v"]); put(f"{nm}.dv_drop", float(v_[: np.argmin(v_) + 1].max() - v_.min()), "{:.2f}")
+put("wedge_coef", 4, "{:d}"); put("wedge_mm4", 4 * sj.TAU_Y / (rho_f * G) * 1e3, "{:.1f}")
+put("pack_random_pct", 64, "{:d}"); put("pack_ordered_pct", 74, "{:d}")
+put("f_body_tyre", N["body_o_f"][0], "{:.2f}")
+put("head_lag_amp", lam_h * k * th, "{:.2f}")
+put("sigma_ratio_skin_wall", sig_skin / sig_wall, "{:.3f}")
+put("tail_after_fit", 1.5, "{:.1f}")
+put("Lk_v_abs", abs(Lfresh[0, 0]) * 10, "{:.1f}"); put("Lk_ratio_abs", abs(Lfresh[2, 0] / Lfresh[0, 0]), "{:.2f}")
+put("rho_gml", RHO / 1000, "{:.3f}"); put("base_mm", (0.160 - zrim) * 1e3, "{:.1f}")
+put("Iw_e4", P["Iw"] * 1e4, "{:.1f}")
+
+put("kerb_top_curv_mm", 0.12 ** 2 / (2 * math.pi ** 2 * 0.030) * 1e3, "{:.0f}")
+for nm in ("ride_sharp30", "ride_sharp30_preview", "ride_sharp30_slosh", "ride_sharp30_joint"):
+    m_ = RIDES[nm]["t"] <= 0.8; put(f"{nm}.surge_mm", float(np.nanmax(RIDES[nm]["lean"][m_])), "{:.1f}")
+put("motor_vs_road", (P["Vmax"] - b * 1.5) / P["Ra"] * b / N["kerb_Fr_peak"][0], "{:.2f}")
+put("res_dv_max", N["ride_resonant.dv_drop"][0], "{:.2f}")
 
 # ============================================================================================ 9. the figures (SVG)
 FONT = 'font-family="IBM Plex Mono, monospace"'
@@ -647,22 +710,22 @@ body1.append(f'<line x1="200" y1="388" x2="{200 + 20 * sc:.1f}" y2="388" stroke=
 put_text("fig1_svg", svg(880, 400, "The glass of the page to scale: inner radius against height, the stout to 125 mm, the head of foam above it, the rim.", body1))
 
 # Figure 2: the Stokes layer at four moments
-yy = np.linspace(0, 2e-3, 161); s2, X2, Y2 = axes(90, 30, 600, 250, [0, 0.5e-3, 1e-3, 1.5e-3, 2e-3], [-1, -0.5, 0, 0.5, 1], ["0", "0.5", "1", "1.5", "2"],
+yy = np.linspace(0, 2e-3, 161); s2, X2, Y2 = axes(90, 30, 600, 230, [0, 0.5e-3, 1e-3, 1.5e-3, 2e-3], [-1, -0.5, 0, 0.5, 1], ["0", "0.5", "1", "1.5", "2"],
                                                    ["−1", "−0.5", "0", "0.5", "1"], (0, 2e-3), (-1.15, 1.15), "distance from the glass, d (mm)", "u∥ / U")
-body2 = [f'<rect x="90" y="30" width="{X2(DX) - 90:.1f}" height="250" fill="#f3ede4"/>', f'<text class="lbl" x="{(90 + X2(DX)) / 2:.1f}" y="46" text-anchor="middle">one grid cell, {DX * 1e3:.1f} mm</text>'] + s2
+body2 = [f'<rect x="90" y="30" width="{X2(DX) - 90:.1f}" height="230" fill="#f3ede4"/>', f'<text class="lbl" x="{(90 + X2(DX)) / 2:.1f}" y="296" text-anchor="middle">◂ one grid cell, {DX * 1e3:.1f} mm ▸</text>'] + s2
 for ph, col, lab, ly_ in ((0, "#1c1518", "ωt = 0", None), (np.pi / 2, "#7a1f2b", "ωt = π/2", None), (np.pi, "#8b8079", "ωt = π", None), (1.5 * np.pi, "#b98a5e", "ωt = 3π/2", None)):
     u = np.cos(ph) - np.exp(-yy / delta) * np.cos(ph - yy / delta)
     body2.append(path(X2, Y2, yy, u, stroke=col, stroke_width=2))
-    xa = 1.7e-3 if ph in (0, np.pi) else 0.62e-3; ya = float(np.interp(xa, yy, u))
-    body2.append(f'<text class="lbl" x="{X2(xa):.1f}" y="{Y2(ya) + (-8 if ph in (0, 1.5 * np.pi) else 16):.1f}" fill="{col}">{lab}</text>')
-body2.append(f'<line x1="{X2(delta):.1f}" y1="30" x2="{X2(delta):.1f}" y2="280" stroke="#7a1f2b" stroke-dasharray="4 4"/><text class="lbl" x="{X2(delta) + 6:.1f}" y="270">δ = {delta * 1e3:.2f} mm</text>')
+    xa = 1.75e-3; ya = float(np.interp(xa, yy, u))
+    body2.append(f'<text class="lbl" x="{X2(xa):.1f}" y="{Y2(ya) + (-7 if ya >= 0 else 15):.1f}" fill="{col}">{lab}</text>')
+body2.append(f'<line x1="{X2(delta):.1f}" y1="30" x2="{X2(delta):.1f}" y2="260" stroke="#7a1f2b" stroke-dasharray="4 4"/><text class="lbl" x="{X2(delta) + 6:.1f}" y="44">δₛ = {delta * 1e3:.2f} mm</text>')
 put_text("fig2_svg", svg(720, 330, "The velocity of the stout along the glass, relative to the glass, against the distance from the wall, at four moments of one swing.", body2))
 
 # Figure 3: the free swings, stored data and the refit
 s3, X3, Y3 = axes(80, 30, 600, 230, [0, 1, 2, 3, 4, 5], [-4, -2, 0, 2, 4], ["0", "1", "2", "3", "4", "5"], ["−4", "−2", "0", "2", "4"], (0, 5), (-5, 5),
-                  "time t (s)", "q_ring (mm)")
+                  "time t (s)", "q (ring), mm")
 body3 = s3 + [f'<rect x="{X3(t0p):.1f}" y="30" width="{X3(t0p + Tp) - X3(t0p):.1f}" height="230" fill="#f3ede4"/>',
-              f'<text class="lbl" x="{X3(t0p + Tp) + 4:.1f}" y="46">the push</text>']
+              f'<text class="lbl" x="{X3(t0p):.1f}" y="22">the push</text>']
 for key, col in (("nohead", "#8b8079"), ("head", "#7a1f2b")):
     d_ = SW[key]; body3.append(path(X3, Y3, d_["t"], d_["q"] * 1e3, stroke=col, stroke_width=1.6))
     F_ = d_["fit"]; tf = np.linspace(0, 5 - d_["t_start"], 400)
@@ -672,10 +735,10 @@ for j_, (lab, col) in enumerate((("without the head", "#8b8079"), ("with the hea
 put_text("fig3_svg", svg(720, 300, "The swing on the ring at 13/16 of the radius after one push, with and without the head of foam: stored data and the fitted damped cosine.", body3))
 
 # Figure 4: the kerb, the cart alone
-t4 = np.array(ks["t"]) - 1.0 / 1.5 * 0 ; tk = np.array(ks["t"]); xk = np.array(ks["x"]); t_on = float(np.interp(1.5 - 0.06 - 0.04, xk, tk))
+t4 = np.array(ks["t"]) - 1.0 / 1.5 * 0 ; tk = np.array(ks["t"]); xk = np.array(ks["x"]); t_on = float(np.interp(X_TOUCH, xk, tk))
 sel = (tk >= t_on - 0.05) & (tk <= t_on + 0.25)
-s4, X4, Y4 = axes(80, 30, 600, 170, [t_on - 0.05 + 0.05 * i for i in range(7)], [-80, -40, 0, 20],
-                  [f"{(0.05 * i - 0.05) * 1e3:.0f}" for i in range(7)], ["−80", "−40", "0", "20"], (t_on - 0.05, t_on + 0.25), (-90, 25),
+s4, X4, Y4 = axes(80, 30, 600, 170, [t_on - 0.05 + 0.05 * i for i in range(7)], [-80, -60, -40, -20, 0, 20],
+                  [f"{(0.05 * i - 0.05) * 1e3:.0f}".replace("-", "−") for i in range(7)], ["−80", "−60", "−40", "−20", "0", "20"], (t_on - 0.05, t_on + 0.25), (-90, 25),
                   "time from the wheel's first touch of the kerb (ms)", "force along the road (N)")
 Nk = np.array(ks["N"]); Fmk = np.array(ks["Fm"]); vk = np.array(ks["v"])
 imax_v = np.minimum(P["Imax"], (P["Vmax"] - b * vk) / P["Ra"]); Fcan = np.minimum(b * imax_v, P["mu"] * Nk)
@@ -684,13 +747,13 @@ tt_ = tk[sel]; aa = air[sel]
 for j_ in range(len(tt_)):
     if aa[j_]: body4.append(f'<rect x="{X4(tt_[j_]):.1f}" y="30" width="{max(X4(tt_[j_] + 0.001) - X4(tt_[j_]), 1):.1f}" height="170" fill="#ece6dc"/>')
 body4 += s4
-body4.append(f'<line x1="80" y1="{Y4(b * P["Imax"]):.1f}" x2="680" y2="{Y4(b * P["Imax"]):.1f}" stroke="#8b8079" stroke-dasharray="6 3"/>')
+for sgn in (1, -1): body4.append(f'<line x1="80" y1="{Y4(sgn * b * P["Imax"]):.1f}" x2="680" y2="{Y4(sgn * b * P["Imax"]):.1f}" stroke="#8b8079" stroke-dasharray="6 3"/>')
 body4.append(path(X4, Y4, tk[sel], np.array(ks["Fr"])[sel], stroke="#1c1518", stroke_width=1.8))
 body4.append(path(X4, Y4, tk[sel], Fcan[sel], stroke="#b98a5e", stroke_width=3))
-body4.append(path(X4, Y4, tk[sel], Fmk[sel], stroke="#7a1f2b", stroke_width=1.4))
+body4.append(path(X4, Y4, tk[sel], Fmk[sel], stroke="#7a1f2b", stroke_width=1.6, stroke_dasharray="4 2"))
 body4.append(f'<text class="lbl" x="{X4(t_on + 0.12):.1f}" y="{Y4(b * P["Imax"]) - 6:.1f}">±{b * P["Imax"]:.0f} N, the drive at {P["Imax"]:.0f} A</text>')
-s4b, X4b, Y4b = axes(80, 250, 600, 110, [t_on - 0.05 + 0.05 * i for i in range(7)], [1.2, 1.3, 1.4, 1.5], [f"{(0.05 * i - 0.05) * 1e3:.0f}" for i in range(7)],
-                     ["1.2", "1.3", "1.4", "1.5"], (t_on - 0.05, t_on + 0.25), (1.17, 1.53), "time from the wheel's first touch of the kerb (ms)", "cart speed (m/s)")
+s4b, X4b, Y4b = axes(80, 250, 600, 110, [t_on - 0.05 + 0.05 * i for i in range(7)], [1.2, 1.3, 1.4, 1.5, 1.6], [f"{(0.05 * i - 0.05) * 1e3:.0f}".replace("-", "−") for i in range(7)],
+                     ["1.2", "1.3", "1.4", "1.5", "1.6"], (t_on - 0.05, t_on + 0.25), (1.17, 1.62), "time from the wheel's first touch of the kerb (ms)", "cart speed (m/s)")
 body4 += s4b
 body4.append(path(X4b, Y4b, tk[sel], vk[sel], stroke="#1c1518", stroke_width=1.8))
 tke = np.array(ke["t"]); sel_e = (tke >= t_on - 0.05) & (tke <= t_on + 0.25)

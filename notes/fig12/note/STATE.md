@@ -34,11 +34,13 @@ the page to run 10 (`DIR` in `public/scripts/guinness-jax-play.js`), `generation
 - Symbols changed for one-symbol-one-meaning: x_e (schedule error), F_a (active force), k_s,c_s (spring), d_t (tyre compression),
   z_s (stroke), lambda_h=m_s/rho, mu_g (grip), X (Riccati), f (noise), d (distance from wall), Ca_f/Ca_w, j imaginary unit.
 - Run 3 story and its numbers dropped (data not stored); one-mode Table 7 dropped (code not stored); other Fig. 12 page no longer cited.
-- [ ] Reader rounds
+- [x] Round 1: owner 70, student 95, checker 13 wrong; all answered in notes/fig12/readers/round1-answers.md, fixed
+- [ ] Round 2 (fresh readers) running
+- [x] Prepared: DIR -> 2026-11-14-run10, generations.json entry, readings note 'eight', hero line (commit da9260a)
 - [ ] Publish (DIR, generations.json, docs, inventory, build, Chromium, main, live)
 - [ ] REPORT.md
 
 ## Commits on this branch (newest first)
-- (next) note rewrite, round 1 pending
+- (next) round-1 fixes
 - 0e6dd63 state file
 - (start) 8109801 hand-off prompt
