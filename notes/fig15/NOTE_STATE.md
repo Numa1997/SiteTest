@@ -152,3 +152,14 @@ filed, box 512 vs 192, hard box above V0, fit start 60 %, |w_N|^2 step, ten-wall
 share-through reason, conduction band defined.
 Page items (panel text, Fig. 15e title/axis/units, 'Fermi sea', real-units J_p, 'Read values' button, '20 runs') -> coordinator.
 Owner mark 4 (file paths) is a reading artefact: they are links.
+
+## Round 4 referee (54 marks, read 6af5c32) and derivation checker (notes/fig15/derivation-check-gen2-r4.md, 6 errors): fixed.
+Physics corrections: side-leak estimate (28) is m R w / hbar with w = min(R, sigma_perp) (trapped wave no wider than the packet);
+diode turn: the tilted peak gets LOWER (1 -> 0.65 -> 0.34) and slightly WIDER (0.071 -> 0.077 -> 0.085), not narrower;
+d=2 long run lasts 509 (about one lifetime after the peak), ends with 0.0074 trapped; long-packet exact averages by quadrature
+(0.500, 0.0319); disc energy wording (walls' 0.75 run to come); border = more than a thousandth; levels printed to 3 decimals.
+Referee text fixes: separation-of-variables reason, g formula brackets, units hold for any a, slit picture, divide by k1,
+centre-phase e^{+-ikd/2}, t_2 defined, Lorentzian substitution shown, tan substitution steps, packet centred on resonance,
+FIX1 direction (share reads low), 'almost exponentially', 0.59 rad meaning, tilt paragraph split, d^2k step, thin line of
+Fig. 15e, N-1 per band, xi = +-cosh mu, 'possible cause', 66 %, Maekawa without 'fastest', diode leak sentence, laser wording.
+Declined: textbook (unread), dimensionless-number box (next pass if time), page font (stylesheet), links (merge).

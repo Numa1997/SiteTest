@@ -198,7 +198,8 @@ for V0, D, P in ((1.5, 1.0, 2.5), (2.0, 1.0, 2.5), (3.0, 1.0, 2.5), (2.0, 1.5, 3
         put(f'{tag}_long_E', best['spec']['E'], best['file'])
         ek = f'2|{V0:g}|{D:g}|{P:g}|12'
         if ek in IDX['exact']:
-            e = IDX['exact'][ek]; put(f'{tag}_long_exact', r3(float(np.interp(best['spec']['E'], e['E'], e['Tbar']))), f'index.json exact[{ek}] Tbar at the run energy')
+            exact1d.SIG0 = 12.0; put(f'{tag}_long_exact', r3(exact1d.tbar(best['spec']['E'], segs(2, V0, D, P), nk=2001)), 'exact1d.tbar, sigma_x 12, at the run energy (quadrature)')
+            put(f'{tag}_long_tend', round(best['t_end']), best['file']); put(f'{tag}_long_well', r3(best['end']['well']), 'probability still between the walls at the end of the run')
     s3 = runs(shape='flat', V0=V0, D=D, P=P, R=0.0, N=2, bias=0.0, sx=3.0); r = nearest(s3, Es[0])
     ok = r is not None and abs(r['spec']['E'] - Es[0]) <= 0.05
     put(f'{tag}_short_T', r3(through(r)) if ok else None, r['file'] if ok else 'missing: short packet within 0.05 of E1')
@@ -320,6 +321,12 @@ for B in (0.0, 0.875, 1.25):
     put(f'area_b{tg}', round(float(np.trapezoid(T[m], Ef[m])), 3), f'iv.py: area under the transmission peak (+-0.25 around it) at bias {B}')
     put(f'sup_b{tg}', round(float(supf(Ef[i], B)), 1), f'supply function at the peak energy, bias {B}')
     put(f'lev_b{tg}', round(float(Ef[i]), 2), f'iv.py: energy of the transmission peak (the level) at bias {B}')
+    put(f'tpk_b{tg}', round(float(T[i]), 2), f'iv.py: height of the transmission peak at bias {B}')
+    h_ = T[i] / 2; lo = i
+    while T[lo] > h_: lo -= 1
+    hi = i
+    while T[hi] > h_: hi += 1
+    put(f'fw_b{tg}', round(float(Ef[hi] - Ef[lo]), 3), f'iv.py: full width at half its height of that peak (grid {Ef[1]-Ef[0]:.4f})')
 x = EX1['iv']
 put('iv_exact_Vp', x['V_peak'], 'exact-1d.json iv'); put('iv_exact_Vv', round(x['V_valley'], 3), 'exact-1d.json iv')
 put('iv_exact_pvr', round(x['pvr'], 1), 'exact-1d.json iv')
