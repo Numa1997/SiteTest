@@ -284,6 +284,7 @@ for Nb in (3, 5, 10):
         e = IDX['exact'][ek]
         bE = [r['spec']['E'] for r in ins]; gE = [r['spec']['E'] for r in gap if edges[1] + 0.1 <= r['spec']['E'] <= 1.6]
         put(f'N{Nb}_band_exact', r3(float(np.mean(np.interp(bE, e['E'], e['Tbar'])))) if bE else None, f'exact packet average (18) at the same band energies, index.json exact[{ek}]')
+        put(f'N{Nb}_gap_lo', round(min(gE), 2) if gE else None, 'lowest gap energy averaged'); put(f'N{Nb}_gap_hi', round(max(gE), 2) if gE else None, 'highest')
         put(f'N{Nb}_gap_exact', r3(float(np.mean(np.interp(gE, e['E'], e['Tbar'])))) if gE else None, 'same, gap energies')
 
 # ---------- 4. discs and shells ----------
@@ -327,13 +328,14 @@ for B in (0.0, 0.875, 1.25):
     tg = f'{B:g}'.replace('.', '_')
     put(f'area_b{tg}', round(float(np.trapezoid(T[m], Ef[m])), 3), f'iv.py: area under the transmission peak (+-0.25 around it) at bias {B}')
     put(f'sup_b{tg}', round(float(supf(Ef[i], B)), 1), f'supply function at the peak energy, bias {B}')
+    put(f'prod_b{tg}', round(float(np.trapezoid(T[m], Ef[m]) * supf(Ef[i], B)), 2), 'area x supply, from the unrounded values')
     put(f'lev_b{tg}', round(float(Ef[i]), 2), f'iv.py: energy of the transmission peak (the level) at bias {B}')
     put(f'tpk_b{tg}', round(float(T[i]), 2), f'iv.py: height of the transmission peak at bias {B}')
     h_ = T[i] / 2; lo = i
     while T[lo] > h_: lo -= 1
     hi = i
     while T[hi] > h_: hi += 1
-    put(f'fw_b{tg}', round(float(Ef[hi] - Ef[lo]), 3), f'iv.py: full width at half its height of that peak (grid {Ef[1]-Ef[0]:.4f})')
+    put(f'fw_b{tg}', round(float(Ef[hi] - Ef[lo]), 3) if B else OUT['V2D1_G1'], f'iv.py: full width at half its height of that peak (grid {Ef[1]-Ef[0]:.4f})')
 x = EX1['iv']
 put('iv_exact_Vp', x['V_peak'], 'exact-1d.json iv'); put('iv_exact_Vv', round(x['V_valley'], 3), 'exact-1d.json iv')
 put('iv_exact_pvr', round(x['pvr'], 1), 'exact-1d.json iv')
@@ -347,10 +349,12 @@ for c in IDX['iv']:
     put(f'{tag}_pvr', round(Js[ip] / Js[iv_], 1), 'peak / valley')
     put(f'{tag}_Jp', round(Js[ip], 2), 'index.json iv J_runs: current at the peak'); put(f'{tag}_Jend', round(Js[-1], 2), 'index.json iv J_runs: current at the last voltage')
     put(f'{tag}_valley_at_end', iv_ == len(Js) - 1, 'True: the lowest current after the peak is at the last voltage computed')
-    X = c.get('J_exact_single_energy_same_points')
-    if X:
-        Xs = [p[1] for p in X]; jp = int(np.argmax(Xs[:len(Xs) * 3 // 4])); jv = jp + int(np.argmin(Xs[jp:]))
-        put(f'{tag}_xs_Vp', Vs[jp], 'index.json iv J_exact_single_energy_same_points: peak (exact T at the 25 run energies)')
+    if c['shape'] == 'flat':
+        # NOT the index's J_exact_single_energy_same_points: file_rt3d2.py computed it with iv.py's default V0 = 3. Recomputed here at V0 = 2.
+        assert iv.V0 == 2.0
+        Ei = np.array(c['energies']); Xs = [float(np.trapezoid(iv.T_biased_vec(Ei, 2.5, V) * iv.supply(Ei, c['EF'], V, c['kT']), Ei)) for V in Vs]
+        jp = int(np.argmax(Xs[:len(Xs) * 3 // 4])); jv = jp + int(np.argmin(Xs[jp:]))
+        put(f'{tag}_xs_Vp', Vs[jp], 'iv.py at V0 = 2: exact single-energy T at the 25 run energies, same trapezoid sum: peak')
         put(f'{tag}_xs_Vv', Vs[jv], 'same: valley after it'); put(f'{tag}_xs_pvr', round(Xs[jp] / Xs[jv], 1), 'same: peak / valley')
     nF = len([r for r in RUNS if r['spec']['shape'] == c['shape'] and r['spec']['R'] == c['R'] and r['spec']['N'] == 2 and r['spec']['V0'] == 2
               and r['spec']['D'] == 1 and r['spec']['P'] == 2.5 and r['spec']['sx'] == 3 and round(r['spec']['E'], 3) in set(c['energies'])])

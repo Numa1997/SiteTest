@@ -236,3 +236,13 @@ gen2_numbers.py --write; new keys n_dup, n_replaced, iv_*_Jp/Jend/valley_at_end,
 Status sentences rewritten as findings: method paragraph (reruns done, 7 notebooks, 18.6 h summed), long packets (15 of 15),
 diode walls 0.75 / 1.625 / 4.4 against exact 0.875 / 1.825 / 4.3, same-points exact 1.125 / 16.7 (aliasing), discs 3.46 -> 2.82
 (ratio 1.2, valley at range end). Build: 997 KaTeX, 0 errors, 390 and 1440. Next: fresh round (referee, owner, student, checker).
+
+## Round 8 (commits e066f11, 1cc135d, this one). Marks: referee 6 errors + ~40 stops; owner reader 26; student reader 22;
+derivation checker 4 errors (1 real: index iv J_exact_single_energy_same_points was filed by file_rt3d2.py with iv.py's default
+V0 = 3; recomputed at V0 = 2 in gen2_numbers.py: peak 0.75, valley 1.75, ratio 4.8, so the runs' early peak is the coarse
+energy grid). Fixed: 17 % computed (was typed 12 %), naive-count reason, 4 % gap reason (not traced), long-packet paragraph
+(nearest + best run, half-trapped defined), grid-or-fit-window, V_b notation, side-leak vs (28) honest, tau_side rounding
+note, shells lower bounds, legend as list, absorbing-border formula, mirror reason, GPU ns sourced (0.92), Example 3.1,
+P^N form, finite-well table, gamma phase, packet sentence, f's, products unrounded (1.03, 0.73), fw 0.0704, gap 1.1-1.6.
+Not changed (reported): page-code items; textbook (only sources read are cited); remaining signpost references to later
+sections; shell levels not worked out; symbol reuse t/R/u. Next: fresh round 9.
