@@ -48,6 +48,11 @@ Done in Phase 2:
    `.out.txt`), `t_long.cjs` (its `long_*.txt` outputs are kept), all of `tools/kaggle/resonant-tunnelling/` (Fig. 15, hold) and
    `tools/fig12/control/` (Fig. 16 session). `tools/inventory.py` got a rule for `notes/inventory/`; `docs/files.md` rewritten; check and build pass.
 
+8. Records point to their copies: every entry of `public/data/schrodinger-sphere/generations.json` and
+   `public/data/fig12/generations.json` (Fig. 12: every run) now has `dataset` and `dataset_path`; old content unchanged
+   (checked by comparing the JSON without the new keys); all 15 paths exist in the datasets; documented in
+   `docs/kaggle-pipeline.md`; Fig. 14 page tested in Chromium at 390 and 1440 px (9 data files, 0 errors). Nothing deleted.
+
 Held: Fig. 15 (`fig15-*`, 15 notebooks incl. the 3 `fig15-correction-walls-*` of the running correction session) and Fig. 16
 (`fig-16-guinness-cart-with-control`): not touched while those sessions run. 
 ## The owner's rules (from the brief, CLAUDE.md and the owner's preferences)
@@ -162,9 +167,8 @@ Held: Fig. 15 (`fig15-*`, 15 notebooks incl. the 3 `fig15-correction-walls-*` of
 
 ## Left to do (after Phase 2, 14 November 2026, 14:00 UTC)
 
-1. Fig. 14 still has 6 notebooks and Fig. 12 has 3, all named in live `generations.json` records. To reach one notebook per figure:
-   add to each record a pointer to its dataset folder (`dataset: numakoudsie/fig14-schrodinger-sphere`, `path: <notebook>/v<N>/`),
-   test the pages, merge, then delete the notebooks the records no longer need. Future reruns go into one notebook per figure.
+1. Fig. 14 still has 6 notebooks and Fig. 12 has 3. Their records now point to the datasets (step 8). Removing the notebooks is a
+   deletion and waits for the owner's explicit authorization, notebook by notebook. Future reruns go into one notebook per figure.
 2. Fig. 15 (15 notebooks, about 7 GB) and Fig. 16: same treatment when their sessions end.
 3. Scripts kept on purpose (named somewhere, possibly by accident): 60; a stricter, full-path check could free more.
 

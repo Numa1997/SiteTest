@@ -7,7 +7,9 @@
   "kaggle": "numakoudsie/schrodinger-sphere-full-grid",
   "version": "1",
   "commit": "10dc1d64200446165d40456972d9b51047846f71",
-  "shape": "sphere"
+  "shape": "sphere",
+  "dataset": "numakoudsie/fig14-schrodinger-sphere",
+  "dataset_path": "schrodinger-sphere-full-grid/v1/"
  },
  {
   "date": "2026-11-12",
@@ -17,7 +19,9 @@
   "runs": 81,
   "kaggle": "numakoudsie/schrodinger-sphere-3d-wave",
   "version": "1",
-  "commit": "7083b64c90303ffabe4355e7359a347a392a6485"
+  "commit": "7083b64c90303ffabe4355e7359a347a392a6485",
+  "dataset": "numakoudsie/fig14-schrodinger-sphere",
+  "dataset_path": "schrodinger-sphere-3d-wave/v1/"
  },
  {
   "date": "2026-11-12",
@@ -27,7 +31,9 @@
   "runs": 585,
   "kaggle": "numakoudsie/schrodinger-flat-wall",
   "version": "1",
-  "commit": "76c7ce089557d9939ed1f63f5535021057f387ee"
+  "commit": "76c7ce089557d9939ed1f63f5535021057f387ee",
+  "dataset": "numakoudsie/fig14-schrodinger-sphere",
+  "dataset_path": "schrodinger-flat-wall/v1/"
  },
  {
   "date": "2026-11-12",
@@ -37,7 +43,9 @@
   "runs": 585,
   "kaggle": "numakoudsie/schrodinger-pillar",
   "version": "1",
-  "commit": "89f6e9d3305f243b2507ae64f6ab9c4a186bdbef"
+  "commit": "89f6e9d3305f243b2507ae64f6ab9c4a186bdbef",
+  "dataset": "numakoudsie/fig14-schrodinger-sphere",
+  "dataset_path": "schrodinger-pillar/v1/"
  },
  {
   "date": "2026-11-12",
@@ -47,7 +55,9 @@
   "runs": 1170,
   "kaggle": "numakoudsie/schrodinger-spherical-wave",
   "version": "1",
-  "commit": "13dda4cef3aeb6cd00ea3dbb48ee8a770344afcc"
+  "commit": "13dda4cef3aeb6cd00ea3dbb48ee8a770344afcc",
+  "dataset": "numakoudsie/fig14-schrodinger-sphere",
+  "dataset_path": "schrodinger-spherical-wave/v1/"
  },
  {
   "date": "2026-11-13",
@@ -57,6 +67,11 @@
   "runs": 1458,
   "kaggle": "numakoudsie/schrodinger-shapes-3d",
   "version": "1",
-  "commit": "a2691194927b8da12f0692c6c3b632ff4e9e76f6"
+  "commit": "a2691194927b8da12f0692c6c3b632ff4e9e76f6",
+  "dataset": "numakoudsie/fig14-schrodinger-sphere",
+  "dataset_path": [
+   "schrodinger-shapes-3d/v1/",
+   "schrodinger-shapes-3d/v2/"
+  ]
  }
 ]

@@ -1,16 +1,24 @@
 {
- "about": "Generations of the Fig. 12 rides computed on Kaggle, newest last. The page plays the newest; older ones are kept for the record.",
+ "about": "Generations of the Fig. 12 rides computed on Kaggle, newest last. The page plays the newest; older ones are kept for the record. Every Kaggle output behind these generations is kept byte for byte in the private dataset numakoudsie/fig12-guinness-on-a-cart (folder <notebook>/v<version>/).",
  "generations": [
   {
    "date": "2026-11-12",
    "solver": "v1",
-   "note": "over-damped (damping ratio 0.10 to 0.14 after the last bump): glass faces held at zero velocity, a no-slip wall one cell thick; kept for the record, with the free-swing tests of solver v2"
+   "note": "over-damped (damping ratio 0.10 to 0.14 after the last bump): glass faces held at zero velocity, a no-slip wall one cell thick; kept for the record, with the free-swing tests of solver v2",
+   "dataset": "numakoudsie/fig12-guinness-on-a-cart",
+   "dataset_path": [
+    "guinness-on-a-cart-stout-sloshing/v3/",
+    "guinness-free-swing-v2/v4/",
+    "guinness-free-swing-v2/v5/"
+   ]
   },
   {
    "date": "2026-11-13",
    "solver": "v2",
    "files": "2026-11-13/index.json, rides.json",
-   "note": "Taichi: ghost-fluid surface, free-slip glass faces, the Fig. 12 note's wall and foam friction; played by the page until 13 November 2026, evening; kept for the record"
+   "note": "Taichi: ghost-fluid surface, free-slip glass faces, the Fig. 12 note's wall and foam friction; played by the page until 13 November 2026, evening; kept for the record",
+   "dataset": "numakoudsie/fig12-guinness-on-a-cart",
+   "dataset_path": "guinness-on-a-cart-stout-sloshing/v5/"
   },
   {
    "date": "2026-11-13",
@@ -22,16 +30,19 @@
      "run": 6,
      "version": 6,
      "commit": "4c105275d3efe381335a3cb6cc23efbf0b13a9f6",
-     "what": "the three rides with the speed held only, and the free swings with and without the head"
+     "what": "the three rides with the speed held only, and the free swings with and without the head",
+     "dataset_path": "guinness-on-a-cart-stout-in-jax/v6/"
     },
     {
      "run": 7,
      "version": 7,
      "commit": "87e37209199e74d6039af224a5a739f17b3e4fbc",
-     "what": "the same roads with the site's controllers in the loop: joint control on all three, slosh LQR and road preview on the kerb"
+     "what": "the same roads with the site's controllers in the loop: joint control on all three, slosh LQR and road preview on the kerb",
+     "dataset_path": "guinness-on-a-cart-stout-in-jax/v7/"
     }
    ],
-   "note": "JAX (tools/fig12/kaggle/stout_jax.py): APIC particles on a 1.5 mm grid, the head of foam as a sheet with its weight, yield stress and wall friction, the cart and its controllers coupled both ways; played by the page until 14 November 2026, kept for the record (the head had weight but no mass)"
+   "note": "JAX (tools/fig12/kaggle/stout_jax.py): APIC particles on a 1.5 mm grid, the head of foam as a sheet with its weight, yield stress and wall friction, the cart and its controllers coupled both ways; played by the page until 14 November 2026, kept for the record (the head had weight but no mass)",
+   "dataset": "numakoudsie/fig12-guinness-on-a-cart"
   },
   {
    "date": "2026-11-14",
@@ -43,22 +54,26 @@
      "run": 8,
      "version": 8,
      "commit": "96e8a1da32568524ddfba80eb709e03edb26bec2",
-     "what": "the pint at rest, the free swing with the head (the controllers' plant, measured in the run: 2.915 Hz, damping ratio 0.425), the three roads with the speed held and with joint control, the kerb with the slosh LQR; books checked in every stored frame"
+     "what": "the pint at rest, the free swing with the head (the controllers' plant, measured in the run: 2.915 Hz, damping ratio 0.425), the three roads with the speed held and with joint control, the kerb with the slosh LQR; books checked in every stored frame",
+     "dataset_path": "guinness-on-a-cart-stout-in-jax/v8/"
     },
     {
      "run": 9,
      "version": 9,
      "commit": "726d51a51ee45a66c2b9bfc51db9adf0035c9ab4",
-     "what": "the kerb with the road preview, computed alone after run 8's budget ran out, with run 8's plant"
+     "what": "the kerb with the road preview, computed alone after run 8's budget ran out, with run 8's plant",
+     "dataset_path": "guinness-on-a-cart-stout-in-jax/v9/"
     },
     {
      "run": 6,
      "version": 6,
      "commit": "4c105275d3efe381335a3cb6cc23efbf0b13a9f6",
-     "what": "the free swing without the head (no head, so the head's mass cannot change it), packed again into this folder"
+     "what": "the free swing without the head (no head, so the head's mass cannot change it), packed again into this folder",
+     "dataset_path": "guinness-on-a-cart-stout-in-jax/v6/"
     }
    ],
-   "note": "JAX (tools/fig12/kaggle/stout_jax.py) with the head's mass in the pressure step (a Robin condition; the note's eqs. 15a, 15b, 18a); played by the page until 14 November 2026 (run 10)"
+   "note": "JAX (tools/fig12/kaggle/stout_jax.py) with the head's mass in the pressure step (a Robin condition; the note's eqs. 15a, 15b, 18a); played by the page until 14 November 2026 (run 10)",
+   "dataset": "numakoudsie/fig12-guinness-on-a-cart"
   },
   {
    "date": "2026-11-14",
@@ -70,22 +85,26 @@
      "run": 10,
      "version": 10,
      "commit": "58eea6870a20b8edfaa9ef46ee655cf1e890fdfe",
-     "what": "the pint at rest and the five controlled rides (joint control on the three roads; slosh LQR and road preview on the kerb), the controllers designed on run 8's measured swing (2.915 Hz, damping ratio 0.425) with beta 1.541/1.242 = 1.241, gains K = (71.121, -1228.717, -40.499, -150.000); books checked in every stored frame; ALL PASS (notes/fig12/jax/run10-check/)"
+     "what": "the pint at rest and the five controlled rides (joint control on the three roads; slosh LQR and road preview on the kerb), the controllers designed on run 8's measured swing (2.915 Hz, damping ratio 0.425) with beta 1.541/1.242 = 1.241, gains K = (71.121, -1228.717, -40.499, -150.000); books checked in every stored frame; ALL PASS (notes/fig12/jax/run10-check/)",
+     "dataset_path": "guinness-on-a-cart-stout-in-jax/v10/"
     },
     {
      "run": 8,
      "version": 8,
      "commit": "96e8a1da32568524ddfba80eb709e03edb26bec2",
-     "what": "the three roads with the speed held and the free swing with the head, packed again into this folder"
+     "what": "the three roads with the speed held and the free swing with the head, packed again into this folder",
+     "dataset_path": "guinness-on-a-cart-stout-in-jax/v8/"
     },
     {
      "run": 6,
      "version": 6,
      "commit": "4c105275d3efe381335a3cb6cc23efbf0b13a9f6",
-     "what": "the free swing without the head, packed again into this folder"
+     "what": "the free swing without the head, packed again into this folder",
+     "dataset_path": "guinness-on-a-cart-stout-in-jax/v6/"
     }
    ],
-   "note": "JAX (tools/fig12/kaggle/stout_jax.py, run_b.py RUNSET=run10, BETA_HEAD); played by the page; the lecture note rewritten on these files the same day (notes/fig12/note/)"
+   "note": "JAX (tools/fig12/kaggle/stout_jax.py, run_b.py RUNSET=run10, BETA_HEAD); played by the page; the lecture note rewritten on these files the same day (notes/fig12/note/)",
+   "dataset": "numakoudsie/fig12-guinness-on-a-cart"
   }
  ]
 }

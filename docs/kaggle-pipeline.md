@@ -60,6 +60,10 @@ Kaggle has no folders. Order comes from two things it does have: versions inside
   `manifest.json` (size and SHA-256 of every file). After a run, its output goes into the dataset as a new dataset version.
 - **Tests and smoke runs** are deleted once the numbers they gave are written into the docs, and their code and small records
   are copied to `notes/inventory/raw/kaggle-copies/`.
+- **Each record points to its copy.** Every entry of `public/data/schrodinger-sphere/generations.json` and
+  `public/data/fig12/generations.json` (for Fig. 12 every run) carries `dataset` (the dataset's name) and `dataset_path` (the
+  folder `<notebook>/v<version>/`, or a list of them) where the run's whole Kaggle output lies. The pages do not read these two
+  fields.
 - **Nothing that a live record names is deleted** (`generations.json`, `index.json`) until that record points to the dataset copy.
 
 Datasets made on 14 November 2026: `numakoudsie/fig14-schrodinger-sphere` (8 notebook runs, 937 MB) and
