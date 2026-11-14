@@ -134,3 +134,9 @@ Not done: Fig. 15e axis-label overlap and run-count heading (page code, told coo
 air film; the barrier product written out (checked: |w|^2 6.94688 = tm.py); sec 4 matrix route stated; time-step error not
 measured on its own (said); shells met head-on (packet within 3.7, shells reach 5.5-8.5), not 'round it'; Pauli for the filling.
 Not done: links to blob/main dead until merge (owner session merges); symbols t,T,R,m,x,d reused but each flagged where it changes.
+
+## Round 3 derivation checker (notes/fig15/derivation-check-gen2-r3.md): all 32 equations re-derive; 10 text errors fixed:
+sign e^{+i int f dt}; Fig. 15b dashed curve is the 1D twin on the grid; long-packet stop effect stated correctly (a few %);
+d=2 run ends with wave still trapped; shells cut = window ends at run end AND < 1 lifetime (2 of 4); 'lowest filed energy';
+N=10 shares are the twins'; Tbar by quadrature (0.540, exact1d.tbar); s=4.5 top level -> broad peak at 2.028 (FWHM 0.314);
+missing full stop. Round 4 next.

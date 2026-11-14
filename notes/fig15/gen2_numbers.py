@@ -19,6 +19,7 @@ HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.abspath(os.pat
 sys.path.insert(0, os.path.join(ROOT, 'tools', 'kaggle', 'resonant-tunnelling'))
 import tm  # noqa: E402
 import iv  # noqa: E402
+import exact1d  # noqa: E402
 
 IDX_PATH = os.path.join(ROOT, 'public/data/resonant-tunnelling/2026-11-14/kaggle/index.json')
 EX1_PATH = os.path.join(ROOT, 'public/data/resonant-tunnelling/2026-11-13/derived/exact-1d.json')
@@ -156,6 +157,8 @@ for P in (2.5, 3.5, 4.5, 5.5):
     put(f'{tag}_E1', round(Es[0], 3), f'tm.py: first resonance, walls P = {P}')
     if len(Es) > 1: put(f'{tag}_E2', round(Es[1], 3), f'tm.py: second resonance, walls P = {P}')
     put(f'{tag}_all', [round(e, 3) for e in Es if e < 2.0], f'tm.py: every resonance below V0 = 2, walls P = {P}')
+    up = [e for e in Es if e >= 2.0]
+    if up: put(f'{tag}_Eup', round(up[0], 3), 'first full-transmission peak above the barrier top'); put(f'{tag}_Gup', r3(width(sg, up[0])), 'its FWHM')
     G = width(sg, Es[0]); put(f'{tag}_G1', r3(G), f'tm.py: FWHM of the first resonance, P = {P}')
     put(f'{tag}_tau1', r3(1 / G), f'1/Gamma, P = {P}')
     L = P - 1.0; k1 = np.sqrt(2 * (2.0 - Es[0]))
@@ -204,7 +207,8 @@ for V0, D, P in ((1.5, 1.0, 2.5), (2.0, 1.0, 2.5), (3.0, 1.0, 2.5), (2.0, 1.5, 3
         key = f'2|{V0:g}|{D:g}|{P:g}|{sx}'
         if key in IDX['exact']:
             e = IDX['exact'][key]
-            put(f'{tag}_Tbar{sx}', r3(float(np.interp(Es[0], e['E'], e['Tbar']))), f'index.json exact[{key}]: packet average at E1 (linear between 0.01 steps)')
+            exact1d.SIG0 = float(sx); tq = exact1d.tbar(Es[0], segs(2, V0, D, P), nk=2001)
+            put(f'{tag}_Tbar{sx}', r3(tq), f'exact1d.tbar: packet average (18) at the unrounded E1 by quadrature (index.json exact[{key}] holds the same curve on a 0.01 grid)')
 
 # ---------- the Fabry-Perot form of the running example ----------
 def theta(E, V0=2.0, D=1.0, P=2.5):
@@ -296,7 +300,8 @@ for R in (3.0, 5.0):
             b = max(rs, key=lambda r: r['tau']['tau'])
             put(f'{tag}_taumax', r3(b['tau']['tau']), b['file']); put(f'{tag}_taumax_E', b['spec']['E'], b['file'])
             put(f'{tag}_n', len(rs), 'shell runs with a fitted lifetime')
-            put(f'{tag}_cut', bool(b['tau']['t1'] >= b['t_end'] - 2 * b['frame_dt']), 'True: the fit window ends at the end of the run, so tau rests on part of the decay')
+            put(f'{tag}_cut', bool(b['tau']['t1'] >= b['t_end'] - 2 * b['frame_dt'] and (b['tau']['t1'] - b['tau']['t0']) < b['tau']['tau']), 'True: the fit window ends at the end of the run AND spans less than one lifetime')
+            put(f'{tag}_minE', min(r['spec']['E'] for r in rs), 'lowest energy filed so far for this pair')
 
 # ---------- 5. the diode ----------
 iv.V0 = 2.0
