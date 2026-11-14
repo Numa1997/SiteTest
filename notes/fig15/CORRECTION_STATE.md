@@ -104,3 +104,7 @@ Section 4: exact chi(x,t) for one wall run, compared with the stored file.
 - A save_notebook for version 2 was refused: "Maximum batch GPU session count of 2 reached" -> two batch sessions are held:
   walls-gpu v1 (13:20) and walls-exact v1 (12:28, the old 600-wall job). cancel_notebook_session is denied in this session.
 - file_corrected.py (step 9) written: gate, statuses kept / rebuilt / recomputed / failed / missing, diode J(V) from T_ref.
+- 13:29 UTC: owner stopped walls-gpu and walls-exact by hand. Tracker added (commit 54cf2c7): ETA lines, timing.json, CALIB mode.
+  Launched numakoudsie/fig15-correction-walls-calib v1 (kernel 145000508, two batches per group, timeout 3600 s); started 13:29:55.
+  Quota at 13:31: 48,930 s. Another session's notebook (fig-16-guinness-cart-with-control, 13:28) holds the second GPU slot.
+  Live tracking: Kaggle shows logs only after a run ends; ntfy.sh relay was refused by this session's permission check.
