@@ -176,6 +176,7 @@ RULES = [
     (r'notes/fig12/note/paper\.html', 'Fig. 12 note: the source of the note of guinness-kaggle.html, its computed numbers written as {{name}}', 'docs/simulations/fig12-beer-slosh.md'),
     (r'notes/fig12/note-numbers\.json', 'Fig. 12 note: the numbers note_numbers.py printed, name, value and printed text', 'docs/simulations/fig12-beer-slosh.md'),
     (r'notes/fig12/readers/.+\.md', 'Fig. 12 note: the marks of an independent reader, or the derivation checker\u2019s table, for one round of the note', 'docs/simulations/fig12-beer-slosh.md'),
+    (r'notes/fig12/handoff-jax/07-diagnosis\.md', 'Fig. 12 in JAX: diagnosis of five open items after the note (lean readings, rim points, kerb residue, numerical damping, the Play button)', 'docs/simulations/fig12-beer-slosh.md'),
     (r'notes/fig(\d\d)/.+', lambda m: 'Fig. %d: a measuring script of the review, or its saved output.' % int(m.group(1)), 'docs/notes.md'),
     # root of the app
     (r'AGENTS\.md', "The maintainer's summary: ownership, layout, design rules, folds, the data pipeline, platform quirks.", 'docs/build-and-deploy.md'),
