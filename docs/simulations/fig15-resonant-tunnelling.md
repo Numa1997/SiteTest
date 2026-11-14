@@ -83,8 +83,34 @@ overflow; all shapes, pair/single, radii, views and heights switch; SHA-256 matc
 (median / 95th percentile, device pixel ratio 2): sheet 0.5 / 1.0 ms, WebGL submit 0.9 / 4.3 ms, store and charts 0.5 / 1.9 ms
 at 1440 px; 0.5 / 2.8, 0.9 / 4.9, 0.6 / 2.5 ms at 390 px. The measured screen-frame interval there (83–133 ms) is the software
 rasteriser of the test container, which has no GPU. Read values: the sheet's vertex equals the stored value to 1e-9; the pixel
-colour read back agrees; `T_far` recomputed from the stored curves equals the index. Lecture note: 323 formulas, 0 KaTeX errors,
-equations (1)–(14).
+colour read back agrees; `T_far` recomputed from the stored curves equals the index. Lecture note (generation 1, 2026-11-13): 323 formulas, 0 KaTeX errors, equations (1)–(14); generation 2: see "The lecture note (generation 2)".
+
+## The lecture note (generation 2)
+
+[resonant-note.js](../../public/scripts/resonant-note.js) fills `<article id="paper">`; `sim.js` typesets it with KaTeX. It teaches
+the whole parameter space the page walks, each part from an everyday picture to the model to the mathematics:
+
+| § | Topic | Equations |
+|---|---|---|
+| 01–06 | Two panes of glass; the 3D model and why walls reduce to a line; one barrier (transfer matrix, thick-barrier limit); two barriers (sum over bounces, unequal barriers); the Breit–Wigner peak, `τ = ħ/Γ` and the leak model `Γ ≈ ħvT/L_eff`; packets, the broad-packet estimate `T̄ ≈ √(π/8) Γ/σ_E`, long packets | (1)–(15) |
+| 07 | Spacing: resonances are the finite well's levels made leaky; `E_n ∝ 1/L_eff²` | (16)–(17) |
+| 08 | Height and thickness: `Γ ∝ T₁ ∝ e^{−2κd}`, lifetime grows exponentially | — |
+| 09 | 3, 5, 10 barriers: Chebyshev formula `T_N = [1 + (R/T) U²_{N−1}(ξ)]⁻¹`, `N − 1` peaks, Kronig–Penney bands and gaps; Figure 2 | (18)–(20) |
+| 10–11 | What was computed (all seven groups of the batch), playback; grid accuracy (measured on generation 1, same method) | (21)–(22) |
+| 12 | Discs R 2–12 (side leak, `1/τ = 1/τ_walls + 1/τ_side`, `τ_side ~ mR²/ħ`), shells R 3, 5 | (23)–(24) |
+| 13 | The diode under bias `V(x) = −eV(x − x_l)/L`: the level slides by ~V/2, the peak drops below 1, supply function derived, Tsu–Esaki, the current from the runs (trapezoid over stored energies); Figure 3 | (25)–(27) |
+| 14 | Limits, Problems, reading | — |
+
+**Numbers.** Every data-dependent number sits in one place, the `NUM` block at the top of the script, written by
+[notes/fig15/gen2_numbers.py](../../notes/fig15/gen2_numbers.py) `--write`. The script prints each number with the run file or
+stored curve it comes from: per-run `T_far`, `tau` and twin `T` from `2026-11-14/kaggle/index.json`; the diode's `J_runs` from the
+same index; the exact 1D values (resonances, widths, finite-well levels, band edges, the level under bias) from `tm.py` and `iv.py`,
+the code that wrote the stored exact curves; the exact I–V from `2026-11-13/derived/exact-1d.json`. It also plots Figure 2 (`FIG2`
+block) from `tm.py`. A case not yet in the index is `null`, and the sentence that uses it says the run is still to come, so the note
+is true at every stage of the batch; rerun `python3 notes/fig15/gen2_numbers.py --write` whenever the index grows.
+
+**Checked** (headless Chromium, 14 Nov 2026, 1440 × 1000 and 390 × 844): 589 formulas, 0 KaTeX errors, equations (1)–(27), no page
+errors, no horizontal overflow. The page has no walkthrough key.
 
 ## Lessons followed (notes/fig15/LESSONS.md)
 
