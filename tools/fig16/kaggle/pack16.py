@@ -11,6 +11,7 @@ here = os.path.dirname(os.path.abspath(__file__))
 out_dir = os.path.normpath(os.path.join(here, "..", "..", "..", "public", "data", "fig16", date)); os.makedirs(out_dir, exist_ok=True)
 Z = np.load(src); S = json.load(open(summary_path)); task = next(t for t in S["tasks"] if t["name"] == name)
 QH, QHF, QD, QV = 2e-5, 1e-4, 1e-4, 1e-10
+FPS = int(S.get("fps", 30))          # stored pictures a second: 30 in run 2, 60 from run 3
 pk = lambda a: base64.b64encode(__import__("zlib").compress(np.ascontiguousarray(a).tobytes(), 9)).decode()
 
 H = Z["H"].astype(np.float64); nf, n, _ = H.shape
@@ -54,7 +55,7 @@ def cloud(arr, extra=None):
 
 nd, drops = cloud(Z["drops"]); nl, lumps = cloud(Z["lumps"], Z["lumpvol"])
 r5 = lambda a, k: [round(float(v), k) for v in a]
-out = dict(name=name, generated=date, n=int(n), frames=int(nf), fps=30, dx=DXc, x0=X0c, fill=float(Z["fill"]), qH=QH, qhf=QHF, qd=QD, qv=QV, t=r5(Z["t"], 4),
+out = dict(name=name, generated=date, n=int(n), frames=int(nf), fps=FPS, rot=bool(S.get("rot", False)), dx=DXc, x0=X0c, fill=float(Z["fill"]), qH=QH, qhf=QHF, qd=QD, qv=QV, t=r5(Z["t"], 4),
            mp=float(Z["mp"]), particles=int(Z["N"]), stout_g=r5(Z["nact"] * float(Z["mp"]) * 1e3, 3), spill_g=r5((int(Z["N"]) - Z["nact"]) * float(Z["mp"]) * 1e3, 3),
            head_spill_ml=r5(Z["foam_spill"] * 1e6, 3), head_glass_ml=r5(Z["vhead"] * 1e6, 3), books=task.get("books"),
            task={k: task[k] for k in ("kind", "end", "dx", "ctrl", "road", "v0") if k in task}, nd=nd, nl=nl, H=pk(Hd), hf=pk(hf), drops=pk(drops), lumps=pk(lumps),
@@ -69,6 +70,8 @@ if "x" in Z.files:
                x=r5(Z["x"], 5), v=r5(Z["v"], 4), zc=r5(Z["zc"], 6), th=r5(Z["th"], 6), zf=r5(Z["zf"], 6), zr=r5(Z["zr"], 6), i=r5(Z["i"], 4), icmd=r5(Z["icmd"], 4),
                uf=r5(Z["uf"], 3), ur=r5(Z["ur"], 3), Nf=r5(Z["Nf"], 3), Nr=r5(Z["Nr"], 3), Ff=r5(Z["Ff"], 3), Fr=r5(Z["Fr"], 3), aeff=r5(Z["aeff"], 4),
                yq=r5(Z["py"], 6), qhat=r5(Z["qh"], 6), gx=r5(Z["gx"], 4), gz=r5(Z["gz"], 4), Fx=r5(Z["Fx"], 4), Fz=r5(Z["Fz"], 4))
+    if "al" in Z.files:   # run 3: the deck's pitch rate (rad/s) and angular acceleration (rad/s^2), the strut speeds, road under each axle
+        out.update(om=r5(Z["om"], 5), al=r5(Z["al"], 4), vzf=r5(Z["vzf"], 5), vzr=r5(Z["vzr"], 5), zaf=r5(Z["zaf"], 6), zar=r5(Z["zar"], 6))
 dst = os.path.join(out_dir, name + ".json"); json.dump(out, open(dst, "w"), separators=(",", ":"))
 bts = open(dst, "rb").read(); sha = hashlib.sha256(bts).hexdigest()
 idx_path = os.path.join(out_dir, "index-16.json")
@@ -82,7 +85,7 @@ label = f"{task['road'][0].upper()}{task['road'][1:]}, {task['v0']:.1f} m/s · {
 m = {k: task.get(k) for k in ("steps", "ms_per_step", "run_s", "spilled_g", "head_spilled_ml", "books", "pitch_max_deg", "i_max_A", "u_max_N", "current_limited", "bump_stop_N", "v_range")}
 m.update(lean_max_mm=round(float(np.nanmax(np.abs(LEAN))), 2), tilt_max_mm=round(float(np.nanmax(np.abs(TILT))), 2))
 idx["files"] = [f for f in idx["files"] if f["path"] != name + ".json"] + [dict(path=name + ".json", label=label, kind=task["kind"], ctrl=task.get("ctrl"), road=task.get("road"),
-                                                                              v0=task.get("v0"), bytes=len(bts), sha256=sha, frames=int(nf), seconds=round((nf - 1) / 30, 3), measured=m)]
+                                                                              v0=task.get("v0"), bytes=len(bts), sha256=sha, frames=int(nf), seconds=round((nf - 1) / FPS, 3), fps=FPS, rot=bool(S.get("rot", False)), measured=m)]
 idx["files"].sort(key=lambda f: (f["kind"] != "ride", f["path"]))
 json.dump(idx, open(idx_path, "w"), indent=1)
 print(dst, len(bts), sha, "tilt max", m["tilt_max_mm"], "mm, head spilled", m["head_spilled_ml"], "mL")
