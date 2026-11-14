@@ -138,6 +138,20 @@ c80244e inventory · 923b43f filer per-notebook commit, replaced record · c21bd
 - Writer's suggestion, not done: the index's twin.T_exact uses 1201 k-points, too coarse for the narrowest d = 2 peaks
   (0.005502 vs converged 0.005878 at E = 0.95); refile with more points if those numbers are ever shown.
 
+## Grid audit (14 Nov 10:10-11:00 UTC) and HOLD
+- The coordinating chat (owner's order) asked for an audit of every run against the exact answer; then said HOLD: no change to
+  the live page, solver, index marks or GPU until it has verified the shift independently. CPU analysis only; nothing to main.
+- Files (branch only): notes/fig15/audit/error_audit.py -> notes/fig15/error_audit.json (every run; exact = continuum transfer
+  matrices averaged over the packet, checked against tm.py and iv.py to 1e-7); audit/twin_sources.py, twin_converge.py (+ .json).
+- Audit, walls (only they have an exact answer; 1088 runs): 3D T_far fails max(0.005, 1 %) in 917, >0.01 abs in 690; median
+  |error| 0.0135, 90th pct 0.060. Twin fails in 835. Twin and 3D agree (median 0.0017). Single walls too (~7 % high).
+- Cause: (a) not it, kinetic is spectral already; (c) dt 0.01 -> 0.0025 moves T < 0.0003; (d) box x2 < 0.0003;
+  (b) barriers sampled on the 0.5 a grid: V0 = 3 resonance at 0.828 (exact 0.878). Cell-averaged potential converges:
+  peak 0.905 (0.25 a), 0.885 (0.125), 0.880 (0.0625). Long packet V0 = 3 E 0.7827: T 0.192 / 0.037 / 0.063 / 0.072 / 0.0745
+  at 0.5 / 0.25 / 0.125 / 0.0625 / 0.03125 vs exact 0.0763. V0 = 2 E 0.821: 0.178 / 0.357 / 0.305 / 0.292 / 0.289 vs 0.2886.
+  Short packet E 0.75: -0.0098 at 0.5, within 0.004 from 0.25 on (dt 0.0025 at fine dx: +0.004, unexplained yet).
+- Implication: the gate needs about 0.0625 a along x (8x the points along x) with a cell-averaged potential.
+
 ## Left (Next = the first open item)
 1. Shards 4-6 and the fix job (two at a time as slots free; check-ins by `send_later`); download each, check SHA-256.
 2. File with `file_rt3d2.py` (date of filing), add the generation to `generations.json`.
