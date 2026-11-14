@@ -1,63 +1,125 @@
-# Fig. 12 in JAX: state before run 8 (13 November 2026, 22:20 UTC)
+# Fig. 12 in JAX: this chat's full state (14 November 2026, 00:45 UTC)
 
-Written by the session "Guinness cart: JAX solver, fix and run" before its context compacts.
+This file is the memory of the chat "Guinness cart: JAX solver, fix and run" (branch `claude/nifty-lamport-iz5pua`).
+After a compaction, reread this file before doing anything else. Keep it current: change it at every step that changes
+what is live or what is left, then commit and push. The rule is in CLAUDE.md ("Write the chat's state into the repository first").
 
 ## The aim
 
-Control the pint of Guinness on the one-wheel cart over the bumps. All data comes from the JAX solver on Kaggle's GPU
-(notebook numakoudsie/guinness-on-a-cart-stout-in-jax), stored, and played on the live page
-https://phyeinusul.com/simulations/guinness-kaggle (public/simulations/guinness-kaggle.html). The browser computes no physics.
+A pint of Guinness on a one-wheel cart, over bumps, on the live page https://phyeinusul.com/simulations/guinness-kaggle
+(`public/simulations/guinness-kaggle.html`). The stout, its head of foam and the cart are computed in JAX on Kaggle's GPU
+(private notebook numakoudsie/guinness-on-a-cart-stout-in-jax), stored, and only played by the page. Real numbers from first
+principles; no slowed animation, no interpolation between runs, no physics in the browser. Then control the pint so it does
+not spill, and show with and without control side by side.
 
-## What is live (main at e89a0c6)
+## What is live (main at 4f77d6a, checked on the live site 14 November 2026, about 00:30 UTC)
 
-- Run 6 (notebook version 6, commit 4c10527): the three rides with the speed held only (ride_resonant, ride_sharp30,
-  ride_bump25) and the free swings with and without the head (free_full_1.5, free_wall_1.5).
-- Run 7 (version 7, commit 87e3720): the same roads with the site's controllers ported into stout_jax.Cart (joint on all three;
-  slosh LQR and road preview on the kerb). Port checked against the JS cart: notes/fig12/handoff-jax/portcheck.txt.
-- Data: public/data/fig12/2026-11-13/index-jax.json and the ten files it lists (each names its version and commit); only the
-  columns more than one cell inside the glass are stored (tools/fig12/kaggle/pack_ride.py).
-- Corrected leans (read from the trusted columns as the page draws them): speed held only 17.3 / 34.1 / 10.6 mm (five bumps,
-  kerb, 25 mm bump), tilts 15.1 / 27.6 / 9.0. Joint control: 1.05 / 30.0 / 0.89 mm. Kerb spill: head 4.08 mL with the speed held,
-  2.74 to 3.66 mL with control; stout 0.008 g (19 particles) with the speed held, 0 with control.
-- The note (sections 1-13): section 10 results of run 6, section 11 the controllers and run 7 (Tables 7 and 8), section 12
-  limits (the head has weight but no mass: with its mass the first mode falls to about 3.07 Hz).
-- public/data/fig12/generations.json lists the JAX generation (runs 6, 7) as played.
-- Run notes: notes/fig12/handoff-jax/05-run3-changes.md (runs 3 to 7 and the lean correction).
+- The page plays run 8: `public/data/fig12/2026-11-13-run8/index-jax.json` and the ten files it lists, 2.7 MB in all
+  (`DIR` in `public/scripts/guinness-jax-play.js`). Default ride: five bumps in step, joint control (`ride_resonant_joint`).
+- Run 8 = notebook version 8 at commit 96e8a1d: rest, free swing with the head, and the eight rides (three roads with the
+  speed held; joint control on all three; slosh LQR on the kerb). Version 9 at commit 726d51a: the kerb with road preview,
+  which run 8's 2,500 s budget skipped, computed alone with run 8's measured plant. The swing without a head is run 6's file
+  (no head, so the head's mass cannot change it), labelled as run 6.
+- Every check passed: `notes/fig12/jax/run8-check/run8-check.txt` and `run9-check.txt` ("ALL PASS"), with the per-task
+  times in `run8-summary.json` and `run9-summary.json` (task times 2,170 s for run 8, 185 s for version 9, on a Tesla T4).
+- Books closed in every stored frame of every task: 0 stout particles lost of 1,001,952; head in the glass + head broken off
+  = 91.314 mL served, to at most 1.3e-8 mL.
+- The head's mass is in the solver: swing with the head 2.915 Hz natural frequency (expected 2.957 Hz, -1.4 %, check is
+  3 %), damping ratio 0.425; run 6 without the head's mass had 3.278 Hz, 0.467. Gains designed on it in the run:
+  K = (74.004, -1295.010, -44.866, -150.000).
+- Leans (front wall minus back, from the trusted columns, `measured.lean_max_mm` in index-jax.json), speed held -> control:
+  five bumps 13.9 -> 0.95 mm (joint); one 25 mm bump 8.9 -> 0.76 mm (joint); kerb 24.3 mm and 2.44 mL of head spilled with
+  the speed held, joint 25.4 mm and 2.00 mL, slosh LQR 21.8 mm and 1.65 mL, road preview 21.2 mm and 2.46 mL. No stout
+  spilled on any ride. Against run 6: kerb head spill 4.08 -> 2.44 mL, stout 0.008 g -> 0.
+- Page readings: "stout in the glass" (3 decimals, from `stout_g`), "stout spilled", "head in the glass" (from `vhead`),
+  "head spilled". Live check at the kerb's picture 27: 429.583 g, 0.000 g, 88.93 mL, 2.38 mL, 338 drops and lumps
+  (test script: scratch `live8.cjs`; the page test in the repository is `notes/fig12/jax/page-test.cjs`).
+- The only console error on the live page is Cloudflare's own analytics beacon, blocked by the page's CSP. Not from the
+  repository; leave it, and never touch the Cloudflare Workers.
+- `public/data/fig12/generations.json`: new generation "jax, the head with its mass" (runs 8, 9 and run 6's free_wall); the
+  JAX generation of runs 6 and 7 marked as played until 14 November 2026. Runs 6 and 7 stay in `public/data/fig12/2026-11-13/`.
+- The note: sections 5.6 (eqs. 15a, 15b), 7.3 (eq. 18a and the CPU test), 9 (readings and books), 10 (run 8, Table 4 with
+  run 6 in brackets, "What the head's mass changed"), 11 (Examples 11.2, 11.4, 11.5, Tables 7 and 8, Floquet), 12 (limits,
+  Problems 12.10, 12.11) and the abstract describe run 8.
 
-## The run-8 order (relayed from the user's coordinating chat, 22:04 and 22:25 UTC; asked here for a yes at 22:10 UTC)
+## What is left
 
-1. Mass books per frame: stout in the glass (initial minus particles that left, 0.429 mg each) and head in the glass (91.3 mL
-   minus the lumps broken off), stored per frame; check glass + spilled = initial per frame; print the largest error.
-   Found: the solver already conserves both exactly; the stored stout_g at 0.01 g hides the kerb's 0.008 g (429.583 and
-   429.575 both print 429.58). The head's thickness is stored per column per frame and the page draws it: at the kerb 181
-   columns thin, some by the full 19 mm. So items 1 and 2 are packing and readings work only (no GPU).
-2. The head thinning on screen: already so (above); show "stout in glass" and "head in glass" readings falling as they spill.
-3. The head's mass in the solver: 272 kg/m3, 19 mm (5.17 kg/m2), inertia on the columns it rests on, not only weight. Check the
-   free swing on the CPU first: near 3.07 Hz (note section 12: omega^2 = g k tanh(kh) / (1 + m_s k tanh(kh)/rho)).
-4. Recompute on Kaggle every ride the page plays (run 6's three, run 7's five) and both free swings with the new head and the
-   per-frame books; arithmetic in one line; under 1.5 GPU hours (estimate: about 2,600 s of T4 time, about 5,300 quota s).
-5. Store as run 8 (keep 6 and 7), update generations.json, the note (sections 9 to 12), the docs, the page's readings; merge;
-   check live. Report once when live: books closed, the new frequency, the new leans and spills with and without control.
+1. The controllers' beta. They used beta = 1.541 (bare stout, `PLANT` at `tools/fig12/kaggle/run_b.py:50`). With the head
+   carried up and down but not pushed along the road it should be 1.541 / (1 + m_s k / rho) = 1.241. The gains would be
+   K = (71.12, -1228.72, -40.50, -150.00), within 10 % (note section 11, "Which swing the regulator is designed for").
+   Not rerun. A fix would set beta in `PLANT` from the head's mass and rerun the five controlled rides with
+   PLANT_F0=2.915, PLANT_ZETA=0.425: task times about 1,220 s plus compiling, so about 1,450 s of T4 time (inference from
+   `run8-summary.json`). GPU time needs the user's yes, with the one-line cost first.
+2. The kerb. No controller cuts the kerb's lean much (24.3 mm held, 25.4 joint, 21.8 slosh, 21.2 preview); slosh LQR cuts the
+   head spilled most (2.44 -> 1.65 mL). The note says why (section 11, Figure 4, key result "what no controller with this
+   motor can prevent"): the kerb pushes the wheel back with up to 82 N, the motor gives at most 15 N. Nothing ordered on it.
+3. The user's coordinating chat was not told directly: the message to it was refused (not in the same channel). The
+   user has the report in this chat.
+4. Kaggle: at most 2 batch GPU sessions per account; another chat's Fig. 15 shards held both before run 8. The weekly quota
+   reset at 00:00 UTC on 14 November; read it with the Kaggle connector before any run.
 
-## Done of it (14 November 2026, 00:40 UTC)
+## The run-8 order (done; kept for the record)
 
-All five items. The head's mass is in `Stout.pressure` (Robin condition, the head's own vertical velocity `wh` as state);
-CPU check at 6 mm 2.737 Hz against 2.722 Hz predicted. Run 8 (notebook version 8, commit 96e8a1d) and version 9 (commit
-726d51a, the kerb with the preview, skipped by run 8's budget) passed every check; books closed in every frame (0 particles,
-at most 1.3e-8 mL). Swing with the head's mass 2.915 Hz (2.957 expected), zeta 0.425; the controllers designed on it.
-Leans (trusted columns), speed held -> control: five bumps 13.9 -> 0.95 mm (joint); 25 mm bump 8.9 -> 0.76 mm (joint);
-kerb 24.3 mm, 2.44 mL of head -> joint 25.4 mm, 2.00 mL; slosh 21.8 mm, 1.65 mL; preview 21.2 mm, 2.46 mL; no stout spilled.
-Stored in public/data/fig12/2026-11-13-run8/ (runs 6, 7 kept in 2026-11-13/); generations.json, the note (5.6, 7.3, 9 to
-12, abstract), docs/simulations/fig12-beer-slosh.md, docs/kaggle-pipeline.md and docs/files.md updated. Open point found after
-the run: the controllers' beta is still the bare stout's 1.541; with the head carried it should be 1.241 (note section 10).
+From the user's coordinating chat, 13 November 22:04 and 22:25 UTC: (1) mass books per frame for stout and head; (2) the
+head thinning on screen with "stout in glass" and "head in glass" readings; (3) the head's mass in the solver (272 kg/m3,
+19 mm), checked on the CPU first (6 mm grid: 2.737 Hz against 2.722 Hz predicted); (4) recompute every ride the page plays
+and both free swings, under 1.5 GPU hours; (5) store as run 8, keep runs 6 and 7, update generations.json, the note
+(sections 9 to 12), the docs and the readings; merge; check live; report once. All five done; report sent 14 November.
 
-## Files that matter
+## Commits of this chat (all on main)
 
-tools/fig12/kaggle/stout_jax.py (solver, Cart with controllers, Stout.prepare/probes), run_b.py (tasks: RUNSET=control for
-run 7's set; TASKS for run 6's), pack_ride.py, check_run.py, nb/run_b_cell.py (notebook cell template), portcheck/;
-public/scripts/guinness-jax-play.js, stout-view2.js; docs/simulations/fig12-beer-slosh.md; docs/kaggle-pipeline.md.
+- a704e01 the state before run 8 (this file's first version)
+- 6cf0028 the head's mass in the pressure solve (Robin condition, the head's own vertical velocity `wh` as state)
+- 74244ee run 8 set-up: books every frame, the plant measured in the run, stout and head in the glass on the page
+- f3e5455 note sections 5.6 and 7.3; `check_run.py` checks the books and the new frequency
+- 96e8a1d run 8 tasks road by road; the swing fit tries the head's decay times; the plant gate rejects runaway fits
+  (notebook version 8 ran this commit)
+- 01335dc the doc describes run 8's code
+- 726d51a `run_b.py`: a task computed alone can take run 8's plant (PLANT_F0, PLANT_ZETA); notebook version 9 ran this
+- 4f77d6a the page plays run 8; data, generations.json, note sections 9 to 12, docs, files.md
+- this commit: this file, the check outputs, the CLAUDE.md rule, `pack_ride.py`'s folder example
 
-## The user's rules for this chat
+## Files and what each does now
 
-Plain short words. No tables, no apologies, no recaps, no option lists, no "Where we are" lines. Mark facts with a handle.
-Never put data from a run that failed its checks under public/. Before every GPU run: one line with what, where, how long, cost.
+- `tools/fig12/kaggle/stout_jax.py`: the solver. State `wh` (the head's vertical velocity per column); `_surf_faces`;
+  `pressure(..., mu, w_old, geff_dt)` with the head's mass as a Robin condition, theta' = theta + mu/dx, mu = 5.13 mm;
+  `observe` returns `vhead` (float64 sum). Cart and the controllers (speed, preview, slosh LQR, joint) live here too.
+- `tools/fig12/kaggle/run_b.py`: the tasks. `RUNSET=run8` runs `TASKS_RUN8` and measures the plant from free_full_1.5
+  (`PLANT_FROM_RUN`); gate 2.5 < f0 < 3.5 Hz, zeta < 0.95, amplitude < 20 mm, rms < amplitude/4, or it stops. `HEAD_MASS`
+  (default on); `PLANT_F0`, `PLANT_ZETA`, `PLANT_FROM` give a lone task the plant. Stores `info["books"]`,
+  `info["head_mass"]`, `info["plant"]`.
+- `tools/fig12/kaggle/pack_ride.py <npz> <summary> <task> <data folder> <version> <commit>`: packs one ride for the page,
+  with `stout_g`, `spill_g`, `head_glass_ml`, `books`, `plant`, and the leans read from the trusted columns.
+- `tools/fig12/kaggle/check_run.py`: the checks (books 0 particles and < 1e-3 mL; frequency within 3 % of 2.957 Hz).
+- `tools/fig12/kaggle/nb/run_b_cell.py`: the notebook cell template (`__RUNSET__` placeholder).
+- `public/scripts/guinness-jax-play.js`, `public/simulations/guinness-kaggle.html`, `public/data/fig12/...`: above.
+- `docs/simulations/fig12-beer-slosh.md`, `docs/kaggle-pipeline.md`, `docs/files.md` (from `tools/inventory.py`).
+- `notes/fig12/jax/page-test.cjs` (reads r-sg and r-hg); `notes/fig12/jax/run8-check/` (the run's own checks).
+- Earlier notes of this work: `notes/fig12/handoff-jax/00-PROMPT.md` to `05-run3-changes.md`, `handoff-guinness-cart.md`,
+  `portcheck.txt`.
+
+## Where the raw outputs are
+
+The run's .npz files are only in this container's scratch folder (gone when it is reclaimed) and in the notebook's outputs
+of versions 8 and 9 on Kaggle (fetch with the Kaggle connector's download, then curl the URLs it gives). Everything the page
+needs is in `public/data/fig12/2026-11-13-run8/`. Scratch scripts of the analysis (`design8.py`, `reduced8.py`, `loop8.py`,
+`floquet8.py`, `live8.cjs`) went into the note's numbers; they are not in the repository.
+
+## Rules (the user's)
+
+- Never ask for, print, log or store the Kaggle token. Kaggle notebooks stay private.
+- Never touch the Cloudflare Workers `phyein-usul` or `stellenrecherche`. Deploying code to `kaggle-bridge` and spending
+  money need the user's yes.
+- No model names in code, commits or PRs.
+- Never put data from a run that failed its checks under `public/`. Stop a run that does not have proper numbers.
+- JAX only, no Taichi. Never slow the animation, never interpolate between runs, never compute physics in the browser.
+- Before every GPU run: one line with what runs, where, how long and what it costs.
+- If self-harm language appears: stop, answer the person, give Telefonseelsorge 0800 111 0 111 or 116 123, emergency 112.
+- Talk: plain short words. No tables, no apologies, no recaps, no option lists, no "Where we are" lines. Mark facts with a
+  handle. Report once when done; "Do not get back to me unless done." The user's profile also holds a constitution
+  (metric units; fact, inference and opinion marked; trigger words Feynman, Planck, Popper, Dirac); the talk rules above
+  are what the user set for this work.
+- CLAUDE.md: when a change is finished, checked against main and tested in a real browser, merge and publish without asking,
+  then verify the live site. A change is not done until the docs describe the code. Push to `claude/nifty-lamport-iz5pua`
+  and fast-forward main.
+- First write the chat's full state into the repository (this file), and keep it current.

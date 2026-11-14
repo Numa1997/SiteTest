@@ -1,0 +1,16 @@
+device Tesla T4 jax 0.11.1
+
+== ride_sharp30_preview: ride, 4.0 s, 2040 steps, 90.9 ms a step, run 185.3 s
+PASS  near-surface list never full  (171458 of 621210)
+PASS  pressure residual small  (largest 1.00e-05)
+PASS  stout books: glass + air + cart + ground = poured, every frame  (largest error 0 particles)
+PASS  head books: glass + broken off = served, every frame  (largest error 1.05e-08 mL)
+PASS  drop list never full  (largest 8)
+PASS  energy book ewall never negative  (end 1.417e-04 J)
+PASS  energy book eskin never negative  (end 1.814e-04 J)
+PASS  energy book efoam never negative  (end 3.262e-03 J)
+PASS  impulse on the cart = minus the stout's momentum  ({'impulse_x': -2.838055691406175e-05, 'momentum_x_end': 2.8380556914061738e-05})
+   spilled 0.00 g of stout, 2.46 mL of head; lean up to 13.8 mm; speed [1.2245514691254133, 1.5364196935673033]
+   frames to look at: 0, 60 (mid), 20 (first spill), 120 (end)
+
+ALL PASS

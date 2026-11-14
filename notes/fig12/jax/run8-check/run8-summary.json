@@ -1,0 +1,743 @@
+{
+ "generated": "2026-11-13",
+ "device": "Tesla T4",
+ "jax": "0.11.1",
+ "fill": 0.125,
+ "rho": 1007.0,
+ "fps": 30,
+ "tasks": [
+  {
+   "name": "rest",
+   "kind": "free",
+   "dx": 0.0015,
+   "model": "full",
+   "end": 2.0,
+   "push": [
+    0.3,
+    0.0,
+    0.146
+   ],
+   "cells": 370386,
+   "particles": 1001952,
+   "mp": 4.2874640044544424e-07,
+   "steps": 1020,
+   "compile_s": 11.7,
+   "run_s": 75.7,
+   "ms_per_step": 74.3,
+   "its_per_step": 101.5,
+   "itmax": 251,
+   "resmax": 9.999394933402073e-06,
+   "nselmax": 76285,
+   "K": 621210,
+   "s_per_simulated_s": 38.5,
+   "spilled_g": 0.0,
+   "drops_max": 0,
+   "volume_kept": 1.0,
+   "head_spilled_ml": 0.0,
+   "head_ml": 91.3,
+   "head": {
+    "R32": 3.4e-05,
+    "phi_l": 0.27,
+    "gamma": 0.0442,
+    "E_inf": 0.0187,
+    "G0": 166.43999999999994,
+    "tau_y": 5.4149999999999965,
+    "Z": 0.18,
+    "lr": 0.004
+   },
+   "head_mass": true,
+   "books": {
+    "stout_particles": 1001952,
+    "stout_err_particles_max": 0,
+    "stout_glass_g_end": 429.5833,
+    "stout_out_g_end": 0.0,
+    "head_ml0": 91.314,
+    "head_glass_ml_end": 91.314,
+    "head_off_ml_end": 0.0,
+    "head_err_ml_max": 0.0
+   },
+   "max_dev_mm": 2.1795108318328857,
+   "max_dev_last_s_mm": 2.1795108318328857,
+   "energy_J": [
+    0.30635130498910396,
+    0.3063258996973533
+   ],
+   "rest_guard": {
+    "max_dev_mm": 0.4978105425834656,
+    "rms_dev_mm": 0.1292378306388855,
+    "columns_without_value": 0,
+    "fallback_columns_max": 0,
+    "head_spilled_ml": 0.0,
+    "spilled_g": 0.0,
+    "limit_max_mm": 0.75,
+    "limit_rms_mm": 0.375
+   }
+  },
+  {
+   "name": "free_full_1.5",
+   "kind": "free",
+   "dx": 0.0015,
+   "model": "full",
+   "end": 5.0,
+   "push": [
+    0.3,
+    1.0,
+    0.146
+   ],
+   "cells": 370386,
+   "particles": 1001952,
+   "mp": 4.2874640044544424e-07,
+   "steps": 2550,
+   "compile_s": 11.3,
+   "run_s": 188.7,
+   "ms_per_step": 74.0,
+   "its_per_step": 101.3,
+   "itmax": 294,
+   "resmax": 9.999679605243728e-06,
+   "nselmax": 93372,
+   "K": 621210,
+   "s_per_simulated_s": 38.0,
+   "spilled_g": 0.0,
+   "drops_max": 0,
+   "volume_kept": 1.0,
+   "head_spilled_ml": 0.0,
+   "head_ml": 91.3,
+   "head": {
+    "R32": 3.4e-05,
+    "phi_l": 0.27,
+    "gamma": 0.0442,
+    "E_inf": 0.0187,
+    "G0": 166.43999999999994,
+    "tau_y": 5.4149999999999965,
+    "Z": 0.18,
+    "lr": 0.004
+   },
+   "head_mass": true,
+   "books": {
+    "stout_particles": 1001952,
+    "stout_err_particles_max": 0,
+    "stout_glass_g_end": 429.5833,
+    "stout_out_g_end": 0.0,
+    "head_ml0": 91.314,
+    "head_glass_ml_end": 91.314,
+    "head_off_ml_end": 0.0,
+    "head_err_ml_max": 0.0
+   },
+   "max_dev_mm": 4.654913902282715,
+   "max_dev_last_s_mm": 3.3179969787597656,
+   "fit_ring13": {
+    "f": 2.6388237232286755,
+    "f0": 2.9152394311359466,
+    "zeta": 0.4250231022393094,
+    "A_mm": 2.1472450607025606,
+    "rms_mm": 0.01324523396964624
+   },
+   "fit_ring16": {
+    "f": 2.6600210818881918,
+    "f0": 3.0502817529716766,
+    "zeta": 0.4894034281604783,
+    "A_mm": 2.256016098345329,
+    "rms_mm": 0.08111648541567001
+   },
+   "energy_J": [
+    0.30635130498910396,
+    0.30638518354759453
+   ]
+  },
+  {
+   "name": "ride_sharp30",
+   "kind": "ride",
+   "dx": 0.0015,
+   "model": "full",
+   "end": 4.0,
+   "road": "one sharp 30 mm bump",
+   "v0": 1.5,
+   "cells": 370386,
+   "particles": 1001952,
+   "mp": 4.2874640044544424e-07,
+   "steps": 2040,
+   "compile_s": 12.7,
+   "run_s": 180.5,
+   "ms_per_step": 88.5,
+   "its_per_step": 133.2,
+   "itmax": 304,
+   "resmax": 9.998381756304298e-06,
+   "nselmax": 176848,
+   "K": 621210,
+   "s_per_simulated_s": 45.5,
+   "spilled_g": 0.0,
+   "drops_max": 11,
+   "volume_kept": 1.0,
+   "head_spilled_ml": 2.44,
+   "head_ml": 91.3,
+   "head": {
+    "R32": 3.4e-05,
+    "phi_l": 0.27,
+    "gamma": 0.0442,
+    "E_inf": 0.0187,
+    "G0": 166.43999999999994,
+    "tau_y": 5.4149999999999965,
+    "Z": 0.18,
+    "lr": 0.004
+   },
+   "head_mass": true,
+   "books": {
+    "stout_particles": 1001952,
+    "stout_err_particles_max": 0,
+    "stout_glass_g_end": 429.5833,
+    "stout_out_g_end": 0.0,
+    "head_ml0": 91.314,
+    "head_glass_ml_end": 88.8693,
+    "head_off_ml_end": 2.4447,
+    "head_err_ml_max": 1.0477377429193857e-08
+   },
+   "lean_max_mm": 14.489173889160156,
+   "v_range": [
+    1.211000049600722,
+    1.5170861579510224
+   ],
+   "impulse_vs_momentum": {
+    "impulse_x": 2.30718639009063e-06,
+    "momentum_x_end": -2.3071863900906157e-06
+   },
+   "ctrl": "speed",
+   "plant": {
+    "w": 18.316989560623956,
+    "zeta": 0.4250231022393094,
+    "beta": 1.5407181225269262,
+    "measured": "run's own free_full_1.5, ring 13"
+   },
+   "control": {
+    "i_max_A": 2.9835760610692814,
+    "icmd_max_A": 8.006052669689863,
+    "frames_current_limited": 6,
+    "us_max_N": 0.0,
+    "ipar_max_A": 0.0,
+    "gains": {
+     "K": [
+      74.00419568184816,
+      -1295.0100293472397,
+      -44.86594617998763,
+      -150.00000000000102
+     ],
+     "Ks": [
+      -501.2156998123334,
+      11.923168259572924,
+      -6.34279425396823,
+      630.0044481464855
+     ]
+    }
+   }
+  },
+  {
+   "name": "ride_sharp30_joint",
+   "kind": "ride",
+   "dx": 0.0015,
+   "model": "full",
+   "end": 4.0,
+   "road": "one sharp 30 mm bump",
+   "v0": 1.5,
+   "ctrl": "joint",
+   "cells": 370386,
+   "particles": 1001952,
+   "mp": 4.2874640044544424e-07,
+   "steps": 2040,
+   "compile_s": 14.1,
+   "run_s": 169.1,
+   "ms_per_step": 82.9,
+   "its_per_step": 111.3,
+   "itmax": 298,
+   "resmax": 9.999735084420536e-06,
+   "nselmax": 154410,
+   "K": 621210,
+   "s_per_simulated_s": 42.6,
+   "spilled_g": 0.0,
+   "drops_max": 3,
+   "volume_kept": 1.0,
+   "head_spilled_ml": 2.0,
+   "head_ml": 91.3,
+   "head": {
+    "R32": 3.4e-05,
+    "phi_l": 0.27,
+    "gamma": 0.0442,
+    "E_inf": 0.0187,
+    "G0": 166.43999999999994,
+    "tau_y": 5.4149999999999965,
+    "Z": 0.18,
+    "lr": 0.004
+   },
+   "head_mass": true,
+   "books": {
+    "stout_particles": 1001952,
+    "stout_err_particles_max": 0,
+    "stout_glass_g_end": 429.5833,
+    "stout_out_g_end": 0.0,
+    "head_ml0": 91.314,
+    "head_glass_ml_end": 89.3187,
+    "head_off_ml_end": 1.9953,
+    "head_err_ml_max": 8.381899232849654e-09
+   },
+   "lean_max_mm": 15.946663856506348,
+   "v_range": [
+    1.2304381930752746,
+    1.5465011955502919
+   ],
+   "impulse_vs_momentum": {
+    "impulse_x": -0.00031201546618556705,
+    "momentum_x_end": 0.0003120154661855669
+   },
+   "plant": {
+    "w": 18.316989560623956,
+    "zeta": 0.4250231022393094,
+    "beta": 1.5407181225269262,
+    "measured": "run's own free_full_1.5, ring 13"
+   },
+   "control": {
+    "i_max_A": 2.9290509434304934,
+    "icmd_max_A": 41.24737271486488,
+    "frames_current_limited": 5,
+    "us_max_N": 11.44995730401104,
+    "ipar_max_A": 0.7521632681028884,
+    "gains": {
+     "K": [
+      74.00419568184816,
+      -1295.0100293472397,
+      -44.86594617998763,
+      -150.00000000000102
+     ],
+     "Ks": [
+      -501.2156998123334,
+      11.923168259572924,
+      -6.34279425396823,
+      630.0044481464855
+     ]
+    }
+   }
+  },
+  {
+   "name": "ride_resonant",
+   "kind": "ride",
+   "dx": 0.0015,
+   "model": "full",
+   "end": 8.0,
+   "road": "five 20 mm bumps in step with the swing",
+   "v0": 1.0,
+   "cells": 370386,
+   "particles": 1001952,
+   "mp": 4.2874640044544424e-07,
+   "steps": 4080,
+   "compile_s": 12.8,
+   "run_s": 343.0,
+   "ms_per_step": 84.1,
+   "its_per_step": 137.6,
+   "itmax": 302,
+   "resmax": 9.999494977819268e-06,
+   "nselmax": 136161,
+   "K": 621210,
+   "s_per_simulated_s": 43.1,
+   "spilled_g": 0.0,
+   "drops_max": 2,
+   "volume_kept": 1.0,
+   "head_spilled_ml": 0.01,
+   "head_ml": 91.3,
+   "head": {
+    "R32": 3.4e-05,
+    "phi_l": 0.27,
+    "gamma": 0.0442,
+    "E_inf": 0.0187,
+    "G0": 166.43999999999994,
+    "tau_y": 5.4149999999999965,
+    "Z": 0.18,
+    "lr": 0.004
+   },
+   "head_mass": true,
+   "books": {
+    "stout_particles": 1001952,
+    "stout_err_particles_max": 0,
+    "stout_glass_g_end": 429.5833,
+    "stout_out_g_end": 0.0,
+    "head_ml0": 91.314,
+    "head_glass_ml_end": 91.3043,
+    "head_off_ml_end": 0.0097,
+    "head_err_ml_max": 0.0
+   },
+   "lean_max_mm": 9.378865242004395,
+   "v_range": [
+    0.9434959558811876,
+    1.0513358414012641
+   ],
+   "impulse_vs_momentum": {
+    "impulse_x": -2.044332639088279e-06,
+    "momentum_x_end": 2.0443326390882786e-06
+   },
+   "ctrl": "speed",
+   "plant": {
+    "w": 18.316989560623956,
+    "zeta": 0.4250231022393094,
+    "beta": 1.5407181225269262,
+    "measured": "run's own free_full_1.5, ring 13"
+   },
+   "control": {
+    "i_max_A": 2.4018083000314143,
+    "icmd_max_A": 2.427459740628538,
+    "frames_current_limited": 0,
+    "us_max_N": 0.0,
+    "ipar_max_A": 0.0,
+    "gains": {
+     "K": [
+      74.00419568184816,
+      -1295.0100293472397,
+      -44.86594617998763,
+      -150.00000000000102
+     ],
+     "Ks": [
+      -501.2156998123334,
+      11.923168259572924,
+      -6.34279425396823,
+      630.0044481464855
+     ]
+    }
+   }
+  },
+  {
+   "name": "ride_resonant_joint",
+   "kind": "ride",
+   "dx": 0.0015,
+   "model": "full",
+   "end": 8.0,
+   "road": "five 20 mm bumps in step with the swing",
+   "v0": 1.0,
+   "ctrl": "joint",
+   "cells": 370386,
+   "particles": 1001952,
+   "mp": 4.2874640044544424e-07,
+   "steps": 4080,
+   "compile_s": 13.8,
+   "run_s": 344.8,
+   "ms_per_step": 84.5,
+   "its_per_step": 137.1,
+   "itmax": 306,
+   "resmax": 9.99974781734636e-06,
+   "nselmax": 118351,
+   "K": 621210,
+   "s_per_simulated_s": 43.3,
+   "spilled_g": 0.0,
+   "drops_max": 0,
+   "volume_kept": 1.0,
+   "head_spilled_ml": 0.0,
+   "head_ml": 91.3,
+   "head": {
+    "R32": 3.4e-05,
+    "phi_l": 0.27,
+    "gamma": 0.0442,
+    "E_inf": 0.0187,
+    "G0": 166.43999999999994,
+    "tau_y": 5.4149999999999965,
+    "Z": 0.18,
+    "lr": 0.004
+   },
+   "head_mass": true,
+   "books": {
+    "stout_particles": 1001952,
+    "stout_err_particles_max": 0,
+    "stout_glass_g_end": 429.5833,
+    "stout_out_g_end": 0.0,
+    "head_ml0": 91.314,
+    "head_glass_ml_end": 91.314,
+    "head_off_ml_end": 0.0,
+    "head_err_ml_max": 0.0
+   },
+   "lean_max_mm": 2.077035665512085,
+   "v_range": [
+    0.9923312342542108,
+    1.0046599700274887
+   ],
+   "impulse_vs_momentum": {
+    "impulse_x": -1.250233445592135e-05,
+    "momentum_x_end": 1.250233445592135e-05
+   },
+   "plant": {
+    "w": 18.316989560623956,
+    "zeta": 0.4250231022393094,
+    "beta": 1.5407181225269262,
+    "measured": "run's own free_full_1.5, ring 13"
+   },
+   "control": {
+    "i_max_A": 1.708395410341099,
+    "icmd_max_A": 1.7119918558335805,
+    "frames_current_limited": 0,
+    "us_max_N": 7.063364634308901,
+    "ipar_max_A": 0.011301394514443697,
+    "gains": {
+     "K": [
+      74.00419568184816,
+      -1295.0100293472397,
+      -44.86594617998763,
+      -150.00000000000102
+     ],
+     "Ks": [
+      -501.2156998123334,
+      11.923168259572924,
+      -6.34279425396823,
+      630.0044481464855
+     ]
+    }
+   }
+  },
+  {
+   "name": "ride_bump25",
+   "kind": "ride",
+   "dx": 0.0015,
+   "model": "full",
+   "end": 8.0,
+   "road": "one 25 mm bump",
+   "v0": 1.0,
+   "cells": 370386,
+   "particles": 1001952,
+   "mp": 4.2874640044544424e-07,
+   "steps": 4080,
+   "compile_s": 12.5,
+   "run_s": 351.3,
+   "ms_per_step": 86.1,
+   "its_per_step": 151.3,
+   "itmax": 294,
+   "resmax": 9.999918802350294e-06,
+   "nselmax": 113603,
+   "K": 621210,
+   "s_per_simulated_s": 44.1,
+   "spilled_g": 0.0,
+   "drops_max": 1,
+   "volume_kept": 1.0,
+   "head_spilled_ml": 0.0,
+   "head_ml": 91.3,
+   "head": {
+    "R32": 3.4e-05,
+    "phi_l": 0.27,
+    "gamma": 0.0442,
+    "E_inf": 0.0187,
+    "G0": 166.43999999999994,
+    "tau_y": 5.4149999999999965,
+    "Z": 0.18,
+    "lr": 0.004
+   },
+   "head_mass": true,
+   "books": {
+    "stout_particles": 1001952,
+    "stout_err_particles_max": 0,
+    "stout_glass_g_end": 429.5833,
+    "stout_out_g_end": 0.0,
+    "head_ml0": 91.314,
+    "head_glass_ml_end": 91.314,
+    "head_off_ml_end": 0.0,
+    "head_err_ml_max": 0.0
+   },
+   "lean_max_mm": 5.78474235534668,
+   "v_range": [
+    0.9623231301789775,
+    1.0356164786044881
+   ],
+   "impulse_vs_momentum": {
+    "impulse_x": -1.5840956414806427e-06,
+    "momentum_x_end": 1.5840956414806564e-06
+   },
+   "ctrl": "speed",
+   "plant": {
+    "w": 18.316989560623956,
+    "zeta": 0.4250231022393094,
+    "beta": 1.5407181225269262,
+    "measured": "run's own free_full_1.5, ring 13"
+   },
+   "control": {
+    "i_max_A": 1.998868947742253,
+    "icmd_max_A": 2.0070969878649025,
+    "frames_current_limited": 0,
+    "us_max_N": 0.0,
+    "ipar_max_A": 0.0,
+    "gains": {
+     "K": [
+      74.00419568184816,
+      -1295.0100293472397,
+      -44.86594617998763,
+      -150.00000000000102
+     ],
+     "Ks": [
+      -501.2156998123334,
+      11.923168259572924,
+      -6.34279425396823,
+      630.0044481464855
+     ]
+    }
+   }
+  },
+  {
+   "name": "ride_bump25_joint",
+   "kind": "ride",
+   "dx": 0.0015,
+   "model": "full",
+   "end": 8.0,
+   "road": "one 25 mm bump",
+   "v0": 1.0,
+   "ctrl": "joint",
+   "cells": 370386,
+   "particles": 1001952,
+   "mp": 4.2874640044544424e-07,
+   "steps": 4080,
+   "compile_s": 13.7,
+   "run_s": 337.7,
+   "ms_per_step": 82.8,
+   "its_per_step": 120.5,
+   "itmax": 294,
+   "resmax": 9.999937901739031e-06,
+   "nselmax": 110966,
+   "K": 621210,
+   "s_per_simulated_s": 42.4,
+   "spilled_g": 0.0,
+   "drops_max": 0,
+   "volume_kept": 1.0,
+   "head_spilled_ml": 0.0,
+   "head_ml": 91.3,
+   "head": {
+    "R32": 3.4e-05,
+    "phi_l": 0.27,
+    "gamma": 0.0442,
+    "E_inf": 0.0187,
+    "G0": 166.43999999999994,
+    "tau_y": 5.4149999999999965,
+    "Z": 0.18,
+    "lr": 0.004
+   },
+   "head_mass": true,
+   "books": {
+    "stout_particles": 1001952,
+    "stout_err_particles_max": 0,
+    "stout_glass_g_end": 429.5833,
+    "stout_out_g_end": 0.0,
+    "head_ml0": 91.314,
+    "head_glass_ml_end": 91.314,
+    "head_off_ml_end": 0.0,
+    "head_err_ml_max": 0.0
+   },
+   "lean_max_mm": 5.38550329208374,
+   "v_range": [
+    0.99200357496981,
+    1.0052593088968296
+   ],
+   "impulse_vs_momentum": {
+    "impulse_x": -4.217249188692174e-06,
+    "momentum_x_end": 4.217249188692174e-06
+   },
+   "plant": {
+    "w": 18.316989560623956,
+    "zeta": 0.4250231022393094,
+    "beta": 1.5407181225269262,
+    "measured": "run's own free_full_1.5, ring 13"
+   },
+   "control": {
+    "i_max_A": 1.6400527238221412,
+    "icmd_max_A": 1.6565005076845047,
+    "frames_current_limited": 0,
+    "us_max_N": 7.925340811267653,
+    "ipar_max_A": 0.009989425672834751,
+    "gains": {
+     "K": [
+      74.00419568184816,
+      -1295.0100293472397,
+      -44.86594617998763,
+      -150.00000000000102
+     ],
+     "Ks": [
+      -501.2156998123334,
+      11.923168259572924,
+      -6.34279425396823,
+      630.0044481464855
+     ]
+    }
+   }
+  },
+  {
+   "name": "ride_sharp30_slosh",
+   "kind": "ride",
+   "dx": 0.0015,
+   "model": "full",
+   "end": 4.0,
+   "road": "one sharp 30 mm bump",
+   "v0": 1.5,
+   "ctrl": "slosh",
+   "cells": 370386,
+   "particles": 1001952,
+   "mp": 4.2874640044544424e-07,
+   "steps": 2040,
+   "compile_s": 12.5,
+   "run_s": 179.3,
+   "ms_per_step": 87.9,
+   "its_per_step": 135.3,
+   "itmax": 301,
+   "resmax": 9.99963504000334e-06,
+   "nselmax": 146293,
+   "K": 621210,
+   "s_per_simulated_s": 45.2,
+   "spilled_g": 0.0,
+   "drops_max": 6,
+   "volume_kept": 1.0,
+   "head_spilled_ml": 1.65,
+   "head_ml": 91.3,
+   "head": {
+    "R32": 3.4e-05,
+    "phi_l": 0.27,
+    "gamma": 0.0442,
+    "E_inf": 0.0187,
+    "G0": 166.43999999999994,
+    "tau_y": 5.4149999999999965,
+    "Z": 0.18,
+    "lr": 0.004
+   },
+   "head_mass": true,
+   "books": {
+    "stout_particles": 1001952,
+    "stout_err_particles_max": 0,
+    "stout_glass_g_end": 429.5833,
+    "stout_out_g_end": 0.0,
+    "head_ml0": 91.314,
+    "head_glass_ml_end": 89.6601,
+    "head_off_ml_end": 1.6539,
+    "head_err_ml_max": 1.257285562553806e-08
+   },
+   "lean_max_mm": 14.240160942077637,
+   "v_range": [
+    1.2159114241970579,
+    1.5421048298268143
+   ],
+   "impulse_vs_momentum": {
+    "impulse_x": -0.00010452143446118792,
+    "momentum_x_end": 0.00010452143446118781
+   },
+   "plant": {
+    "w": 18.316989560623956,
+    "zeta": 0.4250231022393094,
+    "beta": 1.5407181225269262,
+    "measured": "run's own free_full_1.5, ring 13"
+   },
+   "control": {
+    "i_max_A": 2.9710527539748317,
+    "icmd_max_A": 45.52670679209491,
+    "frames_current_limited": 5,
+    "us_max_N": 0.0,
+    "ipar_max_A": 0.0,
+    "gains": {
+     "K": [
+      74.00419568184816,
+      -1295.0100293472397,
+      -44.86594617998763,
+      -150.00000000000102
+     ],
+     "Ks": [
+      -501.2156998123334,
+      11.923168259572924,
+      -6.34279425396823,
+      630.0044481464855
+     ]
+    }
+   }
+  }
+ ]
+}

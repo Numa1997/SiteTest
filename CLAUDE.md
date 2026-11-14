@@ -3,6 +3,12 @@
 Read this before any work in this repository. It records how Numa expects Claude to think and persist.
 Project facts (layout, where the site runs, boundaries) are in AGENTS.md.
 
+## Write the chat's state into the repository first
+- Each chat first writes its full state into the repository: the aim, what is live, what is left, every file and commit,
+  and the user's rules. A compaction then loses nothing, because the chat can reread its own file. (Numa, 14 November 2026.)
+- Put it in the notes folder of the work (for example `notes/fig12/handoff-jax/06-run8-state.md`), keep it current at every
+  step that changes what is live or what is left, commit and push it, and after a compaction reread it before anything else.
+
 ## Persist; never settle for "I can't find anything"
 - One empty search is a fact about that search, not about the world. Before saying something does not exist,
   look at least three ways: the skills, plugins and connectors already in the session; the open web; and every

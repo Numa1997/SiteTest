@@ -167,6 +167,9 @@ RULES = [
     (r'notes/fig11/panel/.+\.(cjs|py)', 'Project 05: an honesty test of the data panel (origin, replay, controller, picture, falsification, cost), or the masking and checked translations of its strings.', 'notes/fig11/panel/README.md'),
     (r'notes/fig11/panel/.+\.txt', 'Project 05: raw output of an honesty test or behaviour test of the data panel, 5 November 2026.', 'notes/fig11/panel/README.md'),
     (r'notes/skills/([a-z-]+)/SKILL\.md', lambda m: 'The revised skill ' + m.group(1) + ', to be uploaded to Numa\'s account (the synced copy in a session is read-only).', 'notes/fig11/panel/README.md'),
+    (r'notes/fig12/jax/run8-check/run[89]-check\.txt', 'Fig. 12 in JAX: the output of check_run.py for Kaggle run 8 (notebook version 8) or the kerb with road preview (version 9): every check, ALL PASS', 'docs/simulations/fig12-beer-slosh.md'),
+    (r'notes/fig12/jax/run8-check/run[89]-summary\.json', 'Fig. 12 in JAX: the summary.json that run 8 or version 9 wrote on Kaggle: each task\u2019s steps, run time, books, plant and leans', 'docs/simulations/fig12-beer-slosh.md'),
+    (r'notes/fig12/handoff-jax/06-run8-state\.md', 'Fig. 12 in JAX: the full state of the chat that ran run 8 (aim, what is live, what is left, commits, files, the user\u2019s rules); reread after a compaction', 'docs/simulations/fig12-beer-slosh.md'),
     (r'notes/fig(\d\d)/.+', lambda m: 'Fig. %d: a measuring script of the review, or its saved output.' % int(m.group(1)), 'docs/notes.md'),
     # root of the app
     (r'AGENTS\.md', "The maintainer's summary: ownership, layout, design rules, folds, the data pipeline, platform quirks.", 'docs/build-and-deploy.md'),

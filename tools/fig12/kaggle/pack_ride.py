@@ -8,7 +8,7 @@ The file (JSON): the cart's lists per stored frame, and four packed blocks (base
   drops int16 [sum nd][3]    the drops of stout in the air in each frame (nd[frame] of them), x, y, z in the glass's frame, steps of qd
   lumps int16 [sum nl][4]    the lumps of head in the air (nl[frame] of them): x, y, z in steps of qd, volume in steps of qv
 Run: python3 tools/fig12/kaggle/pack_ride.py <ride.npz> <summary.json> <task name> <data folder> <notebook version> <commit>
-(data folder: the folder under public/data/fig12/, e.g. 2026-11-13 for runs 6 and 7, 2026-11-14-run8 for run 8)"""
+(data folder: the folder under public/data/fig12/, e.g. 2026-11-13 for runs 6 and 7, 2026-11-13-run8 for run 8)"""
 import base64, hashlib, json, os, sys, zlib
 import numpy as np
 

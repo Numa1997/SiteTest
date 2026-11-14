@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-6321 files, 899.3 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+6325 files, 899.3 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -45,7 +45,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Working notes of project 07, the electron beam](#working-notes-of-project-07-the-electron-beam) | 52 |
 | [Working notes of the Rotor Pendula study](#working-notes-of-the-rotor-pendula-study) | 86 |
 | [Working notes of the Droplet Collection study](#working-notes-of-the-droplet-collection-study) | 123 |
-| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 645 |
+| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 649 |
 
 ## Repository root
 
@@ -53,7 +53,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 |---|---|---|---|
 | [`.gitignore`](../.gitignore) | 39 B | Files git leaves out: Python caches, node_modules, build output. | [files.md](files.md) |
 | [`AGENTS.md`](../AGENTS.md) | 15.9 kB | The maintainer's summary: ownership, layout, design rules, folds, the data pipeline, platform quirks. | [build-and-deploy.md](build-and-deploy.md) |
-| [`CLAUDE.md`](../CLAUDE.md) | 5.1 kB | How Numa expects an AI assistant to work on the project. | [build-and-deploy.md](build-and-deploy.md) |
+| [`CLAUDE.md`](../CLAUDE.md) | 5.6 kB | How Numa expects an AI assistant to work on the project. | [build-and-deploy.md](build-and-deploy.md) |
 | [`README.md`](../README.md) | 8.9 kB | Start here: what the project is, how the files fit together, where each one is explained. | [README.md](../README.md) |
 | [`index.html`](../index.html) | 85.3 kB | The home page: CV, research, simulation plates, index; also the build entry page. | [pages.md](pages.md) |
 | [`package.json`](../package.json) | 479 B | Build declaration: vite build; template dependencies. | [build-and-deploy.md](build-and-deploy.md) |
@@ -5668,7 +5668,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/i18n/ingest.py`](../tools/i18n/ingest.py) | 1.9 kB | Stores checked translations made outside the tables (page pieces, script strings, walkthrough prose). | [i18n.md](i18n.md) |
 | [`tools/i18n/package.json`](../tools/i18n/package.json) | 285 B | The parser wrap.cjs needs (acorn); npm install --prefix tools/i18n. | [i18n.md](i18n.md) |
 | [`tools/i18n/wrap.cjs`](../tools/i18n/wrap.cjs) | 3.7 kB | Wraps the reader-visible strings of a page's scripts in _t(), with a JavaScript parser (acorn). | [i18n.md](i18n.md) |
-| [`tools/inventory.py`](../tools/inventory.py) | 116.2 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
+| [`tools/inventory.py`](../tools/inventory.py) | 116.9 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
 | [`tools/kaggle/resonant-tunnelling/b1_first.py`](../tools/kaggle/resonant-tunnelling/b1_first.py) | 5.2 kB | Fig. 15: the first B1 measurement on three stored flat-wall runs, error split by source. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
 | [`tools/kaggle/resonant-tunnelling/b1_survey.py`](../tools/kaggle/resonant-tunnelling/b1_survey.py) | 2.2 kB | Fig. 15: the B1 check across every finite single-barrier run of Fig. 14. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
 | [`tools/kaggle/resonant-tunnelling/build_rt3d.py`](../tools/kaggle/resonant-tunnelling/build_rt3d.py) | 2.4 kB | Fig. 15, 3D: writes the Kaggle loader notebook for a commit, job set and shard. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
@@ -6470,7 +6470,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/fig12/check-8-6.md`](../notes/fig12/check-8-6.md) | 12.8 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/check.md`](../notes/fig12/check.md) | 24.2 kB | Fig. 12: the derivation checker's table of equations and numbers. | [notes.md](notes.md) |
 
-<details><summary>41 files: Fig. 12: a measuring script of the review, or its saved output.</summary>
+<details><summary>14 files: Fig. 12: a measuring script of the review, or its saved output.</summary>
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
@@ -6488,7 +6488,12 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/fig12/handoff-jax/03-model-and-numbers.md`](../notes/fig12/handoff-jax/03-model-and-numbers.md) | 5.5 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/handoff-jax/04-latest-findings.md`](../notes/fig12/handoff-jax/04-latest-findings.md) | 5.1 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/handoff-jax/05-run3-changes.md`](../notes/fig12/handoff-jax/05-run3-changes.md) | 11.1 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
-| [`notes/fig12/handoff-jax/06-run8-state.md`](../notes/fig12/handoff-jax/06-run8-state.md) | 4.3 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+
+</details>
+
+| File | Size | What it is | Explained in |
+|---|---|---|---|
+| [`notes/fig12/handoff-jax/06-run8-state.md`](../notes/fig12/handoff-jax/06-run8-state.md) | 10.7 kB | Fig. 12 in JAX: the full state of the chat that ran run 8 (aim, what is live, what is left, commits, files, the user’s rules); reread after a compaction | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`notes/fig12/handoff-jax/handoff-guinness-cart.md`](../notes/fig12/handoff-jax/handoff-guinness-cart.md) | 17.2 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/handoff-jax/portcheck.txt`](../notes/fig12/handoff-jax/portcheck.txt) | 1.4 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/jax/page-test.cjs`](../notes/fig12/jax/page-test.cjs) | 3.0 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
@@ -6497,6 +6502,15 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/fig12/jax/run2-data/rest.json`](../notes/fig12/jax/run2-data/rest.json) | 32.3 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/jax/run2-data/ride_resonant.json`](../notes/fig12/jax/run2-data/ride_resonant.json) | 1.02 MB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/jax/run2-data/summary.json`](../notes/fig12/jax/run2-data/summary.json) | 3.3 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig12/jax/run8-check/run8-check.txt`](../notes/fig12/jax/run8-check/run8-check.txt) | 7.6 kB | Fig. 12 in JAX: the output of check_run.py for Kaggle run 8 (notebook version 8) or the kerb with road preview (version 9): every check, ALL PASS | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`notes/fig12/jax/run8-check/run8-summary.json`](../notes/fig12/jax/run8-check/run8-summary.json) | 16.6 kB | Fig. 12 in JAX: the summary.json that run 8 or version 9 wrote on Kaggle: each task’s steps, run time, books, plant and leans | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`notes/fig12/jax/run8-check/run9-check.txt`](../notes/fig12/jax/run8-check/run9-check.txt) | 934 B | Fig. 12 in JAX: the output of check_run.py for Kaggle run 8 (notebook version 8) or the kerb with road preview (version 9): every check, ALL PASS | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`notes/fig12/jax/run8-check/run9-summary.json`](../notes/fig12/jax/run8-check/run9-summary.json) | 2.1 kB | Fig. 12 in JAX: the summary.json that run 8 or version 9 wrote on Kaggle: each task’s steps, run time, books, plant and leans | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+
+<details><summary>18 files: Fig. 12: a measuring script of the review, or its saved output.</summary>
+
+| File | Size | What it is | Explained in |
+|---|---|---|---|
 | [`notes/fig12/jax/shots.cjs`](../notes/fig12/jax/shots.cjs) | 1.2 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/jax/view-test.html`](../notes/fig12/jax/view-test.html) | 2.5 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig12/kaggle-v2/free_swing_v2_2026-11-12.json.gz`](../notes/fig12/kaggle-v2/free_swing_v2_2026-11-12.json.gz) | 706.7 kB | Fig. 12: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
