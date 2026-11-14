@@ -24,7 +24,7 @@ the page to run 10 (`DIR` in `public/scripts/guinness-jax-play.js`), `generation
 - "Don't loop too many times." Round 2 is the last reader round: fix its real errors and clear stops, then publish.
 
 ## What is live
-- phyeinusul.com plays run 8 (`public/data/fig12/2026-11-13-run8/`) with the old note. Unchanged by this session so far.
+- DONE 14 Nov 2026: main 16d9b23 serves the rewritten note and run 10; verified live in Chromium. Report: notes/fig12/note/REPORT.md.
 
 ## Progress
 - [x] STATE.md written and pushed
