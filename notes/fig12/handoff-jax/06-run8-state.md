@@ -51,7 +51,14 @@ not spill, and show with and without control side by side.
 - Notebook text for run 10 ready (scratch nb10.txt): commit 58eea68, BUDGET_S 2450, PLANT_F0 2.9152394311359466,
   PLANT_ZETA 0.4250231022393094 (run 8's measured swing). About 1,450 s of T4 time. Quota at 01:30 UTC: 4,840 s used,
   43,003 s reserved by running sessions, of 108,000 s; resets 21 November.
-- Saves at 01:25 and 01:32 UTC refused: "Maximum batch GPU session count of 2 reached" (other chats' sessions). Retry once an hour (the user), by the scheduled task trig_01A88VQufSbA2wwGEA8Jxsps, next 02:30 UTC; each refused retry schedules the next an hour later.
+- Saves at 01:25 and 01:32 UTC refused: "Maximum batch GPU session count of 2 reached". The coordinating chat (01:48 UTC,
+  relaying the owner) says both slots are Fig. 15's resonant-tunnelling shards 3 and 4; shards 5 and 6 launch at 03:50 UTC and
+  the batch ends about 07:00-08:00 UTC. So the retry (scheduled task trig_01A88VQufSbA2wwGEA8Jxsps) was moved from hourly to
+  08:00 UTC: check read-only that a slot is free and no Fig. 15 shard is running or queued, then launch; else every 30 minutes.
+  Never touch their kernels; do not message that chat.
+- The same message asks for no new control work (the five controllers are the control system) and, while waiting, a full
+  rewrite of the Fig. 12 lecture note to a high standard (every number printed by a script from the stored runs, derivations,
+  derivation-checker and referee agents). Asked the user to confirm before starting it (14 November, 01:50 UTC).
 - After it runs: download outputs to scratch run10/, check_run.py, pack into a new folder public/data/fig12/2026-11-14-run10/
   with run 8's speed-held rides and swings copied beside it (the page plays one folder), point DIR in guinness-jax-play.js at
   it, update generations.json, the note (sections 10 to 12: Tables 7 and 8, the beta caveat removed), the docs; test in
