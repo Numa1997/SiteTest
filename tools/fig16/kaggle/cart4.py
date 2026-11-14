@@ -11,7 +11,7 @@ road, limited by the current limit, the battery's voltage against back-EMF, and 
 Equations of motion (Newton for the deck's centre and Euler for its pitch; derived in notes/fig16/model.md, section 4):
     M_x x''      = F_d - c_x x' + sum_i (-N_i z_a'(x_i)) + F_x^stout
     M_s z_c''    = F_sf + F_sr - M_s g + F_z^stout
-    J theta''    = a_f F_sf - a_r F_sr + d (M_s x'' - F_x^stout) - h_s F_x^stout
+    J theta''    = a_f F_sf - a_r F_sr + d (M_s x'' - F_x^stout) - h_g F_x^stout
     m_i z_i''    = -F_si + N_i - m_i g
     F_si = -k (s_i - L_0) - c s_i' + u_i + F_stop(s_i),  s_f = z_c + a_f sin(theta) - z_f,  s_r = z_c - a_r sin(theta) - z_r
     N_i  = max(0, k_t (z_a(x_i) - z_i) + c_t (z_a'(x_i) x' - z_i'))
@@ -22,7 +22,9 @@ the arms act there); h_s: height of the stout's centre above the deck's centre.
 The glass, clamped to the deck, accelerates with the point S where the stout's first mode lives (height h_g above the deck's centre):
     a_S = (x'' - h_g theta'' cos(theta) - h_g theta'^2 sin(theta),  z_c'' - h_g theta'' sin(theta) + h_g theta'^2 cos(theta))
 and the stout, computed in the glass's frame (axes e_x = (cos theta, sin theta), e_z = (-sin theta, cos theta)), feels the uniform
-effective gravity g_eff = g - a_S resolved on those axes:
+effective gravity g_eff = g - a_S resolved on those axes (the stout's moving push F^stout acts on the deck at the same point S, so the
+two-way coupling keeps action and reaction at one height; diagnostics 14 Nov 2026: with the push at the stout's centre of mass and the
+swing driven at S the passive cart gained energy and the swing grew without bound):
     g_x = -(g + a_Sz) sin(theta) - a_Sx cos(theta),   g_z = -(g + a_Sz) cos(theta) + a_Sx sin(theta)
 This is what Fig. 12's solver takes each step (Stout.step(s, dt, gx, gz)); the fluid code is unchanged. Not included: the parts of the
 rotating frame's forces that vary across the glass (theta'' r and theta'^2 r about S, Coriolis); at the pitch rates of these rides
@@ -207,7 +209,7 @@ class Cart4:
         Fm = jnp.clip(P["nm"] * P["b"] * c["i"], -P["mu"] * Nr, P["mu"] * Nr)
         ax = (Fm - P["cx"] * c["v"] - Nf * saf - Nr * sar + Fx) / S["Mx"]
         azc = (Fsf + Fsr - S["Ms"] * G0 + Fz) / S["Ms"]
-        al = (af * ct_ * Fsf - ar * ct_ * Fsr + P["d"] * (S["Ms"] * ax - Fx) - P["hs"] * Fx) / S["J"]
+        al = (af * ct_ * Fsf - ar * ct_ * Fsr + P["d"] * (S["Ms"] * ax - Fx) - P["hg"] * Fx) / S["J"]
         azf = (-Fsf + Nf - P["mf"] * G0) / P["mf"]; azr = (-Fsr + Nr - P["mr"] * G0) / P["mr"]
         hg = P["hg"]
         aSx = ax - hg * al * ct_ - hg * c["om"] ** 2 * st; aSz = azc - hg * al * st + hg * c["om"] ** 2 * ct_

@@ -11,8 +11,8 @@ import slosh_model as SM, spill as SP
 F64 = jnp.float64
 
 
-def ride(cart, end, ml, DT=0.002):
-    m, md, w, be, ga, rg, damp = SM._setup(SM.fitted())
+def ride(cart, end, ml, DT=0.002, model=None, push=1.0):
+    m, md, w, be, ga, rg, damp = SM._setup(dict(SM.fitted(), **(model or {})))
     c0 = cart.init(0.5, ml); nsub = int(round(DT / 1e-4)); hc = DT / nsub; n = int(round(end / DT)); N = m["N"]
 
     def body(carry, _):
@@ -25,7 +25,7 @@ def ride(cart, end, ml, DT=0.002):
             qd_ = qd_ + hc * qdd; q_ = q_ + hc * qd_
             return (c_, q_, qd_)
         c, q, qd = lax.fori_loop(0, nsub, sub, (c, q, qd))
-        Pn = jnp.sum(ga * qd); Fn = -(Pn - Pm) / DT
+        Pn = jnp.sum(ga * qd); Fn = -(Pn - Pm) / DT * push
         out = dict(t=c["t"], x=c["x"], v=c["v"], tilt=2 * jnp.sum(rg * q), wall=jnp.sum(q), th=c["th"], ax=-c["gx"], azb=-c["gz"] - SM.G,
                    i=c["i"], uf=c["uf"], ur=c["ur"], sat=c["sat"], stop=jnp.maximum(c["stopf"], c["stopr"]), Nf=c["Nf"], Nr=c["Nr"])
         return (c, q, qd, Fn, Pn), out

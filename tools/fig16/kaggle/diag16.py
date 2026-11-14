@@ -19,9 +19,9 @@ ML = SM.liquid_mass()
 RIDES = [("kerb", "one sharp 30 mm bump", 1.5, 4.0), ("five bumps", "five 20 mm bumps in step with the swing", 1.0, 8.0), ("25 mm bump", "one 25 mm bump", 1.0, 8.0)]
 
 
-def ride_full(cart, end, DT=0.002):
+def ride_full(cart, end, DT=0.002, model=None, push=1.0):
     """modal4.ride, keeping every cart signal needed to diagnose."""
-    m, md, w, be, ga, rg, damp = SM._setup(SM.fitted())
+    m, md, w, be, ga, rg, damp = SM._setup(dict(SM.fitted(), **(model or {})))
     c0 = cart.init(0.5, ML); nsub = int(round(DT / 1e-4)); hc = DT / nsub; n = int(round(end / DT))
     def body(carry, _):
         c, q, qd, F, Pm = carry
@@ -31,7 +31,7 @@ def ride_full(cart, end, DT=0.002):
             qdd = -damp(qd_) - w * w * (-c_["gz"] / SM.G) * q_ + be * c_["gx"]
             qd_ = qd_ + hc * qdd; return (c_, q_ + hc * qd_, qd_)
         c, q, qd = lax.fori_loop(0, nsub, sub, (c, q, qd))
-        Pn = jnp.sum(ga * qd); Fn = -(Pn - Pm) / DT
+        Pn = jnp.sum(ga * qd); Fn = -(Pn - Pm) / DT * push
         out = {k: c[k] for k in ("t", "x", "v", "zc", "th", "om", "zf", "zr", "i", "icmd", "uf", "ur", "Nf", "Nr", "gx", "gz", "stopf", "stopr", "zaf", "zar", "ax", "azc", "al")}
         out.update(wall=jnp.sum(q), tilt=2 * jnp.sum(rg * q), qhat=c["qh"][0], azb=-c["gz"] - SM.G)
         out["ax_glass"] = -c["gx"]
@@ -44,8 +44,9 @@ def ride_full(cart, end, DT=0.002):
 res = {}; hist = {}
 for short, road, v0, end in RIDES:
     rt = road_table(ROADS[road], Rw=C4.CART4["Rw"], xmax=0.5 + v0 * end * 1.3 + 2)
-    for ctrl in ("full", "off"):
-        T1 = time.time(); cart = C4.Cart4({}, rt, v0, ctrl); o = ride_full(cart, end)
+    for ctrl, var, model, push in (("full", "measured push", None, 1.0), ("off", "measured push", None, 1.0), ("off", "no push", None, 0.0),
+                                   ("off", "theory push", dict(gamma_scale=1.0), 1.0), ("full", "theory push", dict(gamma_scale=1.0), 1.0)):
+        T1 = time.time(); cart = C4.Cart4({}, rt, v0, ctrl); o = ride_full(cart, end, model=model, push=push); ctrl_ = ctrl; ctrl = f"{ctrl_}, {var}"
         S = cart.S; sf = o["zc"] + C4.CART4["af"] * np.sin(o["th"]) - o["zf"] - S["sf0"]; sr = o["zc"] - C4.CART4["ar"] * np.sin(o["th"]) - o["zr"] - S["sr0"]
         o["ax"] = o["ax_glass"]
         V = __import__("spill").spill(o, WS)
@@ -58,13 +59,13 @@ for short, road, v0, end in RIDES:
                  finite=bool(np.all(np.isfinite(o["wall"]))), seconds=round(time.time() - T1, 1),
                  first_bad_t=float(o["t"][np.argmax(np.abs(o["wall"]) > 0.03)]) if (np.abs(o["wall"]) > 0.03).any() else None)
         res[f"{short} / {ctrl}"] = r; hist[f"{short}/{ctrl}"] = o
-        np.savez_compressed(os.path.join(OUT, f"{short.replace(' ', '_')}_{ctrl}.npz"), **o)
+        np.savez_compressed(os.path.join(OUT, f"{short}_{ctrl}".replace(' ', '_').replace(',', '') + ".npz"), **o)
         print(f"{short:10s} {ctrl:4s}", json.dumps(r), flush=True)
 json.dump(dict(rides=res, cart=C4.CART4, statics={k: float(v) for k, v in C4.statics(C4.CART4, ML).items()}), open(os.path.join(OUT, "diag.json"), "w"), indent=1)
 
 import matplotlib; matplotlib.use("Agg"); import matplotlib.pyplot as plt
-keys = ["kerb/full", "kerb/off"]
-fig, ax = plt.subplots(6, 2, figsize=(14, 16), sharex="col")
+keys = ["kerb/off, measured push", "kerb/off, theory push", "kerb/off, no push", "kerb/full, theory push"]
+fig, ax = plt.subplots(6, 4, figsize=(24, 16), sharex="col")
 for j, k in enumerate(keys):
     o = hist[k]; t = o["t"]; lim = (0.4, 2.5)
     ax[0, j].plot(t, np.degrees(o["th"] - o["th"][0])); ax[0, j].set_ylabel("deck pitch, deg")
