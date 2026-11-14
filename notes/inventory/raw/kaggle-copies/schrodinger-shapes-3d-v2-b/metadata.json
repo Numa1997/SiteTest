@@ -1,0 +1,17 @@
+{
+ "id": 144698873,
+ "ref": "numakoudsie/schrodinger-shapes-3d-v2-b",
+ "title": "schrodinger-shapes-3d-v2-b",
+ "author": "Numa Koudsie",
+ "slug": "schrodinger-shapes-3d-v2-b",
+ "lastRunTime": "2026-11-11T13:31:30.129083300Z",
+ "language": "python",
+ "kernelType": "notebook",
+ "isPrivate": true,
+ "enableGpu": false,
+ "enableInternet": true,
+ "enableTpu": false,
+ "currentVersionNumber": 2,
+ "dockerImage": "gcr.io/kaggle-images/python@sha256:0717e81990be591f8c5f98f033d29ab23e9ffde057e5b3a6bd4371f93969e962",
+ "machineShape": "None"
+}

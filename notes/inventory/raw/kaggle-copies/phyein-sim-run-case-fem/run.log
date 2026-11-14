@@ -1,0 +1,116 @@
+[{"stream_name":"stdout","time":1.167613006,"data":"cores: 4 | python: 3.13.18 | machine: Linux-6.18.55+-x86_64-with-glibc2.39\n"}
+,{"stream_name":"stdout","time":1.167669268,"data":"$ grep -m1 'model name' /proc/cpuinfo; free -g | sed -n 2p\n"}
+,{"stream_name":"stdout","time":1.188490135,"data":"model name\t: Intel(R) Xeon(R) CPU @ 2.20GHz\n"}
+,{"stream_name":"stdout","time":1.214716006,"data":"Mem:              31           0          26           0           4          30\n"}
+,{"stream_name":"stdout","time":1.2170854389999999,"data":"$ rm -rf /kaggle/tmp/phyein-sim \u0026\u0026 git clone -q https://github.com/numa1997/phyein-sim /kaggle/tmp/phyein-sim \u0026\u0026 cd /kaggle/tmp/phyein-sim \u0026\u0026 git checkout -q main \u0026\u0026 git rev-parse HEAD \u003e /kaggle/working/commit.txt\n"}
+,{"stream_name":"stdout","time":2.260589402,"data":"$ bash /kaggle/tmp/phyein-sim/kaggle/bootstrap.sh fem 2\u003e\u00261 | tail -5\n"}
+,{"stream_name":"stdout","time":132.12308611,"data":"FI_PROVIDER=tcp\n"}
+,{"stream_name":"stdout","time":132.123139324,"data":"setting libfabric environment variables for conda-build\n"}
+,{"stream_name":"stdout","time":132.123146238,"data":"FI_PROVIDER=tcp\n"}
+,{"stream_name":"stdout","time":132.123151944,"data":"setting openmpi environment variables for conda-build\n"}
+,{"stream_name":"stdout","time":132.123157534,"data":"bootstrap fem: 130 s. Next: source /kaggle/tmp/phyein-sim/kaggle/env.sh fem\n"}
+,{"stream_name":"stdout","time":132.12376653,"data":"$ source /kaggle/tmp/phyein-sim/kaggle/env.sh fem; export OUT=/kaggle/working/run0 NP=4; cd /kaggle/tmp \u0026\u0026 fem_run.sh /kaggle/tmp/phyein-sim/cases/fem/beam  2\u003e\u00261 | tail -4\n"}
+,{"stream_name":"stdout","time":151.486673393,"data":"axial      mode 1: FEM  2589.85 Hz, beam theory  2586.10 Hz, +0.15 %\n"}
+,{"stream_name":"stdout","time":151.486733939,"data":"CalculiX C3D20 frequencies (Hz): 66.9, 66.9, 416.4, 416.4, 1152.6, 1152.6, 1475.4, 2222.2 | max difference to FEniCSx 0.02 %\n"}
+,{"stream_name":"stdout","time":151.486743167,"data":"beam modes -\u003e PASS\n"}
+,{"stream_name":"stdout","time":151.486749211,"data":"run time: 17 s  (beam defaults)\n"}
+,{"stream_name":"stdout","time":151.488830541,"data":"[\n"}
+,{"stream_name":"stdout","time":151.488859832,"data":" {\n"}
+,{"stream_name":"stdout","time":151.488867387,"data":"  \"set\": \"\",\n"}
+,{"stream_name":"stdout","time":151.4888743,"data":"  \"exit\": 0,\n"}
+,{"stream_name":"stdout","time":151.488879991,"data":"  \"wall_s\": 19.4,\n"}
+,{"stream_name":"stdout","time":151.488886568,"data":"  \"result\": {\n"}
+,{"stream_name":"stdout","time":151.488892781,"data":"   \"parameters\": {\n"}
+,{"stream_name":"stdout","time":151.48889932,"data":"    \"L\": 0.5,\n"}
+,{"stream_name":"stdout","time":151.488905966,"data":"    \"b\": 0.02,\n"}
+,{"stream_name":"stdout","time":151.488911699,"data":"    \"h\": 0.02,\n"}
+,{"stream_name":"stdout","time":151.488917283,"data":"    \"E\": 210000000000.0,\n"}
+,{"stream_name":"stdout","time":151.488949421,"data":"    \"nu\": 0.3,\n"}
+,{"stream_name":"stdout","time":151.488955749,"data":"    \"rho\": 7850.0,\n"}
+,{"stream_name":"stdout","time":151.48896124,"data":"    \"nx\": 40,\n"}
+,{"stream_name":"stdout","time":151.488966608,"data":"    \"ny\": 4,\n"}
+,{"stream_name":"stdout","time":151.488971987,"data":"    \"nz\": 4,\n"}
+,{"stream_name":"stdout","time":151.488977469,"data":"    \"nmodes\": 12,\n"}
+,{"stream_name":"stdout","time":151.488988536,"data":"    \"tol\": 0.02,\n"}
+,{"stream_name":"stdout","time":151.488992444,"data":"    \"ccx\": 1\n"}
+,{"stream_name":"stdout","time":151.488996176,"data":"   },\n"}
+,{"stream_name":"stdout","time":151.488999935,"data":"   \"modes\": [\n"}
+,{"stream_name":"stdout","time":151.489014672,"data":"    {\n"}
+,{"stream_name":"stdout","time":151.489036371,"data":"     \"kind\": \"bending-y\",\n"}
+,{"stream_name":"stdout","time":151.489042239,"data":"     \"mode\": 1,\n"}
+,{"stream_name":"stdout","time":151.489047464,"data":"     \"f_fem_Hz\": 66.93023096597773,\n"}
+,{"stream_name":"stdout","time":151.48905239,"data":"     \"f_euler_bernoulli_Hz\": 66.84132978615898,\n"}
+,{"stream_name":"stdout","time":151.489058257,"data":"     \"rel_error\": 0.0013300330813759143\n"}
+,{"stream_name":"stdout","time":151.489063207,"data":"    },\n"}
+,{"stream_name":"stdout","time":151.489068081,"data":"    {\n"}
+,{"stream_name":"stdout","time":151.48907232,"data":"     \"kind\": \"bending-y\",\n"}
+,{"stream_name":"stdout","time":151.489076724,"data":"     \"mode\": 2,\n"}
+,{"stream_name":"stdout","time":151.489081071,"data":"     \"f_fem_Hz\": 416.35618752142483,\n"}
+,{"stream_name":"stdout","time":151.489085681,"data":"     \"f_euler_bernoulli_Hz\": 418.88744360593654,\n"}
+,{"stream_name":"stdout","time":151.489090224,"data":"     \"rel_error\": -0.006042807258011207\n"}
+,{"stream_name":"stdout","time":151.489094674,"data":"    },\n"}
+,{"stream_name":"stdout","time":151.489098796,"data":"    {\n"}
+,{"stream_name":"stdout","time":151.489103069,"data":"     \"kind\": \"bending-y\",\n"}
+,{"stream_name":"stdout","time":151.489107378,"data":"     \"mode\": 3,\n"}
+,{"stream_name":"stdout","time":151.489111841,"data":"     \"f_fem_Hz\": 1152.3926520955558,\n"}
+,{"stream_name":"stdout","time":151.489121129,"data":"     \"f_euler_bernoulli_Hz\": 1172.8969764933768,\n"}
+,{"stream_name":"stdout","time":151.489125459,"data":"     \"rel_error\": -0.01748177786178884\n"}
+,{"stream_name":"stdout","time":151.489143208,"data":"    },\n"}
+,{"stream_name":"stdout","time":151.4891483,"data":"    {\n"}
+,{"stream_name":"stdout","time":151.489153535,"data":"     \"kind\": \"bending-z\",\n"}
+,{"stream_name":"stdout","time":151.489158992,"data":"     \"mode\": 1,\n"}
+,{"stream_name":"stdout","time":151.48916407,"data":"     \"f_fem_Hz\": 66.93023142207139,\n"}
+,{"stream_name":"stdout","time":151.489168642,"data":"     \"f_euler_bernoulli_Hz\": 66.84132978615898,\n"}
+,{"stream_name":"stdout","time":151.489173058,"data":"     \"rel_error\": 0.001330039904903435\n"}
+,{"stream_name":"stdout","time":151.489177539,"data":"    },\n"}
+,{"stream_name":"stdout","time":151.489181697,"data":"    {\n"}
+,{"stream_name":"stdout","time":151.489186199,"data":"     \"kind\": \"bending-z\",\n"}
+,{"stream_name":"stdout","time":151.489190538,"data":"     \"mode\": 2,\n"}
+,{"stream_name":"stdout","time":151.489194939,"data":"     \"f_fem_Hz\": 416.35618756093555,\n"}
+,{"stream_name":"stdout","time":151.489199282,"data":"     \"f_euler_bernoulli_Hz\": 418.88744360593654,\n"}
+,{"stream_name":"stdout","time":151.489203684,"data":"     \"rel_error\": -0.006042807163688213\n"}
+,{"stream_name":"stdout","time":151.489208061,"data":"    },\n"}
+,{"stream_name":"stdout","time":151.489212177,"data":"    {\n"}
+,{"stream_name":"stdout","time":151.489216799,"data":"     \"kind\": \"bending-z\",\n"}
+,{"stream_name":"stdout","time":151.489243456,"data":"     \"mode\": 3,\n"}
+,{"stream_name":"stdout","time":151.48924879,"data":"     \"f_fem_Hz\": 1152.392652110443,\n"}
+,{"stream_name":"stdout","time":151.489254231,"data":"     \"f_euler_bernoulli_Hz\": 1172.8969764933768,\n"}
+,{"stream_name":"stdout","time":151.489259507,"data":"     \"rel_error\": -0.017481777849096214\n"}
+,{"stream_name":"stdout","time":151.489271247,"data":"    },\n"}
+,{"stream_name":"stdout","time":151.489275732,"data":"    {\n"}
+,{"stream_name":"stdout","time":151.489279871,"data":"     \"kind\": \"axial\",\n"}
+,{"stream_name":"stdout","time":151.48928423,"data":"     \"mode\": 1,\n"}
+,{"stream_name":"stdout","time":151.489288562,"data":"     \"f_fem_Hz\": 2589.851060972368,\n"}
+,{"stream_name":"stdout","time":151.489292995,"data":"     \"f_euler_bernoulli_Hz\": 2586.0970765174256,\n"}
+,{"stream_name":"stdout","time":151.489297469,"data":"     \"rel_error\": 0.001451602296383081\n"}
+,{"stream_name":"stdout","time":151.489301854,"data":"    }\n"}
+,{"stream_name":"stdout","time":151.489305997,"data":"   ],\n"}
+,{"stream_name":"stdout","time":151.489310173,"data":"   \"reference\": \"Euler-Bernoulli cantilever, beta_n L = 1.8751, 4.6941\",\n"}
+,{"stream_name":"stdout","time":151.489314925,"data":"   \"tolerance\": 0.02,\n"}
+,{"stream_name":"stdout","time":151.489319448,"data":"   \"max_error_modes_1_2\": 0.006042807258011207,\n"}
+,{"stream_name":"stdout","time":151.489323856,"data":"   \"pass\": true,\n"}
+,{"stream_name":"stdout","time":151.48932838,"data":"   \"calculix_Hz\": [\n"}
+,{"stream_name":"stdout","time":151.489332601,"data":"    66.94064,\n"}
+,{"stream_name":"stdout","time":151.48933665,"data":"    66.94064,\n"}
+,{"stream_name":"stdout","time":151.489340921,"data":"    416.4264,\n"}
+,{"stream_name":"stdout","time":151.489344896,"data":"    416.4264,\n"}
+,{"stream_name":"stdout","time":151.489349,"data":"    1152.601,\n"}
+,{"stream_name":"stdout","time":151.489353134,"data":"    1152.601,\n"}
+,{"stream_name":"stdout","time":151.489357638,"data":"    1475.373,\n"}
+,{"stream_name":"stdout","time":151.489361997,"data":"    2222.178,\n"}
+,{"stream_name":"stdout","time":151.48936607,"data":"    2222.178,\n"}
+,{"stream_name":"stdout","time":151.4893702,"data":"    2589.977,\n"}
+,{"stream_name":"stdout","time":151.489374334,"data":"    3600.234,\n"}
+,{"stream_name":"stdout","time":151.489378321,"data":"    3600.234\n"}
+,{"stream_name":"stdout","time":151.489382496,"data":"   ],\n"}
+,{"stream_name":"stdout","time":151.489386643,"data":"   \"calculix_vs_fem_max_rel\": 0.0002056332124167337\n"}
+,{"stream_name":"stdout","time":151.489391338,"data":"  }\n"}
+,{"stream_name":"stdout","time":151.48939539,"data":" }\n"}
+,{"stream_name":"stdout","time":151.489399515,"data":"]\n"}
+,{"stream_name":"stderr","time":154.83299371,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":154.833036169,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":155.40047212,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":155.400555051,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":157.769003392,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":159.291483384,"data":"[NbConvertApp] Writing 286027 bytes to __results__.html\n"}
+]

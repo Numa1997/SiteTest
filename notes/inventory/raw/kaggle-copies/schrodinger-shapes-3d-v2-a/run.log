@@ -1,0 +1,233 @@
+[{"stream_name":"stderr","time":8.981958131,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":8.982011890999999,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":8.982019170000001,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":8.982023936000001,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stderr","time":9.734137772,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":9.734177471,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":9.734185084,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":9.734191116,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stdout","time":11.555619416,"data":"import subprocess, sys, time, json, os\n"}
+,{"stream_name":"stdout","time":11.555658684,"data":"T0 = time.time()\n"}
+,{"stream_name":"stdout","time":11.555664112,"data":"LOG = open(\"/kaggle/working/progress.log\", \"a\")\n"}
+,{"stream_name":"stdout","time":11.555668555,"data":"def say(*a):\n"}
+,{"stream_name":"stdout","time":11.555674158,"data":"    s = f\"[{time.time()-T0:7.1f} s] \" + \" \".join(str(x) for x in a); print(s, flush=True); LOG.write(s + \"\\n\"); LOG.flush()\n"}
+,{"stream_name":"stdout","time":11.555684515,"data":"if not globals().get(\"CPU\"): print(subprocess.run([\"nvidia-smi\", \"--query-gpu=name,memory.total,driver_version\", \"--format=csv\"], capture_output=True, text=True).stdout)\n"}
+,{"stream_name":"stdout","time":11.555688178,"data":"def backend():  # ask a separate Python process, so this process imports jax only once\n"}
+,{"stream_name":"stdout","time":11.555691126,"data":"    r = subprocess.run([sys.executable, \"-c\", \"import jax; print(jax.default_backend())\"], capture_output=True, text=True)\n"}
+,{"stream_name":"stdout","time":11.555694111,"data":"    return r.stdout.strip().splitlines()[-1] if r.stdout.strip() else \"none: \" + r.stderr[-300:]\n"}
+,{"stream_name":"stdout","time":11.555697024,"data":"b = backend(); say(\"jax backend before install:\", b)\n"}
+,{"stream_name":"stdout","time":11.555699743,"data":"if b != \"gpu\" and not globals().get(\"CPU\"):\n"}
+,{"stream_name":"stdout","time":11.555702516,"data":"    say(\"installing jax[cuda12]\")\n"}
+,{"stream_name":"stdout","time":11.555705171,"data":"    subprocess.run([sys.executable, \"-m\", \"pip\", \"install\", \"-q\", \"-U\", \"jax[cuda12]\"], check=True)\n"}
+,{"stream_name":"stdout","time":11.555708369,"data":"    say(\"jax backend after install:\", backend())\n"}
+,{"stream_name":"stdout","time":11.555711076,"data":"import jax\n"}
+,{"stream_name":"stdout","time":11.555713703,"data":"jax.config.update(\"jax_enable_x64\", True)\n"}
+,{"stream_name":"stdout","time":11.55571639,"data":"DEV = jax.devices()\n"}
+,{"stream_name":"stdout","time":11.55571914,"data":"say(\"devices:\", DEV, \"jax\", jax.__version__)\n"}
+,{"stream_name":"stdout","time":11.555721955,"data":"assert globals().get(\"CPU\") or any(d.platform == \"gpu\" for d in DEV), \"NO GPU: stopping so no quota is wasted on a CPU fallback\"\n"}
+,{"stream_name":"stdout","time":11.555725009,"data":"\n"}
+,{"stream_name":"stdout","time":11.555727505,"data":"exec(open(\"solver3d.py\").read())\n"}
+,{"stream_name":"stdout","time":11.555730293,"data":"say(\"solver3d.py and shapes3d_run.py from the repository, as fetched by the loader cell\")\n"}
+,{"stream_name":"stdout","time":11.555746263,"data":"\n"}
+,{"stream_name":"stdout","time":11.555749064,"data":"import threading, queue, datetime, hashlib, struct, zlib, traceback, numpy as np\n"}
+,{"stream_name":"stdout","time":11.55575196,"data":"GEN = datetime.datetime.utcnow().strftime(\"%Y-%m-%d\"); OUTD = f\"/kaggle/working/{GEN}/shapes3d\"\n"}
+,{"stream_name":"stdout","time":11.555754927,"data":"N, L, DT, NF = 128, 64.0, 0.01, 48\n"}
+,{"stream_name":"stdout","time":11.555757634,"data":"LIMIT_S = 8400 if not globals().get(\"CPU\") else 36000                                              # no new run starts after this many seconds\n"}
+,{"stream_name":"stdout","time":11.555760557,"data":"WAVE = (slice(16, 112), slice(32, 96), slice(32, 96))       # x -24..24, y and z -16..16 at 0.5 a\n"}
+,{"stream_name":"stdout","time":11.555763304,"data":"HARD = 1e6                                                  # the grid's name for the hard wall; the solver uses HARD_V\n"}
+,{"stream_name":"stdout","time":11.555766151,"data":"Es = [0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5]\n"}
+,{"stream_name":"stdout","time":11.555770035,"data":"V13 = [-4.0, -2.0, -1.0, 0.0, 0.5, 1.0, 1.5, 2.0, 3.0, 4.0, 6.0, 8.0, HARD]\n"}
+,{"stream_name":"stdout","time":11.55577279,"data":"GROUPS = dict(\n"}
+,{"stream_name":"stdout","time":11.555775371,"data":"    sphere=dict(Vs=[-4.0, -2.0, -1.0, HARD], sizes=[2.0, 3.0, 4.0, 5.0, 6.0]),\n"}
+,{"stream_name":"stdout","time":11.555778133,"data":"    coin=dict(Vs=V13, sizes=[2.0, 3.0, 4.0, 5.0, 6.0]),\n"}
+,{"stream_name":"stdout","time":11.555780818,"data":"    tube=dict(Vs=V13, sizes=[2.0, 3.0, 4.0, 5.0, 6.0]),\n"}
+,{"stream_name":"stdout","time":11.555783423,"data":"    soff=dict(Vs=[-2.0, 2.0, 6.0, HARD], sizes=[4.0]),\n"}
+,{"stream_name":"stdout","time":11.555786059999999,"data":"    sslab=dict(Vs=[-2.0, 2.0, 6.0, HARD], sizes=[1.0]),\n"}
+,{"stream_name":"stdout","time":11.555791495,"data":"    spil=dict(Vs=[-2.0, 2.0, 6.0, HARD], sizes=[4.0]))\n"}
+,{"stream_name":"stdout","time":11.555794164,"data":"def nsteps(shape, i, j):\n"}
+,{"stream_name":"stdout","time":11.555796697,"data":"    tr = SH_TRAVEL if shape in SHELLS else 30.0\n"}
+,{"stream_name":"stdout","time":11.555799352,"data":"    return round(tr / np.sqrt(2 * Es[i]) / DT) * (HARD_SUB if GROUPS[shape][\"Vs\"][j] \u003e= HARD else 1)\n"}
+,{"stream_name":"stdout","time":11.555802921,"data":"jobs = [(sh, i, j, k) for sh, G in GROUPS.items() for i in range(len(Es)) for j in range(len(G[\"Vs\"])) for k in range(len(G[\"sizes\"]))]\n"}
+,{"stream_name":"stdout","time":11.555805919,"data":"if globals().get(\"JOBSEL\") == \"hard_and_shells\":           # version 2: only the runs whose start wave was wrong in version 1\n"}
+,{"stream_name":"stdout","time":11.555808846,"data":"    jobs = [t for t in jobs if t[0] in SHELLS or GROUPS[t[0]][\"Vs\"][t[2]] \u003e= HARD]\n"}
+,{"stream_name":"stdout","time":11.55581177,"data":"jobs.sort(key=lambda t: -nsteps(t[0], t[1], t[2]))          # long runs first\n"}
+,{"stream_name":"stdout","time":11.55581456,"data":"if globals().get(\"SHARD\"):                                  # (i, n): this notebook takes every n-th run, starting at the i-th\n"}
+,{"stream_name":"stdout","time":11.555817345,"data":"    jobs = jobs[SHARD[0]::SHARD[1]]\n"}
+,{"stream_name":"stdout","time":11.555819875,"data":"for sh in GROUPS: os.makedirs(f\"{OUTD}/{sh}\", exist_ok=True)\n"}
+,{"stream_name":"stdout","time":11.555822538,"data":"total_steps = sum(nsteps(sh, i, j) for sh, i, j, k in jobs)\n"}
+,{"stream_name":"stdout","time":11.555825223,"data":"say(f\"{len(jobs)} runs; cells x steps x time per cell-step = {N**3} x {total_steps} x 1.2e-9 s = {N**3*total_steps*1.2e-9/3600:.2f} GPU hours \"\n"}
+,{"stream_name":"stdout","time":11.555838941,"data":"    f\"(1.2 ns measured on a T4 over the 405 sphere runs of 2026-11-12); on two GPUs about {N**3*total_steps*1.2e-9/2/60:.0f} min\")\n"}
+,{"stream_name":"stdout","time":11.555842197,"data":"Q = queue.Queue(); [Q.put(j) for j in jobs]\n"}
+,{"stream_name":"stdout","time":11.555844844,"data":"INDEX, DONE, LOCK, ERR, SKIPPED = [], [0], threading.Lock(), [], [0]\n"}
+,{"stream_name":"stdout","time":11.555847615,"data":"JL = open(OUTD + \"/runs.jsonl\", \"a\")\n"}
+,{"stream_name":"stdout","time":11.555850313,"data":"def pack(head, body_bytes, magic):\n"}
+,{"stream_name":"stdout","time":11.555852846,"data":"    hb = json.dumps(head, separators=(\",\", \":\")).encode()\n"}
+,{"stream_name":"stdout","time":11.555855587,"data":"    return magic + struct.pack(\"\u003cI\", len(hb)) + hb + zlib.compress(body_bytes, 9)\n"}
+,{"stream_name":"stdout","time":11.555858383,"data":"def one(g, dev, sh, i, j, k):\n"}
+,{"stream_name":"stdout","time":11.555860933,"data":"    G = GROUPS[sh]; V0 = G[\"Vs\"][j]; size = G[\"sizes\"][k]; hard = V0 \u003e= HARD\n"}
+,{"stream_name":"stdout","time":11.555864281,"data":"    r = run3(g, sh, Es[i], V0, size, hard=hard, dt=DT, nframes=NF, wave=WAVE if sh == \"spil\" else None)\n"}
+,{"stream_name":"stdout","time":11.555867122,"data":"    cv = np.round(r[\"curves\"], 6).tolist(); pk = [float(p) for p in r[\"peaks\"]]\n"}
+,{"stream_name":"stdout","time":11.555869934,"data":"    head = dict(E=Es[i], V0=V0, R=size, size=size, shape=sh, hard=hard, i=i, j=j, k=k, n=NF, nx=N, nr=N // 2, x0=-L / 2, step=L / N,\n"}
+,{"stream_name":"stdout","time":11.555872655,"data":"                steps=int(r[\"steps\"]), dt=r[\"dt\"], frame_dt=r[\"frame_dt\"], wall=round(float(r[\"wall\"]), 2), device=str(dev),\n"}
+,{"stream_name":"stdout","time":11.555875741,"data":"                wave=\"shell\" if sh in SHELLS else \"packet\", peaks=[round(p / pk[0], 6) for p in pk], curves=cv)\n"}
+,{"stream_name":"stdout","time":11.555878564,"data":"    if hard: head[\"hard_V\"] = HARD_V\n"}
+,{"stream_name":"stdout","time":11.555881195,"data":"    if sh in SHELLS: head.update(src_x=SRC_X, shell_r0=SH_R0, shell_sigma0=SH_S0)\n"}
+,{"stream_name":"stdout","time":11.555883834,"data":"    if sh == \"coin\": head[\"thickness\"] = COIN_A\n"}
+,{"stream_name":"stdout","time":11.555886638,"data":"    if sh == \"tube\": head[\"wall_thickness\"] = TUBE_W\n"}
+,{"stream_name":"stdout","time":11.555889327,"data":"    body = pack(head, r[\"amp\"].tobytes() + r[\"phase\"].tobytes(), b\"SPHC\")\n"}
+,{"stream_name":"stdout","time":11.555892147,"data":"    name = f\"{sh}/e{i}_v{j}_s{k}.bin\"\n"}
+,{"stream_name":"stdout","time":11.555894861,"data":"    open(f\"{OUTD}/{name}\", \"wb\").write(body)\n"}
+,{"stream_name":"stdout","time":11.555897526999999,"data":"    t, n, b, a, sy = r[\"curves\"][-1]\n"}
+,{"stream_name":"stdout","time":11.555912812999999,"data":"    rec = dict(file=name, shape=sh, i=i, j=j, k=k, E=Es[i], V0=V0, size=size, hard=hard, bytes=len(body), sha256=hashlib.sha256(body).hexdigest(),\n"}
+,{"stream_name":"stdout","time":11.555915547,"data":"               steps=int(r[\"steps\"]), dt=r[\"dt\"], wall=head[\"wall\"], behind=round(float(b), 6), ahead=round(float(a), 6), norm_end=round(float(n), 6), device=str(dev))\n"}
+,{"stream_name":"stdout","time":11.555918473,"data":"    if r[\"wave\"] is not None:\n"}
+,{"stream_name":"stdout","time":11.555920998,"data":"        w = r[\"wave\"]; fr = r[\"wframes\"]\n"}
+,{"stream_name":"stdout","time":11.555923615,"data":"        wh = dict(E=Es[i], V0=V0, R=size, shape=sh, hard=hard, i=i, j=j, k=k, n=int(w.shape[0]), dims=list(w.shape[1:]), x0=-24.0, y0=-16.0, z0=-16.0, step=0.5,\n"}
+,{"stream_name":"stdout","time":11.555926368,"data":"                  kind=\"re\", L=L, steps=int(r[\"steps\"]), dt=r[\"dt\"], wall=head[\"wall\"], device=str(dev), frames=fr,\n"}
+,{"stream_name":"stdout","time":11.555931964,"data":"                  wscale=[round(p / pk[0], 6) for p in r[\"wpeaks\"]], curves=[cv[f] for f in fr])\n"}
+,{"stream_name":"stdout","time":11.555934753,"data":"        wb = pack(wh, (w.astype(np.int16) + 128).astype(np.uint8).tobytes(), b\"SPHW\")\n"}
+,{"stream_name":"stdout","time":11.555937397,"data":"        wname = f\"{sh}/w_e{i}_v{j}_s{k}.bin\"\n"}
+,{"stream_name":"stdout","time":11.555939926,"data":"        open(f\"{OUTD}/{wname}\", \"wb\").write(wb)\n"}
+,{"stream_name":"stdout","time":11.555942538,"data":"        rec.update(wave_file=wname, wave_bytes=len(wb), wave_sha256=hashlib.sha256(wb).hexdigest())\n"}
+,{"stream_name":"stdout","time":11.555963587,"data":"    with LOCK:\n"}
+,{"stream_name":"stdout","time":11.555966294,"data":"        DONE[0] += 1; INDEX.append(rec); JL.write(json.dumps(rec) + \"\\n\"); JL.flush()\n"}
+,{"stream_name":"stdout","time":11.555974973,"data":"        say(f\"{DONE[0]:4d}/{len(jobs)} {sh} E={Es[i]} V0={'hard' if hard else V0} size={size} on {dev}: {r['steps']} steps, {r['wall']:.1f} s, {len(body)/1e3:.0f} kB, norm {n:.3f}, ahead {a:.3f}\")\n"}
+,{"stream_name":"stdout","time":11.555979239,"data":"def worker(dev):\n"}
+,{"stream_name":"stdout","time":11.555981773,"data":"    bad = 0\n"}
+,{"stream_name":"stdout","time":11.555984275,"data":"    with jax.default_device(dev):\n"}
+,{"stream_name":"stdout","time":11.555986815,"data":"        g = setup(N, L)\n"}
+,{"stream_name":"stdout","time":11.555989326,"data":"        while bad \u003c 5:\n"}
+,{"stream_name":"stdout","time":11.555991947,"data":"            if time.time() - T0 \u003e LIMIT_S:\n"}
+,{"stream_name":"stdout","time":11.555997935,"data":"                with LOCK: SKIPPED[0] = 1\n"}
+,{"stream_name":"stdout","time":11.55600053,"data":"                return\n"}
+,{"stream_name":"stdout","time":11.55600304,"data":"            try: sh, i, j, k = Q.get_nowait()\n"}
+,{"stream_name":"stdout","time":11.556005608,"data":"            except queue.Empty: return\n"}
+,{"stream_name":"stdout","time":11.556008166,"data":"            try:\n"}
+,{"stream_name":"stdout","time":11.556010655,"data":"                one(g, dev, sh, i, j, k); bad = 0\n"}
+,{"stream_name":"stdout","time":11.556013281,"data":"            except Exception as e:\n"}
+,{"stream_name":"stdout","time":11.556015838,"data":"                bad += 1\n"}
+,{"stream_name":"stdout","time":11.556018497,"data":"                with LOCK: ERR.append(dict(job=[sh, i, j, k], error=repr(e)[:500]))\n"}
+,{"stream_name":"stdout","time":11.556021167,"data":"                say(\"RUN FAILED\", sh, i, j, k, \"on\", dev, repr(e)[:300]); say(traceback.format_exc()[-600:])\n"}
+,{"stream_name":"stdout","time":11.55602401,"data":"DEVS = [d for d in jax.devices() if d.platform == \"gpu\"] or [jax.devices()[0]]\n"}
+,{"stream_name":"stdout","time":11.556026763,"data":"TS = time.time()\n"}
+,{"stream_name":"stdout","time":11.556029232,"data":"threads = [threading.Thread(target=worker, args=(d,)) for d in DEVS]\n"}
+,{"stream_name":"stdout","time":11.556031851,"data":"[t.start() for t in threads]; [t.join() for t in threads]\n"}
+,{"stream_name":"stdout","time":11.556034465,"data":"SWEEP_S = time.time() - TS; JL.close()\n"}
+,{"stream_name":"stdout","time":11.556037094,"data":"say(f\"{DONE[0]} of {len(jobs)} runs in {SWEEP_S:.0f} s on {len(DEVS)} GPU(s); failed {len(ERR)}; not started {Q.qsize()}\")\n"}
+,{"stream_name":"stdout","time":11.556039879,"data":"\n"}
+,{"stream_name":"stdout","time":11.556042335,"data":"# ---- the index, one tar per shape, timing ----\n"}
+,{"stream_name":"stdout","time":11.556047355,"data":"import tarfile\n"}
+,{"stream_name":"stdout","time":11.556050002,"data":"INDEX.sort(key=lambda r: r[\"file\"])\n"}
+,{"stream_name":"stdout","time":11.556052833,"data":"left = []\n"}
+,{"stream_name":"stdout","time":11.556055375,"data":"while True:\n"}
+,{"stream_name":"stdout","time":11.556057873,"data":"    try: left.append(list(Q.get_nowait()))\n"}
+,{"stream_name":"stdout","time":11.556060562,"data":"    except queue.Empty: break\n"}
+,{"stream_name":"stdout","time":11.556063144,"data":"idx = dict(generated=GEN, kind=\"shapes3d\", N=N, L=L, dt=DT, nframes=NF, Es=Es, hard_V0=HARD, hard_V=HARD_V, hard_substeps=HARD_SUB,\n"}
+,{"stream_name":"stdout","time":11.556065985,"data":"           groups={sh: dict(Vs=G[\"Vs\"], sizes=G[\"sizes\"]) for sh, G in GROUPS.items()}, coin_thickness=COIN_A, tube_wall=TUBE_W,\n"}
+,{"stream_name":"stdout","time":11.556068913,"data":"           shell=dict(src_x=SRC_X, r0=SH_R0, sigma0=SH_S0, travel=SH_TRAVEL), jobsel=globals().get(\"JOBSEL\", \"all\"), shard=globals().get(\"SHARD\"), packet=dict(x0=-14.0, sigma0=3.0, travel=30.0),\n"}
+,{"stream_name":"stdout","time":11.556072029,"data":"           device=jax.devices()[0].device_kind, gpus=len(DEVS), sweep_s=round(SWEEP_S, 1), failed=ERR, not_started=left,\n"}
+,{"stream_name":"stdout","time":11.556075317,"data":"           method=\"Strang split-step Fourier, 3D; hard wall: height 200 with a step four times shorter (no probability removed)\",\n"}
+,{"stream_name":"stdout","time":11.55607811,"data":"           units=\"hbar = m = 1, lengths in the grid unit a\", runs=INDEX)\n"}
+,{"stream_name":"stdout","time":11.55608079,"data":"json.dump(idx, open(OUTD + \"/index.json\", \"w\"), separators=(\",\", \":\"))\n"}
+,{"stream_name":"stdout","time":11.556083675,"data":"for sh in GROUPS:\n"}
+,{"stream_name":"stdout","time":11.556086165,"data":"    files = sorted(os.listdir(f\"{OUTD}/{sh}\"))\n"}
+,{"stream_name":"stdout","time":11.556088824,"data":"    try:\n"}
+,{"stream_name":"stdout","time":11.556091351,"data":"        with tarfile.open(f\"{OUTD}/{sh}.tar\", \"w\") as tf:\n"}
+,{"stream_name":"stdout","time":11.556094078,"data":"            for f in files: tf.add(f\"{OUTD}/{sh}/{f}\", arcname=f\"{sh}/{f}\")\n"}
+,{"stream_name":"stdout","time":11.556096805,"data":"        with tarfile.open(f\"{OUTD}/{sh}.tar\") as tf: ok = len(tf.getnames()) == len(files)\n"}
+,{"stream_name":"stdout","time":11.556099553,"data":"        if ok:\n"}
+,{"stream_name":"stdout","time":11.556102068,"data":"            for f in files: os.remove(f\"{OUTD}/{sh}/{f}\")\n"}
+,{"stream_name":"stdout","time":11.556104715,"data":"            os.rmdir(f\"{OUTD}/{sh}\")\n"}
+,{"stream_name":"stdout","time":11.556107324,"data":"        say(sh, len(files), \"files -\u003e\", f\"{sh}.tar\", f\"{os.path.getsize(f'{OUTD}/{sh}.tar')/1e6:.1f} MB\", \"ok\" if ok else \"TAR CHECK FAILED: files kept\")\n"}
+,{"stream_name":"stdout","time":11.556110576,"data":"    except Exception as e:\n"}
+,{"stream_name":"stdout","time":11.556113111,"data":"        say(\"TAR FAILED\", sh, repr(e)[:300], \"(the files stay as they are)\")\n"}
+,{"stream_name":"stdout","time":11.5561159,"data":"json.dump(dict(total_s=round(time.time() - T0, 1), sweep_s=round(SWEEP_S, 1), gpus=len(DEVS), runs_done=DONE[0], runs_planned=len(jobs),\n"}
+,{"stream_name":"stdout","time":11.556118698,"data":"               failed=len(ERR), not_started=len(left), gpu_seconds_of_runs=round(sum(r[\"wall\"] for r in INDEX), 1),\n"}
+,{"stream_name":"stdout","time":11.556121458,"data":"               steps_total=int(sum(r[\"steps\"] for r in INDEX))), open(OUTD + \"/timing.json\", \"w\"))\n"}
+,{"stream_name":"stdout","time":11.55612717,"data":"say(f\"all done in {time.time()-T0:.0f} s\")\n"}
+,{"stream_name":"stdout","time":11.556129973,"data":"\n"}
+,{"stream_name":"stdout","time":17.232376073,"data":"[    5.9 s] jax backend before install: cpu\n"}
+,{"stream_name":"stdout","time":18.287589229,"data":"[    6.9 s] devices: [CpuDevice(id=0)] jax 0.11.1\n"}
+,{"stream_name":"stdout","time":18.288775862,"data":"[    6.9 s] solver3d.py and shapes3d_run.py from the repository, as fetched by the loader cell\n"}
+,{"stream_name":"stdout","time":18.29299052,"data":"[    6.9 s] 61 runs; cells x steps x time per cell-step = 2097152 x 275669 x 1.2e-9 s = 0.19 GPU hours (1.2 ns measured on a T4 over the 405 sphere runs of 2026-11-12); on two GPUs about 6 min\n"}
+,{"stream_name":"stderr","time":18.492870953,"data":"\u003cstring\u003e:25: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).\n"}
+,{"stream_name":"stderr","time":18.492911581,"data":"\n"}
+,{"stream_name":"stderr","time":18.492918609,"data":"\u003cstring\u003e:25: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).\n"}
+,{"stream_name":"stdout","time":416.589655077,"data":"[  405.2 s]    1/61 sphere E=0.5 V0=hard size=2.0 on cpu:0: 11844 steps, 397.1 s, 201 kB, norm 0.979, ahead 0.865\n"}
+,{"stream_name":"stdout","time":810.354559682,"data":"[  799.0 s]    2/61 sphere E=0.5 V0=hard size=6.0 on cpu:0: 11844 steps, 393.2 s, 249 kB, norm 0.865, ahead 0.254\n"}
+,{"stream_name":"stdout","time":1201.692632136,"data":"[ 1190.3 s]    3/61 coin E=0.5 V0=hard size=5.0 on cpu:0: 11844 steps, 390.8 s, 188 kB, norm 0.979, ahead 0.420\n"}
+,{"stream_name":"stdout","time":1587.26730687,"data":"[ 1575.9 s]    4/61 tube E=0.5 V0=hard size=4.0 on cpu:0: 11844 steps, 385.0 s, 178 kB, norm 0.843, ahead 0.275\n"}
+,{"stream_name":"stdout","time":1909.050281611,"data":"[ 1897.7 s]    5/61 sslab E=0.5 V0=hard size=1.0 on cpu:0: 9588 steps, 321.0 s, 234 kB, norm 0.591, ahead 0.001\n"}
+,{"stream_name":"stdout","time":2204.610372909,"data":"[ 2193.2 s]    6/61 sphere E=1.0 V0=hard size=4.0 on cpu:0: 8460 steps, 295.0 s, 214 kB, norm 0.975, ahead 0.577\n"}
+,{"stream_name":"stdout","time":2494.043053177,"data":"[ 2482.7 s]    7/61 coin E=1.0 V0=hard size=3.0 on cpu:0: 8460 steps, 288.9 s, 176 kB, norm 0.993, ahead 0.685\n"}
+,{"stream_name":"stdout","time":2779.007739809,"data":"[ 2767.6 s]    8/61 tube E=1.0 V0=hard size=2.0 on cpu:0: 8460 steps, 284.4 s, 163 kB, norm 0.905, ahead 0.780\n"}
+,{"stream_name":"stdout","time":3064.8648661,"data":"[ 3053.5 s]    9/61 tube E=1.0 V0=hard size=6.0 on cpu:0: 8460 steps, 285.3 s, 157 kB, norm 0.953, ahead 0.075\n"}
+,{"stream_name":"stdout","time":3297.851694834,"data":"[ 3286.5 s]   10/61 sphere E=1.5 V0=hard size=5.0 on cpu:0: 6768 steps, 232.4 s, 218 kB, norm 0.961, ahead 0.396\n"}
+,{"stream_name":"stdout","time":3528.636545839,"data":"[ 3517.3 s]   11/61 coin E=1.5 V0=hard size=4.0 on cpu:0: 6768 steps, 230.3 s, 162 kB, norm 0.997, ahead 0.497\n"}
+,{"stream_name":"stdout","time":3758.039549108,"data":"[ 3746.7 s]   12/61 tube E=1.5 V0=hard size=3.0 on cpu:0: 6768 steps, 228.9 s, 151 kB, norm 0.926, ahead 0.573\n"}
+,{"stream_name":"stdout","time":3989.104393613,"data":"[ 3977.7 s]   13/61 soff E=1.0 V0=hard size=4.0 on cpu:0: 6768 steps, 230.4 s, 276 kB, norm 0.574, ahead 0.109\n"}
+,{"stream_name":"stdout","time":4186.55711097,"data":"[ 4175.2 s]   14/61 sphere E=2.0 V0=hard size=3.0 on cpu:0: 5828 steps, 197.0 s, 181 kB, norm 0.996, ahead 0.737\n"}
+,{"stream_name":"stdout","time":4384.209074113,"data":"[ 4372.8 s]   15/61 coin E=2.0 V0=hard size=2.0 on cpu:0: 5828 steps, 197.1 s, 149 kB, norm 0.998, ahead 0.842\n"}
+,{"stream_name":"stdout","time":4581.667408678,"data":"[ 4570.3 s]   16/61 coin E=2.0 V0=hard size=6.0 on cpu:0: 5828 steps, 197.0 s, 151 kB, norm 0.998, ahead 0.211\n"}
+,{"stream_name":"stdout","time":4778.706077442,"data":"[ 4767.3 s]   17/61 tube E=2.0 V0=hard size=5.0 on cpu:0: 5828 steps, 196.6 s, 149 kB, norm 0.962, ahead 0.189\n"}
+,{"stream_name":"stdout","time":4964.10565578,"data":"[ 4952.7 s]   18/61 spil E=1.5 V0=hard size=4.0 on cpu:0: 5452 steps, 184.3 s, 263 kB, norm 0.581, ahead 0.073\n"}
+,{"stream_name":"stdout","time":5144.844827308,"data":"[ 5133.5 s]   19/61 sphere E=2.5 V0=hard size=5.0 on cpu:0: 5264 steps, 180.2 s, 215 kB, norm 0.967, ahead 0.387\n"}
+,{"stream_name":"stdout","time":5329.28731139,"data":"[ 5317.9 s]   20/61 coin E=2.5 V0=hard size=4.0 on cpu:0: 5264 steps, 184.0 s, 153 kB, norm 0.998, ahead 0.484\n"}
+,{"stream_name":"stdout","time":5511.873783086,"data":"[ 5500.5 s]   21/61 tube E=2.5 V0=hard size=3.0 on cpu:0: 5264 steps, 182.1 s, 142 kB, norm 0.952, ahead 0.599\n"}
+,{"stream_name":"stdout","time":5681.361965015,"data":"[ 5670.0 s]   22/61 sphere E=3.0 V0=hard size=2.0 on cpu:0: 4888 steps, 169.0 s, 163 kB, norm 0.998, ahead 0.878\n"}
+,{"stream_name":"stdout","time":5848.278261515,"data":"[ 5836.9 s]   23/61 sphere E=3.0 V0=hard size=6.0 on cpu:0: 4888 steps, 166.4 s, 226 kB, norm 0.906, ahead 0.239\n"}
+,{"stream_name":"stdout","time":6015.188094275,"data":"[ 6003.8 s]   24/61 coin E=3.0 V0=hard size=5.0 on cpu:0: 4888 steps, 166.4 s, 152 kB, norm 0.998, ahead 0.326\n"}
+,{"stream_name":"stdout","time":6178.679609486,"data":"[ 6167.3 s]   25/61 tube E=3.0 V0=hard size=4.0 on cpu:0: 4888 steps, 163.0 s, 141 kB, norm 0.962, ahead 0.376\n"}
+,{"stream_name":"stdout","time":6334.292079235,"data":"[ 6322.9 s]   26/61 sslab E=2.0 V0=hard size=1.0 on cpu:0: 4700 steps, 154.9 s, 222 kB, norm 0.585, ahead 0.004\n"}
+,{"stream_name":"stdout","time":6484.440777456,"data":"[ 6473.1 s]   27/61 sphere E=3.5 V0=hard size=4.0 on cpu:0: 4512 steps, 149.6 s, 198 kB, norm 0.990, ahead 0.568\n"}
+,{"stream_name":"stdout","time":6634.831704009,"data":"[ 6623.5 s]   28/61 coin E=3.5 V0=hard size=3.0 on cpu:0: 4512 steps, 149.9 s, 153 kB, norm 0.998, ahead 0.660\n"}
+,{"stream_name":"stdout","time":6784.804831358,"data":"[ 6773.4 s]   29/61 tube E=3.5 V0=hard size=2.0 on cpu:0: 4512 steps, 149.5 s, 136 kB, norm 0.966, ahead 0.837\n"}
+,{"stream_name":"stdout","time":6934.563945147,"data":"[ 6923.2 s]   30/61 tube E=3.5 V0=hard size=6.0 on cpu:0: 4512 steps, 149.3 s, 131 kB, norm 0.984, ahead 0.097\n"}
+,{"stream_name":"stdout","time":7072.353879934,"data":"[ 7061.0 s]   31/61 sphere E=4.0 V0=hard size=2.0 on cpu:0: 4136 steps, 137.3 s, 155 kB, norm 0.999, ahead 0.879\n"}
+,{"stream_name":"stdout","time":7210.724466354,"data":"[ 7199.4 s]   32/61 sphere E=4.0 V0=hard size=6.0 on cpu:0: 4136 steps, 137.8 s, 218 kB, norm 0.933, ahead 0.231\n"}
+,{"stream_name":"stdout","time":7351.813739959,"data":"[ 7340.4 s]   33/61 coin E=4.0 V0=hard size=5.0 on cpu:0: 4136 steps, 140.6 s, 146 kB, norm 0.999, ahead 0.333\n"}
+,{"stream_name":"stdout","time":7501.07481324,"data":"[ 7489.7 s]   34/61 tube E=4.0 V0=hard size=4.0 on cpu:0: 4136 steps, 148.8 s, 137 kB, norm 0.973, ahead 0.385\n"}
+,{"stream_name":"stdout","time":7643.228109473,"data":"[ 7631.9 s]   35/61 sphere E=4.5 V0=hard size=3.0 on cpu:0: 3948 steps, 141.6 s, 176 kB, norm 0.998, ahead 0.740\n"}
+,{"stream_name":"stdout","time":7785.700121624,"data":"[ 7774.3 s]   36/61 coin E=4.5 V0=hard size=2.0 on cpu:0: 3948 steps, 142.0 s, 144 kB, norm 0.999, ahead 0.841\n"}
+,{"stream_name":"stdout","time":7925.890312672,"data":"[ 7914.5 s]   37/61 coin E=4.5 V0=hard size=6.0 on cpu:0: 3948 steps, 139.7 s, 147 kB, norm 0.999, ahead 0.230\n"}
+,{"stream_name":"stdout","time":8068.92824925,"data":"[ 8057.6 s]   38/61 tube E=4.5 V0=hard size=5.0 on cpu:0: 3948 steps, 142.5 s, 133 kB, norm 0.981, ahead 0.206\n"}
+,{"stream_name":"stdout","time":8202.752275531,"data":"[ 8191.4 s]   39/61 spil E=3.0 V0=hard size=4.0 on cpu:0: 3760 steps, 132.8 s, 241 kB, norm 0.606, ahead 0.070\n"}
+,{"stream_name":"stdout","time":8320.834907701,"data":"[ 8309.5 s]   40/61 soff E=4.0 V0=hard size=4.0 on cpu:0: 3384 steps, 117.4 s, 242 kB, norm 0.574, ahead 0.117\n"}
+,{"stream_name":"stdout","time":8435.55616084,"data":"[ 8424.2 s]   41/61 sslab E=4.5 V0=hard size=1.0 on cpu:0: 3196 steps, 114.0 s, 208 kB, norm 0.574, ahead 0.010\n"}
+,{"stream_name":"stdout","time":8521.588430296,"data":"[ 8510.2 s]   42/61 soff E=0.5 V0=6.0 size=4.0 on cpu:0: 2397 steps, 85.4 s, 290 kB, norm 0.593, ahead 0.104\n"}
+,{"stream_name":"stdout","time":8608.541903909,"data":"[ 8597.2 s]   43/61 spil E=0.5 V0=-2.0 size=4.0 on cpu:0: 2397 steps, 85.8 s, 302 kB, norm 0.593, ahead 0.098\n"}
+,{"stream_name":"stdout","time":8670.047245365,"data":"[ 8658.7 s]   44/61 soff E=1.0 V0=2.0 size=4.0 on cpu:0: 1692 steps, 60.9 s, 281 kB, norm 0.574, ahead 0.112\n"}
+,{"stream_name":"stdout","time":8732.174308594,"data":"[ 8720.8 s]   45/61 sslab E=1.0 V0=6.0 size=1.0 on cpu:0: 1692 steps, 61.5 s, 240 kB, norm 0.574, ahead 0.012\n"}
+,{"stream_name":"stdout","time":8781.144281832,"data":"[ 8769.8 s]   46/61 soff E=1.5 V0=-2.0 size=4.0 on cpu:0: 1363 steps, 48.4 s, 230 kB, norm 0.581, ahead 0.115\n"}
+,{"stream_name":"stdout","time":8829.734373901,"data":"[ 8818.4 s]   47/61 sslab E=1.5 V0=2.0 size=1.0 on cpu:0: 1363 steps, 48.0 s, 249 kB, norm 0.581, ahead 0.107\n"}
+,{"stream_name":"stdout","time":8878.741962188,"data":"[ 8867.4 s]   48/61 spil E=1.5 V0=6.0 size=4.0 on cpu:0: 1363 steps, 47.9 s, 265 kB, norm 0.581, ahead 0.076\n"}
+,{"stream_name":"stdout","time":8920.508368408,"data":"[ 8909.1 s]   49/61 sslab E=2.0 V0=-2.0 size=1.0 on cpu:0: 1175 steps, 41.1 s, 247 kB, norm 0.585, ahead 0.142\n"}
+,{"stream_name":"stdout","time":8962.697257683,"data":"[ 8951.3 s]   50/61 spil E=2.0 V0=2.0 size=4.0 on cpu:0: 1175 steps, 41.2 s, 260 kB, norm 0.585, ahead 0.080\n"}
+,{"stream_name":"stdout","time":8999.181150341,"data":"[ 8987.8 s]   51/61 soff E=2.5 V0=6.0 size=4.0 on cpu:0: 1034 steps, 35.9 s, 247 kB, norm 0.600, ahead 0.106\n"}
+,{"stream_name":"stdout","time":9036.208882125,"data":"[ 9024.8 s]   52/61 spil E=2.5 V0=-2.0 size=4.0 on cpu:0: 1034 steps, 35.9 s, 246 kB, norm 0.600, ahead 0.115\n"}
+,{"stream_name":"stdout","time":9069.750066301,"data":"[ 9058.4 s]   53/61 soff E=3.0 V0=2.0 size=4.0 on cpu:0: 940 steps, 32.9 s, 241 kB, norm 0.606, ahead 0.109\n"}
+,{"stream_name":"stdout","time":9103.559137803,"data":"[ 9092.2 s]   54/61 sslab E=3.0 V0=6.0 size=1.0 on cpu:0: 940 steps, 33.2 s, 217 kB, norm 0.606, ahead 0.031\n"}
+,{"stream_name":"stdout","time":9135.898237469,"data":"[ 9124.5 s]   55/61 soff E=3.5 V0=-2.0 size=4.0 on cpu:0: 893 steps, 31.7 s, 211 kB, norm 0.585, ahead 0.122\n"}
+,{"stream_name":"stdout","time":9169.040187479,"data":"[ 9157.7 s]   56/61 sslab E=3.5 V0=2.0 size=1.0 on cpu:0: 893 steps, 32.6 s, 229 kB, norm 0.585, ahead 0.141\n"}
+,{"stream_name":"stdout","time":9202.172614153,"data":"[ 9190.8 s]   57/61 spil E=3.5 V0=6.0 size=4.0 on cpu:0: 893 steps, 32.1 s, 243 kB, norm 0.585, ahead 0.079\n"}
+,{"stream_name":"stdout","time":9233.018157003,"data":"[ 9221.7 s]   58/61 sslab E=4.0 V0=-2.0 size=1.0 on cpu:0: 846 steps, 30.2 s, 232 kB, norm 0.574, ahead 0.165\n"}
+,{"stream_name":"stdout","time":9264.869705606,"data":"[ 9253.5 s]   59/61 spil E=4.0 V0=2.0 size=4.0 on cpu:0: 846 steps, 30.8 s, 241 kB, norm 0.574, ahead 0.103\n"}
+,{"stream_name":"stdout","time":9293.771333636,"data":"[ 9282.4 s]   60/61 soff E=4.5 V0=6.0 size=4.0 on cpu:0: 799 steps, 28.3 s, 241 kB, norm 0.574, ahead 0.119\n"}
+,{"stream_name":"stdout","time":9323.31813889,"data":"[ 9312.0 s]   61/61 spil E=4.5 V0=-2.0 size=4.0 on cpu:0: 799 steps, 28.4 s, 239 kB, norm 0.574, ahead 0.129\n"}
+,{"stream_name":"stdout","time":9323.31961844,"data":"[ 9312.0 s] 61 of 61 runs in 9305 s on 1 GPU(s); failed 0; not started 0\n"}
+,{"stream_name":"stdout","time":9323.336549042,"data":"[ 9312.0 s] sphere 12 files -\u003e sphere.tar 2.4 MB ok\n"}
+,{"stream_name":"stdout","time":9323.344062415,"data":"[ 9312.0 s] coin 11 files -\u003e coin.tar 1.8 MB ok\n"}
+,{"stream_name":"stdout","time":9323.351041939,"data":"[ 9312.0 s] tube 11 files -\u003e tube.tar 1.6 MB ok\n"}
+,{"stream_name":"stdout","time":9323.358290916,"data":"[ 9312.0 s] soff 9 files -\u003e soff.tar 2.3 MB ok\n"}
+,{"stream_name":"stdout","time":9323.365505171,"data":"[ 9312.0 s] sslab 9 files -\u003e sslab.tar 2.1 MB ok\n"}
+,{"stream_name":"stdout","time":9323.393490249,"data":"[ 9312.0 s] spil 18 files -\u003e spil.tar 19.3 MB ok\n"}
+,{"stream_name":"stdout","time":9323.394297048,"data":"[ 9312.0 s] all done in 9312 s\n"}
+,{"stream_name":"stderr","time":9326.885257227,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":9326.885300472,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":9327.088858481,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":9327.088888229,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":9328.04234596,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to notebook\n"}
+,{"stream_name":"stderr","time":9328.14005778,"data":"[NbConvertApp] Writing 22529 bytes to __notebook__.ipynb\n"}
+,{"stream_name":"stderr","time":9331.303012823,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to html\n"}
+,{"stream_name":"stderr","time":9331.91484737,"data":"[NbConvertApp] Writing 294339 bytes to __results__.html\n"}
+]

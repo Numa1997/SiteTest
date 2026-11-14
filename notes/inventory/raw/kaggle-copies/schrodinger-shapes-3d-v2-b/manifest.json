@@ -1,0 +1,72 @@
+{
+ "notebook": "numakoudsie/schrodinger-shapes-3d-v2-b",
+ "version": 2,
+ "files": [
+  {
+   "file": "2026-11-13/shapes3d/coin.tar",
+   "bytes": 1925120,
+   "saved": false
+  },
+  {
+   "file": "2026-11-13/shapes3d/index.json",
+   "saved": true,
+   "bytes": 21277,
+   "sha256": "d90afcc436bb76507dca8d2887514b4be3925d5ad9ad3c8e7090fa5872806025"
+  },
+  {
+   "file": "2026-11-13/shapes3d/runs.jsonl",
+   "saved": true,
+   "bytes": 22397,
+   "sha256": "c8a281b74e77277bf0ff0cac5b03994ecbd8531381548d7cdf559456fb17664c"
+  },
+  {
+   "file": "2026-11-13/shapes3d/soff.tar",
+   "bytes": 1976320,
+   "saved": false
+  },
+  {
+   "file": "2026-11-13/shapes3d/sphere.tar",
+   "bytes": 2211840,
+   "saved": false
+  },
+  {
+   "file": "2026-11-13/shapes3d/spil.tar",
+   "bytes": 21821440,
+   "saved": false
+  },
+  {
+   "file": "2026-11-13/shapes3d/sslab.tar",
+   "bytes": 2129920,
+   "saved": false
+  },
+  {
+   "file": "2026-11-13/shapes3d/timing.json",
+   "saved": true,
+   "bytes": 171,
+   "sha256": "3c7d58cdfe7b4f35491b38338373d7d05526ffc76e89f128b4bb506e5b1c65dd"
+  },
+  {
+   "file": "2026-11-13/shapes3d/tube.tar",
+   "bytes": 1617920,
+   "saved": false
+  },
+  {
+   "file": "progress.log",
+   "saved": true,
+   "bytes": 7543,
+   "sha256": "ab2eb41c9ccb5f737fb05a55fc233a46fb11c6e0f6e00c5b2ab4a1a3d3f7c24e"
+  },
+  {
+   "file": "shapes3d_run.py",
+   "saved": true,
+   "bytes": 9452,
+   "sha256": "1562e8bdce847cad00486a9ba0678eb007adb2ac60ef3f894ff6c1306a4e753a"
+  },
+  {
+   "file": "solver3d.py",
+   "saved": true,
+   "bytes": 7601,
+   "sha256": "0c5aed954ee0953ed50802faa0e763a465b50395c836641e51ebb37079489b43"
+  }
+ ]
+}

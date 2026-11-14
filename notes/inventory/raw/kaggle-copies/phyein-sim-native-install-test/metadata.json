@@ -1,0 +1,17 @@
+{
+ "id": 144483896,
+ "ref": "numakoudsie/phyein-sim-native-install-test",
+ "title": "phyein-sim native install test",
+ "author": "Numa Koudsie",
+ "slug": "phyein-sim-native-install-test",
+ "lastRunTime": "2026-11-11T13:31:18.733374400Z",
+ "language": "python",
+ "kernelType": "script",
+ "isPrivate": true,
+ "enableGpu": true,
+ "enableInternet": true,
+ "enableTpu": false,
+ "currentVersionNumber": 2,
+ "dockerImage": "gcr.io/kaggle-images/python@sha256:0717e81990be591f8c5f98f033d29ab23e9ffde057e5b3a6bd4371f93969e962",
+ "machineShape": "NvidiaTeslaT4"
+}

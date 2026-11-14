@@ -1,0 +1,20 @@
+{
+ "id": 144538149,
+ "ref": "numakoudsie/phyein-sim-jax-swingup-gpu",
+ "title": "phyein-sim jax swingup gpu",
+ "author": "Numa Koudsie",
+ "slug": "phyein-sim-jax-swingup-gpu",
+ "lastRunTime": "2026-11-11T13:31:23.538182800Z",
+ "language": "python",
+ "kernelType": "script",
+ "isPrivate": true,
+ "enableGpu": true,
+ "enableInternet": true,
+ "categoryIds": [
+  "gpu"
+ ],
+ "enableTpu": false,
+ "currentVersionNumber": 2,
+ "dockerImage": "gcr.io/kaggle-private-byod/python@sha256:de153e6d303881930c51286216393d56f56b26458d0661350305a1e8144eea01",
+ "machineShape": "NvidiaTeslaT4"
+}

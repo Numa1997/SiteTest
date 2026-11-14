@@ -1,0 +1,65 @@
+[{"stream_name":"stdout","time":1.022899789,"data":"GPU 0: Tesla T4 (UUID: GPU-77566326-624d-320e-759e-2f238119147a)\n"}
+,{"stream_name":"stdout","time":1.022942395,"data":"GPU 1: Tesla T4 (UUID: GPU-ed57d5c0-c048-b3b9-c90e-174c248e9c11)\n"}
+,{"stream_name":"stdout","time":1.022946435,"data":"\n"}
+,{"stream_name":"stdout","time":29.903004042,"data":"preinstalled jax: gpu 0.11.1\n"}
+,{"stream_name":"stdout","time":66.649237615,"data":"physics tests: {\n"}
+,{"stream_name":"stdout","time":66.649273863,"data":" \"period_numeric_s\": 1.2949362745002144,\n"}
+,{"stream_name":"stdout","time":66.649279498,"data":" \"period_analytic_s\": 1.2949104742956548,\n"}
+,{"stream_name":"stdout","time":66.649284167,"data":" \"period_rel_error\": 1.992431528807792e-05,\n"}
+,{"stream_name":"stdout","time":66.649288683,"data":" \"rk4_errors\": [\n"}
+,{"stream_name":"stdout","time":66.649293113,"data":"  1.3113021850585938e-05,\n"}
+,{"stream_name":"stdout","time":66.649297363,"data":"  1.71661376953125e-05,\n"}
+,{"stream_name":"stdout","time":66.649301615,"data":"  4.291534423828125e-06,\n"}
+,{"stream_name":"stdout","time":66.649305898,"data":"  3.5762786865234375e-06\n"}
+,{"stream_name":"stdout","time":66.64931006,"data":" ],\n"}
+,{"stream_name":"stdout","time":66.649314153,"data":" \"rk4_observed_orders\": [\n"}
+,{"stream_name":"stdout","time":66.649318458,"data":"  -0.3885652879176529,\n"}
+,{"stream_name":"stdout","time":66.649322797,"data":"  2.0,\n"}
+,{"stream_name":"stdout","time":66.649326918,"data":"  0.2630344058337938\n"}
+,{"stream_name":"stdout","time":66.649331019,"data":" ],\n"}
+,{"stream_name":"stdout","time":66.649335123,"data":" \"energy_drift_rel\": 1.3140351215307283e-06,\n"}
+,{"stream_name":"stdout","time":66.649339631,"data":" \"gradient_rel_error\": 0.005310687702149153\n"}
+,{"stream_name":"stdout","time":66.649344144,"data":"}\n"}
+,{"stream_name":"stdout","time":66.64934865,"data":"16 optimisations of 200 Adam steps: 7.6 s (first call with compilation 10.0 s) on cuda:0\n"}
+,{"stream_name":"stdout","time":66.649353074,"data":"0 of 4 lengths reach upright within 2 degrees; effort by length: 0.25 m: 103.7, 0.50 m: 93.3, 0.75 m: 84.9, 1.00 m: 110.5\n"}
+,{"stream_name":"stdout","time":66.649357612,"data":" \n"}
+,{"stream_name":"stdout","time":66.6493615,"data":"wall 35.4 s\n"}
+,{"stream_name":"stdout","time":414.564160736,"data":"physics tests: {\n"}
+,{"stream_name":"stdout","time":414.564212194,"data":" \"period_numeric_s\": 1.2949362745002144,\n"}
+,{"stream_name":"stdout","time":414.564216863,"data":" \"period_analytic_s\": 1.2949104742956548,\n"}
+,{"stream_name":"stdout","time":414.564220376,"data":" \"period_rel_error\": 1.992431528807792e-05,\n"}
+,{"stream_name":"stdout","time":414.564224199,"data":" \"rk4_errors\": [\n"}
+,{"stream_name":"stdout","time":414.564227495,"data":"  1.3113021850585938e-05,\n"}
+,{"stream_name":"stdout","time":414.564230684,"data":"  1.71661376953125e-05,\n"}
+,{"stream_name":"stdout","time":414.564233808,"data":"  4.291534423828125e-06,\n"}
+,{"stream_name":"stdout","time":414.564236845,"data":"  3.5762786865234375e-06\n"}
+,{"stream_name":"stdout","time":414.564239945,"data":" ],\n"}
+,{"stream_name":"stdout","time":414.564242949,"data":" \"rk4_observed_orders\": [\n"}
+,{"stream_name":"stdout","time":414.564246145,"data":"  -0.3885652879176529,\n"}
+,{"stream_name":"stdout","time":414.564249284,"data":"  2.0,\n"}
+,{"stream_name":"stdout","time":414.564252314,"data":"  0.2630344058337938\n"}
+,{"stream_name":"stdout","time":414.564255363,"data":" ],\n"}
+,{"stream_name":"stdout","time":414.564258383,"data":" \"energy_drift_rel\": 1.3140351215307283e-06,\n"}
+,{"stream_name":"stdout","time":414.564272133,"data":" \"gradient_rel_error\": 0.005310687702149153\n"}
+,{"stream_name":"stdout","time":414.564274929,"data":"}\n"}
+,{"stream_name":"stdout","time":414.564277405,"data":"4096 optimisations of 3000 Adam steps: 153.5 s (first call with compilation 156.0 s) on cuda:0\n"}
+,{"stream_name":"stdout","time":414.564280752,"data":"52 of 64 lengths reach upright within 2 degrees; effort by length: 0.25 m: 28.2, 0.26 m: 29.2, 0.27 m: 32.7, 0.29 m: 32.7, 0.30 m: 32.0, 0.31 m: 35.2, 0.32 m: 36.9, 0.33 m: 34.1, 0.35 m: 39.1, 0.36 m: 39.4, 0.37 m: 38.5, 0.38 m: 41.3, 0.39 m: 46.8, 0.40 m: 46.9, 0.42 m: 51.3, 0.43 m: 53.8, 0.44 m: 55.9, 0.45 m: 57.6, 0.46 m: 63.7, 0.48 m: 62.9, 0.49 m: 67.1, 0.50 m: 70.3, 0.51 m: 73.4, 0.52 m: 76.1, 0.54 m: 80.5, 0.55 m: 83.1, 0.56 m: 76.2, 0.57 m: 82.4, 0.58 m: 83.2, 0.60 m: 93.0, 0.61 m: 79.9, 0.62 m: 82.7, 0.63 m: 83.7, 0.64 m: 87.9, 0.65 m: 81.9, 0.67 m: 86.0, 0.68 m: 86.1, 0.69 m: 93.1, 0.70 m: 91.7, 0.71 m: 93.2, 0.73 m: 91.3, 0.74 m: 92.7, 0.75 m: 97.1, 0.76 m: 97.1, 0.77 m: 108.1, 0.79 m: 102.9, 0.80 m: 102.0, 0.81 m: 107.0, 0.82 m: 104.7, 0.83 m: 108.4, 0.85 m: 111.4, 0.86 m: 109.6, 0.87 m: 115.2, 0.88 m: 117.4, 0.89 m: 120.1, 0.90 m: 117.5, 0.92 m: 126.4, 0.93 m: 122.2, 0.94 m: 126.6, 0.95 m: 128.9, 0.96 m: 130.3, 0.98 m: 134.9, 0.99 m: 135.6, 1.00 m: 137.9\n"}
+,{"stream_name":"stdout","time":414.564291832,"data":" \n"}
+,{"stream_name":"stdout","time":414.564294337,"data":"wall 347.9 s\n"}
+,{"stream_name":"stdout","time":414.564563468,"data":"{\n"}
+,{"stream_name":"stdout","time":414.564577264,"data":" \"device\": \"cuda:0\",\n"}
+,{"stream_name":"stdout","time":414.564581888,"data":" \"precision\": \"float32\",\n"}
+,{"stream_name":"stdout","time":414.564586088,"data":" \"optimisations\": 4096,\n"}
+,{"stream_name":"stdout","time":414.564590325,"data":" \"adam_steps\": 3000,\n"}
+,{"stream_name":"stdout","time":414.564594097,"data":" \"seconds_second_call\": 153.46396231651306,\n"}
+,{"stream_name":"stdout","time":414.564597775,"data":" \"seconds_first_call\": 155.98504042625427,\n"}
+,{"stream_name":"stdout","time":414.564601555,"data":" \"seconds_per_opt_step_per_problem\": 1.248892922497665e-05,\n"}
+,{"stream_name":"stdout","time":414.564605463,"data":" \"jax\": \"0.11.1\"\n"}
+,{"stream_name":"stdout","time":414.564615224,"data":"}\n"}
+,{"stream_name":"stderr","time":416.79734298,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":416.79737433,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":417.113850292,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":417.113875537,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":417.989427762,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":419.090343682,"data":"[NbConvertApp] Writing 282474 bytes to __results__.html\n"}
+]

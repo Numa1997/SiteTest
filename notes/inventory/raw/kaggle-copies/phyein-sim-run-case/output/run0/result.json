@@ -1,0 +1,10 @@
+{
+ "Re": 100,
+ "N": 32,
+ "max_abs_error": 0.0041802611999999795,
+ "rms_error": 0.0022454758291580008,
+ "worst_y": 0.4531,
+ "tolerance": 0.01,
+ "reference": "Ghia, Ghia & Shin 1982, Table I",
+ "pass": true
+}

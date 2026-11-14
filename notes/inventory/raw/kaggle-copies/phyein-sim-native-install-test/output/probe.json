@@ -1,0 +1,8 @@
+{
+ "gpu": "none: bash: line 1: nvidia-smi: command not found",
+ "github.com": "NO DNS: [Errno -3] Temporary failure in name resolution",
+ "dl.openfoam.com": "NO DNS: [Errno -3] Temporary failure in name resolution",
+ "conda.anaconda.org": "NO DNS: [Errno -3] Temporary failure in name resolution",
+ "jax": "0.11.1",
+ "jax_devices": "[CpuDevice(id=0)]"
+}

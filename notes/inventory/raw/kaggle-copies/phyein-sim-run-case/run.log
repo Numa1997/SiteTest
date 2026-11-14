@@ -1,0 +1,36 @@
+[{"stream_name":"stdout","time":0.902531422,"data":"cores: 4 | python: 3.13.18 | machine: Linux-6.18.55+-x86_64-with-glibc2.39\n"}
+,{"stream_name":"stdout","time":0.903187401,"data":"$ grep -m1 'model name' /proc/cpuinfo; free -g | sed -n 2p\n"}
+,{"stream_name":"stdout","time":0.926926649,"data":"model name\t: Intel(R) Xeon(R) CPU @ 2.20GHz\n"}
+,{"stream_name":"stdout","time":0.959222851,"data":"Mem:              31           0          26           0           4          30\n"}
+,{"stream_name":"stdout","time":0.961488641,"data":"$ rm -rf /kaggle/tmp/phyein-sim \u0026\u0026 git clone -q https://github.com/numa1997/phyein-sim /kaggle/tmp/phyein-sim \u0026\u0026 cd /kaggle/tmp/phyein-sim \u0026\u0026 git checkout -q main \u0026\u0026 git rev-parse HEAD \u003e /kaggle/working/commit.txt\n"}
+,{"stream_name":"stdout","time":1.785789944,"data":"$ bash /kaggle/tmp/phyein-sim/kaggle/bootstrap.sh foam 2\u003e\u00261 | tail -5\n"}
+,{"stream_name":"stdout","time":61.867155064,"data":"W: Skipping acquire of configured file 'main/source/Sources' as repository 'https://r2u.stat.illinois.edu/ubuntu noble InRelease' does not seem to provide it (sources.list entry misspelt?)\n"}
+,{"stream_name":"stdout","time":61.867214212,"data":"W: Skipping acquire of configured file 'main/source/Sources' as repository 'https://r2u.stat.illinois.edu/ubuntu noble InRelease' does not seem to provide it (sources.list entry misspelt?)\n"}
+,{"stream_name":"stdout","time":61.867226497,"data":"bootstrap foam: 60 s. Next: source /kaggle/tmp/phyein-sim/kaggle/env.sh foam\n"}
+,{"stream_name":"stdout","time":61.867874445,"data":"$ source /kaggle/tmp/phyein-sim/kaggle/env.sh foam; export OUT=/kaggle/working/run0 NP=4; cd /kaggle/tmp \u0026\u0026 foam_run.sh /kaggle/tmp/phyein-sim/cases/foam/cavity N=32 2\u003e\u00261 | tail -4\n"}
+,{"stream_name":"stdout","time":70.824263514,"data":"run time: 8 s  (cavity N=32)\n"}
+,{"stream_name":"stdout","time":70.824299158,"data":"cavity Re=100 N=32: max |u-u_Ghia|/U = 0.0042 (at y/L=0.4531), rms 0.0022, tolerance 0.01 -\u003e PASS\n"}
+,{"stream_name":"stdout","time":70.825834782,"data":"[\n"}
+,{"stream_name":"stdout","time":70.825859347,"data":" {\n"}
+,{"stream_name":"stdout","time":70.8258634,"data":"  \"set\": \"N=32\",\n"}
+,{"stream_name":"stdout","time":70.82586701,"data":"  \"exit\": 0,\n"}
+,{"stream_name":"stdout","time":70.825870454,"data":"  \"wall_s\": 9.0,\n"}
+,{"stream_name":"stdout","time":70.825873921,"data":"  \"result\": {\n"}
+,{"stream_name":"stdout","time":70.825877289,"data":"   \"Re\": 100,\n"}
+,{"stream_name":"stdout","time":70.825880672,"data":"   \"N\": 32,\n"}
+,{"stream_name":"stdout","time":70.825884061,"data":"   \"max_abs_error\": 0.0041802611999999795,\n"}
+,{"stream_name":"stdout","time":70.825888167,"data":"   \"rms_error\": 0.0022454758291580008,\n"}
+,{"stream_name":"stdout","time":70.825909312,"data":"   \"worst_y\": 0.4531,\n"}
+,{"stream_name":"stdout","time":70.825915608,"data":"   \"tolerance\": 0.01,\n"}
+,{"stream_name":"stdout","time":70.825921758,"data":"   \"reference\": \"Ghia, Ghia \u0026 Shin 1982, Table I\",\n"}
+,{"stream_name":"stdout","time":70.825928612,"data":"   \"pass\": true\n"}
+,{"stream_name":"stdout","time":70.825934434,"data":"  }\n"}
+,{"stream_name":"stdout","time":70.825939186,"data":" }\n"}
+,{"stream_name":"stdout","time":70.825943895,"data":"]\n"}
+,{"stream_name":"stderr","time":73.643193129,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":73.643231021,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":74.056233024,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":74.05628313,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":75.957396454,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":77.274515708,"data":"[NbConvertApp] Writing 286027 bytes to __results__.html\n"}
+]

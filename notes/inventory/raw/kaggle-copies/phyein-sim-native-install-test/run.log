@@ -1,0 +1,15 @@
+[{"stream_name":"stdout","time":106.419896669,"data":"{\n"}
+,{"stream_name":"stdout","time":106.419970299,"data":" \"gpu\": \"none: bash: line 1: nvidia-smi: command not found\",\n"}
+,{"stream_name":"stdout","time":106.419991671,"data":" \"github.com\": \"NO DNS: [Errno -3] Temporary failure in name resolution\",\n"}
+,{"stream_name":"stdout","time":106.419995309,"data":" \"dl.openfoam.com\": \"NO DNS: [Errno -3] Temporary failure in name resolution\",\n"}
+,{"stream_name":"stdout","time":106.419998152,"data":" \"conda.anaconda.org\": \"NO DNS: [Errno -3] Temporary failure in name resolution\",\n"}
+,{"stream_name":"stdout","time":106.420001019,"data":" \"jax\": \"0.11.1\",\n"}
+,{"stream_name":"stdout","time":106.420015723,"data":" \"jax_devices\": \"[CpuDevice(id=0)]\"\n"}
+,{"stream_name":"stdout","time":106.420019902,"data":"}\n"}
+,{"stream_name":"stderr","time":109.548509887,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":109.548551132,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":109.959526989,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":109.959565732,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":111.039938557,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":112.528806603,"data":"[NbConvertApp] Writing 276994 bytes to __results__.html\n"}
+]

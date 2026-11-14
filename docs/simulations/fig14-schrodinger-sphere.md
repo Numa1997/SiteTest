@@ -286,9 +286,10 @@ The owner: "The animation looks horrible ... glitches and slow." Causes found an
   left there and stayed (levels up to 216 of 255 inside the hard ball in the side case). Fixed in
   [solver3d.py](../../tools/kaggle/schrodinger-shapes/solver3d.py): source at x = −17, r₀ = 5 (amplitude 0.018 of the peak at a
   barrier of radius 4); the start wave is set to zero inside a hard wall and normalised again. The 243 affected runs (108
-  side-wave runs, 135 hard runs of sphere, coin and tube) are computed again on Kaggle's CPU, four notebooks
-  `numakoudsie/schrodinger-shapes-3d-v2-a … d` (no GPU hours). Until they are on the site the page does not offer the wave
-  from the side, and says under a hard-wall run of version 1 what is wrong with it.
+  side-wave runs, 135 hard runs of sphere, coin and tube) were computed again on Kaggle's GPU (next section); that version 2 is
+  on the site. Four CPU notebooks `numakoudsie/schrodinger-shapes-3d-v2-a … d` ran the same runs in parallel; their output was
+  never used, and they were deleted on 14 November 2026 after their code, logs and file lists were copied to
+  [notes/inventory/raw/kaggle-copies/](../../notes/inventory/raw/kaggle-copies/).
 - The live preview in the browser is drawn as fog also when Mesh is chosen (it has no fine sheet).
 
 ## Version 2 of the 243 runs is on the site (13 November 2026, 03:35 UTC)
@@ -298,8 +299,9 @@ The owner asked for the GPU instead of the CPU. `numakoudsie/schrodinger-shapes-
 runs (0.62 h; estimate before launch 0.76 h and 23 min), 1 068 639 steps. Merged by
 [merge_v2.py](../../tools/kaggle/schrodinger-shapes/merge_v2.py): every SHA-256 checked, the 243 files and index entries
 replaced (marked `v: 2`), `shell` set to the new source (x = −17, r₀ = 5, travel 24). The four CPU notebooks `…-v2-a` to `-d`
-started earlier compute the same runs; their output is not used (the connector could not cancel them: its cancel call needs a
-session number that neither its status nor its info call returns).
+started earlier computed the same runs; their output was not used (the connector could not cancel them: its cancel call needs a
+session number that neither its status nor its info call returns). They were deleted on 14 November 2026; their code and records
+are kept in [notes/inventory/raw/kaggle-copies/](../../notes/inventory/raw/kaggle-copies/).
 
 Measured on the stored files of version 2 (levels × the frame's peak, in units of the first frame's peak in the plane z = 0):
 

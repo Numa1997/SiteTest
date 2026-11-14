@@ -1,0 +1,40 @@
+{
+ "notebook": "numakoudsie/schrodinger-sphere-gpu-smoke-test",
+ "version": 1,
+ "files": [
+  {
+   "file": "pack.py",
+   "saved": true,
+   "bytes": 1004,
+   "sha256": "99ce481e105c4efb78f42b59a388b4a2da73924fc1ba17ff199ef21328df5fdf"
+  },
+  {
+   "file": "panel_template.html",
+   "bytes": 12426,
+   "saved": false
+  },
+  {
+   "file": "progress.log",
+   "saved": true,
+   "bytes": 1837,
+   "sha256": "904305b779fde9cb96276fa4a1210f4ec084a39ee0148dd2b0603a146f5b53fd"
+  },
+  {
+   "file": "schrodinger_sphere.html",
+   "bytes": 2770505,
+   "saved": false
+  },
+  {
+   "file": "solver.py",
+   "saved": true,
+   "bytes": 3067,
+   "sha256": "0bf9727e5fbca80f243953bd49bf2ac5ccb104f11e4971ccf5aa99ef657bdc0c"
+  },
+  {
+   "file": "timing.json",
+   "saved": true,
+   "bytes": 1735,
+   "sha256": "2381ff2e76c9317e992a18f101044f095e9a9e497e253e2a78a54897470841fa"
+  }
+ ]
+}

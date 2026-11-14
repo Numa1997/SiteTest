@@ -1,0 +1,19 @@
+[   23.7 s] jax backend before install: gpu
+[   25.3 s] devices: [CudaDevice(id=0), CudaDevice(id=1)] jax 0.11.1
+[   25.9 s] code from https://raw.githubusercontent.com/Numa1997/SiteTest/c705a42d3abd534725af4eb899fff949e033c332/tools/kaggle/schrodinger-sphere/
+[   28.6 s] bench {'N': 128, 'dtype': 'complex64', 'ms_per_step': 1.613, 'ns_per_cell_step': 0.769}
+[   30.5 s] bench {'N': 128, 'dtype': 'complex128', 'ms_per_step': 5.096, 'ns_per_cell_step': 2.43}
+[   37.6 s] bench {'N': 256, 'dtype': 'complex64', 'ms_per_step': 13.378, 'ns_per_cell_step': 0.797}
+[   50.7 s] bench {'N': 256, 'dtype': 'complex128', 'ms_per_step': 39.535, 'ns_per_cell_step': 2.356}
+[   55.2 s] accuracy c64 dt=0.01 {'norm': np.float64(0.9926533102989197), 'behind': np.float64(0.24823394417762756), 'ahead': np.float64(0.6324953436851501), 'wall': 4.09, 'steps': 1496}
+[   66.1 s] accuracy c128 dt=0.01 {'norm': np.float64(0.9933511582954013), 'behind': np.float64(0.24841930647764343), 'ahead': np.float64(0.6329267249814616), 'wall': 10.54, 'steps': 1496}
+[   72.8 s] accuracy c64 dt=0.005 {'norm': np.float64(0.9906501173973083), 'behind': np.float64(0.24728986620903015), 'ahead': np.float64(0.6317890286445618), 'wall': 6.44, 'steps': 2992}
+[   76.2 s] run E=2.0 V0=0.0 R=4.0: 1457 steps in 3.1 s, ahead 0.996
+[   80.5 s] run E=2.0 V0=1.0 R=4.0: 1457 steps in 3.9 s, ahead 0.913
+[   84.7 s] run E=2.0 V0=2.0 R=4.0: 1457 steps in 3.8 s, ahead 0.662
+[   88.8 s] run E=2.0 V0=3.0 R=4.0: 1457 steps in 3.8 s, ahead 0.628
+[   92.9 s] run E=2.0 V0=4.0 R=4.0: 1457 steps in 3.7 s, ahead 0.616
+[   96.8 s] run E=2.0 V0=6.0 R=4.0: 1457 steps in 3.6 s, ahead 0.603
+[  100.3 s] run E=3.0 V0=3.0 R=4.0: 1222 steps in 3.2 s, ahead 0.640
+[  133.9 s] 256^3 run: 1457 steps in 30.5 s, ahead 0.6247 (128^3: 0.6278)
+[  134.7 s] panel 2.8 MB written; all done in 135 s
