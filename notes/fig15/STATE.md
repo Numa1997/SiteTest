@@ -124,6 +124,14 @@ c80244e inventory · 923b43f filer per-notebook commit, replaced record · c21bd
 - Page items done: gain note, energy readout, Fig. 15e title/labels/units/count, Read values line, Fermi energy wording.
 - Checked locally on the full data: 1086 KaTeX, 0 errors, 14 sections, Expand all opens the box, no overflow, 390/1440.
 
+## LIVE (14 Nov 10:01 UTC)
+- main 0b5ec289 (merged onto origin/main; the local `main` ref was stale and was not used). Workers Builds deployed by 10:00.
+- Verified live: page 200, note 1086 KaTeX / 0 errors / 14 sections at 390 and 1440, index 3697 runs (15 replaced),
+  generations.json lists rt3d2 3697; /r2/ file 200, immutable cache, nosniff, octet-stream; its SHA-256 equals the index.
+- Known and not ours: Cloudflare's injected analytics beacon is blocked by the site's CSP (console error on every page).
+- Open accuracy point: twin and 3D runs agree (to <1 %) but long-packet resonances sit about 0.02-0.05 E_u below the exact
+  1D ones (barriers 1 a thick on a 0.5 a grid); removing it needs a finer-grid GPU rerun. The note states the grid accuracy.
+
 ## Left (Next = the first open item)
 1. Shards 4-6 and the fix job (two at a time as slots free; check-ins by `send_later`); download each, check SHA-256.
 2. File with `file_rt3d2.py` (date of filing), add the generation to `generations.json`.
