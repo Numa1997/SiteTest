@@ -35,6 +35,20 @@ last, GPU only with the owner's yes on a bill.
 - Owner, 14 Nov: when everything is done, integrate ALL data into one new generation: kept stored runs + 1,088 exact walls
   (488 CPU + 600 GPU) + 2D discs and shells, one index.
 
+## Run of the "complete brief" (14 Nov, ~13:00-13:15 UTC)
+- Step 1: branch at 7e75d4b; Kaggle connector loaded; quota 48,167 s used of 108,000 s (resets 21 Nov 00:00 UTC); R2 check
+  `curl -sS https://api.cloudflare.com/client/v4/accounts` returned "success" with one account.
+- Step 2 (commit e5ba25a): wall_gpu_run.py rewritten: reads walls_all.json (all 1,088 walls, 475 biased, 13 geometry groups),
+  START/STOP range, batches each group with jax.vmap (k padded with zero weights; adaptive batch <= 8 from a memory estimate),
+  checks the first wall of each group against the verified single-wall path (dT <= 1e-9, levels <= 1) and falls back to it on any
+  mismatch or error; pip-install fallbacks in wall_gpu_run.py and rt2d_run.py replaced by the GPU backend check; loaders
+  (walls_gpu.ipynb.tmpl, build_rt2d.py) check the backend first. NOT run locally (brief: no computing in the container).
+- Step 3: numakoudsie/fig15-correction-walls-gpu v1, kernel 144997790, walls 0-100, commit e5ba25a, saved ~13:09 UTC.
+  get_notebook_session_status returned {} at ~1 min and at ~3 min (13:13 UTC): no session started (same symptom as
+  fig15-correction-walls-exact v1). get_notebook_info shows the notebook saved, current_version_number 1, last_run_time
+  "2026-11-11T13:13:11Z" (a date three days off). STOPPED per the brief; owner asked to open the notebook page.
+- Not launched: walls-gpu-2, 2d-smoke, 2d shards, filing. Smoke loader built (scratchpad), not saved to Kaggle.
+
 ## Numbers (filled as measured)
 ### Walls, exact solver (`tools/kaggle/resonant-tunnelling/correction/exact_wall.py`)
 - Method: chi = Int dk/2pi [c+ psi+ + (k/kR) c- psi-] e^{-iEt}; both scattering families (left- and right-incident), exact
