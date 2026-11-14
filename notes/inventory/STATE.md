@@ -4,7 +4,7 @@ Chat state written into the repository first (CLAUDE.md, "Write the chat's state
 reread this file and `BRIEF.md` before anything else. Keep it current at every step that changes what is live or what is left.
 Never write the owner's name in files of this folder.
 
-Last update: 14 November 2026, end of Phase 1 (deliverables written, awaiting the owner's yes).
+Last update: 14 November 2026, 13:35 UTC, Phase 2 running (owner's go: "one notebook per figure ... one data set per figure ... delete all redundant").
 
 ## Aim
 
@@ -15,8 +15,20 @@ delete or merge what is redundant, and set one layout rule for the future. Full 
 
 ## Phase
 
-**Phase 1 (read-only) is finished; STOP. Waiting for the owner's yes, group by group (see ACTIONS.md).** Nothing is deleted or changed anywhere outside this folder. Phase 2 starts only on the
-owner's yes to a named group of actions.
+**Phase 2 is running** on the owner's order of 14 November 2026: one notebook per figure, its data bundled in one Kaggle dataset per
+figure, delete every redundant notebook and script. Kaggle access: the API at `https://api.kaggle.com/v1/` with the key saved as a
+network secret for `api.kaggle.com` (header `Authorization: Bearer`, injected by the proxy). The `kaggle` CLI itself fails, because it
+checks the key by sending it in a request body, where the proxy cannot insert it; call the API with curl or `urllib` instead.
+
+Done in Phase 2:
+1. Copied code, metadata, run log, file list (size, SHA-256) and small files of 11 redundant notebooks to `raw/kaggle-copies/<slug>/`
+   (script: `preserve.py`, kept in the scratchpad; method in `raw/kaggle-deletions.md`). Commit e83891b0.
+2. Docs that named them now point at the copies: `docs/kaggle.md` (smoke test), `docs/simulations/fig14-schrodinger-sphere.md` (CPU shards).
+3. Deleted 11 notebooks at 13:32 UTC (log `raw/kaggle-deletions.log`, each HTTP 200). Account: 39 notebooks before, 28 after (listed).
+
+Held: Fig. 15 (`fig15-*`, 15 notebooks incl. the 3 `fig15-correction-walls-*` of the running correction session) and Fig. 16
+(`fig-16-guinness-cart-with-control`): not touched while those sessions run. `schrodinger-sphere-3d-generation` (only copy of its data)
+waits for the Fig. 14 dataset.
 
 ## The owner's rules (from the brief, CLAUDE.md and the owner's preferences)
 
