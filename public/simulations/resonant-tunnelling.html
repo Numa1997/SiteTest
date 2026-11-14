@@ -167,6 +167,7 @@
                         <button type="button" data-g="10" aria-pressed="false">× 10</button>
                     </div>
                     <p class="chips-note" id="gain-note">One scale for the whole run: the largest |ψ| the run reaches is height 1.</p>
+                    <p class="chips-note">Read values (under the figure): switch it on, then click the sheet to pin a point; its stored numbers appear in the data panel, and the pin stays until you move it.</p>
                 </div>
                 <div class="panel__group">
                     <p class="panel__label">Time</p>
@@ -194,7 +195,7 @@
                 </figure>
                 <figure class="stage">
                     <div class="stage__canvas chart" id="stage-iv"><canvas id="iv" aria-label="Current against voltage for a resonant-tunnelling diode built from the same two walls, with the backward-sloping region marked"></canvas></div>
-                    <figcaption class="stage__cap"><span><b>Fig. 15e</b> · the diode: current against voltage (two walls, exact 1D)</span><span id="cap-iv">Tsu–Esaki</span></figcaption>
+                    <figcaption class="stage__cap"><span><b>Fig. 15e</b> · the diode: current against bias, from the 3D runs, with the exact 1D curve for walls</span><span id="cap-iv">Tsu–Esaki</span></figcaption>
                 </figure>
             </div>
             <div class="src" id="ru-box" style="margin-top:12px"><b>The same device in real units · GaAs / AlGaAs</b>
@@ -389,9 +390,17 @@
             var X = function (v) { return L + (v - o.x0) / (o.x1 - o.x0) * pw; }, Y = function (v) { return T + ph - (v - o.y0) / (o.y1 - o.y0) * ph; };
             (o.xticks || []).forEach(function (v) { var x = X(v); ctx.strokeStyle = RULE; ctx.beginPath(); ctx.moveTo(x, T + ph); ctx.lineTo(x, T + ph + 3); ctx.stroke(); ctx.textAlign = 'center'; ctx.fillText(o.xfmt ? o.xfmt(v) : v, x, T + ph + 15); });
             (o.yticks || []).forEach(function (v) { var y = Y(v); ctx.strokeStyle = RULE; ctx.beginPath(); ctx.moveTo(L - 3, y); ctx.lineTo(L, y); ctx.stroke(); ctx.textAlign = 'right'; ctx.fillText(o.yfmt ? o.yfmt(v) : v, L - 5, y + 3); });
-            if (o.xlabel) { ctx.textAlign = 'right'; ctx.fillText(o.xlabel, W - R, T + ph + 15); }
-            if (o.ylabel) { ctx.textAlign = 'left'; ctx.fillText(o.ylabel, L + 5, T + 11); }
+            if (o.xlabel) subText(ctx, o.xlabel, W - R, T + ph + (o.xlabelBelow ? 28 : 15), 'right');
+            if (o.ylabel) subText(ctx, o.ylabel, o.ylabelAbove ? L : L + 5, o.ylabelAbove ? T - 7 : T + 11, 'left');
             return { X: X, Y: Y, L: L, T: T, pw: pw, ph: ph };
+        }
+        /* a label with subscripts: "V_b" draws b small and lowered (canvas text has no markup) */
+        function subText(ctx, txt, x, y, align) {
+            var parts = txt.split(/(_[A-Za-z0-9])/), big = MONO, small = MONO.replace('10px', '8px'), w = 0;
+            parts.forEach(function (q) { ctx.font = q[0] === '_' ? small : big; w += ctx.measureText(q[0] === '_' ? q.slice(1) : q).width; });
+            var cx = align === 'right' ? x - w : x; ctx.textAlign = 'left';
+            parts.forEach(function (q) { var sub = q[0] === '_', t = sub ? q.slice(1) : q; ctx.font = sub ? small : big; ctx.fillText(t, cx, y + (sub ? 3 : 0)); cx += ctx.measureText(t).width; });
+            ctx.font = MONO;
         }
         function ticks(tEnd) { var st = tEnd > 150 ? 50 : tEnd > 60 ? 20 : 10, out = []; for (var v = 0; v <= tEnd - 0.12 * tEnd; v += st) out.push(v); return out; }
         function plot(ctx, ax, xs, ys, col, wd, dash) {
@@ -497,7 +506,7 @@
             if (!EX || !IDX) return; var iv = EX.iv, runs = IDX.iv || [], jm = Math.max.apply(null, iv.J);
             runs.forEach(function (c) { c.J_runs.forEach(function (p) { jm = Math.max(jm, p[1]); }); });
             jm *= 1.1;
-            var ax = axes(ivc, ivBox, { x0: 0, x1: 2.5, y0: 0, y1: jm, xticks: [0, 0.5, 1, 1.5, 2, 2.5], yticks: [0, jm / 2, jm], xlabel: 'voltage V (units of E_u)', ylabel: 'current J', xfmt: function (v) { return v.toFixed(1); }, yfmt: function (v) { return v.toFixed(2); } });
+            var ax = axes(ivc, ivBox, { x0: 0, x1: 2.5, y0: 0, y1: jm, xticks: [0, 0.5, 1, 1.5, 2, 2.5], yticks: [0, jm / 2, jm], T: 24, ylabelAbove: true, B: 38, xlabelBelow: true, xlabel: 'bias V_b across the diode, in units of E_u = 150 meV', ylabel: 'current J, in units of 1.22 MA/cm²', xfmt: function (v) { return v.toFixed(1); }, yfmt: function (v) { return v.toFixed(2); } });
             if (iv.V_valley) { ivc.fillStyle = 'rgba(163,48,63,.07)'; ivc.fillRect(ax.X(iv.V_peak), ax.T, ax.X(iv.V_valley) - ax.X(iv.V_peak), ax.ph); }
             plot(ivc, ax, iv.V, iv.J, 'rgba(163,48,63,.45)', 1.2); var items = [['exact 1D, one energy at a time', 'rgba(163,48,63,.6)']];
             runs.forEach(function (c) { if (!c.J_runs.length) return; var col = c.shape === 'flat' ? WINE : SLATE;
@@ -505,7 +514,7 @@
                 c.J_runs.forEach(function (p) { dot(ivc, ax, p[0], p[1], col, run && run.head.spec.bias === p[0] && run.head.spec.shape === c.shape && run.head.spec.R === c.R); });
                 items.push([(c.shape === 'flat' ? 'two walls' : 'two discs, R = ' + c.R) + ': 3D runs', col]); });
             legend(ivc, ax, items);
-            document.getElementById('cap-iv').textContent = runs.some(function (c) { return c.J_runs.length; }) ? 'from ' + runs.reduce(function (n, c) { return n + c.J_runs.length * c.energies.length; }, 0) + ' 3D runs' : 'Tsu–Esaki';
+            document.getElementById('cap-iv').textContent = runs.some(function (c) { return c.J_runs.length; }) ? runs.reduce(function (n, c) { return n + c.J_runs.length * c.energies.length; }, 0) + ' filed runs (' + runs.map(function (c) { return (c.shape === 'flat' ? 'walls ' : 'discs ') + c.J_runs.length + ' biases × ' + c.energies.length + ' energies'; }).join('; ') + ')' : 'Tsu–Esaki';
         }
         function fillRealUnits() {
             var ru = EX.real_units, el = document.getElementById('ru'); el.innerHTML = '';
@@ -549,7 +558,7 @@
             var es = energies(); energyIn.max = es.length - 1; var j = 0; es.forEach(function (e, i) { if (Math.abs(e - E) < Math.abs(es[j] - E)) j = i; }); energyIn.value = j; showE();
             setShapeNote();
         }
-        function showE() { var es = energies(), e = es[+energyIn.value]; eOut.textContent = e != null ? e.toFixed(3) + ' · ' + es.length + ' runs' : '—'; }
+        function showE() { var es = energies(), e = es[+energyIn.value]; eOut.textContent = e != null ? e.toFixed(3) + ' · one of ' + es.length + ' stored energies' : '—'; }
         function setShapeNote() {
             var s = sel, n = { flat: s.N === 1 ? 'One wall, infinite across.' : s.N + ' walls, infinite across: the wave separates, so along the flight it is exactly the 1D problem.',
                                coin: (s.N === 1 ? 'One disc' : s.N + ' discs') + ' of radius ' + s.R + ' on the flight axis: the wave also goes round them, and what is trapped leaks out at the side.',
