@@ -179,3 +179,7 @@ is a time (reason); uniqueness for the product; AC power argument for NDR; Gamma
 Coordinator already has the page items (Fig. 15e, gain note). Next: round 6.
 
 ## Round 6 launched 03:18 UTC on ada0993 (fresh referee, owner, student, derivation checker).
+
+## Round 5 derivation checker (derivation-check-gen2-r5.md): 32 equations re-derive; 6 fixed: 20 % (not 21), filed thirds repeat
+every 0.75 in voltage, mirror symmetry exact only inside the side border (border one cell off), two fifths of the d=2 shortfall,
+theta closes to 1e-8 (root precision), J_runs unit includes E_u.
