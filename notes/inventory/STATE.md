@@ -65,6 +65,25 @@ owner's yes to a named group of actions.
   `fig15-rt3d-singles-v2`, `fig15-rt3d2-shard-{1..6}-of-6`, `fig15-rt3d2-fix1`; Fig. 12 runs 6, 8, 10 (notebook versions 6, 8, 10);
   Fig. 14 smoke and full-grid notebooks (version 1). Not yet checked against Kaggle.
 
+## Facts from Kaggle (read 14 November 2026; raw record in `notes/inventory/raw/kaggle-notebooks.json`)
+
+- **Fact:** account `numakoudsie` holds 35 notebooks (`search_notebooks`, group Profile), 0 datasets (`search_datasets`, group My: empty),
+  0 models (`list_models`, owner numakoudsie: empty). Fig. 15: 14 notebooks (6 generation 1, 8 generation 2); Fig. 14: 12 (4 GPU + 3 CPU
+  + shapes-3d GPU + four CPU `v2-a..d`); Fig. 12: 3; other: 6 (ripple-tank test, four `phyein-sim` tests/scripts, Kaggle's empty starter).
+- **Fact:** GPU quota: 48 167 s used of 108 000 s, reset 2026-11-21 00:00 UTC (`get_accelerator_quota`).
+- **Fact:** `get_notebook_info` gives only the current version number and the current source; per-version sources need `versionLabel`.
+  Multi-version notebooks: `guinness-on-a-cart-stout-in-jax` v10, `guinness-free-swing-v2` v5, `guinness-on-a-cart-stout-sloshing` v5,
+  `schrodinger-shapes-3d` v2, `schrodinger-shapes-3d-v2-a..d` v2, `html-panel-test-…` v2, `phyein-sim-jax-swingup-gpu` v2,
+  `phyein-sim-native-install-test` v2.
+- **Fact:** Fig. 15 generation 2 shards 1 and 2 and the smoke test fetched code at `cdcade4`; shards 3 to 6 and `fix1` at `57770d2` (the run-length fix).
+- **Fact:** `schrodinger-shapes-3d` (v2, GPU) and `schrodinger-shapes-3d-v2-a..d` (CPU) run the same job set `hard_and_shells` at the same
+  commit `94d1281`: the same 243 runs were computed twice. Which output the site used is not yet checked.
+- **Fact:** four notebooks fetch code from the GitHub repository `numa1997/phyein-sim`, outside `Numa1997/SiteTest` and outside this session's reach.
+- **Fact:** `get_notebook_info` reports `last_run_time` 2026-11-11T12:23 for every notebook, rising 0.4 s per call: an artefact. The
+  search listing's times are used instead.
+- **Fact:** `list_notebook_session_output` returns file names (no sizes) and the run log; for the Fig. 15 shard the answer was 195 kB of text,
+  saved to a file by the harness. Sizes need HEAD requests on the signed URLs (not yet tried).
+
 ## Method (order of work, Phase 1)
 
 1. Repository: list branches, every data folder under `public/data/` (size, generation, whether a page loads it, by reading the
