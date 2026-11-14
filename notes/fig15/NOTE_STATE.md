@@ -87,3 +87,6 @@ thousandths, upper to hundredths; all resonances listed. 8 bias wording. 9 unequ
 Not changed (outside my files / by design): body font (shared stylesheet; same in every note); Fig. 15e axis label and "from 1000
 3D runs" heading and caption (page code); blank 3D panels in a local build (runs live on R2); the picture-vs-data box stays
 closed by default (CLAUDE.md: "a paragraph the reader can open"); no textbook added (only sources actually read).
+
+## Round 2 (launched ~02:50 UTC on db61bec): fresh referee, owner reader, student reader, derivation checker.
+Outputs: notes/fig15/referee.md, scratchpad/readers/r2-{owner,student}.md, scratchpad/derivation-check-r2.md.
