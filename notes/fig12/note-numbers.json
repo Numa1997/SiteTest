@@ -3035,6 +3035,14 @@
   "value": 0.36164821335461034,
   "text": "0.36"
  },
+ "edge_vs_bare_lo": {
+  "value": 65.19901777694024,
+  "text": "65"
+ },
+ "edge_vs_bare_hi": {
+  "value": 111.48875214551414,
+  "text": "111"
+ },
  "A_fit_wall_mm": {
   "value": 2.258743514840621,
   "text": "2.3"
@@ -3214,6 +3222,62 @@
  "res_dv_max": {
   "value": 0.09129999999999994,
   "text": "0.09"
+ },
+ "surge_cut_s": {
+  "value": 0.8,
+  "text": "0.8"
+ },
+ "kerb_x": {
+  "value": 1.5,
+  "text": "1.5"
+ },
+ "bond": {
+  "value": 100.79417677268493,
+  "text": "101"
+ },
+ "bond_pct": {
+  "value": 0.4948360897184978,
+  "text": "0.5"
+ },
+ "kq_rides": {
+  "value": 0.5982670061875467,
+  "text": "0.6"
+ },
+ "kq_resonant_bare": {
+  "value": 2.1349404150341007,
+  "text": "2"
+ },
+ "lambda_cm": {
+  "value": 13.343184314378176,
+  "text": "13"
+ },
+ "zeta_num_vs_head_pct1": {
+  "value": 2.4618541642744187,
+  "text": "2.5"
+ },
+ "ride_sharp30.back_mm": {
+  "value": 24.26000000000003,
+  "text": "24"
+ },
+ "ride_sharp30_preview.back_mm": {
+  "value": 23.860000000000007,
+  "text": "24"
+ },
+ "ride_sharp30_slosh.back_mm": {
+  "value": 12.380000000000003,
+  "text": "12"
+ },
+ "ride_sharp30_joint.back_mm": {
+  "value": 17.000000000000014,
+  "text": "17"
+ },
+ "kerb_spec_ratio": {
+  "value": 1.1580247044546563,
+  "text": "1.16"
+ },
+ "T_head_meas_ms": {
+  "value": 343.0249979880184,
+  "text": "343"
  },
  "fig4_t_on_m": {
   "value": 1.4,

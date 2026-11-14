@@ -648,6 +648,19 @@ for nm in ("ride_sharp30", "ride_sharp30_preview", "ride_sharp30_slosh", "ride_s
 put("motor_vs_road", (P["Vmax"] - b * 1.5) / P["Ra"] * b / N["kerb_Fr_peak"][0], "{:.2f}")
 put("res_dv_max", N["ride_resonant.dv_drop"][0], "{:.2f}")
 
+
+# ---- round 2
+put("surge_cut_s", 0.8, "{:.1f}"); put("kerb_x", 1.5, "{:.1f}"); put("bond", RHO * G / (sj.GAMMA * k * k), "{:.0f}"); put("bond_pct", 100 * (math.sqrt(1 + sj.GAMMA * k * k / (RHO * G)) - 1), "{:.1f}")
+put("kq_rides", k * float(np.max([FILES[nm]["measured"]["lean_max_mm"] for nm in FILES if nm.startswith("ride")])) / 2e3, "{:.1f}")
+put("kq_resonant_bare", k * N["resonant_A_bare_mm"][0] * 1e-3, "{:.0f}")
+put("lambda_cm", 2 * math.pi / k * 100, "{:.0f}")
+put("zeta_num_vs_head_pct1", 100 * z_num / Z0, "{:.1f}")
+m_ = lambda nm: float(np.nanmin(RIDES[nm]["lean"][RIDES[nm]["t"] <= 1.2]))
+for nm in ("ride_sharp30", "ride_sharp30_preview", "ride_sharp30_slosh", "ride_sharp30_joint"): put(f"{nm}.back_mm", -m_(nm), "{:.0f}")
+ca_ = CA["sharp30_speed"]; ax_ = np.array(ca_["ax"]); tm_ = np.array(ca_["tm"])
+put("kerb_spec_ratio", abs(np.sum(ax_ * np.exp(1j * W0 * tm_))) / abs(np.sum(ax_ * np.exp(1j * w11 * tm_))), "{:.2f}")
+put("T_head_meas_ms", 1000 / (W0 / (2 * math.pi)), "{:.0f}")
+
 # ============================================================================================ 9. the figures (SVG)
 FONT = 'font-family="IBM Plex Mono, monospace"'
 
@@ -712,11 +725,11 @@ put_text("fig1_svg", svg(880, 400, "The glass of the page to scale: inner radius
 # Figure 2: the Stokes layer at four moments
 yy = np.linspace(0, 2e-3, 161); s2, X2, Y2 = axes(90, 30, 600, 230, [0, 0.5e-3, 1e-3, 1.5e-3, 2e-3], [-1, -0.5, 0, 0.5, 1], ["0", "0.5", "1", "1.5", "2"],
                                                    ["−1", "−0.5", "0", "0.5", "1"], (0, 2e-3), (-1.15, 1.15), "distance from the glass, d (mm)", "u∥ / U")
-body2 = [f'<rect x="90" y="30" width="{X2(DX) - 90:.1f}" height="230" fill="#f3ede4"/>', f'<text class="lbl" x="{(90 + X2(DX)) / 2:.1f}" y="296" text-anchor="middle">◂ one grid cell, {DX * 1e3:.1f} mm ▸</text>'] + s2
+body2 = [f'<rect x="90" y="30" width="{X2(DX) - 90:.1f}" height="230" fill="#f3ede4"/>', f'<text class="lbl" x="{(90 + X2(DX)) / 2:.1f}" y="24" text-anchor="middle">◂ one grid cell, {DX * 1e3:.1f} mm ▸</text>'] + s2
 for ph, col, lab, ly_ in ((0, "#1c1518", "ωt = 0", None), (np.pi / 2, "#7a1f2b", "ωt = π/2", None), (np.pi, "#8b8079", "ωt = π", None), (1.5 * np.pi, "#b98a5e", "ωt = 3π/2", None)):
     u = np.cos(ph) - np.exp(-yy / delta) * np.cos(ph - yy / delta)
     body2.append(path(X2, Y2, yy, u, stroke=col, stroke_width=2))
-    xa = 1.75e-3; ya = float(np.interp(xa, yy, u))
+    xa = 1.75e-3 if ph in (0, np.pi) else 0.45e-3; ya = float(np.interp(xa, yy, u))
     body2.append(f'<text class="lbl" x="{X2(xa):.1f}" y="{Y2(ya) + (-7 if ya >= 0 else 15):.1f}" fill="{col}">{lab}</text>')
 body2.append(f'<line x1="{X2(delta):.1f}" y1="30" x2="{X2(delta):.1f}" y2="260" stroke="#7a1f2b" stroke-dasharray="4 4"/><text class="lbl" x="{X2(delta) + 6:.1f}" y="44">δₛ = {delta * 1e3:.2f} mm</text>')
 put_text("fig2_svg", svg(720, 330, "The velocity of the stout along the glass, relative to the glass, against the distance from the wall, at four moments of one swing.", body2))
@@ -725,7 +738,7 @@ put_text("fig2_svg", svg(720, 330, "The velocity of the stout along the glass, r
 s3, X3, Y3 = axes(80, 30, 600, 230, [0, 1, 2, 3, 4, 5], [-4, -2, 0, 2, 4], ["0", "1", "2", "3", "4", "5"], ["−4", "−2", "0", "2", "4"], (0, 5), (-5, 5),
                   "time t (s)", "q (ring), mm")
 body3 = s3 + [f'<rect x="{X3(t0p):.1f}" y="30" width="{X3(t0p + Tp) - X3(t0p):.1f}" height="230" fill="#f3ede4"/>',
-              f'<text class="lbl" x="{X3(t0p):.1f}" y="22">the push</text>']
+              f'<text class="lbl" x="{X3(t0p + Tp) + 4:.1f}" y="252">◂ the push</text>']
 for key, col in (("nohead", "#8b8079"), ("head", "#7a1f2b")):
     d_ = SW[key]; body3.append(path(X3, Y3, d_["t"], d_["q"] * 1e3, stroke=col, stroke_width=1.6))
     F_ = d_["fit"]; tf = np.linspace(0, 5 - d_["t_start"], 400)
