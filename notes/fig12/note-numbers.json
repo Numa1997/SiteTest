@@ -1,0 +1,354 @@
+{
+ "k_theory_per_m": {
+  "value": 47.08951406649616,
+  "text": "47.1"
+ },
+ "f_bare_Hz": {
+  "value": 3.420687410573227,
+  "text": "3.421"
+ },
+ "head_mass_per_area_kg_m2": {
+  "value": 5.165910000000001,
+  "text": "5.17"
+ },
+ "head_density_kg_m3": {
+  "value": 271.89000000000004,
+  "text": "272"
+ },
+ "head_thickness_mm": {
+  "value": 19.0,
+  "text": "19"
+ },
+ "mu_mm": {
+  "value": 5.13,
+  "text": "5.13"
+ },
+ "head_mass_factor_inertia": {
+  "value": 1.2415654799054001,
+  "text": "1.242"
+ },
+ "head_mass_factor_freq": {
+  "value": 0.8974601743616774,
+  "text": "0.897"
+ },
+ "f_with_head_mass_theory_Hz": {
+  "value": 3.0699307199298427,
+  "text": "3.070"
+ },
+ "beta_bare": {
+  "value": 1.5407181225269262,
+  "text": "1.541"
+ },
+ "beta_with_head": {
+  "value": 1.2409479382789539,
+  "text": "1.241"
+ },
+ "swing_f0_Hz": {
+  "value": 2.9152394311359466,
+  "text": "2.915"
+ },
+ "swing_fd_Hz": {
+  "value": 2.6388237232286755,
+  "text": "2.639"
+ },
+ "swing_zeta": {
+  "value": 0.4250231022393094,
+  "text": "0.425"
+ },
+ "swing_f0_vs_theory_pct": {
+  "value": -5.0389179074839525,
+  "text": "-5.0"
+ },
+ "swing_omega_rad_s": {
+  "value": 18.316989560623956,
+  "text": "18.32"
+ },
+ "run8_task_seconds": {
+  "value": 2170.1,
+  "text": "2170"
+ },
+ "run9_task_seconds": {
+  "value": 185.3,
+  "text": "185"
+ },
+ "particles": {
+  "value": 1001952,
+  "text": "1,001,952"
+ },
+ "cells": {
+  "value": 370386,
+  "text": "370,386"
+ },
+ "rest.ms_per_step": {
+  "value": 74.3,
+  "text": "74.3"
+ },
+ "free_full_1.5.ms_per_step": {
+  "value": 74.0,
+  "text": "74.0"
+ },
+ "ride_sharp30.ms_per_step": {
+  "value": 88.5,
+  "text": "88.5"
+ },
+ "ride_sharp30_joint.ms_per_step": {
+  "value": 82.9,
+  "text": "82.9"
+ },
+ "ride_resonant.ms_per_step": {
+  "value": 84.1,
+  "text": "84.1"
+ },
+ "ride_resonant_joint.ms_per_step": {
+  "value": 84.5,
+  "text": "84.5"
+ },
+ "ride_bump25.ms_per_step": {
+  "value": 86.1,
+  "text": "86.1"
+ },
+ "ride_bump25_joint.ms_per_step": {
+  "value": 82.8,
+  "text": "82.8"
+ },
+ "ride_sharp30_slosh.ms_per_step": {
+  "value": 87.9,
+  "text": "87.9"
+ },
+ "ride_sharp30_preview.ms_per_step": {
+  "value": 90.9,
+  "text": "90.9"
+ },
+ "ride_bump25.lean_mm": {
+  "value": 8.94,
+  "text": "8.9"
+ },
+ "ride_bump25.tilt_mm": {
+  "value": 7.97,
+  "text": "8.0"
+ },
+ "ride_bump25.head_spilled_mL": {
+  "value": 0.0,
+  "text": "0.00"
+ },
+ "ride_bump25.stout_spilled_g": {
+  "value": 0.0,
+  "text": "0.000"
+ },
+ "ride_bump25.i_max_A": {
+  "value": 1.999,
+  "text": "2.00"
+ },
+ "head_served_mL": {
+  "value": 91.314,
+  "text": "91.314"
+ },
+ "stout_g": {
+  "value": 429.5833,
+  "text": "429.583"
+ },
+ "ride_bump25_joint.lean_mm": {
+  "value": 0.76,
+  "text": "0.76"
+ },
+ "ride_bump25_joint.tilt_mm": {
+  "value": 0.93,
+  "text": "0.93"
+ },
+ "ride_bump25_joint.head_spilled_mL": {
+  "value": 0.0,
+  "text": "0.00"
+ },
+ "ride_bump25_joint.stout_spilled_g": {
+  "value": 0.0,
+  "text": "0.000"
+ },
+ "ride_bump25_joint.i_max_A": {
+  "value": 1.64,
+  "text": "1.64"
+ },
+ "ride_resonant.lean_mm": {
+  "value": 13.89,
+  "text": "13.9"
+ },
+ "ride_resonant.tilt_mm": {
+  "value": 13.55,
+  "text": "13.6"
+ },
+ "ride_resonant.head_spilled_mL": {
+  "value": 0.01,
+  "text": "0.01"
+ },
+ "ride_resonant.stout_spilled_g": {
+  "value": 0.0,
+  "text": "0.000"
+ },
+ "ride_resonant.i_max_A": {
+  "value": 2.402,
+  "text": "2.40"
+ },
+ "ride_resonant_joint.lean_mm": {
+  "value": 0.95,
+  "text": "0.95"
+ },
+ "ride_resonant_joint.tilt_mm": {
+  "value": 0.89,
+  "text": "0.89"
+ },
+ "ride_resonant_joint.head_spilled_mL": {
+  "value": 0.0,
+  "text": "0.00"
+ },
+ "ride_resonant_joint.stout_spilled_g": {
+  "value": 0.0,
+  "text": "0.000"
+ },
+ "ride_resonant_joint.i_max_A": {
+  "value": 1.708,
+  "text": "1.71"
+ },
+ "ride_sharp30.lean_mm": {
+  "value": 24.26,
+  "text": "24.3"
+ },
+ "ride_sharp30.tilt_mm": {
+  "value": 22.23,
+  "text": "22.2"
+ },
+ "ride_sharp30.head_spilled_mL": {
+  "value": 2.44,
+  "text": "2.44"
+ },
+ "ride_sharp30.stout_spilled_g": {
+  "value": 0.0,
+  "text": "0.000"
+ },
+ "ride_sharp30.i_max_A": {
+  "value": 2.984,
+  "text": "2.98"
+ },
+ "ride_sharp30_joint.lean_mm": {
+  "value": 25.37,
+  "text": "25.4"
+ },
+ "ride_sharp30_joint.tilt_mm": {
+  "value": 24.54,
+  "text": "24.5"
+ },
+ "ride_sharp30_joint.head_spilled_mL": {
+  "value": 2.0,
+  "text": "2.00"
+ },
+ "ride_sharp30_joint.stout_spilled_g": {
+  "value": 0.0,
+  "text": "0.000"
+ },
+ "ride_sharp30_joint.i_max_A": {
+  "value": 2.929,
+  "text": "2.93"
+ },
+ "ride_sharp30_preview.lean_mm": {
+  "value": 21.17,
+  "text": "21.2"
+ },
+ "ride_sharp30_preview.tilt_mm": {
+  "value": 22.7,
+  "text": "22.7"
+ },
+ "ride_sharp30_preview.head_spilled_mL": {
+  "value": 2.46,
+  "text": "2.46"
+ },
+ "ride_sharp30_preview.stout_spilled_g": {
+  "value": 0.0,
+  "text": "0.000"
+ },
+ "ride_sharp30_preview.i_max_A": {
+  "value": 2.95,
+  "text": "2.95"
+ },
+ "ride_sharp30_slosh.lean_mm": {
+  "value": 21.83,
+  "text": "21.8"
+ },
+ "ride_sharp30_slosh.tilt_mm": {
+  "value": 20.8,
+  "text": "20.8"
+ },
+ "ride_sharp30_slosh.head_spilled_mL": {
+  "value": 1.65,
+  "text": "1.65"
+ },
+ "ride_sharp30_slosh.stout_spilled_g": {
+  "value": 0.0,
+  "text": "0.000"
+ },
+ "ride_sharp30_slosh.i_max_A": {
+  "value": 2.971,
+  "text": "2.97"
+ },
+ "free_full_1.5.lean_mm": {
+  "value": 7.58,
+  "text": "7.6"
+ },
+ "free_full_1.5.tilt_mm": {
+  "value": 6.93,
+  "text": "6.9"
+ },
+ "free_full_1.5.head_spilled_mL": {
+  "value": 0.0,
+  "text": "0.00"
+ },
+ "free_full_1.5.stout_spilled_g": {
+  "value": 0.0,
+  "text": "0.000"
+ },
+ "free_wall_1.5.lean_mm": {
+  "value": 10.72,
+  "text": "10.7"
+ },
+ "free_wall_1.5.tilt_mm": {
+  "value": 10.7,
+  "text": "10.7"
+ },
+ "free_wall_1.5.head_spilled_mL": {
+  "value": 0.0,
+  "text": "0.00"
+ },
+ "free_wall_1.5.stout_spilled_g": {
+  "value": 0.0,
+  "text": "0.000"
+ },
+ "books_head_err_mL_max": {
+  "value": 1.257285562553806e-08,
+  "text": "1.3e-08"
+ },
+ "books_stout_err_particles_max": {
+  "value": 0,
+  "text": "0"
+ },
+ "K1": {
+  "value": 74.00419568184816,
+  "text": "74.004"
+ },
+ "K2": {
+  "value": -1295.0100293472397,
+  "text": "-1295.010"
+ },
+ "K3": {
+  "value": -44.86594617998763,
+  "text": "-44.866"
+ },
+ "K4": {
+  "value": -150.00000000000102,
+  "text": "-150.000"
+ },
+ "resonant_joint_lean_cut_pct": {
+  "value": 93.16054715622751,
+  "text": "93"
+ },
+ "bump25_joint_lean_cut_pct": {
+  "value": 91.49888143176734,
+  "text": "91"
+ }
+}
