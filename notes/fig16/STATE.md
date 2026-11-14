@@ -58,7 +58,7 @@ The control system is the centre of the work; the cart is designed to give it th
 - Never touch: Fig. 12's files and data, Fig. 15's files, the Workers, R2, public/de/, public/ar/, scripts/i18n/, *.rtl.css.
 - Owner: BSc physics; metric units; define every term; mark Fact (with handle) / Inference / Opinion; mechanism in one line;
   one decision at a time with 2–3 options, a pick and the case against.
-- Report to the coordinator at: slosh-model validation; concepts (STOP); each GPU bill; live. At most 12 lines each.
+- REPORT DIRECTLY TO THE OWNER in this chat. There is no coordinating chat (owner, 14 November 2026); never message another session.
 - Never write the owner's name. No model names in code, commits or PRs.
 
 ## Files
