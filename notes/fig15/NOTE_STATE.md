@@ -183,3 +183,9 @@ Coordinator already has the page items (Fig. 15e, gain note). Next: round 6.
 ## Round 5 derivation checker (derivation-check-gen2-r5.md): 32 equations re-derive; 6 fixed: 20 % (not 21), filed thirds repeat
 every 0.75 in voltage, mirror symmetry exact only inside the side border (border one cell off), two fifths of the d=2 shortfall,
 theta closes to 1e-8 (root precision), J_runs unit includes E_u.
+
+## Round 6 student (32 marks): fixed the real error 'denominator nearly vanishes' (it falls to 1 - R = T and matches the
+numerator); n = 0 (phase count) vs n = 1 (box count) stated; nu for round trips (m is the mass); time unit 4.39 fs row; figure-key
+pointers (psi, twin, border, discs/shells); x4 label rule; colours in the probability view; long-packet start rule; 'stored
+energies' not 'grid'; packet energy FWHM named; (3) written with hbar, m; Tsu and Esaki (1973); Poisson defined; fit rule early;
+counts of the singles named; 4 % caused by the rule; 66 % context. Left: data-pending items (refresh at full index).
