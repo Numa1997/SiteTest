@@ -219,3 +219,8 @@ Declined/pending: textbook; status wording (full index); page items (coordinator
 
 ## Waiting for the full index. Check-in scheduled 08:40 UTC (send_later trig_015qJd9wuG4GdSQudXZGFJv3): fetch, refresh numbers,
 rewrite status sentences as findings, one fresh reader round + checker, READY. Round-6 derivation checker still running at 03:37.
+
+## Round 6 derivation checker (derivation-check-gen2-r6.md): 32 equations and all numbers check; fixed: filed runs used the older
+run-length rule (stated); supply grows only between E_F - eV_b and E_F, then levels at eV_b/kT; shells share the centre of the
+PAIRS (singles and rows of 3, 5 sit at 0.25); filed energies shift one step per voltage (half shared); d=2 long run 'more than one
+lifetime (344)'.
