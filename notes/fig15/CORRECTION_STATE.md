@@ -26,7 +26,22 @@ last, GPU only with the owner's yes on a bill.
    2,609 disc and shell runs.  -> STOP 2, report.
 
 ## Numbers (filled as measured)
-(none yet)
+### Walls, exact solver (`tools/kaggle/resonant-tunnelling/correction/exact_wall.py`)
+- Method: chi = Int dk/2pi [c+ psi+ + (k/kR) c- psi-] e^{-iEt}; both scattering families (left- and right-incident), exact
+  projections c+- = <psi+-|chi0> (closed form + numeric tail correction), flux integrals for left/right shares.
+- Closure P_left + P_struct + P_right = 1 to 2.5e-6 .. 2.4e-5 (sx = 12). Share carried by the two families 0.99998-1.0000;
+  the missing part is bounded by the start packet's share right of the first face (start_in_barrier).
+- Convergence (scratchpad conv.py): dk 5e-4 -> 2.5e-4 changes T by <= 3e-6, P_well <= 1e-5, |chi|^2 <= 3.5e-5 (N = 10, t 221);
+  bias slicing 2000 -> 8000 changes T by 8e-9; fine grid 0.01 -> 0.005: <= 2e-9.
+- vs coordinator's mytm.packet_T: unbiased N=2 E=0.3: 0.0085371 vs 0.0085371 (|G|^2 weights) and 0.0085558 (true packet, tail
+  included); biased B=2.125 E=0.5: 0.0390478 vs 0.0390475.
+- Bug found and fixed in my own code: weight of right-incident states under bias was kR/k, must be k/kR (T came out 1.47).
+### Writer check (`rebuild_wall.py twin`), flat_N2_V2_D1_P2.5_R0_B0_s3_E0.300
+- The grid twin's chi equals the stored prof1d to 4.6e-8 (relative). Rebuilt |psi| levels: max diff 1 level (1.1 % of points);
+  arg levels: max diff 1 where |psi| >= 10 levels (<= 3 where 3-10 levels).
+- NEW finding (Fact, measured): the stored 3D run loses norm steadily from t = 0, before any wave reaches a border: 3D transverse
+  share / exact discrete transverse share = 0.99981 at t 4.5, 0.99784 at t 45, 0.99536 at t 89.6. Inference: complex64 rounding of
+  the kinetic phase factor on the GPU (|exp(-i K^2 dt/2)| != 1 in float32), about 4e-7 per step. Effect: curves up to 2.4e-3 low.
 
 ## Files and commits
 - `notes/fig15/CORRECTION.md`, `notes/fig15/coordinator/*` (brief and coordinator's checks, from branch ccr-0bb034eb-nkmdd2)
