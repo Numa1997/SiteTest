@@ -4,7 +4,7 @@
  * and the ride never slows: at the end of the stored time it stops. Every file is checked against the SHA-256 in the index. */
 (function () {
   'use strict';
-  const DIR = '../data/fig12/2026-11-13/', INDEX_URL = DIR + 'index-jax.json';
+  const DIR = '../data/fig12/2026-11-13-run8/', INDEX_URL = DIR + 'index-jax.json';
   const GROUND_Y = 0.95, GLASS_BASE = 0.014, GLASS_FLOOR = 0.012;       // drawing constants handed to the view
   const REST = { zw: 0.04 - 0.0011, zb: 0.04 - 0.0011 + 0.135 - 0.0320 };  // the cart standing still (free-swing tests): drawn, not computed
   const $ = (id) => document.getElementById(id);
@@ -48,6 +48,7 @@
       try {
         const r = await load(i); ride = r; cur = i; bumps = r.D.bumps || []; fluid.h0 = r.fill; fluid.dx = r.dx; T = 0; playing = true; play.textContent = 'Pause';
         [...host.children].forEach((b, j) => b.setAttribute('aria-pressed', j === i ? 'true' : 'false'));
+        if (cmpRows) cmpRows.forEach((tr, j) => tr.classList.toggle('is-on', j === i));
         $('ride-note').textContent = describe(r.D); drawRoad();
       } catch (e) { $('cap-t').textContent = e.message; }
       loading = false; cv.classList.remove('is-held');
@@ -56,6 +57,26 @@
       const h = D.head ? ` Head of foam: ${(D.head_ml || 0).toFixed(0)} mL at the start, bubbles of ${(D.head.R32 * 1e6).toFixed(0)} µm (Sauter radius), ${Math.round(D.head.phi_l * 100)} % liquid.` : '';
       if (D.x) return `The cart drives at ${D.v0.toFixed(1)} m/s over: ${D.road}. ${D.frames} stored pictures, ${((D.frames - 1) / D.fps).toFixed(1)} s.` + h;
       return `The cart stands still. ${D.task && D.task.end ? 'The glass is given one short push along the road after 0.3 s, then left alone.' : ''} ${D.frames} stored pictures, ${((D.frames - 1) / D.fps).toFixed(1)} s.` + h;
+    }
+    // the comparison: every stored ride with the numbers Kaggle stored for it (largest lean, head and stout spilled, the
+    // largest motor current among the stored pictures); a row chooses its ride. Nothing here is computed but the layout.
+    let cmpRows = null;
+    const cmp = $('cmp');
+    if (cmp) {
+      const CT = { speed: 'speed held only', preview: 'road preview', slosh: 'slosh LQR', joint: 'joint control' };
+      const order = files.map((f, i) => i).filter((i) => files[i].kind === 'ride')
+        .sort((a, b) => (files[a].road || '').localeCompare(files[b].road || '') || ['speed', 'preview', 'slosh', 'joint'].indexOf(files[a].ctrl) - ['speed', 'preview', 'slosh', 'joint'].indexOf(files[b].ctrl));
+      const tb = document.createElement('tbody'); cmpRows = files.map(() => document.createElement('tr'));
+      let road = null;
+      for (const i of order) {
+        const f = files[i], m = f.measured || {};
+        if (f.road !== road) { road = f.road; const th = document.createElement('tr'); th.className = 'cmp-road'; th.innerHTML = `<th colspan="6">${road}, ${(f.v0 || 0).toFixed(1)} m/s</th>`; tb.appendChild(th); }
+        const tr = cmpRows[i]; tr.tabIndex = 0;
+        tr.innerHTML = `<td>${CT[f.ctrl] || f.ctrl}</td><td>${fmt(m.tilt_max_mm, 1)}</td><td>${fmt(m.lean_max_mm, 1)}</td><td>${fmt(m.head_spilled_ml, 2)}</td><td>${fmt(m.spilled_g, 2)}</td><td>${fmt(m.i_max_stored_A, 2)}</td>`;
+        tr.addEventListener('click', () => choose(i)); tr.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); choose(i); } });
+        tb.appendChild(tr);
+      }
+      cmp.appendChild(tb);
     }
     files.forEach((f, i) => {
       const b = document.createElement('button'); b.type = 'button'; b.className = 'btn btn--ghost g-ride'; b.textContent = f.label || f.path; b.setAttribute('aria-pressed', 'false');
@@ -97,16 +118,21 @@
       const dt = last == null ? 0 : Math.min(0.1, (now - last) / 1000); last = now;
       if (playing) { T += dt; if (T >= dur()) { T = dur(); playing = false; play.textContent = 'Ride again'; } }
       const D = ride.D, k = Math.min(D.frames - 1, Math.round(T * ride.fps));
-      if (D.x) { cart.x = D.x[k]; cart.vx = D.v[k]; cart.zb = D.zb[k]; cart.zw = D.zw[k]; } else { cart.x = 0.5; cart.vx = 0; cart.zb = REST.zb; cart.zw = REST.zw; }
+      if (D.x) { cart.x = D.x[k]; cart.vx = D.v[k]; cart.zb = D.zb[k]; cart.zw = D.zw[k]; cart.us = D.us ? D.us[k] : 0; } else { cart.x = 0.5; cart.vx = 0; cart.zb = REST.zb; cart.zw = REST.zw; cart.us = 0; }
       view.setFrame(ride, k); view.draw();
       if (document.activeElement !== tbar) tbar.value = Math.round(T / dur() * 1000);
       if (now - lastTxt > 250) {                                  // words rewritten four times a second
         lastTxt = now;
         $('t-out').textContent = `${fmt(D.t[k], 2)} of ${fmt(dur(), 1)} s`;
         $('r-v').textContent = D.v ? fmt(D.v[k], 2) + ' m/s' : 'at rest';
-        $('r-s').textContent = fmt(D.spill_g[k], 2) + ' g';                 // stored to 0.01 g: 23 particles are 0.01 g
-        $('r-h').textContent = fmt(D.head_spill_ml[k], 1) + ' mL';
+        // the books as the run counted them (stored to 1 mg, 2.3 particles of 0.429 mg, and to 0.001 mL); older files hold no head volume
+        if ($('r-sg')) $('r-sg').textContent = D.stout_g ? fmt(D.stout_g[k], 3) + ' g' : '—';
+        $('r-s').textContent = fmt(D.spill_g[k], 3) + ' g';
+        if ($('r-hg')) $('r-hg').textContent = D.head_glass_ml ? fmt(D.head_glass_ml[k], 2) + ' mL' : (D.head ? '—' : 'no head');
+        $('r-h').textContent = fmt(D.head_spill_ml[k], 2) + ' mL';
         $('r-d').textContent = String(D.nd[k] + D.nl[k]);
+        if ($('r-i')) $('r-i').textContent = D.i ? fmt(D.i[k], 2) + ' A' : '—';
+        if ($('r-u')) $('r-u').textContent = D.us ? fmt(D.us[k], 1) + ' N' : (D.i ? '0 N' : '—');
         $('cap-t').textContent = `stored picture ${k + 1} of ${D.frames} · ${files[cur].path}`;
         drawRoad();
       }

@@ -19,6 +19,10 @@ for t in S["tasks"]:
     name = t["name"]; print(f"\n== {name}: {t['kind']}, {t['end']} s, {t['steps']} steps, {t['ms_per_step']} ms a step, run {t['run_s']} s")
     check("near-surface list never full", t["nselmax"] < t["K"], f"{t['nselmax']} of {t['K']}")
     check("pressure residual small", t["resmax"] < 1e-3, f"largest {t['resmax']:.2e}")
+    if t.get("books"):   # run 8 on: the books of every stored frame
+        B = t["books"]
+        check("stout books: glass + air + cart + ground = poured, every frame", B["stout_err_particles_max"] == 0, f"largest error {B['stout_err_particles_max']} particles")
+        check("head books: glass + broken off = served, every frame", B["head_err_ml_max"] < 1e-3, f"largest error {B['head_err_ml_max']:.2e} mL")
     if name == "rest":
         g = t.get("rest_guard", {})
         check("rest guard", bool(g) and g["max_dev_mm"] < g["limit_max_mm"] and g["rms_dev_mm"] < g["limit_rms_mm"] and g["head_spilled_ml"] == 0 and g["spilled_g"] == 0, str(g))
@@ -44,6 +48,11 @@ for t in S["tasks"]:
             if t["model"] != "full":
                 # Gate E: the solver's own swing (no head) against the theory of the bare stout, 3.421 Hz
                 check("natural frequency within 3 % of 3.421 Hz", abs(f0 / 3.421 - 1) < 0.03, f"{f0:.3f} Hz")
+            elif t.get("head_mass"):
+                # run 8: the head's mass lowers the first mode by 1/sqrt(1 + m_s k/rho) (note eq. 15b), k read from run 6's swing
+                # without the head on the same grid (3.331 Hz: k = 44.66 1/m, m_s/rho = 5.13 mm, factor 0.902), applied to run 6's swing
+                # with the head's weight only (3.278 Hz): 2.957 Hz
+                check("natural frequency with the head's mass within 3 % of 2.957 Hz", abs(f0 / 2.957 - 1) < 0.03, f"{f0:.3f} Hz")
             else:
                 # with the head (weight, no inertia in this model) the swing's natural frequency is the bare stout's; Gate C predicted
                 # that the head stops the swing within about one period (zeta of order 0.5)
