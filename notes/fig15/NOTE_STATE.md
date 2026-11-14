@@ -246,3 +246,14 @@ note, shells lower bounds, legend as list, absorbing-border formula, mirror reas
 P^N form, finite-well table, gamma phase, packet sentence, f's, products unrounded (1.03, 0.73), fw 0.0704, gap 1.1-1.6.
 Not changed (reported): page-code items; textbook (only sources read are cited); remaining signpost references to later
 sections; shell levels not worked out; symbol reuse t/R/u. Next: fresh round 9.
+
+## Round 9 (on 8aa4802/300b514). Marks: referee 0 errors, 22 stops; owner 14 substantive + 10 presentation; student 14 stops;
+derivation checker: everything checks (0 errors). Fixed: single-shell yardstick (one shell already traps: 42.2 / >=103),
+walls one-wall yardstick 0.154 in disc table, same-run region-vs-twin gap 4.5 % (was mixing batches), section 14 blame
+(grid or fit window), closing line names hand-typed section-11 numbers, "rest is the grid" -> not traced, "measure" -> infer,
+ten-walls caveat in the section-11 box, xi wording, "about a third more" (was "hardly"), prefactor wording, GPU hours
+(18.6 notebook clock, 35.6 per-run), V0 = 3 long-packet rows + sentence, 3-figure precision, gains as ratio, lifetime
+independence caveat, current condition both sides, Fabry-Perot, stray comma, 2L_eff clause, (19) 11 % high at ratio 3,
+(19)/(16) cited in section 11, dx/dt reasons, inside-barrier picture, centrifugal barrier, eigenvector/trace/Fourier
+defined, border width b, no-wrap for short formula + punctuation, gamma phase, f steps, long-packet table, twin defined.
+Kept: symbol reuse (flagged at each switch), signpost references, Problems whose answers can be checked in tables, no textbook.

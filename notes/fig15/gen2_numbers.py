@@ -292,6 +292,8 @@ E1 = OUT['P2_5_E1']; wr = runs(shape='flat', P=2.5, R=0.0, **base)
 walls = ([r for r in wr if abs(r['spec']['E'] - 0.75) < 1e-9] or [nearest(wr, E1)])[0]   # 0.75: the grid energy nearest E1
 put('disc_E', walls['spec']['E'], 'the energy of the disc comparison: 0.75 (grid energy nearest E_r) once filed, else the nearest filed')
 tw = walls['tau']['tau']; put('disc_tau_walls', r3(tw), walls['file']); put('disc_T_walls', r3(through(walls)), walls['file'])
+w1 = [x for x in runs(shape='flat', N=1, V0=2.0, D=1.0, P=2.5, R=0.0, bias=0.0, sx=3.0) if abs(x['spec']['E'] - walls['spec']['E']) < 1e-9]
+put('disc_T1_walls', r3(through(w1[0])) if w1 else None, w1[0]['file'] if w1 else 'missing: one wall')
 for R in (2.0, 4.0, 6.0, 9.0, 12.0):
     tag = f'R{R:g}'
     r = [x for x in runs(shape='coin', P=2.5, R=R, **base) if abs(x['spec']['E'] - walls['spec']['E']) < 1e-9]
@@ -313,6 +315,14 @@ for R in (3.0, 5.0):
             put(f'{tag}_n', len(rs), 'shell runs with a fitted lifetime')
             put(f'{tag}_cut', bool(b['tau']['t1'] >= b['t_end'] - 2 * b['frame_dt'] and (b['tau']['t1'] - b['tau']['t0']) < b['tau']['tau']), 'True: the fit window ends at the end of the run AND spans less than one lifetime')
             put(f'{tag}_minE', min(r['spec']['E'] for r in rs), 'lowest energy filed so far for this pair')
+    one = [r for r in runs(shape='shell', N=1, R=R, V0=2.0, D=1.0, bias=0.0, sx=3.0) if r.get('tau')]
+    if one:
+        b1 = max(one, key=lambda r: r['tau']['tau'])
+        put(f'sh1_{R:g}_taumax', r3(b1['tau']['tau']), b1['file']); put(f'sh1_{R:g}_taumax_E', b1['spec']['E'], b1['file'])
+        put(f'sh1_{R:g}_cut', bool(b1['tau']['t1'] >= b1['t_end'] - 2 * b1['frame_dt'] and (b1['tau']['t1'] - b1['tau']['t0']) < b1['tau']['tau']), 'one shell: fit window cut by the run end')
+put('walls_Tfar', r3(walls['T_far']['value']), walls['file'] + ': region reading (T_far) of the walls run the disc table compares with')
+put('walls_Tfar_gap', round(100 * (1 - walls['T_far']['value'] / through(walls)), 1), 'per cent the region reading lies below the twin, same run')
+put('gpu_run_h', round(sum(r['wall'] for r in RUNS) / 3600, 1), 'index.json runs: sum of wall, hours on one GPU each')
 
 # ---------- 5. the diode ----------
 iv.V0 = 2.0
