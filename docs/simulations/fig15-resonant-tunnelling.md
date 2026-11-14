@@ -98,7 +98,7 @@ the whole parameter space the page walks, each part from an everyday picture to 
 | 09 | 3, 5, 10 barriers: Chebyshev formula `T_N = [1 + (R/T) U²_{N−1}(ξ)]⁻¹`, `N − 1` peaks, Kronig–Penney bands and gaps; Figure 2 | (22)–(24) |
 | 10–11 | What was computed (all seven groups of the batch), playback; grid accuracy (measured on generation 1, same method); batch bookkeeping (3739 jobs, 42 filed once, 3697 runs, 15 replaced) | (25)–(26) |
 | 12 | Discs R 2–12 (side leak, `1/τ = 1/τ_walls + 1/τ_side`, `τ_side ~ mRW/ħ`, solved from unrounded lifetimes), shells R 3, 5 (longest τ at the lowest energy run, so lower bounds) | (27)–(28) |
-| 13 | The diode under bias `V(x) = −eV(x − x_l)/L`: the level slides by ~V/2, the peak drops below 1, supply function derived, Tsu–Esaki, the current from all 500 runs (trapezoid over 25 stored energies) against the exact curve and against the same sum with exact `T` at those energies (recomputed at V0 = 2 by `gen2_numbers.py`, since the index's `J_exact_single_energy_same_points` was filed with `iv.py`'s default V0 = 3); Figure 3 | (29)–(32) |
+| 13 | The diode under bias `V(x) = −eV(x − x_l)/L`: the level slides by ~V/2, the peak drops below 1, supply function derived, Tsu–Esaki, the current from all 500 runs (trapezoid over 25 stored energies) against the exact curve and against the same sum with exact `T` at those energies (recomputed at V0 = 2 by `gen2_numbers.py` and checked against the index's `J_exact_single_energy_same_points`, refiled at V0 = 2 after the first filing used `iv.py`'s default V0 = 3); Figure 3 | (29)–(32) |
 | 14 | Limits, Problems, reading | — |
 
 **Numbers.** Every data-dependent number sits in one place, the `NUM` block at the top of the script, written by

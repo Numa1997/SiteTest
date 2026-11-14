@@ -350,9 +350,10 @@ for c in IDX['iv']:
     put(f'{tag}_Jp', round(Js[ip], 2), 'index.json iv J_runs: current at the peak'); put(f'{tag}_Jend', round(Js[-1], 2), 'index.json iv J_runs: current at the last voltage')
     put(f'{tag}_valley_at_end', iv_ == len(Js) - 1, 'True: the lowest current after the peak is at the last voltage computed')
     if c['shape'] == 'flat':
-        # NOT the index's J_exact_single_energy_same_points: file_rt3d2.py computed it with iv.py's default V0 = 3. Recomputed here at V0 = 2.
+        # recomputed here at V0 = 2 and checked against the index's J_exact_single_energy_same_points (refiled at V0 = 2 on 14 Nov 2026)
         assert iv.V0 == 2.0
         Ei = np.array(c['energies']); Xs = [float(np.trapezoid(iv.T_biased_vec(Ei, 2.5, V) * iv.supply(Ei, c['EF'], V, c['kT']), Ei)) for V in Vs]
+        St = c.get('J_exact_single_energy_same_points'); assert St and max(abs(q[1] - x) for q, x in zip(St, Xs)) < 1e-6, 'index same-points curve differs'
         jp = int(np.argmax(Xs[:len(Xs) * 3 // 4])); jv = jp + int(np.argmin(Xs[jp:]))
         put(f'{tag}_xs_Vp', Vs[jp], 'iv.py at V0 = 2: exact single-energy T at the 25 run energies, same trapezoid sum: peak')
         put(f'{tag}_xs_Vv', Vs[jv], 'same: valley after it'); put(f'{tag}_xs_pvr', round(Xs[jp] / Xs[jv], 1), 'same: peak / valley')
