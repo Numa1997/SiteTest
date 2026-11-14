@@ -149,6 +149,7 @@ put('start_in_max', float(f"{max(r['start_in_barrier'] for r in RUNS):.1e}"), 'l
 put('n_planned', 3739, 'rt3d2_run.py jobs(): the whole batch')
 put('n_nb', len(IDX['notebooks']), 'index.json: notebooks filed')
 put('gpu_h', round(sum(n.get('sweep_s', 0) for n in IDX['notebooks']) / 3600, 1), 'index.json notebooks: sum of sweep_s (clock hours, two T4 each)')
+put('gpu_ns', round(sum(r['wall'] for r in RUNS) / sum(float(np.prod(r['box'])) * r['steps'] for r in RUNS) * 1e9, 2), 'index.json runs: sum of wall (s, one GPU per run) / sum of grid points x steps')
 put('planned', dict(A=4 * 6 * 47, B=2 * 2 * 47, C=4 * 3 * 47, D=8 * 47, E=3 * 3 * 47, F=2 * 20 * 25, G=60), 'rt3d2_run.py jobs(): A 4 P x 6 shapes x 47 E; B 2 R x 2 P x 47; C 4 x 3 x 47; D 8 x 47; E 3 N x 3 x 47; F 2 x 20 V x 25 E; G 60 (notes/fig15/STATE.md)')
 
 # ---------- 1. spacing ----------
