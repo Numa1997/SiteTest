@@ -7,10 +7,11 @@
 import numpy as np
 from math import erfc, sqrt, pi
 import jax, jax.numpy as jnp
-jax.config.update("jax_enable_x64", True)
+import os
+jax.config.update("jax_enable_x64", os.environ.get("EXACT_X64", "1") == "1")
 import exact_wall as ew          # the geometry helpers and the reference implementation
 
-c128 = jnp.complex128
+c128 = jnp.complex128 if jax.config.jax_enable_x64 else jnp.complex64
 
 
 def _prop(q, L):
@@ -22,6 +23,9 @@ def _prop(q, L):
 class ExactJ:
     def __init__(self, sp, xs_out, dk=5e-4, nslice=2000, hfine=0.01):
         self.sp = sp; k_np, w_np = ew.kgrid(sp, dk); bias = sp.get("bias", 0.0) or 0.0
+        NB = 1024; npad = (-len(k_np)) % NB                    # zero-weight padding: the sums are unchanged
+        if npad:
+            k_np = np.r_[k_np, k_np[-1] + dk * np.arange(1, npad + 1)]; w_np = np.r_[w_np, np.zeros(npad)]
         segs, xl, xr = ew.segments(sp, nslice); self.xl, self.xr = xl, xr
         k = jnp.asarray(k_np); w = jnp.asarray(w_np); E = 0.5 * k * k; kR = jnp.sqrt(k * k + 2 * bias)
         self.k, self.w, self.E, self.kR = k, w, E, kR
@@ -52,8 +56,8 @@ class ExactJ:
             xx = np.linspace(a, b, n); fine.append(xx); fw.append(ew.simpson_w(n, (b - a) / (n - 1)))
             m = 0.5 * (a + b); fwell.append(np.full(n, not any(abs(m - c) < D / 2 for c in cs)))
         self.xf = np.concatenate(fine); self.wf = jnp.asarray(np.concatenate(fw)); self.well = np.concatenate(fwell)
-        s = sp["sx"]; xt_hi = xl + 10 * s
-        nt = int(np.ceil((xt_hi - xl) / hfine)); nt += (nt % 2 == 1); nt += 1
+        s = sp["sx"]; xt_hi = max(xr + 1.0, ew.x0_of(sp) + 8.6 * s)      # |chi0|^2 < 1e-16 of its peak beyond 8.6 sigma
+        ht = 0.02; nt = int(np.ceil((xt_hi - xl) / ht)); nt = -(-nt // 512) * 512 + 1; xt_hi = xl + ht * (nt - 1)
         xt = np.linspace(xl, xt_hi, nt); wt = ew.simpson_w(nt, (xt_hi - xl) / (nt - 1))
         # projections: closed form + exact correction where chi0's tail meets the structure and beyond
         Gk = jnp.asarray(ew.G(sp, k_np)); Gmk = jnp.asarray(ew.G(sp, -k_np))
@@ -76,24 +80,24 @@ class ExactJ:
         self.fr = (self.aP * t * er + self.aM * (1 / er + rp * er), self.aP * 1j * kR * t * er + self.aM * 1j * kR * (-1 / er + rp * er))
 
     def values(self, x):
-        """psi+ and psi- on the points x (numpy), as (len(x), nk) device arrays."""
+        """psi+ and psi- on the sorted points x (numpy), as (len(x), nk) device arrays: closed forms left and right of the
+        structure, the face-to-face propagator only inside it."""
         k, kR = self.k, self.kR; x = np.asarray(x, float)
-        L = x < self.xl; Rr = x > self.xr; I = ~(L | Rr)
-        sa, sb, sV = self.seg
-        si = np.clip(np.searchsorted(sa, x, side="right") - 1, 0, len(sa) - 1)
-        xx = jnp.asarray(x)[:, None]
-        # inside: from the left face of the point's segment
-        F = self.faces; idx = jnp.asarray(si)
-        p1, d1, p2, d2 = F[0][idx], F[1][idx], F[2][idx], F[3][idx]
-        q = jnp.sqrt(2 * (self.E[None, :] - jnp.asarray(sV[si])[:, None]) + 0j)
-        c, s, _ = _prop(q, xx - jnp.asarray(sa[si])[:, None])
-        U1 = c * p1 + s * d1; U2 = c * p2 + s * d2
-        inP = self.alphaP[0] * U1 + self.alphaP[1] * U2; inM = self.alphaM[0] * U1 + self.alphaM[1] * U2
-        eL = jnp.exp(1j * xx * k); eR = jnp.exp(1j * xx * kR)
-        Lm, Rm = jnp.asarray(L)[:, None], jnp.asarray(Rr)[:, None]
-        Pp = jnp.where(Lm, eL + self.r / eL, jnp.where(Rm, self.t * eR, inP))
-        Pm = jnp.where(Lm, self.tp / eL, jnp.where(Rm, 1 / eR + self.rp * eR, inM))
-        return Pp, Pm
+        assert np.all(np.diff(x) >= 0), "points must be sorted"
+        nL = int((x < self.xl).sum()); nR = int((x > self.xr).sum()); xi = x[nL:len(x) - nR]
+        parts_p, parts_m = [], []
+        if nL:
+            eL = jnp.exp(1j * jnp.asarray(x[:nL])[:, None] * k); parts_p.append(eL + self.r / eL); parts_m.append(self.tp / eL)
+        if len(xi):
+            sa, sb, sV = self.seg
+            si = np.clip(np.searchsorted(sa, xi, side="right") - 1, 0, len(sa) - 1); idx = jnp.asarray(si); F = self.faces
+            q = jnp.sqrt(2 * (self.E[None, :] - jnp.asarray(sV[si])[:, None]) + 0j)
+            c, s_, _ = _prop(q, jnp.asarray(xi - sa[si])[:, None])
+            U1 = c * F[0][idx] + s_ * F[1][idx]; U2 = c * F[2][idx] + s_ * F[3][idx]
+            parts_p.append(self.alphaP[0] * U1 + self.alphaP[1] * U2); parts_m.append(self.alphaM[0] * U1 + self.alphaM[1] * U2)
+        if nR:
+            eR = jnp.exp(1j * jnp.asarray(x[len(x) - nR:])[:, None] * kR); parts_p.append(self.t * eR); parts_m.append(1 / eR + self.rp * eR)
+        return jnp.concatenate(parts_p, 0), jnp.concatenate(parts_m, 0)
 
     def basis(self, x):
         Pp, Pm = self.values(x); return Pp * self.aP + Pm * self.aM
@@ -117,8 +121,8 @@ class ExactJ:
         base = jnp.exp(-1j * jnp.outer(jnp.arange(chunk) * h, self.E)); step = jnp.exp(-1j * self.E * chunk * h)
         cur = jnp.ones_like(self.E, dtype=c128); Js = []
         for a in range(0, len(tt), chunk):
-            m = min(chunk, len(tt) - a); V = (base[:m] * cur) @ F
-            Js.append(jnp.stack([jnp.imag(jnp.conj(V[:, 2 * q]) * V[:, 2 * q + 1]) for q in range(len(pairs))], 1))
+            m = min(chunk, len(tt) - a); V = (base * cur) @ F
+            Js.append(jnp.stack([jnp.imag(jnp.conj(V[:, 2 * q]) * V[:, 2 * q + 1]) for q in range(len(pairs))], 1)[:m])
             cur = cur * step
         J = np.asarray(jnp.concatenate(Js, 0)); out = []
         for q in range(len(pairs)):
