@@ -1,4 +1,4 @@
-// Fig. 12 in JAX: the built Kaggle page in headless Chromium at four widths, with the stored rides the player's index lists (run 8: public/data/fig12/2026-11-13-run8/).
+// Fig. 12 in JAX: the built Kaggle page in headless Chromium at four widths, with the stored rides the player's index lists (since 14 November 2026: public/data/fig12/2026-11-14-run10/).
 // For each width: errors, sideways scroll, the ride list, the frame rule (frame drawn = round(30 T)), and screenshots of the stage
 // (and of the kerb ride at the head's spill). node notes/fig12/jax/page-test.cjs <out dir>
 const { chromium } = require('playwright'); const { spawn } = require('child_process'); const path = require('path'), fs = require('fs');

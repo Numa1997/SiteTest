@@ -449,7 +449,7 @@ processor's solver at 4 mm (half glass, slow motion) and says so in the caption.
 [`public/simulations/guinness-kaggle.html`](../../public/simulations/guinness-kaggle.html) plays rides computed by the JAX
 solver [`tools/fig12/kaggle/stout_jax.py`](../../tools/fig12/kaggle/stout_jax.py) on Kaggle's GPU, run by
 [`run_b.py`](../../tools/fig12/kaggle/run_b.py) and packed by [`pack_ride.py`](../../tools/fig12/kaggle/pack_ride.py) into
-`public/data/fig12/2026-11-13-run8/` (run 8, played since 14 November 2026; runs 6 and 7 stay in `2026-11-13/`; each folder's
+`public/data/fig12/2026-11-14-run10/` (since 14 November 2026: run 10's five controlled rides, with the controllers' beta corrected for the head's mass, beside run 8's three rides with the speed held, its free swing and run 6's swing without the head; run 8 alone stays in `2026-11-13-run8/`, runs 6 and 7 in `2026-11-13/`; each folder's
 `index-jax.json` lists its files with their SHA-256). The page computes nothing physical. Its scripts (lines 819–825): `fold.js`, `sim.js`, `dataset.js`, `guinness-glass.js`, `stout-view.js`, `stout-view2.js` (`StoutRide`
 unpacks a ride, `StoutView2` draws the glass from the stored fields), `guinness-jax-play.js` (the player). It no longer loads
 `guinness-playback.js`, `kaggle-flow.js` or `datalog.js`: there is no speed slider, governor, live preview, pop-up or data panel on

@@ -178,7 +178,7 @@ A project brings five things; nothing in `kaggle-flow.js` or the bridge changes.
 - Fig. 14, the wave packet and the sphere: the first, described above.
 - Fig. 12 computed on Kaggle, the Guinness cart (`simulations/guinness-kaggle.html`). Since 13 November 2026 it plays rides
   computed by the JAX solver (`tools/fig12/kaggle/stout_jax.py`, `run_b.py`, packed by `pack_ride.py` into
-  `public/data/fig12/2026-11-13-run8/` since 14 November 2026, listed in `index-jax.json` with each file's SHA-256) through `guinness-jax-play.js` and
+  `public/data/fig12/2026-11-14-run10/` since 14 November 2026 (run 10's controlled rides with run 8's other rides; run 8 alone in `2026-11-13-run8/`), listed in `index-jax.json` with each file's SHA-256) through `guinness-jax-play.js` and
   `stout-view2.js`. It follows rules 1, 2, 3 and 5 of "Store first" (one file per ride, an index, a fingerprint check in the
   browser, provenance) and rule 4 (no interpolation: the frame drawn is `round(30 T)`), but uses none of `kaggle-flow.js`: one
   button per stored ride, no slider, governor, live preview, pop-up or bridge; it plays at real speed and stops at the end of
