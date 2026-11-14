@@ -3,7 +3,7 @@
   {
    "cell_type": "markdown",
    "metadata": {},
-   "source": "# Fig. 15 correction: exact rebuild of 600 wall runs on the GPU\n\nWalls separate exactly: psi = chi(x,t) h(y,t) h(z,t); chi is a sum of stationary scattering states (no time grid, no barrier sampling), vectorised in JAX, complex128. Code from the website's repository at commit COMMIT.",
+   "source": "# Fig. 15 correction: exact rebuild of wall runs RANGE of walls_all.json (1,088 walls), batched by geometry with jax.vmap on the GPU\n\nWalls separate exactly: psi = chi(x,t) h(y,t) h(z,t); chi is a sum of stationary scattering states (no time grid, no barrier sampling), vectorised in JAX, complex128. Code from the website's repository at commit COMMIT.",
    "id": "m0"
   },
   {
@@ -11,7 +11,7 @@
    "execution_count": null,
    "metadata": {},
    "outputs": [],
-   "source": "import urllib.request\nB = \"https://raw.githubusercontent.com/Numa1997/SiteTest/COMMIT/tools/kaggle/resonant-tunnelling/\"\nfor f in (\"correction/exact_wall.py\",\"correction/exact_wall_jax.py\",\"correction/rebuild_wall.py\",\"correction/wall_gpu_run.py\",\"correction/walls_left.json\",\"read_rt3d.py\"):\n    urllib.request.urlretrieve(B + f, f.split(\"/\")[-1])\n    if f.endswith(\".py\"): print(\"=\" * 20, f, \"=\" * 20); print(open(f.split(\"/\")[-1]).read())\n",
+   "source": "import jax; print(jax.devices())\nif jax.default_backend() != \"gpu\":\n    print(\"NO GPU BACKEND\"); raise SystemExit(\"NO GPU BACKEND\")\nimport urllib.request\nB = \"https://raw.githubusercontent.com/Numa1997/SiteTest/COMMIT/tools/kaggle/resonant-tunnelling/\"\nfor f in (\"correction/exact_wall.py\",\"correction/exact_wall_jax.py\",\"correction/rebuild_wall.py\",\"correction/wall_gpu_run.py\",\"correction/walls_all.json\",\"read_rt3d.py\"):\n    urllib.request.urlretrieve(B + f, f.split(\"/\")[-1])\n    if f.endswith(\".py\"): print(\"=\" * 20, f, \"=\" * 20); print(open(f.split(\"/\")[-1]).read())\n",
    "id": "c1"
   },
   {
@@ -19,7 +19,7 @@
    "execution_count": null,
    "metadata": {},
    "outputs": [],
-   "source": "RUN = True\nexec(open(\"wall_gpu_run.py\").read())\n",
+   "source": "RUN = True\nSTART, STOP = RANGE\nexec(open(\"wall_gpu_run.py\").read())\n",
    "id": "c2"
   }
  ],

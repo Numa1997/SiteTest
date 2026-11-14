@@ -17,15 +17,10 @@ LOG = open(ROOT + "/progress.log", "a")
 def say(*a):
     s = f"[{time.time()-T0:7.1f} s] " + " ".join(str(x) for x in a); print(s, flush=True); LOG.write(s + "\n"); LOG.flush()
 sys.path.insert(0, ".")
-import subprocess
-if not globals().get("CPU"):
-    def backend():
-        r = subprocess.run([sys.executable, "-c", "import jax; print(jax.default_backend())"], capture_output=True, text=True)
-        return r.stdout.strip().splitlines()[-1] if r.stdout.strip() else "none"
-    if backend() != "gpu":
-        say("installing jax[cuda12]"); subprocess.run([sys.executable, "-m", "pip", "install", "-q", "-U", "jax[cuda12]"], check=True)
 import jax
-if not globals().get("CPU"): assert any(d.platform == "gpu" for d in jax.devices()), "NO GPU: stopping so no quota is wasted"
+print(jax.devices())
+if not globals().get("CPU") and jax.default_backend() != "gpu":
+    say("NO GPU BACKEND"); raise SystemExit("NO GPU BACKEND")
 import axisym as ax, axisym_jax as aj
 
 GRID = dict(hx=0.0625, Nr=256, Rmax=64.0, Wr=12.0, dt=0.01, box_factor=2.0)

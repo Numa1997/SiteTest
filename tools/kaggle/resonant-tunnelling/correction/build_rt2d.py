@@ -11,7 +11,8 @@ md = ("# Fig. 15 correction: discs and shells in the exact (x, rho) reduction (G
       "every disc and shell, so the 3D wave has no angle dependence: the 3D problem is exactly a 2D one in (x, rho). Split-step: FFT "
       "along x (0.0625 a, cell-averaged barriers), order-0 quasi-discrete Hankel transform in rho. "
       f"Job set: {JOBSEL}" + (f", shard {SHARD[0]} of {SHARD[1]}" if SHARD else "") + f". Code from the website's repository at commit {COMMIT}.")
-c1 = (f'import urllib.request\nBASE = "{BASE}"\n'
+c1 = ('import jax; print(jax.devices())\nif jax.default_backend() != "gpu":\n    print("NO GPU BACKEND"); raise SystemExit("NO GPU BACKEND")\n'
+      f'import urllib.request\nBASE = "{BASE}"\n'
       'for f in ("axisym.py", "axisym_jax.py", "rt2d_run.py", "rt2d_smoke.py", "jobs_2d.json"):\n'
       '    urllib.request.urlretrieve(BASE + f, f)\n    if f.endswith(".py"): print("=" * 20, f, "=" * 20); print(open(f).read())\n')
 if JOBSEL == "smoke":
