@@ -13,6 +13,16 @@ Guinness. We will also specifically target those roads that were extremely bumpy
 So: the figure of merit is the head of foam spilled on the kerb (Fig. 12: 1.63-2.51 mL by controller, no stout), then the tilt.
 The control system is the centre of the work; the cart is designed to give it the authority it needs.
 
+## The owner's decision on the machine (this chat, 14 November 2026, after seeing the 2D concept sketch)
+- The glass is GLUED to the cart's deck. No hanging holder, no gimbal. (Concepts A and B as drawn are dropped.)
+- The cart is a realistic engineering system shown in 3D: real suspension linkage (wheel on a swing arm hinged to the chassis,
+  coil-over strut), real parts. The deck heaves and pitches as each wheel meets the bump; that tilts the glued glass; the control
+  system must master that.
+- So: the model must become a two-axle cart with pitch (half-car), the glass rigid on the deck; actuators: hub motors (rear),
+  a voice-coil actuator in each strut (heave and pitch of the deck); sensors: IMU on the deck, load cells, encoders, road scanner.
+- 3D prototype: `notes/fig16/proto/cart3d.html` (three.js from public/vendor/three), screenshots cart3d-iso/side/explode.png.
+  Screenshot script (no server; a background server is refused by the owner's rules): scratch shot.cjs, Playwright page.route.
+
 ## Steps (status)
 1. Read the brief and section 1's files — done for the modelling stage (CLAUDE.md, AGENTS.md, STANDARD.md, kaggle-pipeline.md,
    the solver, run_b.py, pack_ride.py, 06/07 notes, REPORT.md, the note's sections 4, 6.5, 7, 12.3, the control skill).

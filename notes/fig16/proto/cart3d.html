@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fig. 16 prototype: the cart in 3D</title>
+<link rel="stylesheet" href="../../../public/fonts/instrument-plex.css">
+<style>
+  html, body { margin: 0; height: 100%; background: #f6f3ee; color: #1c1518; font-family: 'IBM Plex Sans', sans-serif; }
+  #stage { position: relative; width: 100vw; height: 100vh; overflow: hidden; }
+  canvas { display: block; width: 100%; height: 100%; touch-action: none; }
+  #lines { position: absolute; inset: 0; pointer-events: none; }
+  .lab { position: absolute; font: 12px/1.25 'IBM Plex Mono', monospace; background: #fffdf9; border: 1px solid #1c1518; padding: 3px 6px; white-space: nowrap; pointer-events: none; }
+  .lab b { color: #7a1f2b; font-weight: 500; }
+  #bar { position: absolute; left: 16px; top: 12px; display: flex; gap: 8px; align-items: baseline; }
+  #bar h1 { font: 400 26px 'Instrument Serif', serif; margin: 0 12px 0 0; }
+  button { font: 12px 'IBM Plex Mono', monospace; background: #fffdf9; border: 1px solid #1c1518; padding: 4px 10px; cursor: pointer; }
+  button[aria-pressed="true"] { background: #7a1f2b; color: #fff; border-color: #7a1f2b; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <canvas id="c"></canvas>
+  <svg id="lines"></svg>
+  <div id="bar"><h1>Fig. 16 · the cart</h1>
+    <button id="bx" aria-pressed="false">Exploded</button><button id="bl" aria-pressed="true">Names</button>
+    <button id="bs" aria-pressed="false">Side</button></div>
+</div>
+<script src="../../../public/scripts/guinness-glass.js"></script>
+<script type="module">
+import * as THREE from '../../../public/vendor/three/three.module.min.js';
+const Q = new URLSearchParams(location.search);
+const canvas = document.getElementById('c'), stage = document.getElementById('stage'), svg = document.getElementById('lines');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, preserveDrawingBuffer: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2)); renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+const scene = new THREE.Scene(); scene.background = new THREE.Color('#f6f3ee');
+const cam = new THREE.PerspectiveCamera(28, 1, 0.02, 20);
+scene.add(new THREE.HemisphereLight(0xffffff, 0xb9b1a4, 1.15));
+const sun = new THREE.DirectionalLight(0xffffff, 1.9); sun.position.set(0.5, 1.2, 0.7); sun.castShadow = true;
+sun.shadow.mapSize.set(2048, 2048); Object.assign(sun.shadow.camera, { left: -0.6, right: 0.6, top: 0.6, bottom: -0.6, near: 0.1, far: 4 }); scene.add(sun);
+
+// ---- the machine's dimensions (m). x forward, y up, z to the left.
+const D = { Rw: 0.05, ww: 0.028, wb: 0.22, zw: 0.104, deckY: 0.150, deckT: 0.010, deckL: 0.32, deckW: 0.150, armL: 0.085, pivY: 0.118, zArm: 0.082,
+  footT: 0.014, footR: 0.034, fill: 0.125, head: 0.019 };
+const M = {
+  alu: new THREE.MeshStandardMaterial({ color: 0xc9c5bd, metalness: 0.55, roughness: 0.45 }),
+  steel: new THREE.MeshStandardMaterial({ color: 0x8d8f93, metalness: 0.8, roughness: 0.35 }),
+  dark: new THREE.MeshStandardMaterial({ color: 0x2a2a2c, metalness: 0.2, roughness: 0.7 }),
+  tyre: new THREE.MeshStandardMaterial({ color: 0x1b1b1c, roughness: 0.95 }),
+  wine: new THREE.MeshStandardMaterial({ color: 0x7a1f2b, metalness: 0.3, roughness: 0.5 }),
+  gold: new THREE.MeshStandardMaterial({ color: 0xc9a86a, metalness: 0.7, roughness: 0.35 }),
+  pcb: new THREE.MeshStandardMaterial({ color: 0x1f4d3a, roughness: 0.6 }),
+  spring: new THREE.MeshStandardMaterial({ color: 0x3b3e44, metalness: 0.8, roughness: 0.3 }),
+  glass: new THREE.MeshStandardMaterial({ color: 0xffffff, transparent: true, opacity: 0.10, roughness: 0.05, metalness: 0.0, side: THREE.DoubleSide, depthWrite: false }),
+  stout: new THREE.MeshStandardMaterial({ color: 0x120a08, roughness: 0.25 }),
+  head: new THREE.MeshStandardMaterial({ color: 0xf0e5cc, roughness: 0.9 }),
+  road: new THREE.MeshStandardMaterial({ color: 0xded8cd, roughness: 1 }),
+  laser: new THREE.MeshBasicMaterial({ color: 0x7a1f2b, transparent: true, opacity: 0.10, side: THREE.DoubleSide, depthWrite: false }),
+};
+const cart = new THREE.Group(); scene.add(cart);
+const parts = [];   // { obj, home: Vector3, ex: Vector3 (exploded offset) }
+function add(obj, ex = [0, 0, 0], parent = cart) { obj.traverse((o) => { if (o.isMesh) { o.castShadow = true; o.receiveShadow = true; } }); parent.add(obj); parts.push({ obj, home: obj.position.clone(), ex: new THREE.Vector3(...ex) }); return obj; }
+const box = (w, h, d, m) => new THREE.Mesh(new THREE.BoxGeometry(w, h, d), m);
+const cyl = (r, h, m, seg = 40) => new THREE.Mesh(new THREE.CylinderGeometry(r, r, h, seg), m);
+function between(a, b, r, m) {   // a cylinder from point a to point b
+  const A = new THREE.Vector3(...a), B = new THREE.Vector3(...b), c = cyl(r, A.distanceTo(B), m, 20);
+  c.position.copy(A).add(B).multiplyScalar(0.5); c.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), B.clone().sub(A).normalize()); return c;
+}
+function coil(a, b, R, turns, wire, m) {
+  const A = new THREE.Vector3(...a), B = new THREE.Vector3(...b), ax = B.clone().sub(A), L = ax.length(); ax.normalize();
+  const u = new THREE.Vector3(0, 0, 1).cross(ax).normalize(), v = ax.clone().cross(u);
+  class H extends THREE.Curve { getPoint(t, p = new THREE.Vector3()) { const th = 2 * Math.PI * turns * t; return p.copy(A).addScaledVector(ax, L * t).addScaledVector(u, R * Math.cos(th)).addScaledVector(v, R * Math.sin(th)); } }
+  return new THREE.Mesh(new THREE.TubeGeometry(new H(), 220, wire, 8), m);
+}
+
+// ---- deck, with the glass's seat
+const deckTop = D.deckY + D.deckT / 2;
+const deck = box(D.deckL, D.deckT, D.deckW, M.alu); deck.position.set(0, D.deckY, 0); add(deck, [0, 0.06, 0]);
+// ---- the glass: glued and clamped to the deck. Profile from guinness-glass.js (inner radius every 0.5 mm)
+const GP = self.GUINNESS_GLASS, zF = deckTop + 0.004 + D.footT;           // inner floor above the seat plate
+const lathe = (pts, m) => new THREE.Mesh(new THREE.LatheGeometry(pts.map((p) => new THREE.Vector2(p[0], p[1])), 72), m);
+const prof = []; for (let i = 0; i < GP.R.length; i += 4) prof.push([GP.R[i], i * GP.dz]);
+const gl = new THREE.Group();
+gl.add(lathe([[0, -D.footT], [D.footR, -D.footT], [D.footR, -0.004], [GP.R[0] + 0.003, 0], ...prof.map((p) => [p[0] + 0.003, p[1]]), ...prof.slice().reverse()], M.glass));
+const upTo = (z0, z1) => prof.filter((p) => p[1] >= z0 && p[1] <= z1).map((p) => [p[0] - 0.0004, p[1]]);
+const st = upTo(0, D.fill); gl.add(lathe([[0, 0.0005], ...st, [0, D.fill]], M.stout));
+const hd = upTo(D.fill, D.fill + D.head); gl.add(lathe([[0, D.fill + 0.0002], ...hd, [0, D.fill + D.head]], M.head));
+gl.position.set(0, zF, 0); add(gl, [0, 0.20, 0]);
+// seat plate, clamp ring with three bolts
+const seat = new THREE.Group(); seat.add(cyl(0.046, 0.004, M.steel)); const ring = new THREE.Mesh(new THREE.TorusGeometry(D.footR + 0.003, 0.004, 14, 60), M.wine); ring.rotation.x = Math.PI / 2; ring.position.y = 0.012; seat.add(ring);
+for (let k = 0; k < 3; k++) { const a = k * 2.094 + 0.5, b = cyl(0.003, 0.016, M.gold, 12); b.position.set(0.041 * Math.cos(a), 0.008, 0.041 * Math.sin(a)); seat.add(b); }
+seat.position.set(0, deckTop + 0.002, 0); add(seat, [0, 0.13, 0]);
+// IMU on the seat plate, level probes' board on the glass
+const imu = box(0.014, 0.004, 0.014, M.pcb); imu.position.set(0.052, deckTop + 0.003, 0.03); add(imu, [0.03, 0.13, 0.05]);
+
+// ---- four corners: swing arm, coil-over strut with a voice-coil actuator and a load cell, wheel
+const wheels = [];
+for (const sx of [1, -1]) for (const sz of [1, -1]) {
+  const ax = sx * D.wb / 2, g = new THREE.Group(); const zA = sz * D.zArm, zW = sz * D.zw;
+  // hanger under the deck and the arm's hinge (the arm trails: its hinge is ahead of the axle)
+  const hang = box(0.022, D.deckY - D.deckT / 2 - D.pivY + 0.012, 0.012, M.alu); hang.position.set(ax + D.armL, (D.deckY - D.deckT / 2 + D.pivY - 0.012) / 2 + 0.003, zA - sz * 0.012); g.add(hang);
+  g.add(between([ax + D.armL, D.pivY, zA - sz * 0.02], [ax + D.armL, D.pivY, zA + sz * 0.012], 0.005, M.gold));               // hinge pin
+  const arm = between([ax + D.armL, D.pivY, zA], [ax, D.Rw, zA], 0.008, M.steel); g.add(arm);
+  g.add(between([ax, D.Rw, zA - sz * 0.006], [ax, D.Rw, zW + sz * 0.02], 0.006, M.steel));                                  // stub axle
+  // strut: lower eye on the arm near the axle, upper eye on a tower at the deck's edge
+  const lo = [ax + 0.012, D.Rw + 0.014, zA], hi = [ax + 0.03, D.deckY + 0.058, zA];
+  const tower = box(0.03, 0.062, 0.014, M.alu); tower.position.set(ax + 0.03, D.deckY + 0.031, zA - sz * 0.004); g.add(tower);
+  const dir = new THREE.Vector3(hi[0] - lo[0], hi[1] - lo[1], hi[2] - lo[2]), P = (t) => [lo[0] + dir.x * t, lo[1] + dir.y * t, lo[2] + dir.z * t];
+  g.add(between(P(0.0), P(0.5), 0.0085, M.dark)); g.add(between(P(0.5), P(0.86), 0.0035, M.steel));                            // damper body and rod
+  g.add(coil(P(0.08), P(0.70), 0.0135, 7, 0.0019, M.spring));
+  g.add(between(P(0.70), P(0.90), 0.017, M.wine));                                                                            // voice-coil actuator
+  g.add(between(P(0.90), P(0.97), 0.012, M.gold));                                                                            // load cell
+  add(g, [sx * 0.05, -0.02, sz * 0.07]);
+  // wheel: tyre, rim, and in the rear a hub motor; in front an encoder disc
+  const w = new THREE.Group(); const ty = new THREE.Mesh(new THREE.TorusGeometry(D.Rw - 0.011, 0.011, 18, 64), M.tyre); w.add(ty);
+  const rim = cyl(D.Rw - 0.019, D.ww - 0.006, M.alu); rim.rotation.x = Math.PI / 2; w.add(rim);
+  for (let k = 0; k < 5; k++) { const s = box(0.006, 0.05, D.ww - 0.004, M.steel); s.rotation.z = k * Math.PI / 5; w.add(s); }
+  if (sx < 0) { const hm = cyl(0.024, 0.03, M.wine); hm.rotation.x = Math.PI / 2; hm.position.z = -sz * 0.012; w.add(hm); }
+  else { const en = cyl(0.016, 0.004, M.pcb); en.rotation.x = Math.PI / 2; en.position.z = -sz * 0.016; w.add(en); }
+  w.position.set(ax, D.Rw, zW); add(w, [sx * 0.05, -0.02, sz * 0.16]); wheels.push(w);
+}
+// ---- electronics: controller with heat sink, battery under the deck, the preview sensor on a boom
+const ctl = new THREE.Group(); ctl.add(box(0.07, 0.024, 0.09, M.dark)); for (let k = 0; k < 7; k++) { const f = box(0.066, 0.008, 0.003, M.alu); f.position.set(0, 0.016, -0.036 + k * 0.012); ctl.add(f); }
+const cpcb = box(0.05, 0.002, 0.05, M.pcb); cpcb.position.set(0, -0.013, 0); ctl.add(cpcb);
+ctl.position.set(-0.115, deckTop + 0.014, 0); add(ctl, [-0.06, 0.12, 0]);
+const bat = box(0.13, 0.03, 0.075, M.wine); bat.position.set(0, D.deckY - D.deckT / 2 - 0.016, 0); add(bat, [0, -0.07, 0]);
+const boom = new THREE.Group(); boom.add(between([D.deckL / 2 - 0.01, deckTop + 0.004, 0], [0.245, deckTop + 0.03, 0], 0.004, M.steel));
+const headS = box(0.03, 0.022, 0.05, M.dark); headS.position.set(0.25, deckTop + 0.03, 0); boom.add(headS);
+const fan = new THREE.Mesh(new THREE.BufferGeometry().setAttribute('position', new THREE.Float32BufferAttribute([0.25, deckTop + 0.02, 0, 0.31, 0.001, -0.07, 0.31, 0.001, 0.07], 3)), M.laser); boom.add(fan);
+add(boom, [0.10, 0.04, 0]);
+
+// ---- the road, with the kerb of Fig. 12 ahead (30 mm high, 0.12 m long), drawn where the cart is about to meet it
+const shp = new THREE.Shape(); shp.moveTo(-0.7, -0.02); shp.lineTo(-0.7, 0); const xb = 0.47;
+for (let k = 0; k <= 40; k++) { const s = -0.5 + k / 40; shp.lineTo(xb + s * 0.12, 0.015 * (1 + Math.cos(2 * Math.PI * s))); }
+shp.lineTo(0.9, 0); shp.lineTo(0.9, -0.02);
+const road = new THREE.Mesh(new THREE.ExtrudeGeometry(shp, { depth: 0.5, bevelEnabled: false }), M.road); road.position.z = -0.25; road.receiveShadow = true; scene.add(road);
+
+// ---- names (each tied to a point on the machine)
+const NAMES = [
+  ['L', 'pint glass, <b>glued and clamped</b> to the deck', [-0.035, zF + 0.10, 0]],
+  ['L', 'clamp ring and seat plate', [-0.037, deckTop + 0.014, 0.01]],
+  ['R', '<b>IMU</b>: the deck\'s tilt and acceleration', [0.052, deckTop + 0.004, 0.03]],
+  ['L', 'controller and motor drives', [-0.115, deckTop + 0.03, 0.02]],
+  ['L', 'battery, 24 V', [-0.05, D.deckY - 0.03, 0.036]],
+  ['L', '<b>hub motor</b> in each rear wheel', [-D.wb / 2, D.Rw, D.zw - 0.02]],
+  ['R', 'swing arm, hinged to the chassis', [D.wb / 2 + 0.05, 0.09, D.zArm]],
+  ['R', 'coil spring over a damper', [D.wb / 2 + 0.019, 0.105, D.zArm + 0.012]],
+  ['R', '<b>voice-coil actuator</b>: pushes the deck up or down', [D.wb / 2 + 0.027, D.deckY + 0.03, D.zArm + 0.015]],
+  ['R', 'load cell: the force this wheel carries', [D.wb / 2 + 0.03, D.deckY + 0.054, D.zArm + 0.01]],
+  ['R', 'wheel encoder', [D.wb / 2, D.Rw + 0.01, D.zw - 0.03]],
+  ['R', '<b>road scanner</b>: measures the bump before the wheel meets it', [0.25, deckTop + 0.03, 0.02]],
+  ['R', 'the kerb of Fig. 12: 30 mm high, 0.12 m long', [xb, 0.03, 0.15]],
+];
+const labs = NAMES.map((n) => { const d = document.createElement('div'); d.className = 'lab'; d.innerHTML = n[1]; stage.appendChild(d); return d; });
+
+// ---- camera: drag to turn, wheel to zoom
+const view = { az: 0.72, el: 0.33, dist: 1.05, tgt: new THREE.Vector3(0.06, 0.12, 0) };
+let explode = 0, explodeGoal = Q.get('view') === 'explode' ? 1 : 0, names = Q.get('names') !== '0';
+if (Q.get('view') === 'side') { view.az = 0.0001; view.el = 0.06; view.dist = 1.15; }
+if (Q.get('view') === 'front') { view.az = 1.25; view.el = 0.2; view.dist = 1.0; }
+if (Q.get('view') === 'explode') { view.dist = 1.75; view.tgt.y = 0.17; view.el = 0.30; }
+let drag = null;
+canvas.addEventListener('pointerdown', (e) => { drag = [e.clientX, e.clientY]; canvas.setPointerCapture(e.pointerId); });
+canvas.addEventListener('pointermove', (e) => { if (!drag) return; view.az -= (e.clientX - drag[0]) * 0.006; view.el = Math.max(-0.1, Math.min(1.4, view.el + (e.clientY - drag[1]) * 0.005)); drag = [e.clientX, e.clientY]; });
+canvas.addEventListener('pointerup', () => { drag = null; });
+canvas.addEventListener('wheel', (e) => { e.preventDefault(); view.dist = Math.max(0.5, Math.min(3, view.dist * Math.exp(e.deltaY * 0.001))); }, { passive: false });
+const press = (b, on) => b.setAttribute('aria-pressed', on ? 'true' : 'false');
+bx.onclick = () => { explodeGoal = explodeGoal ? 0 : 1; press(bx, explodeGoal); };
+bl.onclick = () => { names = !names; press(bl, names); };
+bs.onclick = () => { const s = bs.getAttribute('aria-pressed') !== 'true'; press(bs, s); view.az = s ? 0.0001 : 0.72; view.el = s ? 0.06 : 0.36; };
+press(bx, explodeGoal); press(bl, names);
+
+function frame() {
+  const W = stage.clientWidth, H = stage.clientHeight; if (canvas.width !== Math.floor(W * renderer.getPixelRatio())) renderer.setSize(W, H, false);
+  cam.aspect = W / H; cam.updateProjectionMatrix();
+  cam.position.set(view.tgt.x + view.dist * Math.cos(view.el) * Math.sin(view.az), view.tgt.y + view.dist * Math.sin(view.el), view.tgt.z + view.dist * Math.cos(view.el) * Math.cos(view.az)); cam.lookAt(view.tgt);
+  explode += (explodeGoal - explode) * 0.12; if (Q.get('view') === 'explode') explode = 1;
+  parts.forEach((p) => p.obj.position.copy(p.home).addScaledVector(p.ex, explode));
+  renderer.render(scene, cam);
+  // names in two columns, leaders to their points
+  let h = ''; const cols = { L: [], R: [] };
+  NAMES.forEach((n, i) => { const v = new THREE.Vector3(...n[2]).project(cam); cols[n[0]].push({ i, x: (v.x + 1) / 2 * W, y: (1 - v.y) / 2 * H }); });
+  for (const side of ['L', 'R']) {
+    const c = cols[side].sort((a, b) => a.y - b.y); let y = Math.max(70, c.length ? c[0].y - 60 : 70);
+    c.forEach((p) => { const d = labs[p.i]; y = Math.max(y, p.y - 40); const show = names && explode < 0.02 || names && Q.get('view') === 'explode';
+      d.style.display = names ? 'block' : 'none'; const w = d.offsetWidth, x = side === 'L' ? 16 : W - 16 - w; d.style.left = x + 'px'; d.style.top = y + 'px';
+      if (names) h += `<line x1="${side === 'L' ? x + w : x}" y1="${y + 11}" x2="${p.x}" y2="${p.y}" stroke="#1c1518" stroke-width="0.8"/><circle cx="${p.x}" cy="${p.y}" r="2.5" fill="#7a1f2b"/>`;
+      y += 30; });
+  }
+  svg.setAttribute('width', W); svg.setAttribute('height', H); svg.innerHTML = explode > 0.02 && Q.get('view') !== 'explode' ? '' : h;
+  labs.forEach((d) => { if (explode > 0.02 && Q.get('view') !== 'explode') d.style.display = 'none'; });
+  self.__ready = true; requestAnimationFrame(frame);
+}
+frame();
+</script>
+</body>
+</html>
