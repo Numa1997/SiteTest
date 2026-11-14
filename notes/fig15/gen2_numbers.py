@@ -209,9 +209,9 @@ for V0, D, P in ((1.5, 1.0, 2.5), (2.0, 1.0, 2.5), (3.0, 1.0, 2.5), (2.0, 1.5, 3
 # ---------- the Fabry-Perot form of the running example ----------
 def theta(E, V0=2.0, D=1.0, P=2.5):
     t, r = tm.solve(E, segs(1, V0, D, P))[:2]; return 2 * np.angle(r) + 2 * np.sqrt(2 * E) * P, abs(r) ** 2
-Er = OUT['V2D1_E1']; th0, Rr = theta(Er); h = 1e-5
+Er = resonances(2, 2.0, 1.0, 2.5)[0][0]; th0, Rr = theta(Er); h = 1e-5   # the unrounded resonance
 thp = ((theta(Er + h)[0] - theta(Er - h)[0] + np.pi) % (2 * np.pi) - np.pi) / (2 * h)
-put('FP_theta_mod', round(float(th0 % (2 * np.pi)), 4), 'round-trip phase 2 arg r + 2 k s at E_r, modulo 2 pi (2 pi = 6.2832)')
+d0 = float(abs((th0 + np.pi) % (2 * np.pi) - np.pi)); put('FP_theta_mod', float(f'{d0:.1e}'), 'distance of the round-trip phase 2 arg r + 2 k s from a whole number of turns, at the unrounded E_r')
 put('FP_tp', round(float(thp), 2), 'hbar d theta / dE at E_r: the round-trip time')
 put('FP_2Lv', round(float(2 * (1.5 + 2 / np.sqrt(2 * (2 - Er))) / np.sqrt(2 * Er)), 2), '2 L_eff / v at E_r')
 put('FP_R', round(float(Rr), 3), 'R of one barrier at E_r')

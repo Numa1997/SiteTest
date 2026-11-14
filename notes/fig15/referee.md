@@ -1,287 +1,309 @@
-# Fig. 15 · referee report (resonant tunnelling)
+# Fig. 15 · referee report, round 2 (resonant tunnelling)
 
-Read as rendered: `npm run build`, served from `dist/` on port 9417, opened in headless Chrome at 1400 px, every section
-unfolded with its toggle, the "What is rounded…" box opened, and each section screenshotted with the sticky section header
-made static so that nothing is hidden. The note's KaTeX renders cleanly (no raw TeX, no overflow at 1400 px). Two readers:
-**S**, a school student who is good at mathematics, and **G**, a physics graduate. plan.md and check.md were not read.
+Read as rendered, after commit `db61bec` ("fix round-1 marks"). `npm run build`, `dist/` served on port 9531, opened in headless
+Chrome at 1400 px and at 390 px, every section unfolded, the box "What is rounded…" opened, each section screenshotted with only
+the sticky fold headers made static. KaTeX: 0 errors, 0 raw `\(`, 0 display equations overflowing at either width; no console
+errors. plan.md and check.md were not read.
 
-Each mark gives the section, the exact sentence, who gets lost (S, G or both) and why.
+The one-dimensional numbers were recomputed independently (transfer matrices, packet average, band edges, Tsu–Esaki current
+with a 700-step staircase). All of these match the note: T = 0.144, |r| = 0.925, ħθ' = 4.45, Γ(15) = 0.0699, FWHM 0.0704,
+2L_eff/v = 4.55, −2 ln R = 0.3109, 2T/√R = 0.3112, σ⊥(40) = 7.31, E₁ by (21) = 0.649, band 0.590–0.955, second band 2.082,
+ξ(0.735) = −0.0004, peaks for N = 3 and 5, T̄ = 0.196 (short), 0.149 (one barrier), a = 2.75 nm, τ = 62 fs, 87 K, tilted peaks
+0.486 and 0.230 with heights 0.878 and 0.562, and a current peak at V_b = 0.875 with a valley near 1.85 (PVR 4.3). No numerical
+error was found. The marks below are about reading, not arithmetic, except where they say otherwise.
+
+Two readers: **S**, a school student who is good at mathematics; **G**, a physics graduate. Each mark gives the section, the
+exact sentence, who gets lost and why.
 
 ## Marks
 
 ### Abstract
 
-1. "We build it from the Schrödinger equation with no skipped steps: …" (S, G). The claim is not true. The product that gives
-   (7) is skipped (mark 10), as are the separation argument (mark 4) and the phase average in section 5 (mark 21). Either do
-   those steps or soften the claim.
+1. "A long packet, with a narrow spread of energies, resolves peaks a short one averages away." (G) Section 6 shows one long
+   packet run near the running example's peak, and it says the d = 2 peak is *not* resolved. No long-packet run on three or more
+   barriers is shown anywhere. The sentence promises more than the note delivers. Say "passes far more of a single peak".
 
 ### 01 · Two panes of glass
 
-2. "At some colours they cancel the straight-through beam and the pair reflects strongly; at others they reinforce it and
-   the pair turns almost perfectly clear." (G). This overstates the effect. Bare glass reflects about 4 % per surface, so the
-   fringes of two plain panes are faint, and the pair never "reflects strongly". A strong Fabry–Pérot needs mirrors that
-   reflect well, and that is exactly the point of the electron case (R = 0.856). The picture should say that the panes give
-   faint fringes and that silvering them makes the fringes sharp.
-3. Figure 1 is not to scale vertically, and the caption does not say so. The dashed line *E* is drawn at about half of *V*₀,
-   but 0.735/2 = 0.37. In the same section, "the slider under *The diode*" should name the slider by its label, "Voltage
-   across the barriers"; section 10 calls it "the Voltage slider".
+2. "The chips choose the barriers: … their height \(V_0\) and thickness \(d\), their spacing \(s\), and the length of the packet"
+   (S). \(V_0\), \(d\), \(s\) appear here before Figure 1 defines them, which is three paragraphs later. A pointer "(Figure 1)"
+   is enough.
+3. "Reading the figures." paragraph (S). It is 230 words long, with the colours and line styles of four panels, read before the
+   reader knows what a transmission, a lifetime or a packet average is. It uses "the exact one-dimensional answer", "the fitted
+   exponential decay of the trapped wave" and "averaged over the spread of energies a packet holds", all defined only in
+   sections 3 to 6. A student will not take it in here. Moving it is not the referee's call, but it reads as a legend, not as
+   prose.
 
 ### 02 · The model in three dimensions
 
-4. "substituting into (1) and dividing by χgg gives three pieces, each depending on one coordinate. They are satisfied
-   separately by" (G, and S is lost). This is the key step of the whole check, and it is skipped. After dividing, a function
-   of (x,t) plus one of (y,t) plus one of (z,t) adds up to zero. So each must be a function of t alone, and that function is
-   a phase that can be absorbed. Say this in one sentence. Also say why the same g serves for y and z (the start packet is
-   round), and that the z equation is the same as the y equation; (2) prints only y.
-5. "Its narrow width holds a spread of sideways wave numbers 1/(2σ⊥), so its parts drift apart, and solving the second
-   equation of (2) gives the width at time t," (S). Equation (3) is a bare formula: the solving is not shown and the passage
-   is not starred. Either star it, or give the one-line picture: the width grows as σ_v·t, with σ_v = ħ/(2mσ⊥), added in
-   quadrature to σ⊥.
-6. "With σ⊥ = 3 the packet is 7.3 wide by t = 40" (S). "Wide" here means σ⊥, but section 12 says "about 2σ⊥ = 6 wide". Use
-   one meaning of width.
-7. Units (G). The text sets ħ = m = 1 ("Equation (1) becomes i∂ₜψ = …"), yet (3), (16), (17), (21) and (28) bring ħ and m
-   back. A reader cannot tell which equations are in natural units. Say once that ħ and m are kept in the key formulas to show
-   their dimensions. Standard 4 asks for a dimensional check, and no equation gets one in the text.
+4. "A wave packet is a sum of plane waves … that moves at the group velocity \(v=d\omega/dk=\hbar k_0/m\), which for an electron
+   is simply its speed." (S) The relation between \(\omega\) and \(k\) is never given. The reader needs \(E=\hbar\omega\) and
+   \(E=\hbar^2k^2/2m\), hence \(\omega=\hbar k^2/2m\), before the derivative means anything.
+5. "(a dot is a time derivative, a prime a space derivative)" (S). The dot and the prime are used in the formula just before this
+   sentence. Define them before the formula.
+6. "Setting each bracket to zero satisfies the sum, and gives" (G). Each bracket may equal a constant, with the three constants
+   summing to zero. Setting them to zero is one allowed choice (it puts each factor's phase in its own equation). One clause
+   saying this is a choice, not a necessity, would stop the graduate.
+7. "Its narrow width holds a spread of sideways wave numbers \(1/(2\sigma_\perp)\), so its parts drift apart" (S). Why a narrow
+   width implies a spread of wave numbers, and why exactly \(1/(2\sigma_\perp)\), is only explained in section 6 (and there
+   only stated). Point forward to section 6 or give the uncertainty idea in one line here.
+8. "With \(\sigma_\perp=3\) this width is 7.3 by \(t=40\), about halfway through a run" (S, G). The length of a run is not given
+   anywhere before this, and section 10, which describes the runs, never says how long a run lasts or how far apart its 200
+   frames are. The only run length in the note is 213 for the d = 2 run (section 8). "About halfway" has no support.
 
 ### 03 · One barrier ★
 
-8. "If χ jumped, χ′ would be infinite; if χ′ jumped, χ″ would be, and the equation would demand an infinite energy." (G).
-   This is loose. A jump in χ′ puts a delta function into χ″, and the equation could balance it only with a delta-function
-   potential, which a finite step does not have. Say "an infinite potential".
-9. "Between two edges the wave only travels, which multiplies a right-mover by e^{ikℓ} and a left-mover by e^{−ikℓ} over a
-   length ℓ" (G). Matrix (5) maps right-side amplitudes to left-side ones, so its travel matrix is diag(e^{−ikℓ}, e^{ikℓ}),
-   which is the form section 9 uses. As written, the sentence gives the opposite sign. It also never says that (5) assumes the
-   edge at x = 0, and that the travel matrix is what moves the origin to the next edge.
-10. "Carrying out the product for a square barrier (with the amplitudes referred to the barrier's centre) gives" (S, G). This
-    is the central "it can be shown" of the note, and standard 3 forbids it. The product is not shown, and only |w|² comes out,
-    not w. The phase of w is needed later as φ in (22), and the phase of z as ρ in (12). Show the product, at least in the ★
-    passage, and give w and z themselves.
-11. "The form follows for any real potential: reversing time and conjugating ψ leaves the equation unchanged, which pairs the
-    rows; and probability is conserved, which fixes the determinant." (S lost; G wants one line more). Say what "pairs the
-    rows" means: if (A,B)→(C,D) is a solution, so is (B*,A*)→(D*,C*). Also say that the determinant is 1 only because k is
-    the same on both sides; section 13 breaks this (mark 37).
-12. "Example 3.1 … twenty times smaller." Section 8 says "22 times more opaque" for the same pair. Use one number:
-    0.144/0.00657 = 22.
-13. "this is why a scanning tunnelling microscope can feel a single atom on a surface." (G). This is a claim with no source.
-    It is fine as colour, but it needs a reference or the factor (about e^{−2κ·0.1 nm} per ångström).
+9. "Inside a barrier \(k_2=i\kappa\); nothing else changes. Between two edges the wave only travels: the amplitude of a
+   right-mover at the far end of a stretch \(\ell\) long is \(e^{ik\ell}\) times its amplitude at the near end" (S). Inside a
+   barrier there is no right-mover: with \(k=i\kappa\) the factor \(e^{ik\ell}=e^{-\kappa\ell}\) is a decay, and the "left-mover"
+   is the growing exponential. Say so in one clause, or the student will think the wave travels inside the barrier.
+10. "Write the wave just left of an edge as … with the edge at \(x=0\)." (G) The matrix (5) is written with the origin at the
+    edge, and a barrier has two edges at different places. The reader has to see that each edge uses its own origin and that
+    the travel matrix carries the phase from one origin to the next. One sentence.
+11. "Carrying out the product of the three matrices for a square barrier, with \(x=0\) at the barrier's centre, gives
+    \(w=e^{ikd}[\dots]\) and \(\gamma=\dots\) (checked against the numerical product)." (G, and against STANDARD item 3 "no silent
+    step") The central algebra of the section is still not shown; the reader is told it was checked. At least write the product
+    \(\mathbf S_{k\to i\kappa}\,\mathrm{diag}(e^{\kappa d},e^{-\kappa d})\,\mathbf S_{i\kappa\to k}\) and its top-left element.
+12. "Since \(\kappa^2+k^2=2V_0\) and \(k^2\kappa^2=4E(V_0-E)\)," then (7) (S). The shortest route is skipped: by (6),
+    \(|w|^2=1+|\gamma|^2\), and \(|\gamma|^2=\frac{(\kappa^2+k^2)^2}{4k^2\kappa^2}\sinh^2\kappa d\) gives (7) in one line. As
+    written, the student tries to expand \(|w|^2\) from the cosh/sinh form and has to discover \(\cosh^2=1+\sinh^2\) alone.
+13. Section heading "★" on the whole section, and "Passages marked ★ … their results are stated again in plain words just after"
+    (section 1) (S). Section 4 starts "Let \(t\) and \(r\) be the amplitudes of one barrier, measured with \(x=0\) at the
+    barrier's own centre, as in section 3." A reader who skipped the starred section does not know what an amplitude \(t\) is
+    (section 2 defines only \(T\) and \(R\)). The plain restatement of section 3's results (amplitudes \(t\), \(r\) with
+    \(|t|^2=T\), formula (8), "one barrier is mostly a mirror") is missing at the start of section 4.
 
 ### 04 · Two barriers, two ways
 
-14. "Or it can pass the first, reflect off the second, reflect off the back of the first and then pass the second" (G). The
-    back of the first barrier reflects with r′, not r. It equals r only because the barrier is symmetric and its phases are
-    referred to its centre. Say so; otherwise r² in (10) is unexplained.
-15. "This agrees with the matrix product to one part in 10⁹ (notes/fig15/derive.py)." (S, G). This is a repository path in
-    the reader's text, with no link, and the reader cannot open it. The same applies to the closing note of section 14 and to
-    the file name in section 7 (mark 26). Link the files, or move the paths to a source note.
-16. "For thin leaks, 1 − √(RₐR_b) ≈ (Tₐ + T_b)/2, so" (S). "Thin leaks" is undefined (it means small T), and the one-line
-    expansion √((1−Tₐ)(1−T_b)) ≈ 1 − (Tₐ+T_b)/2 is skipped. Also say that t² becomes tₐt_b along with r² → rₐr_b, and give
-    where the peak formula T_aT_b/(1−√(R_aR_b))² comes from: the resonant phase makes the denominator |1−√(R_aR_b)|.
+14. "Example 4.1 · the bounces add up. At \(E=0.735\), keep only the first \(N\) round trips" (S, G). \(N\) here counts round
+    trips; in section 9 \(N\) counts barriers. One symbol, two meanings, in a note that is otherwise careful about this
+    (\(\gamma\) for \(z\), \(R\) in section 12). Use another letter.
+15. "A lopsided pair cannot be perfectly clear: the waves reflected from the pair no longer cancel exactly" (S). "No longer"
+    refers to a cancellation the note never described. Sections 4 and 5 explain full transmission as transmitted bounces adding
+    up; they never say that the reflected wave vanishes because the wave reflected from the front face cancels everything that
+    leaks back out of the well. That is the physical picture of perfect transmission, and it is missing.
+16. "with equality only when \(T_a=T_b\)" (S). One step: \((T_a+T_b)^2-4T_aT_b=(T_a-T_b)^2\ge0\).
 
 ### 05 · The sharp peak and the trapped wave
 
-17. "The travel part of θ gives ħ d(2ks)/dE = 2s/v, because dE/dk = ħv: the time to cross the well and back at the group
-    velocity." (G, and S is lost two lines later). 2s/v is the time to travel twice the centre spacing, not to cross the
-    well, which is s − d wide. The −2d/v is hidden in ρ, because ρ is referred to the barrier centre (ρ_centre = ρ_face − kd).
-    Without this, "L_eff = s − d + 2/κ" appears from nowhere. Show the split: 2ρ = 2ρ_face − 2kd, and ħ dρ_face/dE = 2/(κv)
-    for a step (the 1/κ penetration).
-18. "Each round trip the wave hits two barriers and loses a share T at each, so its probability falls at the rate
-    1/τ = 2T/t_rt, as e^{−t/τ}. Put t_rt = ħθ′ into (15) with √R ≈ 1:" (G). Here R = 0.856 and √R = 0.925, so this is an 8 %
-    approximation. Yet (16) is then stated as an exact equality and used as one ("τ = ħ/Γ = 14.2"). The exact statement comes
-    from the pole of t₂ at E_r − iΓ/2, and that is never mentioned. Either state that τ = ħ/Γ is exact for the decay of the
-    pole and that the leaky-bucket count is an estimate, or write ≈. Also, the loss per round trip is 1 − R², which equals 2T
-    only to first order in T.
-19. "Between resonances sin²(θ/2) is near 1 and T₂ ≈ T²/4R" (S). It is near 1 only midway between resonances, and the
-    approximation also needs T ≪ 1. Say "midway between".
-20. "A leaky bucket gives the same law in words: the narrower the hole, the slower it drains." The analogy is repeated and
-    sharpened in section 8 (mark 28), where it is physically wrong.
-21. "The average of 1/(1 + F sin²(θ/2)) over a full turn is 1/√(1+F), and with F = 4R/T² this is T/(1+R) = T/(2 − T)." (S,
-    G). The integral is quoted, not done, and the algebra (1−R)² + 4R = (1+R)² is skipped. One line each.
-22. "That is just what two independent half-silvered mirrors pass when we add probabilities instead of amplitudes" (S, G).
-    These mirrors are not half-silvered (T = 0.144). Say "two partly silvered mirrors", and give the incoherent sum
-    T²/(1 − R²) that the sentence describes.
-23. Standard 4 asks for a check of (13) or (15) in a limit. None is given here. For example, T → 1 gives no resonance, and
-    T → 0 gives δ-function peaks at the bound levels of section 7.
+17. "\(\theta(E_r)=2\pi n,\ n\) a whole number" with "this first resonance is the one at which about half a wavelength fits
+    between the barriers" (G). With \(r\approx-1\) the reflection phase is \(\rho\approx-\pi\), so at the first resonance
+    \(2ks\approx2\pi\) and \(\theta\approx0\): the first resonance has \(n=0\) (computed: \(\theta/2\pi=5\times10^{-5}\)). A reader
+    who takes \(\rho=+\pi\) gets \(n=2\). Say which \(n\) belongs to which resonance, or the count of "first, second" in section 7
+    cannot be checked against (14).
+18. "Since \(r\) is measured from the barrier's centre, it takes back the half-barrier the wave never actually crosses, \(d/2\)
+    at each end, a time \(-2d/v\) in all." (S) \(d/2\) per end gives, naively, \(d\) in all. The count is \(d/2\) in and \(d/2\)
+    out at each of two reflections, \(2d\) of path. Spell out the four halves.
+19. "(counting two leaks of \(T\) per round trip would give 0.2879)" (S). The student does not know what this alternative is or
+    why it is mentioned. Either explain it (a naive model loses \(2T\) of the probability per round trip, \(1/\tau=2T/t_{\rm rt}\))
+    or drop it.
+20. "With \(t_{\text{rt}}\approx2L_{\text{eff}}/v\) the width becomes \(\Gamma\approx\hbar vT/L_{\text{eff}}\)" (G, silent
+    step). From (15), \(\Gamma=2\hbar T/(\sqrt R\,t_{\rm rt})\), which with \(t_{\rm rt}=2L_{\rm eff}/v\) is
+    \(\hbar vT/(\sqrt R\,L_{\rm eff})\). The factor \(1/\sqrt R\) (here 1.08) is dropped without a word. That is most of why
+    (17) gives 0.0633 against 0.0704 (with \(\sqrt R\) kept: 0.0684). Say "and \(\sqrt R\approx1\)".
+21. "and with \(F=4R/T^2\) this is \(T/(1+R)=T/(2-T)\)" (S). The step \(1+F=(1+R)^2/T^2\), using \(T=1-R\), is skipped.
+22. "That is just what two independent partly silvered mirrors pass when we add probabilities instead of amplitudes" (S, G).
+    Asserted, not shown. One line: \(T^2(1+R^2+R^4+\dots)=T^2/(1-R^2)=T/(1+R)\).
+23. "A cup of tea cooling on the table follows the same law" (both). The same analogy opens section 8, almost word for word
+    ("A cup of hot tea cools by a fixed fraction of its excess warmth each minute"). Use it once.
 
 ### 06 · A wave packet is not a single energy
 
-24. "with |φ(k)|² the packet's spread of wave numbers." (S). φ is not defined. Say that it is the Fourier amplitude of the
-    start packet, normalised so that ∫|φ|²dk = 1, and that it is a Gaussian of width σ_k.
-25. "Its energy spread is four times narrower, σ_E = 0.051, now narrower than the peak of the running example." (G). This
-    compares a standard deviation with a full width. The packet's FWHM in energy is 2.355 × 0.051 = 0.12, which is wider than
-    Γ = 0.070. This is also why the long packet gets only 0.54, not about 1. Compare like with like.
-26. "For the thick barriers, d = 2, the long packet passes only 0.0225: ΔE = 0.051 is still much wider than Γ = 0.00291.
-    Equation (19) says the same in numbers: for d = 2 it gives 0.0359, and the exact average is 0.035." (G). The run gives
-    0.0225 against an exact 0.035, a 36 % shortfall, and the text says nothing about it. The likely cause is in section 8: the
-    run (213 time units) is shorter than τ = 344, so most of the trapped part has not yet leaked when the share is read. Say
-    so here. A new symbol, ΔE, also appears for what was called σ_E.
-27. "For the running example the best of the 5 long-packet runs filed so far passes 0.51 of the packet" (S). "Filed so far"
-    is progress-report language in a textbook chapter. The same holds for "runs so far" (section 12), "1237 of them … are
-    filed so far" (section 10), the "to come" cells (mark 44) and "built from 170 of the 500 planned runs" (section 13).
-    These numbers will go stale. Either move them to one dated status line, or let the page fill them in from the index.
+24. "A Gaussian packet of length \(\sigma_x\) in space is a Gaussian of width \(\sigma_k=1/(2\sigma_x)\) in wave number." (S)
+    Unsupported for the student, and "length" and "width" are not defined as standard deviations of \(|\psi|^2\) and
+    \(|\varphi|^2\). With section 2's \(e^{-x^2/4\sigma_x^2}\) the statement is exact for those standard deviations; say so, and
+    name it as the Fourier transform of a Gaussian (a one-line completion of the square, or a cited result).
+25. "and the area under the Lorentzian (15) is \(\pi\Gamma/2\)" (S). One line: \(\int\frac{(\Gamma/2)^2}{x^2+(\Gamma/2)^2}dx=
+    \frac\Gamma2\cdot\pi\).
+26. "Its energy spread is four times narrower, \(\sigma_E=0.051\): a standard deviation below \(\Gamma\), though its full width
+    at half maximum, 0.119, is still wider than the peak's full width \(\Gamma\)." (S) "A standard deviation below \(\Gamma\)"
+    reads as "one standard deviation below". Write "a standard deviation smaller than \(\Gamma\)".
+27. "the best of the 5 long-packet runs filed so far passes 0.51 of the packet (these runs stopped more than 15 % too early and
+    are due to be rerun; the value already agrees with the exact average)" (S, G). Three problems. What "stopped too early"
+    does to the measured share is not said (does it under- or over-count?). "The best of the runs" is a maximum over run
+    energies 0.70 and 0.75, not a value at 0.735, so it is not the same quantity as the exact peak average 0.538. And 0.51
+    against 0.538 is 5 % low; "agrees" needs that number.
+28. "For the thick barriers, \(d=2\), the long packet passes only 0.0225 (the best of the runs filed so far, which do not yet
+    include the one at the peak) … Equation (19) says the same in numbers: for \(d=2\) it gives 0.0359, and the exact average is
+    0.035." (S, G) "The same" as what? The run says 0.0225 and (19) says 0.0359. A reader reads this as a 40 % disagreement
+    called agreement. Say that the run is off the peak and is not comparable, and that (19) and the exact average agree with each
+    other.
 
 ### 07 · A wider well sings lower
 
-28. "Treat the wave as if it were reflected by hard walls standing 1/κ inside each barrier. Then … E_n ≈ n²π²ħ²/2mL_eff²."
-    (G). Equation (21) is never evaluated with the page's numbers. For the running example L_eff = 2.76 gives E₁ = 0.65
-    against 0.735, which is 12 % low. The table gives the hard box and the finite well but not (21). Add the column, or quote
-    the number, so that the reader knows how rough "the trend" is. Also say that κ depends on E, which makes (21) implicit.
-29. "The finite well matches the resonances to a few thousandths" (G). For s = 3.5 the second level is 1.445 against the
-    resonance 1.486, an error of 0.04. The sentence is true only for the first level.
-30. Table: the finite well lists three levels for L = 3.5 and L = 4.5 (third: 1.878 and 1.377), but the resonance column lists
-    only two, with no explanation. These levels are below V₀ = 2, so the resonances should exist (broad near the top). The
-    page offers the spacing s = 3 as a chip, but the table skips it. The precision is uneven ("0.16" next to "0.162").
-31. "(even states)", "(odd states)" (S). Both terms are used without definition: say that cos is even and sin is odd about the
-    well's centre. The odd-state relation is not derived (the text derives only the even one).
-32. "measures a lifetime of 65.2 (file flat_N2_V2_D1_P3.5_R0_B0_s3_E0.350.bin), against the exact 1/Γ = 58.3: a little
-    longer, as section 11 finds for the running example." (S, G). A raw file name sits in the prose. The notation switches from
-    ħ/Γ to 1/Γ. And the gap is 12 %, against the 6–8 % of section 11, so "as section 11 finds" understates it.
+29. "The finite well matches the lowest resonance to a few thousandths" (G). The table gives 0.744 against 0.735 and 0.395
+    against 0.388: 7 to 9 thousandths, about a hundredth. "To about a hundredth" is the honest wording.
+30. "By (17) there are two reasons: a longer well means fewer hits on the barriers per second, and a lower resonance energy
+    means a larger \(\kappa\), so each hit leaks less." (G) (17) has a third: the lower resonance has a smaller speed \(v\),
+    which also means fewer hits per second. Section 13 uses exactly this reason ("at low energy the electron is slow and meets
+    the barriers less often").
+31. "(The chip \(s=3\) belongs to the thicker barriers of section 8.)" (S) This interrupts the comparison of (21) with the table
+    and refers to a chip the reader has not looked for. Move to the table caption or to section 8.
 
 ### 08 · Taller and thicker barriers
 
-33. "Poke a hole in the bottom of a bucket of water and it drains. … The water level falls by the same law each time, a fixed
-    fraction per second; only the fraction changes." (G). This is physically wrong. A bucket with a hole drains by Torricelli's
-    law: the outflow goes as √h, the level falls linearly in √h, and it reaches zero in a finite time. It is not exponential.
-    A fixed fraction per second needs an outflow proportional to the amount left: a capacitor through a resistor, a slow leak
-    through a long narrow tube (viscous flow), or radioactive decay. Replace the picture; section 5 uses it too.
-34. "A taller barrier raises it a little (0.877 at V₀ = 3)" (S). From 0.735 to 0.877 is a 19 % rise. That is not "a little",
-    and it sits next to "hardly moves".
-35. "The 3D run at E = 0.7 shows what such a lifetime means in practice. The run lasts 213 time units, less than one lifetime,
-    … a straight line … gives 210." (S, G). The sentence does not say which barriers this run used; the reader must guess d = 2
-    (τ = 344). Also say why E = 0.7 rather than the resonance 0.744: it is the nearest stored energy. And say that the fitted
-    210 is therefore not a measurement of τ.
+32. "a straight line through the logarithm of its decay from \(t=91\) to the end gives 210." (S, G) The paragraph never puts 210
+    next to the exact 344 from the table above, nor says why a short fit gives a *shorter* lifetime (39 % short). "A run would
+    have to last several lifetimes" explains imprecision, not a one-sided bias. Name the comparison and the likely reason
+    (early, faster-decaying off-resonant parts of the packet still in the fit window), or say it is not understood.
 
 ### 09 · Three, five and ten barriers
 
-36. "must be an eigenvector of P with eigenvalue e^{iqs}, and that requires cos qs = ξ(E)." (S). The step is skipped. Since
-    det P = 1, the eigenvalues satisfy λ + 1/λ = tr P = 2ξ, so λ = e^{±iqs} gives cos qs = ξ. One line.
-37. Figure 2 caption: "above it lies a gap, 1.126 wide, up to the second band at 2.082." (G). The second band begins above the
-    barrier top V₀ = 2, where κ is imaginary. Equations (4) and (7)–(9) are written for E < V₀ only, and the note never says
-    how T is computed above the top (κ → ik′, sinh → sin). The runs reach E = 2.6, and the last paragraph mentions "the top of
-    the barriers" in passing. One sentence is needed.
-38. "the pair's resonance 0.735 is its middle." (G). It is the middle in ξ (ξ = 0), not in energy: the band runs from 0.59 to
-    0.955, whose midpoint is 0.77. Say "the centre of the band in ξ".
-39. "Equation (23) agrees with the direct product of transfer matrices to 2.3e-12" (S). This is code notation in typeset text;
-    write 2.3 × 10⁻¹².
+33. "and between bands there are energies where no wave can cross the row at all: gaps." (G) For a finite row the transmission
+    in a gap is small, not zero; section 9 itself says it "falls exponentially with the number of barriers", and the 3D runs pass
+    0.0218 in the gap. "Where almost nothing crosses a long row" is correct.
+34. "A crystal of atoms is the same structure with the atoms as the barriers" (G). The ions of a crystal attract electrons: they
+    are wells, and the space between them is the barrier. The Kronig–Penney model works either way round, but the sentence as
+    written is physically backwards.
+35. "It has determinant 1" (S, ★ passage). The reason is one line away: \(\det\mathbf M=|w|^2-|\gamma|^2=1\) by (6), and the travel
+    matrix has determinant 1.
+36. Figure 2: the tick labels (0.4 … 1.2) and the strip labels "N = 2 … N = 10" are set in a serif face; the house chart style
+    (STANDARD, Form) asks for Plex Mono ticks, and "N" is upright where the text has italic \(N\). The same holds for Figure 3's
+    labels "filled up to E_F", "level at V_b = 0", whose E and V are upright and unlike the italic \(E_F\), \(V_b\) of the text.
+37. "Select ten walls and step the energy through the band to watch the wave pass from cell to cell" (S). By the paragraph's own
+    numbers the short packet passes only 0.129 inside the band. "Watch the wave pass" promises more than the reader will see;
+    "watch more of it get through than in the gap" is what the figure shows.
 
 ### 10 · What was computed, and how
 
-40. "e^{−ik²Δt/2}", "with an error of order Δt³ per step." (S, G). Here k is the 3D wave vector of the Fourier grid, but k has
-    meant √(2E) since (4). The symbol 𝓕 is not defined (say "Fourier transform"). Standard 5 also asks for the global order
-    (Δt² over a run), why Δt = 0.01 was chosen (k_max = 2π on a 0.5 a grid gives a kinetic phase of 0.2 rad per step), where
-    the method fails, and the splitting error measured on its own. Section 11 measures only the total grid error.
-41. "ψ(t_f + τ) = e^{−iEτ}[…], u = τ/Δt_f" (S, G). τ is the lifetime everywhere else. Use another letter for the time since
-    the stored frame.
-42. "3739 runs in seven groups: pairs of walls and of discs of radius 2, 4, 6, 9 and 12 at four spacings (1128 runs); … the
-    diode under 20 voltages (1000)" (S). The page offers five spacings (including s = 3) and disc radii 3 and 5 as chips, and
-    the counts do not tell the reader why. Twenty voltages times 25 energies is 500, not 1000; section 13 reveals that the
-    second 500 is discs of radius 6. Say so here.
-43. "about one nanosecond per point." (S). Per point per step? Say which.
+38. "so a wave leaving the box fades out instead of coming back on the other side." (S) Why it would come back on the other side
+    is never said: the Fourier method treats the box as periodic. One clause.
+39. "and \(K\) just multiplies by \(e^{-ik^2\Delta t/2}\) after a Fourier transform." (S) The reason, that a plane wave
+    \(e^{i\mathbf k\cdot\mathbf r}\) is turned by \(\nabla^2\) into \(-k^2\) times itself, is missing; without it the step is
+    magic.
+40. "The error is of order \(\Delta t^3\) per step" (G). Unsupported: the error comes from \(K\) and \(V\) not commuting, and the
+    symmetric split cancels the \(\Delta t^2\) term. One sentence naming the reason.
+41. "the fastest mode the grid holds, \(k=\pi/0.5\), then turns by \(k^2\Delta t/2=0.2\) rad per step, small enough for the split
+    to be accurate." (G) In three dimensions the fastest mode is the corner of the Fourier box, \(|\mathbf k|^2=3(\pi/0.5)^2\),
+    which turns by 0.59 rad per step. And the kinetic phase is applied exactly by the split; the accuracy depends on the
+    commutator term, which is better judged by the measured errors of section 11. The sentence's argument does not support its
+    claim.
+42. "The batch walks the whole parameter space the figure offers, 3739 runs in seven groups: … other heights and thicknesses
+    (564); each barrier alone (376); three, five and ten barriers (423)" (G). The first group and the diode can be reconstructed
+    (6 × 4 × 47, 20 × 25); 564 = 12 × 47, 376 = 8 × 47, 423 = 9 × 47 cannot: which 12, 8 and 9 configurations? Name them or drop
+    the counts.
+43. "it mixes them in the frame that turns with the packet" (S). "Frame" was used one line earlier for a stored snapshot ("two
+    stored frames \(f\) and \(f+1\)"). Here it means a rotating reference. Say "in a reference that turns with the packet's
+    phase".
 
 ### 11 · How good the grid is
 
-44. "Profile against profile, the grid wave differs from the exact one by 3–4 % of the peak during the collision" (G). The note
-    never says how the "exact" time-dependent profile was computed. The exact theory in the note is stationary, (8)–(18).
-    Name the reference solution.
-45. "A likely cause, which we have not separated further: each barrier is only two grid points thick …" (G). Section 14 then
-    states it as fact: "a grid 0.5 a apart makes the barriers a little too opaque". Hedge in both places or neither.
-    Measuring it would be better still: a single 1D twin at 0.25 a decides it.
-46. "A grid twice as fine would cost eight times the points and twice the steps" (G). This is unsupported. The split-step
-    method is unitary for any Δt, but for the same phase accuracy k_max²Δt must stay fixed, which means four times the steps,
-    not two.
-47. "The measurements below were made on the running example in the first set of runs (115 runs …), all on the resonant run
-    E = 0.735" (S). The page's energy slider steps by 0.05 (0.30 to 2.60), so the reader cannot select the run these numbers
-    describe. Say that E = 0.735 is not among the current stored energies.
+44. "The measurements below were made on the running example in an earlier batch of 115 runs" (G). The present batch has 1237
+    runs filed, including the running example, and the page plays those. The grid's error is quoted from runs the reader cannot
+    see. Either repeat the comparison on the present batch or say why not.
+45. "Put together, the three measurements say the grid's resonance is a little narrower than the true one and sits a little
+    lower in energy." (S) The inference is left to the reader. One sentence: shifted lower, so more passes below the peak and
+    less above; narrower, so less of the packet passes at the peak and the trapped wave lives longer.
+46. "lifetimes are 6–8 % long." (box) (G). Section 7 reports a 3D lifetime 12 % long for s = 3.5 ("we have not traced the
+    difference"). The box generalises from the one spacing that was measured. "6–8 % for the running example, 12 % at s = 3.5".
+47. "For walls this reading gave 0.179 against the twin's 0.186, a 4 % gap from the half-trapped rule." (G) The cause is asserted.
+    It might also be the side border or the cut-off frame. Say "which we attribute to" and why.
+48. "For discs it is read from the stored region probabilities … the probability beyond the barriers, plus half of what is still
+    trapped" (G). For discs, the regions "before, between, beyond" are not defined: is "between" the slab between the discs at
+    all radii, or only inside the rim? The wave that leaks sideways out of the gap goes where? The reading cannot be judged
+    without this.
+49. The paragraph "The lifetime is fitted where … The share that got through, plotted as points in Fig. 15d, is …" sits after the
+    box, at the end of the section, but sections 6, 7, 8 and 9 already quote fitted lifetimes and run shares. A reader of
+    section 6 meets "the long packet passes 0.51" with no idea how a run's share is read. Point to it from the first use.
 
 ### 12 · Discs and shells
 
-48. "Shrink the walls to discs of radius R" (S, G). R has been the reflection coefficient since (8), and it appears together
-    with T in (13), (15) and (23). Here it becomes a radius, in (28), in the tables and in Problem 6. One symbol, one meaning:
-    use ρ_d or a for the radius (a is taken too), for instance R_d.
-49. "The runs at E = 0.65, the stored energy nearest the resonance, measure it" (G). The stored energies are 0.30 + 0.05 n,
-    so 0.75 is nearer to 0.735 than 0.65 is. If the disc resonance sits lower, say so and why. Lateral confinement should
-    raise it, not lower it. The "walls" row (15.1) is the E = 0.735 lifetime from the older runs of section 11, not a run at
-    0.65, so the row is not a like-for-like baseline.
-50. "Key result · … As R grows, the lifetime and the share through both approach the walls' values." (G). The table has a
-    lifetime for one radius only (R = 2); every other cell reads "to come". A key result is stated without the data that
-    would support it. The table also leaves the "share through, one disc" cell for walls as "—", although section 6 gives it
-    (0.149).
-51. "Shells. Two spherical shells about the origin, of radii R and R + s, make a different trap: a hollow ball the wave can
-    enter from any side. … because a wave inside a closed shell can only leave through the shell" (S, G). The text does not
-    say where the wave is trapped: inside the inner shell, or in the spherical gap between the two. Section 10 stores
-    "inside and between the shells". The shell height and thickness for these runs are not given. A graduate would also want
-    one sentence on the shell's own levels (spherical Bessel functions, the l = 0 level of a ball of radius R).
+50. "Shrink the walls to discs of radius \(R\) on the flight axis (in this section \(R\) is a radius; the reflection coefficient
+    does not appear)" (both). Declared, but still one symbol with two meanings in one note, against the Taylor rule of the
+    standard (one symbol one meaning). \(\rho\) is taken; \(a\) is the length unit; use \(R_d\) or \(b\).
+51. "Across the flight the packet's probability lies mostly within \(\sigma_\perp=3\) of the axis, a band about 6 wide." (S, G)
+    Section 2 says the width grows to 7.3 by \(t=40\). When the packet reaches the discs it is no longer 3 wide. Give the width at
+    the time of the collision.
+52. Table row "walls · 15.1 · — · 0.176 · —", with "The runs at \(E=0.65\) measure it" (G). 15.1 is the lifetime section 11
+    quotes for the running example at \(E=0.735\) from the earlier batch of 115 runs. Is it also the lifetime at 0.65 in the
+    present batch? And 0.176 differs from the 0.179 and 0.186 of section 11 (different energy?). The reader cannot tell
+    whether the walls row is measured at the same energy as the disc row it is compared with.
+53. "2 · 1.99 · 2.28 · 0.936" (G). A lifetime of 1.99 is less than half a round trip (\(t_{\rm rt}=4.45\)). A wave that leaves in
+    less than one round trip is not trapped in any useful sense; the fit may measure the packet passing by. Say what the fitted
+    decay is at this radius before solving (27) for \(\tau_{\rm side}\).
+54. Key result "By (27) and (28), the narrower the discs, the shorter the trapped wave should live; … the larger radii, still to
+    come, will show the trend. … the runs for the largest discs test it." (both, STANDARD items 4 and 6) The key result is a
+    prediction. Four of the five disc rows read "to come", and the one measured row (R = 2) is the doubtful one of mark 53. A box
+    titled "Key result" should state something the note shows. Either retitle it ("What the runs will test") or wait for the runs.
+55. Table "share through, one disc": 0.415 for R = 6 and 0.678 for R = 4, "to come" for R = 2 (G). The column is never used in
+    the text. What it is for (comparison with the pair? with walls' 0.149?) is not said.
+56. "Most of them are longer than the runs can follow: where the fit window reaches the end of the run … Read those as 'at least
+    this long'" (S, G). Which of the four are "those"? The table does not mark them. Add a mark or a column "fit reaches end".
+57. Shells table, "longest \(\tau\) at \(E\) = 0.3" for R = 3, s = 2.5 (G). 0.30 is the lowest run energy; the longest lifetime
+    lies at the edge of the range, so the true maximum may lie below it. Say so.
+58. Shells, as a whole (G, STANDARD items 2 and 3). The section gives no model for the shell trap: no levels, no estimate of the
+    lifetime, not even the order of magnitude given for discs. The "room with the doors shut" picture is good; one estimate (a
+    spherical well of radius R + s/2, the lowest levels, a leak through one shell by (8)) would let the reader judge 66.9 and 110.
+59. "The packet mostly passes round and over it" (S). "Over" suggests above the barrier in energy. "Round it" says it.
 
 ### 13 · The device
 
-52. Title: "a diode whose current runs backwards" (S). The current never runs backwards. It falls while the voltage rises, as
-    the text itself says ("negative differential resistance"). The title teaches the wrong picture.
-53. "Electrons in GaAs move as free particles with an effective mass m* = 0.067 mₑ" (S). There is no picture of why a crystal
-    electron acts lighter (the periodic lattice potential is folded into the mass). One sentence is enough. (G): AlGaAs has a
-    different mass (about 0.096 mₑ at 35 %), and the matching rule becomes continuity of χ′/m (BenDaniel–Duke). The model
-    uses one mass throughout, and section 14 does not list this.
-54. "A battery across the device holds the right side lower than the left by an energy eV (e the electron's charge, V the
-    voltage; in our units we write the energy simply as V)." (S, G). In (29) the letter V now denotes both the potential
-    V(x) and the voltage, inside the same equation, beside V₀. Use U for the bias energy, or V_b. Also, "e the electron's
-    charge" should read "e the elementary charge"; the electron's charge is −e.
-55. "the electron meets the first barrier with less energy below its top than the second, so the first is more opaque." (S).
-    The wording reads backwards. The electron is further below the top of the first barrier, because the second barrier's
-    top has been lowered by the ramp. "Less energy below its top" suggests it is closer to the top.
-56. (G) Under bias the wave number on the right is k_R = √(2(E+V)) ≠ k_L. The transmission is then (k_R/k_L)|t|², and
-    |w|² − |z|² = 1 in (6) no longer holds as stated. The text cites "the matrices of section 3" for the staircase without
-    noting this.
-57. Figure 3: the trapped "level" is drawn as a sloping line parallel to the tilted well floor. An energy level is a single
-    energy and should be horizontal. The shading under the emitter also continues below the band edge.
-58. "With the exact single-energy T(E,V) the current peaks at V = 0.875 and has its valley at 1.825" (S). The voltages are
-    left in natural units. Give them in volts (0.875 → 131 mV, 1.825 → 274 mV), as the table does for the other quantities.
-59. "For two walls the curve built from the runs climbs to its top near V = 0.5 and falls to its valley at V = 1.375, a
-    peak-to-valley ratio of 5." (G). Smoothing over the packet's spread should lower the peak-to-valley ratio, yet the runs
-    give 5 against the exact 4.3, and they peak at 0.5 against 0.875. The text explains neither. It is probably the 170/500
-    runs filed, which leaves gaps in the trapezoid sum. Say so, or leave the comparison out until the batch is complete.
-60. "Resonant-tunnelling-diode oscillators are the fastest purely electronic oscillators that work at room temperature, near
-    2 THz." (G). The cited paper (Maekawa 2016) supports 1.92 THz. "Fastest" needs the source to say so, or a softer word.
+60. "(\(-e\) the electron's charge, \(V_b\) the voltage, the *bias*; in our units we write the energy simply as \(V_b\), and we
+    keep the plain \(V\) for the potential)" (S). Declared, but the section then writes \(eV_b\) in (29), (31) and Figure 3 and
+    plain \(V_b\) in (32) and the text ("\(V_b=0.875\) (131 mV)"). A student reading (31) then (32) sees the \(e\) vanish. One
+    convention throughout the section would be kinder.
+61. "\(J(V_b)=\frac{e m^*k_BT}{2\pi^2\hbar^3}\int_0^\infty T(E,V_b)\dots\)" (both). \(T\) is the temperature in the prefactor and the
+    transmission in the integrand of the same equation. The note warns about it ("in \(k_BT\) only, \(T\) is the temperature"),
+    but a reader of (31) on its own sees one letter with two meanings. Write \(\mathcal T(E,V_b)\) for the transmission here or
+    \(\Theta\) for the temperature.
+62. "\(\frac{m^*}{\pi\hbar^2}\int_0^\infty\frac{dE_\perp}{1+e^{(E+E_\perp-E_F)/k_BT}}=\frac{m^*k_BT}{\pi\hbar^2}\ln(\dots)\)" (S, ★).
+    The integral is done silently; it is one substitution (multiply top and bottom by \(e^{-x}\)). Also
+    "\(2\,d^2k_\perp/(2\pi)^2=(m^*/\pi\hbar^2)\,dE_\perp\)" skips \(d^2k_\perp=2\pi k_\perp dk_\perp\).
+63. "As the level sinks, the supply grows, from 14.2 at \(V_b=0.875\) to 18 at \(V_b=1.25\); but the area under the peak shrinks
+    faster, from 0.103 at zero voltage to 0.073 and then 0.041" (S, G). "14.2" and "18" are values of the logarithm in (31), not
+    said; 14.2 is also the lifetime of the running example, which invites confusion. "0.073 and then 0.041" do not say at which
+    voltages (presumably 0.875 and 1.25). And the products 14.2 × 0.073 = 1.04 and 18 × 0.041 = 0.74, which carry the argument,
+    are left for the reader. Also 0.103 is below the Lorentzian area \(\pi\Gamma/2=0.111\); say over what range it is taken.
+64. "So far 170 of the 500 runs for two walls are filed … the curve's peak and valley would say more about which runs are filed
+    than about the diode. We quote them when all 500 are in." (both, STANDARD item 6) Honest, but Fig. 15e still draws that curve
+    on the page, beside the exact one, and nothing on the figure says it is not yet meaningful. The note should say what the
+    reader sees in Fig. 15e now, and which line to trust.
+65. "For two discs most of the current flows beside the discs and the dip is shallow." (G) No number and, by the paragraph
+    before, only a partial set of disc runs. Unsupported as stated.
+66. "On each side of the barriers the electrons fill every state up to an energy \(E_F\)" with Figure 3 (S). Figure 3 shades the
+    filled states on the emitter side only; the collector, filled up to \(E_F-eV_b\), is drawn empty. Either shade it or say in the
+    caption that only the emitter's filling matters at this bias.
+67. "We take \(E_F=1.0\) (150 meV)" (G). A Fermi energy of 150 meV in GaAs needs a doping near \(10^{19}\,\text{cm}^{-3}\), far
+    above usual RTD emitters (tens of meV). A sentence on why this value was chosen (so the level starts among filled states for
+    the running example) and that real emitters sit lower.
 
-### 14 · What the model leaves out
+### 14 · What the model leaves out, and where to read on
 
-61. "and it makes real current curves lopsided." (G). This is vague. The known effects of charge build-up in the well are a
-    shifted peak and intrinsic bistability (hysteresis) in the NDR region; name them. Standard 7 also asks for "the next,
-    more complete model". The section names effects but no model: self-consistent Schrödinger–Poisson, sequential versus
-    coherent tunnelling, the non-equilibrium Green's function or Wigner-function treatments.
-62. Further reading: the note has no links at all. The DOM of `#paper` contains zero `<a>` elements. Standard 8 requires "each
-    with a working link" (DOIs exist for all five). The reading list also has no textbook a school student or first-year
-    student could open; a chapter of Griffiths's *Introduction to Quantum Mechanics* or Davies's *The Physics of
-    Low-Dimensional Semiconductors* would fill that gap.
-63. Problems: Problem 1 asks the reader to "derive (9)" from (8), which the text has just done in one line. Problem 6 asks for
-    τ_side "for each disc radius the runs have computed", which today is one radius.
+68. "so real peaks are lower and broader than (31) predicts" (S). (31) predicts a current, not a peak in transmission. Say
+    "real transmission peaks are lower and broader, and the current's peak-to-valley ratio smaller than (31) predicts".
+69. "The next, more complete model solves the Schrödinger and Poisson equations together and lets the electrons scatter as they
+    cross." (G, STANDARD items 7 and 8) No source for the next model, and the reading list has no textbook at all: five research
+    papers, nothing a school student or a second-year student can read first. A textbook chapter (for example a standard
+    quantum-mechanics text on the finite well and transmission, and a low-dimensional-semiconductors text on resonant tunnelling
+    and self-consistent models), opened and read, belongs here.
+70. Problem 6: "Use the table of section 12 and (27) to find \(\tau_{\text{side}}\) for each disc radius the runs have computed.
+    … Does \(\tau_{\text{side}}\) grow faster or slower than \(R\)?" (S) The table has one computed radius. The problem cannot be
+    done today.
+71. Closing line: links to `notes/fig15/gen2_numbers.py` and `public/data/resonant-tunnelling/2026-11-14/kaggle/index.json` point
+    to `github.com/Numa1997/SiteTest/blob/main/…`. Neither file exists on `origin/main` (checked with `git cat-file`); both links
+    give 404 until this branch is merged. `derive.py` exists on main.
 
-### Whole note
+## Verdicts per section against notes/STANDARD.md
 
-64. Type. The body paragraphs render in IBM Plex Sans and only the captions in Latin Modern. STANDARD.md ("Latin Modern in
-    notes") and CLAUDE.md ("lecture notes set like a LaTeX document (Latin Modern text …)") ask for Latin Modern text. If this
-    comes from the shared `paper.css`, it is not this note's to fix, but the referee notes it.
-65. The running energy 0.735 is not a stored energy (the slider offers 0.70 and 0.75, and opens at 0.65). Section 1 should
-    tell the reader which slider position is "the running example" and why it is off the resonance by 0.015.
+| Section | Verdict | Main reasons (marks) |
+|---|---|---|
+| Abstract | clear, one fix | overclaim on long packets (1) |
+| 01 Two panes of glass | clear, minor | picture is good; symbols before Figure 1 (2); figure legend too early (3) |
+| 02 The model in 3D | needs work, small | ω(k) missing (4); dot/prime defined late (5); run length unsupported (8) |
+| 03 One barrier ★ | needs work | product of matrices still silent (11); short route to (7) skipped (12); evanescent "right-mover" (9); skip-reader loses t, r (13) |
+| 04 Two barriers | needs work, small | N clash (14); the picture of cancelling reflection missing (15) |
+| 05 The sharp peak | needs work | √R silently dropped in (17) (20); n of first resonance (17); incoherent sum asserted (22); unexplained 0.2879 (19) |
+| 06 Packets | needs work | σ_k unsupported (24); long-packet numbers compared as if comparable (27, 28) |
+| 07 Wider well | clear, minor | "few thousandths" (29); missing v in reason (30) |
+| 08 Taller, thicker | clear, one fix | 210 vs 344 left uncommented (32) |
+| 09 Bands | clear, minor | "no wave can cross" (33); atoms as barriers (34); figure type (36) |
+| 10 Numerical method | needs work, small | periodic box (38); Fourier step reason (39); error order unsupported (40); 3D fastest mode wrong (41) |
+| 11 Grid quality | needs work, small | measured on an older batch (44); inference unstated (45); 6–8 % over-generalised (46); disc regions undefined (48) |
+| 12 Discs and shells | needs work | key result is a prediction with one doubtful data point (53, 54); R reused (50); shells without a model (58) |
+| 13 The device | needs work, small | T for two things in (31) (61); unlabelled supply numbers (63); Fig. 15e curve unexplained on the page (64); E_F choice (67) |
+| 14 Limits, reading | needs work | no textbook and no source for the next model (69); Problem 6 not doable (70); two dead links (71) |
 
-## Verdict per section (against STANDARD.md §4 and the 21 October verdict)
-
-| § | Title | Verdict | Main reasons (marks) |
-|---|---|---|---|
-| Abstract | — | needs work | false "no skipped steps" claim (1) |
-| 01 | Two panes of glass | needs work, small | picture good but overstated for plain glass (2); figure scale and slider name (3) |
-| 02 | Model in 3D | needs work | separation step skipped (4); (3) bare formula, unstarred (5); width meaning (6); units and no dimensional check (7) |
-| 03 | One barrier ★ | needs work | the product giving (7) is skipped, the core "it can be shown" (10); travel-matrix sign (9); continuity argument loose (8); determinant caveat (11) |
-| 04 | Two barriers | clear, with fixes | strong physics and Example 4.1 is excellent; needs r′ = r (14), the inaccessible file path (15), the (11) steps (16) |
-| 05 | Sharp peak | needs work | 2s/v vs. well width and the origin of L_eff (17); τ = ħ/Γ stated exactly from an 8 % approximation (18); phase average unstated (21); no limit check (23) |
-| 06 | Packets | needs work | φ undefined (24); σ compared with FWHM (25); unexplained 36 % run shortfall (26); status language (27) |
-| 07 | Wider well | needs work | (21) never evaluated (12 % off) (28); "few thousandths" false for level 2 (29); missing third resonances, s = 3 missing (30) |
-| 08 | Taller, thicker | needs work | bucket analogy physically wrong (33); unidentified run (35) |
-| 09 | Bands | clear, with fixes | best section of the note; one skipped eigenvalue line (36), the above-barrier band (37), "middle" (38) |
-| 10 | Computation | needs work | standard 5 only partly met: no global order, no justification for Δt, no separate error (40); τ and k reused (40, 41); run counts unexplained (42) |
-| 11 | Grid quality | clear, with fixes | honest and measured; reference solution unnamed (44), the hedge contradicted in §14 (45), cost claim (46) |
-| 12 | Discs and shells | needs work | R reused for a radius (48); "nearest energy" wrong (49); key result unsupported by the data shown (50); shell trap location unclear (51) |
-| 13 | Device | needs work | V means two things in (29) (54); backwards wording (55); unequal k under bias (56); sloped level in Fig. 3 (57); run curve vs exact unexplained (59); misleading title (52) |
-| 14 | Limits and reading | needs work | no "next model" named (61); no links at all (62) |
-
-Standard items met across the note: 1 (pictures from experience: swing, bottle, coupled pendulums, echo; all good except
-the bucket), 2 (model and the page's numbers), 6 (equation to screen: "Reading the figures" and the open box are good).
-Partly met: 3 (derivation; key steps skipped at (2), (7), the phase average, L_eff), 4 (limits for (8) only; no dimensional
-check), 5 (method described, error not separated), 7 (limits listed, no next model). Not met: 8 (no working links).
+Against the standard as a whole: items 1 (picture), 4 (checks) and 5 (method) are met in most sections; item 3 fails where marks
+11, 12, 20, 22, 24 and 62 point to silent steps; item 6 is weakest in sections 12 and 13, where the figures show data the note
+itself calls incomplete; item 8 lacks a textbook. Form: KaTeX renders cleanly at 1400 and 390 px, equations are numbered, no
+question-and-answer format; the only house-style lapse is the type in Figures 2 and 3 (36).

@@ -103,3 +103,16 @@ centre radius, longest tau at lowest energies; band bottom and E_F defined befor
 the area numbers; (13) not (31) for broader peaks; Fig. 3 redrawn TO SCALE in energy at V_b = 1 (level between collector
 E_F - eV_b and emitter band bottom), collector filled states drawn; chips, panel naming, Fig. 1 E/V0 wording.
 Data question for the coordinator: long-packet runs for V0 = 3 pass 0.188 at E 0.783 where the exact packet average is 0.077.
+
+## Round 2 referee (71 marks, notes/fig15/referee.md, read db61bec) and derivation checker (notes/fig15/derivation-check-gen2-r2.md)
+Checker: all 32 equations re-derive; fixed: sheet scale = largest value of the run is height 1 (NOT the start peak; the page's
+own gain note says "start packet's peak", page code: tell the coordinator); run length rule (flight + 3 x capped lifetime);
+sec 11 profile numbers now measured by notes/fig15/gen1_profile_check.py (3.0 % / 2.4 % of the run peak; 5.8 % of frame
+peak); eq (10) reference points; 6.95; theta at unrounded E_r (5.6e-9); midway T^2/(1+R)^2; 256 levels = 255 steps.
+Referee: fixed all not already fixed by round 2 (definitions of omega(k), separation constants, Fourier widths, |w|^2 step,
+m for round trips, inequality step, independent-mirror sum, tea used once, area of Lorentzian, three reasons, crystal wells,
+det 1 reason, periodic box, Fourier eigenfunction, non-commuting K, V, run counts formula, disc regions, packet width at
+arrival 3.7, one-disc yardstick, shells >= marks and no-model statement, supply integral step, area x supply products,
+E_F choice, eV_b = V_b in our units). Not done: textbook (only read sources), Fig. 15e runs curve (page code), house font in
+SVG (same classes as gen-1 Figure 1), links to main 404 until merge.
+Live site: /r2/resonant-tunnelling/2026-11-14/runs/... returns 404 on phyeinusul.com (checker): told the coordinator.
