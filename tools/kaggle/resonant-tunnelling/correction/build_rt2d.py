@@ -4,7 +4,7 @@ prints the code, and runs the smoke test or one shard (jobs i, i + n, ...). The 
 Usage: python3 build_rt2d.py <commit> smoke | all <i> <n>"""
 import json, os, sys
 HERE = os.path.dirname(os.path.abspath(__file__))
-COMMIT = sys.argv[1]; JOBSEL = sys.argv[2]
+COMMIT = sys.argv[1]; JOBSEL = sys.argv[2]; NTFY = os.environ.get("NTFY")
 SHARD = (int(sys.argv[3]), int(sys.argv[4])) if len(sys.argv) > 4 else None
 BASE = f"https://raw.githubusercontent.com/Numa1997/SiteTest/{COMMIT}/tools/kaggle/resonant-tunnelling/correction/"
 md = ("# Fig. 15 correction: discs and shells in the exact (x, rho) reduction (GPU, JAX)\n\nThe packet flies along the axis of "
@@ -16,9 +16,9 @@ c1 = ('import jax; print(jax.devices())\nif jax.default_backend() != "gpu":\n   
       'for f in ("axisym.py", "axisym_jax.py", "rt2d_run.py", "rt2d_smoke.py", "jobs_2d.json"):\n'
       '    urllib.request.urlretrieve(BASE + f, f)\n    if f.endswith(".py"): print("=" * 20, f, "=" * 20); print(open(f).read())\n')
 if JOBSEL == "smoke":
-    c2 = 'exec(open("rt2d_smoke.py").read())\n'
+    c2 = f'NTFY = {NTFY!r}\nexec(open("rt2d_smoke.py").read())\n'
 else:
-    c2 = f'RUN = True\nGEN = "2026-11-14b"\nSHARD = {SHARD}\nexec(open("rt2d_run.py").read())\n'
+    c2 = f'NTFY = {NTFY!r}\nRUN = True\nGEN = "2026-11-14b"\nSHARD = {SHARD}\nexec(open("rt2d_run.py").read())\n'
 cells = [dict(cell_type="markdown", metadata={}, source=md, id="m0"),
          dict(cell_type="code", execution_count=None, metadata={}, outputs=[], source=c1, id="c1"),
          dict(cell_type="code", execution_count=None, metadata={}, outputs=[], source=c2, id="c2")]

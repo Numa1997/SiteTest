@@ -19,8 +19,19 @@ import numpy as np
 T0 = time.time()
 ROOT = globals().get("OUTROOT", "/kaggle/working"); os.makedirs(ROOT, exist_ok=True)
 LOG = open(ROOT + "/progress.log", "a")
+import urllib.request as _ur, threading as _th
+NTFY = globals().get("NTFY"); _LAST = [0.0]          # live tracker (owner-approved, this use only): progress lines to ntfy.sh/<NTFY>
+_KEY = ("group", "check", "PREDICTION", "done", "FAILED", "failed", "NO GPU", "devices", "MISMATCH", "tar", "smoke", " A ", " B ", " C ", " T ")
+def push(s, force=False):
+    if not NTFY or (not force and time.time() - _LAST[0] < 30): return
+    _LAST[0] = time.time()
+    def f():
+        try: _ur.urlopen(_ur.Request("https://ntfy.sh/" + NTFY, data=s.encode()[:3500]), timeout=10)
+        except Exception: pass
+    _th.Thread(target=f, daemon=True).start()
 def say(*a):
     s = f"[{time.time()-T0:7.1f} s] " + " ".join(str(x) for x in a); print(s, flush=True); LOG.write(s + "\n"); LOG.flush()
+    push(s, any(k in s for k in _KEY))
 sys.path.insert(0, ".")
 import jax
 print(jax.devices())
