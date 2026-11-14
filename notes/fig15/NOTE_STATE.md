@@ -39,3 +39,22 @@ walks: spacing P, height V0 and thickness D, N = 3, 5, 10 barriers (bands), disc
 3. derivation-checker (running; report -> notes/fig15/derivation-check-gen2.md), then referee; fix; docs section.
 4. Refresh numbers with the full index.
 5. Write "READY at <commit>".
+
+## The owner's standard (relayed by the coordinating session, 14 Nov 01:47 and 01:51 UTC)
+The reader: BSc physics (computational/theoretical), reading for pleasure; every stop ("where did that term come from?",
+"what am I looking at?") is a defect.
+1. Honest: every number from the numbers script; one openable paragraph on where the picture differs from the stored data
+   (colour steps, 8-bit |psi| and arg psi, the slice of the 3D field, blending between frames); name every approximation and its cost.
+2. Rigorous: derive from the TDSE to T of one and two barriers; resonances as quasi-bound states + phase condition (Fabry-Perot
+   for matter waves); Breit-Wigner shape, what sets width and height, width = 1/time trapped; what the 3D packet adds (finite
+   width, spread of energies, spreading). Every equation numbered; every symbol defined in words with its unit at first use.
+   Limits: no barrier, infinitely high barrier, very wide gap.
+3. Intuitive: everyday picture -> model -> algebra -> back to the picture.
+4. Direct: short sentences, no Q&A, LaTeX-like house style.
+5. No unexplained term or image: define tunnelling, transmission coefficient, quasi-bound state, resonance width, phase, wave
+   packet, group velocity...; every figure caption says axes, colours, brightness, what to notice; which control gives which view;
+   no forward references.
+6. Be ready before the full index lands: then only the numbers change.
+Readers: when finished, run the referee plus at least two independent readers (owner persona; strong school student / first-year),
+each given only the figure number and page path. Fix every mark; rerun FRESH readers until a full reading has no stops. Report each
+round's marks and what was done, plus the derivation checker's result. Reply to session_01DGmqipDr2dvQjBi7BR6m3S via send_message.
