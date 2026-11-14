@@ -1,4 +1,4 @@
-# Fig. 12 in JAX: this chat's full state (14 November 2026, 00:45 UTC)
+# Fig. 12 in JAX: this chat's full state (14 November 2026, 01:40 UTC)
 
 This file is the memory of the chat "Guinness cart: JAX solver, fix and run" (branch `claude/nifty-lamport-iz5pua`).
 After a compaction, reread this file before doing anything else. Keep it current: change it at every step that changes
@@ -42,9 +42,24 @@ not spill, and show with and without control side by side.
   run 6 in brackets, "What the head's mass changed"), 11 (Examples 11.2, 11.4, 11.5, Tables 7 and 8, Floquet), 12 (limits,
   Problems 12.10, 12.11) and the abstract describe run 8.
 
+## Now (14 November 2026, 01:40 UTC): run 10, the user said yes ("Yes and yes": push main, and rerun with beta fixed)
+
+- main fast-forwarded to b4e8287 (this file and the CLAUDE.md rule).
+- Commit 58eea68 (branch only so far): `run_b.py` takes beta = 1.541 / 1.2416 = 1.2409 with the head's mass (`BETA_HEAD`, on
+  by default, off for RUNSET=run8 so run 8 stays reproducible); `RUNSET=run10` = rest + the five controlled rides. CPU code
+  check passed (scratch cc10). Gains with it: K = (71.12, -1229.3, -40.48, -150) against run 8's (74.00, -1295.6, -44.85, -150).
+- Notebook text for run 10 ready (scratch nb10.txt): commit 58eea68, BUDGET_S 2450, PLANT_F0 2.9152394311359466,
+  PLANT_ZETA 0.4250231022393094 (run 8's measured swing). About 1,450 s of T4 time. Quota at 01:30 UTC: 4,840 s used,
+  43,003 s reserved by running sessions, of 108,000 s; resets 21 November.
+- First save at 01:35 UTC refused: "Maximum batch GPU session count of 2 reached" (other chats' sessions). Retry later.
+- After it runs: download outputs to scratch run10/, check_run.py, pack into a new folder public/data/fig12/2026-11-14-run10/
+  with run 8's speed-held rides and swings copied beside it (the page plays one folder), point DIR in guinness-jax-play.js at
+  it, update generations.json, the note (sections 10 to 12: Tables 7 and 8, the beta caveat removed), the docs; test in
+  Chromium; merge; check live; report once.
+
 ## What is left
 
-1. The controllers' beta. They used beta = 1.541 (bare stout, `PLANT` at `tools/fig12/kaggle/run_b.py:50`). With the head
+1. The controllers' beta (being done as run 10, above). They used beta = 1.541 (bare stout, `PLANT` at `tools/fig12/kaggle/run_b.py:50`). With the head
    carried up and down but not pushed along the road it should be 1.541 / (1 + m_s k / rho) = 1.241. The gains would be
    K = (71.12, -1228.72, -40.50, -150.00), within 10 % (note section 11, "Which swing the regulator is designed for").
    Not rerun. A fix would set beta in `PLANT` from the head's mass and rerun the five controlled rides with
