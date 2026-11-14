@@ -118,3 +118,14 @@ Section 4: exact chi(x,t) for one wall run, compared with the stored file.
   A1 c128 T 0.196889, drift 2.6e-12, 8.060 ms/step. Then crashed: TypeError in axisym_jax's fori_loop carry (float32 vs float64
   after the c128 run left x64 on). Fixed in 17ffd02 (explicit dtypes). Smoke v2 launched ~14:58 (tracker topic suffix -smoke2).
   Inference: c64 drift 2.7e-3 > 1e-3 fails the brief's gate -> c128 needed; bill ~ 28.7 M steps x 8.06 ms / 2 = ~116,000 s.
+
+## 14 Nov, 15:30-19:10 UTC
+- 15:55: owner ordered "cancel the runs"; cancel_notebook_session 369559229 (smoke editor) and 369527657 (walls-gpu editor) accepted;
+  quota stopped at 55,185 s. A laptop bridge session (session_01DGmqimUNaJbZFye8WoovXv) could not load kaggle.com in Chrome; interrupted.
+- Smoke v2 (17ffd02) ran 18:43-19:02, all lines on the tracker. Wall limits c64: N2 0.196539 (exact 0.196820), N10 0.167971 (0.166225),
+  bias 0.039134 (0.039048); c64 drift 2-4e-3, c128 drift 1e-11 at 7-10x the step time. Discs: every refinement <= 0.0019 (hx 0.125 on
+  R12 N10). Shells: Rmax 64 -> 96 moves T 0.6125 -> 0.6220 (0.0095): NOT converged at the base grid.
+- Owner chose B, "done properly": reference T for every run, keep what passes, recompute failures properly.
+- 19:05: discs (2,327, 25.3 M steps) launched at the base grid, c64, 4 shards (shape filter, commit 5d0490f):
+  numakoudsie/fig15-correction-2d-1-of-4 (kernel 145055241, running), -2-of-4 (145055418). Shards 3, 4 next.
+  Shells wait for an Rmax 128/160 convergence test. walls-calib v2 saved 18:50, never started.
