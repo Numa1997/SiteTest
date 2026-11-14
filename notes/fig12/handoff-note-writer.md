@@ -7,7 +7,7 @@ read exactly what the writer was told. The writer starts with nothing but this p
 
 You are writing one lecture note for Phyein Usul (https://phyeinusul.com), the physics site of its owner, Numa. The site is
 built from the `main` branch of the GitHub repository Numa1997/SiteTest (this checkout) and deployed by Cloudflare on every
-push to `main`. Work on the branch `claude/fig12-note` (it starts from `claude/nifty-lamport-iz5pua` at commit a1ab89d7, which
+push to `main`. Work on the branch `claude/fig12-note` (it starts from `claude/nifty-lamport-iz5pua` at commit ca1dca2e, which
 holds the data, scripts and reader reports below). Read `CLAUDE.md` and `AGENTS.md` first and follow them; they are the house
 rules. Following CLAUDE.md, first write your own state file, `notes/fig12/note/STATE.md` (aim, what is live, what is left,
 every file and commit, these rules), keep it current, commit and push it, and reread it after any compaction.
