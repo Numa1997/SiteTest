@@ -286,7 +286,14 @@
                 worker.postMessage({ url: RUNS_ROOT + IDX.runs_base + rec.file, id: id });
             });
         }
+        /* one file in flight at a time: a fast drag across energies or chips loads only the run asked for last, not every run passed */
+        var busy = false, again = false;
         async function loadRun() {
+            if (busy) { again = true; return; }
+            busy = true; try { await loadRun1(); } finally { busy = false; }
+            if (again) { again = false; loadRun(); }
+        }
+        async function loadRun1() {
             var es = energies(); if (!es.length) return;
             var j = 0; es.forEach(function (e, i) { if (Math.abs(e - E) < Math.abs(es[j] - E)) j = i; }); E = es[j];
             var rec = recAt(E); if (!rec) return;
@@ -310,14 +317,22 @@
         /* ---------- time: the stored frames, interpolated (LESSONS.md):
              psi(t_f + tau) = e^{-iE tau} [ (1 - s) psi_f + s e^{iE dt} psi_{f+1} ],  s = tau / dt ---------- */
         function frac() { var dt = run.head.frame_dt, n = run.head.n, f = Math.floor(tPhys / dt + 1e-9); if (f >= n - 1) return { f: n - 1, s: 0 }; return { f: f, s: tPhys / dt - f }; }
+        /* psi on the stored half-plane, frame f, cell k, from the 8-bit levels exactly as the worker's formula
+           (|psi| = q / 255 * peak_f, arg = p / 255 * 2 pi - pi), rounded to float32 as a Float32Array would store it. Only the two
+           frames being mixed are turned into numbers, so a loaded run costs 2 bytes per stored cell (not 10). */
+        var COS = new Float32Array(256), SIN = new Float32Array(256);
+        for (var q0 = 0; q0 < 256; q0++) { var t0 = q0 / 255 * 2 * Math.PI - Math.PI; COS[q0] = Math.cos(t0); SIN[q0] = Math.sin(t0); }
         function interp() {
-            var h = run.head, per = NX * NR, fs = frac(), f = fs.f, s = fs.s, dt = h.frame_dt, Ek = h.E, re = run.re, im = run.im, a0 = f * per, a1 = (f + 1) * per, k;
-            if (s === 0) { for (k = 0; k < per; k++) { psiRe[k] = re[a0 + k]; psiIm[k] = im[a0 + k]; } }
+            var h = run.head, per = NX * NR, fs = frac(), f = fs.f, s = fs.s, dt = h.frame_dt, Ek = h.E, A = run.amp, P = run.phase, a0 = f * per, a1 = (f + 1) * per, k;
+            var m0 = h.peaks[f] / 255, m1 = s === 0 ? 0 : h.peaks[f + 1] / 255, fr = Math.fround;
+            if (s === 0) { for (k = 0; k < per; k++) { var u = A[a0 + k] * m0, ph = P[a0 + k]; psiRe[k] = fr(u * COS[ph]); psiIm[k] = fr(u * SIN[ph]); } }
             else {
                 var cr = Math.cos(Ek * dt), ci = Math.sin(Ek * dt), tau = s * dt, cp = Math.cos(Ek * tau), sp = -Math.sin(Ek * tau);
                 for (k = 0; k < per; k++) {
-                    var gr = re[a1 + k], gi = im[a1 + k], rr = cr * gr - ci * gi, ri = cr * gi + ci * gr;
-                    var br = (1 - s) * re[a0 + k] + s * rr, bi = (1 - s) * im[a0 + k] + s * ri;
+                    var u0 = A[a0 + k] * m0, p0 = P[a0 + k], u1 = A[a1 + k] * m1, p1 = P[a1 + k];
+                    var fr0 = fr(u0 * COS[p0]), fi0 = fr(u0 * SIN[p0]), gr = fr(u1 * COS[p1]), gi = fr(u1 * SIN[p1]);
+                    var rr = cr * gr - ci * gi, ri = cr * gi + ci * gr;
+                    var br = (1 - s) * fr0 + s * rr, bi = (1 - s) * fi0 + s * ri;
                     psiRe[k] = cp * br - sp * bi; psiIm[k] = sp * br + cp * bi;
                 }
             }
