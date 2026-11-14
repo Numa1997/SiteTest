@@ -41,6 +41,13 @@ Done in Phase 2:
    `free_swing_v2.json` = free-swing v4, `free_swing_v2_repair.json` = free-swing v5; the JAX rides are packed from the `.npz` here.
    Copies: `notes/inventory/datasets/fig12-guinness-on-a-cart/`.
 
+7. Repository scripts: of the 109 scripts the Phase 1 rules marked orphan or superseded, each was searched again over every tracked
+   file (full name, then bare name). Deleted (`git rm`): the 27 that no file names and that have no saved output of their own
+   (list: `raw/scripts-deleted.txt`; all debugging leftovers of Fig. 8, 11, 14 sessions; recoverable from git history).
+   Kept: every script some file names (also where the match may be accidental), the Fig. 12 sympy checks (each has its saved
+   `.out.txt`), `t_long.cjs` (its `long_*.txt` outputs are kept), all of `tools/kaggle/resonant-tunnelling/` (Fig. 15, hold) and
+   `tools/fig12/control/` (Fig. 16 session). `tools/inventory.py` got a rule for `notes/inventory/`; `docs/files.md` rewritten; check and build pass.
+
 Held: Fig. 15 (`fig15-*`, 15 notebooks incl. the 3 `fig15-correction-walls-*` of the running correction session) and Fig. 16
 (`fig-16-guinness-cart-with-control`): not touched while those sessions run. 
 ## The owner's rules (from the brief, CLAUDE.md and the owner's preferences)

@@ -1,4 +1,0 @@
-require('../../../../../public/scripts/twoway.js'); const T = globalThis.TwoWay;
-const A = 0.15, om = 4; const w = new T.World({ dx: 0.025, U: 0, machine: { m0: 1.5, m1: 0.5, m2: 0.75, L1: 0.5, L2: 0.75, medium: 'glycerol' }, s: [0, 0, 0, A * om, 0, 0], nsub: 10 });
-w.cartGone = true; w.kinematic = (t) => [A * Math.sin(om * t), 0, 0, A * om * Math.cos(om * t), 0, 0]; w.selfOneV = true;
-for (let k = 0; k < 600; k++) { w.step(null); if (k % 50 && !process.env.ALL) { let bad = 0; for (const s of w.sh) for (const v of s.du) if (!isFinite(v)) bad++; if (!bad) continue; } const S = w.sh || []; console.log(k, S.map(s => { let m = 0; for (const v of s.pS) m = Math.max(m, Math.abs(v)); let mu = 0; for (const v of s.du) mu = Math.max(mu, Math.abs(v)); return m.toExponential(2) + '/' + mu.toExponential(2); }).join(' '), 'main its', w.its0, w.itsx); }
