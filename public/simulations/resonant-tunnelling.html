@@ -253,7 +253,10 @@
         /* ---------- data in ---------- */
         async function boot() {
             var gens = await (await fetch(DATA_BASE + 'generations.json')).json();
-            GEN = gens[gens.length - 1];
+            /* this page reads the generation-2 layout (kind rt3d2: runs with spec, runs_base, exact by N|V0|D|P|sx);
+               an index of another layout is not read, and the page says so instead of failing */
+            GEN = gens.filter(function (g) { return g.kind === 'rt3d2'; }).pop();
+            if (!GEN) { document.getElementById('load').textContent = 'no generation-2 runs filed yet'; return; }
             IDX = await (await fetch(DATA_BASE + GEN.index)).json();
             EX = await (await fetch(DATA_BASE + GEN.exact)).json();
             IDX.runs.forEach(function (r) {

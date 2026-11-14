@@ -10,7 +10,9 @@ Per run, the index carries its spec, file, SHA-256, notebook, version, commit, a
           flight (|x| > the box's inner half-length holding < 1e-3 of it); dividing by P_box removes what the side border took.
   tau     lifetime of the trapped wave: a straight-line fit of ln P_in(t) where P_in has fallen from 60 % to 5 % of its peak
           (P_in: between the first and last barrier for walls and discs; inside the outer shell for shells).
-And for the diode (group F), the current from the runs:
+A spec computed in two groups (the diode's bias-0 points are also pairs of group A) is filed once, with both groups in `groups`
+and the other copy's notebook and SHA-256 in `also_computed`; only a fix notebook's rerun replaces a file (`replaced`).
+And for the diode (group F, selected by spec so that bias-0 points filed under A count), the current from the runs:
   J(V) = Int T(E, V) N(E, V) dE over the 25 stored energies 0.10 ... 1.30 (trapezoid), with the Tsu-Esaki supply function
   N = ln[(1 + e^{(E_F - E)/kT}) / (1 + e^{(E_F - E - V)/kT})], E_F = 1.0, kT = 0.05, the same as exact1d.py. T is the share of a
   packet (sigma_x = 3) that got through, not the single-energy T(E, V), so the curve is the exact one smoothed by the packet's
@@ -77,7 +79,9 @@ def main(src, date, dest):
     for slug in slugs:
         d = os.path.join(src, slug)
         if not os.path.isdir(d) or not os.path.exists(os.path.join(d, "index.json")): continue
-        idx = json.load(open(os.path.join(d, "index.json"))); sha = {r["file"]: r["sha256"] for r in idx["runs"]}
+        idx = json.load(open(os.path.join(d, "index.json"))); sha, grp = {}, {}
+        for r in idx["runs"]:   # one spec can sit in two groups (e.g. A and F at bias 0): two entries, one file (the later one written)
+            sha.setdefault(r["file"], set()).add(r["sha256"]); grp.setdefault(r["file"], set()).add(r["group"])
         tars = [f for f in os.listdir(d) if f.endswith(".tar")]
         COMMIT = commit_of(slug)
         nb = dict(kaggle="numakoudsie/" + slug, version=1, commit=COMMIT, solver="tools/kaggle/resonant-tunnelling/rt3d2.py",
@@ -89,18 +93,26 @@ def main(src, date, dest):
                 for m in tf.getmembers():
                     if not m.name.endswith(".bin"): continue
                     blob = tf.extractfile(m).read(); name = os.path.basename(m.name)
-                    assert hashlib.sha256(blob).hexdigest() == sha[name], name
+                    digest = hashlib.sha256(blob).hexdigest()
+                    assert digest in sha[name], name
                     h, amp, ph, prof, p1 = read_rt3d.read(blob)
-                    open(os.path.join(dest, name), "wb").write(blob)
-                    rec = dict(file=name, group=h["group"], spec=h["spec"], bytes=len(blob), sha256=sha[name], notebook=nb["kaggle"],
-                               version=1, commit=COMMIT, box=h["box"])
+                    rec = dict(file=name, group=h["group"], groups=sorted(grp[name]), spec=h["spec"], bytes=len(blob), sha256=digest,
+                               notebook=nb["kaggle"], version=1, commit=COMMIT, box=h["box"])
                     rec.update(summary(h, prof))
                     old = next((k for k, r in enumerate(runs) if r["file"] == name), None)
-                    if old is not None:
+                    if old is not None and "fix" in slug:
+                        # a rerun at the corrected run length replaces the earlier file
                         replaced.append(dict(file=name, old_notebook=runs[old]["notebook"], old_commit=runs[old]["commit"], old_sha256=runs[old]["sha256"],
-                                             new_notebook=nb["kaggle"], why="the run length of commit cdcade4 missed the packet's trailing edge and cut-off resonance peaks; this run was more than 15 % too short"))
-                        runs[old] = rec
+                                             new_notebook=nb["kaggle"], new_sha256=digest,
+                                             why="the run length of commit cdcade4 missed the packet's trailing edge and cut-off resonance peaks; this run was more than 15 % too short"))
+                        rec["groups"] = sorted(set(rec["groups"]) | set(runs[old]["groups"])); runs[old] = rec
+                    elif old is not None:
+                        # the same spec computed in another group by another shard: one record, both groups, the other copy noted
+                        o = runs[old]; o["groups"] = sorted(set(o["groups"]) | set(rec["groups"]))
+                        o.setdefault("also_computed", []).append(dict(notebook=nb["kaggle"], commit=COMMIT, sha256=digest, group=h["group"]))
+                        nb["filed"] += 1; continue
                     else: runs.append(rec)
+                    open(os.path.join(dest, name), "wb").write(blob)
                     nb["filed"] += 1
         nbs.append(nb)
     key = lambda r: (r["group"], r["spec"]["shape"], r["spec"]["N"], r["spec"]["V0"], r["spec"]["D"], r["spec"]["P"], r["spec"]["R"], r["spec"]["bias"], r["spec"]["sx"], r["spec"]["E"])
@@ -108,7 +120,9 @@ def main(src, date, dest):
     # the diode from the runs (group F)
     ivs = []
     for shape, R in (("flat", 0.0), ("coin", 6.0)):
-        F = [r for r in runs if r["group"] == "F" and r["spec"]["shape"] == shape and r["spec"]["R"] == R and "T_far" in r]
+        FE = set(np.round(np.arange(0.10, 1.301, 0.05), 3).tolist())   # the diode's energy grid
+        F = [r for r in runs if r["spec"]["shape"] == shape and r["spec"]["R"] == R and r["spec"]["N"] == 2 and r["spec"]["V0"] == 2
+             and r["spec"]["D"] == 1 and r["spec"]["P"] == 2.5 and r["spec"]["sx"] == 3 and round(r["spec"]["E"], 3) in FE and "T_far" in r]
         Vs = sorted({r["spec"]["bias"] for r in F}); J, Jx, Jp = [], [], []
         for V in Vs:
             pts = sorted((r["spec"]["E"], r["twin"]["T"] if r.get("twin") else r["T_far"]["value"]) for r in F if r["spec"]["bias"] == V)

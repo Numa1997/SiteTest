@@ -1,6 +1,11 @@
 # Fig. 15, Resonant Tunnelling: state of generation 2
 
-Written 13 November 2026, 23:45 UTC, so that the work survives a context compaction. Updated as steps finish.
+Written 13 November 2026, 23:45 UTC, so that the work survives a context compaction; last updated 14 November 2026, 00:30 UTC.
+A chat that has lost its context rereads this file first and continues from "Next".
+
+## What is live
+- <https://phyeinusul.com/simulations/resonant-tunnelling.html>: generation 1 (115 3D runs, merge 12e710a9, live since
+  13 Nov 19:55 UTC). Nothing of generation 2 is on `main` yet; it lives on branch `claude/fig15-resonant-tunnelling`.
 
 ## Aim
 The whole parameter space of resonant tunnelling, computed in 3D on Kaggle GPUs and animated on the page
@@ -14,8 +19,13 @@ one brightness scale per run, smooth playback.
 - Solver `tools/kaggle/resonant-tunnelling/rt3d2.py`, runner `rt3d2_run.py`, loaders built by `build_rt3d2.py`.
 - Groups: A pairs 1128, B shells 188, C heights/thicknesses 564, D singles 376, E N = 3, 5, 10: 423, F bias 1000, G long packets 60.
 - Six shards `J[i::6]`, two at a time (Kaggle allows two GPU sessions):
-  - shard 1 `numakoudsie/fig15-rt3d2-shard-1-of-6`, launched 20:24 UTC, commit cdcade4
-  - shard 2 `numakoudsie/fig15-rt3d2-shard-2-of-6`, launched 20:48 UTC, commit cdcade4
+  - shard 1 `numakoudsie/fig15-rt3d2-shard-1-of-6`, launched 20:24 UTC, commit cdcade4: DONE, 624 runs, 0 failed,
+    621 files, SHA-256 0 bad; downloaded
+  - shard 2 `numakoudsie/fig15-rt3d2-shard-2-of-6`, launched 20:48 UTC, commit cdcade4: DONE, 623 runs, 0 failed,
+    620 files, SHA-256 0 bad; downloaded
+  - shard 3 launched 14 Nov 00:12 UTC (kernel 144885421, version 1); due about 03:40 UTC
+  - shard 4 waits for a GPU slot: the second slot is held by another session's notebook
+    (`numakoudsie/guinness-on-a-cart-stout-in-jax`, not ours; leave it alone)
   - shards 3-6 `numakoudsie/fig15-rt3d2-shard-{3..6}-of-6`, loaders `rt3d2_all_{2..5}of6.ipynb`, commit 57770d2
   - fix job `numakoudsie/fig15-rt3d2-fix1`, loader `rt3d2_fix1.ipynb`, commit 57770d2: reruns the 15 runs of shards 1-2
     whose run length at cdcade4 was more than 15 % short (`FIX1` in rt3d2_run.py).
@@ -34,16 +44,47 @@ one brightness scale per run, smooth playback.
   Run 13 Nov 22:15: 239 of 239 addresses right, 83 of 83 links reach 200; one page error on the gen-2 page with
   only gen-1 data present (to be made robust). Touch no other Worker.
 
+## Where things are (this container; lost if the container is replaced, then download again from Kaggle)
+- Scratchpad: `/tmp/claude-0/-home-user-SiteTest/27c35645-8316-5eb3-8583-c6488d96fcdb/scratchpad/`
+  - `kaggle_g2/<slug>/`: each notebook's output (`rt3d2_all_<i>of6.tar`, `index.json`, `runs.jsonl`, `timing.json`,
+    `progress.log`, `done.txt`, `urls.txt`). Download: `list_notebook_session_output` (too big for the reply: it is saved to a
+    tool-results file; read the `files` list with python), keep `2026-11-13/rt3d2/*` and `progress.log`, fetch with curl.
+  - Check: every .bin in the tar must hash to one of the SHA-256 the notebook's index gives for its name.
+  - `kaggle_g2/smoke/`: smoke test output. `work/page_gen1.html`: copy of the generation-1 page.
+  - `work/addresses_worker.{log,json}`: the address check of 13 Nov.
+- Kaggle allows two GPU sessions at once for the whole account (other sessions' notebooks count). Quota 30 h a week,
+  resets Saturday 00:00 UTC.
+
+## Files of generation 2 (all on the branch)
+- `tools/kaggle/resonant-tunnelling/rt3d2.py` solver, `rt3d2_run.py` runner (job list, `JOBSEL`, `SHARD`, `FIX1`),
+  `build_rt3d2.py` writes the loaders, `rt3d2_{smoke,all_<i>of6,fix1}.ipynb` loaders, `file_rt3d2.py` filer
+  (`python3 file_rt3d2.py <src with one folder per slug> <date> <runs destination>`), `read_rt3d.py`, `tm.py`, `iv.py`.
+- `public/simulations/resonant-tunnelling.html` the gen-2 page; `public/scripts/rt3d-view.js`, `public/scripts/rt3d-worker.js`.
+- `worker/r2.js`, `wrangler.jsonc` the Worker; `tools/inventory.py`, `docs/files.md` registered.
+- Data to come: `public/data/resonant-tunnelling/<date>/kaggle/index.json` and a gen-2 entry (kind `rt3d2`) in
+  `public/data/resonant-tunnelling/generations.json`; the run files go to R2, not to the repository.
+
+## Commits on the branch (oldest first)
+cdcade4 solver and job list · 17d45c7 loaders at cdcade4, filer draft · f87277d gen-2 page · 6314da1 Worker ·
+a39e2cc run length counts the trailing edge · 57770d2 JOBSEL fix1 · 8324006 loaders 3-6 and fix1 at 57770d2 ·
+c80244e inventory · 923b43f filer per-notebook commit, replaced record · c21bd7e nosniff · a425911 .gitignore ·
+4a12490 this file · then: filer dedupe and I-V by spec; page guard for a missing gen-2 index.
+
 ## Done
+- Filer fixed (14 Nov): a spec computed in two groups (A and F at bias 0; three such names per shard) is filed once with
+  `groups` and `also_computed`, not as a replacement; only a fix notebook replaces; the I-V takes the diode's points by spec.
+- Page guard (14 Nov): the page reads only a generation of kind `rt3d2`; without one it says so instead of failing.
 - Generation 1 live since 13 Nov 19:55 UTC (115 runs, merge 12e710a9).
 - Gen-2 solver, runner, loaders, filer `file_rt3d2.py` (SHA-256, per-notebook commit, replaced-run record, I-V, exact curves).
 - Gen-2 page on the branch (chips for shape, N, R, V0/D, P, sigma_x; bias slider; Fig. 15b-e), tested on the smoke runs.
 - Worker `worker/r2.js` and `wrangler.jsonc`, checked with `wrangler deploy --dry-run` and `wrangler dev`.
 
-## Left
-1. Shards 3-6 and the fix job; download each output, check SHA-256.
+## Left (Next = the first open item)
+1. Shards 4-6 and the fix job (two at a time as slots free; check-ins by `send_later`); download each, check SHA-256.
 2. File with `file_rt3d2.py` (date of filing), add the generation to `generations.json`.
-3. Upload the run files to R2; measure the GB.
+3. Upload the run files to R2; measure the GB. The token: `request_credential` for api.cloudflare.com (an R2 Admin
+   Read & Write token; it is saved on the Default environment). Upload: PUT
+   `/client/v4/accounts/<account id>/r2/buckets/phyein-usul-runs/objects/<key>`; account id from GET /client/v4/accounts.
 4. Finish the page against the real data; screenshots at 390 and 1440 px; frame times.
 5. Lecture note and docs for the new parameter space (spacing, superlattice bands, side leak against R, I-V from runs,
    long packets); `docs/simulations/fig15-resonant-tunnelling.md`, `docs/kaggle-pipeline.md`, `docs/usul.md` (Worker).
