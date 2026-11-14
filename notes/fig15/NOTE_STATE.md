@@ -58,3 +58,13 @@ The reader: BSc physics (computational/theoretical), reading for pleasure; every
 Readers: when finished, run the referee plus at least two independent readers (owner persona; strong school student / first-year),
 each given only the figure number and page path. Fix every mark; rerun FRESH readers until a full reading has no stops. Report each
 round's marks and what was done, plus the derivation checker's result. Reply to session_01DGmqipDr2dvQjBi7BR6m3S via send_message.
+
+## Derivation checker, round 1 (on 692e546; report notes/fig15/derivation-check-gen2.md)
+All 27 equations of that version re-derive. 12 text/number errors, all fixed in 66455ed:
+1 diode-from-runs peak/valley/ratio depend on which energies are filed -> withheld until all 500 runs per structure are in
+  (NUM iv_*_complete); the reason for the early exact peak rewritten (area under the peak shrinks faster than supply grows:
+  0.103 -> 0.073 -> 0.041 vs supply 14.2 -> 18.0). 2 disc energy: 0.75 once filed, else says "nearest filed so far".
+3 long box 2.67x, not 4x. 4 sigma_E vs FWHM (0.119 > Gamma). 5 shell fits cut at run end -> "at least this long".
+6 long-packet runs of the running example are FIX1 (due rerun) -> said while pending. 7 finite well: lowest level to
+thousandths, upper to hundredths; all resonances listed. 8 bias wording. 9 unequal-pair wording. 10 (8) not (9) in sec 8.
+11 "three round trips". 12 band middle in xi; peaks 0.02-0.17 apart; shell faces; "twenty-two"; "and more steps".
