@@ -24,8 +24,7 @@ one brightness scale per run, smooth playback.
   - shard 2 `numakoudsie/fig15-rt3d2-shard-2-of-6`, launched 20:48 UTC, commit cdcade4: DONE, 623 runs, 0 failed,
     620 files, SHA-256 0 bad; downloaded
   - shard 3 launched 14 Nov 00:12 UTC (kernel 144885421, version 1); due about 03:40 UTC
-  - shard 4 waits for a GPU slot: the second slot is held by another session's notebook
-    (`numakoudsie/guinness-on-a-cart-stout-in-jax`, not ours; leave it alone)
+  - shard 4 launched 14 Nov 01:22 UTC (kernel 144897867); due about 04:50 UTC. Check-in scheduled 03:50 UTC.
   - shards 3-6 `numakoudsie/fig15-rt3d2-shard-{3..6}-of-6`, loaders `rt3d2_all_{2..5}of6.ipynb`, commit 57770d2
   - fix job `numakoudsie/fig15-rt3d2-fix1`, loader `rt3d2_fix1.ipynb`, commit 57770d2: reruns the 15 runs of shards 1-2
     whose run length at cdcade4 was more than 15 % short (`FIX1` in rt3d2_run.py).
@@ -71,6 +70,14 @@ c80244e inventory · 923b43f filer per-notebook commit, replaced record · c21bd
 4a12490 this file · then: filer dedupe and I-V by spec; page guard for a missing gen-2 index.
 
 ## Done
+- R2 token saved (14 Nov 01:20 UTC) on the Default environment, injected by the proxy for api.cloudflare.com; tested
+  (put, get, delete a probe). Account id in scratchpad `cf_account_id`. Uploader `scratchpad/r2/up.sh <file> <prefix>`
+  (PUT, checks R2's etag = MD5, retries; log lines `OK key bytes md5`). Upload only from the filer's destination folder
+  (the filer decides which copy of a spec computed twice is kept).
+- Generation date 2026-11-14: keys `resonant-tunnelling/2026-11-14/runs/<file>`; generations.json has the rt3d2 entry.
+- Shards 1-2 filed (1237 runs, 2.15 GB) and uploaded: 1237 OK, 0 failed (`scratchpad/r2/up_shards12.log`).
+- Page checked on the real shard 1-2 data (local server `scratchpad/srv.py` maps /r2/ to the files): no errors at
+  390 and 1440 px. Its lead and meta description still speak of generation 1: rewrite with the note.
 - Filer fixed (14 Nov): a spec computed in two groups (A and F at bias 0; three such names per shard) is filed once with
   `groups` and `also_computed`, not as a replacement; only a fix notebook replaces; the I-V takes the diode's points by spec.
 - Page guard (14 Nov): the page reads only a generation of kind `rt3d2`; without one it says so instead of failing.
