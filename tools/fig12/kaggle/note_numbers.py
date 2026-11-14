@@ -150,7 +150,7 @@ put("K_miles", 3.52, "{:.2f}"); put("K_exp", 5.23, "{:.2f}"); put("K_exp_pct", 1
 put("tank_in_lo", 3, "{:d}"); put("tank_ft_hi", 10, "{:d}")
 put("zeta_wall_exp", z_wall * 5.23 / (2 * math.pi * c_zeta), "{:.4f}")
 kd = k * DX; pic_step = kd ** 2 / 6; put("kdx", kd, "{:.3f}"); put("pic_loss_step", pic_step * 1e4, "{:.1f}")
-put("pic_sigma", pic_step / 0.002, "{:.2f}"); put("pic_zeta", pic_step / 0.002 / w11, "{:.3f}")
+put("pic_sigma", pic_step / 0.004, "{:.2f}"); put("pic_zeta", pic_step / 0.004 / w11, "{:.4f}"); put("pic_vs_bare", pic_step / 0.004 / w11 / (z_wall + sig_bulk / w_code), "{:.1f}")
 
 
 # ============================================================================================ 4. the head of foam
@@ -650,7 +650,7 @@ put("res_dv_max", N["ride_resonant.dv_drop"][0], "{:.2f}")
 
 
 # ---- round 2
-put("surge_cut_s", 0.8, "{:.1f}"); put("kerb_x", 1.5, "{:.1f}"); put("bond", RHO * G / (sj.GAMMA * k * k), "{:.0f}"); put("bond_pct", 100 * (math.sqrt(1 + sj.GAMMA * k * k / (RHO * G)) - 1), "{:.1f}")
+put("surge_cut_s", 0.8, "{:.1f}"); put("back_delay_s", 0.2, "{:.1f}"); put("kerb_x", 1.5, "{:.1f}"); put("bond", RHO * G / (sj.GAMMA * k * k), "{:.0f}"); put("bond_pct", 100 * (math.sqrt(1 + sj.GAMMA * k * k / (RHO * G)) - 1), "{:.1f}")
 put("kq_rides", k * float(np.max([FILES[nm]["measured"]["lean_max_mm"] for nm in FILES if nm.startswith("ride")])) / 2e3, "{:.1f}")
 put("kq_resonant_bare", k * N["resonant_A_bare_mm"][0] * 1e-3, "{:.0f}")
 put("lambda_cm", 2 * math.pi / k * 100, "{:.0f}")
