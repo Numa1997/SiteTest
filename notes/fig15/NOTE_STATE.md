@@ -209,3 +209,10 @@ what (23) says (star in sec 9); long packet widths as FWHM vs Gamma; peak height
 R = 2 fit = lump draining; x4 label; long start 4 sigma_x = 48; R changes slowly; 22.5; width 0.0704 (Gamma); hbar/E_u = ma^2/hbar;
 12 % in sec 14; shells crossed four times; (11) explains why, exact gives numbers; B, E, C group contents; side-border caveat;
 4 % reason; uniqueness reason; six-part rotation gives 0.75.
+
+## Round 7 referee (54 marks; read before 55ca4a1, many repeats): fixed: separation proof direction (product of solutions of (2)
+solves (1), uniqueness); no run at 0.735 -> 'near the resonance ... 0.70 and 0.75'; 'thicken'; d=2 fit an underestimate;
+xi = 0 from U_1 = 2 xi; w = e^{-i phi}/sqrt T step; splitting error from [K, V] = 0 where V flat; shells: u = r psi obeys the 1D
+double-barrier equation with u = 0 at the centre; 1/kappa = 0.63 = 1.3 grid spacings as possible cause; chi'/m* keeps the current
+continuous; 'very sensitive'; gamma aside removed; T_2(k) via E = k^2/2.
+Declined/pending: textbook; status wording (full index); page items (coordinator); comma-wrap nit; table scroll cue (house .ptab).
