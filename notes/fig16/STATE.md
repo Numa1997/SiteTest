@@ -7,9 +7,17 @@ Brief: `notes/fig16/BRIEF.md` (from the coordinating chat, session_01DGmqintkoYz
 A new figure and page, Fig. 16: the same pint (stout + head) as Fig. 12 on a cart designed to carry it, with a control system to
 match, over the same roads, kerb included, with the least sloshing physics allows. Fig. 12 stays as it is (the "before").
 
+## The owner's emphasis (this chat, 14 November 2026)
+"Your main objective here is control. Control, control, control ... control over the foam and over the fluid and over the
+Guinness. We will also specifically target those roads that were extremely bumpy and we were losing not beer but foam."
+So: the figure of merit is the head of foam spilled on the kerb (Fig. 12: 1.63-2.51 mL by controller, no stout), then the tilt.
+The control system is the centre of the work; the cart is designed to give it the authority it needs.
+
 ## Steps (status)
-1. Read the brief and every file in its section 1 — in progress.
-2. Build a low-order slosh model from the stored Fig. 12 rides on the CPU; validate it against run 10's controlled rides
+1. Read the brief and section 1's files — done for the modelling stage (CLAUDE.md, AGENTS.md, STANDARD.md, kaggle-pipeline.md,
+   the solver, run_b.py, pack_ride.py, 06/07 notes, REPORT.md, the note's sections 4, 6.5, 7, 12.3, the control skill).
+   Still to read whole before page work: docs/styles.md, the page HTML, guinness-jax-play.js, the readers' files.
+2. [in progress] Build a low-order slosh model from the stored Fig. 12 rides on the CPU; validate it against run 10's controlled rides
    without fitting to them. Report the validation to the coordinator (≤ 12 lines).
 3. Design 2–3 cart concepts on that model (masses, motor, wheel, gimbal; tilt, spill, peak force, current vs limit; weak point).
    **STOP: report the concepts to the coordinator and the owner; the owner picks one.**
@@ -29,7 +37,16 @@ match, over the same roads, kerb included, with the least sloshing physics allow
 - Never write the owner's name. No model names in code, commits or PRs.
 
 ## Files
-- `notes/fig16/BRIEF.md` (the brief), `notes/fig16/STATE.md` (this file).
+- `notes/fig16/BRIEF.md` (the brief), `notes/fig16/STATE.md` (this file), `notes/fig16/model.md` (the model's derivation).
+- `tools/fig16/rides.py` (decodes stored rides; tilt equals stored tilt_max_mm to 0.01 mm), `slosh_model.py` (N cos-theta modes +
+  Fig. 12's Cart imported unchanged; gains equal run 10's), `fit.py` (friction fit on run 8 training rides only -> fit.json),
+  `validate.py` (model vs stored rides), `spill.py` (head spill by the solver's rule), `gamma_check.py` (stout push 75.7 g measured).
+- JAX (CPU) and matplotlib installed in this container with pip.
+
+## Model findings so far
+- One mode + linear damping: gentle controlled rides of run 10 predicted to 0.07-0.08 mm rms tilt, 0.005 A current (not fitted).
+  Big swings too small (kerb 18-19 vs 21-25 mm): add modes 2-3 (16 % of a tilt) and the head's Ca^(2/3) friction (fit running).
+- Stout push F_x vs -q'': 79.7 / 71.7 g on the gentle training rides (corr 0.96) vs 55.8 g cylinder theory; using 75.7 g.
 
 ## Commits
-- (this commit) brief + state.
+- 1st: brief + state. 2nd: model tools in progress.
