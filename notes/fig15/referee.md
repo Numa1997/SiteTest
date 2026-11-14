@@ -1,160 +1,119 @@
-# Fig. 15 · Resonant Tunnelling — referee report
+# Fig. 15 · referee report, round 10 (resonant tunnelling)
 
-Read as its two target readers (a maths-strong school student; a first/second-year physics
-undergraduate), rendered and screenshotted section by section in headless Chromium from
-`public/scripts/resonant-note.js` injected into `public/simulations/resonant-tunnelling.html`.
-Judged against `notes/STANDARD.md` (section 4, and the 21 October "write it like a chapter of
-Taylor" verdict).
+Read as rendered at commit `4bae4a5` (branch `claude/fig15-gen2-note`, "round 9 fixes"). `npm run build` exit 0; `dist/`
+served on port 9845; opened in headless Chromium (Playwright 1.63) at 1400 px, "Expand all" pressed, each of the 14
+`section.psec` screenshotted; the text extracted with every KaTeX formula replaced by its TeX source. KaTeX: 1056 formulas,
+0 errors, no page errors. At 390 px the document is 390 wide and no display equation, table or figure overflows.
+`plan.md` and `check.md` were not read. The 3D panel was not judged.
 
-## Overall
+Numbers re-derived while reading (Python, from the note's own formulas): T = 0.14395, |w|² = 6.95, Example 3.1, (9) = 0.154,
+Example 4.1 (all seven entries, from (1 − R^{ν+1})²), ρ and n = 0, L_eff = 2.757, 2L_eff/v = 4.55, −2 ln R = 0.3109,
+2T/√R = 0.3112 (the note's 0.3108 and 0.3111 differ in the last digit, as from the unrounded E_r; not marked), 2T = 0.2879, Γ(17) = 0.0632, T/(2−T) = 0.078, σ_E = 0.202 and 0.0505 (FWHM 0.119), (19) = 0.218 and
+0.0359, the long-packet percentages (32 %, 31 %), the hard-box and (21) values of §7, every κd, T and Γ(17) of the §8 table,
+the band numbers of §9, k_max²Δt/2, the 3739 / 3697 run count (42 = 2 × 21 shared energies), σ_⊥(12) = 3.6 and
+σ_⊥(40) = 7.3, τ_side from (27) for every disc row (and the 76.1 / 88.5 from rounded values), the disc ratios 1.14 / 1.06 /
+0.99, the GaAs table (a = 2.754 nm, 4.39 fs, 10.6 meV, 62 fs, 87 K), the supply numbers 14.2 and 18 and the products 1.03
+and 0.73 of §13, the supply-function algebra (30)–(31). All agree with the note to its printed precision, except the two
+items marked below.
 
-This is a strong note. It renders cleanly (KaTeX, the SVG figure, the tables and boxes all
-display correctly). It does what the STANDARD asks: it motivates from everyday experience
-(glass panes, an echo ringing between two walls), states the model and natural units, carries
-the one running example E=1, V0=3, d=1 all the way through, sets key results apart in boxes,
-gives numbered worked examples with the page's own numbers, and ends with a Problems box and
-real, cited references. The voice is calm and Taylor-like, with almost none of the banned AI
-tells (no rhetorical questions, no "it is not X, it is not Y", no stacked em-dashes). The
-physics is, as far as I checked by hand, correct.
+Two readers: **S**, a school student good at mathematics; **G**, a physics graduate.
 
-The problems below are therefore mostly local: two genuine content gaps (a number a reader
-cannot reproduce in §6, an undefined symbol in §9), a figure-label inconsistency in §1, and a
-handful of smaller skipped steps and polish items. None of them sink a section; several are
-worth a one-line fix.
+## Errors (fix first)
 
-## Ranked — the places a reader gets lost or the writing drags
+E1. **§10, "The step", the phase per step.** "the fastest wave the grid can hold, \(k=\pi/\Delta x=6.28\), turns its phase by
+    \(k^2\Delta t/2=0.2\) rad per step, so no part of the wave turns by more than a fifth of a radian in one step." The grid
+    is three-dimensional: the fastest mode is the corner of the Fourier box, \(|\mathbf k|^2=3(\pi/\Delta x)^2\), which turns
+    by 0.59 rad per step. The "no part" claim is false as written. Either say "along any one axis" or give 0.6 rad for the
+    corner mode (and say that these modes carry almost nothing of the packet).
 
-1. **§6, the energy-spread numbers do not reproduce and do not scale.** Sentence (Key-result
-   box): *"a short pulse (σ₀=3, energy spread ≈0.12, far wider than Γ=0.040) transmits only
-   T̄=0.10. Lengthen the pulse to σ₀=12 (spread ≈0.06) and T̄ rises to 0.33."* The text's own
-   rule is "a Gaussian of width σ₀ in space is a Gaussian of width 1/(2σ₀) in k". From that,
-   Δk = 1/(2σ₀) = 0.167 (σ₀=3) and 0.042 (σ₀=12); converting with ΔE ≈ k₀Δk, k₀=√2, gives
-   ΔE ≈ 0.236 and 0.059. So the σ₀=12 value (0.06) matches, but the σ₀=3 value should be ≈0.24,
-   not 0.12 — and the two quoted spreads (0.12, 0.06) differ by a factor 2 while σ₀ differs by a
-   factor 4, so they cannot both follow the stated 1/(2σ₀) rule. A maths-strong reader who does
-   the arithmetic the note invites gets a contradiction. Either give the formula that produces
-   0.12 or correct the number.
+E2. **§11, last paragraph.** "this reading gives 0.178 against 0.187 from the same run's twin, a 4.5 % gap." From the
+    printed numbers the gap is 4.8 % (1 − 0.178/0.187) or 5.1 % (0.187/0.178 − 1); a reader who checks cannot get 4.5 %.
+    Print the gap from the same rounded values, or print three-figure values that give 4.5 %.
 
-2. **§9, the Fermi energy E_F is used but never defined.** It appears in the central device
-   equation (15), the Tsu–Esaki formula, and again in Problem 4 ("raising E_F"), yet the prose
-   never names it. The reader meets `e, m*, k_B, T` (all defined or standard) and then an
-   undefined `E_F`. The sentence *"pulling the trapped level down through the sea of electrons
-   that feed it from the left"* gestures at the Fermi sea but never says "the Fermi level E_F,
-   the top of the filled electron states". One clause fixes it.
+## Reading stops, in note order
 
-3. **§1, the figure labels `s` on the gap, but defines `s` as centre-to-centre.** The caption
-   says *"their centres a distance s apart"* and the whole note uses "well width s−d"
-   (=1.343), which only makes sense if s is centre-to-centre. But in the SVG the `s` arrow runs
-   from x=296 to x=424 — the inner faces of the two barriers (barriers span 250–296 and
-   424–470), i.e. the gap, whose width is s−d, not s. A careful reader looks at the arrow
-   touching the two inner walls, reads "s", and then cannot square it with "centres a distance s
-   apart" or with "well width s−d". The figure code is out of bounds, but the caption should at
-   least say the arrow marks the well, or the arrow should reach the centres.
+1. **§2, separation of variables, still unstarred.** "Call the first bracket's function \(f_1(t)\) … Multiply \(\chi\) by
+   \(e^{iF_1}\) … The wave itself, their product, then gains the phase \(e^{i(F_1+F_2+F_3)}\), which is 1 …" This is the
+   heaviest step of the section and S has no exit; the plain result ("the product is the solution for all time … along the
+   flight it does exactly what a one-dimensional electron does") arrives a paragraph later, after the packet. Mark the
+   phase-removal argument ★ and restate its result in one plain sentence right after (2).
+2. **§2, order of the argument.** "… which starts \(4\sigma_x=48\) before the first face. Back to the general argument.
+   Conversely, if \(\chi\) and \(g\) solve (2), their product solves (1)." "Back to the general argument" is a visible seam:
+   the packet paragraph interrupts a derivation. Move the "Conversely …" sentence up to follow (2) directly, then describe the
+   packet; the uniqueness sentence ("The start is such a product …") then follows the packet naturally.
+3. **§2, symbol before definition (G).** In "Then \(F_1+F_2+F_3\) … is 1 because the three \(f\) add up to zero": the
+   integrals are fixed only up to constants, so the sum is a constant, not zero. Say "choose the constants of integration so
+   that the sum is zero" (one clause).
+4. **§3, no picture of the wave inside a barrier.** Still nowhere a sentence that says what \(\chi\) looks like across one
+   barrier (ripples, a smooth fall by \(e^{-\kappa d}\), smaller ripples beyond) and where to see it (Fig. 15b, the tail
+   inside the shaded barrier). The §2 box says "it falls by 0.204", which is the number but not the picture.
+5. **§5, ★ opened mid-paragraph.** "… at the group velocity. ★ The reflection phase \(2\rho\) corrects this …" The star sits
+   in the middle of a running paragraph; S does not see where to resume. "(End of ★.) In short: …" is good; put the ★
+   passage in its own paragraph so the skip is visible.
+6. **§5, "This is the exponential law of any slow leak."** The sentence follows (16), \(\tau=\hbar/\Gamma\), but refers to
+   the decay \(e^{-t/\tau}\) two sentences before. S reads it as describing (16). Move it next to \(R^{2t/t_{\rm rt}}=e^{-t/\tau}\).
+7. **§6, "Long packets", paragraph after the table.** The order jumps: running example, then \(V_0=3\), then back to the
+   running example ("For the running example the long packet passes far more than the short one does at the peak,
+   \(\bar T=0.196\)"), then the thick barriers. The sentence about the running example belongs before the \(V_0=3\)
+   sentence. The thick-barrier part still packs 509, 344, 39 %, \(\sigma_E=0.051\), 0.744, 0.0359, 0.0351 into five
+   sentences; with the table now holding the shares, this is readable for G, still heavy for S.
+8. **§7, a parenthesis inside a formula sentence.** "Then a whole number \(n\) of half-wavelengths fits in (this \(n\) starts
+   at 1, so it labels the lowest resonance, \(n=0\) in section 5, as \(n=1\); only the label differs) \(L_{\text{eff}}=L+2/\kappa\),
+   \(k=n\pi/L_{\text{eff}}\), and". The parenthesis splits "fits in" from its object; S loses what fits in what. Move the
+   parenthesis after (21).
+9. **§8, last paragraph, fit window.** "a straight line … from \(t=92.7\), where the trapped probability has fallen to 60 % of
+   its peak … to the end gives 210". G wants to know when the run ends relative to that start (217 − 92.7 = 124, about a third
+   of a lifetime): say that the window is only a third of a lifetime, which is the real reason the fit cannot measure 344.
+10. **§10, "The runs", the 42 shared runs.** "42 of the runs belong to two groups at once (the diode's points at zero voltage
+    are also pairs of the first group)". S computes 2 × 25 = 50 diode runs at zero voltage and stops. Add "those at the 21
+    energies from 0.30 up, which both groups use".
+11. **§10, "What the page does", dangling "it".** "… which matters only for the small part of the wave that reaches it.
+    Between two stored frames … it first undoes the steady turning of the phase". The last "it" before was the border; the
+    subject here is the page. Write "the page first undoes".
+12. **§12, Shells, first paragraph, one run-on sentence.** "The packet, within about 3.6 of the axis, meets the shells
+    head-on: much of it is reflected, or tunnels straight through: in through the outer shell and the inner one, and out
+    again …, four crossings in all, and a part tunnels through the outer shell, is caught in the gap … and rings there for a
+    long time, because …" Three colons and four clauses in one sentence; S cannot parse it. Split into three sentences:
+    reflected; tunnels straight through (four crossings); caught and rings.
+13. **§12, Shells, second paragraph.** "(for such a wave \(\nabla^2\psi=\tfrac1r\,d^2(r\psi)/dr^2\) … centrifugal barrier,
+    \(l(l+1)/2r^2\) …, which we do not treat)". Correct and now complete for G, but this is unstarred graduate material in the
+    middle of a sentence. Either ★ the parenthesis or put the plain picture first ("a wave spread evenly round the centre
+    behaves along the radius like the wave between walls, with a hard wall at the centre").
+14. **§13, Figure 3 and Figure 2 labels.** "filled up to EF", "filled up to EF − eVb", "level at Vb = 0" are set upright
+    with text subscripts; "N = 2 … N = 10" in Figure 2 are upright, while the body and captions set \(E_F\), \(V_b\), \(N\) in
+    KaTeX italic. Two styles for one symbol. Minor.
+15. **§13, "The tilt", the share under bias.** "the share that crosses is the flow of probability, \(T=(k_R/k_L)\,|t|^2\)".
+    The same paragraph quotes peak heights 1, 0.877, 0.559 and §13 later 0.65 and 0.34; G wants one word that these heights are
+    of this flux-weighted \(T\), not of \(|t|^2\).
+16. **§14 / Further reading, links (state, not prose).** `notes/fig15/gen2_numbers.py`, `notes/fig15/gen1_profile_check.py`
+    and `public/data/resonant-tunnelling/2026-11-14/kaggle/index.json` are linked on GitHub `main`, where they do not exist
+    yet (`git cat-file -e origin/main:…` fails); they resolve only after this branch is merged. `derive.py` and the
+    2026-11-13 index are on `main`. Check after the merge.
 
-4. **§4, "the phase e^{iks} it picks up crossing the gap s".** Two snags for a physics-grad
-   reader. First, s is not the gap (the gap is s−d), so "crossing the gap s" is wrong wording.
-   Second, and deeper: a wave physically crosses a region of width s−d at wavenumber k₀, picking
-   up phase k₀(s−d), yet the formula uses e^{iks}. The resolution is that t and r must be
-   defined with their phases referenced to the barrier centres, so the extra phase is absorbed —
-   but the note never says where the single-barrier t, r are phase-referenced, so the reader
-   cannot see why e^{iks} (and not e^{ik(s−d)}) is right. One sentence fixing the phase
-   convention would close the gap.
+Fixed since round 9 and not repeated: caption commas bound to their formulas (Figs. 1, 2); the Fig. 15c pointer to
+section 11; the laser sentence of §1; the σ_E/Γ box now says it in words; the 2L_eff closing clause in the §5 ★; (19)'s
+11 % gap explained; the long-packet numbers in a table; the §8/§12 reconciliation; reasons for Δx and Δt; the bridge to the
+earlier batch in §11; (19) cited for "narrower"; the disc yardstick row; the key-result wording on ratios; the centrifugal
+term; the current-flow condition; (11) now said to give the reason, not the size.
 
-5. **§3, the key single-barrier result (8) is asserted, not derived.** The section is titled
-   "One barrier: matching, the transfer matrix, and T" and is starred, so heavier algebra may be
-   skipped — but it hands the reader (7) T=1/|w|² and then (8) T(E)=[1+V₀²sinh²(κd)/4E(V₀−E)]⁻¹
-   with only *"carrying the matrix product through … yields the closed form"*. The matrix
-   entries w, z are never written in terms of E, V₀, d, so the reader cannot connect (7) to (8),
-   and (8) — the single most-used formula in the note — arrives as a quoted answer. A physics
-   grad who wants to follow is effectively told "it can be shown". At minimum give |w|² explicitly
-   so (7)→(8) is checkable.
+## Verdict per section (against `notes/STANDARD.md`)
 
-6. **§5, "Γ=0.040 gives τ=1/Γ=25.1".** 1/0.040 = 25.0 exactly; the 25.1 comes from the true
-   Γ≈0.0398, which has been rounded to 0.040 in the display. A sharp student does the division
-   and finds 25.0, not 25.1. Either show Γ to another digit or write τ=25.0.
+| § | title | verdict | marks |
+|---|---|---|---|
+| 1 | Two panes of glass | clear, leave it | none |
+| 2 | The model in three dimensions | needs work (small): star the phase argument, close the seam, one clause on constants | 1, 2, 3 |
+| 3 | One barrier | clear; one sentence of picture missing | 4 |
+| 4 | Two barriers, two ways | clear, leave it | none |
+| 5 | The sharp peak and the trapped wave | clear; layout of the ★ and one misplaced sentence | 5, 6 |
+| 6 | A wave packet is not a single energy | needs work (small): reorder the paragraph after the table | 7 |
+| 7 | A wider well sings lower | clear; move one parenthesis | 8 |
+| 8 | Taller and thicker barriers | clear; one clause on the fit window | 9 |
+| 9 | Three, five and ten barriers | clear, leave it | 14 (labels only) |
+| 10 | What was computed, and how | needs work (small): the 3D phase-per-step claim is wrong | E1, 10, 11 |
+| 11 | How good the grid is | needs work (small): the 4.5 % does not follow from the printed numbers | E2 |
+| 12 | Discs and shells | needs work (small): split the shells sentence; star or soften the radial equation | 12, 13 |
+| 13 | The device | clear; label style and one word on the flux-weighted T | 14, 15 |
+| 14 | Limits and reading | clear, leave it (links resolve after merge) | 16 |
 
-7. **§5, the jump (9)→(10) is not shown and Γ is never given a formula.** *"Expanding the
-   denominator of (9) about the resonant energy E_r gives a Lorentzian"* — the expansion is
-   skipped and Γ is only ever an operational FWHM (measured, =0.040). That is acceptable for the
-   level, but the intuition built in §4 ("the denominator nearly vanishes") is never tied
-   quantitatively to how *narrow* the peak is, so "sharp because the barriers are opaque" stays a
-   slogan. A line relating Γ to r (or to t, the leak rate) would pay off the §4 setup.
-
-8. **§8 reads inward, toward the project rather than the reader.** *"the honesty of the pipeline
-   is the point"*, `recon.py`, *"every file names its parents … by their SHA-256, so its
-   provenance is traceable"*. The STANDARD does ask for "the numerical method as the code really
-   does it" and "equation to screen", so the section belongs — but the provenance/SHA-256
-   bookkeeping is about the website, not about resonant tunnelling, and it sits between §7
-   (many barriers) and §9 (the device), interrupting the physics thread. A reader after the
-   physics skims or stalls here. Consider trimming the provenance sentence to the physics-relevant
-   checks (Crank–Nicolson agreement, probability conservation).
-
-9. **§9, "A bias voltage V tilts the whole landscape".** "landscape" is on the STANDARD's list
-   of AI-tell words to avoid. "tilts the whole potential" says the same thing and is cleaner.
-
-10. **φ is reused for two different things.** In §6 it is the packet's amplitude in k, φ(k); in
-    §10 it is the metal work function φ. Taylor's "one symbol, one meaning" is mildly broken.
-    The sections are far apart so no reader is confused mid-sentence, but a different letter for
-    one of them would be tidy.
-
-## Verdicts by section (against STANDARD §4)
-
-- **§1 Two panes of glass — clear, leave the prose.** Excellent everyday-first motivation
-  (Fabry–Pérot, the ringing echo with a lifetime). One defect: the figure's `s` arrow marks the
-  gap while the caption defines `s` centre-to-centre (item 3). Caption-level fix only.
-
-- **§2 The model + running example — clear.** Schrödinger equation stated, separation of
-  variables shown, natural units justified, k and κ derived with the running numbers (κ=2,
-  e⁻²≈0.135, 1/κ=0.5). Meets items 1–2 and the start of 3 well.
-
-- **§3 One barrier (★) — needs a small fix.** Matching conditions well motivated (the
-  "χ′ infinite" argument is exactly right). But the transfer-matrix product is never carried
-  out and (8) is quoted (item 5). For a starred section this is borderline-acceptable, but the
-  title promises a derivation the section does not deliver; give |w|².
-
-- **§4 Two barriers, two ways — clear and the highlight of the note.** The path-sum / geometric
-  series is the right pedagogy and Example 4.1 (the bounces accumulating to 99.7%) is a genuinely
-  good worked example. Only the "phase e^{iks} crossing the gap s" wording needs the
-  phase-convention clause (item 4).
-
-- **§5 The sharp peak and trapped state — mostly clear.** Breit–Wigner stated, τ=ℏ/Γ with the
-  lovely two-roads check (Γ from the energy curve, τ_fit from the time decay, both 25.1). Fix the
-  25.0/25.1 arithmetic (item 6) and consider a line giving Γ a home (item 7). The music-note /
-  excited-atom analogy at the end is apt and not overlong.
-
-- **§6 A wave packet is not a single energy — clear in spirit, one number wrong.** This is the
-  honest, distinctive section (peak is 100%, packet is less) and it earns its place. But the
-  σ₀=3 energy spread is not reproducible from the stated rule and is inconsistent with the σ₀=12
-  value (item 1) — the one real content error in the note.
-
-- **§7 Many barriers (★) — clear for a starred section.** Cayley–Hamilton → Chebyshev → bands and
-  gaps is correct and nicely compressed; the "two-cell baby of a superlattice" line lands. The
-  transmission in terms of U_N is never written, so "hinges on ξ(E)" is asserted, but that is
-  within the licence of a ★ section whose result (bands vs gaps) is restated plainly.
-
-- **§8 From data to data — serviceable but drifts.** Satisfies items 5–6 (how the figure is
-  built, equation-to-screen, the Crank–Nicolson cross-check, probability staying 1.000), but the
-  provenance/SHA-256 material is project bookkeeping that interrupts the physics flow (item 8).
-
-- **§9 The device — clear, with one undefined symbol and one banned word.** The NDR mechanism
-  (level swept down through the Fermi sea, current rising then falling) is explained well and the
-  GaAs unit-conversion table is exactly the "put the nanometres back" the STANDARD wants. But
-  E_F is undefined (item 2) and "landscape" should go (item 9).
-
-- **§10 A triangular barrier (★) — clear.** Good tie to field emission and the Electron Beam
-  project; Fowler–Nordheim quoted and the Airy-function exact solution named. Appropriate for a
-  closing starred section. (φ reused as work function — item 10.)
-
-- **§11 Limits + Problems + references — clear and exemplary.** Honest list of what the
-  one-electron, 1-D, coherent, rigid-barrier model drops; next models named (NEGF,
-  Schrödinger–Poisson). The four Problems use the page's own numbers and build on the derived
-  equations. References are real, specific and each carries its role.
-
-## Reading quality
-
-Does it motivate from experience first? Yes. Does it carry the running example throughout?
-Yes, consistently (E=1, V0=3, d=1; κ=2; one-barrier T=6.3%; resonance at s=2.343; Γ=0.040;
-τ=25.1; and the GaAs translation in §9). Does it read top-to-bottom like Taylor? Largely yes;
-the only structural wrinkle is §8 sitting between the physics of §7 and §9. Nothing is
-seriously over-long or repetitive — the glass/echo/ringing motifs in §1 build rather than
-repeat, and the boxes and examples earn their space.
+Overall: the note is correct and reads as a textbook chapter; two small factual slips (E1, E2), no wrong equation. The stops
+that matter most for S are 1, 8 and 12; for G, E1, 3 and 9.

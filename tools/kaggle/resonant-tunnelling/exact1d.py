@@ -81,7 +81,7 @@ def main(path):
     ru = dict(rows=rows, Eu_eV=Eu, a_nm=a_nm, t_u_fs=tu * 1e15, T_kelvin=kT * EuJ / C.k,
               note=(f"These follow from one choice: the barrier height V₀ = 2 is the AlGaAs conduction-band offset, about 0.30 eV for "
                     f"Al₀.₃₅Ga₀.₆₅As (Vurgaftman, Meyer & Ram-Mohan, J. Appl. Phys. 89, 5815, 2001). That fixes the energy unit at "
-                    f"{Eu * 1000:.0f} meV and, with m* = 0.067 mₑ, the length unit at {a_nm:.2f} nm. The Fermi sea fills to "
+                    f"{Eu * 1000:.0f} meV and, with m* = 0.067 mₑ, the length unit at {a_nm:.2f} nm. The electrons in the emitter fill every state up to the Fermi energy, "
                     f"{EF * Eu * 1000:.0f} meV; T = {kT * EuJ / C.k:.0f} K."))
     out = dict(role="exact check of the 3D runs: one-dimensional transfer matrices for the same barriers (exact for the walls, "
                     "by separation of variables; the limit of large discs)",

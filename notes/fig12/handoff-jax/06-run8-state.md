@@ -180,4 +180,14 @@ needs is in `public/data/fig12/2026-11-13-run8/`. Scratch scripts of the analysi
 
 The user: "Hand it over for god sake". The full prompt is in notes/fig12/handoff-note-writer.md; the writer session
 "Fig. 12 Guinness: lecture note" works on branch claude/fig12-note (from this branch at the commit that added that file)
-and publishes run 10 with the note. This chat does not write the note any more.
+and publishes run 10 with the note. This chat does not write the note any more. Writer session id:
+session_01DGmqimuLzhKNXguwGiokgt (created 09:50 UTC).
+
+## Run 10 made live (14 November 2026, about 10:10 UTC)
+
+The coordinating chat relayed the owner's order (09:53 UTC): make run 10 live now, do not wait for the note writer. Done:
+DIR -> 2026-11-14-run10, generations.json (new generation; run 8's marked played until 14 November), docs, and the note's
+section 11 updated by hand to run 10's numbers (Table 8, the gentle-road and kerb paragraphs, K and its readings, the key
+result), with one plain sentence that 11.5-11.7's eigenvalues, sampled loop and Floquet threshold are still for beta 1.541.
+The writer session recomputes those in its rewrite (it will need to rebase over this commit's change to paper.html).
+Tested in Chromium (page-test.cjs at four widths, the comparison table, a run-10 ride, KaTeX): no errors.

@@ -2,3 +2,6 @@ __pycache__/
 *.pyc
 node_modules/
 dist/
+
+# wrangler dev: local state (miniflare R2, caches)
+.wrangler/

@@ -14,5 +14,25 @@
    "numakoudsie/fig15-rt3d-singles-v2"
   ],
   "note": "Replaces the one-dimensional generation of the same day (72 runs built by transfer-matrix superposition for barriers V0 = 3, s = 2.343): the figure is three-dimensional and continues Fig. 14, so its frames are the 3D runs. What remains of the 1D work is derived/exact-1d.json, the exact 1D numbers for the 3D geometry, kept as the check of the 3D runs."
+ },
+ {
+  "date": "2026-11-14",
+  "kind": "rt3d2",
+  "index": "2026-11-14/kaggle/index.json",
+  "exact": "2026-11-13/derived/exact-1d.json",
+  "runs": 3697,
+  "runs_store": "Cloudflare R2 bucket phyein-usul-runs, served by the site's Worker under /r2/resonant-tunnelling/2026-11-14/runs/",
+  "source": "Kaggle GPU (2 x Tesla T4): tools/kaggle/resonant-tunnelling/rt3d2.py through rt3d2_run.py; filed by file_rt3d2.py",
+  "notebooks": [
+   "numakoudsie/fig15-rt3d2-shard-1-of-6",
+   "numakoudsie/fig15-rt3d2-shard-2-of-6",
+   "numakoudsie/fig15-rt3d2-shard-3-of-6",
+   "numakoudsie/fig15-rt3d2-shard-4-of-6",
+   "numakoudsie/fig15-rt3d2-shard-5-of-6",
+   "numakoudsie/fig15-rt3d2-shard-6-of-6",
+   "numakoudsie/fig15-rt3d2-fix1"
+  ],
+  "note": "The whole parameter space in 3D, walls included: spacing, height, thickness, 1 to 10 barriers, discs to R = 12, shells, the diode under bias, long packets. 3739 runs planned; 42 specs computed in two groups are filed once; 15 runs rerun by the fix notebook replace the earlier ones (index: replaced). 6.53 GB in R2. Generation 1 (2026-11-13, 115 runs) stays filed beside it.",
+  "bytes": 6526952030
  }
 ]

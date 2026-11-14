@@ -178,7 +178,11 @@ A project brings five things; nothing in `kaggle-flow.js` or the bridge changes.
 - Fig. 14, the wave packet and the sphere: the first, described above.
 - Fig. 12 computed on Kaggle, the Guinness cart (`simulations/guinness-kaggle.html`). Since 13 November 2026 it plays rides
   computed by the JAX solver (`tools/fig12/kaggle/stout_jax.py`, `run_b.py`, packed by `pack_ride.py` into
+<<<<<<< HEAD
   `public/data/fig12/2026-11-14-run10/` since 14 November 2026 (run 8's folder `2026-11-13-run8/` before that), listed in `index-jax.json` with each file's SHA-256) through `guinness-jax-play.js` and
+=======
+  `public/data/fig12/2026-11-14-run10/` since 14 November 2026 (run 10's controlled rides with run 8's other rides; run 8 alone in `2026-11-13-run8/`), listed in `index-jax.json` with each file's SHA-256) through `guinness-jax-play.js` and
+>>>>>>> origin/main
   `stout-view2.js`. It follows rules 1, 2, 3 and 5 of "Store first" (one file per ride, an index, a fingerprint check in the
   browser, provenance) and rule 4 (no interpolation: the frame drawn is `round(30 T)`), but uses none of `kaggle-flow.js`: one
   button per stored ride, no slider, governor, live preview, pop-up or bridge; it plays at real speed and stops at the end of
@@ -193,6 +197,13 @@ A project brings five things; nothing in `kaggle-flow.js` or the bridge changes.
   `public/data/resonant-tunnelling/2026-11-13/kaggle/` with each file's notebook, version, commit and SHA-256; the page checks the
   SHA-256 in a worker and interpolates between stored frames. Uses none of `kaggle-flow.js`. Details:
   [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md).
+- Fig. 15, generation 2 (14 November 2026): the whole parameter space, 3739 runs planned from six shard notebooks
+  (`numakoudsie/fig15-rt3d2-shard-{1..6}-of-6`) and a fix notebook (`numakoudsie/fig15-rt3d2-fix1`, the 15 runs that the
+  run-length fix of commit 57770d2 lengthened by more than 15 %). Filed by `file_rt3d2.py` under
+  `public/data/resonant-tunnelling/2026-11-14/kaggle/index.json` (per run: notebook, version, commit, SHA-256, groups; a spec
+  computed in two groups is filed once; a fix notebook's rerun replaces the earlier file and the index records it under
+  `replaced`). The run files are not in the repository: they are in the R2 bucket `phyein-usul-runs`, served under `/r2/` by the
+  site's Worker ([usul.md](usul.md), "The run store").
 
 ## Derived data: generated from stored runs
 
