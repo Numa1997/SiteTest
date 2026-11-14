@@ -25,8 +25,9 @@ one brightness scale per run, smooth playback.
     620 files, SHA-256 0 bad; downloaded
   - shard 3 launched 14 Nov 00:12 UTC (kernel 144885421, version 1); due about 03:40 UTC
   - shard 3: DONE, 623 runs, 0 failed; filed and uploaded (14 Nov 03:55): 1853 runs, 3.24 GB in R2
-  - shard 4 launched 14 Nov 01:22 UTC (kernel 144897867); due about 04:50 UTC. Check-in scheduled 05:00 UTC.
-  - shard 5 launched 14 Nov 03:52 UTC (kernel 144916686); due about 07:20 UTC. Then fix1; shard 6 after shard 4.
+  - shard 4: DONE, 623 runs, 0 failed; filed and uploaded (14 Nov 05:10): 2468 runs, 4.33 GB in R2
+  - shard 6 launched 14 Nov 05:02 UTC (kernel 144929204); due about 08:30 UTC.
+  - shard 5 launched 14 Nov 03:52 UTC (kernel 144916686); due about 07:20 UTC. Then fix1. Check-in scheduled 07:25 UTC.
   - Kaggle output paths since shard 3: `2026-11-14/rt3d2/*` (the runner's date), not `2026-11-13/`.
   - shards 3-6 `numakoudsie/fig15-rt3d2-shard-{3..6}-of-6`, loaders `rt3d2_all_{2..5}of6.ipynb`, commit 57770d2
   - fix job `numakoudsie/fig15-rt3d2-fix1`, loader `rt3d2_fix1.ipynb`, commit 57770d2: reruns the 15 runs of shards 1-2
