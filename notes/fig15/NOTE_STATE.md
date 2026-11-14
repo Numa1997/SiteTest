@@ -129,3 +129,8 @@ not the packet's mean energy); problem 6 rewritten to work with R = 2 now; NDR p
 SHA-256 explained; a = 2.75 nm given in sec 2; phase-function step in separation; step r from (5); very-wide-gap paragraph starred;
 P^N form reason; Fig. 3 redrawn at V_b = 0.8 (eV_b arrow from emitter band bottom, no coincident levels); Fig. 1 V0 arrow.
 Not done: Fig. 15e axis-label overlap and run-count heading (page code, told coordinator); Fig. 2 tick marks (minor, next pass).
+
+## Round 3 referee (60 marks, notes/fig15/referee.md): most overlap the readers (already fixed). Fixed now: glass fringes need a thin
+air film; the barrier product written out (checked: |w|^2 6.94688 = tm.py); sec 4 matrix route stated; time-step error not
+measured on its own (said); shells met head-on (packet within 3.7, shells reach 5.5-8.5), not 'round it'; Pauli for the filling.
+Not done: links to blob/main dead until merge (owner session merges); symbols t,T,R,m,x,d reused but each flagged where it changes.
