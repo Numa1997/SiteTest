@@ -19,7 +19,7 @@ The control system is the centre of the work; the cart is designed to give it th
    Still to read whole before page work: docs/styles.md, the page HTML, guinness-jax-play.js, the readers' files.
 2. [DONE, see model.md section 3] Build a low-order slosh model from the stored Fig. 12 rides on the CPU; validate it against run 10's controlled rides
    without fitting to them. Report the validation to the coordinator (≤ 12 lines).
-3. Design 2–3 cart concepts on that model (masses, motor, wheel, gimbal; tilt, spill, peak force, current vs limit; weak point).
+3. [DONE, notes/fig16/concepts.md; WAITING FOR THE OWNER'S PICK] Design 2–3 cart concepts on that model (masses, motor, wheel, gimbal; tilt, spill, peak force, current vs limit; weak point).
    **STOP: report the concepts to the coordinator and the owner; the owner picks one.**
 4. Control system (control skill), new cart module in the JAX solver (fluid untouched), GPU bill + owner's yes per launch.
 5. Page, picture, note, readers, registration, merge, live check.
@@ -50,6 +50,13 @@ The control system is the centre of the work; the cart is designed to give it th
 
 - VALIDATED (validation.json): run 10's five controlled rides, never fitted: head spilled 2.07/2.14, 1.63/1.58, 2.51/2.46 mL
   (stored/model); tilt rms error 0.07-0.08 mm gentle, 0.7-1.1 mm kerb; fitted friction power n = 0.6665 (Cantat: 2/3).
+- Design tools: `tools/fig16/cart16.py` (design simulator: quarter car + gimballed pendulum + slosh modes in the glass's frame;
+  reproduces the validated model for Fig. 12's cart to 0.011 mm), `holder.py` (pendulum mass properties from the glass profile),
+  `sweep.py` (384 kerb variants -> sweep.json), `concepts.py` (3 concepts x 3 roads + robustness -> concepts.json).
+- CONCEPTS (kerb tilt / head spilled): A tray (passive pendulum) 3.83 mm / 0; B gimbal (torque motor + 24 V + load-cell preview)
+  0.55 mm / 0; C muscle (no gimbal) 5.22 mm / 0 but 50 mm / 5.25 mL without preview. Fig. 12 cart: 26.2 mm / 2.46 mL.
+- OPEN for the GPU stage: a tilting glass needs the rotating frame's forces beside the fluid step (brief: do not change the fluid
+  part) -> ask before any launch. The tilt physics (mechanical analogue) is not validated by stored data.
 
 ## Commits
 - 1st: brief + state. 2nd: model tools in progress.
