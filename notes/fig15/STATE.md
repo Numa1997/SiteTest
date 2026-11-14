@@ -110,6 +110,15 @@ c80244e inventory · 923b43f filer per-notebook commit, replaced record · c21bd
   is the software renderer, not the page. A chip switch: 160-280 ms locally until the new run plays.
 - A fast drag over 20 energies: settles 0.3 s after release (one file in flight at a time).
 
+## Final checks done (14 Nov 08:55-09:10 UTC)
+- origin/main merged into the branch (50fb7e6); docs/files.md regenerated, inventory --check passes.
+- Full data (3697 runs) on the page, local: no errors at 390/1440; chip switches 150-300 ms; drag settles 0.23 s.
+- wrangler dev (Worker + local R2 stand-in): /r2/ GET 200 with immutable cache, nosniff, octet-stream; bad key 404; PUT 405.
+  Address check: 239/239 right, 83/83 links 200, 0 page errors.
+- i18n --check passes (Fig. 15 has no de/ar pages, as in generation 1).
+- Waiting for the writing session (session_01DGmqiqazJ9UxECtFYiespR) to write READY on claude/fig15-gen2-note.
+  Then: merge it, build, page check with the note, merge to main, verify live.
+
 ## Left (Next = the first open item)
 1. Shards 4-6 and the fix job (two at a time as slots free; check-ins by `send_later`); download each, check SHA-256.
 2. File with `file_rt3d2.py` (date of filing), add the generation to `generations.json`.
