@@ -114,3 +114,7 @@ Section 4: exact chi(x,t) for one wall run, compared with the stored file.
   sessionTimeoutSeconds 3600 did not show as a stop at 14:30 (output list stayed empty).
 - 14:42 UTC: numakoudsie/fig15-correction-2d-smoke v1 launched (kernel 145008546, commit c53a447, tracker on).
   walls-calib v2 refused: "Maximum batch GPU session count of 2 reached" (second slot held).
+- 2D smoke v1 (14:42): A1 c64 wall limit T 0.196539 (exact 0.196820), drift 2.7e-3, 1.068 ms/step at 786,432 cells;
+  A1 c128 T 0.196889, drift 2.6e-12, 8.060 ms/step. Then crashed: TypeError in axisym_jax's fori_loop carry (float32 vs float64
+  after the c128 run left x64 on). Fixed in 17ffd02 (explicit dtypes). Smoke v2 launched ~14:58 (tracker topic suffix -smoke2).
+  Inference: c64 drift 2.7e-3 > 1e-3 fails the brief's gate -> c128 needed; bill ~ 28.7 M steps x 8.06 ms / 2 = ~116,000 s.
