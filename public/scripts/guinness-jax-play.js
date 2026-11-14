@@ -4,7 +4,7 @@
  * and the ride never slows: at the end of the stored time it stops. Every file is checked against the SHA-256 in the index. */
 (function () {
   'use strict';
-  const DIR = '../data/fig12/2026-11-13/', INDEX_URL = DIR + 'index-jax.json';
+  const DIR = '../data/fig12/2026-11-13-run8/', INDEX_URL = DIR + 'index-jax.json';
   const GROUND_Y = 0.95, GLASS_BASE = 0.014, GLASS_FLOOR = 0.012;       // drawing constants handed to the view
   const REST = { zw: 0.04 - 0.0011, zb: 0.04 - 0.0011 + 0.135 - 0.0320 };  // the cart standing still (free-swing tests): drawn, not computed
   const $ = (id) => document.getElementById(id);

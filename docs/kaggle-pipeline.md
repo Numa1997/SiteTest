@@ -178,11 +178,14 @@ A project brings five things; nothing in `kaggle-flow.js` or the bridge changes.
 - Fig. 14, the wave packet and the sphere: the first, described above.
 - Fig. 12 computed on Kaggle, the Guinness cart (`simulations/guinness-kaggle.html`). Since 13 November 2026 it plays rides
   computed by the JAX solver (`tools/fig12/kaggle/stout_jax.py`, `run_b.py`, packed by `pack_ride.py` into
-  `public/data/fig12/2026-11-13/`, listed in `index-jax.json` with each file's SHA-256) through `guinness-jax-play.js` and
+  `public/data/fig12/2026-11-13-run8/` since 14 November 2026, listed in `index-jax.json` with each file's SHA-256) through `guinness-jax-play.js` and
   `stout-view2.js`. It follows rules 1, 2, 3 and 5 of "Store first" (one file per ride, an index, a fingerprint check in the
   browser, provenance) and rule 4 (no interpolation: the frame drawn is `round(30 T)`), but uses none of `kaggle-flow.js`: one
   button per stored ride, no slider, governor, live preview, pop-up or bridge; it plays at real speed and stops at the end of
-  the stored time. The stored rides are run 6's (Kaggle notebook version 6, 13 November 2026), five files, 3.3 MB. The earlier
+  the stored time. The stored rides are run 8's (Kaggle notebook version 8, the head with its mass, every frame's books checked; the kerb
+  with the road preview from version 9; the swing without the head from version 6), ten files, 2.7 MB; runs 6 and 7 stay in
+  `2026-11-13/` for the record. Run 8 waited about 40 minutes for a GPU slot: Kaggle runs at most two batch GPU sessions per
+  account at a time ("Maximum batch GPU session count of 2 reached"), and Fig. 15's shards held both. The earlier
   generations (12 and 13 November, the Taichi solver, with `KaggleFlow.slider`, `governor`, `popup`, `bridge` with `url: null`
   and the live preview `guinness-preview-worker.js`) are described in [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md).
 - Fig. 15, resonant tunnelling in 3D (`simulations/resonant-tunnelling.html`, 13 November 2026): 115 runs from five notebooks

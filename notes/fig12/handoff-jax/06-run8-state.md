@@ -39,9 +39,17 @@ https://phyeinusul.com/simulations/guinness-kaggle (public/simulations/guinness-
 5. Store as run 8 (keep 6 and 7), update generations.json, the note (sections 9 to 12), the docs, the page's readings; merge;
    check live. Report once when live: books closed, the new frequency, the new leans and spills with and without control.
 
-## Done of it
+## Done of it (14 November 2026, 00:40 UTC)
 
-Nothing yet beyond the checks in item 1.
+All five items. The head's mass is in `Stout.pressure` (Robin condition, the head's own vertical velocity `wh` as state);
+CPU check at 6 mm 2.737 Hz against 2.722 Hz predicted. Run 8 (notebook version 8, commit 96e8a1d) and version 9 (commit
+726d51a, the kerb with the preview, skipped by run 8's budget) passed every check; books closed in every frame (0 particles,
+at most 1.3e-8 mL). Swing with the head's mass 2.915 Hz (2.957 expected), zeta 0.425; the controllers designed on it.
+Leans (trusted columns), speed held -> control: five bumps 13.9 -> 0.95 mm (joint); 25 mm bump 8.9 -> 0.76 mm (joint);
+kerb 24.3 mm, 2.44 mL of head -> joint 25.4 mm, 2.00 mL; slosh 21.8 mm, 1.65 mL; preview 21.2 mm, 2.46 mL; no stout spilled.
+Stored in public/data/fig12/2026-11-13-run8/ (runs 6, 7 kept in 2026-11-13/); generations.json, the note (5.6, 7.3, 9 to
+12, abstract), docs/simulations/fig12-beer-slosh.md, docs/kaggle-pipeline.md and docs/files.md updated. Open point found after
+the run: the controllers' beta is still the bare stout's 1.541; with the head carried it should be 1.241 (note section 10).
 
 ## Files that matter
 
