@@ -223,6 +223,8 @@ put('FP_G', r3(float(2 * (1 - Rr) / (np.sqrt(Rr) * thp))), 'Gamma = 2 T / (sqrt(
 put('FP_lnR', round(float(-2 * np.log(Rr)), 4), '-2 ln R: exact decay per round trip (probability R^2 left after two reflections)')
 put('FP_2TsR', round(float(2 * (1 - Rr) / np.sqrt(Rr)), 4), '2 T / sqrt(R): what the Lorentzian width gives')
 put('FP_2T', round(float(2 * (1 - Rr)), 4), '2 T: two leaks per round trip, counted naively')
+put('t_arrive', round(14 / np.sqrt(2 * 0.735), 1), 'time for the short packet centre to cover the 14 a from x0 to the first face at E = 0.735')
+put('spread_arr', round(3 * np.sqrt(1 + ((14 / np.sqrt(2 * 0.735)) / 18) ** 2), 1), 'sigma_perp at that time')
 put('spread_t40', round(3 * np.sqrt(1 + (40 / (2 * 9)) ** 2), 1), 'sigma_perp(t) = sigma_perp sqrt(1 + (t / 2 sigma_perp^2)^2), sigma_perp = 3, t = 40')
 
 # ---------- 3. N barriers ----------
@@ -317,6 +319,7 @@ for B in (0.0, 0.875, 1.25):
     tg = f'{B:g}'.replace('.', '_')
     put(f'area_b{tg}', round(float(np.trapezoid(T[m], Ef[m])), 3), f'iv.py: area under the transmission peak (+-0.25 around it) at bias {B}')
     put(f'sup_b{tg}', round(float(supf(Ef[i], B)), 1), f'supply function at the peak energy, bias {B}')
+    put(f'lev_b{tg}', round(float(Ef[i]), 2), f'iv.py: energy of the transmission peak (the level) at bias {B}')
 x = EX1['iv']
 put('iv_exact_Vp', x['V_peak'], 'exact-1d.json iv'); put('iv_exact_Vv', round(x['V_valley'], 3), 'exact-1d.json iv')
 put('iv_exact_pvr', round(x['pvr'], 1), 'exact-1d.json iv')

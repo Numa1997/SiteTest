@@ -142,3 +142,13 @@ N=10 shares are the twins'; Tbar by quadrature (0.540, exact1d.tbar); s=4.5 top 
 missing full stop. Round 4 next.
 
 ## Round 4 (launched ~04:40 UTC on 95824f5): fresh referee, owner, student, derivation checker; outputs scratchpad/readers/r4-*.md, scratchpad/derivation-check-r4.md, notes/fig15/referee.md.
+
+## Round 4 readers: owner 24 marks, student 36 (scratchpad/readers/r4-*.md); fixed: x0 = 14 before the first face, arrival t 11.5,
+sigma_x as std dev, Fig. 1 V0 label + d brackets, half-wavelength wording, run cap pointer, Bloch q defined, squared modulus,
+U_{-1} = 0, P eigenvalue e^{-iqs}, Fig. 2 dashed, box note covers 15b-15e, 21 %, R2 share energy, shell 'spacing', area
+definition + level energies 0.29 / 0.10, problem 4, panel naming, pointers to sec 5/6/10/11, travel-matrix sign wording,
+end of the sec 3 star, plain restatement after (13), starred correction sentences in sec 5, 15 planned long runs, peak run not
+filed, box 512 vs 192, hard box above V0, fit start 60 %, |w_N|^2 step, ten-wall wording, bathtub placed at the side leak,
+share-through reason, conduction band defined.
+Page items (panel text, Fig. 15e title/axis/units, 'Fermi sea', real-units J_p, 'Read values' button, '20 runs') -> coordinator.
+Owner mark 4 (file paths) is a reading artefact: they are links.
