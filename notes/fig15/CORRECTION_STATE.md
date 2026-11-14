@@ -16,6 +16,8 @@ last, GPU only with the owner's yes on a bill.
 - Mark Fact (with handle) / Inference / Opinion. Never relay another chat's number as Fact before reproducing it.
 - Wall rebuild is a true 3D field psi = chi(x,t) h(y,t) h(z,t); say so in every report about walls.
 - Never write the owner's name.
+- Owner, 14 Nov: after each big chunk of work, review online sources (GitHub, Kaggle, papers, other simulations) and learn
+  from their experience before the next chunk. Learn, never copy. Read primary sources whole; say which tools answered.
 - Branch `claude/fig15-correction` (from `claude/fig15-resonant-tunnelling` tip dddec29); push only there.
 
 ## Steps
