@@ -182,3 +182,114 @@ Consequences (Facts):
 4. `schrodinger-sphere-3d-generation` (59.7 MB, 81 runs) is on no page and in no site record; Kaggle is its only copy.
 5. A copy of the smoke test's `timing.json` (1 735 B; the source of "1.61 ms per split-step" in `docs/kaggle-pipeline.md`) is now kept in
    `notes/inventory/raw/kaggle-copies/` with its SHA-256, so the cited numbers no longer depend on that notebook.
+
+## Fig. 14, the four CPU shard notebooks `schrodinger-shapes-3d-v2-a..d` (v2 each; exact bytes)
+
+| Notebook | Runs | Six tars (bytes) | Run bytes in its index | CPU sweep |
+|---|---|---|---|---|
+| v2-a | 61 | 29 532 160 | 29 373 238 | 9 305 s |
+| v2-b | 61 | 31 682 560 | 31 504 909 | 9 582 s |
+| v2-c | 61 | 29 634 560 | 29 477 976 | 8 468 s |
+| v2-d | 60 | 27 187 200 | 27 025 208 | 11 061 s |
+| all four | 243 | 118 036 480 (118.0 MB) | 117 381 331 | 38 416 s = 10.7 h of CPU |
+
+Compared with the site and with the GPU run of the same job (Facts):
+- The four CPU notebooks produced exactly the same set of 243 run files as `schrodinger-shapes-3d` v2 (same names).
+- **None** of the 243 is byte-identical to the GPU file, and none is on the site: the site uses the GPU output (243 of 243).
+  Inference: CPU and GPU floating-point results differ in the last digits, which changes the compressed bytes; the two sets are the same
+  physics computed twice, not copies of each other.
+- No record anywhere names these four notebooks.
+
+## Fig. 15 (exact bytes; every file by range request; per-file list in `kaggle-fig15-files.json`)
+
+| Notebook (v1 each) | Tar | Tar bytes | All output files | Runs in its index | Run bytes in its index |
+|---|---|---|---|---|---|
+| fig15-rt3d-smoke | `2026-11-13/rt3d/rt3d.tar` | 2 928 640 | 2 974 313 | 2 | 2 920 642 |
+| fig15-rt3d-shard-1-of-4 | `rt3d.tar` | 46 080 000 | 46 150 037 | 29 | 46 026 549 |
+| fig15-rt3d-shard-2-of-4 | `rt3d.tar` | 46 141 440 | 46 211 440 | 29 | 46 083 699 |
+| fig15-rt3d-shard-3-of-4 | `rt3d.tar` | 46 223 360 | 46 293 268 | 29 | 46 162 432 |
+| fig15-rt3d-shard-4-of-4 | `rt3d.tar` | 45 066 240 | 45 135 216 | 28 | 45 007 922 |
+| fig15-rt3d-singles-v2 | `rt3d.tar` | 31 938 560 | 32 000 712 | 20 | 31 897 836 |
+| **generation 1 total** | | | **218 764 986 (218.8 MB)** | 137 | |
+| fig15-rt3d2-smoke | `2026-11-13/rt3d2/rt3d2_smoke.tar` | 6 891 520 | 6 954 323 | 4 (per its title) | |
+| fig15-rt3d2-shard-1-of-6 | `2026-11-13/rt3d2/rt3d2_all_0of6.tar` | 1 081 016 320 | 1 081 780 336 | 624 | 1 085 804 508 |
+| fig15-rt3d2-shard-2-of-6 | `2026-11-13/rt3d2/rt3d2_all_1of6.tar` | 1 076 592 640 | 1 077 355 186 | 623 | 1 081 385 012 |
+| fig15-rt3d2-shard-3-of-6 | `2026-11-14/rt3d2/rt3d2_all_2of6.tar` | 1 099 632 640 | 1 100 396 663 | 623 | 1 104 671 908 |
+| fig15-rt3d2-shard-4-of-6 | `2026-11-14/rt3d2/rt3d2_all_3of6.tar` | 1 093 980 160 | 1 094 744 748 | 623 | 1 101 025 972 |
+| fig15-rt3d2-shard-5-of-6 | `2026-11-14/rt3d2/rt3d2_all_4of6.tar` | 1 098 752 000 | 1 099 515 892 | 623 | 1 105 775 834 |
+| fig15-rt3d2-shard-6-of-6 | `2026-11-14/rt3d2/rt3d2_all_5of6.tar` | 1 102 458 880 | 1 103 221 356 | 623 | 1 109 491 312 |
+| fig15-rt3d2-fix1 | `2026-11-14/rt3d2/rt3d2_fix1.tar` | 42 967 040 | 43 036 981 | 15 | 42 935 263 |
+| **generation 2 total** | | | **6 607 005 485 (6 607.0 MB)** | 3 754 + 4 | 6 631 089 809 |
+
+Note: each shard's index lists a few more run bytes than its tar holds (for example shard 1: 1 085.8 MB in the index, 1 081.0 MB in the tar,
+624 runs in the index, 621 files in the tar per its own log): a spec computed twice inside one shard keeps one file name, so the tar holds
+the later copy only. Not checked further; the files in use are verified below.
+
+## Fig. 15: is the site's and R2's data the same as Kaggle's? (SHA-256, each shard's `index.json` downloaded)
+
+Generation 2 (`public/data/resonant-tunnelling/2026-11-14/kaggle/index.json`, 3 697 runs, files in R2):
+
+| Notebook | Runs in its index | Site index has the same SHA | Site has a different SHA (another notebook's copy is used) |
+|---|---|---|---|
+| shard 1 | 624 | 614 | 10 |
+| shard 2 | 623 | 608 | 15 |
+| shard 3 | 623 | 616 | 7 |
+| shard 4 | 623 | 615 | 8 |
+| shard 5 | 623 | 616 | 7 |
+| shard 6 | 623 | 613 | 10 |
+| fix1 | 15 | 15 | 0 |
+| sum | 3 754 | **3 697** | 57 |
+
+- **Every one of the 3 697 runs in the site index (= the 3 697 R2 objects) has its SHA-256 in a Kaggle shard index**, and the site index names
+  exactly the notebook whose copy it uses (614 + 608 + 616 + 615 + 616 + 613 + 15 = 3 697).
+- 57 run files exist in two copies on Kaggle with different bytes: 42 specs computed in two job groups and the 15 runs that `fix1` recomputed.
+  One copy of each is in use; the other 57 exist only on Kaggle (6 631.1 MB in the Kaggle indexes against 6 527.0 MB in R2: 104.1 MB).
+  The 15 replaced ones are recorded in the site index under `replaced` with their old SHA-256.
+- Not verified here: the SHA-256 of the R2 objects themselves (that would mean downloading 6.5 GB). Their sizes match the index
+  (`raw/r2-summary.md`), and the page checks each file's SHA-256 in the browser when it loads one.
+
+Generation 1 (`public/data/resonant-tunnelling/2026-11-13/kaggle/`, 115 runs, in the repository):
+
+| Notebook | Runs | Same SHA as the site | Different SHA |
+|---|---|---|---|
+| fig15-rt3d-shard-1-of-4 | 29 | 24 | 5 |
+| fig15-rt3d-shard-2-of-4 | 29 | 24 | 5 |
+| fig15-rt3d-shard-3-of-4 | 29 | 24 | 5 |
+| fig15-rt3d-shard-4-of-4 | 28 | 23 | 5 |
+| fig15-rt3d-singles-v2 | 20 | 20 | 0 |
+| fig15-rt3d-smoke | 2 | 0 | 2 |
+
+- **All 115 site runs are byte-identical to a Kaggle run** (95 from the four shards + 20 from singles-v2), and all 115 files on disk
+  match the site index (184 592 414 B).
+- The 20 single-barrier runs of the four shards (5 per shard) are the ones `singles-v2` replaced: they exist only in the shard tars on Kaggle,
+  and the site index records why under `replaced`.
+- The smoke notebook's 2 runs are different bytes from the site's files of the same name.
+
+## Test notebooks (exact bytes)
+
+| Notebook | Files (bytes) | Total |
+|---|---|---|
+| html-panel-test-ripple-tank-computed-on-kaggle v2 | ripple_tank.html 15 848 816 | 15.85 MB |
+| phyein-sim-jax-swingup-gpu v2 | smoke/: result.json 2 067, swingup.png 58 750, swingup_data.json 5 481, timing.json 252; full/: result.json 19 640, swingup.png 60 673, swingup_data.json 5 470, timing.json 258 | 152 591 B |
+| phyein-sim-run-case v1 (OpenFOAM cavity, N = 32) | commit.txt 41 (`da387cb3de8bc2a86f56a857f752888904793f4f`, repository phyein-sim), timing.json 401, run0/log.icoFoam 3 898 360, 13 small case files (about 10 kB); some time-folder files not measured | about 3.9 MB |
+| phyein-sim-run-case-fem v1 (beam, CalculiX, 12 modes) | commit.txt 41 (same commit), timing.json 2 147, run0/beam.frd 2 542 908, beam.inp 251 409, beam.dat 4 558, run.py 8 169, result.json 1 729, small logs; beam.12d and spooles.out are empty (HTTP 416) | about 2.8 MB |
+| phyein-sim-native-install-test v2 | probe.json 353 | 353 B |
+| notebookddfec594b7 | no output | 0 |
+
+Results recorded in those outputs (Facts): the OpenFOAM cavity case passed its check (largest error 0.0042 against Ghia, Ghia & Shin 1982,
+tolerance 0.01; 9.0 s; install 61 s); the beam case ran in 19.4 s (install 131 s; first bending mode 66.93 Hz against 66.84 Hz from
+Euler-Bernoulli theory). Both ran the code of `numa1997/phyein-sim` at commit `da387cb`.
+
+## Whole account: measured output per group
+
+| Group | Notebooks | Versions with output | Bytes | MB |
+|---|---|---|---|---|
+| Fig. 12 | 3 | 18 | 164 142 355 | 164.1 |
+| Fig. 14 (GPU and CPU originals) | 8 | 9 | about 935.4 MB | 935.4 |
+| Fig. 14 CPU duplicates (v2-a..d) | 4 | 4 | 118 136 000 (tars + small files) | 118.1 |
+| Fig. 15 generation 1 | 6 | 6 | 218 764 986 | 218.8 |
+| Fig. 15 generation 2 | 8 | 8 | 6 613 959 808 | 6 614.0 |
+| Tests | 6 | 6 | about 22.7 MB | 22.7 |
+| **All** | **35** | **51** | | **about 8 073 MB (8.07 GB)** |
+
+Not measured: the outputs of the 8 failed versions (their logs only) and of the first versions of the two-version test notebooks.
