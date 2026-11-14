@@ -129,3 +129,8 @@ Section 4: exact chi(x,t) for one wall run, compared with the stored file.
 - 19:05: discs (2,327, 25.3 M steps) launched at the base grid, c64, 4 shards (shape filter, commit 5d0490f):
   numakoudsie/fig15-correction-2d-1-of-4 (kernel 145055241, running), -2-of-4 (145055418). Shards 3, 4 next.
   Shells wait for an Rmax 128/160 convergence test. walls-calib v2 saved 18:50, never started.
+- 20:03 UTC: disc shards 1-of-4 and 2-of-4 COMPLETE: 582/582 runs each, 0 failed, 3,819 s and 3,601 s; tars rt2d_all_0of4.tar
+  (1,075.4 MB) and rt2d_all_1of4.tar (1,074.5 MB) in their Kaggle outputs (2026-11-15/rt2d/), runs.jsonl + summary.json of 2-of-4
+  downloaded to scratchpad kaggle/2d-2-of-4/. Tracker of 1-of-4 went silent at 19:47 (ntfy throttling) while the run went on.
+- 20:39 UTC: shards 3-of-4 (kernel 145067461) and 4-of-4 (145067465) launched, topics -disc2/-disc3. Quota 64,095 s before.
+- Next: shell Rmax convergence test (96/128/160) when a slot frees; then shells; then compare and recompute failures in c128; walls.
