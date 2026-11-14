@@ -5,7 +5,7 @@ import os, json, time, datetime, math
 from pathlib import Path
 import numpy as np
 import jax, jax.numpy as jnp
-from stout_jax import Geometry, Stout, Cart, CART_COMMON, road_table, make_advance, ride_extra, F64, RBUB, PHI_F, GAMMA, E_INF, G_HEAD, TAU_Y, Z_WALL, LR_WALL
+from stout_jax import Geometry, Stout, Cart, CART_COMMON, road_table, make_advance, ride_extra, F64, RBUB, PHI_F, GAMMA, E_INF, G_HEAD, TAU_Y, Z_WALL, LR_WALL, HEAD0
 
 R = json.load(open(os.environ["GLASS_JSON"]))["R"]; DZP = 0.0005
 FILL, RHO, FPS = 0.125, 1007.0, 30
@@ -69,10 +69,20 @@ if os.environ.get("RUNSET") == "control":
     TASKS = TASKS_CONTROL
 elif os.environ.get("RUNSET") == "run8":
     TASKS = TASKS_RUN8
+elif os.environ.get("RUNSET") == "run10":   # run 8's controlled rides again, beta corrected for the head's mass (BETA_HEAD below)
+    TASKS = [_C[n] for n in ("rest", "ride_sharp30_joint", "ride_resonant_joint", "ride_bump25_joint", "ride_sharp30_slosh", "ride_sharp30_preview")]
 PLANT_FROM_RUN = os.environ.get("RUNSET") == "run8"
 if os.environ.get("PLANT_F0"):   # a task computed alone after run 8 (ONLY=...): the plant run 8 measured, given as numbers
     PLANT.update(w=2 * math.pi * float(os.environ["PLANT_F0"]), zeta=float(os.environ["PLANT_ZETA"]), measured=os.environ.get("PLANT_FROM", "given"))
 HEAD_MASS = os.environ.get("HEAD_MASS", "1") == "1"
+# beta with the head's mass (14 Nov 2026, run 10 on): the glass pushes the stout sideways, not the head, which only rides on it up and
+# down. With its mass the mode's inertia grows by 1 + mu k tanh(kh), mu = PHI_F HEAD0 (the head's mass per area over rho; note
+# eq. 15b), while the drive stays, so the controllers' model takes beta / (1 + mu k tanh(kh)) = 1.541 / 1.242 = 1.241. Runs 7 and 8 used
+# the bare stout's 1.541 (note section 11). On by default from run 10; BETA_HEAD=0 gives run 8's controllers back.
+BETA_HEAD = os.environ.get("BETA_HEAD", "1") == "1" and HEAD_MASS and os.environ.get("RUNSET") != "run8"
+if BETA_HEAD:
+    K1 = XI1 / R_S
+    PLANT.update(beta=PLANT["beta"] / (1 + PHI_F * HEAD0 * K1 * math.tanh(K1 * FILL)), beta_with_head_mass=True)
 if os.environ.get("ONLY"):   # run only the named tasks, comma-separated (one Colab job per task: Colab caps a job at 3600 s)
     TASKS = [t for t in TASKS if t["name"] in os.environ["ONLY"].split(",")]
 if os.environ.get("CODECHECK"):   # a check of this script only: two frames on a 6 mm grid, results thrown away

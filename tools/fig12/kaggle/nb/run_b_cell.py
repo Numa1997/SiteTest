@@ -18,6 +18,6 @@ for f in ["stout_jax.py", "run_b.py"]:
 js = urllib.request.urlopen(BASE + "public/scripts/guinness-glass.js").read().decode()
 R = json.loads(re.search(r"R:\s*(\[[^\]]*\])", js).group(1)); json.dump({"R": R}, open(os.path.join(D, "glass.json"), "w"))
 os.environ["GLASS_JSON"] = os.path.join(D, "glass.json"); os.environ["BUDGET_S"] = "__BUDGET__"
-os.environ["RUNSET"] = "__RUNSET__"   # "" run 6's set; "control" run 7's; "run8" every ride the page plays, the head with its mass
+os.environ["RUNSET"] = "__RUNSET__"   # "" run 6's set; "control" run 7's; "run8" every ride the page plays, the head with its mass; "run10" run 8's controlled rides with beta corrected for the head
 sys.path.insert(0, D)
 runpy.run_path(os.path.join(D, "run_b.py"), run_name="__main__")
