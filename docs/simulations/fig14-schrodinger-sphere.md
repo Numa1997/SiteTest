@@ -111,7 +111,9 @@ whole 3D wave is the stored cut through the axis spun about it. No new computati
 - **Read values** points at the strongest wave along the ray and reports the stored half-plane point at that $x$ and $\rho$.
 - **Kaggle runs**: `numakoudsie/schrodinger-sphere-3d-wave` version 1 (Re ψ on every point of the 3D box, 81 runs at R = 4) is
   now stored on the site and drawn (see below). `numakoudsie/schrodinger-sphere-3d-generation` (the smooth 3D envelope, 81 runs
-  at R = 4) stays on Kaggle; it is kept for a later cross-check of the probabilities.
+  at R = 4) is not used on the page. Its output and code are kept, byte for byte, in the private Kaggle dataset
+  `numakoudsie/fig14-schrodinger-sphere` (folder `schrodinger-sphere-3d-generation/v1/`) for a later cross-check of the
+  probabilities; the notebook itself was deleted on 14 November 2026.
 
 ## Barrier shapes and the lit 3D views (12 November 2026, night)
 

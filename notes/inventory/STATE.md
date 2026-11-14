@@ -26,10 +26,17 @@ Done in Phase 2:
 2. Docs that named them now point at the copies: `docs/kaggle.md` (smoke test), `docs/simulations/fig14-schrodinger-sphere.md` (CPU shards).
 3. Deleted 11 notebooks at 13:32 UTC (log `raw/kaggle-deletions.log`, each HTTP 200). Account: 39 notebooks before, 28 after (listed).
 
-Held: Fig. 15 (`fig15-*`, 15 notebooks incl. the 3 `fig15-correction-walls-*` of the running correction session) and Fig. 16
-(`fig-16-guinness-cart-with-control`): not touched while those sessions run. `schrodinger-sphere-3d-generation` (only copy of its data)
-waits for the Fig. 14 dataset.
+4. Fig. 14 dataset `numakoudsie/fig14-schrodinger-sphere` (private, Kaggle) made at 13:37 UTC: all outputs of the 8 Fig. 14
+   notebook runs (full-grid v1, 3d-wave v1, flat-wall v1, pillar v1, spherical-wave v1, shapes-3d v1 and v2, 3d-generation v1),
+   with each notebook's code, run log and `manifest.json` (size, SHA-256). 937 326 104 bytes staged. Checks: every staged file is in
+   the dataset with its exact size, except 5 `.pyc` caches (dropped by Kaggle) and the 12 shapes tars, which Kaggle unpacked; all 1773
+   tar members are there with exact sizes; 3 files downloaded back are byte-identical. Against the site: 3916 of 4328 site files are
+   byte-identical to a file in it; the other 412 are made in the repository (405 `.bin` packed from the full-grid JSON, 7 records).
+   Copies of README and manifests: `notes/inventory/datasets/fig14-schrodinger-sphere/`.
+5. Deleted `schrodinger-sphere-3d-generation` at 13:40 UTC (its only data is now in the dataset); doc line updated. Account: 27 notebooks.
 
+Held: Fig. 15 (`fig15-*`, 15 notebooks incl. the 3 `fig15-correction-walls-*` of the running correction session) and Fig. 16
+(`fig-16-guinness-cart-with-control`): not touched while those sessions run. 
 ## The owner's rules (from the brief, CLAUDE.md and the owner's preferences)
 
 - Phase 1 changes nothing anywhere. No deletion before the owner's yes on that group. No GPU, no new Kaggle run, no R2 write, nothing that costs money.
