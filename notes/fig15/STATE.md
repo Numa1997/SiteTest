@@ -86,6 +86,23 @@ c80244e inventory · 923b43f filer per-notebook commit, replaced record · c21bd
 - Gen-2 page on the branch (chips for shape, N, R, V0/D, P, sigma_x; bias slider; Fig. 15b-e), tested on the smoke runs.
 - Worker `worker/r2.js` and `wrangler.jsonc`, checked with `wrangler deploy --dry-run` and `wrangler dev`.
 
+## The writing session (14 Nov 01:33 UTC)
+- A separate cloud session writes the lecture note on branch `claude/fig15-gen2-note` (its own state file
+  `notes/fig15/NOTE_STATE.md`; "READY at <commit>" when done). It owns `public/scripts/resonant-note.js`, the page's lead and
+  meta description, `notes/fig15/gen2_numbers.py`, and the note sections of the Fig. 15 doc. Merge that branch into this one
+  before the final check; then rerun its gen2_numbers.py on the full index and refresh the numbers if needed.
+
+## Finishing each shard
+- Download into `scratchpad/kaggle_g2/<slug>/` (see above), then `scratchpad/after_shard.sh`: files ALL shards again (the filer
+  asserts every SHA-256), uploads what is new or changed (MD5 against the upload logs), prints keys in R2 and GB filed.
+
+## Measured on the page (14 Nov, local server, headless Chromium without GPU)
+- Index of 1237 runs: 1.02 MB, 169 kB gzipped; full batch about 3 MB, about 0.5 MB gzipped. Parsed once at load.
+- One run file 1.7 MB (192 box), 3.3-3.4 MB (256, 512). A loaded run now holds 4-10 MB (8-bit levels), 6 kept.
+- Page work per frame 1.5-3 ms (interpolate + sheet, WebGL submit, charts); the frame rate in headless Chromium (50-125 ms)
+  is the software renderer, not the page. A chip switch: 160-280 ms locally until the new run plays.
+- A fast drag over 20 energies: settles 0.3 s after release (one file in flight at a time).
+
 ## Left (Next = the first open item)
 1. Shards 4-6 and the fix job (two at a time as slots free; check-ins by `send_later`); download each, check SHA-256.
 2. File with `file_rt3d2.py` (date of filing), add the generation to `generations.json`.
