@@ -141,7 +141,10 @@
     }
 
     // the wheel: a disc of radius Rw in the plane y = 0, 2 cm thick; far face, tread, near face, spokes, hub
-    const Rw = c.Rw, ang = -c.x / Rw, circle = (y, rad, zc) => { ctx.beginPath(); for (let k = 0; k <= 48; k++) { const t = k / 48 * 2 * Math.PI, p = P(rad * Math.cos(t), y, zc + rad * Math.sin(t)); k ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]); } ctx.closePath(); };
+    // the wheel's angle is kinematics, -x/R_w (rolling without slip), drawn at the screen's rate from the stored position (c.xw, set by
+    // the player between stored pictures; c.x otherwise): at 30 stored pictures a second the five spokes alias and look backwards
+    // (notes/guinness-rebuild/audit.md, A). The spokes are smeared over the angle turned in one screen frame, as an eye sees them.
+    const Rw = c.Rw, xw = c.xw != null ? c.xw : c.x, ang = -xw / Rw, sweep = Math.min(Math.PI, ((c.vx || 0) / Rw) / 60), circle = (y, rad, zc) => { ctx.beginPath(); for (let k = 0; k <= 48; k++) { const t = k / 48 * 2 * Math.PI, p = P(rad * Math.cos(t), y, zc + rad * Math.sin(t)); k ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]); } ctx.closePath(); };
     circle(0.01, Rw, c.zw); ctx.fillStyle = '#1f1a1c'; ctx.fill();
     ctx.fillStyle = '#231d20';                                  // the tread: a band of quads between the two faces
     for (let k = 0; k < 48; k++) {
@@ -152,10 +155,14 @@
     circle(-0.01, Rw, c.zw); ctx.fillStyle = '#2a2326'; ctx.fill();
     circle(-0.01, Rw * 0.72, c.zw); ctx.fillStyle = '#d9d2c7'; ctx.fill();
     ctx.strokeStyle = C.ink; ctx.lineWidth = 2 * dpr;
-    for (let k = 0; k < 5; k++) {
-      const a = ang + k * 2 * Math.PI / 5, p0 = P(0, -0.01, c.zw), p1 = P(0.72 * Rw * Math.cos(a), -0.01, c.zw + 0.72 * Rw * Math.sin(a));
-      ctx.beginPath(); ctx.moveTo(p0[0], p0[1]); ctx.lineTo(p1[0], p1[1]); ctx.stroke();
-    }
+    { const ns = 1 + Math.ceil(Math.abs(sweep) / 0.04); ctx.globalAlpha = Math.min(1, 1.8 / ns);
+      for (let j = 0; j < ns; j++) for (let k = 0; k < 5; k++) {         // the trail lies at earlier angles, ang + v tau / R_w
+        const a = ang + sweep * j / ns + k * 2 * Math.PI / 5, p0 = P(0, -0.01, c.zw), p1 = P(0.72 * Rw * Math.cos(a), -0.01, c.zw + 0.72 * Rw * Math.sin(a));
+        ctx.beginPath(); ctx.moveTo(p0[0], p0[1]); ctx.lineTo(p1[0], p1[1]); ctx.stroke();
+      }
+      ctx.globalAlpha = 1; }
+    { const pv = P(0.86 * Rw * Math.cos(ang), -0.011, c.zw + 0.86 * Rw * Math.sin(ang));   // the valve: one mark, so a whole turn is the only repeat
+      ctx.beginPath(); ctx.arc(pv[0], pv[1], 2.6 * dpr, 0, 2 * Math.PI); ctx.fillStyle = '#c9a227'; ctx.fill(); }
     { const h = P(0, -0.01, c.zw); ctx.beginPath(); ctx.arc(h[0], h[1], 4 * dpr, 0, 2 * Math.PI); ctx.fillStyle = C.ink; ctx.fill(); }
 
     // axle carrier (a fork over the wheel), spring and damper in the near plane, the body as a box

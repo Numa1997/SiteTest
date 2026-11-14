@@ -23,6 +23,8 @@ tilt): twice the cos θ part of the stored surface on the outer ring, exactly as
   at the struts' tops, rear hub motors, the IMU, controller, battery and the road scanner on its boom. The deck's tilt reaches the glass
   by wrapping `project` while `drawGlass` runs. The pose comes from the stored axle heights, deck height and pitch, each measured from its
   first stored value.
+  The wheels (14 November 2026): angle −x/R_w from the player's position between stored pictures (`pose.wheelAng`, kinematics), spokes
+  smeared over the angle turned in one screen frame (`pose.wheelRate` = v/R_w), one gold valve mark (`notes/guinness-rebuild/audit.md` A).
 - The lecture note (first version) is built into the page by `tools/fig16/build_page.py` from `notes/fig16/page/guinness-cart-control.src.html`:
   every number in it is filled from the stored data (the two indexes, the stored rides and the run's summary
   `notes/fig16/run16-v2-summary.json`); `--check` fails if the page differs from what its source and data give.

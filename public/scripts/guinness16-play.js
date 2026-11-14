@@ -81,20 +81,21 @@
     function size() { for (const P of [A, B]) { const c = P.v.cv, r = c.parentElement.getBoundingClientRect(), d = Math.min(2, devicePixelRatio || 1); c.width = Math.max(2, Math.round(r.width * d)); c.height = Math.max(2, Math.round(r.height * d)); P.v.cssW = r.width; } }
     addEventListener('resize', size); size();
 
+    const lerpAt = (a, f) => { const i = Math.max(0, Math.min(a.length - 2, Math.floor(f))), t = Math.max(0, Math.min(1, f - i)); return a[i] + t * (a[i + 1] - a[i]); };   // the wheel's position between stored pictures (kinematics only)
     function tick(now) {
       requestAnimationFrame(tick);
       if (!r12 || !r16) return;
       const dt = last == null ? 0 : Math.min(0.1, (now - last) / 1000); last = now;
       if (playing) { T += dt; if (T >= dur()) { T = dur(); playing = false; $('play').textContent = 'Play'; } }
       const k1 = Math.min(r12.frames - 1, Math.round(T * 30)), D1 = r12.D;
-      Object.assign(A.cart, { x: D1.x[k1], vx: D1.v[k1], zb: D1.zb[k1], zw: D1.zw[k1], us: D1.us ? D1.us[k1] : 0 });
+      Object.assign(A.cart, { x: D1.x[k1], xw: lerpAt(D1.x, T * 30), vx: D1.v[k1], zb: D1.zb[k1], zw: D1.zw[k1], us: D1.us ? D1.us[k1] : 0 });
       A.v.setFrame(r12, k1); A.v.draw();
       const k2 = Math.min(r16.frames - 1, Math.round(T * 30)), D2 = r16.D;
       // the stored pose: axle heights, the deck's centre and pitch, each measured from its first stored value (the cart at rest on
       // the flat road); the actuators' stored force per axle, shared by its two struts
       B.cart.x = D2.x[k2]; B.cart.vx = D2.v[k2];
       B.v.pose = { zwF: D2.zf[k2] - D2.zf[0] + G16.Rw, zwR: D2.zr[k2] - D2.zr[0] + G16.Rw, zc: D2.zc[k2] - D2.zc[0] + G16.Rw + 0.098, pitch: D2.th[k2] - D2.th[0],
-                   wheelAng: -D2.x[k2] / G16.Rw, us: [D2.uf[k2] / 2, D2.uf[k2] / 2, D2.ur[k2] / 2, D2.ur[k2] / 2] };
+                   wheelAng: -lerpAt(D2.x, T * 30) / G16.Rw, wheelRate: D2.v[k2] / G16.Rw, us: [D2.uf[k2] / 2, D2.uf[k2] / 2, D2.ur[k2] / 2, D2.ur[k2] / 2] };
       B.v.setFrame(r16, k2); B.v.draw();
       if (document.activeElement !== $('tbar')) $('tbar').value = Math.round(T / dur() * 1000);
       if (now - lastTxt > 250) {                                  // words rewritten four times a second

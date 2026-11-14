@@ -112,13 +112,14 @@
     $('again').addEventListener('click', () => { T = 0; playing = true; play.textContent = 'Pause'; });
     tbar.addEventListener('input', () => { if (ride) { T = tbar.value / 1000 * dur(); } });
 
+    const lerpAt = (a, f) => { const i = Math.max(0, Math.min(a.length - 2, Math.floor(f))), t = Math.max(0, Math.min(1, f - i)); return a[i] + t * (a[i + 1] - a[i]); };   // the wheel's position between stored pictures (kinematics only)
     function tick(now) {
       requestAnimationFrame(tick);
       if (!ride) return;
       const dt = last == null ? 0 : Math.min(0.1, (now - last) / 1000); last = now;
       if (playing) { T += dt; if (T >= dur()) { T = dur(); playing = false; play.textContent = 'Play'; } }   // 'Ride again' is its own button; Play at the end starts over
       const D = ride.D, k = Math.min(D.frames - 1, Math.round(T * ride.fps));
-      if (D.x) { cart.x = D.x[k]; cart.vx = D.v[k]; cart.zb = D.zb[k]; cart.zw = D.zw[k]; cart.us = D.us ? D.us[k] : 0; } else { cart.x = 0.5; cart.vx = 0; cart.zb = REST.zb; cart.zw = REST.zw; cart.us = 0; }
+      if (D.x) { cart.x = D.x[k]; cart.xw = lerpAt(D.x, T * ride.fps); cart.vx = D.v[k]; cart.zb = D.zb[k]; cart.zw = D.zw[k]; cart.us = D.us ? D.us[k] : 0; } else { cart.x = 0.5; cart.xw = 0.5; cart.vx = 0; cart.zb = REST.zb; cart.zw = REST.zw; cart.us = 0; }
       view.setFrame(ride, k); view.draw();
       if (document.activeElement !== tbar) tbar.value = Math.round(T / dur() * 1000);
       if (now - lastTxt > 250) {                                  // words rewritten four times a second

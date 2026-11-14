@@ -319,6 +319,8 @@
       const k = Math.min(ride.ready - 1, Math.max(0, Math.round(T * D.fps)));
       ds.set('t_play', T); ds.set('i_now', k);
       fluid.frame = ride.bytes.subarray(k * M, (k + 1) * M);
+      { const f = Math.min(ride.ready - 1, Math.max(0, T * D.fps)), i = Math.min(Math.max(0, ride.ready - 2), Math.floor(f)), u = Math.max(0, Math.min(1, f - i));
+        cart.xw = ride.ready > 1 ? ride._x[i] + u * (ride._x[i + 1] - ride._x[i]) : ride._x[k]; }   // the wheel's position between stored pictures (kinematics)
       cart.x = ride._x[k]; cart.vx = ride._v[k]; cart.zw = ride._zw[k]; cart.zb = ride._zb[k];
       ds.set('x_now', cart.x); ds.set('v_now', cart.vx); ds.set('zb_now', cart.zb); ds.set('zw_now', cart.zw);
       ds.set('lean_now', ride._lean[k]); ds.set('spill_now', ride._spill[k]);
