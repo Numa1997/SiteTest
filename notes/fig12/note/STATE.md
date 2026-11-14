@@ -20,6 +20,9 @@ the page to run 10 (`DIR` in `public/scripts/guinness-jax-play.js`), `generation
   `notes/fig12/readers/roundN-*.md`.
 - Report to owner once at the end: plain short words, no tables, no option lists.
 
+## Owner's word, 14 Nov 2026 (overrides the brief's 'repeat until no stops')
+- "Don't loop too many times." Round 2 is the last reader round: fix its real errors and clear stops, then publish.
+
 ## What is live
 - phyeinusul.com plays run 8 (`public/data/fig12/2026-11-13-run8/`) with the old note. Unchanged by this session so far.
 
