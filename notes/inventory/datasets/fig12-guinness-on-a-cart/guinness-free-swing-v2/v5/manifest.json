@@ -1,0 +1,16 @@
+{
+ "notebook": "numakoudsie/guinness-free-swing-v2",
+ "version": 5,
+ "files": [
+  {
+   "file": "2026-11-12/free_swing_v2.json",
+   "bytes": 339570,
+   "sha256": "28d8b6d9f0f25a9655f67165eeb47cd81f02a9f53792edbf40877f77cb029abd"
+  },
+  {
+   "file": "2026-11-12/progress.log",
+   "bytes": 2671,
+   "sha256": "5360a6893d3e4b6a7251e3c7f7d612dd1aa85b8e2ba84acdd386fcc238a51084"
+  }
+ ]
+}

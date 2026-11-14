@@ -1,0 +1,21 @@
+{
+ "notebook": "numakoudsie/guinness-on-a-cart-stout-in-jax",
+ "version": 9,
+ "files": [
+  {
+   "file": "2026-11-14/progress.log",
+   "bytes": 996,
+   "sha256": "7442320c023e9456243d0f8767bcba268767911226eb65a15e4d634644655a21"
+  },
+  {
+   "file": "2026-11-14/ride_sharp30_preview.npz",
+   "bytes": 1119296,
+   "sha256": "410dcdb2584b0fa4a554c3b301ed501aca94cc87a336af73e458b3adee5801b5"
+  },
+  {
+   "file": "2026-11-14/summary.json",
+   "bytes": 2078,
+   "sha256": "952b1b998cb754c83a5c4d653ea9f3906c536431c1fa9c46741c4c5bf22400fb"
+  }
+ ]
+}

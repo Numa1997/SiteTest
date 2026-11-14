@@ -35,6 +35,12 @@ Done in Phase 2:
    Copies of README and manifests: `notes/inventory/datasets/fig14-schrodinger-sphere/`.
 5. Deleted `schrodinger-sphere-3d-generation` at 13:40 UTC (its only data is now in the dataset); doc line updated. Account: 27 notebooks.
 
+6. Fig. 12 dataset `numakoudsie/fig12-guinness-on-a-cart` (private) made at 13:47 UTC: every output of the 19 versions with output
+   (stout-in-jax v1-v10, stout-sloshing v1-v5, free-swing-v2 v2-v5; v1 of free-swing saved none), code, logs, manifests; 138 files,
+   all in the dataset with exact sizes; one `.npz` downloaded back is byte-identical. Site: `rides.json` = sloshing v5,
+   `free_swing_v2.json` = free-swing v4, `free_swing_v2_repair.json` = free-swing v5; the JAX rides are packed from the `.npz` here.
+   Copies: `notes/inventory/datasets/fig12-guinness-on-a-cart/`.
+
 Held: Fig. 15 (`fig15-*`, 15 notebooks incl. the 3 `fig15-correction-walls-*` of the running correction session) and Fig. 16
 (`fig-16-guinness-cart-with-control`): not touched while those sessions run. 
 ## The owner's rules (from the brief, CLAUDE.md and the owner's preferences)
