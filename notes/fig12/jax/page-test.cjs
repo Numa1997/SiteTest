@@ -1,4 +1,4 @@
-// Fig. 12 in JAX: the built Kaggle page in headless Chromium at four widths, with the stored rides of public/data/fig12/2026-11-13/.
+// Fig. 12 in JAX: the built Kaggle page in headless Chromium at four widths, with the stored rides the player's index lists (run 8: public/data/fig12/2026-11-13-run8/).
 // For each width: errors, sideways scroll, the ride list, the frame rule (frame drawn = round(30 T)), and screenshots of the stage
 // (and of the kerb ride at the head's spill). node notes/fig12/jax/page-test.cjs <out dir>
 const { chromium } = require('playwright'); const { spawn } = require('child_process'); const path = require('path'), fs = require('fs');
@@ -21,7 +21,7 @@ const { chromium } = require('playwright'); const { spawn } = require('child_pro
       await p.evaluate((i) => GuinnessJax.choose(i), i);
       await p.waitForFunction(() => document.getElementById('cap-t').textContent.includes('ride_sharp30'), null, { timeout: 60000 });
       await p.evaluate(() => GuinnessJax.seek(26 / 30)); await p.waitForTimeout(400);
-      const r = await p.evaluate(() => ({ st: GuinnessJax.state(), cap: document.getElementById('cap-t').textContent, s: document.getElementById('r-s').textContent, h: document.getElementById('r-h').textContent, d: document.getElementById('r-d').textContent }));
+      const r = await p.evaluate(() => ({ st: GuinnessJax.state(), cap: document.getElementById('cap-t').textContent, sg: document.getElementById('r-sg').textContent, s: document.getElementById('r-s').textContent, hg: document.getElementById('r-hg').textContent, h: document.getElementById('r-h').textContent, d: document.getElementById('r-d').textContent }));
       console.log(W + 'px kerb', JSON.stringify(r));
       await p.locator('#stage').screenshot({ path: path.join(out, `kerb-${W}.png`) });
       await p.screenshot({ path: path.join(out, `page-${W}.png`), fullPage: false });

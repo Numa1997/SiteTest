@@ -1,0 +1,95 @@
+{
+ "generated": "2026-11-14",
+ "device": "Tesla T4",
+ "jax": "0.11.1",
+ "fill": 0.125,
+ "rho": 1007.0,
+ "fps": 30,
+ "tasks": [
+  {
+   "name": "ride_sharp30_preview",
+   "kind": "ride",
+   "dx": 0.0015,
+   "model": "full",
+   "end": 4.0,
+   "road": "one sharp 30 mm bump",
+   "v0": 1.5,
+   "ctrl": "preview",
+   "cells": 370386,
+   "particles": 1001952,
+   "mp": 4.2874640044544424e-07,
+   "steps": 2040,
+   "compile_s": 11.7,
+   "run_s": 185.3,
+   "ms_per_step": 90.9,
+   "its_per_step": 130.9,
+   "itmax": 298,
+   "resmax": 9.999678695749026e-06,
+   "nselmax": 171458,
+   "K": 621210,
+   "s_per_simulated_s": 46.7,
+   "spilled_g": 0.0,
+   "drops_max": 8,
+   "volume_kept": 1.0,
+   "head_spilled_ml": 2.46,
+   "head_ml": 91.3,
+   "head": {
+    "R32": 3.4e-05,
+    "phi_l": 0.27,
+    "gamma": 0.0442,
+    "E_inf": 0.0187,
+    "G0": 166.43999999999994,
+    "tau_y": 5.4149999999999965,
+    "Z": 0.18,
+    "lr": 0.004
+   },
+   "head_mass": true,
+   "books": {
+    "stout_particles": 1001952,
+    "stout_err_particles_max": 0,
+    "stout_glass_g_end": 429.5833,
+    "stout_out_g_end": 0.0,
+    "head_ml0": 91.314,
+    "head_glass_ml_end": 88.8508,
+    "head_off_ml_end": 2.4632,
+    "head_err_ml_max": 1.0477377429193857e-08
+   },
+   "lean_max_mm": 13.773470878601074,
+   "v_range": [
+    1.2245514691254133,
+    1.5364196935673033
+   ],
+   "impulse_vs_momentum": {
+    "impulse_x": -2.838055691406175e-05,
+    "momentum_x_end": 2.8380556914061738e-05
+   },
+   "plant": {
+    "w": 18.316989560623956,
+    "zeta": 0.4250231022393094,
+    "beta": 1.5407181225269262,
+    "measured": "run 8 (notebook version 8), free_full_1.5, ring 13"
+   },
+   "control": {
+    "i_max_A": 2.949657167228655,
+    "icmd_max_A": 8.70868008335431,
+    "frames_current_limited": 6,
+    "us_max_N": 0.0,
+    "ipar_max_A": 0.0,
+    "gains": {
+     "K": [
+      74.00419568184816,
+      -1295.0100293472397,
+      -44.86594617998763,
+      -150.00000000000102
+     ],
+     "Ks": [
+      -501.2156998123334,
+      11.923168259572924,
+      -6.34279425396823,
+      630.0044481464855
+     ]
+    }
+   }
+  }
+ ]
+}

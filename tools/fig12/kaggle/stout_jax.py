@@ -43,6 +43,8 @@ MODELS = {
     # the whole model (notes/fig12/research/verification.md): viscosity, the glass's boundary layer, the surface that cannot stretch
     # (protein skin, or the head as a lid), and the head of foam: its weight on the stout, its friction on the glass, its spilling
     "full": dict(nu=NU_STOUT, wall=True, skin=True, head=True),
+    # the head as a heavy lid only (weight and mass, no shear resistance, no friction on the glass): the check of its inertia
+    "lid": dict(nu=NU_STOUT, wall=True, skin=False, head=True, sheet=False),
 }
 # The head of foam: every number from notes/fig12/research/data-for-solver.md (13 Nov 2026).
 HEAD0 = 0.019        # m, the head as served: 18-20 mm specification; 17.5-22.2 mm measured two minutes after pouring (KegWorks 2019)
@@ -210,7 +212,7 @@ def cut_lo(f, ax):     # the face below each cell (index i), cell-shaped
 
 # ====================================================================== the solver
 class Stout:
-    def __init__(self, G, model="full", ppc=2, seed=1, rho=1007.0, K_frac=0.62, M_drops=16384, tol=1e-5, maxit=600):
+    def __init__(self, G, model="full", ppc=2, seed=1, rho=1007.0, K_frac=0.62, M_drops=16384, tol=1e-5, maxit=600, head_mass=True):
         self.G = G; self.rho = rho; self.ppc = ppc
         M = MODELS[model]; self.model = model
         self.nu = M["nu"]; self.gs = math.sqrt(M["nu"] * OMEGA / 2) if M["wall"] else 0.0
@@ -238,7 +240,10 @@ class Stout:
         self.off64 = jnp.asarray(o)
         self.corners = jnp.asarray(np.array([(a, b, c) for a in (0, 1) for b in (0, 1) for c in (0, 1)], np.int32))
         # the head of foam lives on the columns of the grid (n x n), as a thickness h_f on top of the stout's surface
-        self.head = M["head"]; self.rho_f = PHI_F * rho
+        self.head = M["head"]; self.rho_f = PHI_F * rho; self.sheet = M.get("sheet", True)
+        # the head's mass (13 Nov 2026, run 8): the head moves up and down with the stout's surface, so the stout must accelerate
+        # it; set False to recover runs 6 and 7 (weight only)
+        self.head_mass = head_mass
         X, Y = np.meshgrid(G.xc, G.xc, indexing="ij")
         self.rc = jnp.asarray(np.hypot(X, Y), F32); self.colx = jnp.asarray(X, F32); self.coly = jnp.asarray(Y, F32)
         # the open part of each column at the fill (the horizontal face nearest the fill height): the head lies on every column
@@ -258,7 +263,7 @@ class Stout:
         return dict(xp=jnp.asarray(self.P0), vp=jnp.zeros((N, 3), F32), C=jnp.zeros((N, 3, 3), F32),
                     act=jnp.ones(N, bool), fly=jnp.zeros(N, bool), landed=jnp.zeros(N, bool), stuck=jnp.zeros(N, bool),
                     p=jnp.zeros(self.dims, F32), ewall=z64, efoam=z64, eskin=z64,
-                    hf=hf0, foam_spill=z64, foam0=jnp.sum((hf0 * self.afill).astype(F64)) * self.dx ** 2,
+                    hf=hf0, wh=jnp.zeros((self.n, self.n), F32), foam_spill=z64, foam0=jnp.sum((hf0 * self.afill).astype(F64)) * self.dx ** 2,
                     bx=jnp.full((self.MF, 3), jnp.nan, F32), bv=jnp.zeros((self.MF, 3), F32), bvol=jnp.zeros(self.MF, F32),
                     bptr=jnp.zeros((), I32))
 
@@ -394,7 +399,7 @@ class Stout:
                 u1 = u; tf = lo(top, comp, False) | hi(top, comp, False)
                 u = jnp.where(ok & tf, u * jnp.exp(-self.gs / dx * dt), u)
                 es = es + 0.5 * dV * jnp.sum(jnp.where(ok, u1 * u1 - u * u, 0.0).astype(F64))
-            if self.head and comp == 2:                                       # the head: a sheet that resists shear
+            if self.head and self.sheet and comp == 2:                        # the head: a sheet that resists shear
                 u1 = u; u = self.head_sheet(u, ok, top, hf, dt)
                 ef = ef + 0.5 * dV * jnp.sum(jnp.where(ok, u1 * u1 - u * u, 0.0).astype(F64))
             out.append(u.astype(F32))
@@ -514,20 +519,39 @@ class Stout:
         tRL = jnp.where(cRL, jnp.clip(phR / jnp.where(cRL, phR - phL, -1.0), 0.05, 1.0), 1.0)   # surface's place, R liquid
         return liqL, liqR, tLR, tRL
 
-    def pressure(self, vel, ph, liq, p_prev, ps):
+    def _surf_faces(self, ph, liq):
+        liqL, liqR, tLR, tRL = self._faces(ph, liq, 2)
+        return liqL & ~liqR & (self.th[2] > 0)
+
+    def pressure(self, vel, ph, liq, p_prev, ps, mu=None, w_old=None, geff_dt=0.0):
         """ps: the pressure on the free surface (the weight of the head), in the solver's units (Pa x dt / rho), one value per
         column, set on the air side of the surface. Ghost fluid: p = ps at the surface, so the air neighbour of a liquid cell
-        reads p_ghost = p_liq (1 - 1/theta) + ps / theta: the diagonal gets th / theta and the right side th ps / theta."""
+        reads p_ghost = p_liq (1 - 1/theta) + ps / theta: the diagonal gets th / theta and the right side th ps / theta.
+        mu (run 8): the head's mass per area over rho, m_s/rho = rho_f h_f/rho (m), one value per column. The head moves up and
+        down with the surface, so under it p_s = m_s (g_eff + dw/dt): in the solver's units P_s = mu (g_eff dt + w' - w_old),
+        with w' the new vertical velocity of the face the surface crosses (liquid below, air above). Put into the ghost-fluid
+        rule this is a Robin condition: the face takes theta + mu/dx in place of theta, and the load mu (g_eff dt + w* - w_old),
+        w* the face's velocity before the pressure step. At rest it gives the hydrostatic pressure with the head's weight; in
+        motion the stout carries the head's inertia, implicitly (an explicit, lagged load would be unstable for short waves:
+        mu k = 5.1 mm x 2094 1/m = 10.7 at the grid's shortest wave)."""
         dx = self.dx; diag = jnp.zeros(self.dims, F32); div = jnp.zeros(self.dims, F32); rhs = jnp.zeros(self.dims, F32)
         cp, cm, faces, loads = [], [], [], []
         ps3 = jnp.broadcast_to(ps[:, :, None], self.dims).astype(F32)
         for ax in range(3):
-            th = self.th[ax]; liqL, liqR, tLR, tRL = self._faces(ph, liq, ax); faces.append((liqL, liqR, tLR, tRL))
+            th = self.th[ax]; liqL, liqR, tLR, tRL = self._faces(ph, liq, ax)
+            surf = None
+            if ax == 2 and mu is not None:                                   # the head's mass on the faces the surface crosses
+                surf = liqL & ~liqR & (th > 0); muF = jnp.broadcast_to(mu[:, :, None], tLR.shape)
+                tLR = jnp.where(surf, tLR + muF / dx, tLR)
+            faces.append((liqL, liqR, tLR, tRL))
             open_ = th > 0
             dL = jnp.where(open_, jnp.where(liqR, th, th / tLR), 0.0)
             dR = jnp.where(open_, jnp.where(liqL, th, th / tRL), 0.0)
             diag = diag + cut_hi(dL, ax) + cut_lo(dR, ax)
-            psL, psR = lo(ps3, ax, 0.0), hi(ps3, ax, 0.0); loads.append((psL, psR))
+            psL, psR = lo(ps3, ax, 0.0), hi(ps3, ax, 0.0)
+            if surf is not None:
+                psR = jnp.where(surf, muF * (geff_dt + vel[2] - w_old), psR).astype(F32)
+            loads.append((psL, psR))
             sL = jnp.where(open_ & liqL & ~liqR, th * psR / tLR, 0.0)      # liquid L, air R: the surface load seen by L
             sR = jnp.where(open_ & liqR & ~liqL, th * psL / tRL, 0.0)
             rhs = rhs + cut_hi(sL, ax) + cut_lo(sR, ax)
@@ -631,23 +655,59 @@ class Stout:
         return s, mom
 
     # ---------------------------------------------------------------- one fluid step (Taichi Stout.step)
-    def step(self, s, dt, gx, gz):
-        dt = jnp.asarray(dt, F32); gx = jnp.asarray(gx, F32); gz = jnp.asarray(gz, F32)
+    def prepare(self, s):
+        """The part of a step that depends only on the particles: their velocities on the grid, the level set, the surface. The
+        ride computes it before the cart's sub-steps, so the wall probes read the surface the last fluid step left (as
+        World.readProbes in stout-cart.js), and the step then reuses it."""
         vel, mass, cnt = self.p2g(s)
+        ph, liq, nsel, phr = self.level_set(s, cnt)
+        H, _ = self.surface(phr)
+        return dict(vel=vel, mass=mass, cnt=cnt, ph=ph, liq=liq, nsel=nsel, phr=phr, H=H)
+
+    def probes(self, H):
+        """The two level probes on the glass's wall at r = R(fill), theta = 0 (front) and pi (back), read as
+        Fluid.columnHeightAt of stout-cart.js reads them: beyond r1 = R - 2.5 dx the height is extended straight along the
+        radius from r1 and r1 - 1.5 dx, each read bilinearly from the columns (columns without a surface left out).
+        Returns y_q = (eta_front - eta_back)/2."""
+        G = self.G; dx = self.dx; r = G.Rfill; r1 = r - 2.5 * dx; r2 = r1 - 1.5 * dx
+        Hf = jnp.where(jnp.isfinite(H), H, 0.0); w0 = jnp.isfinite(H).astype(F32)
+        def bil(x, y):
+            fx = (x - G.x0) / dx - 0.5; fy = (y - G.x0) / dx - 0.5
+            i = jnp.clip(jnp.floor(fx).astype(I32), 0, self.n - 2); j = jnp.clip(jnp.floor(fy).astype(I32), 0, self.n - 2)
+            tx = fx - i; ty = fy - j
+            ws = [((1 - tx) * (1 - ty), i, j), (tx * (1 - ty), i + 1, j), ((1 - tx) * ty, i, j + 1), (tx * ty, i + 1, j + 1)]
+            num = sum(w * w0[a, b] * Hf[a, b] for w, a, b in ws); den = sum(w * w0[a, b] for w, a, b in ws)
+            return num / jnp.maximum(den, 1e-9)
+        def at(sgn):
+            h1, h2 = bil(sgn * r1, 0.0), bil(sgn * r2, 0.0)
+            return h1 + (r - r1) * (h1 - h2) / (r1 - r2)
+        return (0.5 * (at(1.0) - at(-1.0))).astype(F64)
+
+    def step(self, s, dt, gx, gz, prep=None):
+        dt = jnp.asarray(dt, F32); gx = jnp.asarray(gx, F32); gz = jnp.asarray(gz, F32)
+        pr = self.prepare(s) if prep is None else prep
+        vel, mass = pr["vel"], pr["mass"]
         # 13 Nov 2026, run 3: gravity's kick of this step (dt g) was added before the viscous and thin-layer stresses, so the glass's
         # Stokes layer and the head braked gravity itself: a pint at rest lost 0.63 mJ of potential energy in 2 s, the books
         # counted 0.77 mJ "dissipated", and the stout stirred (up to 3.7 mm/s). The stresses now act on the velocity the stout
         # has (the last step's, free of divergence); the body force is added after them, just before the pressure step.
         vel = self.normalize_force(vel, mass, dt, 0.0, 0.0)
-        ph, liq, nsel, phr = self.level_set(s, cnt)
-        H, _ = self.surface(phr)
+        # the head's vertical velocity as the step starts: its own, kept from the last step (the particles' hand-over smooths
+        # the stout's velocity at the surface, and the head's momentum equation must close step by step)
+        w_old = jnp.broadcast_to(s["wh"][:, :, None], vel[2].shape)
+        ph, liq, nsel, H = pr["ph"], pr["liq"], pr["nsel"], pr["H"]
         if self.nu > 0: vel = self.viscosity(vel, mass, dt)
         z = jnp.zeros((), F64); ew = es = ef = z
         if self.gs > 0 or self.skin or self.head: vel, ew, es, ef = self.friction(vel, mass, ph, liq, dt, s["hf"])
         vel = [jnp.where((mass[c] > 1e-6) & (self.th[c] > 0), vel[c] + dt * (gx if c == 0 else (gz if c == 2 else 0.0)), vel[c]).astype(F32) for c in range(3)]
         # the head's weight on the surface (verification.md item 4), in the solver's pressure units (Pa x dt / rho)
         ps = (self.rho_f * s["hf"] * jnp.maximum(-gz, 0.0) * dt / self.rho).astype(F32) if self.head else jnp.zeros((self.n, self.n), F32)
-        vel, known, p, it, res = self.pressure(vel, ph, liq, s["p"], ps)
+        mu = (self.rho_f * s["hf"] / self.rho).astype(F32) if (self.head and self.head_mass) else None
+        vel, known, p, it, res = self.pressure(vel, ph, liq, s["p"], ps, mu=mu, w_old=w_old, geff_dt=jnp.maximum(-gz, 0.0) * dt)
+        if mu is not None:   # the head's new vertical velocity: that of the face its surface crosses (liquid below, air above)
+            sf = self._surf_faces(ph, liq); nsf = jnp.sum(sf, 2)
+            wh = jnp.where(nsf > 0, jnp.sum(jnp.where(sf, vel[2], 0.0), 2) / jnp.maximum(nsf, 1), s["wh"]).astype(F32)
+            s = dict(s, wh=wh)
         vel = self.extrapolate(vel, known)
         s, mom = self.g2p(s, vel, dt, gx, gz)
         if self.head: s = self.head_spill(s, H, dt, gx, gz)
@@ -696,7 +756,8 @@ class Stout:
         return dict(H=H, nfallback=nfb, drops=drops.astype(F32), ndrops=nd, nloose=jnp.sum(loose, dtype=I32), nfly=jnp.sum(fly, dtype=I32),
                     nlanded=jnp.sum(s["landed"], dtype=I32), nstuck=jnp.sum(s["stuck"], dtype=I32), nact=jnp.sum(act, dtype=I32), KE=KE, PE=PE, Px=Px,
                     ewall=s["ewall"], efoam=s["efoam"], eskin=s["eskin"], nliq=jnp.sum(liq, dtype=I32), nsel=nsel,
-                    hf=s["hf"], lumps=s["bx"], lumpvol=s["bvol"], foam_spill=s["foam_spill"], foam0=s["foam0"])
+                    hf=s["hf"], lumps=s["bx"], lumpvol=s["bvol"], foam_spill=s["foam_spill"], foam0=s["foam0"],
+                    vhead=jnp.sum((s["hf"] * self.afill).astype(F64)) * dx * dx)   # the head still in the glass (m^3), for the books
 
     def polar(self, H, nr=16, nth=64, Rmax=None):
         """The stored surface H sampled (bilinear, on the GPU) on rings r = Rmax ir / nr, theta = 2 pi ith / nth;
@@ -740,12 +801,60 @@ def road_table(road, Rw=0.04, xmin=-1.0, xmax=14.0, h=0.0005):
     return xmin, h, za, zr
 
 
+CTRL = {"off": 0, "speed": 1, "preview": 2, "slosh": 3, "joint": 4}
+
+
+def slosh_lqr(Mx, b, cx, w, z, be, Imax, lim=None):
+    """Cart.lqrGains of stout-cart.js: LQR on x = (dv, q, q', xi), u = di, for M_x dv' = b di - c_x dv,
+    q'' = -w^2 q - 2 zeta w q' - beta dv', xi' = -dv; Bryson weights 1/(0.05 m/s)^2, 1/(2 mm)^2, 1/(2 mm w)^2, 1/(0.02 m)^2,
+    r = 1/I_max^2. The JS integrates the Riccati flow to its steady state; here the same equation is solved directly."""
+    import scipy.linalg as sl
+    lim = lim or [0.05, 0.002, 0.002 * w, 0.02]
+    A = np.array([[-cx / Mx, 0, 0, 0], [0, 0, 1, 0], [be * cx / Mx, -w * w, -2 * z * w, 0], [-1, 0, 0, 0]])
+    B = np.array([[b / Mx], [0.0], [-be * b / Mx], [0.0]]); Q = np.diag([1.0 / v ** 2 for v in lim]); r = 1.0 / Imax ** 2
+    P = sl.solve_continuous_are(A, B, Q, np.array([[r]]))
+    return (B.T @ P / r).ravel()
+
+
+def susp_lqr(Ms, mw, k, c, kt, ct, a=0.5, sm=0.010, d=0.0002, u=40.0):
+    """Cart.suspGains of stout-cart.js: the quarter car's LQR on y = (stroke, v_b, v_w, tyre compression), cost on the body's
+    acceleration a (cross term), the stroke, the tyre's compression and the force (Bryson: 0.5 m/s^2, 10 mm, 0.2 mm, 40 N)."""
+    import scipy.linalg as sl
+    A = np.array([[0, 1, -1, 0], [-k / Ms, -c / Ms, c / Ms, 0], [k / mw, c / mw, -(c + ct) / mw, kt / mw], [0, 0, -1, 0]])
+    B = np.array([[0.0], [1 / Ms], [-1 / mw], [0.0]])
+    Ca = np.array([-k / Ms, -c / Ms, c / Ms, 0]); Da = 1 / Ms; wa = 1 / a ** 2
+    Q = wa * np.outer(Ca, Ca) + np.diag([1 / sm ** 2, 0, 0, 1 / d ** 2]); N = (wa * Ca * Da)[:, None]; R = wa * Da * Da + 1 / u ** 2
+    P = sl.solve_continuous_are(A, B, Q, np.array([[R]]), s=N)
+    return ((B.T @ P + N.T) / R).ravel()
+
+
+def observer_design(w, z, be, Mx, b, cx, Ts, WF=0.5, Wa=0.002):
+    """Observer.design of stout-cart.js: the Kalman filter's model on z = (v, q, q') discretised exactly for a current held
+    over the sample (A_d, B_d from one exponential of [[A, B], [0, 0]] T_s), and the noise's covariance by Van Loan's method."""
+    import scipy.linalg as sl
+    A = np.array([[-cx / Mx, 0, 0], [0, 0, 1], [be * cx / Mx, -w * w, -2 * z * w]]); B = np.array([b / Mx, 0, -be * b / Mx])
+    G = np.array([[1 / Mx, 0], [0, 0], [-be / Mx, 1]]); W = np.diag([WF, Wa])
+    M4 = np.zeros((4, 4)); M4[:3, :3] = A * Ts; M4[:3, 3] = B * Ts; E4 = sl.expm(M4)
+    Ad, Bd = E4[:3, :3], E4[:3, 3]
+    GWG = G @ W @ G.T; M6 = np.zeros((6, 6)); M6[:3, :3] = -A; M6[:3, 3:] = GWG; M6[3:, 3:] = A.T
+    E6 = sl.expm(M6 * Ts); Qd = Ad @ E6[:3, 3:]
+    return Ad, Bd, 0.5 * (Qd + Qd.T)
+
+
 class Cart:
-    """Cart of stout-cart.js in JAX. State: a dict of float64 scalars. ctrl: 0 off, 1 speed PI, 2 speed PI + road preview."""
+    """Cart of stout-cart.js in JAX (float64), with its controllers, sampled every T_s = 1 ms (Cart.sample):
+    ctrl "off" (i = c_x v0 / b), "speed" (PI with anti-windup), "preview" (PI + the road ahead one current lag early),
+    "slosh" (LQR on the Kalman estimate of (v, q, q') and the integral), "joint" (the slosh LQR + the current that cancels the
+    heave's parametric term + the active suspension's own LQR); susp = 1 adds the skyhook (not with "joint", which has its LQR).
+    The observer (Observer of stout-cart.js) is fed by the encoder's speed every sample, the measured current held over the
+    sample, and the two wall probes' half difference once per fluid step; "joint" puts the body accelerometer's a_z into its
+    model. Sensor noise: none (the site's default). plant = (w, zeta, beta): the first mode as the solver has it."""
 
     def __init__(self, params, road):
-        self.p = {k: float(v) for k, v in params.items() if k not in ("ctrl", "susp")}
-        self.ctrl = int(params.get("ctrl", 1)); self.susp = int(params.get("susp", 0))
+        self.p = {k: float(v) for k, v in params.items() if k not in ("ctrl", "susp", "plant", "sensors")}
+        c = params.get("ctrl", 1); self.ctrl = CTRL[c] if isinstance(c, str) else int(c); self.susp = int(params.get("susp", 0))
+        self.plant = dict(params.get("plant") or dict(w=2 * math.pi * 3.42, zeta=0.005, beta=1.54))
+        self.sensors = dict(dict(sigQ=0.0008, sigV=0.002, WF=0.5, Wa=0.002), **(params.get("sensors") or {}))
         self.xmin, self.h, za, self.zr = road; self.za = jnp.asarray(za, F64); self.nza = len(za)
 
     def axle(self, x):
@@ -762,24 +871,84 @@ class Cart:
     def massX(self, ml):
         P = self.p; return P["Mb"] + ml + P["mw"] + (P["Iw"] + P["Ngear"] ** 2 * P["Jm"]) / P["Rw"] ** 2
 
+    def design(self, ml):
+        """The gains and the filter, once, for the full glass (lqrGains and suspGains cache theirs on first use)."""
+        P = self.p; m = self.plant; Mx = float(self.massX(ml)); b = self.bForce(); so = self.sensors
+        self.K = jnp.asarray(slosh_lqr(Mx, b, P["cx"], m["w"], m["zeta"], m["beta"], P["Imax"]), F64)
+        self.Ks = jnp.asarray(susp_lqr(P["Mb"] + ml, P["mw"], P["k"], P["c"], P["kt"], P["ct"]), F64)
+        Ad, Bd, Qd = observer_design(m["w"], m["zeta"], m["beta"], Mx, b, P["cx"], P["Ts"], so["WF"], so["Wa"])
+        self.Ad0, self.Bd0, self.Qd = jnp.asarray(Ad, F64), jnp.asarray(Bd, F64), jnp.asarray(Qd, F64)
+        self.Mx0 = Mx
+
     def init(self, x0, ml):
         P = self.p; Ms = P["Mb"] + ml; a, d = self.axle(jnp.asarray(x0, F64))
+        self.design(float(ml))
         zw = a - (Ms + P["mw"]) * P["g"] / P["kt"]; zb = zw + P["Ls"] - Ms * P["g"] / P["k"]
-        z = jnp.zeros((), F64)
+        z = jnp.zeros((), F64); so = self.sensors; w = self.plant["w"]
         c = dict(x=jnp.asarray(x0, F64), vx=jnp.asarray(P["v0"], F64), zb=zb, vzb=z, zw=zw, vzw=z, t=z, ml=jnp.asarray(ml, F64),
-                 xi=z, us=z, uscmd=z, tS=z, ax=z, azb=z, azw=z, ireach=z, N=z)
+                 xi=z, us=z, uscmd=z, tS=z, ax=z, azb=z, azw=z, ireach=z, N=z,
+                 # the observer (Observer.reset: at rest on the set speed, the stout still, known to the sensors' accuracy)
+                 oxh=jnp.asarray([P["v0"], 0.0, 0.0], F64), oP=jnp.diag(jnp.asarray([so["sigV"] ** 2, so["sigQ"] ** 2, (so["sigQ"] * w) ** 2], F64)),
+                 uPrev=z, azMeas=z, py=z, pfresh=z, ipar=z)
         i0 = self.resist(c["vx"], (P["Mb"] + ml + P["mw"]) * P["g"]) / self.bForce()
-        c.update(i=i0, icmd=i0)
+        c.update(i=i0, icmd=i0, uPrev=i0)
         return self.forces(c, 0.0, 0.0)
+
+    def disc(self, az):
+        """Observer.discretise: the swing's stiffness w^2 (1 + a_z/g) for this sample, A_d and B_d again (exact hold)."""
+        P = self.p; m = self.plant; Mx = self.Mx0; b = self.bForce(); cx = P["cx"]; Ts = P["Ts"]
+        w2 = m["w"] ** 2 * (1 + az / 9.81); z, be, w = m["zeta"], m["beta"], m["w"]
+        M4 = jnp.zeros((4, 4), F64)
+        M4 = M4.at[0, 0].set(-cx / Mx * Ts).at[1, 2].set(Ts).at[2, 0].set(be * cx / Mx * Ts).at[2, 1].set(-w2 * Ts).at[2, 2].set(-2 * z * w * Ts)
+        M4 = M4.at[0, 3].set(b / Mx * Ts).at[2, 3].set(-be * b / Mx * Ts)
+        E4 = jax.scipy.linalg.expm(M4)
+        return E4[:3, :3], E4[:3, 3]
+
+    def observe(self, c, u, yv, yq, fresh, az):
+        """Observer.update: predict with u held since the last sample, then correct with y_v and, when the probes are fresh,
+        y_q; Joseph's form."""
+        so = self.sensors
+        Ad, Bd = self.disc(az) if self.ctrl == 4 else (self.Ad0, self.Bd0)
+        xp = Ad @ c["oxh"] + Bd * u; Pp = Ad @ c["oP"] @ Ad.T + self.Qd
+        Rv, Rq = so["sigV"] ** 2, so["sigQ"] ** 2; I3 = jnp.eye(3, dtype=F64)
+        # one measurement (the speed)
+        S1 = Pp[0, 0] + Rv; L1 = Pp[:, 0] / S1; x1 = xp + L1 * (yv - xp[0])
+        IKH1 = I3 - jnp.outer(L1, jnp.asarray([1.0, 0.0, 0.0], F64)); P1 = IKH1 @ Pp @ IKH1.T + Rv * jnp.outer(L1, L1)
+        # two (speed and the probes)
+        S2 = Pp[:2, :2] + jnp.diag(jnp.asarray([Rv, Rq], F64)); det = S2[0, 0] * S2[1, 1] - S2[0, 1] * S2[1, 0]
+        Si = jnp.asarray([[S2[1, 1], -S2[0, 1]], [-S2[1, 0], S2[0, 0]]], F64) / det
+        L2 = Pp[:, :2] @ Si; nu2 = jnp.asarray([yv, yq], F64) - xp[:2]; x2 = xp + L2 @ nu2
+        H2 = jnp.asarray([[1.0, 0, 0], [0, 1.0, 0]], F64); IKH2 = I3 - L2 @ H2
+        P2 = IKH2 @ Pp @ IKH2.T + L2 @ jnp.diag(jnp.asarray([Rv, Rq], F64)) @ L2.T
+        x = jnp.where(fresh > 0, x2, x1); Pn = jnp.where(fresh > 0, P2, P1)
+        return x, 0.5 * (Pn + Pn.T)
 
     def sample(self, c):
         P = self.p
         i0 = self.resist(jnp.asarray(P["v0"], F64), (P["Mb"] + c["ml"] + P["mw"]) * P["g"]) / self.bForce()
-        e = P["v0"] - c["vx"]
-        if self.ctrl in (1, 2):
+        e = P["v0"] - c["vx"]; b = self.bForce()
+        if self.ctrl in (3, 4):
+            # the sensors and the observer: the encoder's speed, the probes' newest reading if the fluid has stepped since the
+            # last sample, the current held over the last sample; joint: the body accelerometer's a_z into the model
+            az = c["azb"]
+            xh, Ph = self.observe(c, c["uPrev"], c["vx"], c["py"], c["pfresh"], az)
+            c = dict(c, oxh=xh, oP=Ph, uPrev=c["i"], azMeas=az, pfresh=jnp.zeros((), F64))
+            K = self.K
+            ic = i0 - (K[0] * (xh[0] - P["v0"]) + K[1] * xh[1] + K[2] * xh[2] + K[3] * c["xi"])
+            if self.ctrl == 4:
+                m = self.plant
+                ipar = -self.massX(c["ml"]) * m["w"] ** 2 * (az / P["g"]) * xh[1] / (m["beta"] * b)
+                ic = ic + ipar
+                Ms = P["Mb"] + c["ml"]; s0 = P["Ls"] - Ms * P["g"] / P["k"]; N0 = (Ms + P["mw"]) * P["g"]
+                y = jnp.stack([c["zb"] - c["zw"] - s0, c["vzb"], c["vzw"], (c["N"] - N0) / P["kt"]])
+                u = jnp.clip(-jnp.dot(self.Ks, y), -P["Umax"], P["Umax"])
+                xi = jnp.where(jnp.abs(ic) < P["Imax"], c["xi"] + e * P["Ts"], c["xi"])
+                return dict(c, icmd=ic, xi=xi, uscmd=u, ipar=ipar)
+            xi = jnp.where(jnp.abs(ic) < P["Imax"], c["xi"] + e * P["Ts"], c["xi"])
+        elif self.ctrl in (1, 2):
             ic = i0 + P["Kp"] * e + P["Ki"] * c["xi"]
             if self.ctrl == 2:
-                a, d = self.axle(c["x"] + c["vx"] * P["tauI"]); ic = ic + (P["Mb"] + c["ml"] + P["mw"]) * P["g"] * d / self.bForce()
+                a, d = self.axle(c["x"] + c["vx"] * P["tauI"]); ic = ic + (P["Mb"] + c["ml"] + P["mw"]) * P["g"] * d / b
             xi = jnp.where(jnp.abs(ic) < P["Imax"], c["xi"] + e * P["Ts"], c["xi"])
         else:
             ic = i0; xi = c["xi"]
@@ -800,8 +969,8 @@ class Cart:
 
     def step(self, c, hh, Fx, Fz):
         P = self.p; tS = c["tS"] + hh; due = tS >= P["Ts"] - 1e-12
-        cs = self.forces(self.sample(dict(c, tS=tS - P["Ts"])), Fx, Fz)
-        c = jax.tree_util.tree_map(lambda a, b: jnp.where(due, a, b), cs, dict(c, tS=tS))
+        # the controller only when a sample is due (lax.cond: the filter's matrix exponential is not computed in between)
+        c = lax.cond(due, lambda cc: self.forces(self.sample(dict(cc, tS=tS - P["Ts"])), Fx, Fz), lambda cc: dict(cc, tS=tS), c)
         vx = c["vx"] + hh * c["ax"]; vzb = c["vzb"] + hh * c["azb"]; vzw = c["vzw"] + hh * c["azw"]
         c = dict(c, vx=vx, vzb=vzb, vzw=vzw, x=c["x"] + hh * vx, zb=c["zb"] + hh * vzb, zw=c["zw"] + hh * vzw,
                  i=c["ireach"] + (c["i"] - c["ireach"]) * jnp.exp(-hh / P["tauI"]),
@@ -825,16 +994,20 @@ def make_advance(S, mode, cart=None, cfl=0.8, dtmax=0.002, push=None):
             s, d = S.step(s, dt, -ax, -9.81)
             ex = dict(ex, vmax=d["vmax"].astype(F64))
         else:
-            cs = ex["cart"]; vx0, vz0 = cs["vx"], cs["vzb"]
+            # World.advance of stout-cart.js: the probes read the surface the last fluid step left (fresh for the cart's
+            # first sample after it; the reading at rest before the first step is the filter's start, not a measurement)
+            prep = S.prepare(s)
+            cs = dict(ex["cart"], py=S.probes(prep["H"]), pfresh=jnp.where(ex["probeOk"], 1.0, ex["cart"]["pfresh"]))
+            vx0, vz0 = cs["vx"], cs["vzb"]
             nsub = jnp.maximum(1, jnp.round(dt / 1e-4).astype(I32)); hc = dt / nsub
             cs = lax.fori_loop(0, nsub, lambda _, cc: cart.step(cc, hc, ex["F"][0], ex["F"][1]), cs)
             ax, az = (cs["vx"] - vx0) / dt, (cs["vzb"] - vz0) / dt
-            s, d = S.step(s, dt, -ax, -9.81 - az)
+            s, d = S.step(s, dt, -ax, -9.81 - az, prep=prep)
             P = d["mom"] * S.mp
             F = jnp.where(ex["haveP"], -(P - ex["P"]) / dt, 0.0)
             cs = dict(cs, ml=S.rho * S.V * d["nact"].astype(F64) / S.N + d["mhead"])
             ex = dict(ex, cart=cs, P=P, F=jnp.stack([F[0], F[2]]), haveP=jnp.ones((), bool), vmax=d["vmax"].astype(F64),
-                      imp=ex["imp"] + jnp.stack([F[0], F[2]]) * dt)
+                      imp=ex["imp"] + jnp.stack([F[0], F[2]]) * dt, probeOk=jnp.ones((), bool))
         st = dict(steps=st["steps"] + 1, its=st["its"] + d["it"], itmax=jnp.maximum(st["itmax"], d["it"]),
                   resmax=jnp.maximum(st["resmax"], d["res"].astype(F64)), nselmax=jnp.maximum(st["nselmax"], d["nsel"]))
         return s, t + dt, ex, st
@@ -848,8 +1021,8 @@ def make_advance(S, mode, cart=None, cfl=0.8, dtmax=0.002, push=None):
 
 
 def ride_extra(S, cart_obj, x0=0.5):
-    ml = S.rho * S.V + (S.rho_f * HEAD0 * float(np.sum(np.asarray(S.rc) < S.G.Rfill)) * S.dx ** 2 if S.head else 0.0)
+    ml = S.rho * S.V + (S.rho_f * HEAD0 * float(np.sum(np.asarray(S.afill))) * S.dx ** 2 if S.head else 0.0)
     # the stout starts at rest in the glass, so its momentum relative to the glass is exactly zero: the push of the very first
     # step counts too (13 Nov 2026; before, the first step's push was skipped, 4 % of the impulse in a two-frame check)
     return dict(cart=cart_obj.init(x0, ml), P=jnp.zeros(3, F64), F=jnp.zeros(2, F64), haveP=jnp.ones((), bool),
-                vmax=jnp.zeros((), F64), imp=jnp.zeros(2, F64), t_end=jnp.zeros((), F64))
+                vmax=jnp.zeros((), F64), imp=jnp.zeros(2, F64), t_end=jnp.zeros((), F64), probeOk=jnp.zeros((), bool))

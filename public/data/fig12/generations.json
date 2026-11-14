@@ -1,7 +1,64 @@
 {
  "about": "Generations of the Fig. 12 rides computed on Kaggle, newest last. The page plays the newest; older ones are kept for the record.",
  "generations": [
-  {"date": "2026-11-12", "solver": "v1", "note": "over-damped (damping ratio 0.10 to 0.14 after the last bump): glass faces held at zero velocity, a no-slip wall one cell thick; kept for the record, with the free-swing tests of solver v2"},
-  {"date": "2026-11-13", "solver": "v2", "note": "ghost-fluid surface, free-slip glass faces, the Fig. 12 note's wall and foam friction; played by the page"}
+  {
+   "date": "2026-11-12",
+   "solver": "v1",
+   "note": "over-damped (damping ratio 0.10 to 0.14 after the last bump): glass faces held at zero velocity, a no-slip wall one cell thick; kept for the record, with the free-swing tests of solver v2"
+  },
+  {
+   "date": "2026-11-13",
+   "solver": "v2",
+   "files": "2026-11-13/index.json, rides.json",
+   "note": "Taichi: ghost-fluid surface, free-slip glass faces, the Fig. 12 note's wall and foam friction; played by the page until 13 November 2026, evening; kept for the record"
+  },
+  {
+   "date": "2026-11-13",
+   "solver": "jax",
+   "files": "2026-11-13/index-jax.json and the files it lists",
+   "notebook": "numakoudsie/guinness-on-a-cart-stout-in-jax",
+   "runs": [
+    {
+     "run": 6,
+     "version": 6,
+     "commit": "4c105275d3efe381335a3cb6cc23efbf0b13a9f6",
+     "what": "the three rides with the speed held only, and the free swings with and without the head"
+    },
+    {
+     "run": 7,
+     "version": 7,
+     "commit": "87e37209199e74d6039af224a5a739f17b3e4fbc",
+     "what": "the same roads with the site's controllers in the loop: joint control on all three, slosh LQR and road preview on the kerb"
+    }
+   ],
+   "note": "JAX (tools/fig12/kaggle/stout_jax.py): APIC particles on a 1.5 mm grid, the head of foam as a sheet with its weight, yield stress and wall friction, the cart and its controllers coupled both ways; played by the page until 14 November 2026, kept for the record (the head had weight but no mass)"
+  },
+  {
+   "date": "2026-11-14",
+   "solver": "jax, the head with its mass",
+   "files": "2026-11-13-run8/index-jax.json and the files it lists",
+   "notebook": "numakoudsie/guinness-on-a-cart-stout-in-jax",
+   "runs": [
+    {
+     "run": 8,
+     "version": 8,
+     "commit": "96e8a1da32568524ddfba80eb709e03edb26bec2",
+     "what": "the pint at rest, the free swing with the head (the controllers' plant, measured in the run: 2.915 Hz, damping ratio 0.425), the three roads with the speed held and with joint control, the kerb with the slosh LQR; books checked in every stored frame"
+    },
+    {
+     "run": 9,
+     "version": 9,
+     "commit": "726d51a51ee45a66c2b9bfc51db9adf0035c9ab4",
+     "what": "the kerb with the road preview, computed alone after run 8's budget ran out, with run 8's plant"
+    },
+    {
+     "run": 6,
+     "version": 6,
+     "commit": "4c105275d3efe381335a3cb6cc23efbf0b13a9f6",
+     "what": "the free swing without the head (no head, so the head's mass cannot change it), packed again into this folder"
+    }
+   ],
+   "note": "JAX (tools/fig12/kaggle/stout_jax.py) with the head's mass in the pressure step (a Robin condition; the note's eqs. 15a, 15b, 18a); played by the page"
+  }
  ]
 }
