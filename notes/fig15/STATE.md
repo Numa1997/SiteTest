@@ -132,6 +132,12 @@ c80244e inventory · 923b43f filer per-notebook commit, replaced record · c21bd
 - Open accuracy point: twin and 3D runs agree (to <1 %) but long-packet resonances sit about 0.02-0.05 E_u below the exact
   1D ones (barriers 1 a thick on a 0.5 a grid); removing it needs a finer-grid GPU rerun. The note states the grid accuracy.
 
+## Note update live (14 Nov 10:04 UTC)
+- The writer's final note (READY at c0ae537: round-10 checker fixes, side loss 6/36/36 %) merged and live at main b71a4f28;
+  live resonant-note.js is byte-identical to the build. Writer session stopped.
+- Writer's suggestion, not done: the index's twin.T_exact uses 1201 k-points, too coarse for the narrowest d = 2 peaks
+  (0.005502 vs converged 0.005878 at E = 0.95); refile with more points if those numbers are ever shown.
+
 ## Left (Next = the first open item)
 1. Shards 4-6 and the fix job (two at a time as slots free; check-ins by `send_later`); download each, check SHA-256.
 2. File with `file_rt3d2.py` (date of filing), add the generation to `generations.json`.
