@@ -10,7 +10,10 @@ P = lambda *a: os.path.join(ROOT, *a)
 I16 = json.load(open(P("public", "data", "fig16", "2026-11-14", "index-16.json")))
 I12 = json.load(open(P("public", "data", "fig12", "2026-11-14-run10", "index-jax.json")))
 S = json.load(open(P("notes", "fig16", "run16-v2-summary.json")))
-f16 = {f["path"][:-5]: f for f in I16["files"]}; f12 = {f["path"][:-5]: f for f in I12["files"]}
+f16 = {f["path"][:-5]: f for f in I16["files"]}
+# run 3 and run 4b (15 November 2026: the turning deck's forces, 60 stored pictures a second, control off on every road, the volume
+# correction for the uncontrolled rides): where a ride was computed again, the new one is used
+I16B = json.load(open(P("public", "data", "fig16", "2026-11-15", "index-16.json"))); f16.update({f["path"][:-5]: f for f in I16B["files"]}); f12 = {f["path"][:-5]: f for f in I12["files"]}
 task = {t["name"]: t for t in S["tasks"]}
 C = S["cart"]; pl = S["plant"]
 off = json.load(open(P("public", "data", "fig16", "2026-11-14", "kerb_off.json")))
@@ -36,8 +39,13 @@ V = dict(
     f16_b25_tilt=f"{f16['bump25_full']['measured']['tilt_max_mm']:.2f}", f16_b25_head=f"{f16['bump25_full']['measured']['head_spilled_ml']:.2f}",
     f16_kerb_pitch=f"{f16['kerb_full']['measured']['pitch_max_deg']:.1f}", f16_kerb_i=f"{f16['kerb_full']['measured']['i_max_A']:.0f}",
     f16_kerb_u=f"{f16['kerb_full']['measured']['u_max_N']:.0f}",
-    off_pitch=f"{f16['kerb_off']['measured']['pitch_max_deg']:.0f}", off_end_s=f"{off['t'][-1]:.2f}",
-    off_head=f"{f16['kerb_off']['measured']['head_spilled_ml']:.2f}", off_stout=f"{f16['kerb_off']['measured']['spilled_g']:.1f}",
+    off_pitch=f"{f16['kerb_off']['measured']['pitch_max_deg']:.0f}",
+    off_head=f"{f16['kerb_off']['measured']['head_spilled_ml']:.1f}", off_stout=f"{f16['kerb_off']['measured']['spilled_g']:.0f}",
+    off_res_head=f"{f16['resonant_off']['measured']['head_spilled_ml']:.1f}", off_res_stout=f"{f16['resonant_off']['measured']['spilled_g']:.0f}",
+    off_res_pitch=f"{f16['resonant_off']['measured']['pitch_max_deg']:.0f}", off_b25_head=f"{f16['bump25_off']['measured']['head_spilled_ml']:.1f}",
+    off_b25_stout=f"{f16['bump25_off']['measured']['spilled_g']:.0f}", off_b25_pitch=f"{f16['bump25_off']['measured']['pitch_max_deg']:.0f}",
+    seed2_tilt=f"{f16['kerb_full_seed2']['measured']['tilt_max_mm']:.1f}", seed2_head=f"{f16['kerb_full_seed2']['measured']['head_spilled_ml']:.3f}",
+    head0_ml=f"{json.load(open(P('public', 'data', 'fig16', '2026-11-15', 'kerb_off.json')))['books']['head_ml0']:.0f}",
 )
 nav12 = re.search(r'<nav class="sim-nav" aria-label="Simulations">\s*(.*?)\s*</nav>', open(P("public", "simulations", "guinness-kaggle.html")).read(), re.S).group(1)
 nav12 = re.sub(r'\s*<a href="guinness-cart-control\.html"[^>]*>16</a>', "", nav12)
