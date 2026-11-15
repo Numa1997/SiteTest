@@ -84,6 +84,7 @@ RULES = [
     (r'public/scripts/pint3d-view\.js', "Figs. 12 and 16: the 3D close-up of the pint (three.js module): the stored stout surface, head, drops and lumps of one stored picture, riding with the glass.", 'docs/simulations/fig16-guinness-cart-control.md'),
     (r'tools/fig16/check_pint3d\.cjs', 'Fig. 16: three-way check of the 3D close-up in Chromium (stored value, projection, pixel read back).', 'docs/simulations/fig16-guinness-cart-control.md'),
     (r'tools/fig16/kaggle/modes16\.py', "Fig. 16: the uncontrolled cart's natural modes from its linear model and the wheelbase filter (Kaggle CPU).", 'docs/simulations/fig16-guinness-cart-control.md'),
+    (r'tools/fig16/kaggle/publish16\.py', "Fig. 16: on Kaggle's CPU, packs a GPU run's rides, measures the note's numbers and builds the page (nothing runs outside Kaggle).", 'docs/simulations/fig16-guinness-cart-control.md'),
     (r'tools/fig12/kaggle/damping_grid\.py', "Fig. 12's solver: the method's numerical damping at 1.5 and 1.0 mm, a free swing without friction or head (Kaggle GPU).", 'docs/simulations/fig12-beer-slosh.md'),
     (r'tools/fig16/kaggle/diag16\.py', "Fig. 16: diagnostics on Kaggle's CPU, control on and off, variants of the stout's push.", 'docs/simulations/fig16-guinness-cart-control.md'),
     (r'tools/fig16/kaggle/pack16\.py', "Fig. 16: packs a Kaggle ride into the page's format (no computation).", 'docs/simulations/fig16-guinness-cart-control.md'),

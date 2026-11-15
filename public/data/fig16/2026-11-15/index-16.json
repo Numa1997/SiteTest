@@ -121,39 +121,39 @@
    "ctrl": "off",
    "road": "one 25 mm bump",
    "v0": 1.0,
-   "bytes": 3369529,
-   "sha256": "cce5fa2c9463ad372693fcb99bc696e78ecc431dc947fbde2f07971532fa93be",
-   "kaggle_version": 7,
-   "commit": "fe8d981a348e9cd17c164db5a81756f94789e32a",
+   "bytes": 3451623,
+   "sha256": "952d461546684630d236889050d4ab957e125ea0bc3b8eedb5d815a29af9a987",
+   "kaggle_version": 8,
+   "commit": "00540204564d2abfc963ba3929a8aa1e1529eff9",
    "frames": 481,
    "seconds": 8.0,
    "fps": 60,
    "rot": true,
    "measured": {
-    "steps": 4397,
-    "ms_per_step": 190.0,
-    "run_s": 835.2,
-    "spilled_g": 37.998,
-    "head_spilled_ml": 11.628,
+    "steps": 4410,
+    "ms_per_step": 188.3,
+    "run_s": 830.4,
+    "spilled_g": 39.612,
+    "head_spilled_ml": 11.245,
     "books": {
      "stout_particles": 1001952,
      "stout_err_particles_max": 0,
      "head_ml0": 91.314,
-     "head_glass_ml_end": 79.6858,
-     "head_off_ml_end": 11.6282,
+     "head_glass_ml_end": 80.0687,
+     "head_off_ml_end": 11.2453,
      "head_err_ml_max": 1.257285562553806e-08
     },
-    "pitch_max_deg": 9.260673778264465,
-    "i_max_A": 1.5718892956210353,
+    "pitch_max_deg": 9.244725895877835,
+    "i_max_A": 1.5720849896845233,
     "u_max_N": 0.0,
     "current_limited": false,
     "bump_stop_N": 0.0,
     "v_range": [
-     0.9800491599987592,
-     1.0165106930232966
+     0.980157241939143,
+     1.0164198105512754
     ],
-    "lean_max_mm": 69.15,
-    "tilt_max_mm": 73.82
+    "lean_max_mm": 77.67,
+    "tilt_max_mm": 72.57
    }
   },
   {
@@ -163,39 +163,39 @@
    "ctrl": "full",
    "road": "one sharp 30 mm bump",
    "v0": 1.5,
-   "bytes": 304636,
-   "sha256": "ca6ebf25fba9c4d6ecb88f45af2605be9ef4405e564d473565c2892b06fd7868",
-   "kaggle_version": 4,
-   "commit": "2056270c6eec67586d013d9289c598aaa70f7e46",
+   "bytes": 306941,
+   "sha256": "26e435929e34bc012f96afb9f90d68f8668c0e1c326f20a4f99fa9d3f0c6c2ed",
+   "kaggle_version": 8,
+   "commit": "00540204564d2abfc963ba3929a8aa1e1529eff9",
    "frames": 241,
    "seconds": 4.0,
    "fps": 60,
    "rot": true,
    "measured": {
     "steps": 2160,
-    "ms_per_step": 97.7,
-    "run_s": 210.9,
+    "ms_per_step": 116.0,
+    "run_s": 250.4,
     "spilled_g": 0.0,
-    "head_spilled_ml": 0.01,
+    "head_spilled_ml": 0.015,
     "books": {
      "stout_particles": 1001952,
      "stout_err_particles_max": 0,
      "head_ml0": 91.314,
-     "head_glass_ml_end": 91.3038,
-     "head_off_ml_end": 0.0102,
+     "head_glass_ml_end": 91.2991,
+     "head_off_ml_end": 0.0149,
      "head_err_ml_max": 0.0
     },
-    "pitch_max_deg": 5.320679165375312,
+    "pitch_max_deg": 5.294415148126249,
     "i_max_A": 7.999999999999991,
-    "u_max_N": 49.90726854971526,
+    "u_max_N": 49.90760258774501,
     "current_limited": true,
-    "bump_stop_N": 75.68021548699927,
+    "bump_stop_N": 75.68313829673212,
     "v_range": [
-     1.410117306958596,
-     1.7654923659109587
+     1.4101165540862688,
+     1.7644475164927749
     ],
-    "lean_max_mm": 5.12,
-    "tilt_max_mm": 4.7
+    "lean_max_mm": 5.13,
+    "tilt_max_mm": 4.71
    }
   },
   {
@@ -205,39 +205,39 @@
    "ctrl": "full",
    "road": "one sharp 30 mm bump",
    "v0": 1.5,
-   "bytes": 279387,
-   "sha256": "231be5b17efa47dae5b8459eab2d605a3b5566f4fefb6be8187edb567a7db269",
-   "kaggle_version": 4,
-   "commit": "2056270c6eec67586d013d9289c598aaa70f7e46",
+   "bytes": 309377,
+   "sha256": "3afdea5a695d9ff4baef26a32aef4cd9af5ad153ad7ad75a5a25e05f9492da16",
+   "kaggle_version": 8,
+   "commit": "00540204564d2abfc963ba3929a8aa1e1529eff9",
    "frames": 241,
    "seconds": 4.0,
    "fps": 60,
    "rot": true,
    "measured": {
     "steps": 2160,
-    "ms_per_step": 95.9,
-    "run_s": 207.1,
+    "ms_per_step": 124.3,
+    "run_s": 268.4,
     "spilled_g": 0.0,
-    "head_spilled_ml": 0.023,
+    "head_spilled_ml": 0.024,
     "books": {
      "stout_particles": 1001952,
      "stout_err_particles_max": 0,
      "head_ml0": 91.314,
-     "head_glass_ml_end": 91.2914,
-     "head_off_ml_end": 0.0226,
+     "head_glass_ml_end": 91.2899,
+     "head_off_ml_end": 0.0241,
      "head_err_ml_max": 1.3552527156068805e-14
     },
-    "pitch_max_deg": 5.474444669025871,
+    "pitch_max_deg": 5.414296379696969,
     "i_max_A": 7.999999999999991,
-    "u_max_N": 49.929147755880535,
+    "u_max_N": 49.92902528398221,
     "current_limited": true,
-    "bump_stop_N": 74.73637785394865,
+    "bump_stop_N": 74.73789099690458,
     "v_range": [
-     1.4075964362567142,
-     1.7849416714591493
+     1.4075935879113342,
+     1.7851193822753766
     ],
-    "lean_max_mm": 5.38,
-    "tilt_max_mm": 5.09
+    "lean_max_mm": 5.36,
+    "tilt_max_mm": 5.08
    }
   },
   {
@@ -247,39 +247,39 @@
    "ctrl": "off",
    "road": "one sharp 30 mm bump",
    "v0": 1.5,
-   "bytes": 2265647,
-   "sha256": "3b26f26c988e8df77815c6434198ffc7a1f65ee3207a1e233802712116ae62ac",
-   "kaggle_version": 7,
-   "commit": "fe8d981a348e9cd17c164db5a81756f94789e32a",
+   "bytes": 2260385,
+   "sha256": "98b5ee13e0bc3c2444494b14942ad08bff6e0024dcdf1618dc6a24e9fbf7b22f",
+   "kaggle_version": 8,
+   "commit": "00540204564d2abfc963ba3929a8aa1e1529eff9",
    "frames": 241,
    "seconds": 4.0,
    "fps": 60,
    "rot": true,
    "measured": {
-    "steps": 2468,
-    "ms_per_step": 192.8,
-    "run_s": 475.6,
-    "spilled_g": 87.419,
-    "head_spilled_ml": 14.516,
+    "steps": 2472,
+    "ms_per_step": 197.3,
+    "run_s": 487.4,
+    "spilled_g": 75.567,
+    "head_spilled_ml": 14.376,
     "books": {
      "stout_particles": 1001952,
      "stout_err_particles_max": 0,
      "head_ml0": 91.314,
-     "head_glass_ml_end": 76.7985,
-     "head_off_ml_end": 14.5155,
-     "head_err_ml_max": 1.6763812018226465e-08
+     "head_glass_ml_end": 76.9381,
+     "head_off_ml_end": 14.3759,
+     "head_err_ml_max": 1.6763784913172153e-08
     },
-    "pitch_max_deg": 20.35611915610503,
-    "i_max_A": 7.999999999999993,
+    "pitch_max_deg": 20.447838505161126,
+    "i_max_A": 7.999999999999992,
     "u_max_N": 0.0,
     "current_limited": true,
     "bump_stop_N": 0.0,
     "v_range": [
-     1.2166296369797038,
-     1.5455167784877122
+     1.2209675130778672,
+     1.5456062350475874
     ],
-    "lean_max_mm": 88.11,
-    "tilt_max_mm": 94.67
+    "lean_max_mm": 86.56,
+    "tilt_max_mm": 95.51
    }
   },
   {
@@ -289,39 +289,39 @@
    "ctrl": "off",
    "road": "five 20 mm bumps in step with the swing",
    "v0": 1.0,
-   "bytes": 4135529,
-   "sha256": "76b840ab09e87787681f7d3eb9031edf7cdb8dddfb87f09b45f5e3424f9b5b43",
-   "kaggle_version": 7,
-   "commit": "fe8d981a348e9cd17c164db5a81756f94789e32a",
+   "bytes": 4664843,
+   "sha256": "e536fbaa26ae19a68945a5449ed70b1f3afddf5de5abe20316df9cf9d11f31f8",
+   "kaggle_version": 8,
+   "commit": "00540204564d2abfc963ba3929a8aa1e1529eff9",
    "frames": 481,
    "seconds": 8.0,
    "fps": 60,
    "rot": true,
    "measured": {
-    "steps": 4798,
-    "ms_per_step": 199.7,
-    "run_s": 957.9,
-    "spilled_g": 67.548,
-    "head_spilled_ml": 14.61,
+    "steps": 4809,
+    "ms_per_step": 206.5,
+    "run_s": 992.8,
+    "spilled_g": 77.159,
+    "head_spilled_ml": 14.633,
     "books": {
      "stout_particles": 1001952,
      "stout_err_particles_max": 0,
      "head_ml0": 91.314,
-     "head_glass_ml_end": 76.7036,
-     "head_off_ml_end": 14.6104,
-     "head_err_ml_max": 1.6763812018226465e-08
+     "head_glass_ml_end": 76.6805,
+     "head_off_ml_end": 14.6335,
+     "head_err_ml_max": 1.676379846569931e-08
     },
-    "pitch_max_deg": 7.564186529444968,
-    "i_max_A": 2.4144790400834255,
+    "pitch_max_deg": 7.531699806161537,
+    "i_max_A": 2.1975965805738302,
     "u_max_N": 0.0,
     "current_limited": false,
     "bump_stop_N": 0.0,
     "v_range": [
-     0.9531332436906755,
-     1.0314428533327111
+     0.9659409408552857,
+     1.0303316169828958
     ],
-    "lean_max_mm": 77.0,
-    "tilt_max_mm": 80.71
+    "lean_max_mm": 76.98,
+    "tilt_max_mm": 78.98
    }
   }
  ]

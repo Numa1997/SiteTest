@@ -300,3 +300,26 @@ whose own swing with the head is 2.64-2.9 Hz with zeta 0.43, is driven hard by i
    run 5's rides.
 4. **The glass radius at the fill height is 39.1 mm, not 36 mm.** A 9° tilt raises the wall by 6.19 mm, not 5.7 mm. The note uses
    39.1.
+
+## L. Run 5: the centripetal sign corrected (15 November 2026; GPU notebook version 8, commit 7bb19a7, 51 min of T4)
+
+**Fact** (Kaggle log of version 8; packed on Kaggle's CPU by `publish16.py`, notebook fig-16-cart-diagnostics-cpu version 5).
+- Rest guard: PASS, largest deviation 0.54 mm.
+- Swelling at the end of every ride: within +1.8 %.
+
+| ride | run 4b (wrong sign) | run 5 (corrected) |
+|---|---|---|
+| kerb, control on, seed 1: tilt (run) / head | 4.01 mm / 0.010 mL | 4.02 mm / 0.015 mL |
+| kerb, control on, seed 2 | 4.19 mm / 0.023 mL | 4.24 mm / 0.024 mL |
+| kerb, control off: stout / head | 87.4 g / 14.52 mL | 75.6 g / 14.38 mL |
+| five bumps, control off | 67.5 g / 14.61 mL | 77.2 g / 14.63 mL |
+| one 25 mm bump, control off | 38.0 g / 11.63 mL | 39.6 g / 11.25 mL |
+
+**Inference.**
+- The along-glass error 2 h_g theta'^2 matters only when the deck turns fast. With control on it changes nothing beyond the seed
+  scatter.
+- Without control the stout spilled moves by 4 to 14 %.
+- The pages now play run 5's rides (index-16.json, kaggle_version 8).
+
+From now on, by the owner's rule, nothing runs outside Kaggle: these numbers come from Kaggle's logs, and the files were made by
+Kaggle's CPU.
