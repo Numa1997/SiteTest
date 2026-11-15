@@ -270,3 +270,33 @@ run_b's `fit_swing`:
 **Fix.** 1.0 mm cuts the method's damping to 0.009 at 3.4 times the particles and 3.4 times the time per step (372 against
 108 ms). A rerun of the bare swing at 1.0 mm costs about 10 min of T4, not done. The Fig. 12 docs page now states the measured
 number.
+
+## I (correction, 15 November 2026)
+
+`cart4.linear_model` has no push of the stout back on the deck: the stout row is driven by the deck, the deck rows see no stout.
+The mode at 3.85 Hz is therefore the deck's own pitch mode, with the stout following it:
+- natural frequency 4.08 Hz, ringing frequency 3.85 Hz, peak of the forced response 3.60 Hz (zeta 0.33);
+- `modes16.json` lists ringing frequencies.
+
+"Coupled into one mode" overstated it. What stands: the five bumps (3.45 Hz) fall inside that pitch mode's band, and the stout,
+whose own swing with the head is 2.64-2.9 Hz with zeta 0.43, is driven hard by it.
+
+## M. Found while the note's numbers were measured (15 November 2026; `notes/fig16/note_numbers.py`)
+
+1. **Sign error, fixed.** `cart4.py` gave the centripetal part of a_S, the theta'^2 terms, the wrong sign.
+   - g_x across the glass was exact, because the two errors cancel there.
+   - g_z along the glass was off by -2 h_g theta'^2: at most 0.6 m/s^2 with control, 8.2 m/s^2 without.
+   - Fixed in commit 7bb19a7, with a finite-difference check of the kinematics to 1e-6. Run 5 (notebook version 8) recomputes the
+     five affected rides.
+2. **The drive is limited by grip, not by the motors.** It is capped by tyre grip, mu N_r = 19.0 N at rest, not by the motors'
+   48 N. On the controlled kerb the rear wheels lose contact in 13 stored pictures between 0.62 and 0.90 s, and the struts reach
+   the bump stops (33.8 and 31.5 mm against +-30 mm). Open as a design limit, stated in the note.
+3. **Seed 1 of the controlled kerb: a burst after 3.3 s.**
+   - The probe reading jumps between -0.68 and +0.64 mm.
+   - The actuators then push in opposite phase up to 32 N, against 2.1 N before.
+   - Single-sample pitch accelerations reach 287 rad/s^2.
+   - Seed 2 stays quiet (0.3 N).
+   **Inference, untested:** splash or surface noise at the probes, which the Kalman filter passes to the controller. To check in
+   run 5's rides.
+4. **The glass radius at the fill height is 39.1 mm, not 36 mm.** A 9° tilt raises the wall by 6.19 mm, not 5.7 mm. The note uses
+   39.1.
