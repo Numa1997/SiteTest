@@ -187,3 +187,39 @@ The version kept leaves the pint at rest exactly as it was: 124.8 mm before and 
   third of run 3b's spill there (35.6 g) was a fault of the method. On the kerb and the single bump most of the spill happens in
   the first second, before much swelling, so the spill hardly changes.
 - The rides on the page are run 4b's (index-16.json, kaggle_version 7). With control on, the rides need no correction (+0.1 %).
+
+## I. Is the uncontrolled deck in resonance with the stout? (closed 15 November 2026)
+
+**Correction.** An earlier line (section after run 3) took the pitch spectrum's peak at 3.41 Hz on the five-bump road as evidence of
+resonance. The five bumps are 0.29 m apart, so at 1.0 m/s they arrive at 3.45 Hz: the peak is the road's own frequency. That alone
+proves nothing about resonance.
+
+**Fact.** The natural modes of the cart with control off come from `tools/fig16/kaggle/modes16.py`, which takes the eigenvalues of
+`cart4.linear_model`: cart, deck heave and pitch, two axles, and the stout's first swing with the head (f 2.915 Hz, zeta 0.425).
+It ran on Kaggle's CPU, notebook fig-16-cart-diagnostics-cpu version 3, commit 0df8870. Result: `notes/fig16/modes16.json`.
+
+| mode | f (Hz) | zeta | shares (pitch as the rise of a corner 0.11 m out) |
+|---|---|---|---|
+| the stout's swing | 2.64 | 0.43 | stout 1.00 |
+| deck heave | 3.33 | 0.28 | heave 0.92 |
+| deck pitch with the stout | 3.85 | 0.33 | pitch 0.23, stout 0.75 |
+| rear and front axle hop | 20.3, 26.1 | 0.11, 0.14 | axles |
+
+The wheelbase filter: the rear axle meets a bump wb/v later. At 1.0 m/s the five bumps (3.45 Hz) drive the pitch by
+|2 sin(pi f wb/v)| = 1.38 of the largest possible 2.
+
+**Inference.** The deck's pitch is coupled to the stout's swing in one mode, at 3.85 Hz. The five bumps force it 10 % below that
+frequency, inside its half-power band (zeta 0.33). The uncontrolled cart is near resonance through this coupled mode. The
+mechanism: each bump rocks deck and stout together at nearly their own natural rate.
+
+## J. Does the volume correction add or remove energy? (closed 15 November 2026)
+
+**Fact.** The stored kinetic energy of the stout in the glass, without the correction (run 3b) and with it (run 4b):
+- kerb: 17.9 and 19.7 mJ at the peak (0.8 s); tail decay rates 0.77 and 0.69 1/s;
+- five bumps: 4.9 and 8.0 mJ at 2 s; tail decay rates 0.40 and 0.37 1/s.
+
+**Inference.**
+- By construction the correction moves positions, never velocities, and only lowers swollen stout: it removes potential energy and
+  adds no kinetic energy. It acts only while the pint is swollen by more than 4 %, so in gentle swings it does nothing at all.
+- The larger energy on the five bumps follows from the 35 g more stout kept in the glass.
+- The tail decay rates agree to about 10 %. No sign of energy injection.
