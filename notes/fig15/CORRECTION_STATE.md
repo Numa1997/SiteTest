@@ -162,3 +162,5 @@ Section 4: exact chi(x,t) for one wall run, compared with the stored file.
   new (x, rho) runs anyway. Files: notes/fig15/correction/classify_2d/ (summary with every row, recompute_2d.json).
 - complex128 bill for plan B as defined (1,782 discs + 282 shells): ~8.5x the c64 time -> ~97,000 s discs + ~58,000 s shells
   ~ 43 GPU-h; quota left this week ~25,000 s (7 h). OWNER DECISION NEEDED.
+- 00:15 UTC 15 Nov: owner ordered: no more GPU, document everything. Two leftover reminder tasks deleted (they would have launched
+  shards; both had already fired and failed). Full log: notes/fig15/CORRECTION_LOG.md. Quota 85,460 s. Nothing further launched.
