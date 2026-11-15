@@ -98,6 +98,10 @@
     function size() { for (const P of [A, B]) { const c = P.v.cv, r = c.parentElement.getBoundingClientRect(), d = Math.min(2, devicePixelRatio || 1); c.width = Math.max(2, Math.round(r.width * d)); c.height = Math.max(2, Math.round(r.height * d)); P.v.cssW = r.width; } }
     addEventListener('resize', size); size();
 
+    // the 3D close-ups of the two pints (pint3d-view.js, an ES module that may load after this script)
+    const close = { a: null, b: null };
+    const mk3d = () => { if (close.a || !window.Pint3D || !$('p12')) return; close.a = new window.Pint3D($('p12'), GP); close.b = new window.Pint3D($('p16'), GP); close.a.size(); close.b.size(); };
+    mk3d(); addEventListener('pint3d-ready', mk3d); addEventListener('resize', () => { if (close.a) { close.a.size(); close.b.size(); } });
     const lerpAt = (a, f) => { const i = Math.max(0, Math.min(a.length - 2, Math.floor(f))), t = Math.max(0, Math.min(1, f - i)); return a[i] + t * (a[i + 1] - a[i]); };   // the wheel's position between stored pictures (kinematics only)
     function tick(now) {
       requestAnimationFrame(tick);
@@ -114,6 +118,7 @@
       B.v.pose = { zwF: D2.zf[k2] - D2.zf[0] + G16.Rw, zwR: D2.zr[k2] - D2.zr[0] + G16.Rw, zc: D2.zc[k2] - D2.zc[0] + G16.Rw + 0.098, pitch: D2.th[k2] - D2.th[0],
                    wheelAng: -lerpAt(D2.x, T * fps(r16)) / G16.Rw, wheelRate: D2.v[k2] / G16.Rw, us: [D2.uf[k2] / 2, D2.uf[k2] / 2, D2.ur[k2] / 2, D2.ur[k2] / 2] };
       B.v.setFrame(r16, k2); B.v.draw();
+      if (close.a) { close.a.setFrame(r12, k1); close.a.render(); close.b.setFrame(r16, k2); close.b.render(); }
       if (fade) {                                                 // the switch: the last picture of the other ride fades out over 0.45 s
         const u = (now - fade.t0) / 450, g = B.v.cv.getContext('2d');
         if (u >= 1) fade = null; else { g.save(); g.globalAlpha = 1 - u; g.drawImage(fade.img, 0, 0); g.restore(); }
