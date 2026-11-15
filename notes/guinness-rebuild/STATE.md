@@ -50,3 +50,19 @@ Reread first after any compaction. Prompt: `notes/fig16/PROMPT-computational-phy
   - the 1 mm grid check of numerical damping;
   - merge and publish.
 - Quota: about 76,000 + 6,700 s used by this chat today (runs 3, 3b, 4, 4b); weekly limit 108,000 s.
+
+## Status 15 Nov 2026, after "close all open issues" (owner: "you're on your own")
+- Closed:
+  1. note numbers (runs 3 and 4b, corrections stated);
+  2. close-up at 390 px;
+  3. page weight (drops 2,048 per picture);
+  4. one geometry (Cart16View.fromCart; stored pose as stored);
+  5. three-way check of the close-up (tools/fig16/check_pint3d.cjs, 65/65);
+  6. resonance (modes16, coupled pitch-slosh mode 3.85 Hz, zeta 0.33; road 3.45 Hz; audit I);
+  7. volume correction's energy (audit J);
+  9. stout's push (bounded, audit K).
+- Published: main fast-forwarded to b113106; live on phyeinusul.com, checked in Chromium (both pages play, no errors but the site-wide
+  Cloudflare beacon blocked by the site's CSP, which predates this work).
+- Running: item 8, numerical damping at 1.5 and 1.0 mm (Fig. 12 notebook version 12; version 11 never started).
+- Still open, known: smoothness of the 3D close-up on a real GPU (not measurable here); the lecture notes are corrected, not
+  rewritten to STANDARD.md with a referee.
