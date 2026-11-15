@@ -1,0 +1,1107 @@
+{
+ "g": {
+  "value": 9.81,
+  "how": "cart4.G0"
+ },
+ "ml_kg": {
+  "value": 0.454420708,
+  "how": "modes16.json ml_kg: the stout and head as a rigid load (slosh_model.liquid_mass)"
+ },
+ "st_Ms": {
+  "value": 2.854420708,
+  "how": "cart4.statics(CART4, ml)['Ms']"
+ },
+ "st_Mx": {
+  "value": 5.047013300592593,
+  "how": "cart4.statics(CART4, ml)['Mx']"
+ },
+ "st_J": {
+  "value": 0.025180807734799998,
+  "how": "cart4.statics(CART4, ml)['J']"
+ },
+ "st_Wf": {
+  "value": 14.000933572740001,
+  "how": "cart4.statics(CART4, ml)['Wf']"
+ },
+ "st_Wr": {
+  "value": 14.000933572740001,
+  "how": "cart4.statics(CART4, ml)['Wr']"
+ },
+ "st_Nf0": {
+  "value": 19.886933572740002,
+  "how": "cart4.statics(CART4, ml)['Nf0']"
+ },
+ "st_Nr0": {
+  "value": 23.81093357274,
+  "how": "cart4.statics(CART4, ml)['Nr0']"
+ },
+ "J_pint": {
+  "value": 0.0036808077348,
+  "how": "ml * hs^2: the pint's share of the pitch inertia"
+ },
+ "f_bounce1": {
+  "value": 3.5247243418805176,
+  "how": "sqrt(2k/Ms)/2pi"
+ },
+ "zeta_bounce1": {
+  "value": 0.30055959124176873,
+  "how": "2c/(2 sqrt(2k Ms))"
+ },
+ "k_theta": {
+  "value": 16.939999999999998,
+  "how": "k (af^2 + ar^2), N m/rad"
+ },
+ "f_pitch1": {
+  "value": 4.128022028098378,
+  "how": "sqrt(k(af^2+ar^2)/J)/2pi"
+ },
+ "zeta_pitch1": {
+  "value": 0.35200387124183347,
+  "how": "c(af^2+ar^2)/(2 sqrt(k_theta J))"
+ },
+ "f_hop_r1": {
+  "value": 20.567351353705227,
+  "how": "sqrt((k+kt)/mr)/2pi"
+ },
+ "f_hop_f1": {
+  "value": 26.552336422832308,
+  "how": "sqrt((k+kt)/mf)/2pi"
+ },
+ "static_sag_mm": {
+  "value": 20.001333675342856,
+  "how": "Wf / k: the struts' static compression"
+ },
+ "modes_here": {
+  "value": [
+   {
+    "f": 2.638823723228675,
+    "f_nat": 2.915239431135946,
+    "zeta": 0.42502310223930945,
+    "f_peak": 2.3298412700652067
+   },
+   {
+    "f": 3.3313120845991846,
+    "f_nat": 3.473587003607726,
+    "zeta": 0.28326755694638744,
+    "f_peak": 3.1826834178662247
+   },
+   {
+    "f": 3.847655416021734,
+    "f_nat": 4.079624727051961,
+    "zeta": 0.33239704471877735,
+    "f_peak": 3.6007730402385794
+   },
+   {
+    "f": 20.27618390471279,
+    "f_nat": 20.39905642861253,
+    "zeta": 0.10959288861517577,
+    "f_peak": 20.15256222661898
+   },
+   {
+    "f": 26.07913518309901,
+    "f_nat": 26.33560554446667,
+    "zeta": 0.13922012010672302,
+    "f_peak": 25.82011743588633
+   }
+  ],
+  "how": "eig(cart4.linear_model(v0=1.0)) here: f = |Im|/2pi (damped), f_nat = |lambda|/2pi, f_peak = f_nat sqrt(1 - 2 zeta^2)"
+ },
+ "modes16": {
+  "value": [
+   {
+    "f_hz": 2.639,
+    "zeta": 0.425,
+    "share": {
+     "zc": 0.0,
+     "th": 0.0,
+     "zf": 0.0,
+     "zr": 0.0,
+     "q": 1.0
+    }
+   },
+   {
+    "f_hz": 3.331,
+    "zeta": 0.283,
+    "share": {
+     "zc": 0.916,
+     "th": 0.001,
+     "zf": 0.04,
+     "zr": 0.04,
+     "q": 0.004
+    }
+   },
+   {
+    "f_hz": 3.848,
+    "zeta": 0.332,
+    "share": {
+     "zc": 0.0,
+     "th": 0.234,
+     "zf": 0.01,
+     "zr": 0.01,
+     "q": 0.746
+    }
+   },
+   {
+    "f_hz": 20.276,
+    "zeta": 0.11,
+    "share": {
+     "zc": 0.043,
+     "th": 0.061,
+     "zf": 0.006,
+     "zr": 0.803,
+     "q": 0.087
+    }
+   },
+   {
+    "f_hz": 26.079,
+    "zeta": 0.139,
+    "share": {
+     "zc": 0.035,
+     "th": 0.048,
+     "zf": 0.846,
+     "zr": 0.004,
+     "q": 0.067
+    }
+   }
+  ],
+  "how": "modes16.json, v0 = 1.0 m/s"
+ },
+ "five_f": {
+  "value": 3.448,
+  "how": "v0 / 0.29 m"
+ },
+ "five_pitch_drive": {
+  "value": 1.375,
+  "how": "|2 sin(pi f wb/v)|"
+ },
+ "five_heave_drive": {
+  "value": 1.452,
+  "how": "|2 cos(pi f wb/v)|"
+ },
+ "ratio_five_pitch": {
+  "value": 0.896049896049896,
+  "how": "f(five bumps) / f(pitch with stout)"
+ },
+ "band_lo": {
+  "value": 2.5704639999999994,
+  "how": "f(1 - zeta)"
+ },
+ "band_hi": {
+  "value": 5.125536,
+  "how": "f(1 + zeta)"
+ },
+ "kerb_pitch_drive": {
+  "value": 1.9484438422681527,
+  "how": "|2 sin(pi f0 wb / 1.5)|"
+ },
+ "f0": {
+  "value": 2.9152394311359466,
+  "how": "cart4.PLANT_F0 (run 8, with the head)"
+ },
+ "zeta0": {
+  "value": 0.4250231022393094,
+  "how": "cart4.PLANT_ZETA"
+ },
+ "beta0": {
+  "value": 1.2409479382789539,
+  "how": "cart4.PLANT_BETA"
+ },
+ "w0": {
+  "value": 18.316989560623956,
+  "how": "2 pi f0"
+ },
+ "R_fill_mm": {
+  "value": 39.1,
+  "how": "glass_profile.json R at z = 125 mm (dz 0.5 mm)"
+ },
+ "zrim_mm": {
+  "value": 147.5,
+  "how": "(len(R)-1) dz"
+ },
+ "head0_mm": {
+  "value": 19.0,
+  "how": "stout_jax.HEAD0"
+ },
+ "phi_f": {
+  "value": 0.27,
+  "how": "stout_jax.PHI_F"
+ },
+ "freeboard_mm": {
+  "value": 3.499999999999993,
+  "how": "zrim - fill - HEAD0"
+ },
+ "stout_free_mm": {
+  "value": 22.499999999999993,
+  "how": "zrim - fill"
+ },
+ "tilt_head_deg": {
+  "value": 5.115145130599519,
+  "how": "atan(freeboard / R): a steady tilt that lifts the head's top to the rim"
+ },
+ "rise9_mm": {
+  "value": 6.192831616689369,
+  "how": "R tan 9 deg"
+ },
+ "zS_mm": {
+  "value": 92.0,
+  "how": "hg - FLOOR_ABOVE_DECK: S above the glass's inner floor"
+ },
+ "rmax_mm": {
+  "value": 99.96404353566336,
+  "how": "farthest stout from S: the floor's edge, hypot(zS, R)"
+ },
+ "F12_max": {
+  "value": 11.25,
+  "how": "Fig. 12: b = Km Ngear / Rw, i = min(Imax, (Vmax - b v)/Ra) at 1.5 m/s"
+ },
+ "b12": {
+  "value": 5.0,
+  "how": "Km Ngear / Rw"
+ },
+ "E16": {
+  "value": 4.5,
+  "how": "b v, V"
+ },
+ "i_volt16": {
+  "value": 32.5,
+  "how": "(Vmax - b v)/Ra at 1.5 m/s"
+ },
+ "F16_max": {
+  "value": 48.0,
+  "how": "nm b min(Imax, (Vmax - b v)/Ra)"
+ },
+ "grip_r": {
+  "value": 19.048746858192,
+  "how": "mu N_r0: the rear tyres' grip at rest"
+ },
+ "Fd0": {
+  "value": 3.0,
+  "how": "cx v0: drag at 1.5 m/s"
+ },
+ "slowest_k": {
+  "value": 0.997445716105754,
+  "how": "max |eig(Ad - Bd K)|"
+ },
+ "tau_slow_k": {
+  "value": 0.39099894726268214,
+  "how": "-Ts / ln|z|"
+ },
+ "cl_least_damped_k": {
+  "value": {
+   "f": 20.188912716618155,
+   "zeta": 0.10869813855371795
+  },
+  "how": "least damped closed-loop pole"
+ },
+ "open_max_k": {
+  "value": 1.0,
+  "how": "max |eig(Ad)|"
+ },
+ "Kp_norm_k": {
+  "value": {
+   "j0": 432.00314423708744,
+   "j50": 370.8532631444276,
+   "j100": 124.36449746423591,
+   "j249": 14.09066369687162,
+   "ratio249": 0.03261703967862449,
+   "ratio100": 0.2878786858921182
+  },
+  "how": "Frobenius norm of K_j"
+ },
+ "K_k": {
+  "value": [
+   [
+    -998.0449676534828,
+    -1509.2707388493723,
+    -41.42076301796569,
+    -1.9233993560181502,
+    2078.622981716527,
+    224.87193561042776,
+    -442.32871575767086,
+    -3.96256901122783,
+    590.4127514046288,
+    2.491569438823684,
+    -23087.301695900587,
+    -1595.3070657503956
+   ],
+   [
+    -194.33680879333306,
+    -328.3996062967598,
+    2612.3237912372892,
+    146.56222693589515,
+    232.30214111068165,
+    32.95515190639136,
+    -2407.652460546065,
+    1.6110247632666101,
+    -1265.6037053579273,
+    -21.134862510790356,
+    22831.236660490893,
+    496.7344082016681
+   ],
+   [
+    184.53024303858396,
+    314.0029207167942,
+    2598.1531756902173,
+    145.77908737791833,
+    -211.97273149397247,
+    -30.571496279473134,
+    -2625.204884998873,
+    -16.500125887208743,
+    -913.0036279191994,
+    -2.029609616464719,
+    -23308.092077247693,
+    -515.6325855253018
+   ]
+  ],
+  "how": "LQR gain, rows F_d, u_f, u_r; columns dv, xi, zc, vzc, th, om, zf, vzf, zr, vzr, q, qd"
+ },
+ "Lk_k": {
+  "value": [
+   0.34688551260045386,
+   73.60858319733957
+  ],
+  "how": "Kalman gain of the swing's filter (per probe reading)"
+ },
+ "Q_k": {
+  "value": [
+   399.99999999999994,
+   2500.0,
+   15000.0,
+   24.999999999999996,
+   216.75,
+   0.4444444444444444,
+   3611.1111111111113,
+   1.0,
+   3611.1111111111113,
+   1.0,
+   16000000.0,
+   11922.07351610695
+  ],
+  "how": "diag Q / Ts (Bryson weights)"
+ },
+ "slowest_g": {
+  "value": 0.997445716105754,
+  "how": "max |eig(Ad - Bd K)|"
+ },
+ "tau_slow_g": {
+  "value": 0.39099894726268214,
+  "how": "-Ts / ln|z|"
+ },
+ "cl_least_damped_g": {
+  "value": {
+   "f": 20.188912716618155,
+   "zeta": 0.10869813855371795
+  },
+  "how": "least damped closed-loop pole"
+ },
+ "open_max_g": {
+  "value": 1.0,
+  "how": "max |eig(Ad)|"
+ },
+ "Kp_norm_g": {
+  "value": {
+   "j0": 432.00290878400637,
+   "j50": 370.85320612325427,
+   "j100": 124.36447934238701,
+   "j249": 14.090661666369117,
+   "ratio249": 0.032617052755573445,
+   "ratio100": 0.2878788008452207
+  },
+  "how": "Frobenius norm of K_j"
+ },
+ "K_g": {
+  "value": [
+   [
+    -998.0449676534828,
+    -1509.2707388493723,
+    -41.42076301796569,
+    -1.9233993560181502,
+    2078.622981716527,
+    224.87193561042776,
+    -442.32871575767086,
+    -3.96256901122783,
+    590.4127514046288,
+    2.491569438823684,
+    -23087.301695900587,
+    -1595.3070657503956
+   ],
+   [
+    -194.33680879333306,
+    -328.3996062967598,
+    2612.3237912372892,
+    146.56222693589515,
+    232.30214111068165,
+    32.95515190639136,
+    -2407.652460546065,
+    1.6110247632666101,
+    -1265.6037053579273,
+    -21.134862510790356,
+    22831.236660490893,
+    496.7344082016681
+   ],
+   [
+    184.53024303858396,
+    314.0029207167942,
+    2598.1531756902173,
+    145.77908737791833,
+    -211.97273149397247,
+    -30.571496279473134,
+    -2625.204884998873,
+    -16.500125887208743,
+    -913.0036279191994,
+    -2.029609616464719,
+    -23308.092077247693,
+    -515.6325855253018
+   ]
+  ],
+  "how": "LQR gain, rows F_d, u_f, u_r; columns dv, xi, zc, vzc, th, om, zf, vzf, zr, vzr, q, qd"
+ },
+ "Lk_g": {
+  "value": [
+   0.34688551260045386,
+   73.60858319733957
+  ],
+  "how": "Kalman gain of the swing's filter (per probe reading)"
+ },
+ "Q_g": {
+  "value": [
+   399.99999999999994,
+   2500.0,
+   15000.0,
+   24.999999999999996,
+   216.75,
+   0.4444444444444444,
+   3611.1111111111113,
+   1.0,
+   3611.1111111111113,
+   1.0,
+   16000000.0,
+   11922.07351610695
+  ],
+  "how": "diag Q / Ts (Bryson weights)"
+ },
+ "cands": {
+  "value": [
+   {
+    "tilt_mm": 4.461182630716983,
+    "wall_mm": 2.234324260546387,
+    "head_spill_ml": 0.0,
+    "pitch_deg": 4.295014114802451,
+    "v_min": 1.4115128231370246,
+    "i_max": 7.999999999999991,
+    "u_max": 49.98874255209695,
+    "stop_N": 87.1482400848106,
+    "sat": 1.0,
+    "airborne": true,
+    "weights": {},
+    "slowest_pole": 0.9974480363649987,
+    "seconds": 2.4
+   },
+   {
+    "tilt_mm": 4.48614368769182,
+    "wall_mm": 2.2469133620081494,
+    "head_spill_ml": 0.0,
+    "pitch_deg": 5.328164795950147,
+    "v_min": 1.4009469819387523,
+    "i_max": 7.999999999999991,
+    "u_max": 49.9900867025849,
+    "stop_N": 92.14452761551584,
+    "sat": 1.0,
+    "airborne": true,
+    "weights": {
+     "q": 0.001
+    },
+    "slowest_pole": 0.9974561920863669,
+    "seconds": 1.0
+   },
+   {
+    "tilt_mm": 3.5400535386493384,
+    "wall_mm": 1.7730660674938934,
+    "head_spill_ml": 0.0,
+    "pitch_deg": 3.8353953096383457,
+    "v_min": 1.4092321937220844,
+    "i_max": 7.999999999999991,
+    "u_max": 49.98152313405256,
+    "stop_N": 76.20673029271107,
+    "sat": 1.0,
+    "airborne": true,
+    "weights": {
+     "q": 0.00025
+    },
+    "slowest_pole": 0.9974457161057386,
+    "seconds": 0.9
+   },
+   {
+    "tilt_mm": 4.438432615352576,
+    "wall_mm": 2.2228614707594323,
+    "head_spill_ml": 0.0,
+    "pitch_deg": 4.186352471876481,
+    "v_min": 1.4099303920431123,
+    "i_max": 7.999999999999991,
+    "u_max": 49.989836889986066,
+    "stop_N": 86.7320929131593,
+    "sat": 1.0,
+    "airborne": true,
+    "weights": {
+     "q": 0.0005,
+     "th": 0.15,
+     "stroke": 0.025
+    },
+    "slowest_pole": 0.9974813662662823,
+    "seconds": 0.9
+   },
+   {
+    "tilt_mm": 5.246646590683242,
+    "wall_mm": 2.627710298637103,
+    "head_spill_ml": 0.0,
+    "pitch_deg": 5.290279097736215,
+    "v_min": 1.3984838325701878,
+    "i_max": 7.999999999999991,
+    "u_max": 49.99745649424777,
+    "stop_N": 92.8863611006539,
+    "sat": 1.0,
+    "airborne": true,
+    "weights": {
+     "q": 0.0005,
+     "u": 60.0
+    },
+    "slowest_pole": 0.9974492275461649,
+    "seconds": 1.0
+   }
+  ],
+  "how": "index-16.json design"
+ },
+ "ride_kerb_full": {
+  "value": {
+   "fps": 60,
+   "frames": 241,
+   "tilt_max": 4.696,
+   "tilt_every2_even": 2.724,
+   "tilt_every2_odd": 4.696,
+   "t_tilt_max": 0.75,
+   "v_min": 1.4101,
+   "v_max": 1.7655,
+   "a_min": -2.893242712447659,
+   "a_max": 6.131736526946099,
+   "t_a_min": 0.9667,
+   "pitch_max_deg": 5.320715268702877,
+   "i_max": 8.0,
+   "u_max": 49.907,
+   "head_spill": 0.01,
+   "spill_g": 0.0,
+   "stout0_g": 429.583,
+   "aeff_max": 35.1094,
+   "om_max": 1.60501,
+   "al_max": 286.667,
+   "euler_rmax": 28.656392468238007,
+   "centr_rmax": 0.25751308410475116,
+   "cor_05": 1.60501,
+   "lean_needed_deg": 16.432258918309472
+  },
+  "how": "stored ride file: 60 or 30 pictures a second; acceleration by central differences of the stored speed"
+ },
+ "ride_kerb_full_seed2": {
+  "value": {
+   "fps": 60,
+   "frames": 241,
+   "tilt_max": 5.087,
+   "tilt_every2_even": 2.986,
+   "tilt_every2_odd": 5.087,
+   "t_tilt_max": 0.75,
+   "v_min": 1.4076,
+   "v_max": 1.7849,
+   "a_min": -2.7664670658682837,
+   "a_max": 6.110778443113766,
+   "t_a_min": 0.55,
+   "pitch_max_deg": 5.4744398451364775,
+   "i_max": 8.0,
+   "u_max": 49.929,
+   "head_spill": 0.023,
+   "spill_g": 0.0,
+   "stout0_g": 429.583,
+   "aeff_max": 29.4699,
+   "om_max": 1.62537,
+   "al_max": 229.9984,
+   "euler_rmax": 22.991570070732916,
+   "centr_rmax": 0.26408777290879026,
+   "cor_05": 1.62537,
+   "lean_needed_deg": 15.748706543125548
+  },
+  "how": "stored ride file: 60 or 30 pictures a second; acceleration by central differences of the stored speed"
+ },
+ "ride_kerb_off": {
+  "value": {
+   "fps": 60,
+   "frames": 241,
+   "tilt_max": 94.674,
+   "tilt_every2_even": 94.674,
+   "tilt_every2_odd": 94.329,
+   "t_tilt_max": 0.8667,
+   "v_min": 1.2166,
+   "v_max": 1.5455,
+   "a_min": -7.148169199428082,
+   "a_max": 6.500690034237415,
+   "t_a_min": 0.7167,
+   "pitch_max_deg": 20.356159136966912,
+   "i_max": 8.0,
+   "u_max": 0.0,
+   "head_spill": 14.516,
+   "spill_g": 87.419,
+   "stout0_g": 429.583,
+   "aeff_max": 23.9226,
+   "om_max": 5.80693,
+   "al_max": 154.2919,
+   "euler_rmax": 15.423642208800217,
+   "centr_rmax": 3.3708311348346554,
+   "cor_05": 5.80693,
+   "lean_needed_deg": 36.07938218708996
+  },
+  "how": "stored ride file: 60 or 30 pictures a second; acceleration by central differences of the stored speed"
+ },
+ "ride_resonant_off": {
+  "value": {
+   "fps": 60,
+   "frames": 481,
+   "tilt_max": 80.706,
+   "tilt_every2_even": 80.706,
+   "tilt_every2_odd": 79.464,
+   "t_tilt_max": 1.8,
+   "v_min": 0.9531,
+   "v_max": 1.0314,
+   "a_min": -1.632355499572867,
+   "a_max": 0.7743558795791614,
+   "t_a_min": 1.5833,
+   "pitch_max_deg": 7.564188811317128,
+   "i_max": 2.4145,
+   "u_max": 0.0,
+   "head_spill": 14.61,
+   "spill_g": 67.548,
+   "stout0_g": 429.583,
+   "aeff_max": 9.7301,
+   "om_max": 2.63644,
+   "al_max": 75.4083,
+   "euler_rmax": 7.5381185841503635,
+   "centr_rmax": 0.6948316605969304,
+   "cor_05": 2.63644,
+   "lean_needed_deg": 9.447293660170029
+  },
+  "how": "stored ride file: 60 or 30 pictures a second; acceleration by central differences of the stored speed"
+ },
+ "ride_bump25_off": {
+  "value": {
+   "fps": 60,
+   "frames": 481,
+   "tilt_max": 73.815,
+   "tilt_every2_even": 73.815,
+   "tilt_every2_odd": 73.423,
+   "t_tilt_max": 1.2,
+   "v_min": 0.98,
+   "v_max": 1.0165,
+   "a_min": -0.5044414589902004,
+   "a_max": 0.5073543350723853,
+   "t_a_min": 0.9833,
+   "pitch_max_deg": 9.260659546919982,
+   "i_max": 1.5719,
+   "u_max": 0.0,
+   "head_spill": 11.628,
+   "spill_g": 37.998,
+   "stout0_g": 429.583,
+   "aeff_max": 5.7605,
+   "om_max": 2.6654,
+   "al_max": 39.1208,
+   "euler_rmax": 3.9106733543499796,
+   "centr_rmax": 0.7101802684351417,
+   "cor_05": 2.6654,
+   "lean_needed_deg": 2.943622123855822
+  },
+  "how": "stored ride file: 60 or 30 pictures a second; acceleration by central differences of the stored speed"
+ },
+ "ride_kerb_full_v2": {
+  "value": {
+   "fps": 30,
+   "frames": 121,
+   "tilt_max": 2.637,
+   "tilt_every2_even": 2.295,
+   "tilt_every2_odd": 2.637,
+   "t_tilt_max": 0.7667,
+   "v_min": 1.4113,
+   "v_max": 1.7173,
+   "a_min": -1.8644824429237659,
+   "a_max": 2.7486620421784664,
+   "t_a_min": 0.9667,
+   "pitch_max_deg": 4.026919271517965,
+   "i_max": 8.0,
+   "u_max": 46.36,
+   "head_spill": 0.004,
+   "spill_g": 0.0,
+   "stout0_g": 429.583,
+   "aeff_max": 10.4752,
+   "lean_needed_deg": 10.761250313009501
+  },
+  "how": "stored ride file: 60 or 30 pictures a second; acceleration by central differences of the stored speed"
+ },
+ "ride_resonant_full_v2": {
+  "value": {
+   "fps": 30,
+   "frames": 241,
+   "tilt_max": 0.655,
+   "tilt_every2_even": 0.655,
+   "tilt_every2_odd": 0.651,
+   "t_tilt_max": 7.0667,
+   "v_min": 0.9909,
+   "v_max": 1.0091,
+   "a_min": -0.2022693405953877,
+   "a_max": 0.10799146739410403,
+   "t_a_min": 6.1333,
+   "pitch_max_deg": 0.3635990167900204,
+   "i_max": 1.5398,
+   "u_max": 14.073,
+   "head_spill": 0.0,
+   "spill_g": 0.0,
+   "stout0_g": 429.583,
+   "aeff_max": 0.1585,
+   "lean_needed_deg": 1.181196499066582
+  },
+  "how": "stored ride file: 60 or 30 pictures a second; acceleration by central differences of the stored speed"
+ },
+ "ride_bump25_full_v2": {
+  "value": {
+   "fps": 30,
+   "frames": 241,
+   "tilt_max": 0.497,
+   "tilt_every2_even": 0.493,
+   "tilt_every2_odd": 0.497,
+   "t_tilt_max": 4.5667,
+   "v_min": 0.9927,
+   "v_max": 1.0089,
+   "a_min": -0.08698388573421312,
+   "a_max": 0.05397325612966242,
+   "t_a_min": 6.2667,
+   "pitch_max_deg": 0.2654513464841104,
+   "i_max": 1.2932,
+   "u_max": 16.698,
+   "head_spill": 0.0,
+   "spill_g": 0.0,
+   "stout0_g": 429.583,
+   "aeff_max": 0.0686,
+   "lean_needed_deg": 0.5080202786312906
+  },
+  "how": "stored ride file: 60 or 30 pictures a second; acceleration by central differences of the stored speed"
+ },
+ "seed_rms_mm": {
+  "value": 0.6734876218339023,
+  "how": "rms over the 241 stored pictures of the tilt difference of the two seeds"
+ },
+ "seed_max_mm": {
+  "value": 1.588,
+  "how": "largest difference"
+ },
+ "f12_kerb": {
+  "value": {
+   "steps": 2040,
+   "ms_per_step": 89.8,
+   "its_per_step": 136.0,
+   "run_s": 183.1,
+   "cells": 370386,
+   "particles": 1001952,
+   "spilled_g": 0.0,
+   "head_spilled_ml": 1.63,
+   "control": {
+    "i_max_A": 2.9713556018305196,
+    "icmd_max_A": 40.40575455770423,
+    "frames_current_limited": 6,
+    "us_max_N": 0.0,
+    "ipar_max_A": 0.0,
+    "gains": {
+     "K": [
+      71.12138949777376,
+      -1228.7166302492442,
+      -40.49922328463659,
+      -150.00000000000335
+     ],
+     "Ks": [
+      -501.2156998123334,
+      11.923168259572924,
+      -6.34279425396823,
+      630.0044481464855
+     ]
+    }
+   },
+   "books": {
+    "stout_particles": 1001952,
+    "stout_err_particles_max": 0,
+    "stout_glass_g_end": 429.5833,
+    "stout_out_g_end": 0.0,
+    "head_ml0": 91.314,
+    "head_glass_ml_end": 89.6877,
+    "head_off_ml_end": 1.6263,
+    "head_err_ml_max": 1.0477377429193857e-08
+   },
+   "head_mass": true,
+   "fit_ring13": null,
+   "i_max_stored_A": 2.971,
+   "lean_max_mm_run": 14.245361328125,
+   "lean_max_mm": 21.84,
+   "tilt_max_mm": 20.81
+  },
+  "how": "Fig. 12 index-jax.json (run 10)"
+ },
+ "f12_res": {
+  "value": {
+   "steps": 4080,
+   "ms_per_step": 89.3,
+   "its_per_step": 136.5,
+   "run_s": 364.2,
+   "cells": 370386,
+   "particles": 1001952,
+   "spilled_g": 0.0,
+   "head_spilled_ml": 0.0,
+   "control": {
+    "i_max_A": 1.7204387548478646,
+    "icmd_max_A": 1.7115535000313395,
+    "frames_current_limited": 0,
+    "us_max_N": 7.062909800608162,
+    "ipar_max_A": 0.01557735236368268,
+    "gains": {
+     "K": [
+      71.12138949777376,
+      -1228.7166302492442,
+      -40.49922328463659,
+      -150.00000000000335
+     ],
+     "Ks": [
+      -501.2156998123334,
+      11.923168259572924,
+      -6.34279425396823,
+      630.0044481464855
+     ]
+    }
+   },
+   "books": {
+    "stout_particles": 1001952,
+    "stout_err_particles_max": 0,
+    "stout_glass_g_end": 429.5833,
+    "stout_out_g_end": 0.0,
+    "head_ml0": 91.314,
+    "head_glass_ml_end": 91.314,
+    "head_off_ml_end": 0.0,
+    "head_err_ml_max": 0.0
+   },
+   "head_mass": true,
+   "fit_ring13": null,
+   "i_max_stored_A": 1.72,
+   "lean_max_mm_run": 1.8160269260406494,
+   "lean_max_mm": 1.03,
+   "tilt_max_mm": 1.0
+  },
+  "how": "Fig. 12 index-jax.json (run 10)"
+ },
+ "f12_b25": {
+  "value": {
+   "steps": 4080,
+   "ms_per_step": 84.3,
+   "its_per_step": 118.9,
+   "run_s": 343.7,
+   "cells": 370386,
+   "particles": 1001952,
+   "spilled_g": 0.0,
+   "head_spilled_ml": 0.0,
+   "control": {
+    "i_max_A": 1.6457452804246548,
+    "icmd_max_A": 1.6604877254655237,
+    "frames_current_limited": 0,
+    "us_max_N": 7.926183720624584,
+    "ipar_max_A": 0.013306373625678864,
+    "gains": {
+     "K": [
+      71.12138949777376,
+      -1228.7166302492442,
+      -40.49922328463659,
+      -150.00000000000335
+     ],
+     "Ks": [
+      -501.2156998123334,
+      11.923168259572924,
+      -6.34279425396823,
+      630.0044481464855
+     ]
+    }
+   },
+   "books": {
+    "stout_particles": 1001952,
+    "stout_err_particles_max": 0,
+    "stout_glass_g_end": 429.5833,
+    "stout_out_g_end": 0.0,
+    "head_ml0": 91.314,
+    "head_glass_ml_end": 91.314,
+    "head_off_ml_end": 0.0,
+    "head_err_ml_max": 0.0
+   },
+   "head_mass": true,
+   "fit_ring13": null,
+   "i_max_stored_A": 1.646,
+   "lean_max_mm_run": 0.9025335311889648,
+   "lean_max_mm": 0.88,
+   "tilt_max_mm": 1.03
+  },
+  "how": "Fig. 12 index-jax.json (run 10)"
+ },
+ "gpu_v4_min": {
+  "value": 6.966666666666667,
+  "how": "sum run_s of the v4 rides stored"
+ },
+ "gpu_v7_min": {
+  "value": 37.81166666666666,
+  "how": "sum run_s of the v7 rides stored"
+ },
+ "ms_step_on": {
+  "value": [
+   97.7,
+   95.9
+  ],
+  "how": "ms a step, control on (v4)"
+ },
+ "ms_step_off": {
+  "value": [
+   190.0,
+   192.8,
+   199.7
+  ],
+  "how": "ms a step, control off (v7)"
+ },
+ "steps": {
+  "value": {
+   "bump25_off.json": 4397,
+   "kerb_full.json": 2040,
+   "kerb_full_seed2.json": 2160,
+   "kerb_off.json": 442,
+   "resonant_off.json": 4798,
+   "bump25_full.json": 4080,
+   "resonant_full.json": 4080
+  },
+  "how": "steps per ride"
+ },
+ "check_geff": {
+  "value": 3.552713678800501e-15,
+  "how": "max |g_eff . e - formula| over 1000 random states"
+ },
+ "check_rot": {
+  "value": 1.7763568394002505e-15,
+  "how": "max error of frame_accel's components against the vector formula, Omega = -theta' e_y"
+ },
+ "check_lin": {
+  "value": {
+   "exact": 0.17608836509150805,
+   "lin": 0.17610000000000003
+  },
+  "how": "a_eff exact vs linear at theta 0.01 rad, a_x 0.2 m/s^2, theta'' 1 rad/s^2"
+ },
+ "check_aS": {
+  "value": {
+   "exact": 1.0121172999699724e-07,
+   "code": 1.7590014089209394,
+   "scale": 1.775795648200301
+  },
+  "how": "max |finite difference - formula|, m/s^2: the exact formula and cart4's"
+ },
+ "gz_err_kerb_full": {
+  "value": 0.6285579324244001,
+  "how": "2 h_g max th'^2: cart4's error of g_z (along the glass)"
+ },
+ "gz_err_kerb_full_seed2": {
+  "value": 0.6446059434036,
+  "how": "2 h_g max th'^2: cart4's error of g_z (along the glass)"
+ },
+ "gz_err_kerb_off": {
+  "value": 8.2277863900756,
+  "how": "2 h_g max th'^2: cart4's error of g_z (along the glass)"
+ },
+ "gz_err_resonant_off": {
+  "value": 1.6959990731584,
+  "how": "2 h_g max th'^2: cart4's error of g_z (along the glass)"
+ },
+ "gz_err_bump25_off": {
+  "value": 1.73346314704,
+  "how": "2 h_g max th'^2: cart4's error of g_z (along the glass)"
+ },
+ "run3_run2_rms": {
+  "value": 0.7482146629264772,
+  "how": "rms of run 3 seed 1 minus run 2, kerb with control, at run 2's 121 picture times"
+ },
+ "run3_run2_max": {
+  "value": 1.5459999999999998,
+  "how": "largest difference"
+ },
+ "seed_rms30": {
+  "value": 0.678971785827963,
+  "how": "the two seeds at the same 121 times"
+ },
+ "late_seed1": {
+  "value": {
+   "du_max": 31.5955,
+   "du_before": 2.0515,
+   "al_max": 286.667,
+   "om_max": 0.4168,
+   "tilt_max": 1.617,
+   "yq_jump_t": 3.3333,
+   "yq_min": -0.678,
+   "yq_max": 0.643
+  },
+  "how": "seed 1 after 3.2 s: actuators' pitch part (|u_f - u_r|/2), deck's angular acceleration, pitch rate, tilt, probe reading"
+ },
+ "late_seed2": {
+  "value": {
+   "du_max": 0.33
+  },
+  "how": "seed 2 after 3.2 s"
+ },
+ "airborne": {
+  "value": {
+   "front": 11,
+   "rear": 13,
+   "t_first": 0.5833,
+   "t_last": 0.9
+  },
+  "how": "stored pictures of the controlled kerb (seed 1) in which an axle carries no load"
+ },
+ "strokes_mm": {
+  "value": {
+   "f_min": -33.78326737526928,
+   "f_max": 10.082039132430415,
+   "r_min": -31.504964669677214,
+   "r_max": 30.401886513364314
+  },
+  "how": "strut strokes from their first stored value, controlled kerb seed 1"
+ },
+ "pitch_geom_deg": {
+  "value": 15.826620131872344,
+  "how": "asin(2 s_max / wheelbase): the most the struts' travel can tilt the deck"
+ },
+ "tau_y": {
+  "value": 5.4149999999999965,
+  "how": "Fig. 12 ride file, head.tau_y"
+ },
+ "e_break_mm": {
+  "value": 4.06037564885871,
+  "how": "2 tau_y / (phi_f rho g)"
+ },
+ "dt_fluid_ms": {
+  "value": 1.8518518518518519,
+  "how": "4 s / steps of the controlled kerb (run 3)"
+ },
+ "zeta_num": {
+  "value": 0.015191407918509524,
+  "how": "notes/fig12/damping-grid.json, 1.5 mm"
+ },
+ "zeta_num_share": {
+  "value": 0.03574254631917866,
+  "how": "zeta_num / zeta with the head"
+ },
+ "check_preview": {
+  "value": {
+   "u_opt": -0.16488680761432895,
+   "u_formula": -0.1648868076143303
+  },
+  "how": "first optimal input: optimality equations solved directly vs the preview formula"
+ }
+}
