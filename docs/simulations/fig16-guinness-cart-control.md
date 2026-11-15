@@ -25,9 +25,10 @@ tilt): twice the cos θ part of the stored surface on the outer ring, exactly as
   first stored value.
   The wheels (14 November 2026): angle −x/R_w from the player's position between stored pictures (`pose.wheelAng`, kinematics), spokes
   smeared over the angle turned in one screen frame (`pose.wheelRate` = v/R_w), one gold valve mark (`notes/guinness-rebuild/audit.md` A).
-- The lecture note (first version) is built into the page by `tools/fig16/build_page.py` from `notes/fig16/page/guinness-cart-control.src.html`:
-  every number in it is filled from the stored data (the two indexes, the stored rides and the run's summary
-  `notes/fig16/run16-v2-summary.json`); `--check` fails if the page differs from what its source and data give.
+- The lecture note is built into the page by `tools/fig16/build_page.py` from `notes/fig16/page/guinness-cart-control.src.html`
+  (the note sits between [`<article class="paper" id="paper">`](../../notes/fig16/page/guinness-cart-control.src.html#L89) and
+  [`</article>`](../../notes/fig16/page/guinness-cart-control.src.html#L389)): every number in it is a `{{key}}` filled from stored data;
+  `--check` fails if the page differs from what its source and data give. See "The lecture note" below.
 
 ## The machine and its control system (`tools/fig16/kaggle/cart4.py`)
 
@@ -35,11 +36,11 @@ Planar, as Fig. 12 (both wheels of an axle meet the same road). A rigid deck (2.
 the pint as a rigid load) heaves and pitches on two axles 0.22 m apart; per axle a spring of 700 N/m over a damper of 19 N s/m, a
 voice-coil actuator of ±50 N (two struts), bump stops at ±30 mm, tyres of 16 kN/m. Two rear hub motors, 3 N/A each at the road, 8 A,
 24 V, 0.6 Ω. The stout feels the uniform effective gravity of the point S where its first mode lives, 122 mm above the deck's centre,
-turned into the glass's frame (note eq. 1); its push acts back on the deck at the same point. Left out: the rotating frame's forces that
-vary across the glass.
+turned into the glass's frame (note eq. 4); its push acts back on the deck at the same point. Since run 3 the rotating frame's forces that
+vary across the glass are in the fluid too (note eq. 8).
 
 Control, every 1 ms: LQR on the linear model of cart, deck, axles and the first sloshing mode (run 8's measured swing with the head:
-2.915 Hz, ζ 0.425, β 1.241), with the optimal feed-forward of the road the scanner reads 0.25 s ahead (Tomizuka's preview, note eq. 4);
+2.915 Hz, ζ 0.425, β 1.241), with the optimal feed-forward of the road the scanner reads 0.25 s ahead (note eq. 17);
 the swing estimated by a Kalman filter from the IMU's acceleration and Fig. 12's two wall probes. The weighting is chosen in the
 notebook among five, on the kerb, with the few-mode stout of `tools/fig16/slosh_model.py`; run 2 chose q = 0.25 mm.
 
@@ -63,11 +64,44 @@ full, with 8.35 mL of head and 9.79 g of stout already spilled. Five bumps, 1.0 
 0.50 mm, nothing spilled. Books closed in every ride (0 particles; head within 1e-8 mL). Fig. 12's best on the same roads: 20.81 mm and
 1.63 mL; 1.00 mm; 1.03 mm.
 
+## The lecture note (rewritten 15 November 2026)
+
+A chapter in the manner of a second-year textbook (`notes/STANDARD.md`, verdict of 21 October 2026), nine sections: 1 the kerb and the
+hand; 2 the machine (Table 1 of every parameter, Example 2.1 the bounce); 3 what the stout feels on a tilting deck (effective gravity,
+the acceleration of S on a pitching deck, eq. 3, the waiter's tilt, eq. 5, the linear sideways acceleration, eq. 6, the driven swing,
+eq. 7, ★ the forces of a turning glass, eq. 8); 4 the cart's equations of motion (eqs. 9 to 11), its natural modes with the control off
+(Table 2, from `modes16.json` and recomputed) and the wheelbase filter (eq. 13); 5 the control system (Bryson's rule, ★ LQR from
+dynamic programming, eqs. 15 and 16, ★ preview, eq. 17, the Kalman filter, eq. 18, the hardware's limits, the design step, Table 3);
+6 how the rides were computed (the solver, the cart's sub-steps, the three notebook versions, the volume correction, errors to
+expect); 7 the results (Tables 4 and 5, sampling of peaks); 8 what is on the screen; 9 limits, Problems, further reading (only
+sources opened: Tong, Åström and Murray, Boyd, Liu, Lessard and Seiler, Welch and Bishop, Kugelstadt et al., Fig. 12's note).
+
+**Where its numbers come from.** `notes/fig16/note_numbers.py` measures every derived number from the code and the stored data and
+writes `notes/fig16/note-numbers.json`; [`build_page.py`](../../tools/fig16/build_page.py#L53) only formats them
+([the keys](../../tools/fig16/build_page.py#L77), [Table 3's rows](../../tools/fig16/build_page.py#L68) from the index's design step).
+It uses [`statics`](../../tools/fig16/kaggle/cart4.py#L82), [`linear_model`](../../tools/fig16/kaggle/cart4.py#L97) and
+[`design`](../../tools/fig16/kaggle/cart4.py#L133) of `cart4.py` (masses, modes, LQR gain, closed-loop poles, preview gains, Kalman
+gain), the glass profile, Fig. 12's cart constants, and the stored rides (accelerations by central differences of the stored speed,
+pitch rates, tilts every picture and every second picture, seed scatter, strokes, airborne pictures, the swelling check from the
+stored surfaces). It also runs four checks printed in the note: eq. 4 and the rotating-frame formula of
+[`Stout.frame_accel`](../../tools/fig12/kaggle/stout_jax.py#L273) on random states (agree to 10⁻¹⁵), eq. 6 against eq. 4, and the
+preview law (17) against a direct solution of the optimality equations (agree to 10⁻¹⁵).
+
+**Found while measuring (not changed: page and Kaggle code are outside the note).**
+- The centripetal term of the acceleration of S has the wrong sign in [`Cart4.forces`](../../tools/fig16/kaggle/cart4.py#L218)
+  (`- hg * om**2 * sin`, `+ hg * om**2 * cos`; it should be `+`, `-`). The error, 2 h_g θ'² along the glass's axis, leaves the
+  sideways push g_x exact and changes g_z by at most 0.63 m/s² on the controlled kerb and 8.2 m/s² on the uncontrolled kerb.
+- In the linear model the stout feels the deck but does not push back on it, so Table 2's "pitch mode with the stout" is the deck's own
+  pitch mode (4.08 Hz natural, 3.85 Hz ringing) whose eigenvector carries the driven swing; `modes16.json` lists ringing
+  frequencies (|Im λ|/2π), not natural ones.
+- The drive force is capped by the rear tyres' grip (μ N_r = 19 N at rest), below the motors' 48 N.
+- Seed 1 of the controlled kerb (run 3) shows, from 3.3 s on, actuator forces in opposite phase up to ±32 N and single-sample angular
+  accelerations up to 287 rad/s² after a jump of the probes' reading; seed 2 does not. Not yet explained.
+
 ## Open
 
-The full lecture note to the standard of `notes/STANDARD.md` (readers, derivation checker); the data panel with the three-way proof;
-run-to-run scatter on the kerb; the rotating frame's non-uniform forces; the figure's Kaggle dataset `numakoudsie/fig16-...` (the layout
-rule of `docs/kaggle-pipeline.md`).
+The data panel with the three-way proof; the figure's Kaggle dataset `numakoudsie/fig16-...` (the layout rule of
+`docs/kaggle-pipeline.md`); the centripetal sign in `cart4.py` and a rerun; the late actuator burst of seed 1.
 
 **Control switch and run 3 (15 November 2026).** The page offers three roads and one switch, "Control system on/off". The switch keeps
 the ride time and cross-fades the last picture out over 0.45 s. `guinness16-play.js` reads both indexes,

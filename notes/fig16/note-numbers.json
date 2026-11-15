@@ -1060,7 +1060,9 @@
    "front": 11,
    "rear": 13,
    "t_first": 0.5833,
-   "t_last": 0.9
+   "t_last": 0.9,
+   "rear_t_first": 0.6167,
+   "rear_t_last": 0.9
   },
   "how": "stored pictures of the controlled kerb (seed 1) in which an axle carries no load"
  },
@@ -1103,5 +1105,72 @@
    "u_formula": -0.1648868076143303
   },
   "how": "first optimal input: optimality equations solved directly vs the preview formula"
+ },
+ "weights": {
+  "value": {
+   "dv": 0.05,
+   "xi": 0.02,
+   "zc": 0.01,
+   "vzc": 0.2,
+   "th": 0.08,
+   "om": 1.5,
+   "zw": 0.03,
+   "vzw": 1.0,
+   "q": 0.00025,
+   "qd": 0.009158494780311978,
+   "stroke": 0.02,
+   "Fd": 40.0,
+   "u": 40.0
+  },
+  "how": "cart4.WEIGHTS updated with the chosen weighting"
+ },
+ "omdot_fd_kerb_full": {
+  "value": 44.88952095808381,
+  "how": "max |d(om)/dt| from the stored pictures (60/s)"
+ },
+ "omdot_fd_kerb_off": {
+  "value": 116.06433345184153,
+  "how": "max |d(om)/dt| from the stored pictures (60/s)"
+ },
+ "kal_tau_ms": {
+  "value": 4.347041096474394,
+  "how": "-dt_fluid / ln(1 - L_1)"
+ },
+ "swelling": {
+  "value": {
+   "kerb_full": {
+    "t": 4.0,
+    "read_mm": 125.04,
+    "rest_mm": 124.99993055172018,
+    "ratio": 1.0004510910590476,
+    "stout_left_g": 429.583,
+    "lost_frac": 0.0
+   },
+   "kerb_off": {
+    "t": 4.0,
+    "read_mm": 107.82000000000001,
+    "rest_mm": 107.04258029954391,
+    "ratio": 1.0110017637979114,
+    "stout_left_g": 342.164,
+    "lost_frac": 0.2034973450997828
+   },
+   "resonant_off": {
+    "t": 8.0,
+    "read_mm": 112.02000000000001,
+    "rest_mm": 111.1347571090543,
+    "ratio": 1.0119118565206244,
+    "stout_left_g": 362.035,
+    "lost_frac": 0.1572408591587656
+   },
+   "bump25_off": {
+    "t": 8.0,
+    "read_mm": 118.4,
+    "rest_mm": 117.18973446365413,
+    "ratio": 1.0150907475255044,
+    "stout_left_g": 391.585,
+    "lost_frac": 0.08845322091423542
+   }
+  },
+  "how": "stored median surface at the last picture vs the rest height of the stout still in the glass (glass profile, rho 1007)"
  }
 }

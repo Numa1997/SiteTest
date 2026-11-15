@@ -187,7 +187,8 @@ put("late_seed1", dict(du_max=float(du[late].max()), du_before=float(du[(t1 > 1.
 d2 = rides["kerb_full_seed2"]; t2s = np.asarray(d2["t"])
 put("late_seed2", dict(du_max=float((np.abs(np.asarray(d2["uf"]) - np.asarray(d2["ur"])) / 2)[t2s > 3.2].max())), "seed 2 after 3.2 s")
 Nf = np.asarray(d1["Nf"]); Nr = np.asarray(d1["Nr"])
-put("airborne", dict(front=int((Nf <= 0).sum()), rear=int((Nr <= 0).sum()), t_first=float(t1[(Nf <= 0) | (Nr <= 0)].min()), t_last=float(t1[(Nf <= 0) | (Nr <= 0)].max())),
+put("airborne", dict(front=int((Nf <= 0).sum()), rear=int((Nr <= 0).sum()), t_first=float(t1[(Nf <= 0) | (Nr <= 0)].min()), t_last=float(t1[(Nf <= 0) | (Nr <= 0)].max()),
+                     rear_t_first=float(t1[Nr <= 0].min()), rear_t_last=float(t1[Nr <= 0].max())),
     "stored pictures of the controlled kerb (seed 1) in which an axle carries no load")
 sf = np.asarray(d1["zc"]) + P["af"] * np.sin(d1["th"]) - np.asarray(d1["zf"]); sr = np.asarray(d1["zc"]) - P["ar"] * np.sin(d1["th"]) - np.asarray(d1["zr"])
 put("strokes_mm", dict(f_min=float((sf - sf[0]).min() * 1e3), f_max=float((sf - sf[0]).max() * 1e3), r_min=float((sr - sr[0]).min() * 1e3), r_max=float((sr - sr[0]).max() * 1e3)),
@@ -222,6 +223,36 @@ def preview_check(seed=3, NH=300):
 u_opt, u_formula = preview_check()
 put("check_preview", dict(u_opt=u_opt, u_formula=u_formula), "first optimal input: optimality equations solved directly vs the preview formula")
 
+# the controller's largest acceptable values (Bryson's rule), with the chosen weighting
+put("weights", dict(C4.WEIGHTS, **W), "cart4.WEIGHTS updated with the chosen weighting")
+# the pitch's angular acceleration averaged over one stored picture (central differences of the stored pitch rate)
+for n in ("kerb_full", "kerb_off"):
+    d = rides[n]; put("omdot_fd_" + n, float(np.max(np.abs(np.gradient(np.asarray(d["om"]), np.asarray(d["t"]))))), "max |d(om)/dt| from the stored pictures (60/s)")
+# the Kalman correction's memory: the prediction error shrinks by (1 - L_1) at each fluid step
+put("kal_tau_ms", -out["dt_fluid_ms"]["value"] / math.log(1 - out["Lk_k"]["value"][0]), "-dt_fluid / ln(1 - L_1)")
+# the swelling check of the stored control-off rides (run 4b, with the volume correction) and the controlled kerb (run 3, without):
+# the stored median surface against the height the stout still in the glass fills at rest (run16.py's check, from the page's files)
+import base64, zlib
+sys.path.insert(0, P_("tools", "fig12", "kaggle"))
+def glass_volume(fillz, n=20000):
+    z = np.linspace(0, fillz, n + 1); r = np.interp(z / dzp, np.arange(len(R)), R); return float(np.trapezoid(np.pi * r * r, z))
+def h_rest(vol):
+    lo_, hi_ = 0.0, zrim
+    for _ in range(50):
+        mid = 0.5 * (lo_ + hi_); lo_, hi_ = (mid, hi_) if glass_volume(mid, 4000) < vol else (lo_, mid)
+    return 0.5 * (lo_ + hi_)
+sw = {}
+for n in ("kerb_full", "kerb_off", "resonant_off", "bump25_off"):
+    d = rides[n]; nn = d["n"]
+    # pack16: Hq = round(H / qH) as int16, -32768 where no surface; frames after the first store Hq[k] - Hq[k-1] wrapped to int16, so a
+    # cumulative sum in int16 (wrapping alike) gives Hq back exactly
+    Hq = np.cumsum(np.frombuffer(zlib.decompress(base64.b64decode(d["H"])), np.int16).reshape(d["frames"], nn, nn), 0, dtype=np.int16)
+    k = d["frames"] - 1
+    Hk = np.where(Hq[k] == -32768, np.nan, Hq[k].astype(float) * d["qH"])
+    hr = float(np.nanmedian(Hk)); he = h_rest(d["stout_g"][k] / 1e3 / 1007.0)
+    sw[n] = dict(t=float(d["t"][k]), read_mm=hr * 1e3, rest_mm=he * 1e3, ratio=glass_volume(hr, 4000) / glass_volume(he, 4000), stout_left_g=float(d["stout_g"][k]),
+                 lost_frac=float(d["spill_g"][k] / d["stout_g"][0]))
+put("swelling", sw, "stored median surface at the last picture vs the rest height of the stout still in the glass (glass profile, rho 1007)")
 json.dump(out, open(P_("notes", "fig16", "note-numbers.json"), "w"), indent=1, default=float)
 for k, v in out.items():
     if k.startswith(("K_", "cands", "steps", "Q_")): continue

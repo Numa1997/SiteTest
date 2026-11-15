@@ -11,10 +11,24 @@ parts with their results restated). Only the note changes, between `<article cla
 - [x] read: STANDARD.md, CLAUDE.md, AGENTS.md, the page source, build_page.py, STATE.md, model.md, audit.md A-K, cart4.py,
   run16.py, pack16.py, stout_jax.py (frame_accel, body_force, volume_source, head_spill, step), modes16.json, both index-16.json,
   the Fig. 2 note (reference), Fig. 12's note sections 3-4 (for the driven-swing equation it derives).
-- [ ] measure: `notes/fig16/note_numbers.py` -> `notes/fig16/note-numbers.json` (every derived number of the note)
-- [ ] build_page.py reads note-numbers.json; new keys
-- [ ] write the note; build; `--check`; `npm run build`; Chromium (KaTeX errors, screenshots, page table vs note table)
-- [ ] docs/simulations/fig16-guinness-cart-control.md; commit; push this branch only
+- [x] measure: `notes/fig16/note_numbers.py` -> `notes/fig16/note-numbers.json` (every derived number of the note)
+- [x] build_page.py reads note-numbers.json; 250 keys
+- [x] write the note (nine sections, 18 numbered equations, 5 tables, Problems, 7 sources opened); build; `--check`
+- [x] `npm run build`; Chromium 1440 and 390 px: 0 KaTeX errors, 527 formulas, tags (1)-(18), no unfilled key, no page error, no sideways scroll; the page table equals Tables 4-5
+- [x] docs/simulations/fig16-guinness-cart-control.md; [x] commit; push this branch only
+- Not done here (lead's files): `docs/files.md` (tools/inventory.py says it is out of date after the new files).
+
+## Found while measuring (reported, code untouched)
+- cart4.py `Cart4.forces` line 218: the centripetal term of a_S has the wrong sign (finite-difference test in note_numbers.py).
+  Only g_z is affected (by 2 h_g th'^2: 0.63 m/s^2 controlled kerb, 8.2 m/s^2 uncontrolled kerb); g_x and a_eff are exact.
+- The linear model has no push of the stout back on the deck; modes16.json's "f_hz" are ringing frequencies |Im lambda|/2pi.
+  The pitch mode: natural 4.08 Hz, ringing 3.85 Hz, zeta 0.33; peak response 3.60 Hz; the five bumps at 3.45 Hz.
+- Drive force limited by grip mu N_r0 = 19.0 N (not the motors' 48 N).
+- Run 3 seed 1, controlled kerb: from 3.3 s, actuators in opposite phase up to 32 N, single-sample theta'' up to 287 rad/s^2,
+  after the probe reading jumps (-0.68..0.64 mm); seed 2 quiet (0.3 N). Unexplained.
+- Every-second-picture peak of the controlled kerb: 2.72 mm (even) or 4.70 mm (odd), not "about half".
+- The old note's R = 36 mm was wrong: R at the fill is 39.1 mm (9 deg -> 6.19 mm, not 5.7 mm).
+
 
 ## Chapter plan (sections, what each derives, the worked examples)
 
