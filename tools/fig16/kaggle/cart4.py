@@ -20,7 +20,9 @@ M_x adds the axles and the turning wheels. d: height of the deck's centre of mas
 the arms act there); h_s: height of the stout's centre above the deck's centre.
 
 The glass, clamped to the deck, accelerates with the point S where the stout's first mode lives (height h_g above the deck's centre):
-    a_S = (x'' - h_g theta'' cos(theta) - h_g theta'^2 sin(theta),  z_c'' - h_g theta'' sin(theta) + h_g theta'^2 cos(theta))
+    a_S = (x'' - h_g theta'' cos(theta) + h_g theta'^2 sin(theta),  z_c'' - h_g theta'' sin(theta) - h_g theta'^2 cos(theta))
+(15 Nov 2026: the theta'^2 terms had the wrong sign up to run 4b, an outward instead of the centripetal acceleration; the sideways
+g_x was exact all the same, g_z along the glass was off by 2 h_g theta'^2: at most 0.6 m/s^2 with control, 8.2 m/s^2 without)
 and the stout, computed in the glass's frame (axes e_x = (cos theta, sin theta), e_z = (-sin theta, cos theta)), feels the uniform
 effective gravity g_eff = g - a_S resolved on those axes (the stout's moving push F^stout acts on the deck at the same point S, so the
 two-way coupling keeps action and reaction at one height; diagnostics 14 Nov 2026: with the push at the stout's centre of mass and the
@@ -215,7 +217,7 @@ class Cart4:
         al = (af * ct_ * Fsf - ar * ct_ * Fsr + P["d"] * (S["Ms"] * ax - Fx) - P["hg"] * Fx) / S["J"]
         azf = (-Fsf + Nf - P["mf"] * G0) / P["mf"]; azr = (-Fsr + Nr - P["mr"] * G0) / P["mr"]
         hg = P["hg"]
-        aSx = ax - hg * al * ct_ - hg * c["om"] ** 2 * st; aSz = azc - hg * al * st + hg * c["om"] ** 2 * ct_
+        aSx = ax - hg * al * ct_ + hg * c["om"] ** 2 * st; aSz = azc - hg * al * st - hg * c["om"] ** 2 * ct_   # S = c + hg (-sin, cos)
         gx = -(G0 + aSz) * st - aSx * ct_; gz = -(G0 + aSz) * ct_ + aSx * st
         aeff = aSx * ct_ + (G0 + aSz) * st                          # = -g_x: the glass's sideways acceleration felt by the stout
         return dict(c, ax=ax, azc=azc, al=al, azf=azf, azr=azr, Nf=Nf, Nr=Nr, Ff=Fsf, Fr=Fsr, gx=gx, gz=gz, aeff=aeff, Fdrive=Fm,
