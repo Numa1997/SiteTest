@@ -297,7 +297,14 @@ class Stout:
         inc = [dt * ax_u + du_f, None, dt * az_w + dw_f]
         return [jnp.where((mass[c] > 1e-6) & (self.th[c] > 0), vel[c] + inc[c], vel[c]).astype(F32) if c != 1 else vel[1] for c in range(3)]
 
-    def volume_source(self, cnt, liq, dt):
+    def swelling(self, liq, act):
+        """The pint's swelling: volume of the cells the level set calls liquid (open part of each, inside the cavity) over the true
+        volume of the stout still in the glass, minus 1. At rest about +0.5 % (the half-filled surface layer); after the uncontrolled
+        rides of run 3, +18 to +48 %."""
+        vliq = jnp.sum(jnp.where(liq & self.cavc, 1.0, 0.0).astype(F64)) * self.dx ** 3
+        return vliq / jnp.maximum(jnp.sum(act, dtype=F64) * self.mp / self.rho, 1e-12) - 1.0
+
+    def volume_source(self, cnt, liq, dt, gate=1.0):
         """The volume correction's target net outflow of each interior cell (m/s): kappa (n/n0 - 1 + d) dx/dt where the 5 x 5 x 5 block about
         the cell holds n < (1 - d) n0 particles (n0 = 125 ppc^3, d = 0.05); zero elsewhere. Every cell of the block must be liquid and well
         inside the cavity. Only swelling is corrected, the fault measured (Fig. 16 run 3: +18 to +48 % after the uncontrolled rides): a
@@ -309,7 +316,7 @@ class Stout:
             ok = ok & sh(ok, 1, ax, False) & sh(ok, -1, ax, False) & sh(ok, 2, ax, False) & sh(ok, -2, ax, False)
         dev = jnp.clip(c / (125.0 * self.ppc ** 3) - 1.0, -0.5, 0.0)
         dev = jnp.where(dev < -0.05, dev + 0.05, 0.0)
-        return jnp.where(ok, self.vol_corr * dev * self.dx / dt, 0.0).astype(F32)
+        return jnp.where(ok, gate * self.vol_corr * dev * self.dx / dt, 0.0).astype(F32)
 
     # ---------------------------------------------------------------- state
     def init_state(self):
@@ -777,7 +784,10 @@ class Stout:
         if rot is not None: gdt = gdt[:, :, None]
         uc = None
         if self.vol_corr > 0:   # the volume correction moves positions only (Kugelstadt et al. 2019): its own projection of a zero velocity field
-            src = self.volume_source(pr["cnt"], liq, dt); zf = [jnp.zeros_like(v) for v in vel]
+            # the gate (run 4b): the correction acts only while the whole pint has swollen by more than 4 % (fully from 8 %); run 4 without
+            # it stirred the pint at rest at 1.5 mm (rest guard: 1.54 mm, limit 0.75 mm)
+            gate = jnp.clip((self.swelling(liq, s["act"]) - 0.04) / 0.04, 0.0, 1.0).astype(F32)
+            src = self.volume_source(pr["cnt"], liq, dt, gate); zf = [jnp.zeros_like(v) for v in vel]
             uc, kc, _, _, _ = self.pressure(zf, ph, liq, jnp.zeros_like(s["p"]), jnp.zeros((self.n, self.n), F32), src=src)
             uc = self.extrapolate(uc, kc)
         vel, known, p, it, res = self.pressure(vel, ph, liq, s["p"], ps, mu=mu, w_old=w_old, geff_dt=gdt)
