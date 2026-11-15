@@ -1,5 +1,12 @@
 # Guinness rebuild (Fig. 12 and Fig. 16): this chat's state
 
+## BINDING RULE (owner, 15 Nov 2026, ~15:05 UTC)
+"No referee or checker. No tests to be run. Read the code and validate it by reading, not by running anything. Any tests that you
+run, you run on my Kaggle. Absolutely nothing in your environment anymore, zero."
+So: no scripts, builds, browsers, packers or agents in this container. Only reading, editing files, git, and Kaggle calls.
+Packing (pack16.py), note_numbers.py and build_page.py run in a Kaggle CPU notebook; their outputs are downloaded and committed.
+Cloudflare builds the site on push to main.
+
 Reread first after any compaction. Prompt: `notes/fig16/PROMPT-computational-physicist.md`. Branch: `claude/compassionate-pascal-kk3d8g`
 (from main a1afdbd). Report only to the owner, in this chat.
 
