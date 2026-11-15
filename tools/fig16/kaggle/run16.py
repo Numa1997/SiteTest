@@ -130,6 +130,7 @@ def run_design():
 
 
 measured = {}
+warned = {}
 for task in TASKS:
     name = task["name"]
     if task["kind"] == "design":
@@ -159,7 +160,7 @@ for task in TASKS:
     def record(s, t, ex, st, wall):
         o = obs(s); P = pol(o["H"])
         rec["t"].append(float(t)); rec["H"].append(np.asarray(o["H"])); rec["polar"].append(np.asarray(P))
-        dr = np.asarray(o["drops"]); nd = int(o["ndrops"])
+        dr = np.asarray(o["drops"]); nd = min(int(o["ndrops"]), S.M)       # the listing holds at most M; the count stored is the true one
         if nd > DROPS_KEEP: dr = dr[np.linspace(0, nd - 1, DROPS_KEEP).round().astype(int)]
         else: dr = dr[:DROPS_KEEP]
         rec["drops"].append(dr.astype(np.float16))
@@ -183,7 +184,7 @@ for task in TASKS:
         steps += int(st["steps"]); its += int(st["its"])
         record(s, t, ex, st, w)
         if int(st["nselmax"]) >= S.K: log(f"  STOP frame {f}: surface list full"); break
-        if int(rec["ndrops"][-1]) >= S.M: log(f"  STOP frame {f}: drop list full"); break
+        if int(rec["ndrops"][-1]) >= S.M and not warned.get(name): warned[name] = 1; log(f"  frame {f}: more drops than the listing holds ({S.M:,}); the stored picture shows an even subsample of the first {S.M:,}, the fluid is not affected")
         if not np.isfinite(rec["KE"][-1]) or rec["KE"][-1] > 10: log(f"  STOP: kinetic energy {rec['KE'][-1]} J at t = {float(t):.3f} s"); break
         if task["kind"] == "ride" and not np.isfinite(rec["x"][-1]): log("  STOP: the cart's state is not finite"); break
         if time.time() - Tlast > 60:
