@@ -1,6 +1,6 @@
 /* Fig. 16, computed on Kaggle: plays the stored rides of the four-wheel cart (public/data/fig16/<date>/, listed in index-16.json) beside
  * Fig. 12's best stored ride on the same road (public/data/fig12/2026-11-14-run10/), on one clock. Computes nothing physical: each
- * stored frame (30 a second) holds the stout's surface, the head, drops and lumps (drawn by Fig. 12's StoutView2 and, on the right,
+ * stored frame (30 or 60 a second, the ride's own fps) holds the stout's surface, the head, drops and lumps (drawn by Fig. 12's StoutView2 and, on the right,
  * by Cart16View on top of it), the cart's pose and its control signals. No frame is interpolated; every file is checked against the
  * SHA-256 in its index. The one value read on the page from stored data is Fig. 12's tilt per frame (its files store only the largest),
  * read from Fig. 12's stored surface exactly as tools/fig12/kaggle/pack_ride.py reads it. */
@@ -46,7 +46,8 @@
     if (document.fonts && document.fonts.load) { try { await document.fonts.load('400 100px "Instrument Serif"'); } catch (e) { /* the lettering falls back to a serif */ } }
     const rides = I16.files.filter((f) => f.kind === 'ride'), cache = new Map();
     let r12 = null, r16 = null, cur = -1, T = 0, playing = true, last = null, lastTxt = 0, busy = false;
-    const dur = () => (Math.max(r12.frames, r16.frames) - 1) / 30;
+    const fps = (r) => r.fps || 30;   // stored pictures a second: 30 in Fig. 12 and Fig. 16's run 2, 60 from run 3
+    const dur = () => Math.max((r12.frames - 1) / fps(r12), (r16.frames - 1) / fps(r16));
     const get = async (url, want) => { if (!cache.has(url)) cache.set(url, await load(url, want)); return cache.get(url); };
 
     async function choose(i) {
@@ -87,15 +88,15 @@
       if (!r12 || !r16) return;
       const dt = last == null ? 0 : Math.min(0.1, (now - last) / 1000); last = now;
       if (playing) { T += dt; if (T >= dur()) { T = dur(); playing = false; $('play').textContent = 'Play'; } }
-      const k1 = Math.min(r12.frames - 1, Math.round(T * 30)), D1 = r12.D;
-      Object.assign(A.cart, { x: D1.x[k1], xw: lerpAt(D1.x, T * 30), vx: D1.v[k1], zb: D1.zb[k1], zw: D1.zw[k1], us: D1.us ? D1.us[k1] : 0 });
+      const k1 = Math.min(r12.frames - 1, Math.round(T * fps(r12))), D1 = r12.D;
+      Object.assign(A.cart, { x: D1.x[k1], xw: lerpAt(D1.x, T * fps(r12)), vx: D1.v[k1], zb: D1.zb[k1], zw: D1.zw[k1], us: D1.us ? D1.us[k1] : 0 });
       A.v.setFrame(r12, k1); A.v.draw();
-      const k2 = Math.min(r16.frames - 1, Math.round(T * 30)), D2 = r16.D;
+      const k2 = Math.min(r16.frames - 1, Math.round(T * fps(r16))), D2 = r16.D;
       // the stored pose: axle heights, the deck's centre and pitch, each measured from its first stored value (the cart at rest on
       // the flat road); the actuators' stored force per axle, shared by its two struts
       B.cart.x = D2.x[k2]; B.cart.vx = D2.v[k2];
       B.v.pose = { zwF: D2.zf[k2] - D2.zf[0] + G16.Rw, zwR: D2.zr[k2] - D2.zr[0] + G16.Rw, zc: D2.zc[k2] - D2.zc[0] + G16.Rw + 0.098, pitch: D2.th[k2] - D2.th[0],
-                   wheelAng: -lerpAt(D2.x, T * 30) / G16.Rw, wheelRate: D2.v[k2] / G16.Rw, us: [D2.uf[k2] / 2, D2.uf[k2] / 2, D2.ur[k2] / 2, D2.ur[k2] / 2] };
+                   wheelAng: -lerpAt(D2.x, T * fps(r16)) / G16.Rw, wheelRate: D2.v[k2] / G16.Rw, us: [D2.uf[k2] / 2, D2.uf[k2] / 2, D2.ur[k2] / 2, D2.ur[k2] / 2] };
       B.v.setFrame(r16, k2); B.v.draw();
       if (document.activeElement !== $('tbar')) $('tbar').value = Math.round(T / dur() * 1000);
       if (now - lastTxt > 250) {                                  // words rewritten four times a second
@@ -105,7 +106,7 @@
         $('b-tilt').textContent = fmt(Math.abs(D2.tilt_mm[k2]), 1) + ' mm'; $('b-head').textContent = fmt(D2.head_spill_ml[k2], 2) + ' mL'; $('b-stout').textContent = fmt(D2.spill_g[k2], 2) + ' g';
         $('b-pitch').textContent = fmt((D2.th[k2] - D2.th[0]) * 180 / Math.PI, 1) + '°'; $('b-i').textContent = fmt(D2.i[k2], 1) + ' A';
         $('b-u').textContent = fmt(D2.uf[k2], 0) + ' / ' + fmt(D2.ur[k2], 0) + ' N'; $('b-v').textContent = fmt(D2.v[k2], 2) + ' m/s';
-        $('cap-t').textContent = `stored pictures ${k1 + 1} and ${k2 + 1}` + (k2 < Math.round(T * 30) ? ' (the right ride ended here)' : '');
+        $('cap-t').textContent = `stored pictures ${k1 + 1} and ${k2 + 1}` + (k2 < Math.round(T * fps(r16)) ? ' (the right ride ended here)' : '');
       }
     }
     const q = new URLSearchParams(location.search);
