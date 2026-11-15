@@ -94,3 +94,12 @@ It computes nothing physical. The lighting, the gloss and the glass's tint are d
 - The glass's inner floor stands 30 mm above the deck's centre of mass in the drawing (seat 16 mm, foot 14 mm), as in the
   simulation (`FLOOR_ABOVE_DECK`).
 - The deck's size, the track width and the parts' shapes are drawing only, because the simulated cart is planar.
+
+**Check of the 3D close-up (15 November 2026).** `node tools/fig16/check_pint3d.cjs` runs in Chromium and checks three ways:
+- the stored stout height and head thickness at the wall facing the camera, read with `StoutRide.atInward`, the same function the
+  2D view uses;
+- that point projected through the close-up's own camera;
+- the pixel read back: drawn (alpha > 0) and dark just below the surface, drawn and light inside the head band.
+
+Result on 15 November: 65 of 65 columns pass, in 5 pictures of 5 rides, including the uncontrolled kerb at 0.70 s (stored
+height 130 mm at the front wall) and the uncontrolled 25 mm bump at 1.2 s (163 mm, stout over the rim).
