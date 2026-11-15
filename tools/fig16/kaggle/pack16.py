@@ -42,7 +42,7 @@ Hd = Hq.copy(); Hd[1:] = (Hq[1:].astype(np.int32) - Hq[:-1].astype(np.int32)).as
 hf = np.clip(np.round(Z["hf"].astype(np.float64) / QHF), 0, 255).astype(np.uint8)
 
 
-DROPS_PAGE = int(os.environ.get("DROPS_PAGE", "4096"))   # drops per picture in the page's file: an even subsample of those stored (drawing only;
+DROPS_PAGE = int(os.environ.get("DROPS_PAGE", "2048"))   # drops per picture in the page's file: an even subsample of those stored (drawing only;
                                                          # the true count per picture is kept in nd_true)
 
 

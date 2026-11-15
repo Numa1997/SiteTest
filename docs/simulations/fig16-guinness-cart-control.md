@@ -73,7 +73,7 @@ rule of `docs/kaggle-pipeline.md`).
 the ride time and cross-fades the last picture out over 0.45 s. `guinness16-play.js` reads both indexes,
 `public/data/fig16/2026-11-14/` (run 2) and `2026-11-15/` (runs 3, 3b, 4: the turning deck's forces on the stout, 60 pictures a
 second, control off on every road). Per road and setting it plays run 3's ride where one exists, else run 2's, seed 1. Page files
-keep at most 4,096 drops per picture (an even subsample; the true count is `nd_true`). See `notes/guinness-rebuild/audit.md`.
+keep at most 2,048 drops per picture (an even subsample; the true count is `nd_true`). See `notes/guinness-rebuild/audit.md`.
 
 **3D close-up (15 November 2026).** `public/scripts/pint3d-view.js` (an ES module on three.js 0.170, vendored) draws the same stored
 picture of the pint in 3D under the cart's picture, with the camera riding with the glass:
