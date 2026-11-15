@@ -32,7 +32,9 @@
     if (document.fonts && document.fonts.load) { try { await document.fonts.load('400 100px "Instrument Serif"'); } catch (e) { /* the lettering falls back to a serif */ } }
 
     const files = IDX.files.slice(), cache = new Map();
-    let cur = -1, T = 0, playing = true, last = null, lastTxt = 0, loading = false;
+    let cur = -1, T = 0, playing = true, last = null, lastTxt = 0, loading = false, fade = null;
+    // the control switch: per road, the ride with the speed held only (off) and the last controller chosen there (on, joint control first)
+    const lastOn = {};
     const dur = () => (ride.frames - 1) / ride.fps;
 
     async function load(i) {
@@ -42,11 +44,16 @@
       const D = JSON.parse(new TextDecoder().decode(buf)), r = await new window.StoutRide(D).unpack();
       r.sha = sha; r.bytes = buf.byteLength; cache.set(i, r); return r;
     }
-    async function choose(i) {
-      if (loading || i === cur) return;
-      loading = true; cv.classList.add('is-held'); $('cap-t').textContent = 'loading ' + files[i].path + ' …';
+    async function choose(i, keep) {
+      if (loading || i === cur || i < 0) return;
+      loading = true; if (!keep) cv.classList.add('is-held'); $('cap-t').textContent = 'loading ' + files[i].path + ' …';
       try {
-        const r = await load(i); ride = r; cur = i; bumps = r.D.bumps || []; fluid.h0 = r.fill; fluid.dx = r.dx; T = 0; playing = true; play.textContent = 'Pause';
+        const r = await load(i);
+        if (keep && ride) { const o = document.createElement('canvas'); o.width = cv.width; o.height = cv.height; o.getContext('2d').drawImage(cv, 0, 0); fade = { img: o, t0: performance.now() }; }
+        ride = r; cur = i; bumps = r.D.bumps || []; fluid.h0 = r.fill; fluid.dx = r.dx;
+        if (keep) T = Math.min(T, dur()); else { T = 0; playing = true; play.textContent = 'Pause'; }
+        const f = files[i]; if (f.kind === 'ride' && f.ctrl !== 'speed') lastOn[f.road] = i;
+        const sw = $('ctl-sw'); if (sw) { sw.disabled = f.kind !== 'ride'; sw.setAttribute('aria-pressed', f.ctrl === 'speed' ? 'false' : 'true'); $('ctl-sw-v').textContent = f.kind !== 'ride' ? '—' : f.ctrl === 'speed' ? 'off' : 'on'; }
         [...host.children].forEach((b, j) => b.setAttribute('aria-pressed', j === i ? 'true' : 'false'));
         if (cmpRows) cmpRows.forEach((tr, j) => tr.classList.toggle('is-on', j === i));
         $('ride-note').textContent = describe(r.D); drawRoad();
@@ -81,6 +88,14 @@
     files.forEach((f, i) => {
       const b = document.createElement('button'); b.type = 'button'; b.className = 'btn btn--ghost g-ride'; b.textContent = f.label || f.path; b.setAttribute('aria-pressed', 'false');
       b.addEventListener('click', () => choose(i)); host.appendChild(b);
+    });
+
+    const sw = $('ctl-sw');
+    if (sw) sw.addEventListener('click', () => {
+      const f = files[cur]; if (!f || f.kind !== 'ride') return;
+      const off = files.findIndex((g) => g.kind === 'ride' && g.road === f.road && g.ctrl === 'speed');
+      const on = lastOn[f.road] != null ? lastOn[f.road] : files.findIndex((g) => g.kind === 'ride' && g.road === f.road && g.ctrl === 'joint');
+      choose(f.ctrl === 'speed' ? on : off, true);
     });
 
     // the road of the chosen ride, drawn from its stored bumps, with the cart's stored position
@@ -121,6 +136,10 @@
       const D = ride.D, k = Math.min(D.frames - 1, Math.round(T * ride.fps));
       if (D.x) { cart.x = D.x[k]; cart.xw = lerpAt(D.x, T * ride.fps); cart.vx = D.v[k]; cart.zb = D.zb[k]; cart.zw = D.zw[k]; cart.us = D.us ? D.us[k] : 0; } else { cart.x = 0.5; cart.xw = 0.5; cart.vx = 0; cart.zb = REST.zb; cart.zw = REST.zw; cart.us = 0; }
       view.setFrame(ride, k); view.draw();
+      if (fade) {                                                 // the switch: the last picture of the other ride fades out over 0.45 s
+        const u = (now - fade.t0) / 450, g = cv.getContext('2d');
+        if (u >= 1) fade = null; else { g.save(); g.globalAlpha = 1 - u; g.drawImage(fade.img, 0, 0); g.restore(); }
+      }
       if (document.activeElement !== tbar) tbar.value = Math.round(T / dur() * 1000);
       if (now - lastTxt > 250) {                                  // words rewritten four times a second
         lastTxt = now;

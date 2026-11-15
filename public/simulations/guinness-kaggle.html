@@ -20,6 +20,8 @@
         #cv { transition: opacity 0.45s ease; }
         #cv.is-held { opacity: 0.55; }
         .g-rides { display: grid; gap: 6px; } .g-ride { text-align: left; font-size: 13px; line-height: 1.3; padding: 8px 10px; }
+        .btn.g-switch { justify-content: space-between; width: 100%; } .g-switch b { font-family: "IBM Plex Mono", monospace; font-weight: 500; }
+        .g-switch[aria-pressed="false"] { background: transparent; color: var(--accent); border-color: var(--accent); }
         .g-ride[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); box-shadow: inset 3px 0 0 var(--accent); }
         #road { display: block; width: 100%; height: 84px; border: 1px solid var(--line, rgba(28,21,24,.25)); border-radius: 6px; background: var(--card); margin-top: 10px; }
         .kread { grid-template-columns: 1fr 1fr; }
@@ -89,6 +91,9 @@
                     </label>
                 </div>
                 <div class="panel__group">
+                    <p class="panel__label">Control</p>
+                    <button type="button" class="btn g-switch" id="ctl-sw" aria-pressed="true">Control <b id="ctl-sw-v">on</b></button>
+                    <p class="panel__note" id="ctl-sw-note">Off: the motor only holds the speed. On: the last controller chosen on this road. The switch keeps the ride time and cross-fades.</p>
                     <p class="panel__label">Ride</p>
                     <div id="ride-host" class="g-rides"></div>
                     <p class="panel__note" id="ride-note"></p>

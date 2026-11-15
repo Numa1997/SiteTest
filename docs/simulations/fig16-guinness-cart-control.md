@@ -68,3 +68,10 @@ full, with 8.35 mL of head and 9.79 g of stout already spilled. Five bumps, 1.0 
 The full lecture note to the standard of `notes/STANDARD.md` (readers, derivation checker); the data panel with the three-way proof;
 run-to-run scatter on the kerb; the rotating frame's non-uniform forces; the figure's Kaggle dataset `numakoudsie/fig16-...` (the layout
 rule of `docs/kaggle-pipeline.md`).
+
+**Control switch and run 3 (15 November 2026).** The page offers three roads and one switch, "Control system on/off". The switch keeps
+the ride time and cross-fades the last picture out over 0.45 s. `guinness16-play.js` reads both indexes,
+`public/data/fig16/2026-11-14/` (run 2) and `2026-11-15/` (runs 3, 3b, 4: the turning deck's forces on the stout, 60 pictures a
+second, control off on every road). Per road and setting it plays run 3's ride where one exists, else run 2's, seed 1. Page files
+keep at most 4,096 drops per picture (an even subsample; the true count is `nd_true`). See `notes/guinness-rebuild/audit.md`.
+

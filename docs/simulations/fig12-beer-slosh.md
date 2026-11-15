@@ -802,3 +802,9 @@ symplectic Euler at 0.1 ms (pole error 1e-4 and 1e-3). Checked against Dodge's u
 mass, the damping correlation), Van Loan (1978), and the slosh-control literature (Feddema 1997, Grundelius 2001, Yano &
 Terashima 1997); the list with what was read is at the end of `derive_physics.out.txt`. Still open: the suspension block and
 the three-mode plant in the same form, and where the heave cancellation is exact.
+
+**Control switch (15 November 2026).** `guinness-kaggle.html` has a switch "Control on/off" above the ride list
+(`guinness-jax-play.js`). Off plays the road's stored ride with the speed held only (run 8). On plays the last controller chosen on
+that road, joint control first (run 10). The switch keeps the ride time and cross-fades the last picture out over 0.45 s. No data
+was computed for it: every road was already stored both ways.
+
