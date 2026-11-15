@@ -64,7 +64,7 @@
       try {
         const [n16, n12] = await Promise.all([get(f.dir + f.path, f.sha256), get(D12 + BEST12[f.road], sha12[BEST12[f.road]])]);
         if (keep && r16) { const c = B.v.cv, o = document.createElement('canvas'); o.width = c.width; o.height = c.height; o.getContext('2d').drawImage(c, 0, 0); fade = { img: o, t0: performance.now() }; }
-        r16 = n16; r12 = n12; cur = i;
+        r16 = n16; r12 = n12; cur = i; if (r16.D.cart) window.Cart16View.fromCart(r16.D.cart);
         if (keep) T = Math.min(T, dur()); else { T = 0; playing = true; $('play').textContent = 'Pause'; }
         for (const [P, r] of [[A, r12], [B, r16]]) { P.bumps.length = 0; (r.D.bumps || []).forEach((b) => P.bumps.push(b)); P.fluid.h0 = r.fill; P.fluid.dx = r.dx; }
         [...$('ride-host').children].forEach((b) => b.setAttribute('aria-pressed', b.dataset.road === f.road ? 'true' : 'false'));
@@ -115,7 +115,9 @@
       // the stored pose: axle heights, the deck's centre and pitch, each measured from its first stored value (the cart at rest on
       // the flat road); the actuators' stored force per axle, shared by its two struts
       B.cart.x = D2.x[k2]; B.cart.vx = D2.v[k2];
-      B.v.pose = { zwF: D2.zf[k2] - D2.zf[0] + G16.Rw, zwR: D2.zr[k2] - D2.zr[0] + G16.Rw, zc: D2.zc[k2] - D2.zc[0] + G16.Rw + 0.098, pitch: D2.th[k2] - D2.th[0],
+      // the stored pose, as stored: the axles' heights and the deck's centre of mass above the road, and the deck's pitch (one geometry:
+      // the drawn cart takes its wheelbase, wheel radius and hinge depth from the ride's stored cart, Cart16View.fromCart)
+      B.v.pose = { zwF: D2.zf[k2], zwR: D2.zr[k2], zc: D2.zc[k2], pitch: D2.th[k2],
                    wheelAng: -lerpAt(D2.x, T * fps(r16)) / G16.Rw, wheelRate: D2.v[k2] / G16.Rw, us: [D2.uf[k2] / 2, D2.uf[k2] / 2, D2.ur[k2] / 2, D2.ur[k2] / 2] };
       B.v.setFrame(r16, k2); B.v.draw();
       if (close.a) { close.a.setFrame(r12, k1); close.a.render(); close.b.setFrame(r16, k2); close.b.render(); }

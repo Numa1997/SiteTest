@@ -85,3 +85,12 @@ picture of the pint in 3D under the cart's picture, with the camera riding with 
 
 It computes nothing physical. The lighting, the gloss and the glass's tint are drawing only.
 
+
+**One geometry (15 November 2026).**
+- The drawn cart takes its wheelbase, wheel radius and hinge depth from the ride's stored cart parameters
+  (`Cart16View.fromCart`, from `cart4.py` CART4).
+- The player hands the view the stored axle heights, the deck's centre-of-mass height and the pitch as stored. The earlier
+  hand-set offset of +0.098 m and the subtraction of the first frame are gone.
+- The glass's inner floor stands 30 mm above the deck's centre of mass in the drawing (seat 16 mm, foot 14 mm), as in the
+  simulation (`FLOOR_ABOVE_DECK`).
+- The deck's size, the track width and the parts' shapes are drawing only, because the simulated cart is planar.

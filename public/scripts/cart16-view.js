@@ -14,6 +14,10 @@
   function View(canvas, world, o) { SV2.call(this, canvas, world, o); this.roadW = 0.30; this.names = true; this.pose = { zwF: G.Rw, zwR: G.Rw, zc: 0.150, pitch: 0, wheelAng: 0, us: [0, 0, 0, 0] }; this.G = G; }
   View.prototype = Object.create(SV2.prototype);
   View.G = G;
+  // one geometry: the simulated cart (tools/fig16/kaggle/cart4.py CART4, stored with every ride as D.cart) sets the wheelbase, the
+  // wheel radius and the arms' hinges (d below the deck's centre of mass, the origin of the deck's drawing frame). The deck's size,
+  // the track width and the parts' shapes are drawing only: the simulated cart is planar.
+  View.fromCart = function (c) { G.wb = c.af + c.ar; G.Rw = c.Rw; G.pivDrop = c.d; };
 
   View.prototype.draw = function () {
     const ctx = this.ctx, W = this.cv.width, Hc = this.cv.height, c = this.world.cart, po = this.pose;
