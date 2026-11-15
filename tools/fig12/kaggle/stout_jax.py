@@ -212,8 +212,17 @@ def cut_lo(f, ax):     # the face below each cell (index i), cell-shaped
 
 # ====================================================================== the solver
 class Stout:
-    def __init__(self, G, model="full", ppc=2, seed=1, rho=1007.0, K_frac=0.62, M_drops=16384, tol=1e-5, maxit=600, head_mass=True):
+    def __init__(self, G, model="full", ppc=2, seed=1, rho=1007.0, K_frac=0.62, M_drops=16384, tol=1e-5, maxit=600, head_mass=True, vol_corr=0.0):
         self.G = G; self.rho = rho; self.ppc = ppc
+        # the volume correction (Fig. 16 run 4, 15 Nov 2026): 0 = off, Fig. 12's runs unchanged. After violent stirring the particle cloud
+        # stayed spread out (the stored surface of the uncontrolled kerb stood 24 mm above the height its remaining stout fills at rest):
+        # the projection makes the grid velocity divergence-free, but nothing returns drifted particles to their resting spacing. With
+        # vol_corr = kappa > 0 each interior cell is given the net outflow kappa (n/n0 - 1) dx / dt, n the particles in its 5 x 5 x 5 block,
+        # n0 = 125 ppc^3 at rest (only swelling beyond 5 %, see volume_source); a sparse block draws stout in, a crowded one pushes it out (Kugelstadt et al. 2019). The drift that does
+        # this comes from a second projection (of a zero velocity field with that target) and moves the particles' positions only; put into
+        # the velocity it overshot (a 6 mm test stretched by 20 % fell to 0.85 of the rest volume). A dead band of 3 % keeps the pint at
+        # rest exactly as before.
+        self.vol_corr = float(vol_corr)
         M = MODELS[model]; self.model = model
         self.nu = M["nu"]; self.gs = math.sqrt(M["nu"] * OMEGA / 2) if M["wall"] else 0.0
         self.skin = M["skin"]
@@ -287,6 +296,20 @@ class Stout:
         du_f = 0.5 * (lo(du, 0, 0.0) + hi(du, 0, 0.0)); dw_f = 0.5 * (lo(dw, 2, 0.0) + hi(dw, 2, 0.0))
         inc = [dt * ax_u + du_f, None, dt * az_w + dw_f]
         return [jnp.where((mass[c] > 1e-6) & (self.th[c] > 0), vel[c] + inc[c], vel[c]).astype(F32) if c != 1 else vel[1] for c in range(3)]
+
+    def volume_source(self, cnt, liq, dt):
+        """The volume correction's target net outflow of each interior cell (m/s): kappa (n/n0 - 1 + d) dx/dt where the 5 x 5 x 5 block about
+        the cell holds n < (1 - d) n0 particles (n0 = 125 ppc^3, d = 0.05); zero elsewhere. Every cell of the block must be liquid and well
+        inside the cavity. Only swelling is corrected, the fault measured (Fig. 16 run 3: +18 to +48 % after the uncontrolled rides): a
+        3 x 3 x 3 block (216 particles) counts with about 7 % noise, and correcting both ways inside a 3 % band stirred a pint at rest
+        until its read surface fell 29 mm in 0.8 s (6 mm test, 15 Nov 2026); 125 cells hold about 1,000 particles, about 3 % noise."""
+        inner = liq & self.cav_inner; c = cnt.astype(F32); ok = inner
+        for ax in range(3):
+            c = c + sh(c, 1, ax, 0.0) + sh(c, -1, ax, 0.0) + sh(c, 2, ax, 0.0) + sh(c, -2, ax, 0.0)
+            ok = ok & sh(ok, 1, ax, False) & sh(ok, -1, ax, False) & sh(ok, 2, ax, False) & sh(ok, -2, ax, False)
+        dev = jnp.clip(c / (125.0 * self.ppc ** 3) - 1.0, -0.5, 0.0)
+        dev = jnp.where(dev < -0.05, dev + 0.05, 0.0)
+        return jnp.where(ok, self.vol_corr * dev * self.dx / dt, 0.0).astype(F32)
 
     # ---------------------------------------------------------------- state
     def init_state(self):
@@ -560,7 +583,7 @@ class Stout:
         liqL, liqR, tLR, tRL = self._faces(ph, liq, 2)
         return liqL & ~liqR & (self.th[2] > 0)
 
-    def pressure(self, vel, ph, liq, p_prev, ps, mu=None, w_old=None, geff_dt=0.0):
+    def pressure(self, vel, ph, liq, p_prev, ps, mu=None, w_old=None, geff_dt=0.0, src=None):
         """ps: the pressure on the free surface (the weight of the head), in the solver's units (Pa x dt / rho), one value per
         column, set on the air side of the surface. Ghost fluid: p = ps at the surface, so the air neighbour of a liquid cell
         reads p_ghost = p_liq (1 - 1/theta) + ps / theta: the diagonal gets th / theta and the right side th ps / theta.
@@ -594,6 +617,7 @@ class Stout:
             rhs = rhs + cut_hi(sL, ax) + cut_lo(sR, ax)
             cp.append(cut_hi(th * liqR, ax)); cm.append(cut_lo(th * liqL, ax))
             flux = th * vel[ax]; div = div + cut_hi(flux, ax) - cut_lo(flux, ax)
+        if src is not None: div = div - src                              # the volume correction's target outflow (m/s), see __init__
         A = liq & (diag > 0)
         diag = jnp.where(A, diag, 0.0); cp = [jnp.where(A, c, 0.0) for c in cp]; cm = [jnp.where(A, c, 0.0) for c in cm]
         b = jnp.where(A, -div * dx + rhs, 0.0)
@@ -650,18 +674,19 @@ class Stout:
         return out
 
     # ---------------------------------------------------------------- grid to particles, move, glass, rim (Taichi g2p)
-    def g2p(self, s, vel, dt, gx, gz, rot=None):
+    def g2p(self, s, vel, dt, gx, gz, rot=None, uc=None):
         dx = self.dx; G = self.G; X, act = s["xp"], s["act"]
-        g = (X - self.origin) / dx; vs, Cs = [], []
+        g = (X - self.origin) / dx; vs, Cs, us = [], [], []
         for comp in range(3):
             fl, ok, w, wv, cf, fr = self._corners(g, comp, self.fshape[comp])
             val = jnp.where(ok, vel[comp].reshape(-1)[fl], 0.0)                    # (8, N)
             vs.append(jnp.sum(w * val, 0))
+            if uc is not None: us.append(jnp.sum(w * jnp.where(ok, uc[comp].reshape(-1)[fl], 0.0), 0))
             sg = 2.0 * cf - 1.0                                                     # d(weight)/d(fraction) signs
             gw = jnp.stack([sg[..., 0] * wv[..., 1] * wv[..., 2], wv[..., 0] * sg[..., 1] * wv[..., 2], wv[..., 0] * wv[..., 1] * sg[..., 2]], -1)
             Cs.append(jnp.sum(val[..., None] * gw, 0) / dx)
         newv = jnp.stack(vs, -1); C = jnp.stack(Cs, 1)
-        Xn = X + dt * newv
+        Xn = X + dt * (newv if uc is None else newv + jnp.stack(us, -1))     # the volume correction's drift moves the particle, not its velocity
         below = Xn[:, 2] < 0.1 * dx
         Xn = Xn.at[:, 2].set(jnp.where(below, 0.1 * dx, Xn[:, 2]))
         newv = newv.at[:, 2].set(jnp.where(below & (newv[:, 2] < 0), 0.0, newv[:, 2]))
@@ -750,13 +775,18 @@ class Stout:
         mu = (self.rho_f * s["hf"] / self.rho).astype(F32) if (self.head and self.head_mass) else None
         gdt = jnp.maximum(-gzh, 0.0) * dt
         if rot is not None: gdt = gdt[:, :, None]
+        uc = None
+        if self.vol_corr > 0:   # the volume correction moves positions only (Kugelstadt et al. 2019): its own projection of a zero velocity field
+            src = self.volume_source(pr["cnt"], liq, dt); zf = [jnp.zeros_like(v) for v in vel]
+            uc, kc, _, _, _ = self.pressure(zf, ph, liq, jnp.zeros_like(s["p"]), jnp.zeros((self.n, self.n), F32), src=src)
+            uc = self.extrapolate(uc, kc)
         vel, known, p, it, res = self.pressure(vel, ph, liq, s["p"], ps, mu=mu, w_old=w_old, geff_dt=gdt)
         if mu is not None:   # the head's new vertical velocity: that of the face its surface crosses (liquid below, air above)
             sf = self._surf_faces(ph, liq); nsf = jnp.sum(sf, 2)
             wh = jnp.where(nsf > 0, jnp.sum(jnp.where(sf, vel[2], 0.0), 2) / jnp.maximum(nsf, 1), s["wh"]).astype(F32)
             s = dict(s, wh=wh)
         vel = self.extrapolate(vel, known)
-        s, mom = self.g2p(s, vel, dt, gx, gz, rot)
+        s, mom = self.g2p(s, vel, dt, gx, gz, rot, uc=uc)
         if self.head: s = self.head_spill(s, H, dt, gx, gz, rot)
         s = dict(s, p=p, ewall=s["ewall"] + ew, eskin=s["eskin"] + es, efoam=s["efoam"] + ef)
         vmax = jnp.max(jnp.where(s["act"][:, None], jnp.abs(s["vp"]), 0.0))

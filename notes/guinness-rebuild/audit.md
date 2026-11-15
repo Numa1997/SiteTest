@@ -107,9 +107,9 @@ effect on the rides. **Open:** a 1.0 mm grid point would bound the extrapolation
 |---|---|---|---|---|---|
 | kerb, control on, seed 1 | 4.01 mm | 0.010 mL | 0 | 5.3° | 4.0 s |
 | kerb, control on, seed 2 | 4.19 mm | 0.023 mL | 0 | 5.5° | 4.0 s |
-| kerb, control off, seed 1 | 34.6 mm | 14.55 mL (all) | 88.5 g | 20.4° | 1.73 s (surface list full) |
-| kerb, control off, seed 2 | 35.1 mm | 14.61 mL (all) | 93.2 g | 20.6° | 1.65 s (surface list full) |
-| five 20 mm bumps, control off | 37.9 mm | 14.62 mL (all) | 104.8 g | 7.8° | 2.92 s (surface list full) |
+| kerb, control off, seed 1 | 34.6 mm | 14.55 mL | 88.5 g | 20.4° | 1.73 s (surface list full) |
+| kerb, control off, seed 2 | 35.1 mm | 14.61 mL | 93.2 g | 20.6° | 1.65 s (surface list full) |
+| five 20 mm bumps, control off | 37.9 mm | 14.62 mL | 104.8 g | 7.8° | 2.92 s (surface list full) |
 | one 25 mm bump, control off | 34.3 mm | 11.49 mL | 38.2 g | 9.3° | 8.0 s |
 
 **The effect of the rotating frame's forces, against the scatter.**
@@ -134,3 +134,38 @@ the stout was in the air. Run 3b (notebook version 5) reruns them with K = N to 
 
 **Page files.** At most 4,096 drops per picture are kept: an even subsample of the stored 16,384, for the drawing only. The true
 count per picture is kept as `nd_true`. The one-bump ride is still 6.1 MB.
+
+**Correction (15 Nov, 01:40 UTC).** The head as served is 91.3 mL (19 mm over the stout), not 14.6 mL. The uncontrolled rides lost
+16 % of it, not "all". The stout is 430 g.
+
+## H. The stout swells after violent stirring (found 15 November 2026 from run 3's stored data)
+
+**Fact.** I compared the stored median surface with the height the stout still in the glass fills at rest, using the glass profile
+of `guinness-glass.js` and the stored count of particles in the glass:
+
+| ride | end | surface read | height of the remaining stout at rest | volume read / true |
+|---|---|---|---|---|
+| kerb, control on (two seeds) | 4 s | 125.0 mm | 125.0 mm | +0.1 % |
+| one 25 mm bump, control off | 8 s | 131.8 mm | 117.1 mm | +18 % |
+| kerb, control off (run 3b) | 4 s | 130.9 mm | 107.3 mm | +33 % |
+| five 20 mm bumps, control off (run 3b) | 8 s | 136.6 mm | 103.8 mm | +48 % |
+
+So a glass that has lost 86-103 g of its 430 g is drawn fuller than at the start.
+
+**Cause.** The pressure step makes the grid velocity divergence-free. Particles moved by interpolated velocities still drift apart in
+splashing and re-entry, and nothing pulls them back to their resting spacing of 8 per cell. The level set calls a cell liquid if
+it holds any particle. A dilute cloud therefore reads as liquid up to a higher surface. Fig. 12's kerb rides show the same effect at
++0.85 to +1.44 mm (07-diagnosis.md). With control on, the effect is nil.
+
+**Fix (stout_jax.Stout, vol_corr = kappa, default 0, so Fig. 12 is unchanged bit for bit, checked).**
+- Each interior cell whose 5 x 5 x 5 block holds fewer than 0.95 of its resting 1,000 particles is given a net inflow target
+  kappa (n/n0 - 1 + 0.05) dx/dt.
+- The flow that meets these targets comes from a second projection, of a zero velocity field. It moves the particles' positions
+  only (Kugelstadt et al. 2019); it never enters their velocity.
+
+Two failed versions, both on the 6 mm CPU test:
+- Put into the velocity, the correction overshot: a stout stretched by 20 % fell to 0.85 of its rest volume.
+- Correcting both ways with 3 x 3 x 3 blocks inside a 3 % band (count noise about 7 %) stirred a pint at rest until its read
+  surface fell 29 mm in 0.8 s.
+
+The version kept leaves the pint at rest exactly as it was: 124.8 mm before and after.

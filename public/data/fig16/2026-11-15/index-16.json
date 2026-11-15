@@ -123,6 +123,8 @@
    "v0": 1.0,
    "bytes": 6088019,
    "sha256": "40eed1893da25bef5d2d8a27b452a68560d70fb3d3373eff8cf7e0ff9f482ada",
+   "kaggle_version": 4,
+   "commit": "2056270c6eec67586d013d9289c598aaa70f7e46",
    "frames": 481,
    "seconds": 8.0,
    "fps": 60,
@@ -163,6 +165,8 @@
    "v0": 1.5,
    "bytes": 304636,
    "sha256": "ca6ebf25fba9c4d6ecb88f45af2605be9ef4405e564d473565c2892b06fd7868",
+   "kaggle_version": 4,
+   "commit": "2056270c6eec67586d013d9289c598aaa70f7e46",
    "frames": 241,
    "seconds": 4.0,
    "fps": 60,
@@ -203,6 +207,8 @@
    "v0": 1.5,
    "bytes": 279387,
    "sha256": "231be5b17efa47dae5b8459eab2d605a3b5566f4fefb6be8187edb567a7db269",
+   "kaggle_version": 4,
+   "commit": "2056270c6eec67586d013d9289c598aaa70f7e46",
    "frames": 241,
    "seconds": 4.0,
    "fps": 60,
@@ -232,6 +238,90 @@
     ],
     "lean_max_mm": 5.38,
     "tilt_max_mm": 5.09
+   }
+  },
+  {
+   "path": "kerb_off.json",
+   "label": "One sharp 30 mm bump, 1.5 m/s \u00b7 control system off",
+   "kind": "ride",
+   "ctrl": "off",
+   "road": "one sharp 30 mm bump",
+   "v0": 1.5,
+   "bytes": 3862666,
+   "sha256": "d577eaaf57515bde3fc876f9053ce2bb4147d78ec69c5fc15a3baae66560e240",
+   "kaggle_version": 5,
+   "commit": "2cdafb82a3ea59eab3025fe4e19742000404ba19",
+   "frames": 241,
+   "seconds": 4.0,
+   "fps": 60,
+   "rot": true,
+   "measured": {
+    "steps": 2493,
+    "ms_per_step": 172.8,
+    "run_s": 430.5,
+    "spilled_g": 85.958,
+    "head_spilled_ml": 14.534,
+    "books": {
+     "stout_particles": 1001952,
+     "stout_err_particles_max": 0,
+     "head_ml0": 91.314,
+     "head_glass_ml_end": 76.7799,
+     "head_off_ml_end": 14.5341,
+     "head_err_ml_max": 1.6763812018226465e-08
+    },
+    "pitch_max_deg": 20.280913763486947,
+    "i_max_A": 7.999999999999992,
+    "u_max_N": 0.0,
+    "current_limited": true,
+    "bump_stop_N": 0.0,
+    "v_range": [
+     1.213248527546745,
+     1.5468831325701622
+    ],
+    "lean_max_mm": 82.03,
+    "tilt_max_mm": 91.81
+   }
+  },
+  {
+   "path": "resonant_off.json",
+   "label": "Five 20 mm bumps in step with the swing, 1.0 m/s \u00b7 control system off",
+   "kind": "ride",
+   "ctrl": "off",
+   "road": "five 20 mm bumps in step with the swing",
+   "v0": 1.0,
+   "bytes": 8979542,
+   "sha256": "ebd435e632093ccd5f1b5034045285c7a94e0a046a266df442c7997166338db4",
+   "kaggle_version": 5,
+   "commit": "2cdafb82a3ea59eab3025fe4e19742000404ba19",
+   "frames": 481,
+   "seconds": 8.0,
+   "fps": 60,
+   "rot": true,
+   "measured": {
+    "steps": 4697,
+    "ms_per_step": 181.3,
+    "run_s": 851.2,
+    "spilled_g": 103.061,
+    "head_spilled_ml": 14.606,
+    "books": {
+     "stout_particles": 1001952,
+     "stout_err_particles_max": 0,
+     "head_ml0": 91.314,
+     "head_glass_ml_end": 76.7084,
+     "head_off_ml_end": 14.6056,
+     "head_err_ml_max": 1.676382557075362e-08
+    },
+    "pitch_max_deg": 7.689498265027438,
+    "i_max_A": 2.158110721139541,
+    "u_max_N": 0.0,
+    "current_limited": false,
+    "bump_stop_N": 0.0,
+    "v_range": [
+     0.9665106357334373,
+     1.0298633440074703
+    ],
+    "lean_max_mm": 73.44,
+    "tilt_max_mm": 71.7
    }
   }
  ]

@@ -91,7 +91,7 @@ label = f"{task['road'][0].upper()}{task['road'][1:]}, {task['v0']:.1f} m/s · {
 m = {k: task.get(k) for k in ("steps", "ms_per_step", "run_s", "spilled_g", "head_spilled_ml", "books", "pitch_max_deg", "i_max_A", "u_max_N", "current_limited", "bump_stop_N", "v_range")}
 m.update(lean_max_mm=round(float(np.nanmax(np.abs(LEAN))), 2), tilt_max_mm=round(float(np.nanmax(np.abs(TILT))), 2))
 idx["files"] = [f for f in idx["files"] if f["path"] != name + ".json"] + [dict(path=name + ".json", label=label, kind=task["kind"], ctrl=task.get("ctrl"), road=task.get("road"),
-                                                                              v0=task.get("v0"), bytes=len(bts), sha256=sha, frames=int(nf), seconds=round((nf - 1) / FPS, 3), fps=FPS, rot=bool(S.get("rot", False)), measured=m)]
+                                                                              v0=task.get("v0"), bytes=len(bts), sha256=sha, kaggle_version=int(version), commit=commit, frames=int(nf), seconds=round((nf - 1) / FPS, 3), fps=FPS, rot=bool(S.get("rot", False)), measured=m)]
 idx["files"].sort(key=lambda f: (f["kind"] != "ride", f["path"]))
 json.dump(idx, open(idx_path, "w"), indent=1)
 print(dst, len(bts), sha, "tilt max", m["tilt_max_mm"], "mm, head spilled", m["head_spilled_ml"], "mL")
