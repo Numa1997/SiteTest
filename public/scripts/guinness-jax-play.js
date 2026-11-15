@@ -90,6 +90,10 @@
       b.addEventListener('click', () => choose(i)); host.appendChild(b);
     });
 
+    // the 3D close-up of the pint (pint3d-view.js, an ES module that may load after this script)
+    let close = null;
+    const mk3d = () => { if (close || !window.Pint3D || !$('p3d')) return; close = new window.Pint3D($('p3d'), G); close.size(); };
+    mk3d(); window.addEventListener('pint3d-ready', mk3d); window.addEventListener('resize', () => { if (close) close.size(); });
     const sw = $('ctl-sw');
     if (sw) sw.addEventListener('click', () => {
       const f = files[cur]; if (!f || f.kind !== 'ride') return;
@@ -136,6 +140,7 @@
       const D = ride.D, k = Math.min(D.frames - 1, Math.round(T * ride.fps));
       if (D.x) { cart.x = D.x[k]; cart.xw = lerpAt(D.x, T * ride.fps); cart.vx = D.v[k]; cart.zb = D.zb[k]; cart.zw = D.zw[k]; cart.us = D.us ? D.us[k] : 0; } else { cart.x = 0.5; cart.xw = 0.5; cart.vx = 0; cart.zb = REST.zb; cart.zw = REST.zw; cart.us = 0; }
       view.setFrame(ride, k); view.draw();
+      if (close) { close.setFrame(ride, k); close.render(); }
       if (fade) {                                                 // the switch: the last picture of the other ride fades out over 0.45 s
         const u = (now - fade.t0) / 450, g = cv.getContext('2d');
         if (u >= 1) fade = null; else { g.save(); g.globalAlpha = 1 - u; g.drawImage(fade.img, 0, 0); g.restore(); }

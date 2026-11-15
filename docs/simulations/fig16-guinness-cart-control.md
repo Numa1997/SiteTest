@@ -75,3 +75,13 @@ the ride time and cross-fades the last picture out over 0.45 s. `guinness16-play
 second, control off on every road). Per road and setting it plays run 3's ride where one exists, else run 2's, seed 1. Page files
 keep at most 4,096 drops per picture (an even subsample; the true count is `nd_true`). See `notes/guinness-rebuild/audit.md`.
 
+**3D close-up (15 November 2026).** `public/scripts/pint3d-view.js` (an ES module on three.js 0.170, vendored) draws the same stored
+picture of the pint in 3D under the cart's picture, with the camera riding with the glass:
+- the stout's surface from the stored column heights, sampled on 24 rings and 96 angles as `StoutView2` samples them
+  (`StoutRide.atInward`), with the outer ring meeting the glass at the surface's own height;
+- the stout's side against the glass;
+- the head as a second surface at the stored height plus the stored thickness, and its band against the glass;
+- drops of stout (spheres of radius 0.8 mm, at most 4,096) and lumps of head (spheres of their stored volume).
+
+It computes nothing physical. The lighting, the gloss and the glass's tint are drawing only.
+
