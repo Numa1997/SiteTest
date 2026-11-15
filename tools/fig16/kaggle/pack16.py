@@ -42,10 +42,16 @@ Hd = Hq.copy(); Hd[1:] = (Hq[1:].astype(np.int32) - Hq[:-1].astype(np.int32)).as
 hf = np.clip(np.round(Z["hf"].astype(np.float64) / QHF), 0, 255).astype(np.uint8)
 
 
-def cloud(arr, extra=None):
+DROPS_PAGE = int(os.environ.get("DROPS_PAGE", "4096"))   # drops per picture in the page's file: an even subsample of those stored (drawing only;
+                                                         # the true count per picture is kept in nd_true)
+
+
+def cloud(arr, extra=None, cap=None):
     counts, rows = [], []
     for f in range(nf):
         a = arr[f].astype(np.float64); ok = np.isfinite(a[:, 2]) & (a[:, 2] > -0.25)
+        if cap is not None and ok.sum() > cap:
+            idx = np.flatnonzero(ok); keep = idx[np.linspace(0, len(idx) - 1, cap).round().astype(int)]; ok = np.zeros_like(ok); ok[keep] = True
         if extra is not None: ok &= extra[f] > 0
         q = np.clip(np.round(a[ok] / QD), -32767, 32767)
         if extra is not None: q = np.concatenate([q, np.clip(np.round(extra[f][ok] / QV), 0, 32767)[:, None]], 1)
@@ -53,12 +59,12 @@ def cloud(arr, extra=None):
     return counts, (np.concatenate(rows) if rows else np.zeros((0, 3), np.int16))
 
 
-nd, drops = cloud(Z["drops"]); nl, lumps = cloud(Z["lumps"], Z["lumpvol"])
+nd, drops = cloud(Z["drops"], cap=DROPS_PAGE); nl, lumps = cloud(Z["lumps"], Z["lumpvol"])
 r5 = lambda a, k: [round(float(v), k) for v in a]
 out = dict(name=name, generated=date, n=int(n), frames=int(nf), fps=FPS, rot=bool(S.get("rot", False)), dx=DXc, x0=X0c, fill=float(Z["fill"]), qH=QH, qhf=QHF, qd=QD, qv=QV, t=r5(Z["t"], 4),
            mp=float(Z["mp"]), particles=int(Z["N"]), stout_g=r5(Z["nact"] * float(Z["mp"]) * 1e3, 3), spill_g=r5((int(Z["N"]) - Z["nact"]) * float(Z["mp"]) * 1e3, 3),
            head_spill_ml=r5(Z["foam_spill"] * 1e6, 3), head_glass_ml=r5(Z["vhead"] * 1e6, 3), books=task.get("books"),
-           task={k: task[k] for k in ("kind", "end", "dx", "ctrl", "road", "v0") if k in task}, nd=nd, nl=nl, H=pk(Hd), hf=pk(hf), drops=pk(drops), lumps=pk(lumps),
+           task={k: task[k] for k in ("kind", "end", "dx", "ctrl", "road", "v0") if k in task}, nd=nd, nd_true=[int(v) for v in Z["ndrops"]], nl=nl, H=pk(Hd), hf=pk(hf), drops=pk(drops), lumps=pk(lumps),
            lean_mm=r5(LEAN, 3), tilt_mm=r5(TILT, 3))
 if "x" in Z.files:
     srcb = open(os.path.join(here, "..", "..", "fig12", "kaggle", "run_b.py")).read(); a = srcb.index("ROADS = {"); b = srcb.index("\n}\n", a) + 2

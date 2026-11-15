@@ -1,0 +1,238 @@
+{
+ "about": "Fig. 16 computed in JAX on Kaggle's GPU: Fig. 12's pint (stout, head of foam) on the four-wheel cart with its control system, one file per ride.",
+ "generated": "2026-11-15",
+ "kaggle": {
+  "notebook": "numakoudsie/fig-16-guinness-cart-with-control",
+  "url": "https://www.kaggle.com/code/numakoudsie/fig-16-guinness-cart-with-control",
+  "version": 4,
+  "machine": "Tesla T4"
+ },
+ "code": "tools/fig16/kaggle/cart4.py, run16.py and tools/fig12/kaggle/stout_jax.py at SiteTest commit 2056270c6eec67586d013d9289c598aaa70f7e46",
+ "design": {
+  "chosen": {
+   "q": 0.00025
+  },
+  "candidates": [
+   {
+    "tilt_mm": 4.461182630716983,
+    "wall_mm": 2.234324260546387,
+    "head_spill_ml": 0.0,
+    "pitch_deg": 4.295014114802451,
+    "v_min": 1.4115128231370246,
+    "i_max": 7.999999999999991,
+    "u_max": 49.98874255209695,
+    "stop_N": 87.1482400848106,
+    "sat": 1.0,
+    "airborne": true,
+    "weights": {},
+    "slowest_pole": 0.9974480363649987,
+    "seconds": 2.4
+   },
+   {
+    "tilt_mm": 4.48614368769182,
+    "wall_mm": 2.2469133620081494,
+    "head_spill_ml": 0.0,
+    "pitch_deg": 5.328164795950147,
+    "v_min": 1.4009469819387523,
+    "i_max": 7.999999999999991,
+    "u_max": 49.9900867025849,
+    "stop_N": 92.14452761551584,
+    "sat": 1.0,
+    "airborne": true,
+    "weights": {
+     "q": 0.001
+    },
+    "slowest_pole": 0.9974561920863669,
+    "seconds": 1.0
+   },
+   {
+    "tilt_mm": 3.5400535386493384,
+    "wall_mm": 1.7730660674938934,
+    "head_spill_ml": 0.0,
+    "pitch_deg": 3.8353953096383457,
+    "v_min": 1.4092321937220844,
+    "i_max": 7.999999999999991,
+    "u_max": 49.98152313405256,
+    "stop_N": 76.20673029271107,
+    "sat": 1.0,
+    "airborne": true,
+    "weights": {
+     "q": 0.00025
+    },
+    "slowest_pole": 0.9974457161057386,
+    "seconds": 0.9
+   },
+   {
+    "tilt_mm": 4.438432615352576,
+    "wall_mm": 2.2228614707594323,
+    "head_spill_ml": 0.0,
+    "pitch_deg": 4.186352471876481,
+    "v_min": 1.4099303920431123,
+    "i_max": 7.999999999999991,
+    "u_max": 49.989836889986066,
+    "stop_N": 86.7320929131593,
+    "sat": 1.0,
+    "airborne": true,
+    "weights": {
+     "q": 0.0005,
+     "th": 0.15,
+     "stroke": 0.025
+    },
+    "slowest_pole": 0.9974813662662823,
+    "seconds": 0.9
+   },
+   {
+    "tilt_mm": 5.246646590683242,
+    "wall_mm": 2.627710298637103,
+    "head_spill_ml": 0.0,
+    "pitch_deg": 5.290279097736215,
+    "v_min": 1.3984838325701878,
+    "i_max": 7.999999999999991,
+    "u_max": 49.99745649424777,
+    "stop_N": 92.8863611006539,
+    "sat": 1.0,
+    "airborne": true,
+    "weights": {
+     "q": 0.0005,
+     "u": 60.0
+    },
+    "slowest_pole": 0.9974492275461649,
+    "seconds": 1.0
+   }
+  ],
+  "off": {
+   "tilt_mm": 388.7888409912286,
+   "wall_mm": 194.55410639008326,
+   "head_spill_ml": 12.174376147659718,
+   "pitch_deg": 19.546096458611974,
+   "v_min": 1.197059310332011,
+   "i_max": 7.999999999999991,
+   "u_max": 0.0,
+   "stop_N": 0.0,
+   "sat": 1.0,
+   "airborne": true
+  }
+ },
+ "files": [
+  {
+   "path": "bump25_off.json",
+   "label": "One 25 mm bump, 1.0 m/s \u00b7 control system off",
+   "kind": "ride",
+   "ctrl": "off",
+   "road": "one 25 mm bump",
+   "v0": 1.0,
+   "bytes": 6088019,
+   "sha256": "40eed1893da25bef5d2d8a27b452a68560d70fb3d3373eff8cf7e0ff9f482ada",
+   "frames": 481,
+   "seconds": 8.0,
+   "fps": 60,
+   "rot": true,
+   "measured": {
+    "steps": 4403,
+    "ms_per_step": 138.2,
+    "run_s": 608.5,
+    "spilled_g": 38.222,
+    "head_spilled_ml": 11.492,
+    "books": {
+     "stout_particles": 1001952,
+     "stout_err_particles_max": 0,
+     "head_ml0": 91.314,
+     "head_glass_ml_end": 79.8218,
+     "head_off_ml_end": 11.4922,
+     "head_err_ml_max": 1.676379846569931e-08
+    },
+    "pitch_max_deg": 9.257023998880706,
+    "i_max_A": 1.5718909857436354,
+    "u_max_N": 0.0,
+    "current_limited": false,
+    "bump_stop_N": 0.0,
+    "v_range": [
+     0.9800520436935365,
+     1.0161913101220965
+    ],
+    "lean_max_mm": 68.04,
+    "tilt_max_mm": 72.68
+   }
+  },
+  {
+   "path": "kerb_full.json",
+   "label": "One sharp 30 mm bump, 1.5 m/s \u00b7 control system on",
+   "kind": "ride",
+   "ctrl": "full",
+   "road": "one sharp 30 mm bump",
+   "v0": 1.5,
+   "bytes": 304636,
+   "sha256": "ca6ebf25fba9c4d6ecb88f45af2605be9ef4405e564d473565c2892b06fd7868",
+   "frames": 241,
+   "seconds": 4.0,
+   "fps": 60,
+   "rot": true,
+   "measured": {
+    "steps": 2160,
+    "ms_per_step": 97.7,
+    "run_s": 210.9,
+    "spilled_g": 0.0,
+    "head_spilled_ml": 0.01,
+    "books": {
+     "stout_particles": 1001952,
+     "stout_err_particles_max": 0,
+     "head_ml0": 91.314,
+     "head_glass_ml_end": 91.3038,
+     "head_off_ml_end": 0.0102,
+     "head_err_ml_max": 0.0
+    },
+    "pitch_max_deg": 5.320679165375312,
+    "i_max_A": 7.999999999999991,
+    "u_max_N": 49.90726854971526,
+    "current_limited": true,
+    "bump_stop_N": 75.68021548699927,
+    "v_range": [
+     1.410117306958596,
+     1.7654923659109587
+    ],
+    "lean_max_mm": 5.12,
+    "tilt_max_mm": 4.7
+   }
+  },
+  {
+   "path": "kerb_full_seed2.json",
+   "label": "One sharp 30 mm bump, 1.5 m/s \u00b7 control system on",
+   "kind": "ride",
+   "ctrl": "full",
+   "road": "one sharp 30 mm bump",
+   "v0": 1.5,
+   "bytes": 279387,
+   "sha256": "231be5b17efa47dae5b8459eab2d605a3b5566f4fefb6be8187edb567a7db269",
+   "frames": 241,
+   "seconds": 4.0,
+   "fps": 60,
+   "rot": true,
+   "measured": {
+    "steps": 2160,
+    "ms_per_step": 95.9,
+    "run_s": 207.1,
+    "spilled_g": 0.0,
+    "head_spilled_ml": 0.023,
+    "books": {
+     "stout_particles": 1001952,
+     "stout_err_particles_max": 0,
+     "head_ml0": 91.314,
+     "head_glass_ml_end": 91.2914,
+     "head_off_ml_end": 0.0226,
+     "head_err_ml_max": 1.3552527156068805e-14
+    },
+    "pitch_max_deg": 5.474444669025871,
+    "i_max_A": 7.999999999999991,
+    "u_max_N": 49.929147755880535,
+    "current_limited": true,
+    "bump_stop_N": 74.73637785394865,
+    "v_range": [
+     1.4075964362567142,
+     1.7849416714591493
+    ],
+    "lean_max_mm": 5.38,
+    "tilt_max_mm": 5.09
+   }
+  }
+ ]
+}

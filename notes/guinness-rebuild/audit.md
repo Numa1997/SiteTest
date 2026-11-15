@@ -98,3 +98,39 @@ effect on the rides. **Open:** a 1.0 mm grid point would bound the extrapolation
 - The drawn Fig. 16 cart (`cart16-view.js` G) is not the simulated one (`cart4.py` CART4), and the deck is drawn 0.098 m high by an
   arbitrary offset. One parameter file is needed.
 - The cart is planar: no roll, no yaw, both wheels of an axle meet the same road.
+
+## Results of run 3 (Kaggle notebook version 4, 15 November 2026, 31 min of T4; commit 2056270)
+
+**Fact** (`summary.json` of version 4, packed into `public/data/fig16/2026-11-15/`). The rotating-frame forces are on in every ride.
+
+| ride | largest tilt (run, 60/s) | head spilled | stout spilled | largest pitch | ended |
+|---|---|---|---|---|---|
+| kerb, control on, seed 1 | 4.01 mm | 0.010 mL | 0 | 5.3° | 4.0 s |
+| kerb, control on, seed 2 | 4.19 mm | 0.023 mL | 0 | 5.5° | 4.0 s |
+| kerb, control off, seed 1 | 34.6 mm | 14.55 mL (all) | 88.5 g | 20.4° | 1.73 s (surface list full) |
+| kerb, control off, seed 2 | 35.1 mm | 14.61 mL (all) | 93.2 g | 20.6° | 1.65 s (surface list full) |
+| five 20 mm bumps, control off | 37.9 mm | 14.62 mL (all) | 104.8 g | 7.8° | 2.92 s (surface list full) |
+| one 25 mm bump, control off | 34.3 mm | 11.49 mL | 38.2 g | 9.3° | 8.0 s |
+
+**The effect of the rotating frame's forces, against the scatter.**
+- Controlled kerb, tilt on run 2's pictures: run 3 minus run 2 is 0.83 mm rms, 1.86 mm at most.
+- The two seeds of run 3 differ by 0.75 mm rms, 1.80 mm at most.
+- **Inference:** with control the omitted forces change the ride by no more than the run-to-run scatter. Run 2's controlled rides stand.
+- Uncontrolled kerb, stout spilled by 0.733 s: run 2 5.9 g; run 3 10.1 g and 7.0 g (seeds 1 and 2). That is 1.2-1.7 times more,
+  against a seed spread of 3 g. **Correction:** an earlier chat line said "three times"; it compared different moments.
+
+**Under-sampling.** The controlled kerb's largest tilt is 4.01 mm at 60 pictures a second but 2.16 mm on every second picture.
+Run 2's published 2.64 mm (30 a second) under-reads the peak. The pages must state the rate.
+
+**Uncontrolled cart: why it fails.**
+- The deck pitches up to 9-20°, and its pitch acceleration reaches 154 rad/s² on the kerb.
+- On the five bumps the pitch spectrum peaks at 3.41 Hz, the stout's own swing frequency. The pitch mode and the slosh are in
+  resonance.
+- The head has 3.5 mm of freeboard below the rim, and a 9° tilt alone raises the wall by R tan 9° = 5.7 mm. So the head goes at once
+  and the stout follows.
+
+**Open:** the kerb and five-bump rides with control off stopped with the surface-candidate list full (K = 0.62 N), once a fifth of
+the stout was in the air. Run 3b (notebook version 5) reruns them with K = N to their end.
+
+**Page files.** At most 4,096 drops per picture are kept: an even subsample of the stored 16,384, for the drawing only. The true
+count per picture is kept as `nd_true`. The one-bump ride is still 6.1 MB.
