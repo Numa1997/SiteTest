@@ -155,3 +155,10 @@ Section 4: exact chi(x,t) for one wall run, compared with the stored file.
   closure max 2.6e-5 (none > 1e-4), walls.tar 1,275 MB. Records: notes/fig15/correction/walls_runs.jsonl, walls_summary.json.
 - 23:52 classify-2d (CPU, kernel 145093811, commit 329fb3c) launched: keep / recompute for every disc and shell (margin 0.002).
 - Quota 81,855 s of 108,000 s at 23:55 (includes other sessions' Fig. 12/14/16 notebooks and the idle editor sessions).
+- 00:01-00:06 UTC classify-2d v2 (CPU, commit b9ccf3a; v1 failed: site answered 403 to Python's user agent, fixed):
+  discs 2,327: pass gate 745, keep (clear by 0.002) 545, recompute 1,782 (19.44 M steps); |error| median 0.0128, max 0.438.
+  shells 282: all "recompute", BUT the shell T_old used (P_out/P_box) counts the reflected wave too (T_old ~0.998 vs T_ref ~0.86):
+  the stored shell index never had a transmission number, so the shell comparison is not meaningful; all shells are taken from the
+  new (x, rho) runs anyway. Files: notes/fig15/correction/classify_2d/ (summary with every row, recompute_2d.json).
+- complex128 bill for plan B as defined (1,782 discs + 282 shells): ~8.5x the c64 time -> ~97,000 s discs + ~58,000 s shells
+  ~ 43 GPU-h; quota left this week ~25,000 s (7 h). OWNER DECISION NEEDED.
