@@ -23,6 +23,8 @@ FILL, RHO = 0.125, 1007.0
 FPS = int(os.environ.get("FPS", "60"))         # stored pictures a second (run 3: 60, so that the played motion is smooth)
 M_DROPS = int(os.environ.get("M_DROPS", "131072"))   # drops tracked (run 2 stopped the uncontrolled kerb at 16,384)
 DROPS_KEEP = 16384                              # drops stored per picture for the drawing (an even subsample when there are more)
+K_FRAC = float(os.environ.get("K_FRAC", "0.62"))   # the surface-candidate list as a share of the particles (run 3b: 1.0, the uncontrolled
+                                                # rides stopped with the list full once a fifth of the stout was in the air)
 ROT = os.environ.get("ROT", "1") == "1"         # the rotating frame's forces in the fluid (run 3); "0" reproduces run 2's model
 BUDGET_S = float(os.environ.get("BUDGET_S", "2000")); CODECHECK = bool(os.environ.get("CODECHECK"))
 STAMP = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d")
@@ -54,7 +56,7 @@ TASKS = [dict(name="rest", kind="free", end=end_(2.0)),
          dict(name="kerb_full_seed2", kind="ride", road=KERB, v0=1.5, ctrl="full", end=end_(4.0), seed=2),
          dict(name="kerb_off_seed2", kind="ride", road=KERB, v0=1.5, ctrl="off", end=end_(4.0), seed=2)]
 if os.environ.get("ONLY"): TASKS = [t for t in TASKS if t["name"] in os.environ["ONLY"].split(",") + ["rest", "design"]]
-summary = dict(generated=STAMP, device=jax.devices()[0].device_kind, jax=jax.__version__, fill=FILL, rho=RHO, fps=FPS, cart=C4.CART4, rot=ROT,
+summary = dict(k_frac=K_FRAC, generated=STAMP, device=jax.devices()[0].device_kind, jax=jax.__version__, fill=FILL, rho=RHO, fps=FPS, cart=C4.CART4, rot=ROT,
                m_drops=M_DROPS, zS=C4.CART4["hg"] - C4.FLOOR_ABOVE_DECK,
                plant=dict(f0=C4.PLANT_F0, zeta=C4.PLANT_ZETA, beta=C4.PLANT_BETA), tasks=[])
 WEIGHTS = None
@@ -140,7 +142,7 @@ for task in TASKS:
     if time.time() - T0 + est > BUDGET_S:
         log(f"skip {name}: needs about {est:.0f} s, {BUDGET_S - (time.time() - T0):.0f} s left in the budget"); continue
     log(f"start {name}: grid {dx0 * 1e3:.1f} mm, {task['end']:.3f} s of stout; about {est:.0f} s")
-    G = Geometry(R, DZP, FILL, dx0); S = Stout(G, model="full", rho=RHO, head_mass=True, seed=task.get("seed", 1), M_drops=M_DROPS)
+    G = Geometry(R, DZP, FILL, dx0); S = Stout(G, model="full", rho=RHO, head_mass=True, seed=task.get("seed", 1), M_drops=M_DROPS, K_frac=K_FRAC)
     s = S.init_state(); t = jnp.zeros((), F64)
     ml = S.rho * S.V + S.rho_f * HEAD0 * float(np.sum(np.asarray(S.afill))) * S.dx ** 2
     if task["kind"] == "free":
