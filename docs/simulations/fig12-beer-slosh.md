@@ -818,3 +818,10 @@ picture of the pint in 3D under the cart's picture, with the camera riding with 
 
 It computes nothing physical. The lighting, the gloss and the glass's tint are drawing only.
 
+
+**The method's numerical damping, measured (15 November 2026).**
+- Without friction or head the solver's own loss gives a damping ratio of 0.0152 at the production grid (1.5 mm, 3.326 Hz) and
+  0.0090 at 1.0 mm (3.350 Hz), against 0.0055 and 3.421 Hz for the real stout (`tools/fig12/kaggle/damping_grid.py`,
+  `notes/fig12/damping-grid.json`).
+- So the stored swing without the head decays about three times too fast.
+- With the head (damping ratio 0.425) the method's share is under 4 %.

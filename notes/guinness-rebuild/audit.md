@@ -245,3 +245,28 @@ push stored.
 
 **What it affects.** Only the design model (`slosh_model.py`), whose predictions were validated on rides it never saw. Every
 number on the pages comes from the full fluid solver, which computes the push directly.
+
+## F (result, 15 November 2026). The method's numerical damping, measured at 1.5 and 1.0 mm
+
+**Fact** (`tools/fig12/kaggle/damping_grid.py`, Fig. 12 notebook version 12, commit 758df53, 13 min of T4;
+`notes/fig12/damping-grid.json`). The stout alone, with no friction and no head, pushed and left to swing; ring 13 fitted with
+run_b's `fit_swing`:
+
+| grid | zeta | f0 | fit rms / amplitude |
+|---|---|---|---|
+| 6 mm (CPU, 07-diagnosis) | 0.0782 | 2.96 Hz | |
+| 4.5 mm (CPU) | 0.0433 | 3.12 Hz | |
+| 3 mm (CPU) | 0.0254 | 3.25 Hz | |
+| 1.5 mm (GPU) | 0.0152 | 3.326 Hz | 0.08 / 4.7 mm |
+| 1.0 mm (GPU) | 0.0090 | 3.350 Hz | 0.10 / 4.8 mm |
+| theory, real stout (glass and bulk) | 0.0055 | 3.421 Hz | |
+
+**Correction.** 07-diagnosis.md extrapolated 0.006-0.010 at 1.5 mm. The measured value is 0.0152.
+- Local exponents: zeta ~ dx^0.74 from 3 to 1.5 mm, dx^1.29 from 1.5 to 1.0 mm.
+- At the production grid the method alone damps the bare stout about 2.8 times as much as the real stout (0.0055). That accounts for
+  run 6's measured 0.016 on its own: the bare swing of Fig. 12 (free_wall) dies about three times too fast.
+- With the head (zeta 0.425) the method's share is 0.015 / 0.425 = 3.6 %, too small to change the rides with the head.
+
+**Fix.** 1.0 mm cuts the method's damping to 0.009 at 3.4 times the particles and 3.4 times the time per step (372 against
+108 ms). A rerun of the bare swing at 1.0 mm costs about 10 min of T4, not done. The Fig. 12 docs page now states the measured
+number.
