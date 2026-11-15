@@ -28,8 +28,8 @@ class Pint3D {
     this.cv = canvas; this.G = glass;
     this.zRim = (glass.R.length - 1) * glass.dz;
     this.Rz = (z) => { const f = Math.max(0, Math.min(z, this.zRim - 1e-6)) / glass.dz, i = Math.min(Math.floor(f), glass.R.length - 2); return glass.R[i] + (f - i) * (glass.R[i + 1] - glass.R[i]); };
-    const r = this.renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true, preserveDrawingBuffer: true });
-    r.setPixelRatio(Math.min(2, window.devicePixelRatio || 1)); r.outputColorSpace = THREE.SRGBColorSpace; r.toneMapping = THREE.ACESFilmicToneMapping; r.toneMappingExposure = 1.05;
+    const r = this.renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+    r.setPixelRatio(Math.min(1.5, window.devicePixelRatio || 1)); r.outputColorSpace = THREE.SRGBColorSpace; r.toneMapping = THREE.ACESFilmicToneMapping; r.toneMappingExposure = 1.05;
     const s = this.scene = new THREE.Scene(); s.environment = envTexture(r);
     s.add(new THREE.HemisphereLight(0xffffff, 0x5a4a40, 0.6));
     const key = new THREE.DirectionalLight(0xffffff, 2.2); key.position.set(-0.25, 0.5, 0.35); s.add(key);
@@ -55,7 +55,7 @@ class Pint3D {
     // the glass: inner and outer skins of the stored profile, tinted and nearly clear, drawn last
     const prof = (dr) => { const pts = []; for (let z = 0; z <= this.zRim + 1e-9; z += 0.002) pts.push(new THREE.Vector2(this.Rz(z) + dr, z)); return pts; };
     const outer = prof(0.0032); outer.unshift(new THREE.Vector2(0, -0.014), new THREE.Vector2(this.Rz(0) + 0.0032, -0.014));
-    const gm = new THREE.MeshPhysicalMaterial({ color: GLASSC, roughness: 0.04, metalness: 0, transparent: true, opacity: 0.07, depthWrite: false, side: THREE.DoubleSide, envMapIntensity: 1.6, clearcoat: 1 });
+    const gm = new THREE.MeshStandardMaterial({ color: GLASSC, roughness: 0.05, metalness: 0, transparent: true, opacity: 0.07, depthWrite: false, side: THREE.DoubleSide, envMapIntensity: 1.6 });
     const gOut = new THREE.Mesh(new THREE.LatheGeometry(outer, 96), gm); gOut.renderOrder = 2; s.add(gOut);
     const gIn = new THREE.Mesh(new THREE.LatheGeometry(prof(0), 96), gm); gIn.renderOrder = 2; s.add(gIn);
     // drops of stout and lumps of head in the air
@@ -70,11 +70,13 @@ class Pint3D {
   }
   size() {
     const w = this.cv.clientWidth, h = this.cv.clientHeight; if (w < 2 || h < 2) return;
-    this.renderer.setSize(w, h, false); this.camera.aspect = w / h; this.camera.updateProjectionMatrix();
+    this.renderer.setSize(w, h, false); this.camera.aspect = w / h; this.camera.updateProjectionMatrix(); this.drawn = null;
   }
   setFrame(ride, k) { this.ride = ride; this.k = Math.max(0, Math.min(ride.frames - 1, k)); }
+  // draws only when the stored picture or the size changed; times its two parts (geometry in JavaScript, the draw call) in this.stats
   render() {
-    const ride = this.ride; if (!ride) return;
+    const ride = this.ride; if (!ride || (this.drawn && this.drawn[0] === ride && this.drawn[1] === this.k)) return;
+    this.drawn = [ride, this.k]; const t0 = performance.now();
     const k = this.k, Rz = this.Rz, zRim = this.zRim, D = ride.D;
     // rings and angles, as StoutView2: the outer ring is the wall at the surface's own height in that direction
     const edge = [];
@@ -107,7 +109,8 @@ class Pint3D {
     for (let q = 0; q < nl; q++) { const o = 4 * (l0 + q), vol = ride.lumps[o + 3] * D.qv, rad = Math.max(0.0008, Math.cbrt(3 * vol / (4 * Math.PI)));
       this.m4.makeScale(rad, rad, rad).setPosition(ride.lumps[o] * qd, ride.lumps[o + 2] * qd, -ride.lumps[o + 1] * qd); this.lumps.setMatrixAt(q, this.m4); }
     this.lumps.count = nl; this.lumps.instanceMatrix.needsUpdate = true;
-    this.renderer.render(this.scene, this.camera);
+    const t1 = performance.now(); this.renderer.render(this.scene, this.camera); const t2 = performance.now();
+    const S = this.stats || (this.stats = { n: 0, js: 0, gl: 0 }); S.n++; S.js += t1 - t0; S.gl += t2 - t1; Pint3D.last = this;
   }
 }
 window.Pint3D = Pint3D;
