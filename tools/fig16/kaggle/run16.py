@@ -204,6 +204,19 @@ for task in TASKS:
                 books=dict(stout_particles=S.N, stout_err_particles_max=int(np.abs(nsum - S.N).max()), head_ml0=round(foam0 * 1e6, 4),
                            head_glass_ml_end=round(float(out["vhead"][-1]) * 1e6, 4), head_off_ml_end=round(float(out["foam_spill"][-1]) * 1e6, 4),
                            head_err_ml_max=float(np.abs(out["vhead"] + out["foam_spill"] - foam0).max() * 1e6)))
+    # the swelling check (run 4): the read median surface against the height the stout still in the glass fills at rest
+    from stout_jax import glass_volume
+    def h_rest(vol):
+        lo_, hi_ = 0.0, G.zrim
+        for _ in range(50):
+            mid = 0.5 * (lo_ + hi_); lo_, hi_ = (mid, hi_) if glass_volume(G.R, G.dzp, mid, 4000) < vol else (lo_, mid)
+        return 0.5 * (lo_ + hi_)
+    sw = []
+    for k in sorted({0, len(out["t"]) // 2, len(out["t"]) - 1}):
+        hr = float(np.nanmedian(out["H"][k])); he = h_rest(out["nact"][k] * S.mp / S.rho)
+        sw.append(dict(t=round(float(out["t"][k]), 3), read_mm=round(hr * 1e3, 2), rest_mm=round(he * 1e3, 2),
+                       volume_ratio=round(glass_volume(G.R, G.dzp, hr, 4000) / glass_volume(G.R, G.dzp, he, 4000), 4)))
+    info["swelling"] = sw; log(f"  swelling check {name}: " + "; ".join(f"t {d['t']} s read {d['read_mm']} rest {d['rest_mm']} mm ({(d['volume_ratio'] - 1) * 100:+.1f} %)" for d in sw))
     pol_arr = out["polar"]
     if task["kind"] == "ride":
         th = 2 * np.pi * np.arange(pol_arr.shape[2]) / pol_arr.shape[2]
