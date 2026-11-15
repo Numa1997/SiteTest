@@ -169,3 +169,21 @@ Two failed versions, both on the 6 mm CPU test:
   surface fell 29 mm in 0.8 s.
 
 The version kept leaves the pint at rest exactly as it was: 124.8 mm before and after.
+
+**Run 4 (notebook version 6) and run 4b (version 7), 15 November 2026.**
+- Run 4: the correction ungated, 3 x 3 x 3 blocks replaced by 5 x 5 x 5. The rest guard stopped it at 1.5 mm (largest deviation
+  1.54 mm against a limit of 0.75 mm). No ride was computed; 3 GPU-minutes.
+- Run 4b (commit fe8d981): the correction acts only while the whole pint has swollen by more than 4 %. The rest guard passes
+  (0.54 mm, the same as without the correction). 42 min of T4.
+- Swelling checks printed by the run, read surface against the rest height of the stout still in the glass:
+
+| ride, control off | run 3/3b: volume read / true | run 4b | stout spilled 3/3b -> 4b | head spilled 3/3b -> 4b |
+|---|---|---|---|---|
+| kerb (4 s) | +33 % | +1.2 % | 86.0 -> 87.4 g | 14.53 -> 14.52 mL |
+| five 20 mm bumps (8 s) | +48 % | +1.3 % | 103.1 -> 67.5 g | 14.61 -> 14.61 mL |
+| one 25 mm bump (8 s) | +18 % | +1.5 % | 38.2 -> 38.0 g | 11.49 -> 11.63 mL |
+
+- **Inference:** on the five bumps the swelling raised the surface, so the later bumps threw out stout that was not there. A
+  third of run 3b's spill there (35.6 g) was a fault of the method. On the kerb and the single bump most of the spill happens in
+  the first second, before much swelling, so the spill hardly changes.
+- The rides on the page are run 4b's (index-16.json, kaggle_version 7). With control on, the rides need no correction (+0.1 %).

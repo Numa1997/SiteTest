@@ -121,39 +121,39 @@
    "ctrl": "off",
    "road": "one 25 mm bump",
    "v0": 1.0,
-   "bytes": 6088019,
-   "sha256": "40eed1893da25bef5d2d8a27b452a68560d70fb3d3373eff8cf7e0ff9f482ada",
-   "kaggle_version": 4,
-   "commit": "2056270c6eec67586d013d9289c598aaa70f7e46",
+   "bytes": 6394501,
+   "sha256": "1c6d6592050db59b31026fb2d1e967797b401f838ffa853e9a573f80fef4132e",
+   "kaggle_version": 7,
+   "commit": "fe8d981a348e9cd17c164db5a81756f94789e32a",
    "frames": 481,
    "seconds": 8.0,
    "fps": 60,
    "rot": true,
    "measured": {
-    "steps": 4403,
-    "ms_per_step": 138.2,
-    "run_s": 608.5,
-    "spilled_g": 38.222,
-    "head_spilled_ml": 11.492,
+    "steps": 4397,
+    "ms_per_step": 190.0,
+    "run_s": 835.2,
+    "spilled_g": 37.998,
+    "head_spilled_ml": 11.628,
     "books": {
      "stout_particles": 1001952,
      "stout_err_particles_max": 0,
      "head_ml0": 91.314,
-     "head_glass_ml_end": 79.8218,
-     "head_off_ml_end": 11.4922,
-     "head_err_ml_max": 1.676379846569931e-08
+     "head_glass_ml_end": 79.6858,
+     "head_off_ml_end": 11.6282,
+     "head_err_ml_max": 1.257285562553806e-08
     },
-    "pitch_max_deg": 9.257023998880706,
-    "i_max_A": 1.5718909857436354,
+    "pitch_max_deg": 9.260673778264465,
+    "i_max_A": 1.5718892956210353,
     "u_max_N": 0.0,
     "current_limited": false,
     "bump_stop_N": 0.0,
     "v_range": [
-     0.9800520436935365,
-     1.0161913101220965
+     0.9800491599987592,
+     1.0165106930232966
     ],
-    "lean_max_mm": 68.04,
-    "tilt_max_mm": 72.68
+    "lean_max_mm": 69.15,
+    "tilt_max_mm": 73.82
    }
   },
   {
@@ -247,39 +247,39 @@
    "ctrl": "off",
    "road": "one sharp 30 mm bump",
    "v0": 1.5,
-   "bytes": 3862666,
-   "sha256": "d577eaaf57515bde3fc876f9053ce2bb4147d78ec69c5fc15a3baae66560e240",
-   "kaggle_version": 5,
-   "commit": "2cdafb82a3ea59eab3025fe4e19742000404ba19",
+   "bytes": 3858711,
+   "sha256": "1e5aca96170f1bcbd45c4a54b93b5e6330e11ec5076be335d9b473c783165cc3",
+   "kaggle_version": 7,
+   "commit": "fe8d981a348e9cd17c164db5a81756f94789e32a",
    "frames": 241,
    "seconds": 4.0,
    "fps": 60,
    "rot": true,
    "measured": {
-    "steps": 2493,
-    "ms_per_step": 172.8,
-    "run_s": 430.5,
-    "spilled_g": 85.958,
-    "head_spilled_ml": 14.534,
+    "steps": 2468,
+    "ms_per_step": 192.8,
+    "run_s": 475.6,
+    "spilled_g": 87.419,
+    "head_spilled_ml": 14.516,
     "books": {
      "stout_particles": 1001952,
      "stout_err_particles_max": 0,
      "head_ml0": 91.314,
-     "head_glass_ml_end": 76.7799,
-     "head_off_ml_end": 14.5341,
+     "head_glass_ml_end": 76.7985,
+     "head_off_ml_end": 14.5155,
      "head_err_ml_max": 1.6763812018226465e-08
     },
-    "pitch_max_deg": 20.280913763486947,
-    "i_max_A": 7.999999999999992,
+    "pitch_max_deg": 20.35611915610503,
+    "i_max_A": 7.999999999999993,
     "u_max_N": 0.0,
     "current_limited": true,
     "bump_stop_N": 0.0,
     "v_range": [
-     1.213248527546745,
-     1.5468831325701622
+     1.2166296369797038,
+     1.5455167784877122
     ],
-    "lean_max_mm": 82.03,
-    "tilt_max_mm": 91.81
+    "lean_max_mm": 88.11,
+    "tilt_max_mm": 94.67
    }
   },
   {
@@ -289,39 +289,39 @@
    "ctrl": "off",
    "road": "five 20 mm bumps in step with the swing",
    "v0": 1.0,
-   "bytes": 8979542,
-   "sha256": "ebd435e632093ccd5f1b5034045285c7a94e0a046a266df442c7997166338db4",
-   "kaggle_version": 5,
-   "commit": "2cdafb82a3ea59eab3025fe4e19742000404ba19",
+   "bytes": 7150181,
+   "sha256": "9aece3876f030fbe7f4cfe6a64a8f8c47ba2037e28cc8e7011cb03253e0afc3e",
+   "kaggle_version": 7,
+   "commit": "fe8d981a348e9cd17c164db5a81756f94789e32a",
    "frames": 481,
    "seconds": 8.0,
    "fps": 60,
    "rot": true,
    "measured": {
-    "steps": 4697,
-    "ms_per_step": 181.3,
-    "run_s": 851.2,
-    "spilled_g": 103.061,
-    "head_spilled_ml": 14.606,
+    "steps": 4798,
+    "ms_per_step": 199.7,
+    "run_s": 957.9,
+    "spilled_g": 67.548,
+    "head_spilled_ml": 14.61,
     "books": {
      "stout_particles": 1001952,
      "stout_err_particles_max": 0,
      "head_ml0": 91.314,
-     "head_glass_ml_end": 76.7084,
-     "head_off_ml_end": 14.6056,
-     "head_err_ml_max": 1.676382557075362e-08
+     "head_glass_ml_end": 76.7036,
+     "head_off_ml_end": 14.6104,
+     "head_err_ml_max": 1.6763812018226465e-08
     },
-    "pitch_max_deg": 7.689498265027438,
-    "i_max_A": 2.158110721139541,
+    "pitch_max_deg": 7.564186529444968,
+    "i_max_A": 2.4144790400834255,
     "u_max_N": 0.0,
     "current_limited": false,
     "bump_stop_N": 0.0,
     "v_range": [
-     0.9665106357334373,
-     1.0298633440074703
+     0.9531332436906755,
+     1.0314428533327111
     ],
-    "lean_max_mm": 73.44,
-    "tilt_max_mm": 71.7
+    "lean_max_mm": 77.0,
+    "tilt_max_mm": 80.71
    }
   }
  ]

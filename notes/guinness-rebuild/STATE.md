@@ -29,3 +29,24 @@ Reread first after any compaction. Prompt: `notes/fig16/PROMPT-computational-phy
    1.4 h at most (budget 3600 s, timeout 5400 s); quota 76,012 s used of 108,000 s on 14 Nov 23:00 UTC.
 2. Audit `notes/guinness-rebuild/audit.md`: rot-frame effect = run 3 kerb_full vs run 2 kerb_full, against the seed scatter.
 3. Pack, then the animation: wheels, 3D fluid, the on/off switch for both figures.
+
+## Status 15 Nov 2026, 03:50 UTC
+- Physics done:
+  - the rotating frame's forces (run 3);
+  - control off on every road;
+  - the drop list;
+  - the scatter of seeds;
+  - the swelling fix: gated volume correction, run 4b, uncontrolled rides within 1.5 %.
+- Page data: public/data/fig16/2026-11-15/ holds kerb_full (+ seed 2, v4) and kerb_off, resonant_off, bump25_off (v7).
+- Pages:
+  - the control switch on Fig. 12 and Fig. 16;
+  - wheels fixed;
+  - the 3D close-up (pint3d-view.js) on both.
+  - NOT merged to main yet.
+- Open:
+  - lecture notes and docs numbers (the Fig. 16 note still says tilt 2.6 mm, an under-read; run 3 gives 4.0 mm at 60/s);
+  - the data panel and three-way proof for the new view;
+  - one geometry for the drawn and simulated cart;
+  - the 1 mm grid check of numerical damping;
+  - merge and publish.
+- Quota: about 76,000 + 6,700 s used by this chat today (runs 3, 3b, 4, 4b); weekly limit 108,000 s.
