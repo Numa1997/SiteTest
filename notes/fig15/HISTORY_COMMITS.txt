@@ -1,0 +1,114 @@
+8d41961 | 2026-11-15 02:22 | session_01DGmqiqhCMW3FREtBievpnu | Fig. 15 correction: full log of the session (results, failures, every mistake, GPU spent, where every file is)
+838b958 | 2026-11-15 00:07 | session_01DGmqiqhCMW3FREtBievpnu | Fig. 15 correction: plan-B classification of the 2,609 discs and shells (545 discs kept, 1,782 discs + 282 shells to recompute); complex128 bill
+b9ccf3a | 2026-11-14 23:58 | session_01DGmqiqhCMW3FREtBievpnu | Fig. 15 correction: classify_2d sets status for unreadable stored runs
+a7cf734 | 2026-11-14 23:58 | session_01DGmqiqhCMW3FREtBievpnu | Fig. 15 correction: stored-file download with a browser user agent (site answered 403); unreadable stored runs are recomputed, never guessed
+0ee0bd7 | 2026-11-14 23:57 | session_01DGmqiqhCMW3FREtBievpnu | Fig. 15 correction: all 1,088 exact walls rebuilt (0 failed, closure <= 2.6e-5), records; classify-2d launched
+329fb3c | 2026-11-14 23:53 | session_01DGmqiqhCMW3FREtBievpnu | Fig. 15 correction: classify_2d.py (plan B: keep the stored disc or shell when it clears the gate by 0.002, else recompute in complex128)
+5ef0cdb | 2026-11-14 23:51 | session_01DGmqiqhCMW3FREtBievpnu | Fig. 15 correction: per-run records of the 282 recomputed shells (Rmax 160); all 2,609 disc and shell runs done
+aa80bb5 | 2026-11-14 23:47 | session_01DGmqiqhCMW3FREtBievpnu | CORRECTION_STATE: shell shard 1 done; wall calibration identical to the verified path in all 13 groups; all 1,088 walls launched
+f2f49a2 | 2026-11-14 23:28 | session_01DGmqiqhCMW3FREtBievpnu | Fig. 15 correction: per-run records of the 2,327 recomputed discs (runs.jsonl of fig15-correction-2d-1..4-of-4)
+fd74480 | 2026-11-14 22:52 | session_01DGmqiqhCMW3FREtBievpnu | CORRECTION_STATE: shell convergence (Rmax 160), grid-override bug fixed, shells relaunched
+07ac9bf | 2026-11-14 22:41 | session_01DGmqiqhCMW3FREtBievpnu | Fig. 15 correction: rt2d_run.py kept the default grid and dropped the loader's GRID override (shells ran at Rmax 64 instead of 160); fixed
+e92e764 | 2026-11-14 22:10 | session_01DGmqiqhCMW3FREtBievpnu | CORRECTION_STATE: all 2,327 discs computed, 0 failed; shell convergence test launched
+98110c3 | 2026-11-14 20:50 | session_01DGmqiqhCMW3FREtBievpnu | Fig. 15 correction: shell radial-range convergence test (Rmax 64-192 a, four shells, one c128 check), loader support
+ec6fcca | 2026-11-14 20:39 | session_01DGmqiqhCMW3FREtBievpnu | CORRECTION_STATE: disc shards 1-2 done (1,164 runs, 0 failed), 3-4 launched
+007971f | 2026-11-14 19:07 | session_01DGmqiqhCMW3FREtBievpnu | CORRECTION_STATE: cancels, smoke v2 results, B chosen, disc shards launched
+5d0490f | 2026-11-14 19:04 | session_01DGmqiqhCMW3FREtBievpnu | Fig. 15 correction: 2D runner shape filter, live ETA by work done; loader passes extra settings (shape, dtype, grid)
+4f393de | 2026-11-14 15:35 | session_01DGmqiq1crx88SDxneD5eCN | Fig. 16: the page, A Pint of Guinness on a Cart Built to Carry It, registered as a figure
+c28289f | 2026-11-14 14:56 | session_01DGmqiqhCMW3FREtBievpnu | CORRECTION_STATE: smoke v1 numbers, crash and fix; smoke v2 launched
+17ffd02 | 2026-11-14 14:55 | session_01DGmqiqhCMW3FREtBievpnu | Fig. 15 correction: axisym_jax loop carry with explicit dtypes (a complex64 run after a complex128 run crashed: float32 carry promoted to float64); found by the Kaggle smoke v1
+ead761c | 2026-11-14 14:42 | session_01DGmqiqhCMW3FREtBievpnu | CORRECTION_STATE: tracker on; 2D smoke launched
+c53a447 | 2026-11-14 14:19 | session_01DGmqiqhCMW3FREtBievpnu | Fig. 15 correction: live tracker (progress lines pushed to a private-name ntfy.sh topic set by the loader; owner-approved for this use)
+4286b8c | 2026-11-14 13:31 | session_01DGmqiqhCMW3FREtBievpnu | CORRECTION_STATE: calibration run launched
+54cf2c7 | 2026-11-14 13:29 | session_01DGmqiqhCMW3FREtBievpnu | Fig. 15 correction: wall runner tracking (done/total, rate, ETA per line), timing.json per group, calibration mode predicting the time for all 1,088 walls
+55d57fe | 2026-11-14 13:25 | session_01DGmqiqhCMW3FREtBievpnu | Fig. 15 correction: file_corrected.py (one corrected generation: kept, rebuilt, recomputed runs); state
+ab67850 | 2026-11-14 13:13 | session_01DGmqiqhCMW3FREtBievpnu | CORRECTION_STATE: batched wall runner committed; walls-gpu notebook saved but no session started; stopped per brief
+e5ba25a | 2026-11-14 13:09 | session_01DGmqiqhCMW3FREtBievpnu | Fig. 15 correction: wall runner batched by geometry with jax.vmap (checked per group against the single-wall path on the GPU), all 1,088 walls (walls_all.json); pip-install fallbacks replaced by a GPU backend check
+7e75d4b | 2026-11-14 12:42 | session_01DGmqiojNWvbk4vZik2e4oW | Fig. 15 correction: exact wall JAX code 3-5x faster (projection grid cut to where the packet is nonzero, closed forms outside the structure, fixed array shapes); results identical (T to 1e-11, levels 0)
+b1426eb | 2026-11-14 12:28 | session_01DGmqiojNWvbk4vZik2e4oW | CORRECTION_STATE: wall GPU job launched; owner's rule to integrate all data into one generation
+63fddef | 2026-11-14 12:27 | session_01DGmqiojNWvbk4vZik2e4oW | Fig. 15 correction: exact wall rebuild vectorised in JAX for the GPU (600 walls left)
+0ff4708 | 2026-11-14 12:25 | session_01DGmqiojNWvbk4vZik2e4oW | Fig. 15 correction: CPU wall batch stopped on the owner's order; rest goes to the GPU
+980df90 | 2026-11-14 12:23 | session_01DGmqiojNWvbk4vZik2e4oW | Fig. 15 correction: wall rebuild progress (records so far)
+5a26fa9 | 2026-11-14 12:21 | session_01DGmqiojNWvbk4vZik2e4oW | Fig. 15 correction: 2D runner, smoke suite, job list, notebook builder; wall rebuild progress
+63cd9e6 | 2026-11-14 12:08 | session_01DGmqiojNWvbk4vZik2e4oW | Fig. 15 correction: one-pass wall rebuild, JAX 2D solver, border-reflection finding, source review notes
+12dacd4 | 2026-11-14 11:42 | session_01DGmqiojNWvbk4vZik2e4oW | CORRECTION_STATE: owner's rule on reviewing outside sources after each chunk
+a81df49 | 2026-11-14 11:42 | session_01DGmqiojNWvbk4vZik2e4oW | Fig. 15 correction: exact wall solver, RT3C writer, wall T for all 1,088 runs, axisymmetric solver draft
+3f2467c | 2026-11-14 10:57 | session_01DGmqiojNWvbk4vZik2e4oW | Fig. 15 correction: brief, coordinator's checks, state file
+dddec29 | 2026-11-14 10:15 | session_01DGmqimPtCe2EEcSkNkjwPC | Fig. 15 grid audit (branch only, read-only analysis): every wall run against the exact continuum answer; the shift comes from barriers sampled on the 0.5 a grid; convergence of the twin with a cell-averaged potential
+00976f9 | 2026-11-14 10:04 | session_01DGmqimPtCe2EEcSkNkjwPC | STATE.md: final note live (main b71a4f28)
+b56cff9 | 2026-11-14 10:02 |  | Merge remote-tracking branch 'origin/claude/fig15-gen2-note' into claude/fig15-resonant-tunnelling
+885deee | 2026-11-14 10:02 | session_01DGmqiqazJ9UxECtFYiespR | Fig. 15 note: READY at c0ae537
+c0ae537 | 2026-11-14 10:02 | session_01DGmqiqazJ9UxECtFYiespR | Fig. 15 note: round-10 derivation checker fixes (side loss same region 6/36/36 % via rt3d2.run1d, d=2 exact average converged, k range per step, gain ratios unrounded, ten-wall rise above 1.4)
+e9ae592 | 2026-11-14 10:01 | session_01DGmqimPtCe2EEcSkNkjwPC | STATE.md: generation 2 live (main 0b5ec289), verified
+4fe1c72 | 2026-11-14 09:58 | session_01DGmqimPtCe2EEcSkNkjwPC | Fig. 15 generation 2: lecture note merged (READY at ad6738d), docs and state for the release
+1f8585a | 2026-11-14 09:56 |  | Merge remote-tracking branch 'origin/claude/fig15-gen2-note' into claude/fig15-resonant-tunnelling
+d794a62 | 2026-11-14 09:55 | session_01DGmqimPtCe2EEcSkNkjwPC | Fig. 15 page: 15e title, bias V_b and E_u typeset, label off the 2.5 tick, current in units of 1.22 MA/cm², caption counts the filed runs; energy readout says 'one of N stored energies'; a line on Read values; 'Fermi sea' replaced by the Fermi energy
+01902ee | 2026-11-14 09:55 | session_01DGmqiqazJ9UxECtFYiespR | Fig. 15 note: READY at ad6738d
+ad6738d | 2026-11-14 09:44 | session_01DGmqiqazJ9UxECtFYiespR | Fig. 15 note: round 10 owner fixes (twin trapped remainder, side-border loss in 3D lifetimes, Tsu-Esaki current condition, 2D Gaussian share, grid accuracy ranges, caveats)
+eb4147d | 2026-11-14 09:39 | session_01DGmqiqazJ9UxECtFYiespR | Fig. 15 note: round 10 fixes (3D grid phase per step, 4-digit same-run gap, diode current story consistent, plain-words for (23), electron sea introduced, fit window size, flux-weighted T, prose)
+4bae4a5 | 2026-11-14 09:32 | session_01DGmqiqazJ9UxECtFYiespR | Fig. 15 note: round 9 fixes (single-shell yardstick, same-run gaps, V0 = 3 long packets, honesty wording, definitions, no-wrap after short formulas)
+3d05c5b | 2026-11-14 09:24 |  | Merge remote-tracking branch 'origin/claude/fig15-resonant-tunnelling' into claude/fig15-gen2-note
+aeed0c5 | 2026-11-14 09:24 | session_01DGmqimPtCe2EEcSkNkjwPC | Fig. 15 page: Expand all / Collapse all also open and close the plain details boxes in the note
+100fa3f | 2026-11-14 09:23 | session_01DGmqiqazJ9UxECtFYiespR | Fig. 15 note: merge refiled index (same-energy diode curve now at V0 = 2); script checks it
+d4f0cc9 | 2026-11-14 09:22 |  | Merge remote-tracking branch 'origin/claude/fig15-resonant-tunnelling' into claude/fig15-gen2-note
+300b514 | 2026-11-14 09:22 | session_01DGmqiqazJ9UxECtFYiespR | Fig. 15 note: round 9 student marks (gamma phase reason, phase removal in steps, long-packet table, (11) under tilt, Fermi-Dirac named, twin defined, long-packet structures named, shell crossings and radial equation)
+9efff28 | 2026-11-14 09:20 | session_01DGmqimPtCe2EEcSkNkjwPC | Fig. 15: the diode's exact check curve at barrier height 2 (iv.py defaulted to 3; peak 0.75, valley 1.75, ratio 4.8), refiled; the scale note says what the code does (the run's largest |psi| is height 1)
+8aa4802 | 2026-11-14 09:16 | session_01DGmqiqazJ9UxECtFYiespR | Fig. 15 note: diode same-energy comparison recomputed at V0 = 2 (index value was filed at V0 = 3); checker round 8 fixes; docs
+1cc135d | 2026-11-14 09:02 | session_01DGmqiqazJ9UxECtFYiespR | Fig. 15 note: figure legend as a list, sourced GPU time, clearer Example 3.1, P^N form, finite-well table
+e066f11 | 2026-11-14 09:00 | session_01DGmqiqazJ9UxECtFYiespR | Fig. 15 note, round 8 fixes: 17 % computed, naive-count and 4 % gap reasons corrected, long-packet paragraph rewritten, V_b, side-leak and shell caveats, clarity
+87c1013 | 2026-11-14 08:52 | session_01DGmqimPtCe2EEcSkNkjwPC | STATE.md: final checks done, waiting for the note
+2e6a7fd | 2026-11-14 08:50 | session_01DGmqiqazJ9UxECtFYiespR | Fig. 15 note: full 3697-run index; status sentences become findings (diode peak, valley, ratio from all 500 runs)
+07bb188 | 2026-11-14 08:45 |  | Merge remote-tracking branch 'origin/claude/fig15-resonant-tunnelling' into claude/fig15-gen2-note
+90509d6 | 2026-11-14 08:43 |  | Fig. 15 note: numbers from the 3084-run index (shards 1-5); disc comparison sentences now backed by runs
+8e780ab | 2026-11-14 08:42 | session_01DGmqimPtCe2EEcSkNkjwPC | generations.json: measured bytes of generation 2
+260c585 | 2026-11-14 08:42 | session_01DGmqimPtCe2EEcSkNkjwPC | Fig. 15 gen 2: all six shards and the fix job filed: 3697 runs, 15 replaced, 6.53 GB in R2
+52b95dd | 2026-11-14 08:41 |  | Merge claude/fig15-resonant-tunnelling (index with shards 1-5, 3084 runs) into claude/fig15-gen2-note
+b122f6f | 2026-11-14 07:33 | session_01DGmqimPtCe2EEcSkNkjwPC | Fig. 15 gen 2: shard 5 filed (3084 runs, 5.43 GB in R2); fix1 launched
+5f0515a | 2026-11-14 05:06 | session_01DGmqimPtCe2EEcSkNkjwPC | Fig. 15 gen 2: shard 4 filed (2468 runs, 4.33 GB in R2)
+b047d71 | 2026-11-14 03:57 | session_01DGmqimPtCe2EEcSkNkjwPC | Fig. 15 gen 2: shard 3 filed (1853 runs, 3.24 GB in R2)
+3623643 | 2026-11-14 03:39 |  | Fig. 15 note: round-6 derivation-checker fixes (run-length rule of the filed runs, supply function range)
+57964b4 | 2026-11-14 03:37 |  | Fig. 15 note state: waiting for the full index
+59df5fd | 2026-11-14 03:37 |  | Fig. 15 note: round-7 referee fixes (separation proof, splitting error, shells as 1D double barrier, grid vs 1/kappa)
+55ca4a1 | 2026-11-14 03:35 |  | Fig. 15 note: fix round-7 reader marks
+75bbc77 | 2026-11-14 03:29 |  | Fig. 15 note state: round 7 launched
+8cc9769 | 2026-11-14 03:28 |  | Fig. 15 note: house frame (contents list + paper__body, so the text sets in Latin Modern); round-6 referee fixes
+2e318f6 | 2026-11-14 03:24 |  | Fig. 15 note: round-6 owner-reader fixes
+034bc81 | 2026-11-14 03:23 |  | Fig. 15 note: round-6 student fixes (resonance denominator, n counting, time unit, figure key)
+556824a | 2026-11-14 03:21 |  | Fig. 15 note: round-5 derivation-checker fixes (mirror symmetry inside the border, 20 %, filed thirds, units)
+a20d017 | 2026-11-14 03:17 |  | Fig. 15 note state: round 6 launched
+ada0993 | 2026-11-14 03:17 |  | Fig. 15 note: fix round-5 marks (long-packet sentence, star endings, L_eff restated, regime box, Bloch row, why current falls)
+c346801 | 2026-11-14 03:09 |  | Fig. 15 note state: round 5 launched
+ddcd0ed | 2026-11-14 03:09 |  | Fig. 15 note: wording of s/lambda
+6c344ef | 2026-11-14 03:09 |  | Fig. 15 note: the model's dimensionless numbers in the running-example box
+d45d8c5 | 2026-11-14 03:08 |  | Fig. 15 note: round-4 referee and checker fixes (side-leak estimate, diode peak lower not narrower, long-packet facts)
+9fe3785 | 2026-11-14 03:05 |  | Fig. 15 note: fix round-4 reader marks
+6af5c32 | 2026-11-14 02:58 |  | Fig. 15 note state: round 4 launched
+95824f5 | 2026-11-14 02:57 |  | Fig. 15 note: round-3 derivation-checker fixes (phase sign, twin vs exact, shells cut rule, quadrature averages)
+f8e0926 | 2026-11-14 02:41 |  | Fig. 15 note: round-3 referee fixes (barrier product written out, shells met head-on, Pauli, thin air film)
+27e392b | 2026-11-14 02:40 |  | Fig. 15 note: referee report (round 3, in progress)
+184e5c0 | 2026-11-14 02:40 |  | Fig. 15 note: tick marks on Figure 2
+1494562 | 2026-11-14 02:39 |  | Fig. 15 note: fix round-3 reader marks (rendering faults, Fig. 3 at V_b = 0.8, explanations)
+b3486a1 | 2026-11-14 01:37 | session_01DGmqimPtCe2EEcSkNkjwPC | STATE.md: writing session, finish script, page measurements
+26d5023 | 2026-11-14 01:37 | session_01DGmqimPtCe2EEcSkNkjwPC | Fig. 15 page: a loaded run keeps the 8-bit levels (2 bytes per cell, was 10: 4-10 MB a run, was 20-52 MB) and the page decodes only the two frames it mixes, by the worker's formula; one run file in flight at a time, so a fast drag loads the last run asked for
+93e5782 | 2026-11-14 01:26 | session_01DGmqimPtCe2EEcSkNkjwPC | Fig. 15 gen 2: shards 1-2 filed (1237 runs, 2.15 GB, uploaded to R2); generations.json entry rt3d2 2026-11-14; STATE.md
+11849ed | 2026-11-14 00:14 | session_01DGmqimPtCe2EEcSkNkjwPC | Fig. 15 gen 2: filer files a spec computed in two groups once and takes the diode by spec; page reads only an rt3d2 generation; STATE.md with files, commits and downloads
+4a12490 | 2026-11-13 23:45 | session_01DGmqimPtCe2EEcSkNkjwPC | notes/fig15/STATE.md: the state of generation 2 (batch, R2, done, left, rules)
+923b43f | 2026-11-13 21:55 | session_01DGmqimPtCe2EEcSkNkjwPC | file_rt3d2: per-notebook commit; a fix notebook's run replaces the earlier one of the same name, recorded in the index
+8324006 | 2026-11-13 21:54 | session_01DGmqimPtCe2EEcSkNkjwPC | Fig. 15 gen 2: loader notebooks for shards 3-6 and fix1 at commit 57770d2 (corrected run length)
+57770d2 | 2026-11-13 21:54 | session_01DGmqimPtCe2EEcSkNkjwPC | Fig. 15 gen 2: JOBSEL fix1, the 15 runs of shards 1-2 that the run-length fix lengthens by more than 15 %
+a39e2cc | 2026-11-13 21:41 | session_01DGmqimPtCe2EEcSkNkjwPC | Fig. 15 gen 2: run length counts the packet's trailing edge (2 sigma_x behind the centre), and the lifetime window no longer skips a resonance whose peak it cuts (found on the 512-point long-packet runs)
+f87277d | 2026-11-13 20:56 | session_01DGmqimPtCe2EEcSkNkjwPC | Fig. 15, generation 2 (branch only, not yet on main): the page walks the whole parameter space (shape, count, radius, height and thickness, spacing, voltage, packet length, energy); runs load from the R2 store under /r2/; the filer computes share-through, lifetimes, exact 1D curves and the current from the bias runs
+17d45c7 | 2026-11-13 20:21 | session_01DGmqimPtCe2EEcSkNkjwPC | Fig. 15, 3D generation 2: loader notebooks (smoke, six shards) at commit cdcade4; filer draft
+cdcade4 | 2026-11-13 20:20 | session_01DGmqimPtCe2EEcSkNkjwPC | Fig. 15, 3D generation 2: solver and job list for the whole parameter space (3739 runs: spacing, height, thickness, 1-10 barriers, discs to R = 12, shells, bias, long packets)
+b6186ee | 2026-11-13 19:44 | session_01DGmqimPtCe2EEcSkNkjwPC | Merge origin/main into claude/fig15-resonant-tunnelling; inventory keeps Fig. 14's rules beside Fig. 15's
+f6a47be | 2026-11-13 19:43 | session_01DGmqimPtCe2EEcSkNkjwPC | Fig. 15 is 3D: the page plays the 115 Kaggle runs (walls, discs, shells) on Fig. 14's meshed sheet, barriers as static glass solids
+01607a0 | 2026-11-13 18:05 | session_01DGmqimPtCe2EEcSkNkjwPC | Fig. 15, 3D: loader notebook for the 20 corrected single-barrier runs (singles_v2, commit db0a60c)
+db0a60c | 2026-11-13 18:05 | session_01DGmqimPtCe2EEcSkNkjwPC | Fig. 15, 3D: single wall and disc are now the pair's left barrier alone (2 cells thick); version 1 put them at x = 0, one grid point thick
+5c35a0d | 2026-11-13 17:51 | session_01DGmqimPtCe2EEcSkNkjwPC | Fig. 15, 3D: read_rt3d.py, the reader and check printer for the Kaggle run files
+681ecd9 | 2026-11-13 17:40 | session_01DGmqimPtCe2EEcSkNkjwPC | Fig. 15, 3D: the Kaggle loader notebooks (smoke test and the main batch in 4 shards) at commit eb3cff0
+eb3cff0 | 2026-11-13 17:39 | session_01DGmqimPtCe2EEcSkNkjwPC | Fig. 15, 3D: GPU solver and Kaggle runner for two barriers in 3D (walls, coins, shells); grid tests
+cf0d0ad | 2026-11-13 14:16 | session_01DGmqimPtCe2EEcSkNkjwPC | notes/fig15/referee.md: blind reader's report on the Fig. 15 note
+5f3a87b | 2026-11-13 14:16 | session_01DGmqiodVZQkg4UwuNJqcxS | notes/fig15: correct the brief and lessons. Fig. 15 is 3D, on Kaggle's GPUs, built on all of Fig. 14's stored 3D runs; the 1D/CPU framing is withdrawn
+6205650 | 2026-11-13 14:03 | session_01DGmqimPtCe2EEcSkNkjwPC | Fig. 15: resonant tunnelling, built from stored data (page, note, derived data, checks)
+bb085a6 | 2026-11-13 13:08 | session_01DGmqiodVZQkg4UwuNJqcxS | notes/fig15/LESSONS.md: the final goal and every mistake made on Fig. 14, for the Fig. 15 session; BRIEF.md: the page plays stored frames only
+12a62d6 | 2026-11-13 13:05 | session_01DGmqiodVZQkg4UwuNJqcxS | notes/fig15/BRIEF.md: the brief for the Fig. 15 session (resonant tunnelling, built on Fig. 14's stored runs)

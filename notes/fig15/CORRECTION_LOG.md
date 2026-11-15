@@ -47,6 +47,8 @@ The new run files exist only inside the Kaggle notebook outputs (tars); none is 
 
 ### 3.3 Shells (282)
 - **Fact:** converged at Rmax 160 a (Rmax 160 → 192 changes T by ≤ 0.0008 on four test shells, `fig15-correction-2d-shellconv`).
+- **Fact:** the one complex128 check on a shell (N2 R3 E0.75, Rmax 160) gives T 0.628891 against complex64 0.627703: a gap of
+  0.0012, twice the gap seen on discs, at 52 ms per step (14× complex64) (`correction/kaggle_outputs/2d-shellconv/progress.log`).
 - **Fact:** the stored shell runs **cannot be compared**: the stored index has no transmission number for shells, and the number I
   built for them (P_out / P_box) counts the reflected wave as well (T_old ≈ 0.998 against T_ref ≈ 0.86). So "282 of 282 fail" in the
   summary is **my definition error, not a measurement**. The new shell T exists for all 282; the stored ones are not validated either

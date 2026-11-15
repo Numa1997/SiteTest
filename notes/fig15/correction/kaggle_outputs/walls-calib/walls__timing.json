@@ -1,0 +1,305 @@
+{
+ "devices": [
+  "cuda:0",
+  "cuda:1"
+ ],
+ "total_s": 227.8,
+ "groups": {
+  "(192, 2, 1.0, 2.5, 3.0, False)": {
+   "s_per_wall": 1.918,
+   "compile_s": 0.0,
+   "B": 5,
+   "batches": 2
+  },
+  "(192, 2, 1.0, 3.5, 3.0, False)": {
+   "s_per_wall": 1.664,
+   "compile_s": 1.2,
+   "B": 5,
+   "batches": 2
+  },
+  "(192, 2, 1.0, 4.5, 3.0, False)": {
+   "s_per_wall": 1.752,
+   "compile_s": 0.8,
+   "B": 5,
+   "batches": 2
+  },
+  "(192, 2, 1.0, 5.5, 3.0, False)": {
+   "s_per_wall": 1.907,
+   "compile_s": 2.2,
+   "B": 4,
+   "batches": 2
+  },
+  "(192, 2, 1.5, 3.0, 3.0, False)": {
+   "s_per_wall": 1.486,
+   "compile_s": 1.1,
+   "B": 5,
+   "batches": 2
+  },
+  "(192, 2, 2.0, 3.5, 3.0, False)": {
+   "s_per_wall": 1.43,
+   "compile_s": 1.2,
+   "B": 5,
+   "batches": 2
+  },
+  "(192, 1, 1.0, 2.5, 3.0, False)": {
+   "s_per_wall": 1.332,
+   "compile_s": 1.2,
+   "B": 6,
+   "batches": 2
+  },
+  "(192, 3, 1.0, 2.5, 3.0, False)": {
+   "s_per_wall": 1.608,
+   "compile_s": 0.7,
+   "B": 5,
+   "batches": 2
+  },
+  "(192, 5, 1.0, 2.5, 3.0, False)": {
+   "s_per_wall": 2.167,
+   "compile_s": 1.4,
+   "B": 4,
+   "batches": 2
+  },
+  "(256, 10, 1.0, 2.5, 3.0, False)": {
+   "s_per_wall": 3.385,
+   "compile_s": 1.9,
+   "B": 2,
+   "batches": 2
+  },
+  "(192, 2, 1.0, 2.5, 3.0, True)": {
+   "s_per_wall": 3.095,
+   "compile_s": 1.0,
+   "B": 2,
+   "batches": 2
+  },
+  "(512, 2, 1.0, 2.5, 12.0, False)": {
+   "s_per_wall": 1.915,
+   "compile_s": 0.3,
+   "B": 6,
+   "batches": 2
+  },
+  "(512, 2, 2.0, 3.5, 12.0, False)": {
+   "s_per_wall": 1.355,
+   "compile_s": 3.7,
+   "B": 6,
+   "batches": 2
+  }
+ },
+ "batches": [
+  {
+   "group": "(192, 2, 1.0, 2.5, 3.0, False)",
+   "n": 5,
+   "B": 5,
+   "s": 8.72,
+   "first": true,
+   "dev": "cuda:0"
+  },
+  {
+   "group": "(192, 2, 1.0, 3.5, 3.0, False)",
+   "n": 5,
+   "B": 5,
+   "s": 9.5,
+   "first": true,
+   "dev": "cuda:0"
+  },
+  {
+   "group": "(192, 2, 1.0, 2.5, 3.0, False)",
+   "n": 5,
+   "B": 5,
+   "s": 9.59,
+   "first": false,
+   "dev": "cuda:1"
+  },
+  {
+   "group": "(192, 2, 1.0, 3.5, 3.0, False)",
+   "n": 5,
+   "B": 5,
+   "s": 8.32,
+   "first": false,
+   "dev": "cuda:1"
+  },
+  {
+   "group": "(192, 2, 1.0, 4.5, 3.0, False)",
+   "n": 5,
+   "B": 5,
+   "s": 9.61,
+   "first": true,
+   "dev": "cuda:0"
+  },
+  {
+   "group": "(192, 2, 1.0, 4.5, 3.0, False)",
+   "n": 5,
+   "B": 5,
+   "s": 8.76,
+   "first": false,
+   "dev": "cuda:1"
+  },
+  {
+   "group": "(192, 2, 1.0, 5.5, 3.0, False)",
+   "n": 4,
+   "B": 4,
+   "s": 9.87,
+   "first": true,
+   "dev": "cuda:0"
+  },
+  {
+   "group": "(192, 2, 1.0, 5.5, 3.0, False)",
+   "n": 4,
+   "B": 4,
+   "s": 7.63,
+   "first": false,
+   "dev": "cuda:1"
+  },
+  {
+   "group": "(192, 2, 1.5, 3.0, 3.0, False)",
+   "n": 5,
+   "B": 5,
+   "s": 8.51,
+   "first": true,
+   "dev": "cuda:0"
+  },
+  {
+   "group": "(192, 2, 1.5, 3.0, 3.0, False)",
+   "n": 5,
+   "B": 5,
+   "s": 7.43,
+   "first": false,
+   "dev": "cuda:1"
+  },
+  {
+   "group": "(192, 2, 2.0, 3.5, 3.0, False)",
+   "n": 5,
+   "B": 5,
+   "s": 8.37,
+   "first": true,
+   "dev": "cuda:0"
+  },
+  {
+   "group": "(192, 2, 2.0, 3.5, 3.0, False)",
+   "n": 5,
+   "B": 5,
+   "s": 7.15,
+   "first": false,
+   "dev": "cuda:1"
+  },
+  {
+   "group": "(192, 1, 1.0, 2.5, 3.0, False)",
+   "n": 6,
+   "B": 6,
+   "s": 9.2,
+   "first": true,
+   "dev": "cuda:0"
+  },
+  {
+   "group": "(192, 1, 1.0, 2.5, 3.0, False)",
+   "n": 6,
+   "B": 6,
+   "s": 7.99,
+   "first": false,
+   "dev": "cuda:1"
+  },
+  {
+   "group": "(192, 3, 1.0, 2.5, 3.0, False)",
+   "n": 5,
+   "B": 5,
+   "s": 8.74,
+   "first": true,
+   "dev": "cuda:0"
+  },
+  {
+   "group": "(192, 3, 1.0, 2.5, 3.0, False)",
+   "n": 5,
+   "B": 5,
+   "s": 8.04,
+   "first": false,
+   "dev": "cuda:1"
+  },
+  {
+   "group": "(192, 5, 1.0, 2.5, 3.0, False)",
+   "n": 4,
+   "B": 4,
+   "s": 10.11,
+   "first": true,
+   "dev": "cuda:0"
+  },
+  {
+   "group": "(192, 5, 1.0, 2.5, 3.0, False)",
+   "n": 4,
+   "B": 4,
+   "s": 8.67,
+   "first": false,
+   "dev": "cuda:1"
+  },
+  {
+   "group": "(256, 10, 1.0, 2.5, 3.0, False)",
+   "n": 2,
+   "B": 2,
+   "s": 8.69,
+   "first": true,
+   "dev": "cuda:0"
+  },
+  {
+   "group": "(256, 10, 1.0, 2.5, 3.0, False)",
+   "n": 2,
+   "B": 2,
+   "s": 6.77,
+   "first": false,
+   "dev": "cuda:1"
+  },
+  {
+   "group": "(192, 2, 1.0, 2.5, 3.0, True)",
+   "n": 2,
+   "B": 2,
+   "s": 7.16,
+   "first": true,
+   "dev": "cuda:0"
+  },
+  {
+   "group": "(192, 2, 1.0, 2.5, 3.0, True)",
+   "n": 2,
+   "B": 2,
+   "s": 6.19,
+   "first": false,
+   "dev": "cuda:1"
+  },
+  {
+   "group": "(512, 2, 1.0, 2.5, 12.0, False)",
+   "n": 6,
+   "B": 6,
+   "s": 11.78,
+   "first": true,
+   "dev": "cuda:0"
+  },
+  {
+   "group": "(512, 2, 1.0, 2.5, 12.0, False)",
+   "n": 6,
+   "B": 6,
+   "s": 11.49,
+   "first": false,
+   "dev": "cuda:1"
+  },
+  {
+   "group": "(512, 2, 2.0, 3.5, 12.0, False)",
+   "n": 6,
+   "B": 6,
+   "s": 11.86,
+   "first": true,
+   "dev": "cuda:0"
+  },
+  {
+   "group": "(512, 2, 2.0, 3.5, 12.0, False)",
+   "n": 6,
+   "B": 6,
+   "s": 8.13,
+   "first": false,
+   "dev": "cuda:1"
+  }
+ ],
+ "prediction": {
+  "walls": 1088,
+  "compute_s": 2612.4,
+  "compile_s_per_gpu": 16.7,
+  "wall_clock_s_one_notebook": 1382.9,
+  "wall_clock_s_two_notebooks": 729.8,
+  "note": "GPU quota is charged per session wall-clock, not per GPU; two notebooks halve the wall clock"
+ }
+}
