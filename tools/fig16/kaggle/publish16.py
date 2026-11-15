@@ -29,7 +29,13 @@ with tarfile.open(fileobj=io.BytesIO(data)) as t:
     top = t.getnames()[0].split("/")[0]; t.extractall("/tmp")
 os.rename(os.path.join("/tmp", top), REPO); log(f"repository at {COMMIT}")
 summ = [p for p in glob.glob("/kaggle/input/**/summary.json", recursive=True)]
-log("summaries found: " + ", ".join(summ))
+log("summaries found under /kaggle/input: " + ", ".join(summ))
+if not summ and os.environ.get("SRC_URLS"):
+    # the GPU run's files fetched by their signed download links (a JSON {file name: url}), when no data source is attached
+    os.makedirs("/tmp/src", exist_ok=True)
+    for name, url in json.loads(os.environ["SRC_URLS"]).items():
+        open(os.path.join("/tmp/src", name), "wb").write(urllib.request.urlopen(url).read()); log(f"fetched {name}")
+    summ = ["/tmp/src/summary.json"]
 summ = [p for p in summ if all(os.path.exists(os.path.join(os.path.dirname(p), r + ".npz")) for r in RIDES)][0]
 src = os.path.dirname(summ); log(f"GPU output: {src}")
 t0 = time.time()
