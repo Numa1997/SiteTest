@@ -223,3 +223,25 @@ mechanism: each bump rocks deck and stout together at nearly their own natural r
   adds no kinetic energy. It acts only while the pint is swollen by more than 4 %, so in gentle swings it does nothing at all.
 - The larger energy on the five bumps follows from the 35 g more stout kept in the glass.
 - The tail decay rates agree to about 10 %. No sign of energy injection.
+
+## K. The stout's push: 75.7 g measured against 55.8 g from theory (bounded, 15 November 2026)
+
+**Fact.** `tools/fig16/gamma_check.py` regressed the stored push F_x on -q'' of run 8's rides at 30 pictures a second, q'' being
+the second derivative of tilt/2 by two central differences.
+- The glass is nearly a cylinder where the swing lives: R = 38.2-39.3 mm from 95 to 125 mm, with slope |dR/dz| <= 0.11. The
+  swing's decay depth is R/xi = 21 mm.
+- So the tulip shape does not explain a 36 % excess. The radius that would give 75.7 g is 43.3 mm.
+
+**Fact.** Two central differences with step dt shrink a component at angular frequency w by [sin(w dt)/(w dt)]^2:
+- 0.87 at 3 Hz and 30/s, so the fitted mass reads about 14 % high;
+- more for the jolts' higher frequencies.
+
+On run 3's 60/s rides, halving the rate raises the fitted mass by a factor of 1.4 to 2.1. Those rides cannot measure the mass
+itself (their push includes the turning deck's effects; correlations 0.2-0.8), but they show the sensitivity to sampling.
+
+**Inference.** Run 8's 75.7 g is inflated by at least 14-19 % at the swing's frequency; corrected, about 60-70 g. The remaining
+10-25 % above theory cannot be settled from stored 30/s data. The clean test would be a free swing stored at 60/s or more with its
+push stored.
+
+**What it affects.** Only the design model (`slosh_model.py`), whose predictions were validated on rides it never saw. Every
+number on the pages comes from the full fluid solver, which computes the push directly.
