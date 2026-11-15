@@ -44,29 +44,45 @@
     const A = pane($('c12'), window.StoutView2, { viewHeight: 0.46, groundY: 0.86, elevDeg: 16, azimDeg: -24 });
     const B = pane($('c16'), window.Cart16View, { viewHeight: 0.56, groundY: 0.84, elevDeg: 16, azimDeg: -24 }); B.v.targetZ = 0.20;
     if (document.fonts && document.fonts.load) { try { await document.fonts.load('400 100px "Instrument Serif"'); } catch (e) { /* the lettering falls back to a serif */ } }
-    const rides = I16.files.filter((f) => f.kind === 'ride'), cache = new Map();
-    let r12 = null, r16 = null, cur = -1, T = 0, playing = true, last = null, lastTxt = 0, busy = false;
+    // run 3 (15 November 2026: the turning deck's forces in the fluid, 60 pictures a second, control off on every road) where it was
+    // computed, run 2 (14 November) otherwise; seed 1 of each
+    const D16B = '../data/fig16/2026-11-15/'; let I16B = null;
+    try { const rb = await fetch(D16B + 'index-16.json'); if (rb.ok) I16B = await rb.json(); } catch (e) { /* run 2 alone */ }
+    const all = I16.files.map((f) => Object.assign({ dir: D16 }, f)).concat(I16B ? I16B.files.map((f) => Object.assign({ dir: D16B }, f)) : []).filter((f) => f.kind === 'ride' && !/seed2/.test(f.path));
+    const pick = (road, ctrl) => { const c = all.filter((f) => f.road === road && f.ctrl === ctrl); return c.find((f) => f.dir === D16B) || c[0]; };
+    const rides = []; Object.keys(BEST12).forEach((road) => ['full', 'off'].forEach((ctrl) => { const f = pick(road, ctrl); if (f) rides.push(f); }));
+    const cache = new Map();
+    let r12 = null, r16 = null, cur = -1, T = 0, playing = true, last = null, lastTxt = 0, busy = false, fade = null;
     const fps = (r) => r.fps || 30;   // stored pictures a second: 30 in Fig. 12 and Fig. 16's run 2, 60 from run 3
     const dur = () => Math.max((r12.frames - 1) / fps(r12), (r16.frames - 1) / fps(r16));
     const get = async (url, want) => { if (!cache.has(url)) cache.set(url, await load(url, want)); return cache.get(url); };
 
-    async function choose(i) {
-      if (busy || i === cur) return; busy = true;
+    // keep: the switch of the control system: the same road at the same ride time, the old picture cross-faded out over 0.45 s
+    async function choose(i, keep) {
+      if (busy || i === cur || i < 0) return; busy = true;
       const f = rides[i]; $('cap-t').textContent = 'loading ' + f.path + ' …';
       try {
-        [r16, r12] = await Promise.all([get(D16 + f.path, f.sha256), get(D12 + BEST12[f.road], sha12[BEST12[f.road]])]);
-        cur = i; T = 0; playing = true; $('play').textContent = 'Pause';
+        const [n16, n12] = await Promise.all([get(f.dir + f.path, f.sha256), get(D12 + BEST12[f.road], sha12[BEST12[f.road]])]);
+        if (keep && r16) { const c = B.v.cv, o = document.createElement('canvas'); o.width = c.width; o.height = c.height; o.getContext('2d').drawImage(c, 0, 0); fade = { img: o, t0: performance.now() }; }
+        r16 = n16; r12 = n12; cur = i;
+        if (keep) T = Math.min(T, dur()); else { T = 0; playing = true; $('play').textContent = 'Pause'; }
         for (const [P, r] of [[A, r12], [B, r16]]) { P.bumps.length = 0; (r.D.bumps || []).forEach((b) => P.bumps.push(b)); P.fluid.h0 = r.fill; P.fluid.dx = r.dx; }
-        [...$('ride-host').children].forEach((b, j) => b.setAttribute('aria-pressed', j === i ? 'true' : 'false'));
+        [...$('ride-host').children].forEach((b) => b.setAttribute('aria-pressed', b.dataset.road === f.road ? 'true' : 'false'));
+        $('ctl-sw').setAttribute('aria-pressed', f.ctrl === 'full' ? 'true' : 'false'); $('ctl-sw-v').textContent = f.ctrl === 'full' ? 'on' : 'off';
         $('h12').textContent = 'Fig. 12 · one wheel · ' + ({ slosh: 'slosh LQR', joint: 'joint control' })[r12.D.ctrl];
         $('h16').textContent = 'Fig. 16 · four wheels · control system ' + (f.ctrl === 'full' ? 'on' : 'off');
         $('ride-note').textContent = `${f.road[0].toUpperCase()}${f.road.slice(1)} at ${fmt(f.v0, 1)} m/s. Left: Fig. 12's best stored ride on this road, ${r12.D.name}. ` +
-          `Right: ${f.path}, ${f.frames} stored pictures${f.frames < r12.frames ? ', the run stopped early on Kaggle at ' + fmt(r16.D.t[r16.frames - 1], 2) + ' s when its list of flying drops was full' : ''}. ` +
+          `Right: ${f.path} (${f.dir.split('/').slice(-2, -1)[0]}), ${f.frames} stored pictures, ${fps(r16)} a second${f.seconds < f.task_end - 0.02 ? ', the run stopped early on Kaggle at ' + fmt(r16.D.t[r16.frames - 1], 2) + ' s' : ''}. ` +
           `Fingerprints ${r12.checked && r16.checked ? 'checked: both files match their index' : 'not checked (this browser cannot compute SHA-256)'}.`;
       } catch (e) { $('cap-t').textContent = e.message; }
       busy = false;
     }
-    rides.forEach((f, i) => { const b = document.createElement('button'); b.type = 'button'; b.className = 'btn btn--ghost g-ride'; b.textContent = f.label; b.setAttribute('aria-pressed', 'false'); b.onclick = () => choose(i); $('ride-host').appendChild(b); });
+    rides.forEach((f) => { f.task_end = f.road === 'one sharp 30 mm bump' ? 4 : 8; });
+    const idx = (road, ctrl) => rides.findIndex((f) => f.road === road && f.ctrl === ctrl);
+    Object.keys(BEST12).forEach((road) => { const b = document.createElement('button'); b.type = 'button'; b.className = 'btn btn--ghost g-ride'; b.dataset.road = road;
+      b.textContent = `${road[0].toUpperCase()}${road.slice(1)}, ${road === 'one sharp 30 mm bump' ? '1.5' : '1.0'} m/s`; b.setAttribute('aria-pressed', 'false');
+      b.onclick = () => choose(idx(road, cur >= 0 ? rides[cur].ctrl : 'full')); $('ride-host').appendChild(b); });
+    $('ctl-sw').onclick = () => { if (cur < 0) return; const f = rides[cur]; choose(idx(f.road, f.ctrl === 'full' ? 'off' : 'full'), true); };
     // the comparison, from the two indexes (stored numbers only)
     const tb = $('cmp').appendChild(document.createElement('tbody'));
     for (const road of Object.keys(BEST12)) {
@@ -74,7 +90,7 @@
       const th = document.createElement('tr'); th.className = 'cmp-road'; th.innerHTML = `<th colspan="5">${road}, ${fmt(f12.v0, 1)} m/s</th>`; tb.appendChild(th);
       const row = (name, m) => { const tr = document.createElement('tr'); tr.innerHTML = `<td>${name}</td><td>${fmt(m.tilt_max_mm, 2)}</td><td>${fmt(m.head_spilled_ml, 3)}</td><td>${fmt(m.spilled_g, 2)}</td><td>${fmt(m.i_max_A != null ? m.i_max_A : m.i_max_stored_A, 2)}</td>`; tb.appendChild(tr); };
       row('Fig. 12, ' + ({ slosh: 'slosh LQR', joint: 'joint' })[f12.ctrl], m12);
-      rides.filter((f) => f.road === road).forEach((f) => row('Fig. 16, control ' + (f.ctrl === 'full' ? 'on' : 'off') + (f.frames < 121 ? ' *' : ''), f.measured));
+      rides.filter((f) => f.road === road).forEach((f) => row('Fig. 16, control ' + (f.ctrl === 'full' ? 'on' : 'off') + (f.seconds < f.task_end - 0.02 ? ' *' : ''), f.measured));
     }
     $('play').onclick = () => { if (T >= dur() - 1e-9) T = 0; playing = !playing || T === 0; $('play').textContent = playing ? 'Pause' : 'Play'; };
     $('again').onclick = () => { T = 0; playing = true; $('play').textContent = 'Pause'; };
@@ -98,6 +114,10 @@
       B.v.pose = { zwF: D2.zf[k2] - D2.zf[0] + G16.Rw, zwR: D2.zr[k2] - D2.zr[0] + G16.Rw, zc: D2.zc[k2] - D2.zc[0] + G16.Rw + 0.098, pitch: D2.th[k2] - D2.th[0],
                    wheelAng: -lerpAt(D2.x, T * fps(r16)) / G16.Rw, wheelRate: D2.v[k2] / G16.Rw, us: [D2.uf[k2] / 2, D2.uf[k2] / 2, D2.ur[k2] / 2, D2.ur[k2] / 2] };
       B.v.setFrame(r16, k2); B.v.draw();
+      if (fade) {                                                 // the switch: the last picture of the other ride fades out over 0.45 s
+        const u = (now - fade.t0) / 450, g = B.v.cv.getContext('2d');
+        if (u >= 1) fade = null; else { g.save(); g.globalAlpha = 1 - u; g.drawImage(fade.img, 0, 0); g.restore(); }
+      }
       if (document.activeElement !== $('tbar')) $('tbar').value = Math.round(T / dur() * 1000);
       if (now - lastTxt > 250) {                                  // words rewritten four times a second
         lastTxt = now;
