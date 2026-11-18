@@ -34,6 +34,17 @@ a tan band under the head while settling; stout near-black when settled, brown a
 glass with vertical highlight streaks and a bright rim line; thick clear foot catching light; gold harp, white lettering; warm low
 light, reflection on the table, soft shadow. Physics of the cascade: https://www.rsc.org/news/2010/march/mystery-solved-why-guinness-bubbles-go-down
 
+## The owner's order (18 Nov, evening)
+"Resolve the split. I don't care what it takes. Learn from one another. Complete both works. Merge them into a functioning
+animation already." Plan sent to session_01DGmqipAnEdVvBLCf7CLGmT: one integration branch (this one), main gets one merge of both
+works after panel16_check and frames_check pass on it.
+- Method chosen: the live page stays a real-time animation of the stored frames; the drawing becomes physically based in three.js
+  (glass n 1.52 transmissive, stout Beer-Lambert from deLange's average beer spectrum at SRM 40, foam head, warm room). The Blender
+  path-traced frame (render_pint.py) is the reference look; rendering every stored frame that way costs ~5 min per frame (too much
+  for 241 frames x several rides on the remaining GPU quota).
+- Done (9a6e8ef): pint3d-view.js physically based; cart16-view.js records deck_px_* into this.deckStore.
+- Next: the 2D carts and road in the same style; then the page layout with the other session; checks; merge; live verify; docs.
+
 ## Steps (status)
 1. Reads, session check, split — done.
 2. Reference photographs — done (above).
