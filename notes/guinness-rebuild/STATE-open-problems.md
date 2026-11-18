@@ -15,10 +15,11 @@ Close the six open problems of the handoff, one at a time, in its order. Merge f
   end with "Where we are:" and "Next, if you say yes:".
 
 ## Problems (status)
-1. inventory --check and docs/files.md — DONE on the branch (CPU v9: --check failed only for a stale files.md; after regenerating, exit 0, 6577 files; every file described). Merge to main pending. The rules for diag_burst.py, damping_grid.py, check_pint3d.cjs exist
-   (tools/inventory.py lines 85-90). Plan: CPU notebook git-clones main, runs `tools/inventory.py --check`; on failure runs it
-   without --check and returns docs/files.md.
-2. Fig. 16 data panel with the three-way proof — open.
+1. inventory --check and docs/files.md — DONE, merged (main 56b5241).
+2. Fig. 16 data panel — BUILT (commit a8b8dcc, owner said "Go for it" to option 1 + the message): store and ledger in
+   guinness16-play.js; page src gets data.css, dataset.js, id="stage"; proof tools/fig16/kaggle/panel16_check.py; docs updated.
+   Deck pixels: asked the look session to record them in this.deckStore (NOT ds) in cart16-view.js; until then "not recorded".
+   NEXT: read CPU v10 output (report, screenshots, built html, files.md), fix, commit the built page, merge, curl live.
 3. Fig. 16's own Kaggle dataset — open.
 4. 3D close-up smoothness on a Kaggle GPU machine — open.
 5. Fig. 12 bare swing at 1.0 mm — optional; GPU (~10 min): ask the owner first.
@@ -27,8 +28,13 @@ Close the six open problems of the handoff, one at a time, in its order. Merge f
 ## Kaggle runs of this session
 - CPU `numakoudsie/fig-16-cart-diagnostics-cpu` version 9 (18 Nov): git clone of this branch, `inventory.py --check`, then regenerate;
   outputs inventory.log, files.md. Status: COMPLETE; files.md downloaded, diff reviewed (2 new notes files, 3 sizes, counts), committed.
+- CPU same notebook version 10 (18 Nov): clone branch, node --check, panel16_check.py, inventory. Outputs: run.log, panel16.log,
+  panel16-report.json, 4 screenshots, guinness-cart-control.html, files.md.
 
 ## Commits
 - this file; docs/files.md from CPU v9 (state-file size line set by hand with the script's rule, bytes/1000 to 0.1 kB).
 - Info (04:20 UTC, session_01DGmqin2AFu75ELh8fAbGr9): session_01DGmqioyaYR5VnnZaKfpEhD works on the look of Figs. 12 and 16 (stout-view*.js,
   guinness-glass.js, cart16-view.js, pint3d-view.js); it will propose a file split. Do not edit those files before agreeing it.
+- File split agreed (04:23 UTC, with the owner's yes per that session): look session edits stout-view.js, stout-view2.js, guinness-glass.js,
+  cart16-view.js, drawing parts of pint3d-view.js. Mine: Fig. 16 panel, page HTML and src, frame-time work, Kaggle dataset, inventory.
+  Message them before touching any of theirs.
