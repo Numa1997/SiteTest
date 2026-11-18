@@ -65,7 +65,7 @@ fail = 0
 with sync_playwright() as p:
     br = p.chromium.launch()
     for (w, h) in [(1440, 1000), (390, 844)]:
-        ctx = br.new_context(viewport={"width": w, "height": h}, device_scale_factor=2)
+        ctx = br.new_context(viewport={"width": w, "height": h}, device_scale_factor=2, bypass_csp=True)   # the test's own probes are evaluated strings; the page's policy is not changed
         pg = ctx.new_page(); errs = []
         pg.on("console", lambda m: errs.append(m.text) if m.type == "error" else None)
         pg.on("pageerror", lambda e: errs.append(str(e)))
