@@ -86,6 +86,22 @@ Sixth round shown in chat, waiting for his verdict:
  - Printing a chip: die with pads; a scanning light bar prints three layers: H-tree clock network (depth 4), Manhattan wiring, vias.
 Not yet built from his list: birds and flocks (a better one), seasons/climate/clouds, bio fractals.
 
+Update 12:55 (same day): his corrections to the sixth round, each rebuilt and shown in chat, waiting for his verdict:
+ - Forest: "every tree is unique". Now each seedling has its own genome (oak-like binary, fir with a leading axis, three-way bush,
+   wind-leaning, weeping with drooping branches; random spread, ratio, lean, depth 4-6, 120-190 motes to mature); mother unique too.
+ - Iron: he meant the classic iron POWDER over a magnet under a sheet. Now 3000 grains; each slides along the field (random walk
+   along B), and is pulled sideways onto discrete field lines via the flux function psi = sum q atan2 (step -sin(22 psi)); a "tap"
+   every 3.5 s shakes them loose; two bar magnets drift and turn under the sheet.
+ - Sound: not the tube; "maybe do it for harmonica". Now a ten-hole harmonica at the bottom plays single notes and chords in turn;
+   3300 air specks are displaced radially by each sounding hole, 6 sin(k r - omega t)/(1 + r/140), wavelength 70 px (hole 1) down to
+   30 px (hole 10), so pressure rings and their interference are visible; the reeds vibrate.
+ - Springs were wrong: he wants "a shitload of spinners spinning randomly and then a magnetic field bringing them all to
+   resonance". Now 312 three-blade spinners with random speeds and directions; a rotating field (3 rad/s) ramps up and locks them,
+   d(theta)/dt = omega_i + K sin(phi - theta), K 0 -> 10 -> 0 on a 22 s cycle.
+ - Mixing: different shapes per species. Now three species (triangles, rings, squares) in three chambers, two walls lift, entropy
+   curve normalised by ln 3.
+Unchanged from round six and not commented on: printing a chip.
+
 ## User's rules for this work
 - Merge and publish finished, tested work without asking; verify the live site; docs must describe the code.
 - Do only what is asked; reply in plain connected English; never use the user's name.
