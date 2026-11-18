@@ -26,6 +26,7 @@ DROPS_KEEP = 16384                              # drops stored per picture for t
 K_FRAC = float(os.environ.get("K_FRAC", "0.62"))   # the surface-candidate list as a share of the particles (run 3b: 1.0, the uncontrolled
                                                 # rides stopped with the list full once a fifth of the stout was in the air)
 VOL_CORR = float(os.environ.get("VOL_CORR", "0"))   # run 4: the volume correction's kappa (stout_jax.Stout); 0 = off as in runs 2 and 3
+PROBE = os.environ.get("PROBE", "bilinear")     # run 6: "patch", the level probes as area sensors (stout_jax.Stout.probes_patch, audit M3)
 ROT = os.environ.get("ROT", "1") == "1"         # the rotating frame's forces in the fluid (run 3); "0" reproduces run 2's model
 BUDGET_S = float(os.environ.get("BUDGET_S", "2000")); CODECHECK = bool(os.environ.get("CODECHECK"))
 STAMP = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d")
@@ -57,7 +58,7 @@ TASKS = [dict(name="rest", kind="free", end=end_(2.0)),
          dict(name="kerb_full_seed2", kind="ride", road=KERB, v0=1.5, ctrl="full", end=end_(4.0), seed=2),
          dict(name="kerb_off_seed2", kind="ride", road=KERB, v0=1.5, ctrl="off", end=end_(4.0), seed=2)]
 if os.environ.get("ONLY"): TASKS = [t for t in TASKS if t["name"] in os.environ["ONLY"].split(",") + ["rest", "design"]]
-summary = dict(vol_corr=VOL_CORR, k_frac=K_FRAC, generated=STAMP, device=jax.devices()[0].device_kind, jax=jax.__version__, fill=FILL, rho=RHO, fps=FPS, cart=C4.CART4, rot=ROT,
+summary = dict(probe=PROBE, vol_corr=VOL_CORR, k_frac=K_FRAC, generated=STAMP, device=jax.devices()[0].device_kind, jax=jax.__version__, fill=FILL, rho=RHO, fps=FPS, cart=C4.CART4, rot=ROT,
                m_drops=M_DROPS, zS=C4.CART4["hg"] - C4.FLOOR_ABOVE_DECK,
                plant=dict(f0=C4.PLANT_F0, zeta=C4.PLANT_ZETA, beta=C4.PLANT_BETA), tasks=[])
 WEIGHTS = None
@@ -79,7 +80,7 @@ def make_advance16(S, cart, cfl=0.8, dtmax=0.002):
         s, t, ex, st = c
         dt = jnp.minimum(jnp.minimum(dtmax, cfl * dx / jnp.maximum(ex["vmax"], 1e-6)), ex["t_end"] - t)
         prep = S.prepare(s)
-        cs = dict(ex["cart"], py=S.probes(prep["H"]), pfresh=jnp.where(ex["probeOk"], 1.0, ex["cart"]["pfresh"]))
+        cs = dict(ex["cart"], py=(S.probes_patch(prep["H"]) if PROBE == "patch" else S.probes(prep["H"])), pfresh=jnp.where(ex["probeOk"], 1.0, ex["cart"]["pfresh"]))
         nsub = jnp.maximum(1, jnp.round(dt / 1e-4).astype(I32)); hc = dt / nsub
         def sub(k, a):
             cc, gxs, gzs, oms, als = a; cc = cart.step(cc, hc, ex["F"][0], ex["F"][1])

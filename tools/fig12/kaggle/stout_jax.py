@@ -756,6 +756,25 @@ class Stout:
             return h1 + (r - r1) * (h1 - h2) / (r1 - r2)
         return (0.5 * (at(1.0) - at(-1.0))).astype(F64)
 
+    def probes_patch(self, H):
+        """Fig. 16's level probes as an area sensor (15 Nov 2026): each probe reads the median height of the columns whose centres lie
+        within a patch on the glass's axis of travel, r1 - 2.4 dx <= |x| <= r1 + 0.7 dx and |y| <= 1.5 dx (3 x 3 columns at dx = 1.5 mm, centres 33.0, 34.5, 36.0 mm) (r1 = R - 2.5 dx), so one
+        column that spikes for one picture (a drop landing at the wall, or the surface finder's fallback; audit M3: 5 mm in one
+        column for 1/60 s) cannot move it; y_q = (median_front - median_back)/2 divided by the first mode's shape at the patch's mean
+        radius, J1(xi r_p / R) / J1(xi), so that y_q reads the swing's height at the wall, as probes() does. Fig. 12 never calls it."""
+        if not hasattr(self, "_patch"):
+            G = self.G; dx = self.dx; c = G.x0 + (np.arange(self.n) + 0.5) * dx; r1 = G.Rfill - 2.5 * dx
+            X, Y = np.meshgrid(c, c, indexing="ij"); idx = {}
+            for s in (1, -1):
+                m = (s * X >= r1 - 2.4 * dx) & (s * X <= r1 + 0.7 * dx) & (np.abs(Y) <= 1.5 * dx)   # 3 x 3 columns at dx 1.5 mm
+                idx[s] = (jnp.asarray(np.nonzero(m)[0]), jnp.asarray(np.nonzero(m)[1]), float(np.mean(np.abs(X[m]))))
+            from scipy.special import j1
+            rp = 0.5 * (idx[1][2] + idx[-1][2]); xi = 1.8411837813406593
+            self._patch = (idx, float(j1(xi * rp / G.Rfill) / j1(xi)))
+        idx, shape = self._patch
+        med = lambda s: jnp.nanmedian(H[idx[s][0], idx[s][1]])
+        return jnp.nan_to_num(0.5 * (med(1) - med(-1)) / shape).astype(F64)
+
     def step(self, s, dt, gx, gz, prep=None, rot=None):
         """rot = (om, al, zS): the glass also turns (Fig. 16); None: the glass only translates (Fig. 12, unchanged)."""
         dt = jnp.asarray(dt, F32); gx = jnp.asarray(gx, F32); gz = jnp.asarray(gz, F32)
