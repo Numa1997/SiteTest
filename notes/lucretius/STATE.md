@@ -6,15 +6,13 @@ Aim: the poem page `public/lucretius.html` (+ `/de/`, `/ar/`), Lucretius I 146�
 - Flat, modern layout (no sheet, frame or ornaments): PR #140. Each language one column; unbroken hairlines between columns;
   a short dash between verses inside each column; sticky head with index 01–04, name, credit. Below 1100 px one language at a time.
 - Arabic: tenth version, translated from the Latin as a poem, fully vowelled (`notes/lucretius/poem-ar-146-224.json`): PR #139.
-- Background "currents and atoms" (static SVG tiles + falling dots): PR #142. Older margin strips at `?bg=a|b|c`.
+- Background: fractal engine (`public/scripts/lucretius-fractals.js`), PR #143, live 18 November 2026. Earlier backgrounds at
+  `?bg=d` (currents and atoms, PR #142) and `?bg=a|b|c` (margin strips, PR #141).
 - Design system artifact "Phyein Usul Design System" (slug 43974698-cdb2-438a-8609-9050a1e6a1a9): PoemLeaf component flat, tenth
   Arabic; it does NOT have any background ornament.
 
 ## In progress
-- Branch `lucretius-fractal-engine` (tested, being merged): a canvas engine (`public/scripts/lucretius-fractals.js`) that grows famous fractals one by one
-  (fern, dragon, Lévy C, Koch, Gosper, Hilbert, Sierpinski, tree, phyllotaxis, Lorenz, Julia, Clifford/de Jong attractors) and lets a
-  fluid (stream function, divergence-free) carry them off; at most three alive, 30 fps, paused when hidden, still under reduced motion.
-  Becomes the default; the currents-and-atoms tiles move to `?bg=d`.
+- Nothing. Waiting for the user's verdict on the fractal engine.
 
 ## User's rules for this work
 - Merge and publish finished, tested work without asking; verify the live site; docs must describe the code.
