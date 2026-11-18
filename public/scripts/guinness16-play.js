@@ -181,7 +181,10 @@
 
     // the 3D close-ups of the two pints (pint3d-view.js, an ES module that may load after this script)
     const close = { a: null, b: null };
-    const mk3d = () => { if (close.a || !window.Pint3D || !$('p12')) return; close.a = new window.Pint3D($('p12'), GP); close.b = new window.Pint3D($('p16'), GP); close.a.size(); close.b.size(); };
+    // ?no3d=1 leaves the 3D close-ups out (the data panel does not use them; panel16_check.py loads the page this way, because software
+    // WebGL on a test machine can take many seconds a picture and blocks the page)
+    const NO3D = new URLSearchParams(location.search).get('no3d') === '1';
+    const mk3d = () => { if (NO3D || close.a || !window.Pint3D || !$('p12')) return; close.a = new window.Pint3D($('p12'), GP); close.b = new window.Pint3D($('p16'), GP); close.a.size(); close.b.size(); };
     mk3d(); addEventListener('pint3d-ready', mk3d); addEventListener('resize', () => { if (close.a) { close.a.size(); close.b.size(); } });
     const lerpAt = (a, f) => { const i = Math.max(0, Math.min(a.length - 2, Math.floor(f))), t = Math.max(0, Math.min(1, f - i)); return a[i] + t * (a[i + 1] - a[i]); };   // the wheel's position between stored pictures (kinematics only)
     function tick(now) {

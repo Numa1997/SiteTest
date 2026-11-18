@@ -11,7 +11,9 @@ Steps:
      with Read values on, a click pins a pane and the strip's words change at most about 4 times a second;
   6. screenshots (deviceScaleFactor 2 for the owner) and OUTDIR/panel16-report.json.
 Exit status 1 if any check fails."""
-import json, os, subprocess, sys, time, http.server, threading, functools
+import json, os, subprocess, sys, time, http.server, threading, functools, signal
+signal.signal(signal.SIGALRM, lambda *a: (_ for _ in ()).throw(SystemExit("panel16_check: 25-minute limit reached")))
+signal.alarm(25 * 60)   # a hard limit: a hung browser must not hold a Kaggle session for hours
 
 OUT = sys.argv[1] if len(sys.argv) > 1 else "/kaggle/working"
 ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", ".."))
@@ -70,7 +72,7 @@ with sync_playwright() as p:
         pg.on("console", lambda m: errs.append(m.text) if m.type == "error" else None)
         pg.on("pageerror", lambda e: errs.append(str(e)))
         for ride, t in [("kerb_full.json", 0.62), ("kerb_off.json", 0.40), ("resonant_full.json", 2.0)]:
-            pg.goto(f"{BASE}?ride={ride}&t={t}", wait_until="networkidle")
+            pg.goto(f"{BASE}?ride={ride}&t={t}&no3d=1", wait_until="networkidle")   # no3d: the panel does not use the 3D close-ups
             pg.wait_for_function("() => window.Sim && window.Sim.data && document.querySelector('.dp-tab')", timeout=60000)
             pg.wait_for_timeout(700)                      # the readings are rewritten 4 times a second
             r = pg.evaluate(PROOF); r["viewport"] = [w, h]; r["ride_asked"] = ride
