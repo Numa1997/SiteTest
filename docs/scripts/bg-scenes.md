@@ -27,7 +27,7 @@ CSS mask so a scene never ends in a hard line; `data-bg-alpha` scales its streng
 | Home | band above the footer | `shores` | "the shores of light": things rising out of dust |
 | Simulations | behind the title | `powder` | iron powder lining up along the field of magnets and of a wire whose current switches on and off |
 | Simulations | band above the footer | `harp` | a harmonica: each note travels out through the air as a front, delayed by distance |
-| Portfolios | top right margin | `chip` | a chip traced block by block, wires routed, then stamped die by die over a wafer |
+| Portfolios | the empty half beside the title (left of it on the Arabic page), from 1240 px width; a small corner below that | `chip` | a chip traced block by block, wires routed, then stamped die by die over a wafer |
 | Portfolios | band above the footer | `mix` | three species of different shape mix by collisions and reach one temperature |
 | Lucretius | behind the title | `letters` | letters drifting into words, the poem's own picture of atoms |
 | Lucretius | fixed, side margins only | `swerve` | falling atoms and the small swerve that lets them meet |
