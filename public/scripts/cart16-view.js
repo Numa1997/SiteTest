@@ -81,7 +81,7 @@
       ctx.strokeStyle = INK; ctx.lineWidth = 2 * dpr;
       // spokes smeared over the angle turned since this wheel was last drawn (WheelBlur, stout-view.js), and one valve mark with a streak
       { const sw = window.WheelBlur.sweep(this, ang, xa > 0 ? (side > 0 ? "fl" : "fn") : (side > 0 ? "rl" : "rn")), ns = 1 + Math.ceil(Math.abs(sw) / 0.04); ctx.globalAlpha = Math.min(1, 1.8 / ns);
-        for (let j = 0; j < ns; j++) for (let k = 0; k < 5; k++) { const a = ang + sw * j / ns + k * 2 * Math.PI / 5; line([[xa, yn, zw], [xa + 0.72 * R * Math.cos(a), yn, zw + 0.72 * R * Math.sin(a)]], INK, 2); }
+        for (let j = 0; j < ns; j++) for (let k = 0; k < 5; k++) { const a = ang + sw * j / ns + k * 2 * Math.PI / 5; line([[xa, yn, zw], [xa + 0.72 * R * Math.cos(a), yn, zw + 0.72 * R * Math.sin(a)]], k === 0 ? GOLD : INK, k === 0 ? 3.2 : 2); }
         ctx.globalAlpha = 1;
         window.WheelBlur.streak(ctx, ang, sw, (a) => P([xa + 0.86 * R * Math.cos(a), yn, zw + 0.86 * R * Math.sin(a)]), dpr); }
       { const pv = P([xa + 0.86 * R * Math.cos(ang), yn, zw + 0.86 * R * Math.sin(ang)]); ctx.beginPath(); ctx.arc(pv[0], pv[1], 2.6 * dpr, 0, 2 * Math.PI); ctx.fillStyle = GOLD; ctx.fill(); }

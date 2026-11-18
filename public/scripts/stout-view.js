@@ -17,8 +17,10 @@
     const m = owner._wheelAng || (owner._wheelAng = {}), k = key || 'w', prev = m[k]; m[k] = ang;
     if (prev == null) return 0;
     const s = prev - ang;                                       // the trail lies at earlier angles; rolling forward, the angle decreases
-    return Math.abs(s) > Math.PI ? 0 : s;
+    if (Math.abs(s) > Math.PI) return 0;
+    return Math.max(-SHUTTER, Math.min(SHUTTER, s));            // a short shutter: the spokes stay sharp, a full frame's turn would blur them
   }
+  const SHUTTER = 0.12;   // rad: the most a wheel is smeared, about 1/250 s at 1-1.5 m/s; one gold spoke makes the pattern repeat only once a turn
   function valveStreak(ctx, ang, sweep, at, dpr) {
     if (Math.abs(sweep) < 1e-3) return;
     ctx.save(); ctx.strokeStyle = 'rgba(201, 162, 39, 0.55)'; ctx.lineWidth = 3.2 * dpr; ctx.lineCap = 'round'; ctx.beginPath();
@@ -176,7 +178,7 @@
     { const ns = 1 + Math.ceil(Math.abs(sweep) / 0.04); ctx.globalAlpha = Math.min(1, 1.8 / ns);
       for (let j = 0; j < ns; j++) for (let k = 0; k < 5; k++) {         // the trail lies at earlier angles, ang + v tau / R_w
         const a = ang + sweep * j / ns + k * 2 * Math.PI / 5, p0 = P(0, -0.01, c.zw), p1 = P(0.72 * Rw * Math.cos(a), -0.01, c.zw + 0.72 * Rw * Math.sin(a));
-        ctx.beginPath(); ctx.moveTo(p0[0], p0[1]); ctx.lineTo(p1[0], p1[1]); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(p0[0], p0[1]); ctx.lineTo(p1[0], p1[1]); if (k === 0) { ctx.save(); ctx.strokeStyle = '#c9a227'; ctx.lineWidth = 3.2 * dpr; ctx.stroke(); ctx.restore(); } else ctx.stroke();
       }
       ctx.globalAlpha = 1; }
     valveStreak(ctx, ang, sweep, (a) => P(0.86 * Rw * Math.cos(a), -0.011, c.zw + 0.86 * Rw * Math.sin(a)), dpr);
