@@ -102,10 +102,32 @@ preview law (17) against a direct solution of the optimality equations (agree to
   next to the wall spiking for one picture, magnified 2.67 times by the two-point probe's extrapolation (audit M3,
   `tools/fig16/kaggle/diag_burst.py`). With area probes (run 6) the actuators stay below 0.4 N after 3.3 s.
 
+## Data panel (18 November 2026)
+
+The page loads `scripts/dataset.js` after `sim.js` and `styles/data.css`; `guinness16-play.js` declares one store
+(`Sim.dataset`, about 60 names) and appends `scripts/datalog.js` once the first ride is in it. The figure's two panes carry
+`id="stage"`, so the panel's Read values switch (off by default) sits in the caption.
+- What is stored, where it is set: the reader's choice and both files (road, control on or off, file names, SHA-256 as fetched,
+  notebook version, pictures a second, frames, the head's volume at the start), copied in `fillRide()` when a ride is chosen; the right
+  ride's arrays as stored (time, tilt, pitch, motor current, the two axles' actuator forces, speed, head in the glass, head and stout
+  spilled) and Fig. 12's spilled head and stout; every frame in `tick()`, the values at the picture on screen, Fig. 12's tilt read from
+  its stored surface (`tilt12`) and the residual of the head's book; `k_text16`/`k_text12`, the pictures whose numbers the readings show.
+- Checks (`Sim.data.check`): each "now" value against the stored array at k; k against min(N − 1, round(t f)); the pitch against
+  (θ_k − θ_0) 180/π; the playback length; Fig. 12's tilt written out again from the stored surface; the fingerprint against the index.
+- Read back (`Sim.data.drawn`): the words of the readings under each figure must equal the stored value at k_text, formatted as the
+  page formats it. Pixels of the deck: `Cart16View` records the deck top's front and rear edge in `deckStore` (not `ds`: with `ds`, the
+  drawing it inherits from Fig. 12 would write names this store does not declare); until the drawing records them the check says "not
+  recorded". The pixel test checks alpha first.
+- Book: head in the glass + head spilled = the head at the start (`head_res`, stored by the page, added again by the panel).
+- Read values pins a pane (the new cart, its pint, Fig. 12's cart or pint) and shows its stored values in the strip under the figure.
+- Where the picture and the store differ is said in the panel's `about`: readings trail by up to 0.25 s; wheels turn by interpolated
+  position (kinematics); the switch cross-fades over 0.45 s; Fig. 12's tilt per picture is read on the page; the 3D close-ups record no
+  points of their own.
+- Proof: `tools/fig16/kaggle/panel16_check.py`, run on Kaggle's CPU (headless Chromium, 1440 and 390 px, three rides).
+
 ## Open
 
-The data panel with the three-way proof; the figure's Kaggle dataset `numakoudsie/fig16-...` (the layout rule of
-`docs/kaggle-pipeline.md`).
+The figure's Kaggle dataset `numakoudsie/fig16-...` (the layout rule of `docs/kaggle-pipeline.md`).
 
 **Control switch and run 3 (15 November 2026).** The page offers three roads and one switch, "Control system on/off". The switch keeps
 the ride time and cross-fades the last picture out over 0.45 s. `guinness16-play.js` reads both indexes,
