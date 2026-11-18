@@ -30,6 +30,19 @@ His orders, in his order:
     Kaggle account for this.
 Nothing of this is in the repository or live yet. The poem page has no background.
 
+Update 05:20: the five "falling" examples (window rain, cloud collection, Galton, sand, dripstone) were rejected ("shit",
+"terrible"). He asked for four new ones, "more complicated degrees, functions", with his own directions. Shown in chat, waiting:
+ - Drops in a shear wind: window drops advected by u(y) = 70 tanh((y-200)/60) px/s (left above, right below), a Kelvin-Helmholtz
+   style ripple v = 20 sin(0.02x - 1.2t) sech^2((y-200)/60), mobility (r-3)/6 clipped, merging by volume, gravity slide for r > 9.
+ - Roots and neurons: 48 nodes, 28 % "closed" (rings) that repel growing tips within 50 px; tips steer to the nearest unconnected
+   open node within 170 px (turn rate 2.6 rad/s), connect within 7 px, a node takes at most 3 links, a connected node ejects 2 new
+   tips, a tip that finds nothing in 380 px retracts; pulses run along finished links.
+ - How a clock ticks: seconds pendulum (theta = 0.16 sin(pi t), T = 2 s), anchor rocking with it, 30-tooth escape wheel advancing
+   pi/30 per half swing, second gear, falling weight on a cord.
+ - Clocks falling into sync: 153 clock hands, Kuramoto model d(theta_i)/dt = omega_i + K r sin(psi - theta_i), omega ~ N(pi, 0.6),
+   K(t) = 2.4 (0.5 - 0.5 cos(2 pi t / 36)), big faint hand = order parameter r at angle psi.
+The earlier four he called gorgeous (letters, seeds, swerve, shores) still stand for deployment on 4 subpages + Kaggle notebooks.
+
 ## User's rules for this work
 - Merge and publish finished, tested work without asking; verify the live site; docs must describe the code.
 - Do only what is asked; reply in plain connected English; never use the user's name.
