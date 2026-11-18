@@ -8,6 +8,24 @@
  * constants, so the data panel can recompute each point from the projection. */
 (function (root) {
   'use strict';
+  // A wheel's motion blur, as a camera whose shutter is open for the whole frame sees it: the spokes are smeared over the angle the
+  // wheel turned since it was last drawn (remembered per wheel, so it is right at any frame rate, playback speed or pause), never over
+  // a fixed 1/60 s. On a slow frame the turn per frame nears the 72 degrees between the five spokes and unsmeared spokes would seem to
+  // stand still or run backwards (the wagon-wheel effect); smeared over the true turn they blur instead, and the single valve mark,
+  // drawn with a streak behind it, shows the direction. A jump of more than half a turn (a seek or a new ride) is not smeared.
+  function wheelSweep(owner, ang, key) {
+    const m = owner._wheelAng || (owner._wheelAng = {}), k = key || 'w', prev = m[k]; m[k] = ang;
+    if (prev == null) return 0;
+    const s = prev - ang;                                       // the trail lies at earlier angles; rolling forward, the angle decreases
+    return Math.abs(s) > Math.PI ? 0 : s;
+  }
+  function valveStreak(ctx, ang, sweep, at, dpr) {
+    if (Math.abs(sweep) < 1e-3) return;
+    ctx.save(); ctx.strokeStyle = 'rgba(201, 162, 39, 0.55)'; ctx.lineWidth = 3.2 * dpr; ctx.lineCap = 'round'; ctx.beginPath();
+    for (let j = 0; j <= 12; j++) { const p = at(ang + sweep * j / 12); j ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]); }
+    ctx.stroke(); ctx.restore();
+  }
+  root.WheelBlur = { sweep: wheelSweep, streak: valveStreak };
   const C = {
     paper: '#f5f1ea', ink: '#1c1518', muted: '#6b6166', accent: '#7a1f2b', line: 'rgba(28,21,24,0.85)',
     stoutDark: [14, 8, 7], stoutRuby: [96, 22, 16], head: [236, 225, 201], headShade: [196, 178, 146], glass: 'rgba(120,140,150,0.10)',
@@ -144,7 +162,7 @@
     // the wheel's angle is kinematics, -x/R_w (rolling without slip), drawn at the screen's rate from the stored position (c.xw, set by
     // the player between stored pictures; c.x otherwise): at 30 stored pictures a second the five spokes alias and look backwards
     // (notes/guinness-rebuild/audit.md, A). The spokes are smeared over the angle turned in one screen frame, as an eye sees them.
-    const Rw = c.Rw, xw = c.xw != null ? c.xw : c.x, ang = -xw / Rw, sweep = Math.min(Math.PI, ((c.vx || 0) / Rw) / 60), circle = (y, rad, zc) => { ctx.beginPath(); for (let k = 0; k <= 48; k++) { const t = k / 48 * 2 * Math.PI, p = P(rad * Math.cos(t), y, zc + rad * Math.sin(t)); k ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]); } ctx.closePath(); };
+    const Rw = c.Rw, xw = c.xw != null ? c.xw : c.x, ang = -xw / Rw, sweep = wheelSweep(this, ang), circle = (y, rad, zc) => { ctx.beginPath(); for (let k = 0; k <= 48; k++) { const t = k / 48 * 2 * Math.PI, p = P(rad * Math.cos(t), y, zc + rad * Math.sin(t)); k ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]); } ctx.closePath(); };
     circle(0.01, Rw, c.zw); ctx.fillStyle = '#1f1a1c'; ctx.fill();
     ctx.fillStyle = '#231d20';                                  // the tread: a band of quads between the two faces
     for (let k = 0; k < 48; k++) {
@@ -161,6 +179,7 @@
         ctx.beginPath(); ctx.moveTo(p0[0], p0[1]); ctx.lineTo(p1[0], p1[1]); ctx.stroke();
       }
       ctx.globalAlpha = 1; }
+    valveStreak(ctx, ang, sweep, (a) => P(0.86 * Rw * Math.cos(a), -0.011, c.zw + 0.86 * Rw * Math.sin(a)), dpr);
     { const pv = P(0.86 * Rw * Math.cos(ang), -0.011, c.zw + 0.86 * Rw * Math.sin(ang));   // the valve: one mark, so a whole turn is the only repeat
       ctx.beginPath(); ctx.arc(pv[0], pv[1], 2.6 * dpr, 0, 2 * Math.PI); ctx.fillStyle = '#c9a227'; ctx.fill(); }
     { const h = P(0, -0.01, c.zw); ctx.beginPath(); ctx.arc(h[0], h[1], 4 * dpr, 0, 2 * Math.PI); ctx.fillStyle = C.ink; ctx.fill(); }
