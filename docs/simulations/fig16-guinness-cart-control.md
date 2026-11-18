@@ -138,6 +138,10 @@ the ride time and cross-fades the last picture out over 0.45 s. `guinness16-play
 `public/data/fig16/2026-11-14/` (run 2) and `2026-11-15/` (runs 3, 3b, 4: the turning deck's forces on the stout, 60 pictures a
 second, control off on every road). Per road and setting it plays run 3's ride where one exists, else run 2's, seed 1. Page files
 keep at most 2,048 drops per picture (an even subsample; the true count is `nd_true`). See `notes/guinness-rebuild/audit.md`.
+**Spilled stout in the 2D figures (18 November 2026).** `StoutView2` (`stout-view2.js`) no longer draws each stored drop as a speck: the
+stored drops in each 5 mm cube of the glass's frame are drawn as one drop at their centre holding their whole volume (each stored
+drop stands for `nd_true/nd` particles of mass `mp`, at 1007 kg/m³; at least 0.8 mm across). Overlapping drops join into one opaque
+body of liquid; large drops get a small highlight. Drawing only: the stored positions, counts and spilled volumes are unchanged.
 
 **3D close-up (15 November 2026).** `public/scripts/pint3d-view.js` (an ES module on three.js 0.170, vendored) draws the same stored
 picture of the pint in 3D under the cart's picture, with the camera riding with the glass:
@@ -176,3 +180,11 @@ report `notes/guinness-rebuild/frames/frames16-report-v16.json`). Headless Chrom
 (250-1000 ms) measure a CPU standing in for a graphics card, not the page on a real device, and are not a result. What does carry over
 is the close-up's own timer (`Pint3D.stats`): 5-7 ms of JavaScript and 1-2 ms of render call per stored picture, so the 3D close-up is a
 small part of a frame; the 2D drawing of the carts and glasses takes the rest. A real frame rate needs a browser with a graphics card.
+
+## The three figures of the pint (18 November 2026)
+The owner asked that a reader never meet the same thing twice without being told why. All three pages of the pint of Guinness
+(`beer-slosh.html`, `guinness-kaggle.html`, `guinness-cart-control.html`) now carry, under the title, the same strip (`nav.gfam`,
+styles `.gfam*` at the end of `public/styles/sim.css`): the three figures, what only each one shows, the current page marked
+(`aria-current="page"`). The two Fig. 12 pages have distinct titles ("…, Live in Your Browser" and "…, Computed on Kaggle", also in
+`catalog.js`). On this page the left pane is labelled "For comparison · Fig. 12's one-wheel cart, its best controller" (in the page and in
+`guinness16-play.js`). Nothing was removed. Checked on Kaggle CPU by `tools/fig16/kaggle/family_shots.py`.

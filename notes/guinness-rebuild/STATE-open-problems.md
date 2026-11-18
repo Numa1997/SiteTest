@@ -69,3 +69,10 @@ Close the six open problems of the handoff, one at a time, in its order. Merge f
 - CPU v20 (30-min limit): node --check, spill_shots.py (7 shots, kerb_off/kerb_full), panel16_check.py on d18338a4.
   If it passes: merge to main, curl live for WheelBlur. Then fix spill/particles in stout-view2.js from the shots.
 - Problem 5 GPU (~20 T4-min) still waits for the owner's yes.
+- 19:00 UTC: wheel fix LIVE on main (e1a72d71, curl: WheelBlur in stout-view.js). Spill merge-by-5-mm-cubes (146f6bbe) passed v21
+  (FAIL 0) but looks no better (drops spread over ~30 cm, bins hold one drop): NOT merged; the owner was shown before/after.
+- Look session now on claude/continuous-spill (solver: one model in and out of the glass); it owns stout_jax.py and run_b.py solver calls.
+- 19:25 UTC owner: "intervene ... check its work". Read its diff; sent it 3 faults: (1) level set built only inside the cavity, so liquid
+  outside is still free fall (no surface, pressure, tension); (2) 2.5 mm wall thinner than a cell leaks through partly open faces
+  (fits its rest FAIL: surface 23-28 mm vs 125, 72 outside, 11 lost); (3) scope drift (air drag, splash): park until rest + shove pass,
+  no GPU before dx <= 2 mm CPU tests pass.
