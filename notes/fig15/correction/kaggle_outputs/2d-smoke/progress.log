@@ -1,0 +1,35 @@
+[    0.5 s] devices: [CudaDevice(id=0), CudaDevice(id=1)] jax 0.11.1
+[   12.4 s] A wall-limit N2 E0.75 (exact 0.196820): T 0.196539 +- 5.1e-04 drift 2.7e-03 9984 steps 1.084 ms/step cells 786432 wall 11.9 s
+[   93.7 s] A wall-limit N2 E0.75 c128: T 0.196889 +- 5.1e-04 drift 2.6e-12 9984 steps 8.119 ms/step cells 786432 wall 81.3 s
+[  120.6 s] A wall-limit N10 E0.9 (exact 0.166225): T 0.167971 +- 2.6e-02 drift 2.7e-03 22074 steps 1.206 ms/step cells 1048576 wall 26.9 s
+[  129.4 s] A wall-limit bias 2.125 E0.5 (exact 0.039048): T 0.039134 +- 2.8e-09 drift 3.2e-03 8541 steps 1.010 ms/step cells 786432 wall 8.9 s
+[  137.0 s] B coin_N2_V2_D1_P2.5_R6_B0_s3_E0.750.bin base: T 0.447860 +- 2.5e-03 drift 2.1e-03 7137 steps 1.041 ms/step cells 786432 wall 7.6 s
+[  195.8 s] B coin_N2_V2_D1_P2.5_R6_B0_s3_E0.750.bin c128: T 0.448442 +- 2.5e-03 drift 2.8e-12 7137 steps 8.210 ms/step cells 786432 wall 58.8 s
+[  200.0 s] B coin_N2_V2_D1_P2.5_R6_B0_s3_E0.750.bin hx=0.125: T 0.448778 +- 2.6e-03 drift 1.2e-03 7137 steps 0.571 ms/step cells 393216 wall 4.2 s
+[  215.1 s] B coin_N2_V2_D1_P2.5_R6_B0_s3_E0.750.bin hx=0.03125: T 0.447371 +- 2.5e-03 drift 2.7e-03 7137 steps 2.065 ms/step cells 1572864 wall 15.1 s
+[  228.1 s] B coin_N2_V2_D1_P2.5_R6_B0_s3_E0.750.bin Nr=384: T 0.447955 +- 2.5e-03 drift 2.0e-03 7137 steps 1.790 ms/step cells 1179648 wall 13.1 s
+[  241.9 s] B coin_N2_V2_D1_P2.5_R6_B0_s3_E0.750.bin dt=0.005: T 0.447319 +- 2.5e-03 drift 4.1e-03 14313 steps 0.953 ms/step cells 786432 wall 13.8 s
+[  253.6 s] B coin_N2_V2_D1_P2.5_R6_B0_s3_E0.750.bin box_factor=3.0: T 0.447471 +- 2.5e-03 drift 2.5e-03 7137 steps 1.593 ms/step cells 1179648 wall 11.6 s
+[  266.6 s] B coin_N2_V2_D1_P2.5_R6_B0_s3_E0.750.bin Rmax96 Nr384: T 0.447899 +- 2.1e-03 drift 2.1e-03 7137 steps 1.793 ms/step cells 1179648 wall 13.0 s
+[  294.1 s] B coin_N10_V2_D1_P2.5_R12_B0_s3_E0.900.bin base: T 0.194833 +- 1.2e-02 drift 2.4e-03 22659 steps 1.204 ms/step cells 1048576 wall 27.5 s
+[  578.4 s] B coin_N10_V2_D1_P2.5_R12_B0_s3_E0.900.bin c128: T 0.195438 +- 1.2e-02 drift 1.5e-11 22659 steps 12.536 ms/step cells 1048576 wall 284.3 s
+[  592.7 s] B coin_N10_V2_D1_P2.5_R12_B0_s3_E0.900.bin hx=0.125: T 0.196731 +- 1.2e-02 drift 2.3e-03 22659 steps 0.623 ms/step cells 524288 wall 14.3 s
+[  646.9 s] B coin_N10_V2_D1_P2.5_R12_B0_s3_E0.900.bin hx=0.03125: T 0.194756 +- 1.1e-02 drift 2.3e-03 22659 steps 2.377 ms/step cells 2097152 wall 54.2 s
+[  696.1 s] B coin_N10_V2_D1_P2.5_R12_B0_s3_E0.900.bin Nr=384: T 0.194845 +- 1.2e-02 drift 2.4e-03 22659 steps 2.154 ms/step cells 1572864 wall 49.1 s
+[  749.2 s] B coin_N10_V2_D1_P2.5_R12_B0_s3_E0.900.bin dt=0.005: T 0.194154 +- 1.2e-02 drift 4.9e-03 45357 steps 1.167 ms/step cells 1048576 wall 53.2 s
+[  790.9 s] B coin_N10_V2_D1_P2.5_R12_B0_s3_E0.900.bin box_factor=3.0: T 0.194707 +- 1.2e-02 drift 5.7e-03 22659 steps 1.828 ms/step cells 1572864 wall 41.7 s
+[  840.0 s] B coin_N10_V2_D1_P2.5_R12_B0_s3_E0.900.bin Rmax96 Nr384: T 0.197811 +- 7.2e-03 drift 2.4e-03 22659 steps 2.152 ms/step cells 1572864 wall 49.0 s
+[  853.7 s] B shell_N2_V2_D1_P2.5_R3_B0_s3_E0.750.bin base: T 0.612247 +- 4.1e-02 drift 1.9e-03 13104 steps 0.960 ms/step cells 786432 wall 13.8 s
+[  960.3 s] B shell_N2_V2_D1_P2.5_R3_B0_s3_E0.750.bin c128: T 0.613184 +- 4.1e-02 drift 1.6e-12 13104 steps 8.043 ms/step cells 786432 wall 106.6 s
+[  967.4 s] B shell_N2_V2_D1_P2.5_R3_B0_s3_E0.750.bin hx=0.125: T 0.612812 +- 4.1e-02 drift 1.1e-03 13104 steps 0.495 ms/step cells 393216 wall 7.0 s
+[  993.8 s] B shell_N2_V2_D1_P2.5_R3_B0_s3_E0.750.bin hx=0.03125: T 0.611963 +- 4.1e-02 drift 2.5e-03 13104 steps 1.888 ms/step cells 1572864 wall 26.4 s
+[ 1017.3 s] B shell_N2_V2_D1_P2.5_R3_B0_s3_E0.750.bin Nr=384: T 0.613657 +- 4.0e-02 drift 1.9e-03 13104 steps 1.675 ms/step cells 1179648 wall 23.5 s
+[ 1042.2 s] B shell_N2_V2_D1_P2.5_R3_B0_s3_E0.750.bin dt=0.005: T 0.611275 +- 4.1e-02 drift 3.9e-03 26247 steps 0.910 ms/step cells 786432 wall 24.9 s
+[ 1062.6 s] B shell_N2_V2_D1_P2.5_R3_B0_s3_E0.750.bin box_factor=3.0: T 0.611536 +- 4.1e-02 drift 2.8e-03 13104 steps 1.453 ms/step cells 1179648 wall 20.4 s
+[ 1086.4 s] B shell_N2_V2_D1_P2.5_R3_B0_s3_E0.750.bin Rmax96 Nr384: T 0.621971 +- 2.6e-02 drift 2.4e-03 13104 steps 1.675 ms/step cells 1179648 wall 23.8 s
+[ 1089.0 s] C coin_N2_V2_D1_P2.5_R6_B0_s3_E0.750.bin rt3d2 rules: T 0.447143 +- 4.8e-03 drift 7.8e-04 7164 steps 0.328 ms/step cells 12288 wall 2.6 s
+[ 1091.3 s] C coin_N2_V2_D1_P2.5_R12_B0_s3_E1.200.bin rt3d2 rules: T 0.060170 +- 6.3e-04 drift 5.6e-04 6567 steps 0.311 ms/step cells 12288 wall 2.3 s
+[ 1094.1 s] C shell_N2_V2_D1_P2.5_R5_B0_s3_E0.750.bin rt3d2 rules: T 0.410173 +- 1.2e-01 drift 7.1e-04 12935 steps 0.189 ms/step cells 12288 wall 2.8 s
+[ 1099.2 s] T coin_N10_V2_D1_P2.5_R6_B0_s3_E0.300.bin production grid: T 0.214871 +- 2.1e-01 drift 6.7e-04 2964 steps 1.665 ms/step cells 1048576 wall 5.1 s
+[ 1109.1 s] T coin_N2_V2_D1_P2.5_R12_B0_s12_E0.583.bin production grid: T 0.015919 +- 1.2e-02 drift 6.7e-04 2964 steps 3.230 ms/step cells 2097152 wall 9.9 s
+[ 1109.1 s] smoke done

@@ -14,7 +14,7 @@ no new computation. Keep the other chats in order.
 - No GPU, no R2 write, no change to `main` without a yes that names it. Never write the owner's name.
 
 ## What is live (Fact, checked on the live site in headless Chromium, 1440 x 1000)
-- `main` d6db0aa5: the page plays generation 2026-11-18 by default; `?gen=2026-11-14` plays the earlier one.
+- `main` d6db0aa5: the page plays generation 2026-11-18 by default; the 2,782 replaced files of 2026-11-14 are deleted from R2 (6.18 GB in 3,697 objects remain).
   Walls, discs and shells, three energies each, in both views: no page error, no failed request.
 - R2: 2,782 replaced run files under `resonant-tunnelling/2026-11-18/runs/`, 4,439,713,712 bytes; SHA-256 checked against
   the branch records and R2's MD5 against the bytes sent. Generation 2026-11-14 untouched (6.53 GB). Total about 10.97 GB.

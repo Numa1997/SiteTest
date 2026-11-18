@@ -113,7 +113,8 @@ replaced files (4.44 GB) are in R2 under `resonant-tunnelling/2026-11-18/runs/`.
 its record at filing and again on upload, together with R2's MD5. Generation 2026-11-14 stays filed, with its audit.
 
 The page plays the last generation of kind `rt3d2` that is not marked `"preview": true` in `generations.json`: since 18 November
-2026 this one. `?gen=<date>` shows another generation, for example `?gen=2026-11-14` for the earlier one. Checked on the live
+2026 this one. `?gen=<date>` reads another generation's index; for 2026-11-14 only its 915 kept runs still load, since its 2,782 replaced
+files were deleted from R2 on 18 November 2026 at the owner's order. Checked on the live
 site in headless Chromium at 1440 x 1000 before the switch (walls, discs, shells, three energies each): no page error, no
 failed request, SHA-256 matched for every run loaded. For a run with a
 reference it shows `T_ref` (walls: exact), names the method and the earlier value in the source line, and says so when the

@@ -32,7 +32,7 @@
    "numakoudsie/fig15-rt3d2-shard-6-of-6",
    "numakoudsie/fig15-rt3d2-fix1"
   ],
-  "note": "The whole parameter space in 3D, walls included: spacing, height, thickness, 1 to 10 barriers, discs to R = 12, shells, the diode under bias, long packets. 3739 runs planned; 42 specs computed in two groups are filed once; 15 runs rerun by the fix notebook replace the earlier ones (index: replaced). 6.53 GB in R2. Generation 1 (2026-11-13, 115 runs) stays filed beside it.",
+  "note": "The whole parameter space in 3D, walls included: spacing, height, thickness, 1 to 10 barriers, discs to R = 12, shells, the diode under bias, long packets. 3739 runs planned; 42 specs computed in two groups are filed once; 15 runs rerun by the fix notebook replace the earlier ones (index: replaced). 6.53 GB in R2. Generation 1 (2026-11-13, 115 runs) stays filed beside it. Corrected on 18 November 2026 by generation 2026-11-18: of these 3,697 files, the 2,782 that failed the check were deleted from R2; the 915 that passed stay, and the corrected generation plays them.",
   "bytes": 6526952030
  },
  {
@@ -71,7 +71,7 @@
    "discs": 72,
    "shells": 241
   },
-  "note": "Correction of generation 2026-11-14, whose barriers were sampled on the 0.5 a grid. Every stored run is checked against a reference T_ref: walls against the exact solution (superposition of stationary scattering states), discs against the exact axisymmetric (x, rho) reduction; gate |T_old - T_ref| <= max(0.005, 1 % of T_ref). A run that passes keeps its stored file; a run that fails is replaced by the reference file. Shells stored no transmission, so they are not gated and all take the (x, rho) file. provisional: T_unc > 0.005, the probability still inside the structure when the reference run stopped. Generation 2026-11-14 stays filed beside it, with its audit. The page plays this generation since 18 November 2026; ?gen=2026-11-14 shows the earlier one.",
+  "note": "Correction of generation 2026-11-14, whose barriers were sampled on the 0.5 a grid. Every stored run is checked against a reference T_ref: walls against the exact solution (superposition of stationary scattering states), discs against the exact axisymmetric (x, rho) reduction; gate |T_old - T_ref| <= max(0.005, 1 % of T_ref). A run that passes keeps its stored file; a run that fails is replaced by the reference file. Shells stored no transmission, so they are not gated and all take the (x, rho) file. provisional: T_unc > 0.005, the probability still inside the structure when the reference run stopped. Generation 2026-11-14 stays filed beside it, with its audit. The page plays this generation since 18 November 2026. The 2,782 run files of generation 2026-11-14 that it replaces were deleted from R2 on 18 November 2026 (owner's order); that generation keeps its index, its audit and its 915 kept files, which this generation plays.",
   "bytes": 4439713712
  }
 ]
