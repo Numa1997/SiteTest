@@ -703,12 +703,17 @@ class Stout:
         uc = [0.5 * (cut_lo(vel[ax], ax) + cut_hi(vel[ax], ax)) for ax in range(3)]   # the liquid's velocity at cell centres
         U = [ux - uc[0], -uc[1], uz - uc[2]]; Um = jnp.sqrt(U[0] ** 2 + U[1] ** 2 + U[2] ** 2) + 1e-9
         front = jnp.maximum(0.0, -(n[0] * U[0] + n[1] * U[1] + n[2] * U[2]) / Um)
-        surf = liq & (ph > -dx) & ~self.cavc
+        # the surface as a one-sided smoothed delta on the liquid side, (1 + cos(pi phi/e))/e for -e < phi < 0, e = 1.5 dx: its volume
+        # integral is the surface's area, so the summed force is exactly the frontal area times the pressure (drag check 1, 036b81d:
+        # the surface cells alone gave 67 % of the law for an 8 mm drop)
+        e = 1.5 * dx; band = liq & (ph < 0) & (ph > -e) & ~self.cavc
+        delta = jnp.where(band, (1.0 + jnp.cos(jnp.pi * ph / e)) / e, 0.0)
         Re = jnp.clip(RHO_AIR * Um * d / MU_AIR, 0.1, 1000.0); CD = 24.0 / Re * (1.0 + 0.15 * Re ** 0.687)
-        a = jnp.where(surf, 0.5 * RHO_AIR * CD * Um * front / (self.rho * dx), 0.0)        # times U_vec: acceleration
+        a = 0.5 * RHO_AIR * CD * Um * front * delta / self.rho                      # times U_vec: acceleration
         out = []
         for ax in range(3):
-            ac = a * U[ax]; af = 0.5 * (lo(ac, ax, 0.0) + hi(ac, ax, 0.0))
+            ac = a * U[ax]; aL, aR = lo(ac, ax, 0.0), hi(ac, ax, 0.0)
+            af = (aL + aR) / jnp.maximum(1.0, (aL != 0).astype(F32) + (aR != 0).astype(F32))   # a face beside air takes its liquid cell's whole value
             out.append(jnp.where((mass[ax] > 1e-6) & (self.th[ax] > 0), vel[ax] + dt * af, vel[ax]).astype(F32))
         return out
 
