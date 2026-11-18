@@ -132,16 +132,28 @@ class Geometry:
             # the pressure (smoke test 1, 18 Nov 2026: the pint at rest leaked; review by the open-problems session)
             # (only when both cell centres are open: a cell whose centre lies in the wall is a cut cell and keeps its face fractions,
             # as in the old model; closing those too lost the liquid in the sliver beside the wall, smoke test 3-4: wall columns 1.4 mm low)
-            u9 = (np.arange(1, 8) / 8.0 - 0.5) * dx
-            cu = np.ones_like(thu, bool); cv = np.ones_like(thv, bool); cw = np.ones_like(thw, bool)
-            eu = ~self.solid((xf - 0.5 * dx)[:, None, None], cy[None, :, None], zc[None, None, :]) & ~self.solid((xf + 0.5 * dx)[:, None, None], cy[None, :, None], zc[None, None, :])
-            ev = ~self.solid(c[:, None, None], (yf - 0.5 * dx)[None, :, None], zc[None, None, :]) & ~self.solid(c[:, None, None], (yf + 0.5 * dx)[None, :, None], zc[None, None, :])
-            ew = ~self.solid(c[:, None, None], cy[None, :, None], (zf - 0.5 * dx)[None, None, :]) & ~self.solid(c[:, None, None], cy[None, :, None], (zf + 0.5 * dx)[None, None, :])
-            for d in u9:
-                cu &= ~self.solid((xf + d)[:, None, None], cy[None, :, None], zc[None, None, :])
-                cv &= ~self.solid(c[:, None, None], (yf + d)[None, :, None], zc[None, None, :])
-                cw &= ~self.solid(c[:, None, None], cy[None, :, None], (zf + d)[None, None, :])
-            thu = np.where(cu | ~eu, thu, 0.0); thv = np.where(cv | ~ev, thv, 0.0); thw = np.where(cw | ~ew, thw, 0.0)
+            # 19 Nov 2026 (GPU rest checks 2-4: the pint at rest sank 13-15 mm in 0.3 s on every body; the old model held): one pressure per
+            # cell, so a cell must not join the stout in the glass to the air outside it. The glass wall (2.5 mm) is thinner than two cells,
+            # and a cell can hold an open sliver on each side of it; cc51c2c left such cells open both ways, and the stout lost its
+            # hydrostatic support through them. Rule: below the rim every cell belongs to one side, the cavity or the outside, the side that
+            # holds more of its open volume (2 x 2 x 2 samples); a face between cells of different sides is closed. Above the rim nothing is
+            # closed (the stout flows over the rim there).
+            q4 = np.array([-0.25, 0.25]) * dx
+            nin = np.zeros((nx, ny, nz)); nout = np.zeros((nx, ny, nz))
+            for ox in q4:
+                for oy in q4:
+                    for oz in q4:
+                        Xs, Ys, Zs = np.meshgrid(c + ox, cy + oy, zc + oz, indexing="ij")
+                        op = ~self.solid(Xs, Ys, Zs); cv_ = self.cavity(Xs, Ys, Zs)
+                        nin += op & cv_; nout += op & ~cv_
+            side = nin > nout                                           # True: the cavity's side
+            low = (zc < self.zrim)[None, None, :]
+            du = np.zeros_like(thu, bool); du[1:-1] = (side[1:] != side[:-1]) & low & True
+            dv = np.zeros_like(thv, bool); dv[:, 1:-1] = (side[:, 1:] != side[:, :-1]) & low
+            zcf = self.z0 + dx * np.arange(nz + 1)
+            dw = np.zeros_like(thw, bool); dw[:, :, 1:-1] = (side[:, :, 1:] != side[:, :, :-1]) & (zcf[1:-1] < self.zrim)[None, None, :]
+            thu = np.where(du, 0.0, thu); thv = np.where(dv, 0.0, thv); thw = np.where(dw, 0.0, thw)
+            self.side = side
         self.thu, self.thv, self.thw = thu, thv, thw
         X, Y, Z = np.meshgrid(c, cy, zc, indexing="ij"); r2 = X * X + Y * Y
         self.xc, self.yc, self.zc = c, cy, zc
