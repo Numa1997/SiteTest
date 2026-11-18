@@ -118,7 +118,7 @@ files were deleted from R2 on 18 November 2026 at the owner's order. Checked on 
 site in headless Chromium at 1440 x 1000 before the switch (walls, discs, shells, three energies each): no page error, no
 failed request, SHA-256 matched for every run loaded. For a run with a
 reference it shows `T_ref` (walls: exact), names the method and the earlier value in the source line, and says so when the
-value is provisional. The lecture note below still describes generation 2026-11-14 and is to be revised.
+value is provisional. The lecture note (below) describes this generation since 18 November 2026: its sections 10 and 11 explain the exact wall reference, the (x, rho) reduction, the gate, `T_unc` and what was kept, and the cause of the first grid's error as the audit measured it (`notes/fig15/audit/`).
 
 ## The lecture note (generation 2)
 
@@ -127,19 +127,19 @@ the whole parameter space the page walks, each part from an everyday picture to 
 
 | § | Topic | Equations |
 |---|---|---|
-| 01–06 | Two panes of glass; the 3D model and why walls reduce to a line; one barrier (transfer matrix, thick-barrier limit); two barriers (sum over bounces, unequal barriers); the Breit–Wigner peak, `τ = ħ/Γ` and the leak model `Γ ≈ ħvT/L_eff`; packets, the broad-packet estimate `T̄ ≈ √(π/8) Γ/σ_E`, long packets (the run nearest each resonance and the one that passes most, with half the still-trapped wave added) | (1)–(19) |
+| 01–06 | Two panes of glass; the 3D model and why walls reduce to a line; one barrier (transfer matrix, thick-barrier limit); two barriers (sum over bounces, unequal barriers); the Breit–Wigner peak, `τ = ħ/Γ` and the leak model `Γ ≈ ħvT/L_eff`; packets, the broad-packet estimate `T̄ ≈ √(π/8) Γ/σ_E`, long packets (the exact wall runs against the exact average (18), largest difference per structure) | (1)–(19) |
 | 07 | Spacing: resonances are the finite well's levels made leaky; `E_n ∝ 1/L_eff²` | (20)–(21) |
 | 08 | Height and thickness: `Γ ∝ T₁ ∝ e^{−2κd}`, lifetime grows exponentially | — |
 | 09 | 3, 5, 10 barriers: Chebyshev formula `T_N = [1 + (R/T) U²_{N−1}(ξ)]⁻¹`, `N − 1` peaks, Kronig–Penney bands and gaps; Figure 2 | (22)–(24) |
-| 10–11 | What was computed (all seven groups of the batch), playback; grid accuracy (measured on generation 1, same method); batch bookkeeping (3739 jobs, 42 filed once, 3697 runs, 15 replaced) | (25)–(26) |
-| 12 | Discs R 2–12 (side leak, `1/τ = 1/τ_walls + 1/τ_side`, `τ_side ~ mRW/ħ`, solved from unrounded lifetimes), shells R 3, 5 (longest τ at the lowest energy run, so lower bounds) | (27)–(28) |
-| 13 | The diode under bias `V(x) = −eV(x − x_l)/L`: the level slides by ~V/2, the peak drops below 1, supply function derived, Tsu–Esaki, the current from all 500 runs (trapezoid over 25 stored energies) against the exact curve and against the same sum with exact `T` at those energies (recomputed at V0 = 2 by `gen2_numbers.py` and checked against the index's `J_exact_single_energy_same_points`, refiled at V0 = 2 after the first filing used `iv.py`'s default V0 = 3); Figure 3 | (29)–(32) |
+| 10–11 | What was computed: the first batch (3D grid, staircase barriers) and the correction (exact walls by stationary scattering states (25a)–(25b); discs and shells by the exact (x, ρ) reduction (25c), read by (25d) with `T_unc`; the gate (25e), kept and replaced); playback. The first grid's error over all walls and discs, and its cause measured by the audit (time step and box ruled out, cell-averaged barriers converge; the V0 = 3 resonance 0.878 exact, 0.828 on the first grid; by (25f) a well 0.07 a wider) | (25)–(26), (25a)–(25f) |
+| 12 | Discs R 2–12 (side leak, `1/τ = 1/τ_walls + 1/τ_side`, `τ_side ~ mRW/ħ`; shares are `T_ref`, lifetimes of kept runs marked), shells R 3, 5 (one shell already traps; longest τ at the lowest energy, provisional) | (27)–(28) |
+| 13 | The diode under bias `V(x) = −eV(x − x_l)/L`: the level slides by ~V/2, the peak drops below 1, supply function derived, Tsu–Esaki, the current from all 500 runs (each run's `T_ref`, trapezoid over 25 stored energies; top at the exact 0.875, ratio 3.8 against 4.3 because the packets' spread smooths the curve) against the exact curve and against the same sum with single-energy `T` at those energies (recomputed at V0 = 2 by `gen2_numbers.py`, checked against the 2026-11-14 filing); Figure 3 | (29)–(32) |
 | 14 | Limits, Problems, reading | — |
 
 **Numbers.** Every data-dependent number sits in one place, the `NUM` block at the top of the script, written by
 [notes/fig15/gen2_numbers.py](../../notes/fig15/gen2_numbers.py) `--write`. The script prints each number with the run file or
-stored curve it comes from: per-run `T_far`, `tau` and twin `T` from `2026-11-14/kaggle/index.json`; the diode's `J_runs` from the
-same index; the exact 1D values (resonances, widths, finite-well levels, band edges, the level under bias) from `tm.py` and `iv.py`,
+stored curve it comes from: per-run `T_ref`, `T_old`, `error`, `status`, `T_unc`, `provisional` and `tau` from `2026-11-18/kaggle/index.json` (a pure read; no run is computed); the first batch's bookkeeping from `2026-11-14/kaggle/index.json`; the audit numbers from `notes/fig15/audit/`; the correction's method figures quoted from its records; the diode's `J_runs` from the
+2026-11-18 index; the exact 1D values (resonances, widths, finite-well levels, band edges, the level under bias) from `tm.py` and `iv.py`,
 the code that wrote the stored exact curves; the exact I–V from `2026-11-13/derived/exact-1d.json`. It also plots Figure 2 (`FIG2`
 block) from `tm.py`. A case not in the index is `null`, and the sentence that uses it says so; with the full index (3697 runs) every case is present.
 Rerun `python3 notes/fig15/gen2_numbers.py --write` whenever the index changes.

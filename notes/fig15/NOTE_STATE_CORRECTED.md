@@ -21,3 +21,12 @@ sections 6-9, 12, 13 true for the new numbers; NUM block from notes/fig15/gen2_n
 
 ## Left
 - read THEORY_AND_CODE.md, the new index; adapt gen2_numbers.py; rewrite sections; readers; build; merge; live check; reply.
+
+## Done (draft, before readers)
+- gen2_numbers.py reads 2026-11-18 (T_ref everywhere; T_unc, provisional, status), the 2026-11-14 index for bookkeeping, the
+  audit json; removed the rt3d2.run1d side-loss computation (a run; banned) and the twin/T_far numbers.
+- Note: sections 10 and 11 rewritten (25a-25f); sections 6-9, 12-14 sentences made true (long-packet table now exact vs (18);
+  ten walls exact; disc table T_ref, kept lifetimes marked *; shells: one shell already traps, provisional; diode from T_ref).
+- docs page updated. Build: 1219 KaTeX, 0 errors, no overflow at 390/1440.
+## Left
+- one referee round + one derivation-checker round; fix; merge to main; verify live; reply to coordinator (<= 8 lines).

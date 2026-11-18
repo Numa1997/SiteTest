@@ -3,14 +3,17 @@
 Usage:  python3 notes/fig15/gen2_numbers.py            print every number with the run file (or stored curve) it comes from
         python3 notes/fig15/gen2_numbers.py --write    also rewrite the NUM block of public/scripts/resonant-note.js
 
-Sources, and nothing else:
-  public/data/resonant-tunnelling/2026-11-14/kaggle/index.json   the generation-2 runs (file_rt3d2.py): per run T_far, tau, the
-                                                                  walls' 1D twin T; the diode's J(V) from the runs; exact 1D curves
+Sources, and nothing else (a pure read: no run is computed here):
+  public/data/resonant-tunnelling/2026-11-18/kaggle/index.json   the corrected generation (file_corrected.py): per run T_ref (walls
+                                                                  exact; discs and shells the (x, rho) run), T_unc, provisional,
+                                                                  T_old, error, gate, status, tau; the diode's J(V) from T_ref
+  public/data/resonant-tunnelling/2026-11-14/kaggle/index.json   the batch as first computed (run lengths, GPU time, counts)
+  notes/fig15/audit/twin_sources.json, twin_converge.json         the grid audit: which numerical source moved the resonances
   public/data/resonant-tunnelling/2026-11-13/derived/exact-1d.json  the exact 1D diode curve (iv.py) the page draws in Fig. 15e
   tools/kaggle/resonant-tunnelling/tm.py, iv.py                   the same exact 1D code that wrote the stored exact curves, used
                                                                   where the stored 0.01 energy grid is too coarse for a narrow peak
                                                                   (resonance energies, widths Gamma, band edges, the level under bias)
-A case not yet in the index (shards 3-6 of the batch) prints as "missing"; the note's sentences are written to stay true either way.
+A case not in the index prints as "missing".
 """
 import json, os, re, sys
 import numpy as np
@@ -21,10 +24,12 @@ import tm  # noqa: E402
 import iv  # noqa: E402
 import exact1d  # noqa: E402
 
-IDX_PATH = os.path.join(ROOT, 'public/data/resonant-tunnelling/2026-11-14/kaggle/index.json')
+IDX_PATH = os.path.join(ROOT, 'public/data/resonant-tunnelling/2026-11-18/kaggle/index.json')
 EX1_PATH = os.path.join(ROOT, 'public/data/resonant-tunnelling/2026-11-13/derived/exact-1d.json')
 NOTE = os.path.join(ROOT, 'public/scripts/resonant-note.js')
 IDX = json.load(open(IDX_PATH)); EX1 = json.load(open(EX1_PATH))
+OLD = json.load(open(os.path.join(ROOT, 'public/data/resonant-tunnelling/2026-11-14/kaggle/index.json')))
+AUD = os.path.join(ROOT, 'notes/fig15/audit')
 RUNS = IDX['runs']
 OUT = {}            # name -> value, for the note's NUM block
 SRC = []            # (name, value, source) lines
@@ -130,8 +135,8 @@ def runs(**kw):
     return sorted(out, key=lambda r: r['spec']['E'])
 
 
-def through(r):
-    return r['twin']['T'] if r.get('twin') else (r['T_far']['value'] if r.get('T_far') else None)
+def through(r):   # generation 2026-11-18: the reference transmission of every run (walls exact; discs and shells the (x, rho) run)
+    return r.get('T_ref')
 
 
 def nearest(rs, E):
@@ -140,16 +145,58 @@ def nearest(rs, E):
 
 base = dict(N=2, V0=2.0, D=1.0, bias=0.0, sx=3.0)
 
-put('n_runs', len(RUNS), 'index.json: runs filed')
+OR = OLD['runs']
+put('n_runs', len(RUNS), 'index.json (2026-11-18): runs filed')
 put('n_dup', sum(1 for r in RUNS if len(r.get('groups', [])) > 1), 'index.json: specs computed in two groups, filed once')
-put('n_replaced', len(IDX.get('replaced', [])), 'index.json replaced: runs the fix notebook reran')
-put('run_tmin', round(min(r['t_end'] for r in RUNS)), 'shortest run length t_end in the index')
-put('run_tmax', round(max(r['t_end'] for r in RUNS)), 'longest run length t_end in the index')
-put('start_in_max', float(f"{max(r['start_in_barrier'] for r in RUNS):.1e}"), 'largest share of a start packet inside a barrier')
+put('n_replaced', len(OLD.get('replaced', [])), '2026-11-14 index replaced: runs the fix notebook reran')
+put('run_tmin', round(min(r['t_end'] for r in OR)), 'shortest run length t_end, 2026-11-14')
+put('run_tmax', round(max(r['t_end'] for r in OR)), 'longest run length t_end, 2026-11-14')
+put('start_in_max', float(f"{max(r['start_in_barrier'] for r in OR):.1e}"), 'largest share of a start packet inside a barrier, 2026-11-14')
 put('n_planned', 3739, 'rt3d2_run.py jobs(): the whole batch')
-put('n_nb', len(IDX['notebooks']), 'index.json: notebooks filed')
-put('gpu_h', round(sum(n.get('sweep_s', 0) for n in IDX['notebooks']) / 3600, 1), 'index.json notebooks: sum of sweep_s (clock hours, two T4 each)')
-put('gpu_ns', round(sum(r['wall'] for r in RUNS) / sum(float(np.prod(r['box'])) * r['steps'] for r in RUNS) * 1e9, 2), 'index.json runs: sum of wall (s, one GPU per run) / sum of grid points x steps')
+put('n_nb', len(OLD['notebooks']), '2026-11-14 index: notebooks filed')
+put('gpu_h', round(sum(n.get('sweep_s', 0) for n in OLD['notebooks']) / 3600, 1), '2026-11-14 notebooks: sum of sweep_s (clock hours, two T4 each)')
+put('gpu_ns', round(sum(r['wall'] for r in OR) / sum(float(np.prod(r['box'])) * r['steps'] for r in OR) * 1e9, 2), '2026-11-14 runs: sum of wall / sum of grid points x steps')
+# ---------- the correction (2026-11-18) ----------
+def cnt(**kw): return sum(1 for r in RUNS if all(r.get(k) == v if k != 'shape' else r['spec']['shape'] == v for k, v in kw.items()))
+for sh, nm in (('flat', 'w'), ('coin', 'd'), ('shell', 's')):
+    put(f'c_{nm}_n', cnt(shape=sh), f'{sh}: runs'); put(f'c_{nm}_kept', cnt(shape=sh, status='kept'), f'{sh}: kept (stored file passes the gate)')
+    put(f'c_{nm}_new', cnt(shape=sh, status='rebuilt') + cnt(shape=sh, status='recomputed'), f'{sh}: rebuilt or recomputed')
+    put(f'c_{nm}_prov', sum(1 for r in RUNS if r['spec']['shape'] == sh and r.get('provisional')), f'{sh}: provisional (T_unc > 0.005)')
+    er = [abs(r['error']) for r in RUNS if r['spec']['shape'] == sh and r.get('error') is not None]
+    if er: put(f'c_{nm}_err_med', r3(float(np.median(er)), 2), f'{sh}: median |T_old - T_ref|'); put(f'c_{nm}_err_max', r3(max(er), 2), f'{sh}: largest |T_old - T_ref|')
+    un = [r['T_unc'] for r in RUNS if r['spec']['shape'] == sh and r.get('T_unc') is not None]
+    if un: put(f'c_{nm}_unc_med', r3(float(np.median(un)), 1), f'{sh}: median T_unc'); put(f'c_{nm}_unc_max', r3(max(un), 2), f'{sh}: largest T_unc')
+    dr = [r['drift'] for r in RUNS if r['spec']['shape'] == sh and r.get('drift') is not None]
+    if dr: put(f'c_{nm}_drift_max', r3(max(dr), 2), f'{sh}: largest complex64 norm drift of the (x, rho) runs')
+put('c_w_closure_max', r3(max(r['closure_max'] for r in RUNS if r.get('closure_max') is not None), 2), 'walls: largest |P_left + P_struct + P_right - 1| of the exact runs')
+put('c_n_new', OUT['c_w_new'] + OUT['c_d_new'] + OUT['c_s_new'], 'runs replaced in all'); put('c_n_prov', OUT['c_w_prov'] + OUT['c_d_prov'] + OUT['c_s_prov'], 'provisional in all')
+A1 = json.load(open(os.path.join(AUD, 'twin_sources.json'))); A2 = json.load(open(os.path.join(AUD, 'twin_converge.json')))
+for i, a in enumerate(A1):
+    tg = f'au{i}'
+    put(tg + '_E', a['spec']['E'], 'audit case: ' + json.dumps(a['spec'])); put(tg + '_V0', a['spec']['V0'], 'audit case'); put(tg + '_sx', a['spec']['sx'], 'audit case')
+    for k in ('exact', 'stored', 'dx0.25', 'dx0.125', 'dt0.0025', 'box x2'):
+        put(tg + '_' + k.replace('.', '').replace(' ', ''), r3(a[k]), 'twin_sources.json: the twin at the stored grid (stored), varied one source at a time')
+for i, c in enumerate(A2['conv']):
+    for k, v in c['T'].items():
+        put(f'cv{i}_' + k.replace('.', '').replace('|', '_'), r3(v), 'twin_converge.json: the twin with a cell-averaged potential, dx|dt')
+    put(f'cv{i}_exact', r3(c['exact']), 'twin_converge.json: exact packet average')
+# method figures of the correction runs, quoted from their records (not in an index): notes/fig15/CORRECTION_LOG.md 3.1-3.3, 7;
+# notes/fig15/THEORY_AND_CODE.md 3.2, 3.4, 9.1-9.3
+for k, v, src in (('m_slices', 2000, 'THEORY_AND_CODE 3.2: flat slices of the ramp under bias'), ('m_slices2', 8000, 'same, refined'),
+                  ('m_slices_dT', 8e-9, 'THEORY_AND_CODE 3.2: change of T from 2,000 to 8,000 slices'), ('m_dk', 5e-4, 'THEORY_AND_CODE 3.4: k step'),
+                  ('m_dk_dT', 3e-6, 'THEORY_AND_CODE 3.4: change of T when the k step is halved'), ('m_hx', 0.0625, 'THEORY_AND_CODE 8.2: x cell of the (x, rho) runs'),
+                  ('m_conv', 0.0019, 'THEORY_AND_CODE 9.2: largest change of disc T under any refinement tested'),
+                  ('m_wl_c64', 0.1965, 'CORRECTION_LOG 7: (x, rho) wall limit, N2 E0.75, complex64 (0.196539)'), ('m_wl_ex', 0.1968, 'same, exact 0.196820'),
+                  ('m_c128_d', 6e-4, 'THEORY_AND_CODE 9.1: complex64 against complex128, discs'), ('m_c128_s', 0.0012, 'same, the one shell checked'),
+                  ('m_rmax_s', 160, 'THEORY_AND_CODE 8.2: radial range of the shell runs, a'), ('m_rmax_d', 64, 'same, discs')):
+    put(k, v, src)
+pe, ps = A2['peak']['exact']['peak'], A2['peak']['stored dx0.5 step']['peak']
+kap = np.sqrt(2 * (3.0 - pe)); Le = 1.5 + 2 / kap
+put('pk_rel', round(100 * (pe - ps) / pe, 1), 'per cent the first grid lowers the V0 = 3 resonance')
+put('pk_kap', round(kap, 2), 'kappa at the exact V0 = 3 resonance'); put('pk_Leff', round(Le, 2), 'L_eff = L + 2/kappa, L = 1.5')
+put('pk_dL', round((pe - ps) / pe / 2 * Le, 3), 'by (21), dL_eff = (dE/E) L_eff / 2: how much wider the well acts on the first grid')
+for k, v in A2['peak'].items():
+    put('pk_' + k.replace(' ', '_').replace('.', ''), round(v['peak'], 3), 'twin_converge.json: V0 = 3 resonance from a sweep of long packets (sx 24), peak by a parabola')
 put('planned', dict(A=4 * 6 * 47, B=2 * 2 * 47, C=4 * 3 * 47, D=8 * 47, E=3 * 3 * 47, F=2 * 20 * 25, G=60), 'rt3d2_run.py jobs(): A 4 P x 6 shapes x 47 E; B 2 R x 2 P x 47; C 4 x 3 x 47; D 8 x 47; E 3 N x 3 x 47; F 2 x 20 V x 25 E; G 60 (notes/fig15/STATE.md)')
 
 # ---------- 1. spacing ----------
@@ -171,6 +218,7 @@ for P in (2.5, 3.5, 4.5, 5.5):
     rs = runs(shape='flat', P=P, R=0.0, **base); r = nearest(rs, Es[0])
     if r and abs(r['spec']['E'] - Es[0]) <= 0.05:
         put(f'{tag}_run_E', r['spec']['E'], r['file']); put(f'{tag}_run_tau', r3(r['tau']['tau'] if r.get('tau') else None), r['file'])
+        put(f'{tag}_run_status', r['status'], 'kept: the stored 3D file; rebuilt: the exact wall file')
     else:
         put(f'{tag}_run_E', None, f'missing: walls P = {P} near E = {Es[0]:.3f}'); put(f'{tag}_run_tau', None, 'missing')
 
@@ -193,23 +241,22 @@ for V0, D, P in ((1.5, 1.0, 2.5), (2.0, 1.0, 2.5), (3.0, 1.0, 2.5), (2.0, 1.5, 3
     put(f'{tag}_run_E', r['spec']['E'] if ok else None, r['file'] if ok else 'missing')
     put(f'{tag}_run_tau', r3(r['tau']['tau']) if ok else None, r['file'] if ok else 'missing')
     put(f'{tag}_run_tend', r3(r['t_end']) if ok else None, 'run length t_end'); put(f'{tag}_run_t0', r3(r['tau']['t0']) if ok else None, 'start of the fit window')
+    put(f'{tag}_run_status', r['status'] if ok else None, 'kept or rebuilt')
     # the long packet (G) across this resonance, if computed
     g = runs(shape='flat', V0=V0, D=D, P=P, R=0.0, N=2, bias=0.0, sx=12.0)
     if g:
         best = max(g, key=lambda r: through(r) or 0)
         put(f'{tag}_long_T', r3(through(best)), best['file']); put(f'{tag}_long_n', len(g), 'G runs filed for this structure')
         put(f'{tag}_long_E', best['spec']['E'], best['file'])
-        def half(r):   # share through plus half of what is still trapped, both from the 1D twin (the 3D trapped share has lost wave to the side border)
-            return r['twin']['T'] + (1 - r['twin']['T'] - r['twin']['R']) / 2 if r.get('twin') else None
         atE = nearest(g, Es[0]); put(f'{tag}_long_atE_E', atE['spec']['E'], atE['file']); put(f'{tag}_long_atE_T', r3(through(atE)), atE['file'])
-        put(f'{tag}_long_atE_well', r3(atE['end']['well']), 'probability still between the walls at the end of that run')
-        put(f'{tag}_long_atE_Th', r3(half(atE)), 'twin T + (1 - T - R)/2, nearest run'); put(f'{tag}_long_Th', r3(half(best)), 'twin T + (1 - T - R)/2, best run')
-        put(f'{tag}_long_twin_trap', r3(1 - best['twin']['T'] - best['twin']['R']), 'twin: still trapped at the end of the best run'); put(f'{tag}_long_3d_well', r3(best['end']['well']), '3D: still between the walls at the end of the best run')
+        put(f'{tag}_long_status', sorted(set(x['status'] for x in g)), 'statuses of these runs')
         ek = f'2|{V0:g}|{D:g}|{P:g}|12'
         if ek in IDX['exact']:
             exact1d.SIG0 = 12.0; put(f'{tag}_long_exact', r3(exact1d.tbar(best['spec']['E'], segs(2, V0, D, P), nk=2001)), 'exact1d.tbar, sigma_x 12, at the run energy (quadrature)')
             put(f'{tag}_long_atE_exact', r3(exact1d.tbar(atE['spec']['E'], segs(2, V0, D, P), nk=2001)), 'exact1d.tbar, sigma_x 12, at the energy of the run nearest E1')
-            put(f'{tag}_long_tend', round(best['t_end']), best['file']); put(f'{tag}_long_well', r3(best['end']['well']), 'probability still between the walls at the end of the run')
+            put(f'{tag}_long_tend', round(best['t_end']), best['file'])
+            dv = [abs(through(x) - exact1d.tbar(x['spec']['E'], segs(2, V0, D, P), nk=4001)) for x in g]
+            put(f'{tag}_long_dev', float(f'{max(dv):.1e}'), 'largest |T_ref - exact1d.tbar| over the 15 long-packet runs of this structure')
     s3 = runs(shape='flat', V0=V0, D=D, P=P, R=0.0, N=2, bias=0.0, sx=3.0); r = nearest(s3, Es[0])
     ok = r is not None and abs(r['spec']['E'] - Es[0]) <= 0.05
     put(f'{tag}_short_T', r3(through(r)) if ok else None, r['file'] if ok else 'missing: short packet within 0.05 of E1')
@@ -295,7 +342,7 @@ for Nb in (3, 5, 10):
 # ---------- 4. discs and shells ----------
 E1 = OUT['P2_5_E1']; wr = runs(shape='flat', P=2.5, R=0.0, **base)
 walls = ([r for r in wr if abs(r['spec']['E'] - 0.75) < 1e-9] or [nearest(wr, E1)])[0]   # 0.75: the grid energy nearest E1
-put('disc_E', walls['spec']['E'], 'the energy of the disc comparison: 0.75 (grid energy nearest E_r) once filed, else the nearest filed')
+put('disc_walls_status', walls['status'], walls['file']); put('disc_E', walls['spec']['E'], 'the energy of the disc comparison: 0.75 (grid energy nearest E_r) once filed, else the nearest filed')
 tw = walls['tau']['tau']; put('disc_tau_walls', r3(tw), walls['file']); put('disc_T_walls', r3(through(walls)), walls['file'])
 w1 = [x for x in runs(shape='flat', N=1, V0=2.0, D=1.0, P=2.5, R=0.0, bias=0.0, sx=3.0) if abs(x['spec']['E'] - walls['spec']['E']) < 1e-9]
 put('disc_T1_walls', r3(through(w1[0])) if w1 else None, w1[0]['file'] if w1 else 'missing: one wall')
@@ -305,11 +352,14 @@ for R in (2.0, 4.0, 6.0, 9.0, 12.0):
     one = [x for x in runs(shape='coin', N=1, V0=2.0, D=1.0, P=2.5, R=R, bias=0.0, sx=3.0) if abs(x['spec']['E'] - walls['spec']['E']) < 1e-9]
     if r and r[0].get('tau'):
         t = r[0]['tau']['tau']; put(f'{tag}_tau', r3(t), r[0]['file']); put(f'{tag}_T', r3(through(r[0])), r[0]['file'])
+        put(f'{tag}_status', r[0]['status'], 'kept (stored 3D file) or recomputed ((x, rho) file)'); put(f'{tag}_prov', bool(r[0].get('provisional')), 'T_unc > 0.005')
+        put(f'{tag}_unc', r3(r[0].get('T_unc') or 0, 2), 'T_unc of the pair run')
         put(f'{tag}_tau_side', r3(1 / (1 / t - 1 / tw)) if t < tw else None, '1/(1/tau - 1/tau_walls)')
         put(f'{tag}_tau_side_rnd', r3(1 / (1 / r3(t) - 1 / r3(tw))) if r3(t) < r3(tw) else None, 'the same from the rounded lifetimes printed in the table')
     else:
         put(f'{tag}_tau', None, f'missing: discs R {R} at E {walls["spec"]["E"]}'); put(f'{tag}_T', None, 'missing'); put(f'{tag}_tau_side', None, 'missing')
     put(f'{tag}_T1', r3(through(one[0])) if one else None, one[0]['file'] if one else 'missing: one disc')
+    put(f'{tag}_T1_status', one[0]['status'] if one else None, 'one disc: kept or recomputed')
     put(f'{tag}_gain', round(through(r[0]) / through(one[0]), 2) if (r and one) else None, 'pair share / one-disc share, unrounded')
 for R in (3.0, 5.0):
     for P in (2.5, 3.5):
@@ -320,33 +370,26 @@ for R in (3.0, 5.0):
             put(f'{tag}_taumax', r3(b['tau']['tau']), b['file']); put(f'{tag}_taumax_E', b['spec']['E'], b['file'])
             put(f'{tag}_n', len(rs), 'shell runs with a fitted lifetime')
             put(f'{tag}_cut', bool(b['tau']['t1'] >= b['t_end'] - 2 * b['frame_dt'] and (b['tau']['t1'] - b['tau']['t0']) < b['tau']['tau']), 'True: the fit window ends at the end of the run AND spans less than one lifetime')
-            put(f'{tag}_minE', min(r['spec']['E'] for r in rs), 'lowest energy filed so far for this pair')
+            put(f'{tag}_minE', min(r['spec']['E'] for r in rs), 'lowest energy of the runs for this pair')
+            put(f'{tag}_T', r3(through(b)), 'T_ref of that run'); put(f'{tag}_unc', r3(b.get('T_unc'), 2), 'its T_unc'); put(f'{tag}_prov', bool(b.get('provisional')), 'provisional')
     one = [r for r in runs(shape='shell', N=1, R=R, V0=2.0, D=1.0, bias=0.0, sx=3.0) if r.get('tau')]
     if one:
         b1 = max(one, key=lambda r: r['tau']['tau'])
         put(f'sh1_{R:g}_taumax', r3(b1['tau']['tau']), b1['file']); put(f'sh1_{R:g}_taumax_E', b1['spec']['E'], b1['file'])
         put(f'sh1_{R:g}_cut', bool(b1['tau']['t1'] >= b1['t_end'] - 2 * b1['frame_dt'] and (b1['tau']['t1'] - b1['tau']['t0']) < b1['tau']['tau']), 'one shell: fit window cut by the run end')
-put('walls_Tfar', round(walls['T_far']['value'], 4), walls['file'] + ': region reading (T_far) of the walls run the disc table compares with')
-put('walls_twin4', round(through(walls), 4), walls['file'] + ': twin share, 4 decimals')
-put('walls_Tfar_gap', round(100 * (1 - walls['T_far']['value'] / through(walls)), 1), 'per cent the region reading lies below the twin, same run')
-import types   # the page's own 1D twin solver, rt3d2.run1d (numpy only; jax is imported by rt3d2 but not used by run1d)
-if 'jax' not in sys.modules:
-    _j = types.ModuleType('jax'); _j.numpy = types.ModuleType('jax.numpy'); sys.modules['jax'] = _j; sys.modules['jax.numpy'] = _j.numpy
-import rt3d2  # noqa: E402
-for tg, kw, E in (('sl_V2D1', dict(V0=2.0, D=1.0, P=2.5), 0.75), ('sl_P3_5', dict(V0=2.0, D=1.0, P=3.5), 0.4), ('sl_V2D2', dict(V0=2.0, D=2.0, P=3.5), 0.75)):
-    r = [x for x in runs(shape='flat', N=2, bias=0.0, sx=3.0, R=0.0, **kw) if abs(x['spec']['E'] - E) < 1e-9][0]
-    gg = rt3d2.setup(Nx=r['box'][0], N=r['box'][1]); o = rt3d2.run1d(gg, dict(r['spec']), r['t_end'])
-    assert abs(o['transmitted'] - r['twin']['T']) < 1e-5, 'run1d does not reproduce the stored twin'
-    cc = rt3d2.centres(r['spec']); xg = gg['x']; inner = (xg > min(cc) + kw['D'] / 2) & (xg < max(cc) - kw['D'] / 2)
-    tw_in = float(o['prof'][-1][inner].sum() * gg['dx'])
-    put(tg, round(100 * (1 - r['end']['well'] / tw_in)), r['file'] + ': per cent of the trapped wave the 3D run has lost sideways by its end (3D well against the twin between the same inner faces, last frame, rt3d2.run1d)')
-    put(tg + '_t', round(r['t_end']), 'end of that run')
+for R in (12.0,):
+    g = runs(shape='coin', V0=2.0, D=1.0, P=2.5, R=R, N=2, bias=0.0, sx=12.0)
+    if g:
+        best = max(g, key=lambda r: through(r) or 0)
+        put('R12_long_T', r3(through(best)), best['file']); put('R12_long_E', best['spec']['E'], best['file']); put('R12_long_prov', sum(1 for x in g if x.get('provisional')), 'provisional among them')
+for sh, nm in (('flat', 'w'), ('coin', 'd')):
+    q = [(r['T_old'] / r['T_ref']) for r in RUNS if r['spec']['shape'] == sh and r['spec']['bias'] == 0 and r['spec']['N'] == 2 and r['spec']['V0'] == 2.0 and r['spec']['D'] == 1.0 and r['spec']['P'] == 2.5 and r['spec']['sx'] == 3.0 and r.get('T_old') and r['T_ref'] > 1e-3 and (sh == 'flat' or r['spec']['R'] == 6.0)]
+    put(f'gq_{nm}_lo', round(min(q), 2), f'{sh} running example (discs R 6): smallest T_old / T_ref'); put(f'gq_{nm}_hi', round(max(q), 2), 'largest')
 for tg, kw in (('ge_V2D2', dict(V0=2.0, D=2.0, P=3.5)), ('ge_V3D1', dict(V0=3.0, D=1.0, P=2.5)), ('ge_V2D1', dict(V0=2.0, D=1.0, P=2.5))):
-    rs = [x for x in runs(shape='flat', N=2, bias=0.0, sx=3.0, R=0.0, **kw) if x.get('twin') and x['twin']['T_exact'] > 1e-3]
-    exact1d.SIG0 = 3.0
-    q = [x['twin']['T'] / exact1d.tbar(x['spec']['E'], segs(2, kw['V0'], kw['D'], kw['P']), nk=8001) for x in rs]   # not the index's T_exact (1201 points: too coarse for d = 2's narrow peak)
-    put(tg + '_lo', round(min(q), 2), 'smallest ratio twin T / exact T over the stored energies'); put(tg + '_hi', round(max(q), 2), 'largest')
-put('gpu_run_h', round(sum(r['wall'] for r in RUNS) / 3600, 1), 'index.json runs: sum of wall, hours on one GPU each')
+    rs = [x for x in runs(shape='flat', N=2, bias=0.0, sx=3.0, R=0.0, **kw) if x.get('T_old') and x['T_ref'] > 1e-3]
+    q = [x['T_old'] / x['T_ref'] for x in rs]
+    put(tg + '_lo', round(min(q), 2), 'smallest T_old / T_ref (the 2026-11-14 run against the exact wall), stored energies'); put(tg + '_hi', round(max(q), 2), 'largest')
+put('gpu_run_h', round(sum(r['wall'] for r in OR) / 3600, 1), '2026-11-14 runs: sum of wall, hours on one GPU each')
 
 # ---------- 5. the diode ----------
 iv.V0 = 2.0
@@ -386,13 +429,14 @@ for c in IDX['iv']:
     if c['shape'] == 'flat':
         # recomputed here at V0 = 2 and checked against the index's J_exact_single_energy_same_points (refiled at V0 = 2 on 14 Nov 2026)
         assert iv.V0 == 2.0
-        Ei = np.array(c['energies']); Xs = [float(np.trapezoid(iv.T_biased_vec(Ei, 2.5, V) * iv.supply(Ei, c['EF'], V, c['kT']), Ei)) for V in Vs]
-        St = c.get('J_exact_single_energy_same_points'); assert St and max(abs(q[1] - x) for q, x in zip(St, Xs)) < 1e-6, 'index same-points curve differs'
+        Ei = np.round(np.arange(0.10, 1.3001, 0.05), 3); Xs = [float(np.trapezoid(iv.T_biased_vec(Ei, 2.5, V) * iv.supply(Ei, c['EF'], V, c['kT']), Ei)) for V in Vs]
+        St = [x for x in OLD['iv'] if x['shape'] == 'flat'][0].get('J_exact_single_energy_same_points'); assert St and max(abs(q[1] - x) for q, x in zip(St, Xs)) < 1e-6, 'same-points curve differs from the 2026-11-14 filing'
         jp = int(np.argmax(Xs[:len(Xs) * 3 // 4])); jv = jp + int(np.argmin(Xs[jp:]))
         put(f'{tag}_xs_Vp', Vs[jp], 'iv.py at V0 = 2: exact single-energy T at the 25 run energies, same trapezoid sum: peak')
         put(f'{tag}_xs_Vv', Vs[jv], 'same: valley after it'); put(f'{tag}_xs_pvr', round(Xs[jp] / Xs[jv], 1), 'same: peak / valley')
     nF = len([r for r in RUNS if r['spec']['shape'] == c['shape'] and r['spec']['R'] == c['R'] and r['spec']['N'] == 2 and r['spec']['V0'] == 2
-              and r['spec']['D'] == 1 and r['spec']['P'] == 2.5 and r['spec']['sx'] == 3 and round(r['spec']['E'], 3) in set(c['energies'])])
+              and r['spec']['D'] == 1 and r['spec']['P'] == 2.5 and r['spec']['sx'] == 3 and round(r['spec']['E'], 3) in set(np.round(np.arange(0.10, 1.3001, 0.05), 3))])
+    put(f'{tag}_prov', sum(1 for r in RUNS if r['spec']['shape'] == c['shape'] and r['spec']['R'] == c['R'] and r['spec']['N'] == 2 and r['spec']['V0'] == 2 and r['spec']['D'] == 1 and r['spec']['P'] == 2.5 and r['spec']['sx'] == 3 and r.get('provisional') and r['spec']['E'] <= 1.3001), 'provisional runs on the diode grid')
     put(f'{tag}_nruns', nF, 'runs on the diode grid (bias 0 ... 2.375 x energies 0.10 ... 1.30) filed so far; 500 planned')
     put(f'{tag}_J', [[p[0], r3(p[1])] for p in J], 'index.json iv J_runs')
     put(f'{tag}_complete', nF >= 500, 'all 20 voltages x 25 energies filed: only then are peak, valley and ratio quoted')
@@ -402,7 +446,7 @@ put('dE_short', round(np.sqrt(2 * E1) / (2 * 3), 3), 'k0 / (2 sigma_x), sigma_x 
 put('dE_long', round(np.sqrt(2 * E1) / (2 * 12), 3), 'k0 / (2 sigma_x), sigma_x = 12')
 put('box_long', round(512 / 192, 2), 'Nx 512 for long packets against 192: the box is this many times longer')
 put('dE_long_fwhm', round(2 * np.sqrt(2 * np.log(2)) * np.sqrt(2 * E1) / 24, 3), 'full width at half maximum of the long packet in energy, 2.355 sigma_E')
-put('long_rerun_pending', not any('fix1' in n['kaggle'] for n in IDX['notebooks']), 'the running example long-packet runs of shards 1-2 are on rt3d2_run.py FIX1 (ran >15 % short) until the fix notebook is filed')
+put('long_rerun_pending', False, 'the running example long-packet runs of shards 1-2 are on rt3d2_run.py FIX1 (ran >15 % short) until the fix notebook is filed')
 g = runs(shape='flat', V0=2.0, D=1.0, P=2.5, R=0.0, N=2, bias=0.0, sx=12.0)
 put('long_files', [r['file'] for r in g], 'G runs, walls of the running example')
 
