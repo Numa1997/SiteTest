@@ -542,25 +542,11 @@ site", the sources). The four columns are in the same order on all three pages (
 right to left. `notes/lucretius/make_page.py` writes the page and drops table entries that are no longer on it. Do not edit
 `public/lucretius.html` by hand: run `make_page.py`, then `tools/i18n/build.py`.
 
-**Background.** Since 18 November 2026 (evening): **a fractal engine** (`public/scripts/lucretius-fractals.js`, ~180 lines, no
-library). A `canvas.lp-fx` fixed to the window, behind the page, under soft wine glows (`div.lp-deco`, `styles/lucretius-deco.css`).
-Sixteen famous fractals, each made fresh with random choices where the mathematics allows: Barnsley fern and Sierpinski triangle
-(chaos game of an iterated function system), Heighway dragon, Lévy C curve, Koch snowflake, Gosper flowsnake, Hilbert curve,
-Sierpinski arrowhead and a fractal plant (L-systems drawn by a turtle), a binary tree with random angle and ratio (grown breadth
-first), the golden-angle sunflower (Vogel's model, 137.5°), the golden spiral, the Lorenz attractor, a Julia set (inverse iteration
-for one of seven famous c), and Clifford and Peter de Jong attractors (famous parameter sets). Each appears at a random place, mostly
-in the margins, 230 to 360 px across, randomly turned: it **grows** (its points or its curve revealed in order, easing out, 3.5 to
-6.5 s), **holds** (2 to 4.5 s), then a **fluid** carries it off while it fades (8 to 12 s), like ink in water; curves stay
-connected while stretched. The fluid is divergence-free: velocity = curl of a stream function ψ, a sum of five slowly drifting sine
-waves with random wave vectors; plus a slow fall (9 px/s) and a small random sideways swerve for every point (the clinamen). At most
-four fractals are alive, a new one every 2.5 to 5.5 s. Cost: at most about 13 000 points a frame, 30 frames a second, one path per
-fractal; device pixel ratio capped at 1.5; the loop stops while the tab is hidden. Measured in headless Chromium at 1600 × 1000:
-the worst gap between frames was 21.6 ms. Under `prefers-reduced-motion` two fractals are drawn once and nothing moves. A mask keeps
-the canvas at full strength in the margins and fades it, over the 160 px beside the 1240 px text block, to a sixth behind it; up to
-760 px the whole canvas is at 45 %.
-Earlier backgrounds stay reachable: `?bg=d` currents and atoms (static SVG tiles, 2400 × 1600, from `notes/lucretius/make_bg.py`,
-the dots falling one tile in 90 s), `?bg=a` recursive branches, `?bg=b` Weierstrass lines, `?bg=c` spiral tendrils (margin strips).
-A small script sets `html[data-bg]`; then the fractal engine does not start.
+**Background.** Since 18 November 2026 (late) the page has no background ornament by default: a fractal engine
+(16 fractals grown on a canvas and carried off by a fluid, PR #143) was live for half an hour and removed at the user's request. The
+earlier backgrounds stay reachable by address, from `styles/lucretius-deco.css`: `?bg=d` currents and atoms (soft wine glows and two
+static SVG tiles, 2400 × 1600, from `notes/lucretius/make_bg.py`, the dots falling one tile in 90 s), `?bg=a` recursive branches,
+`?bg=b` Weierstrass lines, `?bg=c` spiral tendrils (margin strips). A small script in the page sets `html[data-bg]`.
 
 **The layout.** Since 13 November 2026 the poem is set flat and modern, with no paper sheet, frame, corner stars or ornament rows (`article.lp-book`, no border, no background). It opens with the head `div.lp-cols`, under a 1 px dark rule across the full width: for each language a small mono index in wine (01 to 04), the name in its own words (Latina, English, Deutsch, العربية; Instrument Serif 27 px, the Arabic in Amiri 24 px) and the credit in mono; a light rule under it; sticky at the top of the window on a translucent paper ground with a blur. Then the 20 verses (`section.lp`, address `#l146` and so on; `:target` tints the row; each section is named "Lines 146 to 148" and so on for screen readers). The verses stand in `div.lp-body`, so each
 language runs down its own column as one text: behind them `div.lp-rules` (a grid with the same columns) draws three plain light hairlines
