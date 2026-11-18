@@ -1,0 +1,23 @@
+# Fig. 15 lecture note, revision for the corrected generation 2026-11-18: state of this chat
+
+Chat: the Fig. 15 note writer (session_01DGmqiqazJ9UxECtFYiespR). Branch `claude/fig15-note-corrected`, from origin/main 808c91a.
+Order: the Fig. 15 coordinator (session_01DGmqinbgPZhEHKndFyAjfV), 18 Nov ~20:34 UTC, on the owner's order "finish everything".
+
+## Aim
+Rewrite the note (public/scripts/resonant-note.js) for generation 2026-11-18: sections 10 and 11 new (staircase cause measured,
+exact wall reference, (x, rho) reduction and why it is exact, gate, T_unc / provisional, kept and replaced); every sentence of
+sections 6-9, 12, 13 true for the new numbers; NUM block from notes/fig15/gen2_numbers.py reading 2026-11-18/kaggle/index.json
+(T_ref where T_far or the twin's T was used).
+
+## Rules (owner and coordinator)
+- No runs in the container except the pure index read by gen2_numbers.py; no GPU, no Kaggle launch, no R2 action.
+- Derive, never assert (notes/STANDARD.md). Never write the owner's name or e-mail.
+- Readers: at most two rounds in total (one referee + one derivation checker), owner watching cost.
+- Build, check in headless Chromium (no KaTeX errors, numbers = NUM), merge to main, verify live.
+- Reply to the coordinator in at most 8 lines; message no other session.
+
+## Done
+- (nothing yet)
+
+## Left
+- read THEORY_AND_CODE.md, the new index; adapt gen2_numbers.py; rewrite sections; readers; build; merge; live check; reply.
