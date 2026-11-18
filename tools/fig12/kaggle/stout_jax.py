@@ -49,6 +49,10 @@ MODELS = {
 # The head of foam: every number from notes/fig12/research/data-for-solver.md (13 Nov 2026).
 HEAD0 = 0.019        # m, the head as served: 18-20 mm specification; 17.5-22.2 mm measured two minutes after pouring (KegWorks 2019)
 GAMMA = 0.0442       # N/m, surface tension of degassed Guinness, 20 C, pendant drop (Voelp & Willenbacher 2021, Table 2)
+# the air in a pub (continuous model's drag, Stout.air_drag): 20 C, 101.3 kPa, dry; density and viscosity from the standard tables
+# (CRC Handbook: rho = p M / (R T) = 1.204 kg/m^3, mu = 1.81e-5 Pa s)
+RHO_AIR = 1.204
+MU_AIR = 1.81e-5
 E_INF = 0.0187       # N/m, its surface dilatational elasticity (same table)
 RBUB = 34e-6         # m, Sauter radius of the head's bubbles: the stout's own (mean diameter 61 um, log-normal sigma 0.24; Watamura 2019)
 PHI_F = 0.27         # liquid fraction of the head: 0.24-0.36 from the column equilibrium and its slow drainage (data-for-solver.md)
@@ -86,31 +90,69 @@ def head_wall_stress(v):
 # ====================================================================== geometry (built once, before the run)
 class Geometry:
     """The glass on the grid: open fractions of every face, wall area per cell, masks. Cell (i, j, k) has its centre at
-    (x0 + (i + 1/2) dx, x0 + (j + 1/2) dx, z0 + (k + 1/2) dx); z0 = -2 dx (two cells of glass below the floor)."""
+    (x0 + (i + 1/2) dx, x0 + (j + 1/2) dx, z0 + (k + 1/2) dx); z0 = -2 dx (two cells of glass below the floor).
+    body = None: the grid is the glass's cavity and 20 mm above the rim (Fig. 12 and Fig. 16 up to 18 Nov 2026).
+    body = (hx, hy, z_top), the continuous model (18 Nov 2026, notes/spill/STATE.md): the grid covers the cart's body top
+    (|x| < hx, |y| < hy, at z_top below the glass's inner floor) and 30 mm above the rim; the glass is a SOLID inside the grid (its
+    wall from R(z) to R(max(z, 8 mm)) + 2.5 mm, its foot down to z_top) and so is the body below z_top. Liquid anywhere on the grid
+    obeys the same equations; the grid is open at its sides, top and bottom beyond the body."""
 
-    def __init__(self, R, dzp, fill, dx):
+    WALL = 0.0025
+
+    def __init__(self, R, dzp, fill, dx, body=None):
         R = np.asarray(R, float); self.R = R; self.dzp = dzp; self.fill = fill; self.dx = dx; self.nR = len(R)
-        self.zrim = (len(R) - 1) * dzp; Rmax = R.max()
-        self.n = n = int(math.ceil(2 * (Rmax + 2 * dx) / dx)); self.nz = nz = int(math.ceil((self.zrim + 0.02) / dx)) + 2
-        self.x0 = -n * dx / 2; self.z0 = -2 * dx
+        self.zrim = (len(R) - 1) * dzp; Rmax = R.max(); self.body = body
+        if body is None:
+            self.n = n = int(math.ceil(2 * (Rmax + 2 * dx) / dx)); self.nz = nz = int(math.ceil((self.zrim + 0.02) / dx)) + 2
+            self.x0 = -n * dx / 2; self.z0 = -2 * dx
+        else:
+            hx, hy, zt = body
+            # z0 = -k dx puts the cavity's floor (z = 0) on a face, as the old grid does (the floor mid-cell left stout below it)
+            self.n = n = int(math.ceil(2 * (max(hx, hy) + 2 * dx) / dx)); self.z0 = -(int(math.ceil(-zt / dx)) + 4) * dx
+            self.nz = nz = int(math.ceil((self.zrim + 0.03 - self.z0) / dx)); self.x0 = -n * dx / 2
         s = (np.arange(4) + 0.5) / 4
         xs4 = self.x0 + dx * (np.arange(n)[:, None] + s[None, :]).ravel()      # 4 samples across each cell
         zs4 = self.z0 + dx * (np.arange(nz)[:, None] + s[None, :]).ravel()
         xf = self.x0 + dx * np.arange(n + 1); zf = self.z0 + dx * np.arange(nz + 1)
-        ins = self.inside
+        ins = self.inside if body is None else self.open
         thu = ins(xf[:, None, None], xs4[None, :, None], zs4[None, None, :]).reshape(n + 1, n, 4, nz, 4).mean((2, 4))
         thv = ins(xs4[:, None, None], xf[None, :, None], zs4[None, None, :]).reshape(n, 4, n + 1, nz, 4).mean((1, 4))
         thw = ins(xs4[:, None, None], xs4[None, :, None], zf[None, None, :]).reshape(n, 4, n, 4, nz + 1).mean((1, 3))
-        thu[0] = thu[-1] = 0; thv[:, 0] = thv[:, -1] = 0; thw[:, :, 0] = 0      # the box is closed except its top
-        self.thu, self.thv, self.thw = thu, thv, thw
+        if body is None: thu[0] = thu[-1] = 0; thv[:, 0] = thv[:, -1] = 0; thw[:, :, 0] = 0      # the box is closed except its top
         c = self.x0 + (np.arange(n) + 0.5) * dx; zc = self.z0 + (np.arange(nz) + 0.5) * dx
+        if body is not None:
+            # a face is closed when the segment between the two cell centres it joins crosses a solid anywhere (9 points): the glass's
+            # wall is thinner than two cells, and a face cut by it would otherwise couple the stout inside to the air outside through
+            # the pressure (smoke test 1, 18 Nov 2026: the pint at rest leaked; review by the open-problems session)
+            # (only when both cell centres are open: a cell whose centre lies in the wall is a cut cell and keeps its face fractions,
+            # as in the old model; closing those too lost the liquid in the sliver beside the wall, smoke test 3-4: wall columns 1.4 mm low)
+            u9 = (np.arange(1, 8) / 8.0 - 0.5) * dx
+            cu = np.ones_like(thu, bool); cv = np.ones_like(thv, bool); cw = np.ones_like(thw, bool)
+            eu = ~self.solid((xf - 0.5 * dx)[:, None, None], c[None, :, None], zc[None, None, :]) & ~self.solid((xf + 0.5 * dx)[:, None, None], c[None, :, None], zc[None, None, :])
+            ev = ~self.solid(c[:, None, None], (xf - 0.5 * dx)[None, :, None], zc[None, None, :]) & ~self.solid(c[:, None, None], (xf + 0.5 * dx)[None, :, None], zc[None, None, :])
+            ew = ~self.solid(c[:, None, None], c[None, :, None], (zf - 0.5 * dx)[None, None, :]) & ~self.solid(c[:, None, None], c[None, :, None], (zf + 0.5 * dx)[None, None, :])
+            for d in u9:
+                cu &= ~self.solid((xf + d)[:, None, None], c[None, :, None], zc[None, None, :])
+                cv &= ~self.solid(c[:, None, None], (xf + d)[None, :, None], zc[None, None, :])
+                cw &= ~self.solid(c[:, None, None], c[None, :, None], (zf + d)[None, None, :])
+            thu = np.where(cu | ~eu, thu, 0.0); thv = np.where(cv | ~ev, thv, 0.0); thw = np.where(cw | ~ew, thw, 0.0)
+        self.thu, self.thv, self.thw = thu, thv, thw
         X, Y, Z = np.meshgrid(c, c, zc, indexing="ij"); r2 = X * X + Y * Y
         self.xc, self.zc = c, zc
         Rcav = self.Rz(np.minimum(Z, self.zrim - 1e-6))
         self.cav_inner = (Z > 0) & (r2 < (Rcav - 0.5 * dx) ** 2)                       # well inside the cavity
-        self.wallcut = (Z > 0) & (Z < self.zrim) & (r2 >= (self.Rz(Z) - 0.5 * dx) ** 2)   # cut by the glass
-        self.cavc = ins(X, Y, Z)                                                       # centre inside the cavity
-        self._wall_area()
+        self.wallcut = (Z > 0) & (Z < self.zrim) & (r2 >= (self.Rz(Z) - 0.5 * dx) ** 2) & (r2 < (self.Rz(Z) + 0.5 * dx) ** 2 if body else True)   # cut by the glass's inner wall
+        self.cavc = self.inside(X, Y, Z) if body is None else self.cavity(X, Y, Z)    # centre inside the cavity (or above it)
+        # where the level set is built from the particles: the cavity's interior (old model), or every open cell (continuous model)
+        # (continuous model: open cells at least half a cell from any solid, as cav_inner keeps half a cell from the inner wall: an
+        # empty cell against a wall, where the particles stand thinner, must not read as air; smoke test 3 read the wall columns 1.4 mm low)
+        if body is None: self.lsdom = self.cav_inner
+        else:
+            # half a cell from the cavity's inner wall (the old rule, cav_inner) inside the cavity; every open cell elsewhere, so a film
+            # down the outside of the glass or a puddle on the body keeps its own free surface (review, 18 Nov 2026)
+            self.lsdom = np.where(self.cavity(X, Y, Z), self.cav_inner, ~self.solid(X, Y, Z))
+        if body is None: self._wall_area()
+        else: self._wall_area_solid(xs4, zs4)
         self.Rfill = float(self.Rz(fill))
 
     def Rz(self, z):
@@ -120,6 +162,23 @@ class Geometry:
     def inside(self, x, y, z):
         z = np.asarray(z, float)
         return ((z > 0) & ((z >= self.zrim) | (x * x + y * y < self.Rz(z) ** 2))).astype(float)
+
+    def cavity(self, x, y, z):
+        """The glass's cavity and the cylinder of the rim's radius above it (the stout 'in the glass', for the books)."""
+        z = np.asarray(z, float); r2 = x * x + y * y
+        return (z > 0) & (r2 < self.Rz(np.minimum(z, self.zrim - 1e-6)) ** 2)
+
+    def solid(self, x, y, z):
+        """The continuous model's solids: the glass (wall shell and foot) and the cart's body below its top."""
+        hx, hy, zt = self.body; z = np.asarray(z, float); r2 = x * x + y * y
+        Rin = self.Rz(np.clip(z, 0.0, self.zrim - 1e-6)); Rout = self.Rz(np.clip(z, 0.008, self.zrim - 1e-6)) + self.WALL
+        wall = (z > 0) & (z < self.zrim) & (r2 >= Rin ** 2) & (r2 < Rout ** 2)
+        foot = (z <= 0) & (z > zt) & (r2 < Rout ** 2)
+        deck = (z <= zt) & (np.abs(x) < hx) & (np.abs(y) < hy)
+        return wall | foot | deck
+
+    def open(self, x, y, z):
+        return (~self.solid(x, y, z)).astype(float)
 
     def _wall_area(self):
         """Area of glass inside each cell, per cell volume (as solver.py): the side wall of each layer, 2 pi R ds, shared by
@@ -155,6 +214,26 @@ class Geometry:
         self.aw = np.where(self.thw > 0, 0.5 * (pad(a, 2)[:, :, :-1] + pad(a, 2)[:, :, 1:]), 0)
         self.area_cells = float(A.sum())
         self.area_profile = float((2 * np.pi * 0.5 * (R[:-1] + R[1:]) * ds).sum() + np.pi * R[0] ** 2)
+
+    def _wall_area_solid(self, xs4, zs4):
+        """Area of solid surface in each cell, per cell volume, for the continuous model: on 4 x 4 x 4 samples per cell, the
+        crossings between solid and open samples along each axis give the surface's projections (A_x, A_y, A_z), each crossing
+        (dx/4)^2; for a surface that is flat across the cell its area is |(A_x, A_y, A_z)|."""
+        n, nz, dx = self.n, self.nz, self.dx; h2 = (dx / 4) ** 2; A = np.zeros((n, n, nz))
+        X, Y = np.meshgrid(xs4, xs4, indexing="ij")
+        for k in range(nz):
+            S = np.stack([self.solid(X, Y, np.full_like(X, z)) for z in zs4[4 * k:4 * k + 4]], -1)   # (4n, 4n, 4)
+            S = S.reshape(n, 4, n, 4, 4).transpose(0, 2, 1, 3, 4)                                    # (n, n, 4, 4, 4)
+            ax_ = np.abs(np.diff(S.astype(int), axis=2)).sum((2, 3, 4)); ay = np.abs(np.diff(S.astype(int), axis=3)).sum((2, 3, 4))
+            az = np.abs(np.diff(S.astype(int), axis=4)).sum((2, 3, 4))
+            A[:, :, k] = np.sqrt(ax_ ** 2 + ay ** 2 + az ** 2) * h2 * 4.0 / 3.0   # 3 of the 4 sample intervals per cell lie inside it
+        a = A / dx ** 3
+        pad = lambda arr, ax: np.concatenate([np.take(arr, [0], ax) * 0, arr, np.take(arr, [0], ax) * 0], ax)
+        self.ac = a
+        self.au = np.where(self.thu > 0, 0.5 * (pad(a, 0)[:-1] + pad(a, 0)[1:]), 0)
+        self.av = np.where(self.thv > 0, 0.5 * (pad(a, 1)[:, :-1] + pad(a, 1)[:, 1:]), 0)
+        self.aw = np.where(self.thw > 0, 0.5 * (pad(a, 2)[:, :, :-1] + pad(a, 2)[:, :, 1:]), 0)
+        self.area_cells = float(A.sum()); self.area_profile = float("nan")
 
 
 def glass_volume(R, dzp, fill, n=20000):
@@ -239,10 +318,16 @@ class Stout:
         f = lambda a: jnp.asarray(a, F32)
         self.th = [f(G.thu), f(G.thv), f(G.thw)]; self.af = [f(G.au), f(G.av), f(G.aw)]; self.ac = f(G.ac)
         self.cav_inner = jnp.asarray(G.cav_inner); self.wallcut = jnp.asarray(G.wallcut); self.cavc = jnp.asarray(G.cavc > 0)
+        self.lsdom = jnp.asarray(G.lsdom)
         self.Rd = jnp.asarray(G.R, F32)
         self.origin = jnp.asarray([G.x0, G.x0, G.z0], F32)
         k = np.arange(nz + 1)[None, None, :]
         self.floor_w = jnp.asarray((G.thw == 0) & (k <= 2))       # closed floor faces: w = 0 exactly
+        # the continuous model (G.body set, 18 Nov 2026): every closed face of the glass and of the cart's body holds w = 0, and the
+        # stout's free surface carries the surface tension GAMMA wherever no head lies on it
+        self.cont = G.body is not None
+        if self.cont: self.floor_w = jnp.asarray(G.thw == 0)
+        self.gamma = GAMMA if self.cont else 0.0
         c = jnp.asarray(G.xc, F32); zc = jnp.asarray(G.zc, F32)
         self.cc = (c, c, zc)
         o = np.array([(a, b, c) for a in range(-1, 3) for b in range(-1, 3) for c in range(-1, 3)], np.int32)
@@ -388,7 +473,7 @@ class Stout:
 
     def level_set(self, s, cnt):
         dx = self.dx; G = self.G
-        mA = (cnt == 0) & self.cav_inner
+        mA = (cnt == 0) & self.lsdom   # continuous model: everywhere, so liquid outside the glass has its own free surface too
         near = self.dilate(mA); nearP = self.dilate(near)
         X, act = s["xp"], s["act"]
         ci = jnp.floor((X - self.origin) / dx).astype(I32); cfl, cok = self.flat(ci, self.dims)
@@ -399,6 +484,7 @@ class Stout:
         Q = X[sel]
         rr = jnp.sqrt(Q[:, 0] ** 2 + Q[:, 1] ** 2); Rw = self.Rz(Q[:, 2])
         img = (Q[:, 2] < G.zrim) & (rr > Rw - 2.0 * dx) & (rr > 1e-9)
+        if self.cont: img = img & (rr < Rw) & (Q[:, 2] > 0)   # mirror only stout inside the cavity across the inner wall (not stout down the outside)
         fw = jnp.where(rr > 1e-9, (2.0 * Rw - rr) / jnp.maximum(rr, 1e-9), 0.0)
         Q2 = jnp.stack([Q[:, 0] * fw, Q[:, 1] * fw, Q[:, 2]], -1)
         R2 = 4.0 * dx * dx; size = math.prod(self.dims)
@@ -586,11 +672,56 @@ class Stout:
         tRL = jnp.where(cRL, jnp.clip(phR / jnp.where(cRL, phR - phL, -1.0), 0.05, 1.0), 1.0)   # surface's place, R liquid
         return liqL, liqR, tLR, tRL
 
+    def tension(self, ph, hf, dt):
+        """Surface tension on the stout's free surface (continuous model): the pressure just inside the surface exceeds the air's by
+        gamma kappa (Young-Laplace), kappa = div(grad phi / |grad phi|) of the level set (phi < 0 in the liquid, so a drop has kappa =
+        2/r > 0), by central differences. It enters the ghost-fluid rule as the surface's pressure, in the solver's units p dt / rho.
+        |kappa| is held below 2/dx (a drop one cell across): the grid resolves nothing smaller. Not where the head lies on the stout
+        (its own sheet carries the surface there). Explicit capillary waves need dt < sqrt(rho dx^3 / (2 pi gamma)) = 3.5 ms at 1.5 mm."""
+        dx = self.dx; g = []
+        for ax in range(3): g.append((sh(ph, 1, ax, 0.0) - sh(ph, -1, ax, 0.0)) / (2 * dx))
+        nn = jnp.sqrt(g[0] ** 2 + g[1] ** 2 + g[2] ** 2) + 1e-6
+        kap = sum((sh(g[ax] / nn, 1, ax, 0.0) - sh(g[ax] / nn, -1, ax, 0.0)) / (2 * dx) for ax in range(3))
+        kap = jnp.clip(kap, -2.0 / dx, 2.0 / dx)
+        bare = jnp.broadcast_to((hf <= 0)[:, :, None], self.dims) | ~self.cavc
+        return jnp.where(bare & (jnp.abs(ph) < 2.0 * dx), self.gamma * kap * dt / self.rho, 0.0).astype(F32)
+
+    def air_drag(self, vel, mass, ph, liq, dt, wind):
+        """The air's drag on stout outside the glass (continuous model, 18 Nov 2026; notes/spill/STATE.md, 'Air'). The air is at rest on
+        the ground, so in the glass's frame it blows at wind = (-v_x, -v_z) of the glass. On each surface cell of liquid outside the
+        cavity the wind presses on the frontal area dx^2 max(0, -n . U_hat) (n the liquid's outward normal), with the sphere's drag
+        coefficient C_D(Re) of Schiller & Naumann, C_D = 24/Re (1 + 0.15 Re^0.687), Re = rho_a |U| d / mu_a < 1000, d the local size
+        4/|kappa| (a sphere of diameter d has kappa = 4/d), held between dx and 10 mm. The force is shared by the cell's liquid,
+        rho dx^3: for a drop resolved by several cells the frontal areas add to pi d^2/4 and the masses to pi d^3 rho/6, so the
+        acceleration is (3/4) C_D rho_a U^2 / (rho d), the textbook law. Inside the glass the air is sheltered (its effect on the
+        pint's surface was estimated at 0.1 mm of stout and is left out)."""
+        dx = self.dx; ux, uz = wind
+        g = [(sh(ph, 1, ax, 0.0) - sh(ph, -1, ax, 0.0)) / (2 * dx) for ax in range(3)]
+        nn = jnp.sqrt(g[0] ** 2 + g[1] ** 2 + g[2] ** 2) + 1e-6; n = [gi / nn for gi in g]
+        kap = sum((sh(n[ax], 1, ax, 0.0) - sh(n[ax], -1, ax, 0.0)) / (2 * dx) for ax in range(3))
+        d = jnp.clip(4.0 / jnp.maximum(jnp.abs(kap), 1e-6), dx, 0.01)
+        uc = [0.5 * (cut_lo(vel[ax], ax) + cut_hi(vel[ax], ax)) for ax in range(3)]   # the liquid's velocity at cell centres
+        U = [ux - uc[0], -uc[1], uz - uc[2]]; Um = jnp.sqrt(U[0] ** 2 + U[1] ** 2 + U[2] ** 2) + 1e-9
+        front = jnp.maximum(0.0, -(n[0] * U[0] + n[1] * U[1] + n[2] * U[2]) / Um)
+        # the surface as a one-sided smoothed delta on the liquid side, (1 + cos(pi phi/e))/e for -e < phi < 0, e = 1.5 dx: its volume
+        # integral is the surface's area, so the summed force is exactly the frontal area times the pressure (drag check 1, 036b81d:
+        # the surface cells alone gave 67 % of the law for an 8 mm drop)
+        e = 1.5 * dx; band = liq & (ph < 0) & (ph > -e) & ~self.cavc
+        delta = jnp.where(band, (1.0 + jnp.cos(jnp.pi * ph / e)) / e, 0.0)
+        Re = jnp.clip(RHO_AIR * Um * d / MU_AIR, 0.1, 1000.0); CD = 24.0 / Re * (1.0 + 0.15 * Re ** 0.687)
+        a = 0.5 * RHO_AIR * CD * Um * front * delta / self.rho                      # times U_vec: acceleration
+        out = []
+        for ax in range(3):
+            ac = a * U[ax]; aL, aR = lo(ac, ax, 0.0), hi(ac, ax, 0.0)
+            af = (aL + aR) / jnp.maximum(1.0, (aL != 0).astype(F32) + (aR != 0).astype(F32))   # a face beside air takes its liquid cell's whole value
+            out.append(jnp.where((mass[ax] > 1e-6) & (self.th[ax] > 0), vel[ax] + dt * af, vel[ax]).astype(F32))
+        return out
+
     def _surf_faces(self, ph, liq):
         liqL, liqR, tLR, tRL = self._faces(ph, liq, 2)
         return liqL & ~liqR & (self.th[2] > 0)
 
-    def pressure(self, vel, ph, liq, p_prev, ps, mu=None, w_old=None, geff_dt=0.0, src=None):
+    def pressure(self, vel, ph, liq, p_prev, ps, mu=None, w_old=None, geff_dt=0.0, src=None, pst=None):
         """ps: the pressure on the free surface (the weight of the head), in the solver's units (Pa x dt / rho), one value per
         column, set on the air side of the surface. Ghost fluid: p = ps at the surface, so the air neighbour of a liquid cell
         reads p_ghost = p_liq (1 - 1/theta) + ps / theta: the diagonal gets th / theta and the right side th ps / theta.
@@ -604,6 +735,7 @@ class Stout:
         dx = self.dx; diag = jnp.zeros(self.dims, F32); div = jnp.zeros(self.dims, F32); rhs = jnp.zeros(self.dims, F32)
         cp, cm, faces, loads = [], [], [], []
         ps3 = jnp.broadcast_to(ps[:, :, None], self.dims).astype(F32)
+        if pst is not None: ps3 = (ps3 + pst).astype(F32)               # surface tension (continuous model): gamma kappa, solver units
         for ax in range(3):
             th = self.th[ax]; liqL, liqR, tLR, tRL = self._faces(ph, liq, ax)
             surf = None
@@ -694,6 +826,7 @@ class Stout:
             Cs.append(jnp.sum(val[..., None] * gw, 0) / dx)
         newv = jnp.stack(vs, -1); C = jnp.stack(Cs, 1)
         Xn = X + dt * (newv if uc is None else newv + jnp.stack(us, -1))     # the volume correction's drift moves the particle, not its velocity
+        if self.cont: return self._g2p_cont(s, X, Xn, newv, C, act, dt, gx, gz, rot)
         below = Xn[:, 2] < 0.1 * dx
         Xn = Xn.at[:, 2].set(jnp.where(below, 0.1 * dx, Xn[:, 2]))
         newv = newv.at[:, 2].set(jnp.where(below & (newv[:, 2] < 0), 0.0, newv[:, 2]))
@@ -724,6 +857,67 @@ class Stout:
         fly2 = (fly & ~land & ~hit) | leave
         s = dict(s, xp=xp.astype(F32), vp=vp.astype(F32), C=jnp.where(act[:, None, None], C, 0.0).astype(F32),
                  act=act2, fly=fly2, landed=s["landed"] | land, stuck=s["stuck"] | hit)
+        mom = jnp.sum(jnp.where(act2[:, None], newv, 0.0).astype(F64), 0)
+        return s, mom
+
+    def _g2p_cont(self, s, X, Xn, newv, C, act, dt, gx, gz, rot):
+        """The continuous model's particle update (18 Nov 2026). Every particle stays a particle of the same liquid wherever it is:
+        no free flight, no change of equations at the rim. The glass (wall shell, foot) and the cart's body are solids: a particle
+        that a step carries into one is put back on the side it came from, a tenth of a cell off the surface, and loses its velocity
+        into the surface (no penetration; sliding is left to the liquid's viscosity and the wall layer). A particle above the grid's
+        top feels the same body force with no pressure (the air's p = 0), as a drop in the air does on the grid. A particle that
+        leaves the grid sideways or below it has fallen off the cart: it leaves the computation and its mass the cart (landed)."""
+        G = self.G; dx = self.dx; hx, hy, zt = G.body; W = G.WALL; eps = 0.1 * dx; zr_ = G.zrim
+        # above the grid: the body force alone (no grid values there)
+        if rot is None: acc = jnp.broadcast_to(jnp.array([gx, 0.0, gz], F32), X.shape)
+        else:
+            a_x, a_z = self.frame_accel(X[:, 0], X[:, 2], s["vp"][:, 0], s["vp"][:, 2], gx, gz, rot)
+            acc = jnp.stack([a_x, jnp.zeros_like(a_x), a_z], -1)
+        topz = G.z0 + self.nz * dx
+        high = X[:, 2] >= topz - 0.5 * dx
+        vb = s["vp"] + dt * acc
+        newv = jnp.where(high[:, None], vb, newv); Xn = jnp.where(high[:, None], X + dt * vb, Xn)
+        C = jnp.where(high[:, None, None], 0.0, C)
+        # the glass: the wall shell between R(z) and R(max(z, 8 mm)) + W for 0 < z < rim, the foot below the floor
+        def radii(z):
+            Rin = self.Rz(jnp.clip(z, 0.0, zr_ - 1e-6)); Rout = self.Rz(jnp.clip(z, 0.008, zr_ - 1e-6)) + W
+            return Rin, Rout
+        ro = jnp.sqrt(X[:, 0] ** 2 + X[:, 1] ** 2); Rin_o, Rout_o = radii(X[:, 2])
+        r = jnp.sqrt(Xn[:, 0] ** 2 + Xn[:, 1] ** 2); z = Xn[:, 2]; Rin, Rout = radii(z)
+        er = jnp.stack([Xn[:, 0], Xn[:, 1], jnp.zeros_like(r)], -1) / jnp.maximum(r, 1e-12)[:, None]
+        in_wall = (z > 0) & (z < zr_) & (r >= Rin) & (r < Rout)
+        in_foot = (z <= 0) & (z > zt) & (r < Rout)
+        hit = in_wall | in_foot
+        from_top = hit & (X[:, 2] >= zr_)                                     # came down onto the rim's top
+        # from inside the cavity: the old position inside it, or (if a step left it in the wall) nearer the inner face than the outer
+        from_in = hit & ~from_top & (X[:, 2] > 0) & ((ro < Rin_o) | (ro - Rin_o < Rout_o - ro))
+        from_out = hit & ~from_top & ~from_in                                 # from outside the glass
+        # inside: back to the inner wall (or up to the cavity's floor if it came through the floor)
+        floor_in = from_in & in_foot
+        # back into the cavity: first up to the floor if it went through it, then in to the inner wall at that height (the floor's
+        # corner is steep, R grows 2 mm per 0.5 mm: a particle lifted to the floor can still stand in the wall; smoke test 2 found 48
+        # particles pushed out that way onto the body)
+        zin = jnp.where(floor_in, eps, Xn[:, 2]); Rin_b = self.Rz(jnp.clip(zin, 0.0, zr_ - 1e-6))
+        rin_t = jnp.where(from_in, jnp.minimum(1.0, (Rin_b - eps) / jnp.maximum(r, 1e-12)), 1.0)
+        rout_t = jnp.where(from_out, (Rout + eps) / jnp.maximum(r, 1e-12), 1.0)
+        sc = rin_t * rout_t
+        Xn = Xn.at[:, 0].multiply(sc).at[:, 1].multiply(sc)
+        Xn = Xn.at[:, 2].set(jnp.where(from_top, zr_ + eps, jnp.where(floor_in, eps, Xn[:, 2])))
+        vn = jnp.sum(newv * er, -1)
+        newv = jnp.where((from_in & (rin_t < 1.0) & (vn > 0))[:, None], newv - vn[:, None] * er, newv)
+        newv = jnp.where((from_out & (vn < 0))[:, None], newv - vn[:, None] * er, newv)
+        newv = newv.at[:, 2].set(jnp.where((from_top | floor_in) & (newv[:, 2] < 0), 0.0, newv[:, 2]))
+        # the cart's body top
+        deck = (Xn[:, 2] < zt + eps) & (jnp.abs(Xn[:, 0]) < hx) & (jnp.abs(Xn[:, 1]) < hy) & (X[:, 2] >= zt)
+        Xn = Xn.at[:, 2].set(jnp.where(deck, zt + eps, Xn[:, 2]))
+        newv = newv.at[:, 2].set(jnp.where(deck & (newv[:, 2] < 0), 0.0, newv[:, 2]))
+        # off the cart: outside the grid sideways or below it
+        half = -G.x0
+        gone = act & ((jnp.abs(Xn[:, 0]) > half - 0.5 * dx) | (jnp.abs(Xn[:, 1]) > half - 0.5 * dx) | (Xn[:, 2] < G.z0 + 0.5 * dx))
+        act2 = act & ~gone
+        xp = jnp.where(act[:, None], Xn, s["xp"]); vp = jnp.where(act[:, None], newv, s["vp"])
+        s = dict(s, xp=xp.astype(F32), vp=vp.astype(F32), C=jnp.where(act2[:, None, None], C, 0.0).astype(F32),
+                 act=act2, landed=s["landed"] | gone)
         mom = jnp.sum(jnp.where(act2[:, None], newv, 0.0).astype(F64), 0)
         return s, mom
 
@@ -775,7 +969,7 @@ class Stout:
         med = lambda s: jnp.nanmedian(H[idx[s][0], idx[s][1]])
         return jnp.nan_to_num(0.5 * (med(1) - med(-1)) / shape).astype(F64)
 
-    def step(self, s, dt, gx, gz, prep=None, rot=None):
+    def step(self, s, dt, gx, gz, prep=None, rot=None, wind=None):
         """rot = (om, al, zS): the glass also turns (Fig. 16); None: the glass only translates (Fig. 12, unchanged)."""
         dt = jnp.asarray(dt, F32); gx = jnp.asarray(gx, F32); gz = jnp.asarray(gz, F32)
         if rot is not None: rot = tuple(jnp.asarray(r, F32) for r in rot)
@@ -794,6 +988,7 @@ class Stout:
         z = jnp.zeros((), F64); ew = es = ef = z
         if self.gs > 0 or self.skin or self.head: vel, ew, es, ef = self.friction(vel, mass, ph, liq, dt, s["hf"])
         vel = self.body_force(vel, mass, dt, gx, gz, rot)
+        if self.cont and wind is not None: vel = self.air_drag(vel, mass, pr["ph"], pr["liq"], dt, wind)
         # the head's weight on the surface (verification.md item 4), in the solver's pressure units (Pa x dt / rho); with rot, the
         # vertical field of each column at the fill height
         gzh = gz if rot is None else self.frame_accel(self.colx, self.G.fill, 0.0, 0.0, gx, gz, rot)[1]
@@ -809,7 +1004,8 @@ class Stout:
             src = self.volume_source(pr["cnt"], liq, dt, gate); zf = [jnp.zeros_like(v) for v in vel]
             uc, kc, _, _, _ = self.pressure(zf, ph, liq, jnp.zeros_like(s["p"]), jnp.zeros((self.n, self.n), F32), src=src)
             uc = self.extrapolate(uc, kc)
-        vel, known, p, it, res = self.pressure(vel, ph, liq, s["p"], ps, mu=mu, w_old=w_old, geff_dt=gdt)
+        pst = self.tension(ph, s["hf"], dt) if self.cont else None
+        vel, known, p, it, res = self.pressure(vel, ph, liq, s["p"], ps, mu=mu, w_old=w_old, geff_dt=gdt, pst=pst)
         if mu is not None:   # the head's new vertical velocity: that of the face its surface crosses (liquid below, air above)
             sf = self._surf_faces(ph, liq); nsf = jnp.sum(sf, 2)
             wh = jnp.where(nsf > 0, jnp.sum(jnp.where(sf, vel[2], 0.0), 2) / jnp.maximum(nsf, 1), s["wh"]).astype(F32)
@@ -851,6 +1047,10 @@ class Stout:
         Hp = Hm[i, j]
         loose = act & jnp.isfinite(Hp) & (X[:, 2] > Hp + 1.5 * dx)
         dmask = loose | fly | s["stuck"]
+        if self.cont:   # the continuous model: also every particle outside the glass's cavity (down the glass, on the cart, in the air)
+            rX = jnp.sqrt(X[:, 0] ** 2 + X[:, 1] ** 2)
+            incav = (X[:, 2] > 0) & (rX < self.Rz(jnp.clip(X[:, 2], 0.0, G.zrim - 1e-6)))
+            fly = act & ~incav; dmask = loose | fly
         nd = jnp.sum(dmask, dtype=I32)
         di = jnp.nonzero(dmask, size=self.M, fill_value=0)[0]
         drops = jnp.where((jnp.arange(self.M) < nd)[:, None], X[di], jnp.nan)
@@ -1108,7 +1308,7 @@ def make_advance(S, mode, cart=None, cfl=0.8, dtmax=0.002, push=None):
             nsub = jnp.maximum(1, jnp.round(dt / 1e-4).astype(I32)); hc = dt / nsub
             cs = lax.fori_loop(0, nsub, lambda _, cc: cart.step(cc, hc, ex["F"][0], ex["F"][1]), cs)
             ax, az = (cs["vx"] - vx0) / dt, (cs["vzb"] - vz0) / dt
-            s, d = S.step(s, dt, -ax, -9.81 - az, prep=prep)
+            s, d = S.step(s, dt, -ax, -9.81 - az, prep=prep, wind=(-cs["vx"], -cs["vzb"]) if S.cont else None)
             P = d["mom"] * S.mp
             F = jnp.where(ex["haveP"], -(P - ex["P"]) / dt, 0.0)
             cs = dict(cs, ml=S.rho * S.V * d["nact"].astype(F64) / S.N + d["mhead"])
