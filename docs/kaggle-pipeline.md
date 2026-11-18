@@ -80,8 +80,10 @@ all identical (12 shapes tars unpacked by Kaggle, 5 `.pyc` caches dropped), 587 
 On 18 November 2026 the Fig. 12 dataset got version 2 (versions 11 and 12 of `guinness-on-a-cart-stout-in-jax`, the damping-grid
 study of 15 November, `tools/fig12/kaggle/damping_grid.py` at `758df53`), the Fig. 12 notebook a fourth job, `damping-grid`, and its
 version 2 ran `check`: every file identical, including the new ones.
-The old notebooks of these two figures (Fig. 14: six; Fig. 12: three) are replaced by these and stay on Kaggle until the owner
-authorises their deletion one by one.
+On 18 November 2026 (owner: "Go ahead then") the eight old notebooks these replace were deleted, after the code of every one of
+their versions was added to the datasets (`<notebook>/v<N>/source.ipynb`): Fig. 14's six and Fig. 12's `guinness-on-a-cart-stout-sloshing`
+and `guinness-free-swing-v2`. `guinness-on-a-cart-stout-in-jax` stays (another session used it on 15 November). Log:
+`notes/inventory/raw/kaggle-deletions.log`.
 
 Datasets made on 14 November 2026: `numakoudsie/fig14-schrodinger-sphere` (8 notebook runs, 937 MB) and
 `numakoudsie/fig12-guinness-on-a-cart` (19 notebook versions, 158 MB); their file lists are in `notes/inventory/datasets/`.

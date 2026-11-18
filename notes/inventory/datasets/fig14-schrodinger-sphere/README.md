@@ -21,3 +21,7 @@ Total: 2961 files, 937 326 104 bytes.
 Checked against the site: 3916 of the 4328 site files are byte-identical to a file here (or to a member of a shapes3d tar).
 The other 412 are made in the repository: 405 `.bin` packed from `schrodinger-sphere-full-grid/v1/output/runs/*.json`, 7 index and record files.
 `schrodinger-sphere-3d-generation` v1 is not used by the site; it is kept because this is its only copy.
+
+Added 18 November 2026: `v<version>/source.ipynb`, the exact code of every version of every notebook in this dataset except
+guinness-on-a-cart-stout-in-jax (kept on Kaggle), fetched with the Kaggle API (GetKernel, versionLabel) before the old notebooks were
+deleted. The one notebook of the figure is now fig-14-schrodinger-sphere / fig-12-guinness-on-a-cart; it runs every job from this code.

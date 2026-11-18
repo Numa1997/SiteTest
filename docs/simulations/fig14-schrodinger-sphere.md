@@ -320,3 +320,12 @@ left at the first grid point inside a hard wall are the wave's reach into a wall
 With `shell.src_x = -17` in the index the page offers "Spherical, from the side" again, and runs marked `v: 2` no longer carry
 the note about the start wave.
 
+## Where the Kaggle runs are now (18 November 2026)
+
+The Kaggle notebooks named on this page (`schrodinger-sphere-full-grid`, `schrodinger-sphere-3d-wave`, `schrodinger-flat-wall`,
+`schrodinger-pillar`, `schrodinger-spherical-wave`, `schrodinger-shapes-3d`, and the earlier `schrodinger-sphere-3d-generation` and
+`schrodinger-shapes-3d-v2-a … d`) were deleted from Kaggle. Every output file of every run, with its log, a manifest (size and
+SHA-256) and the exact code of every version (`v<N>/source.ipynb`), is in the private dataset `numakoudsie/fig14-schrodinger-sphere`,
+folder `<notebook>/v<version>/`; `public/data/schrodinger-sphere/generations.json` names that folder for each generation
+(`dataset_path`). The figure has one notebook now, `numakoudsie/fig-14-schrodinger-sphere` (`tools/kaggle/figures/build.py`):
+`JOB = "check"` verifies the dataset, a job name reruns that computation with the stored code (see `docs/kaggle-pipeline.md`).
