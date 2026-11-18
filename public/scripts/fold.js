@@ -349,6 +349,17 @@
         if (location.hash) openTo(targetOf(location.hash), false);
     }
 
+    function figuresInCatalog() { var seen = {}, n = 0; (window.SIMULATIONS || []).forEach(function (x) { if (!seen[x.fig]) { seen[x.fig] = 1; n++; } }); return n; }
+    /* "7 projects, 4 shown here"; without a known total, the cards on the page */
+    function ofAll(shown, all, one, many) { return all ? plural(all, one, many) + (shown && shown < all ? ', ' + T('{n} shown here', { n: shown }) : '') : plural(shown, one, many); }
+    function projectsLine(sec) {
+        var line = sec.querySelector('.fs-counts'), shown = count(sec, 'article'); if (!line || !window.fetch || !window.DOMParser) return;
+        fetch('portfolios.html').then(function (r) { if (!r.ok) throw 0; return r.text(); }).then(function (html) {
+            var all = new DOMParser().parseFromString(html, 'text/html').querySelectorAll('article.proj').length;
+            line.textContent = ofAll(shown, all, 'project', 'projects');
+        }).catch(function () { line.textContent = ''; });
+    }
+
     /* the home page: Positions, Education, Research, Simulations, Skills */
     function home() {
         var secs = doc.querySelectorAll('main .section[id]');
@@ -356,8 +367,12 @@
         var units = {
             positions: function (s) { return plural(count(s, 'article.entry'), 'role', 'roles'); },
             education: function (s) { return plural(count(s, 'h3'), 'qualification', 'qualifications'); },
-            research: function (s) { return plural(count(s, 'article'), 'project', 'projects'); },
-            simulations: function (s) { return plural(count(s, 'article'), 'figure', 'figures'); },
+            /* Projects and figures: the cards on this page are a selection, so the number comes from the list itself and the
+               line says how many of them are shown here. Figures: the distinct figure numbers of the catalog (catalog.js, which
+               the home page loads). Projects: the project articles of the Projects page, read once (below); until that answer
+               arrives the line is empty, never a wrong number. */
+            research: function () { return '\u00a0'; },
+            simulations: function (s) { return ofAll(count(s, 'article'), figuresInCatalog(), 'figure', 'figures'); },
             skills: function (s) { return plural(count(s, 'dt'), 'area', 'areas'); }
         };
         Array.prototype.forEach.call(secs, function (sec, i) {
@@ -367,6 +382,7 @@
             h2.insertBefore(num, h2.firstChild);
             var c = units[sec.id] ? units[sec.id](sec) : '';
             make(sec, { level: 1, head: [h2], counts: /^0 /.test(c) ? '' : c, label: h2.textContent.replace(/^\d+/, '').trim() });
+            if (sec.id === 'research') projectsLine(sec);
         });
         tools(secs[0], 'before');
     }

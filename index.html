@@ -793,7 +793,7 @@
       <span><a href="#top">Back to top ↑</a></span>
     </footer>
 
-    <script src="scripts/fold.js"></script><script>/* the index: how far the reader is through the section on screen, as a bar under its entry */ (function () { var links = [].slice.call(document.querySelectorAll('.index a[href^="#"]')); if (!links.length) return; var go = 0; function upd() { go = 0; links.forEach(function (a) { var s = document.getElementById(a.getAttribute('href').slice(1)); if (!s) return; var r = s.getBoundingClientRect(), h = Math.max(1, r.height - innerHeight * 0.4), p = Math.min(1, Math.max(0, (innerHeight * 0.3 - r.top) / h)); a.style.setProperty('--p', p.toFixed(3)); }); } addEventListener('scroll', function () { if (!go) { go = 1; requestAnimationFrame(upd); } }, { passive: true }); addEventListener('load', upd); upd(); })();</script>
+    <script src="scripts/catalog.js"></script><script src="scripts/fold.js"></script><script>/* the index: how far the reader is through the section on screen, as a bar under its entry */ (function () { var links = [].slice.call(document.querySelectorAll('.index a[href^="#"]')); if (!links.length) return; var go = 0; function upd() { go = 0; links.forEach(function (a) { var s = document.getElementById(a.getAttribute('href').slice(1)); if (!s) return; var r = s.getBoundingClientRect(), h = Math.max(1, r.height - innerHeight * 0.4), p = Math.min(1, Math.max(0, (innerHeight * 0.3 - r.top) / h)); a.style.setProperty('--p', p.toFixed(3)); }); } addEventListener('scroll', function () { if (!go) { go = 1; requestAnimationFrame(upd); } }, { passive: true }); addEventListener('load', upd); upd(); })();</script>
     <script>
       (function () {
         var reduced =
