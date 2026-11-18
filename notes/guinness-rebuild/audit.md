@@ -323,3 +323,27 @@ whose own swing with the head is 2.64-2.9 Hz with zeta 0.43, is driven hard by i
 
 From now on, by the owner's rule, nothing runs outside Kaggle: these numbers come from Kaggle's logs, and the files were made by
 Kaggle's CPU.
+
+## M3 (diagnosed, 18 November 2026). The burst in seed 1 of the controlled kerb
+
+**Fact.** `tools/fig16/kaggle/diag_burst.py`, Kaggle CPU notebook fig-16-cart-diagnostics-cpu version 6, on the stored rides of run 5.
+- The probe reading recomputed from the stored surface matches the stored one: 0.024 mm rms (seed 1), 0.027 mm (seed 2). So the
+  controller saw what the surface held.
+- No column gained or lost its surface. The guess "a column loses its surface" was wrong.
+- In seed 1 at 3.867-3.900 s single columns of the probe's patch spike for one picture while their neighbours move less than
+  1.4 mm:
+  - (51, 28) +2.92 mm;
+  - (52, 29) -4.88 then +5.64 mm.
+  Seed 2 shows the same kind, smaller: 1.0-1.7 mm in column 52.
+- The column 52 sits next to the wall. The probe extends the surface linearly to the wall from r1 = R - 2.5 dx and r2 = r1 - 1.5 dx,
+  which multiplies h1 by 2.67 and h2 by 1.67.
+
+**Inference.** A smooth slosh moves neighbouring columns together. One column spiking 5 mm for 1/60 s is local: a drop landing at the
+wall, or the surface finder's fallback. The bilinear probe passes it, amplified, to the Kalman filter, which reads it as slosh, and
+the actuators answer (up to 28 N in run 5). A real level sensor averages over an area and would not see one 1.5 mm column.
+
+**Fix (run 6, GPU notebook version 9, commit 5c45658).**
+- `Stout.probes_patch` is a Fig. 16 option: each probe reads the median of 3 x 3 columns at the wall (centres 33.0, 34.5 and
+  36.0 mm from the axis, |y| <= 2.25 mm), divided by the first mode's shape there (0.971).
+- Fig. 12's `probes()` is unchanged.
+- Run 6 recomputes the controlled kerb, both seeds.
