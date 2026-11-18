@@ -78,6 +78,11 @@ while t < REST + 1.2 - 1e-9:
                          on_body=int(np.sum(act & (X[:, 2] < SJ.BODY_TOP + 2 * dx))), vmax=float(d["vmax"]), it=int(d["it"])))
         say(json.dumps(hist[-1]))
 fin = hist[-1]; Xf = np.asarray(s["xp"])
+# films and puddles outside the glass must keep a level set: particles outside the cavity in cells outside lsdom (should be ~0)
+actf = np.asarray(s["act"]); ci = np.floor((Xf - np.array([G.x0, G.x0, G.z0])) / dx).astype(int); okc = actf & np.all((ci >= 0) & (ci < np.array([G.n, G.n, G.nz])), 1)
+rr_ = np.hypot(Xf[:, 0], Xf[:, 1]); incav_ = (Xf[:, 2] > 0) & (rr_ < np.interp(np.clip(Xf[:, 2], 0, G.zrim) / DZP, np.arange(len(R)), R))
+noset = okc & ~incav_ & ~G.lsdom[tuple(np.clip(ci, 0, None).T)]
+check("shove: liquid outside the glass has a level set (outside lsdom: 0)", int(noset.sum()) == 0, f"{int(noset.sum())} of {int((okc & ~incav_).sum())} outside the cavity")
 check("shove: stout went over the rim and down the outside", max(h["outside"] for h in hist) > 0, f"max outside {max(h['outside'] for h in hist)}")
 check("shove: books close (active + fallen = N)", fin["active"] + fin["fallen"] == N, f"{fin['active']} + {fin['fallen']} = {N}")
 check("shove: no NaN, speeds bounded", np.isfinite(Xf).all() and max(h["vmax"] for h in hist) < 10.0, f"vmax {max(h['vmax'] for h in hist):.2f} m/s")

@@ -139,8 +139,9 @@ class Geometry:
         # empty cell against a wall, where the particles stand thinner, must not read as air; smoke test 3 read the wall columns 1.4 mm low)
         if body is None: self.lsdom = self.cav_inner
         else:
-            h = 0.5 * dx; self.lsdom = ~self.solid(X, Y, Z)
-            for (ox, oy, oz) in ((h, 0, 0), (-h, 0, 0), (0, h, 0), (0, -h, 0), (0, 0, h), (0, 0, -h)): self.lsdom &= ~self.solid(X + ox, Y + oy, Z + oz)
+            # half a cell from the cavity's inner wall (the old rule, cav_inner) inside the cavity; every open cell elsewhere, so a film
+            # down the outside of the glass or a puddle on the body keeps its own free surface (review, 18 Nov 2026)
+            self.lsdom = np.where(self.cavity(X, Y, Z), self.cav_inner, ~self.solid(X, Y, Z))
         if body is None: self._wall_area()
         else: self._wall_area_solid(xs4, zs4)
         self.Rfill = float(self.Rz(fill))
