@@ -542,13 +542,15 @@ site", the sources). The four columns are in the same order on all three pages (
 right to left. `notes/lucretius/make_page.py` writes the page and drops table entries that are no longer on it. Do not edit
 `public/lucretius.html` by hand: run `make_page.py`, then `tools/i18n/build.py`.
 
-**Background.** Wine-red fractal curves run down both margins of the page, behind everything (`div.lp-deco` with two strips, the
-right one mirrored and shifted half a tile; `styles/lucretius-deco.css`). The strips are SVG tiles 1600 px tall that join seamlessly,
-drawn by `notes/lucretius/make_bg.py` into `images/lucretius/`: **a** (the default) a slow stem with recursive curved branches, like the
-branching of the site's mark; **b** seven Weierstrass lines, x(y) = x₀ + Σ 0.55ᵏ cos(2π 2ᵏ y / H + φₖ), eight octaves; **c** a sine vine
-with logarithmic-spiral curls, each sprouting smaller curls. Adding `?bg=b` or `?bg=c` to the address shows the other two (a small
-script sets `html[data-bg]`). Each strip is drawn 360 px wide and set 250 px wide, its left edge at 50 % − 840 px, so on wide screens it
-stays in the margin; up to 760 px it is pushed almost off the screen at half strength.
+**Background.** Since 18 November 2026: **currents and atoms**, over the whole page behind everything (`div.lp-deco`,
+`styles/lucretius-deco.css`). Two full-width SVG tiles (2400 × 1600 px, joining seamlessly from tile to tile), drawn by
+`notes/lucretius/make_bg.py`: `bg-d-lines.svg`, 66 wine lines in six braided currents running down the page, each line
+x(y) = X_c(y) + spread · u + Σₖ 0.5ᵏ A cos(2π mₖ y / H + φₖ) with whole numbers mₖ (so it closes on itself); and `bg-d-atoms.svg`,
+about 800 dots along those lines, mostly small, a few large and solid: Lucretius' atoms falling and swerving. The dot layer moves
+down one tile in 90 s (still under `prefers-reduced-motion`). Three soft wine radial glows sit under them. A mask keeps both layers at
+full strength in the margins and fades them, over the 160 px beside the 1240 px text block, to a sixth behind it; up to 760 px the
+tiles are smaller and the whole layer is fainter. The earlier margin strips stay reachable with `?bg=a` (recursive branches),
+`?bg=b` (Weierstrass lines) or `?bg=c` (spiral tendrils); a small script sets `html[data-bg]`.
 
 **The layout.** Since 13 November 2026 the poem is set flat and modern, with no paper sheet, frame, corner stars or ornament rows (`article.lp-book`, no border, no background). It opens with the head `div.lp-cols`, under a 1 px dark rule across the full width: for each language a small mono index in wine (01 to 04), the name in its own words (Latina, English, Deutsch, العربية; Instrument Serif 27 px, the Arabic in Amiri 24 px) and the credit in mono; a light rule under it; sticky at the top of the window on a translucent paper ground with a blur. Then the 20 verses (`section.lp`, address `#l146` and so on; `:target` tints the row; each section is named "Lines 146 to 148" and so on for screen readers). The verses stand in `div.lp-body`, so each
 language runs down its own column as one text: behind them `div.lp-rules` (a grid with the same columns) draws three plain light hairlines

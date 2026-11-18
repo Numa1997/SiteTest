@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-6571 files, 928.9 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+6573 files, 929.1 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -24,7 +24,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [IBM Plex, Instrument Serif, and the Arabic faces](#ibm-plex-instrument-serif-and-the-arabic-faces) | 61 |
 | [Thumbnails](#thumbnails) | 17 |
 | [Figures of Double Pendulum under Control](#figures-of-double-pendulum-under-control) | 4 |
-| [Logo](#logo) | 5 |
+| [Logo](#logo) | 7 |
 | [The CV page](#the-cv-page) | 4 |
 | [Project copy: Droplet Collection](#project-copy-droplet-collection) | 11 |
 | [Project copy: Rotor Pendula](#project-copy-rotor-pendula) | 2 |
@@ -4913,7 +4913,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/styles/fold.rtl.css`](../public/styles/fold.rtl.css) | 11.0 kB | fold.css with left and right exchanged, for the Arabic pages; generated with rtlcss, do not edit. | [styles.md](styles.md) |
 | [`public/styles/i18n.css`](../public/styles/i18n.css) | 6.8 kB | Language switch, Arabic fonts and the few right-to-left rules of the translated pages. | [styles.md](styles.md) |
 | [`public/styles/kaggle-flow.css`](../public/styles/kaggle-flow.css) | 3.8 kB | Styles of kaggle-flow.js: the computed band, soft zones and dots of the sliders, the loading notice and its pipeline drawing. | [kaggle-pipeline.md](kaggle-pipeline.md) |
-| [`public/styles/lucretius-deco.css`](../public/styles/lucretius-deco.css) | 1.2 kB | Places the background strips of the Lucretius page in both margins; ?bg=a\|b\|c picks one. | [pages.md#the-poem-page-lucretiushtml-10-november-2026-rebuilt-11-november-2026](pages.md#the-poem-page-lucretiushtml-10-november-2026-rebuilt-11-november-2026) |
+| [`public/styles/lucretius-deco.css`](../public/styles/lucretius-deco.css) | 3.2 kB | Lays the Lucretius background over the page: currents and atoms, faded behind the text; ?bg=a\|b\|c shows the older strips. | [pages.md#the-poem-page-lucretiushtml-10-november-2026-rebuilt-11-november-2026](pages.md#the-poem-page-lucretiushtml-10-november-2026-rebuilt-11-november-2026) |
 | [`public/styles/paper.css`](../public/styles/paper.css) | 10.1 kB | Lecture notes set like LaTeX: Latin Modern, numbered equations, figures, abstract box. | [styles.md](styles.md) |
 | [`public/styles/paper.rtl.css`](../public/styles/paper.rtl.css) | 10.3 kB | paper.css with left and right exchanged, for the Arabic pages; generated with rtlcss, do not edit. | [styles.md](styles.md) |
 | [`public/styles/portfolio.css`](../public/styles/portfolio.css) | 6.1 kB | The project cards and figure plates of the Portfolios page. | [styles.md](styles.md) |
@@ -5092,9 +5092,11 @@ to confirm that every file is described. Sizes are those of the files when the l
 | File | Size | What it is | Explained in |
 |---|---|---|---|
 | [`public/images/fig13/chaos-map-rods-P20.png`](../public/images/fig13/chaos-map-rods-P20.png) | 318.2 kB | Fig. 13: the chaos map of momentum space (equal rods, P = 20 kg m^2/s), written by tools/fig13/map_png.py from chaos_map.py. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
-| [`public/images/lucretius/bg-a.svg`](../public/images/lucretius/bg-a.svg) | 14.4 kB | Background strips of the Lucretius page, written by notes/lucretius/make_bg.py. | [pages.md#the-poem-page-lucretiushtml-10-november-2026-rebuilt-11-november-2026](pages.md#the-poem-page-lucretiushtml-10-november-2026-rebuilt-11-november-2026) |
-| [`public/images/lucretius/bg-b.svg`](../public/images/lucretius/bg-b.svg) | 73.5 kB | Background strips of the Lucretius page, written by notes/lucretius/make_bg.py. | [pages.md#the-poem-page-lucretiushtml-10-november-2026-rebuilt-11-november-2026](pages.md#the-poem-page-lucretiushtml-10-november-2026-rebuilt-11-november-2026) |
-| [`public/images/lucretius/bg-c.svg`](../public/images/lucretius/bg-c.svg) | 84.2 kB | Background strips of the Lucretius page, written by notes/lucretius/make_bg.py. | [pages.md#the-poem-page-lucretiushtml-10-november-2026-rebuilt-11-november-2026](pages.md#the-poem-page-lucretiushtml-10-november-2026-rebuilt-11-november-2026) |
+| [`public/images/lucretius/bg-a.svg`](../public/images/lucretius/bg-a.svg) | 12.8 kB | Background tiles of the Lucretius page (d: currents and atoms, the default; a to c: margin strips), written by notes/lucretius/make_bg.py. | [pages.md#the-poem-page-lucretiushtml-10-november-2026-rebuilt-11-november-2026](pages.md#the-poem-page-lucretiushtml-10-november-2026-rebuilt-11-november-2026) |
+| [`public/images/lucretius/bg-b.svg`](../public/images/lucretius/bg-b.svg) | 51.1 kB | Background tiles of the Lucretius page (d: currents and atoms, the default; a to c: margin strips), written by notes/lucretius/make_bg.py. | [pages.md#the-poem-page-lucretiushtml-10-november-2026-rebuilt-11-november-2026](pages.md#the-poem-page-lucretiushtml-10-november-2026-rebuilt-11-november-2026) |
+| [`public/images/lucretius/bg-c.svg`](../public/images/lucretius/bg-c.svg) | 59.0 kB | Background tiles of the Lucretius page (d: currents and atoms, the default; a to c: margin strips), written by notes/lucretius/make_bg.py. | [pages.md#the-poem-page-lucretiushtml-10-november-2026-rebuilt-11-november-2026](pages.md#the-poem-page-lucretiushtml-10-november-2026-rebuilt-11-november-2026) |
+| [`public/images/lucretius/bg-d-atoms.svg`](../public/images/lucretius/bg-d-atoms.svg) | 51.1 kB | Background tiles of the Lucretius page (d: currents and atoms, the default; a to c: margin strips), written by notes/lucretius/make_bg.py. | [pages.md#the-poem-page-lucretiushtml-10-november-2026-rebuilt-11-november-2026](pages.md#the-poem-page-lucretiushtml-10-november-2026-rebuilt-11-november-2026) |
+| [`public/images/lucretius/bg-d-lines.svg`](../public/images/lucretius/bg-d-lines.svg) | 208.9 kB | Background tiles of the Lucretius page (d: currents and atoms, the default; a to c: margin strips), written by notes/lucretius/make_bg.py. | [pages.md#the-poem-page-lucretiushtml-10-november-2026-rebuilt-11-november-2026](pages.md#the-poem-page-lucretiushtml-10-november-2026-rebuilt-11-november-2026) |
 | [`public/images/phyein-usul-mark.svg`](../public/images/phyein-usul-mark.svg) | 178.4 kB | The Phyein Usul logo: above the name on the home page, linking home in the top bar of the other pages. | [assets.md](assets.md) |
 
 ## The CV page
@@ -5551,7 +5553,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`docs/kaggle.md`](kaggle.md) | 4.4 kB | Documentation: Computing on Kaggle: the Schrödinger test. | [kaggle.md](kaggle.md) |
 | [`docs/minor-issues-report.md`](minor-issues-report.md) | 19.5 kB | Documentation: Minor issues · final verification report. | [minor-issues-report.md](minor-issues-report.md) |
 | [`docs/notes.md`](notes.md) | 5.4 kB | Documentation: The lecture-note review: `notes/` and `.claude/agents/`. | [notes.md](notes.md) |
-| [`docs/pages.md`](pages.md) | 57.1 kB | Documentation: The site's own pages: home, simulations catalog, Portfolios, robots.txt. | [pages.md](pages.md) |
+| [`docs/pages.md`](pages.md) | 57.3 kB | Documentation: The site's own pages: home, simulations catalog, Portfolios, robots.txt. | [pages.md](pages.md) |
 | [`docs/performance.md`](performance.md) | 53.8 kB | Documentation: Performance: what was measured, what was slow, what changed. | [performance.md](performance.md) |
 | [`docs/portfolios.md`](portfolios.md) | 68.5 kB | Documentation: The four research projects: `public/portfolios/`. | [portfolios.md](portfolios.md) |
 | [`docs/research-theory-audit.md`](research-theory-audit.md) | 30.0 kB | Documentation: Readability audit: Droplet Collection and Rotor Pendula. | [research-theory-audit.md](research-theory-audit.md) |
@@ -5732,7 +5734,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/i18n/ingest.py`](../tools/i18n/ingest.py) | 1.9 kB | Stores checked translations made outside the tables (page pieces, script strings, walkthrough prose). | [i18n.md](i18n.md) |
 | [`tools/i18n/package.json`](../tools/i18n/package.json) | 285 B | The parser wrap.cjs needs (acorn); npm install --prefix tools/i18n. | [i18n.md](i18n.md) |
 | [`tools/i18n/wrap.cjs`](../tools/i18n/wrap.cjs) | 3.7 kB | Wraps the reader-visible strings of a page's scripts in _t(), with a JavaScript parser (acorn). | [i18n.md](i18n.md) |
-| [`tools/inventory.py`](../tools/inventory.py) | 124.3 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
+| [`tools/inventory.py`](../tools/inventory.py) | 124.4 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
 | [`tools/kaggle/figures/build.py`](../tools/kaggle/figures/build.py) | 10.3 kB | One Kaggle notebook per figure: writes each figure notebook (every job of the figure in one table, JOB = check verifies the figure dataset, any job name reruns it with the stored code at its pinned commit) and its kernel-metadata.json. | [kaggle-pipeline.md](kaggle-pipeline.md) |
 | [`tools/kaggle/figures/fig-12-guinness-on-a-cart/fig-12-guinness-on-a-cart.ipynb`](../tools/kaggle/figures/fig-12-guinness-on-a-cart/fig-12-guinness-on-a-cart.ipynb) | 7.0 kB | The Kaggle notebook fig-12-guinness-on-a-cart (one notebook for the whole figure), written by build.py: the notebook as pushed. | [kaggle-pipeline.md](kaggle-pipeline.md) |
 | [`tools/kaggle/figures/fig-12-guinness-on-a-cart/kernel-metadata.json`](../tools/kaggle/figures/fig-12-guinness-on-a-cart/kernel-metadata.json) | 421 B | The Kaggle notebook fig-12-guinness-on-a-cart (one notebook for the whole figure), written by build.py: its push settings (slug, dataset attached, CPU). | [kaggle-pipeline.md](kaggle-pipeline.md) |
@@ -7095,7 +7097,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 |---|---|---|---|
 | [`notes/lucretius/README.md`](../notes/lucretius/README.md) | 13.6 kB | Lucretius I 146-224 kept for the site: sources, corrections, what is where. | [README.md](../notes/lucretius/README.md) |
 | [`notes/lucretius/extract.py`](../notes/lucretius/extract.py) | 5.1 kB | Cuts Lucretius I 146-224 out of the downloaded sources without retyping. | [README.md](../notes/lucretius/README.md) |
-| [`notes/lucretius/make_bg.py`](../notes/lucretius/make_bg.py) | 4.7 kB | Draws the three background strips of the Lucretius page (fractal branches, Weierstrass lines, spiral tendrils) as tiling SVGs. | [pages.md#the-poem-page-lucretiushtml-10-november-2026-rebuilt-11-november-2026](pages.md#the-poem-page-lucretiushtml-10-november-2026-rebuilt-11-november-2026) |
+| [`notes/lucretius/make_bg.py`](../notes/lucretius/make_bg.py) | 7.2 kB | Draws the background tiles of the Lucretius page: currents and atoms (default), fractal branches, Weierstrass lines, spiral tendrils. | [pages.md#the-poem-page-lucretiushtml-10-november-2026-rebuilt-11-november-2026](pages.md#the-poem-page-lucretiushtml-10-november-2026-rebuilt-11-november-2026) |
 | [`notes/lucretius/make_home.py`](../notes/lucretius/make_home.py) | 11.6 kB | Writes the Lucretius band of the home page from the first four sentences. | [README.md](../notes/lucretius/README.md) |
 | [`notes/lucretius/make_page.py`](../notes/lucretius/make_page.py) | 19.2 kB | Writes public/lucretius.html: Lucretius I 146-224 in four columns (Latin, Leonard, Diels, Arabic). | [README.md](../notes/lucretius/README.md) |
 | [`notes/lucretius/poem-146-224.json`](../notes/lucretius/poem-146-224.json) | 15.8 kB | Lucretius I 146-224 per Latin sentence: Latin, Leonard (English), Diels (German), cut from the sources. | [README.md](../notes/lucretius/README.md) |
