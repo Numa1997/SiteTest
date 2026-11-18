@@ -103,7 +103,8 @@ class Geometry:
             self.x0 = -n * dx / 2; self.z0 = -2 * dx
         else:
             hx, hy, zt = body
-            self.n = n = int(math.ceil(2 * (max(hx, hy) + 2 * dx) / dx)); self.z0 = zt - 4 * dx
+            # z0 = -k dx puts the cavity's floor (z = 0) on a face, as the old grid does (the floor mid-cell left stout below it)
+            self.n = n = int(math.ceil(2 * (max(hx, hy) + 2 * dx) / dx)); self.z0 = -(int(math.ceil(-zt / dx)) + 4) * dx
             self.nz = nz = int(math.ceil((self.zrim + 0.03 - self.z0) / dx)); self.x0 = -n * dx / 2
         s = (np.arange(4) + 0.5) / 4
         xs4 = self.x0 + dx * (np.arange(n)[:, None] + s[None, :]).ravel()      # 4 samples across each cell

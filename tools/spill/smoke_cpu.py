@@ -53,6 +53,11 @@ step = jax.jit(lambda s, dt, gx, gz: S.step(s, dt, gx, gz))
 t = 0.0; dt = 0.002
 while t < REST - 1e-9: s, d = step(s, dt, 0.0, -9.81); t += dt
 o = S.observe(s); H = np.asarray(o["H"]); Hc = H[np.isfinite(H)]
+Xr = np.asarray(s["xp"]); rr = np.hypot(Xr[:, 0], Xr[:, 1]); Rr = np.interp(np.clip(Xr[:, 2], 0, G.zrim) / DZP, np.arange(len(R)), R)
+out_i = np.where(~((Xr[:, 2] > 0) & (rr < Rr)))[0][:20]; rep["rest_outside_sample_mm"] = [[round(float(v) * 1e3, 2) for v in (rr[i], Rr[i], Xr[i, 2])] for i in out_i]
+say("outside at rest (r, R(z), z in mm): " + json.dumps(rep["rest_outside_sample_mm"]))
+worst = np.argsort(np.where(np.isfinite(H), H, 1.0), axis=None)[:5]; rep["rest_lowest_columns"] = [[round(float(G.xc[i // G.n]) * 1e3, 1), round(float(G.xc[i % G.n]) * 1e3, 1), round(float(H.flat[i]) * 1e3, 2)] for i in worst]
+say("lowest columns (x, y, H in mm): " + json.dumps(rep["rest_lowest_columns"]))
 check("at rest: none lost, none outside", int(o["nact"]) == N and int(o["nfly"]) == 0, f"active {int(o['nact'])}/{N}, outside {int(o['nfly'])}")
 check("at rest: surface at the fill, level within 0.5 mm", Hc.size > 0 and Hc.max() - Hc.min() < 0.0005 and abs(np.median(Hc) - 0.125) < 0.001, f"H {Hc.min() * 1e3:.2f}..{Hc.max() * 1e3:.2f} mm, median {np.median(Hc) * 1e3:.2f}")
 
