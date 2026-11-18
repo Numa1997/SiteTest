@@ -30,7 +30,9 @@ Close the six open problems of the handoff, one at a time, in its order. Merge f
    (23 outputs of GPU v2/v8/v9 + README + manifest), all 23 sizes equal the manifest. Made via api.kaggle.com StartBlobUpload + PUT +
    CreateDataset (connector has no create). Records in notes/inventory/datasets/fig16-guinness-cart-control/; docs updated.
    docs/files.md lags by these 3 record files: regenerate in the next Kaggle CPU run.
-4. 3D close-up smoothness on a Kaggle GPU machine — open.
+4. 3D close-up frame times — CLOSED AS NOT MEASURABLE ON KAGGLE (owner said go; GPU v16, 3.3 GPU-min): headless Chromium got only
+   software WebGL (SwiftShader, llvmpipe), never the T4. Close-up own cost 5-7 ms JS + 1-2 ms render call per picture; 2D drawing
+   dominates. Report notes/guinness-rebuild/frames/; docs updated; speed handed to the look session (it owns the drawing).
 5. Fig. 12 bare swing at 1.0 mm — optional; GPU (~10 min): ask the owner first.
 6. Fig. 12 lecture note to STANDARD.md — only if the owner wants it.
 

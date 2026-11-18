@@ -164,3 +164,12 @@ It computes nothing physical. The lighting, the gloss and the glass's tint are d
 
 Result on 15 November: 65 of 65 columns pass, in 5 pictures of 5 rides, including the uncontrolled kerb at 0.70 s (stored
 height 130 mm at the front wall) and the uncontrolled 25 mm bump at 1.2 s (163 mm, stout over the rim).
+
+## Frame times of the 3D close-up (18 November 2026)
+
+`tools/fig16/kaggle/frames_check.py` ran on a Kaggle T4 machine (CPU notebook `fig-16-cart-diagnostics-cpu`, version 16, 3.3 GPU-minutes;
+report `notes/guinness-rebuild/frames/frames16-report-v16.json`). Headless Chromium did not reach the T4 by any of the three routes tried
+(ANGLE on Vulkan, ANGLE on EGL, the default): WebGL named SwiftShader or Mesa llvmpipe, both software. Whole-page frame intervals there
+(250-1000 ms) measure a CPU standing in for a graphics card, not the page on a real device, and are not a result. What does carry over
+is the close-up's own timer (`Pint3D.stats`): 5-7 ms of JavaScript and 1-2 ms of render call per stored picture, so the 3D close-up is a
+small part of a frame; the 2D drawing of the carts and glasses takes the rest. A real frame rate needs a browser with a graphics card.
