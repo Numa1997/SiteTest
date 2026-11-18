@@ -10,7 +10,7 @@
    most; canvas pixels are CSS pixels (not doubled on dense screens). Nothing is mounted when the reader asks for reduced motion.
 
    The ten scenes (each an object with init() and draw(dt); all sizes come from the element, W x H):
-     letters  loose letters drift, then assemble into a word and scatter again         (Lucretius I 196-197)
+     motes    dust trembling in a sunbeam, knocked by unseen atoms (Brownian motion)  (Lucretius II 112-141)
      seeds    a seed falls, a stem grows slowly into a rose, an ear of wheat or grapes  (I 174-175)
      swerve   atoms fall in parallel; one tilts; a cascade of collisions                (II 216-293)
      shores   motes rise through a slow waterline and brighten: the shores of light     (I 170, 179)
@@ -54,40 +54,33 @@
 
   var S = {};
 
-  /* ---- letters: the same letters, rearranged, make every word ---- */
-  S.letters = {
-    words: [['SEMINA', 0], ['بذور', 1], ['NATVRA', 0], ['العدم', 1], ['NOTHING', 0], ['طبيعة', 1], ['SAMEN', 0], ['نور', 1], ['NIHIL', 0], ['LVMEN', 0]],
-    font: '30px "Instrument Serif", Georgia, "Times New Roman", serif',
+  /* ---- motes: dust in a sunbeam, knocked about by atoms nobody sees (Lucretius II 112-141; Brownian motion) ----
+     each mote follows dv = -g v dt + s sqrt(dt) xi (an Ornstein-Uhlenbeck walk): the drag g slows it, the random kicks s
+     of the unseen air molecules keep it trembling; a mote is only lit while it is inside the slanting beam */
+  S.motes = {
     init: function () {
-      this.P = []; var k = Math.max(1, Math.round(area() / 2.5));
-      for (var r = 0; r < k; r++) for (var w = 0; w < this.words.length; w++) { var ch = Array.from(this.words[w][0]); for (var i = 0; i < ch.length; i++) this.P.push({ ch: ch[i], x: R() * W, y: R() * H, vx: v(-13, 13), vy: v(-13, 13), t: null }); }
-      this.T = 0; this.wi = 0; this.cur = null;
+      this.ax = W * .92; this.ay = -30; this.bx = W * .12; this.by = H + 30; var L = Math.hypot(this.bx - this.ax, this.by - this.ay);
+      this.ux = (this.bx - this.ax) / L; this.uy = (this.by - this.ay) / L; this.bw = Math.min(64, W * .16);
+      this.P = []; var n = Math.round(cl(W * H / 1500, 30, 110));
+      for (var i = 0; i < n; i++) this.P.push({ x: v(0, W), y: v(0, H), vx: 0, vy: 0, r: v(.7, 2.1), h: [] });
     },
+    lit: function (px, py) { var dx = px - this.ax, dy = py - this.ay, d = dx * this.uy - dy * this.ux; return Math.exp(-d * d / (this.bw * this.bw)); },
     draw: function (dt) {
-      clear(); x.font = this.font; x.textBaseline = 'middle'; this.T += dt; var self = this;
-      if (!this.cur && this.T > 1.5) {
-        var w = this.words[this.wi % this.words.length], chs = Array.from(w[0]), mg = margin(), pos = [], i, tot = 0;
-        var cx = mg > 170 ? (R() < .5 ? mg / 2 : W - mg / 2) : W * v(.25, .75), cy = H * v(.15, .85);
-        if (w[1]) { var ws = chs.map(function (c) { return x.measureText(c).width + 5; }); ws.forEach(function (q) { tot += q; }); var xr = cx + tot / 2; ws.forEach(function (q) { xr -= q; pos.push(xr); }); }
-        else { tot = x.measureText(w[0]).width; chs.forEach(function (c, i) { pos.push(cx - tot / 2 + x.measureText(w[0].slice(0, i)).width); }); }
-        chs.forEach(function (c, i) { var best = null, bd = 1e9; self.P.forEach(function (q) { if (q.ch === c && !q.t) { var d = Math.abs(q.x - pos[i]) + Math.abs(q.y - cy); if (d < bd) { bd = d; best = q; } } }); if (best) best.t = [pos[i], cy]; });
-        this.cur = { w: w, cx: cx, cy: cy, t0: this.T };
-      }
-      var k = 0, age = 0;
-      if (this.cur) {
-        age = this.T - this.cur.t0; if (this.cur.w[1]) k = cl((age - 2.6) / .8, 0, 1) * cl((6.3 - age) / .5, 0, 1);
-        if (age > 6.5) { this.P.forEach(function (p) { if (p.t) { p.t = null; p.vx = v(-30, 30); p.vy = v(-30, 30); } }); this.cur = null; this.T = 0; this.wi++; }
-      }
-      x.textAlign = 'left';
+      clear(); var self = this, nx = this.uy, ny = -this.ux, w = this.bw * 1.8;
+      var g = x.createLinearGradient(this.ax - nx * w, this.ay - ny * w, this.ax + nx * w, this.ay + ny * w);
+      g.addColorStop(0, col(0)); g.addColorStop(.5, col(.07)); g.addColorStop(1, col(0)); x.fillStyle = g; x.beginPath();
+      x.moveTo(this.ax - nx * w, this.ay - ny * w); x.lineTo(this.ax + nx * w, this.ay + ny * w); x.lineTo(this.bx + nx * w, this.by + ny * w); x.lineTo(this.bx - nx * w, this.by - ny * w); x.closePath(); x.fill();
+      var sd = Math.sqrt(dt);
       this.P.forEach(function (p) {
-        if (p.t) { var s = Math.min(1, dt * 3); p.x += (p.t[0] - p.x) * s; p.y += (p.t[1] - p.y) * s; }
-        else { p.vx = cl(p.vx + (R() - .5) * dt * 30, -30, 30); p.vy = cl(p.vy + (R() - .5) * dt * 30, -30, 30); p.x += p.vx * dt; p.y += p.vy * dt; if (p.x < -20) p.x = W + 10; if (p.x > W + 20) p.x = -10; if (p.y < -20) p.y = H + 10; if (p.y > H + 20) p.y = -10; }
-        x.fillStyle = col(p.t ? .9 * (1 - k) : .32); x.fillText(p.ch, p.x, p.y);
+        var gm = 2.2, sg = 46 / p.r; p.vx += -gm * p.vx * dt + sg * sd * (R() + R() + R() - 1.5) * 2; p.vy += -gm * p.vy * dt + sg * sd * (R() + R() + R() - 1.5) * 2 + 1.5 * dt;
+        p.x += p.vx * dt; p.y += p.vy * dt; if (p.x < -6) p.x += W + 12; if (p.x > W + 6) p.x -= W + 12; if (p.y < -6) p.y += H + 12; if (p.y > H + 6) p.y -= H + 12;
+        p.h.push(p.x, p.y); if (p.h.length > 24) p.h.splice(0, 2);
+        var I = self.lit(p.x, p.y); if (I < .03) return;
+        x.strokeStyle = col(.22 * I); x.lineWidth = .6; x.beginPath(); x.moveTo(p.h[0], p.h[1]); for (var k = 2; k < p.h.length; k += 2) { if (Math.abs(p.h[k] - p.h[k - 2]) > 40 || Math.abs(p.h[k + 1] - p.h[k - 1]) > 40) x.moveTo(p.h[k], p.h[k + 1]); else x.lineTo(p.h[k], p.h[k + 1]); } x.stroke();
+        dot(p.x, p.y, p.r, .1 + .75 * I);
       });
-      if (this.cur && k > 0) { x.textAlign = 'center'; x.fillStyle = col(.9 * k); x.fillText(this.cur.w[0], this.cur.cx, this.cur.cy); }
     }
   };
-
   /* ---- seeds: each thing from its own seed, little by little ---- */
   S.seeds = {
     init: function () { this.S = []; this.Pl = []; this.tm = 0; },
@@ -159,7 +152,23 @@
     rec(px, py, -PI / 2, G.len * (.25 + .75 * g), 0);
   }
   S.forest = {
-    mk: function (px, G) { G.j = []; for (var i = 0; i < 97; i++) G.j.push(R()); G.len *= this.sc; return { x: px, G: G, fed: 0, mat: 0, age: 0, Rs: [], Rt: [{ x: px, y: this.GY, a: PI / 2 + v(-.3, .3), s: 0 }] }; },
+    /* a forest that starts from one tree and keeps spreading over the land until no room is left; four seasons a year (a year
+       lasts 40 s); its leaves breathe vapour in summer, the vapour gathers into droplets above the canopy, droplets collide and
+       merge, and the big ones fall back as rain that feeds the young trees; in winter the clouds snow */
+    YEAR: 40,
+    mk: function (px, G) { G.j = []; for (var i = 0; i < 97; i++) G.j.push(R()); G.len *= this.sc; G.need *= .45; return { x: px, G: G, fed: 0, mat: 0, age: 0, Rs: [], Rt: [{ x: px, y: this.GY, a: PI / 2 + v(-.3, .3), s: 0 }] }; },
+    /* what lies over the land: rectangles of the page's text and cards that no crown, leaf, cloud or flake may enter */
+    inOb: function (px, py, pad) { for (var i = 0; i < this.ob.length; i++) { var o = this.ob[i]; if (px > o.l - pad && px < o.r + pad && py > o.t - pad && py < o.b + pad) return true; } return false; },
+    room: function (xl, xr) { var top = 0; for (var i = 0; i < this.ob.length; i++) { var o = this.ob[i]; if (o.r > xl && o.l < xr && o.t < this.GY) top = Math.max(top, Math.min(o.b, this.GY)); } return this.GY - top - 12; },
+    /* a tree as tall as the free space above its spot allows: in the margins a full tree, under the buttons a low shrub */
+    fit: function (px, G) {
+      if (px < 14 || px > W - 14) return null; var t = this.mk(px, G), hw = 0, h = 0;
+      for (var k = 0; k < 3; k++) { var o = { S: [], T: [] }; grow(t.G, px, this.GY, 1, o); var mn = this.GY, a = px, b = px;
+        o.S.forEach(function (q) { mn = Math.min(mn, q[3]); a = Math.min(a, q[2]); b = Math.max(b, q[2]); }); h = this.GY - mn + 8; hw = Math.max(px - a, b - px) + 8;
+        var rm = this.room(px - hw, px + hw); if (h <= rm) break; t.G.len *= rm / h * .96; }
+      if (h > this.room(px - hw, px + hw) + 1 || t.G.len < 4) return null;
+      if (!this.A.every(function (q) { return Math.abs(q.x - px) > Math.max(12, (q.hw + hw) * .45); })) return null;
+      t.hw = hw; t.h = h; t.ls = cl(h / 140 + .3, .4, 1); return t; },
     /* roots: tips walk down through the soil, bend towards the nearest speck of rotted leaf, fork now and then */
     root: function (t, dt) {
       var top = this.GY, lim = this.GY + this.UN - 26, M = this.M, nt = t.Rt.length;
@@ -179,31 +188,56 @@
       }
     },
     roots: function (Rs, a) { var top = this.GY, U = this.UN - 26; for (var i = 0; i < Rs.length; i++) { var r = Rs[i], f = 1 - cl((r[3] - top) / U, 0, 1); x.strokeStyle = col(a * (.6 - Math.min(.3, r[4] * .1)) * (.25 + .75 * f)); x.lineWidth = Math.max(.6, 2.4 - r[4] * .55); ln(r[0], r[1], r[2], r[3]); } },
-    ripen: function (t) { var o = { S: [], T: [] }; grow(t.G, t.x, this.GY, 1, o); t.S = o.S; var sl = Math.max(1, o.T.length / 32); t.T = o.T.map(function (q) { return { x: q.x, y: q.y, a: q.a, s: 1, hold: v(1, 9) * sl, rg: 0, sl: sl }; }); t.mat = 1; t.age = 0; t.life = v(55, 100); },
-    free: function (px) { for (var i = 0; i < this.av.length; i++) if (px > this.av[i][0] && px < this.av[i][1]) return false; return px > 20 && px < W - 20; },
-    spawn: function () { for (var k = 0; k < 40; k++) { var px = v(30, W - 30); if (this.free(px) && this.A.every(function (t) { return Math.abs(t.x - px) > 55; })) { this.A.push(this.mk(px, KINDS[R() * 5 | 0]())); return; } } },
-    init: function () { this.UN = W > 760 ? (+host.getAttribute('data-bg-under') || 0) : 0; this.Hn = []; this.GY = H - 46 - this.UN; this.Fd = []; this.sc = cl(H / 520, .8, 1.7); this.max = cl(Math.round(9 * W / 680), 5, 18); this.A = []; this.L = []; this.M = []; this.av = []; var self = this, hr = host.getBoundingClientRect(), sel = host.getAttribute('data-bg-avoid');
-      function keep(q, pad) { if (q && W > 760) document.querySelectorAll(q).forEach(function (e) { var r = e.getBoundingClientRect(); if (r.width && r.bottom - hr.top > self.GY - 300) self.av.push([r.left - hr.left - pad, r.right - hr.left + pad]); }); }
-      keep(sel, 130); keep(host.getAttribute('data-bg-avoid-near'), 34);
-      var mx = Math.max(46, W * .1); for (var q = 0; q < 60 && !this.free(mx); q++) mx = v(30, W - 30);
-      var g = KINDS[0](); g.len = 64; g.maxd = 6; var m = this.mk(mx, g); this.ripen(m); m.life = 45; this.A.push(m); for (var k = 0; k < Math.max(3, this.max / 3); k++) this.spawn(); },
+    ripen: function (t) { var o = { S: [], T: [] }; grow(t.G, t.x, this.GY, 1, o); t.S = o.S; t.T = o.T.map(function (q) { return { x: q.x, y: q.y, a: q.a, s: 1, rg: 0 }; }); t.mat = 1; t.age = 0; t.life = v(2.5, 4) * this.YEAR; },
+    seed: function (near) { for (var k = 0; k < 14; k++) { var px = near && R() < .65 ? near.x + (R() < .5 ? -1 : 1) * v(near.hw * .6 + 10, near.hw + 240) : v(14, W - 14), t = this.fit(px, KINDS[R() * 5 | 0]()); if (t) { this.A.push(t); return t; } } return null; },
+    init: function () {
+      this.UN = W > 760 ? (+host.getAttribute('data-bg-under') || 0) : 0; this.Hn = []; this.GY = H - 46 - this.UN; this.Fd = []; this.sc = cl(H / 520, .8, 1.7);
+      this.A = []; this.L = []; this.M = []; this.ob = []; this.V = []; this.Y = 0; this.sn = new Float32Array(Math.ceil(W / 12) + 1); this.sky = W > 760;
+      var self = this, hr = host.getBoundingClientRect();
+      [host.getAttribute('data-bg-avoid'), host.getAttribute('data-bg-avoid-near')].forEach(function (q) { if (q) document.querySelectorAll(q).forEach(function (e) { var r = e.getBoundingClientRect(); if (r.width && r.height) self.ob.push({ l: r.left - hr.left - 14, r: r.right - hr.left + 14, t: r.top - hr.top - 10, b: r.bottom - hr.top + 10 }); }); });
+      var m = null; for (var q = 0; q < 80 && !m; q++) { var g = KINDS[0](); g.len = 64; g.maxd = 6; m = this.fit(q ? v(14, W - 14) : Math.max(46, W * .1), g); }
+      if (m) { this.A.push(m); this.ripen(m); m.life = 2.5 * this.YEAR; } },
     draw: function (dt) {
-      clear(); var GY = this.GY, self = this, young = 0; x.strokeStyle = col(.25); x.lineWidth = 1; ln(0, GY, W, GY);
+      clear(); var GY = this.GY, self = this; this.Y += dt; var ph = (this.Y / this.YEAR) % 1, sea = ph * 4 | 0;
+      x.strokeStyle = col(.25); x.lineWidth = 1; for (var g0 = 0; g0 < W; g0 += 8) if (!this.inOb(g0 + 4, GY, 0)) ln(g0, GY, g0 + 8, GY);
+      /* snow lying on the ground, melting in spring */
+      var sn = this.sn; x.fillStyle = col(.16); for (var b = 0; b < sn.length; b++) { if (sea === 0 || sea === 1) sn[b] = Math.max(0, sn[b] - dt * .3); if (sn[b] > .3) x.fillRect(b * 12, GY - sn[b], 12, sn[b]); }
       if (this.UN) { this.Fd = this.Fd.filter(function (f) { f.a -= dt / 7; if (f.a > 0) self.roots(f.Rs, f.a); return f.a > 0; }); x.lineCap = 'round'; this.A.forEach(function (t) { self.root(t, dt); self.roots(t.Rs, 1); }); x.lineCap = 'butt'; }
+      var leaves = 0;
       this.A.forEach(function (t) {
         x.strokeStyle = col(.6);
         if (t.mat) {
-          t.age += dt; t.S.forEach(function (s) { x.lineWidth = Math.max(.7, 3.8 - s[4] * .65); ln(s[0], s[1], s[2], s[3]); });
+          t.age += dt; t.S.forEach(function (s) { x.lineWidth = Math.max(.6, (3.8 - s[4] * .65) * cl(t.h / 160, .45, 1)); ln(s[0], s[1], s[2], s[3]); });
+          if (sea === 3) { x.strokeStyle = col(.18); x.lineWidth = 1.6; t.S.forEach(function (s, i) { if (s[4] > 1 && i % 2 && sn[(s[2] / 12) | 0] > 1) ln(s[0], s[1] - 1.5, s[2], s[3] - 1.5); }); }
           t.T.forEach(function (tp) {
-            if (tp.s >= 1) { tp.hold -= dt; if (tp.hold <= 0) { tp.s = 0; tp.rg = 3; self.L.push({ x: tp.x, y: tp.y, ph: R() * 6, t: 0, w: v(-30, 44) }); } }
-            else if (tp.rg > 0) tp.rg -= dt; else { tp.s = Math.min(1, tp.s + dt / 2); if (tp.s >= 1) tp.hold = v(2, 11) * tp.sl; }
-            if (tp.s > 0) leaf(tp.x, tp.y, tp.a, tp.s, .6);
+            if (sea === 2) { if (tp.s >= 1 && R() < dt * .45) { tp.s = 0; tp.rg = null; self.L.push({ x: tp.x, y: tp.y, ph: R() * 6, t: 0, w: v(-26, 34) }); } }
+            else if (sea === 0 || sea === 1) { if (tp.rg === null) tp.rg = v(0, 5); if (tp.s < 1) { if (tp.rg > 0) tp.rg -= dt; else tp.s = Math.min(1, tp.s + dt / 1.2); }
+              else if (sea === 1 && R() < dt * .012) { tp.s = 0; tp.rg = v(1, 4); self.L.push({ x: tp.x, y: tp.y, ph: R() * 6, t: 0, w: v(-26, 34) }); } }
+            if (tp.s > 0) { leaf(tp.x, tp.y, tp.a, tp.s * t.ls, sea === 2 ? .38 : .6); if (tp.s >= 1) leaves++; }
+            if (sea < 2 && tp.s >= 1 && self.sky && t.h > 90 && self.room(tp.x - 1, tp.x + 1) > GY * .6 && R() < dt * .14) self.V.push({ x: tp.x, y: tp.y, r: .5, q: 0 });
           });
+          if (sea < 2 && R() < dt * .25 && self.A.length < 90) self.seed(t);
           if (t.age > t.life) { t.dead = 1; if (self.UN) self.Fd.push({ Rs: t.Rs, a: 1 }); t.S.forEach(function (s, i) { if (i % 2 === 0) self.L.push({ x: (s[0] + s[2]) / 2, y: (s[1] + s[3]) / 2, ph: R() * 6, t: 0, w: v(-10, 10) }); }); }
-        } else { young++; var g = Math.min(1, t.fed / t.G.need); if (g <= 0) dot(t.x, GY, 1.5, .5); else grow(t.G, t.x, GY, g, null); if (g >= 1) self.ripen(t); }
+        } else { if (sea < 2) t.fed += dt * t.G.need / 6; var g = Math.min(1, t.fed / t.G.need); if (g <= 0) dot(t.x, GY, 1.5, .5); else grow(t.G, t.x, GY, g, null); if (g >= 1) self.ripen(t); }
       });
-      this.A = this.A.filter(function (t) { return !t.dead; }); if (young < 2 && this.A.length < this.max) this.spawn();
-      this.L = this.L.filter(function (l) { l.t += dt; l.y += 32 * dt; var w = l.ph + l.t * 2.4; l.x += (l.w + Math.cos(w) * 34) * dt; if (!self.free(l.x) && self.av.length) return false; if (l.y >= GY - 2) { for (var k = 0; k < 4; k++) self.M.push({ x: l.x + v(-4, 4), y: GY, ty: GY + 6 + R() * (self.UN ? (self.UN - 40) * R() : 22) }); return false; } leaf(l.x, l.y, Math.sin(w), 1, .75); return true; });
+      this.A = this.A.filter(function (t) { return !t.dead; }); if (!this.A.length) this.seed(null);
+      this.L = this.L.filter(function (l) { l.t += dt; l.y += 32 * dt; var w = l.ph + l.t * 2.4; l.x += (l.w + Math.cos(w) * 34) * dt; if (self.inOb(l.x, l.y, 4) || l.x < -10 || l.x > W + 10) return false; if (l.y >= GY - 2) { for (var k = 0; k < 4; k++) self.M.push({ x: l.x + v(-4, 4), y: GY, ty: GY + 6 + R() * (self.UN ? (self.UN - 40) * R() : 22) }); return false; } leaf(l.x, l.y, w, 1, .45); return true; });
+      /* the sky: vapour rises to the cloud layer; droplets wander, collide and merge (volume is kept, r = cube root); the speed
+         of fall grows as r squared (Stokes), so only merged drops beat the updraft and fall, sweeping up small ones on the way */
+      var V = this.V, cb = Math.max(70, GY * .16), ct = cb + 60, up = sea === 1 ? 7 : sea === 0 ? 4 : 2;
+      for (var a = 0; a < V.length; a++) { var d = V[a]; if (d.dead) continue;
+        if (!d.q) { d.y -= 90 * dt; d.x += (R() - .5) * 10 * dt; if (d.y < v(cb, ct)) { d.q = 1; d.r = .7; } if (!d.q) { dot(d.x, d.y, .6, .22); continue; } }
+        if (sea === 3 && !d.snow) { if (R() < dt * .8) { V.push({ x: d.x, y: d.y, r: .5, q: 1, snow: 1 }); d.r = Math.cbrt(Math.max(0, d.r * d.r * d.r - .125)); } if (d.r < .55) d.snow = 1; }
+        var snow = d.snow, vt = snow ? 60 : 9 * d.r * d.r - up, nx = d.x + (R() - .5) * 8 * dt + (snow ? Math.sin(self.Y * 2 + a) * 8 * dt : 0), ny = d.y + vt * dt;
+        if (self.inOb(nx, ny, 6) || nx < 2 || nx > W - 2) { d.x -= (nx - d.x) * 2; } else { d.x = nx; } d.y = Math.max(cb - 20, ny);
+        if (d.y >= GY) { d.dead = 1; if (snow) sn[(cl(d.x, 0, W - 1) / 12) | 0] = Math.min(5, sn[(cl(d.x, 0, W - 1) / 12) | 0] + .6);
+          else if (d.r > 1.3) self.A.forEach(function (t) { if (!t.mat && Math.abs(t.x - d.x) < 70) t.fed += 2 * d.r; }); continue; }
+        if (snow) { x.strokeStyle = col(.4); x.lineWidth = .8; ln(d.x - 2, d.y, d.x + 2, d.y); ln(d.x - 1, d.y - 1.7, d.x + 1, d.y + 1.7); ln(d.x - 1, d.y + 1.7, d.x + 1, d.y - 1.7); continue; }
+        for (var b2 = a + 1; b2 < V.length; b2++) { var e = V[b2]; if (e.dead || !e.q || e.snow) continue; var dx = e.x - d.x, dy = e.y - d.y, rr = d.r + e.r + 1.2; if (dx * dx + dy * dy < rr * rr * 4) { d.r = Math.cbrt(d.r * d.r * d.r + e.r * e.r * e.r); e.dead = 1; } }
+        if (sea < 3 && d.y < ct + 20) d.r += dt * .06;
+        if (vt > 30) { x.strokeStyle = col(.45); x.lineWidth = d.r * .8; ln(d.x, d.y - 6, d.x, d.y); } else dot(d.x, d.y, d.r, .45);
+      }
+      this.V = V.filter(function (d) { return !d.dead; }); if (this.V.length > 500) this.V.splice(0, this.V.length - 500);
       if (this.M.length > 700) this.M.splice(0, this.M.length - 700);
       if (this.UN) { var U = this.UN, Hn = this.Hn;
         /* the fungal network: threads in the soil tie the root systems of trees far apart; sugar runs along them from grown
@@ -231,6 +265,7 @@
       this.M = this.M.filter(function (m) { var b = null; self.A.forEach(function (k) { if (!k.mat && (!b || Math.abs(k.x - m.x) < Math.abs(b.x - m.x))) b = k; }); m.y += (m.ty - m.y) * dt * 1.5; if (b) { var d = b.x - m.x; if (Math.abs(d) < 3) { b.fed++; return false; } m.x += (d > 0 ? 1 : -1) * 26 * dt; } dot(m.x, m.y, 1.4, .85); return true; });
     }
   };
+
 
   /* ---- powder: iron powder over magnets under a sheet, and a wire with a current ---- */
   S.powder = {
@@ -351,7 +386,7 @@
     }
   };
 
-  var cur = S[name]; if (!cur) { host.removeChild(cv); return; }
+  var cur = S[name]; if (!cur) { host.removeChild(cv); return; } host.__bgScene = cur;
   var inst = { on: !('IntersectionObserver' in window),
     size: function () { var w = fixed ? innerWidth : host.clientWidth, h = fixed ? innerHeight : host.clientHeight; if (!w || !h) return; if (Math.abs(w - W) < 30 && Math.abs(h - H) < 100 && W) return; W = w; H = h; cv.width = W; cv.height = H; cur.init(); },
     draw: function (dt) { if (W) cur.draw(dt); } };
