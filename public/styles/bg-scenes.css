@@ -1,0 +1,14 @@
+/* Phyein Usul: where the living scenes of scripts/bg-scenes.js sit. Documented in docs/scripts/bg-scenes.md.
+   The body is transparent so that scenes placed behind the page (z-index -1) show on the paper colour of <html>. */
+body { position: relative; background: transparent; }
+canvas.bgs { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+/* behind the top of a page: header and title stand on it; it fades out downwards */
+.bgs-top { position: absolute; top: 0; left: 0; right: 0; height: 560px; z-index: -1; pointer-events: none; overflow: hidden; }
+/* fixed to the window, behind everything: used with data-bg-mask="sides", so it lives in the side margins */
+.bgs-fixed { position: fixed; inset: 0; z-index: -1; pointer-events: none; }
+/* a band of its own, between or after the parts of a page */
+.bgs-band { position: relative; height: 260px; pointer-events: none; overflow: hidden; }
+.bgs-band--low { height: 170px; }
+.bgs-band--tall { height: 320px; }
+@media (max-width: 760px) { .bgs-top { height: 420px; } .bgs-band { height: 200px; } .bgs-band--low { height: 130px; } .bgs-band--tall { height: 240px; } }
+@media print { canvas.bgs, .bgs-top, .bgs-fixed, .bgs-band { display: none; } }

@@ -164,7 +164,7 @@ page = f'''<!doctype html>
     <link rel="stylesheet" href="styles/site.css" />
     <link rel="stylesheet" href="styles/catalog.css" />
     <link rel="stylesheet" href="styles/i18n.css" />
-    <link rel="stylesheet" href="styles/lucretius-deco.css" /><script src="scripts/flip.js"></script>
+    <link rel="stylesheet" href="styles/lucretius-deco.css" /><link rel="stylesheet" href="styles/bg-scenes.css" /><script src="scripts/flip.js"></script>
     <link rel="stylesheet" href="fonts/arabic.css" />
 {fav}    <script>
       document.documentElement.className = 'js';
@@ -173,7 +173,7 @@ page = f'''<!doctype html>
 {CSS}    </style>
   </head>
 
-  <body>
+  <body><div class="bgs-top" data-bg="letters" data-bg-mask="softdown" aria-hidden="true"></div><div class="bgs-fixed" data-bg="swerve" data-bg-mask="sides" aria-hidden="true"></div>
     <div class="lp-deco" aria-hidden="true"><i></i><i></i></div>
     <script>(function(){{var m=/[?&]bg=([abcd])/.exec(location.search);if(m)document.documentElement.dataset.bg=m[1];}})();</script>
     <a class="skip-link" href="#poem">Skip to the poem</a>
@@ -226,7 +226,7 @@ page = f'''<!doctype html>
       </ul>
     </main>
 
-    <footer>
+<div class="bgs-band" data-bg="seeds" data-bg-mask="up" aria-hidden="true"></div><footer>
       <span>© 2026 Numa Koudsie</span>
       <span><a href="index.html">Home page</a> · <a href="simulations.html">Simulations</a> · <a href="#top" id="to-top">Back to top ↑</a></span>
     </footer>
@@ -237,7 +237,7 @@ page = f'''<!doctype html>
         window.scrollTo(0, 0);
       }});
     </script>
-{JS}  </body>
+{JS}<script src="scripts/bg-scenes.js" defer></script></body>
 </html>
 '''
 io.open('public/lucretius.html', 'w', encoding='utf-8').write(page); print('ok', len(page))
