@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="../styles/site.rtl.css" />
     <link rel="stylesheet" href="../styles/catalog.rtl.css" />
     <link rel="stylesheet" href="../styles/i18n.css" />
-    <link rel="stylesheet" href="../styles/lucretius-deco.css" /><script src="../scripts/flip.js"></script>
+    <link rel="stylesheet" href="../styles/lucretius-deco.css" /><link rel="stylesheet" href="../styles/bg-scenes.css" /><script src="../scripts/flip.js"></script>
     <link rel="stylesheet" href="../fonts/arabic.css" />
     <link
       rel="icon"
@@ -110,10 +110,10 @@
   
     <link rel="stylesheet" href="../fonts/arabic.css" />
     <script src="../scripts/i18n/strings-ar.js"></script>
-    <meta name="translated-from" content="English public/lucretius.html, commit efc69708+" />
+    <meta name="translated-from" content="English public/lucretius.html, commit 46ac12a2+" />
   </head>
 
-  <body>
+  <body><div class="bgs-top" data-bg="letters" data-bg-mask="softdown" aria-hidden="true"></div><div class="bgs-fixed" data-bg="swerve" data-bg-mask="sides" aria-hidden="true"></div>
     <div class="lp-deco" aria-hidden="true"><i></i><i></i></div>
     <script>(function(){var m=/[?&]bg=([abcd])/.exec(location.search);if(m)document.documentElement.dataset.bg=m[1];})();</script>
     <a class="skip-link" href="#poem">انتقل إلى القصيدة</a>
@@ -903,7 +903,7 @@
       </ul>
     </main>
 
-    <footer>
+<div class="bgs-band" data-bg="seeds" data-bg-mask="up" aria-hidden="true"></div><footer>
       <span>© 2026 نعمة سائر قدسية</span>
       <span><a href="index.html">الصفحة الرئيسية</a> · <a href="simulations.html">المحاكاة</a> · <a href="#top" id="to-top">إلى الأعلى ↑</a></span>
     </footer>
@@ -932,5 +932,5 @@
         sync(); show(L);
       })();
     </script>
-  </body>
+<script src="../scripts/bg-scenes.js" defer></script></body>
 </html>
