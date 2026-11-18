@@ -110,12 +110,13 @@
   
     <link rel="stylesheet" href="../fonts/arabic.css" />
     <script src="../scripts/i18n/strings-ar.js"></script>
-    <meta name="translated-from" content="English public/lucretius.html, commit bc1f85d" />
+    <meta name="translated-from" content="English public/lucretius.html, commit bc1f85d1+" />
   </head>
 
   <body>
     <div class="lp-deco" aria-hidden="true"><i></i><i></i></div>
-    <script>(function(){var m=/[?&]bg=([abc])/.exec(location.search);if(m)document.documentElement.dataset.bg=m[1];})();</script>
+    <canvas class="lp-fx" aria-hidden="true"></canvas>
+    <script>(function(){var m=/[?&]bg=([abcd])/.exec(location.search);if(m)document.documentElement.dataset.bg=m[1];})();</script>
     <a class="skip-link" href="#poem">انتقل إلى القصيدة</a>
 
     <header class="cat-top">
@@ -932,5 +933,6 @@
         sync(); show(L);
       })();
     </script>
+    <script src="../scripts/lucretius-fractals.js" defer></script>
   </body>
 </html>
