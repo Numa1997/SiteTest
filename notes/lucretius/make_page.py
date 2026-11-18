@@ -175,7 +175,8 @@ page = f'''<!doctype html>
 
   <body>
     <div class="lp-deco" aria-hidden="true"><i></i><i></i></div>
-    <script>(function(){{var m=/[?&]bg=([abc])/.exec(location.search);if(m)document.documentElement.dataset.bg=m[1];}})();</script>
+    <canvas class="lp-fx" aria-hidden="true"></canvas>
+    <script>(function(){{var m=/[?&]bg=([abcd])/.exec(location.search);if(m)document.documentElement.dataset.bg=m[1];}})();</script>
     <a class="skip-link" href="#poem">Skip to the poem</a>
 
     <header class="cat-top">
@@ -237,7 +238,8 @@ page = f'''<!doctype html>
         window.scrollTo(0, 0);
       }});
     </script>
-{JS}  </body>
+{JS}    <script src="scripts/lucretius-fractals.js" defer></script>
+  </body>
 </html>
 '''
 io.open('public/lucretius.html', 'w', encoding='utf-8').write(page); print('ok', len(page))

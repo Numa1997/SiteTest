@@ -11,7 +11,7 @@ Aim: the poem page `public/lucretius.html` (+ `/de/`, `/ar/`), Lucretius I 146â€
   Arabic; it does NOT have any background ornament.
 
 ## In progress
-- Branch `lucretius-fractal-engine`: a canvas engine (`public/scripts/lucretius-fractals.js`) that grows famous fractals one by one
+- Branch `lucretius-fractal-engine` (tested, being merged): a canvas engine (`public/scripts/lucretius-fractals.js`) that grows famous fractals one by one
   (fern, dragon, LÃ©vy C, Koch, Gosper, Hilbert, Sierpinski, tree, phyllotaxis, Lorenz, Julia, Clifford/de Jong attractors) and lets a
   fluid (stream function, divergence-free) carry them off; at most three alive, 30 fps, paused when hidden, still under reduced motion.
   Becomes the default; the currents-and-atoms tiles move to `?bg=d`.
