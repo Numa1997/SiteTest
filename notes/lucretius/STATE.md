@@ -129,7 +129,8 @@ not built yet: flocks of birds, seasons/climate/clouds, bio fractals.
 Update 18 November 14:48: the user looked at the screenshots: "so many gaps you could fill with other simulations. All gaps must
 be filled such that also the eyesight does not get deranged because of the distractions everywhere ... bit by bit, rather slowly,
 elegantly", layout changes allowed. Working one gap per step. Step 1 (branch `fill-gaps-1`): the chip moved from the corner into
-the empty half beside the Projects title (mirrored on the Arabic page), alpha .6. Gaps still open: right of the Simulations title;
+the empty half beside the Projects title (mirrored on the Arabic page), alpha .6. Step 2 (15:12, "Show me then", branch `fill-gaps-2`): the iron powder moved out from behind the Simulations title into
+the empty half beside it (new holder `.bgs-aside`, mask `round`, from 1240 px). Gaps still open:
 home below the pendulum card and below the hero; side margins beside the card lists; Lucretius top.
 
 ## User's rules for this work
