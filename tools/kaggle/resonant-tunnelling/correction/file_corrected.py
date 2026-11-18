@@ -168,8 +168,8 @@ def main(src, old_index, date, out_index, dest, rec_dir):
              new_bytes=sum(r["bytes"] for r in runs if r["status"] in ("rebuilt", "recomputed")),
              gate_pass={s: sum(1 for r in runs if r["spec"]["shape"] == s and r.get("gate")) for s in counts},
              provisional={s: sum(1 for r in runs if r["spec"]["shape"] == s and r.get("provisional")) for s in counts},
-             err_abs_median={s: float(np.median([abs(r["error"]) for r in runs if r["spec"]["shape"] == s and "error" in r] or [0])) for s in counts},
-             err_abs_max={s: float(max([abs(r["error"]) for r in runs if r["spec"]["shape"] == s and "error" in r] or [0])) for s in counts})
+             err_abs_median={s: float(np.median([abs(r["error"]) for r in runs if r["spec"]["shape"] == s and r.get("error") is not None] or [0])) for s in counts},
+             err_abs_max={s: float(max([abs(r["error"]) for r in runs if r["spec"]["shape"] == s and r.get("error") is not None] or [0])) for s in counts})
     json.dump(S, open(os.path.join(os.path.dirname(os.path.abspath(out_index)), "summary.json"), "w"), indent=1)
     print(json.dumps(S, indent=1))
 
