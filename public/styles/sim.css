@@ -259,7 +259,7 @@ html, a, button, input, select, textarea, label, summary, [role="button"], [tabi
 a:active, button:active { opacity: .72; transition: opacity 0s; }
 input[type="range"]:active { opacity: 1; }
 
-/* ================= the pint of Guinness: which of its three figures this is (beer-slosh, guinness-kaggle, guinness-cart-control) ================= */
+/* ================= the pint of Guinness: which of its two figures this is (guinness-kaggle, guinness-cart-control) ================= */
 .gfam { margin: 18px 0 0; }
 .gfam__k { margin: 0 0 8px; font-family: var(--mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
 .gfam__list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }

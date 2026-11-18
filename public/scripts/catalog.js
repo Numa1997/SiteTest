@@ -233,26 +233,9 @@
             added: '2026-10-24'
         },
         {
-            id: 'beer-slosh',
-            fig: 12,
-            title: 'A Pint of Guinness on a One-Wheel Cart, Live in Your Browser',
-            file: 'simulations/beer-slosh.html',
-            field: 'fluids',
-            stage: 2,
-            subject: 'fluid dynamics · vehicle dynamics',
-            summary: 'A pint of stout in the Guinness tulip glass, measured from a dimensioned drawing, rides a cart with one wheel, one spring and one damper over bumps. Climbing a bump, the road pushes the wheel back along the normal to its surface: in the glass’s frame that jolt tips gravity for a moment, and the stout rocks at 3.2 Hz and can spill. The stout is computed live from the Navier–Stokes equations in three dimensions; a DC motor with a speed controller and an active suspension keep it calm. Push the cart, drag it, switch the controller off.',
-            equation: '\\frac{\\partial\\mathbf u}{\\partial t} + (\\mathbf u\\cdot\\nabla)\\mathbf u = -\\frac{\\nabla p}{\\rho} + \\nu\\nabla^2\\mathbf u + \\mathbf g - \\mathbf a_g, \\qquad F_x = -N z_a\'(x), \\qquad i = i_0 + K_p(v_0 - \\dot x) + K_i\\int(v_0 - \\dot x)\\,dt',
-            model: 'incompressible Navier–Stokes with a free surface in the frame of the measured tulip glass, open at the rim, spilled stout falling freely; a one-wheel cart (rigid wheel, radial tyre, spring, damper) driven by a DC gear motor on a current-limited drive, a sampled PI speed loop, a skyhook active suspension; the stout pushes back through its momentum',
-            method: 'APIC particles on a 4 or 3 mm MAC grid, cut-cell walls R(z), ghost-fluid free surface, pressure by conjugate gradients with MIC(0), live in the browser; cart at 0.1 ms; checked against the hydrostatic tilt and the linear sloshing frequency of a cylinder',
-            controls: 'push the cart (buttons or arrow keys) or drag it with the pointer; set speed; open loop or speed control; active suspension; bump height; 4 or 3 mm grid; pause and start again',
-            concepts: ['Navier–Stokes equations', 'free surface', 'sloshing', 'spilling', 'non-inertial frame', 'particle-in-cell', 'APIC', 'pressure projection', 'quarter-car model', 'contact force', 'DC motor', 'PI control', 'anti-windup', 'skyhook', 'momentum'],
-            has: ['derivation', 'data', 'read', 'round', 'check'],
-            added: '2026-11-06'
-        },
-        {
             id: 'guinness-kaggle',
             fig: 12,
-            title: 'A Pint of Guinness on a One-Wheel Cart, Computed on Kaggle',
+            title: 'A Pint of Guinness on a One-Wheel Cart',
             file: 'simulations/guinness-kaggle.html',
             field: 'fluids',
             stage: 2,

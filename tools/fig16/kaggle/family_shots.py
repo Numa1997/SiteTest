@@ -1,4 +1,4 @@
-"""Screenshots of the top of the three pages of the pint of Guinness (beer-slosh, guinness-kaggle, guinness-cart-control) at 1440 and
+"""Screenshots of the top of the two pages of the pint of Guinness (guinness-kaggle, guinness-cart-control) at 1440 and
 390 px, to check the strip that says which of the three figures each page is (Kaggle CPU; nothing runs outside Kaggle, owner 15 Nov 2026).
 Run from the repository's root:  python3 tools/fig16/kaggle/family_shots.py OUTDIR. Writes family-<page>-<width>.png and family.json
 (the strip's three labels, which one is marked current, the h1, page errors)."""
@@ -20,7 +20,7 @@ with sync_playwright() as p:
     br = p.chromium.launch()
     for w, h in ((1440, 1000), (390, 844)):
         ctx = br.new_context(viewport={"width": w, "height": h}, device_scale_factor=1, bypass_csp=True)
-        for page in ("beer-slosh", "guinness-kaggle", "guinness-cart-control"):
+        for page in ("guinness-kaggle", "guinness-cart-control"):
             pg = ctx.new_page(); errs = []
             pg.on("pageerror", lambda e: errs.append(str(e)))
             pg.goto(f"http://127.0.0.1:8019/simulations/{page}.html?no3d=1", wait_until="domcontentloaded")
@@ -35,5 +35,5 @@ with sync_playwright() as p:
     br.close()
 srv.shutdown()
 json.dump(rep, open(os.path.join(OUT, "family.json"), "w"), indent=1)
-bad = [r for r in rep if len(r["labels"]) != 3 or not r["current"] or r["overflow_x"] or r["errors"]]
+bad = [r for r in rep if len(r["labels"]) != 2 or not r["current"] or r["overflow_x"] or r["errors"]]
 print("FAMILY FAIL" if bad else "FAMILY OK", len(bad))

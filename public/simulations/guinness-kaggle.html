@@ -5,7 +5,7 @@
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A Pint of Guinness on a One-Wheel Cart, computed on Kaggle · Numa Koudsie</title>
+    <title>A Pint of Guinness on a One-Wheel Cart · Numa Koudsie</title>
     <meta name="description" content="A pint of Guinness in its tulip glass rides a one-wheel cart over bumps. The stout, its head of foam and the cart were computed ahead of time on Kaggle&#8217;s GPU; this page only plays the stored rides back in 3D.">
     <meta name="theme-color" content="#f5f1ea">
     <link rel="stylesheet" href="../styles/sim.css">
@@ -59,21 +59,20 @@
             <a href="draw-decompose.html">8</a>
             <a href="driven-oscillator.html">9</a>
             <a href="wind-turbine.html">10</a>
-            <a href="pendulum-control.html">11</a> <a href="beer-slosh.html">12</a> <a href="momentum-spirographs.html">13</a> <a href="schrodinger-sphere.html">14</a> <a href="resonant-tunnelling.html">15</a> <a href="guinness-cart-control.html">16</a>
+            <a href="pendulum-control.html">11</a> <a href="guinness-kaggle.html" aria-current="page">12</a> <a href="momentum-spirographs.html">13</a> <a href="schrodinger-sphere.html">14</a> <a href="resonant-tunnelling.html">15</a> <a href="guinness-cart-control.html">16</a>
         </nav>
     </header>
 
     <main class="sim">
         <noscript><p class="sim-error"><b>This simulation needs JavaScript.</b> <a href="../simulations.html">Back to the simulations</a></p></noscript>
         <div class="sim__head">
-            <p class="sim__num">Fig. 12 · computed on Kaggle · played back</p>
-            <h1>A Pint of Guinness on a One-Wheel Cart, Computed on Kaggle<span class="dot">.</span></h1>
-            <p class="sim__lede">The same pint and cart as the <a href="beer-slosh.html">in-browser version of Fig. 12</a>, but nothing is computed on your device. The stout, its head of foam and the cart were computed ahead of time on Kaggle&#8217;s graphics card: a million particles of stout in the real glass, the head lying on it, the cart feeling both. This page only plays those stored rides back, at their real speed.</p>
-            <nav class="gfam" aria-label="The three figures of the pint of Guinness">
-                <p class="gfam__k">One pint, three figures · each shows what the others do not</p>
+            <p class="sim__num">Fig. 12 · played back</p>
+            <h1>A Pint of Guinness on a One-Wheel Cart<span class="dot">.</span></h1>
+            <p class="sim__lede">Nothing is computed on your device. The stout, its head of foam and the cart were computed ahead of time on Kaggle&#8217;s graphics card: a million particles of stout in the real glass, the head lying on it, the cart feeling both. This page only plays those stored rides back, at their real speed.</p>
+            <nav class="gfam" aria-label="The two figures of the pint of Guinness">
+                <p class="gfam__k">One pint, two figures · each shows what the other does not</p>
                 <ol class="gfam__list">
-                    <li><a href="beer-slosh.html"><b>Fig. 12 · live</b><span>The one-wheel cart solved in your browser while you watch. Push it, change its speed, switch its controller: the only figure you can steer.</span></a></li>
-                    <li aria-current="page"><a href="guinness-kaggle.html"><b>Fig. 12 · on Kaggle</b><span>The same one-wheel cart with a million particles, computed ahead of time on a graphics card. Several controllers on three roads, played back; on the kerb every one of them spills.</span></a></li>
+                    <li aria-current="page"><a href="guinness-kaggle.html"><b>Fig. 12</b><span>The one-wheel cart: a million particles of stout, several controllers on three roads; on the kerb every one of them spills.</span></a></li>
                     <li><a href="guinness-cart-control.html"><b>Fig. 16</b><span>A new four-wheel cart built to carry the pint over that kerb, with Fig. 12&#8217;s best ride beside it for comparison.</span></a></li>
                 </ol>
             </nav>
@@ -137,7 +136,7 @@
 
         <article class="paper" id="paper" aria-labelledby="paper-title">
             <header class="paper__head">
-                <p class="paper__kicker">Lecture note · Fig. 12 computed on Kaggle · fluid dynamics · control</p>
+                <p class="paper__kicker">Lecture note · Fig. 12 · fluid dynamics · control</p>
                 <h2 class="paper__title" id="paper-title">A full pint over the bumps</h2>
                 <p class="paper__by">Numa Koudsie · for readers from the last year of school to the second year of university; ★ marks the heavier mathematics, and every starred result is restated in plain words after it</p>
                 <div class="paper__abstract"><b>Abstract.</b> A pint of stout with its head of foam rides a one-wheel cart over bumps. Every ride on this page was computed ahead of time on a rented graphics card, with about a million small parcels of stout, the foam lying on them and the cart they push against; the page only plays the stored pictures back. In this chapter we build that model from the ground up. We write Newton's law for a liquid inside a glass that is being shaken, find the rhythm at which the stout's surface rocks (3.421 times a second for the stout alone), and show how a sudden change of the cart's speed sets it rocking. We follow the swing's energy into the thin layers of friction at the glass and into the head of foam, which turns out to be the strongest brake: with its head the computed pint has a natural frequency of 2.915 Hz and stops within about one swing. We then follow the computer through one step of its calculation and check its bookkeeping: in every stored picture every parcel of stout and every millilitre of foam is accounted for. Last, we give the cart the habits of a good waiter, five controllers for its motor and its suspension. On gentle roads the best of them keeps the surface within about a millimetre of level where holding the speed alone lets it lean by 13.9 mm. On a short, sharp hump 30 mm high taken at 1.5 m/s, which we call the kerb, none of them can: the road pushes the cart back with up to 82 N, while at that speed the motor can push forward with at most 11.25 N, and foam goes over the rim under every controller. No stout is spilled on any ride.</div>
@@ -718,7 +717,7 @@
                         </table>
                         <details class="pdetails">
                             <summary><b>The controllers are the site's own</b> (open)</summary>
-                            <p>The site also has a version of this figure that runs live in your browser, the Fig. 12 page with its own simpler stout model. The controllers on the graphics card are a line-by-line port of that page's controllers (<code>public/scripts/stout-cart.js</code>: <code>Cart.sample</code>, <code>Cart.lqrGains</code>, <code>Cart.suspGains</code>, <code>Observer</code>) into <code>tools/fig12/kaggle/stout_jax.py</code> (class <code>Cart</code>, <code>slosh_lqr</code>, <code>susp_lqr</code>, <code>observer_design</code>). A check (<code>notes/fig12/handoff-jax/portcheck.txt</code>) runs both on the kerb with a rigid load and one and the same probe signal and compares them at every fluid step for the whole ride: the speed loop, the preview and the skyhook agree to 4 × 10⁻¹³ A in the commanded current, the slosh LQR and joint control to 6 × 10⁻⁸ A, because the site solves the Riccati equation by letting it flow to its steady state while the port solves it directly. The gains printed in this note are computed by the port's own functions, and the suspension's agree with those stored with the rides to 8 × 10⁻⁶.</p>
+                            <p>The controllers were first written for an earlier version of this figure that ran a simpler stout model in the browser (removed from the site on 18 November 2026; its controller code stays in the repository). The controllers on the graphics card are a line-by-line port of those controllers (<code>public/scripts/stout-cart.js</code>: <code>Cart.sample</code>, <code>Cart.lqrGains</code>, <code>Cart.suspGains</code>, <code>Observer</code>) into <code>tools/fig12/kaggle/stout_jax.py</code> (class <code>Cart</code>, <code>slosh_lqr</code>, <code>susp_lqr</code>, <code>observer_design</code>). A check (<code>notes/fig12/handoff-jax/portcheck.txt</code>) runs both on the kerb with a rigid load and one and the same probe signal and compares them at every fluid step for the whole ride: the speed loop, the preview and the skyhook agree to 4 × 10⁻¹³ A in the commanded current, the slosh LQR and joint control to 6 × 10⁻⁸ A, because the site solves the Riccati equation by letting it flow to its steady state while the port solves it directly. The gains printed in this note are computed by the port's own functions, and the suspension's agree with those stored with the rides to 8 × 10⁻⁶.</p>
                         </details>
 
                         <h4><span class="psub__n">12.10</span>What the controlled rides show</h4>
