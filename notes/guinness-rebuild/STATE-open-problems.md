@@ -15,7 +15,7 @@ Close the six open problems of the handoff, one at a time, in its order. Merge f
   end with "Where we are:" and "Next, if you say yes:".
 
 ## Problems (status)
-1. inventory --check and docs/files.md — IN PROGRESS. The rules for diag_burst.py, damping_grid.py, check_pint3d.cjs exist
+1. inventory --check and docs/files.md — DONE on the branch (CPU v9: --check failed only for a stale files.md; after regenerating, exit 0, 6577 files; every file described). Merge to main pending. The rules for diag_burst.py, damping_grid.py, check_pint3d.cjs exist
    (tools/inventory.py lines 85-90). Plan: CPU notebook git-clones main, runs `tools/inventory.py --check`; on failure runs it
    without --check and returns docs/files.md.
 2. Fig. 16 data panel with the three-way proof — open.
@@ -26,7 +26,9 @@ Close the six open problems of the handoff, one at a time, in its order. Merge f
 
 ## Kaggle runs of this session
 - CPU `numakoudsie/fig-16-cart-diagnostics-cpu` version 9 (18 Nov): git clone of this branch, `inventory.py --check`, then regenerate;
-  outputs inventory.log, files.md. Status: RUNNING at launch; fetch, review the diff, commit docs/files.md.
+  outputs inventory.log, files.md. Status: COMPLETE; files.md downloaded, diff reviewed (2 new notes files, 3 sizes, counts), committed.
 
 ## Commits
-- this file.
+- this file; docs/files.md from CPU v9 (state-file size line set by hand with the script's rule, bytes/1000 to 0.1 kB).
+- Info (04:20 UTC, session_01DGmqin2AFu75ELh8fAbGr9): session_01DGmqioyaYR5VnnZaKfpEhD works on the look of Figs. 12 and 16 (stout-view*.js,
+  guinness-glass.js, cart16-view.js, pint3d-view.js); it will propose a file split. Do not edit those files before agreeing it.
