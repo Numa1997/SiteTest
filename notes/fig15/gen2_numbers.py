@@ -169,6 +169,8 @@ for sh, nm in (('flat', 'w'), ('coin', 'd'), ('shell', 's')):
     dr = [r['drift'] for r in RUNS if r['spec']['shape'] == sh and r.get('drift') is not None]
     if dr: put(f'c_{nm}_drift_max', r3(max(dr), 2), f'{sh}: largest complex64 norm drift of the (x, rho) runs')
 put('c_w_closure_max', r3(max(r['closure_max'] for r in RUNS if r.get('closure_max') is not None), 2), 'walls: largest |P_left + P_struct + P_right - 1| of the exact runs')
+put('c_w_bias', sum(1 for r in RUNS if r['spec']['shape'] == 'flat' and r['spec']['bias'] != 0), 'walls under a voltage'); put('c_w_bias_kept', sum(1 for r in RUNS if r['spec']['shape'] == 'flat' and r['spec']['bias'] != 0 and r['status'] == 'kept'), 'of them kept: the first batch agrees within the gate')
+put('m_shconv', 0.0008, 'THEORY_AND_CODE 9.2: shells, change of T from radial range 160 to 192 a')
 put('c_n_new', OUT['c_w_new'] + OUT['c_d_new'] + OUT['c_s_new'], 'runs replaced in all'); put('c_n_prov', OUT['c_w_prov'] + OUT['c_d_prov'] + OUT['c_s_prov'], 'provisional in all')
 A1 = json.load(open(os.path.join(AUD, 'twin_sources.json'))); A2 = json.load(open(os.path.join(AUD, 'twin_converge.json')))
 for i, a in enumerate(A1):
@@ -196,7 +198,7 @@ put('pk_rel', round(100 * (pe - ps) / pe, 1), 'per cent the first grid lowers th
 put('pk_kap', round(kap, 2), 'kappa at the exact V0 = 3 resonance'); put('pk_Leff', round(Le, 2), 'L_eff = L + 2/kappa, L = 1.5')
 put('pk_dL', round((pe - ps) / pe / 2 * Le, 3), 'by (21), dL_eff = (dE/E) L_eff / 2: how much wider the well acts on the first grid')
 for k, v in A2['peak'].items():
-    put('pk_' + k.replace(' ', '_').replace('.', ''), round(v['peak'], 3), 'twin_converge.json: V0 = 3 resonance from a sweep of long packets (sx 24), peak by a parabola')
+    put('pk_' + k.replace(' ', '_').replace('.', ''), round(v['peak'], 4), 'twin_converge.json: V0 = 3 resonance from a sweep of long packets (sx 24), peak by a parabola')
 put('planned', dict(A=4 * 6 * 47, B=2 * 2 * 47, C=4 * 3 * 47, D=8 * 47, E=3 * 3 * 47, F=2 * 20 * 25, G=60), 'rt3d2_run.py jobs(): A 4 P x 6 shapes x 47 E; B 2 R x 2 P x 47; C 4 x 3 x 47; D 8 x 47; E 3 N x 3 x 47; F 2 x 20 V x 25 E; G 60 (notes/fig15/STATE.md)')
 
 # ---------- 1. spacing ----------
@@ -240,6 +242,7 @@ for V0, D, P in ((1.5, 1.0, 2.5), (2.0, 1.0, 2.5), (3.0, 1.0, 2.5), (2.0, 1.5, 3
     ok = r and abs(r['spec']['E'] - Es[0]) <= 0.05 and r.get('tau')
     put(f'{tag}_run_E', r['spec']['E'] if ok else None, r['file'] if ok else 'missing')
     put(f'{tag}_run_tau', r3(r['tau']['tau']) if ok else None, r['file'] if ok else 'missing')
+    put(f'{tag}_run_tau_raw', r['tau']['tau'] if ok else None, 'unrounded'); put(f'{tag}_tau1_raw', 1 / G, '1/Gamma unrounded')
     put(f'{tag}_run_tend', r3(r['t_end']) if ok else None, 'run length t_end'); put(f'{tag}_run_t0', r3(r['tau']['t0']) if ok else None, 'start of the fit window')
     put(f'{tag}_run_status', r['status'] if ok else None, 'kept or rebuilt')
     # the long packet (G) across this resonance, if computed
@@ -268,6 +271,7 @@ for V0, D, P in ((1.5, 1.0, 2.5), (2.0, 1.0, 2.5), (3.0, 1.0, 2.5), (2.0, 1.5, 3
             exact1d.SIG0 = float(sx); tq = exact1d.tbar(Es[0], segs(2, V0, D, P), nk=2001)
             put(f'{tag}_Tbar{sx}', r3(tq), f'exact1d.tbar: packet average (18) at the unrounded E1 by quadrature (index.json exact[{key}] holds the same curve on a 0.01 grid)')
 
+put('rule_pct', round(100 * (OUT['V2D1_run_tau_raw'] / OUT['V2D1_tau1_raw'] - 1), 1), 'per cent the fit rule reads long on the exact running-example run, from unrounded values')
 # ---------- the Fabry-Perot form of the running example ----------
 def theta(E, V0=2.0, D=1.0, P=2.5):
     t, r = tm.solve(E, segs(1, V0, D, P))[:2]; return 2 * np.angle(r) + 2 * np.sqrt(2 * E) * P, abs(r) ** 2

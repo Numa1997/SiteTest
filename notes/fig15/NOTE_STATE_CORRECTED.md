@@ -30,3 +30,12 @@ sections 6-9, 12, 13 true for the new numbers; NUM block from notes/fig15/gen2_n
 - docs page updated. Build: 1219 KaTeX, 0 errors, no overflow at 390/1440.
 ## Left
 - one referee round + one derivation-checker round; fix; merge to main; verify live; reply to coordinator (<= 8 lines).
+
+## Readers (the one allowed round)
+- Referee: 8 errors + 29 stops. Derivation checker: 7 errors (equations 25a-25f and the 515-value NUM block otherwise check).
+- Fixed: time-step claim (changes up to 0.002), (25e) stray semicolon, disc difference ~0.046, shell comparison (wider pair at
+  R3 lives longer; R5 bounds cannot be ranked), long-packet gap ~1e-3 stated as untraced, fit-rule sign reconciled (1.7 % long,
+  unrounded), kept-run asterisks, shell accuracy (~0.0012 in two tests), equation order ((25f) -> (26a)), inside share from |chi|^2
+  not flux, biased walls' two independent checks (26 kept; one (x, rho) run), V0 = 3 ratio range filter stated, k/k_R reason,
+  (x, rho) grid stated, shell faces, rho/phi flagged, (25d) absorbed part, sigma_E range for the diode.
+- Not fixed: shell run lengths, the two out-of-date correction docs (545 vs 745), the twin lifetime 15.3 (not re-checkable).
