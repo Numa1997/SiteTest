@@ -49,6 +49,10 @@ MODELS = {
 # The head of foam: every number from notes/fig12/research/data-for-solver.md (13 Nov 2026).
 HEAD0 = 0.019        # m, the head as served: 18-20 mm specification; 17.5-22.2 mm measured two minutes after pouring (KegWorks 2019)
 GAMMA = 0.0442       # N/m, surface tension of degassed Guinness, 20 C, pendant drop (Voelp & Willenbacher 2021, Table 2)
+# the air in a pub (continuous model's drag, Stout.air_drag): 20 C, 101.3 kPa, dry; density and viscosity from the standard tables
+# (CRC Handbook: rho = p M / (R T) = 1.204 kg/m^3, mu = 1.81e-5 Pa s)
+RHO_AIR = 1.204
+MU_AIR = 1.81e-5
 E_INF = 0.0187       # N/m, its surface dilatational elasticity (same table)
 RBUB = 34e-6         # m, Sauter radius of the head's bubbles: the stout's own (mean diameter 61 um, log-normal sigma 0.24; Watamura 2019)
 PHI_F = 0.27         # liquid fraction of the head: 0.24-0.36 from the column equilibrium and its slow drainage (data-for-solver.md)
@@ -682,6 +686,32 @@ class Stout:
         bare = jnp.broadcast_to((hf <= 0)[:, :, None], self.dims) | ~self.cavc
         return jnp.where(bare & (jnp.abs(ph) < 2.0 * dx), self.gamma * kap * dt / self.rho, 0.0).astype(F32)
 
+    def air_drag(self, vel, mass, ph, liq, dt, wind):
+        """The air's drag on stout outside the glass (continuous model, 18 Nov 2026; notes/spill/STATE.md, 'Air'). The air is at rest on
+        the ground, so in the glass's frame it blows at wind = (-v_x, -v_z) of the glass. On each surface cell of liquid outside the
+        cavity the wind presses on the frontal area dx^2 max(0, -n . U_hat) (n the liquid's outward normal), with the sphere's drag
+        coefficient C_D(Re) of Schiller & Naumann, C_D = 24/Re (1 + 0.15 Re^0.687), Re = rho_a |U| d / mu_a < 1000, d the local size
+        4/|kappa| (a sphere of diameter d has kappa = 4/d), held between dx and 10 mm. The force is shared by the cell's liquid,
+        rho dx^3: for a drop resolved by several cells the frontal areas add to pi d^2/4 and the masses to pi d^3 rho/6, so the
+        acceleration is (3/4) C_D rho_a U^2 / (rho d), the textbook law. Inside the glass the air is sheltered (its effect on the
+        pint's surface was estimated at 0.1 mm of stout and is left out)."""
+        dx = self.dx; ux, uz = wind
+        g = [(sh(ph, 1, ax, 0.0) - sh(ph, -1, ax, 0.0)) / (2 * dx) for ax in range(3)]
+        nn = jnp.sqrt(g[0] ** 2 + g[1] ** 2 + g[2] ** 2) + 1e-6; n = [gi / nn for gi in g]
+        kap = sum((sh(n[ax], 1, ax, 0.0) - sh(n[ax], -1, ax, 0.0)) / (2 * dx) for ax in range(3))
+        d = jnp.clip(4.0 / jnp.maximum(jnp.abs(kap), 1e-6), dx, 0.01)
+        uc = [0.5 * (cut_lo(vel[ax], ax) + cut_hi(vel[ax], ax)) for ax in range(3)]   # the liquid's velocity at cell centres
+        U = [ux - uc[0], -uc[1], uz - uc[2]]; Um = jnp.sqrt(U[0] ** 2 + U[1] ** 2 + U[2] ** 2) + 1e-9
+        front = jnp.maximum(0.0, -(n[0] * U[0] + n[1] * U[1] + n[2] * U[2]) / Um)
+        surf = liq & (ph > -dx) & ~self.cavc
+        Re = jnp.clip(RHO_AIR * Um * d / MU_AIR, 0.1, 1000.0); CD = 24.0 / Re * (1.0 + 0.15 * Re ** 0.687)
+        a = jnp.where(surf, 0.5 * RHO_AIR * CD * Um * front / (self.rho * dx), 0.0)        # times U_vec: acceleration
+        out = []
+        for ax in range(3):
+            ac = a * U[ax]; af = 0.5 * (lo(ac, ax, 0.0) + hi(ac, ax, 0.0))
+            out.append(jnp.where((mass[ax] > 1e-6) & (self.th[ax] > 0), vel[ax] + dt * af, vel[ax]).astype(F32))
+        return out
+
     def _surf_faces(self, ph, liq):
         liqL, liqR, tLR, tRL = self._faces(ph, liq, 2)
         return liqL & ~liqR & (self.th[2] > 0)
@@ -934,7 +964,7 @@ class Stout:
         med = lambda s: jnp.nanmedian(H[idx[s][0], idx[s][1]])
         return jnp.nan_to_num(0.5 * (med(1) - med(-1)) / shape).astype(F64)
 
-    def step(self, s, dt, gx, gz, prep=None, rot=None):
+    def step(self, s, dt, gx, gz, prep=None, rot=None, wind=None):
         """rot = (om, al, zS): the glass also turns (Fig. 16); None: the glass only translates (Fig. 12, unchanged)."""
         dt = jnp.asarray(dt, F32); gx = jnp.asarray(gx, F32); gz = jnp.asarray(gz, F32)
         if rot is not None: rot = tuple(jnp.asarray(r, F32) for r in rot)
@@ -953,6 +983,7 @@ class Stout:
         z = jnp.zeros((), F64); ew = es = ef = z
         if self.gs > 0 or self.skin or self.head: vel, ew, es, ef = self.friction(vel, mass, ph, liq, dt, s["hf"])
         vel = self.body_force(vel, mass, dt, gx, gz, rot)
+        if self.cont and wind is not None: vel = self.air_drag(vel, mass, pr["ph"], pr["liq"], dt, wind)
         # the head's weight on the surface (verification.md item 4), in the solver's pressure units (Pa x dt / rho); with rot, the
         # vertical field of each column at the fill height
         gzh = gz if rot is None else self.frame_accel(self.colx, self.G.fill, 0.0, 0.0, gx, gz, rot)[1]
@@ -1272,7 +1303,7 @@ def make_advance(S, mode, cart=None, cfl=0.8, dtmax=0.002, push=None):
             nsub = jnp.maximum(1, jnp.round(dt / 1e-4).astype(I32)); hc = dt / nsub
             cs = lax.fori_loop(0, nsub, lambda _, cc: cart.step(cc, hc, ex["F"][0], ex["F"][1]), cs)
             ax, az = (cs["vx"] - vx0) / dt, (cs["vzb"] - vz0) / dt
-            s, d = S.step(s, dt, -ax, -9.81 - az, prep=prep)
+            s, d = S.step(s, dt, -ax, -9.81 - az, prep=prep, wind=(-cs["vx"], -cs["vzb"]) if S.cont else None)
             P = d["mom"] * S.mp
             F = jnp.where(ex["haveP"], -(P - ex["P"]) / dt, 0.0)
             cs = dict(cs, ml=S.rho * S.V * d["nact"].astype(F64) / S.N + d["mhead"])
