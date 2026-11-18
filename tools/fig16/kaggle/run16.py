@@ -47,8 +47,8 @@ _src = open(os.path.join(os.path.dirname(os.path.abspath(C4.__file__)), "..", ".
 _a = _src.index("ROADS = {"); _b = _src.index("\n}\n", _a) + 2
 ROADS = eval(_src[_a + len("ROADS = "):_b])       # Fig. 12's roads, exactly as run_b.py defines them
 KERB, RES, B25 = "one sharp 30 mm bump", "five 20 mm bumps in step with the swing", "one 25 mm bump"
-dx0 = 0.006 if CODECHECK else 0.0015
-end_ = lambda e: 2 / FPS if CODECHECK else e
+dx0 = float(os.environ.get("DX", "0.006" if CODECHECK else "0.0015"))   # 19 Nov 2026: DX sets the grid (the continuous model's checks run at 2 mm)
+end_ = lambda e: 2 / FPS if CODECHECK else min(e, float(os.environ.get("END", "1e9")))   # END: a short calibration ride
 # run 3 (14 Nov 2026): the rotating frame's forces; the control-off rides of every road; the kerb twice more for the scatter.
 # Run 2's gentle rides with control (pitch rate <= 0.04 rad/s, al r <= 0.06 m/s^2) are kept: not recomputed.
 TASKS = [dict(name="rest", kind="free", end=end_(2.0)),
