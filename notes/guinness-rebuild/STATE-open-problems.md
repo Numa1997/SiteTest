@@ -49,3 +49,10 @@ Close the six open problems of the handoff, one at a time, in its order. Merge f
 - File split agreed (04:23 UTC, with the owner's yes per that session): look session edits stout-view.js, stout-view2.js, guinness-glass.js,
   cart16-view.js, drawing parts of pint3d-view.js. Mine: Fig. 16 panel, page HTML and src, frame-time work, Kaggle dataset, inventory.
   Message them before touching any of theirs.
+
+## Joint integration (18 Nov ~17:00 UTC)
+- Look session relayed the owner: "Resolve the split ... Complete both works. Merge them into a functioning animation already."
+- Agreed: one integration branch claude/guinness-realism; main gets one merge of both works after panel16_check and frames_check pass
+  on it. It merged main 6aa30fc; its 9a6e8ef adds deck_px_* into this.deckStore (cart16-view.js) and a physically based pint3d-view.js.
+- Mine to merge into it: dbef006 (run_b task free_wall_1.0). After panel16_check passes there: update fig16 docs (deck pixels recorded).
+- Problem 5 GPU run waits for the owner's yes to ~20 T4-min (0.33 GPU-h, 40-min hard limit); not overlapping its GPU work.
