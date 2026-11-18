@@ -98,6 +98,7 @@ RULES = [
     (r'tools/fig16/\w+\.json', 'Fig. 16 design study: stored results (fit, validation, sweep, concepts).', 'docs/simulations/fig16-guinness-cart-control.md'),
     (r'notes/fig16/.+', 'Fig. 16 working notes: brief, state, model, concepts, prototypes, run summary, page source.', 'docs/simulations/fig16-guinness-cart-control.md'),
     (r'notes/guinness-rebuild/.+', 'Rebuild of the two Guinness figures (12 and 16): the chat state and the physics audit with every finding, fix and correction.', 'docs/simulations/fig16-guinness-cart-control.md'),
+    (r'notes/guinness-merge/.+', "The three pages of the pint of Guinness: the owner's order to tell them apart and the plan (nothing removed).", 'docs/simulations/fig16-guinness-cart-control.md'),
     # the repository's own files (not part of the app)
     (r'README\.md', 'Start here: what the project is, how the files fit together, where each one is explained.', 'README.md'),
     (r'docs/files\.md', 'This list. Written by tools/inventory.py; do not edit by hand.', 'docs/files.md'),
