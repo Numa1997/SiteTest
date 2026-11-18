@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-6581 files, 929.2 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+6584 files, 929.2 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -46,7 +46,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Working notes of project 07, the electron beam](#working-notes-of-project-07-the-electron-beam) | 52 |
 | [Working notes of the Rotor Pendula study](#working-notes-of-the-rotor-pendula-study) | 86 |
 | [Working notes of the Droplet Collection study](#working-notes-of-the-droplet-collection-study) | 123 |
-| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 823 |
+| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 826 |
 
 ## Repository root
 
@@ -5551,7 +5551,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`docs/files.md`](files.md) | this file | This list. Written by tools/inventory.py; do not edit by hand. | [files.md](files.md) |
 | [`docs/glossary.md`](glossary.md) | 17.0 kB | Documentation: Glossary: English, German, Arabic. | [glossary.md](glossary.md) |
 | [`docs/i18n.md`](i18n.md) | 18.5 kB | Documentation: The site in German and Arabic: `tools/i18n/`, `i18n/`, `public/de/`, `public/ar/`. | [i18n.md](i18n.md) |
-| [`docs/kaggle-pipeline.md`](kaggle-pipeline.md) | 22.9 kB | Documentation: The Kaggle pipeline: computing on Kaggle, playing on the website. | [kaggle-pipeline.md](kaggle-pipeline.md) |
+| [`docs/kaggle-pipeline.md`](kaggle-pipeline.md) | 23.5 kB | Documentation: The Kaggle pipeline: computing on Kaggle, playing on the website. | [kaggle-pipeline.md](kaggle-pipeline.md) |
 | [`docs/kaggle.md`](kaggle.md) | 4.4 kB | Documentation: Computing on Kaggle: the Schrödinger test. | [kaggle.md](kaggle.md) |
 | [`docs/minor-issues-report.md`](minor-issues-report.md) | 19.5 kB | Documentation: Minor issues · final verification report. | [minor-issues-report.md](minor-issues-report.md) |
 | [`docs/notes.md`](notes.md) | 5.4 kB | Documentation: The lecture-note review: `notes/` and `.claude/agents/`. | [notes.md](notes.md) |
@@ -5585,7 +5585,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`docs/simulations/fig13-momentum-spirographs.md`](simulations/fig13-momentum-spirographs.md) | 29.4 kB | Documentation: Fig. 13 · Spirographs in Momentum Space, the Flower Hunt, the dashboard and the films. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`docs/simulations/fig14-schrodinger-sphere.md`](simulations/fig14-schrodinger-sphere.md) | 32.3 kB | Documentation: Fig. 14 · A Wave Packet Meets a Sphere. | [fig14-schrodinger-sphere.md](simulations/fig14-schrodinger-sphere.md) |
 | [`docs/simulations/fig15-resonant-tunnelling.md`](simulations/fig15-resonant-tunnelling.md) | 11.7 kB | Documentation: Fig. 15 · Resonant Tunnelling (3D). | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
-| [`docs/simulations/fig16-guinness-cart-control.md`](simulations/fig16-guinness-cart-control.md) | 15.5 kB | Documentation: Fig. 16 · A Pint of Guinness on a Cart Built to Carry It. | [fig16-guinness-cart-control.md](simulations/fig16-guinness-cart-control.md) |
+| [`docs/simulations/fig16-guinness-cart-control.md`](simulations/fig16-guinness-cart-control.md) | 15.6 kB | Documentation: Fig. 16 · A Pint of Guinness on a Cart Built to Carry It. | [fig16-guinness-cart-control.md](simulations/fig16-guinness-cart-control.md) |
 | [`docs/simulations/project06-rods-in-liquid.md`](simulations/project06-rods-in-liquid.md) | 9.7 kB | Documentation: Project 06 · Balancing Two Rods in a Liquid. | [project06-rods-in-liquid.md](simulations/project06-rods-in-liquid.md) |
 | [`docs/styles.md`](styles.md) | 52.1 kB | Documentation: Stylesheets: `public/styles/`. | [styles.md](styles.md) |
 | [`docs/usul.md`](usul.md) | 14.2 kB | Documentation: Phyein Usul · the website at phyeinusul.com. | [usul.md](usul.md) |
@@ -6954,14 +6954,14 @@ to confirm that every file is described. Sizes are those of the files when the l
 | File | Size | What it is | Explained in |
 |---|---|---|---|
 | [`notes/guinness-rebuild/HANDOFF-open-problems.md`](../notes/guinness-rebuild/HANDOFF-open-problems.md) | 5.8 kB | Rebuild of the two Guinness figures (12 and 16): the chat state and the physics audit with every finding, fix and correction. | [fig16-guinness-cart-control.md](simulations/fig16-guinness-cart-control.md) |
-| [`notes/guinness-rebuild/STATE-open-problems.md`](../notes/guinness-rebuild/STATE-open-problems.md) | 4.0 kB | Rebuild of the two Guinness figures (12 and 16): the chat state and the physics audit with every finding, fix and correction. | [fig16-guinness-cart-control.md](simulations/fig16-guinness-cart-control.md) |
+| [`notes/guinness-rebuild/STATE-open-problems.md`](../notes/guinness-rebuild/STATE-open-problems.md) | 4.4 kB | Rebuild of the two Guinness figures (12 and 16): the chat state and the physics audit with every finding, fix and correction. | [fig16-guinness-cart-control.md](simulations/fig16-guinness-cart-control.md) |
 | [`notes/guinness-rebuild/STATE.md`](../notes/guinness-rebuild/STATE.md) | 6.9 kB | Rebuild of the two Guinness figures (12 and 16): the chat state and the physics audit with every finding, fix and correction. | [fig16-guinness-cart-control.md](simulations/fig16-guinness-cart-control.md) |
 | [`notes/guinness-rebuild/audit.md`](../notes/guinness-rebuild/audit.md) | 24.0 kB | Rebuild of the two Guinness figures (12 and 16): the chat state and the physics audit with every finding, fix and correction. | [fig16-guinness-cart-control.md](simulations/fig16-guinness-cart-control.md) |
 | [`notes/home/longlines.cjs`](../notes/home/longlines.cjs) | 1.2 kB | Browser measurements of the home page: index size, column widths, characters per line, section screenshots. | [styles.md](styles.md) |
 | [`notes/home/measure.cjs`](../notes/home/measure.cjs) | 2.6 kB | Browser measurements of the home page: index size, column widths, characters per line, section screenshots. | [styles.md](styles.md) |
 | [`notes/home/sections.cjs`](../notes/home/sections.cjs) | 891 B | Browser measurements of the home page: index size, column widths, characters per line, section screenshots. | [styles.md](styles.md) |
 
-<details><summary>132 files: Inventory and clean-up of the computations (Kaggle, R2, scripts): state, records, copies of deleted Kaggle notebooks, manifests of the per-figure Kaggle datasets.</summary>
+<details><summary>135 files: Inventory and clean-up of the computations (Kaggle, R2, scripts): state, records, copies of deleted Kaggle notebooks, manifests of the per-figure Kaggle datasets.</summary>
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
@@ -7000,6 +7000,9 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/inventory/datasets/fig14-schrodinger-sphere/schrodinger-sphere-3d-wave/v1/manifest.json`](../notes/inventory/datasets/fig14-schrodinger-sphere/schrodinger-sphere-3d-wave/v1/manifest.json) | 13.0 kB | Inventory and clean-up of the computations (Kaggle, R2, scripts): state, records, copies of deleted Kaggle notebooks, manifests of the per-figure Kaggle datasets. | [STATE.md](../notes/inventory/STATE.md) |
 | [`notes/inventory/datasets/fig14-schrodinger-sphere/schrodinger-sphere-full-grid/v1/manifest.json`](../notes/inventory/datasets/fig14-schrodinger-sphere/schrodinger-sphere-full-grid/v1/manifest.json) | 58.6 kB | Inventory and clean-up of the computations (Kaggle, R2, scripts): state, records, copies of deleted Kaggle notebooks, manifests of the per-figure Kaggle datasets. | [STATE.md](../notes/inventory/STATE.md) |
 | [`notes/inventory/datasets/fig14-schrodinger-sphere/schrodinger-spherical-wave/v1/manifest.json`](../notes/inventory/datasets/fig14-schrodinger-sphere/schrodinger-spherical-wave/v1/manifest.json) | 183.0 kB | Inventory and clean-up of the computations (Kaggle, R2, scripts): state, records, copies of deleted Kaggle notebooks, manifests of the per-figure Kaggle datasets. | [STATE.md](../notes/inventory/STATE.md) |
+| [`notes/inventory/datasets/fig16-guinness-cart-control/README.md`](../notes/inventory/datasets/fig16-guinness-cart-control/README.md) | 1.2 kB | Inventory and clean-up of the computations (Kaggle, R2, scripts): state, records, copies of deleted Kaggle notebooks, manifests of the per-figure Kaggle datasets. | [STATE.md](../notes/inventory/STATE.md) |
+| [`notes/inventory/datasets/fig16-guinness-cart-control/description.md`](../notes/inventory/datasets/fig16-guinness-cart-control/description.md) | 1.2 kB | Inventory and clean-up of the computations (Kaggle, R2, scripts): state, records, copies of deleted Kaggle notebooks, manifests of the per-figure Kaggle datasets. | [STATE.md](../notes/inventory/STATE.md) |
+| [`notes/inventory/datasets/fig16-guinness-cart-control/manifest.json`](../notes/inventory/datasets/fig16-guinness-cart-control/manifest.json) | 4.5 kB | Inventory and clean-up of the computations (Kaggle, R2, scripts): state, records, copies of deleted Kaggle notebooks, manifests of the per-figure Kaggle datasets. | [STATE.md](../notes/inventory/STATE.md) |
 | [`notes/inventory/inventory.json`](../notes/inventory/inventory.json) | 205.8 kB | Inventory and clean-up of the computations (Kaggle, R2, scripts): state, records, copies of deleted Kaggle notebooks, manifests of the per-figure Kaggle datasets. | [STATE.md](../notes/inventory/STATE.md) |
 | [`notes/inventory/raw/kaggle-copies/html-panel-test-ripple-tank-computed-on-kaggle/manifest.json`](../notes/inventory/raw/kaggle-copies/html-panel-test-ripple-tank-computed-on-kaggle/manifest.json) | 187 B | Inventory and clean-up of the computations (Kaggle, R2, scripts): state, records, copies of deleted Kaggle notebooks, manifests of the per-figure Kaggle datasets. | [STATE.md](../notes/inventory/STATE.md) |
 | [`notes/inventory/raw/kaggle-copies/html-panel-test-ripple-tank-computed-on-kaggle/metadata.json`](../notes/inventory/raw/kaggle-copies/html-panel-test-ripple-tank-computed-on-kaggle/metadata.json) | 597 B | Inventory and clean-up of the computations (Kaggle, R2, scripts): state, records, copies of deleted Kaggle notebooks, manifests of the per-figure Kaggle datasets. | [STATE.md](../notes/inventory/STATE.md) |
