@@ -56,3 +56,7 @@ Close the six open problems of the handoff, one at a time, in its order. Merge f
   on it. It merged main 6aa30fc; its 9a6e8ef adds deck_px_* into this.deckStore (cart16-view.js) and a physically based pint3d-view.js.
 - Mine to merge into it: dbef006 (run_b task free_wall_1.0). After panel16_check passes there: update fig16 docs (deck pixels recorded).
 - Problem 5 GPU run waits for the owner's yes to ~20 T4-min (0.33 GPU-h, 40-min hard limit); not overlapping its GPU work.
+- 18 Nov ~18:10 UTC: the look session's panel16 v1 on its branch hung >2 h (its software-WebGL 3D scene blocks the page). Fix pushed to
+  claude/guinness-realism as 6ec7f73 (my files): guinness16-play.js ?no3d=1 skips the 3D close-ups; panel16_check loads with no3d=1 and
+  has a 25-min limit. Its edit to guinness16-play.js (setCart/setPose for close.b) reviewed: fine. My CPU v18 runs panel16_check on the
+  joint branch (30-min limit). Merge to main = one merge of claude/guinness-realism after it passes.
