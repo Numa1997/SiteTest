@@ -25,7 +25,7 @@ def svg(body, opacity):
 
 
 def path(pts, w):
-    d = 'M' + ' L'.join(f'{x:.1f} {y:.1f}' for x, y in pts)
+    d = 'M' + ' L'.join(f'{x:.0f} {y:.0f}' for x, y in pts)
     return f'<path d="{d}" stroke-width="{w:.2f}"/>'
 
 
@@ -102,3 +102,52 @@ if __name__ == '__main__':
         s = f()
         open(f'{OUT}/bg-{name}.svg', 'w').write(s)
         print(name, len(s), 'bytes')
+
+
+# ---------- d: currents and atoms (the default since 18 November 2026) ----------
+# A full-width tile (WD x H). Sixty-six lines run down the page in six braided currents. Each line is
+#   x(y) = X_c(y) + spread * u + sum_k 0.5^k A cos(2 pi m_k y / H + phase)
+# with whole numbers m_k, so every line closes on itself from tile to tile; X_c(y), the current's own course, wanders
+# the same way. Along the lines sit the "atoms": dots of random size, mostly small, a few large and solid,
+# falling with the currents (the page moves this layer down slowly). Lucretius' atoms falling through the void and swerving.
+WD = 2400
+
+
+def fbm(y, ph, amp, ms):
+    return sum(amp * .5 ** k * math.cos(2 * math.pi * m * y / H + ph[k]) for k, m in enumerate(ms))
+
+
+def make_d():
+    rnd = random.Random(1916)
+    lines, atoms = [], []
+    centres = [150, 420, 760, 1640, 1980, 2250]
+    for ci, cx in enumerate(centres):
+        cph = [rnd.uniform(0, 6.3) for _ in range(4)]
+        n = 11
+        for j in range(n):
+            u = (j - (n - 1) / 2) / ((n - 1) / 2)
+            ph = [rnd.uniform(0, 6.3) for _ in range(6)]
+            width = rnd.uniform(.5, 1.7) * (1.3 if abs(u) < .35 else 1)
+            pts = []
+            for y in range(0, H + 1, 5):
+                spread = 70 + 50 * math.sin(2 * math.pi * y / H * (ci % 3 + 1) + cph[3])
+                x = cx + fbm(y, cph, 120, (1, 2, 3)) + spread * u + fbm(y, ph, 26, (2, 4, 7, 11, 17, 29))
+                pts.append((x, y))
+            lines.append(path(pts, width))
+            for _ in range(rnd.randint(9, 16)):
+                x, y = pts[rnd.randrange(len(pts))]
+                r = rnd.choice((.9, 1.1, 1.3, 1.6, 2, 2.6, 3.4)) if rnd.random() > .06 else rnd.uniform(4.5, 7)
+                solid = r > 3 or rnd.random() < .5
+                atoms.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{r:.1f}"' + (' fill="#7a1f2b" stroke="none"/>' if solid else ' stroke-width=".8"/>'))
+    head = f'<svg xmlns="http://www.w3.org/2000/svg" width="{WD}" height="{H}" viewBox="0 0 {WD} {H}">'
+    tail = '</svg>\n'
+    a = head + f'<g fill="none" stroke="{WINE}" stroke-linecap="round" stroke-opacity=".42">' + ''.join(lines) + '</g>' + tail
+    b = head + f'<g fill="none" stroke="{WINE}" fill-opacity=".7" stroke-opacity=".7">' + ''.join(atoms) + '</g>' + tail
+    return a, b
+
+
+if __name__ == '__main__':
+    a, b = make_d()
+    open(f'{OUT}/bg-d-lines.svg', 'w').write(a)
+    open(f'{OUT}/bg-d-atoms.svg', 'w').write(b)
+    print('d', len(a), len(b), 'bytes')

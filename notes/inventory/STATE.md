@@ -4,7 +4,7 @@ Chat state written into the repository first (CLAUDE.md, "Write the chat's state
 reread this file and `BRIEF.md` before anything else. Keep it current at every step that changes what is live or what is left.
 Never write the owner's name in files of this folder.
 
-Last update: 14 November 2026, about 16:00 UTC. Phase 2: Fig. 12 and Fig. 14 organised (one notebook and one dataset each); Fig. 15 and 16 held.
+Last update: 18 November 2026. Phase 2: Fig. 12 and Fig. 14 organised (one notebook and one dataset each); Fig. 15 and 16 held.
 
 ## Aim
 
@@ -60,6 +60,11 @@ Done in Phase 2:
    were corrected before the push). Both pushed as version 1 on CPU and ran `check`: Fig. 14 ALL OK (2961 files, 587 s), Fig. 12 ALL OK
    (138 files, 63 s). Documented in `docs/kaggle-pipeline.md` (also corrected: Kaggle does have folders, Collections, web page only).
    Nothing deleted. The 9 old notebooks of Fig. 12 and 14 are now replaced; they stay until the owner authorises each deletion.
+
+10. 18 November 2026 (owner: "Go on"): Fig. 15 and 16 still active (Fig. 16 ran `fig-16-cart-diagnostics-cpu` on 18 Nov; Fig. 15's
+   correction has open steps), so held. Fig. 12's JAX notebook had two new versions (11, 12, 15 Nov, damping grid, commit 758df53):
+   copied into dataset version 2 (100 files, 164 172 501 B; manifests in `datasets/fig12-guinness-on-a-cart/`), job `damping-grid`
+   added to the Fig. 12 notebook, its version 2 ran `check`: ALL OK. Nothing deleted.
 
 Held: Fig. 15 (`fig15-*`, 15 notebooks incl. the 3 `fig15-correction-walls-*` of the running correction session) and Fig. 16
 (`fig-16-guinness-cart-with-control`): not touched while those sessions run. 

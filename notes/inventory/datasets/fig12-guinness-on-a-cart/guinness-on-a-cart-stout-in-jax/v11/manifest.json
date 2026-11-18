@@ -1,0 +1,16 @@
+{
+ "notebook": "numakoudsie/guinness-on-a-cart-stout-in-jax",
+ "version": 11,
+ "files": [
+  {
+   "file": "damping/damping.json",
+   "bytes": 12969,
+   "sha256": "bd8308e4f742c3e96d0df499ed31f5832620570f954ceb5ac678f488f60bab27"
+  },
+  {
+   "file": "damping/progress.log",
+   "bytes": 1104,
+   "sha256": "9ca0e06cefc1af8f68a2b15b04c490819e2d800c51110c58d56729287132cc42"
+  }
+ ]
+}

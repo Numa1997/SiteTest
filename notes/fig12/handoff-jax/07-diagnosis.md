@@ -45,9 +45,12 @@ JAX solver, fix and run". CPU only, nothing rerun. Complete as of 14 November 20
   for 0.146 s, ring-13 fit as in the run; script in this chat's scratch, results discarded), one change at a time:
   - no friction, APIC, step ≤ 2 ms: ζ = 0.0782 at 6 mm (2.959 Hz), 0.0433 at 4.5 mm (3.120 Hz), 0.0254 at 3 mm (3.249 Hz).
     With friction off, all of this is the method's loss. A power law through the three frictionless points gives
-    ζ_num ∝ Δx^1.60 and 0.0081 at 1.5 mm; the local exponents (2.06 from 6 to 4.5 mm, 1.31 from 4.5 to 3 mm) bracket it at
-    0.006 to 0.010. The 0.0105 inferred from run 6 (0.0160 minus the predicted 0.0055) lies at the top of that range, so the
-    gap is accounted for within the error bar. The frequency converges the same way: 2.96, 3.12, 3.25, then 3.33 Hz at 1.5 mm,
+    ζ_num ∝ Δx^1.60 and 0.0081 at 1.5 mm, bracketed at 0.006 to 0.010 by the local exponents (2.06 from 6 to 4.5 mm, 1.31
+    from 4.5 to 3 mm). **That extrapolation was wrong.** The same test run on Kaggle's GPU (15 November, Fig. 12 notebook
+    version 12, `tools/fig12/kaggle/damping_grid.py`, `notes/fig12/damping-grid.json`; `notes/guinness-rebuild/audit.md`, F)
+    measured 0.0152 at 1.5 mm and 0.0090 at 1.0 mm: the exponent falls to about 0.74 between 3 and 1.5 mm, so the coarse
+    points over-predicted how fast the loss shrinks. At the production grid the method alone gives about the whole of run 6's
+    0.016. The frequency converges the same way: 2.96, 3.12, 3.25, then 3.33 Hz at 1.5 mm,
     towards the theory's 3.421 Hz.
   - time step, 6 mm, step ≤ 1 ms instead of 2 ms: ζ rises from 0.078 to 0.105. Halving the step adds damping instead of
     removing it, so it is not a truncation error of the time integration: the loss comes with each step, i.e. each
@@ -59,12 +62,12 @@ JAX solver, fix and run". CPU only, nothing rerun. Complete as of 14 November 20
     for the real glass, as a 6 mm grid would under-resolve; the physical and numerical parts add.
   - rest guard: ruled out by the code; it only checks the pint at rest and stops the run, it never changes the state.
   **Cause:** the APIC hand-over between particles and grid, once per step, which smooths the velocity on the scale of a cell;
-  it shrinks with the grid as about Δx^1.3 to Δx^2. **Effect:** run 6's swing without the head, which the page plays, decays at
+  it shrinks with the grid, but more slowly near the production grid (about Δx^0.7 to Δx^1.3) than the coarse CPU points said. **Effect:** run 6's swing without the head, which the page plays, decays at
   ζ = 0.016 against about 0.0055 for the real stout, so about three times too fast (a decay time 1/(ζω) of 3.0 s instead of 8.7 s); the
-  note already says the swing dies too fast. With the head (ζ = 0.425) the method's 0.006 to 0.010 is 1.5 to 2.5 % of the
+  note already says the swing dies too fast. With the head (ζ = 0.425) the method's measured 0.0152 is 3.6 % of the
   damping: no visible effect on the rides, and the plant the controllers were designed on (0.425, measured in the run) already
-  contains it. **Fix cost:** a finer grid (1 mm would give roughly 0.004 to 0.006, at 3.4 times the cells and about 1.5 times
-  the steps, so about 5 times the GPU time) or a less dissipative hand-over (a higher-order or blended APIC/FLIP transfer: a
+  contains it. **Fix cost:** a finer grid (1 mm measured 0.0090, still 1.6 times the real 0.0055, at 3.4 times the particles and
+  3.4 times the time per step) or a less dissipative hand-over (a higher-order or blended APIC/FLIP transfer: a
   solver change, then a CPU test and a GPU rerun). Neither is needed for the rides with the head.
 
 Wrong published numbers found: none. Fix cost: none for items 2–4; item 1 only if the owner wants the bare stout's swing closer

@@ -208,3 +208,11 @@ Asked by the coordinating chat (session_01DGmqintkoYzahfGQQzdXYL) on the owner's
   redistribution 0.25 mm. It is the two-point reading of local roughness (fit residual 0.18-0.29 mm rms). Side finding: on
   the kerb the mean surface rises 0.85-1.44 mm (particles conserved: the particle cloud bulks), on gentle roads <= 0.10 mm.
 - Numerical damping: CPU free swings in scratch damp/ (inviscid at 6, 4.5, 3 mm; dt 1 ms; PIC vs APIC; wall model).
+
+## Handed on (18 November 2026)
+
+From 14 November the chat "Guinness rebuild" (notes/guinness-rebuild/STATE.md) took Fig. 12 and Fig. 16 over: control switch,
+3D close-up, volume correction, the damping measured on Kaggle at 1.5 and 1.0 mm (0.0152, 0.0090), published. The owner's
+binding rule recorded there (15 November): nothing runs in this container any more; tests and builds only on Kaggle. This chat
+follows it. My extrapolation of the numerical damping (0.006-0.010 at 1.5 mm) was wrong; 07-diagnosis.md now says so and gives
+the measured value. Nothing else of this chat is open.

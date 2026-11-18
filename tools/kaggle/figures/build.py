@@ -6,7 +6,7 @@ The figure's notebook has every job of the figure in it. The setting JOB (first 
   JOB = "check"   (the default; CPU, a few minutes, free) reads the figure's dataset, checks every stored file against its
                   manifest (size and SHA-256) and checks that the code of every job is present and compiles. Writes check.json.
   JOB = "<name>"  runs that job: the exact code of the old notebook that made the data, read from the dataset
-                  (<old slug>/source-current-version.ipynb), cell by cell, through IPython. That code fetches its solver
+                  (<old slug>/source-current-version.ipynb, or the file a job names), cell by cell, through IPython. That code fetches its solver
                   from this repository at the pinned commit printed in the job table, so a rerun is the same computation.
                   A GPU job needs the accelerator switched on when the notebook is pushed (column "machine" below).
 Each run of the figure's notebook is a new version of the same notebook; its output goes into the figure's dataset as
@@ -20,7 +20,7 @@ FIGURES = {
     "fig-14-schrodinger-sphere": dict(
         title="Fig 14 Schrodinger sphere", figure="Fig. 14, Schrödinger sphere", dataset="fig14-schrodinger-sphere",
         record="public/data/schrodinger-sphere/generations.json",
-        jobs=[  # name, old notebook (its code and outputs are in the dataset under this folder), machine, pinned commit (read from the stored code), what it computes
+        jobs=[  # name, old notebook (its code and outputs are in the dataset under this folder), machine, pinned commit (read from the stored code), what it computes[, code file in that folder]
             ("full-grid", "schrodinger-sphere-full-grid", "GPU T4 x2", "10dc1d64200446165d40456972d9b51047846f71", "the sphere in 3D: 9 energies x 9 heights x 5 radii = 405 runs, 128^3 cells"),
             ("3d-wave", "schrodinger-sphere-3d-wave", "GPU T4 x2", "7083b64c90303ffabe4355e7359a347a392a6485", "the 3D wave Re psi for the 3D view of the sphere"),
             ("flat-wall", "schrodinger-flat-wall", "CPU", "76c7ce089557d9939ed1f63f5535021057f387ee", "the flat wall (1D across the wall, exact in 3D)"),
@@ -36,6 +36,7 @@ FIGURES = {
             ("stout-in-jax", "guinness-on-a-cart-stout-in-jax", "GPU T4 x2", "58eea6870a20b8edfaa9ef46ee655cf1e890fdfe", "the stout in JAX: the rides the page plays (current code is version 10)"),
             ("stout-sloshing", "guinness-on-a-cart-stout-sloshing", "GPU T4 x2", "70703de1821fc5f28a5592a1a74c8d3c84a73488", "Taichi generation: the rides of rides.json (version 5)"),
             ("free-swing", "guinness-free-swing-v2", "GPU T4 x2", "3d6f61a79c7356fdb044c6f134cf385783a492b7", "Taichi generation: the free swing and its repair (versions 4 and 5)"),
+            ("damping-grid", "guinness-on-a-cart-stout-in-jax", "GPU T4 x2", "758df533ed01565887c9059d9e9a72646fc05a8f", "the damping-grid study of 15 November 2026 (versions 11 and 12; code in v12/source.ipynb)", "v12/source.ipynb"),
         ]),
 }
 
@@ -47,7 +48,7 @@ cands = [os.path.dirname(p) for p in glob.glob("/kaggle/input/**/README.md", rec
 assert cands, "attach the dataset %s (Add Input) and run again" % DATASET
 DS = cands[0]; print("dataset at", DS)
 def source_of(job):
-    nb = json.load(open(os.path.join(DS, job["folder"], "source-current-version.ipynb")))
+    nb = json.load(open(os.path.join(DS, job["folder"], job["source"])))
     return [("".join(c["source"]) if isinstance(c["source"], list) else c["source"]) for c in nb["cells"] if c["cell_type"] == "code"]
 OUT = "/kaggle/working/" + datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d")
 os.makedirs(OUT, exist_ok=True)
@@ -92,7 +93,7 @@ else:
 
 def build(slug):
     F = FIGURES[slug]
-    jobs = [dict(name=n, folder=f, machine=m, commit=c, what=w) for n, f, m, c, w in F["jobs"]]
+    jobs = [dict(name=j[0], folder=j[1], machine=j[2], commit=j[3], what=j[4], source=(j[5] if len(j) > 5 else "source-current-version.ipynb")) for j in F["jobs"]]
     table = "\n".join(f"| `{j['name']}` | {j['what']} | {j['machine']} | `{j['commit'][:7]}` | `{j['folder']}/` |" for j in jobs)
     md = (f"# {F['figure']}: every computation of the figure in one notebook\n\n"
           f"Phyein Usul (phyeinusul.com). Data: dataset `{OWNER}/{F['dataset']}` (attach it as input). "
