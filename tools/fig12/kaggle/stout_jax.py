@@ -135,7 +135,12 @@ class Geometry:
         self.wallcut = (Z > 0) & (Z < self.zrim) & (r2 >= (self.Rz(Z) - 0.5 * dx) ** 2) & (r2 < (self.Rz(Z) + 0.5 * dx) ** 2 if body else True)   # cut by the glass's inner wall
         self.cavc = self.inside(X, Y, Z) if body is None else self.cavity(X, Y, Z)    # centre inside the cavity (or above it)
         # where the level set is built from the particles: the cavity's interior (old model), or every open cell (continuous model)
-        self.lsdom = self.cav_inner if body is None else ~self.solid(X, Y, Z)
+        # (continuous model: open cells at least half a cell from any solid, as cav_inner keeps half a cell from the inner wall: an
+        # empty cell against a wall, where the particles stand thinner, must not read as air; smoke test 3 read the wall columns 1.4 mm low)
+        if body is None: self.lsdom = self.cav_inner
+        else:
+            h = 0.5 * dx; self.lsdom = ~self.solid(X, Y, Z)
+            for (ox, oy, oz) in ((h, 0, 0), (-h, 0, 0), (0, h, 0), (0, -h, 0), (0, 0, h), (0, 0, -h)): self.lsdom &= ~self.solid(X + ox, Y + oy, Z + oz)
         if body is None: self._wall_area()
         else: self._wall_area_solid(xs4, zs4)
         self.Rfill = float(self.Rz(fill))
