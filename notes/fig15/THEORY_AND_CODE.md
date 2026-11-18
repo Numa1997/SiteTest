@@ -370,6 +370,8 @@ Gate: |T_old − T_ref| ≤ max(0.005, 0.01 T_ref) (`classify_2d.py:35`). Becaus
 a run is kept only if it clears the gate by 0.002 (`classify_2d.py:46`); otherwise it is marked for a complex128 recompute.
 Results: walls, 918 of 1,088 stored fail (exact T_ref); discs, 1,582 of 2,327 stored fail; 545 kept with margin.
 
+> **Correction (18 Nov 2026, Fig. 15 note writer):** the filed generation 2026-11-18 did not use this margin. `file_corrected.py` applies the gate with no margin, so the index keeps **745** discs and replaces 1,582 (`public/data/resonant-tunnelling/2026-11-18/kaggle/index.json`, `status`). Of the 745 kept, **200** clear the gate by less than 0.002, about the (x, rho) result's own accuracy (0.0019, section 9.2). Check: count kept discs with max(0.005, 0.01 T_ref) - |error| < 0.002 in that index.
+
 > **Defect (my error):** for shells the stored index has no transmission number. I defined T_old = P_out / P_box at the T_far frame
 > (`file_corrected.py:56–61`), where "out" is outside the outer sphere. That includes the reflected wave, so T_old ≈ 0.998 against
 > T_ref ≈ 0.86, and the "282 of 282 fail" is meaningless. A correct definition would be the share beyond the last face in x, which the

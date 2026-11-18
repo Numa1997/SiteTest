@@ -41,6 +41,9 @@ The new run files exist only inside the Kaggle notebook outputs (tars); none is 
 - **Fact** (`classify_2d/classify_2d_summary.json`): stored T_far vs new T_ref: **745 pass** the gate, **1,582 fail**. Median |error|
   0.0128, largest 0.438. With a safety margin of 0.002 (because of the complex64 uncertainty below), 545 are "keep" and 1,782 are
   "recompute".
+
+> **Correction (18 Nov 2026, Fig. 15 note writer):** the filed generation 2026-11-18 did not use this margin. `file_corrected.py` applies the gate with no margin, so the index keeps **745** discs and replaces 1,582 (`public/data/resonant-tunnelling/2026-11-18/kaggle/index.json`, `status`). Of the 745 kept, **200** clear the gate by less than 0.002, about the (x, rho) result's own accuracy (0.0019, section 9.2). Check: count kept discs with max(0.005, 0.01 T_ref) - |error| < 0.002 in that index.
+
 - **Fact** (smoke tests): the new disc T is converged to ≤ 0.0019 under grid refinement and agrees with complex128 to ≤ 6e-4; the
   wall limit reproduces exact T to ≤ 0.0017. **But** complex64 loses 0.2–0.4 % of the norm over a run (drift 2–4e-3), above the
   brief's 1e-3 rule. complex128 drift is 1e-11.
