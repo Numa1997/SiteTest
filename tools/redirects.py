@@ -26,6 +26,7 @@ OUT = PUBLIC / '_redirects'
 # is sent on with a 301, so links and bookmarks from before the move keep working.
 MOVED = [
     ('/portfolios/pendulum-control', '/simulations/pendulum-control.html'),   # Fig. 11 was a project from 3 to 4 November 2026
+    ('/simulations/beer-slosh', '/simulations/guinness-kaggle.html'),   # the in-browser Fig. 12, deleted 18 November 2026 (no physics in the browser)
 ]
 EXACT = [   # addresses of a removed folder page, answered with a 301 too
     ('/portfolios/pendulum-control/index.html', '/simulations/pendulum-control.html'),

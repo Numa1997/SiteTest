@@ -10,6 +10,15 @@
 /ar/portfolios/pendulum-control.html /ar/simulations/pendulum-control.html 301
 /ar/portfolios/pendulum-control /ar/simulations/pendulum-control.html 301
 /ar/portfolios/pendulum-control/ /ar/simulations/pendulum-control.html 301
+/simulations/beer-slosh.html /simulations/guinness-kaggle.html 301
+/simulations/beer-slosh /simulations/guinness-kaggle.html 301
+/simulations/beer-slosh/ /simulations/guinness-kaggle.html 301
+/de/simulations/beer-slosh.html /simulations/guinness-kaggle.html 301
+/de/simulations/beer-slosh /simulations/guinness-kaggle.html 301
+/de/simulations/beer-slosh/ /simulations/guinness-kaggle.html 301
+/ar/simulations/beer-slosh.html /simulations/guinness-kaggle.html 301
+/ar/simulations/beer-slosh /simulations/guinness-kaggle.html 301
+/ar/simulations/beer-slosh/ /simulations/guinness-kaggle.html 301
 /portfolios/pendulum-control/index.html /simulations/pendulum-control.html 301
 /ar/ /ar/index.html 200
 /ar /ar/ 307
@@ -111,9 +120,6 @@
 /simulations/Interactive%20Double-Slit%20Experiment%20Visualization/ /simulations/Interactive%20Double-Slit%20Experiment%20Visualization 307
 /simulations/Transverse%20and%20longitudinal%20waves /simulations/Transverse%20and%20longitudinal%20waves.html 200
 /simulations/Transverse%20and%20longitudinal%20waves/ /simulations/Transverse%20and%20longitudinal%20waves 307
-/simulations/beer-slosh /simulations/guinness-kaggle 301
-/simulations/beer-slosh/ /simulations/guinness-kaggle 301
-/simulations/beer-slosh.html /simulations/guinness-kaggle 301
 /simulations/butterfly-catch /simulations/butterfly-catch.html 200
 /simulations/butterfly-catch/ /simulations/butterfly-catch 307
 /simulations/butterfly-dashboard /simulations/butterfly-dashboard.html 200

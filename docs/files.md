@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-6674 files, 942.0 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+6677 files, 941.7 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -12,7 +12,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Pages under public/](#pages-under-public) | 6 |
 | [German pages (generated)](#german-pages-generated) | 17 |
 | [Arabic pages (generated)](#arabic-pages-generated) | 17 |
-| [Simulation pages](#simulation-pages) | 41 |
+| [Simulation pages](#simulation-pages) | 40 |
 | [Walkthroughs](#walkthroughs) | 36 |
 | [Ledgers of the data panel](#ledgers-of-the-data-panel) | 5 |
 | [Shared scripts](#shared-scripts) | 38 |
@@ -40,13 +40,13 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Template sources](#template-sources) | 2 |
 | [The site’s Worker (Cloudflare)](#the-sites-worker-cloudflare) | 1 |
 | [Documentation](#documentation) | 44 |
-| [Tools](#tools) | 251 |
+| [Tools](#tools) | 252 |
 | [Translation tables](#translation-tables) | 54 |
 | [Agents of the lecture-note review](#agents-of-the-lecture-note-review) | 4 |
 | [Working notes of project 07, the electron beam](#working-notes-of-project-07-the-electron-beam) | 52 |
 | [Working notes of the Rotor Pendula study](#working-notes-of-the-rotor-pendula-study) | 86 |
 | [Working notes of the Droplet Collection study](#working-notes-of-the-droplet-collection-study) | 123 |
-| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 890 |
+| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 893 |
 
 ## Repository root
 
@@ -68,8 +68,8 @@ to confirm that every file is described. Sizes are those of the files when the l
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
-| [`public/_headers`](../public/_headers) | 2.1 kB | Response headers Cloudflare sets on phyeinusul.com: security headers on every file, a year of caching for font files; read by Cloudflare, never served. | [usul.md](usul.md) |
-| [`public/_redirects`](../public/_redirects) | 11.9 kB | Each page at its short address (x, folder/, /), for Cloudflare with html_handling none; written by tools/redirects.py, read by Cloudflare, never served. | [usul.md](usul.md) |
+| [`public/_headers`](../public/_headers) | 1.9 kB | Response headers Cloudflare sets on phyeinusul.com: security headers on every file, a year of caching for font files; read by Cloudflare, never served. | [usul.md](usul.md) |
+| [`public/_redirects`](../public/_redirects) | 12.0 kB | Each page at its short address (x, folder/, /), for Cloudflare with html_handling none; written by tools/redirects.py, read by Cloudflare, never served. | [usul.md](usul.md) |
 | [`public/lucretius.html`](../public/lucretius.html) | 69.8 kB | The poem page: Lucretius I 146-224 in four columns, Latin, English, German, Arabic (written by make_page.py; /de/ and /ar/ differ only in the words around the poem). | [pages.md#the-poem-page-lucretiushtml-10-november-2026-rebuilt-11-november-2026](pages.md#the-poem-page-lucretiushtml-10-november-2026-rebuilt-11-november-2026) |
 | [`public/portfolios.html`](../public/portfolios.html) | 51.5 kB | The Portfolios page: the two research projects. | [pages.md](pages.md) |
 | [`public/robots.txt`](../public/robots.txt) | 58 B | Instructions for search-engine crawlers. | [pages.md](pages.md) |
@@ -127,12 +127,11 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/simulations/Double Pendulum.html`](../public/simulations/Double%20Pendulum.html) | 133.2 kB | Fig. 2 · Double Pendulum: the simulation, its data panel, walkthrough and lecture note. | [fig02-double-pendulum.md](simulations/fig02-double-pendulum.md) |
 | [`public/simulations/Interactive Double-Slit Experiment Visualization.html`](../public/simulations/Interactive%20Double-Slit%20Experiment%20Visualization.html) | 178.6 kB | Fig. 3 · Double-Slit Interference: the simulation, its data panel, walkthrough and lecture note. | [fig03-double-slit.md](simulations/fig03-double-slit.md) |
 | [`public/simulations/Transverse and longitudinal waves.html`](../public/simulations/Transverse%20and%20longitudinal%20waves.html) | 209.4 kB | Fig. 4 · Transverse & Longitudinal: the simulation, its data panel, walkthrough and lecture note. | [fig04-transverse-longitudinal.md](simulations/fig04-transverse-longitudinal.md) |
-| [`public/simulations/beer-slosh.html`](../public/simulations/beer-slosh.html) | 397.0 kB | Fig. 12 · A Pint of Guinness on a One-Wheel Cart: the simulation, its data panel, walkthrough and lecture note. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`public/simulations/butterfly-catch.html`](../public/simulations/butterfly-catch.html) | 48.6 kB | Fig. 13: catching the butterfly, the live interactive catch and its lecture note (theory and method); body from tools/fig13/catch_note_body.html. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`public/simulations/butterfly-dashboard.html`](../public/simulations/butterfly-dashboard.html) | 28.2 kB | Fig. 13 dashboard · The Wave and the Circle: the complex plane of the motion, its height and sideways position against time joined by straight lines, and the paper turned until each wave is the circle again (a wheel, the butterfly). | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`public/simulations/double-inverted-pendulum.html`](../public/simulations/double-inverted-pendulum.html) | 369.4 kB | Project 05 · Balancing Two Rods on a Cart (Fig. 11 from 3 to 4 November 2026), in vacuum and air since 7 November 2026: the real-time simulation, its data panel, walkthrough and lecture note; listed on the Projects page, kept at this address so that its German and Arabic pages are generated with the simulations. | [fig11-double-inverted-pendulum.md](simulations/fig11-double-inverted-pendulum.md) |
 | [`public/simulations/draw-decompose.html`](../public/simulations/draw-decompose.html) | 224.2 kB | Fig. 8 · Draw & Decompose: the simulation, its data panel, walkthrough and lecture note. | [fig08-draw-decompose.md](simulations/fig08-draw-decompose.md) |
-| [`public/simulations/driven-oscillator.html`](../public/simulations/driven-oscillator.html) | 342.7 kB | Fig. 9 · Driven Oscillator: the simulation, its data panel, walkthrough and lecture note. | [fig09-driven-oscillator.md](simulations/fig09-driven-oscillator.md) |
+| [`public/simulations/driven-oscillator.html`](../public/simulations/driven-oscillator.html) | 342.8 kB | Fig. 9 · Driven Oscillator: the simulation, its data panel, walkthrough and lecture note. | [fig09-driven-oscillator.md](simulations/fig09-driven-oscillator.md) |
 | [`public/simulations/fig13/bell.html`](../public/simulations/fig13/bell.html) | 21.2 kB | Fig. 13 film that plays live in the browser, generated by tools/fig13/gift/publish_films.py from tools/fig13/gift/butterfly3d.html; do not edit. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`public/simulations/fig13/catch.html`](../public/simulations/fig13/catch.html) | 7.2 kB | Fig. 13 film player (generated by tools/fig13/gift/film_page.py; do not edit): the catch, drawn live. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`public/simulations/fig13/construction.html`](../public/simulations/fig13/construction.html) | 7.2 kB | Fig. 13 film player (generated by tools/fig13/gift/film_page.py; do not edit): the butterfly built by hand, drawn live. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
@@ -153,8 +152,8 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/simulations/fig13/together.html`](../public/simulations/fig13/together.html) | 29.1 kB | Fig. 13 film that plays live in the browser, generated by tools/fig13/gift/publish_films.py from tools/fig13/gift/together.html; do not edit. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`public/simulations/fig13/turning.html`](../public/simulations/fig13/turning.html) | 20.4 kB | Fig. 13 film that plays live in the browser, generated by tools/fig13/gift/publish_films.py from tools/fig13/gift/morph.html; do not edit. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`public/simulations/flower-hunt.html`](../public/simulations/flower-hunt.html) | 39.8 kB | Fig. 13 study · The Flower Hunt: closed flowers and butterflies found as periodic orbits by Newton's method, a test bench and study notes. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
-| [`public/simulations/guinness-cart-control.html`](../public/simulations/guinness-cart-control.html) | 80.4 kB | Fig. 16 · A Pint of Guinness on a Cart Built to Carry It: the simulation, its data panel, walkthrough and lecture note. | [fig16-guinness-cart-control.md](simulations/fig16-guinness-cart-control.md) |
-| [`public/simulations/guinness-kaggle.html`](../public/simulations/guinness-kaggle.html) | 296.4 kB | Fig. 12 · A Pint of Guinness on a One-Wheel Cart: the simulation, its data panel, walkthrough and lecture note. | [fig12-guinness-kaggle.md](simulations/fig12-guinness-kaggle.md) |
+| [`public/simulations/guinness-cart-control.html`](../public/simulations/guinness-cart-control.html) | 81.2 kB | Fig. 16 · A Pint of Guinness on a Cart Built to Carry It: the simulation, its data panel, walkthrough and lecture note. | [fig16-guinness-cart-control.md](simulations/fig16-guinness-cart-control.md) |
+| [`public/simulations/guinness-kaggle.html`](../public/simulations/guinness-kaggle.html) | 297.0 kB | Fig. 12 · A Pint of Guinness on a One-Wheel Cart: the simulation, its data panel, walkthrough and lecture note. | [fig12-guinness-kaggle.md](simulations/fig12-guinness-kaggle.md) |
 | [`public/simulations/momentum-spirographs.html`](../public/simulations/momentum-spirographs.html) | 153.5 kB | Fig. 13 · Spirographs in Momentum Space: a live grid of double pendulums, each kicked with the (p1, p2) of its cell, drawn as long exposures over the chaos map. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`public/simulations/pendulum-control.html`](../public/simulations/pendulum-control.html) | 208.2 kB | Fig. 11 · Double Pendulum under Control: the simulation, its data panel, walkthrough and lecture note. | [fig11-pendulum-control.md](simulations/fig11-pendulum-control.md) |
 | [`public/simulations/phasor-sums.html`](../public/simulations/phasor-sums.html) | 273.3 kB | Fig. 7 · Phasor Sums: the simulation, its data panel, walkthrough and lecture note. | [fig07-phasor-sums.md](simulations/fig07-phasor-sums.md) |
@@ -222,7 +221,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 |---|---|---|---|
 | [`public/scripts/bg-scenes.js`](../public/scripts/bg-scenes.js) | 44.0 kB | Living scenes: ten small moving pictures (forest, iron powder, harmonica, spinners, mixing, chip, letters, seeds, swerve, shores), each mounted in its own place by data-bg. | [bg-scenes.md](scripts/bg-scenes.md) |
 | [`public/scripts/cart16-view.js`](../public/scripts/cart16-view.js) | 17.4 kB | Fig. 16: Cart16View, the four-wheel cart drawn on Fig. 12's StoutView2 (its camera and glass); the deck's pose from stored data. | [fig16-guinness-cart-control.md](simulations/fig16-guinness-cart-control.md) |
-| [`public/scripts/catalog.js`](../public/scripts/catalog.js) | 27.7 kB | The registry of simulations (SIMULATIONS, SIM_FIELDS, SIM_TOOLS) that the catalog page draws. | [catalog.md](scripts/catalog.md) |
+| [`public/scripts/catalog.js`](../public/scripts/catalog.js) | 25.3 kB | The registry of simulations (SIMULATIONS, SIM_FIELDS, SIM_TOOLS) that the catalog page draws. | [catalog.md](scripts/catalog.md) |
 | [`public/scripts/curve.js`](../public/scripts/curve.js) | 46.9 kB | Parameter curves: a knob that moves by itself along a chosen or drawn curve while the figure runs; writes every number into the page's store. | [curve.md](scripts/curve.md) |
 | [`public/scripts/datalog.js`](../public/scripts/datalog.js) | 104.7 kB | The data panel as a bookkeeper: headline, ledger table, books, Read values, Check, Record one round, Save (.npz + CSV). | [datalog.md](scripts/datalog.md) |
 | [`public/scripts/dataset.js`](../public/scripts/dataset.js) | 8.6 kB | Sim.dataset(): the one named data store each simulation writes its numbers into. | [dataset.md](scripts/dataset.md) |
@@ -242,7 +241,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/scripts/kaggle-flow.js`](../public/scripts/kaggle-flow.js) | 14.3 kB | The page side of the Kaggle pipeline: sliders that show the computed range and grow heavy near its edge, eased speed, the loading notice with the pipeline, the kaggle-bridge client. | [kaggle-pipeline.md](kaggle-pipeline.md) |
 | [`public/scripts/marching.js`](../public/scripts/marching.js) | 5.7 kB | Marching cubes on a rectangular grid (tables from three.js), shared by wave3d-view.js and fig14-iso-worker.js. | [wave3d-view.md](scripts/wave3d-view.md) |
 | [`public/scripts/pint3d-view.js`](../public/scripts/pint3d-view.js) | 10.4 kB | Figs. 12 and 16: the 3D close-up of the pint (three.js module): the stored stout surface, head, drops and lumps of one stored picture, riding with the glass. | [fig16-guinness-cart-control.md](simulations/fig16-guinness-cart-control.md) |
-| [`public/scripts/resonant-note.js`](../public/scripts/resonant-note.js) | 187.5 kB | Fig. 15 lecture note: the whole study, injected into the page’s <article> and typeset by sim.js (KaTeX); the 1D theory as the exact core, the 3D computation and its measured grid error, discs and shells, the device. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
+| [`public/scripts/resonant-note.js`](../public/scripts/resonant-note.js) | 199.1 kB | Fig. 15 lecture note: the whole study, injected into the page’s <article> and typeset by sim.js (KaTeX); the 1D theory as the exact core, the 3D computation and its measured grid error, discs and shells, the device. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
 | [`public/scripts/rt3d-view.js`](../public/scripts/rt3d-view.js) | 13.6 kB | Fig. 15: the 3D view (three.js): the meshed height sheet in the house colours and the barriers as static lit glass solids at their true place; turning by press and drag. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
 | [`public/scripts/rt3d-worker.js`](../public/scripts/rt3d-worker.js) | 3.0 kB | Fig. 15: the background thread that fetches one stored 3D run, checks its SHA-256, inflates it and turns the 8-bit levels into ψ. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
 | [`public/scripts/schrodinger-live-worker.js`](../public/scripts/schrodinger-live-worker.js) | 8.6 kB | Fig. 14 live preview: the same split-step Schrödinger solver as on Kaggle, 64^3 points, in a Web Worker, for regions not computed yet. | [fig14-schrodinger-sphere.md](simulations/fig14-schrodinger-sphere.md) |
@@ -253,7 +252,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/scripts/stout-nm.js`](../public/scripts/stout-nm.js) | 3.0 kB | Fig. 12: the coefficients of the nonlinear (Narimanov–Moiseev) live model, written by tools/fig12/nm_coeffs.py; do not edit. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`public/scripts/stout-pool.js`](../public/scripts/stout-pool.js) | 4.9 kB | Fig. 12: shares four loops of the stout solver over worker threads with shared memory; identical numbers. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`public/scripts/stout-view.js`](../public/scripts/stout-view.js) | 38.5 kB | Fig. 12: draws the cart, the road and the pint on a canvas from the solver’s state; the head of the stout is drawn, not computed. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
-| [`public/scripts/stout-view2.js`](../public/scripts/stout-view2.js) | 14.9 kB | Fig. 12 in JAX: unpacks a stored ride (StoutRide) and draws the glass from its stored fields (StoutView2, on StoutView’s cart, road and camera): the stout’s body, the head of the stored thickness, drops and lumps of head, the lettering on the glass; computes nothing physical | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`public/scripts/stout-view2.js`](../public/scripts/stout-view2.js) | 16.4 kB | Fig. 12 in JAX: unpacks a stored ride (StoutRide) and draws the glass from its stored fields (StoutView2, on StoutView’s cart, road and camera): the stout’s body, the head of the stored thickness, drops and lumps of head, the lettering on the glass; computes nothing physical | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`public/scripts/stout-worker.js`](../public/scripts/stout-worker.js) | 1.1 kB | Fig. 12: one worker thread of the stout solver: waits for a task, does its share of a loop. | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`public/scripts/twoway.js`](../public/scripts/twoway.js) | 57.7 kB | The solved, two-way fluid of projects 05 and 06 (offered on 06 since 7 November 2026): a tank as deep as the cart (its size set by the page through setCart), 2D Navier–Stokes on a MAC grid, the cart coupled through the pressure, the rods as lines of forces; runs the page's 1 ms machine steps inside its 20 ms fluid steps. | [twoway.md](scripts/twoway.md) |
 | [`public/scripts/volume-view.js`](../public/scripts/volume-view.js) | 15.1 kB | Draws a stored 3D cloud as fog by ray marching in WebGL2, with a glass sphere and a camera turned by dragging; recomputes any pixel on the CPU for the data panel (Fig. 14). | [fig14-schrodinger-sphere.md](simulations/fig14-schrodinger-sphere.md) |
@@ -4922,7 +4921,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/styles/paper.rtl.css`](../public/styles/paper.rtl.css) | 10.3 kB | paper.css with left and right exchanged, for the Arabic pages; generated with rtlcss, do not edit. | [styles.md](styles.md) |
 | [`public/styles/portfolio.css`](../public/styles/portfolio.css) | 6.1 kB | The project cards and figure plates of the Portfolios page. | [styles.md](styles.md) |
 | [`public/styles/portfolio.rtl.css`](../public/styles/portfolio.rtl.css) | 6.3 kB | portfolio.css with left and right exchanged, for the Arabic pages; generated with rtlcss, do not edit. | [styles.md](styles.md) |
-| [`public/styles/sim.css`](../public/styles/sim.css) | 21.3 kB | Design of the simulation pages: stage, controls, readouts, walkthrough; imports paper.css and KaTeX. | [styles.md](styles.md) |
+| [`public/styles/sim.css`](../public/styles/sim.css) | 22.4 kB | Design of the simulation pages: stage, controls, readouts, walkthrough; imports paper.css and KaTeX. | [styles.md](styles.md) |
 | [`public/styles/sim.rtl.css`](../public/styles/sim.rtl.css) | 21.5 kB | sim.css with left and right exchanged, for the Arabic pages; generated with rtlcss, do not edit. | [styles.md](styles.md) |
 | [`public/styles/site.css`](../public/styles/site.css) | 27.4 kB | Design of the home, catalog and Portfolios pages: tokens, top bar, sections, cards. | [styles.md](styles.md) |
 | [`public/styles/site.rtl.css`](../public/styles/site.rtl.css) | 27.6 kB | site.css with left and right exchanged, for the Arabic pages; generated with rtlcss, do not edit. | [styles.md](styles.md) |
@@ -5064,7 +5063,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
-| [`public/images/sims/beer-slosh.webp`](../public/images/sims/beer-slosh.webp) | 5.2 kB | Thumbnail of Fig. 12 · A Pint of Guinness on a One-Wheel Cart, 800 × 500 px. | [assets.md](assets.md) |
+| [`public/images/sims/beer-slosh.webp`](../public/images/sims/beer-slosh.webp) | 5.2 kB | Thumbnail with no simulation of that id. | [assets.md](assets.md) |
 | [`public/images/sims/double-inverted-pendulum.webp`](../public/images/sims/double-inverted-pendulum.webp) | 10.8 kB | Thumbnail with no simulation of that id. | [assets.md](assets.md) |
 | [`public/images/sims/double-pendulum.webp`](../public/images/sims/double-pendulum.webp) | 12.5 kB | Thumbnail of Fig. 2 · Double Pendulum, 800 × 500 px. | [assets.md](assets.md) |
 | [`public/images/sims/double-slit.webp`](../public/images/sims/double-slit.webp) | 33.4 kB | Thumbnail of Fig. 3 · Double-Slit Interference, 800 × 500 px. | [assets.md](assets.md) |
@@ -5583,14 +5582,14 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`docs/simulations/fig10-wind-turbine.md`](simulations/fig10-wind-turbine.md) | 57.3 kB | Documentation: Fig. 10 · Wind Turbine Control. | [fig10-wind-turbine.md](simulations/fig10-wind-turbine.md) |
 | [`docs/simulations/fig11-double-inverted-pendulum.md`](simulations/fig11-double-inverted-pendulum.md) | 61.0 kB | Documentation: Project 05 · Balancing Two Rods on a Cart (Fig. 11 from 3 to 4 November 2026). | [fig11-double-inverted-pendulum.md](simulations/fig11-double-inverted-pendulum.md) |
 | [`docs/simulations/fig11-pendulum-control.md`](simulations/fig11-pendulum-control.md) | 28.8 kB | Documentation: Fig. 11 · Double Pendulum under Control (Fig. 11 again since 4 November 2026; a project from 3 to 4 November). | [fig11-pendulum-control.md](simulations/fig11-pendulum-control.md) |
-| [`docs/simulations/fig12-beer-slosh.md`](simulations/fig12-beer-slosh.md) | 87.3 kB | Documentation: Fig. 12 · A Pint of Guinness on a One-Wheel Cart (`public/simulations/beer-slosh.html`). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
+| [`docs/simulations/fig12-beer-slosh.md`](simulations/fig12-beer-slosh.md) | 88.0 kB | Documentation: Fig. 12 · A Pint of Guinness on a One-Wheel Cart (`public/simulations/beer-slosh.html`, DELETED 18 November 2026). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`docs/simulations/fig13-momentum-spirographs.md`](simulations/fig13-momentum-spirographs.md) | 29.4 kB | Documentation: Fig. 13 · Spirographs in Momentum Space, the Flower Hunt, the dashboard and the films. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`docs/simulations/fig14-schrodinger-sphere.md`](simulations/fig14-schrodinger-sphere.md) | 32.3 kB | Documentation: Fig. 14 · A Wave Packet Meets a Sphere. | [fig14-schrodinger-sphere.md](simulations/fig14-schrodinger-sphere.md) |
-| [`docs/simulations/fig15-resonant-tunnelling.md`](simulations/fig15-resonant-tunnelling.md) | 14.6 kB | Documentation: Fig. 15 · Resonant Tunnelling (3D). | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
-| [`docs/simulations/fig16-guinness-cart-control.md`](simulations/fig16-guinness-cart-control.md) | 16.8 kB | Documentation: Fig. 16 · A Pint of Guinness on a Cart Built to Carry It. | [fig16-guinness-cart-control.md](simulations/fig16-guinness-cart-control.md) |
+| [`docs/simulations/fig15-resonant-tunnelling.md`](simulations/fig15-resonant-tunnelling.md) | 15.4 kB | Documentation: Fig. 15 · Resonant Tunnelling (3D). | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
+| [`docs/simulations/fig16-guinness-cart-control.md`](simulations/fig16-guinness-cart-control.md) | 18.1 kB | Documentation: Fig. 16 · A Pint of Guinness on a Cart Built to Carry It. | [fig16-guinness-cart-control.md](simulations/fig16-guinness-cart-control.md) |
 | [`docs/simulations/project06-rods-in-liquid.md`](simulations/project06-rods-in-liquid.md) | 9.7 kB | Documentation: Project 06 · Balancing Two Rods in a Liquid. | [project06-rods-in-liquid.md](simulations/project06-rods-in-liquid.md) |
 | [`docs/styles.md`](styles.md) | 52.1 kB | Documentation: Stylesheets: `public/styles/`. | [styles.md](styles.md) |
-| [`docs/usul.md`](usul.md) | 14.2 kB | Documentation: Phyein Usul · the website at phyeinusul.com. | [usul.md](usul.md) |
+| [`docs/usul.md`](usul.md) | 14.3 kB | Documentation: Phyein Usul · the website at phyeinusul.com. | [usul.md](usul.md) |
 
 ## Tools
 
@@ -5719,6 +5718,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/fig16/kaggle/cart4.py`](../tools/fig16/kaggle/cart4.py) | 19.0 kB | Fig. 16: the four-wheel cart, deck pitch and heave, and its control system (LQR, road preview, Kalman filter), JAX float64. | [fig16-guinness-cart-control.md](simulations/fig16-guinness-cart-control.md) |
 | [`tools/fig16/kaggle/diag16.py`](../tools/fig16/kaggle/diag16.py) | 6.5 kB | Fig. 16: diagnostics on Kaggle's CPU, control on and off, variants of the stout's push. | [fig16-guinness-cart-control.md](simulations/fig16-guinness-cart-control.md) |
 | [`tools/fig16/kaggle/diag_burst.py`](../tools/fig16/kaggle/diag_burst.py) | 4.0 kB | Fig. 16: on Kaggle's CPU, decodes a packed ride, recomputes the level probes from the stored surface and lists the columns behind each jump (audit M3). | [fig16-guinness-cart-control.md](simulations/fig16-guinness-cart-control.md) |
+| [`tools/fig16/kaggle/family_shots.py`](../tools/fig16/kaggle/family_shots.py) | 3.0 kB | The three pages of the pint of Guinness: screenshots of the strip that says which figure each page is, at 1440 and 390 px, in headless Chromium on Kaggle's CPU. | [fig16-guinness-cart-control.md](simulations/fig16-guinness-cart-control.md) |
 | [`tools/fig16/kaggle/frames_check.py`](../tools/fig16/kaggle/frames_check.py) | 5.0 kB | Fig. 16: on a Kaggle GPU machine, measures the frame times of the two pages with the 3D close-up in headless Chromium, naming the WebGL renderer it really gets. | [fig16-guinness-cart-control.md](simulations/fig16-guinness-cart-control.md) |
 | [`tools/fig16/kaggle/modal4.py`](../tools/fig16/kaggle/modal4.py) | 2.5 kB | Fig. 16: the cart with the few-mode stout, used in the notebook to choose the controller's weighting. | [fig16-guinness-cart-control.md](simulations/fig16-guinness-cart-control.md) |
 | [`tools/fig16/kaggle/modes16.py`](../tools/fig16/kaggle/modes16.py) | 2.8 kB | Fig. 16: the uncontrolled cart's natural modes from its linear model and the wheelbase filter (Kaggle CPU). | [fig16-guinness-cart-control.md](simulations/fig16-guinness-cart-control.md) |
@@ -5743,7 +5743,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/i18n/ingest.py`](../tools/i18n/ingest.py) | 1.9 kB | Stores checked translations made outside the tables (page pieces, script strings, walkthrough prose). | [i18n.md](i18n.md) |
 | [`tools/i18n/package.json`](../tools/i18n/package.json) | 285 B | The parser wrap.cjs needs (acorn); npm install --prefix tools/i18n. | [i18n.md](i18n.md) |
 | [`tools/i18n/wrap.cjs`](../tools/i18n/wrap.cjs) | 3.7 kB | Wraps the reader-visible strings of a page's scripts in _t(), with a JavaScript parser (acorn). | [i18n.md](i18n.md) |
-| [`tools/inventory.py`](../tools/inventory.py) | 130.2 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
+| [`tools/inventory.py`](../tools/inventory.py) | 130.7 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
 | [`tools/kaggle/figures/build.py`](../tools/kaggle/figures/build.py) | 10.3 kB | One Kaggle notebook per figure: writes each figure notebook (every job of the figure in one table, JOB = check verifies the figure dataset, any job name reruns it with the stored code at its pinned commit) and its kernel-metadata.json. | [kaggle-pipeline.md](kaggle-pipeline.md) |
 | [`tools/kaggle/figures/fig-12-guinness-on-a-cart/fig-12-guinness-on-a-cart.ipynb`](../tools/kaggle/figures/fig-12-guinness-on-a-cart/fig-12-guinness-on-a-cart.ipynb) | 7.0 kB | The Kaggle notebook fig-12-guinness-on-a-cart (one notebook for the whole figure), written by build.py: the notebook as pushed. | [kaggle-pipeline.md](kaggle-pipeline.md) |
 | [`tools/kaggle/figures/fig-12-guinness-on-a-cart/kernel-metadata.json`](../tools/kaggle/figures/fig-12-guinness-on-a-cart/kernel-metadata.json) | 421 B | The Kaggle notebook fig-12-guinness-on-a-cart (one notebook for the whole figure), written by build.py: its push settings (slug, dataset attached, CPU). | [kaggle-pipeline.md](kaggle-pipeline.md) |
@@ -6913,19 +6913,20 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/fig15/COORDINATOR_LOG.md`](../notes/fig15/COORDINATOR_LOG.md) | 13.5 kB | Fig. 15: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig15/COORDINATOR_STATE.md`](../notes/fig15/COORDINATOR_STATE.md) | 3.0 kB | Fig. 15: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig15/CORRECTION.md`](../notes/fig15/CORRECTION.md) | 18.0 kB | Fig. 15: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
-| [`notes/fig15/CORRECTION_LOG.md`](../notes/fig15/CORRECTION_LOG.md) | 13.2 kB | Fig. 15: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig15/CORRECTION_LOG.md`](../notes/fig15/CORRECTION_LOG.md) | 13.7 kB | Fig. 15: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig15/CORRECTION_STATE.md`](../notes/fig15/CORRECTION_STATE.md) | 16.4 kB | Fig. 15: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig15/HISTORY_COMMITS.txt`](../notes/fig15/HISTORY_COMMITS.txt) | 18.6 kB | Fig. 15: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig15/INVENTORY.md`](../notes/fig15/INVENTORY.md) | 7.9 kB | Fig. 15: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig15/LESSONS.md`](../notes/fig15/LESSONS.md) | 11.4 kB | Fig. 15: the final goal (data generated on Kaggle, stored, played smoothly by the page) and every mistake made on Fig. 14, written on the owner's instruction for the Fig. 15 session. | [LESSONS.md](../notes/fig15/LESSONS.md) |
 
-<details><summary>80 files: Fig. 15: a measuring script of the review, or its saved output.</summary>
+<details><summary>82 files: Fig. 15: a measuring script of the review, or its saved output.</summary>
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
 | [`notes/fig15/NOTE_STATE.md`](../notes/fig15/NOTE_STATE.md) | 27.2 kB | Fig. 15: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig15/NOTE_STATE_CORRECTED.md`](../notes/fig15/NOTE_STATE_CORRECTED.md) | 3.3 kB | Fig. 15: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig15/STATE.md`](../notes/fig15/STATE.md) | 14.9 kB | Fig. 15: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
-| [`notes/fig15/THEORY_AND_CODE.md`](../notes/fig15/THEORY_AND_CODE.md) | 26.3 kB | Fig. 15: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig15/THEORY_AND_CODE.md`](../notes/fig15/THEORY_AND_CODE.md) | 26.8 kB | Fig. 15: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig15/THEORY_AND_CODE_EARLIER.md`](../notes/fig15/THEORY_AND_CODE_EARLIER.md) | 14.0 kB | Fig. 15: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig15/audit/error_audit.log`](../notes/fig15/audit/error_audit.log) | 608 B | Fig. 15: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig15/audit/error_audit.py`](../notes/fig15/audit/error_audit.py) | 4.7 kB | Fig. 15: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
@@ -6987,6 +6988,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/fig15/correction/walls_rebuild.jsonl`](../notes/fig15/correction/walls_rebuild.jsonl) | 331.6 kB | Fig. 15: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig15/correction/walls_runs.jsonl`](../notes/fig15/correction/walls_runs.jsonl) | 508.6 kB | Fig. 15: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig15/correction/walls_summary.json`](../notes/fig15/correction/walls_summary.json) | 2.3 kB | Fig. 15: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig15/derivation-check-corrected.md`](../notes/fig15/derivation-check-corrected.md) | 16.1 kB | Fig. 15: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig15/derivation-check-gen2-r10.md`](../notes/fig15/derivation-check-gen2-r10.md) | 21.2 kB | Fig. 15: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig15/derivation-check-gen2-r2.md`](../notes/fig15/derivation-check-gen2-r2.md) | 17.3 kB | Fig. 15: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig15/derivation-check-gen2-r3.md`](../notes/fig15/derivation-check-gen2-r3.md) | 15.8 kB | Fig. 15: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
@@ -7000,7 +7002,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/fig15/derive.py`](../notes/fig15/derive.py) | 6.4 kB | Fig. 15: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig15/error_audit.json`](../notes/fig15/error_audit.json) | 772.3 kB | Fig. 15: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig15/gen1_profile_check.py`](../notes/fig15/gen1_profile_check.py) | 2.4 kB | Fig. 15: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
-| [`notes/fig15/gen2_numbers.py`](../notes/fig15/gen2_numbers.py) | 30.6 kB | Fig. 15: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
+| [`notes/fig15/gen2_numbers.py`](../notes/fig15/gen2_numbers.py) | 36.1 kB | Fig. 15: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig15/grid_test.py`](../notes/fig15/grid_test.py) | 2.9 kB | Fig. 15: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig15/grid_test2.py`](../notes/fig15/grid_test2.py) | 1.3 kB | Fig. 15: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 
@@ -7008,7 +7010,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
-| [`notes/fig15/referee.md`](../notes/fig15/referee.md) | 11.2 kB | Fig. 15: the blind referee's report on the note. | [notes.md](notes.md) |
+| [`notes/fig15/referee.md`](../notes/fig15/referee.md) | 18.3 kB | Fig. 15: the blind referee's report on the note. | [notes.md](notes.md) |
 
 <details><summary>23 files: Fig. 16 working notes: brief, state, model, concepts, prototypes, run summary, page source.</summary>
 
@@ -7023,7 +7025,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/fig16/modes16.json`](../notes/fig16/modes16.json) | 2.6 kB | Fig. 16 working notes: brief, state, model, concepts, prototypes, run summary, page source. | [fig16-guinness-cart-control.md](simulations/fig16-guinness-cart-control.md) |
 | [`notes/fig16/note-numbers.json`](../notes/fig16/note-numbers.json) | 26.8 kB | Fig. 16 working notes: brief, state, model, concepts, prototypes, run summary, page source. | [fig16-guinness-cart-control.md](simulations/fig16-guinness-cart-control.md) |
 | [`notes/fig16/note_numbers.py`](../notes/fig16/note_numbers.py) | 21.8 kB | Fig. 16 working notes: brief, state, model, concepts, prototypes, run summary, page source. | [fig16-guinness-cart-control.md](simulations/fig16-guinness-cart-control.md) |
-| [`notes/fig16/page/guinness-cart-control.src.html`](../notes/fig16/page/guinness-cart-control.src.html) | 81.4 kB | Fig. 16 working notes: brief, state, model, concepts, prototypes, run summary, page source. | [fig16-guinness-cart-control.md](simulations/fig16-guinness-cart-control.md) |
+| [`notes/fig16/page/guinness-cart-control.src.html`](../notes/fig16/page/guinness-cart-control.src.html) | 82.2 kB | Fig. 16 working notes: brief, state, model, concepts, prototypes, run summary, page source. | [fig16-guinness-cart-control.md](simulations/fig16-guinness-cart-control.md) |
 | [`notes/fig16/plan.md`](../notes/fig16/plan.md) | 8.2 kB | Fig. 16 working notes: brief, state, model, concepts, prototypes, run summary, page source. | [fig16-guinness-cart-control.md](simulations/fig16-guinness-cart-control.md) |
 | [`notes/fig16/proto/cart16-flat.png`](../notes/fig16/proto/cart16-flat.png) | 626.6 kB | Fig. 16 working notes: brief, state, model, concepts, prototypes, run summary, page source. | [fig16-guinness-cart-control.md](simulations/fig16-guinness-cart-control.md) |
 | [`notes/fig16/proto/cart16-kerb.png`](../notes/fig16/proto/cart16-kerb.png) | 571.1 kB | Fig. 16 working notes: brief, state, model, concepts, prototypes, run summary, page source. | [fig16-guinness-cart-control.md](simulations/fig16-guinness-cart-control.md) |
@@ -7042,8 +7044,9 @@ to confirm that every file is described. Sizes are those of the files when the l
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
+| [`notes/guinness-merge/PLAN.md`](../notes/guinness-merge/PLAN.md) | 2.3 kB | The three pages of the pint of Guinness: the owner's order to tell them apart and the plan (nothing removed). | [fig16-guinness-cart-control.md](simulations/fig16-guinness-cart-control.md) |
 | [`notes/guinness-rebuild/HANDOFF-open-problems.md`](../notes/guinness-rebuild/HANDOFF-open-problems.md) | 5.8 kB | Rebuild of the two Guinness figures (12 and 16): the chat state and the physics audit with every finding, fix and correction. | [fig16-guinness-cart-control.md](simulations/fig16-guinness-cart-control.md) |
-| [`notes/guinness-rebuild/STATE-open-problems.md`](../notes/guinness-rebuild/STATE-open-problems.md) | 6.8 kB | Rebuild of the two Guinness figures (12 and 16): the chat state and the physics audit with every finding, fix and correction. | [fig16-guinness-cart-control.md](simulations/fig16-guinness-cart-control.md) |
+| [`notes/guinness-rebuild/STATE-open-problems.md`](../notes/guinness-rebuild/STATE-open-problems.md) | 7.7 kB | Rebuild of the two Guinness figures (12 and 16): the chat state and the physics audit with every finding, fix and correction. | [fig16-guinness-cart-control.md](simulations/fig16-guinness-cart-control.md) |
 | [`notes/guinness-rebuild/STATE.md`](../notes/guinness-rebuild/STATE.md) | 6.9 kB | Rebuild of the two Guinness figures (12 and 16): the chat state and the physics audit with every finding, fix and correction. | [fig16-guinness-cart-control.md](simulations/fig16-guinness-cart-control.md) |
 | [`notes/guinness-rebuild/audit.md`](../notes/guinness-rebuild/audit.md) | 24.0 kB | Rebuild of the two Guinness figures (12 and 16): the chat state and the physics audit with every finding, fix and correction. | [fig16-guinness-cart-control.md](simulations/fig16-guinness-cart-control.md) |
 | [`notes/guinness-rebuild/frames/frames16-report-v16.json`](../notes/guinness-rebuild/frames/frames16-report-v16.json) | 2.7 kB | Rebuild of the two Guinness figures (12 and 16): the chat state and the physics audit with every finding, fix and correction. | [fig16-guinness-cart-control.md](simulations/fig16-guinness-cart-control.md) |
