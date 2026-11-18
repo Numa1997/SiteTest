@@ -39,3 +39,7 @@ sections 6-9, 12, 13 true for the new numbers; NUM block from notes/fig15/gen2_n
   not flux, biased walls' two independent checks (26 kept; one (x, rho) run), V0 = 3 ratio range filter stated, k/k_R reason,
   (x, rho) grid stated, shell faces, rho/phi flagged, (25d) absorbed part, sigma_E range for the diode.
 - Not fixed: shell run lengths, the two out-of-date correction docs (545 vs 745), the twin lifetime 15.3 (not re-checkable).
+
+## Merged and live (18 Nov)
+main fast-forwarded to c9056ac. Live phyeinusul.com: resonant-note.js byte-identical to the repository, NUM block identical,
+1240 KaTeX, 0 errors, 38 equation tags, no page errors (headless Chromium, 1440). Reply sent to the coordinator. Done.
