@@ -132,15 +132,36 @@
     if (this.letter) this.drawLettering(cam, P, Rout, thC, dpr);
 
     // what left the glass, where it was stored: drops of stout (dark) and lumps of head (cream), nearest last
-    const pts = [], D = ride.D;
-    for (let q = ride.dOff[k]; q < ride.dOff[k + 1]; q++) pts.push([ride.drops[3 * q] * D.qd, ride.drops[3 * q + 1] * D.qd, ride.drops[3 * q + 2] * D.qd, 0.0011, 0]);
+    // Stout is liquid, so the stored drops are not drawn one speck each: the drops inside each 5 mm cube of the glass's frame
+    // are merged into one drop at their centre holding their whole volume (each stored drop stands for nd_true/nd simulated
+    // particles of mass mp, density 1007 kg/m^3). Close drops overlap into sheets and threads; a lone drop stays a lone drop.
+    const pts = [], D = ride.D, B = 0.005, nk = ride.dOff[k + 1] - ride.dOff[k];
+    if (nk > 0) {
+      const wq = Math.max(1, ((D.nd_true && D.nd_true[k]) || nk) / nk), vq = wq * (D.mp || 0) / 1007, bins = new Map();
+      for (let q = ride.dOff[k]; q < ride.dOff[k + 1]; q++) {
+        const x = ride.drops[3 * q] * D.qd, y = ride.drops[3 * q + 1] * D.qd, z = ride.drops[3 * q + 2] * D.qd;
+        const key = Math.floor(x / B) + ',' + Math.floor(y / B) + ',' + Math.floor(z / B), b = bins.get(key);
+        if (b) { b[0] += x; b[1] += y; b[2] += z; b[3]++; } else bins.set(key, [x, y, z, 1]);
+      }
+      for (const b of bins.values()) pts.push([b[0] / b[3], b[1] / b[3], b[2] / b[3], Math.max(0.0008, Math.cbrt(0.75 * b[3] * vq / Math.PI)), 0]);
+    }
     for (let q = ride.lOff[k]; q < ride.lOff[k + 1]; q++) pts.push([ride.lumps[4 * q] * D.qd, ride.lumps[4 * q + 1] * D.qd, ride.lumps[4 * q + 2] * D.qd, Math.cbrt(0.75 * ride.lumps[4 * q + 3] * D.qv / Math.PI), 1]);
-    const scr = pts.map((d) => { const p = P(d[0], d[1], d[2]); return [p[2], p[0], p[1], Math.max(1.1 * dpr, cam.f * d[3] / p[2]), d[4]]; }).filter((p) => p[0] > 0.05);
+    const scr = pts.map((d) => { const p = P(d[0], d[1], d[2]); return [p[2], p[0], p[1], Math.max(1.2 * dpr, cam.f * d[3] / p[2]), d[4]]; }).filter((p) => p[0] > 0.05);
     scr.sort((a, b) => b[0] - a[0]);
+    // stout: first every drop in one opaque dark colour (overlaps join into one body of liquid), then a small highlight on each
+    // large drop, upper left, as light from the room catches a wet surface; head: cream with a thin shade line
     for (const [, x, y, r, kind] of scr) {
+      if (kind) continue;
+      ctx.beginPath(); ctx.arc(x, y, r, 0, 2 * Math.PI); ctx.fillStyle = rgb(C.stoutDark); ctx.fill();
+    }
+    for (const [, x, y, r, kind] of scr) {
+      if (kind || r < 2.5 * dpr) continue;
+      ctx.beginPath(); ctx.arc(x - 0.35 * r, y - 0.35 * r, 0.28 * r, 0, 2 * Math.PI); ctx.fillStyle = rgb(C.stoutTop, 0.55); ctx.fill();
+    }
+    for (const [, x, y, r, kind] of scr) {
+      if (!kind) continue;
       ctx.beginPath(); ctx.arc(x, y, r, 0, 2 * Math.PI);
-      if (kind) { ctx.fillStyle = rgb(C.cream); ctx.fill(); ctx.strokeStyle = rgb(C.creamShade, 0.9); ctx.lineWidth = 0.6 * dpr; ctx.stroke(); }
-      else { ctx.fillStyle = rgb(C.stoutDark, 0.92); ctx.fill(); }
+      ctx.fillStyle = rgb(C.cream); ctx.fill(); ctx.strokeStyle = rgb(C.creamShade, 0.9); ctx.lineWidth = 0.6 * dpr; ctx.stroke();
     }
     this.lastEdge = edge;
   };

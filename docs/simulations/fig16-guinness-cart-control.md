@@ -138,6 +138,10 @@ the ride time and cross-fades the last picture out over 0.45 s. `guinness16-play
 `public/data/fig16/2026-11-14/` (run 2) and `2026-11-15/` (runs 3, 3b, 4: the turning deck's forces on the stout, 60 pictures a
 second, control off on every road). Per road and setting it plays run 3's ride where one exists, else run 2's, seed 1. Page files
 keep at most 2,048 drops per picture (an even subsample; the true count is `nd_true`). See `notes/guinness-rebuild/audit.md`.
+**Spilled stout in the 2D figures (18 November 2026).** `StoutView2` (`stout-view2.js`) no longer draws each stored drop as a speck: the
+stored drops in each 5 mm cube of the glass's frame are drawn as one drop at their centre holding their whole volume (each stored
+drop stands for `nd_true/nd` particles of mass `mp`, at 1007 kg/m³; at least 0.8 mm across). Overlapping drops join into one opaque
+body of liquid; large drops get a small highlight. Drawing only: the stored positions, counts and spilled volumes are unchanged.
 
 **3D close-up (15 November 2026).** `public/scripts/pint3d-view.js` (an ES module on three.js 0.170, vendored) draws the same stored
 picture of the pint in 3D under the cart's picture, with the camera riding with the glass:
