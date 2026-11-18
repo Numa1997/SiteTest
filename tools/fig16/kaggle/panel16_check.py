@@ -74,12 +74,14 @@ with sync_playwright() as p:
             pg.wait_for_function("() => window.Sim && window.Sim.data && document.querySelector('.dp-tab')", timeout=60000)
             pg.wait_for_timeout(700)                      # the readings are rewritten 4 times a second
             r = pg.evaluate(PROOF); r["viewport"] = [w, h]; r["ride_asked"] = ride
+            r["banner"] = pg.evaluate("() => { const e = document.getElementById('sim-error'); return e ? e.textContent : null; }")
+            r["stage_h"] = pg.evaluate("() => document.getElementById('stage').getBoundingClientRect().height")
             bad_c = [c for c in r["checks"] if c.get("err") or (isinstance(c.get("diff"), (int, float)) and c["diff"] > 1e-9)]
             bad_d = [x for x in r["drawn"] if not x["ok"] and x["drawn"] != "not recorded"]
             b = r["book"]; book_ok = abs(b["residual_page"]) < 1e-6 and abs(b["residual_page"] - b["residual_panel"]) < 1e-12
             r["verdict"] = {"checks": len(r["checks"]), "checks_bad": bad_c, "drawn": len(r["drawn"]), "drawn_bad": bad_d,
-                            "deck_recorded": any(x["drawn"] != "not recorded" for x in r["drawn"] if x["n"].startswith("deck")), "book_ok": book_ok}
-            fail += bool(bad_c or bad_d or not book_ok)
+                            "deck_recorded": any(x["drawn"] != "not recorded" for x in r["drawn"] if x["n"].startswith("deck")), "book_ok": book_ok, "banner": r["banner"], "stage_h": r["stage_h"]}
+            fail += bool(bad_c or bad_d or not book_ok or r["banner"] or r["stage_h"] > 2 * h)
             log(json.dumps(r["verdict"])); report["runs"].append(r)
         if w == 1440:
             # the pointer, Read values off: sweep across the figure; the overlay must stay empty and no strip may show
@@ -90,7 +92,7 @@ with sync_playwright() as p:
               for (let y = 0; y < o.height; y += 64) { const c = x.getImageData(0, y, o.width, Math.min(64, o.height - y)).data; for (let i = 3; i < c.length; i += 4) if (c[i]) n++; } const s = document.querySelector('.dp-read'); return { overlay_px: n, strip_hidden: s ? s.hidden : true }; }""")
             pg.screenshot(path=os.path.join(OUT, "fig16-panel-figure.png"))
             # Read values on: pin the right cart while it plays; count how often the strip's words change in 3 s
-            pg.click(".dp-readbtn"); c16 = pg.locator("#c16").bounding_box()
+            pg.evaluate("() => document.querySelector('.dp-readbtn').click()"); pg.locator("#c16").scroll_into_view_if_needed(); c16 = pg.locator("#c16").bounding_box()
             pg.mouse.click(c16["x"] + c16["width"] / 2, c16["y"] + c16["height"] / 2)
             pg.evaluate("() => { document.getElementById('again').click(); }")
             changes = pg.evaluate("""() => new Promise((res) => { const el = document.querySelector('.dp-read__vals'); let last = el.textContent, n = 0, t0 = performance.now();
@@ -101,7 +103,7 @@ with sync_playwright() as p:
             ok = off["overlay_px"] == 0 and off["strip_hidden"] and changes["changes_3s"] <= 15 and not area["overlaps"] and changes["title"]
             fail += not ok; log("pointer: " + json.dumps(report["pointer"]) + (" OK" if ok else " FAIL"))
             # the panel open, the ledger and the books
-            pg.click(".dp-readbtn"); pg.click(".dp-tab"); pg.wait_for_timeout(800)
+            pg.evaluate("() => { document.querySelector('.dp-readbtn').click(); document.querySelector('.dp-tab').click(); }"); pg.wait_for_timeout(800)
             pg.screenshot(path=os.path.join(OUT, "fig16-panel-open.png"))
         else:
             pg.screenshot(path=os.path.join(OUT, "fig16-panel-phone.png"), full_page=False)
