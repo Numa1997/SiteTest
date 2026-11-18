@@ -44,3 +44,21 @@ Diagnostic v2 (rest_diag.py, commit 7f139ca) running: old geometry vs continuous
 - [ ] Surface tension. Analytic checks: static drop (Laplace), capillary wave.
 - [ ] Head stage 2.
 - [ ] GPU runs (cost stated first), packing, pages, notes, merge, live.
+
+## Published worked models to code (after the 2 mm rest and shove gates pass; agreed with the open-problems session)
+1. Splash of a drop on a smooth dry solid: Riboux & Gordillo, PRL 113, 024507 (2014), arXiv 1401.6943v3 (read; erratum PRL 113,
+   189901 to check). Ejection time t_e (dimensionless, units R, V, R/V) from  c1 Re^-1 t_e^-1/2 + Re^-2 Oh^-2 = c t_e^{3/2},
+   c1 = sqrt(3)/2, c = 1.1 (eq. 1); sheet speed V_t = (sqrt(3)/2) V t_e^-1/2, sheet thickness H_t = 2.8 R sqrt(12/pi) t_e^{3/2};
+   lift per length l = K_l mu_g V_t + K_u rho_g V_t^2 H_t, K_u ~ 0.3, K_l = -(6/tan^2 alpha)[ln(19.2 lambda/H_t) - ln(1 + 19.2 lambda/H_t)],
+   lambda the gas's mean free path (68 nm in air at 1 atm), alpha the wedge angle (supplementary material: to read);
+   splash when beta = sqrt(l / sigma) >= 0.14 (eq. 4; fits Xu et al. 2005 at all gases and pressures).
+   Xu, Zhang & Nagel PRL 94, 184505 (2005), arXiv physics/0501149 (read): the measurements; Sigma_G/Sigma_L ~ 0.45 at threshold.
+2. Drag on drops in the headwind: Schiller-Naumann C_D = 24/Re (1 + 0.15 Re^0.687), Re < 1000 (standard; to cite from Clift,
+   Grace & Weber, "Bubbles, Drops, and Particles", 1978, which I have not yet read).
+3. Splash on a wet deck: Cossali, Coghe & Marengo, Exp. Fluids 22, 463 (1997), K = We Oh^-0.4 ~ 2100 (from memory: TO READ).
+4. Gas in the stout: Benilov, Cummins & Lee, arXiv 1205.5233 (downloaded): pub draught Guinness gas volume fraction f ~ 0.1 while
+   settling (their measurement), canned ~ 0.05; after settling (~2 min) small. Dissolved CO2/N2: no measured Guinness value found
+   (dispense gas 21-25 % CO2 / 75-79 % N2, sources disagree).
+5. Wetting: glass is strongly wetted by aqueous liquids (static contact angle ~ 0 deg, beer-foam thesis core.ac.uk 30633103: TO READ);
+   no measured stout-on-glass angle found yet.
+6. Surface tension at 6 C: no stout measurement found; water dgamma/dT = -0.15 mN/m/K (standard) as the stand-in, stated as such.
