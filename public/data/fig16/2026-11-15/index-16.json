@@ -163,39 +163,39 @@
    "ctrl": "full",
    "road": "one sharp 30 mm bump",
    "v0": 1.5,
-   "bytes": 306941,
-   "sha256": "26e435929e34bc012f96afb9f90d68f8668c0e1c326f20a4f99fa9d3f0c6c2ed",
-   "kaggle_version": 8,
-   "commit": "00540204564d2abfc963ba3929a8aa1e1529eff9",
+   "bytes": 271578,
+   "sha256": "b3c7148a25c3a244fde8f20ca05d1bcfb1234a8f612acbdc2c73916f970915d6",
+   "kaggle_version": 9,
+   "commit": "48d4caa",
    "frames": 241,
    "seconds": 4.0,
    "fps": 60,
    "rot": true,
    "measured": {
     "steps": 2160,
-    "ms_per_step": 116.0,
-    "run_s": 250.4,
+    "ms_per_step": 117.2,
+    "run_s": 253.0,
     "spilled_g": 0.0,
-    "head_spilled_ml": 0.015,
+    "head_spilled_ml": 0.039,
     "books": {
      "stout_particles": 1001952,
      "stout_err_particles_max": 0,
      "head_ml0": 91.314,
-     "head_glass_ml_end": 91.2991,
-     "head_off_ml_end": 0.0149,
-     "head_err_ml_max": 0.0
+     "head_glass_ml_end": 91.2745,
+     "head_off_ml_end": 0.0395,
+     "head_err_ml_max": 1.3552527156068805e-14
     },
-    "pitch_max_deg": 5.294415148126249,
+    "pitch_max_deg": 5.420910644047833,
     "i_max_A": 7.999999999999991,
-    "u_max_N": 49.90760258774501,
+    "u_max_N": 49.980864282540594,
     "current_limited": true,
-    "bump_stop_N": 75.68313829673212,
+    "bump_stop_N": 74.21067721770841,
     "v_range": [
-     1.4101165540862688,
-     1.7644475164927749
+     1.4118438719260933,
+     1.7712508652983527
     ],
-    "lean_max_mm": 5.13,
-    "tilt_max_mm": 4.71
+    "lean_max_mm": 5.21,
+    "tilt_max_mm": 4.99
    }
   },
   {
@@ -205,39 +205,39 @@
    "ctrl": "full",
    "road": "one sharp 30 mm bump",
    "v0": 1.5,
-   "bytes": 309377,
-   "sha256": "3afdea5a695d9ff4baef26a32aef4cd9af5ad153ad7ad75a5a25e05f9492da16",
-   "kaggle_version": 8,
-   "commit": "00540204564d2abfc963ba3929a8aa1e1529eff9",
+   "bytes": 275448,
+   "sha256": "646cbf43257356f9b790350c915cc08be28ad8ac545f03ce2638dee97ff090f6",
+   "kaggle_version": 9,
+   "commit": "48d4caa",
    "frames": 241,
    "seconds": 4.0,
    "fps": 60,
    "rot": true,
    "measured": {
     "steps": 2160,
-    "ms_per_step": 124.3,
-    "run_s": 268.4,
+    "ms_per_step": 112.2,
+    "run_s": 242.2,
     "spilled_g": 0.0,
-    "head_spilled_ml": 0.024,
+    "head_spilled_ml": 0.011,
     "books": {
      "stout_particles": 1001952,
      "stout_err_particles_max": 0,
      "head_ml0": 91.314,
-     "head_glass_ml_end": 91.2899,
-     "head_off_ml_end": 0.0241,
-     "head_err_ml_max": 1.3552527156068805e-14
+     "head_glass_ml_end": 91.3032,
+     "head_off_ml_end": 0.0108,
+     "head_err_ml_max": 0.0
     },
-    "pitch_max_deg": 5.414296379696969,
+    "pitch_max_deg": 5.075112183547635,
     "i_max_A": 7.999999999999991,
-    "u_max_N": 49.92902528398221,
+    "u_max_N": 49.97989475286711,
     "current_limited": true,
-    "bump_stop_N": 74.73789099690458,
+    "bump_stop_N": 75.98672428732078,
     "v_range": [
-     1.4075935879113342,
-     1.7851193822753766
+     1.4102949088094348,
+     1.7235792603577413
     ],
-    "lean_max_mm": 5.36,
-    "tilt_max_mm": 5.08
+    "lean_max_mm": 4.65,
+    "tilt_max_mm": 4.58
    }
   },
   {

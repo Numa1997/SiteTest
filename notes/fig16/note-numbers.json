@@ -575,28 +575,28 @@
   "value": {
    "fps": 60,
    "frames": 241,
-   "tilt_max": 4.712,
-   "tilt_every2_even": 2.747,
-   "tilt_every2_odd": 4.712,
+   "tilt_max": 4.989,
+   "tilt_every2_even": 2.581,
+   "tilt_every2_odd": 4.989,
    "t_tilt_max": 0.75,
-   "v_min": 1.4101,
-   "v_max": 1.7644,
-   "a_min": -2.740321267808447,
-   "a_max": 6.12874251497005,
+   "v_min": 1.4118,
+   "v_max": 1.7713,
+   "a_min": -3.076907186387011,
+   "a_max": 6.176646706586816,
    "t_a_min": 0.9667,
-   "pitch_max_deg": 5.294416505906372,
+   "pitch_max_deg": 5.420925587071258,
    "i_max": 8.0,
-   "u_max": 49.908,
-   "head_spill": 0.015,
+   "u_max": 49.981,
+   "head_spill": 0.039,
    "spill_g": 0.0,
    "stout0_g": 429.583,
-   "aeff_max": 36.1308,
-   "om_max": 1.6039,
-   "al_max": 277.8129,
-   "euler_rmax": 27.771300830368894,
-   "centr_rmax": 0.25715702316772554,
-   "cor_05": 1.6039,
-   "lean_needed_deg": 15.60715202694073
+   "aeff_max": 33.3759,
+   "om_max": 1.64021,
+   "al_max": 262.7499,
+   "euler_rmax": 26.265542442591197,
+   "centr_rmax": 0.26893215113512187,
+   "cor_05": 1.64021,
+   "lean_needed_deg": 17.414036651033662
   },
   "how": "stored ride file: 60 or 30 pictures a second; acceleration by central differences of the stored speed"
  },
@@ -604,28 +604,28 @@
   "value": {
    "fps": 60,
    "frames": 241,
-   "tilt_max": 5.076,
-   "tilt_every2_even": 2.779,
-   "tilt_every2_odd": 5.076,
+   "tilt_max": 4.581,
+   "tilt_every2_even": 2.469,
+   "tilt_every2_odd": 4.581,
    "t_tilt_max": 0.75,
-   "v_min": 1.4076,
-   "v_max": 1.7851,
-   "a_min": -3.1287425149700496,
-   "a_max": 6.110778443113773,
-   "t_a_min": 0.95,
-   "pitch_max_deg": 5.414336572427254,
+   "v_min": 1.4103,
+   "v_max": 1.7236,
+   "a_min": -2.7425149700599007,
+   "a_max": 6.116766467065865,
+   "t_a_min": 0.55,
+   "pitch_max_deg": 5.075145557709806,
    "i_max": 8.0,
-   "u_max": 49.929,
-   "head_spill": 0.024,
+   "u_max": 49.98,
+   "head_spill": 0.011,
    "spill_g": 0.0,
    "stout0_g": 429.583,
-   "aeff_max": 32.4767,
-   "om_max": 1.664,
-   "al_max": 273.1006,
-   "euler_rmax": 27.300240268015784,
-   "centr_rmax": 0.27679004028972415,
-   "cor_05": 1.664,
-   "lean_needed_deg": 17.68925042274686
+   "aeff_max": 27.6453,
+   "om_max": 1.41832,
+   "al_max": 215.4836,
+   "euler_rmax": 21.54061197162147,
+   "centr_rmax": 0.20109083107931072,
+   "cor_05": 1.41832,
+   "lean_needed_deg": 15.619036366364847
   },
   "how": "stored ride file: 60 or 30 pictures a second; acceleration by central differences of the stored speed"
  },
@@ -789,11 +789,11 @@
   "how": "stored ride file: 60 or 30 pictures a second; acceleration by central differences of the stored speed"
  },
  "seed_rms_mm": {
-  "value": 1.0446924441693661,
+  "value": 0.23964601314909717,
   "how": "rms over the 241 stored pictures of the tilt difference of the two seeds"
  },
  "seed_max_mm": {
-  "value": 2.311,
+  "value": 0.548,
   "how": "largest difference"
  },
  "f12_kerb": {
@@ -956,8 +956,8 @@
  },
  "ms_step_on": {
   "value": [
-   116.0,
-   124.3
+   117.2,
+   112.2
   ],
   "how": "ms a step, control on (v4)"
  },
@@ -1005,11 +1005,11 @@
   "how": "max |finite difference - formula|, m/s^2: the exact formula and cart4's"
  },
  "gz_err_kerb_full": {
-  "value": 0.6276888312400001,
+  "value": 0.6564304779604,
   "how": "2 h_g max th'^2: cart4's error of g_z (along the glass)"
  },
  "gz_err_kerb_full_seed2": {
-  "value": 0.6756106239999999,
+  "value": 0.4908381158656,
   "how": "2 h_g max th'^2: cart4's error of g_z (along the glass)"
  },
  "gz_err_kerb_off": {
@@ -1025,53 +1025,53 @@
   "how": "2 h_g max th'^2: cart4's error of g_z (along the glass)"
  },
  "run3_run2_rms": {
-  "value": 1.084549668512731,
+  "value": 0.30190632612130885,
   "how": "rms of run 3 seed 1 minus run 2, kerb with control, at run 2's 121 picture times"
  },
  "run3_run2_max": {
-  "value": 2.016,
+  "value": 0.958,
   "how": "largest difference"
  },
  "seed_rms30": {
-  "value": 1.0569404973204655,
+  "value": 0.23766534913995813,
   "how": "the two seeds at the same 121 times"
  },
  "late_seed1": {
   "value": {
-   "du_max": 28.144,
-   "du_before": 22.1725,
-   "al_max": 277.8129,
-   "om_max": 1.10194,
-   "tilt_max": 2.054,
-   "yq_jump_t": 3.85,
-   "yq_min": -0.464,
-   "yq_max": 0.885
+   "du_max": 0.197,
+   "du_before": 1.545,
+   "al_max": 2.0219,
+   "om_max": 0.00974,
+   "tilt_max": 0.194,
+   "yq_jump_t": 3.95,
+   "yq_min": -0.01,
+   "yq_max": 0.003
   },
   "how": "seed 1 after 3.2 s: actuators' pitch part (|u_f - u_r|/2), deck's angular acceleration, pitch rate, tilt, probe reading"
  },
  "late_seed2": {
   "value": {
-   "du_max": 8.353
+   "du_max": 4.467
   },
   "how": "seed 2 after 3.2 s"
  },
  "airborne": {
   "value": {
    "front": 11,
-   "rear": 13,
+   "rear": 12,
    "t_first": 0.5833,
-   "t_last": 0.9,
+   "t_last": 0.8833,
    "rear_t_first": 0.6167,
-   "rear_t_last": 0.9
+   "rear_t_last": 0.8833
   },
   "how": "stored pictures of the controlled kerb (seed 1) in which an axle carries no load"
  },
  "strokes_mm": {
   "value": {
-   "f_min": -33.78326737526928,
-   "f_max": 10.081039132430414,
-   "r_min": -31.49761344083564,
-   "r_max": 30.365607813807316
+   "f_min": -33.710407528184774,
+   "f_max": 10.344604540110588,
+   "r_min": -30.684090473745858,
+   "r_max": 29.911451811033245
   },
   "how": "strut strokes from their first stored value, controlled kerb seed 1"
  },
@@ -1125,7 +1125,7 @@
   "how": "cart4.WEIGHTS updated with the chosen weighting"
  },
  "omdot_fd_kerb_full": {
-  "value": 55.08083832335277,
+  "value": 45.23113772455083,
   "how": "max |d(om)/dt| from the stored pictures (60/s)"
  },
  "omdot_fd_kerb_off": {
@@ -1140,9 +1140,9 @@
   "value": {
    "kerb_full": {
     "t": 4.0,
-    "read_mm": 124.96000000000002,
+    "read_mm": 125.06,
     "rest_mm": 124.99993055172018,
-    "ratio": 0.999550400098467,
+    "ratio": 1.0006762171880272,
     "stout_left_g": 429.583,
     "lost_frac": 0.0
    },

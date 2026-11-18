@@ -130,7 +130,7 @@ V.update(
     stout0_g=f"{R_['kerb_full']['stout0_g']:.0f}", off_kerb_tilt=f"{f16['kerb_off']['measured']['tilt_max_mm']:.0f}",
     off_res_tilt=f"{f16['resonant_off']['measured']['tilt_max_mm']:.0f}", off_b25_tilt=f"{f16['bump25_off']['measured']['tilt_max_mm']:.0f}",
     drops_page=f"{max(max(json.load(open(P('public', 'data', 'fig16', '2026-11-15', f['path'])))['nd']) for f in I16B['files']):,}",
-    late_t=f"{late['yq_jump_t']:.1f}", late_yq_min=f"{late['yq_min']:.2f}".replace("-", "−"), late_yq_max=f"{late['yq_max']:.2f}", late_du=f"{late['du_max']:.0f}",
+    late_t=f"{late['yq_jump_t']:.1f}", late_yq_min=f"{late['yq_min']:.2f}".replace("-", "−"), late_yq_max=f"{late['yq_max']:.2f}", late_du=f"{late['du_max']:.1f}",
     late_du_before=f"{late['du_before']:.1f}", late_al=f"{late['al_max']:.0f}", late_om=f"{late['om_max']:.1f}", late_tilt=f"{late['tilt_max']:.1f}",
     late_du2=f"{NN['late_seed2']['du_max']:.1f}", brake=f"{ex_brake:.0f}",
     p93_deg=f"{math.degrees(math.atan(ex_brake / NN['g'])):.1f}", p93_q_mm=f"{NN['beta0'] * ex_brake / NN['w0'] ** 2 * 1e3:.1f}",

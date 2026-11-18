@@ -347,3 +347,15 @@ the actuators answer (up to 28 N in run 5). A real level sensor averages over an
   36.0 mm from the axis, |y| <= 2.25 mm), divided by the first mode's shape there (0.971).
 - Fig. 12's `probes()` is unchanged.
 - Run 6 recomputes the controlled kerb, both seeds.
+
+**Result (run 6, closed).** GPU notebook version 9 (commit 5c45658), packed on Kaggle's CPU, notebook fig-16-cart-diagnostics-cpu
+version 7 (`m3.log`).
+- Rest guard passed: the largest deviation was 0.54 mm against the 0.75 mm limit; swelling stayed within ±0.1 % in both rides.
+- After 3.3 s the actuators push at most 0.2 N each in seed 1 and 0.4 N in seed 2, against 28 N in run 5. No probe reading
+  jumps by more than 0.25 mm per picture after 3.3 s.
+- Kerb with control, seed 1: tilt 4.99 mm (packed, 60 pictures a second), head spilled 0.039 mL. Seed 2: 4.58 mm, 0.011 mL.
+  Run 5 gave 4.71 / 5.08 mm and 0.015 / 0.024 mL.
+- Scatter between the two seeds: 0.24 mm rms in the tilt, against 1.04 mm in run 5. The burst inflated run 5's scatter.
+- The actuators still reach their 50 N limit at the kerb itself; that is the grip and authority limit of M2, not the burst.
+
+**Inference.** The burst was the probe, not the fluid or the controller. A sensor that averages over an area removes it.
