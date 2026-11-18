@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-6588 files, 933.6 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+6589 files, 933.6 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -46,7 +46,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Working notes of project 07, the electron beam](#working-notes-of-project-07-the-electron-beam) | 52 |
 | [Working notes of the Rotor Pendula study](#working-notes-of-the-rotor-pendula-study) | 86 |
 | [Working notes of the Droplet Collection study](#working-notes-of-the-droplet-collection-study) | 123 |
-| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 827 |
+| [Record of the lecture-note review](#record-of-the-lecture-note-review) | 828 |
 
 ## Repository root
 
@@ -6887,6 +6887,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 |---|---|---|---|
 | [`notes/fig14/wave3d_test.py`](../notes/fig14/wave3d_test.py) | 1.5 kB | Fig. 14: the test that computed one run on 128^3 points in this workspace and stored Re psi in 3D (96 x 64 x 64 points, 32 frames, int8). | [fig14-schrodinger-sphere.md](simulations/fig14-schrodinger-sphere.md) |
 | [`notes/fig15/BRIEF.md`](../notes/fig15/BRIEF.md) | 23.9 kB | Fig. 15 (resonant tunnelling, built on the stored runs of Fig. 14): the brief for the session that builds it, written on the owner's instruction on 13 November 2026. | [BRIEF.md](../notes/fig15/BRIEF.md) |
+| [`notes/fig15/COORDINATOR_STATE.md`](../notes/fig15/COORDINATOR_STATE.md) | 3.0 kB | Fig. 15: a measuring script of the review, or its saved output. | [notes.md](notes.md) |
 | [`notes/fig15/LESSONS.md`](../notes/fig15/LESSONS.md) | 11.4 kB | Fig. 15: the final goal (data generated on Kaggle, stored, played smoothly by the page) and every mistake made on Fig. 14, written on the owner's instruction for the Fig. 15 session. | [LESSONS.md](../notes/fig15/LESSONS.md) |
 
 <details><summary>24 files: Fig. 15: a measuring script of the review, or its saved output.</summary>
