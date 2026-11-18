@@ -188,3 +188,11 @@ of `public/styles/sim.css`): the two figures, what only each one shows, the curr
 the left pane is labelled "For comparison · Fig. 12's one-wheel cart, its best controller" (in the page and in `guinness16-play.js`).
 The in-browser page `beer-slosh.html` was deleted the same day (no physics in the browser); see `fig12-beer-slosh.md`. Checked on
 Kaggle CPU by `tools/fig16/kaggle/family_shots.py`.
+
+## The continuous spill model (merged 18 November 2026, not yet used by any ride)
+`tools/fig12/kaggle/stout_jax.py` gained `Geometry(..., body=(hx, hy, z_top))`: the grid then covers the cart's body around the glass,
+the glass and the body are solids, and stout over the rim stays the same liquid (pressure, viscosity, surface tension, free surface)
+down the glass and onto the cart, leaving only by falling off it. With `body=None` (every stored ride) the solver is unchanged bit for
+bit. Checks on Kaggle CPU (`tools/spill/`): at 2 mm the pint at rest holds 125.01 mm with 0 particles lost or outside; a hard shove
+spills as one liquid with the books exact. Air drag is coded but its check fails (0.0805 against 0.1197 m/s²). Nothing has been
+computed with it on the GPU. Full record: `notes/spill/HANDOFF.md`, `notes/spill/STATE.md`.

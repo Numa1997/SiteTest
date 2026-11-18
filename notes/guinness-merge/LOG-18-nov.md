@@ -25,6 +25,12 @@ notes on the site, docs. Neither edits the other's files.
 | 22:11 | STOPPED by the owner: no recompute, no GPU, animation from stored rides first | 50319a6a |
 | 21:30 | 2 mm test at cc51c2c (continuous-spill-smoke-2mm-c) launched before the stop; finishes on its own, result pending | cc51c2c6 |
 
+## 22:20-22:30: the solver session stopped for good
+- It pushed notes/spill/HANDOFF.md (58d05855); it was interrupted and archived. All work is now the pages session's.
+- claude/continuous-spill merged into claude/guinness-open-problems (tools and notes only; no page changes). claude/guinness-realism
+  NOT merged (the look the owner rejected), pending the owner's decision.
+- The deletion of beer-slosh.html is live (main 4748e5c2): its addresses answer 301 to guinness-kaggle.html (curl).
+
 ## Owner's decisions today
 - No recompute (the stored rides stay); no renumbering of figures; no physics in the browser (beer-slosh deleted).
 - First a working animation from the stored rides; air resistance and the air's parameters after that. The owner checks the animation.
