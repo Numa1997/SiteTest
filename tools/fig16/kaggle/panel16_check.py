@@ -86,8 +86,8 @@ with sync_playwright() as p:
             st = pg.locator("#stage").bounding_box()
             pg.evaluate("() => window.Guinness16.choose && window.Guinness16.seek(0.5)")
             for i in range(41): pg.mouse.move(st["x"] + st["width"] * i / 40, st["y"] + st["height"] * 0.3); pg.wait_for_timeout(25)
-            off = pg.evaluate("""() => { const o = document.querySelector('.dp-overlay'), c = o.getContext('2d').getImageData(0, 0, o.width, o.height).data;
-              let n = 0; for (let i = 3; i < c.length; i += 4) if (c[i]) n++; const s = document.querySelector('.dp-read'); return { overlay_px: n, strip_hidden: s ? s.hidden : true }; }""")
+            off = pg.evaluate("""() => { const o = document.querySelector('.dp-overlay'), x = o.getContext('2d'); let n = 0;
+              for (let y = 0; y < o.height; y += 64) { const c = x.getImageData(0, y, o.width, Math.min(64, o.height - y)).data; for (let i = 3; i < c.length; i += 4) if (c[i]) n++; } const s = document.querySelector('.dp-read'); return { overlay_px: n, strip_hidden: s ? s.hidden : true }; }""")
             pg.screenshot(path=os.path.join(OUT, "fig16-panel-figure.png"))
             # Read values on: pin the right cart while it plays; count how often the strip's words change in 3 s
             pg.click(".dp-readbtn"); c16 = pg.locator("#c16").bounding_box()
