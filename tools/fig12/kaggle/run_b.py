@@ -40,6 +40,9 @@ TASKS = [   # third run (13 Nov 2026): the head as a sheet that resists shear; s
     # the solver's own swing (13 Nov 2026, after run 4): no head, so it rings and its frequency and damping can be read against
     # theory, 3.421 Hz and zeta = 0.0056 (glass and bulk, Bongarzone & Gallaire 2022 eq. 17; research/verification.md check 1)
     dict(name="free_wall_1.5", kind="free", dx=0.0015, model="wall", end=5.0, push=(0.3, 1.0, 0.146)),
+    # the same swing on a 1.0 mm grid (18 Nov 2026, open problem 5; audit F: at 1.5 mm the method alone damps zeta 0.0152, at 1.0 mm
+    # 0.0090, real stout 0.0055): run alone with ONLY=free_wall_1.0
+    dict(name="free_wall_1.0", kind="free", dx=0.0010, model="wall", end=5.0, push=(0.3, 1.0, 0.146)),
 ]
 # the controlled rides (13 Nov 2026, evening; the user: "Please do"): the same roads and speeds as run 6, with the site's
 # controllers ported line by line from stout-cart.js (Cart.sample, Observer): "joint" on all three roads, "slosh" and "preview"

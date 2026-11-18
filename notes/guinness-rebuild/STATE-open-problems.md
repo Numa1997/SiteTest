@@ -49,3 +49,23 @@ Close the six open problems of the handoff, one at a time, in its order. Merge f
 - File split agreed (04:23 UTC, with the owner's yes per that session): look session edits stout-view.js, stout-view2.js, guinness-glass.js,
   cart16-view.js, drawing parts of pint3d-view.js. Mine: Fig. 16 panel, page HTML and src, frame-time work, Kaggle dataset, inventory.
   Message them before touching any of theirs.
+
+## Joint integration (18 Nov ~17:00 UTC)
+- Look session relayed the owner: "Resolve the split ... Complete both works. Merge them into a functioning animation already."
+- Agreed: one integration branch claude/guinness-realism; main gets one merge of both works after panel16_check and frames_check pass
+  on it. It merged main 6aa30fc; its 9a6e8ef adds deck_px_* into this.deckStore (cart16-view.js) and a physically based pint3d-view.js.
+- Mine to merge into it: dbef006 (run_b task free_wall_1.0). After panel16_check passes there: update fig16 docs (deck pixels recorded).
+- Problem 5 GPU run waits for the owner's yes to ~20 T4-min (0.33 GPU-h, 40-min hard limit); not overlapping its GPU work.
+- 18 Nov ~18:10 UTC: the look session's panel16 v1 on its branch hung >2 h (its software-WebGL 3D scene blocks the page). Fix pushed to
+  claude/guinness-realism as 6ec7f73 (my files): guinness16-play.js ?no3d=1 skips the 3D close-ups; panel16_check loads with no3d=1 and
+  has a 25-min limit. Its edit to guinness16-play.js (setCart/setPose for close.b) reviewed: fine. My CPU v18 runs panel16_check on the
+  joint branch (30-min limit). Merge to main = one merge of claude/guinness-realism after it passes.
+
+## Owner's three faults (18 Nov evening): wheels, spill all over the place, stout drawn as particles
+- Owner rejects the look session's picture; claude/guinness-realism is NOT to be merged. I took the drawing files back
+  (stout-view.js, stout-view2.js, cart16-view.js), told the look session.
+- Wheels: d18338a4 on claude/guinness-open-problems: smear = real angle turned since last picture, capped at 0.12 rad (WheelBlur in
+  stout-view.js, used by cart16-view.js); one gold spoke (period 360°, so no backward strobing above ~12 pictures/s). Docs updated.
+- CPU v20 (30-min limit): node --check, spill_shots.py (7 shots, kerb_off/kerb_full), panel16_check.py on d18338a4.
+  If it passes: merge to main, curl live for WheelBlur. Then fix spill/particles in stout-view2.js from the shots.
+- Problem 5 GPU (~20 T4-min) still waits for the owner's yes.

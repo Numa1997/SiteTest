@@ -24,7 +24,10 @@ tilt): twice the cos θ part of the stored surface on the outer ring, exactly as
   by wrapping `project` while `drawGlass` runs. The pose comes from the stored axle heights, deck height and pitch, each measured from its
   first stored value.
   The wheels (14 November 2026): angle −x/R_w from the player's position between stored pictures (`pose.wheelAng`, kinematics), spokes
-  smeared over the angle turned in one screen frame (`pose.wheelRate` = v/R_w), one gold valve mark (`notes/guinness-rebuild/audit.md` A).
+  smeared over the angle the wheel really turned since it was last drawn, at most 0.12 rad (a short shutter, `WheelBlur` in
+  `stout-view.js`, 18 November 2026), one spoke drawn gold so the pattern repeats only once a turn and reads the right way at any frame
+  rate above about 12 a second, and the gold valve mark with a short streak. Before, a fixed 1/60 s smear made a grey fan, and slow
+  frames strobed the five equal spokes backwards.
 - The lecture note is built into the page by `tools/fig16/build_page.py` from `notes/fig16/page/guinness-cart-control.src.html`
   (the note sits between [`<article class="paper" id="paper">`](../../notes/fig16/page/guinness-cart-control.src.html#L89) and
   [`</article>`](../../notes/fig16/page/guinness-cart-control.src.html#L389)): every number in it is a `{{key}}` filled from stored data;
