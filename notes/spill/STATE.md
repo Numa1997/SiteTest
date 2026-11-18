@@ -23,6 +23,21 @@ spill becomes ballistic lumps (head_spill, 546-575); surface tension GAMMA is de
 Cells today 57 x 57 x 113 = 0.37 M; with the deck around the glass about 147 x 80 x 125 = 1.47 M (4x). Pressure solve and
 transfers scale about linearly to 1.5x; estimate 4-6x the GPU time of today's rides. CPU smoke tests on a coarse grid are free.
 
+## Air (owner, 18 Nov: "fluid interacting with air ... look up spillage data")
+Sources read: Xu, Zhang & Nagel, PRL 94, 184505 (2005), arXiv physics/0501149 (splash is caused by the surrounding gas; threshold
+Sigma_G/Sigma_L = rho_G c_G sqrt(R V nu_L / 2) / sigma ~ 0.45); Sauret et al., Phys. Fluids 27, 022103 (2015), arXiv 1411.6542 (foam
+damps sloshing by wall friction; few layers suffice); Kulczycki et al. arXiv 1311.7296 (high spot on the wall); Mayer & Krechetnikov
+PRE 85, 046117 (2012) (abstract only, paywalled). Estimates for our ride (1.5 m/s, 16 cm fall, air 1.2 kg/m^3, 20 C):
+- headwind drag on drops of 1-2 mm: Re 100-200, C_d 0.8-1.1 (Schiller-Naumann), a = 3/4 C_d rho_a U^2/(rho d) = 0.8-2 m/s^2: shifts
+  the landing by up to ~3 cm. TO MODEL: drag of the relative wind on liquid exposed to it.
+- aerodynamic breakup: We = rho_a U^2 d / gamma ~ 0.1 << 12: none.
+- splash on the body: Sigma_G/Sigma_L ~ 0.40 (R 1 mm) to 0.56 (R 2 mm) at 1.8 m/s: at the threshold. TO MODEL: sub-grid rule.
+
+## Smoke test 1 (continuous-spill-cpu v1, commit 214fd3d, dx 4 mm)
+PASS old geometry unchanged; solids; wall area (1793 vs 1859 mm^2 per layer); shove: over the rim, down the outside, onto the body,
+books close (50905 + 467 = 51372), vmax 3.9 m/s. FAIL at rest: surface read 23-28 mm (should be 125), 11 lost, 72 outside.
+Diagnostic v2 (rest_diag.py, commit 7f139ca) running: old geometry vs continuous without / with surface tension.
+
 ## Status
 - [ ] Geometry generalised (nx != ny, solid glass shell, deck), CPU smoke test on Kaggle (coarse dx).
 - [ ] g2p: no ballistic switch; exit only off the deck. Books.
