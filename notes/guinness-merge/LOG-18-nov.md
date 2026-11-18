@@ -42,3 +42,11 @@ notes on the site, docs. Neither edits the other's files.
 - A live-3D pint and Fig. 16 cart (pint3d-view.js, cart3d.js, one hook in guinness16-play.js; commits 9a6e8ef, 00ce483, c856f68),
   CPU screenshots fig16 v3-v5. The owner rejected that look. PAGES' deck-pixel lines for cart16-view.js are on that branch only.
 - Both SOLVER branches merge into main 75343c8 with 0 conflicts (git merge-tree); neither is merged.
+
+## 19 November 2026 (pages session alone; the owner: "GPU", compute the spill)
+- Drag check with the one-sided delta fix (06bd5ed), Kaggle CPU continuous-spill-drag v2: 0.1063 vs law 0.1197 m/s^2 (-11 %), PASS;
+  still air 5e-7 m/s^2, PASS.
+- 4da114de: stout_jax Geometry on an nx x ny grid (the deck 310 x 124 mm; square grid would be 6.7 M cells, this ~2.8 M at 1.5 mm);
+  old grid unchanged (nx = ny = n, y0 = x0). run16.py: CONT=1 builds the deck as a solid (0.155, 0.062, -0.030), passes the
+  headwind (-v, -vzc), counts books as nact + nlanded. smoke_cpu.py on the rectangular grid.
+- Kaggle GPU continuous-spill-fig16-gpu v1: code check (6 mm, 2 frames: rest, kerb_off), 30-min cap.
