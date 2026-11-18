@@ -235,7 +235,7 @@
         {
             id: 'beer-slosh',
             fig: 12,
-            title: 'A Pint of Guinness on a One-Wheel Cart',
+            title: 'A Pint of Guinness on a One-Wheel Cart, Live in Your Browser',
             file: 'simulations/beer-slosh.html',
             field: 'fluids',
             stage: 2,
@@ -252,7 +252,7 @@
         {
             id: 'guinness-kaggle',
             fig: 12,
-            title: 'A Pint of Guinness on a One-Wheel Cart',
+            title: 'A Pint of Guinness on a One-Wheel Cart, Computed on Kaggle',
             file: 'simulations/guinness-kaggle.html',
             field: 'fluids',
             stage: 2,

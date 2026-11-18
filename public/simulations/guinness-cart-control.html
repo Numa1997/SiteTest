@@ -63,13 +63,21 @@
             <p class="sim__num">Fig. 16 · computed on Kaggle · played back</p>
             <h1>A Pint of Guinness on a Cart Built to Carry It<span class="dot">.</span></h1>
             <p class="sim__lede">The same pint as <a href="guinness-kaggle.html">Fig. 12</a>, the same stout and head of foam, the same fluid solver and the same roads. The cart is new: four wheels, a deck that actuators can lift and tilt, and a control system that sees the road coming. On the kerb, where every controller of Fig. 12 lost head over the rim, it keeps the stout nearly flat. Nothing is computed on your device: both rides were computed on Kaggle&#8217;s graphics card and are played back from the stored pictures.</p>
+            <nav class="gfam" aria-label="The three figures of the pint of Guinness">
+                <p class="gfam__k">One pint, three figures · each shows what the others do not</p>
+                <ol class="gfam__list">
+                    <li><a href="beer-slosh.html"><b>Fig. 12 · live</b><span>The one-wheel cart solved in your browser while you watch. Push it, change its speed, switch its controller: the only figure you can steer.</span></a></li>
+                    <li><a href="guinness-kaggle.html"><b>Fig. 12 · on Kaggle</b><span>The same one-wheel cart with a million particles, computed ahead of time on a graphics card. Several controllers on three roads, played back; on the kerb every one of them spills.</span></a></li>
+                    <li aria-current="page"><a href="guinness-cart-control.html"><b>Fig. 16</b><span>A new four-wheel cart built to carry the pint over that kerb, with Fig. 12&#8217;s best ride beside it for comparison.</span></a></li>
+                </ol>
+            </nav>
         </div>
 
         <figure class="stage">
             <div class="g16-pair" id="stage" style="position: relative;">
-                <div class="g16-pane"><h2 id="h12">Fig. 12</h2><div class="cv"><canvas id="c12" aria-label="Fig. 12's one-wheel cart with its best controller on the chosen road, played from stored Kaggle data"></canvas></div><div class="cv3"><canvas class="pint3d" id="p12" aria-label="Close-up of Fig. 12's pint in 3D, from the same stored picture, riding with the glass"></canvas><span class="pint3d-cap">the same stored picture in 3D, close up, riding with the glass</span></div>
+                <div class="g16-pane"><h2 id="h12">For comparison · Fig. 12&#8217;s one-wheel cart, its best controller</h2><div class="cv"><canvas id="c12" aria-label="Fig. 12's one-wheel cart with its best controller on the chosen road, played from stored Kaggle data"></canvas></div><div class="cv3"><canvas class="pint3d" id="p12" aria-label="Close-up of Fig. 12's pint in 3D, from the same stored picture, riding with the glass"></canvas><span class="pint3d-cap">the same stored picture in 3D, close up, riding with the glass</span></div>
                     <dl class="kread"><div><dt>tilt of the stout</dt><dd id="a-tilt">—</dd></div><div><dt>head spilled</dt><dd id="a-head">—</dd></div><div><dt>stout spilled</dt><dd id="a-stout">—</dd></div></dl></div>
-                <div class="g16-pane"><h2 id="h16">Fig. 16</h2><div class="cv"><canvas id="c16" aria-label="The four-wheel cart with its control system on the same road, played from stored Kaggle data"></canvas></div><div class="cv3"><canvas class="pint3d" id="p16" aria-label="Close-up of Fig. 16's pint in 3D, from the same stored picture, riding with the glass"></canvas><span class="pint3d-cap">the same stored picture in 3D, close up, riding with the glass</span></div>
+                <div class="g16-pane"><h2 id="h16">Fig. 16 · the new four-wheel cart</h2><div class="cv"><canvas id="c16" aria-label="The four-wheel cart with its control system on the same road, played from stored Kaggle data"></canvas></div><div class="cv3"><canvas class="pint3d" id="p16" aria-label="Close-up of Fig. 16's pint in 3D, from the same stored picture, riding with the glass"></canvas><span class="pint3d-cap">the same stored picture in 3D, close up, riding with the glass</span></div>
                     <dl class="kread"><div><dt>tilt of the stout</dt><dd id="b-tilt">—</dd></div><div><dt>head spilled</dt><dd id="b-head">—</dd></div><div><dt>stout spilled</dt><dd id="b-stout">—</dd></div>
                         <div><dt>deck pitch</dt><dd id="b-pitch">—</dd></div><div><dt>hub motors</dt><dd id="b-i">—</dd></div><div><dt>actuators front / rear</dt><dd id="b-u">—</dd></div>
                         <div><dt>speed</dt><dd id="b-v">—</dd></div></dl></div>

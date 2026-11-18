@@ -150,8 +150,8 @@
         for (const [P, r] of [[A, r12], [B, r16]]) { P.bumps.length = 0; (r.D.bumps || []).forEach((b) => P.bumps.push(b)); P.fluid.h0 = r.fill; P.fluid.dx = r.dx; }
         [...$('ride-host').children].forEach((b) => b.setAttribute('aria-pressed', b.dataset.road === f.road ? 'true' : 'false'));
         $('ctl-sw').setAttribute('aria-pressed', f.ctrl === 'full' ? 'true' : 'false'); $('ctl-sw-v').textContent = f.ctrl === 'full' ? 'on' : 'off';
-        $('h12').textContent = 'Fig. 12 · one wheel · ' + ({ slosh: 'slosh LQR', joint: 'joint control' })[r12.D.ctrl];
-        $('h16').textContent = 'Fig. 16 · four wheels · control system ' + (f.ctrl === 'full' ? 'on' : 'off');
+        $('h12').textContent = 'For comparison · Fig. 12\u2019s one-wheel cart, its best controller: ' + ({ slosh: 'slosh LQR', joint: 'joint control' })[r12.D.ctrl];
+        $('h16').textContent = 'Fig. 16 · the new four-wheel cart · control system ' + (f.ctrl === 'full' ? 'on' : 'off');
         $('ride-note').textContent = `${f.road[0].toUpperCase()}${f.road.slice(1)} at ${fmt(f.v0, 1)} m/s. Left: Fig. 12's best stored ride on this road, ${r12.D.name}. ` +
           `Right: ${f.path} (${f.dir.split('/').slice(-2, -1)[0]}), ${f.frames} stored pictures, ${fps(r16)} a second${f.seconds < f.task_end - 0.02 ? ', the run stopped early on Kaggle at ' + fmt(r16.D.t[r16.frames - 1], 2) + ' s' : ''}. ` +
           `Fingerprints ${r12.checked && r16.checked ? 'checked: both files match their index' : 'not checked (this browser cannot compute SHA-256)'}.`;

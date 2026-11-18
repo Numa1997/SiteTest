@@ -833,3 +833,8 @@ Every output of every version, its log, a manifest (size and SHA-256) and the ex
 the private dataset `numakoudsie/fig12-guinness-on-a-cart`, folder `<notebook>/v<version>/`; `public/data/fig12/generations.json`
 names the folder of each generation. The JAX notebook `guinness-on-a-cart-stout-in-jax` stays on Kaggle (its outputs are also in the
 dataset). The figure's one notebook is `numakoudsie/fig-12-guinness-on-a-cart` (`tools/kaggle/figures/build.py`, `docs/kaggle-pipeline.md`).
+
+## The three figures of the pint (18 November 2026)
+The page carries, under its title (now "A Pint of Guinness on a One-Wheel Cart, Live in Your Browser"), the strip that names the three
+figures of the pint and what only each shows; `guinness-kaggle.html` carries the same strip and is titled "…, Computed on Kaggle".
+See `docs/simulations/fig16-guinness-cart-control.md`, section "The three figures of the pint".
