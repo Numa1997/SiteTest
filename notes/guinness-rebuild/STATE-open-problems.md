@@ -21,7 +21,8 @@ Close the six open problems of the handoff, one at a time, in its order. Merge f
    Deck pixels: asked the look session to record them in this.deckStore (NOT ds) in cart16-view.js; until then "not recorded".
    PROVED on CPU v11 (1440 px, rides kerb_full t=0.62, kerb_off 0.40, resonant_full 2.0): checks 19/19, read-backs 15/15, head book OK;
    deck pixels "not recorded" (look session). Pointer test: v11 out of memory in the test, v12 shell quoting error, v13 slow.
-   Page built on Kaggle v11 committed and merged to main.
+   Page built on Kaggle v11 committed; LIVE on main da39ef8 (curl: id="stage", dataset.js, data.css served; script has defineData).
+   Left: pointer test result (v13), docs/files.md regenerated after the last commits.
 3. Fig. 16's own Kaggle dataset — open.
 4. 3D close-up smoothness on a Kaggle GPU machine — open.
 5. Fig. 12 bare swing at 1.0 mm — optional; GPU (~10 min): ask the owner first.
