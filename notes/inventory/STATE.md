@@ -4,7 +4,9 @@ Chat state written into the repository first (CLAUDE.md, "Write the chat's state
 reread this file and `BRIEF.md` before anything else. Keep it current at every step that changes what is live or what is left.
 Never write the owner's name in files of this folder.
 
-Last update: 18 November 2026, after the deletions. Phase 2: Fig. 12 and Fig. 14 organised (one notebook and one dataset each); Fig. 15 and 16 held.
+Last update: 18 November 2026. **Session finished** (owner: "You're done"). Fig. 15 and Fig. 16 report to their coordinator
+(session_01DGmqintkoYzahfGQQzdXYL); organising them (dataset + one notebook per figure, `tools/kaggle/figures/build.py`) is left
+for whichever session the owner or the coordinator assigns, once those sessions end. Phase 2: Fig. 12 and Fig. 14 organised (one notebook and one dataset each); Fig. 15 and 16 held.
 
 ## Aim
 
