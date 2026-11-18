@@ -209,7 +209,13 @@
         ds.set('hglass_now', hg); ds.set('hspill_now', hs); ds.set('sspill_now', D2.spill_g[k2]); ds.set('head_res', hg + hs - ds.get('head_ml0'));
         ds.set('tilt12_now', tilt12(r12, k1)); ds.set('hspill12_now', D1.head_spill_ml[k1]); ds.set('sspill12_now', D1.spill_g[k1]);
       }
-      if (close.a) { close.a.setFrame(r12, k1); close.a.render(); close.b.setFrame(r16, k2); close.b.render(); }
+      if (close.a) {
+        close.a.setFrame(r12, k1); close.a.render();
+        // the realistic 3D view of Fig. 16 carries the pint on the 3D cart over the road (cart3d.js), moved by the same stored pose
+        if (close.b.setCart && !close.b.cart) close.b.setCart(G16);
+        if (close.b.setPose) close.b.setPose(B.v.pose, (x) => B.cart.road.zr(x + B.cart.x), B.cart.x);
+        close.b.setFrame(r16, k2); close.b.render();
+      }
       if (fade) {                                                 // the switch: the last picture of the other ride fades out over 0.45 s
         const u = (now - fade.t0) / 450, g = B.v.cv.getContext('2d');
         if (u >= 1) fade = null; else { g.save(); g.globalAlpha = 1 - u; g.drawImage(fade.img, 0, 0); g.restore(); }

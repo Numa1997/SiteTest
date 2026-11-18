@@ -9,6 +9,7 @@
    Nothing physical is computed here. The light, the gloss and the glass's tint are drawing only.
    Axes: physics (x along the road, y across, z up from the glass's inner floor) -> three (x, z, -y). */
 import * as THREE from '../vendor/three/three.module.min.js';
+import { Cart3D } from './cart3d.js';
 
 const NR = 24, NTH = 96;
 // colours as seen in photographs of a real pint (notes/realism/STATE.md, photos 1, 2, 4): near-black stout, ivory-cream head
@@ -58,6 +59,7 @@ class Pint3D {
     r.setPixelRatio(Math.min(1.5, window.devicePixelRatio || 1)); r.outputColorSpace = THREE.SRGBColorSpace; r.toneMapping = THREE.AgXToneMapping; r.toneMappingExposure = 1.25;
     const s = this.scene = new THREE.Scene(); const E = envTexture(r); s.environment = E.env;
     s.background = E.bg; s.backgroundBlurriness = 0.35; s.backgroundIntensity = 0.9;   // the room behind, out of focus as in a photograph
+    const P = this.pint = new THREE.Group(); s.add(P);   // the pint, in the glass's own frame (y up from the inner floor); a cart may carry it
     s.add(new THREE.HemisphereLight(0xfff0dc, 0x3a2a20, 0.9));
     const key = new THREE.DirectionalLight(0xffe2b8, 2.4); key.position.set(-0.25, 0.55, 0.35); s.add(key);   // a warm lamp above, in front
     const rim = new THREE.DirectionalLight(0xdfe8ff, 1.2); rim.position.set(0.35, 0.25, -0.45); s.add(rim);  // the window behind, to one side
@@ -90,7 +92,7 @@ class Pint3D {
       this.headTop.geometry.setAttribute('uv', new THREE.BufferAttribute(uv, 2));
       const ub = new Float32Array((this.NZ + 1) * NTH * 2); for (let q = 0; q <= this.NZ; q++) for (let it = 0; it < NTH; it++) { const j = q * NTH + it; ub[2 * j] = it / NTH; ub[2 * j + 1] = q / this.NZ * 0.15; }
       this.headSide.geometry.setAttribute('uv', new THREE.BufferAttribute(ub, 2)); }
-    [this.surf, this.headTop, this.side, this.headSide, this.rubySide].forEach((m) => { m.frustumCulled = false; s.add(m); });
+    [this.surf, this.headTop, this.side, this.headSide, this.rubySide].forEach((m) => { m.frustumCulled = false; P.add(m); });
     this.rubySide.renderOrder = 3;
     // the glass: one solid body of revolution (outer wall 2.5 mm out, a rounded lip, the inner wall, a 14 mm solid foot), a clear
     // dielectric (n = 1.52): three.js refracts what lies behind it and reflects the room by Fresnel's law
@@ -103,7 +105,7 @@ class Pint3D {
     prof.reverse();   // LatheGeometry faces outward when the profile runs from the top down on the outside
     const gm = new THREE.MeshPhysicalMaterial({ color: 0xffffff, roughness: 0.02, metalness: 0, transmission: 1, ior: 1.52, thickness: 0.004,
       specularIntensity: 1, envMapIntensity: 1.3, side: THREE.DoubleSide });
-    const gl = new THREE.Mesh(new THREE.LatheGeometry(prof, 128), gm); gl.renderOrder = 2; s.add(gl);
+    const gl = new THREE.Mesh(new THREE.LatheGeometry(prof, 128), gm); gl.renderOrder = 2; P.add(gl);
     // a varnished wooden bar top under the foot, so the glass has something to stand on, to refract and to reflect in (drawing only)
     { const N = 512, c = document.createElement('canvas'); c.width = N; c.height = N; const g = c.getContext('2d');
       g.fillStyle = '#3a1c0e'; g.fillRect(0, 0, N, N); let sd = 11; const rnd = () => (sd = (sd * 16807) % 2147483647) / 2147483647;
@@ -114,12 +116,12 @@ class Pint3D {
       top.rotation.x = -Math.PI / 2; top.position.y = -FOOT - 0.0002; s.add(top); this.table = top; }
     // drops of stout and lumps of head in the air
     this.MAXD = 4096; this.MAXL = 512;
-    this.drops = new THREE.InstancedMesh(new THREE.SphereGeometry(1, 8, 6), stoutTop, this.MAXD); this.drops.count = 0; this.drops.frustumCulled = false; s.add(this.drops);
-    this.lumps = new THREE.InstancedMesh(new THREE.SphereGeometry(1, 10, 8), cream, this.MAXL); this.lumps.count = 0; this.lumps.frustumCulled = false; s.add(this.lumps);
+    this.drops = new THREE.InstancedMesh(new THREE.SphereGeometry(1, 8, 6), stoutTop, this.MAXD); this.drops.count = 0; this.drops.frustumCulled = false; P.add(this.drops);
+    this.lumps = new THREE.InstancedMesh(new THREE.SphereGeometry(1, 10, 8), cream, this.MAXL); this.lumps.count = 0; this.lumps.frustumCulled = false; P.add(this.lumps);
     this.m4 = new THREE.Matrix4();
   }
   view(azimDeg, elevDeg) {   // the camera on a circle about the glass's axis, looking at its middle
-    const a = azimDeg * Math.PI / 180, e = elevDeg * Math.PI / 180, d = 0.56, c = new THREE.Vector3(0, 0.095, 0);
+    const a = azimDeg * Math.PI / 180, e = elevDeg * Math.PI / 180, d = this.dist || 0.56, c = this.target || new THREE.Vector3(0, 0.095, 0);
     this.camera.position.set(c.x + d * Math.cos(e) * Math.cos(a), c.y + d * Math.sin(e), c.z - d * Math.cos(e) * Math.sin(a)); this.camera.lookAt(c);
   }
   size() {
@@ -127,10 +129,18 @@ class Pint3D {
     this.renderer.setSize(w, h, false); this.camera.aspect = w / h; this.camera.updateProjectionMatrix(); this.drawn = null;
   }
   setFrame(ride, k) { this.ride = ride; this.k = Math.max(0, Math.min(ride.frames - 1, k)); }
+  // the whole cart and road around the pint (Fig. 16): sizes G as Cart16View's; the glass stands on the seat, its foot 14 mm deep
+  setCart(G) {
+    this.cart = new Cart3D(G); this.scene.add(this.cart.group); this.cart.mount.add(this.pint); this.pint.position.set(0, 0.014, 0);
+    if (this.table) this.table.visible = false;
+    this.target = new THREE.Vector3(0, 0.17, 0); this.dist = 1.05; this.camera.fov = 28; this.camera.updateProjectionMatrix(); this.view(-28, 15);
+  }
+  // the stored pose of this picture (Cart16View.pose), the road z_r(x) about the cart and the cart's x: moves the cart, never computes it
+  setPose(pose, road, x) { if (!this.cart) return; this.cart.update(pose, road, x); this.drawn = null; }
   // draws only when the stored picture or the size changed; times its two parts (geometry in JavaScript, the draw call) in this.stats
   render() {
     const ride = this.ride; if (!ride || (this.drawn && this.drawn[0] === ride && this.drawn[1] === this.k)) return;
-    this.drawn = [ride, this.k]; const t0 = performance.now();
+    this.drawn = [ride, this.k]; const t0 = performance.now(); this.scene.updateMatrixWorld();
     const k = this.k, Rz = this.Rz, zRim = this.zRim, D = ride.D;
     // rings and angles, as StoutView2: the outer ring is the wall at the surface's own height in that direction
     const edge = [];
@@ -156,7 +166,7 @@ class Pint3D {
     // the light from behind that crosses the stout and leaves through its near side toward the camera: Beer-Lambert over the
     // chord of the horizontal circle of radius r along the view ray, d = 2 r cos(beta), beta the angle between the ray and the
     // wall's normal (the vertical part of the path and the refraction at the glass are left out: drawing approximation)
-    const br = this.rubySide.geometry.attributes.position, bc = this.rubySide.geometry.attributes.color, C = this.camera.position;
+    const br = this.rubySide.geometry.attributes.position, bc = this.rubySide.geometry.attributes.color, C = this.pint.worldToLocal(this.camera.position.clone());
     for (let it = 0; it < NTH; it++) {
       const th = 2 * Math.PI * it / NTH, c = Math.cos(th), s = Math.sin(th), H = edge[it][1];
       for (let q = 0; q <= NZ; q++) {
