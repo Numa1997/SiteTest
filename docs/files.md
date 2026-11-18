@@ -4906,7 +4906,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
-| [`public/styles/bg-scenes.css`](../public/styles/bg-scenes.css) | 1.2 kB | Holders of the living scenes: top, fixed and band. | [bg-scenes.md](scripts/bg-scenes.md) |
+| [`public/styles/bg-scenes.css`](../public/styles/bg-scenes.css) | 1.7 kB | Holders of the living scenes: top, fixed and band. | [bg-scenes.md](scripts/bg-scenes.md) |
 | [`public/styles/catalog.css`](../public/styles/catalog.css) | 8.0 kB | The catalog entries (paper abstracts) on the simulations page. | [styles.md](styles.md) |
 | [`public/styles/catalog.rtl.css`](../public/styles/catalog.rtl.css) | 8.2 kB | catalog.css with left and right exchanged, for the Arabic pages; generated with rtlcss, do not edit. | [styles.md](styles.md) |
 | [`public/styles/data.css`](../public/styles/data.css) | 39.1 kB | The data panel (headline, ledger table, books) and the Read values strip. | [styles.md](styles.md) |
@@ -5559,7 +5559,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`docs/performance.md`](performance.md) | 53.8 kB | Documentation: Performance: what was measured, what was slow, what changed. | [performance.md](performance.md) |
 | [`docs/portfolios.md`](portfolios.md) | 68.5 kB | Documentation: The four research projects: `public/portfolios/`. | [portfolios.md](portfolios.md) |
 | [`docs/research-theory-audit.md`](research-theory-audit.md) | 30.0 kB | Documentation: Readability audit: Droplet Collection and Rotor Pendula. | [research-theory-audit.md](research-theory-audit.md) |
-| [`docs/scripts/bg-scenes.md`](scripts/bg-scenes.md) | 3.9 kB | Documentation: `public/scripts/bg-scenes.js` and `public/styles/bg-scenes.css` · living scenes (18 November 2026). | [bg-scenes.md](scripts/bg-scenes.md) |
+| [`docs/scripts/bg-scenes.md`](scripts/bg-scenes.md) | 4.2 kB | Documentation: `public/scripts/bg-scenes.js` and `public/styles/bg-scenes.css` · living scenes (18 November 2026). | [bg-scenes.md](scripts/bg-scenes.md) |
 | [`docs/scripts/catalog.md`](scripts/catalog.md) | 15.4 kB | Documentation: public/scripts/catalog.js. | [catalog.md](scripts/catalog.md) |
 | [`docs/scripts/curve.md`](scripts/curve.md) | 19.3 kB | Documentation: public/scripts/curve.js. | [curve.md](scripts/curve.md) |
 | [`docs/scripts/datalog.md`](scripts/datalog.md) | 67.6 kB | Documentation: public/scripts/datalog.js. | [datalog.md](scripts/datalog.md) |
@@ -7103,7 +7103,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | File | Size | What it is | Explained in |
 |---|---|---|---|
 | [`notes/lucretius/README.md`](../notes/lucretius/README.md) | 13.6 kB | Lucretius I 146-224 kept for the site: sources, corrections, what is where. | [README.md](../notes/lucretius/README.md) |
-| [`notes/lucretius/STATE.md`](../notes/lucretius/STATE.md) | 14.3 kB | State of the chat that builds the Lucretius page: what is live, what is in progress, the rules it follows. | [README.md](../notes/lucretius/README.md) |
+| [`notes/lucretius/STATE.md`](../notes/lucretius/STATE.md) | 14.4 kB | State of the chat that builds the Lucretius page: what is live, what is in progress, the rules it follows. | [README.md](../notes/lucretius/README.md) |
 | [`notes/lucretius/extract.py`](../notes/lucretius/extract.py) | 5.1 kB | Cuts Lucretius I 146-224 out of the downloaded sources without retyping. | [README.md](../notes/lucretius/README.md) |
 | [`notes/lucretius/make_bg.py`](../notes/lucretius/make_bg.py) | 7.2 kB | Draws the background tiles of the Lucretius page: currents and atoms (default), fractal branches, Weierstrass lines, spiral tendrils. | [pages.md#the-poem-page-lucretiushtml-10-november-2026-rebuilt-11-november-2026](pages.md#the-poem-page-lucretiushtml-10-november-2026-rebuilt-11-november-2026) |
 | [`notes/lucretius/make_home.py`](../notes/lucretius/make_home.py) | 11.6 kB | Writes the Lucretius band of the home page from the first four sentences. | [README.md](../notes/lucretius/README.md) |

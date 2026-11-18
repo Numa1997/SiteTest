@@ -11,10 +11,11 @@ Any element with `data-bg="<scene>"` gets a `canvas.bgs` as its first child. Thr
 | Class | What it is |
 |---|---|
 | `.bgs-top` | absolute, at the top of the page behind the header and title, 560 px high unless a `style="height:…"` says otherwise |
+| `.bgs-aside` | absolute, in the empty half beside a page title (left of it on Arabic pages), 300 px high; shown only from 1240 px width, where that half is empty |
 | `.bgs-fixed` | fixed to the window, behind everything |
 | `.bgs-band` (`--low` 170 px, `--tall` 320 px, plain 260 px) | a strip in the page flow between two sections |
 
-Attributes: `data-bg-mask` (`down`, `up`, `both`, `soft`, `softdown`, `sides`, `none`; default `both`) fades the edges with a
+Attributes: `data-bg-mask` (`down`, `up`, `both`, `soft`, `softdown`, `round` (an oval fading on every side), `sides`, `none`; default `both`) fades the edges with a
 CSS mask so a scene never ends in a hard line; `data-bg-alpha` scales its strength. The stylesheet makes `body` transparent
 (the paper colour stays on `html`) so that a canvas at `z-index:-1` is visible.
 
@@ -25,7 +26,7 @@ CSS mask so a scene never ends in a hard line; `data-bg-alpha` scales its streng
 | Home (`index.html`) | behind the hero, tree at the left edge | `forest` | unique trees shed leaves that feed their neighbours' seedlings; trees age, fall and are replaced |
 | Home | band before Simulations | `spin` | spinners with random speeds; a wandering field locks an island of them into step |
 | Home | band above the footer | `shores` | "the shores of light": things rising out of dust |
-| Simulations | behind the title | `powder` | iron powder lining up along the field of magnets and of a wire whose current switches on and off |
+| Simulations | the empty half beside the title (from 1240 px width; none on a narrower screen) | `powder` | iron powder lining up along the field of magnets and of a wire whose current switches on and off |
 | Simulations | band above the footer | `harp` | a harmonica: each note travels out through the air as a front, delayed by distance |
 | Portfolios | the empty half beside the title (left of it on the Arabic page), from 1240 px width; a small corner below that | `chip` | a chip traced block by block, wires routed, then stamped die by die over a wafer |
 | Portfolios | band above the footer | `mix` | three species of different shape mix by collisions and reach one temperature |
