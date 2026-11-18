@@ -43,6 +43,20 @@ Update 05:20: the five "falling" examples (window rain, cloud collection, Galton
    K(t) = 2.4 (0.5 - 0.5 cos(2 pi t / 36)), big faint hand = order parameter r at angle psi.
 The earlier four he called gorgeous (letters, seeds, swerve, shores) still stand for deployment on 4 subpages + Kaggle notebooks.
 
+Update 05:35: the four of 05:20 (shear drops, roots and neurons, escapement, Kuramoto clocks) were "quite bad". New order: search
+the web for creative examples, learn from them, develop them, never copy; add at least two layers of complexity. Shown in chat,
+waiting for his verdict:
+ - Slime mould writes (learned from Jeff Jones 2010 / Sage Jenson's Physarum model: agents sense, turn, deposit; trail diffuses and
+   decays). Layers added: food laid on the dotted shape of a word (ΦΥΕΙΝ, أصول, SEMINA, بذور, NATVRA, نور), changing every 22 s, so
+   the network writes the site's own words; decay oscillating with a 20 s "season" so the network thickens and prunes.
+ - Sand on a bowed plate (Chladni 1787): grains random-walk with step proportional to |amplitude|, so they settle on nodal lines of
+   cos(n pi u)cos(m pi v) - cos(m pi u)cos(n pi v). Layers: smooth morph between mode pairs every 9 s; bow strokes (amplitude pulses).
+ - Murmuration and falcon (Reynolds' boids 1987): layers: 7 nearest neighbours (topological, as measured in starlings), a falcon that
+   chases the flock and makes waves of escape, a wandering roost point.
+ - Three-pen harmonograph (Blackburn's pendulum drawing machine): layers: frequency ratio near a musical interval with a slight
+   detune so the figure rotates; three pens detuned from each other for moire.
+Still approved and waiting for deployment: letters, seeds, swerve, shores of light (4 subpages + Kaggle notebooks; pages not named).
+
 ## User's rules for this work
 - Merge and publish finished, tested work without asking; verify the live site; docs must describe the code.
 - Do only what is asked; reply in plain connected English; never use the user's name.
