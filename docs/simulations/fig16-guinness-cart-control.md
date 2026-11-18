@@ -125,9 +125,10 @@ The page loads `scripts/dataset.js` after `sim.js` and `styles/data.css`; `guinn
   points of their own.
 - Proof: `tools/fig16/kaggle/panel16_check.py`, run on Kaggle's CPU (headless Chromium, 1440 and 390 px, three rides).
 
-## Open
+## Kaggle dataset (18 November 2026)
 
-The figure's Kaggle dataset `numakoudsie/fig16-...` (the layout rule of `docs/kaggle-pipeline.md`).
+`numakoudsie/fig16-guinness-cart-control` (private) holds every output file of the GPU notebook versions the page plays (2, 8, 9),
+byte for byte, with a manifest; see `docs/kaggle-pipeline.md` and `notes/inventory/datasets/fig16-guinness-cart-control/`.
 
 **Control switch and run 3 (15 November 2026).** The page offers three roads and one switch, "Control system on/off". The switch keeps
 the ride time and cross-fades the last picture out over 0.45 s. `guinness16-play.js` reads both indexes,

@@ -26,10 +26,10 @@ Close the six open problems of the handoff, one at a time, in its order. Merge f
    rule in the page (d795e8a), live. v14 PROOF, FAIL 0: 3 rides x 1440 and 390 px, checks 19/19, read-backs 15/15, book OK, no banner,
    no console errors; Read values off: overlay 0 px, strip hidden; on: pinned the cart, words changed 2 times in 3 s, strip below figure.
    Screenshots (not committed) sent to the owner. docs/files.md from v14 committed. PROBLEM 2 DONE.
-3. Fig. 16 dataset — IN PROGRESS. CPU v15 stages GPU notebook v2 (8 files), v8 (9), v9 (6) as fig-16-guinness-cart-with-control/v<N>/output/<date>/,
-   manifest.json + README.md, zipped to fig16-dataset.zip (signed links in the private notebook only). Then: create private dataset
-   numakoudsie/fig16-guinness-cart-control (CC BY 4.0, like fig12/fig14) via api.kaggle.com (proxy credentials; ListDatasets works),
-   verify sizes, update docs/kaggle-pipeline.md and fig16 docs. Copy only, delete nothing.
+3. Fig. 16 dataset — DONE 18 Nov ~14:12 UTC: numakoudsie/fig16-guinness-cart-control (private, CC BY 4.0), READY, 25 files
+   (23 outputs of GPU v2/v8/v9 + README + manifest), all 23 sizes equal the manifest. Made via api.kaggle.com StartBlobUpload + PUT +
+   CreateDataset (connector has no create). Records in notes/inventory/datasets/fig16-guinness-cart-control/; docs updated.
+   docs/files.md lags by these 3 record files: regenerate in the next Kaggle CPU run.
 4. 3D close-up smoothness on a Kaggle GPU machine — open.
 5. Fig. 12 bare swing at 1.0 mm — optional; GPU (~10 min): ask the owner first.
 6. Fig. 12 lecture note to STANDARD.md — only if the owner wants it.

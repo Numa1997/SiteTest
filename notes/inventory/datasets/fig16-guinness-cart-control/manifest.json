@@ -1,0 +1,121 @@
+{
+ "dataset": "numakoudsie/fig16-guinness-cart-control",
+ "notebook": "numakoudsie/fig-16-guinness-cart-with-control",
+ "files": [
+  {
+   "path": "fig-16-guinness-cart-with-control/v2/output/2026-11-14/summary.json",
+   "bytes": 12194,
+   "sha256": "cfd21a295e61b5b747ac9460b3acea674be3d4b8e161216f80ba09e05af40e77"
+  },
+  {
+   "path": "fig-16-guinness-cart-with-control/v2/output/2026-11-14/design.json",
+   "bytes": 2355,
+   "sha256": "2f6325b45728e33dbddae36d2d505a5e63173db0b2b0d24895eef9852a633e63"
+  },
+  {
+   "path": "fig-16-guinness-cart-with-control/v2/output/2026-11-14/progress.log",
+   "bytes": 4567,
+   "sha256": "91f6176116dc23f2366cbfa6e5c19743121bfffa7e324ff60721b2b41e698618"
+  },
+  {
+   "path": "fig-16-guinness-cart-with-control/v2/output/2026-11-14/rest.npz",
+   "bytes": 552820,
+   "sha256": "b84f934484a2bfb506ffdcd283a8b448942b25c04e6f3d6fe7800046ab14c4de"
+  },
+  {
+   "path": "fig-16-guinness-cart-with-control/v2/output/2026-11-14/kerb_full.npz",
+   "bytes": 1124117,
+   "sha256": "1945364e214a8b3f01a9d61aea2f6c75a3ae953320bc1ba4048fc8c32d35acc9"
+  },
+  {
+   "path": "fig-16-guinness-cart-with-control/v2/output/2026-11-14/kerb_off.npz",
+   "bytes": 420133,
+   "sha256": "f8531175c8240e19a117e931dbed414ebf0781bf31bc3d2be2fb39acc319be7b"
+  },
+  {
+   "path": "fig-16-guinness-cart-with-control/v2/output/2026-11-14/resonant_full.npz",
+   "bytes": 2218875,
+   "sha256": "788f0de4b5f2b5a56308d6d78b3f1775acfe5b84775f3e90ecc622def88f7d9d"
+  },
+  {
+   "path": "fig-16-guinness-cart-with-control/v2/output/2026-11-14/bump25_full.npz",
+   "bytes": 2216056,
+   "sha256": "670388dd276153c88b9a8cf287318af42ca17cb2393a0be5cd4f2beef0e85c2d"
+  },
+  {
+   "path": "fig-16-guinness-cart-with-control/v8/output/2026-11-15/summary.json",
+   "bytes": 16415,
+   "sha256": "ebb434d82c4769e9e37f92838e4b2a3b344886a32ad9e93be4fe75c3b25bb5ea"
+  },
+  {
+   "path": "fig-16-guinness-cart-with-control/v8/output/2026-11-15/design.json",
+   "bytes": 2358,
+   "sha256": "1fb6e335dbf8af8241feb7de3a1fb90849869ff82ed330f92edf37b829e8d3e5"
+  },
+  {
+   "path": "fig-16-guinness-cart-with-control/v8/output/2026-11-15/progress.log",
+   "bytes": 10223,
+   "sha256": "84380e58633c49c862813cfc4c5bf139e901a4063ea9fbb432d5d3a3e99c3dfa"
+  },
+  {
+   "path": "fig-16-guinness-cart-with-control/v8/output/2026-11-15/rest.npz",
+   "bytes": 1089730,
+   "sha256": "a343b99e914f5201028c56b84a581bcc6a2e409fac4689fa5316e5c77436701d"
+  },
+  {
+   "path": "fig-16-guinness-cart-with-control/v8/output/2026-11-15/kerb_full.npz",
+   "bytes": 2270314,
+   "sha256": "a922859e38f4acfe567bede8e8531b013a4bc67cce09e6ce26e9751c3ef71a95"
+  },
+  {
+   "path": "fig-16-guinness-cart-with-control/v8/output/2026-11-15/kerb_full_seed2.npz",
+   "bytes": 2249877,
+   "sha256": "8c8355c77a8710673e74410081b9e9383890406d28c58962d991de4bc0adfd01"
+  },
+  {
+   "path": "fig-16-guinness-cart-with-control/v8/output/2026-11-15/kerb_off.npz",
+   "bytes": 16901587,
+   "sha256": "a0ad1c81b1cbee35a1959de62e9512ed933e424efff5a3c5642ab04845bd4800"
+  },
+  {
+   "path": "fig-16-guinness-cart-with-control/v8/output/2026-11-15/resonant_off.npz",
+   "bytes": 34638905,
+   "sha256": "7dbd1769939eb450ec2254d4693aafe32655a36b3a18418a75b5694d75ecb8de"
+  },
+  {
+   "path": "fig-16-guinness-cart-with-control/v8/output/2026-11-15/bump25_off.npz",
+   "bytes": 34170922,
+   "sha256": "aa11d8724f5741f6f054328aed0b53d45deeb02349e5456506ce61eaaf27e2a0"
+  },
+  {
+   "path": "fig-16-guinness-cart-with-control/v9/output/2026-11-18/summary.json",
+   "bytes": 9205,
+   "sha256": "3346a107c50f22b7db757793dab381129877c16b30a294b4dd4b41f4b49a7d1d"
+  },
+  {
+   "path": "fig-16-guinness-cart-with-control/v9/output/2026-11-18/design.json",
+   "bytes": 2358,
+   "sha256": "962eea46df1055e9cd57028785518295db424119a3f111f90114b138566bb447"
+  },
+  {
+   "path": "fig-16-guinness-cart-with-control/v9/output/2026-11-18/progress.log",
+   "bytes": 3628,
+   "sha256": "a5f9898190edacac6a872b52e58afade6bf3ee8f32108b268cd5fb28c40c46a5"
+  },
+  {
+   "path": "fig-16-guinness-cart-with-control/v9/output/2026-11-18/rest.npz",
+   "bytes": 1089547,
+   "sha256": "d2ebbb3f5833d92ceba9f9d25940d3297e00e2139f8b0ec07dc264f29879c556"
+  },
+  {
+   "path": "fig-16-guinness-cart-with-control/v9/output/2026-11-18/kerb_full.npz",
+   "bytes": 2228234,
+   "sha256": "ecc0bb4173dd268d23aed77476f65ad4cc210e8531bac47da2d6201a3b9a6e0e"
+  },
+  {
+   "path": "fig-16-guinness-cart-with-control/v9/output/2026-11-18/kerb_full_seed2.npz",
+   "bytes": 2242501,
+   "sha256": "acb1665d373d6a1b0565d7b27ceee1558b2a2e25e0d24793107f023d0e743189"
+  }
+ ]
+}
