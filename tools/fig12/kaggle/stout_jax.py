@@ -114,14 +114,27 @@ class Geometry:
         thv = ins(xs4[:, None, None], xf[None, :, None], zs4[None, None, :]).reshape(n, 4, n + 1, nz, 4).mean((1, 4))
         thw = ins(xs4[:, None, None], xs4[None, :, None], zf[None, None, :]).reshape(n, 4, n, 4, nz + 1).mean((1, 3))
         if body is None: thu[0] = thu[-1] = 0; thv[:, 0] = thv[:, -1] = 0; thw[:, :, 0] = 0      # the box is closed except its top
-        self.thu, self.thv, self.thw = thu, thv, thw
         c = self.x0 + (np.arange(n) + 0.5) * dx; zc = self.z0 + (np.arange(nz) + 0.5) * dx
+        if body is not None:
+            # a face is closed when the segment between the two cell centres it joins crosses a solid anywhere (9 points): the glass's
+            # wall is thinner than two cells, and a face cut by it would otherwise couple the stout inside to the air outside through
+            # the pressure (smoke test 1, 18 Nov 2026: the pint at rest leaked; review by the open-problems session)
+            u9 = (np.arange(9) / 8.0 - 0.5) * dx
+            cu = np.ones_like(thu, bool); cv = np.ones_like(thv, bool); cw = np.ones_like(thw, bool)
+            for d in u9:
+                cu &= ~self.solid((xf + d)[:, None, None], c[None, :, None], zc[None, None, :])
+                cv &= ~self.solid(c[:, None, None], (xf + d)[None, :, None], zc[None, None, :])
+                cw &= ~self.solid(c[:, None, None], c[None, :, None], (zf + d)[None, None, :])
+            thu = np.where(cu, thu, 0.0); thv = np.where(cv, thv, 0.0); thw = np.where(cw, thw, 0.0)
+        self.thu, self.thv, self.thw = thu, thv, thw
         X, Y, Z = np.meshgrid(c, c, zc, indexing="ij"); r2 = X * X + Y * Y
         self.xc, self.zc = c, zc
         Rcav = self.Rz(np.minimum(Z, self.zrim - 1e-6))
         self.cav_inner = (Z > 0) & (r2 < (Rcav - 0.5 * dx) ** 2)                       # well inside the cavity
         self.wallcut = (Z > 0) & (Z < self.zrim) & (r2 >= (self.Rz(Z) - 0.5 * dx) ** 2) & (r2 < (self.Rz(Z) + 0.5 * dx) ** 2 if body else True)   # cut by the glass's inner wall
         self.cavc = self.inside(X, Y, Z) if body is None else self.cavity(X, Y, Z)    # centre inside the cavity (or above it)
+        # where the level set is built from the particles: the cavity's interior (old model), or every open cell (continuous model)
+        self.lsdom = self.cav_inner if body is None else ~self.solid(X, Y, Z)
         if body is None: self._wall_area()
         else: self._wall_area_solid(xs4, zs4)
         self.Rfill = float(self.Rz(fill))
@@ -289,6 +302,7 @@ class Stout:
         f = lambda a: jnp.asarray(a, F32)
         self.th = [f(G.thu), f(G.thv), f(G.thw)]; self.af = [f(G.au), f(G.av), f(G.aw)]; self.ac = f(G.ac)
         self.cav_inner = jnp.asarray(G.cav_inner); self.wallcut = jnp.asarray(G.wallcut); self.cavc = jnp.asarray(G.cavc > 0)
+        self.lsdom = jnp.asarray(G.lsdom)
         self.Rd = jnp.asarray(G.R, F32)
         self.origin = jnp.asarray([G.x0, G.x0, G.z0], F32)
         k = np.arange(nz + 1)[None, None, :]
@@ -443,7 +457,7 @@ class Stout:
 
     def level_set(self, s, cnt):
         dx = self.dx; G = self.G
-        mA = (cnt == 0) & self.cav_inner
+        mA = (cnt == 0) & self.lsdom   # continuous model: everywhere, so liquid outside the glass has its own free surface too
         near = self.dilate(mA); nearP = self.dilate(near)
         X, act = s["xp"], s["act"]
         ci = jnp.floor((X - self.origin) / dx).astype(I32); cfl, cok = self.flat(ci, self.dims)

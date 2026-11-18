@@ -36,7 +36,7 @@ else:
     check("old geometry unchanged", False, "OLD_SOLVER not given")
 
 # 2. continuous geometry
-dx = 0.004; body = (SJ.BODY_HALF[0], SJ.BODY_HALF[1], SJ.BODY_TOP)
+dx = float(os.environ.get("DX", "0.004")); REST = float(os.environ.get("REST", "2.0")); body = (SJ.BODY_HALF[0], SJ.BODY_HALF[1], SJ.BODY_TOP)
 t0 = time.time(); G = SJ.Geometry(R, DZP, FILL, dx, body=body); say(f"continuous geometry: n {G.n}, nz {G.nz}, {G.n * G.n * G.nz} cells, built in {time.time() - t0:.1f} s")
 pts = {"in the cavity": (0, 0, 0.05, False), "in the glass wall": (float(G.Rz(0.08)) + 0.001, 0, 0.08, True),
        "outside the glass": (float(G.Rz(0.08)) + 0.006, 0, 0.08, False), "in the foot": (0, 0, -0.007, True),
@@ -51,15 +51,15 @@ check("wall area of one layer near 2 pi (R_in + R_out) dx", abs(layer / (Aout + 
 S = SJ.Stout(G, model="wall", K_frac=1.0, M_drops=4096); s = S.init_state(); N = S.N
 step = jax.jit(lambda s, dt, gx, gz: S.step(s, dt, gx, gz))
 t = 0.0; dt = 0.002
-while t < 0.3 - 1e-9: s, d = step(s, dt, 0.0, -9.81); t += dt
+while t < REST - 1e-9: s, d = step(s, dt, 0.0, -9.81); t += dt
 o = S.observe(s); H = np.asarray(o["H"]); Hc = H[np.isfinite(H)]
 check("at rest: none lost, none outside", int(o["nact"]) == N and int(o["nfly"]) == 0, f"active {int(o['nact'])}/{N}, outside {int(o['nfly'])}")
-check("at rest: surface level within 1 cell", Hc.size > 0 and Hc.max() - Hc.min() < dx, f"H {Hc.min() * 1e3:.1f}..{Hc.max() * 1e3:.1f} mm")
+check("at rest: surface at the fill, level within 0.5 mm", Hc.size > 0 and Hc.max() - Hc.min() < 0.0005 and abs(np.median(Hc) - 0.125) < 0.001, f"H {Hc.min() * 1e3:.2f}..{Hc.max() * 1e3:.2f} mm, median {np.median(Hc) * 1e3:.2f}")
 
 # 4. a hard shove
 hist = []
-while t < 1.5 - 1e-9:
-    gx = 5 * 9.81 if t < 0.45 else 0.0
+while t < REST + 1.2 - 1e-9:
+    gx = 5 * 9.81 if t < REST + 0.15 else 0.0
     s, d = step(s, dt, gx, -9.81); t += dt
     if abs(t / 0.05 - round(t / 0.05)) < 1e-6:
         o = S.observe(s); X = np.asarray(s["xp"]); act = np.asarray(s["act"])
