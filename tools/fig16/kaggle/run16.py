@@ -23,11 +23,13 @@ FILL, RHO = 0.125, 1007.0
 FPS = int(os.environ.get("FPS", "60"))         # stored pictures a second (run 3: 60, so that the played motion is smooth)
 M_DROPS = int(os.environ.get("M_DROPS", "131072"))   # drops tracked (run 2 stopped the uncontrolled kerb at 16,384)
 DROPS_KEEP = 16384                              # drops stored per picture for the drawing (an even subsample when there are more)
-K_FRAC = float(os.environ.get("K_FRAC", "0.62"))   # the surface-candidate list as a share of the particles (run 3b: 1.0, the uncontrolled
+K_FRAC = float(os.environ.get("K_FRAC", "1.0" if os.environ.get("CONT", "0") == "1" else "0.62"))   # the surface-candidate list as a share of the particles (run 3b: 1.0, the uncontrolled
                                                 # rides stopped with the list full once a fifth of the stout was in the air)
 VOL_CORR = float(os.environ.get("VOL_CORR", "0"))   # run 4: the volume correction's kappa (stout_jax.Stout); 0 = off as in runs 2 and 3
 PROBE = os.environ.get("PROBE", "bilinear")     # run 6: "patch", the level probes as area sensors (stout_jax.Stout.probes_patch, audit M3)
 ROT = os.environ.get("ROT", "1") == "1"         # the rotating frame's forces in the fluid (run 3); "0" reproduces run 2's model
+CONT = os.environ.get("CONT", "0") == "1"           # 19 Nov 2026: the continuous spill model (stout_jax Geometry body=): stout over the rim stays
+                                                # liquid down the glass and on the deck; it leaves only off the deck's edge; the air's drag on it
 BUDGET_S = float(os.environ.get("BUDGET_S", "2000")); CODECHECK = bool(os.environ.get("CODECHECK"))
 STAMP = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d")
 WORK = Path(os.environ.get("NB_WORK", "/kaggle/working")) / STAMP; WORK.mkdir(parents=True, exist_ok=True)
@@ -68,6 +70,9 @@ def save_summary(): json.dump(summary, open(WORK / "summary.json", "w"), indent=
 
 
 ZS = C4.CART4["hg"] - C4.FLOOR_ABOVE_DECK
+# the deck as a solid under the glass (continuous model): 310 x 124 mm (the drawing, cart16-view.js G.deckL, G.deckW), its top
+# FLOOR_ABOVE_DECK below the glass's inner floor (seat 16 mm + foot 14 mm; the seat is taken as part of the glass's foot)
+DECK = (0.155, 0.062, -C4.FLOOR_ABOVE_DECK)
 
 
 def make_advance16(S, cart, cfl=0.8, dtmax=0.002):
@@ -89,7 +94,10 @@ def make_advance16(S, cart, cfl=0.8, dtmax=0.002):
         cs, gxs, gzs, oms, als = lax.fori_loop(0, nsub, sub, (cs, z0, z0, z0, z0))
         gx, gz, om, al = gxs / nsub, gzs / nsub, oms / nsub, als / nsub
         rot = (om, al, ZS) if ROT else None
-        s, d = S.step(s, dt, gx, gz, prep=prep, rot=rot)
+        # the air stands still on the ground: in the glass's frame it blows at minus the deck's velocity (forward speed v, heave vzc;
+        # the deck's pitch of a few degrees is not turned into the glass's axes)
+        wind = (-cs["v"], -cs["vzc"]) if CONT else None
+        s, d = S.step(s, dt, gx, gz, prep=prep, rot=rot, wind=wind)
         P = d["mom"] * S.mp
         # the stout's push on the glass: minus the rate of change of its momentum relative to the glass, taken in the inertial frame
         # (run 3): dP/dt + om x P, with om x P = om (-P_z, 0, P_x) in the glass's axes; run 2 had dP/dt alone
@@ -144,7 +152,7 @@ for task in TASKS:
     if time.time() - T0 + est > BUDGET_S:
         log(f"skip {name}: needs about {est:.0f} s, {BUDGET_S - (time.time() - T0):.0f} s left in the budget"); continue
     log(f"start {name}: grid {dx0 * 1e3:.1f} mm, {task['end']:.3f} s of stout; about {est:.0f} s")
-    G = Geometry(R, DZP, FILL, dx0); S = Stout(G, model="full", rho=RHO, head_mass=True, seed=task.get("seed", 1), M_drops=M_DROPS, K_frac=K_FRAC, vol_corr=VOL_CORR)
+    G = Geometry(R, DZP, FILL, dx0, body=DECK if CONT else None); S = Stout(G, model="full", rho=RHO, head_mass=True, seed=task.get("seed", 1), M_drops=M_DROPS, K_frac=K_FRAC, vol_corr=VOL_CORR)
     s = S.init_state(); t = jnp.zeros((), F64)
     ml = S.rho * S.V + S.rho_f * HEAD0 * float(np.sum(np.asarray(S.afill))) * S.dx ** 2
     if task["kind"] == "free":
@@ -197,9 +205,9 @@ for task in TASKS:
                 f"head spilled {rec['foam_spill'][-1] * 1e6:.2f} mL; stout spilled {S.N - rec['nact'][-1]:,} particles")
     wall = time.time() - Tc; run_s = wall - comp_s; measured[dx0] = run_s / max(float(t) - 1 / FPS, 1e-6)
     out = {k: np.array(v) for k, v in rec.items() if len(v)}
-    np.savez_compressed(WORK / f"{name}.npz", **out, dx=dx0, fill=FILL, x0=G.x0, n=G.n, Rfill=G.Rfill, mp=S.mp, N=S.N)
-    foam0 = float(np.asarray(S.init_state()["foam0"])); nsum = out["nact"] + out["nfly"] + out["nlanded"] + out["nstuck"]
-    info = dict(task, cells=G.n * G.n * G.nz, particles=S.N, mp=S.mp, steps=steps, compile_s=round(comp_s, 1), run_s=round(run_s, 1),
+    np.savez_compressed(WORK / f"{name}.npz", **out, dx=dx0, fill=FILL, x0=G.x0, n=G.n, y0=G.y0, nx=G.nx, ny=G.ny, cont=CONT, Rfill=G.Rfill, mp=S.mp, N=S.N)
+    foam0 = float(np.asarray(S.init_state()["foam0"])); nsum = (out["nact"] + out["nlanded"]) if CONT else (out["nact"] + out["nfly"] + out["nlanded"] + out["nstuck"])   # continuous: nfly (outside the glass) is part of nact
+    info = dict(task, cells=G.nx * G.ny * G.nz, particles=S.N, mp=S.mp, steps=steps, compile_s=round(comp_s, 1), run_s=round(run_s, 1),
                 ms_per_step=round(run_s / max(steps - 1, 1) * 1e3, 1), its_per_step=round(its / max(steps, 1), 1), itmax=int(out["itmax"].max()),
                 spilled_g=round((S.N - out["nact"][-1]) * S.mp * 1e3, 3), head_spilled_ml=round(float(out["foam_spill"][-1]) * 1e6, 3), dx=dx0,
                 books=dict(stout_particles=S.N, stout_err_particles_max=int(np.abs(nsum - S.N).max()), head_ml0=round(foam0 * 1e6, 4),
@@ -229,7 +237,7 @@ for task in TASKS:
                     gains=dict(K=np.asarray(cart.K).tolist(), poles_max_abs=cart.D["slowest"]),
                     impulse_vs_momentum=dict(impulse_x=float(np.asarray(ex["imp"][0])), momentum_x_end=float(np.asarray(ex["P"][0]))))
     if name == "rest":
-        inside = np.hypot(*np.meshgrid(G.x0 + (np.arange(G.n) + 0.5) * dx0, G.x0 + (np.arange(G.n) + 0.5) * dx0, indexing="ij")) < G.Rfill - dx0
+        inside = np.hypot(*np.meshgrid(G.xc, G.yc, indexing="ij")) < G.Rfill - dx0
         Hl = out["H"][-1][inside]; devc = np.abs(Hl - FILL) * 1e3
         g_ = dict(max_dev_mm=float(np.nanmax(devc)), rms_dev_mm=float(np.sqrt(np.nanmean(devc ** 2))), columns_without_value=int((~np.isfinite(Hl)).sum()),
                   head_spilled_ml=info["head_spilled_ml"], spilled_g=info["spilled_g"], limit_max_mm=REST_MAX_CELLS * dx0 * 1e3, limit_rms_mm=REST_RMS_CELLS * dx0 * 1e3)

@@ -37,7 +37,7 @@ else:
 
 # 2. continuous geometry
 dx = float(os.environ.get("DX", "0.004")); REST = float(os.environ.get("REST", "2.0")); body = (SJ.BODY_HALF[0], SJ.BODY_HALF[1], SJ.BODY_TOP)
-t0 = time.time(); G = SJ.Geometry(R, DZP, FILL, dx, body=body); say(f"continuous geometry: n {G.n}, nz {G.nz}, {G.n * G.n * G.nz} cells, built in {time.time() - t0:.1f} s")
+t0 = time.time(); G = SJ.Geometry(R, DZP, FILL, dx, body=body); say(f"continuous geometry: nx {G.nx}, ny {G.ny}, nz {G.nz}, {G.nx * G.ny * G.nz} cells, built in {time.time() - t0:.1f} s")
 pts = {"in the cavity": (0, 0, 0.05, False), "in the glass wall": (float(G.Rz(0.08)) + 0.001, 0, 0.08, True),
        "outside the glass": (float(G.Rz(0.08)) + 0.006, 0, 0.08, False), "in the foot": (0, 0, -0.007, True),
        "the body": (0.09, 0.0, SJ.BODY_TOP - 0.002, True), "air beside the body": (0, 0.09, SJ.BODY_TOP - 0.002, False)}
@@ -56,7 +56,7 @@ o = S.observe(s); H = np.asarray(o["H"]); Hc = H[np.isfinite(H)]
 Xr = np.asarray(s["xp"]); rr = np.hypot(Xr[:, 0], Xr[:, 1]); Rr = np.interp(np.clip(Xr[:, 2], 0, G.zrim) / DZP, np.arange(len(R)), R)
 out_i = np.where(~((Xr[:, 2] > 0) & (rr < Rr)))[0][:20]; rep["rest_outside_sample_mm"] = [[round(float(v) * 1e3, 2) for v in (rr[i], Rr[i], Xr[i, 2])] for i in out_i]
 say("outside at rest (r, R(z), z in mm): " + json.dumps(rep["rest_outside_sample_mm"]))
-worst = np.argsort(np.where(np.isfinite(H), H, 1.0), axis=None)[:5]; rep["rest_lowest_columns"] = [[round(float(G.xc[i // G.n]) * 1e3, 1), round(float(G.xc[i % G.n]) * 1e3, 1), round(float(H.flat[i]) * 1e3, 2)] for i in worst]
+worst = np.argsort(np.where(np.isfinite(H), H, 1.0), axis=None)[:5]; rep["rest_lowest_columns"] = [[round(float(G.xc[i // G.ny]) * 1e3, 1), round(float(G.yc[i % G.ny]) * 1e3, 1), round(float(H.flat[i]) * 1e3, 2)] for i in worst]
 say("lowest columns (x, y, H in mm): " + json.dumps(rep["rest_lowest_columns"]))
 check("at rest: none lost, none outside", int(o["nact"]) == N and int(o["nfly"]) == 0, f"active {int(o['nact'])}/{N}, outside {int(o['nfly'])}")
 # the same pint at rest in the OLD model on the same grid: its spread of the read surface is the baseline the grid allows
@@ -79,9 +79,9 @@ while t < REST + 1.2 - 1e-9:
         say(json.dumps(hist[-1]))
 fin = hist[-1]; Xf = np.asarray(s["xp"])
 # films and puddles outside the glass must keep a level set: particles outside the cavity in cells outside lsdom (should be ~0)
-actf = np.asarray(s["act"]); ci = np.floor((Xf - np.array([G.x0, G.x0, G.z0])) / dx).astype(int); okc = actf & np.all((ci >= 0) & (ci < np.array([G.n, G.n, G.nz])), 1)
+actf = np.asarray(s["act"]); ci = np.floor((Xf - np.array([G.x0, G.y0, G.z0])) / dx).astype(int); okc = actf & np.all((ci >= 0) & (ci < np.array([G.nx, G.ny, G.nz])), 1)
 rr_ = np.hypot(Xf[:, 0], Xf[:, 1]); incav_ = (Xf[:, 2] > 0) & (rr_ < np.interp(np.clip(Xf[:, 2], 0, G.zrim) / DZP, np.arange(len(R)), R))
-noset = okc & ~incav_ & ~G.lsdom[tuple(np.clip(ci, 0, np.array([G.n, G.n, G.nz]) - 1).T)]
+noset = okc & ~incav_ & ~G.lsdom[tuple(np.clip(ci, 0, np.array([G.nx, G.ny, G.nz]) - 1).T)]
 check("shove: liquid outside the glass has a level set (outside lsdom: 0)", int(noset.sum()) == 0, f"{int(noset.sum())} of {int((okc & ~incav_).sum())} outside the cavity")
 check("shove: stout went over the rim and down the outside", max(h["outside"] for h in hist) > 0, f"max outside {max(h['outside'] for h in hist)}")
 check("shove: books close (active + fallen = N)", fin["active"] + fin["fallen"] == N, f"{fin['active']} + {fin['fallen']} = {N}")

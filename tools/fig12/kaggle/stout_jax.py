@@ -105,21 +105,27 @@ class Geometry:
         if body is None:
             self.n = n = int(math.ceil(2 * (Rmax + 2 * dx) / dx)); self.nz = nz = int(math.ceil((self.zrim + 0.02) / dx)) + 2
             self.x0 = -n * dx / 2; self.z0 = -2 * dx
+            nx = ny = n; self.y0 = self.x0
         else:
             hx, hy, zt = body
             # z0 = -k dx puts the cavity's floor (z = 0) on a face, as the old grid does (the floor mid-cell left stout below it)
-            self.n = n = int(math.ceil(2 * (max(hx, hy) + 2 * dx) / dx)); self.z0 = -(int(math.ceil(-zt / dx)) + 4) * dx
-            self.nz = nz = int(math.ceil((self.zrim + 0.03 - self.z0) / dx)); self.x0 = -n * dx / 2
+            # a grid as long and as wide as the body (19 Nov 2026: the Fig. 16 deck is 310 x 124 mm; a square grid on the longer side
+            # spent 60 % of its cells on the air beside the deck): nx cells along x, ny across, both even about the glass's axis
+            nx = int(math.ceil(2 * (hx + 2 * dx) / dx)); ny = int(math.ceil(2 * (hy + 2 * dx) / dx)); self.n = n = nx
+            self.z0 = -(int(math.ceil(-zt / dx)) + 4) * dx
+            self.nz = nz = int(math.ceil((self.zrim + 0.03 - self.z0) / dx)); self.x0 = -nx * dx / 2; self.y0 = -ny * dx / 2
+        self.nx, self.ny = nx, ny
         s = (np.arange(4) + 0.5) / 4
-        xs4 = self.x0 + dx * (np.arange(n)[:, None] + s[None, :]).ravel()      # 4 samples across each cell
+        xs4 = self.x0 + dx * (np.arange(nx)[:, None] + s[None, :]).ravel()      # 4 samples across each cell
+        ys4 = self.y0 + dx * (np.arange(ny)[:, None] + s[None, :]).ravel()
         zs4 = self.z0 + dx * (np.arange(nz)[:, None] + s[None, :]).ravel()
-        xf = self.x0 + dx * np.arange(n + 1); zf = self.z0 + dx * np.arange(nz + 1)
+        xf = self.x0 + dx * np.arange(nx + 1); yf = self.y0 + dx * np.arange(ny + 1); zf = self.z0 + dx * np.arange(nz + 1)
         ins = self.inside if body is None else self.open
-        thu = ins(xf[:, None, None], xs4[None, :, None], zs4[None, None, :]).reshape(n + 1, n, 4, nz, 4).mean((2, 4))
-        thv = ins(xs4[:, None, None], xf[None, :, None], zs4[None, None, :]).reshape(n, 4, n + 1, nz, 4).mean((1, 4))
-        thw = ins(xs4[:, None, None], xs4[None, :, None], zf[None, None, :]).reshape(n, 4, n, 4, nz + 1).mean((1, 3))
+        thu = ins(xf[:, None, None], ys4[None, :, None], zs4[None, None, :]).reshape(nx + 1, ny, 4, nz, 4).mean((2, 4))
+        thv = ins(xs4[:, None, None], yf[None, :, None], zs4[None, None, :]).reshape(nx, 4, ny + 1, nz, 4).mean((1, 4))
+        thw = ins(xs4[:, None, None], ys4[None, :, None], zf[None, None, :]).reshape(nx, 4, ny, 4, nz + 1).mean((1, 3))
         if body is None: thu[0] = thu[-1] = 0; thv[:, 0] = thv[:, -1] = 0; thw[:, :, 0] = 0      # the box is closed except its top
-        c = self.x0 + (np.arange(n) + 0.5) * dx; zc = self.z0 + (np.arange(nz) + 0.5) * dx
+        c = self.x0 + (np.arange(nx) + 0.5) * dx; cy = self.y0 + (np.arange(ny) + 0.5) * dx; zc = self.z0 + (np.arange(nz) + 0.5) * dx
         if body is not None:
             # a face is closed when the segment between the two cell centres it joins crosses a solid anywhere (9 points): the glass's
             # wall is thinner than two cells, and a face cut by it would otherwise couple the stout inside to the air outside through
@@ -128,17 +134,17 @@ class Geometry:
             # as in the old model; closing those too lost the liquid in the sliver beside the wall, smoke test 3-4: wall columns 1.4 mm low)
             u9 = (np.arange(1, 8) / 8.0 - 0.5) * dx
             cu = np.ones_like(thu, bool); cv = np.ones_like(thv, bool); cw = np.ones_like(thw, bool)
-            eu = ~self.solid((xf - 0.5 * dx)[:, None, None], c[None, :, None], zc[None, None, :]) & ~self.solid((xf + 0.5 * dx)[:, None, None], c[None, :, None], zc[None, None, :])
-            ev = ~self.solid(c[:, None, None], (xf - 0.5 * dx)[None, :, None], zc[None, None, :]) & ~self.solid(c[:, None, None], (xf + 0.5 * dx)[None, :, None], zc[None, None, :])
-            ew = ~self.solid(c[:, None, None], c[None, :, None], (zf - 0.5 * dx)[None, None, :]) & ~self.solid(c[:, None, None], c[None, :, None], (zf + 0.5 * dx)[None, None, :])
+            eu = ~self.solid((xf - 0.5 * dx)[:, None, None], cy[None, :, None], zc[None, None, :]) & ~self.solid((xf + 0.5 * dx)[:, None, None], cy[None, :, None], zc[None, None, :])
+            ev = ~self.solid(c[:, None, None], (yf - 0.5 * dx)[None, :, None], zc[None, None, :]) & ~self.solid(c[:, None, None], (yf + 0.5 * dx)[None, :, None], zc[None, None, :])
+            ew = ~self.solid(c[:, None, None], cy[None, :, None], (zf - 0.5 * dx)[None, None, :]) & ~self.solid(c[:, None, None], cy[None, :, None], (zf + 0.5 * dx)[None, None, :])
             for d in u9:
-                cu &= ~self.solid((xf + d)[:, None, None], c[None, :, None], zc[None, None, :])
-                cv &= ~self.solid(c[:, None, None], (xf + d)[None, :, None], zc[None, None, :])
-                cw &= ~self.solid(c[:, None, None], c[None, :, None], (zf + d)[None, None, :])
+                cu &= ~self.solid((xf + d)[:, None, None], cy[None, :, None], zc[None, None, :])
+                cv &= ~self.solid(c[:, None, None], (yf + d)[None, :, None], zc[None, None, :])
+                cw &= ~self.solid(c[:, None, None], cy[None, :, None], (zf + d)[None, None, :])
             thu = np.where(cu | ~eu, thu, 0.0); thv = np.where(cv | ~ev, thv, 0.0); thw = np.where(cw | ~ew, thw, 0.0)
         self.thu, self.thv, self.thw = thu, thv, thw
-        X, Y, Z = np.meshgrid(c, c, zc, indexing="ij"); r2 = X * X + Y * Y
-        self.xc, self.zc = c, zc
+        X, Y, Z = np.meshgrid(c, cy, zc, indexing="ij"); r2 = X * X + Y * Y
+        self.xc, self.yc, self.zc = c, cy, zc
         Rcav = self.Rz(np.minimum(Z, self.zrim - 1e-6))
         self.cav_inner = (Z > 0) & (r2 < (Rcav - 0.5 * dx) ** 2)                       # well inside the cavity
         self.wallcut = (Z > 0) & (Z < self.zrim) & (r2 >= (self.Rz(Z) - 0.5 * dx) ** 2) & (r2 < (self.Rz(Z) + 0.5 * dx) ** 2 if body else True)   # cut by the glass's inner wall
@@ -152,7 +158,7 @@ class Geometry:
             # down the outside of the glass or a puddle on the body keeps its own free surface (review, 18 Nov 2026)
             self.lsdom = np.where(self.cavity(X, Y, Z), self.cav_inner, ~self.solid(X, Y, Z))
         if body is None: self._wall_area()
-        else: self._wall_area_solid(xs4, zs4)
+        else: self._wall_area_solid(xs4, ys4, zs4)
         self.Rfill = float(self.Rz(fill))
 
     def Rz(self, z):
@@ -215,15 +221,15 @@ class Geometry:
         self.area_cells = float(A.sum())
         self.area_profile = float((2 * np.pi * 0.5 * (R[:-1] + R[1:]) * ds).sum() + np.pi * R[0] ** 2)
 
-    def _wall_area_solid(self, xs4, zs4):
+    def _wall_area_solid(self, xs4, ys4, zs4):
         """Area of solid surface in each cell, per cell volume, for the continuous model: on 4 x 4 x 4 samples per cell, the
         crossings between solid and open samples along each axis give the surface's projections (A_x, A_y, A_z), each crossing
         (dx/4)^2; for a surface that is flat across the cell its area is |(A_x, A_y, A_z)|."""
-        n, nz, dx = self.n, self.nz, self.dx; h2 = (dx / 4) ** 2; A = np.zeros((n, n, nz))
-        X, Y = np.meshgrid(xs4, xs4, indexing="ij")
+        nx, ny, nz, dx = self.nx, self.ny, self.nz, self.dx; h2 = (dx / 4) ** 2; A = np.zeros((nx, ny, nz))
+        X, Y = np.meshgrid(xs4, ys4, indexing="ij")
         for k in range(nz):
             S = np.stack([self.solid(X, Y, np.full_like(X, z)) for z in zs4[4 * k:4 * k + 4]], -1)   # (4n, 4n, 4)
-            S = S.reshape(n, 4, n, 4, 4).transpose(0, 2, 1, 3, 4)                                    # (n, n, 4, 4, 4)
+            S = S.reshape(nx, 4, ny, 4, 4).transpose(0, 2, 1, 3, 4)                                  # (nx, ny, 4, 4, 4)
             ax_ = np.abs(np.diff(S.astype(int), axis=2)).sum((2, 3, 4)); ay = np.abs(np.diff(S.astype(int), axis=3)).sum((2, 3, 4))
             az = np.abs(np.diff(S.astype(int), axis=4)).sum((2, 3, 4))
             A[:, :, k] = np.sqrt(ax_ ** 2 + ay ** 2 + az ** 2) * h2 * 4.0 / 3.0   # 3 of the 4 sample intervals per cell lie inside it
@@ -309,8 +315,9 @@ class Stout:
         self.rread = 0.505 * dx  # the read-out's: derived 13 Nov 2026, reads a flat seeded layer to -0.09..+0.02 cell (0.9 dx reads 0.5-1.0 cell high)
         self.tol = tol; self.maxit = maxit
         n, nz = G.n, G.nz; self.n, self.nz = n, nz
-        self.dims = (n, n, nz)
-        self.fshape = [(n + 1, n, nz), (n, n + 1, nz), (n, n, nz + 1)]
+        nx, ny = G.nx, G.ny; self.nx, self.ny = nx, ny          # nx = ny = n on the old square grid (bit for bit as before)
+        self.dims = (nx, ny, nz)
+        self.fshape = [(nx + 1, ny, nz), (nx, ny + 1, nz), (nx, ny, nz + 1)]
         P = seed_particles(G, ppc, seed)
         self.N = len(P); self.V = glass_volume(G.R, G.dzp, G.fill); self.mp = rho * self.V / self.N
         self.K = int(K_frac * self.N); self.M = M_drops
@@ -320,7 +327,7 @@ class Stout:
         self.cav_inner = jnp.asarray(G.cav_inner); self.wallcut = jnp.asarray(G.wallcut); self.cavc = jnp.asarray(G.cavc > 0)
         self.lsdom = jnp.asarray(G.lsdom)
         self.Rd = jnp.asarray(G.R, F32)
-        self.origin = jnp.asarray([G.x0, G.x0, G.z0], F32)
+        self.origin = jnp.asarray([G.x0, G.y0, G.z0], F32)
         k = np.arange(nz + 1)[None, None, :]
         self.floor_w = jnp.asarray((G.thw == 0) & (k <= 2))       # closed floor faces: w = 0 exactly
         # the continuous model (G.body set, 18 Nov 2026): every closed face of the glass and of the cart's body holds w = 0, and the
@@ -328,8 +335,8 @@ class Stout:
         self.cont = G.body is not None
         if self.cont: self.floor_w = jnp.asarray(G.thw == 0)
         self.gamma = GAMMA if self.cont else 0.0
-        c = jnp.asarray(G.xc, F32); zc = jnp.asarray(G.zc, F32)
-        self.cc = (c, c, zc)
+        c = jnp.asarray(G.xc, F32); cy = jnp.asarray(G.yc, F32); zc = jnp.asarray(G.zc, F32)
+        self.cc = (c, cy, zc)
         o = np.array([(a, b, c) for a in range(-1, 3) for b in range(-1, 3) for c in range(-1, 3)], np.int32)
         self.off64 = jnp.asarray(o)
         self.corners = jnp.asarray(np.array([(a, b, c) for a in (0, 1) for b in (0, 1) for c in (0, 1)], np.int32))
@@ -338,7 +345,7 @@ class Stout:
         # the head's mass (13 Nov 2026, run 8): the head moves up and down with the stout's surface, so the stout must accelerate
         # it; set False to recover runs 6 and 7 (weight only)
         self.head_mass = head_mass
-        X, Y = np.meshgrid(G.xc, G.xc, indexing="ij")
+        X, Y = np.meshgrid(G.xc, G.yc, indexing="ij")
         self.rc = jnp.asarray(np.hypot(X, Y), F32); self.colx = jnp.asarray(X, F32); self.coly = jnp.asarray(Y, F32)
         # the open part of each column at the fill (the horizontal face nearest the fill height): the head lies on every column
         # that holds stout there, out to the glass, and a column's head counts hf x this area (13 Nov 2026, run 3: the head lay
@@ -411,7 +418,7 @@ class Stout:
         return dict(xp=jnp.asarray(self.P0), vp=jnp.zeros((N, 3), F32), C=jnp.zeros((N, 3, 3), F32),
                     act=jnp.ones(N, bool), fly=jnp.zeros(N, bool), landed=jnp.zeros(N, bool), stuck=jnp.zeros(N, bool),
                     p=jnp.zeros(self.dims, F32), ewall=z64, efoam=z64, eskin=z64,
-                    hf=hf0, wh=jnp.zeros((self.n, self.n), F32), foam_spill=z64, foam0=jnp.sum((hf0 * self.afill).astype(F64)) * self.dx ** 2,
+                    hf=hf0, wh=jnp.zeros((self.nx, self.ny), F32), foam_spill=z64, foam0=jnp.sum((hf0 * self.afill).astype(F64)) * self.dx ** 2,
                     bx=jnp.full((self.MF, 3), jnp.nan, F32), bv=jnp.zeros((self.MF, 3), F32), bvol=jnp.zeros(self.MF, F32),
                     bptr=jnp.zeros((), I32))
 
@@ -912,8 +919,8 @@ class Stout:
         Xn = Xn.at[:, 2].set(jnp.where(deck, zt + eps, Xn[:, 2]))
         newv = newv.at[:, 2].set(jnp.where(deck & (newv[:, 2] < 0), 0.0, newv[:, 2]))
         # off the cart: outside the grid sideways or below it
-        half = -G.x0
-        gone = act & ((jnp.abs(Xn[:, 0]) > half - 0.5 * dx) | (jnp.abs(Xn[:, 1]) > half - 0.5 * dx) | (Xn[:, 2] < G.z0 + 0.5 * dx))
+        hxg, hyg = -G.x0, -G.y0
+        gone = act & ((jnp.abs(Xn[:, 0]) > hxg - 0.5 * dx) | (jnp.abs(Xn[:, 1]) > hyg - 0.5 * dx) | (Xn[:, 2] < G.z0 + 0.5 * dx))
         act2 = act & ~gone
         xp = jnp.where(act[:, None], Xn, s["xp"]); vp = jnp.where(act[:, None], newv, s["vp"])
         s = dict(s, xp=xp.astype(F32), vp=vp.astype(F32), C=jnp.where(act2[:, None, None], C, 0.0).astype(F32),
@@ -939,8 +946,8 @@ class Stout:
         G = self.G; dx = self.dx; r = G.Rfill; r1 = r - 2.5 * dx; r2 = r1 - 1.5 * dx
         Hf = jnp.where(jnp.isfinite(H), H, 0.0); w0 = jnp.isfinite(H).astype(F32)
         def bil(x, y):
-            fx = (x - G.x0) / dx - 0.5; fy = (y - G.x0) / dx - 0.5
-            i = jnp.clip(jnp.floor(fx).astype(I32), 0, self.n - 2); j = jnp.clip(jnp.floor(fy).astype(I32), 0, self.n - 2)
+            fx = (x - G.x0) / dx - 0.5; fy = (y - G.y0) / dx - 0.5
+            i = jnp.clip(jnp.floor(fx).astype(I32), 0, self.nx - 2); j = jnp.clip(jnp.floor(fy).astype(I32), 0, self.ny - 2)
             tx = fx - i; ty = fy - j
             ws = [((1 - tx) * (1 - ty), i, j), (tx * (1 - ty), i + 1, j), ((1 - tx) * ty, i, j + 1), (tx * ty, i + 1, j + 1)]
             num = sum(w * w0[a, b] * Hf[a, b] for w, a, b in ws); den = sum(w * w0[a, b] for w, a, b in ws)
@@ -957,8 +964,8 @@ class Stout:
         column for 1/60 s) cannot move it; y_q = (median_front - median_back)/2 divided by the first mode's shape at the patch's mean
         radius, J1(xi r_p / R) / J1(xi), so that y_q reads the swing's height at the wall, as probes() does. Fig. 12 never calls it."""
         if not hasattr(self, "_patch"):
-            G = self.G; dx = self.dx; c = G.x0 + (np.arange(self.n) + 0.5) * dx; r1 = G.Rfill - 2.5 * dx
-            X, Y = np.meshgrid(c, c, indexing="ij"); idx = {}
+            G = self.G; dx = self.dx; c = G.x0 + (np.arange(self.nx) + 0.5) * dx; cy = G.y0 + (np.arange(self.ny) + 0.5) * dx; r1 = G.Rfill - 2.5 * dx
+            X, Y = np.meshgrid(c, cy, indexing="ij"); idx = {}
             for s in (1, -1):
                 m = (s * X >= r1 - 2.4 * dx) & (s * X <= r1 + 0.7 * dx) & (np.abs(Y) <= 1.5 * dx)   # 3 x 3 columns at dx 1.5 mm
                 idx[s] = (jnp.asarray(np.nonzero(m)[0]), jnp.asarray(np.nonzero(m)[1]), float(np.mean(np.abs(X[m]))))
@@ -992,7 +999,7 @@ class Stout:
         # the head's weight on the surface (verification.md item 4), in the solver's pressure units (Pa x dt / rho); with rot, the
         # vertical field of each column at the fill height
         gzh = gz if rot is None else self.frame_accel(self.colx, self.G.fill, 0.0, 0.0, gx, gz, rot)[1]
-        ps = (self.rho_f * s["hf"] * jnp.maximum(-gzh, 0.0) * dt / self.rho).astype(F32) if self.head else jnp.zeros((self.n, self.n), F32)
+        ps = (self.rho_f * s["hf"] * jnp.maximum(-gzh, 0.0) * dt / self.rho).astype(F32) if self.head else jnp.zeros((self.nx, self.ny), F32)
         mu = (self.rho_f * s["hf"] / self.rho).astype(F32) if (self.head and self.head_mass) else None
         gdt = jnp.maximum(-gzh, 0.0) * dt
         if rot is not None: gdt = gdt[:, :, None]
@@ -1002,7 +1009,7 @@ class Stout:
             # it stirred the pint at rest at 1.5 mm (rest guard: 1.54 mm, limit 0.75 mm)
             gate = jnp.clip((self.swelling(liq, s["act"]) - 0.04) / 0.04, 0.0, 1.0).astype(F32)
             src = self.volume_source(pr["cnt"], liq, dt, gate); zf = [jnp.zeros_like(v) for v in vel]
-            uc, kc, _, _, _ = self.pressure(zf, ph, liq, jnp.zeros_like(s["p"]), jnp.zeros((self.n, self.n), F32), src=src)
+            uc, kc, _, _, _ = self.pressure(zf, ph, liq, jnp.zeros_like(s["p"]), jnp.zeros((self.nx, self.ny), F32), src=src)
             uc = self.extrapolate(uc, kc)
         pst = self.tension(ph, s["hf"], dt) if self.cont else None
         vel, known, p, it, res = self.pressure(vel, ph, liq, s["p"], ps, mu=mu, w_old=w_old, geff_dt=gdt, pst=pst)
@@ -1038,8 +1045,8 @@ class Stout:
         H, nfb = self.surface(phr)
         # drops
         X, act, fly = s["xp"], s["act"], s["fly"]
-        i = jnp.clip(jnp.floor((X[:, 0] - G.x0) / dx).astype(I32), 0, self.n - 1)
-        j = jnp.clip(jnp.floor((X[:, 1] - G.x0) / dx).astype(I32), 0, self.n - 1)
+        i = jnp.clip(jnp.floor((X[:, 0] - G.x0) / dx).astype(I32), 0, self.nx - 1)
+        j = jnp.clip(jnp.floor((X[:, 1] - G.y0) / dx).astype(I32), 0, self.ny - 1)
         # a drop stands more than 1.5 dx above the surface of its column and of the eight around it (stout climbing the glass in a
         # cut column is not a drop)
         Hm = jnp.where(jnp.isfinite(H), H, -jnp.inf); Hm = jnp.maximum(Hm, jnp.maximum(sh(Hm, 1, 0, -jnp.inf), sh(Hm, -1, 0, -jnp.inf)))
@@ -1071,8 +1078,8 @@ class Stout:
         G = self.G; dx = self.dx; Rmax = (G.Rfill - 0.5 * dx) if Rmax is None else Rmax
         r = Rmax * jnp.arange(nr + 1) / nr; th = 2 * jnp.pi * jnp.arange(nth) / nth
         x = r[:, None] * jnp.cos(th)[None]; y = r[:, None] * jnp.sin(th)[None]
-        fx = (x - G.x0) / dx - 0.5; fy = (y - G.x0) / dx - 0.5
-        i = jnp.clip(jnp.floor(fx).astype(I32), 0, self.n - 2); j = jnp.clip(jnp.floor(fy).astype(I32), 0, self.n - 2)
+        fx = (x - G.x0) / dx - 0.5; fy = (y - G.y0) / dx - 0.5
+        i = jnp.clip(jnp.floor(fx).astype(I32), 0, self.nx - 2); j = jnp.clip(jnp.floor(fy).astype(I32), 0, self.ny - 2)
         tx = fx - i; ty = fy - j
         Hf = jnp.where(jnp.isfinite(H), H, jnp.nanmean(H))
         return ((1 - tx) * (1 - ty) * Hf[i, j] + tx * (1 - ty) * Hf[i + 1, j] + (1 - tx) * ty * Hf[i, j + 1] + tx * ty * Hf[i + 1, j + 1]).astype(F32)
