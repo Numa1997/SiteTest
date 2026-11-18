@@ -62,3 +62,16 @@ Diagnostic v2 (rest_diag.py, commit 7f139ca) running: old geometry vs continuous
 5. Wetting: glass is strongly wetted by aqueous liquids (static contact angle ~ 0 deg, beer-foam thesis core.ac.uk 30633103: TO READ);
    no measured stout-on-glass angle found yet.
 6. Surface tension at 6 C: no stout measurement found; water dgamma/dT = -0.15 mN/m/K (standard) as the stand-in, stated as such.
+
+## Results to 18 Nov 2026, 22:10 UTC, and the owner's decision
+- smoke 2 mm (continuous-spill-smoke-2mm-b, 6a41be3): ALL PASS. Rest 0.5 s: 420216/420216 active, 0 outside, 0 lost, surface median
+  125.01 mm (124.86-125.09; old model same grid 124.85-125.08). Shove: max outside 63405, max on body 9584, fallen 206104 (49 %),
+  books exact, vmax 3.09 m/s.
+- smoke 4 mm (smoke-b, 86bbb88): rest 0 outside, 0 lost; wall columns 1.4 mm low (grid effect, gone at 2 mm); film check crashed
+  (index bug, fixed 317057d).
+- 2 mm at cc51c2c (face rule: cut cells keep fractions): continuous-spill-smoke-2mm-c, running at the decision; result not recorded.
+- Air drag (036b81d) check (continuous-spill-drag v1): 8 mm drop, dx 2 mm, U 1.5 m/s: 0.0805 m/s^2 vs the law 0.1197 (Re 798,
+  C_D 0.475): FAIL (-33 %); still air 1e-6: PASS. Fix 06bd5ed (one-sided smoothed surface delta) NOT run.
+- OWNER'S DECISION (via the open-problems session, 18 Nov 22:11): no recompute, no GPU or calibration run, no renumbering; first a
+  functioning animation from the stored rides; air resistance and the air's parameters only after that. Air drag, splash and head
+  stage 2 STOPPED; nothing new launched on Kaggle. This branch stays as it is, not merged.
