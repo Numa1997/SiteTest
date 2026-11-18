@@ -6,9 +6,16 @@ canvas.bgs { position: absolute; inset: 0; width: 100%; height: 100%; pointer-ev
 .bgs-top { position: absolute; top: 0; left: 0; right: 0; height: 560px; z-index: -1; pointer-events: none; overflow: hidden; }
 /* fixed to the window, behind everything: used with data-bg-mask="sides", so it lives in the side margins */
 .bgs-fixed { position: fixed; inset: 0; z-index: -1; pointer-events: none; }
+/* beside the title, in the empty half of the page top (left of the title on Arabic pages); only where that half is empty */
+.bgs-aside { position: absolute; top: 76px; height: 300px; left: calc(50% + 70px); width: min(520px, calc(50% - 110px)); z-index: -1; pointer-events: none; overflow: hidden; }
+[dir="rtl"] .bgs-aside { left: auto; right: calc(50% + 70px); }
+@media (max-width: 1239px) { .bgs-aside { display: none; } }
 /* a band of its own, between or after the parts of a page */
 .bgs-band { position: relative; height: 260px; pointer-events: none; overflow: hidden; }
 .bgs-band--low { height: 170px; }
 .bgs-band--tall { height: 320px; }
 @media (max-width: 760px) { .bgs-top { height: 420px; } .bgs-band { height: 200px; } .bgs-band--low { height: 130px; } .bgs-band--tall { height: 240px; } }
-@media print { canvas.bgs, .bgs-top, .bgs-fixed, .bgs-band { display: none; } }
+/* the home forest: from 761 px wide the holder reaches 150 px below the hero, so the trees' roots fill the soil there */
+.bgs-top--forest { height: min(100svh, 860px); }
+@media (min-width: 761px) { .bgs-top--forest { height: calc(min(100svh, 860px) + 150px); } }
+@media print { canvas.bgs, .bgs-top, .bgs-aside, .bgs-fixed, .bgs-band { display: none; } }
