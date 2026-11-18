@@ -468,6 +468,7 @@ class Stout:
         Q = X[sel]
         rr = jnp.sqrt(Q[:, 0] ** 2 + Q[:, 1] ** 2); Rw = self.Rz(Q[:, 2])
         img = (Q[:, 2] < G.zrim) & (rr > Rw - 2.0 * dx) & (rr > 1e-9)
+        if self.cont: img = img & (rr < Rw) & (Q[:, 2] > 0)   # mirror only stout inside the cavity across the inner wall (not stout down the outside)
         fw = jnp.where(rr > 1e-9, (2.0 * Rw - rr) / jnp.maximum(rr, 1e-9), 0.0)
         Q2 = jnp.stack([Q[:, 0] * fw, Q[:, 1] * fw, Q[:, 2]], -1)
         R2 = 4.0 * dx * dx; size = math.prod(self.dims)
