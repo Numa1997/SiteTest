@@ -10,6 +10,7 @@
     <meta name="theme-color" content="#f5f1ea">
     <link rel="stylesheet" href="../styles/sim.css">
     <link rel="stylesheet" href="../styles/fold.css"><script src="../scripts/flip.js"></script>
+    <link rel="stylesheet" href="../styles/data.css">
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%237a1f2b'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='38' fill='%23f5f1ea'%3EN%3C/text%3E%3C/svg%3E">
     <style>
         .g16-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
@@ -62,7 +63,7 @@
         </div>
 
         <figure class="stage">
-            <div class="g16-pair">
+            <div class="g16-pair" id="stage" style="position: relative;">
                 <div class="g16-pane"><h2 id="h12">Fig. 12</h2><div class="cv"><canvas id="c12" aria-label="Fig. 12's one-wheel cart with its best controller on the chosen road, played from stored Kaggle data"></canvas></div><div class="cv3"><canvas class="pint3d" id="p12" aria-label="Close-up of Fig. 12's pint in 3D, from the same stored picture, riding with the glass"></canvas><span class="pint3d-cap">the same stored picture in 3D, close up, riding with the glass</span></div>
                     <dl class="kread"><div><dt>tilt of the stout</dt><dd id="a-tilt">—</dd></div><div><dt>head spilled</dt><dd id="a-head">—</dd></div><div><dt>stout spilled</dt><dd id="a-stout">—</dd></div></dl></div>
                 <div class="g16-pane"><h2 id="h16">Fig. 16</h2><div class="cv"><canvas id="c16" aria-label="The four-wheel cart with its control system on the same road, played from stored Kaggle data"></canvas></div><div class="cv3"><canvas class="pint3d" id="p16" aria-label="Close-up of Fig. 16's pint in 3D, from the same stored picture, riding with the glass"></canvas><span class="pint3d-cap">the same stored picture in 3D, close up, riding with the glass</span></div>
@@ -411,6 +412,7 @@
 
     <script src="../scripts/fold.js"></script>
     <script src="../scripts/sim.js"></script>
+    <script src="../scripts/dataset.js"></script>
     <script src="../scripts/guinness-glass.js"></script>
     <script src="../scripts/stout-view.js"></script>
     <script src="../scripts/stout-view2.js"></script>
