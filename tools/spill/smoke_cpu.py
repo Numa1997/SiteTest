@@ -59,7 +59,12 @@ say("outside at rest (r, R(z), z in mm): " + json.dumps(rep["rest_outside_sample
 worst = np.argsort(np.where(np.isfinite(H), H, 1.0), axis=None)[:5]; rep["rest_lowest_columns"] = [[round(float(G.xc[i // G.n]) * 1e3, 1), round(float(G.xc[i % G.n]) * 1e3, 1), round(float(H.flat[i]) * 1e3, 2)] for i in worst]
 say("lowest columns (x, y, H in mm): " + json.dumps(rep["rest_lowest_columns"]))
 check("at rest: none lost, none outside", int(o["nact"]) == N and int(o["nfly"]) == 0, f"active {int(o['nact'])}/{N}, outside {int(o['nfly'])}")
-check("at rest: surface at the fill, level within 0.5 mm", Hc.size > 0 and Hc.max() - Hc.min() < 0.0005 and abs(np.median(Hc) - 0.125) < 0.001, f"H {Hc.min() * 1e3:.2f}..{Hc.max() * 1e3:.2f} mm, median {np.median(Hc) * 1e3:.2f}")
+# the same pint at rest in the OLD model on the same grid: its spread of the read surface is the baseline the grid allows
+G0 = SJ.Geometry(R, DZP, FILL, dx); S0 = SJ.Stout(G0, model="wall", K_frac=1.0, M_drops=4096); s0 = S0.init_state(); st0 = jax.jit(lambda s, dt: S0.step(s, dt, 0.0, -9.81)); t0_ = 0.0
+while t0_ < REST - 1e-9: s0, _ = st0(s0, dt); t0_ += dt
+H0 = np.asarray(S0.observe(s0)["H"]); H0 = H0[np.isfinite(H0)]; base = H0.max() - H0.min()
+say(f"old model at rest, same grid and time: H {H0.min() * 1e3:.2f}..{H0.max() * 1e3:.2f} mm, median {np.median(H0) * 1e3:.2f}")
+check("at rest: surface at the fill, spread within max(0.5 mm, old model + 0.2 mm)", Hc.size > 0 and Hc.max() - Hc.min() <= max(0.0005, base + 0.0002) and abs(np.median(Hc) - np.median(H0)) < 0.0005, f"H {Hc.min() * 1e3:.2f}..{Hc.max() * 1e3:.2f} mm, median {np.median(Hc) * 1e3:.2f}" + f"; old spread {base * 1e3:.2f} mm")
 
 # 4. a hard shove
 hist = []

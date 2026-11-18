@@ -836,24 +836,29 @@ class Stout:
         def radii(z):
             Rin = self.Rz(jnp.clip(z, 0.0, zr_ - 1e-6)); Rout = self.Rz(jnp.clip(z, 0.008, zr_ - 1e-6)) + W
             return Rin, Rout
-        ro = jnp.sqrt(X[:, 0] ** 2 + X[:, 1] ** 2); Rin_o, _ = radii(X[:, 2])
+        ro = jnp.sqrt(X[:, 0] ** 2 + X[:, 1] ** 2); Rin_o, Rout_o = radii(X[:, 2])
         r = jnp.sqrt(Xn[:, 0] ** 2 + Xn[:, 1] ** 2); z = Xn[:, 2]; Rin, Rout = radii(z)
         er = jnp.stack([Xn[:, 0], Xn[:, 1], jnp.zeros_like(r)], -1) / jnp.maximum(r, 1e-12)[:, None]
         in_wall = (z > 0) & (z < zr_) & (r >= Rin) & (r < Rout)
         in_foot = (z <= 0) & (z > zt) & (r < Rout)
         hit = in_wall | in_foot
         from_top = hit & (X[:, 2] >= zr_)                                     # came down onto the rim's top
-        from_in = hit & ~from_top & (X[:, 2] > 0) & (ro < Rin_o)              # from inside the cavity
+        # from inside the cavity: the old position inside it, or (if a step left it in the wall) nearer the inner face than the outer
+        from_in = hit & ~from_top & (X[:, 2] > 0) & ((ro < Rin_o) | (ro - Rin_o < Rout_o - ro))
         from_out = hit & ~from_top & ~from_in                                 # from outside the glass
         # inside: back to the inner wall (or up to the cavity's floor if it came through the floor)
         floor_in = from_in & in_foot
-        rin_t = jnp.where(from_in & ~floor_in, (Rin - eps) / jnp.maximum(r, 1e-12), 1.0)
+        # back into the cavity: first up to the floor if it went through it, then in to the inner wall at that height (the floor's
+        # corner is steep, R grows 2 mm per 0.5 mm: a particle lifted to the floor can still stand in the wall; smoke test 2 found 48
+        # particles pushed out that way onto the body)
+        zin = jnp.where(floor_in, eps, Xn[:, 2]); Rin_b = self.Rz(jnp.clip(zin, 0.0, zr_ - 1e-6))
+        rin_t = jnp.where(from_in, jnp.minimum(1.0, (Rin_b - eps) / jnp.maximum(r, 1e-12)), 1.0)
         rout_t = jnp.where(from_out, (Rout + eps) / jnp.maximum(r, 1e-12), 1.0)
         sc = rin_t * rout_t
         Xn = Xn.at[:, 0].multiply(sc).at[:, 1].multiply(sc)
         Xn = Xn.at[:, 2].set(jnp.where(from_top, zr_ + eps, jnp.where(floor_in, eps, Xn[:, 2])))
         vn = jnp.sum(newv * er, -1)
-        newv = jnp.where((from_in & ~floor_in & (vn > 0))[:, None], newv - vn[:, None] * er, newv)
+        newv = jnp.where((from_in & (rin_t < 1.0) & (vn > 0))[:, None], newv - vn[:, None] * er, newv)
         newv = jnp.where((from_out & (vn < 0))[:, None], newv - vn[:, None] * er, newv)
         newv = newv.at[:, 2].set(jnp.where((from_top | floor_in) & (newv[:, 2] < 0), 0.0, newv[:, 2]))
         # the cart's body top
