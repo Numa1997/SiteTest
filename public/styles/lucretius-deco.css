@@ -1,12 +1,10 @@
 /* Lucretius page: background. The SVG tiles come from notes/lucretius/make_bg.py; the moving fractals from scripts/lucretius-fractals.js.
-   Default (since 18 November 2026): soft wine glows, and over them a canvas fixed to the window where famous fractals grow one by one
-   and a fluid carries them off. The canvas is at full strength in the margins and fades, over the 160 px beside the 1240 px text
-   block, to a sixth behind it.
-   ?bg=d shows the earlier "currents and atoms" tiles, ?bg=a, b or c the earlier margin strips (a script in the page sets html[data-bg];
-   the fractal script then does not start). */
+   Default (since 18 November 2026, late): no background ornament; the fractal engine was removed at the user's request.
+   ?bg=d shows the earlier "currents and atoms" tiles, ?bg=a, b or c the earlier margin strips (a script in the page sets html[data-bg]). */
 body { position: relative; }
 .cat-top, .cat { position: relative; z-index: 1; }
-.lp-deco { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
+.lp-deco { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+html[data-bg='d'] .lp-deco {
   background:
     radial-gradient(60% 40% at 0% 12%, rgba(122, 31, 43, .10), transparent 70%),
     radial-gradient(55% 45% at 100% 48%, rgba(122, 31, 43, .09), transparent 70%),
