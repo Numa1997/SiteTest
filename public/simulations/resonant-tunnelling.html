@@ -256,7 +256,9 @@
             var gens = await (await fetch(DATA_BASE + 'generations.json')).json();
             /* this page reads the generation-2 layout (kind rt3d2: runs with spec, runs_base, exact by N|V0|D|P|sx);
                an index of another layout is not read, and the page says so instead of failing */
-            GEN = gens.filter(function (g) { return g.kind === 'rt3d2'; }).pop();
+            /* a generation marked "preview" in generations.json is read only when the address asks for it: ?gen=<its date> */
+            var want = new URLSearchParams(location.search).get('gen');
+            GEN = gens.filter(function (g) { return g.kind === 'rt3d2' && (want ? g.date === want : !g.preview); }).pop();
             if (!GEN) { document.getElementById('load').textContent = 'no generation-2 runs filed yet'; return; }
             IDX = await (await fetch(DATA_BASE + GEN.index)).json();
             EX = await (await fetch(DATA_BASE + GEN.exact)).json();
@@ -284,7 +286,7 @@
                     cache[rec.file] = d; var ks = Object.keys(cache); if (ks.length > 6) delete cache[ks[0]];   /* at most 6 runs kept */
                     res(d);
                 };
-                worker.postMessage({ url: RUNS_ROOT + IDX.runs_base + rec.file, id: id });
+                worker.postMessage({ url: RUNS_ROOT + (rec.runs_base || IDX.runs_base) + rec.file, id: id });   /* a kept run keeps the folder of the generation that computed it */
             });
         }
         /* one file in flight at a time: a fast drag across energies or chips loads only the run asked for last, not every run passed */
@@ -448,7 +450,7 @@
             if (run.prof1d) { plot(pxc, ax, xs, b, INK, 1.2, [4, 3]); items.push(['exact 1D twin (walls)', INK, [4, 3]]); }
             items.push(['potential V(x), right scale', SLATE]);
             legend(pxc, ax, items);
-            document.getElementById('cap-px').textContent = run.prof1d ? 'walls separate: the two must agree' : 'no 1D twin for ' + (h.spec.shape === 'coin' ? 'discs' : 'shells');
+            document.getElementById('cap-px').textContent = run.prof1d ? 'walls separate: the two must agree' : h.spec.shape === 'flat' ? 'this wall is built from the exact 1D solution itself' : 'no 1D twin for ' + (h.spec.shape === 'coin' ? 'discs' : 'shells');
         }
         function regionNames(s) {
             if (s.shape === 'shell') return s.N > 1 ? [['core', 'inside the inner shell', SLATE], ['gap', 'between the shells', WINE], ['out', 'outside', MUT]] : [['core', 'inside the shell', WINE], ['out', 'outside', MUT]];
@@ -477,7 +479,8 @@
             var x = ax.X(tPhys); ptc.strokeStyle = INK; ptc.lineWidth = 1; ptc.beginPath(); ptc.moveTo(x, ax.T); ptc.lineTo(x, ax.T + ax.ph); ptc.stroke();
             document.getElementById('cap-pt').textContent = 'stored every ' + h.frame_dt.toFixed(2) + ' in time';
         }
-        function through(r) { return r.twin ? r.twin.T : r.T_far ? r.T_far.value : null; }   /* walls: the 1D twin (3D walls equal it); discs: T_far */
+        function through(r) { return r.T_ref != null ? r.T_ref : r.twin ? r.twin.T : r.T_far ? r.T_far.value : null; }   /* corrected generation: the reference T_ref (walls exact, discs (x, rho)); before it: walls the 1D twin, discs T_far */
+        function throughLabel(r) { return r.T_ref != null ? (r.spec.shape === 'flat' ? ' (exact)' : ' (reference run in x, ρ)') + (r.provisional ? ' · provisional: ' + r.T_unc.toFixed(3) + ' still inside at the end' : '') : r.twin ? ' (1D twin)' : r.T_far ? ' (3D, T_far)' : ''; }
         /* Fig. 15d: walls and discs: the share that got through, every stored energy of this structure (points), against the exact 1D
            lines for walls of the same structure. Shells: the lifetime against energy. */
         function drawTE() {
@@ -514,7 +517,7 @@
                 c.J_runs.forEach(function (p) { dot(ivc, ax, p[0], p[1], col, run && run.head.spec.bias === p[0] && run.head.spec.shape === c.shape && run.head.spec.R === c.R); });
                 items.push([(c.shape === 'flat' ? 'two walls' : 'two discs, R = ' + c.R) + ': 3D runs', col]); });
             legend(ivc, ax, items);
-            document.getElementById('cap-iv').textContent = runs.some(function (c) { return c.J_runs.length; }) ? runs.reduce(function (n, c) { return n + c.J_runs.length * c.energies.length; }, 0) + ' filed runs (' + runs.map(function (c) { return (c.shape === 'flat' ? 'walls ' : 'discs ') + c.J_runs.length + ' biases × ' + c.energies.length + ' energies'; }).join('; ') + ')' : 'Tsu–Esaki';
+            document.getElementById('cap-iv').textContent = runs.some(function (c) { return c.J_runs.length; }) ? (runs.every(function (c) { return c.energies; }) ? runs.reduce(function (n, c) { return n + c.J_runs.length * c.energies.length; }, 0) + ' filed runs (' + runs.map(function (c) { return (c.shape === 'flat' ? 'walls ' : 'discs ') + c.J_runs.length + ' biases × ' + c.energies.length + ' energies'; }).join('; ') + ')' : 'current from the reference T of the filed runs (' + runs.map(function (c) { return (c.shape === 'flat' ? 'walls ' : 'discs ') + c.J_runs.length + ' biases'; }).join('; ') + ')') : 'Tsu–Esaki';
         }
         function fillRealUnits() {
             var ru = EX.real_units, el = document.getElementById('ru'); el.innerHTML = '';
@@ -629,11 +632,12 @@
             var h = run.head, r = run.rec, s = h.spec;
             ds.set('shape', { flat: 'walls', coin: 'discs', shell: 'spherical shells' }[s.shape]); ds.set('N', s.N); ds.set('V0', s.V0); ds.set('D', s.D); ds.set('P', s.P);
             ds.set('size', s.R); ds.set('bias', s.bias); ds.set('sx', s.sx); ds.set('E', h.E); ds.set('view', VIEW === 're' ? 'Re ψ' : '|ψ|²'); ds.set('gain', GAIN);
-            ds.set('file', r.file); ds.set('notebook', r.notebook + ' v' + r.version); ds.set('sha_ok', run.sha_ok); ds.set('peak_max', run.peakMax);
+            ds.set('file', r.file); ds.set('notebook', r.notebook ? r.notebook + ' v' + r.version : 'correction of ' + (r.parent ? r.parent.notebook : '?')); ds.set('sha_ok', run.sha_ok); ds.set('peak_max', run.peakMax);
             ds.set('T_far', r.T_far ? r.T_far.value : NaN); ds.set('T_far_frame', r.T_far ? r.T_far.frame : -1);
             ds.set('T_twin', r.twin ? r.twin.T : NaN); ds.set('T_exact', r.twin && r.twin.T_exact != null ? r.twin.T_exact : NaN); ds.set('tau', r.tau ? r.tau.tau : NaN);
-            var txt = 'This run is <code>' + r.file + '</code>, computed on Kaggle (' + r.notebook + ', version ' + r.version + ', solver at commit <code>' + r.commit.slice(0, 7) + '</code>) on a ' + h.box.join(' × ') + ' grid, ' + h.steps + ' steps in ' + h.wall.toFixed(0) + ' s. ' +
+            var txt = 'This run is <code>' + r.file + '</code>, ' + (r.notebook ? 'computed on Kaggle (' + r.notebook + ', version ' + r.version + ', solver at commit <code>' + r.commit.slice(0, 7) + '</code>) on a ' + h.box.join(' × ') + ' grid, ' + h.steps + ' steps in ' + h.wall.toFixed(0) + ' s. ' : (r.status === 'rebuilt' ? 'rebuilt exactly' : 'recomputed') + ' on Kaggle in the correction of 15 November 2026 (' + r.method + '), written at the stored frame times and output grid; it replaces the run of ' + (r.parent ? r.parent.notebook : 'the earlier generation') + ', which failed the check against it. ') +
                 (run.sha_ok ? 'Its SHA-256 matched the index.' : '<b style="color:var(--accent)">Its SHA-256 did NOT match the index.</b>') + ' The page interpolates between its ' + h.n + ' stored frames and computes nothing else. ' + IDX.runs.length + ' runs are stored in all.';
+            if (r.status) txt += ' Reference T = ' + (r.T_ref != null ? r.T_ref.toFixed(4) : '—') + (r.T_old != null ? '; the earlier run gave ' + r.T_old.toFixed(4) + ' (' + (r.gate ? 'inside' : 'outside') + ' the gate of 0.005 or 1 %)' : '; the earlier shell runs stored no transmission to compare') + (r.status === 'kept' ? '; the earlier run is kept and played here.' : '.') + (r.T_unc != null ? ' At the end of the reference run ' + r.T_unc.toFixed(4) + ' of the probability was still inside the structure' + (r.provisional ? ', more than 0.005, so this value is provisional.' : '.') : '');
             if (r.twin) txt += ' Walls separate, so the run carries its exact 1D twin; the two differ by at most ' + r.twin.sep_check_max.toExponential(1) + ' of the peak.';
             document.getElementById('src-t').innerHTML = ' ' + txt;
         }
@@ -647,7 +651,7 @@
             document.getElementById('r-lost').textContent = (1 - nrm).toFixed(4);
             var r = run.rec, v = through(r);
             document.getElementById('l-t').textContent = h.spec.shape === 'shell' ? 'Lifetime τ inside the shells' : 'Share that got through · trapped lifetime τ';
-            document.getElementById('r-t').textContent = h.spec.shape === 'shell' ? (r.tau ? r.tau.tau.toFixed(1) : '—') : (v != null ? v.toFixed(3) : '—') + (r.twin ? ' (1D twin)' : r.T_far ? ' (3D, T_far)' : '') + (r.tau && h.spec.N > 1 ? ' · τ = ' + r.tau.tau.toFixed(1) : '');
+            document.getElementById('r-t').textContent = h.spec.shape === 'shell' ? (r.tau ? r.tau.tau.toFixed(1) : '—') : (v != null ? v.toFixed(3) : '—') + throughLabel(r) + (r.tau && h.spec.N > 1 ? ' · τ = ' + r.tau.tau.toFixed(1) : '');
         }
 
         /* ---------- read values ---------- */

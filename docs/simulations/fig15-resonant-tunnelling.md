@@ -88,6 +88,34 @@ at 1440 px; 0.5 / 2.8, 0.9 / 4.9, 0.6 / 2.5 ms at 390 px. The measured screen-fr
 rasteriser of the test container, which has no GPU. Read values: the sheet's vertex equals the stored value to 1e-9; the pixel
 colour read back agrees; `T_far` recomputed from the stored curves equals the index. Lecture note (generation 1, 2026-11-13): 323 formulas, 0 KaTeX errors, equations (1)–(14); generation 2: see "The lecture note (generation 2)".
 
+## The corrected generation (2026-11-18)
+
+Generation 2026-11-14 drew each barrier on the 0.5 a grid of the 3D run: a barrier 1 a thick is two grid points. The spectral
+free flight then sees a staircase, not the sharp step, and the narrow resonances move. Checked against references, 918 of the
+1,088 wall runs and 1,582 of the 2,327 disc runs fail the gate `|T_old - T_ref| <= max(0.005, 1 % of T_ref)`.
+
+The corrected generation computes no new physics. `tools/kaggle/resonant-tunnelling/correction/file_corrected.py` (branch
+`claude/fig15-correction`, commit 12b8fd09), run on Kaggle's CPU (`numakoudsie/fig15-filer-2026-11-18`, version 4), files the
+runs the correction notebooks of 14-15 November had already stored:
+
+- **Walls:** the reference is exact. A wall cannot push the wave sideways, so psi = chi(x, t) h(y, t) h(z, t); chi is a sum of
+  stationary scattering states, with no time grid and no barrier sampling. 170 stored walls pass and are kept; 918 are rebuilt.
+- **Discs:** the reference is the exact axisymmetric reduction in (x, rho), with barriers averaged over each cell at 0.0625 a
+  along x (complex64; norm drift at most 4.8e-3, written per run as `drift`). 745 stored discs pass and are kept; 1,582 are
+  replaced by the (x, rho) file.
+- **Shells:** the stored shell index has no transmission, so there is nothing to gate. All 282 take the (x, rho) file.
+- **Provisional:** `T_unc` is the probability still inside the structure when the reference run stopped. Where it exceeds 0.005
+  the transmission is undecided by that much, and the run carries `provisional: true`: 72 discs and 241 shells.
+
+Per run the index holds `T_ref`, `T_old`, `error`, `gate`, `status` (kept, rebuilt, recomputed), `closure_max` (walls) or `drift`
+and `T_unc` (discs, shells). A kept run names the folder of the generation that computed it in its own `runs_base`; the 2,782
+replaced files (4.44 GB) are in R2 under `resonant-tunnelling/2026-11-18/runs/`. Every new file's SHA-256 was checked against
+its record at filing and again on upload, together with R2's MD5. Generation 2026-11-14 stays filed, with its audit.
+
+The page reads a generation marked `"preview": true` in `generations.json` only at `?gen=<its date>`. For a run with a
+reference it shows `T_ref` (walls: exact), names the method and the earlier value in the source line, and says so when the
+value is provisional. The lecture note below still describes generation 2026-11-14 and is to be revised.
+
 ## The lecture note (generation 2)
 
 [resonant-note.js](../../public/scripts/resonant-note.js) fills `<article id="paper">`; `sim.js` typesets it with KaTeX. It teaches

@@ -34,5 +34,45 @@
   ],
   "note": "The whole parameter space in 3D, walls included: spacing, height, thickness, 1 to 10 barriers, discs to R = 12, shells, the diode under bias, long packets. 3739 runs planned; 42 specs computed in two groups are filed once; 15 runs rerun by the fix notebook replace the earlier ones (index: replaced). 6.53 GB in R2. Generation 1 (2026-11-13, 115 runs) stays filed beside it.",
   "bytes": 6526952030
+ },
+ {
+  "date": "2026-11-18",
+  "kind": "rt3d2",
+  "preview": true,
+  "index": "2026-11-18/kaggle/index.json",
+  "exact": "2026-11-13/derived/exact-1d.json",
+  "runs": 3697,
+  "parent_generation": "2026-11-14",
+  "runs_store": "Cloudflare R2 bucket phyein-usul-runs, served by the site's Worker under /r2/: the 2,782 replaced runs under resonant-tunnelling/2026-11-18/runs/, the 915 kept runs where generation 2026-11-14 filed them (each run's runs_base)",
+  "source": "No new physics run: filed on Kaggle's CPU by tools/kaggle/resonant-tunnelling/correction/file_corrected.py (commit 12b8fd09) from the stored outputs of the correction notebooks of 14-15 November 2026",
+  "notebooks": [
+   "numakoudsie/fig15-filer-2026-11-18",
+   "numakoudsie/fig15-correction-walls-gpu",
+   "numakoudsie/fig15-correction-2d-1-of-4",
+   "numakoudsie/fig15-correction-2d-2-of-4",
+   "numakoudsie/fig15-correction-2d-3-of-4",
+   "numakoudsie/fig15-correction-2d-4-of-4",
+   "numakoudsie/fig15-correction-2d-shells-1-of-2",
+   "numakoudsie/fig15-correction-2d-shells-2-of-2"
+  ],
+  "counts": {
+   "walls": {
+    "kept": 170,
+    "rebuilt": 918
+   },
+   "discs": {
+    "kept": 745,
+    "recomputed": 1582
+   },
+   "shells": {
+    "recomputed": 282
+   }
+  },
+  "provisional": {
+   "discs": 72,
+   "shells": 241
+  },
+  "note": "Correction of generation 2026-11-14, whose barriers were sampled on the 0.5 a grid. Every stored run is checked against a reference T_ref: walls against the exact solution (superposition of stationary scattering states), discs against the exact axisymmetric (x, rho) reduction; gate |T_old - T_ref| <= max(0.005, 1 % of T_ref). A run that passes keeps its stored file; a run that fails is replaced by the reference file. Shells stored no transmission, so they are not gated and all take the (x, rho) file. provisional: T_unc > 0.005, the probability still inside the structure when the reference run stopped. Generation 2026-11-14 stays filed beside it, with its audit. While \"preview\" is true the page reads this generation only at ?gen=2026-11-18.",
+  "bytes": 4439713712
  }
 ]

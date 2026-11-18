@@ -87,7 +87,12 @@ and `guinness-free-swing-v2`. `guinness-on-a-cart-stout-in-jax` stays (another s
 
 Datasets made on 14 November 2026: `numakoudsie/fig14-schrodinger-sphere` (8 notebook runs, 937 MB) and
 `numakoudsie/fig12-guinness-on-a-cart` (19 notebook versions, 158 MB); their file lists are in `notes/inventory/datasets/`.
-Fig. 15 and Fig. 16 follow when their running sessions end. The deletions and their reasons: `notes/inventory/raw/kaggle-deletions.md`.
+Fig. 16's dataset `numakoudsie/fig16-guinness-cart-control` (private, CC BY 4.0) was made on 18 November 2026: every output file of
+versions 2, 8 and 9 of `fig-16-guinness-cart-with-control` (the versions the page plays), 23 files, 103 476 921 bytes, staged by
+version 15 of the CPU notebook `fig-16-cart-diagnostics-cpu` (manifest with SHA-256), uploaded as one archive that Kaggle unpacked;
+all 23 sizes equal the manifest's. Copies: `notes/inventory/datasets/fig16-guinness-cart-control/`. Made through api.kaggle.com
+(`BlobApiService/StartBlobUpload`, then `DatasetApiService/CreateDataset`), because the Kaggle connector has no create call.
+Fig. 15 follows when its running session ends. The deletions and their reasons: `notes/inventory/raw/kaggle-deletions.md`.
 
 ## Store first
 

@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="vendor/katex/katex.min.css" />
     <link rel="stylesheet" href="styles/paper.css" />
     <link rel="stylesheet" href="styles/catalog.css" />
-    <link rel="stylesheet" href="styles/fold.css" /><link rel="stylesheet" href="styles/i18n.css" /><script src="scripts/flip.js"></script>
+    <link rel="stylesheet" href="styles/fold.css" /><link rel="stylesheet" href="styles/bg-scenes.css" /><link rel="stylesheet" href="styles/i18n.css" /><script src="scripts/flip.js"></script>
     <link
       rel="icon"
       href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%237a1f2b'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='34' font-weight='700' fill='%23fff'%3ENK%3C/text%3E%3C/svg%3E"
@@ -26,7 +26,7 @@
     </script>
   </head>
 
-  <body>
+  <body><div class="bgs-aside" data-bg="powder" data-bg-mask="round" data-bg-alpha=".75" aria-hidden="true"></div>
     <a class="skip-link" href="#catalog">Skip to the simulations</a>
 
     <header class="cat-top">
@@ -93,7 +93,7 @@
       </section>
     </main>
 
-    <footer>
+<div class="bgs-band bgs-band--tall" data-bg="harp" data-bg-mask="up" aria-hidden="true"></div><footer>
       <span>© 2026 Numa Koudsie</span>
       <span><a href="index.html">Home page</a> · <a href="portfolios.html">Projects</a> · <a href="#top" id="to-top">Back to top ↑</a></span>
     </footer>
@@ -208,5 +208,5 @@
         window.__catalog = { count: SIMS.length, render: render };
       })();
     </script>
-  </body>
+<script src="scripts/bg-scenes.js" defer></script></body>
 </html>

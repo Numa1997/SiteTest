@@ -1,0 +1,118 @@
+{
+ "modes": {
+  "angle-vulkan": {
+   "fig16": {
+    "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+    "frames": {
+     "frames": 8,
+     "median_ms": 1033.2,
+     "p95_ms": 1166.6,
+     "max_ms": 1166.6,
+     "fps_median": 1.0,
+     "over_16.7ms": 1.0,
+     "over_33.3ms": 1.0
+    },
+    "close_up": {
+     "frames": 9,
+     "js_ms": 4.644444444443151,
+     "render_call_ms": 1.222222222225456
+    },
+    "errors": []
+   },
+   "fig12": {
+    "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+    "frames": {
+     "frames": 18,
+     "median_ms": 449.9,
+     "p95_ms": 633.3,
+     "max_ms": 633.3,
+     "fps_median": 2.2,
+     "over_16.7ms": 1.0,
+     "over_33.3ms": 1.0
+    },
+    "close_up": {
+     "frames": 19,
+     "js_ms": 5.068421052630966,
+     "render_call_ms": 10.678947368419214
+    },
+    "errors": []
+   }
+  },
+  "angle-egl": {
+   "fig16": {
+    "renderer": "ANGLE (Mesa, llvmpipe (LLVM 20.1.2 256 bits), OpenGL ES 3.2)",
+    "frames": {
+     "frames": 9,
+     "median_ms": 649.9,
+     "p95_ms": 1383.3,
+     "max_ms": 1383.3,
+     "fps_median": 1.5,
+     "over_16.7ms": 1.0,
+     "over_33.3ms": 1.0
+    },
+    "close_up": {
+     "frames": 10,
+     "js_ms": 7.279999999998836,
+     "render_call_ms": 1.670000000001164
+    },
+    "errors": []
+   },
+   "fig12": {
+    "renderer": "ANGLE (Mesa, llvmpipe (LLVM 20.1.2 256 bits), OpenGL ES 3.2)",
+    "frames": {
+     "frames": 30,
+     "median_ms": 250,
+     "p95_ms": 299.9,
+     "max_ms": 433.3,
+     "fps_median": 4.0,
+     "over_16.7ms": 1.0,
+     "over_33.3ms": 1.0
+    },
+    "close_up": {
+     "frames": 31,
+     "js_ms": 5.9258064516151565,
+     "render_call_ms": 1.590322580642908
+    },
+    "errors": []
+   }
+  },
+  "default": {
+   "fig16": {
+    "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+    "frames": {
+     "frames": 8,
+     "median_ms": 1033.3,
+     "p95_ms": 1266.6,
+     "max_ms": 1266.6,
+     "fps_median": 1.0,
+     "over_16.7ms": 1.0,
+     "over_33.3ms": 1.0
+    },
+    "close_up": {
+     "frames": 9,
+     "js_ms": 4.944444444450912,
+     "render_call_ms": 1.1888888888901823
+    },
+    "errors": []
+   },
+   "fig12": {
+    "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+    "frames": {
+     "frames": 17,
+     "median_ms": 450,
+     "p95_ms": 633.2,
+     "max_ms": 633.2,
+     "fps_median": 2.2,
+     "over_16.7ms": 1.0,
+     "over_33.3ms": 1.0
+    },
+    "close_up": {
+     "frames": 18,
+     "js_ms": 5.81666666666408,
+     "render_call_ms": 1.4333333333326865
+    },
+    "errors": []
+   }
+  }
+ }
+}
