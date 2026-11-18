@@ -159,12 +159,37 @@
     rec(px, py, -PI / 2, G.len * (.25 + .75 * g), 0);
   }
   S.forest = {
-    mk: function (px, G) { G.j = []; for (var i = 0; i < 97; i++) G.j.push(R()); G.len *= this.sc; return { x: px, G: G, fed: 0, mat: 0, age: 0 }; },
+    mk: function (px, G) { G.j = []; for (var i = 0; i < 97; i++) G.j.push(R()); G.len *= this.sc; return { x: px, G: G, fed: 0, mat: 0, age: 0, Rs: [], Rt: [{ x: px, y: this.GY, a: PI / 2 + v(-.3, .3), s: 0 }] }; },
+    /* roots: tips walk down through the soil, bend towards the nearest speck of rotted leaf, fork now and then */
+    root: function (t, dt) {
+      var top = this.GY, lim = this.GY + this.UN - 26, M = this.M, nt = t.Rt.length;
+      if (t.Rs.length > (t.mat ? 170 : 90)) return;
+      for (var i = 0; i < nt; i++) {
+        var p = t.Rt[i]; if (p.dead) continue; var b = null, bd = 90 * 90, dep = (p.y - top) / (lim - top);
+        if (!t.mat) for (var k = 0; k < M.length; k++) { var dx = M[k].x - p.x, dy = M[k].y - p.y, d = dx * dx + dy * dy; if (d < bd) { bd = d; b = M[k]; } }
+        var aim = b ? Math.atan2(b.y - p.y, b.x - p.x) : (p.o ? p.home : PI / 2);
+        if (dep > .8) aim = p.a < PI / 2 ? .15 : PI - .15;
+        var da = Math.atan2(Math.sin(aim - p.a), Math.cos(aim - p.a));
+        p.a += da * (b ? 1.4 : .7) * dt + (R() - .5) * 1.8 * dt; p.a = cl(p.a, .08, PI - .08);
+        var sp = (t.mat ? 7 : 13) * dt / (1 + .35 * (p.o || 0)), nx = p.x + Math.cos(p.a) * sp, ny = p.y + Math.sin(p.a) * sp; p.s += sp;
+        if (ny > lim + 6 || nx < 4 || nx > W - 4 || p.s > 400) { p.dead = 1; continue; }
+        if (p.s > 6) { t.Rs.push([p.lx, p.ly, nx, ny, p.o || 0]); p.lx = nx; p.ly = ny; p.s = 0; p.n = (p.n || 0) + 1;
+          if (t.Rt.length < 16 && (p.o || 0) < 3 && p.n % 3 === 0 && R() < .7) { var sd = R() < .5 ? -1 : 1; t.Rt.push({ x: nx, y: ny, a: p.a + sd * v(.7, 1.2), home: PI / 2 - sd * v(.6, 1.1), s: 0, lx: nx, ly: ny, o: (p.o || 0) + 1 }); } }
+        p.x = nx; p.y = ny;
+      }
+    },
+    roots: function (Rs, a) { var top = this.GY, U = this.UN - 26; for (var i = 0; i < Rs.length; i++) { var r = Rs[i], f = 1 - cl((r[3] - top) / U, 0, 1); x.strokeStyle = col(a * (.6 - Math.min(.3, r[4] * .1)) * (.25 + .75 * f)); x.lineWidth = Math.max(.6, 2.4 - r[4] * .55); ln(r[0], r[1], r[2], r[3]); } },
     ripen: function (t) { var o = { S: [], T: [] }; grow(t.G, t.x, this.GY, 1, o); t.S = o.S; var sl = Math.max(1, o.T.length / 32); t.T = o.T.map(function (q) { return { x: q.x, y: q.y, a: q.a, s: 1, hold: v(1, 9) * sl, rg: 0, sl: sl }; }); t.mat = 1; t.age = 0; t.life = v(55, 100); },
-    spawn: function () { for (var k = 0; k < 30; k++) { var px = v(30, W - 30); if (this.A.every(function (t) { return Math.abs(t.x - px) > 55; })) { this.A.push(this.mk(px, KINDS[R() * 5 | 0]())); return; } } },
-    init: function () { this.GY = H - 46; this.sc = cl(H / 520, .8, 1.7); this.max = cl(Math.round(9 * W / 680), 5, 18); this.A = []; this.L = []; this.M = []; var g = KINDS[0](); g.len = 64; g.maxd = 6; var m = this.mk(Math.max(46, W * .1), g); this.ripen(m); m.life = 45; this.A.push(m); for (var k = 0; k < Math.max(3, this.max / 3); k++) this.spawn(); },
+    free: function (px) { for (var i = 0; i < this.av.length; i++) if (px > this.av[i][0] && px < this.av[i][1]) return false; return px > 20 && px < W - 20; },
+    spawn: function () { for (var k = 0; k < 40; k++) { var px = v(30, W - 30); if (this.free(px) && this.A.every(function (t) { return Math.abs(t.x - px) > 55; })) { this.A.push(this.mk(px, KINDS[R() * 5 | 0]())); return; } } },
+    init: function () { this.UN = W > 760 ? (+host.getAttribute('data-bg-under') || 0) : 0; this.Hn = []; this.GY = H - 46 - this.UN; this.Fd = []; this.sc = cl(H / 520, .8, 1.7); this.max = cl(Math.round(9 * W / 680), 5, 18); this.A = []; this.L = []; this.M = []; this.av = []; var self = this, hr = host.getBoundingClientRect(), sel = host.getAttribute('data-bg-avoid');
+      function keep(q, pad) { if (q && W > 760) document.querySelectorAll(q).forEach(function (e) { var r = e.getBoundingClientRect(); if (r.width && r.bottom - hr.top > self.GY - 300) self.av.push([r.left - hr.left - pad, r.right - hr.left + pad]); }); }
+      keep(sel, 130); keep(host.getAttribute('data-bg-avoid-near'), 34);
+      var mx = Math.max(46, W * .1); for (var q = 0; q < 60 && !this.free(mx); q++) mx = v(30, W - 30);
+      var g = KINDS[0](); g.len = 64; g.maxd = 6; var m = this.mk(mx, g); this.ripen(m); m.life = 45; this.A.push(m); for (var k = 0; k < Math.max(3, this.max / 3); k++) this.spawn(); },
     draw: function (dt) {
       clear(); var GY = this.GY, self = this, young = 0; x.strokeStyle = col(.25); x.lineWidth = 1; ln(0, GY, W, GY);
+      if (this.UN) { this.Fd = this.Fd.filter(function (f) { f.a -= dt / 7; if (f.a > 0) self.roots(f.Rs, f.a); return f.a > 0; }); x.lineCap = 'round'; this.A.forEach(function (t) { self.root(t, dt); self.roots(t.Rs, 1); }); x.lineCap = 'butt'; }
       this.A.forEach(function (t) {
         x.strokeStyle = col(.6);
         if (t.mat) {
@@ -174,12 +199,35 @@
             else if (tp.rg > 0) tp.rg -= dt; else { tp.s = Math.min(1, tp.s + dt / 2); if (tp.s >= 1) tp.hold = v(2, 11) * tp.sl; }
             if (tp.s > 0) leaf(tp.x, tp.y, tp.a, tp.s, .6);
           });
-          if (t.age > t.life) { t.dead = 1; t.S.forEach(function (s, i) { if (i % 2 === 0) self.L.push({ x: (s[0] + s[2]) / 2, y: (s[1] + s[3]) / 2, ph: R() * 6, t: 0, w: v(-10, 10) }); }); }
+          if (t.age > t.life) { t.dead = 1; if (self.UN) self.Fd.push({ Rs: t.Rs, a: 1 }); t.S.forEach(function (s, i) { if (i % 2 === 0) self.L.push({ x: (s[0] + s[2]) / 2, y: (s[1] + s[3]) / 2, ph: R() * 6, t: 0, w: v(-10, 10) }); }); }
         } else { young++; var g = Math.min(1, t.fed / t.G.need); if (g <= 0) dot(t.x, GY, 1.5, .5); else grow(t.G, t.x, GY, g, null); if (g >= 1) self.ripen(t); }
       });
       this.A = this.A.filter(function (t) { return !t.dead; }); if (young < 2 && this.A.length < this.max) this.spawn();
-      this.L = this.L.filter(function (l) { l.t += dt; l.y += 32 * dt; var w = l.ph + l.t * 2.4; l.x += (l.w + Math.cos(w) * 34) * dt; if (l.y >= GY - 2) { for (var k = 0; k < 4; k++) self.M.push({ x: l.x + v(-4, 4), y: GY, ty: GY + 6 + R() * 22 }); return false; } leaf(l.x, l.y, Math.sin(w), 1, .75); return true; });
+      this.L = this.L.filter(function (l) { l.t += dt; l.y += 32 * dt; var w = l.ph + l.t * 2.4; l.x += (l.w + Math.cos(w) * 34) * dt; if (!self.free(l.x) && self.av.length) return false; if (l.y >= GY - 2) { for (var k = 0; k < 4; k++) self.M.push({ x: l.x + v(-4, 4), y: GY, ty: GY + 6 + R() * (self.UN ? (self.UN - 40) * R() : 22) }); return false; } leaf(l.x, l.y, Math.sin(w), 1, .75); return true; });
       if (this.M.length > 700) this.M.splice(0, this.M.length - 700);
+      if (this.UN) { var U = this.UN, Hn = this.Hn;
+        /* the fungal network: threads in the soil tie the root systems of trees far apart; sugar runs along them from grown
+           trees to young ones, as in a real wood-wide web, and feeds them */
+        this.ht = (this.ht || 0) - dt;
+        if (this.ht <= 0 && Hn.length < 9) { this.ht = 1.5; var C = this.A.filter(function (k) { return k.Rs.length >= 8; }), best = null, bd = 0;
+          for (var a = 0; a < C.length; a++) for (var b = a + 1; b < C.length; b++) { var d = Math.abs(C[a].x - C[b].x) * v(.6, 1); if (d > bd && !Hn.some(function (h) { return (h.a === C[a] && h.b === C[b]) || (h.a === C[b] && h.b === C[a]); })) { bd = d; best = [C[a], C[b]]; } }
+          if (best && bd > 60) { var ra = best[0].Rs[(best[0].Rs.length * v(.3, 1)) | 0], rb = best[1].Rs[(best[1].Rs.length * v(.3, 1)) | 0], P = [], n = 60, sag = v(10, U * .4), ph = R() * 6, w1 = v(2, 5);
+            for (var q = 0; q <= n; q++) { var u = q / n; P.push([ra[2] + (rb[2] - ra[2]) * u + 4 * Math.sin(u * 17 + ph), Math.min(GY + U - 28, ra[3] + (rb[3] - ra[3]) * u + sag * Math.sin(PI * u) + 3 * Math.sin(u * w1 * 6 + ph))]); }
+            Hn.push({ a: best[0], b: best[1], P: P, g: 0, f: 1, et: v(.5, 2), D: [] }); } }
+        x.lineWidth = .7;
+        this.Hn = Hn.filter(function (h) {
+          if (h.a.dead || h.b.dead) h.f -= dt / 5; else h.g = Math.min(1, h.g + dt / 10); if (h.f <= 0) return false;
+          var m = Math.max(1, Math.round(h.g * 60)); x.strokeStyle = col(.22 * h.f); x.beginPath(); x.moveTo(h.P[0][0], h.P[0][1]); for (var q = 1; q <= m; q++) x.lineTo(h.P[q][0], h.P[q][1]); x.stroke();
+          if (h.g >= 1 && h.f >= 1) { h.et -= dt; if (h.et <= 0) { h.et = v(1, 2.6); var fw = h.a.mat && !h.b.mat ? 1 : h.b.mat && !h.a.mat ? -1 : (R() < .5 ? 1 : -1); h.D.push({ u: fw > 0 ? 0 : 60, d: fw }); } }
+          h.D = h.D.filter(function (o) { o.u += o.d * 26 * dt; if (o.u < 0 || o.u > 60) { var to = o.d > 0 ? h.b : h.a; if (!to.mat) to.fed += 3; return false; } var q = o.u | 0, e = o.u - q, A = h.P[q], B = h.P[Math.min(60, q + 1)]; dot(A[0] + (B[0] - A[0]) * e, A[1] + (B[1] - A[1]) * e, 1.3, .75 * h.f); return true; });
+          return true; });
+        this.M = this.M.filter(function (m) {
+        var bp = null, bk = null, bd = 120 * 120;
+        for (var j = 0; j < self.A.length; j++) { var k = self.A[j]; if (k.mat) continue; for (var q = 0; q < k.Rt.length; q++) { var p = k.Rt[q], dx = p.x - m.x, dy = p.y - m.y, d = dx * dx + dy * dy; if (d < bd) { bd = d; bp = p; bk = k; } } }
+        m.age = (m.age || 0) + dt; if (m.y < m.ty - 1) m.y += (m.ty - m.y) * dt * .8;
+        else if (bp) { var dd = Math.sqrt(bd); if (dd < 5) { bk.fed++; return false; } m.x += (bp.x - m.x) / dd * 16 * dt; m.y += (bp.y - m.y) / dd * 16 * dt; }
+        var fa = cl((70 - m.age) / 20, 0, 1); if (fa <= 0) return false;
+        dot(m.x, m.y, 1.1, fa * .55 * (1 - .6 * cl((m.y - GY) / U, 0, 1))); return true; }); return; }
       this.M = this.M.filter(function (m) { var b = null; self.A.forEach(function (k) { if (!k.mat && (!b || Math.abs(k.x - m.x) < Math.abs(b.x - m.x))) b = k; }); m.y += (m.ty - m.y) * dt * 1.5; if (b) { var d = b.x - m.x; if (Math.abs(d) < 3) { b.fed++; return false; } m.x += (d > 0 ? 1 : -1) * 26 * dt; } dot(m.x, m.y, 1.4, .85); return true; });
     }
   };
