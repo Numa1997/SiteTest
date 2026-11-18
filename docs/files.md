@@ -4,7 +4,7 @@ Written by [`tools/inventory.py`](../tools/inventory.py) from the files in the r
 Run `python3 tools/inventory.py` after adding, removing or changing files, and `python3 tools/inventory.py --check`
 to confirm that every file is described. Sizes are those of the files when the list was written.
 
-6584 files, 929.2 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
+6586 files, 933.6 MB in all. Runs of more than 12 similar files are folded; open them to see each file.
 
 | Folder | Files |
 |---|---|
@@ -16,7 +16,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [Walkthroughs](#walkthroughs) | 36 |
 | [Ledgers of the data panel](#ledgers-of-the-data-panel) | 5 |
 | [Shared scripts](#shared-scripts) | 38 |
-| [Computed data played back by the pages (named by date of generation)](#computed-data-played-back-by-the-pages-named-by-date-of-generation) | 4498 |
+| [Computed data played back by the pages (named by date of generation)](#computed-data-played-back-by-the-pages-named-by-date-of-generation) | 4500 |
 | [Stylesheets](#stylesheets) | 18 |
 | [KaTeX](#katex) | 24 |
 | [three.js](#threejs) | 3 |
@@ -158,7 +158,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/simulations/momentum-spirographs.html`](../public/simulations/momentum-spirographs.html) | 153.5 kB | Fig. 13 · Spirographs in Momentum Space: a live grid of double pendulums, each kicked with the (p1, p2) of its cell, drawn as long exposures over the chaos map. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`public/simulations/pendulum-control.html`](../public/simulations/pendulum-control.html) | 208.2 kB | Fig. 11 · Double Pendulum under Control: the simulation, its data panel, walkthrough and lecture note. | [fig11-pendulum-control.md](simulations/fig11-pendulum-control.md) |
 | [`public/simulations/phasor-sums.html`](../public/simulations/phasor-sums.html) | 273.3 kB | Fig. 7 · Phasor Sums: the simulation, its data panel, walkthrough and lecture note. | [fig07-phasor-sums.md](simulations/fig07-phasor-sums.md) |
-| [`public/simulations/resonant-tunnelling.html`](../public/simulations/resonant-tunnelling.html) | 66.7 kB | Fig. 15 · Resonant Tunnelling: the simulation, its data panel, walkthrough and lecture note. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
+| [`public/simulations/resonant-tunnelling.html`](../public/simulations/resonant-tunnelling.html) | 68.7 kB | Fig. 15 · Resonant Tunnelling: the simulation, its data panel, walkthrough and lecture note. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
 | [`public/simulations/rods-in-liquid.html`](../public/simulations/rods-in-liquid.html) | 403.2 kB | Project 06 · Balancing Two Rods in a Liquid (7 November 2026): project 05's script with its own settings, a machine that can swing the rods up in water, glycerol and honey, a slim cart, and the controller told the flow; data panel, walkthrough dipc and lecture note. | [project06-rods-in-liquid.md](simulations/project06-rods-in-liquid.md) |
 | [`public/simulations/schrodinger-sphere.html`](../public/simulations/schrodinger-sphere.html) | 233.5 kB | Fig. 14 · A Wave Packet Meets a Sphere: the simulation, its data panel, walkthrough and lecture note. | [fig14-schrodinger-sphere.md](simulations/fig14-schrodinger-sphere.md) |
 | [`public/simulations/water-wave.html`](../public/simulations/water-wave.html) | 170.7 kB | Fig. 5 · Circular Water Waves: the simulation, its data panel, walkthrough and lecture note. | [fig05-water-wave.md](simulations/fig05-water-wave.md) |
@@ -463,7 +463,9 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`public/data/resonant-tunnelling/2026-11-13/kaggle/runs/sshell_R3_E1.500.bin`](../public/data/resonant-tunnelling/2026-11-13/kaggle/runs/sshell_R3_E1.500.bin) | 1.54 MB | Fig. 15 3D run (2026-11-13, sshell): RT3C, 200 frames of \|ψ\| and arg ψ on the plane z = 0 (8-bit), the profile along x, region probabilities; as Kaggle wrote it. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
 | [`public/data/resonant-tunnelling/2026-11-13/kaggle/runs/sshell_R3_E2.000.bin`](../public/data/resonant-tunnelling/2026-11-13/kaggle/runs/sshell_R3_E2.000.bin) | 1.59 MB | Fig. 15 3D run (2026-11-13, sshell): RT3C, 200 frames of \|ψ\| and arg ψ on the plane z = 0 (8-bit), the profile along x, region probabilities; as Kaggle wrote it. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
 | [`public/data/resonant-tunnelling/2026-11-14/kaggle/index.json`](../public/data/resonant-tunnelling/2026-11-14/kaggle/index.json) | 2.91 MB | Fig. 15 3D runs (2026-11-14): per run its file, SHA-256, Kaggle notebook, version and commit, and the numbers read from it (share through, lifetime, the 1D twin); which version-1 runs were replaced and why. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
-| [`public/data/resonant-tunnelling/generations.json`](../public/data/resonant-tunnelling/generations.json) | 2.0 kB | Fig. 15 data: the list of generations, each with its Kaggle index, the exact 1D check, the notebooks and the source scripts. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
+| [`public/data/resonant-tunnelling/2026-11-18/kaggle/index.json`](../public/data/resonant-tunnelling/2026-11-18/kaggle/index.json) | 4.36 MB | Fig. 15 3D runs (2026-11-18): per run its file, SHA-256, Kaggle notebook, version and commit, and the numbers read from it (share through, lifetime, the 1D twin); which version-1 runs were replaced and why. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
+| [`public/data/resonant-tunnelling/2026-11-18/kaggle/summary.json`](../public/data/resonant-tunnelling/2026-11-18/kaggle/summary.json) | 528 B | Fig. 15 corrected generation (2026-11-18): the filer’s summary: runs kept, rebuilt and recomputed per shape, runs passing the gate, provisional runs, the size of the error of the earlier runs, the bytes of the new files. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
+| [`public/data/resonant-tunnelling/generations.json`](../public/data/resonant-tunnelling/generations.json) | 4.1 kB | Fig. 15 data: the list of generations, each with its Kaggle index, the exact 1D check, the notebooks and the source scripts. | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
 
 <details><summary>405 files: Fig. 14 data generated on Kaggle on 2026-11-12: one stored run (header with the probability curves, then the zlib frames of |psi| and arg psi on the half-plane through the flight axis, from which the page spins the 3D wave).</summary>
 
@@ -5584,7 +5586,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`docs/simulations/fig12-beer-slosh.md`](simulations/fig12-beer-slosh.md) | 87.3 kB | Documentation: Fig. 12 · A Pint of Guinness on a One-Wheel Cart (`public/simulations/beer-slosh.html`). | [fig12-beer-slosh.md](simulations/fig12-beer-slosh.md) |
 | [`docs/simulations/fig13-momentum-spirographs.md`](simulations/fig13-momentum-spirographs.md) | 29.4 kB | Documentation: Fig. 13 · Spirographs in Momentum Space, the Flower Hunt, the dashboard and the films. | [fig13-momentum-spirographs.md](simulations/fig13-momentum-spirographs.md) |
 | [`docs/simulations/fig14-schrodinger-sphere.md`](simulations/fig14-schrodinger-sphere.md) | 32.3 kB | Documentation: Fig. 14 · A Wave Packet Meets a Sphere. | [fig14-schrodinger-sphere.md](simulations/fig14-schrodinger-sphere.md) |
-| [`docs/simulations/fig15-resonant-tunnelling.md`](simulations/fig15-resonant-tunnelling.md) | 11.7 kB | Documentation: Fig. 15 · Resonant Tunnelling (3D). | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
+| [`docs/simulations/fig15-resonant-tunnelling.md`](simulations/fig15-resonant-tunnelling.md) | 14.1 kB | Documentation: Fig. 15 · Resonant Tunnelling (3D). | [fig15-resonant-tunnelling.md](simulations/fig15-resonant-tunnelling.md) |
 | [`docs/simulations/fig16-guinness-cart-control.md`](simulations/fig16-guinness-cart-control.md) | 15.6 kB | Documentation: Fig. 16 · A Pint of Guinness on a Cart Built to Carry It. | [fig16-guinness-cart-control.md](simulations/fig16-guinness-cart-control.md) |
 | [`docs/simulations/project06-rods-in-liquid.md`](simulations/project06-rods-in-liquid.md) | 9.7 kB | Documentation: Project 06 · Balancing Two Rods in a Liquid. | [project06-rods-in-liquid.md](simulations/project06-rods-in-liquid.md) |
 | [`docs/styles.md`](styles.md) | 52.1 kB | Documentation: Stylesheets: `public/styles/`. | [styles.md](styles.md) |
@@ -5739,7 +5741,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`tools/i18n/ingest.py`](../tools/i18n/ingest.py) | 1.9 kB | Stores checked translations made outside the tables (page pieces, script strings, walkthrough prose). | [i18n.md](i18n.md) |
 | [`tools/i18n/package.json`](../tools/i18n/package.json) | 285 B | The parser wrap.cjs needs (acorn); npm install --prefix tools/i18n. | [i18n.md](i18n.md) |
 | [`tools/i18n/wrap.cjs`](../tools/i18n/wrap.cjs) | 3.7 kB | Wraps the reader-visible strings of a page's scripts in _t(), with a JavaScript parser (acorn). | [i18n.md](i18n.md) |
-| [`tools/inventory.py`](../tools/inventory.py) | 125.5 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
+| [`tools/inventory.py`](../tools/inventory.py) | 125.9 kB | Writes docs/files.md and checks that every file in the repository is described. | [files.md](files.md) |
 | [`tools/kaggle/figures/build.py`](../tools/kaggle/figures/build.py) | 10.3 kB | One Kaggle notebook per figure: writes each figure notebook (every job of the figure in one table, JOB = check verifies the figure dataset, any job name reruns it with the stored code at its pinned commit) and its kernel-metadata.json. | [kaggle-pipeline.md](kaggle-pipeline.md) |
 | [`tools/kaggle/figures/fig-12-guinness-on-a-cart/fig-12-guinness-on-a-cart.ipynb`](../tools/kaggle/figures/fig-12-guinness-on-a-cart/fig-12-guinness-on-a-cart.ipynb) | 7.0 kB | The Kaggle notebook fig-12-guinness-on-a-cart (one notebook for the whole figure), written by build.py: the notebook as pushed. | [kaggle-pipeline.md](kaggle-pipeline.md) |
 | [`tools/kaggle/figures/fig-12-guinness-on-a-cart/kernel-metadata.json`](../tools/kaggle/figures/fig-12-guinness-on-a-cart/kernel-metadata.json) | 421 B | The Kaggle notebook fig-12-guinness-on-a-cart (one notebook for the whole figure), written by build.py: its push settings (slug, dataset attached, CPU). | [kaggle-pipeline.md](kaggle-pipeline.md) |

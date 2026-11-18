@@ -1,0 +1,39 @@
+{
+ "counts": {
+  "coin": {
+   "recomputed": 1582,
+   "kept": 745
+  },
+  "flat": {
+   "kept": 170,
+   "rebuilt": 918
+  },
+  "shell": {
+   "recomputed": 282
+  }
+ },
+ "failed": [],
+ "missing": [],
+ "new_files": 2782,
+ "new_bytes": 4439713712,
+ "gate_pass": {
+  "coin": 745,
+  "flat": 170,
+  "shell": 0
+ },
+ "provisional": {
+  "coin": 72,
+  "flat": 0,
+  "shell": 241
+ },
+ "err_abs_median": {
+  "coin": 0.0127587,
+  "flat": 0.0136072,
+  "shell": 0.0
+ },
+ "err_abs_max": {
+  "coin": 0.4381993,
+  "flat": 0.4351907,
+  "shell": 0.0
+ }
+}
