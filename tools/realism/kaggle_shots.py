@@ -32,12 +32,12 @@ TYPES = {".html": "text/html", ".js": "text/javascript", ".css": "text/css", ".j
          ".webp": "image/webp", ".png": "image/png", ".woff2": "font/woff2", ".jpg": "image/jpeg"}
 # (page, ride query or None, seek function or None, moments in s, canvas selector)
 PAGES = {
-    "12": [("simulations/guinness-kaggle.html", None, "GuinnessJax", [0.0, 0.8, 1.6, 3.0], "canvas"),
+    "12": [("simulations/guinness-kaggle.html", None, "GuinnessJax", [0.0, 0.8, 1.6, 3.0], "#cv,#p3d"),
            ("simulations/beer-slosh.html", None, None, [3.0, 8.0], "#cv")],
-    "16": [("simulations/guinness-cart-control.html", "kerb_full.json", "Guinness16", [0.0, 0.6, 2.0], "canvas"),
-           ("simulations/guinness-cart-control.html", "kerb_off.json", "Guinness16", [0.7], "canvas")],
+    "16": [("simulations/guinness-cart-control.html", "kerb_full.json", "Guinness16", [0.0, 0.6, 2.0], "#c16,#p16,#p12"),
+           ("simulations/guinness-cart-control.html", "kerb_off.json", "Guinness16", [0.7], "#c16,#p16,#p12")],
 }[FIG]
-WIDTHS = [(390, 844), (1440, 900)]
+WIDTHS = [(390, 844), (1440, 900)] if os.environ.get("WIDTHS", "both") == "both" else [(1440, 900)]
 
 
 def serve(route):
@@ -68,10 +68,10 @@ with sync_playwright() as pw:
                     errs.append(f"seek: {e}")
                 stem = f"{TAG}_fig{FIG}_{os.path.basename(page)[:-5]}_{ride[:-5] if ride else 'live'}_{w}_t{t:.1f}"
                 shots = {}
-                for kind, target in (("screen", pg), ("figure", pg.locator(sel).first)):
+                for kind, target in [("screen", pg)] + [(q.lstrip("#"), pg.locator(q).first) for q in sel.split(",")]:
                     t0 = time.time()
                     try:
-                        if kind == "figure": target.scroll_into_view_if_needed(timeout=60000)
+                        if kind != "screen": target.scroll_into_view_if_needed(timeout=60000)
                         target.screenshot(path=os.path.join(OUT, f"{stem}_{kind}.png"), timeout=180000); shots[kind] = round(time.time() - t0, 1)
                     except Exception as e:
                         shots[kind] = None; errs.append(f"{kind} shot: {str(e)[:300]}")

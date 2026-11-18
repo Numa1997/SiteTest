@@ -156,6 +156,11 @@
       arm: A([(pivF[0] + nf.xa) / 2, nf.ya, (pivF[2] + zF) / 2]), hinge: A(pivF), spring: A(LF(0.35)), coil: A(LF(0.81)), cell: A(LF(0.94)),
       encoder: A([G.wb / 2, near * (G.yw + G.hw), zF]), scanner: A(T([0.247, near * 0.022, G.deckT + 0.031])), road: A([0.30, near * 0.07, zr(0.30)]),
     };
+    // where the deck top's front and rear edge (on its centre line, y = 0) were drawn, in css px, for the data panel's read-back
+    if (this.deckStore) {
+      const a = A(T([G.deckL / 2, 0, G.deckT])), b = A(T([-G.deckL / 2, 0, G.deckT]));
+      this.deckStore.set('deck_px_fx', a[0]); this.deckStore.set('deck_px_fy', a[1]); this.deckStore.set('deck_px_rx', b[0]); this.deckStore.set('deck_px_ry', b[1]);
+    }
   };
   root.Cart16View = View;
 })(typeof self !== 'undefined' ? self : this);
