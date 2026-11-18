@@ -57,6 +57,17 @@ waiting for his verdict:
    detune so the figure rotates; three pens detuned from each other for moire.
 Still approved and waiting for deployment: letters, seeds, swerve, shores of light (4 subpages + Kaggle notebooks; pages not named).
 
+Update 05:45: the web-derived four (slime mould words, Chladni, murmuration, harmonograph) were rejected too ("nothing
+impressive"). Lesson drawn: what he loved were small stories from the poem where things fall, dissolve and become something
+recognisable; generic physics demos and textures fail. Fifth round shown in chat, waiting:
+ - Nothing is lost (I 215-264): a tree; a leaf lets go, flutters down, breaks into 5 motes in the soil, the motes travel to the
+   trunk and climb the branches to an empty tip, where 5 motes make one new leaf. Leaves + motes are conserved.
+ - Rain draws a tree: drops land on a tilted, bumpy slope, each runs to its lowest neighbour and wears the ground a little; paths
+   merge into a branching river that looks like a tree; redrawn on new terrain every 30 s.
+ - Snow writes its fall: flakes grow while they fall (six identical arms, side branches appear as it descends), no two alike.
+ - A star from falling dust: a slowly turning cloud falls inward, spins up, feeds a star that lights; after 26 s it bursts and the
+   same dust becomes the next cloud.
+
 ## User's rules for this work
 - Merge and publish finished, tested work without asking; verify the live site; docs must describe the code.
 - Do only what is asked; reply in plain connected English; never use the user's name.
