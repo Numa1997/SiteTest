@@ -112,3 +112,15 @@ The control system is the centre of the work; the cart is designed to give it th
 
 ## Commits
 - 1st: brief + state. 2nd: model tools in progress.
+
+## Session finished (18 November 2026, rebuild chat session_01DGmqimP4q3W5e6LtQwSTNe)
+Fig. 16 is closed by the rebuild chat. The page uses these Kaggle outputs:
+- GPU `numakoudsie/fig-16-guinness-cart-with-control`:
+  - version 2 (14 Nov, commit 2041127): resonant_full, bump25_full -> public/data/fig16/2026-11-14/;
+  - version 8 (15 Nov, run 5): kerb_off, resonant_off, bump25_off -> public/data/fig16/2026-11-15/;
+  - version 9 (18 Nov, run 6, commit 5c45658, area probes): kerb_full, kerb_full_seed2 -> public/data/fig16/2026-11-15/.
+- CPU `numakoudsie/fig-16-cart-diagnostics-cpu`: version 6 (diag_burst, audit M3), version 7 (run 6 packed, m3.log),
+  version 8 (page built at commit 45d6d51 with the corrected note, inventory --check).
+- Fig. 12 GPU `numakoudsie/guinness-on-a-cart-stout-in-jax` version 12: numerical damping (notes/fig12/damping-grid.json).
+Left open, not computed: the data panel with the three-way proof for Fig. 16; the figure's own Kaggle dataset (inventory session);
+Fig. 12's bare swing at 1.0 mm; smoothness of the 3D close-up on a real GPU.

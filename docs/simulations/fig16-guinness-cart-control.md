@@ -41,7 +41,10 @@ vary across the glass are in the fluid too (note eq. 8).
 
 Control, every 1 ms: LQR on the linear model of cart, deck, axles and the first sloshing mode (run 8's measured swing with the head:
 2.915 Hz, ζ 0.425, β 1.241), with the optimal feed-forward of the road the scanner reads 0.25 s ahead (note eq. 17);
-the swing estimated by a Kalman filter from the IMU's acceleration and Fig. 12's two wall probes. The weighting is chosen in the
+the swing estimated by a Kalman filter from the IMU's acceleration and two wall probes. In the controlled kerb rides (run 6,
+GPU notebook version 9) each probe is an area sensor, `Stout.probes_patch` in `tools/fig12/kaggle/stout_jax.py`: the median of
+3 × 3 columns at the wall divided by the first mode's shape there (0.971); `run16.py` selects it with `PROBE=patch`. Fig. 12's
+`probes()` is unchanged. The weighting is chosen in the
 notebook among five, on the kerb, with the few-mode stout of `tools/fig16/slosh_model.py`; run 2 chose q = 0.25 mm.
 
 ## How the data was made
@@ -87,21 +90,22 @@ stored surfaces). It also runs four checks printed in the note: eq. 4 and the ro
 [`Stout.frame_accel`](../../tools/fig12/kaggle/stout_jax.py#L273) on random states (agree to 10⁻¹⁵), eq. 6 against eq. 4, and the
 preview law (17) against a direct solution of the optimality equations (agree to 10⁻¹⁵).
 
-**Found while measuring (not changed: page and Kaggle code are outside the note).**
-- The centripetal term of the acceleration of S has the wrong sign in [`Cart4.forces`](../../tools/fig16/kaggle/cart4.py#L218)
-  (`- hg * om**2 * sin`, `+ hg * om**2 * cos`; it should be `+`, `-`). The error, 2 h_g θ'² along the glass's axis, leaves the
-  sideways push g_x exact and changes g_z by at most 0.63 m/s² on the controlled kerb and 8.2 m/s² on the uncontrolled kerb.
+**Found while measuring, and fixed.**
+- The centripetal term of the acceleration of S had the wrong sign in [`Cart4.forces`](../../tools/fig16/kaggle/cart4.py#L220)
+  (fixed in commit 7bb19a7). The error, 2 h_g θ'² along the glass's axis, left the sideways push g_x exact. Runs 5 and 6 use the
+  fixed code; the two gentle roads with control (run 2, version 2) predate it.
 - In the linear model the stout feels the deck but does not push back on it, so Table 2's "pitch mode with the stout" is the deck's own
   pitch mode (4.08 Hz natural, 3.85 Hz ringing) whose eigenvector carries the driven swing; `modes16.json` lists ringing
   frequencies (|Im λ|/2π), not natural ones.
 - The drive force is capped by the rear tyres' grip (μ N_r = 19 N at rest), below the motors' 48 N.
-- Seed 1 of the controlled kerb (run 3) shows, from 3.3 s on, actuator forces in opposite phase up to ±32 N and single-sample angular
-  accelerations up to 287 rad/s² after a jump of the probes' reading; seed 2 does not. Not yet explained.
+- Seed 1 of the controlled kerb (runs 3 and 5) showed a late actuator burst (up to 28-32 N after 3.3 s). Cause: single grid columns
+  next to the wall spiking for one picture, magnified 2.67 times by the two-point probe's extrapolation (audit M3,
+  `tools/fig16/kaggle/diag_burst.py`). With area probes (run 6) the actuators stay below 0.4 N after 3.3 s.
 
 ## Open
 
 The data panel with the three-way proof; the figure's Kaggle dataset `numakoudsie/fig16-...` (the layout rule of
-`docs/kaggle-pipeline.md`); the centripetal sign in `cart4.py` and a rerun; the late actuator burst of seed 1.
+`docs/kaggle-pipeline.md`).
 
 **Control switch and run 3 (15 November 2026).** The page offers three roads and one switch, "Control system on/off". The switch keeps
 the ride time and cross-fades the last picture out over 0.45 s. `guinness16-play.js` reads both indexes,

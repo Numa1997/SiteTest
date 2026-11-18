@@ -83,3 +83,8 @@ Reread first after any compaction. Prompt: `notes/fig16/PROMPT-computational-phy
   - the seed-1 burst after 3.3 s on the controlled kerb (audit M3);
   - the grip limit (audit M2), a design limit stated in the note;
   - smoothness of the 3D close-up on a real GPU.
+
+## Status 18 Nov 2026, ~01:10 UTC: Fig. 16 finished (owner, via the inventory session: "push them to end their work already")
+- Run 6 (GPU v9, area probes) closed M3: actuators after 3.3 s at most 0.4 N (run 5: 28 N). Packed on CPU v7; page rebuilt on CPU v8
+  with the note corrected (centripetal sign fixed since run 5, burst explained). No further runs.
+- "Session finished" written in notes/fig16/STATE.md; message to the inventory session (session_01DGmqin2AFu75ELh8fAbGr9).
