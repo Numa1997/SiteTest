@@ -25,7 +25,8 @@ Close the six open problems of the handoff, one at a time, in its order. Merge f
 6. Fig. 12 lecture note to STANDARD.md — only if the owner wants it.
 
 ## Kaggle runs of this session
-(none yet)
+- CPU `numakoudsie/fig-16-cart-diagnostics-cpu` version 9 (18 Nov): git clone of this branch, `inventory.py --check`, then regenerate;
+  outputs inventory.log, files.md. Status: RUNNING at launch; fetch, review the diff, commit docs/files.md.
 
 ## Commits
 - this file.
