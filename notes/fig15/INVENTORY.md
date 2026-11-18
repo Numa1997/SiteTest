@@ -3,6 +3,7 @@
 Everything every session produced for Fig. 15, with what is wrong in it. Written 15 Nov at the owner's order; no computation was run to
 write it (counts are read from files already in the repository or from Kaggle's own listings). Companion files:
 `CORRECTION_LOG.md` (the correction session, every mistake), `HISTORY_COMMITS.txt` (all 114 commits, one per line, with session id).
+Theory mapped onto code: `THEORY_AND_CODE.md` (the correction) and `THEORY_AND_CODE_EARLIER.md` (generations 0–2 and their tools).
 
 ## 1. The sessions
 
