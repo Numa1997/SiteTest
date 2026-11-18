@@ -1,12 +1,32 @@
-/* Lucretius page: background ornaments. Wine fractal curves run down both margins; the SVGs come from notes/lucretius/make_bg.py.
-   ?bg=a, b or c on the address picks one (a script in the page sets html[data-bg]); a, the branches, is the default.
-   Each strip is drawn 360 px wide and set 250 px wide here, so it sits in the margin beside the 1240 px content column. */
+/* Lucretius page: background ornaments; the SVGs come from notes/lucretius/make_bg.py.
+   Default (since 18 November 2026), "currents and atoms": over the whole width of the page, braided wine currents run down the page
+   and dots ride on them, falling slowly (one tile in 90 s; still when the reader asks for reduced motion), over a soft wine glow.
+   The layers are strong in the margins and fade, over the 160 px next to the 1240 px text block, to a sixth behind it, so the text stays easy to read.
+   ?bg=a, b or c on the address shows the earlier margin strips instead (a script in the page sets html[data-bg]). */
 body { position: relative; }
-.lp-deco { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
-.lp-deco i { position: absolute; top: 0; bottom: 0; width: 250px; background: url(../images/lucretius/bg-a.svg) 0 0 / 250px 1600px repeat-y; }
-.lp-deco i:first-child { left: calc(50% - 840px); }
-.lp-deco i:last-child { right: calc(50% - 840px); transform: scaleX(-1); background-position: 0 800px; }
+.lp-deco { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
+  background:
+    radial-gradient(60% 40% at 0% 12%, rgba(122, 31, 43, .10), transparent 70%),
+    radial-gradient(55% 45% at 100% 48%, rgba(122, 31, 43, .09), transparent 70%),
+    radial-gradient(60% 40% at 10% 88%, rgba(122, 31, 43, .08), transparent 70%); }
+.lp-deco::before, .lp-deco::after { content: ''; position: absolute; inset: 0;
+  -webkit-mask-image: linear-gradient(to right, #000 calc(50% - 720px), rgba(0,0,0,.16) calc(50% - 560px), rgba(0,0,0,.16) calc(50% + 560px), #000 calc(50% + 720px));
+  mask-image: linear-gradient(to right, #000 calc(50% - 720px), rgba(0,0,0,.16) calc(50% - 560px), rgba(0,0,0,.16) calc(50% + 560px), #000 calc(50% + 720px)); }
+.lp-deco::before { background: url(../images/lucretius/bg-d-lines.svg) 50% 0 / 2400px 1600px repeat-y; }
+.lp-deco::after { background: url(../images/lucretius/bg-d-atoms.svg) 50% 0 / 2400px 1600px repeat-y; animation: lp-fall 90s linear infinite; }
+@keyframes lp-fall { to { background-position: 50% 1600px; } }
+@media (prefers-reduced-motion: reduce) { .lp-deco::after { animation: none; } }
+.lp-deco i { display: none; }
+html[data-bg] .lp-deco { background: none; } html[data-bg] .lp-deco::before, html[data-bg] .lp-deco::after { display: none; }
+html[data-bg] .lp-deco i { display: block; position: absolute; top: 0; bottom: 0; width: 250px; background: url(../images/lucretius/bg-a.svg) 0 0 / 250px 1600px repeat-y; }
+html[data-bg] .lp-deco i:first-child { left: calc(50% - 840px); }
+html[data-bg] .lp-deco i:last-child { right: calc(50% - 840px); transform: scaleX(-1); background-position: 0 800px; }
 html[data-bg='b'] .lp-deco i { background-image: url(../images/lucretius/bg-b.svg); }
 html[data-bg='c'] .lp-deco i { background-image: url(../images/lucretius/bg-c.svg); }
 .cat-top, .cat { position: relative; z-index: 1; }
-@media (max-width: 760px) { .lp-deco i { opacity: .5; } .lp-deco i:first-child { left: -190px; } .lp-deco i:last-child { right: -190px; } }
+/* the column head is sticky on a translucent ground: let the currents show through it a little */
+@media (max-width: 760px) {
+  .lp-deco::before, .lp-deco::after { background-size: 1500px 1000px; -webkit-mask-image: linear-gradient(to right, rgba(0,0,0,.55), rgba(0,0,0,.14) 25%, rgba(0,0,0,.14) 75%, rgba(0,0,0,.55)); mask-image: linear-gradient(to right, rgba(0,0,0,.55), rgba(0,0,0,.14) 25%, rgba(0,0,0,.14) 75%, rgba(0,0,0,.55)); }
+  @keyframes lp-fall { to { background-position: 50% 1000px; } }
+  html[data-bg] .lp-deco i { opacity: .5; } html[data-bg] .lp-deco i:first-child { left: -190px; } html[data-bg] .lp-deco i:last-child { right: -190px; }
+}
