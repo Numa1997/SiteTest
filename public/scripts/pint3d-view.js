@@ -12,7 +12,7 @@ import * as THREE from '../vendor/three/three.module.min.js';
 
 const NR = 24, NTH = 96;
 // colours as seen in photographs of a real pint (notes/realism/STATE.md, photos 1, 2, 4): near-black stout, ivory-cream head
-const STOUT = 0x070302, CREAM = 0xe6d6b4;
+const STOUT = 0x070302, CREAM = 0xf0e4c8;
 // The stout's colour by transmission is Beer-Lambert, I = I0 exp(-alpha d), with the measured average beer spectrum
 // (deLange, J. Am. Soc. Brew. Chem. 66(3) 143-150, 2008; formula in en.wikipedia.org/wiki/Standard_Reference_Method):
 //   A(lambda) per cm = SRM/12.7 (0.018747 exp(-(lambda-430)/13.374) + 0.98226 exp(-(lambda-430)/80.514)),  alpha = ln10 A.
@@ -30,10 +30,14 @@ function envTexture(renderer) {
   const gr = g.createLinearGradient(0, 0, 0, H); gr.addColorStop(0, '#3b2a20'); gr.addColorStop(0.3, '#5a4434'); gr.addColorStop(0.5, '#2a1d16'); gr.addColorStop(0.6, '#24170f'); gr.addColorStop(1, '#120b08');
   g.fillStyle = gr; g.fillRect(0, 0, W, H);
   for (let i = 0; i < 6; i++) { const x = (i + 0.5) * W / 6, y = H * 0.18, rg = g.createRadialGradient(x, y, 0, x, y, 18); rg.addColorStop(0, '#fff3d6'); rg.addColorStop(0.35, '#ffcf80'); rg.addColorStop(1, 'rgba(255,190,110,0)'); g.fillStyle = rg; g.fillRect(x - 20, y - 20, 40, 40); }
-  g.fillStyle = '#e8eef2'; g.fillRect(W * 0.70, H * 0.26, W * 0.08, H * 0.2); g.fillStyle = '#c9d4da'; g.fillRect(W * 0.79, H * 0.26, W * 0.05, H * 0.2);
+  // a tall window behind and to the side, and a narrower one in front: they make the narrow vertical highlights on a real glass
+  g.fillStyle = "#f4f7fa"; g.fillRect(W * 0.70, H * 0.12, W * 0.06, H * 0.4); g.fillStyle = "#dfe7ec"; g.fillRect(W * 0.78, H * 0.12, W * 0.03, H * 0.4);
+  g.fillStyle = "#fff6e8"; g.fillRect(W * 0.20, H * 0.15, W * 0.025, H * 0.34);
   const tex = new THREE.CanvasTexture(c); tex.colorSpace = THREE.SRGBColorSpace;
   const sc = new THREE.Scene(); sc.add(new THREE.Mesh(new THREE.SphereGeometry(10, 64, 32), new THREE.MeshBasicMaterial({ map: tex, side: THREE.BackSide })));
-  const pm = new THREE.PMREMGenerator(renderer); const env = pm.fromScene(sc, 0.01).texture; pm.dispose(); return env;
+  const pm = new THREE.PMREMGenerator(renderer); const env = pm.fromScene(sc, 0.01).texture; pm.dispose();
+  const bg = new THREE.CanvasTexture(c); bg.colorSpace = THREE.SRGBColorSpace; bg.mapping = THREE.EquirectangularReflectionMapping;
+  return { env: env, bg: bg };
 }
 
 function foamTexture() {
@@ -50,10 +54,11 @@ class Pint3D {
     this.cv = canvas; this.G = glass;
     this.zRim = (glass.R.length - 1) * glass.dz;
     this.Rz = (z) => { const f = Math.max(0, Math.min(z, this.zRim - 1e-6)) / glass.dz, i = Math.min(Math.floor(f), glass.R.length - 2); return glass.R[i] + (f - i) * (glass.R[i + 1] - glass.R[i]); };
-    const r = this.renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+    const r = this.renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: false });
     r.setPixelRatio(Math.min(1.5, window.devicePixelRatio || 1)); r.outputColorSpace = THREE.SRGBColorSpace; r.toneMapping = THREE.AgXToneMapping; r.toneMappingExposure = 1.25;
-    const s = this.scene = new THREE.Scene(); s.environment = envTexture(r);
-    s.add(new THREE.HemisphereLight(0xfff0dc, 0x3a2a20, 0.5));
+    const s = this.scene = new THREE.Scene(); const E = envTexture(r); s.environment = E.env;
+    s.background = E.bg; s.backgroundBlurriness = 0.35; s.backgroundIntensity = 0.9;   // the room behind, out of focus as in a photograph
+    s.add(new THREE.HemisphereLight(0xfff0dc, 0x3a2a20, 0.9));
     const key = new THREE.DirectionalLight(0xffe2b8, 2.4); key.position.set(-0.25, 0.55, 0.35); s.add(key);   // a warm lamp above, in front
     const rim = new THREE.DirectionalLight(0xdfe8ff, 1.2); rim.position.set(0.35, 0.25, -0.45); s.add(rim);  // the window behind, to one side
     this.camera = new THREE.PerspectiveCamera(22, 1, 0.01, 5);
@@ -99,6 +104,14 @@ class Pint3D {
     const gm = new THREE.MeshPhysicalMaterial({ color: 0xffffff, roughness: 0.02, metalness: 0, transmission: 1, ior: 1.52, thickness: 0.004,
       specularIntensity: 1, envMapIntensity: 1.3, side: THREE.DoubleSide });
     const gl = new THREE.Mesh(new THREE.LatheGeometry(prof, 128), gm); gl.renderOrder = 2; s.add(gl);
+    // a varnished wooden bar top under the foot, so the glass has something to stand on, to refract and to reflect in (drawing only)
+    { const N = 512, c = document.createElement('canvas'); c.width = N; c.height = N; const g = c.getContext('2d');
+      g.fillStyle = '#3a1c0e'; g.fillRect(0, 0, N, N); let sd = 11; const rnd = () => (sd = (sd * 16807) % 2147483647) / 2147483647;
+      for (let i = 0; i < 160; i++) { const y = rnd() * N, a = 0.05 + 0.12 * rnd(); g.strokeStyle = rnd() < 0.5 ? `rgba(90,45,20,${a})` : `rgba(20,8,4,${a})`; g.lineWidth = 1 + 4 * rnd();
+        g.beginPath(); g.moveTo(0, y); for (let x = 0; x <= N; x += 16) g.lineTo(x, y + 6 * Math.sin(x / 60 + i) + 3 * Math.sin(x / 13 + 2 * i)); g.stroke(); }
+      const wood = new THREE.CanvasTexture(c); wood.colorSpace = THREE.SRGBColorSpace; wood.wrapS = wood.wrapT = THREE.RepeatWrapping; wood.repeat.set(2, 2);
+      const top = new THREE.Mesh(new THREE.CircleGeometry(0.6, 64), new THREE.MeshPhysicalMaterial({ map: wood, roughness: 0.3, clearcoat: 0.8, clearcoatRoughness: 0.15 }));
+      top.rotation.x = -Math.PI / 2; top.position.y = -FOOT - 0.0002; s.add(top); this.table = top; }
     // drops of stout and lumps of head in the air
     this.MAXD = 4096; this.MAXL = 512;
     this.drops = new THREE.InstancedMesh(new THREE.SphereGeometry(1, 8, 6), stoutTop, this.MAXD); this.drops.count = 0; this.drops.frustumCulled = false; s.add(this.drops);
