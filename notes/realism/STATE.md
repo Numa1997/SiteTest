@@ -45,7 +45,8 @@ light, reflection on the table, soft shadow. Physics of the cascade: https://www
 ## Kaggle run register
 - guinness-realism-fig12 v1 and guinness-realism-fig16 v1 (18 Nov, CPU, commit 9bb8503, TAG before, ran in parallel): both ERROR
   at the first screenshot, "Page.screenshot: Timeout 30000ms exceeded" (no graphics card: WebGL drawn in software). No pictures.
-- v2 of both (commit below): 3 minutes per picture, a failed picture is logged and skipped, seconds per picture in manifest.json.
+- v2 of both (18 Nov, commit 162286d, parallel): COMPLETE. Fig. 12: 24 pictures (12 moments), Fig. 16: 16 pictures (8 moments),
+  0 console errors; 18-102 s per picture in software WebGL. Pictures stay in the notebooks' output (version 2).
 
 ## Commits
 - this file and tools/realism/kaggle_shots.py.
