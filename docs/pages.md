@@ -29,6 +29,10 @@ Related pages: the fold mechanism is in [scripts/fold.md](scripts/fold.md), the 
 
 ## What the three HTML pages share
 
+Since 18 November 2026 the home page, the catalog, Portfolios and the Lucretius page each carry living scenes (a forest behind the
+home hero, iron powder behind the Simulations title, a chip in the Portfolios margin, and so on), mounted by `data-bg` holders,
+`styles/bg-scenes.css` and `scripts/bg-scenes.js`. Which scene sits where, and how they run: [scripts/bg-scenes.md](scripts/bg-scenes.md).
+
 | Part | Home | Catalog | Portfolios |
 |---|---|---|---|
 | `<html class="no-js">`, switched to `js` by a one-line script in `<head>` | [2](../index.html#L2), [21–23](../index.html#L21-L23) | [2](../public/simulations.html#L2), [24–26](../public/simulations.html#L24-L26) | [2](../public/portfolios.html#L2), [26–28](../public/portfolios.html#L26-L28) |

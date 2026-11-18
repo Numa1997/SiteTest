@@ -118,6 +118,14 @@ Added layers, shown in chat as one widget with six buttons, waiting for his verd
    shows the spread of the species' kinetic energies falling as they reach one temperature.
  - Chip: when the die is finished it is copied and stamped die by die across a wafer in a back-and-forth path.
 
+Update 18 November: "Beautiful work. Publish and deploy." then "Not all scenes in one background. Get creative in where and how to
+place them". Built `public/scripts/bg-scenes.js` + `public/styles/bg-scenes.css` (docs/scripts/bg-scenes.md): ten scenes, each in its
+own place. Home: forest behind the hero, spinners band before Simulations, shores band above the footer. Simulations: iron powder
+behind the title, harmonica band above the footer. Portfolios: chip in the top right margin, mixing band above the footer.
+Lucretius: letters behind the title, swerve in the side margins (fixed), seeds band above the footer. Branch `bg-scenes`.
+Left: Kaggle notebooks that simulate the scenes' data (the user gave permission to write them in his Kaggle account);
+not built yet: flocks of birds, seasons/climate/clouds, bio fractals.
+
 ## User's rules for this work
 - Merge and publish finished, tested work without asking; verify the live site; docs must describe the code.
 - Do only what is asked; reply in plain connected English; never use the user's name.
