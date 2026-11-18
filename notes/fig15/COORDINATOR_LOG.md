@@ -154,3 +154,20 @@ Live check (**Fact:** `coordinator-2026-11-18/live_check.js`, headless Chromium,
    rule that sessions do not message each other; this chat answered neither. The correction chat
    (session_01DGmqiqhCMW3FREtBievpnu) and the Fig. 15 writer (session_01DGmqiqazJ9UxECtFYiespR) are idle.
 9. The R2 token is still saved on the Default environment.
+
+## 10. Deletion of the replaced generation 2026-11-14 files (18 Nov, about 17:45 UTC)
+
+The owner's order: "delete them already. Delete all of them and stop using my storage and my computation."
+
+- **Fact:** `coordinator-2026-11-18/r2_delete.py` deleted from R2 the 2,782 keys `resonant-tunnelling/2026-11-14/runs/<file>`
+  whose run has status rebuilt or recomputed in the 2026-11-18 index, after checking that each replacement is logged as
+  uploaded. 2,782 deleted, 0 failed (`coordinator-2026-11-18/r2_delete.log`). This cannot be undone from R2.
+- **Fact:** on the live site afterwards: a deleted old file answers 404, its replacement 200, a kept old file 200.
+- **Inference:** the bucket now holds 10,966,665,742 - 4,782,653,753 = 6,184,011,989 bytes in 3,697 objects, inside the
+  free 10 GB. Cloudflare's usage reading still ended at 16:40, before the deletion, when this was written; read it again
+  to confirm.
+- **Consequence:** `?gen=2026-11-14` now plays only the 915 kept runs; the other 2,782 fail to load there. The index
+  and audit of generation 2026-11-14 remain in the repository. `generations.json` and the Fig. 15 doc on `main` still
+  say the earlier generation can be shown; that sentence is now wrong and is to be corrected.
+- **Not checked:** whether the original Kaggle notebooks (`fig15-rt3d2-shard-*`, `fig15-rt3d2-fix1`) still hold the
+  deleted files.
