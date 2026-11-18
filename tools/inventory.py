@@ -225,7 +225,6 @@ RULES = [
     (r'notes/lucretius/extract\.py', 'Cuts Lucretius I 146-224 out of the downloaded sources without retyping.', 'notes/lucretius/README.md'),
     (r'notes/lucretius/make_bg\.py', 'Draws the background tiles of the Lucretius page: currents and atoms (default), fractal branches, Weierstrass lines, spiral tendrils.', 'docs/pages.md#the-poem-page-lucretiushtml-10-november-2026-rebuilt-11-november-2026'),
     (r'public/images/lucretius/bg-[a-d][-a-z]*\.svg', 'Background tiles of the Lucretius page (d: currents and atoms; a to c: margin strips; all at ?bg=), written by notes/lucretius/make_bg.py.', 'docs/pages.md#the-poem-page-lucretiushtml-10-november-2026-rebuilt-11-november-2026'),
-    (r'public/scripts/lucretius-fractals\.js', 'The Lucretius background engine: sixteen famous fractals grow one by one and a divergence-free fluid carries them off (canvas, 30 fps).', 'docs/pages.md#the-poem-page-lucretiushtml-10-november-2026-rebuilt-11-november-2026'),
     (r'public/styles/lucretius-deco\.css', 'Lucretius page backgrounds by address (?bg=a|b|c|d); none by default.', 'docs/pages.md#the-poem-page-lucretiushtml-10-november-2026-rebuilt-11-november-2026'),
     (r'notes/lucretius/make_home\.py', 'Writes the Lucretius band of the home page from the first four sentences.', 'notes/lucretius/README.md'),
     (r'notes/lucretius/make_page\.py', 'Writes public/lucretius.html: Lucretius I 146-224 in four columns (Latin, Leonard, Diels, Arabic).', 'notes/lucretius/README.md'),
