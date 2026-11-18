@@ -77,6 +77,9 @@ dataset (`<old notebook>/source-current-version.ipynb`) and run cell by cell; th
 pinned commit. A GPU job needs `enable_gpu` set in the notebook's `kernel-metadata.json` before the push. Push:
 `kaggle kernels push -p tools/kaggle/figures/<slug>`. Version 1 of both ran `check` on 14 November 2026: Fig. 14, 2961 files,
 all identical (12 shapes tars unpacked by Kaggle, 5 `.pyc` caches dropped), 587 s; Fig. 12, 138 files, all identical, 63 s.
+On 18 November 2026 the Fig. 12 dataset got version 2 (versions 11 and 12 of `guinness-on-a-cart-stout-in-jax`, the damping-grid
+study of 15 November, `tools/fig12/kaggle/damping_grid.py` at `758df53`), the Fig. 12 notebook a fourth job, `damping-grid`, and its
+version 2 ran `check`: every file identical, including the new ones.
 The old notebooks of these two figures (Fig. 14: six; Fig. 12: three) are replaced by these and stay on Kaggle until the owner
 authorises their deletion one by one.
 
