@@ -10,6 +10,9 @@ canvas.bgs { position: absolute; inset: 0; width: 100%; height: 100%; pointer-ev
 .bgs-aside { position: absolute; top: 76px; height: 300px; left: calc(50% + 70px); width: min(520px, calc(50% - 110px)); z-index: -1; pointer-events: none; overflow: hidden; }
 [dir="rtl"] .bgs-aside { left: auto; right: calc(50% + 70px); }
 @media (max-width: 1239px) { .bgs-aside { display: none; } }
+/* beside a wider title (Lucretius): further out */
+.bgs-aside--far { left: calc(50% + 230px); width: min(380px, calc(50% - 250px)); }
+[dir="rtl"] .bgs-aside--far { left: auto; right: calc(50% + 230px); }
 /* a band of its own, between or after the parts of a page */
 .bgs-band { position: relative; height: 260px; pointer-events: none; overflow: hidden; }
 .bgs-band--low { height: 170px; }

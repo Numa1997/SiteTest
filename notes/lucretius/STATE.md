@@ -133,7 +133,12 @@ the empty half beside the Projects title (mirrored on the Arabic page), alpha .6
 the empty half beside it (new holder `.bgs-aside`, mask `round`, from 1240 px).
 Step 3 (16:40, "Absolutely", branch `fill-gaps-3`): the strip under the home hero is soil now: the forest holder reaches
 150 px lower, trees only grow where no text stands (data-bg-avoid), roots grow down, fungal threads tie distant trees and feed
-seedlings. Gaps still open:
+seedlings.
+Step 4 (21:03, "make the tree formation faster ... keeps scaling up ... climate ... seasonal changes ... the words and letters
+one is dumb, as well as that one with a circle", branch `forest-climate`): forest spreads over the whole land under the hero
+(ground lowered, soil 90 px), seasons, vapour/collision/rain/snow; letters replaced by dust motes in a sunbeam beside the
+Lucretius title. Asked which scene is "the one with a circle" (spinners or seeds); waiting for the answer.
+Gaps still open:
 side margins beside the card lists; Lucretius top.
 
 ## User's rules for this work
