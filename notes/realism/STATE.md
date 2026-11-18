@@ -47,6 +47,11 @@ light, reflection on the table, soft shadow. Physics of the cascade: https://www
   at the first screenshot, "Page.screenshot: Timeout 30000ms exceeded" (no graphics card: WebGL drawn in software). No pictures.
 - v2 of both (18 Nov, commit 162286d, parallel): COMPLETE. Fig. 12: 24 pictures (12 moments), Fig. 16: 16 pictures (8 moments),
   0 console errors; 18-102 s per picture in software WebGL. Pictures stay in the notebooks' output (version 2).
+- guinness-realism-render v1 (18 Nov, GPU T4, commit 67ea2ae): Blender 4.2 Cycles, 512 samples, kerb_full frame 36 (0.6 s),
+  Poly Haven brown_photostudio_02 light. COMPLETE, 392 s in all, render 5 min 06 s. Outputs render.png, compare.png (render beside
+  photo 1), render.log. Device used not confirmed (log tail cut). Seen: real glass, refraction, reflection on the table, foot right;
+  stout too see-through and grey (ALPHA provisional), no ruby edge, head too white and flat, no print on the glass, studio room
+  not a pub, table plain.
 
 ## Commits
 - this file and tools/realism/kaggle_shots.py.
