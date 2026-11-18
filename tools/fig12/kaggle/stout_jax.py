@@ -352,6 +352,11 @@ class Stout:
         # only on columns whose centre is inside the glass; its weight, 51 Pa, then squeezed the stout up into the bare columns
         # at the glass at 11 mm/s in one step from rest, and the pint at rest stirred itself)
         self.afill = jnp.asarray(G.thw[:, :, int(round((G.fill - G.z0) / dx))], F32)
+        if G.body is not None:
+            # the continuous model's grid also covers the air around the glass, open at the fill height too: the head lies only on the
+            # glass's own columns, those whose centre is within the glass's radius at the fill plus one cell (19 Nov 2026: GPU check 2
+            # laid it on every column over the deck, and the pint at rest sank 9.6 mm in 0.3 s)
+            self.afill = jnp.where(jnp.asarray(np.hypot(*np.meshgrid(G.xc, G.yc, indexing="ij")) < G.Rfill + dx), self.afill, 0.0).astype(F32)
         self.ell = G.Rfill / 1.84118         # m, the depth over which the foam's sliding speed dies away upward, 1/k (Sauret 2015)
         self.Rrim = float(G.Rz(G.zrim - 1e-6))
         self.MF = 4096                       # lumps of head in flight, at most
