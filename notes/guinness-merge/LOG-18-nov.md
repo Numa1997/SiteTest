@@ -19,11 +19,20 @@ notes on the site, docs. Neither edits the other's files.
 | time | what | commit |
 |---|---|---|
 | 19:18 | one model inside and outside the glass | 214fd3df |
-| 19:33-20:47 | four faults found by PAGES' review and fixed: leaking wall, no surface outside, mirror images, floor corner, wall rule | f885e961, 71ef8836, c8fb9670, f315e4aa, 6a41be3c, 86bbb880 |
+| 19:33-20:47 | three faults found by PAGES' review (wall leak and no surface outside; mirror images; surface near outer walls) and two by its own tests (floor-corner leak; wall-column reading), all fixed | f885e961, 71ef8836, c8fb9670, f315e4aa, 6a41be3c, 86bbb880 |
 | ~22:00 | 2 mm test ALL PASS: pint at rest 125.01 mm, 0 lost, 0 outside; shove spills as one liquid, books exact | 6a41be3c |
 | 22:02-22:10 | air drag coded; its check FAILED (0.0805 vs 0.1197 m/s^2); fix written, not run | 036b81d2, 06bd5ed6 |
 | 22:11 | STOPPED by the owner: no recompute, no GPU, animation from stored rides first | 50319a6a |
+| 21:30 | 2 mm test at cc51c2c (continuous-spill-smoke-2mm-c) launched before the stop; finishes on its own, result pending | cc51c2c6 |
 
 ## Owner's decisions today
 - No recompute (the stored rides stay); no renumbering of figures; no physics in the browser (beer-slosh deleted).
 - First a working animation from the stored rides; air resistance and the air's parameters after that. The owner checks the animation.
+
+## SOLVER, earlier the same day: the look of the figures (branch claude/guinness-realism, never merged, nothing live)
+- 17:30-18:30: before pictures of both pages (Kaggle CPU guinness-realism-fig12 v2, 24 pictures; -fig16 v2, 16).
+- One path-traced frame in Blender, Kaggle GPU guinness-realism-render v1, 6.5 T4-minutes (commit 67ea2ae): the only GPU use of
+  either session today.
+- A live-3D pint and Fig. 16 cart (pint3d-view.js, cart3d.js, one hook in guinness16-play.js; commits 9a6e8ef, 00ce483, c856f68),
+  CPU screenshots fig16 v3-v5. The owner rejected that look. PAGES' deck-pixel lines for cart16-view.js are on that branch only.
+- Both SOLVER branches merge into main 75343c8 with 0 conflicts (git merge-tree); neither is merged.
