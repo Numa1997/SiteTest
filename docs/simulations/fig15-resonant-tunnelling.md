@@ -112,7 +112,10 @@ and `T_unc` (discs, shells). A kept run names the folder of the generation that 
 replaced files (4.44 GB) are in R2 under `resonant-tunnelling/2026-11-18/runs/`. Every new file's SHA-256 was checked against
 its record at filing and again on upload, together with R2's MD5. Generation 2026-11-14 stays filed, with its audit.
 
-The page reads a generation marked `"preview": true` in `generations.json` only at `?gen=<its date>`. For a run with a
+The page plays the last generation of kind `rt3d2` that is not marked `"preview": true` in `generations.json`: since 18 November
+2026 this one. `?gen=<date>` shows another generation, for example `?gen=2026-11-14` for the earlier one. Checked on the live
+site in headless Chromium at 1440 x 1000 before the switch (walls, discs, shells, three energies each): no page error, no
+failed request, SHA-256 matched for every run loaded. For a run with a
 reference it shows `T_ref` (walls: exact), names the method and the earlier value in the source line, and says so when the
 value is provisional. The lecture note below still describes generation 2026-11-14 and is to be revised.
 
