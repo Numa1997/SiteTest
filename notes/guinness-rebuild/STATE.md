@@ -88,3 +88,5 @@ Reread first after any compaction. Prompt: `notes/fig16/PROMPT-computational-phy
 - Run 6 (GPU v9, area probes) closed M3: actuators after 3.3 s at most 0.4 N (run 5: 28 N). Packed on CPU v7; page rebuilt on CPU v8
   with the note corrected (centripetal sign fixed since run 5, burst explained). No further runs.
 - "Session finished" written in notes/fig16/STATE.md; report to the coordinator (session_01DGmqintkoYzahfGQQzdXYL); the inventory session is finished and asked not to be messaged.
+- 01:05 UTC: published, main 0387f0a; live checked with curl (index: 3 rides v8, 2 rides v9; note's new paragraph served).
+  The report to the coordinator failed: session_01DGmqintkoYzahfGQQzdXYL "not found". Reported to the owner in this chat instead.
