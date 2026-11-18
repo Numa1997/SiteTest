@@ -38,7 +38,6 @@
  {
   "date": "2026-11-18",
   "kind": "rt3d2",
-  "preview": true,
   "index": "2026-11-18/kaggle/index.json",
   "exact": "2026-11-13/derived/exact-1d.json",
   "runs": 3697,
@@ -72,7 +71,7 @@
    "discs": 72,
    "shells": 241
   },
-  "note": "Correction of generation 2026-11-14, whose barriers were sampled on the 0.5 a grid. Every stored run is checked against a reference T_ref: walls against the exact solution (superposition of stationary scattering states), discs against the exact axisymmetric (x, rho) reduction; gate |T_old - T_ref| <= max(0.005, 1 % of T_ref). A run that passes keeps its stored file; a run that fails is replaced by the reference file. Shells stored no transmission, so they are not gated and all take the (x, rho) file. provisional: T_unc > 0.005, the probability still inside the structure when the reference run stopped. Generation 2026-11-14 stays filed beside it, with its audit. While \"preview\" is true the page reads this generation only at ?gen=2026-11-18.",
+  "note": "Correction of generation 2026-11-14, whose barriers were sampled on the 0.5 a grid. Every stored run is checked against a reference T_ref: walls against the exact solution (superposition of stationary scattering states), discs against the exact axisymmetric (x, rho) reduction; gate |T_old - T_ref| <= max(0.005, 1 % of T_ref). A run that passes keeps its stored file; a run that fails is replaced by the reference file. Shells stored no transmission, so they are not gated and all take the (x, rho) file. provisional: T_unc > 0.005, the probability still inside the structure when the reference run stopped. Generation 2026-11-14 stays filed beside it, with its audit. The page plays this generation since 18 November 2026; ?gen=2026-11-14 shows the earlier one.",
   "bytes": 4439713712
  }
 ]
