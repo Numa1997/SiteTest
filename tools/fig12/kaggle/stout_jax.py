@@ -120,13 +120,18 @@ class Geometry:
             # a face is closed when the segment between the two cell centres it joins crosses a solid anywhere (9 points): the glass's
             # wall is thinner than two cells, and a face cut by it would otherwise couple the stout inside to the air outside through
             # the pressure (smoke test 1, 18 Nov 2026: the pint at rest leaked; review by the open-problems session)
-            u9 = (np.arange(9) / 8.0 - 0.5) * dx
+            # (only when both cell centres are open: a cell whose centre lies in the wall is a cut cell and keeps its face fractions,
+            # as in the old model; closing those too lost the liquid in the sliver beside the wall, smoke test 3-4: wall columns 1.4 mm low)
+            u9 = (np.arange(1, 8) / 8.0 - 0.5) * dx
             cu = np.ones_like(thu, bool); cv = np.ones_like(thv, bool); cw = np.ones_like(thw, bool)
+            eu = ~self.solid((xf - 0.5 * dx)[:, None, None], c[None, :, None], zc[None, None, :]) & ~self.solid((xf + 0.5 * dx)[:, None, None], c[None, :, None], zc[None, None, :])
+            ev = ~self.solid(c[:, None, None], (xf - 0.5 * dx)[None, :, None], zc[None, None, :]) & ~self.solid(c[:, None, None], (xf + 0.5 * dx)[None, :, None], zc[None, None, :])
+            ew = ~self.solid(c[:, None, None], c[None, :, None], (zf - 0.5 * dx)[None, None, :]) & ~self.solid(c[:, None, None], c[None, :, None], (zf + 0.5 * dx)[None, None, :])
             for d in u9:
                 cu &= ~self.solid((xf + d)[:, None, None], c[None, :, None], zc[None, None, :])
                 cv &= ~self.solid(c[:, None, None], (xf + d)[None, :, None], zc[None, None, :])
                 cw &= ~self.solid(c[:, None, None], c[None, :, None], (zf + d)[None, None, :])
-            thu = np.where(cu, thu, 0.0); thv = np.where(cv, thv, 0.0); thw = np.where(cw, thw, 0.0)
+            thu = np.where(cu | ~eu, thu, 0.0); thv = np.where(cv | ~ev, thv, 0.0); thw = np.where(cw | ~ew, thw, 0.0)
         self.thu, self.thv, self.thw = thu, thv, thw
         X, Y, Z = np.meshgrid(c, c, zc, indexing="ij"); r2 = X * X + Y * Y
         self.xc, self.zc = c, zc
