@@ -102,6 +102,22 @@ Update 12:55 (same day): his corrections to the sixth round, each rebuilt and sh
    curve normalised by ln 3.
 Unchanged from round six and not commented on: printing a chip.
 
+Update 13:10: verdict on the corrected six: "the final version of each one now is looking much better. Now add one more degree
+of complexity to each." Also the chip was rebuilt before that (he: chips are not printed in one parallel sweep): ~30 blocks traced
+at once, each from its own corner, then ~45 wires routed block to block through the channels, each with its own start and end.
+Added layers, shown in chat as one widget with six buttons, waiting for his verdict:
+ - Forest: generations. A grown seedling becomes a shedding tree itself; trees die of age (55-100 s; the first mother after 45 s),
+   crumble into falling debris that feeds the young; new sprouts appear (max 9 trees); runs for ever.
+ - Iron powder: a wire through the sheet whose current switches on and off (18 s cycle); its circular field (psi -= 0.5 I ln r^2)
+   adds to the magnets' field, so the lines wrap into rings round the wire and relax again.
+ - Harmonica: notes travel. Each hole's loudness is stored over time and every air speck feels it delayed by r/c (c = 140 px/s), so
+   a note starts as an expanding front and silence travels out after it; rests added to the tune.
+ - Spinners: the field is local and wanders (strength 16 exp(-d^2/33800) round a moving source) and neighbours couple weakly
+   (0.9 sin of the four neighbours' phase differences): an island of order moves through the disorder and decays behind.
+ - Mixing: real collisions (equal-mass elastic) and heat: triangles start fast, rings medium, squares slow; a dashed second curve
+   shows the spread of the species' kinetic energies falling as they reach one temperature.
+ - Chip: when the die is finished it is copied and stamped die by die across a wafer in a back-and-forth path.
+
 ## User's rules for this work
 - Merge and publish finished, tested work without asking; verify the live site; docs must describe the code.
 - Do only what is asked; reply in plain connected English; never use the user's name.
