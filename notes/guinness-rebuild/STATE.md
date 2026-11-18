@@ -90,3 +90,6 @@ Reread first after any compaction. Prompt: `notes/fig16/PROMPT-computational-phy
 - "Session finished" written in notes/fig16/STATE.md; report to the coordinator (session_01DGmqintkoYzahfGQQzdXYL); the inventory session is finished and asked not to be messaged.
 - 01:05 UTC: published, main 0387f0a; live checked with curl (index: 3 rides v8, 2 rides v9; note's new paragraph served).
   The report to the coordinator failed: session_01DGmqintkoYzahfGQQzdXYL "not found". Reported to the owner in this chat instead.
+- 04:16 UTC: owner: "Close all open problems in deploying a new session specialised in them." Handoff written
+  (notes/guinness-rebuild/HANDOFF-open-problems.md, main 470513e); new session session_01DGmqipAnEdVvBLCf7CLGmT started on main
+  with it. This chat stops work on the open problems.
