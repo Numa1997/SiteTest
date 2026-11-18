@@ -825,3 +825,11 @@ It computes nothing physical. The lighting, the gloss and the glass's tint are d
   `notes/fig12/damping-grid.json`).
 - So the stored swing without the head decays about three times too fast.
 - With the head (damping ratio 0.425) the method's share is under 4 %.
+
+## Where the Kaggle runs are now (18 November 2026)
+
+The Taichi notebooks named on this page, `guinness-on-a-cart-stout-sloshing` and `guinness-free-swing-v2`, were deleted from Kaggle.
+Every output of every version, its log, a manifest (size and SHA-256) and the exact code of every version (`v<N>/source.ipynb`) are in
+the private dataset `numakoudsie/fig12-guinness-on-a-cart`, folder `<notebook>/v<version>/`; `public/data/fig12/generations.json`
+names the folder of each generation. The JAX notebook `guinness-on-a-cart-stout-in-jax` stays on Kaggle (its outputs are also in the
+dataset). The figure's one notebook is `numakoudsie/fig-12-guinness-on-a-cart` (`tools/kaggle/figures/build.py`, `docs/kaggle-pipeline.md`).

@@ -542,15 +542,11 @@ site", the sources). The four columns are in the same order on all three pages (
 right to left. `notes/lucretius/make_page.py` writes the page and drops table entries that are no longer on it. Do not edit
 `public/lucretius.html` by hand: run `make_page.py`, then `tools/i18n/build.py`.
 
-**Background.** Since 18 November 2026: **currents and atoms**, over the whole page behind everything (`div.lp-deco`,
-`styles/lucretius-deco.css`). Two full-width SVG tiles (2400 × 1600 px, joining seamlessly from tile to tile), drawn by
-`notes/lucretius/make_bg.py`: `bg-d-lines.svg`, 66 wine lines in six braided currents running down the page, each line
-x(y) = X_c(y) + spread · u + Σₖ 0.5ᵏ A cos(2π mₖ y / H + φₖ) with whole numbers mₖ (so it closes on itself); and `bg-d-atoms.svg`,
-about 800 dots along those lines, mostly small, a few large and solid: Lucretius' atoms falling and swerving. The dot layer moves
-down one tile in 90 s (still under `prefers-reduced-motion`). Three soft wine radial glows sit under them. A mask keeps both layers at
-full strength in the margins and fades them, over the 160 px beside the 1240 px text block, to a sixth behind it; up to 760 px the
-tiles are smaller and the whole layer is fainter. The earlier margin strips stay reachable with `?bg=a` (recursive branches),
-`?bg=b` (Weierstrass lines) or `?bg=c` (spiral tendrils); a small script sets `html[data-bg]`.
+**Background.** Since 18 November 2026 (late) the page has no background ornament by default: a fractal engine
+(16 fractals grown on a canvas and carried off by a fluid, PR #143) was live for half an hour and removed at the user's request. The
+earlier backgrounds stay reachable by address, from `styles/lucretius-deco.css`: `?bg=d` currents and atoms (soft wine glows and two
+static SVG tiles, 2400 × 1600, from `notes/lucretius/make_bg.py`, the dots falling one tile in 90 s), `?bg=a` recursive branches,
+`?bg=b` Weierstrass lines, `?bg=c` spiral tendrils (margin strips). A small script in the page sets `html[data-bg]`.
 
 **The layout.** Since 13 November 2026 the poem is set flat and modern, with no paper sheet, frame, corner stars or ornament rows (`article.lp-book`, no border, no background). It opens with the head `div.lp-cols`, under a 1 px dark rule across the full width: for each language a small mono index in wine (01 to 04), the name in its own words (Latina, English, Deutsch, العربية; Instrument Serif 27 px, the Arabic in Amiri 24 px) and the credit in mono; a light rule under it; sticky at the top of the window on a translucent paper ground with a blur. Then the 20 verses (`section.lp`, address `#l146` and so on; `:target` tints the row; each section is named "Lines 146 to 148" and so on for screen readers). The verses stand in `div.lp-body`, so each
 language runs down its own column as one text: behind them `div.lp-rules` (a grid with the same columns) draws three plain light hairlines

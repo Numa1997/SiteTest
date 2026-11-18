@@ -4,7 +4,9 @@ Chat state written into the repository first (CLAUDE.md, "Write the chat's state
 reread this file and `BRIEF.md` before anything else. Keep it current at every step that changes what is live or what is left.
 Never write the owner's name in files of this folder.
 
-Last update: 18 November 2026. Phase 2: Fig. 12 and Fig. 14 organised (one notebook and one dataset each); Fig. 15 and 16 held.
+Last update: 18 November 2026. **Session finished** (owner: "You're done"). Fig. 15 and Fig. 16 report to their coordinator
+(session_01DGmqintkoYzahfGQQzdXYL); organising them (dataset + one notebook per figure, `tools/kaggle/figures/build.py`) is left
+for whichever session the owner or the coordinator assigns, once those sessions end. Phase 2: Fig. 12 and Fig. 14 organised (one notebook and one dataset each); Fig. 15 and 16 held.
 
 ## Aim
 
@@ -65,6 +67,14 @@ Done in Phase 2:
    correction has open steps), so held. Fig. 12's JAX notebook had two new versions (11, 12, 15 Nov, damping grid, commit 758df53):
    copied into dataset version 2 (100 files, 164 172 501 B; manifests in `datasets/fig12-guinness-on-a-cart/`), job `damping-grid`
    added to the Fig. 12 notebook, its version 2 ran `check`: ALL OK. Nothing deleted.
+
+11. 18 November 2026 (owner: "I don't know what to delete ... You do. Go ahead then"): code of every version of the 8 replaced
+   notebooks fetched (GetKernel with versionLabel) and added to both datasets as `<notebook>/v<N>/source.ipynb` (18 files, all
+   listed on Kaggle with exact sizes); then deleted, each HTTP 200, logged in `raw/kaggle-deletions.log`: Fig. 14's six,
+   `guinness-on-a-cart-stout-sloshing`, `guinness-free-swing-v2`. Kept: `guinness-on-a-cart-stout-in-jax` (used 15 Nov). Account: 31
+   notebooks, of which Fig. 12 and 14 hold 3 (the two figure notebooks and the JAX one). Docs updated (fig14, fig12, pipeline).
+   `docs/files.md` not regenerated: on `main` the check already fails on Fig. 16's new `tools/fig16/kaggle/diag_burst.py` (no
+   description); Fig. 16 is hands-off, so its session must add the rule. Not edited: `notes/fig12/handoff-control-session.md` (another session's handoff) still names the two Taichi notebooks.
 
 Held: Fig. 15 (`fig15-*`, 15 notebooks incl. the 3 `fig15-correction-walls-*` of the running correction session) and Fig. 16
 (`fig-16-guinness-cart-with-control`): not touched while those sessions run. 

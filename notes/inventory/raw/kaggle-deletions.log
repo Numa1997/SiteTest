@@ -10,3 +10,11 @@
 2026-11-14T13:32:42Z delete numakoudsie/schrodinger-shapes-3d-v2-c -> {} HTTP 200
 2026-11-14T13:32:43Z delete numakoudsie/schrodinger-shapes-3d-v2-d -> {} HTTP 200
 2026-11-14T13:40:12Z delete numakoudsie/schrodinger-sphere-3d-generation -> {} HTTP 200 (data and code in dataset numakoudsie/fig14-schrodinger-sphere)
+2026-11-18T00:29:38Z delete numakoudsie/schrodinger-sphere-full-grid -> {} HTTP 200 (owner: "Go ahead then", 18 Nov 2026; outputs and every version's code in dataset numakoudsie/fig14-schrodinger-sphere, checked)
+2026-11-18T00:29:38Z delete numakoudsie/schrodinger-sphere-3d-wave -> {} HTTP 200 (owner: "Go ahead then", 18 Nov 2026; outputs and every version's code in dataset numakoudsie/fig14-schrodinger-sphere, checked)
+2026-11-18T00:29:38Z delete numakoudsie/schrodinger-flat-wall -> {} HTTP 200 (owner: "Go ahead then", 18 Nov 2026; outputs and every version's code in dataset numakoudsie/fig14-schrodinger-sphere, checked)
+2026-11-18T00:29:39Z delete numakoudsie/schrodinger-pillar -> {} HTTP 200 (owner: "Go ahead then", 18 Nov 2026; outputs and every version's code in dataset numakoudsie/fig14-schrodinger-sphere, checked)
+2026-11-18T00:29:39Z delete numakoudsie/schrodinger-spherical-wave -> {} HTTP 200 (owner: "Go ahead then", 18 Nov 2026; outputs and every version's code in dataset numakoudsie/fig14-schrodinger-sphere, checked)
+2026-11-18T00:29:39Z delete numakoudsie/schrodinger-shapes-3d -> {} HTTP 200 (owner: "Go ahead then", 18 Nov 2026; outputs and every version's code in dataset numakoudsie/fig14-schrodinger-sphere, checked)
+2026-11-18T00:29:40Z delete numakoudsie/guinness-on-a-cart-stout-sloshing -> {} HTTP 200 (owner: "Go ahead then", 18 Nov 2026; outputs and every version's code in dataset numakoudsie/fig12-guinness-on-a-cart, checked)
+2026-11-18T00:29:41Z delete numakoudsie/guinness-free-swing-v2 -> {} HTTP 200 (owner: "Go ahead then", 18 Nov 2026; outputs and every version's code in dataset numakoudsie/fig12-guinness-on-a-cart, checked)

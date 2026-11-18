@@ -38,3 +38,7 @@ repository from the `.npz` files here; the `.npz` exist only in this dataset.
 Added 18 November 2026 (dataset version 2): versions 11 and 12 of guinness-on-a-cart-stout-in-jax, run 15 November 2026, the
 damping-grid study (`tools/fig12/kaggle/damping_grid.py`, commit 758df533; `damping/damping.json` and `progress.log`); version 12's
 code is in `v12/source.ipynb`. `source-current-version.ipynb` stays the code of version 10, the run the site plays.
+
+Added 18 November 2026: `v<version>/source.ipynb`, the exact code of every version of every notebook in this dataset except
+guinness-on-a-cart-stout-in-jax (kept on Kaggle), fetched with the Kaggle API (GetKernel, versionLabel) before the old notebooks were
+deleted. The one notebook of the figure is now fig-14-schrodinger-sphere / fig-12-guinness-on-a-cart; it runs every job from this code.
