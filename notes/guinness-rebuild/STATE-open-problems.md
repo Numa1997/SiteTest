@@ -60,3 +60,12 @@ Close the six open problems of the handoff, one at a time, in its order. Merge f
   claude/guinness-realism as 6ec7f73 (my files): guinness16-play.js ?no3d=1 skips the 3D close-ups; panel16_check loads with no3d=1 and
   has a 25-min limit. Its edit to guinness16-play.js (setCart/setPose for close.b) reviewed: fine. My CPU v18 runs panel16_check on the
   joint branch (30-min limit). Merge to main = one merge of claude/guinness-realism after it passes.
+
+## Owner's three faults (18 Nov evening): wheels, spill all over the place, stout drawn as particles
+- Owner rejects the look session's picture; claude/guinness-realism is NOT to be merged. I took the drawing files back
+  (stout-view.js, stout-view2.js, cart16-view.js), told the look session.
+- Wheels: d18338a4 on claude/guinness-open-problems: smear = real angle turned since last picture, capped at 0.12 rad (WheelBlur in
+  stout-view.js, used by cart16-view.js); one gold spoke (period 360°, so no backward strobing above ~12 pictures/s). Docs updated.
+- CPU v20 (30-min limit): node --check, spill_shots.py (7 shots, kerb_off/kerb_full), panel16_check.py on d18338a4.
+  If it passes: merge to main, curl live for WheelBlur. Then fix spill/particles in stout-view2.js from the shots.
+- Problem 5 GPU (~20 T4-min) still waits for the owner's yes.
