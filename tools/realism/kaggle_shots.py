@@ -7,7 +7,7 @@ Nothing runs outside Kaggle (owner, 15 and 18 November 2026). Steps:
      figure's canvas alone, at device scale 2; the stored rides are moved to the moment with the page's own seek();
   5. /kaggle/working/shots/*.png, shots.log, manifest.json (file, page, width, ride, t, console errors).
 Environment: COMMIT, FIG ("12" or "16"), TAG (e.g. "before")."""
-import io, json, os, subprocess, sys, tarfile, urllib.request
+import io, json, os, subprocess, sys, tarfile, time, urllib.request
 
 COMMIT = os.environ["COMMIT"]; FIG = os.environ["FIG"]; TAG = os.environ.get("TAG", "before")
 WORK = "/kaggle/working"; OUT = os.path.join(WORK, "shots"); REPO = "/tmp/repo"; os.makedirs(OUT, exist_ok=True)
@@ -59,17 +59,25 @@ with sync_playwright() as pw:
             pg.route(lambda u: "local.test" in u, serve); pg.route(lambda u: "local.test" not in u, lambda r: r.abort())
             pg.goto(f"http://local.test/{page}" + (f"?ride={ride}" if ride else "")); pg.wait_for_timeout(6000)
             for t in moments:
-                if seek: pg.evaluate(f"(t) => window.{seek}.seek(t)", t); pg.wait_for_timeout(1500)
-                else: pg.wait_for_timeout(int(t * 1000) if t == moments[0] else int((t - moments[moments.index(t) - 1]) * 1000))
-                stem = f"{TAG}_fig{FIG}_{os.path.basename(page)[:-5]}_{(ride or 'live')[:-5] if ride else 'live'}_{w}_t{t:.1f}"
-                pg.screenshot(path=os.path.join(OUT, stem + "_screen.png"))
-                cv = pg.locator(sel).first
+                # the stored rides are paused by seek(); without a graphics card (Kaggle CPU) Chromium draws WebGL in software,
+                # so one frame can take seconds: allow 3 minutes per picture and never let one failed picture stop the run
                 try:
-                    cv.scroll_into_view_if_needed(); cv.screenshot(path=os.path.join(OUT, stem + "_figure.png")); fig_ok = True
+                    if seek: pg.evaluate(f"(t) => window.{seek}.seek(t)", t); pg.wait_for_timeout(3000)
+                    else: pg.wait_for_timeout(int(t * 1000) if t == moments[0] else int((t - moments[moments.index(t) - 1]) * 1000))
                 except Exception as e:
-                    fig_ok = False; errs.append(f"figure shot: {e}")
-                manifest.append({"file": stem, "page": page, "width": w, "ride": ride, "t": t, "figure_shot": fig_ok, "errors": list(errs)})
-                log(f"{stem}: figure {'ok' if fig_ok else 'MISSING'}, {len(errs)} console errors")
+                    errs.append(f"seek: {e}")
+                stem = f"{TAG}_fig{FIG}_{os.path.basename(page)[:-5]}_{ride[:-5] if ride else 'live'}_{w}_t{t:.1f}"
+                shots = {}
+                for kind, target in (("screen", pg), ("figure", pg.locator(sel).first)):
+                    t0 = time.time()
+                    try:
+                        if kind == "figure": target.scroll_into_view_if_needed(timeout=60000)
+                        target.screenshot(path=os.path.join(OUT, f"{stem}_{kind}.png"), timeout=180000); shots[kind] = round(time.time() - t0, 1)
+                    except Exception as e:
+                        shots[kind] = None; errs.append(f"{kind} shot: {str(e)[:300]}")
+                manifest.append({"file": stem, "page": page, "width": w, "ride": ride, "t": t, "seconds": shots, "errors": list(errs)})
+                log(f"{stem}: " + ", ".join(f"{k} {'MISSING' if v is None else f'{v} s'}" for k, v in shots.items()) + f", {len(errs)} errors")
+                json.dump(manifest, open(os.path.join(WORK, "manifest.json"), "w"), indent=1)
             ctx.close()
     b.close()
 json.dump(manifest, open(os.path.join(WORK, "manifest.json"), "w"), indent=1)
