@@ -1,0 +1,27 @@
+[    0.5 s] devices: [CudaDevice(id=0), CudaDevice(id=1)] jax 0.11.1 shell convergence
+[   16.1 s] S shell_N2_V2_D1_P2.5_R3_B0_s3_E0.750.bin Rmax 64 Nr 256 Wr 12: T 0.612247 +- 4.1e-02 drift 1.9e-03 13104 steps 1.017 ms/step cells 786432 wall 15.6 s
+[   39.9 s] S shell_N2_V2_D1_P2.5_R3_B0_s3_E0.750.bin Rmax 96 Nr 384 Wr 12: T 0.621971 +- 2.6e-02 drift 2.4e-03 13104 steps 1.668 ms/step cells 1179648 wall 23.8 s
+[   75.0 s] S shell_N2_V2_D1_P2.5_R3_B0_s3_E0.750.bin Rmax 128 Nr 512 Wr 24: T 0.625080 +- 2.1e-02 drift 2.6e-03 13104 steps 2.518 ms/step cells 1572864 wall 35.1 s
+[  127.3 s] S shell_N2_V2_D1_P2.5_R3_B0_s3_E0.750.bin Rmax 160 Nr 640 Wr 24: T 0.627703 +- 1.7e-02 drift 2.8e-03 13104 steps 3.733 ms/step cells 1966080 wall 52.3 s
+[  196.2 s] S shell_N2_V2_D1_P2.5_R3_B0_s3_E0.750.bin Rmax 192 Nr 768 Wr 24: T 0.628453 +- 1.6e-02 drift 2.9e-03 13104 steps 4.954 ms/step cells 2359296 wall 68.9 s
+[  196.2 s] S shell_N2_V2_D1_P2.5_R3_B0_s3_E0.750.bin T(Rmax): 64: 0.61225, 96: 0.62197, 128: 0.62508, 160: 0.62770, 192: 0.62845
+[  212.2 s] S shell_N2_V2_D1_P2.5_R5_B0_s3_E0.300.bin Rmax 64 Nr 256 Wr 12: T 0.507017 +- 5.1e-02 drift 3.1e-03 16107 steps 0.942 ms/step cells 786432 wall 16.0 s
+[  242.5 s] S shell_N2_V2_D1_P2.5_R5_B0_s3_E0.300.bin Rmax 96 Nr 384 Wr 12: T 0.519049 +- 3.4e-02 drift 3.8e-03 16107 steps 1.786 ms/step cells 1179648 wall 30.3 s
+[  285.8 s] S shell_N2_V2_D1_P2.5_R5_B0_s3_E0.300.bin Rmax 128 Nr 512 Wr 24: T 0.522524 +- 2.9e-02 drift 4.0e-03 16107 steps 2.556 ms/step cells 1572864 wall 43.3 s
+[  347.3 s] S shell_N2_V2_D1_P2.5_R5_B0_s3_E0.300.bin Rmax 160 Nr 640 Wr 24: T 0.524471 +- 2.6e-02 drift 4.1e-03 16107 steps 3.621 ms/step cells 1966080 wall 61.5 s
+[  429.2 s] S shell_N2_V2_D1_P2.5_R5_B0_s3_E0.300.bin Rmax 192 Nr 768 Wr 24: T 0.524767 +- 2.6e-02 drift 4.1e-03 16107 steps 4.849 ms/step cells 2359296 wall 81.9 s
+[  429.2 s] S shell_N2_V2_D1_P2.5_R5_B0_s3_E0.300.bin T(Rmax): 64: 0.50702, 96: 0.51905, 128: 0.52252, 160: 0.52447, 192: 0.52477
+[  441.0 s] S shell_N1_V2_D1_P2.5_R3_B0_s3_E1.500.bin Rmax 64 Nr 256 Wr 12: T 0.837630 +- 1.1e-02 drift 8.2e-04 11505 steps 0.970 ms/step cells 786432 wall 11.8 s
+[  463.2 s] S shell_N1_V2_D1_P2.5_R3_B0_s3_E1.500.bin Rmax 96 Nr 384 Wr 12: T 0.840102 +- 6.8e-03 drift 9.5e-04 11505 steps 1.823 ms/step cells 1179648 wall 22.2 s
+[  494.9 s] S shell_N1_V2_D1_P2.5_R3_B0_s3_E1.500.bin Rmax 128 Nr 512 Wr 24: T 0.840932 +- 5.4e-03 drift 1.0e-03 11505 steps 2.613 ms/step cells 1572864 wall 31.6 s
+[  539.3 s] S shell_N1_V2_D1_P2.5_R3_B0_s3_E1.500.bin Rmax 160 Nr 640 Wr 24: T 0.841653 +- 4.2e-03 drift 1.1e-03 11505 steps 3.643 ms/step cells 1966080 wall 44.4 s
+[  598.6 s] S shell_N1_V2_D1_P2.5_R3_B0_s3_E1.500.bin Rmax 192 Nr 768 Wr 24: T 0.842089 +- 3.4e-03 drift 1.2e-03 11505 steps 4.897 ms/step cells 2359296 wall 59.3 s
+[  598.6 s] S shell_N1_V2_D1_P2.5_R3_B0_s3_E1.500.bin T(Rmax): 64: 0.83763, 96: 0.84010, 128: 0.84093, 160: 0.84165, 192: 0.84209
+[  611.8 s] S shell_N1_V2_D1_P2.5_R5_B0_s3_E0.750.bin Rmax 64 Nr 256 Wr 12: T 0.634798 +- 3.4e-02 drift 1.9e-03 13104 steps 0.956 ms/step cells 786432 wall 13.2 s
+[  636.3 s] S shell_N1_V2_D1_P2.5_R5_B0_s3_E0.750.bin Rmax 96 Nr 384 Wr 12: T 0.642217 +- 2.2e-02 drift 2.4e-03 13104 steps 1.793 ms/step cells 1179648 wall 24.5 s
+[  671.6 s] S shell_N1_V2_D1_P2.5_R5_B0_s3_E0.750.bin Rmax 128 Nr 512 Wr 24: T 0.644735 +- 1.9e-02 drift 2.5e-03 13104 steps 2.579 ms/step cells 1572864 wall 35.3 s
+[  720.7 s] S shell_N1_V2_D1_P2.5_R5_B0_s3_E0.750.bin Rmax 160 Nr 640 Wr 24: T 0.646734 +- 1.5e-02 drift 2.7e-03 13104 steps 3.596 ms/step cells 1966080 wall 49.2 s
+[  787.4 s] S shell_N1_V2_D1_P2.5_R5_B0_s3_E0.750.bin Rmax 192 Nr 768 Wr 24: T 0.647445 +- 1.4e-02 drift 2.8e-03 13104 steps 4.894 ms/step cells 2359296 wall 66.7 s
+[  787.4 s] S shell_N1_V2_D1_P2.5_R5_B0_s3_E0.750.bin T(Rmax): 64: 0.63480, 96: 0.64222, 128: 0.64474, 160: 0.64673, 192: 0.64745
+[ 1473.5 s] S shell_N2_V2_D1_P2.5_R3_B0_s3_E0.750.bin Rmax 160 c128: T 0.628891 +- 1.7e-02 drift 5.7e-12 13104 steps 52.182 ms/step cells 1966080 wall 686.1 s
+[ 1473.5 s] S shellconv done: smallest converged Rmax = 160.0

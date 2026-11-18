@@ -626,6 +626,14 @@
             ds.var('T_twin', [], 'float', { symbol: 'T_1D', long_name: 'walls: transmitted share of the exact 1D twin (same grid, border losses counted)', computed_in: 'Kaggle run header', digits: 4 });
             ds.var('T_exact', [], 'float', { symbol: 'T̄', long_name: 'walls without voltage: the exact transfer-matrix packet average', computed_in: 'Kaggle run header', digits: 4 });
             ds.var('tau', [], 'float', { symbol: 'τ', long_name: 'lifetime of the trapped wave, fitted to the stored P(t)', computed_in: 'file_rt3d2.py', digits: 2 });
+            ds.var('status', [], 'str', { symbol: 'status', long_name: 'kept (the stored run passed its check), rebuilt (wall, exact) or recomputed (disc or shell, (x, ρ) run)', computed_in: 'file_corrected.py' });
+            ds.var('T_ref', [], 'float', { symbol: 'T_ref', long_name: 'reference share through: walls exact (stationary scattering states), discs and shells the axisymmetric (x, ρ) run', computed_in: 'exact_wall_jax.py, axisym_jax.py (Kaggle)', digits: 4 });
+            ds.var('T_old', [], 'float', { symbol: 'T_old', long_name: 'the earlier 3D run’s T_far (none for shells: their index held no transmission)', computed_in: '2026-11-14/kaggle/index.json', digits: 4 });
+            ds.var('err', [], 'float', { symbol: 'T_old − T_ref', long_name: 'error of the earlier run against the reference', computed_in: 'file_corrected.py', formula: 'T_old − T_ref', digits: 4 });
+            ds.var('gate', [], 'bool', { symbol: 'gate ✓', long_name: '|T_old − T_ref| ≤ max(0.005, 1 % of T_ref)', computed_in: 'file_corrected.py' });
+            ds.var('T_unc', [], 'float', { symbol: 'T_unc', long_name: 'discs and shells: probability still inside the structure when the reference run stopped; T_ref is undecided by up to this much', computed_in: 'axisym_jax.py (Kaggle)', digits: 4 });
+            ds.var('drift', [], 'float', { symbol: 'δN', long_name: 'discs and shells: norm drift of the complex64 reference run', computed_in: 'axisym_jax.py (Kaggle)', digits: 4 });
+            ds.var('provisional', [], 'bool', { symbol: 'provisional', long_name: 'T_unc > 0.005', computed_in: 'file_corrected.py' });
             ds.var('frame_ms', [], 'float', { symbol: 'Δt_screen', units: 'ms', long_name: 'median time between screen frames, last 240', computed_in: 'clock', digits: 1 });
         }
         function writeRunStore() {
@@ -634,6 +642,9 @@
             ds.set('size', s.R); ds.set('bias', s.bias); ds.set('sx', s.sx); ds.set('E', h.E); ds.set('view', VIEW === 're' ? 'Re ψ' : '|ψ|²'); ds.set('gain', GAIN);
             ds.set('file', r.file); ds.set('notebook', r.notebook ? r.notebook + ' v' + r.version : 'correction of ' + (r.parent ? r.parent.notebook : '?')); ds.set('sha_ok', run.sha_ok); ds.set('peak_max', run.peakMax);
             ds.set('T_far', r.T_far ? r.T_far.value : NaN); ds.set('T_far_frame', r.T_far ? r.T_far.frame : -1);
+            ds.set('status', r.status || 'generation ' + GEN.date); ds.set('T_ref', r.T_ref != null ? r.T_ref : NaN); ds.set('T_old', r.T_old != null ? r.T_old : NaN);
+            ds.set('err', r.error != null ? r.error : NaN); ds.set('gate', r.gate == null ? '—' : r.gate); ds.set('T_unc', r.T_unc != null ? r.T_unc : NaN);
+            ds.set('drift', r.drift != null ? r.drift : NaN); ds.set('provisional', r.provisional == null ? '—' : r.provisional);
             ds.set('T_twin', r.twin ? r.twin.T : NaN); ds.set('T_exact', r.twin && r.twin.T_exact != null ? r.twin.T_exact : NaN); ds.set('tau', r.tau ? r.tau.tau : NaN);
             var txt = 'This run is <code>' + r.file + '</code>, ' + (r.notebook ? 'computed on Kaggle (' + r.notebook + ', version ' + r.version + ', solver at commit <code>' + r.commit.slice(0, 7) + '</code>) on a ' + h.box.join(' × ') + ' grid, ' + h.steps + ' steps in ' + h.wall.toFixed(0) + ' s. ' : (r.status === 'rebuilt' ? 'rebuilt exactly' : 'recomputed') + ' on Kaggle in the correction of 15 November 2026 (' + r.method + '), written at the stored frame times and output grid; it replaces the run of ' + (r.parent ? r.parent.notebook : 'the earlier generation') + (r.T_old != null ? ', which failed the check against it. ' : ', whose stored index held no transmission to check. ')) +
                 (run.sha_ok ? 'Its SHA-256 matched the index.' : '<b style="color:var(--accent)">Its SHA-256 did NOT match the index.</b>') + ' The page interpolates between its ' + h.n + ' stored frames and computes nothing else. ' + IDX.runs.length + ' runs are stored in all.';
@@ -681,11 +692,13 @@
             groups: [
                 { title: 'What you set', note: 'the barriers, the voltage, the packet and the drawing', vars: ['shape', 'N', 'V0', 'D', 'P', 'size', 'bias', 'sx', 'E', 'k0', 'view', 'gain'] },
                 { title: 'The stored run', note: 'read from the Kaggle file and its index entry', vars: ['file', 'notebook', 'sha_ok', 'peak_max', 'T_far', 'T_far_frame', 'T_twin', 'T_exact', 'tau'] },
+                { title: 'The check against the reference', note: 'from the corrected index (generation 2026-11-18); empty for an earlier generation', vars: ['status', 'T_ref', 'T_old', 'err', 'gate', 'T_unc', 'drift', 'provisional'] },
                 { title: 'This frame', note: 'region probabilities are stored per frame and interpolated linearly in t; the wave in the frame turning at E', vars: ['t', 'frame', 'P_a', 'P_b', 'P_c', 'norm', 'lost', 'frame_ms'] }
             ],
             check: {
                 k0: function () { return { formula: '√(2E)', inputs: [['E', ds.get('E'), '', 3]], value: Math.sqrt(2 * ds.get('E')) }; },
                 lost: function () { return { formula: '1 − P_box', inputs: [['P_box', ds.get('norm'), '', 5]], value: 1 - ds.get('norm') }; },
+                err: function () { var r = run.rec; if (r.T_old == null || r.T_ref == null) return null; return { formula: 'T_old − T_ref', inputs: [['T_old', r.T_old, '', 6], ['T_ref', r.T_ref, '', 7]], value: r.T_old - r.T_ref }; },
                 T_far: function () {
                     var r = run.rec, C = run.C; if (!r.T_far) return null; var f = r.T_far.frame, inr = C.well ? C.well[f] : 0;
                     return { formula: '(P_beyond + P_between / 2) / P_box at frame f*', inputs: [['P_beyond', C.right[f], '', 6], ['P_between', inr, '', 6], ['P_box', C.norm[f], '', 6]], value: (C.right[f] + 0.5 * inr) / C.norm[f] };

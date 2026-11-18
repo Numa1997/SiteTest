@@ -1,0 +1,527 @@
+0.00s - Debugger warning: It seems that frozen modules are being used, which may
+0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off
+0.00s - to python to disable frozen modules.
+0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.
+0.00s - Debugger warning: It seems that frozen modules are being used, which may
+0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off
+0.00s - to python to disable frozen modules.
+0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.
+[CudaDevice(id=0), CudaDevice(id=1)]
+==================== axisym.py ====================
+"""Fig. 15 correction, discs and shells: the exact reduction to two dimensions (x, rho), and a reference solver for it.
+
+The packet starts on the x axis and flies along it; discs are centred on that axis and shells on the origin, which lies on it.
+So psi does not depend on the angle about the axis (m = 0), and with hbar = m = 1
+    i d psi/dt = -1/2 (d^2/dx^2 + d^2/drho^2 + (1/rho) d/drho) psi + V(x, rho) psi.
+This is the 3D problem, exactly, on a 2D grid.
+
+Scheme: Strang split-step. The kinetic factor exp(-i (kx^2 + krho^2) dt / 2) is applied exactly: FFT along x, and along rho the
+quasi-discrete Hankel transform of order 0 (Guizar-Sicairos and Gutierrez-Vega, J. Opt. Soc. Am. A 21, 53 (2004)): with j_n the
+zeros of J0, S = j_{N+1}, nodes rho_n = j_n Rmax / S, wave numbers k_n = j_n / Rmax, and the symmetric matrix
+    T_mn = 2 J0(j_m j_n / S) / (S |J1(j_m)| |J1(j_n)|),
+the scaled field u_n = psi(rho_n) / |J1(j_n)| transforms as u -> T u. T is made exactly orthogonal (T (T^2)^(-1/2)), so the free
+step M = T diag(exp(-i k^2 dt/2)) T is unitary. Norm: Int |psi|^2 2 pi rho drho dx = (4 pi Rmax^2 / S^2) sum |u|^2 hx.
+V is held as cell averages ('cell': each x cell of width hx and each rho cell between midpoints of nodes, the share of the cell
+inside a barrier), or by rt3d2's drawing rules ('rt3d2': V0 on x points strictly inside a barrier; across, the azimuthal average of
+the 0.5 a Cartesian staircase disc, which is what the m = 0 wave sees of it).
+Absorbing borders: sin^(1/8) on the outer tenth of the x box (as rt3d2) and on the outer Wrho of the rho range. What they absorb is
+counted by where it was taken: x < xl (reflected), x > xr (transmitted), between (undecided).
+T_ref = P(x > xr) + absorbed(x > xr) + (P(between) + absorbed(between)) / 2 at the end; the undecided half is the uncertainty.
+complex128 throughout.
+"""
+import numpy as np
+from scipy.special import jn_zeros, j0, j1
+
+POW = 0.125
+
+
+def qdht(N, Rmax):
+    j = jn_zeros(0, N + 1); S = j[-1]; jn = j[:-1]
+    T = 2 * j0(np.outer(jn, jn) / S) / (S * np.outer(np.abs(j1(jn)), np.abs(j1(jn))))
+    w, U = np.linalg.eigh(T @ T); T = T @ (U * w ** -0.5) @ U.T       # exactly orthogonal, symmetric
+    T = 0.5 * (T + T.T)
+    rho = jn * Rmax / S; k = jn / Rmax; J1 = np.abs(j1(jn))
+    wq = 4 * np.pi * Rmax**2 / S**2      # sum |u|^2 * wq * hx = Int |psi|^2 dV
+    # rho cell edges (midpoints between nodes, 0 at the axis, Rmax at the end), for cell averages
+    e = np.r_[0.0, 0.5 * (rho[1:] + rho[:-1]), Rmax]
+    return dict(T=T, rho=rho, k=k, J1=J1, wq=wq, edges=e, S=S, Rmax=Rmax)
+
+
+def border(n, W):
+    m = np.ones(n); e = np.arange(W); m[:W] = np.sin(0.5 * np.pi * e / W) ** POW; m[-W:] = m[:W][::-1]; return m
+
+
+def centres(sp):
+    N, P, D = sp["N"], sp["P"], sp["D"]
+    for c in (0.0, 0.25):
+        cs = [c + (k - (N - 1) / 2) * P for k in range(N)]
+        faces = [f for ck in cs for f in (ck - D / 2, ck + D / 2)]
+        if all(abs((f - 0.25) / 0.5 - round((f - 0.25) / 0.5)) < 1e-9 for f in faces): return cs
+    raise ValueError
+
+
+def extent(sp):
+    if sp["shape"] == "shell":
+        Ro = sp["R"] + (sp["N"] - 1) * sp["P"] + sp["D"] / 2; return -Ro, Ro
+    cs = centres(sp); return cs[0] - sp["D"] / 2, cs[-1] + sp["D"] / 2
+
+
+def x0_of(sp):
+    return extent(sp)[0] - max(14.0, 4 * sp["sx"])
+
+
+def overlap(a, b, lo, hi):
+    """length of [a, b] inside [lo, hi], elementwise over arrays a, b"""
+    return np.clip(np.minimum(b, hi) - np.maximum(a, lo), 0, None)
+
+
+def staircase_disc_profile(rho, R, h=0.5, nth=720):
+    """Azimuthal average of rt3d2's Cartesian disc (cells of the 0.5 grid whose centre lies strictly inside R)."""
+    th = (np.arange(nth) + 0.5) * np.pi / 2 / nth
+    y = rho[:, None] * np.cos(th)[None]; z = rho[:, None] * np.sin(th)[None]
+    yc = np.round(y / h) * h; zc = np.round(z / h) * h
+    return ((yc**2 + zc**2) < R**2).mean(1)
+
+
+def potential(sp, x, hx, Q, rule="cell", sub=8):
+    """V(x, rho) on the grid (Nx, Nrho) and the region masks."""
+    rho, e = Q["rho"], Q["edges"]; D, V0 = sp["D"], sp["V0"]; xl, xr = extent(sp)
+    if sp["shape"] in ("flat", "coin"):
+        cs = centres(sp)
+        if rule == "rt3d2":
+            fx = np.zeros_like(x)
+            for c in cs: fx += (np.abs(x - c) < D / 2)
+        else:
+            fx = sum(overlap(x - hx / 2, x + hx / 2, c - D / 2, c + D / 2) for c in cs) / hx
+        if sp["shape"] == "flat": fr = np.ones_like(rho)
+        elif rule == "rt3d2": fr = staircase_disc_profile(rho, sp["R"])
+        else: fr = np.clip((np.minimum(e[1:], sp["R"])**2 - e[:-1]**2) / (e[1:]**2 - e[:-1]**2), 0, 1)
+        V = V0 * fx[:, None] * fr[None, :]
+    else:
+        Rs = [sp["R"] + k * sp["P"] for k in range(sp["N"])]
+        if rule == "rt3d2":
+            # the Cartesian staircase: r of the nearest 0.5 grid point; azimuthal average over the cross-section
+            th = (np.arange(180) + 0.5) * np.pi / 2 / 180
+            yc = np.round(rho[:, None] * np.cos(th) / 0.5) * 0.5; zc = np.round(rho[:, None] * np.sin(th) / 0.5) * 0.5
+            r2c = yc**2 + zc**2; xc = np.round((x - 0.0) / 0.5) * 0.5
+            V = np.empty((len(x), len(rho)))
+            for a in range(0, len(x), 256):
+                rr = np.sqrt(xc[a:a + 256, None, None]**2 + r2c[None])
+                ins = np.zeros(rr.shape, bool)
+                for Rc in Rs: ins |= np.abs(rr - Rc) < D / 2
+                V[a:a + 256] = V0 * ins.mean(2)
+        else:
+            # cell averages by sub x sub sampling, area-weighted in rho
+            u = (np.arange(sub) + 0.5) / sub
+            xs = (x[:, None] - hx / 2 + hx * u[None])                       # (Nx, sub)
+            rs = e[:-1, None] + (e[1:] - e[:-1])[:, None] * u[None]         # (Nr, sub)
+            wr = rs / rs.sum(1, keepdims=True)
+            V = np.empty((len(x), len(rho)))
+            for a in range(0, len(x), 256):                                 # chunks of x keep memory small
+                r = np.sqrt(xs[a:a + 256, :, None, None]**2 + rs[None, None]**2)   # (chunk, sub, Nr, sub)
+                ins = np.zeros(r.shape, bool)
+                for Rc in Rs: ins |= np.abs(r - Rc) < D / 2
+                V[a:a + 256] = V0 * (ins * wr[None, None]).sum(3).mean(1)
+    if sp.get("bias"):
+        V = V - sp["bias"] * np.clip((x - xl) / (xr - xl), 0, 1)[:, None]
+    X = x[:, None]; Rh = rho[None, :]
+    if sp["shape"] in ("flat", "coin"):
+        cs = centres(sp); slab = np.zeros_like(x, bool)
+        for c in cs: slab |= np.abs(x - c) < D / 2
+        lat = np.ones_like(rho, bool) if sp["shape"] == "flat" else rho < sp["R"]
+        reg = dict(left=np.broadcast_to(X < xl, V.shape), right=np.broadcast_to(X > xr, V.shape))
+        if len(cs) > 1:
+            reg["well"] = ((x > cs[0] + D / 2) & (x < cs[-1] - D / 2) & ~slab)[:, None] & lat[None, :]
+    else:
+        Rs = [sp["R"] + k * sp["P"] for k in range(sp["N"])]; r = np.sqrt(X**2 + Rh**2)
+        ins = np.zeros(r.shape, bool)
+        for Rc in Rs: ins |= np.abs(r - Rc) < D / 2
+        reg = dict(core=r < Rs[0] - D / 2, out=r > Rs[-1] + D / 2)
+        if len(Rs) > 1: reg["gap"] = (r > Rs[0] + D / 2) & (r < Rs[-1] - D / 2) & ~ins
+    side = dict(L=np.broadcast_to(X < xl, V.shape), R=np.broadcast_to(X > xr, V.shape))
+    side["M"] = ~(side["L"] | side["R"])
+    return V, reg, side
+
+
+def run(sp, t_end, hx=0.125, Lx=None, Nr=160, Rmax=40.0, Wr=8.0, dt=0.01, nframes=200, rule="cell", keep_frames=False):
+    Lx = Lx or sp["Nx"] * 0.5
+    Nx = int(round(Lx / hx)); x = (np.arange(Nx) - Nx // 2) * hx
+    kx = 2 * np.pi * np.fft.fftfreq(Nx, hx)
+    Q = qdht(Nr, Rmax); rho = Q["rho"]
+    mx = border(Nx, max(4, Nx // 10)); mr = np.ones(Nr); W = rho > Rmax - Wr
+    nW = int(W.sum()); e = np.arange(nW)[::-1]; mr[W] = np.sin(0.5 * np.pi * e / nW) ** POW
+    mask = mx[:, None] * mr[None, :]
+    V, reg, side = potential(sp, x, hx, Q, rule)
+    k0 = np.sqrt(2 * sp["E"]); x0 = x0_of(sp)
+    psi = np.exp(-(x[:, None] - x0)**2 / (4 * sp["sx"]**2) - rho[None, :]**2 / (4 * sp["sp"]**2) + 1j * k0 * x[:, None])
+    u = psi / Q["J1"][None, :]
+    wq = Q["wq"] * hx
+    u /= np.sqrt((np.abs(u)**2).sum() * wq)
+    inside = V > 0.5 * sp["V0"] if sp["V0"] > 0 else np.zeros_like(V, bool)
+    start_in_barrier = float((np.abs(u)**2 * (V != 0) * (np.abs(V) > 0)).sum() * wq) if not sp.get("bias") else None
+    hv = np.exp(-0.5j * V * dt)
+    Mr = Q["T"] @ (np.exp(-0.5j * Q["k"]**2 * dt)[:, None] * Q["T"])
+    Dx = np.exp(-0.5j * kx**2 * dt)[:, None]
+    steps = int(round(t_end / dt)); per = max(1, steps // (nframes - 1))
+    absorbed = dict(L=0.0, R=0.0, M=0.0); absorbed_r = dict(L=0.0, R=0.0, M=0.0)
+    curves = []; frames = []
+    names = ["t", "norm"] + sorted(reg) + ["absL", "absR", "absM"]
+    rho2 = lambda a: np.abs(a)**2 * wq
+    for f in range(nframes):
+        for _ in range(per if f else 0):
+            u = hv * u
+            u = np.fft.ifft(Dx * np.fft.fft(u, axis=0), axis=0) @ Mr
+            u = hv * u
+            before = np.abs(u)**2
+            u = u * mask
+            lost = (before - np.abs(u)**2) * wq
+            for s_, m in side.items(): absorbed[s_] += float(lost[m].sum())
+        d = rho2(u)
+        curves.append([f * per * dt, float(d.sum())] + [float(d[m].sum()) for _, m in sorted(reg.items())] +
+                      [absorbed["L"], absorbed["R"], absorbed["M"]])
+        if keep_frames: frames.append((u * Q["J1"][None, :]).copy())
+    C = np.array(curves)
+    cn = {n: C[:, i] for i, n in enumerate(names)}
+    d = rho2(u); P_R = float(d[side["R"]].sum()); P_M = float(d[side["M"]].sum())
+    T = P_R + absorbed["R"] + 0.5 * (P_M + absorbed["M"])
+    out = dict(T=T, T_unc=0.5 * (P_M + absorbed["M"]), curves=C, names=names, x=x, rho=rho, steps=per * (nframes - 1),
+               frame_dt=per * dt, wq=wq, V=V, start_in_barrier=start_in_barrier)
+    if keep_frames: out["frames"] = frames
+    return out
+
+==================== axisym_jax.py ====================
+"""Fig. 15 correction, discs and shells: the axisymmetric (x, rho) solver of axisym.py in JAX, for the GPU (and CPU checks).
+
+Same scheme and setup as axisym.run (read its docstring): Strang split-step, FFT along x, the orthogonal QDHT step M along rho,
+cell-averaged V, sin^(1/8) borders; what the borders absorb is counted by side (x < xl, x > xr, between). Additions:
+  - frames: the half-plane rho >= 0 at the stored frame times, |psi| and arg psi on the page's output points (x on the stored 0.5 a
+    grid, rho = 0, 0.5, ..., 31.5), interpolated from the solver grid in rho by the exact Bessel series of the QDHT (band-limited),
+    and taken from the fine x grid at the coinciding points;
+  - the x-profile p(x, t) = Int |psi|^2 2 pi rho drho on the stored 0.5 a points (fine-grid cell sums);
+  - the norm drift, measured: sum |u|^2 + absorbed, which must stay 1.
+dtype: complex128 (x64) or complex64.
+"""
+import time
+import numpy as np
+import jax, jax.numpy as jnp
+from scipy.special import j0
+import axisym as ax
+
+
+def bessel_rows(Q, rho_out):
+    """Matrix B (len(rho_out) x Nr) with psi(rho_out) = B @ psi_nodes for a field band-limited to the QDHT's wave numbers:
+    psi(rho) = sum_m Psi_m J0(k_m rho), Psi = T-transform of the scaled nodes."""
+    # scaled nodes u_n = psi_n / J1_n ; spectrum (scaled) U = T u ; psi(rho) = sum_m c_m U_m J0(k_m rho), with c_m chosen so
+    # that psi(rho_n) = psi_n reproduces: c_m = 2 / (Rmax^2 ... ) -> build by solving on the nodes instead (exact interpolation)
+    Jn = j0(np.outer(Q["rho"], Q["k"]))               # (Nr, Nr): psi_nodes = Jn @ a
+    Jo = j0(np.outer(rho_out, Q["k"]))
+    return Jo @ np.linalg.solve(Jn, np.eye(len(Q["rho"])))
+
+
+def run(sp, t_end, hx=0.0625, Lx=None, Nr=160, Rmax=40.0, Wr=8.0, dt=0.01, nframes=200, rule="cell", dtype="c128",
+        out_x=None, out_rho=None, frame_dt=None, box_half=None):
+    if dtype == "c128": jax.config.update("jax_enable_x64", True)
+    cdt = jnp.complex128 if dtype == "c128" else jnp.complex64; rdt = jnp.float64 if dtype == "c128" else jnp.float32
+    Lx = Lx or sp["Nx"] * 0.5
+    Nx = int(round(Lx / hx)); x = (np.arange(Nx) - Nx // 2) * hx; kx = 2 * np.pi * np.fft.fftfreq(Nx, hx)
+    Q = ax.qdht(Nr, Rmax); rho = Q["rho"]
+    mx = ax.border(Nx, max(4, Nx // 10)); mr = np.ones(Nr); W = rho > Rmax - Wr
+    nW = int(W.sum()); e = np.arange(nW)[::-1]; mr[W] = np.sin(0.5 * np.pi * e / nW) ** ax.POW
+    mask = mx[:, None] * mr[None, :]
+    V, reg, side = ax.potential(sp, x, hx, Q, rule)
+    k0 = np.sqrt(2 * sp["E"]); x0 = ax.x0_of(sp)
+    psi = np.exp(-(x[:, None] - x0)**2 / (4 * sp["sx"]**2) - rho[None, :]**2 / (4 * sp["sp"]**2) + 1j * k0 * x[:, None])
+    u = psi / Q["J1"][None, :]; wq = Q["wq"] * hx; u /= np.sqrt((np.abs(u)**2).sum() * wq)
+    if frame_dt is None:
+        steps = int(round(t_end / dt)); per = max(1, steps // (nframes - 1))
+    else:
+        per = int(round(frame_dt / dt))
+    hv = jnp.asarray(np.exp(-0.5j * V * dt), cdt)
+    Mr = jnp.asarray(Q["T"] @ (np.exp(-0.5j * Q["k"]**2 * dt)[:, None] * Q["T"]), cdt)
+    Dx = jnp.asarray(np.exp(-0.5j * kx**2 * dt)[:, None], cdt)
+    M = jnp.asarray(mask, rdt)
+    inbox = (np.abs(x) <= box_half)[:, None] if box_half else np.ones((Nx, 1), bool)
+    reg = {k: np.asarray(v) & inbox for k, v in reg.items()}
+    S = {k: jnp.asarray(v, rdt) for k, v in side.items()}; Rg = {k: jnp.asarray(v, rdt) for k, v in reg.items()}
+    IB = jnp.asarray(np.broadcast_to(inbox, (Nx, Nr)), rdt)
+
+    @jax.jit
+    def chunk(u):
+        def body(i, c):
+            u, aL, aR, aM = c
+            u = hv * u; u = jnp.fft.ifft(Dx * jnp.fft.fft(u, axis=0), axis=0) @ Mr; u = hv * u
+            b = jnp.abs(u)**2; u = (u * M).astype(cdt); lost = ((b - jnp.abs(u)**2) * wq).astype(rdt)
+            # explicit dtypes: after a complex128 run x64 stays on, and numpy constants would promote a complex64 run's carry
+            return u, (aL + (lost * S["L"]).sum()).astype(rdt), (aR + (lost * S["R"]).sum()).astype(rdt), (aM + (lost * S["M"]).sum()).astype(rdt)
+        z = jnp.zeros((), rdt)
+        return jax.lax.fori_loop(0, per, body, (u, z, z, z))
+
+    @jax.jit
+    def measure(u):
+        d = jnp.abs(u)**2 * wq
+        return (d * IB).sum(), d.sum(), {k: (d * m).sum() for k, m in Rg.items()}, {k: (d * m).sum() for k, m in S.items()}
+
+    # output points
+    if out_x is not None:
+        ix = np.rint((np.asarray(out_x) - x[0]) / hx).astype(int); assert np.allclose(x[ix], out_x)
+        B = jnp.asarray(bessel_rows(Q, np.asarray(out_rho)) * Q["J1"][None, :], cdt)       # acts on scaled u
+        IX = jnp.asarray(ix)
+    p = jnp.asarray(u, cdt); A = dict(L=0.0, R=0.0, M=0.0)
+    curves, frames, profs = [], [], []
+    t0 = time.time()
+    for f in range(nframes):
+        if f:
+            p, aL, aR, aM = chunk(p); A["L"] += float(aL); A["R"] += float(aR); A["M"] += float(aM)
+        n, ntot, rg, sd = jax.device_get(measure(p))
+        curves.append([f * per * dt, float(n)] + [float(rg[k]) for k in sorted(reg)] + [A["L"], A["R"], A["M"], float(ntot)])
+        if out_x is not None:
+            half = (p[IX] @ B.T)                          # (len(out_x), len(out_rho)) complex psi
+            frames.append(np.asarray(half))
+            line = np.asarray((jnp.abs(p)**2).sum(1)) * wq / hx       # Int |psi|^2 2 pi rho drho at each fine x
+            prof = line[ix]
+            profs.append(prof)
+    wall = time.time() - t0
+    C = np.array(curves); names = ["t", "norm"] + sorted(reg) + ["absL", "absR", "absM", "total"]
+    last = C[-1]; cn = dict(zip(names, last))
+    _, _, _, sd = jax.device_get(measure(p))
+    T = float(sd["R"]) + A["R"] + 0.5 * (float(sd["M"]) + A["M"])
+    drift = float(np.max(np.abs(C[:, -1] + C[:, -4] + C[:, -3] + C[:, -2] - 1)))
+    return dict(T=T, T_unc=0.5 * (float(sd["M"]) + A["M"]), curves=C, names=names, steps=per * (nframes - 1), frame_dt=per * dt,
+                wall=wall, s_per_step=wall / max(1, per * (nframes - 1)), drift=drift, cells=Nx * Nr,
+                frames=np.array(frames) if frames else None, profs=np.array(profs) if profs else None)
+
+==================== rt2d_run.py ====================
+"""Fig. 15 correction: the 2,609 disc and shell runs recomputed in the exact (x, rho) reduction (axisym_jax.py), on Kaggle's GPUs.
+
+Each job is a stored generation-2 run (jobs_2d.json, made from the index by make_jobs_2d.py): its spec, frame times and the stored
+file's output layout. The new file is written in the stored RT3C layout, so the page plays it unchanged:
+  |psi| and arg psi on z = 0, y >= 0 (= psi(x, rho = |y|)) on the stored 0.5 a points, 8-bit levels of each frame's own peak;
+  the x-profile (Int |psi|^2 2 pi rho drho) on the stored x points; the stored region curves (inside the stored box);
+  in the header: T_ref (share beyond the last face, counting what the borders absorbed, by side), its undecided half T_unc,
+  the norm drift, the solver grid, and the parent file's SHA-256.
+Globals a loader sets: OUTROOT, GEN, SHARD = (i, n), JOBSEL ('smoke' or 'all'), DTYPE ('c64' | 'c128'), GRID (dict of solver
+settings), LIMIT_S. Progress: one line per run in progress.log, written the moment the run ends.
+"""
+import os, sys, json, time, hashlib, struct, zlib, threading, queue, tarfile, traceback
+import numpy as np
+T0 = time.time()
+ROOT = globals().get("OUTROOT", "/kaggle/working"); os.makedirs(ROOT, exist_ok=True)
+LOG = open(ROOT + "/progress.log", "a")
+import urllib.request as _ur, threading as _th
+NTFY = globals().get("NTFY"); _LAST = [0.0]          # live tracker (owner-approved, this use only): progress lines to ntfy.sh/<NTFY>
+_KEY = ("group", "check", "PREDICTION", "done", "FAILED", "failed", "NO GPU", "devices", "MISMATCH", "tar", "smoke", " A ", " B ", " C ", " T ")
+def push(s, force=False):
+    if not NTFY or (not force and time.time() - _LAST[0] < 30): return
+    _LAST[0] = time.time()
+    def f():
+        try: _ur.urlopen(_ur.Request("https://ntfy.sh/" + NTFY, data=s.encode()[:3500]), timeout=10)
+        except Exception: pass
+    _th.Thread(target=f, daemon=True).start()
+def say(*a):
+    s = f"[{time.time()-T0:7.1f} s] " + " ".join(str(x) for x in a); print(s, flush=True); LOG.write(s + "\n"); LOG.flush()
+    push(s, any(k in s for k in _KEY))
+sys.path.insert(0, ".")
+import jax
+print(jax.devices())
+if not globals().get("CPU") and jax.default_backend() != "gpu":
+    say("NO GPU BACKEND"); raise SystemExit("NO GPU BACKEND")
+import axisym as ax, axisym_jax as aj
+
+GRID = dict(hx=0.0625, Nr=256, Rmax=64.0, Wr=12.0, dt=0.01, box_factor=2.0)
+GRID.update(globals().get("GRID", {}))
+DTYPE = globals().get("DTYPE", "c64")
+
+
+def layout(Nx):
+    x = (np.arange(Nx) - Nx // 2) * 0.5; inner = (Nx // 2 - max(4, Nx // 10)) * 0.5
+    i0 = int(np.searchsorted(x, -inner)); i1 = int(np.searchsorted(x, inner))
+    return x, i0, i1
+
+
+def quantize(sl, ph):
+    pk = float(sl.max()) or 1.0
+    qa = np.clip(np.round(255 * sl / pk), 0, 255).astype(np.uint8)
+    qp = (np.round((ph + np.pi) / (2 * np.pi) * 255) % 256).astype(np.uint8); qp[qa < 3] = 0
+    return qa, qp, pk
+
+
+def one(job, dev):
+    sp = job["spec"]; x, i0, i1 = layout(sp["Nx"]); n = job["n"]
+    o = aj.run(sp, job["t_end"], hx=GRID["hx"], Lx=sp["Nx"] * 0.5 * GRID["box_factor"], Nr=GRID["Nr"], Rmax=GRID["Rmax"],
+               Wr=GRID["Wr"], dt=GRID["dt"], nframes=n, frame_dt=job["frame_dt"], dtype=DTYPE, out_x=x,
+               out_rho=np.arange(64) * 0.5, box_half=0.5 * sp["Nx"] * 0.5, rule=GRID.get("rule", "cell"))
+    F = o["frames"]                                     # (n, Nx, 64): psi on the stored points
+    A, P, pk = [], [], []
+    for f in range(n):
+        s = F[f, i0:i1]; qa, qp, p = quantize(np.abs(s), np.angle(s)); A.append(qa); P.append(qp); pk.append(p)
+    C = o["curves"]; names = o["names"]
+    keep = ["t", "norm"] + (["core", "gap", "out"] if sp["shape"] == "shell" else ["left", "right", "well"])
+    keep = [k for k in keep if k in names]
+    curves = C[:, [names.index(k) for k in keep]]
+    extra = {k: np.round(C[:, names.index(k)], 7).tolist() for k in ("absL", "absR", "absM", "total")}
+    head = dict(spec=sp, group=job["group"], shape=sp["shape"], E=sp["E"], V0=sp["V0"], D=sp["D"], P=sp["P"], N=sp["N"], size=sp["R"],
+                bias=sp["bias"], sigma_x=sp["sx"], sigma_perp=sp["sp"], x0=ax.x0_of(sp),
+                centres=(ax.centres(sp) if sp["shape"] != "shell" else None), extent=list(ax.extent(sp)), n=n, nxs=i1 - i0, nr=64,
+                x_first=float(x[i0]), step=0.5, prof_x_first=float(x[0]), prof_nx=sp["Nx"], steps=o["steps"], dt=GRID["dt"],
+                t_end=float(C[-1, 0]), frame_dt=o["frame_dt"], wall=round(o["wall"], 2), device=str(dev),
+                peaks=[round(p / pk[0], 6) for p in pk], peak0=pk[0], curve_names=keep, curves=np.round(curves, 7).tolist(),
+                box=[sp["Nx"], 128, 128], method="exact axisymmetric reduction (m = 0) in (x, rho): Strang split-step, FFT in x, "
+                "order-0 quasi-discrete Hankel transform in rho, cell-averaged V (tools/kaggle/resonant-tunnelling/correction/axisym_jax.py)",
+                grid=dict(GRID, dtype=DTYPE), parent=dict(file=job["file"], sha256=job["sha256"]), T_ref=o["T"], T_unc=o["T_unc"],
+                drift=o["drift"], extra_curves=extra)
+    body = np.array(A).tobytes() + np.array(P).tobytes() + np.asarray(o["profs"], np.float32).tobytes()
+    hb = json.dumps(head, separators=(",", ":")).encode()
+    blob = b"RT3C" + struct.pack("<I", len(hb)) + hb + zlib.compress(body, 6)
+    return blob, head, o
+
+
+if __name__ == "__main__" or globals().get("RUN"):
+    say("devices:", jax.devices(), "jax", jax.__version__, "dtype", DTYPE, "grid", GRID)
+    J = json.load(open(globals().get("JOBS", "jobs_2d.json")))
+    if globals().get("JOBSEL") == "smoke": J = [j for j in J if j["file"] in SMOKE]
+    elif globals().get("SHARD"): i, nsh = SHARD; J = J[i::nsh]
+    GEN = globals().get("GEN", "2026-11-14b"); OUTD = f"{ROOT}/{GEN}/rt2d"; os.makedirs(OUTD, exist_ok=True)
+    done = {l.split()[0] for l in open(OUTD + "/done.txt")} if os.path.exists(OUTD + "/done.txt") else set()
+    Q = queue.Queue(); [Q.put(j) for j in sorted(J, key=lambda j: -j["cost"]) if j["file"] not in done]
+    LOCK = threading.Lock(); JL = open(OUTD + "/runs.jsonl", "a"); DL = open(OUTD + "/done.txt", "a"); CNT = [0]; ERR = []
+    LIMIT_S = globals().get("LIMIT_S", 11.0 * 3600)
+
+    def worker(dev):
+        with jax.default_device(dev):
+            while time.time() - T0 < LIMIT_S:
+                try: j = Q.get_nowait()
+                except queue.Empty: return
+                try:
+                    blob, head, o = one(j, dev)
+                    open(f"{OUTD}/{j['file']}", "wb").write(blob)
+                    rec = dict(file=j["file"], spec=j["spec"], sha256=hashlib.sha256(blob).hexdigest(), bytes=len(blob), T_ref=o["T"],
+                               T_unc=o["T_unc"], drift=o["drift"], steps=o["steps"], wall=round(o["wall"], 2),
+                               s_per_step=o["s_per_step"], cells=o["cells"], device=str(dev))
+                    with LOCK:
+                        CNT[0] += 1; JL.write(json.dumps(rec) + "\n"); JL.flush(); DL.write(j["file"] + "\n"); DL.flush()
+                        say(f"{CNT[0]}/{len(J)} {j['file']} on {dev}: T {o['T']:.5f} +- {o['T_unc']:.1e}, drift {o['drift']:.1e}, "
+                            f"{o['steps']} steps, {o['wall']:.1f} s ({o['s_per_step']*1e3:.3f} ms/step)")
+                except Exception as e:
+                    with LOCK: ERR.append(dict(file=j["file"], error=repr(e)[:400]))
+                    say("RUN FAILED", j["file"], repr(e)[:300]); say(traceback.format_exc()[-600:])
+
+    devs = [d for d in jax.devices() if d.platform == "gpu"] or [jax.devices()[0]]
+    th = [threading.Thread(target=worker, args=(d,)) for d in devs]; [t.start() for t in th]; [t.join() for t in th]
+    JL.close(); DL.close()
+    say(f"{CNT[0]} runs done, {len(ERR)} failed, {Q.qsize()} not started, {time.time()-T0:.0f} s")
+    files = sorted(f for f in os.listdir(OUTD) if f.endswith(".bin"))
+    tname = f"{OUTD}/rt2d_{globals().get('JOBSEL', 'all')}" + (f"_{SHARD[0]}of{SHARD[1]}" if globals().get("SHARD") else "") + ".tar"
+    with tarfile.open(tname, "w") as tf:
+        for f in files: tf.add(f"{OUTD}/{f}", arcname=f)
+    json.dump(dict(failed=ERR, done=CNT[0], total_s=round(time.time() - T0, 1)), open(OUTD + "/summary.json", "w"))
+    say("tar", os.path.basename(tname), round(os.path.getsize(tname) / 1e6, 1), "MB")
+
+==================== rt2d_smoke.py ====================
+"""Fig. 15 correction: the Kaggle T4 smoke test of the 2D (x, rho) solver. It measures the step time for the bill and checks:
+  A. wall limit: a disc wider than the rho range (R = 1000) against the exact walls (T_exact given, from exact_wall.py);
+  B. convergence on 3 stored runs: hx 0.125 / 0.0625 / 0.03125, Nr 256 / 384 at Rmax 64, Rmax 64 / 96, dt 0.01 / 0.005,
+     box 2x / 3x, complex64 / complex128 (the norm drift and the T difference);
+  C. rt3d2's drawing at 0.5 a (V0 on x points strictly inside, the azimuthal average of the Cartesian staircase disc, the stored
+     box, rho range 32 a with a 6.4 a border): the RT3C files are written, and T_far and the curves are compared on the CPU with
+     the stored 3D files.
+Every result is one line in progress.log and one record in smoke.jsonl, written as it ends.
+"""
+import os, sys, json, time
+import numpy as np
+SMOKE = []
+exec(open("rt2d_run.py").read().split('if __name__ == "__main__" or globals().get("RUN"):')[0])
+J = {j["file"]: j for j in json.load(open("jobs_2d.json"))}
+OUTD = ROOT + "/smoke"; os.makedirs(OUTD, exist_ok=True); SJ = open(OUTD + "/smoke.jsonl", "a")
+say("devices:", jax.devices(), "jax", jax.__version__)
+BASE = dict(hx=0.0625, Nr=256, Rmax=64.0, Wr=12.0, dt=0.01, box_factor=2.0)
+
+
+def go(tag, sp, t_end, grid, dtype="c64", frame_dt=None, write=None):
+    global GRID, DTYPE
+    t0 = time.time()
+    if write:
+        GRID = dict(grid); DTYPE = dtype
+        blob, head, o = one(write, jax.devices()[0]); open(f"{OUTD}/{write['file']}", "wb").write(blob)
+    else:
+        o = aj.run(sp, t_end, hx=grid["hx"], Lx=sp["Nx"] * 0.5 * grid["box_factor"], Nr=grid["Nr"], Rmax=grid["Rmax"], Wr=grid["Wr"],
+                   dt=grid["dt"], nframes=40, frame_dt=frame_dt, dtype=dtype, box_half=0.5 * sp["Nx"] * 0.5, rule=grid.get("rule", "cell"))
+    rec = dict(tag=tag, spec=sp, grid=grid, dtype=dtype, T=o["T"], T_unc=o["T_unc"], drift=o["drift"], steps=o["steps"],
+               wall=round(time.time() - t0, 2), s_per_step=o["s_per_step"], cells=o["cells"])
+    SJ.write(json.dumps(rec) + "\n"); SJ.flush()
+    say(f"{tag}: T {o['T']:.6f} +- {o['T_unc']:.1e} drift {o['drift']:.1e} {o['steps']} steps {o['s_per_step']*1e3:.3f} ms/step "
+        f"cells {o['cells']} wall {time.time()-t0:.1f} s")
+
+
+# A. wall limit (T_exact from exact_wall.py, box 2x)
+wall = dict(shape="coin", N=2, V0=2.0, D=1.0, P=2.5, R=1000.0, E=0.75, bias=0.0, sx=3.0, sp=3.0, Nx=192)
+go("A wall-limit N2 E0.75 (exact 0.196820)", wall, 100.0, BASE)
+go("A wall-limit N2 E0.75 c128", wall, 100.0, BASE, "c128")
+wall10 = dict(wall, N=10, E=0.9, Nx=256)
+go("A wall-limit N10 E0.9 (exact 0.166225)", wall10, 220.89, BASE)
+wallb = dict(wall, bias=2.125, E=0.5)
+go("A wall-limit bias 2.125 E0.5 (exact 0.039048)", wallb, 85.57, BASE)
+
+# B. convergence on three stored runs
+picks = ["coin_N2_V2_D1_P2.5_R6_B0_s3_E0.750.bin", "coin_N10_V2_D1_P2.5_R12_B0_s3_E0.900.bin", "shell_N2_V2_D1_P2.5_R3_B0_s3_E0.750.bin"]
+for f in picks:
+    j = J[f]; sp = j["spec"]; te = j["t_end"]
+    go(f"B {f} base", sp, te, BASE)
+    go(f"B {f} c128", sp, te, BASE, "c128")
+    for k, v in (("hx", 0.125), ("hx", 0.03125), ("Nr", 384), ("dt", 0.005), ("box_factor", 3.0)):
+        go(f"B {f} {k}={v}", sp, te, dict(BASE, **{k: v}))
+    go(f"B {f} Rmax96 Nr384", sp, te, dict(BASE, Rmax=96.0, Nr=384))
+
+# C. rt3d2's drawing at 0.5 a on three stored runs, written as RT3C for the CPU comparison
+RULE = dict(hx=0.5, Nr=64, Rmax=32.0, Wr=6.4, dt=0.01, box_factor=1.0, rule="rt3d2")
+for f in ["coin_N2_V2_D1_P2.5_R6_B0_s3_E0.750.bin", "coin_N2_V2_D1_P2.5_R12_B0_s3_E1.200.bin", "shell_N2_V2_D1_P2.5_R5_B0_s3_E0.750.bin"]:
+    go(f"C {f} rt3d2 rules", J[f]["spec"], J[f]["t_end"], RULE, write=J[f])
+
+# the bill's step time: the production grid on the three box sizes
+for f in [k for k in J if J[k]["spec"]["Nx"] == 256][:1] + [k for k in J if J[k]["spec"]["Nx"] == 512][:1]:
+    go(f"T {f} production grid", J[f]["spec"], min(J[f]["t_end"], 30.0), BASE)
+say("smoke done")
+
+[CudaDevice(id=0), CudaDevice(id=1)]
+[    0.5 s] devices: [CudaDevice(id=0), CudaDevice(id=1)] jax 0.11.1
+[   12.4 s] A wall-limit N2 E0.75 (exact 0.196820): T 0.196539 +- 5.1e-04 drift 2.7e-03 9984 steps 1.084 ms/step cells 786432 wall 11.9 s
+[   93.7 s] A wall-limit N2 E0.75 c128: T 0.196889 +- 5.1e-04 drift 2.6e-12 9984 steps 8.119 ms/step cells 786432 wall 81.3 s
+[  120.6 s] A wall-limit N10 E0.9 (exact 0.166225): T 0.167971 +- 2.6e-02 drift 2.7e-03 22074 steps 1.206 ms/step cells 1048576 wall 26.9 s
+[  129.4 s] A wall-limit bias 2.125 E0.5 (exact 0.039048): T 0.039134 +- 2.8e-09 drift 3.2e-03 8541 steps 1.010 ms/step cells 786432 wall 8.9 s
+[  137.0 s] B coin_N2_V2_D1_P2.5_R6_B0_s3_E0.750.bin base: T 0.447860 +- 2.5e-03 drift 2.1e-03 7137 steps 1.041 ms/step cells 786432 wall 7.6 s
+[  195.8 s] B coin_N2_V2_D1_P2.5_R6_B0_s3_E0.750.bin c128: T 0.448442 +- 2.5e-03 drift 2.8e-12 7137 steps 8.210 ms/step cells 786432 wall 58.8 s
+[  200.0 s] B coin_N2_V2_D1_P2.5_R6_B0_s3_E0.750.bin hx=0.125: T 0.448778 +- 2.6e-03 drift 1.2e-03 7137 steps 0.571 ms/step cells 393216 wall 4.2 s
+[  215.1 s] B coin_N2_V2_D1_P2.5_R6_B0_s3_E0.750.bin hx=0.03125: T 0.447371 +- 2.5e-03 drift 2.7e-03 7137 steps 2.065 ms/step cells 1572864 wall 15.1 s
+[  228.1 s] B coin_N2_V2_D1_P2.5_R6_B0_s3_E0.750.bin Nr=384: T 0.447955 +- 2.5e-03 drift 2.0e-03 7137 steps 1.790 ms/step cells 1179648 wall 13.1 s
+[  241.9 s] B coin_N2_V2_D1_P2.5_R6_B0_s3_E0.750.bin dt=0.005: T 0.447319 +- 2.5e-03 drift 4.1e-03 14313 steps 0.953 ms/step cells 786432 wall 13.8 s
+[  253.6 s] B coin_N2_V2_D1_P2.5_R6_B0_s3_E0.750.bin box_factor=3.0: T 0.447471 +- 2.5e-03 drift 2.5e-03 7137 steps 1.593 ms/step cells 1179648 wall 11.6 s
+[  266.6 s] B coin_N2_V2_D1_P2.5_R6_B0_s3_E0.750.bin Rmax96 Nr384: T 0.447899 +- 2.1e-03 drift 2.1e-03 7137 steps 1.793 ms/step cells 1179648 wall 13.0 s
+[  294.1 s] B coin_N10_V2_D1_P2.5_R12_B0_s3_E0.900.bin base: T 0.194833 +- 1.2e-02 drift 2.4e-03 22659 steps 1.204 ms/step cells 1048576 wall 27.5 s
+[  578.4 s] B coin_N10_V2_D1_P2.5_R12_B0_s3_E0.900.bin c128: T 0.195438 +- 1.2e-02 drift 1.5e-11 22659 steps 12.536 ms/step cells 1048576 wall 284.3 s
+[  592.7 s] B coin_N10_V2_D1_P2.5_R12_B0_s3_E0.900.bin hx=0.125: T 0.196731 +- 1.2e-02 drift 2.3e-03 22659 steps 0.623 ms/step cells 524288 wall 14.3 s
+[  646.9 s] B coin_N10_V2_D1_P2.5_R12_B0_s3_E0.900.bin hx=0.03125: T 0.194756 +- 1.1e-02 drift 2.3e-03 22659 steps 2.377 ms/step cells 2097152 wall 54.2 s
+[  696.1 s] B coin_N10_V2_D1_P2.5_R12_B0_s3_E0.900.bin Nr=384: T 0.194845 +- 1.2e-02 drift 2.4e-03 22659 steps 2.154 ms/step cells 1572864 wall 49.1 s
+[  749.2 s] B coin_N10_V2_D1_P2.5_R12_B0_s3_E0.900.bin dt=0.005: T 0.194154 +- 1.2e-02 drift 4.9e-03 45357 steps 1.167 ms/step cells 1048576 wall 53.2 s
+[  790.9 s] B coin_N10_V2_D1_P2.5_R12_B0_s3_E0.900.bin box_factor=3.0: T 0.194707 +- 1.2e-02 drift 5.7e-03 22659 steps 1.828 ms/step cells 1572864 wall 41.7 s
+[  840.0 s] B coin_N10_V2_D1_P2.5_R12_B0_s3_E0.900.bin Rmax96 Nr384: T 0.197811 +- 7.2e-03 drift 2.4e-03 22659 steps 2.152 ms/step cells 1572864 wall 49.0 s
+[  853.7 s] B shell_N2_V2_D1_P2.5_R3_B0_s3_E0.750.bin base: T 0.612247 +- 4.1e-02 drift 1.9e-03 13104 steps 0.960 ms/step cells 786432 wall 13.8 s
+[  960.3 s] B shell_N2_V2_D1_P2.5_R3_B0_s3_E0.750.bin c128: T 0.613184 +- 4.1e-02 drift 1.6e-12 13104 steps 8.043 ms/step cells 786432 wall 106.6 s
+[  967.4 s] B shell_N2_V2_D1_P2.5_R3_B0_s3_E0.750.bin hx=0.125: T 0.612812 +- 4.1e-02 drift 1.1e-03 13104 steps 0.495 ms/step cells 393216 wall 7.0 s
+[  993.8 s] B shell_N2_V2_D1_P2.5_R3_B0_s3_E0.750.bin hx=0.03125: T 0.611963 +- 4.1e-02 drift 2.5e-03 13104 steps 1.888 ms/step cells 1572864 wall 26.4 s
+[ 1017.3 s] B shell_N2_V2_D1_P2.5_R3_B0_s3_E0.750.bin Nr=384: T 0.613657 +- 4.0e-02 drift 1.9e-03 13104 steps 1.675 ms/step cells 1179648 wall 23.5 s
+[ 1042.2 s] B shell_N2_V2_D1_P2.5_R3_B0_s3_E0.750.bin dt=0.005: T 0.611275 +- 4.1e-02 drift 3.9e-03 26247 steps 0.910 ms/step cells 786432 wall 24.9 s
+[ 1062.6 s] B shell_N2_V2_D1_P2.5_R3_B0_s3_E0.750.bin box_factor=3.0: T 0.611536 +- 4.1e-02 drift 2.8e-03 13104 steps 1.453 ms/step cells 1179648 wall 20.4 s
+[ 1086.4 s] B shell_N2_V2_D1_P2.5_R3_B0_s3_E0.750.bin Rmax96 Nr384: T 0.621971 +- 2.6e-02 drift 2.4e-03 13104 steps 1.675 ms/step cells 1179648 wall 23.8 s
+[ 1089.0 s] C coin_N2_V2_D1_P2.5_R6_B0_s3_E0.750.bin rt3d2 rules: T 0.447143 +- 4.8e-03 drift 7.8e-04 7164 steps 0.328 ms/step cells 12288 wall 2.6 s
+[ 1091.3 s] C coin_N2_V2_D1_P2.5_R12_B0_s3_E1.200.bin rt3d2 rules: T 0.060170 +- 6.3e-04 drift 5.6e-04 6567 steps 0.311 ms/step cells 12288 wall 2.3 s
+[ 1094.1 s] C shell_N2_V2_D1_P2.5_R5_B0_s3_E0.750.bin rt3d2 rules: T 0.410173 +- 1.2e-01 drift 7.1e-04 12935 steps 0.189 ms/step cells 12288 wall 2.8 s
+[ 1099.2 s] T coin_N10_V2_D1_P2.5_R6_B0_s3_E0.300.bin production grid: T 0.214871 +- 2.1e-01 drift 6.7e-04 2964 steps 1.665 ms/step cells 1048576 wall 5.1 s
+[ 1109.1 s] T coin_N2_V2_D1_P2.5_R12_B0_s12_E0.583.bin production grid: T 0.015919 +- 1.2e-02 drift 6.7e-04 2964 steps 3.230 ms/step cells 2097152 wall 9.9 s
+[ 1109.1 s] smoke done
+/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\|'
+  cells[i][c] = re.sub('\\\\\|', '|', cell)
+/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\_'
+  text = re.sub(r'_', '\_', text) # Escape underscores in display text
+[NbConvertApp] Converting notebook __notebook__.ipynb to notebook
+[NbConvertApp] Writing 43627 bytes to __notebook__.ipynb
+[NbConvertApp] Converting notebook __notebook__.ipynb to html
+[NbConvertApp] Writing 313865 bytes to __results__.html
