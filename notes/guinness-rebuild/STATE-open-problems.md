@@ -22,7 +22,10 @@ Close the six open problems of the handoff, one at a time, in its order. Merge f
    PROVED on CPU v11 (1440 px, rides kerb_full t=0.62, kerb_off 0.40, resonant_full 2.0): checks 19/19, read-backs 15/15, head book OK;
    deck pixels "not recorded" (look session). Pointer test: v11 out of memory in the test, v12 shell quoting error, v13 slow.
    Page built on Kaggle v11 committed; LIVE on main da39ef8 (curl: id="stage", dataset.js, data.css served; script has defineData).
-   Left: pointer test result (v13), docs/files.md regenerated after the last commits.
+   BUG found by v13 screenshot: overlay grew the grid (ResizeObserver loop, "This simulation stopped", giant figure). Fixed by a CSS
+   rule in the page (d795e8a), live. v14 PROOF, FAIL 0: 3 rides x 1440 and 390 px, checks 19/19, read-backs 15/15, book OK, no banner,
+   no console errors; Read values off: overlay 0 px, strip hidden; on: pinned the cart, words changed 2 times in 3 s, strip below figure.
+   Screenshots (not committed) sent to the owner. docs/files.md from v14 committed. PROBLEM 2 DONE.
 3. Fig. 16's own Kaggle dataset — open.
 4. 3D close-up smoothness on a Kaggle GPU machine — open.
 5. Fig. 12 bare swing at 1.0 mm — optional; GPU (~10 min): ask the owner first.
