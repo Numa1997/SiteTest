@@ -68,6 +68,24 @@ recognisable; generic physics demos and textures fail. Fifth round shown in chat
  - A star from falling dust: a slowly turning cloud falls inward, spins up, feeds a star that lights; after 26 s it bursts and the
    same dust becomes the next cloud.
 
+Update 05:55: turning point. After the fifth round he named what he finds cool: music and frequencies in air pressure, sand on
+a plate, magnetic fields on metals (invisible physics made visible), and listed directions: birds and flocks; the falling-leaf tree
+must feed NEIGHBOUR trees born from its fall, not itself; cycles of seasons, climates, clouds; electronic chips and the process of
+printing them; logical fractals and natural bio fractals; mixing of particle species, increasing entropy; an ensemble of springs
+resonating to one exterior drive "at least after a while".
+Sixth round shown in chat, waiting for his verdict:
+ - A forest from one fall: mother tree at x=190 drops leaves (wind carries them), each leaf = 4 motes that feed the nearest of five
+   seedlings (160 motes to mature, tree grows from depth 1 to 4), mother regrows its own leaves after 3 s.
+ - Iron filings: 960 needles relax to the direction of B from three slowly turning, drifting bar magnets (two poles each, softened
+   1/r^2), darker where the field is strong, slower to turn where it is weak.
+ - Sound in a tube (Kundt's tube): air layers displaced by 0.02 sin(n pi u) cos(8t), 900 dust grains hop in proportion to
+   |sin(n pi u)| and heap at the nodes; mode n cycles 2,3,5,4,6,1 every 9 s.
+ - Springs in resonance: 34 mass-spring oscillators (omega 3..9 rad/s, damping 0.25) driven by one shaking beam whose frequency
+   sweeps 6 +/- 3 rad/s over 50 s; faint envelope = steady-state amplitude.
+ - Mixing and entropy: 140 rings + 140 dots in two chambers, wall lifts from t = 3 s, mixing-entropy curve drawn below.
+ - Printing a chip: die with pads; a scanning light bar prints three layers: H-tree clock network (depth 4), Manhattan wiring, vias.
+Not yet built from his list: birds and flocks (a better one), seasons/climate/clouds, bio fractals.
+
 ## User's rules for this work
 - Merge and publish finished, tested work without asking; verify the live site; docs must describe the code.
 - Do only what is asked; reply in plain connected English; never use the user's name.
