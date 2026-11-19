@@ -14,7 +14,7 @@ drops cannot be followed (step 1, measure_stored.py). So:
   v(x_k) = (T(x_k) - x_k) / dt - a_k dt / 2,     T: the optimal map from picture k's cloud to picture k+1's.
 Mass enters (over the rim) and leaves (frozen on the old plane, or below -250 mm) between pictures, so T is a PARTIAL optimal transport
 of the mass the two pictures share (Figalli, Arch. Ration. Mech. Anal. 195 (2010) 533), computed with POT (Flamary et al., JMLR 22
-(2021) 1), entropic regularisation small against the cell size.
+(2021) 1), exact partial transport as a linear program (no regularisation).
 
 CHECKS AGAINST THE STORED RIDE (the weir estimate failed exactly these):
  1. Parcels flown on from their derived (x, v) under the stored a(t) must come down on Fig. 12's body plane (z = -14 mm, 220 x 120 mm)
@@ -59,15 +59,16 @@ for k in range(nf - 1):
     a = np.array([gx[k], 0.0, gz[k]]); Bs = B - 0.5 * a * dt * dt                                   # remove gravity's own part of the step
     share = min(mA.sum(), mB.sum())
     C = ot.dist(A, Bs)                                                                               # squared distances, m^2
-    P = ot.partial.entropic_partial_wasserstein(mA / mA.sum(), mB / mB.sum(), C, reg=REG, m=share / max(mA.sum(), mB.sum()), numItermax=2000)
+    P = ot.partial.partial_wasserstein(mA / mA.sum(), mB / mB.sum(), C / C.max(), m=0.999 * share / max(mA.sum(), mB.sum()))   # exact LP (19 Nov: the entropic version underflowed)
     row = P.sum(1); ok = row > 1e-12
+    if ok.sum() < 5: continue
     T = (P @ B)[ok] / row[ok, None]
     v = (T - A[ok]) / dt - 0.5 * a * dt
     VEL.append((k, A[ok], v, mA[ok]))
     moved = A[ok] + v * dt + 0.5 * a * dt * dt
     w_moved = ot.emd2(np.full(len(moved), 1 / len(moved)), np.full(len(B), 1 / len(B)), ot.dist(moved, B)); w_still = ot.emd2(np.full(len(A), 1 / len(A)), np.full(len(B), 1 / len(B)), ot.dist(A, B))
     resid.append((t[k], np.sqrt(w_moved) * 1e3, np.sqrt(w_still) * 1e3))
-say(f"Picture pairs with a spray to transport: {len(VEL)} of {nf - 1}; sample points per picture {M}; entropic regularisation {REG:g} m^2 (cell 1.5 mm: {0.0015 ** 2:g} m^2).")
+say(f"Picture pairs with a spray to transport: {len(VEL)} of {nf - 1}; sample points per picture {M}; exact partial transport (linear program).")
 R = np.array(resid); REP["transport_residual_mm"] = dict(moved_median=float(np.median(R[:, 1])), still_median=float(np.median(R[:, 2])))
 say(f"Check 3, transport residual (Wasserstein-2 to the next picture): moved by (v, a) {np.median(R[:, 1]):.2f} mm (median), not moved {np.median(R[:, 2]):.2f} mm.\n")
 
