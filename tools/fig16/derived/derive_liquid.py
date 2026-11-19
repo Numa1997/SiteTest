@@ -54,6 +54,24 @@ Rp = np.array([float(v) for v in js.split("R: [")[1].split("]")[0].split(",")]);
 Rz = lambda z: np.interp(np.clip(np.asarray(z) / 0.0005, 0, len(Rp) - 1.001), np.arange(len(Rp)), Rp)
 t = Z["t"].astype(float); nf = len(t); dt = float(np.median(np.diff(t))); mp = float(Z["mp"]); N = int(Z["N"])
 gx, gz = Z["gx"].astype(float), Z["gz"].astype(float)
+omS = Z["om"].astype(float); alS = np.gradient(omS, t); ZS = 0.122 - 0.030   # pitch rate, pitch acceleration; pivot height (run16.py:64, cart4.py:61)
+
+
+def fly(x, v, t0, zp, tmax=0.8, h=5e-4):
+    """Integrate the stored solver's own frame equation (stout_jax.py:391: gravity and the cart's acceleration, Euler alpha, centrifugal
+    om^2, Coriolis 2 om v) from (x, v) at time t0 until z = zp, midpoint rule, step 0.5 ms. Returns time taken, position, velocity there."""
+    x = np.array(x, float); v = np.array(v, float); tau = np.full(len(x), np.nan); X = np.zeros_like(x); V = np.zeros_like(v); s_ = 0.0; alive = x[:, 2] > zp
+    while alive.any() and s_ < tmax:
+        g_x, g_z, o, a_ = (float(np.interp(t0 + s_, t, q)) for q in (gx, gz, omS, alS))
+        f = lambda x_, v_: np.stack([g_x + a_ * (x_[:, 2] - ZS) + o * o * x_[:, 0] + 2 * o * v_[:, 2], np.zeros(len(x_)), g_z - a_ * x_[:, 0] + o * o * (x_[:, 2] - ZS) - 2 * o * v_[:, 0]], 1)
+        a1 = f(x, v); vm = v + 0.5 * h * a1; xm = x + 0.5 * h * v; a2 = f(xm, vm); xn = x + h * vm; vn = v + h * a2
+        hit = alive & (xn[:, 2] <= zp)
+        if hit.any():
+            fr = (x[hit, 2] - zp) / (x[hit, 2] - xn[hit, 2]); X[hit] = x[hit] + fr[:, None] * (xn[hit] - x[hit]); V[hit] = v[hit] + fr[:, None] * (vn[hit] - v[hit]); tau[hit] = s_ + fr * h
+        x = np.where(alive[:, None], xn, x); v = np.where(alive[:, None], vn, v); alive &= ~hit; s_ += h
+    return tau, X, V
+
+
 acc = lambda k: np.array([0.5 * (gx[k] + gx[min(k + 1, nf - 1)]), 0.0, 0.5 * (gz[k] + gz[min(k + 1, nf - 1)])])
 rng = np.random.default_rng(1)
 stuck_ = lambda X: (np.abs(X[:, 2] - OLD[2]) < 4e-4) & (np.abs(X[:, 0]) < OLD[0] + 1e-3) & (np.abs(X[:, 1]) < OLD[1] + 1e-3)
@@ -237,28 +255,25 @@ for (k, P_, w_) in FR:
     if near.sum() >= 8:
         tr = cKDTree(lv_p[near]); d_, j_ = tr.query(P_, k=8); W = lv_m[near][j_] / np.maximum(d_, 1e-4); v1 = (lv_v[near][j_] * W[..., None]).sum(1) / W.sum(1)[:, None]
     else: v1 = np.tile(v_mean, (len(P_), 1))
-    az = acc(k)[2] if acc(k)[2] < -1e-9 else -1e-9; d = OLD[2] - DECK[2]
-    tf = (-v1[:, 2] - np.sqrt(np.maximum(v1[:, 2] ** 2 - 2 * az * d, 0))) / az; ah = acc(k)[:2]
-    LAND.append((t[k] + 0.5 * dt + tf, P_ + v1[:, :2] * tf[:, None] + 0.5 * ah * (tf ** 2)[:, None], v1 + acc(k) * tf[:, None], w_, 0))
+    tf, Xd, Vd = fly(np.c_[P_, np.full(len(P_), OLD[2])], v1, t[k] + 0.5 * dt, DECK[2]); okf = np.isfinite(tf)       # the 16 mm drop, full frame equation
+    LAND.append((t[k] + 0.5 * dt + tf[okf], Xd[okf, :2], Vd[okf], w_[okf] * (w_.sum() / max(w_[okf].sum(), 1e-30)), 0))
 Mbelow = np.array([airS[k][1][airS[k][0][:, 2] < DECK[2]].sum() if (len(airS[k][0]) and nfly[k] > 0) else 0.0 for k in range(nf)])
-Fraw = Mbelow + nland * mp; Fmono = np.minimum(np.maximum.accumulate(Fraw), Fraw[-1])                     # ends exactly at nlanded * mp; dF = np.diff(Fmono); fall_noise = float(np.clip(-np.diff(Fraw), 0, None).sum())
+Fraw = Mbelow + nland * mp; Fmono = np.minimum(np.maximum.accumulate(Fraw), Fraw[-1]); dF = np.diff(Fmono); fall_noise = float(np.clip(-np.diff(Fraw), 0, None).sum())   # Fmono ends exactly at nlanded * mp
 carry = 0.0; fall_carried = 0.0
 for k in range(nf - 1):
     mk = dF[k] + carry
     if mk <= 0: continue
     X, mm, vv = SS[k]; hv = np.isfinite(vv[:, 0]) & (X[:, 2] > DECK[2]) if len(X) else np.zeros(0, bool)
     if hv.sum() == 0: carry = mk; fall_carried += dF[k]; continue
-    x, v, m = X[hv], vv[hv], mm[hv]; a = acc(k); az = a[2] if a[2] < -1e-9 else -1e-9
-    c2 = x[:, 2] - DECK[2]; tau2 = (-v[:, 2] - np.sqrt(np.maximum(v[:, 2] ** 2 - 2 * az * c2, 0))) / az
-    c1 = x[:, 2] - OLD[2]; tau1 = (-v[:, 2] - np.sqrt(np.maximum(v[:, 2] ** 2 - 2 * az * np.maximum(c1, 0), 0))) / az
-    p1 = x[:, :2] + v[:, :2] * tau1[:, None] + 0.5 * a[:2] * (tau1 ** 2)[:, None]
-    over_body = (c1 > 0) & (np.abs(p1[:, 0]) < OLD[0]) & (np.abs(p1[:, 1]) < OLD[1])                 # these freeze in the stored ride: part (1)
-    cand = ~over_body & (tau2 > 0)
+    x, v, m = X[hv], vv[hv], mm[hv]
+    tau2, X2, V2 = fly(x, v, t[k], DECK[2]); c1 = x[:, 2] - OLD[2]; _, X1, _ = fly(x, v, t[k], OLD[2])    # full frame equation
+    over_body = (c1 > 0) & (np.abs(X1[:, 0]) < OLD[0]) & (np.abs(X1[:, 1]) < OLD[1])                 # these freeze in the stored ride: part (1)
+    cand = ~over_body & np.isfinite(tau2) & (tau2 > 0)
     if cand.sum() == 0: carry = mk; fall_carried += dF[k]; continue
     pick = cand & (tau2 <= dt)
     if pick.sum() == 0: pick = np.zeros_like(cand); pick[np.where(cand)[0][np.argsort(tau2[cand])[:20]]] = True
     w_ = m[pick] / m[pick].sum() * mk; tp = tau2[pick]
-    LAND.append((t[k] + np.minimum(tp, dt), x[pick, :2] + v[pick, :2] * tp[:, None] + 0.5 * a[:2] * (tp ** 2)[:, None], v[pick] + a * tp[:, None], w_, 1)); carry = 0.0
+    LAND.append((t[k] + np.minimum(tp, dt), X2[pick, :2], V2[pick], w_, 1)); carry = 0.0
 srcS = np.zeros((nf - 1, 3, nxc, nyc)); tot = {0: [0.0, 0.0], 1: [0.0, 0.0]}
 for (tl, P_, V_, w_, part) in LAND:
     kk = np.clip(((tl - t[0]) / dt).astype(int), 0, nf - 2); on = (np.abs(P_[:, 0]) < DECK[0]) & (np.abs(P_[:, 1]) < DECK[1])
