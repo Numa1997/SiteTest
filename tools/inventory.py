@@ -102,6 +102,7 @@ RULES = [
     (r'notes/spill/.+\.md', "The continuous spill model (stout stays liquid over the rim, down the glass, onto the cart): its state and its handoff of 18 November 2026.", 'docs/simulations/fig16-guinness-cart-control.md'),
     (r'tools/spill/(smoke_cpu|rest_diag|drag_check|rest_variants)\.py', "The continuous spill model: its Kaggle CPU checks (pint at rest and a hard shove; the rest diagnostic; air drag against the textbook law).", 'docs/simulations/fig16-guinness-cart-control.md'),
     (r'tools/fig16/derived/measure_stored\.py', "Fig. 16, spill derived from the stored rides, step 1 (Kaggle CPU notebook fig16-spill-derived): what a stored ride allows (books, drop list, identity, velocities by free-flight matching, rim speed, landing on the deck, the deck's shaking).", 'docs/simulations/fig16-guinness-cart-control.md'),
+    (r'tools/fig16/derived/rim_flight\.py', "Fig. 16, spill derived from a stored ride, step 2 (Kaggle CPU): exit speed over the rim from mass conservation, flight under the stored effective gravity, landing on Fig. 16's deck, checked against the stored ride's own drops on Fig. 12's body plane.", 'docs/simulations/fig16-guinness-cart-control.md'),
     # the repository's own files (not part of the app)
     (r'README\.md', 'Start here: what the project is, how the files fit together, where each one is explained.', 'README.md'),
     (r'docs/files\.md', 'This list. Written by tools/inventory.py; do not edit by hand.', 'docs/files.md'),
