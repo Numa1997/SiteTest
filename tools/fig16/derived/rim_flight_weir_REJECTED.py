@@ -1,4 +1,5 @@
-"""Fig. 16, spill derived from a stored ride, step 2 (19 Nov 2026): the stout leaving the rim, its flight, where it lands on Fig. 16's deck.
+"""REJECTED 19 Nov 2026: the weir estimate of the exit speed failed its check against the stored ride (27.0 vs 32.3 g on the old plane, spread 44 vs 71 mm, 7 vs 43 g past the edge); kept as the record. Superseded by land_on_deck.py.
+Fig. 16, spill derived from a stored ride, step 2 (19 Nov 2026): the stout leaving the rim, its flight, where it lands on Fig. 16's deck.
 Kaggle CPU; nothing runs outside Kaggle. Run on Kaggle with the dataset numakoudsie/fig16-guinness-cart-control attached:
     python3 rim_flight.py OUTDIR        (env RIDE, default kerb_off)
 
