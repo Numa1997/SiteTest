@@ -1,5 +1,7 @@
 # Fig. 16 spill derived from the stored ride: state on 19-20 Nov 2026 (handoff)
 
+> Incomplete: covers only the derived spill of Fig. 16. The complete handoff for both figures is `notes/HANDOFF-guinness-19-nov.md`.
+
 Branch `claude/guinness-open-problems`. Nothing here is merged or live. Read CLAUDE.md, then this file, before any work.
 Earlier history: notes/spill/HANDOFF.md, notes/spill/STATE.md, notes/spill/FINDINGS-review-19-nov.md.
 
