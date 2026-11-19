@@ -79,10 +79,14 @@ Switched on by `Geometry(R, dzp, fill, dx, body=(hx, hy, z_top))`; with `body=No
 | v5 | 6aab9eb0 (one side per cell) | 2 mm, 0.3 s | A 124.78, B 124.69, C 124.77, D 124.80 mm (ranges 124.4-125.0), 0 lost, 0 outside; E 125.00; mean particle height 72.74 -> 72.4-72.5 mm |
 | v6 (run16 CONT=1) | 6aab9eb0 | 2 mm | rest guard PASS (max 0.34 mm, rms 0.22 mm in 0.3 s); kerb_off 0.3 s ran, 86.5 ms/step |
 | v7 (run16 CONT=1 full) | 6aab9eb0 | 1.5 mm | rest 2 s: max 6.2 mm, rms 5.2 mm off level: guard FAIL (limit 0.75 / 0.375 mm); 350 ms/step; no ride computed |
-| v8 (rest_variants D, F no tension, E) | 7d29ec55 | 1.5 mm, 1 s | RUNNING at the time of writing: is surface tension what settles the pint? |
+| v8 (rest_variants D, F no tension, E) | 7d29ec55 | 1.5 mm, 1 s, 1 001 952 particles | D (deck, full, tension): surface 120.49 mm (119.4-122.4), mean particle height 72.69 -> 67.74 mm; F (same, NO tension): 120.63 mm, 72.69 -> 67.96 mm; E (old model): 124.87 mm, 72.69 -> 72.69 mm. 0 outside the cavity, 1 particle lost. Surface tension is NOT the cause. |
 
-So: the new model holds a pint at rest for 0.3 s to 0.2-0.3 mm, but drifts several millimetres over 2 s at 1.5 mm, while the old
-model holds exactly. The cause is not found.
+So: the new model holds a pint at rest for 0.3 s to 0.2-0.3 mm at 2 mm, but at 1.5 mm it loses 4.5 mm of surface in 1 s, while the
+old model holds. The particles stay in the cavity but their mean height falls 5 mm: the liquid is being compressed, i.e. the projection
+is not keeping the velocity divergence-free on the continuous grid. Surface tension is excluded (v8). Untested candidates: the
+conjugate gradient hitting maxit = 600 on the much larger grid (2.6 M cells at 1.5 mm vs 0.37 M; tolerance 1e-5) or its
+preconditioner; K_frac = 1.0 vs 0.62; the level set or ghost-fluid treatment at the cut cells left by the face rule; floor_w holding
+w = 0 on every closed face. The cause is not found.
 
 ## 5. My holes and shortcomings (the owner's verdict: bad physics, no intuition; these are the specific failures)
 
