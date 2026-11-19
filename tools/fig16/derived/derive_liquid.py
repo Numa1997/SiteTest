@@ -42,8 +42,36 @@ CHECKS, pass marks fixed before the run:
     the final writes).
 OUTPUT: REPORT.md, report.json, deck_source.npz (per interval and 5 mm deck cell: mass, momentum x, momentum y, for stout and head),
 fields.npz (rho and u on a 5 mm grid at six pictures), figures."""
-import glob, json, os, subprocess, sys, time, urllib.request
+import glob, json, os, subprocess, sys, time, traceback, urllib.request
 import numpy as np
+# ---- CRASH-PROOF RUNNER (20 Nov). The file is cut at the lines "# ===BLOCK <name>"; each block runs in one shared namespace, a
+# failure is recorded (block name, traceback) and the next block still runs; after EVERY block REPORT.md and report.json are
+# rewritten, so nothing finished is lost. Line numbers in tracebacks are those of this file. SMOKE=1: the first 12 pictures from
+# just before stored liquid first enters the slab -30 mm <= z < -14 mm, every block, for a run of about a minute.
+if __name__ == "__main__":
+    _path = os.path.abspath(sys.argv[0]); _src = open(_path).read().split("\n# ===BLOCK ")
+    _G = {"__name__": "__guarded__", "__file__": _path, "ERRORS": []}; _off = 0
+
+    def _flush(G):
+        try:
+            out = G.get("OUT", sys.argv[1] if len(sys.argv) > 1 else "/kaggle/working"); os.makedirs(out, exist_ok=True)
+            rep = dict(G.get("REP", {})); rep["errors"] = G["ERRORS"]; md = list(G.get("MD", []))
+            if G["ERRORS"]: md += ["\n## Block failures\n"] + [f"- block `{e['block']}`: {e['error']}" for e in G["ERRORS"]]
+            open(os.path.join(out, "REPORT.md"), "w").write("\n".join(md) + "\n")
+            json.dump(rep, open(os.path.join(out, "report.json"), "w"), indent=1, default=lambda o: float(o) if np.ndim(o) == 0 else np.asarray(o).tolist())
+        except Exception as e:
+            print("flush failed:", repr(e), flush=True)
+
+    for _i, _chunk in enumerate(_src):
+        _body = _chunk if _i == 0 else "# ===BLOCK " + _chunk; _name = "setup" if _i == 0 else _chunk.split("\n", 1)[0].strip(); _t = time.time()
+        try:
+            exec(compile("\n" * _off + _body, _path, "exec"), _G); print(f"[block {_name}: done in {time.time() - _t:.1f} s]", flush=True)
+        except Exception as e:
+            _G["ERRORS"].append(dict(block=_name, error=f"{type(e).__name__}: {e}", trace=traceback.format_exc()))
+            print(f"[block {_name}: FAILED: {type(e).__name__}: {e}]\n{traceback.format_exc()}", flush=True)
+            if _name == "setup": _flush(_G); break                                  # nothing can run without the setup
+        _flush(_G); _off += _body.count("\n") + 1
+    print(f"blocks failed: {len(_G['ERRORS'])}", flush=True); sys.exit(1 if _G["ERRORS"] else 0)
 subprocess.run([sys.executable, "-m", "pip", "install", "-q", "POT==0.9.4"], capture_output=True)
 import ot
 OUT = sys.argv[1] if len(sys.argv) > 1 else "/kaggle/working"; os.makedirs(OUT, exist_ok=True)
@@ -51,7 +79,21 @@ SUB = "fig-16-guinness-cart-with-control/v8/output/2026-11-15"; RIDE = os.enviro
 RHO, GAM, PHI_F = 1007.0, 0.0442, 0.27
 OLD = (0.11, 0.06, -0.014); DECK = (0.155, 0.062, -0.030); DC = 0.005; MS = int(os.environ.get("M", "1200"))
 MD = []; say = lambda s="": (print(s, flush=True), MD.append(s)); REP = {}; T0 = time.time()
-Z = np.load(glob.glob(f"/kaggle/input/**/{SUB}/{RIDE}.npz", recursive=True)[0])
+class _Ride:
+    """The stored ride, read once per key (cached); in SMOKE mode every per-picture array is cut to the smoke window."""
+    def __init__(s, z, sl): s.z, s.sl, s.files, s.c, s.nf0 = z, sl, z.files, {}, len(z["t"])
+    def __getitem__(s, k):
+        if k not in s.c:
+            a = s.z[k]; s.c[k] = a[s.sl] if (s.sl is not None and np.ndim(a) >= 1 and np.shape(a)[0] == s.nf0) else a
+        return s.c[k]
+
+
+_Z0 = np.load(glob.glob(f"/kaggle/input/**/{SUB}/{RIDE}.npz", recursive=True)[0]); SMOKE = os.environ.get("SMOKE", "0") == "1"; _sl = None
+if SMOKE:
+    _dz = _Z0["drops"]; _has = [bool(np.any((_dz[k][:, 2] >= -0.030) & (_dz[k][:, 2] < -0.0144))) for k in range(len(_dz))]
+    _k0 = max(0, (int(np.argmax(_has)) if any(_has) else len(_dz) // 3) - 4); _sl = slice(_k0, min(_k0 + 12, len(_dz)))
+Z = _Ride(_Z0, _sl)
+if SMOKE: say(f"# SMOKE RUN: pictures {_sl.start} to {_sl.stop - 1} only; numbers are not results\n")
 js = urllib.request.urlopen("https://raw.githubusercontent.com/Numa1997/SiteTest/main/public/scripts/guinness-glass.js", timeout=30).read().decode()
 Rp = np.array([float(v) for v in js.split("R: [")[1].split("]")[0].split(",")]); ZRIM = (len(Rp) - 1) * 0.0005; RRIM = float(Rp[-1])
 Rz = lambda z: np.interp(np.clip(np.asarray(z) / 0.0005, 0, len(Rp) - 1.001), np.arange(len(Rp)), Rp)
@@ -207,6 +249,7 @@ def run(name, air, frozen, m_air_exact, m_new):
     return out, src, cum, L, LV, S
 
 
+# ===BLOCK stout_transport
 say(f"# Fig. 16, ride `{RIDE}`: the spilled stout outside the glass as a liquid, derived from the stored ride\n")
 nact = Z["nact"].astype(float); nfly = Z["nfly"].astype(float); nst = Z["nstuck"].astype(float); nland = Z["nlanded"].astype(float)
 airS, frS = [], []
@@ -218,6 +261,8 @@ raw = np.array([len(stout_markers(k)[0]) * stout_markers(k)[2] for k in range(nf
 new_s = np.r_[np.maximum(nact[:-1] - nact[1:], 0.0) * mp]
 airS_raw = [(airS[k][0], np.full(len(airS[k][0]), raw[k] / max(len(airS[k][0]), 1))) for k in range(nf)]
 resS, srcS, cumS, LS, LVS, SS = run("stout", airS, frS, nfly * mp, new_s)
+REP["stout"] = resS                                                  # kept even if a later block fails
+# ===BLOCK landing
 # ================= LANDING OF THE STOUT ON FIG. 16'S DECK (20 Nov, the owner's two changes) =================
 # (1) Liquid frozen on z = -14 mm: its STORED position, exact. Newly frozen in interval k = frozen markers listed in picture k+1 and not
 #     in picture k (frozen markers do not move, so a listed one keeps its float16 position); mass Delta nstuck * mp per interval, exact.
@@ -314,6 +359,7 @@ resS["check1_mass"] = dict(median_rel_dev=float(np.median(dev)), max_rel_dev=flo
 c3 = None
 if c3: c3["stored_beside_g"] = float(nland[-1] * mp * 1e3); c3["pass_beside"] = abs(c3["derived_beside_g"] / c3["stored_beside_g"] - 1) < 0.15; c3["PASS"] = bool(c3["pass_mass"] and c3["pass_centroid"] and c3["pass_spread"] and c3["pass_beside"])
 REP["stout"] = resS
+# ===BLOCK head_transport
 # the head: its markers are the stored lumps
 airH, frH = [], []
 for k in range(nf):
@@ -323,6 +369,7 @@ resH, srcH, cumH, LH, _, _ = run("head", airH, frH, None, new_h); REP["head"] = 
 hb = np.array([airH[k][1].sum() + frH[k][1].sum() for k in range(nf)])
 REP["head"]["books"] = dict(spilled_liquid_g_end=float(fs[-1] * 1e3), in_air_plus_frozen_g_end=float(hb[-1] * 1e3), max_in_air_plus_frozen_g=float(hb.max() * 1e3))
 
+# ===BLOCK report_stout
 P = lambda b: "PASS" if b else "FAIL"
 s = REP["stout"]
 say("## Stout: the checks (pass marks fixed before the run)\n")
@@ -338,11 +385,14 @@ say("\n## Stout: the landing on Fig. 16's deck (before the deck stage)\n")
 say(f"Total landed: **{G['total_landed_g']:.2f} g** of {G['over_rim_g']:.2f} g over the rim: frozen part {G['frozen_g']:.2f} g (stored {G['stored_frozen_g']:.2f}), fallen part {G['fallen_g']:.2f} g (stored {G['stored_fallen_g']:.2f}).")
 say(f"On Fig. 16's deck **{G['on_deck_g']:.2f} g**, off it **{G['off_deck_g']:.2f} g**. Frozen positions by identity: {G['frozen_by_identity']} (persistence of listed frozen markers, median {G['frozen_persistence_median']:.3f}); "
     f"mass carried to a later interval for want of listed positions: frozen {G['frozen_mass_carried_g']:.2f} g, fallen {G['fallen_mass_carried_g']:.2f} g; sampling noise clipped from the fallen flux {G['fallen_noise_clipped_g']:.2f} g.")
+# ===BLOCK report_head
 h = REP["head"]
 say("\n## The head of foam (as a fluid of density 0.27 rho)\n")
 say(f"Liquid in the spilled head (books): {h['books']['spilled_liquid_g_end']:.2f} g ({Z['foam_spill'][-1] * 1e6:.2f} mL of foam). Striking the deck: {h['deck']['landed_on_deck_g']:.2f} g; missing it: {h['deck']['missed_deck_g']:.2f} g.")
 if "check2_prediction" in h: c = h["check2_prediction"]; say(f"Prediction check: carried {c['carried_mm']:.2f} mm, unmoved {c['unmoved_mm']:.2f} mm, floor {c['sampling_floor_mm']:.2f} mm: **{P(c['PASS'])}**")
 if "check3_landing" in h: c = h["check3_landing"]; say(f"Landing on Fig. 12's plane: stored {c['stored_on_g']:.2f} g, derived {c['derived_on_g']:.2f} g; centroid stored {[round(v, 1) for v in c['stored_centroid_mm']]}, derived {[round(v, 1) for v in c['derived_centroid_mm']]} mm.")
+# ===BLOCK step1_books
+big = nfly * mp > 0.02 * (nfly * mp).max()                         # (also set in landing; repeated so this block stands alone)
 say("\n## The missing mass: step 1, the stored counters alone\n")
 bal = (nact + nfly + nland + nst) - N; kb = int(np.argmax(np.abs(bal)))
 say(f"Per picture, in the glass + in the air + fallen past the edge + frozen on the old plane - N: largest imbalance {bal[kb] * mp * 1e3:+.4f} g "
@@ -352,6 +402,7 @@ say(f"Head: stored lumps (air + frozen) against foam_spill, largest difference {
 fac = (nfly[big] * mp) / np.maximum(raw[big], 1e-30)
 say(f"Weight per picture: listed air markers x (ndrops / listed) x mp, rescaled to nfly x mp; the rescale factor has median {np.median(fac):.3f}, range {fac.min():.3f} to {fac.max():.3f}.")
 REP["step1"] = dict(max_imbalance_g=float(bal[kb] * mp * 1e3), picture=kb, t=float(t[kb]), head_max_dev_g=float(hdev[kh]), weight_rescale_median=float(np.median(fac)))
+# ===BLOCK field_fallen
 # ================= FIELD CHECK SPLIT BY PART: noise floor AND mismatch in one run (20 Nov, second session) =================
 # WHY. Of the 75.57 g landed, the frozen 32.29 g is placed at its STORED positions on z = -14 mm; only its 16 mm drop is derived, so
 # comparing it with the stored frozen mass is near-circular: reported, proves little. The fallen 43.28 g is placed by the derivation.
@@ -439,14 +490,6 @@ if pick is None: FC["verdict"] = "INCONCLUSIVE: no resolution has a comparison f
 else:
     ok_ = pick["model_error"] <= ERR_MAX and pick["mismatch"] <= BASE_RATIO * pick["unmoved"]
     FC["chosen"] = pick; FC["verdict"] = "PASS" if ok_ else "FAIL"
-# frozen part (near-circular): derived 16 mm drop against the stored newly frozen mass, on the same grids; floor = split-half / 2
-fzl = [(tl_, P_, w_) for (tl_, P_, V_, w_, part) in LAND if part == 0]
-frl = [(np.full(len(q[1]), t[q[0]] + 0.5 * dt), q[1], q[2]) for q in FR]
-FZ_D, FZ_S = fzl, frl; rs3 = np.random.default_rng(13); FZ_A, FZ_B = [], []
-for (tt_, P_, w_) in FZ_S:
-    h_ = rs3.random(len(P_)) < 0.5; FZ_A.append((tt_, P_[h_], 2 * w_[h_])); FZ_B.append((tt_, P_[~h_], 2 * w_[~h_]))
-FC["frozen_near_circular"] = [dict(cell_mm=c * 1e3, window_s=W, mismatch=l1(stack(FZ_D, c, W), stack(FZ_S, c, W)), floor_stored=l1(stack(FZ_A, c, W), stack(FZ_B, c, W)) / 2)
-                              for c in CELLS for W in WINS]
 FC["wall_s"] = time.time() - T1; REP["field_check"] = FC
 say("\n## Field check split by part (noise floor and mismatch in one run; marks fixed before the run)\n")
 say(f"Fallen part (placed by the derivation): liquid in the air at picture k, velocity known on arrival, carried {HZ} pictures on with the frame equation; "
@@ -457,10 +500,20 @@ for e in FC["complete"]:
     say(f"| {e['cell_mm']:.0f} | {e['window_s']:.2f} | {100 * e['mismatch']:.1f} % | {100 * e['unmoved']:.1f} % | {100 * e['floor_stored']:.1f} % | {100 * e['floor_derived']:.1f} % | "
         f"{100 * e['floor_comparison']:.1f} % | {100 * e['model_error']:.1f} % | {e['quarter_over_half']:.2f} | {e['stored_g']:.2f} | {e['derived_g']:.2f} |")
 say(f"\nVerdict (complete listings; finest resolution with Fc <= {100 * FLOOR_MAX:.0f} %; PASS if E <= {100 * ERR_MAX:.0f} % and M <= {BASE_RATIO} U): **{FC['verdict']}**"
-    + (f" at {pick['cell_mm']:.0f} mm, {pick['window_s']:.2f} s." if pick else "."))
+    + (f" at {pick['cell_mm']:.0f} mm, {pick['window_s']:.2f} s." if pick else ".") + f" Fallen-part wall time {FC['wall_s']:.0f} s.")
+# ===BLOCK field_frozen
+# frozen part (near-circular): derived 16 mm drop against the stored newly frozen mass, on the same grids; floor = split-half / 2
+fzl = [(tl_, P_, w_) for (tl_, P_, V_, w_, part) in LAND if part == 0]
+frl = [(np.full(len(q[1]), t[q[0]] + 0.5 * dt), q[1], q[2]) for q in FR]
+FZ_D, FZ_S = fzl, frl; rs3 = np.random.default_rng(13); FZ_A, FZ_B = [], []
+for (tt_, P_, w_) in FZ_S:
+    h_ = rs3.random(len(P_)) < 0.5; FZ_A.append((tt_[h_], P_[h_], 2 * w_[h_])); FZ_B.append((tt_[~h_], P_[~h_], 2 * w_[~h_]))
+REP["field_check_frozen"] = FZR = [dict(cell_mm=c * 1e3, window_s=W, mismatch=l1(stack(FZ_D, c, W), stack(FZ_S, c, W)), floor_stored=l1(stack(FZ_A, c, W), stack(FZ_B, c, W)) / 2)
+                                   for c in CELLS for W in WINS]
 say("\nFrozen part (near-circular: stored positions, only the 16 mm drop derived), mismatch and floor (split-half / 2) per resolution: "
-    + "; ".join(f"{e['cell_mm']:.0f} mm {e['window_s']:.2f} s: {100 * e['mismatch']:.1f} % / {100 * e['floor_stored']:.1f} %" for e in FC["frozen_near_circular"]))
-say(f"(Run A reported its floor as the raw split-half L1, 129.2 %; by the scaling above the full-sample floor is half of that.) Field check wall time {FC['wall_s']:.0f} s.")
+    + "; ".join(f"{e['cell_mm']:.0f} mm {e['window_s']:.2f} s: {100 * e['mismatch']:.1f} % / {100 * e['floor_stored']:.1f} %" for e in FZR))
+say("(Run A reported its floor as the raw split-half L1, 129.2 %; by the scaling above the full-sample floor is half of that.)")
+# ===BLOCK outputs
 np.savez_compressed(os.path.join(OUT, "deck_source.npz"), t=t, cell=DC, deck=np.array(DECK), stout=srcS, head=srcH)
 say(f"\nWall time {time.time() - T0:.0f} s on Kaggle CPU.")
 json.dump(REP, open(os.path.join(OUT, "report.json"), "w"), indent=1, default=float); open(os.path.join(OUT, "REPORT.md"), "w").write("\n".join(MD) + "\n")

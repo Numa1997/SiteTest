@@ -489,3 +489,13 @@ folder like `notes/spill/runs/` needs its own rule) and keep the description tru
 - Written into `tools/fig16/derived/derive_liquid.py` (the block before the final writes): prediction of the slab mass HZ = 3 pictures
   ahead from arrival velocities; cells 5/10/15/20 mm x windows 0.1/0.25/0.5 s; marks FLOOR_MAX 0.25, ERR_MAX 0.25, BASE_RATIO 0.5.
   Committed, NOT launched; waiting for the owner's yes and the supervisor's reading.
+- 19 Nov 19:10:57 UTC: `fig16-spray-derived` v8 launched (commit 4f775c17), RUNNING 19:11:03, COMPLETE 19:16:30 (5 min 33 s), but
+  the script crashed at the frozen-part report (half split kept all time stamps: `tt_` for `tt_[h_]`); run A reproduced exactly;
+  the fallen-part numbers were computed and lost (printed only at the end). Mistake of this session, with the empty `python3 -` call
+  in the container at ~19:05 (computed nothing; against R1).
+- Supervisor's process rule from now on: answer the deciding question from the code first; crash-proof script (each block writes its
+  result at once; one failure cannot lose the others); smoke run on Kaggle CPU (12 pictures, all blocks, ~1 min) before any full run;
+  commit, send the hash, wait for the supervisor's reading and the owner's yes before any launch.
+- Done (not launched): `derive_liquid.py` cut into blocks `# ===BLOCK <name>` run by a guarded runner at the top (each block's
+  failure recorded in report.json "errors", REPORT.md and report.json rewritten after every block); SMOKE=1 mode (12 pictures from
+  4 before stored liquid first enters the slab); half-split bug fixed; fallen and frozen parts in separate blocks.
