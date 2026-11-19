@@ -59,7 +59,7 @@ for k in range(nf - 1):
     a = np.array([gx[k], 0.0, gz[k]]); Bs = B - 0.5 * a * dt * dt                                   # remove gravity's own part of the step
     share = min(mA.sum(), mB.sum())
     C = ot.dist(A, Bs)                                                                               # squared distances, m^2
-    P = ot.partial.partial_wasserstein(mA / mA.sum(), mB / mB.sum(), C / C.max(), m=0.999 * share / max(mA.sum(), mB.sum()))   # exact LP (19 Nov: the entropic version underflowed)
+    P = ot.partial.partial_wasserstein(mA / mA.sum(), mB / mB.sum(), C / C.max(), m=0.999 * share / max(mA.sum(), mB.sum()), nb_dummy=200)   # exact LP (19 Nov: the entropic version underflowed)
     row = P.sum(1); ok = row > 1e-12
     if ok.sum() < 5: continue
     T = (P @ B)[ok] / row[ok, None]
