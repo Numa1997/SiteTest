@@ -96,8 +96,11 @@ def run(name, air, frozen, m_air_exact, m_new):
     nxc, nyc = int(round(2 * DECK[0] / DC)), int(round(2 * DECK[1] / DC))
     src = np.zeros((nf - 1, 3, nxc, nyc)); cum = dict(old_on=np.zeros(nf), old_beside=np.zeros(nf), deck_on=np.zeros(nf), deck_off=np.zeros(nf))
     cross_xy = []; we_low = 0.0; we_all = 0.0
+    # LEDGER (20 Nov, the missing 5.8 g): per interval, mass leaving the air per the books against mass counted as crossing
+    L = {q: np.zeros(nf - 1) for q in ("books_leave", "plan_leave", "cross_old", "deficit_nov", "deficit_cross", "deficit_late", "inward", "deck")}
     for k in range(nf - 1):
-        A, mA, vA = S[k]; B, mB, vB = S[k + 1]; a = acc(k)
+        A, mA, vA = S[k]; B, mB, vB = S[k + 1]; a = acc(k); deficit = np.zeros(len(A))
+        L["books_leave"][k] = air[k][1].sum() + m_new[k] - air[k + 1][1].sum()
         if len(A) >= 8 and len(B) >= 8:
             known = np.isfinite(vA[:, 0]); pred = A + 0.5 * a * dt * dt; pred[known] += vA[known] * dt
             shared = mB.sum() - m_new[k]
@@ -110,6 +113,7 @@ def run(name, air, frozen, m_air_exact, m_new):
                     _, df = partial_plan(B[h1[:h]], mB[h1[:h]], B[h1[h:2 * h]], mB[h1[h:2 * h]], 0.9 * min(mB[h1[:h]].sum(), mB[h1[h:2 * h]].sum()), B[h1[:h]])
                     pred_res.append(d1); still_res.append(d0); floor_res.append(df)
             P, _ = partial_plan(A, mA, B, mB, shared, pred)
+            deficit = np.clip(mA - P.sum(1), 0.0, None); L["plan_leave"][k] = deficit.sum()   # mass the plan sends out of the air
             col = P.sum(0); okB = col > 0.5 * mB
             vB[okB] = (B[okB] - (P.T @ A)[okB] / col[okB, None]) / dt + 0.5 * a * dt          # arrival velocity at picture k+1
             row = P.sum(1); okA = (row > 0.5 * mA) & ~known
@@ -127,6 +131,8 @@ def run(name, air, frozen, m_air_exact, m_new):
             vel = lambda tau: v + a * tau[:, None]
             t1 = cross(OLD[2]); p1 = pos(np.nan_to_num(t1)); on_old = np.isfinite(t1) & (np.abs(p1[:, 0]) < OLD[0]) & (np.abs(p1[:, 1]) < OLD[1])
             beside = np.isfinite(t1) & ~on_old
+            cr = on_old | beside; dh = deficit[has]
+            L["cross_old"][k] = m[cr].sum(); L["deficit_nov"][k] = deficit[~has].sum(); L["deficit_cross"][k] = dh[cr].sum(); L["deficit_late"][k] = dh[~cr].sum()
             cum["old_on"][k + 1] = m[on_old].sum(); cum["old_beside"][k + 1] = m[beside].sum()
             if on_old.any(): cross_xy.append(np.c_[p1[on_old], m[on_old]])
             # onto Fig. 16's deck: (a) through the old plane, then 16 mm more; (b) beside the old body, at the deck's height
@@ -138,13 +144,14 @@ def run(name, air, frozen, m_air_exact, m_new):
                 land_p.append(pp); land_v.append(vv); land_m.append(m[on_old])
             t2 = cross(DECK[2]); p2 = pos(np.nan_to_num(t2)); outside_old = ~((np.abs(p2[:, 0]) < OLD[0]) & (np.abs(p2[:, 1]) < OLD[1]))
             c2 = np.isfinite(t2) & outside_old & ~on_old
+            L["inward"][k] = m[np.isfinite(t2) & ~outside_old & ~on_old].sum()      # beside the old body at -14 mm, under its outline at -30 mm
             if c2.any(): land_p.append(p2[c2]); land_v.append(vel(np.nan_to_num(t2))[c2]); land_m.append(m[c2])
             if land_p:
                 lp, lv, lm = np.concatenate(land_p), np.concatenate(land_v), np.concatenate(land_m)
                 ond = (np.abs(lp[:, 0]) < DECK[0]) & (np.abs(lp[:, 1]) < DECK[1])
                 i = np.clip(((lp[ond, 0] + DECK[0]) / DC).astype(int), 0, nxc - 1); j = np.clip(((lp[ond, 1] + DECK[1]) / DC).astype(int), 0, nyc - 1)
                 np.add.at(src[k, 0], (i, j), lm[ond]); np.add.at(src[k, 1], (i, j), lm[ond] * lv[ond, 0]); np.add.at(src[k, 2], (i, j), lm[ond] * lv[ond, 1])
-                cum["deck_on"][k + 1] = lm[ond].sum(); cum["deck_off"][k + 1] = lm[~ond].sum()
+                cum["deck_on"][k + 1] = lm[ond].sum(); cum["deck_off"][k + 1] = lm[~ond].sum(); L["deck"][k] = lm.sum()
             # Weber number of the airborne liquid (stout only): h = (rho / RHO) * cell, cell 4 mm
             if name == "stout" and len(x):
                 ce = 0.004; key = np.floor(x / ce).astype(np.int64); _, inv = np.unique(key, axis=0, return_inverse=True); mc = np.bincount(inv.ravel(), weights=m)
@@ -169,7 +176,7 @@ def run(name, air, frozen, m_air_exact, m_new):
         c3["pass_spread"] = bool(np.all(np.abs(dsp / ss - 1) < 0.25)); out["check3_landing"] = c3
     out["deck"] = dict(landed_on_deck_g=float(cum["deck_on"][-1] * 1e3), missed_deck_g=float(cum["deck_off"][-1] * 1e3))
     if we_all > 0: out["weber_below_1_share"] = float(we_low / we_all)
-    return out, src, cum
+    return out, src, cum, L
 
 
 say(f"# Fig. 16, ride `{RIDE}`: the spilled stout outside the glass as a liquid, derived from the stored ride\n")
@@ -182,7 +189,7 @@ for k in range(nf):
 raw = np.array([len(stout_markers(k)[0]) * stout_markers(k)[2] for k in range(nf)])
 new_s = np.r_[np.maximum(nact[:-1] - nact[1:], 0.0) * mp]
 airS_raw = [(airS[k][0], np.full(len(airS[k][0]), raw[k] / max(len(airS[k][0]), 1))) for k in range(nf)]
-resS, srcS, cumS = run("stout", airS, frS, nfly * mp, new_s)
+resS, srcS, cumS, LS = run("stout", airS, frS, nfly * mp, new_s)
 est = raw; big = nfly * mp > 0.02 * (nfly * mp).max(); dev = np.abs(est[big] / (nfly[big] * mp) - 1)
 resS["check1_mass"] = dict(median_rel_dev=float(np.median(dev)), max_rel_dev=float(dev.max()), PASS=bool(np.median(dev) < 0.10))
 c3 = resS.get("check3_landing")
@@ -193,7 +200,7 @@ airH, frH = [], []
 for k in range(nf):
     Xa, Xs, ma, ms = head_markers(k); airH.append((Xa, ma)); frH.append((Xs, ms))
 fs = Z["foam_spill"].astype(float) * PHI_F * RHO; new_h = np.maximum(np.diff(fs), 0.0)
-resH, srcH, cumH = run("head", airH, frH, None, new_h); REP["head"] = resH
+resH, srcH, cumH, LH = run("head", airH, frH, None, new_h); REP["head"] = resH
 hb = np.array([airH[k][1].sum() + frH[k][1].sum() for k in range(nf)])
 REP["head"]["books"] = dict(spilled_liquid_g_end=float(fs[-1] * 1e3), in_air_plus_frozen_g_end=float(hb[-1] * 1e3), max_in_air_plus_frozen_g=float(hb.max() * 1e3))
 
@@ -218,6 +225,31 @@ say("\n## The head of foam (as a fluid of density 0.27 rho)\n")
 say(f"Liquid in the spilled head (books): {h['books']['spilled_liquid_g_end']:.2f} g ({Z['foam_spill'][-1] * 1e6:.2f} mL of foam). Striking the deck: {h['deck']['landed_on_deck_g']:.2f} g; missing it: {h['deck']['missed_deck_g']:.2f} g.")
 if "check2_prediction" in h: c = h["check2_prediction"]; say(f"Prediction check: carried {c['carried_mm']:.2f} mm, unmoved {c['unmoved_mm']:.2f} mm, floor {c['sampling_floor_mm']:.2f} mm: **{P(c['PASS'])}**")
 if "check3_landing" in h: c = h["check3_landing"]; say(f"Landing on Fig. 12's plane: stored {c['stored_on_g']:.2f} g, derived {c['derived_on_g']:.2f} g; centroid stored {[round(v, 1) for v in c['stored_centroid_mm']]}, derived {[round(v, 1) for v in c['derived_centroid_mm']]} mm.")
+say("\n## The missing mass: step 1, the stored counters alone\n")
+bal = (nact + nfly + nland + nst) - N; kb = int(np.argmax(np.abs(bal)))
+say(f"Per picture, in the glass + in the air + fallen past the edge + frozen on the old plane - N: largest imbalance {bal[kb] * mp * 1e3:+.4f} g "
+    f"({bal[kb]:+.0f} markers) at picture {kb} (t = {t[kb]:.3f} s); all {nf} pictures exact: {bool(np.all(bal == 0))}.")
+hdev = (hb - fs) * 1e3; kh = int(np.argmax(np.abs(hdev)))
+say(f"Head: stored lumps (air + frozen) against foam_spill, largest difference {hdev[kh]:+.3f} g of liquid at picture {kh} (t = {t[kh]:.3f} s).")
+fac = (nfly[big] * mp) / np.maximum(raw[big], 1e-30)
+say(f"Weight per picture: listed air markers x (ndrops / listed) x mp, rescaled to nfly x mp; the rescale factor has median {np.median(fac):.3f}, range {fac.min():.3f} to {fac.max():.3f}.")
+REP["step1"] = dict(max_imbalance_g=float(bal[kb] * mp * 1e3), picture=kb, t=float(t[kb]), head_max_dev_g=float(hdev[kh]), weight_rescale_median=float(np.median(fac)))
+say("\n## The missing mass: step 2, the derivation's ledger (stout, cumulative to 4 s, g)\n")
+C = {q: float(LS[q].sum() * 1e3) for q in LS}
+air_end = nfly[-1] * mp * 1e3
+say("| | g |\n|---|---|")
+say(f"| over the rim (books) | {(N - nact[-1]) * mp * 1e3:.2f} |")
+say(f"| still in the air at 4 s (books) | {air_end:.2f} |")
+say(f"| left the air, books: sum of (frozen + fallen) per interval | {C['books_leave']:.2f} |")
+say(f"| left the air, transport plan (dummy column) | {C['plan_leave']:.2f} |")
+say(f"| counted crossing z = -14 mm (on the body + beside) | {C['cross_old']:.2f} |")
+say(f"| of the plan's leaving mass: with no velocity, never tested | {C['deficit_nov']:.2f} |")
+say(f"| of the plan's leaving mass: velocity known, ballistic crossing not within (0, dt] | {C['deficit_late']:.2f} |")
+say(f"| counted crossing but the plan keeps it in the air (double count, + sign) | {C['cross_old'] - C['deficit_cross']:.2f} |")
+say(f"| beside the old body at -14 mm, under its outline at -30 mm, dropped | {C['inward']:.2f} |")
+say(f"| counted on the deck stage (on + off) | {C['deck']:.2f} |")
+REP["ledger_g"] = C; REP["ledger_g"]["air_end"] = air_end
+np.savez_compressed(os.path.join(OUT, "ledger.npz"), t=t, **{f"stout_{q}": LS[q] for q in LS}, **{f"head_{q}": LH[q] for q in LH})
 np.savez_compressed(os.path.join(OUT, "deck_source.npz"), t=t, cell=DC, deck=np.array(DECK), stout=srcS, head=srcH)
 say(f"\nWall time {time.time() - T0:.0f} s on Kaggle CPU.")
 json.dump(REP, open(os.path.join(OUT, "report.json"), "w"), indent=1, default=float); open(os.path.join(OUT, "REPORT.md"), "w").write("\n".join(MD) + "\n")
