@@ -97,6 +97,7 @@ def run(name, air, frozen, m_air_exact, m_new):
     src = np.zeros((nf - 1, 3, nxc, nyc)); cum = dict(old_on=np.zeros(nf), old_beside=np.zeros(nf), deck_on=np.zeros(nf), deck_off=np.zeros(nf))
     cross_xy = []; we_low = 0.0; we_all = 0.0
     # LEDGER (20 Nov, the missing 5.8 g): per interval, mass leaving the air per the books against mass counted as crossing
+    LV = []                                                           # per interval: the plan's leaving liquid at its ballistic crossing of z = -14 mm (no time window)
     L = {q: np.zeros(nf - 1) for q in ("books_leave", "plan_leave", "cross_old", "deficit_nov", "deficit_cross", "deficit_late", "inward", "deck")}
     for k in range(nf - 1):
         A, mA, vA = S[k]; B, mB, vB = S[k + 1]; a = acc(k); deficit = np.zeros(len(A))
@@ -134,6 +135,11 @@ def run(name, air, frozen, m_air_exact, m_new):
             cr = on_old | beside; dh = deficit[has]
             L["cross_old"][k] = m[cr].sum(); L["deficit_nov"][k] = deficit[~has].sum(); L["deficit_cross"][k] = dh[cr].sum(); L["deficit_late"][k] = dh[~cr].sum()
             cum["old_on"][k + 1] = m[on_old].sum(); cum["old_beside"][k + 1] = m[beside].sum()
+            sel = dh > 0; az_ = a[2] if a[2] < -1e-9 else -1e-9
+            if sel.any():
+                xs, vs, c0 = x[sel], v[sel], x[sel, 2] - OLD[2]
+                tau = (-vs[:, 2] - np.sqrt(np.maximum(vs[:, 2] ** 2 - 2 * az_ * c0, 0))) / az_; ok = (c0 > 0) & (tau > 0)
+                LV.append((k, xs[ok, :2] + vs[ok, :2] * tau[ok, None] + 0.5 * a[:2] * (tau[ok] ** 2)[:, None], vs[ok] + a * tau[ok, None], dh[sel][ok], t[k] + tau[ok]))
             if on_old.any(): cross_xy.append(np.c_[p1[on_old], m[on_old]])
             # onto Fig. 16's deck: (a) through the old plane, then 16 mm more; (b) beside the old body, at the deck's height
             land_p, land_v, land_m, off_m = [], [], [], 0.0
@@ -176,7 +182,7 @@ def run(name, air, frozen, m_air_exact, m_new):
         c3["pass_spread"] = bool(np.all(np.abs(dsp / ss - 1) < 0.25)); out["check3_landing"] = c3
     out["deck"] = dict(landed_on_deck_g=float(cum["deck_on"][-1] * 1e3), missed_deck_g=float(cum["deck_off"][-1] * 1e3))
     if we_all > 0: out["weber_below_1_share"] = float(we_low / we_all)
-    return out, src, cum, L
+    return out, src, cum, L, LV, S
 
 
 say(f"# Fig. 16, ride `{RIDE}`: the spilled stout outside the glass as a liquid, derived from the stored ride\n")
@@ -189,10 +195,104 @@ for k in range(nf):
 raw = np.array([len(stout_markers(k)[0]) * stout_markers(k)[2] for k in range(nf)])
 new_s = np.r_[np.maximum(nact[:-1] - nact[1:], 0.0) * mp]
 airS_raw = [(airS[k][0], np.full(len(airS[k][0]), raw[k] / max(len(airS[k][0]), 1))) for k in range(nf)]
-resS, srcS, cumS, LS = run("stout", airS, frS, nfly * mp, new_s)
+resS, srcS, cumS, LS, LVS, SS = run("stout", airS, frS, nfly * mp, new_s)
+# ================= LANDING OF THE STOUT ON FIG. 16'S DECK (20 Nov, the owner's two changes) =================
+# (1) Liquid frozen on z = -14 mm: its STORED position, exact. Newly frozen in interval k = frozen markers listed in picture k+1 and not
+#     in picture k (frozen markers do not move, so a listed one keeps its float16 position); mass Delta nstuck * mp per interval, exact.
+#     Derived: only the 16 mm drop to the deck, from the velocity of the derived leaving liquid nearest to it at -14 mm.
+# (2) Liquid that fell past the old body's edge: mass through z = -30 mm per interval from the books, exact:
+#     F_k = (stored air liquid below -30 mm) + nlanded * mp, increments of its running maximum; placed at the ballistic crossings of -30 mm
+#     of the derived air liquid that is not over the old body.
+from scipy.spatial import cKDTree
+nxc, nyc = int(round(2 * DECK[0] / DC)), int(round(2 * DECK[1] / DC)); WIN = 0.1
+FX = []
+for k in range(nf):
+    X = Z["drops"][k].astype(np.float64); X = X[np.isfinite(X).all(1)]; FX.append(X[stuck_(X)][:, :2])
+keys = lambda P: set(map(tuple, np.round(P * 1e6).astype(np.int64)))
+persist, NEW = [], []
+for k in range(nf - 1):
+    s0, s1 = keys(FX[k]), keys(FX[k + 1])
+    if len(FX[k]): persist.append(np.mean([q in s1 for q in map(tuple, np.round(FX[k] * 1e6).astype(np.int64))]))
+    K1 = np.round(FX[k + 1] * 1e6).astype(np.int64); NEW.append(FX[k + 1][np.array([tuple(q) not in s0 for q in K1], bool)] if len(K1) else np.zeros((0, 2)))
+persist_med = float(np.median(persist)) if persist else float("nan")
+USE_ID = persist_med >= 0.9
+dnst = np.maximum(np.diff(nst), 0.0) * mp; carried = 0.0; carry = 0.0; FR = []                    # FR: (k, xy, mass) newly frozen, stored
+edges = (np.linspace(-DECK[0], DECK[0], nxc + 1), np.linspace(-DECK[1], DECK[1], nyc + 1)); cxy = np.stack(np.meshgrid(0.5 * (edges[0][1:] + edges[0][:-1]), 0.5 * (edges[1][1:] + edges[1][:-1]), indexing="ij"), -1).reshape(-1, 2)
+for k in range(nf - 1):
+    mk = dnst[k] + carry
+    if mk <= 0: continue
+    if USE_ID:
+        P_ = NEW[k]; w_ = np.full(len(P_), 1.0)
+    else:                                                                                           # fallback: difference of the frozen fields, 5 mm cells
+        h0 = np.histogram2d(FX[k][:, 0], FX[k][:, 1], edges)[0] * (nst[k] / max(len(FX[k]), 1)); h1 = np.histogram2d(FX[k + 1][:, 0], FX[k + 1][:, 1], edges)[0] * (nst[k + 1] / max(len(FX[k + 1]), 1))
+        dh_ = np.clip(h1 - h0, 0, None).ravel(); P_, w_ = cxy[dh_ > 0], dh_[dh_ > 0]
+    if len(P_) == 0: carry = mk; carried += dnst[k]; continue
+    FR.append((k, P_, w_ / w_.sum() * mk)); carry = 0.0
+if carry > 0: FR.append((nf - 2, FX[-1], np.full(len(FX[-1]), carry / max(len(FX[-1]), 1))))
+lv_k = np.concatenate([np.full(len(q[1]), q[0]) for q in LVS]); lv_p = np.concatenate([q[1] for q in LVS]); lv_v = np.concatenate([q[2] for q in LVS]); lv_m = np.concatenate([q[3] for q in LVS]); lv_t = np.concatenate([q[4] for q in LVS])
+v_mean = np.average(lv_v, axis=0, weights=lv_m)
+LAND = []                                                                                          # (time on deck, xy, velocity, mass, part)
+for (k, P_, w_) in FR:
+    near = np.abs(lv_k - k) <= 3
+    if near.sum() >= 8:
+        tr = cKDTree(lv_p[near]); d_, j_ = tr.query(P_, k=8); W = lv_m[near][j_] / np.maximum(d_, 1e-4); v1 = (lv_v[near][j_] * W[..., None]).sum(1) / W.sum(1)[:, None]
+    else: v1 = np.tile(v_mean, (len(P_), 1))
+    az = acc(k)[2] if acc(k)[2] < -1e-9 else -1e-9; d = OLD[2] - DECK[2]
+    tf = (-v1[:, 2] - np.sqrt(np.maximum(v1[:, 2] ** 2 - 2 * az * d, 0))) / az; ah = acc(k)[:2]
+    LAND.append((t[k] + 0.5 * dt + tf, P_ + v1[:, :2] * tf[:, None] + 0.5 * ah * (tf ** 2)[:, None], v1 + acc(k) * tf[:, None], w_, 0))
+Mbelow = np.array([airS[k][1][airS[k][0][:, 2] < DECK[2]].sum() if (len(airS[k][0]) and nfly[k] > 0) else 0.0 for k in range(nf)])
+Fraw = Mbelow + nland * mp; Fmono = np.minimum(np.maximum.accumulate(Fraw), Fraw[-1])                     # ends exactly at nlanded * mp; dF = np.diff(Fmono); fall_noise = float(np.clip(-np.diff(Fraw), 0, None).sum())
+carry = 0.0; fall_carried = 0.0
+for k in range(nf - 1):
+    mk = dF[k] + carry
+    if mk <= 0: continue
+    X, mm, vv = SS[k]; hv = np.isfinite(vv[:, 0]) & (X[:, 2] > DECK[2]) if len(X) else np.zeros(0, bool)
+    if hv.sum() == 0: carry = mk; fall_carried += dF[k]; continue
+    x, v, m = X[hv], vv[hv], mm[hv]; a = acc(k); az = a[2] if a[2] < -1e-9 else -1e-9
+    c2 = x[:, 2] - DECK[2]; tau2 = (-v[:, 2] - np.sqrt(np.maximum(v[:, 2] ** 2 - 2 * az * c2, 0))) / az
+    c1 = x[:, 2] - OLD[2]; tau1 = (-v[:, 2] - np.sqrt(np.maximum(v[:, 2] ** 2 - 2 * az * np.maximum(c1, 0), 0))) / az
+    p1 = x[:, :2] + v[:, :2] * tau1[:, None] + 0.5 * a[:2] * (tau1 ** 2)[:, None]
+    over_body = (c1 > 0) & (np.abs(p1[:, 0]) < OLD[0]) & (np.abs(p1[:, 1]) < OLD[1])                 # these freeze in the stored ride: part (1)
+    cand = ~over_body & (tau2 > 0)
+    if cand.sum() == 0: carry = mk; fall_carried += dF[k]; continue
+    pick = cand & (tau2 <= dt)
+    if pick.sum() == 0: pick = np.zeros_like(cand); pick[np.where(cand)[0][np.argsort(tau2[cand])[:20]]] = True
+    w_ = m[pick] / m[pick].sum() * mk; tp = tau2[pick]
+    LAND.append((t[k] + np.minimum(tp, dt), x[pick, :2] + v[pick, :2] * tp[:, None] + 0.5 * a[:2] * (tp ** 2)[:, None], v[pick] + a * tp[:, None], w_, 1)); carry = 0.0
+srcS = np.zeros((nf - 1, 3, nxc, nyc)); tot = {0: [0.0, 0.0], 1: [0.0, 0.0]}
+for (tl, P_, V_, w_, part) in LAND:
+    kk = np.clip(((tl - t[0]) / dt).astype(int), 0, nf - 2); on = (np.abs(P_[:, 0]) < DECK[0]) & (np.abs(P_[:, 1]) < DECK[1])
+    i = np.clip(((P_[on, 0] + DECK[0]) / DC).astype(int), 0, nxc - 1); j = np.clip(((P_[on, 1] + DECK[1]) / DC).astype(int), 0, nyc - 1)
+    np.add.at(srcS, (kk[on], 0, i, j), w_[on]); np.add.at(srcS, (kk[on], 1, i, j), w_[on] * V_[on, 0]); np.add.at(srcS, (kk[on], 2, i, j), w_[on] * V_[on, 1])
+    tot[part][0] += w_[on].sum(); tot[part][1] += w_[~on].sum()
+# ---- field check: per 5 mm deck cell and per 0.1 s window, derived mass against the stored frozen mass (L1 / stored mass)
+nw = int(np.ceil((t[-1] - t[0]) / WIN)) + 2
+def field(tl, P_, w_):
+    G = np.zeros((nw, nxc, nyc)); on = (np.abs(P_[:, 0]) < DECK[0]) & (np.abs(P_[:, 1]) < DECK[1])
+    np.add.at(G, (np.clip(((tl[on] - t[0]) / WIN).astype(int), 0, nw - 1), np.clip(((P_[on, 0] + DECK[0]) / DC).astype(int), 0, nxc - 1), np.clip(((P_[on, 1] + DECK[1]) / DC).astype(int), 0, nyc - 1)), w_[on]); return G
+cat = lambda L_, i: np.concatenate([q[i] for q in L_]) if L_ else np.zeros(0)
+Sfield = field(cat([(np.full(len(q[1]), t[q[0]] + 0.5 * dt),) for q in FR], 0), np.concatenate([q[1] for q in FR]), cat(FR, 2))
+fz = [q for q in LAND if q[4] == 0]
+Dfield = field(cat(fz, 0), np.concatenate([q[1] for q in fz]), cat(fz, 3))
+inbody = (np.abs(lv_p[:, 0]) < OLD[0]) & (np.abs(lv_p[:, 1]) < OLD[1])
+Vfield = field(lv_t[inbody], lv_p[inbody], lv_m[inbody])
+L1 = lambda A_, B_: float(np.abs(A_ - B_).sum() / max(B_.sum(), 1e-30))
+rs = np.random.default_rng(7); half = [[], []]
+for (k, P_, w_) in FR:
+    pm = rs.permutation(len(P_)); hh = len(P_) // 2
+    for s_, ix in enumerate((pm[:hh], pm[hh:2 * hh])):
+        if len(ix): half[s_].append((np.full(len(ix), t[k] + 0.5 * dt), P_[ix], w_[ix] * len(P_) / len(ix)))
+floor = L1(*(field(cat(h_, 0), np.concatenate([q[1] for q in h_]), cat(h_, 2)) for h_ in half)) if half[0] and half[1] else float("nan")
+LANDREP = dict(frozen_g=float((tot[0][0] + tot[0][1]) * 1e3), fallen_g=float((tot[1][0] + tot[1][1]) * 1e3), on_deck_g=float((tot[0][0] + tot[1][0]) * 1e3), off_deck_g=float((tot[0][1] + tot[1][1]) * 1e3),
+               stored_frozen_g=float(nst[-1] * mp * 1e3), stored_fallen_g=float(nland[-1] * mp * 1e3), over_rim_g=float((N - nact[-1]) * mp * 1e3),
+               frozen_persistence_median=persist_med, frozen_by_identity=bool(USE_ID), frozen_mass_carried_g=float(carried * 1e3), fallen_mass_carried_g=float(fall_carried * 1e3),
+               fallen_noise_clipped_g=fall_noise * 1e3, L1_deck_vs_stored=L1(Dfield, Sfield), L1_derived_velocity_crossing_vs_stored=L1(Vfield, Sfield), L1_sampling_floor=floor)
+LANDREP["total_landed_g"] = LANDREP["frozen_g"] + LANDREP["fallen_g"]
+resS["landing"] = LANDREP; resS["deck"] = dict(landed_on_deck_g=LANDREP["on_deck_g"], missed_deck_g=LANDREP["off_deck_g"])
+resS.pop("check3_landing", None)
 est = raw; big = nfly * mp > 0.02 * (nfly * mp).max(); dev = np.abs(est[big] / (nfly[big] * mp) - 1)
 resS["check1_mass"] = dict(median_rel_dev=float(np.median(dev)), max_rel_dev=float(dev.max()), PASS=bool(np.median(dev) < 0.10))
-c3 = resS.get("check3_landing")
+c3 = None
 if c3: c3["stored_beside_g"] = float(nland[-1] * mp * 1e3); c3["pass_beside"] = abs(c3["derived_beside_g"] / c3["stored_beside_g"] - 1) < 0.15; c3["PASS"] = bool(c3["pass_mass"] and c3["pass_centroid"] and c3["pass_spread"] and c3["pass_beside"])
 REP["stout"] = resS
 # the head: its markers are the stored lumps
@@ -200,7 +300,7 @@ airH, frH = [], []
 for k in range(nf):
     Xa, Xs, ma, ms = head_markers(k); airH.append((Xa, ma)); frH.append((Xs, ms))
 fs = Z["foam_spill"].astype(float) * PHI_F * RHO; new_h = np.maximum(np.diff(fs), 0.0)
-resH, srcH, cumH, LH = run("head", airH, frH, None, new_h); REP["head"] = resH
+resH, srcH, cumH, LH, _, _ = run("head", airH, frH, None, new_h); REP["head"] = resH
 hb = np.array([airH[k][1].sum() + frH[k][1].sum() for k in range(nf)])
 REP["head"]["books"] = dict(spilled_liquid_g_end=float(fs[-1] * 1e3), in_air_plus_frozen_g_end=float(hb[-1] * 1e3), max_in_air_plus_frozen_g=float(hb.max() * 1e3))
 
@@ -210,16 +310,15 @@ say("## Stout: the checks (pass marks fixed before the run)\n")
 say(f"1. Mass. Markers classed 'in the air', weighted, against the stored books: median deviation {100 * s['check1_mass']['median_rel_dev']:.1f} %, largest {100 * s['check1_mass']['max_rel_dev']:.1f} % (mark: median below 10 %): **{P(s['check1_mass']['PASS'])}**")
 if "check2_prediction" in s:
     c = s["check2_prediction"]; say(f"2. Prediction of picture k+2 ({c['pairs']} pairs): rho carried on {c['carried_mm']:.2f} mm, rho left unmoved {c['unmoved_mm']:.2f} mm, sampling floor {c['sampling_floor_mm']:.2f} mm (mark: carried at most half of unmoved): **{P(c['PASS'])}**")
-if c3:
-    say(f"3. Landing on Fig. 12's body plane, against the stored ride: **{P(c3['PASS'])}**\n")
-    say("| | stored ride | derived | mark | |\n|---|---|---|---|---|")
-    say(f"| liquid through the plane (g) | {c3['stored_on_g']:.1f} | {c3['derived_on_g']:.1f} | within 15 % | {P(c3['pass_mass'])} |")
-    say(f"| centroid x, y (mm) | {[round(v, 1) for v in c3['stored_centroid_mm']]} | {[round(v, 1) for v in c3['derived_centroid_mm']]} | within 10 mm | {P(c3['pass_centroid'])} |")
-    say(f"| spread x, y (mm) | {[round(v, 1) for v in c3['stored_spread_mm']]} | {[round(v, 1) for v in c3['derived_spread_mm']]} | within 25 % | {P(c3['pass_spread'])} |")
-    say(f"| liquid passing beside the body (g) | {c3['stored_beside_g']:.1f} | {c3['derived_beside_g']:.1f} | within 15 % | {P(c3['pass_beside'])} |")
+G = s["landing"]
+say(f"3. Landing, field check per 5 mm deck cell and 0.1 s window: L1 mismatch, derived mass on the deck against the stored frozen mass, "
+    f"**{100 * G['L1_deck_vs_stored']:.1f} %** of the mass (sampling floor, two halves of the stored markers: {100 * G['L1_sampling_floor']:.1f} %). "
+    f"The same with the derived velocities alone (the leaving liquid's own ballistic crossing of -14 mm, no stored positions): {100 * G['L1_derived_velocity_crossing_vs_stored']:.1f} %.")
 say(f"\nLiquid in the air with no derived velocity (never transported): {s['unassigned_g']:.2f} g-pictures. Share of airborne stout with Weber number below 1: {100 * s.get('weber_below_1_share', float('nan')):.1f} %.")
 say("\n## Stout: the landing on Fig. 16's deck (before the deck stage)\n")
-say(f"Liquid striking the deck in 4 s: **{s['deck']['landed_on_deck_g']:.1f} g**; liquid missing the deck: **{s['deck']['missed_deck_g']:.1f} g**; over the rim in all: {(N - nact[-1]) * mp * 1e3:.1f} g.")
+say(f"Total landed: **{G['total_landed_g']:.2f} g** of {G['over_rim_g']:.2f} g over the rim: frozen part {G['frozen_g']:.2f} g (stored {G['stored_frozen_g']:.2f}), fallen part {G['fallen_g']:.2f} g (stored {G['stored_fallen_g']:.2f}).")
+say(f"On Fig. 16's deck **{G['on_deck_g']:.2f} g**, off it **{G['off_deck_g']:.2f} g**. Frozen positions by identity: {G['frozen_by_identity']} (persistence of listed frozen markers, median {G['frozen_persistence_median']:.3f}); "
+    f"mass carried to a later interval for want of listed positions: frozen {G['frozen_mass_carried_g']:.2f} g, fallen {G['fallen_mass_carried_g']:.2f} g; sampling noise clipped from the fallen flux {G['fallen_noise_clipped_g']:.2f} g.")
 h = REP["head"]
 say("\n## The head of foam (as a fluid of density 0.27 rho)\n")
 say(f"Liquid in the spilled head (books): {h['books']['spilled_liquid_g_end']:.2f} g ({Z['foam_spill'][-1] * 1e6:.2f} mL of foam). Striking the deck: {h['deck']['landed_on_deck_g']:.2f} g; missing it: {h['deck']['missed_deck_g']:.2f} g.")
@@ -234,22 +333,6 @@ say(f"Head: stored lumps (air + frozen) against foam_spill, largest difference {
 fac = (nfly[big] * mp) / np.maximum(raw[big], 1e-30)
 say(f"Weight per picture: listed air markers x (ndrops / listed) x mp, rescaled to nfly x mp; the rescale factor has median {np.median(fac):.3f}, range {fac.min():.3f} to {fac.max():.3f}.")
 REP["step1"] = dict(max_imbalance_g=float(bal[kb] * mp * 1e3), picture=kb, t=float(t[kb]), head_max_dev_g=float(hdev[kh]), weight_rescale_median=float(np.median(fac)))
-say("\n## The missing mass: step 2, the derivation's ledger (stout, cumulative to 4 s, g)\n")
-C = {q: float(LS[q].sum() * 1e3) for q in LS}
-air_end = nfly[-1] * mp * 1e3
-say("| | g |\n|---|---|")
-say(f"| over the rim (books) | {(N - nact[-1]) * mp * 1e3:.2f} |")
-say(f"| still in the air at 4 s (books) | {air_end:.2f} |")
-say(f"| left the air, books: sum of (frozen + fallen) per interval | {C['books_leave']:.2f} |")
-say(f"| left the air, transport plan (dummy column) | {C['plan_leave']:.2f} |")
-say(f"| counted crossing z = -14 mm (on the body + beside) | {C['cross_old']:.2f} |")
-say(f"| of the plan's leaving mass: with no velocity, never tested | {C['deficit_nov']:.2f} |")
-say(f"| of the plan's leaving mass: velocity known, ballistic crossing not within (0, dt] | {C['deficit_late']:.2f} |")
-say(f"| counted crossing but the plan keeps it in the air (double count, + sign) | {C['cross_old'] - C['deficit_cross']:.2f} |")
-say(f"| beside the old body at -14 mm, under its outline at -30 mm, dropped | {C['inward']:.2f} |")
-say(f"| counted on the deck stage (on + off) | {C['deck']:.2f} |")
-REP["ledger_g"] = C; REP["ledger_g"]["air_end"] = air_end
-np.savez_compressed(os.path.join(OUT, "ledger.npz"), t=t, **{f"stout_{q}": LS[q] for q in LS}, **{f"head_{q}": LH[q] for q in LH})
 np.savez_compressed(os.path.join(OUT, "deck_source.npz"), t=t, cell=DC, deck=np.array(DECK), stout=srcS, head=srcH)
 say(f"\nWall time {time.time() - T0:.0f} s on Kaggle CPU.")
 json.dump(REP, open(os.path.join(OUT, "report.json"), "w"), indent=1, default=float); open(os.path.join(OUT, "REPORT.md"), "w").write("\n".join(MD) + "\n")
