@@ -37,6 +37,9 @@ CHECKS, pass marks fixed before the run:
     did not use (Wasserstein-2 distance, partial): PASS if the median distance is at most half that of rho left unmoved.
  3. LANDING against the stored ride, on Fig. 12's body plane: derived mass through the plane within 15 % of the stored frozen mass;
     centroid within 10 mm; spread (x and y) within 25 %; mass passing beside the body within 15 % of the stored fallen mass.
+ 4. FIELD CHECK SPLIT BY PART (20 Nov): noise floor and mismatch in one run, marks fixed in the code; the fallen part is tested by
+    prediction of the stored liquid in the slab -30 mm <= z < -14 mm, the frozen part reported as near-circular (see the block above
+    the final writes).
 OUTPUT: REPORT.md, report.json, deck_source.npz (per interval and 5 mm deck cell: mass, momentum x, momentum y, for stout and head),
 fields.npz (rho and u on a 5 mm grid at six pictures), figures."""
 import glob, json, os, subprocess, sys, time, urllib.request
@@ -118,7 +121,8 @@ def run(name, air, frozen, m_air_exact, m_new):
     LV = []                                                           # per interval: the plan's leaving liquid at its ballistic crossing of z = -14 mm (no time window)
     L = {q: np.zeros(nf - 1) for q in ("books_leave", "plan_leave", "cross_old", "deficit_nov", "deficit_cross", "deficit_late", "inward", "deck")}
     for k in range(nf - 1):
-        A, mA, vA = S[k]; B, mB, vB = S[k + 1]; a = acc(k); deficit = np.zeros(len(A))
+        A, mA, vA = S[k][:3]; S[k].append(np.isfinite(vA[:, 0]).copy())   # S[k][3]: velocity known on ARRIVAL (pictures k-1, k only), for the field check
+        B, mB, vB = S[k + 1][:3]; a = acc(k); deficit = np.zeros(len(A))
         L["books_leave"][k] = air[k][1].sum() + m_new[k] - air[k + 1][1].sum()
         if len(A) >= 8 and len(B) >= 8:
             known = np.isfinite(vA[:, 0]); pred = A + 0.5 * a * dt * dt; pred[known] += vA[known] * dt
@@ -263,7 +267,7 @@ carry = 0.0; fall_carried = 0.0
 for k in range(nf - 1):
     mk = dF[k] + carry
     if mk <= 0: continue
-    X, mm, vv = SS[k]; hv = np.isfinite(vv[:, 0]) & (X[:, 2] > DECK[2]) if len(X) else np.zeros(0, bool)
+    X, mm, vv = SS[k][:3]; hv = np.isfinite(vv[:, 0]) & (X[:, 2] > DECK[2]) if len(X) else np.zeros(0, bool)
     if hv.sum() == 0: carry = mk; fall_carried += dF[k]; continue
     x, v, m = X[hv], vv[hv], mm[hv]
     tau2, X2, V2 = fly(x, v, t[k], DECK[2]); c1 = x[:, 2] - OLD[2]; _, X1, _ = fly(x, v, t[k], OLD[2])    # full frame equation
@@ -348,6 +352,115 @@ say(f"Head: stored lumps (air + frozen) against foam_spill, largest difference {
 fac = (nfly[big] * mp) / np.maximum(raw[big], 1e-30)
 say(f"Weight per picture: listed air markers x (ndrops / listed) x mp, rescaled to nfly x mp; the rescale factor has median {np.median(fac):.3f}, range {fac.min():.3f} to {fac.max():.3f}.")
 REP["step1"] = dict(max_imbalance_g=float(bal[kb] * mp * 1e3), picture=kb, t=float(t[kb]), head_max_dev_g=float(hdev[kh]), weight_rescale_median=float(np.median(fac)))
+# ================= FIELD CHECK SPLIT BY PART: noise floor AND mismatch in one run (20 Nov, second session) =================
+# WHY. Of the 75.57 g landed, the frozen 32.29 g is placed at its STORED positions on z = -14 mm; only its 16 mm drop is derived, so
+# comparing it with the stored frozen mass is near-circular: reported, proves little. The fallen 43.28 g is placed by the derivation.
+# The stored solver keeps every marker that misses the old body in free flight until z = -0.25 m (stout_jax.py:869-878, `land`), and
+# lists it (dmask = loose | fly | stuck, stout_jax.py:1073), so the stored ride holds that liquid in the slab -30 mm <= z < -14 mm.
+# TEST (prediction, not a fit): liquid in the air at picture k whose velocity is known on ARRIVAL (from pictures k-1, k only) is carried
+# HZ pictures on with the stored solver's own frame equation (as fly(); liquid crossing the old body's top inside its outline freezes,
+# as in the stored ride, and is dropped). Its mass in the slab at picture j = k + HZ is compared, per (x, y) cell and time window, with
+# the stored markers there, which the derivation never used. Liquid that crosses the rim after k cannot reach the slab in HZ pictures
+# (rim to -14 mm is over 130 mm of fall; at 0.4 m/s down and 24 m/s^2, the largest stored g_eff, that takes over 80 ms > 50 ms).
+# NOISE FLOOR, by split halves (Inference, Poisson counting): the L1 difference of two independent halves is about twice the L1 of the
+# full sample against the truth, so full floor = split-half / 2. Checked in the run: quarters against halves should give sqrt(2).
+# The derived side has its own noise (at most MS points per picture): same split. Comparison floor Fc = sqrt(Fs^2 + Fd^2).
+# Model error estimate (errors adding in quadrature, Inference): E = sqrt(max(M^2 - Fc^2, 0)), M the measured mismatch.
+# PASS MARKS, fixed here before the run (Opinion, open to the owner before launch):
+#   resolution: the finest (cell first, then window) whose comparison floor Fc <= FLOOR_MAX on the complete pictures;
+#   at it, PASS if E <= ERR_MAX and M <= BASE_RATIO * U, U the mismatch of the stored slab left unmoved (picture k against j).
+#   If no resolution has Fc <= FLOOR_MAX: INCONCLUSIVE, no verdict.
+# COMPLETE PICTURES: the listing holds at most M_DROPS markers taken by index (stout_jax.py:1076), then thinned evenly (run16.py:176);
+# when ndrops > M_DROPS the listed sample is not even over all markers. The verdict uses only pairs (k, j) where both listings are
+# complete; all pairs are reported beside it.
+FLOOR_MAX, ERR_MAX, BASE_RATIO = 0.25, 0.25, 0.5
+HZ = 3; SLAB = (DECK[2], OLD[2] - 4e-4); EXT = (0.30, 0.20); CELLS = (0.005, 0.010, 0.015, 0.020); WINS = (0.1, 0.25, 0.5)
+MLIST = int(Z["m_drops"]) if "m_drops" in Z.files else 131072        # run16.py M_DROPS = 131 072 for the v8 rides (handoff 2.3)
+trunc = Z["ndrops"].astype(float) > MLIST; T1 = time.time()
+
+
+def carry(x, v, t0, T, h=5e-4):
+    """Carry (x, v) from t0 for time T with fly()'s frame equation and step; returns positions and a mask of liquid still in flight."""
+    x = np.array(x, float); v = np.array(v, float); alive = np.ones(len(x), bool); n = max(int(np.ceil(T / h)), 1); h = T / n; s_ = 0.0
+    for _ in range(n):
+        g_x, g_z, o, a_ = (float(np.interp(t0 + s_, t, q)) for q in (gx, gz, omS, alS))
+        f = lambda x_, v_: np.stack([g_x + a_ * (x_[:, 2] - ZS) + o * o * x_[:, 0] + 2 * o * v_[:, 2], np.zeros(len(x_)), g_z - a_ * x_[:, 0] + o * o * (x_[:, 2] - ZS) - 2 * o * v_[:, 0]], 1)
+        a1 = f(x, v); vm = v + 0.5 * h * a1; xm = x + 0.5 * h * v; a2 = f(xm, vm); xn = x + h * vm; vn = v + h * a2
+        frz = alive & (x[:, 2] >= OLD[2]) & (xn[:, 2] < OLD[2]) & (np.abs(xn[:, 0]) < OLD[0]) & (np.abs(xn[:, 1]) < OLD[1])
+        alive &= ~frz & (xn[:, 2] >= -0.25); x = np.where(alive[:, None], xn, x); v = np.where(alive[:, None], vn, v); s_ += h
+    return x, alive
+
+
+inslab = lambda X: (X[:, 2] >= SLAB[0]) & (X[:, 2] < SLAB[1]) if len(X) else np.zeros(0, bool)
+rs2 = np.random.default_rng(11); REC = []; novel = 0.0; launched = 0.0
+for j in range(HZ + 1, nf):
+    k = j - HZ; Xs, ms = airS[j]; Xk, mk_ = airS[k]; sl = inslab(Xs); slk = inslab(Xk)
+    X0, m0, v0 = SS[k][:3]; arr = SS[k][3] if len(SS[k]) > 3 else np.isfinite(v0[:, 0])
+    novel += float(m0[~arr].sum()); launched += float(m0.sum())
+    F = {}
+    hs = rs2.random(sl.sum()) < 0.5; qs = rs2.integers(0, 4, sl.sum()); P_, w_ = Xs[sl, :2], ms[sl]
+    F["S"] = (P_, w_); F["SA"] = (P_[hs], 2 * w_[hs]); F["SB"] = (P_[~hs], 2 * w_[~hs]); F["SQa"] = (P_[qs == 0], 4 * w_[qs == 0]); F["SQb"] = (P_[qs == 1], 4 * w_[qs == 1])
+    F["U"] = (Xk[slk, :2], mk_[slk])
+    if arr.sum():
+        xe, alive = carry(X0[arr], v0[arr], t[k], t[j] - t[k]); sel = alive & inslab(xe); hd = rs2.random(len(xe)) < 0.5; md_ = m0[arr]
+        F["D"] = (xe[sel, :2], md_[sel]); F["DA"] = (xe[sel & hd, :2], 2 * md_[sel & hd]); F["DB"] = (xe[sel & ~hd, :2], 2 * md_[sel & ~hd])
+    else: F["D"] = F["DA"] = F["DB"] = (np.zeros((0, 2)), np.zeros(0))
+    REC.append(dict(j=j, complete=not (trunc[j] or trunc[k]), F=F))
+
+
+def stack(items, c, W):
+    """items: (time, P, w), time a number or one per point; mass per (time window, x cell, y cell) over the EXT rectangle."""
+    nw_ = int(np.ceil((t[-1] - t[0]) / W)) + 1; nx, ny = int(round(2 * EXT[0] / c)), int(round(2 * EXT[1] / c)); G = np.zeros((nw_, nx, ny))
+    for (tt, P, w) in items:
+        if not len(P): continue
+        tt = np.broadcast_to(np.asarray(tt, float), (len(P),)); ok = (np.abs(P[:, 0]) < EXT[0]) & (np.abs(P[:, 1]) < EXT[1])
+        np.add.at(G, (np.clip(((tt[ok] - t[0]) / W).astype(int), 0, nw_ - 1), np.clip(((P[ok, 0] + EXT[0]) / c).astype(int), 0, nx - 1),
+                      np.clip(((P[ok, 1] + EXT[1]) / c).astype(int), 0, ny - 1)), w[ok])
+    return G
+
+
+l1 = lambda A_, B_: float(np.abs(A_ - B_).sum() / max(B_.sum(), 1e-30)) if A_ is not None and B_ is not None else float("nan")
+
+
+def fallen_eval(recs, c, W):
+    G = {key: stack([(t[r["j"]],) + r["F"][key] for r in recs], c, W) for key in ("S", "SA", "SB", "SQa", "SQb", "U", "D", "DA", "DB")}
+    M = l1(G["D"], G["S"]); U = l1(G["U"], G["S"]); Fs = l1(G["SA"], G["SB"]) / 2; Fd = l1(G["DA"], G["DB"]) / 2; Fc = float(np.hypot(Fs, Fd))
+    return dict(cell_mm=c * 1e3, window_s=W, mismatch=M, unmoved=U, floor_stored=Fs, floor_derived=Fd, floor_comparison=Fc,
+                quarter_over_half=l1(G["SQa"], G["SQb"]) / max(2 * Fs, 1e-30), model_error=float(np.sqrt(max(M * M - Fc * Fc, 0.0))),
+                stored_g=float(G["S"].sum() * 1e3), derived_g=float(G["D"].sum() * 1e3))
+
+
+comp = [r for r in REC if r["complete"]]
+FC = dict(pairs_all=len(REC), pairs_complete=len(comp), pictures_listing_truncated=int(trunc.sum()), listing_capacity=MLIST, horizon_pictures=HZ,
+          launch_mass_without_arrival_velocity_share=novel / max(launched, 1e-30), marks=dict(FLOOR_MAX=FLOOR_MAX, ERR_MAX=ERR_MAX, BASE_RATIO=BASE_RATIO),
+          complete=[fallen_eval(comp, c, W) for c in CELLS for W in WINS] if comp else [], all=[fallen_eval(REC, c, W) for c in CELLS for W in WINS])
+pick = next((e for e in FC["complete"] if e["floor_comparison"] <= FLOOR_MAX), None)
+if pick is None: FC["verdict"] = "INCONCLUSIVE: no resolution has a comparison floor at or below FLOOR_MAX"
+else:
+    ok_ = pick["model_error"] <= ERR_MAX and pick["mismatch"] <= BASE_RATIO * pick["unmoved"]
+    FC["chosen"] = pick; FC["verdict"] = "PASS" if ok_ else "FAIL"
+# frozen part (near-circular): derived 16 mm drop against the stored newly frozen mass, on the same grids; floor = split-half / 2
+fzl = [(tl_, P_, w_) for (tl_, P_, V_, w_, part) in LAND if part == 0]
+frl = [(np.full(len(q[1]), t[q[0]] + 0.5 * dt), q[1], q[2]) for q in FR]
+FZ_D, FZ_S = fzl, frl; rs3 = np.random.default_rng(13); FZ_A, FZ_B = [], []
+for (tt_, P_, w_) in FZ_S:
+    h_ = rs3.random(len(P_)) < 0.5; FZ_A.append((tt_, P_[h_], 2 * w_[h_])); FZ_B.append((tt_, P_[~h_], 2 * w_[~h_]))
+FC["frozen_near_circular"] = [dict(cell_mm=c * 1e3, window_s=W, mismatch=l1(stack(FZ_D, c, W), stack(FZ_S, c, W)), floor_stored=l1(stack(FZ_A, c, W), stack(FZ_B, c, W)) / 2)
+                              for c in CELLS for W in WINS]
+FC["wall_s"] = time.time() - T1; REP["field_check"] = FC
+say("\n## Field check split by part (noise floor and mismatch in one run; marks fixed before the run)\n")
+say(f"Fallen part (placed by the derivation): liquid in the air at picture k, velocity known on arrival, carried {HZ} pictures on with the frame equation; "
+    f"its mass in the slab {SLAB[0] * 1e3:.0f} mm <= z < {SLAB[1] * 1e3:.1f} mm against the stored markers there. Pairs: {len(REC)}, of them complete listings {len(comp)} "
+    f"({int(trunc.sum())} pictures have more listed markers than the {MLIST:,} the listing holds). Launch mass without an arrival velocity: {100 * FC['launch_mass_without_arrival_velocity_share']:.1f} %.")
+say("\n| cell mm | window s | mismatch M | unmoved U | floor stored | floor derived | floor Fc | model error E | quarters/halves (expect 1.41) | stored g | derived g |\n|---|---|---|---|---|---|---|---|---|---|---|")
+for e in FC["complete"]:
+    say(f"| {e['cell_mm']:.0f} | {e['window_s']:.2f} | {100 * e['mismatch']:.1f} % | {100 * e['unmoved']:.1f} % | {100 * e['floor_stored']:.1f} % | {100 * e['floor_derived']:.1f} % | "
+        f"{100 * e['floor_comparison']:.1f} % | {100 * e['model_error']:.1f} % | {e['quarter_over_half']:.2f} | {e['stored_g']:.2f} | {e['derived_g']:.2f} |")
+say(f"\nVerdict (complete listings; finest resolution with Fc <= {100 * FLOOR_MAX:.0f} %; PASS if E <= {100 * ERR_MAX:.0f} % and M <= {BASE_RATIO} U): **{FC['verdict']}**"
+    + (f" at {pick['cell_mm']:.0f} mm, {pick['window_s']:.2f} s." if pick else "."))
+say("\nFrozen part (near-circular: stored positions, only the 16 mm drop derived), mismatch and floor (split-half / 2) per resolution: "
+    + "; ".join(f"{e['cell_mm']:.0f} mm {e['window_s']:.2f} s: {100 * e['mismatch']:.1f} % / {100 * e['floor_stored']:.1f} %" for e in FC["frozen_near_circular"]))
+say(f"(Run A reported its floor as the raw split-half L1, 129.2 %; by the scaling above the full-sample floor is half of that.) Field check wall time {FC['wall_s']:.0f} s.")
 np.savez_compressed(os.path.join(OUT, "deck_source.npz"), t=t, cell=DC, deck=np.array(DECK), stout=srcS, head=srcH)
 say(f"\nWall time {time.time() - T0:.0f} s on Kaggle CPU.")
 json.dump(REP, open(os.path.join(OUT, "report.json"), "w"), indent=1, default=float); open(os.path.join(OUT, "REPORT.md"), "w").write("\n".join(MD) + "\n")

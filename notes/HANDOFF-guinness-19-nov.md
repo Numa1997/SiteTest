@@ -476,3 +476,16 @@ folder like `notes/spill/runs/` needs its own rule) and keep the description tru
 - Whether the owner ever wrote "every action needs a yes" in those words; R11 is inferred from the 03:19 relay and his 11:29/11:43
   messages, and written as a rule in `STATE-derived-20-nov.md:11`.
 - What the owner saw in the live spill after 146f6bbe went live; he has not commented on it.
+
+---------------------------------------------------------------------------------------------------------------------------------
+
+## 8. Second session log (from 19 Nov, after this handoff)
+- Owner's yes (with the supervisor's three changes): (1) no model-name attribution line in commits (R18 takes precedence);
+  (2) one script, one run, noise floor AND mismatch, pass marks in the code before launch, floor by split halves, full floor =
+  split-half / 2 (Poisson); (3) split the check by part: frozen 32.29 g near-circular (report only), fallen 43.28 g the real test.
+- Fact: fallen markers stay in flight to z = -0.25 m (`tools/fig12/kaggle/stout_jax.py:869-878`) and are listed
+  (`:1073`), so the stored ride holds them in the slab -30 <= z < -14 mm. Fact: the listing takes at most M_DROPS markers BY INDEX
+  (`:1076`) before even thinning (`tools/fig16/kaggle/run16.py:176`); pictures with ndrops > M_DROPS are not even samples.
+- Written into `tools/fig16/derived/derive_liquid.py` (the block before the final writes): prediction of the slab mass HZ = 3 pictures
+  ahead from arrival velocities; cells 5/10/15/20 mm x windows 0.1/0.25/0.5 s; marks FLOOR_MAX 0.25, ERR_MAX 0.25, BASE_RATIO 0.5.
+  Committed, NOT launched; waiting for the owner's yes and the supervisor's reading.
