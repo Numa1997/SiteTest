@@ -161,11 +161,14 @@ CATCH = ['live-catch.html', 'drag it, then ask for the butterfly', 1080, 1920]  
 MORE = [['dive.html', 'from a kick to a butterfly', 1080, 1920], ['together.html?scene=phone', 'one motion, six pictures', 1080, 1920],
         ['turning.html?scene=wheel', 'turning the paper: a wheel', 1920, 1080], ['turning.html?scene=butterfly', 'turning the paper: the butterfly', 1920, 1080],
         ['bell.html', 'the bell above the floor', 1920, 1080]]   # the other Fig. 13 films (publish_films.py), all drawn live
+# the films panel of the Fig. 13 page (20 November 2026): every film, the six pictures also in their wide layout
+GALLERY = ALL + [MORE[0], MORE[1], ['together.html?scene=wide', 'one motion, six pictures (wide)', 1920, 1080]] + MORE[2:]
 PAGES = {   # file: (title, parts)
     'film.html': ('For رِيمْ: the whole film, live', ALL + MORE),
     'reem.html': ('For رِيمْ', ALL + MORE),
     'construction.html': ('Constructing the butterfly by hand', [ALL[1]]),
     'catch.html': ('Catching the butterfly', [CATCH]),
+    'gallery.html': ('Fig. 13: the films', GALLERY),
 }
 import json
 for name, (title, parts) in PAGES.items():

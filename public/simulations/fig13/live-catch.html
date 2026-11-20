@@ -11,8 +11,8 @@
      the butterfly. The motion is computed live as the film plays (pendulum.js: the pendulum's equations and the controller of
      tools/fig13/butterfly_control.py, its gains designed in the browser at start): free from
      rest at (2.85, 3.0) rad, or from where the reader drags it; on the reader's press: pump and steer, wait, catch with the periodic
-     LQR along the orbit, hold until the reader lets go. The reader can ask for any of the fourteen closed drawings of the flower
-     hunt (PEND.TARGETS); the flowers are steered by energy, angular momentum and turn (pendulum.js, Run.whirlTau). ?auto=1 does it unasked (on after 6 s, four laps held), for the gift's films.
+     LQR along the orbit, hold until the reader lets go. The reader can ask for any of the fourteen closed drawings of the hunt
+     for periodic orbits (PEND.TARGETS); the rotating orbits are steered by energy, angular momentum and turn (pendulum.js, Run.whirlTau). ?auto=1 does it unasked (on after 6 s, four laps held), for the gift's films.
      Serve the repository root; tools/fig13/gift/render.cjs THEME OUT 1 all catch x 1080x1920 writes the frames. -->
 <style>
 @font-face { font-family: 'Instrument Serif'; src: url(../../fonts/instrument-serif/instrument-serif-400-latin.woff2) format('woff2'); }
@@ -93,7 +93,7 @@ let DES, RUN, D, N = 0;
 const BFLY = PEND.TARGETS.findIndex(g => g.kind === 'butterfly' && g.k === 24), DESIGNS = {};
 let TARGET = BFLY;
 const designOf = i => DESIGNS[i] || (DESIGNS[i] = i === BFLY ? PEND.design() : PEND.design(PEND.TARGETS[i]));   // gains computed on first use, ~0.1 s
-const TG = () => PEND.TARGETS[TARGET], tgName = () => TG().kind === 'butterfly' ? (TARGET === BFLY ? 'butterfly' : `butterfly of ${TG().k} turns`) : `flower of ${TG().k} petals`;
+const TG = () => PEND.TARGETS[TARGET], tgName = () => TG().kind === 'butterfly' ? (TARGET === BFLY ? 'butterfly' : `butterfly of ${TG().k} turns`) : `rotating orbit of ${TG().k} lobes`;
 function useDesign() {      // what the drawing needs of the present target
     const st = Math.max(1, Math.floor(DES.M / 600)), OB = DES.S.filter((x, i) => i % st === 0 || i === DES.M);
     D.orbit_th1 = OB.map(x => x[0]); D.orbit_th2 = OB.map(x => x[1]); D.E_max = Math.max(420, 1.12 * DES.Estar);
@@ -268,10 +268,10 @@ function captions() {
         [CA + 200, 'Caught. The corrections shrink to almost nothing.'],
         [RE, 'Let go: the motor is off, and the pen keeps drawing the butterfly by itself.'],
     ] : [
-        [0, `<b>Drag the pendulum</b> anywhere and let go, or press Random chaos. It is free now (${START_NAME}): it tumbles, and no two tumbles are alike. Press <b>Catch it</b> for the ${nm}, or <b>Choose a pattern</b>: ten flowers and four butterflies.`],
-        [ON, fl ? `You asked for the ${nm}. The motor spins the pendulum up to ${Es} J and sets how much it turns about the pin. With those two right the pen already draws the flower; then the motor turns the whole flower into place.`
+        [0, `<b>Drag the pendulum</b> anywhere and let go, or press Random chaos. It is free now (${START_NAME}): it tumbles, and no two tumbles are alike. Press <b>Catch it</b> for the ${nm}, or <b>Choose a pattern</b>: ten rotating periodic orbits and four butterflies.`],
+        [ON, fl ? `You asked for the ${nm}. The motor spins the pendulum up to ${Es} J and sets how much it turns about the pin. With those two right the pen already draws the orbit; then the motor turns the whole orbit into place.`
                 : `You asked for the ${nm}. The motor pushes in step with the upper rod to raise the energy to ${Es} J, and sizes the swing. Then it waits for the motion to pass close. A miss means: slow down and try again.`],
-        [CA, fl && DES.steady ? 'In place. The motor now only trims the energy, the turning and the angle of the flower.' : `Close enough: now small, quick corrections along the ${TG().kind}'s own lap.`],
+        [CA, fl && DES.steady ? 'In place. The motor now only trims the energy, the turning and the angle of the orbit.' : `Close enough: now small, quick corrections along the ${TG().kind === 'butterfly' ? 'butterfly' : 'orbit'}'s own lap.`],
         [CA + 200, `Caught and held: the ${nm}, with almost no torque. Press <b>Let go</b> to switch the motor off, or choose another pattern: the motor takes it there from here.`],
         [RE, `The motor is off. ${after} Drag the pendulum away, press Catch it again, or choose another pattern.`],
     ];
@@ -356,7 +356,7 @@ function drawPat() {
         q.strokeStyle = rgba(TH.curve, 0.95); q.lineWidth = 1.6; q.beginPath();
         for (let j = 0; j < o.th1.length; j++) { const [x, h] = tip(o.th1[j], o.th2[j]); j ? q.lineTo(cx + sc * x, cy - sc * h) : q.moveTo(cx + sc * x, cy - sc * h); }
         q.stroke();
-        q.textAlign = 'center'; q.fillStyle = TH.ink; q.font = '500 23px "Instrument Sans"'; q.fillText(tg.kind === 'flower' ? `flower, ${tg.k} petals` : `butterfly, ${tg.k} turns`, cx, y0 + PATH - 38);
+        q.textAlign = 'center'; q.fillStyle = TH.ink; q.font = '500 23px "Instrument Sans"'; q.fillText(tg.kind === 'flower' ? `rotating, ${tg.k} lobes` : `butterfly, ${tg.k} turns`, cx, y0 + PATH - 38);
         q.fillStyle = TH.muted; q.font = '19px "Instrument Sans"'; q.fillText(`${PEND.energy([0, 0, tg.p1, tg.p2]).toFixed(0)} J · ${tg.stability}`, cx, y0 + PATH - 15);
     });
     q.textAlign = 'left';

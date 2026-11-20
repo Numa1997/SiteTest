@@ -20,19 +20,23 @@
         .f13page .sim__head { max-width: none; margin-bottom: 12px; }
         .f13page .sim__head h1 { margin-bottom: 0; }
         .f13page .sim__head, .f13page .stage, .f13page .panel { animation: none; }
-        .f13 { display: grid; grid-template-columns: minmax(0, 1fr) 360px; grid-template-rows: auto auto 1fr; grid-template-areas: "intro intro" "main pin" "more pin"; gap: 18px 24px; align-items: start; }
+        .f13 { display: grid; grid-template-columns: minmax(0, 1fr) 360px; grid-template-rows: auto auto auto 1fr; grid-template-areas: "intro intro" "main pin" "main try" "more try"; gap: 18px 24px; align-items: start; }
         .f13__intro { grid-area: intro; display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 10px 40px; }
         .f13__intro .sim__lede { flex: 1 1 520px; max-width: 920px; margin: 0; }
         .f13__introside { flex: 0 1 auto; }
         .f13__main { grid-area: main; min-width: 0; display: grid; gap: 10px; }
         .f13__side { display: contents; }
-        .f13__pin { grid-area: pin; align-self: start; position: sticky; top: 12px; max-height: calc(100vh - 24px); overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; }
+        .f13__pin { grid-area: pin; align-self: start; }
+        .f13__try { grid-area: try; align-self: start; }
+        .f13__try .f13__demorow { display: grid; grid-template-columns: 1fr 1fr; }
+        .f13__try .f13__demorow button { padding: 0 10px; white-space: normal; line-height: 1.2; min-height: 46px; }
+        .f13__try .f13__demosay { font-size: 14px; min-height: 0; }
         .f13__more { grid-area: more; }
         /* the parameters: a heading with one button back to the start, then the groups side by side */
         .f13__morehead { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; }
         .f13__moretitle { margin: 0; font-family: var(--serif); font-size: 26px; font-weight: 400; color: var(--ink); }
         #reset { min-height: 44px; }
-        .f13__groups { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 18px 28px; }
+        .f13__groups { display: grid; grid-template-columns: repeat(auto-fit, minmax(215px, 1fr)); gap: 14px 24px; }
         .f13__groups > .panel__group { border-top: 0; padding-top: 0; }
         .f13__groups .ctl { padding: 6px 8px; margin: 0 -8px; border-radius: 8px; transition: background .25s ease; }
         .f13__groups .ctl output { padding: 1px 8px; border-radius: 999px; transition: background .25s ease, color .25s ease; }
@@ -55,6 +59,8 @@
         .f13__layers { position: absolute; inset: 0; will-change: transform; }
         .f13__layers canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
         #stage.is-panning { cursor: grabbing; }
+        #stage.is-energy #cv, #stage.is-energy #map { opacity: .28; transition: opacity .3s ease; }
+        #cv, #map { transition: opacity .3s ease; }
         /* the pin: a ring the reader can take hold of and drag across the sheet */
         .f13__mark { position: absolute; left: 0; top: 0; width: 52px; height: 52px; margin: -26px 0 0 -26px; padding: 0; border: 2px solid #fff6ea; border-radius: 50%; background: rgba(122, 31, 43, .22); box-shadow: 0 0 0 2px rgba(20, 13, 16, .55), 0 2px 10px rgba(0, 0, 0, .35); touch-action: none; cursor: grab; z-index: 2; }
         .f13__mark span { position: absolute; left: 50%; top: 50%; width: 8px; height: 8px; margin: -4px 0 0 -4px; border-radius: 50%; background: #fff6ea; }
@@ -108,7 +114,8 @@
         @media (max-width: 900px) {
             .f13 { display: flex; flex-direction: column; gap: 14px; }
             .f13__side { display: contents; }
-            .f13__main { order: 1; } .f13__pin { order: 2; } .f13__intro { order: 3; } .f13__more { order: 4; }
+            .f13__main { order: 1; } .f13__try { order: 2; } .f13__pin { order: 3; } .f13__intro { order: 4; } .f13__more { order: 5; }
+            .f13__try .f13__demorow { display: flex; }
             .f13__pin { position: static; max-height: none; overflow: visible; }
             .f13 > *, .f13__side > *, .f13__introside { min-width: 0; max-width: 100%; }
             .f13__intro { display: block; } .f13__intro .sim__lede { margin-bottom: 10px; }
@@ -135,7 +142,51 @@
             .f13__demorow { flex-wrap: nowrap; overflow-x: auto; margin: 0 -16px; padding: 0 16px 4px; scrollbar-width: none; }
             .f13__demorow::-webkit-scrollbar { display: none; }
         }
-        .inside { margin: 44px 0 0; }
+        /* the films (20 November 2026): a panel of their own under the sheet; the film playing large, all nine beside it */
+        .films { margin: 36px 0 0; padding: 22px 24px 18px; border-radius: 14px; background: #140d10; color: #f5f1ea; scroll-margin-top: 8px; }
+        .films__head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 8px 24px; margin: 0 0 16px; }
+        .films__title { display: flex; align-items: center; gap: 18px; margin: 0; }
+        .films__reem { height: 74px; width: auto; display: block; } .films__far { height: 64px; width: auto; display: block; }
+        .films__sub { margin: 0; max-width: 520px; font-size: 15px; line-height: 1.5; color: #d9ccc4; }
+        .films__body { display: grid; gap: 18px; align-items: start; scroll-margin-top: 8px; }
+        .films__body.is-tall { grid-template-columns: auto minmax(0, 1fr); }
+        .films__body.is-wide { grid-template-columns: minmax(0, 1fr); }
+        .films__stage { position: relative; border-radius: 10px; overflow: hidden; background: #000; }
+        .films__stage iframe { display: block; border: 0; width: 100%; height: 100%; }
+        .films__start { display: block; position: relative; padding: 0; border: 0; background: none; cursor: pointer; width: 100%; height: 100%; }
+        .films__start img { display: block; width: 100%; height: 100%; object-fit: contain; background: #140d10; }
+        .films__play { position: absolute; left: 50%; top: 50%; width: 96px; height: 96px; margin: -48px 0 0 -48px; border-radius: 50%; background: #7a1f2b; box-shadow: 0 0 0 6px rgba(245, 241, 234, .18); display: grid; place-items: center; transition: transform .15s ease; }
+        .films__start:hover .films__play { transform: scale(1.07); }
+        .films__play svg { width: 44px; height: 44px; fill: #f5f1ea; margin-left: 6px; }
+        .films__list { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); }
+        .films__body.is-tall .films__list img { height: 196px; }
+        .films__body.is-wide .films__list { grid-template-columns: repeat(auto-fill, minmax(132px, 1fr)); }
+        .films__list button { position: relative; display: grid; grid-template-rows: auto auto; width: 100%; height: 100%; padding: 0 0 8px; border: 1px solid #3a2a2e; border-radius: 10px; background: #1d1418; color: #f5f1ea; text-align: left; cursor: pointer; overflow: hidden; transition: border-color .15s ease, background .15s ease; }
+        .films__list button:hover { border-color: #e2a2aa; }
+        .films__list button.is-on { border-color: #e2a2aa; background: #2a1a1f; box-shadow: inset 0 0 0 1px #e2a2aa; }
+        .films__list img { display: block; width: 100%; height: 118px; object-fit: cover; object-position: top; background: #140d10; }
+        .films__n { display: inline-block; min-width: 20px; margin-right: 6px; padding: 1px 5px; border-radius: 5px; background: #7a1f2b; color: #f5f1ea; font: 500 12px var(--mono); text-align: center; }
+        .films__t { padding: 8px 10px 0; font: 14px/1.3 var(--sans); }
+        .films__len { padding: 2px 10px 0; font: 12px var(--mono); color: #b9a59b; }
+        .films__foot { display: flex; justify-content: flex-end; margin-top: 12px; }
+        .films__close { min-height: 44px; padding: 0 18px; border: 1px solid #e2a2aa; border-radius: 8px; background: transparent; color: #f5f1ea; font: 500 14px var(--sans); cursor: pointer; }
+        .films__close:hover { background: #7a1f2b; }
+        @media (max-width: 900px) {
+            .films__body.is-tall { grid-template-columns: minmax(0, 1fr); }
+            .films__list, .films__body.is-wide .films__list { display: flex; overflow-x: auto; scrollbar-width: none; padding-bottom: 4px; }
+            .films__list li { flex: 0 0 150px; }
+        }
+        @media (max-width: 640px) {
+            .films { margin: 28px -16px 0; border-radius: 0; padding: 18px 16px 14px; }
+            .films__reem { height: 54px; } .films__far { height: 46px; }
+            .films__stage { margin: 0 -16px; border-radius: 0; }
+        }
+        .inside { margin: 40px 0 0; }
+        .inside__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; align-items: stretch; }
+        .inside__grid > .station { margin: 0; display: flex; flex-direction: column; }
+        .inside__grid > .station > .actions { margin-top: auto; }
+        .inside__grid > .station.is-open { grid-column: 1 / -1; display: block; }
+        .inside__grid > .station.is-open.is-side { display: grid; }
         .inside > h2 { font-family: var(--serif); font-size: 30px; font-weight: 400; margin: 0 0 6px; color: var(--ink); }
         .inside > p { margin: 0 0 16px; font-size: 16px; line-height: 1.6; color: var(--ink-2); max-width: 760px; }
         .station { background: var(--card); border: 1px solid var(--line-strong, #cdc1ae); border-radius: 10px; padding: 16px; margin: 0 0 16px; scroll-margin-top: 12px; }
@@ -197,7 +248,7 @@
                 <div class="f13__introside">
                     <p class="dedication">To Rim</p>
                     <ul class="onpage" aria-label="On this page">
-                        <li><a href="#butterfly">The butterfly</a></li><li><a href="#hunt">The flower hunt</a></li><li><a href="#catch">The catch</a></li><li><a href="#films">The eight films</a></li><li><a href="#paper">All the theory</a></li>
+                        <li><a href="#butterfly">The butterfly</a></li><li><a href="#hunt">The hunt for periodic orbits</a></li><li><a href="#catch">The catch</a></li><li><a href="#films">The films</a></li><li><a href="#paper">All the theory</a></li>
                     </ul>
                 </div>
             </div>
@@ -221,7 +272,7 @@
                         <button type="button" id="zin"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.2" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M15 15l5.5 5.5M7.5 10.5h6M10.5 7.5v6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg><span>Zoom +</span></button>
                         <button type="button" id="zall"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Whole</span></button>
                         <span class="f13__sep" aria-hidden="true"></span>
-                        <button type="button" id="anat" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3.2"/></svg><span>The eye</span></button>
+                        <button type="button" id="anat" aria-pressed="false" aria-label="Energy limits" title="Energy limits: the energy curves and the fold lines"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3.2"/></svg><span>Energy</span></button>
                         <button type="button" id="rods" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l-4 8 7 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="3" r="2"/><circle cx="8" cy="11" r="2.4"/><circle cx="15" cy="20" r="2.4"/></svg><span>Rods</span></button>
                         <output id="cap-t" class="f13__t"><i>t</i> = 0.0 s</output>
                     </div>
@@ -229,19 +280,6 @@
                         <span><b>Fig. 13</b> · one double pendulum per cell, each struck once from hanging still. Left to right the strike on the upper rod <i>p</i><sub>1</sub> grows, bottom to top the strike on the lower rod <i>p</i><sub>2</sub>. Each cell shows the real path of that pendulum's tip. The glow behind is the chaos map: bright where two almost equal strikes part quickly.</span>
                     </figcaption>
                 </figure>
-                <div class="f13__demos" role="group" aria-label="Try this">
-                    <p class="f13__demolabel">Try this</p>
-                    <div class="f13__demorow">
-                        <button type="button" data-demo="eye">The eye</button>
-                        <button type="button" data-demo="chaos">Into the chaos</button>
-                        <button type="button" data-demo="flower">A flower that closes</button>
-                        <button type="button" data-demo="butterfly">The butterfly</button>
-                        <button type="button" data-demo="nog">No gravity</button>
-                        <button type="button" data-demo="heavy">Heavy lower rod</button>
-                        <button type="button" data-demo="reset" class="is-reset">Start values</button>
-                    </div>
-                    <p class="f13__demosay" id="demo-say" aria-live="polite">Each button sets the sheet up for one thing to see and says what to look at.</p>
-                </div>
                 <p class="f13__keys" id="sheet-keys"><b>Handles.</b> Tap a cell to pin its pendulum; drag the ring to strike it anew anywhere on the sheet; tap twice to zoom in there.<span class="f13__fine"> With a mouse, drag the sheet to move it. Keys: arrows move the pin, + and − zoom, space pauses.</span> The cells are a hundred separate experiments, sorted by how they were struck.</p>
             </div>
 
@@ -265,6 +303,20 @@
                         <button type="button" class="btn btn--ghost" id="unpin" hidden>Let go of the pin</button>
                     </div>
                 </aside>
+
+                <div class="f13__demos f13__try" role="group" aria-label="Try this">
+                    <p class="f13__demolabel">Try this</p>
+                    <div class="f13__demorow">
+                        <button type="button" data-demo="eye">Energy limits</button>
+                        <button type="button" data-demo="chaos">Into the chaos</button>
+                        <button type="button" data-demo="orbit">A periodic orbit</button>
+                        <button type="button" data-demo="butterfly">The butterfly</button>
+                        <button type="button" data-demo="nog">No gravity</button>
+                        <button type="button" data-demo="heavy">Heavy lower rod</button>
+                        <button type="button" data-demo="reset" class="is-reset">Start values</button>
+                    </div>
+                    <p class="f13__demosay" id="demo-say" aria-live="polite">Each button sets the sheet up for one thing to see and says what to look at.</p>
+                </div>
 
                 <aside class="panel f13__more" aria-label="Parameters">
                     <div class="f13__morehead"><p class="f13__moretitle">Parameters</p><button type="button" class="btn btn--ghost" id="reset">Back to the start values</button></div>
@@ -301,6 +353,9 @@
                             <span class="ctl__row"><span>Length ratio <i>l</i><sub>2</sub>/<i>l</i><sub>1</sub></span><output id="lr-out">1.00</output></span>
                             <input type="range" id="lr" min="-1" max="1" step="0.05" value="0">
                         </label>
+                    </div>
+                    <div class="panel__group">
+                        <p class="panel__label">Strikes and gravity</p>
                         <label class="ctl">
                             <span class="ctl__row"><span>Momentum range <i>P</i></span><output id="p-out">20 kg·m²/s</output></span>
                             <input type="range" id="p" min="2" max="30" step="1" value="20">
@@ -315,10 +370,35 @@
             </div>
         </div>
 
+        <section class="films" id="films" aria-labelledby="films-title">
+            <header class="films__head">
+                <h2 id="films-title" class="films__title"><img src="../images/fig13/reem-night.svg" alt="For رِيمْ" class="films__reem"><img src="../images/fig13/farashatuki-night.svg" alt="فَرَاشَتُكِ" class="films__far"></h2>
+                <p class="films__sub">Nine films, drawn live in your browser while they play: the gift, the butterfly built by hand, the catch, and the pictures around them.</p>
+            </header>
+            <div class="films__body is-tall" id="films-body">
+                <div class="films__stage" id="films-stage">
+                    <button type="button" class="films__start" id="films-start" aria-label="Play film 1"><img src="../images/fig13/films/1.webp" alt="" id="films-poster"><span class="films__play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg></span></button>
+                </div>
+                <ol class="films__list" aria-label="The films">
+                    <li><button type="button" data-part="1" class="is-tall"><img src="../images/fig13/films/1.webp" alt="" loading="lazy" width="480" height="853"><span class="films__t"><b class="films__n">1</b>For رِيمْ: two words written by turning arrows</span><span class="films__len">1:28</span></button></li>
+                    <li><button type="button" data-part="2" class="is-tall"><img src="../images/fig13/films/2.webp" alt="" loading="lazy" width="480" height="853"><span class="films__t"><b class="films__n">2</b>The butterfly built by hand from its two waves</span><span class="films__len">1:05</span></button></li>
+                    <li><button type="button" data-part="3" class="is-tall"><img src="../images/fig13/films/3.webp" alt="" loading="lazy" width="480" height="853"><span class="films__t"><b class="films__n">3</b>The catch: out of chaos, onto the butterfly</span><span class="films__len">0:30</span></button></li>
+                    <li><button type="button" data-part="4" class="is-tall"><img src="../images/fig13/films/4.webp" alt="" loading="lazy" width="480" height="853"><span class="films__t"><b class="films__n">4</b>The dive: from the sheet into one cell</span><span class="films__len">0:52</span></button></li>
+                    <li><button type="button" data-part="5" class="is-tall"><img src="../images/fig13/films/5.webp" alt="" loading="lazy" width="480" height="853"><span class="films__t"><b class="films__n">5</b>One motion, six pictures</span><span class="films__len">1:27</span></button></li>
+                    <li><button type="button" data-part="6" class="is-wide"><img src="../images/fig13/films/6.webp" alt="" loading="lazy" width="800" height="450"><span class="films__t"><b class="films__n">6</b>One motion, six pictures, wide</span><span class="films__len">1:27</span></button></li>
+                    <li><button type="button" data-part="7" class="is-wide"><img src="../images/fig13/films/7.webp" alt="" loading="lazy" width="800" height="450"><span class="films__t"><b class="films__n">7</b>Turning the paper: a wheel</span><span class="films__len">0:28</span></button></li>
+                    <li><button type="button" data-part="8" class="is-wide"><img src="../images/fig13/films/8.webp" alt="" loading="lazy" width="800" height="450"><span class="films__t"><b class="films__n">8</b>Turning the paper: the butterfly</span><span class="films__len">0:33</span></button></li>
+                    <li><button type="button" data-part="9" class="is-wide"><img src="../images/fig13/films/9.webp" alt="" loading="lazy" width="800" height="450"><span class="films__t"><b class="films__n">9</b>The bell above the floor</span><span class="films__len">0:30</span></button></li>
+                </ol>
+            </div>
+            <div class="films__foot"><button type="button" class="films__close" id="films-close" hidden>Close the film</button></div>
+        </section>
+
         <section class="inside" id="inside" aria-labelledby="inside-title">
             <h2 id="inside-title">Inside Fig. 13</h2>
             <p>One cell of the sheet, the strike (3.557, 12.211), draws a butterfly. Everything built around it runs here, on this page, computed live in your browser. Open one; the sheet above pauses while it runs, and opening another closes the first.</p>
 
+            <div class="inside__grid">
             <div class="station" id="butterfly" data-src="butterfly-dashboard.html?embed=1" data-kind="auto">
                 <h3>The butterfly: one motion, three pictures</h3>
                 <p>The tip of the butterfly pendulum in the wall it moves in, with its height and its sideways position against time joined to it by straight lines. Turn the paper a quarter turn and each wave becomes the butterfly. A wheel first, to see the idea.</p>
@@ -327,35 +407,20 @@
             </div>
 
             <div class="station" id="hunt" data-src="flower-hunt.html?embed=1" data-kind="auto">
-                <h3>The flower hunt</h3>
-                <p>Which strikes make the tip draw a flower that closes, or a butterfly? A garden of closed drawings found by Newton's method, and a bench where you strike a pendulum yourself and watch how far each new petal lands from the last.</p>
+                <h3>The hunt for periodic orbits</h3>
+                <p>Which strikes make the tip draw a rotating orbit that closes, or a butterfly? A garden of closed drawings found by Newton's method, and a bench where you strike a pendulum yourself and watch how far each new lobe lands from the last.</p>
                 <div class="actions"><button type="button" class="btn" data-play>Open here</button><a class="btn btn--ghost" href="#part-iii">Its theory</a></div>
                 <div class="station__frame"></div>
             </div>
 
             <div class="station" id="catch" data-src="fig13/live-catch.html" data-kind="film">
-                <h3>Catching a pattern: flowers and butterflies</h3>
-                <p>Drag the pendulum anywhere and let go: it tumbles in chaos, free. Then ask for a pattern: <b>Choose a pattern</b> shows ten flowers and four butterflies, and a tap sends a motor at the top pin to bring the pendulum onto that one and hold it there, from wherever it is, also from another pattern. <b>Let go</b> switches the motor off. A flower is caught within 3 to 6 s of the tap in half of all tries; the butterflies take longer, about 20 s.</p>
+                <h3>Catching a pattern: rotating orbits and butterflies</h3>
+                <p>Drag the pendulum anywhere and let go: it tumbles in chaos, free. Then ask for a pattern: <b>Choose a pattern</b> shows ten rotating orbits and four butterflies, and a tap sends a motor at the top pin to bring the pendulum onto that one and hold it there, from wherever it is, also from another pattern. <b>Let go</b> switches the motor off. A rotating orbit is caught within 3 to 6 s of the tap in half of all tries; the butterflies take longer, about 20 s.</p>
                 <div class="actions"><button type="button" class="btn" data-play>Open here</button><a class="btn btn--ghost" href="#part-iv">Its theory</a></div>
                 <div class="station__frame"></div>
             </div>
-
-            <div class="station" id="films" data-src="fig13/reem.html?embed=1" data-kind="player">
-                <h3>For رِيمْ: the eight films</h3>
-                <p>Each film is drawn live while it plays. Tap one to start it here; it runs on into the next.</p>
-                <ol class="parts">
-                    <li><button type="button" data-part="1"><b>1</b>For رِيمْ: two words written by turning arrows</button></li>
-                    <li><button type="button" data-part="2"><b>2</b>The butterfly built by hand from its two waves</button></li>
-                    <li><button type="button" data-part="3"><b>3</b>The catch: out of chaos, onto the butterfly</button></li>
-                    <li><button type="button" data-part="4"><b>4</b>The dive: from the sheet into one cell</button></li>
-                    <li><button type="button" data-part="5"><b>5</b>One motion, six pictures</button></li>
-                    <li><button type="button" data-part="6"><b>6</b>Turning the paper: a wheel</button></li>
-                    <li><button type="button" data-part="7"><b>7</b>Turning the paper: the butterfly</button></li>
-                    <li><button type="button" data-part="8"><b>8</b>The bell above the floor</button></li>
-                </ol>
-                <div class="actions"><button type="button" class="btn" data-play hidden>Close</button></div>
-                <div class="station__frame"></div>
             </div>
+
         </section>
 
         <article class="paper" id="paper" aria-labelledby="paper-title">
@@ -388,7 +453,7 @@
                         <li><a href="#d-needs"><span>15</span>What the butterfly needs</a></li>
                         <li><a href="#b-numbers"><span>16</span>The butterfly as a machine: its strike, its speeds, its forces</a></li>
                         <li class="toc-part">Part III · The flower hunt: which strikes close</li>
-                        <li><a href="#h-petal"><span>17</span>Where a petal comes from</a></li>
+                        <li><a href="#h-petal"><span>17</span>Where a lobe comes from</a></li>
                         <li><a href="#h-g0"><span>18</span>Without gravity, one number decides</a></li>
                         <li><a href="#h-g"><span>19</span>With gravity: closed orbits</a></li>
                         <li><a href="#h-bfly"><span>20</span>The butterfly</a></li>
@@ -403,7 +468,7 @@
                         <li><a href="#c-wait"><span>28</span>Wait, and the mirror butterfly</a></li>
                         <li><a href="#c-catch"><span>29</span>The catch: feedback designed on the orbit</a></li>
                         <li><a href="#c-release"><span>30</span>Hold, let go, and miss</a></li>
-                        <li><a href="#c-flowers"><span>31</span>Flowers: the same motor, a different lock</a></li>
+                        <li><a href="#c-flowers"><span>31</span>Rotating orbits: the same motor, a different lock</a></li>
                         <li><a href="#c-program"><span>32</span>The program</a></li>
                         <li><a href="#c-checks"><span>33</span>Checks and measurements</a></li>
                         <li><a href="#c-screen"><span>34</span>Equation to screen</a></li>
@@ -416,7 +481,7 @@
                     <section class="psec" id="n-picture">
                         <h3><span class="psec__n">01</span>The picture</h3>
                         <p class="psec__lead">Hang a hundred identical wind chimes in a hall, in ten rows of ten. Give each one a different tap: harder to the right, harder on the lower piece towards the back. Then open a camera's shutter and let a small lamp on each chime's tip write on the film.</p>
-                        <p>That photograph is Fig. 13. The chimes are double pendulums: a rod hanging from a pin, a second rod hanging from the end of the first. Where a chime hangs in the hall tells you how it was tapped. What its lamp writes tells you what it then did. Some lamps write a clean ring. Some write a flower with a fixed number of petals, again and again. A few write a scribble that never repeats. Neighbours in the hall were tapped almost alike, so walking through the hall you see how the motion changes as the tap changes, and where a small change of the tap changes everything.</p>
+                        <p>That photograph is Fig. 13. The chimes are double pendulums: a rod hanging from a pin, a second rod hanging from the end of the first. Where a chime hangs in the hall tells you how it was tapped. What its lamp writes tells you what it then did. Some lamps write a clean ring. Some write a rotating orbit with a fixed number of lobes, again and again. A few write a scribble that never repeats. Neighbours in the hall were tapped almost alike, so walking through the hall you see how the motion changes as the tap changes, and where a small change of the tap changes everything.</p>
                         <p>Behind the hundred lamps the page lays a second picture, made the same way with many more pendulums and a different question: not "what does it draw" but "would its twin draw the same". That second picture glows in the shape of an eye. Sections 4 to 6 say what it measures and why it has a pupil, an iris and two long streaks.</p>
                     </section>
 
@@ -460,7 +525,7 @@
 
                     <section class="psec" id="n-eye">
                         <h3><span class="psec__n">05</span>The eye: pupil and iris</h3>
-                        <p class="psec__lead">The eye is drawn by energy. Press <em>The eye</em> in the bar under the figure to see the curves of this section on the figure.</p>
+                        <p class="psec__lead">The eye is drawn by energy. Press <em>Energy limits</em> in the bar under the figure to see the curves of this section on the figure.</p>
                         <p>On this map chaos appears only where a rod can go over the top: as long as both rods only rock about the bottom, the motion stays close to two coupled swings, and the twins stay together. Going over the top costs energy, and the strike must pay it. From (2), with the pendulum hanging at \(V = -(U_1 + U_2)\):</p>
                         \[ \text{lower rod up, upper rod down: } K \ge 2U_2 = 9.8\ \mathrm{J};\qquad \text{upper rod up, lower hanging from it: } K \ge 2U_1 = 29.4\ \mathrm{J};\qquad \text{both straight up: } K \ge 2(U_1+U_2) = 39.2\ \mathrm{J}. \tag{7} \]
                         <p>(The first threshold is Heyl's energy argument for a flip; the other two follow the same way.) Each threshold is one of the ellipses of (4).</p>
@@ -484,7 +549,7 @@
                     <section class="psec" id="n-x">
                         <h3><span class="psec__n">06</span>The two streaks<span class="star">★</span></h3>
                         <p class="psec__lead">Far outside the eye a strike carries ten or a hundred times what gravity can give. Chaos should be gone. Yet two bright streaks run out to the edge of the sheet, like lashes.</p>
-                        <p>Switch gravity off (the <em>Gravity</em> slider at 0). The pendulum is then a free jointed stick spinning about the pin. Nothing twists it from outside, so its total angular momentum \(p_1 + p_2\) is conserved, as well as its energy \(K\): two conserved quantities for two angles, and the motion is regular for every strike. What remains to decide is what the elbow does. It behaves like a pendulum of its own: either the angle \(\Delta\) keeps turning, the arms folding through each other once per turn and the tip passing through the pin (a petal), or \(\Delta\) swings back and forth and the tip stays out on a ring.</p>
+                        <p>Switch gravity off (the <em>Gravity</em> slider at 0). The pendulum is then a free jointed stick spinning about the pin. Nothing twists it from outside, so its total angular momentum \(p_1 + p_2\) is conserved, as well as its energy \(K\): two conserved quantities for two angles, and the motion is regular for every strike. What remains to decide is what the elbow does. It behaves like a pendulum of its own: either the angle \(\Delta\) keeps turning, the arms folding through each other once per turn and the tip passing through the pin (a lobe), or \(\Delta\) swings back and forth and the tip stays out on a ring.</p>
                         <p>To fold through, the stick must pass the folded position, where its moment of inertia about the pin is smallest, \(I_{\text{fold}} = A + B - 2C\) (set \(\theta_2 = \theta_1 + \pi\) in (2); \(\tfrac23\ \mathrm{kg\,m^2}\) for the equal rods). Spinning there with the angular momentum \(p_1 + p_2\) costs \((p_1+p_2)^2 / 2I_{\text{fold}}\), the way a skater who pulls her arms in spins faster and must supply energy to do so. The elbow folds through when the strike provides more:</p>
                         \[ K(p_1, p_2) > \frac{(p_1+p_2)^2}{2(A + B - 2C)}\quad\Longleftrightarrow\quad 3p_1^2 - 114\,p_1p_2 + 75\,p_2^2 > 0\quad\text{(equal rods)}. \tag{8} \]
                         <p>Both sides are quadratic in the strike, so the border does not depend on how hard the strike is, only on its direction: it is two straight lines through the centre of the sheet,</p>
@@ -500,7 +565,7 @@
                                 <tr><td>more than 0.10 rad (5.7°)</td><td>70.63 %</td><td>0.0 %</td></tr>
                             </tbody>
                         </table>
-                        <p>The streaks are the lines (9), and away from them the hard strikes are regular without exception. The lines also sort the cells: on the side where (8) holds the tip draws petals through the pin (60 of the hundred cells), on the other side rings that never reach the pin (38 cells); the remaining two are the pupil's.</p>
+                        <p>The streaks are the lines (9), and away from them the hard strikes are regular without exception. The lines also sort the cells: on the side where (8) holds the tip draws lobes through the pin (60 of the hundred cells), on the other side rings that never reach the pin (38 cells); the remaining two are the pupil's.</p>
                     </section>
 
                     <section class="psec" id="n-cells">
@@ -508,8 +573,8 @@
                         <p class="psec__lead">Four kinds of drawing, and where on the sheet each lives.</p>
                         <ul>
                             <li><b>Rings.</b> Upper right and lower left of the steep streak, towards the corners where \(p_1\) and \(p_2\) have the same sign. The elbow does not fold through; the arm stays nearly straight and the whole pendulum whirls round the pin like a single long rod. The tip stays near the 2 m circle.</li>
-                            <li><b>Rosettes.</b> Where (8) holds. Each turn of the elbow draws one petal through the pin; the next petal lies turned by a fixed angle \(\delta\). When \(\delta/2\pi\) is a fraction \(q/k\) the flower closes with \(k\) petals. <a href="#hunt">The flower hunt</a> finds these strikes.</li>
-                            <li><b>Butterflies.</b> The column \(p_1 = 3.56\), upper half: pin the cell \((3.56,\ 10)\). Here each petal lands almost on the last one, so the petal direction drifts slowly, and gravity makes it swing about straight down like a pendulum; the petals pile up at the two turning points, the wings. Tuned to \((3.557,\ 12.211)\) it closes after 24 petals: the butterfly of <a href="#butterfly">the dashboard</a> and of <a href="#catch">the catch</a>.</li>
+                            <li><b>Rosettes.</b> Where (8) holds. Each turn of the elbow draws one lobe through the pin; the next lobe lies turned by a fixed angle \(\delta\). When \(\delta/2\pi\) is a fraction \(q/k\) the rotating orbit closes with \(k\) lobes. <a href="#hunt">The hunt for periodic orbits</a> finds these strikes.</li>
+                            <li><b>Butterflies.</b> The column \(p_1 = 3.56\), upper half: pin the cell \((3.56,\ 10)\). Here each lobe lands almost on the last one, so the lobe direction drifts slowly, and gravity makes it swing about straight down like a pendulum; the lobes pile up at the two turning points, the wings. Tuned to \((3.557,\ 12.211)\) it closes after 24 lobes: the butterfly of <a href="#butterfly">the dashboard</a> and of <a href="#catch">the catch</a>.</li>
                             <li><b>Tangles.</b> The cells on the glow. Six of the hundred strikes are chaotic by the map, three mirror pairs: \((3.56,\ 6)\) and \((-3.56,\ -6)\), \((-3.56,\ 2)\) and \((3.56,\ -2)\), \((17.78,\ 2)\) and \((-17.78,\ -2)\). The last pair sits on the flat streak. Their drawings never settle into a figure; restart and they draw the same tangle again, because the page repeats the same arithmetic, but strike a hair differently (change \(N\) or \(P\) slightly) and the tangle is another one.</li>
                         </ul>
                         <p>Every drawing has a twin on the opposite side of the centre, mirrored left to right: the symmetry \((\theta, p) \to (-\theta, -p)\) of section 3.</p>
@@ -529,14 +594,14 @@
                             <li><b>A cell's place</b>: the strike. The small numbers along the left edge are \(p_2\) of each row, those along the bottom \(p_1\) of each column, in kg·m²/s.</li>
                             <li><b>A cell's drawing</b>: equation (5), the tip in metres; the pin is the cell's centre; 2 m is 0.4 of the cell's shorter side. <em>Rods</em>, in the bar under the figure, draws the two rods themselves.</li>
                             <li><b>The glow</b>: \(v\) of (6) for the strike at that point of the sheet; wine to rose, transparent where \(v = 0\).</li>
-                            <li><b>The eye</b>: the green ellipse is \(K = 2U_2\) (the pupil's edge), the yellow one \(K = 2(U_1 + U_2)\), both from (4) and (7) with the sliders' values; the dashed lines are (9), from (8) in its general form.</li>
+                            <li><b>Energy limits</b> (the button; the eye is the shape these curves give the glow): the green ellipse is \(K = 2U_2\) (the pupil's edge), the yellow one \(K = 2(U_1 + U_2)\), both from (4) and (7) with the sliders' values; the dashed lines are (9), from (8) in its general form.</li>
                             <li><b>The pinned pendulum</b>: the page opens with the butterfly's strike pinned; tap a cell to pin another. A ring marks the pinned strike. Drag the ring and the pinned pendulum is struck afresh at the strike under your finger, about eleven times a second while you drag, anywhere on the sheet and not only at the centres of cells; a strike within 8 % of a cell of its centre takes that cell. The panel shows its strike, \(K\) from (4), the map's \(v\) at its strike, and which part of the eye it is in, rewritten at most four times a second. <em>Let go of the pin</em> lets it go. The small picture has three views.</li>
                             <li><b>Tip path</b>: that pendulum enlarged, with the last 3 s of its tip's path.</li>
                             <li><b>Angles</b>: \(\theta_2\) against \(\theta_1\), each taken between −180° and +180°, hanging straight down in the middle. The left edge is the same line as the right one and the bottom the same as the top, so the square is a torus cut open and laid flat. The path is kept from the moment of pinning. A rod that goes over the top leaves through one edge and comes back through the opposite one.</li>
                             <li><b>Section</b>: a Poincaré section. Each time the upper rod passes straight down, \(\theta_1 = 0\) (mod \(2\pi\)), one dot is placed at \((\theta_2, p_2)\). The energy is fixed, so the motion lives on a three-dimensional surface, and the section cuts that surface down to a plane. A regular motion winds round a torus, and its dots fall on the closed curve where the plane cuts that torus. A chaotic motion scatters its dots over an area. A closed orbit returns to the same few dots. A pass with the upper rod turning backwards is drawn at \((-\theta_2, -p_2)\): the mirror image of a motion is again a motion, so all dots belong to one section, the one with \(\dot\theta_1 > 0\). The moment of passing is found inside one integration step of 1/4500 s by a straight line.</li>
                             <li><b>Zoom</b>: the sheet is a window on the plane of strikes. <em>Zoom +</em> (or a second tap on the pinned cell) halves its width and height around the pinned strike, which stays pinned; with nothing pinned it narrows around the middle. The pendulums in the cells are computed afresh for the new strikes. The map behind is one stored picture, a value every 0.056 kg·m²/s; zoomed in further than that it shows its own grain and nothing new. With a mouse the sheet can be dragged: the window moves by the strikes the drag covers, and the cells start again. <em>Whole</em> goes back to the whole sheet and keeps the pin.</li>
-                            <li><b>Try this</b>: a row of buttons under the figure, each setting the sheet up for one thing to see, with one sentence saying what to look at: the eye; ten times closer around a chaotic strike, with the section; a flower of 8 petals that closes; the butterfly of 24 turns; gravity off; a lower rod three times as heavy; and the start values. Every parameter a button moves away from its start value is marked in the panel <em>Parameters</em>, which also has a button back to the start values.</li>
-                            <li><b>Atlas</b>: the list holds the fourteen closed curves of the flower hunt of Part III, ten flowers and four butterflies, read from the same file as the hunt's garden. Choosing one sets the pendulum to equal rods under \(g = 9.8\) m/s², puts that strike on the centre of a cell, pins it, and shows 1 kg·m²/s of \(p_2\) either side of it. The neighbours then show how the curve opens when the strike is slightly off.</li>
+                            <li><b>Try this</b>: a row of buttons under the figure, each setting the sheet up for one thing to see, with one sentence saying what to look at: the energy limits; ten times closer around a chaotic strike, with the section; a rotating periodic orbit of 8 lobes; the butterfly of 24 turns; gravity off; a lower rod three times as heavy; and the start values. Every parameter a button moves away from its start value is marked in the panel <em>Parameters</em>, which also has a button back to the start values.</li>
+                            <li><b>Atlas</b>: the list holds the fourteen closed curves of the hunt for periodic orbits of Part III, ten rotating orbits and four butterflies, read from the same file as the hunt's garden. Choosing one sets the pendulum to equal rods under \(g = 9.8\) m/s², puts that strike on the centre of a cell, pins it, and shows 1 kg·m²/s of \(p_2\) either side of it. The neighbours then show how the curve opens when the strike is slightly off.</li>
                             <li><b>Where drawing and model differ</b>: the plate forgets (the model does not); the sheet stops while it is off the screen, and on a slow device it runs slower than real time rather than skipping steps, so \(t\) under the figure is the time of the model, not of the clock; the colour is a logarithm of the exposure; the map is 6.67 s of twins, so a strike whose twins part only later counts as regular.</li>
                         </ul>
                     </section>
@@ -548,7 +613,7 @@
                             <span class="pbox__t">Problems</span>
                             <ol>
                                 <li>The butterfly's strike is \(p_1 = 3.557\), \(p_2 = 12.211\) kg·m²/s. Put it into (4) and find its kinetic energy. How many times the eye's outer edge, 39.2 J, is it? Check your number against the panel: choose the butterfly of 24 turns in the atlas.</li>
-                                <li>Where does the pupil's edge, \(K = 9.8\) J, cross the two axes of the sheet? Set \(p_2 = 0\) in (4), then \(p_1 = 0\). Press <em>The eye</em> and compare. Why is the pupil wider than it is tall?</li>
+                                <li>Where does the pupil's edge, \(K = 9.8\) J, cross the two axes of the sheet? Set \(p_2 = 0\) in (4), then \(p_1 = 0\). Press <em>Energy limits</em> and compare. Why is the pupil wider than it is tall?</li>
                                 <li>The dashed lines are the strikes for which the fold-through condition (8) holds with an equals sign. Divide \(3p_1^2 - 114\,p_1p_2 + 75\,p_2^2 = 0\) by \(p_2^2\), solve the quadratic for \(p_1/p_2\), and recover the two slopes of (9).</li>
                                 <li>Go to a closed curve in the atlas and open <em>Section</em>. Count the separate dots after a minute. Then tap a neighbouring cell. Its dots do not repeat; they fill in a ring. Say in one sentence what the ring is a cut through.</li>
                             </ol>
@@ -561,7 +626,7 @@
                             <li>2swap, <a href="https://www.youtube.com/watch?v=dtjb2OhEQcU">“Double Pendulums are Chaoticn’t”</a> (2025), 7:08 to 7:20, and his open-source renderer swaptube. The picture of spirographs across momentum space and the twin-distance map are his; this page reproduces them from the equations and adds the explanation of the map's parts.</li>
                             <li>J. S. Heyl, <a href="https://www.famaf.unc.edu.ar/~vmarconi/fiscomp/Double.pdf">“The Double Pendulum Fractal”</a> (2008): the rod equations and the energy argument for which rod can flip, equation (7).</li>
                             <li>Drew’s Campfire, <a href="https://www.youtube.com/watch?v=8jVogdTJESw">“Pushing Simulations to the LIMIT to Turn Chaos into Order”</a>, credited by 2swap as an inspiration.</li>
-                            <li>On this site: <a href="#hunt">the flower hunt</a> (closed flowers and butterflies by Newton's method), <a href="#butterfly">the butterfly dashboard</a>, <a href="#catch">catching the butterfly</a> (a motor sets a chaotic pendulum on the butterfly), and <a href="Double%20Pendulum.html">Fig. 2</a>, the point-mass double pendulum.</li>
+                            <li>On this site: <a href="#hunt">the hunt for periodic orbits</a> (closed rotating orbits and butterflies by Newton's method), <a href="#butterfly">the butterfly dashboard</a>, <a href="#catch">catching the butterfly</a> (a motor sets a chaotic pendulum on the butterfly), and <a href="Double%20Pendulum.html">Fig. 2</a>, the point-mass double pendulum.</li>
                         </ul>
                     </section>
 
@@ -597,7 +662,7 @@
 
             <section class="psec" id="d-needs">
                 <h3><span class="psec__n">15</span>What the butterfly needs</h3>
-                <p>The butterfly is the pendulum kicked with \(p = (3.557, 12.211)\) kg·m²/s from hanging still. Its state returns to the start after \(T = 2.659\) s (to about \(10^{-11}\), found by Newton's method on Hamilton's equations; see <a href="#hunt">The Flower Hunt</a>), so its path closes after 24 petals. It is shown here at a quarter of real speed. In a frictionless model it repeats for ever; a real one loses energy to friction, and this orbit is weakly unstable (a small error grows by about 2 % per lap), so it drifts after a minute or two.</p>
+                <p>The butterfly is the pendulum kicked with \(p = (3.557, 12.211)\) kg·m²/s from hanging still. Its state returns to the start after \(T = 2.659\) s (to about \(10^{-11}\), found by Newton's method on Hamilton's equations; see <a href="#hunt">The Hunt for Periodic Orbits</a>), so its path closes after 24 lobes. It is shown here at a quarter of real speed. In a frictionless model it repeats for ever; a real one loses energy to friction, and this orbit is weakly unstable (a small error grows by about 2 % per lap), so it drifts after a minute or two.</p>
             </section>
 
                     <section class="psec" id="b-numbers">
@@ -608,25 +673,25 @@
                         \[ \dot\theta_1 = \frac{Bp_1 - Cp_2}{AB - C^2} = -25.30\ \mathrm{rad/s},\qquad \dot\theta_2 = \frac{Ap_2 - Cp_1}{AB - C^2} = +74.59\ \mathrm{rad/s}. \tag{14} \]
                         <p>The upper rod starts backwards at 4.0 turns a second, the lower rod forwards at 11.9 turns a second. The strike supplies \(K = 410.38\ \mathrm{J}\) by (4), so the energy is \(E^* = K - 19.6 = 390.78\ \mathrm{J}\).</p>
                         <p><b>One lap.</b> After \(T = 2.659405\ \mathrm{s}\) the pendulum is back in its starting state, the lower rod exactly 24 turns further on. In between, the two rods do very different things. The upper rod behaves like a slow pendulum: it swings out to \(\pm156.7^\circ\) and back, never over the top, its speed between \(-32.7\) and \(+33.1\ \mathrm{rad/s}\). The lower rod behaves like a spinner: it never stops and never reverses, turning at 44.7 to 74.6 rad/s, 9.0 turns a second on average. The tip moves at 38 to 52 m/s, the speed of a car on a motorway. The top pin has to hold all this: it pulls with about 0.9 kN on average and with up to 4.3 kN, 220 times the weight of the two rods (19.6 N).</p>
-                        <p><b>Why the drawing is a butterfly.</b> Each time the elbow is straight, the tip is at its full reach \(2l\), in the direction of the upper rod: that is the end of a petal. The lower rod overtakes the upper one 24 times a lap, so there are 24 petals, and each points where the upper rod pointed at that moment. The upper rod swings like a pendulum, slow at its turning points, so the petals crowd together there: the outermost ones lie at \(\pm135.6^\circ\) from straight down. Those two crowds are the wings. If the upper rod went over the top, the petals would go all the way round and the drawing would be a flower.</p>
+                        <p><b>Why the drawing is a butterfly.</b> Each time the elbow is straight, the tip is at its full reach \(2l\), in the direction of the upper rod: that is the end of a lobe. The lower rod overtakes the upper one 24 times a lap, so there are 24 lobes, and each points where the upper rod pointed at that moment. The upper rod swings like a pendulum, slow at its turning points, so the lobes crowd together there: the outermost ones lie at \(\pm135.6^\circ\) from straight down. Those two crowds are the wings. If the upper rod went over the top, the lobes would go all the way round and the drawing would be a rotating orbit.</p>
                         <p><b>Why it is not chaos.</b> The motion carries 390.8 J. Gravity can give or take at most 19.6 J of it, one part in twenty. So gravity cannot stop a rod or decide which way it goes; it only bends the slow swing of the upper rod. Followed for one lap, an error in the state grows by the factor 1.0198 (section 25): the exact closed drawing is slowly lost, but the butterfly shape is not.</p>
-                        <div class="pbox"><span class="pbox__t">Key result · the butterfly</span><p>Strike \((3.557,\ 12.211)\ \mathrm{kg\,m^2/s}\) from hanging still; energy 390.78 J; period 2.6594 s; 24 turns of the lower rod and 24 petals a lap; upper rod within \(\pm156.7^\circ\); an error grows 2 % a lap.</p></div>
+                        <div class="pbox"><span class="pbox__t">Key result · the butterfly</span><p>Strike \((3.557,\ 12.211)\ \mathrm{kg\,m^2/s}\) from hanging still; energy 390.78 J; period 2.6594 s; 24 turns of the lower rod and 24 lobes a lap; upper rod within \(\pm156.7^\circ\); an error grows 2 % a lap.</p></div>
                     </section>
 
                     <div class="ppart-head" id="part-iii">
                         <p class="paper__kicker">Part III</p>
                         <h3 class="ppart-title">The flower hunt: which strikes close</h3>
-                        <p>A double pendulum that hangs still and is kicked once draws a curve with the tip of its lower rod. For most kicks the curve never closes. We show that the tip draws one petal each time the arms fold through, that without gravity a single number, the kick's direction, decides how far each new petal turns, and that a flower closes when that turn is a rational part of a full circle. With gravity we find the closed flowers exactly, as periodic orbits, by Newton's method, and we measure which of them survive a small push. A butterfly turns out to be a pendulum inside the pendulum: the direction of the petals swings back and forth about straight down.</p>
+                        <p>A double pendulum that hangs still and is kicked once draws a curve with the tip of its lower rod. For most kicks the curve never closes. We show that the tip draws one lobe each time the arms fold through, that without gravity a single number, the kick's direction, decides how far each new lobe turns, and that a rotating orbit closes when that turn is a rational part of a full circle. With gravity we find the closed rotating orbits exactly, as periodic orbits, by Newton's method, and we measure which of them survive a small push. A butterfly turns out to be a pendulum inside the pendulum: the direction of the lobes swings back and forth about straight down.</p>
                     </div>
                     <section class="psec" id="h-petal">
-                        <h3><span class="psec__n">17</span>Where a petal comes from</h3>
+                        <h3><span class="psec__n">17</span>Where a lobe comes from</h3>
                         <p class="psec__lead">Put your forearm in line with your upper arm and your hand is as far from your shoulder as it can be. Fold the elbow all the way and your hand comes back to the shoulder. A double pendulum does the same with its tip.</p>
                         <p>Each rod has length \(l\), the upper rod makes the angle \(\theta_1\) with the downward vertical and the lower rod the angle \(\theta_2\). The tip is the sum of two arrows of length \(l\). Written as a complex number, with the real axis pointing down and the imaginary axis pointing right,</p>
                         \[ z_{\text{tip}} = l\,e^{i\theta_1} + l\,e^{i\theta_2} = 2l\cos\frac{\Delta}{2}\;e^{i\psi}, \qquad \Delta = \theta_1 - \theta_2,\quad \psi = \frac{\theta_1 + \theta_2}{2}. \tag{15} \]
                         <p>To see the second form, take \(e^{i\psi}\) out of both terms: what is left is \(l(e^{i\Delta/2} + e^{-i\Delta/2}) = 2l\cos(\Delta/2)\). So the tip lies at the distance \(2l\,|\cos(\Delta/2)|\) from the pivot. When the arms line up (\(\Delta = 0\) or a whole number of turns) the tip is on the rim, \(2l\) away. When they fold (\(\Delta = \pi\)) the tip is at the pivot.</p>
-                        <p>If the angle between the arms keeps turning, the tip runs out to the rim, back through the pivot, out to the rim on the other side, and so on. One full turn of \(\Delta\) draws one petal, a loop through the centre. The tip of that petal lies in the direction of the lower rod at the moment the arms are lined up. Call \(\delta\) the angle the lower rod turns between two such moments. Then the next petal tip is \(\delta\) further round, and the flower closes after \(k\) petals exactly when</p>
+                        <p>If the angle between the arms keeps turning, the tip runs out to the rim, back through the pivot, out to the rim on the other side, and so on. One full turn of \(\Delta\) draws one lobe, a loop through the centre. The tip of that lobe lies in the direction of the lower rod at the moment the arms are lined up. Call \(\delta\) the angle the lower rod turns between two such moments. Then the next lobe tip is \(\delta\) further round, and the rotating orbit closes after \(k\) lobes exactly when</p>
                         \[ \frac{\delta}{2\pi} = \frac{q}{k} \pmod 1, \qquad q, k \text{ whole numbers with no common factor}. \tag{16} \]
-                        <p>Every pendulum on this page starts hanging straight down, \(\theta_1 = \theta_2 = 0\). The arms are lined up, so the start is itself a petal tip: every flower here has a petal pointing straight down. The arms fold through only for some kicks. For the others \(\Delta\) rocks back and forth without reaching \(\pi\), the tip never passes the pivot, and the pendulum draws rings instead of petals.</p>
+                        <p>Every pendulum on this page starts hanging straight down, \(\theta_1 = \theta_2 = 0\). The arms are lined up, so the start is itself a lobe tip: every rotating orbit here has a lobe pointing straight down. The arms fold through only for some kicks. For the others \(\Delta\) rocks back and forth without reaching \(\pi\), the tip never passes the pivot, and the pendulum draws rings instead of lobes.</p>
                     </section>
 
                     <section class="psec" id="h-g0">
@@ -636,33 +701,33 @@
                         <p>Whether the arms fold through follows from energy alone. At the start, for two equal uniform rods of mass \(m\), the energy is \(E = \tfrac{6}{7ml^2}(p_1^2 - 3p_1p_2 + 4p_2^2)\). To fold, the stick must spin with its arms folded, where its moment of inertia about the pivot is smallest, \(\tfrac23 ml^2\). Spinning with the angular momentum \(p_1+p_2\) then costs \(\tfrac{3(p_1+p_2)^2}{4ml^2}\), the way a skater pulling in her arms spins faster and must supply energy to do so. The arms fold through when the kick provides more than that:</p>
                         \[ 3p_1^2 - 114\,p_1p_2 + 75\,p_2^2 > 0 . \tag{17} \]
                         <p>The edge of this region is two straight lines through the origin, \(p_1 = (19 \mp 4\sqrt{21})\,p_2\), which is \(p_1 = 0.6697\,p_2\) and \(p_1 = 37.33\,p_2\). They are the two arms of the X in Fig. 13's chaos map.</p>
-                        <p>We integrate one turn of \(\Delta\) for 1800 kick directions, 0.1° apart, and read off \(\delta(\alpha)\). It is the curve in the bench's chart. Solving (16) on it gives 80 directions for flowers of 2 to 12 petals.</p>
-                        <div class="pbox"><span class="pbox__t">Key result · without gravity</span><p>A flower's shape is fixed by the direction of the kick alone. Its size in time is set by the strength of the kick. Closed flowers sit at the directions where \(\delta/2\pi\) is a fraction \(q/k\).</p></div>
+                        <p>We integrate one turn of \(\Delta\) for 1800 kick directions, 0.1° apart, and read off \(\delta(\alpha)\). It is the curve in the bench's chart. Solving (16) on it gives 80 directions for rotating orbits of 2 to 12 lobes.</p>
+                        <div class="pbox"><span class="pbox__t">Key result · without gravity</span><p>A rotating orbit's shape is fixed by the direction of the kick alone. Its size in time is set by the strength of the kick. Closed rotating orbits sit at the directions where \(\delta/2\pi\) is a fraction \(q/k\).</p></div>
                     </section>
 
                     <section class="psec" id="h-g">
                         <h3><span class="psec__n">19</span>With gravity: closed orbits</h3>
-                        <p class="psec__lead">Gravity spoils both symmetries: the time scaling and the freedom to turn the flower. A closed flower must now be found as a whole orbit.</p>
-                        <p>A flower of \(k\) petals is closed if, after \(k\) turns of \(\Delta\), the pendulum is back where it started: hanging straight down, \(\theta_2\) a whole number of turns, with the same momenta. Energy is conserved, so once \(p_1\) matches, \(p_2\) matches too. That leaves two conditions for the two unknowns of the kick:</p>
+                        <p class="psec__lead">Gravity spoils both symmetries: the time scaling and the freedom to turn the rotating orbit. A closed rotating orbit must now be found as a whole orbit.</p>
+                        <p>A rotating orbit of \(k\) lobes is closed if, after \(k\) turns of \(\Delta\), the pendulum is back where it started: hanging straight down, \(\theta_2\) a whole number of turns, with the same momenta. Energy is conserved, so once \(p_1\) matches, \(p_2\) matches too. That leaves two conditions for the two unknowns of the kick:</p>
                         \[ F(p_1, p_2) = \Bigl( \theta_2(t_k) - 2\pi n,\;\; p_1(t_k) - p_1(0) \Bigr) = (0,\,0), \tag{18} \]
-                        <p>where \(t_k\) is the moment of the \(k\)-th alignment. We solve (18) by Newton's method, starting from the gravity-free flower at a kick strength of 18 or 30 kg·m²/s, and integrate with an eighth-order Runge–Kutta method (DOP853) at a relative tolerance of \(10^{-11}\). Every orbit in the garden closes to better than \(10^{-9}\).</p>
-                        <div class="pbox"><span class="pbox__t">Example 19.1 · the seven-petal daisy</span><p>The kick \(\mathbf p = (-28.032,\ 0.476)\) kg·m²/s gives the energy \(E = 689.0\) J, 17.6 times the 39.2 J it takes to lift both rods straight up. The tip draws seven petals and returns in \(T = 0.794\) s; after seven petals the state differs from the start by \(1.8\times10^{-11}\).</p></div>
-                        <p>A closed orbit is useful only if it survives a small push. Watch the moments when the arms line up: the state there is \((\theta_2, p_1)\), and one flower is a map of that plane onto itself. Its Jacobian \(J\) has determinant 1, because Hamiltonian motion keeps phase-space area. If \(|\operatorname{tr} J| < 2\), nearby kicks circle the flower and draw nearly the same picture: the orbit is <em>stable</em>. If \(|\operatorname{tr} J| > 2\), nearby kicks run away from it and the picture smears within a few periods: <em>unstable</em>. Within 0.01 of 2 our finite differences cannot tell, and we say <em>neutral</em>. This is common at high energy, where gravity is weak and almost a whole family of kicks nearly closes. In the garden the 3-petal flower at \(\mathbf p = (24.42,\ 0.00)\) has \(\operatorname{tr} J = 1.96\): stable. The 7-petal flower at \((7.51,\ 12.34)\) has \(\operatorname{tr} J = -14.8\): it is there on purpose, so you can watch an unstable flower fall apart.</p>
+                        <p>where \(t_k\) is the moment of the \(k\)-th alignment. We solve (18) by Newton's method, starting from the gravity-free rotating orbit at a kick strength of 18 or 30 kg·m²/s, and integrate with an eighth-order Runge–Kutta method (DOP853) at a relative tolerance of \(10^{-11}\). Every orbit in the garden closes to better than \(10^{-9}\).</p>
+                        <div class="pbox"><span class="pbox__t">Example 19.1 · the seven-lobe daisy</span><p>The kick \(\mathbf p = (-28.032,\ 0.476)\) kg·m²/s gives the energy \(E = 689.0\) J, 17.6 times the 39.2 J it takes to lift both rods straight up. The tip draws seven lobes and returns in \(T = 0.794\) s; after seven lobes the state differs from the start by \(1.8\times10^{-11}\).</p></div>
+                        <p>A closed orbit is useful only if it survives a small push. Watch the moments when the arms line up: the state there is \((\theta_2, p_1)\), and one rotating orbit is a map of that plane onto itself. Its Jacobian \(J\) has determinant 1, because Hamiltonian motion keeps phase-space area. If \(|\operatorname{tr} J| < 2\), nearby kicks circle the orbit and draw nearly the same picture: the orbit is <em>stable</em>. If \(|\operatorname{tr} J| > 2\), nearby kicks run away from it and the picture smears within a few periods: <em>unstable</em>. Within 0.01 of 2 our finite differences cannot tell, and we say <em>neutral</em>. This is common at high energy, where gravity is weak and almost a whole family of kicks nearly closes. In the garden the 3-lobe rotating orbit at \(\mathbf p = (24.42,\ 0.00)\) has \(\operatorname{tr} J = 1.96\): stable. The 7-lobe rotating orbit at \((7.51,\ 12.34)\) has \(\operatorname{tr} J = -14.8\): it is there on purpose, so you can watch an unstable rotating orbit fall apart.</p>
                     </section>
 
                     <section class="psec" id="h-bfly">
                         <h3><span class="psec__n">20</span>The butterfly</h3>
-                        <p class="psec__lead">A butterfly is a flower that cannot decide where to point.</p>
-                        <p>Take the kick \(\mathbf p = (3.556,\ 10)\), a cell of the video's grid. Its petal tips point, in order, 57°, 97°, 119°, 126°, 121°, 104°, 74°, 33°, −14°, … from straight down. Each petal lands close to the previous one: the lower rod turns by almost a whole turn between petals, so \(\delta/2\pi\) is close to 0, the one-petal resonance. Without gravity the petals would creep round the circle at a steady rate. Gravity pulls the petal direction towards straight down, so it swings about the bottom like a pendulum, out to \(\pm126°\) and back. A pendulum is slowest at its turning points, so the petals pile up there: two dense fans, left and right. Those are the wings.</p>
-                        <p>Along the line \(p_1 = 3.556\) every kick from \(p_2 = 7.0\) to \(17.9\) is caught in this swing (89 of 161 kicks, 0.1 apart). The wings open between about \(\pm123°\) and \(\pm165°\), widest for the hardest kicks, and one swing takes between 10 and 45 petals. When one swing takes a whole number \(N\) of petals, the butterfly closes. It is then a periodic orbit with \(N\) turns of \(\Delta\), and (18) finds it.</p>
-                        <div class="pbox"><span class="pbox__t">Example 20.1 · the 24-petal butterfly</span><p>\(\mathbf p = (3.557,\ 12.211)\) kg·m²/s, \(E = 390.8\) J. The petal direction swings out to \(\pm135.6°\), the tip draws 24 petals and returns in \(T = 2.659\) s; the state closes to \(9\times10^{-12}\). Its trace is 2.000: neutral.</p></div>
-                        <p>The butterflies with 12, 14 and 16 petals have traces of 2.39, 2.17 and 2.04: unstable. This is expected. Resonant closed orbits come in pairs, one stable and one unstable (the Poincaré–Birkhoff theorem), and Newton's method found the unstable member of each of these three pairs. Their stable partners are not yet computed.</p>
+                        <p class="psec__lead">A butterfly is a rotating orbit that cannot decide where to point.</p>
+                        <p>Take the kick \(\mathbf p = (3.556,\ 10)\), a cell of the video's grid. Its lobe tips point, in order, 57°, 97°, 119°, 126°, 121°, 104°, 74°, 33°, −14°, … from straight down. Each lobe lands close to the previous one: the lower rod turns by almost a whole turn between lobes, so \(\delta/2\pi\) is close to 0, the one-lobe resonance. Without gravity the lobes would creep round the circle at a steady rate. Gravity pulls the lobe direction towards straight down, so it swings about the bottom like a pendulum, out to \(\pm126°\) and back. A pendulum is slowest at its turning points, so the lobes pile up there: two dense fans, left and right. Those are the wings.</p>
+                        <p>Along the line \(p_1 = 3.556\) every kick from \(p_2 = 7.0\) to \(17.9\) is caught in this swing (89 of 161 kicks, 0.1 apart). The wings open between about \(\pm123°\) and \(\pm165°\), widest for the hardest kicks, and one swing takes between 10 and 45 lobes. When one swing takes a whole number \(N\) of lobes, the butterfly closes. It is then a periodic orbit with \(N\) turns of \(\Delta\), and (18) finds it.</p>
+                        <div class="pbox"><span class="pbox__t">Example 20.1 · the 24-lobe butterfly</span><p>\(\mathbf p = (3.557,\ 12.211)\) kg·m²/s, \(E = 390.8\) J. The lobe direction swings out to \(\pm135.6°\), the tip draws 24 lobes and returns in \(T = 2.659\) s; the state closes to \(9\times10^{-12}\). Its trace is 2.000: neutral.</p></div>
+                        <p>The butterflies with 12, 14 and 16 lobes have traces of 2.39, 2.17 and 2.04: unstable. This is expected. Resonant closed orbits come in pairs, one stable and one unstable (the Poincaré–Birkhoff theorem), and Newton's method found the unstable member of each of these three pairs. Their stable partners are not yet computed.</p>
                     </section>
 
                     <section class="psec" id="h-check">
                         <h3><span class="psec__n">21</span>How we know</h3>
-                        <p>The model is the compound double pendulum of two equal uniform rods, \(m = 1\) kg, \(l = 1\) m, \(g = 9.8\) m/s². For two equal rods its equations reduce exactly to 2swap's and to Heyl's (checked with SymPy); the energy, the fold-through lines (17) and the small-swing frequencies were checked again with Wolfram. The search runs in <code>tools/fig13/hunt.py</code>, the stability in <code>hunt_inspect.py</code>, the butterflies in <code>butterfly.py</code>. The fold-through edges found by integration, 0.0262 and 0.9791 rad, agree with (17), 0.0268 and 0.9807 rad, to one scan step. The page itself integrates with its own fourth-order Runge–Kutta at \(h = 1/9000\) s on the bench and \(1/4500\) s in the garden. On the bench it measures \(\delta/2\pi\) for the 7-petal flower at \((-30.04,\ 2.52)\) within \(4\times10^{-5}\) of \(4/7\) over 64 petals: the browser confirms the closure the offline search found.</p>
-                        <p>What is not shown yet: the stable partners of the three unstable butterflies, flowers of 6 and of 9 to 12 petals with gravity (Newton's method did not converge from our starting kicks), and the same hunt for point masses and unequal rods.</p>
+                        <p>The model is the compound double pendulum of two equal uniform rods, \(m = 1\) kg, \(l = 1\) m, \(g = 9.8\) m/s². For two equal rods its equations reduce exactly to 2swap's and to Heyl's (checked with SymPy); the energy, the fold-through lines (17) and the small-swing frequencies were checked again with Wolfram. The search runs in <code>tools/fig13/hunt.py</code>, the stability in <code>hunt_inspect.py</code>, the butterflies in <code>butterfly.py</code>. The fold-through edges found by integration, 0.0262 and 0.9791 rad, agree with (17), 0.0268 and 0.9807 rad, to one scan step. The page itself integrates with its own fourth-order Runge–Kutta at \(h = 1/9000\) s on the bench and \(1/4500\) s in the garden. On the bench it measures \(\delta/2\pi\) for the 7-lobe rotating orbit at \((-30.04,\ 2.52)\) within \(4\times10^{-5}\) of \(4/7\) over 64 lobes: the browser confirms the closure the offline search found.</p>
+                        <p>What is not shown yet: the stable partners of the three unstable butterflies, rotating orbits of 6 and of 9 to 12 lobes with gravity (Newton's method did not converge from our starting kicks), and the same hunt for point masses and unequal rods.</p>
                     </section>
 
                     <section class="psec" id="h-src">
@@ -771,24 +836,24 @@
                     </section>
 
                     <section class="psec" id="c-flowers">
-                        <h3><span class="psec__n">31</span>Flowers: the same motor, a different lock</h3>
-                        <p class="psec__lead">The flower hunt found ten flowers and three more butterflies (<a href="#hunt">The Flower Hunt</a>). The reader can ask the motor for any of them. The flowers need a different law, and it works better than the butterfly's.</p>
-                        <p><b>The picture.</b> A skater in a spin pulls her arms in and turns faster, but nothing pushes her round: how much she turns, her angular momentum, stays what it was. A double pendulum that whirls fast is nearly that skater. Gravity can give or take 39 J at most between the lowest and the highest pose; a flower carries 262 to 970 J. Gravity is a ripple on it. Without gravity two things would stay exactly constant with the motor off: the energy \(E\), and by (26) the angular momentum about the pin, \(P = p_1 + p_2\).</p>
-                        <p>Measured on the ten flowers: over a lap \(P\) stays within 1 to 8 % of its mean \(\bar P\) (standard deviation 0.3 to 0.8 against means of 7.6 to 27.3 kg·m²/s). On the butterfly it runs between 1.2 and 15.8. So the orbits fall into two kinds, and <code>design()</code> tells them apart by that spread: <b>swinging</b> (the butterflies: the upper rod swings to and fro) and <b>whirling</b> (the flowers: both rods go round).</p>
-                        <p><b>Why two numbers are enough for the picture.</b> Without gravity nothing marks a direction in space. Turn the whole pendulum about the pin by any angle \(\psi\) and it moves exactly as before. So every motion with the flower's energy and the flower's \(\bar P\), with the lower rod overtaking the upper one in the same sense, draws <em>the same flower, turned by some angle</em>. Set \(E\) and \(\bar P\) and the pen already draws the flower. A third number, the turn \(\psi\), puts it in place.</p>
-                        <p><b>Setting two things with one torque.</b> Take \(\tau = a\,\dot\theta_1 + b\). By (25) and (26), averaged over a few petals (gravity averages out),</p>
+                        <h3><span class="psec__n">31</span>Rotating orbits: the same motor, a different lock</h3>
+                        <p class="psec__lead">The hunt for periodic orbits found ten rotating orbits and three more butterflies (<a href="#hunt">The Hunt for Periodic Orbits</a>). The reader can ask the motor for any of them. The rotating orbits need a different law, and it works better than the butterfly's.</p>
+                        <p><b>The picture.</b> A skater in a spin pulls her arms in and turns faster, but nothing pushes her round: how much she turns, her angular momentum, stays what it was. A double pendulum that whirls fast is nearly that skater. Gravity can give or take 39 J at most between the lowest and the highest pose; a rotating orbit carries 262 to 970 J. Gravity is a ripple on it. Without gravity two things would stay exactly constant with the motor off: the energy \(E\), and by (26) the angular momentum about the pin, \(P = p_1 + p_2\).</p>
+                        <p>Measured on the ten rotating orbits: over a lap \(P\) stays within 1 to 8 % of its mean \(\bar P\) (standard deviation 0.3 to 0.8 against means of 7.6 to 27.3 kg·m²/s). On the butterfly it runs between 1.2 and 15.8. So the orbits fall into two kinds, and <code>design()</code> tells them apart by that spread: <b>swinging</b> (the butterflies: the upper rod swings to and fro) and <b>whirling</b> (the rotating orbits: both rods go round).</p>
+                        <p><b>Why two numbers are enough for the picture.</b> Without gravity nothing marks a direction in space. Turn the whole pendulum about the pin by any angle \(\psi\) and it moves exactly as before. So every motion with the rotating orbit's energy and the rotating orbit's \(\bar P\), with the lower rod overtaking the upper one in the same sense, draws <em>the same rotating orbit, turned by some angle</em>. Set \(E\) and \(\bar P\) and the pen already draws the rotating orbit. A third number, the turn \(\psi\), puts it in place.</p>
+                        <p><b>Setting two things with one torque.</b> Take \(\tau = a\,\dot\theta_1 + b\). By (25) and (26), averaged over a few lobes (gravity averages out),</p>
                         \[ \dot E = a\,\langle\dot\theta_1^2\rangle + b\,\langle\dot\theta_1\rangle,\qquad \dot P = a\,\langle\dot\theta_1\rangle + b . \tag{34} \]
                         <p>Ask for the energy and the angular momentum to close on their targets at chosen rates, \(\dot E = c_E\,(E^* - E)\) and \(\dot P = c_L\,(P_{\text{ref}} - \langle P\rangle)\), and solve (34):</p>
                         \[ a = \frac{\dot E - \langle\dot\theta_1\rangle\,\dot P}{\langle\dot\theta_1^2\rangle - \langle\dot\theta_1\rangle^2},\qquad b = \dot P - a\,\langle\dot\theta_1\rangle . \tag{35} \]
-                        <p>The denominator is the unevenness of the upper rod's turning. If the rod turned perfectly evenly it would be zero, and one torque could not set two things: a steady push would change both together and nothing could separate them. The rod speeds up and slows down with each petal, and that is what the motor uses. In the program \(c_E = 2\ \mathrm{s^{-1}}\), \(c_L = 1.5\ \mathrm{s^{-1}}\), the averages are running means over 0.2 s, and below 0.6 \(E^*\) the motor simply pumps with the energy term of (27). Of the two mirror images the motor takes the one whose lower rod already turns the right way: it holds the upper rod and cannot quickly reverse the lower one.</p>
-                        <p><b>Turning the flower into place.</b> The angle between the rods and the two momenta do not change when the pendulum is turned as a whole. Matching \((\theta_1 - \theta_2,\ p_1,\ p_2)\) to the stored lap gives the place \(k\) on the lap, and then the turn is \(\psi = \theta_1 - \theta_1^*(t_k)\). A little too much angular momentum makes the whole flower creep forward:</p>
+                        <p>The denominator is the unevenness of the upper rod's turning. If the rod turned perfectly evenly it would be zero, and one torque could not set two things: a steady push would change both together and nothing could separate them. The rod speeds up and slows down with each lobe, and that is what the motor uses. In the program \(c_E = 2\ \mathrm{s^{-1}}\), \(c_L = 1.5\ \mathrm{s^{-1}}\), the averages are running means over 0.2 s, and below 0.6 \(E^*\) the motor simply pumps with the energy term of (27). Of the two mirror images the motor takes the one whose lower rod already turns the right way: it holds the upper rod and cannot quickly reverse the lower one.</p>
+                        <p><b>Turning the rotating orbit into place.</b> The angle between the rods and the two momenta do not change when the pendulum is turned as a whole. Matching \((\theta_1 - \theta_2,\ p_1,\ p_2)\) to the stored lap gives the place \(k\) on the lap, and then the turn is \(\psi = \theta_1 - \theta_1^*(t_k)\). A little too much angular momentum makes the whole rotating orbit creep forward:</p>
                         \[ \dot\psi = c_\psi\,\big(\langle P\rangle - \bar P\big). \tag{36} \]
-                        <p>\(c_\psi\) is measured once per flower: strike it slightly differently along the direction \((-\dot\theta_2,\ \dot\theta_1)\) in \((p_1, p_2)\), which leaves the energy alone, run one lap and read the turn. It comes out between 0.58 and 4.46 rad/s per kg·m²/s. So the motor asks for a slightly wrong angular momentum on purpose,</p>
+                        <p>\(c_\psi\) is measured once per rotating orbit: strike it slightly differently along the direction \((-\dot\theta_2,\ \dot\theta_1)\) in \((p_1, p_2)\), which leaves the energy alone, run one lap and read the turn. It comes out between 0.58 and 4.46 rad/s per kg·m²/s. So the motor asks for a slightly wrong angular momentum on purpose,</p>
                         \[ P_{\text{ref}} = \pm\bar P - \frac{k_\psi}{c_\psi}\,\psi,\qquad\text{so that}\qquad \dot\psi = -k_\psi\,\psi,\quad k_\psi = 0.8\ \mathrm{s^{-1}}, \tag{37} \]
-                        <p>never more than 12 % off \(\bar P\). The turn dies away and the detuning with it. This is a phase-locked loop, the circuit that keeps a radio on its station: run a little fast while behind, a little slow while ahead. The flower counts as caught when the distance (29) falls below 0.2, and as lost above 0.7; a lost flower still has its energy and angular momentum, so the motor steers on without starting over.</p>
-                        <p><b>Four flowers are caught with the gains of section 29 instead</b>: the 5 petals at 768 J and at 669 J, the unstable 7 petals at 313 J and the 8 petals at 506 J. On these the upper rod stops and turns back during the lap, the turn loop (36) has no steady whirl to work on, and the catch of section 29 takes over at \(d < 0.6\) once \(E\) and \(\bar P\) are set.</p>
-                        <div class="pbox"><span class="pbox__t">Measured · 60 starts for each pattern</span><p>The page's own start and 59 poses as a finger leaves them, <em>Catch it</em> pressed after 4 s; "held" means still caught six seconds (or six laps) later; 300 s allowed. <b>Each of the ten flowers: held in 60 of 60, never needing to start over; half within 2.6 to 5.7 s of the press, the slowest 14 s.</b> The butterflies stay on the wait-and-catch of sections 27 to 30 and are slower: 12 turns 56 of 60 (median 12 s); 18 turns 60 (8 s); 24 turns 60 (21 s, slowest 122 s); 32 turns 60 (35 s, slowest 161 s). For the 24-turn butterfly the first catch holds in about six of ten tries; the others slip and the motor starts over.</p></div>
-                        <p><b>How well they are held.</b> The six flowers on the lock stay within 0.04 to 0.09 of the loop on average (0.18 at worst) with a mean torque of 0.3 to 1.1 N·m: the lock keeps trimming and never quite rests. The four caught with gains settle towards zero torque, like the butterfly. <b>After letting go</b>, 20 s later: the stable flowers (3, 5 and 8 petals) are still within 0.04; the neutral ones have drifted by up to 0.6 (the flower turns slowly); the unstable 7-petal flower is gone (1.5), as it must be.</p>
+                        <p>never more than 12 % off \(\bar P\). The turn dies away and the detuning with it. This is a phase-locked loop, the circuit that keeps a radio on its station: run a little fast while behind, a little slow while ahead. The rotating orbit counts as caught when the distance (29) falls below 0.2, and as lost above 0.7; a lost rotating orbit still has its energy and angular momentum, so the motor steers on without starting over.</p>
+                        <p><b>Four rotating orbits are caught with the gains of section 29 instead</b>: the 5 lobes at 768 J and at 669 J, the unstable 7 lobes at 313 J and the 8 lobes at 506 J. On these the upper rod stops and turns back during the lap, the turn loop (36) has no steady whirl to work on, and the catch of section 29 takes over at \(d < 0.6\) once \(E\) and \(\bar P\) are set.</p>
+                        <div class="pbox"><span class="pbox__t">Measured · 60 starts for each pattern</span><p>The page's own start and 59 poses as a finger leaves them, <em>Catch it</em> pressed after 4 s; "held" means still caught six seconds (or six laps) later; 300 s allowed. <b>Each of the ten rotating orbits: held in 60 of 60, never needing to start over; half within 2.6 to 5.7 s of the press, the slowest 14 s.</b> The butterflies stay on the wait-and-catch of sections 27 to 30 and are slower: 12 turns 56 of 60 (median 12 s); 18 turns 60 (8 s); 24 turns 60 (21 s, slowest 122 s); 32 turns 60 (35 s, slowest 161 s). For the 24-turn butterfly the first catch holds in about six of ten tries; the others slip and the motor starts over.</p></div>
+                        <p><b>How well they are held.</b> The six rotating orbits on the lock stay within 0.04 to 0.09 of the loop on average (0.18 at worst) with a mean torque of 0.3 to 1.1 N·m: the lock keeps trimming and never quite rests. The four caught with gains settle towards zero torque, like the butterfly. <b>After letting go</b>, 20 s later: the stable rotating orbits (3, 5 and 8 lobes) are still within 0.04; the neutral ones have drifted by up to 0.6 (the rotating orbit turns slowly); the unstable 7-lobe rotating orbit is gone (1.5), as it must be.</p>
                     </section>
 
                     <section class="psec" id="c-program">
@@ -828,7 +893,7 @@
     E, w1, P      = energy(s), dtheta1/dt, p1 + p2
     reach         = max |P| over the last 3 s
     phase chaos:  tau = 0                                   until the reader presses Catch it or taps a pattern
-    (a flower: laws (35) and (37) instead of pump and wait; caught at d &lt; 0.2, lost at d &gt; 0.7)
+    (a rotating orbit: laws (35) and (37) instead of pump and wait; caught at d &lt; 0.2, lost at d &gt; 0.7)
     phase pump:   tau = law (27)                             -> wait when |E - E*| &lt; 5 J and |reach - 15.77| &lt; 3
                   (a drain after a miss aims law (27) at 60 J)
     phase wait:   tau = 0; d, nearest point, mirror sign = (29)  -> catch when d &lt; 0.6, miss after 12 s
@@ -896,7 +961,7 @@
                             <li>K. J. Åström and K. Furuta, <a href="https://doi.org/10.1016/S0005-1098(99)00140-5">“Swinging up a pendulum by energy control”</a>, <i>Automatica</i> 36 (2000) 287–295. The energy law, its Lyapunov function \(V = (E-E_0)^2/2\), and the advice to combine energy control with a catching controller near the target (read).</li>
                             <li>E. Ott, C. Grebogi and J. A. Yorke, <a href="https://doi.org/10.1103/PhysRevLett.64.1196">“Controlling chaos”</a>, <i>Phys. Rev. Lett.</i> 64 (1990) 1196. Waiting for a chaotic motion to come near an unstable periodic orbit and holding it with small corrections (citation checked; the full text could not be opened from this session).</li>
                             <li>Fig. 9 of this site, <a href="driven-oscillator.html">the driven oscillator</a>: proportional, integral and derivative control as physical parts; why an integral removes a steady error.</li>
-                            <li>The flower hunt, <a href="#hunt">Fig. 13 study</a>: how the butterfly orbit was found by Newton's method, and why it is a butterfly.</li>
+                            <li>The hunt for periodic orbits, <a href="#hunt">Fig. 13 study</a>: how the butterfly orbit was found by Newton's method, and why it is a butterfly.</li>
                         </ul>
                     </section>
                 </div>
@@ -1180,10 +1245,10 @@ function drawAnatomy() {
     const small = stage.getBoundingClientRect().width < 600;
     if (c1 || c2 || P < 10) return;                 // zoomed in: the curves stay, their labels belong to the whole sheet
     if (par.g > 0) {
-        label(small ? 'pupil' : 'pupil: too gentle to flip a rod', X(0) + 6, Y(0));
-        label(small ? 'iris' : 'iris: enough to flip, not enough to forget gravity', small ? X(0) - 2.4 * cw : X(0) - 3.2 * cw, Y(0) + (small ? 1.2 : 1.75) * ch);
+        label(small ? `< ${(2 * U2).toFixed(1)} J` : `below ${(2 * U2).toFixed(1)} J: no rod can go over the top`, X(0) + 6, Y(0));
+        label(small ? `< ${(2 * (U1 + U2)).toFixed(1)} J` : `below ${(2 * (U1 + U2)).toFixed(1)} J: a rod can flip, gravity decides`, small ? X(0) - 2.4 * cw : X(0) - 3.2 * cw, Y(0) + (small ? 1.2 : 1.75) * ch);
     }
-    label(small ? 'fold lines' : 'the elbow just fails to fold through', X(P * AR * .42), Y(P * .78));
+    label(small ? 'fold lines' : 'fold lines: the elbow just fails to fold through', X(P * AR * .42), Y(P * .78));
 }
 function setPin(q, quiet) {
     pin = q; pinS = q ? (worker && !q.free ? q.s.slice() : q.s) : null; trailN = 0; trailHead = 0; sect.length = 0; angNew.length = 0; smax = 1; torLast = null; tctx.clearRect(0, 0, tor.width, tor.height); dirty = true;
@@ -1200,10 +1265,10 @@ function pinWords() {
     $('pr-e').textContent = `${ke.toFixed(1)} J`;
     const v = mapValue(a, b); $('pr-v').textContent = v === null ? 'no map for these settings' : v.toFixed(2) + (v > 0.5 ? ' (chaotic)' : v > 0.15 ? ' (edge)' : ' (regular)');
     let say;
-    if (par.g === 0) say = foldsThrough(a, b) ? 'No gravity: the elbow folds through and the tip draws petals, a rosette.' : 'No gravity: the elbow cannot fold through; the tip stays out on a ring.';
-    else if (ke < 2 * U2) say = `In the pupil: ${ke.toFixed(1)} J is less than the ${(2 * U2).toFixed(1)} J it takes to lift the lower rod over the top. Neither rod can flip; the pendulum only rocks.`;
-    else if (ke < 2 * (U1 + U2)) say = `In the iris: ${ke.toFixed(1)} J can flip a rod, but gravity (up to ${(2 * (U1 + U2)).toFixed(1)} J) still decides which way. Most strikes here are chaotic.`;
-    else say = `Outside the eye: ${ke.toFixed(1)} J is ${(ke / (2 * (U1 + U2))).toFixed(1)} times what gravity can give or take. ` + (foldsThrough(a, b) ? 'The elbow folds through: petals, a rosette.' : 'The elbow cannot fold through: the tip stays out on a ring.');
+    if (par.g === 0) say = foldsThrough(a, b) ? 'No gravity: the elbow folds through and the tip draws lobes, a rosette.' : 'No gravity: the elbow cannot fold through; the tip stays out on a ring.';
+    else if (ke < 2 * U2) say = `Below the lower energy limit: ${ke.toFixed(1)} J is less than the ${(2 * U2).toFixed(1)} J it takes to lift the lower rod over the top. Neither rod can flip; the pendulum only rocks.`;
+    else if (ke < 2 * (U1 + U2)) say = `Between the energy limits: ${ke.toFixed(1)} J can flip a rod, but gravity (up to ${(2 * (U1 + U2)).toFixed(1)} J) still decides which way. Most strikes here are chaotic.`;
+    else say = `Above both energy limits: ${ke.toFixed(1)} J is ${(ke / (2 * (U1 + U2))).toFixed(1)} times what gravity can give or take. ` + (foldsThrough(a, b) ? 'The elbow folds through: lobes, a rosette.' : 'The elbow cannot fold through: the tip stays out on a ring.');
     $('pr-say').textContent = say;
 }
 let mapPx = null;
@@ -1301,7 +1366,7 @@ $('play').onclick = () => setRunning(!running);
 $('restart').onclick = () => { build(); draw(); };
 $('rods').onclick = () => { showRods = !showRods; $('rods').setAttribute('aria-pressed', String(showRods)); draw(); };
 $('showmap').onchange = e => { showMap = e.target.checked; drawMap(); };
-$('anat').onclick = () => { anat = !anat; $('anat').setAttribute('aria-pressed', String(anat)); draw(); };
+$('anat').onclick = () => { anat = !anat; $('anat').setAttribute('aria-pressed', String(anat)); stage.classList.toggle('is-energy', anat); draw(); };
 $('unpin').onclick = () => { unpin(); draw(); };
 function unpin() { setPin(null); $('pr-p').textContent = $('pr-e').textContent = $('pr-v').textContent = '–'; $('pr-say').textContent = 'Tap a cell of the figure.'; }
 
@@ -1398,7 +1463,7 @@ $('zall').onclick = () => { const keep = pin && pin.p0.slice(); c1 = c2 = 0; P =
 $('zin').title = 'Zoom in around the pin (or the middle)'; $('zout').title = 'Zoom out'; $('zall').title = 'The whole sheet';
 // ---- atlas: the closed curves the flower hunt found (scripts/fig13-hunt-data.js, written by tools/fig13/hunt_export.py) ----------
 const GARDEN = (window.FIG13_HUNT && window.FIG13_HUNT.garden) || [];
-GARDEN.forEach((g, n) => { const o = document.createElement('option'); o.value = n; o.textContent = (g.kind === 'butterfly' ? `Butterfly, ${g.k} turns` : `Flower, ${g.k} petals`) + ` · (${g.p1.toFixed(2)}, ${g.p2.toFixed(2)}) · ${g.stability}`; $('atlas').appendChild(o); });
+GARDEN.forEach((g, n) => { const o = document.createElement('option'); o.value = n; o.textContent = (g.kind === 'butterfly' ? `Butterfly, ${g.k} turns` : `Rotating orbit, ${g.k} lobes`) + ` · (${g.p1.toFixed(2)}, ${g.p2.toFixed(2)}) · ${g.stability}`; $('atlas').appendChild(o); });
 $('atlas').onchange = e => {
     const g = GARDEN[+e.target.value]; if (e.target.value === '' || !g) return;
     // these curves were found for two equal uniform rods under g = 9.8: set the pendulum back to that
@@ -1447,19 +1512,19 @@ function startValues() {          // everything as the page opens, without the p
 }
 function setSlider(id, v) { $(id).value = v; $(id).dispatchEvent(new Event('input')); }
 function atlasGo(k) { $('atlas').value = String(k); $('atlas').dispatchEvent(new Event('change')); }
-const BFLY = GARDEN.findIndex(g => g.kind === 'butterfly' && g.k === 24), FLOWER = GARDEN.findIndex(g => g.kind === 'flower' && g.k === 8);
+const BFLY = GARDEN.findIndex(g => g.kind === 'butterfly' && g.k === 24), ROT8 = GARDEN.findIndex(g => g.kind === 'flower' && g.k === 8);
 const DEMOS = {
-    eye: ['Green ellipse: strikes below 9.8 J, too gentle to lift either rod over the top (the pupil; all regular). Yellow: 39.2 J, enough to stand both rods straight up. Between them, the iris, most strikes are chaotic. The dashed lines are the two directions in which the elbow just fails to fold through; the bright streaks lie on them.',
+    eye: ['The energy given by the strike decides what can happen. Inside the green curve a strike gives less than 9.8 J: neither rod can go over the top, and every pendulum only rocks (regular). Between green and yellow (9.8 to 39.2 J) a rod can flip, but gravity still decides which way: most of these strikes are chaotic. Outside yellow, gravity is a small correction. The dashed lines: the two strike directions in which the elbow just fails to fold through; the bright streaks of the chaos map lie on them. The pendulum drawings are faded meanwhile so the curves can be read.',
         () => { startValues(); $('anat').click(); strikeAt(3.557, -2); }],
     chaos: ['Ten times closer, around a strike whose map value is 0.83. Neighbours a few hundredths of a kg·m²/s apart already draw different tangles. The small picture shows the section: its dots scatter over an area instead of lying on one curve.',
         () => { startValues(); goTo(3.557, -2, 2); setView('sec'); }],
-    flower: ['A flower of 8 petals that closes on itself, from the atlas. The sheet now shows ±1 kg·m²/s around it: the neighbours’ flowers turn slowly and smear into rosettes. The section shows a few dots, hit again and again.',
-        () => { startValues(); if (FLOWER >= 0) atlasGo(FLOWER); setView('sec'); }],
+    orbit: ['A periodic orbit from the atlas: the upper rod turns round and round and the tip draws 8 lobes, then closes on itself. The sheet now shows ±1 kg·m²/s around it: the neighbouring strikes do not close; their curves turn slowly and smear. The section shows a few dots, hit again and again.',
+        () => { startValues(); if (ROT8 >= 0) atlasGo(ROT8); setView('sec'); }],
     butterfly: ['The butterfly of 24 turns (Part II of the note), with its neighbours around it. Its whole story is in the stations below the figure: the dashboard, the hunt, the catch and the films.',
         () => { startValues(); if (BFLY >= 0) atlasGo(BFLY); }],
-    nog: ['Gravity off. Now one number decides each strike: whether the elbow can fold through. Every cell draws a ring or a rosette, and nothing is chaotic. The glow, computed with gravity, is hidden; press The eye and only the dashed fold lines remain.',
+    nog: ['Gravity off. Now one number decides each strike: whether the elbow can fold through. Every cell draws a ring or a rosette, and nothing is chaotic. The glow, computed with gravity, is hidden; press Energy limits and only the dashed fold lines remain.',
         () => { startValues(); setSlider('g', 0); strikeAt(3.557, 12.211); }],
-    heavy: ['The lower rod three times as heavy as the upper one (mass ratio 3.00). The chaos map was computed for equal rods, so it is hidden. Press The eye to see how the pupil and the iris change shape.',
+    heavy: ['The lower rod three times as heavy as the upper one (mass ratio 3.00). The chaos map was computed for equal rods, so it is hidden. Press Energy limits to see how the two energy curves change shape.',
         () => { startValues(); setSlider('mr', 1.1); strikeAt(3.557, 12.211); }],
     reset: ['Back to the start values: equal rods, gravity 9.8 m/s², the whole sheet, the butterfly’s strike pinned.',
         () => { startValues(); strikeAt(3.557, 12.211); }]
@@ -1491,10 +1556,11 @@ function closeStation() {
     const st = openStation, b = st.querySelector('[data-play]'); st.querySelector('.station__frame').innerHTML = ''; st.classList.remove('is-side');
     if (st.dataset.kind === 'player') b.hidden = true; else b.textContent = 'Open here';
     st.querySelectorAll('.parts button').forEach(x => x.classList.remove('is-on'));
-    openStation = null; if (sheetWasRunning && !running) $('play').click();
+    st.classList.remove('is-open'); openStation = null; if (sheetWasRunning && !running) $('play').click();
 }
 function openStationAt(st, part) {
-    const same = openStation === st;
+    if (filmOn) filmsClose();
+    const same = openStation === st; st.classList.add('is-open');
     if (openStation && !same) { const keep = sheetWasRunning; closeStation(); sheetWasRunning = keep; if (running) $('play').click(); }
     else if (!openStation) { sheetWasRunning = running; if (running) $('play').click(); }
     const f = document.createElement('iframe'), kind = st.dataset.kind, b = st.querySelector('[data-play]');
@@ -1506,10 +1572,50 @@ function openStationAt(st, part) {
     (kind === 'player' && !st.classList.contains('is-side') ? host : st).scrollIntoView({ block: 'start', behavior: 'smooth' });      // the film list is long on a phone: go to the film itself
 }
 document.querySelectorAll('.station [data-play]').forEach(btn => btn.onclick = () => { const st = btn.closest('.station'); if (openStation === st) closeStation(); else openStationAt(st); });
-document.querySelectorAll('.station .parts button').forEach(btn => btn.onclick = () => openStationAt($('films'), +btn.dataset.part));
-document.querySelectorAll('[data-film]').forEach(btn => btn.onclick = () => openStationAt($('films'), +btn.dataset.film));
+// ---- the films: one plays large in the panel, the nine are beside it; a portrait film stands beside the list, a wide one takes the
+// width with the list under it. The sheet pauses while a film plays (a phone computes one thing at a time) and goes on after Close.
+const fBody = $('films-body'), fStage = $('films-stage'), WIDE = new Set([6, 7, 8, 9]);
+let filmOn = false, filmPart = 1, filmShape = [1080, 1920], filmBar = 0, filmWasRunning = false;
+function sizeFilm() {
+    const [W, H] = filmShape, bar = filmOn ? filmBar : 0, tall = H > W;
+    fBody.classList.toggle('is-tall', tall); fBody.classList.toggle('is-wide', !tall);
+    const bodyW = fBody.clientWidth, room = Math.min(window.innerHeight - 16, 1150);
+    let w;
+    if (window.innerWidth <= 640) w = window.innerWidth;
+    else if (window.innerWidth <= 900) w = Math.min(bodyW, tall ? (room - bar) * W / H : bodyW);
+    else w = Math.min(tall ? bodyW * 0.56 : bodyW, (room - bar) * W / H);
+    fStage.style.width = Math.round(w) + 'px'; fStage.style.height = Math.round(w * H / W + bar) + 'px';
+}
+function markFilm(k) {
+    filmPart = k; document.querySelectorAll('.films__list button').forEach(b => b.classList.toggle('is-on', +b.dataset.part === k));
+    if (!filmOn) { $('films-poster').src = `../images/fig13/films/${k}.webp`; $('films-start').setAttribute('aria-label', 'Play film ' + k); }
+}
+function playFilm(k) {
+    if (openStation) closeStation();
+    if (!filmOn) { filmWasRunning = running; if (running) setRunning(false); }
+    filmOn = true; filmShape = WIDE.has(k) ? [1920, 1080] : [1080, 1920]; filmBar = filmBar || 150;
+    const f = document.createElement('iframe'); f.src = 'fig13/gallery.html?embed=1&theme=dark&part=' + k; f.title = 'Fig. 13: the films'; f.setAttribute('allow', 'fullscreen');
+    fStage.innerHTML = ''; fStage.appendChild(f); $('films-close').hidden = false; markFilm(k); sizeFilm();
+    fBody.scrollIntoView({ block: 'start', behavior: 'smooth' });      // the film and its controls in the window, the heading above it
+}
+function filmsClose() {
+    if (!filmOn) return; filmOn = false; $('films-close').hidden = true;
+    fStage.innerHTML = ''; const b = document.createElement('button'); b.type = 'button'; b.className = 'films__start'; b.id = 'films-start';
+    b.innerHTML = `<img src="../images/fig13/films/${filmPart}.webp" alt="" id="films-poster"><span class="films__play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg></span>`;
+    b.onclick = () => playFilm(filmPart); fStage.appendChild(b); markFilm(filmPart); sizeFilm();
+    if (filmWasRunning && !running) setRunning(true);
+}
+$('films-start').onclick = () => playFilm(filmPart); $('films-close').onclick = filmsClose;
+document.querySelectorAll('.films__list button').forEach(b => b.onclick = () => playFilm(+b.dataset.part));
+document.querySelectorAll('[data-film]').forEach(btn => btn.onclick = () => playFilm(+btn.dataset.film));
+addEventListener('resize', sizeFilm); markFilm(1); sizeFilm();
 addEventListener('message', e => {
-    if (e.origin !== location.origin || !e.data || !openStation) return;
+    if (e.origin !== location.origin || !e.data) return;
+    const ff = filmOn && fStage.querySelector('iframe');
+    if (ff && e.source === ff.contentWindow && e.data.fig13 === 'part') {      // the player went on to another film, or told its bar's height
+        filmShape = [e.data.W, e.data.H]; filmBar = e.data.bar || filmBar; markFilm(e.data.part); sizeFilm(); return;
+    }
+    if (!openStation) return;
     const f = openStation.querySelector('iframe'); if (!f || e.source !== f.contentWindow) return;
     if (e.data.fig13 === 'height') f.style.height = Math.max(200, e.data.h) + 'px';
     if (e.data.fig13 === 'part') {
