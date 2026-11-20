@@ -58,3 +58,31 @@ Pass marks of sub-run 2: n_drain_faces == 0 every step FAIL (15 109-15 116); it 
 |mean height change| < 0.05 mm PASS (0.004); |surface - 125.0| < 0.2 mm PASS (0.131); 0 outside FAIL (1 at one step).
 Verdict by the owner's rule: sub-run 2 did not pass; neither refutation condition holds (n_drain_faces is not 0; sub-run 1 never
 reached it = 600). Waiting for the owner.
+
+# Step 2: side visibility (owner's go, 20 Nov 2026: "keep going until finish line or an error comes up")
+
+## The task (plan delivered 20 Nov as a system notice; owner said go)
+Below the rim (z < 0.1475 m) particles, mirror images and solid extension may touch only grid cells on their own side of the glass
+wall; the velocity is extrapolated into unknown faces once per side and each particle reads its side's copy. Switch S.enable_side_vis()
+(stout_jax.py; off = unchanged). Test: rest_variants.py STEP2=1, three cases at dx 1.5 mm, dt 2 ms, case F, enable_ls_extend on:
+rest_2s (2.0 s), push_tagged (outer band 15 mm wide beyond R_out, deck to 0.060 m, bx = 5 m/s^2 for 0.2 s, 0.5 s, side_vis on),
+push_untagged (same, side_vis off: negative control). Smoke (5 steps per case) first, then full. Stop and report after Step 2.
+
+## Pass marks (from the plan, table 2.3)
+rest_2s: n_drain_bowl == 0, n_phantom_out == 0, n_drain_total == 0 every step; it < 600, res < 1e-5; outside_strict == 0 (every
+stray particle logged in step2_*_stray.jsonl). Mean height change and median surface: THRESHOLDS LOST IN PASTING, owner to give;
+values are reported raw (Step 1 used 0.05 mm and 0.2 mm). push_tagged: crossings below the rim == 0. push_untagged: crossings or
+phantom bleed (n_phantom_hi: outside-side liquid cells with z_c in 0.075 m .. rim, above the band) > 0.
+
+## Choices made in the code (say so in the report)
+- Side of a cell or face centre: Geometry.side_of. Open points: the region holding them (cavity below the rim = True). Points in the
+  glass: the nearer open surface in the (r, z) section. Equal to the plan's R_mid(z) rule for open points above the floor; differs only
+  inside the glass's foot and thick bowl base, where the radial mid-line does not follow the wall.
+- Side of a particle: r < R_mid(min(z, rim)) (above the rim: the rim's mid-radius), so particles above the rim write into the
+  matching side below it.
+- "Merged above the rim": both velocity copies keep every known face above the rim; unknown faces there are filled per copy.
+- outside_strict uses z > -1e-5 m (the plan wrote z > 0) so the floor gets the same 1e-5 m tolerance as the wall.
+- Band particles carry the pint's particle mass; K = N (no cap); nsel logged and flagged if it reaches K.
+
+## Log
+- 20 Nov ~18:30 UTC: code written (syntax parsed only; no run in the container).

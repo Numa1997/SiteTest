@@ -198,6 +198,36 @@ class Geometry:
     def open(self, x, y, z):
         return (~self.solid(x, y, z)).astype(float)
 
+    def side_of(self, x, y, z, chunk=4096):
+        """Step 2 (20 Nov 2026, notes/spill/STATE-projection-fix.md): which side of the glass a point belongs to, True = the cavity's.
+        An open point is on the side whose region holds it (the cavity below the rim: z > 0, r < R(z)); every other open point,
+        above the rim included, is False (above the rim the sides are not used). A point in the glass (wall shell or foot) is on the
+        side of the nearer of the two open surfaces in the (r, z) section: the cavity's (floor and inner wall) or the outside's
+        (outer wall, the foot's side and the deck's top beside it). Above the floor of the bowl this is the wall's mid-surface
+        r = R_mid(z) = (R_in + R_out)/2 wherever the wall is cut radially; it also splits the foot and the thick base of the bowl,
+        where the radial mid-line would not follow the wall. The deck is False."""
+        x, y, z = np.broadcast_arrays(np.asarray(x, float), np.asarray(y, float), np.asarray(z, float))
+        shp = x.shape; x = x.ravel(); y = y.ravel(); z = z.ravel(); r = np.hypot(x, y)
+        hx, hy, zt = self.body; zrim = self.zrim
+        out = self.cavity(x, y, z) & (z < zrim)
+        Rin = self.Rz(np.clip(z, 0.0, zrim - 1e-6)); Rout = self.Rz(np.clip(z, 0.008, zrim - 1e-6)) + self.WALL
+        gl = ((z > 0) & (z < zrim) & (r >= Rin) & (r < Rout)) | ((z <= 0) & (z > zt) & (r < Rout))
+        if gl.any():
+            zp = np.arange(self.nR) * self.dzp; zp[-1] = min(zp[-1], zrim)
+            ri = self.Rz(zp); ro = self.Rz(np.maximum(zp, 0.008)) + self.WALL; rf = float(self.Rz(0.008) + self.WALL)
+            cav = np.array([(0.0, 0.0)] + list(zip(ri, zp)))
+            ext = np.array([(rf + 1.0, zt), (rf, zt)] + list(zip(ro, zp)))
+            def dmin(P, poly):
+                a = poly[:-1]; b = poly[1:]; ab = b - a; L2 = np.maximum((ab ** 2).sum(1), 1e-30); d = np.empty(len(P))
+                for i in range(0, len(P), chunk):
+                    p = P[i:i + chunk, None, :]
+                    t = np.clip(((p - a[None]) * ab[None]).sum(2) / L2[None], 0, 1)
+                    d[i:i + chunk] = np.sqrt(((p - (a[None] + t[..., None] * ab[None])) ** 2).sum(2)).min(1)
+                return d
+            P = np.stack([r[gl], z[gl]], 1)
+            out[gl] = dmin(P, cav) < dmin(P, ext)
+        return out.reshape(shp)
+
     def _wall_area(self):
         """Area of glass inside each cell, per cell volume (as solver.py): the side wall of each layer, 2 pi R ds, shared by
         the layer's cells cut by it; the floor gives the cells above it dx^2 times their bottom's part inside the glass."""
@@ -309,7 +339,8 @@ def cut_lo(f, ax):     # the face below each cell (index i), cell-shaped
 
 # ====================================================================== the solver
 class Stout:
-    def __init__(self, G, model="full", ppc=2, seed=1, rho=1007.0, K_frac=0.62, M_drops=16384, tol=1e-5, maxit=600, head_mass=True, vol_corr=0.0):
+    def __init__(self, G, model="full", ppc=2, seed=1, rho=1007.0, K_frac=0.62, M_drops=16384, tol=1e-5, maxit=600, head_mass=True, vol_corr=0.0,
+                 extra=None):
         self.G = G; self.rho = rho; self.ppc = ppc
         # the volume correction (Fig. 16 run 4, 15 Nov 2026): 0 = off, Fig. 12's runs unchanged. After violent stirring the particle cloud
         # stayed spread out (the stored surface of the uncontrolled kerb stood 24 mm above the height its remaining stout fills at rest):
@@ -332,6 +363,9 @@ class Stout:
         self.fshape = [(nx + 1, ny, nz), (nx, ny + 1, nz), (nx, ny, nz + 1)]
         P = seed_particles(G, ppc, seed)
         self.N = len(P); self.V = glass_volume(G.R, G.dzp, G.fill); self.mp = rho * self.V / self.N
+        # Step 2 (20 Nov 2026): extra particles (positions, m) after the pint's, each of the pint's particle mass; None: unchanged
+        self.N_pint = self.N
+        if extra is not None: P = np.concatenate([P, np.asarray(extra, float)]); self.N = len(P)
         self.K = int(K_frac * self.N); self.M = M_drops
         self.P0 = P.astype(np.float32)
         f = lambda a: jnp.asarray(a, F32)
@@ -346,6 +380,7 @@ class Stout:
         # stout's free surface carries the surface tension GAMMA wherever no head lies on it
         self.cont = G.body is not None
         self.ls_extend = False   # test switch (20 Nov 2026, notes/spill/STATE-projection-fix.md): see enable_ls_extend; off = the v8 code unchanged
+        self.side_vis = False    # Step 2 switch (20 Nov 2026): see enable_side_vis; off = unchanged
         if self.cont: self.floor_w = jnp.asarray(G.thw == 0)
         self.gamma = GAMMA if self.cont else 0.0
         c = jnp.asarray(G.xc, F32); cy = jnp.asarray(G.yc, F32); zc = jnp.asarray(G.zc, F32)
@@ -496,6 +531,38 @@ class Stout:
             m = m | sh(m, 1, ax, False) | sh(m, 2, ax, False) | sh(m, -1, ax, False) | sh(m, -2, ax, False)
         return m
 
+    def build_sides(self):
+        """Step 2 masks (logging, and the switch below): cell_side (True: the cavity's side, Geometry.side_of at the cell centre),
+        below_rim (centre below the rim), solidc (centre in a solid), and for each face component its side and whether its centre
+        is below the rim. Built once, on the CPU."""
+        if hasattr(self, "cell_side"): return
+        G = self.G; dx = self.dx
+        X, Y, Z = np.meshgrid(G.xc, G.yc, G.zc, indexing="ij")
+        self.cell_side_np = G.side_of(X, Y, Z); self.below_rim_np = Z < G.zrim; self.solidc_np = G.solid(X, Y, Z)
+        self.cell_side = jnp.asarray(self.cell_side_np); self.below_rim = jnp.asarray(self.below_rim_np); self.solidc = jnp.asarray(self.solidc_np)
+        xf = G.x0 + dx * np.arange(self.nx + 1); yf = G.y0 + dx * np.arange(self.ny + 1); zf = G.z0 + dx * np.arange(self.nz + 1)
+        pts = [(xf, G.yc, G.zc), (G.xc, yf, G.zc), (G.xc, G.yc, zf)]
+        self.fside, self.fbelow = [], []
+        for a, b, c in pts:
+            Xf, Yf, Zf = np.meshgrid(a, b, c, indexing="ij")
+            self.fside.append(jnp.asarray(G.side_of(Xf, Yf, Zf))); self.fbelow.append(jnp.asarray(Zf < G.zrim))
+
+    def enable_side_vis(self):
+        """Step 2 switch (20 Nov 2026, notes/spill/STATE-projection-fix.md): below the rim, information does not cross the glass wall.
+        (1) A particle's kernel in the level set writes only into cells on its own side (side of a particle: r < R_mid(min(z, rim)),
+        R_mid = (R_in + R_out)/2); its mirror image across the inner wall writes only into open cavity cells below the rim.
+        (2) The solid extension (enable_ls_extend, call it after this) reads only open cells on the solid cell's own side.
+        (3) The velocity is extrapolated into unknown faces twice, once from the known faces on the cavity's side (and above the
+        rim), once from those on the outside (and above the rim); each particle reads the copy of its own side.
+        The 2.5 mm wall is thinner than the kernel (2 dx = 3 mm): without this, liquid on one side wets cells on the other."""
+        self.build_sides(); self.side_vis = True
+
+    def p_side(self, X):
+        """Side of each particle, True = the cavity's: r < R_mid(min(z, rim)), as Geometry.side_of on the open regions."""
+        G = self.G; zr_ = G.zrim; rr = jnp.sqrt(X[:, 0] ** 2 + X[:, 1] ** 2)
+        Rin = self.Rz(jnp.clip(X[:, 2], 0.0, zr_ - 1e-6)); Rout = self.Rz(jnp.clip(X[:, 2], 0.008, zr_ - 1e-6)) + G.WALL
+        return rr < 0.5 * (Rin + Rout)
+
     def enable_ls_extend(self):
         """Test switch, sub-run 2 of the bowl-base drain test (20 Nov 2026). On every cell whose centre lies in the glass (wall or
         foot) and which has an open face, the liquid level set is extended from the nearest open point along the glass's normal,
@@ -524,6 +591,8 @@ class Stout:
         def sdf(r, z):
             return np.where(in_glass(r, np.zeros_like(r), z), -1.0, 1.0) * dist(r, z)
         ii = np.argwhere(E); x = X[E]; y = Y[E]; z = Z[E]; r = np.hypot(x, y)
+        sv = self.side_vis
+        if sv: side = self.cell_side_np; side_e = side[E]   # Step 2: read only open cells on the solid cell's own side
         phi = sdf(r, z); h = 1e-4
         gr = (sdf(r + h, z) - sdf(r - h, z)) / (2 * h); gz = (sdf(r, z + h) - sdf(r, z - h)) / (2 * h)
         gn = np.maximum(np.hypot(gr, gz), 1e-12); gr /= gn; gz /= gn
@@ -541,6 +610,7 @@ class Stout:
                         I = np.clip(i0 + np.array([ox, oy, oz]), 0, np.array([nx - 1, ny - 1, nz - 1]))
                         w = (f[:, 0] if ox else 1 - f[:, 0]) * (f[:, 1] if oy else 1 - f[:, 1]) * (f[:, 2] if oz else 1 - f[:, 2])
                         ok = ~gl[I[:, 0], I[:, 1], I[:, 2]] & ~self._solid_np(G, I)
+                        if sv: ok = ok & (side[I[:, 0], I[:, 1], I[:, 2]] == side_e)
                         new = ~found
                         idx[new, k] = (I[:, 0] * ny + I[:, 1]) * nz + I[:, 2]
                         wts[new, k] = np.where(ok, w, 0.0)[new]
@@ -551,7 +621,8 @@ class Stout:
         self.ext_cells = jnp.asarray((ii[:, 0] * ny + ii[:, 1]) * nz + ii[:, 2], I32)
         self.ext_idx = jnp.asarray(idx, I32); self.ext_w = jnp.asarray(wts, F32)
         self.ext_mask = jnp.asarray(E); self.ls_extend = True
-        self.ext_info = dict(cells=int(E.sum()), unresolved=int((~found).sum()), phi_mm=[float(phi.min() * 1e3), float(phi.max() * 1e3)])
+        self.ext_info = dict(cells=int(E.sum()), unresolved=int((~found).sum()), phi_mm=[float(phi.min() * 1e3), float(phi.max() * 1e3)],
+                             side_vis=bool(sv), cavity_side_cells=int(side_e.sum()) if sv else None)
         return self.ext_info
 
     @staticmethod
@@ -578,13 +649,18 @@ class Stout:
         R2 = 4.0 * dx * dx; size = math.prod(self.dims)
         W = jnp.zeros(size, F32); S = jnp.zeros((size, 3), F32)
         nearf = near.reshape(-1)
-        for q, ok_q in ((Q, valid), (Q2, valid & img)):
+        if self.side_vis:   # Step 2: each kernel writes only on its own side of the glass below the rim (see enable_side_vis)
+            pin = self.p_side(Q); csf = self.cell_side.reshape(-1); brf = self.below_rim.reshape(-1); slf = self.solidc.reshape(-1)
+        for mirror, (q, ok_q) in enumerate(((Q, valid), (Q2, valid & img))):
             qi = jnp.floor((q - self.origin) / dx - 0.5).astype(I32)
             J = qi[:, None, :] + self.off64[None]                                  # (K, 64, 3)
             fl, ok = self.flat(J, self.dims)
             xcJ = self.origin + (J.astype(F32) + 0.5) * dx
             dd = q[:, None, :] - xcJ; d2 = jnp.sum(dd * dd, -1)
             use = ok & ok_q[:, None] & nearf[fl] & (d2 < R2)
+            if self.side_vis:
+                if mirror: use = use & csf[fl] & ~slf[fl] & brf[fl]
+                else: use = use & (~brf[fl] | (csf[fl] == pin[:, None]))
             qq = 1.0 - d2 / R2; wt = jnp.where(use, qq * qq * qq, 0.0)
             W = W.at[fl.reshape(-1)].add(wt.reshape(-1))
             S = S.at[fl.reshape(-1)].add((wt[..., None] * dd).reshape(-1, 3))
@@ -906,12 +982,15 @@ class Stout:
         return out
 
     # ---------------------------------------------------------------- grid to particles, move, glass, rim (Taichi g2p)
-    def g2p(self, s, vel, dt, gx, gz, rot=None, uc=None):
+    def g2p(self, s, vel, dt, gx, gz, rot=None, uc=None, vel_out=None):
         dx = self.dx; G = self.G; X, act = s["xp"], s["act"]
         g = (X - self.origin) / dx; vs, Cs, us = [], [], []
+        if vel_out is not None: pin = self.p_side(X)   # Step 2: vel is the cavity side's copy, vel_out the outside's
         for comp in range(3):
             fl, ok, w, wv, cf, fr = self._corners(g, comp, self.fshape[comp])
             val = jnp.where(ok, vel[comp].reshape(-1)[fl], 0.0)                    # (8, N)
+            if vel_out is not None:
+                val = jnp.where(pin[None, :], val, jnp.where(ok, vel_out[comp].reshape(-1)[fl], 0.0))
             vs.append(jnp.sum(w * val, 0))
             if uc is not None: us.append(jnp.sum(w * jnp.where(ok, uc[comp].reshape(-1)[fl], 0.0), 0))
             sg = 2.0 * cf - 1.0                                                     # d(weight)/d(fraction) signs
@@ -1103,8 +1182,12 @@ class Stout:
             sf = self._surf_faces(ph, liq); nsf = jnp.sum(sf, 2)
             wh = jnp.where(nsf > 0, jnp.sum(jnp.where(sf, vel[2], 0.0), 2) / jnp.maximum(nsf, 1), s["wh"]).astype(F32)
             s = dict(s, wh=wh)
-        vel = self.extrapolate(vel, known)
-        s, mom = self.g2p(s, vel, dt, gx, gz, rot, uc=uc)
+        if self.side_vis:   # Step 2: one extrapolated copy per side of the glass below the rim (see enable_side_vis)
+            vel_out = self.extrapolate(vel, [k & (~fs | ~fb) for k, fs, fb in zip(known, self.fside, self.fbelow)])
+            vel = self.extrapolate(vel, [k & (fs | ~fb) for k, fs, fb in zip(known, self.fside, self.fbelow)])
+        else:
+            vel = self.extrapolate(vel, known); vel_out = None
+        s, mom = self.g2p(s, vel, dt, gx, gz, rot, uc=uc, vel_out=vel_out)
         if self.head: s = self.head_spill(s, H, dt, gx, gz, rot)
         s = dict(s, p=p, ewall=s["ewall"] + ew, eskin=s["eskin"] + es, efoam=s["efoam"] + ef)
         vmax = jnp.max(jnp.where(s["act"][:, None], jnp.abs(s["vp"]), 0.0))
