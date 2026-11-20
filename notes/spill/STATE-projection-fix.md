@@ -124,7 +124,7 @@ the owner's yes before Step 3. The 1e-5 m guard in _g2p_cont (plan 2.4) is not m
 Two Step 2 thresholds (mean height change, median surface) are still not given; the owner did not answer that part.
 
 ## Code (stout_jax.py, all behind arguments or switches whose defaults keep the old behaviour)
-- Geometry(top=0.03, lip=0.0): grid height above the rim; rounded lip = disc of radius lip about (R_m, z_c), z_c = rim - lip,
+- Geometry(top=0.03, lip=0.0): grid height above the rim; rounded lip = disc of radius lip about (R_m, z_c), z_c = rim - lip (attribute zlip),
   R_m = R(z_c) + WALL/2 (lip = WALL/2 = 1.25 mm is a half-round top, rim height unchanged). Geometry.glass (glass alone, with lip) and
   Geometry.section_lines (the (r, z) section as the cavity's and the outside's polylines) now serve solid(), side_of() and
   enable_ls_extend (same polygon as before when lip = 0).
@@ -142,3 +142,5 @@ side_vis + extension + guard on)
 
 ## Log
 - 20 Nov ~19:05 UTC: Step 3 code written (syntax parsed only).
+- 20 Nov 18:45:41-18:47:29 UTC: Step 3 smoke v1 (code 31ce6a31) crashed before step 1 (Geometry.__init__): the lip's centre height,
+  named zc, was overwritten by the existing cell-centre array Geometry.zc. Renamed zlip. Log notes/spill/step3/smoke_v1.log.

@@ -105,7 +105,7 @@ class Geometry:
         # Step 3 (20 Nov 2026): top = the grid's height above the rim (continuous model; 0.03 m = unchanged); lip = radius of the
         # rounded rim (0 = the square top of the wall, unchanged). With lip > 0 the wall above zc = rim - lip is the disc of radius lip
         # about (R_m, zc), R_m = R(zc) + WALL/2: a half-round lip of the wall's own half-thickness, the rim's height unchanged.
-        self.lip = float(lip); self.zc = self.zrim - self.lip; self.Rm = float(self.Rz(self.zc - 1e-9) + 0.5 * self.WALL) if lip > 0 else None
+        self.lip = float(lip); self.zlip = self.zrim - self.lip; self.Rm = float(self.Rz(self.zlip - 1e-9) + 0.5 * self.WALL) if lip > 0 else None
         if body is None:
             self.n = n = int(math.ceil(2 * (Rmax + 2 * dx) / dx)); self.nz = nz = int(math.ceil((self.zrim + 0.02) / dx)) + 2
             self.x0 = -n * dx / 2; self.z0 = -2 * dx
@@ -200,8 +200,8 @@ class Geometry:
         """The glass alone (wall shell, rounded lip if lip > 0, foot), continuous model."""
         hx, hy, zt = self.body; z = np.asarray(z, float); r2 = x * x + y * y
         Rin = self.Rz(np.clip(z, 0.0, self.zrim - 1e-6)); Rout = self.Rz(np.clip(z, 0.008, self.zrim - 1e-6)) + self.WALL
-        wall = (z > 0) & (z < self.zc) & (r2 >= Rin ** 2) & (r2 < Rout ** 2)
-        if self.lip > 0: wall = wall | ((z >= self.zc) & ((np.sqrt(r2) - self.Rm) ** 2 + (z - self.zc) ** 2 < self.lip ** 2))
+        wall = (z > 0) & (z < self.zlip) & (r2 >= Rin ** 2) & (r2 < Rout ** 2)
+        if self.lip > 0: wall = wall | ((z >= self.zlip) & ((np.sqrt(r2) - self.Rm) ** 2 + (z - self.zlip) ** 2 < self.lip ** 2))
         foot = (z <= 0) & (z > zt) & (r2 < Rout ** 2)
         return wall | foot
 
@@ -209,13 +209,13 @@ class Geometry:
         """The glass's (r, z) section as two polylines: the cavity's surface (floor, inner wall, inner half of the lip up to its
         top) and the outside's surface (deck top beside the foot, foot side, outer wall, outer half of the lip up to its top)."""
         hx, hy, zt = self.body; zrim = self.zrim
-        zp = np.arange(self.nR) * self.dzp; zp = zp[zp < self.zc]; zp = np.append(zp, self.zc)
+        zp = np.arange(self.nR) * self.dzp; zp = zp[zp < self.zlip]; zp = np.append(zp, self.zlip)
         ri = self.Rz(zp); ro = self.Rz(np.maximum(zp, 0.008)) + self.WALL; rf = float(self.Rz(0.008) + self.WALL)
         cav = [(0.0, 0.0)] + list(zip(ri, zp)); ext = [(rf + 1.0, zt), (rf, zt)] + list(zip(ro, zp))
         if self.lip > 0:
             a = np.linspace(0.0, 0.5 * np.pi, narc)
-            cav += list(zip(self.Rm - self.lip * np.cos(a), self.zc + self.lip * np.sin(a)))
-            ext += list(zip(self.Rm + self.lip * np.cos(a), self.zc + self.lip * np.sin(a)))
+            cav += list(zip(self.Rm - self.lip * np.cos(a), self.zlip + self.lip * np.sin(a)))
+            ext += list(zip(self.Rm + self.lip * np.cos(a), self.zlip + self.lip * np.sin(a)))
         return np.array(cav), np.array(ext)
         return wall | foot | deck
 
@@ -1074,7 +1074,7 @@ class Stout:
         ro = jnp.sqrt(X[:, 0] ** 2 + X[:, 1] ** 2); Rin_o, Rout_o = radii(X[:, 2])
         r = jnp.sqrt(Xn[:, 0] ** 2 + Xn[:, 1] ** 2); z = Xn[:, 2]; Rin, Rout = radii(z)
         er = jnp.stack([Xn[:, 0], Xn[:, 1], jnp.zeros_like(r)], -1) / jnp.maximum(r, 1e-12)[:, None]
-        lip = G.lip; zcl = G.zc                                                  # Step 3: rounded lip (lip = 0: zcl = rim, as before)
+        lip = G.lip; zcl = G.zlip                                                  # Step 3: rounded lip (lip = 0: zcl = rim, as before)
         in_wall = (z > 0) & (z < zcl) & (r >= Rin) & (r < Rout)
         in_foot = (z <= 0) & (z > zt) & (r < Rout)
         if lip > 0:   # the lip: the disc of radius lip about (R_m, zc); a particle in it goes out along the disc's radius

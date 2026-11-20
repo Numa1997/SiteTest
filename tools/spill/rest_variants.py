@@ -308,7 +308,7 @@ def step3_run():
     sel = os.environ.get("ONLY"); cases = [c for c in cases if not sel or c[0] in sel.split(",")]
     dxd = float(os.environ.get("DX", "0.0015")); dt = 0.002; F0 = 3.421
     G = SJ.Geometry(R, DZP, FILL, dxd, body=F16, top=0.08, lip=0.00125)
-    topz = G.z0 + G.nz * dxd; hx, hy, zt = F16; lip = G.lip; zcl = G.zc
+    topz = G.z0 + G.nz * dxd; hx, hy, zt = F16; lip = G.lip; zcl = G.zlip
     say(f"{sub}: grid {G.nx} x {G.ny} x {G.nz}, top {topz * 1e3:.1f} mm (rim {G.zrim * 1e3:.1f} mm), lip {lip * 1e3:.2f} mm about "
         f"(R_m {G.Rm * 1e3:.3f} mm, z_c {zcl * 1e3:.3f} mm)")
     out_all = {}

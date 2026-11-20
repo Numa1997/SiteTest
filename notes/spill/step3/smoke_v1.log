@@ -1,0 +1,64 @@
+/kaggle/src/script.py:4: DeprecationWarning: Python 3.14 will, by default, filter extracted tar archives and reject files or modify their metadata. Use the filter argument to control this behavior.
+
+  tarfile.open(fileobj=io.BytesIO(b)).extractall('/tmp/repo'); root='/tmp/repo/'+os.listdir('/tmp/repo')[0]
+
+fetched in 42.1 s
+
+name, memory.total [MiB]
+
+Tesla T4, 15360 MiB
+
+Tesla T4, 15360 MiB
+
+Traceback (most recent call last):
+
+  File "/tmp/repo/SiteTest-31ce6a317d7753f2bc57c5484c7d60a7068ea9fa/tools/spill/rest_variants.py", line 386, in <module>
+
+    if STEP3: step3_run()
+
+              ~~~~~~~~~^^
+
+  File "/tmp/repo/SiteTest-31ce6a317d7753f2bc57c5484c7d60a7068ea9fa/tools/spill/rest_variants.py", line 310, in step3_run
+
+    G = SJ.Geometry(R, DZP, FILL, dxd, body=F16, top=0.08, lip=0.00125)
+
+  File "/tmp/repo/SiteTest-31ce6a317d7753f2bc57c5484c7d60a7068ea9fa/tools/fig12/kaggle/stout_jax.py", line 177, in __init__
+
+    else: self._wall_area_solid(xs4, ys4, zs4)
+
+          ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+
+  File "/tmp/repo/SiteTest-31ce6a317d7753f2bc57c5484c7d60a7068ea9fa/tools/fig12/kaggle/stout_jax.py", line 293, in _wall_area_solid
+
+    S = np.stack([self.solid(X, Y, np.full_like(X, z)) for z in zs4[4 * k:4 * k + 4]], -1)   # (4n, 4n, 4)
+
+                  ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  File "/tmp/repo/SiteTest-31ce6a317d7753f2bc57c5484c7d60a7068ea9fa/tools/fig12/kaggle/stout_jax.py", line 197, in solid
+
+    return self.glass(x, y, z) | deck
+
+           ~~~~~~~~~~^^^^^^^^^
+
+  File "/tmp/repo/SiteTest-31ce6a317d7753f2bc57c5484c7d60a7068ea9fa/tools/fig12/kaggle/stout_jax.py", line 203, in glass
+
+    wall = (z > 0) & (z < self.zc) & (r2 >= Rin ** 2) & (r2 < Rout ** 2)
+
+                      ^^^^^^^^^^^
+
+ValueError: operands could not be broadcast together with shapes (844,348) (176,) 
+
+exit 1
+
+/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\|'
+
+  cells[i][c] = re.sub('\\\\\|', '|', cell)
+
+/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\_'
+
+  text = re.sub(r'_', '\_', text) # Escape underscores in display text
+
+[NbConvertApp] Converting notebook __script__.ipynb to html
+
+[NbConvertApp] Writing 277006 bytes to __results__.html
+
