@@ -1,0 +1,58 @@
+/kaggle/src/script.py:4: DeprecationWarning: Python 3.14 will, by default, filter extracted tar archives and reject files or modify their metadata. Use the filter argument to control this behavior.
+
+  tarfile.open(fileobj=io.BytesIO(b)).extractall('/tmp/repo'); root='/tmp/repo/'+os.listdir('/tmp/repo')[0]
+
+fetched in 41.7 s
+
+name, memory.total [MiB]
+
+Tesla T4, 15360 MiB
+
+Tesla T4, 15360 MiB
+
+[18:51:08 UTC | +   16.3 s] smoke: grid 211 x 87 x 176, top 228.0 mm (rim 147.5 mm), lip 1.25 mm about (R_m 38.792 mm, z_c 146.250 mm)
+
+[18:51:27 UTC | +   35.7 s] smoke/slosh: N = 1001952, K = 1001952, steps 5, push 1.0 m/s^2 from 0.3 s for 0.146 s, extension {'cells': 17272, 'unresolved': 0, 'phi_mm': [-1.041392597270577, -0.0013351016942144578], 'side_vis': True, 'cavity_side_cells': 6804}
+
+[18:51:29 UTC | +   37.5 s] smoke/slosh: t = 0  in solid 231  ceiling 0  z max 124.85 mm  over 0  mean z 72.695 mm
+
+[18:52:15 UTC | +   83.4 s] smoke/slosh: step 1/5  t 0.002  gx 0.0  it 245  res 9.32e-06  in solid 0  ceiling 0  z max 124.9  cross 0  over 0  above rim 0  q13 0.003 mm  vmax 0.001  (33 s)
+
+[18:52:15 UTC | +   83.7 s] smoke/slosh: step 2/5  t 0.004  gx 0.0  it 163  res 9.86e-06  in solid 0  ceiling 0  z max 124.9  cross 0  over 0  above rim 0  q13 0.003 mm  vmax 0.001  (46 s)
+
+[18:52:15 UTC | +   84.0 s] smoke/slosh: step 3/5  t 0.006  gx 0.0  it 104  res 9.71e-06  in solid 0  ceiling 0  z max 124.9  cross 0  over 0  above rim 0  q13 0.003 mm  vmax 0.002  (46 s)
+
+[18:52:16 UTC | +   84.5 s] smoke/slosh: step 5/5  t 0.010  gx 0.0  it 47  res 9.87e-06  in solid 0  ceiling 0  z max 124.9  cross 0  over 0  above rim 0  q13 0.003 mm  vmax 0.003  (47 s)
+
+[18:52:16 UTC | +   84.5 s] smoke/slosh: done {"label": "slosh", "sub": "smoke", "steps": 5, "T": 0.01, "N": 1001952, "K": 1001952, "grid": [211, 87, 176], "top_mm": 228.0, "lip_mm": 1.25, "push": [0.3, 1.0, 0.146], "ext": {"cells": 17272, "unresolved": 0, "phi_mm": [-1.041392597270577, -0.0013351016942144578], "side_vis": true, "cavity_side_cells": 6804}, "it_max": 245, "res_max": 9.874987881630659e-06, "in_solid_max": 0, "ceiling_max": 0, "zmax_max_mm": 124.85529482364655, "crossings_total": 0, "over_max": 0, "over_end": 0, "above_rim_max": 0, "nact_end": 1001952, "nsel_max": 358867, "nsel_capped": false, "mean_z0_mm": 72.6948007941246, "mean_z1_mm": 72.6948007941246, "ms_per_step": 9393.2945728302, "wall_s": 46.966474294662476, "fit_ring13": {}, "f_target_hz": 3.421, "pass_marks": {"f_within_3pct": false, "ceiling_zero": true, "crossings_zero": true, "in_solid_zero": true}, "pass_marks_all": false}
+
+[18:52:33 UTC | +  101.9 s] smoke/overflow: N = 1001952, K = 1001952, steps 5, push 5.0 m/s^2 from 0.0 s for 0.2 s, extension {'cells': 17272, 'unresolved': 0, 'phi_mm': [-1.041392597270577, -0.0013351016942144578], 'side_vis': True, 'cavity_side_cells': 6804}
+
+[18:52:34 UTC | +  102.7 s] smoke/overflow: t = 0  in solid 231  ceiling 0  z max 124.85 mm  over 0  mean z 72.695 mm
+
+[18:53:19 UTC | +  147.6 s] smoke/overflow: step 1/5  t 0.002  gx 5.0  it 311  res 9.64e-06  in solid 0  ceiling 0  z max 124.9  cross 0  over 0  above rim 0  q13 0.033 mm  vmax 0.027  (33 s)
+
+[18:53:19 UTC | +  148.1 s] smoke/overflow: step 2/5  t 0.004  gx 5.0  it 230  res 9.65e-06  in solid 0  ceiling 0  z max 125.0  cross 0  over 0  above rim 0  q13 0.093 mm  vmax 0.053  (45 s)
+
+[18:53:20 UTC | +  148.5 s] smoke/overflow: step 3/5  t 0.006  gx 5.0  it 240  res 9.47e-06  in solid 0  ceiling 0  z max 125.1  cross 0  over 0  above rim 0  q13 0.184 mm  vmax 0.078  (46 s)
+
+[18:53:21 UTC | +  149.3 s] smoke/overflow: step 5/5  t 0.010  gx 5.0  it 221  res 9.26e-06  in solid 0  ceiling 0  z max 125.6  cross 0  over 0  above rim 0  q13 0.432 mm  vmax 0.130  (47 s)
+
+[18:53:21 UTC | +  149.3 s] smoke/overflow: done {"label": "overflow", "sub": "smoke", "steps": 5, "T": 0.01, "N": 1001952, "K": 1001952, "grid": [211, 87, 176], "top_mm": 228.0, "lip_mm": 1.25, "push": [0.0, 5.0, 0.2], "ext": {"cells": 17272, "unresolved": 0, "phi_mm": [-1.041392597270577, -0.0013351016942144578], "side_vis": true, "cavity_side_cells": 6804}, "it_max": 311, "res_max": 9.65063190960791e-06, "in_solid_max": 0, "ceiling_max": 0, "zmax_max_mm": 125.6093978881836, "crossings_total": 0, "over_max": 0, "over_end": 0, "above_rim_max": 0, "nact_end": 1001952, "nsel_max": 362726, "nsel_capped": false, "mean_z0_mm": 72.6948007941246, "mean_z1_mm": 72.69512861967087, "ms_per_step": 9326.980352401733, "wall_s": 46.63490295410156, "pass_marks": {"ceiling_zero": true, "crossings_zero": true, "in_solid_zero": true, "overflowed": false}, "pass_marks_all": false}
+
+[18:53:21 UTC | +  149.3 s] smoke: all done
+
+exit 0
+
+/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\|'
+
+  cells[i][c] = re.sub('\\\\\|', '|', cell)
+
+/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\_'
+
+  text = re.sub(r'_', '\_', text) # Escape underscores in display text
+
+[NbConvertApp] Converting notebook __script__.ipynb to html
+
+[NbConvertApp] Writing 277006 bytes to __results__.html
+

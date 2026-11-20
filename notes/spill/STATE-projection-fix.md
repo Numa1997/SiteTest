@@ -144,3 +144,7 @@ side_vis + extension + guard on)
 - 20 Nov ~19:05 UTC: Step 3 code written (syntax parsed only).
 - 20 Nov 18:45:41-18:47:29 UTC: Step 3 smoke v1 (code 31ce6a31) crashed before step 1 (Geometry.__init__): the lip's centre height,
   named zc, was overwritten by the existing cell-centre array Geometry.zc. Renamed zlip. Log notes/spill/step3/smoke_v1.log.
+- 20 Nov 18:47:59-18:53:47 UTC: Step 3 smoke v2 (code 9fbc0edf), Kaggle step3-lip-smoke v2, T4, 5 min 48 s (queue 2 min), script
+  149 s. Grid 211 x 87 x 176, top 228.0 mm; lip about (R_m 38.792 mm, z_c 146.250 mm); extension 17 272 cells, unresolved 0. Both
+  cases: in solid 0 after step 1 (231 at t = 0: seed jitter), ceiling 0, crossings 0, it <= 311, res < 1e-5. About 0.33 s a step.
+- 20 Nov 18:54:05 UTC: Step 3 full run launched (Kaggle step3-lip-full, T4).

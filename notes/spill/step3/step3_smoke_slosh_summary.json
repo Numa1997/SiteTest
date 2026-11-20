@@ -1,0 +1,55 @@
+{
+ "label": "slosh",
+ "sub": "smoke",
+ "steps": 5,
+ "T": 0.01,
+ "N": 1001952,
+ "K": 1001952,
+ "grid": [
+  211,
+  87,
+  176
+ ],
+ "top_mm": 228.0,
+ "lip_mm": 1.25,
+ "push": [
+  0.3,
+  1.0,
+  0.146
+ ],
+ "ext": {
+  "cells": 17272,
+  "unresolved": 0,
+  "phi_mm": [
+   -1.041392597270577,
+   -0.0013351016942144578
+  ],
+  "side_vis": true,
+  "cavity_side_cells": 6804
+ },
+ "it_max": 245,
+ "res_max": 9.874987881630659e-06,
+ "in_solid_max": 0,
+ "ceiling_max": 0,
+ "zmax_max_mm": 124.85529482364655,
+ "crossings_total": 0,
+ "over_max": 0,
+ "over_end": 0,
+ "above_rim_max": 0,
+ "nact_end": 1001952,
+ "nsel_max": 358867,
+ "nsel_capped": false,
+ "mean_z0_mm": 72.6948007941246,
+ "mean_z1_mm": 72.6948007941246,
+ "ms_per_step": 9393.2945728302,
+ "wall_s": 46.966474294662476,
+ "fit_ring13": {},
+ "f_target_hz": 3.421,
+ "pass_marks": {
+  "f_within_3pct": false,
+  "ceiling_zero": true,
+  "crossings_zero": true,
+  "in_solid_zero": true
+ },
+ "pass_marks_all": false
+}
