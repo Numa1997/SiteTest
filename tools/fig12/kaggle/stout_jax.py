@@ -402,6 +402,8 @@ class Stout:
         self.ls_extend = False   # test switch (20 Nov 2026, notes/spill/STATE-projection-fix.md): see enable_ls_extend; off = the v8 code unchanged
         self.side_vis = False    # Step 2 switch (20 Nov 2026): see enable_side_vis; off = unchanged
         self.wall_guard = False  # Step 3 switch (20 Nov 2026): _g2p_cont keeps cavity particles 1e-5 m inside the inner wall; off = unchanged
+        self.diag_g2p = False    # Step 3 verify (diagnostic only): the state also carries each particle's position before _g2p_cont's
+                                 # collisions (xprop) and whether it touched the glass (g2p_glass); the motion is unchanged
         if self.cont: self.floor_w = jnp.asarray(G.thw == 0)
         self.gamma = GAMMA if self.cont else 0.0
         c = jnp.asarray(G.xc, F32); cy = jnp.asarray(G.yc, F32); zc = jnp.asarray(G.zc, F32)
@@ -494,7 +496,8 @@ class Stout:
                     p=jnp.zeros(self.dims, F32), ewall=z64, efoam=z64, eskin=z64,
                     hf=hf0, wh=jnp.zeros((self.nx, self.ny), F32), foam_spill=z64, foam0=jnp.sum((hf0 * self.afill).astype(F64)) * self.dx ** 2,
                     bx=jnp.full((self.MF, 3), jnp.nan, F32), bv=jnp.zeros((self.MF, 3), F32), bvol=jnp.zeros(self.MF, F32),
-                    bptr=jnp.zeros((), I32))
+                    bptr=jnp.zeros((), I32),
+                    **(dict(xprop=jnp.asarray(self.P0), g2p_glass=jnp.zeros(N, bool)) if self.diag_g2p else {}))
 
     def heff(self, hf):
         """Height of glass over which a head of thickness hf slides, weighted by its sliding speed to the power 5/3."""
@@ -1067,6 +1070,7 @@ class Stout:
         vb = s["vp"] + dt * acc
         newv = jnp.where(high[:, None], vb, newv); Xn = jnp.where(high[:, None], X + dt * vb, Xn)
         C = jnp.where(high[:, None, None], 0.0, C)
+        Xprop = Xn                                                             # diagnostic only (diag_g2p)
         # the glass: the wall shell between R(z) and R(max(z, 8 mm)) + W for 0 < z < rim, the foot below the floor
         def radii(z):
             Rin = self.Rz(jnp.clip(z, 0.0, zr_ - 1e-6)); Rout = self.Rz(jnp.clip(z, 0.008, zr_ - 1e-6)) + W
@@ -1126,6 +1130,7 @@ class Stout:
         xp = jnp.where(act[:, None], Xn, s["xp"]); vp = jnp.where(act[:, None], newv, s["vp"])
         s = dict(s, xp=xp.astype(F32), vp=vp.astype(F32), C=jnp.where(act2[:, None, None], C, 0.0).astype(F32),
                  act=act2, landed=s["landed"] | gone)
+        if self.diag_g2p: s = dict(s, xprop=Xprop.astype(F32), g2p_glass=hit | in_cap)
         mom = jnp.sum(jnp.where(act2[:, None], newv, 0.0).astype(F64), 0)
         return s, mom
 

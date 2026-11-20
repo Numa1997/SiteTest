@@ -164,3 +164,17 @@ stout sliding over the lip's shoulder sits below 147.5 mm (lip surface at r = R_
 while it passes r = R_m: a legal pass over the top that the test reads as a crossing. The test was written for the square rim.
 To prove: rerun overflow logging each crossing's old and new positions and whether the segment between them passes through the
 glass (about 4 GPU-min). Stopped here for the owner (a pass mark failed).
+
+# Task A: close Step 3 (instruction notes: uploaded PROMPT-for-ClaudeCode-step3verify-step4.md, section 5; owner's yes 20 Nov ~21:00 UTC)
+Step 2's two height marks are now given (instruction section 3): 0.05 mm and 0.2 mm; Step 2's -0.0056 mm and 0.027 mm PASS.
+Rules added (instruction section 4): dt = min(2e-3, 0.8 dx/vmax, elastic limit) in every test from Step 4 on (Task A keeps 2 ms on
+purpose); pass marks written with abs( ), never "|" in tables; each check in its own guarded block.
+Task A code (diagnostic only): Stout.diag_g2p (state carries xprop, the position before _g2p_cont's collisions, and g2p_glass; motion
+unchanged); rest_variants.py STEP3_VERIFY=1 (overflow of STEP3 exactly; old test unchanged; phi_glass at 17 points per step for
+particles within 5 mm of the glass; verdicts REAL_CROSSING / LIP_CHORD_CLIP / CLEAR / SHALLOW_OTHER). Outputs notes/spill/step3_verify/.
+Pass marks (fixed): old_cross_count = 10 at steps 78-99; real_crossing_count = 0; n_in_solid_max = 0, it_max < 600, res_max < 1e-5;
+every flagged particle logged with its verdict.
+Choices: z_cross is where the step crosses the side test's mid-radius R_mid(min(z, rim)) (Stout.p_side), which near the lip is
+R_m within about 0.05 mm; "side changes below z_rim" means both ends below z_rim; counts are particle-steps within 5 mm of the glass;
+SHALLOW_OTHER = phi_min in [-6.25e-4, 0) that is neither a lip-chord clip nor real (the instruction's three classes do not cover it).
+Risk: the GPU's scatter order is not deterministic, so the reproduction of exactly 10 old-test events can miss by chance.

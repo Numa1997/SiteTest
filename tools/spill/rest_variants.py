@@ -26,7 +26,8 @@ CASES = dict(A=(F12, "wall"), B=(F12, "full"), C=(F16, "wall"), D=(F16, "full"),
              F=(F16, "full", "no tension"))      # F: D with the surface tension switched off (19 Nov 2026: is it what settles the pint?)
 only = os.environ.get("ONLY"); rep = {"dx_mm": dx * 1e3, "rest_s": REST, "device": str(jax.devices()[0])}
 DRAIN = os.environ.get("DRAIN") == "1"; STEP2 = os.environ.get("STEP2") == "1"; STEP3 = os.environ.get("STEP3") == "1"
-for key, case in (() if (DRAIN or STEP2 or STEP3) else CASES.items()):
+STEP3V = os.environ.get("STEP3_VERIFY") == "1"
+for key, case in (() if (DRAIN or STEP2 or STEP3 or STEP3V) else CASES.items()):
     body, model = case[0], case[1]
     if only and key not in only.split(","): continue
     t0 = time.time()
@@ -43,7 +44,7 @@ for key, case in (() if (DRAIN or STEP2 or STEP3) else CASES.items()):
              mean_z_mm=[round(z0 * 1e3, 2), round(float(X[act, 2].mean()) * 1e3, 2)], below_floor=int((act & (X[:, 2] < 0)).sum()),
              outside_cavity=int((act & ~((X[:, 2] > 0) & (rr < Rr))).sum()), wall_s=round(time.time() - t0, 1))
     rep[key] = r; print(key, json.dumps(r), flush=True)
-if not (DRAIN or STEP2 or STEP3): json.dump(rep, open(os.path.join(OUT, "rest_variants.json"), "w"), indent=1, default=str)
+if not (DRAIN or STEP2 or STEP3 or STEP3V): json.dump(rep, open(os.path.join(OUT, "rest_variants.json"), "w"), indent=1, default=str)
 
 
 # ====================================================================================================================================
@@ -384,3 +385,186 @@ def step3_run():
 
 
 if STEP3: step3_run()
+
+
+# ====================================================================================================================================
+# Step 3 verify, Task A (20 Nov 2026, notes/spill/STATE-projection-fix.md): diagnostic only, the overflow case of STEP3 exactly (grid
+# top rim + 0.08 m, lip 1.25 mm, model "wall", gamma 0, side_vis + extension + wall guard, seed 1, push 5.0 m/s^2 for 0.2 s, dt fixed
+# 2 ms, 0.6 s). The old crossing test runs unchanged. In addition, for every particle active before and after a step whose old or new
+# position lies within 5 mm of the glass, the glass's signed distance phi_glass (exact distance to the (r, z) section polylines of
+# Geometry.section_lines, the lip's arc as 24 chords, 0.7 um from the circle; sign from the analytic test, negative in the glass) at
+# 17 points on the straight step from the old to the new position; and hit_g2p (did _g2p_cont move it: its position before the
+# collisions differs from the final one). Verdicts: REAL_CROSSING, LIP_CHORD_CLIP, CLEAR, else SHALLOW_OTHER (phi_min in [-6.25e-4, 0)
+# but not a lip-chord clip, no side change below the lip). Run with STEP3_VERIFY=1, SUBRUN = "smoke" (5 steps) or "full".
+def step3v_run():
+    import datetime
+    import jax.numpy as jnp
+    T0 = time.time()
+    def say(m):
+        print(f"[{datetime.datetime.now(datetime.timezone.utc).strftime('%H:%M:%S')} UTC | +{time.time() - T0:7.1f} s] {m}", flush=True)
+    sub = os.environ.get("SUBRUN", "smoke")
+    vout = os.path.join(OUT, "step3_verify"); os.makedirs(vout, exist_ok=True)
+    dxd = float(os.environ.get("DX", "0.0015")); dt = 0.002; T = 0.6; tp0, ax_, tpl = 0.0, 5.0, 0.2
+    G = SJ.Geometry(R, DZP, FILL, dxd, body=F16, top=0.08, lip=0.00125)
+    topz = G.z0 + G.nz * dxd; hx, hy, zt = F16; lip = G.lip; zcl = G.zlip; zrim = G.zrim; Rm = G.Rm; W = G.WALL
+    DEEP = 0.5 * lip; NEAR = 5e-3; WIN = 32; CAP = 600000; NS = 17; FCAP = 256
+    say(f"{sub}: grid {G.nx} x {G.ny} x {G.nz}, top {topz * 1e3:.1f} mm, lip {lip * 1e3:.2f} mm about (R_m {Rm * 1e3:.4f} mm, z_lip {zcl * 1e3:.3f} mm), "
+        f"rim {zrim * 1e3:.3f} mm, dt fixed {dt} s")
+    # the glass's section as two polylines (z non-decreasing along each), for a windowed exact distance
+    cavl, extl = G.section_lines()
+    polys = []
+    for P in (cavl, extl):
+        A = jnp.asarray(P[:-1], jnp.float32); B = jnp.asarray(P[1:], jnp.float32); zm = jnp.asarray(0.5 * (P[:-1, 1] + P[1:, 1]), jnp.float32)
+        assert np.all(np.diff(0.5 * (P[:-1, 1] + P[1:, 1])) >= -1e-12)
+        polys.append((A, B, zm))
+    offs = jnp.arange(-WIN, WIN)
+    Rd = jnp.asarray(R, jnp.float32)
+    def RzJ(z):
+        f = jnp.clip(z / DZP, 0.0, len(R) - 1.001); i = jnp.floor(f).astype(jnp.int32); return Rd[i] + (f - i) * (Rd[i + 1] - Rd[i])
+    def in_glass(r, z):
+        Rin = RzJ(jnp.clip(z, 0.0, zrim - 1e-6)); Rout = RzJ(jnp.clip(z, 0.008, zrim - 1e-6)) + W
+        wall = (z > 0) & (z < zcl) & (r >= Rin) & (r < Rout)
+        cap = (z >= zcl) & ((r - Rm) ** 2 + (z - zcl) ** 2 < lip ** 2)
+        foot = (z <= 0) & (z > zt) & (r < Rout)
+        return wall | cap | foot
+    def phi(r, z):          # r, z: (n,) -> (n,)
+        d = jnp.full(r.shape, 1.0, jnp.float32)
+        for A, B, zm in polys:
+            M = A.shape[0]; i0 = jnp.searchsorted(zm, z); idx = jnp.clip(i0[:, None] + offs[None], 0, M - 1)
+            a = A[idx]; b = B[idx]; ab = b - a; p = jnp.stack([r, z], -1)[:, None, :]
+            t = jnp.clip(jnp.sum((p - a) * ab, -1) / jnp.maximum(jnp.sum(ab * ab, -1), 1e-30), 0.0, 1.0)
+            d = jnp.minimum(d, jnp.sqrt(jnp.min(jnp.sum((p - (a + t[..., None] * ab)) ** 2, -1), -1)))
+        return jnp.where(in_glass(r, z), -d, d)
+    def phi_chunked(r, z, ch=16384):
+        n = r.shape[0]; npad = (-n) % ch
+        rp = jnp.pad(r, (0, npad), constant_values=1.0); zp = jnp.pad(z, (0, npad), constant_values=1.0)
+        return jax.lax.map(lambda c: phi(c[0], c[1]), (rp.reshape(-1, ch), zp.reshape(-1, ch))).reshape(-1)[:n]
+    def side_f(r, z):       # > 0 on the outside's side; the side test of Stout.p_side: r < R_mid(min(z, rim))
+        Rin = RzJ(jnp.clip(z, 0.0, zrim - 1e-6)); Rout = RzJ(jnp.clip(z, 0.008, zrim - 1e-6)) + W
+        return r - 0.5 * (Rin + Rout)
+    S = SJ.Stout(G, model="wall", K_frac=1.0, M_drops=4096); S.gamma = 0.0
+    S.enable_side_vis(); info = S.enable_ls_extend(); S.wall_guard = True; S.diag_g2p = True
+    s = S.init_state(); N = S.N
+    nst = 5 if sub == "smoke" else int(round(T / dt))
+    say(f"{sub}: N = {N}, K = {S.K}, steps {nst}, extension {info}")
+    prep = jax.jit(S.prepare); step = jax.jit(lambda s, pr, gx: S.step(s, dt, gx, -9.81, prep=pr))
+    # the old test, exactly as step3_run's stats (rest_variants.py at 9cecadc, lines 316-342)
+    def stats_old(s, side_prev):
+        X = s["xp"]; act = s["act"]; r = jnp.hypot(X[:, 0], X[:, 1]); z = X[:, 2]
+        Rin = S.Rz(jnp.clip(z, 0.0, G.zrim - 1e-6)); Rout = S.Rz(jnp.clip(z, 0.008, G.zrim - 1e-6)) + G.WALL; e = 1e-5
+        in_wall = (z > 0) & (z < zcl) & (r > Rin + e) & (r < Rout - e)
+        in_cap = (z >= zcl) & (jnp.sqrt((r - G.Rm) ** 2 + (z - zcl) ** 2) < lip - e)
+        in_foot = (z < -e) & (z > zt + e) & (r < Rout - e)
+        in_deck = (z < zt - e) & (jnp.abs(X[:, 0]) < hx) & (jnp.abs(X[:, 1]) < hy)
+        in_solid = act & (in_wall | in_cap | in_foot | in_deck)
+        ceil = act & (z >= topz - dxd)
+        side = S.p_side(X); below = z < G.zrim
+        cross = act & (side != side_prev[0]) & below & side_prev[1]
+        return jnp.sum(in_solid), jnp.sum(ceil), cross, (side, below)
+    so_j = jax.jit(stats_old)
+    def new_test(Xo, Xn, Xp, act_o, act_n, gglass, cross_old):
+        ok = act_o & act_n
+        ro = jnp.hypot(Xo[:, 0], Xo[:, 1]); rn = jnp.hypot(Xn[:, 0], Xn[:, 1])
+        po = phi_chunked(ro, Xo[:, 2]); pn = phi_chunked(rn, Xn[:, 2])
+        ds = jnp.linalg.norm(Xn - Xo, axis=1)
+        near = ok & (jnp.minimum(po, pn) < NEAR)
+        nnear = jnp.sum(near)
+        sel = jnp.nonzero(near, size=CAP, fill_value=0)[0]; valid = jnp.arange(CAP) < nnear
+        xo = Xo[sel]; xn = Xn[sel]; sk = jnp.linspace(0.0, 1.0, NS, dtype=jnp.float32)
+        q = xo[:, None, :] + sk[None, :, None] * (xn - xo)[:, None, :]                    # (CAP, 17, 3)
+        rq = jnp.hypot(q[..., 0], q[..., 1]).reshape(-1); zq = q[..., 2].reshape(-1)
+        ph = phi_chunked(rq, zq).reshape(CAP, NS)
+        kmin = jnp.argmin(ph, 1); pmin = jnp.min(ph, 1); zmin = jnp.take_along_axis(q[..., 2], kmin[:, None], 1)[:, 0]
+        sf = side_f(rq, zq).reshape(CAP, NS)
+        so_ = sf[:, 0] > 0; sn_ = sf[:, -1] > 0; chg = so_ != sn_
+        flip = (sf[:, :-1] > 0) != (sf[:, 1:] > 0); kf = jnp.argmax(flip, 1)
+        f0 = jnp.take_along_axis(sf, kf[:, None], 1)[:, 0]; f1 = jnp.take_along_axis(sf, kf[:, None] + 1, 1)[:, 0]
+        z0 = jnp.take_along_axis(q[..., 2], kf[:, None], 1)[:, 0]; z1 = jnp.take_along_axis(q[..., 2], kf[:, None] + 1, 1)[:, 0]
+        wq = f0 / jnp.where(f1 != f0, f0 - f1, 1.0); zx = z0 + wq * (z1 - z0)
+        zx = jnp.where(chg & jnp.any(flip, 1), zx, jnp.nan)
+        hit = jnp.any(jnp.abs(Xp[sel] - xn) > 0.0, 1)
+        po_s = po[sel]; pn_s = pn[sel]; zo = xo[:, 2]; zn = xn[:, 2]
+        real = valid & ((pmin < -DEEP) | (chg & (zx < zcl)) | (chg & (zo < zrim) & (zn < zrim) & hit))
+        clip = valid & ~real & (zo >= zcl) & (zn >= zcl) & (po_s > 0) & (pn_s > 0) & ~hit & (pmin >= -DEEP) & (pmin < 0)
+        clear = valid & ~real & (pmin >= 0)
+        other = valid & ~real & ~clip & ~clear
+        oc = cross_old[sel] & valid
+        flag = real | oc
+        fsel = jnp.nonzero(flag, size=FCAP, fill_value=-1)[0]
+        nflag = jnp.sum(flag)
+        dmax = jnp.max(jnp.where(ok, ds, 0.0))
+        fl = dict(i=sel[jnp.clip(fsel, 0)], ok=fsel >= 0, oc=oc[jnp.clip(fsel, 0)], real=real[jnp.clip(fsel, 0)], clip=clip[jnp.clip(fsel, 0)],
+                  clear=clear[jnp.clip(fsel, 0)], xo=xo[jnp.clip(fsel, 0)], xn=xn[jnp.clip(fsel, 0)], po=po_s[jnp.clip(fsel, 0)],
+                  pn=pn_s[jnp.clip(fsel, 0)], pmin=pmin[jnp.clip(fsel, 0)], zmin=zmin[jnp.clip(fsel, 0)], zx=zx[jnp.clip(fsel, 0)],
+                  hit=hit[jnp.clip(fsel, 0)], gg=gglass[sel[jnp.clip(fsel, 0)]])
+        cnt = dict(near=nnear, real=jnp.sum(real), clip=jnp.sum(clip), clear=jnp.sum(clear), other=jnp.sum(other), old_cross=jnp.sum(cross_old),
+                   old_cross_in_near=jnp.sum(oc), nflag=nflag, hit=jnp.sum(valid & hit), phimin=jnp.min(jnp.where(valid, pmin, 1.0)), dsmax=dmax,
+                   cross_any_in_near=jnp.sum(valid & chg & (zo < zrim) & (zn < zrim)))
+        return cnt, fl
+    nt_j = jax.jit(new_test)
+    sp = (S.p_side(s["xp"]), s["xp"][:, 2] < G.zrim)
+    isol0, ce0, _, sp = so_j(s, sp)
+    say(f"{sub}: t = 0  in solid {int(isol0)}  ceiling {int(ce0)}")
+    sfx = "" if sub == "full" else f"_{sub}"      # the full run writes the names of the instruction: flagged_particles.jsonl, summary.json
+    fh = open(os.path.join(vout, f"steps{sfx}.jsonl"), "w"); ff = open(os.path.join(vout, f"flagged_particles{sfx}.jsonl"), "w")
+    rows = []; tc = time.time(); tot = dict(real=0, clip=0, clear=0, other=0, old_cross=0, flagged_logged=0, hit=0)
+    ver_old = {}; big_steps = []; cap_hit = False; fcap_hit = False
+    for k in range(nst):
+        t = k * dt; gx = ax_ if (tp0 - 1e-9 <= t < tp0 + tpl - 1e-9) else 0.0
+        try:
+            Xo = s["xp"]; act_o = s["act"]
+            pr = prep(s); s, d = step(s, pr, gx)
+            isol, ce, cross, sp = so_j(s, sp)
+            cnt, fl = nt_j(Xo, s["xp"], s["xprop"], act_o, s["act"], s["g2p_glass"], cross)
+            cnt = {kk: (float(v) if kk in ("phimin", "dsmax") else int(v)) for kk, v in cnt.items()}
+            row = dict(step=k + 1, t=round((k + 1) * dt, 4), dt=dt, gx=gx, it=int(d["it"]), res=float(d["res"]), in_solid=int(isol), ceiling=int(ce),
+                       vmax=float(d["vmax"]), ds_max_m=cnt["dsmax"], ds_max_over_dx=cnt["dsmax"] / dxd, **{f"n_{kk}": v for kk, v in cnt.items() if kk not in ("dsmax",)},
+                       wall_s=round(time.time() - tc, 2))
+            if cnt["near"] >= CAP: row["near_capped"] = True; cap_hit = True
+            if cnt["nflag"] > FCAP: row["flag_capped"] = True; fcap_hit = True
+            if row["ds_max_over_dx"] > 1.0: big_steps.append([row["step"], round(row["ds_max_over_dx"], 3)])
+            for kk in ("real", "clip", "clear", "other", "old_cross", "hit"): tot[kk] += cnt[kk]
+            if cnt["nflag"] > 0:
+                F = {kk: np.asarray(v) for kk, v in fl.items()}
+                for j in np.nonzero(F["ok"])[0]:
+                    verdict = "REAL_CROSSING" if F["real"][j] else ("LIP_CHORD_CLIP" if F["clip"][j] else ("CLEAR" if F["clear"][j] else "SHALLOW_OTHER"))
+                    xo, xn = F["xo"][j].astype(float), F["xn"][j].astype(float)
+                    rec = dict(step=k + 1, t=row["t"], dt=dt, idx=int(F["i"][j]), old_cross=bool(F["oc"][j]), verdict=verdict,
+                               x_old=xo[0], y_old=xo[1], z_old=xo[2], r_old=float(np.hypot(xo[0], xo[1])),
+                               x_new=xn[0], y_new=xn[1], z_new=xn[2], r_new=float(np.hypot(xn[0], xn[1])),
+                               ds=float(np.linalg.norm(xn - xo)), ds_over_dx=float(np.linalg.norm(xn - xo) / dxd),
+                               phi_old=float(F["po"][j]), phi_new=float(F["pn"][j]), phi_min=float(F["pmin"][j]), z_min_phi=float(F["zmin"][j]),
+                               z_cross=(None if not np.isfinite(F["zx"][j]) else float(F["zx"][j])), hit_g2p=bool(F["hit"][j]), g2p_glass=bool(F["gg"][j]))
+                    ff.write(json.dumps(rec) + "\n"); tot["flagged_logged"] += 1
+                    if rec["old_cross"]: ver_old[verdict] = ver_old.get(verdict, 0) + 1
+                ff.flush()
+            rows.append(row); fh.write(json.dumps(row) + "\n"); fh.flush()
+            if k < 3 or (k + 1) % 25 == 0 or k == nst - 1 or cnt["old_cross"] or cnt["real"]:
+                say(f"{sub}: step {k + 1}/{nst}  t {row['t']:.3f}  it {row['it']}  res {row['res']:.2e}  in solid {row['in_solid']}  old cross {cnt['old_cross']}  "
+                    f"near {cnt['near']}  real {cnt['real']}  clip {cnt['clip']}  other {cnt['other']}  phi min {cnt['phimin'] * 1e3:.4f} mm  "
+                    f"ds/dx max {row['ds_max_over_dx']:.3f}  ({row['wall_s']:.0f} s)")
+        except Exception as ex:
+            import traceback; say(f"{sub}: step {k + 1} FAILED: {ex!r}"); traceback.print_exc(); break
+    fh.close(); ff.close()
+    if rows:
+        mx = lambda key: max(r[key] for r in rows)
+        oc_steps = [[r["step"], r["n_old_cross"]] for r in rows if r["n_old_cross"] > 0]
+        summ = dict(sub=sub, steps_done=len(rows), steps_planned=nst, T=len(rows) * dt, N=N, dt_rule="fixed dt = 2.0e-3 s (as Step 3's overflow; no speed limit)",
+                    old_cross_count=tot["old_cross"], old_cross_steps=oc_steps, old_cross_verdicts=ver_old, real_crossing_count=tot["real"],
+                    lip_chord_clip_count=tot["clip"], clear_count=tot["clear"], shallow_other_count=tot["other"],
+                    counts_are="particle-steps among particles within 5 mm of the glass (old or new position)", hit_g2p_particle_steps=tot["hit"],
+                    flagged_logged=tot["flagged_logged"], max_ds_m=mx("ds_max_m"), max_ds_over_dx=mx("ds_max_over_dx"), steps_ds_over_dx_gt_1=big_steps,
+                    n_in_solid_max=mx("in_solid"), it_max=mx("it"), res_max=mx("res"), ceiling_max=mx("ceiling"), vmax_max=mx("vmax"),
+                    phi_min_overall_m=min(r["n_phimin"] for r in rows), near_capped=cap_hit, flag_capped=fcap_hit,
+                    params=dict(deep_m=DEEP, near_m=NEAR, samples=NS, window_segments=2 * WIN, z_lip_m=zcl, z_rim_m=zrim, R_m_m=Rm, lip_m=lip),
+                    ms_per_step=1e3 * (time.time() - tc) / len(rows), wall_s=time.time() - tc)
+        summ["pass_marks"] = dict(old_cross_10_at_steps_78_99=(tot["old_cross"] == 10 and all(78 <= st <= 99 for st, _ in oc_steps)),
+                                  real_crossing_zero=tot["real"] == 0, in_solid_zero=summ["n_in_solid_max"] == 0, it_lt_600=summ["it_max"] < 600,
+                                  res_lt_1e5=summ["res_max"] < 1e-5, every_flag_logged=(tot["flagged_logged"] >= tot["old_cross"] and not fcap_hit))
+        summ["pass_marks_all"] = all(summ["pass_marks"].values())
+        json.dump(summ, open(os.path.join(vout, f"summary{sfx}.json"), "w"), indent=1, default=str)
+        say(f"{sub}: summary {json.dumps(summ, default=str)}")
+    say(f"{sub}: all done")
+
+
+if STEP3V: step3v_run()
