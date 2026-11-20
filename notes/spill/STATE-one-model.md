@@ -15,7 +15,17 @@ No stitching, no hand rules. Stored frames at 60 per second for the existing Fig
   kerb (differenced velocities, not the 60 Hz gx, gz samples).
 - Must come out of the equations: splash falling back, film down the outer wall, landing splash, spreading, falling off.
 
-## Solver choice (pending)
+## Solver choice (pending; documentation checked 20 Nov)
+Documentation result (DualSPHysics repo, master, read 20 Nov):
+- (a) GPU: the non-Newtonian multiphase code is a separate source tree `src_mphase/DSPH_v5.0_NNewtonian/source/` with CUDA
+  kernels (`JSphGpu_NN_ker.cu`) and a `-gpu` option (`doc/help/DualSPHysics5.0_NNewtonian_Help.out:41`). No prebuilt
+  binary: `bin/linux` holds only the v5.4 tools (`bin/linux/VERSION_INFO.txt`). Must be compiled; its Makefile defaults to
+  CUDA 9.2 (`Makefile:59`). Phases: up to nine liquids, each with its own density, viscosity and yield stress
+  (`doc/xml_format/_FmtXML_MphaseNNewtonian.xml:8-21`); no air phase. tau_yield is specific (Pa m3/kg), i.e. sigma_y / rho.
+- (c) Surface tension: none in the non-Newtonian code (0 matches for tension/cohesion/CSF in the XML format and the GPU
+  kernel). It exists only in the separate LiquidGas v4.0 code (example 06_SurfaceTension, `examples/Examples_mphase_liquidgas.pdf`),
+  which is Newtonian water-air.
+- (b) Kaggle install: not yet tested.
 First choice DualSPHysics 5. Check (a) multiphase non-Newtonian on GPU, (b) installs on Kaggle, (c) surface tension.
 If (a) or (b) fails: OpenFOAM multiphaseInterFoam (stout, head, air) on GitHub runners.
 
@@ -47,7 +57,8 @@ Then the kerb ride. Known limit to report: deck film thinner than the particle s
 ## Log
 - 20 Nov: step 0 report given. Session "Fig. 16 derived spill: continue from handoff" (session_01DGmqiqE4iJRHF2gkZVo1Dv)
   archived on the owner's order.
-- 20 Nov: branch created, this file written. Next: DualSPHysics 5 documentation check for (a) and (c).
+- 20 Nov: branch created, this file written.
+- 20 Nov: documentation check done (above). Next: owner decides; then the Kaggle compile check for (b).
 
 ## What is live
 Unchanged: main 12c2e3a, Fig. 12 and Fig. 16 play stored Kaggle rides.
