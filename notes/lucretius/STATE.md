@@ -138,6 +138,10 @@ Step 4 (21:03, "make the tree formation faster ... keeps scaling up ... climate 
 one is dumb, as well as that one with a circle", branch `forest-climate`): forest spreads over the whole land under the hero
 (ground lowered, soil 90 px), seasons, vapour/collision/rain/snow; letters replaced by dust motes in a sunbeam beside the
 Lucretius title. Asked which scene is "the one with a circle" (spinners or seeds); waiting for the answer.
+Step 5 (20 Nov 19:29, "each side, left and right ... fill with simulations ... continue the tree simulation or spinners or
+resonance ... quantum ... complex systems and fractals", branch `side-rails`): new scene `rails` on the home page: left margin
+roots continue from the forest down the page (space colonisation, Murray's law, sap), right margin Barton's pendulums. Shows from
+about 1400 px width. Left for later if asked: a quantum example, fractals, other pages' margins.
 Gaps still open:
 side margins beside the card lists; Lucretius top.
 

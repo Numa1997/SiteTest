@@ -26,6 +26,7 @@ pendulum card) that nothing may enter: no crown, leaf, droplet or flake, and the
 | Page | Place | Scene | What it shows |
 |---|---|---|---|
 | Home (`index.html`) | the land under the hero, across the whole width; tall trees only where no text stands above, low ones under the buttons | `forest` | one tree spreads into a forest that fills the land within about two years; four seasons; vapour, clouds, rain and snow; roots and fungal threads in the soil |
+| Home | both side margins beside the Index and the sections, from below the forest down to the shores strip (fixed holder, drawn in page coordinates so it scrolls with the page; only where a margin is at least 90 px wide, so from about 1400 px) | `rails` | left: the forest's roots go on growing down the page; right: Barton's pendulums |
 | Home | band before Simulations | `spin` | spinners with random speeds; a wandering field locks an island of them into step |
 | Home | band above the footer | `shores` | "the shores of light": things rising out of dust |
 | Simulations | the empty half beside the title (from 1240 px width; none on a narrower screen) | `powder` | iron powder lining up along the field of magnets and of a wire whose current switches on and off |
@@ -65,6 +66,26 @@ depth. Fungal threads tie distant root systems; sugar runs along them from grown
 and threads fade out.
 
 On a phone the hero text covers the land, so almost nothing grows there.
+
+## The side rails (20 November 2026)
+
+`S.rails` reads three things from the page: the box of `data-bg-around` (`.layout`, the Index and the sections), the bottom of the
+forest, and the top of `data-bg-until` (the shores strip). The two margins left and right of that box, from the forest's soil down
+to the shores, are its land. It checks once a second whether the page has grown (a section opened) and extends its land.
+
+**Left: the roots go on.** The roots start under the forest's own trees that stand in the left margin, so the soil continues
+without a seam. They grow by space colonisation: water is scattered over the margin (one drop per 1100 px², thicker towards the
+outer edges); every water drop within 120 px pulls its nearest root tip towards it; each tip grows 6 px per step in the mean
+direction of its pulls (plus a slight downward pull and a little noise), 20 steps a second; a drop that a root reaches (within
+8 px) is used up. That gives the branching of leaf veins and river beds. Thickness follows Murray's law (the cube of a parent's
+radius is the sum of its children's cubes, so line width grows as the cube root of the number of tips it feeds), and sap dots
+climb from the tips back up towards the trees.
+
+**Right: Barton's pendulums.** Every 200 px a bar carries up to eight light pendulums of lengths 42 to 142 px in shuffled order and
+one heavy driver in the middle. The driver's length drifts slowly (a period of 50 to 80 s), so its frequency sweeps through the
+range. The bar is shaken by the driver's swing, and each light pendulum obeys θ'' = −(g/L) θ − γ θ' − a_bar / L with
+g = 4000 px/s², γ = 0.35 /s: only the one whose own frequency √(g/L) matches the driver's swings wide (resonance under an outside
+force), the others barely move, and as the driver's length drifts the wide swing passes from one pendulum to the next.
 
 ## How it runs
 
