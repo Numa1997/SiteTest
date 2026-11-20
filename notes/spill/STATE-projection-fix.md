@@ -92,3 +92,29 @@ phantom bleed (n_phantom_hi: outside-side liquid cells with z_c in 0.075 m .. ri
   n_phantom_hi 10 081-10 112 (the control discriminates), crossings 0. Extension: 17 240 cells, unresolved 0. Band 766 880
   particles; nsel 0.69 M < K. Step time about 0.2 s (rest), 0.4 s (push).
 - 20 Nov 18:21:50 UTC: full run launched (Kaggle step2-side-full, T4). Quota before: 185 min left of 1 800 (resets 21 Nov 00:00 UTC).
+- 20 Nov 18:21:50-18:34:10 UTC: full run done (code a49b6481), Kaggle step2-side-full, T4. Outputs notes/spill/step2/step2_full_*.
+  GPU used by smoke + full: 966.8 s = 16.1 min (quota 96 893.7 s -> 97 860.5 s used; 169 min left until 21 Nov 00:00 UTC).
+
+## Step 2 results (Fact; files notes/spill/step2/step2_full_*_summary.json, *.jsonl, full.log)
+| run | launched | running | finished | total | script |
+|---|---|---|---|---|---|
+| smoke (5 steps x 3) | 18:17:01 | 18:17:07 | 18:21:32 | 4 min 31 s | 184.5 s |
+| full | 18:21:50 | 18:21:55 | 18:34:10 | 12 min 20 s | 627.2 s (rest 258 s at 0.258 s/step; push 152 s and 144 s, 0.58-0.61 s/step) |
+
+rest_2s (2.0 s, 1000 steps, side_vis on): n_drain_bowl 0, n_drain_total 0, n_phantom_out 0 at every step (Step 1 ext: 15 109-15 116
+drain faces); it max 250 (step 1, then 24-84), res max 9.99999e-6; mean height 72.6948 -> 72.6892 mm (-0.0056 mm; range 72.6882-72.6948);
+median surface 124.938 -> 124.973 mm at 2.0 s (|H - 125| = 0.027 mm; range 124.865-124.973, minimum near 1 s, then back up);
+outside_strict 0 every step; outside 1 at one step (219, t = 0.438 s): particle 996282 at z 124.27 mm, r - R(z) = -2.5e-9 m in
+float64 (inside the wall), counted outside by the float32 check: rounding at the wall, not penetration. Extension 17 240 cells,
+unresolved 0. All six pass marks with thresholds PASS; the two without thresholds reported above.
+
+push_tagged (side_vis on) / push_untagged (off), 0.5 s: crossings below the rim 0 / 0. Both pints spill over the rim: first pint
+particle outside at step 61 (t = 0.122 s), at z = 147.6-147.9 mm (rim 147.5 mm), r 37.5-37.9 mm; outside up to 3 494 / 5 166 pint
+particles, every one counted by the strict test too; none changed side while below the rim (crossings 0), so all went over the rim.
+n_phantom_hi (outside-side liquid cells, z_c 75 mm .. rim): tagged 0 until step 68 (after the spill began at step 61), max 4 946;
+untagged 10 112 from step 1 (before any spill), max 15 940. The control discriminates (pass); tagged crossings 0 (pass).
+Caveat (Inference): after step 61 n_phantom_hi in push_tagged also counts the real spilled stout running down the outside, so it is
+not a clean phantom count there; before the spill it is 0 with side_vis and about 10 100 without.
+
+Decision rule of the plan: all pass marks hold; the one outside > 0 is wall grazing (2.5 nm, float32) -> commit, report, stop for
+the owner's yes before Step 3. The 1e-5 m guard in _g2p_cont (plan 2.4) is not made yet: it is a code change for the owner to approve.
