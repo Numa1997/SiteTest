@@ -178,3 +178,7 @@ Choices: z_cross is where the step crosses the side test's mid-radius R_mid(min(
 R_m within about 0.05 mm; "side changes below z_rim" means both ends below z_rim; counts are particle-steps within 5 mm of the glass;
 SHALLOW_OTHER = phi_min in [-6.25e-4, 0) that is neither a lip-chord clip nor real (the instruction's three classes do not cover it).
 Risk: the GPU's scatter order is not deterministic, so the reproduction of exactly 10 old-test events can miss by chance.
+- 20 Nov 21:04:05-21:07:05 UTC: Task A smoke (code 8f672e62), Kaggle task-a-verify-smoke, T4, 3 min 0 s, script 80 s. 5 steps:
+  old cross 0, real 0, in solid 0 after step 1, it <= 311, res < 1e-5; step 1 "other" 280 = the seed-jitter particles in the foot moved
+  out (phi_min -0.20 mm, not real); about 290 000 particles within 5 mm of the glass; about 0.7 s a step.
+- 20 Nov 21:07:18 UTC: Task A full run launched (Kaggle task-a-verify-full, T4).

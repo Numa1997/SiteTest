@@ -1,0 +1,44 @@
+/kaggle/src/script.py:4: DeprecationWarning: Python 3.14 will, by default, filter extracted tar archives and reject files or modify their metadata. Use the filter argument to control this behavior.
+
+  tarfile.open(fileobj=io.BytesIO(b)).extractall('/tmp/repo'); root='/tmp/repo/'+os.listdir('/tmp/repo')[0]
+
+fetched in 42.6 s
+
+name, memory.total [MiB]
+
+Tesla T4, 15360 MiB
+
+Tesla T4, 15360 MiB
+
+[21:05:31 UTC | +   17.3 s] smoke: grid 211 x 87 x 176, top 228.0 mm, lip 1.25 mm about (R_m 38.7920 mm, z_lip 146.250 mm), rim 147.500 mm, dt fixed 0.002 s
+
+[21:05:51 UTC | +   37.6 s] smoke: N = 1001952, K = 1001952, steps 5, extension {'cells': 17272, 'unresolved': 0, 'phi_mm': [-1.041392597270577, -0.0013351016942144578], 'side_vis': True, 'cavity_side_cells': 6804}
+
+[21:05:53 UTC | +   39.2 s] smoke: t = 0  in solid 231  ceiling 0
+
+[21:06:31 UTC | +   77.7 s] smoke: step 1/5  t 0.002  it 311  res 9.63e-06  in solid 0  old cross 0  near 289259  real 0  clip 0  other 280  phi min -0.2001 mm  ds/dx max 0.636  (38 s)
+
+[21:06:32 UTC | +   78.4 s] smoke: step 2/5  t 0.004  it 230  res 9.98e-06  in solid 0  old cross 0  near 289300  real 0  clip 0  other 0  phi min 0.0023 mm  ds/dx max 0.071  (39 s)
+
+[21:06:33 UTC | +   79.1 s] smoke: step 3/5  t 0.006  it 240  res 9.21e-06  in solid 0  old cross 0  near 289339  real 0  clip 0  other 0  phi min 0.0023 mm  ds/dx max 0.105  (40 s)
+
+[21:06:34 UTC | +   80.4 s] smoke: step 5/5  t 0.010  it 221  res 9.04e-06  in solid 0  old cross 0  near 289397  real 0  clip 0  other 0  phi min 0.0023 mm  ds/dx max 0.175  (41 s)
+
+[21:06:34 UTC | +   80.4 s] smoke: summary {"sub": "smoke", "steps_done": 5, "steps_planned": 5, "T": 0.01, "N": 1001952, "dt_rule": "fixed dt = 2.0e-3 s (as Step 3's overflow; no speed limit)", "old_cross_count": 0, "old_cross_steps": [], "old_cross_verdicts": {}, "real_crossing_count": 0, "lip_chord_clip_count": 0, "clear_count": 1446398, "shallow_other_count": 280, "counts_are": "particle-steps among particles within 5 mm of the glass (old or new position)", "hit_g2p_particle_steps": 470, "flagged_logged": 0, "max_ds_m": 0.0009546343353576958, "max_ds_over_dx": 0.6364228902384639, "steps_ds_over_dx_gt_1": [], "n_in_solid_max": 0, "it_max": 311, "res_max": 9.9796588983736e-06, "ceiling_max": 0, "vmax_max": 0.1302960067987442, "phi_min_overall_m": -0.00020014107576571405, "near_capped": false, "flag_capped": false, "params": {"deep_m": 0.000625, "near_m": 0.005, "samples": 17, "window_segments": 64, "z_lip_m": 0.14625, "z_rim_m": 0.1475, "R_m_m": 0.03879200006, "lip_m": 0.00125}, "ms_per_step": 8236.754655838013, "wall_s": 41.183775663375854, "pass_marks": {"old_cross_10_at_steps_78_99": false, "real_crossing_zero": true, "in_solid_zero": true, "it_lt_600": true, "res_lt_1e5": true, "every_flag_logged": true}, "pass_marks_all": false}
+
+[21:06:34 UTC | +   80.4 s] smoke: all done
+
+exit 0
+
+/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\|'
+
+  cells[i][c] = re.sub('\\\\\|', '|', cell)
+
+/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\_'
+
+  text = re.sub(r'_', '\_', text) # Escape underscores in display text
+
+[NbConvertApp] Converting notebook __script__.ipynb to html
+
+[NbConvertApp] Writing 277025 bytes to __results__.html
+
