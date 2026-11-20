@@ -92,7 +92,8 @@ def drain_run():
                 s1 = sol[tuple(a_)] | sol[tuple(b_)]; c2 = cav[tuple(a_)] & cav[tuple(b_)]
                 out["solid"] = out["solid"] + jnp.sum(f & s1); out["cavity"] = out["cavity"] + jnp.sum(f & ~s1 & c2)
                 out["other"] = out["other"] + jnp.sum(f & ~s1 & ~c2)
-                hist = hist + jnp.sum(f, (0, 1)).astype(jnp.int32)[: G.nz] if ax != 2 else hist + jnp.sum(f, (0, 1)).astype(jnp.int32)[: G.nz]
+                hz = jnp.sum(f, (0, 1)).astype(jnp.int32)          # per cell layer; a vertical face (nz - 1 of them) counts in the layer below it
+                hist = hist + hz if ax != 2 else hist.at[: G.nz - 1].add(hz)
             return out, hist
         wd_j = jax.jit(where_drain)
         def drain_where(liq):
