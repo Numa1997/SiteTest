@@ -1,0 +1,108 @@
+/kaggle/src/script.py:4: DeprecationWarning: Python 3.14 will, by default, filter extracted tar archives and reject files or modify their metadata. Use the filter argument to control this behavior.
+
+  tarfile.open(fileobj=io.BytesIO(b)).extractall('/tmp/repo'); root='/tmp/repo/'+os.listdir('/tmp/repo')[0]
+
+fetched in 48.4 s
+
+name, memory.total [MiB]
+
+Tesla T4, 15360 MiB
+
+Tesla T4, 15360 MiB
+
+[04:35:36 UTC | +   14.6 s] full/base: grid 211 x 87 x 143, N = 1001952, steps 100, extension None
+
+[04:35:39 UTC | +   18.0 s] full/base: t = 0  mean height 72.695 mm  median surface 124.938 mm  outside 280
+
+[04:36:17 UTC | +   56.0 s] full/base: drain faces by place at step 1: {"cavity": 0, "other": 14595, "solid": 599, "layers_z_mm_count": [[0.75, 36], [2.25, 172], [3.75, 219], [5.25, 188], [6.75, 172], [8.25, 175], [9.75, 180], [11.25, 185], [12.75, 180], [14.25, 186], [15.75, 175], [17.25, 174], [18.75, 185], [20.25, 182], [21.75, 184], [23.25, 178], [24.75, 181], [26.25, 181], [27.75, 172], [29.25, 170], [30.75, 168], [32.25, 166], [33.75, 174], [35.25, 181], [36.75, 180], [38.25, 182], [39.75, 185], [41.25, 181], [42.75, 184], [44.25, 185], [45.75, 186], [47.25, 184], [48.75, 176], [50.25, 193], [51.75, 210], [53.25, 203], [54.75, 208], [56.25, 201], [57.75, 212], [59.25, 218]]}
+
+[04:36:17 UTC | +   56.0 s] full/base: step 1/100  it 192  res 9.70e-06  drain 15194  z 72.669  H 124.917  out 0  (31 s)
+
+[04:36:18 UTC | +   56.4 s] full/base: step 2/100  it 249  res 9.59e-06  drain 15120  z 72.659  H 124.908  out 0  (38 s)
+
+[04:36:18 UTC | +   56.8 s] full/base: step 3/100  it 257  res 8.64e-06  drain 15115  z 72.659  H 124.908  out 0  (39 s)
+
+[04:36:27 UTC | +   65.1 s] full/base: step 25/100  it 229  res 9.11e-06  drain 15131  z 72.581  H 124.844  out 0  (47 s)
+
+[04:36:36 UTC | +   74.8 s] full/base: step 50/100  it 249  res 9.93e-06  drain 15127  z 72.414  H 124.715  out 0  (57 s)
+
+[04:36:46 UTC | +   84.5 s] full/base: step 75/100  it 264  res 9.24e-06  drain 15134  z 72.148  H 124.521  out 0  (66 s)
+
+[04:36:56 UTC | +   94.3 s] full/base: drain faces by place at step 100: {"cavity": 0, "other": 14590, "solid": 539, "layers_z_mm_count": [[0.75, 14], [2.25, 134], [3.75, 220], [5.25, 186], [6.75, 172], [8.25, 173], [9.75, 181], [11.25, 184], [12.75, 181], [14.25, 183], [15.75, 177], [17.25, 177], [18.75, 182], [20.25, 183], [21.75, 187], [23.25, 179], [24.75, 182], [26.25, 174], [27.75, 169], [29.25, 169], [30.75, 167], [32.25, 167], [33.75, 173], [35.25, 181], [36.75, 183], [38.25, 177], [39.75, 191], [41.25, 180], [42.75, 184], [44.25, 183], [45.75, 188], [47.25, 182], [48.75, 174], [50.25, 199], [51.75, 205], [53.25, 203], [54.75, 207], [56.25, 203], [57.75, 213], [59.25, 217]]}
+
+[04:36:56 UTC | +   94.3 s] full/base: step 100/100  it 247  res 8.32e-06  drain 15129  z 71.881  H 124.315  out 0  (76 s)
+
+[04:36:56 UTC | +   94.3 s] full/base: done {"label": "base", "sub": "full", "steps": 100, "T": 0.2, "N": 1001952, "ext": null, "mean_z0_mm": 72.6948007941246, "mean_z1_mm": 71.8812420964241, "surface0_mm": 124.93813782930374, "surface1_mm": 124.31507557630539, "it_max": 274, "res_max": 9.999456779041793e-06, "drain_min": 15111, "drain_max": 15194, "outside_max": 0, "ms_per_step": 762.46990442276, "wall_s": 76.24699187278748}
+
+[04:37:02 UTC | +  100.1 s] full/ext: grid 211 x 87 x 143, N = 1001952, steps 500, extension {'cells': 17240, 'unresolved': 0, 'phi_mm': [-1.0386316135821696, -0.0013351016942144578]}
+
+[04:37:05 UTC | +  103.2 s] full/ext: t = 0  mean height 72.695 mm  median surface 124.938 mm  outside 280
+
+[04:37:41 UTC | +  139.7 s] full/ext: drain faces by place at step 1: {"cavity": 0, "other": 14595, "solid": 517, "layers_z_mm_count": [[2.25, 58], [3.75, 236], [5.25, 188], [6.75, 172], [8.25, 175], [9.75, 180], [11.25, 185], [12.75, 180], [14.25, 186], [15.75, 175], [17.25, 174], [18.75, 185], [20.25, 185], [21.75, 190], [23.25, 185], [24.75, 190], [26.25, 188], [27.75, 169], [29.25, 164], [30.75, 161], [32.25, 156], [33.75, 172], [35.25, 194], [36.75, 186], [38.25, 182], [39.75, 185], [41.25, 181], [42.75, 184], [44.25, 185], [45.75, 186], [47.25, 184], [48.75, 176], [50.25, 197], [51.75, 216], [53.25, 203], [54.75, 208], [56.25, 201], [57.75, 212], [59.25, 218], [60.75, 231]]}
+
+[04:37:41 UTC | +  139.7 s] full/ext: step 1/500  it 211  res 9.62e-06  drain 15112  z 72.695  H 124.938  out 0  (31 s)
+
+[04:37:41 UTC | +  139.8 s] full/ext: step 2/500  it 7  res 9.59e-06  drain 15112  z 72.695  H 124.938  out 0  (37 s)
+
+[04:37:41 UTC | +  139.9 s] full/ext: step 3/500  it 3  res 9.26e-06  drain 15112  z 72.695  H 124.938  out 0  (37 s)
+
+[04:37:44 UTC | +  142.5 s] full/ext: step 25/500  it 11  res 9.83e-06  drain 15112  z 72.695  H 124.937  out 0  (39 s)
+
+[04:37:47 UTC | +  145.4 s] full/ext: step 50/500  it 5  res 5.79e-06  drain 15112  z 72.694  H 124.936  out 0  (42 s)
+
+[04:37:50 UTC | +  148.8 s] full/ext: step 75/500  it 33  res 9.82e-06  drain 15112  z 72.694  H 124.934  out 0  (46 s)
+
+[04:37:53 UTC | +  152.0 s] full/ext: step 100/500  it 11  res 9.61e-06  drain 15112  z 72.694  H 124.932  out 0  (49 s)
+
+[04:37:57 UTC | +  156.0 s] full/ext: step 125/500  it 104  res 9.30e-06  drain 15112  z 72.694  H 124.931  out 0  (53 s)
+
+[04:38:01 UTC | +  160.0 s] full/ext: step 150/500  it 11  res 9.48e-06  drain 15112  z 72.694  H 124.930  out 0  (57 s)
+
+[04:38:05 UTC | +  163.2 s] full/ext: step 175/500  it 23  res 9.80e-06  drain 15112  z 72.694  H 124.927  out 0  (60 s)
+
+[04:38:08 UTC | +  166.5 s] full/ext: step 200/500  it 25  res 7.24e-06  drain 15111  z 72.694  H 124.923  out 0  (63 s)
+
+[04:38:11 UTC | +  170.0 s] full/ext: step 225/500  it 6  res 8.54e-06  drain 15112  z 72.694  H 124.919  out 0  (67 s)
+
+[04:38:15 UTC | +  173.2 s] full/ext: step 250/500  it 13  res 8.00e-06  drain 15112  z 72.694  H 124.911  out 0  (70 s)
+
+[04:38:18 UTC | +  176.9 s] full/ext: step 275/500  it 15  res 7.70e-06  drain 15114  z 72.694  H 124.902  out 0  (74 s)
+
+[04:38:22 UTC | +  180.4 s] full/ext: step 300/500  it 13  res 9.35e-06  drain 15115  z 72.694  H 124.894  out 0  (77 s)
+
+[04:38:25 UTC | +  183.9 s] full/ext: step 325/500  it 53  res 8.75e-06  drain 15115  z 72.694  H 124.886  out 0  (81 s)
+
+[04:38:29 UTC | +  187.8 s] full/ext: step 350/500  it 91  res 8.07e-06  drain 15115  z 72.693  H 124.878  out 0  (85 s)
+
+[04:38:33 UTC | +  191.8 s] full/ext: step 375/500  it 15  res 8.44e-06  drain 15115  z 72.693  H 124.872  out 0  (89 s)
+
+[04:38:37 UTC | +  196.0 s] full/ext: step 400/500  it 136  res 9.43e-06  drain 15112  z 72.693  H 124.867  out 0  (93 s)
+
+[04:38:42 UTC | +  200.3 s] full/ext: step 425/500  it 11  res 7.81e-06  drain 15111  z 72.692  H 124.864  out 0  (97 s)
+
+[04:38:46 UTC | +  204.3 s] full/ext: step 450/500  it 53  res 6.43e-06  drain 15111  z 72.692  H 124.866  out 0  (101 s)
+
+[04:38:50 UTC | +  208.1 s] full/ext: step 475/500  it 87  res 8.79e-06  drain 15110  z 72.692  H 124.868  out 0  (105 s)
+
+[04:38:53 UTC | +  211.8 s] full/ext: drain faces by place at step 500: {"cavity": 0, "other": 14592, "solid": 520, "layers_z_mm_count": [[2.25, 58], [3.75, 236], [5.25, 188], [6.75, 172], [8.25, 175], [9.75, 180], [11.25, 185], [12.75, 180], [14.25, 186], [15.75, 175], [17.25, 174], [18.75, 185], [20.25, 185], [21.75, 190], [23.25, 184], [24.75, 193], [26.25, 190], [27.75, 166], [29.25, 164], [30.75, 161], [32.25, 156], [33.75, 172], [35.25, 194], [36.75, 186], [38.25, 182], [39.75, 185], [41.25, 181], [42.75, 184], [44.25, 185], [45.75, 186], [47.25, 184], [48.75, 176], [50.25, 197], [51.75, 216], [53.25, 203], [54.75, 208], [56.25, 201], [57.75, 212], [59.25, 218], [60.75, 231]]}
+
+[04:38:53 UTC | +  211.8 s] full/ext: step 500/500  it 7  res 9.31e-06  drain 15112  z 72.691  H 124.869  out 0  (109 s)
+
+[04:38:53 UTC | +  211.8 s] full/ext: done {"label": "ext", "sub": "full", "steps": 500, "T": 1.0, "N": 1001952, "ext": {"cells": 17240, "unresolved": 0, "phi_mm": [-1.0386316135821696, -0.0013351016942144578]}, "mean_z0_mm": 72.6948007941246, "mean_z1_mm": 72.69104570150375, "surface0_mm": 124.93813782930374, "surface1_mm": 124.86947327852249, "it_max": 211, "res_max": 9.999211215472315e-06, "drain_min": 15109, "drain_max": 15116, "outside_max": 1, "ms_per_step": 217.24775457382202, "wall_s": 108.62387871742249, "pass_marks": {"drain_zero_every_step": false, "it_lt_600": true, "res_lt_1e5": true, "mean_z_within_0p05mm": true, "surface_within_0p2mm_of_125": true, "zero_outside": false}, "pass": false}
+
+[04:38:53 UTC | +  211.8 s] full: all done
+
+exit 0
+
+/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\|'
+
+  cells[i][c] = re.sub('\\\\\|', '|', cell)
+
+/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\_'
+
+  text = re.sub(r'_', '\_', text) # Escape underscores in display text
+
+[NbConvertApp] Converting notebook __script__.ipynb to html
+
+[NbConvertApp] Writing 276991 bytes to __results__.html
+

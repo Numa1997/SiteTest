@@ -1,0 +1,82 @@
+/kaggle/src/script.py:4: DeprecationWarning: Python 3.14 will, by default, filter extracted tar archives and reject files or modify their metadata. Use the filter argument to control this behavior.
+
+  tarfile.open(fileobj=io.BytesIO(b)).extractall('/tmp/repo'); root='/tmp/repo/'+os.listdir('/tmp/repo')[0]
+
+fetched in 39.9 s
+
+name, memory.total [MiB]
+
+Tesla T4, 15360 MiB
+
+Tesla T4, 15360 MiB
+
+[04:32:30 UTC | +   16.3 s] full/base: grid 211 x 87 x 143, N = 1001952, steps 100, extension None
+
+[04:32:34 UTC | +   19.8 s] full/base: t = 0  mean height 72.695 mm  median surface 124.938 mm  outside 280
+
+Traceback (most recent call last):
+
+  File "/tmp/repo/SiteTest-0b4d9218972542b5b3bbc77ea183a551f3ea187f/tools/spill/rest_variants.py", line 147, in <module>
+
+    if DRAIN: drain_run()
+
+              ~~~~~~~~~^^
+
+  File "/tmp/repo/SiteTest-0b4d9218972542b5b3bbc77ea183a551f3ea187f/tools/spill/rest_variants.py", line 124, in drain_run
+
+    if k == 0 or k == nst - 1: row["drain_where"] = drain_where(pr["liq"])
+
+                                                    ~~~~~~~~~~~^^^^^^^^^^^
+
+  File "/tmp/repo/SiteTest-0b4d9218972542b5b3bbc77ea183a551f3ea187f/tools/spill/rest_variants.py", line 99, in drain_where
+
+    o, h = wd_j(liq); h = np.asarray(h)
+
+           ~~~~^^^^^
+
+  File "/tmp/repo/SiteTest-0b4d9218972542b5b3bbc77ea183a551f3ea187f/tools/spill/rest_variants.py", line 95, in where_drain
+
+    hist = hist + jnp.sum(f, (0, 1)).astype(jnp.int32)[: G.nz] if ax != 2 else hist + jnp.sum(f, (0, 1)).astype(jnp.int32)[: G.nz]
+
+                                                                               ~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  File "/usr/local/lib/python3.13/dist-packages/jax/_src/numpy/array_methods.py", line 1532, in op
+
+    return getattr(self.aval, f"_{name}")(self, *args)
+
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+
+  File "/usr/local/lib/python3.13/dist-packages/jax/_src/numpy/array_methods.py", line 732, in _operator_add
+
+    return ufuncs.add(self, cast(ArrayLike, other))
+
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  File "/usr/local/lib/python3.13/dist-packages/jax/_src/numpy/ufunc_api.py", line 183, in __call__
+
+    return call(*args)
+
+  File "/usr/local/lib/python3.13/dist-packages/jax/_src/numpy/ufuncs.py", line 1238, in add
+
+    out = lax.add(x, y)
+
+TypeError: add got incompatible shapes for broadcasting: (143,), (142,).
+
+--------------------
+
+For simplicity, JAX has removed its internal frames from the traceback of the following exception. Set JAX_TRACEBACK_FILTERING=off to include these.
+
+exit 1
+
+/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\|'
+
+  cells[i][c] = re.sub('\\\\\|', '|', cell)
+
+/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\_'
+
+  text = re.sub(r'_', '\_', text) # Escape underscores in display text
+
+[NbConvertApp] Converting notebook __script__.ipynb to html
+
+[NbConvertApp] Writing 276991 bytes to __results__.html
+

@@ -1,0 +1,35 @@
+{
+ "label": "ext",
+ "sub": "full",
+ "steps": 500,
+ "T": 1.0,
+ "N": 1001952,
+ "ext": {
+  "cells": 17240,
+  "unresolved": 0,
+  "phi_mm": [
+   -1.0386316135821696,
+   -0.0013351016942144578
+  ]
+ },
+ "mean_z0_mm": 72.6948007941246,
+ "mean_z1_mm": 72.69104570150375,
+ "surface0_mm": 124.93813782930374,
+ "surface1_mm": 124.86947327852249,
+ "it_max": 211,
+ "res_max": 9.999211215472315e-06,
+ "drain_min": 15109,
+ "drain_max": 15116,
+ "outside_max": 1,
+ "ms_per_step": 217.24775457382202,
+ "wall_s": 108.62387871742249,
+ "pass_marks": {
+  "drain_zero_every_step": false,
+  "it_lt_600": true,
+  "res_lt_1e5": true,
+  "mean_z_within_0p05mm": true,
+  "surface_within_0p2mm_of_125": true,
+  "zero_outside": false
+ },
+ "pass": false
+}
