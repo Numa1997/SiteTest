@@ -1,0 +1,39 @@
+{
+ "frame": {
+  "kerb_interval": 34,
+  "kerb_t": 0.5666666666666667,
+  "rms_b_minus_sampled": 0.8493577930996028,
+  "rms_near_kerb": 1.3934026791410041,
+  "max_b_minus_sampled": 7.723786439641017,
+  "max_position_bound_mm": 0.625913135979932,
+  "max_al_k": 138.61079535595798,
+  "rms_al_k_minus_sampled": 4.7555359431811075,
+  "max_dtheta_minus_trapezoid_rad": 0.0054028642483201356
+ },
+ "C1": {
+  "max_abs_det_minus_1": 1.2312373343092986e-13,
+  "steps": 5734,
+  "PASS": true
+ },
+ "C2": {
+  "max_err_m": 2.220446049250313e-15,
+  "PASS": true
+ },
+ "C3": {
+  "max_err_m": 1.0014211682118912e-13,
+  "PASS": true
+ },
+ "C4": {
+  "max_err": 2.842170943040401e-14,
+  "PASS": 1.0
+ },
+ "A4": {
+  "zrim_m": 0.1475,
+  "Rrim_m": 0.037474,
+  "grid_top_m": 0.1665,
+  "max_mass_g": 13.277746997306187,
+  "at_picture": 58,
+  "share_of_air_at_that_picture": 0.24415615037276295
+ },
+ "errors": []
+}

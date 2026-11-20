@@ -206,7 +206,8 @@ def a4():
         + (f", {100 * a['share_of_air_at_that_picture']:.2f} % of the liquid in the air then." if a["share_of_air_at_that_picture"] is not None else "."))
 
 
-for name, fn in (("load", load), ("frame", frame), ("flight_map_C1", fmap), ("C2_parabola", c2), ("C3_rotation", c3), ("C4_frame_accel", c4), ("A4_top", a4)):
-    block(name, fn)
-say(f"\nWall time {time.time() - T0:.1f} s on Kaggle CPU."); flush()
-sys.exit(1 if ERR else 0)
+if __name__ == "__main__":                        # run as a script: every block; imported (source_twin.py): functions only
+    for name, fn in (("load", load), ("frame", frame), ("flight_map_C1", fmap), ("C2_parabola", c2), ("C3_rotation", c3), ("C4_frame_accel", c4), ("A4_top", a4)):
+        block(name, fn)
+    say(f"\nWall time {time.time() - T0:.1f} s on Kaggle CPU."); flush()
+    sys.exit(1 if ERR else 0)

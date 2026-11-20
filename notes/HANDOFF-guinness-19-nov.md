@@ -503,3 +503,8 @@ folder like `notes/spill/runs/` needs its own rule) and keep the description tru
   derive_liquid smoke run is NOT to be launched. Step 1 written: `tools/fig16/derived/flight_map.py` (Phi 5 x 5 by RK4, impulse-exact
   b and al from the stored cart state v, vzc, om, th via cart4.py:199-222; checks C1 det, C2 parabola, C3 rotation, C4 frame_accel;
   A4 count). Not launched. Slip: a second empty `python3 -c 1` in the container while locating lines (computed nothing; against R1).
+- 20 Nov 01:46:17-01:46:55 UTC: `fig16-flight-map` v1 (commit 67f2b417), 38 s, 2.1 s computing: C1-C4 PASS; A4 broken (13.3 g,
+  24 % of the airborne liquid at picture 58, above the grid's top inside the rim's radius): the launch surface needs the top disk.
+  Reports in `notes/spill/runs/flight-map-v1-*`.
+- Step 2 written: `tools/fig16/derived/source_twin.py` (forward model on rim cylinder + top disk, twin on finer quadrature, Poisson
+  fit, discrepancy principle, mark 5 % L1 on the deck field); `flight_map.py` now runs its blocks only as a script. Not launched.
