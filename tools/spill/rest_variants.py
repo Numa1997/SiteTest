@@ -59,7 +59,8 @@ def drain_run():
     def say(m):
         print(f"[{datetime.datetime.now(datetime.timezone.utc).strftime('%H:%M:%S')} UTC | +{time.time() - T0:7.1f} s] {m}", flush=True)
     sub = os.environ.get("SUBRUN", "smoke")
-    plan = {"smoke": [("base", None, 3), ("ext", None, 3)], "base": [("base", 0.2, None)], "ext": [("ext", 1.0, None)]}[sub]
+    plan = {"smoke": [("base", None, 3), ("ext", None, 3)], "base": [("base", 0.2, None)], "ext": [("ext", 1.0, None)],
+            "full": [("base", 0.2, None), ("ext", 1.0, None)]}[sub]
     dxd = float(os.environ.get("DX", "0.0015"))
     G = SJ.Geometry(R, DZP, FILL, dxd, body=F16)
     zf = G.z0 + dxd * np.arange(G.nz + 1); zcc = G.z0 + dxd * (np.arange(G.nz) + 0.5)
@@ -77,6 +78,26 @@ def drain_run():
             b = (thv[:, 1:-1] > 0) & (liq[:, 1:] != liq[:, :-1]) & low_c[None, None, :]
             c = (thw[:, :, 1:-1] > 0) & (liq[:, :, 1:] != liq[:, :, :-1]) & low_f[None, None, 1:-1]
             return jnp.sum(a, dtype=jnp.int32) + jnp.sum(b, dtype=jnp.int32) + jnp.sum(c, dtype=jnp.int32)
+        # where the drain faces are (logging only): a z histogram per cell layer up to 0.11 m, and how many touch a cell whose centre
+        # is in a solid, in the cavity (both cells), or outside the cavity
+        Xc, Yc, Zc = np.meshgrid(G.xc, G.yc, G.zc, indexing="ij")
+        sol = jnp.asarray(G.solid(Xc, Yc, Zc)); cav = jnp.asarray(G.cavity(Xc, Yc, Zc))
+        kz = jnp.asarray(np.arange(G.nz))
+        def where_drain(liq):
+            out = dict(solid=0, cavity=0, other=0); hist = jnp.zeros(G.nz, jnp.int32)
+            for ax, th in ((0, thu), (1, thv), (2, thw)):
+                sl = [slice(None)] * 3; sl[ax] = slice(1, -1); a_ = [slice(None)] * 3; a_[ax] = slice(1, None); b_ = [slice(None)] * 3; b_[ax] = slice(None, -1)
+                f = (th[tuple(sl)] > 0) & (liq[tuple(a_)] != liq[tuple(b_)])
+                low = (low_f[1:-1][None, None, :] if ax == 2 else low_c[None, None, :]); f = f & low
+                s1 = sol[tuple(a_)] | sol[tuple(b_)]; c2 = cav[tuple(a_)] & cav[tuple(b_)]
+                out["solid"] = out["solid"] + jnp.sum(f & s1); out["cavity"] = out["cavity"] + jnp.sum(f & ~s1 & c2)
+                out["other"] = out["other"] + jnp.sum(f & ~s1 & ~c2)
+                hist = hist + jnp.sum(f, (0, 1)).astype(jnp.int32)[: G.nz] if ax != 2 else hist + jnp.sum(f, (0, 1)).astype(jnp.int32)[: G.nz]
+            return out, hist
+        wd_j = jax.jit(where_drain)
+        def drain_where(liq):
+            o, h = wd_j(liq); h = np.asarray(h)
+            return dict({k: int(v) for k, v in o.items()}, layers_z_mm_count=[[round(float(G.zc[i]) * 1e3, 2), int(h[i])] for i in np.nonzero(h)[0][:40]])
         prep = jax.jit(S.prepare)
         step = jax.jit(lambda s, pr: S.step(s, dt, 0.0, -9.81, prep=pr))
         obs = jax.jit(S.observe)
@@ -100,7 +121,9 @@ def drain_run():
             zm, ou, hm = [float(v) for v in st_j(s)]
             row = dict(step=k + 1, t=round((k + 1) * dt, 4), it=int(d["it"]), res=float(d["res"]), n_drain_faces=nd,
                        mean_z_mm=zm * 1e3, surface_median_mm=hm * 1e3, outside=int(ou), nact=int(d["nact"]), wall_s=round(time.time() - tc, 2))
+            if k == 0 or k == nst - 1: row["drain_where"] = drain_where(pr["liq"])
             rows.append(row); fh.write(json.dumps(row) + "\n"); fh.flush()
+            if "drain_where" in row: say(f"{sub}/{label}: drain faces by place at step {k + 1}: {json.dumps(row['drain_where'])}")
             if k < 3 or (k + 1) % 25 == 0 or k == nst - 1:
                 say(f"{sub}/{label}: step {k + 1}/{nst}  it {row['it']}  res {row['res']:.2e}  drain {nd}  z {row['mean_z_mm']:.3f}  "
                     f"H {row['surface_median_mm']:.3f}  out {row['outside']}  ({row['wall_s']:.0f} s)")
@@ -110,7 +133,7 @@ def drain_run():
                     res_max=max(r["res"] for r in rows), drain_min=min(r["n_drain_faces"] for r in rows),
                     drain_max=max(r["n_drain_faces"] for r in rows), outside_max=max(r["outside"] for r in rows),
                     ms_per_step=1e3 * (time.time() - tc) / nst, wall_s=time.time() - tc)
-        if label == "ext" and sub == "ext":
+        if label == "ext" and sub in ("ext", "full"):
             marks = dict(drain_zero_every_step=summ["drain_max"] == 0, it_lt_600=summ["it_max"] < 600, res_lt_1e5=summ["res_max"] < 1e-5,
                          mean_z_within_0p05mm=abs(summ["mean_z1_mm"] - summ["mean_z0_mm"]) < 0.05,
                          surface_within_0p2mm_of_125=abs(summ["surface1_mm"] - 125.0) < 0.2, zero_outside=summ["outside_max"] == 0)
