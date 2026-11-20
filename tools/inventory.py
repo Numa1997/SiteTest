@@ -153,7 +153,7 @@ RULES = [
     (r'notes/fig14/3d-wave-test\.png', 'Fig. 14: five frames of the wave itself (crests wine, troughs ink) of the first test run with Re psi stored (E = 2, V0 = 3, R = 4), drawn by volume-view.js.', 'docs/simulations/fig14-schrodinger-sphere.md'),
     (r'notes/fig14/wave3d_test\.py', 'Fig. 14: the test that computed one run on 128^3 points in this workspace and stored Re psi in 3D (96 x 64 x 64 points, 32 frames, int8).', 'docs/simulations/fig14-schrodinger-sphere.md'),
     (r'notes/fig14/3d-test-strip\.png', 'Fig. 14: five frames of the first 3D test run (E = 2, V0 = 3, R = 4, computed in this workspace) drawn by volume-view.js.', 'docs/simulations/fig14-schrodinger-sphere.md'),
-    (r'\.github/workflows/scenes-kaggle\.yml', 'Scenes on Kaggle: when a scene model changes on main, compute it on Kaggle, check the output by SHA-256, commit it to public/data/scenes/.', 'docs/scenes-pipeline.md'),
+    (r'\.github/workflows/scenes-kaggle\.yml', 'Scenes on Kaggle, started by hand once per scene: compute it on Kaggle, check the output by SHA-256, commit it to public/data/scenes/.', 'docs/scenes-pipeline.md'),
     (r'tools/scenes/pipeline\.py', 'The scenes pipeline: push the notebook, wait, download, check every SHA-256, store the data and its generation.', 'docs/scenes-pipeline.md'),
     (r'tools/scenes/kaggle_scenes\.py', 'Text of the Kaggle notebook scenes-living-backgrounds: fetches tools/scenes at a pinned commit and runs one scene model.', 'docs/scenes-pipeline.md'),
     (r'tools/scenes/barton\.py', "Reference model of Barton's pendulums (the right margin of the home page), exactly periodic so the stored loop has no seam.", 'notes/scenes/PLAN.md'),

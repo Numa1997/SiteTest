@@ -1,16 +1,12 @@
-# The scenes pipeline (docs/scenes-pipeline.md): when a scene's model changes on main, Kaggle computes it, this workflow checks
-# the output and commits it to public/data/scenes/, and Cloudflare publishes. It can also be started by hand for one scene
-# (Actions tab -> "Scenes on Kaggle" -> Run workflow) or by the Worker kaggle-bridge (repository_dispatch "scene-run").
+# The scenes pipeline (docs/scenes-pipeline.md). Started by hand only, once per scene: GitHub -> Actions -> "Scenes on Kaggle" ->
+# Run workflow -> the scene's name. Kaggle computes the scene's data once (all its runs, every random start recorded by its seed),
+# this workflow checks the output by SHA-256 and commits it to public/data/scenes/, and Cloudflare publishes. Nothing runs on a
+# timer and nothing reruns by itself.
 name: Scenes on Kaggle
 on:
-  push:
-    branches: [main]
-    paths: ["tools/scenes/*.py", "!tools/scenes/pipeline.py", "!tools/scenes/kaggle_scenes.py"]
   workflow_dispatch:
     inputs:
       scene: { description: "scene to compute (a model file tools/scenes/<scene>.py)", required: true, default: "barton" }
-  repository_dispatch:
-    types: [scene-run]
 permissions:
   contents: write
 concurrency:            # one Kaggle run at a time: each run is a new version of the same notebook
@@ -22,16 +18,13 @@ jobs:
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
-        with: { fetch-depth: 2 }
       - uses: actions/setup-python@v5
         with: { python-version: "3.12" }
       - run: pip install kaggle==2.2.5
       - name: Which scenes
         id: which
         run: |
-          if [ -n "${{ github.event.inputs.scene }}" ]; then S="${{ github.event.inputs.scene }}"
-          elif [ -n "${{ github.event.client_payload.scene }}" ]; then S="${{ github.event.client_payload.scene }}"
-          else S=$(git diff --name-only HEAD~1 HEAD -- 'tools/scenes/*.py' | grep -v -e pipeline.py -e kaggle_scenes.py | xargs -r -n1 basename | sed 's/\.py$//' | tr '\n' ' '); fi
+          S="${{ github.event.inputs.scene }}"
           echo "scenes=$S" >> "$GITHUB_OUTPUT"; echo "scenes: $S"
       - name: Compute on Kaggle, check, store
         if: steps.which.outputs.scenes != ''

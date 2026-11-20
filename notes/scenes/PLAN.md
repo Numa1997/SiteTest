@@ -10,9 +10,10 @@ pixel units, no record). The goal is the same pipeline as the figures (docs/kagg
 1. **Specify.** One reference model per scene in `tools/scenes/<scene>.py`, in SI units, every parameter a named symbol at the top,
    the equations in its docstring, integrated accurately (SciPy DOP853 or an exact method), with its own checks written into the
    output (periodicity, tolerance, conservation, a known limit).
-2. **Generate on Kaggle, automatically.** GitHub Actions ([docs/scenes-pipeline.md](../../docs/scenes-pipeline.md), decided by the owner
-   on 20 November 2026) pushes the private CPU notebook `numakoudsie/scenes-living-backgrounds` whenever a model changes on `main`,
-   waits, checks the output by SHA-256 and commits it; `tools/scenes/kaggle_scenes.py` is the notebook's text.
+2. **Generate on Kaggle, once per scene.** The GitHub Actions workflow "Scenes on Kaggle" ([docs/scenes-pipeline.md](../../docs/scenes-pipeline.md)),
+   started by hand with the scene's name, pushes the private CPU notebook `numakoudsie/scenes-living-backgrounds`, waits, checks the
+   output by SHA-256 and commits it. A scene that should differ on every visit is generated once as a set of runs from random starts
+   (seeds recorded); the page picks one at random. No timer, no automatic rerun (owner, 20 November 2026).
    Its output, named by the date of generation, also goes into a dataset `numakoudsie/scenes-living-backgrounds` once there is
    more than one scene.
 3. **Stored in GitHub by the workflow.** `public/data/scenes/<YYYY-MM-DD>/` (the data files and `index-<scene>.json` with the notebook, version,

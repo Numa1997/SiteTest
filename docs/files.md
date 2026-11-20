@@ -5561,7 +5561,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 
 | File | Size | What it is | Explained in |
 |---|---|---|---|
-| [`.github/workflows/scenes-kaggle.yml`](../.github/workflows/scenes-kaggle.yml) | 2.7 kB | Scenes on Kaggle: when a scene model changes on main, compute it on Kaggle, check the output by SHA-256, commit it to public/data/scenes/. | [scenes-pipeline.md](scenes-pipeline.md) |
+| [`.github/workflows/scenes-kaggle.yml`](../.github/workflows/scenes-kaggle.yml) | 2.2 kB | Scenes on Kaggle, started by hand once per scene: compute it on Kaggle, check the output by SHA-256, commit it to public/data/scenes/. | [scenes-pipeline.md](scenes-pipeline.md) |
 
 ## Documentation
 
@@ -5584,7 +5584,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`docs/performance.md`](performance.md) | 53.8 kB | Documentation: Performance: what was measured, what was slow, what changed. | [performance.md](performance.md) |
 | [`docs/portfolios.md`](portfolios.md) | 68.5 kB | Documentation: The four research projects: `public/portfolios/`. | [portfolios.md](portfolios.md) |
 | [`docs/research-theory-audit.md`](research-theory-audit.md) | 30.0 kB | Documentation: Readability audit: Droplet Collection and Rotor Pendula. | [research-theory-audit.md](research-theory-audit.md) |
-| [`docs/scenes-pipeline.md`](scenes-pipeline.md) | 5.4 kB | Documentation: The scenes pipeline: Kaggle computes, GitHub stores, Cloudflare serves. | [scenes-pipeline.md](scenes-pipeline.md) |
+| [`docs/scenes-pipeline.md`](scenes-pipeline.md) | 5.6 kB | Documentation: The scenes pipeline: Kaggle computes, GitHub stores, Cloudflare serves. | [scenes-pipeline.md](scenes-pipeline.md) |
 | [`docs/scripts/bg-scenes.md`](scripts/bg-scenes.md) | 9.5 kB | Documentation: `public/scripts/bg-scenes.js` and `public/styles/bg-scenes.css` · living scenes (18 November 2026). | [bg-scenes.md](scripts/bg-scenes.md) |
 | [`docs/scripts/catalog.md`](scripts/catalog.md) | 15.4 kB | Documentation: public/scripts/catalog.js. | [catalog.md](scripts/catalog.md) |
 | [`docs/scripts/curve.md`](scripts/curve.md) | 19.3 kB | Documentation: public/scripts/curve.js. | [curve.md](scripts/curve.md) |
@@ -7343,7 +7343,7 @@ to confirm that every file is described. Sizes are those of the files when the l
 | [`notes/lucretius/make_page.py`](../notes/lucretius/make_page.py) | 19.6 kB | Writes public/lucretius.html: Lucretius I 146-224 in four columns (Latin, Leonard, Diels, Arabic). | [README.md](../notes/lucretius/README.md) |
 | [`notes/lucretius/poem-146-224.json`](../notes/lucretius/poem-146-224.json) | 15.8 kB | Lucretius I 146-224 per Latin sentence: Latin, Leonard (English), Diels (German), cut from the sources. | [README.md](../notes/lucretius/README.md) |
 | [`notes/lucretius/poem-ar-146-224.json`](../notes/lucretius/poem-ar-146-224.json) | 10.8 kB | The Arabic of Lucretius I 146-224 (tenth version, free verse, fully vowelled), translated from the Latin for this site. | [README.md](../notes/lucretius/README.md) |
-| [`notes/scenes/PLAN.md`](../notes/scenes/PLAN.md) | 4.3 kB | Plan of the living scenes: specify, generate on Kaggle, store, play, document; order of the scenes. | [PLAN.md](../notes/scenes/PLAN.md) |
+| [`notes/scenes/PLAN.md`](../notes/scenes/PLAN.md) | 4.4 kB | Plan of the living scenes: specify, generate on Kaggle, store, play, document; order of the scenes. | [PLAN.md](../notes/scenes/PLAN.md) |
 | [`notes/skills/phyein-usul-data-panel/SKILL.md`](../notes/skills/phyein-usul-data-panel/SKILL.md) | 26.9 kB | The revised skill phyein-usul-data-panel, to be uploaded to Numa's account (the synced copy in a session is read-only). | [README.md](../notes/fig11/panel/README.md) |
 | [`notes/spill/HANDOFF.md`](../notes/spill/HANDOFF.md) | 8.1 kB | The continuous spill model (stout stays liquid over the rim, down the glass, onto the cart): its state and its handoff of 18 November 2026. | [fig16-guinness-cart-control.md](simulations/fig16-guinness-cart-control.md) |
 | [`notes/spill/STATE.md`](../notes/spill/STATE.md) | 7.1 kB | The continuous spill model (stout stays liquid over the rim, down the glass, onto the cart): its state and its handoff of 18 November 2026. | [fig16-guinness-cart-control.md](simulations/fig16-guinness-cart-control.md) |

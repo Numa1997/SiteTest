@@ -7,15 +7,20 @@ plain words, every piece that moves that data, where it lives, and why it is nee
 
 ## The chain in one picture
 
-A kitchen with a conveyor belt. The recipe is written in the repository (GitHub). When a recipe changes, the belt starts by itself:
-the order goes to the oven (Kaggle), the dish comes back, a checker compares it with the label the oven printed on it (SHA-256),
-and only a dish that matches is put on the shelf (the repository's `public/data/scenes/`). The shop window (Cloudflare) refreshes
-itself whenever the shelf changes. Nobody stands at the belt.
+A kitchen that cooks each dish once. The recipe is written in the repository (GitHub). Pressing one button sends the order to
+the oven (Kaggle); the dish comes back, a checker compares it with the label the oven printed on it (SHA-256), and only a dish
+that matches is put on the shelf (the repository's `public/data/scenes/`). The shop window (Cloudflare) refreshes itself whenever
+the shelf changes. Nothing is cooked again unless someone presses the button again.
+
+**Data is generated once per scene** (owner, 20 November 2026). A scene that should look different on every visit gets its variety
+from that one generation: the model computes a set of runs from different random starts (each start recorded by its seed), all in
+the same Kaggle run, and the page picks one of the stored runs, and a random point in it, each time it is opened. The browser picks;
+it computes no physics.
 
 | Step | What happens | Where | Who does it |
 |---|---|---|---|
-| 1 | A scene's model `tools/scenes/<scene>.py` is changed and merged into `main` | GitHub | a person or a session |
-| 2 | The workflow **Scenes on Kaggle** starts | GitHub Actions, [.github/workflows/scenes-kaggle.yml](../.github/workflows/scenes-kaggle.yml) | GitHub, by itself |
+| 1 | The scene's model `tools/scenes/<scene>.py` is on `main` | GitHub | a person or a session |
+| 2 | The workflow **Scenes on Kaggle** is started by hand with the scene's name | GitHub Actions, [.github/workflows/scenes-kaggle.yml](../.github/workflows/scenes-kaggle.yml) | the owner or a session, once per scene |
 | 3 | It pushes a new version of the private CPU notebook `numakoudsie/scenes-living-backgrounds`; the notebook downloads the model from GitHub at exactly that commit and runs it | Kaggle | [tools/scenes/pipeline.py](../tools/scenes/pipeline.py) step 1-2, [tools/scenes/kaggle_scenes.py](../tools/scenes/kaggle_scenes.py) |
 | 4 | It waits for the run (asking Kaggle every 20 s, at most 30 min) | GitHub Actions | `pipeline.py` step 3 |
 | 5 | It downloads the run's output and checks every file's size and SHA-256 against `index-<scene>.json`, which the notebook wrote on Kaggle; any difference stops everything | GitHub Actions | `pipeline.py` step 4 |
@@ -26,14 +31,11 @@ itself whenever the shelf changes. Nobody stands at the belt.
 
 The output also stays on Kaggle with the notebook version that made it (the notebook page, tab Output).
 
-## Ways to start it
+## How to start it
 
-- **By itself**: a change to any `tools/scenes/<scene>.py` merged into `main` (not `pipeline.py` or `kaggle_scenes.py`, which are the
-  belt, not recipes). Only the changed scenes are computed.
-- **By hand**: GitHub, tab Actions, "Scenes on Kaggle", button "Run workflow", type the scene's name (for example `barton`).
-- **By the Worker `kaggle-bridge`** (planned, not built): an event `scene-run` with `{"scene": "…"}`.
-
-Runs never overlap (`concurrency: scenes-kaggle`): each run is a new version of the same notebook, so a second run waits for the first.
+One way only, by hand: GitHub, tab Actions, "Scenes on Kaggle", button "Run workflow", type the scene's name (for example
+`barton`). There is no timer and no automatic rerun. Two starts never overlap (`concurrency: scenes-kaggle`): each is a new
+version of the same notebook, so a second one waits for the first.
 
 ## Keys
 
