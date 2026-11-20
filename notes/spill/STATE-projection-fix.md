@@ -118,3 +118,26 @@ not a clean phantom count there; before the spill it is 0 with side_vis and abou
 
 Decision rule of the plan: all pass marks hold; the one outside > 0 is wall grazing (2.5 nm, float32) -> commit, report, stop for
 the owner's yes before Step 3. The 1e-5 m guard in _g2p_cont (plan 2.4) is not made yet: it is a code change for the owner to approve.
+
+# Step 3: taller grid, rounded lip, bare stout (owner: "sure go ahead", 20 Nov 2026, after the Step 2 report)
+Two Step 2 thresholds (mean height change, median surface) are still not given; the owner did not answer that part.
+
+## Code (stout_jax.py, all behind arguments or switches whose defaults keep the old behaviour)
+- Geometry(top=0.03, lip=0.0): grid height above the rim; rounded lip = disc of radius lip about (R_m, z_c), z_c = rim - lip,
+  R_m = R(z_c) + WALL/2 (lip = WALL/2 = 1.25 mm is a half-round top, rim height unchanged). Geometry.glass (glass alone, with lip) and
+  Geometry.section_lines (the (r, z) section as the cavity's and the outside's polylines) now serve solid(), side_of() and
+  enable_ls_extend (same polygon as before when lip = 0).
+- _g2p_cont: a particle that a step puts in the lip goes out along the disc's radius to lip + 0.1 dx and loses its velocity into it.
+- Stout.wall_guard (plan 2.4): after the collisions a cavity particle within 1e-5 m of the inner wall is put 1e-5 m inside it.
+
+## Test: rest_variants.py STEP3=1 (Fig. 16 deck, model "wall" = no head, gamma 0, dx 1.5 mm, dt 2 ms, top rim + 0.08 m, lip 1.25 mm,
+side_vis + extension + guard on)
+- slosh: rest 0.3 s, push 1.0 m/s^2 for 0.146 s (damping_grid.py's push), free to 2.5 s; ring 13 cos part every 5 steps; fit_swing
+  (run_b.py) from 0.546 s. Pass: |f / 3.421 Hz - 1| < 3 %; 0 ceiling hits; 0 crossings; 0 particles deeper than 1e-5 m in a solid.
+- overflow: push 5.0 m/s^2 for 0.2 s, to 0.6 s. Pass: 0 ceiling hits (z >= top - dx), 0 crossings below the rim, 0 in solid, stout over.
+- Note (Fact): 3.421 Hz is the upright cylinder of R(fill) = 39.1 mm (notes/fig12/handoff-control-session.md:151). The tulip measured
+  0.7-1.2 % above the cylinder on each of four grids (notes/fig12/check.md:169); the old JAX model at 1.5 mm, inviscid, gave 3.326 Hz
+  (notes/fig12/damping-grid.json, -2.8 %). So the 3 % mark is reachable but tight at 1.5 mm.
+
+## Log
+- 20 Nov ~19:05 UTC: Step 3 code written (syntax parsed only).

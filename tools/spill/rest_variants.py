@@ -25,8 +25,8 @@ F12 = (SJ.BODY_HALF[0], SJ.BODY_HALF[1], SJ.BODY_TOP); F16 = (0.155, 0.062, -0.0
 CASES = dict(A=(F12, "wall"), B=(F12, "full"), C=(F16, "wall"), D=(F16, "full"), E=(None, "full"),
              F=(F16, "full", "no tension"))      # F: D with the surface tension switched off (19 Nov 2026: is it what settles the pint?)
 only = os.environ.get("ONLY"); rep = {"dx_mm": dx * 1e3, "rest_s": REST, "device": str(jax.devices()[0])}
-DRAIN = os.environ.get("DRAIN") == "1"; STEP2 = os.environ.get("STEP2") == "1"
-for key, case in (() if (DRAIN or STEP2) else CASES.items()):
+DRAIN = os.environ.get("DRAIN") == "1"; STEP2 = os.environ.get("STEP2") == "1"; STEP3 = os.environ.get("STEP3") == "1"
+for key, case in (() if (DRAIN or STEP2 or STEP3) else CASES.items()):
     body, model = case[0], case[1]
     if only and key not in only.split(","): continue
     t0 = time.time()
@@ -43,7 +43,7 @@ for key, case in (() if (DRAIN or STEP2) else CASES.items()):
              mean_z_mm=[round(z0 * 1e3, 2), round(float(X[act, 2].mean()) * 1e3, 2)], below_floor=int((act & (X[:, 2] < 0)).sum()),
              outside_cavity=int((act & ~((X[:, 2] > 0) & (rr < Rr))).sum()), wall_s=round(time.time() - t0, 1))
     rep[key] = r; print(key, json.dumps(r), flush=True)
-if not (DRAIN or STEP2): json.dump(rep, open(os.path.join(OUT, "rest_variants.json"), "w"), indent=1, default=str)
+if not (DRAIN or STEP2 or STEP3): json.dump(rep, open(os.path.join(OUT, "rest_variants.json"), "w"), indent=1, default=str)
 
 
 # ====================================================================================================================================
@@ -282,3 +282,105 @@ def step2_run():
 
 
 if STEP2: step2_run()
+
+
+# ====================================================================================================================================
+# Step 3: taller grid, rounded rim lip, bare stout (20 Nov 2026, notes/spill/STATE-projection-fix.md). Fig. 16 deck, model "wall"
+# (viscosity and the glass's boundary layer; no head, no skin), gamma = 0, dx = 1.5 mm, dt = 2 ms; grid top = rim + 0.08 m; lip
+# radius 1.25 mm; side visibility, solid extension and the 1e-5 m wall guard on. Run with STEP3=1 and SUBRUN = "smoke" (5 steps per
+# case) or "full":
+#   slosh     at rest 0.3 s, pushed along x by 1.0 m/s^2 for 0.146 s, then free to 2.5 s (1250 steps); the swing is the cos(theta)
+#             part of ring 13 of the stored surface (damping_grid.py's measure), sampled every 5 steps, fitted with run_b.py's fit_swing
+#             from 0.1 s after the push; pass: frequency within 3 % of 3.421 Hz (the upright cylinder of R(fill), depth 0.125 m)
+#   overflow  pushed along x by 5.0 m/s^2 for 0 <= t < 0.2 s, to 0.6 s (300 steps): the stout goes over the lip; pass: 0 particles
+#             within a cell of the grid's top, 0 crossings of the wall below the rim, 0 particles deeper than 1e-5 m in a solid
+#             after any step, and some stout over the rim (else the lip was not tested)
+def step3_run():
+    import datetime
+    import jax.numpy as jnp
+    T0 = time.time()
+    def say(m):
+        print(f"[{datetime.datetime.now(datetime.timezone.utc).strftime('%H:%M:%S')} UTC | +{time.time() - T0:7.1f} s] {m}", flush=True)
+    sub = os.environ.get("SUBRUN", "smoke")
+    _src = open(os.path.join(ROOT, "tools", "fig12", "kaggle", "run_b.py")).read()
+    _a = _src.index("def fit_swing"); _b = _src.index("\n\n\n", _a); _ns = {"np": np}; exec(_src[_a:_b], _ns); fit_swing = _ns["fit_swing"]
+    cases = [("slosh", 2.5, (0.3, 1.0, 0.146)), ("overflow", 0.6, (0.0, 5.0, 0.2))]
+    sel = os.environ.get("ONLY"); cases = [c for c in cases if not sel or c[0] in sel.split(",")]
+    dxd = float(os.environ.get("DX", "0.0015")); dt = 0.002; F0 = 3.421
+    G = SJ.Geometry(R, DZP, FILL, dxd, body=F16, top=0.08, lip=0.00125)
+    topz = G.z0 + G.nz * dxd; hx, hy, zt = F16; lip = G.lip; zcl = G.zc
+    say(f"{sub}: grid {G.nx} x {G.ny} x {G.nz}, top {topz * 1e3:.1f} mm (rim {G.zrim * 1e3:.1f} mm), lip {lip * 1e3:.2f} mm about "
+        f"(R_m {G.Rm * 1e3:.3f} mm, z_c {zcl * 1e3:.3f} mm)")
+    out_all = {}
+    for label, T, (tp0, ax_, tpl) in cases:
+        S = SJ.Stout(G, model="wall", K_frac=1.0, M_drops=4096); S.gamma = 0.0
+        S.enable_side_vis(); info = S.enable_ls_extend(); S.wall_guard = True
+        s = S.init_state(); N = S.N
+        nst = 5 if sub == "smoke" else int(round(T / dt))
+        say(f"{sub}/{label}: N = {N}, K = {S.K}, steps {nst}, push {ax_} m/s^2 from {tp0} s for {tpl} s, extension {info}")
+        prep = jax.jit(S.prepare); step = jax.jit(lambda s, pr, gx: S.step(s, dt, gx, -9.81, prep=pr))
+        obs = jax.jit(S.observe); pol = jax.jit(lambda H: S.polar(H))
+        def stats(s, side_prev):
+            X = s["xp"]; act = s["act"]; r = jnp.hypot(X[:, 0], X[:, 1]); z = X[:, 2]
+            Rin = S.Rz(jnp.clip(z, 0.0, G.zrim - 1e-6)); Rout = S.Rz(jnp.clip(z, 0.008, G.zrim - 1e-6)) + G.WALL; e = 1e-5
+            in_wall = (z > 0) & (z < zcl) & (r > Rin + e) & (r < Rout - e)
+            in_cap = (z >= zcl) & (jnp.sqrt((r - G.Rm) ** 2 + (z - zcl) ** 2) < lip - e)
+            in_foot = (z < -e) & (z > zt + e) & (r < Rout - e)
+            in_deck = (z < zt - e) & (jnp.abs(X[:, 0]) < hx) & (jnp.abs(X[:, 1]) < hy)
+            in_solid = act & (in_wall | in_cap | in_foot | in_deck)
+            ceil = act & (z >= topz - dxd)
+            side = S.p_side(X); below = z < G.zrim
+            cross = act & (side != side_prev[0]) & below & side_prev[1]
+            over = act & ~side                                   # on the outside's side (over the rim and beyond the lip's mid-radius)
+            above = act & (z >= G.zrim)
+            zmean = jnp.sum(jnp.where(act, z, 0.0)) / jnp.maximum(jnp.sum(act), 1)
+            return (jnp.sum(in_solid), jnp.sum(ceil), jnp.max(jnp.where(act, z, -1.0)), jnp.sum(cross), jnp.sum(over), jnp.sum(above), zmean,
+                    (side, below))
+        st_j = jax.jit(stats)
+        sp = (S.p_side(s["xp"]), s["xp"][:, 2] < G.zrim)
+        isol0, ce0, zmax0, _, ov0, ab0, zm0, sp = st_j(s, sp)
+        say(f"{sub}/{label}: t = 0  in solid {int(isol0)}  ceiling {int(ce0)}  z max {float(zmax0) * 1e3:.2f} mm  over {int(ov0)}  mean z {float(zm0) * 1e3:.3f} mm")
+        fh = open(os.path.join(OUT, f"step3_{sub}_{label}.jsonl"), "w"); rows = []; tc = time.time(); ncross = 0; ts, q13 = [], []
+        for k in range(nst):
+            t = k * dt; gx = ax_ if (tp0 - 1e-9 <= t < tp0 + tpl - 1e-9) else 0.0
+            pr = prep(s); s, d = step(s, pr, gx)
+            isol, ce, zmax, cr, ov, ab, zm, sp = st_j(s, sp); ncross += int(cr)
+            row = dict(step=k + 1, t=round((k + 1) * dt, 4), gx=gx, it=int(d["it"]), res=float(d["res"]), in_solid=int(isol), ceiling=int(ce),
+                       zmax_mm=float(zmax) * 1e3, crossings=int(cr), crossings_cum=ncross, over=int(ov), above_rim=int(ab), mean_z_mm=float(zm) * 1e3,
+                       nact=int(d["nact"]), nsel=int(d["nsel"]), vmax=float(d["vmax"]), wall_s=round(time.time() - tc, 2))
+            if (k + 1) % 5 == 0 or sub == "smoke":
+                P = np.asarray(pol(obs(s)["H"])); th = 2 * np.pi * np.arange(P.shape[1]) / P.shape[1]
+                q = float(2 / len(th) * (P[13] * np.cos(th)).sum()); ts.append(row["t"]); q13.append(q); row["q13_mm"] = q * 1e3
+            if int(d["nsel"]) >= S.K: row["nsel_capped"] = True
+            rows.append(row); fh.write(json.dumps(row) + "\n"); fh.flush()
+            if k < 3 or (k + 1) % 50 == 0 or k == nst - 1:
+                say(f"{sub}/{label}: step {k + 1}/{nst}  t {row['t']:.3f}  gx {gx}  it {row['it']}  res {row['res']:.2e}  in solid {row['in_solid']}  "
+                    f"ceiling {row['ceiling']}  z max {row['zmax_mm']:.1f}  cross {ncross}  over {row['over']}  above rim {row['above_rim']}  "
+                    f"q13 {row.get('q13_mm', float('nan')):.3f} mm  vmax {row['vmax']:.3f}  ({row['wall_s']:.0f} s)")
+        fh.close()
+        mx = lambda key: max(r[key] for r in rows)
+        summ = dict(label=label, sub=sub, steps=nst, T=nst * dt, N=N, K=S.K, grid=[G.nx, G.ny, G.nz], top_mm=topz * 1e3, lip_mm=lip * 1e3,
+                    push=[tp0, ax_, tpl], ext=info, it_max=mx("it"), res_max=mx("res"), in_solid_max=mx("in_solid"), ceiling_max=mx("ceiling"),
+                    zmax_max_mm=mx("zmax_mm"), crossings_total=ncross, over_max=mx("over"), over_end=rows[-1]["over"], above_rim_max=mx("above_rim"),
+                    nact_end=rows[-1]["nact"], nsel_max=mx("nsel"), nsel_capped=any(r.get("nsel_capped") for r in rows),
+                    mean_z0_mm=float(zm0) * 1e3, mean_z1_mm=rows[-1]["mean_z_mm"], ms_per_step=1e3 * (time.time() - tc) / nst, wall_s=time.time() - tc)
+        if label == "slosh":
+            ts_, q_ = np.array(ts), np.array(q13); m = ts_ > tp0 + tpl + 0.1
+            F = fit_swing(ts_[m] - ts_[m][0], q_[m]) if m.sum() > 30 else {}
+            summ["fit_ring13"] = F; summ["f_target_hz"] = F0
+            if F.get("f"):
+                summ["f_err_pct"] = 100 * (F["f"] / F0 - 1); summ["f0_err_pct"] = 100 * (F["f0"] / F0 - 1)
+            summ["pass_marks"] = dict(f_within_3pct=bool(F.get("f") and abs(F["f"] / F0 - 1) < 0.03), ceiling_zero=summ["ceiling_max"] == 0,
+                                      crossings_zero=ncross == 0, in_solid_zero=summ["in_solid_max"] == 0)
+        else:
+            summ["pass_marks"] = dict(ceiling_zero=summ["ceiling_max"] == 0, crossings_zero=ncross == 0, in_solid_zero=summ["in_solid_max"] == 0,
+                                      overflowed=summ["over_max"] > 0)
+        summ["pass_marks_all"] = all(summ["pass_marks"].values())
+        out_all[label] = summ
+        json.dump(summ, open(os.path.join(OUT, f"step3_{sub}_{label}_summary.json"), "w"), indent=1, default=str)
+        say(f"{sub}/{label}: done {json.dumps(summ, default=str)}")
+        del S, s, pr
+    say(f"{sub}: all done")
+
+
+if STEP3: step3_run()

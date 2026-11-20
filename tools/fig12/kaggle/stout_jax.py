@@ -99,9 +99,13 @@ class Geometry:
 
     WALL = 0.0025
 
-    def __init__(self, R, dzp, fill, dx, body=None):
+    def __init__(self, R, dzp, fill, dx, body=None, top=0.03, lip=0.0):
         R = np.asarray(R, float); self.R = R; self.dzp = dzp; self.fill = fill; self.dx = dx; self.nR = len(R)
         self.zrim = (len(R) - 1) * dzp; Rmax = R.max(); self.body = body
+        # Step 3 (20 Nov 2026): top = the grid's height above the rim (continuous model; 0.03 m = unchanged); lip = radius of the
+        # rounded rim (0 = the square top of the wall, unchanged). With lip > 0 the wall above zc = rim - lip is the disc of radius lip
+        # about (R_m, zc), R_m = R(zc) + WALL/2: a half-round lip of the wall's own half-thickness, the rim's height unchanged.
+        self.lip = float(lip); self.zc = self.zrim - self.lip; self.Rm = float(self.Rz(self.zc - 1e-9) + 0.5 * self.WALL) if lip > 0 else None
         if body is None:
             self.n = n = int(math.ceil(2 * (Rmax + 2 * dx) / dx)); self.nz = nz = int(math.ceil((self.zrim + 0.02) / dx)) + 2
             self.x0 = -n * dx / 2; self.z0 = -2 * dx
@@ -113,7 +117,7 @@ class Geometry:
             # spent 60 % of its cells on the air beside the deck): nx cells along x, ny across, both even about the glass's axis
             nx = int(math.ceil(2 * (hx + 2 * dx) / dx)); ny = int(math.ceil(2 * (hy + 2 * dx) / dx)); self.n = n = nx
             self.z0 = -(int(math.ceil(-zt / dx)) + 4) * dx
-            self.nz = nz = int(math.ceil((self.zrim + 0.03 - self.z0) / dx)); self.x0 = -nx * dx / 2; self.y0 = -ny * dx / 2
+            self.nz = nz = int(math.ceil((self.zrim + top - self.z0) / dx)); self.x0 = -nx * dx / 2; self.y0 = -ny * dx / 2
         self.nx, self.ny = nx, ny
         s = (np.arange(4) + 0.5) / 4
         xs4 = self.x0 + dx * (np.arange(nx)[:, None] + s[None, :]).ravel()      # 4 samples across each cell
@@ -188,11 +192,31 @@ class Geometry:
 
     def solid(self, x, y, z):
         """The continuous model's solids: the glass (wall shell and foot) and the cart's body below its top."""
+        hx, hy, zt = self.body; z = np.asarray(z, float)
+        deck = (z <= zt) & (np.abs(x) < hx) & (np.abs(y) < hy)
+        return self.glass(x, y, z) | deck
+
+    def glass(self, x, y, z):
+        """The glass alone (wall shell, rounded lip if lip > 0, foot), continuous model."""
         hx, hy, zt = self.body; z = np.asarray(z, float); r2 = x * x + y * y
         Rin = self.Rz(np.clip(z, 0.0, self.zrim - 1e-6)); Rout = self.Rz(np.clip(z, 0.008, self.zrim - 1e-6)) + self.WALL
-        wall = (z > 0) & (z < self.zrim) & (r2 >= Rin ** 2) & (r2 < Rout ** 2)
+        wall = (z > 0) & (z < self.zc) & (r2 >= Rin ** 2) & (r2 < Rout ** 2)
+        if self.lip > 0: wall = wall | ((z >= self.zc) & ((np.sqrt(r2) - self.Rm) ** 2 + (z - self.zc) ** 2 < self.lip ** 2))
         foot = (z <= 0) & (z > zt) & (r2 < Rout ** 2)
-        deck = (z <= zt) & (np.abs(x) < hx) & (np.abs(y) < hy)
+        return wall | foot
+
+    def section_lines(self, narc=24):
+        """The glass's (r, z) section as two polylines: the cavity's surface (floor, inner wall, inner half of the lip up to its
+        top) and the outside's surface (deck top beside the foot, foot side, outer wall, outer half of the lip up to its top)."""
+        hx, hy, zt = self.body; zrim = self.zrim
+        zp = np.arange(self.nR) * self.dzp; zp = zp[zp < self.zc]; zp = np.append(zp, self.zc)
+        ri = self.Rz(zp); ro = self.Rz(np.maximum(zp, 0.008)) + self.WALL; rf = float(self.Rz(0.008) + self.WALL)
+        cav = [(0.0, 0.0)] + list(zip(ri, zp)); ext = [(rf + 1.0, zt), (rf, zt)] + list(zip(ro, zp))
+        if self.lip > 0:
+            a = np.linspace(0.0, 0.5 * np.pi, narc)
+            cav += list(zip(self.Rm - self.lip * np.cos(a), self.zc + self.lip * np.sin(a)))
+            ext += list(zip(self.Rm + self.lip * np.cos(a), self.zc + self.lip * np.sin(a)))
+        return np.array(cav), np.array(ext)
         return wall | foot | deck
 
     def open(self, x, y, z):
@@ -210,13 +234,9 @@ class Geometry:
         shp = x.shape; x = x.ravel(); y = y.ravel(); z = z.ravel(); r = np.hypot(x, y)
         hx, hy, zt = self.body; zrim = self.zrim
         out = self.cavity(x, y, z) & (z < zrim)
-        Rin = self.Rz(np.clip(z, 0.0, zrim - 1e-6)); Rout = self.Rz(np.clip(z, 0.008, zrim - 1e-6)) + self.WALL
-        gl = ((z > 0) & (z < zrim) & (r >= Rin) & (r < Rout)) | ((z <= 0) & (z > zt) & (r < Rout))
+        gl = self.glass(x, y, z)
         if gl.any():
-            zp = np.arange(self.nR) * self.dzp; zp[-1] = min(zp[-1], zrim)
-            ri = self.Rz(zp); ro = self.Rz(np.maximum(zp, 0.008)) + self.WALL; rf = float(self.Rz(0.008) + self.WALL)
-            cav = np.array([(0.0, 0.0)] + list(zip(ri, zp)))
-            ext = np.array([(rf + 1.0, zt), (rf, zt)] + list(zip(ro, zp)))
+            cav, ext = self.section_lines()
             def dmin(P, poly):
                 a = poly[:-1]; b = poly[1:]; ab = b - a; L2 = np.maximum((ab ** 2).sum(1), 1e-30); d = np.empty(len(P))
                 for i in range(0, len(P), chunk):
@@ -381,6 +401,7 @@ class Stout:
         self.cont = G.body is not None
         self.ls_extend = False   # test switch (20 Nov 2026, notes/spill/STATE-projection-fix.md): see enable_ls_extend; off = the v8 code unchanged
         self.side_vis = False    # Step 2 switch (20 Nov 2026): see enable_side_vis; off = unchanged
+        self.wall_guard = False  # Step 3 switch (20 Nov 2026): _g2p_cont keeps cavity particles 1e-5 m inside the inner wall; off = unchanged
         if self.cont: self.floor_w = jnp.asarray(G.thw == 0)
         self.gamma = GAMMA if self.cont else 0.0
         c = jnp.asarray(G.xc, F32); cy = jnp.asarray(G.yc, F32); zc = jnp.asarray(G.zc, F32)
@@ -572,17 +593,13 @@ class Stout:
         G = self.G; dx = self.dx; nx, ny, nz = self.dims
         X, Y, Z = np.meshgrid(G.xc, G.yc, G.zc, indexing="ij")
         hx, hy, zt = G.body; zrim = G.zrim
-        def in_glass(x, y, z):
-            z = np.asarray(z, float); r2 = x * x + y * y
-            Rin = G.Rz(np.clip(z, 0.0, zrim - 1e-6)); Rout = G.Rz(np.clip(z, 0.008, zrim - 1e-6)) + G.WALL
-            return ((z > 0) & (z < zrim) & (r2 >= Rin ** 2) & (r2 < Rout ** 2)) | ((z <= 0) & (z > zt) & (r2 < Rout ** 2))
+        in_glass = G.glass   # Step 3: the glass with its lip (lip = 0: as before)
         thu, thv, thw = G.thu, G.thv, G.thw
         openf = (thu[1:] > 0) | (thu[:-1] > 0) | (thv[:, 1:] > 0) | (thv[:, :-1] > 0) | (thw[:, :, 1:] > 0) | (thw[:, :, :-1] > 0)
         gl = in_glass(X, Y, Z); E = gl & openf
         # the glass's section in (r, z): the polygon without its edge on the axis
-        zp = np.arange(G.nR) * G.dzp; zp[-1] = min(zp[-1], zrim)
-        ri = G.Rz(zp); ro = G.Rz(np.maximum(zp, 0.008)) + G.WALL; rf = float(G.Rz(0.008) + G.WALL)
-        pts = [(0.0, zt), (rf, zt), (rf, 0.0)] + list(zip(ro, zp)) + list(zip(ri[::-1], zp[::-1])) + [(0.0, 0.0)]
+        cavl, extl = G.section_lines(); rf = float(G.Rz(0.008) + G.WALL)
+        pts = [(0.0, zt)] + [tuple(p) for p in extl[1:]] + [tuple(p) for p in cavl[::-1]]
         a = np.array(pts[:-1]); b = np.array(pts[1:]); ab = b - a; L2 = np.maximum((ab ** 2).sum(1), 1e-30)
         def dist(r, z):
             p = np.stack([r, z], -1)[:, None, :]
@@ -1057,10 +1074,15 @@ class Stout:
         ro = jnp.sqrt(X[:, 0] ** 2 + X[:, 1] ** 2); Rin_o, Rout_o = radii(X[:, 2])
         r = jnp.sqrt(Xn[:, 0] ** 2 + Xn[:, 1] ** 2); z = Xn[:, 2]; Rin, Rout = radii(z)
         er = jnp.stack([Xn[:, 0], Xn[:, 1], jnp.zeros_like(r)], -1) / jnp.maximum(r, 1e-12)[:, None]
-        in_wall = (z > 0) & (z < zr_) & (r >= Rin) & (r < Rout)
+        lip = G.lip; zcl = G.zc                                                  # Step 3: rounded lip (lip = 0: zcl = rim, as before)
+        in_wall = (z > 0) & (z < zcl) & (r >= Rin) & (r < Rout)
         in_foot = (z <= 0) & (z > zt) & (r < Rout)
+        if lip > 0:   # the lip: the disc of radius lip about (R_m, zc); a particle in it goes out along the disc's radius
+            dr_c = r - G.Rm; dz_c = z - zcl; dc = jnp.sqrt(dr_c ** 2 + dz_c ** 2)
+            in_cap = (z >= zcl) & (dc < lip)
+        else: in_cap = jnp.zeros_like(in_wall)
         hit = in_wall | in_foot
-        from_top = hit & (X[:, 2] >= zr_)                                     # came down onto the rim's top
+        from_top = hit & (X[:, 2] >= zr_) if lip == 0 else jnp.zeros_like(hit)   # came down onto the rim's square top
         # from inside the cavity: the old position inside it, or (if a step left it in the wall) nearer the inner face than the outer
         from_in = hit & ~from_top & (X[:, 2] > 0) & ((ro < Rin_o) | (ro - Rin_o < Rout_o - ro))
         from_out = hit & ~from_top & ~from_in                                 # from outside the glass
@@ -1079,6 +1101,20 @@ class Stout:
         newv = jnp.where((from_in & (rin_t < 1.0) & (vn > 0))[:, None], newv - vn[:, None] * er, newv)
         newv = jnp.where((from_out & (vn < 0))[:, None], newv - vn[:, None] * er, newv)
         newv = newv.at[:, 2].set(jnp.where((from_top | floor_in) & (newv[:, 2] < 0), 0.0, newv[:, 2]))
+        if lip > 0:
+            ok_ = dc > 1e-9; nr_ = jnp.where(ok_, dr_c / jnp.maximum(dc, 1e-9), 0.0); nz_ = jnp.where(ok_, dz_c / jnp.maximum(dc, 1e-9), 1.0)
+            rc_new = G.Rm + (lip + eps) * nr_; zc_new = zcl + (lip + eps) * nz_
+            scc = jnp.where(in_cap, rc_new / jnp.maximum(r, 1e-12), 1.0)
+            Xn = Xn.at[:, 0].multiply(scc).at[:, 1].multiply(scc)
+            Xn = Xn.at[:, 2].set(jnp.where(in_cap, zc_new, Xn[:, 2]))
+            n3 = nr_[:, None] * er + nz_[:, None] * jnp.array([0.0, 0.0, 1.0], F32)[None, :]
+            vnc = jnp.sum(newv * n3, -1)
+            newv = jnp.where((in_cap & (vnc < 0))[:, None], newv - vnc[:, None] * n3, newv)
+        if self.wall_guard:   # Step 3 (plan 2.4): a particle in the cavity stays at least 1e-5 m inside the inner wall (float32 grazing)
+            rg = jnp.sqrt(Xn[:, 0] ** 2 + Xn[:, 1] ** 2); Rg = self.Rz(jnp.clip(Xn[:, 2], 0.0, zr_ - 1e-6))
+            gd = (Xn[:, 2] > 0) & (Xn[:, 2] < zcl) & (rg < Rg) & (rg > Rg - 1e-5)
+            sg_ = jnp.where(gd, (Rg - 1e-5) / jnp.maximum(rg, 1e-12), 1.0)
+            Xn = Xn.at[:, 0].multiply(sg_).at[:, 1].multiply(sg_)
         # the cart's body top
         deck = (Xn[:, 2] < zt + eps) & (jnp.abs(Xn[:, 0]) < hx) & (jnp.abs(Xn[:, 1]) < hy) & (X[:, 2] >= zt)
         Xn = Xn.at[:, 2].set(jnp.where(deck, zt + eps, Xn[:, 2]))
