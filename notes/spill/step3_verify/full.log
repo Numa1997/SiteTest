@@ -1,0 +1,82 @@
+/kaggle/src/script.py:4: DeprecationWarning: Python 3.14 will, by default, filter extracted tar archives and reject files or modify their metadata. Use the filter argument to control this behavior.
+
+  tarfile.open(fileobj=io.BytesIO(b)).extractall('/tmp/repo'); root='/tmp/repo/'+os.listdir('/tmp/repo')[0]
+
+fetched in 41.4 s
+
+name, memory.total [MiB]
+
+Tesla T4, 15360 MiB
+
+Tesla T4, 15360 MiB
+
+[21:08:42 UTC | +   16.7 s] full: grid 211 x 87 x 176, top 228.0 mm, lip 1.25 mm about (R_m 38.7920 mm, z_lip 146.250 mm), rim 147.500 mm, dt fixed 0.002 s
+
+[21:09:01 UTC | +   36.4 s] full: N = 1001952, K = 1001952, steps 300, extension {'cells': 17272, 'unresolved': 0, 'phi_mm': [-1.041392597270577, -0.0013351016942144578], 'side_vis': True, 'cavity_side_cells': 6804}
+
+[21:09:03 UTC | +   37.9 s] full: t = 0  in solid 231  ceiling 0
+
+[21:09:40 UTC | +   75.6 s] full: step 1/300  t 0.002  it 311  res 9.64e-06  in solid 0  old cross 0  near 289259  real 0  clip 0  other 280  phi min -0.2001 mm  ds/dx max 0.636  (38 s)
+
+[21:09:41 UTC | +   76.3 s] full: step 2/300  t 0.004  it 230  res 9.77e-06  in solid 0  old cross 0  near 289300  real 0  clip 0  other 0  phi min 0.0023 mm  ds/dx max 0.071  (38 s)
+
+[21:09:42 UTC | +   76.9 s] full: step 3/300  t 0.006  it 240  res 9.57e-06  in solid 0  old cross 0  near 289339  real 0  clip 0  other 0  phi min 0.0023 mm  ds/dx max 0.105  (39 s)
+
+[21:09:57 UTC | +   91.9 s] full: step 25/300  t 0.050  it 230  res 8.48e-06  in solid 0  old cross 0  near 290273  real 0  clip 0  other 0  phi min 0.0023 mm  ds/dx max 0.556  (54 s)
+
+[21:10:14 UTC | +  109.1 s] full: step 50/300  t 0.100  it 225  res 9.63e-06  in solid 0  old cross 0  near 293911  real 0  clip 0  other 0  phi min 0.0023 mm  ds/dx max 0.494  (71 s)
+
+[21:10:31 UTC | +  125.9 s] full: step 75/300  t 0.150  it 205  res 9.05e-06  in solid 0  old cross 0  near 292017  real 0  clip 0  other 0  phi min 0.0023 mm  ds/dx max 0.647  (88 s)
+
+[21:10:33 UTC | +  127.9 s] full: step 78/300  t 0.156  it 209  res 9.68e-06  in solid 0  old cross 1  near 291944  real 0  clip 2  other 0  phi min -0.0117 mm  ds/dx max 0.723  (90 s)
+
+[21:10:37 UTC | +  131.7 s] full: step 84/300  t 0.168  it 196  res 9.64e-06  in solid 0  old cross 1  near 291584  real 0  clip 4  other 0  phi min -0.0261 mm  ds/dx max 0.880  (94 s)
+
+[21:10:39 UTC | +  133.6 s] full: step 87/300  t 0.174  it 206  res 9.15e-06  in solid 0  old cross 2  near 291360  real 0  clip 6  other 0  phi min -0.0213 mm  ds/dx max 0.963  (96 s)
+
+[21:10:40 UTC | +  135.0 s] full: step 89/300  t 0.178  it 209  res 9.12e-06  in solid 0  old cross 1  near 291112  real 0  clip 1  other 0  phi min -0.0381 mm  ds/dx max 1.018  (97 s)
+
+[21:10:41 UTC | +  135.6 s] full: step 90/300  t 0.180  it 203  res 9.05e-06  in solid 0  old cross 1  near 291018  real 0  clip 3  other 0  phi min -0.0385 mm  ds/dx max 1.052  (98 s)
+
+[21:10:41 UTC | +  136.3 s] full: step 91/300  t 0.182  it 197  res 8.98e-06  in solid 0  old cross 1  near 290876  real 0  clip 6  other 0  phi min -0.0275 mm  ds/dx max 1.075  (98 s)
+
+[21:10:42 UTC | +  137.0 s] full: step 92/300  t 0.184  it 204  res 9.63e-06  in solid 0  old cross 2  near 290730  real 0  clip 4  other 0  phi min -0.0295 mm  ds/dx max 1.102  (99 s)
+
+[21:10:47 UTC | +  141.7 s] full: step 99/300  t 0.198  it 226  res 9.19e-06  in solid 0  old cross 1  near 289194  real 0  clip 7  other 0  phi min -0.0393 mm  ds/dx max 1.300  (104 s)
+
+[21:10:47 UTC | +  142.4 s] full: step 100/300  t 0.200  it 228  res 9.73e-06  in solid 0  old cross 0  near 288909  real 0  clip 7  other 0  phi min -0.0393 mm  ds/dx max 1.328  (104 s)
+
+[21:11:05 UTC | +  160.5 s] full: step 125/300  t 0.250  it 244  res 9.97e-06  in solid 0  old cross 0  near 292017  real 0  clip 0  other 0  phi min 0.0025 mm  ds/dx max 1.854  (123 s)
+
+[21:11:23 UTC | +  177.8 s] full: step 150/300  t 0.300  it 220  res 9.28e-06  in solid 0  old cross 0  near 301737  real 0  clip 0  other 0  phi min 0.0024 mm  ds/dx max 2.475  (140 s)
+
+[21:11:39 UTC | +  194.1 s] full: step 175/300  t 0.350  it 205  res 9.88e-06  in solid 0  old cross 0  near 300203  real 0  clip 0  other 0  phi min 0.0000 mm  ds/dx max 3.315  (156 s)
+
+[21:11:55 UTC | +  210.2 s] full: step 200/300  t 0.400  it 255  res 9.35e-06  in solid 0  old cross 0  near 287777  real 0  clip 0  other 0  phi min 0.0001 mm  ds/dx max 2.073  (172 s)
+
+[21:12:13 UTC | +  227.8 s] full: step 225/300  t 0.450  it 231  res 9.38e-06  in solid 0  old cross 0  near 290446  real 0  clip 0  other 0  phi min 0.0001 mm  ds/dx max 1.578  (190 s)
+
+[21:12:30 UTC | +  245.3 s] full: step 250/300  t 0.500  it 215  res 9.57e-06  in solid 0  old cross 0  near 305703  real 0  clip 0  other 0  phi min 0.0000 mm  ds/dx max 1.383  (207 s)
+
+[21:12:47 UTC | +  262.5 s] full: step 275/300  t 0.550  it 219  res 9.12e-06  in solid 0  old cross 0  near 297429  real 0  clip 0  other 0  phi min 0.0005 mm  ds/dx max 1.386  (225 s)
+
+[21:13:05 UTC | +  280.0 s] full: step 300/300  t 0.600  it 234  res 9.18e-06  in solid 0  old cross 0  near 287570  real 0  clip 0  other 0  phi min 0.0001 mm  ds/dx max 1.473  (242 s)
+
+[21:13:05 UTC | +  280.0 s] full: summary {"sub": "full", "steps_done": 300, "steps_planned": 300, "T": 0.6, "N": 1001952, "dt_rule": "fixed dt = 2.0e-3 s (as Step 3's overflow; no speed limit)", "old_cross_count": 10, "old_cross_steps": [[78, 1], [84, 1], [87, 2], [89, 1], [90, 1], [91, 1], [92, 2], [99, 1]], "old_cross_verdicts": {"LIP_CHORD_CLIP": 10}, "real_crossing_count": 0, "lip_chord_clip_count": 116, "clear_count": 88209575, "shallow_other_count": 294, "counts_are": "particle-steps among particles within 5 mm of the glass (old or new position)", "hit_g2p_particle_steps": 379442, "flagged_logged": 10, "max_ds_m": 0.006169913802295923, "max_ds_over_dx": 4.113275868197282, "steps_ds_over_dx_gt_1": [[89, 1.018], [90, 1.052], [91, 1.075], [92, 1.102], [93, 1.13], [94, 1.159], [95, 1.188], [96, 1.216], [97, 1.244], [98, 1.271], [99, 1.3], [100, 1.328], [101, 1.348], [102, 1.368], [103, 1.379], [104, 1.403], [105, 1.422], [106, 1.446], [107, 1.49], [108, 1.481], [109, 1.501], [110, 1.527], [111, 1.549], [112, 1.57], [113, 1.591], [114, 1.614], [115, 1.629], [116, 1.653], [117, 1.675], [118, 1.702], [119, 1.727], [120, 1.745], [121, 1.767], [122, 1.788], [123, 1.809], [124, 1.831], [125, 1.854], [126, 1.878], [127, 1.899], [128, 1.934], [129, 1.95], [130, 1.972], [131, 1.994], [132, 2.021], [133, 2.047], [134, 2.071], [135, 2.079], [136, 2.101], [137, 2.125], [138, 2.149], [139, 2.173], [140, 2.207], [141, 2.226], [142, 2.247], [143, 2.27], [144, 2.293], [145, 2.318], [146, 2.342], [147, 2.366], [148, 2.382], [149, 2.408], [150, 2.475], [151, 2.475], [152, 2.481], [153, 2.505], [154, 2.529], [155, 2.56], [156, 2.581], [157, 2.616], [158, 2.632], [159, 2.668], [160, 2.672], [161, 2.66], [162, 2.646], [163, 2.664], [164, 2.673], [165, 2.659], [166, 2.695], [167, 2.945], [168, 3.176], [169, 3.214], [170, 3.285], [171, 3.27], [172, 3.27], [173, 3.401], [174, 3.415], [175, 3.315], [176, 3.234], [177, 3.206], [178, 3.165], [179, 2.844], [180, 2.742], [181, 2.669], [182, 3.103], [183, 3.68], [184, 3.91], [185, 4.01], [186, 4.113], [187, 3.788], [188, 3.763], [189, 3.513], [190, 3.091], [191, 2.97], [192, 2.721], [193, 2.721], [194, 2.719], [195, 2.623], [196, 2.565], [197, 2.568], [198, 2.364], [199, 2.259], [200, 2.073], [201, 2.152], [202, 2.18], [203, 2.184], [204, 1.956], [205, 1.912], [206, 1.881], [207, 1.846], [208, 1.826], [209, 1.869], [210, 1.899], [211, 1.932], [212, 1.803], [213, 1.798], [214, 1.825], [215, 1.867], [216, 1.86], [217, 1.66], [218, 1.563], [219, 1.564], [220, 1.593], [221, 1.618], [222, 1.593], [223, 1.587], [224, 1.627], [225, 1.578], [226, 1.566], [227, 1.586], [228, 1.577], [229, 1.633], [230, 1.579], [231, 1.603], [232, 1.631], [233, 1.628], [234, 1.615], [235, 1.642], [236, 1.663], [237, 1.691], [238, 1.734], [239, 1.757], [240, 1.72], [241, 1.517], [242, 1.544], [243, 1.534], [244, 1.533], [245, 1.528], [246, 1.465], [247, 1.485], [248, 1.495], [249, 1.41], [250, 1.383], [251, 1.409], [252, 1.378], [253, 1.377], [254, 1.402], [255, 1.371], [256, 1.398], [257, 1.376], [258, 1.382], [259, 1.405], [260, 1.371], [261, 1.639], [262, 1.626], [263, 1.423], [264, 1.428], [265, 1.449], [266, 1.508], [267, 1.556], [268, 1.52], [269, 1.511], [270, 1.491], [271, 1.444], [272, 1.393], [273, 1.393], [274, 1.419], [275, 1.386], [276, 1.417], [277, 1.442], [278, 1.465], [279, 1.492], [280, 1.439], [281, 1.344], [282, 1.2], [283, 1.175], [284, 1.166], [285, 1.189], [286, 1.213], [287, 1.233], [288, 1.279], [289, 1.311], [290, 1.337], [291, 1.347], [292, 1.369], [293, 1.397], [294, 1.42], [295, 1.45], [296, 1.396], [297, 1.415], [298, 1.407], [299, 1.436], [300, 1.473]], "n_in_solid_max": 0, "it_max": 311, "res_max": 9.994731044571381e-06, "ceiling_max": 0, "vmax_max": 3.07456374168396, "phi_min_overall_m": -0.00020014107576571405, "near_capped": false, "flag_capped": false, "params": {"deep_m": 0.000625, "near_m": 0.005, "samples": 17, "window_segments": 64, "z_lip_m": 0.14625, "z_rim_m": 0.1475, "R_m_m": 0.03879200006, "lip_m": 0.00125}, "ms_per_step": 806.8617645899454, "wall_s": 242.0585310459137, "pass_marks": {"old_cross_10_at_steps_78_99": true, "real_crossing_zero": true, "in_solid_zero": true, "it_lt_600": true, "res_lt_1e5": true, "every_flag_logged": true}, "pass_marks_all": true}
+
+[21:13:05 UTC | +  280.0 s] full: all done
+
+exit 0
+
+/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\|'
+
+  cells[i][c] = re.sub('\\\\\|', '|', cell)
+
+/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\_'
+
+  text = re.sub(r'_', '\_', text) # Escape underscores in display text
+
+[NbConvertApp] Converting notebook __script__.ipynb to html
+
+[NbConvertApp] Writing 277023 bytes to __results__.html
+

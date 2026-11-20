@@ -182,3 +182,23 @@ Risk: the GPU's scatter order is not deterministic, so the reproduction of exact
   old cross 0, real 0, in solid 0 after step 1, it <= 311, res < 1e-5; step 1 "other" 280 = the seed-jitter particles in the foot moved
   out (phi_min -0.20 mm, not real); about 290 000 particles within 5 mm of the glass; about 0.7 s a step.
 - 20 Nov 21:07:18 UTC: Task A full run launched (Kaggle task-a-verify-full, T4).
+- 20 Nov 21:07:18-21:13:24 UTC: Task A full run (code 8f672e62), Kaggle task-a-verify-full, T4, 6 min 6 s, script 242 s
+  (0.81 s/step). Task A GPU (smoke + full): 506.7 s = 8.4 min; 142.4 min left until 21 Nov 00:00 UTC.
+
+## Task A results (Fact; notes/spill/step3_verify/summary.json, flagged_particles.jsonl, steps.jsonl, full.log)
+All pass marks PASS: old_cross_count 10 at steps 78, 84, 87 (2), 89, 90, 91, 92 (2), 99 (same steps and counts as Step 3);
+real_crossing_count 0; n_in_solid_max 0; it_max 311; res_max 9.995e-6; all 10 flagged particles logged; none capped.
+The 10: all LIP_CHORD_CLIP, hit_g2p false, both ends in open air above the lip (z 147.40-147.50 mm; z_lip 146.25 mm), step length
+0.48-0.83 mm (ds/dx 0.32-0.55), chord dips into the crest by 0.002-0.039 mm, crossing height 147.459-147.498 mm (rim crest 147.5).
+Over the run (particle-steps within 5 mm of the glass): LIP_CHORD_CLIP 116 (steps 60-127), SHALLOW_OTHER 294 (280 = the seed-jitter
+particles moved out of the foot at step 1, phi_min -0.20 mm; 14 later, all shallower than 0.068 mm), REAL 0; deepest dip after
+step 1: 0.068 mm. hit_g2p: 379 442 particle-steps (contacts the collision resolved).
+Step length: ds/dx > 1 at every step from 89 to 300; max 4.11 (6.17 mm in one 2 ms step, step 186, vmax 3.07 m/s): the fixed
+2 ms step lets the fastest stout move more than the wall's thickness per step. No penetration followed here, but rule 8 (dt limited
+by 0.8 dx / vmax) is needed from Step 4 on.
+Code check at 9cecadc: dt fixed 2 ms (rest_variants.py step3_run, dt = 0.002); old test rest_variants.py:333 (Step 2's copy :219);
+lip solid stout_jax.py:204, outline section_lines :208-219, extension polygon from section_lines; _g2p_cont at lip > 0: from_top is
+off, a particle inside the lip's disc goes out along the disc's radius to lip + 0.1 dx; a particle in the shell below z_lip goes to
+the side its old position was nearer (from_in / from_out).
+Reproduction: the run follows Step 3 exactly to step ~113, then drifts (GPU scatter order; vmax 3.07 m/s here, 2.34 m/s in Step 3).
+Decision rule: real_crossing_count = 0 -> Step 3 CLOSED (PASS). Waiting for the owner's yes before Task B (Step 4).
