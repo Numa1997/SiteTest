@@ -633,8 +633,8 @@
         'use strict';
         /* ---------- where the stored runs are served from: the one line to change when the store moves ---------- */
         var DATA_BASE = '../data/schrodinger-sphere/';   /* generations.json lists the dated generations; each has its own index.json */
-        var BRIDGE_URL = null;   /* kaggle-bridge's address once it is deployed; null: not connected (docs/kaggle-pipeline.md) */
-        var PROJECT = 'schrodinger-sphere';
+        /* runs not computed on Kaggle are shown by the browser's live preview where one exists (docs/kaggle-pipeline.md) */
+        var PROJECT = 'schrodinger-sphere';   /* the folder under public/data/ */
         /* the controls offer stops beyond the computed grid: those are the regions not computed yet */
         var EXTRA = { E: [5.0, 5.5, 6.0], V0: [10.0, 12.0], R: [1.0, 7.0, 8.0] };
         /* the barrier shapes: each has its own stored grid; size is R (sphere, pillar) or the thickness a (flat wall) */
@@ -671,8 +671,8 @@
         var timeIn = document.getElementById('time'), timeOut = document.getElementById('time-out');
         var IDX = null, byKey = {}, by2d = {}, cache = {}, live = null, liveKey = null, worker = null, job = 0;
         var tPhys = 0, playing = true, endHeld = false, fade = { from: null, a: 1 }, lastKey = null, lastSrc = null, shownReal = false;
-        var gov = KaggleFlow.governor(0.45, 0), pop = KaggleFlow.popup(stage), bridge = KaggleFlow.bridge({ url: BRIDGE_URL, project: PROJECT });
-        var requested = {}, sliders = {};
+        var gov = KaggleFlow.governor(0.45, 0), pop = KaggleFlow.popup(stage);
+        var sliders = {};
         var prev = document.createElement('canvas'), pg = prev.getContext('2d');
 
         /* ---------- the store (scripts/dataset.js): every number shown is written here where it is read or computed ---------- */
@@ -1130,7 +1130,7 @@
                 if (VIEW === 'mesh') how += '. The drawn sheet is a resampling of the stored grid (band-limited, 3 × finer), which passes through every stored value and adds no wave the run did not have';
                 src.innerHTML = 'Computed on Kaggle on ' + c.meta.generated + ', ' + how + '; ' + c.head.steps + ' steps of Δt = ' + c.head.dt + ' in ' + c.head.wall.toFixed(1) + ' s. File <code>' + c.meta.file + '</code>, SHA-256 ' + (c.sha === true ? 'checked ✓' : c.sha === false ? '<b>does not match</b>' : 'not checked (no crypto in this browser)') + '.';
             }
-            else if (c) src.innerHTML = 'Not computed on Kaggle yet. This is a <b style="display:inline">live preview</b> computed in your browser on a coarser grid (64³), ' + c.ready_n + ' of 48 frames so far. Checked against Kaggle on stored runs: the probabilities agree to within 0.08 at every frame. ' + (by2d[key(p.E, p.V0, p.R)] ? 'Kaggle’s 2D generation of this run gives at the end: behind ' + by2d[key(p.E, p.V0, p.R)].behind.toFixed(3) + ', ahead ' + by2d[key(p.E, p.V0, p.R)].ahead.toFixed(3) + '. ' : '') + (bridge.connected ? '' : 'The link that would have Kaggle compute it in 3D (kaggle-bridge) is not switched on yet.');
+            else if (c) src.innerHTML = 'Outside the grid computed on Kaggle. This is a <b style="display:inline">live preview</b> computed in your browser on a coarser grid (64³), ' + c.ready_n + ' of 48 frames so far. Checked against Kaggle on stored runs: the probabilities agree to within 0.08 at every frame. ' + (by2d[key(p.E, p.V0, p.R)] ? 'Kaggle’s 2D generation of this run gives at the end: behind ' + by2d[key(p.E, p.V0, p.R)].behind.toFixed(3) + ', ahead ' + by2d[key(p.E, p.V0, p.R)].ahead.toFixed(3) + '. ' : '') + (bridge.connected ? '' : 'The link that would have Kaggle compute it in 3D (kaggle-bridge) is not switched on yet.');
             else src.textContent = SHAPE === 'sphere' && p.V0 >= HARD ? 'Not computed yet: the hard sphere needs new GPU runs on Kaggle, which wait for the owner’s yes.' : SHAPE === 'sphere' && p.V0 < 0 ? 'Not computed yet on Kaggle.' : 'Not computed yet.';
         }
 
@@ -1163,14 +1163,14 @@
             var behind = !c || tPhys > cap + 1e-6;
             ds.set('speed', sp); ds.set('edge', edge); ds.set('live_done', live ? live.ready_n / 48 : 0);
             document.querySelector('#speed span').style.width = (100 * sp).toFixed(0) + '%';
-            /* the visitor is heading out of the computed range: ask kaggle-bridge for the next block at once */
-            ['E', 'V0', 'R'].forEach(function (nm) { var s = sliders[nm], h = s.heading(); if (h && !requested[nm + h + k]) { requested[nm + h + k] = true; bridge.request({ heading: nm, direction: h, from: p }); } });
+            /* the computed range ends here: beyond it the live preview, where there is one */
+            /* (nothing is ordered from Kaggle: the stored grid is what Kaggle computed) */
             /* the notice: only when nothing is left to show */
             var starved = behind || (c.ready_n < c.n && tPhys >= cap - 1e-6 && sp < 0.05);
             if (starved && !isStored(p.E, p.V0, p.R)) {
                 var lp = live && liveKey === k ? live.ready_n / 48 : 0;
-                pop.set({ stage: bridge.connected ? 1 : 0, broken: bridge.connected ? -1 : 1, title: (SHAPES[SHAPE] ? SHAPE.replace('slab', 'flat wall') + ': ' : '') + 'E = ' + p.E + ', V₀ = ' + fmtV(p.V0) + ', ' + SHAPES[SHAPE].size + ' = ' + p.R + ' has not been computed yet',
-                    text: (bridge.connected ? 'Asked kaggle-bridge to have it computed on Kaggle’s GPU; it will be stored and come back here.' : 'The link to Kaggle, <b>kaggle-bridge</b>, is not switched on yet (dashed above), so Kaggle cannot be asked from this page. ') +
+                pop.set({ title: (SHAPES[SHAPE] ? SHAPE.replace('slab', 'flat wall') + ': ' : '') + 'E = ' + p.E + ', V₀ = ' + fmtV(p.V0) + ', ' + SHAPES[SHAPE].size + ' = ' + p.R + ' was not computed on Kaggle',
+                    text: 'This stop lies outside the grid computed on Kaggle. ' +
                         (SHAPE === 'sphere' && p.V0 < HARD ? ' Meanwhile your browser computes a live preview on a coarser grid: ' + Math.round(100 * lp) + ' %. The animation goes on as soon as the next frame is ready.' : ' There is no browser preview for this case.'), progress: lp });
                 pop.show();
             } else if (pop.shown) pop.hide();
