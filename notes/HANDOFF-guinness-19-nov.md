@@ -499,3 +499,7 @@ folder like `notes/spill/runs/` needs its own rule) and keep the description tru
 - Done (not launched): `derive_liquid.py` cut into blocks `# ===BLOCK <name>` run by a guarded runner at the top (each block's
   failure recorded in report.json "errors", REPORT.md and report.json rewritten after every block); SMOKE=1 mode (12 pictures from
   4 before stored liquid first enters the slab); half-split bug fixed; fallen and frozen parts in separate blocks.
+- 20 Nov: the owner set the new route, `notes/spill/DERIVATION-flight-inversion.md` (2fef8f0), section 9 one step per yes; the
+  derive_liquid smoke run is NOT to be launched. Step 1 written: `tools/fig16/derived/flight_map.py` (Phi 5 x 5 by RK4, impulse-exact
+  b and al from the stored cart state v, vzc, om, th via cart4.py:199-222; checks C1 det, C2 parabola, C3 rotation, C4 frame_accel;
+  A4 count). Not launched. Slip: a second empty `python3 -c 1` in the container while locating lines (computed nothing; against R1).
