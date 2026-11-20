@@ -19,8 +19,8 @@ The script integrates until the cycle repeats and measures the residual |θ(t + 
 
 Integration: DOP853 (SciPy), rtol 1e-10, atol 1e-12, on the full nonlinear equations (1) and (2).
 Output: barton.bin = b"BRT1", uint32 header length, a JSON header (parameters, checks), then int16 little-endian frames
-(rows = frames at FPS, columns = driver phase share and the eight angles, in units of 1e-4 rad; the driver's φ is stored as
-sin φ and cos φ times 1e4 so the page draws it exactly).
+(rows = frames at FPS; columns: the driver's angle θ_d (1e-4 rad), its length L_d (1e-4 m), the bar's travel x_b (1e-6 m), then
+the eight angles (1e-4 rad)). The page draws these numbers and computes nothing.
 Usage: python3 barton.py [out_dir]"""
 import json, os, struct, sys, time
 import numpy as np
@@ -76,11 +76,12 @@ def run(out_dir="."):
     # resonance check: when each pendulum swings widest, the driver's length should be close to its own
     tpk = ts[:-1][np.argmax(np.abs(th), axis=1)] - k_settle * T
     Ld_at_pk = Ld(tpk, T)
-    frames = np.empty((nf, 2 + n), dtype=np.int16)
-    frames[:, 0] = np.round(1e4 * np.sin(Y[0])); frames[:, 1] = np.round(1e4 * np.cos(Y[0]))
-    frames[:, 2:] = np.round(1e4 * th.T)
-    hdr = dict(model="barton", version=1, params=P, T_sweep=T, driver_turns_per_sweep=N, frames=nf, columns=["sin_phi", "cos_phi"] + ["theta_%d" % i for i in range(n)],
-               units="1e-4 (sin, cos) and 1e-4 rad (angles)", L=L.tolist(), L_px=(L * P["scale"]).tolist(),
+    tt = ts[:-1] - k_settle * T; th_d = P["A"] * np.sin(Y[0])
+    frames = np.empty((nf, 3 + n), dtype=np.int16)
+    frames[:, 0] = np.round(1e4 * th_d); frames[:, 1] = np.round(1e4 * Ld(tt, T)); frames[:, 2] = np.round(1e6 * P["kappa"] * th_d)
+    frames[:, 3:] = np.round(1e4 * th.T)
+    hdr = dict(model="barton", version=1, params=P, T_sweep=T, driver_turns_per_sweep=N, frames=nf, columns=["theta_d", "L_d", "x_bar"] + ["theta_%d" % i for i in range(n)],
+               units=dict(theta_d="1e-4 rad", L_d="1e-4 m", x_bar="1e-6 m", theta_i="1e-4 rad"), L=L.tolist(), L_px=(L * P["scale"]).tolist(),
                checks=dict(periodic_residual_rad=resid, phase_wrap_rad=phi_wrap, tolerance_diff_rad=tol_diff,
                            quantisation_rad=0.5e-4, max_angle_rad=amp.tolist(), peak_time_s=tpk.tolist(),
                            driver_length_at_peak_m=Ld_at_pk.tolist()),
