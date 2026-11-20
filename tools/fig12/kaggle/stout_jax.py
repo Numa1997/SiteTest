@@ -345,6 +345,7 @@ class Stout:
         # the continuous model (G.body set, 18 Nov 2026): every closed face of the glass and of the cart's body holds w = 0, and the
         # stout's free surface carries the surface tension GAMMA wherever no head lies on it
         self.cont = G.body is not None
+        self.ls_extend = False   # test switch (20 Nov 2026, notes/spill/STATE-projection-fix.md): see enable_ls_extend; off = the v8 code unchanged
         if self.cont: self.floor_w = jnp.asarray(G.thw == 0)
         self.gamma = GAMMA if self.cont else 0.0
         c = jnp.asarray(G.xc, F32); cy = jnp.asarray(G.yc, F32); zc = jnp.asarray(G.zc, F32)
@@ -495,6 +496,69 @@ class Stout:
             m = m | sh(m, 1, ax, False) | sh(m, 2, ax, False) | sh(m, -1, ax, False) | sh(m, -2, ax, False)
         return m
 
+    def enable_ls_extend(self):
+        """Test switch, sub-run 2 of the bowl-base drain test (20 Nov 2026). On every cell whose centre lies in the glass (wall or
+        foot) and which has an open face, the liquid level set is extended from the nearest open point along the glass's normal,
+        phi_liq(x) = phi_liq(x - phi_glass(x) n_s(x)) (solid extrapolation as Ando et al.), and these cells no longer use wallcut /
+        ls_inherit. phi_glass is the exact signed distance to the glass's (r, z) section (negative inside), n_s its gradient; the
+        value at the surface point is read trilinearly from the cell centres that are not in the glass (weights renormalised)."""
+        G = self.G; dx = self.dx; nx, ny, nz = self.dims
+        X, Y, Z = np.meshgrid(G.xc, G.yc, G.zc, indexing="ij")
+        hx, hy, zt = G.body; zrim = G.zrim
+        def in_glass(x, y, z):
+            z = np.asarray(z, float); r2 = x * x + y * y
+            Rin = G.Rz(np.clip(z, 0.0, zrim - 1e-6)); Rout = G.Rz(np.clip(z, 0.008, zrim - 1e-6)) + G.WALL
+            return ((z > 0) & (z < zrim) & (r2 >= Rin ** 2) & (r2 < Rout ** 2)) | ((z <= 0) & (z > zt) & (r2 < Rout ** 2))
+        thu, thv, thw = G.thu, G.thv, G.thw
+        openf = (thu[1:] > 0) | (thu[:-1] > 0) | (thv[:, 1:] > 0) | (thv[:, :-1] > 0) | (thw[:, :, 1:] > 0) | (thw[:, :, :-1] > 0)
+        gl = in_glass(X, Y, Z); E = gl & openf
+        # the glass's section in (r, z): the polygon without its edge on the axis
+        zp = np.arange(G.nR) * G.dzp; zp[-1] = min(zp[-1], zrim)
+        ri = G.Rz(zp); ro = G.Rz(np.maximum(zp, 0.008)) + G.WALL; rf = float(G.Rz(0.008) + G.WALL)
+        pts = [(0.0, zt), (rf, zt), (rf, 0.0)] + list(zip(ro, zp)) + list(zip(ri[::-1], zp[::-1])) + [(0.0, 0.0)]
+        a = np.array(pts[:-1]); b = np.array(pts[1:]); ab = b - a; L2 = np.maximum((ab ** 2).sum(1), 1e-30)
+        def dist(r, z):
+            p = np.stack([r, z], -1)[:, None, :]
+            t = np.clip(((p - a[None]) * ab[None]).sum(2) / L2[None], 0, 1)
+            return np.sqrt(((p - (a[None] + t[..., None] * ab[None])) ** 2).sum(2)).min(1)
+        def sdf(r, z):
+            return np.where(in_glass(r, np.zeros_like(r), z), -1.0, 1.0) * dist(r, z)
+        ii = np.argwhere(E); x = X[E]; y = Y[E]; z = Z[E]; r = np.hypot(x, y)
+        phi = sdf(r, z); h = 1e-4
+        gr = (sdf(r + h, z) - sdf(r - h, z)) / (2 * h); gz = (sdf(r, z + h) - sdf(r, z - h)) / (2 * h)
+        gn = np.maximum(np.hypot(gr, gz), 1e-12); gr /= gn; gz /= gn
+        cx = np.where(r > 1e-9, x / np.maximum(r, 1e-9), 1.0); cy = np.where(r > 1e-9, y / np.maximum(r, 1e-9), 0.0)
+        n3 = np.stack([gr * cx, gr * cy, gz], 1)
+        org = np.array([G.x0, G.y0, G.z0])
+        idx = np.zeros((len(ii), 8), np.int64); wts = np.zeros((len(ii), 8), np.float32); found = np.zeros(len(ii), bool)
+        for push in (0.0, 0.25, 0.5, 0.75, 1.0, 1.5, 2.0):   # the surface point; pushed further into the open only if no open centre is around it
+            q = np.stack([x, y, z], 1) + (-phi + push * dx)[:, None] * n3
+            g = (q - org) / dx - 0.5; i0 = np.floor(g).astype(np.int64); f = g - i0
+            k = 0
+            for ox in (0, 1):
+                for oy in (0, 1):
+                    for oz in (0, 1):
+                        I = np.clip(i0 + np.array([ox, oy, oz]), 0, np.array([nx - 1, ny - 1, nz - 1]))
+                        w = (f[:, 0] if ox else 1 - f[:, 0]) * (f[:, 1] if oy else 1 - f[:, 1]) * (f[:, 2] if oz else 1 - f[:, 2])
+                        ok = ~gl[I[:, 0], I[:, 1], I[:, 2]] & ~self._solid_np(G, I)
+                        new = ~found
+                        idx[new, k] = (I[:, 0] * ny + I[:, 1]) * nz + I[:, 2]
+                        wts[new, k] = np.where(ok, w, 0.0)[new]
+                        k += 1
+            s_ = wts.sum(1); found = found | (s_ > 1e-6)
+            if found.all(): break
+        wts = wts / np.maximum(wts.sum(1, keepdims=True), 1e-12)
+        self.ext_cells = jnp.asarray((ii[:, 0] * ny + ii[:, 1]) * nz + ii[:, 2], I32)
+        self.ext_idx = jnp.asarray(idx, I32); self.ext_w = jnp.asarray(wts, F32)
+        self.ext_mask = jnp.asarray(E); self.ls_extend = True
+        self.ext_info = dict(cells=int(E.sum()), unresolved=int((~found).sum()), phi_mm=[float(phi.min() * 1e3), float(phi.max() * 1e3)])
+        return self.ext_info
+
+    @staticmethod
+    def _solid_np(G, I):
+        xc = G.x0 + (I[:, 0] + 0.5) * G.dx; yc = G.y0 + (I[:, 1] + 0.5) * G.dx; zc = G.z0 + (I[:, 2] + 0.5) * G.dx
+        return G.solid(xc, yc, zc)
+
     def level_set(self, s, cnt):
         dx = self.dx; G = self.G
         mA = (cnt == 0) & self.lsdom   # continuous model: everywhere, so liquid outside the glass has its own free surface too
@@ -532,6 +596,10 @@ class Stout:
         liq = (ph < 0) | (cnt > 0)
         ph = jnp.where((cnt > 0) & (ph >= 0), -0.05 * dx, ph).astype(F32)
         thu, thv, thw = self.th
+        if self.ls_extend:   # test switch: solid cells take the level set of the nearest open point along the glass's normal
+            phs = jnp.sum(self.ext_w * ph.reshape(-1)[self.ext_idx], 1)
+            ph = ph.reshape(-1).at[self.ext_cells].set(phs).reshape(self.dims)
+            liq = liq.reshape(-1).at[self.ext_cells].set(phs < 0).reshape(self.dims)
         for _ in range(3):   # Taichi ls_inherit: cells cut by the glass that read as air take the liquid's phi beside them
             best = jnp.ones(self.dims, F32)
             for ax, th in ((0, thu), (1, thv)):
@@ -540,6 +608,7 @@ class Stout:
             above = sh(ph, 1, 2, 1.0)
             best = jnp.minimum(best, jnp.where((cut_hi(thw, 2) > 0) & sh(liq, 1, 2, False) & (above < -0.5 * dx), above, 1.0))
             take = (~liq) & self.wallcut & (best < 1.0)
+            if self.ls_extend: take = take & ~self.ext_mask
             liq = liq | take; ph = jnp.where(take, jnp.minimum(best, -0.05 * dx), ph)
         return ph, liq, nsel, phr
 

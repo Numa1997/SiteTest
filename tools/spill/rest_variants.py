@@ -25,7 +25,8 @@ F12 = (SJ.BODY_HALF[0], SJ.BODY_HALF[1], SJ.BODY_TOP); F16 = (0.155, 0.062, -0.0
 CASES = dict(A=(F12, "wall"), B=(F12, "full"), C=(F16, "wall"), D=(F16, "full"), E=(None, "full"),
              F=(F16, "full", "no tension"))      # F: D with the surface tension switched off (19 Nov 2026: is it what settles the pint?)
 only = os.environ.get("ONLY"); rep = {"dx_mm": dx * 1e3, "rest_s": REST, "device": str(jax.devices()[0])}
-for key, case in CASES.items():
+DRAIN = os.environ.get("DRAIN") == "1"
+for key, case in (() if DRAIN else CASES.items()):
     body, model = case[0], case[1]
     if only and key not in only.split(","): continue
     t0 = time.time()
@@ -42,4 +43,82 @@ for key, case in CASES.items():
              mean_z_mm=[round(z0 * 1e3, 2), round(float(X[act, 2].mean()) * 1e3, 2)], below_floor=int((act & (X[:, 2] < 0)).sum()),
              outside_cavity=int((act & ~((X[:, 2] > 0) & (rr < Rr))).sum()), wall_s=round(time.time() - t0, 1))
     rep[key] = r; print(key, json.dumps(r), flush=True)
-json.dump(rep, open(os.path.join(OUT, "rest_variants.json"), "w"), indent=1, default=str)
+if not DRAIN: json.dump(rep, open(os.path.join(OUT, "rest_variants.json"), "w"), indent=1, default=str)
+
+
+# ====================================================================================================================================
+# The bowl-base drain test (20 Nov 2026, notes/spill/STATE-projection-fix.md). Case F (Fig. 16 deck, model "full", no surface tension),
+# dx = 1.5 mm, dt = 2 ms, the glass at rest. Run with DRAIN=1 and SUBRUN = "smoke" (3 steps, both codes), "base" (baseline code, 0.2 s)
+# or "ext" (the solid-extrapolated level set, S.enable_ls_extend(), 1.0 s). Every step logs: CG iterations it, final residual res,
+# n_drain_faces (open faces, theta > 0, joining a liquid and a non-liquid cell below z = 0.11 m, on the level set the pressure step
+# used), mean particle height, median read surface, particles outside the cavity. One JSON line per step, flushed, in OUT.
+def drain_run():
+    import datetime
+    import jax.numpy as jnp
+    T0 = time.time()
+    def say(m):
+        print(f"[{datetime.datetime.now(datetime.timezone.utc).strftime('%H:%M:%S')} UTC | +{time.time() - T0:7.1f} s] {m}", flush=True)
+    sub = os.environ.get("SUBRUN", "smoke")
+    plan = {"smoke": [("base", None, 3), ("ext", None, 3)], "base": [("base", 0.2, None)], "ext": [("ext", 1.0, None)]}[sub]
+    dxd = float(os.environ.get("DX", "0.0015"))
+    G = SJ.Geometry(R, DZP, FILL, dxd, body=F16)
+    zf = G.z0 + dxd * np.arange(G.nz + 1); zcc = G.z0 + dxd * (np.arange(G.nz) + 0.5)
+    low_c = jnp.asarray(zcc < 0.11); low_f = jnp.asarray(zf < 0.11)
+    out_all = {}
+    for label, T, nsteps in plan:
+        S = SJ.Stout(G, model="full", K_frac=1.0, M_drops=4096); S.gamma = 0.0
+        info = S.enable_ls_extend() if label == "ext" else None
+        s = S.init_state(); N = S.N; dt = 0.002
+        nst = nsteps if nsteps else int(round(T / dt))
+        say(f"{sub}/{label}: grid {G.nx} x {G.ny} x {G.nz}, N = {N}, steps {nst}, extension {info}")
+        thu, thv, thw = S.th
+        def ndrain(liq):
+            a = (thu[1:-1] > 0) & (liq[1:] != liq[:-1]) & low_c[None, None, :]
+            b = (thv[:, 1:-1] > 0) & (liq[:, 1:] != liq[:, :-1]) & low_c[None, None, :]
+            c = (thw[:, :, 1:-1] > 0) & (liq[:, :, 1:] != liq[:, :, :-1]) & low_f[None, None, 1:-1]
+            return jnp.sum(a, dtype=jnp.int32) + jnp.sum(b, dtype=jnp.int32) + jnp.sum(c, dtype=jnp.int32)
+        prep = jax.jit(S.prepare)
+        step = jax.jit(lambda s, pr: S.step(s, dt, 0.0, -9.81, prep=pr))
+        obs = jax.jit(S.observe)
+        nd_j = jax.jit(ndrain)
+        Rd = jnp.asarray(R, jnp.float32)
+        def stats(s):
+            X = s["xp"]; act = s["act"]; rr = jnp.hypot(X[:, 0], X[:, 1])
+            Rr = jnp.interp(jnp.clip(X[:, 2], 0, G.zrim) / DZP, jnp.arange(len(R), dtype=jnp.float32), Rd)
+            zmean = jnp.sum(jnp.where(act, X[:, 2], 0.0)) / jnp.maximum(jnp.sum(act), 1)
+            outside = jnp.sum(act & ~((X[:, 2] > 0) & (rr < Rr)))
+            H = obs(s)["H"]; Hf = jnp.where(jnp.isfinite(H), H, jnp.nan)
+            return zmean, outside, jnp.nanmedian(Hf)
+        st_j = jax.jit(stats)
+        z0, o0, h0 = [float(v) for v in st_j(s)]
+        say(f"{sub}/{label}: t = 0  mean height {z0 * 1e3:.3f} mm  median surface {h0 * 1e3:.3f} mm  outside {int(o0)}")
+        fn = os.path.join(OUT, f"drain_{sub}_{label}.jsonl"); fh = open(fn, "w")
+        rows = []; tc = time.time()
+        for k in range(nst):
+            pr = prep(s); nd = int(nd_j(pr["liq"]))
+            s, d = step(s, pr)
+            zm, ou, hm = [float(v) for v in st_j(s)]
+            row = dict(step=k + 1, t=round((k + 1) * dt, 4), it=int(d["it"]), res=float(d["res"]), n_drain_faces=nd,
+                       mean_z_mm=zm * 1e3, surface_median_mm=hm * 1e3, outside=int(ou), nact=int(d["nact"]), wall_s=round(time.time() - tc, 2))
+            rows.append(row); fh.write(json.dumps(row) + "\n"); fh.flush()
+            if k < 3 or (k + 1) % 25 == 0 or k == nst - 1:
+                say(f"{sub}/{label}: step {k + 1}/{nst}  it {row['it']}  res {row['res']:.2e}  drain {nd}  z {row['mean_z_mm']:.3f}  "
+                    f"H {row['surface_median_mm']:.3f}  out {row['outside']}  ({row['wall_s']:.0f} s)")
+        fh.close()
+        summ = dict(label=label, sub=sub, steps=nst, T=nst * dt, N=N, ext=info, mean_z0_mm=z0 * 1e3, mean_z1_mm=rows[-1]["mean_z_mm"],
+                    surface0_mm=h0 * 1e3, surface1_mm=rows[-1]["surface_median_mm"], it_max=max(r["it"] for r in rows),
+                    res_max=max(r["res"] for r in rows), drain_min=min(r["n_drain_faces"] for r in rows),
+                    drain_max=max(r["n_drain_faces"] for r in rows), outside_max=max(r["outside"] for r in rows),
+                    ms_per_step=1e3 * (time.time() - tc) / nst, wall_s=time.time() - tc)
+        if label == "ext" and sub == "ext":
+            marks = dict(drain_zero_every_step=summ["drain_max"] == 0, it_lt_600=summ["it_max"] < 600, res_lt_1e5=summ["res_max"] < 1e-5,
+                         mean_z_within_0p05mm=abs(summ["mean_z1_mm"] - summ["mean_z0_mm"]) < 0.05,
+                         surface_within_0p2mm_of_125=abs(summ["surface1_mm"] - 125.0) < 0.2, zero_outside=summ["outside_max"] == 0)
+            summ["pass_marks"] = marks; summ["pass"] = all(marks.values())
+        out_all[label] = summ
+        json.dump(summ, open(os.path.join(OUT, f"drain_{sub}_{label}_summary.json"), "w"), indent=1, default=str)
+        say(f"{sub}/{label}: done {json.dumps(summ, default=str)}")
+    say(f"{sub}: all done")
+
+
+if DRAIN: drain_run()
