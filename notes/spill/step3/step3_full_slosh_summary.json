@@ -1,0 +1,63 @@
+{
+ "label": "slosh",
+ "sub": "full",
+ "steps": 1250,
+ "T": 2.5,
+ "N": 1001952,
+ "K": 1001952,
+ "grid": [
+  211,
+  87,
+  176
+ ],
+ "top_mm": 228.0,
+ "lip_mm": 1.25,
+ "push": [
+  0.3,
+  1.0,
+  0.146
+ ],
+ "ext": {
+  "cells": 17272,
+  "unresolved": 0,
+  "phi_mm": [
+   -1.041392597270577,
+   -0.0013351016942144578
+  ],
+  "side_vis": true,
+  "cavity_side_cells": 6804
+ },
+ "it_max": 285,
+ "res_max": 9.999816029448994e-06,
+ "in_solid_max": 0,
+ "ceiling_max": 0,
+ "zmax_max_mm": 132.4596405029297,
+ "crossings_total": 0,
+ "over_max": 0,
+ "over_end": 0,
+ "above_rim_max": 0,
+ "nact_end": 1001952,
+ "nsel_max": 373590,
+ "nsel_capped": false,
+ "mean_z0_mm": 72.6948007941246,
+ "mean_z1_mm": 72.64067977666855,
+ "ms_per_step": 379.02392768859863,
+ "wall_s": 473.7799115180969,
+ "fit_ring13": {
+  "f": 3.3208727945728382,
+  "f0": 3.3211730253287657,
+  "zeta": 0.013445811595563741,
+  "A_mm": 6.011737362140934,
+  "rms_mm": 0.07003220682714462
+ },
+ "f_target_hz": 3.421,
+ "f_err_pct": -2.9268402638749413,
+ "f0_err_pct": -2.918064152915345,
+ "pass_marks": {
+  "f_within_3pct": true,
+  "ceiling_zero": true,
+  "crossings_zero": true,
+  "in_solid_zero": true
+ },
+ "pass_marks_all": true
+}

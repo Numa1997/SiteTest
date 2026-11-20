@@ -1,0 +1,118 @@
+/kaggle/src/script.py:4: DeprecationWarning: Python 3.14 will, by default, filter extracted tar archives and reject files or modify their metadata. Use the filter argument to control this behavior.
+
+  tarfile.open(fileobj=io.BytesIO(b)).extractall('/tmp/repo'); root='/tmp/repo/'+os.listdir('/tmp/repo')[0]
+
+fetched in 49.3 s
+
+name, memory.total [MiB]
+
+Tesla T4, 15360 MiB
+
+Tesla T4, 15360 MiB
+
+[18:55:46 UTC | +   17.4 s] full: grid 211 x 87 x 176, top 228.0 mm (rim 147.5 mm), lip 1.25 mm about (R_m 38.792 mm, z_c 146.250 mm)
+
+[18:56:06 UTC | +   37.4 s] full/slosh: N = 1001952, K = 1001952, steps 1250, push 1.0 m/s^2 from 0.3 s for 0.146 s, extension {'cells': 17272, 'unresolved': 0, 'phi_mm': [-1.041392597270577, -0.0013351016942144578], 'side_vis': True, 'cavity_side_cells': 6804}
+
+[18:56:08 UTC | +   39.3 s] full/slosh: t = 0  in solid 231  ceiling 0  z max 124.85 mm  over 0  mean z 72.695 mm
+
+[18:56:41 UTC | +   72.6 s] full/slosh: step 1/1250  t 0.002  gx 0.0  it 245  res 9.32e-06  in solid 0  ceiling 0  z max 124.9  cross 0  over 0  above rim 0  q13 nan mm  vmax 0.001  (33 s)
+
+[18:56:42 UTC | +   72.9 s] full/slosh: step 2/1250  t 0.004  gx 0.0  it 163  res 9.61e-06  in solid 0  ceiling 0  z max 124.9  cross 0  over 0  above rim 0  q13 nan mm  vmax 0.001  (34 s)
+
+[18:56:42 UTC | +   73.1 s] full/slosh: step 3/1250  t 0.006  gx 0.0  it 72  res 9.71e-06  in solid 0  ceiling 0  z max 124.9  cross 0  over 0  above rim 0  q13 nan mm  vmax 0.002  (34 s)
+
+[18:57:03 UTC | +   93.9 s] full/slosh: step 50/1250  t 0.100  gx 0.0  it 103  res 9.38e-06  in solid 0  ceiling 0  z max 124.9  cross 0  over 0  above rim 0  q13 -0.002 mm  vmax 0.003  (55 s)
+
+[18:57:11 UTC | +  102.5 s] full/slosh: step 100/1250  t 0.200  gx 0.0  it 75  res 9.63e-06  in solid 0  ceiling 0  z max 124.9  cross 0  over 0  above rim 0  q13 0.003 mm  vmax 0.001  (63 s)
+
+[18:57:20 UTC | +  110.9 s] full/slosh: step 150/1250  t 0.300  gx 0.0  it 31  res 9.47e-06  in solid 0  ceiling 0  z max 124.9  cross 0  over 0  above rim 0  q13 -0.000 mm  vmax 0.001  (72 s)
+
+[18:57:36 UTC | +  127.6 s] full/slosh: step 200/1250  t 0.400  gx 1.0  it 222  res 9.29e-06  in solid 0  ceiling 0  z max 130.9  cross 0  over 0  above rim 0  q13 4.862 mm  vmax 0.066  (88 s)
+
+[18:57:55 UTC | +  146.5 s] full/slosh: step 250/1250  t 0.500  gx 0.0  it 224  res 9.75e-06  in solid 0  ceiling 0  z max 128.4  cross 0  over 0  above rim 0  q13 2.805 mm  vmax 0.137  (107 s)
+
+[18:58:14 UTC | +  165.5 s] full/slosh: step 300/1250  t 0.600  gx 0.0  it 196  res 9.62e-06  in solid 0  ceiling 0  z max 131.8  cross 0  over 0  above rim 0  q13 -5.878 mm  vmax 0.038  (126 s)
+
+[18:58:33 UTC | +  183.6 s] full/slosh: step 350/1250  t 0.700  gx 0.0  it 223  res 9.57e-06  in solid 0  ceiling 0  z max 128.0  cross 0  over 0  above rim 0  q13 2.641 mm  vmax 0.141  (144 s)
+
+[18:58:51 UTC | +  202.1 s] full/slosh: step 400/1250  t 0.800  gx 0.0  it 219  res 9.46e-06  in solid 0  ceiling 0  z max 129.5  cross 0  over 0  above rim 0  q13 3.062 mm  vmax 0.135  (163 s)
+
+[18:59:10 UTC | +  220.7 s] full/slosh: step 450/1250  t 0.900  gx 0.0  it 215  res 9.14e-06  in solid 0  ceiling 0  z max 131.4  cross 0  over 0  above rim 0  q13 -5.522 mm  vmax 0.025  (181 s)
+
+[18:59:28 UTC | +  239.4 s] full/slosh: step 500/1250  t 1.000  gx 0.0  it 228  res 9.56e-06  in solid 0  ceiling 0  z max 128.5  cross 0  over 0  above rim 0  q13 2.445 mm  vmax 0.112  (200 s)
+
+[18:59:47 UTC | +  258.0 s] full/slosh: step 550/1250  t 1.100  gx 0.0  it 222  res 9.43e-06  in solid 0  ceiling 0  z max 128.1  cross 0  over 0  above rim 0  q13 2.815 mm  vmax 0.104  (219 s)
+
+[19:00:06 UTC | +  276.8 s] full/slosh: step 600/1250  t 1.200  gx 0.0  it 213  res 8.49e-06  in solid 0  ceiling 0  z max 131.2  cross 0  over 0  above rim 0  q13 -4.978 mm  vmax 0.024  (237 s)
+
+[19:00:24 UTC | +  294.7 s] full/slosh: step 650/1250  t 1.300  gx 0.0  it 223  res 9.12e-06  in solid 0  ceiling 0  z max 127.5  cross 0  over 0  above rim 0  q13 2.144 mm  vmax 0.119  (255 s)
+
+[19:00:42 UTC | +  313.2 s] full/slosh: step 700/1250  t 1.400  gx 0.0  it 217  res 9.71e-06  in solid 0  ceiling 0  z max 128.0  cross 0  over 0  above rim 0  q13 2.669 mm  vmax 0.109  (274 s)
+
+[19:01:01 UTC | +  331.7 s] full/slosh: step 750/1250  t 1.500  gx 0.0  it 216  res 8.34e-06  in solid 0  ceiling 0  z max 130.0  cross 0  over 0  above rim 0  q13 -4.465 mm  vmax 0.018  (292 s)
+
+[19:01:19 UTC | +  350.1 s] full/slosh: step 800/1250  t 1.600  gx 0.0  it 228  res 8.70e-06  in solid 0  ceiling 0  z max 127.0  cross 0  over 0  above rim 0  q13 1.745 mm  vmax 0.098  (311 s)
+
+[19:01:37 UTC | +  368.6 s] full/slosh: step 850/1250  t 1.700  gx 0.0  it 217  res 9.84e-06  in solid 0  ceiling 0  z max 127.9  cross 0  over 0  above rim 0  q13 2.637 mm  vmax 0.091  (329 s)
+
+[19:01:55 UTC | +  386.6 s] full/slosh: step 900/1250  t 1.800  gx 0.0  it 212  res 9.53e-06  in solid 0  ceiling 0  z max 129.8  cross 0  over 0  above rim 0  q13 -4.245 mm  vmax 0.019  (347 s)
+
+[19:02:13 UTC | +  404.4 s] full/slosh: step 950/1250  t 1.900  gx 0.0  it 224  res 9.84e-06  in solid 0  ceiling 0  z max 126.9  cross 0  over 0  above rim 0  q13 1.672 mm  vmax 0.085  (365 s)
+
+[19:02:32 UTC | +  422.6 s] full/slosh: step 1000/1250  t 2.000  gx 0.0  it 224  res 7.86e-06  in solid 0  ceiling 0  z max 127.7  cross 0  over 0  above rim 0  q13 2.399 mm  vmax 0.078  (383 s)
+
+[19:02:50 UTC | +  440.8 s] full/slosh: step 1050/1250  t 2.100  gx 0.0  it 209  res 9.51e-06  in solid 0  ceiling 0  z max 128.8  cross 0  over 0  above rim 0  q13 -3.839 mm  vmax 0.026  (401 s)
+
+[19:03:08 UTC | +  459.1 s] full/slosh: step 1100/1250  t 2.200  gx 0.0  it 123  res 9.57e-06  in solid 0  ceiling 0  z max 126.8  cross 0  over 0  above rim 0  q13 1.387 mm  vmax 0.089  (420 s)
+
+[19:03:26 UTC | +  477.1 s] full/slosh: step 1150/1250  t 2.300  gx 0.0  it 219  res 9.52e-06  in solid 0  ceiling 0  z max 127.5  cross 0  over 0  above rim 0  q13 2.327 mm  vmax 0.083  (438 s)
+
+[19:03:44 UTC | +  495.3 s] full/slosh: step 1200/1250  t 2.400  gx 0.0  it 216  res 9.39e-06  in solid 0  ceiling 0  z max 128.7  cross 0  over 0  above rim 0  q13 -3.545 mm  vmax 0.022  (456 s)
+
+[19:04:02 UTC | +  513.1 s] full/slosh: step 1250/1250  t 2.500  gx 0.0  it 224  res 8.66e-06  in solid 0  ceiling 0  z max 126.5  cross 0  over 0  above rim 0  q13 1.231 mm  vmax 0.076  (474 s)
+
+<string>:6: RuntimeWarning: overflow encountered in exp
+
+[19:04:04 UTC | +  514.8 s] full/slosh: done {"label": "slosh", "sub": "full", "steps": 1250, "T": 2.5, "N": 1001952, "K": 1001952, "grid": [211, 87, 176], "top_mm": 228.0, "lip_mm": 1.25, "push": [0.3, 1.0, 0.146], "ext": {"cells": 17272, "unresolved": 0, "phi_mm": [-1.041392597270577, -0.0013351016942144578], "side_vis": true, "cavity_side_cells": 6804}, "it_max": 285, "res_max": 9.999816029448994e-06, "in_solid_max": 0, "ceiling_max": 0, "zmax_max_mm": 132.4596405029297, "crossings_total": 0, "over_max": 0, "over_end": 0, "above_rim_max": 0, "nact_end": 1001952, "nsel_max": 373590, "nsel_capped": false, "mean_z0_mm": 72.6948007941246, "mean_z1_mm": 72.64067977666855, "ms_per_step": 379.02392768859863, "wall_s": 473.7799115180969, "fit_ring13": {"f": 3.3208727945728382, "f0": 3.3211730253287657, "zeta": 0.013445811595563741, "A_mm": 6.011737362140934, "rms_mm": 0.07003220682714462}, "f_target_hz": 3.421, "f_err_pct": -2.9268402638749413, "f0_err_pct": -2.918064152915345, "pass_marks": {"f_within_3pct": true, "ceiling_zero": true, "crossings_zero": true, "in_solid_zero": true}, "pass_marks_all": true}
+
+[19:04:22 UTC | +  532.7 s] full/overflow: N = 1001952, K = 1001952, steps 300, push 5.0 m/s^2 from 0.0 s for 0.2 s, extension {'cells': 17272, 'unresolved': 0, 'phi_mm': [-1.041392597270577, -0.0013351016942144578], 'side_vis': True, 'cavity_side_cells': 6804}
+
+[19:04:22 UTC | +  533.6 s] full/overflow: t = 0  in solid 231  ceiling 0  z max 124.85 mm  over 0  mean z 72.695 mm
+
+[19:04:55 UTC | +  566.0 s] full/overflow: step 1/300  t 0.002  gx 5.0  it 311  res 9.64e-06  in solid 0  ceiling 0  z max 124.9  cross 0  over 0  above rim 0  q13 nan mm  vmax 0.027  (32 s)
+
+[19:04:55 UTC | +  566.4 s] full/overflow: step 2/300  t 0.004  gx 5.0  it 228  res 9.83e-06  in solid 0  ceiling 0  z max 125.0  cross 0  over 0  above rim 0  q13 nan mm  vmax 0.053  (33 s)
+
+[19:04:56 UTC | +  566.8 s] full/overflow: step 3/300  t 0.006  gx 5.0  it 240  res 9.22e-06  in solid 0  ceiling 0  z max 125.1  cross 0  over 0  above rim 0  q13 nan mm  vmax 0.078  (33 s)
+
+[19:05:26 UTC | +  597.6 s] full/overflow: step 50/300  t 0.100  gx 5.0  it 225  res 9.50e-06  in solid 0  ceiling 0  z max 155.6  cross 0  over 0  above rim 4308  q13 24.189 mm  vmax 0.369  (64 s)
+
+[19:05:45 UTC | +  616.0 s] full/overflow: step 100/300  t 0.200  gx 5.0  it 229  res 9.66e-06  in solid 0  ceiling 0  z max 150.8  cross 10  over 17365  above rim 2999  q13 24.002 mm  vmax 0.761  (82 s)
+
+[19:06:05 UTC | +  635.9 s] full/overflow: step 150/300  t 0.300  gx 0.0  it 216  res 9.94e-06  in solid 0  ceiling 0  z max 160.0  cross 10  over 18262  above rim 3795  q13 -15.955 mm  vmax 1.712  (102 s)
+
+[19:06:22 UTC | +  652.9 s] full/overflow: step 200/300  t 0.400  gx 0.0  it 227  res 8.80e-06  in solid 0  ceiling 0  z max 171.0  cross 10  over 8106  above rim 4417  q13 -14.274 mm  vmax 1.593  (119 s)
+
+[19:06:41 UTC | +  672.6 s] full/overflow: step 250/300  t 0.500  gx 0.0  it 211  res 9.25e-06  in solid 0  ceiling 0  z max 164.1  cross 10  over 2582  above rim 2886  q13 21.131 mm  vmax 1.104  (139 s)
+
+[19:07:01 UTC | +  692.2 s] full/overflow: step 300/300  t 0.600  gx 0.0  it 233  res 9.16e-06  in solid 0  ceiling 0  z max 164.3  cross 10  over 1881  above rim 411  q13 2.867 mm  vmax 0.872  (159 s)
+
+[19:07:01 UTC | +  692.2 s] full/overflow: done {"label": "overflow", "sub": "full", "steps": 300, "T": 0.6, "N": 1001952, "K": 1001952, "grid": [211, 87, 176], "top_mm": 228.0, "lip_mm": 1.25, "push": [0.0, 5.0, 0.2], "ext": {"cells": 17272, "unresolved": 0, "phi_mm": [-1.041392597270577, -0.0013351016942144578], "side_vis": true, "cavity_side_cells": 6804}, "it_max": 311, "res_max": 9.998127097787801e-06, "in_solid_max": 0, "ceiling_max": 0, "zmax_max_mm": 178.08663845062256, "crossings_total": 10, "over_max": 18262, "over_end": 1881, "above_rim_max": 18930, "nact_end": 985567, "nsel_max": 462421, "nsel_capped": false, "mean_z0_mm": 72.6948007941246, "mean_z1_mm": 71.40649855136871, "ms_per_step": 528.6746096611023, "wall_s": 158.60238409042358, "pass_marks": {"ceiling_zero": true, "crossings_zero": false, "in_solid_zero": true, "overflowed": true}, "pass_marks_all": false}
+
+[19:07:01 UTC | +  692.2 s] full: all done
+
+exit 0
+
+/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\|'
+
+  cells[i][c] = re.sub('\\\\\|', '|', cell)
+
+/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\_'
+
+  text = re.sub(r'_', '\_', text) # Escape underscores in display text
+
+[NbConvertApp] Converting notebook __script__.ipynb to html
+
+[NbConvertApp] Writing 277004 bytes to __results__.html
+

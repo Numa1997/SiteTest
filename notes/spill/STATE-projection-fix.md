@@ -148,3 +148,19 @@ side_vis + extension + guard on)
   149 s. Grid 211 x 87 x 176, top 228.0 mm; lip about (R_m 38.792 mm, z_c 146.250 mm); extension 17 272 cells, unresolved 0. Both
   cases: in solid 0 after step 1 (231 at t = 0: seed jitter), ceiling 0, crossings 0, it <= 311, res < 1e-5. About 0.33 s a step.
 - 20 Nov 18:54:05 UTC: Step 3 full run launched (Kaggle step3-lip-full, T4).
+- 20 Nov 18:54:05-19:07:42 UTC: Step 3 full run (code 9fbc0edf), Kaggle step3-lip-full, T4, 13 min 37 s, script ~692 s (slosh 474 s
+  at 0.379 s/step, overflow 159 s at 0.529 s/step). Step 3 GPU (3 sessions): 1 089 s = 18.2 min; 150.8 min left until 21 Nov 00:00 UTC.
+
+## Step 3 results (Fact; notes/spill/step3/step3_full_*_summary.json, *.jsonl, full.log)
+slosh (bare stout, 1.0 m/s^2 for 0.146 s, free to 2.5 s): fit of ring 13 from 0.546 s: f = 3.3209 Hz (f0 3.3212), -2.93 % of
+3.421 Hz -> PASS (inside 3 % by 0.07 %); zeta 0.0134, amplitude 6.0 mm, fit rms 0.070 mm. The old model at 1.5 mm gave 3.326 Hz.
+Ceiling 0, crossings 0, in solid 0, it <= 285, res < 1e-5, z max 132.5 mm (no overflow), mean height 72.695 -> 72.641 mm.
+overflow (5.0 m/s^2 for 0.2 s, to 0.6 s): stout above the rim from step 38 (0.076 s), over the lip from step 52; up to 18 930 above
+the rim and 18 262 on the outside's side; 16 385 particles left the grid (fell off the deck). Ceiling 0 (z max 178.1 mm, top 228 mm),
+in solid 0 at every step, it <= 311, res < 1e-5. CROSSINGS 10 -> FAIL of the mark "0 crossings below the rim": 1-2 per step at
+steps 78-99 (t 0.156-0.198 s) only, while 3 700-18 900 particles were above the rim; none before the spill or after step 99.
+Inference (not proven): the crossing test counts a side change with both positions below z = rim (147.5 mm). With the rounded lip,
+stout sliding over the lip's shoulder sits below 147.5 mm (lip surface at r = R_m +- 0.8 mm is z = 147.21 mm, plus 0.15 mm offset)
+while it passes r = R_m: a legal pass over the top that the test reads as a crossing. The test was written for the square rim.
+To prove: rerun overflow logging each crossing's old and new positions and whether the segment between them passes through the
+glass (about 4 GPU-min). Stopped here for the owner (a pass mark failed).
