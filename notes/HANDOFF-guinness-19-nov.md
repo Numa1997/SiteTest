@@ -508,3 +508,7 @@ folder like `notes/spill/runs/` needs its own rule) and keep the description tru
   Reports in `notes/spill/runs/flight-map-v1-*`.
 - Step 2 written: `tools/fig16/derived/source_twin.py` (forward model on rim cylinder + top disk, twin on finer quadrature, Poisson
   fit, discrepancy principle, mark 5 % L1 on the deck field); `flight_map.py` now runs its blocks only as a script. Not launched.
+- 20 Nov 02:08:51-02:10:30 UTC: `fig16-source-twin` v1 SMOKE (e7175a68): all blocks ran (21 s); exposed two faults: frozen/landed
+  dropped after the 30 followed pictures, and the deck comparison mixed node sets (floor 113 %). Owner's yes to both fixes plus five
+  more (moments start, multiscale blur 40/20/0 mm, fit nodes as dense as the truth and shifted, GATE before any fit: truth on fit
+  nodes deck L1 < 2 % and out-of-grid < 2 %, re-contact classifier a/b/c/d). Written in source_twin.py; smoke v2 next, not launched.
