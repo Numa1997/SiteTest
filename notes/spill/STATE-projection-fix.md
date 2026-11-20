@@ -24,6 +24,7 @@ Decision: sub-run 2 passes -> explanation confirmed, report and stop. Sub-run 2 
 it == 600 -> explanation refuted, report the logs and stop. No further fixes.
 
 ## Rules
+- (Owner, 20 Nov 18:4x UTC) While writing code with no Kaggle run active: a one-line status every 10 minutes (clock time, what I am doing, expected time of the next launch).
 Kaggle only; time estimate, live monitor (clock and elapsed), results to file per sub-run, outputs committed, run times at the end.
 Commit author: the repository owner's git identity; no assistant or model names; no co-author lines. Never: main, Workers, R2,
 public/de/, public/ar/, scripts/i18n/, *.rtl.css. May change: tools/spill/rest_variants.py, stout_jax.py (sub-run 2, behind the
