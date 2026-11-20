@@ -306,6 +306,83 @@
     }
   };
 
+  /* ---- rails: the two side margins of the home page below the hero, fixed to the window but drawn in page coordinates, so
+     they scroll with the page. Left: the forest's roots go on growing down the page (space colonisation: each tip grows towards
+     the scattered water it can sense; thickness by Murray's law, r^3 of a parent = sum of r^3 of its children; sap climbs back
+     up to the trees). Right: Barton's pendulums: on every bar a heavy driver swings with a slowly changing length, and of the
+     light pendulums hanging beside it only the one whose length matches swings wide (resonance under an outside force). ---- */
+  S.rails = {
+    geo: function () {
+      var lay = document.querySelector(host.getAttribute('data-bg-around') || 'main'), fo = document.querySelector('[data-bg=forest]'), end = document.querySelector(host.getAttribute('data-bg-until') || 'footer');
+      if (!lay) return null; var r = lay.getBoundingClientRect(), sy = scrollY, top = fo ? fo.getBoundingClientRect().bottom + sy - 46 : r.top + sy;
+      var bot = end ? end.getBoundingClientRect().top + sy - 30 : r.bottom + sy;
+      return { l0: 12, l1: r.left - 18, r0: r.right + 18, r1: W - 12, top: top, bot: Math.max(top + 200, bot) };
+    },
+    init: function () {
+      var self = this; this.g = this.geo(); this.N = []; this.At = []; this.grid = {}; this.flow = []; this.Bs = []; this.t = 0; this.gt = 0; this.mt = 0; this.ok = false;
+      var g = this.g; if (!g || g.l1 - g.l0 < 90 || g.r1 - g.r0 < 90) return; this.ok = true;
+      this.lw = g.l1 - g.l0; this.rw = g.r1 - g.r0; this.yLen = 0;
+      var fo = document.querySelector('[data-bg=forest]'), F = fo && fo.__bgScene, xs = [];
+      if (F && F.A) F.A.forEach(function (t) { var px = t.x - g.l0; if (px > 8 && px < self.lw - 8 && xs.every(function (q) { return Math.abs(q - px) > 30; })) xs.push(px); });
+      if (!xs.length) xs = [this.lw * .35, this.lw * .75]; xs.slice(0, 3).forEach(function (px) { self.add(px, 0, -1); });
+      this.extend();
+    },
+    /* scatter water over any new length of page, and hang new bars of pendulums there */
+    extend: function () {
+      var g = this.g, L = g.bot - g.top; if (L <= this.yLen + 20) return; var y0 = this.yLen, n = Math.round(this.lw * (L - y0) / 1100);
+      for (var i = 0; i < n; i++) { var u = R(); this.At.push({ x: 6 + (this.lw - 12) * (R() < .5 ? u * u : 1 - u * u), y: v(y0 + 8, L - 10), on: 1 }); }
+      var G = 200; for (var y = Math.max(40, Math.ceil((y0 - 40) / G) * G + 40); y < L - 160; y += G) this.bar(y);
+      this.yLen = L;
+    },
+    bar: function (y) {
+      var n = Math.max(3, Math.min(8, Math.floor((this.rw - 24) / 24))), Ls = [], P = [];
+      for (var i = 0; i < n; i++) Ls.push(42 + 100 * i / (n - 1));
+      for (i = Ls.length - 1; i > 0; i--) { var j = (R() * (i + 1)) | 0, t = Ls[i]; Ls[i] = Ls[j]; Ls[j] = t; }
+      var di = (n / 2) | 0; for (i = 0; i < n; i++) P.push({ x: 12 + (this.rw - 24) * (i + .5) / n, L: Ls[i], th: 0, w: 0, drv: i === di });
+      this.Bs.push({ y: y, P: P, ph: R() * 6.28, phi: 0, sw: v(50, 80) });
+    },
+    add: function (px, py, par) { var i = this.N.length; this.N.push({ x: px, y: py, p: par, c: 1, k: 0 }); var key = ((px / 32) | 0) + ',' + ((py / 32) | 0); (this.grid[key] = this.grid[key] || []).push(i); return i; },
+    near: function (px, py, D) { var best = -1, bd = D * D, cx = (px / 32) | 0, cy = (py / 32) | 0, m = Math.ceil(D / 32); for (var a = -m; a <= m; a++) for (var b = -m; b <= m; b++) { var c = this.grid[(cx + a) + ',' + (cy + b)]; if (!c) continue; for (var k = 0; k < c.length; k++) { var q = this.N[c[k]], dx = q.x - px, dy = q.y - py, d = dx * dx + dy * dy; if (d < bd) { bd = d; best = c[k]; } } } return [best, bd]; },
+    growStep: function () {
+      var N = this.N, my = 0, acc = {}, i; for (i = 0; i < N.length; i++) if (N[i].y > my) my = N[i].y;
+      for (i = 0; i < this.At.length; i++) { var a = this.At[i]; if (!a.on || a.y > my + 120) continue; var r = this.near(a.x, a.y, 120); if (r[0] < 0) continue;
+        if (r[1] < 64) { a.on = 0; continue; } var q = N[r[0]], d = Math.sqrt(r[1]), s = acc[r[0]] || (acc[r[0]] = [0, 0]); s[0] += (a.x - q.x) / d; s[1] += (a.y - q.y) / d; }
+      for (var k in acc) { var q2 = N[k], s2 = acc[k], dx = s2[0] + (R() - .5) * .6, dy = s2[1] + .15, dl = Math.hypot(dx, dy) || 1, nx = q2.x + dx / dl * 6, ny = q2.y + dy / dl * 6;
+        if (this.near(nx, ny, 3)[0] < 0) this.add(cl(nx, 2, this.lw - 2), ny, +k); }
+      this.At = this.At.filter(function (a) { return a.on; });
+    },
+    murray: function () { var N = this.N, i; for (i = 0; i < N.length; i++) N[i].k = 0; for (i = N.length - 1; i >= 0; i--) { var q = N[i]; q.c = Math.max(1, q.k); if (q.p >= 0) N[q.p].k += q.c; } },
+    draw: function (dt) {
+      clear(); if (!this.ok) return; var self = this, g = this.g, sy = scrollY, N = this.N; this.t += dt; this.gt += dt; this.mt += dt;
+      if (this.mt > 1) { this.mt = 0; var g2 = this.geo(); if (g2 && Math.abs(g2.bot - g.bot) > 4) { g.bot = g2.bot; this.extend(); } this.murray(); }
+      while (this.gt > .05) { this.gt -= .05; this.growStep(); }
+      var top = g.top - sy, fade = function (py) { return cl(py / 80, 0, 1) * cl((g.bot - g.top - py) / 80, 0, 1); };
+      if (top > H || g.bot - sy < 0) return;
+      /* left: roots */
+      x.save(); x.beginPath(); x.rect(g.l0 - 4, 0, this.lw + 8, H); x.clip(); x.lineCap = 'round';
+      for (var i = 0; i < N.length; i++) { var q = N[i]; if (q.p < 0) continue; var sY = top + q.y; if (sY < -10 || sY > H + 10) continue; var pq = N[q.p], f = fade(q.y);
+        x.strokeStyle = col((.2 + .05 * Math.min(4, Math.cbrt(q.c))) * f); x.lineWidth = Math.min(2, .5 + .25 * Math.cbrt(q.c)); ln(g.l0 + pq.x, top + pq.y, g.l0 + q.x, sY); }
+      if (R() < dt * 4 && N.length > 10) { var tp = N[(R() * N.length) | 0]; if (tp.c === 1 && tp.p >= 0) this.flow.push({ i: tp.p, f: 0, x: tp.x, y: tp.y }); }
+      this.flow = this.flow.filter(function (o) { var tq = N[o.i]; if (!tq) return false; var dx = tq.x - o.x, dy = tq.y - o.y, d = Math.hypot(dx, dy), st = 34 * dt;
+        if (d <= st) { o.x = tq.x; o.y = tq.y; if (tq.p < 0) return false; o.i = tq.p; } else { o.x += dx / d * st; o.y += dy / d * st; }
+        var s = top + o.y; if (s > -5 && s < H + 5) dot(g.l0 + o.x, s, 1.1, .45 * fade(o.y)); return true; });
+      if (this.flow.length > 160) this.flow.splice(0, this.flow.length - 160);
+      x.restore();
+      /* right: Barton's pendulums; g in px/s^2, so a 42 px pendulum swings with a period of about 0.6 s */
+      var G = 4000, A = .32, eps = 9, gam = .35, sub = 4, h = dt / sub;
+      x.save(); x.beginPath(); x.rect(g.r0 - 4, 0, this.rw + 8, H); x.clip();
+      this.Bs.forEach(function (B) {
+        var Ld = 42 + 100 * (.5 + .5 * Math.sin(self.t * 6.2832 / B.sw + B.ph)), wd = Math.sqrt(G / Ld), xb = 0;
+        for (var s = 0; s < sub; s++) { B.phi += wd * h; var ab = -eps * A * wd * wd * Math.sin(B.phi);
+          B.P.forEach(function (p) { if (p.drv) { p.L = Ld; p.th = A * Math.sin(B.phi); return; } var w0 = G / p.L; p.w += (-w0 * p.th - gam * p.w - ab / p.L) * h; p.th = cl(p.th + p.w * h, -1.1, 1.1); }); }
+        xb = eps * A * Math.sin(B.phi); var by = top + B.y; if (by < -170 || by > H + 10) return; var f = fade(B.y);
+        x.strokeStyle = col(.4 * f); x.lineWidth = 1; ln(g.r0 + 6 + xb, by, g.r1 - 6 + xb, by);
+        B.P.forEach(function (p) { var px0 = g.r0 + p.x + xb, ex = px0 + p.L * Math.sin(p.th), ey = by + p.L * Math.cos(p.th);
+          x.strokeStyle = col((p.drv ? .55 : .3) * f); x.lineWidth = p.drv ? 1.2 : .8; ln(px0, by, ex, ey); dot(ex, ey, p.drv ? 4 : 2.2, (p.drv ? .8 : .4 + .4 * Math.min(1, Math.abs(p.th) * 3)) * f); });
+      });
+      x.restore();
+    }
+  };
   /* ---- spin: spinners at random; a wandering rotating field brings those in reach into step ---- */
   S.spin = {
     init: function () { this.t = 0; this.O = []; this.nc = Math.floor(W / 28); this.nr = Math.floor(H / 29.5); var ox = (W - (this.nc - 1) * 28) / 2, oy = (H - (this.nr - 1) * 29.5) / 2; for (var j = 0; j < this.nr; j++) for (var i = 0; i < this.nc; i++) this.O.push({ x: ox + i * 28, y: oy + j * 29.5, th: R() * 2 * PI, w: (R() < .5 ? -1 : 1) * v(1.5, 5) }); this.sg = cl(Math.min(W, H) * .33, 110, 300); },
