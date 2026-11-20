@@ -38,6 +38,32 @@ Herschel-Bulkley sigma_y (10 Pa, sweep 0-50), Papanastasiou-regularised (Yue et 
 2018). Frame: stout_jax.py frame_accel + impulse-exact b, om, al of tools/fig16/derived/flight_map.py (only reuse from the
 old branch). Order: A (2-D planar, Kaggle CPU) tests 0-4; B (3-D GPU) smoke + tests 5-7; C kerb ride 4 s, checkpoints
 0.1 s, books per picture; D frames 60/s, surface from particles, docs, merge and publish.
+
+### Additions 20 Nov (owner)
+- phi_body for stout particles (start 0.03): density (1 - phi_body) rho_l.
+- Head at walls: Navier slip, slip length l_s (start: free slip for head, no-slip for stout); test A.3 run both ways,
+  difference reported.
+- Stage E after the ride: surface tension gamma by continuum surface force on the grid. Test: drop of radius R at rest holds
+  2 gamma / R within 10 % and stays round. Then the ride again with gamma on.
+- Air drag: switch, off by default, quadratic in relative speed; not tuned now.
+- Every parameter named in the docs with symbol, value, source or "assumed".
+
+### Parameter table (keep current; copy into the docs)
+| symbol | meaning | value | source |
+|---|---|---|---|
+| rho_l | liquid density | 1007 kg/m3 | run16.py:22 (Fig. 16 rides) |
+| phi_body | gas fraction of the stout body | 0.03 | owner, assumed |
+| phi_head | gas fraction of the head | 0.73 | stout_jax.py:57 (PHI_F = 0.27) |
+| nu | stout kinematic viscosity | 2.06e-3/1007 m2/s | Benilov et al., arXiv 1205.5233 (stout_jax.py:33) |
+| sigma_y | head yield stress | 10 Pa, sweep 0-50 | owner start; old model derived 5.4 Pa (stout_jax.py:66) |
+| m | Papanastasiou regularisation time | 0.2 s | assumed (explicit viscous step limit) |
+| K, n | head Herschel-Bulkley consistency, index | to be read from Yue et al. 2015 | pending |
+| c | sound speed of the stiff equation of state | 50 m/s | owner start |
+| l_s | Navier slip length | stout 0, head infinite (free slip) | owner start |
+| gamma | surface tension | 0 in v1; 0.0442 N/m in stage E | Voelp & Willenbacher 2021 (stout_jax.py:51) |
+| C_d | air drag coefficient | switch off | not tuned |
+| dx | grid spacing | 1.5 mm | owner |
+
 The DualSPHysics ladder below is superseded by this order (A.0 to C).
 
 ## Validation ladder (old, superseded)
@@ -70,7 +96,8 @@ Then the kerb ride. Known limit to report: deck film thinner than the particle s
   archived on the owner's order.
 - 20 Nov: branch created, this file written.
 - 20 Nov: documentation check done (above). Superseded by the owner's MPM decision.
-- 20 Nov: owner's MPM decision recorded. Plan for A.0 sent; waiting for yes.
+- 20 Nov: owner's MPM decision recorded. Plan for A.0 sent.
+- 20 Nov: owner's additions recorded (phi_body, Navier slip, stage E gamma, air-drag switch). Waiting for yes to write code.
 
 ## What is live
 Unchanged: main 12c2e3a, Fig. 12 and Fig. 16 play stored Kaggle rides.
