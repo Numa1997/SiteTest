@@ -1,0 +1,44 @@
+{
+ "label": "push_untagged",
+ "sub": "smoke",
+ "steps": 5,
+ "T": 0.01,
+ "N": 1768832,
+ "N_pint": 1001952,
+ "K": 1768832,
+ "side_vis": false,
+ "ext": {
+  "cells": 17240,
+  "unresolved": 0,
+  "phi_mm": [
+   -1.0386316135821696,
+   -0.0013351016942144578
+  ],
+  "side_vis": false,
+  "cavity_side_cells": null
+ },
+ "mean_z0_mm": 72.6948007941246,
+ "mean_z1_mm": 72.69497960805893,
+ "surface0_mm": 124.93813782930374,
+ "surface1_mm": 124.94340538978577,
+ "it_max": 272,
+ "res_max": 9.650386346038431e-06,
+ "n_drain_bowl_max": 0,
+ "n_drain_total_max": 25836,
+ "n_phantom_out_max": 123787,
+ "n_phantom_hi_max": 10112,
+ "outside_max": 0,
+ "outside_strict_max": 0,
+ "crossings_total": 0,
+ "other_side_max": 0,
+ "other_side_t0": 0,
+ "nsel_max": 694994,
+ "nsel_capped": false,
+ "band_top_max_mm": 59.816353023052216,
+ "ms_per_step": 6724.20859336853,
+ "wall_s": 33.62104368209839,
+ "pass_marks": {
+  "discriminates": true
+ },
+ "pass_marks_all": true
+}

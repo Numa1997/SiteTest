@@ -1,0 +1,70 @@
+/kaggle/src/script.py:4: DeprecationWarning: Python 3.14 will, by default, filter extracted tar archives and reject files or modify their metadata. Use the filter argument to control this behavior.
+
+  tarfile.open(fileobj=io.BytesIO(b)).extractall('/tmp/repo'); root='/tmp/repo/'+os.listdir('/tmp/repo')[0]
+
+fetched in 47.3 s
+
+name, memory.total [MiB]
+
+Tesla T4, 15360 MiB
+
+Tesla T4, 15360 MiB
+
+[18:18:41 UTC | +   30.4 s] smoke/rest_2s: grid 211 x 87 x 143, N = 1001952 (pint 1001952, band 0), K = 1001952, steps 5, side_vis True, extension {'cells': 17240, 'unresolved': 0, 'phi_mm': [-1.0386316135821696, -0.0013351016942144578], 'side_vis': True, 'cavity_side_cells': 6788}
+
+[18:18:46 UTC | +   35.1 s] smoke/rest_2s: t = 0  mean height 72.695 mm  median surface 124.938 mm  outside 280 (strict 231)  on the other side 0  band top -1000.0 mm
+
+[18:19:22 UTC | +   71.5 s] smoke/rest_2s: step 1/5  it 250  res 8.98e-06  bowl 0  total 0  phantom 0/0  z 72.6948  H 124.9381  out 0/0  cross 0  other 0  nsel 358867  (36 s)
+
+[18:19:22 UTC | +   71.7 s] smoke/rest_2s: step 2/5  it 31  res 9.93e-06  bowl 0  total 0  phantom 0/0  z 72.6948  H 124.9382  out 0/0  cross 0  other 0  nsel 358862  (37 s)
+
+[18:19:22 UTC | +   71.9 s] smoke/rest_2s: step 3/5  it 61  res 9.89e-06  bowl 0  total 0  phantom 0/0  z 72.6948  H 124.9382  out 0/0  cross 0  other 0  nsel 358863  (37 s)
+
+[18:19:23 UTC | +   72.3 s] smoke/rest_2s: step 5/5  it 72  res 9.85e-06  bowl 0  total 0  phantom 0/0  z 72.6948  H 124.9381  out 0/0  cross 0  other 0  nsel 358863  (37 s)
+
+[18:19:23 UTC | +   72.3 s] smoke/rest_2s: done {"label": "rest_2s", "sub": "smoke", "steps": 5, "T": 0.01, "N": 1001952, "N_pint": 1001952, "K": 1001952, "side_vis": true, "ext": {"cells": 17240, "unresolved": 0, "phi_mm": [-1.0386316135821696, -0.0013351016942144578], "side_vis": true, "cavity_side_cells": 6788}, "mean_z0_mm": 72.6948007941246, "mean_z1_mm": 72.6948007941246, "surface0_mm": 124.93813782930374, "surface1_mm": 124.93809312582016, "it_max": 250, "res_max": 9.9344133559498e-06, "n_drain_bowl_max": 0, "n_drain_total_max": 0, "n_phantom_out_max": 0, "n_phantom_hi_max": 0, "outside_max": 0, "outside_strict_max": 0, "crossings_total": 0, "other_side_max": 0, "other_side_t0": 0, "nsel_max": 358867, "nsel_capped": false, "band_top_max_mm": -1000.0, "ms_per_step": 7439.089059829712, "wall_s": 37.19544744491577, "pass_marks": {"n_drain_bowl_zero": true, "n_phantom_out_zero": true, "n_drain_total_zero": true, "it_lt_600": true, "res_lt_1e5": true, "outside_strict_zero": true}, "pass_marks_all": true, "mean_z_change_mm": 0.0, "surface_minus_125_mm": -0.06190687417984009, "no_threshold_given": ["mean_z_change_mm", "surface_minus_125_mm"]}
+
+[18:19:40 UTC | +   89.2 s] smoke/push_tagged: grid 211 x 87 x 143, N = 1768832 (pint 1001952, band 766880), K = 1768832, steps 5, side_vis True, extension {'cells': 17240, 'unresolved': 0, 'phi_mm': [-1.0386316135821696, -0.0013351016942144578], 'side_vis': True, 'cavity_side_cells': 6788}
+
+[18:19:45 UTC | +   94.1 s] smoke/push_tagged: t = 0  mean height 72.695 mm  median surface 124.938 mm  outside 280 (strict 231)  on the other side 0  band top 59.8 mm
+
+[18:20:19 UTC | +  129.0 s] smoke/push_tagged: step 1/5  it 273  res 9.86e-06  bowl 0  total 17808  phantom 111220/0  z 72.6948  H 124.9387  out 0/0  cross 0  other 0  nsel 693159  (35 s)
+
+[18:20:20 UTC | +  129.4 s] smoke/push_tagged: step 2/5  it 224  res 9.81e-06  bowl 0  total 18008  phantom 111140/0  z 72.6948  H 124.9386  out 0/0  cross 0  other 0  nsel 693640  (35 s)
+
+[18:20:20 UTC | +  129.8 s] smoke/push_tagged: step 3/5  it 146  res 9.17e-06  bowl 0  total 18414  phantom 110317/0  z 72.6948  H 124.9395  out 0/0  cross 0  other 0  nsel 694115  (36 s)
+
+[18:20:21 UTC | +  130.7 s] smoke/push_tagged: step 5/5  it 221  res 1.00e-05  bowl 0  total 17559  phantom 109737/0  z 72.6949  H 124.9474  out 0/0  cross 0  other 0  nsel 694978  (37 s)
+
+[18:20:21 UTC | +  130.7 s] smoke/push_tagged: done {"label": "push_tagged", "sub": "smoke", "steps": 5, "T": 0.01, "N": 1768832, "N_pint": 1001952, "K": 1768832, "side_vis": true, "ext": {"cells": 17240, "unresolved": 0, "phi_mm": [-1.0386316135821696, -0.0013351016942144578], "side_vis": true, "cavity_side_cells": 6788}, "mean_z0_mm": 72.6948007941246, "mean_z1_mm": 72.69494980573654, "surface0_mm": 124.93813782930374, "surface1_mm": 124.9474361538887, "it_max": 273, "res_max": 9.999496796808671e-06, "n_drain_bowl_max": 0, "n_drain_total_max": 18414, "n_phantom_out_max": 111220, "n_phantom_hi_max": 0, "outside_max": 0, "outside_strict_max": 0, "crossings_total": 0, "other_side_max": 0, "other_side_t0": 0, "nsel_max": 695168, "nsel_capped": false, "band_top_max_mm": 59.818532317876816, "ms_per_step": 7308.0963134765625, "wall_s": 36.540483474731445, "pass_marks": {"crossings_zero": true}, "pass_marks_all": true}
+
+[18:20:38 UTC | +  147.5 s] smoke/push_untagged: grid 211 x 87 x 143, N = 1768832 (pint 1001952, band 766880), K = 1768832, steps 5, side_vis False, extension {'cells': 17240, 'unresolved': 0, 'phi_mm': [-1.0386316135821696, -0.0013351016942144578], 'side_vis': False, 'cavity_side_cells': None}
+
+[18:20:41 UTC | +  150.8 s] smoke/push_untagged: t = 0  mean height 72.695 mm  median surface 124.938 mm  outside 280 (strict 231)  on the other side 0  band top 59.8 mm
+
+[18:21:13 UTC | +  182.9 s] smoke/push_untagged: step 1/5  it 272  res 8.31e-06  bowl 0  total 25197  phantom 123787/10112  z 72.6948  H 124.9387  out 0/0  cross 0  other 0  nsel 693159  (32 s)
+
+[18:21:14 UTC | +  183.3 s] smoke/push_untagged: step 2/5  it 215  res 8.59e-06  bowl 0  total 25311  phantom 123744/10110  z 72.6948  H 124.9384  out 0/0  cross 0  other 0  nsel 693640  (32 s)
+
+[18:21:14 UTC | +  183.7 s] smoke/push_untagged: step 3/5  it 213  res 9.62e-06  bowl 0  total 25836  phantom 123075/10105  z 72.6948  H 124.9388  out 0/0  cross 0  other 0  nsel 694109  (33 s)
+
+[18:21:15 UTC | +  184.5 s] smoke/push_untagged: step 5/5  it 205  res 9.65e-06  bowl 0  total 25221  phantom 122569/10081  z 72.6950  H 124.9434  out 0/0  cross 0  other 0  nsel 694920  (34 s)
+
+[18:21:15 UTC | +  184.5 s] smoke/push_untagged: done {"label": "push_untagged", "sub": "smoke", "steps": 5, "T": 0.01, "N": 1768832, "N_pint": 1001952, "K": 1768832, "side_vis": false, "ext": {"cells": 17240, "unresolved": 0, "phi_mm": [-1.0386316135821696, -0.0013351016942144578], "side_vis": false, "cavity_side_cells": null}, "mean_z0_mm": 72.6948007941246, "mean_z1_mm": 72.69497960805893, "surface0_mm": 124.93813782930374, "surface1_mm": 124.94340538978577, "it_max": 272, "res_max": 9.650386346038431e-06, "n_drain_bowl_max": 0, "n_drain_total_max": 25836, "n_phantom_out_max": 123787, "n_phantom_hi_max": 10112, "outside_max": 0, "outside_strict_max": 0, "crossings_total": 0, "other_side_max": 0, "other_side_t0": 0, "nsel_max": 694994, "nsel_capped": false, "band_top_max_mm": 59.816353023052216, "ms_per_step": 6724.20859336853, "wall_s": 33.62104368209839, "pass_marks": {"discriminates": true}, "pass_marks_all": true}
+
+[18:21:15 UTC | +  184.5 s] smoke: all done
+
+exit 0
+
+/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\|'
+
+  cells[i][c] = re.sub('\\\\\|', '|', cell)
+
+/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\_'
+
+  text = re.sub(r'_', '\_', text) # Escape underscores in display text
+
+[NbConvertApp] Converting notebook __script__.ipynb to html
+
+[NbConvertApp] Writing 277000 bytes to __results__.html
+

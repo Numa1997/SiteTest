@@ -1,0 +1,55 @@
+{
+ "label": "rest_2s",
+ "sub": "smoke",
+ "steps": 5,
+ "T": 0.01,
+ "N": 1001952,
+ "N_pint": 1001952,
+ "K": 1001952,
+ "side_vis": true,
+ "ext": {
+  "cells": 17240,
+  "unresolved": 0,
+  "phi_mm": [
+   -1.0386316135821696,
+   -0.0013351016942144578
+  ],
+  "side_vis": true,
+  "cavity_side_cells": 6788
+ },
+ "mean_z0_mm": 72.6948007941246,
+ "mean_z1_mm": 72.6948007941246,
+ "surface0_mm": 124.93813782930374,
+ "surface1_mm": 124.93809312582016,
+ "it_max": 250,
+ "res_max": 9.9344133559498e-06,
+ "n_drain_bowl_max": 0,
+ "n_drain_total_max": 0,
+ "n_phantom_out_max": 0,
+ "n_phantom_hi_max": 0,
+ "outside_max": 0,
+ "outside_strict_max": 0,
+ "crossings_total": 0,
+ "other_side_max": 0,
+ "other_side_t0": 0,
+ "nsel_max": 358867,
+ "nsel_capped": false,
+ "band_top_max_mm": -1000.0,
+ "ms_per_step": 7439.089059829712,
+ "wall_s": 37.19544744491577,
+ "pass_marks": {
+  "n_drain_bowl_zero": true,
+  "n_phantom_out_zero": true,
+  "n_drain_total_zero": true,
+  "it_lt_600": true,
+  "res_lt_1e5": true,
+  "outside_strict_zero": true
+ },
+ "pass_marks_all": true,
+ "mean_z_change_mm": 0.0,
+ "surface_minus_125_mm": -0.06190687417984009,
+ "no_threshold_given": [
+  "mean_z_change_mm",
+  "surface_minus_125_mm"
+ ]
+}
