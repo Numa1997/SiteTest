@@ -20,12 +20,25 @@
         .f13page .sim__head { max-width: none; margin-bottom: 12px; }
         .f13page .sim__head h1 { margin-bottom: 0; }
         .f13page .sim__head, .f13page .stage, .f13page .panel { animation: none; }
-        .f13 { display: grid; grid-template-columns: minmax(0, 1fr) 360px; grid-template-areas: "intro intro" "main side"; gap: 18px 24px; align-items: start; }
+        .f13 { display: grid; grid-template-columns: minmax(0, 1fr) 360px; grid-template-rows: auto auto 1fr; grid-template-areas: "intro intro" "main pin" "more pin"; gap: 18px 24px; align-items: start; }
         .f13__intro { grid-area: intro; display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 10px 40px; }
         .f13__intro .sim__lede { flex: 1 1 520px; max-width: 920px; margin: 0; }
         .f13__introside { flex: 0 1 auto; }
         .f13__main { grid-area: main; min-width: 0; display: grid; gap: 10px; }
-        .f13__side { grid-area: side; min-width: 0; display: grid; gap: 16px; position: sticky; top: 12px; max-height: calc(100vh - 24px); overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; }
+        .f13__side { display: contents; }
+        .f13__pin { grid-area: pin; align-self: start; position: sticky; top: 12px; max-height: calc(100vh - 24px); overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; }
+        .f13__more { grid-area: more; }
+        /* the parameters: a heading with one button back to the start, then the groups side by side */
+        .f13__morehead { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; }
+        .f13__moretitle { margin: 0; font-family: var(--serif); font-size: 26px; font-weight: 400; color: var(--ink); }
+        #reset { min-height: 44px; }
+        .f13__groups { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 18px 28px; }
+        .f13__groups > .panel__group { border-top: 0; padding-top: 0; }
+        .f13__groups .ctl { padding: 6px 8px; margin: 0 -8px; border-radius: 8px; transition: background .25s ease; }
+        .f13__groups .ctl output { padding: 1px 8px; border-radius: 999px; transition: background .25s ease, color .25s ease; }
+        .f13__groups .ctl.is-changed { background: color-mix(in srgb, var(--accent, #7a1f2b) 7%, transparent); }
+        .f13__groups .ctl.is-changed output { background: var(--accent); color: var(--card); }
+        .f13__groups .ctl.is-flash { background: color-mix(in srgb, var(--accent, #7a1f2b) 16%, transparent); }
         .dedication { margin: 0 0 8px; font-family: var(--serif); font-style: italic; font-size: 17px; line-height: 1.4; color: var(--muted); }
         .onpage { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
         .onpage a { display: inline-flex; align-items: center; min-height: 40px; box-sizing: border-box; padding: 0 14px; border: 1px solid var(--line-strong, #cdc1ae); border-radius: 999px; background: var(--card); color: var(--accent, #7a1f2b); font: 13px/1.2 var(--mono); text-decoration: none; white-space: nowrap; }
@@ -50,15 +63,28 @@
         .f13__hint { position: absolute; left: 50%; bottom: 12px; transform: translateX(-50%); margin: 0; padding: 7px 14px; border-radius: 999px; background: rgba(20, 13, 16, .82); color: #fff6ea; font: 13px/1.2 var(--mono); white-space: nowrap; pointer-events: none; z-index: 1; }
         /* the bar under the figure: large buttons within reach of a thumb */
         .f13__bar { display: flex; align-items: stretch; gap: 4px; padding: 6px; border-top: 1px solid var(--rule-soft); background: var(--card); }
-        .f13__bar button { flex: 1 1 0; min-width: 0; min-height: 54px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; padding: 4px 2px; border: 1px solid transparent; border-radius: 8px; background: transparent; color: var(--accent); font: 11.5px/1.1 var(--mono); letter-spacing: .02em; cursor: pointer; touch-action: manipulation; transition: background .15s ease, color .15s ease, border-color .15s ease; }
+        .f13__bar button { flex: 1 1 0; min-width: 0; min-height: 54px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; padding: 4px 2px; border: 1px solid var(--line-strong, #cdc1ae); border-radius: 8px; background: var(--card); color: var(--accent); font: 500 12px/1.1 var(--mono); letter-spacing: .02em; cursor: pointer; touch-action: manipulation; transition: background .15s ease, color .15s ease, border-color .15s ease, transform .1s ease; }
+        .f13__bar #play { background: var(--accent); border-color: var(--accent); color: var(--card); }
+        .f13__bar #play:hover { background: var(--accent-dark, #5e1621); }
+        .f13__sep { flex: 0 0 1px; align-self: stretch; margin: 6px 4px; background: var(--rule); }
         .f13__bar button svg { width: 24px; height: 24px; fill: currentColor; flex: none; }
         .f13__bar button span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
-        .f13__bar button:hover { border-color: var(--rule); background: var(--card-soft, #faf6ef); }
+        .f13__bar button:hover { border-color: var(--accent); }
+        @media (min-width: 901px) { .f13__bar { gap: 6px; padding: 8px; } .f13__bar button { flex-direction: row; gap: 8px; min-height: 48px; font-size: 13px; } .f13__bar button svg { width: 20px; height: 20px; } }
         .f13__bar button:active { transform: scale(.96); }
         .f13__bar button[aria-pressed="true"]:not(#play) { background: var(--accent); color: var(--card); }
         #play .i-play, #play[aria-pressed="false"] .i-pause { display: none; }
         #play[aria-pressed="false"] .i-play { display: inline; }
         .f13__t { flex: 0 0 auto; align-self: center; min-width: 8.5ch; padding: 0 8px; text-align: right; font: 12px var(--mono); color: var(--ink-2); font-variant-numeric: tabular-nums; }
+        /* "Try this": one tap sets the sheet up for one thing to see; the sentence under the row says what to look at */
+        .f13__demos { display: grid; gap: 8px; padding: 14px 16px; border: 1px solid var(--rule); border-left: 3px solid var(--accent); border-radius: 10px; background: var(--card); }
+        .f13__demolabel { margin: 0; font: 500 11px var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--accent); }
+        .f13__demorow { display: flex; flex-wrap: wrap; gap: 8px; }
+        .f13__demorow button { min-height: 44px; padding: 0 16px; border: 1px solid var(--accent); border-radius: 999px; background: transparent; color: var(--accent); font: 500 14px/1.2 var(--sans); cursor: pointer; white-space: nowrap; transition: background .15s ease, color .15s ease; }
+        .f13__demorow button:hover, .f13__demorow button.is-on { background: var(--accent); color: var(--card); }
+        .f13__demorow button.is-reset { border-color: var(--line-strong, #cdc1ae); color: var(--ink-2); }
+        .f13__demorow button.is-reset:hover { background: var(--card-soft, #faf6ef); color: var(--ink); }
+        .f13__demosay { margin: 0; font-size: 15px; line-height: 1.55; color: var(--ink); min-height: 3.1em; }
         .f13__keys { margin: 0 2px; font-size: 14px; line-height: 1.55; color: var(--ink-2); max-width: 980px; }
         .f13__keys b { font-weight: 500; color: var(--ink); }
         @media (hover: none) and (pointer: coarse) { .f13__fine { display: none; } }
@@ -83,6 +109,7 @@
             .f13 { display: flex; flex-direction: column; gap: 14px; }
             .f13__side { display: contents; }
             .f13__main { order: 1; } .f13__pin { order: 2; } .f13__intro { order: 3; } .f13__more { order: 4; }
+            .f13__pin { position: static; max-height: none; overflow: visible; }
             .f13 > *, .f13__side > *, .f13__introside { min-width: 0; max-width: 100%; }
             .f13__intro { display: block; } .f13__intro .sim__lede { margin-bottom: 10px; }
             .f13__probe { grid-template-columns: minmax(0, 46%) minmax(0, 1fr); align-items: start; }
@@ -103,6 +130,10 @@
             .onpage { flex-wrap: nowrap; overflow-x: auto; margin: 0 -16px; padding: 0 16px 4px; scrollbar-width: none; }
             .onpage::-webkit-scrollbar { display: none; }
             .onpage a { min-height: 44px; }
+            .f13__sep { margin: 8px 1px; }
+            .f13__demos { margin: 0 -16px; border-radius: 0; border-left: 0; border-right: 0; border-top: 0; padding: 12px 16px; }
+            .f13__demorow { flex-wrap: nowrap; overflow-x: auto; margin: 0 -16px; padding: 0 16px 4px; scrollbar-width: none; }
+            .f13__demorow::-webkit-scrollbar { display: none; }
         }
         .inside { margin: 44px 0 0; }
         .inside > h2 { font-family: var(--serif); font-size: 30px; font-weight: 400; margin: 0 0 6px; color: var(--ink); }
@@ -116,6 +147,14 @@
         @media (max-width: 640px) { .station { padding: 14px 10px; margin-left: -12px; margin-right: -12px; } .station__frame { margin: 0 -10px; } }
         .station__frame iframe { display: block; width: 100%; border: 0; border-radius: 8px; background: transparent; margin: 14px auto 0; }
         .station__frame iframe.is-film { background: #140d10; }
+        @media (min-width: 901px) {
+            .station.is-side { display: grid; grid-template-columns: auto minmax(280px, 1fr); grid-template-rows: auto auto auto auto 1fr; column-gap: 28px; align-items: start; }
+            .station.is-side > .station__frame { grid-column: 1; grid-row: 1 / -1; }
+            .station.is-side > :not(.station__frame) { grid-column: 2; }
+            .station.is-side .station__frame iframe { margin: 0; }
+            .station.is-side .parts { grid-template-columns: 1fr; }
+            .station.is-side h3 { font-size: 30px; }
+        }
         .parts { list-style: none; margin: 0 0 4px; padding: 0; display: grid; gap: 8px; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); }
         .parts button { width: 100%; min-height: 48px; text-align: left; padding: 8px 12px; border: 1px solid var(--line-strong, #cdc1ae); border-radius: 8px; background: transparent; color: var(--ink); font: 15px/1.35 var(--sans); cursor: pointer; }
         .parts button b { font: 12px var(--mono); color: var(--muted); margin-right: 8px; font-weight: 400; }
@@ -177,9 +216,11 @@
                     <div class="f13__bar" role="toolbar" aria-label="The sheet">
                         <button type="button" id="play" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="i-pause" d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/><path class="i-play" d="M8 5l11 7-11 7z"/></svg><span>Pause</span></button>
                         <button type="button" id="restart"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5a7 7 0 1 1-6.6 4.7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><path d="M3.5 4.5l1.9 5.4 5.4-1.9z"/></svg><span>Restart</span></button>
+                        <span class="f13__sep" aria-hidden="true"></span>
                         <button type="button" id="zout"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.2" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M15 15l5.5 5.5M7.5 10.5h6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg><span>Zoom −</span></button>
                         <button type="button" id="zin"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.2" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M15 15l5.5 5.5M7.5 10.5h6M10.5 7.5v6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg><span>Zoom +</span></button>
                         <button type="button" id="zall"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Whole</span></button>
+                        <span class="f13__sep" aria-hidden="true"></span>
                         <button type="button" id="anat" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3.2"/></svg><span>The eye</span></button>
                         <button type="button" id="rods" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l-4 8 7 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="3" r="2"/><circle cx="8" cy="11" r="2.4"/><circle cx="15" cy="20" r="2.4"/></svg><span>Rods</span></button>
                         <output id="cap-t" class="f13__t"><i>t</i> = 0.0 s</output>
@@ -188,6 +229,19 @@
                         <span><b>Fig. 13</b> · one double pendulum per cell, each struck once from hanging still. Left to right the strike on the upper rod <i>p</i><sub>1</sub> grows, bottom to top the strike on the lower rod <i>p</i><sub>2</sub>. Each cell shows the real path of that pendulum's tip. The glow behind is the chaos map: bright where two almost equal strikes part quickly.</span>
                     </figcaption>
                 </figure>
+                <div class="f13__demos" role="group" aria-label="Try this">
+                    <p class="f13__demolabel">Try this</p>
+                    <div class="f13__demorow">
+                        <button type="button" data-demo="eye">The eye</button>
+                        <button type="button" data-demo="chaos">Into the chaos</button>
+                        <button type="button" data-demo="flower">A flower that closes</button>
+                        <button type="button" data-demo="butterfly">The butterfly</button>
+                        <button type="button" data-demo="nog">No gravity</button>
+                        <button type="button" data-demo="heavy">Heavy lower rod</button>
+                        <button type="button" data-demo="reset" class="is-reset">Start values</button>
+                    </div>
+                    <p class="f13__demosay" id="demo-say" aria-live="polite">Each button sets the sheet up for one thing to see and says what to look at.</p>
+                </div>
                 <p class="f13__keys" id="sheet-keys"><b>Handles.</b> Tap a cell to pin its pendulum; drag the ring to strike it anew anywhere on the sheet; tap twice to zoom in there.<span class="f13__fine"> With a mouse, drag the sheet to move it. Keys: arrows move the pin, + and − zoom, space pauses.</span> The cells are a hundred separate experiments, sorted by how they were struck.</p>
             </div>
 
@@ -212,7 +266,9 @@
                     </div>
                 </aside>
 
-                <aside class="panel f13__more" aria-label="More controls">
+                <aside class="panel f13__more" aria-label="Parameters">
+                    <div class="f13__morehead"><p class="f13__moretitle">Parameters</p><button type="button" class="btn btn--ghost" id="reset">Back to the start values</button></div>
+                    <div class="f13__groups">
                     <div class="panel__group">
                         <p class="panel__label">Where on the sheet</p>
                         <p id="z-say" class="f13__zsay">–</p>
@@ -253,6 +309,7 @@
                             <span class="ctl__row"><span>Gravity <i>g</i></span><output id="g-out">9.8 m/s²</output></span>
                             <input type="range" id="g" min="0" max="25" step="0.1" value="9.8">
                         </label>
+                    </div>
                     </div>
                 </aside>
             </div>
@@ -478,6 +535,7 @@
                             <li><b>Angles</b>: \(\theta_2\) against \(\theta_1\), each taken between −180° and +180°, hanging straight down in the middle. The left edge is the same line as the right one and the bottom the same as the top, so the square is a torus cut open and laid flat. The path is kept from the moment of pinning. A rod that goes over the top leaves through one edge and comes back through the opposite one.</li>
                             <li><b>Section</b>: a Poincaré section. Each time the upper rod passes straight down, \(\theta_1 = 0\) (mod \(2\pi\)), one dot is placed at \((\theta_2, p_2)\). The energy is fixed, so the motion lives on a three-dimensional surface, and the section cuts that surface down to a plane. A regular motion winds round a torus, and its dots fall on the closed curve where the plane cuts that torus. A chaotic motion scatters its dots over an area. A closed orbit returns to the same few dots. A pass with the upper rod turning backwards is drawn at \((-\theta_2, -p_2)\): the mirror image of a motion is again a motion, so all dots belong to one section, the one with \(\dot\theta_1 > 0\). The moment of passing is found inside one integration step of 1/4500 s by a straight line.</li>
                             <li><b>Zoom</b>: the sheet is a window on the plane of strikes. <em>Zoom +</em> (or a second tap on the pinned cell) halves its width and height around the pinned strike, which stays pinned; with nothing pinned it narrows around the middle. The pendulums in the cells are computed afresh for the new strikes. The map behind is one stored picture, a value every 0.056 kg·m²/s; zoomed in further than that it shows its own grain and nothing new. With a mouse the sheet can be dragged: the window moves by the strikes the drag covers, and the cells start again. <em>Whole</em> goes back to the whole sheet and keeps the pin.</li>
+                            <li><b>Try this</b>: a row of buttons under the figure, each setting the sheet up for one thing to see, with one sentence saying what to look at: the eye; ten times closer around a chaotic strike, with the section; a flower of 8 petals that closes; the butterfly of 24 turns; gravity off; a lower rod three times as heavy; and the start values. Every parameter a button moves away from its start value is marked in the panel <em>Parameters</em>, which also has a button back to the start values.</li>
                             <li><b>Atlas</b>: the list holds the fourteen closed curves of the flower hunt of Part III, ten flowers and four butterflies, read from the same file as the hunt's garden. Choosing one sets the pendulum to equal rods under \(g = 9.8\) m/s², puts that strike on the centre of a cell, pins it, and shows 1 kg·m²/s of \(p_2\) either side of it. The neighbours then show how the curve opens when the strike is slightly off.</li>
                             <li><b>Where drawing and model differ</b>: the plate forgets (the model does not); the sheet stops while it is off the screen, and on a slow device it runs slower than real time rather than skipping steps, so \(t\) under the figure is the time of the model, not of the clock; the colour is a logarithm of the exposure; the map is 6.67 s of twins, so a strike whose twins part only later counts as regular.</li>
                         </ul>
@@ -1327,7 +1385,7 @@ stage.addEventListener('keydown', e => {       // keys: arrows move the pin one 
 function showRange() {
     const d = Math.max(1, digits()), mn = v => v.toFixed(d).replace('-', '−');
     $('z-say').textContent = `p₁ from ${mn(c1 - P * AR)} to ${mn(c1 + P * AR)}, p₂ from ${mn(c2 - P)} to ${mn(c2 + P)} kg·m²/s` + (c1 || c2 || P !== 20 ? `; magnified ${(20 / P).toFixed(P > 2 ? 1 : 0).replace(/\.0$/, '')} times` : ' (the whole sheet)');
-    $('p-out').textContent = (P >= 2 && P === Math.round(P) ? P : P.toPrecision(3)) + ' kg·m²/s'; $('p').value = Math.max(2, Math.min(30, Math.round(P)));
+    $('p-out').textContent = (P >= 2 && P === Math.round(P) ? P : P.toPrecision(3)) + ' kg·m²/s'; $('p').value = Math.max(2, Math.min(30, Math.round(P))); if (typeof markChanged === 'function') markChanged(false);
 }
 function goTo(s1, s2, Pn) {
     P = Math.max(0.005, Math.min(30, Pn)); const i0 = N >> 1, j0 = N >> 1;
@@ -1367,18 +1425,70 @@ $('g').oninput = e => { par.g = +e.target.value; $('g-out').textContent = par.g.
 $('mr').oninput = e => { par.m2 = par.m1 * Math.exp(+e.target.value); $('mr-out').textContent = (par.m2 / par.m1).toFixed(2); rebuild(); };
 $('lr').oninput = e => { par.l2 = par.l1 * Math.exp(+e.target.value); $('lr-out').textContent = (par.l2 / par.l1).toFixed(2); rebuild(); };
 
+// ---- "Try this": each button sets the sheet up for one thing to see, and one sentence says what to look at ---------------
+// Every parameter moved away from its start value is marked in the parameters panel, so a reader sees at once what a button changed.
+const DEF = { tau: 1.5, n: 10, mr: 0, lr: 0, p: 20, g: 9.8 };
+function markChanged(flash) {
+    for (const id in DEF) {
+        const c = $(id).closest('.ctl'), was = c.classList.contains('is-changed'), now = Math.abs(+$(id).value - DEF[id]) > 1e-9;
+        c.classList.toggle('is-changed', now);
+        if (flash && was !== now) { c.classList.add('is-flash'); setTimeout(() => c.classList.remove('is-flash'), 900); }
+    }
+}
+for (const id in DEF) $(id).addEventListener('input', () => markChanged(false));
+function startValues() {          // everything as the page opens, without the pin
+    par.model = 'rods'; $('m-rods').classList.add('is-on'); $('m-pts').classList.remove('is-on');
+    for (const id in DEF) $(id).value = DEF[id];
+    tau = 1.5; $('tau-out').textContent = '1.5 s'; N = 10; $('n-out').textContent = '10';
+    par.m2 = par.m1; par.l2 = par.l1; par.g = 9.8; $('mr-out').textContent = $('lr-out').textContent = '1.00'; $('g-out').textContent = '9.8 m/s²';
+    if (!night) setLook(true); if (anat) $('anat').click(); if (showRods) $('rods').click();
+    if (!showMap) { $('showmap').checked = true; showMap = true; }
+    c1 = c2 = 0; P = 20; pin = null; $('atlas').value = ''; setPar(); size(); makePalette(); showRange(); drawMap(); setView('tip');
+}
+function setSlider(id, v) { $(id).value = v; $(id).dispatchEvent(new Event('input')); }
+function atlasGo(k) { $('atlas').value = String(k); $('atlas').dispatchEvent(new Event('change')); }
+const BFLY = GARDEN.findIndex(g => g.kind === 'butterfly' && g.k === 24), FLOWER = GARDEN.findIndex(g => g.kind === 'flower' && g.k === 8);
+const DEMOS = {
+    eye: ['Green ellipse: strikes below 9.8 J, too gentle to lift either rod over the top (the pupil; all regular). Yellow: 39.2 J, enough to stand both rods straight up. Between them, the iris, most strikes are chaotic. The dashed lines are the two directions in which the elbow just fails to fold through; the bright streaks lie on them.',
+        () => { startValues(); $('anat').click(); strikeAt(3.557, -2); }],
+    chaos: ['Ten times closer, around a strike whose map value is 0.83. Neighbours a few hundredths of a kg·m²/s apart already draw different tangles. The small picture shows the section: its dots scatter over an area instead of lying on one curve.',
+        () => { startValues(); goTo(3.557, -2, 2); setView('sec'); }],
+    flower: ['A flower of 8 petals that closes on itself, from the atlas. The sheet now shows ±1 kg·m²/s around it: the neighbours’ flowers turn slowly and smear into rosettes. The section shows a few dots, hit again and again.',
+        () => { startValues(); if (FLOWER >= 0) atlasGo(FLOWER); setView('sec'); }],
+    butterfly: ['The butterfly of 24 turns (Part II of the note), with its neighbours around it. Its whole story is in the stations below the figure: the dashboard, the hunt, the catch and the films.',
+        () => { startValues(); if (BFLY >= 0) atlasGo(BFLY); }],
+    nog: ['Gravity off. Now one number decides each strike: whether the elbow can fold through. Every cell draws a ring or a rosette, and nothing is chaotic. The glow, computed with gravity, is hidden; press The eye and only the dashed fold lines remain.',
+        () => { startValues(); setSlider('g', 0); strikeAt(3.557, 12.211); }],
+    heavy: ['The lower rod three times as heavy as the upper one (mass ratio 3.00). The chaos map was computed for equal rods, so it is hidden. Press The eye to see how the pupil and the iris change shape.',
+        () => { startValues(); setSlider('mr', 1.1); strikeAt(3.557, 12.211); }],
+    reset: ['Back to the start values: equal rods, gravity 9.8 m/s², the whole sheet, the butterfly’s strike pinned.',
+        () => { startValues(); strikeAt(3.557, 12.211); }]
+};
+function demo(k) {
+    DEMOS[k][1](); $('demo-say').textContent = DEMOS[k][0]; $('hint').hidden = true;
+    document.querySelectorAll('[data-demo]').forEach(b => b.classList.toggle('is-on', b.dataset.demo === k && k !== 'reset'));
+    markChanged(true); draw();
+}
+document.querySelectorAll('[data-demo]').forEach(b => b.onclick = () => demo(b.dataset.demo));
+$('reset').onclick = () => demo('reset');
+
 // ---- Inside Fig. 13: each station opens in place, in a frame of this page; one at a time, and the sheet pauses meanwhile
 // (a phone computes one thing at a time). The dashboard and the hunt report their height, the film player the shape of its part.
 let openStation = null, sheetWasRunning = false;
+// On a desktop a portrait frame (a film of 1080 x 1920, the catch) stands beside the station's text and list of films, as tall as
+// the window allows; a wide film (1920 x 1080) takes the whole width. On a phone every frame takes the width.
 function sizeFrame(st, W, H, bar) {
     const f = st.querySelector('iframe'); if (!f) return;
-    const avail = st.querySelector('.station__frame').clientWidth, room = Math.max(420, window.innerHeight - 24) - (bar || 0);
-    const w = Math.min(avail, Math.round(room * W / H), W > H ? 1100 : 520);
+    st.dataset.fw = W; st.dataset.fh = H; st.dataset.fb = bar || 0;
+    const side = window.innerWidth > 900 && H > W; st.classList.toggle('is-side', side);
+    const cs = getComputedStyle(st), inner = st.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+    const avail = side ? inner - 300 - 28 : st.querySelector('.station__frame').clientWidth, room = Math.max(420, window.innerHeight - 24) - (bar || 0);
+    const w = window.innerWidth <= 640 ? avail : Math.min(avail, Math.round(room * W / H));   // a phone: the whole width, scroll for the rest
     f.style.width = w + 'px'; f.style.height = Math.round(w * H / W + (bar || 0)) + 'px';
 }
 function closeStation() {
     if (!openStation) return;
-    const st = openStation, b = st.querySelector('[data-play]'); st.querySelector('.station__frame').innerHTML = '';
+    const st = openStation, b = st.querySelector('[data-play]'); st.querySelector('.station__frame').innerHTML = ''; st.classList.remove('is-side');
     if (st.dataset.kind === 'player') b.hidden = true; else b.textContent = 'Open here';
     st.querySelectorAll('.parts button').forEach(x => x.classList.remove('is-on'));
     openStation = null; if (sheetWasRunning && !running) $('play').click();
@@ -1393,7 +1503,7 @@ function openStationAt(st, part) {
     const host = st.querySelector('.station__frame'); host.innerHTML = ''; host.appendChild(f); openStation = st;
     if (kind === 'auto') f.style.height = '70vh'; else sizeFrame(st, 1080, 1920, kind === 'player' ? 84 : 0);
     if (kind === 'player') { b.hidden = false; b.textContent = 'Close'; } else b.textContent = 'Close';
-    (kind === 'player' ? host : st).scrollIntoView({ block: 'start', behavior: 'smooth' });      // the film list is long on a phone: go to the film itself
+    (kind === 'player' && !st.classList.contains('is-side') ? host : st).scrollIntoView({ block: 'start', behavior: 'smooth' });      // the film list is long on a phone: go to the film itself
 }
 document.querySelectorAll('.station [data-play]').forEach(btn => btn.onclick = () => { const st = btn.closest('.station'); if (openStation === st) closeStation(); else openStationAt(st); });
 document.querySelectorAll('.station .parts button').forEach(btn => btn.onclick = () => openStationAt($('films'), +btn.dataset.part));
@@ -1402,9 +1512,13 @@ addEventListener('message', e => {
     if (e.origin !== location.origin || !e.data || !openStation) return;
     const f = openStation.querySelector('iframe'); if (!f || e.source !== f.contentWindow) return;
     if (e.data.fig13 === 'height') f.style.height = Math.max(200, e.data.h) + 'px';
-    if (e.data.fig13 === 'part') { sizeFrame(openStation, e.data.W, e.data.H, e.data.bar); openStation.querySelectorAll('.parts button').forEach(x => x.classList.toggle('is-on', +x.dataset.part === e.data.part)); }
+    if (e.data.fig13 === 'part') {
+        const wasSide = openStation.classList.contains('is-side'); sizeFrame(openStation, e.data.W, e.data.H, e.data.bar);
+        if (wasSide !== openStation.classList.contains('is-side')) (openStation.classList.contains('is-side') ? openStation : f).scrollIntoView({ block: 'start', behavior: 'smooth' });   // the film changed shape: keep it in view
+        openStation.querySelectorAll('.parts button').forEach(x => x.classList.toggle('is-on', +x.dataset.part === e.data.part));
+    }
 });
-addEventListener('resize', () => { if (openStation && openStation.dataset.kind === 'film') sizeFrame(openStation, 1080, 1920, 0); });
+addEventListener('resize', () => { const s = openStation; if (s && s.dataset.kind !== 'auto' && s.dataset.fw) sizeFrame(s, +s.dataset.fw, +s.dataset.fh, +s.dataset.fb); });
 if (/^#(butterfly|hunt|catch|films)$/.test(location.hash)) setTimeout(() => $(location.hash.slice(1)).scrollIntoView(), 300);
 
 let last = null, onScreen = true;

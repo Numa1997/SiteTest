@@ -255,3 +255,22 @@ catch page did not. State and measurements of the work: `notes/fig13/sheet-displ
   Desktop: load 1.1 → 0.4 s, first lit pixel 1.3 → 0.5 s, 60 frames a second before and after, figure 31.5 → 42.6 % of the first screen.
   The phone's frame rate is in the state file. Not measured on a real phone.
 
+**20 November 2026, later: the desktop, the demonstrations and the films.**
+- The bar under the figure is a row of bordered buttons in three groups (run; zoom; overlays), Pause filled; on a desktop icon and
+  word side by side, 48 px tall.
+- **Try this** (`DEMOS`, `demo()` in the page): seven buttons under the figure, each with one sentence of what to look at: The eye,
+  Into the chaos (goTo(3.557, −2, 2), section view), A flower that closes (atlas, 8 petals), The butterfly (atlas, 24 turns), No gravity,
+  Heavy lower rod (mass ratio 3.00), Start values (`startValues()` and the butterfly pinned).
+- **Parameters**: on a desktop no longer in the side column (where 1491 px of controls sat in an 876 px box) but in a panel under the
+  figure, its three groups side by side; a slider away from its start value (`DEF`) is marked, and flashes when a demonstration moves
+  it; *Back to the start values*. The side column holds only the pinned pendulum and stays in view.
+- **Stations** on a desktop: a portrait frame (a film of 1080 × 1920, the catch) stands beside the station's text and list of films,
+  as tall as the window allows (`sizeFrame`, class `is-side`); a wide film (1920 × 1080) takes the whole width (1284 × 876 at
+  1440 × 900, 455 px wide in a 1342 px box before), and when the film changes shape the page keeps it in view. On a phone every
+  frame takes the whole width (380 × 830 on a 390 px phone, 273 × 639 before this change).
+- **Film player** (`tools/fig13/gift/film_page.py`, all four players): buttons at least 44 px with drawn icons (previous, play/pause,
+  next, from the start), a speed of ½, 1 or 2, Night/Paper, and a scrub bar of one equal segment per film with marks between them:
+  a tap or a drag jumps within the film showing at once, to another film on release; arrow keys step 3 s.
+- Tested in headless Chromium at 1440 × 900, 1920 × 1080 and 390 × 844 (touch): every demonstration, the reset, the marked sliders,
+  a wide and a tall film, the catch beside its text, scrubbing and speed; no page errors.
+

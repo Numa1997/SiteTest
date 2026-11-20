@@ -62,3 +62,10 @@ rate is not. Phone main thread now: paint 25 %, native canvas work 57 %, no phys
   phone. The only console message is Cloudflare's analytics beacon blocked by the site's CSP, on every page, not from this work.
 - Left out on purpose: `tools/i18n/build.py` rewrote 47 German and Arabic files with drift from other sessions (the Fig. 12
   link, commit stamps); Fig. 13 is English only and this work adds no strings, so they were not committed here.
+
+## Second round (20 November 2026, "what about desktop?")
+Done: bar of bordered buttons in groups; "Try this" demonstrations with one sentence each; parameters under the figure on a
+desktop with changed values marked and a reset; portrait frames beside their text on a desktop, wide films full width, phones full
+width; film player with 44 px icon buttons, scrub bar with chapter marks, speed ½/1/2. Tested at 1440 x 900, 1920 x 1080, 390 x 844.
+Speed unchanged (phone, slowed 4x: 26.4 frames a second; desktop 60).
+

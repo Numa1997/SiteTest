@@ -6,8 +6,9 @@ film.html and reem.html (the gift link) play, one after the other, the three liv
     live-catch.html         a motor at the top pin takes the pendulum out of chaos, sets it on the butterfly, and lets go
 Each film computes its motion live (pendulum.js); each is opened with ?film=1 in a frame of 1080 x 1920 scaled to the screen; this page keeps the clock (30 frames a second) and
 asks the film to draw frame f (window.renderFrame), so nothing is precomputed and no video file is needed (Cloudflare serves no
-file above 25 MiB; the four-minute film as one MP4 is about 60 MB). Controls: play/pause (or tap the picture), previous, next,
-from the start, Night/Paper, and a bar showing where you are in the whole film; it loops.
+file above 25 MiB; the four-minute film as one MP4 is about 60 MB). Controls (20 November 2026: large, thumb-sized, drawn icons):
+previous, play/pause (or tap the picture), next, from the start, a speed of 1/2, 1 or 2, Night/Paper, and a scrub bar with one
+segment per part that can be tapped or dragged (within a part the film jumps to that frame; to another part on release); it loops.
 
     construction.html and catch.html play one each. The recorded videos are gone: everything is computed in the browser.
 
@@ -36,26 +37,45 @@ html, body { margin:0; height:100%; background:var(--bg); overflow:hidden; }
 #box { position:fixed; left:0; top:0; width:1080px; height:1920px; transform-origin:0 0; }
 iframe { width:100%; height:100%; border:0; display:block; background:var(--bg); }
 #tap { position:fixed; inset:0 0 64px 0; z-index:1; }
-.bar { position:fixed; left:10px; right:10px; bottom:10px; display:flex; gap:8px; align-items:center; flex-wrap:wrap; z-index:2;
-       font:14px 'Instrument Sans', sans-serif; }
-.bar a, .bar button { color:var(--muted); background:var(--chip); border:1px solid var(--line); border-radius:6px; padding:6px 10px;
-       text-decoration:none; font:inherit; cursor:pointer; }
-.bar button.on { color:var(--ink); }
-#prog { flex:1 1 120px; height:6px; background:var(--chip); border:1px solid var(--line); border-radius:4px; position:relative; min-width:80px; }
-#prog i { position:absolute; left:0; top:0; bottom:0; background:var(--accent); border-radius:4px; }
-#prog b { position:absolute; top:-3px; bottom:-3px; width:1px; background:var(--muted); }
-#lab { color:var(--muted); }
+.bar { position:fixed; left:8px; right:8px; bottom:8px; display:flex; flex-direction:column; gap:6px; z-index:2;
+       font:15px/1.2 'Instrument Sans', sans-serif; color:var(--ink); }
+.row { display:flex; gap:6px; align-items:center; flex-wrap:wrap; }
+.bar a, .bar button { display:inline-flex; align-items:center; justify-content:center; gap:6px; min-height:44px; min-width:44px; box-sizing:border-box;
+       color:var(--ink); background:var(--chip); border:1px solid var(--line); border-radius:10px; padding:0 12px;
+       text-decoration:none; font:inherit; cursor:pointer; touch-action:manipulation; }
+.bar button:hover, .bar a:hover { border-color:var(--accent); }
+.bar button svg { width:22px; height:22px; fill:currentColor; }
+.bar #play { background:var(--accent); border-color:var(--accent); color:var(--bg); min-width:64px; }
+.seg { display:inline-flex; }
+.seg button { border-radius:0; margin-left:-1px; color:var(--muted); }
+.seg button:first-child { border-radius:10px 0 0 10px; margin-left:0; } .seg button:last-child { border-radius:0 10px 10px 0; }
+.seg button.on { color:var(--bg); background:var(--accent); border-color:var(--accent); }
+.grow { flex:1 1 auto; }
+#scrub { position:relative; height:32px; cursor:pointer; touch-action:none; }
+#prog { position:absolute; left:0; right:0; top:11px; height:10px; background:var(--chip); border:1px solid var(--line); border-radius:6px; }
+#prog i { position:absolute; left:0; top:0; bottom:0; background:var(--accent); border-radius:6px; }
+#prog b { position:absolute; top:-4px; bottom:-4px; width:2px; margin-left:-1px; background:var(--muted); }
+#knob { position:absolute; top:6px; width:20px; height:20px; margin-left:-10px; border-radius:50%; background:var(--ink); box-shadow:0 0 0 3px var(--accent); }
+@media (max-width: 560px) { .grow { display:none; } .row > button, .row > a { flex:1 1 0; } .seg { flex:1 1 40%; } .seg button { flex:1 1 0; } }
+#lab { color:var(--muted); font-size:14px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:100%; }
 </style>
 </head>
 <body>
 <div id="box"><iframe id="fr" title="film"></iframe></div>
 <div id="tap"></div>
 <div class="bar">
-  <a id="back" href="../momentum-spirographs.html#films">← Fig. 13</a>
-  <button type="button" id="play">Pause</button><button type="button" id="prev">◀</button><button type="button" id="next">▶</button>
-  <button type="button" id="again">From the start</button>
-  <button type="button" id="night">Night</button><button type="button" id="paper">Paper</button>
-  <span id="lab"></span><div id="prog"><i id="fill"></i></div>
+  <div class="row"><span id="lab"></span></div>
+  <div id="scrub" role="slider" tabindex="0" aria-label="Where in the film" aria-valuemin="0" aria-valuemax="100"><div id="prog"><i id="fill"></i></div><span id="knob"></span></div>
+  <div class="row">
+    <a id="back" href="../momentum-spirographs.html#films">← Fig. 13</a>
+    <button type="button" id="prev" aria-label="Previous film"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 5h2.5v14H6zM20 5v14L9 12z"/></svg></button>
+    <button type="button" id="play" aria-label="Pause"><svg viewBox="0 0 24 24" aria-hidden="true"><path id="ico" d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg></button>
+    <button type="button" id="next" aria-label="Next film"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.5 5H18v14h-2.5zM4 5v14l11-7z"/></svg></button>
+    <button type="button" id="again" aria-label="From the start"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5a7 7 0 1 1-6.6 4.7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><path d="M3.5 4.5l1.9 5.4 5.4-1.9z"/></svg></button>
+    <span class="grow"></span>
+    <span class="seg" role="group" aria-label="Speed"><button type="button" data-speed="0.5">½×</button><button type="button" data-speed="1" class="on">1×</button><button type="button" data-speed="2">2×</button></span>
+    <span class="seg" role="group" aria-label="Plate"><button type="button" id="night">Night</button><button type="button" id="paper">Paper</button></span>
+  </div>
 </div>
 <script>
 'use strict';
@@ -66,7 +86,8 @@ let part = 0, f = 0, total = null, playing = true, last = null, lengths = PARTS.
 function fit() {   // each part has its own stage size: portrait films 1080 x 1920, wide ones 1920 x 1080
     const W = PARTS[part][2] || 1080, H = PARTS[part][3] || 1920, box = document.getElementById('box');
     box.style.width = W + 'px'; box.style.height = H + 'px';
-    const cw = document.documentElement.clientWidth, ch = document.documentElement.clientHeight - document.querySelector('.bar').offsetHeight - 20, s = Math.min(cw / W, ch / H, 1);
+    const barH = document.querySelector('.bar').offsetHeight; document.getElementById('tap').style.bottom = (barH + 16) + 'px';
+    const cw = document.documentElement.clientWidth, ch = document.documentElement.clientHeight - barH - 16, s = Math.min(cw / W, ch / H, 1);
     box.style.transform = `translate(${Math.max(0, (cw - W * s) / 2)}px, ${Math.max(0, (ch - H * s) / 2)}px) scale(${s})`;
 }
 // the film's canvas needs only the pixels the screen shows: the device's ratio times the scale of the box (never below 1)
@@ -75,7 +96,7 @@ function load(k, frame) {
     part = (k + PARTS.length) % PARTS.length; f = frame || 0; total = null; seenRestarts = 0;
     document.getElementById('tap').style.pointerEvents = PARTS[part][0].startsWith('live-catch') ? 'none' : 'auto';   // the catch has its own buttons: let taps through
     fit(); fr.src = PARTS[part][0] + (PARTS[part][0].includes('?') ? '&' : '?') + 'film=1&theme=' + theme + '&dpr=' + dprShown();
-    if (Q.get('embed') === '1' && parent !== window) parent.postMessage({ fig13: 'part', part: part + 1, W: PARTS[part][2] || 1080, H: PARTS[part][3] || 1920, bar: document.querySelector('.bar').offsetHeight + 20 }, location.origin);
+    if (Q.get('embed') === '1' && parent !== window) parent.postMessage({ fig13: 'part', part: part + 1, W: PARTS[part][2] || 1080, H: PARTS[part][3] || 1920, bar: document.querySelector('.bar').offsetHeight + 16 }, location.origin);
 }
 fr.addEventListener('load', () => {
     const w = fr.contentWindow;
@@ -85,14 +106,30 @@ fr.addEventListener('load', () => {
 function draw() {
     const w = fr.contentWindow; if (!total || !w.renderFrame) return;
     w.renderFrame(Math.min(f, total - 1));
-    const known = lengths.every(x => x > 0), sum = lengths.reduce((a, b) => a + b, 0);
-    let before = 0; for (let i = 0; i < part; i++) before += lengths[i];
-    document.getElementById('fill').style.width = known ? (100 * (before + f) / sum) + '%' : (100 * (part + f / total) / PARTS.length) + '%';
-    document.getElementById('lab').textContent = (part + 1) + ' / ' + PARTS.length + ' · ' + PARTS[part][1];
+    if (!dragging) showAt((part + Math.min(1, f / total)) / PARTS.length);
+    document.getElementById('lab').textContent = 'Film ' + (part + 1) + ' of ' + PARTS.length + ' · ' + PARTS[part][1];
 }
+// the scrub bar: one equal segment per part, a mark between parts; a tap or a drag jumps there
+function showAt(x) { const pc = (100 * Math.max(0, Math.min(1, x))).toFixed(2) + '%'; document.getElementById('fill').style.width = pc; document.getElementById('knob').style.left = pc; document.getElementById('scrub').setAttribute('aria-valuenow', Math.round(100 * x)); }
+const prog = document.getElementById('prog'), scrub = document.getElementById('scrub');
+for (let k = 1; k < PARTS.length; k++) { const b = document.createElement('b'); b.style.left = (100 * k / PARTS.length) + '%'; prog.appendChild(b); }
+let dragging = false, want = null;
+function seekAt(e, done) {
+    const r = prog.getBoundingClientRect(), x = Math.max(0, Math.min(0.9999, (e.clientX - r.left) / r.width)), k = Math.floor(x * PARTS.length), u = x * PARTS.length - k;
+    showAt(x); want = [k, u];
+    if (k === part && total) { f = Math.floor(u * total); draw(); }          // within the film showing: jump there at once
+    else if (done) { const n = lengths[k] || 0; load(k, Math.floor(u * n)); } // another film: on release
+}
+scrub.addEventListener('pointerdown', e => { dragging = true; scrub.setPointerCapture(e.pointerId); seekAt(e, false); });
+scrub.addEventListener('pointermove', e => { if (dragging) seekAt(e, false); });
+scrub.addEventListener('pointerup', e => { if (!dragging) return; dragging = false; seekAt(e, true); });
+scrub.addEventListener('pointercancel', () => { dragging = false; });
+scrub.addEventListener('keydown', e => { const d = { ArrowLeft: -1, ArrowRight: 1 }[e.key]; if (!d || !total) return; e.preventDefault(); f = Math.max(0, Math.min(total - 1, f + d * 3 * FPS)); draw(); });
+let speed = 1, step = 0;
+document.querySelectorAll('[data-speed]').forEach(b => b.onclick = () => { speed = +b.dataset.speed; document.querySelectorAll('[data-speed]').forEach(x => x.classList.toggle('on', x === b)); });
 function tick(ts) {
-    if (playing && total && (last === null || ts - last >= 1000 / FPS - 2)) {
-        last = ts; f++;
+    if (playing && total && !dragging && (last === null || ts - last >= 1000 / FPS - 2)) {
+        last = ts; step += speed; const adv = Math.floor(step); step -= adv; f += adv;
         const w = fr.contentWindow; if (w && w.FILM) {
             if (w.FILM.restarts !== undefined && w.FILM.restarts !== seenRestarts) { seenRestarts = w.FILM.restarts; f = 0; }   // the reader chose a new start
             total = w.FILM.frames(); lengths[part] = total; }   // a live film learns its length as it runs
@@ -104,7 +141,8 @@ function setTheme(t) {
     theme = t; document.documentElement.dataset.theme = t;
     document.getElementById('night').classList.toggle('on', t === 'dark'); document.getElementById('paper').classList.toggle('on', t === 'light');
 }
-function toggle() { playing = !playing; document.getElementById('play').textContent = playing ? 'Pause' : 'Play'; }
+function toggle() { playing = !playing; document.getElementById('play').setAttribute('aria-label', playing ? 'Pause' : 'Play');
+    document.getElementById('ico').setAttribute('d', playing ? 'M7 5h3.5v14H7zM13.5 5H17v14h-3.5z' : 'M8 5l11 7-11 7z'); }
 document.getElementById('play').onclick = toggle; document.getElementById('tap').onclick = toggle;
 document.getElementById('prev').onclick = () => load(part - 1); document.getElementById('next').onclick = () => load(part + 1);
 document.getElementById('again').onclick = () => load(0);
